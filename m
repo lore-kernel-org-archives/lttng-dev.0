@@ -1,19 +1,21 @@
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [RFC PATCH babeltrace] ctf-writer: Add support for
- the cpu_id field
-Date: Tue, 03 Jun 2014 09:39:56 +0200
-Message-ID: <538D7BCC.7080800__4825.37830616838$1401781247$gmane$org@linutronix.de>
-References: <1401178102-9731-1-git-send-email-bigeasy@linutronix.de>
- <CA+jJMxt4+T0iLx0EJHJz9Fm1oSxiJ6B1oOuwQ+BsQaLCBT_bxQ@mail.gmail.com>
+From: Gerlando Falauto <gerlando.falauto@keymile.com>
+Subject: [PATCH] lttng-ust-tracef-provider.h: fix typo
+Date: Tue,  3 Jun 2014 10:01:58 +0200
+Message-ID: <1401782518-32510-1-git-send-email-gerlando.falauto__15380.3256609992$1401782598$gmane$org@keymile.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from www.linutronix.de ([62.245.132.108] helo=Galois.linutronix.de)
+Received: from mail-de.keymile.com ([195.8.104.250])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <bigeasy@linutronix.de>) id 1WrjKE-0005UZ-OA
- for lttng-dev@lists.lttng.org; Tue, 03 Jun 2014 03:40:03 -0400
-In-Reply-To: <CA+jJMxt4+T0iLx0EJHJz9Fm1oSxiJ6B1oOuwQ+BsQaLCBT_bxQ@mail.gmail.com>
+ (envelope-from <prvs=02319cc1ae=gerlando.falauto@keymile.com>)
+ id 1Wrjfi-0005eU-Ac
+ for lttng-dev@lists.lttng.org; Tue, 03 Jun 2014 04:02:16 -0400
+Received: from frodo.de.keymile.net ([10.9.1.54]:58412
+ helo=mailrelay.de.keymile.net)
+ by mail-de.keymile.com with esmtp (Exim 4.76)
+ (envelope-from <gerlando.falauto@keymile.com>) id 1Wrjfa-0005w9-0A
+ for lttng-dev@lists.lttng.org; Tue, 03 Jun 2014 10:02:06 +0200
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,34 +24,29 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?B?SsOpcsOpbWllIEdhbGFybmVhdQ==?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
+To: lttng-dev@lists.lttng.org
+Cc: Gerlando Falauto <gerlando.falauto@keymile.com>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMDYvMDIvMjAxNCAwNzowOCBQTSwgSsOpcsOpbWllIEdhbGFybmVhdSB3cm90ZToKPiBIaSBT
-ZWJhc3RpYW4sCgpIaSBKw6lyw6ltaWUsCgo+IEknZCBwcmVmZXIgd2UgcHJvdmlkZSBhIGdlbmVy
-aWMgd2F5IG9mIGFkZGluZyBmaWVsZHMgdG8gdGhlIHBhY2tldAo+IGNvbnRleHQuIFNvbWV0aGlu
-ZyBha2luIHRvIHdoYXQncyBwcm92aWRlZCBmb3Igc3RydWN0dXJlcyB3aGljaCB3b3VsZAo+IGxl
-dCB1c2VycyBkZWZpbmUgYXJiaXRyYXJ5IHBhY2tldCBjb250ZXh0IGZpZWxkcy4KPiAKPiBJIHBy
-b3Bvc2UgYWRkaW5nCj4gCj4gaW50IGJ0X2N0Zl9zdHJlYW1fY2xhc3NfYWRkX3BhY2tldF9jb250
-ZXh0X2ZpZWxkKGNvbnN0IGNoYXIKPiAqZmllbGRfbmFtZSwgc3RydWN0IGJ0X2N0Zl9maWVsZF90
-eXBlICpmaWVsZF90eXBlKTsKPiAKPiBhbmQKPiAKPiBzdHJ1Y3QgYnRfY3RmX2ZpZWxkICpidF9j
-dGZfc3RyZWFtX2dldF9wYWNrZXRfY29udGV4dF9maWVsZChjb25zdCBjaGFyCj4gKmZpZWxkX25h
-bWUpOwo+IAo+IEknbSBvcGVuIHRvIGJldHRlciBuYW1pbmcgc3VnZ2VzdGlvbnMsIGJ1dCBob3Bl
-ZnVsbHkgSSdtIGdldHRpbmcgdGhlCj4gZnVuY3Rpb25hbGl0eSBhY3Jvc3MuCj4gCj4gVGhvdWdo
-dHM/Ckxvb2tzIGxpa2UgYSBmZXcgbGluZXMgbW9yZSB0aGFuIHdoYXQgSSBob3BlZCBmb3IuIExl
-dCBtZSB0cnkgeW91ciB3YXkuClNvIHdoYXQgeW91IHN1Z2dlc3QgaXMgc29tZXRoaW5nIGxpa2Ug
-dGhhdDoKCi0tLQpzdHJ1Y3QgYnRfY3RmX2ZpZWxkX3R5cGUgKmNwdV9udW07CgpjcHVfbnVtID0g
-YnRfY3RmX2ZpZWxkX3R5cGVfaW50ZWdlcl9jcmVhdGUoMzEpOwoKYnRfY3RmX2ZpZWxkX3NpZ25l
-ZF9pbnRlZ2VyX3NldF92YWx1ZShjcHVfbnVtLCAyKTsKYnRfY3RmX3N0cmVhbV9jbGFzc19hZGRf
-cGFja2V0X2NvbnRleHRfZmllbGQoImNwdSIsIGNwdV9udW0pOwoKLS0tCgphbmQgdGhlbiBJIHRy
-eSB0byBjaGFuZ2UgdGhlIENQVSBudW1iZXIgSSBoYXZlIHRvCmJ0X2N0Zl9maWVsZF9zaWduZWRf
-aW50ZWdlcl9zZXRfdmFsdWUoKSArIGZsdXNoIGxpa2UgSSBkaWQgYmVmb3JlLApyaWdodD8KRm9y
-IHRoYXQgdG8gd29yayBJIHdvdWxkIGhhdmUgdG8ga2VlcCBhbiBhcnJheSBvZiBldmVyeXRoaW5n
-IHRoYXQgY2FtZQp2aWEgYnRfY3RmX3N0cmVhbV9jbGFzc19hZGRfcGFja2V0X2NvbnRleHRfZmll
-bGQoKSBhbmQgYXR0YWNoIHRvIHN0cnVjdApidF9jdGZfc3RyZWFtICBzbyBJIGhhdmUgdGhvc2Ug
-ZmllbGRzIGluIGluaXRfcGFja2V0X2NvbnRleHQoKS4KCklzIHRoaXMgd2hhdCB5b3UgaGFkIGlu
-IG1pbmQ/Cgo+IAo+IErDqXLDqW1pZQoKU2ViYXN0aWFuCgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cg==
+Fix typo potentially allowing for multiple inclusions.
+
+Signed-off-by: Gerlando Falauto <gerlando.falauto@keymile.com>
+---
+ liblttng-ust/lttng-ust-tracef-provider.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/liblttng-ust/lttng-ust-tracef-provider.h b/liblttng-ust/lttng-ust-tracef-provider.h
+index b759191..1e32888 100644
+--- a/liblttng-ust/lttng-ust-tracef-provider.h
++++ b/liblttng-ust/lttng-ust-tracef-provider.h
+@@ -2,7 +2,7 @@
+ #define TRACEPOINT_PROVIDER lttng_ust_tracef
+ 
+ #if !defined(_TRACEPOINT_LTTNG_UST_TRACEF_PROVIDER_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
+-#define _TRACEPOINT_LTTNG_UST_TRACEF_PROVIER_H
++#define _TRACEPOINT_LTTNG_UST_TRACEF_PROVIDER_H
+ 
+ /*
+  * Copyright (C) 2011-2014  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+-- 
+1.8.0.1
