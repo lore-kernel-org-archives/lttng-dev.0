@@ -1,23 +1,16 @@
-From: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
-Subject: [lttng-tools PATCH] Fix: remove the default GIT_VERSION
-	define to allow different version control
-Date: Tue,  3 Jun 2014 14:30:09 -0400
-Message-ID: <b857bc6a10d6b74a31f80a3c26d6f43cbc22b955.1401819810.git.raphael.beamonte__11190.6114071191$1401820392$gmane$org@gmail.com>
-References: <538E1204.6080304@voxpopuli.im>
- <cover.1401819810.git.raphael.beamonte@gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: userspace-rcu on ARMv7 (Beagle Bone Black)
+Date: Tue, 3 Jun 2014 18:33:29 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359AF532__27618.5932606042$1401820590$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f176.google.com ([209.85.213.176])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <raphael.beamonte@gmail.com>) id 1WrtTb-0001EC-5y
- for lttng-dev@lists.lttng.org; Tue, 03 Jun 2014 14:30:28 -0400
-Received: by mail-ig0-f176.google.com with SMTP id a13so966918igq.9
- for <lttng-dev@lists.lttng.org>; Tue, 03 Jun 2014 11:30:17 -0700 (PDT)
-In-Reply-To: <cover.1401819810.git.raphael.beamonte@gmail.com>
-In-Reply-To: <cover.1401819810.git.raphael.beamonte@gmail.com>
-References: <cover.1401819810.git.raphael.beamonte@gmail.com>
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WrtWh-0001I3-IQ
+ for lttng-dev@lists.lttng.org; Tue, 03 Jun 2014 14:33:41 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,22 +19,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwu
-Y29tPgotLS0KIGluY2x1ZGUvdmVyc2lvbi5oLnRtcGwgfCA0ICstLS0KIDEgZmlsZSBjaGFuZ2Vk
-LCAxIGluc2VydGlvbigrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9pbmNsdWRlL3Zl
-cnNpb24uaC50bXBsIGIvaW5jbHVkZS92ZXJzaW9uLmgudG1wbAppbmRleCA2MzllNmQ3Li4yY2Fi
-NzMzIDEwMDY0NAotLS0gYS9pbmNsdWRlL3ZlcnNpb24uaC50bXBsCisrKyBiL2luY2x1ZGUvdmVy
-c2lvbi5oLnRtcGwKQEAgLTIwLDE1ICsyMCwxMyBAQAogI2lmbmRlZiBWRVJTSU9OX0gKICNkZWZp
-bmUgVkVSU0lPTl9ICiAKLSNkZWZpbmUgR0lUX1ZFUlNJT04KLQogLyoKICAqIERlZmluZSB0aGUg
-bWFjcm8gY29udGFpbmluZyB0aGUgRlVMTCB2ZXJzaW9uCiAgKi8KICNpZmRlZiBHSVRfVkVSU0lP
-TgogI2RlZmluZSBGVUxMX1ZFUlNJT04gIiIgR0lUX1ZFUlNJT04KICNlbHNlIC8qIEdJVF9WRVJT
-SU9OICovCi0jZGVmaW5lIEZVTExfVkVSU0lPTiAidiIgVkVSU0lPTgorI2RlZmluZSBGVUxMX1ZF
-UlNJT04gIiIgVkVSU0lPTgogI2VuZGlmIC8qIEdJVF9WRVJTSU9OICovCiAKICNlbmRpZiAvKiBW
-RVJTSU9OX0ggKi8KLS0gCjIuMC4wLnJjMgoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
-by9sdHRuZy1kZXYK
+   I've tried deploying userspace-rcu onto a bare, out-of-the-box Beagle Bo=
+ne Black (running Angstrom GNU/Linux v2012.12 (Core edition) on kernel 3.8.=
+13).  The dependencies seem to be all there (libc6 (2.4 vs. 2.16-r15), auto=
+make (1.10 vs. 1.12.3-r2.1), libtool (2.2 vs. 2.4.2-r5)).
+
+   The bootstrap and configure steps bring no surprises, with minor differe=
+nces with respect to a Ubuntu deployment (BBB has gawk, Ubuntu has mawk; th=
+e maximum command line length is 32 768 for BBB, 1 572 864 for Ubuntu; BBB =
+is missing mt; BBB's gcc -static does not work; where Ubuntu checks for the=
+ mfence instruction, BBB checks for the dmb instruction).
+
+   The make step, however, seems to go into an infinite loop.  It invokes a=
+utomake-1.12 --foreign, then config/missing --run autoconf, repeat.
+
+   Anyone know why?  And how to fix it?
+
+   (Using userspace-rcu-0.8.0-2)
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+R & D pour la d=E9fense Canada - Valcartier (RDDC Valcartier) | Defence R&D=
+ Canada - Valcartier (DRDC Valcartier)
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
