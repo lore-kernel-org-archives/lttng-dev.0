@@ -1,20 +1,12 @@
-From: Paul Woegerer <paul_woegerer@mentor.com>
-Subject: [PATCH lttng-tools] Add dependency to libcommon for
-	python binding
-Date: Thu,  5 Jun 2014 12:39:48 +0200
-Message-ID: <1401964788-24312-1-git-send-email-paul_woegerer__38856.660857755$1401964865$gmane$org@mentor.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: lttng kretprobe issue
+Date: Thu, 5 Jun 2014 17:08:31 +0000 (UTC)
+Message-ID: <301896191.27236.1401988111285.JavaMail.zimbra__27973.26955847$1401988163$gmane$org@efficios.com>
+References: <CAP7TvLcyae2tvJQCmE00=QfmteB4byyKRY+SDkeYaVjF3z5GeA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0287504290=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Paul_Woegerer@mentor.com>) id 1WsV5U-0006n5-VU
- for lttng-dev@lists.lttng.org; Thu, 05 Jun 2014 06:40:04 -0400
-Received: from svr-orw-exc-10.mgc.mentorg.com ([147.34.98.58])
- by relay1.mentorg.com with esmtp
- id 1WsV5O-00029w-Eb from Paul_Woegerer@mentor.com
- for lttng-dev@lists.lttng.org; Thu, 05 Jun 2014 03:39:54 -0700
+In-Reply-To: <CAP7TvLcyae2tvJQCmE00=QfmteB4byyKRY+SDkeYaVjF3z5GeA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,46 +15,122 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: tarek slaymia <tarek.slaymia@gmail.com>
+Cc: lttng-dev@lists.lttng.org, lttng-dev-request@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Using the python binding library currently results in in the following error message:
+--===============0287504290==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_27235_1652636127.1401988111283"
 
-ImportError: No module named '_lttng'
+------=_Part_27235_1652636127.1401988111283
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-During handling of the above exception, another exception occurred:
+----- Original Message -----
 
-Traceback (most recent call last):
-  File "./test_daemon.py", line 31, in <module>
-    from test_utils import *
-  File "/home/pwoegere/MGC/lttng2_stack_latest/lttng-tools/tests/utils/test_utils.py", line 33, in <module>
-    from lttng import *
-  File "/home/pwoegere/MGC/lttng2_stack_latest/lttng-tools/extras/bindings/swig/python/lttng.py", line 34, in <module>
-    _lttng = swig_import_helper()
-  File "/home/pwoegere/MGC/lttng2_stack_latest/lttng-tools/extras/bindings/swig/python/lttng.py", line 26, in swig_import_helper
-    import _lttng
-ImportError: /home/pwoegere/MGC/lttng2_stack_latest/lttng-tools/extras/bindings/swig/python/.libs/_lttng.so: undefined symbol: log_add_time
+> From: "tarek slaymia" <tarek.slaymia@gmail.com>
+> To: lttng-dev@lists.lttng.org, lttng-dev-request@lists.lttng.org
+> Sent: Thursday, May 29, 2014 3:53:10 PM
+> Subject: [lttng-dev] lttng kretprobe issue
 
-This patch adds the missing dependency to libcommon that contains the definition of log_add_time.
+> Hi all
 
-Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
----
- extras/bindings/swig/python/Makefile.am | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> when i replace a syscall function address for example sys_write using this
+> function in my LKM module :
 
-diff --git a/extras/bindings/swig/python/Makefile.am b/extras/bindings/swig/python/Makefile.am
-index caf1934..ec35930 100644
---- a/extras/bindings/swig/python/Makefile.am
-+++ b/extras/bindings/swig/python/Makefile.am
-@@ -13,7 +13,8 @@ MAINTAINERCLEANFILES = lttng_wrap.c lttng.py
- nodist__lttng_la_SOURCES = lttng_wrap.c
- _lttng_la_LDFLAGS = -module
- _lttng_la_LIBADD = 	$(top_srcdir)/src/lib/lttng-ctl/liblttng-ctl.la 		\
--			$(top_srcdir)/src/common/sessiond-comm/libsessiond-comm.la
-+			$(top_srcdir)/src/common/sessiond-comm/libsessiond-comm.la		\
-+			$(top_srcdir)/src/common/libcommon.la
- 
- lttng_wrap.c: lttng.i
- 	$(SWIG) -python -I. -I$(top_srcdir)/src/common/sessiond-comm lttng.i
+> xchg(&sys_call_table[__NR_write],my_own_write);
+
+> In the normal case the content of sys_call_table[__NR_write] address changes
+> and it displays the address of my_own_write using debug technique .
+
+> I have an issue when tracing this change using lttng kretprobe :
+
+> lttng enable-event sys_write -k --function sys_write
+
+> The ip value of sys_write ( the same address of sys_call_table[__NR_write] )
+> remains the same even after changing it by the new function address (address
+> of my_own_write)
+> Why the ip value of sys_write syscall displayed in lttng traces remains the
+> same even after changing it ?
+
+sys_write is a symbol, and its address does not change. You place the 
+kretprobe on the symbol. 
+
+What you are overwriting is the content of the sys_call_table array, not 
+the address of the sys_write symbol. 
+
+So the resulting behavior is very much expected. 
+
+Thanks, 
+
+Mathieu 
+
+> Best regards.
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 -- 
-1.9.3
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+------=_Part_27235_1652636127.1401988111283
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: times new roman, new york, times, se=
+rif; font-size: 12pt; color: #000000"><div><br></div><hr id=3D"zwchr"><bloc=
+kquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:=
+5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;fo=
+nt-family:Helvetica,Arial,sans-serif;font-size:12pt;"><b>From: </b>"tarek s=
+laymia" &lt;tarek.slaymia@gmail.com&gt;<br><b>To: </b>lttng-dev@lists.lttng=
+.org, lttng-dev-request@lists.lttng.org<br><b>Sent: </b>Thursday, May 29, 2=
+014 3:53:10 PM<br><b>Subject: </b>[lttng-dev] lttng kretprobe issue<br><div=
+><br></div><div dir=3D"ltr"><div><div><div><div><div>Hi all<br><div><br></d=
+iv></div>when i replace a syscall function address for example sys_write us=
+ing this function in my LKM module :<br><div><br></div>xchg(&amp;sys_call_t=
+able[__NR_write],my_own_write);<br><br></div>In the normal case the content=
+ of sys_call_table[__NR_write]=20
+address changes and it displays the address of my_own_write using debug=20
+technique .<br><div><br></div></div>I have an issue when tracing this chang=
+e using lttng kretprobe :<br><br>
+lttng enable-event sys_write -k --function sys_write<br><br>&nbsp;The ip va=
+lue of sys_write ( the same address of=20
+sys_call_table[__NR_write] ) remains the same even after changing it by=20
+the new function address (address of my_own_write) <br></div>Why the ip val=
+ue of sys_write syscall displayed in lttng traces remains the same even aft=
+er changing it ? &nbsp; </div></div></blockquote><div><br></div><div>sys_wr=
+ite is a symbol, and its address does not change. You place the<br></div><d=
+iv>kretprobe on the symbol.<br></div><div><br></div><div>What you are overw=
+riting is the content of the sys_call_table array, not<br></div><div>the ad=
+dress of the sys_write symbol.<br></div><div><br></div><div>So the resultin=
+g behavior is very much expected.<br></div><div><br></div><div>Thanks,<br><=
+/div><div><br></div><div>Mathieu<br></div><div><br></div><blockquote style=
+=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#0=
+00;font-weight:normal;font-style:normal;text-decoration:none;font-family:He=
+lvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div><br></div>B=
+est regards.</div><br>_______________________________________________<br>lt=
+tng-dev mailing list<br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org=
+/cgi-bin/mailman/listinfo/lttng-dev<br></blockquote><div><br><br></div><div=
+><br></div><div>-- <br></div><div><span name=3D"x"></span>Mathieu Desnoyers=
+<br>EfficiOS Inc.<br>http://www.efficios.com<span name=3D"x"></span><br></d=
+iv></div></body></html>
+------=_Part_27235_1652636127.1401988111283--
+
+
+--===============0287504290==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0287504290==--
