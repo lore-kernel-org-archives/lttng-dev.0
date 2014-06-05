@@ -1,18 +1,15 @@
 From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: Debian specific userspace RCU configure override
-Date: Thu, 5 Jun 2014 18:15:20 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359B99F4__15369.7457434193$1401992338$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
-References: <48CF5AC71E61DB46B70D0F388054EFFD359B89C8@VAL-E-02.valcartier.drdc-rddc.gc.ca>
- <161918991.27343.1401990893978.JavaMail.zimbra@efficios.com>
+Subject: Re: Documentation Links broken?
+Date: Thu, 5 Jun 2014 18:21:39 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359B9A03__783.321847166185$1401992574$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WscEa-00033X-Ng
- for lttng-dev@lists.lttng.org; Thu, 05 Jun 2014 14:17:58 -0400
-In-Reply-To: <161918991.27343.1401990893978.JavaMail.zimbra@efficios.com>
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WscIV-00037G-HN
+ for lttng-dev@lists.lttng.org; Thu, 05 Jun 2014 14:22:01 -0400
 Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -22,53 +19,34 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: =?utf-8?B?T25kxZllaiBTdXLDvQ==?= <ondrej@sury.org>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Michael Jeanson <mjeanson@efficios.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: Randy Juillard <randyjuillard@w5tech.com>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS1NZXNzYWdlIGQnb3JpZ2luZS0tLS0tDQpEZcKgOiBNYXRoaWV1IERlc25veWVycyBbbWFp
-bHRvOm1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbV0gDQpFbnZvecOpwqA6IDUganVpbiAy
-MDE0IDEzOjU1DQoNCj4+ICAgIEkgbmVlZCB0byByZXZpdmUgdGhpcyB0aHJlYWQuICBBbHRob3Vn
-aCB0aGUgb3JpZ2luYWwgYnVpbGQgZmFpbHVyZSBtYXkgaGF2ZSBiZWVuIG9uIEFSTXY3IHdhbnRp
-bmcgQVJNdjQsIEkndmUgcnVuIGludG8gdGhlIHNhbWUgZmFpbHVyZSB3aXRoIGENCj4+ICAgIHB1
-cmUgQVJNdjcgYXJjaGl0ZWN0dXJlLiAgU3BlY2lmaWNhbGx5LCBCZWFnbGUgQm9uZSBCbGFjay4N
-Cj4+DQo+PiAgICBJIGJ1aWx0IHVzZXJzcGFjZS1yY3Ugd2l0aG91dCB0cm91YmxlIChleGNlcHQg
-Zm9yIHRoYXQgY2xvY2sgYnVzaW5lc3MgcmVwb3J0ZWQgZWFybGllciksIGJ1dCB3aGVuIEkgdGhl
-biB0cmllZCB0byBidWlsZCBsdHRuZy11c3QsIEkgcmFuIGludG8NCj4+ICAgIHRoZSBzYW1lICdF
-cnJvcjogc2VsZWN0ZWQgcHJvY2Vzc29yIGRvZXMgbm90IHN1cHBvcnQgQVJNIG1vZGUgYGRtYicu
-ICBUYWtpbmcgYSBsb29rIGF0IHRoZSB1c2Vyc3BhY2UtcmN1IGFuZCBsdHRuZy11c3QgY29uZmln
-LmxvZ3MsIHRoZXkNCj4+ICAgICpib3RoKiByZXBvcnQgJ3VuYW1lIC1tID0gYXJtdjdsJy4gIFRo
-ZSBjb3JlIHRlc3RzICpib3RoKiByZXBvcnQgYSBidWlsZCBzeXN0ZW0gdHlwZSBvZiAnYXJtdjds
-LXVua25vd24tbGludXgtZ251ZWFiaScuICBIb3dldmVyLCB1c2Vyc3BhY2UtcmN1DQo+PiAgICB0
-ZXN0cyBmb3IgZG1iIGFuZCBmaW5kcyBpdCwgd2hpbGUgbHR0bmctdXN0IG9taXRzIHRoaXMgdGVz
-dC4NCj4+DQo+PiAgICBUaGUgbWFrZSBlcnJvciBvY2N1cnMgZHVyaW5nIHRoZSBDQ0xEIG9mIGxp
-YnJpbmdidWZmZXIubGEuDQo+Pg0KPj4gICAgQmVzaWRlcyB0aGUgbWFrZSwgY29uZmlnIGFuZCBj
-b25maWd1cmUgbG9ncywgd2hhdCBzaG91bGQgSSBwb3N0IGhlcmU/DQo+DQo+IFlvdSBwcm9iYWJs
-eSBidWlsdCBsdHRuZy11c3QgYWdhaW5zdCBhIG1pc21hdGNoaW5nIHZlcnNpb24gb2YgdXJjdSBo
-ZWFkZXJzLg0KPg0KPiBNYWtlIHN1cmUgeW91IGlzc3VlICJtYWtlIGNsZWFuIiBpbiB5b3VyIGx0
-dG5nLXVzdCB0cmVlLCBkb3VibGUtY2hlY2sgdGhhdCB0aGUgdXJjdS9jb25maWcuaCBoZWFkZXIg
-aW5zdGFsbGVkIGluIHlvdXIgc3lzdGVtICh0aGUgb25lIHVzZWQgYnkgdGhlIGx0dG5nLXVzdCBi
-dWlsZCkgaGFzIHRoZSBDT05GSUdfUkNVX0FSTV9IQVZFX0RNQiBkZWZpbmUgaW4gdGhlIGNvcnJl
-Y3Qgc3RhdGUgKHRoZSBvbmUgZGV0ZWN0ZWQgYnkgdXJjdSBjb25maWd1cmUpLg0KPg0KPk1hdGhp
-ZXUNCg0KICAgVGhlIHN5c3RlbSB3YXMgY2xlYW4gYW5kIGV2ZXJ5dGhpbmcgd2FzIGZpcnN0LXJ1
-bi4gIEkgZGlkIGJvb3RzdHJhcC9jb25maWd1cmUvbWFrZS9pbnN0YWxsIGZvciB1c2Vyc3BhY2Ut
-cmN1LCB0aGVuIHRoZSBzYW1lIGZvciBsdHRuZy11c3QgKG1pbnVzIHRoZSBpbnN0YWxsLCBvZiBj
-b3Vyc2UpLg0KDQogICBCb3RoIC91c3IvbG9jYWwvaW5jbHVkZS91cmN1L2NvbmZpZy5oIGFuZCAv
-dXNyL3NyYy91c2Vyc3BhY2UtcmN1LTAuOC4wL3VyY3UvY29uZmlnLmggaGF2ZSAnI2RlZmluZSBD
-T05GSUdfUkNVX0FSTV9IQVZFX0RNQiAxJy4gIFNvIGRvZXMgL3Vzci9zcmMvdXNlcnNwYWNlLXJj
-dS0wLjguMC9jb25maWcuaC4gIFRoZSBvbmx5IGNvbmZpZy5oICpub3QqIHRvIGhhdmUgdGhhdCAj
-ZGVmaW5lIGlzIC91c3Ivc3JjL2x0dG5nLXVzdC0yLjMuMC9jb25maWcuaC4gIENvdWxkIGl0IGJl
-IHRoZSBsaWJyaW5nYnVmZmVyIG1ha2UgdXNlZCB0aGUgbGF0dGVyPw0KDQpEYW5pZWwgVS4gVGhp
-YmF1bHQNClByb3RlY3Rpb24gZGVzIHN5c3TDqG1lcyBldCBjb250cmVtZXN1cmVzIChQU0MpIHwg
-U3lzdGVtcyBQcm90ZWN0aW9uICYgQ291bnRlcm1lYXN1cmVzIChTUEMpDQpDeWJlciBzw6ljdXJp
-dMOpIHBvdXIgbGVzIG1pc3Npb25zIGVzc2VudGllbGxlcyAoQ01FKSB8IE1pc3Npb24gQ3JpdGlj
-YWwgQ3liZXIgU2VjdXJpdHkgKE1DQ1MpDQpSRERDIC0gQ2VudHJlIGRlIHJlY2hlcmNoZXMgZGUg
-VmFsY2FydGllciB8IERSREMgLSBWYWxjYXJ0aWVyIFJlc2VhcmNoIENlbnRyZQ0KMjQ1OSByb3V0
-ZSBkZSBsYSBCcmF2b3VyZQ0KUXXDqWJlYyBRQyAgRzNKIDFYNQ0KQ0FOQURBDQpWb3ggOiAoNDE4
-KSA4NDQtNDAwMCB4NDI0NQ0KRmF4IDogKDQxOCkgODQ0LTQ1MzgNCk5BQyA6IDkxOFYgUVNESiA8
-aHR0cDovL3d3dy50cmF2ZWxnaXMuY29tL21hcC5hc3A/YWRkcj05MThWJTIwUVNESj4NCkdvdXZl
-cm5lbWVudCBkdSBDYW5hZGEgfCBHb3Zlcm5tZW50IG9mIENhbmFkYQ0KPGh0dHA6Ly93d3cudmFs
-Y2FydGllci5kcmRjLXJkZGMuZ2MuY2EvPg0KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
-L2x0dG5nLWRldgo=
+----------------------------------------------------------------------
+Date: Wed, 4 Jun 2014 23:05:05 +0000
+From: Randy Juillard <randyjuillard@w5tech.com>
+
+> Seems that your links for the documentation are broke on the web page:
+>                https://lttng.org/ust
+>
+> Randy Juillard
+----------------------------------------------------------------------
+   Nope, the links are fine.  It's the web pages' contents which are broken=
+.  They are all time-stamped June 2.
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
+re
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
