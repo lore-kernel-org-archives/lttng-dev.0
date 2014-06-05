@@ -1,21 +1,19 @@
-From: Jon Bernard <jbernard@debian.org>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 Subject: Re: Debian specific userspace RCU configure override
-Date: Thu, 5 Jun 2014 14:29:33 -0400
-Message-ID: <20140605182933.GA6748__39578.351219143$1401993076$gmane$org@helmut>
+Date: Thu, 5 Jun 2014 18:46:21 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359B9A22__45273.4899278314$1401994431$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 References: <48CF5AC71E61DB46B70D0F388054EFFD359B89C8@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+ <20140605182933.GA6748@helmut>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out2-smtp.messagingengine.com ([66.111.4.26])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jbernard@debian.org>) id 1WscQ0-0003BR-8K
- for lttng-dev@lists.lttng.org; Thu, 05 Jun 2014 14:29:49 -0400
-Received: from compute6.internal (compute6.nyi.mail.srv.osa [10.202.2.46])
- by gateway1.nyi.mail.srv.osa (Postfix) with ESMTP id E51CC2198C
- for <lttng-dev@lists.lttng.org>; Thu,  5 Jun 2014 14:29:34 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD359B89C8@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WscgF-0003JI-5u
+ for lttng-dev@lists.lttng.org; Thu, 05 Jun 2014 14:46:32 -0400
+In-Reply-To: <20140605182933.GA6748@helmut>
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,58 +22,34 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+To: Jon Bernard <jbernard@debian.org>
 Cc: =?utf-8?B?T25kxZllaiBTdXLDvQ==?= <ondrej@sury.org>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Michael Jeanson <mjeanson@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-* Thibault, Daniel <Daniel.Thibault@drdc-rddc.gc.ca> wrote:
-> ----------------------------------------------------------------------
-> Date: Wed, 28 May 2014 14:10:50 -0400
-> 
-> > As I currently understand, the debian build problem is that although the
-> > package is compiled on armv7 hardware, it is expected to target armv4t.
-> > And this is not correctly detected at configure-time.  The folks on
-> > #debian-arm suggested that this could be solved in configure.ac.  I can
-> > explicitly pass '--build <target>' to ./configure to get around this,
-> > but arm users that build from source will need to remember this.
-> >
-> > Jon
-> ----------------------------------------------------------------------
->    I need to revive this thread.  Although the original build failure
->    may have been on ARMv7 wanting ARMv4, I've run into the same
->    failure with a pure ARMv7 architecture.  Specifically, Beagle Bone
->    Black.
-> 
->    I built userspace-rcu without trouble (except for that clock
->    business reported earlier), but when I then tried to build
->    lttng-ust, I ran into the same 'Error: selected processor does not
->    support ARM mode `dmb'.  Taking a look at the userspace-rcu and
->    lttng-ust config.logs, they *both* report 'uname -m = armv7l'.  The
->    core tests *both* report a build system type of
->    'armv7l-unknown-linux-gnueabi'.  However, userspace-rcu tests for
->    dmb and finds it, while lttng-ust omits this test.
-> 
->    The make error occurs during the CCLD of libringbuffer.la.
-> 
->    Besides the make, config and configure logs, what should I post
->    here?
-
-It sounds like you might be hitting the same issue that I had.  When
-building urcu on this particular host, ./configure will detect an armv7
-target even though userland is armv4.  I was able to get around this by
-explicitly passing '--build' and '--host' flags to configure.  There is
-also a pre-built armel deb for the latest version of urcu at:
-
-    https://packages.debian.org/sid/armel/liburcu2/download
-
-In my particular case, the build machine is v7 hardware running a v7
-kernel but with a v4 userland.  You can confirm this with
-
-    gcc -dumpmachine
-
-Maybe this will help, I'm curious to know how it goes.
-
-Cheers,
-
--- 
-Jon
+LS0tLS1NZXNzYWdlIGQnb3JpZ2luZS0tLS0tDQpEZcKgOiBKb24gQmVybmFyZCBbbWFpbHRvOmpi
+ZXJuYXJkQGRlYmlhbi5vcmddIA0KRW52b3nDqcKgOiA1IGp1aW4gMjAxNCAxNDozMA0KDQo+IEl0
+IHNvdW5kcyBsaWtlIHlvdSBtaWdodCBiZSBoaXR0aW5nIHRoZSBzYW1lIGlzc3VlIHRoYXQgSSBo
+YWQuICBXaGVuIGJ1aWxkaW5nIHVyY3Ugb24gdGhpcyBwYXJ0aWN1bGFyIGhvc3QsIC4vY29uZmln
+dXJlIHdpbGwgZGV0ZWN0IGFuIGFybXY3IHRhcmdldCBldmVuIHRob3VnaCB1c2VybGFuZCBpcyBh
+cm12NC4NCj4gSSB3YXMgYWJsZSB0byBnZXQgYXJvdW5kIHRoaXMgYnkgZXhwbGljaXRseSBwYXNz
+aW5nICctLWJ1aWxkJyBhbmQgJy0taG9zdCcgZmxhZ3MgdG8gY29uZmlndXJlLiAgVGhlcmUgaXMg
+YWxzbyBhIHByZS1idWlsdCBhcm1lbCBkZWIgZm9yIHRoZSBsYXRlc3QgdmVyc2lvbiBvZiB1cmN1
+IGF0Og0KPg0KPiAgICBodHRwczovL3BhY2thZ2VzLmRlYmlhbi5vcmcvc2lkL2FybWVsL2xpYnVy
+Y3UyL2Rvd25sb2FkDQo+DQo+IEluIG15IHBhcnRpY3VsYXIgY2FzZSwgdGhlIGJ1aWxkIG1hY2hp
+bmUgaXMgdjcgaGFyZHdhcmUgcnVubmluZyBhIHY3IGtlcm5lbCBidXQgd2l0aCBhIHY0IHVzZXJs
+YW5kLiAgWW91IGNhbiBjb25maXJtIHRoaXMgd2l0aA0KPg0KPiAgICBnY2MgLWR1bXBtYWNoaW5l
+DQo+DQo+IE1heWJlIHRoaXMgd2lsbCBoZWxwLCBJJ20gY3VyaW91cyB0byBrbm93IGhvdyBpdCBn
+b2VzLg0KPg0KPiBKb24NCg0KIyBnY2MgLWR1bXBtYWNoaW5lIA0KYXJtLWFuZ3N0cm9tLWxpbnV4
+LWdudWVhYmkNCg0KRGFuaWVsIFUuIFRoaWJhdWx0DQpQcm90ZWN0aW9uIGRlcyBzeXN0w6htZXMg
+ZXQgY29udHJlbWVzdXJlcyAoUFNDKSB8IFN5c3RlbXMgUHJvdGVjdGlvbiAmIENvdW50ZXJtZWFz
+dXJlcyAoU1BDKQ0KQ3liZXIgc8OpY3VyaXTDqSBwb3VyIGxlcyBtaXNzaW9ucyBlc3NlbnRpZWxs
+ZXMgKENNRSkgfCBNaXNzaW9uIENyaXRpY2FsIEN5YmVyIFNlY3VyaXR5IChNQ0NTKQ0KUkREQyAt
+IENlbnRyZSBkZSByZWNoZXJjaGVzIGRlIFZhbGNhcnRpZXIgfCBEUkRDIC0gVmFsY2FydGllciBS
+ZXNlYXJjaCBDZW50cmUNCjI0NTkgcm91dGUgZGUgbGEgQnJhdm91cmUNClF1w6liZWMgUUMgIEcz
+SiAxWDUNCkNBTkFEQQ0KVm94IDogKDQxOCkgODQ0LTQwMDAgeDQyNDUNCkZheCA6ICg0MTgpIDg0
+NC00NTM4DQpOQUMgOiA5MThWIFFTREogPGh0dHA6Ly93d3cudHJhdmVsZ2lzLmNvbS9tYXAuYXNw
+P2FkZHI9OTE4ViUyMFFTREo+DQpHb3V2ZXJuZW1lbnQgZHUgQ2FuYWRhIHwgR292ZXJubWVudCBv
+ZiBDYW5hZGENCjxodHRwOi8vd3d3LnZhbGNhcnRpZXIuZHJkYy1yZGRjLmdjLmNhLz4NCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
+aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3Jn
+L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
