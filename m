@@ -1,18 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust RFC] tracef: move
- _lttng_ust_tracef()	definition to tracef.h
-Date: Thu, 5 Jun 2014 17:21:30 +0000 (UTC)
-Message-ID: <931085984.27276.1401988890434.JavaMail.zimbra__39926.2726925828$1401988937$gmane$org@efficios.com>
-References: <1401782635-32638-1-git-send-email-gerlando.falauto@keymile.com>
+Subject: Re: [PATCH lttng-ust] Fix: remove weak attribute
+	from	__start___tracepoints_ptrs and __stop___tracepoints_ptrs
+Date: Thu, 5 Jun 2014 17:27:06 +0000 (UTC)
+Message-ID: <414903224.27282.1401989226863.JavaMail.zimbra__49555.0165106126$1401989272$gmane$org@efficios.com>
+References: <1401318352-9154-1-git-send-email-gerlando.falauto@keymile.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WsbM6-0002aP-VJ
- for lttng-dev@lists.lttng.org; Thu, 05 Jun 2014 13:21:36 -0400
-In-Reply-To: <1401782635-32638-1-git-send-email-gerlando.falauto@keymile.com>
+ (envelope-from <compudj@efficios.com>) id 1WsbRV-0002dn-Mi
+ for lttng-dev@lists.lttng.org; Thu, 05 Jun 2014 13:27:12 -0400
+In-Reply-To: <1401318352-9154-1-git-send-email-gerlando.falauto@keymile.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,108 +25,73 @@ To: Gerlando Falauto <gerlando.falauto@keymile.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The idea is good, but a few comments:
-
-- there is a newline at the end of tracef.c that should be removed,
-- we need to add includes for headers that tracef.h now requires,
-- I don't know how to handle the fact that tracef.h would now require
-  a #define _GNU_SOURCE. Usually we don't do those define within header
-  files. (see man vasprintf),
-- we'd have to remove unneeded includes and defines from tracef.c.
-
-Thoughts ?
-
-Thanks,
-
-Mathieu
-
------ Original Message -----
-> From: "Gerlando Falauto" <gerlando.falauto@keymile.com>
-> To: lttng-dev@lists.lttng.org
-> Cc: "Gerlando Falauto" <gerlando.falauto@keymile.com>
-> Sent: Tuesday, June 3, 2014 4:03:55 AM
-> Subject: [lttng-dev] [PATCH lttng-ust RFC] tracef: move _lttng_ust_tracef()	definition to tracef.h
-> 
-> With the current implementation, in order to use tracef() within your
-> application, you have to link it against liblttng-ust, because
-> _lttng_ust_tracef() is part of it.
-> 
-> So move _lttng_ust_tracef() to the header file in order to drop this
-> static awareness, allowing the application to be compiled with
-> -DTRACEPOINT_DEFINE and -DTRACEPOINT_PROBE_DYNAMIC_LINKAGE
-> without any static dependency to liblttng-ust.so
-> (you will need to LD_PRELOAD it in order for tracing to work though).
-> 
-> Signed-off-by: Gerlando Falauto <gerlando.falauto@keymile.com>
-> ---
->  include/lttng/tracef.h | 18 ++++++++++++++++--
->  liblttng-ust/tracef.c  | 16 ----------------
->  2 files changed, 16 insertions(+), 18 deletions(-)
-> 
-> diff --git a/include/lttng/tracef.h b/include/lttng/tracef.h
-> index 7e8b59e..612c56a 100644
-> --- a/include/lttng/tracef.h
-> +++ b/include/lttng/tracef.h
-> @@ -29,8 +29,22 @@
->  extern "C" {
->  #endif
->  
-> -extern
-> -void _lttng_ust_tracef(const char *fmt, ...);
-> +static inline void _lttng_ust_tracef(const char *fmt, ...)
-> +{
-> +	va_list ap;
-> +	char *msg;
-> +	int len;
-> +
-> +	va_start(ap, fmt);
-> +	len = vasprintf(&msg, fmt, ap);
-> +	/* len does not include the final \0 */
-> +	if (len < 0)
-> +		goto end;
-> +	__tracepoint_cb_lttng_ust_tracef___event(msg, len);
-> +	free(msg);
-> +end:
-> +	va_end(ap);
-> +}
->  
->  #define tracef(fmt, ...)						\
->  	do {								\
-> diff --git a/liblttng-ust/tracef.c b/liblttng-ust/tracef.c
-> index 9ef063c..0c7ab17 100644
-> --- a/liblttng-ust/tracef.c
-> +++ b/liblttng-ust/tracef.c
-> @@ -28,19 +28,3 @@
->  #define TRACEPOINT_DEFINE
->  #include "lttng-ust-tracef-provider.h"
->  
-> -void _lttng_ust_tracef(const char *fmt, ...)
-> -{
-> -	va_list ap;
-> -	char *msg;
-> -	int len;
-> -
-> -	va_start(ap, fmt);
-> -	len = vasprintf(&msg, fmt, ap);
-> -	/* len does not include the final \0 */
-> -	if (len < 0)
-> -		goto end;
-> -	__tracepoint_cb_lttng_ust_tracef___event(msg, len);
-> -	free(msg);
-> -end:
-> -	va_end(ap);
-> -}
-> --
-> 1.8.0.1
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJHZXJsYW5kbyBGYWxhdXRvIiA8
+Z2VybGFuZG8uZmFsYXV0b0BrZXltaWxlLmNvbT4KPiBUbzogbHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZwo+IENjOiAiR2VybGFuZG8gRmFsYXV0byIgPGdlcmxhbmRvLmZhbGF1dG9Aa2V5bWlsZS5j
+b20+Cj4gU2VudDogV2VkbmVzZGF5LCBNYXkgMjgsIDIwMTQgNzowNTo1MiBQTQo+IFN1YmplY3Q6
+IFtsdHRuZy1kZXZdIFtQQVRDSCBsdHRuZy11c3RdIEZpeDogcmVtb3ZlIHdlYWsgYXR0cmlidXRl
+IGZyb20JX19zdGFydF9fX3RyYWNlcG9pbnRzX3B0cnMgYW5kCj4gX19zdG9wX19fdHJhY2Vwb2lu
+dHNfcHRycwo+IAo+IFNvbWUgT3BlbkVtYmVkZGVkIEdDQyByZWxlYXNlcyAobmFtZWx5IDQuNy4y
+KSBpbmNvcnJlY3RseSBlbWl0IHRob3NlCj4gc3ltYm9scyB3aXRoIGRlZmF1bHQgdmlzaWJpbGl0
+eSBpZiBib3RoIHdlYWsgYW5kIGhpZGRlbiBhdHRyaWJ1dGVzCj4gYXJlIHVzZWQuCj4gV2hlbiB0
+cmFjZXBvaW50cyBhcmUgZGlzdHJpYnV0ZWQgYW1vbmcgdGhlIG1haW4gYXBwbGljYXRpb24gYW5k
+IG9uZSBvcgo+IHNldmVyYWwgc2hhcmVkIG9iamVjdHMgKGUuZy4gbHR0bmdfdXN0X3RyYWNlZjpl
+dmVudCBpbiBsaWJsdHRuZy11c3Quc28KPiBBTkQgeW91ciBvd24gdHJhY2Vwb2ludCBwcm92aWRl
+ciwgc3RhdGljYWxseSBvciBkeW5hbWljYWxseSBsaW5rZWQpLAo+IHRoaXMgcmVzdWx0cyBpbiBh
+IHN1YnRsZSBuYW1lIGNsYXNoIGF0IHJ1bnRpbWUsIGNhdXNpbmcgb25seSB0aGUKPiB0cmFjZXBv
+aW50cyBmcm9tIG9uZSBwYXJ0aWN1bGFyIGJpbmFyeSB0byBiZSBhY3RpdmUsIHNpbGVudGx5IGJy
+ZWFraW5nCj4gYWxsIG90aGVycy4KPiBUaGVzZSBzeW1ib2xzIGFyZSBpbmRlZWQgb25seSBkZWNs
+YXJlZCBhbmQgbmVlZCBub3QgYmUgZGVmaW5lZCAoY29udHJhcnkKPiB0byBfX3RyYWNlcG9pbnRf
+cmVnaXN0ZXJlZCBhbmQgZnJpZW5kcyksIGFzIHRoZXkgYXJlIGF1dG9tYXRpY2FsbHkKPiBQUk9W
+SURFLWQgYnkgdGhlIGxpbmtlciBhcyBwb2ludGVycyB0byB0aGUgIl90cmFjZXBvaW50X3B0cnMi
+IG9ycGhhbmVkCj4gc2VjdGlvbi4KCkRvZXMgaXQgd29yayB3ZWxsIGlmIHRoZSBwcm9ncmFtIGFu
+ZC9vciBsaWJyYXJpZXMgZG8gdGhlIGZvbGxvd2luZzoKCi0gdGhleSBpbmNsdWRlIHRyYWNlcG9p
+bnQuaCwKLSBidXQgdGhleSBkb24ndCBjb250YWluIGFueSB0cmFjZXBvaW50IChzbyB0aGVyZSBp
+cyB0ZWNobmljYWxseSBubwogIF90cmFjZXBvaW50X3B0cnMgc2VjdGlvbikKCkhhcyB0aGlzIGNh
+c2UgYmVlbiB0ZXN0ZWQgPyBJIHJlbWVtYmVyIHRoYXQgdGhlIHdlYWsgd2FzIHRoZXJlIGZvciB0
+aGlzCnBlY3VsaWFyIGNvcm5lciBjYXNlLgoKVGhhbmtzLAoKTWF0aGlldQoKPiAKPiBTbyBldmVu
+IHRob3VnaCB0aGUgaXNzdWUgaXMgb25seSBvYnNlcnZlZCB3aXRoIGEgYnVnZ3kgY29tcGlsZXIs
+IHJlbW92aW5nCj4gdGhlIHdlYWsgYXR0cmlidXRlIGFsc28gZW5mb3JjZXMgdGhlIGNvcnJlY3Qg
+c3Ryb25nIGxpbmtpbmcgdG8gdGhlIHN5bWJvbHMKPiBwcm92aWRlZCBieSB0aGUgbGlua2VyICh3
+aGljaCB3b3VsZCBvdGhlcndpc2UsIGJ5IHdlYWsgc2VtYW50aWNzLCBkZWZhdWx0Cj4gdG8gYSB2
+YWx1ZSBvZiBhbGwtemVyb2VzKS4KPiAKPiBSZWZlcmVuY2VzOiBodHRwczovL2djYy5nbnUub3Jn
+L21sL2djYy1oZWxwLzIwMTQtMDUvbXNnMDAwMDUuaHRtbAo+IFJlZmVyZW5jZXM6IGh0dHA6Ly9s
+aXN0cy5sdHRuZy5vcmcvcGlwZXJtYWlsL2x0dG5nLWRldi8yMDE0LU1heS8wMjMwOTAuaHRtbAo+
+IFJlcG9ydGVkLWJ5OiBNYXJ0aW4gw5xuc2FsIDxtYXJ0aW51bnNhbEBnbWFpbC5jb20+Cj4gVGhh
+bmtzLXRvOiBIZW5yaWsgV2FsbGluIDxoZW5yaWt3YWxsaW43MkBnbWFpbC5jb20+Cj4gQ2M6IFBh
+dWwgV29lZ2VyZXIgPFBhdWxfV29lZ2VyZXJAbWVudG9yLmNvbT4KPiBTaWduZWQtb2ZmLWJ5OiBH
+ZXJsYW5kbyBGYWxhdXRvIDxnZXJsYW5kby5mYWxhdXRvQGtleW1pbGUuY29tPgo+IC0tLQo+ICBp
+bmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaCB8IDE1ICsrKysrKysrKystLS0tLQo+ICAxIGZpbGUg
+Y2hhbmdlZCwgMTAgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0
+IGEvaW5jbHVkZS9sdHRuZy90cmFjZXBvaW50LmggYi9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQu
+aAo+IGluZGV4IGM1YTA5ZDguLjIyOWVhNzIgMTAwNjQ0Cj4gLS0tIGEvaW5jbHVkZS9sdHRuZy90
+cmFjZXBvaW50LmgKPiArKysgYi9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaAo+IEBAIC0zMDgs
+MTQgKzMwOCwxOSBAQCBfX3RyYWNlcG9pbnRzX19kZXN0cm95KHZvaWQpCj4gICNpZmRlZiBUUkFD
+RVBPSU5UX0RFRklORQo+ICAKPiAgLyoKPiAtICogVGhlc2Ugd2VhayBzeW1ib2xzLCB0aGUgY29u
+c3RydWN0b3IsIGFuZCBkZXN0cnVjdG9yIHRha2UgY2FyZSBvZgo+IC0gKiByZWdpc3RlcmluZyBv
+bmx5IF9vbmVfIGluc3RhbmNlIG9mIHRoZSB0cmFjZXBvaW50cyBwZXIgc2hhcmVkLW9qYmVjdAo+
+IC0gKiAob3IgZm9yIHRoZSB3aG9sZSBtYWluIHByb2dyYW0pLgo+ICsgKiBUaGVzZSBzdHJvbmcg
+aGlkZGVuIHN5bWJvbHMgYXJlIGF1dG9tYXRpY2FsbHkgcHJvdmlkZWQgYnkgdGhlIGxpbmtlcgo+
+ICsgKiBmb3IgZWFjaCBzaGFyZWQtb2JqZWN0IChvciBmb3IgdGhlIHdob2xlIG1haW4gcHJvZ3Jh
+bSkgYXMgcG9pbnRlcnMKPiArICogdG8gdGhlIG9ycGhhbmVkIHNlY3Rpb24gIl90cmFjZXBvaW50
+c19wdHJzIiBhbmQgbXVzdCBub3QgYmUgdmlzaWJsZQo+ICsgKiBmcm9tIG90aGVyIHNoYXJlZCBv
+YmplY3RzIHRvIGF2b2lkIG5hbWUgY2xhc2hlcyBhdCBydW50aW1lIHdoaWNoIHdvdWxkCj4gKyAq
+IHNpbGVudGx5IGVuYWJsZSBvbmx5IHRoZSB0cmFjZXBvaW50cyBmcm9tIHRoZSBvYmplY3QgbG9h
+ZGVkIGZpcnN0Lgo+ICsgKiBOT1RJQ0U6IFNvbWUgT3BlbkVtYmVkZGVkIEdDQyByZWxlYXNlcyAo
+bmFtZWx5IDQuNy4yKSBpbmNvcnJlY3RseQo+ICsgKiBlbWl0IHRob3NlIHN5bWJvbHMgd2l0aCBk
+ZWZhdWx0IHZpc2liaWxpdHkgaWYgYm90aCB3ZWFrIGFuZCBoaWRkZW4KPiArICogYXJlIHVzZWQu
+Cj4gICAqLwo+ICBleHRlcm4gc3RydWN0IHRyYWNlcG9pbnQgKiBjb25zdCBfX3N0YXJ0X19fdHJh
+Y2Vwb2ludHNfcHRyc1tdCj4gLQlfX2F0dHJpYnV0ZV9fKCh3ZWFrLCB2aXNpYmlsaXR5KCJoaWRk
+ZW4iKSkpOwo+ICsJX19hdHRyaWJ1dGVfXygodmlzaWJpbGl0eSgiaGlkZGVuIikpKTsKPiAgZXh0
+ZXJuIHN0cnVjdCB0cmFjZXBvaW50ICogY29uc3QgX19zdG9wX19fdHJhY2Vwb2ludHNfcHRyc1td
+Cj4gLQlfX2F0dHJpYnV0ZV9fKCh3ZWFrLCB2aXNpYmlsaXR5KCJoaWRkZW4iKSkpOwo+ICsJX19h
+dHRyaWJ1dGVfXygodmlzaWJpbGl0eSgiaGlkZGVuIikpKTsKPiAgCj4gIC8qCj4gICAqIFdoZW4g
+VFJBQ0VQT0lOVF9QUk9CRV9EWU5BTUlDX0xJTktBR0UgaXMgZGVmaW5lZCwgd2UgZG8gbm90IGVt
+aXQgYQo+IC0tCj4gMS44LjAuMQo+IAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBs
+aXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
+aXN0aW5mby9sdHRuZy1kZXYKPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMu
+Cmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5s
+dHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
+bHR0bmctZGV2Cg==
