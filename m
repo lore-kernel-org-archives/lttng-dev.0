@@ -1,18 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: lttng kretprobe issue
-Date: Thu, 5 Jun 2014 18:57:56 +0000 (UTC)
-Message-ID: <1590663737.27468.1401994676463.JavaMail.zimbra__25470.7212829546$1401996791$gmane$org@efficios.com>
-References: <CAP7TvLcyae2tvJQCmE00=QfmteB4byyKRY+SDkeYaVjF3z5GeA@mail.gmail.com>
- <301896191.27236.1401988111285.JavaMail.zimbra@efficios.com>
- <CAP7TvLeOkPm-cLKQ4oQjix=SrHpYcgC=-if+bE8-05C4TR4U9g@mail.gmail.com>
+Subject: Re: Debian specific userspace RCU configure override
+Date: Thu, 5 Jun 2014 19:00:35 +0000 (UTC)
+Message-ID: <385986525.27497.1401994835470.JavaMail.zimbra__7606.36695563353$1401996792$gmane$org@efficios.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD359B89C8@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+ <161918991.27343.1401990893978.JavaMail.zimbra@efficios.com>
+ <48CF5AC71E61DB46B70D0F388054EFFD359B99F4@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1808561666=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WscrP-0003P3-02
- for lttng-dev@lists.lttng.org; Thu, 05 Jun 2014 14:58:05 -0400
-In-Reply-To: <CAP7TvLeOkPm-cLKQ4oQjix=SrHpYcgC=-if+bE8-05C4TR4U9g@mail.gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1Wscu1-0003T6-EL
+ for lttng-dev@lists.lttng.org; Thu, 05 Jun 2014 15:00:47 -0400
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD359B99F4@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,240 +22,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: tarek slaymia <tarek.slaymia@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: =?utf-8?Q?Ond=C5=99ej_Sur=C3=BD?= <ondrej@sury.org>, lttng-dev@lists.lttng.org, Michael Jeanson <mjeanson@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1808561666==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_27467_2141572951.1401994676462"
-
-------=_Part_27467_2141572951.1401994676462
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
-Please reply to the list. 
-
-I don't know, this is _your_ research :) 
-
-Thanks, 
-
-Mathieu 
-
------ Original Message -----
-
-> From: "tarek slaymia" <tarek.slaymia@gmail.com>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Sent: Thursday, June 5, 2014 2:50:50 PM
-> Subject: Re: [lttng-dev] lttng kretprobe issue
-
-> thanks Mathiew.
-> what i'm trying to do exacltly is changing the address of sys_write in the
-> sys_call_table by a new function.
-> i wanna check if the sys_call_table[__NR_write] contains the address of my
-> new function instead of the address of sys_write after loading my module.
-> How can i check this change using lttng ?
-> Thanks in advance !
-
-> 2014-06-05 13:08 GMT-04:00 Mathieu Desnoyers < mathieu.desnoyers@efficios.com
-> > :
-
-> > > From: "tarek slaymia" < tarek.slaymia@gmail.com >
-> > 
-> 
-> > > To: lttng-dev@lists.lttng.org , lttng-dev-request@lists.lttng.org
-> > 
-> 
-> > > Sent: Thursday, May 29, 2014 3:53:10 PM
-> > 
-> 
-> > > Subject: [lttng-dev] lttng kretprobe issue
-> > 
-> 
-
-> > > Hi all
-> > 
-> 
-
-> > > when i replace a syscall function address for example sys_write using
-> > > this
-> > > function in my LKM module :
-> > 
-> 
-
-> > > xchg(&sys_call_table[__NR_write],my_own_write);
-> > 
-> 
-
-> > > In the normal case the content of sys_call_table[__NR_write] address
-> > > changes
-> > > and it displays the address of my_own_write using debug technique .
-> > 
-> 
-
-> > > I have an issue when tracing this change using lttng kretprobe :
-> > 
-> 
-
-> > > lttng enable-event sys_write -k --function sys_write
-> > 
-> 
-
-> > > The ip value of sys_write ( the same address of
-> > > sys_call_table[__NR_write]
-> > > )
-> > > remains the same even after changing it by the new function address
-> > > (address
-> > > of my_own_write)
-> > 
-> 
-> > > Why the ip value of sys_write syscall displayed in lttng traces remains
-> > > the
-> > > same even after changing it ?
-> > 
-> 
-
-> > sys_write is a symbol, and its address does not change. You place the
-> 
-> > kretprobe on the symbol.
-> 
-
-> > What you are overwriting is the content of the sys_call_table array, not
-> 
-> > the address of the sys_write symbol.
-> 
-
-> > So the resulting behavior is very much expected.
-> 
-
-> > Thanks,
-> 
-
-> > Mathieu
-> 
-
-> > > Best regards.
-> > 
-> 
-
-> > > _______________________________________________
-> > 
-> 
-> > > lttng-dev mailing list
-> > 
-> 
-> > > lttng-dev@lists.lttng.org
-> > 
-> 
-> > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > 
-> 
-
-> > --
-> 
-> > Mathieu Desnoyers
-> 
-> > EfficiOS Inc.
-> 
-> > http://www.efficios.com
-> 
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
-------=_Part_27467_2141572951.1401994676462
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: times new roman, new york, times, se=
-rif; font-size: 12pt; color: #000000"><div>Please reply to the list.</div><=
-div><br></div><div>I don't know, this is _your_ research :)<br></div><div><=
-br></div><div>Thanks,<br></div><div><br></div><div>Mathieu<br></div><div><b=
-r></div><hr id=3D"zwchr"><blockquote style=3D"border-left:2px solid #1010FF=
-;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:=
-normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-siz=
-e:12pt;"><b>From: </b>"tarek slaymia" &lt;tarek.slaymia@gmail.com&gt;<br><b=
->To: </b>"Mathieu Desnoyers" &lt;mathieu.desnoyers@efficios.com&gt;<br><b>S=
-ent: </b>Thursday, June 5, 2014 2:50:50 PM<br><b>Subject: </b>Re: [lttng-de=
-v] lttng kretprobe issue<br><div><br></div><div dir=3D"ltr"><div><div>thank=
-s Mathiew.<br>what i'm trying to do exacltly is changing the address of sys=
-_write in the sys_call_table by a new function. <br>i wanna check if the sy=
-s_call_table[__NR_write] contains the address of my new function instead of=
- the address of sys_write after loading my module.<br>
-</div>How can i check this change using lttng ?<br></div>Thanks in advance =
-!<br></div><div class=3D"gmail_extra"><br><div><br></div><div class=3D"gmai=
-l_quote">2014-06-05 13:08 GMT-04:00 Mathieu Desnoyers <span dir=3D"ltr">&lt=
-;<a href=3D"mailto:mathieu.desnoyers@efficios.com" target=3D"_blank">mathie=
-u.desnoyers@efficios.com</a>&gt;</span>:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex"><div><div style=3D"font-family:times new rom=
-an,new york,times,serif;font-size:12pt;color:#000000"><div><br></div><hr><b=
-lockquote style=3D"border-left:2px solid #1010ff;margin-left:5px;padding-le=
-ft:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none=
-;font-family:Helvetica,Arial,sans-serif;font-size:12pt">
-<b>From: </b>"tarek slaymia" &lt;<a href=3D"mailto:tarek.slaymia@gmail.com"=
- target=3D"_blank">tarek.slaymia@gmail.com</a>&gt;<br><b>To: </b><a href=3D=
-"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.=
-org</a>, <a href=3D"mailto:lttng-dev-request@lists.lttng.org" target=3D"_bl=
-ank">lttng-dev-request@lists.lttng.org</a><br>
-<b>Sent: </b>Thursday, May 29, 2014 3:53:10 PM<br><b>Subject: </b>[lttng-de=
-v] lttng kretprobe issue<div><div class=3D"h5"><br><div><br></div><div dir=
-=3D"ltr"><div><div><div><div><div>Hi all<br><div><br></div></div>when i rep=
-lace a syscall function address for example sys_write using this function i=
-n my LKM module :<br>
-<div><br></div>xchg(&amp;sys_call_table[__NR_write],my_own_write);<br><div>=
-<br></div></div>In the normal case the content of sys_call_table[__NR_write=
-]=20
-address changes and it displays the address of my_own_write using debug=20
-technique .<br><div><br></div></div>I have an issue when tracing this chang=
-e using lttng kretprobe :<br><div><br></div>
-lttng enable-event sys_write -k --function sys_write<br><div><br></div>&nbs=
-p;The ip value of sys_write ( the same address of=20
-sys_call_table[__NR_write] ) remains the same even after changing it by=20
-the new function address (address of my_own_write) <br></div>Why the ip val=
-ue of sys_write syscall displayed in lttng traces remains the same even aft=
-er changing it ? &nbsp; </div></div></div></div></blockquote><div><br></div=
->
-<div>sys_write is a symbol, and its address does not change. You place the<=
-br></div><div>kretprobe on the symbol.<br></div><div><br></div><div>What yo=
-u are overwriting is the content of the sys_call_table array, not<br></div>
-<div>the address of the sys_write symbol.<br></div><div><br></div><div>So t=
-he resulting behavior is very much expected.<br></div><div><br></div><div>T=
-hanks,<br></div><div><br></div><div>Mathieu<br></div><div><br></div><blockq=
-uote style=3D"border-left:2px solid #1010ff;margin-left:5px;padding-left:5p=
-x;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font=
--family:Helvetica,Arial,sans-serif;font-size:12pt">
-<div dir=3D"ltr"><div><br></div>Best regards.</div><br>____________________=
-___________________________<br>lttng-dev mailing list<br><a href=3D"mailto:=
-lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-span class=3D"HOEnZb"><span style=3D"color: #888888;" data-mce-style=3D"col=
-or: #888888;" color=3D"#888888"><br></span></span></blockquote><span class=
-=3D"HOEnZb"><span style=3D"color: #888888;" data-mce-style=3D"color: #88888=
-8;" color=3D"#888888"><div>
-<br><div><br></div></div><div><br></div><div>-- <br></div><div><span></span=
->Mathieu Desnoyers<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com" =
-target=3D"_blank">http://www.efficios.com</a><span></span><br></div>
-</span></span></div></div></blockquote></div><br></div>
-</blockquote><div><br><br></div><div><br></div><div>-- <br></div><div><span=
- name=3D"x"></span>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficio=
-s.com<span name=3D"x"></span><br></div></div></body></html>
-------=_Part_27467_2141572951.1401994676462--
-
-
---===============1808561666==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1808561666==--
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJEYW5pZWwgVGhpYmF1bHQiIDxE
+YW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhPgo+IFRvOiAiTWF0aGlldSBEZXNub3llcnMi
+IDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gQ2M6IGx0dG5nLWRldkBsaXN0cy5s
+dHRuZy5vcmcsICJKb24gQmVybmFyZCIgPGpiZXJuYXJkQGRlYmlhbi5vcmc+LCAiT25kxZllaiBT
+dXLDvSIgPG9uZHJlakBzdXJ5Lm9yZz4sICJNaWNoYWVsCj4gSmVhbnNvbiIgPG1qZWFuc29uQGVm
+ZmljaW9zLmNvbT4KPiBTZW50OiBUaHVyc2RheSwgSnVuZSA1LCAyMDE0IDI6MTU6MjAgUE0KPiBT
+dWJqZWN0OiBSRTogW2x0dG5nLWRldl0gRGViaWFuIHNwZWNpZmljIHVzZXJzcGFjZSBSQ1UgY29u
+ZmlndXJlIG92ZXJyaWRlCj4gCj4gLS0tLS1NZXNzYWdlIGQnb3JpZ2luZS0tLS0tCj4gRGXCoDog
+TWF0aGlldSBEZXNub3llcnMgW21haWx0bzptYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb21d
+Cj4gRW52b3nDqcKgOiA1IGp1aW4gMjAxNCAxMzo1NQo+IAo+ID4+ICAgIEkgbmVlZCB0byByZXZp
+dmUgdGhpcyB0aHJlYWQuICBBbHRob3VnaCB0aGUgb3JpZ2luYWwgYnVpbGQgZmFpbHVyZSBtYXkK
+PiA+PiAgICBoYXZlIGJlZW4gb24gQVJNdjcgd2FudGluZyBBUk12NCwgSSd2ZSBydW4gaW50byB0
+aGUgc2FtZSBmYWlsdXJlIHdpdGgKPiA+PiAgICBhCj4gPj4gICAgcHVyZSBBUk12NyBhcmNoaXRl
+Y3R1cmUuICBTcGVjaWZpY2FsbHksIEJlYWdsZSBCb25lIEJsYWNrLgo+ID4+Cj4gPj4gICAgSSBi
+dWlsdCB1c2Vyc3BhY2UtcmN1IHdpdGhvdXQgdHJvdWJsZSAoZXhjZXB0IGZvciB0aGF0IGNsb2Nr
+IGJ1c2luZXNzCj4gPj4gICAgcmVwb3J0ZWQgZWFybGllciksIGJ1dCB3aGVuIEkgdGhlbiB0cmll
+ZCB0byBidWlsZCBsdHRuZy11c3QsIEkgcmFuCj4gPj4gICAgaW50bwo+ID4+ICAgIHRoZSBzYW1l
+ICdFcnJvcjogc2VsZWN0ZWQgcHJvY2Vzc29yIGRvZXMgbm90IHN1cHBvcnQgQVJNIG1vZGUgYGRt
+YicuCj4gPj4gICAgVGFraW5nIGEgbG9vayBhdCB0aGUgdXNlcnNwYWNlLXJjdSBhbmQgbHR0bmct
+dXN0IGNvbmZpZy5sb2dzLCB0aGV5Cj4gPj4gICAgKmJvdGgqIHJlcG9ydCAndW5hbWUgLW0gPSBh
+cm12N2wnLiAgVGhlIGNvcmUgdGVzdHMgKmJvdGgqIHJlcG9ydCBhCj4gPj4gICAgYnVpbGQgc3lz
+dGVtIHR5cGUgb2YgJ2FybXY3bC11bmtub3duLWxpbnV4LWdudWVhYmknLiAgSG93ZXZlciwKPiA+
+PiAgICB1c2Vyc3BhY2UtcmN1Cj4gPj4gICAgdGVzdHMgZm9yIGRtYiBhbmQgZmluZHMgaXQsIHdo
+aWxlIGx0dG5nLXVzdCBvbWl0cyB0aGlzIHRlc3QuCj4gPj4KPiA+PiAgICBUaGUgbWFrZSBlcnJv
+ciBvY2N1cnMgZHVyaW5nIHRoZSBDQ0xEIG9mIGxpYnJpbmdidWZmZXIubGEuCj4gPj4KPiA+PiAg
+ICBCZXNpZGVzIHRoZSBtYWtlLCBjb25maWcgYW5kIGNvbmZpZ3VyZSBsb2dzLCB3aGF0IHNob3Vs
+ZCBJIHBvc3QgaGVyZT8KPiA+Cj4gPiBZb3UgcHJvYmFibHkgYnVpbHQgbHR0bmctdXN0IGFnYWlu
+c3QgYSBtaXNtYXRjaGluZyB2ZXJzaW9uIG9mIHVyY3UgaGVhZGVycy4KPiA+Cj4gPiBNYWtlIHN1
+cmUgeW91IGlzc3VlICJtYWtlIGNsZWFuIiBpbiB5b3VyIGx0dG5nLXVzdCB0cmVlLCBkb3VibGUt
+Y2hlY2sgdGhhdAo+ID4gdGhlIHVyY3UvY29uZmlnLmggaGVhZGVyIGluc3RhbGxlZCBpbiB5b3Vy
+IHN5c3RlbSAodGhlIG9uZSB1c2VkIGJ5IHRoZQo+ID4gbHR0bmctdXN0IGJ1aWxkKSBoYXMgdGhl
+IENPTkZJR19SQ1VfQVJNX0hBVkVfRE1CIGRlZmluZSBpbiB0aGUgY29ycmVjdAo+ID4gc3RhdGUg
+KHRoZSBvbmUgZGV0ZWN0ZWQgYnkgdXJjdSBjb25maWd1cmUpLgo+ID4KPiA+TWF0aGlldQo+IAo+
+ICAgIFRoZSBzeXN0ZW0gd2FzIGNsZWFuIGFuZCBldmVyeXRoaW5nIHdhcyBmaXJzdC1ydW4uICBJ
+IGRpZAo+ICAgIGJvb3RzdHJhcC9jb25maWd1cmUvbWFrZS9pbnN0YWxsIGZvciB1c2Vyc3BhY2Ut
+cmN1LCB0aGVuIHRoZSBzYW1lIGZvcgo+ICAgIGx0dG5nLXVzdCAobWludXMgdGhlIGluc3RhbGws
+IG9mIGNvdXJzZSkuCj4gCj4gICAgQm90aCAvdXNyL2xvY2FsL2luY2x1ZGUvdXJjdS9jb25maWcu
+aCBhbmQKPiAgICAvdXNyL3NyYy91c2Vyc3BhY2UtcmN1LTAuOC4wL3VyY3UvY29uZmlnLmggaGF2
+ZSAnI2RlZmluZQo+ICAgIENPTkZJR19SQ1VfQVJNX0hBVkVfRE1CIDEnLiAgU28gZG9lcwo+ICAg
+IC91c3Ivc3JjL3VzZXJzcGFjZS1yY3UtMC44LjAvY29uZmlnLmguICBUaGUgb25seSBjb25maWcu
+aCAqbm90KiB0byBoYXZlCj4gICAgdGhhdCAjZGVmaW5lIGlzIC91c3Ivc3JjL2x0dG5nLXVzdC0y
+LjMuMC9jb25maWcuaC4gIENvdWxkIGl0IGJlIHRoZQo+ICAgIGxpYnJpbmdidWZmZXIgbWFrZSB1
+c2VkIHRoZSBsYXR0ZXI/CgpUaGlzIGRlZmluZSBpcyBzcGVjaWZpYyB0byB1cmN1IGNvbmZpZy5o
+LiBJdCBkb2VzIG5vdCAoYW5kIHNob3VsZCBub3QpCmV4aXN0IGluIFVTVCBjb25maWcuaC4KClRo
+YW5rcywKCk1hdGhpZXUKCj4gCj4gRGFuaWVsIFUuIFRoaWJhdWx0Cj4gUHJvdGVjdGlvbiBkZXMg
+c3lzdMOobWVzIGV0IGNvbnRyZW1lc3VyZXMgKFBTQykgfCBTeXN0ZW1zIFByb3RlY3Rpb24gJgo+
+IENvdW50ZXJtZWFzdXJlcyAoU1BDKQo+IEN5YmVyIHPDqWN1cml0w6kgcG91ciBsZXMgbWlzc2lv
+bnMgZXNzZW50aWVsbGVzIChDTUUpIHwgTWlzc2lvbiBDcml0aWNhbCBDeWJlcgo+IFNlY3VyaXR5
+IChNQ0NTKQo+IFJEREMgLSBDZW50cmUgZGUgcmVjaGVyY2hlcyBkZSBWYWxjYXJ0aWVyIHwgRFJE
+QyAtIFZhbGNhcnRpZXIgUmVzZWFyY2ggQ2VudHJlCj4gMjQ1OSByb3V0ZSBkZSBsYSBCcmF2b3Vy
+ZQo+IFF1w6liZWMgUUMgIEczSiAxWDUKPiBDQU5BREEKPiBWb3ggOiAoNDE4KSA4NDQtNDAwMCB4
+NDI0NQo+IEZheCA6ICg0MTgpIDg0NC00NTM4Cj4gTkFDIDogOTE4ViBRU0RKIDxodHRwOi8vd3d3
+LnRyYXZlbGdpcy5jb20vbWFwLmFzcD9hZGRyPTkxOFYlMjBRU0RKPgo+IEdvdXZlcm5lbWVudCBk
+dSBDYW5hZGEgfCBHb3Zlcm5tZW50IG9mIENhbmFkYQo+IDxodHRwOi8vd3d3LnZhbGNhcnRpZXIu
+ZHJkYy1yZGRjLmdjLmNhLz4KPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMu
+Cmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5s
+dHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
+bHR0bmctZGV2Cg==
