@@ -1,19 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Debian specific userspace RCU configure override
-Date: Thu, 5 Jun 2014 19:00:35 +0000 (UTC)
-Message-ID: <385986525.27497.1401994835470.JavaMail.zimbra__7606.36695563353$1401996792$gmane$org@efficios.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD359B89C8@VAL-E-02.valcartier.drdc-rddc.gc.ca>
- <161918991.27343.1401990893978.JavaMail.zimbra@efficios.com>
- <48CF5AC71E61DB46B70D0F388054EFFD359B99F4@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Eduardo Silva <edsiper@gmail.com>
+Subject: Centos 6.5 support ?
+Date: Fri, 6 Jun 2014 15:06:26 -0600
+Message-ID: <CAMAQheN4oJYEGMML4CsQ6jBZ=VnHZQjEuiDg5uXadDNqRrMsSw__7153.34451892904$1402089205$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-ve0-f181.google.com ([209.85.128.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Wscu1-0003T6-EL
- for lttng-dev@lists.lttng.org; Thu, 05 Jun 2014 15:00:47 -0400
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD359B99F4@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+ (envelope-from <edsiper@gmail.com>) id 1Wt1Lg-0003zR-4i
+ for lttng-dev@lists.lttng.org; Fri, 06 Jun 2014 17:06:54 -0400
+Received: by mail-ve0-f181.google.com with SMTP id pa12so4002422veb.12
+ for <lttng-dev@lists.lttng.org>; Fri, 06 Jun 2014 14:06:46 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,66 +20,36 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: =?utf-8?Q?Ond=C5=99ej_Sur=C3=BD?= <ondrej@sury.org>, lttng-dev@lists.lttng.org, Michael Jeanson <mjeanson@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJEYW5pZWwgVGhpYmF1bHQiIDxE
-YW5pZWwuVGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhPgo+IFRvOiAiTWF0aGlldSBEZXNub3llcnMi
-IDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gQ2M6IGx0dG5nLWRldkBsaXN0cy5s
-dHRuZy5vcmcsICJKb24gQmVybmFyZCIgPGpiZXJuYXJkQGRlYmlhbi5vcmc+LCAiT25kxZllaiBT
-dXLDvSIgPG9uZHJlakBzdXJ5Lm9yZz4sICJNaWNoYWVsCj4gSmVhbnNvbiIgPG1qZWFuc29uQGVm
-ZmljaW9zLmNvbT4KPiBTZW50OiBUaHVyc2RheSwgSnVuZSA1LCAyMDE0IDI6MTU6MjAgUE0KPiBT
-dWJqZWN0OiBSRTogW2x0dG5nLWRldl0gRGViaWFuIHNwZWNpZmljIHVzZXJzcGFjZSBSQ1UgY29u
-ZmlndXJlIG92ZXJyaWRlCj4gCj4gLS0tLS1NZXNzYWdlIGQnb3JpZ2luZS0tLS0tCj4gRGXCoDog
-TWF0aGlldSBEZXNub3llcnMgW21haWx0bzptYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb21d
-Cj4gRW52b3nDqcKgOiA1IGp1aW4gMjAxNCAxMzo1NQo+IAo+ID4+ICAgIEkgbmVlZCB0byByZXZp
-dmUgdGhpcyB0aHJlYWQuICBBbHRob3VnaCB0aGUgb3JpZ2luYWwgYnVpbGQgZmFpbHVyZSBtYXkK
-PiA+PiAgICBoYXZlIGJlZW4gb24gQVJNdjcgd2FudGluZyBBUk12NCwgSSd2ZSBydW4gaW50byB0
-aGUgc2FtZSBmYWlsdXJlIHdpdGgKPiA+PiAgICBhCj4gPj4gICAgcHVyZSBBUk12NyBhcmNoaXRl
-Y3R1cmUuICBTcGVjaWZpY2FsbHksIEJlYWdsZSBCb25lIEJsYWNrLgo+ID4+Cj4gPj4gICAgSSBi
-dWlsdCB1c2Vyc3BhY2UtcmN1IHdpdGhvdXQgdHJvdWJsZSAoZXhjZXB0IGZvciB0aGF0IGNsb2Nr
-IGJ1c2luZXNzCj4gPj4gICAgcmVwb3J0ZWQgZWFybGllciksIGJ1dCB3aGVuIEkgdGhlbiB0cmll
-ZCB0byBidWlsZCBsdHRuZy11c3QsIEkgcmFuCj4gPj4gICAgaW50bwo+ID4+ICAgIHRoZSBzYW1l
-ICdFcnJvcjogc2VsZWN0ZWQgcHJvY2Vzc29yIGRvZXMgbm90IHN1cHBvcnQgQVJNIG1vZGUgYGRt
-YicuCj4gPj4gICAgVGFraW5nIGEgbG9vayBhdCB0aGUgdXNlcnNwYWNlLXJjdSBhbmQgbHR0bmct
-dXN0IGNvbmZpZy5sb2dzLCB0aGV5Cj4gPj4gICAgKmJvdGgqIHJlcG9ydCAndW5hbWUgLW0gPSBh
-cm12N2wnLiAgVGhlIGNvcmUgdGVzdHMgKmJvdGgqIHJlcG9ydCBhCj4gPj4gICAgYnVpbGQgc3lz
-dGVtIHR5cGUgb2YgJ2FybXY3bC11bmtub3duLWxpbnV4LWdudWVhYmknLiAgSG93ZXZlciwKPiA+
-PiAgICB1c2Vyc3BhY2UtcmN1Cj4gPj4gICAgdGVzdHMgZm9yIGRtYiBhbmQgZmluZHMgaXQsIHdo
-aWxlIGx0dG5nLXVzdCBvbWl0cyB0aGlzIHRlc3QuCj4gPj4KPiA+PiAgICBUaGUgbWFrZSBlcnJv
-ciBvY2N1cnMgZHVyaW5nIHRoZSBDQ0xEIG9mIGxpYnJpbmdidWZmZXIubGEuCj4gPj4KPiA+PiAg
-ICBCZXNpZGVzIHRoZSBtYWtlLCBjb25maWcgYW5kIGNvbmZpZ3VyZSBsb2dzLCB3aGF0IHNob3Vs
-ZCBJIHBvc3QgaGVyZT8KPiA+Cj4gPiBZb3UgcHJvYmFibHkgYnVpbHQgbHR0bmctdXN0IGFnYWlu
-c3QgYSBtaXNtYXRjaGluZyB2ZXJzaW9uIG9mIHVyY3UgaGVhZGVycy4KPiA+Cj4gPiBNYWtlIHN1
-cmUgeW91IGlzc3VlICJtYWtlIGNsZWFuIiBpbiB5b3VyIGx0dG5nLXVzdCB0cmVlLCBkb3VibGUt
-Y2hlY2sgdGhhdAo+ID4gdGhlIHVyY3UvY29uZmlnLmggaGVhZGVyIGluc3RhbGxlZCBpbiB5b3Vy
-IHN5c3RlbSAodGhlIG9uZSB1c2VkIGJ5IHRoZQo+ID4gbHR0bmctdXN0IGJ1aWxkKSBoYXMgdGhl
-IENPTkZJR19SQ1VfQVJNX0hBVkVfRE1CIGRlZmluZSBpbiB0aGUgY29ycmVjdAo+ID4gc3RhdGUg
-KHRoZSBvbmUgZGV0ZWN0ZWQgYnkgdXJjdSBjb25maWd1cmUpLgo+ID4KPiA+TWF0aGlldQo+IAo+
-ICAgIFRoZSBzeXN0ZW0gd2FzIGNsZWFuIGFuZCBldmVyeXRoaW5nIHdhcyBmaXJzdC1ydW4uICBJ
-IGRpZAo+ICAgIGJvb3RzdHJhcC9jb25maWd1cmUvbWFrZS9pbnN0YWxsIGZvciB1c2Vyc3BhY2Ut
-cmN1LCB0aGVuIHRoZSBzYW1lIGZvcgo+ICAgIGx0dG5nLXVzdCAobWludXMgdGhlIGluc3RhbGws
-IG9mIGNvdXJzZSkuCj4gCj4gICAgQm90aCAvdXNyL2xvY2FsL2luY2x1ZGUvdXJjdS9jb25maWcu
-aCBhbmQKPiAgICAvdXNyL3NyYy91c2Vyc3BhY2UtcmN1LTAuOC4wL3VyY3UvY29uZmlnLmggaGF2
-ZSAnI2RlZmluZQo+ICAgIENPTkZJR19SQ1VfQVJNX0hBVkVfRE1CIDEnLiAgU28gZG9lcwo+ICAg
-IC91c3Ivc3JjL3VzZXJzcGFjZS1yY3UtMC44LjAvY29uZmlnLmguICBUaGUgb25seSBjb25maWcu
-aCAqbm90KiB0byBoYXZlCj4gICAgdGhhdCAjZGVmaW5lIGlzIC91c3Ivc3JjL2x0dG5nLXVzdC0y
-LjMuMC9jb25maWcuaC4gIENvdWxkIGl0IGJlIHRoZQo+ICAgIGxpYnJpbmdidWZmZXIgbWFrZSB1
-c2VkIHRoZSBsYXR0ZXI/CgpUaGlzIGRlZmluZSBpcyBzcGVjaWZpYyB0byB1cmN1IGNvbmZpZy5o
-LiBJdCBkb2VzIG5vdCAoYW5kIHNob3VsZCBub3QpCmV4aXN0IGluIFVTVCBjb25maWcuaC4KClRo
-YW5rcywKCk1hdGhpZXUKCj4gCj4gRGFuaWVsIFUuIFRoaWJhdWx0Cj4gUHJvdGVjdGlvbiBkZXMg
-c3lzdMOobWVzIGV0IGNvbnRyZW1lc3VyZXMgKFBTQykgfCBTeXN0ZW1zIFByb3RlY3Rpb24gJgo+
-IENvdW50ZXJtZWFzdXJlcyAoU1BDKQo+IEN5YmVyIHPDqWN1cml0w6kgcG91ciBsZXMgbWlzc2lv
-bnMgZXNzZW50aWVsbGVzIChDTUUpIHwgTWlzc2lvbiBDcml0aWNhbCBDeWJlcgo+IFNlY3VyaXR5
-IChNQ0NTKQo+IFJEREMgLSBDZW50cmUgZGUgcmVjaGVyY2hlcyBkZSBWYWxjYXJ0aWVyIHwgRFJE
-QyAtIFZhbGNhcnRpZXIgUmVzZWFyY2ggQ2VudHJlCj4gMjQ1OSByb3V0ZSBkZSBsYSBCcmF2b3Vy
-ZQo+IFF1w6liZWMgUUMgIEczSiAxWDUKPiBDQU5BREEKPiBWb3ggOiAoNDE4KSA4NDQtNDAwMCB4
-NDI0NQo+IEZheCA6ICg0MTgpIDg0NC00NTM4Cj4gTkFDIDogOTE4ViBRU0RKIDxodHRwOi8vd3d3
-LnRyYXZlbGdpcy5jb20vbWFwLmFzcD9hZGRyPTkxOFYlMjBRU0RKPgo+IEdvdXZlcm5lbWVudCBk
-dSBDYW5hZGEgfCBHb3Zlcm5tZW50IG9mIENhbmFkYQo+IDxodHRwOi8vd3d3LnZhbGNhcnRpZXIu
-ZHJkYy1yZGRjLmdjLmNhLz4KPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMu
-Cmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5s
-dHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
-bHR0bmctZGV2Cg==
+Hi Folks,
+
+we just got a report from one user of Monkey Project where the
+software have some missing dependencies in the system, e.g:
+
+[root@centos65 monkey-1.5.0]# make
+  CC    jemalloc [all]
+  CC    src/monkey.o
+In file included from ./include/mk_linuxtrace.h:67,
+                 from monkey.c:29:
+/usr/include/lttng/tracepoint-event.h:39:28: error:
+TRACEPOINT_INCLUDE_FILE: No such file or directory
+make[1]: *** [monkey.o] Error 1
+make: *** [all] Error 2
+[root@centos65 monkey-1.5.0]# rpm -qa |grep lttng
+lttng-ust-devel-2.0.8-1.el6.x86_64
+lttng-tools-devel-2.0.4-2.el6.x86_64
+lttng-ust-2.0.8-1.el6.x86_64
+lttng-tools-2.0.4-2.el6.x86_64
+
+after test this in a VM i found all packages are installed, is there
+anything extra required or are we missing something from the caller
+(monkey server) ?
+
+thanks for your help
+
+-- 
+Eduardo Silva
+http://edsiper.linuxchile.cl
+http://monkey-project.com
