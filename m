@@ -1,17 +1,18 @@
-From: Antoine Busque <antoine.busque@efficios.com>
-Subject: [PATCH lttng-modules] Fix: blktrace instrumentation for
-	backported branches
-Date: Fri, 6 Jun 2014 18:00:59 -0400
-Message-ID: <CA+MZcXvcHsLm3y5hyTSU718OfPF5cP2A_+XOoesOJ6898iK-mQ__2583.20778743855$1402092107$gmane$org@mail.gmail.com>
+From: "Brosseau, Yannick" <yannick.brosseau@gmail.com>
+Subject: Re: Centos 6.5 support ?
+Date: Sat, 7 Jun 2014 05:15:19 -0700
+Message-ID: <CAEzWAeKe-y0FCXcDv_igdmdMSQ1+2mr8e_GOEBin6VgPZFVvjQ__49930.6756807075$1402143373$gmane$org@mail.gmail.com>
+References: <CAMAQheN4oJYEGMML4CsQ6jBZ=VnHZQjEuiDg5uXadDNqRrMsSw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0292646121=="
+Content-Type: multipart/mixed; boundary="===============1068137546=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pd0-f174.google.com ([209.85.192.174])
+Received: from mail-qg0-f49.google.com ([209.85.192.49])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <nintendopro@gmail.com>) id 1Wt2C9-0004Jg-NA
- for lttng-dev@lists.lttng.org; Fri, 06 Jun 2014 18:01:07 -0400
-Received: by mail-pd0-f174.google.com with SMTP id r10so2925100pdi.33
- for <lttng-dev@lists.lttng.org>; Fri, 06 Jun 2014 15:00:59 -0700 (PDT)
+ (envelope-from <yannick.brosseau@gmail.com>) id 1WtFWv-0000dW-02
+ for lttng-dev@lists.lttng.org; Sat, 07 Jun 2014 08:15:26 -0400
+Received: by mail-qg0-f49.google.com with SMTP id a108so6483602qge.22
+ for <lttng-dev@lists.lttng.org>; Sat, 07 Jun 2014 05:15:19 -0700 (PDT)
+In-Reply-To: <CAMAQheN4oJYEGMML4CsQ6jBZ=VnHZQjEuiDg5uXadDNqRrMsSw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,116 +21,126 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Eduardo Silva <edsiper@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0292646121==
-Content-Type: multipart/alternative; boundary=e89a8f13ed2029565e04fb31ffdb
+--===============1068137546==
+Content-Type: multipart/alternative; boundary=001a11c27e38791a5004fb3dee6b
 
---e89a8f13ed2029565e04fb31ffdb
+--001a11c27e38791a5004fb3dee6b
 Content-Type: text/plain; charset=UTF-8
 
-The following commit from kernel 3.15 changing the API of a block layer
-tracepoint has been backported to multiple branches:
+I think the structure you are using might need a newer version of
+LTTng-ust.
+Hopefully, the 2.4 version is currently in EPEL testing, and it should be
+available in EPEL stable in a few days.
+https://admin.fedoraproject.org/updates/FEDORA-EPEL-2014-1482/lttng-ust-2.4.1-1.el6,lttng-tools-2.4.1-1.el6
 
-commit af5040da01ef980670b3741b3e10733ee3e33566
-Author: Roman Pen <r.peniaev@gmail.com>
-Date:   Tue Mar 4 23:13:10 2014 +0900
 
-    blktrace: fix accounting of partially completed requests
+On Fri, Jun 6, 2014 at 2:06 PM, Eduardo Silva <edsiper@gmail.com> wrote:
 
-This patch fixes the resulting build failure by adding the proper
-version checks. The versions and corresponding commit SHA-1 hashes are
-as follow:
+> Hi Folks,
+>
+> we just got a report from one user of Monkey Project where the
+> software have some missing dependencies in the system, e.g:
+>
+> [root@centos65 monkey-1.5.0]# make
+>   CC    jemalloc [all]
+>   CC    src/monkey.o
+> In file included from ./include/mk_linuxtrace.h:67,
+>                  from monkey.c:29:
+> /usr/include/lttng/tracepoint-event.h:39:28: error:
+> TRACEPOINT_INCLUDE_FILE: No such file or directory
+> make[1]: *** [monkey.o] Error 1
+> make: *** [all] Error 2
+> [root@centos65 monkey-1.5.0]# rpm -qa |grep lttng
+> lttng-ust-devel-2.0.8-1.el6.x86_64
+> lttng-tools-devel-2.0.4-2.el6.x86_64
+> lttng-ust-2.0.8-1.el6.x86_64
+> lttng-tools-2.0.4-2.el6.x86_64
+>
+> after test this in a VM i found all packages are installed, is there
+> anything extra required or are we missing something from the caller
+> (monkey server) ?
+>
+> thanks for your help
+>
+> --
+> Eduardo Silva
+> http://edsiper.linuxchile.cl
+> http://monkey-project.com
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
 
-   3.2.58
-       commit 5b85afa68e4f56c27f1d5c6f49e5257bce6448e6
-
-   3.4.91
-       commit 14eee5bd065d6aac0acbdc6092a25ba68c55b9c8
-
-   3.10.41
-       commit e9d933941569c107e0083c3c115467c699a57db2
-
-   3.12.21
-       commit 5104b40a981d26212ced149fbd43ad0b6b72910b
-
-   3.14.15
-       commit 0a8eda9c00ef37e8b40de77f2b0714317191bcf2
-
-Signed-off-by: Antoine Busque <antoine.busque@efficios.com>
----
- instrumentation/events/lttng-module/block.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/instrumentation/events/lttng-module/block.h
-b/instrumentation/events/lttng-module/block.h
-index 4f3460e..5684153 100644
---- a/instrumentation/events/lttng-module/block.h
-+++ b/instrumentation/events/lttng-module/block.h
-@@ -221,8 +221,11 @@ DEFINE_EVENT(block_rq_with_error, block_rq_requeue,
-     TP_ARGS(q, rq)
- )
-
--#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,15,0)    \
--    || LTTNG_KERNEL_RANGE(3,2,58, 3,3,0))
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,5)    \
-+    || LTTNG_KERNEL_RANGE(3,2,58, 3,3,0)        \
-+    || LTTNG_KERNEL_RANGE(3,4,91, 3,5,1)        \
-+    || LTTNG_KERNEL_RANGE(3,10,41, 3,11,0)        \
-+    || LTTNG_KERNEL_RANGE(3,12,21, 3,13,0))
-
- /**
-  * block_rq_complete - block IO operation completed by device driver
--- 
-2.0.0
-
---e89a8f13ed2029565e04fb31ffdb
+--001a11c27e38791a5004fb3dee6b
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">The following commit from kernel 3.15 changing the API of =
-a block layer<br>tracepoint has been backported to multiple branches:<br><b=
-r>commit af5040da01ef980670b3741b3e10733ee3e33566<br>Author: Roman Pen &lt;=
-<a href=3D"mailto:r.peniaev@gmail.com">r.peniaev@gmail.com</a>&gt;<br>
-Date:=C2=A0=C2=A0 Tue Mar 4 23:13:10 2014 +0900<br><br>=C2=A0=C2=A0=C2=A0 b=
-lktrace: fix accounting of partially completed requests<br><br>This patch f=
-ixes the resulting build failure by adding the proper<br>version checks. Th=
-e versions and corresponding commit SHA-1 hashes are<br>
-as follow:<br><br>=C2=A0=C2=A0 3.2.58<br>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 commit 5b85afa68e4f56c27f1d5c6f49e5257bce6448e6<br><br>=C2=A0=C2=A0 3.4=
-.91<br>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 commit 14eee5bd065d6aac0acbdc60=
-92a25ba68c55b9c8<br><br>=C2=A0=C2=A0 3.10.41<br>=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 commit e9d933941569c107e0083c3c115467c699a57db2<br>
-<br>=C2=A0=C2=A0 3.12.21<br>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 commit 510=
-4b40a981d26212ced149fbd43ad0b6b72910b<br><br>=C2=A0=C2=A0 3.14.15<br>=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 commit 0a8eda9c00ef37e8b40de77f2b0714317191b=
-cf2<br><br>Signed-off-by: Antoine Busque &lt;<a href=3D"mailto:antoine.busq=
-ue@efficios.com">antoine.busque@efficios.com</a>&gt;<br>
----<br>=C2=A0instrumentation/events/lttng-module/block.h | 7 +++++--<br>=C2=
-=A01 file changed, 5 insertions(+), 2 deletions(-)<br><br>diff --git a/inst=
-rumentation/events/lttng-module/block.h b/instrumentation/events/lttng-modu=
-le/block.h<br>
-index 4f3460e..5684153 100644<br>--- a/instrumentation/events/lttng-module/=
-block.h<br>+++ b/instrumentation/events/lttng-module/block.h<br>@@ -221,8 +=
-221,11 @@ DEFINE_EVENT(block_rq_with_error, block_rq_requeue,<br>=C2=A0=C2=
-=A0=C2=A0=C2=A0 TP_ARGS(q, rq)<br>
-=C2=A0)<br>=C2=A0<br>-#if (LINUX_VERSION_CODE &gt;=3D KERNEL_VERSION(3,15,0=
-)=C2=A0=C2=A0=C2=A0 \<br>-=C2=A0=C2=A0=C2=A0 || LTTNG_KERNEL_RANGE(3,2,58, =
-3,3,0))<br>+#if (LINUX_VERSION_CODE &gt;=3D KERNEL_VERSION(3,14,5)=C2=A0=C2=
-=A0=C2=A0 \<br>+=C2=A0=C2=A0=C2=A0 || LTTNG_KERNEL_RANGE(3,2,58, 3,3,0)=C2=
-=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 \<br>
-+=C2=A0=C2=A0=C2=A0 || LTTNG_KERNEL_RANGE(3,4,91, 3,5,1)=C2=A0=C2=A0=C2=A0 =
-=C2=A0=C2=A0=C2=A0 \<br>+=C2=A0=C2=A0=C2=A0 || LTTNG_KERNEL_RANGE(3,10,41, =
-3,11,0)=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 \<br>+=C2=A0=C2=A0=C2=A0 || LT=
-TNG_KERNEL_RANGE(3,12,21, 3,13,0))<br>=C2=A0<br>=C2=A0/**<br>=C2=A0 * block=
-_rq_complete - block IO operation completed by device driver<br>
--- <br>2.0.0<br><br><br></div>
+<div dir=3D"ltr">I think the structure you are using might need a newer ver=
+sion of LTTng-ust.=C2=A0<div>Hopefully, the 2.4 version is currently in EPE=
+L testing, and it should be available in EPEL stable in a few days.=C2=A0</=
+div><div>
+<a href=3D"https://admin.fedoraproject.org/updates/FEDORA-EPEL-2014-1482/lt=
+tng-ust-2.4.1-1.el6,lttng-tools-2.4.1-1.el6">https://admin.fedoraproject.or=
+g/updates/FEDORA-EPEL-2014-1482/lttng-ust-2.4.1-1.el6,lttng-tools-2.4.1-1.e=
+l6</a><br>
+</div></div><div class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">O=
+n Fri, Jun 6, 2014 at 2:06 PM, Eduardo Silva <span dir=3D"ltr">&lt;<a href=
+=3D"mailto:edsiper@gmail.com" target=3D"_blank">edsiper@gmail.com</a>&gt;</=
+span> wrote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">Hi Folks,<br>
+<br>
+we just got a report from one user of Monkey Project where the<br>
+software have some missing dependencies in the system, e.g:<br>
+<br>
+[root@centos65 monkey-1.5.0]# make<br>
+=C2=A0 CC =C2=A0 =C2=A0jemalloc [all]<br>
+=C2=A0 CC =C2=A0 =C2=A0src/monkey.o<br>
+In file included from ./include/mk_linuxtrace.h:67,<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from monkey.c=
+:29:<br>
+/usr/include/lttng/tracepoint-event.h:39:28: error:<br>
+TRACEPOINT_INCLUDE_FILE: No such file or directory<br>
+make[1]: *** [monkey.o] Error 1<br>
+make: *** [all] Error 2<br>
+[root@centos65 monkey-1.5.0]# rpm -qa |grep lttng<br>
+lttng-ust-devel-2.0.8-1.el6.x86_64<br>
+lttng-tools-devel-2.0.4-2.el6.x86_64<br>
+lttng-ust-2.0.8-1.el6.x86_64<br>
+lttng-tools-2.0.4-2.el6.x86_64<br>
+<br>
+after test this in a VM i found all packages are installed, is there<br>
+anything extra required or are we missing something from the caller<br>
+(monkey server) ?<br>
+<br>
+thanks for your help<br>
+<span class=3D"HOEnZb"><font color=3D"#888888"><br>
+--<br>
+Eduardo Silva<br>
+<a href=3D"http://edsiper.linuxchile.cl" target=3D"_blank">http://edsiper.l=
+inuxchile.cl</a><br>
+<a href=3D"http://monkey-project.com" target=3D"_blank">http://monkey-proje=
+ct.com</a><br>
+<br>
+_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
+br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+br>
+</font></span></blockquote></div><br></div>
 
---e89a8f13ed2029565e04fb31ffdb--
+--001a11c27e38791a5004fb3dee6b--
 
 
---===============0292646121==
+--===============1068137546==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -140,4 +151,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0292646121==--
+--===============1068137546==--
