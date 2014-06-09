@@ -1,16 +1,18 @@
-From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
-Subject: [lttng-tool] Fix: wrong casting of return value
-Date: Mon, 9 Jun 2014 11:40:36 -0400
-Message-ID: <1402328436-13404-1-git-send-email-jonathan.r.julien__36136.3934971907$1402328503$gmane$org@gmail.com>
+From: Nathan Lynch <Nathan_Lynch@mentor.com>
+Subject: Re: [RFC PATCH 1/1] check if set_schedaffinity works in
+ configure.ac
+Date: Mon, 9 Jun 2014 13:52:38 -0500
+Message-ID: <53960276.2050809__7612.14907183803$1402340042$gmane$org@mentor.com>
+References: <5394C476.2050707@gmail.com> <5394C521.4040001@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
+Received: from relay1.mentorg.com ([192.94.38.131])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@ericsson.com>)
- id 1Wu1gj-00014K-Ca
- for lttng-dev@lists.lttng.org; Mon, 09 Jun 2014 11:40:50 -0400
+ (envelope-from <Nathan_Lynch@mentor.com>) id 1Wu4gY-00027Y-PW
+ for lttng-dev@lists.lttng.org; Mon, 09 Jun 2014 14:52:52 -0400
+In-Reply-To: <5394C521.4040001@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,33 +21,23 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Pranith Kumar <bobby.prani@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The function uri_parse_str_urls return a ssize_t and the return was
-casted to a size_t. This caused the following error checking to fail as
--1 was interpreted as 18446744073709551615.
+On 06/08/2014 03:18 PM, Pranith Kumar wrote:
+> On 06/08/2014 04:15 PM, Pranith Kumar wrote:
+>> On some systems set_schedaffinity exists but return "-1" when
+>> called. Tests fail in such cases ("test_urcu_hash")
+>> 
+>> Check if we can call set_schedaffinity and define accordingly
+> I just realized that this is a common mailing list. This is for
+> userspace-rcu library. I am trying to use it on an Nvidia Tegra K1
+> device.
 
-Fixes #803
+It seems odd that sched_setaffinity would fail... what is the value of
+errno associated with the failed calls?
 
-Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
----
- src/lib/lttng-ctl/save.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/src/lib/lttng-ctl/save.c b/src/lib/lttng-ctl/save.c
-index d136b2d..d414a9d 100644
---- a/src/lib/lttng-ctl/save.c
-+++ b/src/lib/lttng-ctl/save.c
-@@ -99,7 +99,8 @@ int lttng_save_session_attr_set_output_url(
- 	struct lttng_save_session_attr *attr, const char *url)
- {
- 	int ret = 0;
--	size_t len, size;
-+	size_t len;
-+	ssize_t size;
- 	struct lttng_uri *uris = NULL;
- 
- 	if (!attr) {
--- 
-2.0.0
+(Also, you have the name of the function right in your patch, but need
+to correct it in the patch subject and description --
+"sched_setaffinity" not "set_schedaffinity".)
