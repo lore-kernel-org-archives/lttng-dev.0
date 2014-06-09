@@ -1,22 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: babeltrace test failures on some architectures
-Date: Mon, 9 Jun 2014 11:32:16 -0400
-Message-ID: <CA+jJMxsuEtk3QdDz1_a0MOBq0To7wB4+QnOW3Rkp0uJZ1eM1gw__41447.2040873536$1402328007$gmane$org@mail.gmail.com>
-References: <20140604184126.GA26877@helmut>
- <CA+jJMxtn8XiLjT5NVURv5K8kECPPoPs1WF-0zTakJmRW=CO3mg@mail.gmail.com>
- <CAEzWAeLEvv8FbHfwq8=sMeDW49DjO_gKoZ99z1Ff9s+dR6GuJQ@mail.gmail.com>
- <20140609145201.GB25766@helmut>
+From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+Subject: [lttng-tool] Fix: wrong casting of return value
+Date: Mon, 9 Jun 2014 11:40:36 -0400
+Message-ID: <1402328436-13404-1-git-send-email-jonathan.r.julien__36136.3934971907$1402328503$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f172.google.com ([209.85.216.172])
+Received: from usevmg21.ericsson.net ([198.24.6.65])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Wu1Yb-0000zh-Qv
- for lttng-dev@lists.lttng.org; Mon, 09 Jun 2014 11:32:27 -0400
-Received: by mail-qc0-f172.google.com with SMTP id o8so832878qcw.3
- for <lttng-dev@lists.lttng.org>; Mon, 09 Jun 2014 08:32:16 -0700 (PDT)
-In-Reply-To: <20140609145201.GB25766@helmut>
+ (envelope-from <jonathan.rajotte-julien@ericsson.com>)
+ id 1Wu1gj-00014K-Ca
+ for lttng-dev@lists.lttng.org; Mon, 09 Jun 2014 11:40:50 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,53 +19,33 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Brosseau, Yannick" <yannick.brosseau@gmail.com>, =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-VGhlIGJ1aWxkIGxvZ3Mgb25seSBzZWVtIHRvIGNvbnRhaW4gdGhlICJwcm92ZSIgb3V0cHV0IChp
-bnZva2VkIGJ5IHJ1bi5zaCkuCgpDb3VsZCB5b3UgcnVuIHRlc3RzL2Jpbi90ZXN0X3RyYWNlX3Jl
-YWQgYW5kCnRlc3RzL2xpYi90ZXN0X3NlZWtfZW1wdHlfcGFja2V0IG9uIGFybWVsIGFuZCBzcGFy
-Yz8gVGhlIG91dHB1dCBvZgpib3RoIG9mIHRoZXNlIHRlc3RzIGFuZCB0aGUgY29yZWR1bXBzIChp
-ZiBhbnkpIHNob3VsZCBnaXZlIG1lCnNvbWV0aGluZyB0byB3b3JrIHdpdGguCgpUaGFua3MsCkrD
-qXLDqW1pZQoKT24gTW9uLCBKdW4gOSwgMjAxNCBhdCAxMDo1MiBBTSwgSm9uIEJlcm5hcmQgPGpi
-ZXJuYXJkQGRlYmlhbi5vcmc+IHdyb3RlOgo+ICogQnJvc3NlYXUsIFlhbm5pY2sgPHlhbm5pY2su
-YnJvc3NlYXVAZ21haWwuY29tPiB3cm90ZToKPj4gSsOpcsOpbWllLCB0aGUgZW5kIG9mIHRoZSBi
-dWlsZC5sb2cgc2VlbSB0byBjb250YWlucyB0aGUgdGVzdHMgb3V0cHV0Lgo+Cj4gSWYgSSBjYW4g
-cHJvdmlkZSBhZGRpdGlvbmFsIGluZm8gdGhhdCBpc24ndCBpbiB0aGUgbG9ncywgb3IgcnVuCj4g
-c3BlY2lhbGl6ZWQgdGVzdHMsIGV0YywganVzdCBsZXQgbWUga25vdy4KPgo+IC0tCj4gSm9uCj4K
-Pj4gT24gTW9uLCBKdW4gOSwgMjAxNCBhdCAxMDoxNiBBTSwgSsOpcsOpbWllIEdhbGFybmVhdSA8
-Cj4+IGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4+Cj4+ID4gSGkgSm9u
-LAo+PiA+Cj4+ID4gV291bGQgaXQgYmUgcG9zc2libGUgdG8gcnVuIHRoZSB0ZXN0cyBvbiB0aGVz
-ZSBtYWNoaW5lcyBhbmQgcHJvdmlkZQo+PiA+IHRoZSBUQVAgb3V0cHV0Pwo+PiA+Cj4+ID4gVGhh
-bmtzLAo+PiA+IErDqXLDqW1pZQo+PiA+Cj4+ID4gT24gV2VkLCBKdW4gNCwgMjAxNCBhdCAyOjQx
-IFBNLCBKb24gQmVybmFyZCA8amJlcm5hcmRAZGViaWFuLm9yZz4gd3JvdGU6Cj4+ID4gPiBJIG5v
-dGljZWQgYmFiZWx0cmFjZSBpcyBoYXZpbmcgdGVzdCBmYWlsdXJlcyBvbiBhcm1lbCwgaHVyZC1p
-Mzg2LAo+PiA+ID4ga2ZyZWVic2Qte2FtZDY0LGkzODZ9LCBhbmQgc3BhcmMuICBUaGVzZSB3ZXJl
-IHBhc3NpbmcgaW4gdmVyc2lvbiAxLjEgYW5kCj4+ID4gPiB0aGUgZmFpbHVyZXMgYXBwZWFyZWQg
-aW4gMS4yLiAgSGVyZSBhcmUgbGlua3MgdG8gdGhlIGJ1aWxkIGxvZ3M6Cj4+ID4gPgo+PiA+ID4g
-ICAgIGFybWVsOgo+PiA+IGh0dHBzOi8vYnVpbGRkLmRlYmlhbi5vcmcvc3RhdHVzL2ZldGNoLnBo
-cD9wa2c9YmFiZWx0cmFjZSZhcmNoPWFybWVsJnZlcj0xLjIuMS0yJnN0YW1wPTEzOTU4NDY5MTMK
-Pj4gPiA+ICAgICBodXJkLWkzODY6Cj4+ID4gaHR0cHM6Ly9idWlsZGQuZGViaWFuLm9yZy9zdGF0
-dXMvZmV0Y2gucGhwP3BrZz1iYWJlbHRyYWNlJmFyY2g9aHVyZC1pMzg2JnZlcj0xLjIuMS0yJnN0
-YW1wPTEzOTgxNTgzOTQKPj4gPiA+ICAgICBrZnJlZWJzZC1hbWQ2NDoKPj4gPiBodHRwczovL2J1
-aWxkZC5kZWJpYW4ub3JnL3N0YXR1cy9hcmNoaXRlY3R1cmUucGhwP2E9a2ZyZWVic2QtYW1kNjQm
-c3VpdGU9c2lkCj4+ID4gPiAgICAga2ZyZWVic2QtaTM4NjoKPj4gPiBodHRwczovL2J1aWxkZC5k
-ZWJpYW4ub3JnL3N0YXR1cy9mZXRjaC5waHA/cGtnPWJhYmVsdHJhY2UmYXJjaD1rZnJlZWJzZC1p
-Mzg2JnZlcj0xLjIuMS0yJnN0YW1wPTEzOTU4NDI1MTgKPj4gPiA+ICAgICBzcGFyYzoKPj4gPiBo
-dHRwczovL2J1aWxkZC5kZWJpYW4ub3JnL3N0YXR1cy9mZXRjaC5waHA/cGtnPWJhYmVsdHJhY2Um
-YXJjaD1zcGFyYyZ2ZXI9MS4yLjEtMiZzdGFtcD0xMzk1ODU5NTQ2Cj4+ID4gPgo+PiA+ID4gICAg
-IGJ1aWxkZCBwYWdlOgo+PiA+IGh0dHBzOi8vYnVpbGRkLmRlYmlhbi5vcmcvc3RhdHVzL3BhY2th
-Z2UucGhwP3A9YmFiZWx0cmFjZQo+PiA+ID4KPj4gPiA+IENoZWVycywKPj4gPiA+Cj4+ID4gPiAt
-LQo+PiA+ID4gSm9uCj4+ID4gPgo+PiA+ID4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KPj4gPiA+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4gPiA+IGx0
-dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4gPiA+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
-LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+PiA+Cj4+ID4KPj4gPgo+PiA+IC0tCj4+
-ID4gSsOpcsOpbWllIEdhbGFybmVhdQo+PiA+IEVmZmljaU9TIEluYy4KPj4gPiBodHRwOi8vd3d3
-LmVmZmljaW9zLmNvbQo+PiA+Cj4+ID4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KPj4gPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+ID4gbHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZwo+PiA+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
-bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+PiA+CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVm
-ZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmct
-ZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
-bi9saXN0aW5mby9sdHRuZy1kZXYK
+The function uri_parse_str_urls return a ssize_t and the return was
+casted to a size_t. This caused the following error checking to fail as
+-1 was interpreted as 18446744073709551615.
+
+Fixes #803
+
+Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+---
+ src/lib/lttng-ctl/save.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/lib/lttng-ctl/save.c b/src/lib/lttng-ctl/save.c
+index d136b2d..d414a9d 100644
+--- a/src/lib/lttng-ctl/save.c
++++ b/src/lib/lttng-ctl/save.c
+@@ -99,7 +99,8 @@ int lttng_save_session_attr_set_output_url(
+ 	struct lttng_save_session_attr *attr, const char *url)
+ {
+ 	int ret = 0;
+-	size_t len, size;
++	size_t len;
++	ssize_t size;
+ 	struct lttng_uri *uris = NULL;
+ 
+ 	if (!attr) {
+-- 
+2.0.0
