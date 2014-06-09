@@ -1,18 +1,19 @@
 From: Nathan Lynch <Nathan_Lynch@mentor.com>
 Subject: Re: [RFC PATCH 1/1] check if set_schedaffinity works in
  configure.ac
-Date: Mon, 9 Jun 2014 13:52:38 -0500
-Message-ID: <53960276.2050809__7612.14907183803$1402340042$gmane$org@mentor.com>
+Date: Mon, 9 Jun 2014 13:59:56 -0500
+Message-ID: <5396042C.2010708__8714.06977898932$1402340479$gmane$org@mentor.com>
 References: <5394C476.2050707@gmail.com> <5394C521.4040001@gmail.com>
+ <5394C810.1000801@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from relay1.mentorg.com ([192.94.38.131])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Nathan_Lynch@mentor.com>) id 1Wu4gY-00027Y-PW
- for lttng-dev@lists.lttng.org; Mon, 09 Jun 2014 14:52:52 -0400
-In-Reply-To: <5394C521.4040001@gmail.com>
+ (envelope-from <Nathan_Lynch@mentor.com>) id 1Wu4nc-0002BU-4L
+ for lttng-dev@lists.lttng.org; Mon, 09 Jun 2014 15:00:09 -0400
+In-Reply-To: <5394C810.1000801@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,19 +26,19 @@ To: Pranith Kumar <bobby.prani@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 06/08/2014 03:18 PM, Pranith Kumar wrote:
-> On 06/08/2014 04:15 PM, Pranith Kumar wrote:
->> On some systems set_schedaffinity exists but return "-1" when
->> called. Tests fail in such cases ("test_urcu_hash")
->> 
->> Check if we can call set_schedaffinity and define accordingly
-> I just realized that this is a common mailing list. This is for
-> userspace-rcu library. I am trying to use it on an Nvidia Tegra K1
-> device.
+On 06/08/2014 03:31 PM, Pranith Kumar wrote:
+> +    AS_IF([test "x$sched_set_affinity_args" = "x3"], [
+> +        # test if sched_setaffinity works
+> +        AC_MSG_CHECKING([if sched_setaffinity works])
+> +        AC_RUN_IFELSE([AC_LANG_SOURCE([[
+> +                #include <sched.h>
+> +                int main()
+> +                {
+> +                    cpu_set_t foo;
+> +                    return sched_setaffinity(0, sizeof (foo), &foo);
 
-It seems odd that sched_setaffinity would fail... what is the value of
-errno associated with the failed calls?
+This passes uninitialized stack memory to the system call; the return
+value is unpredictable.
 
-(Also, you have the name of the function right in your patch, but need
-to correct it in the patch subject and description --
-"sched_setaffinity" not "set_schedaffinity".)
+If it turns out that such a test is necessary, it should probably call
+sched_getaffinity first and pass the result to sched_setaffinity.
