@@ -1,17 +1,22 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+From: Gerlando Falauto <gerlando.falauto@keymile.com>
 Subject: Re: [PATCH lttng-ust] Fix: remove weak attribute from
  __start___tracepoints_ptrs and __stop___tracepoints_ptrs
-Date: Tue, 10 Jun 2014 17:27:19 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359BEDC9__23480.7578767233$1402421312$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Date: Tue, 10 Jun 2014 22:06:41 +0200
+Message-ID: <53976551.3000505__45447.4812992432$1402430888$gmane$org@keymile.com>
+References: <1401318352-9154-1-git-send-email-gerlando.falauto@keymile.com>
+ <414903224.27282.1401989226863.JavaMail.zimbra@efficios.com>
+ <5396B032.6000507@keymile.com>
+ <857477672.29010.1402420110003.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-de.keymile.com ([195.8.104.250])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WuPpV-0001cl-SG
- for lttng-dev@lists.lttng.org; Tue, 10 Jun 2014 13:27:31 -0400
-Content-Language: fr-FR
+ (envelope-from <prvs=0238c2a47e=gerlando.falauto@keymile.com>)
+ id 1WuSJn-0002Up-LQ
+ for lttng-dev@lists.lttng.org; Tue, 10 Jun 2014 16:06:57 -0400
+In-Reply-To: <857477672.29010.1402420110003.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,103 +25,85 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: Gerlando Falauto <gerlando.falauto@keymile.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Tue, 10 Jun 2014 09:13:54 +0200
-
->> Does it work well if the program and/or libraries do the following:
->>
->> - they include tracepoint.h,
->> - but they don't contain any tracepoint (so there is technically no
->>    _tracepoint_ptrs section)
->>
->> Has this case been tested ? I remember that the weak was there for this
->> peculiar corner case.
->
->I tested it exactly the way you described, and yes, it works.
->*HOWEVER*, if prior to including tracepoint.h the program also #defines =
-
->TRACEPOINT_DEFINE, *THEN* we have the problem you described:
->
->root@kmeter1:~# cat foo.c
->
->#define TRACEPOINT_DEFINE
->#include <lttng/tracepoint.h>
->
->int main(void)
->{
->   printf("Hello world!\n");
->}
->root@kmeter1:~# gcc foo.c -llttng-ust -ldl
->/tmp/cc92SYHX.o: In function `__tracepoints__ptrs_init':
->foo.c:(.text+0x39a): undefined reference to `__stop___tracepoints_ptrs'
->foo.c:(.text+0x39e): undefined reference to `__stop___tracepoints_ptrs'
->[...]
->/tmp/cc92SYHX.o:foo.c:(.text+0x44a): more undefined references to =
-
->`__start___tracepoints_ptrs' follow
->/usr/lib/gcc/powerpc-linux/4.7.2/../../../../powerpc-linux/bin/ld: =
-
->a.out: hidden symbol `__stop___tracepoints_ptrs' isn't defined
->/usr/lib/gcc/powerpc-linux/4.7.2/../../../../powerpc-linux/bin/ld: final =
-
->link failed: Bad value
->collect2: error: ld returned 1 exit status
->
->Re-adding the weak attribute "fixes" this (though it leaves us with a =
-
->much bigger issue, in my opinion).
->
->However, I'm not sure whether:
->
->a) this is really a use case (defining TRACEPOINT_DEFINE and then not =
-
->really defining any), and even so, whether
->
->b) what we have with the weak attribute is really what we want. In the =
-
->end, we would be defining a function with __attribute__((constructor)) =
-
-> (oh wait, potentially even more than one!) without actually having any =
-
->tracepoint available. OK, the above complaints are probably not the most =
-
->intuitive in the world, but isn't that better than an application =
-
->silently "failing" (to provide any tracepoint) at runtime?
->
->After all, the issue with the above messages is about the linker trying =
-
->to resolve those symbols; but that's because they are used by =
-
->__tracepoints__ptrs_init() and friends, not because they are merely =
-
->declared.
->
->Any thoughts?
->
->Gerlando
-----------------------------------------------------------------------
-
-   If the issue is to protect against TRACEPOINT_DEFINE not being 'fulfille=
-d' before hitting lttng/tracepoint.h, maybe tracepoint.h should check for T=
-RACEPOINT_PROVIDER in addition to TRACEPOINT_DEFINE.
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+SGkgTWF0aGlldSwKClsuLi4gcmVtb3Zpbmcgd2VhayBmcm9tIF9fYXR0cmlidXRlX18oLi4uKSBv
+ZiBfX3N0YXJ0X19fdHJhY2Vwb2ludHNfcHRycyAKYW5kIF9fc3RvcF9fX3RyYWNlcG9pbnRzX3B0
+cnNdCgo+PiBBbnkgdGhvdWdodHM/Cj4KPiBJJ20gcmVhbGx5IG5vdCBrZWVuIG9uIGNoYW5naW5n
+IHRoZSBiZWhhdmlvciBvZiBleGlzdGluZyBwdWJsaWMgQVBJcwo+IHRvIHdvcmsgYXJvdW5kIHNw
+ZWNpZmljIGNvbXBpbGVyIGJ1Z3MuCgpJJ20gbm90IGtlZW4gb24gdGhhdCwgZWl0aGVyLiBCdXQg
+aG93IGNhbiB5b3UgYmUgc28gc3VyZSB0aGlzIGlzIHJlYWxseSAKdGhlIGNhc2U/IEknbSBub3Qg
+YSBjb21waWxlciBleHBlcnQsIGFuZCBJIGRvbid0IHVuZGVyc3RhbmQgdGhlIGlubmVyIAp3b3Jr
+aW5ncyBvZiBsdHRuZy11c3QgZWl0aGVyLCBidXQgSSByZWFsbHkgZG9uJ3Qgc2VlIGEgcmVhc29u
+IHdoeSB0aG9zZSAKc3ltYm9scyBzaG91bGQgYmUgYm90aCB3ZWFrICphbmQqIGhpZGRlbi4KQXMg
+ZmFyIGFzIEkgY291bGQgdW5kZXJzdGFuZCwgdGhvc2Ugc3ltYm9scyAqaGF2ZSogdG8gYmUgZGVm
+aW5lZCBpbiAKb3JkZXIgZm9yIHRoZSB2YXJpb3VzIGNvbnRydWN0b3JzIHRvIHdvcmsgcHJvcGVy
+bHkuIEl0J3MganVzdCAqdGhlIHdheSogCnRoZXkgYXJlIGRlZmluZWQgdGhhdCdzIGEgYml0IHdl
+YWsgKG9yIHdlaXJkKSwgaW4gdGhhdCB0aGUgbGlua2VyJ3MgdGhlIApvbmUgZGVmaW5pbmcgdGhl
+bSBpbnN0ZWFkIG9mIHRoZSB1c2VyICh0aHJvdWdoIHRoZSBjb21waWxlcikuCklmIHRoZXkncmUg
+bm90IGRlZmluZWQgKGkuZS4gYmVjYXVzZSBubyB0cmFjZXBvaW50IGlzIGRlZmluZWQgYXQgYWxs
+KSwgCm5vIG9uZSBzaG91bGQgdXNlIHRoZW0gZWl0aGVyIChpLmUuIG5vIApfX3RyYWNlcG9pbnRz
+X19wdHJzX2luaXQoKS9fX3RyYWNlcG9pbnRzX19wdHJzX2Rlc3Ryb3koKSBmdW5jdGlvbiBzaG91
+bGQgCmJlIGVtaXR0ZWQsIGVpdGhlcikuIElmIHNvbWVvbmUgaW5hZHZlcnRlbnRseSBjaGFuZ2Vz
+IHRoZSBzZWN0aW9uIG5vbWUgCnRvIHNvbWV0aGluZyBlbHNlLCB0aGUgbGlua2VyIHNob3VsZCBj
+b21wbGFpbi4KVG8gbWUsIGp1c3QgaGF2aW5nIHRoZSBsaW5rZXIgc2h1dCB1cCBhbmQgc3dhbGxv
+dyBpdCwgc2VlbXMgcGxhaW4gd3JvbmcuCgogPiBQZXJoYXBzIHdlIGNvdWxkIGZpbmQgYSB3YXkg
+dG8KPiB0ZWxsIHVzZXJzIHRoYXQgdGhleSBhcmUgZmFjaW5nIHRoaXMgaXNzdWUgYnkgYWRkaW5n
+IGEgY2hlY2sgaW4gbHR0bmctdXN0Cj4gY29uZmlndXJlLmFjID8KCkknZCB0aG91Z2h0IG9mIHRo
+YXQsIHRvby4gTWF5YmUgYSAjZGVmaW5lIHN5bWJvbCwgZ2VuZXJhdGVkIGJ5IHRoZSAKY29uZmln
+dXJlIHNjcmlwdCB0byBkaXN0aW5ndWlzaCBiZXR3ZWVuIHRoZSB0d28gY2FzZXM/CkkgYmVsaWV2
+ZSB0aGUgdGVzdCBjYXNlIHRvIGRldGVjdCB0aGlzIGJ1ZyB3YXMgcXVpdGUgdHJpdmlhbDsgSSB3
+b3VsZCAKanVzdCBoYXZlIHRvIGRpZyBpdCB1cC4gQnV0IEknbSBub3QgdmVyeSBmb25kIG9mIGF1
+dG90b29scywgZWl0aGVyLiA7LSkKUGx1cywgSSBzdGlsbCBkb24ndCBzZWUgdGhlIGlzc3VlIHdp
+dGggcmVtb3Zpbmcgd2VhaywgcmVhbGx5LgoKQnV0IEknbSBvcGVuIHRvIGFueSBzdWdnZXN0aW9u
+LgoKVGhhbmtzIGFnYWluIQpHZXJsYW5kbwoKPgo+IFRoYW5rcywKPgo+IE1hdGhpZXUKPgo+Pgo+
+PiBUaGFuayB5b3UhCj4+IEdlcmxhbmRvCj4+Cj4+Cj4+Pgo+Pj4gVGhhbmtzLAo+Pj4KPj4+IE1h
+dGhpZXUKPj4+Cj4+Pj4KPj4+PiBTbyBldmVuIHRob3VnaCB0aGUgaXNzdWUgaXMgb25seSBvYnNl
+cnZlZCB3aXRoIGEgYnVnZ3kgY29tcGlsZXIsIHJlbW92aW5nCj4+Pj4gdGhlIHdlYWsgYXR0cmli
+dXRlIGFsc28gZW5mb3JjZXMgdGhlIGNvcnJlY3Qgc3Ryb25nIGxpbmtpbmcgdG8gdGhlIHN5bWJv
+bHMKPj4+PiBwcm92aWRlZCBieSB0aGUgbGlua2VyICh3aGljaCB3b3VsZCBvdGhlcndpc2UsIGJ5
+IHdlYWsgc2VtYW50aWNzLCBkZWZhdWx0Cj4+Pj4gdG8gYSB2YWx1ZSBvZiBhbGwtemVyb2VzKS4K
+Pj4+Pgo+Pj4+IFJlZmVyZW5jZXM6IGh0dHBzOi8vZ2NjLmdudS5vcmcvbWwvZ2NjLWhlbHAvMjAx
+NC0wNS9tc2cwMDAwNS5odG1sCj4+Pj4gUmVmZXJlbmNlczoKPj4+PiBodHRwOi8vbGlzdHMubHR0
+bmcub3JnL3BpcGVybWFpbC9sdHRuZy1kZXYvMjAxNC1NYXkvMDIzMDkwLmh0bWwKPj4+PiBSZXBv
+cnRlZC1ieTogTWFydGluIMOcbnNhbCA8bWFydGludW5zYWxAZ21haWwuY29tPgo+Pj4+IFRoYW5r
+cy10bzogSGVucmlrIFdhbGxpbiA8aGVucmlrd2FsbGluNzJAZ21haWwuY29tPgo+Pj4+IENjOiBQ
+YXVsIFdvZWdlcmVyIDxQYXVsX1dvZWdlcmVyQG1lbnRvci5jb20+Cj4+Pj4gU2lnbmVkLW9mZi1i
+eTogR2VybGFuZG8gRmFsYXV0byA8Z2VybGFuZG8uZmFsYXV0b0BrZXltaWxlLmNvbT4KPj4+PiAt
+LS0KPj4+PiAgICBpbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaCB8IDE1ICsrKysrKysrKystLS0t
+LQo+Pj4+ICAgIDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygt
+KQo+Pj4+Cj4+Pj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC5oIGIvaW5j
+bHVkZS9sdHRuZy90cmFjZXBvaW50LmgKPj4+PiBpbmRleCBjNWEwOWQ4Li4yMjllYTcyIDEwMDY0
+NAo+Pj4+IC0tLSBhL2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC5oCj4+Pj4gKysrIGIvaW5jbHVk
+ZS9sdHRuZy90cmFjZXBvaW50LmgKPj4+PiBAQCAtMzA4LDE0ICszMDgsMTkgQEAgX190cmFjZXBv
+aW50c19fZGVzdHJveSh2b2lkKQo+Pj4+ICAgICNpZmRlZiBUUkFDRVBPSU5UX0RFRklORQo+Pj4+
+Cj4+Pj4gICAgLyoKPj4+PiAtICogVGhlc2Ugd2VhayBzeW1ib2xzLCB0aGUgY29uc3RydWN0b3Is
+IGFuZCBkZXN0cnVjdG9yIHRha2UgY2FyZSBvZgo+Pj4+IC0gKiByZWdpc3RlcmluZyBvbmx5IF9v
+bmVfIGluc3RhbmNlIG9mIHRoZSB0cmFjZXBvaW50cyBwZXIgc2hhcmVkLW9qYmVjdAo+Pj4+IC0g
+KiAob3IgZm9yIHRoZSB3aG9sZSBtYWluIHByb2dyYW0pLgo+Pj4+ICsgKiBUaGVzZSBzdHJvbmcg
+aGlkZGVuIHN5bWJvbHMgYXJlIGF1dG9tYXRpY2FsbHkgcHJvdmlkZWQgYnkgdGhlIGxpbmtlcgo+
+Pj4+ICsgKiBmb3IgZWFjaCBzaGFyZWQtb2JqZWN0IChvciBmb3IgdGhlIHdob2xlIG1haW4gcHJv
+Z3JhbSkgYXMgcG9pbnRlcnMKPj4+PiArICogdG8gdGhlIG9ycGhhbmVkIHNlY3Rpb24gIl90cmFj
+ZXBvaW50c19wdHJzIiBhbmQgbXVzdCBub3QgYmUgdmlzaWJsZQo+Pj4+ICsgKiBmcm9tIG90aGVy
+IHNoYXJlZCBvYmplY3RzIHRvIGF2b2lkIG5hbWUgY2xhc2hlcyBhdCBydW50aW1lIHdoaWNoIHdv
+dWxkCj4+Pj4gKyAqIHNpbGVudGx5IGVuYWJsZSBvbmx5IHRoZSB0cmFjZXBvaW50cyBmcm9tIHRo
+ZSBvYmplY3QgbG9hZGVkIGZpcnN0Lgo+Pj4+ICsgKiBOT1RJQ0U6IFNvbWUgT3BlbkVtYmVkZGVk
+IEdDQyByZWxlYXNlcyAobmFtZWx5IDQuNy4yKSBpbmNvcnJlY3RseQo+Pj4+ICsgKiBlbWl0IHRo
+b3NlIHN5bWJvbHMgd2l0aCBkZWZhdWx0IHZpc2liaWxpdHkgaWYgYm90aCB3ZWFrIGFuZCBoaWRk
+ZW4KPj4+PiArICogYXJlIHVzZWQuCj4+Pj4gICAgICovCj4+Pj4gICAgZXh0ZXJuIHN0cnVjdCB0
+cmFjZXBvaW50ICogY29uc3QgX19zdGFydF9fX3RyYWNlcG9pbnRzX3B0cnNbXQo+Pj4+IC0JX19h
+dHRyaWJ1dGVfXygod2VhaywgdmlzaWJpbGl0eSgiaGlkZGVuIikpKTsKPj4+PiArCV9fYXR0cmli
+dXRlX18oKHZpc2liaWxpdHkoImhpZGRlbiIpKSk7Cj4+Pj4gICAgZXh0ZXJuIHN0cnVjdCB0cmFj
+ZXBvaW50ICogY29uc3QgX19zdG9wX19fdHJhY2Vwb2ludHNfcHRyc1tdCj4+Pj4gLQlfX2F0dHJp
+YnV0ZV9fKCh3ZWFrLCB2aXNpYmlsaXR5KCJoaWRkZW4iKSkpOwo+Pj4+ICsJX19hdHRyaWJ1dGVf
+XygodmlzaWJpbGl0eSgiaGlkZGVuIikpKTsKPj4+Pgo+Pj4+ICAgIC8qCj4+Pj4gICAgICogV2hl
+biBUUkFDRVBPSU5UX1BST0JFX0RZTkFNSUNfTElOS0FHRSBpcyBkZWZpbmVkLCB3ZSBkbyBub3Qg
+ZW1pdCBhCj4+Pj4gLS0KPj4+PiAxLjguMC4xCj4+Pj4KPj4+Pgo+Pj4+IF9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+Pj4gbHR0bmctZGV2IG1haWxpbmcg
+bGlzdAo+Pj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4+PiBodHRwOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4+Pgo+Pj4KPj4KPj4K
+PgoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMu
+bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
