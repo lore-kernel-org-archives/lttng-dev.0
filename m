@@ -1,22 +1,19 @@
-From: Gerlando Falauto <gerlando.falauto@keymile.com>
-Subject: Re: [PATCH lttng-ust] Fix: remove weak attribute from
- __start___tracepoints_ptrs and __stop___tracepoints_ptrs
-Date: Tue, 10 Jun 2014 22:06:41 +0200
-Message-ID: <53976551.3000505__45447.4812992432$1402430888$gmane$org@keymile.com>
-References: <1401318352-9154-1-git-send-email-gerlando.falauto@keymile.com>
- <414903224.27282.1401989226863.JavaMail.zimbra@efficios.com>
- <5396B032.6000507@keymile.com>
- <857477672.29010.1402420110003.JavaMail.zimbra@efficios.com>
+From: Antoine Busque <antoine.busque@efficios.com>
+Subject: Re: [PATCH lttng-modules] Fix: correct typo in kernel
+ version number range
+Date: Wed, 11 Jun 2014 10:43:11 -0400
+Message-ID: <CA+MZcXvyRFtvFCeUi18JqB8ZcjcbvRz5t+XoVf9S-hancjhx9g__8740.8592612066$1402497866$gmane$org@mail.gmail.com>
+References: <1402411964-4522-1-git-send-email-antoine.busque@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1612113365=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-de.keymile.com ([195.8.104.250])
+Received: from mail-pd0-f169.google.com ([209.85.192.169])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <prvs=0238c2a47e=gerlando.falauto@keymile.com>)
- id 1WuSJn-0002Up-LQ
- for lttng-dev@lists.lttng.org; Tue, 10 Jun 2014 16:06:57 -0400
-In-Reply-To: <857477672.29010.1402420110003.JavaMail.zimbra@efficios.com>
+ (envelope-from <nintendopro@gmail.com>) id 1WujkD-0000Zx-MA
+ for lttng-dev@lists.lttng.org; Wed, 11 Jun 2014 10:43:23 -0400
+Received: by mail-pd0-f169.google.com with SMTP id w10so7348392pde.28
+ for <lttng-dev@lists.lttng.org>; Wed, 11 Jun 2014 07:43:12 -0700 (PDT)
+In-Reply-To: <1402411964-4522-1-git-send-email-antoine.busque@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,85 +22,130 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Antoine Busque <antoine.busque@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgTWF0aGlldSwKClsuLi4gcmVtb3Zpbmcgd2VhayBmcm9tIF9fYXR0cmlidXRlX18oLi4uKSBv
-ZiBfX3N0YXJ0X19fdHJhY2Vwb2ludHNfcHRycyAKYW5kIF9fc3RvcF9fX3RyYWNlcG9pbnRzX3B0
-cnNdCgo+PiBBbnkgdGhvdWdodHM/Cj4KPiBJJ20gcmVhbGx5IG5vdCBrZWVuIG9uIGNoYW5naW5n
-IHRoZSBiZWhhdmlvciBvZiBleGlzdGluZyBwdWJsaWMgQVBJcwo+IHRvIHdvcmsgYXJvdW5kIHNw
-ZWNpZmljIGNvbXBpbGVyIGJ1Z3MuCgpJJ20gbm90IGtlZW4gb24gdGhhdCwgZWl0aGVyLiBCdXQg
-aG93IGNhbiB5b3UgYmUgc28gc3VyZSB0aGlzIGlzIHJlYWxseSAKdGhlIGNhc2U/IEknbSBub3Qg
-YSBjb21waWxlciBleHBlcnQsIGFuZCBJIGRvbid0IHVuZGVyc3RhbmQgdGhlIGlubmVyIAp3b3Jr
-aW5ncyBvZiBsdHRuZy11c3QgZWl0aGVyLCBidXQgSSByZWFsbHkgZG9uJ3Qgc2VlIGEgcmVhc29u
-IHdoeSB0aG9zZSAKc3ltYm9scyBzaG91bGQgYmUgYm90aCB3ZWFrICphbmQqIGhpZGRlbi4KQXMg
-ZmFyIGFzIEkgY291bGQgdW5kZXJzdGFuZCwgdGhvc2Ugc3ltYm9scyAqaGF2ZSogdG8gYmUgZGVm
-aW5lZCBpbiAKb3JkZXIgZm9yIHRoZSB2YXJpb3VzIGNvbnRydWN0b3JzIHRvIHdvcmsgcHJvcGVy
-bHkuIEl0J3MganVzdCAqdGhlIHdheSogCnRoZXkgYXJlIGRlZmluZWQgdGhhdCdzIGEgYml0IHdl
-YWsgKG9yIHdlaXJkKSwgaW4gdGhhdCB0aGUgbGlua2VyJ3MgdGhlIApvbmUgZGVmaW5pbmcgdGhl
-bSBpbnN0ZWFkIG9mIHRoZSB1c2VyICh0aHJvdWdoIHRoZSBjb21waWxlcikuCklmIHRoZXkncmUg
-bm90IGRlZmluZWQgKGkuZS4gYmVjYXVzZSBubyB0cmFjZXBvaW50IGlzIGRlZmluZWQgYXQgYWxs
-KSwgCm5vIG9uZSBzaG91bGQgdXNlIHRoZW0gZWl0aGVyIChpLmUuIG5vIApfX3RyYWNlcG9pbnRz
-X19wdHJzX2luaXQoKS9fX3RyYWNlcG9pbnRzX19wdHJzX2Rlc3Ryb3koKSBmdW5jdGlvbiBzaG91
-bGQgCmJlIGVtaXR0ZWQsIGVpdGhlcikuIElmIHNvbWVvbmUgaW5hZHZlcnRlbnRseSBjaGFuZ2Vz
-IHRoZSBzZWN0aW9uIG5vbWUgCnRvIHNvbWV0aGluZyBlbHNlLCB0aGUgbGlua2VyIHNob3VsZCBj
-b21wbGFpbi4KVG8gbWUsIGp1c3QgaGF2aW5nIHRoZSBsaW5rZXIgc2h1dCB1cCBhbmQgc3dhbGxv
-dyBpdCwgc2VlbXMgcGxhaW4gd3JvbmcuCgogPiBQZXJoYXBzIHdlIGNvdWxkIGZpbmQgYSB3YXkg
-dG8KPiB0ZWxsIHVzZXJzIHRoYXQgdGhleSBhcmUgZmFjaW5nIHRoaXMgaXNzdWUgYnkgYWRkaW5n
-IGEgY2hlY2sgaW4gbHR0bmctdXN0Cj4gY29uZmlndXJlLmFjID8KCkknZCB0aG91Z2h0IG9mIHRo
-YXQsIHRvby4gTWF5YmUgYSAjZGVmaW5lIHN5bWJvbCwgZ2VuZXJhdGVkIGJ5IHRoZSAKY29uZmln
-dXJlIHNjcmlwdCB0byBkaXN0aW5ndWlzaCBiZXR3ZWVuIHRoZSB0d28gY2FzZXM/CkkgYmVsaWV2
-ZSB0aGUgdGVzdCBjYXNlIHRvIGRldGVjdCB0aGlzIGJ1ZyB3YXMgcXVpdGUgdHJpdmlhbDsgSSB3
-b3VsZCAKanVzdCBoYXZlIHRvIGRpZyBpdCB1cC4gQnV0IEknbSBub3QgdmVyeSBmb25kIG9mIGF1
-dG90b29scywgZWl0aGVyLiA7LSkKUGx1cywgSSBzdGlsbCBkb24ndCBzZWUgdGhlIGlzc3VlIHdp
-dGggcmVtb3Zpbmcgd2VhaywgcmVhbGx5LgoKQnV0IEknbSBvcGVuIHRvIGFueSBzdWdnZXN0aW9u
-LgoKVGhhbmtzIGFnYWluIQpHZXJsYW5kbwoKPgo+IFRoYW5rcywKPgo+IE1hdGhpZXUKPgo+Pgo+
-PiBUaGFuayB5b3UhCj4+IEdlcmxhbmRvCj4+Cj4+Cj4+Pgo+Pj4gVGhhbmtzLAo+Pj4KPj4+IE1h
-dGhpZXUKPj4+Cj4+Pj4KPj4+PiBTbyBldmVuIHRob3VnaCB0aGUgaXNzdWUgaXMgb25seSBvYnNl
-cnZlZCB3aXRoIGEgYnVnZ3kgY29tcGlsZXIsIHJlbW92aW5nCj4+Pj4gdGhlIHdlYWsgYXR0cmli
-dXRlIGFsc28gZW5mb3JjZXMgdGhlIGNvcnJlY3Qgc3Ryb25nIGxpbmtpbmcgdG8gdGhlIHN5bWJv
-bHMKPj4+PiBwcm92aWRlZCBieSB0aGUgbGlua2VyICh3aGljaCB3b3VsZCBvdGhlcndpc2UsIGJ5
-IHdlYWsgc2VtYW50aWNzLCBkZWZhdWx0Cj4+Pj4gdG8gYSB2YWx1ZSBvZiBhbGwtemVyb2VzKS4K
-Pj4+Pgo+Pj4+IFJlZmVyZW5jZXM6IGh0dHBzOi8vZ2NjLmdudS5vcmcvbWwvZ2NjLWhlbHAvMjAx
-NC0wNS9tc2cwMDAwNS5odG1sCj4+Pj4gUmVmZXJlbmNlczoKPj4+PiBodHRwOi8vbGlzdHMubHR0
-bmcub3JnL3BpcGVybWFpbC9sdHRuZy1kZXYvMjAxNC1NYXkvMDIzMDkwLmh0bWwKPj4+PiBSZXBv
-cnRlZC1ieTogTWFydGluIMOcbnNhbCA8bWFydGludW5zYWxAZ21haWwuY29tPgo+Pj4+IFRoYW5r
-cy10bzogSGVucmlrIFdhbGxpbiA8aGVucmlrd2FsbGluNzJAZ21haWwuY29tPgo+Pj4+IENjOiBQ
-YXVsIFdvZWdlcmVyIDxQYXVsX1dvZWdlcmVyQG1lbnRvci5jb20+Cj4+Pj4gU2lnbmVkLW9mZi1i
-eTogR2VybGFuZG8gRmFsYXV0byA8Z2VybGFuZG8uZmFsYXV0b0BrZXltaWxlLmNvbT4KPj4+PiAt
-LS0KPj4+PiAgICBpbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaCB8IDE1ICsrKysrKysrKystLS0t
-LQo+Pj4+ICAgIDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygt
-KQo+Pj4+Cj4+Pj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC5oIGIvaW5j
-bHVkZS9sdHRuZy90cmFjZXBvaW50LmgKPj4+PiBpbmRleCBjNWEwOWQ4Li4yMjllYTcyIDEwMDY0
-NAo+Pj4+IC0tLSBhL2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC5oCj4+Pj4gKysrIGIvaW5jbHVk
-ZS9sdHRuZy90cmFjZXBvaW50LmgKPj4+PiBAQCAtMzA4LDE0ICszMDgsMTkgQEAgX190cmFjZXBv
-aW50c19fZGVzdHJveSh2b2lkKQo+Pj4+ICAgICNpZmRlZiBUUkFDRVBPSU5UX0RFRklORQo+Pj4+
-Cj4+Pj4gICAgLyoKPj4+PiAtICogVGhlc2Ugd2VhayBzeW1ib2xzLCB0aGUgY29uc3RydWN0b3Is
-IGFuZCBkZXN0cnVjdG9yIHRha2UgY2FyZSBvZgo+Pj4+IC0gKiByZWdpc3RlcmluZyBvbmx5IF9v
-bmVfIGluc3RhbmNlIG9mIHRoZSB0cmFjZXBvaW50cyBwZXIgc2hhcmVkLW9qYmVjdAo+Pj4+IC0g
-KiAob3IgZm9yIHRoZSB3aG9sZSBtYWluIHByb2dyYW0pLgo+Pj4+ICsgKiBUaGVzZSBzdHJvbmcg
-aGlkZGVuIHN5bWJvbHMgYXJlIGF1dG9tYXRpY2FsbHkgcHJvdmlkZWQgYnkgdGhlIGxpbmtlcgo+
-Pj4+ICsgKiBmb3IgZWFjaCBzaGFyZWQtb2JqZWN0IChvciBmb3IgdGhlIHdob2xlIG1haW4gcHJv
-Z3JhbSkgYXMgcG9pbnRlcnMKPj4+PiArICogdG8gdGhlIG9ycGhhbmVkIHNlY3Rpb24gIl90cmFj
-ZXBvaW50c19wdHJzIiBhbmQgbXVzdCBub3QgYmUgdmlzaWJsZQo+Pj4+ICsgKiBmcm9tIG90aGVy
-IHNoYXJlZCBvYmplY3RzIHRvIGF2b2lkIG5hbWUgY2xhc2hlcyBhdCBydW50aW1lIHdoaWNoIHdv
-dWxkCj4+Pj4gKyAqIHNpbGVudGx5IGVuYWJsZSBvbmx5IHRoZSB0cmFjZXBvaW50cyBmcm9tIHRo
-ZSBvYmplY3QgbG9hZGVkIGZpcnN0Lgo+Pj4+ICsgKiBOT1RJQ0U6IFNvbWUgT3BlbkVtYmVkZGVk
-IEdDQyByZWxlYXNlcyAobmFtZWx5IDQuNy4yKSBpbmNvcnJlY3RseQo+Pj4+ICsgKiBlbWl0IHRo
-b3NlIHN5bWJvbHMgd2l0aCBkZWZhdWx0IHZpc2liaWxpdHkgaWYgYm90aCB3ZWFrIGFuZCBoaWRk
-ZW4KPj4+PiArICogYXJlIHVzZWQuCj4+Pj4gICAgICovCj4+Pj4gICAgZXh0ZXJuIHN0cnVjdCB0
-cmFjZXBvaW50ICogY29uc3QgX19zdGFydF9fX3RyYWNlcG9pbnRzX3B0cnNbXQo+Pj4+IC0JX19h
-dHRyaWJ1dGVfXygod2VhaywgdmlzaWJpbGl0eSgiaGlkZGVuIikpKTsKPj4+PiArCV9fYXR0cmli
-dXRlX18oKHZpc2liaWxpdHkoImhpZGRlbiIpKSk7Cj4+Pj4gICAgZXh0ZXJuIHN0cnVjdCB0cmFj
-ZXBvaW50ICogY29uc3QgX19zdG9wX19fdHJhY2Vwb2ludHNfcHRyc1tdCj4+Pj4gLQlfX2F0dHJp
-YnV0ZV9fKCh3ZWFrLCB2aXNpYmlsaXR5KCJoaWRkZW4iKSkpOwo+Pj4+ICsJX19hdHRyaWJ1dGVf
-XygodmlzaWJpbGl0eSgiaGlkZGVuIikpKTsKPj4+Pgo+Pj4+ICAgIC8qCj4+Pj4gICAgICogV2hl
-biBUUkFDRVBPSU5UX1BST0JFX0RZTkFNSUNfTElOS0FHRSBpcyBkZWZpbmVkLCB3ZSBkbyBub3Qg
-ZW1pdCBhCj4+Pj4gLS0KPj4+PiAxLjguMC4xCj4+Pj4KPj4+Pgo+Pj4+IF9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+Pj4gbHR0bmctZGV2IG1haWxpbmcg
-bGlzdAo+Pj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4+PiBodHRwOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4+Pgo+Pj4KPj4KPj4K
-PgoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMu
-bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============1612113365==
+Content-Type: multipart/alternative; boundary=047d7bea334eae421904fb907686
+
+--047d7bea334eae421904fb907686
+Content-Type: text/plain; charset=UTF-8
+
+On Tue, Jun 10, 2014 at 10:52 AM, Antoine Busque <
+antoine.busque@efficios.com> wrote:
+
+> A typo in an if statement verifying the range in which the current
+> kernel's version is situated caused build failure for modules on 3.5.0
+> specifically, by trying to use the new api for block_rq_complete which
+> has not been backported from the 3.15 branch to the 3.5 branch.
+> ---
+>  instrumentation/events/lttng-module/block.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/instrumentation/events/lttng-module/block.h
+> b/instrumentation/events/lttng-module/block.h
+> index dbe6c6c..ad0a363 100644
+> --- a/instrumentation/events/lttng-module/block.h
+> +++ b/instrumentation/events/lttng-module/block.h
+> @@ -224,7 +224,7 @@ DEFINE_EVENT(block_rq_with_error, block_rq_requeue,
+>  #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,5)      \
+>         || LTTNG_KERNEL_RANGE(3,12,21, 3,13,0)          \
+>         || LTTNG_KERNEL_RANGE(3,10,41, 3,11,0)          \
+> -       || LTTNG_KERNEL_RANGE(3,4,91, 3,5,1)            \
+> +       || LTTNG_KERNEL_RANGE(3,4,91, 3,5,0)            \
+>         || LTTNG_KERNEL_RANGE(3,2,58, 3,3,0))
+>
+>  /**
+> --
+> 2.0.0
+>
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+I just realised I forgot to sign off the previous patch,
+so I'll resend now. Please excuse the multiple emails,
+I'm still getting the hang of this workflow.
+
+Regards,
+Antoine.
+
+--047d7bea334eae421904fb907686
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div class=3D"gmail_extra"><div class=3D"gmail_quote">On T=
+ue, Jun 10, 2014 at 10:52 AM, Antoine Busque <span dir=3D"ltr">&lt;<a href=
+=3D"mailto:antoine.busque@efficios.com" target=3D"_blank">antoine.busque@ef=
+ficios.com</a>&gt;</span> wrote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
+left-width:1px;border-left-color:rgb(204,204,204);border-left-style:solid;p=
+adding-left:1ex"><div class=3D""><div class=3D"h5">A typo in an if statemen=
+t verifying the range in which the current<br>
+
+kernel&#39;s version is situated caused build failure for modules on 3.5.0<=
+br>
+specifically, by trying to use the new api for block_rq_complete which<br>
+has not been backported from the 3.15 branch to the 3.5 branch.<br>
+---<br>
+=C2=A0instrumentation/events/lttng-module/block.h | 2 +-<br>
+=C2=A01 file changed, 1 insertion(+), 1 deletion(-)<br>
+<br>
+diff --git a/instrumentation/events/lttng-module/block.h b/instrumentation/=
+events/lttng-module/block.h<br>
+index dbe6c6c..ad0a363 100644<br>
+--- a/instrumentation/events/lttng-module/block.h<br>
++++ b/instrumentation/events/lttng-module/block.h<br>
+@@ -224,7 +224,7 @@ DEFINE_EVENT(block_rq_with_error, block_rq_requeue,<br>
+=C2=A0#if (LINUX_VERSION_CODE &gt;=3D KERNEL_VERSION(3,14,5) =C2=A0 =C2=A0 =
+=C2=A0\<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 || LTTNG_KERNEL_RANGE(3,12,21, 3,13,0) =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0\<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 || LTTNG_KERNEL_RANGE(3,10,41, 3,11,0) =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0\<br>
+- =C2=A0 =C2=A0 =C2=A0 || LTTNG_KERNEL_RANGE(3,4,91, 3,5,1) =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0\<br>
++ =C2=A0 =C2=A0 =C2=A0 || LTTNG_KERNEL_RANGE(3,4,91, 3,5,0) =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0\<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 || LTTNG_KERNEL_RANGE(3,2,58, 3,3,0))<br>
+<br>
+=C2=A0/**<br>
+--<br>
+2.0.0</div></div></blockquote><blockquote class=3D"gmail_quote" style=3D"ma=
+rgin:0px 0px 0px 0.8ex;border-left-width:1px;border-left-color:rgb(204,204,=
+204);border-left-style:solid;padding-left:1ex"><div class=3D""><div class=
+=3D"h5">
+
+<br>
+</div></div>_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
+br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+/blockquote><div><br></div>I just realised I forgot to sign off the previou=
+s patch,<div>
+so I&#39;ll resend now. Please excuse the multiple emails,</div><div>I&#39;=
+m still getting the hang of this workflow.=C2=A0</div></div><br></div><div =
+class=3D"gmail_extra">Regards,</div><div class=3D"gmail_extra">Antoine.</di=
+v></div>
+
+--047d7bea334eae421904fb907686--
+
+
+--===============1612113365==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1612113365==--
