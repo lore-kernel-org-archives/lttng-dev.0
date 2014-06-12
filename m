@@ -1,16 +1,16 @@
 From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: lttng ubuntu .deb packages
-Date: Thu, 12 Jun 2014 14:58:12 -0400
-Message-ID: <5399F844.3060606__35263.9802884825$1402599543$gmane$org@voxpopuli.im>
-References: <CAM5kDqyeeBURUD1MLH_4ka=2h43e4fFhBJNUdWEA5s=z8yLJCg@mail.gmail.com>
+Subject: Re: Tracing custom text file using TMF or LTTV question
+Date: Thu, 12 Jun 2014 16:28:33 -0400
+Message-ID: <539A0D71.7040304__1332.10826102204$1402604975$gmane$org@voxpopuli.im>
+References: <B248AFF88F37C1408AA08E754F6BD3364C24D9@ESESSMB103.ericsson.se>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2122350777=="
+Content-Type: multipart/mixed; boundary="===============0840882283=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <alexmonthy@voxpopuli.im>) id 1WvACN-0002HJ-DY
- for lttng-dev@lists.lttng.org; Thu, 12 Jun 2014 14:58:12 -0400
-In-Reply-To: <CAM5kDqyeeBURUD1MLH_4ka=2h43e4fFhBJNUdWEA5s=z8yLJCg@mail.gmail.com>
+ (envelope-from <alexmonthy@voxpopuli.im>) id 1WvBbn-0004Zc-QA
+ for lttng-dev@lists.lttng.org; Thu, 12 Jun 2014 16:28:33 -0400
+In-Reply-To: <B248AFF88F37C1408AA08E754F6BD3364C24D9@ESESSMB103.ericsson.se>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,42 +19,89 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Anand Neeli <anand.neeli@gmail.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Stavros Giannakopoulos <stavros.giannakopoulos@ericsson.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
 This is a multi-part message in MIME format.
---===============2122350777==
+--===============0840882283==
 Content-Type: multipart/alternative;
- boundary="------------060808000203030600050506"
+ boundary="------------000303090809040902090801"
 
 This is a multi-part message in MIME format.
---------------060808000203030600050506
+--------------000303090809040902090801
 Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Yes! There are PPAs for Ubuntu packages, one for the stable branches:
-https://launchpad.net/~lttng/+archive/ppa
+Hi Stavros,
 
-and one for builds of the git master:
-https://launchpad.net/~lttng/+archive/daily
+First, thanks for the interest :)
 
+To add support for a new trace type to TMF, you basically have 2 
+options: either you first convert your trace to another supported 
+format, or you write a parser in TMF. In practice, the second option is 
+easier. There is, imho, not much gain in converting existing traces to 
+CTF, that just ends up being an extra intermediate format. (On the other 
+hand, if you tracer directly writes in CTF, that can net you advantages).
+
+If your trace is in text format, it's possible to create a custom text 
+parser, which you can define directly from the UI using regular 
+expressions. If it's a binary format, then that requires writing some 
+Java code.
+
+
+Next, you'll typically want to add views/analyses for your trace type. 
+The view in your screenshot look quite doable, using our generic Time 
+Graph View. You can see a screenshot of the Control Flow and Resource 
+View, both based on the Time Graph views, on that page:
+http://eclipse.org/linuxtools/projectPages/lttng/
+
+(Latest version also supports showing arrows in the time graph. The 
+latest Control Flow View does so, to show the "flow" of each CPU. We 
+should update that screenshot...)
+
+Another thing to note, a very new feature in TMF is the possibility to 
+define analyses and views using XML definitions, so you do not need to 
+write Java code to create a custom view. This makes it VERY easy to 
+create new views! The data-driven views are a bit more limited than the 
+"Java-driven" ones (for example, I think right now arrows are not 
+supported in the data-driven views), but it's slowly improving.
+
+
+If you have any other questions, please let us know!
 
 Cheers,
 Alexandre
 
 
-On 06/12/2014 02:27 PM, Anand Neeli wrote:
-> Hi All,
-> are there latest ubuntu .deb of lttng-ust, lttng-ust-dev, liburcu,
-> liburcu-dev available?
-> i'm looking for i386 and amd64 CPU target
-> if yes, can some one tell me the location to download?
+
+On 06/12/2014 07:56 AM, Stavros Giannakopoulos wrote:
+> Greetings,
+> i am running a project on behalf or Ericsson Sweden regarding tracing on a custom multicore architecture.
 >
-> i'm able to find older versions in http://packages.ubuntu.com, but i'm
-> looking for the latest deb files
+> I came across your tools through a colleague and It seems that they might be appropriate for our work, especially TMF since we already utilize
+> eclipse quite heavily.
 >
-> Thanks,
-> Anand Neeli
+> I have some technical questions though, and I would like some feedback so I know whether our specifications can be covered by that or some similar tool.
+>
+> Please forward this email to the appropriate department if possible.
+>
+> The specifications we have are:
+> 1. The trace we are interested in is a process-centric view of the events (or actors in our system) along with their respective threads, that will run on specific cores.
+> 2. We don't need to capture the traces, that has been already done, only to parse the generated file and produce a graphical view that includes the processes, threads, cores and the messages that trigger new processes.
+> is that possible?
+> 3. We have the trace files in .lat format already which are generated by using the Flexus tools. What I want to know if there is a conversion tool available or we need to develop a script to do the conversion to a suitable format (CTF). And if the TMF or LTTV can produce this result from a custom trace file and not a kernel trace.
+>
+> Observe on Fig 1 a simplified view of our needs. In practice there will be a few thousands processes in tens of cores and the start/end times and the messages are essential.
+>
+> Fig 1: Example of result wanted.
+> [cid:image002.jpg@01CF8644.F8F779E0]
+>
+>
+> Please reply on my email: stavros.giannakopoulos@ericsson.com<mailto:stavros.giannakopoulos@ericsson.com>
+> or contact Johan Mellgren  at johan.q.mellgren@ericsson.com<mailto:johan.q.mellgren@ericsson.com>
+>
+> Regards,
+> Stavros Giannakopoulos
 >
 >
 >
@@ -64,7 +111,7 @@ On 06/12/2014 02:27 PM, Anand Neeli wrote:
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 
---------------060808000203030600050506
+--------------000303090809040902090801
 Content-Type: text/html; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
 
@@ -74,35 +121,85 @@ Content-Transfer-Encoding: 7bit
       http-equiv="Content-Type">
   </head>
   <body bgcolor="#FFFFFF" text="#000000">
-    Yes! There are PPAs for Ubuntu packages, one for the stable
-    branches:<br>
-    <a class="moz-txt-link-freetext" href="https://launchpad.net/~lttng/+archive/ppa">https://launchpad.net/~lttng/+archive/ppa</a><br>
+    Hi Stavros,<br>
     <br>
-    and one for builds of the git master:<br>
-    <a class="moz-txt-link-freetext" href="https://launchpad.net/~lttng/+archive/daily">https://launchpad.net/~lttng/+archive/daily</a><br>
+    First, thanks for the interest :)<br>
     <br>
+    To add support for a new trace type to TMF, you basically have 2
+    options: either you first convert your trace to another supported
+    format, or you write a parser in TMF. In practice, the second option
+    is easier. There is, imho, not much gain in converting existing
+    traces to CTF, that just ends up being an extra intermediate format.
+    (On the other hand, if you tracer directly writes in CTF, that can
+    net you advantages).<br>
+    <br>
+    If your trace is in text format, it's possible to create a custom
+    text parser, which you can define directly from the UI using regular
+    expressions. If it's a binary format, then that requires writing
+    some Java code.<br>
+    <br>
+    <br>
+    Next, you'll typically want to add views/analyses for your trace
+    type. The view in your screenshot look quite doable, using our
+    generic Time Graph View. You can see a screenshot of the Control
+    Flow and Resource View, both based on the Time Graph views, on that
+    page:<br>
+    <a class="moz-txt-link-freetext" href="http://eclipse.org/linuxtools/projectPages/lttng/">http://eclipse.org/linuxtools/projectPages/lttng/</a><br>
+    <br>
+    (Latest version also supports showing arrows in the time graph. The
+    latest Control Flow View does so, to show the "flow" of each CPU. We
+    should update that screenshot...)<br>
+    <br>
+    Another thing to note, a very new feature in TMF is the possibility
+    to define analyses and views using XML definitions, so you do not
+    need to write Java code to create a custom view. This makes it VERY
+    easy to create new views! The data-driven views are a bit more
+    limited than the "Java-driven" ones (for example, I think right now
+    arrows are not supported in the data-driven views), but it's slowly
+    improving.<br>
+    <br>
+    <br>
+    If you have any other questions, please let us know!<br>
     <br>
     Cheers,<br>
     Alexandre<br>
     <br>
     <br>
-    <div class="moz-cite-prefix">On 06/12/2014 02:27 PM, Anand Neeli
-      wrote:<br>
+    <br>
+    <div class="moz-cite-prefix">On 06/12/2014 07:56 AM, Stavros
+      Giannakopoulos wrote:<br>
     </div>
     <blockquote
-cite="mid:CAM5kDqyeeBURUD1MLH_4ka=2h43e4fFhBJNUdWEA5s=z8yLJCg@mail.gmail.com"
+      cite="mid:B248AFF88F37C1408AA08E754F6BD3364C24D9@ESESSMB103.ericsson.se"
       type="cite">
-      <pre wrap="">Hi All,
-are there latest ubuntu .deb of lttng-ust, lttng-ust-dev, liburcu,
-liburcu-dev available?
-i'm looking for i386 and amd64 CPU target
-if yes, can some one tell me the location to download?
+      <pre wrap="">
+Greetings,
+i am running a project on behalf or Ericsson Sweden regarding tracing on a custom multicore architecture.
 
-i'm able to find older versions in <a class="moz-txt-link-freetext" href="http://packages.ubuntu.com">http://packages.ubuntu.com</a>, but i'm
-looking for the latest deb files
+I came across your tools through a colleague and It seems that they might be appropriate for our work, especially TMF since we already utilize
+eclipse quite heavily.
 
-Thanks,
-Anand Neeli
+I have some technical questions though, and I would like some feedback so I know whether our specifications can be covered by that or some similar tool.
+
+Please forward this email to the appropriate department if possible.
+
+The specifications we have are:
+1. The trace we are interested in is a process-centric view of the events (or actors in our system) along with their respective threads, that will run on specific cores.
+2. We don't need to capture the traces, that has been already done, only to parse the generated file and produce a graphical view that includes the processes, threads, cores and the messages that trigger new processes.
+is that possible?
+3. We have the trace files in .lat format already which are generated by using the Flexus tools. What I want to know if there is a conversion tool available or we need to develop a script to do the conversion to a suitable format (CTF). And if the TMF or LTTV can produce this result from a custom trace file and not a kernel trace.
+
+Observe on Fig 1 a simplified view of our needs. In practice there will be a few thousands processes in tens of cores and the start/end times and the messages are essential.
+
+Fig 1: Example of result wanted.
+[<a class="moz-txt-link-freetext" href="cid:image002.jpg@01CF8644.F8F779E0">cid:image002.jpg@01CF8644.F8F779E0</a>]
+
+
+Please reply on my email: <a class="moz-txt-link-abbreviated" href="mailto:stavros.giannakopoulos@ericsson.com">stavros.giannakopoulos@ericsson.com</a><a class="moz-txt-link-rfc2396E" href="mailto:stavros.giannakopoulos@ericsson.com">&lt;mailto:stavros.giannakopoulos@ericsson.com&gt;</a>
+or contact Johan Mellgren  at <a class="moz-txt-link-abbreviated" href="mailto:johan.q.mellgren@ericsson.com">johan.q.mellgren@ericsson.com</a><a class="moz-txt-link-rfc2396E" href="mailto:johan.q.mellgren@ericsson.com">&lt;mailto:johan.q.mellgren@ericsson.com&gt;</a>
+
+Regards,
+Stavros Giannakopoulos
 
 </pre>
       <br>
@@ -118,10 +215,10 @@ lttng-dev mailing list
   </body>
 </html>
 
---------------060808000203030600050506--
+--------------000303090809040902090801--
 
 
---===============2122350777==
+--===============0840882283==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -132,4 +229,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2122350777==--
+--===============0840882283==--
