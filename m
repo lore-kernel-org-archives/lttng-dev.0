@@ -1,17 +1,17 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: Debian specific userspace RCU configure override
- (ARMv7 Beagle Bone Black)
-Date: Thu, 12 Jun 2014 16:46:20 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359C1188__45401.5228235677$1402591624$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: [lttng-tools PATCH] version control
+Date: Thu, 12 Jun 2014 14:02:00 -0400
+Message-ID: <20140612180200.GB8011__19123.0600387373$1402596178$gmane$org@thessa>
+References: <538E1204.6080304@voxpopuli.im>
+ <cover.1401819810.git.raphael.beamonte@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============0298182588=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Wv88x-0001I1-7A
- for lttng-dev@lists.lttng.org; Thu, 12 Jun 2014 12:46:29 -0400
-Content-Language: fr-FR
+ (envelope-from <dgoulet@efficios.com>) id 1Wv9KB-0001kn-SD
+ for lttng-dev@lists.lttng.org; Thu, 12 Jun 2014 14:02:10 -0400
+In-Reply-To: <cover.1401819810.git.raphael.beamonte@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,64 +20,86 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: =?iso-8859-1?Q?Rapha=EBl?= Beamonte <raphael.beamonte@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-> Date: Thu, 12 Jun 2014 13:51:06 +0000
->   Progress on this front.  I did one thing: I edited userspace-rcu/urcu/a=
-rch/arm.h to comment =
 
->out the #ifdef CONFIG_RCU_ARM_HAVE_DMB defines so that userspace-rcu build=
-s "dmb-less".  =
+--===============0298182588==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="Pd0ReVV5GZGQvF3a"
+Content-Disposition: inline
 
->Once rebuilt and re-installed, I can then move on to try lttng-tools again=
-, and this time it passes =
 
->the rculfhash.lo step.  It dies much later for a completely unrelated reas=
-on which I expect to fix =
+--Pd0ReVV5GZGQvF3a
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->shortly.  At this point I also expect a rebuild of lttng-ust would succeed.
+Merged!
 
-   Turns out this new make error is obscure (only 8 hits in Google, 3 of wh=
-ich are in Chinese).
+On 03 Jun (14:30:08), Rapha=EBl Beamonte wrote:
+> Hello folks,
+>=20
+> Like Alexandre explained, using different version control disallow the
+> use of the git describe command that gives us the git commit id to know
+> our running version of LTTng-tools. This patch aims to keep a version
+> number, even if it's not the most updated, even if we're outside a
+> git or bzr repository.
+>=20
+> By default, it will just use the principal VERSION define. This behavior
+> was already in the source code, but wasn't working due to the default
+> blank GIT_VERSION define. Removing it does the trick.
+>=20
+> Rapha=EBl
+>=20
+>=20
+> Rapha=EBl Beamonte (1):
+>   Fix: remove the default GIT_VERSION define to allow different version
+>     control
+>=20
+>  include/version.h.tmpl | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> --=20
+> 2.0.0.rc2
+>=20
+>=20
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-make[5]: Entering directory '/usr/src/lttng-tools-2.3.0/src/lib/lttng-ctl/f=
-ilter'
-  LEX      filter-lexer.c
-flex: fatal internal error, exec failed
-make[5]: *** [filter-lexer.c] Error 141
+--Pd0ReVV5GZGQvF3a
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
-   It turns out /usr/bin/flex is unusable on the BBB's Angstrom distributio=
-n!  It is only runnable in calls like 'flex --help' or 'flex --version'.  A=
-s soon as you try to process any .l file, it will choke with an error 141. =
- This is because /usr/bin/flex uses a hard-wired reference to the m4 execut=
-able where it lay on the machine where the Angstrom image was cross-compile=
-d!  (Thanks to Rob Clark for finding this out, http://gstreamer-devel.96612=
-5.n4.nabble.com/Installation-error-td969071.html)  The ugly but simple fix =
-is to create a symbolic link at the place flex looks for m4:
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
-# mkdir -p /build/v2012.12/build/tmp-angstrom_v2012_12-eglibc/sysroots/x86_=
-64-linux/usr/bin
-# ln -s /usr/bin/m4 /build/v2012.12/build/tmp-angstrom_v2012_12-eglibc/sysr=
-oots/x86_64-linux/usr/bin/m4
+iQF8BAEBAgBmBQJTmesYXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02gasH/RQJUEDQ1UQMTYsguLvLxafF
+sBQB08AwxHCPhWY4jz99n/PyIWmC3UHpIae+nRLHL4esLD+f+1hntu83Y/YwraHS
+rV020xaMg0dLTJ6G4a9a3w1kRsID8I/R8X1BgLhuKy+tOxw8KAexB5SUK8PPgddS
+POu+eEabme8MOeym3qxLfOxHuJ+29pUcPiXxQ3kSAJM42K74rzKMAuOYWNXsfuHA
+94d8f+JoK6tMRhij153WZ+tl7XJLt5tk/isznomKM+86NCcaXNAz5rj+rbwTQtlm
+wQz9ee5tDxmkJqzXlOlQuBRwJTGI5TvV6dNPhS3i9AhXJ4n7PLeGr2vh+oO5qGA=
+=15w3
+-----END PGP SIGNATURE-----
 
-   Equivalently, invocations of flex must be preceded by setting the enviro=
-nment variable M4 =3D /usr/bin/m4.  Which is what userspace-rcu must someho=
-w do to actually install without tripping over this bug.
+--Pd0ReVV5GZGQvF3a--
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada <http://www.valcartier.drdc-r=
-ddc.gc.ca/>
+
+--===============0298182588==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0298182588==--
