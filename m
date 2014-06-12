@@ -1,17 +1,16 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Add dependency to libcommon for
- python binding
-Date: Thu, 12 Jun 2014 14:02:09 -0400
-Message-ID: <20140612180209.GC8011__6357.32973828471$1402596208$gmane$org@thessa>
-References: <1401964788-24312-1-git-send-email-paul_woegerer@mentor.com>
+Subject: Re: [lttng-tool] Fix: wrong casting of return value
+Date: Thu, 12 Jun 2014 14:02:21 -0400
+Message-ID: <20140612180221.GD8011__5987.34387099302$1402596264$gmane$org@thessa>
+References: <1402328436-13404-1-git-send-email-jonathan.r.julien@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2035633470=="
+Content-Type: multipart/mixed; boundary="===============1698680876=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1Wv9KK-0001ku-0y
- for lttng-dev@lists.lttng.org; Thu, 12 Jun 2014 14:02:18 -0400
-In-Reply-To: <1401964788-24312-1-git-send-email-paul_woegerer@mentor.com>
+ (envelope-from <dgoulet@efficios.com>) id 1Wv9KV-0001lQ-7Z
+ for lttng-dev@lists.lttng.org; Thu, 12 Jun 2014 14:02:28 -0400
+In-Reply-To: <1402328436-13404-1-git-send-email-jonathan.r.julien@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,72 +19,52 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Paul Woegerer <paul_woegerer@mentor.com>
+To: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 
---===============2035633470==
+--===============1698680876==
 Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="H8ygTp4AXg6deix2"
+	protocol="application/pgp-signature"; boundary="n/aVsWSeQ4JHkrmm"
 Content-Disposition: inline
 
 
---H8ygTp4AXg6deix2
+--n/aVsWSeQ4JHkrmm
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Merged!
 
-On 05 Jun (12:39:48), Paul Woegerer wrote:
-> Using the python binding library currently results in in the following er=
-ror message:
+On 09 Jun (11:40:36), Jonathan Rajotte Julien wrote:
+> The function uri_parse_str_urls return a ssize_t and the return was
+> casted to a size_t. This caused the following error checking to fail as
+> -1 was interpreted as 18446744073709551615.
 >=20
-> ImportError: No module named '_lttng'
+> Fixes #803
 >=20
-> During handling of the above exception, another exception occurred:
->=20
-> Traceback (most recent call last):
->   File "./test_daemon.py", line 31, in <module>
->     from test_utils import *
->   File "/home/pwoegere/MGC/lttng2_stack_latest/lttng-tools/tests/utils/te=
-st_utils.py", line 33, in <module>
->     from lttng import *
->   File "/home/pwoegere/MGC/lttng2_stack_latest/lttng-tools/extras/binding=
-s/swig/python/lttng.py", line 34, in <module>
->     _lttng =3D swig_import_helper()
->   File "/home/pwoegere/MGC/lttng2_stack_latest/lttng-tools/extras/binding=
-s/swig/python/lttng.py", line 26, in swig_import_helper
->     import _lttng
-> ImportError: /home/pwoegere/MGC/lttng2_stack_latest/lttng-tools/extras/bi=
-ndings/swig/python/.libs/_lttng.so: undefined symbol: log_add_time
->=20
-> This patch adds the missing dependency to libcommon that contains the def=
-inition of log_add_time.
->=20
-> Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
+> Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
 > ---
->  extras/bindings/swig/python/Makefile.am | 3 ++-
+>  src/lib/lttng-ctl/save.c | 3 ++-
 >  1 file changed, 2 insertions(+), 1 deletion(-)
 >=20
-> diff --git a/extras/bindings/swig/python/Makefile.am b/extras/bindings/sw=
-ig/python/Makefile.am
-> index caf1934..ec35930 100644
-> --- a/extras/bindings/swig/python/Makefile.am
-> +++ b/extras/bindings/swig/python/Makefile.am
-> @@ -13,7 +13,8 @@ MAINTAINERCLEANFILES =3D lttng_wrap.c lttng.py
->  nodist__lttng_la_SOURCES =3D lttng_wrap.c
->  _lttng_la_LDFLAGS =3D -module
->  _lttng_la_LIBADD =3D 	$(top_srcdir)/src/lib/lttng-ctl/liblttng-ctl.la 		\
-> -			$(top_srcdir)/src/common/sessiond-comm/libsessiond-comm.la
-> +			$(top_srcdir)/src/common/sessiond-comm/libsessiond-comm.la		\
-> +			$(top_srcdir)/src/common/libcommon.la
+> diff --git a/src/lib/lttng-ctl/save.c b/src/lib/lttng-ctl/save.c
+> index d136b2d..d414a9d 100644
+> --- a/src/lib/lttng-ctl/save.c
+> +++ b/src/lib/lttng-ctl/save.c
+> @@ -99,7 +99,8 @@ int lttng_save_session_attr_set_output_url(
+>  	struct lttng_save_session_attr *attr, const char *url)
+>  {
+>  	int ret =3D 0;
+> -	size_t len, size;
+> +	size_t len;
+> +	ssize_t size;
+>  	struct lttng_uri *uris =3D NULL;
 > =20
->  lttng_wrap.c: lttng.i
->  	$(SWIG) -python -I. -I$(top_srcdir)/src/common/sessiond-comm lttng.i
+>  	if (!attr) {
 > --=20
-> 1.9.3
+> 2.0.0
 >=20
 >=20
 > _______________________________________________
@@ -93,28 +72,28 @@ ig/python/Makefile.am
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---H8ygTp4AXg6deix2
+--n/aVsWSeQ4JHkrmm
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQF8BAEBAgBmBQJTmeshXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+iQF8BAEBAgBmBQJTmestXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
 ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02ceQIAKj8QUk2T34xqTSPSsI7VoN7
-NTnHBCUswVnoXHdMXWbZWU6s5i8uzUsDH/hqnYWEmOyl4ZhTQpXW1LTqIyGst8J+
-D15Yaey4CBTAmqnYTB4k0Oe+Lb2oiIA11vHilkfIEX2cUKCKba5h9lPEsZyUiZys
-OzkSKWizd05DtFFhjljCmvRzDBo+8VPw2ZCMBvNk1BdLCJ7+jdScNsTyVaS6aAFb
-LHfHhWMEVl9T0TftWlD0Qm6Ccp6Cd5Uff5a3oxeakiwKe21VG4+WwS2EgO/SvpWt
-QYV0IhK62ALiKx/5ujSZQlBXaq2fHlBq+vVyMjIPaxrBmwKn9h5z/eAl0ItWnOY=
-=Nhzs
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02ZW8H/3XQqI47j5giuCl10XthfvGL
+M+LARFNZj+qKRc29PpItw/+CRD0Y2gNziSolZfjU4wL0TuTDxLrpIechUYDbA2yn
+I/uZZOdSODi3oPOlGzwebJdgiafEjjbOMTZjupYeIv2+VgI1rlwEfwq7O5iFzf9k
+u+cz1oyGVj+ME4Y8lwSRIZS3JVeKO5F/BGj8NE2TBzvXMmsHEcKHTwaAMl4f+9W2
+2524/ICuwV3XTxnkCyMWraSVyvNlMpM/6FzhDoqhjWotcqf+5hP52fCEcsWnPVwp
+F8zPMsXSg8ZbCOb8uW8XKJHUcp03mHDc1+bFKpRbwd80nqCcgXfEAOj5/4K8+YU=
+=uXcX
 -----END PGP SIGNATURE-----
 
---H8ygTp4AXg6deix2--
+--n/aVsWSeQ4JHkrmm--
 
 
---===============2035633470==
+--===============1698680876==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -125,4 +104,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2035633470==--
+--===============1698680876==--
