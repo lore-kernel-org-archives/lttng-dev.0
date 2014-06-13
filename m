@@ -1,17 +1,25 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: lttng ubuntu .deb packages - compilation error
-Date: Thu, 12 Jun 2014 20:55:48 -0400
-Message-ID: <539A4C14.5080302__39562.8238017254$1402621001$gmane$org@voxpopuli.im>
-References: <CAM5kDqxJSHNcEj7=Jv+yDNJk9+bPCwTEjvYgdk36Pz8iMcw+qQ@mail.gmail.com>
+From: Jon Bernard <jbernard@debian.org>
+Subject: Re: babeltrace test failures on some architectures
+Date: Thu, 12 Jun 2014 23:51:17 -0400
+Message-ID: <20140613035117.GA8741__24450.7129224532$1402631549$gmane$org@helmut>
+References: <20140604184126.GA26877@helmut>
+ <CA+jJMxtn8XiLjT5NVURv5K8kECPPoPs1WF-0zTakJmRW=CO3mg@mail.gmail.com>
+ <CAEzWAeLEvv8FbHfwq8=sMeDW49DjO_gKoZ99z1Ff9s+dR6GuJQ@mail.gmail.com>
+ <20140609145201.GB25766@helmut>
+ <CA+jJMxsuEtk3QdDz1_a0MOBq0To7wB4+QnOW3Rkp0uJZ1eM1gw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.181])
+Received: from out2-smtp.messagingengine.com ([66.111.4.26])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <alexmonthy@voxpopuli.im>) id 1WvFmc-00062W-J7
- for lttng-dev@lists.lttng.org; Thu, 12 Jun 2014 20:56:00 -0400
-In-Reply-To: <CAM5kDqxJSHNcEj7=Jv+yDNJk9+bPCwTEjvYgdk36Pz8iMcw+qQ@mail.gmail.com>
+ (envelope-from <jbernard@debian.org>) id 1WvIWR-0006yU-NJ
+ for lttng-dev@lists.lttng.org; Thu, 12 Jun 2014 23:51:29 -0400
+Received: from compute3.internal (compute3.nyi.mail.srv.osa [10.202.2.43])
+ by gateway1.nyi.mail.srv.osa (Postfix) with ESMTP id 4E01720BEA
+ for <lttng-dev@lists.lttng.org>; Thu, 12 Jun 2014 23:51:18 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <CA+jJMxsuEtk3QdDz1_a0MOBq0To7wB4+QnOW3Rkp0uJZ1eM1gw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,92 +28,102 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Anand Neeli <anand.neeli@gmail.com>
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+* J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com> wrote:
+> The build logs only seem to contain the "prove" output (invoked by run.sh=
+).
+> =
 
-Did you install the "liblttng-ust-dev" package? That one is required if
-you want to compile applications against UST.
+> Could you run tests/bin/test_trace_read and
+> tests/lib/test_seek_empty_packet on armel and sparc? The output of
+> both of these tests and the coredumps (if any) should give me
+> something to work with.
 
-sdt.h comes from "systemtap-sdt-dev", which liblttng-ust-dev depends on,
-so it should get pulled in automatically once you install the dev package.
+Here are the sparc results:
 
-One more comment below:
+    $ ./tests/bin/test_trace_read
+    1..17
+    ./tests/bin/test_trace_read: line 34: 31489 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    not ok 1 - Run babeltrace with trace env-warning
+    #   Failed test 'Run babeltrace with trace env-warning'
+    #   in ./tests/bin/test_trace_read:main() at line 37.
+    ./tests/bin/test_trace_read: line 34: 31508 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    not ok 2 - Run babeltrace with trace lttng-modules-2.0-pre5
+    #   Failed test 'Run babeltrace with trace lttng-modules-2.0-pre5'
+    #   in ./tests/bin/test_trace_read:main() at line 37.
+    ./tests/bin/test_trace_read: line 34: 31527 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    not ok 3 - Run babeltrace with trace sequence
+    #   Failed test 'Run babeltrace with trace sequence'
+    #   in ./tests/bin/test_trace_read:main() at line 37.
+    ./tests/bin/test_trace_read: line 34: 31546 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    not ok 4 - Run babeltrace with trace smalltrace
+    #   Failed test 'Run babeltrace with trace smalltrace'
+    #   in ./tests/bin/test_trace_read:main() at line 37.
+    ./tests/bin/test_trace_read: line 34: 31565 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    not ok 5 - Run babeltrace with trace succeed1
+    #   Failed test 'Run babeltrace with trace succeed1'
+    #   in ./tests/bin/test_trace_read:main() at line 37.
+    ./tests/bin/test_trace_read: line 34: 31584 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    not ok 6 - Run babeltrace with trace succeed2
+    #   Failed test 'Run babeltrace with trace succeed2'
+    #   in ./tests/bin/test_trace_read:main() at line 37.
+    ./tests/bin/test_trace_read: line 34: 31603 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    not ok 7 - Run babeltrace with trace succeed3
+    #   Failed test 'Run babeltrace with trace succeed3'
+    #   in ./tests/bin/test_trace_read:main() at line 37.
+    ./tests/bin/test_trace_read: line 34: 31622 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    not ok 8 - Run babeltrace with trace succeed4
+    #   Failed test 'Run babeltrace with trace succeed4'
+    #   in ./tests/bin/test_trace_read:main() at line 37.
+    ./tests/bin/test_trace_read: line 34: 31641 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    not ok 9 - Run babeltrace with trace test
+    #   Failed test 'Run babeltrace with trace test'
+    #   in ./tests/bin/test_trace_read:main() at line 37.
+    ./tests/bin/test_trace_read: line 34: 31660 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    not ok 10 - Run babeltrace with trace warnings
+    #   Failed test 'Run babeltrace with trace warnings'
+    #   in ./tests/bin/test_trace_read:main() at line 37.
+    ./tests/bin/test_trace_read: line 34: 31679 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    not ok 11 - Run babeltrace with trace wk-heartbeat-u
+    #   Failed test 'Run babeltrace with trace wk-heartbeat-u'
+    #   in ./tests/bin/test_trace_read:main() at line 37.
+    ./tests/bin/test_trace_read: line 40: 31698 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    ok 12 - Run babeltrace with invalid trace fail1
+    ./tests/bin/test_trace_read: line 40: 31713 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    ok 13 - Run babeltrace with invalid trace fail2
+    ./tests/bin/test_trace_read: line 40: 31728 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    ok 14 - Run babeltrace with invalid trace integer-range
+    ok 15 - Run babeltrace with invalid trace lttng-modules-2.0-pre1
+    ok 16 - Run babeltrace with invalid trace packet-based-metadata
+    ./tests/bin/test_trace_read: line 40: 31773 Bus error               $BA=
+BELTRACE_BIN ${path} > /dev/null 2>&1
+    ok 17 - Run babeltrace with invalid trace smalltrace
+    # Looks like you failed 11 tests of 17.
 
 
-On 14-06-12 05:34 PM, Anand Neeli wrote:
-> Hi All,
-> I'm using a i386 ubuntu deb package to get include file of lttng-ust and
-> urcu
-> I have just instrumented with a basic tracepoint, my tracepoint .c and .h
-> look good.
->
-> i get following error fatal error: sys/sdt.h: No such file or directory
->
-> /home/aneeli/evo_all/cevo/liblogtrace_test/src/logtrace_test.c
-> In file included from
-> /home/aneeli/evo_all/cevo/liblogtrace_test/src/logtest_tracepoint.h:11:0,
->                  from
-> /home/aneeli/evo_all/cevo/liblogtrace_test/src/logtrace_test.c:18:
-> /home/aneeli/evo_all/cevo/lttng/obj-native/install/usr/include/lttng/tracepoint.h:38:21:
-> fatal error: sys/sdt.h: No such file or directory
-> compilation terminated.
->
-> looks like LTTNG_UST_HAVE_SDT_INTEGRATION flag is set in deb i386 files
-> lttng/ust-config.h:
-> #define LTTNG_UST_HAVE_SDT_INTEGRATION 1
->
-> Where as LTTNG_UST_HAVE_SDT_INTEGRATION=1 is commented when i compile
-> manually for some other platforms
+    $ ./tests/lib/test_seek_empty_packet
+    1..29
+    Bus error
 
-That's expected, because the SDT integration is not enabled by default.
-You have to pass --with-sdt to configure to enable it. Which we do in
-the Debian/Ubuntu packages, since the sdt.h header is easily available.
+I'll gather the arm results tomorrow.
 
+-- =
 
-Cheers,
-Alexandre
-
-
->
-> Am i missing anything here?
-> how can i compile for i386 using include files from deb.
->
->
-> Thanks,
-> Anand Neeli
->
->
->
-> On Fri, Jun 13, 2014 at 12:28 AM, Alexandre Montplaisir <
-> alexmonthy@voxpopuli.im> wrote:
->
->>  Yes! There are PPAs for Ubuntu packages, one for the stable branches:
->> https://launchpad.net/~lttng/+archive/ppa
->>
->> and one for builds of the git master:
->> https://launchpad.net/~lttng/+archive/daily
->>
->>
->> Cheers,
->> Alexandre
->>
->>
->>
->> On 06/12/2014 02:27 PM, Anand Neeli wrote:
->>
->> Hi All,
->> are there latest ubuntu .deb of lttng-ust, lttng-ust-dev, liburcu,
->> liburcu-dev available?
->> i'm looking for i386 and amd64 CPU target
->> if yes, can some one tell me the location to download?
->>
->> i'm able to find older versions in http://packages.ubuntu.com, but i'm
->> looking for the latest deb files
->>
->> Thanks,
->> Anand Neeli
->>
->>
+Jon
