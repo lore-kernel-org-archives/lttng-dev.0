@@ -1,25 +1,16 @@
-From: Jon Bernard <jbernard@debian.org>
-Subject: Re: babeltrace test failures on some architectures
-Date: Thu, 12 Jun 2014 23:51:17 -0400
-Message-ID: <20140613035117.GA8741__24450.7129224532$1402631549$gmane$org@helmut>
-References: <20140604184126.GA26877@helmut>
- <CA+jJMxtn8XiLjT5NVURv5K8kECPPoPs1WF-0zTakJmRW=CO3mg@mail.gmail.com>
- <CAEzWAeLEvv8FbHfwq8=sMeDW49DjO_gKoZ99z1Ff9s+dR6GuJQ@mail.gmail.com>
- <20140609145201.GB25766@helmut>
- <CA+jJMxsuEtk3QdDz1_a0MOBq0To7wB4+QnOW3Rkp0uJZ1eM1gw@mail.gmail.com>
+From: Anand Neeli <anand.neeli@gmail.com>
+Subject: lttng enable event failing with i386 deb package
+Date: Fri, 13 Jun 2014 17:07:39 +0530
+Message-ID: <CAM5kDqwu=BPJedJXp2y+uMmiBQy5QCSSmqG7PigKbN1pGdny6w__48935.1112083115$1402659517$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============0823773866=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out2-smtp.messagingengine.com ([66.111.4.26])
+Received: from mail-we0-f181.google.com ([74.125.82.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jbernard@debian.org>) id 1WvIWR-0006yU-NJ
- for lttng-dev@lists.lttng.org; Thu, 12 Jun 2014 23:51:29 -0400
-Received: from compute3.internal (compute3.nyi.mail.srv.osa [10.202.2.43])
- by gateway1.nyi.mail.srv.osa (Postfix) with ESMTP id 4E01720BEA
- for <lttng-dev@lists.lttng.org>; Thu, 12 Jun 2014 23:51:18 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <CA+jJMxsuEtk3QdDz1_a0MOBq0To7wB4+QnOW3Rkp0uJZ1eM1gw@mail.gmail.com>
+ (envelope-from <anand.neeli@gmail.com>) id 1WvPnm-0001UH-Te
+ for lttng-dev@lists.lttng.org; Fri, 13 Jun 2014 07:37:49 -0400
+Received: by mail-we0-f181.google.com with SMTP id q59so2584273wes.26
+ for <lttng-dev@lists.lttng.org>; Fri, 13 Jun 2014 04:37:40 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -28,102 +19,110 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-* J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com> wrote:
-> The build logs only seem to contain the "prove" output (invoked by run.sh=
-).
-> =
+--===============0823773866==
+Content-Type: multipart/alternative; boundary=001a11c2ab34da4e6304fbb61a1b
 
-> Could you run tests/bin/test_trace_read and
-> tests/lib/test_seek_empty_packet on armel and sparc? The output of
-> both of these tests and the coredumps (if any) should give me
-> something to work with.
+--001a11c2ab34da4e6304fbb61a1b
+Content-Type: text/plain; charset=UTF-8
 
-Here are the sparc results:
+Hi All,
 
-    $ ./tests/bin/test_trace_read
-    1..17
-    ./tests/bin/test_trace_read: line 34: 31489 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    not ok 1 - Run babeltrace with trace env-warning
-    #   Failed test 'Run babeltrace with trace env-warning'
-    #   in ./tests/bin/test_trace_read:main() at line 37.
-    ./tests/bin/test_trace_read: line 34: 31508 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    not ok 2 - Run babeltrace with trace lttng-modules-2.0-pre5
-    #   Failed test 'Run babeltrace with trace lttng-modules-2.0-pre5'
-    #   in ./tests/bin/test_trace_read:main() at line 37.
-    ./tests/bin/test_trace_read: line 34: 31527 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    not ok 3 - Run babeltrace with trace sequence
-    #   Failed test 'Run babeltrace with trace sequence'
-    #   in ./tests/bin/test_trace_read:main() at line 37.
-    ./tests/bin/test_trace_read: line 34: 31546 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    not ok 4 - Run babeltrace with trace smalltrace
-    #   Failed test 'Run babeltrace with trace smalltrace'
-    #   in ./tests/bin/test_trace_read:main() at line 37.
-    ./tests/bin/test_trace_read: line 34: 31565 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    not ok 5 - Run babeltrace with trace succeed1
-    #   Failed test 'Run babeltrace with trace succeed1'
-    #   in ./tests/bin/test_trace_read:main() at line 37.
-    ./tests/bin/test_trace_read: line 34: 31584 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    not ok 6 - Run babeltrace with trace succeed2
-    #   Failed test 'Run babeltrace with trace succeed2'
-    #   in ./tests/bin/test_trace_read:main() at line 37.
-    ./tests/bin/test_trace_read: line 34: 31603 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    not ok 7 - Run babeltrace with trace succeed3
-    #   Failed test 'Run babeltrace with trace succeed3'
-    #   in ./tests/bin/test_trace_read:main() at line 37.
-    ./tests/bin/test_trace_read: line 34: 31622 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    not ok 8 - Run babeltrace with trace succeed4
-    #   Failed test 'Run babeltrace with trace succeed4'
-    #   in ./tests/bin/test_trace_read:main() at line 37.
-    ./tests/bin/test_trace_read: line 34: 31641 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    not ok 9 - Run babeltrace with trace test
-    #   Failed test 'Run babeltrace with trace test'
-    #   in ./tests/bin/test_trace_read:main() at line 37.
-    ./tests/bin/test_trace_read: line 34: 31660 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    not ok 10 - Run babeltrace with trace warnings
-    #   Failed test 'Run babeltrace with trace warnings'
-    #   in ./tests/bin/test_trace_read:main() at line 37.
-    ./tests/bin/test_trace_read: line 34: 31679 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    not ok 11 - Run babeltrace with trace wk-heartbeat-u
-    #   Failed test 'Run babeltrace with trace wk-heartbeat-u'
-    #   in ./tests/bin/test_trace_read:main() at line 37.
-    ./tests/bin/test_trace_read: line 40: 31698 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    ok 12 - Run babeltrace with invalid trace fail1
-    ./tests/bin/test_trace_read: line 40: 31713 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    ok 13 - Run babeltrace with invalid trace fail2
-    ./tests/bin/test_trace_read: line 40: 31728 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    ok 14 - Run babeltrace with invalid trace integer-range
-    ok 15 - Run babeltrace with invalid trace lttng-modules-2.0-pre1
-    ok 16 - Run babeltrace with invalid trace packet-based-metadata
-    ./tests/bin/test_trace_read: line 40: 31773 Bus error               $BA=
-BELTRACE_BIN ${path} > /dev/null 2>&1
-    ok 17 - Run babeltrace with invalid trace smalltrace
-    # Looks like you failed 11 tests of 17.
+I have ubuntu i386 debian packages (ppa latest stable) at a location along
+with the libraries, and i'm trying to launch lttng and seeing error when
+i'm enabling events
+
+PERROR [30126/30126]: Consumer execl(): No such file or directory (in
+spawn_consumerd() at main.c:2294)
+Error: Condition timed out. The consumer thread was never ready. Killing it
+Error: Fatal error spawning consumer control thread
+Error: Events: 32-bit UST consumer start failed (channel channel0, session
+auto-20140613-165748)
+
+Detailed steps i followed are as:
+$> pwd
+$> ....install/usr/bin
+$> LD_LIBRARY_PATH=../lib/i386-linux-gnu/ ./lttng-relayd -d
+$> LD_LIBRARY_PATH=../lib/i386-linux-gnu/ ./lttng --sessiond-path
+<abs_path_to>lttng-sessiond --relayd-path <abs_path_to>lttng-relayd create
+--live 200000 -U net://localhost
+Spawning a session daemon
+Session auto-20140613-165748 created.
+Traces will be written in net://localhost
+Live timer set to 200000 usec
+
+$> export PATH=$PATH:<abs-path>/lib/i386-linux-gnu/lttng/libexec/
+{i see that consumerd is in lib/<platform>/lttng/libexec/  so have set a
+path to it}
+
+$>  LD_LIBRARY_PATH=../lib/i386-linux-gnu/  ./lttng enable-event -a
+--userspace
+
+PERROR [30126/30126]: Consumer execl(): No such file or directory (in
+spawn_consumerd() at main.c:2294)
+Error: Condition timed out. The consumer thread was never ready. Killing it
+Error: Fatal error spawning consumer control thread
+Error: Events: 32-bit UST consumer start failed (channel channel0, session
+auto-20140613-165748)
+
+What does this mean? and how can i get around this?
+can anyone please help.
 
 
-    $ ./tests/lib/test_seek_empty_packet
-    1..29
-    Bus error
+Thanks,
+Anand Neeli
 
-I'll gather the arm results tomorrow.
+--001a11c2ab34da4e6304fbb61a1b
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
--- =
+<div dir=3D"ltr">Hi All,<div><br></div><div>I have ubuntu i386 debian packa=
+ges (ppa latest stable) at a location along with the libraries, and i&#39;m=
+ trying to launch lttng and seeing error when i&#39;m enabling events</div>
+<div><br></div><div><div>PERROR [30126/30126]: Consumer execl(): No such fi=
+le or directory (in spawn_consumerd() at main.c:2294)</div><div>Error: Cond=
+ition timed out. The consumer thread was never ready. Killing it</div><div>
+Error: Fatal error spawning consumer control thread</div><div>Error: Events=
+: 32-bit UST consumer start failed (channel channel0, session auto-20140613=
+-165748)</div></div><div><br></div><div>Detailed steps i followed are as:</=
+div>
+<div>$&gt; pwd<br></div><div><div>$&gt; ....install/usr/bin</div><div>$&gt;=
+=C2=A0LD_LIBRARY_PATH=3D../lib/i386-linux-gnu/ ./lttng-relayd -d</div><div>=
+$&gt;=C2=A0LD_LIBRARY_PATH=3D../lib/i386-linux-gnu/ ./lttng --sessiond-path=
+ &lt;abs_path_to&gt;lttng-sessiond --relayd-path=C2=A0&lt;abs_path_to&gt;lt=
+tng-relayd create --live 200000 -U net://localhost</div>
+<div><div>Spawning a session daemon</div><div>Session auto-20140613-165748 =
+created.</div><div>Traces will be written in net://localhost</div><div>Live=
+ timer set to 200000 usec</div></div><div><br></div><div>$&gt; export PATH=
+=3D$PATH:&lt;abs-path&gt;/lib/i386-linux-gnu/lttng/libexec/<br>
+</div><div>{i see that consumerd is in lib/&lt;platform&gt;/lttng/libexec/ =
+=C2=A0so have set a path to it}</div><div><br></div><div>$&gt; =C2=A0LD_LIB=
+RARY_PATH=3D../lib/i386-linux-gnu/ =C2=A0./lttng enable-event -a --userspac=
+e</div><div><br>
+</div><div>PERROR [30126/30126]: Consumer execl(): No such file or director=
+y (in spawn_consumerd() at main.c:2294)</div><div>Error: Condition timed ou=
+t. The consumer thread was never ready. Killing it</div><div>Error: Fatal e=
+rror spawning consumer control thread</div>
+<div>Error: Events: 32-bit UST consumer start failed (channel channel0, ses=
+sion auto-20140613-165748)</div></div><div><br></div><div>What does this me=
+an? and how can i get around this?</div><div>can anyone please help.</div>
+<div><br></div><div><br></div><div>Thanks,</div><div>Anand Neeli</div><div>=
+<br></div><div><br></div></div>
 
-Jon
+--001a11c2ab34da4e6304fbb61a1b--
+
+
+--===============0823773866==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0823773866==--
