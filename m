@@ -1,18 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules] Fix: correct typo in
-	kernel	version number
-Date: Mon, 16 Jun 2014 02:45:55 +0000 (UTC)
-Message-ID: <2090385103.524.1402886755790.JavaMail.zimbra__30797.4507021301$1402886810$gmane$org@efficios.com>
-References: <1402497944-2186-1-git-send-email-antoine.busque@efficios.com>
+From: Varad Deshmukh <varad.deshmukh@gmail.com>
+Subject: PageTrace alternatives
+Date: Mon, 16 Jun 2014 07:34:46 -0700
+Message-ID: <CAGiYYG26UPbHqiRq-WrPkx8GTLyJKK6tNbmbPP3wBHfQCHvQfw__12695.6424596303$1402929370$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1227915142=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-ob0-f176.google.com ([209.85.214.176])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1WwMvn-0004v2-Rd
- for lttng-dev@lists.lttng.org; Sun, 15 Jun 2014 22:46:01 -0400
-In-Reply-To: <1402497944-2186-1-git-send-email-antoine.busque@efficios.com>
+ (envelope-from <varad.deshmukh@gmail.com>) id 1WwY08-0000na-Gk
+ for lttng-dev@lists.lttng.org; Mon, 16 Jun 2014 10:35:18 -0400
+Received: by mail-ob0-f176.google.com with SMTP id wm4so5016344obc.35
+ for <lttng-dev@lists.lttng.org>; Mon, 16 Jun 2014 07:35:07 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,57 +19,59 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Antoine Busque <antoine.busque@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-I changed "if statement" for "preprocessor conditional". Merged,
+--===============1227915142==
+Content-Type: multipart/alternative; boundary=089e015372c6fb6be604fbf4ee45
 
-Thanks!
+--089e015372c6fb6be604fbf4ee45
+Content-Type: text/plain; charset=UTF-8
 
-Mathieu
+Hi,
+I am looking for a way to understand the Page Access pattern of different
+processes on Linux machines, something like what PageTrace does (
+http://linux-mm.org/PageTrace). However, the hosting website for the code
+seems to be down for some reason, and I cant find it any clones for it.
 
------ Original Message -----
-> From: "Antoine Busque" <antoine.busque@efficios.com>
-> To: lttng-dev@lists.lttng.org
-> Sent: Wednesday, June 11, 2014 10:45:44 AM
-> Subject: [lttng-dev] [PATCH lttng-modules] Fix: correct typo in kernel	version number
-> 
-> A typo in an if statement verifying the range in which the current
-> kernel's version is situated caused build failure for modules on 3.5.0
-> specifically, by trying to use the new api for block_rq_complete which
-> has not been backported from the 3.15 branch to the 3.5 branch.
-> 
-> Signed-off-by: Antoine Busque <antoine.busque@efficios.com>
-> ---
->  instrumentation/events/lttng-module/block.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/instrumentation/events/lttng-module/block.h
-> b/instrumentation/events/lttng-module/block.h
-> index dbe6c6c..ad0a363 100644
-> --- a/instrumentation/events/lttng-module/block.h
-> +++ b/instrumentation/events/lttng-module/block.h
-> @@ -224,7 +224,7 @@ DEFINE_EVENT(block_rq_with_error, block_rq_requeue,
->  #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,14,5)	\
->  	|| LTTNG_KERNEL_RANGE(3,12,21, 3,13,0)		\
->  	|| LTTNG_KERNEL_RANGE(3,10,41, 3,11,0)		\
-> -	|| LTTNG_KERNEL_RANGE(3,4,91, 3,5,1)		\
-> +	|| LTTNG_KERNEL_RANGE(3,4,91, 3,5,0)		\
->  	|| LTTNG_KERNEL_RANGE(3,2,58, 3,3,0))
->  
->  /**
-> --
-> 2.0.0
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
+Does LTTng provide any similar functionality? If not, could anyone suggest
+any good tools that do the same?
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Thanks in advance.
+
+Regards,
+Varad Deshmukh
+
+--089e015372c6fb6be604fbf4ee45
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div>I am looking for a way to understand the Page Acce=
+ss pattern of different processes on Linux machines, something like what Pa=
+geTrace does (<a href=3D"http://linux-mm.org/PageTrace">http://linux-mm.org=
+/PageTrace</a>). However, the hosting website for the code seems to be down=
+ for some reason, and I cant find it any clones for it.=C2=A0</div>
+
+<div><br></div><div>Does LTTng provide any similar functionality? If not, c=
+ould anyone suggest any good tools that do the same?</div><div><br></div><d=
+iv>Thanks in advance.</div><div><br></div><div>Regards,</div><div>Varad Des=
+hmukh</div>
+
+<div><div><br></div>
+</div></div>
+
+--089e015372c6fb6be604fbf4ee45--
+
+
+--===============1227915142==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1227915142==--
