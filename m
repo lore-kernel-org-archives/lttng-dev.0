@@ -1,16 +1,17 @@
-From: Varad Deshmukh <varad.deshmukh@gmail.com>
-Subject: PageTrace alternatives
-Date: Mon, 16 Jun 2014 07:34:46 -0700
-Message-ID: <CAGiYYG26UPbHqiRq-WrPkx8GTLyJKK6tNbmbPP3wBHfQCHvQfw__12695.6424596303$1402929370$gmane$org@mail.gmail.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: Debian specific userspace RCU configure override
+ (ARMv7 Beagle Bone Black)
+Date: Mon, 16 Jun 2014 15:00:54 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359C171E__30384.4655900777$1402930922$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1227915142=="
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ob0-f176.google.com ([209.85.214.176])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <varad.deshmukh@gmail.com>) id 1WwY08-0000na-Gk
- for lttng-dev@lists.lttng.org; Mon, 16 Jun 2014 10:35:18 -0400
-Received: by mail-ob0-f176.google.com with SMTP id wm4so5016344obc.35
- for <lttng-dev@lists.lttng.org>; Mon, 16 Jun 2014 07:35:07 -0700 (PDT)
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WwYP6-0000z8-RC
+ for lttng-dev@lists.lttng.org; Mon, 16 Jun 2014 11:01:04 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,59 +20,46 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1227915142==
-Content-Type: multipart/alternative; boundary=089e015372c6fb6be604fbf4ee45
+   Further progress with LTTng on Beagle Bone Black.  Having forced userspa=
+ce-rcu to ignore the dmb instruction (CONFIG_RCU_ARM_HAVE_DMB undefined), l=
+ttng-tools installs in the no-kernel, no-user-space case.  It also installs=
+ in the just-user-space case, but there is something potentially wrong with=
+ lttng-ust.  Testing the lttng-modules cases will have to wait until I get =
+a new BBB kernel built that has CONFIG_TRACEPOINTS turned on.
 
---089e015372c6fb6be604fbf4ee45
-Content-Type: text/plain; charset=UTF-8
+   The dmb instruction problem still stands.
 
-Hi,
-I am looking for a way to understand the Page Access pattern of different
-processes on Linux machines, something like what PageTrace does (
-http://linux-mm.org/PageTrace). However, the hosting website for the code
-seems to be down for some reason, and I cant find it any clones for it.
+   lttng-userspace emits a long list of warnings during its make:
 
-Does LTTng provide any similar functionality? If not, could anyone suggest
-any good tools that do the same?
+CC lttng-ust-malloc.lo
+In file included from ../include/lttng/ust-tracepoint-event.h:367:0,
+                               from ../include/lttng/tracepoint-event.h:62,
+                               from ust_libc.h:93,
+                               from lttng-ust-malloc.c:29:
+././ust_libc.h: In function '__event_prepare_filter_stack__ust_libc___mallo=
+c':
+././ust_libc.h:35:1: warning: cast from pointer to integer of different siz=
+e [-Wpointer-to-int-cast]
+...
 
-Thanks in advance.
+   This recurs on five lines.
 
-Regards,
-Varad Deshmukh
+   Despite this, sample user-space events are captured as expected.  Babelt=
+race also installs, and the trace looks okay.
 
---089e015372c6fb6be604fbf4ee45
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi,<div>I am looking for a way to understand the Page Acce=
-ss pattern of different processes on Linux machines, something like what Pa=
-geTrace does (<a href=3D"http://linux-mm.org/PageTrace">http://linux-mm.org=
-/PageTrace</a>). However, the hosting website for the code seems to be down=
- for some reason, and I cant find it any clones for it.=C2=A0</div>
-
-<div><br></div><div>Does LTTng provide any similar functionality? If not, c=
-ould anyone suggest any good tools that do the same?</div><div><br></div><d=
-iv>Thanks in advance.</div><div><br></div><div>Regards,</div><div>Varad Des=
-hmukh</div>
-
-<div><div><br></div>
-</div></div>
-
---089e015372c6fb6be604fbf4ee45--
-
-
---===============1227915142==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1227915142==--
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC) Cyber s=E9curit=E9 pour les missions essentielles (CME) =
+| Mission Critical Cyber Security (MCCS) RDDC - Centre de recherches de Val=
+cartier | DRDC - Valcartier Research Centre
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada <http://www.valcartier.drdc-r=
+ddc.gc.ca/>
