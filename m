@@ -1,17 +1,21 @@
-From: David Goulet <dgoulet@efficios.com>
+From: Francis Deslauriers <francis.deslauriers@efficios.com>
 Subject: Re: [PATCH lttng-tools] Add vpid,
  vppid and vtid explanation in add-context help menu
-Date: Thu, 19 Jun 2014 14:21:19 -0400
-Message-ID: <20140619182119.GA27213__7875.82588750428$1403202149$gmane$org@thessa>
+Date: Thu, 19 Jun 2014 14:38:52 -0400
+Message-ID: <CADcCL0giSreZ=bmPC+Q9jcNrsqkPSnoR92RTQ2X-iVP7Kf=zmA__41283.0447465696$1403203217$gmane$org@mail.gmail.com>
 References: <1403144380-26702-1-git-send-email-francis.deslauriers@efficios.com>
+ <20140619182119.GA27213@thessa>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0455415024=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
+Received: from mail-qc0-f170.google.com ([209.85.216.170])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1Wxgxi-0001HB-B1
- for lttng-dev@lists.lttng.org; Thu, 19 Jun 2014 14:21:32 -0400
-In-Reply-To: <1403144380-26702-1-git-send-email-francis.deslauriers@efficios.com>
+ (envelope-from <fdeslaur@gmail.com>) id 1WxhF0-0001Q5-Hn
+ for lttng-dev@lists.lttng.org; Thu, 19 Jun 2014 14:39:24 -0400
+Received: by mail-qc0-f170.google.com with SMTP id l6so2624057qcy.1
+ for <lttng-dev@lists.lttng.org>; Thu, 19 Jun 2014 11:39:13 -0700 (PDT)
+In-Reply-To: <20140619182119.GA27213@thessa>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,97 +24,55 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: francis.deslauriers@efficios.com
+To: David Goulet <dgoulet@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+On Thu, Jun 19, 2014 at 2:21 PM, David Goulet <dgoulet@efficios.com> wrote:
+> On 18 Jun (22:19:40), francis.deslauriers@efficios.com wrote:
+>> From: Francis Deslauriers <francis.deslauriers@efficios.com>
+>>
+>> Signed-off-by: Francis Deslauriers <francis.deslauriers@efficios.com>
+>> ---
+>>  src/bin/lttng/commands/add_context.c | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/src/bin/lttng/commands/add_context.c b/src/bin/lttng/commands/add_context.c
+>> index 405b782..52d0db4 100644
+>> --- a/src/bin/lttng/commands/add_context.c
+>> +++ b/src/bin/lttng/commands/add_context.c
+>> @@ -514,6 +514,9 @@ static void usage(FILE *ofp)
+>>       fprintf(ofp, "                           TYPE can be one of the strings below:\n");
+>>       print_ctx_type(ofp);
+>>       fprintf(ofp, "\n");
+>> +     fprintf(ofp, "Note that the vpid, vppid and vtid context types represent the virtual process id,\n"
+>> +                     "virtual parent process id and virtual thread id as seen from the current execution context\n"
+>> +                     "as oppose to the pid, ppid and tid that are kernel internal data structures.\n\n");
+>
+> That would be kind of neat if you could also add this to the man page.
+> Usually, I try to keep both the --help and man page in sync :).
 
---===============0455415024==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="T4sUOijqQbZv57TR"
-Content-Disposition: inline
+I didn't add it to the man page because there is no mention of the
+available context types in the man page.
+The user is asked to run the lttng add-context -h command to get more
+information on the available types.
+Should I add a note to the man page anyway?
 
+Thanks,
+Francis
 
---T4sUOijqQbZv57TR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 18 Jun (22:19:40), francis.deslauriers@efficios.com wrote:
-> From: Francis Deslauriers <francis.deslauriers@efficios.com>
->=20
-> Signed-off-by: Francis Deslauriers <francis.deslauriers@efficios.com>
-> ---
->  src/bin/lttng/commands/add_context.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/src/bin/lttng/commands/add_context.c b/src/bin/lttng/command=
-s/add_context.c
-> index 405b782..52d0db4 100644
-> --- a/src/bin/lttng/commands/add_context.c
-> +++ b/src/bin/lttng/commands/add_context.c
-> @@ -514,6 +514,9 @@ static void usage(FILE *ofp)
->  	fprintf(ofp, "                           TYPE can be one of the strings=
- below:\n");
->  	print_ctx_type(ofp);
->  	fprintf(ofp, "\n");
-> +	fprintf(ofp, "Note that the vpid, vppid and vtid context types represen=
-t the virtual process id,\n"
-> +			"virtual parent process id and virtual thread id as seen from the cur=
-rent execution context\n"
-> +			"as oppose to the pid, ppid and tid that are kernel internal data str=
-uctures.\n\n");
-
-That would be kind of neat if you could also add this to the man page.
-Usually, I try to keep both the --help and man page in sync :).
-
-Cheers!
-David
-
->  	fprintf(ofp, "Example:\n");
->  	fprintf(ofp, "This command will add the context information 'prio' and =
-two per-cpu\n"
->  			"perf counters (hardware branch misses and cache misses), to all chan=
-nels\n"
-> --=20
-> 1.8.3.2
->=20
->=20
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---T4sUOijqQbZv57TR
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQF8BAEBAgBmBQJToyofXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02Z7sIAKM6O4bX8T5Mo7T9GX0rEfsG
-MGGMERrSnn/0WGFh3WeCQTH3THLW1zgIOHjhIIqMrVwJa5oobh0Dsnqr8zEufIeQ
-srEzWCxg6ItmuCQswj/8Ijwb8KcEApJu01ItIZOnSaemF6b3x5ACf+goSFNXDgM4
-hbmb3m5+c/hhcVXMAOQfZJ0SVLHjT6x7wWaojVVTxS5a514AUHMgrOGscKPl2xnq
-lnWjtRU62VaFT68nddV2i2vnd7BQ7XQRNonIkLeB2PCBM+4FVjgq3YpG9zJAaKJk
-H0LrQgrSj1XEFTw/m2rqvCu7Pn9l1m6WHGQz9KAGXkAvnuexxIQ3UUA6RqHFwuM=
-=KC9y
------END PGP SIGNATURE-----
-
---T4sUOijqQbZv57TR--
-
-
---===============0455415024==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0455415024==--
+>
+> Cheers!
+> David
+>
+>>       fprintf(ofp, "Example:\n");
+>>       fprintf(ofp, "This command will add the context information 'prio' and two per-cpu\n"
+>>                       "perf counters (hardware branch misses and cache misses), to all channels\n"
+>> --
+>> 1.8.3.2
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
