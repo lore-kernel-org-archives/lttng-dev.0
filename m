@@ -1,16 +1,15 @@
-From: Dmitri Shubin <sbn@tbricks.com>
-Subject: How to check is tracepoint is currently enabled (UST)
-Date: Sun, 22 Jun 2014 19:27:31 +0400
-Message-ID: <CADmgc-v_RxXAjZtqYk=VkDoD9W9r1XTs7j5Sg-68F0vhkYyr1w__21380.0374920995$1403450915$gmane$org@mail.gmail.com>
+From: Eric Wong <normalperson@yhbt.net>
+Subject: [PATCH 0/3] rculfhash: error checking fixes
+Date: Tue, 24 Jun 2014 01:20:29 +0000
+Message-ID: <1403572832-9066-1-git-send-email-normalperson__5962.4187801548$1403572885$gmane$org@yhbt.net>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1973113796=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f175.google.com ([209.85.223.175])
+Received: from dcvr.yhbt.net ([64.71.152.64] ident=normalperson)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <sbn@tbricks.com>) id 1Wyjg9-0007uS-Ax
- for lttng-dev@lists.lttng.org; Sun, 22 Jun 2014 11:27:39 -0400
-Received: by mail-ie0-f175.google.com with SMTP id tp5so4676048ieb.6
- for <lttng-dev@lists.lttng.org>; Sun, 22 Jun 2014 08:27:31 -0700 (PDT)
+ (envelope-from <normalperson@yhbt.net>) id 1WzFPc-00024v-RZ
+ for lttng-dev@lists.lttng.org; Mon, 23 Jun 2014 21:20:41 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,56 +19,37 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
+Cc: e@80x24.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1973113796==
-Content-Type: multipart/alternative; boundary=089e0122f7f479ddf604fc6e5d27
+Hi Mathieu, I noticed the pthread_create handling is a bit dangerous in
+rculfhash since it may kill the process long after the process is up and
+running.  I also fixed the calloc failure handling since I was in the
+area.
 
---089e0122f7f479ddf604fc6e5d27
-Content-Type: text/plain; charset=UTF-8
+In the future, it would also be nice if the alloc_bucket_table behavior
+could fail gracefully on ENOMEM, but that would break ABI...
 
-Hi,
+The following changes since commit d863e15371666dff14e7f3191de5ff91d9b24d7f:
 
-In dtrace it's possible to check if some probe is currently enabled or not
-(to avoid argument preparation for disabled probes).
-But I'm unable to find similar feature in lttng-ust (at least it's not
-mentioned in lttng-ust man page).
+  Cleanup: tests: cast console write return value as void (2014-05-13 09:27:36 -0400)
 
-Am I missed it or it's not implemented on purpose?
+are available in the git repository at:
 
-From what I see in lttng/tracepoint.h it can be implemented like
+  git://80x24.org/urcu rculfhash-errcheck
 
-#define tracepoint_enabled(provider,
-name) caa_unlikely(__tracepoint_##provider##___##name.state)
+for you to fetch changes up to d54dd3e6ada2edf4599fc0f26e647a6942a73a39:
 
-Thanks!
+  rculfhash: remove duplicated code (2014-06-24 00:39:26 +0000)
 
---089e0122f7f479ddf604fc6e5d27
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+----------------------------------------------------------------
+Eric Wong (3):
+      rculfhash: fall back to single-threaded resize on calloc failure
+      rculfhash: handle pthread_create failures
+      rculfhash: remove duplicated code
 
-<div dir=3D"ltr">Hi,<div><br></div><div>In dtrace it&#39;s possible to chec=
-k if some probe is currently enabled or not (to avoid argument preparation =
-for disabled probes).</div><div>But I&#39;m unable to find similar feature =
-in lttng-ust (at least it&#39;s not mentioned in lttng-ust man page).</div>
-<div><br></div><div>Am I missed it or it&#39;s not implemented on purpose?<=
-/div><div><br></div><div>From what I see in lttng/tracepoint.h it can be im=
-plemented like</div><div><br></div><div>#define tracepoint_enabled(provider=
-, name)=C2=A0caa_unlikely(__tracepoint_##provider##___##name.state)<br>
-</div><div><br></div><div>Thanks!</div><div><br></div></div>
+ rculfhash.c | 49 +++++++++++++++++++++++++++++++++----------------
+ 1 file changed, 33 insertions(+), 16 deletions(-)
 
---089e0122f7f479ddf604fc6e5d27--
-
-
---===============1973113796==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1973113796==--
+P.S. I still hope to resume the wfcqueue-related epoll improvements
+     we started on last year in the kernel.
