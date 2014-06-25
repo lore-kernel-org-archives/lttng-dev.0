@@ -1,19 +1,21 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@ericsson.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
 Subject: Re: How to check is tracepoint is currently enabled
 	(UST)
-Date: Wed, 25 Jun 2014 10:49:00 -0400
-Message-ID: <53AAE15C.3040100__47963.2281502292$1403707805$gmane$org@ericsson.com>
+Date: Wed, 25 Jun 2014 11:36:15 -0400
+Message-ID: <CAFXXi0=XEwjPfLwxsGim6_FwRqGD-YM9o1zTVFRWbmyigGDPcw__41578.7631915466$1403710680$gmane$org@mail.gmail.com>
 References: <48CF5AC71E61DB46B70D0F388054EFFD359C62DE@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+ <53AAE15C.3040100@ericsson.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg20.ericsson.net ([198.24.6.45])
+Received: from mail-ie0-f173.google.com ([209.85.223.173])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@ericsson.com>)
- id 1WzoVW-0000EJ-Td
- for lttng-dev@lists.lttng.org; Wed, 25 Jun 2014 10:49:12 -0400
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD359C62DE@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+ (envelope-from <thundersim@gmail.com>) id 1WzpFj-0000WM-Oq
+ for lttng-dev@lists.lttng.org; Wed, 25 Jun 2014 11:37:03 -0400
+Received: by mail-ie0-f173.google.com with SMTP id y20so1814349ier.32
+ for <lttng-dev@lists.lttng.org>; Wed, 25 Jun 2014 08:36:46 -0700 (PDT)
+In-Reply-To: <53AAE15C.3040100@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,94 +24,53 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-You can also list all ust events available for tracing via the command "ltt=
-ng list -u". =
+I am pretty sure that Dmitri is talking about a check that you can use
+in your application, to see if a specific tracepoint is enabled. If
+some data that you pass to the tracepoint is expensive to compute, yo
+might want to avoid computing it when tracing is disabled.
 
+> #define tracepoint_enabled(provider, name) caa_unlikely(__tracepoint_##provider##___##name.state)
 
-Make sure that the application you want to trace is running. =
+Dmitri, that macro that you posted, does it work for you?
 
+Otherwise, you can simply embed the code in the call to tracepoint:
 
-On 06/25/2014 10:40 AM, Thibault, Daniel wrote:
-> ----------------------------------------------------------------------
-> Date: Sun, 22 Jun 2014 19:27:31 +0400
-> From: Dmitri Shubin <sbn@tbricks.com>
-> =
+    tracepoint(hello, world, expensive_work(data));
 
->> In dtrace it's possible to check if some probe is currently enabled or n=
-ot (to avoid argument preparation for disabled probes).
->> But I'm unable to find similar feature in lttng-ust (at least it's not m=
-entioned in lttng-ust man page).
->>
->> Am I missed it or it's not implemented on purpose?
-> =
+In the expansion of the "tracepoint" macro [1], expensive_work is only
+called if the tracepoint is enabled, so you don't pay the cost if the
+tracepoint is disabled.
 
->    Use the list command.  A command such as 'lttng list <session_name>' w=
-ill list the known events and their enabled/disabled status.  You can filte=
-r the command's output by specifying a domain (--userspace) and/or a channe=
-l (--channel <channel_name>).  For example:
-> =
+If the code that you need to run to compute your data is not a single
+function call, you can: (a) make it a function or (b) use gcc's
+statement expressions [2]. For example, instead of:
 
-> (begin example)
-> $ lttng create some_session
-> Session some_session created.
-> Traces will be written in /home/username/lttng-traces/ some_session-20140=
-625-102709
-> $ lttng enable-event -u some_event
-> UST event some_event created in channel channel0
-> $ lttng list some_session -u --channel channel0
-> Tracing session some_session: [inactive]
->     Trace path: /home/username/lttng-traces/ some_session-20140625-102709
-> =
+    /* Here we call get_data and compute_median even if tracing is disabled. */
+    struct data* data = get_data();
+    int median = compute_median(data);
+    free(data);
+    tracepoint(hello, world, median);
 
-> =3D=3D=3D Domain: UST global =3D=3D=3D
-> =
+you could do:
+    /* Here we _don't_ call get_data and compute_median when tracing
+is disabled. */
+    tracepoint(hello, world, ({
+        struct data* data = get_data();
+        int median = compute_median(data);
+        free(data);
+        median;
+    }));
 
-> Buffer type: per UID
-> =
+The statement expression will only be executed if the tracepoint is
+enabled (you can verify that by adding a printf in there).
 
-> - channel0: [enabled]
-> =
+Does it answer you question?
 
->     Attributes:
->       overwrite mode: 0
->       subbuffers size: 131072
->       number of subbufers: 4
->       switch time interval: 0
->       read time interval: 0
->       output: mmap()
-> =
+Simon
 
->     Events:
->       some_event (type: tracepoint) [enabled]
-> (end example)
-> =
-
->    You can take a look at /usr/src/lttng-tools/src/bin/lttng/commands/lis=
-t.c to see how the information is obtained.
-> =
-
-> Daniel U. Thibault
-> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
-ountermeasures (SPC)
-> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
-l Cyber Security (MCCS)
-> RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Ce=
-ntre
-> 2459 route de la Bravoure
-> Qu=E9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> =
+[1] http://git.lttng.org/?p=lttng-ust.git;a=blob;f=include/lttng/tracepoint.h;h=c5a09d815db1383e539c8c455e8477dda29a579a;hb=HEAD#l47
+[2] https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
