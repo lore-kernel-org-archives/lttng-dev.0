@@ -1,16 +1,16 @@
-From: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-Subject: =?utf-8?q?trace_time_out_of_order?=
-Date: Wed, 25 Jun 2014 15:15:50 +0800
-Message-ID: <d49b4b69-120a-427b-bcd0-abe7dbe48855__27599.7338969775$1403680638$gmane$org@aliyun.com>
-Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+From: Paul Woegerer <paul_woegerer@mentor.com>
+Subject: [PATCH lttng-ust v2] Bugfix for
+	http://bugs.lttng.org/issues/745
+Date: Wed, 25 Jun 2014 14:05:49 +0200
+Message-ID: <1403697949-20140-1-git-send-email-paul_woegerer__17943.2019860998$1403698016$gmane$org@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtpcm9-304.freemail.mail.aliyun.com ([110.75.46.4])
+Received: from relay1.mentorg.com ([192.94.38.131])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <zhenyu.ren@aliyun.com>) id 1WzhRB-0005SY-HQ
- for lttng-dev@lists.lttng.org; Wed, 25 Jun 2014 03:16:17 -0400
+ (envelope-from <Paul_Woegerer@mentor.com>) id 1Wzlxq-0007gg-1Y
+ for lttng-dev@lists.lttng.org; Wed, 25 Jun 2014 08:06:10 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,47 +19,68 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-SGksbHR0bmctZGV2CgogICBJIHRyYWNlZCBteSBycGMgYXBwbGljYXRpb24uIE9uIHRoZSBzZXJ2
-ZXIgc2lkZSAsYSB0aHJlYWQgcmVhZHMgYSByZXF1ZXN0IGZyb20gdGhlIHNvY2tldCBhbmQgcHVz
-aCB0aGUgd29ya2l0ZW0gdG8gYSBxdWV1ZShwdXNoV29ya0l0ZW0gdHJhY2Vwb2ludCBhZnRlciBx
-dWV1aW5nKSxhbm90aGVyIHRocmVhZCB3aWxsIGdldCB0aGUgd29ya2l0ZW0gZnJvbSBxdWV1ZSBh
-bmQgcHJvY2VzcyBpdChQcm9jZXNzV29ya0l0ZW0gdHJhY2Vwb2ludCBoZXJlKS4gSG93ZXZlciwg
-aW4gdGhlIHRyYWNlIGxvZyxJIHNhdyB0aGUgUHJvY2Vzc1dvcmtJdGVtIGJlZm9yZSBwdXNoV29y
-a0l0ZW0uSXMgdGhpcyBhIGNsb2NrIGlzc3VlPwoKWzE0OjM4OjA3LjYxOTg0MTE1Nl0gKCswLjAw
-MDAwMDY5MykgIGFycGNfc2VydmVyOlByb2Nlc3NXb3JrSXRlbTogeyBjcHVfaWQgPSAwIH0sIHsg
-dnRpZCA9IDI4NTgxIH0sIHsgSXRlbSA9IDExMjA0NjQwMCB9ICAgICAgICAgICAgICAgICBBClsx
-NDozODowNy42MTk4NDE1NThdICgrMC4wMDAwMDA0MDIpICBhcnBjX3NlcnZlcjpQcm9jZXNzV29y
-a0l0ZW06IHsgY3B1X2lkID0gMTIgfSwgeyB2dGlkID0gMjg1ODMgfSwgeyBJdGVtID0gMTEyMDQ5
-MDg4IH0gICAgICAgICAgICAgICAgQgpbMTQ6Mzg6MDcuNjE5ODQ0NTUxXSAoKzAuMDAwMDAyOTkz
-KSAgYXJwY19zZXJ2ZXI6UHJvY2Vzc1dvcmtJdGVtOiB7IGNwdV9pZCA9IDkgfSwgeyB2dGlkID0g
-Mjg1ODIgfSwgeyBJdGVtID0gNzI5Njk2MDAgfSAgICAgICAgICAgICAgICAgICBDClsxNDozODow
-Ny42MTk4NDUwOTBdICgrMC4wMDAwMDA1MzkpICBhcnBjX3NlcnZlcjpwdXNoV29ya0l0ZW06IHsg
-Y3B1X2lkID0gMyB9LCB7IHZ0aWQgPSAyODU2OSB9LCB7IEl0ZW0gPSAxMTIwNDY0MDAgfSAgICAg
-ICAgICAgICAgICAgICAgICBBClsxNDozODowNy42MTk4NDY1MjVdICgrMC4wMDAwMDE0MzUpICBz
-Y2hlZF93YWtldXA6IHsgY3B1X2lkID0gMTIgfSwgeyB2dGlkID0gMjg1ODMgfSwgeyBjb21tID0g
-IiIsIHRpZCA9IDI4NTgxLCBwcmlvID0gMTIwLCBzdWNjZXNzID0gMCwgdGFyZ2V0X2NwdSA9IDAg
-fQpbMTQ6Mzg6MDcuNjE5ODQ2ODcyXSAoKzAuMDAwMDAwMzQ3KSAgYXJwY19zZXJ2ZXI6cHVzaFdv
-cmtJdGVtOiB7IGNwdV9pZCA9IDcgfSwgeyB2dGlkID0gMjg1NjMgfSwgeyBJdGVtID0gNzI5Njgz
-NTIgfQpbMTQ6Mzg6MDcuNjE5ODQ5MTcyXSAoKzAuMDAwMDAyMzAwKSAgYXJwY19zZXJ2ZXI6UHJv
-Y2Vzc1dvcmtJdGVtOiB7IGNwdV9pZCA9IDE5IH0sIHsgdnRpZCA9IDI4NTg3IH0sIHsgSXRlbSA9
-IDcyOTY4MzUyIH0KWzE0OjM4OjA3LjYxOTg1MDUyNV0gKCswLjAwMDAwMTM1MykgIGFycGNfc2Vy
-dmVyOnB1c2hXb3JrSXRlbTogeyBjcHVfaWQgPSA2IH0sIHsgdnRpZCA9IDI4NTY0IH0sIHsgSXRl
-bSA9IDExMjA0OTA4OCB9ICAgICAgICAgICAgICAgICAgICAgIEIKWzE0OjM4OjA3LjYxOTg2MjY5
-Nl0gKCswLjAwMDAxMjE3MSkgIHNjaGVkX3N3aXRjaDogeyBjcHVfaWQgPSAzIH0sIHsgdnRpZCA9
-IDI4NTY5IH0sIHsgcHJldl9jb21tID0gInBhbmd1X2NodW5rc2VydiIsIHByZXZfdGlkID0gMjg1
-NjksIHByZXZfcHJpbyA9IDIwLCBwcmV2X3N0YXRlID0gMSwgbmV4dF9jb21tID0gInN3YXBwZXIi
-LCBuZXh0X3RpZCA9IDAsIG5leHRfcHJpbyA9IDIwIH0KWzE0OjM4OjA3LjYxOTg2NDQ5NF0gKCsw
-LjAwMDAwMTc5OCkgIHNjaGVkX3N3aXRjaDogeyBjcHVfaWQgPSA2IH0sIHsgdnRpZCA9IDI4NTY0
-IH0sIHsgcHJldl9jb21tID0gInBhbmd1X2NodW5rc2VydiIsIHByZXZfdGlkID0gMjg1NjQsIHBy
-ZXZfcHJpbyA9IDIwLCBwcmV2X3N0YXRlID0gMSwgbmV4dF9jb21tID0gInBhbmd1X2NodW5rc2Vy
-diIsIG5leHRfdGlkID0gMjg1NjgsIG5leHRfcHJpbyA9IDIwIH0KWzE0OjM4OjA3LjYxOTg2NzEw
-MV0gKCswLjAwMDAwMjYwNykgIGFycGNfc2VydmVyOnB1c2hXb3JrSXRlbTogeyBjcHVfaWQgPSA2
-IH0sIHsgdnRpZCA9IDI4NTY4IH0sIHsgSXRlbSA9IDcyOTY5NjAwIH0gICAgICAgICAgICAgICAg
-ICAgICAgIEMKCgoKcHM6IEhhcmR3YXJlOiAyIHggWGVvbiBFNS0yNDMwIDAgMi4yMEdIeigyNEhU
-KSDvvIwgOTZHIG1lbSAKICAgICAgdXJjdSAwLjggbHR0bmcgMi4zCgpUaGFua3MKemhlbnl1LnJl
-bgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmct
-ZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5s
-dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+In case of a fork prevent ust_lock_nocheck() in ust_before_fork() to be
+executed before handle_pending_statedump() gets completed.
+
+Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
+---
+ liblttng-ust/lttng-ust-comm.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
+index 5df33f5..7cda59f 100644
+--- a/liblttng-ust/lttng-ust-comm.c
++++ b/liblttng-ust/lttng-ust-comm.c
+@@ -173,6 +173,7 @@ void ust_unlock(void)
+  *   daemon problems).
+  */
+ static sem_t constructor_wait;
++static sem_t fork_child_wait;
+ /*
+  * Doing this for both the global and local sessiond.
+  */
+@@ -502,12 +503,16 @@ int handle_register_done(struct sock_info *sock_info)
+ static
+ void handle_pending_statedump(struct sock_info *sock_info)
+ {
++	int ret;
+ 	int ctor_passed = sock_info->constructor_sem_posted;
+ 
+ 	if (ctor_passed && sock_info->statedump_pending) {
+ 		sock_info->statedump_pending = 0;
+ 		lttng_handle_pending_statedump(sock_info);
+ 	}
++
++	ret = sem_post(&fork_child_wait);
++	assert(!ret);
+ }
+ 
+ static
+@@ -1436,6 +1441,9 @@ void __attribute__((constructor)) lttng_ust_init(void)
+ 	ret = sem_init(&constructor_wait, 0, 0);
+ 	assert(!ret);
+ 
++	ret = sem_init(&fork_child_wait, 0, 0);
++	assert(!ret);
++
+ 	ret = setup_local_apps();
+ 	if (ret) {
+ 		DBG("local apps setup returned %d", ret);
+@@ -1627,6 +1635,12 @@ void ust_before_fork(sigset_t *save_sigset)
+ 	if (ret == -1) {
+ 		PERROR("sigprocmask");
+ 	}
++
++	do {
++		ret = sem_wait(&fork_child_wait);
++	} while (ret < 0 && errno == EINTR);
++	assert(!ret);
++
+ 	ust_lock_nocheck();
+ 	rcu_bp_before_fork();
+ }
+-- 
+2.0.0
