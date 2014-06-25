@@ -1,16 +1,14 @@
-From: Paul Woegerer <paul_woegerer@mentor.com>
-Subject: [PATCH lttng-ust v2] Bugfix for
-	http://bugs.lttng.org/issues/745
-Date: Wed, 25 Jun 2014 14:05:49 +0200
-Message-ID: <1403697949-20140-1-git-send-email-paul_woegerer__17943.2019860998$1403698016$gmane$org@mentor.com>
+From: Yiyang Dai <daiyiyang@hotmail.com>
+Subject: seq value error in python binding
+Date: Wed, 25 Jun 2014 16:43:07 +0800
+Message-ID: <BLU182-W9130C7B1F76AC7D936B938A2190__49912.6970455565$1403699403$gmane$org@phx.gbl>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0873305119=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from blu004-omc3s27.hotmail.com ([65.55.116.102])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Paul_Woegerer@mentor.com>) id 1Wzlxq-0007gg-1Y
- for lttng-dev@lists.lttng.org; Wed, 25 Jun 2014 08:06:10 -0400
+ (envelope-from <daiyiyang@hotmail.com>) id 1WzinR-0006BF-7A
+ for lttng-dev@lists.lttng.org; Wed, 25 Jun 2014 04:43:16 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,68 +17,96 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-In case of a fork prevent ust_lock_nocheck() in ust_before_fork() to be
-executed before handle_pending_statedump() gets completed.
+--===============0873305119==
+Content-Type: multipart/alternative;
+	boundary="_1e83f6ca-8649-48b4-9e98-feb17a03d8b4_"
 
-Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
----
- liblttng-ust/lttng-ust-comm.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+--_1e83f6ca-8649-48b4-9e98-feb17a03d8b4_
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 
-diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
-index 5df33f5..7cda59f 100644
---- a/liblttng-ust/lttng-ust-comm.c
-+++ b/liblttng-ust/lttng-ust-comm.c
-@@ -173,6 +173,7 @@ void ust_unlock(void)
-  *   daemon problems).
-  */
- static sem_t constructor_wait;
-+static sem_t fork_child_wait;
- /*
-  * Doing this for both the global and local sessiond.
-  */
-@@ -502,12 +503,16 @@ int handle_register_done(struct sock_info *sock_info)
- static
- void handle_pending_statedump(struct sock_info *sock_info)
- {
-+	int ret;
- 	int ctor_passed = sock_info->constructor_sem_posted;
- 
- 	if (ctor_passed && sock_info->statedump_pending) {
- 		sock_info->statedump_pending = 0;
- 		lttng_handle_pending_statedump(sock_info);
- 	}
-+
-+	ret = sem_post(&fork_child_wait);
-+	assert(!ret);
- }
- 
- static
-@@ -1436,6 +1441,9 @@ void __attribute__((constructor)) lttng_ust_init(void)
- 	ret = sem_init(&constructor_wait, 0, 0);
- 	assert(!ret);
- 
-+	ret = sem_init(&fork_child_wait, 0, 0);
-+	assert(!ret);
-+
- 	ret = setup_local_apps();
- 	if (ret) {
- 		DBG("local apps setup returned %d", ret);
-@@ -1627,6 +1635,12 @@ void ust_before_fork(sigset_t *save_sigset)
- 	if (ret == -1) {
- 		PERROR("sigprocmask");
- 	}
-+
-+	do {
-+		ret = sem_wait(&fork_child_wait);
-+	} while (ret < 0 && errno == EINTR);
-+	assert(!ret);
-+
- 	ust_lock_nocheck();
- 	rcu_bp_before_fork();
- }
--- 
-2.0.0
+SGVsbG8gdGhlcmUsDQp3aGVuIEkgdHJ5aW5nIHRvIGV4dHJhY3QgIm1zZyIgZmllbGQgZ2VuZXJh
+dGVkIGJ5IGV4YW1wbGUgcHJvZ3JhbSAiZGVtby10cmFjZWYiIHdpdGggcHl0aG9uIGJpbmRpbmcg
+LCBJIGdvdCBmb2xsb3dpbmcgZXJyb3IgbWVzc2FnZToNClRyYWNlYmFjayAobW9zdCByZWNlbnQg
+Y2FsbCBsYXN0KTogIEZpbGUgImRhdGEucHkiLCBsaW5lIDQ2LCBpbiA8bW9kdWxlPiAgICBzZXF1
+ZW5jZSA9IGV2ZW50WyJtc2ciXSAgRmlsZSAiL3Vzci9sb2NhbC9saWIvcHl0aG9uMy4zL3NpdGUt
+cGFja2FnZXMvYmFiZWx0cmFjZS5weSIsIGxpbmUgODA2LCBpbiBfX2dldGl0ZW1fXyAgICByZXR1
+cm4gZmllbGQudmFsdWUgIEZpbGUgIi91c3IvbG9jYWwvbGliL3B5dGhvbjMuMy9zaXRlLXBhY2th
+Z2VzL2JhYmVsdHJhY2UucHkiLCBsaW5lIDEyNzksIGluIHZhbHVlICAgIHZhbHVlLmFwcGVuZChl
+dkRlZi52YWx1ZSlBdHRyaWJ1dGVFcnJvcjogJ05vbmVUeXBlJyBvYmplY3QgaGFzIG5vIGF0dHJp
+YnV0ZSAndmFsdWUnDQoNCmJ1dCBldmVyeXRoaW5nIHdvcmtzIGZpbmUgd2l0aCBiYWJlbHRyYWNl
+IGNtZFsxNTo0MjozMi4zMjI1NjY2NzhdICgrPy4/Pz8/Pz8/Pz8pIG1hc3RlciBsdHRuZ191c3Rf
+dHJhY2VmOmV2ZW50OiB7IGNwdV9pZCA9IDIgfSwgeyBfbXNnX2xlbmd0aCA9IDQ2LCBtc2cgPSAi
+VGhpcyBpcyBhICJteXN0cmluZyB0ZXN0IiBmb3JtYXR0ZWQgMCBldmVudCA0MiIgfVsxNTo0Mjoz
+Mi4zMjI1ODIwMDJdICgrMC4wMDAwMTUzMjQpIG1hc3RlciBsdHRuZ191c3RfdHJhY2VmOmV2ZW50
+OiB7IGNwdV9pZCA9IDIgfSwgeyBfbXNnX2xlbmd0aCA9IDQ2LCBtc2cgPSAiVGhpcyBpcyBhICJt
+eXN0cmluZyB0ZXN0IiBmb3JtYXR0ZWQgMSBldmVudCA0MiIgfVsxNTo0MjozMi4zMjI1ODI4Mzhd
+ICgrMC4wMDAwMDA4MzYpIG1hc3RlciBsdHRuZ191c3RfdHJhY2VmOmV2ZW50OiB7IGNwdV9pZCA9
+IDIgfSwgeyBfbXNnX2xlbmd0aCA9IDQ2LCBtc2cgPSAiVGhpcyBpcyBhICJteXN0cmluZyB0ZXN0
+IiBmb3JtYXR0ZWQgMiBldmVudCA0MiIgfVsxNTo0MjozMi4zMjI1ODM0MTZdICgrMC4wMDAwMDA1
+NzgpIG1hc3RlciBsdHRuZ191c3RfdHJhY2VmOmV2ZW50OiB7IGNwdV9pZCA9IDIgfSwgeyBfbXNn
+X2xlbmd0aCA9IDQ2LCBtc2cgPSAiVGhpcyBpcyBhICJteXN0cmluZyB0ZXN0IiBmb3JtYXR0ZWQg
+MyBldmVudCA0MiIgfVsxNTo0MjozMi4zMjI1ODQwMDJdICgrMC4wMDAwMDA1ODYpIG1hc3RlciBs
+dHRuZ191c3RfdHJhY2VmOmV2ZW50OiB7IGNwdV9pZCA9IDIgfSwgeyBfbXNnX2xlbmd0aCA9IDQ2
+LCBtc2cgPSAiVGhpcyBpcyBhICJteXN0cmluZyB0ZXN0IiBmb3JtYXR0ZWQgNCBldmVudCA0MiIg
+fQ0KYW55IGlkZWEgb2YgdGhpcyA/DQpSZWdhcmRzLFlpeWFuZyAJCSAJICAgCQkgIA==
+
+--_1e83f6ca-8649-48b4-9e98-feb17a03d8b4_
+Content-Type: text/html; charset="gb2312"
+Content-Transfer-Encoding: base64
+
+PGh0bWw+DQo8aGVhZD4NCjxzdHlsZT48IS0tDQouaG1tZXNzYWdlIFANCnsNCm1hcmdpbjowcHg7
+DQpwYWRkaW5nOjBweA0KfQ0KYm9keS5obW1lc3NhZ2UNCnsNCmZvbnQtc2l6ZTogMTJwdDsNCmZv
+bnQtZmFtaWx5OkNhbGlicmkNCn0NCi0tPjwvc3R5bGU+PC9oZWFkPg0KPGJvZHkgY2xhc3M9J2ht
+bWVzc2FnZSc+PGRpdiBkaXI9J2x0cic+SGVsbG8gdGhlcmUsPGRpdj48YnI+PC9kaXY+PGRpdj53
+aGVuIEkgdHJ5aW5nIHRvIGV4dHJhY3QgIm1zZyIgZmllbGQgZ2VuZXJhdGVkIGJ5IGV4YW1wbGUg
+cHJvZ3JhbSAiZGVtby10cmFjZWYiIHdpdGggcHl0aG9uIGJpbmRpbmcgLCZuYnNwOzwvZGl2Pjxk
+aXY+SSBnb3QgZm9sbG93aW5nIGVycm9yIG1lc3NhZ2U6PC9kaXY+PGRpdj48YnI+PC9kaXY+PGRp
+dj48ZGl2PlRyYWNlYmFjayAobW9zdCByZWNlbnQgY2FsbCBsYXN0KTo8L2Rpdj48ZGl2PiZuYnNw
+OyBGaWxlICJkYXRhLnB5IiwgbGluZSA0NiwgaW4gJmx0O21vZHVsZSZndDs8L2Rpdj48ZGl2PiZu
+YnNwOyAmbmJzcDsgc2VxdWVuY2UgPSBldmVudFsibXNnIl08L2Rpdj48ZGl2PiZuYnNwOyBGaWxl
+ICIvdXNyL2xvY2FsL2xpYi9weXRob24zLjMvc2l0ZS1wYWNrYWdlcy9iYWJlbHRyYWNlLnB5Iiwg
+bGluZSA4MDYsIGluIF9fZ2V0aXRlbV9fPC9kaXY+PGRpdj4mbmJzcDsgJm5ic3A7IHJldHVybiBm
+aWVsZC52YWx1ZTwvZGl2PjxkaXY+Jm5ic3A7IEZpbGUgIi91c3IvbG9jYWwvbGliL3B5dGhvbjMu
+My9zaXRlLXBhY2thZ2VzL2JhYmVsdHJhY2UucHkiLCBsaW5lIDEyNzksIGluIHZhbHVlPC9kaXY+
+PGRpdj4mbmJzcDsgJm5ic3A7IHZhbHVlLmFwcGVuZChldkRlZi52YWx1ZSk8L2Rpdj48ZGl2PkF0
+dHJpYnV0ZUVycm9yOiAnTm9uZVR5cGUnIG9iamVjdCBoYXMgbm8gYXR0cmlidXRlICd2YWx1ZSc8
+L2Rpdj48L2Rpdj48ZGl2Pjxicj48L2Rpdj48ZGl2Pjxicj48L2Rpdj48ZGl2PmJ1dCBldmVyeXRo
+aW5nIHdvcmtzIGZpbmUgd2l0aCBiYWJlbHRyYWNlIGNtZDwvZGl2PjxkaXY+PGRpdj5bMTU6NDI6
+MzIuMzIyNTY2Njc4XSAoKz8uPz8/Pz8/Pz8/KSBtYXN0ZXIgbHR0bmdfdXN0X3RyYWNlZjpldmVu
+dDogeyBjcHVfaWQgPSAyIH0sIHsgX21zZ19sZW5ndGggPSA0NiwgbXNnID0gIlRoaXMgaXMgYSAi
+bXlzdHJpbmcgdGVzdCIgZm9ybWF0dGVkIDAgZXZlbnQgNDIiIH08L2Rpdj48ZGl2PlsxNTo0Mjoz
+Mi4zMjI1ODIwMDJdICgrMC4wMDAwMTUzMjQpIG1hc3RlciBsdHRuZ191c3RfdHJhY2VmOmV2ZW50
+OiB7IGNwdV9pZCA9IDIgfSwgeyBfbXNnX2xlbmd0aCA9IDQ2LCBtc2cgPSAiVGhpcyBpcyBhICJt
+eXN0cmluZyB0ZXN0IiBmb3JtYXR0ZWQgMSBldmVudCA0MiIgfTwvZGl2PjxkaXY+WzE1OjQyOjMy
+LjMyMjU4MjgzOF0gKCswLjAwMDAwMDgzNikgbWFzdGVyIGx0dG5nX3VzdF90cmFjZWY6ZXZlbnQ6
+IHsgY3B1X2lkID0gMiB9LCB7IF9tc2dfbGVuZ3RoID0gNDYsIG1zZyA9ICJUaGlzIGlzIGEgIm15
+c3RyaW5nIHRlc3QiIGZvcm1hdHRlZCAyIGV2ZW50IDQyIiB9PC9kaXY+PGRpdj5bMTU6NDI6MzIu
+MzIyNTgzNDE2XSAoKzAuMDAwMDAwNTc4KSBtYXN0ZXIgbHR0bmdfdXN0X3RyYWNlZjpldmVudDog
+eyBjcHVfaWQgPSAyIH0sIHsgX21zZ19sZW5ndGggPSA0NiwgbXNnID0gIlRoaXMgaXMgYSAibXlz
+dHJpbmcgdGVzdCIgZm9ybWF0dGVkIDMgZXZlbnQgNDIiIH08L2Rpdj48ZGl2PlsxNTo0MjozMi4z
+MjI1ODQwMDJdICgrMC4wMDAwMDA1ODYpIG1hc3RlciBsdHRuZ191c3RfdHJhY2VmOmV2ZW50OiB7
+IGNwdV9pZCA9IDIgfSwgeyBfbXNnX2xlbmd0aCA9IDQ2LCBtc2cgPSAiVGhpcyBpcyBhICJteXN0
+cmluZyB0ZXN0IiBmb3JtYXR0ZWQgNCBldmVudCA0MiIgfTwvZGl2PjwvZGl2PjxkaXY+PGJyPjwv
+ZGl2PjxkaXY+YW55IGlkZWEgb2YgdGhpcyA/PC9kaXY+PGRpdj48YnI+PC9kaXY+PGRpdj5SZWdh
+cmRzLDwvZGl2PjxkaXY+WWl5YW5nPC9kaXY+IAkJIAkgICAJCSAgPC9kaXY+PC9ib2R5Pg0KPC9o
+dG1sPg==
+
+--_1e83f6ca-8649-48b4-9e98-feb17a03d8b4_--
+
+
+--===============0873305119==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0873305119==--
