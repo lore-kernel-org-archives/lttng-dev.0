@@ -1,21 +1,16 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Subject: Re: How to check is tracepoint is currently enabled
-	(UST)
-Date: Wed, 25 Jun 2014 11:36:15 -0400
-Message-ID: <CAFXXi0=XEwjPfLwxsGim6_FwRqGD-YM9o1zTVFRWbmyigGDPcw__41578.7631915466$1403710680$gmane$org@mail.gmail.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD359C62DE@VAL-E-02.valcartier.drdc-rddc.gc.ca>
- <53AAE15C.3040100@ericsson.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: trace time out of order
+Date: Wed, 25 Jun 2014 16:48:19 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359C6325__29662.020240403$1403714954$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f173.google.com ([209.85.223.173])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <thundersim@gmail.com>) id 1WzpFj-0000WM-Oq
- for lttng-dev@lists.lttng.org; Wed, 25 Jun 2014 11:37:03 -0400
-Received: by mail-ie0-f173.google.com with SMTP id y20so1814349ier.32
- for <lttng-dev@lists.lttng.org>; Wed, 25 Jun 2014 08:36:46 -0700 (PDT)
-In-Reply-To: <53AAE15C.3040100@ericsson.com>
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1WzqMz-00010V-PF
+ for lttng-dev@lists.lttng.org; Wed, 25 Jun 2014 12:48:29 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,53 +19,35 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@ericsson.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-I am pretty sure that Dmitri is talking about a check that you can use
-in your application, to see if a specific tracepoint is enabled. If
-some data that you pass to the tracepoint is expensive to compute, yo
-might want to avoid computing it when tracing is disabled.
+----------------------------------------------------------------------
+Date: Wed, 25 Jun 2014 15:15:50 +0800
+From: "zhenyu.ren" <zhenyu.ren@aliyun.com>
 
-> #define tracepoint_enabled(provider, name) caa_unlikely(__tracepoint_##provider##___##name.state)
+>   I traced my rpc application. On the server side ,a thread reads a reque=
+st from the socket and push the workitem to a queue (pushWorkItem tracepoin=
+t after queuing), another thread will get the workitem from queue and proce=
+ss it (ProcessWorkItem tracepoint here). However, in the trace log,I saw th=
+e ProcessWorkItem before pushWorkItem. Is this a clock issue?
+----------------------------------------------------------------------
 
-Dmitri, that macro that you posted, does it work for you?
+   See http://bugs.lttng.org/issues/614.  This may be what you're running i=
+nto.
 
-Otherwise, you can simply embed the code in the call to tracepoint:
-
-    tracepoint(hello, world, expensive_work(data));
-
-In the expansion of the "tracepoint" macro [1], expensive_work is only
-called if the tracepoint is enabled, so you don't pay the cost if the
-tracepoint is disabled.
-
-If the code that you need to run to compute your data is not a single
-function call, you can: (a) make it a function or (b) use gcc's
-statement expressions [2]. For example, instead of:
-
-    /* Here we call get_data and compute_median even if tracing is disabled. */
-    struct data* data = get_data();
-    int median = compute_median(data);
-    free(data);
-    tracepoint(hello, world, median);
-
-you could do:
-    /* Here we _don't_ call get_data and compute_median when tracing
-is disabled. */
-    tracepoint(hello, world, ({
-        struct data* data = get_data();
-        int median = compute_median(data);
-        free(data);
-        median;
-    }));
-
-The statement expression will only be executed if the tracepoint is
-enabled (you can verify that by adding a printf in there).
-
-Does it answer you question?
-
-Simon
-
-[1] http://git.lttng.org/?p=lttng-ust.git;a=blob;f=include/lttng/tracepoint.h;h=c5a09d815db1383e539c8c455e8477dda29a579a;hb=HEAD#l47
-[2] https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
+re
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
