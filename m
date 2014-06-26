@@ -1,17 +1,19 @@
-From: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Subject: Re: "lttng enable-event" fails
-Date: Thu, 26 Jun 2014 15:20:20 +0200
-Message-ID: <53AC1E14.4030700__44870.1137713671$1403788900$gmane$org@wanadoo.fr>
-References: <53A91EF9.1050006@wanadoo.fr> <20140624135319.GB11698@thessa>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: seq value error in python binding
+Date: Thu, 26 Jun 2014 10:52:21 -0400
+Message-ID: <CA+jJMxvS2=VLPMz6C+Om1=sMHR3=HRkip7qpAkCAb4BaSNPmDg__27105.7117883631$1403794410$gmane$org@mail.gmail.com>
+References: <BLU182-W9130C7B1F76AC7D936B938A2190@phx.gbl>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"; Format="flowed"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp02.smtpout.orange.fr ([80.12.242.124]
- helo=smtp.smtpout.orange.fr) by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <thierry.bultel@wanadoo.fr>) id 1X09bH-0007qO-Ty
- for lttng-dev@lists.lttng.org; Thu, 26 Jun 2014 09:20:32 -0400
-In-Reply-To: <20140624135319.GB11698@thessa>
+Received: from mail-qa0-f43.google.com ([209.85.216.43])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1X0B2I-0008Ll-RN
+ for lttng-dev@lists.lttng.org; Thu, 26 Jun 2014 10:52:32 -0400
+Received: by mail-qa0-f43.google.com with SMTP id k15so2942755qaq.30
+ for <lttng-dev@lists.lttng.org>; Thu, 26 Jun 2014 07:52:21 -0700 (PDT)
+In-Reply-To: <BLU182-W9130C7B1F76AC7D936B938A2190@phx.gbl>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,82 +22,52 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Yiyang Dai <daiyiyang@hotmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Some other useful information probably:
-The bug does not happen with the (old) Linaro 2012.10 compiler:
-
-# ./host/usr/bin/arm-linux-gnueabihf-gcc --version
-arm-linux-gnueabihf-gcc (crosstool-NG linaro-1.13.1-4.7-2012.10-20121022 =
-
-- Linaro GCC 2012.10) 4.7.3 20121001 (prerelease)
-Copyright =A9 2012 Free Software Foundation, Inc.
-
-Whereas it happens with the one provided by buildroot:
-
-../buildroot_agv_v15_amos820/host/usr/bin/arm-linux-gcc --version
-arm-linux-gcc (Buildroot 2014.02-rc3-00323-g2f12017) 4.7.3
-Copyright =A9 2012 Free Software Foundation, Inc.
-
-Thus I am submitting that bug report to buildroot as well.
-
-Regards
-Thierry
-
-
-Le 24/06/2014 15:53, David Goulet a =E9crit :
-> On 24 Jun (08:47:21), Thierry Bultel wrote:
->> Hi,
->>
->> I am using lttng (2.4.1), target is ARM Cortex A9; compiler is gcc-4.7.3,
->> but I have the same issue with gcc-4.8.2
->> The kernel is Freescale's 3.0.35-4.1.0
->>
->>
->> lttng fails to start:
->>
->> [root@buildroot ~]# lttng create
->> Session auto-19700319-135920 created.
->> Traces will be written in /root/lttng-traces/auto-19700319-135920
->> [root@buildroot~]# lttng enable-event --kernel --all
->> PERROR [5831/5915]: wait: Success (in run_as_clone() at runas.c:243)
->> Error: Trace directory creation error
->> Error: Events: Kernel create session failed (channel channel0, session
->> auto-19700319-135920)
->>
->> My analysis show that lttng attempts to create the trace directory, when
->> "lttng enable-event" is called.
->> To do so, it uses a slave thread that performs a kind of "mkdir -p" ,
->> that thread is spawned via a call to "clone"
->> and the father waits for it via "waitpid".
->>
->> When the slave returns, waitpid says it is not completed. Added a little
->> code to shows that the thread
->> is killed with SIGSEGV at the time it calls "return"
->>
->> Changing it to call "exit" instead, makes it a little better, but other
->> numerous errors come when
->> calling "lttng start"
->>
->> Did anyone encounter such an issue ?
->
-> Hrm, tbh I never tried lttng-tools on ARM but if a SIGSEGV is raised you
-> should be able to get a core dump and with gdb we can understand which
-> callsite failed badly.
->
-> Thanks!
-> David
->
->>
->> Best regards
->> Thierry Bultel
->>
->>
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+T24gV2VkLCBKdW4gMjUsIDIwMTQgYXQgNDo0MyBBTSwgWWl5YW5nIERhaSA8ZGFpeWl5YW5nQGhv
+dG1haWwuY29tPiB3cm90ZToKPiBIZWxsbyB0aGVyZSwKPgo+IHdoZW4gSSB0cnlpbmcgdG8gZXh0
+cmFjdCAibXNnIiBmaWVsZCBnZW5lcmF0ZWQgYnkgZXhhbXBsZSBwcm9ncmFtCj4gImRlbW8tdHJh
+Y2VmIiB3aXRoIHB5dGhvbiBiaW5kaW5nICwKPiBJIGdvdCBmb2xsb3dpbmcgZXJyb3IgbWVzc2Fn
+ZToKPgo+IFRyYWNlYmFjayAobW9zdCByZWNlbnQgY2FsbCBsYXN0KToKPiAgIEZpbGUgImRhdGEu
+cHkiLCBsaW5lIDQ2LCBpbiA8bW9kdWxlPgo+ICAgICBzZXF1ZW5jZSA9IGV2ZW50WyJtc2ciXQo+
+ICAgRmlsZSAiL3Vzci9sb2NhbC9saWIvcHl0aG9uMy4zL3NpdGUtcGFja2FnZXMvYmFiZWx0cmFj
+ZS5weSIsIGxpbmUgODA2LCBpbgo+IF9fZ2V0aXRlbV9fCj4gICAgIHJldHVybiBmaWVsZC52YWx1
+ZQo+ICAgRmlsZSAiL3Vzci9sb2NhbC9saWIvcHl0aG9uMy4zL3NpdGUtcGFja2FnZXMvYmFiZWx0
+cmFjZS5weSIsIGxpbmUgMTI3OSwgaW4KPiB2YWx1ZQo+ICAgICB2YWx1ZS5hcHBlbmQoZXZEZWYu
+dmFsdWUpCj4gQXR0cmlidXRlRXJyb3I6ICdOb25lVHlwZScgb2JqZWN0IGhhcyBubyBhdHRyaWJ1
+dGUgJ3ZhbHVlJwo+Cj4KPiBidXQgZXZlcnl0aGluZyB3b3JrcyBmaW5lIHdpdGggYmFiZWx0cmFj
+ZSBjbWQKPiBbMTU6NDI6MzIuMzIyNTY2Njc4XSAoKz8uPz8/Pz8/Pz8/KSBtYXN0ZXIgbHR0bmdf
+dXN0X3RyYWNlZjpldmVudDogeyBjcHVfaWQKPiA9IDIgfSwgeyBfbXNnX2xlbmd0aCA9IDQ2LCBt
+c2cgPSAiVGhpcyBpcyBhICJteXN0cmluZyB0ZXN0IiBmb3JtYXR0ZWQgMAo+IGV2ZW50IDQyIiB9
+Cj4gWzE1OjQyOjMyLjMyMjU4MjAwMl0gKCswLjAwMDAxNTMyNCkgbWFzdGVyIGx0dG5nX3VzdF90
+cmFjZWY6ZXZlbnQ6IHsgY3B1X2lkCj4gPSAyIH0sIHsgX21zZ19sZW5ndGggPSA0NiwgbXNnID0g
+IlRoaXMgaXMgYSAibXlzdHJpbmcgdGVzdCIgZm9ybWF0dGVkIDEKPiBldmVudCA0MiIgfQo+IFsx
+NTo0MjozMi4zMjI1ODI4MzhdICgrMC4wMDAwMDA4MzYpIG1hc3RlciBsdHRuZ191c3RfdHJhY2Vm
+OmV2ZW50OiB7IGNwdV9pZAo+ID0gMiB9LCB7IF9tc2dfbGVuZ3RoID0gNDYsIG1zZyA9ICJUaGlz
+IGlzIGEgIm15c3RyaW5nIHRlc3QiIGZvcm1hdHRlZCAyCj4gZXZlbnQgNDIiIH0KPiBbMTU6NDI6
+MzIuMzIyNTgzNDE2XSAoKzAuMDAwMDAwNTc4KSBtYXN0ZXIgbHR0bmdfdXN0X3RyYWNlZjpldmVu
+dDogeyBjcHVfaWQKPiA9IDIgfSwgeyBfbXNnX2xlbmd0aCA9IDQ2LCBtc2cgPSAiVGhpcyBpcyBh
+ICJteXN0cmluZyB0ZXN0IiBmb3JtYXR0ZWQgMwo+IGV2ZW50IDQyIiB9Cj4gWzE1OjQyOjMyLjMy
+MjU4NDAwMl0gKCswLjAwMDAwMDU4NikgbWFzdGVyIGx0dG5nX3VzdF90cmFjZWY6ZXZlbnQ6IHsg
+Y3B1X2lkCj4gPSAyIH0sIHsgX21zZ19sZW5ndGggPSA0NiwgbXNnID0gIlRoaXMgaXMgYSAibXlz
+dHJpbmcgdGVzdCIgZm9ybWF0dGVkIDQKPiBldmVudCA0MiIgfQo+Cj4gYW55IGlkZWEgb2YgdGhp
+cyA/CgpGaXhlZCBhcyBvZiAzODY2YzggaW4gbWFzdGVyIGFuZCBlMTFiOGQgaW4gc3RhYmxlLTEu
+Mi4KCmNvbW1pdCAzODY2Yzg1MDM4MzVlNmJiY2FmZTU0MzY5OTIxNzdhZTE1MDQ2ZDYwCkF1dGhv
+cjogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgpE
+YXRlOiAgIFRodSBKdW4gMjYgMTA6NDI6MDAgMjAxNCAtMDQwMAoKICAgIEZpeCAoUHl0aG9uIGJp
+bmRpbmdzKTogUmV0dXJuIGEgc3RyaW5nIGlmIGEgc2VxdWVuY2UncyBlbGVtZW50IGFyZSBjaGFy
+cwoKICAgIEFuIEF0dHJpYnV0ZUVycm9yIGV4Y2VwdGlvbiB3YXMgcmFpc2VkIHdoZW4gYWNjZXNz
+aW5nIHRoZSB2YWx1ZSBwcm9wZXJ0eQogICAgb2YgYSBzZXF1ZW5jZSB0aGF0IGNvbnRhaW5zIGEg
+c3RyaW5nLgoKICAgIFJlcG9ydGVkLWJ5OiBZaXlhbmcgRGFpIDxkYWl5aXlhbmdAaG90bWFpbC5j
+b20+CiAgICBTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFy
+bmVhdUBlZmZpY2lvcy5jb20+CgoKVGhhbmtzIGZvciByZXBvcnRpbmchCkrDqXLDqW1pZQoKPgo+
+IFJlZ2FyZHMsCj4gWWl5YW5nCj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMu
+bHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
+Zm8vbHR0bmctZGV2Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpo
+dHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
+dG5nLWRldgo=
