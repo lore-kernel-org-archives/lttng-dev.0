@@ -1,19 +1,18 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: seq value error in python binding
-Date: Thu, 26 Jun 2014 10:52:21 -0400
-Message-ID: <CA+jJMxvS2=VLPMz6C+Om1=sMHR3=HRkip7qpAkCAb4BaSNPmDg__27105.7117883631$1403794410$gmane$org@mail.gmail.com>
-References: <BLU182-W9130C7B1F76AC7D936B938A2190@phx.gbl>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: [PATCH lttng-ust] Fix: Wrong configure check for UST
+	perf event counters context support
+Date: Thu, 26 Jun 2014 11:42:28 -0400
+Message-ID: <1403797348-3958-1-git-send-email-christian.babeux__10772.6385853768$1403797440$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f43.google.com ([209.85.216.43])
+Received: from mail-qc0-f170.google.com ([209.85.216.170])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1X0B2I-0008Ll-RN
- for lttng-dev@lists.lttng.org; Thu, 26 Jun 2014 10:52:32 -0400
-Received: by mail-qa0-f43.google.com with SMTP id k15so2942755qaq.30
- for <lttng-dev@lists.lttng.org>; Thu, 26 Jun 2014 07:52:21 -0700 (PDT)
-In-Reply-To: <BLU182-W9130C7B1F76AC7D936B938A2190@phx.gbl>
+ (envelope-from <christian.babeux@0x80.ca>) id 1X0BpD-0000CT-Pf
+ for lttng-dev@lists.lttng.org; Thu, 26 Jun 2014 11:43:07 -0400
+Received: by mail-qc0-f170.google.com with SMTP id l6so3375596qcy.29
+ for <lttng-dev@lists.lttng.org>; Thu, 26 Jun 2014 08:42:54 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,52 +21,58 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yiyang Dai <daiyiyang@hotmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gV2VkLCBKdW4gMjUsIDIwMTQgYXQgNDo0MyBBTSwgWWl5YW5nIERhaSA8ZGFpeWl5YW5nQGhv
-dG1haWwuY29tPiB3cm90ZToKPiBIZWxsbyB0aGVyZSwKPgo+IHdoZW4gSSB0cnlpbmcgdG8gZXh0
-cmFjdCAibXNnIiBmaWVsZCBnZW5lcmF0ZWQgYnkgZXhhbXBsZSBwcm9ncmFtCj4gImRlbW8tdHJh
-Y2VmIiB3aXRoIHB5dGhvbiBiaW5kaW5nICwKPiBJIGdvdCBmb2xsb3dpbmcgZXJyb3IgbWVzc2Fn
-ZToKPgo+IFRyYWNlYmFjayAobW9zdCByZWNlbnQgY2FsbCBsYXN0KToKPiAgIEZpbGUgImRhdGEu
-cHkiLCBsaW5lIDQ2LCBpbiA8bW9kdWxlPgo+ICAgICBzZXF1ZW5jZSA9IGV2ZW50WyJtc2ciXQo+
-ICAgRmlsZSAiL3Vzci9sb2NhbC9saWIvcHl0aG9uMy4zL3NpdGUtcGFja2FnZXMvYmFiZWx0cmFj
-ZS5weSIsIGxpbmUgODA2LCBpbgo+IF9fZ2V0aXRlbV9fCj4gICAgIHJldHVybiBmaWVsZC52YWx1
-ZQo+ICAgRmlsZSAiL3Vzci9sb2NhbC9saWIvcHl0aG9uMy4zL3NpdGUtcGFja2FnZXMvYmFiZWx0
-cmFjZS5weSIsIGxpbmUgMTI3OSwgaW4KPiB2YWx1ZQo+ICAgICB2YWx1ZS5hcHBlbmQoZXZEZWYu
-dmFsdWUpCj4gQXR0cmlidXRlRXJyb3I6ICdOb25lVHlwZScgb2JqZWN0IGhhcyBubyBhdHRyaWJ1
-dGUgJ3ZhbHVlJwo+Cj4KPiBidXQgZXZlcnl0aGluZyB3b3JrcyBmaW5lIHdpdGggYmFiZWx0cmFj
-ZSBjbWQKPiBbMTU6NDI6MzIuMzIyNTY2Njc4XSAoKz8uPz8/Pz8/Pz8/KSBtYXN0ZXIgbHR0bmdf
-dXN0X3RyYWNlZjpldmVudDogeyBjcHVfaWQKPiA9IDIgfSwgeyBfbXNnX2xlbmd0aCA9IDQ2LCBt
-c2cgPSAiVGhpcyBpcyBhICJteXN0cmluZyB0ZXN0IiBmb3JtYXR0ZWQgMAo+IGV2ZW50IDQyIiB9
-Cj4gWzE1OjQyOjMyLjMyMjU4MjAwMl0gKCswLjAwMDAxNTMyNCkgbWFzdGVyIGx0dG5nX3VzdF90
-cmFjZWY6ZXZlbnQ6IHsgY3B1X2lkCj4gPSAyIH0sIHsgX21zZ19sZW5ndGggPSA0NiwgbXNnID0g
-IlRoaXMgaXMgYSAibXlzdHJpbmcgdGVzdCIgZm9ybWF0dGVkIDEKPiBldmVudCA0MiIgfQo+IFsx
-NTo0MjozMi4zMjI1ODI4MzhdICgrMC4wMDAwMDA4MzYpIG1hc3RlciBsdHRuZ191c3RfdHJhY2Vm
-OmV2ZW50OiB7IGNwdV9pZAo+ID0gMiB9LCB7IF9tc2dfbGVuZ3RoID0gNDYsIG1zZyA9ICJUaGlz
-IGlzIGEgIm15c3RyaW5nIHRlc3QiIGZvcm1hdHRlZCAyCj4gZXZlbnQgNDIiIH0KPiBbMTU6NDI6
-MzIuMzIyNTgzNDE2XSAoKzAuMDAwMDAwNTc4KSBtYXN0ZXIgbHR0bmdfdXN0X3RyYWNlZjpldmVu
-dDogeyBjcHVfaWQKPiA9IDIgfSwgeyBfbXNnX2xlbmd0aCA9IDQ2LCBtc2cgPSAiVGhpcyBpcyBh
-ICJteXN0cmluZyB0ZXN0IiBmb3JtYXR0ZWQgMwo+IGV2ZW50IDQyIiB9Cj4gWzE1OjQyOjMyLjMy
-MjU4NDAwMl0gKCswLjAwMDAwMDU4NikgbWFzdGVyIGx0dG5nX3VzdF90cmFjZWY6ZXZlbnQ6IHsg
-Y3B1X2lkCj4gPSAyIH0sIHsgX21zZ19sZW5ndGggPSA0NiwgbXNnID0gIlRoaXMgaXMgYSAibXlz
-dHJpbmcgdGVzdCIgZm9ybWF0dGVkIDQKPiBldmVudCA0MiIgfQo+Cj4gYW55IGlkZWEgb2YgdGhp
-cyA/CgpGaXhlZCBhcyBvZiAzODY2YzggaW4gbWFzdGVyIGFuZCBlMTFiOGQgaW4gc3RhYmxlLTEu
-Mi4KCmNvbW1pdCAzODY2Yzg1MDM4MzVlNmJiY2FmZTU0MzY5OTIxNzdhZTE1MDQ2ZDYwCkF1dGhv
-cjogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgpE
-YXRlOiAgIFRodSBKdW4gMjYgMTA6NDI6MDAgMjAxNCAtMDQwMAoKICAgIEZpeCAoUHl0aG9uIGJp
-bmRpbmdzKTogUmV0dXJuIGEgc3RyaW5nIGlmIGEgc2VxdWVuY2UncyBlbGVtZW50IGFyZSBjaGFy
-cwoKICAgIEFuIEF0dHJpYnV0ZUVycm9yIGV4Y2VwdGlvbiB3YXMgcmFpc2VkIHdoZW4gYWNjZXNz
-aW5nIHRoZSB2YWx1ZSBwcm9wZXJ0eQogICAgb2YgYSBzZXF1ZW5jZSB0aGF0IGNvbnRhaW5zIGEg
-c3RyaW5nLgoKICAgIFJlcG9ydGVkLWJ5OiBZaXlhbmcgRGFpIDxkYWl5aXlhbmdAaG90bWFpbC5j
-b20+CiAgICBTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFy
-bmVhdUBlZmZpY2lvcy5jb20+CgoKVGhhbmtzIGZvciByZXBvcnRpbmchCkrDqXLDqW1pZQoKPgo+
-IFJlZ2FyZHMsCj4gWWl5YW5nCj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
-Zm8vbHR0bmctZGV2Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpo
-dHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo=
+When building on non-x86 platforms, the build errors out with the following:
+
+  CC       lttng-context-perf-counters.lo
+lttng-context-perf-counters.c:95:2: error: #error "Perf event counters are only supported on x86 so far."
+lttng-context-perf-counters.c: In function 'read_perf_counter':
+lttng-context-perf-counters.c:114:4: warning: implicit declaration of function 'rdpmc' [-Wimplicit-function-declaration]
+make[2]: *** [lttng-context-perf-counters.lo] Error 1
+
+The configure script checks for the presence of the "perf_event.h" header to enable support for
+perf events counters. However, the current implementation is only available on x86,
+hence the build fails on platform where the perf header is available.
+
+Fix this issue by detecting the architecture we are currently building and wether
+to enable or not the support for perf event counters context.
+
+Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+---
+ configure.ac | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 76851db..4841f46 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -194,9 +194,23 @@ AC_CHECK_LIB([urcu-bp], [call_rcu_bp], [], [AC_MSG_ERROR([liburcu 0.6 or newer i
+ 
+ # optional linux/perf_event.h
+ AC_CHECK_HEADERS([linux/perf_event.h], [have_perf_event=yes], [])
+-AM_CONDITIONAL([HAVE_PERF_EVENT], [test "x$have_perf_event" = "xyes"])
+ 
+-if test "x$have_perf_event" = "xyes"; then
++# Perf event counters are only supported on x86 so far.
++AC_MSG_CHECKING([UST support for architecture perf event counters])
++case $host_cpu in
++changequote(,)dnl
++	i[3456]86)
++changequote([,])dnl
++	UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS=yes;;
++	x86_64) UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS=yes;;
++	amd64) UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS=yes;;
++	*) UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS=no;;
++esac
++AC_MSG_RESULT([$UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS])
++
++AM_CONDITIONAL([HAVE_PERF_EVENT], [test "x$have_perf_event" = "xyes" -a "x$UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS" = "xyes"])
++
++if test "x$have_perf_event" = "xyes" -a "x$UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS" = "xyes"; then
+ AC_DEFINE([LTTNG_UST_HAVE_PERF_EVENT], [1])
+ fi
+ 
+-- 
+1.9.3
