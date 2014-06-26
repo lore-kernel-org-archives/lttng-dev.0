@@ -1,18 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: Wrong configure check for
- UST perf event counters context support
-Date: Thu, 26 Jun 2014 15:53:52 +0000 (UTC)
-Message-ID: <48769898.4925.1403798032029.JavaMail.zimbra__47213.1978640848$1403798101$gmane$org@efficios.com>
-References: <1403797348-3958-1-git-send-email-christian.babeux@efficios.com>
+From: Tan Dung Le Tran <tan.dung.le.tran@ericsson.com>
+Subject: Re: [PATCH lttng-ust] JUL: use root logger to capture
+ events
+Date: Thu, 26 Jun 2014 16:05:31 +0000
+Message-ID: <510A3668CBDB6143966144326546DA921BFF3FC2__44521.9234949493$1403798800$gmane$org@eusaamb103.ericsson.se>
+References: <1402932636-8366-1-git-send-email-dgoulet@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from usevmg20.ericsson.net ([198.24.6.45])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1X0Bzn-0000I5-Eb
- for lttng-dev@lists.lttng.org; Thu, 26 Jun 2014 11:54:01 -0400
-In-Reply-To: <1403797348-3958-1-git-send-email-christian.babeux@efficios.com>
+ (envelope-from <tan.dung.le.tran@ericsson.com>) id 1X0CB8-0000QA-U4
+ for lttng-dev@lists.lttng.org; Thu, 26 Jun 2014 12:05:42 -0400
+In-Reply-To: <1402932636-8366-1-git-send-email-dgoulet@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,85 +22,526 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: David Goulet <dgoulet@efficios.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-merged, thanks!
+Hi David,
 
-Mathieu
+Is this patch applicable for lttng-ust "origin/stable-2.4" ?
 
------ Original Message -----
-> From: "Christian Babeux" <christian.babeux@efficios.com>
-> To: lttng-dev@lists.lttng.org
-> Cc: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, "Christian Babeux" <christian.babeux@efficios.com>
-> Sent: Thursday, June 26, 2014 11:42:28 AM
-> Subject: [PATCH lttng-ust] Fix: Wrong configure check for UST perf event counters context support
-> 
-> When building on non-x86 platforms, the build errors out with the following:
-> 
->   CC       lttng-context-perf-counters.lo
-> lttng-context-perf-counters.c:95:2: error: #error "Perf event counters are
-> only supported on x86 so far."
-> lttng-context-perf-counters.c: In function 'read_perf_counter':
-> lttng-context-perf-counters.c:114:4: warning: implicit declaration of
-> function 'rdpmc' [-Wimplicit-function-declaration]
-> make[2]: *** [lttng-context-perf-counters.lo] Error 1
-> 
-> The configure script checks for the presence of the "perf_event.h" header to
-> enable support for
-> perf events counters. However, the current implementation is only available
-> on x86,
-> hence the build fails on platform where the perf header is available.
-> 
-> Fix this issue by detecting the architecture we are currently building and
-> wether
-> to enable or not the support for perf event counters context.
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  configure.ac | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/configure.ac b/configure.ac
-> index 76851db..4841f46 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -194,9 +194,23 @@ AC_CHECK_LIB([urcu-bp], [call_rcu_bp], [],
-> [AC_MSG_ERROR([liburcu 0.6 or newer i
->  
->  # optional linux/perf_event.h
->  AC_CHECK_HEADERS([linux/perf_event.h], [have_perf_event=yes], [])
-> -AM_CONDITIONAL([HAVE_PERF_EVENT], [test "x$have_perf_event" = "xyes"])
->  
-> -if test "x$have_perf_event" = "xyes"; then
-> +# Perf event counters are only supported on x86 so far.
-> +AC_MSG_CHECKING([UST support for architecture perf event counters])
-> +case $host_cpu in
-> +changequote(,)dnl
-> +	i[3456]86)
-> +changequote([,])dnl
-> +	UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS=yes;;
-> +	x86_64) UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS=yes;;
-> +	amd64) UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS=yes;;
-> +	*) UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS=no;;
-> +esac
-> +AC_MSG_RESULT([$UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS])
-> +
-> +AM_CONDITIONAL([HAVE_PERF_EVENT], [test "x$have_perf_event" = "xyes" -a
-> "x$UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS" = "xyes"])
-> +
-> +if test "x$have_perf_event" = "xyes" -a
-> "x$UST_SUPPORT_FOR_ARCH_PERF_EVENT_COUNTERS" = "xyes"; then
->  AC_DEFINE([LTTNG_UST_HAVE_PERF_EVENT], [1])
->  fi
->  
-> --
-> 1.9.3
-> 
-> 
+Thanks,
+Tan
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+
+-----Original Message-----
+From: David Goulet [mailto:dgoulet@efficios.com] 
+Sent: June-16-14 11:31 AM
+To: lttng-dev@lists.lttng.org
+Subject: [lttng-dev] [PATCH lttng-ust] JUL: use root logger to capture events
+
+The JUL agent now uses the root logger ("") to capture all events. This allows us to remove the Timer thread and cleanup a huge portion of the code base. It simplifies a great deal the internal structure of the agent since we don't have to monitor the Logger object anymore.
+
+Since tracepoint filtering is done in UST, we just the LTTng handler to the root logger and send everything to UST except disabled events.
+
+Signed-off-by: David Goulet <dgoulet@efficios.com>
+---
+ .../org/lttng/ust/jul/LTTngLogHandler.java         | 100 ++------------
+ .../org/lttng/ust/jul/LTTngSessiondCmd2_4.java     | 145 ++++-----------------
+ .../org/lttng/ust/jul/LTTngTCPSessiondClient.java  | 105 +--------------
+ 3 files changed, 41 insertions(+), 309 deletions(-)
+
+diff --git a/liblttng-ust-jul/org/lttng/ust/jul/LTTngLogHandler.java b/liblttng-ust-jul/org/lttng/ust/jul/LTTngLogHandler.java
+index 8c79512..00e8e3c 100644
+--- a/liblttng-ust-jul/org/lttng/ust/jul/LTTngLogHandler.java
++++ b/liblttng-ust-jul/org/lttng/ust/jul/LTTngLogHandler.java
+@@ -29,40 +29,16 @@ import java.util.Map;
+ 
+ import org.lttng.ust.jul.LTTngUst;
+ 
+-class LTTngLogger {
+-	/*
+-	 * The log handler is attached to the logger when the reference count is
+-	 * nonzero. Each event referring to a logger holds a reference to that
+-	 * logger. If down to 0, this object is removed from the handler.
+-	 */
+-	public int refcount;
+-	public String name;
+-	Logger logger;
+-
+-	public LTTngLogger(String name, Logger logger) {
+-		this.name = name;
+-		this.refcount = 0;
+-		this.logger = logger;
+-	}
+-
+-	public void attach(LTTngLogHandler handler) {
+-		this.logger.addHandler(handler);
+-	}
+-
+-	public void detach(LTTngLogHandler handler) {
+-		this.logger.removeHandler(handler);
+-	}
+-}
+-
+ public class LTTngLogHandler extends Handler {
+ 	/* Am I a root Log Handler. */
+ 	public int is_root = 0;
++	public int attached = 0;
+ 
+ 	public LogManager logManager;
+ 
+ 	/* Logger object attached to this handler that can trigger a tracepoint. */
+-	private Map<String, LTTngLogger> loggerMap =
+-		Collections.synchronizedMap(new HashMap<String, LTTngLogger>());
++	public Map<String, LTTngEvent> disabledEvents =
++		Collections.synchronizedMap(new HashMap<String, LTTngEvent>());
+ 
+ 	/* Constructor */
+ 	public LTTngLogHandler(LogManager logManager) { @@ -75,68 +51,10 @@ public class LTTngLogHandler extends Handler {
+ 	}
+ 
+ 	/*
+-	 * Return true if the logger is enabled and attached. Else, if not found,
+-	 * return false.
+-	 */
+-	public boolean exists(String name) {
+-		if (loggerMap.get(name) != null) {
+-			return true;
+-		} else {
+-			return false;
+-		}
+-	}
+-
+-	/*
+-	 * Attach an event to this handler. If no logger object exists, one is
+-	 * created else the refcount is incremented.
+-	 */
+-	public void attachEvent(LTTngEvent event) {
+-		Logger logger;
+-		LTTngLogger lttngLogger;
+-
+-		/* Does the logger actually exist. */
+-		logger = this.logManager.getLogger(event.name);
+-		if (logger == null) {
+-			/* Stop attach right now. */
+-			return;
+-		}
+-
+-		lttngLogger = loggerMap.get(event.name);
+-		if (lttngLogger == null) {
+-			lttngLogger = new LTTngLogger(event.name, logger);
+-
+-			/* Attach the handler to the logger and add is to the map. */
+-			lttngLogger.attach(this);
+-			lttngLogger.refcount = 1;
+-			loggerMap.put(lttngLogger.name, lttngLogger);
+-		} else {
+-			lttngLogger.refcount += 1;
+-		}
+-	}
+-
+-	/*
+-	 * Dettach an event from this handler. If the refcount goes down to 0, the
+-	 * logger object is removed thus not attached anymore.
+-	 */
+-	public void detachEvent(LTTngEvent event) {
+-		LTTngLogger logger;
+-
+-		logger = loggerMap.get(event.name);
+-		if (logger != null) {
+-			logger.refcount -= 1;
+-			if (logger.refcount == 0) {
+-				/* Dettach from handler since no more event is associated. */
+-				logger.detach(this);
+-				loggerMap.remove(logger);
+-			}
+-		}
+-	}
+-
+-	/*
+ 	 * Cleanup this handler state meaning put it back to a vanilla state.
+ 	 */
+ 	public void clear() {
+-		this.loggerMap.clear();
++		this.disabledEvents.clear();
+ 	}
+ 
+ 	@Override
+@@ -147,10 +65,14 @@ public class LTTngLogHandler extends Handler {
+ 
+ 	@Override
+ 	public void publish(LogRecord record) {
+-		LTTngLogger logger;
++		LTTngEvent event;
+ 
+-		logger = loggerMap.get(record.getLoggerName());
+-		if (logger == null) {
++		/*
++		 * Check if the logger has been disabled and if yes don't fire the
++		 * tracepoint.
++		 */
++		event = this.disabledEvents.get(record.getLoggerName());
++		if (event != null) {
+ 			/* Ignore and don't fire TP. */
+ 			return;
+ 		}
+diff --git a/liblttng-ust-jul/org/lttng/ust/jul/LTTngSessiondCmd2_4.java b/liblttng-ust-jul/org/lttng/ust/jul/LTTngSessiondCmd2_4.java
+index 6808326..dc068f1 100644
+--- a/liblttng-ust-jul/org/lttng/ust/jul/LTTngSessiondCmd2_4.java
++++ b/liblttng-ust-jul/org/lttng/ust/jul/LTTngSessiondCmd2_4.java
+@@ -133,7 +133,7 @@ public interface LTTngSessiondCmd2_4 {
+ 			buf.order(ByteOrder.LITTLE_ENDIAN);
+ 			lttngLogLevel = buf.getInt();
+ 			lttngLogLevelType = buf.getInt();
+-			name = new String(data, data_offset, data.length - data_offset);
++			name = new String(data, data_offset, data.length - 
++data_offset).trim();
+ 		}
+ 
+ 		@Override
+@@ -152,76 +152,32 @@ public interface LTTngSessiondCmd2_4 {
+ 		 * @return Event name as a string if the event is NOT found thus was
+ 		 * not enabled.
+ 		 */
+-		public void execute(LTTngLogHandler handler,
+-				Map<String, ArrayList<LTTngEvent>> eventMap, Set wildCardSet) {
+-			ArrayList<LTTngEvent> bucket;
+-			LTTngEvent event;
++		public void execute(LTTngLogHandler handler) {
++			LTTngEvent event, lookupEv;
+ 
+-			if (name == null) {
++			if (this.name == null) {
+ 				this.code = lttng_jul_ret_code.CODE_INVALID_CMD;
+ 				return;
+ 			}
+ 
+-			/* Wild card to enable ALL logger. */
+-			if (name.trim().equals("*")) {
+-				String loggerName;
+-				Enumeration loggers = handler.logManager.getLoggerNames();
+-
+-				/* Add event to the wildcard set. */
+-				wildCardSet.add(new LTTngEvent(name.trim(), lttngLogLevel,
+-							lttngLogLevelType));
+-
+-				/*
+-				 * Create an event for each logger found and attach it to the
+-				 * handler.
+-				 */
+-				while (loggers.hasMoreElements()) {
+-					loggerName = loggers.nextElement().toString();
+-					/* Somehow there is always an empty string at the end. */
+-					if (loggerName == "") {
+-						continue;
+-					}
+-
+-					event = new LTTngEvent(loggerName, lttngLogLevel,
+-							lttngLogLevelType);
+-					/* Attach event to Log handler to it can be traced. */
+-					handler.attachEvent(event);
+-
+-					/*
+-					 * The agent timer call this function with eventMap set to
+-					 * null because it already has a reference to an existing
+-					 * event so is should not try to add a new one here.
+-					 */
+-					if (eventMap != null) {
+-						bucket = eventMap.get(loggerName);
+-						if (bucket == null) {
+-							bucket = new ArrayList<LTTngEvent>();
+-							eventMap.put(loggerName, bucket);
+-						}
+-						bucket.add(event);
+-					}
+-				}
+-			} else {
+-				event = new LTTngEvent(name.trim(), lttngLogLevel,
+-						lttngLogLevelType);
+-				/* Attach event to Log handler to it can be traced. */
+-				handler.attachEvent(event);
+-
+-				/*
+-				 * The agent timer call this function with eventMap set to
+-				 * null because it already has a reference to an existing
+-				 * event so is should not try to add a new one here.
+-				 */
+-				if (eventMap != null) {
+-					bucket = eventMap.get(name.trim());
+-					if (bucket == null) {
+-						bucket = new ArrayList<LTTngEvent>();
+-						eventMap.put(name.trim(), bucket);
+-					}
+-					bucket.add(event);
+-				}
++			/*
++			 * Try to remove the logger name from the disabled events set in
++			 * the handler. The return value is of no importance, we just need
++			 * to try it.
++			 */
++			handler.disabledEvents.remove(this.name);
++
++			/* Handler already attached. */
++			if (handler.attached == 1) {
++				this.code = lttng_jul_ret_code.CODE_SUCCESS_CMD;
++				return;
+ 			}
+ 
++			/* Get the default JUL root logger and add our handler. */
++			Logger rootLogger = handler.logManager.getLogger("");
++			rootLogger.addHandler(handler);
++			handler.attached = 1;
++
+ 			this.code = lttng_jul_ret_code.CODE_SUCCESS_CMD;
+ 			return;
+ 		}
+@@ -238,13 +194,9 @@ public interface LTTngSessiondCmd2_4 {
+ 
+ 		@Override
+ 		public void populate(byte[] data) {
+-			int data_offset = INT_SIZE * 2;
+-
+ 			ByteBuffer buf = ByteBuffer.wrap(data);
+ 			buf.order(ByteOrder.LITTLE_ENDIAN);
+-			lttngLogLevel = buf.getInt();
+-			lttngLogLevelType = buf.getInt();
+-			name = new String(data, data_offset, data.length - data_offset);
++			name = new String(data).trim();
+ 		}
+ 
+ 		@Override
+@@ -260,62 +212,21 @@ public interface LTTngSessiondCmd2_4 {
+ 		 * Execute disable handler action which is to disable the given handler
+ 		 * to the received name.
+ 		 */
+-		public void execute(LTTngLogHandler handler,
+-				Map<String, ArrayList<LTTngEvent>> eventMap, Set wildCardSet) {
+-			ArrayList<LTTngEvent> bucket;
++		public void execute(LTTngLogHandler handler) {
+ 			LTTngEvent event;
+ 
+-			if (name == null) {
++			if (this.name == null) {
+ 				this.code = lttng_jul_ret_code.CODE_INVALID_CMD;
+ 				return;
+ 			}
+ 
+-			/* Wild card to disable ALL logger. */
+-			if (name.trim().equals("*")) {
+-				String loggerName;
+-				Enumeration loggers = handler.logManager.getLoggerNames();
+-
+-				/* Remove event from the wildcard set. */
+-				wildCardSet.remove(new LTTngEvent(name.trim(), lttngLogLevel,
+-							lttngLogLevelType));
+-
+-				while (loggers.hasMoreElements()) {
+-					loggerName = loggers.nextElement().toString();
+-					/* Somehow there is always an empty string at the end. */
+-					if (loggerName == "") {
+-						continue;
+-					}
+-
+-					event = new LTTngEvent(loggerName, lttngLogLevel,
+-							lttngLogLevelType);
+-
+-					bucket = eventMap.get(loggerName);
+-					if (bucket != null) {
+-						handler.detachEvent(event);
+-						bucket.remove(event);
+-						if (bucket.isEmpty() == true) {
+-							eventMap.remove(bucket);
+-						}
+-					}
+-				}
+-				this.code = lttng_jul_ret_code.CODE_SUCCESS_CMD;
+-			} else {
+-				event = new LTTngEvent(this.name, lttngLogLevel,
+-						lttngLogLevelType);
+-
+-				bucket = eventMap.get(this.name);
+-				if (bucket != null) {
+-					handler.detachEvent(event);
+-					bucket.remove(event);
+-					if (bucket.isEmpty() == true) {
+-						eventMap.remove(bucket);
+-					}
+-					this.code = lttng_jul_ret_code.CODE_SUCCESS_CMD;
+-				} else {
+-					this.code = lttng_jul_ret_code.CODE_UNK_LOGGER_NAME;
+-				}
++			event = handler.disabledEvents.get(this.name);
++			if (event == null) {
++				handler.disabledEvents.put(this.name,
++						new LTTngEvent(this.name, 0, 0));
+ 			}
+ 
++			this.code = lttng_jul_ret_code.CODE_SUCCESS_CMD;
+ 			return;
+ 		}
+ 	}
+diff --git a/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java b/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
+index a2d12fc..912d507 100644
+--- a/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
++++ b/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
+@@ -39,8 +39,6 @@ import java.util.Iterator;  import java.util.List;  import java.util.Enumeration;  import java.util.Set; -import java.util.Timer; -import java.util.TimerTask;  import java.util.logging.Logger;  import java.util.Collections;
+ 
+@@ -64,23 +62,6 @@ public class LTTngTCPSessiondClient {
+ 
+ 	private Semaphore registerSem;
+ 
+-	private Timer eventTimer;
+-
+-	/*
+-	 * Indexed by event name but can contains duplicates since multiple
+-	 * sessions can enable the same event with or without different loglevels.
+-	 */
+-	private Map<String, ArrayList<LTTngEvent>> eventMap =
+-		Collections.synchronizedMap(
+-				new HashMap<String, ArrayList<LTTngEvent>>());
+-
+-	private Set<LTTngEvent> wildCardSet =
+-		Collections.synchronizedSet(new HashSet<LTTngEvent>());
+-
+-	/* Timer delay at each 5 seconds. */
+-	private final static long timerDelay = 5 * 1000;
+-	private static boolean timerInitialized;
+-
+ 	private static final String rootPortFile = "/var/run/lttng/jul.port";
+ 	private static final String userPortFile = "/.lttng/jul.port";
+ 
+@@ -90,83 +71,6 @@ public class LTTngTCPSessiondClient {
+ 	public LTTngTCPSessiondClient(String host, Semaphore sem) {
+ 		this.sessiondHost = host;
+ 		this.registerSem = sem;
+-		this.eventTimer = new Timer();
+-		this.timerInitialized = false;
+-	}
+-
+-	private void setupEventTimer() {
+-		if (this.timerInitialized) {
+-			return;
+-		}
+-
+-		this.eventTimer.scheduleAtFixedRate(new TimerTask() {
+-			@Override
+-			public void run() {
+-				LTTngSessiondCmd2_4.sessiond_enable_handler enableCmd = new
+-					LTTngSessiondCmd2_4.sessiond_enable_handler();
+-
+-				synchronized (eventMap) {
+-					String loggerName;
+-					Enumeration loggers = handler.logManager.getLoggerNames();
+-
+-					/*
+-					 * Create an event for each logger found and attach it to the
+-					 * handler.
+-					 */
+-					while (loggers.hasMoreElements()) {
+-						ArrayList<LTTngEvent> bucket;
+-
+-						loggerName = loggers.nextElement().toString();
+-
+-						/* Logger is already enabled or end of list, skip it. */
+-						if (handler.exists(loggerName) == true ||
+-								loggerName.equals("")) {
+-							continue;
+-						}
+-
+-						bucket = eventMap.get(loggerName);
+-						if (bucket == null) {
+-							/* No event(s) exist for this logger. */
+-							continue;
+-						}
+-
+-						for (LTTngEvent event : bucket) {
+-							enableCmd.name = event.name;
+-							enableCmd.lttngLogLevel = event.logLevel.level;
+-							enableCmd.lttngLogLevelType = event.logLevel.type;
+-
+-							/* Event exist so pass null here. */
+-							enableCmd.execute(handler, null, wildCardSet);
+-						}
+-					}
+-				}
+-
+-				/* Handle wild cards. */
+-				synchronized (wildCardSet) {
+-					Map<String, ArrayList<LTTngEvent>> modifiedEvents =
+-						new HashMap<String, ArrayList<LTTngEvent>>();
+-					Set<LTTngEvent> tmpSet = new HashSet<LTTngEvent>();
+-					Iterator<LTTngEvent> it = wildCardSet.iterator();
+-
+-					while (it.hasNext()) {
+-						LTTngEvent event = it.next();
+-
+-						/* Only support * for now. */
+-						if (event.name.equals("*")) {
+-							enableCmd.name = event.name;
+-							enableCmd.lttngLogLevel = event.logLevel.level;
+-							enableCmd.lttngLogLevelType = event.logLevel.type;
+-
+-							/* That might create a new event so pass the map. */
+-							enableCmd.execute(handler, modifiedEvents, tmpSet);
+-						}
+-					}
+-					eventMap.putAll(modifiedEvents);
+-				}
+-			}
+-		}, this.timerDelay, this.timerDelay);
+-
+-		this.timerInitialized = true;
+ 	}
+ 
+ 	/*
+@@ -185,8 +89,6 @@ public class LTTngTCPSessiondClient {
+ 	 * Cleanup Agent state.
+ 	 */
+ 	private void cleanupState() {
+-		eventMap.clear();
+-		wildCardSet.clear();
+ 		if (this.handler != null) {
+ 			this.handler.clear();
+ 		}
+@@ -216,8 +118,6 @@ public class LTTngTCPSessiondClient {
+ 				 */
+ 				registerToSessiond();
+ 
+-				setupEventTimer();
+-
+ 				/*
+ 				 * Block on socket receive and wait for command from the
+ 				 * session daemon. This will return if and only if there is a @@ -239,7 +139,6 @@ public class LTTngTCPSessiondClient {
+ 
+ 	public void destroy() {
+ 		this.quit = true;
+-		this.eventTimer.cancel();
+ 
+ 		try {
+ 			if (this.sessiondSock != null) {
+@@ -331,7 +230,7 @@ public class LTTngTCPSessiondClient {
+ 						break;
+ 					}
+ 					enableCmd.populate(data);
+-					enableCmd.execute(this.handler, this.eventMap, this.wildCardSet);
++					enableCmd.execute(this.handler);
+ 					data = enableCmd.getBytes();
+ 					break;
+ 				}
+@@ -344,7 +243,7 @@ public class LTTngTCPSessiondClient {
+ 						break;
+ 					}
+ 					disableCmd.populate(data);
+-					disableCmd.execute(this.handler, this.eventMap, this.wildCardSet);
++					disableCmd.execute(this.handler);
+ 					data = disableCmd.getBytes();
+ 					break;
+ 				}
+--
+2.0.0
+
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
