@@ -1,15 +1,34 @@
-From: Martin Townsend <martin.townsend@xsilon.com>
-Subject: lttng-tools compilation error v2.5.0 rc1
-Date: Fri, 27 Jun 2014 13:27:19 +0100
-Message-ID: <53AD6327.3080501__20415.8082990491$1403872090$gmane$org@xsilon.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-UST 2.5.0-rc2
+Date: Fri, 27 Jun 2014 14:24:23 +0000 (UTC)
+Message-ID: <686006560.5328.1403879063674.JavaMail.zimbra__43721.4654441506$1403879158$gmane$org@efficios.com>
+References: <1545776973.5327.1403879030732.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mout.kundenserver.de ([212.227.126.131])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <martin.townsend@xsilon.com>) id 1X0VFX-0007Hn-LO
- for lttng-dev@lists.lttng.org; Fri, 27 Jun 2014 08:27:30 -0400
+ (envelope-from <compudj@efficios.com>) id 1X0X4k-0007uY-VX
+ for lttng-dev@lists.lttng.org; Fri, 27 Jun 2014 10:24:33 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id F19F534010E
+ for <lttng-dev@lists.lttng.org>; Fri, 27 Jun 2014 14:24:28 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id 89qJrMtyVACE for <lttng-dev@lists.lttng.org>;
+ Fri, 27 Jun 2014 14:24:24 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 938BC3401A0
+ for <lttng-dev@lists.lttng.org>; Fri, 27 Jun 2014 14:24:24 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id UEjFOTcZvJi9 for <lttng-dev@lists.lttng.org>;
+ Fri, 27 Jun 2014 14:24:24 +0000 (UTC)
+Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
+ by mail.efficios.com (Postfix) with ESMTP id 3AFAC34010E
+ for <lttng-dev@lists.lttng.org>; Fri, 27 Jun 2014 14:24:24 +0000 (UTC)
+In-Reply-To: <1545776973.5327.1403879030732.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,61 +40,27 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
-I updated to version 2.5.0 rc1 today and found that I couldn't build 
-lttng-tools for my Microblaze based system.
+Changelog:
 
-| error.c: In function 'log_add_time':
-| error.c:52:17: error: 'error_log_time' undeclared (first use in this 
-function)
-|   ret = snprintf(error_log_time.str, sizeof(error_log_time.str),
-|                  ^
-| error.c:52:17: note: each undeclared identifier is reported only once 
-for each function it appears in
-| make[3]: *** [error.lo] Error 1
-| make[3]: *** Waiting for unfinished jobs....
+2014-06-27 lttng-ust 2.5.0-rc2
+        * Fix: lttng-ust-jul: set thread in daemon mode
+        * JUL: use root logger to capture events
+        * Fix: Wrong configure check for UST perf event counters context support
+        * Fix: multiple providers in same C file failure
+        * Fix: header inclusion guard typo in lttng-ust-tracef-provider.h
+        * Fix: 2.5.0-rc1 changelog has off-by-one date
 
-After grepping URCU_TLS in the source I could see it was used elsewhere 
-with accessor macros so I used the following patch which fixes the 
-compiler error.
 
-I'm not familiar with the code so I was wondering if this is the correct 
-fix?
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README file for installation instructions)
 
-Best Regards,
-Martin
-
- From 8a2789962fb22e92f8e9b46747c4d56cdaae04ca Mon Sep 17 00:00:00 2001
-From: Martin Townsend <martin.townsend@xsilon.com>
-Date: Fri, 27 Jun 2014 11:41:03 +0100
-Subject: [PATCH] fixed compile error mising URCU_TLS
-
----
-  src/common/error.c | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/src/common/error.c b/src/common/error.c
-index 418fc47..92852f9 100644
---- a/src/common/error.c
-+++ b/src/common/error.c
-@@ -49,14 +49,14 @@ const char *log_add_time(void)
-      }
-
-      /* Format time in the TLS variable. */
--    ret = snprintf(error_log_time.str, sizeof(error_log_time.str),
-+    ret = snprintf(URCU_TLS(error_log_time).str, 
-sizeof(URCU_TLS(error_log_time).str),
-              "%02d:%02d:%02d.%06ld",
-              tm.tm_hour, tm.tm_min, tm.tm_sec, tp.tv_nsec);
-      if (ret < 0) {
-          goto error;
-      }
-
--    return error_log_time.str;
-+    return URCU_TLS(error_log_time).str;
-
-  error:
-      /* Return an empty string on error so logging is not affected. */
 -- 
-1.9.1
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
