@@ -1,18 +1,16 @@
-From: Alexander Monakov <amonakov@ispras.ru>
-Subject: Re: [RFC PATCH lttng-ust] Implement register_done
- waiting via LD_AUDIT
-Date: Tue, 1 Jul 2014 19:19:57 +0400 (MSK)
-Message-ID: <alpine.LNX.2.00.1407011902580.15415__49010.2083109834$1404228119$gmane$org@monopod.intra.ispras.ru>
-References: <1404226029-9092-1-git-send-email-paul_woegerer@mentor.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [LTTNG-TOOLS PATCH] Fix: get the stream_id when
+	generating live beacons
+Date: Tue,  1 Jul 2014 12:10:52 -0400
+Message-ID: <1404231052-20970-1-git-send-email-jdesfossez__6224.58819202638$1404231116$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ispras.ru ([83.149.199.79])
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <amonakov@ispras.ru>) id 1X1zrj-00062U-FH
- for lttng-dev@lists.lttng.org; Tue, 01 Jul 2014 11:21:07 -0400
-In-Reply-To: <1404226029-9092-1-git-send-email-paul_woegerer@mentor.com>
+ (envelope-from <jdesfossez@efficios.com>) id 1X20e7-0006M3-Mi
+ for lttng-dev@lists.lttng.org; Tue, 01 Jul 2014 12:11:07 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,29 +19,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Paul Woegerer <paul_woegerer@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: dgoulet@efficios.com
+Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello,
+When we send an empty index (beacon), we need to extract the stream_id
+to avoid stalling the client on inactive streams on startup.
 
-I'm not aware of the context of this patch, but please note that the amount of
-overhead from non-empty LD_AUDIT is currently extremely high in all released
-Glibc versions.  The forced high overhead is, as I understand, misaligned with
-LTTng's aim to provide low-overhead tracing.
+This patch should also be backported to 2.4.x.
 
-Non-empty LD_AUDIT behaves as if one of auditing libraries provided PLT hooks.
-This causes the dynamic linker to install register save-restore helpers for
-each PLT call, even if they are not needed (if no PLT hooks were in fact
-provided).
+Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+---
+ src/common/consumer-timer.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Here's the Glibc bug that shows a ~19x slowdown on a microbenchmark that
-repeatedly calls sqrt() from libm.so.  The proposed patch was not accepted,
-with the review suggesting a different approach.
-
-https://sourceware.org/bugzilla/show_bug.cgi?id=15533
-
-Could you explain the problem your patch aims to solve?  Sorry if it was
-already explained elsewhere; please point me to the discussion in that case.
-
-Alexander
+diff --git a/src/common/consumer-timer.c b/src/common/consumer-timer.c
+index c659bf6..c13577f 100644
+--- a/src/common/consumer-timer.c
++++ b/src/common/consumer-timer.c
+@@ -118,8 +118,16 @@ static int send_empty_index(struct lttng_consumer_stream *stream, uint64_t ts)
+ {
+ 	int ret;
+ 	struct ctf_packet_index index;
++	uint64_t stream_id;
++
++	ret = kernctl_get_stream_id(stream->wait_fd, &stream_id);
++	if (ret < 0) {
++		PERROR("kernctl_get_stream_id");
++		goto error;
++	}
+ 
+ 	memset(&index, 0, sizeof(index));
++	index.stream_id = htobe64(stream_id);
+ 	index.timestamp_end = htobe64(ts);
+ 	ret = consumer_stream_write_index(stream, &index);
+ 	if (ret < 0) {
+-- 
+1.9.1
