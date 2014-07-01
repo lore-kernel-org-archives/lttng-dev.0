@@ -1,19 +1,18 @@
-From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
-Subject: Re: [RFC PATCH lttng-ust] Implement register_done
- waiting via LD_AUDIT
-Date: Tue, 1 Jul 2014 18:12:11 +0200
-Message-ID: <53B2DDDB.3090102__4903.33624552495$1404231176$gmane$org@mentor.com>
-References: <1404226029-9092-1-git-send-email-paul_woegerer@mentor.com>
- <alpine.LNX.2.00.1407011902580.15415@monopod.intra.ispras.ru>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: Re: [LTTNG-TOOLS PATCH] Fix: get the stream_id when
+ generating live beacons
+Date: Tue, 01 Jul 2014 12:17:11 -0400
+Message-ID: <53B2DF07.9040107__13103.4977421679$1404231489$gmane$org@efficios.com>
+References: <1404231052-20970-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from fukushima.klipix.org ([85.12.144.25])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Paul_Woegerer@mentor.com>) id 1X20fO-0006Ob-GH
- for lttng-dev@lists.lttng.org; Tue, 01 Jul 2014 12:12:23 -0400
-In-Reply-To: <alpine.LNX.2.00.1407011902580.15415@monopod.intra.ispras.ru>
+ (envelope-from <jdesfossez@efficios.com>) id 1X20kA-0006S0-R3
+ for lttng-dev@lists.lttng.org; Tue, 01 Jul 2014 12:17:22 -0400
+In-Reply-To: <1404231052-20970-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,82 +21,43 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexander Monakov <amonakov@ispras.ru>
+To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Alexander,
+Forget this patch, I'll send a new version soon.
+Need to check the domain before...
 
-The idea of this patch is to prevent deadlocks in the initialization
-phase of lttng-ust when forks (e.g. for daemons) are happening in the
-traced application.
-
-lttng-ust uses a semaphore to block further execution of the program
-until lttng-ust is fully initialized (see lttng-ust-comm.c:1496 in
-lttng_ust_init() "switch (timeout_mode)"). The initialization of
-lttng-ust happens in the ust_listener_thread that gets started from
-lttng_ust_init(). If initialization is done the semaphore gets posted
-(search for sem_post) and the static ctor lttng_ust_init() is able to
-complete.
-
-Unfortunately the current approach of delaying execution of main until
-lttng-ust is available has several drawbacks. E.g. the dynamic linker
-lock is taken during the execution the static ctor. Using glibc
-functions that also require the same lock as part of the lttng-ust
-initialization easily gets us into a deadlock situation.
-
-This patch is trying to delay execution of main with a different
-technique (using a named semaphore in la_preinit to wait for lttng-ust
-initialization).
-
-
-Note that this is not the only issue that prevents us from using
-LD_AUDIT effectively for our own purposes:
-
-https://sourceware.org/bugzilla/show_bug.cgi?id=11177#c8
-prevents us from using my current patch e.g. to trace firefox (and other
-applications that link against libicu*.so)
-
-https://sourceware.org/bugzilla/show_bug.cgi?id=16592 prevents us from
-using LD_AUDIT as a generic function enter/exit framework for public
-functions (all glibc functions, glib, ....).
-
-Having a stable LD_AUDIT interface would be extremely valuable in the
-context of tracing. Unfortunately in it's current state it's just a nice
-toy to play with.
-
-
-HTH,
-Paul
-
-
-On 07/01/2014 05:19 PM, Alexander Monakov wrote:
-> Hello,
+On 14-07-01 12:10 PM, Julien Desfossez wrote:
+> When we send an empty index (beacon), we need to extract the stream_id
+> to avoid stalling the client on inactive streams on startup.
 > 
-> I'm not aware of the context of this patch, but please note that the amount of
-> overhead from non-empty LD_AUDIT is currently extremely high in all released
-> Glibc versions.  The forced high overhead is, as I understand, misaligned with
-> LTTng's aim to provide low-overhead tracing.
+> This patch should also be backported to 2.4.x.
 > 
-> Non-empty LD_AUDIT behaves as if one of auditing libraries provided PLT hooks.
-> This causes the dynamic linker to install register save-restore helpers for
-> each PLT call, even if they are not needed (if no PLT hooks were in fact
-> provided).
+> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+> ---
+>  src/common/consumer-timer.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> Here's the Glibc bug that shows a ~19x slowdown on a microbenchmark that
-> repeatedly calls sqrt() from libm.so.  The proposed patch was not accepted,
-> with the review suggesting a different approach.
+> diff --git a/src/common/consumer-timer.c b/src/common/consumer-timer.c
+> index c659bf6..c13577f 100644
+> --- a/src/common/consumer-timer.c
+> +++ b/src/common/consumer-timer.c
+> @@ -118,8 +118,16 @@ static int send_empty_index(struct lttng_consumer_stream *stream, uint64_t ts)
+>  {
+>  	int ret;
+>  	struct ctf_packet_index index;
+> +	uint64_t stream_id;
+> +
+> +	ret = kernctl_get_stream_id(stream->wait_fd, &stream_id);
+> +	if (ret < 0) {
+> +		PERROR("kernctl_get_stream_id");
+> +		goto error;
+> +	}
+>  
+>  	memset(&index, 0, sizeof(index));
+> +	index.stream_id = htobe64(stream_id);
+>  	index.timestamp_end = htobe64(ts);
+>  	ret = consumer_stream_write_index(stream, &index);
+>  	if (ret < 0) {
 > 
-> https://sourceware.org/bugzilla/show_bug.cgi?id=15533
-> 
-> Could you explain the problem your patch aims to solve?  Sorry if it was
-> already explained elsewhere; please point me to the discussion in that case.
-> 
-> Alexander
-> 
-
-
--- 
-Paul Woegerer, SW Development Engineer
-Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
-Mentor Graphics, Embedded Software Division
