@@ -1,21 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC PATCH lttng-ust] Implement register_done
- waiting via LD_AUDIT
-Date: Wed, 2 Jul 2014 14:20:47 +0000 (UTC)
-Message-ID: <155121331.7082.1404310847950.JavaMail.zimbra__19032.8951961876$1404310912$gmane$org@efficios.com>
-References: <1404226029-9092-1-git-send-email-paul_woegerer@mentor.com>
- <alpine.LNX.2.00.1407011902580.15415@monopod.intra.ispras.ru>
- <53B2DDDB.3090102@mentor.com>
- <alpine.LNX.2.00.1407012102010.15415@monopod.intra.ispras.ru>
+Subject: Re: Simple question about tracepoint defs
+Date: Wed, 2 Jul 2014 14:25:20 +0000 (UTC)
+Message-ID: <1881122758.7106.1404311120916.JavaMail.zimbra__19726.4059250758$1404311179$gmane$org@efficios.com>
+References: <CAEEAEzX5h6FL6_cT5UJ+UyQa364jttLheQE6Br03fgZ9MRBW3Q@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1X2LP1-0005lX-7X
- for lttng-dev@lists.lttng.org; Wed, 02 Jul 2014 10:20:57 -0400
-In-Reply-To: <alpine.LNX.2.00.1407012102010.15415@monopod.intra.ispras.ru>
+ (envelope-from <compudj@efficios.com>) id 1X2LTP-0005p8-EO
+ for lttng-dev@lists.lttng.org; Wed, 02 Jul 2014 10:25:28 -0400
+In-Reply-To: <CAEEAEzX5h6FL6_cT5UJ+UyQa364jttLheQE6Br03fgZ9MRBW3Q@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,92 +20,56 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexander Monakov <amonakov@ispras.ru>
+To: Sandeep K Chaudhary <babbusandy2006@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 ----- Original Message -----
-> From: "Alexander Monakov" <amonakov@ispras.ru>
-> To: "Paul Woegerer" <Paul_Woegerer@mentor.com>
-> Cc: lttng-dev@lists.lttng.org, "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
-> Sent: Tuesday, July 1, 2014 1:14:16 PM
-> Subject: Re: [lttng-dev] [RFC PATCH lttng-ust] Implement register_done waiting via LD_AUDIT
+> From: "Sandeep K Chaudhary" <babbusandy2006@gmail.com>
+> To: lttng-dev@lists.lttng.org
+> Sent: Wednesday, July 2, 2014 2:02:25 AM
+> Subject: [lttng-dev] Simple question about tracepoint defs
 > 
-> On Tue, 1 Jul 2014, Woegerer, Paul wrote:
-> > Unfortunately the current approach of delaying execution of main until
-> > lttng-ust is available has several drawbacks. E.g. the dynamic linker
-> > lock is taken during the execution the static ctor. Using glibc
-> > functions that also require the same lock as part of the lttng-ust
-> > initialization easily gets us into a deadlock situation.
+> Hi guys,
 > 
-> That's surprising; in my experience dlopen/dlsym from a static DSO ctor work,
-> so I wonder what functions are causing a deadlock for you.
-
-It works because the glibc uses a nestable mutex internally. Unfortunately,
-it does not cover our use-case. It can be summarized as this simplified list
-of actions:
-
-liblttng-ust constructor executes during application startup (or if lttng-ust is
-dlopen'd):
-  - spawns 2 lttng-ust listener threads (one for per-user, one for system-wide
-    tracing),
-  - Within each lttng-ust listener thread:
-    - if we can connect to a session daemon, will await commands from the
-      session daemon to setup tracing. At the end of the sequence of commands
-      for application startup, the session daemon sends a "registration done"
-      command.
-    - When the registration done command is received, the thread posts the
-      "constructor_wait" semaphore,
-    - If the lttng-ust listener thread fails to connect to a session daemon,
-      it posts the "constructor_wait" semaphore,
-  - after having spawned the 2 lttng-ust listener threads, the liblttng-ust
-    constructor waits on the "constructor_wait" semaphore, using the
-    LTTNG_UST_REGISTER_TIMEOUT as a timeout (see lttng-ust(3)).
-
-So if within the commands executed by the listener thread, we try to use
-glibc functions that grab the dynamic loader lock (already being held while
-calling constructors), we deadlock in this way:
-
-  - constructor holding dl lock
-    - constructor waiting on constructor_wait semaphore
-
-  - listener thread trying to grab dl lock, which needs to be available
-    before we can post the semaphore
-
-The issue here is that nestable mutexes are good when a single thread is
-trying to grab the same mutex in a nested fashion, but not when this
-dependency is transitive through another lock or semaphore.
-
-The reason why we wait on this "constructor_wait" semaphore is to ensure
-that events traced at the beginning of the application are indeed traced.
-
+> I have a simple question about tracepoint definitions.
 > 
-> > This patch is trying to delay execution of main with a different
-> > technique (using a named semaphore in la_preinit to wait for lttng-ust
-> > initialization).
+> Is it not possible to have two or more trace-point definitions in the
+> same header file?
 > 
-> Frankly I don't think LD_AUDIT is the right tool for the job in this case,
-> even ignoring its flakiness in glibc; better to fix your current approach if
-> possible.
+> Reading from the manual[1] as
+> 
+> "There can be an arbitrary number of tracepoint providers within an
+> application, but they must each have their own provider name. Duplicate
+> provider names are not allowed.",
+> 
+> I get the idea that it is not possible since each tracepoint provider
+> needs to have unique name, and therefore, should be in a different
+> header file.
+> 
+> Please confirm if this is the case.
+> 
+> It would be much better for me if it is possible to have multiple
+> trace-point definitions in the same header file.
 
-Suggestions are very welcome. This issue is a real pain for us, and makes
-it tricky to use glibc APIs related to the dynamic loader.
+Yes, it is possible. See lttng-ust
+
+doc/examples/demo/ust_tests_demo.h
 
 Thanks,
 
 Mathieu
 
 > 
-> > Having a stable LD_AUDIT interface would be extremely valuable in the
-> > context of tracing.
+> [1] https://lttng.org/files/doc/man-pages/man3/lttng-ust.3.html
 > 
-> Oh, but the interface is extremely stable, it was unchanging for a long time
-> now; it's just the implementation... ;)  (sorry, could not resist)
+> Thanks and regards,
+> Sandeep.
 > 
-> Also note that LD_AUDIT on Linux is glibc-specific, not available on other
-> libcs that are otherwise quite useful, such as Bionic.
-> 
-> Alexander
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 > 
 
 -- 
