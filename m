@@ -1,17 +1,22 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: lttng-tools compilation error v2.5.0 rc1
-Date: Wed, 2 Jul 2014 14:35:32 +0000 (UTC)
-Message-ID: <1402805019.7146.1404311732714.JavaMail.zimbra__31593.7996180311$1404311888$gmane$org@efficios.com>
-References: <53AD6327.3080501@xsilon.com> <53B3D56D.8040009@xsilon.com>
+From: Alexander Monakov <amonakov@ispras.ru>
+Subject: Re: [RFC PATCH lttng-ust] Implement register_done
+ waiting via LD_AUDIT
+Date: Wed, 2 Jul 2014 19:02:09 +0400 (MSK)
+Message-ID: <alpine.LNX.2.00.1407021834120.15415__8559.4741198749$1404313469$gmane$org@monopod.intra.ispras.ru>
+References: <1404226029-9092-1-git-send-email-paul_woegerer@mentor.com>
+ <alpine.LNX.2.00.1407011902580.15415@monopod.intra.ispras.ru>
+ <53B2DDDB.3090102@mentor.com>
+ <alpine.LNX.2.00.1407012102010.15415@monopod.intra.ispras.ru>
+ <155121331.7082.1404310847950.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from smtp.ispras.ru ([83.149.199.79])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1X2LdH-0005wV-Jp
- for lttng-dev@lists.lttng.org; Wed, 02 Jul 2014 10:35:41 -0400
-In-Reply-To: <53B3D56D.8040009@xsilon.com>
+ (envelope-from <amonakov@ispras.ru>) id 1X2M43-0006AD-RA
+ for lttng-dev@lists.lttng.org; Wed, 02 Jul 2014 11:03:21 -0400
+In-Reply-To: <155121331.7082.1404310847950.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,96 +25,26 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Martin Townsend <martin.townsend@xsilon.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Martin,
+Thanks Mathieu for such detailed response.  I did not understand the nature of
+the deadlock until your explanation.
 
-David is on vacation this week. Don't worry, he will look into
-this before 2.5 final.
+My suggestion for the immediate problem is: can you restructure the code so
+that all preliminary work (connecting to the daemon etc.) is done directly
+from the constructor before spawning the secondary thread?  So that you don't
+have to suspend after launching the listener thread?  From your explanation it
+looks like there's no particular reason to do that work in the listener
+thread, except perhaps the convenience of programming (not needing to pass
+around the socket, etc).
 
-Thanks!
+Admittedly the above is written from general principles, so I do apologize if
+I'm not seeing some real LTTng-specific issues there and sound like an
+armchair code analyst.
 
-Mathieu
+Apropos, and you might already know that: Glibc runs static constructors from
+LD_PRELOAD'ed DSOs _after_ the ctors from libs loaded as dependencies.
 
------ Original Message -----
-> From: "Martin Townsend" <martin.townsend@xsilon.com>
-> To: lttng-dev@lists.lttng.org
-> Sent: Wednesday, July 2, 2014 5:48:29 AM
-> Subject: Re: [lttng-dev] lttng-tools compilation error v2.5.0 rc1
-> 
-> Any update on this?
-> 
-> Best Regards,
-> Martin.
-> 
-> On 27/06/14 13:27, Martin Townsend wrote:
-> > Hi,
-> >
-> > I updated to version 2.5.0 rc1 today and found that I couldn't build
-> > lttng-tools for my Microblaze based system.
-> >
-> > | error.c: In function 'log_add_time':
-> > | error.c:52:17: error: 'error_log_time' undeclared (first use in this
-> > function)
-> > |   ret = snprintf(error_log_time.str, sizeof(error_log_time.str),
-> > |                  ^
-> > | error.c:52:17: note: each undeclared identifier is reported only
-> > once for each function it appears in
-> > | make[3]: *** [error.lo] Error 1
-> > | make[3]: *** Waiting for unfinished jobs....
-> >
-> > After grepping URCU_TLS in the source I could see it was used
-> > elsewhere with accessor macros so I used the following patch which
-> > fixes the compiler error.
-> >
-> > I'm not familiar with the code so I was wondering if this is the
-> > correct fix?
-> >
-> > Best Regards,
-> > Martin
-> >
-> > From 8a2789962fb22e92f8e9b46747c4d56cdaae04ca Mon Sep 17 00:00:00 2001
-> > From: Martin Townsend <martin.townsend@xsilon.com>
-> > Date: Fri, 27 Jun 2014 11:41:03 +0100
-> > Subject: [PATCH] fixed compile error mising URCU_TLS
-> >
-> > ---
-> >  src/common/error.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/src/common/error.c b/src/common/error.c
-> > index 418fc47..92852f9 100644
-> > --- a/src/common/error.c
-> > +++ b/src/common/error.c
-> > @@ -49,14 +49,14 @@ const char *log_add_time(void)
-> >      }
-> >
-> >      /* Format time in the TLS variable. */
-> > -    ret = snprintf(error_log_time.str, sizeof(error_log_time.str),
-> > +    ret = snprintf(URCU_TLS(error_log_time).str,
-> > sizeof(URCU_TLS(error_log_time).str),
-> >              "%02d:%02d:%02d.%06ld",
-> >              tm.tm_hour, tm.tm_min, tm.tm_sec, tp.tv_nsec);
-> >      if (ret < 0) {
-> >          goto error;
-> >      }
-> >
-> > -    return error_log_time.str;
-> > +    return URCU_TLS(error_log_time).str;
-> >
-> >  error:
-> >      /* Return an empty string on error so logging is not affected. */
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Alexander
