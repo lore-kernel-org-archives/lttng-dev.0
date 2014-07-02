@@ -1,17 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Simple question about tracepoint defs
-Date: Wed, 2 Jul 2014 14:25:20 +0000 (UTC)
-Message-ID: <1881122758.7106.1404311120916.JavaMail.zimbra__19726.4059250758$1404311179$gmane$org@efficios.com>
-References: <CAEEAEzX5h6FL6_cT5UJ+UyQa364jttLheQE6Br03fgZ9MRBW3Q@mail.gmail.com>
+Subject: Re: Reusing tracepoint definition with same type of
+ arguments but in different order
+Date: Wed, 2 Jul 2014 14:26:22 +0000 (UTC)
+Message-ID: <1033348953.7107.1404311182259.JavaMail.zimbra__13222.5925488912$1404311296$gmane$org@efficios.com>
+References: <CAEEAEzV00Hv1+zA3DgQaU5v+-3myAypoxAds3iAE_dWEZ852xg@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1X2LTP-0005p8-EO
- for lttng-dev@lists.lttng.org; Wed, 02 Jul 2014 10:25:28 -0400
-In-Reply-To: <CAEEAEzX5h6FL6_cT5UJ+UyQa364jttLheQE6Br03fgZ9MRBW3Q@mail.gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1X2LUO-0005qF-IS
+ for lttng-dev@lists.lttng.org; Wed, 02 Jul 2014 10:26:30 -0400
+In-Reply-To: <CAEEAEzV00Hv1+zA3DgQaU5v+-3myAypoxAds3iAE_dWEZ852xg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -27,41 +28,42 @@ List-Id: lttng-dev@lists.lttng.org
 ----- Original Message -----
 > From: "Sandeep K Chaudhary" <babbusandy2006@gmail.com>
 > To: lttng-dev@lists.lttng.org
-> Sent: Wednesday, July 2, 2014 2:02:25 AM
-> Subject: [lttng-dev] Simple question about tracepoint defs
+> Sent: Wednesday, July 2, 2014 2:09:48 AM
+> Subject: [lttng-dev] Reusing tracepoint definition with same type of arguments but in different order
 > 
 > Hi guys,
 > 
-> I have a simple question about tracepoint definitions.
+> Is it possible to reuse a tracepoint definition for a different trace
+> with same type (and number) of arguments but in different order?
 > 
-> Is it not possible to have two or more trace-point definitions in the
-> same header file?
+> Specifically, if I have the arguments in the following order in the
+> definition
 > 
-> Reading from the manual[1] as
+>         TP_ARGS(
+>                 int, anint,
+>                 long *, values,
+>                 char *, text,
+>                 double, doublearg,
+>                 float, floatarg,
+>                 bool, boolarg
+>          )
 > 
-> "There can be an arbitrary number of tracepoint providers within an
-> application, but they must each have their own provider name. Duplicate
-> provider names are not allowed.",
-> 
-> I get the idea that it is not possible since each tracepoint provider
-> needs to have unique name, and therefore, should be in a different
-> header file.
-> 
-> Please confirm if this is the case.
-> 
-> It would be much better for me if it is possible to have multiple
-> trace-point definitions in the same header file.
+> Using some technique, would this definition be directly usable for a
+> tracepoint with the argument order -  "long *, int, char *, double,
+> float, bool" or some other order for the matter?
 
-Yes, it is possible. See lttng-ust
+No.
 
-doc/examples/demo/ust_tests_demo.h
+> 
+> I understand that I can always change the order appropriately
+> according to the definition in the trace-point insertion but I am
+> interested in knowing if there is a way to even avoid this. Please let
+> me know.
 
 Thanks,
 
 Mathieu
 
-> 
-> [1] https://lttng.org/files/doc/man-pages/man3/lttng-ust.3.html
 > 
 > Thanks and regards,
 > Sandeep.
