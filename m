@@ -1,16 +1,16 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: Simple question about tracepoint defs
-Date: Wed, 2 Jul 2014 15:27:23 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359C6DE4__38752.0093856894$1404314906$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Paul Woegerer <paul_woegerer@mentor.com>
+Subject: [PATCH lttng-ust] Bugfix for
+	http://bugs.lttng.org/issues/745
+Date: Fri, 4 Jul 2014 14:21:51 +0200
+Message-ID: <1404476512-18305-1-git-send-email-paul_woegerer__43532.1182515056$1404476583$gmane$org@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from relay1.mentorg.com ([192.94.38.131])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1X2MRW-0006La-RQ
- for lttng-dev@lists.lttng.org; Wed, 02 Jul 2014 11:27:36 -0400
-Content-Language: fr-FR
+ (envelope-from <Paul_Woegerer@mentor.com>) id 1X32VK-00052e-Jp
+ for lttng-dev@lists.lttng.org; Fri, 04 Jul 2014 08:22:16 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,58 +19,26 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Wed, 2 Jul 2014 02:02:25 -0400
-From: Sandeep K Chaudhary <babbusandy2006@gmail.com>
+Since (at least) in the short term LD_AUDIT will not be able to make sem_wait()
+in the static constructor go away I provide the following patch to fix
+http://bugs.lttng.org/issues/745.
 
-> Is it not possible to have two or more trace-point definitions in the sam=
-e header file?
->
-> Reading from the manual[1] as
->
-> "There can be an arbitrary number of tracepoint providers within an
-> application, but they must each have their own provider name. Duplicate
-> provider names are not allowed.",
->
->I get the idea that it is not possible since each tracepoint provider
->needs to have unique name, and therefore, should be in a different
->header file.
->
->Please confirm if this is the case.
->
-> It would be much better for me if it is possible to have multiple
-> trace-point definitions in the same header file.
->
-> [1] https://lttng.org/files/doc/man-pages/man3/lttng-ust.3.html
+It works by making the process of forking mutual exclusive with base address
+statedumping that happens from the ust_listener_thread.
 
-   Each tracepoint provider can provide a number of tracepoints.  Ideally, =
-each tracepoint header should cover a single tracepoint provider -otherwise=
- you'd end up with two tracepoint providers in lockstep, which is much the =
-same as regrouping their tracepoints under a single tracepoint provider, ex=
-cept with extra overhead.
-   Think of the tracepoint provider as the shared object that implements it=
-s tracepoints.  It is a container for tracepoints, very much like a file sy=
-stem.  You can have two different tracepoints bearing the same name (identi=
-fier) as long as they are in different tracepoint providers, very much like=
- you can have two different files with the same name as long as they are in=
- different folders.
-   I hope this clarifies things.
+I have tested this fix with several variations of (constrained) fork bombs
+(including tests/regression/ust/daemon from lttng-tools) on x86_64, ARM(imx6q)
+and powerpc(P4080DS). It works reliable. I could not find any issues with this
+approach.
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+Paul Woegerer (1):
+  Bugfix for #745 deadlock with baddr statedump+fork
+
+ liblttng-ust/lttng-ust-comm.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+-- 
+2.0.1
