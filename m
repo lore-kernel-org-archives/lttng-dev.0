@@ -1,18 +1,16 @@
-From: Paul Woegerer <paul_woegerer@mentor.com>
-Subject: [PATCH lttng-ust] Bugfix for #745 deadlock with baddr
-	statedump+fork
-Date: Fri, 4 Jul 2014 14:21:52 +0200
-Message-ID: <1404476512-18305-2-git-send-email-paul_woegerer__10906.4666940414$1404476587$gmane$org@mentor.com>
-References: <1404476512-18305-1-git-send-email-paul_woegerer@mentor.com>
+From: Shariyar <syed.shariyar@gmail.com>
+Subject: LTTng not generating trace contents
+Date: Sun, 6 Jul 2014 18:49:51 -0400
+Message-ID: <CAKQh6pi4+cbUi0p7P899aF3QvRs0nBMAEYsnFGaqzGn617r3Jw__26746.4218698025$1404687049$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2029767972=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail-pa0-f48.google.com ([209.85.220.48])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Paul_Woegerer@mentor.com>) id 1X32VS-00052l-Cy
- for lttng-dev@lists.lttng.org; Fri, 04 Jul 2014 08:22:26 -0400
-In-Reply-To: <1404476512-18305-1-git-send-email-paul_woegerer@mentor.com>
+ (envelope-from <syed.shariyar@gmail.com>) id 1X3vFt-0002cp-9B
+ for lttng-dev@lists.lttng.org; Sun, 06 Jul 2014 18:49:58 -0400
+Received: by mail-pa0-f48.google.com with SMTP id et14so4371295pad.21
+ for <lttng-dev@lists.lttng.org>; Sun, 06 Jul 2014 15:49:51 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,78 +19,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
----
- liblttng-ust/lttng-ust-comm.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+--===============2029767972==
+Content-Type: multipart/alternative; boundary=047d7b67691823cd3704fd8e2d50
 
-diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
-index 5df33f5..8fa2e03 100644
---- a/liblttng-ust/lttng-ust-comm.c
-+++ b/liblttng-ust/lttng-ust-comm.c
-@@ -173,6 +173,7 @@ void ust_unlock(void)
-  *   daemon problems).
-  */
- static sem_t constructor_wait;
-+static sem_t fork_child_wait;
- /*
-  * Doing this for both the global and local sessiond.
-  */
-@@ -502,11 +503,18 @@ int handle_register_done(struct sock_info *sock_info)
- static
- void handle_pending_statedump(struct sock_info *sock_info)
- {
-+	int ret;
- 	int ctor_passed = sock_info->constructor_sem_posted;
- 
- 	if (ctor_passed && sock_info->statedump_pending) {
-+		do {
-+			ret = sem_wait(&fork_child_wait);
-+		} while (ret < 0 && errno == EINTR);
-+		assert(!ret);
- 		sock_info->statedump_pending = 0;
- 		lttng_handle_pending_statedump(sock_info);
-+		ret = sem_post(&fork_child_wait);
-+		assert(!ret);
- 	}
- }
- 
-@@ -1436,6 +1444,9 @@ void __attribute__((constructor)) lttng_ust_init(void)
- 	ret = sem_init(&constructor_wait, 0, 0);
- 	assert(!ret);
- 
-+	ret = sem_init(&fork_child_wait, 0, 1);
-+	assert(!ret);
-+
- 	ret = setup_local_apps();
- 	if (ret) {
- 		DBG("local apps setup returned %d", ret);
-@@ -1627,6 +1638,12 @@ void ust_before_fork(sigset_t *save_sigset)
- 	if (ret == -1) {
- 		PERROR("sigprocmask");
- 	}
-+
-+	do {
-+		ret = sem_wait(&fork_child_wait);
-+	} while (ret < 0 && errno == EINTR);
-+	assert(!ret);
-+
- 	ust_lock_nocheck();
- 	rcu_bp_before_fork();
- }
-@@ -1637,6 +1654,10 @@ static void ust_after_fork_common(sigset_t *restore_sigset)
- 
- 	DBG("process %d", getpid());
- 	ust_unlock();
-+
-+	ret = sem_post(&fork_child_wait);
-+	assert(!ret);
-+
- 	/* Restore signals */
- 	ret = sigprocmask(SIG_SETMASK, restore_sigset, NULL);
- 	if (ret == -1) {
--- 
-2.0.1
+--047d7b67691823cd3704fd8e2d50
+Content-Type: text/plain; charset=UTF-8
+
+Hi,
+
+I am having a problem in generating a kernel trace using the latest LTTng
+on Ubuntu 12.04. It was working fine previously but when I updated LTTng it
+stopped generating the trace contents. I did an uninstall and reinstall but
+it didn't work either.
+
+In particular, I am able to create a session, list all kernel events, start
+a trace and stop a trace. My user is also in the tracing group. However,
+there are no contents in the trace files generated for every CPU in the
+system. Initially, the Babeltrace and the TMF both gave errors and when I
+explored the trace folder I found out that they are empty files.The
+metadata and index files do show some contents; however, nothing exists in
+the channelx_x files.
+
+What would be wrong? Please let me know.
+
+Regards,
+Shariyar
+
+--047d7b67691823cd3704fd8e2d50
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div><br></div><div>I am having a problem in generating=
+ a kernel trace using the latest LTTng on Ubuntu 12.04. It was working fine=
+ previously but when I updated LTTng it stopped generating the trace conten=
+ts. I did an uninstall and reinstall but it didn&#39;t work either.=C2=A0</=
+div>
+<div><br></div><div>In particular, I am able to create a session, list all =
+kernel events, start a trace and stop a trace. My user is also in the traci=
+ng group. However, there are no contents in the trace files generated for e=
+very CPU in the system. Initially, the Babeltrace and the TMF both gave err=
+ors and when I explored the trace folder I found out that they are empty fi=
+les.The metadata and index files do show some contents; however, nothing ex=
+ists in the channelx_x files.</div>
+<div><br></div><div>What would be wrong? Please let me know.</div><div><br>=
+</div><div>Regards,</div><div>Shariyar</div></div>
+
+--047d7b67691823cd3704fd8e2d50--
+
+
+--===============2029767972==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============2029767972==--
