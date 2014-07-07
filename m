@@ -1,16 +1,19 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
 Subject: Re: LTTng not generating trace contents
-Date: Mon, 7 Jul 2014 18:24:46 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359C72E9__31729.0878775113$1404757552$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Date: Mon, 07 Jul 2014 16:39:10 -0400
+Message-ID: <53BB056E.10508__30058.4830962636$1404765619$gmane$org@voxpopuli.im>
+References: <48CF5AC71E61DB46B70D0F388054EFFD359C729D@VAL-E-02.valcartier.drdc-rddc.gc.ca>	<CAKQh6pjJ9SUFKtLwONVySiPbtP-udZCfs9L87mGszPVPCu2PKA@mail.gmail.com>	<53BAE112.4000809@voxpopuli.im>
+ <CAKQh6ph1Ck-aR0PJ_YZoFxF9R1gogh4xGORaoCWDiH55QcxTkg@mail.gmail.com>
+ <53BAE408.6070601@voxpopuli.im>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1X4Dau-000199-RT
- for lttng-dev@lists.lttng.org; Mon, 07 Jul 2014 14:24:58 -0400
-Content-Language: fr-FR
+ (envelope-from <alexmonthy@voxpopuli.im>) id 1X4Fgr-0001tW-4d
+ for lttng-dev@lists.lttng.org; Mon, 07 Jul 2014 16:39:15 -0400
+In-Reply-To: <53BAE408.6070601@voxpopuli.im>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,43 +22,76 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: Shariyar <syed.shariyar@gmail.com>
+To: Shariyar <syed.shariyar@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Mon, 7 Jul 2014 13:43:12 -0400
-From: Shariyar <syed.shariyar@gmail.com>
-Subject: Re: [lttng-dev] LTTng not generating trace contents
-
-> lttng --version,
->    lttng (LTTng Trace Control) 2.4.1 - ?poque Opaque
->
-> lttng-sessiond --version
->    2.4.1
->
-> I removed all LTTng packages from the system by manually searching in dpk=
-g and reinstalled it as follows:
-> sudo apt-get install lttng-tools lttng-modules-dkms babeltrace
->
-> The ppa in the system is: http://ppa.launchpad.net/lttng/ppa/ubuntu
-
-   What of the liburcu, python-lttng, liblttng-ctl0, liblttng-ctl-dev packa=
-ges?  I also presume lttng-ust is not involved?  (liburcu is a prime suspec=
-t because both kernel and user-space tracing depend on it)
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+QWxyaWdodCwgdGhlIHN0YWJsZS0gcGFja2FnZXMgaGF2ZSBiZWVuIHVwZGF0ZWQgdG9vLiBJdCBz
+aG91bGQgbm93IGJlIApwb3NzaWJsZSB0byBpbnN0YWxsIHRoZW0gb24gcmVjZW50IFVidW50dSB2
+ZXJzaW9ucy4KCkxldCB1cyBrbm93IGlmIHRoZXJlIGFyZSBzdGlsbCBhbnkgaXNzdWVzLgoKQ2hl
+ZXJzLApBbGV4YW5kcmUKCgpPbiAwNy8wNy8yMDE0IDAyOjE2IFBNLCBBbGV4YW5kcmUgTW9udHBs
+YWlzaXIgd3JvdGU6Cj4gR3JlYXQsIHRoYW5rcyBmb3IgdGVzdGluZywgdGhhdCBtZWFucyB3ZSds
+bCBoYXZlIHRvIGJhY2twb3J0IEp1bGllbidzIAo+IHBhdGNoIHRvIHRoZSBzdGFibGUgcGFja2Fn
+ZXMgZWFybGllciB0aGFuIGV4cGVjdGVkIQo+Cj4gSSdsbCB0cnkgdG8gdXBkYXRlIHRoZXNlIHRo
+aXMgYWZ0ZXJub29uLCBJJ2xsIGtlZXAgeW91IHBvc3RlZC4KPgo+IENoZWVycywKPiBBbGV4YW5k
+cmUKPgo+IE9uIDA3LzA3LzIwMTQgMDI6MTEgUE0sIFNoYXJpeWFyIHdyb3RlOgo+PiBObyBpdCBk
+aWRuJ3QgaW5zdGFsbCBjb3JyZWN0bHkuSXQgaXMgZ2VuZXJhdGluZyBhIGNyYXNoIHJlcG9ydCBh
+bmQKPj4gbHR0bmctbW9kdWxlLWRrbXMgZXhpc3RzIGluIGl0IHRvby4KPj4KPj4KPj4gUmVnYXJk
+cywKPj4gU2hhcml5YXIKPj4KPj4KPj4gT24gTW9uLCBKdWwgNywgMjAxNCBhdCAyOjA0IFBNLCBB
+bGV4YW5kcmUgTW9udHBsYWlzaXIgPAo+PiBhbGV4bW9udGh5QHZveHBvcHVsaS5pbT4gd3JvdGU6
+Cj4+Cj4+PiAgIEhpLAo+Pj4KPj4+IENvdWxkIHlvdSBqdXN0IGRvCj4+PiAkIHN1ZG8gYXB0LWdl
+dCBpbnN0YWxsIC0tcmVpbnN0YWxsIGx0dG5nLW1vZHVsZXMtZGttcwo+Pj4KPj4+IGFuZCBjaGVj
+ayBpbiB0aGUgb3V0cHV0IGlmIHlvdSBoYXZlIGFueSBlcnJvcnMsIG9yIGlmIGl0IHJlYWxseSAK
+Pj4+IGluc3RhbGxzCj4+PiBzdWNjZXNzZnVsbHk/Cj4+Pgo+Pj4gTWF5YmUgVWJ1bnR1J3MgcGF0
+Y2hlcyBhbHJlYWR5IHRyaWNrbGVkIGRvd24gdG8gMTIuMDQgYW5kIHlvdSBtaWdodCBiZQo+Pj4g
+aGl0dGluZyBodHRwczovL2J1Z3MubHR0bmcub3JnL2lzc3Vlcy84MTQKPj4+Cj4+Pgo+Pj4gVGhh
+bmtzLAo+Pj4gQWxleGFuZHJlCj4+Pgo+Pj4KPj4+Cj4+PiBPbiAwNy8wNy8yMDE0IDAxOjQzIFBN
+LCBTaGFyaXlhciB3cm90ZToKPj4+Cj4+PiAgIGx0dG5nIC0tdmVyc2lvbiwKPj4+ICAgICAgbHR0
+bmcgKExUVG5nIFRyYWNlIENvbnRyb2wpIDIuNC4xIC0gw4lwb3F1ZSBPcGFxdWUKPj4+Cj4+PiAg
+IGx0dG5nLXNlc3Npb25kIC0tdmVyc2lvbgo+Pj4gICAgICAyLjQuMQo+Pj4KPj4+Cj4+PiBJIHJl
+bW92ZWQgYWxsIExUVG5nIHBhY2thZ2VzIGZyb20gdGhlIHN5c3RlbSBieSBtYW51YWxseSBzZWFy
+Y2hpbmcgCj4+PiBpbiBkcGtnCj4+PiBhbmQgcmVpbnN0YWxsZWQgaXQgYXMgZm9sbG93czoKPj4+
+IHN1ZG8gYXB0LWdldCBpbnN0YWxsIGx0dG5nLXRvb2xzIGx0dG5nLW1vZHVsZXMtZGttcyBiYWJl
+bHRyYWNlCj4+Pgo+Pj4gVGhlIHBwYSBpbiB0aGUgc3lzdGVtIGlzOiBodHRwOi8vcHBhLmxhdW5j
+aHBhZC5uZXQvbHR0bmcvcHBhL3VidW50dQo+Pj4KPj4+IE5vdywgSSBnZXQgdGhlIGZvbGxvd2lu
+ZyBlcnJvcjoKPj4+IHN1ZG8gbHR0bmcgbGlzdCAtawo+Pj4gRXJyb3I6IFVuYWJsZSB0byBsaXN0
+IGtlcm5lbCBldmVudHM6IEtlcm5lbCB0cmFjZXIgbm90IGF2YWlsYWJsZQo+Pj4gRXJyb3I6IENv
+bW1hbmQgZXJyb3IKPj4+Cj4+PiBJIGhhdmUgZW5jb3VudGVyZWQgdGhpcyBwcm9ibGVtIG9uIHR3
+byBkaWZmZXJlbnQgc3lzdGVtcyBydW5uaW5nIFVidW50dQo+Pj4gMTIuMDQsIGFmdGVyIHRoZSB1
+cGRhdGUgb2Ygc3lzdGVtIGFuZCBMVFRuZwo+Pj4KPj4+IFJlZ2FyZHMsCj4+PiBTaGFyaXlhcgo+
+Pj4KPj4+Cj4+PiBPbiBNb24sIEp1bCA3LCAyMDE0IGF0IDExOjQyIEFNLCBUaGliYXVsdCwgRGFu
+aWVsIAo+Pj4gPERhbmllbC5UaGliYXVsdEBkcmRjLXJkZGMuZ2MuY2E+IHdyb3RlOgo+Pj4KPj4+
+Cj4+PiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tCj4+PiBEYXRlOiBTdW4sIDYgSnVsIDIwMTQgMTg6NDk6NTEgLTA0
+MDAKPj4+IEZyb206IFNoYXJpeWFyIDxzeWVkLnNoYXJpeWFyQGdtYWlsLmNvbT4gPHN5ZWQuc2hh
+cml5YXJAZ21haWwuY29tPgo+Pj4KPj4+ICAgSSBhbSBoYXZpbmcgYSBwcm9ibGVtIGluIGdlbmVy
+YXRpbmcgYSBrZXJuZWwgdHJhY2UgdXNpbmcgdGhlIGxhdGVzdAo+Pj4KPj4+ICAgTFRUbmcgb24g
+VWJ1bnR1IDEyLjA0Lgo+Pj4KPj4+ICAgSXQgd2FzIHdvcmtpbmcgZmluZSBwcmV2aW91c2x5IGJ1
+dCB3aGVuIEkgdXBkYXRlZCBMVFRuZyBpdCBzdG9wcGVkCj4+Pgo+Pj4gICBnZW5lcmF0aW5nIHRo
+ZSB0cmFjZSBjb250ZW50cy4gSSBkaWQgYW4gdW5pbnN0YWxsIGFuZCByZWluc3RhbGwgCj4+PiBi
+dXQgaXQKPj4+IGRpZG4ndCB3b3JrIGVpdGhlci4KPj4+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPj4+Cj4+PiAg
+ICAgUGxlYXNlIGRlZmluZSB3aGF0IHlvdSBtZWFuIGJ5ICJ0aGUgbGF0ZXN0IExUVG5nIi4gIFdo
+YXQgYXJlIHRoZQo+Pj4gdmVyc2lvbnM/ICAoJCBsdHRuZyAtLXZlcnNpb24sICQgbHR0bmctc2Vz
+c2lvbmQgLS12ZXJzaW9uKQo+Pj4KPj4+IERhbmllbCBVLiBUaGliYXVsdAo+Pj4gUHJvdGVjdGlv
+biBkZXMgc3lzdMOobWVzIGV0IGNvbnRyZW1lc3VyZXMgKFBTQykgfCBTeXN0ZW1zIFByb3RlY3Rp
+b24gJgo+Pj4gQ291bnRlcm1lYXN1cmVzIChTUEMpCj4+PiBDeWJlciBzw6ljdXJpdMOpIHBvdXIg
+bGVzIG1pc3Npb25zIGVzc2VudGllbGxlcyAoQ01FKSB8IE1pc3Npb24gQ3JpdGljYWwKPj4+IEN5
+YmVyIFNlY3VyaXR5IChNQ0NTKQo+Pj4gUkREQyAtIENlbnRyZSBkZSByZWNoZXJjaGVzIGRlIFZh
+bGNhcnRpZXIgfCBEUkRDIC0gVmFsY2FydGllciBSZXNlYXJjaAo+Pj4gQ2VudHJlCj4+PiAyNDU5
+IHJvdXRlIGRlIGxhIEJyYXZvdXJlCj4+PiBRdcOpYmVjIFFDICBHM0ogMVg1Cj4+PiBDQU5BREEK
+Pj4+IFZveCA6ICg0MTgpIDg0NC00MDAwIHg0MjQ1Cj4+PiBGYXggOiAoNDE4KSA4NDQtNDUzOAo+
+Pj4gTkFDIDogOTE4ViBRU0RKIDxodHRwOi8vd3d3LnRyYXZlbGdpcy5jb20vbWFwLmFzcD9hZGRy
+PTkxOFYlMjBRU0RKPiAKPj4+IDxodHRwOi8vd3d3LnRyYXZlbGdpcy5jb20vbWFwLmFzcD9hZGRy
+PTkxOFYlMjBRU0RKPgo+Pj4gR291dmVybmVtZW50IGR1IENhbmFkYSB8IEdvdmVybm1lbnQgb2Yg
+Cj4+PiBDYW5hZGE8aHR0cDovL3d3dy52YWxjYXJ0aWVyLmRyZGMtcmRkYy5nYy5jYS8+IAo+Pj4g
+PGh0dHA6Ly93d3cudmFsY2FydGllci5kcmRjLXJkZGMuZ2MuY2EvPgo+Pj4KPj4+Cj4+Pgo+Pj4g
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+IGx0dG5n
+LWRldiBtYWlsaW5nIAo+Pj4gbGlzdGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmdodHRwOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4+Cj4+Pgo+
+Pj4KPgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0
+dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoK
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
+diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
