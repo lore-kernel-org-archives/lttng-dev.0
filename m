@@ -1,18 +1,17 @@
-From: Shariyar <syed.shariyar@gmail.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
 Subject: Re: LTTng not generating trace contents
-Date: Mon, 7 Jul 2014 13:43:12 -0400
-Message-ID: <CAKQh6pjJ9SUFKtLwONVySiPbtP-udZCfs9L87mGszPVPCu2PKA__37706.8131500438$1404755062$gmane$org@mail.gmail.com>
+Date: Mon, 07 Jul 2014 14:04:02 -0400
+Message-ID: <53BAE112.4000809__17788.3343691521$1404756292$gmane$org@voxpopuli.im>
 References: <48CF5AC71E61DB46B70D0F388054EFFD359C729D@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+ <CAKQh6pjJ9SUFKtLwONVySiPbtP-udZCfs9L87mGszPVPCu2PKA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0482179625=="
+Content-Type: multipart/mixed; boundary="===============0364535054=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pa0-f47.google.com ([209.85.220.47])
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <syed.shariyar@gmail.com>) id 1X4Cwg-0000kB-G2
- for lttng-dev@lists.lttng.org; Mon, 07 Jul 2014 13:43:24 -0400
-Received: by mail-pa0-f47.google.com with SMTP id kq14so5813900pab.34
- for <lttng-dev@lists.lttng.org>; Mon, 07 Jul 2014 10:43:12 -0700 (PDT)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD359C729D@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+ (envelope-from <alexmonthy@voxpopuli.im>) id 1X4DGj-0000uN-7r
+ for lttng-dev@lists.lttng.org; Mon, 07 Jul 2014 14:04:04 -0400
+In-Reply-To: <CAKQh6pjJ9SUFKtLwONVySiPbtP-udZCfs9L87mGszPVPCu2PKA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,19 +20,140 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+To: Shariyar <syed.shariyar@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0482179625==
-Content-Type: multipart/alternative; boundary=001a1136048c56f8cd04fd9e02b5
+This is a multi-part message in MIME format.
+--===============0364535054==
+Content-Type: multipart/alternative;
+ boundary="------------000007020701050904020006"
 
---001a1136048c56f8cd04fd9e02b5
-Content-Type: text/plain; charset=UTF-8
+This is a multi-part message in MIME format.
+--------------000007020701050904020006
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
+X-MIME-Autoconverted: from 8bit to quoted-printable by smtp.polymtl.ca id s67I4HSo004584
 
- lttng --version,
-    lttng (LTTng Trace Control) 2.4.1 - =C3=89poque Opaque
+Hi,
+
+Could you just do
+$ sudo apt-get install --reinstall lttng-modules-dkms
+
+and check in the output if you have any errors, or if it really installs=20
+successfully?
+
+Maybe Ubuntu's patches already trickled down to 12.04 and you might be=20
+hitting https://bugs.lttng.org/issues/814
+
+
+Thanks,
+Alexandre
+
+
+On 07/07/2014 01:43 PM, Shariyar wrote:
+>   lttng --version,
+>      lttng (LTTng Trace Control) 2.4.1 - =C9poque Opaque
+>
+>   lttng-sessiond --version
+>      2.4.1
+>
+>
+> I removed all LTTng packages from the system by manually searching in d=
+pkg
+> and reinstalled it as follows:
+> sudo apt-get install lttng-tools lttng-modules-dkms babeltrace
+>
+> The ppa in the system is: http://ppa.launchpad.net/lttng/ppa/ubuntu
+>
+> Now, I get the following error:
+> sudo lttng list -k
+> Error: Unable to list kernel events: Kernel tracer not available
+> Error: Command error
+>
+> I have encountered this problem on two different systems running Ubuntu
+> 12.04, after the update of system and LTTng
+>
+> Regards,
+> Shariyar
+>
+>
+> On Mon, Jul 7, 2014 at 11:42 AM, Thibault, Daniel <
+> Daniel.Thibault@drdc-rddc.gc.ca> wrote:
+>
+>> ----------------------------------------------------------------------
+>> Date: Sun, 6 Jul 2014 18:49:51 -0400
+>> From: Shariyar <syed.shariyar@gmail.com>
+>>
+>>> I am having a problem in generating a kernel trace using the latest
+>> LTTng on Ubuntu 12.04.
+>>> It was working fine previously but when I updated LTTng it stopped
+>> generating the trace contents. I did an uninstall and reinstall but it
+>> didn't work either.
+>> ----------------------------------------------------------------------
+>>
+>>     Please define what you mean by "the latest LTTng".  What are the
+>> versions?  ($ lttng --version, $ lttng-sessiond --version)
+>>
+>> Daniel U. Thibault
+>> Protection des syst=E8mes et contremesures (PSC) | Systems Protection =
+&
+>> Countermeasures (SPC)
+>> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Crit=
+ical
+>> Cyber Security (MCCS)
+>> RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research
+>> Centre
+>> 2459 route de la Bravoure
+>> Qu=E9bec QC  G3J 1X5
+>> CANADA
+>> Vox : (418) 844-4000 x4245
+>> Fax : (418) 844-4538
+>> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+>> Gouvernement du Canada | Government of Canada
+>> <http://www.valcartier.drdc-rddc.gc.ca/>
+>>
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+--------------000007020701050904020006
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1"
+      http-equiv="Content-Type">
+  </head>
+  <body bgcolor="#FFFFFF" text="#000000">
+    Hi,<br>
+    <br>
+    Could you just do<br>
+    $ sudo apt-get install --reinstall lttng-modules-dkms<br>
+    <br>
+    and check in the output if you have any errors, or if it really
+    installs successfully?<br>
+    <br>
+    Maybe Ubuntu's patches already trickled down to 12.04 and you might
+    be hitting <a class="moz-txt-link-freetext" href="https://bugs.lttng.org/issues/814">https://bugs.lttng.org/issues/814</a><br>
+    <br>
+    <br>
+    Thanks,<br>
+    Alexandre<br>
+    <br>
+    <br>
+    <div class="moz-cite-prefix">On 07/07/2014 01:43 PM, Shariyar wrote:<br>
+    </div>
+    <blockquote
+cite="mid:CAKQh6pjJ9SUFKtLwONVySiPbtP-udZCfs9L87mGszPVPCu2PKA@mail.gmail.com"
+      type="cite">
+      <pre wrap=""> lttng --version,
+    lttng (LTTng Trace Control) 2.4.1 - &Eacute;poque Opaque
 
  lttng-sessiond --version
     2.4.1
@@ -43,7 +163,7 @@ I removed all LTTng packages from the system by manually searching in dpkg
 and reinstalled it as follows:
 sudo apt-get install lttng-tools lttng-modules-dkms babeltrace
 
-The ppa in the system is: http://ppa.launchpad.net/lttng/ppa/ubuntu
+The ppa in the system is: <a class="moz-txt-link-freetext" href="http://ppa.launchpad.net/lttng/ppa/ubuntu">http://ppa.launchpad.net/lttng/ppa/ubuntu</a>
 
 Now, I get the following error:
 sudo lttng list -k
@@ -57,141 +177,70 @@ Regards,
 Shariyar
 
 
-On Mon, Jul 7, 2014 at 11:42 AM, Thibault, Daniel <
-Daniel.Thibault@drdc-rddc.gc.ca> wrote:
+On Mon, Jul 7, 2014 at 11:42 AM, Thibault, Daniel &lt;
+<a class="moz-txt-link-abbreviated" href="mailto:Daniel.Thibault@drdc-rddc.gc.ca">Daniel.Thibault@drdc-rddc.gc.ca</a>&gt; wrote:
 
-> ----------------------------------------------------------------------
-> Date: Sun, 6 Jul 2014 18:49:51 -0400
-> From: Shariyar <syed.shariyar@gmail.com>
->
-> > I am having a problem in generating a kernel trace using the latest
-> LTTng on Ubuntu 12.04.
-> > It was working fine previously but when I updated LTTng it stopped
-> generating the trace contents. I did an uninstall and reinstall but it
-> didn't work either.
-> ----------------------------------------------------------------------
->
->    Please define what you mean by "the latest LTTng".  What are the
-> versions?  ($ lttng --version, $ lttng-sessiond --version)
->
-> Daniel U. Thibault
-> Protection des syst=C3=A8mes et contremesures (PSC) | Systems Protection =
-&
-> Countermeasures (SPC)
-> Cyber s=C3=A9curit=C3=A9 pour les missions essentielles (CME) | Mission C=
-ritical
-> Cyber Security (MCCS)
-> RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research
-> Centre
-> 2459 route de la Bravoure
-> Qu=C3=A9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
->
+</pre>
+      <blockquote type="cite">
+        <pre wrap="">----------------------------------------------------------------------
+Date: Sun, 6 Jul 2014 18:49:51 -0400
+From: Shariyar <a class="moz-txt-link-rfc2396E" href="mailto:syed.shariyar@gmail.com">&lt;syed.shariyar@gmail.com&gt;</a>
 
---001a1136048c56f8cd04fd9e02b5
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+</pre>
+        <blockquote type="cite">
+          <pre wrap="">I am having a problem in generating a kernel trace using the latest
+</pre>
+        </blockquote>
+        <pre wrap="">LTTng on Ubuntu 12.04.
+</pre>
+        <blockquote type="cite">
+          <pre wrap="">It was working fine previously but when I updated LTTng it stopped
+</pre>
+        </blockquote>
+        <pre wrap="">generating the trace contents. I did an uninstall and reinstall but it
+didn't work either.
+----------------------------------------------------------------------
 
-<div dir=3D"ltr"><div><span style=3D"font-family:arial,sans-serif;font-size=
-:13px">=C2=A0lttng --version,</span><br></div><div>=C2=A0 =C2=A0 lttng (LTT=
-ng Trace Control) 2.4.1 - =C3=89poque Opaque</div><div><br></div><div><span=
- style=3D"font-family:arial,sans-serif;font-size:13px">=C2=A0lttng-sessiond=
- --version</span><br>
+   Please define what you mean by "the latest LTTng".  What are the
+versions?  ($ lttng --version, $ lttng-sessiond --version)
 
-</div><div><span style=3D"font-family:arial,sans-serif;font-size:13px">=C2=
-=A0 =C2=A0 2.4.1</span></div><div><span style=3D"font-family:arial,sans-ser=
-if;font-size:13px"><br></span></div><div><span style=3D"font-family:arial,s=
-ans-serif;font-size:13px"><br>
+Daniel U. Thibault
+Protection des syst&egrave;mes et contremesures (PSC) | Systems Protection &amp;
+Countermeasures (SPC)
+Cyber s&eacute;curit&eacute; pour les missions essentielles (CME) | Mission Critical
+Cyber Security (MCCS)
+RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research
+Centre
+2459 route de la Bravoure
+Qu&eacute;bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <a class="moz-txt-link-rfc2396E" href="http://www.travelgis.com/map.asp?addr=918V%20QSDJ">&lt;http://www.travelgis.com/map.asp?addr=918V%20QSDJ&gt;</a>
+Gouvernement du Canada | Government of Canada
+<a class="moz-txt-link-rfc2396E" href="http://www.valcartier.drdc-rddc.gc.ca/">&lt;http://www.valcartier.drdc-rddc.gc.ca/&gt;</a>
 
-</span></div><div><span style=3D"font-family:arial,sans-serif;font-size:13p=
-x">I removed all LTTng packages from the system by manually searching in dp=
-kg and reinstalled it as follows:</span></div><div><span style=3D"color:rgb=
-(51,51,51);font-family:monospace;font-size:12px;line-height:18px">sudo apt-=
-get install lttng-tools lttng-modules-dkms babeltrace</span><span style=3D"=
-font-family:arial,sans-serif;font-size:13px"><br>
+</pre>
+      </blockquote>
+      <pre wrap="">
+</pre>
+      <br>
+      <fieldset class="mimeAttachmentHeader"></fieldset>
+      <br>
+      <pre wrap="">_______________________________________________
+lttng-dev mailing list
+<a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>
+<a class="moz-txt-link-freetext" href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
+</pre>
+    </blockquote>
+    <br>
+  </body>
+</html>
 
-</span></div><div><span style=3D"color:rgb(51,51,51);font-family:monospace;=
-font-size:12px;line-height:18px"><br></span></div><div><span style=3D"color=
-:rgb(51,51,51);font-family:monospace;font-size:12px;line-height:18px">The p=
-pa in the system is:=C2=A0</span><font color=3D"#333333" face=3D"monospace"=
-><span style=3D"font-size:12px;line-height:18px"><a href=3D"http://ppa.laun=
-chpad.net/lttng/ppa/ubuntu" target=3D"_blank">http://ppa.launchpad.net/lttn=
-g/ppa/ubuntu</a></span></font></div>
-
-<div><font color=3D"#333333" face=3D"monospace"><span style=3D"font-size:12=
-px;line-height:18px"><br></span></font></div><div><font color=3D"#333333" f=
-ace=3D"monospace"><span style=3D"font-size:12px;line-height:18px">Now, I ge=
-t the following error:</span></font></div>
-<div><font color=3D"#333333" face=3D"monospace"><div style><span style=3D"l=
-ine-height:18px">sudo lttng list -k</span></div><div style><span style=3D"l=
-ine-height:18px">Error: Unable to list kernel events: Kernel tracer not ava=
-ilable</span></div>
-<div style><span style=3D"line-height:18px">Error: Command error</span></di=
-v><div style=3D"font-size:12px;line-height:18px"><br></div></font></div>
-<div><font color=3D"#333333" face=3D"monospace"><span style=3D"font-size:12=
-px;line-height:18px">I have encountered this problem on two different syste=
-ms running Ubuntu 12.04, after the update of system and LTTng</span></font>=
-</div>
-<div><font color=3D"#333333" face=3D"monospace"><span style=3D"font-size:12=
-px;line-height:18px"><br></span></font></div><div><font color=3D"#333333" f=
-ace=3D"monospace"><span style=3D"font-size:12px;line-height:18px">Regards,<=
-/span></font></div>
-<div><font color=3D"#333333" face=3D"monospace"><span style=3D"font-size:12=
-px;line-height:18px">Shariyar</span></font></div></div><div class=3D"gmail_=
-extra"><br><br><div class=3D"gmail_quote">On Mon, Jul 7, 2014 at 11:42 AM, =
-Thibault, Daniel <span dir=3D"ltr">&lt;<a href=3D"mailto:Daniel.Thibault@dr=
-dc-rddc.gc.ca" target=3D"_blank">Daniel.Thibault@drdc-rddc.gc.ca</a>&gt;</s=
-pan> wrote:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex">--------------------------------------------=
---------------------------<br>
-Date: Sun, 6 Jul 2014 18:49:51 -0400<br>
-From: Shariyar &lt;<a href=3D"mailto:syed.shariyar@gmail.com">syed.shariyar=
-@gmail.com</a>&gt;<br>
-<div class=3D""><br>
-&gt; I am having a problem in generating a kernel trace using the latest LT=
-Tng on Ubuntu 12.04.<br>
-&gt; It was working fine previously but when I updated LTTng it stopped gen=
-erating the trace contents. I did an uninstall and reinstall but it didn&#3=
-9;t work either.<br>
-</div>---------------------------------------------------------------------=
--<br>
-<br>
-=C2=A0 =C2=A0Please define what you mean by &quot;the latest LTTng&quot;. =
-=C2=A0What are the versions? =C2=A0($ lttng --version, $ lttng-sessiond --v=
-ersion)<br>
-<br>
-Daniel U. Thibault<br>
-Protection des syst=C3=A8mes et contremesures (PSC) | Systems Protection &a=
-mp; Countermeasures (SPC)<br>
-Cyber s=C3=A9curit=C3=A9 pour les missions essentielles (CME) | Mission Cri=
-tical Cyber Security (MCCS)<br>
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re<br>
-2459 route de la Bravoure<br>
-Qu=C3=A9bec QC =C2=A0G3J 1X5<br>
-CANADA<br>
-Vox : <a href=3D"tel:%28418%29%20844-4000%20x4245" value=3D"+14188444000">(=
-418) 844-4000 x4245</a><br>
-Fax : <a href=3D"tel:%28418%29%20844-4538" value=3D"+14188444538">(418) 844=
--4538</a><br>
-NAC : 918V QSDJ &lt;<a href=3D"http://www.travelgis.com/map.asp?addr=3D918V=
-%20QSDJ" target=3D"_blank">http://www.travelgis.com/map.asp?addr=3D918V%20Q=
-SDJ</a>&gt;<br>
-Gouvernement du Canada | Government of Canada<br>
-&lt;<a href=3D"http://www.valcartier.drdc-rddc.gc.ca/" target=3D"_blank">ht=
-tp://www.valcartier.drdc-rddc.gc.ca/</a>&gt;<br>
-</blockquote></div><br></div>
-
---001a1136048c56f8cd04fd9e02b5--
+--------------000007020701050904020006--
 
 
---===============0482179625==
+--===============0364535054==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Disposition: inline
@@ -202,4 +251,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0482179625==--
+--===============0364535054==--
