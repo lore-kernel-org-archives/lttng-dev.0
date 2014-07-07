@@ -1,16 +1,20 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: LTTng not generating trace contents
-Date: Mon, 7 Jul 2014 15:42:51 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359C729D__38102.4385955699$1404747840$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust] Add lttng_ust_notrace to static
+ inline functions
+Date: Mon, 7 Jul 2014 15:46:20 +0000 (UTC)
+Message-ID: <1796163414.9525.1404747980133.JavaMail.zimbra__26664.1532107771$1404748044$gmane$org@efficios.com>
+References: <1404741861-26337-1-git-send-email-paul_woegerer@mentor.com>
+ <1716559010.9467.1404745056024.JavaMail.zimbra@efficios.com>
+ <53BABDFB.6010900@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1X4B4E-0008RI-5a
- for lttng-dev@lists.lttng.org; Mon, 07 Jul 2014 11:43:03 -0400
-Content-Language: fr-FR
+ (envelope-from <compudj@efficios.com>) id 1X4B7W-0008UI-QC
+ for lttng-dev@lists.lttng.org; Mon, 07 Jul 2014 11:46:29 -0400
+In-Reply-To: <53BABDFB.6010900@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,36 +23,111 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: Shariyar <syed.shariyar@gmail.com>
+To: Paul Woegerer <Paul_Woegerer@mentor.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Sun, 6 Jul 2014 18:49:51 -0400
-From: Shariyar <syed.shariyar@gmail.com>
+----- Original Message -----
+> From: "Paul Woegerer" <Paul_Woegerer@mentor.com>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Monday, July 7, 2014 11:34:19 AM
+> Subject: Re: [PATCH lttng-ust] Add lttng_ust_notrace to static inline functions
+> 
+> On 07/07/2014 04:57 PM, Mathieu Desnoyers wrote:
+> > Merged into master and stable-2.4, thanks!
+> 
+> Thanks !
+> 
+> Hmmm ... but what to do about static inline function cds_list_empty
+> (included via lttng/ust-tracepoint-event.h -> urcu/rculist.h ->
+> urcu/list.h). Would you accept a patch that introduces rcu_cds_notrace
+> in urcu/compiler.h + respective changes in urcu/*.h ?
 
-> I am having a problem in generating a kernel trace using the latest LTTng=
- on Ubuntu 12.04.
-> It was working fine previously but when I updated LTTng it stopped genera=
-ting the trace contents. I did an uninstall and reinstall but it didn't wor=
-k either.
-----------------------------------------------------------------------
+It starts to look like a cat and mouse game honestly. Especially if
+we consider "contexts", those can call external functions, which might
+not have notrace attribute.
 
-   Please define what you mean by "the latest LTTng".  What are the version=
-s?  ($ lttng --version, $ lttng-sessiond --version)
+I think the proper solution here would be to use a per-thread nesting
+value, and check it in the finstrument-function callback, and return
+immediately if we are nested.
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+> 
+> --
+> Paul
+> 
+> > 
+> > Mathieu
+> > 
+> > ----- Original Message -----
+> >> From: "Paul Woegerer" <paul_woegerer@mentor.com>
+> >> To: lttng-dev@lists.lttng.org, "mathieu desnoyers"
+> >> <mathieu.desnoyers@efficios.com>
+> >> Cc: "Paul Woegerer" <paul_woegerer@mentor.com>
+> >> Sent: Monday, July 7, 2014 10:04:21 AM
+> >> Subject: [PATCH lttng-ust] Add lttng_ust_notrace to static inline
+> >> functions
+> >>
+> >> The static inline functions
+> >> __tracepoint_provider_mismatch_<TRACEPOINT_PROVIDER> and
+> >> __tracepoint_provider_check_<TRACEPOINT_PROVIDER> are missing the
+> >> lttng_ust_notrace attribute to prevent them from getting instrumented
+> >> with -finstrument-functions (if e.g. defined in CFLAGS). This patch is
+> >> adding the attribute to those functions.
+> >>
+> >> Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
+> >> ---
+> >>  include/lttng/ust-tracepoint-event.h | 4 ++++
+> >>  1 file changed, 4 insertions(+)
+> >>
+> >> diff --git a/include/lttng/ust-tracepoint-event.h
+> >> b/include/lttng/ust-tracepoint-event.h
+> >> index d12e8bb..8895310 100644
+> >> --- a/include/lttng/ust-tracepoint-event.h
+> >> +++ b/include/lttng/ust-tracepoint-event.h
+> >> @@ -75,6 +75,8 @@
+> >>  /* Reset all macros within TRACEPOINT_EVENT */
+> >>  #include <lttng/ust-tracepoint-event-reset.h>
+> >>  
+> >> +static inline lttng_ust_notrace
+> >> +void _TP_COMBINE_TOKENS(__tracepoint_provider_mismatch_,
+> >> TRACEPOINT_PROVIDER)(void);
+> >>  static inline
+> >>  void _TP_COMBINE_TOKENS(__tracepoint_provider_mismatch_,
+> >>  TRACEPOINT_PROVIDER)(void)
+> >>  {
+> >> @@ -88,6 +90,8 @@ void _TP_COMBINE_TOKENS(__tracepoint_provider_mismatch_,
+> >> TRACEPOINT_PROVIDER)(vo
+> >>  #define TRACEPOINT_EVENT_INSTANCE(_provider, _template, _name, _args)	\
+> >>  	__tracepoint_provider_mismatch_##_provider();
+> >>  
+> >> +static inline lttng_ust_notrace
+> >> +void _TP_COMBINE_TOKENS(__tracepoint_provider_check_,
+> >> TRACEPOINT_PROVIDER)(void);
+> >>  static inline
+> >>  void _TP_COMBINE_TOKENS(__tracepoint_provider_check_,
+> >>  TRACEPOINT_PROVIDER)(void)
+> >>  {
+> >> --
+> >> 2.0.1
+> >>
+> >>
+> > 
+> 
+> 
+> --
+> Paul Woegerer, SW Development Engineer
+> Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
+> Mentor Graphics, Embedded Software Division
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
