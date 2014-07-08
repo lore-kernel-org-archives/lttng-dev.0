@@ -1,19 +1,21 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: LTTng not generating trace contents
-Date: Mon, 07 Jul 2014 16:39:10 -0400
-Message-ID: <53BB056E.10508__30058.4830962636$1404765619$gmane$org@voxpopuli.im>
-References: <48CF5AC71E61DB46B70D0F388054EFFD359C729D@VAL-E-02.valcartier.drdc-rddc.gc.ca>	<CAKQh6pjJ9SUFKtLwONVySiPbtP-udZCfs9L87mGszPVPCu2PKA@mail.gmail.com>	<53BAE112.4000809@voxpopuli.im>
- <CAKQh6ph1Ck-aR0PJ_YZoFxF9R1gogh4xGORaoCWDiH55QcxTkg@mail.gmail.com>
- <53BAE408.6070601@voxpopuli.im>
+From: "Woegerer, Paul" <Paul_Woegerer@mentor.com>
+Subject: Re: [PATCH lttng-ust] Add lttng_ust_notrace to static
+	inline functions
+Date: Tue, 8 Jul 2014 11:06:46 +0200
+Message-ID: <53BBB4A6.7030309__32364.5664415837$1404810500$gmane$org@mentor.com>
+References: <1404741861-26337-1-git-send-email-paul_woegerer@mentor.com>
+ <1716559010.9467.1404745056024.JavaMail.zimbra@efficios.com>
+ <53BABDFB.6010900@mentor.com>
+ <1796163414.9525.1404747980133.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.181])
+Received: from relay1.mentorg.com ([192.94.38.131])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <alexmonthy@voxpopuli.im>) id 1X4Fgr-0001tW-4d
- for lttng-dev@lists.lttng.org; Mon, 07 Jul 2014 16:39:15 -0400
-In-Reply-To: <53BAE408.6070601@voxpopuli.im>
+ (envelope-from <Paul_Woegerer@mentor.com>) id 1X4RMY-0005z1-3O
+ for lttng-dev@lists.lttng.org; Tue, 08 Jul 2014 05:07:04 -0400
+In-Reply-To: <1796163414.9525.1404747980133.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,76 +24,145 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Shariyar <syed.shariyar@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-QWxyaWdodCwgdGhlIHN0YWJsZS0gcGFja2FnZXMgaGF2ZSBiZWVuIHVwZGF0ZWQgdG9vLiBJdCBz
-aG91bGQgbm93IGJlIApwb3NzaWJsZSB0byBpbnN0YWxsIHRoZW0gb24gcmVjZW50IFVidW50dSB2
-ZXJzaW9ucy4KCkxldCB1cyBrbm93IGlmIHRoZXJlIGFyZSBzdGlsbCBhbnkgaXNzdWVzLgoKQ2hl
-ZXJzLApBbGV4YW5kcmUKCgpPbiAwNy8wNy8yMDE0IDAyOjE2IFBNLCBBbGV4YW5kcmUgTW9udHBs
-YWlzaXIgd3JvdGU6Cj4gR3JlYXQsIHRoYW5rcyBmb3IgdGVzdGluZywgdGhhdCBtZWFucyB3ZSds
-bCBoYXZlIHRvIGJhY2twb3J0IEp1bGllbidzIAo+IHBhdGNoIHRvIHRoZSBzdGFibGUgcGFja2Fn
-ZXMgZWFybGllciB0aGFuIGV4cGVjdGVkIQo+Cj4gSSdsbCB0cnkgdG8gdXBkYXRlIHRoZXNlIHRo
-aXMgYWZ0ZXJub29uLCBJJ2xsIGtlZXAgeW91IHBvc3RlZC4KPgo+IENoZWVycywKPiBBbGV4YW5k
-cmUKPgo+IE9uIDA3LzA3LzIwMTQgMDI6MTEgUE0sIFNoYXJpeWFyIHdyb3RlOgo+PiBObyBpdCBk
-aWRuJ3QgaW5zdGFsbCBjb3JyZWN0bHkuSXQgaXMgZ2VuZXJhdGluZyBhIGNyYXNoIHJlcG9ydCBh
-bmQKPj4gbHR0bmctbW9kdWxlLWRrbXMgZXhpc3RzIGluIGl0IHRvby4KPj4KPj4KPj4gUmVnYXJk
-cywKPj4gU2hhcml5YXIKPj4KPj4KPj4gT24gTW9uLCBKdWwgNywgMjAxNCBhdCAyOjA0IFBNLCBB
-bGV4YW5kcmUgTW9udHBsYWlzaXIgPAo+PiBhbGV4bW9udGh5QHZveHBvcHVsaS5pbT4gd3JvdGU6
-Cj4+Cj4+PiAgIEhpLAo+Pj4KPj4+IENvdWxkIHlvdSBqdXN0IGRvCj4+PiAkIHN1ZG8gYXB0LWdl
-dCBpbnN0YWxsIC0tcmVpbnN0YWxsIGx0dG5nLW1vZHVsZXMtZGttcwo+Pj4KPj4+IGFuZCBjaGVj
-ayBpbiB0aGUgb3V0cHV0IGlmIHlvdSBoYXZlIGFueSBlcnJvcnMsIG9yIGlmIGl0IHJlYWxseSAK
-Pj4+IGluc3RhbGxzCj4+PiBzdWNjZXNzZnVsbHk/Cj4+Pgo+Pj4gTWF5YmUgVWJ1bnR1J3MgcGF0
-Y2hlcyBhbHJlYWR5IHRyaWNrbGVkIGRvd24gdG8gMTIuMDQgYW5kIHlvdSBtaWdodCBiZQo+Pj4g
-aGl0dGluZyBodHRwczovL2J1Z3MubHR0bmcub3JnL2lzc3Vlcy84MTQKPj4+Cj4+Pgo+Pj4gVGhh
-bmtzLAo+Pj4gQWxleGFuZHJlCj4+Pgo+Pj4KPj4+Cj4+PiBPbiAwNy8wNy8yMDE0IDAxOjQzIFBN
-LCBTaGFyaXlhciB3cm90ZToKPj4+Cj4+PiAgIGx0dG5nIC0tdmVyc2lvbiwKPj4+ICAgICAgbHR0
-bmcgKExUVG5nIFRyYWNlIENvbnRyb2wpIDIuNC4xIC0gw4lwb3F1ZSBPcGFxdWUKPj4+Cj4+PiAg
-IGx0dG5nLXNlc3Npb25kIC0tdmVyc2lvbgo+Pj4gICAgICAyLjQuMQo+Pj4KPj4+Cj4+PiBJIHJl
-bW92ZWQgYWxsIExUVG5nIHBhY2thZ2VzIGZyb20gdGhlIHN5c3RlbSBieSBtYW51YWxseSBzZWFy
-Y2hpbmcgCj4+PiBpbiBkcGtnCj4+PiBhbmQgcmVpbnN0YWxsZWQgaXQgYXMgZm9sbG93czoKPj4+
-IHN1ZG8gYXB0LWdldCBpbnN0YWxsIGx0dG5nLXRvb2xzIGx0dG5nLW1vZHVsZXMtZGttcyBiYWJl
-bHRyYWNlCj4+Pgo+Pj4gVGhlIHBwYSBpbiB0aGUgc3lzdGVtIGlzOiBodHRwOi8vcHBhLmxhdW5j
-aHBhZC5uZXQvbHR0bmcvcHBhL3VidW50dQo+Pj4KPj4+IE5vdywgSSBnZXQgdGhlIGZvbGxvd2lu
-ZyBlcnJvcjoKPj4+IHN1ZG8gbHR0bmcgbGlzdCAtawo+Pj4gRXJyb3I6IFVuYWJsZSB0byBsaXN0
-IGtlcm5lbCBldmVudHM6IEtlcm5lbCB0cmFjZXIgbm90IGF2YWlsYWJsZQo+Pj4gRXJyb3I6IENv
-bW1hbmQgZXJyb3IKPj4+Cj4+PiBJIGhhdmUgZW5jb3VudGVyZWQgdGhpcyBwcm9ibGVtIG9uIHR3
-byBkaWZmZXJlbnQgc3lzdGVtcyBydW5uaW5nIFVidW50dQo+Pj4gMTIuMDQsIGFmdGVyIHRoZSB1
-cGRhdGUgb2Ygc3lzdGVtIGFuZCBMVFRuZwo+Pj4KPj4+IFJlZ2FyZHMsCj4+PiBTaGFyaXlhcgo+
-Pj4KPj4+Cj4+PiBPbiBNb24sIEp1bCA3LCAyMDE0IGF0IDExOjQyIEFNLCBUaGliYXVsdCwgRGFu
-aWVsIAo+Pj4gPERhbmllbC5UaGliYXVsdEBkcmRjLXJkZGMuZ2MuY2E+IHdyb3RlOgo+Pj4KPj4+
-Cj4+PiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tCj4+PiBEYXRlOiBTdW4sIDYgSnVsIDIwMTQgMTg6NDk6NTEgLTA0
-MDAKPj4+IEZyb206IFNoYXJpeWFyIDxzeWVkLnNoYXJpeWFyQGdtYWlsLmNvbT4gPHN5ZWQuc2hh
-cml5YXJAZ21haWwuY29tPgo+Pj4KPj4+ICAgSSBhbSBoYXZpbmcgYSBwcm9ibGVtIGluIGdlbmVy
-YXRpbmcgYSBrZXJuZWwgdHJhY2UgdXNpbmcgdGhlIGxhdGVzdAo+Pj4KPj4+ICAgTFRUbmcgb24g
-VWJ1bnR1IDEyLjA0Lgo+Pj4KPj4+ICAgSXQgd2FzIHdvcmtpbmcgZmluZSBwcmV2aW91c2x5IGJ1
-dCB3aGVuIEkgdXBkYXRlZCBMVFRuZyBpdCBzdG9wcGVkCj4+Pgo+Pj4gICBnZW5lcmF0aW5nIHRo
-ZSB0cmFjZSBjb250ZW50cy4gSSBkaWQgYW4gdW5pbnN0YWxsIGFuZCByZWluc3RhbGwgCj4+PiBi
-dXQgaXQKPj4+IGRpZG4ndCB3b3JrIGVpdGhlci4KPj4+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPj4+Cj4+PiAg
-ICAgUGxlYXNlIGRlZmluZSB3aGF0IHlvdSBtZWFuIGJ5ICJ0aGUgbGF0ZXN0IExUVG5nIi4gIFdo
-YXQgYXJlIHRoZQo+Pj4gdmVyc2lvbnM/ICAoJCBsdHRuZyAtLXZlcnNpb24sICQgbHR0bmctc2Vz
-c2lvbmQgLS12ZXJzaW9uKQo+Pj4KPj4+IERhbmllbCBVLiBUaGliYXVsdAo+Pj4gUHJvdGVjdGlv
-biBkZXMgc3lzdMOobWVzIGV0IGNvbnRyZW1lc3VyZXMgKFBTQykgfCBTeXN0ZW1zIFByb3RlY3Rp
-b24gJgo+Pj4gQ291bnRlcm1lYXN1cmVzIChTUEMpCj4+PiBDeWJlciBzw6ljdXJpdMOpIHBvdXIg
-bGVzIG1pc3Npb25zIGVzc2VudGllbGxlcyAoQ01FKSB8IE1pc3Npb24gQ3JpdGljYWwKPj4+IEN5
-YmVyIFNlY3VyaXR5IChNQ0NTKQo+Pj4gUkREQyAtIENlbnRyZSBkZSByZWNoZXJjaGVzIGRlIFZh
-bGNhcnRpZXIgfCBEUkRDIC0gVmFsY2FydGllciBSZXNlYXJjaAo+Pj4gQ2VudHJlCj4+PiAyNDU5
-IHJvdXRlIGRlIGxhIEJyYXZvdXJlCj4+PiBRdcOpYmVjIFFDICBHM0ogMVg1Cj4+PiBDQU5BREEK
-Pj4+IFZveCA6ICg0MTgpIDg0NC00MDAwIHg0MjQ1Cj4+PiBGYXggOiAoNDE4KSA4NDQtNDUzOAo+
-Pj4gTkFDIDogOTE4ViBRU0RKIDxodHRwOi8vd3d3LnRyYXZlbGdpcy5jb20vbWFwLmFzcD9hZGRy
-PTkxOFYlMjBRU0RKPiAKPj4+IDxodHRwOi8vd3d3LnRyYXZlbGdpcy5jb20vbWFwLmFzcD9hZGRy
-PTkxOFYlMjBRU0RKPgo+Pj4gR291dmVybmVtZW50IGR1IENhbmFkYSB8IEdvdmVybm1lbnQgb2Yg
-Cj4+PiBDYW5hZGE8aHR0cDovL3d3dy52YWxjYXJ0aWVyLmRyZGMtcmRkYy5nYy5jYS8+IAo+Pj4g
-PGh0dHA6Ly93d3cudmFsY2FydGllci5kcmRjLXJkZGMuZ2MuY2EvPgo+Pj4KPj4+Cj4+Pgo+Pj4g
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+IGx0dG5n
-LWRldiBtYWlsaW5nIAo+Pj4gbGlzdGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmdodHRwOi8vbGlz
-dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4+Cj4+Pgo+
-Pj4KPgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0
-dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoK
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
-diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Thanks for your feedback.
+
+You made me think again how to address this issue from a different
+angle. I found a nice practical solution.
+
+Suppose you have a tracepoint provider:
+
+ackermann_tracepoint.c + ackermann_tracepoint.h
+
+To make the tracepoint provider robust against -finstrument-functions
+you just need to change ackermann_tracepoint.c from:
+
+#define TRACEPOINT_CREATE_PROBES
+#include "ackermann_tracepoint.h"
+
+to:
+
+#pragma GCC optimize ("no-instrument-functions")
+#define TRACEPOINT_CREATE_PROBES
+#include "ackermann_tracepoint.h"
+
+If you don't mind using _Pragma (C99)
+(see: https://gcc.gnu.org/onlinedocs/cpp/Pragmas.html)
+we should be able to make this happen automatically (#ifdef
+TRACEPOINT_CREATE_PROBES _Pragma ... )
+
+
+--
+Paul
+
+
+On 07/07/2014 05:46 PM, Mathieu Desnoyers wrote:
+> ----- Original Message -----
+>> From: "Paul Woegerer" <Paul_Woegerer@mentor.com>
+>> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+>> Cc: lttng-dev@lists.lttng.org
+>> Sent: Monday, July 7, 2014 11:34:19 AM
+>> Subject: Re: [PATCH lttng-ust] Add lttng_ust_notrace to static inline functions
+>>
+>> On 07/07/2014 04:57 PM, Mathieu Desnoyers wrote:
+>>> Merged into master and stable-2.4, thanks!
+>>
+>> Thanks !
+>>
+>> Hmmm ... but what to do about static inline function cds_list_empty
+>> (included via lttng/ust-tracepoint-event.h -> urcu/rculist.h ->
+>> urcu/list.h). Would you accept a patch that introduces rcu_cds_notrace
+>> in urcu/compiler.h + respective changes in urcu/*.h ?
+> 
+> It starts to look like a cat and mouse game honestly. Especially if
+> we consider "contexts", those can call external functions, which might
+> not have notrace attribute.
+> 
+> I think the proper solution here would be to use a per-thread nesting
+> value, and check it in the finstrument-function callback, and return
+> immediately if we are nested.
+> 
+> Thoughts ?
+> 
+> Thanks,
+> 
+> Mathieu
+> 
+>>
+>> --
+>> Paul
+>>
+>>>
+>>> Mathieu
+>>>
+>>> ----- Original Message -----
+>>>> From: "Paul Woegerer" <paul_woegerer@mentor.com>
+>>>> To: lttng-dev@lists.lttng.org, "mathieu desnoyers"
+>>>> <mathieu.desnoyers@efficios.com>
+>>>> Cc: "Paul Woegerer" <paul_woegerer@mentor.com>
+>>>> Sent: Monday, July 7, 2014 10:04:21 AM
+>>>> Subject: [PATCH lttng-ust] Add lttng_ust_notrace to static inline
+>>>> functions
+>>>>
+>>>> The static inline functions
+>>>> __tracepoint_provider_mismatch_<TRACEPOINT_PROVIDER> and
+>>>> __tracepoint_provider_check_<TRACEPOINT_PROVIDER> are missing the
+>>>> lttng_ust_notrace attribute to prevent them from getting instrumented
+>>>> with -finstrument-functions (if e.g. defined in CFLAGS). This patch is
+>>>> adding the attribute to those functions.
+>>>>
+>>>> Signed-off-by: Paul Woegerer <paul_woegerer@mentor.com>
+>>>> ---
+>>>>  include/lttng/ust-tracepoint-event.h | 4 ++++
+>>>>  1 file changed, 4 insertions(+)
+>>>>
+>>>> diff --git a/include/lttng/ust-tracepoint-event.h
+>>>> b/include/lttng/ust-tracepoint-event.h
+>>>> index d12e8bb..8895310 100644
+>>>> --- a/include/lttng/ust-tracepoint-event.h
+>>>> +++ b/include/lttng/ust-tracepoint-event.h
+>>>> @@ -75,6 +75,8 @@
+>>>>  /* Reset all macros within TRACEPOINT_EVENT */
+>>>>  #include <lttng/ust-tracepoint-event-reset.h>
+>>>>  
+>>>> +static inline lttng_ust_notrace
+>>>> +void _TP_COMBINE_TOKENS(__tracepoint_provider_mismatch_,
+>>>> TRACEPOINT_PROVIDER)(void);
+>>>>  static inline
+>>>>  void _TP_COMBINE_TOKENS(__tracepoint_provider_mismatch_,
+>>>>  TRACEPOINT_PROVIDER)(void)
+>>>>  {
+>>>> @@ -88,6 +90,8 @@ void _TP_COMBINE_TOKENS(__tracepoint_provider_mismatch_,
+>>>> TRACEPOINT_PROVIDER)(vo
+>>>>  #define TRACEPOINT_EVENT_INSTANCE(_provider, _template, _name, _args)	\
+>>>>  	__tracepoint_provider_mismatch_##_provider();
+>>>>  
+>>>> +static inline lttng_ust_notrace
+>>>> +void _TP_COMBINE_TOKENS(__tracepoint_provider_check_,
+>>>> TRACEPOINT_PROVIDER)(void);
+>>>>  static inline
+>>>>  void _TP_COMBINE_TOKENS(__tracepoint_provider_check_,
+>>>>  TRACEPOINT_PROVIDER)(void)
+>>>>  {
+>>>> --
+>>>> 2.0.1
+>>>>
+>>>>
+>>>
+>>
+>>
+>> --
+>> Paul Woegerer, SW Development Engineer
+>> Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
+>> Mentor Graphics, Embedded Software Division
+>>
+> 
+
+
+-- 
+Paul Woegerer, SW Development Engineer
+Sourcery Analyzer <http://go.mentor.com/sourceryanalyzer>
+Mentor Graphics, Embedded Software Division
