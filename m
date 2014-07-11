@@ -1,19 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC PATCH 1/1] check if set_schedaffinity works in
- configure.ac
-Date: Fri, 11 Jul 2014 15:55:34 +0000 (UTC)
-Message-ID: <1676153325.12166.1405094134846.JavaMail.zimbra__39272.4220677794$1405094208$gmane$org@efficios.com>
-References: <5394C476.2050707@gmail.com> <5394C521.4040001@gmail.com>
- <5394C810.1000801@gmail.com> <5396042C.2010708@mentor.com>
+Subject: =?utf-8?q?=5BCFP=5D_Tracing_Summit_2014_Call_for_Pres?=
+ =?utf-8?q?entations=2C_October_13th=2C_2014=2C_D=C3=BCsseldorf=2C_Germany?=
+Date: Fri, 11 Jul 2014 21:06:40 +0000 (UTC)
+Message-ID: <1637700547.13216.1405112800501.JavaMail.zimbra__25098.3408921913$1405112846$gmane$org@efficios.com>
+References: <1588164463.13173.1405111472461.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1X5dAf-0007cu-Gp
- for lttng-dev@lists.lttng.org; Fri, 11 Jul 2014 11:55:42 -0400
-In-Reply-To: <5396042C.2010708@mentor.com>
+ (envelope-from <compudj@efficios.com>) id 1X5i1i-0000vi-NO
+ for lttng-dev@lists.lttng.org; Fri, 11 Jul 2014 17:06:45 -0400
+In-Reply-To: <1588164463.13173.1405111472461.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,47 +21,56 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Nathan Lynch <Nathan_Lynch@mentor.com>
-Cc: Pranith Kumar <bobby.prani@gmail.com>, lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: submission@tracingsummit.org
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Nathan Lynch" <Nathan_Lynch@mentor.com>
-> To: "Pranith Kumar" <bobby.prani@gmail.com>
-> Cc: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, lttng-dev@lists.lttng.org
-> Sent: Monday, June 9, 2014 2:59:56 PM
-> Subject: Re: [lttng-dev] [RFC PATCH 1/1] check if set_schedaffinity works in configure.ac
-> 
-> On 06/08/2014 03:31 PM, Pranith Kumar wrote:
-> > +    AS_IF([test "x$sched_set_affinity_args" = "x3"], [
-> > +        # test if sched_setaffinity works
-> > +        AC_MSG_CHECKING([if sched_setaffinity works])
-> > +        AC_RUN_IFELSE([AC_LANG_SOURCE([[
-> > +                #include <sched.h>
-> > +                int main()
-> > +                {
-> > +                    cpu_set_t foo;
-> > +                    return sched_setaffinity(0, sizeof (foo), &foo);
-> 
-> This passes uninitialized stack memory to the system call; the return
-> value is unpredictable.
-> 
-> If it turns out that such a test is necessary, it should probably call
-> sched_getaffinity first and pass the result to sched_setaffinity.
-> 
-
-It looks like a respin of the patch taking care
-of Nathan's comments is needed here. It might be
-a good thing to open a bug report against Userspace
-RCU on http://bugs.lttng.org to keep track of this
-issue.
-
-Thanks!
-
-Mathieu
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGksCgpXZSBhcmUgb3JnYW5pemluZyBhIHRyYWNpbmcgc3VtbWl0IGluIETDvHNzZWxkb3JmLCBH
+ZXJtYW55LCBvbgpPY3RvYmVyIDEzLCAyMDE0LCBhdCB0aGUgQ29uZ3Jlc3MgQ2VudHJlIETDvHNz
+ZWxkb3JmLiBUaGlzIGV2ZW50IGlzIApjb2xvY2F0ZWQgd2l0aCBMaW51eENvbiBFdXJvcGUgMjAx
+NC4KIApUaGlzIGV2ZW50IGZvY3VzZXMgb24gdGhlIHRyYWNpbmcgYXJlYSwgZ2F0aGVyaW5nIHBl
+b3BsZSBpbnZvbHZlZCBpbgpkZXZlbG9wbWVudCBhbmQgZW5kLXVzZXJzIG9mIHRyYWNpbmcgdG9v
+bHMgYXMgd2VsbCBhcyB0cmFjZSBhbmFseXNpcwp0b29scy4gVGhlIG1haW4gdGFyZ2V0IG9mIHRo
+aXMgVHJhY2luZyBTdW1taXQgaXMgdG8gcHJvdmlkZSByb29tIGZvcgpkaXNjdXNzaW9uIGJldHdl
+ZW4gcGVvcGxlIGluIHRoZSB2YXJpb3VzIGFyZWFzIHRoYXQgYmVuZWZpdCBmcm9tCnRyYWNpbmcs
+IG5hbWVseSBwYXJhbGxlbCwgZGlzdHJpYnV0ZWQgYW5kL29yIHJlYWwtdGltZSBzeXN0ZW1zLCBh
+cyB3ZWxsCmFzIGtlcm5lbCBkZXZlbG9wbWVudC4KCklmIHlvdSBhcmUgaW50ZXJlc3RlZCB0byBw
+cmVzZW50LCBwbGVhc2Ugc3VibWl0IGEgcHJvcG9zYWwgdG8Kc3VibWlzc2lvbkB0cmFjaW5nc3Vt
+bWl0Lm9yZyBiZWZvcmUgQXVndXN0IDMxLCAyMDE0LCBhdCAyMzo1OSBFU1QuClBsZWFzZSBwcm92
+aWRlIGEgdGl0bGUsIGFic3RyYWN0IGRlc2NyaWJpbmcgdGhlIHByb3Bvc2VkIHRhbGsKKDkwMCBj
+aGFyYWN0ZXJzIG1heGltdW0pLCBzaG9ydCBiaW9ncmFwaHkgKDkwMCBjaGFyYWN0ZXJzIG1heGlt
+dW0pLAphbmQgZGVzY3JpYmUgdGhlIHRhcmdldGVkIGF1ZGllbmNlICg5MDAgY2hhcmFjdGVycyBt
+YXhpbXVtKS4KCldlIGFyZSB3ZWxjb21pbmcgcHJlc2VudGF0aW9ucyBmcm9tIGJvdGggZW5kIHVz
+ZXJzIGFuZCBkZXZlbG9wZXJzLCBvbgp0b3BpY3MgY292ZXJpbmcsIGJ1dCBub3QgbGltaXRlZCB0
+bzoKCiAqIFRyYWNlIGNvbGxlY3Rpb24gYW5kIGV4dHJhY3Rpb24sCiAqIFRyYWNlIGZpbHRlcmlu
+ZywKICogVHJhY2UgYWdncmVnYXRpb24sCiAqIFRyYWNlIGZvcm1hdHMsCiAqIFRyYWNpbmcgbXVs
+dGktY29yZSBzeXN0ZW1zLAogKiBUcmFjZSBhYnN0cmFjdGlvbiwKICogVHJhY2UgbW9kZWxpbmcs
+CiAqIEF1dG9tYXRlZCB0cmFjZSBhbmFseXNpcyAoZS5nLiBkZXBlbmRlbmN5IGFuYWx5c2lzKSwK
+ICogVHJhY2luZyBsYXJnZSBjbHVzdGVycyBhbmQgZGlzdHJpYnV0ZWQgc3lzdGVtcywKICogSGFy
+ZHdhcmUtbGV2ZWwgdHJhY2luZyAoZS5nLiBEU1AsIEdQVSwgYmFyZS1tZXRhbCksCiAqIFRyYWNl
+IHZpc3VhbGlzYXRpb24sCiAqIEludGVyYWN0aW9uIGJldHdlZW4gZGVidWdnaW5nIGFuZCB0cmFj
+aW5nLAogKiBUcmFjaW5nIHJlbW90ZSBjb250cm9sLAogKiBBbmFseXNpcyBvZiBsYXJnZSB0cmFj
+ZSBkYXRhc2V0cywKICogQ2xvdWQgdHJhY2UgY29sbGVjdGlvbiBhbmQgYW5hbHlzaXMsCiAqIElu
+dGVncmF0aW9uIGJldHdlZW4gdHJhY2UgdG9vbHMsCiAqIExpdmUgdHJhY2luZyAmIG1vbml0b3Jp
+bmcuCgpUaG9zZSBjYW4gY292ZXIgcmVjZW50bHkgYXZhaWxhYmxlIHRlY2hub2xvZ2llcywgb25n
+b2luZyB3b3JrLCBhbmQgeWV0Cm5vbi1leGlzdGluZyB0ZWNobm9sb2dpZXMgKHdoaWNoIGFyZSBj
+b21wZWxsaW5nbHkgaW50ZXJlc3RpbmcgdG8KZW5kLXVzZXJzKS4KClRoZXJlIGlzIGEgc2luZ2xl
+IHRyYWNrLCBjb250YWluaW5nIHByZXNlbnRhdGlvbnMgYmV0d2VlbiAzMCBhbmQgNDUKbWludXRl
+cyBwZXIgc3ViamVjdCB3aXRoIGRpc2N1c3Npb24uIAoKUmVnaXN0cmF0aW9uIHRvIExpbnV4Q29u
+IEV1cm9wZSAyMDE0IG9yIENsb3VkT3BlbiBFdXJvcGUgMjAxNCBpcwpyZXF1aXJlZCBpbiBvcmRl
+ciB0byByZWdpc3RlciB0byB0aGUgVHJhY2luZyBTdW1taXQgMjAxNC4gQWxsCnJlZ2lzdHJhdGlv
+biBwYXNzZXMsIGluY2x1ZGluZyB0aGUgbmV3IEF0dGVuZGVlIE5ldHdvcmtpbmcgUGFzcwpyZWdp
+c3RyYXRpb24sIHdpbGwgYWxsb3cgeW91IHRvIHJlZ2lzdGVyIGZvciB0aGUgVHJhY2luZyBTdW1t
+aXQuIFRoZQpUcmFjaW5nIFN1bW1pdCByZWdpc3RyYXRpb24gYWNjZXNzIGNvZGUgd2lsbCBiZSBw
+cm92aWRlZCBvbiB5b3VyCkxpbnV4Q29uL0Nsb3VkT3BlbiByZWdpc3RyYXRpb24gY29uZmlybWF0
+aW9uIHBhZ2UuIFRoZSBUcmFjaW5nIFN1bW1pdAoyMDE0IGhhcyBubyBlbnRyYW5jZSBmZWVzIGZv
+ciBMaW51eENvbi9Db3VsZE9wZW4gYXR0ZW5kZWVzLgoKV2UgcmVjb21tZW5kIHlvdSByZWdpc3Rl
+ciB0byBlaXRoZXIgb3IgYm90aCBldmVudHMgYmVmb3JlIEF1Z3VzdCAxc3QsCjIwMTQgdG8gYmVu
+ZWZpdCBmcm9tIGVhcmx5IHJlZ2lzdHJhdGlvbiBmZWVzLgoKU2VlIHRoZSBUcmFjaW5nIFN1bW1p
+dCAyMDE0IHdpa2kgYXQKaHR0cDovL3d3dy50cmFjaW5nc3VtbWl0Lm9yZy93aWtpL1RyYWNpbmdT
+dW1taXQyMDE0IGZvciBkZXRhaWxzLgoKVGhhbmsgeW91LAoKRG9taW5pcXVlIFRvdXBpbiAmIE1h
+dGhpZXUgRGVzbm95ZXJzCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRw
+Oi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcu
+b3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
+LWRldgo=
