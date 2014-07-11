@@ -1,18 +1,19 @@
-From: francis.deslauriers@efficios.com
-Subject: [PATCH lttng-ust] Move enablers syncing after the
-	channel registration
-Date: Thu, 10 Jul 2014 18:22:14 -0400
-Message-ID: <1405030934-3924-1-git-send-email-francis.deslauriers__20717.6073374741$1405031047$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [RFC PATCH 1/1] check if set_schedaffinity works in
+ configure.ac
+Date: Fri, 11 Jul 2014 15:55:34 +0000 (UTC)
+Message-ID: <1676153325.12166.1405094134846.JavaMail.zimbra__39272.4220677794$1405094208$gmane$org@efficios.com>
+References: <5394C476.2050707@gmail.com> <5394C521.4040001@gmail.com>
+ <5394C810.1000801@gmail.com> <5396042C.2010708@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f48.google.com ([209.85.216.48])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <fdeslaur@gmail.com>) id 1X5Mjz-0001Us-2Z
- for lttng-dev@lists.lttng.org; Thu, 10 Jul 2014 18:23:04 -0400
-Received: by mail-qa0-f48.google.com with SMTP id x12so213074qac.35
- for <lttng-dev@lists.lttng.org>; Thu, 10 Jul 2014 15:22:53 -0700 (PDT)
+ (envelope-from <compudj@efficios.com>) id 1X5dAf-0007cu-Gp
+ for lttng-dev@lists.lttng.org; Fri, 11 Jul 2014 11:55:42 -0400
+In-Reply-To: <5396042C.2010708@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,41 +22,47 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Nathan Lynch <Nathan_Lynch@mentor.com>
+Cc: Pranith Kumar <bobby.prani@gmail.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-From: Francis Deslauriers <francis.deslauriers@efficios.com>
+----- Original Message -----
+> From: "Nathan Lynch" <Nathan_Lynch@mentor.com>
+> To: "Pranith Kumar" <bobby.prani@gmail.com>
+> Cc: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, lttng-dev@lists.lttng.org
+> Sent: Monday, June 9, 2014 2:59:56 PM
+> Subject: Re: [lttng-dev] [RFC PATCH 1/1] check if set_schedaffinity works in configure.ac
+> 
+> On 06/08/2014 03:31 PM, Pranith Kumar wrote:
+> > +    AS_IF([test "x$sched_set_affinity_args" = "x3"], [
+> > +        # test if sched_setaffinity works
+> > +        AC_MSG_CHECKING([if sched_setaffinity works])
+> > +        AC_RUN_IFELSE([AC_LANG_SOURCE([[
+> > +                #include <sched.h>
+> > +                int main()
+> > +                {
+> > +                    cpu_set_t foo;
+> > +                    return sched_setaffinity(0, sizeof (foo), &foo);
+> 
+> This passes uninitialized stack memory to the system call; the return
+> value is unpredictable.
+> 
+> If it turns out that such a test is necessary, it should probably call
+> sched_getaffinity first and pass the result to sched_setaffinity.
+> 
 
-Fixes possible race condition where an event registration is received
- before its channel registration by the consumer.
+It looks like a respin of the patch taking care
+of Nathan's comments is needed here. It might be
+a good thing to open a bug report against Userspace
+RCU on http://bugs.lttng.org to keep track of this
+issue.
 
-Signed-off-by: Francis Deslauriers <francis.deslauriers@efficios.com>
----
- liblttng-ust/lttng-events.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Thanks!
 
-diff --git a/liblttng-ust/lttng-events.c b/liblttng-ust/lttng-events.c
-index e44628d..285b98e 100644
---- a/liblttng-ust/lttng-events.c
-+++ b/liblttng-ust/lttng-events.c
-@@ -248,8 +248,6 @@ int lttng_session_enable(struct lttng_session *session)
- 
- 	/* Set transient enabler state to "enabled" */
- 	session->tstate = 1;
--	/* We need to sync enablers with session before activation. */
--	lttng_session_sync_enablers(session);
- 
- 	/*
- 	 * Snapshot the number of events per channel to know the type of header
-@@ -287,6 +285,9 @@ int lttng_session_enable(struct lttng_session *session)
- 		}
- 	}
- 
-+	/* We need to sync enablers with session before activation. */
-+	lttng_session_sync_enablers(session);
-+
- 	/* Set atomically the state to "active" */
- 	CMM_ACCESS_ONCE(session->active) = 1;
- 	CMM_ACCESS_ONCE(session->been_active) = 1;
+Mathieu
+
+
 -- 
-1.8.3.2
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
