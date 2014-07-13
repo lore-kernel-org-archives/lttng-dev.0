@@ -1,18 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: =?utf-8?q?=5BCFP=5D_Tracing_Summit_2014_Call_for_Pres?=
- =?utf-8?q?entations=2C_October_13th=2C_2014=2C_D=C3=BCsseldorf=2C_Germany?=
-Date: Fri, 11 Jul 2014 21:06:40 +0000 (UTC)
-Message-ID: <1637700547.13216.1405112800501.JavaMail.zimbra__25098.3408921913$1405112846$gmane$org@efficios.com>
-References: <1588164463.13173.1405111472461.JavaMail.zimbra@efficios.com>
+Subject: [RFC PATCH lttng-modules] Use 3.16
+	ktime_get_mono_fast_ns() new API
+Date: Sun, 13 Jul 2014 14:15:22 -0400
+Message-ID: <1405275322-25572-1-git-send-email-mathieu.desnoyers__2829.88771000436$1405275391$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1X5i1i-0000vi-NO
- for lttng-dev@lists.lttng.org; Fri, 11 Jul 2014 17:06:45 -0400
-In-Reply-To: <1588164463.13173.1405111472461.JavaMail.zimbra@efficios.com>
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1X6OJF-00078w-Qy
+ for lttng-dev@lists.lttng.org; Sun, 13 Jul 2014 14:15:39 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,56 +19,213 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: submission@tracingsummit.org
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpXZSBhcmUgb3JnYW5pemluZyBhIHRyYWNpbmcgc3VtbWl0IGluIETDvHNzZWxkb3JmLCBH
-ZXJtYW55LCBvbgpPY3RvYmVyIDEzLCAyMDE0LCBhdCB0aGUgQ29uZ3Jlc3MgQ2VudHJlIETDvHNz
-ZWxkb3JmLiBUaGlzIGV2ZW50IGlzIApjb2xvY2F0ZWQgd2l0aCBMaW51eENvbiBFdXJvcGUgMjAx
-NC4KIApUaGlzIGV2ZW50IGZvY3VzZXMgb24gdGhlIHRyYWNpbmcgYXJlYSwgZ2F0aGVyaW5nIHBl
-b3BsZSBpbnZvbHZlZCBpbgpkZXZlbG9wbWVudCBhbmQgZW5kLXVzZXJzIG9mIHRyYWNpbmcgdG9v
-bHMgYXMgd2VsbCBhcyB0cmFjZSBhbmFseXNpcwp0b29scy4gVGhlIG1haW4gdGFyZ2V0IG9mIHRo
-aXMgVHJhY2luZyBTdW1taXQgaXMgdG8gcHJvdmlkZSByb29tIGZvcgpkaXNjdXNzaW9uIGJldHdl
-ZW4gcGVvcGxlIGluIHRoZSB2YXJpb3VzIGFyZWFzIHRoYXQgYmVuZWZpdCBmcm9tCnRyYWNpbmcs
-IG5hbWVseSBwYXJhbGxlbCwgZGlzdHJpYnV0ZWQgYW5kL29yIHJlYWwtdGltZSBzeXN0ZW1zLCBh
-cyB3ZWxsCmFzIGtlcm5lbCBkZXZlbG9wbWVudC4KCklmIHlvdSBhcmUgaW50ZXJlc3RlZCB0byBw
-cmVzZW50LCBwbGVhc2Ugc3VibWl0IGEgcHJvcG9zYWwgdG8Kc3VibWlzc2lvbkB0cmFjaW5nc3Vt
-bWl0Lm9yZyBiZWZvcmUgQXVndXN0IDMxLCAyMDE0LCBhdCAyMzo1OSBFU1QuClBsZWFzZSBwcm92
-aWRlIGEgdGl0bGUsIGFic3RyYWN0IGRlc2NyaWJpbmcgdGhlIHByb3Bvc2VkIHRhbGsKKDkwMCBj
-aGFyYWN0ZXJzIG1heGltdW0pLCBzaG9ydCBiaW9ncmFwaHkgKDkwMCBjaGFyYWN0ZXJzIG1heGlt
-dW0pLAphbmQgZGVzY3JpYmUgdGhlIHRhcmdldGVkIGF1ZGllbmNlICg5MDAgY2hhcmFjdGVycyBt
-YXhpbXVtKS4KCldlIGFyZSB3ZWxjb21pbmcgcHJlc2VudGF0aW9ucyBmcm9tIGJvdGggZW5kIHVz
-ZXJzIGFuZCBkZXZlbG9wZXJzLCBvbgp0b3BpY3MgY292ZXJpbmcsIGJ1dCBub3QgbGltaXRlZCB0
-bzoKCiAqIFRyYWNlIGNvbGxlY3Rpb24gYW5kIGV4dHJhY3Rpb24sCiAqIFRyYWNlIGZpbHRlcmlu
-ZywKICogVHJhY2UgYWdncmVnYXRpb24sCiAqIFRyYWNlIGZvcm1hdHMsCiAqIFRyYWNpbmcgbXVs
-dGktY29yZSBzeXN0ZW1zLAogKiBUcmFjZSBhYnN0cmFjdGlvbiwKICogVHJhY2UgbW9kZWxpbmcs
-CiAqIEF1dG9tYXRlZCB0cmFjZSBhbmFseXNpcyAoZS5nLiBkZXBlbmRlbmN5IGFuYWx5c2lzKSwK
-ICogVHJhY2luZyBsYXJnZSBjbHVzdGVycyBhbmQgZGlzdHJpYnV0ZWQgc3lzdGVtcywKICogSGFy
-ZHdhcmUtbGV2ZWwgdHJhY2luZyAoZS5nLiBEU1AsIEdQVSwgYmFyZS1tZXRhbCksCiAqIFRyYWNl
-IHZpc3VhbGlzYXRpb24sCiAqIEludGVyYWN0aW9uIGJldHdlZW4gZGVidWdnaW5nIGFuZCB0cmFj
-aW5nLAogKiBUcmFjaW5nIHJlbW90ZSBjb250cm9sLAogKiBBbmFseXNpcyBvZiBsYXJnZSB0cmFj
-ZSBkYXRhc2V0cywKICogQ2xvdWQgdHJhY2UgY29sbGVjdGlvbiBhbmQgYW5hbHlzaXMsCiAqIElu
-dGVncmF0aW9uIGJldHdlZW4gdHJhY2UgdG9vbHMsCiAqIExpdmUgdHJhY2luZyAmIG1vbml0b3Jp
-bmcuCgpUaG9zZSBjYW4gY292ZXIgcmVjZW50bHkgYXZhaWxhYmxlIHRlY2hub2xvZ2llcywgb25n
-b2luZyB3b3JrLCBhbmQgeWV0Cm5vbi1leGlzdGluZyB0ZWNobm9sb2dpZXMgKHdoaWNoIGFyZSBj
-b21wZWxsaW5nbHkgaW50ZXJlc3RpbmcgdG8KZW5kLXVzZXJzKS4KClRoZXJlIGlzIGEgc2luZ2xl
-IHRyYWNrLCBjb250YWluaW5nIHByZXNlbnRhdGlvbnMgYmV0d2VlbiAzMCBhbmQgNDUKbWludXRl
-cyBwZXIgc3ViamVjdCB3aXRoIGRpc2N1c3Npb24uIAoKUmVnaXN0cmF0aW9uIHRvIExpbnV4Q29u
-IEV1cm9wZSAyMDE0IG9yIENsb3VkT3BlbiBFdXJvcGUgMjAxNCBpcwpyZXF1aXJlZCBpbiBvcmRl
-ciB0byByZWdpc3RlciB0byB0aGUgVHJhY2luZyBTdW1taXQgMjAxNC4gQWxsCnJlZ2lzdHJhdGlv
-biBwYXNzZXMsIGluY2x1ZGluZyB0aGUgbmV3IEF0dGVuZGVlIE5ldHdvcmtpbmcgUGFzcwpyZWdp
-c3RyYXRpb24sIHdpbGwgYWxsb3cgeW91IHRvIHJlZ2lzdGVyIGZvciB0aGUgVHJhY2luZyBTdW1t
-aXQuIFRoZQpUcmFjaW5nIFN1bW1pdCByZWdpc3RyYXRpb24gYWNjZXNzIGNvZGUgd2lsbCBiZSBw
-cm92aWRlZCBvbiB5b3VyCkxpbnV4Q29uL0Nsb3VkT3BlbiByZWdpc3RyYXRpb24gY29uZmlybWF0
-aW9uIHBhZ2UuIFRoZSBUcmFjaW5nIFN1bW1pdAoyMDE0IGhhcyBubyBlbnRyYW5jZSBmZWVzIGZv
-ciBMaW51eENvbi9Db3VsZE9wZW4gYXR0ZW5kZWVzLgoKV2UgcmVjb21tZW5kIHlvdSByZWdpc3Rl
-ciB0byBlaXRoZXIgb3IgYm90aCBldmVudHMgYmVmb3JlIEF1Z3VzdCAxc3QsCjIwMTQgdG8gYmVu
-ZWZpdCBmcm9tIGVhcmx5IHJlZ2lzdHJhdGlvbiBmZWVzLgoKU2VlIHRoZSBUcmFjaW5nIFN1bW1p
-dCAyMDE0IHdpa2kgYXQKaHR0cDovL3d3dy50cmFjaW5nc3VtbWl0Lm9yZy93aWtpL1RyYWNpbmdT
-dW1taXQyMDE0IGZvciBkZXRhaWxzLgoKVGhhbmsgeW91LAoKRG9taW5pcXVlIFRvdXBpbiAmIE1h
-dGhpZXUgRGVzbm95ZXJzCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRw
-Oi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcu
-b3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
-LWRldgo=
+The new ktime_get_mono_fast_ns() API introduced in kernel 3.16 allows
+tracing NMI handlers.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+---
+ Makefile              |    2 +-
+ wrapper/trace-clock.c |   29 ++++++++++++++
+ wrapper/trace-clock.h |  107 +++++++++++++++++++++++++++++++++++++++++++------
+ 3 files changed, 124 insertions(+), 14 deletions(-)
+ create mode 100644 wrapper/trace-clock.c
+
+diff --git a/Makefile b/Makefile
+index 606b5ec..9935e15 100644
+--- a/Makefile
++++ b/Makefile
+@@ -21,7 +21,7 @@ lttng-tracer-objs :=  lttng-events.o lttng-abi.o \
+ 			lttng-context-vtid.o lttng-context-ppid.o \
+ 			lttng-context-vppid.o lttng-calibrate.o \
+ 			lttng-context-hostname.o wrapper/random.o \
+-			probes/lttng.o
++			probes/lttng.o wrapper/trace-clock.o
+ 
+ obj-m += lttng-statedump.o
+ lttng-statedump-objs := lttng-statedump-impl.o wrapper/irqdesc.o \
+diff --git a/wrapper/trace-clock.c b/wrapper/trace-clock.c
+new file mode 100644
+index 0000000..ac44084
+--- /dev/null
++++ b/wrapper/trace-clock.c
+@@ -0,0 +1,29 @@
++/*
++ * wrapper/trace-clock.c
++ *
++ * Contains LTTng trace clock mapping to LTTng trace clock or mainline monotonic
++ * clock. This wrapper depends on CONFIG_HIGH_RES_TIMERS=y.
++ *
++ * Copyright (C) 2011-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include "trace-clock.h"
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0))
++DEFINE_PER_CPU(local_t, lttng_last_tsc);
++EXPORT_PER_CPU_SYMBOL(lttng_last_tsc);
++#endif /* #else #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0)) */
+diff --git a/wrapper/trace-clock.h b/wrapper/trace-clock.h
+index 9c0c806..68df48d 100644
+--- a/wrapper/trace-clock.h
++++ b/wrapper/trace-clock.h
+@@ -32,7 +32,9 @@
+ #include <linux/ktime.h>
+ #include <linux/time.h>
+ #include <linux/hrtimer.h>
++#include <linux/percpu.h>
+ #include <linux/version.h>
++#include <asm/local.h>
+ #include "../lttng-kernel-version.h"
+ #include "random.h"
+ 
+@@ -40,6 +42,88 @@
+ #error "Linux kernels 3.10 and 3.11 introduce a deadlock in the timekeeping subsystem. Fixed by commit 7bd36014460f793c19e7d6c94dab67b0afcfcb7f \"timekeeping: Fix HRTICK related deadlock from ntp lock changes\" in Linux."
+ #endif
+ 
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0))
++
++DECLARE_PER_CPU(local_t, lttng_last_tsc);
++
++#if (BITS_PER_LONG == 32)
++/*
++ * Fixup "src_now" using the 32 LSB from "last". We need to handle overflow and
++ * underflow of the 32nd bit. "last" can be above, below or equal to the 32 LSB
++ * of "src_now".
++ */
++static inline u64 trace_clock_fixup(u64 src_now, u32 last)
++{
++	u64 now;
++
++	now = src_now & 0xFFFFFFFF00000000ULL;
++	now |= (u64) last;
++	/* Detect overflow or underflow between now and last. */
++	if ((src_now & 0x80000000U) && !(last & 0x80000000U)) {
++		/*
++		 * If 32nd bit transitions from 1 to 0, and we move forward in
++		 * time from "now" to "last", then we have an overflow.
++		 */
++		if (((s32) now - (s32) last) < 0)
++			now += 0x0000000100000000ULL;
++	} else if (!(src_now & 0x80000000U) && (last & 0x80000000U)) {
++		/*
++		 * If 32nd bit transitions from 0 to 1, and we move backward in
++		 * time from "now" to "last", then we have an underflow.
++		 */
++		if (((s32) now - (s32) last) > 0)
++			now -= 0x0000000100000000ULL;
++	}
++	return now;
++}
++#else /* #if (BITS_PER_LONG == 32) */
++/*
++ * The fixup is pretty easy on 64-bit architectures: "last" is a 64-bit
++ * value, so we can use last directly as current time.
++ */
++static inline u64 trace_clock_fixup(u64 src_now, unsigned long last)
++{
++	return (u64) last;
++}
++#endif /* #else #if (BITS_PER_LONG == 32) */
++
++/*
++ * Always called with preemption disabled. Can be interrupted.
++ */
++static inline u64 trace_clock_monotonic_wrapper(void)
++{
++	u64 now;
++	unsigned long last, result;
++	local_t *last_tsc;
++
++	/* Use fast nmi-safe monotonic clock provided by the Linux kernel. */
++	last_tsc = &__get_cpu_var(lttng_last_tsc);
++	last = local_read(last_tsc);
++	/*
++	 * Read "last" before "now". It is not strictly required, but it ensures
++	 * that an interrupt coming in won't artificially trigger a case where
++	 * "now" < "last". This kind of situation should only happen if the
++	 * mono_fast time source goes slightly backwards.
++	 */
++	barrier();
++	now = ktime_get_mono_fast_ns();
++	if (((long) now - (long) last) < 0)
++		now = trace_clock_fixup(now, last);
++	result = local_cmpxchg(last_tsc, last, (unsigned long) now);
++	if (result == last) {
++		/* Update done. */
++		return now;
++	} else {
++		/*
++		 * Update not done, due to concurrent update. We can use
++		 * "result", since it has been sampled concurrently with our
++		 * time read, so it should not be far from "now".
++		 */
++		return trace_clock_fixup(now, result);
++	}
++}
++
++#else /* #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0)) */
+ static inline u64 trace_clock_monotonic_wrapper(void)
+ {
+ 	ktime_t ktime;
+@@ -54,6 +138,7 @@ static inline u64 trace_clock_monotonic_wrapper(void)
+ 	ktime = ktime_get();
+ 	return ktime_to_ns(ktime);
+ }
++#endif /* #else #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0)) */
+ 
+ static inline u32 trace_clock_read32(void)
+ {
+@@ -75,23 +160,19 @@ static inline int trace_clock_uuid(char *uuid)
+ 	return wrapper_get_bootid(uuid);
+ }
+ 
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0))
+ static inline int get_trace_clock(void)
+ {
+-	/*
+-	 * LTTng: Using mainline kernel monotonic clock. NMIs will not be
+-	 * traced, and expect significant performance degradation compared to
+-	 * the LTTng trace clocks. Integration of the LTTng 0.x trace clocks
+-	 * into LTTng 2.0 is planned in a near future.
+-	 */
+-	printk(KERN_WARNING "LTTng: Using mainline kernel monotonic clock.\n");
+-	printk(KERN_WARNING "  * NMIs will not be traced,\n");
+-	printk(KERN_WARNING "  * expect significant performance degradation compared to the\n");
+-	printk(KERN_WARNING "    LTTng trace clocks.\n");
+-	printk(KERN_WARNING "Integration of the LTTng 0.x trace clocks into LTTng 2.0 is planned\n");
+-	printk(KERN_WARNING "in a near future.\n");
+-
++	printk(KERN_WARNING "LTTng: Using mainline kernel monotonic fast clock, which is NMI-safe.\n");
++	return 0;
++}
++#else /* #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0)) */
++static inline int get_trace_clock(void)
++{
++	printk(KERN_WARNING "LTTng: Using mainline kernel monotonic clock. NMIs will not be traced.\n");
+ 	return 0;
+ }
++#endif /* #else #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0)) */
+ 
+ static inline void put_trace_clock(void)
+ {
+-- 
+1.7.10.4
