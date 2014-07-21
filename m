@@ -1,20 +1,16 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@ericsson.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 Subject: Re: [RFC] lttng-modules system call tracing filtering
-Date: Mon, 21 Jul 2014 08:49:05 -0400
-Message-ID: <53CD0C41.5090902__11545.0070974932$1405947014$gmane$org@ericsson.com>
-References: <1789128836.17290.1405805963800.JavaMail.zimbra@efficios.com>
- <53CBE64D.7080607@efficios.com>
- <554999700.17402.1405872058663.JavaMail.zimbra@efficios.com>
+Date: Mon, 21 Jul 2014 13:37:43 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD359CE19A__34219.2420423546$1405949911$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="windows-1252"
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@ericsson.com>)
- id 1X9D1k-0002Qw-Sl
- for lttng-dev@lists.lttng.org; Mon, 21 Jul 2014 08:49:14 -0400
-In-Reply-To: <554999700.17402.1405872058663.JavaMail.zimbra@efficios.com>
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1X9Dms-0002jF-Dd
+ for lttng-dev@lists.lttng.org; Mon, 21 Jul 2014 09:37:57 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,148 +19,58 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Julien Desfossez <jdesfossez@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
+----------------------------------------------------------------------
+Date: Sat, 19 Jul 2014 21:39:23 +0000 (UTC)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Julien Desfossez <jdesfossez@efficios.com>
 
+> For the curious, I implement this "filtering" with a per-channel bitmap t=
+hat represents which system calls to trace.
+> We might need to double-check that I got the NR_syscalls right for each a=
+rchitecture, especially those with
+> compatibility system call tables (64-bit archs having 32-bit compat sysca=
+lls). For the common case (all system calls
+> are traced), the pointer to the array is NULL, so this is a simple pointe=
+r check, which is less expensive cache-wise
+> than looking up within the bitmap.
+>
+> As far as lttng-tools is concerned, what is a bit different is that syste=
+m calls don't each get a file descriptor assigned, =
 
-On 07/20/2014 12:00 PM, Mathieu Desnoyers wrote:
-> ----- Original Message -----
->> From: "Julien Desfossez" <jdesfossez@efficios.com>
->> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, "lttng-dev" <l=
-ttng-dev@lists.lttng.org>
->> Cc: "David Goulet (dgoulet@efficios.com)" <dgoulet@efficios.com>
->> Sent: Sunday, July 20, 2014 11:54:53 AM
->> Subject: Re: [RFC] lttng-modules system call tracing filtering
->>
->> On 14-07-19 05:39 PM, Mathieu Desnoyers wrote:
->>> Hi!
->>>
->>> I just create a dev branch with system call filtering within LTTng
->>> modules. Currently, only enable-event is supported at the lttng-tools
->>> level for this. With this feature, you can specify exactly which system
->>> calls you want to trace.
->>>
->>> Here are the dev branches:
->>>
->>> https://github.com/compudj/lttng-modules-dev branch: syscall-filtering
->>> https://github.com/compudj/lttng-tools-dev/ branch: syscall-filtering
->>
->> Great !
->>
->> Just to clarify, what happens to the exit_syscall event ?
->> Is it still emitted for every syscall exit or only for the ones we
->> selected ?
-> =
+> unlike other tracepoint events. Therefore, we interact with them at the c=
+hannel level. If we can find a way to send =
 
-> Just for the ones selected.
-> =
+> the disable-event command directly to the channel, with the new "u.syscal=
+l.disable" flag I added to the lttng ABI, =
 
->> Is it renamed ?
-> =
-
-> Yes, I'm planning to rename it, given that I want to extract the
-> system call output parameter at syscall exit anyway, so we need to
-> specialize this event.
-> =
-
->>
->> For the CLI usage, I think having a coma separated list would be more
->> friendly that having to enable each syscall in a separate command, but
->> I'm sure it is easy to have that.
-> =
-
-> Perhaps this already works actually, I have not tried it though.
-
-No reason this shouldn=92t work out of the box :).
-You're inside the event striping loop so everything is fine.
-
-Cheers!
-
-
-> =
-
-> Thanks for the feedback!
-> =
-
+>we should be able to use disable-event with syscalls.
+>
+> However, I'm not sure how deeply we need to modify lttng-tools for this.
+>
 > Mathieu
-> =
 
->>
->> Thanks !
->>
->> Julien
->>
->>>
->>> To use it:
->>>
->>> #ex 1
->>> lttng create
->>> lttng enable-event -k --syscall sys_open
->>> lttng enable-event -k --syscall sys_close
->>> lttng start; sleep 3; lttng stop; lttng view
->>> -> should only show sys_open and sys_close syscalls.
->>>
->>> #ex 2
->>> lttng create
->>> lttng enable-event -k --syscall -a
->>> lttng start; sleep 3; lttng stop; lttng view
->>> -> should show all syscalls
->>>
->>> #ex 3
->>> lttng create
->>> lttng enable-event -k --syscall -a
->>> lttng enable-event -k --syscall sys_open
->>> -> returns that the system call is already enabled.
->>> lttng start; sleep 3; lttng stop; lttng view
->>> -> should show all syscalls
->>>
->>> #ex 4
->>> lttng create
->>> lttng enable-event -k --syscall sys_open
->>> lttng enable-event -k --syscall -a
->>> lttng start; sleep 3; lttng stop; lttng view
->>> -> should show all syscalls
->>>
->>> ### Now about the disable-event part (not implemented in tools yet)
->>> ### This is the behavior I would like:
->>>
->>> #ex 5 (TODO)
->>> lttng create
->>> lttng enable-event -k --syscall -a
->>> lttng disable-event -k --syscall sys_open
->>> lttng start; sleep 3; lttng stop; lttng view
->>> -> should show all syscalls except sys_open
->>>
->>> #ex 6 (TODO)
->>> lttng create
->>> lttng disable-event -k --syscall sys_open
->>> -> should fail.
->>>
->>> For the curious, I implement this "filtering" with a per-channel
->>> bitmap that represents which system calls to trace. We might need
->>> to double-check that I got the NR_syscalls right for each
->>> architecture, especially those with compatibility system call
->>> tables (64-bit archs having 32-bit compat syscalls). For the common
->>> case (all system calls are traced), the pointer to the array is NULL,
->>> so this is a simple pointer check, which is less expensive cache-wise
->>> than looking up within the bitmap.
->>>
->>> As far as lttng-tools is concerned, what is a bit different is that
->>> system calls don't each get a file descriptor assigned, unlike other
->>> tracepoint events. Therefore, we interact with them at the channel
->>> level. If we can find a way to send the disable-event command directly
->>> to the channel, with the new "u.syscall.disable" flag I added to the
->>> lttng ABI, we should be able to use disable-event with syscalls.
->>> However, I'm not sure how deeply we need to modify lttng-tools for
->>> this.
->>>
->>> Feedback is welcome,
->>>
->>> Thanks !
->>>
->>> Mathieu
->>>
->>
-> =
+   Why is the filter per-channel?  Last time I checked, syscalls could only=
+ be assigned once per session, therefore there would only be a need for a p=
+er-session filter bitmap.  Of course, if the intent is to allow syscalls to=
+ be potentially multiply assigned, like user-space events are, then this is=
+ the right way to go.
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
+re
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
