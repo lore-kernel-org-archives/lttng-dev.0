@@ -1,17 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Babeltrace 1.2.2
-Date: Tue, 22 Jul 2014 19:04:01 +0000 (UTC)
-Message-ID: <638816839.18364.1406055841907.JavaMail.zimbra__17007.5402748354$1406157220$gmane$org@efficios.com>
-References: <1716407469.18362.1406055814624.JavaMail.zimbra@efficios.com>
+From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+Subject: [PATCH lttng-tool] Fix: print version number even if on
+	a development git branch
+Date: Wed, 23 Jul 2014 14:38:20 -0400
+Message-ID: <1406140700-7627-1-git-send-email-jonathan.r.julien__44467.9985907443$1406168839$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from usevmg21.ericsson.net ([198.24.6.65])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XA5iK-0001KS-W7
- for lttng-dev@lists.lttng.org; Wed, 23 Jul 2014 19:12:50 -0400
-In-Reply-To: <1716407469.18362.1406055814624.JavaMail.zimbra@efficios.com>
+ (envelope-from <jonathan.rajotte-julien@ericsson.com>)
+ id 1XA8jq-0001eK-4f
+ for lttng-dev@lists.lttng.org; Wed, 23 Jul 2014 22:26:35 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,40 +20,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org, tiwg@multicore-association.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The Babeltrace project provides trace read and write libraries, as well
-as a trace converter. Plugins can be created for any trace format to
-allow its conversion to/from another trace format.
+The use of GIT_VERSION as a full replacement for FULL_NAME and
+discarding the VERSION macro does not indicate which version
+is lttng at.
 
-The main format expected to be converted to/from is the Common Trace
-Format (CTF). The default input format of the "babeltrace" command is
-CTF, and its default output format is a human-readable text log. The
-"babeltrace-log" command converts from a text log to a CTF trace.
+This able lttng to be more verbose about the overall version
+even if we are on a different git branch than master.
 
-Changelog:
+Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+---
+ include/Makefile.am    | 13 +------------
+ include/version.h.tmpl |  7 ++-----
+ 2 files changed, 3 insertions(+), 17 deletions(-)
 
-2014-07-22 Babeltrace 1.2.2
-        * Fix: Support out of tree builds in babeltrace
-        * Fix: mmap trace read the stream_id from the first packet
-        * Fix: check the lttng-relayd protocol version
-        * Fix: don't update the trace collection if no new streams were received
-        * Fix (Python bindings): Return a string if a sequence's element are chars
-        * Fix: don't use a return code in _bt_ctf_stream_append_discarded_events
-        * Fix: Report the sequence's length field's value as length
-        * Fix: Variable name typo in SequenceField and Event classes
-        * Fix python: remove weird char at the end of line
-        * Fix: add missing files to gitignore
-        * Fix: ctf-text: add missing double-quotes around enum tag
-        * Fix: Add missing lttng_live_should_quit checks
-        * Fix: Report errors occuring in lttng_live_read
-
-Project website: http://www.efficios.com/babeltrace
-Download link: http://www.efficios.com/files/babeltrace/
-CTF specification: http://www.efficios.com/ctf
-
+diff --git a/include/Makefile.am b/include/Makefile.am
+index d40cb4a..ab13d86 100644
+--- a/include/Makefile.am
++++ b/include/Makefile.am
+@@ -47,19 +47,8 @@ version.h:
+ 			## don't want to update the file if it is already up to date
+ 			##
+ 			if [ $$(grep -cE "^#define GIT_VERSION \"?$${git_version}\"?$$" "$${version_h}") -eq 0 ]; then \
+-				if [ $$(grep -c "^#define GIT_VERSION" "$${version_h}") -gt 0 ]; then \
+-					##
+-					## If there is already a GIT_VERSION defined,
+-					## we just replace it by the new version
+-					##
++					## Replace it by the new version
+ 					sed -i "s'^#define GIT_VERSION.*$$'#define GIT_VERSION \"$${git_version}\"'" "$${version_h}"; \
+-				else \
+-					##
+-					## Else, we add a GIT_VERSION define
+-					## containing our new version.
+-					##
+-					sed -i "s'^\(#define VERSION_H.*\)$$'\1\n\n#define GIT_VERSION \"$${git_version}\"'" "$${version_h}"; \
+-				fi; \
+ 			fi; \
+ 		fi; \
+ 	fi)
+diff --git a/include/version.h.tmpl b/include/version.h.tmpl
+index 2cab733..2d69456 100644
+--- a/include/version.h.tmpl
++++ b/include/version.h.tmpl
+@@ -20,13 +20,10 @@
+ #ifndef VERSION_H
+ #define VERSION_H
+ 
++#define GIT_VERSION ""
+ /*
+  * Define the macro containing the FULL version
+  */
+-#ifdef GIT_VERSION
+-#define FULL_VERSION "" GIT_VERSION
+-#else /* GIT_VERSION */
+-#define FULL_VERSION "" VERSION
+-#endif /* GIT_VERSION */
++#define FULL_VERSION ""VERSION " " GIT_VERSION
+ 
+ #endif /* VERSION_H */
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.0.0
