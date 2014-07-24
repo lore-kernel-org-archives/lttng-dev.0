@@ -1,85 +1,145 @@
-From: Jiri Olsa <jolsa@redhat.com>
-Subject: Re: [RFC] perf to ctf converter
-Date: Thu, 24 Jul 2014 16:46:37 +0200
-Message-ID: <20140724144637.GE7652@krava.brq.redhat.com>
-References: <20140603163640.GA16279@linutronix.de>
- <20140714141533.GD17761@krava.redhat.com>
- <20140721171151.GA12969@linutronix.de>
- <20140721183530.GA28673@krava.redhat.com>
- <53CE0B89.7030400@linutronix.de>
- <20140722112535.GA29750@krava.redhat.com>
- <53CE4BAF.2010906@linutronix.de>
- <53CE67B0.7020406@linutronix.de>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@ericsson.com>
+Subject: Re: Problem with perf:thread in 2.5.0
+Date: Thu, 24 Jul 2014 11:01:36 -0400
+Message-ID: <53D11FD0.8060400__7309.29826754636$1406214168$gmane$org@ericsson.com>
+References: <CAO6Ho0fvPCgt6vK3S1DjsjfnRymRG=NUDSb8M_gJPdOjJ8UP0g@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <53CE67B0.7020406@linutronix.de>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, acme@kernel.org, namhyung.kim@lge.com, tzanussi@gmail.com
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: quoted-printable
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from usevmg21.ericsson.net ([198.24.6.65])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <jonathan.rajotte-julien@ericsson.com>)
+ id 1XAKWd-0006Jb-Fa
+ for lttng-dev@lists.lttng.org; Thu, 24 Jul 2014 11:01:48 -0400
+In-Reply-To: <CAO6Ho0fvPCgt6vK3S1DjsjfnRymRG=NUDSb8M_gJPdOjJ8UP0g@mail.gmail.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: Evgeniy Ivanov <i@eivanov.com>, lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Tue, Jul 22, 2014 at 03:31:28PM +0200, Sebastian Andrzej Siewior wrote:
+Hi!
 
-SNIP
+> Hi!
+> =
 
-> 
-> So the strings look good now. I also renamed "pid" to "common_pid" because
-> 
-> [06:37:09.885385418] (+0.017541187) sched:sched_wakeup: { cpu_id = 0 },
-> { common_pid = 179, common_tid = 179, common_comm = ":179", comm = "ls",
-> pid = 14068, prio = 120, success = 1, target_cpu = 5 }
-> 
-> that thing brings its own pid & comm.
-> 
-> And while looking at the data types and dropped that & LONG since it is
-> not set for 64bit data types as I assumed. I do now consider ->size and
-> the result is
-> 
-> [06:37:09.867838634] (+0.000253941) sched:sched_stat_runtime: { cpu_id =
-> 0 }, { common_pid = 14068, common_tid = 14068, common_comm = "ls", comm
-> = "ls", pid = 14068, runtime = 2020750, vruntime = 76395575003 }
-> 
-> that means vruntime is 64bit as it should and decimal might be nice.
-> \o/
-> 
-> Sebastian
+> I use lttng-2.5.0 (tools, modules, =85) and linux-3.8.13. When I try to a=
+dd context for performance counters I get the following error:
+> =
 
-hi,
-I made some changes over your branch:
-  git://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-  perf/ctf_convert
+>> lttng add-context -u -t perf:cpu:cpu-cycles
+> Error: perf:cpu:cpu-cycles: UST invalid context
+> Warning: Some command(s) went wrong
 
-following patches:
-(needs to be prettyfied, but hopefuly works and ilustrate the point)
-  perf tools: Iterate both common_fields and fields for tracepoit
-  perf tools: Use sample_type for generic fields
+Well i think we will both agree that the help page does not help very much.=
+(Should fix that)
 
-we now add all fields available in the perf.data (via perf_event_attr:sample_type)
-and then for tracepoints we add both common_types and types fields
+If we go deep down into the code we get the supported context for UST domai=
+n. :)
 
-I'm not sure we want to store made up data like symbol information,
-which could be obtained from IP anyway - how does babeltrace or any
-other CTF viewer do that?
+Ust domain support 6 type of context:
+LTTNG_EVENT_CONTEXT_VTID
+LTTNG_EVENT_CONTEXT_VPID
+LTTNG_UST_CONTEXT_VPID
+LTTNG_EVENT_CONTEXT_PTHREAD_ID
+LTTNG_EVENT_CONTEXT_PROCNAME
+LTTNG_EVENT_CONTEXT_IP
+LTTNG_EVENT_CONTEXT_PERF_THREAD_COUNTER
 
+Well this does help a little ... If we dig a little deeper and search aroun=
+d we get more info and see that an enum from "./lttng-tools/include/lttng/e=
+vent.h" lttng_event_context_t maps to another one in the lttng-tool side ( =
+context_type in add_context.c)
 
----
-However I'm still not convinced 100% this is the way we want
-to go with this. What we do now is:
-  - read/parse perf.data events and convert them into ctf events
+*Important Part*
+So if we decrypt the macros and functions in add-context.c, we get that the=
+ following contexts are supported for UST:
 
-What I/we do originally wanted to do was to use CTF to describe
-perf event as is defined via perf interface, so we dont need to
-parse data stream, but just store it.
+vpid
+vtid
+pthread_id
+procname
+ip
 
-This would be handy/needed for CTF record support, where we _want_
-to store raw data from kernel and not parse it before that.
+perf:thread:cpu-cycles
+perf:thread:cycles
+perf:thread:stalled-cycles-frontend
+perf:thread:idle-cycles-frontend
+perf:thread:stalled-cycles-backend
+perf:thread:idle-cycles-backend
+perf:thread:instructions
+perf:thread:cache-references
+perf:thread:cache-misses
+perf:thread:branch-instructions
+perf:thread:branches
+perf:thread:branch-misses
+perf:thread:bus-cycles
+    =
 
-I'll recheck and get back with issues I found with this approach.
+perf:thread:L1-dcache
+perf:thread:L1-icache
+perf:thread:LLC
+perf:thread:dTLB
+perf:thread:iTLB-loads
+perf:thread:iTLB-load-misses                                               =
+                                                                           =
+                     =
 
-Meanwhile I think we can continue with what we have now,
-I just wanted to share the other approach with you ;-)
+perf:thread:branch-loads
+perf:thread:branch-load-misses
+        =
 
-thanks,
-jirka
+perf:thread:cpu-clock
+perf:thread:task-clock
+perf:thread:page-fault
+perf:thread:faults
+perf:thread:major-faults
+perf:thread:minor-faults
+perf:thread:context-switches
+perf:thread:cs
+perf:thread:cpu-migrations
+perf:thread:migrations
+perf:thread:alignment-faults
+perf:thread:emulation-faults
+
+**(TL;DR : perf:cpu:cpu-cycles is not in the list)**
+
+If you want perf:cpu:cpu-cycles you will need a kernel tracing domain.
+
+Even if it make sense that a ust tracing session cannot touch hardware stuf=
+f it won=92t hurt to be more explicit about it. :).
+
+> =
+
+> We have another machine with 2.5.0 (modules are not installed though) and=
+ adding perf:cpu:cpu-cycles works fine, but it is always zero in results.
+
+As for this, I cannot explain why lttng-tool does not complain on adding th=
+e context.
+You can open a bug here http://bugs.lttng.org/projects/lttng-tools (you wil=
+l need to create an account and sign in)
+
+Cheers,
+Jonathan
+
+> =
+
+> -- =
+
+> Cheers,
+> Evgeniy
+> =
+
+> =
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> =
