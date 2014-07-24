@@ -1,17 +1,16 @@
-From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
-Subject: [PATCH lttng-tool] Fix: print version number even if on
-	a development git branch
-Date: Wed, 23 Jul 2014 14:38:20 -0400
-Message-ID: <1406140700-7627-1-git-send-email-jonathan.r.julien__44467.9985907443$1406168839$gmane$org@gmail.com>
+From: Evgeniy Ivanov <i@eivanov.com>
+Subject: Problem with perf:thread in 2.5.0
+Date: Thu, 24 Jul 2014 12:23:15 +0400
+Message-ID: <CAO6Ho0fvPCgt6vK3S1DjsjfnRymRG=NUDSb8M_gJPdOjJ8UP0g__1760.07192717424$1406190246$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1962620894=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
+Received: from mail-ig0-f174.google.com ([209.85.213.174])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@ericsson.com>)
- id 1XA8jq-0001eK-4f
- for lttng-dev@lists.lttng.org; Wed, 23 Jul 2014 22:26:35 -0400
+ (envelope-from <lolkaantimat@gmail.com>) id 1XAEJ7-0003i8-Kb
+ for lttng-dev@lists.lttng.org; Thu, 24 Jul 2014 04:23:23 -0400
+Received: by mail-ig0-f174.google.com with SMTP id c1so6194258igq.13
+ for <lttng-dev@lists.lttng.org>; Thu, 24 Jul 2014 01:23:16 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,66 +19,61 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-The use of GIT_VERSION as a full replacement for FULL_NAME and
-discarding the VERSION macro does not indicate which version
-is lttng at.
+--===============1962620894==
+Content-Type: multipart/alternative; boundary=047d7bdc17421bdd9c04feec2b3d
 
-This able lttng to be more verbose about the overall version
-even if we are on a different git branch than master.
+--047d7bdc17421bdd9c04feec2b3d
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
----
- include/Makefile.am    | 13 +------------
- include/version.h.tmpl |  7 ++-----
- 2 files changed, 3 insertions(+), 17 deletions(-)
+Hi!
 
-diff --git a/include/Makefile.am b/include/Makefile.am
-index d40cb4a..ab13d86 100644
---- a/include/Makefile.am
-+++ b/include/Makefile.am
-@@ -47,19 +47,8 @@ version.h:
- 			## don't want to update the file if it is already up to date
- 			##
- 			if [ $$(grep -cE "^#define GIT_VERSION \"?$${git_version}\"?$$" "$${version_h}") -eq 0 ]; then \
--				if [ $$(grep -c "^#define GIT_VERSION" "$${version_h}") -gt 0 ]; then \
--					##
--					## If there is already a GIT_VERSION defined,
--					## we just replace it by the new version
--					##
-+					## Replace it by the new version
- 					sed -i "s'^#define GIT_VERSION.*$$'#define GIT_VERSION \"$${git_version}\"'" "$${version_h}"; \
--				else \
--					##
--					## Else, we add a GIT_VERSION define
--					## containing our new version.
--					##
--					sed -i "s'^\(#define VERSION_H.*\)$$'\1\n\n#define GIT_VERSION \"$${git_version}\"'" "$${version_h}"; \
--				fi; \
- 			fi; \
- 		fi; \
- 	fi)
-diff --git a/include/version.h.tmpl b/include/version.h.tmpl
-index 2cab733..2d69456 100644
---- a/include/version.h.tmpl
-+++ b/include/version.h.tmpl
-@@ -20,13 +20,10 @@
- #ifndef VERSION_H
- #define VERSION_H
- 
-+#define GIT_VERSION ""
- /*
-  * Define the macro containing the FULL version
-  */
--#ifdef GIT_VERSION
--#define FULL_VERSION "" GIT_VERSION
--#else /* GIT_VERSION */
--#define FULL_VERSION "" VERSION
--#endif /* GIT_VERSION */
-+#define FULL_VERSION ""VERSION " " GIT_VERSION
- 
- #endif /* VERSION_H */
--- 
-2.0.0
+I use lttng-2.5.0 (tools, modules, =E2=80=A6) and linux-3.8.13. When I try =
+to add
+context for performance counters I get the following error:
+
+> lttng add-context -u -t perf:cpu:cpu-cycles
+Error: perf:cpu:cpu-cycles: UST invalid context
+Warning: Some command(s) went wrong
+
+We have another machine with 2.5.0 (modules are not installed though) and
+adding perf:cpu:cpu-cycles works fine, but it is always zero in results.
+
+
+--=20
+Cheers,
+Evgeniy
+
+--047d7bdc17421bdd9c04feec2b3d
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi!<div><br></div><div>I use lttng-2.5.0 (tools, modules, =
+=E2=80=A6) and linux-3.8.13. When I try to add context for performance coun=
+ters I get the following error:</div><div><div><br></div><div>&gt; lttng ad=
+d-context -u -t perf:cpu:cpu-cycles</div>
+<div>Error: perf:cpu:cpu-cycles: UST invalid context</div><div>Warning: Som=
+e command(s) went wrong</div></div><div><br></div><div>We have another mach=
+ine with 2.5.0 (modules are not installed though) and adding perf:cpu:cpu-c=
+ycles works fine, but it is always zero in results.<br clear=3D"all">
+<div><br></div><div><br></div>-- <br>Cheers,<br>Evgeniy
+</div></div>
+
+--047d7bdc17421bdd9c04feec2b3d--
+
+
+--===============1962620894==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1962620894==--
