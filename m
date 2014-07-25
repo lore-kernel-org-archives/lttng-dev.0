@@ -1,135 +1,72 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@ericsson.com>
-Subject: Re: Problem with perf:thread in 2.5.0
-Date: Thu, 24 Jul 2014 17:07:57 -0400
-Message-ID: <53D175AD.4030904__24781.9064105444$1406236150$gmane$org@ericsson.com>
-References: <CAO6Ho0fvPCgt6vK3S1DjsjfnRymRG=NUDSb8M_gJPdOjJ8UP0g@mail.gmail.com>	<53D11FD0.8060400@ericsson.com>
- <CAO6Ho0c3TsMVAC5P=oDWkwmfoH4sKeRBc=np+w19CV2U=8AEGQ@mail.gmail.com>
- <53D170A2.6010103@ericsson.com>
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [RFC] perf to ctf converter
+Date: Fri, 25 Jul 2014 10:37:16 +0200
+Message-ID: <53D2173C.7090603@linutronix.de>
+References: <20140603163640.GA16279@linutronix.de> <20140714141533.GD17761@krava.redhat.com> <20140721171151.GA12969@linutronix.de> <20140721183530.GA28673@krava.redhat.com> <53CE0B89.7030400@linutronix.de> <20140722112535.GA29750@krava.redhat.com> <53CE4BAF.2010906@linutronix.de> <53CE67B0.7020406@linutronix.de> <20140724144637.GE7652@krava.brq.redhat.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg20.ericsson.net ([198.24.6.45])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@ericsson.com>)
- id 1XAQFA-0008KG-56
- for lttng-dev@lists.lttng.org; Thu, 24 Jul 2014 17:08:10 -0400
-In-Reply-To: <53D170A2.6010103@ericsson.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-kernel-owner@vger.kernel.org>
+In-Reply-To: <20140724144637.GE7652@krava.brq.redhat.com>
+Sender: linux-kernel-owner@vger.kernel.org
+To: Jiri Olsa <jolsa@redhat.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, acme@kernel.org, namhyung.kim@lge.com, tzanussi@gmail.com
 List-Id: lttng-dev@lists.lttng.org
 
-CgpPbiAwNy8yNC8yMDE0IDA0OjQ2IFBNLCBKb25hdGhhbiBSYWpvdHRlLUp1bGllbiB3cm90ZToK
-PiAKPiBIZXkgRXZnZW5peSwKPiAKPiAKPj4gSm9uYXRoYW4sIHNvcnJ5LCBJJ3ZlIGNvcGllZCB3
-cm9uZyBvdXRwdXQsIG9yaWdpbmFsIGNvbW1hbmQgd2FzIHdpdGggcGVyZjp0aHJlYWQ6Y3B1LWN5
-Y2xlczoKPj4KPj4+IGx0dG5nIGFkZC1jb250ZXh0IC11IC10IHZwaWQgLXQgcGVyZjp0aHJlYWQ6
-Y3B1LWN5Y2xlcyAtdCBwZXJmOnRocmVhZDppbnN0cnVjdGlvbnMgLXQgcGVyZjp0aHJlYWQ6Y2Fj
-aGUtbWlzc2VzCj4+IFNlc3Npb24gYXV0by0yMDE0MDcyNC0wOTE1MjQgY3JlYXRlZC4KPj4gVHJh
-Y2VzIHdpbGwgYmUgd3JpdHRlbiBpbiAvZXhwb3J0L2hvbWUvZWl2YS9sdHRuZy10cmFjZXMvYXV0
-by0yMDE0MDcyNC0wOTE1MjQKPj4gVVNUIGNvbnRleHQgdnBpZCBhZGRlZCB0byBhbGwgY2hhbm5l
-bHMKPj4gRXJyb3I6IHBlcmY6dGhyZWFkOmNwdS1jeWNsZXM6IFVTVCBpbnZhbGlkIGNvbnRleHQK
-Pj4gRXJyb3I6IHBlcmY6dGhyZWFkOmluc3RydWN0aW9uczogVVNUIGludmFsaWQgY29udGV4dAo+
-PiBFcnJvcjogcGVyZjp0aHJlYWQ6Y2FjaGUtbWlzc2VzOiBVU1QgaW52YWxpZCBjb250ZXh0Cj4+
-IFdhcm5pbmc6IFNvbWUgY29tbWFuZChzKSB3ZW50IHdyb25nCj4+IFVTVCBldmVudCBlaXZhX3Rl
-c3Q6KiBjcmVhdGVkIGluIGNoYW5uZWwgY2hhbm5lbDAKPiAKPiBXZWlyZCwgaXQgd29ya3Mgb24g
-bXkgc2lkZSAoYyZwKSB3aXRoIGxhdGVzdCB2ZXJzaW9uIHdpdGNoIGlzIDIuNSBzdGFibGUgOlAu
-CgpJIGp1c3QgdGVzdGVkIGEgZnJlc2ggaW5zdGFsbCBmcm9tIHN0YWJsZSBwcGEgKGh0dHBzOi8v
-bGF1bmNocGFkLm5ldC9+bHR0bmcvK2FyY2hpdmUvdWJ1bnR1L3BwYSkuCgphbmQgZXZlcnl0aGlu
-ZyBzZWVtcyB0byB3b3JrIGZpbmUuIEN5Y2xlLGNhY2hlIGV0Yy4KCldlbGwsIGtlZXAgdXMgdXAg
-dG8gZGF0ZS4KCkNoZWVycwpKb25hdGhhbgoKPiAKPj4KPj4+IGx0dG5nIC0tdmVyc2lvbgo+PiBs
-dHRuZyAoTFRUbmcgVHJhY2UgQ29udHJvbCkgMi41LjAgLSBGdW1pc3RlcmllCj4gCj4gRnJvbSB0
-aGlzIG91dHB1dCBJIGd1ZXNzIHlvdSBhcmUgd29ya2luZyB3aXRoIHRoZSBsdHRuZyBwYWNrYWdl
-IGFuZCBub3QgdGhlIHNvdXJjZSBmcm9tIGdpdC4gSSBkb24ndCB0aGluayBwYWNrYWdpbmcgaXMg
-dGhlIHByb2JsZW0gaGVyZSBidXQgbGV0IGp1c3Qga2VlcCB0aGF0IGluIG1pbmQuCj4gV2hhdCBk
-aXN0IGFyZSB5b3Ugb24gPwo+IAo+IEknbSBzdXJlIHlvdSBhbHJlYWR5IGRvbmUgaXQgYSB0aG91
-c2FuZCB0aW1lIGJ1dCBjb3VsZCB5b3UganVzdCBydW4gdGhlc2UgYW5kIHNlbmQgdGhlIG91dHB1
-dCA/Cj4gCj4gRmlyc3QgbWFrZSBzdXJlIG5vIGx0dG5nLXNlc3Npb25kIGlzIHJ1bm5pbmcgdGhl
-biBsYXVuY2g6Cj4gCj4gbHR0bmctc2Vzc2lvbmQgLXZ2dgo+IAo+IEluIGEgc2VwYXJhdGUgdGVy
-bWluYWw6Cj4gCj4gbHR0bmcgZGVzdHJveSAtYSAgLy8gSnVzdCBpbiBjYXNlCj4gbHR0bmcgLXZ2
-diBjcmVhdGUgdGVzdAo+IAo+IGx0dG5nIC12dnYgYWRkLWNvbnRleHQgLXUgLXQgdnBpZCAtdCBw
-ZXJmOnRocmVhZDpjcHUtY3ljbGVzIC10IHBlcmY6dGhyZWFkOmluc3RydWN0aW9ucyAtdCBwZXJm
-OnRocmVhZDpjYWNoZS1taXNzZXMKPiAKPiBJZiB0aGlzIHdvcmssIHlvdSBjb3VsZCB0ZXN0IGlm
-IHlvdSBnZXQgdGhlIGRhdGEgb3IgemVyby4KPiAKPiBsdHRuZyBlbmFibGUtZXZlbnQgLXUgLWEg
-LXMgdGVzdCAKPiAKPiBsdHRuZyBzdGFydCAKPiAvLyBSdW4gdGhlIHByb2dyYW0KPiAKPiBsdHRu
-ZyBzdG9wCj4gCj4gTWFrZSBzdXJlIHRvIHNlbmQgdGhlIG91dHB1dCBmcm9tIGx0dG5nLXNlc3Np
-b25kIC12dnYuCj4gCj4gCj4gQ2hlZXJzLAo+IEpvbmF0aGFuCj4gCj4+Cj4+IExhdGVyIEkndmUg
-dHJpZWQgY3B1LWN5Y2xlcyBzZXBhcmF0ZWx5IGFuZCB0aGVuIGFjY2lkZW50YWxseSBzd2l0Y2hl
-ZCB0byBwZXJmOmNwdS4gTm93IGV2ZXJ5dGhpbmcgc3RhcnRlZCB0byB3b3JrLCBidXQgbm90aGlu
-ZyBjaGFuZ2VkIHNpbmNlIHRoZW4uIFRob3VnaCBkaWRuJ3QgY2hlY2sgaWYgd2Ugc3RpbGwgZ2V0
-IHplcm9lcyBvbiBhbm90aGVyIG1hY2hpbmUuCj4+Cj4+Cj4+IE9uIFRodSwgSnVsIDI0LCAyMDE0
-IGF0IDc6MDEgUE0sIEpvbmF0aGFuIFJham90dGUtSnVsaWVuIDxqb25hdGhhbi5yYWpvdHRlLWp1
-bGllbkBlcmljc3Nvbi5jb20gPG1haWx0bzpqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlcmljc3Nv
-bi5jb20+PiB3cm90ZToKPj4KPj4gICAgIEhpIQo+Pgo+PiAgICAgPiBIaSEKPj4gICAgID4KPj4g
-ICAgID4gSSB1c2UgbHR0bmctMi41LjAgKHRvb2xzLCBtb2R1bGVzLCDigKYpIGFuZCBsaW51eC0z
-LjguMTMuIFdoZW4gSSB0cnkgdG8gYWRkIGNvbnRleHQgZm9yIHBlcmZvcm1hbmNlIGNvdW50ZXJz
-IEkgZ2V0IHRoZSBmb2xsb3dpbmcgZXJyb3I6Cj4+ICAgICA+Cj4+ICAgICA+PiBsdHRuZyBhZGQt
-Y29udGV4dCAtdSAtdCBwZXJmOmNwdTpjcHUtY3ljbGVzCj4+ICAgICA+IEVycm9yOiBwZXJmOmNw
-dTpjcHUtY3ljbGVzOiBVU1QgaW52YWxpZCBjb250ZXh0Cj4+ICAgICA+IFdhcm5pbmc6IFNvbWUg
-Y29tbWFuZChzKSB3ZW50IHdyb25nCj4+Cj4+ICAgICBXZWxsIGkgdGhpbmsgd2Ugd2lsbCBib3Ro
-IGFncmVlIHRoYXQgdGhlIGhlbHAgcGFnZSBkb2VzIG5vdCBoZWxwIHZlcnkgbXVjaC4oU2hvdWxk
-IGZpeCB0aGF0KQo+Pgo+PiAgICAgSWYgd2UgZ28gZGVlcCBkb3duIGludG8gdGhlIGNvZGUgd2Ug
-Z2V0IHRoZSBzdXBwb3J0ZWQgY29udGV4dCBmb3IgVVNUIGRvbWFpbi4gOikKPj4KPj4gICAgIFVz
-dCBkb21haW4gc3VwcG9ydCA2IHR5cGUgb2YgY29udGV4dDoKPj4gICAgIExUVE5HX0VWRU5UX0NP
-TlRFWFRfVlRJRAo+PiAgICAgTFRUTkdfRVZFTlRfQ09OVEVYVF9WUElECj4+ICAgICBMVFROR19V
-U1RfQ09OVEVYVF9WUElECj4+ICAgICBMVFROR19FVkVOVF9DT05URVhUX1BUSFJFQURfSUQKPj4g
-ICAgIExUVE5HX0VWRU5UX0NPTlRFWFRfUFJPQ05BTUUKPj4gICAgIExUVE5HX0VWRU5UX0NPTlRF
-WFRfSVAKPj4gICAgIExUVE5HX0VWRU5UX0NPTlRFWFRfUEVSRl9USFJFQURfQ09VTlRFUgo+Pgo+
-PiAgICAgV2VsbCB0aGlzIGRvZXMgaGVscCBhIGxpdHRsZSAuLi4gSWYgd2UgZGlnIGEgbGl0dGxl
-IGRlZXBlciBhbmQgc2VhcmNoIGFyb3VuZCB3ZSBnZXQgbW9yZSBpbmZvIGFuZCBzZWUgdGhhdCBh
-biBlbnVtIGZyb20gIi4vbHR0bmctdG9vbHMvaW5jbHVkZS9sdHRuZy9ldmVudC5oIiBsdHRuZ19l
-dmVudF9jb250ZXh0X3QgbWFwcyB0byBhbm90aGVyIG9uZSBpbiB0aGUgbHR0bmctdG9vbCBzaWRl
-ICggY29udGV4dF90eXBlIGluIGFkZF9jb250ZXh0LmMpCj4+Cj4+ICAgICAqSW1wb3J0YW50IFBh
-cnQqCj4+ICAgICBTbyBpZiB3ZSBkZWNyeXB0IHRoZSBtYWNyb3MgYW5kIGZ1bmN0aW9ucyBpbiBh
-ZGQtY29udGV4dC5jLCB3ZSBnZXQgdGhhdCB0aGUgZm9sbG93aW5nIGNvbnRleHRzIGFyZSBzdXBw
-b3J0ZWQgZm9yIFVTVDoKPj4KPj4gICAgIHZwaWQKPj4gICAgIHZ0aWQKPj4gICAgIHB0aHJlYWRf
-aWQKPj4gICAgIHByb2NuYW1lCj4+ICAgICBpcAo+Pgo+PiAgICAgcGVyZjp0aHJlYWQ6Y3B1LWN5
-Y2xlcwo+PiAgICAgcGVyZjp0aHJlYWQ6Y3ljbGVzCj4+ICAgICBwZXJmOnRocmVhZDpzdGFsbGVk
-LWN5Y2xlcy1mcm9udGVuZAo+PiAgICAgcGVyZjp0aHJlYWQ6aWRsZS1jeWNsZXMtZnJvbnRlbmQK
-Pj4gICAgIHBlcmY6dGhyZWFkOnN0YWxsZWQtY3ljbGVzLWJhY2tlbmQKPj4gICAgIHBlcmY6dGhy
-ZWFkOmlkbGUtY3ljbGVzLWJhY2tlbmQKPj4gICAgIHBlcmY6dGhyZWFkOmluc3RydWN0aW9ucwo+
-PiAgICAgcGVyZjp0aHJlYWQ6Y2FjaGUtcmVmZXJlbmNlcwo+PiAgICAgcGVyZjp0aHJlYWQ6Y2Fj
-aGUtbWlzc2VzCj4+ICAgICBwZXJmOnRocmVhZDpicmFuY2gtaW5zdHJ1Y3Rpb25zCj4+ICAgICBw
-ZXJmOnRocmVhZDpicmFuY2hlcwo+PiAgICAgcGVyZjp0aHJlYWQ6YnJhbmNoLW1pc3Nlcwo+PiAg
-ICAgcGVyZjp0aHJlYWQ6YnVzLWN5Y2xlcwo+Pgo+PiAgICAgcGVyZjp0aHJlYWQ6TDEtZGNhY2hl
-Cj4+ICAgICBwZXJmOnRocmVhZDpMMS1pY2FjaGUKPj4gICAgIHBlcmY6dGhyZWFkOkxMQwo+PiAg
-ICAgcGVyZjp0aHJlYWQ6ZFRMQgo+PiAgICAgcGVyZjp0aHJlYWQ6aVRMQi1sb2Fkcwo+PiAgICAg
-cGVyZjp0aHJlYWQ6aVRMQi1sb2FkLW1pc3Nlcwo+PiAgICAgcGVyZjp0aHJlYWQ6YnJhbmNoLWxv
-YWRzCj4+ICAgICBwZXJmOnRocmVhZDpicmFuY2gtbG9hZC1taXNzZXMKPj4KPj4gICAgIHBlcmY6
-dGhyZWFkOmNwdS1jbG9jawo+PiAgICAgcGVyZjp0aHJlYWQ6dGFzay1jbG9jawo+PiAgICAgcGVy
-Zjp0aHJlYWQ6cGFnZS1mYXVsdAo+PiAgICAgcGVyZjp0aHJlYWQ6ZmF1bHRzCj4+ICAgICBwZXJm
-OnRocmVhZDptYWpvci1mYXVsdHMKPj4gICAgIHBlcmY6dGhyZWFkOm1pbm9yLWZhdWx0cwo+PiAg
-ICAgcGVyZjp0aHJlYWQ6Y29udGV4dC1zd2l0Y2hlcwo+PiAgICAgcGVyZjp0aHJlYWQ6Y3MKPj4g
-ICAgIHBlcmY6dGhyZWFkOmNwdS1taWdyYXRpb25zCj4+ICAgICBwZXJmOnRocmVhZDptaWdyYXRp
-b25zCj4+ICAgICBwZXJmOnRocmVhZDphbGlnbm1lbnQtZmF1bHRzCj4+ICAgICBwZXJmOnRocmVh
-ZDplbXVsYXRpb24tZmF1bHRzCj4+Cj4+ICAgICAqKihUTDtEUiA6IHBlcmY6Y3B1OmNwdS1jeWNs
-ZXMgaXMgbm90IGluIHRoZSBsaXN0KSoqCj4+Cj4+ICAgICBJZiB5b3Ugd2FudCBwZXJmOmNwdTpj
-cHUtY3ljbGVzIHlvdSB3aWxsIG5lZWQgYSBrZXJuZWwgdHJhY2luZyBkb21haW4uCj4+Cj4+ICAg
-ICBFdmVuIGlmIGl0IG1ha2Ugc2Vuc2UgdGhhdCBhIHVzdCB0cmFjaW5nIHNlc3Npb24gY2Fubm90
-IHRvdWNoIGhhcmR3YXJlIHN0dWZmIGl0IHdvbuKAmXQgaHVydCB0byBiZSBtb3JlIGV4cGxpY2l0
-IGFib3V0IGl0LiA6KS4KPj4KPj4gICAgID4KPj4gICAgID4gV2UgaGF2ZSBhbm90aGVyIG1hY2hp
-bmUgd2l0aCAyLjUuMCAobW9kdWxlcyBhcmUgbm90IGluc3RhbGxlZCB0aG91Z2gpIGFuZCBhZGRp
-bmcgcGVyZjpjcHU6Y3B1LWN5Y2xlcyB3b3JrcyBmaW5lLCBidXQgaXQgaXMgYWx3YXlzIHplcm8g
-aW4gcmVzdWx0cy4KPj4KPj4gICAgIEFzIGZvciB0aGlzLCBJIGNhbm5vdCBleHBsYWluIHdoeSBs
-dHRuZy10b29sIGRvZXMgbm90IGNvbXBsYWluIG9uIGFkZGluZyB0aGUgY29udGV4dC4KPj4gICAg
-IFlvdSBjYW4gb3BlbiBhIGJ1ZyBoZXJlIGh0dHA6Ly9idWdzLmx0dG5nLm9yZy9wcm9qZWN0cy9s
-dHRuZy10b29scyAoeW91IHdpbGwgbmVlZCB0byBjcmVhdGUgYW4gYWNjb3VudCBhbmQgc2lnbiBp
-bikKPj4KPj4gICAgIENoZWVycywKPj4gICAgIEpvbmF0aGFuCj4+Cj4+ICAgICA+Cj4+ICAgICA+
-IC0tCj4+ICAgICA+IENoZWVycywKPj4gICAgID4gRXZnZW5peQo+PiAgICAgPgo+PiAgICAgPgo+
-PiAgICAgPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+
-PiAgICAgPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+ICAgICA+IGx0dG5nLWRldkBsaXN0cy5s
-dHRuZy5vcmcgPG1haWx0bzpsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPgo+PiAgICAgPiBodHRw
-Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4g
-ICAgID4KPj4KPj4KPj4KPj4KPj4gLS0gCj4+IENoZWVycywKPj4gRXZnZW5peQo+IAo+IAo+IF9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2
-IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMu
-bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPiAKCgpfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGlu
-ZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9j
-Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+On 07/24/2014 04:46 PM, Jiri Olsa wrote:
+> hi,
+
+Hi,
+
+> I made some changes over your branch:
+>   git://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+>   perf/ctf_convert
+> 
+> following patches:
+> (needs to be prettyfied, but hopefuly works and ilustrate the point)
+>   perf tools: Iterate both common_fields and fields for tracepoit
+>   perf tools: Use sample_type for generic fields
+> 
+> we now add all fields available in the perf.data (via perf_event_attr:sample_type)
+> and then for tracepoints we add both common_types and types fields
+> 
+> I'm not sure we want to store made up data like symbol information,
+> which could be obtained from IP anyway - how does babeltrace or any
+> other CTF viewer do that?
+
+This is probably for Mathieu best to answer. I *think* that it records
+pointers and does not resolve symbols if possible.
+
+I assumed it to be a good thing to do because you don't get the symbols
+anymore once the library/binary is upgraded unless you look for the old
+files. But then the very same problem you have perf since it does not
+record the symbol.
+So we could drop the symbol resolution but then we would have to teach
+babeltrace and friends to resolve it.
+
+> ---
+> However I'm still not convinced 100% this is the way we want
+> to go with this. What we do now is:
+>   - read/parse perf.data events and convert them into ctf events
+> 
+> What I/we do originally wanted to do was to use CTF to describe
+> perf event as is defined via perf interface, so we dont need to
+> parse data stream, but just store it.
+> 
+> This would be handy/needed for CTF record support, where we _want_
+> to store raw data from kernel and not parse it before that.
+> 
+> I'll recheck and get back with issues I found with this approach.
+
+Okay.
+
+> Meanwhile I think we can continue with what we have now,
+
+Good :)
+
+> I just wanted to share the other approach with you ;-)
+> 
+> thanks,
+> jirka
+
+Sebastian
