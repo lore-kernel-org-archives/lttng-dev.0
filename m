@@ -1,21 +1,15 @@
-From: Evgeniy Ivanov <i@eivanov.com>
-Subject: Re: Problem with perf:thread in 2.5.0
-Date: Fri, 25 Jul 2014 23:33:56 +0400
-Message-ID: <CAO6Ho0fY==DNxF08VjOWq7fzKEzHiCChBpf=UXT6-T0YrSFECQ__29654.9000930556$1406316892$gmane$org@mail.gmail.com>
-References: <CAO6Ho0fvPCgt6vK3S1DjsjfnRymRG=NUDSb8M_gJPdOjJ8UP0g@mail.gmail.com>
- <53D11FD0.8060400@ericsson.com>
- <CAO6Ho0c3TsMVAC5P=oDWkwmfoH4sKeRBc=np+w19CV2U=8AEGQ@mail.gmail.com>
- <53D170A2.6010103@ericsson.com> <53D175AD.4030904@ericsson.com>
+From: Simon Marchi <simon.marchi@ericsson.com>
+Subject: [RFC PATCH] Rename public structure to avoid collisions
+Date: Fri, 25 Jul 2014 18:43:47 -0400
+Message-ID: <1406328227-7545-1-git-send-email-simon.marchi__1198.94366148419$1406329640$gmane$org@ericsson.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0476265420=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f177.google.com ([209.85.223.177])
+Received: from usevmg20.ericsson.net ([198.24.6.45])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <lolkaantimat@gmail.com>) id 1XAlFi-0007H4-IF
- for lttng-dev@lists.lttng.org; Fri, 25 Jul 2014 15:34:04 -0400
-Received: by mail-ie0-f177.google.com with SMTP id at20so4159817iec.36
- for <lttng-dev@lists.lttng.org>; Fri, 25 Jul 2014 12:33:56 -0700 (PDT)
-In-Reply-To: <53D175AD.4030904@ericsson.com>
+ (envelope-from <simon.marchi@ericsson.com>) id 1XAoDW-0008LC-Me
+ for lttng-dev@lists.lttng.org; Fri, 25 Jul 2014 18:44:00 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,536 +18,277 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@ericsson.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: Simon Marchi <simon.marchi@ericsson.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0476265420==
-Content-Type: multipart/alternative; boundary=e89a8f839e937d0db104ff09a7ee
-
---e89a8f839e937d0db104ff09a7ee
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hey Jonathan,
-
-Thanks a lot for help! I think I've found the reason of invalid context
-messages: I reran root's lttng-sessiond, but didn't check sessions for my
-user (since I've done 'destroy -a'). Today again I got issue with invalid
-context and noticed, that there are two pairs of lttng-sessiond
-and lttng-consumerd: from old version and from new version according dates.
-Old one is from July 7, which is surprising, since I often do "destroy -a".
-After killing everything seems to work. Btw, it's Oracle linux 6.5 with
-linux 3.8.
-
-I'll check that zeros after weekend: I don't have own access to that
-machine.
-
-
-
-
-On Fri, Jul 25, 2014 at 1:07 AM, Jonathan Rajotte-Julien <
-jonathan.rajotte-julien@ericsson.com> wrote:
-
->
->
-> On 07/24/2014 04:46 PM, Jonathan Rajotte-Julien wrote:
-> >
-> > Hey Evgeniy,
-> >
-> >
-> >> Jonathan, sorry, I've copied wrong output, original command was with
-> perf:thread:cpu-cycles:
-> >>
-> >>> lttng add-context -u -t vpid -t perf:thread:cpu-cycles -t
-> perf:thread:instructions -t perf:thread:cache-misses
-> >> Session auto-20140724-091524 created.
-> >> Traces will be written in
-> /export/home/eiva/lttng-traces/auto-20140724-091524
-> >> UST context vpid added to all channels
-> >> Error: perf:thread:cpu-cycles: UST invalid context
-> >> Error: perf:thread:instructions: UST invalid context
-> >> Error: perf:thread:cache-misses: UST invalid context
-> >> Warning: Some command(s) went wrong
-> >> UST event eiva_test:* created in channel channel0
-> >
-> > Weird, it works on my side (c&p) with latest version witch is 2.5 stabl=
-e
-> :P.
->
-> I just tested a fresh install from stable ppa (
-> https://launchpad.net/~lttng/+archive/ubuntu/ppa).
->
-> and everything seems to work fine. Cycle,cache etc.
->
-> Well, keep us up to date.
->
-> Cheers
-> Jonathan
->
-> >
-> >>
-> >>> lttng --version
-> >> lttng (LTTng Trace Control) 2.5.0 - Fumisterie
-> >
-> > From this output I guess you are working with the lttng package and not
-> the source from git. I don't think packaging is the problem here but let
-> just keep that in mind.
-> > What dist are you on ?
-> >
-> > I'm sure you already done it a thousand time but could you just run
-> these and send the output ?
-> >
-> > First make sure no lttng-sessiond is running then launch:
-> >
-> > lttng-sessiond -vvv
-> >
-> > In a separate terminal:
-> >
-> > lttng destroy -a  // Just in case
-> > lttng -vvv create test
-> >
-> > lttng -vvv add-context -u -t vpid -t perf:thread:cpu-cycles -t
-> perf:thread:instructions -t perf:thread:cache-misses
-> >
-> > If this work, you could test if you get the data or zero.
-> >
-> > lttng enable-event -u -a -s test
-> >
-> > lttng start
-> > // Run the program
-> >
-> > lttng stop
-> >
-> > Make sure to send the output from lttng-sessiond -vvv.
-> >
-> >
-> > Cheers,
-> > Jonathan
-> >
-> >>
-> >> Later I've tried cpu-cycles separately and then accidentally switched
-> to perf:cpu. Now everything started to work, but nothing changed since
-> then. Though didn't check if we still get zeroes on another machine.
-> >>
-> >>
-> >> On Thu, Jul 24, 2014 at 7:01 PM, Jonathan Rajotte-Julien <
-> jonathan.rajotte-julien@ericsson.com <mailto:
-> jonathan.rajotte-julien@ericsson.com>> wrote:
-> >>
-> >>     Hi!
-> >>
-> >>     > Hi!
-> >>     >
-> >>     > I use lttng-2.5.0 (tools, modules, =E2=80=A6) and linux-3.8.13. =
-When I
-> try to add context for performance counters I get the following error:
-> >>     >
-> >>     >> lttng add-context -u -t perf:cpu:cpu-cycles
-> >>     > Error: perf:cpu:cpu-cycles: UST invalid context
-> >>     > Warning: Some command(s) went wrong
-> >>
-> >>     Well i think we will both agree that the help page does not help
-> very much.(Should fix that)
-> >>
-> >>     If we go deep down into the code we get the supported context for
-> UST domain. :)
-> >>
-> >>     Ust domain support 6 type of context:
-> >>     LTTNG_EVENT_CONTEXT_VTID
-> >>     LTTNG_EVENT_CONTEXT_VPID
-> >>     LTTNG_UST_CONTEXT_VPID
-> >>     LTTNG_EVENT_CONTEXT_PTHREAD_ID
-> >>     LTTNG_EVENT_CONTEXT_PROCNAME
-> >>     LTTNG_EVENT_CONTEXT_IP
-> >>     LTTNG_EVENT_CONTEXT_PERF_THREAD_COUNTER
-> >>
-> >>     Well this does help a little ... If we dig a little deeper and
-> search around we get more info and see that an enum from
-> "./lttng-tools/include/lttng/event.h" lttng_event_context_t maps to anoth=
-er
-> one in the lttng-tool side ( context_type in add_context.c)
-> >>
-> >>     *Important Part*
-> >>     So if we decrypt the macros and functions in add-context.c, we get
-> that the following contexts are supported for UST:
-> >>
-> >>     vpid
-> >>     vtid
-> >>     pthread_id
-> >>     procname
-> >>     ip
-> >>
-> >>     perf:thread:cpu-cycles
-> >>     perf:thread:cycles
-> >>     perf:thread:stalled-cycles-frontend
-> >>     perf:thread:idle-cycles-frontend
-> >>     perf:thread:stalled-cycles-backend
-> >>     perf:thread:idle-cycles-backend
-> >>     perf:thread:instructions
-> >>     perf:thread:cache-references
-> >>     perf:thread:cache-misses
-> >>     perf:thread:branch-instructions
-> >>     perf:thread:branches
-> >>     perf:thread:branch-misses
-> >>     perf:thread:bus-cycles
-> >>
-> >>     perf:thread:L1-dcache
-> >>     perf:thread:L1-icache
-> >>     perf:thread:LLC
-> >>     perf:thread:dTLB
-> >>     perf:thread:iTLB-loads
-> >>     perf:thread:iTLB-load-misses
-> >>     perf:thread:branch-loads
-> >>     perf:thread:branch-load-misses
-> >>
-> >>     perf:thread:cpu-clock
-> >>     perf:thread:task-clock
-> >>     perf:thread:page-fault
-> >>     perf:thread:faults
-> >>     perf:thread:major-faults
-> >>     perf:thread:minor-faults
-> >>     perf:thread:context-switches
-> >>     perf:thread:cs
-> >>     perf:thread:cpu-migrations
-> >>     perf:thread:migrations
-> >>     perf:thread:alignment-faults
-> >>     perf:thread:emulation-faults
-> >>
-> >>     **(TL;DR : perf:cpu:cpu-cycles is not in the list)**
-> >>
-> >>     If you want perf:cpu:cpu-cycles you will need a kernel tracing
-> domain.
-> >>
-> >>     Even if it make sense that a ust tracing session cannot touch
-> hardware stuff it won=E2=80=99t hurt to be more explicit about it. :).
-> >>
-> >>     >
-> >>     > We have another machine with 2.5.0 (modules are not installed
-> though) and adding perf:cpu:cpu-cycles works fine, but it is always zero =
-in
-> results.
-> >>
-> >>     As for this, I cannot explain why lttng-tool does not complain on
-> adding the context.
-> >>     You can open a bug here http://bugs.lttng.org/projects/lttng-tools
-> (you will need to create an account and sign in)
-> >>
-> >>     Cheers,
-> >>     Jonathan
-> >>
-> >>     >
-> >>     > --
-> >>     > Cheers,
-> >>     > Evgeniy
-> >>     >
-> >>     >
-> >>     > _______________________________________________
-> >>     > lttng-dev mailing list
-> >>     > lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>
-> >>     > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >>     >
-> >>
-> >>
-> >>
-> >>
-> >> --
-> >> Cheers,
-> >> Evgeniy
-> >
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
-
-
---=20
-Cheers,
-Evgeniy
-
---e89a8f839e937d0db104ff09a7ee
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hey Jonathan,<div><br></div><div>Thanks a lot for help! I =
-think I&#39;ve found the reason of invalid context messages: I reran root&#=
-39;s lttng-sessiond, but didn&#39;t check sessions for my user (since I&#39=
-;ve done &#39;destroy -a&#39;). Today again I got issue with invalid contex=
-t and noticed, that there are two pairs of lttng-sessiond and=C2=A0lttng-co=
-nsumerd: from old version and from new version according dates. Old one is =
-from July 7, which is surprising, since I often do &quot;destroy -a&quot;. =
-After killing everything seems to work. Btw, it&#39;s Oracle linux 6.5 with=
- linux 3.8.</div>
-<div><br></div><div>I&#39;ll check that zeros after weekend: I don&#39;t ha=
-ve own access to that machine.</div><div><br></div><div><br></div></div><di=
-v class=3D"gmail_extra"><br><br><div class=3D"gmail_quote">On Fri, Jul 25, =
-2014 at 1:07 AM, Jonathan Rajotte-Julien <span dir=3D"ltr">&lt;<a href=3D"m=
-ailto:jonathan.rajotte-julien@ericsson.com" target=3D"_blank">jonathan.rajo=
-tte-julien@ericsson.com</a>&gt;</span> wrote:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex"><div class=3D""><br>
-<br>
-On 07/24/2014 04:46 PM, Jonathan Rajotte-Julien wrote:<br>
-&gt;<br>
-&gt; Hey Evgeniy,<br>
-&gt;<br>
-&gt;<br>
-&gt;&gt; Jonathan, sorry, I&#39;ve copied wrong output, original command wa=
-s with perf:thread:cpu-cycles:<br>
-&gt;&gt;<br>
-&gt;&gt;&gt; lttng add-context -u -t vpid -t perf:thread:cpu-cycles -t perf=
-:thread:instructions -t perf:thread:cache-misses<br>
-&gt;&gt; Session auto-20140724-091524 created.<br>
-&gt;&gt; Traces will be written in /export/home/eiva/lttng-traces/auto-2014=
-0724-091524<br>
-&gt;&gt; UST context vpid added to all channels<br>
-&gt;&gt; Error: perf:thread:cpu-cycles: UST invalid context<br>
-&gt;&gt; Error: perf:thread:instructions: UST invalid context<br>
-&gt;&gt; Error: perf:thread:cache-misses: UST invalid context<br>
-&gt;&gt; Warning: Some command(s) went wrong<br>
-&gt;&gt; UST event eiva_test:* created in channel channel0<br>
-&gt;<br>
-&gt; Weird, it works on my side (c&amp;p) with latest version witch is 2.5 =
-stable :P.<br>
-<br>
-</div>I just tested a fresh install from stable ppa (<a href=3D"https://lau=
-nchpad.net/~lttng/+archive/ubuntu/ppa" target=3D"_blank">https://launchpad.=
-net/~lttng/+archive/ubuntu/ppa</a>).<br>
-<br>
-and everything seems to work fine. Cycle,cache etc.<br>
-<br>
-Well, keep us up to date.<br>
-<br>
-Cheers<br>
-Jonathan<br>
-<div><div class=3D"h5"><br>
-&gt;<br>
-&gt;&gt;<br>
-&gt;&gt;&gt; lttng --version<br>
-&gt;&gt; lttng (LTTng Trace Control) 2.5.0 - Fumisterie<br>
-&gt;<br>
-&gt; From this output I guess you are working with the lttng package and no=
-t the source from git. I don&#39;t think packaging is the problem here but =
-let just keep that in mind.<br>
-&gt; What dist are you on ?<br>
-&gt;<br>
-&gt; I&#39;m sure you already done it a thousand time but could you just ru=
-n these and send the output ?<br>
-&gt;<br>
-&gt; First make sure no lttng-sessiond is running then launch:<br>
-&gt;<br>
-&gt; lttng-sessiond -vvv<br>
-&gt;<br>
-&gt; In a separate terminal:<br>
-&gt;<br>
-&gt; lttng destroy -a =C2=A0// Just in case<br>
-&gt; lttng -vvv create test<br>
-&gt;<br>
-&gt; lttng -vvv add-context -u -t vpid -t perf:thread:cpu-cycles -t perf:th=
-read:instructions -t perf:thread:cache-misses<br>
-&gt;<br>
-&gt; If this work, you could test if you get the data or zero.<br>
-&gt;<br>
-&gt; lttng enable-event -u -a -s test<br>
-&gt;<br>
-&gt; lttng start<br>
-&gt; // Run the program<br>
-&gt;<br>
-&gt; lttng stop<br>
-&gt;<br>
-&gt; Make sure to send the output from lttng-sessiond -vvv.<br>
-&gt;<br>
-&gt;<br>
-&gt; Cheers,<br>
-&gt; Jonathan<br>
-&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; Later I&#39;ve tried cpu-cycles separately and then accidentally s=
-witched to perf:cpu. Now everything started to work, but nothing changed si=
-nce then. Though didn&#39;t check if we still get zeroes on another machine=
-.<br>
-
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; On Thu, Jul 24, 2014 at 7:01 PM, Jonathan Rajotte-Julien &lt;<a hr=
-ef=3D"mailto:jonathan.rajotte-julien@ericsson.com">jonathan.rajotte-julien@=
-ericsson.com</a> &lt;mailto:<a href=3D"mailto:jonathan.rajotte-julien@erics=
-son.com">jonathan.rajotte-julien@ericsson.com</a>&gt;&gt; wrote:<br>
-
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 Hi!<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt; Hi!<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt; I use lttng-2.5.0 (tools, modules, =E2=80=A6) a=
-nd linux-3.8.13. When I try to add context for performance counters I get t=
-he following error:<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt;&gt; lttng add-context -u -t perf:cpu:cpu-cycles=
-<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt; Error: perf:cpu:cpu-cycles: UST invalid context=
-<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt; Warning: Some command(s) went wrong<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 Well i think we will both agree that the help page d=
-oes not help very much.(Should fix that)<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 If we go deep down into the code we get the supporte=
-d context for UST domain. :)<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 Ust domain support 6 type of context:<br>
-&gt;&gt; =C2=A0 =C2=A0 LTTNG_EVENT_CONTEXT_VTID<br>
-&gt;&gt; =C2=A0 =C2=A0 LTTNG_EVENT_CONTEXT_VPID<br>
-&gt;&gt; =C2=A0 =C2=A0 LTTNG_UST_CONTEXT_VPID<br>
-&gt;&gt; =C2=A0 =C2=A0 LTTNG_EVENT_CONTEXT_PTHREAD_ID<br>
-&gt;&gt; =C2=A0 =C2=A0 LTTNG_EVENT_CONTEXT_PROCNAME<br>
-&gt;&gt; =C2=A0 =C2=A0 LTTNG_EVENT_CONTEXT_IP<br>
-&gt;&gt; =C2=A0 =C2=A0 LTTNG_EVENT_CONTEXT_PERF_THREAD_COUNTER<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 Well this does help a little ... If we dig a little =
-deeper and search around we get more info and see that an enum from &quot;.=
-/lttng-tools/include/lttng/event.h&quot; lttng_event_context_t maps to anot=
-her one in the lttng-tool side ( context_type in add_context.c)<br>
-
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 *Important Part*<br>
-&gt;&gt; =C2=A0 =C2=A0 So if we decrypt the macros and functions in add-con=
-text.c, we get that the following contexts are supported for UST:<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 vpid<br>
-&gt;&gt; =C2=A0 =C2=A0 vtid<br>
-&gt;&gt; =C2=A0 =C2=A0 pthread_id<br>
-&gt;&gt; =C2=A0 =C2=A0 procname<br>
-&gt;&gt; =C2=A0 =C2=A0 ip<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:cpu-cycles<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:cycles<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:stalled-cycles-frontend<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:idle-cycles-frontend<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:stalled-cycles-backend<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:idle-cycles-backend<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:instructions<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:cache-references<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:cache-misses<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:branch-instructions<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:branches<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:branch-misses<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:bus-cycles<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:L1-dcache<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:L1-icache<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:LLC<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:dTLB<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:iTLB-loads<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:iTLB-load-misses<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:branch-loads<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:branch-load-misses<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:cpu-clock<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:task-clock<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:page-fault<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:faults<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:major-faults<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:minor-faults<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:context-switches<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:cs<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:cpu-migrations<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:migrations<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:alignment-faults<br>
-&gt;&gt; =C2=A0 =C2=A0 perf:thread:emulation-faults<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 **(TL;DR : perf:cpu:cpu-cycles is not in the list)**=
-<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 If you want perf:cpu:cpu-cycles you will need a kern=
-el tracing domain.<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 Even if it make sense that a ust tracing session can=
-not touch hardware stuff it won=E2=80=99t hurt to be more explicit about it=
-. :).<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt; We have another machine with 2.5.0 (modules are=
- not installed though) and adding perf:cpu:cpu-cycles works fine, but it is=
- always zero in results.<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 As for this, I cannot explain why lttng-tool does no=
-t complain on adding the context.<br>
-&gt;&gt; =C2=A0 =C2=A0 You can open a bug here <a href=3D"http://bugs.lttng=
-.org/projects/lttng-tools" target=3D"_blank">http://bugs.lttng.org/projects=
-/lttng-tools</a> (you will need to create an account and sign in)<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 Cheers,<br>
-&gt;&gt; =C2=A0 =C2=A0 Jonathan<br>
-&gt;&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt; --<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt; Cheers,<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt; Evgeniy<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt; _______________________________________________=
-<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt; lttng-dev mailing list<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lt=
-tng-dev@lists.lttng.org</a> &lt;mailto:<a href=3D"mailto:lttng-dev@lists.lt=
-tng.org">lttng-dev@lists.lttng.org</a>&gt;<br>
-&gt;&gt; =C2=A0 =C2=A0 &gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailm=
-an/listinfo/lttng-dev" target=3D"_blank">http://lists.lttng.org/cgi-bin/mai=
-lman/listinfo/lttng-dev</a><br>
-&gt;&gt; =C2=A0 =C2=A0 &gt;<br>
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; --<br>
-&gt;&gt; Cheers,<br>
-&gt;&gt; Evgeniy<br>
-&gt;<br>
-&gt;<br>
-&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
-</a><br>
-</div></div>&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo=
-/lttng-dev" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listin=
-fo/lttng-dev</a><br>
-<div class=3D"">&gt;<br>
-<br>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-</div><a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-de=
-v</a><br>
-</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br>Cheers,<br>E=
-vgeniy
-</div>
-
---e89a8f839e937d0db104ff09a7ee--
-
-
---===============0476265420==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0476265420==--
+SSBhbSBzb2xpY2l0aW5nIHlvdXIgY29tbWVudHMgYWJvdXQgdGhpcyBwYXRjaCwgc29tZSBwZW9w
+bGUgbWlnaHQgbm90Cmxpa2UgaXQuCgpXaGVuIHRyeWluZyB0byB1c2UgbHR0bmctdXN0IHdpdGgg
+YSBwcm9ncmFtIHRoYXQgZGVmaW5lcyBpdHMgb3duIHN0cnVjdAp0cmFjZXBvaW50LCBhIG5hbWUg
+Y29sbGlzaW9uIGFyaXNlcyBhbmQgY29tcGlsYXRpb24gZmFpbHMgKHNlZSBleGFtcGxlCmxvd2Vy
+KS4KCkkgc3VnZ2VzdCB0aGUgZm9sbG93aW5nIHJlbmFtZXMgKHRoZSBwcm9ibGVtIG9ubHkgc2hv
+d2VkIHVwIHdpdGggc3RydWN0CnRyYWNlcG9pbnQgaW4gbXkgY2FzZSwgYnV0IGxldCdzIGJlIHBy
+b2FjdGl2ZSk6CgogKiBzdHJ1Y3QgdHJhY2Vwb2ludCAtPiBzdHJ1Y3QgbHR0bmdfdXN0X3RyYWNl
+cG9pbnQKICogc3RydWN0IHRyYWNlcG9pbnRfcHJvYmUgLT4gc3RydWN0IGx0dG5nX3VzdF90cmFj
+ZXBvaW50X3Byb2JlCiAqIHN0cnVjdCB0cmFjZXBvaW50X2Rsb3BlbiAtPiBzdHJ1Y3QgbHR0bmdf
+dXN0X3RyYWNlcG9pbnRfZGxvcGVuCgpTdHJpY3RseSBzcGVha2luZywgdGhvc2UgbmFtZXMgYXJl
+IHBhcnQgb2YgdGhlIHB1YmxpYyBBUEkgb2YgTFRUbmcsIHNvIEkKdW5kZXJzdGFuZCB0aGF0IGl0
+IHdvdWxkIGJlIGEgZmVsb255IHRvIHJlbmFtZSBpdCwgc2luY2UgaXQgYnJlYWtzIHRoZQpob2x5
+IEFQSS4gSG93ZXZlciwgdGhvc2Ugc3RydWN0dXJlcyBhcmUgb25seSB1c2VkIHRocm91Z2ggc29t
+ZSBtYWNyb3MsCmFuZCBJIGFtIG5vdCBhd2FyZSBvZiBhbnkgc2Vuc2libGUgdXNlIGNhc2Ugd2hl
+cmUgYSB1c2VyIG9mIGx0dG5nLXVzdAp3b3VsZCBkaXJlY3RseSByZWZlcmVuY2UgdGhvc2Ugc3Ry
+dWN0dXJlcy4gVGhlcmVmb3JlLCBpdCBzaG91bGQgbm90IGJyZWFrCmFueSBleGlzdGluZyBjb2Rl
+LiBJZiB5b3UgZG8gaGF2ZSBzdWNoIGEgdXNlIGNhc2UsIHdoZXJlIGl0IHdvdWxkIGJyZWFrCnlv
+dXIgY29kZSwgcGxlYXNlIGp1bXAgaW4gdGhlIGRpc2N1c3Npb24uCgpUaGlzIHNob3VsZCBub3Qg
+YnJlYWsgYW55IGFwcGxpY2F0aW9uIGluc3RydW1lbnRlZCBhbmQgYnVpbHQgYmVmb3JlIHRoZQpj
+aGFuZ2UuIFRlc3RlZCBieSBidWlsZGluZyAiaGVsbG8iIGJlZm9yZSBhbmQgdHJhY2luZyBpdCBh
+ZnRlciB0aGUKY2hhbmdlLgoKSGVyZSBpcyBhbiBleGFtcGxlIG9mIGVycm9yIGR1ZSB0byB0aGUg
+bmFtZSBjb2xsaXNpb24uIFRoaXMgaXMgd2hlbgpidWlsZGluZyBnZGIsIHdoaWNoIEkgdHJ5IHRv
+IGluc3RydW1lbnQgd2l0aCBsdHRuZy11c3QuCgpJbiBmaWxlIGluY2x1ZGVkIGZyb20gL3Vzci9s
+b2NhbC9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaDoyODowLAogICAgICAgICAgICAgICAgIGZy
+b20gdXN0X3RyYWNlcG9pbnRzLmg6MTUsCiAgICAgICAgICAgICAgICAgZnJvbSBpbmYtcHRyYWNl
+LmM6Mzg6Ci91c3IvbG9jYWwvaW5jbHVkZS9sdHRuZy90cmFjZXBvaW50LXR5cGVzLmg6MzI6ODog
+ZXJyb3I6IHJlZGVmaW5pdGlvbiBvZgrigJhzdHJ1Y3QgdHJhY2Vwb2ludOKAmQogc3RydWN0IHRy
+YWNlcG9pbnQgewogICAgICAgIF4KSW4gZmlsZSBpbmNsdWRlZCBmcm9tIGluZmVyaW9yLmg6Mzc6
+MCwKICAgICAgICAgICAgICAgICBmcm9tIGluZi1wdHJhY2UuYzoyMjoKYnJlYWtwb2ludC5oOjgx
+Nzo4OiBub3RlOiBvcmlnaW5hbGx5IGRlZmluZWQgaGVyZQogc3RydWN0IHRyYWNlcG9pbnQKICAg
+ICAgICBeCk1ha2VmaWxlOjEwODg6IHJlY2lwZSBmb3IgdGFyZ2V0ICdpbmYtcHRyYWNlLm8nIGZh
+aWxlZAptYWtlOiAqKiogW2luZi1wdHJhY2Uub10gRXJyb3IgMQotLS0KIGluY2x1ZGUvbHR0bmcv
+dHJhY2Vwb2ludC10eXBlcy5oICAgfCAxMCArKystLS0tCiBpbmNsdWRlL2x0dG5nL3RyYWNlcG9p
+bnQuaCAgICAgICAgIHwgMjkgKysrKysrKysrLS0tLS0tLS0tLQogbGlibHR0bmctdXN0L3RyYWNl
+cG9pbnQtaW50ZXJuYWwuaCB8ICAyICstCiBsaWJsdHRuZy11c3QvdHJhY2Vwb2ludC5jICAgICAg
+ICAgIHwgNTcgKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0tLS0KIDQgZmlsZXMg
+Y2hhbmdlZCwgNTEgaW5zZXJ0aW9ucygrKSwgNDcgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEv
+aW5jbHVkZS9sdHRuZy90cmFjZXBvaW50LXR5cGVzLmggYi9pbmNsdWRlL2x0dG5nL3RyYWNlcG9p
+bnQtdHlwZXMuaAppbmRleCA2MzRmOTcwLi5mNTRlMzBhIDEwMDY0NAotLS0gYS9pbmNsdWRlL2x0
+dG5nL3RyYWNlcG9pbnQtdHlwZXMuaAorKysgYi9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQtdHlw
+ZXMuaApAQCAtMjMsMTkgKzIzLDE5IEBACiAgKiBTT0ZUV0FSRS4KICAqLwogCi1zdHJ1Y3QgdHJh
+Y2Vwb2ludF9wcm9iZSB7CitzdHJ1Y3QgbHR0bmdfdXN0X3RyYWNlcG9pbnRfcHJvYmUgewogCXZv
+aWQgKCpmdW5jKSh2b2lkKTsKIAl2b2lkICpkYXRhOwogfTsKIAotI2RlZmluZSBUUkFDRVBPSU5U
+X1BBRERJTkcJMTYKLXN0cnVjdCB0cmFjZXBvaW50IHsKKyNkZWZpbmUgTFRUTkdfVVNUX1RSQUNF
+UE9JTlRfUEFERElORwkxNgorc3RydWN0IGx0dG5nX3VzdF90cmFjZXBvaW50IHsKIAljb25zdCBj
+aGFyICpuYW1lOwogCWludCBzdGF0ZTsKLQlzdHJ1Y3QgdHJhY2Vwb2ludF9wcm9iZSAqcHJvYmVz
+OworCXN0cnVjdCBsdHRuZ191c3RfdHJhY2Vwb2ludF9wcm9iZSAqcHJvYmVzOwogCWludCAqdHJh
+Y2Vwb2ludF9wcm92aWRlcl9yZWY7CiAJY29uc3QgY2hhciAqc2lnbmF0dXJlOwotCWNoYXIgcGFk
+ZGluZ1tUUkFDRVBPSU5UX1BBRERJTkddOworCWNoYXIgcGFkZGluZ1tMVFROR19VU1RfVFJBQ0VQ
+T0lOVF9QQURESU5HXTsKIH07CiAKICNlbmRpZiAvKiBfTFRUTkdfVFJBQ0VQT0lOVF9UWVBFU19I
+ICovCmRpZmYgLS1naXQgYS9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaCBiL2luY2x1ZGUvbHR0
+bmcvdHJhY2Vwb2ludC5oCmluZGV4IGM1YTA5ZDguLmU1OTYwNmEgMTAwNjQ0Ci0tLSBhL2luY2x1
+ZGUvbHR0bmcvdHJhY2Vwb2ludC5oCisrKyBiL2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC5oCkBA
+IC0xNTEsMTMgKzE1MSwxMyBAQCBleHRlcm4gIkMiIHsKICAqIGFkZHJlc3MuCiAgKi8KICNkZWZp
+bmUgX0RFQ0xBUkVfVFJBQ0VQT0lOVChfcHJvdmlkZXIsIF9uYW1lLCAuLi4pCQkJIAkJXAotZXh0
+ZXJuIHN0cnVjdCB0cmFjZXBvaW50IF9fdHJhY2Vwb2ludF8jI19wcm92aWRlciMjX19fIyNfbmFt
+ZTsJCQkJXAorZXh0ZXJuIHN0cnVjdCBsdHRuZ191c3RfdHJhY2Vwb2ludCBfX3RyYWNlcG9pbnRf
+IyNfcHJvdmlkZXIjI19fXyMjX25hbWU7CQlcCiBzdGF0aWMgaW5saW5lIF9fYXR0cmlidXRlX18o
+KGFsd2F5c19pbmxpbmUsIHVudXNlZCkpIGx0dG5nX3VzdF9ub3RyYWNlCQkJXAogdm9pZCBfX3Ry
+YWNlcG9pbnRfY2JfIyNfcHJvdmlkZXIjI19fXyMjX25hbWUoX1RQX0FSR1NfUFJPVE8oX19WQV9B
+UkdTX18pKTsJCVwKIHN0YXRpYwkJCQkJCQkJCQkJXAogdm9pZCBfX3RyYWNlcG9pbnRfY2JfIyNf
+cHJvdmlkZXIjI19fXyMjX25hbWUoX1RQX0FSR1NfUFJPVE8oX19WQV9BUkdTX18pKQkJXAogewkJ
+CQkJCQkJCQkJXAotCXN0cnVjdCB0cmFjZXBvaW50X3Byb2JlICpfX3RwX3Byb2JlOwkJCQkJCVwK
+KwlzdHJ1Y3QgbHR0bmdfdXN0X3RyYWNlcG9pbnRfcHJvYmUgKl9fdHBfcHJvYmU7CQkJCQkJXAog
+CQkJCQkJCQkJCQlcCiAJaWYgKGNhYV91bmxpa2VseSghVFBfUkNVX0xJTktfVEVTVCgpKSkJCQkJ
+CQlcCiAJCXJldHVybjsJCQkJCQkJCQlcCkBAIC0xNjYsNyArMTY2LDcgQEAgdm9pZCBfX3RyYWNl
+cG9pbnRfY2JfIyNfcHJvdmlkZXIjI19fXyMjX25hbWUoX1RQX0FSR1NfUFJPVE8oX19WQV9BUkdT
+X18pKQkJXAogCWlmIChjYWFfdW5saWtlbHkoIV9fdHBfcHJvYmUpKQkJCQkJCQlcCiAJCWdvdG8g
+ZW5kOwkJCQkJCQkJXAogCWRvIHsJCQkJCQkJCQkJXAotCQl2b2lkICgqX190cF9jYikodm9pZCkg
+PSBfX3RwX3Byb2JlLT5mdW5jOwkJCQkJXAorCQl2b2lkICgqX190cF9jYikodm9pZCkgPSBfX3Rw
+X3Byb2JlLT5mdW5jOwkJCQlcCiAJCXZvaWQgKl9fdHBfZGF0YSA9IF9fdHBfcHJvYmUtPmRhdGE7
+CQkJCQlcCiAJCQkJCQkJCQkJCVwKIAkJVVJDVV9GT1JDRV9DQVNUKHZvaWQgKCopKF9UUF9BUkdT
+X0RBVEFfUFJPVE8oX19WQV9BUkdTX18pKSwgX190cF9jYikJXApAQCAtMjA0LDEyICsyMDQsMTIg
+QEAgZXh0ZXJuIGludCBfX3RyYWNlcG9pbnRfcHJvYmVfdW5yZWdpc3Rlcihjb25zdCBjaGFyICpu
+YW1lLCB2b2lkICgqZnVuYykodm9pZCksCiAgKiB0cmFjZXBvaW50IGR5bmFtaWMgbGlua2FnZSBo
+YW5kbGluZyAoY2FsbGJhY2tzKS4gSGlkZGVuIHZpc2liaWxpdHk6CiAgKiBzaGFyZWQgYWNyb3Nz
+IG9iamVjdHMgaW4gYSBtb2R1bGUvbWFpbiBleGVjdXRhYmxlLgogICovCi1zdHJ1Y3QgdHJhY2Vw
+b2ludF9kbG9wZW4geworc3RydWN0IGx0dG5nX3VzdF90cmFjZXBvaW50X2Rsb3BlbiB7CiAJdm9p
+ZCAqbGlibHR0bmd1c3RfaGFuZGxlOwogCi0JaW50ICgqdHJhY2Vwb2ludF9yZWdpc3Rlcl9saWIp
+KHN0cnVjdCB0cmFjZXBvaW50ICogY29uc3QgKnRyYWNlcG9pbnRzX3N0YXJ0LAorCWludCAoKnRy
+YWNlcG9pbnRfcmVnaXN0ZXJfbGliKShzdHJ1Y3QgbHR0bmdfdXN0X3RyYWNlcG9pbnQgKiBjb25z
+dCAqdHJhY2Vwb2ludHNfc3RhcnQsCiAJCWludCB0cmFjZXBvaW50c19jb3VudCk7Ci0JaW50ICgq
+dHJhY2Vwb2ludF91bnJlZ2lzdGVyX2xpYikoc3RydWN0IHRyYWNlcG9pbnQgKiBjb25zdCAqdHJh
+Y2Vwb2ludHNfc3RhcnQpOworCWludCAoKnRyYWNlcG9pbnRfdW5yZWdpc3Rlcl9saWIpKHN0cnVj
+dCBsdHRuZ191c3RfdHJhY2Vwb2ludCAqIGNvbnN0ICp0cmFjZXBvaW50c19zdGFydCk7CiAjaWZu
+ZGVmIF9MR1BMX1NPVVJDRQogCXZvaWQgKCpyY3VfcmVhZF9sb2NrX3N5bV9icCkodm9pZCk7CiAJ
+dm9pZCAoKnJjdV9yZWFkX3VubG9ja19zeW1fYnApKHZvaWQpOwpAQCAtMjE3LDcgKzIxNyw3IEBA
+IHN0cnVjdCB0cmFjZXBvaW50X2Rsb3BlbiB7CiAjZW5kaWYKIH07CiAKLWV4dGVybiBzdHJ1Y3Qg
+dHJhY2Vwb2ludF9kbG9wZW4gdHJhY2Vwb2ludF9kbG9wZW47CitleHRlcm4gc3RydWN0IGx0dG5n
+X3VzdF90cmFjZXBvaW50X2Rsb3BlbiB0cmFjZXBvaW50X2Rsb3BlbjsKIAogI2lmIGRlZmluZWQo
+VFJBQ0VQT0lOVF9ERUZJTkUpIHx8IGRlZmluZWQoVFJBQ0VQT0lOVF9DUkVBVEVfUFJPQkVTKQog
+CkBAIC0yMzAsNyArMjMwLDcgQEAgaW50IF9fdHJhY2Vwb2ludF9yZWdpc3RlcmVkCiAJX19hdHRy
+aWJ1dGVfXygod2VhaywgdmlzaWJpbGl0eSgiaGlkZGVuIikpKTsKIGludCBfX3RyYWNlcG9pbnRf
+cHRyc19yZWdpc3RlcmVkCiAJX19hdHRyaWJ1dGVfXygod2VhaywgdmlzaWJpbGl0eSgiaGlkZGVu
+IikpKTsKLXN0cnVjdCB0cmFjZXBvaW50X2Rsb3BlbiB0cmFjZXBvaW50X2Rsb3Blbgorc3RydWN0
+IGx0dG5nX3VzdF90cmFjZXBvaW50X2Rsb3BlbiB0cmFjZXBvaW50X2Rsb3BlbgogCV9fYXR0cmli
+dXRlX18oKHdlYWssIHZpc2liaWxpdHkoImhpZGRlbiIpKSk7CiAKICNpZm5kZWYgX0xHUExfU09V
+UkNFCkBAIC0zMTIsOSArMzEyLDkgQEAgX190cmFjZXBvaW50c19fZGVzdHJveSh2b2lkKQogICog
+cmVnaXN0ZXJpbmcgb25seSBfb25lXyBpbnN0YW5jZSBvZiB0aGUgdHJhY2Vwb2ludHMgcGVyIHNo
+YXJlZC1vamJlY3QKICAqIChvciBmb3IgdGhlIHdob2xlIG1haW4gcHJvZ3JhbSkuCiAgKi8KLWV4
+dGVybiBzdHJ1Y3QgdHJhY2Vwb2ludCAqIGNvbnN0IF9fc3RhcnRfX190cmFjZXBvaW50c19wdHJz
+W10KK2V4dGVybiBzdHJ1Y3QgbHR0bmdfdXN0X3RyYWNlcG9pbnQgKiBjb25zdCBfX3N0YXJ0X19f
+dHJhY2Vwb2ludHNfcHRyc1tdCiAJX19hdHRyaWJ1dGVfXygod2VhaywgdmlzaWJpbGl0eSgiaGlk
+ZGVuIikpKTsKLWV4dGVybiBzdHJ1Y3QgdHJhY2Vwb2ludCAqIGNvbnN0IF9fc3RvcF9fX3RyYWNl
+cG9pbnRzX3B0cnNbXQorZXh0ZXJuIHN0cnVjdCBsdHRuZ191c3RfdHJhY2Vwb2ludCAqIGNvbnN0
+IF9fc3RvcF9fX3RyYWNlcG9pbnRzX3B0cnNbXQogCV9fYXR0cmlidXRlX18oKHdlYWssIHZpc2li
+aWxpdHkoImhpZGRlbiIpKSk7CiAKIC8qCkBAIC0zNDQsNyArMzQ0LDcgQEAgZXh0ZXJuIHN0cnVj
+dCB0cmFjZXBvaW50ICogY29uc3QgX19zdG9wX19fdHJhY2Vwb2ludHNfcHRyc1tdCiAJc3RhdGlj
+IGNvbnN0IGNoYXIgX190cF9zdHJ0YWJfIyNfcHJvdmlkZXIjI19fXyMjX25hbWVbXQkJCVwKIAkJ
+X19hdHRyaWJ1dGVfXygoc2VjdGlvbigiX190cmFjZXBvaW50c19zdHJpbmdzIikpKSA9CQlcCiAJ
+CQkjX3Byb3ZpZGVyICI6IiAjX25hbWU7CQkJCQlcCi0Jc3RydWN0IHRyYWNlcG9pbnQgX190cmFj
+ZXBvaW50XyMjX3Byb3ZpZGVyIyNfX18jI19uYW1lCQkJXAorCXN0cnVjdCBsdHRuZ191c3RfdHJh
+Y2Vwb2ludCBfX3RyYWNlcG9pbnRfIyNfcHJvdmlkZXIjI19fXyMjX25hbWUJXAogCQlfX2F0dHJp
+YnV0ZV9fKChzZWN0aW9uKCJfX3RyYWNlcG9pbnRzIikpKSA9CQkJXAogCQl7CQkJCQkJCQlcCiAJ
+CQlfX3RwX3N0cnRhYl8jI19wcm92aWRlciMjX19fIyNfbmFtZSwJCQlcCkBAIC0zNTQsNyArMzU0
+LDggQEAgZXh0ZXJuIHN0cnVjdCB0cmFjZXBvaW50ICogY29uc3QgX19zdG9wX19fdHJhY2Vwb2lu
+dHNfcHRyc1tdCiAJCQlfVFBfRVhUUkFDVF9TVFJJTkcoX2FyZ3MpLAkJCQlcCiAJCQl7IH0sCQkJ
+CQkJCVwKIAkJfTsJCQkJCQkJCVwKLQlzdGF0aWMgc3RydWN0IHRyYWNlcG9pbnQgKiBfX3RyYWNl
+cG9pbnRfcHRyXyMjX3Byb3ZpZGVyIyNfX18jI19uYW1lCVwKKwlzdGF0aWMgc3RydWN0IGx0dG5n
+X3VzdF90cmFjZXBvaW50ICoJCQkJCVwKKwkJX190cmFjZXBvaW50X3B0cl8jI19wcm92aWRlciMj
+X19fIyNfbmFtZQkJCVwKIAkJX19hdHRyaWJ1dGVfXygodXNlZCwgc2VjdGlvbigiX190cmFjZXBv
+aW50c19wdHJzIikpKSA9CQlcCiAJCQkmX190cmFjZXBvaW50XyMjX3Byb3ZpZGVyIyNfX18jI19u
+YW1lOwogCkBAIC0zNzEsMTEgKzM3MiwxMSBAQCBfX3RyYWNlcG9pbnRzX19wdHJzX2luaXQodm9p
+ZCkKIAlpZiAoIXRyYWNlcG9pbnRfZGxvcGVuLmxpYmx0dG5ndXN0X2hhbmRsZSkKIAkJcmV0dXJu
+OwogCXRyYWNlcG9pbnRfZGxvcGVuLnRyYWNlcG9pbnRfcmVnaXN0ZXJfbGliID0KLQkJVVJDVV9G
+T1JDRV9DQVNUKGludCAoKikoc3RydWN0IHRyYWNlcG9pbnQgKiBjb25zdCAqLCBpbnQpLAorCQlV
+UkNVX0ZPUkNFX0NBU1QoaW50ICgqKShzdHJ1Y3QgbHR0bmdfdXN0X3RyYWNlcG9pbnQgKiBjb25z
+dCAqLCBpbnQpLAogCQkJCWRsc3ltKHRyYWNlcG9pbnRfZGxvcGVuLmxpYmx0dG5ndXN0X2hhbmRs
+ZSwKIAkJCQkJInRyYWNlcG9pbnRfcmVnaXN0ZXJfbGliIikpOwogCXRyYWNlcG9pbnRfZGxvcGVu
+LnRyYWNlcG9pbnRfdW5yZWdpc3Rlcl9saWIgPQotCQlVUkNVX0ZPUkNFX0NBU1QoaW50ICgqKShz
+dHJ1Y3QgdHJhY2Vwb2ludCAqIGNvbnN0ICopLAorCQlVUkNVX0ZPUkNFX0NBU1QoaW50ICgqKShz
+dHJ1Y3QgbHR0bmdfdXN0X3RyYWNlcG9pbnQgKiBjb25zdCAqKSwKIAkJCQlkbHN5bSh0cmFjZXBv
+aW50X2Rsb3Blbi5saWJsdHRuZ3VzdF9oYW5kbGUsCiAJCQkJCSJ0cmFjZXBvaW50X3VucmVnaXN0
+ZXJfbGliIikpOwogCV9fdHJhY2Vwb2ludF9faW5pdF91cmN1X3N5bSgpOwpkaWZmIC0tZ2l0IGEv
+bGlibHR0bmctdXN0L3RyYWNlcG9pbnQtaW50ZXJuYWwuaCBiL2xpYmx0dG5nLXVzdC90cmFjZXBv
+aW50LWludGVybmFsLmgKaW5kZXggMmM5OWRiZC4uMmYxODM1NSAxMDA2NDQKLS0tIGEvbGlibHR0
+bmctdXN0L3RyYWNlcG9pbnQtaW50ZXJuYWwuaAorKysgYi9saWJsdHRuZy11c3QvdHJhY2Vwb2lu
+dC1pbnRlcm5hbC5oCkBAIC0yNyw3ICsyNyw3IEBACiAKIHN0cnVjdCB0cmFjZXBvaW50X2xpYiB7
+CiAJc3RydWN0IGNkc19saXN0X2hlYWQgbGlzdDsJLyogbGlzdCBvZiByZWdpc3RlcmVkIGxpYnMg
+Ki8KLQlzdHJ1Y3QgdHJhY2Vwb2ludCAqIGNvbnN0ICp0cmFjZXBvaW50c19zdGFydDsKKwlzdHJ1
+Y3QgbHR0bmdfdXN0X3RyYWNlcG9pbnQgKiBjb25zdCAqdHJhY2Vwb2ludHNfc3RhcnQ7CiAJaW50
+IHRyYWNlcG9pbnRzX2NvdW50OwogCXN0cnVjdCBjZHNfbGlzdF9oZWFkIGNhbGxzaXRlczsKIH07
+CmRpZmYgLS1naXQgYS9saWJsdHRuZy11c3QvdHJhY2Vwb2ludC5jIGIvbGlibHR0bmctdXN0L3Ry
+YWNlcG9pbnQuYwppbmRleCAwMGM0NzE5Li5hNGE3OWJhIDEwMDY0NAotLS0gYS9saWJsdHRuZy11
+c3QvdHJhY2Vwb2ludC5jCisrKyBiL2xpYmx0dG5nLXVzdC90cmFjZXBvaW50LmMKQEAgLTQ1LDcg
+KzQ1LDcgQEAKIC8qIFNldCB0byAxIHRvIGVuYWJsZSB0cmFjZXBvaW50IGRlYnVnIG91dHB1dCAq
+Lwogc3RhdGljIGNvbnN0IGludCB0cmFjZXBvaW50X2RlYnVnOwogc3RhdGljIGludCBpbml0aWFs
+aXplZDsKLXN0YXRpYyB2b2lkICgqbmV3X3RyYWNlcG9pbnRfY2IpKHN0cnVjdCB0cmFjZXBvaW50
+ICopOworc3RhdGljIHZvaWQgKCpuZXdfdHJhY2Vwb2ludF9jYikoc3RydWN0IGx0dG5nX3VzdF90
+cmFjZXBvaW50ICopOwogCiAvKgogICogdHJhY2Vwb2ludF9tdXRleCBuZXN0cyBpbnNpZGUgVVNU
+IG11dGV4LgpAQCAtOTMsNyArOTMsNyBAQCBzdGF0aWMgaW50IG5lZWRfdXBkYXRlOwogICovCiBz
+dHJ1Y3QgdHJhY2Vwb2ludF9lbnRyeSB7CiAJc3RydWN0IGNkc19obGlzdF9ub2RlIGhsaXN0Owot
+CXN0cnVjdCB0cmFjZXBvaW50X3Byb2JlICpwcm9iZXM7CisJc3RydWN0IGx0dG5nX3VzdF90cmFj
+ZXBvaW50X3Byb2JlICpwcm9iZXM7CiAJaW50IHJlZmNvdW50OwkvKiBOdW1iZXIgb2YgdGltZXMg
+YXJtZWQuIDAgaWYgZGlzYXJtZWQuICovCiAJaW50IGNhbGxzaXRlX3JlZmNvdW50OwkvKiBob3cg
+bWFueSBsaWJzIHVzZSB0aGlzIHRyYWNlcG9pbnQgKi8KIAljb25zdCBjaGFyICpzaWduYXR1cmU7
+CkBAIC0xMDYsNyArMTA2LDcgQEAgc3RydWN0IHRwX3Byb2JlcyB7CiAJCS8qIEZpZWxkIGJlbG93
+IG9ubHkgdXNlZCBmb3IgY2FsbF9yY3Ugc2NoZW1lICovCiAJCS8qIHN0cnVjdCByY3VfaGVhZCBo
+ZWFkOyAqLwogCX0gdTsKLQlzdHJ1Y3QgdHJhY2Vwb2ludF9wcm9iZSBwcm9iZXNbMF07CisJc3Ry
+dWN0IGx0dG5nX3VzdF90cmFjZXBvaW50X3Byb2JlIHByb2Jlc1swXTsKIH07CiAKIC8qCkBAIC0x
+MjAsMTQgKzEyMCwxNSBAQCBzdGF0aWMgc3RydWN0IGNkc19obGlzdF9oZWFkIGNhbGxzaXRlX3Rh
+YmxlW0NBTExTSVRFX1RBQkxFX1NJWkVdOwogc3RydWN0IGNhbGxzaXRlX2VudHJ5IHsKIAlzdHJ1
+Y3QgY2RzX2hsaXN0X25vZGUgaGxpc3Q7CS8qIGhhc2ggdGFibGUgbm9kZSAqLwogCXN0cnVjdCBj
+ZHNfbGlzdF9oZWFkIG5vZGU7CS8qIGxpYiBsaXN0IG9mIGNhbGxzaXRlcyBub2RlICovCi0Jc3Ry
+dWN0IHRyYWNlcG9pbnQgKnRwOworCXN0cnVjdCBsdHRuZ191c3RfdHJhY2Vwb2ludCAqdHA7CiB9
+OwogCiAvKiBjb3Zlcml0eVsrYWxsb2NdICovCiBzdGF0aWMgdm9pZCAqYWxsb2NhdGVfcHJvYmVz
+KGludCBjb3VudCkKIHsKLQlzdHJ1Y3QgdHBfcHJvYmVzICpwICA9IHptYWxsb2MoY291bnQgKiBz
+aXplb2Yoc3RydWN0IHRyYWNlcG9pbnRfcHJvYmUpCi0JCQkrIHNpemVvZihzdHJ1Y3QgdHBfcHJv
+YmVzKSk7CisJc3RydWN0IHRwX3Byb2JlcyAqcCA9CisJCXptYWxsb2MoY291bnQgKiBzaXplb2Yo
+c3RydWN0IGx0dG5nX3VzdF90cmFjZXBvaW50X3Byb2JlKQorCQkrIHNpemVvZihzdHJ1Y3QgdHBf
+cHJvYmVzKSk7CiAJcmV0dXJuIHAgPT0gTlVMTCA/IE5VTEwgOiBwLT5wcm9iZXM7CiB9CiAKQEAg
+LTE1OCw3ICsxNTksNyBAQCB0cmFjZXBvaW50X2VudHJ5X2FkZF9wcm9iZShzdHJ1Y3QgdHJhY2Vw
+b2ludF9lbnRyeSAqZW50cnksCiAJCQkgICB2b2lkICgqcHJvYmUpKHZvaWQpLCB2b2lkICpkYXRh
+KQogewogCWludCBucl9wcm9iZXMgPSAwOwotCXN0cnVjdCB0cmFjZXBvaW50X3Byb2JlICpvbGQs
+ICpuZXc7CisJc3RydWN0IGx0dG5nX3VzdF90cmFjZXBvaW50X3Byb2JlICpvbGQsICpuZXc7CiAK
+IAlpZiAoIXByb2JlKSB7CiAJCVdBUk5fT04oMSk7CkBAIC0xNzgsNyArMTc5LDggQEAgdHJhY2Vw
+b2ludF9lbnRyeV9hZGRfcHJvYmUoc3RydWN0IHRyYWNlcG9pbnRfZW50cnkgKmVudHJ5LAogCWlm
+IChuZXcgPT0gTlVMTCkKIAkJcmV0dXJuIEVSUl9QVFIoLUVOT01FTSk7CiAJaWYgKG9sZCkKLQkJ
+bWVtY3B5KG5ldywgb2xkLCBucl9wcm9iZXMgKiBzaXplb2Yoc3RydWN0IHRyYWNlcG9pbnRfcHJv
+YmUpKTsKKwkJbWVtY3B5KG5ldywgb2xkLAorCQkgICAgICAgbnJfcHJvYmVzICogc2l6ZW9mKHN0
+cnVjdCBsdHRuZ191c3RfdHJhY2Vwb2ludF9wcm9iZSkpOwogCW5ld1tucl9wcm9iZXNdLmZ1bmMg
+PSBwcm9iZTsKIAluZXdbbnJfcHJvYmVzXS5kYXRhID0gZGF0YTsKIAluZXdbbnJfcHJvYmVzICsg
+MV0uZnVuYyA9IE5VTEw7CkBAIC0xOTMsNyArMTk1LDcgQEAgdHJhY2Vwb2ludF9lbnRyeV9yZW1v
+dmVfcHJvYmUoc3RydWN0IHRyYWNlcG9pbnRfZW50cnkgKmVudHJ5LAogCQkJICAgICAgdm9pZCAo
+KnByb2JlKSh2b2lkKSwgdm9pZCAqZGF0YSkKIHsKIAlpbnQgbnJfcHJvYmVzID0gMCwgbnJfZGVs
+ID0gMCwgaTsKLQlzdHJ1Y3QgdHJhY2Vwb2ludF9wcm9iZSAqb2xkLCAqbmV3OworCXN0cnVjdCBs
+dHRuZ191c3RfdHJhY2Vwb2ludF9wcm9iZSAqb2xkLCAqbmV3OwogCiAJb2xkID0gZW50cnktPnBy
+b2JlczsKIApAQCAtMzE2LDcgKzMxOCw3IEBAIHN0YXRpYyB2b2lkIHJlbW92ZV90cmFjZXBvaW50
+KHN0cnVjdCB0cmFjZXBvaW50X2VudHJ5ICplKQogICogU2V0cyB0aGUgcHJvYmUgY2FsbGJhY2sg
+Y29ycmVzcG9uZGluZyB0byBvbmUgdHJhY2Vwb2ludC4KICAqLwogc3RhdGljIHZvaWQgc2V0X3Ry
+YWNlcG9pbnQoc3RydWN0IHRyYWNlcG9pbnRfZW50cnkgKiplbnRyeSwKLQlzdHJ1Y3QgdHJhY2Vw
+b2ludCAqZWxlbSwgaW50IGFjdGl2ZSkKKwlzdHJ1Y3QgbHR0bmdfdXN0X3RyYWNlcG9pbnQgKmVs
+ZW0sIGludCBhY3RpdmUpCiB7CiAJV0FSTl9PTihzdHJuY21wKCgqZW50cnkpLT5uYW1lLCBlbGVt
+LT5uYW1lLCBMVFROR19VU1RfU1lNX05BTUVfTEVOIC0gMSkgIT0gMCk7CiAJLyoKQEAgLTM1NCw3
+ICszNTYsNyBAQCBzdGF0aWMgdm9pZCBzZXRfdHJhY2Vwb2ludChzdHJ1Y3QgdHJhY2Vwb2ludF9l
+bnRyeSAqKmVudHJ5LAogICogZnVuY3Rpb24gaW5zdXJlcyB0aGF0IHRoZSBvcmlnaW5hbCBjYWxs
+YmFjayBpcyBub3QgdXNlZCBhbnltb3JlLiBUaGlzIGluc3VyZWQKICAqIGJ5IHByZWVtcHRfZGlz
+YWJsZSBhcm91bmQgdGhlIGNhbGwgc2l0ZS4KICAqLwotc3RhdGljIHZvaWQgZGlzYWJsZV90cmFj
+ZXBvaW50KHN0cnVjdCB0cmFjZXBvaW50ICplbGVtKQorc3RhdGljIHZvaWQgZGlzYWJsZV90cmFj
+ZXBvaW50KHN0cnVjdCBsdHRuZ191c3RfdHJhY2Vwb2ludCAqZWxlbSkKIHsKIAllbGVtLT5zdGF0
+ZSA9IDA7CiAJcmN1X2Fzc2lnbl9wb2ludGVyKGVsZW0tPnByb2JlcywgTlVMTCk7CkBAIC0zNjQs
+NyArMzY2LDcgQEAgc3RhdGljIHZvaWQgZGlzYWJsZV90cmFjZXBvaW50KHN0cnVjdCB0cmFjZXBv
+aW50ICplbGVtKQogICogQWRkIHRoZSBjYWxsc2l0ZSB0byB0aGUgY2FsbHNpdGUgaGFzaCB0YWJs
+ZS4gTXVzdCBiZSBjYWxsZWQgd2l0aAogICogdHJhY2Vwb2ludCBtdXRleCBoZWxkLgogICovCi1z
+dGF0aWMgdm9pZCBhZGRfY2FsbHNpdGUoc3RydWN0IHRyYWNlcG9pbnRfbGliICogbGliLCBzdHJ1
+Y3QgdHJhY2Vwb2ludCAqdHApCitzdGF0aWMgdm9pZCBhZGRfY2FsbHNpdGUoc3RydWN0IHRyYWNl
+cG9pbnRfbGliICogbGliLCBzdHJ1Y3QgbHR0bmdfdXN0X3RyYWNlcG9pbnQgKnRwKQogewogCXN0
+cnVjdCBjZHNfaGxpc3RfaGVhZCAqaGVhZDsKIAlzdHJ1Y3QgY2FsbHNpdGVfZW50cnkgKmU7CkBA
+IC00MzUsNyArNDM3LDcgQEAgc3RhdGljIHZvaWQgdHJhY2Vwb2ludF9zeW5jX2NhbGxzaXRlcyhj
+b25zdCBjaGFyICpuYW1lKQogCWhhc2ggPSBqaGFzaChuYW1lLCBuYW1lX2xlbiwgMCk7CiAJaGVh
+ZCA9ICZjYWxsc2l0ZV90YWJsZVtoYXNoICYgKENBTExTSVRFX1RBQkxFX1NJWkUgLSAxKV07CiAJ
+Y2RzX2hsaXN0X2Zvcl9lYWNoX2VudHJ5KGUsIG5vZGUsIGhlYWQsIGhsaXN0KSB7Ci0JCXN0cnVj
+dCB0cmFjZXBvaW50ICp0cCA9IGUtPnRwOworCQlzdHJ1Y3QgbHR0bmdfdXN0X3RyYWNlcG9pbnQg
+KnRwID0gZS0+dHA7CiAKIAkJaWYgKHN0cm5jbXAobmFtZSwgdHAtPm5hbWUsIExUVE5HX1VTVF9T
+WU1fTkFNRV9MRU4gLSAxKSkKIAkJCWNvbnRpbnVlOwpAQCAtNDU2LDEwICs0NTgsMTAgQEAgc3Rh
+dGljIHZvaWQgdHJhY2Vwb2ludF9zeW5jX2NhbGxzaXRlcyhjb25zdCBjaGFyICpuYW1lKQogICog
+VXBkYXRlcyB0aGUgcHJvYmUgY2FsbGJhY2sgY29ycmVzcG9uZGluZyB0byBhIHJhbmdlIG9mIHRy
+YWNlcG9pbnRzLgogICovCiBzdGF0aWMKLXZvaWQgdHJhY2Vwb2ludF91cGRhdGVfcHJvYmVfcmFu
+Z2Uoc3RydWN0IHRyYWNlcG9pbnQgKiBjb25zdCAqYmVnaW4sCi0JCQkJICAgc3RydWN0IHRyYWNl
+cG9pbnQgKiBjb25zdCAqZW5kKQordm9pZCB0cmFjZXBvaW50X3VwZGF0ZV9wcm9iZV9yYW5nZShz
+dHJ1Y3QgbHR0bmdfdXN0X3RyYWNlcG9pbnQgKiBjb25zdCAqYmVnaW4sCisJCQkJICAgc3RydWN0
+IGx0dG5nX3VzdF90cmFjZXBvaW50ICogY29uc3QgKmVuZCkKIHsKLQlzdHJ1Y3QgdHJhY2Vwb2lu
+dCAqIGNvbnN0ICppdGVyOworCXN0cnVjdCBsdHRuZ191c3RfdHJhY2Vwb2ludCAqIGNvbnN0ICpp
+dGVyOwogCXN0cnVjdCB0cmFjZXBvaW50X2VudHJ5ICptYXJrX2VudHJ5OwogCiAJZm9yIChpdGVy
+ID0gYmVnaW47IGl0ZXIgPCBlbmQ7IGl0ZXIrKykgewpAQCAtNDg3LDkgKzQ4OSw5IEBAIHN0YXRp
+YyB2b2lkIGxpYl91cGRhdGVfdHJhY2Vwb2ludHMoc3RydWN0IHRyYWNlcG9pbnRfbGliICpsaWIp
+CiAKIHN0YXRpYyB2b2lkIGxpYl9yZWdpc3Rlcl9jYWxsc2l0ZXMoc3RydWN0IHRyYWNlcG9pbnRf
+bGliICpsaWIpCiB7Ci0Jc3RydWN0IHRyYWNlcG9pbnQgKiBjb25zdCAqYmVnaW47Ci0Jc3RydWN0
+IHRyYWNlcG9pbnQgKiBjb25zdCAqZW5kOwotCXN0cnVjdCB0cmFjZXBvaW50ICogY29uc3QgKml0
+ZXI7CisJc3RydWN0IGx0dG5nX3VzdF90cmFjZXBvaW50ICogY29uc3QgKmJlZ2luOworCXN0cnVj
+dCBsdHRuZ191c3RfdHJhY2Vwb2ludCAqIGNvbnN0ICplbmQ7CisJc3RydWN0IGx0dG5nX3VzdF90
+cmFjZXBvaW50ICogY29uc3QgKml0ZXI7CiAKIAliZWdpbiA9IGxpYi0+dHJhY2Vwb2ludHNfc3Rh
+cnQ7CiAJZW5kID0gbGliLT50cmFjZXBvaW50c19zdGFydCArIGxpYi0+dHJhY2Vwb2ludHNfY291
+bnQ7CkBAIC01MjQsMTggKzUyNiwxOCBAQCBzdGF0aWMgdm9pZCB0cmFjZXBvaW50X3VwZGF0ZV9w
+cm9iZXModm9pZCkKIAkJbGliX3VwZGF0ZV90cmFjZXBvaW50cyhsaWIpOwogfQogCi1zdGF0aWMg
+c3RydWN0IHRyYWNlcG9pbnRfcHJvYmUgKgorc3RhdGljIHN0cnVjdCBsdHRuZ191c3RfdHJhY2Vw
+b2ludF9wcm9iZSAqCiB0cmFjZXBvaW50X2FkZF9wcm9iZShjb25zdCBjaGFyICpuYW1lLCB2b2lk
+ICgqcHJvYmUpKHZvaWQpLCB2b2lkICpkYXRhLAogCQljb25zdCBjaGFyICpzaWduYXR1cmUpCiB7
+CiAJc3RydWN0IHRyYWNlcG9pbnRfZW50cnkgKmVudHJ5OwotCXN0cnVjdCB0cmFjZXBvaW50X3By
+b2JlICpvbGQ7CisJc3RydWN0IGx0dG5nX3VzdF90cmFjZXBvaW50X3Byb2JlICpvbGQ7CiAKIAll
+bnRyeSA9IGdldF90cmFjZXBvaW50KG5hbWUpOwogCWlmICghZW50cnkpIHsKIAkJZW50cnkgPSBh
+ZGRfdHJhY2Vwb2ludChuYW1lLCBzaWduYXR1cmUpOwogCQlpZiAoSVNfRVJSKGVudHJ5KSkKLQkJ
+CXJldHVybiAoc3RydWN0IHRyYWNlcG9pbnRfcHJvYmUgKillbnRyeTsKKwkJCXJldHVybiAoc3Ry
+dWN0IGx0dG5nX3VzdF90cmFjZXBvaW50X3Byb2JlICopZW50cnk7CiAJfQogCW9sZCA9IHRyYWNl
+cG9pbnRfZW50cnlfYWRkX3Byb2JlKGVudHJ5LCBwcm9iZSwgZGF0YSk7CiAJaWYgKElTX0VSUihv
+bGQpICYmICFlbnRyeS0+cmVmY291bnQpCkBAIC03MDcsMTUgKzcwOSwxNiBAQCBlbmQ6CiAJcHRo
+cmVhZF9tdXRleF91bmxvY2soJnRyYWNlcG9pbnRfbXV0ZXgpOwogfQogCi12b2lkIHRyYWNlcG9p
+bnRfc2V0X25ld190cmFjZXBvaW50X2NiKHZvaWQgKCpjYikoc3RydWN0IHRyYWNlcG9pbnQgKikp
+Cit2b2lkIHRyYWNlcG9pbnRfc2V0X25ld190cmFjZXBvaW50X2NiKHZvaWQgKCpjYikoc3RydWN0
+IGx0dG5nX3VzdF90cmFjZXBvaW50ICopKQogewogCW5ld190cmFjZXBvaW50X2NiID0gY2I7CiB9
+CiAKLXN0YXRpYyB2b2lkIG5ld190cmFjZXBvaW50cyhzdHJ1Y3QgdHJhY2Vwb2ludCAqIGNvbnN0
+ICpzdGFydCwgc3RydWN0IHRyYWNlcG9pbnQgKiBjb25zdCAqZW5kKQorc3RhdGljIHZvaWQgbmV3
+X3RyYWNlcG9pbnRzKHN0cnVjdCBsdHRuZ191c3RfdHJhY2Vwb2ludCAqIGNvbnN0ICpzdGFydCwK
+KwkJCSAgICBzdHJ1Y3QgbHR0bmdfdXN0X3RyYWNlcG9pbnQgKiBjb25zdCAqZW5kKQogewogCWlm
+IChuZXdfdHJhY2Vwb2ludF9jYikgewotCQlzdHJ1Y3QgdHJhY2Vwb2ludCAqIGNvbnN0ICp0Owor
+CQlzdHJ1Y3QgbHR0bmdfdXN0X3RyYWNlcG9pbnQgKiBjb25zdCAqdDsKIAogCQlmb3IgKHQgPSBz
+dGFydDsgdCA8IGVuZDsgdCsrKSB7CiAJCQlpZiAoKnQpCkBAIC03MjQsNyArNzI3LDcgQEAgc3Rh
+dGljIHZvaWQgbmV3X3RyYWNlcG9pbnRzKHN0cnVjdCB0cmFjZXBvaW50ICogY29uc3QgKnN0YXJ0
+LCBzdHJ1Y3QgdHJhY2Vwb2ludAogCX0KIH0KIAotaW50IHRyYWNlcG9pbnRfcmVnaXN0ZXJfbGli
+KHN0cnVjdCB0cmFjZXBvaW50ICogY29uc3QgKnRyYWNlcG9pbnRzX3N0YXJ0LAoraW50IHRyYWNl
+cG9pbnRfcmVnaXN0ZXJfbGliKHN0cnVjdCBsdHRuZ191c3RfdHJhY2Vwb2ludCAqIGNvbnN0ICp0
+cmFjZXBvaW50c19zdGFydCwKIAkJCSAgICBpbnQgdHJhY2Vwb2ludHNfY291bnQpCiB7CiAJc3Ry
+dWN0IHRyYWNlcG9pbnRfbGliICpwbCwgKml0ZXI7CkBAIC03NzMsNyArNzc2LDcgQEAgbGliX2Fk
+ZGVkOgogCXJldHVybiAwOwogfQogCi1pbnQgdHJhY2Vwb2ludF91bnJlZ2lzdGVyX2xpYihzdHJ1
+Y3QgdHJhY2Vwb2ludCAqIGNvbnN0ICp0cmFjZXBvaW50c19zdGFydCkKK2ludCB0cmFjZXBvaW50
+X3VucmVnaXN0ZXJfbGliKHN0cnVjdCBsdHRuZ191c3RfdHJhY2Vwb2ludCAqIGNvbnN0ICp0cmFj
+ZXBvaW50c19zdGFydCkKIHsKIAlzdHJ1Y3QgdHJhY2Vwb2ludF9saWIgKmxpYjsKIAotLSAKMi4w
+LjAKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
+Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3Rz
+Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
