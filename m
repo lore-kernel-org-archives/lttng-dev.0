@@ -1,18 +1,19 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Change wfq usages for wfcq
-Date: Mon, 28 Jul 2014 15:32:33 -0400
-Message-ID: <20140728193233.GG5591__14000.1359316104$1406576019$gmane$org@thessa>
-References: <1406352416-11364-1-git-send-email-simon.marchi@polymtl.ca>
- <20140728185019.GF5591@thessa>
- <CAFXXi0m61TdHb5+EC8=kR6yrby5Bw6Sf4UeeZz0WUK37JpsM8g@mail.gmail.com>
+From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+Subject: [PATCH lttng-tool] Always print GIT_VERSION even if
+	empty
+Date: Mon, 28 Jul 2014 15:43:29 -0400
+Message-ID: <1406576609-28197-1-git-send-email-jonathan.r.julien__4578.92102790556$1406576781$gmane$org@gmail.com>
+References: <1406140700-7627-1-git-send-email-jonathan.r.julien@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0079491199=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
+Received: from usevmg20.ericsson.net ([198.24.6.45])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1XBqf3-0005y3-4Q
- for lttng-dev@lists.lttng.org; Mon, 28 Jul 2014 15:32:46 -0400
-In-Reply-To: <CAFXXi0m61TdHb5+EC8=kR6yrby5Bw6Sf4UeeZz0WUK37JpsM8g@mail.gmail.com>
+ (envelope-from <jonathan.rajotte-julien@ericsson.com>)
+ id 1XBqpg-00063S-5O
+ for lttng-dev@lists.lttng.org; Mon, 28 Jul 2014 15:43:45 -0400
+In-Reply-To: <1406140700-7627-1-git-send-email-jonathan.r.julien@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,77 +22,100 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+Adjustment from last proposed patch. Less crowded and more standard.
+This should not break any packaging.
 
---===============0079491199==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="8bBEDOJVaa9YlTAt"
-Content-Disposition: inline
+feedback?
 
+Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+---
+ include/Makefile.am              | 14 +-------------
+ include/version.h.tmpl           |  9 +--------
+ src/bin/lttng/commands/version.c |  2 +-
+ src/bin/lttng/lttng.c            |  4 ++--
+ 4 files changed, 5 insertions(+), 24 deletions(-)
 
---8bBEDOJVaa9YlTAt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-As agreed on #lttng, I've merged that patch and changed the requirements
-for userspace RCU from >=3D 0.7.2 to >=3D 0.8.0.
-
-Thanks!
-David
-
-On 28 Jul (15:10:44), Simon Marchi wrote:
-> On 28 July 2014 14:50, David Goulet <dgoulet@efficios.com> wrote:
-> > So there is quite an issue with that which is that tools does not work
-> > with urcu 0.7 anymore.
-> >
-> > That would mean urcu 0.8 and later would be the requirement from now on.
->=20
-> Ok, so the version number of urcu in configure.ac should be updated too.
->=20
-> > Not sure I'm comfortable with that but again I don't see why we should
-> > not do that also....
->=20
-> tools is using a deprecated API, so you'll have to do it at some
-> point. I don't think it's an inconvenience for anybody. If you decide
-> to upgrade to lttng-tools/lttng-ust/lttng-modules 2.6, it's not much
-> more work to upgrade urcu as well.
->=20
-> > David
-
---8bBEDOJVaa9YlTAt
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQF8BAEBAgBmBQJT1qVRXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02MtYH+wS6kTJ1vSGcjsdwDuXpl47x
-9Ed9zUJFIly3rIJwV3sTe6I0NiiLGQWZQyezElUki1cOh0ivfbUqx3HrZSHWacSY
-uiIDV5emWTYyqEXUaOYNE3W4xLnRc/lDwHC0MQAWd2Q8lg+/I9Xfj7YPvt+IsGsk
-uEJGZRK5jKUytDCc8U6LNBtDnAIu/IXFH2UHP8VTRRUJx7il7z1CdYh5E25VTqUs
-0edYiRX8JBqNYYE0fqppQSL7fD8/VfZv0f/gTuas4FHCV60M/OkRdXMF1+j+IldA
-pAjBw6Vl46IvZFEoJUMvVK6d9vR9htTucxF6YEiOTMZc/mF+5H7B4B2GLcI6GSI=
-=wD+6
------END PGP SIGNATURE-----
-
---8bBEDOJVaa9YlTAt--
-
-
---===============0079491199==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0079491199==--
+diff --git a/include/Makefile.am b/include/Makefile.am
+index d40cb4a..89b084d 100644
+--- a/include/Makefile.am
++++ b/include/Makefile.am
+@@ -47,19 +47,7 @@ version.h:
+ 			## don't want to update the file if it is already up to date
+ 			##
+ 			if [ $$(grep -cE "^#define GIT_VERSION \"?$${git_version}\"?$$" "$${version_h}") -eq 0 ]; then \
+-				if [ $$(grep -c "^#define GIT_VERSION" "$${version_h}") -gt 0 ]; then \
+-					##
+-					## If there is already a GIT_VERSION defined,
+-					## we just replace it by the new version
+-					##
+-					sed -i "s'^#define GIT_VERSION.*$$'#define GIT_VERSION \"$${git_version}\"'" "$${version_h}"; \
+-				else \
+-					##
+-					## Else, we add a GIT_VERSION define
+-					## containing our new version.
+-					##
+-					sed -i "s'^\(#define VERSION_H.*\)$$'\1\n\n#define GIT_VERSION \"$${git_version}\"'" "$${version_h}"; \
+-				fi; \
++				sed -i "s'^#define GIT_VERSION.*$$'#define GIT_VERSION \"$${git_version}\"'" "$${version_h}"; \
+ 			fi; \
+ 		fi; \
+ 	fi)
+diff --git a/include/version.h.tmpl b/include/version.h.tmpl
+index 2cab733..861a477 100644
+--- a/include/version.h.tmpl
++++ b/include/version.h.tmpl
+@@ -20,13 +20,6 @@
+ #ifndef VERSION_H
+ #define VERSION_H
+ 
+-/*
+- * Define the macro containing the FULL version
+- */
+-#ifdef GIT_VERSION
+-#define FULL_VERSION "" GIT_VERSION
+-#else /* GIT_VERSION */
+-#define FULL_VERSION "" VERSION
+-#endif /* GIT_VERSION */
++#define GIT_VERSION ""
+ 
+ #endif /* VERSION_H */
+diff --git a/src/bin/lttng/commands/version.c b/src/bin/lttng/commands/version.c
+index 13e5c99..768ebb5 100644
+--- a/src/bin/lttng/commands/version.c
++++ b/src/bin/lttng/commands/version.c
+@@ -164,7 +164,7 @@ int cmd_version(int argc, const char **argv)
+ 	if (lttng_opt_mi) {
+ 		ret = print_mi();
+ 	} else {
+-		MSG("lttng version " FULL_VERSION " - " VERSION_NAME);
++		MSG("lttng version " VERSION " - " VERSION_NAME " - " GIT_VERSION);
+ 		MSG("\n" VERSION_DESCRIPTION "\n");
+ 		MSG("Web site: http://lttng.org");
+ 		MSG("\n%s", lttng_license);
+diff --git a/src/bin/lttng/lttng.c b/src/bin/lttng/lttng.c
+index bad57fd..41232be 100644
+--- a/src/bin/lttng/lttng.c
++++ b/src/bin/lttng/lttng.c
+@@ -90,7 +90,7 @@ static struct cmd_struct commands[] =  {
+ 
+ static void usage(FILE *ofp)
+ {
+-	fprintf(ofp, "LTTng Trace Control " FULL_VERSION" - " VERSION_NAME"\n\n");
++	fprintf(ofp, "LTTng Trace Control " VERSION " - " VERSION_NAME" - " GIT_VERSION "\n\n");
+ 	fprintf(ofp, "usage: lttng [OPTIONS] <COMMAND> [<ARGS>]\n");
+ 	fprintf(ofp, "\n");
+ 	fprintf(ofp, "Options:\n");
+@@ -134,7 +134,7 @@ static void usage(FILE *ofp)
+ 
+ static void version(FILE *ofp)
+ {
+-	fprintf(ofp, "%s (LTTng Trace Control) " FULL_VERSION" - " VERSION_NAME"\n",
++	fprintf(ofp, "%s (LTTng Trace Control) " VERSION" - " VERSION_NAME" - " GIT_VERSION "\n",
+ 			progname);
+ }
+ 
+-- 
+2.0.0
