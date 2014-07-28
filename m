@@ -1,18 +1,17 @@
-From: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
-Subject: [PATCH lttng-tools] Add the formal version before the
-	git version for a commit outside the master branch
-Date: Mon, 28 Jul 2014 16:00:04 -0400
-Message-ID: <1406577604-2799-1-git-send-email-raphael.beamonte__39023.9518056207$1406577674$gmane$org@gmail.com>
+From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+Subject: [PATCH lttng-tool] Fix: mi: Make sure GIT_VERSION
+	symbol always exist
+Date: Mon, 28 Jul 2014 17:54:36 -0400
+Message-ID: <1406584476-32009-1-git-send-email-jonathan.r.julien__21974.8160838664$1406584601$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f178.google.com ([209.85.220.178])
+Received: from usevmg21.ericsson.net ([198.24.6.65])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <raphael.beamonte@gmail.com>) id 1XBr5m-0006DP-PC
- for lttng-dev@lists.lttng.org; Mon, 28 Jul 2014 16:00:24 -0400
-Received: by mail-vc0-f178.google.com with SMTP id la4so12162756vcb.9
- for <lttng-dev@lists.lttng.org>; Mon, 28 Jul 2014 13:00:13 -0700 (PDT)
+ (envelope-from <jonathan.rajotte-julien@ericsson.com>)
+ id 1XBssq-0006sA-L5
+ for lttng-dev@lists.lttng.org; Mon, 28 Jul 2014 17:55:10 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,41 +21,64 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
-Cc: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwu
-Y29tPgotLS0KIGluY2x1ZGUvTWFrZWZpbGUuYW0gfCA4ICsrKysrLS0tCiAxIGZpbGUgY2hhbmdl
-ZCwgNSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUv
-TWFrZWZpbGUuYW0gYi9pbmNsdWRlL01ha2VmaWxlLmFtCmluZGV4IGQ0MGNiNGEuLjY3YTcwNjMg
-MTAwNjQ0Ci0tLSBhL2luY2x1ZGUvTWFrZWZpbGUuYW0KKysrIGIvaW5jbHVkZS9NYWtlZmlsZS5h
-bQpAQCAtMjQsOCArMjQsMTAgQEAgdmVyc2lvbi5oOgogCQkJaWYgWyAiJCR7Z2l0X2JyYW5jaH0i
-ID09ICIkJHtnaXRfZGVzY3JpYmV9IiBdIHx8IFwKIAkJCQlbICIkJHtnaXRfYnJhbmNofSIgPT0g
-ImhlYWRzL21hc3RlciIgXTsgdGhlbiBcCiAJCQkJZ2l0X3ZlcnNpb249IiQke2dpdF9kZXNjcmli
-ZX0iOyBcCisJCQkJYWRkdmVyc2lvbj0iIjsgXAogCQkJZWxzZSBcCiAJCQkJZ2l0X3ZlcnNpb249
-IiQkKGdpdCBkZXNjcmliZSAtLWxvbmcgLS1hbGwpIjsgXAorCQkJCWFkZHZlcnNpb249IlwiIFZF
-UlNJT04gXCItIjsgXAogCQkJZmk7IFwKIAkJZmk7IFwKIAkJIyMKQEAgLTQ2LDE5ICs0OCwxOSBA
-QCB2ZXJzaW9uLmg6CiAJCQkjIyBhcyB0aGUgb25lIGN1cnJlbnRseSBpbiB0aGUgZmlsZSAoaWYg
-dGhlcmUgaXMgb25lKSwgYXMgd2UKIAkJCSMjIGRvbid0IHdhbnQgdG8gdXBkYXRlIHRoZSBmaWxl
-IGlmIGl0IGlzIGFscmVhZHkgdXAgdG8gZGF0ZQogCQkJIyMKLQkJCWlmIFsgJCQoZ3JlcCAtY0Ug
-Il4jZGVmaW5lIEdJVF9WRVJTSU9OIFwiPyQke2dpdF92ZXJzaW9ufVwiPyQkIiAiJCR7dmVyc2lv
-bl9ofSIpIC1lcSAwIF07IHRoZW4gXAorCQkJaWYgWyAkJChncmVwIC1jRSAiXiNkZWZpbmUgR0lU
-X1ZFUlNJT04gXCI/JCR7YWRkdmVyc2lvbn0kJHtnaXRfdmVyc2lvbn1cIj8kJCIgIiQke3ZlcnNp
-b25faH0iKSAtZXEgMCBdOyB0aGVuIFwKIAkJCQlpZiBbICQkKGdyZXAgLWMgIl4jZGVmaW5lIEdJ
-VF9WRVJTSU9OIiAiJCR7dmVyc2lvbl9ofSIpIC1ndCAwIF07IHRoZW4gXAogCQkJCQkjIwogCQkJ
-CQkjIyBJZiB0aGVyZSBpcyBhbHJlYWR5IGEgR0lUX1ZFUlNJT04gZGVmaW5lZCwKIAkJCQkJIyMg
-d2UganVzdCByZXBsYWNlIGl0IGJ5IHRoZSBuZXcgdmVyc2lvbgogCQkJCQkjIwotCQkJCQlzZWQg
-LWkgInMnXiNkZWZpbmUgR0lUX1ZFUlNJT04uKiQkJyNkZWZpbmUgR0lUX1ZFUlNJT04gXCIkJHtn
-aXRfdmVyc2lvbn1cIiciICIkJHt2ZXJzaW9uX2h9IjsgXAorCQkJCQlzZWQgLWkgInMnXiNkZWZp
-bmUgR0lUX1ZFUlNJT04uKiQkJyNkZWZpbmUgR0lUX1ZFUlNJT04gXCIkJHthZGR2ZXJzaW9ufSQk
-e2dpdF92ZXJzaW9ufVwiJyIgIiQke3ZlcnNpb25faH0iOyBcCiAJCQkJZWxzZSBcCiAJCQkJCSMj
-CiAJCQkJCSMjIEVsc2UsIHdlIGFkZCBhIEdJVF9WRVJTSU9OIGRlZmluZQogCQkJCQkjIyBjb250
-YWluaW5nIG91ciBuZXcgdmVyc2lvbi4KIAkJCQkJIyMKLQkJCQkJc2VkIC1pICJzJ15cKCNkZWZp
-bmUgVkVSU0lPTl9ILipcKSQkJ1wxXG5cbiNkZWZpbmUgR0lUX1ZFUlNJT04gXCIkJHtnaXRfdmVy
-c2lvbn1cIiciICIkJHt2ZXJzaW9uX2h9IjsgXAorCQkJCQlzZWQgLWkgInMnXlwoI2RlZmluZSBW
-RVJTSU9OX0guKlwpJCQnXDFcblxuI2RlZmluZSBHSVRfVkVSU0lPTiBcIiQke2FkZHZlcnNpb259
-JCR7Z2l0X3ZlcnNpb259XCInIiAiJCR7dmVyc2lvbl9ofSI7IFwKIAkJCQlmaTsgXAogCQkJZmk7
-IFwKIAkJZmk7IFwKLS0gCjIuMC4wLnJjMAoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
-by9sdHRuZy1kZXYK
+The use of GIT_VERSION symbol in mi to express the position in git tree
+force the need to have it defined for each type of build.
+
+This make sure that a build from source file only (git scm not present) is possible.
+
+Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+---
+ include/Makefile.am    | 15 ++-------------
+ include/version.h.tmpl |  6 +++++-
+ 2 files changed, 7 insertions(+), 14 deletions(-)
+
+diff --git a/include/Makefile.am b/include/Makefile.am
+index d40cb4a..ca515da 100644
+--- a/include/Makefile.am
++++ b/include/Makefile.am
+@@ -47,19 +47,8 @@ version.h:
+ 			## don't want to update the file if it is already up to date
+ 			##
+ 			if [ $$(grep -cE "^#define GIT_VERSION \"?$${git_version}\"?$$" "$${version_h}") -eq 0 ]; then \
+-				if [ $$(grep -c "^#define GIT_VERSION" "$${version_h}") -gt 0 ]; then \
+-					##
+-					## If there is already a GIT_VERSION defined,
+-					## we just replace it by the new version
+-					##
+-					sed -i "s'^#define GIT_VERSION.*$$'#define GIT_VERSION \"$${git_version}\"'" "$${version_h}"; \
+-				else \
+-					##
+-					## Else, we add a GIT_VERSION define
+-					## containing our new version.
+-					##
+-					sed -i "s'^\(#define VERSION_H.*\)$$'\1\n\n#define GIT_VERSION \"$${git_version}\"'" "$${version_h}"; \
+-				fi; \
++				sed -i "s'^#define GIT_VERSION.*$$'#define GIT_VERSION \"$${git_version}\"'" "$${version_h}"; \
++				sed -i "s'^#define GIT_SOURCE.*$$'#define GIT_SOURCE 1'" "$${version_h}"; \
+ 			fi; \
+ 		fi; \
+ 	fi)
+diff --git a/include/version.h.tmpl b/include/version.h.tmpl
+index 2cab733..3ef6905 100644
+--- a/include/version.h.tmpl
++++ b/include/version.h.tmpl
+@@ -20,10 +20,14 @@
+ #ifndef VERSION_H
+ #define VERSION_H
+ 
++
++#define GIT_SOURCE 0
++#define GIT_VERSION ""
++
+ /*
+  * Define the macro containing the FULL version
+  */
+-#ifdef GIT_VERSION
++#if GIT_SOURCE
+ #define FULL_VERSION "" GIT_VERSION
+ #else /* GIT_VERSION */
+ #define FULL_VERSION "" VERSION
+-- 
+2.0.0
