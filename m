@@ -1,17 +1,18 @@
-From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
-Subject: [PATCH lttng-tool] Fix: mi: logically dead code,
-	missing ret assignment
-Date: Mon, 28 Jul 2014 15:50:28 -0400
-Message-ID: <1406577028-7152-1-git-send-email-jonathan.r.julien__46435.1193783388$1406577109$gmane$org@gmail.com>
+From: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
+Subject: [PATCH lttng-tools] Add the formal version before the
+	git version for a commit outside the master branch
+Date: Mon, 28 Jul 2014 16:00:04 -0400
+Message-ID: <1406577604-2799-1-git-send-email-raphael.beamonte__39023.9518056207$1406577674$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg20.ericsson.net ([198.24.6.45])
+Received: from mail-vc0-f178.google.com ([209.85.220.178])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@ericsson.com>)
- id 1XBqwc-00067O-HB
- for lttng-dev@lists.lttng.org; Mon, 28 Jul 2014 15:50:55 -0400
+ (envelope-from <raphael.beamonte@gmail.com>) id 1XBr5m-0006DP-PC
+ for lttng-dev@lists.lttng.org; Mon, 28 Jul 2014 16:00:24 -0400
+Received: by mail-vc0-f178.google.com with SMTP id la4so12162756vcb.9
+ for <lttng-dev@lists.lttng.org>; Mon, 28 Jul 2014 13:00:13 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,25 +22,41 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
+Cc: =?UTF-8?q?Rapha=C3=ABl=20Beamonte?= <raphael.beamonte@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
----
- src/bin/lttng/commands/list.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
-index 210c2f4..956b62e 100644
---- a/src/bin/lttng/commands/list.c
-+++ b/src/bin/lttng/commands/list.c
-@@ -748,7 +748,7 @@ static int mi_list_kernel_events(struct lttng_event *events, int count,
- 	}
- 
- 	for (i = 0; i < count; i++) {
--		mi_lttng_event(writer, &events[i], 0);
-+		ret = mi_lttng_event(writer, &events[i], 0);
- 		if (ret) {
- 			goto end;
- 		}
--- 
-2.0.0
+U2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwu
+Y29tPgotLS0KIGluY2x1ZGUvTWFrZWZpbGUuYW0gfCA4ICsrKysrLS0tCiAxIGZpbGUgY2hhbmdl
+ZCwgNSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUv
+TWFrZWZpbGUuYW0gYi9pbmNsdWRlL01ha2VmaWxlLmFtCmluZGV4IGQ0MGNiNGEuLjY3YTcwNjMg
+MTAwNjQ0Ci0tLSBhL2luY2x1ZGUvTWFrZWZpbGUuYW0KKysrIGIvaW5jbHVkZS9NYWtlZmlsZS5h
+bQpAQCAtMjQsOCArMjQsMTAgQEAgdmVyc2lvbi5oOgogCQkJaWYgWyAiJCR7Z2l0X2JyYW5jaH0i
+ID09ICIkJHtnaXRfZGVzY3JpYmV9IiBdIHx8IFwKIAkJCQlbICIkJHtnaXRfYnJhbmNofSIgPT0g
+ImhlYWRzL21hc3RlciIgXTsgdGhlbiBcCiAJCQkJZ2l0X3ZlcnNpb249IiQke2dpdF9kZXNjcmli
+ZX0iOyBcCisJCQkJYWRkdmVyc2lvbj0iIjsgXAogCQkJZWxzZSBcCiAJCQkJZ2l0X3ZlcnNpb249
+IiQkKGdpdCBkZXNjcmliZSAtLWxvbmcgLS1hbGwpIjsgXAorCQkJCWFkZHZlcnNpb249IlwiIFZF
+UlNJT04gXCItIjsgXAogCQkJZmk7IFwKIAkJZmk7IFwKIAkJIyMKQEAgLTQ2LDE5ICs0OCwxOSBA
+QCB2ZXJzaW9uLmg6CiAJCQkjIyBhcyB0aGUgb25lIGN1cnJlbnRseSBpbiB0aGUgZmlsZSAoaWYg
+dGhlcmUgaXMgb25lKSwgYXMgd2UKIAkJCSMjIGRvbid0IHdhbnQgdG8gdXBkYXRlIHRoZSBmaWxl
+IGlmIGl0IGlzIGFscmVhZHkgdXAgdG8gZGF0ZQogCQkJIyMKLQkJCWlmIFsgJCQoZ3JlcCAtY0Ug
+Il4jZGVmaW5lIEdJVF9WRVJTSU9OIFwiPyQke2dpdF92ZXJzaW9ufVwiPyQkIiAiJCR7dmVyc2lv
+bl9ofSIpIC1lcSAwIF07IHRoZW4gXAorCQkJaWYgWyAkJChncmVwIC1jRSAiXiNkZWZpbmUgR0lU
+X1ZFUlNJT04gXCI/JCR7YWRkdmVyc2lvbn0kJHtnaXRfdmVyc2lvbn1cIj8kJCIgIiQke3ZlcnNp
+b25faH0iKSAtZXEgMCBdOyB0aGVuIFwKIAkJCQlpZiBbICQkKGdyZXAgLWMgIl4jZGVmaW5lIEdJ
+VF9WRVJTSU9OIiAiJCR7dmVyc2lvbl9ofSIpIC1ndCAwIF07IHRoZW4gXAogCQkJCQkjIwogCQkJ
+CQkjIyBJZiB0aGVyZSBpcyBhbHJlYWR5IGEgR0lUX1ZFUlNJT04gZGVmaW5lZCwKIAkJCQkJIyMg
+d2UganVzdCByZXBsYWNlIGl0IGJ5IHRoZSBuZXcgdmVyc2lvbgogCQkJCQkjIwotCQkJCQlzZWQg
+LWkgInMnXiNkZWZpbmUgR0lUX1ZFUlNJT04uKiQkJyNkZWZpbmUgR0lUX1ZFUlNJT04gXCIkJHtn
+aXRfdmVyc2lvbn1cIiciICIkJHt2ZXJzaW9uX2h9IjsgXAorCQkJCQlzZWQgLWkgInMnXiNkZWZp
+bmUgR0lUX1ZFUlNJT04uKiQkJyNkZWZpbmUgR0lUX1ZFUlNJT04gXCIkJHthZGR2ZXJzaW9ufSQk
+e2dpdF92ZXJzaW9ufVwiJyIgIiQke3ZlcnNpb25faH0iOyBcCiAJCQkJZWxzZSBcCiAJCQkJCSMj
+CiAJCQkJCSMjIEVsc2UsIHdlIGFkZCBhIEdJVF9WRVJTSU9OIGRlZmluZQogCQkJCQkjIyBjb250
+YWluaW5nIG91ciBuZXcgdmVyc2lvbi4KIAkJCQkJIyMKLQkJCQkJc2VkIC1pICJzJ15cKCNkZWZp
+bmUgVkVSU0lPTl9ILipcKSQkJ1wxXG5cbiNkZWZpbmUgR0lUX1ZFUlNJT04gXCIkJHtnaXRfdmVy
+c2lvbn1cIiciICIkJHt2ZXJzaW9uX2h9IjsgXAorCQkJCQlzZWQgLWkgInMnXlwoI2RlZmluZSBW
+RVJTSU9OX0guKlwpJCQnXDFcblxuI2RlZmluZSBHSVRfVkVSU0lPTiBcIiQke2FkZHZlcnNpb259
+JCR7Z2l0X3ZlcnNpb259XCInIiAiJCR7dmVyc2lvbl9ofSI7IFwKIAkJCQlmaTsgXAogCQkJZmk7
+IFwKIAkJZmk7IFwKLS0gCjIuMC4wLnJjMAoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
+Lmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
+by9sdHRuZy1kZXYK
