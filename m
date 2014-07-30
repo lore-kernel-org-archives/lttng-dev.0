@@ -1,16 +1,19 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
 Subject: Re: Enable UST probes only in specific process
-Date: Wed, 30 Jul 2014 16:36:30 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD3CCB3AF5__1211.05634975738$1406738261$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+Date: Wed, 30 Jul 2014 14:31:28 -0400
+Message-ID: <CA+jJMxva_iZRJMzLkMTJ5=WXd1p4-WJNEQM95u2w8sdP0927hw__16641.175610903$1406745159$gmane$org@mail.gmail.com>
+References: <CADmgc-ueSkK_XZPwtjsm_6dvSDCqi1GLfCyH7SNhVw1n-7WppQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-qg0-f43.google.com ([209.85.192.43])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1XCWrl-0004wy-RX
- for lttng-dev@lists.lttng.org; Wed, 30 Jul 2014 12:36:43 -0400
-Content-Language: fr-FR
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XCYf0-0005ao-2s
+ for lttng-dev@lists.lttng.org; Wed, 30 Jul 2014 14:31:39 -0400
+Received: by mail-qg0-f43.google.com with SMTP id a108so2285482qge.16
+ for <lttng-dev@lists.lttng.org>; Wed, 30 Jul 2014 11:31:28 -0700 (PDT)
+In-Reply-To: <CADmgc-ueSkK_XZPwtjsm_6dvSDCqi1GLfCyH7SNhVw1n-7WppQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,44 +22,32 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Dmitri Shubin <sbn@tbricks.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Wed, 30 Jul 2014 17:58:25 +0400
-From: Dmitri Shubin <sbn@tbricks.com>
-
-> Is it possible to enable user-space tracepoint in specific process (of gi=
-ven PID)?
->
-> AFAIU
-> lttng enable-event -u prov:probe --filter '$ctx.vpid=3D=3D12345'
-> enables probe for all processes and then drops unmatched.
->
-> In my case I'm doing rather heavyweight thing in probe (getting stack
-> trace) and want to do that only in the process of interest.
->
-> Is it possible?
->
-> The only way I can do it now is playing with LTTNG_HOME variable setting =
-it to different paths for each process.
-
-   I do believe that the filter drops the event before it starts resolving =
-its arguments, so filtering should be enough.  Someone more familiar with t=
-he internals of LTTng should set us straight either way.
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+T24gV2VkLCBKdWwgMzAsIDIwMTQgYXQgOTo1OCBBTSwgRG1pdHJpIFNodWJpbiA8c2JuQHRicmlj
+a3MuY29tPiB3cm90ZToKPiBIaSEKPgo+IElzIGl0IHBvc3NpYmxlIHRvIGVuYWJsZSB1c2VyLXNw
+YWNlIHRyYWNlcG9pbnQgaW4gc3BlY2lmaWMgcHJvY2VzcyAob2YgZ2l2ZW4KPiBQSUQpPwo+Cj4g
+QUZBSVUKPiBsdHRuZyBlbmFibGUtZXZlbnQgLXUgcHJvdjpwcm9iZSAtLWZpbHRlciAnJGN0eC52
+cGlkPT0xMjM0NScKPiBlbmFibGVzIHByb2JlIGZvciBhbGwgcHJvY2Vzc2VzIGFuZCB0aGVuIGRy
+b3BzIHVubWF0Y2hlZC4KPgoKQ29ycmVjdC4gVGhlIGV2ZW50IHdvbid0IGJlIHRyYWNlZC4KCj4g
+SW4gbXkgY2FzZSBJJ20gZG9pbmcgcmF0aGVyIGhlYXZ5d2VpZ2h0IHRoaW5nIGluIHByb2JlIChn
+ZXR0aW5nIHN0YWNrIHRyYWNlKQo+IGFuZCB3YW50IHRvIGRvIHRoYXQgb25seSBpbiB0aGUgcHJv
+Y2VzcyBvZiBpbnRlcmVzdC4KPgo+IElzIGl0IHBvc3NpYmxlPwoKVGhlIGFyZ3VtZW50cyB3b24n
+dCBiZSBldmFsdWF0ZWQgaWYgdGhlIGV2ZW50IGlzIG5vdCBlbmFibGVkLiBIb3dldmVyLAp3aGVu
+IGFuIGV2ZW50IGlzIGVuYWJsZWQsIHRoZSBhcmd1bWVudHMgYXJlIGV2YWx1YXRlZCByZWdhcmRs
+ZXNzIG9mCnRoZSByZXN1bHQgb2YgdGhlIGZpbHRlcidzIGV4cHJlc3Npb24gZXZhbHVhdGlvbiBz
+aW5jZSBpdCBjb3VsZCBiZQpiYXNlZCBvbiB0aGUgZXZlbnQncyBjb250ZW50LgoKTGV0IG1lIGtu
+b3cgaWYgdGhhdCdzIG5vdCB3aGF0IHlvdSBtZWFudC4KCj4KPiBUaGUgb25seSB3YXkgSSBjYW4g
+ZG8gaXQgbm93IGlzIHBsYXlpbmcgd2l0aCBMVFROR19IT01FIHZhcmlhYmxlIHNldHRpbmcgaXQK
+PiB0byBkaWZmZXJlbnQgcGF0aHMgZm9yIGVhY2ggcHJvY2Vzcy4KCkknbSBub3Qgc3VyZSBJIHVu
+ZGVyc3RhbmQgd2hhdCB5b3UgbWVhbiBoZXJlLiBDYXJlIHRvIGVsYWJvcmF0ZT8KClRoYW5rcywK
+SsOpcsOpbWllCgo+Cj4gVGhhbmtzIQo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
+c3RpbmZvL2x0dG5nLWRldgo+CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIElu
+Yy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
+Lmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
+by9sdHRuZy1kZXYK
