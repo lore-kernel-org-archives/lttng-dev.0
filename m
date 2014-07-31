@@ -1,18 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tool] Fix: mi: Make sure
-	GIT_VERSION	symbol always exist
-Date: Thu, 31 Jul 2014 21:17:17 +0000 (UTC)
-Message-ID: <649476030.24171.1406841437430.JavaMail.zimbra__35181.450416758$1406841497$gmane$org@efficios.com>
-References: <1406584476-32009-1-git-send-email-jonathan.r.julien@gmail.com>
+Subject: Re: [PATCH lttng-tools] Add the formal version before
+ the	git version for a commit outside the master branch
+Date: Thu, 31 Jul 2014 21:17:46 +0000 (UTC)
+Message-ID: <1643385577.24172.1406841466938.JavaMail.zimbra__49863.1228729666$1406841598$gmane$org@efficios.com>
+References: <1406577604-2799-1-git-send-email-raphael.beamonte@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XCxiw-0006Ov-C6
- for lttng-dev@lists.lttng.org; Thu, 31 Jul 2014 17:17:24 -0400
-In-Reply-To: <1406584476-32009-1-git-send-email-jonathan.r.julien@gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1XCxjP-0006PR-KA
+ for lttng-dev@lists.lttng.org; Thu, 31 Jul 2014 17:17:53 -0400
+In-Reply-To: <1406577604-2799-1-git-send-email-raphael.beamonte@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,93 +21,55 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+To: =?utf-8?Q?Rapha=C3=ABl?= Beamonte <raphael.beamonte@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Just to make sure: I guess this patch is not needed
-after the changes I did ?
-
------ Original Message -----
-> From: "Jonathan Rajotte Julien" <jonathan.r.julien@gmail.com>
-> To: lttng-dev@lists.lttng.org
-> Sent: Monday, July 28, 2014 5:54:36 PM
-> Subject: [lttng-dev] [PATCH lttng-tool] Fix: mi: Make sure GIT_VERSION	symbol always exist
-> 
-> The use of GIT_VERSION symbol in mi to express the position in git tree
-> force the need to have it defined for each type of build.
-> 
-> This make sure that a build from source file only (git scm not present) is
-> possible.
-> 
-> Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
-> ---
->  include/Makefile.am    | 15 ++-------------
->  include/version.h.tmpl |  6 +++++-
->  2 files changed, 7 insertions(+), 14 deletions(-)
-> 
-> diff --git a/include/Makefile.am b/include/Makefile.am
-> index d40cb4a..ca515da 100644
-> --- a/include/Makefile.am
-> +++ b/include/Makefile.am
-> @@ -47,19 +47,8 @@ version.h:
->  			## don't want to update the file if it is already up to date
->  			##
->  			if [ $$(grep -cE "^#define GIT_VERSION \"?$${git_version}\"?$$"
->  			"$${version_h}") -eq 0 ]; then \
-> -				if [ $$(grep -c "^#define GIT_VERSION" "$${version_h}") -gt 0 ]; then \
-> -					##
-> -					## If there is already a GIT_VERSION defined,
-> -					## we just replace it by the new version
-> -					##
-> -					sed -i "s'^#define GIT_VERSION.*$$'#define GIT_VERSION
-> \"$${git_version}\"'" "$${version_h}"; \
-> -				else \
-> -					##
-> -					## Else, we add a GIT_VERSION define
-> -					## containing our new version.
-> -					##
-> -					sed -i "s'^\(#define VERSION_H.*\)$$'\1\n\n#define GIT_VERSION
-> \"$${git_version}\"'" "$${version_h}"; \
-> -				fi; \
-> +				sed -i "s'^#define GIT_VERSION.*$$'#define GIT_VERSION
-> \"$${git_version}\"'" "$${version_h}"; \
-> +				sed -i "s'^#define GIT_SOURCE.*$$'#define GIT_SOURCE 1'"
-> "$${version_h}"; \
->  			fi; \
->  		fi; \
->  	fi)
-> diff --git a/include/version.h.tmpl b/include/version.h.tmpl
-> index 2cab733..3ef6905 100644
-> --- a/include/version.h.tmpl
-> +++ b/include/version.h.tmpl
-> @@ -20,10 +20,14 @@
->  #ifndef VERSION_H
->  #define VERSION_H
->  
-> +
-> +#define GIT_SOURCE 0
-> +#define GIT_VERSION ""
-> +
->  /*
->   * Define the macro containing the FULL version
->   */
-> -#ifdef GIT_VERSION
-> +#if GIT_SOURCE
->  #define FULL_VERSION "" GIT_VERSION
->  #else /* GIT_VERSION */
->  #define FULL_VERSION "" VERSION
-> --
-> 2.0.0
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SXMgdGhpcyBjaGFuZ2Ugc3RpbGwgbmVlZGVkIGFmdGVyIHRoZSByZWNlbnQgY2hhbmdlcyBJIGRp
+ZCA/CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gRnJvbTogIlJhcGhhw6tsIEJlYW1v
+bnRlIiA8cmFwaGFlbC5iZWFtb250ZUBnbWFpbC5jb20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5s
+dHRuZy5vcmcKPiBDYzogIlJhcGhhw6tsIEJlYW1vbnRlIiA8cmFwaGFlbC5iZWFtb250ZUBnbWFp
+bC5jb20+Cj4gU2VudDogTW9uZGF5LCBKdWx5IDI4LCAyMDE0IDQ6MDA6MDQgUE0KPiBTdWJqZWN0
+OiBbbHR0bmctZGV2XSBbUEFUQ0ggbHR0bmctdG9vbHNdIEFkZCB0aGUgZm9ybWFsIHZlcnNpb24g
+YmVmb3JlIHRoZQlnaXQgdmVyc2lvbiBmb3IgYSBjb21taXQgb3V0c2lkZSB0aGUKPiBtYXN0ZXIg
+YnJhbmNoCj4gCj4gU2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVh
+bW9udGVAZ21haWwuY29tPgo+IC0tLQo+ICBpbmNsdWRlL01ha2VmaWxlLmFtIHwgOCArKysrKy0t
+LQo+ICAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQo+IAo+
+IGRpZmYgLS1naXQgYS9pbmNsdWRlL01ha2VmaWxlLmFtIGIvaW5jbHVkZS9NYWtlZmlsZS5hbQo+
+IGluZGV4IGQ0MGNiNGEuLjY3YTcwNjMgMTAwNjQ0Cj4gLS0tIGEvaW5jbHVkZS9NYWtlZmlsZS5h
+bQo+ICsrKyBiL2luY2x1ZGUvTWFrZWZpbGUuYW0KPiBAQCAtMjQsOCArMjQsMTAgQEAgdmVyc2lv
+bi5oOgo+ICAJCQlpZiBbICIkJHtnaXRfYnJhbmNofSIgPT0gIiQke2dpdF9kZXNjcmliZX0iIF0g
+fHwgXAo+ICAJCQkJWyAiJCR7Z2l0X2JyYW5jaH0iID09ICJoZWFkcy9tYXN0ZXIiIF07IHRoZW4g
+XAo+ICAJCQkJZ2l0X3ZlcnNpb249IiQke2dpdF9kZXNjcmliZX0iOyBcCj4gKwkJCQlhZGR2ZXJz
+aW9uPSIiOyBcCj4gIAkJCWVsc2UgXAo+ICAJCQkJZ2l0X3ZlcnNpb249IiQkKGdpdCBkZXNjcmli
+ZSAtLWxvbmcgLS1hbGwpIjsgXAo+ICsJCQkJYWRkdmVyc2lvbj0iXCIgVkVSU0lPTiBcIi0iOyBc
+Cj4gIAkJCWZpOyBcCj4gIAkJZmk7IFwKPiAgCQkjIwo+IEBAIC00NiwxOSArNDgsMTkgQEAgdmVy
+c2lvbi5oOgo+ICAJCQkjIyBhcyB0aGUgb25lIGN1cnJlbnRseSBpbiB0aGUgZmlsZSAoaWYgdGhl
+cmUgaXMgb25lKSwgYXMgd2UKPiAgCQkJIyMgZG9uJ3Qgd2FudCB0byB1cGRhdGUgdGhlIGZpbGUg
+aWYgaXQgaXMgYWxyZWFkeSB1cCB0byBkYXRlCj4gIAkJCSMjCj4gLQkJCWlmIFsgJCQoZ3JlcCAt
+Y0UgIl4jZGVmaW5lIEdJVF9WRVJTSU9OIFwiPyQke2dpdF92ZXJzaW9ufVwiPyQkIgo+ICIkJHt2
+ZXJzaW9uX2h9IikgLWVxIDAgXTsgdGhlbiBcCj4gKwkJCWlmIFsgJCQoZ3JlcCAtY0UgIl4jZGVm
+aW5lIEdJVF9WRVJTSU9OCj4gXCI/JCR7YWRkdmVyc2lvbn0kJHtnaXRfdmVyc2lvbn1cIj8kJCIg
+IiQke3ZlcnNpb25faH0iKSAtZXEgMCBdOyB0aGVuIFwKPiAgCQkJCWlmIFsgJCQoZ3JlcCAtYyAi
+XiNkZWZpbmUgR0lUX1ZFUlNJT04iICIkJHt2ZXJzaW9uX2h9IikgLWd0IDAgXTsgdGhlbiBcCj4g
+IAkJCQkJIyMKPiAgCQkJCQkjIyBJZiB0aGVyZSBpcyBhbHJlYWR5IGEgR0lUX1ZFUlNJT04gZGVm
+aW5lZCwKPiAgCQkJCQkjIyB3ZSBqdXN0IHJlcGxhY2UgaXQgYnkgdGhlIG5ldyB2ZXJzaW9uCj4g
+IAkJCQkJIyMKPiAtCQkJCQlzZWQgLWkgInMnXiNkZWZpbmUgR0lUX1ZFUlNJT04uKiQkJyNkZWZp
+bmUgR0lUX1ZFUlNJT04KPiBcIiQke2dpdF92ZXJzaW9ufVwiJyIgIiQke3ZlcnNpb25faH0iOyBc
+Cj4gKwkJCQkJc2VkIC1pICJzJ14jZGVmaW5lIEdJVF9WRVJTSU9OLiokJCcjZGVmaW5lIEdJVF9W
+RVJTSU9OCj4gXCIkJHthZGR2ZXJzaW9ufSQke2dpdF92ZXJzaW9ufVwiJyIgIiQke3ZlcnNpb25f
+aH0iOyBcCj4gIAkJCQllbHNlIFwKPiAgCQkJCQkjIwo+ICAJCQkJCSMjIEVsc2UsIHdlIGFkZCBh
+IEdJVF9WRVJTSU9OIGRlZmluZQo+ICAJCQkJCSMjIGNvbnRhaW5pbmcgb3VyIG5ldyB2ZXJzaW9u
+Lgo+ICAJCQkJCSMjCj4gLQkJCQkJc2VkIC1pICJzJ15cKCNkZWZpbmUgVkVSU0lPTl9ILipcKSQk
+J1wxXG5cbiNkZWZpbmUgR0lUX1ZFUlNJT04KPiBcIiQke2dpdF92ZXJzaW9ufVwiJyIgIiQke3Zl
+cnNpb25faH0iOyBcCj4gKwkJCQkJc2VkIC1pICJzJ15cKCNkZWZpbmUgVkVSU0lPTl9ILipcKSQk
+J1wxXG5cbiNkZWZpbmUgR0lUX1ZFUlNJT04KPiBcIiQke2FkZHZlcnNpb259JCR7Z2l0X3ZlcnNp
+b259XCInIiAiJCR7dmVyc2lvbl9ofSI7IFwKPiAgCQkJCWZpOyBcCj4gIAkJCWZpOyBcCj4gIAkJ
+Zmk7IFwKPiAtLQo+IDIuMC4wLnJjMAo+IAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRl
+dkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
+bi9saXN0aW5mby9sdHRuZy1kZXYKPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJ
+bmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
+Zm8vbHR0bmctZGV2Cg==
