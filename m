@@ -1,19 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH 2/3] rculfhash: handle pthread_create
- failures
-Date: Thu, 31 Jul 2014 20:57:31 +0000 (UTC)
-Message-ID: <973177847.24112.1406840251313.JavaMail.zimbra__36158.5870771252$1406840321$gmane$org@efficios.com>
+Subject: Re: [PATCH 3/3] rculfhash: remove duplicated code
+Date: Thu, 31 Jul 2014 21:00:25 +0000 (UTC)
+Message-ID: <2086346770.24116.1406840425252.JavaMail.zimbra__33587.4975230128$1406840487$gmane$org@efficios.com>
 References: <1403572832-9066-1-git-send-email-normalperson@yhbt.net>
- <1403572832-9066-3-git-send-email-normalperson@yhbt.net>
+ <1403572832-9066-4-git-send-email-normalperson@yhbt.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XCxPp-0006Ba-6u
- for lttng-dev@lists.lttng.org; Thu, 31 Jul 2014 16:57:39 -0400
-In-Reply-To: <1403572832-9066-3-git-send-email-normalperson@yhbt.net>
+ (envelope-from <compudj@efficios.com>) id 1XCxSc-0006Fj-0g
+ for lttng-dev@lists.lttng.org; Thu, 31 Jul 2014 17:00:31 -0400
+In-Reply-To: <1403572832-9066-4-git-send-email-normalperson@yhbt.net>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,8 +25,7 @@ To: Eric Wong <normalperson@yhbt.net>
 Cc: e@80x24.org, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Merged with minor style edits into master, stable-0.8 and stable-0.7,
-thanks!
+Merged into master, stable-0.8, stable-0.7, thanks!
 
 Mathieu
 
@@ -35,69 +33,58 @@ Mathieu
 > From: "Eric Wong" <normalperson@yhbt.net>
 > To: lttng-dev@lists.lttng.org
 > Cc: e@80x24.org
-> Sent: Monday, June 23, 2014 9:20:31 PM
-> Subject: [lttng-dev] [PATCH 2/3] rculfhash: handle pthread_create failures
-> 
-> Like calloc, pthread_create may fail with EAGAIN due to a lack
-> of resources.  Account for that and gracefully continue.
+> Sent: Monday, June 23, 2014 9:20:32 PM
+> Subject: [lttng-dev] [PATCH 3/3] rculfhash: remove duplicated code
 > 
 > Signed-off-by: Eric Wong <normalperson@yhbt.net>
 > ---
->  rculfhash.c | 24 ++++++++++++++++++++++--
->  1 file changed, 22 insertions(+), 2 deletions(-)
+>  rculfhash.c | 19 ++++---------------
+>  1 file changed, 4 insertions(+), 15 deletions(-)
 > 
 > diff --git a/rculfhash.c b/rculfhash.c
-> index 2a45045..d534be2 100644
+> index d534be2..61da37a 100644
 > --- a/rculfhash.c
 > +++ b/rculfhash.c
-> @@ -1171,6 +1171,7 @@ void partition_resize_helper(struct cds_lfht *ht,
+> @@ -1177,6 +1177,10 @@ void partition_resize_helper(struct cds_lfht *ht,
 > unsigned long i,
->  		void (*fct)(struct cds_lfht *ht, unsigned long i,
->  			unsigned long start, unsigned long len))
->  {
-> +	unsigned long start = 0;
->  	unsigned long partition_len;
->  	struct partition_resize_work *work;
 >  	int thread, ret;
-> @@ -1201,6 +1202,18 @@ void partition_resize_helper(struct cds_lfht *ht,
-> unsigned long i,
->  		work[thread].fct = fct;
->  		ret = pthread_create(&(work[thread].thread_id), ht->resize_attr,
->  			partition_resize_thread, &work[thread]);
-> +		if (ret == EAGAIN) {
-> +			/*
-> +			 * out of resources: wait and join the threads
-> +			 * we've created, then handle leftovers
-> +			 */
-> +			dbg_printf(
-> +			      "error spawning for resize, single-threading\n");
-> +			start = work[thread].start;
-> +			len -= start;
-> +			nr_threads = thread;
-> +			break;
-> +		}
->  		assert(!ret);
->  	}
->  	for (thread = 0; thread < nr_threads; thread++) {
-> @@ -1208,10 +1221,17 @@ void partition_resize_helper(struct cds_lfht *ht,
-> unsigned long i,
->  		assert(!ret);
->  	}
->  	free(work);
-> -	return;
+>  	unsigned long nr_threads;
+>  
+> +	assert(nr_cpus_mask != -1);
+> +	if (nr_cpus_mask < 0 || len < 2 * MIN_PARTITION_PER_THREAD)
+> +		goto fallback;
 > +
-> +	/*
-> +	 * a pthread_create failure above will either lead in us having
-> +	 * no threads to join or starting at a non-zero offset,
-> +	 * fallback to single thread processing of leftovers
-> +	 */
-> +	if (start == 0 && nr_threads > 0)
-> +		return;
->  fallback:
->  	ht->flavor->thread_online();
-> -	fct(ht, i, 0, len);
-> +	fct(ht, i, start, len);
->  	ht->flavor->thread_offline();
+>  	/*
+>  	 * Note: nr_cpus_mask + 1 is always power of 2.
+>  	 * We spawn just the number of threads we need to satisfy the minimum
+> @@ -1270,13 +1274,6 @@ static
+>  void init_table_populate(struct cds_lfht *ht, unsigned long i,
+>  			 unsigned long len)
+>  {
+> -	assert(nr_cpus_mask != -1);
+> -	if (nr_cpus_mask < 0 || len < 2 * MIN_PARTITION_PER_THREAD) {
+> -		ht->flavor->thread_online();
+> -		init_table_populate_partition(ht, i, 0, len);
+> -		ht->flavor->thread_offline();
+> -		return;
+> -	}
+>  	partition_resize_helper(ht, i, len, init_table_populate_partition);
+>  }
+>  
+> @@ -1369,14 +1366,6 @@ void remove_table_partition(struct cds_lfht *ht,
+> unsigned long i,
+>  static
+>  void remove_table(struct cds_lfht *ht, unsigned long i, unsigned long len)
+>  {
+> -
+> -	assert(nr_cpus_mask != -1);
+> -	if (nr_cpus_mask < 0 || len < 2 * MIN_PARTITION_PER_THREAD) {
+> -		ht->flavor->thread_online();
+> -		remove_table_partition(ht, i, 0, len);
+> -		ht->flavor->thread_offline();
+> -		return;
+> -	}
+>  	partition_resize_helper(ht, i, len, remove_table_partition);
 >  }
 >  
 > --
