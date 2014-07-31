@@ -1,21 +1,18 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Enable UST probes only in specific process
-Date: Thu, 31 Jul 2014 14:15:01 -0400
-Message-ID: <CA+jJMxuycmPC69X-S66oz861f-60PfD+=UJ=Lq=QSgx_N7j+EQ__3249.60862421921$1406830574$gmane$org@mail.gmail.com>
-References: <CADmgc-ueSkK_XZPwtjsm_6dvSDCqi1GLfCyH7SNhVw1n-7WppQ@mail.gmail.com>
- <CA+jJMxva_iZRJMzLkMTJ5=WXd1p4-WJNEQM95u2w8sdP0927hw@mail.gmail.com>
- <CADmgc-taOgBY+nsOX7bNuMtbgyi5Uw+9Tcy4Y64O5nedZR51UQ@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH urcu] x86: drop extra semi-colon in
+	caa_cpu_relax
+Date: Thu, 31 Jul 2014 19:59:33 +0000 (UTC)
+Message-ID: <865912392.24056.1406836773592.JavaMail.zimbra__12700.7103911184$1406836839$gmane$org@efficios.com>
+References: <20140731002151.GA32652@dcvr.yhbt.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f53.google.com ([209.85.192.53])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1XCusd-0005Co-6Z
- for lttng-dev@lists.lttng.org; Thu, 31 Jul 2014 14:15:12 -0400
-Received: by mail-qg0-f53.google.com with SMTP id q107so4456472qgd.26
- for <lttng-dev@lists.lttng.org>; Thu, 31 Jul 2014 11:15:01 -0700 (PDT)
-In-Reply-To: <CADmgc-taOgBY+nsOX7bNuMtbgyi5Uw+9Tcy4Y64O5nedZR51UQ@mail.gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1XCwVi-0005mr-Q1
+ for lttng-dev@lists.lttng.org; Thu, 31 Jul 2014 15:59:40 -0400
+In-Reply-To: <20140731002151.GA32652@dcvr.yhbt.net>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,55 +21,62 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Dmitri Shubin <sbn@tbricks.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Eric Wong <normalperson@yhbt.net>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gVGh1LCBKdWwgMzEsIDIwMTQgYXQgMToyOSBQTSwgRG1pdHJpIFNodWJpbiA8c2JuQHRicmlj
-a3MuY29tPiB3cm90ZToKPiBIaSBKw6lyw6ltaWUsCj4KPgo+IE9uIFdlZCwgSnVsIDMwLCAyMDE0
-IGF0IDEwOjMxIFBNLCBKw6lyw6ltaWUgR2FsYXJuZWF1Cj4gPGplcmVtaWUuZ2FsYXJuZWF1QGVm
-ZmljaW9zLmNvbT4gd3JvdGU6Cj4+Cj4+IE9uIFdlZCwgSnVsIDMwLCAyMDE0IGF0IDk6NTggQU0s
-IERtaXRyaSBTaHViaW4gPHNibkB0YnJpY2tzLmNvbT4gd3JvdGU6Cj4+ID4gQUZBSVUKPj4gPiBs
-dHRuZyBlbmFibGUtZXZlbnQgLXUgcHJvdjpwcm9iZSAtLWZpbHRlciAnJGN0eC52cGlkPT0xMjM0
-NScKPj4gPiBlbmFibGVzIHByb2JlIGZvciBhbGwgcHJvY2Vzc2VzIGFuZCB0aGVuIGRyb3BzIHVu
-bWF0Y2hlZC4KPj4gPgo+Pgo+PiBDb3JyZWN0LiBUaGUgZXZlbnQgd29uJ3QgYmUgdHJhY2VkLgo+
-Cj4KPiBJLmUuIGl0IHdvbid0IGJlIHdyaXR0ZW4gdG8gdHJhY2UgYnVmZmVyL2ZpbGUsIG9rLgo+
-Cj4+Cj4+IFRoZSBhcmd1bWVudHMgd29uJ3QgYmUgZXZhbHVhdGVkIGlmIHRoZSBldmVudCBpcyBu
-b3QgZW5hYmxlZC4gSG93ZXZlciwKPj4gd2hlbiBhbiBldmVudCBpcyBlbmFibGVkLCB0aGUgYXJn
-dW1lbnRzIGFyZSBldmFsdWF0ZWQgcmVnYXJkbGVzcyBvZgo+PiB0aGUgcmVzdWx0IG9mIHRoZSBm
-aWx0ZXIncyBleHByZXNzaW9uIGV2YWx1YXRpb24gc2luY2UgaXQgY291bGQgYmUKPj4gYmFzZWQg
-b24gdGhlIGV2ZW50J3MgY29udGVudC4KPj4KPj4gTGV0IG1lIGtub3cgaWYgdGhhdCdzIG5vdCB3
-aGF0IHlvdSBtZWFudC4KPgo+Cj4gWWVzLCBleGFjdGx5Lgo+IEkgcGFzcyBzdGFjayB0cmFjZSBh
-cyBhbiBhcmd1bWVudCB0byB0aGUgdHJhY2Vwb2ludC4KPiBTbyBpdCdzIGNvbXB1dGVkIGp1c3Qg
-dG8gYmUgZHJvcHBlZC4uLgo+Cj4+Cj4+ID4gVGhlIG9ubHkgd2F5IEkgY2FuIGRvIGl0IG5vdyBp
-cyBwbGF5aW5nIHdpdGggTFRUTkdfSE9NRSB2YXJpYWJsZSBzZXR0aW5nCj4+ID4gaXQKPj4gPiB0
-byBkaWZmZXJlbnQgcGF0aHMgZm9yIGVhY2ggcHJvY2Vzcy4KPj4KPj4gSSdtIG5vdCBzdXJlIEkg
-dW5kZXJzdGFuZCB3aGF0IHlvdSBtZWFuIGhlcmUuIENhcmUgdG8gZWxhYm9yYXRlPwo+Cj4KPiAk
-IGNhdCBhLmMKPiAjaW5jbHVkZSA8c3RkbGliLmg+Cj4gI2luY2x1ZGUgPHVuaXN0ZC5oPgo+ICNp
-bmNsdWRlIDxsdHRuZy90cmFjZWYuaD4KPgo+IGludCBtYWluKCkKPiB7Cj4gICAgIGZvciAoOzsp
-IHsKPiAgICAgICAgIHRyYWNlZigiaGVsbG8iLCAoYWJvcnQoKSwgMSkpOwo+ICAgICAgICAgc2xl
-ZXAoMSk7Cj4gICAgIH0KPgo+ICAgICByZXR1cm4gMDsKPiB9Cj4gJCBnY2MgYS5jIC1sbHR0bmct
-dXN0Cj4gJCBta2RpciAvdG1wL2x0dG5nLWhvbWUtMSAvdG1wL2x0dG5nLWhvbWUtMgo+ICQgTFRU
-TkdfSE9NRT0vdG1wL2x0dG5nLWhvbWUtMSAuL2Eub3V0ICYKPiBbMV0gMTMwMjkKPiAkIExUVE5H
-X0hPTUU9L3RtcC9sdHRuZy1ob21lLTIgLi9hLm91dCAmCj4gWzJdIDEzMDMyCj4gJCBleHBvcnQg
-TFRUTkdfSE9NRT0vdG1wL2x0dG5nLWhvbWUtMQo+ICQgbHR0bmcgY3JlYXRlCj4gU3Bhd25pbmcg
-YSBzZXNzaW9uIGRhZW1vbgo+IFNlc3Npb24gYXV0by0yMDE0MDczMS0yMTE3MzAgY3JlYXRlZC4K
-PiBUcmFjZXMgd2lsbCBiZSB3cml0dGVuIGluCj4gL3RtcC9sdHRuZy1ob21lLTEvbHR0bmctdHJh
-Y2VzL2F1dG8tMjAxNDA3MzEtMjExNzMwCj4gJCBsdHRuZyBlbmFibGUtZXZlbnQgLXUgbHR0bmdf
-dXN0X3RyYWNlZjpldmVudAo+IFVTVCBldmVudCBsdHRuZ191c3RfdHJhY2VmOmV2ZW50IGNyZWF0
-ZWQgaW4gY2hhbm5lbCBjaGFubmVsMAo+ICQgbHR0bmcgc3RhcnQKPiBUcmFjaW5nIHN0YXJ0ZWQg
-Zm9yIHNlc3Npb24gYXV0by0yMDE0MDczMS0yMTE3MzAKPiAkCj4gWzFdLSAgQWJvcnRlZCAgICAg
-ICAgICAgICAgICAgKGNvcmUgZHVtcGVkKSBMVFROR19IT01FPS90bXAvbHR0bmctaG9tZS0xCj4g
-Li9hLm91dAo+CgpUaGF0J3MgYW4gaW50ZXJlc3Rpbmcgd29ya2Fyb3VuZCEKCj4gSS5lLiBoZXJl
-IEkgaGF2ZSBzZXBhcmF0ZSBzZXNzaW9uIHBlciBlYWNoIHByb2Nlc3MgSSB3YW50IHRvIHRyYWNl
-Lgo+IEl0IHdvdWxkIGJlIGVhc2llciBpZiBJIGNhbiBoYXZlIGNoYW5uZWwgcGVyIHByb2Nlc3Ms
-IGxpa2UgZS5nLgo+ICQgbHR0bmcgZW5hYmxlLWNoYW5uZWwgLXAgMTIzNDUKPgoKSW5kZWVkLCB0
-aGF0IHdvdWxkIGJlIG5pY2UuCgo+IEZvciBpbnN0YW5jZSBpbiBkdHJhY2UgSSBjYW4gZXhwbGlj
-aXRseSBzcGVjaWZ5IHByb2Nlc3MgSSB3YW50IHRvIHRyYWNlIGJ5Cj4gYXBwZW5kaW5nIGl0cyBQ
-SUQgdG8gcHJvYmUgbmFtZS4KCllvdSdsbCBiZSBnbGFkIHRvIGxlYXJuIHRoYXQgd2UnbGwgYmUg
-YWRkaW5nIHRoaXMgZmVhdHVyZSBieSB0aGUgZW5kCm9mIHRoZSB5ZWFyLiBQcm9iYWJseSB3aXRo
-aW4gdGhlIDIuNyByZWxlYXNlIHRpbWVmcmFtZS4KClJlZ2FyZHMsCkrDqXLDqW1pZQoKPgo+IFJl
-Z2FyZHMhCgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3
-dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
-dHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+----- Original Message -----
+> From: "Eric Wong" <normalperson@yhbt.net>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Wednesday, July 30, 2014 8:21:51 PM
+> Subject: [PATCH urcu] x86: drop extra semi-colon in caa_cpu_relax
+> 
+> This fixes compilation in braceless if/else constructs:
+> 
+> 	if (expr)
+> 		caa_cpu_relax();
+> 	else
+> 		...
+> 
+> Signed-off-by: Eric Wong <normalperson@yhbt.net>
+> ---
+>   Btw, did you notice my rculfhash patches last month.
+>   I just realize I forgot to Cc you directly.
+>   Thanks for URCU!
+
+Hi Eric,
+
+Patch merged, thanks!
+
+Yes, I've seen them in my inbox, but was unfortunately
+very busy at the time. Thanks for the reminder!
+
+Mathieu
+
+
+> 
+>  urcu/arch/x86.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/urcu/arch/x86.h b/urcu/arch/x86.h
+> index 7af1ca5..ccc4ce8 100644
+> --- a/urcu/arch/x86.h
+> +++ b/urcu/arch/x86.h
+> @@ -66,7 +66,7 @@ extern "C" {
+>  #endif
+>  #endif
+>  
+> -#define caa_cpu_relax()	__asm__ __volatile__ ("rep; nop" : : : "memory");
+> +#define caa_cpu_relax()	__asm__ __volatile__ ("rep; nop" : : : "memory")
+>  
+>  #define rdtscll(val)							  \
+>  	do {						  		  \
+> --
+> EW
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
