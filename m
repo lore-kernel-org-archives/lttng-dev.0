@@ -1,19 +1,19 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Enable UST probes only in specific process
-Date: Thu, 31 Jul 2014 17:27:42 -0400
-Message-ID: <CA+jJMxubD90jPuzTvU8fLAeNU9o3C8hOPELF6b4Taf6Fgpndrw__41339.2374561683$1406842129$gmane$org@mail.gmail.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD3CCB3D11@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Eric Wong <normalperson@yhbt.net>
+Subject: Re: [PATCH 0/3] rculfhash: error checking fixes
+Date: Thu, 31 Jul 2014 21:35:00 +0000
+Message-ID: <20140731213500.GA662__7647.06908162243$1406842545$gmane$org@dcvr.yhbt.net>
+References: <1403572832-9066-1-git-send-email-normalperson@yhbt.net>
+ <1681102864.24131.1406840905204.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f49.google.com ([209.85.216.49])
+Received: from dcvr.yhbt.net ([64.71.152.64] ident=normalperson)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1XCxt6-0006X6-0s
- for lttng-dev@lists.lttng.org; Thu, 31 Jul 2014 17:27:53 -0400
-Received: by mail-qa0-f49.google.com with SMTP id dc16so2985939qab.36
- for <lttng-dev@lists.lttng.org>; Thu, 31 Jul 2014 14:27:42 -0700 (PDT)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD3CCB3D11@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+ (envelope-from <normalperson@yhbt.net>) id 1XCy05-0006bP-8r
+ for lttng-dev@lists.lttng.org; Thu, 31 Jul 2014 17:35:02 -0400
+Content-Disposition: inline
+In-Reply-To: <1681102864.24131.1406840905204.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,56 +22,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: e@80x24.org, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gVGh1LCBKdWwgMzEsIDIwMTQgYXQgNDoxNCBQTSwgVGhpYmF1bHQsIERhbmllbAo8RGFuaWVs
-LlRoaWJhdWx0QGRyZGMtcmRkYy5nYy5jYT4gd3JvdGU6Cj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+IERhdGU6
-IFRodSwgMzEgSnVsIDIwMTQgMTQ6MTU6MDEgLTA0MDAKPiBGcm9tOiBKw6lyw6ltaWUgR2FsYXJu
-ZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gVG86IERtaXRyaSBTaHViaW4g
-PHNibkB0YnJpY2tzLmNvbT4KPgo+Pj4+IFRoZSBhcmd1bWVudHMgd29uJ3QgYmUgZXZhbHVhdGVk
-IGlmIHRoZSBldmVudCBpcyBub3QgZW5hYmxlZC4KPj4+PiBIb3dldmVyLCB3aGVuIGFuIGV2ZW50
-IGlzIGVuYWJsZWQsIHRoZSBhcmd1bWVudHMgYXJlIGV2YWx1YXRlZAo+Pj4+IHJlZ2FyZGxlc3Mg
-b2YgdGhlIHJlc3VsdCBvZiB0aGUgZmlsdGVyJ3MgZXhwcmVzc2lvbiBldmFsdWF0aW9uIHNpbmNl
-Cj4+Pj4gaXQgY291bGQgYmUgYmFzZWQgb24gdGhlIGV2ZW50J3MgY29udGVudC4KPj4+Cj4+PiBZ
-ZXMsIGV4YWN0bHkuCj4+PiBJIHBhc3Mgc3RhY2sgdHJhY2UgYXMgYW4gYXJndW1lbnQgdG8gdGhl
-IHRyYWNlcG9pbnQuCj4+PiBTbyBpdCdzIGNvbXB1dGVkIGp1c3QgdG8gYmUgZHJvcHBlZC4uLgo+
-Pj4KPj4+IFsuLi5dCj4+Pgo+Pj4gSS5lLiBoZXJlIEkgaGF2ZSBzZXBhcmF0ZSBzZXNzaW9uIHBl
-ciBlYWNoIHByb2Nlc3MgSSB3YW50IHRvIHRyYWNlLgo+Pj4gSXQgd291bGQgYmUgZWFzaWVyIGlm
-IEkgY2FuIGhhdmUgY2hhbm5lbCBwZXIgcHJvY2VzcywgbGlrZSBlLmcuCj4+PiAkIGx0dG5nIGVu
-YWJsZS1jaGFubmVsIC1wIDEyMzQ1Cj4+Pgo+Pj4gRm9yIGluc3RhbmNlIGluIGR0cmFjZSBJIGNh
-biBleHBsaWNpdGx5IHNwZWNpZnkgcHJvY2VzcyBJIHdhbnQgdG8KPj4+IHRyYWNlIGJ5IGFwcGVu
-ZGluZyBpdHMgUElEIHRvIHByb2JlIG5hbWUuCj4+Cj4+IFlvdSdsbCBiZSBnbGFkIHRvIGxlYXJu
-IHRoYXQgd2UnbGwgYmUgYWRkaW5nIHRoaXMgZmVhdHVyZSBieSB0aGUgZW5kIG9mIHRoZSB5ZWFy
-LiBQcm9iYWJseSB3aXRoaW4gdGhlIDIuNyByZWxlYXNlIHRpbWVmcmFtZS4KPgo+IE9uY2UgdGhp
-cyBmZWF0dXJlIGlzIGluIHBsYWNlLCBpdCB3aWxsIG1lYW4gdGhlIHRyYWNlcG9pbnQgYXJndW1l
-bnRzIGdldCBldmFsdWF0ZWQgb25seSBpZiB0aGUgY2FuZGlkYXRlIGV2ZW50IHBhc3NlcyB0aGUg
-UElEICJwcmUtZmlsdGVyIiwgcmlnaHQ/ICBXaWxsIHdlIGJlIGFibGUgdG8gc2V0IHRoZSBwcmUt
-ZmlsdGVyIHRvIFBJRCByYW5nZXMgb3Igc2V0cyBvZiB2YWx1ZXM/ICBJIHN1cHBvc2UgdGhlcmUg
-d2lsbCBiZSBzaW1pbGFyIGZpbHRlcmluZyBvcHRpb25zIHdpdGggcmVnYXJkIHRvIHVzZXIgSURz
-PwoKSSBkb24ndCB0aGluayBpdCB3aWxsIGludm9sdmUgYSBwcmUtZmlsdGVyIHN0YWdlLiBJdCB3
-aWxsIG1vc3QgbGlrZWx5CndvcmsgYnkgaGF2aW5nIHRoZSBzZXNzaW9uIGRhZW1vbiBlbmFibGUg
-dGhlIHByb2JlIGluIGEgc2luZ2xlIHByb2Nlc3MKYW5kIG5vdCBjb21tdW5pY2F0aW5nIHRoZSBl
-bmFibGUtZXZlbnQgbWVzc2FnZSB0byB0aGUgb3RoZXJzLgoKQXMgZmFyIGFzIHRoZSBhYmlsaXR5
-IHRvIHByb3ZpZGUgYSByYW5nZSBvciBhIGxpc3Qgb2YgUElEcyBvciBvdGhlcgpzdWNoIG9wdGlv
-bnMsIEknbSBub3QgcmVhbGx5IGludm9sdmVkIGluIHRoZSBkZXZlbG9wbWVudCBvZiB0aGlzCmZl
-YXR1cmUgc28gSSBkb24ndCByZWFsbHkga25vdyBmb3Igc3VyZS4uLiBJdCdzIGNlcnRhaW5seSBh
-IGxlZ2l0aW1hdGUKdXNlIGNhc2UuCgpEYXZpZCB3aWxsIGJlIHdvcmtpbmcgb24gdGhpcyBmZWF0
-dXJlIHNvIEknbSBzdXJlIHRoZSBmZWVkYmFjayB3aWxsCnByb3ZlIHVzZWZ1bC4KClJlZ2FyZHMs
-CkrDqXLDqW1pZQoKPgo+IERhbmllbCBVLiBUaGliYXVsdAo+IFByb3RlY3Rpb24gZGVzIHN5c3TD
-qG1lcyBldCBjb250cmVtZXN1cmVzIChQU0MpIHwgU3lzdGVtcyBQcm90ZWN0aW9uICYgQ291bnRl
-cm1lYXN1cmVzIChTUEMpCj4gQ3liZXIgc8OpY3VyaXTDqSBwb3VyIGxlcyBtaXNzaW9ucyBlc3Nl
-bnRpZWxsZXMgKENNRSkgfCBNaXNzaW9uIENyaXRpY2FsIEN5YmVyIFNlY3VyaXR5IChNQ0NTKQo+
-IFJEREMgLSBDZW50cmUgZGUgcmVjaGVyY2hlcyBkZSBWYWxjYXJ0aWVyIHwgRFJEQyAtIFZhbGNh
-cnRpZXIgUmVzZWFyY2ggQ2VudHJlCj4gMjQ1OSByb3V0ZSBkZSBsYSBCcmF2b3VyZQo+IFF1w6li
-ZWMgUUMgIEczSiAxWDUKPiBDQU5BREEKPiBWb3ggOiAoNDE4KSA4NDQtNDAwMCB4NDI0NQo+IEZh
-eCA6ICg0MTgpIDg0NC00NTM4Cj4gTkFDIDogOTE4ViBRU0RKIDxodHRwOi8vd3d3LnRyYXZlbGdp
-cy5jb20vbWFwLmFzcD9hZGRyPTkxOFYlMjBRU0RKPgo+IEdvdXZlcm5lbWVudCBkdSBDYW5hZGEg
-fCBHb3Zlcm5tZW50IG9mIENhbmFkYQo+IDxodHRwOi8vd3d3LnZhbGNhcnRpZXIuZHJkYy1yZGRj
-LmdjLmNhLz4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8v
-d3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-Cmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
-dgo=
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> All merged, thanks! Sorry for the delay, the past month has been quite busy.
+
+No worries.  I've been sidetracked into other projects, too.
+
+> Eric Wong <normalperson@yhbt.net> wrote:
+> > In the future, it would also be nice if the alloc_bucket_table behavior
+> > could fail gracefully on ENOMEM, but that would break ABI...
+> 
+> We could pull this into master for an eventual 0.9 release. We already
+> have a few ABI breaking changes that require us to bump the ABI in
+> master.
+
+OK.  I'll try to work on that (unless you have more time now, I've
+been sidetracked too :x)
+
+While we're on ABI/API changes, there's also several other changes
+I would like:
+
+* Remove the pthread_mutex_t requirement in the wfcqueue and lfstack
+  structures.
+
+  I suppose we could implement limited new classes and layer the
+  complete old ones on top to preserve ABI/API compatibility.
+
+* cmpxchg_double (cmpxchg16b on x86-64) so lfstack can use
+  a lock-free stack for single pop operations.  I'm currently using
+  ck_stack from ConcurrencyKit, but generally prefer using the
+  URCU APIs and it would be great if lfstack could support this
+  on some arches.
+
+Do you have any timeline for a 0.9 release?
