@@ -1,23 +1,20 @@
-From: Eric Wong <normalperson@yhbt.net>
-Subject: Re: [PATCH 0/3] rculfhash: error checking fixes
-Date: Fri, 1 Aug 2014 01:44:17 +0000
-Message-ID: <20140801014417.GA29924__10313.912938773$1406857517$gmane$org@dcvr.yhbt.net>
-References: <1403572832-9066-1-git-send-email-normalperson@yhbt.net>
- <1681102864.24131.1406840905204.JavaMail.zimbra@efficios.com>
- <20140731213500.GA662@dcvr.yhbt.net>
- <1996010706.24303.1406844354939.JavaMail.zimbra@efficios.com>
- <20140731222545.GA3947@dcvr.yhbt.net>
- <252105882.24338.1406851935525.JavaMail.zimbra@efficios.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@ericsson.com>
+Subject: Re: [PATCH lttng-tool] Fix: mi: Make sure GIT_VERSION
+ symbol always exist
+Date: Fri, 1 Aug 2014 09:02:08 -0400
+Message-ID: <53DB8FD0.2050300__15736.2030739479$1406898210$gmane$org@ericsson.com>
+References: <1406584476-32009-1-git-send-email-jonathan.r.julien@gmail.com>
+ <649476030.24171.1406841437430.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from dcvr.yhbt.net ([64.71.152.64] ident=normalperson)
+Received: from usevmg21.ericsson.net ([198.24.6.65])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <normalperson@yhbt.net>) id 1XD1tJ-00085Z-Pt
- for lttng-dev@lists.lttng.org; Thu, 31 Jul 2014 21:44:18 -0400
-Content-Disposition: inline
-In-Reply-To: <252105882.24338.1406851935525.JavaMail.zimbra@efficios.com>
+ (envelope-from <jonathan.rajotte-julien@ericsson.com>)
+ id 1XDCTS-0003b3-6V
+ for lttng-dev@lists.lttng.org; Fri, 01 Aug 2014 09:02:19 -0400
+In-Reply-To: <649476030.24171.1406841437430.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,57 +23,91 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: e@80x24.org, lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> I'm trying something with transparent union. See patch in separate
-> email.
+Not needed anymore. Thx for the major change !
 
-Thanks!  I didn't know about the transparent union feature in GCC,
-looks much nicer than what I would've done :)
-
-> > > > * cmpxchg_double (cmpxchg16b on x86-64) so lfstack can use
-> > > >   a lock-free stack for single pop operations.  I'm currently using
-> > > >   ck_stack from ConcurrencyKit, but generally prefer using the
-> > > >   URCU APIs and it would be great if lfstack could support this
-> > > >   on some arches.
-> > > 
-> > > Is there a way to implement a fallback for architectures that don't
-> > > have the double cmpxchg ?
-> > 
-> > Unfortunately not.  I have completely separate code paths, also cannot
-> > support early AMD64 machines which lack cmpxchg16b.
+On 07/31/2014 05:17 PM, Mathieu Desnoyers wrote:
+> Just to make sure: I guess this patch is not needed
+> after the changes I did ?
 > 
-> This means we would have to dynamically detect if the CPU supports
-> the instruction, and fallback to a different way of doing things.
-> So we would have to plan space (e.g. a union) for both the cmpxchg16b
-> and the fallback, with possibly a compiler flag that would allow
-> compiling out the fallback if the user really care about compactness,
-> and not about portability.
-
-Yeah, it's a bit of a pain :/
-
-> > > My intent is that if we start doing
-> > > optimizations for some architectures, the APIs can still be used
-> > > as is by applications ported to other architectures (modulo a
-> > > performance penality cost if unavoidable).
-> > 
-> > Understandable.  I wonder if regular cmpxchg with pointer-packing
-> > for the generation counter works.  I'll have to try that.
+> ----- Original Message -----
+>> From: "Jonathan Rajotte Julien" <jonathan.r.julien@gmail.com>
+>> To: lttng-dev@lists.lttng.org
+>> Sent: Monday, July 28, 2014 5:54:36 PM
+>> Subject: [lttng-dev] [PATCH lttng-tool] Fix: mi: Make sure GIT_VERSION	symbol always exist
+>>
+>> The use of GIT_VERSION symbol in mi to express the position in git tree
+>> force the need to have it defined for each type of build.
+>>
+>> This make sure that a build from source file only (git scm not present) is
+>> possible.
+>>
+>> Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+>> ---
+>>  include/Makefile.am    | 15 ++-------------
+>>  include/version.h.tmpl |  6 +++++-
+>>  2 files changed, 7 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/include/Makefile.am b/include/Makefile.am
+>> index d40cb4a..ca515da 100644
+>> --- a/include/Makefile.am
+>> +++ b/include/Makefile.am
+>> @@ -47,19 +47,8 @@ version.h:
+>>  			## don't want to update the file if it is already up to date
+>>  			##
+>>  			if [ $$(grep -cE "^#define GIT_VERSION \"?$${git_version}\"?$$"
+>>  			"$${version_h}") -eq 0 ]; then \
+>> -				if [ $$(grep -c "^#define GIT_VERSION" "$${version_h}") -gt 0 ]; then \
+>> -					##
+>> -					## If there is already a GIT_VERSION defined,
+>> -					## we just replace it by the new version
+>> -					##
+>> -					sed -i "s'^#define GIT_VERSION.*$$'#define GIT_VERSION
+>> \"$${git_version}\"'" "$${version_h}"; \
+>> -				else \
+>> -					##
+>> -					## Else, we add a GIT_VERSION define
+>> -					## containing our new version.
+>> -					##
+>> -					sed -i "s'^\(#define VERSION_H.*\)$$'\1\n\n#define GIT_VERSION
+>> \"$${git_version}\"'" "$${version_h}"; \
+>> -				fi; \
+>> +				sed -i "s'^#define GIT_VERSION.*$$'#define GIT_VERSION
+>> \"$${git_version}\"'" "$${version_h}"; \
+>> +				sed -i "s'^#define GIT_SOURCE.*$$'#define GIT_SOURCE 1'"
+>> "$${version_h}"; \
+>>  			fi; \
+>>  		fi; \
+>>  	fi)
+>> diff --git a/include/version.h.tmpl b/include/version.h.tmpl
+>> index 2cab733..3ef6905 100644
+>> --- a/include/version.h.tmpl
+>> +++ b/include/version.h.tmpl
+>> @@ -20,10 +20,14 @@
+>>  #ifndef VERSION_H
+>>  #define VERSION_H
+>>  
+>> +
+>> +#define GIT_SOURCE 0
+>> +#define GIT_VERSION ""
+>> +
+>>  /*
+>>   * Define the macro containing the FULL version
+>>   */
+>> -#ifdef GIT_VERSION
+>> +#if GIT_SOURCE
+>>  #define FULL_VERSION "" GIT_VERSION
+>>  #else /* GIT_VERSION */
+>>  #define FULL_VERSION "" VERSION
+>> --
+>> 2.0.0
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
 > 
-> Not sure I understand your idea here.
-
-The lock-free pop in ck_stack relies on an extra generation counter
-field to avoid ABA problem.  I could pack that counter into the normal
-head pointer of the stack since current x86-64 only uses 48-bit address
-space; so I could have 20 bits for the counter (including bits for
-alignment).  I doubt it could be trusted on systems with many
-cores/threads, though.
-
-On the other hand, my choice of a lock-free stack already wastes cycles
-spinning when the stack is empty; so I might choose something else
-entirely.
-
-Thanks for your responses!
