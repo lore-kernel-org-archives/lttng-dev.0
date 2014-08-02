@@ -1,20 +1,19 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@ericsson.com>
-Subject: Re: [PATCH lttng-tool] Fix: mi: Make sure GIT_VERSION
- symbol always exist
-Date: Fri, 1 Aug 2014 09:02:08 -0400
-Message-ID: <53DB8FD0.2050300__15736.2030739479$1406898210$gmane$org@ericsson.com>
-References: <1406584476-32009-1-git-send-email-jonathan.r.julien@gmail.com>
- <649476030.24171.1406841437430.JavaMail.zimbra@efficios.com>
+From: Eric Wong <normalperson@yhbt.net>
+Subject: Re: [RFC PATCH urcu] wfcqueue: Implement mutex-free
+ wfcqueue head with transparent union
+Date: Sat, 2 Aug 2014 09:10:36 +0000
+Message-ID: <20140802091036.GA9107__13025.5934237086$1406970746$gmane$org@dcvr.yhbt.net>
+References: <1406855243-17124-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
+Received: from dcvr.yhbt.net ([64.71.152.64] ident=normalperson)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@ericsson.com>)
- id 1XDCTS-0003b3-6V
- for lttng-dev@lists.lttng.org; Fri, 01 Aug 2014 09:02:19 -0400
-In-Reply-To: <649476030.24171.1406841437430.JavaMail.zimbra@efficios.com>
+ (envelope-from <normalperson@yhbt.net>) id 1XDVKn-0001YR-QA
+ for lttng-dev@lists.lttng.org; Sat, 02 Aug 2014 05:10:38 -0400
+Content-Disposition: inline
+In-Reply-To: <1406855243-17124-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,91 +22,10 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Not needed anymore. Thx for the major change !
+Thanks,
 
-On 07/31/2014 05:17 PM, Mathieu Desnoyers wrote:
-> Just to make sure: I guess this patch is not needed
-> after the changes I did ?
-> 
-> ----- Original Message -----
->> From: "Jonathan Rajotte Julien" <jonathan.r.julien@gmail.com>
->> To: lttng-dev@lists.lttng.org
->> Sent: Monday, July 28, 2014 5:54:36 PM
->> Subject: [lttng-dev] [PATCH lttng-tool] Fix: mi: Make sure GIT_VERSION	symbol always exist
->>
->> The use of GIT_VERSION symbol in mi to express the position in git tree
->> force the need to have it defined for each type of build.
->>
->> This make sure that a build from source file only (git scm not present) is
->> possible.
->>
->> Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
->> ---
->>  include/Makefile.am    | 15 ++-------------
->>  include/version.h.tmpl |  6 +++++-
->>  2 files changed, 7 insertions(+), 14 deletions(-)
->>
->> diff --git a/include/Makefile.am b/include/Makefile.am
->> index d40cb4a..ca515da 100644
->> --- a/include/Makefile.am
->> +++ b/include/Makefile.am
->> @@ -47,19 +47,8 @@ version.h:
->>  			## don't want to update the file if it is already up to date
->>  			##
->>  			if [ $$(grep -cE "^#define GIT_VERSION \"?$${git_version}\"?$$"
->>  			"$${version_h}") -eq 0 ]; then \
->> -				if [ $$(grep -c "^#define GIT_VERSION" "$${version_h}") -gt 0 ]; then \
->> -					##
->> -					## If there is already a GIT_VERSION defined,
->> -					## we just replace it by the new version
->> -					##
->> -					sed -i "s'^#define GIT_VERSION.*$$'#define GIT_VERSION
->> \"$${git_version}\"'" "$${version_h}"; \
->> -				else \
->> -					##
->> -					## Else, we add a GIT_VERSION define
->> -					## containing our new version.
->> -					##
->> -					sed -i "s'^\(#define VERSION_H.*\)$$'\1\n\n#define GIT_VERSION
->> \"$${git_version}\"'" "$${version_h}"; \
->> -				fi; \
->> +				sed -i "s'^#define GIT_VERSION.*$$'#define GIT_VERSION
->> \"$${git_version}\"'" "$${version_h}"; \
->> +				sed -i "s'^#define GIT_SOURCE.*$$'#define GIT_SOURCE 1'"
->> "$${version_h}"; \
->>  			fi; \
->>  		fi; \
->>  	fi)
->> diff --git a/include/version.h.tmpl b/include/version.h.tmpl
->> index 2cab733..3ef6905 100644
->> --- a/include/version.h.tmpl
->> +++ b/include/version.h.tmpl
->> @@ -20,10 +20,14 @@
->>  #ifndef VERSION_H
->>  #define VERSION_H
->>  
->> +
->> +#define GIT_SOURCE 0
->> +#define GIT_VERSION ""
->> +
->>  /*
->>   * Define the macro containing the FULL version
->>   */
->> -#ifdef GIT_VERSION
->> +#if GIT_SOURCE
->>  #define FULL_VERSION "" GIT_VERSION
->>  #else /* GIT_VERSION */
->>  #define FULL_VERSION "" VERSION
->> --
->> 2.0.0
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
-> 
+Tested-by: Eric Wong <normalperson@yhbt.net>
