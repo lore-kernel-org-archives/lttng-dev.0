@@ -1,21 +1,21 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
- <jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-tools] Disallow wildcards in event names
-	except as the last character
-Date: Mon,  4 Aug 2014 14:10:29 -0400
-Message-ID: <1407175829-23486-3-git-send-email-jeremie.galarneau__7139.58533383465$1407176124$gmane$org@efficios.com>
-References: <1407175829-23486-1-git-send-email-jeremie.galarneau@efficios.com>
+From: =?ISO-8859-1?Q?Rapha=EBl_Beamonte?= <raphael.beamonte@gmail.com>
+Subject: Re: [PATCH lttng-tools] Add the formal version before
+ the git version for a commit outside the master branch
+Date: Mon, 4 Aug 2014 14:12:48 -0400
+Message-ID: <CAE_Gge2ChC0CvO9_rUaPg75BrA1bcZAn+2kZ3wjgTjeQJ4TDxg__45574.6030704633$1407176242$gmane$org@mail.gmail.com>
+References: <1406577604-2799-1-git-send-email-raphael.beamonte@gmail.com>
+ <1643385577.24172.1406841466938.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f41.google.com ([209.85.216.41])
+Received: from mail-oi0-f50.google.com ([209.85.218.50])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1XEMic-0002po-BC
- for lttng-dev@lists.lttng.org; Mon, 04 Aug 2014 14:10:51 -0400
-Received: by mail-qa0-f41.google.com with SMTP id j7so7357626qaq.28
- for <lttng-dev@lists.lttng.org>; Mon, 04 Aug 2014 11:10:40 -0700 (PDT)
-In-Reply-To: <1407175829-23486-1-git-send-email-jeremie.galarneau@efficios.com>
+ (envelope-from <nashii@gmail.com>) id 1XEMl2-0002tE-Ql
+ for lttng-dev@lists.lttng.org; Mon, 04 Aug 2014 14:13:22 -0400
+Received: by mail-oi0-f50.google.com with SMTP id a141so4770262oig.37
+ for <lttng-dev@lists.lttng.org>; Mon, 04 Aug 2014 11:13:09 -0700 (PDT)
+In-Reply-To: <1643385577.24172.1406841466938.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,56 +24,100 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
-aWNpb3MuY29tPgotLS0KIGluY2x1ZGUvbHR0bmcvbHR0bmctZXJyb3IuaCAgfCAgMSArCiBzcmMv
-YmluL2x0dG5nLXNlc3Npb25kL2NtZC5jIHwgMzcgKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKwogc3JjL2NvbW1vbi9lcnJvci5jICAgICAgICAgICB8ICAxICsKIDMgZmlsZXMg
-Y2hhbmdlZCwgMzkgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUvbHR0bmcvbHR0
-bmctZXJyb3IuaCBiL2luY2x1ZGUvbHR0bmcvbHR0bmctZXJyb3IuaAppbmRleCBlNmMzMGQ2Li4x
-MjIwZTQ4IDEwMDY0NAotLS0gYS9pbmNsdWRlL2x0dG5nL2x0dG5nLWVycm9yLmgKKysrIGIvaW5j
-bHVkZS9sdHRuZy9sdHRuZy1lcnJvci5oCkBAIC0xMzIsNiArMTMyLDcgQEAgZW51bSBsdHRuZ19l
-cnJvcl9jb2RlIHsKIAlMVFROR19FUlJfTk9fQ09OU1VNRVIgICAgICAgICAgICA9IDEwOSwgLyog
-Tm8gY29uc3VtZXIgZXhpc3QgZm9yIHRoZSBzZXNzaW9uICovCiAJTFRUTkdfRVJSX0VYQ0xVU0lP
-Tl9JTlZBTCAgICAgICAgPSAxMTAsIC8qIEludmFsaWQgZXZlbnQgZXhjbHVzaW9uIGRhdGEgKi8K
-IAlMVFROR19FUlJfRVhDTFVTSU9OX05PTUVNICAgICAgICA9IDExMSwgLyogTGFjayBvZiBtZW1v
-cnkgd2hpbGUgcHJvY2Vzc2luZyBldmVudCBleGNsdXNpb25zICovCisJTFRUTkdfRVJSX0lOVkFM
-SURfRVZFTlRfTkFNRSAgICAgPSAxMTIsIC8qIEludmFsaWQgZXZlbnQgbmFtZSAqLwogCiAJLyog
-TVVTVCBiZSBsYXN0IGVsZW1lbnQgKi8KIAlMVFROR19FUlJfTlIsICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgLyogTGFzdCBlbGVtZW50ICovCmRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nLXNl
-c3Npb25kL2NtZC5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jbWQuYwppbmRleCAwNDRlOWVl
-Li4wY2M3MTMwIDEwMDY0NAotLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2NtZC5jCisrKyBi
-L3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvY21kLmMKQEAgLTEzMDEsNiArMTMwMSwzOCBAQCBlcnJv
-cjoKIAlyZXR1cm4gcmV0OwogfQogCitzdGF0aWMgaW50IHZhbGlkYXRlX2V2ZW50X25hbWUoY29u
-c3QgY2hhciAqbmFtZSkKK3sKKwlpbnQgcmV0ID0gMDsKKwljb25zdCBjaGFyICpjID0gbmFtZTsK
-Kwljb25zdCBjaGFyICpldmVudF9uYW1lX2VuZCA9IGMgKyBMVFROR19TWU1CT0xfTkFNRV9MRU47
-CisKKwkvKgorCSAqIE1ha2Ugc3VyZSB0aGF0IHVuZXNjYXBlZCB3aWxkY2FyZHMgYXJlIG9ubHkg
-dXNlZCBhcyB0aGUgbGFzdAorCSAqIGNoYXJhY3RlciBvZiB0aGUgZXZlbnQgbmFtZS4KKwkgKi8K
-Kwl3aGlsZSAoYyA8IGV2ZW50X25hbWVfZW5kKSB7CisJCXN3aXRjaCAoKmMpIHsKKwkJY2FzZSAn
-XDAnOgorCQkJZ290byBlbmQ7CisJCWNhc2UgJ1xcJzoKKwkJCWMrKzsKKwkJCWJyZWFrOworCQlj
-YXNlICcqJzoKKwkJCWlmICgoYyArIDEpIDwgZXZlbnRfbmFtZV9lbmQgJiYgKihjICsgMSkpIHsK
-KwkJCQkvKiBXaWxkY2FyZCBpcyBub3QgdGhlIGxhc3QgY2hhcmFjdGVyICovCisJCQkJcmV0ID0g
-TFRUTkdfRVJSX0lOVkFMSURfRVZFTlRfTkFNRTsKKwkJCQlnb3RvIGVuZDsKKwkJCX0KKwkJZGVm
-YXVsdDoKKwkJCWJyZWFrOworCQl9CisJCWMrKzsKKwl9CitlbmQ6CisJcmV0dXJuIHJldDsKK30K
-KwogLyoKICAqIENvbW1hbmQgTFRUTkdfRU5BQkxFX0VWRU5UIHByb2Nlc3NlZCBieSB0aGUgY2xp
-ZW50IHRocmVhZC4KICAqLwpAQCAtMTMxOCw2ICsxMzUwLDExIEBAIGludCBjbWRfZW5hYmxlX2V2
-ZW50KHN0cnVjdCBsdHRfc2Vzc2lvbiAqc2Vzc2lvbiwgc3RydWN0IGx0dG5nX2RvbWFpbiAqZG9t
-YWluLAogCWFzc2VydChldmVudCk7CiAJYXNzZXJ0KGNoYW5uZWxfbmFtZSk7CiAKKwlyZXQgPSB2
-YWxpZGF0ZV9ldmVudF9uYW1lKGV2ZW50LT5uYW1lKTsKKwlpZiAocmV0KSB7CisJCWdvdG8gZXJy
-b3I7CisJfQorCiAJcmN1X3JlYWRfbG9jaygpOwogCiAJc3dpdGNoIChkb21haW4tPnR5cGUpIHsK
-ZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vZXJyb3IuYyBiL3NyYy9jb21tb24vZXJyb3IuYwppbmRl
-eCA2ZTI4M2NjLi41NWQ1NmU2IDEwMDY0NAotLS0gYS9zcmMvY29tbW9uL2Vycm9yLmMKKysrIGIv
-c3JjL2NvbW1vbi9lcnJvci5jCkBAIC0xNjQsNiArMTY0LDcgQEAgc3RhdGljIGNvbnN0IGNoYXIg
-KmVycm9yX3N0cmluZ19hcnJheVtdID0gewogCVsgRVJST1JfSU5ERVgoTFRUTkdfRVJSX01JX09V
-VFBVVF9UWVBFKSBdID0gIkludmFsaWQgTUkgb3V0cHV0IGZvcm1hdCIsCiAJWyBFUlJPUl9JTkRF
-WChMVFROR19FUlJfTUlfSU9fRkFJTCkgXSA9ICJJTyBlcnJvciB3aGlsZSB3cml0aW5nIE1JIG91
-dHB1dCIsCiAJWyBFUlJPUl9JTkRFWChMVFROR19FUlJfTUlfTk9UX0lNUExFTUVOVEVEKSBdID0g
-Ik1pIGZlYXR1cmUgbm90IGltcGxlbWVudGVkIiwKKwlbIEVSUk9SX0lOREVYKExUVE5HX0VSUl9J
-TlZBTElEX0VWRU5UX05BTUUpIF0gPSAiSW52YWxpZCBldmVudCBuYW1lIiwKIAogCS8qIExhc3Qg
-ZWxlbWVudCAqLwogCVsgRVJST1JfSU5ERVgoTFRUTkdfRVJSX05SKSBdID0gIlVua25vd24gZXJy
-b3IgY29kZSIKLS0gCjIuMC4zCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcu
-b3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
-LWRldgo=
+2014-07-31 17:17 GMT-04:00 Mathieu Desnoyers <mathieu.desnoyers@efficios.co=
+m>:
+> Is this change still needed after the recent changes I did ?
+
+No, I guess it is not. It was only to add the version number in the
+version string as asked, but I guess it's not necessary anymore.
+
+> ----- Original Message -----
+>> From: "Rapha=EBl Beamonte" <raphael.beamonte@gmail.com>
+>> To: lttng-dev@lists.lttng.org
+>> Cc: "Rapha=EBl Beamonte" <raphael.beamonte@gmail.com>
+>> Sent: Monday, July 28, 2014 4:00:04 PM
+>> Subject: [lttng-dev] [PATCH lttng-tools] Add the formal version before t=
+he    git version for a commit outside the
+>> master branch
+>>
+>> Signed-off-by: Rapha=EBl Beamonte <raphael.beamonte@gmail.com>
+>> ---
+>>  include/Makefile.am | 8 +++++---
+>>  1 file changed, 5 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/include/Makefile.am b/include/Makefile.am
+>> index d40cb4a..67a7063 100644
+>> --- a/include/Makefile.am
+>> +++ b/include/Makefile.am
+>> @@ -24,8 +24,10 @@ version.h:
+>>                       if [ "$${git_branch}" =3D=3D "$${git_describe}" ] =
+|| \
+>>                               [ "$${git_branch}" =3D=3D "heads/master" ]=
+; then \
+>>                               git_version=3D"$${git_describe}"; \
+>> +                             addversion=3D""; \
+>>                       else \
+>>                               git_version=3D"$$(git describe --long --al=
+l)"; \
+>> +                             addversion=3D"\" VERSION \"-"; \
+>>                       fi; \
+>>               fi; \
+>>               ##
+>> @@ -46,19 +48,19 @@ version.h:
+>>                       ## as the one currently in the file (if there is o=
+ne), as we
+>>                       ## don't want to update the file if it is already =
+up to date
+>>                       ##
+>> -                     if [ $$(grep -cE "^#define GIT_VERSION \"?$${git_v=
+ersion}\"?$$"
+>> "$${version_h}") -eq 0 ]; then \
+>> +                     if [ $$(grep -cE "^#define GIT_VERSION
+>> \"?$${addversion}$${git_version}\"?$$" "$${version_h}") -eq 0 ]; then \
+>>                               if [ $$(grep -c "^#define GIT_VERSION" "$$=
+{version_h}") -gt 0 ]; then \
+>>                                       ##
+>>                                       ## If there is already a GIT_VERSI=
+ON defined,
+>>                                       ## we just replace it by the new v=
+ersion
+>>                                       ##
+>> -                                     sed -i "s'^#define GIT_VERSION.*$$=
+'#define GIT_VERSION
+>> \"$${git_version}\"'" "$${version_h}"; \
+>> +                                     sed -i "s'^#define GIT_VERSION.*$$=
+'#define GIT_VERSION
+>> \"$${addversion}$${git_version}\"'" "$${version_h}"; \
+>>                               else \
+>>                                       ##
+>>                                       ## Else, we add a GIT_VERSION defi=
+ne
+>>                                       ## containing our new version.
+>>                                       ##
+>> -                                     sed -i "s'^\(#define VERSION_H.*\)=
+$$'\1\n\n#define GIT_VERSION
+>> \"$${git_version}\"'" "$${version_h}"; \
+>> +                                     sed -i "s'^\(#define VERSION_H.*\)=
+$$'\1\n\n#define GIT_VERSION
+>> \"$${addversion}$${git_version}\"'" "$${version_h}"; \
+>>                               fi; \
+>>                       fi; \
+>>               fi; \
+>> --
+>> 2.0.0.rc0
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
