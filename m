@@ -1,25 +1,19 @@
 From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-Subject: [PATCH] tests: test_ctf_writer: replace HOST_NAME_MAX
+Subject: Bug#751337: [PATCH] tests: test_ctf_writer: replace HOST_NAME_MAX
 Date: Tue, 5 Aug 2014 22:02:51 +0200
-Message-ID: <20140805200251.GA17716__28522.8673405529$1407269134$gmane$org@breakpoint.cc>
+Message-ID: <20140805200251.GA17716__3353.89392353154$1407269182$gmane$org@breakpoint.cc>
+Reply-To: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>, 751337@bugs.debian.org
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from chamillionaire.breakpoint.cc ([80.244.247.6]
- ident=b4211bbfa85a4012b5a667b51e9e61d2)
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <sebastian@breakpoint.cc>) id 1XEkwf-000365-RC
- for lttng-dev@lists.lttng.org; Tue, 05 Aug 2014 16:03:00 -0400
+Content-Type: text/plain; charset=us-ascii
+Return-path: <bounce-debian-bugs-dist=glddb-debian-bugs-dist=m.gmane.org@lists.debian.org>
+Resent-To: debian-bugs-dist@lists.debian.org
+Resent-Message-ID: <handler.751337.B751337.140726897417265@bugs.debian.org>
 Content-Disposition: inline
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
+List-URL: <http://lists.debian.org/debian-bugs-dist/>
+List-Post: <mailto:debian-bugs-dist@lists.debian.org>
+List-Help: <mailto:debian-bugs-dist-request@lists.debian.org?subject=help>
+List-Subscribe: <mailto:debian-bugs-dist-request@lists.debian.org?subject=subscribe>
+List-Unsubscribe: <mailto:debian-bugs-dist-request@lists.debian.org?subject=unsubscribe>
 To: jeremie.galarneau@efficios.com
 Cc: 751337@bugs.debian.org, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
