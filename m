@@ -1,19 +1,19 @@
 From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
 Subject: Bug#751337: [PATCH] tests: test_ctf_writer: replace HOST_NAME_MAX
 Date: Tue, 5 Aug 2014 22:02:51 +0200
-Message-ID: <20140805200251.GA17716__3353.89392353154$1407269182$gmane$org@breakpoint.cc>
+Message-ID: <20140805200251.GA17716__46096.2349702187$1407269182$gmane$org@breakpoint.cc>
 Reply-To: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>, 751337@bugs.debian.org
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Return-path: <bounce-debian-bugs-dist=glddb-debian-bugs-dist=m.gmane.org@lists.debian.org>
+Return-path: <bounce-debian-bugs-rc=glddbr-debian-bugs-rc=gmane.org@lists.debian.org>
 Resent-To: debian-bugs-dist@lists.debian.org
 Resent-Message-ID: <handler.751337.B751337.140726897417265@bugs.debian.org>
 Content-Disposition: inline
-List-URL: <http://lists.debian.org/debian-bugs-dist/>
-List-Post: <mailto:debian-bugs-dist@lists.debian.org>
-List-Help: <mailto:debian-bugs-dist-request@lists.debian.org?subject=help>
-List-Subscribe: <mailto:debian-bugs-dist-request@lists.debian.org?subject=subscribe>
-List-Unsubscribe: <mailto:debian-bugs-dist-request@lists.debian.org?subject=unsubscribe>
+List-URL: <http://lists.debian.org/debian-bugs-rc/>
+List-Post: <mailto:debian-bugs-rc@lists.debian.org>
+List-Help: <mailto:debian-bugs-rc-request@lists.debian.org?subject=help>
+List-Subscribe: <mailto:debian-bugs-rc-request@lists.debian.org?subject=subscribe>
+List-Unsubscribe: <mailto:debian-bugs-rc-request@lists.debian.org?subject=unsubscribe>
 To: jeremie.galarneau@efficios.com
 Cc: 751337@bugs.debian.org, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
