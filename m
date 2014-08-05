@@ -1,32 +1,23 @@
 From: Jon Bernard <jbernard@tuxion.com>
-Subject: Re: Bug#751337: [PATCH] tests: test_ctf_writer: replace
-	HOST_NAME_MAX
+Subject: Bug#751337: [PATCH] tests: test_ctf_writer: replace HOST_NAME_MAX
 Date: Tue, 5 Aug 2014 16:14:12 -0400
-Message-ID: <20140805201412.GA11272__31680.1352928907$1407269718$gmane$org@helmut>
+Message-ID: <20140805201412.GA11272__1602.22563795305$1407269728$gmane$org@helmut>
 References: <20140805200251.GA17716@breakpoint.cc>
+Reply-To: Jon Bernard <jbernard@tuxion.com>, 751337@bugs.debian.org
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out3-smtp.messagingengine.com ([66.111.4.27])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jbernard@tuxion.com>) id 1XEl7j-0003CC-Og
- for lttng-dev@lists.lttng.org; Tue, 05 Aug 2014 16:14:24 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
- by gateway1.nyi.internal (Postfix) with ESMTP id 0B01222A6C
- for <lttng-dev@lists.lttng.org>; Tue,  5 Aug 2014 16:14:13 -0400 (EDT)
+Content-Type: text/plain; charset=us-ascii
+Return-path: <bounce-debian-bugs-rc=glddbr-debian-bugs-rc=gmane.org@lists.debian.org>
+Resent-To: debian-bugs-dist@lists.debian.org
+Resent-Message-ID: <handler.751337.B751337.140726966021081@bugs.debian.org>
 Content-Disposition: inline
 In-Reply-To: <20140805200251.GA17716@breakpoint.cc>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
+List-URL: <http://lists.debian.org/debian-bugs-rc/>
+List-Post: <mailto:debian-bugs-rc@lists.debian.org>
+List-Help: <mailto:debian-bugs-rc-request@lists.debian.org?subject=help>
+List-Subscribe: <mailto:debian-bugs-rc-request@lists.debian.org?subject=subscribe>
+List-Unsubscribe: <mailto:debian-bugs-rc-request@lists.debian.org?subject=unsubscribe>
 To: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>, 751337@bugs.debian.org
-Cc: lttng-dev@lists.lttng.org
+Cc: jeremie.galarneau@efficios.com, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 * Sebastian Andrzej Siewior <sebastian@breakpoint.cc> wrote:
