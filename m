@@ -1,21 +1,21 @@
 From: Jon Bernard <jbernard@tuxion.com>
 Subject: Bug#751337: [PATCH] tests: test_ctf_writer: replace HOST_NAME_MAX
 Date: Tue, 5 Aug 2014 16:14:12 -0400
-Message-ID: <20140805201412.GA11272__1602.22563795305$1407269728$gmane$org@helmut>
+Message-ID: <20140805201412.GA11272__45532.272445462$1407269729$gmane$org@helmut>
 References: <20140805200251.GA17716@breakpoint.cc>
 Reply-To: Jon Bernard <jbernard@tuxion.com>, 751337@bugs.debian.org
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Return-path: <bounce-debian-bugs-rc=glddbr-debian-bugs-rc=gmane.org@lists.debian.org>
+Return-path: <bounce-debian-bugs-dist=glddb-debian-bugs-dist=m.gmane.org@lists.debian.org>
 Resent-To: debian-bugs-dist@lists.debian.org
 Resent-Message-ID: <handler.751337.B751337.140726966021081@bugs.debian.org>
 Content-Disposition: inline
 In-Reply-To: <20140805200251.GA17716@breakpoint.cc>
-List-URL: <http://lists.debian.org/debian-bugs-rc/>
-List-Post: <mailto:debian-bugs-rc@lists.debian.org>
-List-Help: <mailto:debian-bugs-rc-request@lists.debian.org?subject=help>
-List-Subscribe: <mailto:debian-bugs-rc-request@lists.debian.org?subject=subscribe>
-List-Unsubscribe: <mailto:debian-bugs-rc-request@lists.debian.org?subject=unsubscribe>
+List-URL: <http://lists.debian.org/debian-bugs-dist/>
+List-Post: <mailto:debian-bugs-dist@lists.debian.org>
+List-Help: <mailto:debian-bugs-dist-request@lists.debian.org?subject=help>
+List-Subscribe: <mailto:debian-bugs-dist-request@lists.debian.org?subject=subscribe>
+List-Unsubscribe: <mailto:debian-bugs-dist-request@lists.debian.org?subject=unsubscribe>
 To: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>, 751337@bugs.debian.org
 Cc: jeremie.galarneau@efficios.com, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
