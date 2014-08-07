@@ -1,7 +1,7 @@
 From: =?UTF-8?Q?J=C3=A9r=C3=A9mie?= Galarneau <jeremie.galarneau@efficios.com>
 Subject: Bug#751337: [PATCH] tests: test_ctf_writer: replace HOST_NAME_MAX
 Date: Thu, 7 Aug 2014 15:07:08 -0400
-Message-ID: <CA+jJMxv2baZmUL=jG1UOXoCm6jHVVzQt6bO_=jDmny+-UX_8xQ__2264.00077012858$1407438563$gmane$org@mail.gmail.com>
+Message-ID: <CA+jJMxv2baZmUL=jG1UOXoCm6jHVVzQt6bO_=jDmny+-UX_8xQ__36687.2914754369$1407438567$gmane$org@mail.gmail.com>
 References: <20140805200251.GA17716@breakpoint.cc>
 	<20140805201412.GA11272@helmut>
 	<20140806070324.GA2888@breakpoint.cc>
@@ -9,17 +9,17 @@ Reply-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie?= Galarneau <jeremie.galarneau@efficios.co
 Mime-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Return-path: <bounce-debian-bugs-rc=glddbr-debian-bugs-rc=gmane.org@lists.debian.org>
+Return-path: <bounce-debian-bugs-dist=glddb-debian-bugs-dist=m.gmane.org@lists.debian.org>
 Sender: jeremie.galarneau@gmail.com
 Resent-To: debian-bugs-dist@lists.debian.org
 Resent-Message-ID: <handler.751337.B751337.14074384368619@bugs.debian.org>
 Sender: jeremie.galarneau@gmail.com
 In-Reply-To: <20140806070324.GA2888@breakpoint.cc>
-List-URL: <http://lists.debian.org/debian-bugs-rc/>
-List-Post: <mailto:debian-bugs-rc@lists.debian.org>
-List-Help: <mailto:debian-bugs-rc-request@lists.debian.org?subject=help>
-List-Subscribe: <mailto:debian-bugs-rc-request@lists.debian.org?subject=subscribe>
-List-Unsubscribe: <mailto:debian-bugs-rc-request@lists.debian.org?subject=unsubscribe>
+List-URL: <http://lists.debian.org/debian-bugs-dist/>
+List-Post: <mailto:debian-bugs-dist@lists.debian.org>
+List-Help: <mailto:debian-bugs-dist-request@lists.debian.org?subject=help>
+List-Subscribe: <mailto:debian-bugs-dist-request@lists.debian.org?subject=subscribe>
+List-Unsubscribe: <mailto:debian-bugs-dist-request@lists.debian.org?subject=unsubscribe>
 To: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
 Cc: 751337@bugs.debian.org, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
