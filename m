@@ -1,17 +1,22 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: [PATCH lttng-tool] Mi & save/load: add option to
- indent or not on config writer creation
-Date: Thu, 7 Aug 2014 17:14:24 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD3CCB4897__329.948488115583$1407431733$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Bug#751337: [PATCH] tests: test_ctf_writer: replace
+	HOST_NAME_MAX
+Date: Thu, 7 Aug 2014 15:07:08 -0400
+Message-ID: <CA+jJMxv2baZmUL=jG1UOXoCm6jHVVzQt6bO_=jDmny+-UX_8xQ__29042.1721096665$1407438496$gmane$org@mail.gmail.com>
+References: <20140805200251.GA17716@breakpoint.cc>
+ <20140805201412.GA11272@helmut>
+ <20140806070324.GA2888@breakpoint.cc>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-we0-f178.google.com ([74.125.82.178])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1XFRGo-0001cy-Bu
- for lttng-dev@lists.lttng.org; Thu, 07 Aug 2014 13:14:36 -0400
-Content-Language: fr-FR
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XFT1u-0002Hd-Nb
+ for lttng-dev@lists.lttng.org; Thu, 07 Aug 2014 15:07:20 -0400
+Received: by mail-we0-f178.google.com with SMTP id w61so4734562wes.9
+ for <lttng-dev@lists.lttng.org>; Thu, 07 Aug 2014 12:07:08 -0700 (PDT)
+In-Reply-To: <20140806070324.GA2888@breakpoint.cc>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,41 +25,32 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+Cc: 751337@bugs.debian.org, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Thu, 07 Aug 2014 11:47:59 -0400
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Re: Message-ID: <53E39FAF.9060904@voxpopuli.im>
-
-> I was expecting Jonathan to explain it further in his upcoming reply ;)
->
-> But from the numbers I've seen from his benchmark, it was overall 50 =
-
-> times faster when using the minified XML than using the "pretty-printed" =
-
-> one.
-> Mainly from:
-> - Not having to concatenate all the outputted strings into one
-> - Not having to iterate (MANY times) on empty XML nodes
-
-> Alexandre
-----------------------------------------------------------------------
-   Fifty times faster!?  Impressive.
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+Rml4ZWQgaW4gYm90aCBtYXN0ZXIgKGFzIG9mIDIyODQzYjYpIGFuZCBzdGFibGUgMS4yIChhcyBv
+ZiAwOTU0NjcwKSBicmFuY2hlcy4KCk9uIFdlZCwgQXVnIDYsIDIwMTQgYXQgMzowMyBBTSwgU2Vi
+YXN0aWFuIEFuZHJ6ZWogU2lld2lvcgo8c2ViYXN0aWFuQGJyZWFrcG9pbnQuY2M+IHdyb3RlOgo+
+IE9uIDIwMTQtMDgtMDUgMTY6MTQ6MTIgWy0wNDAwXSwgSm9uIEJlcm5hcmQgd3JvdGU6Cj4+IFRo
+aXMgbWF5IGFsc28gd29yayBhcyB3ZWxsOgo+Pgo+PiAgICAgZGlmZiAtLWdpdCBhL2NvbmZpZ3Vy
+ZS5hYyBiL2NvbmZpZ3VyZS5hYwo+PiAgICAgaW5kZXggODBlYmEzMy4uMjQ4MDQ0ZSAxMDA2NDQK
+Pj4gICAgIC0tLSBhL2NvbmZpZ3VyZS5hYwo+PiAgICAgKysrIGIvY29uZmlndXJlLmFjCj4+ICAg
+ICBAQCAtNTAsNiArNTAsMTcgQEAgQUNfQ19JTkxJTkUKPj4gICAgICBBQ19UWVBFX1BJRF9UCj4+
+ICAgICAgQUNfVFlQRV9TSVpFX1QKPj4KPj4gICAgICsjIEZyZWVCU0QgZG9lcyBub3QgZGVmaW5l
+IEhPU1RfTkFNRV9NQVgKPj4gICAgICtBQ19DSEVDS19ERUNMKEhPU1RfTkFNRV9NQVgsLAo+PiAg
+ICAgKyAgICAgICBbCj4+ICAgICArICAgICAgICBBQ19DSEVDS19ERUNMKF9QT1NJWF9IT1NUX05B
+TUVfTUFYLAo+PiAgICAgKyAgICAgICAgICAgICAgICAgICAgICBBQ19ERUZJTkUoSE9TVF9OQU1F
+X01BWCwgX1BPU0lYX0hPU1RfTkFNRV9NQVgsIFtdKSwKPj4gICAgICsgICAgICAgICAgICAgICAg
+ICAgICAgQUNfREVGSU5FKEhPU1RfTkFNRV9NQVgsIDI1NiwgW0RlZmluZSB0byAyNTYgaWYgbmVp
+dGhlciBoYXZlIEhPU1RfTkFNRV9NQVggbm9yIF9QT1NJWF9IT1NUX05BTUVfTUFYXSksCj4+ICAg
+ICArICAgICAgICAgICAgICAgICAgICAgIFtbI2luY2x1ZGUgPGxpbWl0cy5oPl1dKQo+PiAgICAg
+KyAgICAgICBdLAo+PiAgICAgKyAgICAgICBbWyNpbmNsdWRlIDxsaW1pdHMuaD5dXQo+PiAgICAg
+KykKPgo+IFN1cmUgaXQgd2lsbC4gSSBoYXZlIG5vIHN0cm9uZyBvcGluaW9uIG9uIGhvdyBpdCBn
+ZXRzIGZpeGVkIDopCj4KPj4gICAgICsKPj4gICAgICAjIENoZWNrcyBmb3IgbGlicmFyeSBmdW5j
+dGlvbnMuCj4+ICAgICAgQUNfRlVOQ19NQUxMT0MKPj4gICAgICBBQ19GVU5DX01NQVAKPj4KPgo+
+IFNlYmFzdGlhbgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6
+Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
+cmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
+ZGV2Cg==
