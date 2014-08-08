@@ -1,71 +1,70 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Bug#751337: [PATCH] tests: test_ctf_writer: replace HOST_NAME_MAX
-Date: Thu, 7 Aug 2014 15:07:08 -0400
-Message-ID: <CA+jJMxv2baZmUL=jG1UOXoCm6jHVVzQt6bO_=jDmny+-UX_8xQ__36687.2914754369$1407438567$gmane$org@mail.gmail.com>
-References: <20140805200251.GA17716@breakpoint.cc>
-	<20140805201412.GA11272@helmut>
-	<20140806070324.GA2888@breakpoint.cc>
-Reply-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie?= Galarneau <jeremie.galarneau@efficios.com>, 751337@bugs.debian.org
+From: David Goulet <dgoulet@ev0ke.net>
+Subject: [PATCH lttng-ust] Change JUL agent to use the new ABI
+Date: Fri,  8 Aug 2014 12:48:48 -0400
+Message-ID: <1407516528-27193-1-git-send-email-dgoulet__8544.85555687479$1407516632$gmane$org@ev0ke.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-Return-path: <bounce-debian-bugs-dist=glddb-debian-bugs-dist=m.gmane.org@lists.debian.org>
-Sender: jeremie.galarneau@gmail.com
-Resent-To: debian-bugs-dist@lists.debian.org
-Resent-Message-ID: <handler.751337.B751337.14074384368619@bugs.debian.org>
-Sender: jeremie.galarneau@gmail.com
-In-Reply-To: <20140806070324.GA2888@breakpoint.cc>
-List-URL: <http://lists.debian.org/debian-bugs-dist/>
-List-Post: <mailto:debian-bugs-dist@lists.debian.org>
-List-Help: <mailto:debian-bugs-dist-request@lists.debian.org?subject=help>
-List-Subscribe: <mailto:debian-bugs-dist-request@lists.debian.org?subject=subscribe>
-List-Unsubscribe: <mailto:debian-bugs-dist-request@lists.debian.org?subject=unsubscribe>
-To: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-Cc: 751337@bugs.debian.org, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <dgoulet@ev0ke.net>) id 1XFnLk-00013T-0x
+ for lttng-dev@lists.lttng.org; Fri, 08 Aug 2014 12:49:09 -0400
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Fixed in both master (as of 22843b6) and stable 1.2 (as of 0954670) branche=
-s.
+From: David Goulet <dgoulet@efficios.com>
 
-On Wed, Aug 6, 2014 at 3:03 AM, Sebastian Andrzej Siewior
-<sebastian@breakpoint.cc> wrote:
-> On 2014-08-05 16:14:12 [-0400], Jon Bernard wrote:
->> This may also work as well:
->>
->>     diff --git a/configure.ac b/configure.ac
->>     index 80eba33..248044e 100644
->>     --- a/configure.ac
->>     +++ b/configure.ac
->>     @@ -50,6 +50,17 @@ AC_C_INLINE
->>      AC_TYPE_PID_T
->>      AC_TYPE_SIZE_T
->>
->>     +# FreeBSD does not define HOST_NAME_MAX
->>     +AC_CHECK_DECL(HOST_NAME_MAX,,
->>     +       [
->>     +        AC_CHECK_DECL(_POSIX_HOST_NAME_MAX,
->>     +                      AC_DEFINE(HOST_NAME_MAX, _POSIX_HOST_NAME_MAX=
-, []),
->>     +                      AC_DEFINE(HOST_NAME_MAX, 256, [Define to 256 =
-if neither have HOST_NAME_MAX nor _POSIX_HOST_NAME_MAX]),
->>     +                      [[#include <limits.h>]])
->>     +       ],
->>     +       [[#include <limits.h>]]
->>     +)
->
-> Sure it will. I have no strong opinion on how it gets fixed :)
->
->>     +
->>      # Checks for library functions.
->>      AC_FUNC_MALLOC
->>      AC_FUNC_MMAP
->>
->
-> Sebastian
+Two things have changed, the agent port file created by the session
+daemon, the name is now "agent.port". The second thing is that upon
+registration, the agent needs to send its domain which is here
+LTTNG_DOMAIN_JUL (val: 3).
 
+Signed-off-by: David Goulet <dgoulet@efficios.com>
+---
+ .../org/lttng/ust/jul/LTTngTCPSessiondClient.java            | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-
---=20
-J=C3=A9r=C3=A9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+diff --git a/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java b/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
+index 861c734..cf3074b 100644
+--- a/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
++++ b/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
+@@ -53,8 +53,13 @@ public class LTTngTCPSessiondClient {
+ 
+ 	private Semaphore registerSem;
+ 
+-	private static final String rootPortFile = "/var/run/lttng/jul.port";
+-	private static final String userPortFile = "/.lttng/jul.port";
++	private static final String rootPortFile = "/var/run/lttng/agent.port";
++	private static final String userPortFile = "/.lttng/agent.port";
++	/*
++	 * This is taken from the lttng/domain.h file which is mapped to
++	 * LTTNG_DOMAIN_JUL value for this agent.
++	 */
++	private static final int agent_domain = 3;
+ 
+ 	/* Indicate if we've already release the semaphore. */
+ 	private boolean sem_posted = false;
+@@ -311,10 +316,11 @@ public class LTTngTCPSessiondClient {
+ 	}
+ 
+ 	private void registerToSessiond() throws Exception {
+-		byte data[] = new byte[4];
++		byte data[] = new byte[8];
+ 		ByteBuffer buf = ByteBuffer.wrap(data);
+ 		String pid = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
+ 
++		buf.putInt(this.agent_domain);
+ 		buf.putInt(Integer.parseInt(pid));
+ 		this.outToSessiond.write(data, 0, data.length);
+ 		this.outToSessiond.flush();
+-- 
+2.1.0.rc1
