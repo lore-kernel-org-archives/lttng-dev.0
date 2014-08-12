@@ -1,18 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Change JUL agent to use the new
-	ABI
-Date: Fri, 8 Aug 2014 17:45:58 +0000 (UTC)
-Message-ID: <1827826081.3209.1407519958433.JavaMail.zimbra__34898.1546391316$1407519886$gmane$org@efficios.com>
-References: <1407516528-27193-1-git-send-email-dgoulet@ev0ke.net>
+From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+Subject: [PATCH lttng-tool] Fix: list command: revert merge
+	error made when adding mi on pretty printing
+Date: Tue, 12 Aug 2014 13:55:40 -0400
+Message-ID: <1407866140-6261-1-git-send-email-jonathan.r.julien__37032.0097114474$1407866226$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from usevmg20.ericsson.net ([198.24.6.45])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XFoCZ-0001O1-36
- for lttng-dev@lists.lttng.org; Fri, 08 Aug 2014 13:43:44 -0400
-In-Reply-To: <1407516528-27193-1-git-send-email-dgoulet@ev0ke.net>
+ (envelope-from <jonathan.rajotte-julien@ericsson.com>)
+ id 1XHGIi-0007ML-HJ
+ for lttng-dev@lists.lttng.org; Tue, 12 Aug 2014 13:56:06 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,74 +20,34 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@ev0ke.net>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-merged, thanks!
+Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+---
+ src/bin/lttng/commands/list.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-Mathieu
-
------ Original Message -----
-> From: "David Goulet" <dgoulet@ev0ke.net>
-> To: lttng-dev@lists.lttng.org
-> Cc: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, "David Goulet" <dgoulet@efficios.com>
-> Sent: Friday, August 8, 2014 12:48:48 PM
-> Subject: [PATCH lttng-ust] Change JUL agent to use the new ABI
-> 
-> From: David Goulet <dgoulet@efficios.com>
-> 
-> Two things have changed, the agent port file created by the session
-> daemon, the name is now "agent.port". The second thing is that upon
-> registration, the agent needs to send its domain which is here
-> LTTNG_DOMAIN_JUL (val: 3).
-> 
-> Signed-off-by: David Goulet <dgoulet@efficios.com>
-> ---
->  .../org/lttng/ust/jul/LTTngTCPSessiondClient.java            | 12
->  +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
-> b/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
-> index 861c734..cf3074b 100644
-> --- a/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
-> +++ b/liblttng-ust-jul/org/lttng/ust/jul/LTTngTCPSessiondClient.java
-> @@ -53,8 +53,13 @@ public class LTTngTCPSessiondClient {
->  
->  	private Semaphore registerSem;
->  
-> -	private static final String rootPortFile = "/var/run/lttng/jul.port";
-> -	private static final String userPortFile = "/.lttng/jul.port";
-> +	private static final String rootPortFile = "/var/run/lttng/agent.port";
-> +	private static final String userPortFile = "/.lttng/agent.port";
-> +	/*
-> +	 * This is taken from the lttng/domain.h file which is mapped to
-> +	 * LTTNG_DOMAIN_JUL value for this agent.
-> +	 */
-> +	private static final int agent_domain = 3;
->  
->  	/* Indicate if we've already release the semaphore. */
->  	private boolean sem_posted = false;
-> @@ -311,10 +316,11 @@ public class LTTngTCPSessiondClient {
->  	}
->  
->  	private void registerToSessiond() throws Exception {
-> -		byte data[] = new byte[4];
-> +		byte data[] = new byte[8];
->  		ByteBuffer buf = ByteBuffer.wrap(data);
->  		String pid = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
->  
-> +		buf.putInt(this.agent_domain);
->  		buf.putInt(Integer.parseInt(pid));
->  		this.outToSessiond.write(data, 0, data.length);
->  		this.outToSessiond.flush();
-> --
-> 2.1.0.rc1
-> 
-> 
-
+diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
+index e3ff4f1..ccffdc7 100644
+--- a/src/bin/lttng/commands/list.c
++++ b/src/bin/lttng/commands/list.c
+@@ -1271,14 +1271,10 @@ static int list_sessions(const char *session_name)
+ 					break;
+ 				}
+ 			} else {
+-				MSG("  %d) %s (%s) [%s%s]", i + 1,
+-						sessions[i].name, sessions[i].path,
++				MSG("  %d) %s (%s) [%s%s]", i + 1, sessions[i].name,
++						sessions[i].path,
+ 						active_string(sessions[i].enabled),
+ 						snapshot_string(sessions[i].snapshot_mode));
+-				MSG("%sTrace path: %s", indent4, sessions[i].path);
+-				MSG("%sLive timer interval (usec): %u\n", indent4,
+-						sessions[i].live_timer_interval);
+-				break;
+ 			}
+ 		}
+ 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.0.4
