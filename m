@@ -1,17 +1,17 @@
 From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
-Subject: [PATCH lttng-tool] Fix: list command: revert merge
-	error made when adding mi on pretty printing
-Date: Tue, 12 Aug 2014 13:55:40 -0400
-Message-ID: <1407866140-6261-1-git-send-email-jonathan.r.julien__37032.0097114474$1407866226$gmane$org@gmail.com>
+Subject: [PATCH lttng-tool] fix: mi: xsd: wrong comment for
+	context_type_type
+Date: Wed, 13 Aug 2014 16:58:29 -0400
+Message-ID: <1407963509-6920-1-git-send-email-jonathan.r.julien__34780.9420353316$1407963603$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg20.ericsson.net ([198.24.6.45])
+Received: from usevmg21.ericsson.net ([198.24.6.65])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
  (envelope-from <jonathan.rajotte-julien@ericsson.com>)
- id 1XHGIi-0007ML-HJ
- for lttng-dev@lists.lttng.org; Tue, 12 Aug 2014 13:56:06 -0400
+ id 1XHfd5-00080E-EW
+ for lttng-dev@lists.lttng.org; Wed, 13 Aug 2014 16:58:49 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,29 +25,21 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
 ---
- src/bin/lttng/commands/list.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ src/common/mi_lttng.xsd | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
-index e3ff4f1..ccffdc7 100644
---- a/src/bin/lttng/commands/list.c
-+++ b/src/bin/lttng/commands/list.c
-@@ -1271,14 +1271,10 @@ static int list_sessions(const char *session_name)
- 					break;
- 				}
- 			} else {
--				MSG("  %d) %s (%s) [%s%s]", i + 1,
--						sessions[i].name, sessions[i].path,
-+				MSG("  %d) %s (%s) [%s%s]", i + 1, sessions[i].name,
-+						sessions[i].path,
- 						active_string(sessions[i].enabled),
- 						snapshot_string(sessions[i].snapshot_mode));
--				MSG("%sTrace path: %s", indent4, sessions[i].path);
--				MSG("%sLive timer interval (usec): %u\n", indent4,
--						sessions[i].live_timer_interval);
--				break;
- 			}
- 		}
+diff --git a/src/common/mi_lttng.xsd b/src/common/mi_lttng.xsd
+index f63065c..d2cc5d4 100644
+--- a/src/common/mi_lttng.xsd
++++ b/src/common/mi_lttng.xsd
+@@ -83,7 +83,7 @@ THE SOFTWARE.
+ 		</xs:restriction>
+ 	</xs:simpleType>
  
+-	<!-- Maps to the lttng_loglevel_type enum -->
++	<!-- Maps to the lttng_event_context_type enum -->
+ 	<xs:simpleType name="context_type_type">
+ 		<xs:restriction base="xs:string">
+ 			<xs:enumeration value="PERF_COUNTER" />
 -- 
 2.0.4
