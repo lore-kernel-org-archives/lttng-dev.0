@@ -1,27 +1,18 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Vacation 2014
-Date: Thu, 14 Aug 2014 14:38:42 -0400
-Message-ID: <20140814183842.GG6420__25171.1487574086$1408041599$gmane$org@thessa>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+ <jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-tools] Fix: Man page typos
+Date: Thu, 14 Aug 2014 16:17:22 -0400
+Message-ID: <1408047442-18033-1-git-send-email-jeremie.galarneau__21887.6001927585$1408047523$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2124727815=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
+Received: from mail-qa0-f51.google.com ([209.85.216.51])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1XHzvE-0006tK-PY
- for lttng-dev@lists.lttng.org; Thu, 14 Aug 2014 14:38:54 -0400
-Received: from localhost (localhost [127.0.0.1])
- by smtp.ini-tech.com (Postfix) with ESMTP id 1CAC38552E
- for <lttng-dev@lists.lttng.org>; Thu, 14 Aug 2014 18:39:37 +0000 (UTC)
-Received: from smtp.ini-tech.com ([127.0.0.1])
- by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id YWi_bLQMKKQa for <lttng-dev@lists.lttng.org>;
- Thu, 14 Aug 2014 18:39:36 +0000 (UTC)
-Received: from smtp.ini-tech.com (localhost [127.0.0.1])
- by smtp.ini-tech.com (Postfix) with ESMTP id 6163C8553D
- for <lttng-dev@lists.lttng.org>; Thu, 14 Aug 2014 18:39:36 +0000 (UTC)
-Received: from thessa (unknown [96.127.212.51])
- by smtp.ini-tech.com (Postfix) with ESMTPSA id 49B508552E
- for <lttng-dev@lists.lttng.org>; Thu, 14 Aug 2014 18:39:36 +0000 (UTC)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XI1Sl-0007TQ-DL
+ for lttng-dev@lists.lttng.org; Thu, 14 Aug 2014 16:17:36 -0400
+Received: by mail-qa0-f51.google.com with SMTP id k15so1366376qaq.38
+ for <lttng-dev@lists.lttng.org>; Thu, 14 Aug 2014 13:17:25 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -30,62 +21,69 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-
---===============2124727815==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="S5HS5MvDw4DmbRmb"
-Content-Disposition: inline
-
-
---S5HS5MvDw4DmbRmb
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi everyone!
-
-Quick announcement to inform that i'll be on vacation meaning away from
-emails/IRC from August 17th to Sept 1st 2014.
-
-While I'm away, J=E9r=E9mie Galarneau is the maintainer of lttng-tools so
-please be nice to him :).
-
-Cheers!
-David
-
---S5HS5MvDw4DmbRmb
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQF8BAEBAgBmBQJT7QIyXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02FtkH/RAW6kTmkd02Z674l3gPktus
-BOtjRlnAiOHb8fMuENkgHa4XvLoOAwVO2ay8QIolO+qC4gzXpc98plXh5/jUziX9
-JsdkYWepXGanvQHIm5t8sIgPssEjYRtcVGdR7UgmZVdaeFlyPyJue7XtMWx5DGTE
-F5LBK6BDgbTObzzAwsG+veA/RAyOyCdP/KlzhIrydIomIrPLHWV3352ruyC31AJa
-lEE65sLzFEFz0XyIBO626nH4JxQf6y20Bh+4b6nlFi3QW4bs508HwzrH95bL5tbH
-uPyKQvMfQ1BpCbEMM7yRtpGMyUK0vp/6mGKiozjvolrGyOnR3DYtxQa16C5Qh8c=
-=UttE
------END PGP SIGNATURE-----
-
---S5HS5MvDw4DmbRmb--
-
-
---===============2124727815==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2124727815==--
+U2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
+aWNpb3MuY29tPgotLS0KIGRvYy9tYW4vbHR0bmctc2Vzc2lvbmQuOCB8IDggKysrKy0tLS0KIGRv
+Yy9tYW4vbHR0bmcuMSAgICAgICAgICB8IDYgKysrLS0tCiAyIGZpbGVzIGNoYW5nZWQsIDcgaW5z
+ZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kb2MvbWFuL2x0dG5nLXNl
+c3Npb25kLjggYi9kb2MvbWFuL2x0dG5nLXNlc3Npb25kLjgKaW5kZXggNmZkYzQ4My4uMjEyYjc0
+MyAxMDA2NDQKLS0tIGEvZG9jL21hbi9sdHRuZy1zZXNzaW9uZC44CisrKyBiL2RvYy9tYW4vbHR0
+bmctc2Vzc2lvbmQuOApAQCAtMTM0LDcgKzEzNCw3IEBAIHdpZGUgb25lIGluIFxmQi9ldGMvbHR0
+bmcvc2Vzc2lvbnMvYXV0by9cZlAuIE5vdGUgdGhhdCB0aGUgZGlyZWN0b3J5IGNvbnRhaW5pbmcK
+IHRoZSBzZXNzaW9uJ3MgY29uZmlndXJhdGlvbiBhbmQgbHR0bmctc2Vzc2lvbmQgTVVTVCBoYXZl
+IHRoZSBzYW1lIFVJRCBmb3IgdGhlbQogdG8gYmUgYXV0b21hdGljYWxseSBsb2FkZWQuCiAKLVNw
+ZWNpZml5aW5nIGEgcGF0aCB3aXRoIFwtbCwgXC1cLWxvYWQgUEFUSCBvdmVycmlkZXMgdGhlIGRl
+ZmF1bHQgZGlyZWN0b3J5IGFuZAorU3BlY2lmeWluZyBhIHBhdGggd2l0aCBcLWwsIFwtXC1sb2Fk
+IFBBVEggb3ZlcnJpZGVzIHRoZSBkZWZhdWx0IGRpcmVjdG9yeSBhbmQKIFVJRCBjaGVjay4gVGhl
+IGx0dG5nLXNlc3Npb25kIHdpbGwgc2ltcGx5IGNoZWNrIGlmIGl0J3MgYWNjZXNzaWJsZSBhbmQg
+dHJ5IHRvCiBsb2FkIGV2ZXJ5IHNlc3Npb24gZmlsZSBpbiBpdC4KIC5QUApAQCAtMTUzLDEwICsx
+NTMsMTAgQEAgb3ZlcnJpZGUgdGhpcyB2YXJpYWJsZS4KIFNwZWNpZnkgdGhlIDY0LWJpdCBjb25z
+dW1lciBiaW5hcnkgcGF0aC4gXGZCLS1jb25zdW1lcmQ2NC1wYXRoXGZQCiBvdmVycmlkZSB0aGlz
+IHZhcmlhYmxlLgogLklQICJMVFROR19DT05TVU1FUkQzMl9MSUJESVIiCi1TcGVjaWZpeSB0aGUg
+NjQtYml0IGxpYnJhcnkgcGF0aCBjb250YWluaW5nIGxpYmNvbnN1bWVyLnNvLgorU3BlY2lmeSB0
+aGUgNjQtYml0IGxpYnJhcnkgcGF0aCBjb250YWluaW5nIGxpYmNvbnN1bWVyLnNvLgogXGZCLS1j
+b25zdW1lcmQzMi1saWJkaXJcZlAgb3ZlcnJpZGUgdGhpcyB2YXJpYWJsZS4KIC5JUCAiTFRUTkdf
+Q09OU1VNRVJENjRfTElCRElSIgotU3BlY2lmaXkgdGhlIDMyLWJpdCBsaWJyYXJ5IHBhdGggY29u
+dGFpbmluZyBsaWJjb25zdW1lci5zby4KK1NwZWNpZnkgdGhlIDMyLWJpdCBsaWJyYXJ5IHBhdGgg
+Y29udGFpbmluZyBsaWJjb25zdW1lci5zby4KIFxmQi0tY29uc3VtZXJkNjQtbGliZGlyXGZQIG92
+ZXJyaWRlIHRoaXMgdmFyaWFibGUuCiAuSVAgIkxUVE5HX0RFQlVHX05PQ0xPTkUiCiBEZWJ1Zy1t
+b2RlIGRpc2FibGluZyB1c2Ugb2YgY2xvbmUvZm9yay4gSW5zZWN1cmUsIGJ1dCByZXF1aXJlZCB0
+byBhbGxvdwpAQCAtMTg3LDcgKzE4Nyw3IEBAIGJhYmVsdHJhY2UoMSksIGx0dG5nLXVzdCgzKSwg
+bHR0bmcoMSkKIEZvciB1bnByaXZpbGVnZWQgdXNlciBydW5uaW5nIGx0dG5nLXNlc3Npb25kLCB0
+aGUgbWF4aW11bSBudW1iZXIgb2YgZmlsZQogZGVzY3JpcHRvcnMgcGVyIHByb2Nlc3MgaXMgdXN1
+YWxseSAxMDI0LiBUaGlzIGxpbWl0cyB0aGUgbnVtYmVyIG9mIHRyYWNlYWJsZQogYXBwbGljYXRp
+b25zIHNpbmNlIGZvciBlYWNoIGluc3RydW1lbnRlZCBhcHBsaWNhdGlvbiB0aGVyZSBpcyB0d28g
+ZmlsZQotZGVzY3JpcHRvcnMgcGVyLUNQVSBhbmQgb25lIG1vcmUgc29ja3RldCBmb3IgYmlkaXJl
+Y3Rpb25hbCBjb21tdW5pY2F0aW9uLgorZGVzY3JpcHRvcnMgcGVyLUNQVSBhbmQgb25lIG1vcmUg
+c29ja2V0IGZvciBiaWRpcmVjdGlvbmFsIGNvbW11bmljYXRpb24uCiAKIEZvciB0aGUgcm9vdCB1
+c2VyLCB0aGUgbGltaXQgaXMgYnVtcGVkIHRvIDY1NTM1LiBGdXR1cmUgdmVyc2lvbiB3aWxsIGRl
+YWwgd2l0aAogdGhpcyBsaW1pdGF0aW9uLgpkaWZmIC0tZ2l0IGEvZG9jL21hbi9sdHRuZy4xIGIv
+ZG9jL21hbi9sdHRuZy4xCmluZGV4IDgwODYxZTkuLjJkZGEyOGEgMTAwNjQ0Ci0tLSBhL2RvYy9t
+YW4vbHR0bmcuMQorKysgYi9kb2MvbWFuL2x0dG5nLjEKQEAgLTI4MSw3ICsyODEsNyBAQCBVUkws
+IGlmIG9uZSBpcyBzcGVjaWZpZWQsIGFzIHRoZSBkZWZhdWx0IHNuYXBzaG90IG91dHB1dC4gIEV2
+ZXJ5IGNoYW5uZWwgd2lsbCBiZQogaW4gb3ZlcndyaXRlIG1vZGUgYW5kIHdpdGggbW1hcCBvdXRw
+dXQgKHNwbGljZSBub3Qgc3VwcG9ydGVkKS4KIC5UUAogLkJSICJcLVwtbGl2ZSBbVVNFQ10iCi1T
+ZXQgdGhlIHNlc3Npb24gZXhjbHVzaXZlbHkgaW4gbGl2ZSBtb2RlLiBUaGUgcGFyZW1ldGVyIGlz
+IHRoZSBkZWxheSBpbiBtaWNybworU2V0IHRoZSBzZXNzaW9uIGV4Y2x1c2l2ZWx5IGluIGxpdmUg
+bW9kZS4gVGhlIHBhcmFtZXRlciBpcyB0aGUgZGVsYXkgaW4gbWljcm8KIHNlY29uZHMgYmVmb3Jl
+IHRoZSBkYXRhIGlzIGZsdXNoZWQgYW5kIHN0cmVhbWVkLiBUaGUgbGl2ZSBtb2RlIGFsbG93cyB5
+b3UgdG8KIHN0cmVhbSB0aGUgdHJhY2UgYW5kIHZpZXcgaXQgd2hpbGUgaXQncyBiZWluZyByZWNv
+cmRlZCBieSBhbnkgdHJhY2VyLiBGb3IgdGhhdCwKIHlvdSBuZWVkIGEgbHR0bmctcmVsYXlkIGFu
+ZCB0aGlzIHNlc3Npb24gcmVxdWlyZXMgYSBuZXR3b3JrIFVSTCAoXC1VIG9yCkBAIC05MDUsNyAr
+OTA1LDcgQEAgQXBwbHkgdG8gc2Vzc2lvbiBuYW1lLgogTmFtZSBvZiB0aGUgc25hcHNob3QncyBv
+dXRwdXQuCiAuVFAKIC5CUiAiXC1tLCBcLVwtbWF4LXNpemUgU0laRSIKLU1heGltdW0gc2l6ZSBp
+biBieXRlcyBvZiB0aGUgc25hcHNob3QuIFRoZSBtYXhpdW0gc2l6ZSBkb2VzIG5vdCBpbmNsdWRl
+IHRoZQorTWF4aW11bSBzaXplIGluIGJ5dGVzIG9mIHRoZSBzbmFwc2hvdC4gVGhlIG1heGltdW0g
+c2l6ZSBkb2VzIG5vdCBpbmNsdWRlIHRoZQogbWV0YWRhdGEgZmlsZS4gSHVtYW4gcmVhZGFibGUg
+Zm9ybWF0IGlzIGFjY2VwdGVkOiB7K2ssK00sK0d9LiBGb3IgaW5zdGFuY2UsCiBcLVwtbWF4LXNp
+emUgNU0KIApAQCAtMTA5MCw3ICsxMDkwLDcgQEAgZm91bmQuCiAuUFAKIElmIHlvdSBlbmNvdW50
+ZXIgYW55IGlzc3VlcyBvciB1c2FiaWxpdHkgcHJvYmxlbSwgcGxlYXNlIHJlcG9ydCBpdCBvbiBv
+dXIKIG1haWxpbmcgbGlzdCA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4gdG8gaGVscCBpbXBy
+b3ZlIHRoaXMgcHJvamVjdCBvcgotYXQgaHR0cHM6Ly9idWdzLmx0dG5nLm9yZyB3aGljaCBpcyBh
+IGJ1Z3RyYWNrZXIuCithdCBodHRwczovL2J1Z3MubHR0bmcub3JnIHdoaWNoIGlzIGEgYnVnIHRy
+YWNrZXIuCiAuUFAKIAogLlNIICJDUkVESVRTIgotLSAKMi4wLjQKCgpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
