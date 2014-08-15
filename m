@@ -1,16 +1,19 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: babeltrace 1.2.2 and python3
-Date: Fri, 15 Aug 2014 15:47:59 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD3D184038__15177.5444196121$1408117774$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: babeltrace 1.2.2 and python3
+Date: Fri, 15 Aug 2014 13:50:52 -0400
+Message-ID: <CA+jJMxvhHJp-1EdKwEFYoLrCbND1HCHLjvBRqSz4dNt5KXeugg__38115.6344585635$1408125122$gmane$org@mail.gmail.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD3D184038@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-qg0-f47.google.com ([209.85.192.47])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1XIJjh-0005Ut-KF
- for lttng-dev@lists.lttng.org; Fri, 15 Aug 2014 11:48:21 -0400
-Content-Language: fr-FR
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XILeU-0006Az-6o
+ for lttng-dev@lists.lttng.org; Fri, 15 Aug 2014 13:51:06 -0400
+Received: by mail-qg0-f47.google.com with SMTP id i50so2494251qgf.34
+ for <lttng-dev@lists.lttng.org>; Fri, 15 Aug 2014 10:50:52 -0700 (PDT)
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD3D184038@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,45 +22,54 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-   The babeltrace 1.2.2 README suggests the python3-dev package and states =
-configure need only be called with the enable-python-bindings option.
-
-   However, my configure log (on a system with python3-dev (and therefore p=
-ython3) and swig2.0 installed) reads in part:
-
-checking for swig... no
-checking for swig2.0... /usr/bin/swig2.0
-checking SWIG version... 2.0.4
-checking for SWIG library... /usr/share/swig2.0
-checking for python... /usr/bin/python
-checking for python version... 2.7
-checking for python platform... linux2
-checking for python script directory... ${prefix}/lib/python2.7/dist-packag=
-es
-checking for python extension module directory... ${exec_prefix}/lib/python=
-2.7/dist-packages
-checking for python2.7-config... /usr/bin/python2.7-config
-checking python include flags... -I/usr/include/python2.7 -I/usr/include/py=
-thon2.7
-
-   I get the impression the "wrong" version of python is being bound to.  I=
-s this what the export of PYTHON and PYTHON_CONFIG is meant to fix?
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC=A0 G3J 1X5
-CANADA
-Vox=A0: (418) 844-4000 x4245
-Fax=A0: (418) 844-4538
-NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada=A0| Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+T24gRnJpLCBBdWcgMTUsIDIwMTQgYXQgMTE6NDcgQU0sIFRoaWJhdWx0LCBEYW5pZWwKPERhbmll
+bC5UaGliYXVsdEBkcmRjLXJkZGMuZ2MuY2E+IHdyb3RlOgo+ICAgIFRoZSBiYWJlbHRyYWNlIDEu
+Mi4yIFJFQURNRSBzdWdnZXN0cyB0aGUgcHl0aG9uMy1kZXYgcGFja2FnZSBhbmQgc3RhdGVzIGNv
+bmZpZ3VyZSBuZWVkIG9ubHkgYmUgY2FsbGVkIHdpdGggdGhlIGVuYWJsZS1weXRob24tYmluZGlu
+Z3Mgb3B0aW9uLgo+Cj4gICAgSG93ZXZlciwgbXkgY29uZmlndXJlIGxvZyAob24gYSBzeXN0ZW0g
+d2l0aCBweXRob24zLWRldiAoYW5kIHRoZXJlZm9yZSBweXRob24zKSBhbmQgc3dpZzIuMCBpbnN0
+YWxsZWQpIHJlYWRzIGluIHBhcnQ6Cj4KPiBjaGVja2luZyBmb3Igc3dpZy4uLiBubwo+IGNoZWNr
+aW5nIGZvciBzd2lnMi4wLi4uIC91c3IvYmluL3N3aWcyLjAKPiBjaGVja2luZyBTV0lHIHZlcnNp
+b24uLi4gMi4wLjQKPiBjaGVja2luZyBmb3IgU1dJRyBsaWJyYXJ5Li4uIC91c3Ivc2hhcmUvc3dp
+ZzIuMAo+IGNoZWNraW5nIGZvciBweXRob24uLi4gL3Vzci9iaW4vcHl0aG9uCj4gY2hlY2tpbmcg
+Zm9yIHB5dGhvbiB2ZXJzaW9uLi4uIDIuNwo+IGNoZWNraW5nIGZvciBweXRob24gcGxhdGZvcm0u
+Li4gbGludXgyCj4gY2hlY2tpbmcgZm9yIHB5dGhvbiBzY3JpcHQgZGlyZWN0b3J5Li4uICR7cHJl
+Zml4fS9saWIvcHl0aG9uMi43L2Rpc3QtcGFja2FnZXMKPiBjaGVja2luZyBmb3IgcHl0aG9uIGV4
+dGVuc2lvbiBtb2R1bGUgZGlyZWN0b3J5Li4uICR7ZXhlY19wcmVmaXh9L2xpYi9weXRob24yLjcv
+ZGlzdC1wYWNrYWdlcwo+IGNoZWNraW5nIGZvciBweXRob24yLjctY29uZmlnLi4uIC91c3IvYmlu
+L3B5dGhvbjIuNy1jb25maWcKPiBjaGVja2luZyBweXRob24gaW5jbHVkZSBmbGFncy4uLiAtSS91
+c3IvaW5jbHVkZS9weXRob24yLjcgLUkvdXNyL2luY2x1ZGUvcHl0aG9uMi43Cj4KPiAgICBJIGdl
+dCB0aGUgaW1wcmVzc2lvbiB0aGUgIndyb25nIiB2ZXJzaW9uIG9mIHB5dGhvbiBpcyBiZWluZyBi
+b3VuZCB0by4gIElzIHRoaXMgd2hhdCB0aGUgZXhwb3J0IG9mIFBZVEhPTiBhbmQgUFlUSE9OX0NP
+TkZJRyBpcyBtZWFudCB0byBmaXg/Cj4KClRoZSBjb25maWd1cmUgc3RlcCB3aWxsIGNoZWNrIGZv
+ciB0aGUgc3lzdGVtJ3MgZGVmYXVsdCBQeXRob24KaW50ZXJwcmV0ZXIgd2hpY2gsIGluIHlvdXIg
+Y2FzZSwgc2VlbXMgdG8gYmUgUHl0aG9uIDIuNy4KVGhlIFBZVEhPTiBhbmQgUFlUSE9OX0NPTkZJ
+RyB2YXJpYWJsZXMgY2FuIGJlIHVzZWQgdG8gb3ZlcnJpZGUgdGhlCmRlZmF1bHQgc3lzdGVtIGNv
+bmZpZ3VyYXRpb24gYW5kIHBvaW50IHRvIGEgUHl0aG9uIDMgaW50ZXJwcmV0ZXIsIGFzCmluZGlj
+YXRlZCBpbiB0aGUgUkVBRE1FOgoKICBJZiB5b3Ugd2FudCBQeXRob24gYmluZGluZ3MsIHJ1biAu
+L2NvbmZpZ3VyZSAtLWVuYWJsZS1weXRob24tYmluZGluZ3MuCiAgUGxlYXNlIG5vdGUgdGhhdCBz
+b21lIGRpc3RyaWJ1dGlvbnMgd2lsbCBuZWVkIHRoZSBmb2xsb3dpbmcKICBlbnZpcm9ubWVudCB2
+YXJpYWJsZXMgc2V0IGJlZm9yZSBydW5uaW5nIGNvbmZpZ3VyZToKCiAgICBleHBvcnQgUFlUSE9O
+PSJweXRob24zIgogICAgZXhwb3J0IFBZVEhPTl9DT05GSUc9Ii91c3IvYmluL3B5dGhvbjMtY29u
+ZmlnIgoKUmVnYXJkcywKSsOpcsOpbWllCgo+IERhbmllbCBVLiBUaGliYXVsdAo+IFByb3RlY3Rp
+b24gZGVzIHN5c3TDqG1lcyBldCBjb250cmVtZXN1cmVzIChQU0MpIHwgU3lzdGVtcyBQcm90ZWN0
+aW9uICYgQ291bnRlcm1lYXN1cmVzIChTUEMpCj4gQ3liZXIgc8OpY3VyaXTDqSBwb3VyIGxlcyBt
+aXNzaW9ucyBlc3NlbnRpZWxsZXMgKENNRSkgfCBNaXNzaW9uIENyaXRpY2FsIEN5YmVyIFNlY3Vy
+aXR5IChNQ0NTKQo+IFJEREMgLSBDZW50cmUgZGUgcmVjaGVyY2hlcyBkZSBWYWxjYXJ0aWVyIHwg
+RFJEQyAtIFZhbGNhcnRpZXIgUmVzZWFyY2ggQ2VudHJlCj4gMjQ1OSByb3V0ZSBkZSBsYSBCcmF2
+b3VyZQo+IFF1w6liZWMgUUMgIEczSiAxWDUKPiBDQU5BREEKPiBWb3ggOiAoNDE4KSA4NDQtNDAw
+MCB4NDI0NQo+IEZheCA6ICg0MTgpIDg0NC00NTM4Cj4gTkFDIDogOTE4ViBRU0RKIDxodHRwOi8v
+d3d3LnRyYXZlbGdpcy5jb20vbWFwLmFzcD9hZGRyPTkxOFYlMjBRU0RKPgo+IEdvdXZlcm5lbWVu
+dCBkdSBDYW5hZGEgfCBHb3Zlcm5tZW50IG9mIENhbmFkYQo+IDxodHRwOi8vd3d3LnZhbGNhcnRp
+ZXIuZHJkYy1yZGRjLmdjLmNhLz4KPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
+aW5mby9sdHRuZy1kZXYKCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpo
+dHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
+dG5nLWRldgo=
