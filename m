@@ -1,18 +1,16 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
- <jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Man page typos
-Date: Thu, 14 Aug 2014 16:17:22 -0400
-Message-ID: <1408047442-18033-1-git-send-email-jeremie.galarneau__21887.6001927585$1408047523$gmane$org@efficios.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: babeltrace 1.2.2 and python3
+Date: Fri, 15 Aug 2014 15:47:59 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD3D184038__15177.5444196121$1408117774$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f51.google.com ([209.85.216.51])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1XI1Sl-0007TQ-DL
- for lttng-dev@lists.lttng.org; Thu, 14 Aug 2014 16:17:36 -0400
-Received: by mail-qa0-f51.google.com with SMTP id k15so1366376qaq.38
- for <lttng-dev@lists.lttng.org>; Thu, 14 Aug 2014 13:17:25 -0700 (PDT)
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1XIJjh-0005Ut-KF
+ for lttng-dev@lists.lttng.org; Fri, 15 Aug 2014 11:48:21 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,69 +19,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
-aWNpb3MuY29tPgotLS0KIGRvYy9tYW4vbHR0bmctc2Vzc2lvbmQuOCB8IDggKysrKy0tLS0KIGRv
-Yy9tYW4vbHR0bmcuMSAgICAgICAgICB8IDYgKysrLS0tCiAyIGZpbGVzIGNoYW5nZWQsIDcgaW5z
-ZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kb2MvbWFuL2x0dG5nLXNl
-c3Npb25kLjggYi9kb2MvbWFuL2x0dG5nLXNlc3Npb25kLjgKaW5kZXggNmZkYzQ4My4uMjEyYjc0
-MyAxMDA2NDQKLS0tIGEvZG9jL21hbi9sdHRuZy1zZXNzaW9uZC44CisrKyBiL2RvYy9tYW4vbHR0
-bmctc2Vzc2lvbmQuOApAQCAtMTM0LDcgKzEzNCw3IEBAIHdpZGUgb25lIGluIFxmQi9ldGMvbHR0
-bmcvc2Vzc2lvbnMvYXV0by9cZlAuIE5vdGUgdGhhdCB0aGUgZGlyZWN0b3J5IGNvbnRhaW5pbmcK
-IHRoZSBzZXNzaW9uJ3MgY29uZmlndXJhdGlvbiBhbmQgbHR0bmctc2Vzc2lvbmQgTVVTVCBoYXZl
-IHRoZSBzYW1lIFVJRCBmb3IgdGhlbQogdG8gYmUgYXV0b21hdGljYWxseSBsb2FkZWQuCiAKLVNw
-ZWNpZml5aW5nIGEgcGF0aCB3aXRoIFwtbCwgXC1cLWxvYWQgUEFUSCBvdmVycmlkZXMgdGhlIGRl
-ZmF1bHQgZGlyZWN0b3J5IGFuZAorU3BlY2lmeWluZyBhIHBhdGggd2l0aCBcLWwsIFwtXC1sb2Fk
-IFBBVEggb3ZlcnJpZGVzIHRoZSBkZWZhdWx0IGRpcmVjdG9yeSBhbmQKIFVJRCBjaGVjay4gVGhl
-IGx0dG5nLXNlc3Npb25kIHdpbGwgc2ltcGx5IGNoZWNrIGlmIGl0J3MgYWNjZXNzaWJsZSBhbmQg
-dHJ5IHRvCiBsb2FkIGV2ZXJ5IHNlc3Npb24gZmlsZSBpbiBpdC4KIC5QUApAQCAtMTUzLDEwICsx
-NTMsMTAgQEAgb3ZlcnJpZGUgdGhpcyB2YXJpYWJsZS4KIFNwZWNpZnkgdGhlIDY0LWJpdCBjb25z
-dW1lciBiaW5hcnkgcGF0aC4gXGZCLS1jb25zdW1lcmQ2NC1wYXRoXGZQCiBvdmVycmlkZSB0aGlz
-IHZhcmlhYmxlLgogLklQICJMVFROR19DT05TVU1FUkQzMl9MSUJESVIiCi1TcGVjaWZpeSB0aGUg
-NjQtYml0IGxpYnJhcnkgcGF0aCBjb250YWluaW5nIGxpYmNvbnN1bWVyLnNvLgorU3BlY2lmeSB0
-aGUgNjQtYml0IGxpYnJhcnkgcGF0aCBjb250YWluaW5nIGxpYmNvbnN1bWVyLnNvLgogXGZCLS1j
-b25zdW1lcmQzMi1saWJkaXJcZlAgb3ZlcnJpZGUgdGhpcyB2YXJpYWJsZS4KIC5JUCAiTFRUTkdf
-Q09OU1VNRVJENjRfTElCRElSIgotU3BlY2lmaXkgdGhlIDMyLWJpdCBsaWJyYXJ5IHBhdGggY29u
-dGFpbmluZyBsaWJjb25zdW1lci5zby4KK1NwZWNpZnkgdGhlIDMyLWJpdCBsaWJyYXJ5IHBhdGgg
-Y29udGFpbmluZyBsaWJjb25zdW1lci5zby4KIFxmQi0tY29uc3VtZXJkNjQtbGliZGlyXGZQIG92
-ZXJyaWRlIHRoaXMgdmFyaWFibGUuCiAuSVAgIkxUVE5HX0RFQlVHX05PQ0xPTkUiCiBEZWJ1Zy1t
-b2RlIGRpc2FibGluZyB1c2Ugb2YgY2xvbmUvZm9yay4gSW5zZWN1cmUsIGJ1dCByZXF1aXJlZCB0
-byBhbGxvdwpAQCAtMTg3LDcgKzE4Nyw3IEBAIGJhYmVsdHJhY2UoMSksIGx0dG5nLXVzdCgzKSwg
-bHR0bmcoMSkKIEZvciB1bnByaXZpbGVnZWQgdXNlciBydW5uaW5nIGx0dG5nLXNlc3Npb25kLCB0
-aGUgbWF4aW11bSBudW1iZXIgb2YgZmlsZQogZGVzY3JpcHRvcnMgcGVyIHByb2Nlc3MgaXMgdXN1
-YWxseSAxMDI0LiBUaGlzIGxpbWl0cyB0aGUgbnVtYmVyIG9mIHRyYWNlYWJsZQogYXBwbGljYXRp
-b25zIHNpbmNlIGZvciBlYWNoIGluc3RydW1lbnRlZCBhcHBsaWNhdGlvbiB0aGVyZSBpcyB0d28g
-ZmlsZQotZGVzY3JpcHRvcnMgcGVyLUNQVSBhbmQgb25lIG1vcmUgc29ja3RldCBmb3IgYmlkaXJl
-Y3Rpb25hbCBjb21tdW5pY2F0aW9uLgorZGVzY3JpcHRvcnMgcGVyLUNQVSBhbmQgb25lIG1vcmUg
-c29ja2V0IGZvciBiaWRpcmVjdGlvbmFsIGNvbW11bmljYXRpb24uCiAKIEZvciB0aGUgcm9vdCB1
-c2VyLCB0aGUgbGltaXQgaXMgYnVtcGVkIHRvIDY1NTM1LiBGdXR1cmUgdmVyc2lvbiB3aWxsIGRl
-YWwgd2l0aAogdGhpcyBsaW1pdGF0aW9uLgpkaWZmIC0tZ2l0IGEvZG9jL21hbi9sdHRuZy4xIGIv
-ZG9jL21hbi9sdHRuZy4xCmluZGV4IDgwODYxZTkuLjJkZGEyOGEgMTAwNjQ0Ci0tLSBhL2RvYy9t
-YW4vbHR0bmcuMQorKysgYi9kb2MvbWFuL2x0dG5nLjEKQEAgLTI4MSw3ICsyODEsNyBAQCBVUkws
-IGlmIG9uZSBpcyBzcGVjaWZpZWQsIGFzIHRoZSBkZWZhdWx0IHNuYXBzaG90IG91dHB1dC4gIEV2
-ZXJ5IGNoYW5uZWwgd2lsbCBiZQogaW4gb3ZlcndyaXRlIG1vZGUgYW5kIHdpdGggbW1hcCBvdXRw
-dXQgKHNwbGljZSBub3Qgc3VwcG9ydGVkKS4KIC5UUAogLkJSICJcLVwtbGl2ZSBbVVNFQ10iCi1T
-ZXQgdGhlIHNlc3Npb24gZXhjbHVzaXZlbHkgaW4gbGl2ZSBtb2RlLiBUaGUgcGFyZW1ldGVyIGlz
-IHRoZSBkZWxheSBpbiBtaWNybworU2V0IHRoZSBzZXNzaW9uIGV4Y2x1c2l2ZWx5IGluIGxpdmUg
-bW9kZS4gVGhlIHBhcmFtZXRlciBpcyB0aGUgZGVsYXkgaW4gbWljcm8KIHNlY29uZHMgYmVmb3Jl
-IHRoZSBkYXRhIGlzIGZsdXNoZWQgYW5kIHN0cmVhbWVkLiBUaGUgbGl2ZSBtb2RlIGFsbG93cyB5
-b3UgdG8KIHN0cmVhbSB0aGUgdHJhY2UgYW5kIHZpZXcgaXQgd2hpbGUgaXQncyBiZWluZyByZWNv
-cmRlZCBieSBhbnkgdHJhY2VyLiBGb3IgdGhhdCwKIHlvdSBuZWVkIGEgbHR0bmctcmVsYXlkIGFu
-ZCB0aGlzIHNlc3Npb24gcmVxdWlyZXMgYSBuZXR3b3JrIFVSTCAoXC1VIG9yCkBAIC05MDUsNyAr
-OTA1LDcgQEAgQXBwbHkgdG8gc2Vzc2lvbiBuYW1lLgogTmFtZSBvZiB0aGUgc25hcHNob3QncyBv
-dXRwdXQuCiAuVFAKIC5CUiAiXC1tLCBcLVwtbWF4LXNpemUgU0laRSIKLU1heGltdW0gc2l6ZSBp
-biBieXRlcyBvZiB0aGUgc25hcHNob3QuIFRoZSBtYXhpdW0gc2l6ZSBkb2VzIG5vdCBpbmNsdWRl
-IHRoZQorTWF4aW11bSBzaXplIGluIGJ5dGVzIG9mIHRoZSBzbmFwc2hvdC4gVGhlIG1heGltdW0g
-c2l6ZSBkb2VzIG5vdCBpbmNsdWRlIHRoZQogbWV0YWRhdGEgZmlsZS4gSHVtYW4gcmVhZGFibGUg
-Zm9ybWF0IGlzIGFjY2VwdGVkOiB7K2ssK00sK0d9LiBGb3IgaW5zdGFuY2UsCiBcLVwtbWF4LXNp
-emUgNU0KIApAQCAtMTA5MCw3ICsxMDkwLDcgQEAgZm91bmQuCiAuUFAKIElmIHlvdSBlbmNvdW50
-ZXIgYW55IGlzc3VlcyBvciB1c2FiaWxpdHkgcHJvYmxlbSwgcGxlYXNlIHJlcG9ydCBpdCBvbiBv
-dXIKIG1haWxpbmcgbGlzdCA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4gdG8gaGVscCBpbXBy
-b3ZlIHRoaXMgcHJvamVjdCBvcgotYXQgaHR0cHM6Ly9idWdzLmx0dG5nLm9yZyB3aGljaCBpcyBh
-IGJ1Z3RyYWNrZXIuCithdCBodHRwczovL2J1Z3MubHR0bmcub3JnIHdoaWNoIGlzIGEgYnVnIHRy
-YWNrZXIuCiAuUFAKIAogLlNIICJDUkVESVRTIgotLSAKMi4wLjQKCgpfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0
-dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
-aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+   The babeltrace 1.2.2 README suggests the python3-dev package and states =
+configure need only be called with the enable-python-bindings option.
+
+   However, my configure log (on a system with python3-dev (and therefore p=
+ython3) and swig2.0 installed) reads in part:
+
+checking for swig... no
+checking for swig2.0... /usr/bin/swig2.0
+checking SWIG version... 2.0.4
+checking for SWIG library... /usr/share/swig2.0
+checking for python... /usr/bin/python
+checking for python version... 2.7
+checking for python platform... linux2
+checking for python script directory... ${prefix}/lib/python2.7/dist-packag=
+es
+checking for python extension module directory... ${exec_prefix}/lib/python=
+2.7/dist-packages
+checking for python2.7-config... /usr/bin/python2.7-config
+checking python include flags... -I/usr/include/python2.7 -I/usr/include/py=
+thon2.7
+
+   I get the impression the "wrong" version of python is being bound to.  I=
+s this what the export of PYTHON and PYTHON_CONFIG is meant to fix?
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
+re
+2459 route de la Bravoure
+Qu=E9bec QC=A0 G3J 1X5
+CANADA
+Vox=A0: (418) 844-4000 x4245
+Fax=A0: (418) 844-4538
+NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada=A0| Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
