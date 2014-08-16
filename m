@@ -1,17 +1,22 @@
-From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tool] Fix: list command: revert merge
+From: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+Subject: Fwd: [PATCH lttng-tool] Fix: list command: revert merge
  error made when adding mi on pretty printing
-Date: Sat, 16 Aug 2014 10:45:46 -0400
-Message-ID: <20140816144546.GG7634__14531.688244506$1408200389$gmane$org@thessa>
+Date: Sat, 16 Aug 2014 16:59:22 -0400
+Message-ID: <CAF4oYfHTfLZ0x77fEPkkm_AT7jE4UCxu4LvOPioRrKWows0zhw__962.560057132755$1408222823$gmane$org@mail.gmail.com>
 References: <1407866140-6261-1-git-send-email-jonathan.r.julien@gmail.com>
+ <20140816144546.GG7634@thessa>
+ <CAF4oYfEnxpEMTJhYgHjPH6rP57S+nod1x6th_rtOSZ1-AeCiAA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0766248789=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
+Received: from mail-yh0-f44.google.com ([209.85.213.44])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1XIfEu-0004eH-AF
- for lttng-dev@lists.lttng.org; Sat, 16 Aug 2014 10:45:53 -0400
-In-Reply-To: <1407866140-6261-1-git-send-email-jonathan.r.julien@gmail.com>
+ (envelope-from <jonathan.r.julien@gmail.com>) id 1XIl4S-0006fq-Mn
+ for lttng-dev@lists.lttng.org; Sat, 16 Aug 2014 16:59:31 -0400
+Received: by mail-yh0-f44.google.com with SMTP id f73so3371469yha.17
+ for <lttng-dev@lists.lttng.org>; Sat, 16 Aug 2014 13:59:22 -0700 (PDT)
+In-Reply-To: <CAF4oYfEnxpEMTJhYgHjPH6rP57S+nod1x6th_rtOSZ1-AeCiAA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,95 +25,59 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-
---===============0766248789==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="sLx0z+5FKKtIVDwd"
-Content-Disposition: inline
-
-
---sLx0z+5FKKtIVDwd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 12 Aug (13:55:40), Jonathan Rajotte Julien wrote:
-> Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
-> ---
->  src/bin/lttng/commands/list.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
->=20
-> diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
-> index e3ff4f1..ccffdc7 100644
-> --- a/src/bin/lttng/commands/list.c
-> +++ b/src/bin/lttng/commands/list.c
-> @@ -1271,14 +1271,10 @@ static int list_sessions(const char *session_name)
->  					break;
->  				}
->  			} else {
-> -				MSG("  %d) %s (%s) [%s%s]", i + 1,
-> -						sessions[i].name, sessions[i].path,
-> +				MSG("  %d) %s (%s) [%s%s]", i + 1, sessions[i].name,
-> +						sessions[i].path,
->  						active_string(sessions[i].enabled),
->  						snapshot_string(sessions[i].snapshot_mode));
-> -				MSG("%sTrace path: %s", indent4, sessions[i].path);
-> -				MSG("%sLive timer interval (usec): %u\n", indent4,
-> -						sessions[i].live_timer_interval);
-> -				break;
-
-Not sure removing that is wanted here. The "trace path" and "live timer
-interval" lines are in stable-2.5 thus removing them here, you need a
-real good reason ;)
-
-David
-
->  			}
->  		}
-> =20
-> --=20
-> 2.0.4
->=20
->=20
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---sLx0z+5FKKtIVDwd
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQF8BAEBAgBmBQJT726aXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
-ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I020vkIAJSTr/gXJ4Hym4778XxofUjG
-mQPZBYa9DvRcYjvV9NaPgP89faKscBEY6Pv8zAiqQpYBs3xbEsDN8hW4Y8oF+APg
-On+79VJzr55tvW1Krv9gpxOO+l/IHzVAXPu/nPOQ7bS0yw9bOO2bQw3mCNZAf/yA
-lmtNrryC2v05VrxCHqAU1BSDCDbICBwmvB9KtEf51lCwTkoofptuLqxXwlfE54RS
-TZYx6FQp+ftTk/g+KahQashGJ5/jmuiv+1guptaltBgtDZIPq7zTkHjvmGWLuOVq
-9+xzBpAJ7f8fOPPszkYIVfVXtbfr2dM9lQiSgm5Jqlk3dkAGRoY3yFebsMAE1kY=
-=uSxK
------END PGP SIGNATURE-----
-
---sLx0z+5FKKtIVDwd--
-
-
---===============0766248789==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0766248789==--
+QWN0dWFsbHkgaWYgeW91IHdhbnQgdG8gcHJlc2VydmUgdGhlIG9yaWdpbmFsIGJlaGF2aW91ciBm
+cm9tIDIuNSB5b3UKd2FudCB0byByZW1vdmUgdGhlbS4KClRoaXMgY29kZSBwYXRoIGlzIGZvciBs
+aXN0aW5nIGFsbCB0aGUgc2Vzc2lvbnMuIE5vdCBmb3IgdGhlIGluZGl2aWR1YWwgbGlzdGluZy4K
+CkhlcmUgdGhlIGNvZGUgZnJvbSB0aGUgImFsbCBsaXN0aW5nIiBwYXRoIGluIDIuNQoKTVNHKCIg
+ICVkKSAlcyAoJXMpIFslcyVzXSIsIGkgKyAxLCBzZXNzaW9uc1tpXS5uYW1lLCBzZXNzaW9uc1tp
+XS5wYXRoLAphY3RpdmVfc3RyaW5nKHNlc3Npb25zW2ldLmVuYWJsZWQpLApzbmFwc2hvdF9zdHJp
+bmcoc2Vzc2lvbnNbaV0uc25hcHNob3RfbW9kZSkpOwoKSSBkb24ndCBtaW5kIHlvdSB0ZWxsaW5n
+IG1lIHRoYXQgd2UgY2FuIGFkZCB0aGUgdHJhY2UgcGF0aCBhbmQgdGhlCmxpdmUgdGltZXIgbm93
+IHRoYXQgd2UgaGF2ZSBtaS4KQnV0IGFzIGxvbmcgYXMgd2UgdGFsayBhYm91dCB0aGlzIHBhdGNo
+LCBpdCByZXZlcnQgdG8gdGhlIG9yaWdpbmFsCmJlaGF2aW91ciBmcm9tIDIuNSBhbmQgZml4IG15
+IGluY29tcGV0ZW5jZS4gTm90aWNlIHRoZSByZW1vdmFsIG9mIHRoZQpicmVhayBzdGF0ZW1lbnQg
+dG9vLi4uIGlmIHlvdSBhcmUgb24gbWFzdGVyIGFuZCBkbyBhIGx0dG5nIGxpc3Qgd2l0aAptdWx0
+aXBsZSBzZXNzaW9ucyBvbmx5IHRoZSBmaXJzdCBvbmUgc2hvdyB1cC4KCk9yIGFtIEkgbWlzc2lu
+ZyBzb21ldGhpbmcgPwoKCj4gT24gU2F0LCBBdWcgMTYsIDIwMTQgYXQgMTA6NDUgQU0sIERhdmlk
+IEdvdWxldCA8ZGdvdWxldEBlZmZpY2lvcy5jb20+IHdyb3RlOgo+Pgo+PiBPbiAxMiBBdWcgKDEz
+OjU1OjQwKSwgSm9uYXRoYW4gUmFqb3R0ZSBKdWxpZW4gd3JvdGU6Cj4+ID4gU2lnbmVkLW9mZi1i
+eTogSm9uYXRoYW4gUmFqb3R0ZSBKdWxpZW4gPGpvbmF0aGFuLnIuanVsaWVuQGdtYWlsLmNvbT4K
+Pj4gPiAtLS0KPj4gPiAgc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9saXN0LmMgfCA4ICsrLS0tLS0t
+Cj4+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pCj4+
+ID4KPj4gPiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9saXN0LmMgYi9zcmMv
+YmluL2x0dG5nL2NvbW1hbmRzL2xpc3QuYwo+PiA+IGluZGV4IGUzZmY0ZjEuLmNjZmZkYzcgMTAw
+NjQ0Cj4+ID4gLS0tIGEvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9saXN0LmMKPj4gPiArKysgYi9z
+cmMvYmluL2x0dG5nL2NvbW1hbmRzL2xpc3QuYwo+PiA+IEBAIC0xMjcxLDE0ICsxMjcxLDEwIEBA
+IHN0YXRpYyBpbnQgbGlzdF9zZXNzaW9ucyhjb25zdCBjaGFyICpzZXNzaW9uX25hbWUpCj4+ID4g
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBicmVhazsKPj4gPiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICB9Cj4+ID4gICAgICAgICAgICAgICAgICAgICAgIH0gZWxz
+ZSB7Cj4+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTVNHKCIgICVkKSAlcyAoJXMp
+IFslcyVzXSIsIGkgKyAxLAo+PiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBzZXNzaW9uc1tpXS5uYW1lLCBzZXNzaW9uc1tpXS5wYXRoLAo+PiA+ICsgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIE1TRygiICAlZCkgJXMgKCVzKSBbJXMlc10iLCBpICsg
+MSwgc2Vzc2lvbnNbaV0ubmFtZSwKPj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgc2Vzc2lvbnNbaV0ucGF0aCwKPj4gPiAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgYWN0aXZlX3N0cmluZyhzZXNzaW9uc1tpXS5lbmFi
+bGVkKSwKPj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+c25hcHNob3Rfc3RyaW5nKHNlc3Npb25zW2ldLnNuYXBzaG90X21vZGUpKTsKPj4gPiAtICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICBNU0coIiVzVHJhY2UgcGF0aDogJXMiLCBpbmRlbnQ0LCBz
+ZXNzaW9uc1tpXS5wYXRoKTsKPj4gPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNU0co
+IiVzTGl2ZSB0aW1lciBpbnRlcnZhbCAodXNlYyk6ICV1XG4iLCBpbmRlbnQ0LAo+PiA+IC0gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzZXNzaW9uc1tpXS5saXZl
+X3RpbWVyX2ludGVydmFsKTsKPj4gPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgICBicmVh
+azsKPj4KPj4gTm90IHN1cmUgcmVtb3ZpbmcgdGhhdCBpcyB3YW50ZWQgaGVyZS4gVGhlICJ0cmFj
+ZSBwYXRoIiBhbmQgImxpdmUgdGltZXIKPj4gaW50ZXJ2YWwiIGxpbmVzIGFyZSBpbiBzdGFibGUt
+Mi41IHRodXMgcmVtb3ZpbmcgdGhlbSBoZXJlLCB5b3UgbmVlZCBhCj4+IHJlYWwgZ29vZCByZWFz
+b24gOykKPj4KPj4gRGF2aWQKPj4KPj4gPiAgICAgICAgICAgICAgICAgICAgICAgfQo+PiA+ICAg
+ICAgICAgICAgICAgfQo+PiA+Cj4+ID4gLS0KPj4gPiAyLjAuNAo+PiA+Cj4+ID4KPj4gPiBfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiA+IGx0dG5nLWRl
+diBtYWlsaW5nIGxpc3QKPj4gPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+ID4gaHR0cDov
+L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KPgo+
+Cj4KPiAtLQo+IEpvbmF0aGFuIFJham90dGUgSnVsaWVuCj4gQ2hhcmfDqSBkZSBsYWJvcmF0b2ly
+ZSwgSU5GMTk5NQo+IFBvbHl0ZWNobmlxdWUgTW9udHLDqWFsCgpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
+YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
