@@ -1,16 +1,17 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: Man page typos
-Date: Sat, 16 Aug 2014 10:43:30 -0400
-Message-ID: <20140816144330.GD7634__4285.72645546428$1408200261$gmane$org@thessa>
-References: <1408047442-18033-1-git-send-email-jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tool] Mi & save/load: add option to
+ indent or not on config writer creation
+Date: Sat, 16 Aug 2014 10:43:44 -0400
+Message-ID: <20140816144344.GE7634__39271.1197761402$1408200275$gmane$org@thessa>
+References: <1407334428-7601-1-git-send-email-jonathan.r.julien@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0909480316=="
+Content-Type: multipart/mixed; boundary="===============0435913407=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1XIfCk-0004Y3-IE
- for lttng-dev@lists.lttng.org; Sat, 16 Aug 2014 10:43:39 -0400
-In-Reply-To: <1408047442-18033-1-git-send-email-jeremie.galarneau@efficios.com>
+ (envelope-from <dgoulet@efficios.com>) id 1XIfCv-0004YU-Vw
+ for lttng-dev@lists.lttng.org; Sat, 16 Aug 2014 10:43:50 -0400
+In-Reply-To: <1407334428-7601-1-git-send-email-jonathan.r.julien@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,148 +20,156 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+To: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 
---===============0909480316==
+--===============0435913407==
 Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="ZARJHfwaSJQLOEUz"
+	protocol="application/pgp-signature"; boundary="orO6xySwJI16pVnm"
 Content-Disposition: inline
 
 
---ZARJHfwaSJQLOEUz
-Content-Type: text/plain; charset=iso-8859-1
+--orO6xySwJI16pVnm
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Merged.
+Merged
 
-Backported to stable-2.5 also
-
-On 14 Aug (16:17:22), J=E9r=E9mie Galarneau wrote:
-> Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+On 06 Aug (10:13:48), Jonathan Rajotte Julien wrote:
+> The presence of tabulation and newline in mi is irrelevant and
+> can impact client performance. The parsing & processing of a lot of data =
+=66rom mi
+> with many /t and /n impact performance. This aim to fix the problem at the
+> source. Style is useless for machine.
+>=20
+> Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
 > ---
->  doc/man/lttng-sessiond.8 | 8 ++++----
->  doc/man/lttng.1          | 6 +++---
->  2 files changed, 7 insertions(+), 7 deletions(-)
+>  src/bin/lttng-sessiond/save.c | 2 +-
+>  src/common/config/config.c    | 8 ++++----
+>  src/common/config/config.h    | 5 ++++-
+>  src/common/mi-lttng.c         | 2 +-
+>  4 files changed, 10 insertions(+), 7 deletions(-)
 >=20
-> diff --git a/doc/man/lttng-sessiond.8 b/doc/man/lttng-sessiond.8
-> index 6fdc483..212b743 100644
-> --- a/doc/man/lttng-sessiond.8
-> +++ b/doc/man/lttng-sessiond.8
-> @@ -134,7 +134,7 @@ wide one in \fB/etc/lttng/sessions/auto/\fP. Note tha=
-t the directory containing
->  the session's configuration and lttng-sessiond MUST have the same UID fo=
-r them
->  to be automatically loaded.
+> diff --git a/src/bin/lttng-sessiond/save.c b/src/bin/lttng-sessiond/save.c
+> index 90b3a3b..28844e3 100644
+> --- a/src/bin/lttng-sessiond/save.c
+> +++ b/src/bin/lttng-sessiond/save.c
+> @@ -1514,7 +1514,7 @@ int save_session(struct ltt_session *session,
+>  	}
+>  	file_opened =3D 1;
 > =20
-> -Specifiying a path with \-l, \-\-load PATH overrides the default directo=
-ry and
-> +Specifying a path with \-l, \-\-load PATH overrides the default director=
-y and
->  UID check. The lttng-sessiond will simply check if it's accessible and t=
-ry to
->  load every session file in it.
->  .PP
-> @@ -153,10 +153,10 @@ override this variable.
->  Specify the 64-bit consumer binary path. \fB--consumerd64-path\fP
->  override this variable.
->  .IP "LTTNG_CONSUMERD32_LIBDIR"
-> -Specifiy the 64-bit library path containing libconsumer.so.
-> +Specify the 64-bit library path containing libconsumer.so.
->  \fB--consumerd32-libdir\fP override this variable.
->  .IP "LTTNG_CONSUMERD64_LIBDIR"
-> -Specifiy the 32-bit library path containing libconsumer.so.
-> +Specify the 32-bit library path containing libconsumer.so.
->  \fB--consumerd64-libdir\fP override this variable.
->  .IP "LTTNG_DEBUG_NOCLONE"
->  Debug-mode disabling use of clone/fork. Insecure, but required to allow
-> @@ -187,7 +187,7 @@ babeltrace(1), lttng-ust(3), lttng(1)
->  For unprivileged user running lttng-sessiond, the maximum number of file
->  descriptors per process is usually 1024. This limits the number of trace=
-able
->  applications since for each instrumented application there is two file
-> -descriptors per-CPU and one more socktet for bidirectional communication.
-> +descriptors per-CPU and one more socket for bidirectional communication.
+> -	writer =3D config_writer_create(fd);
+> +	writer =3D config_writer_create(fd, 1);
+>  	if (!writer) {
+>  		ret =3D LTTNG_ERR_NOMEM;
+>  		goto end;
+> diff --git a/src/common/config/config.c b/src/common/config/config.c
+> index bfb2576..1dccd26 100644
+> --- a/src/common/config/config.c
+> +++ b/src/common/config/config.c
+> @@ -353,7 +353,7 @@ end:
+>  }
 > =20
->  For the root user, the limit is bumped to 65535. Future version will dea=
-l with
->  this limitation.
-> diff --git a/doc/man/lttng.1 b/doc/man/lttng.1
-> index 80861e9..2dda28a 100644
-> --- a/doc/man/lttng.1
-> +++ b/doc/man/lttng.1
-> @@ -281,7 +281,7 @@ URL, if one is specified, as the default snapshot out=
-put.  Every channel will be
->  in overwrite mode and with mmap output (splice not supported).
->  .TP
->  .BR "\-\-live [USEC]"
-> -Set the session exclusively in live mode. The paremeter is the delay in =
-micro
-> +Set the session exclusively in live mode. The parameter is the delay in =
-micro
->  seconds before the data is flushed and streamed. The live mode allows yo=
-u to
->  stream the trace and view it while it's being recorded by any tracer. Fo=
-r that,
->  you need a lttng-relayd and this session requires a network URL (\-U or
-> @@ -905,7 +905,7 @@ Apply to session name.
->  Name of the snapshot's output.
->  .TP
->  .BR "\-m, \-\-max-size SIZE"
-> -Maximum size in bytes of the snapshot. The maxium size does not include =
-the
-> +Maximum size in bytes of the snapshot. The maximum size does not include=
- the
->  metadata file. Human readable format is accepted: {+k,+M,+G}. For instan=
-ce,
->  \-\-max-size 5M
+>  LTTNG_HIDDEN
+> -struct config_writer *config_writer_create(int fd_output)
+> +struct config_writer *config_writer_create(int fd_output, int indent)
+>  {
+>  	int ret;
+>  	struct config_writer *writer;
+> @@ -379,12 +379,12 @@ struct config_writer *config_writer_create(int fd_o=
+utput)
 > =20
-> @@ -1090,7 +1090,7 @@ found.
->  .PP
->  If you encounter any issues or usability problem, please report it on our
->  mailing list <lttng-dev@lists.lttng.org> to help improve this project or
-> -at https://bugs.lttng.org which is a bugtracker.
-> +at https://bugs.lttng.org which is a bug tracker.
->  .PP
+>  	ret =3D xmlTextWriterSetIndentString(writer->writer,
+>  		BAD_CAST config_xml_indent_string);
+> -	if (ret)  {
+> +	if (ret) {
+>  		goto error_destroy;
+>  	}
 > =20
->  .SH "CREDITS"
+> -	ret =3D xmlTextWriterSetIndent(writer->writer, 1);
+> -	if (ret)  {
+> +	ret =3D xmlTextWriterSetIndent(writer->writer, indent);
+> +	if (ret) {
+>  		goto error_destroy;
+>  	}
+> =20
+> diff --git a/src/common/config/config.h b/src/common/config/config.h
+> index 9a5671a..2fed612 100644
+> --- a/src/common/config/config.h
+> +++ b/src/common/config/config.h
+> @@ -81,11 +81,14 @@ int config_parse_value(const char *value);
+>   * fd_output File to which the XML content must be written. The file wil=
+l be
+>   * closed once the config_writer has been destroyed.
+>   *
+> + * indent If other than 0 the XML will be pretty printed
+> + * with indentation and newline.
+> + *
+>   * Returns an instance of a configuration writer on success, NULL on
+>   * error.
+>   */
+>  LTTNG_HIDDEN
+> -struct config_writer *config_writer_create(int fd_output);
+> +struct config_writer *config_writer_create(int fd_output, int indent);
+> =20
+>  /*
+>   * Destroy an instance of a configuration writer.
+> diff --git a/src/common/mi-lttng.c b/src/common/mi-lttng.c
+> index a636c71..31fa610 100644
+> --- a/src/common/mi-lttng.c
+> +++ b/src/common/mi-lttng.c
+> @@ -352,7 +352,7 @@ struct mi_writer *mi_lttng_writer_create(int fd_outpu=
+t, int mi_output_type)
+>  		goto end;
+>  	}
+>  	if (mi_output_type =3D=3D LTTNG_MI_XML) {
+> -		mi_writer->writer =3D config_writer_create(fd_output);
+> +		mi_writer->writer =3D config_writer_create(fd_output, 0);
+>  		if (!mi_writer->writer) {
+>  			goto err_destroy;
+>  		}
 > --=20
-> 2.0.4
+> 2.0.0
 >=20
+>=20
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---ZARJHfwaSJQLOEUz
+--orO6xySwJI16pVnm
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQF8BAEBAgBmBQJT724SXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+iQF8BAEBAgBmBQJT724gXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
 ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I026TQH/jLg+RSOFbQ/l6eVbOJq5gQF
-dvFPIcGmsNKCDr89Xl1RCyvWgjdAEz8cJbausKhk9BhZ4ZN5adXjQNg/HjjkZIvY
-EMoSkGAAReK46qXFsWeD7M+t8WP8jKyqQ7Kv74ycxev2sWefqSAwDp+zQmIfJkHp
-WJZbzi/iFDpgXO9lKBaPw0TIlJw+k0+RHJr40eGm1aU3I3HfKn2cBb/KiDyCTYVr
-zg8qrI+A1nGGxGPP5OlIVrmQobO9PGxIfhsSjChYNCS7J4Ih22a+BQBo8edq6L4S
-wdeEJa+zn3QOGWIayh+2UJrZfkJh1of7e3hltj3DTOiJK2VZHLDVDKoc02MTsD8=
-=fnQ3
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02vt0IALbgBRsRWQmyWyb3n0rrfbHh
+apozn5cWb9SrCRDgeQpCDinfKH0K4CpYPLRYF7KJueGiqFLf3scTZTMGRnHwhKfW
+w2mh+iHQiggCbKL1e3DdCEiIXeg9HU/3DLqn+xsruQdI+NAeFKgATwDFFDue3Pp0
+JibH+vT1L47WrkM59VH3P+2lkqaYvxjdV3WMah7pSeTKyVXiQmQC7aW+YBY57SUv
+Yd/sfVg//ghmEVR/Cr4AGVCb6ASd78nb1aG6mdu6xZKR0fjB8VW+lKv6vBdC46sU
+1PP3qtK0g9OZeR0RBH8tI59dcuC6JCIFbBSXBYmTPSKTbHkezyJuo5yamzhvNTI=
+=BSBb
 -----END PGP SIGNATURE-----
 
---ZARJHfwaSJQLOEUz--
+--orO6xySwJI16pVnm--
 
 
---===============0909480316==
+--===============0435913407==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Disposition: inline
 Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0909480316==--
+--===============0435913407==--
