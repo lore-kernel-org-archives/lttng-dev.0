@@ -1,22 +1,17 @@
-From: Jonathan Rajotte <jonathan.r.julien@gmail.com>
-Subject: Fwd: [PATCH lttng-tool] Fix: list command: revert merge
- error made when adding mi on pretty printing
-Date: Sat, 16 Aug 2014 16:59:22 -0400
-Message-ID: <CAF4oYfHTfLZ0x77fEPkkm_AT7jE4UCxu4LvOPioRrKWows0zhw__962.560057132755$1408222823$gmane$org@mail.gmail.com>
-References: <1407866140-6261-1-git-send-email-jonathan.r.julien@gmail.com>
- <20140816144546.GG7634@thessa>
- <CAF4oYfEnxpEMTJhYgHjPH6rP57S+nod1x6th_rtOSZ1-AeCiAA@mail.gmail.com>
+From: Eric Wong <normalperson@yhbt.net>
+Subject: [PATCH urcu] wfstack: implement mutex-free wfstack with
+ transparent union
+Date: Mon, 18 Aug 2014 05:02:54 +0000
+Message-ID: <20140818050254.GA13470__22615.4079464779$1408338224$gmane$org@dcvr.yhbt.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yh0-f44.google.com ([209.85.213.44])
+Received: from dcvr.yhbt.net ([64.71.152.64] ident=normalperson)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.r.julien@gmail.com>) id 1XIl4S-0006fq-Mn
- for lttng-dev@lists.lttng.org; Sat, 16 Aug 2014 16:59:31 -0400
-Received: by mail-yh0-f44.google.com with SMTP id f73so3371469yha.17
- for <lttng-dev@lists.lttng.org>; Sat, 16 Aug 2014 13:59:22 -0700 (PDT)
-In-Reply-To: <CAF4oYfEnxpEMTJhYgHjPH6rP57S+nod1x6th_rtOSZ1-AeCiAA@mail.gmail.com>
+ (envelope-from <normalperson@yhbt.net>) id 1XJF5r-0000Qc-AB
+ for lttng-dev@lists.lttng.org; Mon, 18 Aug 2014 01:02:56 -0400
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,59 +20,158 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-QWN0dWFsbHkgaWYgeW91IHdhbnQgdG8gcHJlc2VydmUgdGhlIG9yaWdpbmFsIGJlaGF2aW91ciBm
-cm9tIDIuNSB5b3UKd2FudCB0byByZW1vdmUgdGhlbS4KClRoaXMgY29kZSBwYXRoIGlzIGZvciBs
-aXN0aW5nIGFsbCB0aGUgc2Vzc2lvbnMuIE5vdCBmb3IgdGhlIGluZGl2aWR1YWwgbGlzdGluZy4K
-CkhlcmUgdGhlIGNvZGUgZnJvbSB0aGUgImFsbCBsaXN0aW5nIiBwYXRoIGluIDIuNQoKTVNHKCIg
-ICVkKSAlcyAoJXMpIFslcyVzXSIsIGkgKyAxLCBzZXNzaW9uc1tpXS5uYW1lLCBzZXNzaW9uc1tp
-XS5wYXRoLAphY3RpdmVfc3RyaW5nKHNlc3Npb25zW2ldLmVuYWJsZWQpLApzbmFwc2hvdF9zdHJp
-bmcoc2Vzc2lvbnNbaV0uc25hcHNob3RfbW9kZSkpOwoKSSBkb24ndCBtaW5kIHlvdSB0ZWxsaW5n
-IG1lIHRoYXQgd2UgY2FuIGFkZCB0aGUgdHJhY2UgcGF0aCBhbmQgdGhlCmxpdmUgdGltZXIgbm93
-IHRoYXQgd2UgaGF2ZSBtaS4KQnV0IGFzIGxvbmcgYXMgd2UgdGFsayBhYm91dCB0aGlzIHBhdGNo
-LCBpdCByZXZlcnQgdG8gdGhlIG9yaWdpbmFsCmJlaGF2aW91ciBmcm9tIDIuNSBhbmQgZml4IG15
-IGluY29tcGV0ZW5jZS4gTm90aWNlIHRoZSByZW1vdmFsIG9mIHRoZQpicmVhayBzdGF0ZW1lbnQg
-dG9vLi4uIGlmIHlvdSBhcmUgb24gbWFzdGVyIGFuZCBkbyBhIGx0dG5nIGxpc3Qgd2l0aAptdWx0
-aXBsZSBzZXNzaW9ucyBvbmx5IHRoZSBmaXJzdCBvbmUgc2hvdyB1cC4KCk9yIGFtIEkgbWlzc2lu
-ZyBzb21ldGhpbmcgPwoKCj4gT24gU2F0LCBBdWcgMTYsIDIwMTQgYXQgMTA6NDUgQU0sIERhdmlk
-IEdvdWxldCA8ZGdvdWxldEBlZmZpY2lvcy5jb20+IHdyb3RlOgo+Pgo+PiBPbiAxMiBBdWcgKDEz
-OjU1OjQwKSwgSm9uYXRoYW4gUmFqb3R0ZSBKdWxpZW4gd3JvdGU6Cj4+ID4gU2lnbmVkLW9mZi1i
-eTogSm9uYXRoYW4gUmFqb3R0ZSBKdWxpZW4gPGpvbmF0aGFuLnIuanVsaWVuQGdtYWlsLmNvbT4K
-Pj4gPiAtLS0KPj4gPiAgc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9saXN0LmMgfCA4ICsrLS0tLS0t
-Cj4+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pCj4+
-ID4KPj4gPiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9saXN0LmMgYi9zcmMv
-YmluL2x0dG5nL2NvbW1hbmRzL2xpc3QuYwo+PiA+IGluZGV4IGUzZmY0ZjEuLmNjZmZkYzcgMTAw
-NjQ0Cj4+ID4gLS0tIGEvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9saXN0LmMKPj4gPiArKysgYi9z
-cmMvYmluL2x0dG5nL2NvbW1hbmRzL2xpc3QuYwo+PiA+IEBAIC0xMjcxLDE0ICsxMjcxLDEwIEBA
-IHN0YXRpYyBpbnQgbGlzdF9zZXNzaW9ucyhjb25zdCBjaGFyICpzZXNzaW9uX25hbWUpCj4+ID4g
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBicmVhazsKPj4gPiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICB9Cj4+ID4gICAgICAgICAgICAgICAgICAgICAgIH0gZWxz
-ZSB7Cj4+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTVNHKCIgICVkKSAlcyAoJXMp
-IFslcyVzXSIsIGkgKyAxLAo+PiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICBzZXNzaW9uc1tpXS5uYW1lLCBzZXNzaW9uc1tpXS5wYXRoLAo+PiA+ICsgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIE1TRygiICAlZCkgJXMgKCVzKSBbJXMlc10iLCBpICsg
-MSwgc2Vzc2lvbnNbaV0ubmFtZSwKPj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgc2Vzc2lvbnNbaV0ucGF0aCwKPj4gPiAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgYWN0aXZlX3N0cmluZyhzZXNzaW9uc1tpXS5lbmFi
-bGVkKSwKPj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-c25hcHNob3Rfc3RyaW5nKHNlc3Npb25zW2ldLnNuYXBzaG90X21vZGUpKTsKPj4gPiAtICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBNU0coIiVzVHJhY2UgcGF0aDogJXMiLCBpbmRlbnQ0LCBz
-ZXNzaW9uc1tpXS5wYXRoKTsKPj4gPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNU0co
-IiVzTGl2ZSB0aW1lciBpbnRlcnZhbCAodXNlYyk6ICV1XG4iLCBpbmRlbnQ0LAo+PiA+IC0gICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzZXNzaW9uc1tpXS5saXZl
-X3RpbWVyX2ludGVydmFsKTsKPj4gPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgICBicmVh
-azsKPj4KPj4gTm90IHN1cmUgcmVtb3ZpbmcgdGhhdCBpcyB3YW50ZWQgaGVyZS4gVGhlICJ0cmFj
-ZSBwYXRoIiBhbmQgImxpdmUgdGltZXIKPj4gaW50ZXJ2YWwiIGxpbmVzIGFyZSBpbiBzdGFibGUt
-Mi41IHRodXMgcmVtb3ZpbmcgdGhlbSBoZXJlLCB5b3UgbmVlZCBhCj4+IHJlYWwgZ29vZCByZWFz
-b24gOykKPj4KPj4gRGF2aWQKPj4KPj4gPiAgICAgICAgICAgICAgICAgICAgICAgfQo+PiA+ICAg
-ICAgICAgICAgICAgfQo+PiA+Cj4+ID4gLS0KPj4gPiAyLjAuNAo+PiA+Cj4+ID4KPj4gPiBfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiA+IGx0dG5nLWRl
-diBtYWlsaW5nIGxpc3QKPj4gPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+ID4gaHR0cDov
-L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KPgo+
-Cj4KPiAtLQo+IEpvbmF0aGFuIFJham90dGUgSnVsaWVuCj4gQ2hhcmfDqSBkZSBsYWJvcmF0b2ly
-ZSwgSU5GMTk5NQo+IFBvbHl0ZWNobmlxdWUgTW9udHLDqWFsCgpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
-LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
-YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+This saves space for users who use alternative synchronization
+mechanisms.
+
+Signed-off-by: Eric Wong <normalperson@yhbt.net>
+Cc: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+Cc: Lai Jiangshan <laijs@cn.fujitsu.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ urcu/static/wfstack.h | 18 +++++++++++++++---
+ urcu/wfstack.h        | 23 +++++++++++++++++++++--
+ wfstack.c             |  9 +++++++--
+ 3 files changed, 43 insertions(+), 7 deletions(-)
+
+diff --git a/urcu/static/wfstack.h b/urcu/static/wfstack.h
+index db0d5b8..eb12f37 100644
+--- a/urcu/static/wfstack.h
++++ b/urcu/static/wfstack.h
+@@ -77,6 +77,14 @@ void _cds_wfs_node_init(struct cds_wfs_node *node)
+ }
+ 
+ /*
++ * __cds_wfs_init: initialize wait-free stack.
++ */
++static inline void ___cds_wfs_init(struct __cds_wfs_stack *s)
++{
++	s->head = CDS_WFS_END;
++}
++
++/*
+  * cds_wfs_init: initialize wait-free stack.
+  */
+ static inline
+@@ -99,8 +107,10 @@ static inline bool ___cds_wfs_end(void *node)
+  *
+  * No memory barrier is issued. No mutual exclusion is required.
+  */
+-static inline bool _cds_wfs_empty(struct cds_wfs_stack *s)
++static inline bool _cds_wfs_empty(cds_wfs_stack_ptr_t u_stack)
+ {
++	struct __cds_wfs_stack *s = u_stack._s;
++
+ 	return ___cds_wfs_end(CMM_LOAD_SHARED(s->head));
+ }
+ 
+@@ -114,8 +124,9 @@ static inline bool _cds_wfs_empty(struct cds_wfs_stack *s)
+  * Returns non-zero otherwise.
+  */
+ static inline
+-int _cds_wfs_push(struct cds_wfs_stack *s, struct cds_wfs_node *node)
++int _cds_wfs_push(cds_wfs_stack_ptr_t u_stack, struct cds_wfs_node *node)
+ {
++	struct __cds_wfs_stack *s = u_stack._s;
+ 	struct cds_wfs_head *old_head, *new_head;
+ 
+ 	assert(node->next == NULL);
+@@ -269,8 +280,9 @@ ___cds_wfs_pop_nonblocking(struct cds_wfs_stack *s)
+  */
+ static inline
+ struct cds_wfs_head *
+-___cds_wfs_pop_all(struct cds_wfs_stack *s)
++___cds_wfs_pop_all(cds_wfs_stack_ptr_t u_stack)
+ {
++	struct __cds_wfs_stack *s = u_stack._s;
+ 	struct cds_wfs_head *head;
+ 
+ 	/*
+diff --git a/urcu/wfstack.h b/urcu/wfstack.h
+index fc0b44b..8d6f22c 100644
+--- a/urcu/wfstack.h
++++ b/urcu/wfstack.h
+@@ -83,11 +83,25 @@ struct cds_wfs_head {
+ 	struct cds_wfs_node node;
+ };
+ 
++struct __cds_wfs_stack {
++	struct cds_wfs_head *head;
++};
++
+ struct cds_wfs_stack {
+ 	struct cds_wfs_head *head;
+ 	pthread_mutex_t lock;
+ };
+ 
++/*
++ * The transparent union allows calling functions that work on both
++ * struct cds_wfcq_head and struct __cds_wfcq_head on any of those two
++ * types.
++ */
++typedef union __attribute__((__transparent_union__)) {
++	struct __cds_wfs_stack *_s;
++	struct cds_wfs_stack *s;
++} cds_wfs_stack_ptr_t;
++
+ #ifdef _LGPL_SOURCE
+ 
+ #include <urcu/static/wfstack.h>
+@@ -136,11 +150,16 @@ extern void cds_wfs_node_init(struct cds_wfs_node *node);
+ extern void cds_wfs_init(struct cds_wfs_stack *s);
+ 
+ /*
++ * __cds_wfs_init: initialize wait-free stack.
++ */
++extern void __cds_wfs_init(struct __cds_wfs_stack *s);
++
++/*
+  * cds_wfs_empty: return whether wait-free stack is empty.
+  *
+  * No memory barrier is issued. No mutual exclusion is required.
+  */
+-extern bool cds_wfs_empty(struct cds_wfs_stack *s);
++extern bool cds_wfs_empty(cds_wfs_stack_ptr_t u_stack);
+ 
+ /*
+  * cds_wfs_push: push a node into the stack.
+@@ -151,7 +170,7 @@ extern bool cds_wfs_empty(struct cds_wfs_stack *s);
+  * Returns 0 if the stack was empty prior to adding the node.
+  * Returns non-zero otherwise.
+  */
+-extern int cds_wfs_push(struct cds_wfs_stack *s, struct cds_wfs_node *node);
++extern int cds_wfs_push(cds_wfs_stack_ptr_t u_stack, struct cds_wfs_node *node);
+ 
+ /*
+  * cds_wfs_pop_blocking: pop a node from the stack.
+diff --git a/wfstack.c b/wfstack.c
+index c8bd7e6..fec9e47 100644
+--- a/wfstack.c
++++ b/wfstack.c
+@@ -38,6 +38,11 @@ void cds_wfs_init(struct cds_wfs_stack *s)
+ 	_cds_wfs_init(s);
+ }
+ 
++void __cds_wfs_init(struct __cds_wfs_stack *s)
++{
++	___cds_wfs_init(s);
++}
++
+ bool cds_wfs_empty(struct cds_wfs_stack *s)
+ {
+ 	return _cds_wfs_empty(s);
+@@ -112,7 +117,7 @@ struct cds_wfs_node *
+ 	return ___cds_wfs_pop_with_state_nonblocking(s, state);
+ }
+ 
+-struct cds_wfs_head *__cds_wfs_pop_all(struct cds_wfs_stack *s)
++struct cds_wfs_head *__cds_wfs_pop_all(cds_wfs_stack_ptr_t u_stack)
+ {
+-	return ___cds_wfs_pop_all(s);
++	return ___cds_wfs_pop_all(u_stack);
+ }
+-- 
+EW
