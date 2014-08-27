@@ -1,17 +1,19 @@
-From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
-Subject: [PATCH lttng-tool] Fix: parse_prob_opts return the
-	actual success of the function
-Date: Wed, 27 Aug 2014 15:46:57 -0400
-Message-ID: <1409168817-22679-1-git-send-email-jonathan.r.julien__36078.5464909442$1409168885$gmane$org@gmail.com>
+From: Jessica Foest <jessica.foest@gmail.com>
+Subject: Re: PERF PARAMETERS
+Date: Wed, 27 Aug 2014 15:53:32 -0400
+Message-ID: <CAPxN80DvMN8LyJq7Z8z9PF93h5004eDeiTw_yOi9jS_1o3GaiA__33490.3353629217$1409169258$gmane$org@mail.gmail.com>
+References: <CAPxN80B=S_dYb5kn_UA-sDyOZiMySrsvkWVtg5fDgdLd2V9z2Q@mail.gmail.com>
+ <53FE15C0.1010004@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0578613422=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
+Received: from mail-ob0-f182.google.com ([209.85.214.182])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@ericsson.com>)
- id 1XMjBR-0002M5-G3
- for lttng-dev@lists.lttng.org; Wed, 27 Aug 2014 15:47:11 -0400
+ (envelope-from <jessica.foest@gmail.com>) id 1XMjHm-0002Ps-3S
+ for lttng-dev@lists.lttng.org; Wed, 27 Aug 2014 15:53:38 -0400
+Received: by mail-ob0-f182.google.com with SMTP id wm4so600984obc.27
+ for <lttng-dev@lists.lttng.org>; Wed, 27 Aug 2014 12:53:32 -0700 (PDT)
+In-Reply-To: <53FE15C0.1010004@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,112 +22,81 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This bug have been triggered by the mi merging and the use of a
-command_ret in enable_events functions. Previously, enable_events was
-reusing the ret variable for another operation and always replacing ret.
-Parse_probe_event returned the last output of sscanf which represent
-the number of match and not the success of the operation.
+--===============0578613422==
+Content-Type: multipart/alternative; boundary=089e015371c453219a0501a1c60a
 
-Fixes #830
+--089e015371c453219a0501a1c60a
+Content-Type: text/plain; charset=UTF-8
 
-Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
----
- src/bin/lttng/commands/enable_events.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+Thanks :)
 
-diff --git a/src/bin/lttng/commands/enable_events.c b/src/bin/lttng/commands/enable_events.c
-index f62dadb..3263c58 100644
---- a/src/bin/lttng/commands/enable_events.c
-+++ b/src/bin/lttng/commands/enable_events.c
-@@ -247,26 +247,27 @@ static void usage(FILE *ofp)
-  */
- static int parse_probe_opts(struct lttng_event *ev, char *opt)
- {
--	int ret;
-+	int ret = CMD_SUCCESS;
-+	int match;
- 	char s_hex[19];
- #define S_HEX_LEN_SCANF_IS_A_BROKEN_API "18"	/* 18 is (19 - 1) (\0 is extra) */
- 	char name[LTTNG_SYMBOL_NAME_LEN];
- 
- 	if (opt == NULL) {
--		ret = -1;
-+		ret = CMD_ERROR;
- 		goto end;
- 	}
- 
- 	/* Check for symbol+offset */
--	ret = sscanf(opt, "%" LTTNG_SYMBOL_NAME_LEN_SCANF_IS_A_BROKEN_API
-+	match = sscanf(opt, "%" LTTNG_SYMBOL_NAME_LEN_SCANF_IS_A_BROKEN_API
- 			"[^'+']+%" S_HEX_LEN_SCANF_IS_A_BROKEN_API "s", name, s_hex);
--	if (ret == 2) {
-+	if (match == 2) {
- 		strncpy(ev->attr.probe.symbol_name, name, LTTNG_SYMBOL_NAME_LEN);
- 		ev->attr.probe.symbol_name[LTTNG_SYMBOL_NAME_LEN - 1] = '\0';
- 		DBG("probe symbol %s", ev->attr.probe.symbol_name);
- 		if (*s_hex == '\0') {
- 			ERR("Invalid probe offset %s", s_hex);
--			ret = -1;
-+			ret = CMD_ERROR;
- 			goto end;
- 		}
- 		ev->attr.probe.offset = strtoul(s_hex, NULL, 0);
-@@ -277,9 +278,9 @@ static int parse_probe_opts(struct lttng_event *ev, char *opt)
- 
- 	/* Check for symbol */
- 	if (isalpha(name[0])) {
--		ret = sscanf(opt, "%" LTTNG_SYMBOL_NAME_LEN_SCANF_IS_A_BROKEN_API "s",
-+		match = sscanf(opt, "%" LTTNG_SYMBOL_NAME_LEN_SCANF_IS_A_BROKEN_API "s",
- 			name);
--		if (ret == 1) {
-+		if (match == 1) {
- 			strncpy(ev->attr.probe.symbol_name, name, LTTNG_SYMBOL_NAME_LEN);
- 			ev->attr.probe.symbol_name[LTTNG_SYMBOL_NAME_LEN - 1] = '\0';
- 			DBG("probe symbol %s", ev->attr.probe.symbol_name);
-@@ -291,11 +292,11 @@ static int parse_probe_opts(struct lttng_event *ev, char *opt)
- 	}
- 
- 	/* Check for address */
--	ret = sscanf(opt, "%" S_HEX_LEN_SCANF_IS_A_BROKEN_API "s", s_hex);
--	if (ret > 0) {
-+	match = sscanf(opt, "%" S_HEX_LEN_SCANF_IS_A_BROKEN_API "s", s_hex);
-+	if (match > 0) {
- 		if (*s_hex == '\0') {
- 			ERR("Invalid probe address %s", s_hex);
--			ret = -1;
-+			ret = CMD_ERROR;
- 			goto end;
- 		}
- 		ev->attr.probe.addr = strtoul(s_hex, NULL, 0);
-@@ -306,7 +307,7 @@ static int parse_probe_opts(struct lttng_event *ev, char *opt)
- 	}
- 
- 	/* No match */
--	ret = -1;
-+	ret = CMD_ERROR;
- 
- end:
- 	return ret;
-@@ -906,7 +907,7 @@ static int enable_events(char *session_name)
- 				break;
- 			case LTTNG_EVENT_PROBE:
- 				ret = parse_probe_opts(&ev, opt_probe);
--				if (ret < 0) {
-+				if (ret) {
- 					ERR("Unable to parse probe options");
- 					ret = 0;
- 					goto error;
-@@ -914,7 +915,7 @@ static int enable_events(char *session_name)
- 				break;
- 			case LTTNG_EVENT_FUNCTION:
- 				ret = parse_probe_opts(&ev, opt_function);
--				if (ret < 0) {
-+				if (ret) {
- 					ERR("Unable to parse function probe options");
- 					ret = 0;
- 					goto error;
--- 
-2.0.4
+
+2014-08-27 13:30 GMT-04:00 Julien Desfossez <jdesfossez@efficios.com>:
+
+> Hi,
+>
+> On 14-08-26 11:21 PM, Jessica Foest wrote:
+> > Hi
+> >
+> > i tried to retrieve system calls traces with all perf context parameters
+> > . the problem is that only a few PERF counters are activated and lttng
+> > fails to activate  the other perf context parameters.
+> > how can i solve it ?
+>
+> There is a hardware limit on the number perf PMU counters that can be
+> activated at the same time. It depends on the CPU and if you are on a
+> virtual machine.
+> If I remember correctly it is 3 or 4 on the i7.
+>
+> Julien
+>
+
+--089e015371c453219a0501a1c60a
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Thanks :)</div><div class=3D"gmail_extra"><br><br><div cla=
+ss=3D"gmail_quote">2014-08-27 13:30 GMT-04:00 Julien Desfossez <span dir=3D=
+"ltr">&lt;<a href=3D"mailto:jdesfossez@efficios.com" target=3D"_blank">jdes=
+fossez@efficios.com</a>&gt;</span>:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">Hi,<br>
+<div><div class=3D"h5"><br>
+On 14-08-26 11:21 PM, Jessica Foest wrote:<br>
+&gt; Hi<br>
+&gt;<br>
+&gt; i tried to retrieve system calls traces with all perf context paramete=
+rs<br>
+&gt; . the problem is that only a few PERF counters are activated and lttng=
+<br>
+&gt; fails to activate=C2=A0 the other perf context parameters.<br>
+&gt; how can i solve it ?<br>
+<br>
+</div></div>There is a hardware limit on the number perf PMU counters that =
+can be<br>
+activated at the same time. It depends on the CPU and if you are on a<br>
+virtual machine.<br>
+If I remember correctly it is 3 or 4 on the i7.<br>
+<span class=3D"HOEnZb"><font color=3D"#888888"><br>
+Julien<br>
+</font></span></blockquote></div><br></div>
+
+--089e015371c453219a0501a1c60a--
+
+
+--===============0578613422==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0578613422==--
