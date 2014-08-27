@@ -1,17 +1,20 @@
-From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
-Subject: [PATCH v2] mi: Fix event attributes printing under
+From: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+Subject: Re: [PATCH v2] mi: Fix event attributes printing under
 	attributes element
-Date: Wed, 27 Aug 2014 16:56:18 -0400
-Message-ID: <1409172978-22933-1-git-send-email-jonathan.r.julien__353.176557882939$1409173026$gmane$org@gmail.com>
+Date: Wed, 27 Aug 2014 17:12:01 -0400
+Message-ID: <CAF4oYfGadpCyTuUk57bnLf2TLYk77dxu_1hShQVYzq7LFcZrjw__25620.8401675851$1409173963$gmane$org@mail.gmail.com>
+References: <1409172978-22933-1-git-send-email-jonathan.r.julien@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg20.ericsson.net ([198.24.6.45])
+Received: from mail-yh0-f52.google.com ([209.85.213.52])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@ericsson.com>)
- id 1XMkGc-0002qG-1i
- for lttng-dev@lists.lttng.org; Wed, 27 Aug 2014 16:56:31 -0400
+ (envelope-from <jonathan.r.julien@gmail.com>) id 1XMkVi-0002zT-UQ
+ for lttng-dev@lists.lttng.org; Wed, 27 Aug 2014 17:12:07 -0400
+Received: by mail-yh0-f52.google.com with SMTP id t59so781688yho.39
+ for <lttng-dev@lists.lttng.org>; Wed, 27 Aug 2014 14:12:01 -0700 (PDT)
+In-Reply-To: <1409172978-22933-1-git-send-email-jonathan.r.julien@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,106 +23,83 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-The event attributes (symbol name, address, and offset) where not
-printed under the good element. Furthermore the xsd semantic was invalid
-on attributes validation
-
-Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
----
- src/common/mi-lttng.c   | 23 ++++++++++++++++++++++-
- src/common/mi_lttng.xsd | 25 +++++--------------------
- 2 files changed, 27 insertions(+), 21 deletions(-)
-
-diff --git a/src/common/mi-lttng.c b/src/common/mi-lttng.c
-index 83df149..1f8c4ee 100644
---- a/src/common/mi-lttng.c
-+++ b/src/common/mi-lttng.c
-@@ -914,6 +914,11 @@ int mi_lttng_event_function_probe(struct mi_writer *writer,
- {
- 	int ret;
- 
-+	ret = mi_lttng_writer_open_element(writer, config_element_attributes);
-+	if (ret) {
-+		goto end;
-+	}
-+
- 	if (event->attr.probe.addr != 0) {
- 		/* event probe address */
- 		ret = mi_lttng_writer_write_element_unsigned_int(writer,
-@@ -936,6 +941,8 @@ int mi_lttng_event_function_probe(struct mi_writer *writer,
- 			goto end;
- 		}
- 	}
-+
-+	ret = mi_lttng_writer_close_element(writer);
- end:
- 	return ret;
- }
-@@ -944,9 +951,23 @@ LTTNG_HIDDEN
- int mi_lttng_event_function_entry(struct mi_writer *writer,
- 		struct lttng_event *event)
- {
-+	int ret;
-+
-+	ret = mi_lttng_writer_open_element(writer, config_element_attributes);
-+	if (ret) {
-+		goto end;
-+	}
-+
- 	/* event probe symbol_name */
--	return mi_lttng_writer_write_element_string(writer,
-+	ret = mi_lttng_writer_write_element_string(writer,
- 			config_element_symbol_name, event->attr.ftrace.symbol_name);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	ret = mi_lttng_writer_close_element(writer);
-+end:
-+	return ret;
- }
- 
- LTTNG_HIDDEN
-diff --git a/src/common/mi_lttng.xsd b/src/common/mi_lttng.xsd
-index d2cc5d4..f9e784a 100644
---- a/src/common/mi_lttng.xsd
-+++ b/src/common/mi_lttng.xsd
-@@ -143,28 +143,13 @@ THE SOFTWARE.
- 		</xs:restriction>
- 	</xs:simpleType>
- 
--	<!-- Maps to the lttng_event_probe_attr struct -->
--	<xs:complexType name="event_probe_attributes_type">
--		<xs:all>
--			<xs:element name="address" type="uint64_type" />
--			<xs:element name="offset" type="uint64_type" />
--			<xs:element name="symbol_name" type="name_type" />
--		</xs:all>
--	</xs:complexType>
--
--	<!-- Maps to the lttng_event_function_attr struct -->
--	<xs:complexType name="event_ftrace_attributes_type">
--		<xs:all>
--			<xs:element name="symbol_name" type="name_type" />
--		</xs:all>
--	</xs:complexType>
--
- 	<!-- Maps to per event type configuration -->
- 	<xs:complexType name="event_attributes_type">
--		<xs:choice>
--			<xs:element name="probe_attributes" type="event_probe_attributes_type" />
--			<xs:element name="function_attributes" type="event_ftrace_attributes_type" />
--		</xs:choice>
-+		<xs:all>
-+			<xs:element name="symbol_name" type="name_type" minOccurs="0" />
-+			<xs:element name="address" type="uint64_type" minOccurs="0" />
-+			<xs:element name="offset" type="uint64_type" minOccurs="0" />
-+		</xs:all>
- 	</xs:complexType>
- 
- 	<!-- Maps to exclusion type -->
--- 
-2.0.4
+VGhlc2UgcGF0Y2ggYXJlIG5vdCBnb29kIGFuZCBzaG91bGQgbm90IGJlIGNvbnNpZGVyZWQuIFRo
+ZSB4c2Qgd2FzCnZhbGlkIGFuZCBiYXNlZCBvbiB0aGUgcHJldmlvdXMgd29yayBmcm9tIGxpYmNv
+bmZpZyBzaG91bGQgc3RheSB0aGF0CndheSB0byBtYWludGFpbiBzaW1pbGlhcml0eSB3aXRoIHRo
+ZSBvdXRwdXQgZnJvbSB0aGUgc2F2ZSBjb21tYW5kLiBUaGUKbWkgbmVlZCBhIHBhdGNoIHRvIGNv
+bXBseSB3aXRoIHRoZSB4c2QuIEknbGwgc2VuZCBpdCB0b21vcnJvdyAuLi4uCgpTb3JyeSBmb3Ig
+dGhlIHNwYW0KCk9uIFdlZCwgQXVnIDI3LCAyMDE0IGF0IDQ6NTYgUE0sIEpvbmF0aGFuIFJham90
+dGUgSnVsaWVuCjxqb25hdGhhbi5yLmp1bGllbkBnbWFpbC5jb20+IHdyb3RlOgo+IFRoZSBldmVu
+dCBhdHRyaWJ1dGVzIChzeW1ib2wgbmFtZSwgYWRkcmVzcywgYW5kIG9mZnNldCkgd2hlcmUgbm90
+Cj4gcHJpbnRlZCB1bmRlciB0aGUgZ29vZCBlbGVtZW50LiBGdXJ0aGVybW9yZSB0aGUgeHNkIHNl
+bWFudGljIHdhcyBpbnZhbGlkCj4gb24gYXR0cmlidXRlcyB2YWxpZGF0aW9uCj4KPiBTaWduZWQt
+b2ZmLWJ5OiBKb25hdGhhbiBSYWpvdHRlIEp1bGllbiA8am9uYXRoYW4uci5qdWxpZW5AZ21haWwu
+Y29tPgo+IC0tLQo+ICBzcmMvY29tbW9uL21pLWx0dG5nLmMgICB8IDIzICsrKysrKysrKysrKysr
+KysrKysrKystCj4gIHNyYy9jb21tb24vbWlfbHR0bmcueHNkIHwgMjUgKysrKystLS0tLS0tLS0t
+LS0tLS0tLS0tLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDI3IGluc2VydGlvbnMoKyksIDIxIGRlbGV0
+aW9ucygtKQo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vbWktbHR0bmcuYyBiL3NyYy9jb21t
+b24vbWktbHR0bmcuYwo+IGluZGV4IDgzZGYxNDkuLjFmOGM0ZWUgMTAwNjQ0Cj4gLS0tIGEvc3Jj
+L2NvbW1vbi9taS1sdHRuZy5jCj4gKysrIGIvc3JjL2NvbW1vbi9taS1sdHRuZy5jCj4gQEAgLTkx
+NCw2ICs5MTQsMTEgQEAgaW50IG1pX2x0dG5nX2V2ZW50X2Z1bmN0aW9uX3Byb2JlKHN0cnVjdCBt
+aV93cml0ZXIgKndyaXRlciwKPiAgewo+ICAgICAgICAgaW50IHJldDsKPgo+ICsgICAgICAgcmV0
+ID0gbWlfbHR0bmdfd3JpdGVyX29wZW5fZWxlbWVudCh3cml0ZXIsIGNvbmZpZ19lbGVtZW50X2F0
+dHJpYnV0ZXMpOwo+ICsgICAgICAgaWYgKHJldCkgewo+ICsgICAgICAgICAgICAgICBnb3RvIGVu
+ZDsKPiArICAgICAgIH0KPiArCj4gICAgICAgICBpZiAoZXZlbnQtPmF0dHIucHJvYmUuYWRkciAh
+PSAwKSB7Cj4gICAgICAgICAgICAgICAgIC8qIGV2ZW50IHByb2JlIGFkZHJlc3MgKi8KPiAgICAg
+ICAgICAgICAgICAgcmV0ID0gbWlfbHR0bmdfd3JpdGVyX3dyaXRlX2VsZW1lbnRfdW5zaWduZWRf
+aW50KHdyaXRlciwKPiBAQCAtOTM2LDYgKzk0MSw4IEBAIGludCBtaV9sdHRuZ19ldmVudF9mdW5j
+dGlvbl9wcm9iZShzdHJ1Y3QgbWlfd3JpdGVyICp3cml0ZXIsCj4gICAgICAgICAgICAgICAgICAg
+ICAgICAgZ290byBlbmQ7Cj4gICAgICAgICAgICAgICAgIH0KPiAgICAgICAgIH0KPiArCj4gKyAg
+ICAgICByZXQgPSBtaV9sdHRuZ193cml0ZXJfY2xvc2VfZWxlbWVudCh3cml0ZXIpOwo+ICBlbmQ6
+Cj4gICAgICAgICByZXR1cm4gcmV0Owo+ICB9Cj4gQEAgLTk0NCw5ICs5NTEsMjMgQEAgTFRUTkdf
+SElEREVOCj4gIGludCBtaV9sdHRuZ19ldmVudF9mdW5jdGlvbl9lbnRyeShzdHJ1Y3QgbWlfd3Jp
+dGVyICp3cml0ZXIsCj4gICAgICAgICAgICAgICAgIHN0cnVjdCBsdHRuZ19ldmVudCAqZXZlbnQp
+Cj4gIHsKPiArICAgICAgIGludCByZXQ7Cj4gKwo+ICsgICAgICAgcmV0ID0gbWlfbHR0bmdfd3Jp
+dGVyX29wZW5fZWxlbWVudCh3cml0ZXIsIGNvbmZpZ19lbGVtZW50X2F0dHJpYnV0ZXMpOwo+ICsg
+ICAgICAgaWYgKHJldCkgewo+ICsgICAgICAgICAgICAgICBnb3RvIGVuZDsKPiArICAgICAgIH0K
+PiArCj4gICAgICAgICAvKiBldmVudCBwcm9iZSBzeW1ib2xfbmFtZSAqLwo+IC0gICAgICAgcmV0
+dXJuIG1pX2x0dG5nX3dyaXRlcl93cml0ZV9lbGVtZW50X3N0cmluZyh3cml0ZXIsCj4gKyAgICAg
+ICByZXQgPSBtaV9sdHRuZ193cml0ZXJfd3JpdGVfZWxlbWVudF9zdHJpbmcod3JpdGVyLAo+ICAg
+ICAgICAgICAgICAgICAgICAgICAgIGNvbmZpZ19lbGVtZW50X3N5bWJvbF9uYW1lLCBldmVudC0+
+YXR0ci5mdHJhY2Uuc3ltYm9sX25hbWUpOwo+ICsgICAgICAgaWYgKHJldCkgewo+ICsgICAgICAg
+ICAgICAgICBnb3RvIGVuZDsKPiArICAgICAgIH0KPiArCj4gKyAgICAgICByZXQgPSBtaV9sdHRu
+Z193cml0ZXJfY2xvc2VfZWxlbWVudCh3cml0ZXIpOwo+ICtlbmQ6Cj4gKyAgICAgICByZXR1cm4g
+cmV0Owo+ICB9Cj4KPiAgTFRUTkdfSElEREVOCj4gZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vbWlf
+bHR0bmcueHNkIGIvc3JjL2NvbW1vbi9taV9sdHRuZy54c2QKPiBpbmRleCBkMmNjNWQ0Li5mOWU3
+ODRhIDEwMDY0NAo+IC0tLSBhL3NyYy9jb21tb24vbWlfbHR0bmcueHNkCj4gKysrIGIvc3JjL2Nv
+bW1vbi9taV9sdHRuZy54c2QKPiBAQCAtMTQzLDI4ICsxNDMsMTMgQEAgVEhFIFNPRlRXQVJFLgo+
+ICAgICAgICAgICAgICAgICA8L3hzOnJlc3RyaWN0aW9uPgo+ICAgICAgICAgPC94czpzaW1wbGVU
+eXBlPgo+Cj4gLSAgICAgICA8IS0tIE1hcHMgdG8gdGhlIGx0dG5nX2V2ZW50X3Byb2JlX2F0dHIg
+c3RydWN0IC0tPgo+IC0gICAgICAgPHhzOmNvbXBsZXhUeXBlIG5hbWU9ImV2ZW50X3Byb2JlX2F0
+dHJpYnV0ZXNfdHlwZSI+Cj4gLSAgICAgICAgICAgICAgIDx4czphbGw+Cj4gLSAgICAgICAgICAg
+ICAgICAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iYWRkcmVzcyIgdHlwZT0idWludDY0X3R5cGUi
+IC8+Cj4gLSAgICAgICAgICAgICAgICAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0ib2Zmc2V0IiB0
+eXBlPSJ1aW50NjRfdHlwZSIgLz4KPiAtICAgICAgICAgICAgICAgICAgICAgICA8eHM6ZWxlbWVu
+dCBuYW1lPSJzeW1ib2xfbmFtZSIgdHlwZT0ibmFtZV90eXBlIiAvPgo+IC0gICAgICAgICAgICAg
+ICA8L3hzOmFsbD4KPiAtICAgICAgIDwveHM6Y29tcGxleFR5cGU+Cj4gLQo+IC0gICAgICAgPCEt
+LSBNYXBzIHRvIHRoZSBsdHRuZ19ldmVudF9mdW5jdGlvbl9hdHRyIHN0cnVjdCAtLT4KPiAtICAg
+ICAgIDx4czpjb21wbGV4VHlwZSBuYW1lPSJldmVudF9mdHJhY2VfYXR0cmlidXRlc190eXBlIj4K
+PiAtICAgICAgICAgICAgICAgPHhzOmFsbD4KPiAtICAgICAgICAgICAgICAgICAgICAgICA8eHM6
+ZWxlbWVudCBuYW1lPSJzeW1ib2xfbmFtZSIgdHlwZT0ibmFtZV90eXBlIiAvPgo+IC0gICAgICAg
+ICAgICAgICA8L3hzOmFsbD4KPiAtICAgICAgIDwveHM6Y29tcGxleFR5cGU+Cj4gLQo+ICAgICAg
+ICAgPCEtLSBNYXBzIHRvIHBlciBldmVudCB0eXBlIGNvbmZpZ3VyYXRpb24gLS0+Cj4gICAgICAg
+ICA8eHM6Y29tcGxleFR5cGUgbmFtZT0iZXZlbnRfYXR0cmlidXRlc190eXBlIj4KPiAtICAgICAg
+ICAgICAgICAgPHhzOmNob2ljZT4KPiAtICAgICAgICAgICAgICAgICAgICAgICA8eHM6ZWxlbWVu
+dCBuYW1lPSJwcm9iZV9hdHRyaWJ1dGVzIiB0eXBlPSJldmVudF9wcm9iZV9hdHRyaWJ1dGVzX3R5
+cGUiIC8+Cj4gLSAgICAgICAgICAgICAgICAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iZnVuY3Rp
+b25fYXR0cmlidXRlcyIgdHlwZT0iZXZlbnRfZnRyYWNlX2F0dHJpYnV0ZXNfdHlwZSIgLz4KPiAt
+ICAgICAgICAgICAgICAgPC94czpjaG9pY2U+Cj4gKyAgICAgICAgICAgICAgIDx4czphbGw+Cj4g
+KyAgICAgICAgICAgICAgICAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0ic3ltYm9sX25hbWUiIHR5
+cGU9Im5hbWVfdHlwZSIgbWluT2NjdXJzPSIwIiAvPgo+ICsgICAgICAgICAgICAgICAgICAgICAg
+IDx4czplbGVtZW50IG5hbWU9ImFkZHJlc3MiIHR5cGU9InVpbnQ2NF90eXBlIiBtaW5PY2N1cnM9
+IjAiIC8+Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0ib2Zmc2V0
+IiB0eXBlPSJ1aW50NjRfdHlwZSIgbWluT2NjdXJzPSIwIiAvPgo+ICsgICAgICAgICAgICAgICA8
+L3hzOmFsbD4KPiAgICAgICAgIDwveHM6Y29tcGxleFR5cGU+Cj4KPiAgICAgICAgIDwhLS0gTWFw
+cyB0byBleGNsdXNpb24gdHlwZSAtLT4KPiAtLQo+IDIuMC40Cj4KCgoKLS0gCkpvbmF0aGFuIFJh
+am90dGUgSnVsaWVuCkNoYXJnw6kgZGUgbGFib3JhdG9pcmUsIElORjE5OTUKUG9seXRlY2huaXF1
+ZSBNb250csOpYWwKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
+Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
