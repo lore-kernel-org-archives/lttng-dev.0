@@ -1,17 +1,17 @@
-From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
-Subject: [PATCH lttng-tool] mi: Fix event attributes printing
-	under attributes element
-Date: Wed, 27 Aug 2014 13:07:35 -0400
-Message-ID: <1409159255-27330-1-git-send-email-jonathan.r.julien__30123.6478415833$1409159336$gmane$org@gmail.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: Re: PERF PARAMETERS
+Date: Wed, 27 Aug 2014 13:30:40 -0400
+Message-ID: <53FE15C0.1010004__31746.1922103123$1409160705$gmane$org@efficios.com>
+References: <CAPxN80B=S_dYb5kn_UA-sDyOZiMySrsvkWVtg5fDgdLd2V9z2Q@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg20.ericsson.net ([198.24.6.45])
+Received: from fukushima.klipix.org ([85.12.144.25])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@ericsson.com>)
- id 1XMghL-0001MS-7B
- for lttng-dev@lists.lttng.org; Wed, 27 Aug 2014 13:07:55 -0400
+ (envelope-from <jdesfossez@efficios.com>) id 1XMh3Y-0001VY-Aa
+ for lttng-dev@lists.lttng.org; Wed, 27 Aug 2014 13:30:54 -0400
+In-Reply-To: <CAPxN80B=S_dYb5kn_UA-sDyOZiMySrsvkWVtg5fDgdLd2V9z2Q@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,107 +20,22 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Jessica Foest <jessica.foest@gmail.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-The event attributes (symbol name, address, and offset) where not
-printed under the good element. Furthermore the xsd semantic was invalid
-on attributes validation
+Hi,
 
-Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
----
- src/common/mi-lttng.c   | 23 ++++++++++++++++++++++-
- src/common/mi_lttng.xsd | 23 ++++-------------------
- 2 files changed, 26 insertions(+), 20 deletions(-)
+On 14-08-26 11:21 PM, Jessica Foest wrote:
+> Hi 
+> 
+> i tried to retrieve system calls traces with all perf context parameters
+> . the problem is that only a few PERF counters are activated and lttng
+> fails to activate  the other perf context parameters.
+> how can i solve it ?
 
-diff --git a/src/common/mi-lttng.c b/src/common/mi-lttng.c
-index 83df149..1f8c4ee 100644
---- a/src/common/mi-lttng.c
-+++ b/src/common/mi-lttng.c
-@@ -914,6 +914,11 @@ int mi_lttng_event_function_probe(struct mi_writer *writer,
- {
- 	int ret;
- 
-+	ret = mi_lttng_writer_open_element(writer, config_element_attributes);
-+	if (ret) {
-+		goto end;
-+	}
-+
- 	if (event->attr.probe.addr != 0) {
- 		/* event probe address */
- 		ret = mi_lttng_writer_write_element_unsigned_int(writer,
-@@ -936,6 +941,8 @@ int mi_lttng_event_function_probe(struct mi_writer *writer,
- 			goto end;
- 		}
- 	}
-+
-+	ret = mi_lttng_writer_close_element(writer);
- end:
- 	return ret;
- }
-@@ -944,9 +951,23 @@ LTTNG_HIDDEN
- int mi_lttng_event_function_entry(struct mi_writer *writer,
- 		struct lttng_event *event)
- {
-+	int ret;
-+
-+	ret = mi_lttng_writer_open_element(writer, config_element_attributes);
-+	if (ret) {
-+		goto end;
-+	}
-+
- 	/* event probe symbol_name */
--	return mi_lttng_writer_write_element_string(writer,
-+	ret = mi_lttng_writer_write_element_string(writer,
- 			config_element_symbol_name, event->attr.ftrace.symbol_name);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	ret = mi_lttng_writer_close_element(writer);
-+end:
-+	return ret;
- }
- 
- LTTNG_HIDDEN
-diff --git a/src/common/mi_lttng.xsd b/src/common/mi_lttng.xsd
-index d2cc5d4..3ffcfb9 100644
---- a/src/common/mi_lttng.xsd
-+++ b/src/common/mi_lttng.xsd
-@@ -143,30 +143,15 @@ THE SOFTWARE.
- 		</xs:restriction>
- 	</xs:simpleType>
- 
--	<!-- Maps to the lttng_event_probe_attr struct -->
--	<xs:complexType name="event_probe_attributes_type">
--		<xs:all>
--			<xs:element name="address" type="uint64_type" />
--			<xs:element name="offset" type="uint64_type" />
--			<xs:element name="symbol_name" type="name_type" />
--		</xs:all>
--	</xs:complexType>
--
--	<!-- Maps to the lttng_event_function_attr struct -->
--	<xs:complexType name="event_ftrace_attributes_type">
-+	<!-- Maps to per event type configuration -->
-+	<xs:complexType name="event_attributes_type">
- 		<xs:all>
- 			<xs:element name="symbol_name" type="name_type" />
-+			<xs:element name="address" type="uint64_type" minOccurs="0" />
-+			<xs:element name="offset" type="uint64_type" minOccurs="0" />
- 		</xs:all>
- 	</xs:complexType>
- 
--	<!-- Maps to per event type configuration -->
--	<xs:complexType name="event_attributes_type">
--		<xs:choice>
--			<xs:element name="probe_attributes" type="event_probe_attributes_type" />
--			<xs:element name="function_attributes" type="event_ftrace_attributes_type" />
--		</xs:choice>
--	</xs:complexType>
--
- 	<!-- Maps to exclusion type -->
- 	<xs:complexType name="event_exclusion_list_type">
- 		<xs:sequence>
--- 
-2.0.4
+There is a hardware limit on the number perf PMU counters that can be
+activated at the same time. It depends on the CPU and if you are on a
+virtual machine.
+If I remember correctly it is 3 or 4 on the i7.
+
+Julien
