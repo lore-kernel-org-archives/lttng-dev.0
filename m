@@ -1,21 +1,17 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
- <jeremie.galarneau@efficios.com>
-Subject: [PATCH lttng-tools 2/2] Tests: Validate that filters
-	may be used with JUL's logger_name filtering
-Date: Thu, 28 Aug 2014 12:53:44 -0400
-Message-ID: <1409244824-6680-2-git-send-email-jeremie.galarneau__14989.7714764395$1409244937$gmane$org@efficios.com>
-References: <1409244824-6680-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+Subject: [PATCH lttng-tool] Fix: mi print of probe attributes +
+	validation
+Date: Thu, 28 Aug 2014 16:51:09 -0400
+Message-ID: <1409259069-1165-1-git-send-email-jonathan.r.julien__31639.4633766778$1409259343$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f173.google.com ([209.85.216.173])
+Received: from usevmg21.ericsson.net ([198.24.6.65])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1XN2xO-0001F7-LW
- for lttng-dev@lists.lttng.org; Thu, 28 Aug 2014 12:53:56 -0400
-Received: by mail-qc0-f173.google.com with SMTP id w7so1090030qcr.18
- for <lttng-dev@lists.lttng.org>; Thu, 28 Aug 2014 09:53:49 -0700 (PDT)
-In-Reply-To: <1409244824-6680-1-git-send-email-jeremie.galarneau@efficios.com>
+ (envelope-from <jonathan.rajotte-julien@ericsson.com>)
+ id 1XN6iZ-0002Zm-Qw
+ for lttng-dev@lists.lttng.org; Thu, 28 Aug 2014 16:54:53 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -27,54 +23,99 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-VGhpcyB0ZXN0IHZhbGlkYXRlcyB0aGF0IGN1c3RvbSBmaWx0ZXJzIG1heSBiZSB1c2VkIG9uIEpV
-TCBldmVudHMgd2l0aG91dAppbnRlcmZlcmluZyB3aXRoIHRoZSBpbXBsaWNpdCBmaWx0ZXJpbmcg
-ZG9uZSBvbiB0aGUgbG9nZ2VyX25hbWUgZmllbGQuCgpTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUg
-R2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Ci0tLQogdGVzdHMvcmVn
-cmVzc2lvbi91c3QvamF2YS1qdWwvdGVzdF9qYXZhX2p1bCB8IDQyICsrKysrKysrKysrKysrKysr
-KysrKysrKysrKystCiAxIGZpbGUgY2hhbmdlZCwgNDEgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlv
-bigtKQoKZGlmZiAtLWdpdCBhL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L2phdmEtanVsL3Rlc3RfamF2
-YV9qdWwgYi90ZXN0cy9yZWdyZXNzaW9uL3VzdC9qYXZhLWp1bC90ZXN0X2phdmFfanVsCmluZGV4
-IDllZmRhMzkuLjExZGMwOWYgMTAwNzU1Ci0tLSBhL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L2phdmEt
-anVsL3Rlc3RfamF2YV9qdWwKKysrIGIvdGVzdHMvcmVncmVzc2lvbi91c3QvamF2YS1qdWwvdGVz
-dF9qYXZhX2p1bApAQCAtMjksNyArMjksNyBAQCBFVkVOVF9OQU1FPSJKVGVzdExUVG5nIgogRVZF
-TlRfTkFNRTI9IkpUZXN0TFRUbmcyIgogSkFWQV9DUD0iJENVUkRJUjovdXNyL2xvY2FsL2xpYi9s
-dHRuZy9qYXZhL2xpYmx0dG5nLXVzdC1qdWwuamFyOi91c3IvbGliL2x0dG5nL2phdmEvbGlibHR0
-bmctdXN0LWp1bC5qYXIiCiAKLU5VTV9URVNUUz0xMjQKK05VTV9URVNUUz0xMzIKIAogc291cmNl
-ICRURVNURElSL3V0aWxzL3V0aWxzLnNoCiAKQEAgLTc0LDYgKzc0LDE3IEBAIGZ1bmN0aW9uIGVu
-YWJsZV9qdWxfZmlsdGVyKCkKIAlvayAkPyAiRW5hYmxlIGV2ZW50ICRldmVudF9uYW1lIHdpdGgg
-ZmlsdGVyICRmaWx0ZXIgZm9yIHNlc3Npb24gJHNlc3NfbmFtZSIKIH0KIAorZnVuY3Rpb24gZW5h
-YmxlX2p1bF9maWx0ZXJfbG9nbGV2ZWxfb25seSgpCit7CisJbG9jYWwgc2Vzc19uYW1lPSIkMSIK
-Kwlsb2NhbCBldmVudF9uYW1lPSIkMiIKKwlsb2NhbCBmaWx0ZXI9IiQzIgorCWxvY2FsIGxvZ2xl
-dmVsPSIkNCIKKworCSRURVNURElSLy4uL3NyYy9iaW4vbHR0bmcvJExUVE5HX0JJTiBlbmFibGUt
-ZXZlbnQgLS1sb2dsZXZlbC1vbmx5ICRsb2dsZXZlbCAiJGV2ZW50X25hbWUiIC1zICRzZXNzX25h
-bWUgLWogLS1maWx0ZXIgIiRmaWx0ZXIiID4vZGV2L251bGwgMj4mMQorCW9rICQ/ICJFbmFibGUg
-ZXZlbnQgJGV2ZW50X25hbWUgd2l0aCBmaWx0ZXIgXCIkZmlsdGVyXCIgYW5kIGxvZ2xldmVsLW9u
-bHkgJGxvZ2xldmVsIGZvciBzZXNzaW9uICRzZXNzX25hbWUiCit9CisKICMgTVVTVCBzZXQgVEVT
-VERJUiBiZWZvcmUgY2FsbGluZyB0aG9zZSBmdW5jdGlvbnMKIAogZnVuY3Rpb24gdGVzdF9qdWxf
-YmVmb3JlX3N0YXJ0ICgpCkBAIC00NDMsNiArNDU0LDM0IEBAIGZ1bmN0aW9uIHRlc3RfanVsX2Rp
-c2FibGVfZW5hYmxlKCkKIAlmaQogfQogCitmdW5jdGlvbiB0ZXN0X2p1bF9maWx0ZXJfbG9nbGV2
-ZWwoKQoreworCWxvY2FsIEJPR1VTX0VWRU5UX05BTUU9Im5vdF9hX3JlYWxfZXZlbnQiCisJbG9j
-YWwgRklMVEVSPSJpbnRfbG9nbGV2ZWwgPiA3MDAgfHwgaW50X2xvZ2xldmVsIDwgNzAwIgorCWxv
-Y2FsIEFMTF9FVkVOVFM9Ii4iCisKKwlkaWFnICJUZXN0IEpVTCBhIGZpbHRlciB3aXRoIGEgbG9n
-bGV2ZWwiCisKKwljcmVhdGVfbHR0bmdfc2Vzc2lvbiAkU0VTU0lPTl9OQU1FICRUUkFDRV9QQVRI
-LyRTRVNTSU9OX05BTUUKKwkjIEVuYWJsZSBhbiBldmVudCB3aXRoIGEgZmlsdGVyIGFuZCB0aGUg
-bG9nbGV2ZWwtb25seSBvcHRpb24uCisJZW5hYmxlX2p1bF9maWx0ZXJfbG9nbGV2ZWxfb25seSAk
-U0VTU0lPTl9OQU1FICRCT0dVU19FVkVOVF9OQU1FICIkRklMVEVSIiBKVUxfQ09ORklHCisJZGlz
-YWJsZV9qdWxfbHR0bmdfZXZlbnQgJFNFU1NJT05fTkFNRSAkQk9HVVNfRVZFTlRfTkFNRQorCWVu
-YWJsZV9qdWxfZmlsdGVyX2xvZ2xldmVsX29ubHkgJFNFU1NJT05fTkFNRSAkQk9HVVNfRVZFTlRf
-TkFNRSAiJEZJTFRFUiIgSlVMX0NPTkZJRworCXN0YXJ0X2x0dG5nX3RyYWNpbmcgJFNFU1NJT05f
-TkFNRQorCisJIyBSdW4gNSB0aW1lcyB3aXRoIGEgMSBzZWNvbmQgZGVsYXkgYW5kIGZpcmUgc2Vj
-b25kIFRQLgorCXJ1bl9hcHAgMCAxCisKKwlzdG9wX2x0dG5nX3RyYWNpbmcgJFNFU1NJT05fTkFN
-RQorCWRlc3Ryb3lfbHR0bmdfc2Vzc2lvbiAkU0VTU0lPTl9OQU1FCisKKwkjIFZhbGlkYXRlIHRl
-c3QuIEV4cGVjdGluZyBubyBldmVudHMuCisJdHJhY2VfbWF0Y2hlcyAkQUxMX0VWRU5UUyAwICRU
-UkFDRV9QQVRILyRTRVNTSU9OX05BTUUKKwlpZiBbICQ/IC1uZSAwIF07IHRoZW4KKwkJcmV0dXJu
-ICQ/CisJZmkKK30KKwogcGxhbl90ZXN0cyAkTlVNX1RFU1RTCiAKIHByaW50X3Rlc3RfYmFubmVy
-ICIkVEVTVF9ERVNDIgpAQCAtNDY5LDYgKzUwOCw3IEBAIHNraXAgJHdpdGhhcHAgIkpVTCBzdXBw
-b3J0IGlzIG5lZWRlZC4gU2tpcHBpbmcgYWxsIHRlc3RzLiIgJE5VTV9URVNUUyB8fAogCQl0ZXN0
-X2p1bF9iZWZvcmVfc3RhcnQKIAkJdGVzdF9qdWxfYWZ0ZXJfc3RhcnQKIAkJdGVzdF9qdWxfbXVs
-dGlfc2Vzc2lvbgorCQl0ZXN0X2p1bF9maWx0ZXJfbG9nbGV2ZWwKIAkpCiAKIAlmb3IgZmN0X3Rl
-c3QgaW4gJHt0ZXN0c1tAXX07Ci0tIAoyLjEuMAoKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYK
+Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
+---
+ src/common/mi-lttng.c   | 37 ++++++++++++++++++++++++++++++++++++-
+ src/common/mi_lttng.xsd |  6 +++---
+ 2 files changed, 39 insertions(+), 4 deletions(-)
+
+diff --git a/src/common/mi-lttng.c b/src/common/mi-lttng.c
+index 83df149..a250546 100644
+--- a/src/common/mi-lttng.c
++++ b/src/common/mi-lttng.c
+@@ -914,6 +914,16 @@ int mi_lttng_event_function_probe(struct mi_writer *writer,
+ {
+ 	int ret;
+ 
++	ret = mi_lttng_writer_open_element(writer, config_element_attributes);
++	if (ret) {
++		goto end;
++	}
++
++	ret = mi_lttng_writer_open_element(writer, config_element_probe_attributes);
++	if (ret) {
++		goto end;
++	}
++
+ 	if (event->attr.probe.addr != 0) {
+ 		/* event probe address */
+ 		ret = mi_lttng_writer_write_element_unsigned_int(writer,
+@@ -936,6 +946,9 @@ int mi_lttng_event_function_probe(struct mi_writer *writer,
+ 			goto end;
+ 		}
+ 	}
++
++	/* Close probe_attributes and attributes */
++	ret = mi_lttng_close_multi_element(writer, 2);
+ end:
+ 	return ret;
+ }
+@@ -944,9 +957,29 @@ LTTNG_HIDDEN
+ int mi_lttng_event_function_entry(struct mi_writer *writer,
+ 		struct lttng_event *event)
+ {
++	int ret;
++
++	ret = mi_lttng_writer_open_element(writer, config_element_attributes);
++	if (ret) {
++		goto end;
++	}
++
++	ret = mi_lttng_writer_open_element(writer, config_element_probe_attributes);
++	if (ret) {
++		goto end;
++	}
++
+ 	/* event probe symbol_name */
+-	return mi_lttng_writer_write_element_string(writer,
++	ret = mi_lttng_writer_write_element_string(writer,
+ 			config_element_symbol_name, event->attr.ftrace.symbol_name);
++	if (ret) {
++		goto end;
++	}
++
++	/* Close function_attributes and attributes */
++	ret = mi_lttng_close_multi_element(writer, 2);
++end:
++	return ret;
+ }
+ 
+ LTTNG_HIDDEN
+@@ -976,6 +1009,8 @@ int mi_lttng_event(struct mi_writer *writer,
+ 		}
+ 		break;
+ 	}
++	case LTTNG_EVENT_FUNCTION:
++		/* Fallthrough */
+ 	case LTTNG_EVENT_PROBE:
+ 		ret = mi_lttng_event_function_probe(writer, event);
+ 		break;
+diff --git a/src/common/mi_lttng.xsd b/src/common/mi_lttng.xsd
+index d2cc5d4..b115c61 100644
+--- a/src/common/mi_lttng.xsd
++++ b/src/common/mi_lttng.xsd
+@@ -146,9 +146,9 @@ THE SOFTWARE.
+ 	<!-- Maps to the lttng_event_probe_attr struct -->
+ 	<xs:complexType name="event_probe_attributes_type">
+ 		<xs:all>
+-			<xs:element name="address" type="uint64_type" />
+-			<xs:element name="offset" type="uint64_type" />
+-			<xs:element name="symbol_name" type="name_type" />
++			<xs:element name="address" type="uint64_type" minOccurs="0" />
++			<xs:element name="offset" type="uint64_type" minOccurs="0" />
++			<xs:element name="symbol_name" type="name_type" minOccurs="0" />
+ 		</xs:all>
+ 	</xs:complexType>
+ 
+-- 
+2.0.4
