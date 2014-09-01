@@ -1,17 +1,18 @@
-From: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
-Subject: [PATCH lttng-tool] Fix: mi print of probe attributes +
-	validation
-Date: Thu, 28 Aug 2014 16:51:09 -0400
-Message-ID: <1409259069-1165-1-git-send-email-jonathan.r.julien__31639.4633766778$1409259343$gmane$org@gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH urcu] wfstack: implement mutex-free wfstack
+ with transparent union
+Date: Mon, 1 Sep 2014 14:00:56 +0000 (UTC)
+Message-ID: <1769347096.14758.1409580056702.JavaMail.zimbra__1790.41991145841$1409579990$gmane$org@efficios.com>
+References: <20140818050254.GA13470@dcvr.yhbt.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@ericsson.com>)
- id 1XN6iZ-0002Zm-Qw
- for lttng-dev@lists.lttng.org; Thu, 28 Aug 2014 16:54:53 -0400
+ (envelope-from <compudj@efficios.com>) id 1XOS7v-0006nu-8f
+ for lttng-dev@lists.lttng.org; Mon, 01 Sep 2014 09:58:41 -0400
+In-Reply-To: <20140818050254.GA13470@dcvr.yhbt.net>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,102 +21,191 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Eric Wong <normalperson@yhbt.net>
+Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
----
- src/common/mi-lttng.c   | 37 ++++++++++++++++++++++++++++++++++++-
- src/common/mi_lttng.xsd |  6 +++---
- 2 files changed, 39 insertions(+), 4 deletions(-)
+Hi Eric,
 
-diff --git a/src/common/mi-lttng.c b/src/common/mi-lttng.c
-index 83df149..a250546 100644
---- a/src/common/mi-lttng.c
-+++ b/src/common/mi-lttng.c
-@@ -914,6 +914,16 @@ int mi_lttng_event_function_probe(struct mi_writer *writer,
- {
- 	int ret;
- 
-+	ret = mi_lttng_writer_open_element(writer, config_element_attributes);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	ret = mi_lttng_writer_open_element(writer, config_element_probe_attributes);
-+	if (ret) {
-+		goto end;
-+	}
-+
- 	if (event->attr.probe.addr != 0) {
- 		/* event probe address */
- 		ret = mi_lttng_writer_write_element_unsigned_int(writer,
-@@ -936,6 +946,9 @@ int mi_lttng_event_function_probe(struct mi_writer *writer,
- 			goto end;
- 		}
- 	}
-+
-+	/* Close probe_attributes and attributes */
-+	ret = mi_lttng_close_multi_element(writer, 2);
- end:
- 	return ret;
- }
-@@ -944,9 +957,29 @@ LTTNG_HIDDEN
- int mi_lttng_event_function_entry(struct mi_writer *writer,
- 		struct lttng_event *event)
- {
-+	int ret;
-+
-+	ret = mi_lttng_writer_open_element(writer, config_element_attributes);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	ret = mi_lttng_writer_open_element(writer, config_element_probe_attributes);
-+	if (ret) {
-+		goto end;
-+	}
-+
- 	/* event probe symbol_name */
--	return mi_lttng_writer_write_element_string(writer,
-+	ret = mi_lttng_writer_write_element_string(writer,
- 			config_element_symbol_name, event->attr.ftrace.symbol_name);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* Close function_attributes and attributes */
-+	ret = mi_lttng_close_multi_element(writer, 2);
-+end:
-+	return ret;
- }
- 
- LTTNG_HIDDEN
-@@ -976,6 +1009,8 @@ int mi_lttng_event(struct mi_writer *writer,
- 		}
- 		break;
- 	}
-+	case LTTNG_EVENT_FUNCTION:
-+		/* Fallthrough */
- 	case LTTNG_EVENT_PROBE:
- 		ret = mi_lttng_event_function_probe(writer, event);
- 		break;
-diff --git a/src/common/mi_lttng.xsd b/src/common/mi_lttng.xsd
-index d2cc5d4..b115c61 100644
---- a/src/common/mi_lttng.xsd
-+++ b/src/common/mi_lttng.xsd
-@@ -146,9 +146,9 @@ THE SOFTWARE.
- 	<!-- Maps to the lttng_event_probe_attr struct -->
- 	<xs:complexType name="event_probe_attributes_type">
- 		<xs:all>
--			<xs:element name="address" type="uint64_type" />
--			<xs:element name="offset" type="uint64_type" />
--			<xs:element name="symbol_name" type="name_type" />
-+			<xs:element name="address" type="uint64_type" minOccurs="0" />
-+			<xs:element name="offset" type="uint64_type" minOccurs="0" />
-+			<xs:element name="symbol_name" type="name_type" minOccurs="0" />
- 		</xs:all>
- 	</xs:complexType>
- 
+Good idea to do it also for wfstack.
+
+A few comments below,
+
+----- Original Message -----
+> From: "Eric Wong" <normalperson@yhbt.net>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: lttng-dev@lists.lttng.org, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, "Lai Jiangshan"
+> <laijs@cn.fujitsu.com>
+> Sent: Monday, August 18, 2014 1:02:54 AM
+> Subject: [PATCH urcu] wfstack: implement mutex-free wfstack with transparent union
+> 
+> This saves space for users who use alternative synchronization
+> mechanisms.
+> 
+> Signed-off-by: Eric Wong <normalperson@yhbt.net>
+> Cc: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+> Cc: Lai Jiangshan <laijs@cn.fujitsu.com>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+>  urcu/static/wfstack.h | 18 +++++++++++++++---
+>  urcu/wfstack.h        | 23 +++++++++++++++++++++--
+>  wfstack.c             |  9 +++++++--
+>  3 files changed, 43 insertions(+), 7 deletions(-)
+> 
+> diff --git a/urcu/static/wfstack.h b/urcu/static/wfstack.h
+> index db0d5b8..eb12f37 100644
+> --- a/urcu/static/wfstack.h
+> +++ b/urcu/static/wfstack.h
+> @@ -77,6 +77,14 @@ void _cds_wfs_node_init(struct cds_wfs_node *node)
+>  }
+>  
+>  /*
+> + * __cds_wfs_init: initialize wait-free stack.
+> + */
+> +static inline void ___cds_wfs_init(struct __cds_wfs_stack *s)
+> +{
+> +	s->head = CDS_WFS_END;
+> +}
+> +
+> +/*
+>   * cds_wfs_init: initialize wait-free stack.
+>   */
+>  static inline
+> @@ -99,8 +107,10 @@ static inline bool ___cds_wfs_end(void *node)
+>   *
+>   * No memory barrier is issued. No mutual exclusion is required.
+>   */
+> -static inline bool _cds_wfs_empty(struct cds_wfs_stack *s)
+> +static inline bool _cds_wfs_empty(cds_wfs_stack_ptr_t u_stack)
+>  {
+> +	struct __cds_wfs_stack *s = u_stack._s;
+> +
+>  	return ___cds_wfs_end(CMM_LOAD_SHARED(s->head));
+>  }
+>  
+> @@ -114,8 +124,9 @@ static inline bool _cds_wfs_empty(struct cds_wfs_stack
+> *s)
+>   * Returns non-zero otherwise.
+>   */
+>  static inline
+> -int _cds_wfs_push(struct cds_wfs_stack *s, struct cds_wfs_node *node)
+> +int _cds_wfs_push(cds_wfs_stack_ptr_t u_stack, struct cds_wfs_node *node)
+>  {
+> +	struct __cds_wfs_stack *s = u_stack._s;
+>  	struct cds_wfs_head *old_head, *new_head;
+>  
+>  	assert(node->next == NULL);
+> @@ -269,8 +280,9 @@ ___cds_wfs_pop_nonblocking(struct cds_wfs_stack *s)
+>   */
+>  static inline
+>  struct cds_wfs_head *
+> -___cds_wfs_pop_all(struct cds_wfs_stack *s)
+> +___cds_wfs_pop_all(cds_wfs_stack_ptr_t u_stack)
+>  {
+> +	struct __cds_wfs_stack *s = u_stack._s;
+>  	struct cds_wfs_head *head;
+>  
+>  	/*
+> diff --git a/urcu/wfstack.h b/urcu/wfstack.h
+> index fc0b44b..8d6f22c 100644
+> --- a/urcu/wfstack.h
+> +++ b/urcu/wfstack.h
+> @@ -83,11 +83,25 @@ struct cds_wfs_head {
+>  	struct cds_wfs_node node;
+>  };
+>  
+> +struct __cds_wfs_stack {
+> +	struct cds_wfs_head *head;
+> +};
+> +
+>  struct cds_wfs_stack {
+>  	struct cds_wfs_head *head;
+>  	pthread_mutex_t lock;
+>  };
+>  
+> +/*
+> + * The transparent union allows calling functions that work on both
+> + * struct cds_wfcq_head and struct __cds_wfcq_head on any of those two
+
+should be:  struct cds_wfs_stack and struct __cds_wfs_stack
+
+Other than that, looks good! Can you send an updated version ?
+
+Thanks,
+
+Mathieu
+
+> + * types.
+> + */
+> +typedef union __attribute__((__transparent_union__)) {
+> +	struct __cds_wfs_stack *_s;
+> +	struct cds_wfs_stack *s;
+> +} cds_wfs_stack_ptr_t;
+> +
+>  #ifdef _LGPL_SOURCE
+>  
+>  #include <urcu/static/wfstack.h>
+> @@ -136,11 +150,16 @@ extern void cds_wfs_node_init(struct cds_wfs_node
+> *node);
+>  extern void cds_wfs_init(struct cds_wfs_stack *s);
+>  
+>  /*
+> + * __cds_wfs_init: initialize wait-free stack.
+> + */
+> +extern void __cds_wfs_init(struct __cds_wfs_stack *s);
+> +
+> +/*
+>   * cds_wfs_empty: return whether wait-free stack is empty.
+>   *
+>   * No memory barrier is issued. No mutual exclusion is required.
+>   */
+> -extern bool cds_wfs_empty(struct cds_wfs_stack *s);
+> +extern bool cds_wfs_empty(cds_wfs_stack_ptr_t u_stack);
+>  
+>  /*
+>   * cds_wfs_push: push a node into the stack.
+> @@ -151,7 +170,7 @@ extern bool cds_wfs_empty(struct cds_wfs_stack *s);
+>   * Returns 0 if the stack was empty prior to adding the node.
+>   * Returns non-zero otherwise.
+>   */
+> -extern int cds_wfs_push(struct cds_wfs_stack *s, struct cds_wfs_node *node);
+> +extern int cds_wfs_push(cds_wfs_stack_ptr_t u_stack, struct cds_wfs_node
+> *node);
+>  
+>  /*
+>   * cds_wfs_pop_blocking: pop a node from the stack.
+> diff --git a/wfstack.c b/wfstack.c
+> index c8bd7e6..fec9e47 100644
+> --- a/wfstack.c
+> +++ b/wfstack.c
+> @@ -38,6 +38,11 @@ void cds_wfs_init(struct cds_wfs_stack *s)
+>  	_cds_wfs_init(s);
+>  }
+>  
+> +void __cds_wfs_init(struct __cds_wfs_stack *s)
+> +{
+> +	___cds_wfs_init(s);
+> +}
+> +
+>  bool cds_wfs_empty(struct cds_wfs_stack *s)
+>  {
+>  	return _cds_wfs_empty(s);
+> @@ -112,7 +117,7 @@ struct cds_wfs_node *
+>  	return ___cds_wfs_pop_with_state_nonblocking(s, state);
+>  }
+>  
+> -struct cds_wfs_head *__cds_wfs_pop_all(struct cds_wfs_stack *s)
+> +struct cds_wfs_head *__cds_wfs_pop_all(cds_wfs_stack_ptr_t u_stack)
+>  {
+> -	return ___cds_wfs_pop_all(s);
+> +	return ___cds_wfs_pop_all(u_stack);
+>  }
+> --
+> EW
+> 
+> 
+
 -- 
-2.0.4
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
