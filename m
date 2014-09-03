@@ -1,17 +1,17 @@
 From: David Goulet <dgoulet@efficios.com>
-Subject: Re: [PATCH lttng-tool] Fix: parse_prob_opts return the
- actual success of the function
-Date: Wed, 3 Sep 2014 14:50:47 -0400
-Message-ID: <20140903185047.GC1549__22774.8577054173$1409770412$gmane$org@dalia>
-References: <1409168817-22679-1-git-send-email-jonathan.r.julien@gmail.com>
+Subject: Re: [PATCH lttng-tool] Fix: mi print of probe
+ attributes + validation
+Date: Wed, 3 Sep 2014 14:51:02 -0400
+Message-ID: <20140903185102.GD1549__48736.3408240073$1409770523$gmane$org@dalia>
+References: <1409259069-1165-1-git-send-email-jonathan.r.julien@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0479649831=="
+Content-Type: multipart/mixed; boundary="===============0560878819=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dgoulet@efficios.com>) id 1XPFdt-00080q-MF
- for lttng-dev@lists.lttng.org; Wed, 03 Sep 2014 14:50:59 -0400
-In-Reply-To: <1409168817-22679-1-git-send-email-jonathan.r.julien@gmail.com>
+ (envelope-from <dgoulet@efficios.com>) id 1XPFe8-00081X-Qq
+ for lttng-dev@lists.lttng.org; Wed, 03 Sep 2014 14:51:14 -0400
+In-Reply-To: <1409259069-1165-1-git-send-email-jonathan.r.julien@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,131 +25,118 @@ Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 
---===============0479649831==
+--===============0560878819==
 Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="1ccMZA6j1vT5UqiK"
+	protocol="application/pgp-signature"; boundary="0/kgSOzhNoDC5T3a"
 Content-Disposition: inline
 
 
---1ccMZA6j1vT5UqiK
+--0/kgSOzhNoDC5T3a
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Merged
 
-On 27 Aug (15:46:57), Jonathan Rajotte Julien wrote:
-> This bug have been triggered by the mi merging and the use of a
-> command_ret in enable_events functions. Previously, enable_events was
-> reusing the ret variable for another operation and always replacing ret.
-> Parse_probe_event returned the last output of sscanf which represent
-> the number of match and not the success of the operation.
->=20
-> Fixes #830
->=20
+On 28 Aug (16:51:09), Jonathan Rajotte Julien wrote:
 > Signed-off-by: Jonathan Rajotte Julien <jonathan.r.julien@gmail.com>
 > ---
->  src/bin/lttng/commands/enable_events.c | 27 ++++++++++++++-------------
->  1 file changed, 14 insertions(+), 13 deletions(-)
+>  src/common/mi-lttng.c   | 37 ++++++++++++++++++++++++++++++++++++-
+>  src/common/mi_lttng.xsd |  6 +++---
+>  2 files changed, 39 insertions(+), 4 deletions(-)
 >=20
-> diff --git a/src/bin/lttng/commands/enable_events.c b/src/bin/lttng/comma=
-nds/enable_events.c
-> index f62dadb..3263c58 100644
-> --- a/src/bin/lttng/commands/enable_events.c
-> +++ b/src/bin/lttng/commands/enable_events.c
-> @@ -247,26 +247,27 @@ static void usage(FILE *ofp)
->   */
->  static int parse_probe_opts(struct lttng_event *ev, char *opt)
+> diff --git a/src/common/mi-lttng.c b/src/common/mi-lttng.c
+> index 83df149..a250546 100644
+> --- a/src/common/mi-lttng.c
+> +++ b/src/common/mi-lttng.c
+> @@ -914,6 +914,16 @@ int mi_lttng_event_function_probe(struct mi_writer *=
+writer,
 >  {
-> -	int ret;
-> +	int ret =3D CMD_SUCCESS;
-> +	int match;
->  	char s_hex[19];
->  #define S_HEX_LEN_SCANF_IS_A_BROKEN_API "18"	/* 18 is (19 - 1) (\0 is ex=
-tra) */
->  	char name[LTTNG_SYMBOL_NAME_LEN];
+>  	int ret;
 > =20
->  	if (opt =3D=3D NULL) {
-> -		ret =3D -1;
-> +		ret =3D CMD_ERROR;
->  		goto end;
->  	}
-> =20
->  	/* Check for symbol+offset */
-> -	ret =3D sscanf(opt, "%" LTTNG_SYMBOL_NAME_LEN_SCANF_IS_A_BROKEN_API
-> +	match =3D sscanf(opt, "%" LTTNG_SYMBOL_NAME_LEN_SCANF_IS_A_BROKEN_API
->  			"[^'+']+%" S_HEX_LEN_SCANF_IS_A_BROKEN_API "s", name, s_hex);
-> -	if (ret =3D=3D 2) {
-> +	if (match =3D=3D 2) {
->  		strncpy(ev->attr.probe.symbol_name, name, LTTNG_SYMBOL_NAME_LEN);
->  		ev->attr.probe.symbol_name[LTTNG_SYMBOL_NAME_LEN - 1] =3D '\0';
->  		DBG("probe symbol %s", ev->attr.probe.symbol_name);
->  		if (*s_hex =3D=3D '\0') {
->  			ERR("Invalid probe offset %s", s_hex);
-> -			ret =3D -1;
-> +			ret =3D CMD_ERROR;
+> +	ret =3D mi_lttng_writer_open_element(writer, config_element_attributes);
+> +	if (ret) {
+> +		goto end;
+> +	}
+> +
+> +	ret =3D mi_lttng_writer_open_element(writer, config_element_probe_attri=
+butes);
+> +	if (ret) {
+> +		goto end;
+> +	}
+> +
+>  	if (event->attr.probe.addr !=3D 0) {
+>  		/* event probe address */
+>  		ret =3D mi_lttng_writer_write_element_unsigned_int(writer,
+> @@ -936,6 +946,9 @@ int mi_lttng_event_function_probe(struct mi_writer *w=
+riter,
 >  			goto end;
 >  		}
->  		ev->attr.probe.offset =3D strtoul(s_hex, NULL, 0);
-> @@ -277,9 +278,9 @@ static int parse_probe_opts(struct lttng_event *ev, c=
-har *opt)
-> =20
->  	/* Check for symbol */
->  	if (isalpha(name[0])) {
-> -		ret =3D sscanf(opt, "%" LTTNG_SYMBOL_NAME_LEN_SCANF_IS_A_BROKEN_API "s=
-",
-> +		match =3D sscanf(opt, "%" LTTNG_SYMBOL_NAME_LEN_SCANF_IS_A_BROKEN_API =
-"s",
->  			name);
-> -		if (ret =3D=3D 1) {
-> +		if (match =3D=3D 1) {
->  			strncpy(ev->attr.probe.symbol_name, name, LTTNG_SYMBOL_NAME_LEN);
->  			ev->attr.probe.symbol_name[LTTNG_SYMBOL_NAME_LEN - 1] =3D '\0';
->  			DBG("probe symbol %s", ev->attr.probe.symbol_name);
-> @@ -291,11 +292,11 @@ static int parse_probe_opts(struct lttng_event *ev,=
- char *opt)
 >  	}
-> =20
->  	/* Check for address */
-> -	ret =3D sscanf(opt, "%" S_HEX_LEN_SCANF_IS_A_BROKEN_API "s", s_hex);
-> -	if (ret > 0) {
-> +	match =3D sscanf(opt, "%" S_HEX_LEN_SCANF_IS_A_BROKEN_API "s", s_hex);
-> +	if (match > 0) {
->  		if (*s_hex =3D=3D '\0') {
->  			ERR("Invalid probe address %s", s_hex);
-> -			ret =3D -1;
-> +			ret =3D CMD_ERROR;
->  			goto end;
->  		}
->  		ev->attr.probe.addr =3D strtoul(s_hex, NULL, 0);
-> @@ -306,7 +307,7 @@ static int parse_probe_opts(struct lttng_event *ev, c=
-har *opt)
->  	}
-> =20
->  	/* No match */
-> -	ret =3D -1;
-> +	ret =3D CMD_ERROR;
-> =20
+> +
+> +	/* Close probe_attributes and attributes */
+> +	ret =3D mi_lttng_close_multi_element(writer, 2);
 >  end:
 >  	return ret;
-> @@ -906,7 +907,7 @@ static int enable_events(char *session_name)
->  				break;
->  			case LTTNG_EVENT_PROBE:
->  				ret =3D parse_probe_opts(&ev, opt_probe);
-> -				if (ret < 0) {
-> +				if (ret) {
->  					ERR("Unable to parse probe options");
->  					ret =3D 0;
->  					goto error;
-> @@ -914,7 +915,7 @@ static int enable_events(char *session_name)
->  				break;
->  			case LTTNG_EVENT_FUNCTION:
->  				ret =3D parse_probe_opts(&ev, opt_function);
-> -				if (ret < 0) {
-> +				if (ret) {
->  					ERR("Unable to parse function probe options");
->  					ret =3D 0;
->  					goto error;
+>  }
+> @@ -944,9 +957,29 @@ LTTNG_HIDDEN
+>  int mi_lttng_event_function_entry(struct mi_writer *writer,
+>  		struct lttng_event *event)
+>  {
+> +	int ret;
+> +
+> +	ret =3D mi_lttng_writer_open_element(writer, config_element_attributes);
+> +	if (ret) {
+> +		goto end;
+> +	}
+> +
+> +	ret =3D mi_lttng_writer_open_element(writer, config_element_probe_attri=
+butes);
+> +	if (ret) {
+> +		goto end;
+> +	}
+> +
+>  	/* event probe symbol_name */
+> -	return mi_lttng_writer_write_element_string(writer,
+> +	ret =3D mi_lttng_writer_write_element_string(writer,
+>  			config_element_symbol_name, event->attr.ftrace.symbol_name);
+> +	if (ret) {
+> +		goto end;
+> +	}
+> +
+> +	/* Close function_attributes and attributes */
+> +	ret =3D mi_lttng_close_multi_element(writer, 2);
+> +end:
+> +	return ret;
+>  }
+> =20
+>  LTTNG_HIDDEN
+> @@ -976,6 +1009,8 @@ int mi_lttng_event(struct mi_writer *writer,
+>  		}
+>  		break;
+>  	}
+> +	case LTTNG_EVENT_FUNCTION:
+> +		/* Fallthrough */
+>  	case LTTNG_EVENT_PROBE:
+>  		ret =3D mi_lttng_event_function_probe(writer, event);
+>  		break;
+> diff --git a/src/common/mi_lttng.xsd b/src/common/mi_lttng.xsd
+> index d2cc5d4..b115c61 100644
+> --- a/src/common/mi_lttng.xsd
+> +++ b/src/common/mi_lttng.xsd
+> @@ -146,9 +146,9 @@ THE SOFTWARE.
+>  	<!-- Maps to the lttng_event_probe_attr struct -->
+>  	<xs:complexType name=3D"event_probe_attributes_type">
+>  		<xs:all>
+> -			<xs:element name=3D"address" type=3D"uint64_type" />
+> -			<xs:element name=3D"offset" type=3D"uint64_type" />
+> -			<xs:element name=3D"symbol_name" type=3D"name_type" />
+> +			<xs:element name=3D"address" type=3D"uint64_type" minOccurs=3D"0" />
+> +			<xs:element name=3D"offset" type=3D"uint64_type" minOccurs=3D"0" />
+> +			<xs:element name=3D"symbol_name" type=3D"name_type" minOccurs=3D"0" />
+>  		</xs:all>
+>  	</xs:complexType>
+> =20
 > --=20
 > 2.0.4
 >=20
@@ -159,28 +146,28 @@ har *opt)
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---1ccMZA6j1vT5UqiK
+--0/kgSOzhNoDC5T3a
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQF8BAEBAgBmBQJUB2MHXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+iQF8BAEBAgBmBQJUB2MWXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
 ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
-MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I026hIIAMgyTtKsHMYF/ifdvy8ehUvV
-zaPIOtaY0bcf3Q0qnkZjA+EjEnAETuQ40OAOYlBIIHBA+AcjbmECsFF4Lf/Oyx9R
-90g2OZqsCkVeUdvWZie8OFXrKtuxBf3UXBr65o7iVfWgPDSzBrOykSktWKnveLNb
-XgTQZ490RWqoz60UGSFTu7/4UM1bw97+/c0RJ17pp2193rh1UGAfb6RRhhlMge9/
-JR1rR9O0PhLoERJvqPXZ8iSfwwfF237PAVX7F7Ft51TCEfKLF/d4rpoQ2Or0TX4U
-kdLucb5BDMurwYmn3rCpZbaGmkno0/SE07Rs4XqfzuZ1eyiArP9SCUMlj46NS8k=
-=2Btu
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02/oMH/jawsMhIZJjZOqFIj8gXJDWP
+ZCA7Cl4ix3qIHF95/D+kTFhAjSJt5/+sEcDTiWRVDHbd/fosFTyjCbQ0V1jPkPCX
+w6dY5l3YHbWubIL15PPgyqQFobqibQIB5N8iHcEDTqRfXYnlbuj34vx/BhQH8EIO
+zSYgSXzXYzwSPyM2lj9KmISUPVeUXYJoxlCAJFZ6oZ1aF46eDwUxQ7sBrbDVQ+Ea
+zP1TceYpbkzPqIK2dtJdlpnHX0ahMdgR52lVGEmOsjKx/wIiE4i4nGBZ5XTv9Adp
+06io9QQzgDHSlNVsrtkTM0pgvcrdqsQhRuoJpIQuUWEgzHUsALCWGAQZ7zkVSxw=
+=Zy5j
 -----END PGP SIGNATURE-----
 
---1ccMZA6j1vT5UqiK--
+--0/kgSOzhNoDC5T3a--
 
 
---===============0479649831==
+--===============0560878819==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -191,4 +178,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0479649831==--
+--===============0560878819==--
