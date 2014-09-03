@@ -1,16 +1,18 @@
-From: Ilya Mirsky <ilya.mirsky@gmail.com>
-Subject: URCU use cases
-Date: Sat, 6 Sep 2014 11:34:24 +0300
-Message-ID: <CANRvXTM__Z4M2zThuz4+jUUGowd7QFWL79M2gYD9txwcbHZnKA__47172.574295155$1409992550$gmane$org@mail.gmail.com>
+From: "ChitlurSrinivasa, Venkatesh" <Venkatesh.Babu@netapp.com>
+Subject: Re: Cost of user-space tracepoint()
+Date: Wed, 3 Sep 2014 18:05:16 +0000
+Message-ID: <4f7ab5e41d3c411dbe80cc350ecac202__5991.4838210263$1410005229$gmane$org@hioexcmbx04-prd.hq.netapp.com>
+References: <8e23c09fe3e245c6baf478136222a2ea@hioexcmbx04-prd.hq.netapp.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1391177165=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vc0-f181.google.com ([209.85.220.181])
+Received: from mx12.netapp.com ([216.240.18.77])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <ilya.mirsky@gmail.com>) id 1XQBSg-0006Zl-3V
- for lttng-dev@lists.lttng.org; Sat, 06 Sep 2014 04:35:10 -0400
-Received: by mail-vc0-f181.google.com with SMTP id ij19so44591vcb.12
- for <lttng-dev@lists.lttng.org>; Sat, 06 Sep 2014 01:35:04 -0700 (PDT)
+ (envelope-from <Venkatesh.Babu@netapp.com>) id 1XPEvy-0007jA-Ie
+ for lttng-dev@lists.lttng.org; Wed, 03 Sep 2014 14:05:36 -0400
+In-Reply-To: <8e23c09fe3e245c6baf478136222a2ea@hioexcmbx04-prd.hq.netapp.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,56 +21,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: "ChitlurSrinivasa, Venkatesh" <Venkatesh.Babu@netapp.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1391177165==
-Content-Type: multipart/alternative; boundary=089e01634bf05a885b05026176ef
-
---089e01634bf05a885b05026176ef
-Content-Type: text/plain; charset=UTF-8
-
-Hi,
-
-Studying the API of URCU it seems that it's mostly intended for link-based
-data structures, such a lists. Suppose I have a large struct that is often
-accessed by many readers, and some writers that occasionally update few
-fields each time. If I understand correctly, using URCU, the writers would
-have to make a copy of the struct on each write, make the changes, and then
-publish the updated version. This is wasteful for small updates to a large
-struct.
-
-Am I missing something here? Is there a better way of doing this?
-
-Thanks,
-Ilya
-
---089e01634bf05a885b05026176ef
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi,<div><br></div><div>Studying the API of URCU it seems t=
-hat it&#39;s mostly intended for link-based data structures, such a lists. =
-Suppose I have a large struct that is often accessed by many readers, and s=
-ome writers that occasionally update few fields each time. If I understand =
-correctly, using URCU, the writers would have to make a copy of the struct =
-on each write, make the changes, and then publish the updated version. This=
- is wasteful for small updates to a large struct.</div><div><br></div><div>=
-Am I missing something here? Is there a better way of doing this?</div><div=
-><br></div><div>Thanks,</div><div>Ilya</div></div>
-
---089e01634bf05a885b05026176ef--
-
-
---===============1391177165==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1391177165==--
+SSBzZW50IHRoaXMgbWFpbCBmZXcgZGF5cyBiYWNrIGFuZCBkaWRuJ3QgcmVjZWl2ZSByZXNwb25z
+ZS4gU28gSSBhbSBzZW5kaW5nIGl0IGFnYWluLgoKV2UgYXJlIHBsYW5uaW5nIHRvIHVzZSBMVFRu
+ZyBVU1QgYXMgaXQgc3VwcG9ydHMgbG90IG9mIGludGVyZXN0aW5nIGZlYXR1cmVzLCBidXQgaGF2
+ZSBzb21lIHBlcmZvcm1hbmNlIGNvbmNlcm5zIChhcyBjb21wYXJlZCB3aXRoIG91ciBpbi1ob3Vz
+ZSB0cmFjaW5nIHRvb2wpLiBQbGVhc2UgcG9pbnQgbWUgdG8gdGhlIGxhdGVzdCBiZW5jaG1hcmsg
+dGVzdHMgYW5kIHBlcmZvcm1hbmNlIHJlc3VsdHMuCgpJIG5vdGljZWQgdGhhdCB0aGUgdHJhY2Vw
+b2ludCBpcyBtYWtpbmcgY2xvY2tfZ2V0dGltZSgpIGFuZCBzY2hlZF9nZXRjcHUoKSBzeXN0ZW0g
+Y2FsbHMuIFdpdGggTGludXgga2VybmVsIHYzLjYuMTEgYW5kIGxpYmMgdjIuMTMtMzgrZGViN3Uz
+LCBJIHNlZSB0aGF0IHRoZXNlIHN5c3RlbSBjYWxscyBhcmUgbm90IGdvaW5nIHRocm91Z2ggVkRT
+TyBhbmQgaGVuY2UgY29zdGluZyBtb3JlLiBJIHRyaWVkIHRvIGFkZCB3cmFwcGVyIGZ1bmN0aW9u
+cyBmb3IgdGhlc2Ugc3lzdGVtIGNhbGxzIHRvIGNhbGwgX192ZHNvX2Nsb2NrX2dldHRpbWUgYW5k
+IF9fdmRzb19nZXRjcHUgYXMgdXBncmFkaW5nIGxpYmMgd2FzIG5vdCBhbiBvcHRpb24uIFdpdGgg
+dGhpcyBjaGFuZ2UgdGhlIGNvc3Qgb2YgdHJhY2Vwb2ludCgpIHJlY29yZGluZyBvbmUgaW50ZWdl
+ciBkcm9wcGVkIHRvIDc5NSBjeWNsZXMgKD0gMjg0IG5zZWMgb24gSW50ZWwoUikgWGVvbihSKSBD
+UFUgRTUtMjY4MCB2MiBAIDIuODBHSHopLiBTdGlsbCB0aGlzIG51bWJlciBzZWVtcyB0byBiZSBo
+aWdoZXIgdGhhbiBlYXJsaWVyIHB1Ymxpc2hlZCBudW1iZXJzLiAKClZCYWJ1CgpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCkZyb206IENoaXRsdXJTcmluaXZhc2EsIFZl
+bmthdGVzaApTZW50OiBXZWRuZXNkYXksIEF1Z3VzdCAyMCwgMjAxNCAxMjozMCBQTQpUbzogbHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpTdWJqZWN0OiBDb3N0IG9mIHVzZXItc3BhY2UgdHJhY2Vw
+b2ludCgpCgpJIGFtIHN1cmUgeW91IGd1eXMgd2lsbCBkbyByZWd1bGFyIHBlcmZvcm1hbmNlIHJ1
+bnMgb24gZGlmZmVyZW50IHZlcnNpb25zIG9mIExUVG5nLCBidXQgSSBjb3VsZG4ndCBmaW5kIGFu
+eSBsaW5rcyB0byB0aGUgbGF0ZXN0IHJlc3VsdHMuIEkgd2FzIHRyeWluZyB0byBmaW5kIHRoZSBj
+b3N0IG9mIGEgdHJhY2Vwb2ludCgpIHJlY29yZGluZyBvbmUgaW50ZWdlci4gT24gQ1BVIEludGVs
+IFhlb24gRTUtMjY4MCB2MiBAIDIuODBHSHrigIssIHJ1bm5pbmcgTGludXggMy42LjEx4oCLIGFu
+ZCBsdHRuZyAyLjQuMSwgIEkgYW0gZ2V0dGluZyBhYm91dCA5MjcgY3ljbGVzICg5MjcwNjkyMTQ0
+IGN5Y2xlcyBmb3IgMTAwMDAwMDDigIsgaXRlcmF0aW9ucykuIFRoaXMgc2VlbXMgdG8gYmUgbG90
+IGhpZ2hlciB0aGFuIHRoZSBkb2N1bWVudGVkIHJlc3VsdHMuIEluIHRoZSBwYXBlciBodHRwczov
+L2x0dG5nLm9yZy9maWxlcy9wYXBlcnMvZGVzbm95ZXJzLnBkZiAgdGhlIGF2ZXJhZ2UgY29zdCBv
+ZiB0cmFjZXBvaW50KCkgd2l0aCBvbGRlciBsdHQtdXNlcnRyYWNlLWZhc3QgdHJhY2Vwb2ludCBp
+cyAyOTcgY3ljbGVzLiBBbm90aGVyIGxpbmsgaHR0cDovL2x0dG5nLm9yZy9maWxlcy90aGVzaXMv
+ZGVzbm95ZXJzLXRoZXNpcy1kZWZlbnNlLTIwMDktMTItZTEucGRmIHNheXMgY2FjaGUgaG90IHRy
+YWNlcG9pbnQoKSBjb3N0IGlzIDIzOCBjeWNsZXMuCgpJbiBzcGl0ZSBvZiBiZXR0ZXIgY3B1LCBu
+ZXdlciB2ZXJzaW9uIG9mIGx0dG5nIGFuZCBrZXJuZWwgSSBhbSBzZWVpbmcgaGlnaGVyIGNvc3Qu
+IEFtIEkgbWlzc2luZyBzb21ldGhpbmcgaGVyZT8gRG8gSSBuZWVkIHRvIGVuYWJsZSBjZXJ0YWlu
+IGZlYXR1cmVzIG9mIGtlcm5lbC9jcHUgPwoKVkJhYnUKCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2
+QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
+aXN0aW5mby9sdHRuZy1kZXYK
