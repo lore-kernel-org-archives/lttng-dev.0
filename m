@@ -1,17 +1,16 @@
-From: Michel Dagenais <michel.dagenais@polymtl.ca>
-Subject: Re: How to analysis a huge trace-collected data
- efficiently
-Date: Thu, 11 Sep 2014 07:32:04 -0400 (EDT)
-Message-ID: <166741422.14611521.1410435124958.JavaMail.root__2407.79664968631$1410435236$gmane$org@polymtl.ca>
-References: <e4797186-ccb1-4efc-a68e-953e8575a42a@aliyun.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: lttng-bash_completion
+Date: Thu, 11 Sep 2014 17:56:22 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD4EC62D32__6907.20649804479$1410458273$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1522580262=="
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <michel.dagenais@polymtl.ca>) id 1XS2ch-0005Jl-TW
- for lttng-dev@lists.lttng.org; Thu, 11 Sep 2014 07:33:14 -0400
-In-Reply-To: <e4797186-ccb1-4efc-a68e-953e8575a42a@aliyun.com>
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1XS8bo-0007RM-Tb
+ for lttng-dev@lists.lttng.org; Thu, 11 Sep 2014 13:56:46 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,66 +19,60 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1522580262==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_14611520_455137948.1410435124957"
+The lttng-tools.git file extras/lttng-bash_completion is incomplete since t=
+he addition the load and save commands to LTTng's repertoire.  The missing =
+routines (inserted between _lttng_cmd_list() and _lttng_cmd_setsession()) w=
+ould be:
 
-------=_Part_14611520_455137948.1410435124957
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+_lttng_cmd_load() {
+	options=3D$(lttng load --list-options)
 
-Yes, if you look at the options available, you can split the trace in smaller files and even limit the total size accumulated. 
+	case $cur in
+	-*)
+		_lttng_complete_options
+		return
+		;;
+	*)
+		_lttng_complete_sessions
+		return
+		;;
+	esac
+}
 
------ Mail original -----
+_lttng_cmd_save() {
+	options=3D$(lttng save --list-options)
 
-> Hi,
-> It's well known that tracing can produce huge data easily.So if we
-> keep tracing on a production system for a while(hour/day/week) ,we
-> may get a huge CTF file. It's very inefficient to analysis a huge
-> CTF file ,especially the interested events are in some narrow time
-> window.Is there any way to change the situation?Can we split a huge
-> ctf file into several small ctf file? Or can lttng produce a list of
-> small time-sequence ctf filles just like some loggers do?
+	case $cur in
+	-*)
+		_lttng_complete_options
+		return
+		;;
+	*)
+		_lttng_complete_sessions
+		return
+		;;
+	esac
+}
 
-------=_Part_14611520_455137948.1410435124957
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+   I'll let someone else generate the patch.
 
-<html><head><style type=3D'text/css'>p { margin: 0; }</style></head><body><=
-div style=3D'font-family: times new roman,new york,times,serif; font-size: =
-12pt; color: #000000'>Yes, if you look at the options available, you can sp=
-lit the trace in smaller files and even limit the total size accumulated.<b=
-r><br><hr id=3D"zwchr"><blockquote style=3D"border-left:2px solid #1010FF;m=
-argin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:no=
-rmal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:=
-12pt;"><div class=3D"__aliyun_email_body_block"><div style=3D"color:#333333=
-;font-size:14px;font-family:Tahoma,Arial,STHeiti,SimSun;;">Hi,</div><div st=
-yle=3D"color:#333333;font-size:14px;font-family:Tahoma,Arial,STHeiti,SimSun=
-;;">&nbsp; &nbsp;It's well known that tracing can produce huge data easily.=
-So if we keep tracing on a production system for a while(hour/day/week) &nb=
-sp;,we may get &nbsp;a huge CTF file. It's very inefficient to analysis a h=
-uge CTF file ,especially the interested events are in some narrow time wind=
-ow.Is there any way to change the situation?Can we split a huge ctf file in=
-to several small ctf file? Or can lttng produce a list of small time-sequen=
-ce &nbsp;ctf filles just like some loggers do?</div><div style=3D"color:#33=
-3333;font-size:14px;font-family:Tahoma,Arial,STHeiti,SimSun;;"><br></div></=
-div></blockquote></div></body></html>
-------=_Part_14611520_455137948.1410435124957--
+   Oh, and there's a bug with those two commands.  See bug #835.
 
-
---===============1522580262==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1522580262==--
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
+re
+2459 route de la Bravoure
+Qu=E9bec QC=A0 G3J 1X5
+CANADA
+Vox=A0: (418) 844-4000 x4245
+Fax=A0: (418) 844-4538
+NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada=A0| Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
