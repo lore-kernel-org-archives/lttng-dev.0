@@ -1,15 +1,15 @@
 From: nitin.a.kamble@intel.com
-Subject: [PATCH 0/1] Fix lttng-modules build with v3.17 kernel
-Date: Thu, 25 Sep 2014 17:12:37 -0700
-Message-ID: <cover.1411690005.git.nitin.a.kamble__36084.3434035361$1411690394$gmane$org@intel.com>
+Subject: [Patch v2 0/1] fix lttng-modules build with kernel v3.17
+Date: Thu, 25 Sep 2014 18:19:39 -0700
+Message-ID: <cover.1411693988.git.nitin.a.kamble__26931.0923330069$1411694394$gmane$org@intel.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mga01.intel.com ([192.55.52.88])
+Received: from mga14.intel.com ([192.55.52.115])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <nitin.a.kamble@intel.com>) id 1XXJ98-00011K-QX
- for lttng-dev@lists.lttng.org; Thu, 25 Sep 2014 20:12:28 -0400
+ (envelope-from <nitin.a.kamble@intel.com>) id 1XXKBi-0001O9-IX
+ for lttng-dev@lists.lttng.org; Thu, 25 Sep 2014 21:19:11 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,12 +24,14 @@ List-Id: lttng-dev@lists.lttng.org
 
 From: Nitin A Kamble <nitin.a.kamble@intel.com>
 
-Hi Mathieu,
-
-The lttng-modules build was failing with th v3.17 kernel. The accompanied commit fixes the issue.
+The commit I sent earlier is further modified here, to avoid build
+breakage with the older kernel version. Now the change to asoc.h is
+conditional on the kernel version, and depending on the kernel
+version used it chooses right fields for the sound codec.
 
 Thanks,
 Nitin
+
 
 The following changes since commit 91c2dd86ac5ef716c039f30668f4126d019a3a4b:
 
@@ -43,8 +45,8 @@ are available in the git repository at:
 Nitin A Kamble (1):
   asoc.h: fix build with v3.17 kernel
 
- instrumentation/events/lttng-module/asoc.h | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ instrumentation/events/lttng-module/asoc.h | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
 -- 
 1.8.1.4
