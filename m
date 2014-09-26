@@ -1,18 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [Patch v2 1/1] asoc.h: fix build with v3.17 kernel
-Date: Fri, 26 Sep 2014 16:09:37 +0000 (UTC)
-Message-ID: <1775813209.45.1411747777849.JavaMail.zimbra__43879.6412585818$1411747991$gmane$org@efficios.com>
-References: <cover.1411693988.git.nitin.a.kamble@intel.com>
- <0344820c621a00d554e1691bbb7ed314c23371fd.1411693988.git.nitin.a.kamble@intel.com>
+Subject: lttng-modules: close on exec warning with 3.2.x kernels
+Date: Fri, 26 Sep 2014 19:24:45 +0000 (UTC)
+Message-ID: <1434737829.167.1411759485233.JavaMail.zimbra__19094.9664604434$1411759685$gmane$org@efficios.com>
+References: <539697457.164.1411759425630.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XXY5h-0006MD-Bp
- for lttng-dev@lists.lttng.org; Fri, 26 Sep 2014 12:09:56 -0400
-In-Reply-To: <0344820c621a00d554e1691bbb7ed314c23371fd.1411693988.git.nitin.a.kamble@intel.com>
+ (envelope-from <compudj@efficios.com>) id 1XXb8W-0007Qa-F3
+ for lttng-dev@lists.lttng.org; Fri, 26 Sep 2014 15:25:02 -0400
+In-Reply-To: <539697457.164.1411759425630.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,139 +20,46 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: nitin a kamble <nitin.a.kamble@intel.com>
-Cc: lttng-dev@lists.lttng.org
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-merged, thanks !
-
-Mathieu
-
------ Original Message -----
-> From: "nitin a kamble" <nitin.a.kamble@intel.com>
-> To: lttng-dev@lists.lttng.org, "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: "Nitin A Kamble" <nitin.a.kamble@intel.com>
-> Sent: Thursday, September 25, 2014 9:19:43 PM
-> Subject: [Patch v2 1/1] asoc.h: fix build with v3.17 kernel
-> 
-> From: Nitin A Kamble <nitin.a.kamble@intel.com>
-> 
-> The snd_soc_codec structure has changed in the v3.17 kernel. Some
-> of the redundant fields have been removed. To be specific this commit
-> from the v3.17 kernel causes the build failure for lttng-modules.
-> 
-> |commit f4333203ec933f9272c90c7add01774ec2cf94d3
-> |Author: Lars-Peter Clausen <lars@metafoo.de>
-> |Date:   Mon Jun 16 18:13:02 2014 +0200
-> |
-> |    ASoC: Move name and id from CODEC/platform to component
-> |
-> |    The component struct already has a name and id field which are
-> |    initialized to
-> |    the same values as the same fields in the CODEC and platform structs. So
-> |    remove
-> |    them from the CODEC and platform structs and used the ones from the
-> |    component
-> |    struct instead.
-> |
-> |    Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-> |    Signed-off-by: Mark Brown <broonie@linaro.org>
-> 
-> The asoc.h is changed according to the change in the above kernel commit
-> to fix the lttng-modules build. The change in the lttng-modules code is
-> conditional on the kernel version, so that it does not break builds with
-> previous kernel versions.
-> 
-> Signed-off-by: Nitin A Kamble <nitin.a.kamble@intel.com>
-> ---
->  instrumentation/events/lttng-module/asoc.h | 26 +++++++++++++++++---------
->  1 file changed, 17 insertions(+), 9 deletions(-)
-> 
-> diff --git a/instrumentation/events/lttng-module/asoc.h
-> b/instrumentation/events/lttng-module/asoc.h
-> index 672bea4..bf9cf86 100644
-> --- a/instrumentation/events/lttng-module/asoc.h
-> +++ b/instrumentation/events/lttng-module/asoc.h
-> @@ -21,6 +21,14 @@ struct snd_soc_card;
->  struct snd_soc_dapm_widget;
->  #endif
->  
-> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0))
-> +#define CODEC_NAME_FIELD component.name
-> +#define CODEC_ID_FIELD component.id
-> +#else
-> +#define CODEC_NAME_FIELD name
-> +#define CODEC_ID_FIELD id
-> +#endif
-> +
->  /*
->   * Log register events
->   */
-> @@ -32,15 +40,15 @@ DECLARE_EVENT_CLASS(snd_soc_reg,
->  	TP_ARGS(codec, reg, val),
->  
->  	TP_STRUCT__entry(
-> -		__string(	name,		codec->name	)
-> +		__string(	name,		codec->CODEC_NAME_FIELD	)
->  		__field(	int,		id		)
->  		__field(	unsigned int,	reg		)
->  		__field(	unsigned int,	val		)
->  	),
->  
->  	TP_fast_assign(
-> -		tp_strcpy(name, codec->name)
-> -		tp_assign(id, codec->id)
-> +		tp_strcpy(name, codec->CODEC_NAME_FIELD)
-> +		tp_assign(id, codec->CODEC_ID_FIELD)
->  		tp_assign(reg, reg)
->  		tp_assign(val, val)
->  	),
-> @@ -77,15 +85,15 @@ DECLARE_EVENT_CLASS(snd_soc_preg,
->  	TP_ARGS(platform, reg, val),
->  
->  	TP_STRUCT__entry(
-> -		__string(	name,		platform->name	)
-> +		__string(	name,		platform->CODEC_NAME_FIELD	)
->  		__field(	int,		id		)
->  		__field(	unsigned int,	reg		)
->  		__field(	unsigned int,	val		)
->  	),
->  
->  	TP_fast_assign(
-> -		tp_strcpy(name, platform->name)
-> -		tp_assign(id, platform->id)
-> +		tp_strcpy(name, platform->CODEC_NAME_FIELD)
-> +		tp_assign(id, platform->CODEC_ID_FIELD)
->  		tp_assign(reg, reg)
->  		tp_assign(val, val)
->  	),
-> @@ -399,17 +407,17 @@ TRACE_EVENT(snd_soc_cache_sync,
->  	TP_ARGS(codec, type, status),
->  
->  	TP_STRUCT__entry(
-> -		__string(	name,		codec->name	)
-> +		__string(	name,		codec->CODEC_NAME_FIELD	)
->  		__string(	status,		status		)
->  		__string(	type,		type		)
->  		__field(	int,		id		)
->  	),
->  
->  	TP_fast_assign(
-> -		tp_strcpy(name, codec->name)
-> +		tp_strcpy(name, codec->CODEC_NAME_FIELD)
->  		tp_strcpy(status, status)
->  		tp_strcpy(type, type)
-> -		tp_assign(id, codec->id)
-> +		tp_assign(id, codec->CODEC_ID_FIELD)
->  	),
->  
->  	TP_printk("codec=%s.%d type=%s status=%s", __get_str(name),
-> --
-> 1.8.1.4
-> 
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGkgSnVsaWVuLAoKQ2FuIHlvdSBpbnZlc3RpZ2F0ZSA/IEl0IGhhcHBlbnMgd2hlbiBidWlsZGlu
+ZyBsdHRuZy1tb2R1bGVzCm1hc3RlciBhZ2FpbnN0IGEgdjMuMi42MiBMaW51eCBrZXJuZWwuCgpJ
+biBmaWxlIGluY2x1ZGVkIGZyb20gaW5jbHVkZS9saW51eC9iaXRvcHMuaDoyMjowLAogICAgICAg
+ICAgICAgICAgIGZyb20gaW5jbHVkZS9saW51eC9rZXJuZWwuaDoxNywKICAgICAgICAgICAgICAg
+ICBmcm9tIGluY2x1ZGUvbGludXgvY2FjaGUuaDo0LAogICAgICAgICAgICAgICAgIGZyb20gaW5j
+bHVkZS9saW51eC90aW1lLmg6NywKICAgICAgICAgICAgICAgICBmcm9tIGluY2x1ZGUvbGludXgv
+c3RhdC5oOjYwLAogICAgICAgICAgICAgICAgIGZyb20gaW5jbHVkZS9saW51eC9tb2R1bGUuaDox
+MCwKICAgICAgICAgICAgICAgICBmcm9tIC9ob21lL2NvbXB1ZGovZ2l0L2x0dG5nLW1vZHVsZXMv
+bHR0bmctc3RhdGVkdW1wLWltcGwuYzozMDoKL2hvbWUvY29tcHVkai9naXQvbHR0bmctbW9kdWxl
+cy9sdHRuZy1zdGF0ZWR1bXAtaW1wbC5jOiBJbiBmdW5jdGlvbiDigJhsdHRuZ19kdW1wX29uZV9m
+ZOKAmToKL2hvbWUvY29tcHVkai9naXQvbGludXgvYXJjaC94ODYvaW5jbHVkZS9hc20vYml0b3Bz
+Lmg6MzM4OjI5OiB3YXJuaW5nOiBwYXNzaW5nIGFyZ3VtZW50IDIgb2Yg4oCYY29uc3RhbnRfdGVz
+dF9iaXTigJkgZnJvbSBpbmNvbXBhdGlibGUgcG9pbnRlciB0eXBlCiAgID8gY29uc3RhbnRfdGVz
+dF9iaXQoKG5yKSwgKGFkZHIpKSBcCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXgovaG9t
+ZS9jb21wdWRqL2dpdC9sdHRuZy1tb2R1bGVzL2x0dG5nLXN0YXRlZHVtcC1pbXBsLmM6MjQwOjI3
+OiBub3RlOiBpbiBleHBhbnNpb24gb2YgbWFjcm8g4oCYdGVzdF9iaXTigJkKICBpZiAoZmQgPCBm
+ZHQtPm1heF9mZHMgJiYgdGVzdF9iaXQoZmQsIGZkdC0+Y2xvc2Vfb25fZXhlYykpCiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIF4KL2hvbWUvY29tcHVkai9naXQvbGludXgvYXJjaC94ODYvaW5j
+bHVkZS9hc20vYml0b3BzLmg6MzA5OjI4OiBub3RlOiBleHBlY3RlZCDigJhjb25zdCB2b2xhdGls
+ZSBsb25nIHVuc2lnbmVkIGludCAq4oCZIGJ1dCBhcmd1bWVudCBpcyBvZiB0eXBlIOKAmHN0cnVj
+dCBmZF9zZXQgKuKAmQogc3RhdGljIF9fYWx3YXlzX2lubGluZSBpbnQgY29uc3RhbnRfdGVzdF9i
+aXQodW5zaWduZWQgaW50IG5yLCBjb25zdCB2b2xhdGlsZSB1bnNpZ25lZCBsb25nICphZGRyKQog
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgXgovaG9tZS9jb21wdWRqL2dpdC9saW51eC9hcmNo
+L3g4Ni9pbmNsdWRlL2FzbS9iaXRvcHMuaDozMzk6Mjk6IHdhcm5pbmc6IHBhc3NpbmcgYXJndW1l
+bnQgMiBvZiDigJh2YXJpYWJsZV90ZXN0X2JpdOKAmSBmcm9tIGluY29tcGF0aWJsZSBwb2ludGVy
+IHR5cGUKICAgOiB2YXJpYWJsZV90ZXN0X2JpdCgobnIpLCAoYWRkcikpKQogICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIF4KL2hvbWUvY29tcHVkai9naXQvbHR0bmctbW9kdWxlcy9sdHRuZy1z
+dGF0ZWR1bXAtaW1wbC5jOjI0MDoyNzogbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvIOKAmHRl
+c3RfYml04oCZCiAgaWYgKGZkIDwgZmR0LT5tYXhfZmRzICYmIHRlc3RfYml0KGZkLCBmZHQtPmNs
+b3NlX29uX2V4ZWMpKQogICAgICAgICAgICAgICAgICAgICAgICAgICBeCi9ob21lL2NvbXB1ZGov
+Z2l0L2xpbnV4L2FyY2gveDg2L2luY2x1ZGUvYXNtL2JpdG9wcy5oOjMxNToxOTogbm90ZTogZXhw
+ZWN0ZWQg4oCYY29uc3Qgdm9sYXRpbGUgbG9uZyB1bnNpZ25lZCBpbnQgKuKAmSBidXQgYXJndW1l
+bnQgaXMgb2YgdHlwZSDigJhzdHJ1Y3QgZmRfc2V0ICrigJkKIHN0YXRpYyBpbmxpbmUgaW50IHZh
+cmlhYmxlX3Rlc3RfYml0KGludCBuciwgdm9sYXRpbGUgY29uc3QgdW5zaWduZWQgbG9uZyAqYWRk
+cikKICAgICAgICAgICAgICAgICAgIF4KClRoYW5rcywKCk1hdGhpZXUKCgotLSAKTWF0aGlldSBE
+ZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
+bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
+LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
