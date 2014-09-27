@@ -1,18 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: lttng-modules: close on exec warning with 3.2.x
- kernels
-Date: Fri, 26 Sep 2014 22:12:02 +0000 (UTC)
-Message-ID: <693032550.231.1411769522061.JavaMail.zimbra__3325.76897130839$1411769718$gmane$org@efficios.com>
-References: <1434737829.167.1411759485233.JavaMail.zimbra@efficios.com>
+Subject: [PATCH lttng-tools] Fix: FD leak in accept error
+	handling
+Date: Sat, 27 Sep 2014 19:49:22 -0400
+Message-ID: <1411861762-17552-1-git-send-email-mathieu.desnoyers__34520.8581108183$1411861975$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XXdkS-0008If-CQ
- for lttng-dev@lists.lttng.org; Fri, 26 Sep 2014 18:12:21 -0400
-In-Reply-To: <1434737829.167.1411759485233.JavaMail.zimbra@efficios.com>
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1XY1kM-0007go-BQ
+ for lttng-dev@lists.lttng.org; Sat, 27 Sep 2014 19:49:52 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id CE5863402C8
+ for <lttng-dev@lists.lttng.org>; Sat, 27 Sep 2014 23:49:41 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,65 +22,63 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: dgoulet@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Rml4ZWQgYnkgY29tbWl0OgoKY29tbWl0IGFhMjlmMmQzM2JhZTEzOTZiN2JkNDc2NmI3NDQyY2E3
-ODBmYTcxMmUKQXV0aG9yOiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZm
-aWNpb3MuY29tPgpEYXRlOiAgIEZyaSBTZXAgMjYgMTg6MDk6MjkgMjAxNCAtMDQwMAoKICAgIEZp
-eDogc3RhdGVkdW1wOiBjbG9zZV9vbl9leGVjIGZsYWcgYmFja3dhcmQgY29tcGF0CiAgICAKICAg
-IE9sZGVyIGtlcm5lbHMgKGUuZy4gMy4yLjYyKSB1c2UgRkRfSVNTRVQoKSB0byB0ZXN0IGNsb3Nl
-X29uX2V4ZWMgZmxhZy4KICAgIAogICAgU2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMg
-PG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KCihhbHNvIGJhY2twb3J0ZWQgdG8gc3Rh
-YmxlLTIuNSkKClRoYW5rcywKCk1hdGhpZXUKCi0tLS0tIE9yaWdpbmFsIE1lc3NhZ2UgLS0tLS0K
-PiBGcm9tOiAiTWF0aGlldSBEZXNub3llcnMiIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5j
-b20+Cj4gVG86ICJKdWxpZW4gRGVzZm9zc2V6IiA8amRlc2Zvc3NlekBlZmZpY2lvcy5jb20+Cj4g
-Q2M6ICJsdHRuZy1kZXYiIDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPgo+IFNlbnQ6IEZyaWRh
-eSwgU2VwdGVtYmVyIDI2LCAyMDE0IDM6MjQ6NDUgUE0KPiBTdWJqZWN0OiBbbHR0bmctZGV2XSBs
-dHRuZy1tb2R1bGVzOiBjbG9zZSBvbiBleGVjIHdhcm5pbmcgd2l0aCAzLjIueCBrZXJuZWxzCj4g
-Cj4gSGkgSnVsaWVuLAo+IAo+IENhbiB5b3UgaW52ZXN0aWdhdGUgPyBJdCBoYXBwZW5zIHdoZW4g
-YnVpbGRpbmcgbHR0bmctbW9kdWxlcwo+IG1hc3RlciBhZ2FpbnN0IGEgdjMuMi42MiBMaW51eCBr
-ZXJuZWwuCj4gCj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIGluY2x1ZGUvbGludXgvYml0b3BzLmg6
-MjI6MCwKPiAgICAgICAgICAgICAgICAgIGZyb20gaW5jbHVkZS9saW51eC9rZXJuZWwuaDoxNywK
-PiAgICAgICAgICAgICAgICAgIGZyb20gaW5jbHVkZS9saW51eC9jYWNoZS5oOjQsCj4gICAgICAg
-ICAgICAgICAgICBmcm9tIGluY2x1ZGUvbGludXgvdGltZS5oOjcsCj4gICAgICAgICAgICAgICAg
-ICBmcm9tIGluY2x1ZGUvbGludXgvc3RhdC5oOjYwLAo+ICAgICAgICAgICAgICAgICAgZnJvbSBp
-bmNsdWRlL2xpbnV4L21vZHVsZS5oOjEwLAo+ICAgICAgICAgICAgICAgICAgZnJvbQo+ICAgICAg
-ICAgICAgICAgICAgL2hvbWUvY29tcHVkai9naXQvbHR0bmctbW9kdWxlcy9sdHRuZy1zdGF0ZWR1
-bXAtaW1wbC5jOjMwOgo+IC9ob21lL2NvbXB1ZGovZ2l0L2x0dG5nLW1vZHVsZXMvbHR0bmctc3Rh
-dGVkdW1wLWltcGwuYzogSW4gZnVuY3Rpb24KPiDigJhsdHRuZ19kdW1wX29uZV9mZOKAmToKPiAv
-aG9tZS9jb21wdWRqL2dpdC9saW51eC9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9iaXRvcHMuaDozMzg6
-Mjk6IHdhcm5pbmc6Cj4gcGFzc2luZyBhcmd1bWVudCAyIG9mIOKAmGNvbnN0YW50X3Rlc3RfYml0
-4oCZIGZyb20gaW5jb21wYXRpYmxlIHBvaW50ZXIgdHlwZQo+ICAgID8gY29uc3RhbnRfdGVzdF9i
-aXQoKG5yKSwgKGFkZHIpKSBcCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeCj4gL2hv
-bWUvY29tcHVkai9naXQvbHR0bmctbW9kdWxlcy9sdHRuZy1zdGF0ZWR1bXAtaW1wbC5jOjI0MDoy
-Nzogbm90ZTogaW4KPiBleHBhbnNpb24gb2YgbWFjcm8g4oCYdGVzdF9iaXTigJkKPiAgIGlmIChm
-ZCA8IGZkdC0+bWF4X2ZkcyAmJiB0ZXN0X2JpdChmZCwgZmR0LT5jbG9zZV9vbl9leGVjKSkKPiAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBeCj4gL2hvbWUvY29tcHVkai9naXQvbGludXgvYXJj
-aC94ODYvaW5jbHVkZS9hc20vYml0b3BzLmg6MzA5OjI4OiBub3RlOiBleHBlY3RlZAo+IOKAmGNv
-bnN0IHZvbGF0aWxlIGxvbmcgdW5zaWduZWQgaW50ICrigJkgYnV0IGFyZ3VtZW50IGlzIG9mIHR5
-cGUg4oCYc3RydWN0IGZkX3NldAo+ICrigJkKPiAgc3RhdGljIF9fYWx3YXlzX2lubGluZSBpbnQg
-Y29uc3RhbnRfdGVzdF9iaXQodW5zaWduZWQgaW50IG5yLCBjb25zdCB2b2xhdGlsZQo+ICB1bnNp
-Z25lZCBsb25nICphZGRyKQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeCj4gL2hvbWUv
-Y29tcHVkai9naXQvbGludXgvYXJjaC94ODYvaW5jbHVkZS9hc20vYml0b3BzLmg6MzM5OjI5OiB3
-YXJuaW5nOgo+IHBhc3NpbmcgYXJndW1lbnQgMiBvZiDigJh2YXJpYWJsZV90ZXN0X2JpdOKAmSBm
-cm9tIGluY29tcGF0aWJsZSBwb2ludGVyIHR5cGUKPiAgICA6IHZhcmlhYmxlX3Rlc3RfYml0KChu
-ciksIChhZGRyKSkpCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeCj4gL2hvbWUvY29t
-cHVkai9naXQvbHR0bmctbW9kdWxlcy9sdHRuZy1zdGF0ZWR1bXAtaW1wbC5jOjI0MDoyNzogbm90
-ZTogaW4KPiBleHBhbnNpb24gb2YgbWFjcm8g4oCYdGVzdF9iaXTigJkKPiAgIGlmIChmZCA8IGZk
-dC0+bWF4X2ZkcyAmJiB0ZXN0X2JpdChmZCwgZmR0LT5jbG9zZV9vbl9leGVjKSkKPiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICBeCj4gL2hvbWUvY29tcHVkai9naXQvbGludXgvYXJjaC94ODYv
-aW5jbHVkZS9hc20vYml0b3BzLmg6MzE1OjE5OiBub3RlOiBleHBlY3RlZAo+IOKAmGNvbnN0IHZv
-bGF0aWxlIGxvbmcgdW5zaWduZWQgaW50ICrigJkgYnV0IGFyZ3VtZW50IGlzIG9mIHR5cGUg4oCY
-c3RydWN0IGZkX3NldAo+ICrigJkKPiAgc3RhdGljIGlubGluZSBpbnQgdmFyaWFibGVfdGVzdF9i
-aXQoaW50IG5yLCB2b2xhdGlsZSBjb25zdCB1bnNpZ25lZCBsb25nCj4gICphZGRyKQo+ICAgICAg
-ICAgICAgICAgICAgICBeCj4gCj4gVGhhbmtzLAo+IAo+IE1hdGhpZXUKPiAKPiAKPiAtLQo+IE1h
-dGhpZXUgRGVzbm95ZXJzCj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29t
-Cj4gCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBs
-dHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6
-Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IAoK
-LS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5j
-b20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMu
-bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+*** CID 1241799:  Resource leak  (RESOURCE_LEAK)
+/src/common/sessiond-comm/inet.c: 324 in lttcomm_accept_inet_sock()
+318
+319     end:
+320             return new_sock;
+321
+322     error:
+323             free(new_sock);
+>>>     CID 1241799:  Resource leak  (RESOURCE_LEAK)
+>>>     Handle variable "new_fd" going out of scope leaks the handle.
+324             return NULL;
+325     }
+326
+327     /*
+328      * Make the socket listen using LTTNG_SESSIOND_COMM_MAX_LISTEN.
+329      */
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ src/common/sessiond-comm/inet.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/src/common/sessiond-comm/inet.c b/src/common/sessiond-comm/inet.c
+index cf06ecb..4e34ad0 100644
+--- a/src/common/sessiond-comm/inet.c
++++ b/src/common/sessiond-comm/inet.c
+@@ -272,7 +272,7 @@ error_connect:
+ LTTNG_HIDDEN
+ struct lttcomm_sock *lttcomm_accept_inet_sock(struct lttcomm_sock *sock)
+ {
+-	int new_fd;
++	int new_fd, closeret;
+ 	socklen_t len;
+ 	struct lttcomm_sock *new_sock;
+ 	unsigned long timeout;
+@@ -305,10 +305,18 @@ struct lttcomm_sock *lttcomm_accept_inet_sock(struct lttcomm_sock *sock)
+ 
+ 		ret = lttcomm_setsockopt_rcv_timeout(new_fd, timeout);
+ 		if (ret) {
++			closeret = close(new_fd);
++			if (closeret) {
++				PERROR("close");
++			}
+ 			goto error;
+ 		}
+ 		ret = lttcomm_setsockopt_snd_timeout(new_fd, timeout);
+ 		if (ret) {
++			closeret = close(new_fd);
++			if (closeret) {
++				PERROR("close");
++			}
+ 			goto error;
+ 		}
+ 	}
+-- 
+2.1.0
