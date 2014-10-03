@@ -1,15 +1,15 @@
 From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: ARMv7 Beagle Bone Black and the dmb instruction
-Date: Fri, 3 Oct 2014 15:30:57 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD512311B3__48483.3516217352$1412350318$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Subject: Re: ARMv7 Beagle Bone Black and the dmb instruction
+Date: Fri, 3 Oct 2014 15:55:25 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD512311CA__31220.5983944752$1412351785$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Xa4ox-0003Jd-O6
- for lttng-dev@lists.lttng.org; Fri, 03 Oct 2014 11:31:08 -0400
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Xa5Cd-0003Sz-SD
+ for lttng-dev@lists.lttng.org; Fri, 03 Oct 2014 11:55:37 -0400
 Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -19,53 +19,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Jon Bernard
+ (jbernard@debian.org)" <jbernard@debian.org>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-   This is a return to an issue first mentioned here in June 2014 ("Debian =
-specific userspace RCU configure override (ARMv7 Beagle Bone Black)").
-
-   I'm trying to install TTng on an ARMv7 Beagle Bone Black.  Lttng-modules=
- "installs" but adds nothing because the kernel has no CONFIG_TRACEPOINTS f=
-lag.  So this will be a pure user-space installation.  Userspace-rcu instal=
-ls without trouble, although I note that its configure log states "checking=
- for dmb instruction... yes".  Lttng-ust, however, fails completely to inst=
-all.  I note that its configure log makes no mention of a dmb instruction -=
-an omission?
-
-   The make fails at /usr/src/lttng-ust-2.5.0/libringbuffer/libringbuffer_l=
-a-ring_buffer_frontend.lo
-
-CC libringbuffer_la-ring_buffer_frontend.lo
-/tmp/ccsyYAoj.s: Assembler messages:
-/tmp/ccsyYAoj.s:2678: Error: selected processor does not support ARM mode `=
-dmb'
-/tmp/ccsyYAoj.s:2692: Error: selected processor does not support ARM mode `=
-dmb'
-/tmp/ccsyYAoj.s:2725: Error: selected processor does not support ARM mode `=
-dmb'
-...
-(22 more such errors)
-...
-Make[2]: *** [libringbuffer_la-ring_buffer_frontend.lo] Error 1
-
-userspace-rcu is 0.8.0-64-(0.8.4-21)-718eb63
-lttng-ust is 2.5.0-10-501f677
-
-'Angstrom GNU/Linux v2012.12 (Core edition)' on kernel '3.8.13'.  No system=
-tap, no Java or JNI.
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+ICAgT29wcy4gIEkgaGFkIHN0b3BwZWQgdG9vIGVhcmx5IGluIGxvb2tpbmcgdXAgdGhlIGVhcmxp
+ZXIgZGlzY3Vzc2lvbiBvZiB0aGlzIHByb2JsZW0uDQoNCiAgIEJvdGggL3Vzci9sb2NhbC9pbmNs
+dWRlL3VyY3UvY29uZmlnLmggYW5kIC91c3Ivc3JjL3VzZXJzcGFjZS1yY3UtMC44LjAvdXJjdS9j
+b25maWcuaCBoYXZlICcjZGVmaW5lIENPTkZJR19SQ1VfQVJNX0hBVkVfRE1CIDEnIGFuZCBjb21t
+ZW50aW5nIHRoaXMgb3V0IG1heSBhbGxvdyB0aGUgbWFrZXMgdG8gY29tcGxldGUuDQoNCkRlIDog
+Sm9uIEJlcm5hcmQgW21haWx0bzpqYmVybmFyZEBkZWJpYW4ub3JnXSANCkVudm95w6kgOiA1IGp1
+aW4gMjAxNCAxNDozMA0KDQo+IEl0IHNvdW5kcyBsaWtlIHlvdSBtaWdodCBiZSBoaXR0aW5nIHRo
+ZSBzYW1lIGlzc3VlIHRoYXQgSSBoYWQuICBXaGVuIGJ1aWxkaW5nIHVyY3Ugb24gdGhpcyBwYXJ0
+aWN1bGFyIGhvc3QsIC4vY29uZmlndXJlIHdpbGwgZGV0ZWN0IGFuIGFybXY3IHRhcmdldCBldmVu
+IHRob3VnaCB1c2VybGFuZCBpcyBhcm12NC4NCj4gSSB3YXMgYWJsZSB0byBnZXQgYXJvdW5kIHRo
+aXMgYnkgZXhwbGljaXRseSBwYXNzaW5nICctLWJ1aWxkJyBhbmQgJy0taG9zdCcgZmxhZ3MgdG8g
+Y29uZmlndXJlLg0KPg0KPiBJbiBteSBwYXJ0aWN1bGFyIGNhc2UsIHRoZSBidWlsZCBtYWNoaW5l
+IGlzIHY3IGhhcmR3YXJlIHJ1bm5pbmcgYSB2NyBrZXJuZWwgYnV0IHdpdGggYSB2NCB1c2VybGFu
+ZC4gIFlvdSBjYW4gY29uZmlybSB0aGlzIHdpdGgNCj4gICAgZ2NjIC1kdW1wbWFjaGluZQ0KDQoj
+IGdjYyAtZHVtcG1hY2hpbmUgDQphcm0tYW5nc3Ryb20tbGludXgtZ251ZWFiaQ0KDQogICBJIGhh
+dmUgbm8gaWRlYSBob3cgdGhpcyAnYXJtLWFuZ3N0cm9tLWxpbnV4LWdudWVhYmknIHJlbGF0ZXMg
+dG8gYXJtdjQgdXNlci1zcGFjZSB2cy4gYXJtdjcga2VybmVsIHNwYWNlLg0KDQogICBKb24sIGNv
+dWxkIHlvdSBlbGFib3JhdGUgb24gdGhlIC0tYnVpbGQgYW5kIC0taG9zdCBmaXg/DQogDQpEYW5p
+ZWwgVS4gVGhpYmF1bHQNClByb3RlY3Rpb24gZGVzIHN5c3TDqG1lcyBldCBjb250cmVtZXN1cmVz
+IChQU0MpIHwgU3lzdGVtcyBQcm90ZWN0aW9uICYgQ291bnRlcm1lYXN1cmVzIChTUEMpDQpDeWJl
+ciBzw6ljdXJpdMOpIHBvdXIgbGVzIG1pc3Npb25zIGVzc2VudGllbGxlcyAoQ01FKSB8IE1pc3Np
+b24gQ3JpdGljYWwgQ3liZXIgU2VjdXJpdHkgKE1DQ1MpDQpSRERDIC0gQ2VudHJlIGRlIHJlY2hl
+cmNoZXMgZGUgVmFsY2FydGllciB8IERSREMgLSBWYWxjYXJ0aWVyIFJlc2VhcmNoIENlbnRyZQ0K
+MjQ1OSByb3V0ZSBkZSBsYSBCcmF2b3VyZQ0KUXXDqWJlYyBRQ8KgIEczSiAxWDUNCkNBTkFEQQ0K
+Vm94wqA6ICg0MTgpIDg0NC00MDAwIHg0MjQ1DQpGYXjCoDogKDQxOCkgODQ0LTQ1MzgNCk5BQ8Kg
+OiA5MThWIFFTREogPGh0dHA6Ly93d3cudHJhdmVsZ2lzLmNvbS9tYXAuYXNwP2FkZHI9OTE4ViUy
+MFFTREo+DQpHb3V2ZXJuZW1lbnQgZHUgQ2FuYWRhwqB8IEdvdmVybm1lbnQgb2YgQ2FuYWRhDQo8
+aHR0cDovL3d3dy52YWxjYXJ0aWVyLmRyZGMtcmRkYy5nYy5jYS8+DQpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
