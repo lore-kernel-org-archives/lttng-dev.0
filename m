@@ -1,16 +1,15 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: ARMv7 Beagle Bone Black and the dmb instruction
-Date: Fri, 3 Oct 2014 15:55:25 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD512311CA__31220.5983944752$1412351785$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: [lttng-modules PATCH] Fix compilation on Ubuntu 14.10
+Date: Fri,  3 Oct 2014 15:58:02 -0400
+Message-ID: <1412366282-32756-1-git-send-email-alexmonthy__30588.8846669861$1412366356$gmane$org@voxpopuli.im>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Xa5Cd-0003Sz-SD
- for lttng-dev@lists.lttng.org; Fri, 03 Oct 2014 11:55:37 -0400
-Content-Language: fr-FR
+ (envelope-from <alexmonthy@voxpopuli.im>) id 1Xa8zQ-0004lW-Ft
+ for lttng-dev@lists.lttng.org; Fri, 03 Oct 2014 15:58:14 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,39 +18,44 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Jon Bernard
- (jbernard@debian.org)" <jbernard@debian.org>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-ICAgT29wcy4gIEkgaGFkIHN0b3BwZWQgdG9vIGVhcmx5IGluIGxvb2tpbmcgdXAgdGhlIGVhcmxp
-ZXIgZGlzY3Vzc2lvbiBvZiB0aGlzIHByb2JsZW0uDQoNCiAgIEJvdGggL3Vzci9sb2NhbC9pbmNs
-dWRlL3VyY3UvY29uZmlnLmggYW5kIC91c3Ivc3JjL3VzZXJzcGFjZS1yY3UtMC44LjAvdXJjdS9j
-b25maWcuaCBoYXZlICcjZGVmaW5lIENPTkZJR19SQ1VfQVJNX0hBVkVfRE1CIDEnIGFuZCBjb21t
-ZW50aW5nIHRoaXMgb3V0IG1heSBhbGxvdyB0aGUgbWFrZXMgdG8gY29tcGxldGUuDQoNCkRlIDog
-Sm9uIEJlcm5hcmQgW21haWx0bzpqYmVybmFyZEBkZWJpYW4ub3JnXSANCkVudm95w6kgOiA1IGp1
-aW4gMjAxNCAxNDozMA0KDQo+IEl0IHNvdW5kcyBsaWtlIHlvdSBtaWdodCBiZSBoaXR0aW5nIHRo
-ZSBzYW1lIGlzc3VlIHRoYXQgSSBoYWQuICBXaGVuIGJ1aWxkaW5nIHVyY3Ugb24gdGhpcyBwYXJ0
-aWN1bGFyIGhvc3QsIC4vY29uZmlndXJlIHdpbGwgZGV0ZWN0IGFuIGFybXY3IHRhcmdldCBldmVu
-IHRob3VnaCB1c2VybGFuZCBpcyBhcm12NC4NCj4gSSB3YXMgYWJsZSB0byBnZXQgYXJvdW5kIHRo
-aXMgYnkgZXhwbGljaXRseSBwYXNzaW5nICctLWJ1aWxkJyBhbmQgJy0taG9zdCcgZmxhZ3MgdG8g
-Y29uZmlndXJlLg0KPg0KPiBJbiBteSBwYXJ0aWN1bGFyIGNhc2UsIHRoZSBidWlsZCBtYWNoaW5l
-IGlzIHY3IGhhcmR3YXJlIHJ1bm5pbmcgYSB2NyBrZXJuZWwgYnV0IHdpdGggYSB2NCB1c2VybGFu
-ZC4gIFlvdSBjYW4gY29uZmlybSB0aGlzIHdpdGgNCj4gICAgZ2NjIC1kdW1wbWFjaGluZQ0KDQoj
-IGdjYyAtZHVtcG1hY2hpbmUgDQphcm0tYW5nc3Ryb20tbGludXgtZ251ZWFiaQ0KDQogICBJIGhh
-dmUgbm8gaWRlYSBob3cgdGhpcyAnYXJtLWFuZ3N0cm9tLWxpbnV4LWdudWVhYmknIHJlbGF0ZXMg
-dG8gYXJtdjQgdXNlci1zcGFjZSB2cy4gYXJtdjcga2VybmVsIHNwYWNlLg0KDQogICBKb24sIGNv
-dWxkIHlvdSBlbGFib3JhdGUgb24gdGhlIC0tYnVpbGQgYW5kIC0taG9zdCBmaXg/DQogDQpEYW5p
-ZWwgVS4gVGhpYmF1bHQNClByb3RlY3Rpb24gZGVzIHN5c3TDqG1lcyBldCBjb250cmVtZXN1cmVz
-IChQU0MpIHwgU3lzdGVtcyBQcm90ZWN0aW9uICYgQ291bnRlcm1lYXN1cmVzIChTUEMpDQpDeWJl
-ciBzw6ljdXJpdMOpIHBvdXIgbGVzIG1pc3Npb25zIGVzc2VudGllbGxlcyAoQ01FKSB8IE1pc3Np
-b24gQ3JpdGljYWwgQ3liZXIgU2VjdXJpdHkgKE1DQ1MpDQpSRERDIC0gQ2VudHJlIGRlIHJlY2hl
-cmNoZXMgZGUgVmFsY2FydGllciB8IERSREMgLSBWYWxjYXJ0aWVyIFJlc2VhcmNoIENlbnRyZQ0K
-MjQ1OSByb3V0ZSBkZSBsYSBCcmF2b3VyZQ0KUXXDqWJlYyBRQ8KgIEczSiAxWDUNCkNBTkFEQQ0K
-Vm94wqA6ICg0MTgpIDg0NC00MDAwIHg0MjQ1DQpGYXjCoDogKDQxOCkgODQ0LTQ1MzgNCk5BQ8Kg
-OiA5MThWIFFTREogPGh0dHA6Ly93d3cudHJhdmVsZ2lzLmNvbS9tYXAuYXNwP2FkZHI9OTE4ViUy
-MFFTREo+DQpHb3V2ZXJuZW1lbnQgZHUgQ2FuYWRhwqB8IEdvdmVybm1lbnQgb2YgQ2FuYWRhDQo8
-aHR0cDovL3d3dy52YWxjYXJ0aWVyLmRyZGMtcmRkYy5nYy5jYS8+DQpfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0
-dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
-aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Extend the range introduced in 2260bfd to also include Ubuntu's
+3.16 kernel. The API-changing patch was also backported to that series.
+This will also be required for Trusty users once the the Utopic
+hardware-enablement stack, including that 3.16 kernel, comes in.
+
+Refs #838. See comment #2 for the patch in question.
+
+Signed-off-by: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+---
+ lttng-statedump-impl.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/lttng-statedump-impl.c b/lttng-statedump-impl.c
+index bab5d9f..e0d74f6 100644
+--- a/lttng-statedump-impl.c
++++ b/lttng-statedump-impl.c
+@@ -412,7 +412,8 @@ void lttng_statedump_process_ns(struct lttng_session *session,
+ 	 * for details.
+ 	 */
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,17,0) || \
+-		LTTNG_UBUNTU_KERNEL_RANGE(3,13,11,36, 3,14,0,0))
++		LTTNG_UBUNTU_KERNEL_RANGE(3,13,11,36, 3,14,0,0) || \
++		LTTNG_UBUNTU_KERNEL_RANGE(3,16,0,11, 3,17,0,0))
+ 	proxy = p->nsproxy;
+ #else
+ 	rcu_read_lock();
+@@ -430,7 +431,8 @@ void lttng_statedump_process_ns(struct lttng_session *session,
+ 			p, type, mode, submode, status, NULL);
+ 	}
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,17,0) || \
+-		LTTNG_UBUNTU_KERNEL_RANGE(3,13,11,36, 3,14,0,0))
++		LTTNG_UBUNTU_KERNEL_RANGE(3,13,11,36, 3,14,0,0) || \
++		LTTNG_UBUNTU_KERNEL_RANGE(3,16,0,11, 3,17,0,0))
+ 	/* (nothing) */
+ #else
+ 	rcu_read_unlock();
+-- 
+2.1.0
