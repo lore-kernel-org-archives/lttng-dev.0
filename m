@@ -1,18 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Fix: Abort loading log4j agent classes when
- detected log4j version is too old
-Date: Thu, 2 Oct 2014 20:36:49 +0000 (UTC)
-Message-ID: <622918749.2570.1412282209881.JavaMail.zimbra__7994.40390333093$1412282274$gmane$org@efficios.com>
-References: <1412281916-11684-1-git-send-email-christian.babeux@efficios.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: ARMv7 Beagle Bone Black and the dmb instruction
+Date: Fri, 3 Oct 2014 15:30:57 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD512311B3__48483.3516217352$1412350318$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XZn7Y-0005ey-CE
- for lttng-dev@lists.lttng.org; Thu, 02 Oct 2014 16:37:08 -0400
-In-Reply-To: <1412281916-11684-1-git-send-email-christian.babeux@efficios.com>
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Xa4ox-0003Jd-O6
+ for lttng-dev@lists.lttng.org; Fri, 03 Oct 2014 11:31:08 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,104 +19,53 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged, thanks!
+   This is a return to an issue first mentioned here in June 2014 ("Debian =
+specific userspace RCU configure override (ARMv7 Beagle Bone Black)").
 
-Mathieu
+   I'm trying to install TTng on an ARMv7 Beagle Bone Black.  Lttng-modules=
+ "installs" but adds nothing because the kernel has no CONFIG_TRACEPOINTS f=
+lag.  So this will be a pure user-space installation.  Userspace-rcu instal=
+ls without trouble, although I note that its configure log states "checking=
+ for dmb instruction... yes".  Lttng-ust, however, fails completely to inst=
+all.  I note that its configure log makes no mention of a dmb instruction -=
+an omission?
 
------ Original Message -----
-> From: "Christian Babeux" <christian.babeux@efficios.com>
-> To: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: lttng-dev@lists.lttng.org, "Christian Babeux" <christian.babeux@efficios.com>
-> Sent: Thursday, October 2, 2014 4:31:56 PM
-> Subject: [PATCH] Fix: Abort loading log4j agent classes when detected log4j version is too old
-> 
-> The Java Log4j agent rely on the getTimeStamp() method that was
-> introduced in log4j 1.2.15. This fix implement a runtime detection of
-> the log4j library capabilities and abort the loading of the relevant
-> agent classes if the version used is too old.
-> 
-> Thus, log4j tracing will be deactivated on older version of the
-> library.
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  .../java/org/lttng/ust/agent/LTTngAgent.java       | 38
->  ++++++++++++++++++----
->  1 file changed, 32 insertions(+), 6 deletions(-)
-> 
-> diff --git a/liblttng-ust-java-agent/java/org/lttng/ust/agent/LTTngAgent.java
-> b/liblttng-ust-java-agent/java/org/lttng/ust/agent/LTTngAgent.java
-> index 342ccfa..293ac84 100644
-> --- a/liblttng-ust-java-agent/java/org/lttng/ust/agent/LTTngAgent.java
-> +++ b/liblttng-ust-java-agent/java/org/lttng/ust/agent/LTTngAgent.java
-> @@ -29,7 +29,6 @@ import java.util.Enumeration;
->  import java.lang.reflect.InvocationTargetException;
->  
->  import java.util.logging.Logger;
-> -import java.util.logging.FileHandler;;
->  import java.util.logging.SimpleFormatter;
->  
->  public class LTTngAgent {
-> @@ -92,17 +91,44 @@ public class LTTngAgent {
->  	}
->  
->  	private Boolean loadLog4jClasses() {
-> -		Boolean loaded = false;
-> +		Class<?> logging;
-> +
->  		try {
->  			ClassLoader loader = ClassLoader.getSystemClassLoader();
-> -			loader.loadClass("org.apache.log4j.Logger");
-> -			loaded = true;
-> +			logging = loader.loadClass("org.apache.log4j.spi.LoggingEvent");
->  		} catch (ClassNotFoundException e) {
->  			/* Log4j classes not found, no need to create the relevant objects */
-> -			loaded = false;
-> +			return false;
-> +		}
-> +
-> +		/*
-> +		 * Detect capabilities of the log4j library. We only
-> +		 * support log4j >= 1.2.15.  The getTimeStamp() method
-> +		 * was introduced in log4j 1.2.15, so verify that it
-> +		 * is available.
-> +		 *
-> +		 * We can't rely on the getPackage().getImplementationVersion()
-> +		 * call that would retrieves information from the manifest file
-> +		 * found in the JAR since the manifest file shipped
-> +		 * from upstream is known to be broken in several
-> +		 * versions of the library.
-> +		 *
-> +		 * More info:
-> +		 * https://issues.apache.org/bugzilla/show_bug.cgi?id=44370
-> +		 */
-> +
-> +		try {
-> +			logging.getDeclaredMethod("getTimeStamp");
-> +		} catch (NoSuchMethodException e) {
-> +			return false;
-> +		} catch (NullPointerException e) {
-> +			/* Should never happen */
-> +			return false;
-> +		} catch (SecurityException e) {
-> +			return false;
->  		}
->  
-> -		return loaded;
-> +		return true;
->  	}
->  
->  	private void initAgentJULClasses() {
-> --
-> 2.1.1
-> 
-> 
+   The make fails at /usr/src/lttng-ust-2.5.0/libringbuffer/libringbuffer_l=
+a-ring_buffer_frontend.lo
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+CC libringbuffer_la-ring_buffer_frontend.lo
+/tmp/ccsyYAoj.s: Assembler messages:
+/tmp/ccsyYAoj.s:2678: Error: selected processor does not support ARM mode `=
+dmb'
+/tmp/ccsyYAoj.s:2692: Error: selected processor does not support ARM mode `=
+dmb'
+/tmp/ccsyYAoj.s:2725: Error: selected processor does not support ARM mode `=
+dmb'
+...
+(22 more such errors)
+...
+Make[2]: *** [libringbuffer_la-ring_buffer_frontend.lo] Error 1
+
+userspace-rcu is 0.8.0-64-(0.8.4-21)-718eb63
+lttng-ust is 2.5.0-10-501f677
+
+'Angstrom GNU/Linux v2012.12 (Core edition)' on kernel '3.8.13'.  No system=
+tap, no Java or JNI.
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
+re
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
