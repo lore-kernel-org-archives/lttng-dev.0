@@ -1,18 +1,21 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [lttng-modules PATCH] Fix compilation on Ubuntu
- 14.10
-Date: Fri, 3 Oct 2014 20:02:17 +0000 (UTC)
-Message-ID: <615927374.2824.1412366537270.JavaMail.zimbra__41863.5866757997$1412366616$gmane$org@efficios.com>
-References: <1412366282-32756-1-git-send-email-alexmonthy@voxpopuli.im>
+Subject: Re: [PATCH lttng-tools] Fix: FD leak in accept error
+	handling
+Date: Sat, 4 Oct 2014 13:24:02 +0000 (UTC)
+Message-ID: <42225267.2928.1412429042743.JavaMail.zimbra__38660.9672489159$1412429107$gmane$org@efficios.com>
+References: <1411861762-17552-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Xa93e-0004po-Vu
- for lttng-dev@lists.lttng.org; Fri, 03 Oct 2014 16:02:37 -0400
-In-Reply-To: <1412366282-32756-1-git-send-email-alexmonthy@voxpopuli.im>
+ (envelope-from <compudj@efficios.com>) id 1XaPJo-0001mL-IO
+ for lttng-dev@lists.lttng.org; Sat, 04 Oct 2014 09:24:19 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 73EC0340187
+ for <lttng-dev@lists.lttng.org>; Sat,  4 Oct 2014 13:24:11 +0000 (UTC)
+In-Reply-To: <1411861762-17552-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,66 +24,78 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+To: dgoulet@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-merged, thanks!
-
-Mathieu
+Bump.
 
 ----- Original Message -----
-> From: "Alexandre Montplaisir" <alexmonthy@voxpopuli.im>
-> To: lttng-dev@lists.lttng.org
-> Sent: Friday, October 3, 2014 3:58:02 PM
-> Subject: [lttng-dev] [lttng-modules PATCH] Fix compilation on Ubuntu 14.10
+> From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> To: dgoulet@efficios.com
+> Cc: lttng-dev@lists.lttng.org, "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Sent: Saturday, September 27, 2014 7:49:22 PM
+> Subject: [PATCH lttng-tools] Fix: FD leak in accept error handling
 > 
-> Extend the range introduced in 2260bfd to also include Ubuntu's
-> 3.16 kernel. The API-changing patch was also backported to that series.
-> This will also be required for Trusty users once the the Utopic
-> hardware-enablement stack, including that 3.16 kernel, comes in.
+> *** CID 1241799:  Resource leak  (RESOURCE_LEAK)
+> /src/common/sessiond-comm/inet.c: 324 in lttcomm_accept_inet_sock()
+> 318
+> 319     end:
+> 320             return new_sock;
+> 321
+> 322     error:
+> 323             free(new_sock);
+> >>>     CID 1241799:  Resource leak  (RESOURCE_LEAK)
+> >>>     Handle variable "new_fd" going out of scope leaks the handle.
+> 324             return NULL;
+> 325     }
+> 326
+> 327     /*
+> 328      * Make the socket listen using LTTNG_SESSIOND_COMM_MAX_LISTEN.
+> 329      */
 > 
-> Refs #838. See comment #2 for the patch in question.
-> 
-> Signed-off-by: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > ---
->  lttng-statedump-impl.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  src/common/sessiond-comm/inet.c | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> diff --git a/lttng-statedump-impl.c b/lttng-statedump-impl.c
-> index bab5d9f..e0d74f6 100644
-> --- a/lttng-statedump-impl.c
-> +++ b/lttng-statedump-impl.c
-> @@ -412,7 +412,8 @@ void lttng_statedump_process_ns(struct lttng_session
-> *session,
->  	 * for details.
->  	 */
->  #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,17,0) || \
-> -		LTTNG_UBUNTU_KERNEL_RANGE(3,13,11,36, 3,14,0,0))
-> +		LTTNG_UBUNTU_KERNEL_RANGE(3,13,11,36, 3,14,0,0) || \
-> +		LTTNG_UBUNTU_KERNEL_RANGE(3,16,0,11, 3,17,0,0))
->  	proxy = p->nsproxy;
->  #else
->  	rcu_read_lock();
-> @@ -430,7 +431,8 @@ void lttng_statedump_process_ns(struct lttng_session
-> *session,
->  			p, type, mode, submode, status, NULL);
+> diff --git a/src/common/sessiond-comm/inet.c
+> b/src/common/sessiond-comm/inet.c
+> index cf06ecb..4e34ad0 100644
+> --- a/src/common/sessiond-comm/inet.c
+> +++ b/src/common/sessiond-comm/inet.c
+> @@ -272,7 +272,7 @@ error_connect:
+>  LTTNG_HIDDEN
+>  struct lttcomm_sock *lttcomm_accept_inet_sock(struct lttcomm_sock *sock)
+>  {
+> -	int new_fd;
+> +	int new_fd, closeret;
+>  	socklen_t len;
+>  	struct lttcomm_sock *new_sock;
+>  	unsigned long timeout;
+> @@ -305,10 +305,18 @@ struct lttcomm_sock *lttcomm_accept_inet_sock(struct
+> lttcomm_sock *sock)
+>  
+>  		ret = lttcomm_setsockopt_rcv_timeout(new_fd, timeout);
+>  		if (ret) {
+> +			closeret = close(new_fd);
+> +			if (closeret) {
+> +				PERROR("close");
+> +			}
+>  			goto error;
+>  		}
+>  		ret = lttcomm_setsockopt_snd_timeout(new_fd, timeout);
+>  		if (ret) {
+> +			closeret = close(new_fd);
+> +			if (closeret) {
+> +				PERROR("close");
+> +			}
+>  			goto error;
+>  		}
 >  	}
->  #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,17,0) || \
-> -		LTTNG_UBUNTU_KERNEL_RANGE(3,13,11,36, 3,14,0,0))
-> +		LTTNG_UBUNTU_KERNEL_RANGE(3,13,11,36, 3,14,0,0) || \
-> +		LTTNG_UBUNTU_KERNEL_RANGE(3,16,0,11, 3,17,0,0))
->  	/* (nothing) */
->  #else
->  	rcu_read_unlock();
 > --
 > 2.1.0
 > 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 > 
 
 -- 
