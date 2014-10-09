@@ -1,17 +1,18 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: lttng-modules on Debian Wheezy BeagleBone Black
-	rev. C
-Date: Wed, 8 Oct 2014 21:09:09 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD5A23A947__224.642645525996$1412802590$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+From: Tommy Huynh <tom.huynh15@yahoo.com>
+Subject: Re: Trace files not getting generated
+Date: Thu, 9 Oct 2014 02:10:03 +0000 (UTC)
+Message-ID: <1618947506.9995.1412820603498.JavaMail.yahoo__42539.6718005233$1412873064$gmane$org@jws106139.mail.bf1.yahoo.com>
+References: <CA+jJMxsrbkk0A3zNMzTrg_=NhFaxyjvjRm_hcAx_tjL9g+D4MA@mail.gmail.com>
+Reply-To: Tommy Huynh <tom.huynh15@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from nm49-vm4.bullet.mail.gq1.yahoo.com ([67.195.87.234])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1XbyTz-0001Kz-9r
- for lttng-dev@lists.lttng.org; Wed, 08 Oct 2014 17:09:16 -0400
-Content-Language: fr-FR
+ (envelope-from <tom.huynh15@yahoo.com>) id 1Xc3Dy-0002rv-Cf
+ for lttng-dev@lists.lttng.org; Wed, 08 Oct 2014 22:13:05 -0400
+In-Reply-To: <CA+jJMxsrbkk0A3zNMzTrg_=NhFaxyjvjRm_hcAx_tjL9g+D4MA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,39 +21,52 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-> arch/include/asm has a time.h but no timex.h.
-
-   Correction:
-
-   arch/arm/include/asm/mach has a time.h but no timex.h.
-
-   Googling around, it seems the missing timex.h can either be ignored (by =
-creating an empty file in the expected spot), or recovered from the full ke=
-rnel source tree, at arch/arm/mach-<processor>/include/mach.  My problem is=
- identifying the correct one, if any.  Uname -i and uname -p both return 'u=
-nknown' for the BeagleBone Black (while running Debian Wheezy, anyway).
-
-   These files seem to serve mostly to #define the CLOCK_TICK_RATE, with va=
-lues such as 512000, 1000000 and 38000000, 40000000.  Some mach-<processor>=
- directories do not have an include sub-directory.  Other mach-<processor> =
-cases comment the CLOCK_TICK_RATE value as 'bogus'.  I'll try to resolve th=
-is tomorrow.
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC=A0 G3J 1X5
-CANADA
-Vox=A0: (418) 844-4000 x4245
-Fax=A0: (418) 844-4538
-NAC=A0: 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada=A0| Government of Canada <http://www.valcartier.drdc=
--rddc.gc.ca/>
+VGhhbmsgeW91IGZvciB5b3VyIHByb21wdCByZXNwb25zZS4KClJlZ2FyZGluZyB5b3VyIHF1ZXN0
+aW9uOgoKClRoZSBsdHRuZyBjbGllbnQgc2VlbXMgdG8gYmUgc3RhcnRpbmcgYSBuZXcgc2Vzc2lv
+biBkYWVtb24gYXQKbGluZSA5NyBvZiB0NC1sdHRuZy1odHRwZXJmLmxvZy4gRGlkIGl0IGNyYXNo
+IGluIHRoZSBtZWFudGltZT8gT3IKcGVyaGFwcyB0aGVzZSBleGVjdXRpb25zIGFyZSB1bnJlbGF0
+ZWQ/CiAgICBUaGVzZSBleGVjdXRpb25zIGFyZSBwcm9iYWJseSB1bnJlbGF0ZWQuIEkgZGlkIHJ1
+biB0aGUgZXhwZXJpbWVudCAKICAgIHNldmVyYWwgdGltZXMgdG8gbWFrZSBzdXJlIGl0J3MgcmVw
+cm9kdWNpYmxlLgoKCgpJdCBpcyBleHBlY3RlZCBpZiB0aGUgSU8gY2FwYWNpdGllcyBvZiB0aGUg
+bWFjaGluZSBhcmUgZXhjZWVkZWQgYnkgdGhlCmV2ZW50IHRocm91Z2hwdXQuIFRoYXQgd291bGRu
+J3Qgc3VycHJpc2UgbWUgc2luY2UgeW91IGhhdmUgMjQgY29yZXMgCgpwcm9kdWNpbmcgZXZlbnRz
+IHdpdGggYWxsIGtlcm5lbCBldmVudHMgZW5hYmxlZC4KICAgIEFyZSB5b3Ugc3VnZ2VzdGluZyBh
+IHNjYWxhYmlsaXR5IGlzc3VlIHdpdGggTFRUbmc/IAogICAgV2hhdCBpcyB0aGUgYmVzdCB3YXkg
+dG8gYWRkcmVzcyB0aGlzPyAKCgpSZWdhcmRzLAotLQpUb20KCgotLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgpP
+biBXZWRuZXNkYXksIE9jdG9iZXIgOCwgMjAxNCA0OjExIFBNLCBKw6lyw6ltaWUgR2FsYXJuZWF1
+IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+IHdyb3RlOgpHb29kIHF1ZXN0aW9uLi4u
+IFRoZSBjb25zdW1lciBzZWVtcyBhYmxlIHRvIGZsdXNoIGFuZCBJIGRvbid0IHJlYWxseQpzZWUg
+YW55IGVycm9ycy4uLgpIb3dldmVyLCB0aGUgbHR0bmcgY2xpZW50IHNlZW1zIHRvIGJlIHN0YXJ0
+aW5nIGEgbmV3IHNlc3Npb24gZGFlbW9uIGF0CmxpbmUgOTcgb2YgdDQtbHR0bmctaHR0cGVyZi5s
+b2cuIERpZCBpdCBjcmFzaCBpbiB0aGUgbWVhbnRpbWU/IE9yCnBlcmhhcHMgdGhlc2UgZXhlY3V0
+aW9ucyBhcmUgdW5yZWxhdGVkPwoKQXMgZm9yIHRoZSBtZXNzYWdlcyBpbiBkbWVzZywgdGhlIGRy
+b3BwZWQgZXZlbnRzIGFyZSBub3QgbmVjZXNzYXJpbHkKaW5kaWNhdGl2ZSBvZiBhbiBpc3N1ZTsg
+aXQgaXMgZXhwZWN0ZWQgaWYgdGhlIElPIGNhcGFjaXRpZXMgb2YgdGhlCm1hY2hpbmUgYXJlIGV4
+Y2VlZGVkIGJ5IHRoZSBldmVudCB0aHJvdWdocHV0LiBUaGF0IHdvdWxkbid0IHN1cnByaXNlCm1l
+IHNpbmNlIHlvdSBoYXZlIDI0IGNvcmVzIHByb2R1Y2luZyBldmVudHMgd2l0aCBhbGwga2VybmVs
+IGV2ZW50cwplbmFibGVkLgoKQnkgdGhlIHdheSwgd291bGQgeW91IG1pbmQgcG9zdGluZyB0aGlz
+IG9uIHRoZSBsdHRuZy1kZXYgbWFpbGluZyBsaXN0PwpQZXJoYXBzIHNvbWVvbmUgY2FuIGhlbHAg
+dXMgZmlndXJlIGl0IG91dCBmYXN0ZXIuCgpSZWdhcmRzLApKw6lyw6ltaWUKCgpPbiBXZWQsIE9j
+dCA4LCAyMDE0IGF0IDQ6MTQgUE0sIFRvbW15IEh1eW5oIDx0b20uaHV5bmgxNUB5YWhvby5jb20+
+IHdyb3RlOgo+IEhpIErDqXLDqW1pZSwKPgo+IExUVG5nIGRvZXNuJ3QgZ2VuZXJhdGUgdGhlIHRy
+YWNlIGZpbGVzIGFuZCBwcmludHMgc29tZXRoaW5nIGxpa2UgdGhpczoKPiAgICAgcmluZyBidWZm
+ZXIgcmVsYXktZGlzY2FyZCwgY3B1IDA6IHJlY29yZHMgd2VyZSBsb3N0LiBDYXVzZWQgYnk6Cj4g
+ICAgICAgWyA1NjI2Njk3IGJ1ZmZlciBmdWxsLCAwIG5lc3QgYnVmZmVyIHdyYXAtYXJvdW5kLCAw
+IGV2ZW50IHRvbyBiaWcgXQo+IFRoZSBiZWhhdmlvciBzZWVtcyBzaW1pbGFyIHRvIHRoaXMgZW1h
+aWwgdGhyZWFkOgo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvcGlwZXJtYWlsL2x0dG5nLWRldi8y
+MDEzLURlY2VtYmVyLzAyMjA1OS5odG1sLAo+Cj4gYnV0IG15IGxvZyBkb2Vzbid0IHNob3cgdGhl
+IHByb2JsZW0gd2l0aCB0aGUgY29uc3VtZXIgZGFlbW9uLgo+Cj4gSSdtIHJ1bm5pbmcgb24gYSBG
+cmVlc2NhbGUgVDQyNDBxZHMgZGV2ZWxvcG1lbnQgYm9hcmQgd2l0aCBMaW51eCAzLjEyLjE5Cj4g
+YW5kIExUVG5nIDIuNC4KPgo+IFRoZSBydW4gbG9nIGlzIGF0dGFjaGVkIGluIHRoaXMgZW1haWwg
+YWxvbmcgd2l0aCB0aGUgbG9nIGZpbGUgcHJvZHVjZWQgd2l0aDoKPgo+ICAgICBsdHRuZy1zZXNz
+aW9uZCAtdnZ2IC0tdmVyYm9zZS1jb25zdW1lciA+IHNlc3Npb25kLmxvZwo+Cj4gQ291bGQgeW91
+IGxldCBtZSBrbm93IHdoYXQncyB3cm9uZz8KPgo+IFJlZ2FyZHMKPiAtLQo+IFRvbSBIdXluaAoK
+CgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNp
+b3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xp
+c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
