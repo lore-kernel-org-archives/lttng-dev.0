@@ -1,20 +1,17 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Trace files not getting generated
-Date: Sat, 11 Oct 2014 15:36:38 -0400
-Message-ID: <CA+jJMxudVt9cKbVzPBhaimeYJUSjYm4sE38TSGYcvX3VoDSd8g__39250.470189336$1413056249$gmane$org@mail.gmail.com>
-References: <CA+jJMxsrbkk0A3zNMzTrg_=NhFaxyjvjRm_hcAx_tjL9g+D4MA@mail.gmail.com>
- <1618947506.9995.1412820603498.JavaMail.yahoo@jws106139.mail.bf1.yahoo.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: Announcing the new LTTng website
+Date: Sat, 11 Oct 2014 18:39:25 -0400
+Message-ID: <CAGDH53m0FqrsbOStwjKNZoqjM=W=MKpspJS6EX2rC3mAKpyj0A__3338.56260772354$1413067213$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f172.google.com ([209.85.217.172])
+Received: from mail-ig0-f181.google.com ([209.85.213.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Xd2T6-0007Um-HC
- for lttng-dev@lists.lttng.org; Sat, 11 Oct 2014 15:36:46 -0400
-Received: by mail-lb0-f172.google.com with SMTP id b6so4749637lbj.31
- for <lttng-dev@lists.lttng.org>; Sat, 11 Oct 2014 12:36:38 -0700 (PDT)
-In-Reply-To: <1618947506.9995.1412820603498.JavaMail.yahoo@jws106139.mail.bf1.yahoo.com>
+ (envelope-from <christian.babeux@0x80.ca>) id 1Xd5Jz-0008Ph-55
+ for lttng-dev@lists.lttng.org; Sat, 11 Oct 2014 18:39:34 -0400
+Received: by mail-ig0-f181.google.com with SMTP id r10so6738632igi.2
+ for <lttng-dev@lists.lttng.org>; Sat, 11 Oct 2014 15:39:25 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,63 +20,31 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Tommy Huynh <tom.huynh15@yahoo.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gV2VkLCBPY3QgOCwgMjAxNCBhdCAxMDoxMCBQTSwgVG9tbXkgSHV5bmggPHRvbS5odXluaDE1
-QHlhaG9vLmNvbT4gd3JvdGU6Cj4gVGhhbmsgeW91IGZvciB5b3VyIHByb21wdCByZXNwb25zZS4K
-Pgo+IFJlZ2FyZGluZyB5b3VyIHF1ZXN0aW9uOgo+Cj4KPiBUaGUgbHR0bmcgY2xpZW50IHNlZW1z
-IHRvIGJlIHN0YXJ0aW5nIGEgbmV3IHNlc3Npb24gZGFlbW9uIGF0Cj4gbGluZSA5NyBvZiB0NC1s
-dHRuZy1odHRwZXJmLmxvZy4gRGlkIGl0IGNyYXNoIGluIHRoZSBtZWFudGltZT8gT3IKPiBwZXJo
-YXBzIHRoZXNlIGV4ZWN1dGlvbnMgYXJlIHVucmVsYXRlZD8KPiAgICAgVGhlc2UgZXhlY3V0aW9u
-cyBhcmUgcHJvYmFibHkgdW5yZWxhdGVkLiBJIGRpZCBydW4gdGhlIGV4cGVyaW1lbnQKPiAgICAg
-c2V2ZXJhbCB0aW1lcyB0byBtYWtlIHN1cmUgaXQncyByZXByb2R1Y2libGUuCj4KPgo+Cj4gSXQg
-aXMgZXhwZWN0ZWQgaWYgdGhlIElPIGNhcGFjaXRpZXMgb2YgdGhlIG1hY2hpbmUgYXJlIGV4Y2Vl
-ZGVkIGJ5IHRoZQo+IGV2ZW50IHRocm91Z2hwdXQuIFRoYXQgd291bGRuJ3Qgc3VycHJpc2UgbWUg
-c2luY2UgeW91IGhhdmUgMjQgY29yZXMKPgo+IHByb2R1Y2luZyBldmVudHMgd2l0aCBhbGwga2Vy
-bmVsIGV2ZW50cyBlbmFibGVkLgo+ICAgICBBcmUgeW91IHN1Z2dlc3RpbmcgYSBzY2FsYWJpbGl0
-eSBpc3N1ZSB3aXRoIExUVG5nPwoKTm8uIFRoZSBwcm9ibGVtIGlzIG5vdCB0aGF0IExUVG5nIGNh
-bid0IGV4dHJhY3QvY2FwdHVyZSB0aGUgZXZlbnRzLgpUaGUgaXNzdWUgaXMgdGhhdCB0aGUgbWFj
-aGluZSdzIElPIGNhbid0IGhhbmRsZSBzdWNoIGEgaGlnaCwKc3VzdGFpbmVkLCB0aHJvdWdocHV0
-IHdoaWNoIGZvcmNlcyBMVFRuZyB0byBkcm9wIGV2ZW50cy4KCj4gICAgIFdoYXQgaXMgdGhlIGJl
-c3Qgd2F5IHRvIGFkZHJlc3MgdGhpcz8KCkVuYWJsaW5nIGZld2VyIGV2ZW50cyBvciBzYXZpbmcg
-dG8gYSBmYXN0ZXIgZGV2aWNlIHdpbGwgaGVscCBhIGxvdC4KT3RoZXJ3aXNlLCBpbmNyZWFzaW5n
-IHRoZSBidWZmZXIgc2l6ZXMgbWF5IGhlbHAgd2l0aCBjb3Bpbmcgd2l0aCBzaG9ydApidXJzdHMg
-b2YgaGlnaCB0cmFjaW5nIGFjdGl2aXR5LgoKUmVnYXJkcywKSsOpcsOpbWllCgo+Cj4KPiBSZWdh
-cmRzLAo+IC0tCj4gVG9tCj4KPgo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPgo+IE9uIFdlZG5lc2RheSwg
-T2N0b2JlciA4LCAyMDE0IDQ6MTEgUE0sIErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2Fs
-YXJuZWF1QGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gR29vZCBxdWVzdGlvbi4uLiBUaGUgY29uc3Vt
-ZXIgc2VlbXMgYWJsZSB0byBmbHVzaCBhbmQgSSBkb24ndCByZWFsbHkKPiBzZWUgYW55IGVycm9y
-cy4uLgo+IEhvd2V2ZXIsIHRoZSBsdHRuZyBjbGllbnQgc2VlbXMgdG8gYmUgc3RhcnRpbmcgYSBu
-ZXcgc2Vzc2lvbiBkYWVtb24gYXQKPiBsaW5lIDk3IG9mIHQ0LWx0dG5nLWh0dHBlcmYubG9nLiBE
-aWQgaXQgY3Jhc2ggaW4gdGhlIG1lYW50aW1lPyBPcgo+IHBlcmhhcHMgdGhlc2UgZXhlY3V0aW9u
-cyBhcmUgdW5yZWxhdGVkPwo+Cj4gQXMgZm9yIHRoZSBtZXNzYWdlcyBpbiBkbWVzZywgdGhlIGRy
-b3BwZWQgZXZlbnRzIGFyZSBub3QgbmVjZXNzYXJpbHkKPiBpbmRpY2F0aXZlIG9mIGFuIGlzc3Vl
-OyBpdCBpcyBleHBlY3RlZCBpZiB0aGUgSU8gY2FwYWNpdGllcyBvZiB0aGUKPiBtYWNoaW5lIGFy
-ZSBleGNlZWRlZCBieSB0aGUgZXZlbnQgdGhyb3VnaHB1dC4gVGhhdCB3b3VsZG4ndCBzdXJwcmlz
-ZQo+IG1lIHNpbmNlIHlvdSBoYXZlIDI0IGNvcmVzIHByb2R1Y2luZyBldmVudHMgd2l0aCBhbGwg
-a2VybmVsIGV2ZW50cwo+IGVuYWJsZWQuCj4KPiBCeSB0aGUgd2F5LCB3b3VsZCB5b3UgbWluZCBw
-b3N0aW5nIHRoaXMgb24gdGhlIGx0dG5nLWRldiBtYWlsaW5nIGxpc3Q/Cj4gUGVyaGFwcyBzb21l
-b25lIGNhbiBoZWxwIHVzIGZpZ3VyZSBpdCBvdXQgZmFzdGVyLgo+Cj4gUmVnYXJkcywKPiBKw6ly
-w6ltaWUKPgo+Cj4gT24gV2VkLCBPY3QgOCwgMjAxNCBhdCA0OjE0IFBNLCBUb21teSBIdXluaCA8
-dG9tLmh1eW5oMTVAeWFob28uY29tPiB3cm90ZToKPj4gSGkgSsOpcsOpbWllLAo+Pgo+PiBMVFRu
-ZyBkb2Vzbid0IGdlbmVyYXRlIHRoZSB0cmFjZSBmaWxlcyBhbmQgcHJpbnRzIHNvbWV0aGluZyBs
-aWtlIHRoaXM6Cj4+ICAgICByaW5nIGJ1ZmZlciByZWxheS1kaXNjYXJkLCBjcHUgMDogcmVjb3Jk
-cyB3ZXJlIGxvc3QuIENhdXNlZCBieToKPj4gICAgICAgWyA1NjI2Njk3IGJ1ZmZlciBmdWxsLCAw
-IG5lc3QgYnVmZmVyIHdyYXAtYXJvdW5kLCAwIGV2ZW50IHRvbyBiaWcgXQo+PiBUaGUgYmVoYXZp
-b3Igc2VlbXMgc2ltaWxhciB0byB0aGlzIGVtYWlsIHRocmVhZDoKPj4gaHR0cDovL2xpc3RzLmx0
-dG5nLm9yZy9waXBlcm1haWwvbHR0bmctZGV2LzIwMTMtRGVjZW1iZXIvMDIyMDU5Lmh0bWwsCj4+
-Cj4+IGJ1dCBteSBsb2cgZG9lc24ndCBzaG93IHRoZSBwcm9ibGVtIHdpdGggdGhlIGNvbnN1bWVy
-IGRhZW1vbi4KPj4KPj4gSSdtIHJ1bm5pbmcgb24gYSBGcmVlc2NhbGUgVDQyNDBxZHMgZGV2ZWxv
-cG1lbnQgYm9hcmQgd2l0aCBMaW51eCAzLjEyLjE5Cj4+IGFuZCBMVFRuZyAyLjQuCj4+Cj4+IFRo
-ZSBydW4gbG9nIGlzIGF0dGFjaGVkIGluIHRoaXMgZW1haWwgYWxvbmcgd2l0aCB0aGUgbG9nIGZp
-bGUgcHJvZHVjZWQgd2l0aDoKPj4KPj4gICAgIGx0dG5nLXNlc3Npb25kIC12dnYgLS12ZXJib3Nl
-LWNvbnN1bWVyID4gc2Vzc2lvbmQubG9nCj4+Cj4+IENvdWxkIHlvdSBsZXQgbWUga25vdyB3aGF0
-J3Mgd3Jvbmc/Cj4+Cj4+IFJlZ2FyZHMKPj4gLS0KPj4gVG9tIEh1eW5oCj4KPgo+Cj4gLS0KPiBK
-w6lyw6ltaWUgR2FsYXJuZWF1Cj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3Mu
-Y29tCgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5l
-ZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
-Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Hi everyone,
+
+We have launched a new website for the LTTng project [1]. We have done
+major improvements on the documentation side of the project. You can
+now read the documentation at [2].
+
+Contributing and improving the documentation is now very easy, just
+follow the instructions on our Github repo [3].
+
+A big thanks to Philippe Proulx who helped design the new website and
+wrote most of the documentation.
+
+Also, I would like to thank Daniel Thibault, from the DRDC, who wrote
+an open guide that was mostly used to complete parts of the
+"Understanding LTTng" chapter and for a few passages here and there.
+
+Finally, if you encounter any issues using the new website, please let us know!
+
+Thanks,
+
+Christian
+
+[1] - https://lttng.org
+[2] - https://lttng.org/docs
+[3] - https://github.com/lttng/lttng-docs
