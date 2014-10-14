@@ -1,19 +1,20 @@
-From: "Emilio G. Cota" <cota@braap.org>
-Subject: [urcu][RFC][PATCH] lfstack,
-	wfcqueue: do not pass NULL as value to atomic_xchg
-Date: Mon, 13 Oct 2014 22:31:25 -0400
-Message-ID: <1413253885-7187-1-git-send-email-cota__1495.03177167407$1413253972$gmane$org@braap.org>
+From: Nathan Lynch <Nathan_Lynch@mentor.com>
+Subject: lttng-modules master build failure with ARM kernels
+Date: Tue, 14 Oct 2014 11:59:05 -0500
+Message-ID: <543D5659.7030907__48312.8325119198$1413306004$gmane$org@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out4-smtp.messagingengine.com ([66.111.4.28])
+Received: from relay1.mentorg.com ([192.94.38.131])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <cota@braap.org>) id 1Xdru6-0007Mu-PS
- for lttng-dev@lists.lttng.org; Mon, 13 Oct 2014 22:32:03 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
- by gateway2.nyi.internal (Postfix) with ESMTP id 5D0652103D
- for <lttng-dev@lists.lttng.org>; Mon, 13 Oct 2014 22:31:55 -0400 (EDT)
+ (envelope-from <Nathan_Lynch@mentor.com>) id 1Xe5RI-0003WY-Gd
+ for lttng-dev@lists.lttng.org; Tue, 14 Oct 2014 12:59:15 -0400
+Received: from svr-orw-fem-02x.mgc.mentorg.com ([147.34.96.206]
+ helo=SVR-ORW-FEM-02.mgc.mentorg.com)
+ by relay1.mentorg.com with esmtp
+ id 1Xe5RC-0005hI-8f from Nathan_Lynch@mentor.com
+ for lttng-dev@lists.lttng.org; Tue, 14 Oct 2014 09:59:06 -0700
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,55 +26,47 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-atomic_xchg expects a pointer and a value. The value is sign
-extended to unsigned long, and the sign is obtained from
-
-  #define caa_is_signed_type(type)        ((type) -1 < (type) 0)
-
-If -Wextra is enabled, gcc then throws an "ordered comparison
-of pointer and null pointer" warning when the value passed to
-atomic_xchg is NULL.
-
-The appended is just a quick fix that doesn't fix the real issue.
-For this I tried a few things, and the simplest change is to
-just do an unconditional cast to unsigned long. This seems to work
-for me but I must be missing something--FWIW here's a test program:
-  https://gist.github.com/cota/9ff275d4dddde302cade
-
-Note that Mathieu worked on this in the past. See commit
-  4b5f005 gcc warning fixes: -Wsign-compare and -Wextra
-
-Signed-off-by: Emilio G. Cota <cota@braap.org>
----
- urcu/static/lfstack.h  | 2 +-
- urcu/static/wfcqueue.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/urcu/static/lfstack.h b/urcu/static/lfstack.h
-index 63af91a..32076ab 100644
---- a/urcu/static/lfstack.h
-+++ b/urcu/static/lfstack.h
-@@ -237,7 +237,7 @@ struct cds_lfs_head *___cds_lfs_pop_all(cds_lfs_stack_ptr_t u_s)
- 	 * taking care to order writes to each node prior to the full
- 	 * memory barrier after this uatomic_xchg().
- 	 */
--	return uatomic_xchg(&s->head, NULL);
-+	return uatomic_xchg(&s->head, 0);
- }
- 
- /*
-diff --git a/urcu/static/wfcqueue.h b/urcu/static/wfcqueue.h
-index 48b2625..deddc5f 100644
---- a/urcu/static/wfcqueue.h
-+++ b/urcu/static/wfcqueue.h
-@@ -518,7 +518,7 @@ ___cds_wfcq_splice(
- 		 * uatomic_xchg, as well as tail pointer vs head node
- 		 * address.
- 		 */
--		head = uatomic_xchg(&src_q_head->node.next, NULL);
-+		head = uatomic_xchg(&src_q_head->node.next, 0);
- 		if (head)
- 			break;	/* non-empty */
- 		if (CMM_LOAD_SHARED(src_q_tail->p) == &src_q_head->node)
--- 
-1.8.3
+QmlzZWN0IHNheXMgdGhhdAoKICBjb21taXQgNjQ0ZDZlOWMyODA3MDQxZGIyYjRmZDljMzM1MGQ0
+ZmEyNDMwNjBiMQogIFJlbW92ZSBzeXNfIHByZWZpeCBmcm9tIHN5c2NhbGwgbmFtZXMKCmJyb2tl
+IHRoZSBidWlsZCBmb3IgQVJNIGtlcm5lbHMgKEkndmUgdHJpZWQgMy4xNiBhbmQgMy4xNyk6Cgog
+IENDIFtNXSAgL2hvbWUvbmF0aGFubC9zcmMvbHR0bmctbW9kdWxlcy5naXQvbHR0bmctc3lzY2Fs
+bHMubwovaG9tZS9uYXRoYW5sL3NyYy9sdHRuZy1tb2R1bGVzLmdpdC9sdHRuZy1zeXNjYWxscy5j
+OjI4MToxMTogZXJyb3I6IOKAmF9fZXZlbnRfcHJvYmVfX3N5c2NhbGxfZW50cnlfc3lzX21tYXDi
+gJkgdW5kZWNsYXJlZCBoZXJlIChub3QgaW4gYSBmdW5jdGlvbikKICAgLmZ1bmMgPSBfX2V2ZW50
+X3Byb2JlX19zeXNjYWxsX2VudHJ5XyMjX3RlbXBsYXRlLCBcCiAgICAgICAgICAgXgoKLi4uIHdp
+dGggc2ltaWxhciBlcnJvcnMgZm9yIF9fZXZlbnRfcHJvYmVfX3N5c2NhbGxfZW50cnlfc3lzX2V4
+ZWN2ZQphbmQgX19ldmVudF9wcm9iZV9fc3lzY2FsbF9lbnRyeV9zeXNfY2xvbmUuCgpUaGUgZm9s
+bG93aW5nIG1pbmltYWwgcGF0Y2ggZ2V0cyB0aGUgYnVpbGQgdG8gc3VjY2VlZC4gIEkgYXNzdW1l
+IGFsbApzeXNfIHByZWZpeGVzIHNob3VsZCBiZSByZW1vdmVkIGZyb20gaW5zdHJ1bWVudGF0aW9u
+L3N5c2NhbGxzL2hlYWRlcnMvYXJtLTMyLSo/CgooYW5kIHBvd2VycGMsIGFuZCBtaXBzPykKCgpk
+aWZmIC0tZ2l0IGEvaW5zdHJ1bWVudGF0aW9uL3N5c2NhbGxzL2hlYWRlcnMvYXJtLTMyLXN5c2Nh
+bGxzLTMuNC4yNV9pbnRlZ2Vyc19vdmVycmlkZS5oIGIvaW5zdHJ1bWVudGF0aW9uL3N5c2NhbGxz
+L2hlYWRlcnMvYXJtLTMyLXN5c2NhbGxzLTMuNC4yNV9pbnRlZ2Vyc19vdmVycmlkZS5oCmluZGV4
+IGI0YTcxMzg5OTA4NS4uODUyZTVlZWQ5ZjY3IDEwMDY0NAotLS0gYS9pbnN0cnVtZW50YXRpb24v
+c3lzY2FsbHMvaGVhZGVycy9hcm0tMzItc3lzY2FsbHMtMy40LjI1X2ludGVnZXJzX292ZXJyaWRl
+LmgKKysrIGIvaW5zdHJ1bWVudGF0aW9uL3N5c2NhbGxzL2hlYWRlcnMvYXJtLTMyLXN5c2NhbGxz
+LTMuNC4yNV9pbnRlZ2Vyc19vdmVycmlkZS5oCkBAIC0zOSw4ICszOSw4IEBAIFNDX0xUVE5HX1RS
+QUNFUE9JTlRfRVZFTlQoc3lzX3N5bmNfZmlsZV9yYW5nZTIsCiAKICNlbHNlCS8qIENSRUFURV9T
+WVNDQUxMX1RBQkxFICovCiAKLSNkZWZpbmUgT1ZFUlJJREVfVEFCTEVfMzJfc3lzX21tYXAKLVRS
+QUNFX1NZU0NBTExfVEFCTEUoc3lzX21tYXAsIHN5c19tbWFwLCA5MCwgNikKKyNkZWZpbmUgT1ZF
+UlJJREVfVEFCTEVfMzJfbW1hcAorVFJBQ0VfU1lTQ0FMTF9UQUJMRShtbWFwLCBtbWFwLCA5MCwg
+NikKIAogI2RlZmluZSBPVkVSUklERV9UQUJMRV8zMl9zeXNfYXJtX2ZhZHZpc2U2NF82NAogVFJB
+Q0VfU1lTQ0FMTF9UQUJMRShzeXNfYXJtX2ZhZHZpc2U2NF82NCwgc3lzX2FybV9mYWR2aXNlNjRf
+NjQsIDI3MCwgNCkKZGlmZiAtLWdpdCBhL2luc3RydW1lbnRhdGlvbi9zeXNjYWxscy9oZWFkZXJz
+L2FybS0zMi1zeXNjYWxscy0zLjQuMjVfcG9pbnRlcnNfb3ZlcnJpZGUuaCBiL2luc3RydW1lbnRh
+dGlvbi9zeXNjYWxscy9oZWFkZXJzL2FybS0zMi1zeXNjYWxscy0zLjQuMjVfcG9pbnRlcnNfb3Zl
+cnJpZGUuaAppbmRleCBlNTg0NmRmODhkYWUuLmQzNDQ4MmYzYTk5YSAxMDA2NDQKLS0tIGEvaW5z
+dHJ1bWVudGF0aW9uL3N5c2NhbGxzL2hlYWRlcnMvYXJtLTMyLXN5c2NhbGxzLTMuNC4yNV9wb2lu
+dGVyc19vdmVycmlkZS5oCisrKyBiL2luc3RydW1lbnRhdGlvbi9zeXNjYWxscy9oZWFkZXJzL2Fy
+bS0zMi1zeXNjYWxscy0zLjQuMjVfcG9pbnRlcnNfb3ZlcnJpZGUuaApAQCAtMjcsMTAgKzI3LDEw
+IEBAIFNDX0xUVE5HX1RSQUNFUE9JTlRfRVZFTlQoc3lzX21tYXAyLAogCiAjZWxzZQkvKiBDUkVB
+VEVfU1lTQ0FMTF9UQUJMRSAqLwogCi0jZGVmaW5lIE9WRVJSSURFX1RBQkxFXzMyX3N5c19leGVj
+dmUKLVRSQUNFX1NZU0NBTExfVEFCTEUoc3lzX2V4ZWN2ZSwgc3lzX2V4ZWN2ZSwgMTEsIDMpCisj
+ZGVmaW5lIE9WRVJSSURFX1RBQkxFXzMyX2V4ZWN2ZQorVFJBQ0VfU1lTQ0FMTF9UQUJMRShleGVj
+dmUsIGV4ZWN2ZSwgMTEsIDMpCiAjZGVmaW5lIE9WRVJSSURFX1RBQkxFXzMyX3N5c19jbG9uZQot
+VFJBQ0VfU1lTQ0FMTF9UQUJMRShzeXNfY2xvbmUsIHN5c19jbG9uZSwgMTIwLCA1KQorVFJBQ0Vf
+U1lTQ0FMTF9UQUJMRShjbG9uZSwgY2xvbmUsIDEyMCwgNSkKICNkZWZpbmUgT1ZFUlJJREVfVEFC
+TEVfMzJfc3lzX21tYXAyCiBUUkFDRV9TWVNDQUxMX1RBQkxFKHN5c19tbWFwMiwgc3lzX21tYXAy
+LCAxOTIsIDYpCiAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
+Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
