@@ -1,18 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: preserve example files'
- timestamps when copying
-Date: Thu, 16 Oct 2014 13:48:49 +0000 (UTC)
-Message-ID: <370711573.10362.1413467329274.JavaMail.zimbra__26560.9994101853$1413467386$gmane$org@efficios.com>
-References: <1413467119-18187-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Anand Neeli <anand.neeli@gmail.com>
+Subject: compilation warning
+Date: Thu, 16 Oct 2014 23:13:32 +0530
+Message-ID: <CAM5kDqz4vYK2aDoRzXu3=LpjFVa2p0M38uidO2qG6JC0x9-n3w__20902.6507138789$1413481482$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0436964950=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-wi0-f172.google.com ([209.85.212.172])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XelQL-0008Sc-7i
- for lttng-dev@lists.lttng.org; Thu, 16 Oct 2014 09:49:02 -0400
-In-Reply-To: <1413467119-18187-1-git-send-email-jeremie.galarneau@efficios.com>
+ (envelope-from <anand.neeli@gmail.com>) id 1Xep5N-0001AU-V6
+ for lttng-dev@lists.lttng.org; Thu, 16 Oct 2014 13:43:41 -0400
+Received: by mail-wi0-f172.google.com with SMTP id n3so93188wiv.5
+ for <lttng-dev@lists.lttng.org>; Thu, 16 Oct 2014 10:43:32 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,35 +19,82 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkLCB0aGFua3MhCgpNYXRoaWV1CgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4g
-RnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5j
-b20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBDYzogIm1hdGhpZXUgZGVzbm95
-ZXJzIiA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPiwgIkrDqXLDqW1pZSBHYWxhcm5l
-YXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gU2VudDogVGh1cnNkYXksIE9j
-dG9iZXIgMTYsIDIwMTQgMzo0NToxOSBQTQo+IFN1YmplY3Q6IFtQQVRDSCBsdHRuZy11c3RdIEZp
-eDogcHJlc2VydmUgZXhhbXBsZSBmaWxlcycgdGltZXN0YW1wcyB3aGVuIGNvcHlpbmcKPiAKPiBU
-aGlzIGZpeGVzIGFuIGlzc3VlIHdoZXJlIGV4YW1wbGVzIHdlcmUgYWx3YXlzIGJlaW5nIHJlYnVp
-bHQKPiB3aGVuIHBlcmZvcm1pbmcgYW4gb3V0IG9mIHRyZWUgYnVpbGQgc2luY2UgdGhlIGV4YW1w
-bGVzIHdlcmUKPiBiZWluZyBjb3BpZWQgdG8gdGhlIGJ1aWxkIGRpcmVjdG9yeSB3aXRoIGEgdGlt
-ZXN0YW1wIG1vcmUKPiByZWNlbnQgdGhhbiB0aGUgYWxyZWFkeS1idWlsdCBleGFtcGxlIG9iamVj
-dHMuCj4gCj4gU2lnbmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxh
-cm5lYXVAZWZmaWNpb3MuY29tPgo+IC0tLQo+ICBkb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0gfCAy
-ICstCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQo+IAo+
-IGRpZmYgLS1naXQgYS9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0gYi9kb2MvZXhhbXBsZXMvTWFr
-ZWZpbGUuYW0KPiBpbmRleCBmYmFiYjhlLi42ZjBhMzFhIDEwMDY0NAo+IC0tLSBhL2RvYy9leGFt
-cGxlcy9NYWtlZmlsZS5hbQo+ICsrKyBiL2RvYy9leGFtcGxlcy9NYWtlZmlsZS5hbQo+IEBAIC01
-Nyw3ICs1Nyw3IEBAIGVuZGlmCj4gIGFsbC1sb2NhbDoKPiAgCUBpZiBbIHgiJChzcmNkaXIpIiAh
-PSB4IiQoYnVpbGRkaXIpIiBdOyB0aGVuIFwKPiAgCQlmb3Igc3ViZGlyIGluICQoU1VCRElSU19Q
-Uk9YWSkgJChTVUJESVJTX0pVTCk7IGRvIFwKPiAtCQkJY3AgLWZSICQoc3JjZGlyKS8kJHN1YmRp
-ciAkKGJ1aWxkZGlyKTsgXAo+ICsJCQljcCAtcGZSICQoc3JjZGlyKS8kJHN1YmRpciAkKGJ1aWxk
-ZGlyKTsgXAo+ICAJCWRvbmU7IFwKPiAgCWZpOyBcCj4gIAlpZiBbIHgiJChzaGVsbCBlY2hvICIk
-KHRvcF9zcmNkaXIpIiB8IGdyZXAgIl4vIiB8IHdjIC1sKSIgPSB4IjEiIF07IHRoZW4gXAo+IC0t
-Cj4gMi4xLjIKPiAKPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6
-Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
-ZGV2Cg==
+--===============0436964950==
+Content-Type: multipart/alternative; boundary=001a11c1b6ca7658f005058dc95c
+
+--001a11c1b6ca7658f005058dc95c
+Content-Type: text/plain; charset=UTF-8
+
+Hi All,
+I get following warning during compilation of my instrumented module.
+I know i can suppress this, but just wanted to get to your notice.
+
+
+In file included from /usr/include/lttng/ust-tracepoint-event.h:26:0,
+
+                 from /usr/include/lttng/tracepoint-event.h:58,
+
+                 from src/common_tracepoint.h:135,
+
+                 from src/common_tracepoint.c:10:
+
+/usr/include/i386-linux-gnu/urcu/rculist.h: In function 'cds_list_del_rcu':
+
+/usr/include/i386-linux-gnu/urcu/rculist.h:72:2: error: to be safe all
+intermediate pointers in cast from 'struct cds_list_head **' to 'struct
+cds_list_head * volatile*' must be 'const' qualified [-Werror=cast-qual]
+
+
+
+Thanks,
+
+Anand Neeli
+
+--001a11c1b6ca7658f005058dc95c
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi All,<div>I get following warning during compilation of =
+my instrumented module.</div><div>I know i can suppress this, but just want=
+ed to get to your notice.</div><div>
+
+
+
+
+
+
+
+<p><br></p>
+<p>In file included from /usr/include/lttng/ust-tracepoint-event.h:26:0,</p=
+>
+<p>=C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 from /usr/=
+include/lttng/tracepoint-event.h:58,</p>
+<p>=C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 from src/c=
+ommon_tracepoint.h:135,</p>
+<p>=C2=A0=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 from src/c=
+ommon_tracepoint.c:10:</p>
+<p>/usr/include/i386-linux-gnu/urcu/rculist.h: In function &#39;cds_list_de=
+l_rcu&#39;:</p><p>/usr/include/i386-linux-gnu/urcu/rculist.h:72:2: error: t=
+o be safe all intermediate pointers in cast from &#39;struct cds_list_head =
+**&#39; to &#39;struct cds_list_head * volatile*&#39; must be &#39;const&#3=
+9; qualified [-Werror=3Dcast-qual]</p>
+<p><br></p><p><br></p><p>Thanks,</p><p>Anand Neeli</p></div></div>
+
+--001a11c1b6ca7658f005058dc95c--
+
+
+--===============0436964950==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0436964950==--
