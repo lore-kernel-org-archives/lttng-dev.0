@@ -1,19 +1,20 @@
-From: Christian Babeux <christian.babeux@efficios.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
 Subject: Re: Best way to analyze CTF files
-Date: Fri, 17 Oct 2014 20:13:22 -0400
-Message-ID: <CAGDH53kBntaqFvMe=LAQ9OG5Y0yx9JRHhbLhLZiaNhWCn4yVWg__31194.553213618$1413591250$gmane$org@mail.gmail.com>
+Date: Fri, 17 Oct 2014 22:15:11 -0400
+Message-ID: <CAB4xu_0CHASSN7qNb0qpUzQ7PSuh2B-EapiWySNePrHmf3VAVA__15028.1855756932$1413598589$gmane$org@mail.gmail.com>
 References: <E949C1E351B4914B87A26A5F96E06A9286AC1D@PAYTON.anl.gov>
+ <CAGDH53kBntaqFvMe=LAQ9OG5Y0yx9JRHhbLhLZiaNhWCn4yVWg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f179.google.com ([209.85.223.179])
+Received: from mail-qc0-f169.google.com ([209.85.216.169])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <christian.babeux@0x80.ca>) id 1XfHeE-0001st-6T
- for lttng-dev@lists.lttng.org; Fri, 17 Oct 2014 20:13:33 -0400
-Received: by mail-ie0-f179.google.com with SMTP id ar1so1697419iec.24
- for <lttng-dev@lists.lttng.org>; Fri, 17 Oct 2014 17:13:22 -0700 (PDT)
-In-Reply-To: <E949C1E351B4914B87A26A5F96E06A9286AC1D@PAYTON.anl.gov>
+ (envelope-from <eeppeliteloop@gmail.com>) id 1XfJYZ-0002US-Vh
+ for lttng-dev@lists.lttng.org; Fri, 17 Oct 2014 22:15:51 -0400
+Received: by mail-qc0-f169.google.com with SMTP id o8so1531641qcw.28
+ for <lttng-dev@lists.lttng.org>; Fri, 17 Oct 2014 19:15:42 -0700 (PDT)
+In-Reply-To: <CAGDH53kBntaqFvMe=LAQ9OG5Y0yx9JRHhbLhLZiaNhWCn4yVWg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,56 +23,105 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Boisvert, Sebastien" <boisvert@anl.gov>
+To: Christian Babeux <christian.babeux@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Sebastien,
-
-A simple Python script using the Babeltrace bindings would probably do
-the job here. See [1] for an example using the bindings.
-
-Thanks,
-
-Christian
-
-[1] - https://lttng.org/docs/#doc-viewing-and-analyzing-your-traces
-
-On Fri, Oct 17, 2014 at 6:23 PM, Boisvert, Sebastien <boisvert@anl.gov> wrote:
-> Bonjour,
->
-> First, thank you for LTTng-UST. This is very useful and convenient.
->
-> I just got started today using LTTng (LTTng-UST) for tracing a HPC application
-> that I am working on (I am a postdoc). I am impressed by how easy LTTng is to use it.
->
-> In my system, an actor message is represented by a pair
-> <message_actor_source, message_number>.
->
-> I want to list all messages that have a high delivery time (message:actor_receive - message:actor_send).
->
-> I am doing this to get the messages of one actor (actor 1000019):
->
-> [boisvert@bigmem biosal]$ babeltrace ~/lttng-traces/auto-20141017-181240|grep "message_source_actor = 1000019"  > actor_1000019
->
-> Then, I can look at one message with (message <1000019, 14>):
->
-> [boisvert@bigmem biosal]$ grep "message_number = 14," actor_1000019
-> [18:12:43.647017211] (+0.000005110) bigmem.knoxville.kbase.us message:actor_send: { cpu_id = 30 }, { message_number = 14, message_action = 31592, message_count = 8, message_source_actor = 1000019, message_destination_actor = 1000059, message_source_node = -1, message_destination_node = -1 }
-> [18:12:43.647025249] (+0.000002860) bigmem.knoxville.kbase.us message:actor_receive: { cpu_id = 49 }, { message_number = 14, message_action = 31592, message_count = 8, message_source_actor = 1000019, message_destination_actor = 1000059, message_source_node = 3, message_destination_node = 3 }
->
-> If I substract the times:
->
-> irb(main):003:0> (43.647025249-43.647017211)*10**9
-> => 8038.00000426236
->
-> This message (<1000019, 14>) required 8038 ns for the delivery. This one is fine.
->
->
-> So basically my question is:
->
-> Is there an easy way to analyze these tracepoint files ?
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+T24gRnJpLCBPY3QgMTcsIDIwMTQgYXQgODoxMyBQTSwgQ2hyaXN0aWFuIEJhYmV1eAo8Y2hyaXN0
+aWFuLmJhYmV1eEBlZmZpY2lvcy5jb20+IHdyb3RlOgo+IEhpIFNlYmFzdGllbiwKPgo+IEEgc2lt
+cGxlIFB5dGhvbiBzY3JpcHQgdXNpbmcgdGhlIEJhYmVsdHJhY2UgYmluZGluZ3Mgd291bGQgcHJv
+YmFibHkgZG8KPiB0aGUgam9iIGhlcmUuIFNlZSBbMV0gZm9yIGFuIGV4YW1wbGUgdXNpbmcgdGhl
+IGJpbmRpbmdzLgoKWWVzLCBoZXJlJ3MgYSBzdGFydCBTw6liYXN0aWVuIDxodHRwOi8vcGFzdGVi
+aW4uY29tL1FYZmV2MXZlPjoKCiAgICBpbXBvcnQgYmFiZWx0cmFjZQogICAgaW1wb3J0IGpzb24K
+ICAgIGltcG9ydCBzeXMKCgogICAgZGVmIGdldF9tc2dfaW50ZXJ2YWxzKHRyYWNlX3BhdGgpOgog
+ICAgICAgIGNvbCA9IGJhYmVsdHJhY2UuVHJhY2VDb2xsZWN0aW9uKCkKCiAgICAgICAgaWYgY29s
+LmFkZF90cmFjZSh0cmFjZV9wYXRoLCAnY3RmJykgaXMgTm9uZToKICAgICAgICAgICAgcmFpc2Ug
+UnVudGltZUVycm9yKCdDYW5ub3QgYWRkIHRyYWNlJykKCiAgICAgICAgbXNnX2ludGVydmFscyA9
+IHt9CgogICAgICAgIGZvciBldiBpbiBjb2wuZXZlbnRzOgogICAgICAgICAgICBpZiBldi5uYW1l
+IG5vdCBpbiBbJ21lc3NhZ2U6YWN0b3Jfc2VuZCcsICdtZXNzYWdlOmFjdG9yX3JlY2VpdmUnXToK
+ICAgICAgICAgICAgICAgIGNvbnRpbnVlCgogICAgICAgICAgICBtc2dfc291cmNlX2FjdG9yID0g
+ZXZbJ21lc3NhZ2Vfc291cmNlX2FjdG9yJ10KICAgICAgICAgICAgbXNnX251bWJlciA9IGV2Wydt
+ZXNzYWdlX251bWJlciddCgogICAgICAgICAgICBpZiBtc2dfc291cmNlX2FjdG9yIG5vdCBpbiBt
+c2dfaW50ZXJ2YWxzOgogICAgICAgICAgICAgICAgbXNnX2ludGVydmFsc1ttc2dfc291cmNlX2Fj
+dG9yXSA9IHt9CgogICAgICAgICAgICBpZiBtc2dfbnVtYmVyIG5vdCBpbiBtc2dfaW50ZXJ2YWxz
+W21zZ19zb3VyY2VfYWN0b3JdOgogICAgICAgICAgICAgICAgbXNnX2ludGVydmFsc1ttc2dfc291
+cmNlX2FjdG9yXVttc2dfbnVtYmVyXSA9IHt9CgogICAgICAgICAgICBpbnRlcnZhbCA9IG1zZ19p
+bnRlcnZhbHNbbXNnX3NvdXJjZV9hY3Rvcl1bbXNnX251bWJlcl0KCiAgICAgICAgICAgIGlmIGV2
+Lm5hbWUgPT0gJ21lc3NhZ2U6YWN0b3Jfc2VuZCc6CiAgICAgICAgICAgICAgICBpbnRlcnZhbFsn
+c2VuZF90cyddID0gZXYudGltZXN0YW1wCiAgICAgICAgICAgIGVsc2U6CiAgICAgICAgICAgICAg
+ICBpbnRlcnZhbFsncmVjdl90cyddID0gZXYudGltZXN0YW1wCgogICAgICAgIHJldHVybiBtc2df
+aW50ZXJ2YWxzCgoKICAgIGlmIF9fbmFtZV9fID09ICdfX21haW5fXyc6CiAgICAgICAgbXNnX2lu
+dGVydmFscyA9IGdldF9tc2dfaW50ZXJ2YWxzKHN5cy5hcmd2WzFdKQogICAgICAgIHByaW50KGpz
+b24uZHVtcHMobXNnX2ludGVydmFscywgaW5kZW50PTIpKQoKVGhpcyB3aWxsIG91dHB1dCBhIEpT
+T04gZGljdCBtYXBwaW5nIGFjdG9ycyB0byBtZXNzYWdlIG51bWJlcnMsIGFuZCB0aGVuCmVhY2gg
+bWVzc2FnZSBudW1iZXIgdG8gYSBkaWN0IGNvbnRhaW5pbmcgYm90aCB0aGUgc2VuZCBhbmQgcmVj
+ZWl2ZSB0aW1lc3RhbXBzOgoKICAgIHB5dGhvbjMgaW50ZXJ2YWxzLnB5IC9wYXRoL3RvL3RyYWNl
+ID4gaW50ZXJ2YWxzLmpzb24KCk9uY2UgeW91IGhhdmUgdGhhdCBKU09OIGRhdGFiYXNlLCB5b3Ug
+bWF5IGVpdGhlciByZWFkIGl0IG1hbnVhbGx5IG9yIHF1ZXJ5IGl0CmVhc2lseSB1c2luZyBhbm90
+aGVyIFB5dGhvbiBzY3JpcHQgPGh0dHA6Ly9wYXN0ZWJpbi5jb20vZkx3eXZFejg+OgoKICAgIGlt
+cG9ydCBqc29uCiAgICBpbXBvcnQgc3lzCgoKICAgIGRlZiBwcmludF9tc2dfZGlmZihmaWxlbmFt
+ZSwgYWN0b3JfaWQsIG1zZ19udW1iZXIpOgogICAgICAgIGRlZiBnZXRfZGlmZihtc2cpOgogICAg
+ICAgICAgICBzZW5kX3RzID0gbXNnWydzZW5kX3RzJ10KICAgICAgICAgICAgcmVjdl90cyA9IG1z
+Z1sncmVjdl90cyddCgogICAgICAgICAgICBpZiBzZW5kX3RzID09IC0xIG9yIHJlY3ZfdHMgPT0g
+LTE6CiAgICAgICAgICAgICAgICByZXR1cm4gTm9uZQoKICAgICAgICAgICAgcmV0dXJuIHJlY3Zf
+dHMgLSBzZW5kX3RzCgogICAgICAgIHdpdGggb3BlbihmaWxlbmFtZSkgYXMgZjoKICAgICAgICAg
+ICAgbXNnX2ludGVydmFscyA9IGpzb24ubG9hZChmKQoKICAgICAgICBhY3RvciA9IG1zZ19pbnRl
+cnZhbHNbYWN0b3JfaWRdCgogICAgICAgIGlmIG1zZ19udW1iZXIgaXMgTm9uZToKICAgICAgICAg
+ICAgZm9yIG1zZ19udW1iZXIgaW4gc29ydGVkKGFjdG9yLmtleXMoKSk6CiAgICAgICAgICAgICAg
+ICBtc2cgPSBhY3Rvclttc2dfbnVtYmVyXQogICAgICAgICAgICAgICAgcHJpbnQoJ3t9OiB7fScu
+Zm9ybWF0KG1zZ19udW1iZXIsIGdldF9kaWZmKG1zZykpKQogICAgICAgIGVsc2U6CiAgICAgICAg
+ICAgIHByaW50KGdldF9kaWZmKGFjdG9yW21zZ19udW1iZXJdKSkKCgogICAgaWYgX19uYW1lX18g
+PT0gJ19fbWFpbl9fJzoKICAgICAgICBmaWxlbmFtZSA9IHN5cy5hcmd2WzFdCiAgICAgICAgYWN0
+b3JfaWQgPSBzeXMuYXJndlsyXQogICAgICAgIG1zZ19udW1iZXIgPSBOb25lCgogICAgICAgIGlm
+IGxlbihzeXMuYXJndikgPiAzOgogICAgICAgICAgICBtc2dfbnVtYmVyID0gc3lzLmFyZ3ZbM10K
+CiAgICAgICAgcHJpbnRfbXNnX2RpZmYoZmlsZW5hbWUsIGFjdG9yX2lkLCBtc2dfbnVtYmVyKQoK
+VXNlIGl0IGxpa2UgdGhpczoKCiAgICBweXRob24zIHF1ZXJ5LnB5IDxKU09OIGZpbGUgcGF0aD4g
+PGFjdG9yIElEPiBbPG1lc3NhZ2UgbnVtYmVyPl0KCkZvciBleGFtcGxlOgoKICAgIHB5dGhvbjMg
+cXVlcnkucHkgaW50ZXJ2YWxzLmpzb24gMTAwMDAxOQogICAgcHl0aG9uMyBxdWVyeS5weSBpbnRl
+cnZhbHMuanNvbiAxMDAwMDU5CiAgICBweXRob24zIHF1ZXJ5LnB5IGludGVydmFscy5qc29uIDEw
+MDAwMTkgMTQKCk1vZGlmeSB0aG9zZSBzY3JpcHRzIGF0IHdpbGwgdG8gZml0IHlvdXIgZXhhY3Qg
+dXNlIGNhc2UuIE9mIGNvdXJzZSB0aGUgdmVyc2lvbnMKYWJvdmUgY291bGQgY3Jhc2ggaW4gbWFu
+eSB3YXlzIGJlY2F1c2UgdGhleSBsYWNrIGEgZmV3IHJ1biB0aW1lIGNoZWNrcywgZXRjLgoKSG9w
+ZSBpdCBoZWxwcywKUGhpbAoKPgo+IFRoYW5rcywKPgo+IENocmlzdGlhbgo+Cj4gWzFdIC0gaHR0
+cHM6Ly9sdHRuZy5vcmcvZG9jcy8jZG9jLXZpZXdpbmctYW5kLWFuYWx5emluZy15b3VyLXRyYWNl
+cwo+Cj4gT24gRnJpLCBPY3QgMTcsIDIwMTQgYXQgNjoyMyBQTSwgQm9pc3ZlcnQsIFNlYmFzdGll
+biA8Ym9pc3ZlcnRAYW5sLmdvdj4gd3JvdGU6Cj4+IEJvbmpvdXIsCj4+Cj4+IEZpcnN0LCB0aGFu
+ayB5b3UgZm9yIExUVG5nLVVTVC4gVGhpcyBpcyB2ZXJ5IHVzZWZ1bCBhbmQgY29udmVuaWVudC4K
+Pj4KPj4gSSBqdXN0IGdvdCBzdGFydGVkIHRvZGF5IHVzaW5nIExUVG5nIChMVFRuZy1VU1QpIGZv
+ciB0cmFjaW5nIGEgSFBDIGFwcGxpY2F0aW9uCj4+IHRoYXQgSSBhbSB3b3JraW5nIG9uIChJIGFt
+IGEgcG9zdGRvYykuIEkgYW0gaW1wcmVzc2VkIGJ5IGhvdyBlYXN5IExUVG5nIGlzIHRvIHVzZSBp
+dC4KPj4KPj4gSW4gbXkgc3lzdGVtLCBhbiBhY3RvciBtZXNzYWdlIGlzIHJlcHJlc2VudGVkIGJ5
+IGEgcGFpcgo+PiA8bWVzc2FnZV9hY3Rvcl9zb3VyY2UsIG1lc3NhZ2VfbnVtYmVyPi4KPj4KPj4g
+SSB3YW50IHRvIGxpc3QgYWxsIG1lc3NhZ2VzIHRoYXQgaGF2ZSBhIGhpZ2ggZGVsaXZlcnkgdGlt
+ZSAobWVzc2FnZTphY3Rvcl9yZWNlaXZlIC0gbWVzc2FnZTphY3Rvcl9zZW5kKS4KPj4KPj4gSSBh
+bSBkb2luZyB0aGlzIHRvIGdldCB0aGUgbWVzc2FnZXMgb2Ygb25lIGFjdG9yIChhY3RvciAxMDAw
+MDE5KToKPj4KPj4gW2JvaXN2ZXJ0QGJpZ21lbSBiaW9zYWxdJCBiYWJlbHRyYWNlIH4vbHR0bmct
+dHJhY2VzL2F1dG8tMjAxNDEwMTctMTgxMjQwfGdyZXAgIm1lc3NhZ2Vfc291cmNlX2FjdG9yID0g
+MTAwMDAxOSIgID4gYWN0b3JfMTAwMDAxOQo+Pgo+PiBUaGVuLCBJIGNhbiBsb29rIGF0IG9uZSBt
+ZXNzYWdlIHdpdGggKG1lc3NhZ2UgPDEwMDAwMTksIDE0Pik6Cj4+Cj4+IFtib2lzdmVydEBiaWdt
+ZW0gYmlvc2FsXSQgZ3JlcCAibWVzc2FnZV9udW1iZXIgPSAxNCwiIGFjdG9yXzEwMDAwMTkKPj4g
+WzE4OjEyOjQzLjY0NzAxNzIxMV0gKCswLjAwMDAwNTExMCkgYmlnbWVtLmtub3h2aWxsZS5rYmFz
+ZS51cyBtZXNzYWdlOmFjdG9yX3NlbmQ6IHsgY3B1X2lkID0gMzAgfSwgeyBtZXNzYWdlX251bWJl
+ciA9IDE0LCBtZXNzYWdlX2FjdGlvbiA9IDMxNTkyLCBtZXNzYWdlX2NvdW50ID0gOCwgbWVzc2Fn
+ZV9zb3VyY2VfYWN0b3IgPSAxMDAwMDE5LCBtZXNzYWdlX2Rlc3RpbmF0aW9uX2FjdG9yID0gMTAw
+MDA1OSwgbWVzc2FnZV9zb3VyY2Vfbm9kZSA9IC0xLCBtZXNzYWdlX2Rlc3RpbmF0aW9uX25vZGUg
+PSAtMSB9Cj4+IFsxODoxMjo0My42NDcwMjUyNDldICgrMC4wMDAwMDI4NjApIGJpZ21lbS5rbm94
+dmlsbGUua2Jhc2UudXMgbWVzc2FnZTphY3Rvcl9yZWNlaXZlOiB7IGNwdV9pZCA9IDQ5IH0sIHsg
+bWVzc2FnZV9udW1iZXIgPSAxNCwgbWVzc2FnZV9hY3Rpb24gPSAzMTU5MiwgbWVzc2FnZV9jb3Vu
+dCA9IDgsIG1lc3NhZ2Vfc291cmNlX2FjdG9yID0gMTAwMDAxOSwgbWVzc2FnZV9kZXN0aW5hdGlv
+bl9hY3RvciA9IDEwMDAwNTksIG1lc3NhZ2Vfc291cmNlX25vZGUgPSAzLCBtZXNzYWdlX2Rlc3Rp
+bmF0aW9uX25vZGUgPSAzIH0KPj4KPj4gSWYgSSBzdWJzdHJhY3QgdGhlIHRpbWVzOgo+Pgo+PiBp
+cmIobWFpbik6MDAzOjA+ICg0My42NDcwMjUyNDktNDMuNjQ3MDE3MjExKSoxMCoqOQo+PiA9PiA4
+MDM4LjAwMDAwNDI2MjM2Cj4+Cj4+IFRoaXMgbWVzc2FnZSAoPDEwMDAwMTksIDE0PikgcmVxdWly
+ZWQgODAzOCBucyBmb3IgdGhlIGRlbGl2ZXJ5LiBUaGlzIG9uZSBpcyBmaW5lLgo+Pgo+Pgo+PiBT
+byBiYXNpY2FsbHkgbXkgcXVlc3Rpb24gaXM6Cj4+Cj4+IElzIHRoZXJlIGFuIGVhc3kgd2F5IHRv
+IGFuYWx5emUgdGhlc2UgdHJhY2Vwb2ludCBmaWxlcyA/Cj4+IF9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4g
+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
+aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPgo+IF9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
+bG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0
+dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
+dHRuZy1kZXYK
