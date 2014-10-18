@@ -1,26 +1,20 @@
-From: "Boisvert, Sebastien" <boisvert@anl.gov>
-Subject: Re: Writing .tp files for lttng-gen-tp
-Date: Sat, 18 Oct 2014 18:01:42 +0000
-Message-ID: <E949C1E351B4914B87A26A5F96E06A9286ACB0__16672.5727766336$1413655345$gmane$org@PAYTON.anl.gov>
-References: <E949C1E351B4914B87A26A5F96E06A9286ABF8@PAYTON.anl.gov>
- <CAB4xu_1hoWpxQMFhxmukHxBQUTXOStxUX+sbneVpxTYKed75qA@mail.gmail.com>
- <E949C1E351B4914B87A26A5F96E06A9286AC60@PAYTON.anl.gov>,
- <CAB4xu_1N7U8_guz0-wGTRfELnGH1z19EeK2-Q18xuFVCCNHGhQ@mail.gmail.com>
+From: Nathan Lynch <nathan_lynch@mentor.com>
+Subject: [PATCH] lttng-modules: fix build for non-x86
+Date: Sat, 18 Oct 2014 14:00:23 -0500
+Message-ID: <1413658823-25373-1-git-send-email-nathan_lynch__16561.6790102378$1413658884$gmane$org@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailrelay.anl.gov ([130.202.101.22])
+Received: from relay1.mentorg.com ([192.94.38.131])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <boisvert@anl.gov>) id 1XfYK5-0007Pi-5x
- for lttng-dev@lists.lttng.org; Sat, 18 Oct 2014 14:01:50 -0400
-Received: from mailgateway.anl.gov (mailgateway.anl.gov [130.202.101.28])
- (using TLSv1 with cipher RC4-SHA (128/128 bits))
- (No client certificate requested)
- by mailrelay.anl.gov (Postfix) with ESMTP id AFC1D7CC288
- for <lttng-dev@lists.lttng.org>; Sat, 18 Oct 2014 13:01:43 -0500 (CDT)
-In-Reply-To: <CAB4xu_1N7U8_guz0-wGTRfELnGH1z19EeK2-Q18xuFVCCNHGhQ@mail.gmail.com>
-Content-Language: en-US
+ (envelope-from <Nathan_Lynch@mentor.com>) id 1XfZEt-0007ik-DB
+ for lttng-dev@lists.lttng.org; Sat, 18 Oct 2014 15:00:34 -0400
+Received: from svr-orw-fem-02x.mgc.mentorg.com ([147.34.96.206]
+ helo=SVR-ORW-FEM-02.mgc.mentorg.com)
+ by relay1.mentorg.com with esmtp
+ id 1XfZEn-00043a-45 from Nathan_Lynch@mentor.com
+ for lttng-dev@lists.lttng.org; Sat, 18 Oct 2014 12:00:25 -0700
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -29,147 +23,190 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Thanks, this is a very good idea. I will do that.
+Since commit 644d6e9c2807041db2b4fd9c3350d4fa243060b1 "Remove sys_
+prefix from syscall names" the build has been broken for non-x86
+architectures.
 
-> ________________________________________
-> From: Philippe Proulx [eeppeliteloop@gmail.com]
-> Sent: Saturday, October 18, 2014 12:58 PM
-> To: Boisvert, Sebastien
-> Cc: lttng-dev@lists.lttng.org
-> Subject: Re: [lttng-dev] Writing .tp files for lttng-gen-tp
-> On Sat, Oct 18, 2014 at 10:39 AM, Boisvert, Sebastien <boisvert@anl.gov> =
-wrote:
-> >
-> > Hi,
-> >
-> > I changed the provider name to thorium_message.
-> >
-> > I also tried using a macro in the template file, but the define alone
-> > breaks things.
-> >
-> > Template file: https://github.com/sebhtml/biosal/blob/master/engine/tho=
-rium/tracepoints/lttng/message.tp (the macro is commented)
-> >
-> >
-> > Uncommenting the macro produces these warnings:
-> >
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> >
-> > And the linker fails.
-> Yes, sorry about that, I didn't look at the output.
-> lttng-gen-tp has some bugs. It parses everything using regexes, so I gues=
-s it
-> won't deal properly with custom C preprocessor stuff reusing
-> TRACEPOINT_EVENT() within a macro. For some reason, it detects `int` as
-> the tracepoint provider name ("domain" in lttng-gen-tp's jargon).
-> IMO your use case might already be too advanced for lttng-gen-tp, so I wo=
-uld
-> advise that you have a look at defining plain tracepoint providers without
-> using lttng-gen-tp: <http://lttng.org/docs/#doc-tracepoint-provider>. It
-> basically involves writing a proper template header. The hardest part
-> is defining
-> the tracepoints using TRACEPOINT_EVENT(), but you already did that.
-> So start with this (TP provider name fixed):
-> * message.h: <http://pastebin.com/yiqN0CEj>
-> * message.c: <http://pastebin.com/BmXiSCbd>
-> Build it like this:
-> gcc -I../../../.. -I. -c message.c
-> and link the resulting message.o with your application as usual.
-> >
-> > > ________________________________________
-> > > From: Philippe Proulx [eeppeliteloop@gmail.com]
-> > > Sent: Friday, October 17, 2014 9:36 PM
-> > > To: Boisvert, Sebastien
-> > > Cc: lttng-dev@lists.lttng.org
-> > > Subject: Re: [lttng-dev] Writing .tp files for lttng-gen-tp
-> > > On Fri, Oct 17, 2014 at 5:39 PM, Boisvert, Sebastien <boisvert@anl.go=
-v> wrote:
-> > > > Hi,
-> > > >
-> > > > I wrote a big .tp file to define numerous tracepoints that only dif=
-fer in the event name.
-> > > > They all take the same arguments and they all dump the same fields.
-> > > >
-> > > >
-> > > > .tp file: https://github.com/sebhtml/biosal/blob/master/engine/thor=
-ium/tracepoints/lttng/message.tp
-> > > >
-> > > >
-> > > > Is there a more compact way of doing that ?
-> > > Yes; note that a template file is just part of an eventual C header
-> > > file, so C preprocessor
-> > > stuff is accepted. This should work:
-> > > #include <engine/thorium/message.h>
-> > > #define THORIUM_MSG_TP(name) \
-> > > TRACEPOINT_EVENT( \
-> > > message, \
-> > > name, \
-> > > TP_ARGS( \
-> > > struct thorium_message *, msg \
-> > > ), \
-> > > TP_FIELDS( \
-> > > ctf_integer(int, message_number, msg->number) \
-> > > ctf_integer(int, message_action, msg->action) \
-> > > ctf_integer(int, message_count, msg->count) \
-> > > ctf_integer(int, message_source_actor, msg->source_actor) \
-> > > ctf_integer(int, message_destination_actor,
-> > > msg->destination_actor) \
-> > > ctf_integer(int, message_source_node, msg->source_node) \
-> > > ctf_integer(int, message_destination_node,
-> > > msg->destination_node) \
-> > > ) \
-> > > )
-> > > THORIUM_MSG_TP(actor_send)
-> > > THORIUM_MSG_TP(node_send)
-> > > THORIUM_MSG_TP(worker_send)
-> > > THORIUM_MSG_TP(worker_receive)
-> > > THORIUM_MSG_TP(worker_send_mailbox)
-> > > THORIUM_MSG_TP(worker_send_schedule)
-> > > THORIUM_MSG_TP(worker_pool_enqueue)
-> > > THORIUM_MSG_TP(worker_pool_dequeue)
-> > > THORIUM_MSG_TP(worker_enqueue_message)
-> > > THORIUM_MSG_TP(actor_receive)
-> > > THORIUM_MSG_TP(worker_dequeue_message)
-> > > THORIUM_MSG_TP(node_send_system)
-> > > THORIUM_MSG_TP(node_receive)
-> > > THORIUM_MSG_TP(node_receive_message)
-> > > THORIUM_MSG_TP(node_send_dispatch)
-> > > THORIUM_MSG_TP(node_dispatch_message)
-> > > THORIUM_MSG_TP(transport_send)
-> > > THORIUM_MSG_TP(transport_receive)
-> > > Please write back if it does not.
-> > > BTW, I would suggest that your tracepoint provider name (currently `m=
-essage`) be
-> > > more specific as to what your application really is, e.g., `thorium_m=
-sg`.
-> > > Phil
-> > > >
-> > > >
-> > > >                 S=E9bastien
-> > > >
-> > > >
-> > > > _______________________________________________
-> > > > lttng-dev mailing list
-> > > > lttng-dev@lists.lttng.org
-> > > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Remove the sys_ prefix from syscall names and related macros as has
+already been done for x86.
+
+Correct "OVVERRIDE" typo in arm and powerpc headers while we're at it.
+
+Successfully built against v3.17 for 32- and 64-bit mips and powerpc;
+runtime tested on arm, verifying that mmap2, execve, and clone syscall
+events are captured.
+
+Signed-off-by: Nathan Lynch <nathan_lynch@mentor.com>
+---
+ .../arm-32-syscalls-3.4.25_integers_override.h       | 20 ++++++++++----------
+ .../arm-32-syscalls-3.4.25_pointers_override.h       | 16 ++++++++--------
+ .../mips-32-syscalls-3.13.0_pointers_override.h      |  4 ++--
+ .../mips-64-syscalls-3.5.0_pointers_override.h       |  2 +-
+ .../powerpc-32-syscalls-3.0.34_integers_override.h   |  4 ++--
+ .../powerpc-32-syscalls-3.0.34_pointers_override.h   | 16 ++++++++--------
+ 6 files changed, 31 insertions(+), 31 deletions(-)
+
+diff --git a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
+index e575f6e03e7e..d5af6d028813 100644
+--- a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
++++ b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
+@@ -1,11 +1,11 @@
+ 
+ 
+-#define OVERRIDE_TABLE_32_sys_arm_fadvise64_64
+-#define OVERRIDE_TABLE_32_sys_sync_file_range2
++#define OVERRIDE_TABLE_32_arm_fadvise64_64
++#define OVERRIDE_TABLE_32_sync_file_range2
+ 
+ #ifndef CREATE_SYSCALL_TABLE
+ 
+-SC_LTTNG_TRACEPOINT_EVENT(sys_arm_fadvise64_64,
++SC_LTTNG_TRACEPOINT_EVENT(arm_fadvise64_64,
+ 	TP_PROTO(int fd, int advice, loff_t offset, loff_t len),
+ 	TP_ARGS(fd, advice, offset, len),
+ 	TP_STRUCT__entry(
+@@ -21,7 +21,7 @@ SC_LTTNG_TRACEPOINT_EVENT(sys_arm_fadvise64_64,
+ 	TP_printk()
+ )
+ 
+-SC_LTTNG_TRACEPOINT_EVENT(sys_sync_file_range2,
++SC_LTTNG_TRACEPOINT_EVENT(sync_file_range2,
+ 	TP_PROTO(int fd, loff_t offset, loff_t nbytes, unsigned int flags),
+ 	TP_ARGS(fd, offset, nbytes, flags),
+ 	TP_STRUCT__entry(
+@@ -39,13 +39,13 @@ SC_LTTNG_TRACEPOINT_EVENT(sys_sync_file_range2,
+ 
+ #else	/* CREATE_SYSCALL_TABLE */
+ 
+-#define OVVERRIDE_TABLE_32_sys_mmap
+-TRACE_SYSCALL_TABLE(sys_mmap, sys_mmap, 90, 6)
++#define OVERRIDE_TABLE_32_mmap
++TRACE_SYSCALL_TABLE(mmap, mmap, 90, 6)
+ 
+-#define OVERRIDE_TABLE_32_sys_arm_fadvise64_64
+-TRACE_SYSCALL_TABLE(sys_arm_fadvise64_64, sys_arm_fadvise64_64, 270, 4)
+-#define OVERRIDE_TABLE_32_sys_sync_file_range2
+-TRACE_SYSCALL_TABLE(sys_sync_file_range2, sys_sync_file_range2, 341, 4)
++#define OVERRIDE_TABLE_32_arm_fadvise64_64
++TRACE_SYSCALL_TABLE(arm_fadvise64_64, arm_fadvise64_64, 270, 4)
++#define OVERRIDE_TABLE_32_sync_file_range2
++TRACE_SYSCALL_TABLE(sync_file_range2, sync_file_range2, 341, 4)
+ 
+ #endif /* CREATE_SYSCALL_TABLE */
+ 
+diff --git a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
+index e5846df88dae..c01d355948c8 100644
+--- a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
++++ b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
+@@ -1,10 +1,10 @@
+ 
+-#define OVERRIDE_TABLE_32_sys_mmap2
++#define OVERRIDE_TABLE_32_mmap2
+ 
+ 
+ #ifndef CREATE_SYSCALL_TABLE
+ 
+-SC_LTTNG_TRACEPOINT_EVENT(sys_mmap2,
++SC_LTTNG_TRACEPOINT_EVENT(mmap2,
+ 	TP_PROTO(void *addr, size_t len, int prot,
+                  int flags, int fd, off_t pgoff),
+ 	TP_ARGS(addr, len, prot, flags, fd, pgoff),
+@@ -27,12 +27,12 @@ SC_LTTNG_TRACEPOINT_EVENT(sys_mmap2,
+ 
+ #else	/* CREATE_SYSCALL_TABLE */
+ 
+-#define OVERRIDE_TABLE_32_sys_execve
+-TRACE_SYSCALL_TABLE(sys_execve, sys_execve, 11, 3)
+-#define OVERRIDE_TABLE_32_sys_clone
+-TRACE_SYSCALL_TABLE(sys_clone, sys_clone, 120, 5)
+-#define OVERRIDE_TABLE_32_sys_mmap2
+-TRACE_SYSCALL_TABLE(sys_mmap2, sys_mmap2, 192, 6)
++#define OVERRIDE_TABLE_32_execve
++TRACE_SYSCALL_TABLE(execve, execve, 11, 3)
++#define OVERRIDE_TABLE_32_clone
++TRACE_SYSCALL_TABLE(clone, clone, 120, 5)
++#define OVERRIDE_TABLE_32_mmap2
++TRACE_SYSCALL_TABLE(mmap2, mmap2, 192, 6)
+ 
+ #endif /* CREATE_SYSCALL_TABLE */
+ 
+diff --git a/instrumentation/syscalls/headers/mips-32-syscalls-3.13.0_pointers_override.h b/instrumentation/syscalls/headers/mips-32-syscalls-3.13.0_pointers_override.h
+index 596104d9772b..bcf5662f3a90 100644
+--- a/instrumentation/syscalls/headers/mips-32-syscalls-3.13.0_pointers_override.h
++++ b/instrumentation/syscalls/headers/mips-32-syscalls-3.13.0_pointers_override.h
+@@ -2,7 +2,7 @@
+ 
+ #else	/* CREATE_SYSCALL_TABLE */
+ 
+-#define OVERRIDE_TABLE_32_sys_clone
+-TRACE_SYSCALL_TABLE(sys_clone, sys_clone, 4120, 0)
++#define OVERRIDE_TABLE_32_clone
++TRACE_SYSCALL_TABLE(clone, clone, 4120, 0)
+ 
+ #endif /* CREATE_SYSCALL_TABLE */
+diff --git a/instrumentation/syscalls/headers/mips-64-syscalls-3.5.0_pointers_override.h b/instrumentation/syscalls/headers/mips-64-syscalls-3.5.0_pointers_override.h
+index 53f92dbf446c..f4c35c7e702d 100644
+--- a/instrumentation/syscalls/headers/mips-64-syscalls-3.5.0_pointers_override.h
++++ b/instrumentation/syscalls/headers/mips-64-syscalls-3.5.0_pointers_override.h
+@@ -3,6 +3,6 @@
+ #else	/* CREATE_SYSCALL_TABLE */
+ 
+ #define OVERRIDE_TABLE_64_sys_clone
+-TRACE_SYSCALL_TABLE(sys_clone, sys_clone, 5055, 0)
++TRACE_SYSCALL_TABLE(clone, clone, 5055, 0)
+ 
+ #endif /* CREATE_SYSCALL_TABLE */
+diff --git a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_integers_override.h b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_integers_override.h
+index 6696f43b4364..c0aabbbc0ecd 100644
+--- a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_integers_override.h
++++ b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_integers_override.h
+@@ -2,8 +2,8 @@
+ 
+ #else	/* CREATE_SYSCALL_TABLE */
+ 
+-#define OVVERRIDE_TABLE_32_sys_mmap
+-TRACE_SYSCALL_TABLE(sys_mmap, sys_mmap, 90, 6)
++#define OVERRIDE_TABLE_32_mmap
++TRACE_SYSCALL_TABLE(mmap, mmap, 90, 6)
+ 
+ #endif /* CREATE_SYSCALL_TABLE */
+ 
+diff --git a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
+index fdff68e9d93a..94b22fb3bc0b 100644
+--- a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
++++ b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
+@@ -1,8 +1,8 @@
+-#define OVERRIDE_TABLE_32_sys_mmap2
++#define OVERRIDE_TABLE_32_mmap2
+ 
+ #ifndef CREATE_SYSCALL_TABLE
+ 
+-SC_LTTNG_TRACEPOINT_EVENT(sys_mmap2,
++SC_LTTNG_TRACEPOINT_EVENT(mmap2,
+ 	TP_PROTO(void *addr, size_t len, int prot,
+                  int flags, int fd, off_t pgoff),
+ 	TP_ARGS(addr, len, prot, flags, fd, pgoff),
+@@ -25,12 +25,12 @@ SC_LTTNG_TRACEPOINT_EVENT(sys_mmap2,
+ 
+ #else	/* CREATE_SYSCALL_TABLE */
+ 
+-#define OVERRIDE_TABLE_32_sys_execve
+-TRACE_SYSCALL_TABLE(sys_execve, sys_execve, 11, 3)
+-#define OVERRIDE_TABLE_32_sys_clone
+-TRACE_SYSCALL_TABLE(sys_clone, sys_clone, 120, 5)
+-#define OVERRIDE_TABLE_32_sys_mmap2
+-TRACE_SYSCALL_TABLE(sys_mmap2, sys_mmap2, 192, 6)
++#define OVERRIDE_TABLE_32_execve
++TRACE_SYSCALL_TABLE(execve, execve, 11, 3)
++#define OVERRIDE_TABLE_32_clone
++TRACE_SYSCALL_TABLE(clone, clone, 120, 5)
++#define OVERRIDE_TABLE_32_mmap2
++TRACE_SYSCALL_TABLE(mmap2, mmap2, 192, 6)
+ 
+ #endif /* CREATE_SYSCALL_TABLE */
+ 
+-- 
+1.9.3
