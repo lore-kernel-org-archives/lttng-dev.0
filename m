@@ -1,19 +1,24 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
+From: "Boisvert, Sebastien" <boisvert@anl.gov>
 Subject: Re: Writing .tp files for lttng-gen-tp
-Date: Fri, 17 Oct 2014 22:36:34 -0400
-Message-ID: <CAB4xu_1hoWpxQMFhxmukHxBQUTXOStxUX+sbneVpxTYKed75qA__15159.8951466896$1413599869$gmane$org@mail.gmail.com>
-References: <E949C1E351B4914B87A26A5F96E06A9286ABF8@PAYTON.anl.gov>
+Date: Sat, 18 Oct 2014 14:39:28 +0000
+Message-ID: <E949C1E351B4914B87A26A5F96E06A9286AC60__4241.99384074218$1413643215$gmane$org@PAYTON.anl.gov>
+References: <E949C1E351B4914B87A26A5F96E06A9286ABF8@PAYTON.anl.gov>,
+ <CAB4xu_1hoWpxQMFhxmukHxBQUTXOStxUX+sbneVpxTYKed75qA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f172.google.com ([209.85.216.172])
+Received: from mailrelay.anl.gov ([130.202.101.22])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <eeppeliteloop@gmail.com>) id 1XfJtG-0002c9-3X
- for lttng-dev@lists.lttng.org; Fri, 17 Oct 2014 22:37:12 -0400
-Received: by mail-qc0-f172.google.com with SMTP id o8so1506087qcw.17
- for <lttng-dev@lists.lttng.org>; Fri, 17 Oct 2014 19:37:04 -0700 (PDT)
-In-Reply-To: <E949C1E351B4914B87A26A5F96E06A9286ABF8@PAYTON.anl.gov>
+ (envelope-from <boisvert@anl.gov>) id 1XfVAM-0006OF-PP
+ for lttng-dev@lists.lttng.org; Sat, 18 Oct 2014 10:39:36 -0400
+Received: from mailgateway.anl.gov (mailgateway.anl.gov [130.202.101.28])
+ (using TLSv1 with cipher RC4-SHA (128/128 bits))
+ (No client certificate requested)
+ by mailrelay.anl.gov (Postfix) with ESMTP id 4C7AD7CC192
+ for <lttng-dev@lists.lttng.org>; Sat, 18 Oct 2014 09:39:29 -0500 (CDT)
+In-Reply-To: <CAB4xu_1hoWpxQMFhxmukHxBQUTXOStxUX+sbneVpxTYKed75qA@mail.gmail.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,52 +27,116 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Boisvert, Sebastien" <boisvert@anl.gov>
+To: Philippe Proulx <eeppeliteloop@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gRnJpLCBPY3QgMTcsIDIwMTQgYXQgNTozOSBQTSwgQm9pc3ZlcnQsIFNlYmFzdGllbiA8Ym9p
-c3ZlcnRAYW5sLmdvdj4gd3JvdGU6Cj4gSGksCj4KPiBJIHdyb3RlIGEgYmlnIC50cCBmaWxlIHRv
-IGRlZmluZSBudW1lcm91cyB0cmFjZXBvaW50cyB0aGF0IG9ubHkgZGlmZmVyIGluIHRoZSBldmVu
-dCBuYW1lLgo+IFRoZXkgYWxsIHRha2UgdGhlIHNhbWUgYXJndW1lbnRzIGFuZCB0aGV5IGFsbCBk
-dW1wIHRoZSBzYW1lIGZpZWxkcy4KPgo+Cj4gLnRwIGZpbGU6IGh0dHBzOi8vZ2l0aHViLmNvbS9z
-ZWJodG1sL2Jpb3NhbC9ibG9iL21hc3Rlci9lbmdpbmUvdGhvcml1bS90cmFjZXBvaW50cy9sdHRu
-Zy9tZXNzYWdlLnRwCj4KPgo+IElzIHRoZXJlIGEgbW9yZSBjb21wYWN0IHdheSBvZiBkb2luZyB0
-aGF0ID8KClllczsgbm90ZSB0aGF0IGEgdGVtcGxhdGUgZmlsZSBpcyBqdXN0IHBhcnQgb2YgYW4g
-ZXZlbnR1YWwgQyBoZWFkZXIKZmlsZSwgc28gQyBwcmVwcm9jZXNzb3IKc3R1ZmYgaXMgYWNjZXB0
-ZWQuIFRoaXMgc2hvdWxkIHdvcms6CgogICAgI2luY2x1ZGUgPGVuZ2luZS90aG9yaXVtL21lc3Nh
-Z2UuaD4KCiAgICAjZGVmaW5lIFRIT1JJVU1fTVNHX1RQKG5hbWUpIFwKICAgICAgICBUUkFDRVBP
-SU5UX0VWRU5UKCBcCiAgICAgICAgICAgIG1lc3NhZ2UsIFwKICAgICAgICAgICAgbmFtZSwgXAog
-ICAgICAgICAgICBUUF9BUkdTKCBcCiAgICAgICAgICAgICAgICBzdHJ1Y3QgdGhvcml1bV9tZXNz
-YWdlICosIG1zZyBcCiAgICAgICAgICAgICksIFwKICAgICAgICAgICAgVFBfRklFTERTKCBcCiAg
-ICAgICAgICAgICAgICBjdGZfaW50ZWdlcihpbnQsIG1lc3NhZ2VfbnVtYmVyLCBtc2ctPm51bWJl
-cikgXAogICAgICAgICAgICAgICAgY3RmX2ludGVnZXIoaW50LCBtZXNzYWdlX2FjdGlvbiwgbXNn
-LT5hY3Rpb24pIFwKICAgICAgICAgICAgICAgIGN0Zl9pbnRlZ2VyKGludCwgbWVzc2FnZV9jb3Vu
-dCwgbXNnLT5jb3VudCkgXAogICAgICAgICAgICAgICAgY3RmX2ludGVnZXIoaW50LCBtZXNzYWdl
-X3NvdXJjZV9hY3RvciwgbXNnLT5zb3VyY2VfYWN0b3IpIFwKICAgICAgICAgICAgICAgIGN0Zl9p
-bnRlZ2VyKGludCwgbWVzc2FnZV9kZXN0aW5hdGlvbl9hY3RvciwKbXNnLT5kZXN0aW5hdGlvbl9h
-Y3RvcikgXAogICAgICAgICAgICAgICAgY3RmX2ludGVnZXIoaW50LCBtZXNzYWdlX3NvdXJjZV9u
-b2RlLCBtc2ctPnNvdXJjZV9ub2RlKSBcCiAgICAgICAgICAgICAgICBjdGZfaW50ZWdlcihpbnQs
-IG1lc3NhZ2VfZGVzdGluYXRpb25fbm9kZSwKbXNnLT5kZXN0aW5hdGlvbl9ub2RlKSBcCiAgICAg
-ICAgICAgICkgXAogICAgICAgICkKCiAgICBUSE9SSVVNX01TR19UUChhY3Rvcl9zZW5kKQogICAg
-VEhPUklVTV9NU0dfVFAobm9kZV9zZW5kKQogICAgVEhPUklVTV9NU0dfVFAod29ya2VyX3NlbmQp
-CiAgICBUSE9SSVVNX01TR19UUCh3b3JrZXJfcmVjZWl2ZSkKICAgIFRIT1JJVU1fTVNHX1RQKHdv
-cmtlcl9zZW5kX21haWxib3gpCiAgICBUSE9SSVVNX01TR19UUCh3b3JrZXJfc2VuZF9zY2hlZHVs
-ZSkKICAgIFRIT1JJVU1fTVNHX1RQKHdvcmtlcl9wb29sX2VucXVldWUpCiAgICBUSE9SSVVNX01T
-R19UUCh3b3JrZXJfcG9vbF9kZXF1ZXVlKQogICAgVEhPUklVTV9NU0dfVFAod29ya2VyX2VucXVl
-dWVfbWVzc2FnZSkKICAgIFRIT1JJVU1fTVNHX1RQKGFjdG9yX3JlY2VpdmUpCiAgICBUSE9SSVVN
-X01TR19UUCh3b3JrZXJfZGVxdWV1ZV9tZXNzYWdlKQogICAgVEhPUklVTV9NU0dfVFAobm9kZV9z
-ZW5kX3N5c3RlbSkKICAgIFRIT1JJVU1fTVNHX1RQKG5vZGVfcmVjZWl2ZSkKICAgIFRIT1JJVU1f
-TVNHX1RQKG5vZGVfcmVjZWl2ZV9tZXNzYWdlKQogICAgVEhPUklVTV9NU0dfVFAobm9kZV9zZW5k
-X2Rpc3BhdGNoKQogICAgVEhPUklVTV9NU0dfVFAobm9kZV9kaXNwYXRjaF9tZXNzYWdlKQogICAg
-VEhPUklVTV9NU0dfVFAodHJhbnNwb3J0X3NlbmQpCiAgICBUSE9SSVVNX01TR19UUCh0cmFuc3Bv
-cnRfcmVjZWl2ZSkKClBsZWFzZSB3cml0ZSBiYWNrIGlmIGl0IGRvZXMgbm90LgoKQlRXLCBJIHdv
-dWxkIHN1Z2dlc3QgdGhhdCB5b3VyIHRyYWNlcG9pbnQgcHJvdmlkZXIgbmFtZSAoY3VycmVudGx5
-IGBtZXNzYWdlYCkgYmUKbW9yZSBzcGVjaWZpYyBhcyB0byB3aGF0IHlvdXIgYXBwbGljYXRpb24g
-cmVhbGx5IGlzLCBlLmcuLCBgdGhvcml1bV9tc2dgLgoKUGhpbAo+Cj4KPiAgICAgICAgICAgICAg
-ICAgU8OpYmFzdGllbgo+Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
-bHR0bmctZGV2CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDov
-L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Hi,
+
+I changed the provider name to thorium_message.
+
+I also tried using a macro in the template file, but the define alone
+breaks things.
+
+Template file: https://github.com/sebhtml/biosal/blob/master/engine/thorium=
+/tracepoints/lttng/message.tp (the macro is commented)
+
+
+Uncommenting the macro produces these warnings:
+
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+Warning: different domain provided (int,thorium_message)
+
+And the linker fails.
+
+> ________________________________________
+> From: Philippe Proulx [eeppeliteloop@gmail.com]
+> Sent: Friday, October 17, 2014 9:36 PM
+> To: Boisvert, Sebastien
+> Cc: lttng-dev@lists.lttng.org
+> Subject: Re: [lttng-dev] Writing .tp files for lttng-gen-tp
+> On Fri, Oct 17, 2014 at 5:39 PM, Boisvert, Sebastien <boisvert@anl.gov> w=
+rote:
+> > Hi,
+> >
+> > I wrote a big .tp file to define numerous tracepoints that only differ =
+in the event name.
+> > They all take the same arguments and they all dump the same fields.
+> >
+> >
+> > .tp file: https://github.com/sebhtml/biosal/blob/master/engine/thorium/=
+tracepoints/lttng/message.tp
+> >
+> >
+> > Is there a more compact way of doing that ?
+> Yes; note that a template file is just part of an eventual C header
+> file, so C preprocessor
+> stuff is accepted. This should work:
+> #include <engine/thorium/message.h>
+> #define THORIUM_MSG_TP(name) \
+> TRACEPOINT_EVENT( \
+> message, \
+> name, \
+> TP_ARGS( \
+> struct thorium_message *, msg \
+> ), \
+> TP_FIELDS( \
+> ctf_integer(int, message_number, msg->number) \
+> ctf_integer(int, message_action, msg->action) \
+> ctf_integer(int, message_count, msg->count) \
+> ctf_integer(int, message_source_actor, msg->source_actor) \
+> ctf_integer(int, message_destination_actor,
+> msg->destination_actor) \
+> ctf_integer(int, message_source_node, msg->source_node) \
+> ctf_integer(int, message_destination_node,
+> msg->destination_node) \
+> ) \
+> )
+> THORIUM_MSG_TP(actor_send)
+> THORIUM_MSG_TP(node_send)
+> THORIUM_MSG_TP(worker_send)
+> THORIUM_MSG_TP(worker_receive)
+> THORIUM_MSG_TP(worker_send_mailbox)
+> THORIUM_MSG_TP(worker_send_schedule)
+> THORIUM_MSG_TP(worker_pool_enqueue)
+> THORIUM_MSG_TP(worker_pool_dequeue)
+> THORIUM_MSG_TP(worker_enqueue_message)
+> THORIUM_MSG_TP(actor_receive)
+> THORIUM_MSG_TP(worker_dequeue_message)
+> THORIUM_MSG_TP(node_send_system)
+> THORIUM_MSG_TP(node_receive)
+> THORIUM_MSG_TP(node_receive_message)
+> THORIUM_MSG_TP(node_send_dispatch)
+> THORIUM_MSG_TP(node_dispatch_message)
+> THORIUM_MSG_TP(transport_send)
+> THORIUM_MSG_TP(transport_receive)
+> Please write back if it does not.
+> BTW, I would suggest that your tracepoint provider name (currently `messa=
+ge`) be
+> more specific as to what your application really is, e.g., `thorium_msg`.
+> Phil
+> >
+> >
+> >                 S=E9bastien
+> >
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
