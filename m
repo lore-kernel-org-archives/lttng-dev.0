@@ -1,26 +1,23 @@
-From: "Boisvert, Sebastien" <boisvert@anl.gov>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
 Subject: Re: Writing .tp files for lttng-gen-tp
-Date: Sat, 18 Oct 2014 21:16:54 +0000
-Message-ID: <E949C1E351B4914B87A26A5F96E06A9286ACD9__25608.3521330313$1413667064$gmane$org@PAYTON.anl.gov>
+Date: Sat, 18 Oct 2014 19:51:14 -0400
+Message-ID: <CAB4xu_2GkfFUtbTDO1eiY8hyQBFa3x9wAYhhm6VgNJfwCYcNwQ__30859.0354900391$1413676360$gmane$org@mail.gmail.com>
 References: <E949C1E351B4914B87A26A5F96E06A9286ABF8@PAYTON.anl.gov>
  <CAB4xu_1hoWpxQMFhxmukHxBQUTXOStxUX+sbneVpxTYKed75qA@mail.gmail.com>
- <E949C1E351B4914B87A26A5F96E06A9286AC60@PAYTON.anl.gov>,
+ <E949C1E351B4914B87A26A5F96E06A9286AC60@PAYTON.anl.gov>
  <CAB4xu_1N7U8_guz0-wGTRfELnGH1z19EeK2-Q18xuFVCCNHGhQ@mail.gmail.com>
+ <E949C1E351B4914B87A26A5F96E06A9286ACD9@PAYTON.anl.gov>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailrelay.anl.gov ([130.202.101.22])
+Received: from mail-qa0-f54.google.com ([209.85.216.54])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <boisvert@anl.gov>) id 1XfbMy-0008P2-QP
- for lttng-dev@lists.lttng.org; Sat, 18 Oct 2014 17:17:03 -0400
-Received: from mailgateway.anl.gov (mailgateway.anl.gov [130.202.101.28])
- (using TLSv1 with cipher RC4-SHA (128/128 bits))
- (No client certificate requested)
- by mailrelay.anl.gov (Postfix) with ESMTP id 587287CC2DA
- for <lttng-dev@lists.lttng.org>; Sat, 18 Oct 2014 16:16:55 -0500 (CDT)
-In-Reply-To: <CAB4xu_1N7U8_guz0-wGTRfELnGH1z19EeK2-Q18xuFVCCNHGhQ@mail.gmail.com>
-Content-Language: en-US
+ (envelope-from <eeppeliteloop@gmail.com>) id 1Xfdmo-0000fz-8S
+ for lttng-dev@lists.lttng.org; Sat, 18 Oct 2014 19:51:52 -0400
+Received: by mail-qa0-f54.google.com with SMTP id i13so2006674qae.27
+ for <lttng-dev@lists.lttng.org>; Sat, 18 Oct 2014 16:51:44 -0700 (PDT)
+In-Reply-To: <E949C1E351B4914B87A26A5F96E06A9286ACD9@PAYTON.anl.gov>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -29,180 +26,142 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Philippe Proulx <eeppeliteloop@gmail.com>
+To: "Boisvert, Sebastien" <boisvert@anl.gov>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-Since all my thorium_message:* tracepoints have the same arguments and same=
- fields,
-should I instead use one single tracepoint with an additional argument and =
-field for
-the calling context ("actor_receive", "node_receive", and so on):
-
-
-TRACEPOINT_EVENT(
-    thorium,
-    message_delivery_path,
-    TP_ARGS(
-        char *, context,
-        struct thorium_message *, message
-    ),
-    TP_FIELDS(
-        ctf_string(context, context)
-        ctf_integer(int, message_number, message->number)
-        ctf_integer(int, message_action, message->action)
-        ctf_integer(int, message_count, message->count)
-        ctf_integer(int, message_source_actor, message->source_actor)
-        ctf_integer(int, message_destination_actor, message->destination_ac=
-tor)
-        ctf_integer(int, message_source_node, message->source_node)
-        ctf_integer(int, message_destination_node, message->destination_nod=
-e)
-    )
-)  =
-
-
-
-I feel like this is better, but I don't know if this a good practice to do =
-this with LTTng.
-
-> ________________________________________
-> From: Philippe Proulx [eeppeliteloop@gmail.com]
-> Sent: Saturday, October 18, 2014 12:58 PM
-> To: Boisvert, Sebastien
-> Cc: lttng-dev@lists.lttng.org
-> Subject: Re: [lttng-dev] Writing .tp files for lttng-gen-tp
-> On Sat, Oct 18, 2014 at 10:39 AM, Boisvert, Sebastien <boisvert@anl.gov> =
-wrote:
-> >
-> > Hi,
-> >
-> > I changed the provider name to thorium_message.
-> >
-> > I also tried using a macro in the template file, but the define alone
-> > breaks things.
-> >
-> > Template file: https://github.com/sebhtml/biosal/blob/master/engine/tho=
-rium/tracepoints/lttng/message.tp (the macro is commented)
-> >
-> >
-> > Uncommenting the macro produces these warnings:
-> >
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> > Warning: different domain provided (int,thorium_message)
-> >
-> > And the linker fails.
-> Yes, sorry about that, I didn't look at the output.
-> lttng-gen-tp has some bugs. It parses everything using regexes, so I gues=
-s it
-> won't deal properly with custom C preprocessor stuff reusing
-> TRACEPOINT_EVENT() within a macro. For some reason, it detects `int` as
-> the tracepoint provider name ("domain" in lttng-gen-tp's jargon).
-> IMO your use case might already be too advanced for lttng-gen-tp, so I wo=
-uld
-> advise that you have a look at defining plain tracepoint providers without
-> using lttng-gen-tp: <http://lttng.org/docs/#doc-tracepoint-provider>. It
-> basically involves writing a proper template header. The hardest part
-> is defining
-> the tracepoints using TRACEPOINT_EVENT(), but you already did that.
-> So start with this (TP provider name fixed):
-> * message.h: <http://pastebin.com/yiqN0CEj>
-> * message.c: <http://pastebin.com/BmXiSCbd>
-> Build it like this:
-> gcc -I../../../.. -I. -c message.c
-> and link the resulting message.o with your application as usual.
-> >
-> > > ________________________________________
-> > > From: Philippe Proulx [eeppeliteloop@gmail.com]
-> > > Sent: Friday, October 17, 2014 9:36 PM
-> > > To: Boisvert, Sebastien
-> > > Cc: lttng-dev@lists.lttng.org
-> > > Subject: Re: [lttng-dev] Writing .tp files for lttng-gen-tp
-> > > On Fri, Oct 17, 2014 at 5:39 PM, Boisvert, Sebastien <boisvert@anl.go=
-v> wrote:
-> > > > Hi,
-> > > >
-> > > > I wrote a big .tp file to define numerous tracepoints that only dif=
-fer in the event name.
-> > > > They all take the same arguments and they all dump the same fields.
-> > > >
-> > > >
-> > > > .tp file: https://github.com/sebhtml/biosal/blob/master/engine/thor=
-ium/tracepoints/lttng/message.tp
-> > > >
-> > > >
-> > > > Is there a more compact way of doing that ?
-> > > Yes; note that a template file is just part of an eventual C header
-> > > file, so C preprocessor
-> > > stuff is accepted. This should work:
-> > > #include <engine/thorium/message.h>
-> > > #define THORIUM_MSG_TP(name) \
-> > > TRACEPOINT_EVENT( \
-> > > message, \
-> > > name, \
-> > > TP_ARGS( \
-> > > struct thorium_message *, msg \
-> > > ), \
-> > > TP_FIELDS( \
-> > > ctf_integer(int, message_number, msg->number) \
-> > > ctf_integer(int, message_action, msg->action) \
-> > > ctf_integer(int, message_count, msg->count) \
-> > > ctf_integer(int, message_source_actor, msg->source_actor) \
-> > > ctf_integer(int, message_destination_actor,
-> > > msg->destination_actor) \
-> > > ctf_integer(int, message_source_node, msg->source_node) \
-> > > ctf_integer(int, message_destination_node,
-> > > msg->destination_node) \
-> > > ) \
-> > > )
-> > > THORIUM_MSG_TP(actor_send)
-> > > THORIUM_MSG_TP(node_send)
-> > > THORIUM_MSG_TP(worker_send)
-> > > THORIUM_MSG_TP(worker_receive)
-> > > THORIUM_MSG_TP(worker_send_mailbox)
-> > > THORIUM_MSG_TP(worker_send_schedule)
-> > > THORIUM_MSG_TP(worker_pool_enqueue)
-> > > THORIUM_MSG_TP(worker_pool_dequeue)
-> > > THORIUM_MSG_TP(worker_enqueue_message)
-> > > THORIUM_MSG_TP(actor_receive)
-> > > THORIUM_MSG_TP(worker_dequeue_message)
-> > > THORIUM_MSG_TP(node_send_system)
-> > > THORIUM_MSG_TP(node_receive)
-> > > THORIUM_MSG_TP(node_receive_message)
-> > > THORIUM_MSG_TP(node_send_dispatch)
-> > > THORIUM_MSG_TP(node_dispatch_message)
-> > > THORIUM_MSG_TP(transport_send)
-> > > THORIUM_MSG_TP(transport_receive)
-> > > Please write back if it does not.
-> > > BTW, I would suggest that your tracepoint provider name (currently `m=
-essage`) be
-> > > more specific as to what your application really is, e.g., `thorium_m=
-sg`.
-> > > Phil
-> > > >
-> > > >
-> > > >                 S=E9bastien
-> > > >
-> > > >
-> > > > _______________________________________________
-> > > > lttng-dev mailing list
-> > > > lttng-dev@lists.lttng.org
-> > > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+T24gU2F0LCBPY3QgMTgsIDIwMTQgYXQgNToxNiBQTSwgQm9pc3ZlcnQsIFNlYmFzdGllbiA8Ym9p
+c3ZlcnRAYW5sLmdvdj4gd3JvdGU6Cj4gSGksCj4KPiBTaW5jZSBhbGwgbXkgdGhvcml1bV9tZXNz
+YWdlOiogdHJhY2Vwb2ludHMgaGF2ZSB0aGUgc2FtZSBhcmd1bWVudHMgYW5kIHNhbWUgZmllbGRz
+LAo+IHNob3VsZCBJIGluc3RlYWQgdXNlIG9uZSBzaW5nbGUgdHJhY2Vwb2ludCB3aXRoIGFuIGFk
+ZGl0aW9uYWwgYXJndW1lbnQgYW5kIGZpZWxkIGZvcgo+IHRoZSBjYWxsaW5nIGNvbnRleHQgKCJh
+Y3Rvcl9yZWNlaXZlIiwgIm5vZGVfcmVjZWl2ZSIsIGFuZCBzbyBvbik6CgpJIHdhcyB3YWl0aW5n
+IGZvciB0aGlzIHF1ZXN0aW9uIDstKS4KCkkgd291bGRuJ3QgcmVjb21tZW5kIHJlY29yZGluZyBh
+IHN0cmluZyBlYWNoIHRpbWUuIEF0IHRoZSB2ZXJ5IGxlYXN0LCB5b3UKY291bGQgdXNlIGFuIGlu
+dGVnZXIgaWRlbnRpZmllciwgd2hpY2ggd29uJ3QgaW1wYWN0IHlvdXIgYXBwJ3MgcGVyZm9ybWFu
+Y2UKYXMgbXVjaCBhcyBjb3B5aW5nIGEgc3RyaW5nIGZvciBlYWNoIGV2ZW50LgoKQnV0LCB1bHRp
+bWF0ZWx5LCBJIHRoaW5rIHRoZSBkaWZmZXJlbnQgbmFtZXMgYXBwcm9hY2ggaXMgdGhlIGJlc3Qu
+IFRoZSBUUCBuYW1lCmlzIHN1cHBvc2VkIHRvIHBpbnBvaW50IGEgc3BlY2lmaWMsIHN0YXRpYyBs
+b2NhdGlvbiBpbiB5b3VyIHNvdXJjZSBjb2RlLCBhbmQKdGhhdCdzIGV4YWN0bHkgd2hhdCB5b3Un
+cmUgZG9pbmcgbm93LiBQbHVzLCB5b3Ugd291bGQgbmVlZCB0byBhZGQgYSBmaWx0ZXIsCndoaWNo
+IGlzIHNvbWUgaW50ZXJwcmV0ZWQgYnl0ZWNvZGUgZXhlY3V0ZWQgd2hlbiB0aGUgZXZlbnQgZmly
+ZXMsIHdoZW5ldmVyCnlvdSB3YW50IHRvIGRpc2FibGUgc3BlY2lmaWMgdHJhY2Vwb2ludHMsIHdo
+ZXJlYXMgTFRUbmcgaXMgZGVzaWduZWQgdG8KZW5hYmxlL2Rpc2FibGUgVFAgZWFzaWx5IHVzaW5n
+IFRQIG5hbWVzLgoKUGhpbAo+Cj4KPiBUUkFDRVBPSU5UX0VWRU5UKAo+ICAgICB0aG9yaXVtLAo+
+ICAgICBtZXNzYWdlX2RlbGl2ZXJ5X3BhdGgsCj4gICAgIFRQX0FSR1MoCj4gICAgICAgICBjaGFy
+ICosIGNvbnRleHQsCj4gICAgICAgICBzdHJ1Y3QgdGhvcml1bV9tZXNzYWdlICosIG1lc3NhZ2UK
+PiAgICAgKSwKPiAgICAgVFBfRklFTERTKAo+ICAgICAgICAgY3RmX3N0cmluZyhjb250ZXh0LCBj
+b250ZXh0KQo+ICAgICAgICAgY3RmX2ludGVnZXIoaW50LCBtZXNzYWdlX251bWJlciwgbWVzc2Fn
+ZS0+bnVtYmVyKQo+ICAgICAgICAgY3RmX2ludGVnZXIoaW50LCBtZXNzYWdlX2FjdGlvbiwgbWVz
+c2FnZS0+YWN0aW9uKQo+ICAgICAgICAgY3RmX2ludGVnZXIoaW50LCBtZXNzYWdlX2NvdW50LCBt
+ZXNzYWdlLT5jb3VudCkKPiAgICAgICAgIGN0Zl9pbnRlZ2VyKGludCwgbWVzc2FnZV9zb3VyY2Vf
+YWN0b3IsIG1lc3NhZ2UtPnNvdXJjZV9hY3RvcikKPiAgICAgICAgIGN0Zl9pbnRlZ2VyKGludCwg
+bWVzc2FnZV9kZXN0aW5hdGlvbl9hY3RvciwgbWVzc2FnZS0+ZGVzdGluYXRpb25fYWN0b3IpCj4g
+ICAgICAgICBjdGZfaW50ZWdlcihpbnQsIG1lc3NhZ2Vfc291cmNlX25vZGUsIG1lc3NhZ2UtPnNv
+dXJjZV9ub2RlKQo+ICAgICAgICAgY3RmX2ludGVnZXIoaW50LCBtZXNzYWdlX2Rlc3RpbmF0aW9u
+X25vZGUsIG1lc3NhZ2UtPmRlc3RpbmF0aW9uX25vZGUpCj4gICAgICkKPiApCj4KPgo+IEkgZmVl
+bCBsaWtlIHRoaXMgaXMgYmV0dGVyLCBidXQgSSBkb24ndCBrbm93IGlmIHRoaXMgYSBnb29kIHBy
+YWN0aWNlIHRvIGRvIHRoaXMgd2l0aCBMVFRuZy4KPgo+PiBfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCj4+IEZyb206IFBoaWxpcHBlIFByb3VseCBbZWVwcGVsaXRlbG9v
+cEBnbWFpbC5jb21dCj4+IFNlbnQ6IFNhdHVyZGF5LCBPY3RvYmVyIDE4LCAyMDE0IDEyOjU4IFBN
+Cj4+IFRvOiBCb2lzdmVydCwgU2ViYXN0aWVuCj4+IENjOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcu
+b3JnCj4+IFN1YmplY3Q6IFJlOiBbbHR0bmctZGV2XSBXcml0aW5nIC50cCBmaWxlcyBmb3IgbHR0
+bmctZ2VuLXRwCj4+IE9uIFNhdCwgT2N0IDE4LCAyMDE0IGF0IDEwOjM5IEFNLCBCb2lzdmVydCwg
+U2ViYXN0aWVuIDxib2lzdmVydEBhbmwuZ292PiB3cm90ZToKPj4gPgo+PiA+IEhpLAo+PiA+Cj4+
+ID4gSSBjaGFuZ2VkIHRoZSBwcm92aWRlciBuYW1lIHRvIHRob3JpdW1fbWVzc2FnZS4KPj4gPgo+
+PiA+IEkgYWxzbyB0cmllZCB1c2luZyBhIG1hY3JvIGluIHRoZSB0ZW1wbGF0ZSBmaWxlLCBidXQg
+dGhlIGRlZmluZSBhbG9uZQo+PiA+IGJyZWFrcyB0aGluZ3MuCj4+ID4KPj4gPiBUZW1wbGF0ZSBm
+aWxlOiBodHRwczovL2dpdGh1Yi5jb20vc2ViaHRtbC9iaW9zYWwvYmxvYi9tYXN0ZXIvZW5naW5l
+L3Rob3JpdW0vdHJhY2Vwb2ludHMvbHR0bmcvbWVzc2FnZS50cCAodGhlIG1hY3JvIGlzIGNvbW1l
+bnRlZCkKPj4gPgo+PiA+Cj4+ID4gVW5jb21tZW50aW5nIHRoZSBtYWNybyBwcm9kdWNlcyB0aGVz
+ZSB3YXJuaW5nczoKPj4gPgo+PiA+IFdhcm5pbmc6IGRpZmZlcmVudCBkb21haW4gcHJvdmlkZWQg
+KGludCx0aG9yaXVtX21lc3NhZ2UpCj4+ID4gV2FybmluZzogZGlmZmVyZW50IGRvbWFpbiBwcm92
+aWRlZCAoaW50LHRob3JpdW1fbWVzc2FnZSkKPj4gPiBXYXJuaW5nOiBkaWZmZXJlbnQgZG9tYWlu
+IHByb3ZpZGVkIChpbnQsdGhvcml1bV9tZXNzYWdlKQo+PiA+IFdhcm5pbmc6IGRpZmZlcmVudCBk
+b21haW4gcHJvdmlkZWQgKGludCx0aG9yaXVtX21lc3NhZ2UpCj4+ID4gV2FybmluZzogZGlmZmVy
+ZW50IGRvbWFpbiBwcm92aWRlZCAoaW50LHRob3JpdW1fbWVzc2FnZSkKPj4gPiBXYXJuaW5nOiBk
+aWZmZXJlbnQgZG9tYWluIHByb3ZpZGVkIChpbnQsdGhvcml1bV9tZXNzYWdlKQo+PiA+IFdhcm5p
+bmc6IGRpZmZlcmVudCBkb21haW4gcHJvdmlkZWQgKGludCx0aG9yaXVtX21lc3NhZ2UpCj4+ID4g
+V2FybmluZzogZGlmZmVyZW50IGRvbWFpbiBwcm92aWRlZCAoaW50LHRob3JpdW1fbWVzc2FnZSkK
+Pj4gPiBXYXJuaW5nOiBkaWZmZXJlbnQgZG9tYWluIHByb3ZpZGVkIChpbnQsdGhvcml1bV9tZXNz
+YWdlKQo+PiA+IFdhcm5pbmc6IGRpZmZlcmVudCBkb21haW4gcHJvdmlkZWQgKGludCx0aG9yaXVt
+X21lc3NhZ2UpCj4+ID4gV2FybmluZzogZGlmZmVyZW50IGRvbWFpbiBwcm92aWRlZCAoaW50LHRo
+b3JpdW1fbWVzc2FnZSkKPj4gPiBXYXJuaW5nOiBkaWZmZXJlbnQgZG9tYWluIHByb3ZpZGVkIChp
+bnQsdGhvcml1bV9tZXNzYWdlKQo+PiA+IFdhcm5pbmc6IGRpZmZlcmVudCBkb21haW4gcHJvdmlk
+ZWQgKGludCx0aG9yaXVtX21lc3NhZ2UpCj4+ID4gV2FybmluZzogZGlmZmVyZW50IGRvbWFpbiBw
+cm92aWRlZCAoaW50LHRob3JpdW1fbWVzc2FnZSkKPj4gPiBXYXJuaW5nOiBkaWZmZXJlbnQgZG9t
+YWluIHByb3ZpZGVkIChpbnQsdGhvcml1bV9tZXNzYWdlKQo+PiA+IFdhcm5pbmc6IGRpZmZlcmVu
+dCBkb21haW4gcHJvdmlkZWQgKGludCx0aG9yaXVtX21lc3NhZ2UpCj4+ID4gV2FybmluZzogZGlm
+ZmVyZW50IGRvbWFpbiBwcm92aWRlZCAoaW50LHRob3JpdW1fbWVzc2FnZSkKPj4gPiBXYXJuaW5n
+OiBkaWZmZXJlbnQgZG9tYWluIHByb3ZpZGVkIChpbnQsdGhvcml1bV9tZXNzYWdlKQo+PiA+Cj4+
+ID4gQW5kIHRoZSBsaW5rZXIgZmFpbHMuCj4+IFllcywgc29ycnkgYWJvdXQgdGhhdCwgSSBkaWRu
+J3QgbG9vayBhdCB0aGUgb3V0cHV0Lgo+PiBsdHRuZy1nZW4tdHAgaGFzIHNvbWUgYnVncy4gSXQg
+cGFyc2VzIGV2ZXJ5dGhpbmcgdXNpbmcgcmVnZXhlcywgc28gSSBndWVzcyBpdAo+PiB3b24ndCBk
+ZWFsIHByb3Blcmx5IHdpdGggY3VzdG9tIEMgcHJlcHJvY2Vzc29yIHN0dWZmIHJldXNpbmcKPj4g
+VFJBQ0VQT0lOVF9FVkVOVCgpIHdpdGhpbiBhIG1hY3JvLiBGb3Igc29tZSByZWFzb24sIGl0IGRl
+dGVjdHMgYGludGAgYXMKPj4gdGhlIHRyYWNlcG9pbnQgcHJvdmlkZXIgbmFtZSAoImRvbWFpbiIg
+aW4gbHR0bmctZ2VuLXRwJ3MgamFyZ29uKS4KPj4gSU1PIHlvdXIgdXNlIGNhc2UgbWlnaHQgYWxy
+ZWFkeSBiZSB0b28gYWR2YW5jZWQgZm9yIGx0dG5nLWdlbi10cCwgc28gSSB3b3VsZAo+PiBhZHZp
+c2UgdGhhdCB5b3UgaGF2ZSBhIGxvb2sgYXQgZGVmaW5pbmcgcGxhaW4gdHJhY2Vwb2ludCBwcm92
+aWRlcnMgd2l0aG91dAo+PiB1c2luZyBsdHRuZy1nZW4tdHA6IDxodHRwOi8vbHR0bmcub3JnL2Rv
+Y3MvI2RvYy10cmFjZXBvaW50LXByb3ZpZGVyPi4gSXQKPj4gYmFzaWNhbGx5IGludm9sdmVzIHdy
+aXRpbmcgYSBwcm9wZXIgdGVtcGxhdGUgaGVhZGVyLiBUaGUgaGFyZGVzdCBwYXJ0Cj4+IGlzIGRl
+ZmluaW5nCj4+IHRoZSB0cmFjZXBvaW50cyB1c2luZyBUUkFDRVBPSU5UX0VWRU5UKCksIGJ1dCB5
+b3UgYWxyZWFkeSBkaWQgdGhhdC4KPj4gU28gc3RhcnQgd2l0aCB0aGlzIChUUCBwcm92aWRlciBu
+YW1lIGZpeGVkKToKPj4gKiBtZXNzYWdlLmg6IDxodHRwOi8vcGFzdGViaW4uY29tL3lpcU4wQ0Vq
+Pgo+PiAqIG1lc3NhZ2UuYzogPGh0dHA6Ly9wYXN0ZWJpbi5jb20vQm1YaVNDYmQ+Cj4+IEJ1aWxk
+IGl0IGxpa2UgdGhpczoKPj4gZ2NjIC1JLi4vLi4vLi4vLi4gLUkuIC1jIG1lc3NhZ2UuYwo+PiBh
+bmQgbGluayB0aGUgcmVzdWx0aW5nIG1lc3NhZ2UubyB3aXRoIHlvdXIgYXBwbGljYXRpb24gYXMg
+dXN1YWwuCj4+ID4KPj4gPiA+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KPj4gPiA+IEZyb206IFBoaWxpcHBlIFByb3VseCBbZWVwcGVsaXRlbG9vcEBnbWFpbC5jb21d
+Cj4+ID4gPiBTZW50OiBGcmlkYXksIE9jdG9iZXIgMTcsIDIwMTQgOTozNiBQTQo+PiA+ID4gVG86
+IEJvaXN2ZXJ0LCBTZWJhc3RpZW4KPj4gPiA+IENjOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+Cj4+ID4gPiBTdWJqZWN0OiBSZTogW2x0dG5nLWRldl0gV3JpdGluZyAudHAgZmlsZXMgZm9yIGx0
+dG5nLWdlbi10cAo+PiA+ID4gT24gRnJpLCBPY3QgMTcsIDIwMTQgYXQgNTozOSBQTSwgQm9pc3Zl
+cnQsIFNlYmFzdGllbiA8Ym9pc3ZlcnRAYW5sLmdvdj4gd3JvdGU6Cj4+ID4gPiA+IEhpLAo+PiA+
+ID4gPgo+PiA+ID4gPiBJIHdyb3RlIGEgYmlnIC50cCBmaWxlIHRvIGRlZmluZSBudW1lcm91cyB0
+cmFjZXBvaW50cyB0aGF0IG9ubHkgZGlmZmVyIGluIHRoZSBldmVudCBuYW1lLgo+PiA+ID4gPiBU
+aGV5IGFsbCB0YWtlIHRoZSBzYW1lIGFyZ3VtZW50cyBhbmQgdGhleSBhbGwgZHVtcCB0aGUgc2Ft
+ZSBmaWVsZHMuCj4+ID4gPiA+Cj4+ID4gPiA+Cj4+ID4gPiA+IC50cCBmaWxlOiBodHRwczovL2dp
+dGh1Yi5jb20vc2ViaHRtbC9iaW9zYWwvYmxvYi9tYXN0ZXIvZW5naW5lL3Rob3JpdW0vdHJhY2Vw
+b2ludHMvbHR0bmcvbWVzc2FnZS50cAo+PiA+ID4gPgo+PiA+ID4gPgo+PiA+ID4gPiBJcyB0aGVy
+ZSBhIG1vcmUgY29tcGFjdCB3YXkgb2YgZG9pbmcgdGhhdCA/Cj4+ID4gPiBZZXM7IG5vdGUgdGhh
+dCBhIHRlbXBsYXRlIGZpbGUgaXMganVzdCBwYXJ0IG9mIGFuIGV2ZW50dWFsIEMgaGVhZGVyCj4+
+ID4gPiBmaWxlLCBzbyBDIHByZXByb2Nlc3Nvcgo+PiA+ID4gc3R1ZmYgaXMgYWNjZXB0ZWQuIFRo
+aXMgc2hvdWxkIHdvcms6Cj4+ID4gPiAjaW5jbHVkZSA8ZW5naW5lL3Rob3JpdW0vbWVzc2FnZS5o
+Pgo+PiA+ID4gI2RlZmluZSBUSE9SSVVNX01TR19UUChuYW1lKSBcCj4+ID4gPiBUUkFDRVBPSU5U
+X0VWRU5UKCBcCj4+ID4gPiBtZXNzYWdlLCBcCj4+ID4gPiBuYW1lLCBcCj4+ID4gPiBUUF9BUkdT
+KCBcCj4+ID4gPiBzdHJ1Y3QgdGhvcml1bV9tZXNzYWdlICosIG1zZyBcCj4+ID4gPiApLCBcCj4+
+ID4gPiBUUF9GSUVMRFMoIFwKPj4gPiA+IGN0Zl9pbnRlZ2VyKGludCwgbWVzc2FnZV9udW1iZXIs
+IG1zZy0+bnVtYmVyKSBcCj4+ID4gPiBjdGZfaW50ZWdlcihpbnQsIG1lc3NhZ2VfYWN0aW9uLCBt
+c2ctPmFjdGlvbikgXAo+PiA+ID4gY3RmX2ludGVnZXIoaW50LCBtZXNzYWdlX2NvdW50LCBtc2ct
+PmNvdW50KSBcCj4+ID4gPiBjdGZfaW50ZWdlcihpbnQsIG1lc3NhZ2Vfc291cmNlX2FjdG9yLCBt
+c2ctPnNvdXJjZV9hY3RvcikgXAo+PiA+ID4gY3RmX2ludGVnZXIoaW50LCBtZXNzYWdlX2Rlc3Rp
+bmF0aW9uX2FjdG9yLAo+PiA+ID4gbXNnLT5kZXN0aW5hdGlvbl9hY3RvcikgXAo+PiA+ID4gY3Rm
+X2ludGVnZXIoaW50LCBtZXNzYWdlX3NvdXJjZV9ub2RlLCBtc2ctPnNvdXJjZV9ub2RlKSBcCj4+
+ID4gPiBjdGZfaW50ZWdlcihpbnQsIG1lc3NhZ2VfZGVzdGluYXRpb25fbm9kZSwKPj4gPiA+IG1z
+Zy0+ZGVzdGluYXRpb25fbm9kZSkgXAo+PiA+ID4gKSBcCj4+ID4gPiApCj4+ID4gPiBUSE9SSVVN
+X01TR19UUChhY3Rvcl9zZW5kKQo+PiA+ID4gVEhPUklVTV9NU0dfVFAobm9kZV9zZW5kKQo+PiA+
+ID4gVEhPUklVTV9NU0dfVFAod29ya2VyX3NlbmQpCj4+ID4gPiBUSE9SSVVNX01TR19UUCh3b3Jr
+ZXJfcmVjZWl2ZSkKPj4gPiA+IFRIT1JJVU1fTVNHX1RQKHdvcmtlcl9zZW5kX21haWxib3gpCj4+
+ID4gPiBUSE9SSVVNX01TR19UUCh3b3JrZXJfc2VuZF9zY2hlZHVsZSkKPj4gPiA+IFRIT1JJVU1f
+TVNHX1RQKHdvcmtlcl9wb29sX2VucXVldWUpCj4+ID4gPiBUSE9SSVVNX01TR19UUCh3b3JrZXJf
+cG9vbF9kZXF1ZXVlKQo+PiA+ID4gVEhPUklVTV9NU0dfVFAod29ya2VyX2VucXVldWVfbWVzc2Fn
+ZSkKPj4gPiA+IFRIT1JJVU1fTVNHX1RQKGFjdG9yX3JlY2VpdmUpCj4+ID4gPiBUSE9SSVVNX01T
+R19UUCh3b3JrZXJfZGVxdWV1ZV9tZXNzYWdlKQo+PiA+ID4gVEhPUklVTV9NU0dfVFAobm9kZV9z
+ZW5kX3N5c3RlbSkKPj4gPiA+IFRIT1JJVU1fTVNHX1RQKG5vZGVfcmVjZWl2ZSkKPj4gPiA+IFRI
+T1JJVU1fTVNHX1RQKG5vZGVfcmVjZWl2ZV9tZXNzYWdlKQo+PiA+ID4gVEhPUklVTV9NU0dfVFAo
+bm9kZV9zZW5kX2Rpc3BhdGNoKQo+PiA+ID4gVEhPUklVTV9NU0dfVFAobm9kZV9kaXNwYXRjaF9t
+ZXNzYWdlKQo+PiA+ID4gVEhPUklVTV9NU0dfVFAodHJhbnNwb3J0X3NlbmQpCj4+ID4gPiBUSE9S
+SVVNX01TR19UUCh0cmFuc3BvcnRfcmVjZWl2ZSkKPj4gPiA+IFBsZWFzZSB3cml0ZSBiYWNrIGlm
+IGl0IGRvZXMgbm90Lgo+PiA+ID4gQlRXLCBJIHdvdWxkIHN1Z2dlc3QgdGhhdCB5b3VyIHRyYWNl
+cG9pbnQgcHJvdmlkZXIgbmFtZSAoY3VycmVudGx5IGBtZXNzYWdlYCkgYmUKPj4gPiA+IG1vcmUg
+c3BlY2lmaWMgYXMgdG8gd2hhdCB5b3VyIGFwcGxpY2F0aW9uIHJlYWxseSBpcywgZS5nLiwgYHRo
+b3JpdW1fbXNnYC4KPj4gPiA+IFBoaWwKPj4gPiA+ID4KPj4gPiA+ID4KPj4gPiA+ID4gICAgICAg
+ICAgICAgICAgIFPDqWJhc3RpZW4KPj4gPiA+ID4KPj4gPiA+ID4KPj4gPiA+ID4gX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gPiA+ID4gbHR0bmctZGV2
+IG1haWxpbmcgbGlzdAo+PiA+ID4gPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+ID4gPiA+
+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmct
+ZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5s
+dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
