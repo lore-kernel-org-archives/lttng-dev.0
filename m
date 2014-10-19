@@ -1,17 +1,20 @@
-From: Shariyar <syed.shariyar@gmail.com>
-Subject: Re: Regarding CtfTmfTrace reader in TMF and LTTng's new
-	trace
-Date: Mon, 20 Oct 2014 12:15:07 -0400
-Message-ID: <CAKQh6phdBTr9n5GyMx2raR3za6VZGQs_dZatPO0WCE3CNpROcw__49758.0725154423$1413821772$gmane$org@mail.gmail.com>
+From: Ben Maurer <bmaurer@fb.com>
+Subject: Re: Userspace RCU: workqueue with batching, cheap wakeup,
+ and work stealing
+Date: Sun, 19 Oct 2014 19:15:28 +0000
+Message-ID: <5CDDBDF2D36D9F43B9F5E99003F6A0D4861BCD3E__5359.91968722573$1413824068$gmane$org@PRN-MBX02-1.TheFacebook.com>
+References: <836028170.11148.1413630118955.JavaMail.zimbra@efficios.com>,
+ <1521253780.11371.1413666790992.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0962407237=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pa0-f49.google.com ([209.85.220.49])
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <syed.shariyar@gmail.com>) id 1XgFc1-0004nq-H3
- for lttng-dev@lists.lttng.org; Mon, 20 Oct 2014 12:15:16 -0400
-Received: by mail-pa0-f49.google.com with SMTP id hz1so5417753pad.8
- for <lttng-dev@lists.lttng.org>; Mon, 20 Oct 2014 09:15:07 -0700 (PDT)
+ (envelope-from <prvs=5369e5907e=bmaurer@fb.com>) id 1Xfvx3-0006gy-Vq
+ for lttng-dev@lists.lttng.org; Sun, 19 Oct 2014 15:15:41 -0400
+In-Reply-To: <1521253780.11371.1413666790992.JavaMail.zimbra@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,336 +23,64 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, lttng-dev <lttng-dev@lists.lttng.org>
+Cc: Yannick Brosseau <yannick.brosseau@fb.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0962407237==
-Content-Type: multipart/alternative; boundary=047d7b10cf3da3dbb90505dd0410
+Hey,
 
---047d7b10cf3da3dbb90505dd0410
-Content-Type: text/plain; charset=UTF-8
+That's pretty cool! Do you have any thoughts on the LifoSem implementation in folly? What are the differences in design decisions between your workqueue and lifosem?
 
->
+One other folly abstraction you might want to look at is MPMCQueue -- this is our fifo workqueue that we combine with lifosem: https://github.com/facebook/folly/blob/master/folly/MPMCQueue.h.
 
-  Yes, it is working in TMF views. The index folders are shown separately
-in TMF and contents of the new  trace format are also complete.
+One thing I'd point out about lifo waiting that really applies to rcu is the ability to quiesce threads. When we use futexes to implement data structures like LifoSem, we use an abstraction called MemoryIdler (https://github.com/facebook/folly/blob/master/folly/detail/MemoryIdler.h). When MemoryIdler calls futex() it passes a maximum timeout of 5 seconds. If it takes > 5 seconds to wake up the thread, MemoryIdler releases some of the local resources of that thread. For example, it calls madvise() to release unused portions of the thread's stack and tells jemalloc to free unused per-thread caches. Because we use lifo waiting, the oldest waiting threads tend to sleep for a long time. 
 
-I looked at the TmfStateSystemAnalysisModule class, and in particular
-StateSystemEventRequest class in it at the end. I understand this class
-StateSystemEventRequest but how is this ITmfStateProvider  passed to the
-constructor StateSystemEventRequest(ITmfState
- Provider sp). I don't see any direct implementation of ITmfStateProvider
-there.
+For RCU, I'm guessing that because you require thread registration parts of the library iterate through all active threads. An abstraction like MemoryIdler could allow threads that sleep for a long time to unregister themselves reducing the cost of iteration.
 
-Just to give a bit of context, in my scenario, I am interested in directly
-reading traces from the hard disk without using the views in TMF. If there
-are many traces in the hard disk, my program reads them one by one, perform
-its analysis on them, and closes them. My program would pass the path of
-the trace folder to a class implementing trace reader  and would take the
-contents (Events) one by one from that class.
+One question I've been asking myself: is there an API the kernel could be providing us to do a better job here? One of the things that annoys me about LifoSem is that we don't need exactly LIFO behavior. All we're trying to do is avoid having threads go to sleep if they could spin a bit and acquire new work. We also want inactive threads to sleep for a long time. But among threads that have been running recently, I wish we could give the kernel more freedom in choosing. For example if the most recently run thread in the LIFO stack ran on CPU 12 but a task is currently running on CPU 12, it'd be great if the kernel could choose a different thread -- one that had recently run on a CPU where it can be immediately scheduled.
 
-Thanks,
-Shariyar
+Something to think about here: most applications I've seen don't really stress the performance of this queue. The bulk of the performance win we've gotten from LifoSem has been in the application itself -- LIFO wait queues increase application performance through better cache usage. I believe this is where we'd get further wins -- eg, if the kernel could do a better job of selecting which thread to use.
 
+-b
+________________________________________
+From: Mathieu Desnoyers [mathieu.desnoyers@efficios.com]
+Sent: Saturday, October 18, 2014 2:13 PM
+To: Ben Maurer; lttng-dev
+Cc: Yannick Brosseau; Paul E. McKenney; Lai Jiangshan; Stephen Hemminger
+Subject: Userspace RCU: workqueue with batching, cheap wakeup, and work stealing
 
+Hi,
 
-Date: Mon, 20 Oct 2014 10:37:26 -0400
-> From: Genevi?ve Bastien <gbastien+lttng@versatic.net>
-> To: lttng-dev@lists.lttng.org
-> Subject: Re: [lttng-dev] Regarding CtfTmfTrace reader in TMF and
->         LTTng's new trace format
-> Message-ID: <54451E26.4090308@versatic.net>
-> Content-Type: text/plain; charset="iso-8859-1"
->
-> Hi Shariyar,
->
-> Can your trace be read all right if you import it in TMF (Trace Compass)
-> and open it normally in it? Do all events appear in the events table?
-> There were changes to improve the CTF reading part recently and somebody
-> reported a bug with traces taken on ARM where events are not read
-> correctly, but the bug is not due to the index files.
->
-> If the trace is read correctly by TMF, may I suggest that you use a
-> TmfEventRequest instead of your own iterator to read the trace events.
-> This is the preferred way for now, most analysis do that and you don't
-> have to bother about trace types, iterators, etc. For an example, see
-> the class TmfStateSystemAnalysisModule, at the end of the file is the
-> event request class and the build() method from the class that uses it.
->
-> Genevi?ve
->
->
-> On 14-10-17 11:31 AM, Shariyar wrote:
-> > Hi,
-> >
-> > I am trying to read the traces  generated in the latest format by
-> > LTTng--i.e.,  a trace having an index folder (with index files) and
-> > the files for every channel. I am reading these type of traces in my
-> > Java program by using the CtfTmfTrace class that exists in TMF. I have
-> > been using this class and its associated classes (e.g., CtfIterator
-> > and CtfTmfEvent) to successfully read the traces in previous trace
-> > format of LTTng (i.e., the trace with only files for channels and no
-> > index folder/files).
-> >
-> >  Now, I cannot read the latest trace format with these classes. In
-> > fact, I am only able to read 10-20 events from the latest trace
-> > format.  These events are namely power_cpu_idle, exit_syscall, and
-> > sys_ioctl. Can you  kindly tell me which classes to use to read both
-> > kind of trace formats; old ones and the new ones?
-> >
-> > I have also pasted below my current source code to read LTTng traces.
-> >
-> > /**
-> >      * Constructor to initialize the trace
-> >      * @param filePath file Name
-> >      * @throws TmfTraceException An exception during trace reading
-> >      */
-> >     public CTFSystemCallIterator(String filePath) throws
-> > TmfTraceException {
-> >         fTrace = new CtfTmfTrace();
-> >         fTrace.initTrace(null, filePath, CtfTmfEvent.class);
-> >         fTraceIterator = fTrace.createIterator();
-> >     }
-> >
-> >     /**
-> >      * Moves Iterator to the next event, and returns true if the iterator
-> >      * can advance or false if the iterator cannot advance
-> >      **/
-> >     @Override
-> >     public boolean advance() {
-> >         boolean isAdvance = true;
-> >         fSyscall = ""; //$NON-NLS-1$
-> >         do {
-> >             CtfTmfEvent event = fTraceIterator.getCurrentEvent();
-> >             System.out.println(event);
-> >             fSyscall = handleSysEntryEvent(event);
-> >             isAdvance = fTraceIterator.advance();
-> >         } while (fSyscall.isEmpty() && isAdvance);
-> >
-> >         if (!isAdvance) {
-> >             fIsDispose = true;
-> >             fTrace.dispose();
-> >         }
-> >
-> >         return isAdvance;
-> >
-> >     }
-> >
-> > Thanks,
-> > Shariyar
-> >
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-> -------------- next part --------------
-> An HTML attachment was scrubbed...
-> URL: <
-> http://lists.lttng.org/pipermail/lttng-dev/attachments/20141020/d05b31bc/attachment.html
-> >
->
-> ------------------------------
->
-> Subject: Digest Footer
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
-> ------------------------------
->
-> End of lttng-dev Digest, Vol 78, Issue 22
-> *****************************************
->
+I have written an implementation of a workqueue based
+on wfcqueue (fifo workqueue), wfstack (lifo wait queue)
+including a work-stealing scheme. I think this could
+scale very naturally to large workloads, and it skips
+the overhead of sys_futex when wakees are already running.
+Since the wakeup scheme is very lightweight when work
+is ongoing, we use it extensively.
 
---047d7b10cf3da3dbb90505dd0410
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+It also makes extensive use of wfcqueue "splice" operation
+to move work batch in bulk amongst queue and worker
+threads. It is a O(1) operation which does not need to
+touch the content of the queue.
 
-<div dir=3D"ltr"><br><div class=3D"gmail_extra"><div class=3D"gmail_quote">=
-<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
-left:1px solid rgb(204,204,204);padding-left:1ex">=C2=A0
-</blockquote><div>=C2=A0 Yes, it is working in TMF views. The index folders=
- are shown separately in TMF and contents of the new=C2=A0 trace format are=
- also complete.<br><br></div><div>I looked at the TmfStateSystemAnalysisMod=
-ule class, and in particular StateSystemEventRequest class in it at the end=
-. I understand this class StateSystemEventRequest but how is this ITmfState=
-Provider=C2=A0 passed to the constructor StateSystemEventRequest(ITmfState<=
-/div><div>=C2=A0Provider sp). I don&#39;t see any direct implementation of =
-ITmfStateProvider there. <br><br></div><div>Just to give a bit of context, =
-in my scenario, I am interested in directly reading traces from the hard di=
-sk without using the views in TMF. If there are many traces in the hard dis=
-k, my program reads them one by one, perform its analysis on them, and clos=
-es them. My program would pass the path of the trace folder to a class impl=
-ementing trace reader=C2=A0 and would take the contents (Events) one by one=
- from that class.<br><br></div><div>Thanks,<br></div><div>Shariyar<br></div=
-><div><br><br><br></div><blockquote class=3D"gmail_quote" style=3D"margin:0=
-px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">D=
-ate: Mon, 20 Oct 2014 10:37:26 -0400<br>
-From: Genevi?ve Bastien &lt;<a href=3D"mailto:gbastien%2Blttng@versatic.net=
-">gbastien+lttng@versatic.net</a>&gt;<br>
-To: <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org<=
-/a><br>
-Subject: Re: [lttng-dev] Regarding CtfTmfTrace reader in TMF and<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 LTTng&#39;s new trace format<br>
-Message-ID: &lt;<a href=3D"mailto:54451E26.4090308@versatic.net">54451E26.4=
-090308@versatic.net</a>&gt;<br>
-Content-Type: text/plain; charset=3D&quot;iso-8859-1&quot;<br>
-<br>
-Hi Shariyar,<br>
-<br>
-Can your trace be read all right if you import it in TMF (Trace Compass)<br=
->
-and open it normally in it? Do all events appear in the events table?<br>
-There were changes to improve the CTF reading part recently and somebody<br=
->
-reported a bug with traces taken on ARM where events are not read<br>
-correctly, but the bug is not due to the index files.<br>
-<br>
-If the trace is read correctly by TMF, may I suggest that you use a<br>
-TmfEventRequest instead of your own iterator to read the trace events.<br>
-This is the preferred way for now, most analysis do that and you don&#39;t<=
-br>
-have to bother about trace types, iterators, etc. For an example, see<br>
-the class TmfStateSystemAnalysisModule, at the end of the file is the<br>
-event request class and the build() method from the class that uses it.<br>
-<br>
-Genevi?ve<br>
-<br>
-<br>
-On 14-10-17 11:31 AM, Shariyar wrote:<br>
-&gt; Hi,<br>
-&gt;<br>
-&gt; I am trying to read the traces=C2=A0 generated in the latest format by=
-<br>
-&gt; LTTng--i.e.,=C2=A0 a trace having an index folder (with index files) a=
-nd<br>
-&gt; the files for every channel. I am reading these type of traces in my<b=
-r>
-&gt; Java program by using the CtfTmfTrace class that exists in TMF. I have=
-<br>
-&gt; been using this class and its associated classes (e.g., CtfIterator<br=
->
-&gt; and CtfTmfEvent) to successfully read the traces in previous trace<br>
-&gt; format of LTTng (i.e., the trace with only files for channels and no<b=
-r>
-&gt; index folder/files).<br>
-&gt;<br>
-&gt;=C2=A0 Now, I cannot read the latest trace format with these classes. I=
-n<br>
-&gt; fact, I am only able to read 10-20 events from the latest trace<br>
-&gt; format.=C2=A0 These events are namely power_cpu_idle, exit_syscall, an=
-d<br>
-&gt; sys_ioctl. Can you=C2=A0 kindly tell me which classes to use to read b=
-oth<br>
-&gt; kind of trace formats; old ones and the new ones?<br>
-&gt;<br>
-&gt; I have also pasted below my current source code to read LTTng traces.<=
-br>
-&gt;<br>
-&gt; /**<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 * Constructor to initialize the trace<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 * @param filePath file Name<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 * @throws TmfTraceException An exception during tr=
-ace reading<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 */<br>
-&gt;=C2=A0 =C2=A0 =C2=A0public CTFSystemCallIterator(String filePath) throw=
-s<br>
-&gt; TmfTraceException {<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fTrace =3D new CtfTmfTrace();<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fTrace.initTrace(null, filePath, CtfT=
-mfEvent.class);<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fTraceIterator =3D fTrace.createItera=
-tor();<br>
-&gt;=C2=A0 =C2=A0 =C2=A0}<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0/**<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 * Moves Iterator to the next event, and returns tr=
-ue if the iterator<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 * can advance or false if the iterator cannot adva=
-nce<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 **/<br>
-&gt;=C2=A0 =C2=A0 =C2=A0@Override<br>
-&gt;=C2=A0 =C2=A0 =C2=A0public boolean advance() {<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0boolean isAdvance =3D true;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fSyscall =3D &quot;&quot;; //$NON-NLS=
--1$<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0do {<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0CtfTmfEvent event =3D f=
-TraceIterator.getCurrentEvent();<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0System.out.println(even=
-t);<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fSyscall =3D handleSysE=
-ntryEvent(event);<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0isAdvance =3D fTraceIte=
-rator.advance();<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0} while (fSyscall.isEmpty() &amp;&amp=
-; isAdvance);<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (!isAdvance) {<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fIsDispose =3D true;<br=
->
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fTrace.dispose();<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return isAdvance;<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0}<br>
-&gt;<br>
-&gt; Thanks,<br>
-&gt; Shariyar<br>
-&gt;<br>
-&gt;<br>
-&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
-</a><br>
-&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
-target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
-</a><br>
-<br>
--------------- next part --------------<br>
-An HTML attachment was scrubbed...<br>
-URL: &lt;<a href=3D"http://lists.lttng.org/pipermail/lttng-dev/attachments/=
-20141020/d05b31bc/attachment.html" target=3D"_blank">http://lists.lttng.org=
-/pipermail/lttng-dev/attachments/20141020/d05b31bc/attachment.html</a>&gt;<=
-br>
-<br>
-------------------------------<br>
-<br>
-Subject: Digest Footer<br>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-br>
-<br>
-<br>
-------------------------------<br>
-<br>
-End of lttng-dev Digest, Vol 78, Issue 22<br>
-*****************************************<br>
-</blockquote></div><br></div></div>
+RCU is used to lookup the sibling worker threads for
+work stealing and to wake the siblings of a thread
+busy handling work.
 
---047d7b10cf3da3dbb90505dd0410--
+It's at:
 
+git://git.urcu.so/urcu.git
+branch: urcu/workqueue-wakeup
 
---===============0962407237==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+or gitweb of the top commit:
+https://urldefense.proofpoint.com/v1/url?u=http://git.lttng.org/?p%3Duserspace-rcu.git%3Ba%3Dcommit%3Bh%3D2c6a5414ed2ab44be24211d15a5d9f1f40dbfc74&k=ZVNjlDMF0FElm4dQtryO4A%3D%3D%0A&r=ykFqYBj5kD4j7jlBP4F60A%3D%3D%0A&m=Lj6FdYEksb4oceU%2BtcZSfPjzIApytWcuNFbjvS2oDHc%3D%0A&s=f6323913816c4c2fae2116d0db4689082678cb921efaa7962e3bdede01907454
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Note that this is work in progress, compile-tested only.
+I also need to write extensive tests.
 
---===============0962407237==--
+Feedback is welcome,
+
+Thanks!
+
+Mathieu
