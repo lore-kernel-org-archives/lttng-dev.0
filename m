@@ -1,16 +1,20 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: Writing .tp files for lttng-gen-tp
-Date: Mon, 20 Oct 2014 13:29:17 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD5A244AEA__44897.0173289583$1413811825$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: =?ISO-8859-1?Q?Genevi=E8ve_Bastien?= <gbastien+lttng@versatic.net>
+Subject: Re: Regarding CtfTmfTrace reader in TMF and LTTng's new
+ trace format
+Date: Mon, 20 Oct 2014 10:37:26 -0400
+Message-ID: <54451E26.4090308__34397.003244567$1413815911$gmane$org@versatic.net>
+References: <CAKQh6pgdd+72wcGNxtCC59bQe5sGJ239fWzDsOsSUb4KToCxhw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============1835316178=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from smtp.electronicbox.net ([96.127.255.82])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1XgD1p-0003nc-BP
- for lttng-dev@lists.lttng.org; Mon, 20 Oct 2014 09:29:43 -0400
-Content-Language: fr-FR
+ (envelope-from <gbastien+lttng@versatic.net>) id 1XgE5T-000499-K1
+ for lttng-dev@lists.lttng.org; Mon, 20 Oct 2014 10:37:35 -0400
+Received: from [192.168.69.98] (unknown [96.127.235.205])
+ by smtp.electronicbox.net (Postfix) with ESMTP id 7A35FDF381
+ for <lttng-dev@lists.lttng.org>; Mon, 20 Oct 2014 10:34:42 -0400 (EDT)
+In-Reply-To: <CAKQh6pgdd+72wcGNxtCC59bQe5sGJ239fWzDsOsSUb4KToCxhw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,88 +23,242 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Fri, 17 Oct 2014 21:39:21 +0000
-From: "Boisvert, Sebastien" <boisvert@anl.gov>
+This is a multi-part message in MIME format.
+--===============1835316178==
+Content-Type: multipart/alternative;
+ boundary="------------070500080207020507000308"
 
-> I wrote a big .tp file to define numerous tracepoints that only differ in=
- the event name.
-> They all take the same arguments and they all dump the same fields.
+This is a multi-part message in MIME format.
+--------------070500080207020507000308
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+Hi Shariyar,
+
+Can your trace be read all right if you import it in TMF (Trace Compass)
+and open it normally in it? Do all events appear in the events table?
+There were changes to improve the CTF reading part recently and somebody
+reported a bug with traces taken on ARM where events are not read
+correctly, but the bug is not due to the index files.
+
+If the trace is read correctly by TMF, may I suggest that you use a
+TmfEventRequest instead of your own iterator to read the trace events.
+This is the preferred way for now, most analysis do that and you don't
+have to bother about trace types, iterators, etc. For an example, see
+the class TmfStateSystemAnalysisModule, at the end of the file is the
+event request class and the build() method from the class that uses it.
+
+Genevi=E8ve
+
+
+On 14-10-17 11:31 AM, Shariyar wrote:
+> Hi,
 >
-> .tp file: https://github.com/sebhtml/biosal/blob/master/engine/thorium/tr=
-acepoints/lttng/message.tp
+> I am trying to read the traces  generated in the latest format by
+> LTTng--i.e.,  a trace having an index folder (with index files) and
+> the files for every channel. I am reading these type of traces in my
+> Java program by using the CtfTmfTrace class that exists in TMF. I have
+> been using this class and its associated classes (e.g., CtfIterator
+> and CtfTmfEvent) to successfully read the traces in previous trace
+> format of LTTng (i.e., the trace with only files for channels and no
+> index folder/files).
 >
-> Is there a more compact way of doing that ?
+>  Now, I cannot read the latest trace format with these classes. In
+> fact, I am only able to read 10-20 events from the latest trace
+> format.  These events are namely power_cpu_idle, exit_syscall, and
+> sys_ioctl. Can you  kindly tell me which classes to use to read both
+> kind of trace formats; old ones and the new ones?=20
 >
->               S=E9bastien
-----------------------------------------------------------------------
-   In the kernel domain, one can declare a "tracepoint class" with DECLARE_=
-EVENT_CLASS, and then use DEFINE_EVENT to instantiate the abstract event cl=
-ass into individual trace events that share a single signature.  Surely the=
- same can be done in user-space?
+> I have also pasted below my current source code to read LTTng traces.
+>
+> /**
+>      * Constructor to initialize the trace
+>      * @param filePath file Name
+>      * @throws TmfTraceException An exception during trace reading
+>      */
+>     public CTFSystemCallIterator(String filePath) throws
+> TmfTraceException {
+>         fTrace =3D new CtfTmfTrace();
+>         fTrace.initTrace(null, filePath, CtfTmfEvent.class);
+>         fTraceIterator =3D fTrace.createIterator();
+>     }
+>
+>     /**
+>      * Moves Iterator to the next event, and returns true if the iterat=
+or
+>      * can advance or false if the iterator cannot advance
+>      **/
+>     @Override
+>     public boolean advance() {
+>         boolean isAdvance =3D true;
+>         fSyscall =3D ""; //$NON-NLS-1$
+>         do {
+>             CtfTmfEvent event =3D fTraceIterator.getCurrentEvent();
+>             System.out.println(event);
+>             fSyscall =3D handleSysEntryEvent(event);
+>             isAdvance =3D fTraceIterator.advance();
+>         } while (fSyscall.isEmpty() && isAdvance);
+>
+>         if (!isAdvance) {
+>             fIsDispose =3D true;
+>             fTrace.dispose();
+>         }
+>
+>         return isAdvance;
+>
+>     }
+>
+> Thanks,
+> Shariyar
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-   Looking at /usr/src/lttng-ust/include/lttng/tracepoint.h, we see there a=
-re TRACEPOINT_EVENT_CLASS and TRACEPOINT_EVENT_INSTANCE macros right beside=
- TRACEPOINT_EVENT, so I suspect you could replace your message.tp with some=
-thing like:
 
-[...]
-TRACEPOINT_EVENT_CLASS(
-thorium_message,
-thorium_event_template,
-TP_ARGS(
-struct thorium_message *, message
-),
-TP_FIELDS(
-ctf_integer(int, message_number, message->number)
-ctf_integer(int, message_action, message->action)
-ctf_integer(int, message_count, message->count)
-ctf_integer(int, message_source_actor, message->source_actor)
-ctf_integer(int, message_destination_actor, message->destination_actor)
-ctf_integer(int, message_source_node, message->source_node)
-ctf_integer(int, message_destination_node, message->destination_node)
-)
-)
+--------------070500080207020507000308
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: 8bit
 
-TRACEPOINT_EVENT_INSTANCE(
-thorium_message,
-thorium_event_template, =
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1"
+      http-equiv="Content-Type">
+  </head>
+  <body text="#000000" bgcolor="#FFFFFF">
+    <div class="moz-cite-prefix">Hi Shariyar,<br>
+      <br>
+      Can your trace be read all right if you import it in TMF (Trace
+      Compass) and open it normally in it? Do all events appear in the
+      events table? There were changes to improve the CTF reading part
+      recently and somebody reported a bug with traces taken on ARM
+      where events are not read correctly, but the bug is not due to the
+      index files.<br>
+      <br>
+      If the trace is read correctly by TMF, may I suggest that you use
+      a TmfEventRequest instead of your own iterator to read the trace
+      events. This is the preferred way for now, most analysis do that
+      and you don't have to bother about trace types, iterators, etc.
+      For an example, see the class TmfStateSystemAnalysisModule, at the
+      end of the file is the event request class and the build() method
+      from the class that uses it.<br>
+      <br>
+      Genevi&egrave;ve<br>
+      <br>
+      <br>
+      On 14-10-17 11:31 AM, Shariyar wrote:<br>
+    </div>
+    <blockquote
+cite="mid:CAKQh6pgdd+72wcGNxtCC59bQe5sGJ239fWzDsOsSUb4KToCxhw@mail.gmail.com"
+      type="cite">
+      <div dir="ltr">Hi,
+        <div><br>
+        </div>
+        <div>I am trying to read the traces &nbsp;generated in the latest
+          format by LTTng--i.e., &nbsp;a trace having an index folder (with
+          index files) and the files for every channel. I am reading
+          these type of traces in my Java program by using the
+          CtfTmfTrace class that exists in TMF. I have been using this
+          class and its associated classes (e.g., CtfIterator
+          and&nbsp;CtfTmfEvent) to successfully read the traces in previous
+          trace format of LTTng (i.e., the trace with only files for
+          channels and no index folder/files).</div>
+        <div><br>
+        </div>
+        <div>&nbsp;Now, I cannot read the latest trace format with these
+          classes. In fact, I am only able to read 10-20 events from the
+          latest trace format.&nbsp; These events are namely power_cpu_idle,
+          exit_syscall, and sys_ioctl. Can you &nbsp;kindly tell me which
+          classes to use to read both kind of trace formats; old ones
+          and the new ones?&nbsp;</div>
+        <div><br>
+        </div>
+        <div>I have also pasted below my current source code to read
+          LTTng traces.</div>
+        <div><br>
+        </div>
+        <div>
+          <div>/**</div>
+          <div>&nbsp; &nbsp; &nbsp;* Constructor to initialize the trace</div>
+          <div>&nbsp; &nbsp; &nbsp;* @param filePath file Name</div>
+          <div>&nbsp; &nbsp; &nbsp;* @throws TmfTraceException An exception during
+            trace reading</div>
+          <div>&nbsp; &nbsp; &nbsp;*/</div>
+          <div>&nbsp; &nbsp; public CTFSystemCallIterator(String filePath) throws
+            TmfTraceException {</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; fTrace = new CtfTmfTrace();</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; fTrace.initTrace(null, filePath,
+            CtfTmfEvent.class);</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; fTraceIterator = fTrace.createIterator();</div>
+          <div>&nbsp; &nbsp; }</div>
+          <div><br>
+          </div>
+          <div>&nbsp; &nbsp; /**</div>
+          <div>&nbsp; &nbsp; &nbsp;* Moves Iterator to the next event, and returns true
+            if the iterator</div>
+          <div>&nbsp; &nbsp; &nbsp;* can advance or false if the iterator cannot
+            advance</div>
+          <div>&nbsp; &nbsp; &nbsp;**/</div>
+          <div>&nbsp; &nbsp; @Override</div>
+          <div>&nbsp; &nbsp; public boolean advance() {</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; boolean isAdvance = true;</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; fSyscall = ""; //$NON-NLS-1$</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; do {</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; CtfTmfEvent event =
+            fTraceIterator.getCurrentEvent();</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; System.out.println(event);</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; fSyscall = handleSysEntryEvent(event);</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; isAdvance = fTraceIterator.advance();</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; } while (fSyscall.isEmpty() &amp;&amp;
+            isAdvance);</div>
+          <div><br>
+          </div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; if (!isAdvance) {</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; fIsDispose = true;</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; fTrace.dispose();</div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; }</div>
+          <div><br>
+          </div>
+          <div>&nbsp; &nbsp; &nbsp; &nbsp; return isAdvance;</div>
+          <div><br>
+          </div>
+          <div>&nbsp; &nbsp; }</div>
+        </div>
+        <div><br>
+        </div>
+        <div>Thanks,</div>
+        <div>Shariyar</div>
+      </div>
+      <br>
+      <fieldset class="mimeAttachmentHeader"></fieldset>
+      <br>
+      <pre wrap="">_______________________________________________
+lttng-dev mailing list
+<a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>
+<a class="moz-txt-link-freetext" href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
+</pre>
+    </blockquote>
+    <br>
+  </body>
+</html>
 
-actor_send,
-TP_ARGS(
-struct thorium_message *, message
-)
-)
+--------------070500080207020507000308--
 
-TRACEPOINT_EVENT_INSTANCE(
-thorium_message,
-thorium_event_template, =
 
-node_send,
-TP_ARGS(
-struct thorium_message *, message
-)
-)
-[...]
+--===============1835316178==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-   Try it and let us know.  This should be added to the lttng-gen-tp man pa=
-ges if it works.
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+--===============1835316178==--
