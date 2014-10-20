@@ -1,16 +1,17 @@
-From: Bernd Hufmann <bernd.hufmann@ericsson.com>
-Subject: Re: [RELEASE] LTTng-Tools 2.6.0-rc1 - Gaia
-Date: Mon, 20 Oct 2014 14:44:21 -0400
-Message-ID: <54455805.9060104__48815.346931997$1413830718$gmane$org@ericsson.com>
-References: <20141020172654.GE15954@thessa>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] lttng-modules: fix build for non-x86
+Date: Mon, 20 Oct 2014 19:15:27 +0000 (UTC)
+Message-ID: <1906109421.12357.1413832527159.JavaMail.zimbra__12758.7912408218$1413832630$gmane$org@efficios.com>
+References: <1413658823-25373-1-git-send-email-nathan_lynch@mentor.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1198912885=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg20.ericsson.net ([198.24.6.45])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <bernd.hufmann@ericsson.com>) id 1XgHwS-0005ir-Fo
- for lttng-dev@lists.lttng.org; Mon, 20 Oct 2014 14:44:35 -0400
-In-Reply-To: <20141020172654.GE15954@thessa>
+ (envelope-from <compudj@efficios.com>) id 1XgIQd-0005v2-0c
+ for lttng-dev@lists.lttng.org; Mon, 20 Oct 2014 15:15:48 -0400
+In-Reply-To: <1413658823-25373-1-git-send-email-nathan_lynch@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,260 +20,238 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Nathan Lynch <nathan_lynch@mentor.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1198912885==
-Content-Type: multipart/alternative;
-	boundary="------------000309060403030108080708"
+Merged, thanks a lot !!
 
---------------000309060403030108080708
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
+Mathieu
 
-Hello
-
-I just tried to configure the metadata channel for UST. After that I get 
-an error when listing the session.
-Could someone please verify this? See below for the commands I used and 
-the error message.
-
-Many thanks in advance!
-
-Best Regards
-Bernd
-
- > lttng create
-Session auto-20141020-141307 created.
-Traces will be written in /home/bernd/lttng-traces/auto-20141020-141307
-
- >lttng enable-channel --subbuf-size 8192 -u metadata
-UST channel metadata enabled for session auto-20141020-141307
- >lttng list auto-20141020-141307
-Tracing session auto-20141020-141307: [inactive]
-     Trace path: /home/bernd/lttng-traces/auto-20141020-141307
-
-=== Domain: UST global ===
-
-Buffer type: per UID
-
-Error: UST channel not found
-Error: Command error
-
-
-
-On 10/20/2014 01:26 PM, David Goulet wrote:
-> Greetings everyone (including LTTng bards!),
->
-> The lttng-tools project provides a session daemon (lttng-sessiond) that acts as
-> a tracing registry, the "lttng" command line for tracing control, a lttng-ctl
-> library for tracing control and a lttng-relayd for network streaming and live
-> reading.
->
-> This is the release candidate number 1 of version 2.6, code name: Gaia.
->
-> This features are listed below but here is a quick howto to use them. For the
-> MI feature, simply adds to the lttng command line the option "--mi xml". Only
-> XML is supported for now.
->
-> 	lttng --mi xml version
->
-> Note that there are now new lines for parsing efficiency. You can find the XML
-> schema in "src/common/mi_lttng.xsd". Big thanks to Jonathan Rajotte for this
-> great feature that the lttng bash completion file has already started using it!
->
-> Also, Java log4j support has been added as a new domain (like JUL) that you can
-> use with the command line option -l, --log4j and with the API using
-> LTTNG_DOMAIN_LOG4J.
->
-> Finally, it's now possible to do per syscall tracing. You can get a full list
-> of the available syscalls on your system with "lttng list -k --syscall". To
-> enable a syscall, use its name like so:
->
-> 	lttng enable-event -k --syscall connect
->
-> Note that it's not possible to choose the bitness of the syscall thus for
-> instance enabling "read" on a kernel supporting both 32 and 64 bit will enabled
-> both of them.
->
-> Of course, we fix a BUNCH of things that hopefully will make lttng tools more
-> stable and powerful :). Here is the ChangeLog entry for 2.6-rc1.
->
-> 2014-10-20 lttng-tools 2.6.0-rc1 (Harry Belafonte records Banana Boat Song)
-> 	* Machine Interface added to lttng command line (--mi)
-> 	* Java Log4j agent support (--log4j)
-> 	* Kernel per syscall tracing
-> 	* Multiple fixes. A lot!
->
-> Please report ANY issues to bugs.lttng.org or on that mailing list.
->
-> Using it is testing it!
->
-> Project website: https://lttng.org
-> Download link:
-> https://lttng.org/files/lttng-tools/lttng-tools-2.6.0-rc1.tar.bz2
-> GPG sig: https://lttng.org/files/lttng-tools/lttng-tools-2.6.0-rc1.tar.bz2.asc
->
-> Cheers!
-> David
->
->
+----- Original Message -----
+> From: "Nathan Lynch" <nathan_lynch@mentor.com>
+> To: lttng-dev@lists.lttng.org
+> Sent: Saturday, October 18, 2014 3:00:23 PM
+> Subject: [lttng-dev] [PATCH] lttng-modules: fix build for non-x86
+> 
+> Since commit 644d6e9c2807041db2b4fd9c3350d4fa243060b1 "Remove sys_
+> prefix from syscall names" the build has been broken for non-x86
+> architectures.
+> 
+> Remove the sys_ prefix from syscall names and related macros as has
+> already been done for x86.
+> 
+> Correct "OVVERRIDE" typo in arm and powerpc headers while we're at it.
+> 
+> Successfully built against v3.17 for 32- and 64-bit mips and powerpc;
+> runtime tested on arm, verifying that mmap2, execve, and clone syscall
+> events are captured.
+> 
+> Signed-off-by: Nathan Lynch <nathan_lynch@mentor.com>
+> ---
+>  .../arm-32-syscalls-3.4.25_integers_override.h       | 20
+>  ++++++++++----------
+>  .../arm-32-syscalls-3.4.25_pointers_override.h       | 16 ++++++++--------
+>  .../mips-32-syscalls-3.13.0_pointers_override.h      |  4 ++--
+>  .../mips-64-syscalls-3.5.0_pointers_override.h       |  2 +-
+>  .../powerpc-32-syscalls-3.0.34_integers_override.h   |  4 ++--
+>  .../powerpc-32-syscalls-3.0.34_pointers_override.h   | 16 ++++++++--------
+>  6 files changed, 31 insertions(+), 31 deletions(-)
+> 
+> diff --git
+> a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
+> b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
+> index e575f6e03e7e..d5af6d028813 100644
+> ---
+> a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
+> +++
+> b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
+> @@ -1,11 +1,11 @@
+>  
+>  
+> -#define OVERRIDE_TABLE_32_sys_arm_fadvise64_64
+> -#define OVERRIDE_TABLE_32_sys_sync_file_range2
+> +#define OVERRIDE_TABLE_32_arm_fadvise64_64
+> +#define OVERRIDE_TABLE_32_sync_file_range2
+>  
+>  #ifndef CREATE_SYSCALL_TABLE
+>  
+> -SC_LTTNG_TRACEPOINT_EVENT(sys_arm_fadvise64_64,
+> +SC_LTTNG_TRACEPOINT_EVENT(arm_fadvise64_64,
+>  	TP_PROTO(int fd, int advice, loff_t offset, loff_t len),
+>  	TP_ARGS(fd, advice, offset, len),
+>  	TP_STRUCT__entry(
+> @@ -21,7 +21,7 @@ SC_LTTNG_TRACEPOINT_EVENT(sys_arm_fadvise64_64,
+>  	TP_printk()
+>  )
+>  
+> -SC_LTTNG_TRACEPOINT_EVENT(sys_sync_file_range2,
+> +SC_LTTNG_TRACEPOINT_EVENT(sync_file_range2,
+>  	TP_PROTO(int fd, loff_t offset, loff_t nbytes, unsigned int flags),
+>  	TP_ARGS(fd, offset, nbytes, flags),
+>  	TP_STRUCT__entry(
+> @@ -39,13 +39,13 @@ SC_LTTNG_TRACEPOINT_EVENT(sys_sync_file_range2,
+>  
+>  #else	/* CREATE_SYSCALL_TABLE */
+>  
+> -#define OVVERRIDE_TABLE_32_sys_mmap
+> -TRACE_SYSCALL_TABLE(sys_mmap, sys_mmap, 90, 6)
+> +#define OVERRIDE_TABLE_32_mmap
+> +TRACE_SYSCALL_TABLE(mmap, mmap, 90, 6)
+>  
+> -#define OVERRIDE_TABLE_32_sys_arm_fadvise64_64
+> -TRACE_SYSCALL_TABLE(sys_arm_fadvise64_64, sys_arm_fadvise64_64, 270, 4)
+> -#define OVERRIDE_TABLE_32_sys_sync_file_range2
+> -TRACE_SYSCALL_TABLE(sys_sync_file_range2, sys_sync_file_range2, 341, 4)
+> +#define OVERRIDE_TABLE_32_arm_fadvise64_64
+> +TRACE_SYSCALL_TABLE(arm_fadvise64_64, arm_fadvise64_64, 270, 4)
+> +#define OVERRIDE_TABLE_32_sync_file_range2
+> +TRACE_SYSCALL_TABLE(sync_file_range2, sync_file_range2, 341, 4)
+>  
+>  #endif /* CREATE_SYSCALL_TABLE */
+>  
+> diff --git
+> a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
+> b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
+> index e5846df88dae..c01d355948c8 100644
+> ---
+> a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
+> +++
+> b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
+> @@ -1,10 +1,10 @@
+>  
+> -#define OVERRIDE_TABLE_32_sys_mmap2
+> +#define OVERRIDE_TABLE_32_mmap2
+>  
+>  
+>  #ifndef CREATE_SYSCALL_TABLE
+>  
+> -SC_LTTNG_TRACEPOINT_EVENT(sys_mmap2,
+> +SC_LTTNG_TRACEPOINT_EVENT(mmap2,
+>  	TP_PROTO(void *addr, size_t len, int prot,
+>                   int flags, int fd, off_t pgoff),
+>  	TP_ARGS(addr, len, prot, flags, fd, pgoff),
+> @@ -27,12 +27,12 @@ SC_LTTNG_TRACEPOINT_EVENT(sys_mmap2,
+>  
+>  #else	/* CREATE_SYSCALL_TABLE */
+>  
+> -#define OVERRIDE_TABLE_32_sys_execve
+> -TRACE_SYSCALL_TABLE(sys_execve, sys_execve, 11, 3)
+> -#define OVERRIDE_TABLE_32_sys_clone
+> -TRACE_SYSCALL_TABLE(sys_clone, sys_clone, 120, 5)
+> -#define OVERRIDE_TABLE_32_sys_mmap2
+> -TRACE_SYSCALL_TABLE(sys_mmap2, sys_mmap2, 192, 6)
+> +#define OVERRIDE_TABLE_32_execve
+> +TRACE_SYSCALL_TABLE(execve, execve, 11, 3)
+> +#define OVERRIDE_TABLE_32_clone
+> +TRACE_SYSCALL_TABLE(clone, clone, 120, 5)
+> +#define OVERRIDE_TABLE_32_mmap2
+> +TRACE_SYSCALL_TABLE(mmap2, mmap2, 192, 6)
+>  
+>  #endif /* CREATE_SYSCALL_TABLE */
+>  
+> diff --git
+> a/instrumentation/syscalls/headers/mips-32-syscalls-3.13.0_pointers_override.h
+> b/instrumentation/syscalls/headers/mips-32-syscalls-3.13.0_pointers_override.h
+> index 596104d9772b..bcf5662f3a90 100644
+> ---
+> a/instrumentation/syscalls/headers/mips-32-syscalls-3.13.0_pointers_override.h
+> +++
+> b/instrumentation/syscalls/headers/mips-32-syscalls-3.13.0_pointers_override.h
+> @@ -2,7 +2,7 @@
+>  
+>  #else	/* CREATE_SYSCALL_TABLE */
+>  
+> -#define OVERRIDE_TABLE_32_sys_clone
+> -TRACE_SYSCALL_TABLE(sys_clone, sys_clone, 4120, 0)
+> +#define OVERRIDE_TABLE_32_clone
+> +TRACE_SYSCALL_TABLE(clone, clone, 4120, 0)
+>  
+>  #endif /* CREATE_SYSCALL_TABLE */
+> diff --git
+> a/instrumentation/syscalls/headers/mips-64-syscalls-3.5.0_pointers_override.h
+> b/instrumentation/syscalls/headers/mips-64-syscalls-3.5.0_pointers_override.h
+> index 53f92dbf446c..f4c35c7e702d 100644
+> ---
+> a/instrumentation/syscalls/headers/mips-64-syscalls-3.5.0_pointers_override.h
+> +++
+> b/instrumentation/syscalls/headers/mips-64-syscalls-3.5.0_pointers_override.h
+> @@ -3,6 +3,6 @@
+>  #else	/* CREATE_SYSCALL_TABLE */
+>  
+>  #define OVERRIDE_TABLE_64_sys_clone
+> -TRACE_SYSCALL_TABLE(sys_clone, sys_clone, 5055, 0)
+> +TRACE_SYSCALL_TABLE(clone, clone, 5055, 0)
+>  
+>  #endif /* CREATE_SYSCALL_TABLE */
+> diff --git
+> a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_integers_override.h
+> b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_integers_override.h
+> index 6696f43b4364..c0aabbbc0ecd 100644
+> ---
+> a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_integers_override.h
+> +++
+> b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_integers_override.h
+> @@ -2,8 +2,8 @@
+>  
+>  #else	/* CREATE_SYSCALL_TABLE */
+>  
+> -#define OVVERRIDE_TABLE_32_sys_mmap
+> -TRACE_SYSCALL_TABLE(sys_mmap, sys_mmap, 90, 6)
+> +#define OVERRIDE_TABLE_32_mmap
+> +TRACE_SYSCALL_TABLE(mmap, mmap, 90, 6)
+>  
+>  #endif /* CREATE_SYSCALL_TABLE */
+>  
+> diff --git
+> a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
+> b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
+> index fdff68e9d93a..94b22fb3bc0b 100644
+> ---
+> a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
+> +++
+> b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
+> @@ -1,8 +1,8 @@
+> -#define OVERRIDE_TABLE_32_sys_mmap2
+> +#define OVERRIDE_TABLE_32_mmap2
+>  
+>  #ifndef CREATE_SYSCALL_TABLE
+>  
+> -SC_LTTNG_TRACEPOINT_EVENT(sys_mmap2,
+> +SC_LTTNG_TRACEPOINT_EVENT(mmap2,
+>  	TP_PROTO(void *addr, size_t len, int prot,
+>                   int flags, int fd, off_t pgoff),
+>  	TP_ARGS(addr, len, prot, flags, fd, pgoff),
+> @@ -25,12 +25,12 @@ SC_LTTNG_TRACEPOINT_EVENT(sys_mmap2,
+>  
+>  #else	/* CREATE_SYSCALL_TABLE */
+>  
+> -#define OVERRIDE_TABLE_32_sys_execve
+> -TRACE_SYSCALL_TABLE(sys_execve, sys_execve, 11, 3)
+> -#define OVERRIDE_TABLE_32_sys_clone
+> -TRACE_SYSCALL_TABLE(sys_clone, sys_clone, 120, 5)
+> -#define OVERRIDE_TABLE_32_sys_mmap2
+> -TRACE_SYSCALL_TABLE(sys_mmap2, sys_mmap2, 192, 6)
+> +#define OVERRIDE_TABLE_32_execve
+> +TRACE_SYSCALL_TABLE(execve, execve, 11, 3)
+> +#define OVERRIDE_TABLE_32_clone
+> +TRACE_SYSCALL_TABLE(clone, clone, 120, 5)
+> +#define OVERRIDE_TABLE_32_mmap2
+> +TRACE_SYSCALL_TABLE(mmap2, mmap2, 192, 6)
+>  
+>  #endif /* CREATE_SYSCALL_TABLE */
+>  
+> --
+> 1.9.3
+> 
+> 
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
 
-
---------------000309060403030108080708
-Content-Type: text/html; charset="windows-1252"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-  <head>
-    <meta content=3D"text/html; charset=3Dwindows-1252"
-      http-equiv=3D"Content-Type">
-  </head>
-  <body bgcolor=3D"#FFFFFF" text=3D"#000000">
-    Hello<br>
-    <br>
-    I just tried to configure the metadata channel for UST. After that I
-    get an error when listing the session.<br>
-    Could someone please verify this? See below for the commands I used
-    and the error message.<br>
-    <br>
-    Many thanks in advance!<br>
-    <br>
-    Best Regards<br>
-    Bernd<br>
-    <br>
-    &gt; lttng create<br>
-    Session auto-20141020-141307 created.<br>
-    Traces will be written in
-    /home/bernd/lttng-traces/auto-20141020-141307<br>
-    <br>
-    &gt;lttng enable-channel --subbuf-size 8192 -u metadata<br>
-    UST channel metadata enabled for session auto-20141020-141307<br>
-    &gt;lttng list auto-20141020-141307<br>
-    Tracing session auto-20141020-141307: [inactive]<br>
-    =A0=A0=A0 Trace path: /home/bernd/lttng-traces/auto-20141020-141307<b=
-r>
-    <br>
-    =3D=3D=3D Domain: UST global =3D=3D=3D<br>
-    <br>
-    Buffer type: per UID<br>
-    <br>
-    Error: UST channel not found<br>
-    Error: Command error<br>
-    <br>
-    <br>
-    <br>
-    <div class=3D"moz-cite-prefix">On 10/20/2014 01:26 PM, David Goulet
-      wrote:<br>
-    </div>
-    <blockquote cite=3D"mid:20141020172654.GE15954@thessa" type=3D"cite">=
-
-      <pre wrap=3D"">Greetings everyone (including LTTng bards!),
-
-The lttng-tools project provides a session daemon (lttng-sessiond) that a=
-cts as
-a tracing registry, the "lttng" command line for tracing control, a lttng=
--ctl
-library for tracing control and a lttng-relayd for network streaming and =
-live
-reading.
-
-This is the release candidate number 1 of version 2.6, code name: Gaia.
-
-This features are listed below but here is a quick howto to use them. For=
- the
-MI feature, simply adds to the lttng command line the option "--mi xml". =
-Only
-XML is supported for now.
-
-	lttng --mi xml version
-
-Note that there are now new lines for parsing efficiency. You can find th=
-e XML
-schema in "src/common/mi_lttng.xsd". Big thanks to Jonathan Rajotte for t=
-his
-great feature that the lttng bash completion file has already started usi=
-ng it!
-
-Also, Java log4j support has been added as a new domain (like JUL) that y=
-ou can
-use with the command line option -l, --log4j and with the API using
-LTTNG_DOMAIN_LOG4J.
-
-Finally, it's now possible to do per syscall tracing. You can get a full =
-list
-of the available syscalls on your system with "lttng list -k --syscall". =
-To
-enable a syscall, use its name like so:
-
-	lttng enable-event -k --syscall connect
-
-Note that it's not possible to choose the bitness of the syscall thus for=
-
-instance enabling "read" on a kernel supporting both 32 and 64 bit will e=
-nabled
-both of them.
-
-Of course, we fix a BUNCH of things that hopefully will make lttng tools =
-more
-stable and powerful :). Here is the ChangeLog entry for 2.6-rc1.
-
-2014-10-20 lttng-tools 2.6.0-rc1 (Harry Belafonte records Banana Boat Son=
-g)
-	* Machine Interface added to lttng command line (--mi)
-	* Java Log4j agent support (--log4j)
-	* Kernel per syscall tracing
-	* Multiple fixes. A lot!
-
-Please report ANY issues to bugs.lttng.org or on that mailing list.
-
-Using it is testing it!
-
-Project website: <a class=3D"moz-txt-link-freetext" href=3D"https://lttng=
-=2Eorg">https://lttng.org</a>
-Download link:
-<a class=3D"moz-txt-link-freetext" href=3D"https://lttng.org/files/lttng-=
-tools/lttng-tools-2.6.0-rc1.tar.bz2">https://lttng.org/files/lttng-tools/=
-lttng-tools-2.6.0-rc1.tar.bz2</a>
-GPG sig: <a class=3D"moz-txt-link-freetext" href=3D"https://lttng.org/fil=
-es/lttng-tools/lttng-tools-2.6.0-rc1.tar.bz2.asc">https://lttng.org/files=
-/lttng-tools/lttng-tools-2.6.0-rc1.tar.bz2.asc</a>
-
-Cheers!
-David
-</pre>
-      <br>
-      <fieldset class=3D"mimeAttachmentHeader"></fieldset>
-      <br>
-      <pre wrap=3D"">_______________________________________________
-lttng-dev mailing list
-<a class=3D"moz-txt-link-abbreviated" href=3D"mailto:lttng-dev@lists.lttn=
-g.org">lttng-dev@lists.lttng.org</a>
-<a class=3D"moz-txt-link-freetext" href=3D"http://lists.lttng.org/cgi-bin=
-/mailman/listinfo/lttng-dev">http://lists.lttng.org/cgi-bin/mailman/listi=
-nfo/lttng-dev</a>
-</pre>
-    </blockquote>
-    <br>
-  </body>
-</html>
-
---------------000309060403030108080708--
-
-
---===============1198912885==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1198912885==--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
