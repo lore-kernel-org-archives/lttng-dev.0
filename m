@@ -1,20 +1,31 @@
-From: Ben Maurer <bmaurer@fb.com>
-Subject: Re: Userspace RCU: workqueue with batching, cheap wakeup,
- and work stealing
-Date: Sun, 19 Oct 2014 19:15:28 +0000
-Message-ID: <5CDDBDF2D36D9F43B9F5E99003F6A0D4861BCD3E__5359.91968722573$1413824068$gmane$org@PRN-MBX02-1.TheFacebook.com>
-References: <836028170.11148.1413630118955.JavaMail.zimbra@efficios.com>,
- <1521253780.11371.1413666790992.JavaMail.zimbra@efficios.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: [RELEASE] LTTng-Tools 2.6.0-rc1 - Gaia
+Date: Mon, 20 Oct 2014 13:26:54 -0400
+Message-ID: <20141020172654.GE15954__33321.0016637624$1413826084$gmane$org@thessa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2067633201=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42])
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <prvs=5369e5907e=bmaurer@fb.com>) id 1Xfvx3-0006gy-Vq
- for lttng-dev@lists.lttng.org; Sun, 19 Oct 2014 15:15:41 -0400
-In-Reply-To: <1521253780.11371.1413666790992.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
+ (envelope-from <dgoulet@efficios.com>) id 1XgGjV-0005DI-NL
+ for lttng-dev@lists.lttng.org; Mon, 20 Oct 2014 13:27:07 -0400
+Received: from localhost (localhost [127.0.0.1])
+ by smtp.ini-tech.com (Postfix) with ESMTP id 5347F87F54
+ for <lttng-dev@lists.lttng.org>; Mon, 20 Oct 2014 17:26:58 +0000 (UTC)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+ by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id i3gtHRKFz-JN for <lttng-dev@lists.lttng.org>;
+ Mon, 20 Oct 2014 17:26:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp.ini-tech.com (Postfix) with ESMTP id B95BE87F91
+ for <lttng-dev@lists.lttng.org>; Mon, 20 Oct 2014 17:26:56 +0000 (UTC)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+ by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id Mh9zImwspE0j for <lttng-dev@lists.lttng.org>;
+ Mon, 20 Oct 2014 17:26:56 +0000 (UTC)
+Received: from thessa (unknown [96.127.212.51])
+ by smtp.ini-tech.com (Postfix) with ESMTPSA id 902C387F54
+ for <lttng-dev@lists.lttng.org>; Mon, 20 Oct 2014 17:26:56 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,64 +34,104 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, lttng-dev <lttng-dev@lists.lttng.org>
-Cc: Yannick Brosseau <yannick.brosseau@fb.com>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hey,
 
-That's pretty cool! Do you have any thoughts on the LifoSem implementation in folly? What are the differences in design decisions between your workqueue and lifosem?
+--===============2067633201==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="zaRBsRFn0XYhEU69"
+Content-Disposition: inline
 
-One other folly abstraction you might want to look at is MPMCQueue -- this is our fifo workqueue that we combine with lifosem: https://github.com/facebook/folly/blob/master/folly/MPMCQueue.h.
 
-One thing I'd point out about lifo waiting that really applies to rcu is the ability to quiesce threads. When we use futexes to implement data structures like LifoSem, we use an abstraction called MemoryIdler (https://github.com/facebook/folly/blob/master/folly/detail/MemoryIdler.h). When MemoryIdler calls futex() it passes a maximum timeout of 5 seconds. If it takes > 5 seconds to wake up the thread, MemoryIdler releases some of the local resources of that thread. For example, it calls madvise() to release unused portions of the thread's stack and tells jemalloc to free unused per-thread caches. Because we use lifo waiting, the oldest waiting threads tend to sleep for a long time. 
+--zaRBsRFn0XYhEU69
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-For RCU, I'm guessing that because you require thread registration parts of the library iterate through all active threads. An abstraction like MemoryIdler could allow threads that sleep for a long time to unregister themselves reducing the cost of iteration.
+Greetings everyone (including LTTng bards!),
 
-One question I've been asking myself: is there an API the kernel could be providing us to do a better job here? One of the things that annoys me about LifoSem is that we don't need exactly LIFO behavior. All we're trying to do is avoid having threads go to sleep if they could spin a bit and acquire new work. We also want inactive threads to sleep for a long time. But among threads that have been running recently, I wish we could give the kernel more freedom in choosing. For example if the most recently run thread in the LIFO stack ran on CPU 12 but a task is currently running on CPU 12, it'd be great if the kernel could choose a different thread -- one that had recently run on a CPU where it can be immediately scheduled.
+The lttng-tools project provides a session daemon (lttng-sessiond) that acts as
+a tracing registry, the "lttng" command line for tracing control, a lttng-ctl
+library for tracing control and a lttng-relayd for network streaming and live
+reading.
 
-Something to think about here: most applications I've seen don't really stress the performance of this queue. The bulk of the performance win we've gotten from LifoSem has been in the application itself -- LIFO wait queues increase application performance through better cache usage. I believe this is where we'd get further wins -- eg, if the kernel could do a better job of selecting which thread to use.
+This is the release candidate number 1 of version 2.6, code name: Gaia.
 
--b
-________________________________________
-From: Mathieu Desnoyers [mathieu.desnoyers@efficios.com]
-Sent: Saturday, October 18, 2014 2:13 PM
-To: Ben Maurer; lttng-dev
-Cc: Yannick Brosseau; Paul E. McKenney; Lai Jiangshan; Stephen Hemminger
-Subject: Userspace RCU: workqueue with batching, cheap wakeup, and work stealing
+This features are listed below but here is a quick howto to use them. For the
+MI feature, simply adds to the lttng command line the option "--mi xml". Only
+XML is supported for now.
 
-Hi,
+	lttng --mi xml version
 
-I have written an implementation of a workqueue based
-on wfcqueue (fifo workqueue), wfstack (lifo wait queue)
-including a work-stealing scheme. I think this could
-scale very naturally to large workloads, and it skips
-the overhead of sys_futex when wakees are already running.
-Since the wakeup scheme is very lightweight when work
-is ongoing, we use it extensively.
+Note that there are now new lines for parsing efficiency. You can find the XML
+schema in "src/common/mi_lttng.xsd". Big thanks to Jonathan Rajotte for this
+great feature that the lttng bash completion file has already started using it!
 
-It also makes extensive use of wfcqueue "splice" operation
-to move work batch in bulk amongst queue and worker
-threads. It is a O(1) operation which does not need to
-touch the content of the queue.
+Also, Java log4j support has been added as a new domain (like JUL) that you can
+use with the command line option -l, --log4j and with the API using
+LTTNG_DOMAIN_LOG4J.
 
-RCU is used to lookup the sibling worker threads for
-work stealing and to wake the siblings of a thread
-busy handling work.
+Finally, it's now possible to do per syscall tracing. You can get a full list
+of the available syscalls on your system with "lttng list -k --syscall". To
+enable a syscall, use its name like so:
 
-It's at:
+	lttng enable-event -k --syscall connect
 
-git://git.urcu.so/urcu.git
-branch: urcu/workqueue-wakeup
+Note that it's not possible to choose the bitness of the syscall thus for
+instance enabling "read" on a kernel supporting both 32 and 64 bit will enabled
+both of them.
 
-or gitweb of the top commit:
-https://urldefense.proofpoint.com/v1/url?u=http://git.lttng.org/?p%3Duserspace-rcu.git%3Ba%3Dcommit%3Bh%3D2c6a5414ed2ab44be24211d15a5d9f1f40dbfc74&k=ZVNjlDMF0FElm4dQtryO4A%3D%3D%0A&r=ykFqYBj5kD4j7jlBP4F60A%3D%3D%0A&m=Lj6FdYEksb4oceU%2BtcZSfPjzIApytWcuNFbjvS2oDHc%3D%0A&s=f6323913816c4c2fae2116d0db4689082678cb921efaa7962e3bdede01907454
+Of course, we fix a BUNCH of things that hopefully will make lttng tools more
+stable and powerful :). Here is the ChangeLog entry for 2.6-rc1.
 
-Note that this is work in progress, compile-tested only.
-I also need to write extensive tests.
+2014-10-20 lttng-tools 2.6.0-rc1 (Harry Belafonte records Banana Boat Song)
+	* Machine Interface added to lttng command line (--mi)
+	* Java Log4j agent support (--log4j)
+	* Kernel per syscall tracing
+	* Multiple fixes. A lot!
 
-Feedback is welcome,
+Please report ANY issues to bugs.lttng.org or on that mailing list.
 
-Thanks!
+Using it is testing it!
 
-Mathieu
+Project website: https://lttng.org
+Download link:
+https://lttng.org/files/lttng-tools/lttng-tools-2.6.0-rc1.tar.bz2
+GPG sig: https://lttng.org/files/lttng-tools/lttng-tools-2.6.0-rc1.tar.bz2.asc
+
+Cheers!
+David
+
+--zaRBsRFn0XYhEU69
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBCABmBQJURUXeXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02FZcIAMm4CtwUcsh+8horx9WNE8ol
+a7tX55CE+66fomxNvTpokJu3fCHfo28DdOpbdWKgX8cynuke9E1Hjur0BwboufnK
+37XHOq+Vg2v9zr3KW7L/DsmKoP/mn1ksT+kzwKHDL+h1weVo1w5L8qWosrPXWznX
+GwT8sySGGSf3B3O79MFOvUOg9ThcR1cwDu+eoaWPkSnTRO1FxoGFw5sn02WqnBfO
+VUIrD4bqQdkSO6z1IhHfqoihydAggifUqowzZFRtcA3M/Jsm2TdpkdJtSe2uLcPs
+fCIqroCJ+sLzUqvggbVejUddFV+JjLP4UpQcz++upnRW9x6DF71EgW6utmDkjUg=
+=iCgw
+-----END PGP SIGNATURE-----
+
+--zaRBsRFn0XYhEU69--
+
+
+--===============2067633201==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============2067633201==--
