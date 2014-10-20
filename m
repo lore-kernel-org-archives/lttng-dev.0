@@ -1,17 +1,23 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] lttng-modules: fix build for non-x86
-Date: Mon, 20 Oct 2014 19:15:27 +0000 (UTC)
-Message-ID: <1906109421.12357.1413832527159.JavaMail.zimbra__12758.7912408218$1413832630$gmane$org@efficios.com>
-References: <1413658823-25373-1-git-send-email-nathan_lynch@mentor.com>
+From: "Boisvert, Sebastien" <boisvert@anl.gov>
+Subject: Re: Writing .tp files for lttng-gen-tp
+Date: Mon, 20 Oct 2014 20:07:35 +0000
+Message-ID: <E949C1E351B4914B87A26A5F96E06A9286AF60__21207.9249824912$1413835733$gmane$org@PAYTON.anl.gov>
+References: <48CF5AC71E61DB46B70D0F388054EFFD5A244AEA@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mailrelay.anl.gov ([130.202.101.22])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XgIQd-0005v2-0c
- for lttng-dev@lists.lttng.org; Mon, 20 Oct 2014 15:15:48 -0400
-In-Reply-To: <1413658823-25373-1-git-send-email-nathan_lynch@mentor.com>
+ (envelope-from <boisvert@anl.gov>) id 1XgJF6-0006CD-0w
+ for lttng-dev@lists.lttng.org; Mon, 20 Oct 2014 16:07:53 -0400
+Received: from mailgateway.anl.gov (mailgateway.anl.gov [130.202.101.28])
+ (using TLSv1 with cipher RC4-SHA (128/128 bits))
+ (No client certificate requested)
+ by mailrelay.anl.gov (Postfix) with ESMTP id 90FAC7CC1FC
+ for <lttng-dev@lists.lttng.org>; Mon, 20 Oct 2014 15:07:40 -0500 (CDT)
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD5A244AEA@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,238 +26,133 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Nathan Lynch <nathan_lynch@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged, thanks a lot !!
+Hi Daniel,
 
-Mathieu
+TRACEPOINT_EVENT_CLASS + TRACEPOINT_EVENT_INSTANCE work.
 
------ Original Message -----
-> From: "Nathan Lynch" <nathan_lynch@mentor.com>
+Thanks.
+
+The documentation is in include/lttng/ust-tracepoint-event.h (lttng-ust) an=
+d the last change was made
+in 2011:
+
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  63) /*
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  64)  * TRACEPOINT_EV=
+ENT_CLASS declares a class of tracepoints receiving the
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  65)  * same argument=
+s and having the same field layout.
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  66)  *
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  67)  * TRACEPOINT_EV=
+ENT_INSTANCE declares an instance of a tracepoint, with
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  68)  * its own provi=
+der and name. It refers to a class (template).
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  69)  *
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  70)  * TRACEPOINT_EV=
+ENT declared both a class and an instance and does a
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  71)  * direct mappin=
+g from the instance to the class.
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  72)  */
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  73) =
+
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  74) #undef TRACEPOIN=
+T_EVENT
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  75) #define TRACEPOI=
+NT_EVENT(_provider, _name, _args, _fields)   \
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  76)      TRACEPOINT_=
+EVENT_CLASS(_provider, _name,                \
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  77)                 =
+      _TP_PARAMS(_args),                     \
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  78)                 =
+      _TP_PARAMS(_fields))                   \
+1c324e59 (Mathieu Desnoyers 2011-11-18 12:36:52 -0500  79)      TRACEPOINT_=
+EVENT_INSTANCE(_provider, _name, _name,      \
+68755429 (Mathieu Desnoyers 2012-03-01 14:39:02 -0500  80)                 =
+      _TP_PARAMS(_args))
+
+
+Question: why is it required to give the the arguments  to TRACEPOINT_EVENT=
+_INSTANCE since all tracepoints from the same
+class use the same arguments and same field layout ?
+
+> ________________________________________
+> From: Thibault, Daniel [Daniel.Thibault@drdc-rddc.gc.ca]
+> Sent: Monday, October 20, 2014 8:29 AM
 > To: lttng-dev@lists.lttng.org
-> Sent: Saturday, October 18, 2014 3:00:23 PM
-> Subject: [lttng-dev] [PATCH] lttng-modules: fix build for non-x86
-> 
-> Since commit 644d6e9c2807041db2b4fd9c3350d4fa243060b1 "Remove sys_
-> prefix from syscall names" the build has been broken for non-x86
-> architectures.
-> 
-> Remove the sys_ prefix from syscall names and related macros as has
-> already been done for x86.
-> 
-> Correct "OVVERRIDE" typo in arm and powerpc headers while we're at it.
-> 
-> Successfully built against v3.17 for 32- and 64-bit mips and powerpc;
-> runtime tested on arm, verifying that mmap2, execve, and clone syscall
-> events are captured.
-> 
-> Signed-off-by: Nathan Lynch <nathan_lynch@mentor.com>
-> ---
->  .../arm-32-syscalls-3.4.25_integers_override.h       | 20
->  ++++++++++----------
->  .../arm-32-syscalls-3.4.25_pointers_override.h       | 16 ++++++++--------
->  .../mips-32-syscalls-3.13.0_pointers_override.h      |  4 ++--
->  .../mips-64-syscalls-3.5.0_pointers_override.h       |  2 +-
->  .../powerpc-32-syscalls-3.0.34_integers_override.h   |  4 ++--
->  .../powerpc-32-syscalls-3.0.34_pointers_override.h   | 16 ++++++++--------
->  6 files changed, 31 insertions(+), 31 deletions(-)
-> 
-> diff --git
-> a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
-> b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
-> index e575f6e03e7e..d5af6d028813 100644
-> ---
-> a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
-> +++
-> b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_integers_override.h
-> @@ -1,11 +1,11 @@
->  
->  
-> -#define OVERRIDE_TABLE_32_sys_arm_fadvise64_64
-> -#define OVERRIDE_TABLE_32_sys_sync_file_range2
-> +#define OVERRIDE_TABLE_32_arm_fadvise64_64
-> +#define OVERRIDE_TABLE_32_sync_file_range2
->  
->  #ifndef CREATE_SYSCALL_TABLE
->  
-> -SC_LTTNG_TRACEPOINT_EVENT(sys_arm_fadvise64_64,
-> +SC_LTTNG_TRACEPOINT_EVENT(arm_fadvise64_64,
->  	TP_PROTO(int fd, int advice, loff_t offset, loff_t len),
->  	TP_ARGS(fd, advice, offset, len),
->  	TP_STRUCT__entry(
-> @@ -21,7 +21,7 @@ SC_LTTNG_TRACEPOINT_EVENT(sys_arm_fadvise64_64,
->  	TP_printk()
->  )
->  
-> -SC_LTTNG_TRACEPOINT_EVENT(sys_sync_file_range2,
-> +SC_LTTNG_TRACEPOINT_EVENT(sync_file_range2,
->  	TP_PROTO(int fd, loff_t offset, loff_t nbytes, unsigned int flags),
->  	TP_ARGS(fd, offset, nbytes, flags),
->  	TP_STRUCT__entry(
-> @@ -39,13 +39,13 @@ SC_LTTNG_TRACEPOINT_EVENT(sys_sync_file_range2,
->  
->  #else	/* CREATE_SYSCALL_TABLE */
->  
-> -#define OVVERRIDE_TABLE_32_sys_mmap
-> -TRACE_SYSCALL_TABLE(sys_mmap, sys_mmap, 90, 6)
-> +#define OVERRIDE_TABLE_32_mmap
-> +TRACE_SYSCALL_TABLE(mmap, mmap, 90, 6)
->  
-> -#define OVERRIDE_TABLE_32_sys_arm_fadvise64_64
-> -TRACE_SYSCALL_TABLE(sys_arm_fadvise64_64, sys_arm_fadvise64_64, 270, 4)
-> -#define OVERRIDE_TABLE_32_sys_sync_file_range2
-> -TRACE_SYSCALL_TABLE(sys_sync_file_range2, sys_sync_file_range2, 341, 4)
-> +#define OVERRIDE_TABLE_32_arm_fadvise64_64
-> +TRACE_SYSCALL_TABLE(arm_fadvise64_64, arm_fadvise64_64, 270, 4)
-> +#define OVERRIDE_TABLE_32_sync_file_range2
-> +TRACE_SYSCALL_TABLE(sync_file_range2, sync_file_range2, 341, 4)
->  
->  #endif /* CREATE_SYSCALL_TABLE */
->  
-> diff --git
-> a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
-> b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
-> index e5846df88dae..c01d355948c8 100644
-> ---
-> a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
-> +++
-> b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
-> @@ -1,10 +1,10 @@
->  
-> -#define OVERRIDE_TABLE_32_sys_mmap2
-> +#define OVERRIDE_TABLE_32_mmap2
->  
->  
->  #ifndef CREATE_SYSCALL_TABLE
->  
-> -SC_LTTNG_TRACEPOINT_EVENT(sys_mmap2,
-> +SC_LTTNG_TRACEPOINT_EVENT(mmap2,
->  	TP_PROTO(void *addr, size_t len, int prot,
->                   int flags, int fd, off_t pgoff),
->  	TP_ARGS(addr, len, prot, flags, fd, pgoff),
-> @@ -27,12 +27,12 @@ SC_LTTNG_TRACEPOINT_EVENT(sys_mmap2,
->  
->  #else	/* CREATE_SYSCALL_TABLE */
->  
-> -#define OVERRIDE_TABLE_32_sys_execve
-> -TRACE_SYSCALL_TABLE(sys_execve, sys_execve, 11, 3)
-> -#define OVERRIDE_TABLE_32_sys_clone
-> -TRACE_SYSCALL_TABLE(sys_clone, sys_clone, 120, 5)
-> -#define OVERRIDE_TABLE_32_sys_mmap2
-> -TRACE_SYSCALL_TABLE(sys_mmap2, sys_mmap2, 192, 6)
-> +#define OVERRIDE_TABLE_32_execve
-> +TRACE_SYSCALL_TABLE(execve, execve, 11, 3)
-> +#define OVERRIDE_TABLE_32_clone
-> +TRACE_SYSCALL_TABLE(clone, clone, 120, 5)
-> +#define OVERRIDE_TABLE_32_mmap2
-> +TRACE_SYSCALL_TABLE(mmap2, mmap2, 192, 6)
->  
->  #endif /* CREATE_SYSCALL_TABLE */
->  
-> diff --git
-> a/instrumentation/syscalls/headers/mips-32-syscalls-3.13.0_pointers_override.h
-> b/instrumentation/syscalls/headers/mips-32-syscalls-3.13.0_pointers_override.h
-> index 596104d9772b..bcf5662f3a90 100644
-> ---
-> a/instrumentation/syscalls/headers/mips-32-syscalls-3.13.0_pointers_override.h
-> +++
-> b/instrumentation/syscalls/headers/mips-32-syscalls-3.13.0_pointers_override.h
-> @@ -2,7 +2,7 @@
->  
->  #else	/* CREATE_SYSCALL_TABLE */
->  
-> -#define OVERRIDE_TABLE_32_sys_clone
-> -TRACE_SYSCALL_TABLE(sys_clone, sys_clone, 4120, 0)
-> +#define OVERRIDE_TABLE_32_clone
-> +TRACE_SYSCALL_TABLE(clone, clone, 4120, 0)
->  
->  #endif /* CREATE_SYSCALL_TABLE */
-> diff --git
-> a/instrumentation/syscalls/headers/mips-64-syscalls-3.5.0_pointers_override.h
-> b/instrumentation/syscalls/headers/mips-64-syscalls-3.5.0_pointers_override.h
-> index 53f92dbf446c..f4c35c7e702d 100644
-> ---
-> a/instrumentation/syscalls/headers/mips-64-syscalls-3.5.0_pointers_override.h
-> +++
-> b/instrumentation/syscalls/headers/mips-64-syscalls-3.5.0_pointers_override.h
-> @@ -3,6 +3,6 @@
->  #else	/* CREATE_SYSCALL_TABLE */
->  
->  #define OVERRIDE_TABLE_64_sys_clone
-> -TRACE_SYSCALL_TABLE(sys_clone, sys_clone, 5055, 0)
-> +TRACE_SYSCALL_TABLE(clone, clone, 5055, 0)
->  
->  #endif /* CREATE_SYSCALL_TABLE */
-> diff --git
-> a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_integers_override.h
-> b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_integers_override.h
-> index 6696f43b4364..c0aabbbc0ecd 100644
-> ---
-> a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_integers_override.h
-> +++
-> b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_integers_override.h
-> @@ -2,8 +2,8 @@
->  
->  #else	/* CREATE_SYSCALL_TABLE */
->  
-> -#define OVVERRIDE_TABLE_32_sys_mmap
-> -TRACE_SYSCALL_TABLE(sys_mmap, sys_mmap, 90, 6)
-> +#define OVERRIDE_TABLE_32_mmap
-> +TRACE_SYSCALL_TABLE(mmap, mmap, 90, 6)
->  
->  #endif /* CREATE_SYSCALL_TABLE */
->  
-> diff --git
-> a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
-> b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
-> index fdff68e9d93a..94b22fb3bc0b 100644
-> ---
-> a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
-> +++
-> b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
-> @@ -1,8 +1,8 @@
-> -#define OVERRIDE_TABLE_32_sys_mmap2
-> +#define OVERRIDE_TABLE_32_mmap2
->  
->  #ifndef CREATE_SYSCALL_TABLE
->  
-> -SC_LTTNG_TRACEPOINT_EVENT(sys_mmap2,
-> +SC_LTTNG_TRACEPOINT_EVENT(mmap2,
->  	TP_PROTO(void *addr, size_t len, int prot,
->                   int flags, int fd, off_t pgoff),
->  	TP_ARGS(addr, len, prot, flags, fd, pgoff),
-> @@ -25,12 +25,12 @@ SC_LTTNG_TRACEPOINT_EVENT(sys_mmap2,
->  
->  #else	/* CREATE_SYSCALL_TABLE */
->  
-> -#define OVERRIDE_TABLE_32_sys_execve
-> -TRACE_SYSCALL_TABLE(sys_execve, sys_execve, 11, 3)
-> -#define OVERRIDE_TABLE_32_sys_clone
-> -TRACE_SYSCALL_TABLE(sys_clone, sys_clone, 120, 5)
-> -#define OVERRIDE_TABLE_32_sys_mmap2
-> -TRACE_SYSCALL_TABLE(sys_mmap2, sys_mmap2, 192, 6)
-> +#define OVERRIDE_TABLE_32_execve
-> +TRACE_SYSCALL_TABLE(execve, execve, 11, 3)
-> +#define OVERRIDE_TABLE_32_clone
-> +TRACE_SYSCALL_TABLE(clone, clone, 120, 5)
-> +#define OVERRIDE_TABLE_32_mmap2
-> +TRACE_SYSCALL_TABLE(mmap2, mmap2, 192, 6)
->  
->  #endif /* CREATE_SYSCALL_TABLE */
->  
-> --
-> 1.9.3
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+> Cc: Boisvert, Sebastien
+> Subject: RE: [lttng-dev] Writing .tp files for lttng-gen-tp
+> ----------------------------------------------------------------------
+> Date: Fri, 17 Oct 2014 21:39:21 +0000
+> From: "Boisvert, Sebastien" <boisvert@anl.gov>
+> > I wrote a big .tp file to define numerous tracepoints that only differ =
+in the event name.
+> > They all take the same arguments and they all dump the same fields.
+> >
+> > .tp file: https://github.com/sebhtml/biosal/blob/master/engine/thorium/=
+tracepoints/lttng/message.tp
+> >
+> > Is there a more compact way of doing that ?
+> >
+> >               S=E9bastien
+> ----------------------------------------------------------------------
+>    In the kernel domain, one can declare a "tracepoint class" with DECLAR=
+E_EVENT_CLASS, and then use DEFINE_EVENT to instantiate the abstract event =
+class into individual trace events that share a single signature.  Surely t=
+he same can be done in user-space?
+>    Looking at /usr/src/lttng-ust/include/lttng/tracepoint.h, we see there=
+ are TRACEPOINT_EVENT_CLASS and TRACEPOINT_EVENT_INSTANCE macros right besi=
+de TRACEPOINT_EVENT, so I suspect you could replace your message.tp with so=
+mething like:
+> [...]
+> TRACEPOINT_EVENT_CLASS(
+> thorium_message,
+> thorium_event_template,
+> TP_ARGS(
+> struct thorium_message *, message
+> ),
+> TP_FIELDS(
+> ctf_integer(int, message_number, message->number)
+> ctf_integer(int, message_action, message->action)
+> ctf_integer(int, message_count, message->count)
+> ctf_integer(int, message_source_actor, message->source_actor)
+> ctf_integer(int, message_destination_actor, message->destination_actor)
+> ctf_integer(int, message_source_node, message->source_node)
+> ctf_integer(int, message_destination_node, message->destination_node)
+> )
+> )
+> TRACEPOINT_EVENT_INSTANCE(
+> thorium_message,
+> thorium_event_template,
+> actor_send,
+> TP_ARGS(
+> struct thorium_message *, message
+> )
+> )
+> TRACEPOINT_EVENT_INSTANCE(
+> thorium_message,
+> thorium_event_template,
+> node_send,
+> TP_ARGS(
+> struct thorium_message *, message
+> )
+> )
+> [...]
+>    Try it and let us know.  This should be added to the lttng-gen-tp man =
+pages if it works.
+> Daniel U. Thibault
+> Protection des syst=E8mes et contremesures (PSC) | Systems Protection & C=
+ountermeasures (SPC)
+> Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critica=
+l Cyber Security (MCCS)
+> RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Ce=
+ntre
+> 2459 route de la Bravoure
+> Qu=E9bec QC  G3J 1X5
+> CANADA
+> Vox : (418) 844-4000 x4245
+> Fax : (418) 844-4538
+> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+> Gouvernement du Canada | Government of Canada
+> <http://www.valcartier.drdc-rddc.gc.ca/>
