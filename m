@@ -1,47 +1,77 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.8.5
-Date: Tue, 21 Oct 2014 19:07:26 +0000 (UTC)
-Message-ID: <800134692.13121.1413918446140.JavaMail.zimbra@efficios.com>
-References: <1559520247.13120.1413918433728.JavaMail.zimbra@efficios.com>
+From: Lai Jiangshan <laijs@cn.fujitsu.com>
+Subject: Re: Userspace RCU: workqueue with batching, cheap wakeup,
+ and work stealing
+Date: Wed, 22 Oct 2014 18:57:18 +0800
+Message-ID: <54478D8E.1080608__28198.2329361655$1413975317$gmane$org@cn.fujitsu.com>
+References: <836028170.11148.1413630118955.JavaMail.zimbra@efficios.com>
+ <1521253780.11371.1413666790992.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <1559520247.13120.1413918433728.JavaMail.zimbra@efficios.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Stephen Hemminger <shemminger@vyatta.com>, Alan Stern <stern@rowland.harvard.edu>
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from [59.151.112.132] (helo=heian.cn.fujitsu.com)
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <laijs@cn.fujitsu.com>) id 1XgtYd-0001sB-EZ
+ for lttng-dev@lists.lttng.org; Wed, 22 Oct 2014 06:54:27 -0400
+In-Reply-To: <1521253780.11371.1413666790992.JavaMail.zimbra@efficios.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, lttng-dev <lttng-dev@lists.lttng.org>, Ben Maurer <bmaurer@fb.com>, Yannick Brosseau <scientist@fb.com>
 List-Id: lttng-dev@lists.lttng.org
 
-liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
-data synchronization library provides read-side access which scales
-linearly with the number of cores. It does so by allowing multiples
-copies of a given data structure to live at the same time, and by
-monitoring the data structure accesses to detect grace periods after
-which memory reclamation is possible.
+Hi
 
-liburcu-cds provides efficient data structures based on RCU and
-lock-free algorithms. Those structures include hash tables, queues,
-stacks, and doubly-linked lists.
+I just glance the code quickly...
 
-This is a bugfix release.
+__urcu_steal_work() and __urcu_wakeup_siblings don't test
+if they visit the queue->sibling_head.
 
-Changelog:
-2014-10-21 Userspace RCU 0.8.5
-        * Fix: preserve example files' timestamps when copying
-        * rculfhash: remove duplicated code
-        * rculfhash: handle pthread_create failures
-        * rculfhash: fall back to single-threaded resize on calloc failure
-        * x86: drop extra semi-colon in caa_cpu_relax
-        * Fix: Use after free in rcu_barrier()
-        * Fix: rcu_barrier(): uninitialized futex field
-        * call_rcu threads should clear their PAUSED flag when they unpause
-        * Fix: bring back dummy rcu_bp_exit symbol
+All the tasks may continue stealing works without any progress.
 
-Project website: http://urcu.so
-Git repository: git://git.urcu.so/urcu.git
+Thanks,
+Lai
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+On 10/19/2014 05:13 AM, Mathieu Desnoyers wrote:
+> Hi,
+> 
+> I have written an implementation of a workqueue based
+> on wfcqueue (fifo workqueue), wfstack (lifo wait queue)
+> including a work-stealing scheme. I think this could
+> scale very naturally to large workloads, and it skips
+> the overhead of sys_futex when wakees are already running.
+> Since the wakeup scheme is very lightweight when work
+> is ongoing, we use it extensively.
+> 
+> It also makes extensive use of wfcqueue "splice" operation
+> to move work batch in bulk amongst queue and worker
+> threads. It is a O(1) operation which does not need to
+> touch the content of the queue.
+> 
+> RCU is used to lookup the sibling worker threads for
+> work stealing and to wake the siblings of a thread
+> busy handling work.
+> 
+> It's at:
+> 
+> git://git.urcu.so/urcu.git
+> branch: urcu/workqueue-wakeup
+> 
+> or gitweb of the top commit:
+> http://git.lttng.org/?p=userspace-rcu.git;a=commit;h=2c6a5414ed2ab44be24211d15a5d9f1f40dbfc74
+> 
+> Note that this is work in progress, compile-tested only.
+> I also need to write extensive tests.
+> 
+> Feedback is welcome,
+> 
+> Thanks!
+> 
+> Mathieu
+> 
