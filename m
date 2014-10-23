@@ -1,22 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Userspace RCU: workqueue with batching, cheap wakeup,
- and work stealing
-Date: Thu, 23 Oct 2014 13:06:04 +0000 (UTC)
-Message-ID: <1961985429.339.1414069564156.JavaMail.zimbra__40745.331606786$1414069626$gmane$org@efficios.com>
-References: <836028170.11148.1413630118955.JavaMail.zimbra@efficios.com>
- <1521253780.11371.1413666790992.JavaMail.zimbra@efficios.com>
- <54478D8E.1080608@cn.fujitsu.com>
- <1569300159.298.1413976834389.JavaMail.zimbra@efficios.com>
- <54488392.2030008@cn.fujitsu.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: Re: health check and relaunch of lttng daemons
+Date: Thu, 23 Oct 2014 09:24:51 -0400
+Message-ID: <20141023132451.GC10437__47633.2477563576$1414070746$gmane$org@thessa>
+References: <CAM5kDqzEEKLhpyWuU3+41AJO4wPdKoCyR-YSVnLXtxD1HxfdUQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0961642511=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XhI5n-0001cU-0u
- for lttng-dev@lists.lttng.org; Thu, 23 Oct 2014 09:06:20 -0400
-In-Reply-To: <54488392.2030008@cn.fujitsu.com>
+ (envelope-from <dgoulet@efficios.com>) id 1XhINw-0001jC-1W
+ for lttng-dev@lists.lttng.org; Thu, 23 Oct 2014 09:25:01 -0400
+In-Reply-To: <CAM5kDqzEEKLhpyWuU3+41AJO4wPdKoCyR-YSVnLXtxD1HxfdUQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,106 +19,147 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <laijs@cn.fujitsu.com>
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, lttng-dev <lttng-dev@lists.lttng.org>, Ben Maurer <bmaurer@fb.com>, Yannick Brosseau <scientist@fb.com>
+To: Anand Neeli <anand.neeli@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Lai Jiangshan" <laijs@cn.fujitsu.com>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: "Ben Maurer" <bmaurer@fb.com>, "lttng-dev" <lttng-dev@lists.lttng.org>, "Yannick Brosseau" <scientist@fb.com>,
-> "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, "Stephen Hemminger" <stephen@networkplumber.org>
-> Sent: Thursday, October 23, 2014 12:26:58 AM
-> Subject: Re: Userspace RCU: workqueue with batching, cheap wakeup, and work stealing
-> 
-> Hi, Mathieu
 
-Hi Lai,
+--===============0961642511==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="7qSK/uQB79J36Y4o"
+Content-Disposition: inline
 
-> 
-> In the code, how this problem be solved?
-> "All the tasks may continue stealing works without any progress."
 
-Good point. It is not. I see two possible solutions for this:
+--7qSK/uQB79J36Y4o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-1) We break the circular chain of siblings at the list head.
-   It has the downside that work could accumulate at the first
-   worker of the list, or
-2) Whenever we grab work (either from the global queue or from
-   a sibling), we could dequeue one element and keep it to ourself,
-   out of reach of siblings. This would ensure progress, since
-   worker stealing work would always keep one work element to itself,
-   which would therefore ensure progress.
+On 23 Oct (12:37:40), Anand Neeli wrote:
+> Hi All,
+> I have few queries related to notifications when lttng daemons die and
+> their spawning and health-check
+>=20
+> - When relayd dies then sessiond gets error of connection reset, but it
+> doesnt try to reconnect to relayd again. It just lies on system without
+> being functional.
+>=20
+> - on a system with multiple nodes, relayd can be spawned on any node. Is
+> there a way for the sessiond to discover or get relayd IP-address. (Again
+> in case relayd dies and gets spawned on different node, then sessiond has
+> to discover and re-connect)
 
-I personally prefer (2), since it has fewer downsides.
+No there is no discovery mechanism of relayd. I know that it has been
+worked on a while ago but was more of a school project.
 
-> 
-> Why ___urcu_steal_work() needs cds_wfcq_dequeue_lock()?
+>=20
+> - How is the health_check used. Is it deprecated? coz in lttng.h i see
+> extern LTTNG_DEPRECATED("This call is now obsolete.")
+> int lttng_health_check(enum lttng_health_component c);
 
-This lock is to protect operations on the sibling workqueue.
-Here are the various actors touching it:
+Please see lttng/health.h for the API.
 
-- The worker attempting to steal from the sibling (with splice-from),
-- The sibling itself, in urcu_dequeue_work(), with a dequeue
-  operation,
+>=20
+> If health_check can be used for relayd and sessiond?
+> Can anyone provide more pointers or example code for health check?
 
-Looking at the wfcq synchronization table:
+It can be used on the three daemon we have, sessiond, consumerd and
+relayd. A good example would be the health test that you can find here:
 
- * Synchronization table:
- *
- * External synchronization techniques described in the API below is
- * required between pairs marked with "X". No external synchronization
- * required between pairs marked with "-".
- *
- * Legend:
- * [1] cds_wfcq_enqueue
- * [2] __cds_wfcq_splice (destination queue)
- * [3] __cds_wfcq_dequeue
- * [4] __cds_wfcq_splice (source queue)
- * [5] __cds_wfcq_first
- * [6] __cds_wfcq_next
- *
- *     [1] [2] [3] [4] [5] [6]
- * [1]  -   -   -   -   -   -
- * [2]  -   -   -   -   -   -
- * [3]  -   -   X   X   X   X
- * [4]  -   -   X   -   X   X
- * [5]  -   -   X   X   -   -
- * [6]  -   -   X   X   -   -
+=2E/tests/regression/tools/health/health_check.c
 
-We need a mutex between splice-from and dequeue since they
-are executed by different threads. I can replace this with
-a call to cds_wfcq_splice_blocking() instead, which takes the
-lock internally. That would be neater.
+>=20
+> - it becomes really important to get notification/signal from relayd, so
+> that software can be added to respawn sessiond.
+> please let me know if there is anyway of doing this.
 
-> 
-> It is not a good idea for a worker to call synchronize_rcu() (in
-> urcu_accept_work()).
-> A new work may be coming soon.
+Not sure to fully understand what you want here. You are looking for a
+way to detect relayd health so you can respawn a sessiond?
 
-The reason why the worker calls synchronize_rcu() there is to protect
-the waitqueue lfstack "pop" operation from ABA. It matches the RCU
-read-side critical sections encompassing urcu_dequeue_wake_single().
+Note that if the relayd dies, the current session using it will NOT try
+to reconnect. However, if you create a new session on the sessiond with
+a URL pointing to a working relayd, everything should work. No need to
+respawn a sessiond. You can simply destroy the session for which the
+relayd died and create a new one with the new URL.
 
-Another way to achieve this would be to grab a mutex across calls to
-urcu_dequeue_wake_single(), but unfortunately this call needs to be
-done by the dispatcher thread, and I'm trying to keep a low-latency
-bias in favor of the dispatcher here. In this case, it is done at the
-expense of overhead in the worker when the worker is about to busy-wait
-and eventually block, so I thought the tradeoff was not so bad.
+Cheers!
+David
 
-Thoughts ?
+>=20
+>=20
+> Thanks,
+> Anand Neeli
+>=20
+>=20
+>=20
+>=20
+> On Tue, Oct 21, 2014 at 12:10 AM, Anand Neeli <anand.neeli@gmail.com> wro=
+te:
+>=20
+> > one more point:
+> > if there is a way to kill/exit sessiond on a connection reset then will=
+ be
+> > easier to re-launch it again
+> >
+> > wondering if anything of that sort can be done
+> >
+> > Thanks,
+> > Anand Neeli
+> >
+> > On Tue, Oct 21, 2014 at 12:02 AM, Anand Neeli <anand.neeli@gmail.com>
+> > wrote:
+> >
+> >> Hi All,
+> >> if relayd gets killed i see there is connection reset which happens at
+> >> client.
+> >> Is there a way to relaunch the sessiond/consumerd on a connection rese=
+t?
+> >>
+> >> can some hooks be added or helper application be written to relaunch
+> >> sessiond in case exit of relayd or any other connection reset?
+> >>
+> >> Thanks,
+> >> Anand Neeli
+> >>
+> >
+> >
 
-Thanks for the feedback!
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-Mathieu
 
-> 
-> thanks,
-> Lai
-> 
+--7qSK/uQB79J36Y4o
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBCABmBQJUSQGjXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02lokH/2fe90ATOOUAkhpfKwOq/Vqw
+q3BV42L9XtGg6L3qihuNr18R2LqWK6tT1I2/UjZulPz+03tcluxhdfUG85a5dUFg
++d4r1aGm4wxxLDmRrmEkoL/TTl7BfclVdOGT3RYmSb+nNeCqYMjHAY+izjbYgGev
+kMylYR/2fsS7k4WF6RBH+gC/OaKsan4bd8+zditqvhiPqR8PAuusqnhnyDhyqkk+
+bBMKZVvXyynHx2lGHaJZhl+hM/v7mPeoLt1HeqeMv+hX86gwTxWntvg0oV+EV3XI
+Q3Rbn5p5ErZnkA//y++CF9zKSWSF4ubTWV/z2z+8HiMsV8vsKSPkIShvuwXaOdM=
+=tHo+
+-----END PGP SIGNATURE-----
+
+--7qSK/uQB79J36Y4o--
+
+
+--===============0961642511==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0961642511==--
