@@ -1,22 +1,31 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Userspace RCU: workqueue with batching, cheap wakeup,
- and work stealing
-Date: Thu, 23 Oct 2014 13:30:12 +0000 (UTC)
-Message-ID: <984401415.431.1414071012829.JavaMail.zimbra__36598.3377596878$1414071072$gmane$org@efficios.com>
-References: <836028170.11148.1413630118955.JavaMail.zimbra@efficios.com>
- <1521253780.11371.1413666790992.JavaMail.zimbra@efficios.com>
- <54478D8E.1080608@cn.fujitsu.com>
- <1569300159.298.1413976834389.JavaMail.zimbra@efficios.com>
- <54488392.2030008@cn.fujitsu.com> <5448CA38.2010801@cn.fujitsu.com>
+From: David Goulet <dgoulet@efficios.com>
+Subject: A kind of farewell :)
+Date: Thu, 23 Oct 2014 12:01:30 -0400
+Message-ID: <20141023160130.GE10437__16079.47944799$1414080160$gmane$org@thessa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1094273839=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XhIT9-0001ob-BB
- for lttng-dev@lists.lttng.org; Thu, 23 Oct 2014 09:30:29 -0400
-In-Reply-To: <5448CA38.2010801@cn.fujitsu.com>
+ (envelope-from <dgoulet@efficios.com>) id 1XhKpW-0002bj-2K
+ for lttng-dev@lists.lttng.org; Thu, 23 Oct 2014 12:01:42 -0400
+Received: from localhost (localhost [127.0.0.1])
+ by smtp.ini-tech.com (Postfix) with ESMTP id D6B4A8821C
+ for <lttng-dev@lists.lttng.org>; Thu, 23 Oct 2014 16:01:40 +0000 (UTC)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+ by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id 22ugKHvb0dFj for <lttng-dev@lists.lttng.org>;
+ Thu, 23 Oct 2014 16:01:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp.ini-tech.com (Postfix) with ESMTP id 4A3E68833F
+ for <lttng-dev@lists.lttng.org>; Thu, 23 Oct 2014 16:01:40 +0000 (UTC)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+ by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id qvv8f0lyOie2 for <lttng-dev@lists.lttng.org>;
+ Thu, 23 Oct 2014 16:01:40 +0000 (UTC)
+Received: from thessa (unknown [96.127.212.51])
+ by smtp.ini-tech.com (Postfix) with ESMTPSA id 257078821C
+ for <lttng-dev@lists.lttng.org>; Thu, 23 Oct 2014 16:01:40 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,189 +34,87 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <laijs@cn.fujitsu.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Ben Maurer <bmaurer@fb.com>, Yannick Brosseau <scientist@fb.com>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Lai Jiangshan" <laijs@cn.fujitsu.com>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, "lttng-dev" <lttng-dev@lists.lttng.org>, "Ben Maurer"
-> <bmaurer@fb.com>, "Yannick Brosseau" <scientist@fb.com>
-> Sent: Thursday, October 23, 2014 5:28:24 AM
-> Subject: Re: [lttng-dev] Userspace RCU: workqueue with batching, cheap wakeup, and work stealing
-> 
-> Hi Mathieu:
-> 
-> what happen when the wait_node is still queued when urcu_worker_unregister()
-> is called?
 
-Hrm, I think this could indeed be an issue. I'm thinking to add a "shutdown"
-mode to the workqueue (similarly to folly lifosem). Perhaps this could help
-us handling this situation.
+--===============1094273839==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="J4XPiPrVK1ev6Sgr"
+Content-Disposition: inline
 
-> 
-> On 10/23/2014 12:26 PM, Lai Jiangshan wrote:
-[...]
-> > 
-> > Hi, Mathieu
-> > 
-> > In the code, how this problem be solved?
-> > "All the tasks may continue stealing works without any progress."
-> 
-> Can __urcu_wakeup_siblings() be moved to the end of the urcu_dequeue_work()?
 
-It might help, but I don't think it would solve the theoretical
-lack-of-progress issue. If we are in a state where all workers threads
-are running, none need to be awakened to steal work, and they could fall
-into an endless cycle of work-stealing followed by facing an empty work
-queue due to another concurrent stealing. I think getting threads to keep
-one work item for themselves when they grab work from the global queue
-or steal work offers better forward progress guarantees in this case.
+--J4XPiPrVK1ev6Sgr
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> > 
-> > Why ___urcu_steal_work() needs cds_wfcq_dequeue_lock()?
-> Sorry, it does need, it locks the source queue...
-> but we have cds_wfcq_splice_blocking() which wrap the locking and the
-> splicing.
+Greetings everyone!
 
-Yes,
+This email is to announce that I will be leaving EfficiOS Inc. on
+November 1st 2014 thus *not* working full time anymore on the LTTng
+project.
 
-> 
-> > 
-> > It is not a good idea for a worker to call synchronize_rcu() (in
-> > urcu_accept_work()).
-> > A new work may be coming soon.
-> 
-> 
-> I suggest to add a new API:
-> __cds_lfs_pop_if(stack, expect) {
-> 	atomic {
-> 		if the top == expect {
-> 			pop it;
-> 		}
-> 	}
-> }
-> 
-> Then all the worker can only be woken up by urcu_adaptative_wake_up(),
-> rather than urcu_dequeue_wake_single().
-> 
-> workers dequeues itself when successfully urcu_accept_work() by using
-> __cds_lfs_pop_if().
+<dreamy paragraph>
 
-There is something I don't like about this approach: what if, for some
-reason, a worker being awakened takes a lot of time to start running.
-It would therefore stall the entire waitqueue until it can be executed
-and pop itself from the waitqueue.
+I've been involved for 5 years in the project of which 4 years
+maintaining the lttng-tools code base so rest assure it's with some
+sadness that I'm leaving. I'll be tackling new challenges that hopefully
+will include a LTTng component :).
 
-Thoughts ?
+</dreamy paragraph>
 
-Thanks!
+For now, I will still act as the maintainer but a transition has
+started. J=E9r=E9mie Galarneau (jgalar) will be co-maintainer until he feels
+confident to take on the responsabilities alone :). Now the only one
+question remains, is J=E9r=E9mie up to the challenge?! :P
 
-Mathieu
+In all seriousness, it's a blast to work on LTTng and rest assure, I
+will still be around the LTTng community for a long time!
 
-> 
-> Thanks,
-> Lai
-> 
-> > 
-> > thanks,
-> > Lai
-> > 
-> > On 10/22/2014 07:20 PM, Mathieu Desnoyers wrote:
-> >> Hi Lai,
-> >>
-> >> I pushed a few updates within the past days, including one
-> >> fixing this issue. The updated branch is available at:
-> >>
-> >> git://git.urcu.so/urcu.git
-> >> branch: urcu/workqueue-wakeup
-> >>
-> >> gitweb:
-> >> http://git.lttng.org/?p=userspace-rcu.git;a=shortlog;h=refs/heads/urcu/workqueue-wakeup
-> >>
-> >> Please let me know if you notice anything else,
-> >>
-> >> Thanks!
-> >>
-> >> Mathieu
-> >>
-> >> ----- Original Message -----
-> >>> From: "Lai Jiangshan" <laijs@cn.fujitsu.com>
-> >>> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> >>> Cc: "Ben Maurer" <bmaurer@fb.com>, "lttng-dev"
-> >>> <lttng-dev@lists.lttng.org>, "Yannick Brosseau" <scientist@fb.com>,
-> >>> "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, "Stephen Hemminger"
-> >>> <stephen@networkplumber.org>
-> >>> Sent: Wednesday, October 22, 2014 6:57:18 AM
-> >>> Subject: Re: Userspace RCU: workqueue with batching, cheap wakeup, and
-> >>> work stealing
-> >>>
-> >>> Hi
-> >>>
-> >>> I just glance the code quickly...
-> >>>
-> >>> __urcu_steal_work() and __urcu_wakeup_siblings don't test
-> >>> if they visit the queue->sibling_head.
-> >>>
-> >>> All the tasks may continue stealing works without any progress.
-> >>>
-> >>> Thanks,
-> >>> Lai
-> >>>
-> >>> On 10/19/2014 05:13 AM, Mathieu Desnoyers wrote:
-> >>>> Hi,
-> >>>>
-> >>>> I have written an implementation of a workqueue based
-> >>>> on wfcqueue (fifo workqueue), wfstack (lifo wait queue)
-> >>>> including a work-stealing scheme. I think this could
-> >>>> scale very naturally to large workloads, and it skips
-> >>>> the overhead of sys_futex when wakees are already running.
-> >>>> Since the wakeup scheme is very lightweight when work
-> >>>> is ongoing, we use it extensively.
-> >>>>
-> >>>> It also makes extensive use of wfcqueue "splice" operation
-> >>>> to move work batch in bulk amongst queue and worker
-> >>>> threads. It is a O(1) operation which does not need to
-> >>>> touch the content of the queue.
-> >>>>
-> >>>> RCU is used to lookup the sibling worker threads for
-> >>>> work stealing and to wake the siblings of a thread
-> >>>> busy handling work.
-> >>>>
-> >>>> It's at:
-> >>>>
-> >>>> git://git.urcu.so/urcu.git
-> >>>> branch: urcu/workqueue-wakeup
-> >>>>
-> >>>> or gitweb of the top commit:
-> >>>> http://git.lttng.org/?p=userspace-rcu.git;a=commit;h=2c6a5414ed2ab44be24211d15a5d9f1f40dbfc74
-> >>>>
-> >>>> Note that this is work in progress, compile-tested only.
-> >>>> I also need to write extensive tests.
-> >>>>
-> >>>> Feedback is welcome,
-> >>>>
-> >>>> Thanks!
-> >>>>
-> >>>> Mathieu
-> >>>>
-> >>>
-> >>>
-> >>
-> > 
-> > 
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > .
-> > 
-> 
-> 
+Thanks to everyone that I had the chance to work and collaborate with,
+it has been an immense pleasure for me. I will certainly miss your well
+(NOT) formatted patches and one liner bug reports! :P
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Remember, LTTng all comes down to this debug output that I added 4 years
+ago (and that segfault also on me... :):
+
+	DEBUG1 - [27854/27854]: *** assert failed :-) *** =3D=3D> Matthew, BEET
+	driven development works!
+
+Cheers!
+David
+
+--J4XPiPrVK1ev6Sgr
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBCABmBQJUSSZaXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02PhAH/j9T4jRKZHSUuJzdy35xgsfs
+/fEcyrbwKD+LP139YtphDIbs5CKDWJHIG9VJA4ih+XMSzKGaq0GEd6bVXIyMke3D
+zSfopA2TL3bQhUXTA6copdIlRHJNyTM59NOQ2fJ/cXT4mDOggnZ6ed+zdk0uqujh
+4hFNr5M8Mu8U47riJsVF7z8Ta1Pj7fN7KZQTSaj/EBgzzxWWnkO0iVYTCVXiMRQz
+Kvz10rkeuy3yD2cQGmB3qbjEWrPX3jFfNHhfEu0cqOsUiMkSzRTu6gYCLITSEBl8
+XqT893D/VL1J+vfDdMzBOsK6nwH61i+Fhhe4S2s4DjadjdgAY3UZYwCD/2QLJTM=
+=1fQ3
+-----END PGP SIGNATURE-----
+
+--J4XPiPrVK1ev6Sgr--
+
+
+--===============1094273839==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1094273839==--
