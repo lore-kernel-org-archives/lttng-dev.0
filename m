@@ -1,24 +1,23 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Lai Jiangshan <laijs@cn.fujitsu.com>
 Subject: Re: Userspace RCU: workqueue with batching, cheap wakeup,
  and work stealing
-Date: Thu, 23 Oct 2014 23:24:17 +0000 (UTC)
-Message-ID: <784039748.916.1414106657664.JavaMail.zimbra__37790.7023801983$1414106719$gmane$org@efficios.com>
+Date: Fri, 24 Oct 2014 09:45:59 +0800
+Message-ID: <5449AF57.2040507__10517.6386693076$1414115030$gmane$org@cn.fujitsu.com>
 References: <836028170.11148.1413630118955.JavaMail.zimbra@efficios.com>
- <54488392.2030008@cn.fujitsu.com> <5448CA38.2010801@cn.fujitsu.com>
- <984401415.431.1414071012829.JavaMail.zimbra@efficios.com>
- <1736995491.608.1414081381945.JavaMail.zimbra@efficios.com>
- <1650317292.810.1414101428789.JavaMail.zimbra@efficios.com>
- <5CDDBDF2D36D9F43B9F5E99003F6A0D4861C3F96@PRN-MBX02-1.TheFacebook.com>
- <710327797.877.1414104532195.JavaMail.zimbra@efficios.com>
+ <1521253780.11371.1413666790992.JavaMail.zimbra@efficios.com>
+ <54478D8E.1080608@cn.fujitsu.com>
+ <1569300159.298.1413976834389.JavaMail.zimbra@efficios.com>
+ <54488392.2030008@cn.fujitsu.com>
+ <1961985429.339.1414069564156.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from [59.151.112.132] (helo=heian.cn.fujitsu.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XhRk3-0004qT-Sh
- for lttng-dev@lists.lttng.org; Thu, 23 Oct 2014 19:24:31 -0400
-In-Reply-To: <710327797.877.1414104532195.JavaMail.zimbra@efficios.com>
+ (envelope-from <laijs@cn.fujitsu.com>) id 1XhTu9-0005Wd-8O
+ for lttng-dev@lists.lttng.org; Thu, 23 Oct 2014 21:43:04 -0400
+In-Reply-To: <1961985429.339.1414069564156.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -27,134 +26,113 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Ben Maurer <bmaurer@fb.com>
-Cc: Yannick Brosseau <yannick.brosseau@fb.com>, lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, lttng-dev <lttng-dev@lists.lttng.org>, Ben Maurer <bmaurer@fb.com>, Yannick Brosseau <scientist@fb.com>
 List-Id: lttng-dev@lists.lttng.org
 
-I just implemented a urcu_workqueue_steal_all(), and the
-benchmark test program now uses this when there is congestion
-in the queue.
+On 10/23/2014 09:06 PM, Mathieu Desnoyers wrote:
+> ----- Original Message -----
+>> From: "Lai Jiangshan" <laijs@cn.fujitsu.com>
+>> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+>> Cc: "Ben Maurer" <bmaurer@fb.com>, "lttng-dev" <lttng-dev@lists.lttng.org>, "Yannick Brosseau" <scientist@fb.com>,
+>> "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, "Stephen Hemminger" <stephen@networkplumber.org>
+>> Sent: Thursday, October 23, 2014 12:26:58 AM
+>> Subject: Re: Userspace RCU: workqueue with batching, cheap wakeup, and work stealing
+>>
+>> Hi, Mathieu
+> 
+> Hi Lai,
+> 
+>>
+>> In the code, how this problem be solved?
+>> "All the tasks may continue stealing works without any progress."
+> 
+> Good point. It is not. I see two possible solutions for this:
+> 
+> 1) We break the circular chain of siblings at the list head.
+>    It has the downside that work could accumulate at the first
+>    worker of the list, or
+> 2) Whenever we grab work (either from the global queue or from
+>    a sibling), we could dequeue one element and keep it to ourself,
+>    out of reach of siblings. This would ensure progress, since
+>    worker stealing work would always keep one work element to itself,
+>    which would therefore ensure progress.
+> 
+> I personally prefer (2), since it has fewer downsides.
+> 
+>>
+>> Why ___urcu_steal_work() needs cds_wfcq_dequeue_lock()?
+> 
+> This lock is to protect operations on the sibling workqueue.
+> Here are the various actors touching it:
+> 
+> - The worker attempting to steal from the sibling (with splice-from),
+> - The sibling itself, in urcu_dequeue_work(), with a dequeue
+>   operation,
+> 
+> Looking at the wfcq synchronization table:
+> 
+>  * Synchronization table:
+>  *
+>  * External synchronization techniques described in the API below is
+>  * required between pairs marked with "X". No external synchronization
+>  * required between pairs marked with "-".
+>  *
+>  * Legend:
+>  * [1] cds_wfcq_enqueue
+>  * [2] __cds_wfcq_splice (destination queue)
+>  * [3] __cds_wfcq_dequeue
+>  * [4] __cds_wfcq_splice (source queue)
+>  * [5] __cds_wfcq_first
+>  * [6] __cds_wfcq_next
+>  *
+>  *     [1] [2] [3] [4] [5] [6]
+>  * [1]  -   -   -   -   -   -
+>  * [2]  -   -   -   -   -   -
+>  * [3]  -   -   X   X   X   X
+>  * [4]  -   -   X   -   X   X
+>  * [5]  -   -   X   X   -   -
+>  * [6]  -   -   X   X   -   -
+> 
+> We need a mutex between splice-from and dequeue since they
+> are executed by different threads. I can replace this with
+> a call to cds_wfcq_splice_blocking() instead, which takes the
+> lock internally. That would be neater.
+> 
+>>
+>> It is not a good idea for a worker to call synchronize_rcu() (in
+>> urcu_accept_work()).
+>> A new work may be coming soon.
+> 
+> The reason why the worker calls synchronize_rcu() there is to protect
+> the waitqueue lfstack "pop" operation from ABA. It matches the RCU
+> read-side critical sections encompassing urcu_dequeue_wake_single().
+> 
+> Another way to achieve this would be to grab a mutex across calls to
+> urcu_dequeue_wake_single(), but unfortunately this call needs to be
+> done by the dispatcher thread, and I'm trying to keep a low-latency
+> bias in favor of the dispatcher here. In this case, it is done at the
+> expense of overhead in the worker when the worker is about to busy-wait
+> and eventually block, so I thought the tradeoff was not so bad.
 
-Thanks,
+"single worker pattern" does be a frequent use-case.
+you can image the lag and jitter in this case.
 
-Mathieu
 
------ Original Message -----
-> From: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> To: "Ben Maurer" <bmaurer@fb.com>
-> Cc: "Yannick Brosseau" <yannick.brosseau@fb.com>, "lttng-dev" <lttng-dev@lists.lttng.org>, "Paul E. McKenney"
-> <paulmck@linux.vnet.ibm.com>
-> Sent: Thursday, October 23, 2014 6:48:52 PM
-> Subject: Re: [lttng-dev] Userspace RCU: workqueue with batching, cheap wakeup, and work stealing
-> 
-> Interesting point about bufferbloat!
-> 
-> I've just pushed the "approximate queue upper bound" feature
-> in the last commit.
-> 
-> Going further, when the queue is full, there are indeed a few
-> options:
-> 
-> 1) sleep for a few ms and retry enqueue,
-> 2) grab the entire content of the global workqueue, and discard
->    its work elements one by one,
-> 3) in addition to (2), also steal work from all worker
->    threads, and discard their work elements.
-> 
-> Making the dispatcher act as a dummy "worker thread" would
-> allow it to easily accomplish (2). We'd need some tweaks
-> to "steal all worker's work elements" (3) (new API). This
-> could be presented as a "urcu_queue_steal_all" or something
-> like that, and then the dispatcher could iterate on the
-> work items and either discard them, or perform the appropriate
-> socket action.
+How about a mutex&rcu protected idle-workers?
+
+idle-worker is wokenup via rcu-protected scheme.
+and dequeued&requeued (in urcu_accept_work() or urcu_worker_unregister()) via mutex-protected scheme.
+
 > 
 > Thoughts ?
 > 
-> Thanks,
+> Thanks for the feedback!
 > 
 > Mathieu
 > 
+>>
+>> thanks,
+>> Lai
+>>
 > 
-> ----- Original Message -----
-> > From: "Ben Maurer" <bmaurer@fb.com>
-> > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, "Lai Jiangshan"
-> > <laijs@cn.fujitsu.com>
-> > Cc: "lttng-dev" <lttng-dev@lists.lttng.org>, "Paul E. McKenney"
-> > <paulmck@linux.vnet.ibm.com>, "Yannick Brosseau"
-> > <yannick.brosseau@fb.com>
-> > Sent: Thursday, October 23, 2014 6:09:11 PM
-> > Subject: RE: [lttng-dev] Userspace RCU: workqueue with batching, cheap
-> > wakeup, and work stealing
-> > 
-> > Bounds are pretty critical :-), often during operational incidents we will
-> > get large buildups in our queues and these cause problems.
-> > 
-> > For us, one of the most critical things isn't the memory usage but the
-> > delay
-> > caused to the client. For example, if a server has a queue that incoming
-> > requests are put into if that queue grows large clients experience large
-> > delays. Since most calls to the server have a short timeout (seconds), we'd
-> > rather prevent items from entering the queue so that we fail fast.
-> > 
-> > Some of our applications switch to LIFO processing of work items when the
-> > queue is large. What this does is to focus the processing effort on recent
-> > requests -- ones which will hopefully get back to the user in time for them
-> > to see a response.
-> > 
-> > Long story short: when a queue is overloaded, we'd rather drop some
-> > requests
-> > quickly and serve the other requests with minimal queuing delay. Think of
-> > queues as bufferbloat applied to work items. In fact, we have experimented
-> > with some of the bufferbloat techniques on our work queues (specifically,
-> > CoDEL)
-> > 
-> > -b
-> > ________________________________________
-> > From: Mathieu Desnoyers [mathieu.desnoyers@efficios.com]
-> > Sent: Thursday, October 23, 2014 2:57 PM
-> > To: Lai Jiangshan
-> > Cc: lttng-dev; Paul E. McKenney; Ben Maurer; Yannick Brosseau
-> > Subject: Re: [lttng-dev] Userspace RCU: workqueue with batching, cheap
-> > wakeup, and work stealing
-> > 
-> > The next thing I'm wondering now: should we include an
-> > optional bound to the global workqueue size in the API ?
-> > 
-> > I've just had cases here where I stress test the queue
-> > with very frequent dispatch, and it can fill up memory
-> > relatively quickly if the workers have a large amount of
-> > work to do per work-item.
-> > 
-> > I think the usual way to do this would be to make the
-> > behavior nonblocking when the queue is full, so the
-> > dispatcher can take action and move the work away to
-> > another machine, or report congestion.
-> > 
-> > Thoughts ?
-> > 
-> > Thanks,
-> > 
-> > Mathieu
-> > 
-> > --
-> > Mathieu Desnoyers
-> > EfficiOS Inc.
-> > http://www.efficios.com
-> > 
-> 
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
