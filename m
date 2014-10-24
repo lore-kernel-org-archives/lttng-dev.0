@@ -1,23 +1,18 @@
-From: "Boisvert, Sebastien" <boisvert@anl.gov>
-Subject: Re: A kind of farewell :)
-Date: Fri, 24 Oct 2014 14:38:42 +0000
-Message-ID: <E949C1E351B4914B87A26A5F96E06A9286B58F__43999.8571099297$1414161628$gmane$org@PAYTON.anl.gov>
-References: <20141023160130.GE10437@thessa>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [urcu][PATCH] compiler: use __GNUC__ instead of
+	the	undefined __GNUC_MAJOR__
+Date: Fri, 24 Oct 2014 20:07:19 +0000 (UTC)
+Message-ID: <465505776.1563.1414181239110.JavaMail.zimbra__9791.28129915825$1414181287$gmane$org@efficios.com>
+References: <1413253885-7154-1-git-send-email-cota@braap.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailrelay.anl.gov ([130.202.101.22])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <boisvert@anl.gov>) id 1Xhg1J-0001Ar-85
- for lttng-dev@lists.lttng.org; Fri, 24 Oct 2014 10:39:18 -0400
-Received: from mailgateway.anl.gov (mailgateway.anl.gov [130.202.101.28])
- (using TLSv1 with cipher RC4-SHA (128/128 bits))
- (No client certificate requested)
- by mailrelay.anl.gov (Postfix) with ESMTP id 713CE7CC294
- for <lttng-dev@lists.lttng.org>; Fri, 24 Oct 2014 09:39:06 -0500 (CDT)
-In-Reply-To: <20141023160130.GE10437@thessa>
-Content-Language: en-US
+ (envelope-from <compudj@efficios.com>) id 1Xhl8z-0002mF-E0
+ for lttng-dev@lists.lttng.org; Fri, 24 Oct 2014 16:07:30 -0400
+In-Reply-To: <1413253885-7154-1-git-send-email-cota@braap.org>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,40 +21,54 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David Goulet <dgoulet@efficios.com>, lttng-dev <lttng-dev@lists.lttng.org>
+To: "Emilio G. Cota" <cota@braap.org>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Best luck to you in your future endeavours.
+Merged into master and stable-0.8, thanks!
 
-> ________________________________________
-> From: David Goulet [dgoulet@efficios.com]
-> Sent: Thursday, October 23, 2014 11:01 AM
-> To: lttng-dev
-> Subject: [lttng-dev] A kind of farewell :)
-> Greetings everyone!
-> This email is to announce that I will be leaving EfficiOS Inc. on
-> November 1st 2014 thus *not* working full time anymore on the LTTng
-> project.
-> <dreamy paragraph>
-> I've been involved for 5 years in the project of which 4 years
-> maintaining the lttng-tools code base so rest assure it's with some
-> sadness that I'm leaving. I'll be tackling new challenges that hopefully
-> will include a LTTng component :).
-> </dreamy paragraph>
-> For now, I will still act as the maintainer but a transition has
-> started. J=E9r=E9mie Galarneau (jgalar) will be co-maintainer until he fe=
-els
-> confident to take on the responsabilities alone :). Now the only one
-> question remains, is J=E9r=E9mie up to the challenge?! :P
-> In all seriousness, it's a blast to work on LTTng and rest assure, I
-> will still be around the LTTng community for a long time!
-> Thanks to everyone that I had the chance to work and collaborate with,
-> it has been an immense pleasure for me. I will certainly miss your well
-> (NOT) formatted patches and one liner bug reports! :P
-> Remember, LTTng all comes down to this debug output that I added 4 years
-> ago (and that segfault also on me... :):
->         DEBUG1 - [27854/27854]: *** assert failed :-) *** =3D=3D> Matthew=
-, BEET
->         driven development works!
-> Cheers!
-> David
+Mathieu
+
+----- Original Message -----
+> From: "Emilio G. Cota" <cota@braap.org>
+> To: lttng-dev@lists.lttng.org
+> Sent: Monday, October 13, 2014 10:31:25 PM
+> Subject: [lttng-dev] [urcu][PATCH] compiler: use __GNUC__ instead of the	undefined __GNUC_MAJOR__
+> 
+> gcc defines the major number with __GNUC__, not __GNUC_MAJOR__:
+>   https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html
+> 
+> Signed-off-by: Emilio G. Cota <cota@braap.org>
+> ---
+>  urcu/compiler.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/urcu/compiler.h b/urcu/compiler.h
+> index 1e30903..2e0237e 100644
+> --- a/urcu/compiler.h
+> +++ b/urcu/compiler.h
+> @@ -97,8 +97,8 @@
+>  		(unsigned long) (v))
+>  
+>  #if defined (__GNUC__) \
+> -	&& ((__GNUC_MAJOR__ == 4) && (__GNUC_MINOR__ >= 5)	\
+> -		|| __GNUC_MAJOR__ >= 5)
+> +	&& ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)	\
+> +		|| __GNUC__ >= 5)
+>  #define CDS_DEPRECATED(msg)	\
+>  	__attribute__((deprecated(msg)))
+>  #else
+> --
+> 1.8.3
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
