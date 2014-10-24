@@ -1,24 +1,23 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Userspace RCU: workqueue with batching, cheap wakeup,
- and work stealing
-Date: Fri, 24 Oct 2014 13:22:17 +0000 (UTC)
-Message-ID: <1934266999.1214.1414156937264.JavaMail.zimbra__32041.9974196286$1414156997$gmane$org@efficios.com>
-References: <836028170.11148.1413630118955.JavaMail.zimbra@efficios.com>
- <1521253780.11371.1413666790992.JavaMail.zimbra@efficios.com>
- <54478D8E.1080608@cn.fujitsu.com>
- <1569300159.298.1413976834389.JavaMail.zimbra@efficios.com>
- <54488392.2030008@cn.fujitsu.com>
- <1961985429.339.1414069564156.JavaMail.zimbra@efficios.com>
- <5449AF57.2040507@cn.fujitsu.com>
+From: "Boisvert, Sebastien" <boisvert@anl.gov>
+Subject: Re: A kind of farewell :)
+Date: Fri, 24 Oct 2014 14:38:42 +0000
+Message-ID: <E949C1E351B4914B87A26A5F96E06A9286B58F__43999.8571099297$1414161628$gmane$org@PAYTON.anl.gov>
+References: <20141023160130.GE10437@thessa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mailrelay.anl.gov ([130.202.101.22])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Xhep2-0000nZ-9v
- for lttng-dev@lists.lttng.org; Fri, 24 Oct 2014 09:22:32 -0400
-In-Reply-To: <5449AF57.2040507@cn.fujitsu.com>
+ (envelope-from <boisvert@anl.gov>) id 1Xhg1J-0001Ar-85
+ for lttng-dev@lists.lttng.org; Fri, 24 Oct 2014 10:39:18 -0400
+Received: from mailgateway.anl.gov (mailgateway.anl.gov [130.202.101.28])
+ (using TLSv1 with cipher RC4-SHA (128/128 bits))
+ (No client certificate requested)
+ by mailrelay.anl.gov (Postfix) with ESMTP id 713CE7CC294
+ for <lttng-dev@lists.lttng.org>; Fri, 24 Oct 2014 09:39:06 -0500 (CDT)
+In-Reply-To: <20141023160130.GE10437@thessa>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -27,77 +26,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Lai Jiangshan <laijs@cn.fujitsu.com>
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, lttng-dev <lttng-dev@lists.lttng.org>, Ben Maurer <bmaurer@fb.com>, Yannick Brosseau <scientist@fb.com>
+To: David Goulet <dgoulet@efficios.com>, lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Lai Jiangshan" <laijs@cn.fujitsu.com>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: "Ben Maurer" <bmaurer@fb.com>, "lttng-dev" <lttng-dev@lists.lttng.org>, "Yannick Brosseau" <scientist@fb.com>,
-> "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, "Stephen Hemminger" <stephen@networkplumber.org>
-> Sent: Thursday, October 23, 2014 9:45:59 PM
-> Subject: Re: Userspace RCU: workqueue with batching, cheap wakeup, and work stealing
-> 
-> On 10/23/2014 09:06 PM, Mathieu Desnoyers wrote:
-> > ----- Original Message -----
-> >> From: "Lai Jiangshan" <laijs@cn.fujitsu.com>
-> >> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> >> Cc: "Ben Maurer" <bmaurer@fb.com>, "lttng-dev"
-> >> <lttng-dev@lists.lttng.org>, "Yannick Brosseau" <scientist@fb.com>,
-> >> "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, "Stephen Hemminger"
-> >> <stephen@networkplumber.org>
-> >> Sent: Thursday, October 23, 2014 12:26:58 AM
-> >> Subject: Re: Userspace RCU: workqueue with batching, cheap wakeup, and
-> >> work stealing
-> > 
-[...]
-> >>
-> >> It is not a good idea for a worker to call synchronize_rcu() (in
-> >> urcu_accept_work()).
-> >> A new work may be coming soon.
-> > 
-> > The reason why the worker calls synchronize_rcu() there is to protect
-> > the waitqueue lfstack "pop" operation from ABA. It matches the RCU
-> > read-side critical sections encompassing urcu_dequeue_wake_single().
-> > 
-> > Another way to achieve this would be to grab a mutex across calls to
-> > urcu_dequeue_wake_single(), but unfortunately this call needs to be
-> > done by the dispatcher thread, and I'm trying to keep a low-latency
-> > bias in favor of the dispatcher here. In this case, it is done at the
-> > expense of overhead in the worker when the worker is about to busy-wait
-> > and eventually block, so I thought the tradeoff was not so bad.
-> 
-> "single worker pattern" does be a frequent use-case.
-> you can image the lag and jitter in this case.
+Best luck to you in your future endeavours.
 
-I'd be happy to find a way to reduce unnecessary jitter, indeed.
-However, we need to keep in mind that this is issued only when
-the worker thread has no more work to do. And if there are few
-registered RCU threads, synchronize_rcu() should be pretty quick,
-especially now that multiple grace periods can run concurrently.
-
-> 
-> 
-> How about a mutex&rcu protected idle-workers?
-> 
-> idle-worker is wokenup via rcu-protected scheme.
-> and dequeued&requeued (in urcu_accept_work() or urcu_worker_unregister()) via
-> mutex-protected scheme.
-
-I'm not sure I understand your proposal. Can you give more
-detail about the RCU protected scheme you refer to here,
-along with how it is intended to interact with mutex ?
-
-Note that if we use RCU read-side around lfstack pop, it
-needs to be matched by a grace period between all other
-"pop"/"pop all" and re-push to deal with ABA.
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+> ________________________________________
+> From: David Goulet [dgoulet@efficios.com]
+> Sent: Thursday, October 23, 2014 11:01 AM
+> To: lttng-dev
+> Subject: [lttng-dev] A kind of farewell :)
+> Greetings everyone!
+> This email is to announce that I will be leaving EfficiOS Inc. on
+> November 1st 2014 thus *not* working full time anymore on the LTTng
+> project.
+> <dreamy paragraph>
+> I've been involved for 5 years in the project of which 4 years
+> maintaining the lttng-tools code base so rest assure it's with some
+> sadness that I'm leaving. I'll be tackling new challenges that hopefully
+> will include a LTTng component :).
+> </dreamy paragraph>
+> For now, I will still act as the maintainer but a transition has
+> started. J=E9r=E9mie Galarneau (jgalar) will be co-maintainer until he fe=
+els
+> confident to take on the responsabilities alone :). Now the only one
+> question remains, is J=E9r=E9mie up to the challenge?! :P
+> In all seriousness, it's a blast to work on LTTng and rest assure, I
+> will still be around the LTTng community for a long time!
+> Thanks to everyone that I had the chance to work and collaborate with,
+> it has been an immense pleasure for me. I will certainly miss your well
+> (NOT) formatted patches and one liner bug reports! :P
+> Remember, LTTng all comes down to this debug output that I added 4 years
+> ago (and that segfault also on me... :):
+>         DEBUG1 - [27854/27854]: *** assert failed :-) *** =3D=3D> Matthew=
+, BEET
+>         driven development works!
+> Cheers!
+> David
