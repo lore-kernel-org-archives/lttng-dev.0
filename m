@@ -1,66 +1,68 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Progress on system crash traces with LTTng using DAX and pmem
-Date: Sat, 25 Oct 2014 12:51:25 +0000 (UTC)
-Message-ID: <465653369.1985.1414241485934.JavaMail.zimbra@efficios.com>
-References: <1254279794.1957.1414240389301.JavaMail.zimbra@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: A kind of farewell :)
+Date: Sat, 25 Oct 2014 15:14:37 -0400
+Message-ID: <CA+jJMxs7R01ayHd3NSaSgDVdG=t-Q9u1JTV2UHShwf6OKh1GnQ__6395.39111075482$1414264526$gmane$org@mail.gmail.com>
+References: <20141023160130.GE10437@thessa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Return-path: <owner-linux-mm@kvack.org>
-In-Reply-To: <1254279794.1957.1414240389301.JavaMail.zimbra@efficios.com>
-Sender: owner-linux-mm@kvack.org
-To: Matthew Wilcox <willy@linux.intel.com>, Ross Zwisler <ross.zwisler@linux.intel.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-la0-f46.google.com ([209.85.215.46])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Xi6nT-00019S-Ht
+ for lttng-dev@lists.lttng.org; Sat, 25 Oct 2014 15:14:46 -0400
+Received: by mail-la0-f46.google.com with SMTP id gi9so4168485lab.33
+ for <lttng-dev@lists.lttng.org>; Sat, 25 Oct 2014 12:14:37 -0700 (PDT)
+In-Reply-To: <20141023160130.GE10437@thessa>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: David Goulet <dgoulet@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Matthew, Hi Ross,
-
-A quick follow up on my progress on using DAX and pmem with
-LTTng. I've been able to successfully gather a user-space
-trace into buffers mmap'd into an ext4 filesystem within
-a pmem block device mounted with -o dax to bypass the page
-cache. After a soft reboot, I'm able to mount the partition
-again, and gather the very last data collected in the buffers
-by the applications. I created a "lttng-crash" program that
-extracts data from those buffers and converts the content
-into a readable Common Trace Format trace. So I guess
-you have a use-case for your patchsets on commodity hardware
-right there. :)
-
-I've been asked by my customers if DAX would work well with
-mtd-ram, which they are using. To you foresee any roadblock
-with this approach ?
-
-FYI, the main reason why my customer wants to go with a
-"trace into memory that survives soft reboot" approach
-rather than to use things like kexec/kdump is that they
-care about the amount of time it takes to reboot their
-machines. They want a solution where they can extract the
-detailed crash data after reboot, after the machine is
-back online, rather than requiring a few minutes of offline
-time to extract the crash details.
-
-So I guess next year I'll probably be looking into
-allocating the LTTng kernel tracer buffers into an mmap'd file
-within a ext2/4-DAX-over-pmem/mtd-ram filesystem. It's going
-to be exciting! :)
-
-Please keep me in CC on your next patch versions. I'm willing
-to spend some more time reviewing them if needed. By the way,
-do you guys have a target time-frame/kernel version you aim
-at for getting this work upstream ?
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
-
---
-To unsubscribe, send a message with 'unsubscribe linux-mm' in
-the body to majordomo@kvack.org.  For more info on Linux MM,
-see: http://www.linux-mm.org/ .
-Don't email: <a href=mailto:"dont@kvack.org"> email@kvack.org </a>
+T24gVGh1LCBPY3QgMjMsIDIwMTQgYXQgMTI6MDEgUE0sIERhdmlkIEdvdWxldCA8ZGdvdWxldEBl
+ZmZpY2lvcy5jb20+IHdyb3RlOgo+IEdyZWV0aW5ncyBldmVyeW9uZSEKPgo+IFRoaXMgZW1haWwg
+aXMgdG8gYW5ub3VuY2UgdGhhdCBJIHdpbGwgYmUgbGVhdmluZyBFZmZpY2lPUyBJbmMuIG9uCj4g
+Tm92ZW1iZXIgMXN0IDIwMTQgdGh1cyAqbm90KiB3b3JraW5nIGZ1bGwgdGltZSBhbnltb3JlIG9u
+IHRoZSBMVFRuZwo+IHByb2plY3QuCj4KPiA8ZHJlYW15IHBhcmFncmFwaD4KPgo+IEkndmUgYmVl
+biBpbnZvbHZlZCBmb3IgNSB5ZWFycyBpbiB0aGUgcHJvamVjdCBvZiB3aGljaCA0IHllYXJzCj4g
+bWFpbnRhaW5pbmcgdGhlIGx0dG5nLXRvb2xzIGNvZGUgYmFzZSBzbyByZXN0IGFzc3VyZSBpdCdz
+IHdpdGggc29tZQo+IHNhZG5lc3MgdGhhdCBJJ20gbGVhdmluZy4gSSdsbCBiZSB0YWNrbGluZyBu
+ZXcgY2hhbGxlbmdlcyB0aGF0IGhvcGVmdWxseQo+IHdpbGwgaW5jbHVkZSBhIExUVG5nIGNvbXBv
+bmVudCA6KS4KPgo+IDwvZHJlYW15IHBhcmFncmFwaD4KPgo+IEZvciBub3csIEkgd2lsbCBzdGls
+bCBhY3QgYXMgdGhlIG1haW50YWluZXIgYnV0IGEgdHJhbnNpdGlvbiBoYXMKPiBzdGFydGVkLiBK
+w6lyw6ltaWUgR2FsYXJuZWF1IChqZ2FsYXIpIHdpbGwgYmUgY28tbWFpbnRhaW5lciB1bnRpbCBo
+ZSBmZWVscwo+IGNvbmZpZGVudCB0byB0YWtlIG9uIHRoZSByZXNwb25zYWJpbGl0aWVzIGFsb25l
+IDopLiBOb3cgdGhlIG9ubHkgb25lCj4gcXVlc3Rpb24gcmVtYWlucywgaXMgSsOpcsOpbWllIHVw
+IHRvIHRoZSBjaGFsbGVuZ2U/ISA6UAoKSGFoYSwgeWVhaCwgdGhvc2UgYXJlIGJpZyBzaG9lcyB0
+byBmaWxsISBJIHNob3VsZCBjb21lIHVwIHdpdGggbXkgb3duCmRyZWFteSBwYXJhZ3JhcGggdG8g
+dGVhcmZ1bGx5IGFjY2VwdCB0aGUgcmVzcG9uc2liaWxpdHkuLi4KSG9wZWZ1bGx5IHdlJ2xsIG1h
+a2UgdGhlIHRyYW5zaXRpb24gYXMgc21vb3RoIGFzIHBvc3NpYmxlIGZvciBldmVyeW9uZS4gOi0p
+Cgo+Cj4gSW4gYWxsIHNlcmlvdXNuZXNzLCBpdCdzIGEgYmxhc3QgdG8gd29yayBvbiBMVFRuZyBh
+bmQgcmVzdCBhc3N1cmUsIEkKPiB3aWxsIHN0aWxsIGJlIGFyb3VuZCB0aGUgTFRUbmcgY29tbXVu
+aXR5IGZvciBhIGxvbmcgdGltZSEKPgoKWW91IGJldHRlciBiZSEgOy0pCgpJbiBhbGwgc2VyaW91
+c25lc3MsIHRoYW5rcyBmb3IgYWxsIHRoZSB3b3JrIGFuZCBlZmZvcnRzIHlvdSd2ZSBwdXQKaW50
+byB0aGUgcHJvamVjdCBvdmVyIHRoZSB5ZWFycy4gWW91ciBmZWVkYmFjayAoYW5kIHBhdGNoZXMh
+KSB3aWxsCmFsd2F5cyBiZSB3ZWxjb21lLgoKTGV0J3Mga2VlcCB0aGlzIChyZWxlYXNlKSB0cmFp
+biByb2xsaW5nIQpKw6lyw6ltaWUKCj4gVGhhbmtzIHRvIGV2ZXJ5b25lIHRoYXQgSSBoYWQgdGhl
+IGNoYW5jZSB0byB3b3JrIGFuZCBjb2xsYWJvcmF0ZSB3aXRoLAo+IGl0IGhhcyBiZWVuIGFuIGlt
+bWVuc2UgcGxlYXN1cmUgZm9yIG1lLiBJIHdpbGwgY2VydGFpbmx5IG1pc3MgeW91ciB3ZWxsCj4g
+KE5PVCkgZm9ybWF0dGVkIHBhdGNoZXMgYW5kIG9uZSBsaW5lciBidWcgcmVwb3J0cyEgOlAKPgo+
+IFJlbWVtYmVyLCBMVFRuZyBhbGwgY29tZXMgZG93biB0byB0aGlzIGRlYnVnIG91dHB1dCB0aGF0
+IEkgYWRkZWQgNCB5ZWFycwo+IGFnbyAoYW5kIHRoYXQgc2VnZmF1bHQgYWxzbyBvbiBtZS4uLiA6
+KToKPgo+ICAgICAgICAgREVCVUcxIC0gWzI3ODU0LzI3ODU0XTogKioqIGFzc2VydCBmYWlsZWQg
+Oi0pICoqKiA9PT4gTWF0dGhldywgQkVFVAo+ICAgICAgICAgZHJpdmVuIGRldmVsb3BtZW50IHdv
+cmtzIQo+Cj4gQ2hlZXJzIQo+IERhdmlkCj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZA
+bGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
+bGlzdGluZm8vbHR0bmctZGV2Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1Mg
+SW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
+dHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
+bmZvL2x0dG5nLWRldgo=
