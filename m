@@ -1,25 +1,18 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Padding with Fs in babeltrace for a 32 bits field
-	(ctf_integer_hex)
-Date: Sat, 25 Oct 2014 17:09:10 -0400
-Message-ID: <CA+jJMxs6i2bk6gQK2+YccJTEOdsrSyEBhzupEm5UBLzuRmmCOw__35076.8272452571$1414271397$gmane$org@mail.gmail.com>
-References: <E949C1E351B4914B87A26A5F96E06A9286B328@PAYTON.anl.gov>
- <CAB4xu_3NMhkgL8AsVC7o65sVByYutuNoRu0WvzL+UKMOzsU7ag@mail.gmail.com>
- <E949C1E351B4914B87A26A5F96E06A9286B387@PAYTON.anl.gov>
- <CAB4xu_0L8eucgrr+hSxB_4NGmEfSsUeHfZLL0mjBys1Q_V9fcw@mail.gmail.com>
- <CA+jJMxv1gzHRi3Zq7tX+ACGoEMfq0CfGMTYV0xOPkuHH=JWWwA@mail.gmail.com>
- <850061895.2069.1414269549796.JavaMail.zimbra@efficios.com>
+From: Stefan Seefeld <stefan_seefeld@mentor.com>
+Subject: Re: bug reporting link(s) on new website
+Date: Sat, 25 Oct 2014 17:10:13 -0400
+Message-ID: <544C11B5.4090707__15187.3576375239$1414271457$gmane$org@mentor.com>
+References: <544C0E69.8040201@mentor.com>
+ <CAGDH53==yPRaADsj=GqHjh7KAMXYQ9xhv3Q_BHeu2qPJ6y1pVQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f172.google.com ([209.85.217.172])
+Received: from relay1.mentorg.com ([192.94.38.131])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Xi8aK-0001qZ-LO
- for lttng-dev@lists.lttng.org; Sat, 25 Oct 2014 17:09:20 -0400
-Received: by mail-lb0-f172.google.com with SMTP id n15so212348lbi.31
- for <lttng-dev@lists.lttng.org>; Sat, 25 Oct 2014 14:09:10 -0700 (PDT)
-In-Reply-To: <850061895.2069.1414269549796.JavaMail.zimbra@efficios.com>
+ (envelope-from <Stefan_Seefeld@mentor.com>) id 1Xi8bM-0001sS-73
+ for lttng-dev@lists.lttng.org; Sat, 25 Oct 2014 17:10:21 -0400
+In-Reply-To: <CAGDH53==yPRaADsj=GqHjh7KAMXYQ9xhv3Q_BHeu2qPJ6y1pVQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -28,101 +21,23 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Christian Babeux <christian.babeux@efficios.com>, Stefan Seefeld <stefan_seefeld@mentor.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gU2F0LCBPY3QgMjUsIDIwMTQgYXQgNDozOSBQTSwgTWF0aGlldSBEZXNub3llcnMKPG1hdGhp
-ZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gLS0tLS0gT3JpZ2luYWwgTWVzc2Fn
-ZSAtLS0tLQo+PiBGcm9tOiAiSsOpcsOpbWllIEdhbGFybmVhdSIgPGplcmVtaWUuZ2FsYXJuZWF1
-QGVmZmljaW9zLmNvbT4KPj4gVG86ICJQaGlsaXBwZSBQcm91bHgiIDxlZXBwZWxpdGVsb29wQGdt
-YWlsLmNvbT4KPj4gQ2M6ICJTZWJhc3RpZW4gQm9pc3ZlcnQiIDxib2lzdmVydEBhbmwuZ292Piwg
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZywgIk1hdGhpZXUgRGVzbm95ZXJzIgo+PiA8bWF0aGll
-dS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+PiBTZW50OiBTYXR1cmRheSwgT2N0b2JlciAyNSwg
-MjAxNCAzOjI0OjM4IFBNCj4+IFN1YmplY3Q6IFJlOiBbbHR0bmctZGV2XSBQYWRkaW5nIHdpdGgg
-RnMgaW4gYmFiZWx0cmFjZSBmb3IgYSAzMiBiaXRzIGZpZWxkIChjdGZfaW50ZWdlcl9oZXgpCj4+
-Cj4+IE9uIFdlZCwgT2N0IDIyLCAyMDE0IGF0IDc6MDcgUE0sIFBoaWxpcHBlIFByb3VseAo+PiA8
-ZWVwcGVsaXRlbG9vcEBnbWFpbC5jb20+IHdyb3RlOgo+PiA+IE9uIFdlZCwgT2N0IDIyLCAyMDE0
-IGF0IDU6MzEgUE0sIEJvaXN2ZXJ0LCBTZWJhc3RpZW4gPGJvaXN2ZXJ0QGFubC5nb3Y+Cj4+ID4g
-d3JvdGU6Cj4+ID4+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+
-ID4+PiBGcm9tOiBQaGlsaXBwZSBQcm91bHggW2VlcHBlbGl0ZWxvb3BAZ21haWwuY29tXQo+PiA+
-Pj4gU2VudDogV2VkbmVzZGF5LCBPY3RvYmVyIDIyLCAyMDE0IDQ6MDMgUE0KPj4gPj4+IFRvOiBC
-b2lzdmVydCwgU2ViYXN0aWVuCj4+ID4+PiBDYzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+
-PiA+Pj4gU3ViamVjdDogUmU6IFtsdHRuZy1kZXZdIFBhZGRpbmcgd2l0aCBGcyBpbiBiYWJlbHRy
-YWNlIGZvciBhIDMyIGJpdHMKPj4gPj4+IGZpZWxkIChjdGZfaW50ZWdlcl9oZXgpCj4+ID4+PiBP
-biBXZWQsIE9jdCAyMiwgMjAxNCBhdCA0OjM0IFBNLCBCb2lzdmVydCwgU2ViYXN0aWVuIDxib2lz
-dmVydEBhbmwuZ292Pgo+PiA+Pj4gd3JvdGU6Cj4+ID4+PiA+IEkgYW0gdXNpbmcgTFRUbmctVVNU
-IChsdHRuZyAyLjQuMS0xLmVsNikgYW5kIGJhYmVsdHJhY2UgKDEuMi4xLTEuZWw2KQo+PiA+Pj4g
-PiBvbiBDZW50T1MgNi41ICh1c2luZyBFUEVMKS4KPj4gPj4+ID4KPj4gPj4+ID4gSSBoYXZlIDIg
-aGV4YWRlY2ltYWwgZmllbGRzOgo+PiA+Pj4gPgo+PiA+Pj4gPiAgICAgICBjdGZfaW50ZWdlcl9o
-ZXgoaW50LCBzY3JpcHQsIGFjdG9yLT5zY3JpcHQtPmlkZW50aWZpZXIpCj4+ID4+PiA+ICAgICAg
-IGN0Zl9pbnRlZ2VyX2hleChpbnQsIGFjdGlvbiwgbWVzc2FnZS0+YWN0aW9uKQo+PiA+Pj4gPgo+
-PiA+Pj4gPiBPbmUgb2YgdGhlbSBpcyBwcmludGVkIHdpdGggbGVhZGluZyBGcyAoNjQgYml0cykg
-d2hpbGUgdGhlIG90aGVyIGlzCj4+ID4+PiA+IGZpbmUgKDMyIGJpdHMpLCBidXQgYm90aCBzaG91
-bGQgYmUgMzIgYml0cyB3aWRlLgo+PiA+Pj4gPgo+PiA+Pj4gPiBbMTQ6NTI6MjcuNDE2NTAyODM3
-XSAoKzAuMDAwMDA1MTI0KSBzaWx2ZXJjbGF3Lm5vdmFsb2NhbAo+PiA+Pj4gPiB0aG9yaXVtX2Fj
-dG9yOnJlY2VpdmVfZXhpdDogeyBjcHVfaWQgPSA2IH0sIHsgbmFtZSA9IDEwMDA0NTIsIHNjcmlw
-dCA9Cj4+ID4+PiA+IDB4RkZGRkZGRkZFQjNCMzlGRCwgYWN0aW9uID0gMHg3NzI0LCBjb3VudCA9
-IDQxIH0KPj4gPj4+ID4KPj4gPj4+ID4gSSBleHBlY3QgInNjcmlwdCA9IDB4RUIzQjM5RkQiIGFu
-ZCBub3Qgc2NyaXB0ID0gMHhGRkZGRkZGRkVCM0IzOUZECj4+ID4+PiA+IHNpbmNlIHRoaXMgaXMg
-YSBpbnQgKHNpemVvZihpbnQpIGlzIDQpLgo+PiA+Pj4gVGhlIGlzc3VlIGlzIG9uIHRoZSBCYWJl
-bHRyYWNlJ3MgY3RmLXRleHQgZm9ybWF0IHNpZGUuIFdoZW4gcHJpbnRpbmcgYW4KPj4gPj4+IGlu
-dGVnZXIgd2l0aCBiYXNlIDE2IChjdGZfaW50ZWdlcl9oZXgoKSk6Cj4+ID4+PiBmb3JtYXRzL2N0
-Zi10ZXh0L3R5cGVzL2ludGVnZXIuYzoxMTE6Cj4+ID4+PiAgICAgY2FzZSAxNjoKPj4gPj4+ICAg
-ICB7Cj4+ID4+PiAgICAgICAgIHVpbnQ2NF90IHY7Cj4+ID4+PiAgICAgICAgIGlmICghaW50ZWdl
-cl9kZWNsYXJhdGlvbi0+c2lnbmVkbmVzcykKPj4gPj4+ICAgICAgICAgICAgIHYgPSBpbnRlZ2Vy
-X2RlZmluaXRpb24tPnZhbHVlLl91bnNpZ25lZDsKPj4gPj4+ICAgICAgICAgZWxzZQo+PiA+Pj4g
-ICAgICAgICAgICAgdiA9ICh1aW50NjRfdCkgaW50ZWdlcl9kZWZpbml0aW9uLT52YWx1ZS5fc2ln
-bmVkOwo+PiA+Pj4gICAgICAgICBmcHJpbnRmKHBvcy0+ZnAsICIweCUiIFBSSVg2NCwgdik7Cj4+
-ID4+PiAgICAgICAgIGJyZWFrOwo+PiA+Pj4gICAgIH0KPj4gPj4+IFdoZW4gdGhlIGludGVnZXIg
-aXMgc2lnbmVkLCBpdCdzIGNhc3RlZCB0byBhIDY0LWJpdCB1bnNpZ25lZCBpbnRlZ2VyLAo+PiA+
-Pj4gaGVuY2UgdGhlIHZpc2libGUgc2lnbiBleHRlbnNpb24gKGFsbCB0aG9zZSBGcykgaW4geW91
-ciBjYXNlIHNpbmNlIHRoZQo+PiA+Pj4gYWN0dWFsIHJlY29yZGVkIHZhbHVlIGlzIC0zNDg0NDAw
-NjcgKGlmIEknbSBzdGlsbCBnb29kIGF0IG1lbnRhbCB0d28ncwo+PiA+Pj4gY29tcGxlbWVudCBj
-b252ZXJzaW9ucyA7LSkpLgo+PiA+Pj4gSSBiZWxpZXZlIHRoaXMgY2hvaWNlIGluIEJhYmVsdHJh
-Y2UgaXMgb2theS4gSXQncyBhbHdheXMgd2VpcmQgdG8KPj4gPj4+IHJlcHJlc2VudCBhIHNpZ25l
-ZCBpbnRlZ2VyIGluIGhleCBiYXNlLiBIb3cgd291bGQgeW91IHByaW50IGl0Pwo+PiA+Pgo+PiA+
-PiBUaGUgc2NyaXB0IGlkZW50aWZpZXIgaXMgZm91bmQgaGVyZToKPj4gPj4gW2JvaXN2ZXJ0QGJp
-Z21lbSBiaW9zYWxdJCBncmVwIDM5ZmQgZ2Vub21pY3MvKiAtUgo+PiA+PiBnZW5vbWljcy9hc3Nl
-bWJseS91bml0aWcvdW5pdGlnX3Zpc2l0b3IuaDojZGVmaW5lIFNDUklQVF9VTklUSUdfVklTSVRP
-Ugo+PiA+PiAweGViM2IzOWZkCj4+ID4+Cj4+ID4+IEkgd291bGQganVzdCBwcmludCBhcyBpdCBp
-czogMHhlYjNiMzlmZAo+Pgo+PiBNYWtlcyBzZW5zZSB0byBtZS4gQ0MtaW5nIE1hdGhpZXUgdG8g
-c2VlIGlmIHRoZXJlIHdhcyBhIHJhdGlvbmFsZQo+PiBiZWhpbmQgcHJpbnRpbmcgYXMgNjQtYml0
-Li4uIEFsdGhvdWdoIGl0J3MgcHJvYmFibHkganVzdCBhbiBvdmVyc2lnaHQuCj4KPiBKdXN0IGFu
-IG92ZXJzaWdodC4gSXQgZG9lcyBub3QgbWFrZSBtdWNoIGRpZmZlcmVuY2Ugd2hlbiBwcmludGlu
-Zwo+IGluIGJhc2UgMTAgd2l0aCBzaWduIHdoZXRoZXIgd2UgcHJpbnQgYSAzMiBvciA2NC1iaXQg
-aW50ZWdlci4KPiBJbmRlZWQsIHdoZW4gcHJpbnRpbmcgYXMgSGV4LCB3ZSBzaG91bGQgaGFuZGxl
-IGl0IG1vcmUgY2FyZWZ1bGx5Lgo+IFdlIHNob3VsZCB0YWtlIGludG8gYWNjb3VudCBldmVyeSBp
-bnRlZ2VyIGJpdCBzaXplIGluIGZhY3QuIFdoYXQgc2hvdWxkCj4gd2UgcHJpbnQgaWYgd2UgcHJp
-bnQgYSBzaWduZWQgMjctYml0IGludGVnZXIgPwoKSSBmZWVsIHplcm8tZXh0ZW5kaW5nIHRvIHRo
-ZSBuZXh0IG11bHRpcGxlIG9mIDQgYml0cyAodG8gZml0IGhleApub3RhdGlvbikgd291bGQgYmUg
-dGhlIG1vc3QgaW50dWl0aXZlIGJlaGF2aW9yIGhlcmUuCgpBbnkgY29tbWVudHM/CgpKw6lyw6lt
-aWUKCj4KPiBUaGFua3MsCj4KPiBNYXRoaWV1Cj4KPj4KPj4gPj4KPj4gPj4gJCBjYXQgZm9vLmMK
-Pj4gPj4KPj4gPj4gI2luY2x1ZGUgPHN0ZGlvLmg+Cj4+ID4+ICNkZWZpbmUgU0NSSVBUX1VOSVRJ
-R19WSVNJVE9SIDB4ZWIzYjM5ZmQKPj4gPj4KPj4gPj4gaW50IG1haW4oaW50IGFyZ2MsIGNoYXIg
-Kiphcmd2KQo+PiA+PiB7Cj4+ID4+ICAgICBpbnQgc2NyaXB0Owo+PiA+PiAgICAgc2NyaXB0ID0g
-U0NSSVBUX1VOSVRJR19WSVNJVE9SOwo+PiA+PiAgICAgcHJpbnRmKCIweCV4XG4iLCBzY3JpcHQp
-Owo+PiA+Pgo+PiA+PiAgICAgcmV0dXJuIDA7Cj4+ID4+IH0KPj4gPj4gJCBnY2MgZm9vLmMKPj4g
-Pj4gJCAuL2Eub3V0Cj4+ID4+IDB4ZWIzYjM5ZmQKPj4gPgo+PiA+IEdvb2QgcG9pbnQuIFNvIHRo
-ZSBpbnRlZ2VyJ3Mgc2l6ZSBzaG91bGQgYmUgY2hlY2tlZCBpbnN0ZWFkIG9mIHVzaW5nIFBSSSoK
-Pj4gPiBjb252ZXJzaW9uIHNwZWNpZmljYXRpb25zIHN5c3RlbWF0aWNhbGx5Lgo+PiA+Cj4+ID4g
-SSBjcmVhdGVkIGEgYnVnIHJlcG9ydCBmb3IgdGhpczogPGh0dHA6Ly9idWdzLmx0dG5nLm9yZy9p
-c3N1ZXMvODQ4Pi4KPj4KPj4gVGhhbmtzIGZvciBjcmVhdGluZyB0aGUgYnVnIHJlcG9ydCEKPj4K
-Pj4gSsOpcsOpbWllCj4+Cj4+ID4KPj4gPiBQaGlsCj4+ID4+Cj4+ID4+Cj4+ID4+PiAtMHgxNEM0
-QzYwMz8gSSBndWVzcyB0aGlzIHdvdWxkIHdvcmsgdG9vIGFuZCBjb3VsZCBldmVudHVhbGx5IGJl
-IGEKPj4gPj4+IGZvcm1hdCBvcHRpb24gcGFzc2VkIHRvIEJhYmVsdHJhY2UuCj4+ID4+PiBIb3Bl
-IGl0IGhlbHBzLCBzb21laG93LAo+PiA+Pj4gUGhpbAo+PiA+Pj4gPgo+PiA+Pj4gPiBBbSBJIGRv
-aW5nIHNvbWV0aGluZyB3cm9uZyA/Cj4+ID4+PiA+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCj4+ID4+PiA+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4g
-Pj4+ID4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiA+Pj4gPiBodHRwOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4gPgo+PiA+IF9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+ID4gbHR0bmctZGV2
-IG1haWxpbmcgbGlzdAo+PiA+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4gPiBodHRwOi8v
-bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4KPj4K
-Pj4KPj4gLS0KPj4gSsOpcsOpbWllIEdhbGFybmVhdQo+PiBFZmZpY2lPUyBJbmMuCj4+IGh0dHA6
-Ly93d3cuZWZmaWNpb3MuY29tCj4+Cj4KPiAtLQo+IE1hdGhpZXUgRGVzbm95ZXJzCj4gRWZmaWNp
-T1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgoKCi0tIApKw6lyw6ltaWUgR2FsYXJu
-ZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
-bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+On 25/10/14 05:01 PM, Christian Babeux wrote:
+> Hi Stefan,
+>
+> Perhaps a link to https://bugs.lttng.org/projects would make things more clear?
+
+
+Definitely, yes. (Though the entire redmine setup also appears a bit
+outdated, or even incomplete.)
+
+Thanks,
+        Stefan
+
+-- 
+Stefan Seefeld
+CodeSourcery / Mentor Embedded
+http://www.mentor.com/embedded-software/
