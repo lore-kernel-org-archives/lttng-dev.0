@@ -1,20 +1,19 @@
-From: Stefan Seefeld <stefan_seefeld@mentor.com>
-Subject: bug reporting link(s) on new website
-Date: Sat, 25 Oct 2014 16:56:09 -0400
-Message-ID: <544C0E69.8040201__30868.4766911485$1414270621$gmane$org@mentor.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: Re: bug reporting link(s) on new website
+Date: Sat, 25 Oct 2014 14:01:50 -0700
+Message-ID: <CAGDH53==yPRaADsj=GqHjh7KAMXYQ9xhv3Q_BHeu2qPJ6y1pVQ__12502.2174128846$1414270952$gmane$org@mail.gmail.com>
+References: <544C0E69.8040201@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail-ig0-f181.google.com ([209.85.213.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Stefan_Seefeld@mentor.com>) id 1Xi8Nk-0001h4-Fu
- for lttng-dev@lists.lttng.org; Sat, 25 Oct 2014 16:56:17 -0400
-Received: from svr-orw-fem-02x.mgc.mentorg.com ([147.34.96.206]
- helo=SVR-ORW-FEM-02.mgc.mentorg.com)
- by relay1.mentorg.com with esmtp
- id 1Xi8Ne-00013c-0V from Stefan_Seefeld@mentor.com
- for lttng-dev@lists.lttng.org; Sat, 25 Oct 2014 13:56:10 -0700
+ (envelope-from <christian.babeux@0x80.ca>) id 1Xi8TD-0001m1-Mu
+ for lttng-dev@lists.lttng.org; Sat, 25 Oct 2014 17:01:57 -0400
+Received: by mail-ig0-f181.google.com with SMTP id l13so3020231iga.14
+ for <lttng-dev@lists.lttng.org>; Sat, 25 Oct 2014 14:01:50 -0700 (PDT)
+In-Reply-To: <544C0E69.8040201@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,21 +22,38 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Stefan Seefeld <stefan_seefeld@mentor.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello,
+Hi Stefan,
 
-Looking for the bug trackers for lttng-ust and lttng-tools, I notice
-https://bugs.lttng.org/, which looks rather incomplete. Is there a
-reason it doesn't link the lttng-ust and ltng-tools trackers
-(https://bugs.lttng.org/projects/lttng-ust and
-https://bugs.lttng.org/projects/lttng-tools) ?
+Perhaps a link to https://bugs.lttng.org/projects would make things more clear?
 
 Thanks,
-        Stefan
 
--- 
-Stefan Seefeld
-CodeSourcery / Mentor Embedded
-http://www.mentor.com/embedded-software/
+Christian
+
+On Sat, Oct 25, 2014 at 1:56 PM, Stefan Seefeld
+<stefan_seefeld@mentor.com> wrote:
+> Hello,
+>
+> Looking for the bug trackers for lttng-ust and lttng-tools, I notice
+> https://bugs.lttng.org/, which looks rather incomplete. Is there a
+> reason it doesn't link the lttng-ust and ltng-tools trackers
+> (https://bugs.lttng.org/projects/lttng-ust and
+> https://bugs.lttng.org/projects/lttng-tools) ?
+>
+> Thanks,
+>         Stefan
+>
+> --
+> Stefan Seefeld
+> CodeSourcery / Mentor Embedded
+> http://www.mentor.com/embedded-software/
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
