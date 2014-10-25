@@ -1,74 +1,66 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [urcu][PATCH] compiler: use __GNUC__ instead of
-	the	undefined __GNUC_MAJOR__
-Date: Fri, 24 Oct 2014 20:07:19 +0000 (UTC)
-Message-ID: <465505776.1563.1414181239110.JavaMail.zimbra__9791.28129915825$1414181287$gmane$org@efficios.com>
-References: <1413253885-7154-1-git-send-email-cota@braap.org>
+Subject: Progress on system crash traces with LTTng using DAX and pmem
+Date: Sat, 25 Oct 2014 12:51:25 +0000 (UTC)
+Message-ID: <465653369.1985.1414241485934.JavaMail.zimbra@efficios.com>
+References: <1254279794.1957.1414240389301.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Xhl8z-0002mF-E0
- for lttng-dev@lists.lttng.org; Fri, 24 Oct 2014 16:07:30 -0400
-In-Reply-To: <1413253885-7154-1-git-send-email-cota@braap.org>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Emilio G. Cota" <cota@braap.org>
-Cc: lttng-dev@lists.lttng.org
+Return-path: <owner-linux-mm@kvack.org>
+In-Reply-To: <1254279794.1957.1414240389301.JavaMail.zimbra@efficios.com>
+Sender: owner-linux-mm@kvack.org
+To: Matthew Wilcox <willy@linux.intel.com>, Ross Zwisler <ross.zwisler@linux.intel.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
 List-Id: lttng-dev@lists.lttng.org
 
-Merged into master and stable-0.8, thanks!
+Hi Matthew, Hi Ross,
+
+A quick follow up on my progress on using DAX and pmem with
+LTTng. I've been able to successfully gather a user-space
+trace into buffers mmap'd into an ext4 filesystem within
+a pmem block device mounted with -o dax to bypass the page
+cache. After a soft reboot, I'm able to mount the partition
+again, and gather the very last data collected in the buffers
+by the applications. I created a "lttng-crash" program that
+extracts data from those buffers and converts the content
+into a readable Common Trace Format trace. So I guess
+you have a use-case for your patchsets on commodity hardware
+right there. :)
+
+I've been asked by my customers if DAX would work well with
+mtd-ram, which they are using. To you foresee any roadblock
+with this approach ?
+
+FYI, the main reason why my customer wants to go with a
+"trace into memory that survives soft reboot" approach
+rather than to use things like kexec/kdump is that they
+care about the amount of time it takes to reboot their
+machines. They want a solution where they can extract the
+detailed crash data after reboot, after the machine is
+back online, rather than requiring a few minutes of offline
+time to extract the crash details.
+
+So I guess next year I'll probably be looking into
+allocating the LTTng kernel tracer buffers into an mmap'd file
+within a ext2/4-DAX-over-pmem/mtd-ram filesystem. It's going
+to be exciting! :)
+
+Please keep me in CC on your next patch versions. I'm willing
+to spend some more time reviewing them if needed. By the way,
+do you guys have a target time-frame/kernel version you aim
+at for getting this work upstream ?
+
+Thanks,
 
 Mathieu
-
------ Original Message -----
-> From: "Emilio G. Cota" <cota@braap.org>
-> To: lttng-dev@lists.lttng.org
-> Sent: Monday, October 13, 2014 10:31:25 PM
-> Subject: [lttng-dev] [urcu][PATCH] compiler: use __GNUC__ instead of the	undefined __GNUC_MAJOR__
-> 
-> gcc defines the major number with __GNUC__, not __GNUC_MAJOR__:
->   https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html
-> 
-> Signed-off-by: Emilio G. Cota <cota@braap.org>
-> ---
->  urcu/compiler.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/urcu/compiler.h b/urcu/compiler.h
-> index 1e30903..2e0237e 100644
-> --- a/urcu/compiler.h
-> +++ b/urcu/compiler.h
-> @@ -97,8 +97,8 @@
->  		(unsigned long) (v))
->  
->  #if defined (__GNUC__) \
-> -	&& ((__GNUC_MAJOR__ == 4) && (__GNUC_MINOR__ >= 5)	\
-> -		|| __GNUC_MAJOR__ >= 5)
-> +	&& ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 5)	\
-> +		|| __GNUC__ >= 5)
->  #define CDS_DEPRECATED(msg)	\
->  	__attribute__((deprecated(msg)))
->  #else
-> --
-> 1.8.3
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
 
 -- 
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
+
+--
+To unsubscribe, send a message with 'unsubscribe linux-mm' in
+the body to majordomo@kvack.org.  For more info on Linux MM,
+see: http://www.linux-mm.org/ .
+Don't email: <a href=mailto:"dont@kvack.org"> email@kvack.org </a>
