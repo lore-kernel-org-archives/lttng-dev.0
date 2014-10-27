@@ -1,22 +1,22 @@
 From: Charles Briere <c.briere@samsung.com>
-Subject: [PATCH lttng-tools 03/24] Fix : Wrap variable with
-	URCU_TLS for sizeof
+Subject: [PATCH lttng-tools 07/24] Fix : need to include
+ config.h if using it's definitions
 Date: Mon, 27 Oct 2014 20:49:28 +0000
-Message-ID: <1414442926-14381-4-git-send-email-c.briere__14928.3652114265$1414443199$gmane$org@samsung.com>
+Message-ID: <1414442926-14381-8-git-send-email-c.briere__37354.8194453635$1414443216$gmane$org@samsung.com>
 References: <1414442926-14381-1-git-send-email-c.briere@samsung.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailout3.w2.samsung.com ([211.189.100.13]
- helo=usmailout3.samsung.com) by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <c.briere@samsung.com>) id 1XirEP-0007ni-7g
- for lttng-dev@lists.lttng.org; Mon, 27 Oct 2014 16:49:40 -0400
-Received: from uscpsbgex4.samsung.com
- (u125.gpu85.samsung.co.kr [203.254.195.125]) by usmailout3.samsung.com
+Received: from mailout4.w2.samsung.com ([211.189.100.14]
+ helo=usmailout4.samsung.com) by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <c.briere@samsung.com>) id 1XirET-0007nh-2C
+ for lttng-dev@lists.lttng.org; Mon, 27 Oct 2014 16:49:42 -0400
+Received: from uscpsbgex3.samsung.com
+ (u124.gpu85.samsung.co.kr [203.254.195.124]) by usmailout4.samsung.com
  (Oracle Communications Messaging Server 7u4-24.01(7.0.4.24.0) 64bit (built Nov
- 17 2011)) with ESMTP id <0NE4004KZF6H5N30@usmailout3.samsung.com> for
- lttng-dev@lists.lttng.org; Mon, 27 Oct 2014 16:49:29 -0400 (EDT)
+ 17 2011)) with ESMTP id <0NE400KYNF6JOX20@usmailout4.samsung.com> for
+ lttng-dev@lists.lttng.org; Mon, 27 Oct 2014 16:49:31 -0400 (EDT)
 In-reply-to: <1414442926-14381-1-git-send-email-c.briere@samsung.com>
 Content-language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -35,21 +35,23 @@ From: Charles Briere <c.briere@samsung.com>
 
 Signed-off-by: Charles Briere <c.briere@samsung.com>
 ---
- src/common/error.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ src/common/compat/tid.h | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/src/common/error.c b/src/common/error.c
-index 55d56e6..577070e 100644
---- a/src/common/error.c
-+++ b/src/common/error.c
-@@ -49,7 +49,7 @@ const char *log_add_time(void)
- 	}
+diff --git a/src/common/compat/tid.h b/src/common/compat/tid.h
+index b420914..7645b90 100644
+--- a/src/common/compat/tid.h
++++ b/src/common/compat/tid.h
+@@ -25,9 +25,7 @@
+ #ifndef LTTNG_TID_H
+ #define LTTNG_TID_H
  
- 	/* Format time in the TLS variable. */
--	ret = snprintf(URCU_TLS(error_log_time).str, sizeof(error_log_time.str),
-+	ret = snprintf(URCU_TLS(error_log_time).str, sizeof(URCU_TLS(error_log_time).str),
- 			"%02d:%02d:%02d.%06ld",
- 			tm.tm_hour, tm.tm_min, tm.tm_sec, tp.tv_nsec);
- 	if (ret < 0) {
+-#ifdef __linux__
+-#include <syscall.h>
+-#endif
++#include <config.h>
+ 
+ #if !HAVE_DECL_GETTID
+ # if defined(_syscall0)
 -- 
 2.1.2
