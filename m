@@ -1,8 +1,7 @@
 From: Charles Briere <c.briere@samsung.com>
-Subject: [PATCH lttng-tools 20/24] Android : %m[^] not supported
-	in fscanf
+Subject: [PATCH lttng-tools 23/24] Android : Define posix_fadvise
 Date: Mon, 27 Oct 2014 20:49:30 +0000
-Message-ID: <1414442926-14381-21-git-send-email-c.briere__23865.716221235$1414443786$gmane$org@samsung.com>
+Message-ID: <1414442926-14381-24-git-send-email-c.briere__8853.24029154635$1414443866$gmane$org@samsung.com>
 References: <1414442926-14381-1-git-send-email-c.briere@samsung.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,13 +9,13 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mailout3.w2.samsung.com ([211.189.100.13]
  helo=usmailout3.samsung.com) by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <c.briere@samsung.com>) id 1XirEb-0007ni-AY
- for lttng-dev@lists.lttng.org; Mon, 27 Oct 2014 16:49:50 -0400
-Received: from uscpsbgex2.samsung.com
- (u123.gpu85.samsung.co.kr [203.254.195.123]) by usmailout3.samsung.com
+ (envelope-from <c.briere@samsung.com>) id 1XirEc-0007nm-LN
+ for lttng-dev@lists.lttng.org; Mon, 27 Oct 2014 16:49:54 -0400
+Received: from uscpsbgex3.samsung.com
+ (u124.gpu85.samsung.co.kr [203.254.195.124]) by usmailout3.samsung.com
  (Oracle Communications Messaging Server 7u4-24.01(7.0.4.24.0) 64bit (built Nov
- 17 2011)) with ESMTP id <0NE4003LQF6MW130@usmailout3.samsung.com> for
- lttng-dev@lists.lttng.org; Mon, 27 Oct 2014 16:49:34 -0400 (EDT)
+ 17 2011)) with ESMTP id <0NE4004L7F6N5N30@usmailout3.samsung.com> for
+ lttng-dev@lists.lttng.org; Mon, 27 Oct 2014 16:49:35 -0400 (EDT)
 In-reply-to: <1414442926-14381-1-git-send-email-c.briere@samsung.com>
 Content-language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -33,50 +32,43 @@ List-Id: lttng-dev@lists.lttng.org
 
 From: Charles Briere <c.briere@samsung.com>
 
-Replacing %m[^] and char* by %[^] and char[LTTNG_SYMBOL_NAME_LEN]
+Mapping from __NR_arm_fadvise64_64  to posix_fadvise
+is not done within BIONIC
 
 Signed-off-by: Charles Briere <c.briere@samsung.com>
 ---
- src/bin/lttng-sessiond/kernel.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ configure.ac              | 1 +
+ src/common/compat/fcntl.h | 6 ++++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/src/bin/lttng-sessiond/kernel.c b/src/bin/lttng-sessiond/kernel.c
-index 2aeef26..3e1eff3 100644
---- a/src/bin/lttng-sessiond/kernel.c
-+++ b/src/bin/lttng-sessiond/kernel.c
-@@ -613,7 +613,7 @@ error:
- ssize_t kernel_list_events(int tracer_fd, struct lttng_event **events)
- {
- 	int fd, ret;
--	char *event;
-+	char event[LTTNG_SYMBOL_NAME_LEN];
- 	size_t nbmem, count = 0;
- 	FILE *fp;
- 	struct lttng_event *elist;
-@@ -644,7 +644,7 @@ ssize_t kernel_list_events(int tracer_fd, struct lttng_event **events)
- 		goto end;
- 	}
+diff --git a/configure.ac b/configure.ac
+index 91efd17..ea37ad0 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -67,6 +67,7 @@ AC_CHECK_TYPES([in_port_t], [], [], [[#include <netinet/in.h>]])
  
--	while (fscanf(fp, "event { name = %m[^;]; };\n", &event) == 1) {
-+	while (fscanf(fp,"event { name = %[^;]; };\n", &event) == 1) {
- 		if (count >= nbmem) {
- 			struct lttng_event *new_elist;
- 			size_t new_nbmem;
-@@ -655,7 +655,6 @@ ssize_t kernel_list_events(int tracer_fd, struct lttng_event **events)
- 			new_elist = realloc(elist, new_nbmem * sizeof(struct lttng_event));
- 			if (new_elist == NULL) {
- 				PERROR("realloc list events");
--				free(event);
- 				free(elist);
- 				count = -ENOMEM;
- 				goto end;
-@@ -670,7 +669,6 @@ ssize_t kernel_list_events(int tracer_fd, struct lttng_event **events)
- 		elist[count].name[LTTNG_SYMBOL_NAME_LEN - 1] = '\0';
- 		elist[count].enabled = -1;
- 		count++;
--		free(event);
- 	}
+ AC_CHECK_DECLS([sigwaitinfo],[],[], [[#include <signal.h>]])
+ AC_CHECK_DECLS([pthread_cancel], [], [], [[#include <pthread.h>]])
++AC_CHECK_DECLS([posix_fadvise],[],[], [[#include <fcntl.h>]])
  
- 	*events = elist;
+ AC_CHECK_FUNCS([getpwuid_r],[],[])
+ 
+diff --git a/src/common/compat/fcntl.h b/src/common/compat/fcntl.h
+index 1325a3f..779c942 100644
+--- a/src/common/compat/fcntl.h
++++ b/src/common/compat/fcntl.h
+@@ -36,6 +36,12 @@ extern int compat_sync_file_range(int fd, off64_t offset, off64_t nbytes,
+ #define lttng_sync_file_range(fd, offset, nbytes, flags) \
+ 	compat_sync_file_range(fd, offset, nbytes, flags)
+ 
++# if !HAVE_DECL_POSIX_FADVISE
++#  if defined(__NR_arm_fadvise64_64)
++#   define posix_fadvise(fd, offset, len, advise) syscall(__NR_arm_fadvise64_64, fd, offset, len, advise)
++#  endif
++# endif
++
+ # ifndef POSIX_FADV_DONTNEED
+ #  include <linux/fadvise.h>
+ # endif
 -- 
 2.1.2
