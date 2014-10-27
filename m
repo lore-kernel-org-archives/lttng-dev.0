@@ -1,21 +1,21 @@
 From: Charles Briere <c.briere@samsung.com>
-Subject: [PATCH lttng-tools 07/24] Fix : need to include
- config.h if using it's definitions
+Subject: [PATCH lttng-tools 08/24] Fix : Don't compile ust
+ functions when not enabled
 Date: Mon, 27 Oct 2014 20:49:28 +0000
-Message-ID: <1414442926-14381-8-git-send-email-c.briere__37354.8194453635$1414443216$gmane$org@samsung.com>
+Message-ID: <1414442926-14381-9-git-send-email-c.briere__49111.1194053248$1414443255$gmane$org@samsung.com>
 References: <1414442926-14381-1-git-send-email-c.briere@samsung.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailout4.w2.samsung.com ([211.189.100.14]
- helo=usmailout4.samsung.com) by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <c.briere@samsung.com>) id 1XirET-0007nh-2C
- for lttng-dev@lists.lttng.org; Mon, 27 Oct 2014 16:49:42 -0400
-Received: from uscpsbgex3.samsung.com
- (u124.gpu85.samsung.co.kr [203.254.195.124]) by usmailout4.samsung.com
+Received: from mailout1.w2.samsung.com ([211.189.100.11]
+ helo=usmailout1.samsung.com) by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <c.briere@samsung.com>) id 1XirER-0007nk-NI
+ for lttng-dev@lists.lttng.org; Mon, 27 Oct 2014 16:49:43 -0400
+Received: from uscpsbgex2.samsung.com
+ (u123.gpu85.samsung.co.kr [203.254.195.123]) by mailout1.w2.samsung.com
  (Oracle Communications Messaging Server 7u4-24.01(7.0.4.24.0) 64bit (built Nov
- 17 2011)) with ESMTP id <0NE400KYNF6JOX20@usmailout4.samsung.com> for
+ 17 2011)) with ESMTP id <0NE400FZYF6J0930@mailout1.w2.samsung.com> for
  lttng-dev@lists.lttng.org; Mon, 27 Oct 2014 16:49:31 -0400 (EDT)
 In-reply-to: <1414442926-14381-1-git-send-email-c.briere@samsung.com>
 Content-language: en-US
@@ -35,23 +35,38 @@ From: Charles Briere <c.briere@samsung.com>
 
 Signed-off-by: Charles Briere <c.briere@samsung.com>
 ---
- src/common/compat/tid.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ src/bin/lttng-sessiond/shm.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/src/common/compat/tid.h b/src/common/compat/tid.h
-index b420914..7645b90 100644
---- a/src/common/compat/tid.h
-+++ b/src/common/compat/tid.h
-@@ -25,9 +25,7 @@
- #ifndef LTTNG_TID_H
- #define LTTNG_TID_H
+diff --git a/src/bin/lttng-sessiond/shm.c b/src/bin/lttng-sessiond/shm.c
+index a5caa8b..fa3867c 100644
+--- a/src/bin/lttng-sessiond/shm.c
++++ b/src/bin/lttng-sessiond/shm.c
+@@ -16,6 +16,8 @@
+  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+  */
  
--#ifdef __linux__
--#include <syscall.h>
--#endif
-+#include <config.h>
- 
- #if !HAVE_DECL_GETTID
- # if defined(_syscall0)
++#if HAVE_LIBLTTNG_UST_CTL
++
+ #define _GNU_SOURCE
+ #include <fcntl.h>
+ #include <limits.h>
+@@ -170,3 +172,16 @@ char *shm_ust_get_mmap(char *shm_path, int global)
+ error:
+ 	return NULL;
+ }
++
++#else
++
++/*
++ * Dummy implementation so we do not need to put
++ * ifdef in main.c
++ */
++char *shm_ust_get_mmap(char *shm_path, int global)
++{
++	return 0;
++}
++
++#endif /* HAVE_LIBLTTNG_UST_CTL */
 -- 
 2.1.2
