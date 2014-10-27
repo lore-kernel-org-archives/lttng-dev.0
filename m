@@ -1,21 +1,21 @@
 From: Charles Briere <c.briere@samsung.com>
-Subject: [PATCH lttng-tools 10/24] Add : Compatibility layer for
-	netinet/in.h
+Subject: [PATCH lttng-tools 12/24] Add : Compatibility layer for
+	ulimit.h
 Date: Mon, 27 Oct 2014 20:49:29 +0000
-Message-ID: <1414442926-14381-11-git-send-email-c.briere__763.020051135932$1414443394$gmane$org@samsung.com>
+Message-ID: <1414442926-14381-13-git-send-email-c.briere__9075.84852907366$1414443432$gmane$org@samsung.com>
 References: <1414442926-14381-1-git-send-email-c.briere@samsung.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailout3.w2.samsung.com ([211.189.100.13]
- helo=usmailout3.samsung.com) by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <c.briere@samsung.com>) id 1XirEV-0007nm-ET
+Received: from mailout1.w2.samsung.com ([211.189.100.11]
+ helo=usmailout1.samsung.com) by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <c.briere@samsung.com>) id 1XirEV-0007nk-B3
  for lttng-dev@lists.lttng.org; Mon, 27 Oct 2014 16:49:45 -0400
-Received: from uscpsbgex4.samsung.com
- (u125.gpu85.samsung.co.kr [203.254.195.125]) by usmailout3.samsung.com
+Received: from uscpsbgex2.samsung.com
+ (u123.gpu85.samsung.co.kr [203.254.195.123]) by mailout1.w2.samsung.com
  (Oracle Communications Messaging Server 7u4-24.01(7.0.4.24.0) 64bit (built Nov
- 17 2011)) with ESMTP id <0NE4003LKF6KW130@usmailout3.samsung.com> for
+ 17 2011)) with ESMTP id <0NE400F00F6K0940@mailout1.w2.samsung.com> for
  lttng-dev@lists.lttng.org; Mon, 27 Oct 2014 16:49:32 -0400 (EDT)
 In-reply-to: <1414442926-14381-1-git-send-email-c.briere@samsung.com>
 Content-language: en-US
@@ -33,94 +33,121 @@ List-Id: lttng-dev@lists.lttng.org
 
 From: Charles Briere <c.briere@samsung.com>
 
-Add definition for in_port_t
-
 Signed-off-by: Charles Briere <c.briere@samsung.com>
 ---
- configure.ac                   |  2 ++
- src/common/compat/Makefile.am  |  3 ++-
- src/common/compat/netinet/in.h | 35 +++++++++++++++++++++++++++++++++++
- src/common/uri.h               |  2 +-
- 4 files changed, 40 insertions(+), 2 deletions(-)
- create mode 100644 src/common/compat/netinet/in.h
+ configure.ac                               |  1 +
+ src/bin/lttng-consumerd/health-consumerd.c |  2 +-
+ src/bin/lttng-consumerd/lttng-consumerd.c  |  2 +-
+ src/bin/lttng-relayd/health-relayd.c       |  2 +-
+ src/common/compat/ulimit.h                 | 29 +++++++++++++++++++++++++++++
+ 5 files changed, 33 insertions(+), 3 deletions(-)
+ create mode 100644 src/common/compat/ulimit.h
 
 diff --git a/configure.ac b/configure.ac
-index 1189d8e..3b880c9 100644
+index 3b880c9..fc08cc6 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -62,6 +62,8 @@ AC_CHECK_HEADERS([ \
+@@ -58,6 +58,7 @@ AC_CHECK_HEADERS([ \
+ 	sys/types.h unistd.h fcntl.h string.h pthread.h limits.h \
+ 	signal.h stdlib.h sys/un.h sys/socket.h stdlib.h stdio.h \
+ 	getopt.h sys/ipc.h sys/shm.h popt.h grp.h syscall.h \
++	ulimit.h \
+ 	],[],
  	[AC_CHECK_HEADERS([sys/syscall.h])]
  )
+diff --git a/src/bin/lttng-consumerd/health-consumerd.c b/src/bin/lttng-consumerd/health-consumerd.c
+index 079a14b..3af18e7 100644
+--- a/src/bin/lttng-consumerd/health-consumerd.c
++++ b/src/bin/lttng-consumerd/health-consumerd.c
+@@ -38,7 +38,6 @@
+ #include <assert.h>
+ #include <config.h>
+ #include <urcu/compiler.h>
+-#include <ulimit.h>
+ #include <inttypes.h>
  
-+AC_CHECK_TYPES([in_port_t], [], [], [[#include <netinet/in.h>]])
-+
- # Babeltrace viewer check
- AC_ARG_WITH([babeltrace-bin],
- 	AS_HELP_STRING([--with-babeltrace-bin],
-diff --git a/src/common/compat/Makefile.am b/src/common/compat/Makefile.am
-index 537375b..40495ed 100644
---- a/src/common/compat/Makefile.am
-+++ b/src/common/compat/Makefile.am
-@@ -9,4 +9,5 @@ COMPAT=compat-poll.c
- endif
+ #include <common/defaults.h>
+@@ -46,6 +45,7 @@
+ #include <common/consumer.h>
+ #include <common/consumer-timer.h>
+ #include <common/compat/poll.h>
++#include <common/compat/ulimit.h>
+ #include <common/sessiond-comm/sessiond-comm.h>
+ #include <common/utils.h>
  
- libcompat_la_SOURCES = poll.h fcntl.h endian.h mman.h clone.h \
--                       socket.h compat-fcntl.c uuid.h tid.h $(COMPAT)
-+                       socket.h compat-fcntl.c uuid.h tid.h netinet/in.h \
-+		       $(COMPAT)
-diff --git a/src/common/compat/netinet/in.h b/src/common/compat/netinet/in.h
+diff --git a/src/bin/lttng-consumerd/lttng-consumerd.c b/src/bin/lttng-consumerd/lttng-consumerd.c
+index bdd8ddc..f1bd287 100644
+--- a/src/bin/lttng-consumerd/lttng-consumerd.c
++++ b/src/bin/lttng-consumerd/lttng-consumerd.c
+@@ -39,13 +39,13 @@
+ #include <assert.h>
+ #include <config.h>
+ #include <urcu/compiler.h>
+-#include <ulimit.h>
+ 
+ #include <common/defaults.h>
+ #include <common/common.h>
+ #include <common/consumer.h>
+ #include <common/consumer-timer.h>
+ #include <common/compat/poll.h>
++#include <common/compat/ulimit.h>
+ #include <common/sessiond-comm/sessiond-comm.h>
+ #include <common/utils.h>
+ 
+diff --git a/src/bin/lttng-relayd/health-relayd.c b/src/bin/lttng-relayd/health-relayd.c
+index 3a5cc90..312edd5 100644
+--- a/src/bin/lttng-relayd/health-relayd.c
++++ b/src/bin/lttng-relayd/health-relayd.c
+@@ -38,7 +38,6 @@
+ #include <assert.h>
+ #include <config.h>
+ #include <urcu/compiler.h>
+-#include <ulimit.h>
+ #include <inttypes.h>
+ 
+ #include <common/defaults.h>
+@@ -46,6 +45,7 @@
+ #include <common/consumer.h>
+ #include <common/consumer-timer.h>
+ #include <common/compat/poll.h>
++#include <common/compat/ulimit.h>
+ #include <common/sessiond-comm/sessiond-comm.h>
+ #include <common/utils.h>
+ 
+diff --git a/src/common/compat/ulimit.h b/src/common/compat/ulimit.h
 new file mode 100644
-index 0000000..96981e2
+index 0000000..1140c99
 --- /dev/null
-+++ b/src/common/compat/netinet/in.h
-@@ -0,0 +1,35 @@
++++ b/src/common/compat/ulimit.h
+@@ -0,0 +1,29 @@
 +/*
-+ * Copyright 2014 (c) - Charles Briere <c.briere@samsung.com>
++ * Copyright (C) 2014 - Charles Briere <c.briere@samsung.com>
 + *
-+ * syscall compatibility layer.
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License, version 2 only,
++ * as published by the Free Software Foundation.
 + *
-+ * Permission is hereby granted, free of charge, to any person obtaining a copy
-+ * of this software and associated documentation files (the "Software"), to
-+ * deal in the Software without restriction, including without limitation the
-+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-+ * sell copies of the Software, and to permit persons to whom the Software is
-+ * furnished to do so, subject to the following conditions:
++ * This program is distributed in the hope that it will be useful, but WITHOUT
++ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
++ * more details.
 + *
-+ * The above copyright notice and this permission notice shall be included in
-+ * all copies or substantial portions of the Software.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-+ * IN THE SOFTWARE.
++ * You should have received a copy of the GNU General Public License along
++ * with this program; if not, write to the Free Software Foundation, Inc.,
++ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 + */
 +
-+#ifndef LTTNG_NETINET_IN_H
-+#define LTTNG_NETINET_IN_H
++#ifndef _COMPAT_ULIMIT_H
++#define _COMPAT_ULIMIT_H
 +
-+#include <netinet/in.h>
 +#include <config.h>
 +
-+# ifndef HAVE_IN_PORT_T
-+typedef uint16_t in_port_t;
-+# endif
++# ifdef HAVE_ULIMIT
++#  include <ulimit.h>
++# else
 +
-+#endif
-diff --git a/src/common/uri.h b/src/common/uri.h
-index 3ef6669..7f2f5b6 100644
---- a/src/common/uri.h
-+++ b/src/common/uri.h
-@@ -18,7 +18,7 @@
- #ifndef URI_H
- #define URI_H
- 
--#include <netinet/in.h>
-+#include <common/compat/netinet/in.h>
- #include <lttng/lttng.h>
- 
- /* Destination type of lttng URI */
++# endif /* HAVE_ULIMIT */
++
++#endif  /*_COMPAT_ULIMIT_H */
 -- 
 2.1.2
