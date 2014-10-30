@@ -1,86 +1,86 @@
-From: =?iso-8859-1?Q?Marc-Andr=E9_Laperle?= <marc-andre.laperle@ericsson.com>
-Subject: Listing live sessions after a session is destroyed
-Date: Wed, 29 Oct 2014 21:39:26 +0000
-Message-ID: <D381217948BF4C45AF756AFC995BEB9F1C2EBF68__11464.6911774345$1414618821$gmane$org@eusaamb103.ericsson.se>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Progress on system crash traces with LTTng using DAX and pmem
+Date: Thu, 30 Oct 2014 15:01:43 +0000 (UTC)
+Message-ID: <1620722904.4774.1414681303433.JavaMail.zimbra@efficios.com>
+References: <1254279794.1957.1414240389301.JavaMail.zimbra@efficios.com> <465653369.1985.1414241485934.JavaMail.zimbra@efficios.com> <20141027184809.GW11522@wil.cx>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1977946313=="
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <marc-andre.laperle@ericsson.com>) id 1Xjaxq-0006rA-3w
- for lttng-dev@lists.lttng.org; Wed, 29 Oct 2014 17:39:36 -0400
-Content-Language: en-US
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-kernel-owner@vger.kernel.org>
+In-Reply-To: <20141027184809.GW11522@wil.cx>
+Sender: linux-kernel-owner@vger.kernel.org
+To: Matthew Wilcox <willy@linux.intel.com>, hans.xx.beckerus@ericsson.com, thierry.vilmart@ericsson.com
+Cc: Ross Zwisler <ross.zwisler@linux.intel.com>, lttng-dev <lttng-dev@lists.lttng.org>, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1977946313==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_D381217948BF4C45AF756AFC995BEB9F1C2EBF68eusaamb103erics_"
+----- Original Message -----
+> From: "Matthew Wilcox" <willy@linux.intel.com>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: "Matthew Wilcox" <willy@linux.intel.com>, "Ross Zwisler" <ross.zwisler@linux.intel.com>, "lttng-dev"
+> <lttng-dev@lists.lttng.org>, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+> Sent: Monday, October 27, 2014 2:48:09 PM
+> Subject: Re: Progress on system crash traces with LTTng using DAX and pmem
+> 
+> On Sat, Oct 25, 2014 at 12:51:25PM +0000, Mathieu Desnoyers wrote:
+> > A quick follow up on my progress on using DAX and pmem with
+> > LTTng. I've been able to successfully gather a user-space
+> > trace into buffers mmap'd into an ext4 filesystem within
+> > a pmem block device mounted with -o dax to bypass the page
+> > cache. After a soft reboot, I'm able to mount the partition
+> > again, and gather the very last data collected in the buffers
+> > by the applications. I created a "lttng-crash" program that
+> > extracts data from those buffers and converts the content
+> > into a readable Common Trace Format trace. So I guess
+> > you have a use-case for your patchsets on commodity hardware
+> > right there. :)
+> 
+> Sweet!
+> 
+> > I've been asked by my customers if DAX would work well with
+> > mtd-ram, which they are using. To you foresee any roadblock
+> > with this approach ?
+> 
+> Looks like we'd need to add support to mtd-blkdevs.c for DAX.  I assume
+> they're already using one of the block-based ways to expose MTD to
+> filesystems, rather than jffs2/logfs/ubifs?
 
---_000_D381217948BF4C45AF756AFC995BEB9F1C2EBF68eusaamb103erics_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Yes, from what I understand they interact with a block device. They
+are aiming at using ext2 over this block device. I'm adding Hans
+Beckerus and Therry Vilmart in CC so they can describe how the mtd
+device is used in their setup (which driver exactly, along with
+kernel options to set it up if possible).
 
-I have a viewer connected to relayd and attached to a session named "live".=
- The session is started then destroyed. Then I list the sessions using the =
-same viewer and it returns the destroyed session. If I try to attach to it,=
- it returns a status LTTNG_VIEWER_ATTACH_ALREADY. I think this session shou=
-ld not be listed or there should be a status that indicates that the sessio=
-n doesn't exist anymore. Or is it expected that I create a new viewer befor=
-e listing the sessions again?
+> 
+> I'm thinking we might want to add a flag somewhere in the block_dev / bdi
+> that indicates whether DAX is supported.  Currently we rely on whether
+> ->direct_access is present in the block_device_operations to indicate
+> that, so we'd have to have two block_dev_operations in mtd-blkdevs,
+> depending on whether direct access is supported by the underlying
+> MTD device.  Not a show-stopper.
 
-Thank you for the help!
-Marc-Andre
+Great!
 
---_000_D381217948BF4C45AF756AFC995BEB9F1C2EBF68eusaamb103erics_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+> 
+> > Please keep me in CC on your next patch versions. I'm willing
+> > to spend some more time reviewing them if needed. By the way,
+> > do you guys have a target time-frame/kernel version you aim
+> > at for getting this work upstream ?
+> 
+> We're trying to get it upstream ASAP.  We've been working on it
+> publically since December last year, and it's getting frustrating that
+> it's not upstream already.  I sent a v12 a few minutes before you sent
+> this message ...  I thought git would add you to the cc's since your
+> Reviewed-by is on some of the patches.
 
-<html dir=3D"ltr">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style id=3D"owaParaStyle" type=3D"text/css">P {margin-top:0;margin-bottom:=
-0;}</style>
-</head>
-<body ocsi=3D"0" fpstyle=3D"1">
-<div style=3D"direction: ltr;font-family: Tahoma;color: #000000;font-size: =
-10pt;">I have a viewer connected to relayd and attached to a session named =
-&quot;live&quot;. The session is started then destroyed. Then I list the se=
-ssions using the same viewer and it returns
- the destroyed session. If I try to attach to it, it returns a status LTTNG=
-_VIEWER_ATTACH_ALREADY. I think this session should not be listed or there =
-should be a status that indicates that the session doesn't exist anymore. O=
-r is it expected that I create a
- new viewer before listing the sessions again?<br>
-<br>
-Thank you for the help!<br>
-Marc-Andre<br>
-</div>
-</body>
-</html>
+It appears I have not received the patches. Would it be possible for you
+to setup a git tree with those patches ? It would be easier for me to
+try them out than to fish them from gmane. :-)
 
---_000_D381217948BF4C45AF756AFC995BEB9F1C2EBF68eusaamb103erics_--
+Thanks,
 
+Mathieu
 
---===============1977946313==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1977946313==--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
