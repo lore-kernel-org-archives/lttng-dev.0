@@ -1,18 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: Try loading classes using
- the thread context class loader
-Date: Fri, 31 Oct 2014 18:05:59 +0000 (UTC)
-Message-ID: <1533809.5635.1414778759098.JavaMail.zimbra__29859.2181796723$1414778806$gmane$org@efficios.com>
-References: <1414778627-22489-1-git-send-email-jeremie.galarneau@efficios.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: [PATCH lttng-ust] Update Java agent documentation
+Date: Fri, 31 Oct 2014 15:33:40 -0400
+Message-ID: <1414784020-11301-1-git-send-email-christian.babeux__46399.8284926221$1414784093$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qa0-f45.google.com ([209.85.216.45])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XkGaO-0003Qt-R5
- for lttng-dev@lists.lttng.org; Fri, 31 Oct 2014 14:06:11 -0400
-In-Reply-To: <1414778627-22489-1-git-send-email-jeremie.galarneau@efficios.com>
+ (envelope-from <christian.babeux@0x80.ca>) id 1XkHxR-0003rS-4W
+ for lttng-dev@lists.lttng.org; Fri, 31 Oct 2014 15:34:03 -0400
+Received: by mail-qa0-f45.google.com with SMTP id dc16so5762422qab.32
+ for <lttng-dev@lists.lttng.org>; Fri, 31 Oct 2014 12:33:55 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,71 +20,131 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGludG8gbWFzdGVyIGFuZCBzdGFibGUtMi42LCB0aGFua3MhCgpNYXRoaWV1CgotLS0t
-LSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gRnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxq
-ZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmcKPiBDYzogIm1hdGhpZXUgZGVzbm95ZXJzIiA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNp
-b3MuY29tPiwgIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lv
-cy5jb20+Cj4gU2VudDogRnJpZGF5LCBPY3RvYmVyIDMxLCAyMDE0IDI6MDM6NDcgUE0KPiBTdWJq
-ZWN0OiBbUEFUQ0ggbHR0bmctdXN0XSBGaXg6IFRyeSBsb2FkaW5nIGNsYXNzZXMgdXNpbmcgdGhl
-IHRocmVhZCBjb250ZXh0IGNsYXNzIGxvYWRlcgo+IAo+IExUVG5nQWdlbnQgc2hvdWxkIGxvYWQg
-Y2xhc3NlcyB1c2luZyB0aGUgY3VycmVudCB0aHJlYWQgY29udGV4dCdzCj4gY2xhc3MgbG9hZGVy
-IGFuZCB0aGVuIHRyeSB1c2luZyB0aGUgc3lzdGVtIGNsYXNzIGxvYWRlciBpZiBhCj4gQ2xhc3NO
-b3RGb3VuZEV4Y2VwdGlvbiBpcyB0aHJvd24uCj4gCj4gU2lnbmVkLW9mZi1ieTogSsOpcsOpbWll
-IEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+IC0tLQo+ICAuLi4v
-amF2YS9vcmcvbHR0bmcvdXN0L2FnZW50L0xUVG5nQWdlbnQuamF2YSAgICAgICB8IDI2Cj4gICsr
-KysrKysrKysrKysrKysrLS0tLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDIwIGluc2VydGlvbnMoKyks
-IDYgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2xpYmx0dG5nLXVzdC1qYXZhLWFnZW50
-L2phdmEvb3JnL2x0dG5nL3VzdC9hZ2VudC9MVFRuZ0FnZW50LmphdmEKPiBiL2xpYmx0dG5nLXVz
-dC1qYXZhLWFnZW50L2phdmEvb3JnL2x0dG5nL3VzdC9hZ2VudC9MVFRuZ0FnZW50LmphdmEKPiBp
-bmRleCAyOTNhYzg0Li40N2I0NTE5IDEwMDY0NAo+IC0tLSBhL2xpYmx0dG5nLXVzdC1qYXZhLWFn
-ZW50L2phdmEvb3JnL2x0dG5nL3VzdC9hZ2VudC9MVFRuZ0FnZW50LmphdmEKPiArKysgYi9saWJs
-dHRuZy11c3QtamF2YS1hZ2VudC9qYXZhL29yZy9sdHRuZy91c3QvYWdlbnQvTFRUbmdBZ2VudC5q
-YXZhCj4gQEAgLTk0LDggKzk0LDcgQEAgcHVibGljIGNsYXNzIExUVG5nQWdlbnQgewo+ICAJCUNs
-YXNzPD8+IGxvZ2dpbmc7Cj4gIAo+ICAJCXRyeSB7Cj4gLQkJCUNsYXNzTG9hZGVyIGxvYWRlciA9
-IENsYXNzTG9hZGVyLmdldFN5c3RlbUNsYXNzTG9hZGVyKCk7Cj4gLQkJCWxvZ2dpbmcgPSBsb2Fk
-ZXIubG9hZENsYXNzKCJvcmcuYXBhY2hlLmxvZzRqLnNwaS5Mb2dnaW5nRXZlbnQiKTsKPiArCQkJ
-bG9nZ2luZyA9IGxvYWRDbGFzcygib3JnLmFwYWNoZS5sb2c0ai5zcGkuTG9nZ2luZ0V2ZW50Iik7
-Cj4gIAkJfSBjYXRjaCAoQ2xhc3NOb3RGb3VuZEV4Y2VwdGlvbiBlKSB7Cj4gIAkJCS8qIExvZzRq
-IGNsYXNzZXMgbm90IGZvdW5kLCBubyBuZWVkIHRvIGNyZWF0ZSB0aGUgcmVsZXZhbnQgb2JqZWN0
-cyAqLwo+ICAJCQlyZXR1cm4gZmFsc2U7Cj4gQEAgLTEzMSwxMCArMTMwLDI2IEBAIHB1YmxpYyBj
-bGFzcyBMVFRuZ0FnZW50IHsKPiAgCQlyZXR1cm4gdHJ1ZTsKPiAgCX0KPiAgCj4gKwlwcml2YXRl
-IENsYXNzPD8+IGxvYWRDbGFzcyhTdHJpbmcgY2xhc3NOYW1lKSB0aHJvd3MgQ2xhc3NOb3RGb3Vu
-ZEV4Y2VwdGlvbgo+IHsKPiArCQlDbGFzc0xvYWRlciBsb2FkZXI7Cj4gKwkJQ2xhc3M8Pz4gbG9h
-ZGVkQ2xhc3M7Cj4gKwo+ICsJCXRyeSB7Cj4gKwkJCS8qIFRyeSB0byBsb2FkIGNsYXNzIHVzaW5n
-IHRoZSBjdXJyZW50IHRocmVhZCdzIGNvbnRleHQgY2xhc3MgbG9hZGVyICovCj4gKwkJCWxvYWRl
-ciA9IFRocmVhZC5jdXJyZW50VGhyZWFkKCkuZ2V0Q29udGV4dENsYXNzTG9hZGVyKCk7Cj4gKwkJ
-CWxvYWRlZENsYXNzID0gbG9hZGVyLmxvYWRDbGFzcyhjbGFzc05hbWUpOwo+ICsJCX0gY2F0Y2gg
-KENsYXNzTm90Rm91bmRFeGNlcHRpb24gZSkgewo+ICsJCQkvKiBMb2FkaW5nIGZhaWxlZCwgdHJ5
-IHVzaW5nIHRoZSBzeXN0ZW0gY2xhc3MgbG9hZGVyICovCj4gKwkJCWxvYWRlciA9IENsYXNzTG9h
-ZGVyLmdldFN5c3RlbUNsYXNzTG9hZGVyKCk7Cj4gKwkJCWxvYWRlZENsYXNzID0gbG9hZGVyLmxv
-YWRDbGFzcyhjbGFzc05hbWUpOwo+ICsJCX0KPiArCj4gKwkJcmV0dXJuIGxvYWRlZENsYXNzOwo+
-ICsJfQo+ICsKPiAgCXByaXZhdGUgdm9pZCBpbml0QWdlbnRKVUxDbGFzc2VzKCkgewo+ICAJCXRy
-eSB7Cj4gLQkJCUNsYXNzTG9hZGVyIGxvYWRlciA9IENsYXNzTG9hZGVyLmdldFN5c3RlbUNsYXNz
-TG9hZGVyKCk7Cj4gLQkJCUNsYXNzPD8+IGx0dG5nSlVMID0gbG9hZGVyLmxvYWRDbGFzcygib3Jn
-Lmx0dG5nLnVzdC5hZ2VudC5qdWwuTFRUbmdKVUwiKTsKPiArCQkJQ2xhc3M8Pz4gbHR0bmdKVUwg
-PSBsb2FkQ2xhc3MoIm9yZy5sdHRuZy51c3QuYWdlbnQuanVsLkxUVG5nSlVMIik7Cj4gIAkJCXRo
-aXMuanVsVXNlciA9IChMb2dGcmFtZXdvcmspbHR0bmdKVUwuZ2V0RGVjbGFyZWRDb25zdHJ1Y3Rv
-cihuZXcgQ2xhc3NbXQo+ICAJCQl7Qm9vbGVhbi5jbGFzc30pLm5ld0luc3RhbmNlKGZhbHNlKTsK
-PiAgCQkJdGhpcy5qdWxSb290ID0gKExvZ0ZyYW1ld29yaylsdHRuZ0pVTC5nZXREZWNsYXJlZENv
-bnN0cnVjdG9yKG5ldyBDbGFzc1tdCj4gIAkJCXtCb29sZWFuLmNsYXNzfSkubmV3SW5zdGFuY2Uo
-dHJ1ZSk7Cj4gIAkJCXRoaXMudXNlSlVMID0gdHJ1ZTsKPiBAQCAtMTU0LDggKzE2OSw3IEBAIHB1
-YmxpYyBjbGFzcyBMVFRuZ0FnZW50IHsKPiAgCj4gIAlwcml2YXRlIHZvaWQgaW5pdEFnZW50TG9n
-NGpDbGFzc2VzKCkgewo+ICAJCXRyeSB7Cj4gLQkJCUNsYXNzTG9hZGVyIGxvYWRlciA9IENsYXNz
-TG9hZGVyLmdldFN5c3RlbUNsYXNzTG9hZGVyKCk7Cj4gLQkJCUNsYXNzPD8+IGx0dG5nTG9nNGog
-PQo+IGxvYWRlci5sb2FkQ2xhc3MoIm9yZy5sdHRuZy51c3QuYWdlbnQubG9nNGouTFRUbmdMb2c0
-aiIpOwo+ICsJCQlDbGFzczw/PiBsdHRuZ0xvZzRqID0gbG9hZENsYXNzKCJvcmcubHR0bmcudXN0
-LmFnZW50LmxvZzRqLkxUVG5nTG9nNGoiKTsKPiAgCQkJdGhpcy5sb2c0alVzZXIgPSAoTG9nRnJh
-bWV3b3JrKWx0dG5nTG9nNGouZ2V0RGVjbGFyZWRDb25zdHJ1Y3RvcihuZXcKPiAgCQkJQ2xhc3Nb
-XSB7Qm9vbGVhbi5jbGFzc30pLm5ld0luc3RhbmNlKGZhbHNlKTsKPiAgCQkJdGhpcy5sb2c0alJv
-b3QgPSAoTG9nRnJhbWV3b3JrKWx0dG5nTG9nNGouZ2V0RGVjbGFyZWRDb25zdHJ1Y3RvcihuZXcK
-PiAgCQkJQ2xhc3NbXSB7Qm9vbGVhbi5jbGFzc30pLm5ld0luc3RhbmNlKHRydWUpOwo+ICAJCQl0
-aGlzLnVzZUxvZzRqID0gdHJ1ZTsKPiAtLQo+IDIuMS4yCj4gCj4gCgotLSAKTWF0aGlldSBEZXNu
-b3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
-dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
-bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+---
+ doc/Makefile.am           |  2 +-
+ doc/java-agent.txt        | 51 +++++++++++++++++++++++++++++++++++++++++++++++
+ doc/java-util-logging.txt | 41 -------------------------------------
+ 3 files changed, 52 insertions(+), 42 deletions(-)
+ create mode 100644 doc/java-agent.txt
+ delete mode 100644 doc/java-util-logging.txt
+
+diff --git a/doc/Makefile.am b/doc/Makefile.am
+index 72dcde2..ba21e9f 100644
+--- a/doc/Makefile.am
++++ b/doc/Makefile.am
+@@ -5,4 +5,4 @@ dist_man_MANS = man/lttng-gen-tp.1 \
+ 	man/lttng-ust-dl.3 \
+ 	man/lttng-ust-cyg-profile.3
+ 
+-dist_doc_DATA = java-util-logging.txt
++dist_doc_DATA = java-agent.txt
+diff --git a/doc/java-agent.txt b/doc/java-agent.txt
+new file mode 100644
+index 0000000..51b0e8c
+--- /dev/null
++++ b/doc/java-agent.txt
+@@ -0,0 +1,51 @@
++The agent can now be built in three different configurations:
++
++1) Java agent with JUL support:
++
++$ ./configure --enable-java-agent-jul
++
++2) Java agent with Log4j support:
++
++$ export CLASSPATH=$CLASSPATH:/path/to/log4j.jar
++$ ./configure --enable-java-agent-log4j
++
++3) Java agent with JUL + Log4j support
++
++$ export CLASSPATH=$CLASSPATH:/path/to/log4j.jar
++$ ./configure --enable-java-agent-all
++
++To build the agent with log4j support, make sure that the log4j jar
++is in your Java classpath.
++
++The configure script will automatically detect the appropriate Java
++binaries to use in order to build the Java agent.
++
++The name of the agent jar file is now "liblttng-ust-agent.jar".
++It will be installed in the arch-agnostic "$prefix/share/java" path
++e.g: "/usr/share/java".
++
++In order to support older applications using the "org.lttng.ust.jul"
++package, a transitional package is built with the same name.
++
++All applications should move to use the "org.lttng.ust.agent" package.
++
++After building, you can use the "liblttng-ust-agent.jar" file in a
++Java project.  Depending on your configuration, the agent will
++requires shared objects (e.g: "liblttng-ust-jul.so") which is installed
++by the build system when doing "make install". Make sure that your
++Java application can find this shared object with the
++"java.library.path".
++
++In order to enable the agent in your Java application, you simply have to add
++this as early as you can in the runtime process.
++
++import org.lttng.ust.agent.LTTngAgent;
++[...]
++	private static LTTngAgent lttngAgent;
++	[...]
++	lttngAgent = LTTngAgent.getLTTngAgent();
++
++This will initialize automatically the singleton LTTngAgent, and will
++return when the session daemon registration is done. If no session daemon is
++available, the execution will continue and the agent will retry every
++3 seconds.
+diff --git a/doc/java-util-logging.txt b/doc/java-util-logging.txt
+deleted file mode 100644
+index 9f827e6..0000000
+--- a/doc/java-util-logging.txt
++++ /dev/null
+@@ -1,41 +0,0 @@
+-The support for JUL needs to be explicitly enabled when lttng-ust is
+-configured, e.g.:
+-
+-dependency: openjdk-7-jdk
+-    ./configure --with-java-jdk=/usr/lib/jvm/java-7-openjdk --with-jni-interface
+-
+-On Debian system for instance you can simply use the "default-java" path:
+-
+-    ./configure --with-java-jdk=/usr/lib/jvm/default-java --with-jni-interface
+-
+-Note that the OpenJDK 7 is used for development and continuous integration thus
+-we directly support that version for this library. However, it has been tested
+-with OpenJDK 6 also. Please let us know if other Java version (commercial or
+-not) work with this library.
+-
+-The LTTng Java Agent for JUL support is typically installed here:
+-
+-/usr/local/lib/lttng/java/liblttng-ust-jul.jar
+-
+-After building, you can use the "liblttng-ust-jul.jar" file in a Java project.
+-It requires "liblttng-ust-jul.so" which is installed by the build system when
+-doing "make install". Make sure that your Java application can find this shared
+-object with the "java.library.path".
+-
+-In order to enable the agent in your Java application, you simply have to add
+-this as early as you can in the runtime process.
+-
+-import org.lttng.ust.jul.LTTngAgent;
+-[...]
+-	private static LTTngAgent lttngAgent;
+-	[...]
+-	lttngAgent = LTTngAgent.getLTTngAgent();
+-
+-This will initialize automatically the singleton LTTngAgent, and will
+-return when session daemon registration is done. If no session daemon is
+-available, the execution will continue and the agent will retry every
+-3 seconds.
+-
+-Once registered, it is adds a thread inside your Java application and will be
+-able to automatically use every Logger object and map them to the jul_event
+-tracepoint of the JNI interface.
+-- 
+2.1.1
