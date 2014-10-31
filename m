@@ -1,19 +1,19 @@
-From: =?iso-8859-1?Q?Marc-Andr=E9_Laperle?= <marc-andre.laperle@ericsson.com>
-Subject: Re: Listing live sessions after a session is destroyed
-Date: Fri, 31 Oct 2014 14:47:40 +0000
-Message-ID: <D381217948BF4C45AF756AFC995BEB9F1C2EE352__49513.0406613045$1414766938$gmane$org@eusaamb103.ericsson.se>
-References: <D381217948BF4C45AF756AFC995BEB9F1C2EBF68@eusaamb103.ericsson.se>,
- <CA+jJMxs-gDcAqBBvwfRQA40uLjmdXZTBJCyafp+8vTN=BZZnJA@mail.gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+ <jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-ust] Fix: Try loading classes using the
+	thread context class loader
+Date: Fri, 31 Oct 2014 14:03:47 -0400
+Message-ID: <1414778627-22489-1-git-send-email-jeremie.galarneau__32954.7890964479$1414778696$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg21.ericsson.net ([198.24.6.65])
+Received: from mail-qa0-f53.google.com ([209.85.216.53])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <marc-andre.laperle@ericsson.com>) id 1XkDUS-0002Pg-9a
- for lttng-dev@lists.lttng.org; Fri, 31 Oct 2014 10:47:53 -0400
-In-Reply-To: <CA+jJMxs-gDcAqBBvwfRQA40uLjmdXZTBJCyafp+8vTN=BZZnJA@mail.gmail.com>
-Content-Language: en-US
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XkGYH-0003OP-0Z
+ for lttng-dev@lists.lttng.org; Fri, 31 Oct 2014 14:03:59 -0400
+Received: by mail-qa0-f53.google.com with SMTP id n8so5720934qaq.12
+ for <lttng-dev@lists.lttng.org>; Fri, 31 Oct 2014 11:03:51 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,72 +22,58 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi J=E9r=E9mie,
-
-Thank you for your response. I am seeing this problem with a different view=
-er than babeltrace that we are implementing in Trace Compass. I filled a bu=
-g here:
-http://bugs.lttng.org/issues/853
-
-> What do you mean by "creating a new viewer"?
-
-I meant opening a new connection to relayd which will create a new "viewer"=
- from relayd's perspective.
-
-Thank you,
-Marc-Andr=E9
-
-________________________________________
-From: jeremie.galarneau@gmail.com [jeremie.galarneau@gmail.com] on behalf o=
-f J=E9r=E9mie Galarneau [jeremie.galarneau@efficios.com]
-Sent: Thursday, 30 October 2014 2:41 PM
-To: Marc-Andr=E9 Laperle
-Cc: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] Listing live sessions after a session is destroyed
-
-On Wed, Oct 29, 2014 at 5:39 PM, Marc-Andr=E9 Laperle
-<marc-andre.laperle@ericsson.com> wrote:
-> I have a viewer connected to relayd and attached to a session named "live=
-".
-> The session is started then destroyed. Then I list the sessions using the
-> same viewer and it returns the destroyed session. If I try to attach to i=
-t,
-> it returns a status LTTNG_VIEWER_ATTACH_ALREADY. I think this session sho=
-uld
-> not be listed or there should be a status that indicates that the session
-
-Hi Marc-Andr=E9,
-
-That does look like a bug. Would you mind opening a bug on
-bugs.lttng.org describing the steps you take along with the babeltrace
-(assuming this is the viewer you are using) and relayd verbose logs?
-(launch both with -vvv)
-
-> doesn't exist anymore. Or is it expected that I create a new viewer before
-> listing the sessions again?
-
-What do you mean by "creating a new viewer"?
-
-Regards,
-J=E9r=E9mie
-
->
-> Thank you for the help!
-> Marc-Andre
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
-
-
---
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+TFRUbmdBZ2VudCBzaG91bGQgbG9hZCBjbGFzc2VzIHVzaW5nIHRoZSBjdXJyZW50IHRocmVhZCBj
+b250ZXh0J3MKY2xhc3MgbG9hZGVyIGFuZCB0aGVuIHRyeSB1c2luZyB0aGUgc3lzdGVtIGNsYXNz
+IGxvYWRlciBpZiBhCkNsYXNzTm90Rm91bmRFeGNlcHRpb24gaXMgdGhyb3duLgoKU2lnbmVkLW9m
+Zi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29t
+PgotLS0KIC4uLi9qYXZhL29yZy9sdHRuZy91c3QvYWdlbnQvTFRUbmdBZ2VudC5qYXZhICAgICAg
+IHwgMjYgKysrKysrKysrKysrKysrKystLS0tLQogMSBmaWxlIGNoYW5nZWQsIDIwIGluc2VydGlv
+bnMoKyksIDYgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvbGlibHR0bmctdXN0LWphdmEtYWdl
+bnQvamF2YS9vcmcvbHR0bmcvdXN0L2FnZW50L0xUVG5nQWdlbnQuamF2YSBiL2xpYmx0dG5nLXVz
+dC1qYXZhLWFnZW50L2phdmEvb3JnL2x0dG5nL3VzdC9hZ2VudC9MVFRuZ0FnZW50LmphdmEKaW5k
+ZXggMjkzYWM4NC4uNDdiNDUxOSAxMDA2NDQKLS0tIGEvbGlibHR0bmctdXN0LWphdmEtYWdlbnQv
+amF2YS9vcmcvbHR0bmcvdXN0L2FnZW50L0xUVG5nQWdlbnQuamF2YQorKysgYi9saWJsdHRuZy11
+c3QtamF2YS1hZ2VudC9qYXZhL29yZy9sdHRuZy91c3QvYWdlbnQvTFRUbmdBZ2VudC5qYXZhCkBA
+IC05NCw4ICs5NCw3IEBAIHB1YmxpYyBjbGFzcyBMVFRuZ0FnZW50IHsKIAkJQ2xhc3M8Pz4gbG9n
+Z2luZzsKIAogCQl0cnkgewotCQkJQ2xhc3NMb2FkZXIgbG9hZGVyID0gQ2xhc3NMb2FkZXIuZ2V0
+U3lzdGVtQ2xhc3NMb2FkZXIoKTsKLQkJCWxvZ2dpbmcgPSBsb2FkZXIubG9hZENsYXNzKCJvcmcu
+YXBhY2hlLmxvZzRqLnNwaS5Mb2dnaW5nRXZlbnQiKTsKKwkJCWxvZ2dpbmcgPSBsb2FkQ2xhc3Mo
+Im9yZy5hcGFjaGUubG9nNGouc3BpLkxvZ2dpbmdFdmVudCIpOwogCQl9IGNhdGNoIChDbGFzc05v
+dEZvdW5kRXhjZXB0aW9uIGUpIHsKIAkJCS8qIExvZzRqIGNsYXNzZXMgbm90IGZvdW5kLCBubyBu
+ZWVkIHRvIGNyZWF0ZSB0aGUgcmVsZXZhbnQgb2JqZWN0cyAqLwogCQkJcmV0dXJuIGZhbHNlOwpA
+QCAtMTMxLDEwICsxMzAsMjYgQEAgcHVibGljIGNsYXNzIExUVG5nQWdlbnQgewogCQlyZXR1cm4g
+dHJ1ZTsKIAl9CiAKKwlwcml2YXRlIENsYXNzPD8+IGxvYWRDbGFzcyhTdHJpbmcgY2xhc3NOYW1l
+KSB0aHJvd3MgQ2xhc3NOb3RGb3VuZEV4Y2VwdGlvbiB7CisJCUNsYXNzTG9hZGVyIGxvYWRlcjsK
+KwkJQ2xhc3M8Pz4gbG9hZGVkQ2xhc3M7CisKKwkJdHJ5IHsKKwkJCS8qIFRyeSB0byBsb2FkIGNs
+YXNzIHVzaW5nIHRoZSBjdXJyZW50IHRocmVhZCdzIGNvbnRleHQgY2xhc3MgbG9hZGVyICovCisJ
+CQlsb2FkZXIgPSBUaHJlYWQuY3VycmVudFRocmVhZCgpLmdldENvbnRleHRDbGFzc0xvYWRlcigp
+OworCQkJbG9hZGVkQ2xhc3MgPSBsb2FkZXIubG9hZENsYXNzKGNsYXNzTmFtZSk7CisJCX0gY2F0
+Y2ggKENsYXNzTm90Rm91bmRFeGNlcHRpb24gZSkgeworCQkJLyogTG9hZGluZyBmYWlsZWQsIHRy
+eSB1c2luZyB0aGUgc3lzdGVtIGNsYXNzIGxvYWRlciAqLworCQkJbG9hZGVyID0gQ2xhc3NMb2Fk
+ZXIuZ2V0U3lzdGVtQ2xhc3NMb2FkZXIoKTsKKwkJCWxvYWRlZENsYXNzID0gbG9hZGVyLmxvYWRD
+bGFzcyhjbGFzc05hbWUpOworCQl9CisKKwkJcmV0dXJuIGxvYWRlZENsYXNzOworCX0KKwogCXBy
+aXZhdGUgdm9pZCBpbml0QWdlbnRKVUxDbGFzc2VzKCkgewogCQl0cnkgewotCQkJQ2xhc3NMb2Fk
+ZXIgbG9hZGVyID0gQ2xhc3NMb2FkZXIuZ2V0U3lzdGVtQ2xhc3NMb2FkZXIoKTsKLQkJCUNsYXNz
+PD8+IGx0dG5nSlVMID0gbG9hZGVyLmxvYWRDbGFzcygib3JnLmx0dG5nLnVzdC5hZ2VudC5qdWwu
+TFRUbmdKVUwiKTsKKwkJCUNsYXNzPD8+IGx0dG5nSlVMID0gbG9hZENsYXNzKCJvcmcubHR0bmcu
+dXN0LmFnZW50Lmp1bC5MVFRuZ0pVTCIpOwogCQkJdGhpcy5qdWxVc2VyID0gKExvZ0ZyYW1ld29y
+aylsdHRuZ0pVTC5nZXREZWNsYXJlZENvbnN0cnVjdG9yKG5ldyBDbGFzc1tdIHtCb29sZWFuLmNs
+YXNzfSkubmV3SW5zdGFuY2UoZmFsc2UpOwogCQkJdGhpcy5qdWxSb290ID0gKExvZ0ZyYW1ld29y
+aylsdHRuZ0pVTC5nZXREZWNsYXJlZENvbnN0cnVjdG9yKG5ldyBDbGFzc1tdIHtCb29sZWFuLmNs
+YXNzfSkubmV3SW5zdGFuY2UodHJ1ZSk7CiAJCQl0aGlzLnVzZUpVTCA9IHRydWU7CkBAIC0xNTQs
+OCArMTY5LDcgQEAgcHVibGljIGNsYXNzIExUVG5nQWdlbnQgewogCiAJcHJpdmF0ZSB2b2lkIGlu
+aXRBZ2VudExvZzRqQ2xhc3NlcygpIHsKIAkJdHJ5IHsKLQkJCUNsYXNzTG9hZGVyIGxvYWRlciA9
+IENsYXNzTG9hZGVyLmdldFN5c3RlbUNsYXNzTG9hZGVyKCk7Ci0JCQlDbGFzczw/PiBsdHRuZ0xv
+ZzRqID0gbG9hZGVyLmxvYWRDbGFzcygib3JnLmx0dG5nLnVzdC5hZ2VudC5sb2c0ai5MVFRuZ0xv
+ZzRqIik7CisJCQlDbGFzczw/PiBsdHRuZ0xvZzRqID0gbG9hZENsYXNzKCJvcmcubHR0bmcudXN0
+LmFnZW50LmxvZzRqLkxUVG5nTG9nNGoiKTsKIAkJCXRoaXMubG9nNGpVc2VyID0gKExvZ0ZyYW1l
+d29yaylsdHRuZ0xvZzRqLmdldERlY2xhcmVkQ29uc3RydWN0b3IobmV3IENsYXNzW10ge0Jvb2xl
+YW4uY2xhc3N9KS5uZXdJbnN0YW5jZShmYWxzZSk7CiAJCQl0aGlzLmxvZzRqUm9vdCA9IChMb2dG
+cmFtZXdvcmspbHR0bmdMb2c0ai5nZXREZWNsYXJlZENvbnN0cnVjdG9yKG5ldyBDbGFzc1tdIHtC
+b29sZWFuLmNsYXNzfSkubmV3SW5zdGFuY2UodHJ1ZSk7CiAJCQl0aGlzLnVzZUxvZzRqID0gdHJ1
+ZTsKLS0gCjIuMS4yCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
+dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
