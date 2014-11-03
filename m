@@ -1,18 +1,19 @@
-From: Alexander Grigoriev <alexgri@tbricks.com>
-Subject: [PATCH lttng-tools] Fix: Fail to add several
-	perf_thread context
-Date: Sun,  2 Nov 2014 02:14:45 +0300
-Message-ID: <1414883685-25069-1-git-send-email-alexgri__29873.2794043191$1414883760$gmane$org@tbricks.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: babeltrace-log convertor
+Date: Mon, 3 Nov 2014 11:34:30 -0500
+Message-ID: <CA+jJMxtRgNKyqMsJEjrAJ05TZiQGGmA-6bPg=-DALFbWmQO06A__1197.4424393431$1415032534$gmane$org@mail.gmail.com>
+References: <CA+=dQ--zb_KvOXCCmTyYzaD5BtYTmwUGw+kuoR3+4k0DiHZP5A@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f178.google.com ([209.85.217.178])
+Received: from mail-lb0-f172.google.com ([209.85.217.172])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <alexgri@tbricks.com>) id 1Xkht5-0004Qr-Pw
- for lttng-dev@lists.lttng.org; Sat, 01 Nov 2014 19:15:17 -0400
-Received: by mail-lb0-f178.google.com with SMTP id f15so8479392lbj.23
- for <lttng-dev@lists.lttng.org>; Sat, 01 Nov 2014 16:15:09 -0700 (PDT)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XlKaW-000084-DM
+ for lttng-dev@lists.lttng.org; Mon, 03 Nov 2014 11:34:44 -0500
+Received: by mail-lb0-f172.google.com with SMTP id w7so2449266lbi.3
+ for <lttng-dev@lists.lttng.org>; Mon, 03 Nov 2014 08:34:31 -0800 (PST)
+In-Reply-To: <CA+=dQ--zb_KvOXCCmTyYzaD5BtYTmwUGw+kuoR3+4k0DiHZP5A@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,38 +22,24 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: Alexander Grigoriev <alexgri@tbricks.com>, tav@tbricks.com
+To: Divya Vyas <dvyas@mvista.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-In commit aa3514e96f12c13f681a81ea275dc51dd63473c8 not removed old check
-for duplicate context type in create_ust_app_channel_context() function. If
-the one of perf_tread contexts was already added, in the next
-similar operation function returns error code EEXIST "UST context
-already exist".
-
-Signed-off-by: Alexander Grigoriev <alexgri@tbricks.com>
----
- src/bin/lttng-sessiond/ust-app.c | 7 -------
- 1 file changed, 7 deletions(-)
-
-diff --git a/src/bin/lttng-sessiond/ust-app.c b/src/bin/lttng-sessiond/ust-app.c
-index f8e9693..7f1594b 100644
---- a/src/bin/lttng-sessiond/ust-app.c
-+++ b/src/bin/lttng-sessiond/ust-app.c
-@@ -1940,13 +1940,6 @@ int create_ust_app_channel_context(struct ust_app_session *ua_sess,
- 
- 	DBG2("UST app adding context to channel %s", ua_chan->name);
- 
--	lttng_ht_lookup(ua_chan->ctx, (void *)((unsigned long)uctx->ctx), &iter);
--	node = lttng_ht_iter_get_node_ulong(&iter);
--	if (node != NULL) {
--		ret = -EEXIST;
--		goto error;
--	}
--
- 	ua_ctx = alloc_ust_app_ctx(uctx);
- 	if (ua_ctx == NULL) {
- 		/* malloc failed */
--- 
-1.9.1
+SGkgRGl2eWEsCgpNYWtlIHN1cmUgdGhlIHRleHQgeW91IHBpcGUgdG8gYmFiZWx0cmFjZS1sb2cg
+Y29udGFpbnMgbmV3IGxpbmVzIHNpbmNlCnRoZXNlIGFyZSB1c2VkIHRvIHNwbGl0IHRoZSBpbmNv
+bWluZyB0ZXh0IGludG8gbXVsdGlwbGUgZXZlbnRzLgoKSWYgeW91IHJlYWxseSB3YW50IHRvIGNv
+bnZlcnQgYSBsb2cgZmlsZSB3aGljaCByZWFsbHkgY29udGFpbnMgbGluZXMgPgozMmtiLCBJJ2Qg
+cmVjb21tZW5kIHVzaW5nIHRoZSBDVEYgV3JpdGVyIEMgQVBJIG9yIGl0cyBQeXRob24gdmVyc2lv
+bgoobG9vayBmb3IgdGhlIENURldyaXRlciBjbGFzcykuCgpSZWdhcmRzLApKw6lyw6ltaWUKCk9u
+IFNhdCwgTm92IDEsIDIwMTQgYXQgMjowOCBBTSwgRGl2eWEgVnlhcyA8ZHZ5YXNAbXZpc3RhLmNv
+bT4gd3JvdGU6Cj4gSGkgLAo+Cj4gSSBhbSBjb252ZXJ0aW5nIGEgdGV4dCB0cmFjZSBmaWxlIHRv
+IENURiBmb3JtYXQgYnV0IGdlZXRpbmcgZXJyb3I6Cj4KPiBbRXJyb3JdIExpbmUgdG9vIGxhcmdl
+IGZvciBwYWNrZXQgc2l6ZSAoMzIgS0IpICggZGlzY2FyZGVkKQo+Cj4gQW55IGlkZWEgb24gdGhp
+cz8KPgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0
+dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+
+CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZp
+Y2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8v
+bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
