@@ -1,19 +1,18 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: babeltrace-log convertor
-Date: Mon, 3 Nov 2014 11:34:30 -0500
-Message-ID: <CA+jJMxtRgNKyqMsJEjrAJ05TZiQGGmA-6bPg=-DALFbWmQO06A__1197.4424393431$1415032534$gmane$org@mail.gmail.com>
-References: <CA+=dQ--zb_KvOXCCmTyYzaD5BtYTmwUGw+kuoR3+4k0DiHZP5A@mail.gmail.com>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: [PATCH lttng-ust] Fix: Add versioning to
+	liblttng-ust-agent JAR
+Date: Mon,  3 Nov 2014 15:12:26 -0500
+Message-ID: <1415045546-21425-1-git-send-email-christian.babeux__44560.0490588278$1415045690$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f172.google.com ([209.85.217.172])
+Received: from mail-qc0-f180.google.com ([209.85.216.180])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1XlKaW-000084-DM
- for lttng-dev@lists.lttng.org; Mon, 03 Nov 2014 11:34:44 -0500
-Received: by mail-lb0-f172.google.com with SMTP id w7so2449266lbi.3
- for <lttng-dev@lists.lttng.org>; Mon, 03 Nov 2014 08:34:31 -0800 (PST)
-In-Reply-To: <CA+=dQ--zb_KvOXCCmTyYzaD5BtYTmwUGw+kuoR3+4k0DiHZP5A@mail.gmail.com>
+ (envelope-from <christian.babeux@0x80.ca>) id 1XlNzZ-0001Bu-Nv
+ for lttng-dev@lists.lttng.org; Mon, 03 Nov 2014 15:12:51 -0500
+Received: by mail-qc0-f180.google.com with SMTP id o8so9867727qcw.11
+ for <lttng-dev@lists.lttng.org>; Mon, 03 Nov 2014 12:12:40 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,24 +21,108 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Divya Vyas <dvyas@mvista.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgRGl2eWEsCgpNYWtlIHN1cmUgdGhlIHRleHQgeW91IHBpcGUgdG8gYmFiZWx0cmFjZS1sb2cg
-Y29udGFpbnMgbmV3IGxpbmVzIHNpbmNlCnRoZXNlIGFyZSB1c2VkIHRvIHNwbGl0IHRoZSBpbmNv
-bWluZyB0ZXh0IGludG8gbXVsdGlwbGUgZXZlbnRzLgoKSWYgeW91IHJlYWxseSB3YW50IHRvIGNv
-bnZlcnQgYSBsb2cgZmlsZSB3aGljaCByZWFsbHkgY29udGFpbnMgbGluZXMgPgozMmtiLCBJJ2Qg
-cmVjb21tZW5kIHVzaW5nIHRoZSBDVEYgV3JpdGVyIEMgQVBJIG9yIGl0cyBQeXRob24gdmVyc2lv
-bgoobG9vayBmb3IgdGhlIENURldyaXRlciBjbGFzcykuCgpSZWdhcmRzLApKw6lyw6ltaWUKCk9u
-IFNhdCwgTm92IDEsIDIwMTQgYXQgMjowOCBBTSwgRGl2eWEgVnlhcyA8ZHZ5YXNAbXZpc3RhLmNv
-bT4gd3JvdGU6Cj4gSGkgLAo+Cj4gSSBhbSBjb252ZXJ0aW5nIGEgdGV4dCB0cmFjZSBmaWxlIHRv
-IENURiBmb3JtYXQgYnV0IGdlZXRpbmcgZXJyb3I6Cj4KPiBbRXJyb3JdIExpbmUgdG9vIGxhcmdl
-IGZvciBwYWNrZXQgc2l6ZSAoMzIgS0IpICggZGlzY2FyZGVkKQo+Cj4gQW55IGlkZWEgb24gdGhp
-cz8KPgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0
-dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+
-CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZp
-Y2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8v
-bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+The liblttng-ust-agent JAR need versioning. The manifest file contains the
+appropriate information about the JAR, such as the current version.
+
+A symlink is also created and installed in order to point to the latest
+version of the JAR.
+
+e.g: liblttng-ust-agent.jar -> liblttng-ust-agent-1.0.0.jar
+
+Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+---
+ configure.ac                                       |  1 +
+ liblttng-ust-java-agent/java/Makefile.am           | 24 ++++++++++++++++++----
+ .../java/org/lttng/ust/agent/Manifest.txt          |  7 +++++++
+ 3 files changed, 28 insertions(+), 4 deletions(-)
+ create mode 100644 liblttng-ust-java-agent/java/org/lttng/ust/agent/Manifest.txt
+
+diff --git a/configure.ac b/configure.ac
+index 55cec23..18f3739 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -48,6 +48,7 @@ AC_DEFINE_UNQUOTED([VERSION_NAME], ["$version_name"], [UST version name])
+ AC_DEFINE_UNQUOTED([VERSION_DESCRIPTION], ["$version_description"], [UST version description])
+ 
+ AC_PROG_GREP
++AC_PROG_LN_S
+ # libtool link_all_deplibs fixup. See http://bugs.lttng.org/issues/321.
+ AC_ARG_ENABLE(libtool-linkdep-fixup,
+ 	AS_HELP_STRING([--disable-libtool-linkdep-fixup],
+diff --git a/liblttng-ust-java-agent/java/Makefile.am b/liblttng-ust-java-agent/java/Makefile.am
+index 01e81e5..5a406e4 100644
+--- a/liblttng-ust-java-agent/java/Makefile.am
++++ b/liblttng-ust-java-agent/java/Makefile.am
+@@ -1,12 +1,20 @@
+ JAVAROOT = .
+ 
+-jarfile = liblttng-ust-agent.jar
++pkgpath = org/lttng/ust/agent
++pkgpath_old = org/lttng/ust/jul
++
++jarfile_version = 1.0.0
++jarfile_manifest = $(pkgpath)/Manifest.txt
++jarfile_symlink = liblttng-ust-agent.jar
++jarfile = liblttng-ust-agent-$(jarfile_version).jar
++
+ jarfile_old = liblttng-ust-jul.jar
++
+ jardir = $(datadir)/java
++
+ juljniout = ../jni/jul
+ log4jjniout = ../jni/log4j
+-pkgpath = org/lttng/ust/agent
+-pkgpath_old = org/lttng/ust/jul
++
+ dist_noinst_JAVA = $(pkgpath)/LTTngAgent.java \
+ 		   $(pkgpath)/LTTngSessiondCmd2_6.java \
+ 		   $(pkgpath)/LTTngTCPSessiondClient.java \
+@@ -16,6 +24,8 @@ dist_noinst_JAVA = $(pkgpath)/LTTngAgent.java \
+ 		   $(pkgpath)/jul/LTTngLogHandler.java \
+ 		   $(pkgpath_old)/LTTngAgent.java
+ 
++dist_noinst_DATA = $(jarfile_manifest)
++
+ jar_DATA = $(jarfile) $(jarfile_old)
+ 
+ stamp =
+@@ -36,7 +46,7 @@ classes += $(pkgpath)/log4j/*.class
+ endif
+ 
+ $(jarfile): classnoinst.stamp
+-	$(JAR) cf $(JARFLAGS) $@ $(classes)
++	$(JAR) cfm $(JARFLAGS) $@ $(jarfile_manifest) $(classes) && $(LN_S) $@ $(jarfile_symlink)
+ 
+ $(jarfile_old): classnoinst.stamp
+ 	$(JAR) cf $(JARFLAGS) $@ $(pkgpath)/*.class \
+@@ -52,6 +62,12 @@ log4j-jni-header.stamp: $(dist_noinst_JAVA)
+ 
+ all-local: $(stamp)
+ 
++install-data-local:
++	cd $(DESTDIR)/$(jardir); rm -f $(jarfile_symlink); $(LN_S) $(jarfile) $(jarfile_symlink)
++
++uninstall-local:
++	cd $(DESTDIR)/$(jardir); rm -f $(jarfile_symlink)
++
+ CLEANFILES = $(jarfile) $(jarfile_old) $(pkgpath)/*.class $(pkgpath_old)/*.class $(pkgpath)/jul/*.class \
+ 	$(pkgpath)/log4j/*.class jul-jni-header.stamp log4j-jni-header.stamp \
+ 	$(juljniout)/org_lttng_ust_agent_jul_LTTngLogHandler.h \
+diff --git a/liblttng-ust-java-agent/java/org/lttng/ust/agent/Manifest.txt b/liblttng-ust-java-agent/java/org/lttng/ust/agent/Manifest.txt
+new file mode 100644
+index 0000000..d3c7e26
+--- /dev/null
++++ b/liblttng-ust-java-agent/java/org/lttng/ust/agent/Manifest.txt
+@@ -0,0 +1,7 @@
++Name: org/lttng/ust/agent/
++Specification-Title: LTTng UST Java Agent
++Specification-Version: 1.0.0
++Specification-Vendor: LTTng Project
++Implementation-Title: org.lttng.ust.agent
++Implementation-Version: 1.0.0
++Implementation-Vendor: LTTng Project
+-- 
+2.1.1
