@@ -1,18 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: Add versioning to
-	liblttng-ust-agent JAR
-Date: Mon, 3 Nov 2014 20:18:09 +0000 (UTC)
-Message-ID: <582491195.6992.1415045889067.JavaMail.zimbra__14921.5279998772$1415045956$gmane$org@efficios.com>
-References: <1415045546-21425-1-git-send-email-christian.babeux@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: Fail to add several
+ perf_thread context
+Date: Mon, 3 Nov 2014 15:28:36 -0500
+Message-ID: <CA+jJMxvetzEOx7Oy=4Y-J+B7Znc9MDoiJ-X-euryogG1k6Et2w__12344.9423620061$1415046644$gmane$org@mail.gmail.com>
+References: <1414883685-25069-1-git-send-email-alexgri@tbricks.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-la0-f46.google.com ([209.85.215.46])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XlO4x-0001FA-1j
- for lttng-dev@lists.lttng.org; Mon, 03 Nov 2014 15:18:24 -0500
-In-Reply-To: <1415045546-21425-1-git-send-email-christian.babeux@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XlOF1-0001Jr-LU
+ for lttng-dev@lists.lttng.org; Mon, 03 Nov 2014 15:28:51 -0500
+Received: by mail-la0-f46.google.com with SMTP id hs14so10075236lab.5
+ for <lttng-dev@lists.lttng.org>; Mon, 03 Nov 2014 12:28:36 -0800 (PST)
+In-Reply-To: <1414883685-25069-1-git-send-email-alexgri@tbricks.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,136 +23,41 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Alexander Grigoriev <alexgri@tbricks.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, tav@tbricks.com
 List-Id: lttng-dev@lists.lttng.org
 
-Merged, thanks!
-
-Mathieu
-
------ Original Message -----
-> From: "Christian Babeux" <christian.babeux@efficios.com>
-> To: lttng-dev@lists.lttng.org
-> Cc: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, "Christian Babeux" <christian.babeux@efficios.com>
-> Sent: Monday, November 3, 2014 3:12:26 PM
-> Subject: [PATCH lttng-ust] Fix: Add versioning to liblttng-ust-agent JAR
-> 
-> The liblttng-ust-agent JAR need versioning. The manifest file contains the
-> appropriate information about the JAR, such as the current version.
-> 
-> A symlink is also created and installed in order to point to the latest
-> version of the JAR.
-> 
-> e.g: liblttng-ust-agent.jar -> liblttng-ust-agent-1.0.0.jar
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  configure.ac                                       |  1 +
->  liblttng-ust-java-agent/java/Makefile.am           | 24
->  ++++++++++++++++++----
->  .../java/org/lttng/ust/agent/Manifest.txt          |  7 +++++++
->  3 files changed, 28 insertions(+), 4 deletions(-)
->  create mode 100644
->  liblttng-ust-java-agent/java/org/lttng/ust/agent/Manifest.txt
-> 
-> diff --git a/configure.ac b/configure.ac
-> index 55cec23..18f3739 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -48,6 +48,7 @@ AC_DEFINE_UNQUOTED([VERSION_NAME], ["$version_name"], [UST
-> version name])
->  AC_DEFINE_UNQUOTED([VERSION_DESCRIPTION], ["$version_description"], [UST
->  version description])
->  
->  AC_PROG_GREP
-> +AC_PROG_LN_S
->  # libtool link_all_deplibs fixup. See http://bugs.lttng.org/issues/321.
->  AC_ARG_ENABLE(libtool-linkdep-fixup,
->  	AS_HELP_STRING([--disable-libtool-linkdep-fixup],
-> diff --git a/liblttng-ust-java-agent/java/Makefile.am
-> b/liblttng-ust-java-agent/java/Makefile.am
-> index 01e81e5..5a406e4 100644
-> --- a/liblttng-ust-java-agent/java/Makefile.am
-> +++ b/liblttng-ust-java-agent/java/Makefile.am
-> @@ -1,12 +1,20 @@
->  JAVAROOT = .
->  
-> -jarfile = liblttng-ust-agent.jar
-> +pkgpath = org/lttng/ust/agent
-> +pkgpath_old = org/lttng/ust/jul
-> +
-> +jarfile_version = 1.0.0
-> +jarfile_manifest = $(pkgpath)/Manifest.txt
-> +jarfile_symlink = liblttng-ust-agent.jar
-> +jarfile = liblttng-ust-agent-$(jarfile_version).jar
-> +
->  jarfile_old = liblttng-ust-jul.jar
-> +
->  jardir = $(datadir)/java
-> +
->  juljniout = ../jni/jul
->  log4jjniout = ../jni/log4j
-> -pkgpath = org/lttng/ust/agent
-> -pkgpath_old = org/lttng/ust/jul
-> +
->  dist_noinst_JAVA = $(pkgpath)/LTTngAgent.java \
->  		   $(pkgpath)/LTTngSessiondCmd2_6.java \
->  		   $(pkgpath)/LTTngTCPSessiondClient.java \
-> @@ -16,6 +24,8 @@ dist_noinst_JAVA = $(pkgpath)/LTTngAgent.java \
->  		   $(pkgpath)/jul/LTTngLogHandler.java \
->  		   $(pkgpath_old)/LTTngAgent.java
->  
-> +dist_noinst_DATA = $(jarfile_manifest)
-> +
->  jar_DATA = $(jarfile) $(jarfile_old)
->  
->  stamp =
-> @@ -36,7 +46,7 @@ classes += $(pkgpath)/log4j/*.class
->  endif
->  
->  $(jarfile): classnoinst.stamp
-> -	$(JAR) cf $(JARFLAGS) $@ $(classes)
-> +	$(JAR) cfm $(JARFLAGS) $@ $(jarfile_manifest) $(classes) && $(LN_S) $@
-> $(jarfile_symlink)
->  
->  $(jarfile_old): classnoinst.stamp
->  	$(JAR) cf $(JARFLAGS) $@ $(pkgpath)/*.class \
-> @@ -52,6 +62,12 @@ log4j-jni-header.stamp: $(dist_noinst_JAVA)
->  
->  all-local: $(stamp)
->  
-> +install-data-local:
-> +	cd $(DESTDIR)/$(jardir); rm -f $(jarfile_symlink); $(LN_S) $(jarfile)
-> $(jarfile_symlink)
-> +
-> +uninstall-local:
-> +	cd $(DESTDIR)/$(jardir); rm -f $(jarfile_symlink)
-> +
->  CLEANFILES = $(jarfile) $(jarfile_old) $(pkgpath)/*.class
->  $(pkgpath_old)/*.class $(pkgpath)/jul/*.class \
->  	$(pkgpath)/log4j/*.class jul-jni-header.stamp log4j-jni-header.stamp \
->  	$(juljniout)/org_lttng_ust_agent_jul_LTTngLogHandler.h \
-> diff --git a/liblttng-ust-java-agent/java/org/lttng/ust/agent/Manifest.txt
-> b/liblttng-ust-java-agent/java/org/lttng/ust/agent/Manifest.txt
-> new file mode 100644
-> index 0000000..d3c7e26
-> --- /dev/null
-> +++ b/liblttng-ust-java-agent/java/org/lttng/ust/agent/Manifest.txt
-> @@ -0,0 +1,7 @@
-> +Name: org/lttng/ust/agent/
-> +Specification-Title: LTTng UST Java Agent
-> +Specification-Version: 1.0.0
-> +Specification-Vendor: LTTng Project
-> +Implementation-Title: org.lttng.ust.agent
-> +Implementation-Version: 1.0.0
-> +Implementation-Vendor: LTTng Project
-> --
-> 2.1.1
-> 
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGkgQWxleGFuZGVyLAoKSnVzdCB0byBtYWtlIHN1cmUgSSB1bmRlcnN0YW5kIHRoZSBwcm9ibGVt
+LCBpcyB5b3VyIHBvaW50IHRoYXQgImx0dG5nCmFkZC1jb250ZXh0IiBzaG91bGQgbm90IGZhaWwg
+d2hlbiBtdWx0aXBsZSBjb250ZXh0cyBhcmUgYWRkZWQganVzdApiZWNhdXNlIG9uZSBvZiB0aGVt
+IHdhcyBhbHJlYWR5IHByZXNlbnQ/IElmIG5vdCwgY291bGQgeW91IHByb3ZpZGUgYQpsb2cgZGVt
+b25zdHJhdGluZyB0aGUgaXNzdWU/CgpUaGFua3MhCkrDqXLDqW1pZQoKT24gU2F0LCBOb3YgMSwg
+MjAxNCBhdCA3OjE0IFBNLCBBbGV4YW5kZXIgR3JpZ29yaWV2IDxhbGV4Z3JpQHRicmlja3MuY29t
+PiB3cm90ZToKPiBJbiBjb21taXQgYWEzNTE0ZTk2ZjEyYzEzZjY4MWE4MWVhMjc1ZGM1MWRkNjM0
+NzNjOCBub3QgcmVtb3ZlZCBvbGQgY2hlY2sKPiBmb3IgZHVwbGljYXRlIGNvbnRleHQgdHlwZSBp
+biBjcmVhdGVfdXN0X2FwcF9jaGFubmVsX2NvbnRleHQoKSBmdW5jdGlvbi4gSWYKPiB0aGUgb25l
+IG9mIHBlcmZfdHJlYWQgY29udGV4dHMgd2FzIGFscmVhZHkgYWRkZWQsIGluIHRoZSBuZXh0Cj4g
+c2ltaWxhciBvcGVyYXRpb24gZnVuY3Rpb24gcmV0dXJucyBlcnJvciBjb2RlIEVFWElTVCAiVVNU
+IGNvbnRleHQKPiBhbHJlYWR5IGV4aXN0Ii4KPgo+IFNpZ25lZC1vZmYtYnk6IEFsZXhhbmRlciBH
+cmlnb3JpZXYgPGFsZXhncmlAdGJyaWNrcy5jb20+Cj4gLS0tCj4gIHNyYy9iaW4vbHR0bmctc2Vz
+c2lvbmQvdXN0LWFwcC5jIHwgNyAtLS0tLS0tCj4gIDEgZmlsZSBjaGFuZ2VkLCA3IGRlbGV0aW9u
+cygtKQo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdXN0LWFwcC5jIGIv
+c3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC91c3QtYXBwLmMKPiBpbmRleCBmOGU5NjkzLi43ZjE1OTRi
+IDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdXN0LWFwcC5jCj4gKysrIGIv
+c3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC91c3QtYXBwLmMKPiBAQCAtMTk0MCwxMyArMTk0MCw2IEBA
+IGludCBjcmVhdGVfdXN0X2FwcF9jaGFubmVsX2NvbnRleHQoc3RydWN0IHVzdF9hcHBfc2Vzc2lv
+biAqdWFfc2VzcywKPgo+ICAgICAgICAgREJHMigiVVNUIGFwcCBhZGRpbmcgY29udGV4dCB0byBj
+aGFubmVsICVzIiwgdWFfY2hhbi0+bmFtZSk7Cj4KPiAtICAgICAgIGx0dG5nX2h0X2xvb2t1cCh1
+YV9jaGFuLT5jdHgsICh2b2lkICopKCh1bnNpZ25lZCBsb25nKXVjdHgtPmN0eCksICZpdGVyKTsK
+PiAtICAgICAgIG5vZGUgPSBsdHRuZ19odF9pdGVyX2dldF9ub2RlX3Vsb25nKCZpdGVyKTsKPiAt
+ICAgICAgIGlmIChub2RlICE9IE5VTEwpIHsKPiAtICAgICAgICAgICAgICAgcmV0ID0gLUVFWElT
+VDsKPiAtICAgICAgICAgICAgICAgZ290byBlcnJvcjsKPiAtICAgICAgIH0KPiAtCj4gICAgICAg
+ICB1YV9jdHggPSBhbGxvY191c3RfYXBwX2N0eCh1Y3R4KTsKPiAgICAgICAgIGlmICh1YV9jdHgg
+PT0gTlVMTCkgewo+ICAgICAgICAgICAgICAgICAvKiBtYWxsb2MgZmFpbGVkICovCj4gLS0KPiAx
+LjkuMQo+Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Xwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4g
+aHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
+CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZp
+Y2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8v
+bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
