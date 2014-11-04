@@ -1,34 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.6.0-rc2
-Date: Tue, 4 Nov 2014 17:03:28 +0000 (UTC)
-Message-ID: <1399068322.7413.1415120608424.JavaMail.zimbra__31605.0325324342$1415120682$gmane$org@efficios.com>
-References: <801466286.7412.1415120596677.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] Babeltrace 1.2.4
+Date: Tue, 4 Nov 2014 19:25:14 +0000 (UTC)
+Message-ID: <1749279063.7467.1415129114372.JavaMail.zimbra__16211.2403814264$1415129191$gmane$org@efficios.com>
+References: <2046333991.7462.1415128710599.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XlhW5-0007Ys-OD
- for lttng-dev@lists.lttng.org; Tue, 04 Nov 2014 12:03:43 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 2F796340182
- for <lttng-dev@lists.lttng.org>; Tue,  4 Nov 2014 17:03:33 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id W8zucBnNBEGC for <lttng-dev@lists.lttng.org>;
- Tue,  4 Nov 2014 17:03:28 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id D1D8434019A
- for <lttng-dev@lists.lttng.org>; Tue,  4 Nov 2014 17:03:28 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id B1UnIjkzh45H for <lttng-dev@lists.lttng.org>;
- Tue,  4 Nov 2014 17:03:28 +0000 (UTC)
-Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
- by mail.efficios.com (Postfix) with ESMTP id 9D34C340182
- for <lttng-dev@lists.lttng.org>; Tue,  4 Nov 2014 17:03:28 +0000 (UTC)
-In-Reply-To: <801466286.7412.1415120596677.JavaMail.zimbra@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1XljjH-0008FP-Ca
+ for lttng-dev@lists.lttng.org; Tue, 04 Nov 2014 14:25:28 -0500
+In-Reply-To: <2046333991.7462.1415128710599.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -37,25 +20,31 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org, tiwg@multicore-association.org
 List-Id: lttng-dev@lists.lttng.org
 
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
-port of the low-overhead tracing capabilities of the LTTng kernel tracer
-to user-space. The library "liblttng-ust" enables tracing of
-applications and libraries.
+The Babeltrace project provides trace read and write libraries, as well
+as a trace converter. Plugins can be created for any trace format to
+allow its conversion to/from another trace format.
+
+The main format expected to be converted to/from is the Common Trace
+Format (CTF). The default input format of the "babeltrace" command is
+CTF, and its default output format is a human-readable text log. The
+"babeltrace-log" command converts from a text log to a CTF trace.
+
+This is a bugfix release.
 
 Changelog:
-2014-11-04 lttng-ust 2.6.0-rc2
-        * Fix: Add versioning to liblttng-ust-agent JAR
-        * Fix: Warn when log4j version is too old
-        * Update Java agent documentation
-        * Fix: Try loading classes using the thread context class loader
-        * Update version name
+2014-11-04 Babeltrace 1.2.4
+        * Fix: make sure we can exit the get_new_metadata loop
+        * Docs fix: Change bt_ctf_writer_create_stream return description
+        * Fix: offset_s and CTF clocks with frequency != 1GHz
 
-Project website: http://lttng.org
-Download link: http://lttng.org/download
-(please refer to the README.md file for installation instructions)
+
+Project website: http://www.efficios.com/babeltrace
+Download link: http://www.efficios.com/files/babeltrace/
+CTF specification: http://www.efficios.com/ctf
+
 
 -- 
 Mathieu Desnoyers
