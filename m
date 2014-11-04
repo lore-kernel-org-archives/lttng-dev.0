@@ -1,45 +1,61 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.8.6
-Date: Tue, 4 Nov 2014 16:10:35 +0000 (UTC)
-Message-ID: <2125074956.7393.1415117435081.JavaMail.zimbra@efficios.com>
-References: <2018499994.7387.1415117259378.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng-UST 2.6.0-rc2
+Date: Tue, 4 Nov 2014 17:03:28 +0000 (UTC)
+Message-ID: <1399068322.7413.1415120608424.JavaMail.zimbra__31605.0325324342$1415120682$gmane$org@efficios.com>
+References: <801466286.7412.1415120596677.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <2018499994.7387.1415117259378.JavaMail.zimbra@efficios.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Stephen Hemminger <shemminger@vyatta.com>, Alan Stern <stern@rowland.harvard.edu>
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.efficios.com ([78.47.125.74])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <compudj@efficios.com>) id 1XlhW5-0007Ys-OD
+ for lttng-dev@lists.lttng.org; Tue, 04 Nov 2014 12:03:43 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 2F796340182
+ for <lttng-dev@lists.lttng.org>; Tue,  4 Nov 2014 17:03:33 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id W8zucBnNBEGC for <lttng-dev@lists.lttng.org>;
+ Tue,  4 Nov 2014 17:03:28 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id D1D8434019A
+ for <lttng-dev@lists.lttng.org>; Tue,  4 Nov 2014 17:03:28 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id B1UnIjkzh45H for <lttng-dev@lists.lttng.org>;
+ Tue,  4 Nov 2014 17:03:28 +0000 (UTC)
+Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
+ by mail.efficios.com (Postfix) with ESMTP id 9D34C340182
+ for <lttng-dev@lists.lttng.org>; Tue,  4 Nov 2014 17:03:28 +0000 (UTC)
+In-Reply-To: <801466286.7412.1415120596677.JavaMail.zimbra@efficios.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
-data synchronization library provides read-side access which scales
-linearly with the number of cores. It does so by allowing multiples
-copies of a given data structure to live at the same time, and by
-monitoring the data structure accesses to detect grace periods after
-which memory reclamation is possible.
-
-liburcu-cds provides efficient data structures based on RCU and
-lock-free algorithms. Those structures include hash tables, queues,
-stacks, and doubly-linked lists.
-
-This is a bugfix release. There is one noteworthy fix that has an
-impact on the lfstack API: the return value of cds_lfs_push(), which
-indicates whether the stack content was empty prior to the push,
-was logically reversed compared to the API documentation (and compared
-to its queue counterpart). This bug was introduced in the Userspace RCU
-0.8.0 release.
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
 Changelog:
-2014-11-04 Userspace RCU 0.8.6
-        * Fix: silence gcc -Wextra warning
-        * compiler: use __GNUC__ instead of the undefined __GNUC_MAJOR__
-        * Fix: lfstack reversed empty/non-empty return value
-        * lfstack: fix: add missing __cds_lfs_init
+2014-11-04 lttng-ust 2.6.0-rc2
+        * Fix: Add versioning to liblttng-ust-agent JAR
+        * Fix: Warn when log4j version is too old
+        * Update Java agent documentation
+        * Fix: Try loading classes using the thread context class loader
+        * Update version name
 
-Project website: http://urcu.so
-Git repository: git://git.urcu.so/urcu.git
+Project website: http://lttng.org
+Download link: http://lttng.org/download
+(please refer to the README.md file for installation instructions)
 
 -- 
 Mathieu Desnoyers
