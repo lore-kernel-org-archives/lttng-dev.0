@@ -1,22 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: Fail to add several
- perf_thread context
-Date: Thu, 6 Nov 2014 17:52:37 -0500
-Message-ID: <CA+jJMxtvVyNmBbfw1A-nVkda2oteMuP+D4ww7qi2JZw=3nmzkw__40100.3322717317$1415314413$gmane$org@mail.gmail.com>
-References: <1414883685-25069-1-git-send-email-alexgri@tbricks.com>
- <CA+jJMxvetzEOx7Oy=4Y-J+B7Znc9MDoiJ-X-euryogG1k6Et2w@mail.gmail.com>
- <CAEFm6egRY89XiJDAeHZWfrThWsM_3KKxzDS17fj7FEpQEyjdZw@mail.gmail.com>
+From: Anand Neeli <anand.neeli@gmail.com>
+Subject: babeltrace error when reading traces
+Date: Fri, 7 Nov 2014 19:56:16 +0530
+Message-ID: <CAM5kDqywV5GC84DSC-v6QQTgKWRw5zFPDyVgqOxDbS5K2DgVaw__8255.48499492488$1415370427$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0434937671=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f178.google.com ([209.85.217.178])
+Received: from mail-wg0-f48.google.com ([74.125.82.48])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1XmVv1-0007if-Gm
- for lttng-dev@lists.lttng.org; Thu, 06 Nov 2014 17:52:45 -0500
-Received: by mail-lb0-f178.google.com with SMTP id f15so1924237lbj.23
- for <lttng-dev@lists.lttng.org>; Thu, 06 Nov 2014 14:52:37 -0800 (PST)
-In-Reply-To: <CAEFm6egRY89XiJDAeHZWfrThWsM_3KKxzDS17fj7FEpQEyjdZw@mail.gmail.com>
+ (envelope-from <anand.neeli@gmail.com>) id 1XmkUc-00043W-Au
+ for lttng-dev@lists.lttng.org; Fri, 07 Nov 2014 09:26:27 -0500
+Received: by mail-wg0-f48.google.com with SMTP id m15so3822963wgh.35
+ for <lttng-dev@lists.lttng.org>; Fri, 07 Nov 2014 06:26:17 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,128 +19,150 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexander Grigoriev <alexgri@tbricks.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Alexander Toropov <tav@tbricks.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gTW9uLCBOb3YgMywgMjAxNCBhdCA0OjMwIFBNLCBBbGV4YW5kZXIgR3JpZ29yaWV2IDxhbGV4
-Z3JpQHRicmlja3MuY29tPiB3cm90ZToKPiBIaSBKw6lyw6ltaWUsCj4KPiAibHR0bmcgYWRkLWNv
-bnRleHQiIHNob3VsZCBub3QgZmFpbCB3aGVuIHNldmVyYWwgdW5pcXVlIHBlcmZvcm1hbmNlIGNv
-dW50ZXJzCj4gYWRkZWQgYWZ0ZXIgc3RhcnQgcHJvZ3JhbSB3aXRoIHRyYWNlcG9pbnRzLiBOb3cg
-Imx0dG5nIGFkZC1jb250ZXh0IiBmYWlsCj4gd2hlbiBzZXZlcmFsIHVuaXF1ZSBwZXJmX3RyZWFk
-IGNvbnRleHQgYWRkZWQgYWZ0ZXIgc3RhcnQgcHJvZ3JhbSB3aXRoCj4gdHJhY2Vwb2ludHMuCj4K
-QWxyaWdodC4gUmVhZCBvbiBmb3IgY29tbWVudHMgYWJvdXQgdGhlIGZpeC4KCj4gSSB3cm90ZSBh
-Ym91dCB0aGlzIHByb2JsZW06Cj4KPiAtLS0tLS0tLS0tIEZvcndhcmRlZCBtZXNzYWdlIC0tLS0t
-LS0tLS0KPiBGcm9tOiBBbGV4YW5kZXIgR3JpZ29yaWV2IDxhbGV4Z3JpQHRicmlja3MuY29tPgo+
-IERhdGU6IFR1ZSwgU2VwIDMwLCAyMDE0IGF0IDQ6MjMgUE0KPiBTdWJqZWN0OiBQcm9ibGVtIHdp
-dGggcGVyZjp0aHJlYWQgaW4gMi41Cj4gVG86IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPgo+
-Cj4gSGVsbG8sCj4KPiBJIHVzZSBsdHRuZy0yLjUgYW5kIGxpbnV4LTMuOC4xMy4gV2hlbiBJIHRy
-eSB0byBhZGQgY29udGV4dCB3aXRoIHNldmVyYWwKPiBwZXJmb3JtYW5jZSBjb3VudGVycyBhZnRl
-ciBzdGFydCBwcm9ncmFtIHdpdGggdHJhY2Vwb2ludHMsIEkgZ2V0IHRoZQo+IGZvbGxvd2luZyBl
-cnJvcjoKPgo+PiBhcHBfd2l0aF9sdHRuZyAmICAvLyB7IHRyYWNlcG9pbnQodGVzdCwgdGVzdCwg
-MSk7IHNsZWVwKDEwMDApOyB9Cj4gWzFdIDE5Mjk3Cj4KPj4gbHR0bmcgZGVzdHJveSAtYQo+IE5v
-IHNlc3Npb24gZm91bmQsIG5vdGhpbmcgdG8gZG8uCj4KPj4gbHR0bmcgLXZ2diBjcmVhdGUgdGVz
-dAo+IERFQlVHMyAtIDE0OjU0OjQyLjcxMzU3MyBbMTkzMTMvMTkzMTNdOiBVUkkgc3RyaW5nOgo+
-IGZpbGU6Ly8vaG9tZS9hbGV4Z3JpL2x0dG5nLXRyYWNlcy90ZXN0LTIwMTQwOTMwLTE0NTQ0MiAo
-aW4gdXJpX3BhcnNlKCkgYXQKPiB1cmkuYzoyOTMpCj4gREVCVUczIC0gMTQ6NTQ6NDIuNzEzNjA3
-IFsxOTMxMy8xOTMxM106IFVSSSBmaWxlIGRlc3RpbmF0aW9uOgo+IC9ob21lL2FsZXhncmkvbHR0
-bmctdHJhY2VzL3Rlc3QtMjAxNDA5MzAtMTQ1NDQyIChpbiB1cmlfcGFyc2UoKSBhdAo+IHVyaS5j
-OjMzMCkKPiBERUJVRzMgLSAxNDo1NDo0Mi43MTM2MTYgWzE5MzEzLzE5MzEzXTogVVJJIGR0eXBl
-OiAzLCBwcm90bzogMCwgaG9zdDogLAo+IHN1YmRpcjogLCBjdHJsOiAwLCBkYXRhOiAwIChpbiB1
-cmlfcGFyc2UoKSBhdCB1cmkuYzo1MDcpCj4gREVCVUcxIC0gMTQ6NTQ6NDIuNzEzNjY3IFsxOTMx
-My8xOTMxM106IExTTSBjbWQgdHlwZSA6IDggKGluCj4gc2VuZF9zZXNzaW9uX21zZygpIGF0IGx0
-dG5nLWN0bC5jOjEzMSkKPiBTZXNzaW9uIHRlc3QgY3JlYXRlZC4KPiBUcmFjZXMgd2lsbCBiZSB3
-cml0dGVuIGluIC9ob21lL2FsZXhncmkvbHR0bmctdHJhY2VzL3Rlc3QtMjAxNDA5MzAtMTQ1NDQy
-Cj4gREVCVUcxIC0gMTQ6NTQ6NDIuNzE1ODE5IFsxOTMxMy8xOTMxM106IEluaXQgY29uZmlnIHNl
-c3Npb24gaW4gL2hvbWUvYWxleGdyaQo+IChpbiBjb25maWdfaW5pdCgpIGF0IGNvbmYuYzoyOTUp
-Cj4KPj4gbHR0bmcgLXZ2diBhZGQtY29udGV4dCAtdSAtdCB2cGlkIC10IHBlcmY6dGhyZWFkOmNw
-dS1jeWNsZXMgLXQKPj4gcGVyZjp0aHJlYWQ6aW5zdHJ1Y3Rpb25zIC10IHBlcmY6dGhyZWFkOmNh
-Y2hlLW1pc3NlcyAtcyB0ZXN0Cj4gREVCVUcxIC0gMTQ6NTQ6NTIuMTI0NzQ1IFsxOTMxNi8xOTMx
-Nl06IEFkZGluZyBjb250ZXh0Li4uIChpbiBhZGRfY29udGV4dCgpCj4gYXQgY29tbWFuZHMvYWRk
-X2NvbnRleHQuYzo2MDApCj4gREVCVUcxIC0gMTQ6NTQ6NTIuMTMzMzkzIFsxOTMxNi8xOTMxNl06
-IExTTSBjbWQgdHlwZSA6IDAgKGluCj4gc2VuZF9zZXNzaW9uX21zZygpIGF0IGx0dG5nLWN0bC5j
-OjEzMSkKPiBVU1QgY29udGV4dCB2cGlkIGFkZGVkIHRvIGFsbCBjaGFubmVscwo+IERFQlVHMSAt
-IDE0OjU0OjUyLjE1MzQ0NSBbMTkzMTYvMTkzMTZdOiBBZGRpbmcgY29udGV4dC4uLiAoaW4gYWRk
-X2NvbnRleHQoKQo+IGF0IGNvbW1hbmRzL2FkZF9jb250ZXh0LmM6NjAwKQo+IERFQlVHMSAtIDE0
-OjU0OjUyLjE1MzQ5OSBbMTkzMTYvMTkzMTZdOiBMU00gY21kIHR5cGUgOiAwIChpbgo+IHNlbmRf
-c2Vzc2lvbl9tc2coKSBhdCBsdHRuZy1jdGwuYzoxMzEpCj4gVVNUIGNvbnRleHQgcGVyZjp0aHJl
-YWQ6Y3B1LWN5Y2xlcyBhZGRlZCB0byBhbGwgY2hhbm5lbHMKPiBERUJVRzEgLSAxNDo1NDo1Mi4x
-NTQzNTYgWzE5MzE2LzE5MzE2XTogQWRkaW5nIGNvbnRleHQuLi4gKGluIGFkZF9jb250ZXh0KCkK
-PiBhdCBjb21tYW5kcy9hZGRfY29udGV4dC5jOjYwMCkKPiBERUJVRzEgLSAxNDo1NDo1Mi4xNTQz
-OTIgWzE5MzE2LzE5MzE2XTogTFNNIGNtZCB0eXBlIDogMCAoaW4KPiBzZW5kX3Nlc3Npb25fbXNn
-KCkgYXQgbHR0bmctY3RsLmM6MTMxKQo+IEVycm9yOiBwZXJmOnRocmVhZDppbnN0cnVjdGlvbnM6
-IFVTVCBjb250ZXh0IGFscmVhZHkgZXhpc3QKPiBERUJVRzEgLSAxNDo1NDo1Mi4xNTQ0NjkgWzE5
-MzE2LzE5MzE2XTogQWRkaW5nIGNvbnRleHQuLi4gKGluIGFkZF9jb250ZXh0KCkKPiBhdCBjb21t
-YW5kcy9hZGRfY29udGV4dC5jOjYwMCkKPiBERUJVRzEgLSAxNDo1NDo1Mi4xNTQ1MjUgWzE5MzE2
-LzE5MzE2XTogTFNNIGNtZCB0eXBlIDogMCAoaW4KPiBzZW5kX3Nlc3Npb25fbXNnKCkgYXQgbHR0
-bmctY3RsLmM6MTMxKQo+IEVycm9yOiBwZXJmOnRocmVhZDpjYWNoZS1taXNzZXM6IFVTVCBjb250
-ZXh0IGFscmVhZHkgZXhpc3QKPiBXYXJuaW5nOiBTb21lIGNvbW1hbmQocykgd2VudCB3cm9uZwo+
-IERFQlVHMSAtIDE0OjU0OjUyLjE1NDYyMCBbMTkzMTYvMTkzMTZdOiBDbGVhbiBleGl0IChpbiBj
-bGVhbl9leGl0KCkgYXQKPiBsdHRuZy5jOjE2NykKPgo+ICdsdHRuZy1zZXNzaW9uZCAtdnZ2JyBs
-b2dzIGluIGF0dGFjaG1lbnQKPgo+IFRoYW5rcywKPiBBbGV4YW5kZXIKPiAtLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPgo+Cj4gVGhhbmtzLAo+IEFs
-ZXhhbmRlcgo+Cj4gT24gTW9uLCBOb3YgMywgMjAxNCBhdCAxMToyOCBQTSwgSsOpcsOpbWllIEdh
-bGFybmVhdQo+IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+IHdyb3RlOgo+Pgo+PiBI
-aSBBbGV4YW5kZXIsCj4+Cj4+IEp1c3QgdG8gbWFrZSBzdXJlIEkgdW5kZXJzdGFuZCB0aGUgcHJv
-YmxlbSwgaXMgeW91ciBwb2ludCB0aGF0ICJsdHRuZwo+PiBhZGQtY29udGV4dCIgc2hvdWxkIG5v
-dCBmYWlsIHdoZW4gbXVsdGlwbGUgY29udGV4dHMgYXJlIGFkZGVkIGp1c3QKPj4gYmVjYXVzZSBv
-bmUgb2YgdGhlbSB3YXMgYWxyZWFkeSBwcmVzZW50PyBJZiBub3QsIGNvdWxkIHlvdSBwcm92aWRl
-IGEKPj4gbG9nIGRlbW9uc3RyYXRpbmcgdGhlIGlzc3VlPwo+Pgo+PiBUaGFua3MhCj4+IErDqXLD
-qW1pZQo+Pgo+PiBPbiBTYXQsIE5vdiAxLCAyMDE0IGF0IDc6MTQgUE0sIEFsZXhhbmRlciBHcmln
-b3JpZXYgPGFsZXhncmlAdGJyaWNrcy5jb20+Cj4+IHdyb3RlOgo+PiA+IEluIGNvbW1pdCBhYTM1
-MTRlOTZmMTJjMTNmNjgxYTgxZWEyNzVkYzUxZGQ2MzQ3M2M4IG5vdCByZW1vdmVkIG9sZCBjaGVj
-awo+PiA+IGZvciBkdXBsaWNhdGUgY29udGV4dCB0eXBlIGluIGNyZWF0ZV91c3RfYXBwX2NoYW5u
-ZWxfY29udGV4dCgpIGZ1bmN0aW9uLgo+PiA+IElmCj4+ID4gdGhlIG9uZSBvZiBwZXJmX3RyZWFk
-IGNvbnRleHRzIHdhcyBhbHJlYWR5IGFkZGVkLCBpbiB0aGUgbmV4dAo+PiA+IHNpbWlsYXIgb3Bl
-cmF0aW9uIGZ1bmN0aW9uIHJldHVybnMgZXJyb3IgY29kZSBFRVhJU1QgIlVTVCBjb250ZXh0Cj4+
-ID4gYWxyZWFkeSBleGlzdCIuCj4+ID4KPj4gPiBTaWduZWQtb2ZmLWJ5OiBBbGV4YW5kZXIgR3Jp
-Z29yaWV2IDxhbGV4Z3JpQHRicmlja3MuY29tPgo+PiA+IC0tLQo+PiA+ICBzcmMvYmluL2x0dG5n
-LXNlc3Npb25kL3VzdC1hcHAuYyB8IDcgLS0tLS0tLQo+PiA+ICAxIGZpbGUgY2hhbmdlZCwgNyBk
-ZWxldGlvbnMoLSkKPj4gPgo+PiA+IGRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nLXNlc3Npb25k
-L3VzdC1hcHAuYwo+PiA+IGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC91c3QtYXBwLmMKPj4gPiBp
-bmRleCBmOGU5NjkzLi43ZjE1OTRiIDEwMDY0NAo+PiA+IC0tLSBhL3NyYy9iaW4vbHR0bmctc2Vz
-c2lvbmQvdXN0LWFwcC5jCj4+ID4gKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC91c3QtYXBw
-LmMKPj4gPiBAQCAtMTk0MCwxMyArMTk0MCw2IEBAIGludCBjcmVhdGVfdXN0X2FwcF9jaGFubmVs
-X2NvbnRleHQoc3RydWN0Cj4+ID4gdXN0X2FwcF9zZXNzaW9uICp1YV9zZXNzLAo+PiA+Cj4+ID4g
-ICAgICAgICBEQkcyKCJVU1QgYXBwIGFkZGluZyBjb250ZXh0IHRvIGNoYW5uZWwgJXMiLCB1YV9j
-aGFuLT5uYW1lKTsKPj4gPgo+PiA+IC0gICAgICAgbHR0bmdfaHRfbG9va3VwKHVhX2NoYW4tPmN0
-eCwgKHZvaWQgKikoKHVuc2lnbmVkCj4+ID4gbG9uZyl1Y3R4LT5jdHgpLCAmaXRlcik7Cj4+ID4g
-LSAgICAgICBub2RlID0gbHR0bmdfaHRfaXRlcl9nZXRfbm9kZV91bG9uZygmaXRlcik7Cj4+ID4g
-LSAgICAgICBpZiAobm9kZSAhPSBOVUxMKSB7Cj4+ID4gLSAgICAgICAgICAgICAgIHJldCA9IC1F
-RVhJU1Q7Cj4+ID4gLSAgICAgICAgICAgICAgIGdvdG8gZXJyb3I7Cj4+ID4gLSAgICAgICB9Cj4+
-ID4gLQoKVGhlIGZpeCBpcyBhIGJpdCBtb3JlIGNvbXBsZXggdGhhbiByZW1vdmluZyB0aGlzIGNo
-ZWNrIHNpbmNlIHdlIGRvCndhbnQgdG8gcmV0dXJuIGFuIGVycm9yIHdoZW4gYSB1c2VyIGFkZHMg
-YSBjb250ZXh0IHdoaWNoIGhhcyBhbHJlYWR5CmJlZW4gZW5hYmxlZCBpbiBhIGdpdmVuIGNoYW5u
-ZWwuCgpCYXNpY2FsbHksIHRoYXQgcGFydCBvZiB0aGUgY29kZSBpcyBmaW5lIGFzIGlzLCBidXQg
-dGhlIG1hdGNoaW5nCmZ1bmN0aW9uIG11c3QgYmUgY2hhbmdlZCB0byBhY2NvdW50IGZvciBib3Ro
-IHRoZSBjb250ZXh0IHR5cGUgYW5kIHRoZQpwZXJmIHRocmVhZCBjb3VudGVyIG5hbWUgd2hlbiB0
-aGUgY29udGV4dCB0eXBlIGlzCkxUVE5HX1VTVF9DT05URVhUX1BFUkZfVEhSRUFEX0NPVU5URVIu
-CgpJIGhhdmUgaW1wbGVtZW50ZWQgYSBmaXggaW4gbWFzdGVyIGFzOgoKY29tbWl0IDZhNmIyMDY4
-M2NjZjI5ZTE2YmFjZWVmNWQyOTM1NzAwMWMyYzcxM2EKQXV0aG9yOiBKw6lyw6ltaWUgR2FsYXJu
-ZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+CkRhdGU6ICAgVGh1IE5vdiA2IDE3
-OjM0OjA4IDIwMTQgLTA1MDAKCiAgICBGaXg6IGNoZWNrIHVzZXJzcGFjZSBwZXJmIGNvdW50ZXIg
-bmFtZSB3aGVuIGxvb2tpbmcgdXAgY29udGV4dHMKCiAgICBjcmVhdGVfdXN0X2FwcF9jaGFubmVs
-X2NvbnRleHQoKSBsb29rcyBmb3IgYSBjb250ZXh0J3MgZXhpc3RhbmNlCiAgICBpbiBhIGNoYW5u
-ZWwgYmVmb3JlIGFkZGluZyBpdC4gSG93ZXZlciwgaXQgb25seSBjaGVja3MgZm9yCiAgICBjb250
-ZXh0IHR5cGVzLiBUaGlzIGlzIHZhbGlkIGZvciBhbGwgY29udGV4dCB0eXBlcyBleGNlcHQgZm9y
-CiAgICBMVFROR19VU1RfQ09OVEVYVF9QRVJGX1RIUkVBRF9DT1VOVEVSIHNpbmNlIG11bHRpcGxl
-IHBlcmYKICAgIHRocmVhZCBjb3VudGVycyBtYXkgYmUgZW5hYmxlZCBhdCB0aGUgc2FtZSB0aW1l
-LgoKICAgIFRoaXMgZml4IGVuc3VyZXMgdGhhdCB0aGUgcGVyZiBjb3VudGVyIG5hbWUgaXMgdGFr
-ZW4gaW50bwogICAgY29uc2lkZXJhdGlvbiB3aGVuIGNoZWNraW5nIGZvciBhIGNvbnRleHQncyBw
-cmVzZW5jZSBpbiBhCiAgICBjaGFubmVsLgoKICAgIFJlcG9ydGVkLWJ5OiBBbGV4YW5kZXIgR3Jp
-Z29yaWV2IDxhbGV4Z3JpQHRicmlja3MuY29tPgogICAgU2lnbmVkLW9mZi1ieTogSsOpcsOpbWll
-IEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgoKV291bGQgeW91IG1p
-bmQgdGVzdGluZyBpdD8gSSdsbCBiYWNrcG9ydCBpdCB0byB0aGUgYWZmZWN0ZWQgc3RhYmxlCmJy
-YW5jaGVzIGlmIGl0IGZpeGVzIHRoZSBwcm9ibGVtLgoKVGhhbmtzIQpKw6lyw6ltaWUKCj4+ID4g
-ICAgICAgICB1YV9jdHggPSBhbGxvY191c3RfYXBwX2N0eCh1Y3R4KTsKPj4gPiAgICAgICAgIGlm
-ICh1YV9jdHggPT0gTlVMTCkgewo+PiA+ICAgICAgICAgICAgICAgICAvKiBtYWxsb2MgZmFpbGVk
-ICovCj4+ID4gLS0KPj4gPiAxLjkuMQo+PiA+Cj4+ID4KPj4gPiBfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiA+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-Pj4gPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+ID4gaHR0cDovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4+Cj4+Cj4+Cj4+IC0tCj4+IErD
-qXLDqW1pZSBHYWxhcm5lYXUKPj4gRWZmaWNpT1MgSW5jLgo+PiBodHRwOi8vd3d3LmVmZmljaW9z
-LmNvbQo+Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8v
-d3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-Cmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
-dgo=
+--===============0434937671==
+Content-Type: multipart/alternative; boundary=047d7bae4666892217050745988e
+
+--047d7bae4666892217050745988e
+Content-Type: text/plain; charset=UTF-8
+
+Hi All,
+I'm getting following error when reading traces using babeltrace. I have
+enabled lttng using relayd and created live session.
+
+I get this error till the time app is running. After app exits, babeltrace
+is able to read the traces.
+
+Is there any error in my config? or am i doing anything wrong here?
+
+$>babeltrace
+/var/tmp/lttng-traces/node/mysession-20141107-051543/ust/pid/logtrace-5797-20141107-061325/
+
+[warning] Ill-shapen or missing "/* CTF x.y" header for text-only metadata.
+
+[warning] Unsupported CTF specification version 552137642.32558. Trying
+anyway.
+
+[error] at line 1: token "": syntax error, unexpected $end
+
+[error] Error creating AST
+
+[warning] Unable to open trace metadata for path
+"/var/tmp/lttng-traces/node/mysession-20141107-051543/ust/pid/logtrace-5797-20141107-061325".
+
+[warning] [Context] Cannot open_trace of format ctf at path
+/var/tmp/lttng-traces/vevo_re_node/mysession-20141107-051543/ust/pid/logtrace-5797-20141107-061325.
+
+[warning] [Context] cannot open trace
+"/var/tmp/lttng-traces/node/mysession-20141107-051543/ust/pid/logtrace-5797-20141107-061325"
+from
+/var/tmp/lttng-traces/node/mysession-20141107-051543/ust/pid/logtrace-5797-20141107-061325/
+for reading.
+
+[error] Cannot open any trace for reading.
+
+[error] opening trace
+"/var/tmp/lttng-traces/node/mysession-20141107-051543/ust/pid/logtrace-5797-20141107-061325/"
+for reading.
+
+[error] none of the specified trace paths could be opened.
+
+
+
+The way i'm enabling lttng:
+
+
+sudo -H /usr/bin/lttng-relayd -o /var/tmp/lttng-traces -d
+
+sudo -H /usr/bin/lttng-sessiond --consumerd32-path
+/usr/lib/lttng/libexec/lttng-consumerd --consumerd32-libdir /usr/lib/
+--consumerd64-path /usr/lib64/lttng/libexec/lttng-consumerd
+--consumerd64-libdir /usr/lib64/ -b --no-kernel
+
+sudo -H /usr/bin/lttng create mysession --live 1000000 -U net://$ipaddr
+
+sudo -H /usr/bin/lttng enable-channel mychannel --userspace --buffers-pid
+-s mysession --tracefile-size 8388608 --tracefile-count 8
+
+sudo -H /usr/bin/lttng enable-event --channel mychannel --userspace --all
+--exclude 'ust_libc:*' -s mysession
+
+sudo -H /usr/bin/lttng start
+
+
+Thanks,
+
+Anand Neeli
+
+--047d7bae4666892217050745988e
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi All,<div>I&#39;m getting following error when reading t=
+races using babeltrace. I have enabled lttng using relayd and created live =
+session.</div><div><br></div><div>I get this error till the time app is run=
+ning. After app exits, babeltrace is able to read the traces.</div><div><br=
+></div><div>Is there any error in my config? or am i doing anything wrong h=
+ere?<br><div><br></div><div>
+
+
+
+
+
+
+
+<p class=3D"">$&gt;babeltrace /var/tmp/lttng-traces/node/mysession-20141107=
+-051543/ust/pid/logtrace-5797-20141107-061325/</p>
+<p class=3D"">[warning] Ill-shapen or missing &quot;/* CTF x.y&quot; header=
+ for text-only metadata.</p>
+<p class=3D"">[warning] Unsupported CTF specification version 552137642.325=
+58. Trying anyway.</p><p class=3D"">[error] at line 1: token &quot;&quot;: =
+syntax error, unexpected $end</p>
+<p class=3D"">[error] Error creating AST<br></p>
+<p class=3D"">[warning] Unable to open trace metadata for path &quot;/var/t=
+mp/lttng-traces/node/mysession-20141107-051543/ust/pid/logtrace-5797-201411=
+07-061325&quot;.</p>
+<p class=3D"">[warning] [Context] Cannot open_trace of format ctf at path /=
+var/tmp/lttng-traces/vevo_re_node/mysession-20141107-051543/ust/pid/logtrac=
+e-5797-20141107-061325.</p>
+<p class=3D"">[warning] [Context] cannot open trace &quot;/var/tmp/lttng-tr=
+aces/node/mysession-20141107-051543/ust/pid/logtrace-5797-20141107-061325&q=
+uot; from /var/tmp/lttng-traces/node/mysession-20141107-051543/ust/pid/logt=
+race-5797-20141107-061325/ for reading.</p><p class=3D"">[error] Cannot ope=
+n any trace for reading.</p>
+<p class=3D"">[error] opening trace &quot;/var/tmp/lttng-traces/node/mysess=
+ion-20141107-051543/ust/pid/logtrace-5797-20141107-061325/&quot; for readin=
+g.<br></p>
+<p class=3D"">[error] none of the specified trace paths could be opened.<br=
+></p><p class=3D""><br></p><p class=3D""><br></p><p class=3D"">The way i&#3=
+9;m enabling lttng:</p><p class=3D""><br></p><p class=3D"">sudo -H /usr/bin=
+/lttng-relayd -o /var/tmp/lttng-traces -d=C2=A0</p><p class=3D"">sudo -H /u=
+sr/bin/lttng-sessiond --consumerd32-path /usr/lib/lttng/libexec/lttng-consu=
+merd --consumerd32-libdir /usr/lib/ --consumerd64-path /usr/lib64/lttng/lib=
+exec/lttng-consumerd --consumerd64-libdir /usr/lib64/ -b --no-kernel</p><p =
+class=3D"">sudo -H /usr/bin/lttng create mysession --live 1000000 -U net://=
+$ipaddr</p><p class=3D"">sudo -H /usr/bin/lttng enable-channel mychannel --=
+userspace --buffers-pid -s mysession --tracefile-size 8388608 --tracefile-c=
+ount 8=C2=A0</p><p class=3D"">sudo -H /usr/bin/lttng enable-event --channel=
+ mychannel --userspace --all --exclude &#39;ust_libc:*&#39; -s mysession=C2=
+=A0</p><p class=3D"">sudo -H /usr/bin/lttng start<br></p><p class=3D""><br>=
+</p><p class=3D"">Thanks,</p><p class=3D"">Anand Neeli</p></div></div></div=
+>
+
+--047d7bae4666892217050745988e--
+
+
+--===============0434937671==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0434937671==--
