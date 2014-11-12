@@ -1,16 +1,18 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: Strange result from LTTng porting to ARM
-Date: Wed, 12 Nov 2014 19:10:56 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD6FBC890A__26899.7522689917$1415819509$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Christian Babeux <christian.babeux@efficios.com>
+Subject: [PATCH lttng-ust] Add a configure check for weak
+	symbols support
+Date: Wed, 12 Nov 2014 14:35:21 -0500
+Message-ID: <1415820921-8106-1-git-send-email-christian.babeux__16941.0785114907$1415820982$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail-qa0-f46.google.com ([209.85.216.46])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1XodJm-0007s7-DF
- for lttng-dev@lists.lttng.org; Wed, 12 Nov 2014 14:11:04 -0500
-Content-Language: fr-FR
+ (envelope-from <christian.babeux@0x80.ca>) id 1Xodhb-00080A-VY
+ for lttng-dev@lists.lttng.org; Wed, 12 Nov 2014 14:35:43 -0500
+Received: by mail-qa0-f46.google.com with SMTP id n8so8965443qaq.33
+ for <lttng-dev@lists.lttng.org>; Wed, 12 Nov 2014 11:35:34 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,49 +21,378 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Wed, 12 Nov 2014 23:26:41 +0800
-From: J Lin <jmlin.jmlin@gmail.com>
+Fixes #236
 
-> I've recently ported LTTng to ARM and I can't seem to understand what is =
-going wrong with my results. I ran a typical session with "lttng enable-eve=
-nt -k -a" for test. Here are the observations:
->
-> 1. only "lttng_xxx (e.g, lttng_statedump_interrupts)" are recorded 2. dif=
-ferent sessions yield trace on different CPU (the system has 4) but not for=
- all 4, just 1 cpu 3. no recorded session span more than 1 second though I =
-would run sleep (i.e., 10s) between "start" and "stop"
->
-> This leads me to believe LTTng might be dependent on something in the sys=
-tem that isn't present. This is a customized kernel of a client. It has all=
- required configs.
->
-> If there is a trigger mechanism after running "lttng start", what would i=
-t be? It seems it grabs items initially then doesn't continue. I read in on=
-e of the papers that LTTng is architecture dependent. Any help is appreciat=
-ed.
->
-> Mike
+Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+---
+ config/ax_sys_weak_alias.m4 | 337 ++++++++++++++++++++++++++++++++++++++++++++
+ configure.ac                |   7 +
+ 2 files changed, 344 insertions(+)
+ create mode 100644 config/ax_sys_weak_alias.m4
 
-   How exactly did you "port" LTTng to ARM?  As far as I know, you need onl=
-y rebuild it there.  Your symptoms lead me to believe you may have not inst=
-alled the requisite lttng-modules.  Did you test user-space tracing?
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+diff --git a/config/ax_sys_weak_alias.m4 b/config/ax_sys_weak_alias.m4
+new file mode 100644
+index 0000000..e1bfd33
+--- /dev/null
++++ b/config/ax_sys_weak_alias.m4
+@@ -0,0 +1,337 @@
++# ===========================================================================
++#     http://www.gnu.org/software/autoconf-archive/ax_sys_weak_alias.html
++# ===========================================================================
++#
++# SYNOPSIS
++#
++#   AX_SYS_WEAK_ALIAS
++#
++# DESCRIPTION
++#
++#   Determines whether weak aliases are supported on the system, and if so,
++#   what scheme is used to declare them. Also checks to see if aliases can
++#   cross object file boundaries, as some systems don't permit them to.
++#
++#   Most systems permit something called a "weak alias" or "weak symbol."
++#   These aliases permit a library to provide a stub form of a routine
++#   defined in another library, thus allowing the first library to operate
++#   even if the other library is not linked. This macro will check for
++#   support of weak aliases, figure out what schemes are available, and
++#   determine some characteristics of the weak alias support -- primarily,
++#   whether a weak alias declared in one object file may be referenced from
++#   another object file.
++#
++#   There are four known schemes of declaring weak symbols; each scheme is
++#   checked in turn, and the first one found is prefered. Note that only one
++#   of the mentioned preprocessor macros will be defined!
++#
++#   1. Function attributes
++#
++#   This scheme was first introduced by the GNU C compiler, and attaches
++#   attributes to particular functions. It is among the easiest to use, and
++#   so is the first one checked. If this scheme is detected, the
++#   preprocessor macro HAVE_SYS_WEAK_ALIAS_ATTRIBUTE will be defined to 1.
++#   This scheme is used as in the following code fragment:
++#
++#     void __weakf(int c)
++#     {
++#       /* Function definition... */
++#     }
++#
++#     void weakf(int c) __attribute__((weak, alias("__weakf")));
++#
++#   2. #pragma weak
++#
++#   This scheme is in use by many compilers other than the GNU C compiler.
++#   It is also particularly easy to use, and fairly portable -- well, as
++#   portable as these things get. If this scheme is detected first, the
++#   preprocessor macro HAVE_SYS_WEAK_ALIAS_PRAGMA will be defined to 1. This
++#   scheme is used as in the following code fragment:
++#
++#     extern void weakf(int c);
++#     #pragma weak weakf = __weakf
++#     void __weakf(int c)
++#     {
++#       /* Function definition... */
++#     }
++#
++#   3. #pragma _HP_SECONDARY_DEF
++#
++#   This scheme appears to be in use by the HP compiler. As it is rather
++#   specialized, this is one of the last schemes checked. If it is the first
++#   one detected, the preprocessor macro HAVE_SYS_WEAK_ALIAS_HPSECONDARY
++#   will be defined to 1. This scheme is used as in the following code
++#   fragment:
++#
++#     extern void weakf(int c);
++#     #pragma _HP_SECONDARY_DEF __weakf weakf
++#     void __weakf(int c)
++#     {
++#       /* Function definition... */
++#     }
++#
++#   4. #pragma _CRI duplicate
++#
++#   This scheme appears to be in use by the Cray compiler. As it is rather
++#   specialized, it too is one of the last schemes checked. If it is the
++#   first one detected, the preprocessor macro
++#   HAVE_SYS_WEAK_ALIAS_CRIDUPLICATE will be defined to 1. This scheme is
++#   used as in the following code fragment:
++#
++#     extern void weakf(int c);
++#     #pragma _CRI duplicate weakf as __weakf
++#     void __weakf(int c)
++#     {
++#       /* Function definition... */
++#     }
++#
++#   In addition to the preprocessor macros listed above, if any scheme is
++#   found, the preprocessor macro HAVE_SYS_WEAK_ALIAS will also be defined
++#   to 1.
++#
++#   Once a weak aliasing scheme has been found, a check will be performed to
++#   see if weak aliases are honored across object file boundaries. If they
++#   are, the HAVE_SYS_WEAK_ALIAS_CROSSFILE preprocessor macro is defined to
++#   1.
++#
++#   This Autoconf macro also makes two substitutions. The first, WEAK_ALIAS,
++#   contains the name of the scheme found (one of "attribute", "pragma",
++#   "hpsecondary", or "criduplicate"), or "no" if no weak aliasing scheme
++#   was found. The second, WEAK_ALIAS_CROSSFILE, is set to "yes" or "no"
++#   depending on whether or not weak aliases may cross object file
++#   boundaries.
++#
++# LICENSE
++#
++#   Copyright (c) 2008 Kevin L. Mitchell <klmitch@mit.edu>
++#
++#   Copying and distribution of this file, with or without modification, are
++#   permitted in any medium without royalty provided the copyright notice
++#   and this notice are preserved. This file is offered as-is, without any
++#   warranty.
++
++#serial 6
++
++AU_ALIAS([KLM_SYS_WEAK_ALIAS], [AX_SYS_WEAK_ALIAS])
++AC_DEFUN([AX_SYS_WEAK_ALIAS], [
++  # starting point: no aliasing scheme yet...
++  ax_sys_weak_alias=no
++
++  # Figure out what kind of aliasing may be supported...
++  _AX_SYS_WEAK_ALIAS_ATTRIBUTE
++  _AX_SYS_WEAK_ALIAS_PRAGMA
++  _AX_SYS_WEAK_ALIAS_HPSECONDARY
++  _AX_SYS_WEAK_ALIAS_CRIDUPLICATE
++
++  # Do we actually support aliasing?
++  AC_CACHE_CHECK([how to create weak aliases with $CC],
++                 [ax_cv_sys_weak_alias],
++                 [ax_cv_sys_weak_alias=$ax_sys_weak_alias])
++
++  # OK, set a #define
++  AS_IF([test $ax_cv_sys_weak_alias != no], [
++    AC_DEFINE([HAVE_SYS_WEAK_ALIAS], 1,
++              [Define this if your system can create weak aliases])
++  ])
++
++  # Can aliases cross object file boundaries?
++  _AX_SYS_WEAK_ALIAS_CROSSFILE
++
++  # OK, remember the results
++  AC_SUBST([WEAK_ALIAS], [$ax_cv_sys_weak_alias])
++  AC_SUBST([WEAK_ALIAS_CROSSFILE], [$ax_cv_sys_weak_alias_crossfile])
++])
++
++AC_DEFUN([_AX_SYS_WEAK_ALIAS_ATTRIBUTE],
++[ # Test whether compiler accepts __attribute__ form of weak aliasing
++  AC_CACHE_CHECK([whether $CC accepts function __attribute__((weak,alias()))],
++  [ax_cv_sys_weak_alias_attribute], [
++    # We add -Werror if it's gcc to force an error exit if the weak attribute
++    # isn't understood
++    AS_IF([test $GCC = yes], [
++      save_CFLAGS=$CFLAGS
++      CFLAGS=-Werror])
++
++    # Try linking with a weak alias...
++    AC_LINK_IFELSE([
++      AC_LANG_PROGRAM([
++void __weakf(int c) {}
++void weakf(int c) __attribute__((weak, alias("__weakf")));],
++        [weakf(0)])],
++      [ax_cv_sys_weak_alias_attribute=yes],
++      [ax_cv_sys_weak_alias_attribute=no])
++
++    # Restore original CFLAGS
++    AS_IF([test $GCC = yes], [
++      CFLAGS=$save_CFLAGS])
++  ])
++
++  # What was the result of the test?
++  AS_IF([test $ax_sys_weak_alias = no &&
++         test $ax_cv_sys_weak_alias_attribute = yes], [
++    ax_sys_weak_alias=attribute
++    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_ATTRIBUTE], 1,
++              [Define this if weak aliases may be created with __attribute__])
++  ])
++])
++
++AC_DEFUN([_AX_SYS_WEAK_ALIAS_PRAGMA],
++[ # Test whether compiler accepts #pragma form of weak aliasing
++  AC_CACHE_CHECK([whether $CC supports @%:@pragma weak],
++  [ax_cv_sys_weak_alias_pragma], [
++
++    # Try linking with a weak alias...
++    AC_LINK_IFELSE([
++      AC_LANG_PROGRAM([
++extern void weakf(int c);
++@%:@pragma weak weakf = __weakf
++void __weakf(int c) {}],
++        [weakf(0)])],
++      [ax_cv_sys_weak_alias_pragma=yes],
++      [ax_cv_sys_weak_alias_pragma=no])
++  ])
++
++  # What was the result of the test?
++  AS_IF([test $ax_sys_weak_alias = no &&
++         test $ax_cv_sys_weak_alias_pragma = yes], [
++    ax_sys_weak_alias=pragma
++    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_PRAGMA], 1,
++              [Define this if weak aliases may be created with @%:@pragma weak])
++  ])
++])
++
++AC_DEFUN([_AX_SYS_WEAK_ALIAS_HPSECONDARY],
++[ # Test whether compiler accepts _HP_SECONDARY_DEF pragma from HP...
++  AC_CACHE_CHECK([whether $CC supports @%:@pragma _HP_SECONDARY_DEF],
++  [ax_cv_sys_weak_alias_hpsecondary], [
++
++    # Try linking with a weak alias...
++    AC_LINK_IFELSE([
++      AC_LANG_PROGRAM([
++extern void weakf(int c);
++@%:@pragma _HP_SECONDARY_DEF __weakf weakf
++void __weakf(int c) {}],
++        [weakf(0)])],
++      [ax_cv_sys_weak_alias_hpsecondary=yes],
++      [ax_cv_sys_weak_alias_hpsecondary=no])
++  ])
++
++  # What was the result of the test?
++  AS_IF([test $ax_sys_weak_alias = no &&
++         test $ax_cv_sys_weak_alias_hpsecondary = yes], [
++    ax_sys_weak_alias=hpsecondary
++    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_HPSECONDARY], 1,
++              [Define this if weak aliases may be created with @%:@pragma _HP_SECONDARY_DEF])
++  ])
++])
++
++AC_DEFUN([_AX_SYS_WEAK_ALIAS_CRIDUPLICATE],
++[ # Test whether compiler accepts "_CRI duplicate" pragma from Cray
++  AC_CACHE_CHECK([whether $CC supports @%:@pragma _CRI duplicate],
++  [ax_cv_sys_weak_alias_criduplicate], [
++
++    # Try linking with a weak alias...
++    AC_LINK_IFELSE([
++      AC_LANG_PROGRAM([
++extern void weakf(int c);
++@%:@pragma _CRI duplicate weakf as __weakf
++void __weakf(int c) {}],
++        [weakf(0)])],
++      [ax_cv_sys_weak_alias_criduplicate=yes],
++      [ax_cv_sys_weak_alias_criduplicate=no])
++  ])
++
++  # What was the result of the test?
++  AS_IF([test $ax_sys_weak_alias = no &&
++         test $ax_cv_sys_weak_alias_criduplicate = yes], [
++    ax_sys_weak_alias=criduplicate
++    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_CRIDUPLICATE], 1,
++              [Define this if weak aliases may be created with @%:@pragma _CRI duplicate])
++  ])
++])
++
++dnl Note: This macro is modeled closely on AC_LINK_IFELSE, and in fact
++dnl depends on some implementation details of that macro, particularly
++dnl its use of _AC_MSG_LOG_CONFTEST to log the failed test program and
++dnl its use of ac_link for running the linker.
++AC_DEFUN([_AX_SYS_WEAK_ALIAS_CROSSFILE],
++[ # Check to see if weak aliases can cross object file boundaries
++  AC_CACHE_CHECK([whether $CC supports weak aliases across object file boundaries],
++  [ax_cv_sys_weak_alias_crossfile], [
++    AS_IF([test $ax_cv_sys_weak_alias = no],
++          [ax_cv_sys_weak_alias_crossfile=no], [
++dnl Must build our own test files...
++      # conftest1 contains our weak alias definition...
++      cat >conftest1.$ac_ext <<_ACEOF
++/* confdefs.h.  */
++_ACEOF
++      cat confdefs.h >>conftest1.$ac_ext
++      cat >>conftest1.$ac_ext <<_ACEOF
++/* end confdefs.h.  */
++
++@%:@ifndef HAVE_SYS_WEAK_ALIAS_ATTRIBUTE
++extern void weakf(int c);
++@%:@endif
++@%:@if defined(HAVE_SYS_WEAK_ALIAS_PRAGMA)
++@%:@pragma weak weakf = __weakf
++@%:@elif defined(HAVE_SYS_WEAK_ALIAS_HPSECONDARY)
++@%:@pragma _HP_SECONDARY_DEF __weakf weakf
++@%:@elif defined(HAVE_SYS_WEAK_ALIAS_CRIDUPLICATE)
++@%:@pragma _CRI duplicate weakf as __weakf
++@%:@endif
++void __weakf(int c) {}
++@%:@ifdef HAVE_SYS_WEAK_ALIAS_ATTRIBUTE
++void weakf(int c) __attribute((weak, alias("__weakf")));
++@%:@endif
++_ACEOF
++      # And conftest2 contains our main routine that calls it
++      cat >conftest2.$ac_ext <<_ACEOF
++/* confdefs.h.  */
++_ACEOF
++      cat confdefs.h >> conftest2.$ac_ext
++      cat >>conftest2.$ac_ext <<_ACEOF
++/* end confdefs.h.  */
++
++extern void weakf(int c);
++int
++main ()
++{
++  weakf(0);
++  return 0;
++}
++_ACEOF
++      # We must remove the object files (if any) ourselves...
++      rm -f conftest2.$ac_objext conftest$ac_exeext
++
++      # Change ac_link to compile *2* files together
++      save_aclink=$ac_link
++      ac_link=`echo "$ac_link" | \
++               sed -e 's/conftest\(\.\$ac_ext\)/conftest1\1 conftest2\1/'`
++dnl Substitute our own routine for logging the conftest
++m4_pushdef([_AC_MSG_LOG_CONFTEST],
++[echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
++echo ">>> conftest1.$ac_ext" >&AS_MESSAGE_LOG_FD
++sed "s/^/| /" conftest1.$ac_ext >&AS_MESSAGE_LOG_FD
++echo ">>> conftest2.$ac_ext" >&AS_MESSAGE_LOG_FD
++sed "s/^/| /" conftest2.$ac_ext >&AS_MESSAGE_LOG_FD
++])dnl
++      # Since we created the files ourselves, don't use SOURCE argument
++      AC_LINK_IFELSE(, [ax_cv_sys_weak_alias_crossfile=yes],
++                     [ax_cv_sys_weak_alias_crossfile=no])
++dnl Restore _AC_MSG_LOG_CONFTEST
++m4_popdef([_AC_MSG_LOG_CONFTEST])dnl
++      # Restore ac_link
++      ac_link=$save_aclink
++
++      # We must remove the object files (if any) and C files ourselves...
++      rm -f conftest1.$ac_ext conftest2.$ac_ext \
++            conftest1.$ac_objext conftest2.$ac_objext
++    ])
++  ])
++
++  # What were the results of the test?
++  AS_IF([test $ax_cv_sys_weak_alias_crossfile = yes], [
++    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_CROSSFILE], 1,
++              [Define this if weak aliases in other files are honored])
++  ])
++])
+diff --git a/configure.ac b/configure.ac
+index 18f3739..f84f426 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -106,6 +106,13 @@ AC_CACHE_CHECK([whether the C++ compiler works],
+ 
+ AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
+ 
++# Check if the compiler support weak symbols
++AX_SYS_WEAK_ALIAS
++
++if test "x${ax_cv_sys_weak_alias}" = "xno"; then
++   AC_MSG_ERROR([Your platform doesn't support weak symbols.])
++fi
++
+ ## Checks for libraries.
+ AC_CHECK_LIB([dl], [dlopen],
+ [
+-- 
+2.1.1
