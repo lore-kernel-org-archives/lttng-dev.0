@@ -1,18 +1,24 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
+From: Anders Wallin <wallinux@gmail.com>
 Subject: Re: snapshot issue with 2.5
-Date: Thu, 13 Nov 2014 11:45:28 -0500
-Message-ID: <5464E028.10709__4596.77768308229$1415897194$gmane$org@efficios.com>
-References: <CAF2baFd5vRuGKa7MVpqHvkCHia5fDN19cvq8qdedqJreNU6-vQ@mail.gmail.com>	<CA+jJMxvXfVT8w+hokMyFgTSqN=JH3nQUudJR+8MUJtQmTEgZZQ@mail.gmail.com>	<5463E904.9080102@efficios.com>	<CAF2baFesZ0Ke5qcWt9eGzWTyPuyAW_PM=ZZ+g9baEUNRwK5cGA@mail.gmail.com>	<CAF2baFcKwwciQDr+Wdpcs3_EJV969_aPUA_UtPXGo7=CMxWKvw@mail.gmail.com>
+Date: Thu, 13 Nov 2014 18:41:58 +0100
+Message-ID: <CAF2baFfY-DYF4ZuiUPvdbNNqTwzh3-ujqecS5omraPhSSP=GLw__29983.2865516239$1415900588$gmane$org@mail.gmail.com>
+References: <CAF2baFd5vRuGKa7MVpqHvkCHia5fDN19cvq8qdedqJreNU6-vQ@mail.gmail.com>
+ <CA+jJMxvXfVT8w+hokMyFgTSqN=JH3nQUudJR+8MUJtQmTEgZZQ@mail.gmail.com>
+ <5463E904.9080102@efficios.com>
+ <CAF2baFesZ0Ke5qcWt9eGzWTyPuyAW_PM=ZZ+g9baEUNRwK5cGA@mail.gmail.com>
+ <CAF2baFcKwwciQDr+Wdpcs3_EJV969_aPUA_UtPXGo7=CMxWKvw@mail.gmail.com>
  <CAF2baFfvY6NRNzNc3tkJygc=01ntwf-qa3GgXG_rT+fSw6E2MA@mail.gmail.com>
+ <5464E028.10709@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1007803062=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fukushima.klipix.org ([85.12.144.25])
+Received: from mail-wi0-f170.google.com ([209.85.212.170])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1XoxWb-0006OX-2K
- for lttng-dev@lists.lttng.org; Thu, 13 Nov 2014 11:45:40 -0500
-In-Reply-To: <CAF2baFfvY6NRNzNc3tkJygc=01ntwf-qa3GgXG_rT+fSw6E2MA@mail.gmail.com>
+ (envelope-from <wallinux@gmail.com>) id 1XoyPE-0006hL-Iz
+ for lttng-dev@lists.lttng.org; Thu, 13 Nov 2014 12:42:09 -0500
+Received: by mail-wi0-f170.google.com with SMTP id r20so2672010wiv.3
+ for <lttng-dev@lists.lttng.org>; Thu, 13 Nov 2014 09:41:58 -0800 (PST)
+In-Reply-To: <5464E028.10709@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,365 +27,1318 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Anders Wallin <wallinux@gmail.com>
+To: Julien Desfossez <jdesfossez@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T2ssIHNvIGlmIHlvdSBkb24ndCBsaW1pdCB0aGUgc2l6ZSBvZiB0aGUgc25hcHNob3QgKHJlbW92
-ZSB0aGUgLW0gMUcpIGl0CndvcmtzIGFzIGV4cGVjdGVkID8KCkp1bGllbgoKT24gMTQtMTEtMTMg
-MTA6MzMgQU0sIEFuZGVycyBXYWxsaW4gd3JvdGU6Cj4gYnVnIGlzIGludHJvZHVjZWQgaW4gIDY4
-ODA4ZjRlMGJiYjNhZGNjZmY3MmZmOWRhYjZlYzlmM2E5ZTY4NjYKPiAKPiBSZWdhcmRzCj4gCj4g
-QW5kZXJzCj4gCj4gQW5kZXJzIFdhbGxpbgo+IAo+IE9uIFRodSwgTm92IDEzLCAyMDE0IGF0IDEw
-OjM5IEFNLCBBbmRlcnMgV2FsbGluIDx3YWxsaW51eEBnbWFpbC5jb20KPiA8bWFpbHRvOndhbGxp
-bnV4QGdtYWlsLmNvbT4+IHdyb3RlOgo+IAo+IAo+IAo+ICAgICBBbmRlcnMgV2FsbGluCj4gCj4g
-ICAgIE9uIFRodSwgTm92IDEzLCAyMDE0IGF0IDg6NDMgQU0sIEFuZGVycyBXYWxsaW4gPHdhbGxp
-bnV4QGdtYWlsLmNvbQo+ICAgICA8bWFpbHRvOndhbGxpbnV4QGdtYWlsLmNvbT4+IHdyb3RlOgo+
-IAo+ICAgICAgICAgT24gVGh1LCBOb3YgMTMsIDIwMTQgYXQgMTI6MTEgQU0sIEp1bGllbiBEZXNm
-b3NzZXoKPiAgICAgICAgIDxqZGVzZm9zc2V6QGVmZmljaW9zLmNvbSA8bWFpbHRvOmpkZXNmb3Nz
-ZXpAZWZmaWNpb3MuY29tPj4gd3JvdGU6Cj4gCj4gICAgICAgICAgICAgSGksCj4gCj4gICAgICAg
-ICAgICAgT24gMTQtMTEtMTIgMDU6MzAgUE0sIErDqXLDqW1pZSBHYWxhcm5lYXUgd3JvdGU6Cj4g
-ICAgICAgICAgICAgPiBPbiBXZWQsIE5vdiAxMiwgMjAxNCBhdCA3OjM5IEFNLCBBbmRlcnMgV2Fs
-bGluCj4gICAgICAgICAgICAgPHdhbGxpbnV4QGdtYWlsLmNvbSA8bWFpbHRvOndhbGxpbnV4QGdt
-YWlsLmNvbT4+IHdyb3RlOgo+ICAgICAgICAgICAgID4+IEhpLAo+ICAgICAgICAgICAgID4+Cj4g
-ICAgICAgICAgICAgPj4gdXNpbmcgdXNlcnNwYWNlIHNuYXBzaG90IG1vZGUgaW4gMi41IHNlZW1z
-IHRvIGJyb2tlbi4KPiAgICAgICAgICAgICA+Pgo+ICAgICAgICAgICAgID4+IEkgaGF2ZSBzbWFs
-bCBzdHVwaWQgYXBwbGljYXRpb24odHJhY2V0ZXN0KSBnZW5lcmF0aW5nCj4gICAgICAgICAgICAg
-MTAwMCBldmVudHMKPiAgICAgICAgICAgICA+Pgo+ICAgICAgICAgICAgID4+IFJ1bm5pbmcgdGhl
-IHNjcmlwdCAodGhlIGJlbG93IGlzIHNpbXBsaWZpZWQgdmVyc2lvbiBvZgo+ICAgICAgICAgICAg
-IHRoZSBzY3JpcHQpCj4gICAgICAgICAgICAgPj4KPiAgICAgICAgICAgICAtLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tCj4gICAgICAgICAgICAgPj4gIyEvYmluL2Jhc2gKPiAgICAgICAgICAgICA+
-PiBMVFRORz0nbHR0bmcgLW4nCj4gICAgICAgICAgICAgPj4gbHR0bmctc2Vzc2lvbmQgLS1uby1r
-ZXJuZWwgJgo+ICAgICAgICAgICAgID4KPiAgICAgICAgICAgICA+IFlvdSBzaG91bGQgdXNlIHRo
-ZSAiLWQiIGZsYWcgdG8gbGF1bmNoIHRoZSBzZXNzaW9uZCBhcyBhCj4gICAgICAgICAgICAgZGFl
-bW9uLiBVc2luZwo+ICAgICAgICAgICAgID4gIiYiIG1pZ2h0IGNhdXNlIHRoZSAiY3JlYXRlIiBj
-b21tYW5kIHRvIGxhdW5jaCBhIHNlY29uZAo+ICAgICAgICAgICAgIHNlc3Npb24gZGFlbW9uCj4g
-ICAgICAgICAgICAgPiBzaW5jZSB0aGUgZmlyc3Qgb25lIHdvdWxkIG5vdCBoYXZlIGhhZCB0aGUg
-dGltZSB0byBvcGVuCj4gICAgICAgICAgICAgY3JlYXRlIGl0cwo+ICAgICAgICAgICAgID4gY29t
-bWFuZCBzb2NrZXRzLgo+ICAgICAgICAgICAgID4KPiAgICAgICAgICAgICA+Pgo+ICAgICAgICAg
-ICAgID4+ICRMVFRORyBjcmVhdGUgdGVzdCAtLXNuYXBzaG90Cj4gICAgICAgICAgICAgPj4gJExU
-VE5HIGVuYWJsZS1jaGFubmVsIC11IC0tc3ViYnVmLXNpemUgNjRrIC0tbnVtLXN1YmJ1Zgo+ICAg
-ICAgICAgICAgIDE2IC0tb3ZlcndyaXRlIGNoMQo+ICAgICAgICAgICAgID4+ICRMVFRORyBlbmFi
-bGUtZXZlbnQgLXUgLWMgY2gxICIqIgo+ICAgICAgICAgICAgID4+ICRMVFRORyBzdGFydAo+ICAg
-ICAgICAgICAgID4+ICRMVFRORyBsaXN0IGNoMQo+ICAgICAgICAgICAgID4+Cj4gICAgICAgICAg
-ICAgPj4gbWtkaXIgLXAgc25hcHNob3QvCj4gICAgICAgICAgICAgPj4KPiAgICAgICAgICAgICA+
-PiBmb3IgaSBpbiAkKHNlcSAxICRMT09QUyk7IGRvCj4gICAgICAgICAgICAgPj4gICAgIC4vdHJh
-Y2V0ZXN0Cj4gICAgICAgICAgICAgPj4gICAgICRMVFRORyBzbmFwc2hvdCByZWNvcmQgLW0gMUcK
-PiAgICAgICAgICAgICA+Pgo+ICAgICAgICAgICAgID4+ICAgICAjIHByaW50IG5vIG9mIGV2ZW50
-cyBhbmQgZmlyc3QgYW5kIGxhc3QgZXZlbnQKPiAgICAgICAgICAgICA+PiAgICAgbGFzdD0kKGxz
-IC0xZHJ0ICRIT01FL2x0dG5nLXRyYWNlcy8kU0VTU0lPTiovKiB8IHRhaWwgLTEpCj4gICAgICAg
-ICAgICAgPj4gICAgIGJhYmVsdHJhY2UgJGxhc3QgPiBzbmFwc2hvdC8kaS5idCA8aHR0cDovL2ku
-YnQ+Cj4gICAgICAgICAgICAgPj4gICAgIGNhdCBzbmFwc2hvdC8kaS5idCA8aHR0cDovL2kuYnQ+
-IHwgd2MgLWwKPiAgICAgICAgICAgICA+PiAgICAgY2F0IHNuYXBzaG90LyRpLmJ0IDxodHRwOi8v
-aS5idD4gfCBoZWFkIC0xCj4gICAgICAgICAgICAgPj4gICAgIGNhdCBzbmFwc2hvdC8kaS5idCA8
-aHR0cDovL2kuYnQ+IHwgdGFpbCAtMQo+ICAgICAgICAgICAgID4+IGRvbmUKPiAgICAgICAgICAg
-ICA+Pgo+ICAgICAgICAgICAgID4+ICRMVFRORyBzdG9wCj4gICAgICAgICAgICAgPj4gJExUVE5H
-IGRlc3Ryb3kgJFNFU1NJT04KPiAgICAgICAgICAgICA+Pgo+ICAgICAgICAgICAgIC0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0KPiAgICAgICAgICAgICA+Pgo+ICAgICAgICAgICAgID4+IFRoZSBy
-ZXN1bHQgb2YgdGhlIHJ1biBsb29rcyBsaWtlIHRoaXM7Cj4gICAgICAgICAgICAgPj4gLi90ZXN0
-LnJ1bgo+ICAgICAgICAgICAgID4+IEVycm9yOiBjb25zdW1lciBlcnIgc29ja2V0IHNlY29uZCBw
-b2xsIGVycm9yCj4gICAgICAgICAgICAgPj4gRXJyb3I6IEhlYWx0aCBlcnJvciBvY2N1cnJlZCBp
-biB0aHJlYWRfbWFuYWdlX2NvbnN1bWVyCj4gICAgICAgICAgICAgPj4gUEVSUk9SIC0gMTM6MzY6
-NTkuNjg1MTY3IFsyMzc3Mi8yMzc4MV06IGJpbmQgaW5ldDoKPiAgICAgICAgICAgICBBZGRyZXNz
-IGFscmVhZHkgaW4gdXNlCj4gICAgICAgICAgICAgPj4gKGluIGx0dGNvbW1fYmluZF9pbmV0X3Nv
-Y2soKSBhdCBpbmV0LmM6MTA5KQo+ICAgICAgICAgICAgID4+IFdhcm5pbmc6IEFub3RoZXIgc2Vz
-c2lvbiBkYWVtb24gaXMgdXNpbmcgdGhpcyBKVUwgcG9ydC4KPiAgICAgICAgICAgICBKVUwgc3Vw
-cG9ydCB3aWxsIGJlCj4gICAgICAgICAgICAgPj4gZGVhY3RpdmF0ZWQgdG8gcHJldmVudCBpbnRl
-cmZlcmluZyB3aXRoIHRoZSB0cmFjaW5nLgo+ICAgICAgICAgICAgID4+Cj4gICAgICAgICAgICAg
-Pgo+ICAgICAgICAgICAgID4gSXMgdGhlcmUgYSByZWFzb24gd2h5IHlvdSBydW4gdHdvIHNlc3Np
-b24gZGFlbW9ucz8gSSdtCj4gICAgICAgICAgICAgZ3Vlc3NpbmcgdGhpcwo+ICAgICAgICAgICAg
-ID4gaXMgcmVsYXRlZCB0byBteSAiJiB2cyAtZCIgY29tbWVudCBhYm92ZS4KPiAgICAgICAgICAg
-ICA+Cj4gICAgICAgICAgICAgPj4gbHR0bmcgKExUVG5nIFRyYWNlIENvbnRyb2wpIDIuNS4yIC0g
-RnVtaXN0ZXJpZQo+ICAgICAgICAgICAgID4+IEJhYmVsVHJhY2UgVHJhY2UgVmlld2VyIGFuZCBD
-b252ZXJ0ZXIgMS4yLjQKPiAgICAgICAgICAgICA+PiAgICAgICAgIGxpbnV4LXZkc28uc28uMSA9
-PiAgKDB4MDAwMDdmZmZiYTk2NjAwMCkKPiAgICAgICAgICAgICA+PiAgICAgICAgIGxpYmx0dG5n
-LWN0bC5zby4wID0+Cj4gICAgICAgICAgICAgL3Vzci9saWIveDg2XzY0LWxpbnV4LWdudS9saWJs
-dHRuZy1jdGwuc28uMAo+ICAgICAgICAgICAgID4+ICgweDAwMDA3ZmJmZTRiMWQwMDApCj4gICAg
-ICAgICAgICAgPj4gICAgICAgICBsaWJydC5zby4xID0+IC9saWIveDg2XzY0LWxpbnV4LWdudS9s
-aWJydC5zby4xCj4gICAgICAgICAgICAgKDB4MDAwMDdmYmZlNDkxNTAwMCkKPiAgICAgICAgICAg
-ICA+PiAgICAgICAgIGxpYnhtbDIuc28uMiA9Pgo+ICAgICAgICAgICAgIC91c3IvbGliL3g4Nl82
-NC1saW51eC1nbnUvbGlieG1sMi5zby4yCj4gICAgICAgICAgICAgPj4gKDB4MDAwMDdmYmZlNDVh
-ZTAwMCkKPiAgICAgICAgICAgICA+PiAgICAgICAgIGxpYnBvcHQuc28uMCA9PiAvbGliL3g4Nl82
-NC1saW51eC1nbnUvbGlicG9wdC5zby4wCj4gICAgICAgICAgICAgPj4gKDB4MDAwMDdmYmZlNDNh
-MjAwMCkKPiAgICAgICAgICAgICA+PiAgICAgICAgIGxpYnB0aHJlYWQuc28uMCA9Pgo+ICAgICAg
-ICAgICAgIC9saWIveDg2XzY0LWxpbnV4LWdudS9saWJwdGhyZWFkLnNvLjAKPiAgICAgICAgICAg
-ICA+PiAoMHgwMDAwN2ZiZmU0MTg0MDAwKQo+ICAgICAgICAgICAgID4+ICAgICAgICAgbGliYy5z
-by42ID0+IC9saWIveDg2XzY0LWxpbnV4LWdudS9saWJjLnNvLjYKPiAgICAgICAgICAgICAoMHgw
-MDAwN2ZiZmUzZGJkMDAwKQo+ICAgICAgICAgICAgID4+ICAgICAgICAgL2xpYjY0L2xkLWxpbnV4
-LXg4Ni02NC5zby4yICgweDAwMDA3ZmJmZTRmYWMwMDApCj4gICAgICAgICAgICAgPj4gICAgICAg
-ICBsaWJ1cmN1LnNvLjIgPT4KPiAgICAgICAgICAgICAvdXNyL2xpYi94ODZfNjQtbGludXgtZ251
-L2xpYnVyY3Uuc28uMgo+ICAgICAgICAgICAgID4+ICgweDAwMDA3ZmJmZTNiYjYwMDApCj4gICAg
-ICAgICAgICAgPj4gICAgICAgICBsaWJkbC5zby4yID0+IC9saWIveDg2XzY0LWxpbnV4LWdudS9s
-aWJkbC5zby4yCj4gICAgICAgICAgICAgKDB4MDAwMDdmYmZlMzliMjAwMCkKPiAgICAgICAgICAg
-ICA+PiAgICAgICAgIGxpYnouc28uMSA9PiAvbGliL3g4Nl82NC1saW51eC1nbnUvbGliei5zby4x
-Cj4gICAgICAgICAgICAgKDB4MDAwMDdmYmZlMzc5ODAwMCkKPiAgICAgICAgICAgICA+PiAgICAg
-ICAgIGxpYmx6bWEuc28uNSA9PiAvbGliL3g4Nl82NC1saW51eC1nbnUvbGlibHptYS5zby41Cj4g
-ICAgICAgICAgICAgPj4gKDB4MDAwMDdmYmZlMzU3NjAwMCkKPiAgICAgICAgICAgICA+PiAgICAg
-ICAgIGxpYm0uc28uNiA9PiAvbGliL3g4Nl82NC1saW51eC1nbnUvbGlibS5zby42Cj4gICAgICAg
-ICAgICAgKDB4MDAwMDdmYmZlMzI3MDAwMCkKPiAgICAgICAgICAgICA+Pgo+ICAgICAgICAgICAg
-ID4+IFNlc3Npb24gdGVzdCBjcmVhdGVkLgo+ICAgICAgICAgICAgID4+IERlZmF1bHQgc25hcHNo
-b3Qgb3V0cHV0IHNldCB0bzoKPiAgICAgICAgICAgICA+PiAvaG9tZS9hd2FsbGluL2x0dG5nLXRy
-YWNlcy90ZXN0LTIwMTQxMTEyLTEzMzcwMAo+ICAgICAgICAgICAgID4+IFNuYXBzaG90IG1vZGUg
-c2V0LiBFdmVyeSBjaGFubmVsIGVuYWJsZWQgZm9yIHRoYXQgc2Vzc2lvbgo+ICAgICAgICAgICAg
-IHdpbGwgYmUgc2V0IGluCj4gICAgICAgICAgICAgPj4gb3ZlcndyaXRlIG1vZGUgYW5kIG1tYXAg
-b3V0cHV0Lgo+ICAgICAgICAgICAgID4+IFVTVCBjaGFubmVsIGNoMSBlbmFibGVkIGZvciBzZXNz
-aW9uIHRlc3QKPiAgICAgICAgICAgICA+PiBVU1QgZXZlbnQgKiBjcmVhdGVkIGluIGNoYW5uZWwg
-Y2gxCj4gICAgICAgICAgICAgPj4gVHJhY2luZyBzdGFydGVkIGZvciBzZXNzaW9uIHRlc3QKPiAg
-ICAgICAgICAgICA+PiBUcmFjaW5nIHNlc3Npb24gdGVzdDogW2FjdGl2ZSBzbmFwc2hvdF0KPiAg
-ICAgICAgICAgICA+PiAgICAgVHJhY2UgcGF0aDoKPiAgICAgICAgICAgICA+PiAgICAgTGl2ZSB0
-aW1lciBpbnRlcnZhbCAodXNlYyk6IDQyOTQ5NjcyOTUKPiAgICAgICAgICAgICA+Pgo+ICAgICAg
-ICAgICAgID4+ID09PSBEb21haW46IFVTVCBnbG9iYWwgPT09Cj4gICAgICAgICAgICAgPj4KPiAg
-ICAgICAgICAgICA+PiBDaGFubmVsczoKPiAgICAgICAgICAgICA+PiAtLS0tLS0tLS0tLS0tCj4g
-ICAgICAgICAgICAgPj4gLSBjaDE6IFtlbmFibGVkXQo+ICAgICAgICAgICAgID4+Cj4gICAgICAg
-ICAgICAgPj4gICAgIEF0dHJpYnV0ZXM6Cj4gICAgICAgICAgICAgPj4gICAgICAgb3ZlcndyaXRl
-IG1vZGU6IDEKPiAgICAgICAgICAgICA+PiAgICAgICBzdWJidWZlcnMgc2l6ZTogNDA5Ngo+ICAg
-ICAgICAgICAgID4+ICAgICAgIG51bWJlciBvZiBzdWJidWZlcnM6IDE2Cj4gICAgICAgICAgICAg
-Pj4gICAgICAgc3dpdGNoIHRpbWVyIGludGVydmFsOiAwCj4gICAgICAgICAgICAgPj4gICAgICAg
-cmVhZCB0aW1lciBpbnRlcnZhbDogMAo+ICAgICAgICAgICAgID4+ICAgICAgIHRyYWNlIGZpbGUg
-Y291bnQ6IDAKPiAgICAgICAgICAgICA+PiAgICAgICB0cmFjZSBmaWxlIHNpemUgKGJ5dGVzKTog
-MAo+ICAgICAgICAgICAgID4+ICAgICAgIG91dHB1dDogbW1hcCgpCj4gICAgICAgICAgICAgPj4K
-PiAgICAgICAgICAgICA+PiAgICAgRXZlbnRzOgo+ICAgICAgICAgICAgID4+ICAgICAgICogKHR5
-cGU6IHRyYWNlcG9pbnQpIFtlbmFibGVkXQo+ICAgICAgICAgICAgID4+Cj4gICAgICAgICAgICAg
-Pj4gU25hcHNob3QgcmVjb3JkZWQgc3VjY2Vzc2Z1bGx5IGZvciBzZXNzaW9uIHRlc3QKPiAgICAg
-ICAgICAgICA+PiA4NAo+ICAgICAgICAgICAgID4+IFsxMzozNzowMC44NTI2MTU5NTBdICgrPy4/
-Pz8/Pz8/Pz8pIGFybi1hd2FsbGluLW1pbnQtbDMKPiAgICAgICAgICAgICA+PiB1c3RfYmFkZHJf
-c3RhdGVkdW1wOnNvaW5mbzogeyBjcHVfaWQgPSA0IH0sIHsgYmFkZHIgPQo+ICAgICAgICAgICAg
-IDB4N0ZGRkM2QkM3MDAwLCBzb3BhdGgKPiAgICAgICAgICAgICA+PiA9ICJbdmRzb10iLCBzaXpl
-ID0gMCwgbXRpbWUgPSAtMSB9Cj4gICAgICAgICAgICAgPj4gWzEzOjM3OjAwLjg1Mzc5ODk0OV0g
-KCswLjAwMDAwMDgwNSkgYXJuLWF3YWxsaW4tbWludC1sMwo+ICAgICAgICAgICAgIHRyYWNldGVz
-dDpmaXJzdF90cDoKPiAgICAgICAgICAgICA+PiB7IGNwdV9pZCA9IDYgfSwgeyBteV9zdHJpbmdf
-ZmllbGQgPSAidGVzdCIsCj4gICAgICAgICAgICAgbXlfaW50ZWdlcl9maWVsZCA9IDk5OSB9Cj4g
-ICAgICAgICAgICAgPj4gU25hcHNob3QgcmVjb3JkZWQgc3VjY2Vzc2Z1bGx5IGZvciBzZXNzaW9u
-IHRlc3QKPiAgICAgICAgICAgICA+PiAxNTcKPiAgICAgICAgICAgICA+PiBbMTM6Mzc6MDAuODUz
-NzM1MTk1XSAoKz8uPz8/Pz8/Pz8/KSBhcm4tYXdhbGxpbi1taW50LWwzCj4gICAgICAgICAgICAg
-dHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICAgICAgICAgID4+IHsgY3B1X2lkID0gNiB9LCB7IG15
-X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwKPiAgICAgICAgICAgICBteV9pbnRlZ2VyX2ZpZWxkID0g
-OTI3IH0KPiAgICAgICAgICAgICA+PiBbMTM6Mzc6MDAuODk0ODM5MTE2XSAoKzAuMDAwMDAwMjk5
-KSBhcm4tYXdhbGxpbi1taW50LWwzCj4gICAgICAgICAgICAgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+
-ICAgICAgICAgICAgID4+IHsgY3B1X2lkID0gNSB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0
-IiwKPiAgICAgICAgICAgICBteV9pbnRlZ2VyX2ZpZWxkID0gOTk5IH0KPiAgICAgICAgICAgICA+
-PiBTbmFwc2hvdCByZWNvcmRlZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICAg
-ICAgICAgID4+IDE2OAo+ICAgICAgICAgICAgID4+IFsxMzozNzowMC44NTM3MzUxOTVdICgrPy4/
-Pz8/Pz8/Pz8pIGFybi1hd2FsbGluLW1pbnQtbDMKPiAgICAgICAgICAgICB0cmFjZXRlc3Q6Zmly
-c3RfdHA6Cj4gICAgICAgICAgICAgPj4geyBjcHVfaWQgPSA2IH0sIHsgbXlfc3RyaW5nX2ZpZWxk
-ID0gInRlc3QiLAo+ICAgICAgICAgICAgIG15X2ludGVnZXJfZmllbGQgPSA5MjcgfQo+ICAgICAg
-ICAgICAgID4+IFsxMzozNzowMC45Mjk0NDczMzBdICgrMC4wMDAwMDAzMDUpIGFybi1hd2FsbGlu
-LW1pbnQtbDMKPiAgICAgICAgICAgICB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgICAgICAgICAg
-Pj4geyBjcHVfaWQgPSA1IH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0gInRlc3QiLAo+ICAgICAgICAg
-ICAgIG15X2ludGVnZXJfZmllbGQgPSA5OTkgfQo+ICAgICAgICAgICAgID4+IFNuYXBzaG90IHJl
-Y29yZGVkIHN1Y2Nlc3NmdWxseSBmb3Igc2Vzc2lvbiB0ZXN0Cj4gCj4gICAgICAgICAgICAgU29t
-ZXRoaW5nIGlzIHdyb25nIGZyb20gaGVyZToKPiAgICAgICAgICAgICA+PiAxNjgKPiAgICAgICAg
-ICAgICA+PiBbMTM6Mzc6MDAuODk0NDExMTE3XSAoKz8uPz8/Pz8/Pz8/KSBhcm4tYXdhbGxpbi1t
-aW50LWwzCj4gICAgICAgICAgICAgPj4gdXN0X2JhZGRyX3N0YXRlZHVtcDpzb2luZm86IHsgY3B1
-X2lkID0gNCB9LCB7IGJhZGRyID0gMHg3RkZGNkJGODEwMDAsIHNvcGF0aAo+ICAgICAgICAgICAg
-ID4+ID0gIlt2ZHNvXSIsIHNpemUgPSAwLCBtdGltZSA9IC0xIH0KPiAgICAgICAgICAgICA+PiBb
-MTM6Mzc6MDAuOTcyMDM1NTQ2XSAoKzAuMDAwMDAwNTk3KSBhcm4tYXdhbGxpbi1taW50LWwzIHRy
-YWNldGVzdDpmaXJzdF90cDoKPiAgICAgICAgICAgICA+PiB7IGNwdV9pZCA9IDYgfSwgeyBteV9z
-dHJpbmdfZmllbGQgPSAidGVzdCIsIG15X2ludGVnZXJfZmllbGQgPSA5OTkgfQo+ICAgICAgICAg
-ICAgID4+IFNuYXBzaG90IHJlY29yZGVkIHN1Y2Nlc3NmdWxseSBmb3Igc2Vzc2lvbiB0ZXN0Cj4g
-ICAgICAgICAgICAgPj4gMTY4Cj4gICAgICAgICAgICAgPj4gWzEzOjM3OjAwLjg5NDQxMTExN10g
-KCs/Lj8/Pz8/Pz8/PykgYXJuLWF3YWxsaW4tbWludC1sMwo+ICAgICAgICAgICAgID4+IHVzdF9i
-YWRkcl9zdGF0ZWR1bXA6c29pbmZvOiB7IGNwdV9pZCA9IDQgfSwgeyBiYWRkciA9IDB4N0ZGRjZC
-RjgxMDAwLCBzb3BhdGgKPiAgICAgICAgICAgICA+PiA9ICJbdmRzb10iLCBzaXplID0gMCwgbXRp
-bWUgPSAtMSB9Cj4gICAgICAgICAgICAgPj4gWzEzOjM3OjAxLjAxNDA2MDk0MCA8dGVsOjAxNDA2
-MDk0MD5dICgrMC4wMDAwMDAzNDEpCj4gICAgICAgICAgICAgYXJuLWF3YWxsaW4tbWludC1sMyB0
-cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgICAgICAgICAgPj4geyBjcHVfaWQgPSA3IH0sIHsgbXlf
-c3RyaW5nX2ZpZWxkID0gInRlc3QiLCBteV9pbnRlZ2VyX2ZpZWxkID0gOTk5IH0KPiAgICAgICAg
-ICAgICA+PiBTbmFwc2hvdCByZWNvcmRlZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+
-ICAgICAgICAgICAgID4+IDE2OAo+ICAgICAgICAgICAgID4+IFsxMzozNzowMC44OTQ0MTExMTdd
-ICgrPy4/Pz8/Pz8/Pz8pIGFybi1hd2FsbGluLW1pbnQtbDMKPiAgICAgICAgICAgICA+PiB1c3Rf
-YmFkZHJfc3RhdGVkdW1wOnNvaW5mbzogeyBjcHVfaWQgPSA0IH0sIHsgYmFkZHIgPSAweDdGRkY2
-QkY4MTAwMCwgc29wYXRoCj4gICAgICAgICAgICAgPj4gPSAiW3Zkc29dIiwgc2l6ZSA9IDAsIG10
-aW1lID0gLTEgfQo+ICAgICAgICAgICAgID4+IFsxMzozNzowMS4wNTI1NTU4NzcgPHRlbDowNTI1
-NTU4Nzc+XSAoKzAuMDAwMDAwODcyKQo+ICAgICAgICAgICAgIGFybi1hd2FsbGluLW1pbnQtbDMg
-dHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICAgICAgICAgID4+IHsgY3B1X2lkID0gNiB9LCB7IG15
-X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwgbXlfaW50ZWdlcl9maWVsZCA9IDk5OSB9Cj4gICAgICAg
-ICAgICAgLi4uIHRvIGhlcmUuCj4gCj4gICAgICAgICAgICAgVGhlIGJlZ2lubmluZyB0aW1lc3Rh
-bXAgaXMgdGhlIHNhbWUsIHRoZSBudW1iZXIgb2YgZXZlbnRzIGlzCj4gICAgICAgICAgICAgdGhl
-IHNhbWUsCj4gICAgICAgICAgICAgYnV0IHRoZSBlbmQgdGltZXN0YW1wIG1vdmVzLiBXZSBzZWUg
-YWxzbyB0aGlzIHBhdHRlcm4gYmVsb3cuCj4gICAgICAgICAgICAgSSB3b3VsZCBiZSByZWFsbHkg
-aW50ZXJlc3RlZCB0byBzZWUgdGhlIHdob2xlIHNuYXBzaG90cyB3aGVuCj4gICAgICAgICAgICAg
-aXQgaGFwcGVucy4KPiAgICAgICAgICAgICBJdCBzZWVtcyBsaWtlIHdlIGFyZSBub3QgYmUgb3Zl
-cndyaXRpbmcgdGhlIGJlZ2lubmluZyBvZiB0aGUKPiAgICAgICAgICAgICByaW5nIGJ1ZmZlcgo+
-ICAgICAgICAgICAgIGluIHNvbWUgY29uZGl0aW9ucy4gQ291bGQgeW91IHNlbmQgdXMgeW91ciB0
-cmFjZXRlc3QgcHJvZ3JhbQo+ICAgICAgICAgICAgIGFuZCB0aGUKPiAgICAgICAgICAgICBzY3Jp
-cHQgc28gd2UgY2FuIHRyeSB0byByZXByb2R1Y2UgdGhlIHByb2JsZW0gPwo+IAo+ICAgICAgICAg
-IAo+ICAgICAgICAgSSB3aWxsIGFwcGVuZCBpdCBpbmNsdWRpbmcgYSBydW4gd2l0aCBkZWJ1ZyB0
-dXJuZWQgb24gYW5kIGFsbAo+ICAgICAgICAgdGhlIHNuYXBzaG90IGZpbGVzIGNyZWF0ZWQKPiAg
-ICAgICAgICAKPiAKPiAKPiAgICAgICAgICAgICA+PiBTbmFwc2hvdCByZWNvcmRlZCBzdWNjZXNz
-ZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICAgICAgICAgID4+IDE2OAo+ICAgICAgICAgICAg
-ID4+IFsxMzozNzowMS4wMTQwMzU5OTMgPHRlbDowMTQwMzU5OTM+XSAoKz8uPz8/Pz8/Pz8/KQo+
-ICAgICAgICAgICAgIGFybi1hd2FsbGluLW1pbnQtbDMgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAg
-ICAgICAgICAgID4+IHsgY3B1X2lkID0gNyB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwK
-PiAgICAgICAgICAgICBteV9pbnRlZ2VyX2ZpZWxkID0gOTI3IH0KPiAgICAgICAgICAgICA+PiBb
-MTM6Mzc6MDEuMDk4NjIwODA4XSAoKzAuMDAwMDAxNDA0KSBhcm4tYXdhbGxpbi1taW50LWwzCj4g
-ICAgICAgICAgICAgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICAgICAgICAgID4+IHsgY3B1X2lk
-ID0gNCB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwKPiAgICAgICAgICAgICBteV9pbnRl
-Z2VyX2ZpZWxkID0gOTk5IH0KPiAgICAgICAgICAgICA+PiBTbmFwc2hvdCByZWNvcmRlZCBzdWNj
-ZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICAgICAgICAgID4+IDE2OAo+ICAgICAgICAg
-ICAgID4+IFsxMzozNzowMS4wOTcwODczODggPHRlbDowOTcwODczODg+XSAoKz8uPz8/Pz8/Pz8/
-KQo+ICAgICAgICAgICAgIGFybi1hd2FsbGluLW1pbnQtbDMKPiAgICAgICAgICAgICA+PiB1c3Rf
-YmFkZHJfc3RhdGVkdW1wOnNvaW5mbzogeyBjcHVfaWQgPSA2IH0sIHsgYmFkZHIgPQo+ICAgICAg
-ICAgICAgIDB4N0ZGRjRCRkZFMDAwLCBzb3BhdGgKPiAgICAgICAgICAgICA+PiA9ICJbdmRzb10i
-LCBzaXplID0gMCwgbXRpbWUgPSAtMSB9Cj4gICAgICAgICAgICAgPj4gWzEzOjM3OjAxLjEyOTgz
-OTgzMF0gKCswLjAwMDAwMDUzMykgYXJuLWF3YWxsaW4tbWludC1sMwo+ICAgICAgICAgICAgIHRy
-YWNldGVzdDpmaXJzdF90cDoKPiAgICAgICAgICAgICA+PiB7IGNwdV9pZCA9IDcgfSwgeyBteV9z
-dHJpbmdfZmllbGQgPSAidGVzdCIsCj4gICAgICAgICAgICAgbXlfaW50ZWdlcl9maWVsZCA9IDk5
-OSB9Cj4gICAgICAgICAgICAgPj4gU25hcHNob3QgcmVjb3JkZWQgc3VjY2Vzc2Z1bGx5IGZvciBz
-ZXNzaW9uIHRlc3QKPiAgICAgICAgICAgICA+PiAxNjgKPiAgICAgICAgICAgICA+PiBbMTM6Mzc6
-MDEuMDk3MDg3Mzg4IDx0ZWw6MDk3MDg3Mzg4Pl0gKCs/Lj8/Pz8/Pz8/PykKPiAgICAgICAgICAg
-ICBhcm4tYXdhbGxpbi1taW50LWwzCj4gICAgICAgICAgICAgPj4gdXN0X2JhZGRyX3N0YXRlZHVt
-cDpzb2luZm86IHsgY3B1X2lkID0gNiB9LCB7IGJhZGRyID0KPiAgICAgICAgICAgICAweDdGRkY0
-QkZGRTAwMCwgc29wYXRoCj4gICAgICAgICAgICAgPj4gPSAiW3Zkc29dIiwgc2l6ZSA9IDAsIG10
-aW1lID0gLTEgfQo+ICAgICAgICAgICAgID4+IFsxMzozNzowMS4xMjk4Mzk4MzBdICgrMC4wMDAw
-MDA1MzMpIGFybi1hd2FsbGluLW1pbnQtbDMKPiAgICAgICAgICAgICB0cmFjZXRlc3Q6Zmlyc3Rf
-dHA6Cj4gICAgICAgICAgICAgPj4geyBjcHVfaWQgPSA3IH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0g
-InRlc3QiLAo+ICAgICAgICAgICAgIG15X2ludGVnZXJfZmllbGQgPSA5OTkgfQo+ICAgICAgICAg
-ICAgID4+IFNuYXBzaG90IHJlY29yZGVkIHN1Y2Nlc3NmdWxseSBmb3Igc2Vzc2lvbiB0ZXN0Cj4g
-ICAgICAgICAgICAgPj4gMTY4Cj4gICAgICAgICAgICAgPj4gWzEzOjM3OjAxLjA5NzA4NzM4OCA8
-dGVsOjA5NzA4NzM4OD5dICgrPy4/Pz8/Pz8/Pz8pCj4gICAgICAgICAgICAgYXJuLWF3YWxsaW4t
-bWludC1sMwo+ICAgICAgICAgICAgID4+IHVzdF9iYWRkcl9zdGF0ZWR1bXA6c29pbmZvOiB7IGNw
-dV9pZCA9IDYgfSwgeyBiYWRkciA9Cj4gICAgICAgICAgICAgMHg3RkZGNEJGRkUwMDAsIHNvcGF0
-aAo+ICAgICAgICAgICAgID4+ID0gIlt2ZHNvXSIsIHNpemUgPSAwLCBtdGltZSA9IC0xIH0KPiAg
-ICAgICAgICAgICA+PiBbMTM6Mzc6MDEuMTcyODI5MTA1XSAoKzAuMDAwMDAwNTc1KSBhcm4tYXdh
-bGxpbi1taW50LWwzCj4gICAgICAgICAgICAgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICAgICAg
-ICAgID4+IHsgY3B1X2lkID0gNSB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwKPiAgICAg
-ICAgICAgICBteV9pbnRlZ2VyX2ZpZWxkID0gOTk5IH0KPiAgICAgICAgICAgICA+PiBTbmFwc2hv
-dCByZWNvcmRlZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICAgICAgICAgID4+
-IDE2OAo+ICAgICAgICAgICAgID4+IFsxMzozNzowMS4xNzIwMjE1NTddICgrPy4/Pz8/Pz8/Pz8p
-IGFybi1hd2FsbGluLW1pbnQtbDMKPiAgICAgICAgICAgICA+PiB1c3RfYmFkZHJfc3RhdGVkdW1w
-OnNvaW5mbzogeyBjcHVfaWQgPSA3IH0sIHsgYmFkZHIgPQo+ICAgICAgICAgICAgIDB4N0ZGRjY1
-M0ZFMDAwLCBzb3BhdGgKPiAgICAgICAgICAgICA+PiA9ICJbdmRzb10iLCBzaXplID0gMCwgbXRp
-bWUgPSAtMSB9Cj4gICAgICAgICAgICAgPj4gWzEzOjM3OjAxLjIyMDA3NDE2NV0gKCswLjAwMDAw
-MDU1MykgYXJuLWF3YWxsaW4tbWludC1sMwo+ICAgICAgICAgICAgIHRyYWNldGVzdDpmaXJzdF90
-cDoKPiAgICAgICAgICAgICA+PiB7IGNwdV9pZCA9IDYgfSwgeyBteV9zdHJpbmdfZmllbGQgPSAi
-dGVzdCIsCj4gICAgICAgICAgICAgbXlfaW50ZWdlcl9maWVsZCA9IDk5OSB9Cj4gICAgICAgICAg
-ICAgPj4gV2FpdGluZyBmb3IgZGF0YSBhdmFpbGFiaWxpdHkKPiAgICAgICAgICAgICA+PiBUcmFj
-aW5nIHN0b3BwZWQgZm9yIHNlc3Npb24gdGVzdAo+ICAgICAgICAgICAgID4+IFNlc3Npb24gdGVz
-dCBkZXN0cm95ZWQKPiAgICAgICAgICAgICA+Pgo+ICAgICAgICAgICAgID4+IHRoZSByZXN1bHQg
-ZnJvbSB0aGUgcnVuIG9uIG9sZGVyIHZlcnNpb25zIG9mIGx0dG5nCj4gICAgICAgICAgICAgY3Jl
-YXRlcyBiaWdnZXIgYW5kIGJpZ2dlcgo+ICAgICAgICAgICAgID4+IGV2ZW50IHRyYWNlcyB1bnRp
-bCByZWFjaGluZyBtYXggc2l6ZS4KPiAgICAgICAgICAgICBXZSBzZWUgdGhpcyBwYXR0ZXJuIGhl
-cmUgYW5kIHRoZSBtYXggc2l6ZSBzZWVtcyB0byBiZSAxNjgKPiAgICAgICAgICAgICBldmVudHMs
-IHdhcyBpdAo+ICAgICAgICAgICAgIHNpbWlsYXIgaW4geW91ciBwcmV2aW91cyB0ZXN0cyA/Cj4g
-Cj4gICAgICAgICBJZiBJJ20gcnVubmluZyB0aGUgc2FtZSB0ZXN0IG9uIDIuNCBvciAyLjMgdGhl
-IG1heCBudW1iZXIgb2YKPiAgICAgICAgIGV2ZW50cyBpcyBtdWNoIGJpZ2dlciwgbGlrZSB+MTAw
-MDAgCj4gICAgICAgICAoSSBkb24ndCBoYXZlIHRoZSBleGFjdCBudW1iZXIgcmlnaHQgbm93LCBJ
-IHdpbGwgcmVidWlsZCBhbmQgcnVuCj4gICAgICAgICB0aGUgdGVzdCBhZ2FpbiBhbmQgZ2V0IGJh
-Y2sgCj4gICAgICAgICB3aXRoIHRyYWNlcyBmcm9tIHRoYXQgcnVuKSAKPiAKPiAgICAgRm9yIDIu
-NC4yIHRoZSBsb2cgbG9va3MgbGlrZSB0aGlzOgo+ICAgICAuL3Rlc3QucnVuIC4vdHJhY2V0ZXN0
-Cj4gCj4gICAgIGx0dG5nIChMVFRuZyBUcmFjZSBDb250cm9sKSAyLjQuMiAtIMOJcG9xdWUgT3Bh
-cXVlCj4gICAgIEJhYmVsVHJhY2UgVHJhY2UgVmlld2VyIGFuZCBDb252ZXJ0ZXIgMS4yLjEKPiAg
-ICAgbGludXgtdmRzby5zby4xID0+ICAoMHgwMDAwN2ZmZjc3NWZlMDAwKQo+ICAgICBsaWJsdHRu
-Zy1jdGwuc28uMCA9PiAvdXNyL2xvY2FsL2xpYi9saWJsdHRuZy1jdGwuc28uMAo+ICAgICAoMHgw
-MDAwMmIyYjAxNmU0MDAwKQo+ICAgICBsaWJwb3B0LnNvLjAgPT4gL2xpYi94ODZfNjQtbGludXgt
-Z251L2xpYnBvcHQuc28uMCAoMHgwMDAwMmIyYjAxOTBmMDAwKQo+ICAgICBsaWJwdGhyZWFkLnNv
-LjAgPT4gL2xpYi94ODZfNjQtbGludXgtZ251L2xpYnB0aHJlYWQuc28uMAo+ICAgICAoMHgwMDAw
-MmIyYjAxYjFiMDAwKQo+ICAgICBsaWJjLnNvLjYgPT4gL2xpYi94ODZfNjQtbGludXgtZ251L2xp
-YmMuc28uNiAoMHgwMDAwMmIyYjAxZDM5MDAwKQo+ICAgICBsaWJydC5zby4xID0+IC9saWIveDg2
-XzY0LWxpbnV4LWdudS9saWJydC5zby4xICgweDAwMDAyYjJiMDIwZmYwMDApCj4gICAgIGxpYnVy
-Y3Uuc28uMyA9PiAvdXNyL2xvY2FsL2xpYi9saWJ1cmN1LnNvLjMgKDB4MDAwMDJiMmIwMjMwNzAw
-MCkKPiAgICAgL2xpYjY0L2xkLWxpbnV4LXg4Ni02NC5zby4yICgweDAwMDAyYjJiMDE0YmYwMDAp
-Cj4gCj4gICAgIFNlc3Npb24gdGVzdCBjcmVhdGVkLgo+ICAgICBEZWZhdWx0IHNuYXBzaG90IG91
-dHB1dCBzZXQgdG86IC8vbHR0bmctdHJhY2VzL3Rlc3QtMjAxNDExMTMtMDkzNjExCj4gICAgIFNu
-YXBzaG90IG1vZGUgc2V0LiBFdmVyeSBjaGFubmVsIGVuYWJsZWQgZm9yIHRoYXQgc2Vzc2lvbiB3
-aWxsIGJlCj4gICAgIHNldCBpbiBvdmVyd3JpdGUgbW9kZSBhbmQgbW1hcCBvdXRwdXQuCj4gICAg
-IFVTVCBjaGFubmVsIGNoMSBlbmFibGVkIGZvciBzZXNzaW9uIHRlc3QKPiAgICAgVVNUIGV2ZW50
-ICogY3JlYXRlZCBpbiBjaGFubmVsIGNoMQo+ICAgICBUcmFjaW5nIHN0YXJ0ZWQgZm9yIHNlc3Np
-b24gdGVzdAo+ICAgICBUcmFjaW5nIHNlc3Npb24gdGVzdDogW2FjdGl2ZSBzbmFwc2hvdF0KPiAg
-ICAgICAgIFRyYWNlIHBhdGg6IAo+IAo+ICAgICA9PT0gRG9tYWluOiBVU1QgZ2xvYmFsID09PQo+
-IAo+ICAgICBCdWZmZXIgdHlwZTogcGVyIFVJRAo+IAo+ICAgICBDaGFubmVsczoKPiAgICAgLS0t
-LS0tLS0tLS0tLQo+ICAgICAtIGNoMTogW2VuYWJsZWRdCj4gCj4gICAgICAgICBBdHRyaWJ1dGVz
-Ogo+ICAgICAgICAgICBvdmVyd3JpdGUgbW9kZTogMQo+ICAgICAgICAgICBzdWJidWZlcnMgc2l6
-ZTogNDA5Ngo+ICAgICAgICAgICBudW1iZXIgb2Ygc3ViYnVmZXJzOiAxNgo+ICAgICAgICAgICBz
-d2l0Y2ggdGltZXIgaW50ZXJ2YWw6IDAKPiAgICAgICAgICAgcmVhZCB0aW1lciBpbnRlcnZhbDog
-MAo+ICAgICAgICAgICBvdXRwdXQ6IG1tYXAoKQo+IAo+ICAgICAgICAgRXZlbnRzOgo+ICAgICAg
-ICAgICAqICh0eXBlOiB0cmFjZXBvaW50KSBbZW5hYmxlZF0KPiAKPiAgICAgU25hcHNob3QgcmVj
-b3JkZWQgc3VjY2Vzc2Z1bGx5IGZvciBzZXNzaW9uIHRlc3QKPiAgICAgMTAwMAo+ICAgICBbMDk6
-MzY6MTEuOTg1MzE5MjcyXSAoKz8uPz8/Pz8/Pz8/KSAwN2Y4Y2Y4NGEzOGYgdHJhY2V0ZXN0OmZp
-cnN0X3RwOgo+ICAgICB7IGNwdV9pZCA9IDQgfSwgeyBteV9zdHJpbmdfZmllbGQgPSAidGVzdCIs
-IG15X2ludGVnZXJfZmllbGQgPSAwIH0KPiAgICAgWzA5OjM2OjExLjk4NTg1NzI1NF0gKCswLjAw
-MDAwMDUwMSkgMDdmOGNmODRhMzhmIHRyYWNldGVzdDpmaXJzdF90cDoKPiAgICAgeyBjcHVfaWQg
-PSA0IH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0gInRlc3QiLCBteV9pbnRlZ2VyX2ZpZWxkID0gOTk5
-IH0KPiAgICAgU25hcHNob3QgcmVjb3JkZWQgc3VjY2Vzc2Z1bGx5IGZvciBzZXNzaW9uIHRlc3QK
-PiAgICAgMjAwMAo+ICAgICBbMDk6MzY6MTEuOTg1MzE5MjcyXSAoKz8uPz8/Pz8/Pz8/KSAwN2Y4
-Y2Y4NGEzOGYgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICB7IGNwdV9pZCA9IDQgfSwgeyBteV9z
-dHJpbmdfZmllbGQgPSAidGVzdCIsIG15X2ludGVnZXJfZmllbGQgPSAwIH0KPiAgICAgWzA5OjM2
-OjEyLjAzMzA2NjEzMCA8dGVsOjAzMzA2NjEzMD5dICgrMC4wMDAwMDE2NjMpIDA3ZjhjZjg0YTM4
-Zgo+ICAgICB0cmFjZXRlc3Q6Zmlyc3RfdHA6IHsgY3B1X2lkID0gNSB9LCB7IG15X3N0cmluZ19m
-aWVsZCA9ICJ0ZXN0IiwKPiAgICAgbXlfaW50ZWdlcl9maWVsZCA9IDk5OSB9Cj4gICAgIFNuYXBz
-aG90IHJlY29yZGVkIHN1Y2Nlc3NmdWxseSBmb3Igc2Vzc2lvbiB0ZXN0Cj4gICAgIDMwMDAKPiAg
-ICAgWzA5OjM2OjExLjk4NTMxOTI3Ml0gKCs/Lj8/Pz8/Pz8/PykgMDdmOGNmODRhMzhmIHRyYWNl
-dGVzdDpmaXJzdF90cDoKPiAgICAgeyBjcHVfaWQgPSA0IH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0g
-InRlc3QiLCBteV9pbnRlZ2VyX2ZpZWxkID0gMCB9Cj4gICAgIFswOTozNjoxMi4wODY4ODgxMjEg
-PHRlbDowODY4ODgxMjE+XSAoKzAuMDAwMDAxMjczKSAwN2Y4Y2Y4NGEzOGYKPiAgICAgdHJhY2V0
-ZXN0OmZpcnN0X3RwOiB7IGNwdV9pZCA9IDUgfSwgeyBteV9zdHJpbmdfZmllbGQgPSAidGVzdCIs
-Cj4gICAgIG15X2ludGVnZXJfZmllbGQgPSA5OTkgfQo+ICAgICBTbmFwc2hvdCByZWNvcmRlZCBz
-dWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICA0MDAwCj4gICAgIFswOTozNjoxMS45
-ODUzMTkyNzJdICgrPy4/Pz8/Pz8/Pz8pIDA3ZjhjZjg0YTM4ZiB0cmFjZXRlc3Q6Zmlyc3RfdHA6
-Cj4gICAgIHsgY3B1X2lkID0gNCB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwgbXlfaW50
-ZWdlcl9maWVsZCA9IDAgfQo+ICAgICBbMDk6MzY6MTIuMTQ3Mzc4MjUxXSAoKzAuMDAwMDAxMjU3
-KSAwN2Y4Y2Y4NGEzOGYgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICB7IGNwdV9pZCA9IDQgfSwg
-eyBteV9zdHJpbmdfZmllbGQgPSAidGVzdCIsIG15X2ludGVnZXJfZmllbGQgPSA5OTkgfQo+ICAg
-ICBTbmFwc2hvdCByZWNvcmRlZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICA1
-MDAwCj4gICAgIFswOTozNjoxMS45ODUzMTkyNzJdICgrPy4/Pz8/Pz8/Pz8pIDA3ZjhjZjg0YTM4
-ZiB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgIHsgY3B1X2lkID0gNCB9LCB7IG15X3N0cmluZ19m
-aWVsZCA9ICJ0ZXN0IiwgbXlfaW50ZWdlcl9maWVsZCA9IDAgfQo+ICAgICBbMDk6MzY6MTIuMjI1
-NTg0Njk2XSAoKzAuMDAwMDAwNTI4KSAwN2Y4Y2Y4NGEzOGYgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+
-ICAgICB7IGNwdV9pZCA9IDQgfSwgeyBteV9zdHJpbmdfZmllbGQgPSAidGVzdCIsIG15X2ludGVn
-ZXJfZmllbGQgPSA5OTkgfQo+ICAgICBTbmFwc2hvdCByZWNvcmRlZCBzdWNjZXNzZnVsbHkgZm9y
-IHNlc3Npb24gdGVzdAo+ICAgICA2MDAwCj4gICAgIFswOTozNjoxMS45ODUzMTkyNzJdICgrPy4/
-Pz8/Pz8/Pz8pIDA3ZjhjZjg0YTM4ZiB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgIHsgY3B1X2lk
-ID0gNCB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwgbXlfaW50ZWdlcl9maWVsZCA9IDAg
-fQo+ICAgICBbMDk6MzY6MTIuMjg4MzExMTcyXSAoKzAuMDAwMDAwNTcxKSAwN2Y4Y2Y4NGEzOGYg
-dHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICB7IGNwdV9pZCA9IDcgfSwgeyBteV9zdHJpbmdfZmll
-bGQgPSAidGVzdCIsIG15X2ludGVnZXJfZmllbGQgPSA5OTkgfQo+ICAgICBTbmFwc2hvdCByZWNv
-cmRlZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICA3MDAwCj4gICAgIFswOToz
-NjoxMS45ODUzMTkyNzJdICgrPy4/Pz8/Pz8/Pz8pIDA3ZjhjZjg0YTM4ZiB0cmFjZXRlc3Q6Zmly
-c3RfdHA6Cj4gICAgIHsgY3B1X2lkID0gNCB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0Iiwg
-bXlfaW50ZWdlcl9maWVsZCA9IDAgfQo+ICAgICBbMDk6MzY6MTIuMzc1Nzg5MzA3XSAoKzAuMDAw
-MDAxMjM4KSAwN2Y4Y2Y4NGEzOGYgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICB7IGNwdV9pZCA9
-IDQgfSwgeyBteV9zdHJpbmdfZmllbGQgPSAidGVzdCIsIG15X2ludGVnZXJfZmllbGQgPSA5OTkg
-fQo+ICAgICBTbmFwc2hvdCByZWNvcmRlZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+
-ICAgICA3MDAwCj4gICAgIFswOTozNjoxMi4wMzIzMTQwODRdICgrPy4/Pz8/Pz8/Pz8pIDA3Zjhj
-Zjg0YTM4ZiB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgIHsgY3B1X2lkID0gNSB9LCB7IG15X3N0
-cmluZ19maWVsZCA9ICJ0ZXN0IiwgbXlfaW50ZWdlcl9maWVsZCA9IDAgfQo+ICAgICBbMDk6MzY6
-MTIuNDYwNzU2Nzc5XSAoKzAuMDAwMDAxMjQ4KSAwN2Y4Y2Y4NGEzOGYgdHJhY2V0ZXN0OmZpcnN0
-X3RwOgo+ICAgICB7IGNwdV9pZCA9IDQgfSwgeyBteV9zdHJpbmdfZmllbGQgPSAidGVzdCIsIG15
-X2ludGVnZXJfZmllbGQgPSA5OTkgfQo+ICAgICBTbmFwc2hvdCByZWNvcmRlZCBzdWNjZXNzZnVs
-bHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICA4MDAwCj4gICAgIFswOTozNjoxMi4wMzIzMTQwODRd
-ICgrPy4/Pz8/Pz8/Pz8pIDA3ZjhjZjg0YTM4ZiB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgIHsg
-Y3B1X2lkID0gNSB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwgbXlfaW50ZWdlcl9maWVs
-ZCA9IDAgfQo+ICAgICBbMDk6MzY6MTIuNTQwNDY0MDkwXSAoKzAuMDAwMDAxMjkyKSAwN2Y4Y2Y4
-NGEzOGYgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICB7IGNwdV9pZCA9IDcgfSwgeyBteV9zdHJp
-bmdfZmllbGQgPSAidGVzdCIsIG15X2ludGVnZXJfZmllbGQgPSA5OTkgfQo+ICAgICBTbmFwc2hv
-dCByZWNvcmRlZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICA5MDAwCj4gICAg
-IFswOTozNjoxMi4wMzIzMTQwODRdICgrPy4/Pz8/Pz8/Pz8pIDA3ZjhjZjg0YTM4ZiB0cmFjZXRl
-c3Q6Zmlyc3RfdHA6Cj4gICAgIHsgY3B1X2lkID0gNSB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0
-ZXN0IiwgbXlfaW50ZWdlcl9maWVsZCA9IDAgfQo+ICAgICBbMDk6MzY6MTIuNjIxOTkyOTMxXSAo
-KzAuMDAwMDAxMjk4KSAwN2Y4Y2Y4NGEzOGYgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICB7IGNw
-dV9pZCA9IDUgfSwgeyBteV9zdHJpbmdfZmllbGQgPSAidGVzdCIsIG15X2ludGVnZXJfZmllbGQg
-PSA5OTkgfQo+ICAgICBXYWl0aW5nIGZvciBkYXRhIGF2YWlsYWJpbGl0eQo+ICAgICBUcmFjaW5n
-IHN0b3BwZWQgZm9yIHNlc3Npb24gdGVzdAo+ICAgICBTZXNzaW9uIHRlc3QgZGVzdHJveWVkCj4g
-ICAgICAKPiAKPiAKPiAgICAgICAgICAgICA+Cj4gICAgICAgICAgICAgPiBVbmxlc3MgSSdtIG1p
-c3Rha2VuLCB0aGUgYmVoYXZpb3Igb2YgdGhlIHNuYXBzaG90IG1vZGUgaGFzIGNoYW5nZWQKPiAg
-ICAgICAgICAgICA+IGJldHdlZW4gMi40IGFuZCAyLjUuCj4gICAgICAgICAgICAgPgo+ICAgICAg
-ICAgICAgID4gSW4gdGhlIDIuNCBzZXJpZXMsIGNvbnNlY3V0aXZlIHNuYXBzaG90cyBjb3VsZCBv
-dmVybGFwOyB0aGF0IGlzLAo+ICAgICAgICAgICAgID4gZXZlbnRzIGNvdWxkIGJlIHByZXNlbnQg
-aW4gbXVsdGlwbGUgc25hcHNob3RzLiBBcyBvZiAyLjUsIGFuIGV2ZW50IGlzCj4gICAgICAgICAg
-ICAgPiBndWFyYW50ZWVkIHRvIG9ubHkgYXBwZWFyIGluIG9uZSBzbmFwc2hvdCBhcyB0aGUgZXZl
-bnRzIGFyZSBjb25zaWRlcmVkCj4gICAgICAgICAgICAgPiBhcyBoYXZpbmcgYmVlbiAiY29uc3Vt
-ZWQiIGF0IHRoYXQgcG9pbnQuCj4gCj4gICAgICAgICAgICAgSHVtLCBubyB0aGUgYmVoYXZpb3Ig
-aXMgc3RpbGwgdGhlIHNhbWUsIGNvbnNlY3V0aXZlCj4gICAgICAgICAgICAgc25hcHNob3RzIGNh
-biBvdmVybGFwLgo+IAo+ICAgICAgICAgICAgIENvdWxkIHlvdSB0ZWxsIHVzIG9uIHdoaWNoIGFy
-Y2hpdGVjdHVyZSB5b3UgYXJlIGV4cGVyaWVuY2luZwo+ICAgICAgICAgICAgIHRoZSBwcm9ibGVt
-Cj4gICAgICAgICAgICAgYW5kIHRoZSBudW1iZXIgb2YgQ1BVcyA/Cj4gCj4gICAgICAgICBUaGUg
-dHJhY2VzIGFwcGVuZGVkIGlzIGZyb20gbXkgbGFwdG9wIHJ1bm5pbmcgVWJ1bnR1IDE0LjA0IHdp
-dGgKPiAgICAgICAgICI4IiBjcHUncwo+ICAgICAgICAgbW9kZWwgbmFtZSAgICAgIDogSW50ZWwo
-UikgQ29yZShUTSkgaTctMjc2MFFNIENQVSBAIDIuNDBHSHoKPiAgICAgICAgIEkgaGF2ZSBhbHNv
-IHJ1biB0aGlzIG9uIEFSTSB3aXRoIDE2IGNvcmVzIGFuZCBhIHBvd2VycGMKPiAKPiAKPiAgICAg
-ICAgICAgICBUaGFua3MsCj4gCj4gICAgICAgICAgICAgSnVsaWVuCj4gCj4gCj4gCj4gCgpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
-bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============1007803062==
+Content-Type: multipart/alternative; boundary=f46d04426bbc711c440507c10710
+
+--f46d04426bbc711c440507c10710
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+No, I get the same problem with or w/o setting the size
+
+Anders Wallin
+
+On Thu, Nov 13, 2014 at 5:45 PM, Julien Desfossez <jdesfossez@efficios.com>
+wrote:
+
+> Ok, so if you don't limit the size of the snapshot (remove the -m 1G) it
+> works as expected ?
+>
+> Julien
+>
+> On 14-11-13 10:33 AM, Anders Wallin wrote:
+> > bug is introduced in  68808f4e0bbb3adccff72ff9dab6ec9f3a9e6866
+> >
+> > Regards
+> >
+> > Anders
+> >
+> > Anders Wallin
+> >
+> > On Thu, Nov 13, 2014 at 10:39 AM, Anders Wallin <wallinux@gmail.com
+> > <mailto:wallinux@gmail.com>> wrote:
+> >
+> >
+> >
+> >     Anders Wallin
+> >
+> >     On Thu, Nov 13, 2014 at 8:43 AM, Anders Wallin <wallinux@gmail.com
+> >     <mailto:wallinux@gmail.com>> wrote:
+> >
+> >         On Thu, Nov 13, 2014 at 12:11 AM, Julien Desfossez
+> >         <jdesfossez@efficios.com <mailto:jdesfossez@efficios.com>>
+> wrote:
+> >
+> >             Hi,
+> >
+> >             On 14-11-12 05:30 PM, J=C3=A9r=C3=A9mie Galarneau wrote:
+> >             > On Wed, Nov 12, 2014 at 7:39 AM, Anders Wallin
+> >             <wallinux@gmail.com <mailto:wallinux@gmail.com>> wrote:
+> >             >> Hi,
+> >             >>
+> >             >> using userspace snapshot mode in 2.5 seems to broken.
+> >             >>
+> >             >> I have small stupid application(tracetest) generating
+> >             1000 events
+> >             >>
+> >             >> Running the script (the below is simplified version of
+> >             the script)
+> >             >>
+> >
+>  ------------------------------------------------------------------------=
+----------
+> >             >> #!/bin/bash
+> >             >> LTTNG=3D'lttng -n'
+> >             >> lttng-sessiond --no-kernel &
+> >             >
+> >             > You should use the "-d" flag to launch the sessiond as a
+> >             daemon. Using
+> >             > "&" might cause the "create" command to launch a second
+> >             session daemon
+> >             > since the first one would not have had the time to open
+> >             create its
+> >             > command sockets.
+> >             >
+> >             >>
+> >             >> $LTTNG create test --snapshot
+> >             >> $LTTNG enable-channel -u --subbuf-size 64k --num-subbuf
+> >             16 --overwrite ch1
+> >             >> $LTTNG enable-event -u -c ch1 "*"
+> >             >> $LTTNG start
+> >             >> $LTTNG list ch1
+> >             >>
+> >             >> mkdir -p snapshot/
+> >             >>
+> >             >> for i in $(seq 1 $LOOPS); do
+> >             >>     ./tracetest
+> >             >>     $LTTNG snapshot record -m 1G
+> >             >>
+> >             >>     # print no of events and first and last event
+> >             >>     last=3D$(ls -1drt $HOME/lttng-traces/$SESSION*/* | t=
+ail
+> -1)
+> >             >>     babeltrace $last > snapshot/$i.bt <http://i.bt>
+> >             >>     cat snapshot/$i.bt <http://i.bt> | wc -l
+> >             >>     cat snapshot/$i.bt <http://i.bt> | head -1
+> >             >>     cat snapshot/$i.bt <http://i.bt> | tail -1
+> >             >> done
+> >             >>
+> >             >> $LTTNG stop
+> >             >> $LTTNG destroy $SESSION
+> >             >>
+> >
+>  ------------------------------------------------------------------------=
+----------
+> >             >>
+> >             >> The result of the run looks like this;
+> >             >> ./test.run
+> >             >> Error: consumer err socket second poll error
+> >             >> Error: Health error occurred in thread_manage_consumer
+> >             >> PERROR - 13:36:59.685167 [23772/23781]: bind inet:
+> >             Address already in use
+> >             >> (in lttcomm_bind_inet_sock() at inet.c:109)
+> >             >> Warning: Another session daemon is using this JUL port.
+> >             JUL support will be
+> >             >> deactivated to prevent interfering with the tracing.
+> >             >>
+> >             >
+> >             > Is there a reason why you run two session daemons? I'm
+> >             guessing this
+> >             > is related to my "& vs -d" comment above.
+> >             >
+> >             >> lttng (LTTng Trace Control) 2.5.2 - Fumisterie
+> >             >> BabelTrace Trace Viewer and Converter 1.2.4
+> >             >>         linux-vdso.so.1 =3D>  (0x00007fffba966000)
+> >             >>         liblttng-ctl.so.0 =3D>
+> >             /usr/lib/x86_64-linux-gnu/liblttng-ctl.so.0
+> >             >> (0x00007fbfe4b1d000)
+> >             >>         librt.so.1 =3D> /lib/x86_64-linux-gnu/librt.so.1
+> >             (0x00007fbfe4915000)
+> >             >>         libxml2.so.2 =3D>
+> >             /usr/lib/x86_64-linux-gnu/libxml2.so.2
+> >             >> (0x00007fbfe45ae000)
+> >             >>         libpopt.so.0 =3D> /lib/x86_64-linux-gnu/libpopt.=
+so.0
+> >             >> (0x00007fbfe43a2000)
+> >             >>         libpthread.so.0 =3D>
+> >             /lib/x86_64-linux-gnu/libpthread.so.0
+> >             >> (0x00007fbfe4184000)
+> >             >>         libc.so.6 =3D> /lib/x86_64-linux-gnu/libc.so.6
+> >             (0x00007fbfe3dbd000)
+> >             >>         /lib64/ld-linux-x86-64.so.2 (0x00007fbfe4fac000)
+> >             >>         liburcu.so.2 =3D>
+> >             /usr/lib/x86_64-linux-gnu/liburcu.so.2
+> >             >> (0x00007fbfe3bb6000)
+> >             >>         libdl.so.2 =3D> /lib/x86_64-linux-gnu/libdl.so.2
+> >             (0x00007fbfe39b2000)
+> >             >>         libz.so.1 =3D> /lib/x86_64-linux-gnu/libz.so.1
+> >             (0x00007fbfe3798000)
+> >             >>         liblzma.so.5 =3D> /lib/x86_64-linux-gnu/liblzma.=
+so.5
+> >             >> (0x00007fbfe3576000)
+> >             >>         libm.so.6 =3D> /lib/x86_64-linux-gnu/libm.so.6
+> >             (0x00007fbfe3270000)
+> >             >>
+> >             >> Session test created.
+> >             >> Default snapshot output set to:
+> >             >> /home/awallin/lttng-traces/test-20141112-133700
+> >             >> Snapshot mode set. Every channel enabled for that sessio=
+n
+> >             will be set in
+> >             >> overwrite mode and mmap output.
+> >             >> UST channel ch1 enabled for session test
+> >             >> UST event * created in channel ch1
+> >             >> Tracing started for session test
+> >             >> Tracing session test: [active snapshot]
+> >             >>     Trace path:
+> >             >>     Live timer interval (usec): 4294967295
+> >             >>
+> >             >> =3D=3D=3D Domain: UST global =3D=3D=3D
+> >             >>
+> >             >> Channels:
+> >             >> -------------
+> >             >> - ch1: [enabled]
+> >             >>
+> >             >>     Attributes:
+> >             >>       overwrite mode: 1
+> >             >>       subbufers size: 4096
+> >             >>       number of subbufers: 16
+> >             >>       switch timer interval: 0
+> >             >>       read timer interval: 0
+> >             >>       trace file count: 0
+> >             >>       trace file size (bytes): 0
+> >             >>       output: mmap()
+> >             >>
+> >             >>     Events:
+> >             >>       * (type: tracepoint) [enabled]
+> >             >>
+> >             >> Snapshot recorded successfully for session test
+> >             >> 84
+> >             >> [13:37:00.852615950] (+?.?????????) arn-awallin-mint-l3
+> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =
+=3D
+> >             0x7FFFC6BC7000, sopath
+> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> >             >> [13:37:00.853798949] (+0.000000805) arn-awallin-mint-l3
+> >             tracetest:first_tp:
+> >             >> { cpu_id =3D 6 }, { my_string_field =3D "test",
+> >             my_integer_field =3D 999 }
+> >             >> Snapshot recorded successfully for session test
+> >             >> 157
+> >             >> [13:37:00.853735195] (+?.?????????) arn-awallin-mint-l3
+> >             tracetest:first_tp:
+> >             >> { cpu_id =3D 6 }, { my_string_field =3D "test",
+> >             my_integer_field =3D 927 }
+> >             >> [13:37:00.894839116] (+0.000000299) arn-awallin-mint-l3
+> >             tracetest:first_tp:
+> >             >> { cpu_id =3D 5 }, { my_string_field =3D "test",
+> >             my_integer_field =3D 999 }
+> >             >> Snapshot recorded successfully for session test
+> >             >> 168
+> >             >> [13:37:00.853735195] (+?.?????????) arn-awallin-mint-l3
+> >             tracetest:first_tp:
+> >             >> { cpu_id =3D 6 }, { my_string_field =3D "test",
+> >             my_integer_field =3D 927 }
+> >             >> [13:37:00.929447330] (+0.000000305) arn-awallin-mint-l3
+> >             tracetest:first_tp:
+> >             >> { cpu_id =3D 5 }, { my_string_field =3D "test",
+> >             my_integer_field =3D 999 }
+> >             >> Snapshot recorded successfully for session test
+> >
+> >             Something is wrong from here:
+> >             >> 168
+> >             >> [13:37:00.894411117] (+?.?????????) arn-awallin-mint-l3
+> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =
+=3D
+> 0x7FFF6BF81000, sopath
+> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> >             >> [13:37:00.972035546] (+0.000000597) arn-awallin-mint-l3
+> tracetest:first_tp:
+> >             >> { cpu_id =3D 6 }, { my_string_field =3D "test",
+> my_integer_field =3D 999 }
+> >             >> Snapshot recorded successfully for session test
+> >             >> 168
+> >             >> [13:37:00.894411117] (+?.?????????) arn-awallin-mint-l3
+> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =
+=3D
+> 0x7FFF6BF81000, sopath
+> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> >             >> [13:37:01.014060940 <tel:014060940>] (+0.000000341)
+> >             arn-awallin-mint-l3 tracetest:first_tp:
+> >             >> { cpu_id =3D 7 }, { my_string_field =3D "test",
+> my_integer_field =3D 999 }
+> >             >> Snapshot recorded successfully for session test
+> >             >> 168
+> >             >> [13:37:00.894411117] (+?.?????????) arn-awallin-mint-l3
+> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =
+=3D
+> 0x7FFF6BF81000, sopath
+> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> >             >> [13:37:01.052555877 <tel:052555877>] (+0.000000872)
+> >             arn-awallin-mint-l3 tracetest:first_tp:
+> >             >> { cpu_id =3D 6 }, { my_string_field =3D "test",
+> my_integer_field =3D 999 }
+> >             ... to here.
+> >
+> >             The beginning timestamp is the same, the number of events i=
+s
+> >             the same,
+> >             but the end timestamp moves. We see also this pattern below=
+.
+> >             I would be really interested to see the whole snapshots whe=
+n
+> >             it happens.
+> >             It seems like we are not be overwriting the beginning of th=
+e
+> >             ring buffer
+> >             in some conditions. Could you send us your tracetest progra=
+m
+> >             and the
+> >             script so we can try to reproduce the problem ?
+> >
+> >
+> >         I will append it including a run with debug turned on and all
+> >         the snapshot files created
+> >
+> >
+> >
+> >             >> Snapshot recorded successfully for session test
+> >             >> 168
+> >             >> [13:37:01.014035993 <tel:014035993>] (+?.?????????)
+> >             arn-awallin-mint-l3 tracetest:first_tp:
+> >             >> { cpu_id =3D 7 }, { my_string_field =3D "test",
+> >             my_integer_field =3D 927 }
+> >             >> [13:37:01.098620808] (+0.000001404) arn-awallin-mint-l3
+> >             tracetest:first_tp:
+> >             >> { cpu_id =3D 4 }, { my_string_field =3D "test",
+> >             my_integer_field =3D 999 }
+> >             >> Snapshot recorded successfully for session test
+> >             >> 168
+> >             >> [13:37:01.097087388 <tel:097087388>] (+?.?????????)
+> >             arn-awallin-mint-l3
+> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =
+=3D
+> >             0x7FFF4BFFE000, sopath
+> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> >             >> [13:37:01.129839830] (+0.000000533) arn-awallin-mint-l3
+> >             tracetest:first_tp:
+> >             >> { cpu_id =3D 7 }, { my_string_field =3D "test",
+> >             my_integer_field =3D 999 }
+> >             >> Snapshot recorded successfully for session test
+> >             >> 168
+> >             >> [13:37:01.097087388 <tel:097087388>] (+?.?????????)
+> >             arn-awallin-mint-l3
+> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =
+=3D
+> >             0x7FFF4BFFE000, sopath
+> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> >             >> [13:37:01.129839830] (+0.000000533) arn-awallin-mint-l3
+> >             tracetest:first_tp:
+> >             >> { cpu_id =3D 7 }, { my_string_field =3D "test",
+> >             my_integer_field =3D 999 }
+> >             >> Snapshot recorded successfully for session test
+> >             >> 168
+> >             >> [13:37:01.097087388 <tel:097087388>] (+?.?????????)
+> >             arn-awallin-mint-l3
+> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =
+=3D
+> >             0x7FFF4BFFE000, sopath
+> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> >             >> [13:37:01.172829105] (+0.000000575) arn-awallin-mint-l3
+> >             tracetest:first_tp:
+> >             >> { cpu_id =3D 5 }, { my_string_field =3D "test",
+> >             my_integer_field =3D 999 }
+> >             >> Snapshot recorded successfully for session test
+> >             >> 168
+> >             >> [13:37:01.172021557] (+?.?????????) arn-awallin-mint-l3
+> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 7 }, { baddr =
+=3D
+> >             0x7FFF653FE000, sopath
+> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> >             >> [13:37:01.220074165] (+0.000000553) arn-awallin-mint-l3
+> >             tracetest:first_tp:
+> >             >> { cpu_id =3D 6 }, { my_string_field =3D "test",
+> >             my_integer_field =3D 999 }
+> >             >> Waiting for data availability
+> >             >> Tracing stopped for session test
+> >             >> Session test destroyed
+> >             >>
+> >             >> the result from the run on older versions of lttng
+> >             creates bigger and bigger
+> >             >> event traces until reaching max size.
+> >             We see this pattern here and the max size seems to be 168
+> >             events, was it
+> >             similar in your previous tests ?
+> >
+> >         If I'm running the same test on 2.4 or 2.3 the max number of
+> >         events is much bigger, like ~10000
+> >         (I don't have the exact number right now, I will rebuild and ru=
+n
+> >         the test again and get back
+> >         with traces from that run)
+> >
+> >     For 2.4.2 the log looks like this:
+> >     ./test.run ./tracetest
+> >
+> >     lttng (LTTng Trace Control) 2.4.2 - =C3=89poque Opaque
+> >     BabelTrace Trace Viewer and Converter 1.2.1
+> >     linux-vdso.so.1 =3D>  (0x00007fff775fe000)
+> >     liblttng-ctl.so.0 =3D> /usr/local/lib/liblttng-ctl.so.0
+> >     (0x00002b2b016e4000)
+> >     libpopt.so.0 =3D> /lib/x86_64-linux-gnu/libpopt.so.0
+> (0x00002b2b0190f000)
+> >     libpthread.so.0 =3D> /lib/x86_64-linux-gnu/libpthread.so.0
+> >     (0x00002b2b01b1b000)
+> >     libc.so.6 =3D> /lib/x86_64-linux-gnu/libc.so.6 (0x00002b2b01d39000)
+> >     librt.so.1 =3D> /lib/x86_64-linux-gnu/librt.so.1 (0x00002b2b020ff00=
+0)
+> >     liburcu.so.3 =3D> /usr/local/lib/liburcu.so.3 (0x00002b2b02307000)
+> >     /lib64/ld-linux-x86-64.so.2 (0x00002b2b014bf000)
+> >
+> >     Session test created.
+> >     Default snapshot output set to: //lttng-traces/test-20141113-093611
+> >     Snapshot mode set. Every channel enabled for that session will be
+> >     set in overwrite mode and mmap output.
+> >     UST channel ch1 enabled for session test
+> >     UST event * created in channel ch1
+> >     Tracing started for session test
+> >     Tracing session test: [active snapshot]
+> >         Trace path:
+> >
+> >     =3D=3D=3D Domain: UST global =3D=3D=3D
+> >
+> >     Buffer type: per UID
+> >
+> >     Channels:
+> >     -------------
+> >     - ch1: [enabled]
+> >
+> >         Attributes:
+> >           overwrite mode: 1
+> >           subbufers size: 4096
+> >           number of subbufers: 16
+> >           switch timer interval: 0
+> >           read timer interval: 0
+> >           output: mmap()
+> >
+> >         Events:
+> >           * (type: tracepoint) [enabled]
+> >
+> >     Snapshot recorded successfully for session test
+> >     1000
+> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+> >     [09:36:11.985857254] (+0.000000501) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+> >     Snapshot recorded successfully for session test
+> >     2000
+> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+> >     [09:36:12.033066130 <tel:033066130>] (+0.000001663) 07f8cf84a38f
+> >     tracetest:first_tp: { cpu_id =3D 5 }, { my_string_field =3D "test",
+> >     my_integer_field =3D 999 }
+> >     Snapshot recorded successfully for session test
+> >     3000
+> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+> >     [09:36:12.086888121 <tel:086888121>] (+0.000001273) 07f8cf84a38f
+> >     tracetest:first_tp: { cpu_id =3D 5 }, { my_string_field =3D "test",
+> >     my_integer_field =3D 999 }
+> >     Snapshot recorded successfully for session test
+> >     4000
+> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+> >     [09:36:12.147378251] (+0.000001257) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+> >     Snapshot recorded successfully for session test
+> >     5000
+> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+> >     [09:36:12.225584696] (+0.000000528) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+> >     Snapshot recorded successfully for session test
+> >     6000
+> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+> >     [09:36:12.288311172] (+0.000000571) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 7 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+> >     Snapshot recorded successfully for session test
+> >     7000
+> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+> >     [09:36:12.375789307] (+0.000001238) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+> >     Snapshot recorded successfully for session test
+> >     7000
+> >     [09:36:12.032314084] (+?.?????????) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+> >     [09:36:12.460756779] (+0.000001248) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+> >     Snapshot recorded successfully for session test
+> >     8000
+> >     [09:36:12.032314084] (+?.?????????) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+> >     [09:36:12.540464090] (+0.000001292) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 7 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+> >     Snapshot recorded successfully for session test
+> >     9000
+> >     [09:36:12.032314084] (+?.?????????) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+> >     [09:36:12.621992931] (+0.000001298) 07f8cf84a38f tracetest:first_tp=
+:
+> >     { cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+> >     Waiting for data availability
+> >     Tracing stopped for session test
+> >     Session test destroyed
+> >
+> >
+> >
+> >             >
+> >             > Unless I'm mistaken, the behavior of the snapshot mode ha=
+s
+> changed
+> >             > between 2.4 and 2.5.
+> >             >
+> >             > In the 2.4 series, consecutive snapshots could overlap;
+> that is,
+> >             > events could be present in multiple snapshots. As of 2.5,
+> an event is
+> >             > guaranteed to only appear in one snapshot as the events
+> are considered
+> >             > as having been "consumed" at that point.
+> >
+> >             Hum, no the behavior is still the same, consecutive
+> >             snapshots can overlap.
+> >
+> >             Could you tell us on which architecture you are experiencin=
+g
+> >             the problem
+> >             and the number of CPUs ?
+> >
+> >         The traces appended is from my laptop running Ubuntu 14.04 with
+> >         "8" cpu's
+> >         model name      : Intel(R) Core(TM) i7-2760QM CPU @ 2.40GHz
+> >         I have also run this on ARM with 16 cores and a powerpc
+> >
+> >
+> >             Thanks,
+> >
+> >             Julien
+> >
+> >
+> >
+> >
+>
+
+--f46d04426bbc711c440507c10710
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">No, I get the same problem with or w/o setting the size<di=
+v class=3D"gmail_extra"><br clear=3D"all"><div><div class=3D"gmail_signatur=
+e">Anders Wallin</div></div>
+<br><div class=3D"gmail_quote">On Thu, Nov 13, 2014 at 5:45 PM, Julien Desf=
+ossez <span dir=3D"ltr">&lt;<a href=3D"mailto:jdesfossez@efficios.com" targ=
+et=3D"_blank">jdesfossez@efficios.com</a>&gt;</span> wrote:<br><blockquote =
+class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid=
+;padding-left:1ex">Ok, so if you don&#39;t limit the size of the snapshot (=
+remove the -m 1G) it<br>
+works as expected ?<br>
+<br>
+Julien<br>
+<span class=3D""><br>
+On 14-11-13 10:33 AM, Anders Wallin wrote:<br>
+&gt; bug is introduced in=C2=A0 68808f4e0bbb3adccff72ff9dab6ec9f3a9e6866<br=
+>
+&gt;<br>
+&gt; Regards<br>
+&gt;<br>
+&gt; Anders<br>
+&gt;<br>
+&gt; Anders Wallin<br>
+&gt;<br>
+&gt; On Thu, Nov 13, 2014 at 10:39 AM, Anders Wallin &lt;<a href=3D"mailto:=
+wallinux@gmail.com">wallinux@gmail.com</a><br>
+</span><span class=3D"">&gt; &lt;mailto:<a href=3D"mailto:wallinux@gmail.co=
+m">wallinux@gmail.com</a>&gt;&gt; wrote:<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Anders Wallin<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0On Thu, Nov 13, 2014 at 8:43 AM, Anders Wallin &lt;=
+<a href=3D"mailto:wallinux@gmail.com">wallinux@gmail.com</a><br>
+</span><span class=3D"">&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailt=
+o:wallinux@gmail.com">wallinux@gmail.com</a>&gt;&gt; wrote:<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0On Thu, Nov 13, 2014 at 12:11 AM, Jul=
+ien Desfossez<br>
+</span><span class=3D"">&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;<a href=
+=3D"mailto:jdesfossez@efficios.com">jdesfossez@efficios.com</a> &lt;mailto:=
+<a href=3D"mailto:jdesfossez@efficios.com">jdesfossez@efficios.com</a>&gt;&=
+gt; wrote:<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Hi,<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0On 14-11-12 05:30 PM, J=
+=C3=A9r=C3=A9mie Galarneau wrote:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; On Wed, Nov 12, 20=
+14 at 7:39 AM, Anders Wallin<br>
+</span><div><div class=3D"h5">&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0&lt;<a href=3D"mailto:wallinux@gmail.com">wallinux@gmail.com</a> &lt=
+;mailto:<a href=3D"mailto:wallinux@gmail.com">wallinux@gmail.com</a>&gt;&gt=
+; wrote:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Hi,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; using userspac=
+e snapshot mode in 2.5 seems to broken.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; I have small s=
+tupid application(tracetest) generating<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A01000 events<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Running the sc=
+ript (the below is simplified version of<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0the script)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0-----------------------=
+-----------------------------------------------------------<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; #!/bin/bash<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; LTTNG=3D&#39;l=
+ttng -n&#39;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; lttng-sessiond=
+ --no-kernel &amp;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; You should use the=
+ &quot;-d&quot; flag to launch the sessiond as a<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0daemon. Using<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; &quot;&amp;&quot; =
+might cause the &quot;create&quot; command to launch a second<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0session daemon<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; since the first on=
+e would not have had the time to open<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0create its<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; command sockets.<b=
+r>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG create =
+test --snapshot<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG enable-=
+channel -u --subbuf-size 64k --num-subbuf<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A016 --overwrite ch1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG enable-=
+event -u -c ch1 &quot;*&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG start<b=
+r>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG list ch=
+1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; mkdir -p snaps=
+hot/<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; for i in $(seq=
+ 1 $LOOPS); do<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0./tracetest<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0$LTTNG snapshot record -m 1G<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0# print no of events and first and last event<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0last=3D$(ls -1drt $HOME/lttng-traces/$SESSION*/* | tail -1)<br>
+</div></div>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=
+=A0 =C2=A0 =C2=A0babeltrace $last &gt; snapshot/$<a href=3D"http://i.bt" ta=
+rget=3D"_blank">i.bt</a> &lt;<a href=3D"http://i.bt" target=3D"_blank">http=
+://i.bt</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0cat snapshot/$<a href=3D"http://i.bt" target=3D"_blank">i.bt</a> &lt;=
+<a href=3D"http://i.bt" target=3D"_blank">http://i.bt</a>&gt; | wc -l<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0cat snapshot/$<a href=3D"http://i.bt" target=3D"_blank">i.bt</a> &lt;=
+<a href=3D"http://i.bt" target=3D"_blank">http://i.bt</a>&gt; | head -1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0cat snapshot/$<a href=3D"http://i.bt" target=3D"_blank">i.bt</a> &lt;=
+<a href=3D"http://i.bt" target=3D"_blank">http://i.bt</a>&gt; | tail -1<br>
+<div><div class=3D"h5">&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+&gt;&gt; done<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG stop<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG destroy=
+ $SESSION<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0-----------------------=
+-----------------------------------------------------------<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; The result of =
+the run looks like this;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ./test.run<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Error: consume=
+r err socket second poll error<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Error: Health =
+error occurred in thread_manage_consumer<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; PERROR - 13:36=
+:59.685167 [23772/23781]: bind inet:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Address already in use<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (in lttcomm_bi=
+nd_inet_sock() at inet.c:109)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Warning: Anoth=
+er session daemon is using this JUL port.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0JUL support will be<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; deactivated to=
+ prevent interfering with the tracing.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; Is there a reason =
+why you run two session daemons? I&#39;m<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0guessing this<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; is related to my &=
+quot;&amp; vs -d&quot; comment above.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; lttng (LTTng T=
+race Control) 2.5.2 - Fumisterie<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; BabelTrace Tra=
+ce Viewer and Converter 1.2.4<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0linux-vdso.so.1 =3D&gt;=C2=A0 (0x00007fffba966000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0liblttng-ctl.so.0 =3D&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/usr/lib/x86_64-linux-g=
+nu/liblttng-ctl.so.0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (0x00007fbfe4b=
+1d000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0librt.so.1 =3D&gt; /lib/x86_64-linux-gnu/librt.so.1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0(0x00007fbfe4915000)<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libxml2.so.2 =3D&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/usr/lib/x86_64-linux-g=
+nu/libxml2.so.2<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (0x00007fbfe45=
+ae000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libpopt.so.0 =3D&gt; /lib/x86_64-linux-gnu/libpopt.so.0=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (0x00007fbfe43=
+a2000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libpthread.so.0 =3D&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/lib/x86_64-linux-gnu/l=
+ibpthread.so.0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (0x00007fbfe41=
+84000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libc.so.6 =3D&gt; /lib/x86_64-linux-gnu/libc.so.6<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0(0x00007fbfe3dbd000)<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0/lib64/ld-linux-x86-64.so.2 (0x00007fbfe4fac000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0liburcu.so.2 =3D&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/usr/lib/x86_64-linux-g=
+nu/liburcu.so.2<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (0x00007fbfe3b=
+b6000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libdl.so.2 =3D&gt; /lib/x86_64-linux-gnu/libdl.so.2<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0(0x00007fbfe39b2000)<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libz.so.1 =3D&gt; /lib/x86_64-linux-gnu/libz.so.1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0(0x00007fbfe3798000)<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0liblzma.so.5 =3D&gt; /lib/x86_64-linux-gnu/liblzma.so.5=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (0x00007fbfe35=
+76000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libm.so.6 =3D&gt; /lib/x86_64-linux-gnu/libm.so.6<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0(0x00007fbfe3270000)<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Session test c=
+reated.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Default snapsh=
+ot output set to:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; /home/awallin/=
+lttng-traces/test-20141112-133700<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot mode =
+set. Every channel enabled for that session<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0will be set in<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; overwrite mode=
+ and mmap output.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; UST channel ch=
+1 enabled for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; UST event * cr=
+eated in channel ch1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Tracing starte=
+d for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Tracing sessio=
+n test: [active snapshot]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0Trace path:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0Live timer interval (usec): 4294967295<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D=3D=3D Doma=
+in: UST global =3D=3D=3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Channels:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; -------------<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; - ch1: [enable=
+d]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0Attributes:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0overwrite mode: 1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0subbufers size: 4096<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0number of subbufers: 16<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0switch timer interval: 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0read timer interval: 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0trace file count: 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0trace file size (bytes): 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0output: mmap()<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0Events:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0* (type: tracepoint) [enabled]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 84<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8526=
+15950] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 4 }, { baddr =3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A00x7FFFC6BC7000, sopath<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8537=
+98949] (+0.000000805) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 6=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 157<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8537=
+35195] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 6=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 92=
+7 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8948=
+39116] (+0.000000299) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 5=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8537=
+35195] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 6=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 92=
+7 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.9294=
+47330] (+0.000000305) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 5=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Something is wrong from=
+ here:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8944=
+11117] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFF6BF81000, sopath<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.9720=
+35546] (+0.000000597) arn-awallin-mint-l3 tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 6=
+ }, { my_string_field =3D &quot;test&quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8944=
+11117] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFF6BF81000, sopath<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+</div></div>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [1=
+3:37:01.<a href=3D"tel:014060940" value=3D"+4614060940">014060940</a> &lt;t=
+el:<a href=3D"tel:014060940" value=3D"+4614060940">014060940</a>&gt;] (+0.0=
+00000341)<br>
+<span class=3D"">&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0arn-aw=
+allin-mint-l3 tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 7=
+ }, { my_string_field =3D &quot;test&quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8944=
+11117] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFF6BF81000, sopath<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+</span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:=
+01.<a href=3D"tel:052555877" value=3D"+4652555877">052555877</a> &lt;tel:<a=
+ href=3D"tel:052555877" value=3D"+4652555877">052555877</a>&gt;] (+0.000000=
+872)<br>
+<span class=3D"">&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0arn-aw=
+allin-mint-l3 tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 6=
+ }, { my_string_field =3D &quot;test&quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0... to here.<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0The beginning timestamp=
+ is the same, the number of events is<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0the same,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0but the end timestamp m=
+oves. We see also this pattern below.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0I would be really inter=
+ested to see the whole snapshots when<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0it happens.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0It seems like we are no=
+t be overwriting the beginning of the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ring buffer<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0in some conditions. Cou=
+ld you send us your tracetest program<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0and the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0script so we can try to=
+ reproduce the problem ?<br>
+&gt;<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0I will append it including a run with=
+ debug turned on and all<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0the snapshot files created<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+</span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:=
+01.<a href=3D"tel:014035993" value=3D"+4614035993">014035993</a> &lt;tel:<a=
+ href=3D"tel:014035993" value=3D"+4614035993">014035993</a>&gt;] (+?.??????=
+???)<br>
+<span class=3D"">&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0arn-aw=
+allin-mint-l3 tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 7=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 92=
+7 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:01.0986=
+20808] (+0.000001404) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 4=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+</span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:=
+01.<a href=3D"tel:097087388" value=3D"+4697087388">097087388</a> &lt;tel:<a=
+ href=3D"tel:097087388" value=3D"+4697087388">097087388</a>&gt;] (+?.??????=
+???)<br>
+<span class=3D"">&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0arn-aw=
+allin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 6 }, { baddr =3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A00x7FFF4BFFE000, sopath<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:01.1298=
+39830] (+0.000000533) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 7=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+</span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:=
+01.<a href=3D"tel:097087388" value=3D"+4697087388">097087388</a> &lt;tel:<a=
+ href=3D"tel:097087388" value=3D"+4697087388">097087388</a>&gt;] (+?.??????=
+???)<br>
+<span class=3D"">&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0arn-aw=
+allin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 6 }, { baddr =3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A00x7FFF4BFFE000, sopath<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:01.1298=
+39830] (+0.000000533) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 7=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+</span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:=
+01.<a href=3D"tel:097087388" value=3D"+4697087388">097087388</a> &lt;tel:<a=
+ href=3D"tel:097087388" value=3D"+4697087388">097087388</a>&gt;] (+?.??????=
+???)<br>
+<div><div class=3D"h5">&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 6 }, { baddr =3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A00x7FFF4BFFE000, sopath<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:01.1728=
+29105] (+0.000000575) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 5=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:01.1720=
+21557] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 7 }, { baddr =3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A00x7FFF653FE000, sopath<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:01.2200=
+74165] (+0.000000553) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 6=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Waiting for da=
+ta availability<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Tracing stoppe=
+d for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Session test d=
+estroyed<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; the result fro=
+m the run on older versions of lttng<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0creates bigger and bigg=
+er<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; event traces u=
+ntil reaching max size.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0We see this pattern her=
+e and the max size seems to be 168<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0events, was it<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0similar in your previou=
+s tests ?<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0If I&#39;m running the same test on 2=
+.4 or 2.3 the max number of<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0events is much bigger, like ~10000<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0(I don&#39;t have the exact number ri=
+ght now, I will rebuild and run<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0the test again and get back<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0with traces from that run)<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0For 2.4.2 the log looks like this:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0./test.run ./tracetest<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0lttng (LTTng Trace Control) 2.4.2 - =C3=89poque Opa=
+que<br>
+&gt;=C2=A0 =C2=A0 =C2=A0BabelTrace Trace Viewer and Converter 1.2.1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0linux-vdso.so.1 =3D&gt;=C2=A0 (0x00007fff775fe000)<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0liblttng-ctl.so.0 =3D&gt; /usr/local/lib/liblttng-c=
+tl.so.0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0(0x00002b2b016e4000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0libpopt.so.0 =3D&gt; /lib/x86_64-linux-gnu/libpopt.=
+so.0 (0x00002b2b0190f000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0libpthread.so.0 =3D&gt; /lib/x86_64-linux-gnu/libpt=
+hread.so.0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0(0x00002b2b01b1b000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0libc.so.6 =3D&gt; /lib/x86_64-linux-gnu/libc.so.6 (=
+0x00002b2b01d39000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0librt.so.1 =3D&gt; /lib/x86_64-linux-gnu/librt.so.1=
+ (0x00002b2b020ff000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0liburcu.so.3 =3D&gt; /usr/local/lib/liburcu.so.3 (0=
+x00002b2b02307000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0/lib64/ld-linux-x86-64.so.2 (0x00002b2b014bf000)<br=
+>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Session test created.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Default snapshot output set to: //lttng-traces/test=
+-20141113-093611<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot mode set. Every channel enabled for that s=
+ession will be<br>
+&gt;=C2=A0 =C2=A0 =C2=A0set in overwrite mode and mmap output.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0UST channel ch1 enabled for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0UST event * created in channel ch1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Tracing started for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Tracing session test: [active snapshot]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Trace path:<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0=3D=3D=3D Domain: UST global =3D=3D=3D<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Buffer type: per UID<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Channels:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0-------------<br>
+&gt;=C2=A0 =C2=A0 =C2=A0- ch1: [enabled]<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Attributes:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0overwrite mode: 1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0subbufers size: 4096<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0number of subbufers: 16<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0switch timer interval: 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0read timer interval: 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0output: mmap()<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Events:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0* (type: tracepoint) [enabled]=
+<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A01000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985857254] (+0.000000501) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A02000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+</div></div>&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.033066130 &lt;tel:033066130&g=
+t;] (+0.000001663) 07f8cf84a38f<br>
+<span class=3D"">&gt;=C2=A0 =C2=A0 =C2=A0tracetest:first_tp: { cpu_id =3D 5=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A03000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+</span>&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.086888121 &lt;tel:086888121&gt;] (=
++0.000001273) 07f8cf84a38f<br>
+<div class=3D"HOEnZb"><div class=3D"h5">&gt;=C2=A0 =C2=A0 =C2=A0tracetest:f=
+irst_tp: { cpu_id =3D 5 }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A04000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.147378251] (+0.000001257) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A05000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.225584696] (+0.000000528) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A06000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.288311172] (+0.000000571) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 7 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A07000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.375789307] (+0.000001238) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A07000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.032314084] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 5 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.460756779] (+0.000001248) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A08000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.032314084] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 5 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.540464090] (+0.000001292) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 7 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A09000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.032314084] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 5 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.621992931] (+0.000001298) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 5 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Waiting for data availability<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Tracing stopped for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Session test destroyed<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; Unless I&#39;m mis=
+taken, the behavior of the snapshot mode has changed<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; between 2.4 and 2.=
+5.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; In the 2.4 series,=
+ consecutive snapshots could overlap; that is,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; events could be pr=
+esent in multiple snapshots. As of 2.5, an event is<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; guaranteed to only=
+ appear in one snapshot as the events are considered<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; as having been &qu=
+ot;consumed&quot; at that point.<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Hum, no the behavior is=
+ still the same, consecutive<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0snapshots can overlap.<=
+br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Could you tell us on wh=
+ich architecture you are experiencing<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0the problem<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0and the number of CPUs =
+?<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0The traces appended is from my laptop=
+ running Ubuntu 14.04 with<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&quot;8&quot; cpu&#39;s<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0model name=C2=A0 =C2=A0 =C2=A0 : Inte=
+l(R) Core(TM) i7-2760QM CPU @ 2.40GHz<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0I have also run this on ARM with 16 c=
+ores and a powerpc<br>
+&gt;<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Thanks,<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Julien<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+</div></div></blockquote></div><br></div></div>
+
+--f46d04426bbc711c440507c10710--
+
+
+--===============1007803062==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1007803062==--
