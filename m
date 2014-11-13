@@ -1,18 +1,19 @@
-From: J Lin <jmlin.jmlin@gmail.com>
-Subject: Re: Strange result from LTTng porting to ARM
-Date: Thu, 13 Nov 2014 13:12:14 +0800
-Message-ID: <CACtA8QRE5Y70-Tiss4siDufPyoUzgKBR7BUWR_XYwNSL0UkKuQ__49554.3215693489$1415855587$gmane$org@mail.gmail.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD6FBC890A@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Anders Wallin <wallinux@gmail.com>
+Subject: Re: snapshot issue with 2.5
+Date: Thu, 13 Nov 2014 08:33:07 +0100
+Message-ID: <CAF2baFdgjkw--AdVXMCJVtLpsyHODsYC1WhACgpqEXhYmJEo8w__30327.878209255$1415864046$gmane$org@mail.gmail.com>
+References: <CAF2baFd5vRuGKa7MVpqHvkCHia5fDN19cvq8qdedqJreNU6-vQ@mail.gmail.com>
+ <CA+jJMxvXfVT8w+hokMyFgTSqN=JH3nQUudJR+8MUJtQmTEgZZQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0106084362=="
+Content-Type: multipart/mixed; boundary="===============0189951713=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f170.google.com ([209.85.223.170])
+Received: from mail-qc0-f173.google.com ([209.85.216.173])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jmlin.jmlin@gmail.com>) id 1Xomhg-0002Yu-8W
- for lttng-dev@lists.lttng.org; Thu, 13 Nov 2014 00:12:21 -0500
-Received: by mail-ie0-f170.google.com with SMTP id tp5so15180403ieb.29
- for <lttng-dev@lists.lttng.org>; Wed, 12 Nov 2014 21:12:14 -0800 (PST)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD6FBC890A@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+ (envelope-from <wallinux@gmail.com>) id 1Xoou1-0003P7-5V
+ for lttng-dev@lists.lttng.org; Thu, 13 Nov 2014 02:33:18 -0500
+Received: by mail-qc0-f173.google.com with SMTP id x3so10448913qcv.4
+ for <lttng-dev@lists.lttng.org>; Wed, 12 Nov 2014 23:33:07 -0800 (PST)
+In-Reply-To: <CA+jJMxvXfVT8w+hokMyFgTSqN=JH3nQUudJR+8MUJtQmTEgZZQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,193 +22,643 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0106084362==
-Content-Type: multipart/alternative; boundary=001a113fe8862f28b80507b68ef2
+--===============0189951713==
+Content-Type: multipart/alternative; boundary=001a11c2f87203e9500507b8861d
 
---001a113fe8862f28b80507b68ef2
+--001a11c2f87203e9500507b8861d
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hello Daniel,
+On Wed, Nov 12, 2014 at 11:30 PM, J=C3=A9r=C3=A9mie Galarneau <
+jeremie.galarneau@efficios.com> wrote:
 
-I should correct myself and say cross compiled LTTng to run on ARM. We
-installed lttng-modules via insmod and verified with lsmod. Regarding
-lttng-modules, there was a problem compiling where duplicate definition
-occurred. We use kernel version 3.8 and in the source code saw the
-conflicting section "should be" guarded for version less than 3.15. So we
-added version check to work around it.
-
-We have not tested ust yet. But have compiled all three (lttng-ust,
-lttng-tools, lttng-modules) and placed on development board. Right now, we
-are just doing a simple trace for a certain irq that triggers every 4ms.
-This is the most information we got:
-[00:01:36.985006316] (+0.001175688) (none) lttng_statedump_interrupt: {
-cpu_id =3D 0 }, { irq =3D 29, name =3D "GIC", action =3D "twd" }
-
-Also noticed this when creating a session:
-[ 2][   64.512057] ##### send signal SIG : 10,
-lttng-sessiond(373)->lttng(262) __send_signal
-
-Thanks,
-MIKE
-
-2014-11-13 3:10 GMT+08:00 Thibault, Daniel <Daniel.Thibault@drdc-rddc.gc.ca=
->
+> On Wed, Nov 12, 2014 at 7:39 AM, Anders Wallin <wallinux@gmail.com> wrote=
 :
+> > Hi,
+> >
+> > using userspace snapshot mode in 2.5 seems to broken.
+> >
+> > I have small stupid application(tracetest) generating 1000 events
+> >
+> > Running the script (the below is simplified version of the script)
+> >
+> -------------------------------------------------------------------------=
+---------
+> > #!/bin/bash
+> > LTTNG=3D'lttng -n'
+> > lttng-sessiond --no-kernel &
+>
+> You should use the "-d" flag to launch the sessiond as a daemon. Using
+> "&" might cause the "create" command to launch a second session daemon
+> since the first one would not have had the time to open create its
+> command sockets.
+>
+No reason, but I changed it now "-d". On my laptop I already have a
+sessiond running for kernelspace
+and I wanted my test case to be as simple as possible to prove the faulty
+behavior.
+I have an ARM and a powerpc target as well and on them I'm running the same
+test w/o a sessiond for the kernel
+and not tracing kernel at all.
 
-> ----------------------------------------------------------------------
-> Date: Wed, 12 Nov 2014 23:26:41 +0800
-> From: J Lin <jmlin.jmlin@gmail.com>
+
 >
-> > I've recently ported LTTng to ARM and I can't seem to understand what i=
-s
-> going wrong with my results. I ran a typical session with "lttng
-> enable-event -k -a" for test. Here are the observations:
 > >
-> > 1. only "lttng_xxx (e.g, lttng_statedump_interrupts)" are recorded 2.
-> different sessions yield trace on different CPU (the system has 4) but no=
-t
-> for all 4, just 1 cpu 3. no recorded session span more than 1 second thou=
-gh
-> I would run sleep (i.e., 10s) between "start" and "stop"
+> > $LTTNG create test --snapshot
+> > $LTTNG enable-channel -u --subbuf-size 64k --num-subbuf 16 --overwrite
+> ch1
+> > $LTTNG enable-event -u -c ch1 "*"
+> > $LTTNG start
+> > $LTTNG list ch1
 > >
-> > This leads me to believe LTTng might be dependent on something in the
-> system that isn't present. This is a customized kernel of a client. It ha=
-s
-> all required configs.
+> > mkdir -p snapshot/
 > >
-> > If there is a trigger mechanism after running "lttng start", what would
-> it be? It seems it grabs items initially then doesn't continue. I read in
-> one of the papers that LTTng is architecture dependent. Any help is
-> appreciated.
+> > for i in $(seq 1 $LOOPS); do
+> >     ./tracetest
+> >     $LTTNG snapshot record -m 1G
 > >
-> > Mike
+> >     # print no of events and first and last event
+> >     last=3D$(ls -1drt $HOME/lttng-traces/$SESSION*/* | tail -1)
+> >     babeltrace $last > snapshot/$i.bt
+> >     cat snapshot/$i.bt | wc -l
+> >     cat snapshot/$i.bt | head -1
+> >     cat snapshot/$i.bt | tail -1
+> > done
+> >
+> > $LTTNG stop
+> > $LTTNG destroy $SESSION
+> >
+> -------------------------------------------------------------------------=
+---------
+> >
+> > The result of the run looks like this;
+> > ./test.run
+> > Error: consumer err socket second poll error
+> > Error: Health error occurred in thread_manage_consumer
+> > PERROR - 13:36:59.685167 [23772/23781]: bind inet: Address already in u=
+se
+> > (in lttcomm_bind_inet_sock() at inet.c:109)
+> > Warning: Another session daemon is using this JUL port. JUL support wil=
+l
+> be
+> > deactivated to prevent interfering with the tracing.
+> >
 >
->    How exactly did you "port" LTTng to ARM?  As far as I know, you need
-> only rebuild it there.  Your symptoms lead me to believe you may have not
-> installed the requisite lttng-modules.  Did you test user-space tracing?
+> Is there a reason why you run two session daemons? I'm guessing this
+> is related to my "& vs -d" comment above.
+
+
+> > lttng (LTTng Trace Control) 2.5.2 - Fumisterie
+> > BabelTrace Trace Viewer and Converter 1.2.4
+> >         linux-vdso.so.1 =3D>  (0x00007fffba966000)
+> >         liblttng-ctl.so.0 =3D> /usr/lib/x86_64-linux-gnu/liblttng-ctl.s=
+o.0
+> > (0x00007fbfe4b1d000)
+> >         librt.so.1 =3D> /lib/x86_64-linux-gnu/librt.so.1
+> (0x00007fbfe4915000)
+> >         libxml2.so.2 =3D> /usr/lib/x86_64-linux-gnu/libxml2.so.2
+> > (0x00007fbfe45ae000)
+> >         libpopt.so.0 =3D> /lib/x86_64-linux-gnu/libpopt.so.0
+> > (0x00007fbfe43a2000)
+> >         libpthread.so.0 =3D> /lib/x86_64-linux-gnu/libpthread.so.0
+> > (0x00007fbfe4184000)
+> >         libc.so.6 =3D> /lib/x86_64-linux-gnu/libc.so.6 (0x00007fbfe3dbd=
+000)
+> >         /lib64/ld-linux-x86-64.so.2 (0x00007fbfe4fac000)
+> >         liburcu.so.2 =3D> /usr/lib/x86_64-linux-gnu/liburcu.so.2
+> > (0x00007fbfe3bb6000)
+> >         libdl.so.2 =3D> /lib/x86_64-linux-gnu/libdl.so.2
+> (0x00007fbfe39b2000)
+> >         libz.so.1 =3D> /lib/x86_64-linux-gnu/libz.so.1 (0x00007fbfe3798=
+000)
+> >         liblzma.so.5 =3D> /lib/x86_64-linux-gnu/liblzma.so.5
+> > (0x00007fbfe3576000)
+> >         libm.so.6 =3D> /lib/x86_64-linux-gnu/libm.so.6 (0x00007fbfe3270=
+000)
+> >
+> > Session test created.
+> > Default snapshot output set to:
+> > /home/awallin/lttng-traces/test-20141112-133700
+> > Snapshot mode set. Every channel enabled for that session will be set i=
+n
+> > overwrite mode and mmap output.
+> > UST channel ch1 enabled for session test
+> > UST event * created in channel ch1
+> > Tracing started for session test
+> > Tracing session test: [active snapshot]
+> >     Trace path:
+> >     Live timer interval (usec): 4294967295
+> >
+> > =3D=3D=3D Domain: UST global =3D=3D=3D
+> >
+> > Channels:
+> > -------------
+> > - ch1: [enabled]
+> >
+> >     Attributes:
+> >       overwrite mode: 1
+> >       subbufers size: 4096
+> >       number of subbufers: 16
+> >       switch timer interval: 0
+> >       read timer interval: 0
+> >       trace file count: 0
+> >       trace file size (bytes): 0
+> >       output: mmap()
+> >
+> >     Events:
+> >       * (type: tracepoint) [enabled]
+> >
+> > Snapshot recorded successfully for session test
+> > 84
+> > [13:37:00.852615950] (+?.?????????) arn-awallin-mint-l3
+> > ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFFC6BC700=
+0,
+> sopath
+> > =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> > [13:37:00.853798949] (+0.000000805) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 99=
+9 }
+> > Snapshot recorded successfully for session test
+> > 157
+> > [13:37:00.853735195] (+?.?????????) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 92=
+7 }
+> > [13:37:00.894839116] (+0.000000299) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 99=
+9 }
+> > Snapshot recorded successfully for session test
+> > 168
+> > [13:37:00.853735195] (+?.?????????) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 92=
+7 }
+> > [13:37:00.929447330] (+0.000000305) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 99=
+9 }
+> > Snapshot recorded successfully for session test
+> > 168
+> > [13:37:00.894411117] (+?.?????????) arn-awallin-mint-l3
+> > ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFF6BF8100=
+0,
+> sopath
+> > =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> > [13:37:00.972035546] (+0.000000597) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 99=
+9 }
+> > Snapshot recorded successfully for session test
+> > 168
+> > [13:37:00.894411117] (+?.?????????) arn-awallin-mint-l3
+> > ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFF6BF8100=
+0,
+> sopath
+> > =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> > [13:37:01.014060940] (+0.000000341) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 7 }, { my_string_field =3D "test", my_integer_field =3D 99=
+9 }
+> > Snapshot recorded successfully for session test
+> > 168
+> > [13:37:00.894411117] (+?.?????????) arn-awallin-mint-l3
+> > ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFF6BF8100=
+0,
+> sopath
+> > =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> > [13:37:01.052555877] (+0.000000872) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 99=
+9 }
+> > Snapshot recorded successfully for session test
+> > 168
+> > [13:37:01.014035993] (+?.?????????) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 7 }, { my_string_field =3D "test", my_integer_field =3D 92=
+7 }
+> > [13:37:01.098620808] (+0.000001404) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =3D 99=
+9 }
+> > Snapshot recorded successfully for session test
+> > 168
+> > [13:37:01.097087388] (+?.?????????) arn-awallin-mint-l3
+> > ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF4BFFE00=
+0,
+> sopath
+> > =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> > [13:37:01.129839830] (+0.000000533) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 7 }, { my_string_field =3D "test", my_integer_field =3D 99=
+9 }
+> > Snapshot recorded successfully for session test
+> > 168
+> > [13:37:01.097087388] (+?.?????????) arn-awallin-mint-l3
+> > ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF4BFFE00=
+0,
+> sopath
+> > =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> > [13:37:01.129839830] (+0.000000533) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 7 }, { my_string_field =3D "test", my_integer_field =3D 99=
+9 }
+> > Snapshot recorded successfully for session test
+> > 168
+> > [13:37:01.097087388] (+?.?????????) arn-awallin-mint-l3
+> > ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF4BFFE00=
+0,
+> sopath
+> > =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> > [13:37:01.172829105] (+0.000000575) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 99=
+9 }
+> > Snapshot recorded successfully for session test
+> > 168
+> > [13:37:01.172021557] (+?.?????????) arn-awallin-mint-l3
+> > ust_baddr_statedump:soinfo: { cpu_id =3D 7 }, { baddr =3D 0x7FFF653FE00=
+0,
+> sopath
+> > =3D "[vdso]", size =3D 0, mtime =3D -1 }
+> > [13:37:01.220074165] (+0.000000553) arn-awallin-mint-l3
+> tracetest:first_tp:
+> > { cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 99=
+9 }
+> > Waiting for data availability
+> > Tracing stopped for session test
+> > Session test destroyed
+> >
+> > the result from the run on older versions of lttng creates bigger and
+> bigger
+> > event traces until reaching max size.
+> >
 >
-> Daniel U. Thibault
-> Protection des syst=C3=A8mes et contremesures (PSC) | Systems Protection =
-&
-> Countermeasures (SPC)
-> Cyber s=C3=A9curit=C3=A9 pour les missions essentielles (CME) | Mission C=
-ritical
-> Cyber Security (MCCS)
-> RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research
-> Centre
-> 2459 route de la Bravoure
-> Qu=C3=A9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
+> Unless I'm mistaken, the behavior of the snapshot mode has changed
+> between 2.4 and 2.5.
+>
+> In the 2.4 series, consecutive snapshots could overlap; that is,
+> events could be present in multiple snapshots. As of 2.5, an event is
+> guaranteed to only appear in one snapshot as the events are considered
+> as having been "consumed" at that point.
+>
+> Julien (cc'ed) might be able to confirm this.
+>
+> Regards,
+> J=C3=A9r=C3=A9mie
+>
+> > I have tested this on different architectures, with different buffer
+> sizes
+> > and number of buffer
+> >
+> > Regards
+> > Anders Wallin
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >
+>
+>
+>
+> --
+> J=C3=A9r=C3=A9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
 >
 
---001a113fe8862f28b80507b68ef2
+--001a11c2f87203e9500507b8861d
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><span style=3D"font-family:arial,sans-serif;font-size:14px=
-">Hello Daniel,</span><div style=3D"font-family:arial,sans-serif;font-size:=
-14px"><br></div><div style=3D"font-family:arial,sans-serif;font-size:14px">=
-I should correct myself and say cross compiled LTTng to run on ARM. We inst=
-alled lttng-modules via insmod and verified with lsmod. Regarding lttng-mod=
-ules, there was a problem compiling where duplicate definition occurred. We=
- use kernel version 3.8 and in the source code saw the conflicting section =
-&quot;should be&quot; guarded for version less than 3.15. So we added versi=
-on check to work around it.</div><div style=3D"font-family:arial,sans-serif=
-;font-size:14px"><br></div><div style=3D"font-family:arial,sans-serif;font-=
-size:14px">We have not tested ust yet. But have compiled all three (lttng-u=
-st, lttng-tools, lttng-modules) and placed on development board. Right now,=
- we are just doing a simple trace for a certain irq that triggers every 4ms=
-. This is the most information we got:<br></div><div style=3D"font-family:a=
-rial,sans-serif;font-size:14px">[00:01:36.985006316] (+0.001175688) (none) =
-lttng_statedump_interrupt: { cpu_id =3D 0 }, { irq =3D 29, name =3D &quot;G=
-IC&quot;, action =3D &quot;twd&quot; }<br></div><div style=3D"font-family:a=
-rial,sans-serif;font-size:14px"><br></div><div style=3D"font-family:arial,s=
-ans-serif;font-size:14px">Also noticed this when creating a session:</div><=
-div style=3D"font-family:arial,sans-serif;font-size:14px">[ 2][ =C2=A0 64.5=
-12057] ##### send signal SIG : 10, lttng-sessiond(373)-&gt;lttng(262) __sen=
-d_signal</div><div style=3D"font-family:arial,sans-serif;font-size:14px"><b=
-r></div><div style=3D"font-family:arial,sans-serif;font-size:14px">Thanks,<=
-/div><div style=3D"font-family:arial,sans-serif;font-size:14px">MIKE</div><=
-div class=3D"gmail_extra"><br><div class=3D"gmail_quote">2014-11-13 3:10 GM=
-T+08:00 Thibault, Daniel <span dir=3D"ltr">&lt;<a href=3D"mailto:Daniel.Thi=
-bault@drdc-rddc.gc.ca" target=3D"_blank">Daniel.Thibault@drdc-rddc.gc.ca</a=
->&gt;</span>:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8=
-ex;border-left:1px #ccc solid;padding-left:1ex">---------------------------=
--------------------------------------------<br>
-Date: Wed, 12 Nov 2014 23:26:41 +0800<br>
-From: J Lin &lt;<a href=3D"mailto:jmlin.jmlin@gmail.com">jmlin.jmlin@gmail.=
-com</a>&gt;<br>
+<div dir=3D"ltr"><div class=3D"gmail_extra"><div class=3D"gmail_quote">On W=
+ed, Nov 12, 2014 at 11:30 PM, J=C3=A9r=C3=A9mie Galarneau <span dir=3D"ltr"=
+>&lt;<a href=3D"mailto:jeremie.galarneau@efficios.com" target=3D"_blank">je=
+remie.galarneau@efficios.com</a>&gt;</span> wrote:<br><blockquote class=3D"=
+gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-=
+left:1ex"><span class=3D"">On Wed, Nov 12, 2014 at 7:39 AM, Anders Wallin &=
+lt;<a href=3D"mailto:wallinux@gmail.com">wallinux@gmail.com</a>&gt; wrote:<=
+br>
+&gt; Hi,<br>
+&gt;<br>
+&gt; using userspace snapshot mode in 2.5 seems to broken.<br>
+&gt;<br>
+&gt; I have small stupid application(tracetest) generating 1000 events<br>
+&gt;<br>
+&gt; Running the script (the below is simplified version of the script)<br>
+&gt; ----------------------------------------------------------------------=
+------------<br>
+&gt; #!/bin/bash<br>
+&gt; LTTNG=3D&#39;lttng -n&#39;<br>
+&gt; lttng-sessiond --no-kernel &amp;<br>
+<br>
+</span>You should use the &quot;-d&quot; flag to launch the sessiond as a d=
+aemon. Using<br>
+&quot;&amp;&quot; might cause the &quot;create&quot; command to launch a se=
+cond session daemon<br>
+since the first one would not have had the time to open create its<br>
+command sockets.<br></blockquote><div>No reason, but I changed it now &quot=
+;-d&quot;. On my laptop I already have a sessiond running for kernelspace</=
+div><div>and I wanted my test case to be as simple as possible to prove the=
+ faulty behavior.</div><div>I have an ARM and a powerpc target as well and =
+on them I&#39;m running the same test w/o a sessiond for the kernel=C2=A0</=
+div><div>and not tracing kernel at all.</div><div>=C2=A0</div><blockquote c=
+lass=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;=
+padding-left:1ex">
 <div><div class=3D"h5"><br>
-&gt; I&#39;ve recently ported LTTng to ARM and I can&#39;t seem to understa=
-nd what is going wrong with my results. I ran a typical session with &quot;=
-lttng enable-event -k -a&quot; for test. Here are the observations:<br>
 &gt;<br>
-&gt; 1. only &quot;lttng_xxx (e.g, lttng_statedump_interrupts)&quot; are re=
-corded 2. different sessions yield trace on different CPU (the system has 4=
-) but not for all 4, just 1 cpu 3. no recorded session span more than 1 sec=
-ond though I would run sleep (i.e., 10s) between &quot;start&quot; and &quo=
-t;stop&quot;<br>
+&gt; $LTTNG create test --snapshot<br>
+&gt; $LTTNG enable-channel -u --subbuf-size 64k --num-subbuf 16 --overwrite=
+ ch1<br>
+&gt; $LTTNG enable-event -u -c ch1 &quot;*&quot;<br>
+&gt; $LTTNG start<br>
+&gt; $LTTNG list ch1<br>
 &gt;<br>
-&gt; This leads me to believe LTTng might be dependent on something in the =
-system that isn&#39;t present. This is a customized kernel of a client. It =
-has all required configs.<br>
+&gt; mkdir -p snapshot/<br>
 &gt;<br>
-&gt; If there is a trigger mechanism after running &quot;lttng start&quot;,=
- what would it be? It seems it grabs items initially then doesn&#39;t conti=
-nue. I read in one of the papers that LTTng is architecture dependent. Any =
-help is appreciated.<br>
+&gt; for i in $(seq 1 $LOOPS); do<br>
+&gt;=C2=A0 =C2=A0 =C2=A0./tracetest<br>
+&gt;=C2=A0 =C2=A0 =C2=A0$LTTNG snapshot record -m 1G<br>
 &gt;<br>
-</div></div>&gt; Mike<br>
+&gt;=C2=A0 =C2=A0 =C2=A0# print no of events and first and last event<br>
+&gt;=C2=A0 =C2=A0 =C2=A0last=3D$(ls -1drt $HOME/lttng-traces/$SESSION*/* | =
+tail -1)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0babeltrace $last &gt; snapshot/$<a href=3D"http://i=
+.bt" target=3D"_blank">i.bt</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0cat snapshot/$<a href=3D"http://i.bt" target=3D"_bl=
+ank">i.bt</a> | wc -l<br>
+&gt;=C2=A0 =C2=A0 =C2=A0cat snapshot/$<a href=3D"http://i.bt" target=3D"_bl=
+ank">i.bt</a> | head -1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0cat snapshot/$<a href=3D"http://i.bt" target=3D"_bl=
+ank">i.bt</a> | tail -1<br>
+&gt; done<br>
+&gt;<br>
+&gt; $LTTNG stop<br>
+&gt; $LTTNG destroy $SESSION<br>
+&gt; ----------------------------------------------------------------------=
+------------<br>
+&gt;<br>
+&gt; The result of the run looks like this;<br>
+&gt; ./test.run<br>
+&gt; Error: consumer err socket second poll error<br>
+&gt; Error: Health error occurred in thread_manage_consumer<br>
+&gt; PERROR - 13:36:59.685167 [23772/23781]: bind inet: Address already in =
+use<br>
+&gt; (in lttcomm_bind_inet_sock() at inet.c:109)<br>
+&gt; Warning: Another session daemon is using this JUL port. JUL support wi=
+ll be<br>
+&gt; deactivated to prevent interfering with the tracing.<br>
+&gt;<br>
 <br>
-=C2=A0 =C2=A0How exactly did you &quot;port&quot; LTTng to ARM?=C2=A0 As fa=
-r as I know, you need only rebuild it there.=C2=A0 Your symptoms lead me to=
- believe you may have not installed the requisite lttng-modules.=C2=A0 Did =
-you test user-space tracing?<br>
+</div></div>Is there a reason why you run two session daemons? I&#39;m gues=
+sing this<br>
+is related to my &quot;&amp; vs -d&quot; comment above.=C2=A0</blockquote><=
+blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px=
+ #ccc solid;padding-left:1ex">
+<div><div class=3D"h5"><br>
+&gt; lttng (LTTng Trace Control) 2.5.2 - Fumisterie<br>
+&gt; BabelTrace Trace Viewer and Converter 1.2.4<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0linux-vdso.so.1 =3D&gt;=C2=A0 (0x0000=
+7fffba966000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0liblttng-ctl.so.0 =3D&gt; /usr/lib/x8=
+6_64-linux-gnu/liblttng-ctl.so.0<br>
+&gt; (0x00007fbfe4b1d000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0librt.so.1 =3D&gt; /lib/x86_64-linux-=
+gnu/librt.so.1 (0x00007fbfe4915000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0libxml2.so.2 =3D&gt; /usr/lib/x86_64-=
+linux-gnu/libxml2.so.2<br>
+&gt; (0x00007fbfe45ae000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0libpopt.so.0 =3D&gt; /lib/x86_64-linu=
+x-gnu/libpopt.so.0<br>
+&gt; (0x00007fbfe43a2000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0libpthread.so.0 =3D&gt; /lib/x86_64-l=
+inux-gnu/libpthread.so.0<br>
+&gt; (0x00007fbfe4184000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0libc.so.6 =3D&gt; /lib/x86_64-linux-g=
+nu/libc.so.6 (0x00007fbfe3dbd000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/lib64/ld-linux-x86-64.so.2 (0x00007f=
+bfe4fac000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0liburcu.so.2 =3D&gt; /usr/lib/x86_64-=
+linux-gnu/liburcu.so.2<br>
+&gt; (0x00007fbfe3bb6000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0libdl.so.2 =3D&gt; /lib/x86_64-linux-=
+gnu/libdl.so.2 (0x00007fbfe39b2000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0libz.so.1 =3D&gt; /lib/x86_64-linux-g=
+nu/libz.so.1 (0x00007fbfe3798000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0liblzma.so.5 =3D&gt; /lib/x86_64-linu=
+x-gnu/liblzma.so.5<br>
+&gt; (0x00007fbfe3576000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0libm.so.6 =3D&gt; /lib/x86_64-linux-g=
+nu/libm.so.6 (0x00007fbfe3270000)<br>
+&gt;<br>
+&gt; Session test created.<br>
+&gt; Default snapshot output set to:<br>
+&gt; /home/awallin/lttng-traces/test-20141112-133700<br>
+&gt; Snapshot mode set. Every channel enabled for that session will be set =
+in<br>
+&gt; overwrite mode and mmap output.<br>
+&gt; UST channel ch1 enabled for session test<br>
+&gt; UST event * created in channel ch1<br>
+&gt; Tracing started for session test<br>
+&gt; Tracing session test: [active snapshot]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Trace path:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Live timer interval (usec): 4294967295<br>
+&gt;<br>
+&gt; =3D=3D=3D Domain: UST global =3D=3D=3D<br>
+&gt;<br>
+&gt; Channels:<br>
+&gt; -------------<br>
+&gt; - ch1: [enabled]<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Attributes:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0overwrite mode: 1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0subbufers size: 4096<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0number of subbufers: 16<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0switch timer interval: 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0read timer interval: 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0trace file count: 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0trace file size (bytes): 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0output: mmap()<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Events:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0* (type: tracepoint) [enabled]<br>
+&gt;<br>
+&gt; Snapshot recorded successfully for session test<br>
+&gt; 84<br>
+&gt; [13:37:00.852615950] (+?.?????????) arn-awallin-mint-l3<br>
+&gt; ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFFC6BC70=
+00, sopath<br>
+&gt; =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt; [13:37:00.853798949] (+0.000000805) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 6 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 999 }<br>
+&gt; Snapshot recorded successfully for session test<br>
+&gt; 157<br>
+&gt; [13:37:00.853735195] (+?.?????????) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 6 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 927 }<br>
+&gt; [13:37:00.894839116] (+0.000000299) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 5 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 999 }<br>
+&gt; Snapshot recorded successfully for session test<br>
+&gt; 168<br>
+&gt; [13:37:00.853735195] (+?.?????????) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 6 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 927 }<br>
+&gt; [13:37:00.929447330] (+0.000000305) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 5 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 999 }<br>
+&gt; Snapshot recorded successfully for session test<br>
+&gt; 168<br>
+&gt; [13:37:00.894411117] (+?.?????????) arn-awallin-mint-l3<br>
+&gt; ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFF6BF810=
+00, sopath<br>
+&gt; =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt; [13:37:00.972035546] (+0.000000597) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 6 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 999 }<br>
+&gt; Snapshot recorded successfully for session test<br>
+&gt; 168<br>
+&gt; [13:37:00.894411117] (+?.?????????) arn-awallin-mint-l3<br>
+&gt; ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFF6BF810=
+00, sopath<br>
+&gt; =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt; [13:37:01.014060940] (+0.000000341) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 7 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 999 }<br>
+&gt; Snapshot recorded successfully for session test<br>
+&gt; 168<br>
+&gt; [13:37:00.894411117] (+?.?????????) arn-awallin-mint-l3<br>
+&gt; ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFF6BF810=
+00, sopath<br>
+&gt; =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt; [13:37:01.052555877] (+0.000000872) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 6 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 999 }<br>
+&gt; Snapshot recorded successfully for session test<br>
+&gt; 168<br>
+&gt; [13:37:01.014035993] (+?.?????????) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 7 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 927 }<br>
+&gt; [13:37:01.098620808] (+0.000001404) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 4 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 999 }<br>
+&gt; Snapshot recorded successfully for session test<br>
+&gt; 168<br>
+&gt; [13:37:01.097087388] (+?.?????????) arn-awallin-mint-l3<br>
+&gt; ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF4BFFE0=
+00, sopath<br>
+&gt; =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt; [13:37:01.129839830] (+0.000000533) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 7 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 999 }<br>
+&gt; Snapshot recorded successfully for session test<br>
+&gt; 168<br>
+&gt; [13:37:01.097087388] (+?.?????????) arn-awallin-mint-l3<br>
+&gt; ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF4BFFE0=
+00, sopath<br>
+&gt; =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt; [13:37:01.129839830] (+0.000000533) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 7 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 999 }<br>
+&gt; Snapshot recorded successfully for session test<br>
+&gt; 168<br>
+&gt; [13:37:01.097087388] (+?.?????????) arn-awallin-mint-l3<br>
+&gt; ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF4BFFE0=
+00, sopath<br>
+&gt; =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt; [13:37:01.172829105] (+0.000000575) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 5 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 999 }<br>
+&gt; Snapshot recorded successfully for session test<br>
+&gt; 168<br>
+&gt; [13:37:01.172021557] (+?.?????????) arn-awallin-mint-l3<br>
+&gt; ust_baddr_statedump:soinfo: { cpu_id =3D 7 }, { baddr =3D 0x7FFF653FE0=
+00, sopath<br>
+&gt; =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt; [13:37:01.220074165] (+0.000000553) arn-awallin-mint-l3 tracetest:firs=
+t_tp:<br>
+&gt; { cpu_id =3D 6 }, { my_string_field =3D &quot;test&quot;, my_integer_f=
+ield =3D 999 }<br>
+&gt; Waiting for data availability<br>
+&gt; Tracing stopped for session test<br>
+&gt; Session test destroyed<br>
+&gt;<br>
+&gt; the result from the run on older versions of lttng creates bigger and =
+bigger<br>
+&gt; event traces until reaching max size.<br>
+&gt;<br>
 <br>
-Daniel U. Thibault<br>
-Protection des syst=C3=A8mes et contremesures (PSC) | Systems Protection &a=
-mp; Countermeasures (SPC)<br>
-Cyber s=C3=A9curit=C3=A9 pour les missions essentielles (CME) | Mission Cri=
-tical Cyber Security (MCCS)<br>
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re<br>
-2459 route de la Bravoure<br>
-Qu=C3=A9bec QC=C2=A0 G3J 1X5<br>
-CANADA<br>
-Vox : <a href=3D"tel:%28418%29%20844-4000%20x4245" value=3D"+14188444000">(=
-418) 844-4000 x4245</a><br>
-Fax : <a href=3D"tel:%28418%29%20844-4538" value=3D"+14188444538">(418) 844=
--4538</a><br>
-NAC : 918V QSDJ &lt;<a href=3D"http://www.travelgis.com/map.asp?addr=3D918V=
-%20QSDJ" target=3D"_blank">http://www.travelgis.com/map.asp?addr=3D918V%20Q=
-SDJ</a>&gt;<br>
-Gouvernement du Canada | Government of Canada<br>
-&lt;<a href=3D"http://www.valcartier.drdc-rddc.gc.ca/" target=3D"_blank">ht=
-tp://www.valcartier.drdc-rddc.gc.ca/</a>&gt;<br>
-</blockquote></div><br></div></div>
+</div></div>Unless I&#39;m mistaken, the behavior of the snapshot mode has =
+changed<br>
+between 2.4 and 2.5.<br>
+<br>
+In the 2.4 series, consecutive snapshots could overlap; that is,<br>
+events could be present in multiple snapshots. As of 2.5, an event is<br>
+guaranteed to only appear in one snapshot as the events are considered<br>
+as having been &quot;consumed&quot; at that point.<br>
+<br>
+Julien (cc&#39;ed) might be able to confirm this.<br>
+<br>
+Regards,<br>
+J=C3=A9r=C3=A9mie<br>
+<span class=3D""><br>
+&gt; I have tested this on different architectures, with different buffer s=
+izes<br>
+&gt; and number of buffer<br>
+&gt;<br>
+&gt; Regards<br>
+&gt; Anders Wallin<br>
+&gt;<br>
+</span>&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
+</a><br>
+&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
+target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
+</a><br>
+&gt;<br>
+<span class=3D"HOEnZb"><font color=3D"#888888"><br>
+<br>
+<br>
+--<br>
+J=C3=A9r=C3=A9mie Galarneau<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
+om</a><br>
+</font></span></blockquote></div><br></div></div>
 
---001a113fe8862f28b80507b68ef2--
+--001a11c2f87203e9500507b8861d--
 
 
---===============0106084362==
+--===============0189951713==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0106084362==--
+--===============0189951713==--
