@@ -1,15 +1,25 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix: define _LGPL_SOURCE in C files
-Date: Thu, 13 Nov 2014 16:22:33 -0500
-Message-ID: <1415913753-19134-1-git-send-email-mathieu.desnoyers__45975.6810604178$1415913825$gmane$org@efficios.com>
+From: Anders Wallin <wallinux@gmail.com>
+Subject: Re: snapshot issue with 2.5
+Date: Thu, 13 Nov 2014 22:40:38 +0100
+Message-ID: <CAF2baFcMWfi6e9mdKGJSSUsum4KkCUstM-7vE+gkPrAQLFA1Dg__47158.0571415418$1415914897$gmane$org@mail.gmail.com>
+References: <CAF2baFd5vRuGKa7MVpqHvkCHia5fDN19cvq8qdedqJreNU6-vQ@mail.gmail.com>
+ <CA+jJMxvXfVT8w+hokMyFgTSqN=JH3nQUudJR+8MUJtQmTEgZZQ@mail.gmail.com>
+ <5463E904.9080102@efficios.com>
+ <CAF2baFesZ0Ke5qcWt9eGzWTyPuyAW_PM=ZZ+g9baEUNRwK5cGA@mail.gmail.com>
+ <CAF2baFcKwwciQDr+Wdpcs3_EJV969_aPUA_UtPXGo7=CMxWKvw@mail.gmail.com>
+ <CAF2baFfvY6NRNzNc3tkJygc=01ntwf-qa3GgXG_rT+fSw6E2MA@mail.gmail.com>
+ <5464E028.10709@efficios.com>
+ <CAF2baFfY-DYF4ZuiUPvdbNNqTwzh3-ujqecS5omraPhSSP=GLw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0752957888=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-wi0-f172.google.com ([209.85.212.172])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1Xp1qo-0007o4-Nl
- for lttng-dev@lists.lttng.org; Thu, 13 Nov 2014 16:22:51 -0500
+ (envelope-from <wallinux@gmail.com>) id 1Xp28C-0007vO-5O
+ for lttng-dev@lists.lttng.org; Thu, 13 Nov 2014 16:40:49 -0500
+Received: by mail-wi0-f172.google.com with SMTP id bs8so940900wib.5
+ for <lttng-dev@lists.lttng.org>; Thu, 13 Nov 2014 13:40:38 -0800 (PST)
+In-Reply-To: <CAF2baFfY-DYF4ZuiUPvdbNNqTwzh3-ujqecS5omraPhSSP=GLw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -18,1390 +28,1395 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Defining this in headers is a bad practice, since the header is not
-necessarily the first in the include list.
+--===============0752957888==
+Content-Type: multipart/alternative; boundary=bcaec53d5e2dfa88190507c45c14
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- src/bin/lttng-consumerd/health-consumerd.c   | 1 +
- src/bin/lttng-consumerd/lttng-consumerd.c    | 1 +
- src/bin/lttng-relayd/cmd-2-1.c               | 1 +
- src/bin/lttng-relayd/cmd-2-2.c               | 1 +
- src/bin/lttng-relayd/cmd-2-4.c               | 1 +
- src/bin/lttng-relayd/cmd-generic.c           | 1 +
- src/bin/lttng-relayd/connection.c            | 1 +
- src/bin/lttng-relayd/ctf-trace.c             | 1 +
- src/bin/lttng-relayd/health-relayd.c         | 1 +
- src/bin/lttng-relayd/index.c                 | 1 +
- src/bin/lttng-relayd/live.c                  | 1 +
- src/bin/lttng-relayd/lttng-relayd.h          | 1 -
- src/bin/lttng-relayd/main.c                  | 1 +
- src/bin/lttng-relayd/session.c               | 1 +
- src/bin/lttng-relayd/stream.c                | 1 +
- src/bin/lttng-relayd/utils.c                 | 1 +
- src/bin/lttng-relayd/viewer-stream.c         | 1 +
- src/bin/lttng-sessiond/agent-thread.c        | 1 +
- src/bin/lttng-sessiond/agent.c               | 1 +
- src/bin/lttng-sessiond/buffer-registry.c     | 1 +
- src/bin/lttng-sessiond/channel.c             | 1 +
- src/bin/lttng-sessiond/cmd.c                 | 1 +
- src/bin/lttng-sessiond/consumer.c            | 1 +
- src/bin/lttng-sessiond/context.c             | 1 +
- src/bin/lttng-sessiond/event.c               | 1 +
- src/bin/lttng-sessiond/fd-limit.c            | 1 +
- src/bin/lttng-sessiond/ht-cleanup.c          | 1 +
- src/bin/lttng-sessiond/kernel-consumer.c     | 1 +
- src/bin/lttng-sessiond/kernel.c              | 1 +
- src/bin/lttng-sessiond/load-session-thread.c | 1 +
- src/bin/lttng-sessiond/lttng-sessiond.h      | 1 -
- src/bin/lttng-sessiond/main.c                | 1 +
- src/bin/lttng-sessiond/modprobe.c            | 1 +
- src/bin/lttng-sessiond/save.c                | 1 +
- src/bin/lttng-sessiond/session.c             | 1 +
- src/bin/lttng-sessiond/shm.c                 | 1 +
- src/bin/lttng-sessiond/snapshot.c            | 1 +
- src/bin/lttng-sessiond/syscall.c             | 1 +
- src/bin/lttng-sessiond/trace-kernel.c        | 1 +
- src/bin/lttng-sessiond/trace-ust.c           | 1 +
- src/bin/lttng-sessiond/ust-app.c             | 1 +
- src/bin/lttng-sessiond/ust-consumer.c        | 1 +
- src/bin/lttng-sessiond/ust-metadata.c        | 1 +
- src/bin/lttng-sessiond/ust-registry.c        | 1 +
- src/bin/lttng-sessiond/ust-thread.c          | 1 +
- src/bin/lttng-sessiond/utils.c               | 1 +
- src/bin/lttng/commands/add_context.c         | 1 +
- src/bin/lttng/commands/calibrate.c           | 1 +
- src/bin/lttng/commands/create.c              | 1 +
- src/bin/lttng/commands/destroy.c             | 1 +
- src/bin/lttng/commands/disable_channels.c    | 1 +
- src/bin/lttng/commands/disable_events.c      | 1 +
- src/bin/lttng/commands/enable_channels.c     | 1 +
- src/bin/lttng/commands/enable_events.c       | 1 +
- src/bin/lttng/commands/list.c                | 1 +
- src/bin/lttng/commands/load.c                | 1 +
- src/bin/lttng/commands/save.c                | 1 +
- src/bin/lttng/commands/set_session.c         | 1 +
- src/bin/lttng/commands/snapshot.c            | 1 +
- src/bin/lttng/commands/start.c               | 1 +
- src/bin/lttng/commands/stop.c                | 1 +
- src/bin/lttng/commands/version.c             | 1 +
- src/bin/lttng/commands/view.c                | 1 +
- src/bin/lttng/conf.c                         | 1 +
- src/bin/lttng/lttng.c                        | 1 +
- src/bin/lttng/utils.c                        | 1 +
- src/common/compat/compat-epoll.c             | 1 +
- src/common/compat/compat-fcntl.c             | 1 +
- src/common/compat/compat-poll.c              | 1 +
- src/common/config/config.c                   | 1 +
- src/common/consumer-metadata-cache.c         | 1 +
- src/common/consumer-stream.c                 | 1 +
- src/common/consumer-timer.c                  | 1 +
- src/common/consumer.c                        | 1 +
- src/common/daemonize.c                       | 1 +
- src/common/defaults.c                        | 2 ++
- src/common/error.c                           | 1 +
- src/common/futex.c                           | 1 +
- src/common/hashtable/hashtable.c             | 1 +
- src/common/hashtable/rculfhash-mm-chunk.c    | 2 ++
- src/common/hashtable/rculfhash-mm-mmap.c     | 2 ++
- src/common/hashtable/rculfhash-mm-order.c    | 2 ++
- src/common/hashtable/utils.c                 | 1 +
- src/common/health/health.c                   | 1 +
- src/common/index/index.c                     | 1 +
- src/common/kernel-consumer/kernel-consumer.c | 1 +
- src/common/kernel-ctl/kernel-ctl.c           | 2 ++
- src/common/mi-lttng.c                        | 3 ++-
- src/common/pipe.c                            | 1 +
- src/common/readwrite.c                       | 2 ++
- src/common/relayd/relayd.c                   | 1 +
- src/common/runas.c                           | 1 +
- src/common/sessiond-comm/inet.c              | 1 +
- src/common/sessiond-comm/inet6.c             | 1 +
- src/common/sessiond-comm/sessiond-comm.c     | 1 +
- src/common/sessiond-comm/unix.c              | 1 +
- src/common/testpoint/testpoint.c             | 1 +
- src/common/uri.c                             | 1 +
- src/common/ust-consumer/ust-consumer.c       | 1 +
- src/common/utils.c                           | 1 +
- src/lib/lttng-ctl/load.c                     | 1 +
- src/lib/lttng-ctl/lttng-ctl-health.c         | 2 ++
- src/lib/lttng-ctl/lttng-ctl.c                | 1 +
- src/lib/lttng-ctl/save.c                     | 1 +
- src/lib/lttng-ctl/snapshot.c                 | 1 +
- 105 files changed, 111 insertions(+), 3 deletions(-)
+--bcaec53d5e2dfa88190507c45c14
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/src/bin/lttng-consumerd/health-consumerd.c b/src/bin/lttng-consumerd/health-consumerd.c
-index d1478e5..bd47f0c 100644
---- a/src/bin/lttng-consumerd/health-consumerd.c
-+++ b/src/bin/lttng-consumerd/health-consumerd.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <fcntl.h>
- #include <getopt.h>
- #include <grp.h>
-diff --git a/src/bin/lttng-consumerd/lttng-consumerd.c b/src/bin/lttng-consumerd/lttng-consumerd.c
-index 5d57030..299776a 100644
---- a/src/bin/lttng-consumerd/lttng-consumerd.c
-+++ b/src/bin/lttng-consumerd/lttng-consumerd.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <fcntl.h>
- #include <getopt.h>
- #include <grp.h>
-diff --git a/src/bin/lttng-relayd/cmd-2-1.c b/src/bin/lttng-relayd/cmd-2-1.c
-index de70c51..0cd9b5a 100644
---- a/src/bin/lttng-relayd/cmd-2-1.c
-+++ b/src/bin/lttng-relayd/cmd-2-1.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <string.h>
- 
-diff --git a/src/bin/lttng-relayd/cmd-2-2.c b/src/bin/lttng-relayd/cmd-2-2.c
-index 978a11e..7dd99ad 100644
---- a/src/bin/lttng-relayd/cmd-2-2.c
-+++ b/src/bin/lttng-relayd/cmd-2-2.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <string.h>
- 
-diff --git a/src/bin/lttng-relayd/cmd-2-4.c b/src/bin/lttng-relayd/cmd-2-4.c
-index 6d927a0..d8aa737 100644
---- a/src/bin/lttng-relayd/cmd-2-4.c
-+++ b/src/bin/lttng-relayd/cmd-2-4.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <string.h>
- 
-diff --git a/src/bin/lttng-relayd/cmd-generic.c b/src/bin/lttng-relayd/cmd-generic.c
-index 9029dcd..417d6d3 100644
---- a/src/bin/lttng-relayd/cmd-generic.c
-+++ b/src/bin/lttng-relayd/cmd-generic.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- 
- #include <common/common.h>
-diff --git a/src/bin/lttng-relayd/connection.c b/src/bin/lttng-relayd/connection.c
-index 4cf87ad..2376a3f 100644
---- a/src/bin/lttng-relayd/connection.c
-+++ b/src/bin/lttng-relayd/connection.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <common/common.h>
- 
- #include "connection.h"
-diff --git a/src/bin/lttng-relayd/ctf-trace.c b/src/bin/lttng-relayd/ctf-trace.c
-index 9e9a5c6..59946ea 100644
---- a/src/bin/lttng-relayd/ctf-trace.c
-+++ b/src/bin/lttng-relayd/ctf-trace.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- 
- #include <common/common.h>
-diff --git a/src/bin/lttng-relayd/health-relayd.c b/src/bin/lttng-relayd/health-relayd.c
-index 8a5cbdf..5c4fb50 100644
---- a/src/bin/lttng-relayd/health-relayd.c
-+++ b/src/bin/lttng-relayd/health-relayd.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <fcntl.h>
- #include <getopt.h>
- #include <grp.h>
-diff --git a/src/bin/lttng-relayd/index.c b/src/bin/lttng-relayd/index.c
-index 8cacdd2..a3190b7 100644
---- a/src/bin/lttng-relayd/index.c
-+++ b/src/bin/lttng-relayd/index.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- 
- #include <common/common.h>
-diff --git a/src/bin/lttng-relayd/live.c b/src/bin/lttng-relayd/live.c
-index 5684608..2940b2c 100644
---- a/src/bin/lttng-relayd/live.c
-+++ b/src/bin/lttng-relayd/live.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <getopt.h>
- #include <grp.h>
- #include <limits.h>
-diff --git a/src/bin/lttng-relayd/lttng-relayd.h b/src/bin/lttng-relayd/lttng-relayd.h
-index 896925f..0a3ce47 100644
---- a/src/bin/lttng-relayd/lttng-relayd.h
-+++ b/src/bin/lttng-relayd/lttng-relayd.h
-@@ -19,7 +19,6 @@
- #ifndef LTTNG_RELAYD_H
- #define LTTNG_RELAYD_H
- 
--#define _LGPL_SOURCE
- #include <limits.h>
- #include <urcu.h>
- #include <urcu/wfcqueue.h>
-diff --git a/src/bin/lttng-relayd/main.c b/src/bin/lttng-relayd/main.c
-index 802d7e1..824f145 100644
---- a/src/bin/lttng-relayd/main.c
-+++ b/src/bin/lttng-relayd/main.c
-@@ -18,6 +18,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <getopt.h>
- #include <grp.h>
- #include <limits.h>
-diff --git a/src/bin/lttng-relayd/session.c b/src/bin/lttng-relayd/session.c
-index a9907c4..e0c450c 100644
---- a/src/bin/lttng-relayd/session.c
-+++ b/src/bin/lttng-relayd/session.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <common/common.h>
- 
- #include "ctf-trace.h"
-diff --git a/src/bin/lttng-relayd/stream.c b/src/bin/lttng-relayd/stream.c
-index 410fae8..6988e00 100644
---- a/src/bin/lttng-relayd/stream.c
-+++ b/src/bin/lttng-relayd/stream.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <common/common.h>
- 
- #include "index.h"
-diff --git a/src/bin/lttng-relayd/utils.c b/src/bin/lttng-relayd/utils.c
-index 392fab6..dbb1d1c 100644
---- a/src/bin/lttng-relayd/utils.c
-+++ b/src/bin/lttng-relayd/utils.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng-relayd/viewer-stream.c b/src/bin/lttng-relayd/viewer-stream.c
-index 5ab7be7..2f5d6f7 100644
---- a/src/bin/lttng-relayd/viewer-stream.c
-+++ b/src/bin/lttng-relayd/viewer-stream.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <common/common.h>
- #include <common/index/index.h>
- 
-diff --git a/src/bin/lttng-sessiond/agent-thread.c b/src/bin/lttng-sessiond/agent-thread.c
-index 1caf748..134aeb1 100644
---- a/src/bin/lttng-sessiond/agent-thread.c
-+++ b/src/bin/lttng-sessiond/agent-thread.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- 
- #include <common/common.h>
-diff --git a/src/bin/lttng-sessiond/agent.c b/src/bin/lttng-sessiond/agent.c
-index 5cb8336..dac03c9 100644
---- a/src/bin/lttng-sessiond/agent.c
-+++ b/src/bin/lttng-sessiond/agent.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <urcu/uatomic.h>
- 
-diff --git a/src/bin/lttng-sessiond/buffer-registry.c b/src/bin/lttng-sessiond/buffer-registry.c
-index bab1f30..0ff76de 100644
---- a/src/bin/lttng-sessiond/buffer-registry.c
-+++ b/src/bin/lttng-sessiond/buffer-registry.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <inttypes.h>
- 
- #include <common/common.h>
-diff --git a/src/bin/lttng-sessiond/channel.c b/src/bin/lttng-sessiond/channel.c
-index 1d04b1f..7ea43b8 100644
---- a/src/bin/lttng-sessiond/channel.c
-+++ b/src/bin/lttng-sessiond/channel.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <inttypes.h>
- #include <string.h>
- #include <unistd.h>
-diff --git a/src/bin/lttng-sessiond/cmd.c b/src/bin/lttng-sessiond/cmd.c
-index 17091de..b04f15c 100644
---- a/src/bin/lttng-sessiond/cmd.c
-+++ b/src/bin/lttng-sessiond/cmd.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <inttypes.h>
- #include <urcu/list.h>
-diff --git a/src/bin/lttng-sessiond/consumer.c b/src/bin/lttng-sessiond/consumer.c
-index ce3e5da..42738bc 100644
---- a/src/bin/lttng-sessiond/consumer.c
-+++ b/src/bin/lttng-sessiond/consumer.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng-sessiond/context.c b/src/bin/lttng-sessiond/context.c
-index 2cc6a30..cd4b85f 100644
---- a/src/bin/lttng-sessiond/context.c
-+++ b/src/bin/lttng-sessiond/context.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-diff --git a/src/bin/lttng-sessiond/event.c b/src/bin/lttng-sessiond/event.c
-index 181926b..3db3089 100644
---- a/src/bin/lttng-sessiond/event.c
-+++ b/src/bin/lttng-sessiond/event.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <errno.h>
- #include <urcu/list.h>
- #include <string.h>
-diff --git a/src/bin/lttng-sessiond/fd-limit.c b/src/bin/lttng-sessiond/fd-limit.c
-index a886d33..17a18af 100644
---- a/src/bin/lttng-sessiond/fd-limit.c
-+++ b/src/bin/lttng-sessiond/fd-limit.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <urcu/uatomic.h>
- #include <sys/time.h>
- #include <sys/resource.h>
-diff --git a/src/bin/lttng-sessiond/ht-cleanup.c b/src/bin/lttng-sessiond/ht-cleanup.c
-index a201506..0469f92 100644
---- a/src/bin/lttng-sessiond/ht-cleanup.c
-+++ b/src/bin/lttng-sessiond/ht-cleanup.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- 
- #include <common/hashtable/hashtable.h>
-diff --git a/src/bin/lttng-sessiond/kernel-consumer.c b/src/bin/lttng-sessiond/kernel-consumer.c
-index d71f8ce..f634cd3 100644
---- a/src/bin/lttng-sessiond/kernel-consumer.c
-+++ b/src/bin/lttng-sessiond/kernel-consumer.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-diff --git a/src/bin/lttng-sessiond/kernel.c b/src/bin/lttng-sessiond/kernel.c
-index 00bfbbc..b742697 100644
---- a/src/bin/lttng-sessiond/kernel.c
-+++ b/src/bin/lttng-sessiond/kernel.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <errno.h>
- #include <fcntl.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng-sessiond/load-session-thread.c b/src/bin/lttng-sessiond/load-session-thread.c
-index 868d7c5..3be93cf 100644
---- a/src/bin/lttng-sessiond/load-session-thread.c
-+++ b/src/bin/lttng-sessiond/load-session-thread.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <common/error.h>
- #include <common/config/config.h>
- 
-diff --git a/src/bin/lttng-sessiond/lttng-sessiond.h b/src/bin/lttng-sessiond/lttng-sessiond.h
-index d015012..488cf2f 100644
---- a/src/bin/lttng-sessiond/lttng-sessiond.h
-+++ b/src/bin/lttng-sessiond/lttng-sessiond.h
-@@ -19,7 +19,6 @@
- #ifndef _LTT_SESSIOND_H
- #define _LTT_SESSIOND_H
- 
--#define _LGPL_SOURCE
- #include <urcu.h>
- #include <urcu/wfcqueue.h>
- 
-diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-index 9542e65..a7f77c0 100644
---- a/src/bin/lttng-sessiond/main.c
-+++ b/src/bin/lttng-sessiond/main.c
-@@ -18,6 +18,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <getopt.h>
- #include <grp.h>
- #include <limits.h>
-diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/modprobe.c
-index a28356b..ebf3664 100644
---- a/src/bin/lttng-sessiond/modprobe.c
-+++ b/src/bin/lttng-sessiond/modprobe.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng-sessiond/save.c b/src/bin/lttng-sessiond/save.c
-index aae56a8..b78e7f7 100644
---- a/src/bin/lttng-sessiond/save.c
-+++ b/src/bin/lttng-sessiond/save.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <inttypes.h>
- #include <string.h>
-diff --git a/src/bin/lttng-sessiond/session.c b/src/bin/lttng-sessiond/session.c
-index cd59cb7..99b0165 100644
---- a/src/bin/lttng-sessiond/session.c
-+++ b/src/bin/lttng-sessiond/session.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <limits.h>
- #include <inttypes.h>
- #include <stdio.h>
-diff --git a/src/bin/lttng-sessiond/shm.c b/src/bin/lttng-sessiond/shm.c
-index a5caa8b..e955d12 100644
---- a/src/bin/lttng-sessiond/shm.c
-+++ b/src/bin/lttng-sessiond/shm.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <fcntl.h>
- #include <limits.h>
- #include <sys/mman.h>
-diff --git a/src/bin/lttng-sessiond/snapshot.c b/src/bin/lttng-sessiond/snapshot.c
-index 8faf9a7..1060269 100644
---- a/src/bin/lttng-sessiond/snapshot.c
-+++ b/src/bin/lttng-sessiond/snapshot.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <inttypes.h>
- #include <string.h>
-diff --git a/src/bin/lttng-sessiond/syscall.c b/src/bin/lttng-sessiond/syscall.c
-index b4f2e1e..eb81d67 100644
---- a/src/bin/lttng-sessiond/syscall.c
-+++ b/src/bin/lttng-sessiond/syscall.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <common/bitfield.h>
- #include <common/common.h>
- #include <common/kernel-ctl/kernel-ctl.h>
-diff --git a/src/bin/lttng-sessiond/trace-kernel.c b/src/bin/lttng-sessiond/trace-kernel.c
-index 093297c..1069d1f 100644
---- a/src/bin/lttng-sessiond/trace-kernel.c
-+++ b/src/bin/lttng-sessiond/trace-kernel.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-diff --git a/src/bin/lttng-sessiond/trace-ust.c b/src/bin/lttng-sessiond/trace-ust.c
-index 1f6fd52..511ac90 100644
---- a/src/bin/lttng-sessiond/trace-ust.c
-+++ b/src/bin/lttng-sessiond/trace-ust.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-diff --git a/src/bin/lttng-sessiond/ust-app.c b/src/bin/lttng-sessiond/ust-app.c
-index 5ebe991..5de7a5a 100644
---- a/src/bin/lttng-sessiond/ust-app.c
-+++ b/src/bin/lttng-sessiond/ust-app.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <errno.h>
- #include <inttypes.h>
- #include <pthread.h>
-diff --git a/src/bin/lttng-sessiond/ust-consumer.c b/src/bin/lttng-sessiond/ust-consumer.c
-index 4b52d59..f120144 100644
---- a/src/bin/lttng-sessiond/ust-consumer.c
-+++ b/src/bin/lttng-sessiond/ust-consumer.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <errno.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng-sessiond/ust-metadata.c b/src/bin/lttng-sessiond/ust-metadata.c
-index f430ae1..3794292 100644
---- a/src/bin/lttng-sessiond/ust-metadata.c
-+++ b/src/bin/lttng-sessiond/ust-metadata.c
-@@ -20,6 +20,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <stdint.h>
- #include <string.h>
- #include <stdarg.h>
-diff --git a/src/bin/lttng-sessiond/ust-registry.c b/src/bin/lttng-sessiond/ust-registry.c
-index dc49416..3f4a962 100644
---- a/src/bin/lttng-sessiond/ust-registry.c
-+++ b/src/bin/lttng-sessiond/ust-registry.c
-@@ -15,6 +15,7 @@
-  * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-  */
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <inttypes.h>
- 
-diff --git a/src/bin/lttng-sessiond/ust-thread.c b/src/bin/lttng-sessiond/ust-thread.c
-index 080afa5..d92c1f9 100644
---- a/src/bin/lttng-sessiond/ust-thread.c
-+++ b/src/bin/lttng-sessiond/ust-thread.c
-@@ -15,6 +15,7 @@
-  * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-  */
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- 
- #include <common/common.h>
-diff --git a/src/bin/lttng-sessiond/utils.c b/src/bin/lttng-sessiond/utils.c
-index c9c51ed..fef3180 100644
---- a/src/bin/lttng-sessiond/utils.c
-+++ b/src/bin/lttng-sessiond/utils.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <stdlib.h>
- #include <unistd.h>
- 
-diff --git a/src/bin/lttng/commands/add_context.c b/src/bin/lttng/commands/add_context.c
-index e50ed84..1ba13bf 100644
---- a/src/bin/lttng/commands/add_context.c
-+++ b/src/bin/lttng/commands/add_context.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <ctype.h>
- #include <popt.h>
- #include <stdio.h>
-diff --git a/src/bin/lttng/commands/calibrate.c b/src/bin/lttng/commands/calibrate.c
-index 567f4a5..80b6d39 100644
---- a/src/bin/lttng/commands/calibrate.c
-+++ b/src/bin/lttng/commands/calibrate.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <popt.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng/commands/create.c b/src/bin/lttng/commands/create.c
-index 4f97c86..1fa6d41 100644
---- a/src/bin/lttng/commands/create.c
-+++ b/src/bin/lttng/commands/create.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <ctype.h>
- #include <popt.h>
-diff --git a/src/bin/lttng/commands/destroy.c b/src/bin/lttng/commands/destroy.c
-index 50d5bb4..95343c9 100644
---- a/src/bin/lttng/commands/destroy.c
-+++ b/src/bin/lttng/commands/destroy.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <popt.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng/commands/disable_channels.c b/src/bin/lttng/commands/disable_channels.c
-index 27f1db5..96a9e5d 100644
---- a/src/bin/lttng/commands/disable_channels.c
-+++ b/src/bin/lttng/commands/disable_channels.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <popt.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng/commands/disable_events.c b/src/bin/lttng/commands/disable_events.c
-index e833fe9..9ab8bf0 100644
---- a/src/bin/lttng/commands/disable_events.c
-+++ b/src/bin/lttng/commands/disable_events.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <popt.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng/commands/enable_channels.c b/src/bin/lttng/commands/enable_channels.c
-index a58ebe0..f8272e9 100644
---- a/src/bin/lttng/commands/enable_channels.c
-+++ b/src/bin/lttng/commands/enable_channels.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <popt.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng/commands/enable_events.c b/src/bin/lttng/commands/enable_events.c
-index c4da3df..5ef3490 100644
---- a/src/bin/lttng/commands/enable_events.c
-+++ b/src/bin/lttng/commands/enable_events.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <popt.h>
- #include <stdio.h>
-diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
-index 12499ee..f69d34d 100644
---- a/src/bin/lttng/commands/list.c
-+++ b/src/bin/lttng/commands/list.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <inttypes.h>
- #include <popt.h>
- #include <stdio.h>
-diff --git a/src/bin/lttng/commands/load.c b/src/bin/lttng/commands/load.c
-index caa5713..708ef0b 100644
---- a/src/bin/lttng/commands/load.c
-+++ b/src/bin/lttng/commands/load.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <inttypes.h>
- #include <popt.h>
- #include <stdio.h>
-diff --git a/src/bin/lttng/commands/save.c b/src/bin/lttng/commands/save.c
-index 67862a4..43f10dc 100644
---- a/src/bin/lttng/commands/save.c
-+++ b/src/bin/lttng/commands/save.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <inttypes.h>
- #include <popt.h>
- #include <stdio.h>
-diff --git a/src/bin/lttng/commands/set_session.c b/src/bin/lttng/commands/set_session.c
-index fd3d9a1..3196f12 100644
---- a/src/bin/lttng/commands/set_session.c
-+++ b/src/bin/lttng/commands/set_session.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <popt.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng/commands/snapshot.c b/src/bin/lttng/commands/snapshot.c
-index f3ef3af..4b38edf 100644
---- a/src/bin/lttng/commands/snapshot.c
-+++ b/src/bin/lttng/commands/snapshot.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <inttypes.h>
- #include <popt.h>
-diff --git a/src/bin/lttng/commands/start.c b/src/bin/lttng/commands/start.c
-index 5ca92d8..8016434 100644
---- a/src/bin/lttng/commands/start.c
-+++ b/src/bin/lttng/commands/start.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <popt.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng/commands/stop.c b/src/bin/lttng/commands/stop.c
-index a72f313..5ac182b 100644
---- a/src/bin/lttng/commands/stop.c
-+++ b/src/bin/lttng/commands/stop.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <popt.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng/commands/version.c b/src/bin/lttng/commands/version.c
-index f4d8963..a2409c3 100644
---- a/src/bin/lttng/commands/version.c
-+++ b/src/bin/lttng/commands/version.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <popt.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng/commands/view.c b/src/bin/lttng/commands/view.c
-index dcd4d66..37fb4b8 100644
---- a/src/bin/lttng/commands/view.c
-+++ b/src/bin/lttng/commands/view.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <popt.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng/conf.c b/src/bin/lttng/conf.c
-index 55ed635..4bcf49e 100644
---- a/src/bin/lttng/conf.c
-+++ b/src/bin/lttng/conf.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <limits.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/bin/lttng/lttng.c b/src/bin/lttng/lttng.c
-index e4a8fd2..7658afc 100644
---- a/src/bin/lttng/lttng.c
-+++ b/src/bin/lttng/lttng.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <getopt.h>
- #include <signal.h>
- #include <stdio.h>
-diff --git a/src/bin/lttng/utils.c b/src/bin/lttng/utils.c
-index c518405..3cc254a 100644
---- a/src/bin/lttng/utils.c
-+++ b/src/bin/lttng/utils.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <stdlib.h>
- #include <ctype.h>
-diff --git a/src/common/compat/compat-epoll.c b/src/common/compat/compat-epoll.c
-index 368fae1..29bd2f8 100644
---- a/src/common/compat/compat-epoll.c
-+++ b/src/common/compat/compat-epoll.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <fcntl.h>
- #include <limits.h>
-diff --git a/src/common/compat/compat-fcntl.c b/src/common/compat/compat-fcntl.c
-index b462fd7..527abd8 100644
---- a/src/common/compat/compat-fcntl.c
-+++ b/src/common/compat/compat-fcntl.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <common/compat/fcntl.h>
- #include <unistd.h>
- 
-diff --git a/src/common/compat/compat-poll.c b/src/common/compat/compat-poll.c
-index 4893768..3293244 100644
---- a/src/common/compat/compat-poll.c
-+++ b/src/common/compat/compat-poll.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <stdlib.h>
- #include <sys/resource.h>
-diff --git a/src/common/config/config.c b/src/common/config/config.c
-index 971946c..f93c5a6 100644
---- a/src/common/config/config.c
-+++ b/src/common/config/config.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <ctype.h>
- #include <stdio.h>
-diff --git a/src/common/consumer-metadata-cache.c b/src/common/consumer-metadata-cache.c
-index 0f086fe..9cd99e5 100644
---- a/src/common/consumer-metadata-cache.c
-+++ b/src/common/consumer-metadata-cache.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <pthread.h>
- #include <stdlib.h>
-diff --git a/src/common/consumer-stream.c b/src/common/consumer-stream.c
-index 8fe02e7..ba72dce 100644
---- a/src/common/consumer-stream.c
-+++ b/src/common/consumer-stream.c
-@@ -18,6 +18,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <inttypes.h>
- #include <sys/mman.h>
-diff --git a/src/common/consumer-timer.c b/src/common/consumer-timer.c
-index 1408052..e7343af 100644
---- a/src/common/consumer-timer.c
-+++ b/src/common/consumer-timer.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <inttypes.h>
- #include <signal.h>
-diff --git a/src/common/consumer.c b/src/common/consumer.c
-index 999e400..e37c725 100644
---- a/src/common/consumer.c
-+++ b/src/common/consumer.c
-@@ -18,6 +18,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <poll.h>
- #include <pthread.h>
-diff --git a/src/common/daemonize.c b/src/common/daemonize.c
-index a8e2906..b9d0b03 100644
---- a/src/common/daemonize.c
-+++ b/src/common/daemonize.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <unistd.h>
- #include <paths.h>
- #include <fcntl.h>
-diff --git a/src/common/defaults.c b/src/common/defaults.c
-index d74a42b..974f7c6 100644
---- a/src/common/defaults.c
-+++ b/src/common/defaults.c
-@@ -15,6 +15,8 @@
-  * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-  */
- 
-+#define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <stddef.h>
- #include <unistd.h>
- 
-diff --git a/src/common/error.c b/src/common/error.c
-index 852de6f..2cebbf9 100644
---- a/src/common/error.c
-+++ b/src/common/error.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <inttypes.h>
- 
-diff --git a/src/common/futex.c b/src/common/futex.c
-index 0b27a5b..7f07b11 100644
---- a/src/common/futex.c
-+++ b/src/common/futex.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <limits.h>
- #include <sys/syscall.h>
- #include <unistd.h>
-diff --git a/src/common/hashtable/hashtable.c b/src/common/hashtable/hashtable.c
-index b08a57e..3a38cbf 100644
---- a/src/common/hashtable/hashtable.c
-+++ b/src/common/hashtable/hashtable.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <string.h>
- #include <urcu.h>
-diff --git a/src/common/hashtable/rculfhash-mm-chunk.c b/src/common/hashtable/rculfhash-mm-chunk.c
-index 7204831..2e4e049 100644
---- a/src/common/hashtable/rculfhash-mm-chunk.c
-+++ b/src/common/hashtable/rculfhash-mm-chunk.c
-@@ -20,6 +20,8 @@
-  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-  */
- 
-+#define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <stddef.h>
- #include "rculfhash-internal.h"
- 
-diff --git a/src/common/hashtable/rculfhash-mm-mmap.c b/src/common/hashtable/rculfhash-mm-mmap.c
-index b136e1a..cd415db 100644
---- a/src/common/hashtable/rculfhash-mm-mmap.c
-+++ b/src/common/hashtable/rculfhash-mm-mmap.c
-@@ -20,6 +20,8 @@
-  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-  */
- 
-+#define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <unistd.h>
- #include <sys/mman.h>
- #include "rculfhash-internal.h"
-diff --git a/src/common/hashtable/rculfhash-mm-order.c b/src/common/hashtable/rculfhash-mm-order.c
-index 6e3d29b..0ce98d7 100644
---- a/src/common/hashtable/rculfhash-mm-order.c
-+++ b/src/common/hashtable/rculfhash-mm-order.c
-@@ -21,6 +21,8 @@
-  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-  */
- 
-+#define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include "rculfhash-internal.h"
- 
- static
-diff --git a/src/common/hashtable/utils.c b/src/common/hashtable/utils.c
-index 1ea699d..3c6994b 100644
---- a/src/common/hashtable/utils.c
-+++ b/src/common/hashtable/utils.c
-@@ -49,6 +49,7 @@
-  * byte), but shoehorning those bytes into integers efficiently is messy.
-  */
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <stdint.h>     /* defines uint32_t etc */
- #include <stdio.h>      /* defines printf for tests */
-diff --git a/src/common/health/health.c b/src/common/health/health.c
-index 49f6dc0..3eea3ad 100644
---- a/src/common/health/health.c
-+++ b/src/common/health/health.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <inttypes.h>
- #include <stdio.h>
-diff --git a/src/common/index/index.c b/src/common/index/index.c
-index a462a63..35cff53 100644
---- a/src/common/index/index.c
-+++ b/src/common/index/index.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <sys/stat.h>
- #include <sys/types.h>
-diff --git a/src/common/kernel-consumer/kernel-consumer.c b/src/common/kernel-consumer/kernel-consumer.c
-index cbd1b5a..f2023a6 100644
---- a/src/common/kernel-consumer/kernel-consumer.c
-+++ b/src/common/kernel-consumer/kernel-consumer.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <poll.h>
- #include <pthread.h>
-diff --git a/src/common/kernel-ctl/kernel-ctl.c b/src/common/kernel-ctl/kernel-ctl.c
-index f3ef93d..b223cea 100644
---- a/src/common/kernel-ctl/kernel-ctl.c
-+++ b/src/common/kernel-ctl/kernel-ctl.c
-@@ -16,6 +16,8 @@
-  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-  */
- 
-+#define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #define __USE_LINUX_IOCTL_DEFS
- #include <sys/ioctl.h>
- #include <string.h>
-diff --git a/src/common/mi-lttng.c b/src/common/mi-lttng.c
-index 882afc1..752bcec 100644
---- a/src/common/mi-lttng.c
-+++ b/src/common/mi-lttng.c
-@@ -16,7 +16,8 @@
-  * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-  */
- 
--
-+#define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <include/config.h>
- #include <common/config/config.h>
- #include <lttng/snapshot-internal.h>
-diff --git a/src/common/pipe.c b/src/common/pipe.c
-index 5e2fc6c..09e905d 100644
---- a/src/common/pipe.c
-+++ b/src/common/pipe.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <fcntl.h>
- #include <unistd.h>
-diff --git a/src/common/readwrite.c b/src/common/readwrite.c
-index d33e051..a862d1c 100644
---- a/src/common/readwrite.c
-+++ b/src/common/readwrite.c
-@@ -15,6 +15,8 @@
-  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-  */
- 
-+#define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <errno.h>
- #include <limits.h>
-diff --git a/src/common/relayd/relayd.c b/src/common/relayd/relayd.c
-index 38ebdbd..47db408 100644
---- a/src/common/relayd/relayd.c
-+++ b/src/common/relayd/relayd.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <stdio.h>
- #include <stdlib.h>
-diff --git a/src/common/runas.c b/src/common/runas.c
-index 5ab4271..c146f65 100644
---- a/src/common/runas.c
-+++ b/src/common/runas.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <errno.h>
- #include <limits.h>
- #include <stdio.h>
-diff --git a/src/common/sessiond-comm/inet.c b/src/common/sessiond-comm/inet.c
-index 32a16a6..2703a66 100644
---- a/src/common/sessiond-comm/inet.c
-+++ b/src/common/sessiond-comm/inet.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <limits.h>
- #include <stdio.h>
-diff --git a/src/common/sessiond-comm/inet6.c b/src/common/sessiond-comm/inet6.c
-index 5b137c4..9eab3fa 100644
---- a/src/common/sessiond-comm/inet6.c
-+++ b/src/common/sessiond-comm/inet6.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <limits.h>
- #include <stdio.h>
-diff --git a/src/common/sessiond-comm/sessiond-comm.c b/src/common/sessiond-comm/sessiond-comm.c
-index 65952b2..a985dc7 100644
---- a/src/common/sessiond-comm/sessiond-comm.c
-+++ b/src/common/sessiond-comm/sessiond-comm.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <limits.h>
- #include <stdio.h>
-diff --git a/src/common/sessiond-comm/unix.c b/src/common/sessiond-comm/unix.c
-index 2c87b82..97537c5 100644
---- a/src/common/sessiond-comm/unix.c
-+++ b/src/common/sessiond-comm/unix.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <limits.h>
- #include <stdio.h>
-diff --git a/src/common/testpoint/testpoint.c b/src/common/testpoint/testpoint.c
-index 6893a41..144323e 100644
---- a/src/common/testpoint/testpoint.c
-+++ b/src/common/testpoint/testpoint.c
-@@ -18,6 +18,7 @@
- #ifndef NTESTPOINT
- 
- #define _GNU_SOURCE /* for RTLD_DEFAULT GNU extension */
-+#define _LGPL_SOURCE
- #include <dlfcn.h>  /* for dlsym   */
- #include <stdlib.h> /* for getenv  */
- #include <string.h> /* for strncmp */
-diff --git a/src/common/uri.c b/src/common/uri.c
-index 408b75c..668e617 100644
---- a/src/common/uri.c
-+++ b/src/common/uri.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <arpa/inet.h>
- #include <netdb.h>
-diff --git a/src/common/ust-consumer/ust-consumer.c b/src/common/ust-consumer/ust-consumer.c
-index bff360e..52b6979 100644
---- a/src/common/ust-consumer/ust-consumer.c
-+++ b/src/common/ust-consumer/ust-consumer.c
-@@ -17,6 +17,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <lttng/ust-ctl.h>
- #include <poll.h>
-diff --git a/src/common/utils.c b/src/common/utils.c
-index 1d07cb3..4e78767 100644
---- a/src/common/utils.c
-+++ b/src/common/utils.c
-@@ -18,6 +18,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <ctype.h>
- #include <fcntl.h>
-diff --git a/src/lib/lttng-ctl/load.c b/src/lib/lttng-ctl/load.c
-index 21619a6..3599503 100644
---- a/src/lib/lttng-ctl/load.c
-+++ b/src/lib/lttng-ctl/load.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <string.h>
- 
-diff --git a/src/lib/lttng-ctl/lttng-ctl-health.c b/src/lib/lttng-ctl/lttng-ctl-health.c
-index ba9aac0..83f0925 100644
---- a/src/lib/lttng-ctl/lttng-ctl-health.c
-+++ b/src/lib/lttng-ctl/lttng-ctl-health.c
-@@ -20,6 +20,8 @@
-  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-  */
- 
-+#define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <unistd.h>
- #include <sys/types.h>
- #include <stdint.h>
-diff --git a/src/lib/lttng-ctl/lttng-ctl.c b/src/lib/lttng-ctl/lttng-ctl.c
-index aae0e4f..d573eb0 100644
---- a/src/lib/lttng-ctl/lttng-ctl.c
-+++ b/src/lib/lttng-ctl/lttng-ctl.c
-@@ -20,6 +20,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <grp.h>
- #include <errno.h>
-diff --git a/src/lib/lttng-ctl/save.c b/src/lib/lttng-ctl/save.c
-index d414a9d..8f8cbb6 100644
---- a/src/lib/lttng-ctl/save.c
-+++ b/src/lib/lttng-ctl/save.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <string.h>
- 
-diff --git a/src/lib/lttng-ctl/snapshot.c b/src/lib/lttng-ctl/snapshot.c
-index 6b7b8a9..db9c071 100644
---- a/src/lib/lttng-ctl/snapshot.c
-+++ b/src/lib/lttng-ctl/snapshot.c
-@@ -16,6 +16,7 @@
-  */
- 
- #define _GNU_SOURCE
-+#define _LGPL_SOURCE
- #include <assert.h>
- #include <string.h>
- 
--- 
-2.1.1
+Looks like the patch creates a design bug.
+If you have one channel enabled the max snapshot size will be equal to one
+buffer times the number of channels (seems to be 8??)
+So max AND min size will always be the same and always much smaller then
+the content of the buffers
+The size argument passed to snapshot record is never used (or if it's to
+small it will complain)
+
+A Q&D workaround to get "all" data out is to create a 2nd non-used channel
+like this;
+
+: ${NO_OF_SUBBUF:=3D6}
+: ${SUBBUF_SIZE:=3D4096}
+
+SESSION=3Dtest
+CHANNEL1=3Dch1
+CHANNEL2=3Dch2
+
+CH2_SUBBUF_SIZE=3D$(($SUBBUF_SIZE*$NO_OF_SUBBUF))
+.....
+
+$LTTNG create $SESSION --snapshot
+$LTTNG enable-channel -u --subbuf-size $SUBBUF_SIZE --num-subbuf
+$NO_OF_SUBBUF --overwrite $CHANNEL1
+$LTTNG enable-channel -u --subbuf-size $CH2_SUBBUF_SIZE --num-subbuf 2
+--overwrite $CHANNEL2
+$LTTNG enable-event -u -c $CHANNEL1 "*"
+....
+
+Then I found another issue about the content of the traces, but I will file
+this under another topic
+
+
+Anders Wallin
+
+On Thu, Nov 13, 2014 at 6:41 PM, Anders Wallin <wallinux@gmail.com> wrote:
+
+> No, I get the same problem with or w/o setting the size
+>
+> Anders Wallin
+>
+> On Thu, Nov 13, 2014 at 5:45 PM, Julien Desfossez <jdesfossez@efficios.co=
+m
+> > wrote:
+>
+>> Ok, so if you don't limit the size of the snapshot (remove the -m 1G) it
+>> works as expected ?
+>>
+>> Julien
+>>
+>> On 14-11-13 10:33 AM, Anders Wallin wrote:
+>> > bug is introduced in  68808f4e0bbb3adccff72ff9dab6ec9f3a9e6866
+>> >
+>> > Regards
+>> >
+>> > Anders
+>> >
+>> > Anders Wallin
+>> >
+>> > On Thu, Nov 13, 2014 at 10:39 AM, Anders Wallin <wallinux@gmail.com
+>> > <mailto:wallinux@gmail.com>> wrote:
+>> >
+>> >
+>> >
+>> >     Anders Wallin
+>> >
+>> >     On Thu, Nov 13, 2014 at 8:43 AM, Anders Wallin <wallinux@gmail.com
+>> >     <mailto:wallinux@gmail.com>> wrote:
+>> >
+>> >         On Thu, Nov 13, 2014 at 12:11 AM, Julien Desfossez
+>> >         <jdesfossez@efficios.com <mailto:jdesfossez@efficios.com>>
+>> wrote:
+>> >
+>> >             Hi,
+>> >
+>> >             On 14-11-12 05:30 PM, J=C3=A9r=C3=A9mie Galarneau wrote:
+>> >             > On Wed, Nov 12, 2014 at 7:39 AM, Anders Wallin
+>> >             <wallinux@gmail.com <mailto:wallinux@gmail.com>> wrote:
+>> >             >> Hi,
+>> >             >>
+>> >             >> using userspace snapshot mode in 2.5 seems to broken.
+>> >             >>
+>> >             >> I have small stupid application(tracetest) generating
+>> >             1000 events
+>> >             >>
+>> >             >> Running the script (the below is simplified version of
+>> >             the script)
+>> >             >>
+>> >
+>>  -----------------------------------------------------------------------=
+-----------
+>> >             >> #!/bin/bash
+>> >             >> LTTNG=3D'lttng -n'
+>> >             >> lttng-sessiond --no-kernel &
+>> >             >
+>> >             > You should use the "-d" flag to launch the sessiond as a
+>> >             daemon. Using
+>> >             > "&" might cause the "create" command to launch a second
+>> >             session daemon
+>> >             > since the first one would not have had the time to open
+>> >             create its
+>> >             > command sockets.
+>> >             >
+>> >             >>
+>> >             >> $LTTNG create test --snapshot
+>> >             >> $LTTNG enable-channel -u --subbuf-size 64k --num-subbuf
+>> >             16 --overwrite ch1
+>> >             >> $LTTNG enable-event -u -c ch1 "*"
+>> >             >> $LTTNG start
+>> >             >> $LTTNG list ch1
+>> >             >>
+>> >             >> mkdir -p snapshot/
+>> >             >>
+>> >             >> for i in $(seq 1 $LOOPS); do
+>> >             >>     ./tracetest
+>> >             >>     $LTTNG snapshot record -m 1G
+>> >             >>
+>> >             >>     # print no of events and first and last event
+>> >             >>     last=3D$(ls -1drt $HOME/lttng-traces/$SESSION*/* |
+>> tail -1)
+>> >             >>     babeltrace $last > snapshot/$i.bt <http://i.bt>
+>> >             >>     cat snapshot/$i.bt <http://i.bt> | wc -l
+>> >             >>     cat snapshot/$i.bt <http://i.bt> | head -1
+>> >             >>     cat snapshot/$i.bt <http://i.bt> | tail -1
+>> >             >> done
+>> >             >>
+>> >             >> $LTTNG stop
+>> >             >> $LTTNG destroy $SESSION
+>> >             >>
+>> >
+>>  -----------------------------------------------------------------------=
+-----------
+>> >             >>
+>> >             >> The result of the run looks like this;
+>> >             >> ./test.run
+>> >             >> Error: consumer err socket second poll error
+>> >             >> Error: Health error occurred in thread_manage_consumer
+>> >             >> PERROR - 13:36:59.685167 [23772/23781]: bind inet:
+>> >             Address already in use
+>> >             >> (in lttcomm_bind_inet_sock() at inet.c:109)
+>> >             >> Warning: Another session daemon is using this JUL port.
+>> >             JUL support will be
+>> >             >> deactivated to prevent interfering with the tracing.
+>> >             >>
+>> >             >
+>> >             > Is there a reason why you run two session daemons? I'm
+>> >             guessing this
+>> >             > is related to my "& vs -d" comment above.
+>> >             >
+>> >             >> lttng (LTTng Trace Control) 2.5.2 - Fumisterie
+>> >             >> BabelTrace Trace Viewer and Converter 1.2.4
+>> >             >>         linux-vdso.so.1 =3D>  (0x00007fffba966000)
+>> >             >>         liblttng-ctl.so.0 =3D>
+>> >             /usr/lib/x86_64-linux-gnu/liblttng-ctl.so.0
+>> >             >> (0x00007fbfe4b1d000)
+>> >             >>         librt.so.1 =3D> /lib/x86_64-linux-gnu/librt.so.=
+1
+>> >             (0x00007fbfe4915000)
+>> >             >>         libxml2.so.2 =3D>
+>> >             /usr/lib/x86_64-linux-gnu/libxml2.so.2
+>> >             >> (0x00007fbfe45ae000)
+>> >             >>         libpopt.so.0 =3D>
+>> /lib/x86_64-linux-gnu/libpopt.so.0
+>> >             >> (0x00007fbfe43a2000)
+>> >             >>         libpthread.so.0 =3D>
+>> >             /lib/x86_64-linux-gnu/libpthread.so.0
+>> >             >> (0x00007fbfe4184000)
+>> >             >>         libc.so.6 =3D> /lib/x86_64-linux-gnu/libc.so.6
+>> >             (0x00007fbfe3dbd000)
+>> >             >>         /lib64/ld-linux-x86-64.so.2 (0x00007fbfe4fac000=
+)
+>> >             >>         liburcu.so.2 =3D>
+>> >             /usr/lib/x86_64-linux-gnu/liburcu.so.2
+>> >             >> (0x00007fbfe3bb6000)
+>> >             >>         libdl.so.2 =3D> /lib/x86_64-linux-gnu/libdl.so.=
+2
+>> >             (0x00007fbfe39b2000)
+>> >             >>         libz.so.1 =3D> /lib/x86_64-linux-gnu/libz.so.1
+>> >             (0x00007fbfe3798000)
+>> >             >>         liblzma.so.5 =3D>
+>> /lib/x86_64-linux-gnu/liblzma.so.5
+>> >             >> (0x00007fbfe3576000)
+>> >             >>         libm.so.6 =3D> /lib/x86_64-linux-gnu/libm.so.6
+>> >             (0x00007fbfe3270000)
+>> >             >>
+>> >             >> Session test created.
+>> >             >> Default snapshot output set to:
+>> >             >> /home/awallin/lttng-traces/test-20141112-133700
+>> >             >> Snapshot mode set. Every channel enabled for that sessi=
+on
+>> >             will be set in
+>> >             >> overwrite mode and mmap output.
+>> >             >> UST channel ch1 enabled for session test
+>> >             >> UST event * created in channel ch1
+>> >             >> Tracing started for session test
+>> >             >> Tracing session test: [active snapshot]
+>> >             >>     Trace path:
+>> >             >>     Live timer interval (usec): 4294967295
+>> >             >>
+>> >             >> =3D=3D=3D Domain: UST global =3D=3D=3D
+>> >             >>
+>> >             >> Channels:
+>> >             >> -------------
+>> >             >> - ch1: [enabled]
+>> >             >>
+>> >             >>     Attributes:
+>> >             >>       overwrite mode: 1
+>> >             >>       subbufers size: 4096
+>> >             >>       number of subbufers: 16
+>> >             >>       switch timer interval: 0
+>> >             >>       read timer interval: 0
+>> >             >>       trace file count: 0
+>> >             >>       trace file size (bytes): 0
+>> >             >>       output: mmap()
+>> >             >>
+>> >             >>     Events:
+>> >             >>       * (type: tracepoint) [enabled]
+>> >             >>
+>> >             >> Snapshot recorded successfully for session test
+>> >             >> 84
+>> >             >> [13:37:00.852615950] (+?.?????????) arn-awallin-mint-l3
+>> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =
+=3D
+>> >             0x7FFFC6BC7000, sopath
+>> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+>> >             >> [13:37:00.853798949] (+0.000000805) arn-awallin-mint-l3
+>> >             tracetest:first_tp:
+>> >             >> { cpu_id =3D 6 }, { my_string_field =3D "test",
+>> >             my_integer_field =3D 999 }
+>> >             >> Snapshot recorded successfully for session test
+>> >             >> 157
+>> >             >> [13:37:00.853735195] (+?.?????????) arn-awallin-mint-l3
+>> >             tracetest:first_tp:
+>> >             >> { cpu_id =3D 6 }, { my_string_field =3D "test",
+>> >             my_integer_field =3D 927 }
+>> >             >> [13:37:00.894839116] (+0.000000299) arn-awallin-mint-l3
+>> >             tracetest:first_tp:
+>> >             >> { cpu_id =3D 5 }, { my_string_field =3D "test",
+>> >             my_integer_field =3D 999 }
+>> >             >> Snapshot recorded successfully for session test
+>> >             >> 168
+>> >             >> [13:37:00.853735195] (+?.?????????) arn-awallin-mint-l3
+>> >             tracetest:first_tp:
+>> >             >> { cpu_id =3D 6 }, { my_string_field =3D "test",
+>> >             my_integer_field =3D 927 }
+>> >             >> [13:37:00.929447330] (+0.000000305) arn-awallin-mint-l3
+>> >             tracetest:first_tp:
+>> >             >> { cpu_id =3D 5 }, { my_string_field =3D "test",
+>> >             my_integer_field =3D 999 }
+>> >             >> Snapshot recorded successfully for session test
+>> >
+>> >             Something is wrong from here:
+>> >             >> 168
+>> >             >> [13:37:00.894411117] (+?.?????????) arn-awallin-mint-l3
+>> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =
+=3D
+>> 0x7FFF6BF81000, sopath
+>> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+>> >             >> [13:37:00.972035546] (+0.000000597) arn-awallin-mint-l3
+>> tracetest:first_tp:
+>> >             >> { cpu_id =3D 6 }, { my_string_field =3D "test",
+>> my_integer_field =3D 999 }
+>> >             >> Snapshot recorded successfully for session test
+>> >             >> 168
+>> >             >> [13:37:00.894411117] (+?.?????????) arn-awallin-mint-l3
+>> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =
+=3D
+>> 0x7FFF6BF81000, sopath
+>> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+>> >             >> [13:37:01.014060940 <tel:014060940>] (+0.000000341)
+>> >             arn-awallin-mint-l3 tracetest:first_tp:
+>> >             >> { cpu_id =3D 7 }, { my_string_field =3D "test",
+>> my_integer_field =3D 999 }
+>> >             >> Snapshot recorded successfully for session test
+>> >             >> 168
+>> >             >> [13:37:00.894411117] (+?.?????????) arn-awallin-mint-l3
+>> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 4 }, { baddr =
+=3D
+>> 0x7FFF6BF81000, sopath
+>> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+>> >             >> [13:37:01.052555877 <tel:052555877>] (+0.000000872)
+>> >             arn-awallin-mint-l3 tracetest:first_tp:
+>> >             >> { cpu_id =3D 6 }, { my_string_field =3D "test",
+>> my_integer_field =3D 999 }
+>> >             ... to here.
+>> >
+>> >             The beginning timestamp is the same, the number of events =
+is
+>> >             the same,
+>> >             but the end timestamp moves. We see also this pattern belo=
+w.
+>> >             I would be really interested to see the whole snapshots wh=
+en
+>> >             it happens.
+>> >             It seems like we are not be overwriting the beginning of t=
+he
+>> >             ring buffer
+>> >             in some conditions. Could you send us your tracetest progr=
+am
+>> >             and the
+>> >             script so we can try to reproduce the problem ?
+>> >
+>> >
+>> >         I will append it including a run with debug turned on and all
+>> >         the snapshot files created
+>> >
+>> >
+>> >
+>> >             >> Snapshot recorded successfully for session test
+>> >             >> 168
+>> >             >> [13:37:01.014035993 <tel:014035993>] (+?.?????????)
+>> >             arn-awallin-mint-l3 tracetest:first_tp:
+>> >             >> { cpu_id =3D 7 }, { my_string_field =3D "test",
+>> >             my_integer_field =3D 927 }
+>> >             >> [13:37:01.098620808] (+0.000001404) arn-awallin-mint-l3
+>> >             tracetest:first_tp:
+>> >             >> { cpu_id =3D 4 }, { my_string_field =3D "test",
+>> >             my_integer_field =3D 999 }
+>> >             >> Snapshot recorded successfully for session test
+>> >             >> 168
+>> >             >> [13:37:01.097087388 <tel:097087388>] (+?.?????????)
+>> >             arn-awallin-mint-l3
+>> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =
+=3D
+>> >             0x7FFF4BFFE000, sopath
+>> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+>> >             >> [13:37:01.129839830] (+0.000000533) arn-awallin-mint-l3
+>> >             tracetest:first_tp:
+>> >             >> { cpu_id =3D 7 }, { my_string_field =3D "test",
+>> >             my_integer_field =3D 999 }
+>> >             >> Snapshot recorded successfully for session test
+>> >             >> 168
+>> >             >> [13:37:01.097087388 <tel:097087388>] (+?.?????????)
+>> >             arn-awallin-mint-l3
+>> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =
+=3D
+>> >             0x7FFF4BFFE000, sopath
+>> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+>> >             >> [13:37:01.129839830] (+0.000000533) arn-awallin-mint-l3
+>> >             tracetest:first_tp:
+>> >             >> { cpu_id =3D 7 }, { my_string_field =3D "test",
+>> >             my_integer_field =3D 999 }
+>> >             >> Snapshot recorded successfully for session test
+>> >             >> 168
+>> >             >> [13:37:01.097087388 <tel:097087388>] (+?.?????????)
+>> >             arn-awallin-mint-l3
+>> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =
+=3D
+>> >             0x7FFF4BFFE000, sopath
+>> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+>> >             >> [13:37:01.172829105] (+0.000000575) arn-awallin-mint-l3
+>> >             tracetest:first_tp:
+>> >             >> { cpu_id =3D 5 }, { my_string_field =3D "test",
+>> >             my_integer_field =3D 999 }
+>> >             >> Snapshot recorded successfully for session test
+>> >             >> 168
+>> >             >> [13:37:01.172021557] (+?.?????????) arn-awallin-mint-l3
+>> >             >> ust_baddr_statedump:soinfo: { cpu_id =3D 7 }, { baddr =
+=3D
+>> >             0x7FFF653FE000, sopath
+>> >             >> =3D "[vdso]", size =3D 0, mtime =3D -1 }
+>> >             >> [13:37:01.220074165] (+0.000000553) arn-awallin-mint-l3
+>> >             tracetest:first_tp:
+>> >             >> { cpu_id =3D 6 }, { my_string_field =3D "test",
+>> >             my_integer_field =3D 999 }
+>> >             >> Waiting for data availability
+>> >             >> Tracing stopped for session test
+>> >             >> Session test destroyed
+>> >             >>
+>> >             >> the result from the run on older versions of lttng
+>> >             creates bigger and bigger
+>> >             >> event traces until reaching max size.
+>> >             We see this pattern here and the max size seems to be 168
+>> >             events, was it
+>> >             similar in your previous tests ?
+>> >
+>> >         If I'm running the same test on 2.4 or 2.3 the max number of
+>> >         events is much bigger, like ~10000
+>> >         (I don't have the exact number right now, I will rebuild and r=
+un
+>> >         the test again and get back
+>> >         with traces from that run)
+>> >
+>> >     For 2.4.2 the log looks like this:
+>> >     ./test.run ./tracetest
+>> >
+>> >     lttng (LTTng Trace Control) 2.4.2 - =C3=89poque Opaque
+>> >     BabelTrace Trace Viewer and Converter 1.2.1
+>> >     linux-vdso.so.1 =3D>  (0x00007fff775fe000)
+>> >     liblttng-ctl.so.0 =3D> /usr/local/lib/liblttng-ctl.so.0
+>> >     (0x00002b2b016e4000)
+>> >     libpopt.so.0 =3D> /lib/x86_64-linux-gnu/libpopt.so.0
+>> (0x00002b2b0190f000)
+>> >     libpthread.so.0 =3D> /lib/x86_64-linux-gnu/libpthread.so.0
+>> >     (0x00002b2b01b1b000)
+>> >     libc.so.6 =3D> /lib/x86_64-linux-gnu/libc.so.6 (0x00002b2b01d39000=
+)
+>> >     librt.so.1 =3D> /lib/x86_64-linux-gnu/librt.so.1 (0x00002b2b020ff0=
+00)
+>> >     liburcu.so.3 =3D> /usr/local/lib/liburcu.so.3 (0x00002b2b02307000)
+>> >     /lib64/ld-linux-x86-64.so.2 (0x00002b2b014bf000)
+>> >
+>> >     Session test created.
+>> >     Default snapshot output set to: //lttng-traces/test-20141113-09361=
+1
+>> >     Snapshot mode set. Every channel enabled for that session will be
+>> >     set in overwrite mode and mmap output.
+>> >     UST channel ch1 enabled for session test
+>> >     UST event * created in channel ch1
+>> >     Tracing started for session test
+>> >     Tracing session test: [active snapshot]
+>> >         Trace path:
+>> >
+>> >     =3D=3D=3D Domain: UST global =3D=3D=3D
+>> >
+>> >     Buffer type: per UID
+>> >
+>> >     Channels:
+>> >     -------------
+>> >     - ch1: [enabled]
+>> >
+>> >         Attributes:
+>> >           overwrite mode: 1
+>> >           subbufers size: 4096
+>> >           number of subbufers: 16
+>> >           switch timer interval: 0
+>> >           read timer interval: 0
+>> >           output: mmap()
+>> >
+>> >         Events:
+>> >           * (type: tracepoint) [enabled]
+>> >
+>> >     Snapshot recorded successfully for session test
+>> >     1000
+>> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+>> >     [09:36:11.985857254] (+0.000000501) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+>> >     Snapshot recorded successfully for session test
+>> >     2000
+>> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+>> >     [09:36:12.033066130 <tel:033066130>] (+0.000001663) 07f8cf84a38f
+>> >     tracetest:first_tp: { cpu_id =3D 5 }, { my_string_field =3D "test"=
+,
+>> >     my_integer_field =3D 999 }
+>> >     Snapshot recorded successfully for session test
+>> >     3000
+>> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+>> >     [09:36:12.086888121 <tel:086888121>] (+0.000001273) 07f8cf84a38f
+>> >     tracetest:first_tp: { cpu_id =3D 5 }, { my_string_field =3D "test"=
+,
+>> >     my_integer_field =3D 999 }
+>> >     Snapshot recorded successfully for session test
+>> >     4000
+>> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+>> >     [09:36:12.147378251] (+0.000001257) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+>> >     Snapshot recorded successfully for session test
+>> >     5000
+>> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+>> >     [09:36:12.225584696] (+0.000000528) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+>> >     Snapshot recorded successfully for session test
+>> >     6000
+>> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+>> >     [09:36:12.288311172] (+0.000000571) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 7 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+>> >     Snapshot recorded successfully for session test
+>> >     7000
+>> >     [09:36:11.985319272] (+?.?????????) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+>> >     [09:36:12.375789307] (+0.000001238) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+>> >     Snapshot recorded successfully for session test
+>> >     7000
+>> >     [09:36:12.032314084] (+?.?????????) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+>> >     [09:36:12.460756779] (+0.000001248) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+>> >     Snapshot recorded successfully for session test
+>> >     8000
+>> >     [09:36:12.032314084] (+?.?????????) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+>> >     [09:36:12.540464090] (+0.000001292) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 7 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+>> >     Snapshot recorded successfully for session test
+>> >     9000
+>> >     [09:36:12.032314084] (+?.?????????) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =
+=3D 0 }
+>> >     [09:36:12.621992931] (+0.000001298) 07f8cf84a38f tracetest:first_t=
+p:
+>> >     { cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =
+=3D 999 }
+>> >     Waiting for data availability
+>> >     Tracing stopped for session test
+>> >     Session test destroyed
+>> >
+>> >
+>> >
+>> >             >
+>> >             > Unless I'm mistaken, the behavior of the snapshot mode
+>> has changed
+>> >             > between 2.4 and 2.5.
+>> >             >
+>> >             > In the 2.4 series, consecutive snapshots could overlap;
+>> that is,
+>> >             > events could be present in multiple snapshots. As of 2.5=
+,
+>> an event is
+>> >             > guaranteed to only appear in one snapshot as the events
+>> are considered
+>> >             > as having been "consumed" at that point.
+>> >
+>> >             Hum, no the behavior is still the same, consecutive
+>> >             snapshots can overlap.
+>> >
+>> >             Could you tell us on which architecture you are experienci=
+ng
+>> >             the problem
+>> >             and the number of CPUs ?
+>> >
+>> >         The traces appended is from my laptop running Ubuntu 14.04 wit=
+h
+>> >         "8" cpu's
+>> >         model name      : Intel(R) Core(TM) i7-2760QM CPU @ 2.40GHz
+>> >         I have also run this on ARM with 16 cores and a powerpc
+>> >
+>> >
+>> >             Thanks,
+>> >
+>> >             Julien
+>> >
+>> >
+>> >
+>> >
+>>
+>
+>
+
+--bcaec53d5e2dfa88190507c45c14
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Looks like the patch creates a design bug.<div>If you have=
+ one channel enabled the max snapshot size will be equal to one buffer time=
+s the number of channels (seems to be 8??)</div><div>So max AND min size wi=
+ll always be the same and always much smaller then the content of the buffe=
+rs</div><div>The size argument passed to snapshot record is never used (or =
+if it&#39;s to small it will complain)</div><div><br></div><div>A Q&amp;D w=
+orkaround to get &quot;all&quot; data out is to create a 2nd non-used chann=
+el like this;</div><div><br></div><div>: ${NO_OF_SUBBUF:=3D6}<br></div><div=
+><div>: ${SUBBUF_SIZE:=3D4096}</div><div><br></div><div>SESSION=3Dtest</div=
+><div>CHANNEL1=3Dch1</div><div>CHANNEL2=3Dch2</div><div><br></div><div>CH2_=
+SUBBUF_SIZE=3D$(($SUBBUF_SIZE*$NO_OF_SUBBUF))</div><div>.....</div><div><br=
+></div><div>$LTTNG create $SESSION --snapshot</div><div>$LTTNG enable-chann=
+el -u --subbuf-size $SUBBUF_SIZE --num-subbuf $NO_OF_SUBBUF --overwrite $CH=
+ANNEL1</div><div>$LTTNG enable-channel -u --subbuf-size $CH2_SUBBUF_SIZE --=
+num-subbuf 2 --overwrite $CHANNEL2</div><div>$LTTNG enable-event -u -c $CHA=
+NNEL1 &quot;*&quot;</div></div><div>....</div><div><br></div><div>Then I fo=
+und another issue about the content of the traces, but I will file this und=
+er another topic</div><div><br></div></div><div class=3D"gmail_extra"><br c=
+lear=3D"all"><div><div class=3D"gmail_signature">Anders Wallin</div></div>
+<br><div class=3D"gmail_quote">On Thu, Nov 13, 2014 at 6:41 PM, Anders Wall=
+in <span dir=3D"ltr">&lt;<a href=3D"mailto:wallinux@gmail.com" target=3D"_b=
+lank">wallinux@gmail.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmai=
+l_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left=
+:1ex"><div dir=3D"ltr">No, I get the same problem with or w/o setting the s=
+ize<div class=3D"gmail_extra"><span class=3D"HOEnZb"><font color=3D"#888888=
+"><br clear=3D"all"><div><div>Anders Wallin</div></div></font></span><div><=
+div class=3D"h5">
+<br><div class=3D"gmail_quote">On Thu, Nov 13, 2014 at 5:45 PM, Julien Desf=
+ossez <span dir=3D"ltr">&lt;<a href=3D"mailto:jdesfossez@efficios.com" targ=
+et=3D"_blank">jdesfossez@efficios.com</a>&gt;</span> wrote:<br><blockquote =
+class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid=
+;padding-left:1ex">Ok, so if you don&#39;t limit the size of the snapshot (=
+remove the -m 1G) it<br>
+works as expected ?<br>
+<br>
+Julien<br>
+<span><br>
+On 14-11-13 10:33 AM, Anders Wallin wrote:<br>
+&gt; bug is introduced in=C2=A0 68808f4e0bbb3adccff72ff9dab6ec9f3a9e6866<br=
+>
+&gt;<br>
+&gt; Regards<br>
+&gt;<br>
+&gt; Anders<br>
+&gt;<br>
+&gt; Anders Wallin<br>
+&gt;<br>
+&gt; On Thu, Nov 13, 2014 at 10:39 AM, Anders Wallin &lt;<a href=3D"mailto:=
+wallinux@gmail.com" target=3D"_blank">wallinux@gmail.com</a><br>
+</span><span>&gt; &lt;mailto:<a href=3D"mailto:wallinux@gmail.com" target=
+=3D"_blank">wallinux@gmail.com</a>&gt;&gt; wrote:<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Anders Wallin<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0On Thu, Nov 13, 2014 at 8:43 AM, Anders Wallin &lt;=
+<a href=3D"mailto:wallinux@gmail.com" target=3D"_blank">wallinux@gmail.com<=
+/a><br>
+</span><span>&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:wallinux@=
+gmail.com" target=3D"_blank">wallinux@gmail.com</a>&gt;&gt; wrote:<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0On Thu, Nov 13, 2014 at 12:11 AM, Jul=
+ien Desfossez<br>
+</span><span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"mailto:jd=
+esfossez@efficios.com" target=3D"_blank">jdesfossez@efficios.com</a> &lt;ma=
+ilto:<a href=3D"mailto:jdesfossez@efficios.com" target=3D"_blank">jdesfosse=
+z@efficios.com</a>&gt;&gt; wrote:<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Hi,<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0On 14-11-12 05:30 PM, J=
+=C3=A9r=C3=A9mie Galarneau wrote:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; On Wed, Nov 12, 20=
+14 at 7:39 AM, Anders Wallin<br>
+</span><div><div>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;<a=
+ href=3D"mailto:wallinux@gmail.com" target=3D"_blank">wallinux@gmail.com</a=
+> &lt;mailto:<a href=3D"mailto:wallinux@gmail.com" target=3D"_blank">wallin=
+ux@gmail.com</a>&gt;&gt; wrote:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Hi,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; using userspac=
+e snapshot mode in 2.5 seems to broken.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; I have small s=
+tupid application(tracetest) generating<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A01000 events<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Running the sc=
+ript (the below is simplified version of<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0the script)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0-----------------------=
+-----------------------------------------------------------<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; #!/bin/bash<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; LTTNG=3D&#39;l=
+ttng -n&#39;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; lttng-sessiond=
+ --no-kernel &amp;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; You should use the=
+ &quot;-d&quot; flag to launch the sessiond as a<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0daemon. Using<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; &quot;&amp;&quot; =
+might cause the &quot;create&quot; command to launch a second<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0session daemon<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; since the first on=
+e would not have had the time to open<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0create its<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; command sockets.<b=
+r>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG create =
+test --snapshot<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG enable-=
+channel -u --subbuf-size 64k --num-subbuf<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A016 --overwrite ch1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG enable-=
+event -u -c ch1 &quot;*&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG start<b=
+r>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG list ch=
+1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; mkdir -p snaps=
+hot/<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; for i in $(seq=
+ 1 $LOOPS); do<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0./tracetest<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0$LTTNG snapshot record -m 1G<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0# print no of events and first and last event<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0last=3D$(ls -1drt $HOME/lttng-traces/$SESSION*/* | tail -1)<br>
+</div></div>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=
+=A0 =C2=A0 =C2=A0babeltrace $last &gt; snapshot/$<a href=3D"http://i.bt" ta=
+rget=3D"_blank">i.bt</a> &lt;<a href=3D"http://i.bt" target=3D"_blank">http=
+://i.bt</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0cat snapshot/$<a href=3D"http://i.bt" target=3D"_blank">i.bt</a> &lt;=
+<a href=3D"http://i.bt" target=3D"_blank">http://i.bt</a>&gt; | wc -l<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0cat snapshot/$<a href=3D"http://i.bt" target=3D"_blank">i.bt</a> &lt;=
+<a href=3D"http://i.bt" target=3D"_blank">http://i.bt</a>&gt; | head -1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0cat snapshot/$<a href=3D"http://i.bt" target=3D"_blank">i.bt</a> &lt;=
+<a href=3D"http://i.bt" target=3D"_blank">http://i.bt</a>&gt; | tail -1<br>
+<div><div>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; done=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG stop<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; $LTTNG destroy=
+ $SESSION<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0-----------------------=
+-----------------------------------------------------------<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; The result of =
+the run looks like this;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ./test.run<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Error: consume=
+r err socket second poll error<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Error: Health =
+error occurred in thread_manage_consumer<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; PERROR - 13:36=
+:59.685167 [23772/23781]: bind inet:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Address already in use<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (in lttcomm_bi=
+nd_inet_sock() at inet.c:109)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Warning: Anoth=
+er session daemon is using this JUL port.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0JUL support will be<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; deactivated to=
+ prevent interfering with the tracing.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; Is there a reason =
+why you run two session daemons? I&#39;m<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0guessing this<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; is related to my &=
+quot;&amp; vs -d&quot; comment above.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; lttng (LTTng T=
+race Control) 2.5.2 - Fumisterie<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; BabelTrace Tra=
+ce Viewer and Converter 1.2.4<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0linux-vdso.so.1 =3D&gt;=C2=A0 (0x00007fffba966000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0liblttng-ctl.so.0 =3D&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/usr/lib/x86_64-linux-g=
+nu/liblttng-ctl.so.0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (0x00007fbfe4b=
+1d000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0librt.so.1 =3D&gt; /lib/x86_64-linux-gnu/librt.so.1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0(0x00007fbfe4915000)<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libxml2.so.2 =3D&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/usr/lib/x86_64-linux-g=
+nu/libxml2.so.2<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (0x00007fbfe45=
+ae000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libpopt.so.0 =3D&gt; /lib/x86_64-linux-gnu/libpopt.so.0=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (0x00007fbfe43=
+a2000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libpthread.so.0 =3D&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/lib/x86_64-linux-gnu/l=
+ibpthread.so.0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (0x00007fbfe41=
+84000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libc.so.6 =3D&gt; /lib/x86_64-linux-gnu/libc.so.6<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0(0x00007fbfe3dbd000)<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0/lib64/ld-linux-x86-64.so.2 (0x00007fbfe4fac000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0liburcu.so.2 =3D&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/usr/lib/x86_64-linux-g=
+nu/liburcu.so.2<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (0x00007fbfe3b=
+b6000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libdl.so.2 =3D&gt; /lib/x86_64-linux-gnu/libdl.so.2<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0(0x00007fbfe39b2000)<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libz.so.1 =3D&gt; /lib/x86_64-linux-gnu/libz.so.1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0(0x00007fbfe3798000)<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0liblzma.so.5 =3D&gt; /lib/x86_64-linux-gnu/liblzma.so.5=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; (0x00007fbfe35=
+76000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0libm.so.6 =3D&gt; /lib/x86_64-linux-gnu/libm.so.6<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0(0x00007fbfe3270000)<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Session test c=
+reated.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Default snapsh=
+ot output set to:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; /home/awallin/=
+lttng-traces/test-20141112-133700<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot mode =
+set. Every channel enabled for that session<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0will be set in<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; overwrite mode=
+ and mmap output.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; UST channel ch=
+1 enabled for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; UST event * cr=
+eated in channel ch1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Tracing starte=
+d for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Tracing sessio=
+n test: [active snapshot]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0Trace path:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0Live timer interval (usec): 4294967295<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D=3D=3D Doma=
+in: UST global =3D=3D=3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Channels:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; -------------<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; - ch1: [enable=
+d]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0Attributes:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0overwrite mode: 1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0subbufers size: 4096<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0number of subbufers: 16<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0switch timer interval: 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0read timer interval: 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0trace file count: 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0trace file size (bytes): 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0output: mmap()<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0Events:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0* (type: tracepoint) [enabled]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 84<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8526=
+15950] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 4 }, { baddr =3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A00x7FFFC6BC7000, sopath<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8537=
+98949] (+0.000000805) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 6=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 157<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8537=
+35195] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 6=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 92=
+7 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8948=
+39116] (+0.000000299) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 5=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8537=
+35195] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 6=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 92=
+7 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.9294=
+47330] (+0.000000305) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 5=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Something is wrong from=
+ here:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8944=
+11117] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFF6BF81000, sopath<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.9720=
+35546] (+0.000000597) arn-awallin-mint-l3 tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 6=
+ }, { my_string_field =3D &quot;test&quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8944=
+11117] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFF6BF81000, sopath<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+</div></div>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [1=
+3:37:01.<a href=3D"tel:014060940" value=3D"+4614060940" target=3D"_blank">0=
+14060940</a> &lt;tel:<a href=3D"tel:014060940" value=3D"+4614060940" target=
+=3D"_blank">014060940</a>&gt;] (+0.000000341)<br>
+<span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0arn-awallin-mint-=
+l3 tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 7=
+ }, { my_string_field =3D &quot;test&quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:00.8944=
+11117] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 4 }, { baddr =3D 0x7FFF6BF81000, sopath<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+</span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:=
+01.<a href=3D"tel:052555877" value=3D"+4652555877" target=3D"_blank">052555=
+877</a> &lt;tel:<a href=3D"tel:052555877" value=3D"+4652555877" target=3D"_=
+blank">052555877</a>&gt;] (+0.000000872)<br>
+<span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0arn-awallin-mint-=
+l3 tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 6=
+ }, { my_string_field =3D &quot;test&quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0... to here.<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0The beginning timestamp=
+ is the same, the number of events is<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0the same,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0but the end timestamp m=
+oves. We see also this pattern below.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0I would be really inter=
+ested to see the whole snapshots when<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0it happens.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0It seems like we are no=
+t be overwriting the beginning of the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ring buffer<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0in some conditions. Cou=
+ld you send us your tracetest program<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0and the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0script so we can try to=
+ reproduce the problem ?<br>
+&gt;<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0I will append it including a run with=
+ debug turned on and all<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0the snapshot files created<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+</span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:=
+01.<a href=3D"tel:014035993" value=3D"+4614035993" target=3D"_blank">014035=
+993</a> &lt;tel:<a href=3D"tel:014035993" value=3D"+4614035993" target=3D"_=
+blank">014035993</a>&gt;] (+?.?????????)<br>
+<span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0arn-awallin-mint-=
+l3 tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 7=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 92=
+7 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:01.0986=
+20808] (+0.000001404) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 4=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+</span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:=
+01.<a href=3D"tel:097087388" value=3D"+4697087388" target=3D"_blank">097087=
+388</a> &lt;tel:<a href=3D"tel:097087388" value=3D"+4697087388" target=3D"_=
+blank">097087388</a>&gt;] (+?.?????????)<br>
+<span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0arn-awallin-mint-=
+l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 6 }, { baddr =3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A00x7FFF4BFFE000, sopath<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:01.1298=
+39830] (+0.000000533) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 7=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+</span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:=
+01.<a href=3D"tel:097087388" value=3D"+4697087388" target=3D"_blank">097087=
+388</a> &lt;tel:<a href=3D"tel:097087388" value=3D"+4697087388" target=3D"_=
+blank">097087388</a>&gt;] (+?.?????????)<br>
+<span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0arn-awallin-mint-=
+l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 6 }, { baddr =3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A00x7FFF4BFFE000, sopath<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:01.1298=
+39830] (+0.000000533) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 7=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+</span>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:=
+01.<a href=3D"tel:097087388" value=3D"+4697087388" target=3D"_blank">097087=
+388</a> &lt;tel:<a href=3D"tel:097087388" value=3D"+4697087388" target=3D"_=
+blank">097087388</a>&gt;] (+?.?????????)<br>
+<div><div>&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0arn-awallin-m=
+int-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 6 }, { baddr =3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A00x7FFF4BFFE000, sopath<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:01.1728=
+29105] (+0.000000575) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 5=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Snapshot recor=
+ded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; 168<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:01.1720=
+21557] (+?.?????????) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; ust_baddr_stat=
+edump:soinfo: { cpu_id =3D 7 }, { baddr =3D<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A00x7FFF653FE000, sopath<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; =3D &quot;[vds=
+o]&quot;, size =3D 0, mtime =3D -1 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; [13:37:01.2200=
+74165] (+0.000000553) arn-awallin-mint-l3<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0tracetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; { cpu_id =3D 6=
+ }, { my_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0my_integer_field =3D 99=
+9 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Waiting for da=
+ta availability<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Tracing stoppe=
+d for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; Session test d=
+estroyed<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; the result fro=
+m the run on older versions of lttng<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0creates bigger and bigg=
+er<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;&gt; event traces u=
+ntil reaching max size.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0We see this pattern her=
+e and the max size seems to be 168<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0events, was it<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0similar in your previou=
+s tests ?<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0If I&#39;m running the same test on 2=
+.4 or 2.3 the max number of<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0events is much bigger, like ~10000<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0(I don&#39;t have the exact number ri=
+ght now, I will rebuild and run<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0the test again and get back<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0with traces from that run)<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0For 2.4.2 the log looks like this:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0./test.run ./tracetest<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0lttng (LTTng Trace Control) 2.4.2 - =C3=89poque Opa=
+que<br>
+&gt;=C2=A0 =C2=A0 =C2=A0BabelTrace Trace Viewer and Converter 1.2.1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0linux-vdso.so.1 =3D&gt;=C2=A0 (0x00007fff775fe000)<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0liblttng-ctl.so.0 =3D&gt; /usr/local/lib/liblttng-c=
+tl.so.0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0(0x00002b2b016e4000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0libpopt.so.0 =3D&gt; /lib/x86_64-linux-gnu/libpopt.=
+so.0 (0x00002b2b0190f000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0libpthread.so.0 =3D&gt; /lib/x86_64-linux-gnu/libpt=
+hread.so.0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0(0x00002b2b01b1b000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0libc.so.6 =3D&gt; /lib/x86_64-linux-gnu/libc.so.6 (=
+0x00002b2b01d39000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0librt.so.1 =3D&gt; /lib/x86_64-linux-gnu/librt.so.1=
+ (0x00002b2b020ff000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0liburcu.so.3 =3D&gt; /usr/local/lib/liburcu.so.3 (0=
+x00002b2b02307000)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0/lib64/ld-linux-x86-64.so.2 (0x00002b2b014bf000)<br=
+>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Session test created.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Default snapshot output set to: //lttng-traces/test=
+-20141113-093611<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot mode set. Every channel enabled for that s=
+ession will be<br>
+&gt;=C2=A0 =C2=A0 =C2=A0set in overwrite mode and mmap output.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0UST channel ch1 enabled for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0UST event * created in channel ch1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Tracing started for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Tracing session test: [active snapshot]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Trace path:<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0=3D=3D=3D Domain: UST global =3D=3D=3D<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Buffer type: per UID<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Channels:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0-------------<br>
+&gt;=C2=A0 =C2=A0 =C2=A0- ch1: [enabled]<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Attributes:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0overwrite mode: 1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0subbufers size: 4096<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0number of subbufers: 16<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0switch timer interval: 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0read timer interval: 0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0output: mmap()<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Events:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0* (type: tracepoint) [enabled]=
+<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A01000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985857254] (+0.000000501) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A02000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+</div></div>&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.<a href=3D"tel:033066130" val=
+ue=3D"+4633066130" target=3D"_blank">033066130</a> &lt;tel:<a href=3D"tel:0=
+33066130" value=3D"+4633066130" target=3D"_blank">033066130</a>&gt;] (+0.00=
+0001663) 07f8cf84a38f<br>
+<span>&gt;=C2=A0 =C2=A0 =C2=A0tracetest:first_tp: { cpu_id =3D 5 }, { my_st=
+ring_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A03000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+</span>&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.<a href=3D"tel:086888121" value=3D=
+"+4686888121" target=3D"_blank">086888121</a> &lt;tel:<a href=3D"tel:086888=
+121" value=3D"+4686888121" target=3D"_blank">086888121</a>&gt;] (+0.0000012=
+73) 07f8cf84a38f<br>
+<div><div>&gt;=C2=A0 =C2=A0 =C2=A0tracetest:first_tp: { cpu_id =3D 5 }, { m=
+y_string_field =3D &quot;test&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A04000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.147378251] (+0.000001257) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A05000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.225584696] (+0.000000528) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A06000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.288311172] (+0.000000571) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 7 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A07000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:11.985319272] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.375789307] (+0.000001238) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A07000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.032314084] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 5 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.460756779] (+0.000001248) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 4 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A08000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.032314084] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 5 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.540464090] (+0.000001292) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 7 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Snapshot recorded successfully for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A09000<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.032314084] (+?.?????????) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 5 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 0 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[09:36:12.621992931] (+0.000001298) 07f8cf84a38f tr=
+acetest:first_tp:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0{ cpu_id =3D 5 }, { my_string_field =3D &quot;test&=
+quot;, my_integer_field =3D 999 }<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Waiting for data availability<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Tracing stopped for session test<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Session test destroyed<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; Unless I&#39;m mis=
+taken, the behavior of the snapshot mode has changed<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; between 2.4 and 2.=
+5.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; In the 2.4 series,=
+ consecutive snapshots could overlap; that is,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; events could be pr=
+esent in multiple snapshots. As of 2.5, an event is<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; guaranteed to only=
+ appear in one snapshot as the events are considered<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&gt; as having been &qu=
+ot;consumed&quot; at that point.<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Hum, no the behavior is=
+ still the same, consecutive<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0snapshots can overlap.<=
+br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Could you tell us on wh=
+ich architecture you are experiencing<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0the problem<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0and the number of CPUs =
+?<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0The traces appended is from my laptop=
+ running Ubuntu 14.04 with<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&quot;8&quot; cpu&#39;s<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0model name=C2=A0 =C2=A0 =C2=A0 : Inte=
+l(R) Core(TM) i7-2760QM CPU @ 2.40GHz<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0I have also run this on ARM with 16 c=
+ores and a powerpc<br>
+&gt;<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Thanks,<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Julien<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+</div></div></blockquote></div><br></div></div></div></div>
+</blockquote></div><br></div>
+
+--bcaec53d5e2dfa88190507c45c14--
+
+
+--===============0752957888==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0752957888==--
