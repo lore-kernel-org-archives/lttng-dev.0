@@ -1,16 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix: filter bytecode and string
-	memory leak on error
-Date: Thu, 13 Nov 2014 17:18:16 -0500
-Message-ID: <1415917096-26182-1-git-send-email-mathieu.desnoyers__31782.0180360743$1415917144$gmane$org@efficios.com>
+From: =?UTF-8?q?Andr=C3=A9=20Goddard=20Rosa?= <andre.goddard@gmail.com>
+Subject: [PATCH lttng-modules] Fix compilation on Linux kernel
+	>= 3.18.0
+Date: Thu, 13 Nov 2014 21:33:02 -0800
+Message-ID: <1415943182-2842-1-git-send-email-andre.goddard__41996.1555548527$1415943255$gmane$org@gmail.com>
+References: <1415488636-16588-1-git-send-email-andre.goddard@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-pa0-f46.google.com ([209.85.220.46])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1Xp2ih-00088o-40
- for lttng-dev@lists.lttng.org; Thu, 13 Nov 2014 17:18:28 -0500
+ (envelope-from <andre.goddard@gmail.com>) id 1Xp9Ve-0001kV-8t
+ for lttng-dev@lists.lttng.org; Fri, 14 Nov 2014 00:33:32 -0500
+Received: by mail-pa0-f46.google.com with SMTP id lf10so16744556pab.19
+ for <lttng-dev@lists.lttng.org>; Thu, 13 Nov 2014 21:33:20 -0800 (PST)
+In-Reply-To: <1415488636-16588-1-git-send-email-andre.goddard@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,181 +23,43 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- src/bin/lttng-sessiond/cmd.c       | 11 +++++++++++
- src/bin/lttng-sessiond/event.c     | 12 ++++++++++++
- src/bin/lttng-sessiond/kernel.c    |  1 +
- src/bin/lttng-sessiond/main.c      |  4 ++++
- src/bin/lttng-sessiond/trace-ust.c |  4 ++++
- 5 files changed, 32 insertions(+)
-
-diff --git a/src/bin/lttng-sessiond/cmd.c b/src/bin/lttng-sessiond/cmd.c
-index c2b0248..2598029 100644
---- a/src/bin/lttng-sessiond/cmd.c
-+++ b/src/bin/lttng-sessiond/cmd.c
-@@ -1385,6 +1385,7 @@ end:
- 
- /*
-  * Command LTTNG_ENABLE_EVENT processed by the client thread.
-+ * We own filter, exclusion, and filter_expression.
-  */
- int cmd_enable_event(struct ltt_session *session, struct lttng_domain *domain,
- 		char *channel_name, struct lttng_event *event,
-@@ -1536,6 +1537,10 @@ int cmd_enable_event(struct ltt_session *session, struct lttng_domain *domain,
- 		/* At this point, the session and channel exist on the tracer */
- 		ret = event_ust_enable_tracepoint(usess, uchan, event,
- 				filter_expression, filter, exclusion);
-+		/* We have passed ownership */
-+		filter_expression = NULL;
-+		filter = NULL;
-+		exclusion = NULL;
- 		if (ret != LTTNG_OK) {
- 			goto error;
- 		}
-@@ -1600,6 +1605,9 @@ int cmd_enable_event(struct ltt_session *session, struct lttng_domain *domain,
- 
- 		ret = cmd_enable_event(session, &tmp_dom, (char *) default_chan_name,
- 			&uevent, filter_expression, filter, NULL, wpipe);
-+		/* We have passed ownership */
-+		filter_expression = NULL;
-+		filter = NULL;
- 		if (ret != LTTNG_OK && ret != LTTNG_ERR_UST_EVENT_ENABLED) {
- 			goto error;
- 		}
-@@ -1629,6 +1637,9 @@ int cmd_enable_event(struct ltt_session *session, struct lttng_domain *domain,
- 	ret = LTTNG_OK;
- 
- error:
-+	free(filter_expression);
-+	free(filter);
-+	free(exclusion);
- 	rcu_read_unlock();
- 	return ret;
- }
-diff --git a/src/bin/lttng-sessiond/event.c b/src/bin/lttng-sessiond/event.c
-index 181926b..5e9ca19 100644
---- a/src/bin/lttng-sessiond/event.c
-+++ b/src/bin/lttng-sessiond/event.c
-@@ -180,6 +180,7 @@ int event_kernel_disable_all(struct ltt_kernel_channel *kchan)
- 
- /*
-  * Enable kernel tracepoint event for a channel from the kernel session.
-+ * We own filter_expression and filter.
-  */
- int event_kernel_enable_tracepoint(struct ltt_kernel_channel *kchan,
- 		struct lttng_event *event)
-@@ -407,6 +408,7 @@ error:
- 
- /*
-  * Enable UST tracepoint event for a channel from a UST session.
-+ * We own filter_expression, filter, and exclusion.
-  */
- int event_ust_enable_tracepoint(struct ltt_ust_session *usess,
- 		struct ltt_ust_channel *uchan, struct lttng_event *event,
-@@ -428,6 +430,10 @@ int event_ust_enable_tracepoint(struct ltt_ust_session *usess,
- 	if (uevent == NULL) {
- 		uevent = trace_ust_create_event(event, filter_expression,
- 			filter, exclusion);
-+		/* We have passed ownership */
-+		filter_expression = NULL;
-+		filter = NULL;
-+		exclusion = NULL;
- 		if (uevent == NULL) {
- 			ret = LTTNG_ERR_UST_ENABLE_FAIL;
- 			goto error;
-@@ -475,6 +481,9 @@ int event_ust_enable_tracepoint(struct ltt_ust_session *usess,
- 
- end:
- 	rcu_read_unlock();
-+	free(filter_expression);
-+	free(filter);
-+	free(exclusion);
- 	return ret;
- 
- error:
-@@ -490,6 +499,9 @@ error:
- 		trace_ust_destroy_event(uevent);
- 	}
- 	rcu_read_unlock();
-+	free(filter_expression);
-+	free(filter);
-+	free(exclusion);
- 	return ret;
- }
- 
-diff --git a/src/bin/lttng-sessiond/kernel.c b/src/bin/lttng-sessiond/kernel.c
-index 00bfbbc..a9151f4 100644
---- a/src/bin/lttng-sessiond/kernel.c
-+++ b/src/bin/lttng-sessiond/kernel.c
-@@ -173,6 +173,7 @@ error:
- /*
-  * Create a kernel event, enable it to the kernel tracer and add it to the
-  * channel event list of the kernel session.
-+ * We own filter_expression and filter.
-  */
- int kernel_create_event(struct lttng_event *ev,
- 		struct ltt_kernel_channel *channel)
-diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-index 9542e65..cfe8c35 100644
---- a/src/bin/lttng-sessiond/main.c
-+++ b/src/bin/lttng-sessiond/main.c
-@@ -3217,12 +3217,14 @@ skip_domain:
- 
- 			if (bytecode_len > LTTNG_FILTER_MAX_LEN) {
- 				ret = LTTNG_ERR_FILTER_INVAL;
-+				free(filter_expression);
- 				free(exclusion);
- 				goto error;
- 			}
- 
- 			bytecode = zmalloc(bytecode_len);
- 			if (!bytecode) {
-+				free(filter_expression);
- 				free(exclusion);
- 				ret = LTTNG_ERR_FILTER_NOMEM;
- 				goto error;
-@@ -3234,6 +3236,7 @@ skip_domain:
- 			if (ret <= 0) {
- 				DBG("Nothing recv() from client car len data... continuing");
- 				*sock_error = 1;
-+				free(filter_expression);
- 				free(bytecode);
- 				free(exclusion);
- 				ret = LTTNG_ERR_FILTER_INVAL;
-@@ -3241,6 +3244,7 @@ skip_domain:
- 			}
- 
- 			if ((bytecode->len + sizeof(*bytecode)) != bytecode_len) {
-+				free(filter_expression);
- 				free(bytecode);
- 				free(exclusion);
- 				ret = LTTNG_ERR_FILTER_INVAL;
-diff --git a/src/bin/lttng-sessiond/trace-ust.c b/src/bin/lttng-sessiond/trace-ust.c
-index 19a1c95..33ee071 100644
---- a/src/bin/lttng-sessiond/trace-ust.c
-+++ b/src/bin/lttng-sessiond/trace-ust.c
-@@ -365,6 +365,7 @@ error:
- 
- /*
-  * Allocate and initialize a ust event. Set name and event type.
-+ * We own filter_expression, filter, and exclusion.
-  *
-  * Return pointer to structure or NULL.
-  */
-@@ -440,6 +441,9 @@ struct ltt_ust_event *trace_ust_create_event(struct lttng_event *ev,
- error_free_event:
- 	free(lue);
- error:
-+	free(filter_expression);
-+	free(filter);
-+	free(exclusion);
- 	return NULL;
- }
- 
--- 
-2.1.1
+U2luY2Uga2VybmVsIGNvbW1pdCA4YTk1MjJkMmZlIGNvbXBpbGF0aW9uIGZhaWxzIGFzIGt2bV9h
+Z2VfcGFnZQp0cmFjZXBvaW50IGhhZCBpdHMgc2lnbmF0dXJlIGNoYW5nZWQsIHNvIHVwZGF0ZSBp
+dCBhY2NvcmRpbmdseS4KClRlc3RlZCBwb2ludGluZyB0byBrZXJuZWxzOgogICAgZ2l0IHJlc2V0
+IC0taGFyZCB2My4xNzsgbWFrZSBpbml0L3ZlcnNpb24ubwogICAgZ2l0IHJlc2V0IC0taGFyZCB2
+My4xOC1yYzE7IG1ha2UgaW5pdC92ZXJzaW9uLm8KClNpZ25lZC1vZmYtYnk6IEFuZHLDqSBHb2Rk
+YXJkIFJvc2EgPGFuZHJlLmdvZGRhcmRAZ21haWwuY29tPgotLS0KIGluc3RydW1lbnRhdGlvbi9l
+dmVudHMvbHR0bmctbW9kdWxlL2t2bS5oIHwgMjkgKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysKIDEgZmlsZSBjaGFuZ2VkLCAyOSBpbnNlcnRpb25zKCspCiBtb2RlIGNoYW5nZSAxMDA2NDQg
+PT4gMTAwNzU1IGluc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxlL2t2bS5oCgpkaWZm
+IC0tZ2l0IGEvaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9sdHRuZy1tb2R1bGUva3ZtLmggYi9pbnN0
+cnVtZW50YXRpb24vZXZlbnRzL2x0dG5nLW1vZHVsZS9rdm0uaApvbGQgbW9kZSAxMDA2NDQKbmV3
+IG1vZGUgMTAwNzU1CmluZGV4IGMwZDQyZTIuLjRmOTUwOTUKLS0tIGEvaW5zdHJ1bWVudGF0aW9u
+L2V2ZW50cy9sdHRuZy1tb2R1bGUva3ZtLmgKKysrIGIvaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9s
+dHRuZy1tb2R1bGUva3ZtLmgKQEAgLTIzMiw2ICsyMzIsMzQgQEAgTFRUTkdfVFJBQ0VQT0lOVF9F
+VkVOVChrdm1fZnB1LAogCVRQX3ByaW50aygiJXMiLCBfX3ByaW50X3N5bWJvbGljKF9fZW50cnkt
+PmxvYWQsIGt2bV9mcHVfbG9hZF9zeW1ib2wpKQogKQogCisjaWYgKExJTlVYX1ZFUlNJT05fQ09E
+RSA+PSBLRVJORUxfVkVSU0lPTigzLDE4LDApKQorCitMVFROR19UUkFDRVBPSU5UX0VWRU5UKGt2
+bV9hZ2VfcGFnZSwKKwlUUF9QUk9UTyh1bG9uZyBnZm4sIGludCBsZXZlbCwgc3RydWN0IGt2bV9t
+ZW1vcnlfc2xvdCAqc2xvdCwgaW50IHJlZiksCisJVFBfQVJHUyhnZm4sIGxldmVsLCBzbG90LCBy
+ZWYpLAorCisJVFBfU1RSVUNUX19lbnRyeSgKKwkJX19maWVsZCggICAgICAgIHU2NCwgICAgaHZh
+ICAgICAgICAgICAgICkKKwkJX19maWVsZCggICAgICAgIHU2NCwgICAgZ2ZuICAgICAgICAgICAg
+ICkKKwkJX19maWVsZCggICAgICAgIHU4LCAgICAgbGV2ZWwgICAgICAgICAgICkKKwkJX19maWVs
+ZCggICAgICAgIHU4LCAgICAgcmVmZXJlbmNlZCAgICAgICkKKwkpLAorCisJVFBfZmFzdF9hc3Np
+Z24oCisJCXRwX2Fzc2lnbihnZm4sIGdmbikKKwkJdHBfYXNzaWduKGxldmVsLCBsZXZlbCkKKwkJ
+dHBfYXNzaWduKGh2YSwgKChnZm4gLSBzbG90LT5iYXNlX2dmbikgPDwKKwkJCVBBR0VfU0hJRlQp
+ICsgc2xvdC0+dXNlcnNwYWNlX2FkZHIpCisJCXRwX2Fzc2lnbihyZWZlcmVuY2VkLCByZWYpCisJ
+KSwKKworCVRQX3ByaW50aygiaHZhICVsbHggZ2ZuICVsbHggbGV2ZWwgJXUgJXMiLAorCQlfX2Vu
+dHJ5LT5odmEsIF9fZW50cnktPmdmbiwgX19lbnRyeS0+bGV2ZWwsCisJCV9fZW50cnktPnJlZmVy
+ZW5jZWQgPyAiWU9VTkciIDogIk9MRCIpCispCisKKyNlbHNlCisKIExUVE5HX1RSQUNFUE9JTlRf
+RVZFTlQoa3ZtX2FnZV9wYWdlLAogCVRQX1BST1RPKHVsb25nIGh2YSwgc3RydWN0IGt2bV9tZW1v
+cnlfc2xvdCAqc2xvdCwgaW50IHJlZiksCiAJVFBfQVJHUyhodmEsIHNsb3QsIHJlZiksCkBAIC0y
+NTQsNiArMjgyLDcgQEAgTFRUTkdfVFJBQ0VQT0lOVF9FVkVOVChrdm1fYWdlX3BhZ2UsCiAJCSAg
+X19lbnRyeS0+cmVmZXJlbmNlZCA/ICJZT1VORyIgOiAiT0xEIikKICkKICNlbmRpZgorI2VuZGlm
+CiAKICNpZiAoTElOVVhfVkVSU0lPTl9DT0RFID49IEtFUk5FTF9WRVJTSU9OKDIsNiwzOCkpCiAK
+LS0gCjIuMS4zCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6
+Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
