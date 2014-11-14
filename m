@@ -1,17 +1,18 @@
-From: Anders Wallin <wallinux@gmail.com>
-Subject: snapshot data corrupted after the output buffer is
-	filled
-Date: Fri, 14 Nov 2014 08:28:18 +0100
-Message-ID: <CAF2baFfMNzRQnx-FC7kFRr5m4NpZBEcEohnwf50uOs2vv9=GBw__6.99150045893049$1415950147$gmane$org@mail.gmail.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: Re: snapshot issue with 2.5
+Date: Fri, 14 Nov 2014 14:58:18 -0500
+Message-ID: <54665EDA.7000307__43631.4069469974$1415995165$gmane$org@efficios.com>
+References: <CAF2baFd5vRuGKa7MVpqHvkCHia5fDN19cvq8qdedqJreNU6-vQ@mail.gmail.com>	<CA+jJMxvXfVT8w+hokMyFgTSqN=JH3nQUudJR+8MUJtQmTEgZZQ@mail.gmail.com>	<5463E904.9080102@efficios.com>	<CAF2baFesZ0Ke5qcWt9eGzWTyPuyAW_PM=ZZ+g9baEUNRwK5cGA@mail.gmail.com>	<CAF2baFcKwwciQDr+Wdpcs3_EJV969_aPUA_UtPXGo7=CMxWKvw@mail.gmail.com>	<CAF2baFfvY6NRNzNc3tkJygc=01ntwf-qa3GgXG_rT+fSw6E2MA@mail.gmail.com>	<5464E028.10709@efficios.com>	<CAF2baFfY-DYF4ZuiUPvdbNNqTwzh3-ujqecS5omraPhSSP=GLw@mail.gmail.com>
+ <CAF2baFcMWfi6e9mdKGJSSUsum4KkCUstM-7vE+gkPrAQLFA1Dg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0230692917=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f181.google.com ([209.85.212.181])
+Received: from fukushima.klipix.org ([85.12.144.25])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <wallinux@gmail.com>) id 1XpBIu-0002Ux-2b
- for lttng-dev@lists.lttng.org; Fri, 14 Nov 2014 02:28:26 -0500
-Received: by mail-wi0-f181.google.com with SMTP id n3so1768137wiv.8
- for <lttng-dev@lists.lttng.org>; Thu, 13 Nov 2014 23:28:18 -0800 (PST)
+ (envelope-from <jdesfossez@efficios.com>) id 1XpN0l-0006HD-2O
+ for lttng-dev@lists.lttng.org; Fri, 14 Nov 2014 14:58:31 -0500
+In-Reply-To: <CAF2baFcMWfi6e9mdKGJSSUsum4KkCUstM-7vE+gkPrAQLFA1Dg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,456 +21,499 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Anders Wallin <wallinux@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0230692917==
-Content-Type: multipart/alternative; boundary=f46d04426bbc9dc9610507cc924b
-
---f46d04426bbc9dc9610507cc924b
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-it looks like snapshot events became faulty after the output max size is
-reached.
-The next snapshot get mixed events from different buffers. I have tested it
-on 2.3, 2.4 and 2.5
-and it's in all of them, but it hits earlier in 2.5 due to the  problem
-reported in
-http://lists.lttng.org/pipermail/lttng-dev/2014-November/023773.html
-
-There should never be more then 2 HUNKS in a diff between 2 consecutive
-snapshots, here I got
-11 as the worst case.
-
-TESTCASE;
-
-tracetest code:
----------------------------------------------------------------
-#include <stdio.h>
-#include "tracetest-tp.h"
-
-int main(int argc, char* argv[])
-{
-        int i;
-        for (i =3D 0; i < 1000; i++) {
-                tracepoint(tracetest, first_tp, i, "test");
-        }
-        return 0;
-}
----------------------------------------------------------------
-
-test script:
----------------------------------------------------------------
-#!/bin/bash
-: ${NO_OF_SUBBUF:=3D6}
-: ${SUBBUF_SIZE:=3D4096}
-: ${KERNEL_TRACE:=3DNO}
-: ${LOOPS:=3D10}
-
-SESSION=3Dtest
-CHANNEL1=3Dch1
-CHANNEL2=3Dch2
-
-CH2_SUBBUF_SIZE=3D$(($SUBBUF_SIZE*$NO_OF_SUBBUF))
-
-
-LTTNG=3D'lttng -n'
-killall lttng-consumerd > /dev/null 2>&1
-killall lttng-sessiond > /dev/null 2>&1
-if [ -z $DEBUG ]; then
-    lttng-sessiond --no-kernel -d
-else
-    lttng-sessiond -v --no-kernel --verbose-consumer -b
-fi
-sleep 1
-
-if [ ! -z $DEBUG ]; then
-    export LTTNG_UST_DEBUG=3D1
-fi
-
-rm -rf $HOME/lttng-traces
-rm snapshot/*.bt
-
-$LTTNG --version
-
-$LTTNG create $SESSION --snapshot
-$LTTNG enable-channel -u --subbuf-size $SUBBUF_SIZE --num-subbuf
-$NO_OF_SUBBUF --overwrite $CHANNEL1
-$LTTNG enable-channel -u --subbuf-size $CH2_SUBBUF_SIZE --num-subbuf 2
---overwrite $CHANNEL2
-$LTTNG enable-event -u -c $CHANNEL1 "*"
-$LTTNG start
-$LTTNG list $SESSION
-
-mkdir -p snapshot/
-
-h=3D1
-for i in $(seq 1 $LOOPS); do
-    $APP
-    $LTTNG snapshot record
-    # print no of events and first and last event
-
-
-    last=3D$(ls -1drt $HOME/lttng-traces/$SESSION*/* | tail -1)
-    babeltrace $last > snapshot/$i.bt
-    cat snapshot/$i.bt | wc -l
-    cat snapshot/$i.bt | head -1
-    cat snapshot/$i.bt | tail -1
-    diff -u snapshot/$i.bt snapshot/$h.bt > snapshot/$i_$h.diff
-    cat snapshot/$i_$h.diff | grep "@@" | wc -l | xargs echo "NUMBER OF
-DIFF HUNKS =3D "
-    h=3D$i
-done
-
-$LTTNG stop
-$LTTNG destroy $SESSION
-
----------------------------------------------------------------
-
-result from run (removed some output lines for readability)
----------------------------------------------------------------
-lttng (LTTng Trace Control) 2.4.2 - =C3=89poque Opaque
-Snapshot mode set. Every channel enabled for that session will be set in
-overwrite mode and mmap output.
-Warning: The number of subbuffers (6) is rounded to the next power of 2 (8)
-UST channel ch1 enabled for session test
-Warning: The subbuf size (24576) is rounded to the next power of 2 (32768)
-UST channel ch2 enabled for session test
-UST event * created in channel ch1
-Tracing started for session test
-Tracing session test: [active snapshot]
-    Trace path:
-
-=3D=3D=3D Domain: UST global =3D=3D=3D
-
-Buffer type: per UID
-
-Channels:
--------------
-- ch1: [enabled]
-
-    Attributes:
-      overwrite mode: 1
-      subbufers size: 4096
-      number of subbufers: 8
-      switch timer interval: 0
-      read timer interval: 0
-      output: mmap()
-
-    Events:
-      * (type: tracepoint) [enabled]
-- ch2: [enabled]
-
-    Attributes:
-      overwrite mode: 1
-      subbufers size: 32768
-      number of subbufers: 2
-      switch timer interval: 0
-      read timer interval: 0
-      output: mmap()
-
-    Events:
-      None
-
-Snapshot recorded successfully for session test
-1011
-[07:09:43.278933559] (+?.?????????) 07f8cf84a38f
-ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000,
-sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-[07:09:43.279975100] (+0.000000975) 07f8cf84a38f tracetest:first_tp: {
-cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-NUMBER OF DIFF HUNKS =3D  0
-Snapshot recorded successfully for session test
-2022
-[07:09:43.278933559] (+?.?????????) 07f8cf84a38f
-ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000,
-sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-[07:09:43.337703508] (+0.000001238) 07f8cf84a38f tracetest:first_tp: {
-cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-NUMBER OF DIFF HUNKS =3D  1
-Snapshot recorded successfully for session test
-3033
-[07:09:43.278933559] (+?.?????????) 07f8cf84a38f
-ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000,
-sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-[07:09:43.432827051] (+0.000000308) 07f8cf84a38f tracetest:first_tp: {
-cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-NUMBER OF DIFF HUNKS =3D  1
-Snapshot recorded successfully for session test
-4044
-[07:09:43.278933559] (+?.?????????) 07f8cf84a38f
-ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000,
-sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-[07:09:43.475784825] (+0.000000501) 07f8cf84a38f tracetest:first_tp: {
-cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-NUMBER OF DIFF HUNKS =3D  1
-Snapshot recorded successfully for session test
-4735
-[07:09:43.279031320] (+?.?????????) 07f8cf84a38f tracetest:first_tp: {
-cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 0 }
-[07:09:43.549945106] (+0.000000517) 07f8cf84a38f tracetest:first_tp: {
-cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-NUMBER OF DIFF HUNKS =3D  12
-Snapshot recorded successfully for session test
-4437
-[07:09:43.335916076] (+?.?????????) 07f8cf84a38f
-ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000,
-sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-[07:09:43.654229030] (+0.000000436) 07f8cf84a38f tracetest:first_tp: {
-cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-NUMBER OF DIFF HUNKS =3D  3
-Snapshot recorded successfully for session test
-4746
-[07:09:43.335916076] (+?.?????????) 07f8cf84a38f
-ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000,
-sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-[07:09:43.747509349] (+0.000000502) 07f8cf84a38f tracetest:first_tp: {
-cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-NUMBER OF DIFF HUNKS =3D  11
-Snapshot recorded successfully for session test
-5757
-[07:09:43.335916076] (+?.?????????) 07f8cf84a38f
-ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000,
-sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-[07:09:43.814938128] (+0.000001371) 07f8cf84a38f tracetest:first_tp: {
-cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-NUMBER OF DIFF HUNKS =3D  1
-Snapshot recorded successfully for session test
-6066
-[07:09:43.335916076] (+?.?????????) 07f8cf84a38f
-ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000,
-sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-[07:09:43.919112586] (+0.000000990) 07f8cf84a38f tracetest:first_tp: {
-cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-NUMBER OF DIFF HUNKS =3D  11
-Snapshot recorded successfully for session test
-6077
-[07:09:43.335916076] (+?.?????????) 07f8cf84a38f
-ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000,
-sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-[07:09:44.004234933] (+0.000001213) 07f8cf84a38f tracetest:first_tp: {
-cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-NUMBER OF DIFF HUNKS =3D  2
-Waiting for data availability
-Tracing stopped for session test
-Session test destroyed
----------------------------------------------------------------
-
-Regards
-
-Anders Wallin
-
---f46d04426bbc9dc9610507cc924b
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi,</div><div><br></div><div>it looks like snapshot e=
-vents became faulty after the output max size is reached.</div><div>The nex=
-t snapshot get mixed events from different buffers. I have tested it on 2.3=
-, 2.4 and 2.5</div><div>and it&#39;s in all of them, but it hits earlier in=
- 2.5 due to the =C2=A0problem reported in</div><div><a href=3D"http://lists=
-.lttng.org/pipermail/lttng-dev/2014-November/023773.html">http://lists.lttn=
-g.org/pipermail/lttng-dev/2014-November/023773.html</a></div><div><br></div=
-><div>There should never be more then 2 HUNKS in a diff between 2 consecuti=
-ve snapshots, here I got=C2=A0</div><div>11 as the worst case.</div><div><b=
-r></div><div>TESTCASE;</div><div><br></div><div>tracetest code:</div><div>-=
---------------------------------------------------------------</div><div>#i=
-nclude &lt;stdio.h&gt;</div><div>#include &quot;tracetest-tp.h&quot;</div><=
-div><br></div><div>int main(int argc, char* argv[])</div><div>{</div><div>=
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 int i;</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 fo=
-r (i =3D 0; i &lt; 1000; i++) {</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 tracepoint(tracetest, first_tp, i, &quot;test&quot=
-;);</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 }</div><div>=C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 return 0;</div><div>}</div><div>------------------------------------=
----------------------------</div><div><br></div><div>test script:</div><div=
->---------------------------------------------------------------</div><div>=
-#!/bin/bash=C2=A0</div><div>: ${NO_OF_SUBBUF:=3D6}</div><div>: ${SUBBUF_SIZ=
-E:=3D4096}</div><div>: ${KERNEL_TRACE:=3DNO}</div><div>: ${LOOPS:=3D10}</di=
-v><div><br></div><div>SESSION=3Dtest</div><div>CHANNEL1=3Dch1</div><div>CHA=
-NNEL2=3Dch2</div><div><br></div><div>CH2_SUBBUF_SIZE=3D$(($SUBBUF_SIZE*$NO_=
-OF_SUBBUF))</div><div><br></div><div><br></div><div>LTTNG=3D&#39;lttng -n&#=
-39;</div><div>killall lttng-consumerd &gt; /dev/null 2&gt;&amp;1</div><div>=
-killall lttng-sessiond &gt; /dev/null 2&gt;&amp;1</div><div>if [ -z $DEBUG =
-]; then</div><div>=C2=A0 =C2=A0 lttng-sessiond --no-kernel -d</div><div>els=
-e</div><div>=C2=A0 =C2=A0 lttng-sessiond -v --no-kernel --verbose-consumer =
--b</div><div>fi</div><div>sleep 1</div><div><br></div><div>if [ ! -z $DEBUG=
- ]; then</div><div>=C2=A0 =C2=A0 export LTTNG_UST_DEBUG=3D1</div><div>fi</d=
-iv><div><br></div><div>rm -rf $HOME/lttng-traces</div><div>rm snapshot/*.bt=
-</div><div><br></div><div>$LTTNG --version</div><div><br></div><div>$LTTNG =
-create $SESSION --snapshot</div><div>$LTTNG enable-channel -u --subbuf-size=
- $SUBBUF_SIZE --num-subbuf $NO_OF_SUBBUF --overwrite $CHANNEL1</div><div>$L=
-TTNG enable-channel -u --subbuf-size $CH2_SUBBUF_SIZE --num-subbuf 2 --over=
-write $CHANNEL2</div><div>$LTTNG enable-event -u -c $CHANNEL1 &quot;*&quot;=
-</div><div>$LTTNG start</div><div>$LTTNG list $SESSION</div><div><br></div>=
-<div>mkdir -p snapshot/</div><div><br></div><div>h=3D1</div><div>for i in $=
-(seq 1 $LOOPS); do</div><div>=C2=A0 =C2=A0 $APP</div><div>=C2=A0 =C2=A0 $LT=
-TNG snapshot record</div><div>=C2=A0 =C2=A0 # print no of events and first =
-and last event =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0</div><div>=C2=A0 =C2=A0 last=3D$(ls -1drt $HOME=
-/lttng-traces/$SESSION*/* | tail -1)</div><div>=C2=A0 =C2=A0 babeltrace $la=
-st &gt; snapshot/$<a href=3D"http://i.bt">i.bt</a></div><div>=C2=A0 =C2=A0 =
-cat snapshot/$<a href=3D"http://i.bt">i.bt</a> | wc -l</div><div>=C2=A0 =C2=
-=A0 cat snapshot/$<a href=3D"http://i.bt">i.bt</a> | head -1</div><div>=C2=
-=A0 =C2=A0 cat snapshot/$<a href=3D"http://i.bt">i.bt</a> | tail -1</div><d=
-iv>=C2=A0 =C2=A0 diff -u snapshot/$<a href=3D"http://i.bt">i.bt</a> snapsho=
-t/$<a href=3D"http://h.bt">h.bt</a> &gt; snapshot/$i_$h.diff</div><div>=C2=
-=A0 =C2=A0 cat snapshot/$i_$h.diff | grep &quot;@@&quot; | wc -l | xargs ec=
-ho &quot;NUMBER OF DIFF HUNKS =3D &quot;</div><div>=C2=A0 =C2=A0 h=3D$i</di=
-v><div>done</div><div><br></div><div><div class=3D"gmail_signature"><div cl=
-ass=3D"gmail_signature">$LTTNG stop</div><div class=3D"gmail_signature">$LT=
-TNG destroy $SESSION</div><div class=3D"gmail_signature"><br></div><div cla=
-ss=3D"gmail_signature">----------------------------------------------------=
------------</div><div class=3D"gmail_signature"><br></div><div class=3D"gma=
-il_signature">result from run (removed some output lines for readability)</=
-div><div class=3D"gmail_signature">----------------------------------------=
------------------------</div><div class=3D"gmail_signature">lttng (LTTng Tr=
-ace Control) 2.4.2 - =C3=89poque Opaque</div><div class=3D"gmail_signature"=
->Snapshot mode set. Every channel enabled for that session will be set in o=
-verwrite mode and mmap output.</div><div class=3D"gmail_signature">Warning:=
- The number of subbuffers (6) is rounded to the next power of 2 (8)</div><d=
-iv class=3D"gmail_signature">UST channel ch1 enabled for session test</div>=
-<div class=3D"gmail_signature">Warning: The subbuf size (24576) is rounded =
-to the next power of 2 (32768)</div><div class=3D"gmail_signature">UST chan=
-nel ch2 enabled for session test</div><div class=3D"gmail_signature">UST ev=
-ent * created in channel ch1</div><div class=3D"gmail_signature">Tracing st=
-arted for session test</div><div class=3D"gmail_signature">Tracing session =
-test: [active snapshot]</div><div class=3D"gmail_signature">=C2=A0 =C2=A0 T=
-race path:=C2=A0</div><div class=3D"gmail_signature"><br></div><div class=
-=3D"gmail_signature">=3D=3D=3D Domain: UST global =3D=3D=3D</div><div class=
-=3D"gmail_signature"><br></div><div class=3D"gmail_signature">Buffer type: =
-per UID</div><div class=3D"gmail_signature"><br></div><div class=3D"gmail_s=
-ignature">Channels:</div><div class=3D"gmail_signature">-------------</div>=
-<div class=3D"gmail_signature">- ch1: [enabled]</div><div class=3D"gmail_si=
-gnature"><br></div><div class=3D"gmail_signature">=C2=A0 =C2=A0 Attributes:=
-</div><div class=3D"gmail_signature">=C2=A0 =C2=A0 =C2=A0 overwrite mode: 1=
-</div><div class=3D"gmail_signature">=C2=A0 =C2=A0 =C2=A0 subbufers size: 4=
-096</div><div class=3D"gmail_signature">=C2=A0 =C2=A0 =C2=A0 number of subb=
-ufers: 8</div><div class=3D"gmail_signature">=C2=A0 =C2=A0 =C2=A0 switch ti=
-mer interval: 0</div><div class=3D"gmail_signature">=C2=A0 =C2=A0 =C2=A0 re=
-ad timer interval: 0</div><div class=3D"gmail_signature">=C2=A0 =C2=A0 =C2=
-=A0 output: mmap()</div><div class=3D"gmail_signature"><br></div><div class=
-=3D"gmail_signature">=C2=A0 =C2=A0 Events:</div><div class=3D"gmail_signatu=
-re">=C2=A0 =C2=A0 =C2=A0 * (type: tracepoint) [enabled]</div><div class=3D"=
-gmail_signature">- ch2: [enabled]</div><div class=3D"gmail_signature"><br><=
-/div><div class=3D"gmail_signature">=C2=A0 =C2=A0 Attributes:</div><div cla=
-ss=3D"gmail_signature">=C2=A0 =C2=A0 =C2=A0 overwrite mode: 1</div><div cla=
-ss=3D"gmail_signature">=C2=A0 =C2=A0 =C2=A0 subbufers size: 32768</div><div=
- class=3D"gmail_signature">=C2=A0 =C2=A0 =C2=A0 number of subbufers: 2</div=
-><div class=3D"gmail_signature">=C2=A0 =C2=A0 =C2=A0 switch timer interval:=
- 0</div><div class=3D"gmail_signature">=C2=A0 =C2=A0 =C2=A0 read timer inte=
-rval: 0</div><div class=3D"gmail_signature">=C2=A0 =C2=A0 =C2=A0 output: mm=
-ap()</div><div class=3D"gmail_signature"><br></div><div class=3D"gmail_sign=
-ature">=C2=A0 =C2=A0 Events:</div><div class=3D"gmail_signature">=C2=A0 =C2=
-=A0 =C2=A0 None</div><div class=3D"gmail_signature"><br></div><div class=3D=
-"gmail_signature">Snapshot recorded successfully for session test</div><div=
- class=3D"gmail_signature">1011</div><div class=3D"gmail_signature">[07:09:=
-43.278933559] (+?.?????????) 07f8cf84a38f ust_baddr_statedump:soinfo: { cpu=
-_id =3D 6 }, { baddr =3D 0x7FFF645EE000, sopath =3D &quot;[vdso]&quot;, siz=
-e =3D 0, mtime =3D -1 }</div><div class=3D"gmail_signature">[07:09:43.27997=
-5100] (+0.000000975) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 5 }, { m=
-y_string_field =3D &quot;test&quot;, my_integer_field =3D 999 }</div><div c=
-lass=3D"gmail_signature">NUMBER OF DIFF HUNKS =3D =C2=A00</div><div class=
-=3D"gmail_signature">Snapshot recorded successfully for session test</div><=
-div class=3D"gmail_signature">2022</div><div class=3D"gmail_signature">[07:=
-09:43.278933559] (+?.?????????) 07f8cf84a38f ust_baddr_statedump:soinfo: { =
-cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000, sopath =3D &quot;[vdso]&quot;, =
-size =3D 0, mtime =3D -1 }</div><div class=3D"gmail_signature">[07:09:43.33=
-7703508] (+0.000001238) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 4 }, =
-{ my_string_field =3D &quot;test&quot;, my_integer_field =3D 999 }</div><di=
-v class=3D"gmail_signature">NUMBER OF DIFF HUNKS =3D =C2=A01</div><div clas=
-s=3D"gmail_signature">Snapshot recorded successfully for session test</div>=
-<div class=3D"gmail_signature">3033</div><div class=3D"gmail_signature">[07=
-:09:43.278933559] (+?.?????????) 07f8cf84a38f ust_baddr_statedump:soinfo: {=
- cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000, sopath =3D &quot;[vdso]&quot;,=
- size =3D 0, mtime =3D -1 }</div><div class=3D"gmail_signature">[07:09:43.4=
-32827051] (+0.000000308) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 6 },=
- { my_string_field =3D &quot;test&quot;, my_integer_field =3D 999 }</div><d=
-iv class=3D"gmail_signature">NUMBER OF DIFF HUNKS =3D =C2=A01</div><div cla=
-ss=3D"gmail_signature">Snapshot recorded successfully for session test</div=
-><div class=3D"gmail_signature">4044</div><div class=3D"gmail_signature">[0=
-7:09:43.278933559] (+?.?????????) 07f8cf84a38f ust_baddr_statedump:soinfo: =
-{ cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000, sopath =3D &quot;[vdso]&quot;=
-, size =3D 0, mtime =3D -1 }</div><div class=3D"gmail_signature">[07:09:43.=
-475784825] (+0.000000501) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 5 }=
-, { my_string_field =3D &quot;test&quot;, my_integer_field =3D 999 }</div><=
-div class=3D"gmail_signature">NUMBER OF DIFF HUNKS =3D =C2=A01</div><div cl=
-ass=3D"gmail_signature">Snapshot recorded successfully for session test</di=
-v><div class=3D"gmail_signature">4735</div><div class=3D"gmail_signature">[=
-07:09:43.279031320] (+?.?????????) 07f8cf84a38f tracetest:first_tp: { cpu_i=
-d =3D 5 }, { my_string_field =3D &quot;test&quot;, my_integer_field =3D 0 }=
-</div><div class=3D"gmail_signature">[07:09:43.549945106] (+0.000000517) 07=
-f8cf84a38f tracetest:first_tp: { cpu_id =3D 6 }, { my_string_field =3D &quo=
-t;test&quot;, my_integer_field =3D 999 }</div><div class=3D"gmail_signature=
-">NUMBER OF DIFF HUNKS =3D =C2=A012</div><div class=3D"gmail_signature">Sna=
-pshot recorded successfully for session test</div><div class=3D"gmail_signa=
-ture">4437</div><div class=3D"gmail_signature">[07:09:43.335916076] (+?.???=
-??????) 07f8cf84a38f ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =
-=3D 0x7FFFAD1FE000, sopath =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D -1=
- }</div><div class=3D"gmail_signature">[07:09:43.654229030] (+0.000000436) =
-07f8cf84a38f tracetest:first_tp: { cpu_id =3D 5 }, { my_string_field =3D &q=
-uot;test&quot;, my_integer_field =3D 999 }</div><div class=3D"gmail_signatu=
-re">NUMBER OF DIFF HUNKS =3D =C2=A03</div><div class=3D"gmail_signature">Sn=
-apshot recorded successfully for session test</div><div class=3D"gmail_sign=
-ature">4746</div><div class=3D"gmail_signature">[07:09:43.335916076] (+?.??=
-???????) 07f8cf84a38f ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr=
- =3D 0x7FFFAD1FE000, sopath =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D -=
-1 }</div><div class=3D"gmail_signature">[07:09:43.747509349] (+0.000000502)=
- 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 6 }, { my_string_field =3D &=
-quot;test&quot;, my_integer_field =3D 999 }</div><div class=3D"gmail_signat=
-ure">NUMBER OF DIFF HUNKS =3D =C2=A011</div><div class=3D"gmail_signature">=
-Snapshot recorded successfully for session test</div><div class=3D"gmail_si=
-gnature">5757</div><div class=3D"gmail_signature">[07:09:43.335916076] (+?.=
-?????????) 07f8cf84a38f ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { bad=
-dr =3D 0x7FFFAD1FE000, sopath =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D=
- -1 }</div><div class=3D"gmail_signature">[07:09:43.814938128] (+0.00000137=
-1) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 4 }, { my_string_field =3D=
- &quot;test&quot;, my_integer_field =3D 999 }</div><div class=3D"gmail_sign=
-ature">NUMBER OF DIFF HUNKS =3D =C2=A01</div><div class=3D"gmail_signature"=
->Snapshot recorded successfully for session test</div><div class=3D"gmail_s=
-ignature">6066</div><div class=3D"gmail_signature">[07:09:43.335916076] (+?=
-.?????????) 07f8cf84a38f ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { ba=
-ddr =3D 0x7FFFAD1FE000, sopath =3D &quot;[vdso]&quot;, size =3D 0, mtime =
-=3D -1 }</div><div class=3D"gmail_signature">[07:09:43.919112586] (+0.00000=
-0990) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 6 }, { my_string_field =
-=3D &quot;test&quot;, my_integer_field =3D 999 }</div><div class=3D"gmail_s=
-ignature">NUMBER OF DIFF HUNKS =3D =C2=A011</div><div class=3D"gmail_signat=
-ure">Snapshot recorded successfully for session test</div><div class=3D"gma=
-il_signature">6077</div><div class=3D"gmail_signature">[07:09:43.335916076]=
- (+?.?????????) 07f8cf84a38f ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, =
-{ baddr =3D 0x7FFFAD1FE000, sopath =3D &quot;[vdso]&quot;, size =3D 0, mtim=
-e =3D -1 }</div><div class=3D"gmail_signature">[07:09:44.004234933] (+0.000=
-001213) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 6 }, { my_string_fiel=
-d =3D &quot;test&quot;, my_integer_field =3D 999 }</div><div class=3D"gmail=
-_signature">NUMBER OF DIFF HUNKS =3D =C2=A02</div><div class=3D"gmail_signa=
-ture">Waiting for data availability</div><div class=3D"gmail_signature">Tra=
-cing stopped for session test</div><div class=3D"gmail_signature">Session t=
-est destroyed</div><div class=3D"gmail_signature">-------------------------=
---------------------------------------</div><div class=3D"gmail_signature">=
-<br></div><div class=3D"gmail_signature">Regards</div><div class=3D"gmail_s=
-ignature"><br></div><div class=3D"gmail_signature">Anders Wallin</div></div=
-></div>
-</div>
-
---f46d04426bbc9dc9610507cc924b--
-
-
---===============0230692917==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0230692917==--
+SW5kZWVkLCBpdCdzIGEgcHJvYmxlbSwgd291bGQgeW91IG1pbmQgZmlsbGluZyBhIGJ1ZyByZXBv
+cnQgb24KaHR0cHM6Ly9idWdzLmx0dG5nLm9yZy9wcm9qZWN0cy9sdHRuZy10b29scyBzbyB3ZSBj
+YW4ga2VlcCB0cmFjayBvZiB0aGlzCmlzc3VlID8KClRoYW5rcywKCkp1bGllbgoKT24gMTQtMTEt
+MTMgMDQ6NDAgUE0sIEFuZGVycyBXYWxsaW4gd3JvdGU6Cj4gTG9va3MgbGlrZSB0aGUgcGF0Y2gg
+Y3JlYXRlcyBhIGRlc2lnbiBidWcuCj4gSWYgeW91IGhhdmUgb25lIGNoYW5uZWwgZW5hYmxlZCB0
+aGUgbWF4IHNuYXBzaG90IHNpemUgd2lsbCBiZSBlcXVhbCB0bwo+IG9uZSBidWZmZXIgdGltZXMg
+dGhlIG51bWJlciBvZiBjaGFubmVscyAoc2VlbXMgdG8gYmUgOD8/KQo+IFNvIG1heCBBTkQgbWlu
+IHNpemUgd2lsbCBhbHdheXMgYmUgdGhlIHNhbWUgYW5kIGFsd2F5cyBtdWNoIHNtYWxsZXIgdGhl
+bgo+IHRoZSBjb250ZW50IG9mIHRoZSBidWZmZXJzCj4gVGhlIHNpemUgYXJndW1lbnQgcGFzc2Vk
+IHRvIHNuYXBzaG90IHJlY29yZCBpcyBuZXZlciB1c2VkIChvciBpZiBpdCdzIHRvCj4gc21hbGwg
+aXQgd2lsbCBjb21wbGFpbikKPiAKPiBBIFEmRCB3b3JrYXJvdW5kIHRvIGdldCAiYWxsIiBkYXRh
+IG91dCBpcyB0byBjcmVhdGUgYSAybmQgbm9uLXVzZWQKPiBjaGFubmVsIGxpa2UgdGhpczsKPiAK
+PiA6ICR7Tk9fT0ZfU1VCQlVGOj02fQo+IDogJHtTVUJCVUZfU0laRTo9NDA5Nn0KPiAKPiBTRVNT
+SU9OPXRlc3QKPiBDSEFOTkVMMT1jaDEKPiBDSEFOTkVMMj1jaDIKPiAKPiBDSDJfU1VCQlVGX1NJ
+WkU9JCgoJFNVQkJVRl9TSVpFKiROT19PRl9TVUJCVUYpKQo+IC4uLi4uCj4gCj4gJExUVE5HIGNy
+ZWF0ZSAkU0VTU0lPTiAtLXNuYXBzaG90Cj4gJExUVE5HIGVuYWJsZS1jaGFubmVsIC11IC0tc3Vi
+YnVmLXNpemUgJFNVQkJVRl9TSVpFIC0tbnVtLXN1YmJ1Zgo+ICROT19PRl9TVUJCVUYgLS1vdmVy
+d3JpdGUgJENIQU5ORUwxCj4gJExUVE5HIGVuYWJsZS1jaGFubmVsIC11IC0tc3ViYnVmLXNpemUg
+JENIMl9TVUJCVUZfU0laRSAtLW51bS1zdWJidWYgMgo+IC0tb3ZlcndyaXRlICRDSEFOTkVMMgo+
+ICRMVFRORyBlbmFibGUtZXZlbnQgLXUgLWMgJENIQU5ORUwxICIqIgo+IC4uLi4KPiAKPiBUaGVu
+IEkgZm91bmQgYW5vdGhlciBpc3N1ZSBhYm91dCB0aGUgY29udGVudCBvZiB0aGUgdHJhY2VzLCBi
+dXQgSSB3aWxsCj4gZmlsZSB0aGlzIHVuZGVyIGFub3RoZXIgdG9waWMKPiAKPiAKPiBBbmRlcnMg
+V2FsbGluCj4gCj4gT24gVGh1LCBOb3YgMTMsIDIwMTQgYXQgNjo0MSBQTSwgQW5kZXJzIFdhbGxp
+biA8d2FsbGludXhAZ21haWwuY29tCj4gPG1haWx0bzp3YWxsaW51eEBnbWFpbC5jb20+PiB3cm90
+ZToKPiAKPiAgICAgTm8sIEkgZ2V0IHRoZSBzYW1lIHByb2JsZW0gd2l0aCBvciB3L28gc2V0dGlu
+ZyB0aGUgc2l6ZQo+IAo+ICAgICBBbmRlcnMgV2FsbGluCj4gCj4gICAgIE9uIFRodSwgTm92IDEz
+LCAyMDE0IGF0IDU6NDUgUE0sIEp1bGllbiBEZXNmb3NzZXoKPiAgICAgPGpkZXNmb3NzZXpAZWZm
+aWNpb3MuY29tIDxtYWlsdG86amRlc2Zvc3NlekBlZmZpY2lvcy5jb20+PiB3cm90ZToKPiAKPiAg
+ICAgICAgIE9rLCBzbyBpZiB5b3UgZG9uJ3QgbGltaXQgdGhlIHNpemUgb2YgdGhlIHNuYXBzaG90
+IChyZW1vdmUgdGhlCj4gICAgICAgICAtbSAxRykgaXQKPiAgICAgICAgIHdvcmtzIGFzIGV4cGVj
+dGVkID8KPiAKPiAgICAgICAgIEp1bGllbgo+IAo+ICAgICAgICAgT24gMTQtMTEtMTMgMTA6MzMg
+QU0sIEFuZGVycyBXYWxsaW4gd3JvdGU6Cj4gICAgICAgICA+IGJ1ZyBpcyBpbnRyb2R1Y2VkIGlu
+ICA2ODgwOGY0ZTBiYmIzYWRjY2ZmNzJmZjlkYWI2ZWM5ZjNhOWU2ODY2Cj4gICAgICAgICA+Cj4g
+ICAgICAgICA+IFJlZ2FyZHMKPiAgICAgICAgID4KPiAgICAgICAgID4gQW5kZXJzCj4gICAgICAg
+ICA+Cj4gICAgICAgICA+IEFuZGVycyBXYWxsaW4KPiAgICAgICAgID4KPiAgICAgICAgID4gT24g
+VGh1LCBOb3YgMTMsIDIwMTQgYXQgMTA6MzkgQU0sIEFuZGVycyBXYWxsaW4gPHdhbGxpbnV4QGdt
+YWlsLmNvbSA8bWFpbHRvOndhbGxpbnV4QGdtYWlsLmNvbT4KPiAgICAgICAgID4gPG1haWx0bzp3
+YWxsaW51eEBnbWFpbC5jb20gPG1haWx0bzp3YWxsaW51eEBnbWFpbC5jb20+Pj4gd3JvdGU6Cj4g
+ICAgICAgICA+Cj4gICAgICAgICA+Cj4gICAgICAgICA+Cj4gICAgICAgICA+ICAgICBBbmRlcnMg
+V2FsbGluCj4gICAgICAgICA+Cj4gICAgICAgICA+ICAgICBPbiBUaHUsIE5vdiAxMywgMjAxNCBh
+dCA4OjQzIEFNLCBBbmRlcnMgV2FsbGluIDx3YWxsaW51eEBnbWFpbC5jb20gPG1haWx0bzp3YWxs
+aW51eEBnbWFpbC5jb20+Cj4gICAgICAgICA+ICAgICA8bWFpbHRvOndhbGxpbnV4QGdtYWlsLmNv
+bSA8bWFpbHRvOndhbGxpbnV4QGdtYWlsLmNvbT4+PiB3cm90ZToKPiAgICAgICAgID4KPiAgICAg
+ICAgID4gICAgICAgICBPbiBUaHUsIE5vdiAxMywgMjAxNCBhdCAxMjoxMSBBTSwgSnVsaWVuIERl
+c2Zvc3Nlego+ICAgICAgICAgPiAgICAgICAgIDxqZGVzZm9zc2V6QGVmZmljaW9zLmNvbSA8bWFp
+bHRvOmpkZXNmb3NzZXpAZWZmaWNpb3MuY29tPgo+ICAgICAgICAgPG1haWx0bzpqZGVzZm9zc2V6
+QGVmZmljaW9zLmNvbQo+ICAgICAgICAgPG1haWx0bzpqZGVzZm9zc2V6QGVmZmljaW9zLmNvbT4+
+PiB3cm90ZToKPiAgICAgICAgID4KPiAgICAgICAgID4gICAgICAgICAgICAgSGksCj4gICAgICAg
+ICA+Cj4gICAgICAgICA+ICAgICAgICAgICAgIE9uIDE0LTExLTEyIDA1OjMwIFBNLCBKw6lyw6lt
+aWUgR2FsYXJuZWF1IHdyb3RlOgo+ICAgICAgICAgPiAgICAgICAgICAgICA+IE9uIFdlZCwgTm92
+IDEyLCAyMDE0IGF0IDc6MzkgQU0sIEFuZGVycyBXYWxsaW4KPiAgICAgICAgID4gICAgICAgICAg
+ICAgPHdhbGxpbnV4QGdtYWlsLmNvbSA8bWFpbHRvOndhbGxpbnV4QGdtYWlsLmNvbT4KPiAgICAg
+ICAgIDxtYWlsdG86d2FsbGludXhAZ21haWwuY29tIDxtYWlsdG86d2FsbGludXhAZ21haWwuY29t
+Pj4+IHdyb3RlOgo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiBIaSwKPiAgICAgICAgID4gICAg
+ICAgICAgICAgPj4KPiAgICAgICAgID4gICAgICAgICAgICAgPj4gdXNpbmcgdXNlcnNwYWNlIHNu
+YXBzaG90IG1vZGUgaW4gMi41IHNlZW1zIHRvCj4gICAgICAgICBicm9rZW4uCj4gICAgICAgICA+
+ICAgICAgICAgICAgID4+Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+IEkgaGF2ZSBzbWFsbCBz
+dHVwaWQgYXBwbGljYXRpb24odHJhY2V0ZXN0KQo+ICAgICAgICAgZ2VuZXJhdGluZwo+ICAgICAg
+ICAgPiAgICAgICAgICAgICAxMDAwIGV2ZW50cwo+ICAgICAgICAgPiAgICAgICAgICAgICA+Pgo+
+ICAgICAgICAgPiAgICAgICAgICAgICA+PiBSdW5uaW5nIHRoZSBzY3JpcHQgKHRoZSBiZWxvdyBp
+cyBzaW1wbGlmaWVkCj4gICAgICAgICB2ZXJzaW9uIG9mCj4gICAgICAgICA+ICAgICAgICAgICAg
+IHRoZSBzY3JpcHQpCj4gICAgICAgICA+ICAgICAgICAgICAgID4+Cj4gICAgICAgICA+ICAgICAg
+ICAgICAKPiAgICAgICAgICAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gICAgICAgICA+ICAg
+ICAgICAgICAgID4+ICMhL2Jpbi9iYXNoCj4gICAgICAgICA+ICAgICAgICAgICAgID4+IExUVE5H
+PSdsdHRuZyAtbicKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gbHR0bmctc2Vzc2lvbmQgLS1u
+by1rZXJuZWwgJgo+ICAgICAgICAgPiAgICAgICAgICAgICA+Cj4gICAgICAgICA+ICAgICAgICAg
+ICAgID4gWW91IHNob3VsZCB1c2UgdGhlICItZCIgZmxhZyB0byBsYXVuY2ggdGhlCj4gICAgICAg
+ICBzZXNzaW9uZCBhcyBhCj4gICAgICAgICA+ICAgICAgICAgICAgIGRhZW1vbi4gVXNpbmcKPiAg
+ICAgICAgID4gICAgICAgICAgICAgPiAiJiIgbWlnaHQgY2F1c2UgdGhlICJjcmVhdGUiIGNvbW1h
+bmQgdG8gbGF1bmNoIGEKPiAgICAgICAgIHNlY29uZAo+ICAgICAgICAgPiAgICAgICAgICAgICBz
+ZXNzaW9uIGRhZW1vbgo+ICAgICAgICAgPiAgICAgICAgICAgICA+IHNpbmNlIHRoZSBmaXJzdCBv
+bmUgd291bGQgbm90IGhhdmUgaGFkIHRoZSB0aW1lCj4gICAgICAgICB0byBvcGVuCj4gICAgICAg
+ICA+ICAgICAgICAgICAgIGNyZWF0ZSBpdHMKPiAgICAgICAgID4gICAgICAgICAgICAgPiBjb21t
+YW5kIHNvY2tldHMuCj4gICAgICAgICA+ICAgICAgICAgICAgID4KPiAgICAgICAgID4gICAgICAg
+ICAgICAgPj4KPiAgICAgICAgID4gICAgICAgICAgICAgPj4gJExUVE5HIGNyZWF0ZSB0ZXN0IC0t
+c25hcHNob3QKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gJExUVE5HIGVuYWJsZS1jaGFubmVs
+IC11IC0tc3ViYnVmLXNpemUgNjRrCj4gICAgICAgICAtLW51bS1zdWJidWYKPiAgICAgICAgID4g
+ICAgICAgICAgICAgMTYgLS1vdmVyd3JpdGUgY2gxCj4gICAgICAgICA+ICAgICAgICAgICAgID4+
+ICRMVFRORyBlbmFibGUtZXZlbnQgLXUgLWMgY2gxICIqIgo+ICAgICAgICAgPiAgICAgICAgICAg
+ICA+PiAkTFRUTkcgc3RhcnQKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gJExUVE5HIGxpc3Qg
+Y2gxCj4gICAgICAgICA+ICAgICAgICAgICAgID4+Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+
+IG1rZGlyIC1wIHNuYXBzaG90Lwo+ICAgICAgICAgPiAgICAgICAgICAgICA+Pgo+ICAgICAgICAg
+PiAgICAgICAgICAgICA+PiBmb3IgaSBpbiAkKHNlcSAxICRMT09QUyk7IGRvCj4gICAgICAgICA+
+ICAgICAgICAgICAgID4+ICAgICAuL3RyYWNldGVzdAo+ICAgICAgICAgPiAgICAgICAgICAgICA+
+PiAgICAgJExUVE5HIHNuYXBzaG90IHJlY29yZCAtbSAxRwo+ICAgICAgICAgPiAgICAgICAgICAg
+ICA+Pgo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAgICAgIyBwcmludCBubyBvZiBldmVudHMg
+YW5kIGZpcnN0IGFuZCBsYXN0IGV2ZW50Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+ICAgICBs
+YXN0PSQobHMgLTFkcnQKPiAgICAgICAgICRIT01FL2x0dG5nLXRyYWNlcy8kU0VTU0lPTiovKiB8
+IHRhaWwgLTEpCj4gICAgICAgICA+ICAgICAgICAgICAgID4+ICAgICBiYWJlbHRyYWNlICRsYXN0
+ID4gc25hcHNob3QvJGkuYnQKPiAgICAgICAgIDxodHRwOi8vaS5idD4gPGh0dHA6Ly9pLmJ0Pgo+
+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAgICAgY2F0IHNuYXBzaG90LyRpLmJ0IDxodHRwOi8v
+aS5idD4KPiAgICAgICAgIDxodHRwOi8vaS5idD4gfCB3YyAtbAo+ICAgICAgICAgPiAgICAgICAg
+ICAgICA+PiAgICAgY2F0IHNuYXBzaG90LyRpLmJ0IDxodHRwOi8vaS5idD4KPiAgICAgICAgIDxo
+dHRwOi8vaS5idD4gfCBoZWFkIC0xCj4gICAgICAgICA+ICAgICAgICAgICAgID4+ICAgICBjYXQg
+c25hcHNob3QvJGkuYnQgPGh0dHA6Ly9pLmJ0Pgo+ICAgICAgICAgPGh0dHA6Ly9pLmJ0PiB8IHRh
+aWwgLTEKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gZG9uZQo+ICAgICAgICAgPiAgICAgICAg
+ICAgICA+Pgo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAkTFRUTkcgc3RvcAo+ICAgICAgICAg
+PiAgICAgICAgICAgICA+PiAkTFRUTkcgZGVzdHJveSAkU0VTU0lPTgo+ICAgICAgICAgPiAgICAg
+ICAgICAgICA+Pgo+ICAgICAgICAgPiAgICAgICAgICAgCj4gICAgICAgICAgLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLQo+ICAgICAgICAgPiAgICAgICAgICAgICA+Pgo+ICAgICAgICAgPiAgICAg
+ICAgICAgICA+PiBUaGUgcmVzdWx0IG9mIHRoZSBydW4gbG9va3MgbGlrZSB0aGlzOwo+ICAgICAg
+ICAgPiAgICAgICAgICAgICA+PiAuL3Rlc3QucnVuCj4gICAgICAgICA+ICAgICAgICAgICAgID4+
+IEVycm9yOiBjb25zdW1lciBlcnIgc29ja2V0IHNlY29uZCBwb2xsIGVycm9yCj4gICAgICAgICA+
+ICAgICAgICAgICAgID4+IEVycm9yOiBIZWFsdGggZXJyb3Igb2NjdXJyZWQgaW4KPiAgICAgICAg
+IHRocmVhZF9tYW5hZ2VfY29uc3VtZXIKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gUEVSUk9S
+IC0gMTM6MzY6NTkuNjg1MTY3IFsyMzc3Mi8yMzc4MV06IGJpbmQgaW5ldDoKPiAgICAgICAgID4g
+ICAgICAgICAgICAgQWRkcmVzcyBhbHJlYWR5IGluIHVzZQo+ICAgICAgICAgPiAgICAgICAgICAg
+ICA+PiAoaW4gbHR0Y29tbV9iaW5kX2luZXRfc29jaygpIGF0IGluZXQuYzoxMDkpCj4gICAgICAg
+ICA+ICAgICAgICAgICAgID4+IFdhcm5pbmc6IEFub3RoZXIgc2Vzc2lvbiBkYWVtb24gaXMgdXNp
+bmcgdGhpcwo+ICAgICAgICAgSlVMIHBvcnQuCj4gICAgICAgICA+ICAgICAgICAgICAgIEpVTCBz
+dXBwb3J0IHdpbGwgYmUKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gZGVhY3RpdmF0ZWQgdG8g
+cHJldmVudCBpbnRlcmZlcmluZyB3aXRoIHRoZQo+ICAgICAgICAgdHJhY2luZy4KPiAgICAgICAg
+ID4gICAgICAgICAgICAgPj4KPiAgICAgICAgID4gICAgICAgICAgICAgPgo+ICAgICAgICAgPiAg
+ICAgICAgICAgICA+IElzIHRoZXJlIGEgcmVhc29uIHdoeSB5b3UgcnVuIHR3byBzZXNzaW9uCj4g
+ICAgICAgICBkYWVtb25zPyBJJ20KPiAgICAgICAgID4gICAgICAgICAgICAgZ3Vlc3NpbmcgdGhp
+cwo+ICAgICAgICAgPiAgICAgICAgICAgICA+IGlzIHJlbGF0ZWQgdG8gbXkgIiYgdnMgLWQiIGNv
+bW1lbnQgYWJvdmUuCj4gICAgICAgICA+ICAgICAgICAgICAgID4KPiAgICAgICAgID4gICAgICAg
+ICAgICAgPj4gbHR0bmcgKExUVG5nIFRyYWNlIENvbnRyb2wpIDIuNS4yIC0gRnVtaXN0ZXJpZQo+
+ICAgICAgICAgPiAgICAgICAgICAgICA+PiBCYWJlbFRyYWNlIFRyYWNlIFZpZXdlciBhbmQgQ29u
+dmVydGVyIDEuMi40Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+ICAgICAgICAgbGludXgtdmRz
+by5zby4xID0+ICAoMHgwMDAwN2ZmZmJhOTY2MDAwKQo+ICAgICAgICAgPiAgICAgICAgICAgICA+
+PiAgICAgICAgIGxpYmx0dG5nLWN0bC5zby4wID0+Cj4gICAgICAgICA+ICAgICAgICAgICAgIC91
+c3IvbGliL3g4Nl82NC1saW51eC1nbnUvbGlibHR0bmctY3RsLnNvLjAKPiAgICAgICAgID4gICAg
+ICAgICAgICAgPj4gKDB4MDAwMDdmYmZlNGIxZDAwMCkKPiAgICAgICAgID4gICAgICAgICAgICAg
+Pj4gICAgICAgICBsaWJydC5zby4xID0+Cj4gICAgICAgICAvbGliL3g4Nl82NC1saW51eC1nbnUv
+bGlicnQuc28uMQo+ICAgICAgICAgPiAgICAgICAgICAgICAoMHgwMDAwN2ZiZmU0OTE1MDAwKQo+
+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAgICAgICAgIGxpYnhtbDIuc28uMiA9Pgo+ICAgICAg
+ICAgPiAgICAgICAgICAgICAvdXNyL2xpYi94ODZfNjQtbGludXgtZ251L2xpYnhtbDIuc28uMgo+
+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAoMHgwMDAwN2ZiZmU0NWFlMDAwKQo+ICAgICAgICAg
+PiAgICAgICAgICAgICA+PiAgICAgICAgIGxpYnBvcHQuc28uMCA9Pgo+ICAgICAgICAgL2xpYi94
+ODZfNjQtbGludXgtZ251L2xpYnBvcHQuc28uMAo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAo
+MHgwMDAwN2ZiZmU0M2EyMDAwKQo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAgICAgICAgIGxp
+YnB0aHJlYWQuc28uMCA9Pgo+ICAgICAgICAgPiAgICAgICAgICAgICAvbGliL3g4Nl82NC1saW51
+eC1nbnUvbGlicHRocmVhZC5zby4wCj4gICAgICAgICA+ICAgICAgICAgICAgID4+ICgweDAwMDA3
+ZmJmZTQxODQwMDApCj4gICAgICAgICA+ICAgICAgICAgICAgID4+ICAgICAgICAgbGliYy5zby42
+ID0+Cj4gICAgICAgICAvbGliL3g4Nl82NC1saW51eC1nbnUvbGliYy5zby42Cj4gICAgICAgICA+
+ICAgICAgICAgICAgICgweDAwMDA3ZmJmZTNkYmQwMDApCj4gICAgICAgICA+ICAgICAgICAgICAg
+ID4+ICAgICAgICAgL2xpYjY0L2xkLWxpbnV4LXg4Ni02NC5zby4yCj4gICAgICAgICAoMHgwMDAw
+N2ZiZmU0ZmFjMDAwKQo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAgICAgICAgIGxpYnVyY3Uu
+c28uMiA9Pgo+ICAgICAgICAgPiAgICAgICAgICAgICAvdXNyL2xpYi94ODZfNjQtbGludXgtZ251
+L2xpYnVyY3Uuc28uMgo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAoMHgwMDAwN2ZiZmUzYmI2
+MDAwKQo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAgICAgICAgIGxpYmRsLnNvLjIgPT4KPiAg
+ICAgICAgIC9saWIveDg2XzY0LWxpbnV4LWdudS9saWJkbC5zby4yCj4gICAgICAgICA+ICAgICAg
+ICAgICAgICgweDAwMDA3ZmJmZTM5YjIwMDApCj4gICAgICAgICA+ICAgICAgICAgICAgID4+ICAg
+ICAgICAgbGliei5zby4xID0+Cj4gICAgICAgICAvbGliL3g4Nl82NC1saW51eC1nbnUvbGliei5z
+by4xCj4gICAgICAgICA+ICAgICAgICAgICAgICgweDAwMDA3ZmJmZTM3OTgwMDApCj4gICAgICAg
+ICA+ICAgICAgICAgICAgID4+ICAgICAgICAgbGlibHptYS5zby41ID0+Cj4gICAgICAgICAvbGli
+L3g4Nl82NC1saW51eC1nbnUvbGlibHptYS5zby41Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+
+ICgweDAwMDA3ZmJmZTM1NzYwMDApCj4gICAgICAgICA+ICAgICAgICAgICAgID4+ICAgICAgICAg
+bGlibS5zby42ID0+Cj4gICAgICAgICAvbGliL3g4Nl82NC1saW51eC1nbnUvbGlibS5zby42Cj4g
+ICAgICAgICA+ICAgICAgICAgICAgICgweDAwMDA3ZmJmZTMyNzAwMDApCj4gICAgICAgICA+ICAg
+ICAgICAgICAgID4+Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+IFNlc3Npb24gdGVzdCBjcmVh
+dGVkLgo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiBEZWZhdWx0IHNuYXBzaG90IG91dHB1dCBz
+ZXQgdG86Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+IC9ob21lL2F3YWxsaW4vbHR0bmctdHJh
+Y2VzL3Rlc3QtMjAxNDExMTItMTMzNzAwCj4gICAgICAgICA+ICAgICAgICAgICAgID4+IFNuYXBz
+aG90IG1vZGUgc2V0LiBFdmVyeSBjaGFubmVsIGVuYWJsZWQgZm9yCj4gICAgICAgICB0aGF0IHNl
+c3Npb24KPiAgICAgICAgID4gICAgICAgICAgICAgd2lsbCBiZSBzZXQgaW4KPiAgICAgICAgID4g
+ICAgICAgICAgICAgPj4gb3ZlcndyaXRlIG1vZGUgYW5kIG1tYXAgb3V0cHV0Lgo+ICAgICAgICAg
+PiAgICAgICAgICAgICA+PiBVU1QgY2hhbm5lbCBjaDEgZW5hYmxlZCBmb3Igc2Vzc2lvbiB0ZXN0
+Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+IFVTVCBldmVudCAqIGNyZWF0ZWQgaW4gY2hhbm5l
+bCBjaDEKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gVHJhY2luZyBzdGFydGVkIGZvciBzZXNz
+aW9uIHRlc3QKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gVHJhY2luZyBzZXNzaW9uIHRlc3Q6
+IFthY3RpdmUgc25hcHNob3RdCj4gICAgICAgICA+ICAgICAgICAgICAgID4+ICAgICBUcmFjZSBw
+YXRoOgo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAgICAgTGl2ZSB0aW1lciBpbnRlcnZhbCAo
+dXNlYyk6IDQyOTQ5NjcyOTUKPiAgICAgICAgID4gICAgICAgICAgICAgPj4KPiAgICAgICAgID4g
+ICAgICAgICAgICAgPj4gPT09IERvbWFpbjogVVNUIGdsb2JhbCA9PT0KPiAgICAgICAgID4gICAg
+ICAgICAgICAgPj4KPiAgICAgICAgID4gICAgICAgICAgICAgPj4gQ2hhbm5lbHM6Cj4gICAgICAg
+ICA+ICAgICAgICAgICAgID4+IC0tLS0tLS0tLS0tLS0KPiAgICAgICAgID4gICAgICAgICAgICAg
+Pj4gLSBjaDE6IFtlbmFibGVkXQo+ICAgICAgICAgPiAgICAgICAgICAgICA+Pgo+ICAgICAgICAg
+PiAgICAgICAgICAgICA+PiAgICAgQXR0cmlidXRlczoKPiAgICAgICAgID4gICAgICAgICAgICAg
+Pj4gICAgICAgb3ZlcndyaXRlIG1vZGU6IDEKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gICAg
+ICAgc3ViYnVmZXJzIHNpemU6IDQwOTYKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gICAgICAg
+bnVtYmVyIG9mIHN1YmJ1ZmVyczogMTYKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gICAgICAg
+c3dpdGNoIHRpbWVyIGludGVydmFsOiAwCj4gICAgICAgICA+ICAgICAgICAgICAgID4+ICAgICAg
+IHJlYWQgdGltZXIgaW50ZXJ2YWw6IDAKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gICAgICAg
+dHJhY2UgZmlsZSBjb3VudDogMAo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAgICAgICB0cmFj
+ZSBmaWxlIHNpemUgKGJ5dGVzKTogMAo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAgICAgICBv
+dXRwdXQ6IG1tYXAoKQo+ICAgICAgICAgPiAgICAgICAgICAgICA+Pgo+ICAgICAgICAgPiAgICAg
+ICAgICAgICA+PiAgICAgRXZlbnRzOgo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAgICAgICAq
+ICh0eXBlOiB0cmFjZXBvaW50KSBbZW5hYmxlZF0KPiAgICAgICAgID4gICAgICAgICAgICAgPj4K
+PiAgICAgICAgID4gICAgICAgICAgICAgPj4gU25hcHNob3QgcmVjb3JkZWQgc3VjY2Vzc2Z1bGx5
+IGZvciBzZXNzaW9uIHRlc3QKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gODQKPiAgICAgICAg
+ID4gICAgICAgICAgICAgPj4gWzEzOjM3OjAwLjg1MjYxNTk1MF0gKCs/Lj8/Pz8/Pz8/PykKPiAg
+ICAgICAgIGFybi1hd2FsbGluLW1pbnQtbDMKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gdXN0
+X2JhZGRyX3N0YXRlZHVtcDpzb2luZm86IHsgY3B1X2lkID0gNCB9LCB7Cj4gICAgICAgICBiYWRk
+ciA9Cj4gICAgICAgICA+ICAgICAgICAgICAgIDB4N0ZGRkM2QkM3MDAwLCBzb3BhdGgKPiAgICAg
+ICAgID4gICAgICAgICAgICAgPj4gPSAiW3Zkc29dIiwgc2l6ZSA9IDAsIG10aW1lID0gLTEgfQo+
+ICAgICAgICAgPiAgICAgICAgICAgICA+PiBbMTM6Mzc6MDAuODUzNzk4OTQ5XSAoKzAuMDAwMDAw
+ODA1KQo+ICAgICAgICAgYXJuLWF3YWxsaW4tbWludC1sMwo+ICAgICAgICAgPiAgICAgICAgICAg
+ICB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+IHsgY3B1X2lk
+ID0gNiB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwKPiAgICAgICAgID4gICAgICAgICAg
+ICAgbXlfaW50ZWdlcl9maWVsZCA9IDk5OSB9Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+IFNu
+YXBzaG90IHJlY29yZGVkIHN1Y2Nlc3NmdWxseSBmb3Igc2Vzc2lvbiB0ZXN0Cj4gICAgICAgICA+
+ICAgICAgICAgICAgID4+IDE1Nwo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiBbMTM6Mzc6MDAu
+ODUzNzM1MTk1XSAoKz8uPz8/Pz8/Pz8/KQo+ICAgICAgICAgYXJuLWF3YWxsaW4tbWludC1sMwo+
+ICAgICAgICAgPiAgICAgICAgICAgICB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgICAgICA+ICAg
+ICAgICAgICAgID4+IHsgY3B1X2lkID0gNiB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwK
+PiAgICAgICAgID4gICAgICAgICAgICAgbXlfaW50ZWdlcl9maWVsZCA9IDkyNyB9Cj4gICAgICAg
+ICA+ICAgICAgICAgICAgID4+IFsxMzozNzowMC44OTQ4MzkxMTZdICgrMC4wMDAwMDAyOTkpCj4g
+ICAgICAgICBhcm4tYXdhbGxpbi1taW50LWwzCj4gICAgICAgICA+ICAgICAgICAgICAgIHRyYWNl
+dGVzdDpmaXJzdF90cDoKPiAgICAgICAgID4gICAgICAgICAgICAgPj4geyBjcHVfaWQgPSA1IH0s
+IHsgbXlfc3RyaW5nX2ZpZWxkID0gInRlc3QiLAo+ICAgICAgICAgPiAgICAgICAgICAgICBteV9p
+bnRlZ2VyX2ZpZWxkID0gOTk5IH0KPiAgICAgICAgID4gICAgICAgICAgICAgPj4gU25hcHNob3Qg
+cmVjb3JkZWQgc3VjY2Vzc2Z1bGx5IGZvciBzZXNzaW9uIHRlc3QKPiAgICAgICAgID4gICAgICAg
+ICAgICAgPj4gMTY4Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+IFsxMzozNzowMC44NTM3MzUx
+OTVdICgrPy4/Pz8/Pz8/Pz8pCj4gICAgICAgICBhcm4tYXdhbGxpbi1taW50LWwzCj4gICAgICAg
+ICA+ICAgICAgICAgICAgIHRyYWNldGVzdDpmaXJzdF90cDoKPiAgICAgICAgID4gICAgICAgICAg
+ICAgPj4geyBjcHVfaWQgPSA2IH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0gInRlc3QiLAo+ICAgICAg
+ICAgPiAgICAgICAgICAgICBteV9pbnRlZ2VyX2ZpZWxkID0gOTI3IH0KPiAgICAgICAgID4gICAg
+ICAgICAgICAgPj4gWzEzOjM3OjAwLjkyOTQ0NzMzMF0gKCswLjAwMDAwMDMwNSkKPiAgICAgICAg
+IGFybi1hd2FsbGluLW1pbnQtbDMKPiAgICAgICAgID4gICAgICAgICAgICAgdHJhY2V0ZXN0OmZp
+cnN0X3RwOgo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiB7IGNwdV9pZCA9IDUgfSwgeyBteV9z
+dHJpbmdfZmllbGQgPSAidGVzdCIsCj4gICAgICAgICA+ICAgICAgICAgICAgIG15X2ludGVnZXJf
+ZmllbGQgPSA5OTkgfQo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiBTbmFwc2hvdCByZWNvcmRl
+ZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICAgICAgPgo+ICAgICAgICAgPiAg
+ICAgICAgICAgICBTb21ldGhpbmcgaXMgd3JvbmcgZnJvbSBoZXJlOgo+ICAgICAgICAgPiAgICAg
+ICAgICAgICA+PiAxNjgKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gWzEzOjM3OjAwLjg5NDQx
+MTExN10gKCs/Lj8/Pz8/Pz8/PykKPiAgICAgICAgIGFybi1hd2FsbGluLW1pbnQtbDMKPiAgICAg
+ICAgID4gICAgICAgICAgICAgPj4gdXN0X2JhZGRyX3N0YXRlZHVtcDpzb2luZm86IHsgY3B1X2lk
+ID0gNCB9LCB7Cj4gICAgICAgICBiYWRkciA9IDB4N0ZGRjZCRjgxMDAwLCBzb3BhdGgKPiAgICAg
+ICAgID4gICAgICAgICAgICAgPj4gPSAiW3Zkc29dIiwgc2l6ZSA9IDAsIG10aW1lID0gLTEgfQo+
+ICAgICAgICAgPiAgICAgICAgICAgICA+PiBbMTM6Mzc6MDAuOTcyMDM1NTQ2XSAoKzAuMDAwMDAw
+NTk3KQo+ICAgICAgICAgYXJuLWF3YWxsaW4tbWludC1sMyB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4g
+ICAgICAgICA+ICAgICAgICAgICAgID4+IHsgY3B1X2lkID0gNiB9LCB7IG15X3N0cmluZ19maWVs
+ZCA9ICJ0ZXN0IiwKPiAgICAgICAgIG15X2ludGVnZXJfZmllbGQgPSA5OTkgfQo+ICAgICAgICAg
+PiAgICAgICAgICAgICA+PiBTbmFwc2hvdCByZWNvcmRlZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Np
+b24gdGVzdAo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAxNjgKPiAgICAgICAgID4gICAgICAg
+ICAgICAgPj4gWzEzOjM3OjAwLjg5NDQxMTExN10gKCs/Lj8/Pz8/Pz8/PykKPiAgICAgICAgIGFy
+bi1hd2FsbGluLW1pbnQtbDMKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gdXN0X2JhZGRyX3N0
+YXRlZHVtcDpzb2luZm86IHsgY3B1X2lkID0gNCB9LCB7Cj4gICAgICAgICBiYWRkciA9IDB4N0ZG
+RjZCRjgxMDAwLCBzb3BhdGgKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gPSAiW3Zkc29dIiwg
+c2l6ZSA9IDAsIG10aW1lID0gLTEgfQo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiBbMTM6Mzc6
+MDEuMDE0MDYwOTQwIDx0ZWw6MDE0MDYwOTQwPgo+ICAgICAgICAgPHRlbDowMTQwNjA5NDAgPHRl
+bDowMTQwNjA5NDA+Pl0gKCswLjAwMDAwMDM0MSkKPiAgICAgICAgID4gICAgICAgICAgICAgYXJu
+LWF3YWxsaW4tbWludC1sMyB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgICAgICA+ICAgICAgICAg
+ICAgID4+IHsgY3B1X2lkID0gNyB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwgbXlfaW50
+ZWdlcl9maWVsZCA9IDk5OSB9Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+IFNuYXBzaG90IHJl
+Y29yZGVkIHN1Y2Nlc3NmdWxseSBmb3Igc2Vzc2lvbiB0ZXN0Cj4gICAgICAgICA+ICAgICAgICAg
+ICAgID4+IDE2OAo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiBbMTM6Mzc6MDAuODk0NDExMTE3
+XSAoKz8uPz8/Pz8/Pz8/KSBhcm4tYXdhbGxpbi1taW50LWwzCj4gICAgICAgICA+ICAgICAgICAg
+ICAgID4+IHVzdF9iYWRkcl9zdGF0ZWR1bXA6c29pbmZvOiB7IGNwdV9pZCA9IDQgfSwgeyBiYWRk
+ciA9IDB4N0ZGRjZCRjgxMDAwLCBzb3BhdGgKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gPSAi
+W3Zkc29dIiwgc2l6ZSA9IDAsIG10aW1lID0gLTEgfQo+ICAgICAgICAgPiAgICAgICAgICAgICA+
+PiBbMTM6Mzc6MDEuMDUyNTU1ODc3IDx0ZWw6MDUyNTU1ODc3Pgo+ICAgICAgICAgPHRlbDowNTI1
+NTU4NzcgPHRlbDowNTI1NTU4Nzc+Pl0gKCswLjAwMDAwMDg3MikKPiAgICAgICAgID4gICAgICAg
+ICAgICAgYXJuLWF3YWxsaW4tbWludC1sMyB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgICAgICA+
+ICAgICAgICAgICAgID4+IHsgY3B1X2lkID0gNiB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0
+IiwgbXlfaW50ZWdlcl9maWVsZCA9IDk5OSB9Cj4gICAgICAgICA+ICAgICAgICAgICAgIC4uLiB0
+byBoZXJlLgo+ICAgICAgICAgPgo+ICAgICAgICAgPiAgICAgICAgICAgICBUaGUgYmVnaW5uaW5n
+IHRpbWVzdGFtcCBpcyB0aGUgc2FtZSwgdGhlIG51bWJlciBvZiBldmVudHMgaXMKPiAgICAgICAg
+ID4gICAgICAgICAgICAgdGhlIHNhbWUsCj4gICAgICAgICA+ICAgICAgICAgICAgIGJ1dCB0aGUg
+ZW5kIHRpbWVzdGFtcCBtb3Zlcy4gV2Ugc2VlIGFsc28gdGhpcyBwYXR0ZXJuIGJlbG93Lgo+ICAg
+ICAgICAgPiAgICAgICAgICAgICBJIHdvdWxkIGJlIHJlYWxseSBpbnRlcmVzdGVkIHRvIHNlZSB0
+aGUgd2hvbGUgc25hcHNob3RzIHdoZW4KPiAgICAgICAgID4gICAgICAgICAgICAgaXQgaGFwcGVu
+cy4KPiAgICAgICAgID4gICAgICAgICAgICAgSXQgc2VlbXMgbGlrZSB3ZSBhcmUgbm90IGJlIG92
+ZXJ3cml0aW5nIHRoZSBiZWdpbm5pbmcgb2YgdGhlCj4gICAgICAgICA+ICAgICAgICAgICAgIHJp
+bmcgYnVmZmVyCj4gICAgICAgICA+ICAgICAgICAgICAgIGluIHNvbWUgY29uZGl0aW9ucy4gQ291
+bGQgeW91IHNlbmQgdXMgeW91ciB0cmFjZXRlc3QgcHJvZ3JhbQo+ICAgICAgICAgPiAgICAgICAg
+ICAgICBhbmQgdGhlCj4gICAgICAgICA+ICAgICAgICAgICAgIHNjcmlwdCBzbyB3ZSBjYW4gdHJ5
+IHRvIHJlcHJvZHVjZSB0aGUgcHJvYmxlbSA/Cj4gICAgICAgICA+Cj4gICAgICAgICA+Cj4gICAg
+ICAgICA+ICAgICAgICAgSSB3aWxsIGFwcGVuZCBpdCBpbmNsdWRpbmcgYSBydW4gd2l0aCBkZWJ1
+ZyB0dXJuZWQgb24gYW5kIGFsbAo+ICAgICAgICAgPiAgICAgICAgIHRoZSBzbmFwc2hvdCBmaWxl
+cyBjcmVhdGVkCj4gICAgICAgICA+Cj4gICAgICAgICA+Cj4gICAgICAgICA+Cj4gICAgICAgICA+
+ICAgICAgICAgICAgID4+IFNuYXBzaG90IHJlY29yZGVkIHN1Y2Nlc3NmdWxseSBmb3Igc2Vzc2lv
+biB0ZXN0Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+IDE2OAo+ICAgICAgICAgPiAgICAgICAg
+ICAgICA+PiBbMTM6Mzc6MDEuMDE0MDM1OTkzIDx0ZWw6MDE0MDM1OTkzPgo+ICAgICAgICAgPHRl
+bDowMTQwMzU5OTMgPHRlbDowMTQwMzU5OTM+Pl0gKCs/Lj8/Pz8/Pz8/PykKPiAgICAgICAgID4g
+ICAgICAgICAgICAgYXJuLWF3YWxsaW4tbWludC1sMyB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAg
+ICAgICA+ICAgICAgICAgICAgID4+IHsgY3B1X2lkID0gNyB9LCB7IG15X3N0cmluZ19maWVsZCA9
+ICJ0ZXN0IiwKPiAgICAgICAgID4gICAgICAgICAgICAgbXlfaW50ZWdlcl9maWVsZCA9IDkyNyB9
+Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+IFsxMzozNzowMS4wOTg2MjA4MDhdICgrMC4wMDAw
+MDE0MDQpIGFybi1hd2FsbGluLW1pbnQtbDMKPiAgICAgICAgID4gICAgICAgICAgICAgdHJhY2V0
+ZXN0OmZpcnN0X3RwOgo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiB7IGNwdV9pZCA9IDQgfSwg
+eyBteV9zdHJpbmdfZmllbGQgPSAidGVzdCIsCj4gICAgICAgICA+ICAgICAgICAgICAgIG15X2lu
+dGVnZXJfZmllbGQgPSA5OTkgfQo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiBTbmFwc2hvdCBy
+ZWNvcmRlZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICAgICAgPiAgICAgICAg
+ICAgICA+PiAxNjgKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gWzEzOjM3OjAxLjA5NzA4NzM4
+OCA8dGVsOjA5NzA4NzM4OD4KPiAgICAgICAgIDx0ZWw6MDk3MDg3Mzg4IDx0ZWw6MDk3MDg3Mzg4
+Pj5dICgrPy4/Pz8/Pz8/Pz8pCj4gICAgICAgICA+ICAgICAgICAgICAgIGFybi1hd2FsbGluLW1p
+bnQtbDMKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gdXN0X2JhZGRyX3N0YXRlZHVtcDpzb2lu
+Zm86IHsgY3B1X2lkID0gNiB9LCB7IGJhZGRyID0KPiAgICAgICAgID4gICAgICAgICAgICAgMHg3
+RkZGNEJGRkUwMDAsIHNvcGF0aAo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiA9ICJbdmRzb10i
+LCBzaXplID0gMCwgbXRpbWUgPSAtMSB9Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+IFsxMzoz
+NzowMS4xMjk4Mzk4MzBdICgrMC4wMDAwMDA1MzMpIGFybi1hd2FsbGluLW1pbnQtbDMKPiAgICAg
+ICAgID4gICAgICAgICAgICAgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICAgICAgPiAgICAgICAg
+ICAgICA+PiB7IGNwdV9pZCA9IDcgfSwgeyBteV9zdHJpbmdfZmllbGQgPSAidGVzdCIsCj4gICAg
+ICAgICA+ICAgICAgICAgICAgIG15X2ludGVnZXJfZmllbGQgPSA5OTkgfQo+ICAgICAgICAgPiAg
+ICAgICAgICAgICA+PiBTbmFwc2hvdCByZWNvcmRlZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Npb24g
+dGVzdAo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAxNjgKPiAgICAgICAgID4gICAgICAgICAg
+ICAgPj4gWzEzOjM3OjAxLjA5NzA4NzM4OCA8dGVsOjA5NzA4NzM4OD4KPiAgICAgICAgIDx0ZWw6
+MDk3MDg3Mzg4IDx0ZWw6MDk3MDg3Mzg4Pj5dICgrPy4/Pz8/Pz8/Pz8pCj4gICAgICAgICA+ICAg
+ICAgICAgICAgIGFybi1hd2FsbGluLW1pbnQtbDMKPiAgICAgICAgID4gICAgICAgICAgICAgPj4g
+dXN0X2JhZGRyX3N0YXRlZHVtcDpzb2luZm86IHsgY3B1X2lkID0gNiB9LCB7IGJhZGRyID0KPiAg
+ICAgICAgID4gICAgICAgICAgICAgMHg3RkZGNEJGRkUwMDAsIHNvcGF0aAo+ICAgICAgICAgPiAg
+ICAgICAgICAgICA+PiA9ICJbdmRzb10iLCBzaXplID0gMCwgbXRpbWUgPSAtMSB9Cj4gICAgICAg
+ICA+ICAgICAgICAgICAgID4+IFsxMzozNzowMS4xMjk4Mzk4MzBdICgrMC4wMDAwMDA1MzMpIGFy
+bi1hd2FsbGluLW1pbnQtbDMKPiAgICAgICAgID4gICAgICAgICAgICAgdHJhY2V0ZXN0OmZpcnN0
+X3RwOgo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiB7IGNwdV9pZCA9IDcgfSwgeyBteV9zdHJp
+bmdfZmllbGQgPSAidGVzdCIsCj4gICAgICAgICA+ICAgICAgICAgICAgIG15X2ludGVnZXJfZmll
+bGQgPSA5OTkgfQo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiBTbmFwc2hvdCByZWNvcmRlZCBz
+dWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiAx
+NjgKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gWzEzOjM3OjAxLjA5NzA4NzM4OCA8dGVsOjA5
+NzA4NzM4OD4KPiAgICAgICAgIDx0ZWw6MDk3MDg3Mzg4IDx0ZWw6MDk3MDg3Mzg4Pj5dICgrPy4/
+Pz8/Pz8/Pz8pCj4gICAgICAgICA+ICAgICAgICAgICAgIGFybi1hd2FsbGluLW1pbnQtbDMKPiAg
+ICAgICAgID4gICAgICAgICAgICAgPj4gdXN0X2JhZGRyX3N0YXRlZHVtcDpzb2luZm86IHsgY3B1
+X2lkID0gNiB9LCB7Cj4gICAgICAgICBiYWRkciA9Cj4gICAgICAgICA+ICAgICAgICAgICAgIDB4
+N0ZGRjRCRkZFMDAwLCBzb3BhdGgKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gPSAiW3Zkc29d
+Iiwgc2l6ZSA9IDAsIG10aW1lID0gLTEgfQo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiBbMTM6
+Mzc6MDEuMTcyODI5MTA1XSAoKzAuMDAwMDAwNTc1KQo+ICAgICAgICAgYXJuLWF3YWxsaW4tbWlu
+dC1sMwo+ICAgICAgICAgPiAgICAgICAgICAgICB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgICAg
+ICA+ICAgICAgICAgICAgID4+IHsgY3B1X2lkID0gNSB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0
+ZXN0IiwKPiAgICAgICAgID4gICAgICAgICAgICAgbXlfaW50ZWdlcl9maWVsZCA9IDk5OSB9Cj4g
+ICAgICAgICA+ICAgICAgICAgICAgID4+IFNuYXBzaG90IHJlY29yZGVkIHN1Y2Nlc3NmdWxseSBm
+b3Igc2Vzc2lvbiB0ZXN0Cj4gICAgICAgICA+ICAgICAgICAgICAgID4+IDE2OAo+ICAgICAgICAg
+PiAgICAgICAgICAgICA+PiBbMTM6Mzc6MDEuMTcyMDIxNTU3XSAoKz8uPz8/Pz8/Pz8/KQo+ICAg
+ICAgICAgYXJuLWF3YWxsaW4tbWludC1sMwo+ICAgICAgICAgPiAgICAgICAgICAgICA+PiB1c3Rf
+YmFkZHJfc3RhdGVkdW1wOnNvaW5mbzogeyBjcHVfaWQgPSA3IH0sIHsKPiAgICAgICAgIGJhZGRy
+ID0KPiAgICAgICAgID4gICAgICAgICAgICAgMHg3RkZGNjUzRkUwMDAsIHNvcGF0aAo+ICAgICAg
+ICAgPiAgICAgICAgICAgICA+PiA9ICJbdmRzb10iLCBzaXplID0gMCwgbXRpbWUgPSAtMSB9Cj4g
+ICAgICAgICA+ICAgICAgICAgICAgID4+IFsxMzozNzowMS4yMjAwNzQxNjVdICgrMC4wMDAwMDA1
+NTMpCj4gICAgICAgICBhcm4tYXdhbGxpbi1taW50LWwzCj4gICAgICAgICA+ICAgICAgICAgICAg
+IHRyYWNldGVzdDpmaXJzdF90cDoKPiAgICAgICAgID4gICAgICAgICAgICAgPj4geyBjcHVfaWQg
+PSA2IH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0gInRlc3QiLAo+ICAgICAgICAgPiAgICAgICAgICAg
+ICBteV9pbnRlZ2VyX2ZpZWxkID0gOTk5IH0KPiAgICAgICAgID4gICAgICAgICAgICAgPj4gV2Fp
+dGluZyBmb3IgZGF0YSBhdmFpbGFiaWxpdHkKPiAgICAgICAgID4gICAgICAgICAgICAgPj4gVHJh
+Y2luZyBzdG9wcGVkIGZvciBzZXNzaW9uIHRlc3QKPiAgICAgICAgID4gICAgICAgICAgICAgPj4g
+U2Vzc2lvbiB0ZXN0IGRlc3Ryb3llZAo+ICAgICAgICAgPiAgICAgICAgICAgICA+Pgo+ICAgICAg
+ICAgPiAgICAgICAgICAgICA+PiB0aGUgcmVzdWx0IGZyb20gdGhlIHJ1biBvbiBvbGRlciB2ZXJz
+aW9ucyBvZiBsdHRuZwo+ICAgICAgICAgPiAgICAgICAgICAgICBjcmVhdGVzIGJpZ2dlciBhbmQg
+YmlnZ2VyCj4gICAgICAgICA+ICAgICAgICAgICAgID4+IGV2ZW50IHRyYWNlcyB1bnRpbCByZWFj
+aGluZyBtYXggc2l6ZS4KPiAgICAgICAgID4gICAgICAgICAgICAgV2Ugc2VlIHRoaXMgcGF0dGVy
+biBoZXJlIGFuZCB0aGUgbWF4IHNpemUgc2VlbXMgdG8KPiAgICAgICAgIGJlIDE2OAo+ICAgICAg
+ICAgPiAgICAgICAgICAgICBldmVudHMsIHdhcyBpdAo+ICAgICAgICAgPiAgICAgICAgICAgICBz
+aW1pbGFyIGluIHlvdXIgcHJldmlvdXMgdGVzdHMgPwo+ICAgICAgICAgPgo+ICAgICAgICAgPiAg
+ICAgICAgIElmIEknbSBydW5uaW5nIHRoZSBzYW1lIHRlc3Qgb24gMi40IG9yIDIuMyB0aGUgbWF4
+Cj4gICAgICAgICBudW1iZXIgb2YKPiAgICAgICAgID4gICAgICAgICBldmVudHMgaXMgbXVjaCBi
+aWdnZXIsIGxpa2UgfjEwMDAwCj4gICAgICAgICA+ICAgICAgICAgKEkgZG9uJ3QgaGF2ZSB0aGUg
+ZXhhY3QgbnVtYmVyIHJpZ2h0IG5vdywgSSB3aWxsCj4gICAgICAgICByZWJ1aWxkIGFuZCBydW4K
+PiAgICAgICAgID4gICAgICAgICB0aGUgdGVzdCBhZ2FpbiBhbmQgZ2V0IGJhY2sKPiAgICAgICAg
+ID4gICAgICAgICB3aXRoIHRyYWNlcyBmcm9tIHRoYXQgcnVuKQo+ICAgICAgICAgPgo+ICAgICAg
+ICAgPiAgICAgRm9yIDIuNC4yIHRoZSBsb2cgbG9va3MgbGlrZSB0aGlzOgo+ICAgICAgICAgPiAg
+ICAgLi90ZXN0LnJ1biAuL3RyYWNldGVzdAo+ICAgICAgICAgPgo+ICAgICAgICAgPiAgICAgbHR0
+bmcgKExUVG5nIFRyYWNlIENvbnRyb2wpIDIuNC4yIC0gw4lwb3F1ZSBPcGFxdWUKPiAgICAgICAg
+ID4gICAgIEJhYmVsVHJhY2UgVHJhY2UgVmlld2VyIGFuZCBDb252ZXJ0ZXIgMS4yLjEKPiAgICAg
+ICAgID4gICAgIGxpbnV4LXZkc28uc28uMSA9PiAgKDB4MDAwMDdmZmY3NzVmZTAwMCkKPiAgICAg
+ICAgID4gICAgIGxpYmx0dG5nLWN0bC5zby4wID0+IC91c3IvbG9jYWwvbGliL2xpYmx0dG5nLWN0
+bC5zby4wCj4gICAgICAgICA+ICAgICAoMHgwMDAwMmIyYjAxNmU0MDAwKQo+ICAgICAgICAgPiAg
+ICAgbGlicG9wdC5zby4wID0+IC9saWIveDg2XzY0LWxpbnV4LWdudS9saWJwb3B0LnNvLjAKPiAg
+ICAgICAgICgweDAwMDAyYjJiMDE5MGYwMDApCj4gICAgICAgICA+ICAgICBsaWJwdGhyZWFkLnNv
+LjAgPT4gL2xpYi94ODZfNjQtbGludXgtZ251L2xpYnB0aHJlYWQuc28uMAo+ICAgICAgICAgPiAg
+ICAgKDB4MDAwMDJiMmIwMWIxYjAwMCkKPiAgICAgICAgID4gICAgIGxpYmMuc28uNiA9PiAvbGli
+L3g4Nl82NC1saW51eC1nbnUvbGliYy5zby42Cj4gICAgICAgICAoMHgwMDAwMmIyYjAxZDM5MDAw
+KQo+ICAgICAgICAgPiAgICAgbGlicnQuc28uMSA9PiAvbGliL3g4Nl82NC1saW51eC1nbnUvbGli
+cnQuc28uMQo+ICAgICAgICAgKDB4MDAwMDJiMmIwMjBmZjAwMCkKPiAgICAgICAgID4gICAgIGxp
+YnVyY3Uuc28uMyA9PiAvdXNyL2xvY2FsL2xpYi9saWJ1cmN1LnNvLjMKPiAgICAgICAgICgweDAw
+MDAyYjJiMDIzMDcwMDApCj4gICAgICAgICA+ICAgICAvbGliNjQvbGQtbGludXgteDg2LTY0LnNv
+LjIgKDB4MDAwMDJiMmIwMTRiZjAwMCkKPiAgICAgICAgID4KPiAgICAgICAgID4gICAgIFNlc3Np
+b24gdGVzdCBjcmVhdGVkLgo+ICAgICAgICAgPiAgICAgRGVmYXVsdCBzbmFwc2hvdCBvdXRwdXQg
+c2V0IHRvOgo+ICAgICAgICAgLy9sdHRuZy10cmFjZXMvdGVzdC0yMDE0MTExMy0wOTM2MTEKPiAg
+ICAgICAgID4gICAgIFNuYXBzaG90IG1vZGUgc2V0LiBFdmVyeSBjaGFubmVsIGVuYWJsZWQgZm9y
+IHRoYXQgc2Vzc2lvbgo+ICAgICAgICAgd2lsbCBiZQo+ICAgICAgICAgPiAgICAgc2V0IGluIG92
+ZXJ3cml0ZSBtb2RlIGFuZCBtbWFwIG91dHB1dC4KPiAgICAgICAgID4gICAgIFVTVCBjaGFubmVs
+IGNoMSBlbmFibGVkIGZvciBzZXNzaW9uIHRlc3QKPiAgICAgICAgID4gICAgIFVTVCBldmVudCAq
+IGNyZWF0ZWQgaW4gY2hhbm5lbCBjaDEKPiAgICAgICAgID4gICAgIFRyYWNpbmcgc3RhcnRlZCBm
+b3Igc2Vzc2lvbiB0ZXN0Cj4gICAgICAgICA+ICAgICBUcmFjaW5nIHNlc3Npb24gdGVzdDogW2Fj
+dGl2ZSBzbmFwc2hvdF0KPiAgICAgICAgID4gICAgICAgICBUcmFjZSBwYXRoOgo+ICAgICAgICAg
+Pgo+ICAgICAgICAgPiAgICAgPT09IERvbWFpbjogVVNUIGdsb2JhbCA9PT0KPiAgICAgICAgID4K
+PiAgICAgICAgID4gICAgIEJ1ZmZlciB0eXBlOiBwZXIgVUlECj4gICAgICAgICA+Cj4gICAgICAg
+ICA+ICAgICBDaGFubmVsczoKPiAgICAgICAgID4gICAgIC0tLS0tLS0tLS0tLS0KPiAgICAgICAg
+ID4gICAgIC0gY2gxOiBbZW5hYmxlZF0KPiAgICAgICAgID4KPiAgICAgICAgID4gICAgICAgICBB
+dHRyaWJ1dGVzOgo+ICAgICAgICAgPiAgICAgICAgICAgb3ZlcndyaXRlIG1vZGU6IDEKPiAgICAg
+ICAgID4gICAgICAgICAgIHN1YmJ1ZmVycyBzaXplOiA0MDk2Cj4gICAgICAgICA+ICAgICAgICAg
+ICBudW1iZXIgb2Ygc3ViYnVmZXJzOiAxNgo+ICAgICAgICAgPiAgICAgICAgICAgc3dpdGNoIHRp
+bWVyIGludGVydmFsOiAwCj4gICAgICAgICA+ICAgICAgICAgICByZWFkIHRpbWVyIGludGVydmFs
+OiAwCj4gICAgICAgICA+ICAgICAgICAgICBvdXRwdXQ6IG1tYXAoKQo+ICAgICAgICAgPgo+ICAg
+ICAgICAgPiAgICAgICAgIEV2ZW50czoKPiAgICAgICAgID4gICAgICAgICAgICogKHR5cGU6IHRy
+YWNlcG9pbnQpIFtlbmFibGVkXQo+ICAgICAgICAgPgo+ICAgICAgICAgPiAgICAgU25hcHNob3Qg
+cmVjb3JkZWQgc3VjY2Vzc2Z1bGx5IGZvciBzZXNzaW9uIHRlc3QKPiAgICAgICAgID4gICAgIDEw
+MDAKPiAgICAgICAgID4gICAgIFswOTozNjoxMS45ODUzMTkyNzJdICgrPy4/Pz8/Pz8/Pz8pIDA3
+ZjhjZjg0YTM4Zgo+ICAgICAgICAgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICAgICAgPiAgICAg
+eyBjcHVfaWQgPSA0IH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0gInRlc3QiLAo+ICAgICAgICAgbXlf
+aW50ZWdlcl9maWVsZCA9IDAgfQo+ICAgICAgICAgPiAgICAgWzA5OjM2OjExLjk4NTg1NzI1NF0g
+KCswLjAwMDAwMDUwMSkgMDdmOGNmODRhMzhmCj4gICAgICAgICB0cmFjZXRlc3Q6Zmlyc3RfdHA6
+Cj4gICAgICAgICA+ICAgICB7IGNwdV9pZCA9IDQgfSwgeyBteV9zdHJpbmdfZmllbGQgPSAidGVz
+dCIsCj4gICAgICAgICBteV9pbnRlZ2VyX2ZpZWxkID0gOTk5IH0KPiAgICAgICAgID4gICAgIFNu
+YXBzaG90IHJlY29yZGVkIHN1Y2Nlc3NmdWxseSBmb3Igc2Vzc2lvbiB0ZXN0Cj4gICAgICAgICA+
+ICAgICAyMDAwCj4gICAgICAgICA+ICAgICBbMDk6MzY6MTEuOTg1MzE5MjcyXSAoKz8uPz8/Pz8/
+Pz8/KSAwN2Y4Y2Y4NGEzOGYKPiAgICAgICAgIHRyYWNldGVzdDpmaXJzdF90cDoKPiAgICAgICAg
+ID4gICAgIHsgY3B1X2lkID0gNCB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwKPiAgICAg
+ICAgIG15X2ludGVnZXJfZmllbGQgPSAwIH0KPiAgICAgICAgID4gICAgIFswOTozNjoxMi4wMzMw
+NjYxMzAgPHRlbDowMzMwNjYxMzA+IDx0ZWw6MDMzMDY2MTMwCj4gICAgICAgICA8dGVsOjAzMzA2
+NjEzMD4+XSAoKzAuMDAwMDAxNjYzKSAwN2Y4Y2Y4NGEzOGYKPiAgICAgICAgID4gICAgIHRyYWNl
+dGVzdDpmaXJzdF90cDogeyBjcHVfaWQgPSA1IH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0gInRlc3Qi
+LAo+ICAgICAgICAgPiAgICAgbXlfaW50ZWdlcl9maWVsZCA9IDk5OSB9Cj4gICAgICAgICA+ICAg
+ICBTbmFwc2hvdCByZWNvcmRlZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICAg
+ICAgPiAgICAgMzAwMAo+ICAgICAgICAgPiAgICAgWzA5OjM2OjExLjk4NTMxOTI3Ml0gKCs/Lj8/
+Pz8/Pz8/PykgMDdmOGNmODRhMzhmIHRyYWNldGVzdDpmaXJzdF90cDoKPiAgICAgICAgID4gICAg
+IHsgY3B1X2lkID0gNCB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwgbXlfaW50ZWdlcl9m
+aWVsZCA9IDAgfQo+ICAgICAgICAgPiAgICAgWzA5OjM2OjEyLjA4Njg4ODEyMSA8dGVsOjA4Njg4
+ODEyMT4gPHRlbDowODY4ODgxMjEKPiAgICAgICAgIDx0ZWw6MDg2ODg4MTIxPj5dICgrMC4wMDAw
+MDEyNzMpIDA3ZjhjZjg0YTM4Zgo+ICAgICAgICAgPiAgICAgdHJhY2V0ZXN0OmZpcnN0X3RwOiB7
+IGNwdV9pZCA9IDUgfSwgeyBteV9zdHJpbmdfZmllbGQgPQo+ICAgICAgICAgInRlc3QiLAo+ICAg
+ICAgICAgPiAgICAgbXlfaW50ZWdlcl9maWVsZCA9IDk5OSB9Cj4gICAgICAgICA+ICAgICBTbmFw
+c2hvdCByZWNvcmRlZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICAgICAgPiAg
+ICAgNDAwMAo+ICAgICAgICAgPiAgICAgWzA5OjM2OjExLjk4NTMxOTI3Ml0gKCs/Lj8/Pz8/Pz8/
+PykgMDdmOGNmODRhMzhmCj4gICAgICAgICB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgICAgICA+
+ICAgICB7IGNwdV9pZCA9IDQgfSwgeyBteV9zdHJpbmdfZmllbGQgPSAidGVzdCIsCj4gICAgICAg
+ICBteV9pbnRlZ2VyX2ZpZWxkID0gMCB9Cj4gICAgICAgICA+ICAgICBbMDk6MzY6MTIuMTQ3Mzc4
+MjUxXSAoKzAuMDAwMDAxMjU3KSAwN2Y4Y2Y4NGEzOGYKPiAgICAgICAgIHRyYWNldGVzdDpmaXJz
+dF90cDoKPiAgICAgICAgID4gICAgIHsgY3B1X2lkID0gNCB9LCB7IG15X3N0cmluZ19maWVsZCA9
+ICJ0ZXN0IiwKPiAgICAgICAgIG15X2ludGVnZXJfZmllbGQgPSA5OTkgfQo+ICAgICAgICAgPiAg
+ICAgU25hcHNob3QgcmVjb3JkZWQgc3VjY2Vzc2Z1bGx5IGZvciBzZXNzaW9uIHRlc3QKPiAgICAg
+ICAgID4gICAgIDUwMDAKPiAgICAgICAgID4gICAgIFswOTozNjoxMS45ODUzMTkyNzJdICgrPy4/
+Pz8/Pz8/Pz8pIDA3ZjhjZjg0YTM4Zgo+ICAgICAgICAgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAg
+ICAgICAgPiAgICAgeyBjcHVfaWQgPSA0IH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0gInRlc3QiLAo+
+ICAgICAgICAgbXlfaW50ZWdlcl9maWVsZCA9IDAgfQo+ICAgICAgICAgPiAgICAgWzA5OjM2OjEy
+LjIyNTU4NDY5Nl0gKCswLjAwMDAwMDUyOCkgMDdmOGNmODRhMzhmCj4gICAgICAgICB0cmFjZXRl
+c3Q6Zmlyc3RfdHA6Cj4gICAgICAgICA+ICAgICB7IGNwdV9pZCA9IDQgfSwgeyBteV9zdHJpbmdf
+ZmllbGQgPSAidGVzdCIsCj4gICAgICAgICBteV9pbnRlZ2VyX2ZpZWxkID0gOTk5IH0KPiAgICAg
+ICAgID4gICAgIFNuYXBzaG90IHJlY29yZGVkIHN1Y2Nlc3NmdWxseSBmb3Igc2Vzc2lvbiB0ZXN0
+Cj4gICAgICAgICA+ICAgICA2MDAwCj4gICAgICAgICA+ICAgICBbMDk6MzY6MTEuOTg1MzE5Mjcy
+XSAoKz8uPz8/Pz8/Pz8/KSAwN2Y4Y2Y4NGEzOGYKPiAgICAgICAgIHRyYWNldGVzdDpmaXJzdF90
+cDoKPiAgICAgICAgID4gICAgIHsgY3B1X2lkID0gNCB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0
+ZXN0IiwKPiAgICAgICAgIG15X2ludGVnZXJfZmllbGQgPSAwIH0KPiAgICAgICAgID4gICAgIFsw
+OTozNjoxMi4yODgzMTExNzJdICgrMC4wMDAwMDA1NzEpIDA3ZjhjZjg0YTM4Zgo+ICAgICAgICAg
+dHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICAgICAgPiAgICAgeyBjcHVfaWQgPSA3IH0sIHsgbXlf
+c3RyaW5nX2ZpZWxkID0gInRlc3QiLAo+ICAgICAgICAgbXlfaW50ZWdlcl9maWVsZCA9IDk5OSB9
+Cj4gICAgICAgICA+ICAgICBTbmFwc2hvdCByZWNvcmRlZCBzdWNjZXNzZnVsbHkgZm9yIHNlc3Np
+b24gdGVzdAo+ICAgICAgICAgPiAgICAgNzAwMAo+ICAgICAgICAgPiAgICAgWzA5OjM2OjExLjk4
+NTMxOTI3Ml0gKCs/Lj8/Pz8/Pz8/PykgMDdmOGNmODRhMzhmCj4gICAgICAgICB0cmFjZXRlc3Q6
+Zmlyc3RfdHA6Cj4gICAgICAgICA+ICAgICB7IGNwdV9pZCA9IDQgfSwgeyBteV9zdHJpbmdfZmll
+bGQgPSAidGVzdCIsCj4gICAgICAgICBteV9pbnRlZ2VyX2ZpZWxkID0gMCB9Cj4gICAgICAgICA+
+ICAgICBbMDk6MzY6MTIuMzc1Nzg5MzA3XSAoKzAuMDAwMDAxMjM4KSAwN2Y4Y2Y4NGEzOGYKPiAg
+ICAgICAgIHRyYWNldGVzdDpmaXJzdF90cDoKPiAgICAgICAgID4gICAgIHsgY3B1X2lkID0gNCB9
+LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwKPiAgICAgICAgIG15X2ludGVnZXJfZmllbGQg
+PSA5OTkgfQo+ICAgICAgICAgPiAgICAgU25hcHNob3QgcmVjb3JkZWQgc3VjY2Vzc2Z1bGx5IGZv
+ciBzZXNzaW9uIHRlc3QKPiAgICAgICAgID4gICAgIDcwMDAKPiAgICAgICAgID4gICAgIFswOToz
+NjoxMi4wMzIzMTQwODRdICgrPy4/Pz8/Pz8/Pz8pIDA3ZjhjZjg0YTM4Zgo+ICAgICAgICAgdHJh
+Y2V0ZXN0OmZpcnN0X3RwOgo+ICAgICAgICAgPiAgICAgeyBjcHVfaWQgPSA1IH0sIHsgbXlfc3Ry
+aW5nX2ZpZWxkID0gInRlc3QiLAo+ICAgICAgICAgbXlfaW50ZWdlcl9maWVsZCA9IDAgfQo+ICAg
+ICAgICAgPiAgICAgWzA5OjM2OjEyLjQ2MDc1Njc3OV0gKCswLjAwMDAwMTI0OCkgMDdmOGNmODRh
+MzhmCj4gICAgICAgICB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgICAgICA+ICAgICB7IGNwdV9p
+ZCA9IDQgfSwgeyBteV9zdHJpbmdfZmllbGQgPSAidGVzdCIsCj4gICAgICAgICBteV9pbnRlZ2Vy
+X2ZpZWxkID0gOTk5IH0KPiAgICAgICAgID4gICAgIFNuYXBzaG90IHJlY29yZGVkIHN1Y2Nlc3Nm
+dWxseSBmb3Igc2Vzc2lvbiB0ZXN0Cj4gICAgICAgICA+ICAgICA4MDAwCj4gICAgICAgICA+ICAg
+ICBbMDk6MzY6MTIuMDMyMzE0MDg0XSAoKz8uPz8/Pz8/Pz8/KSAwN2Y4Y2Y4NGEzOGYKPiAgICAg
+ICAgIHRyYWNldGVzdDpmaXJzdF90cDoKPiAgICAgICAgID4gICAgIHsgY3B1X2lkID0gNSB9LCB7
+IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwKPiAgICAgICAgIG15X2ludGVnZXJfZmllbGQgPSAw
+IH0KPiAgICAgICAgID4gICAgIFswOTozNjoxMi41NDA0NjQwOTBdICgrMC4wMDAwMDEyOTIpIDA3
+ZjhjZjg0YTM4Zgo+ICAgICAgICAgdHJhY2V0ZXN0OmZpcnN0X3RwOgo+ICAgICAgICAgPiAgICAg
+eyBjcHVfaWQgPSA3IH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0gInRlc3QiLAo+ICAgICAgICAgbXlf
+aW50ZWdlcl9maWVsZCA9IDk5OSB9Cj4gICAgICAgICA+ICAgICBTbmFwc2hvdCByZWNvcmRlZCBz
+dWNjZXNzZnVsbHkgZm9yIHNlc3Npb24gdGVzdAo+ICAgICAgICAgPiAgICAgOTAwMAo+ICAgICAg
+ICAgPiAgICAgWzA5OjM2OjEyLjAzMjMxNDA4NF0gKCs/Lj8/Pz8/Pz8/PykgMDdmOGNmODRhMzhm
+Cj4gICAgICAgICB0cmFjZXRlc3Q6Zmlyc3RfdHA6Cj4gICAgICAgICA+ICAgICB7IGNwdV9pZCA9
+IDUgfSwgeyBteV9zdHJpbmdfZmllbGQgPSAidGVzdCIsCj4gICAgICAgICBteV9pbnRlZ2VyX2Zp
+ZWxkID0gMCB9Cj4gICAgICAgICA+ICAgICBbMDk6MzY6MTIuNjIxOTkyOTMxXSAoKzAuMDAwMDAx
+Mjk4KSAwN2Y4Y2Y4NGEzOGYKPiAgICAgICAgIHRyYWNldGVzdDpmaXJzdF90cDoKPiAgICAgICAg
+ID4gICAgIHsgY3B1X2lkID0gNSB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJ0ZXN0IiwKPiAgICAg
+ICAgIG15X2ludGVnZXJfZmllbGQgPSA5OTkgfQo+ICAgICAgICAgPiAgICAgV2FpdGluZyBmb3Ig
+ZGF0YSBhdmFpbGFiaWxpdHkKPiAgICAgICAgID4gICAgIFRyYWNpbmcgc3RvcHBlZCBmb3Igc2Vz
+c2lvbiB0ZXN0Cj4gICAgICAgICA+ICAgICBTZXNzaW9uIHRlc3QgZGVzdHJveWVkCj4gICAgICAg
+ICA+Cj4gICAgICAgICA+Cj4gICAgICAgICA+Cj4gICAgICAgICA+ICAgICAgICAgICAgID4KPiAg
+ICAgICAgID4gICAgICAgICAgICAgPiBVbmxlc3MgSSdtIG1pc3Rha2VuLCB0aGUgYmVoYXZpb3Ig
+b2YgdGhlCj4gICAgICAgICBzbmFwc2hvdCBtb2RlIGhhcyBjaGFuZ2VkCj4gICAgICAgICA+ICAg
+ICAgICAgICAgID4gYmV0d2VlbiAyLjQgYW5kIDIuNS4KPiAgICAgICAgID4gICAgICAgICAgICAg
+Pgo+ICAgICAgICAgPiAgICAgICAgICAgICA+IEluIHRoZSAyLjQgc2VyaWVzLCBjb25zZWN1dGl2
+ZSBzbmFwc2hvdHMgY291bGQKPiAgICAgICAgIG92ZXJsYXA7IHRoYXQgaXMsCj4gICAgICAgICA+
+ICAgICAgICAgICAgID4gZXZlbnRzIGNvdWxkIGJlIHByZXNlbnQgaW4gbXVsdGlwbGUgc25hcHNo
+b3RzLgo+ICAgICAgICAgQXMgb2YgMi41LCBhbiBldmVudCBpcwo+ICAgICAgICAgPiAgICAgICAg
+ICAgICA+IGd1YXJhbnRlZWQgdG8gb25seSBhcHBlYXIgaW4gb25lIHNuYXBzaG90IGFzIHRoZQo+
+ICAgICAgICAgZXZlbnRzIGFyZSBjb25zaWRlcmVkCj4gICAgICAgICA+ICAgICAgICAgICAgID4g
+YXMgaGF2aW5nIGJlZW4gImNvbnN1bWVkIiBhdCB0aGF0IHBvaW50Lgo+ICAgICAgICAgPgo+ICAg
+ICAgICAgPiAgICAgICAgICAgICBIdW0sIG5vIHRoZSBiZWhhdmlvciBpcyBzdGlsbCB0aGUgc2Ft
+ZSwgY29uc2VjdXRpdmUKPiAgICAgICAgID4gICAgICAgICAgICAgc25hcHNob3RzIGNhbiBvdmVy
+bGFwLgo+ICAgICAgICAgPgo+ICAgICAgICAgPiAgICAgICAgICAgICBDb3VsZCB5b3UgdGVsbCB1
+cyBvbiB3aGljaCBhcmNoaXRlY3R1cmUgeW91IGFyZQo+ICAgICAgICAgZXhwZXJpZW5jaW5nCj4g
+ICAgICAgICA+ICAgICAgICAgICAgIHRoZSBwcm9ibGVtCj4gICAgICAgICA+ICAgICAgICAgICAg
+IGFuZCB0aGUgbnVtYmVyIG9mIENQVXMgPwo+ICAgICAgICAgPgo+ICAgICAgICAgPiAgICAgICAg
+IFRoZSB0cmFjZXMgYXBwZW5kZWQgaXMgZnJvbSBteSBsYXB0b3AgcnVubmluZyBVYnVudHUKPiAg
+ICAgICAgIDE0LjA0IHdpdGgKPiAgICAgICAgID4gICAgICAgICAiOCIgY3B1J3MKPiAgICAgICAg
+ID4gICAgICAgICBtb2RlbCBuYW1lICAgICAgOiBJbnRlbChSKSBDb3JlKFRNKSBpNy0yNzYwUU0g
+Q1BVIEAKPiAgICAgICAgIDIuNDBHSHoKPiAgICAgICAgID4gICAgICAgICBJIGhhdmUgYWxzbyBy
+dW4gdGhpcyBvbiBBUk0gd2l0aCAxNiBjb3JlcyBhbmQgYSBwb3dlcnBjCj4gICAgICAgICA+Cj4g
+ICAgICAgICA+Cj4gICAgICAgICA+ICAgICAgICAgICAgIFRoYW5rcywKPiAgICAgICAgID4KPiAg
+ICAgICAgID4gICAgICAgICAgICAgSnVsaWVuCj4gICAgICAgICA+Cj4gICAgICAgICA+Cj4gICAg
+ICAgICA+Cj4gICAgICAgICA+Cj4gCj4gCj4gCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
+Zm8vbHR0bmctZGV2Cg==
