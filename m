@@ -1,21 +1,35 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-ust] Perform the sem_wait on the
- constructor semaphore just before the main
-Date: Sat, 15 Nov 2014 15:32:33 -0500
-Message-ID: <CA+jJMxtKrpU5omLRfqcgMoh-UMwokhBoois0AQX6vdY2h8jy9Q__1388.27722189507$1416083598$gmane$org@mail.gmail.com>
-References: <1416078758-27740-1-git-send-email-jeremie.galarneau@efficios.com>
- <1950365656.14051.1416079086099.JavaMail.zimbra@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC] Addition of layout description and format strings
+	to CTF
+Date: Sun, 16 Nov 2014 10:32:27 +0000 (UTC)
+Message-ID: <168316329.14175.1416133947863.JavaMail.zimbra__983.447340741073$1416134001$gmane$org@efficios.com>
+References: <1017583826.14172.1416133885460.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f171.google.com ([209.85.217.171])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Xpk1P-0005ES-Cz
- for lttng-dev@lists.lttng.org; Sat, 15 Nov 2014 15:32:41 -0500
-Received: by mail-lb0-f171.google.com with SMTP id b6so14223170lbj.2
- for <lttng-dev@lists.lttng.org>; Sat, 15 Nov 2014 12:32:33 -0800 (PST)
-In-Reply-To: <1950365656.14051.1416079086099.JavaMail.zimbra@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1Xpx8C-0000q6-Ok
+ for lttng-dev@lists.lttng.org; Sun, 16 Nov 2014 05:32:34 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id ECA46340108
+ for <lttng-dev@lists.lttng.org>; Sun, 16 Nov 2014 10:32:28 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id ITs5OI9c5t9y for <lttng-dev@lists.lttng.org>;
+ Sun, 16 Nov 2014 10:32:28 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 6E8DB340152
+ for <lttng-dev@lists.lttng.org>; Sun, 16 Nov 2014 10:32:28 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id rS5AvLudpYd5 for <lttng-dev@lists.lttng.org>;
+ Sun, 16 Nov 2014 10:32:28 +0000 (UTC)
+Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
+ by mail.efficios.com (Postfix) with ESMTP id 2A12D340108
+ for <lttng-dev@lists.lttng.org>; Sun, 16 Nov 2014 10:32:28 +0000 (UTC)
+In-Reply-To: <1017583826.14172.1416133885460.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,123 +38,111 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-QWZ0ZXIgZGlzY3Vzc2luZyB0aGlzIGZ1cnRoZXIsIHdlIGhhdmUgZGVjaWRlZCB0byBub3QgbWVy
-Z2UgdGhpcyBwYXRjaApzaW5jZSBpdCB3b3VsZCBwcmV2ZW50IHVzIGZyb20gdXNpbmcgZGxvcGVu
-KCkgdG8gbG9hZCBsdHRuZy11c3QgaW4gYW4KYXBwbGljYXRpb24uIFdoaWxlIHRoZSBkbG9wZW4o
-KSBzaG91bGQgc3VjY2VlZCwgdGhlcmUgd291bGQgYmUgbm8KZ3VhcmFudGVlIHRoYXQgdGhlIHRy
-YWNpbmcgaXMgYWN0aXZlL3JlYWR5IHdoZW4gaXQgcmV0dXJucy4KCkF0IHRoaXMgcG9pbnQsIGl0
-IHNlZW1zIHRoYXQgdGhlIGFwcHJvcHJpYXRlIGZpeCByZXF1aXJlcyBhCm5vbi10cml2aWFsIHJl
-ZmFjdG9yIG9mIGx0dG5nLXVzdCdzIHJlZ2lzdHJhdGlvbiBhbmQgaW5pdGlhbGl6YXRpb24KbWVj
-aGFuaXNtIGFuZCB0aHJlYWRpbmcgbW9kZWwuCgpKw6lyw6ltaWUKCk9uIFNhdCwgTm92IDE1LCAy
-MDE0IGF0IDI6MTggUE0sIE1hdGhpZXUgRGVzbm95ZXJzCjxtYXRoaWV1LmRlc25veWVyc0BlZmZp
-Y2lvcy5jb20+IHdyb3RlOgo+IENhbiB5b3UgZXh0ZW5kIHRoZSBjaGFuZ2Vsb2cgYnkgYW55IGNo
-YW5jZSwgZm9yIGluc3RhbmNlIGJ5Cj4gZXhwbGFpbmluZyB3aHkgd2UgbmVlZCB0aGlzID8gU29t
-ZXRoaW5nIGFsb25nIHRoZSBsaW5lcyBvZgo+IGZpeGluZyBkZWFkbG9ja3MgaW52b2x2aW5nIHRo
-ZSBnbGliYyBpbnRlcm5hbCBkeW5hbWljIGxvYWRlcgo+IGxvY2sgd291bGQgYmUgZ29vZC4KPgo+
-IFRoYW5rcywKPgo+IE1hdGhpZXUKPgo+IC0tLS0tIE9yaWdpbmFsIE1lc3NhZ2UgLS0tLS0KPj4g
-RnJvbTogIkrDqXLDqW1pZSBHYWxhcm5lYXUiIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5j
-b20+Cj4+IFRvOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+IENjOiAibWF0aGlldSBkZXNu
-b3llcnMiIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+LCAiSsOpcsOpbWllIEdhbGFy
-bmVhdSIgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPj4gU2VudDogU2F0dXJkYXks
-IE5vdmVtYmVyIDE1LCAyMDE0IDg6MTI6MzggUE0KPj4gU3ViamVjdDogW1BBVENIIGx0dG5nLXVz
-dF0gUGVyZm9ybSB0aGUgc2VtX3dhaXQgb24gdGhlIGNvbnN0cnVjdG9yIHNlbWFwaG9yZSBqdXN0
-IGJlZm9yZSB0aGUgbWFpbgo+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1
-IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4+IC0tLQo+PiAgbGlibHR0bmctdXN0
-L01ha2VmaWxlLmFtICAgICAgfCAgNyArKysrCj4+ICBsaWJsdHRuZy11c3QvbHR0bmctdXN0LWNv
-bW0uYyB8IDc1Cj4+ICArKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0tLS0t
-Cj4+ICAyIGZpbGVzIGNoYW5nZWQsIDU2IGluc2VydGlvbnMoKyksIDI2IGRlbGV0aW9ucygtKQo+
-Pgo+PiBkaWZmIC0tZ2l0IGEvbGlibHR0bmctdXN0L01ha2VmaWxlLmFtIGIvbGlibHR0bmctdXN0
-L01ha2VmaWxlLmFtCj4+IGluZGV4IGUyZTFiYWEuLjgwMmQzMmQgMTAwNjQ0Cj4+IC0tLSBhL2xp
-Ymx0dG5nLXVzdC9NYWtlZmlsZS5hbQo+PiArKysgYi9saWJsdHRuZy11c3QvTWFrZWZpbGUuYW0K
-Pj4gQEAgLTgzLDQgKzgzLDExIEBAIGxpYmx0dG5nX3VzdF9sYV9MSUJBREQgPSBcCj4+ICAgICAg
-IGxpYmx0dG5nLXVzdC10cmFjZXBvaW50LmxhIFwKPj4gICAgICAgbGlibHR0bmctdXN0LXJ1bnRp
-bWUubGEgbGlibHR0bmctdXN0LXN1cHBvcnQubGEKPj4KPj4gK2lmIExUVE5HX1VTVF9CVUlMRF9X
-SVRIX0xJQkRMCj4+ICtsaWJsdHRuZ191c3RfbGFfTElCQUREICs9IC1sZGwKPj4gK2VuZGlmCj4+
-ICtpZiBMVFROR19VU1RfQlVJTERfV0lUSF9MSUJDX0RMCj4+ICtsaWJsdHRuZ191c3RfbGFfTElC
-QUREICs9IC1sYwo+PiArZW5kaWYKPj4gKwo+PiAgbGlibHR0bmdfdXN0X2xhX0NGTEFHUyA9IC1E
-VVNUX0NPTVBPTkVOVD0ibGlibHR0bmdfdXN0IiAtZm5vLXN0cmljdC1hbGlhc2luZwo+PiBkaWZm
-IC0tZ2l0IGEvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMgYi9saWJsdHRuZy11c3QvbHR0
-bmctdXN0LWNvbW0uYwo+PiBpbmRleCAzZGYyYWRjLi44MjU4ZTg1IDEwMDY0NAo+PiAtLS0gYS9s
-aWJsdHRuZy11c3QvbHR0bmctdXN0LWNvbW0uYwo+PiArKysgYi9saWJsdHRuZy11c3QvbHR0bmct
-dXN0LWNvbW0uYwo+PiBAQCAtMjAsNiArMjAsNyBAQAo+PiAgICovCj4+Cj4+ICAjZGVmaW5lIF9M
-R1BMX1NPVVJDRQo+PiArI2RlZmluZSBfR05VX1NPVVJDRQo+PiAgI2luY2x1ZGUgPHN5cy90eXBl
-cy5oPgo+PiAgI2luY2x1ZGUgPHN5cy9zb2NrZXQuaD4KPj4gICNpbmNsdWRlIDxzeXMvbW1hbi5o
-Pgo+PiBAQCAtNTIsNiArNTMsNyBAQAo+PiAgI2luY2x1ZGUgImNvbXBhdC5oIgo+PiAgI2luY2x1
-ZGUgIi4uL2xpYnJpbmdidWZmZXIvdGxzZml4dXAuaCIKPj4gICNpbmNsdWRlICJsdHRuZy11c3Qt
-YmFkZHIuaCIKPj4gKyNpbmNsdWRlIDxsdHRuZy91c3QtZGxmY24uaD4KPj4KPj4gIC8qCj4+ICAg
-KiBIYXMgbHR0bmcgdXN0IGNvbW0gY29uc3RydWN0b3IgYmVlbiBjYWxsZWQgPwo+PiBAQCAtMTQw
-NSwxMCArMTQwNyw4IEBAIHZvaWQgbHR0bmdfdXN0X21hbGxvY193cmFwcGVyX2luaXQodm9pZCkK
-Pj4gICAqLwo+PiAgdm9pZCBfX2F0dHJpYnV0ZV9fKChjb25zdHJ1Y3RvcikpIGx0dG5nX3VzdF9p
-bml0KHZvaWQpCj4+ICB7Cj4+IC0gICAgIHN0cnVjdCB0aW1lc3BlYyBjb25zdHJ1Y3Rvcl90aW1l
-b3V0Owo+PiAgICAgICBzaWdzZXRfdCBzaWdfYWxsX2Jsb2NrZWQsIG9yaWdfcGFyZW50X21hc2s7
-Cj4+ICAgICAgIHB0aHJlYWRfYXR0cl90IHRocmVhZF9hdHRyOwo+PiAtICAgICBpbnQgdGltZW91
-dF9tb2RlOwo+PiAgICAgICBpbnQgcmV0Owo+Pgo+PiAgICAgICBpZiAodWF0b21pY194Y2hnKCZp
-bml0aWFsaXplZCwgMSkgPT0gMSkKPj4gQEAgLTE0NDYsOCArMTQ0Niw2IEBAIHZvaWQgX19hdHRy
-aWJ1dGVfXygoY29uc3RydWN0b3IpKSBsdHRuZ191c3RfaW5pdCh2b2lkKQo+PiAgICAgICAgKi8K
-Pj4gICAgICAgbHR0bmdfdXN0X21hbGxvY193cmFwcGVyX2luaXQoKTsKPj4KPj4gLSAgICAgdGlt
-ZW91dF9tb2RlID0gZ2V0X2NvbnN0cnVjdG9yX3RpbWVvdXQoJmNvbnN0cnVjdG9yX3RpbWVvdXQp
-Owo+PiAtCj4+ICAgICAgIHJldCA9IHNlbV9pbml0KCZjb25zdHJ1Y3Rvcl93YWl0LCAwLCAwKTsK
-Pj4gICAgICAgYXNzZXJ0KCFyZXQpOwo+Pgo+PiBAQCAtMTUwNywyOCArMTUwNSw2IEBAIHZvaWQg
-X19hdHRyaWJ1dGVfXygoY29uc3RydWN0b3IpKSBsdHRuZ191c3RfaW5pdCh2b2lkKQo+PiAgICAg
-ICBpZiAocmV0KSB7Cj4+ICAgICAgICAgICAgICAgRVJSKCJwdGhyZWFkX3NpZ21hc2s6ICVzIiwg
-c3RyZXJyb3IocmV0KSk7Cj4+ICAgICAgIH0KPj4gLQo+PiAtICAgICBzd2l0Y2ggKHRpbWVvdXRf
-bW9kZSkgewo+PiAtICAgICBjYXNlIDE6IC8qIHRpbWVvdXQgd2FpdCAqLwo+PiAtICAgICAgICAg
-ICAgIGRvIHsKPj4gLSAgICAgICAgICAgICAgICAgICAgIHJldCA9IHNlbV90aW1lZHdhaXQoJmNv
-bnN0cnVjdG9yX3dhaXQsCj4+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-JmNvbnN0cnVjdG9yX3RpbWVvdXQpOwo+PiAtICAgICAgICAgICAgIH0gd2hpbGUgKHJldCA8IDAg
-JiYgZXJybm8gPT0gRUlOVFIpOwo+PiAtICAgICAgICAgICAgIGlmIChyZXQgPCAwICYmIGVycm5v
-ID09IEVUSU1FRE9VVCkgewo+PiAtICAgICAgICAgICAgICAgICAgICAgRVJSKCJUaW1lZCBvdXQg
-d2FpdGluZyBmb3IgbHR0bmctc2Vzc2lvbmQiKTsKPj4gLSAgICAgICAgICAgICB9IGVsc2Ugewo+
-PiAtICAgICAgICAgICAgICAgICAgICAgYXNzZXJ0KCFyZXQpOwo+PiAtICAgICAgICAgICAgIH0K
-Pj4gLSAgICAgICAgICAgICBicmVhazsKPj4gLSAgICAgY2FzZSAtMTovKiB3YWl0IGZvcmV2ZXIg
-Ki8KPj4gLSAgICAgICAgICAgICBkbyB7Cj4+IC0gICAgICAgICAgICAgICAgICAgICByZXQgPSBz
-ZW1fd2FpdCgmY29uc3RydWN0b3Jfd2FpdCk7Cj4+IC0gICAgICAgICAgICAgfSB3aGlsZSAocmV0
-IDwgMCAmJiBlcnJubyA9PSBFSU5UUik7Cj4+IC0gICAgICAgICAgICAgYXNzZXJ0KCFyZXQpOwo+
-PiAtICAgICAgICAgICAgIGJyZWFrOwo+PiAtICAgICBjYXNlIDA6IC8qIG5vIHRpbWVvdXQgKi8K
-Pj4gLSAgICAgICAgICAgICBicmVhazsKPj4gLSAgICAgfQo+PiAgfQo+Pgo+PiAgc3RhdGljCj4+
-IEBAIC0xNzAzLDMgKzE2NzksNTAgQEAgdm9pZCBsdHRuZ191c3Rfc29ja2luZm9fc2Vzc2lvbl9l
-bmFibGVkKHZvaWQgKm93bmVyKQo+PiAgICAgICBzdHJ1Y3Qgc29ja19pbmZvICpzb2NrX2luZm8g
-PSBvd25lcjsKPj4gICAgICAgc29ja19pbmZvLT5zdGF0ZWR1bXBfcGVuZGluZyA9IDE7Cj4+ICB9
-Cj4+ICsKPj4gK2ludCBfX2xpYmNfc3RhcnRfbWFpbihpbnQgKCptYWluKSAoaW50LCBjaGFyICoq
-LCBjaGFyICoqKSwgaW50IGFyZ2MsCj4+ICsgICAgIGNoYXIgKip1YnBfYXYsIHZvaWQgKCppbml0
-KSAodm9pZCksIHZvaWQgKCpmaW5pKSAodm9pZCksCj4+ICsgICAgIHZvaWQgKCpydGxkX2Zpbmkp
-ICh2b2lkKSwgdm9pZCAoKnN0YWNrX2VuZCkpCj4+ICt7Cj4+ICsgICAgIGludCByZXQ7Cj4+ICsg
-ICAgIGludCB0aW1lb3V0X21vZGU7Cj4+ICsgICAgIHN0cnVjdCB0aW1lc3BlYyBjb25zdHJ1Y3Rv
-cl90aW1lb3V0Owo+PiArICAgICBpbnQgKCpsaWJjX21haW5fZnVuYykoaW50ICgqbWFpbikgKGlu
-dCwgY2hhciAqKiwgY2hhciAqKiksCj4+ICsgICAgICAgICAgICAgaW50IGFyZ2MsIGNoYXIgKip1
-YnBfYXYsIHZvaWQgKCppbml0KSAodm9pZCksCj4+ICsgICAgICAgICAgICAgdm9pZCAoKmZpbmkp
-ICh2b2lkKSwgdm9pZCAoKnJ0bGRfZmluaSkgKHZvaWQpLAo+PiArICAgICAgICAgICAgIHZvaWQg
-KCpzdGFja19lbmQpKTsKPj4gKwo+PiArICAgICAvKiBSZXRyaWV2ZSB0aGUgb3JpZ2luYWwgX19s
-aWJjX3N0YXJ0X21haW4gZnVuY3Rpb24gKi8KPj4gKyAgICAgbGliY19tYWluX2Z1bmMgPSBkbHN5
-bShSVExEX05FWFQsICJfX2xpYmNfc3RhcnRfbWFpbiIpOwo+PiArICAgICBpZiAobGliY19tYWlu
-X2Z1bmMgPT0gTlVMTCkgewo+PiArICAgICAgICAgICAgIEVSUigidW5hYmxlIHRvIGZpbmQgXCJf
-X2xpYmNfc3RhcnRfbWFpblwiIHN5bWJvbFxuIik7Cj4+ICsgICAgICAgICAgICAgZXJybm8gPSBF
-Tk9TWVM7Cj4+ICsgICAgICAgICAgICAgcmV0dXJuIC0xOwo+PiArICAgICB9Cj4+ICsKPj4gKyAg
-ICAgdGltZW91dF9tb2RlID0gZ2V0X2NvbnN0cnVjdG9yX3RpbWVvdXQoJmNvbnN0cnVjdG9yX3Rp
-bWVvdXQpOwo+PiArICAgICBzd2l0Y2ggKHRpbWVvdXRfbW9kZSkgewo+PiArICAgICBjYXNlIDE6
-IC8qIHRpbWVvdXQgd2FpdCAqLwo+PiArICAgICAgICAgICAgIGRvIHsKPj4gKyAgICAgICAgICAg
-ICAgICAgICAgIHJldCA9IHNlbV90aW1lZHdhaXQoJmNvbnN0cnVjdG9yX3dhaXQsCj4+ICsgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgJmNvbnN0cnVjdG9yX3RpbWVvdXQpOwo+
-PiArICAgICAgICAgICAgIH0gd2hpbGUgKHJldCA8IDAgJiYgZXJybm8gPT0gRUlOVFIpOwo+PiAr
-ICAgICAgICAgICAgIGlmIChyZXQgPCAwICYmIGVycm5vID09IEVUSU1FRE9VVCkgewo+PiArICAg
-ICAgICAgICAgICAgICAgICAgRVJSKCJUaW1lZCBvdXQgd2FpdGluZyBmb3IgbHR0bmctc2Vzc2lv
-bmQiKTsKPj4gKyAgICAgICAgICAgICB9IGVsc2Ugewo+PiArICAgICAgICAgICAgICAgICAgICAg
-YXNzZXJ0KCFyZXQpOwo+PiArICAgICAgICAgICAgIH0KPj4gKyAgICAgICAgICAgICBicmVhazsK
-Pj4gKyAgICAgY2FzZSAtMTovKiB3YWl0IGZvcmV2ZXIgKi8KPj4gKyAgICAgICAgICAgICBkbyB7
-Cj4+ICsgICAgICAgICAgICAgICAgICAgICByZXQgPSBzZW1fd2FpdCgmY29uc3RydWN0b3Jfd2Fp
-dCk7Cj4+ICsgICAgICAgICAgICAgfSB3aGlsZSAocmV0IDwgMCAmJiBlcnJubyA9PSBFSU5UUik7
-Cj4+ICsgICAgICAgICAgICAgYXNzZXJ0KCFyZXQpOwo+PiArICAgICAgICAgICAgIGJyZWFrOwo+
-PiArICAgICBjYXNlIDA6IC8qIG5vIHRpbWVvdXQgKi8KPj4gKyAgICAgICAgICAgICBicmVhazsK
-Pj4gKyAgICAgfQo+PiArCj4+ICsgICAgIC8qIENhbGwgdGhlIG9yaWdpbmFsIGZ1bmN0aW9uICov
-Cj4+ICsgICAgIHJldHVybiBsaWJjX21haW5fZnVuYyhtYWluLCBhcmdjLCB1YnBfYXYsIGluaXQs
-IGZpbmksIHJ0bGRfZmluaSwKPj4gc3RhY2tfZW5kKTsKPj4gK30KPj4gLS0KPj4gMi4xLjMKPj4K
-Pj4KPgo+IC0tCj4gTWF0aGlldSBEZXNub3llcnMKPiBFZmZpY2lPUyBJbmMuCj4gaHR0cDovL3d3
-dy5lZmZpY2lvcy5jb20KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpo
-dHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo=
+This document investigates how to best add description of formatting
+layout to the Common Trace Format (CTF). The main intent here is to
+allow LTTng-UST tracepoint instrumentation to describe how to print the
+content of a sequence or array of bytes, so the resulting printout, in
+Babeltrace, looks like this:
+
+[...]
+000015F0 5F 73 70 72 69 6E 74 66 5F 63 68 6B 00 5F 5F 78 _sprintf_chk.__x
+00001600 73 74 61 74 00 6D 65 6D 6D 6F 76 65 00 5F 6F 62 stat.memmove._ob
+00001610 73 74 61 63 6B 5F 62 65 67 69 6E 00 62 69 6E 64 stack_begin.bind
+[...]
+
+In the spirit of keeping this specification as succinct as possible, an
+investigation phase is required before adding this descriptive element
+to the Common Trace Format (CTF) specification, since it needs to be
+done in a way that is as much as possible general, rather than specific
+for this single use-case.
+
+Therefore, this document also investigates how layout description can be
+used to describe format strings that express the formatting of events.
+
+
+Let's consider the description of a CTF TSDL event containing a
+sequence:
+
+event {
+  name = myevent;
+  fields := struct {
+    uint32_t len;
+    uint8_t myseqfield[len];
+  };
+};
+
+We could introduce the concept of "type attribute" to CTF, thus adding
+a "format" attribute attached to sequence:
+
+event {
+  name = myevent;
+  fields := struct {
+    uint32_t len;
+    uint8_t myseqfield[len] __attribute__((format(hexdump)));
+  };
+};
+
+We however have to take into account that this attribute needs to fit
+within the format strings that are about to be added to CTF. In order to
+use a similar construct to express the event format strings, we could
+also attach them as a "format" attribute of the structure type
+describing the event payload. Those may look like:
+
+event {
+	name = myevent;
+	fields := struct {
+		uint64_t field1;
+		uint32_t field2;
+		uint16_t field3;
+		uint32_t len;
+		uint8_t myseqfield[len];
+	} __attribute__((format(printf("Event has: %d, %x, %d. "
+			"Sequence string is %s, hexdump is: %s",
+		field1, field2, field3,
+		myseqfield,
+		myseqfield __attribute__((format(hexdump)))))));
+};
+
+Where %d means printing in base 10, signed, %x means printing in base
+16, and %s means printing the target field following the field reference
+formatter attribute or else the field's own printing format.
+
+This ensures that the format string is expressed as a subset of type
+formatting.
+
+In case there are many formatters specified for a field, such as:
+
+event {
+	name = myevent;
+	fields := struct {
+		uint64_t field1 __attribute__((format(printf("%x"))));
+	} __attribute__((format(printf("Field hex: %s, dec: %s, dec: %d",
+		field1, field1 __attribute__((format(printf("%d")))),
+		field1))));
+};
+
+The format attribute of the reference always has precedence on the
+format attribute of the field it refers to. In the example above, %s
+takes the formatter of field1 (printf("%x")), whereas the second
+reference to field1 overrides the formatter with a (printf(%d")), to
+print it in base 10. The third reference to field1 uses %d directly in
+the event structure payload formatter to force a decimal printing of the
+field, which has the same result as the second reference.
+
+Attaching the formatter as a type or field reference attribute allows
+nesting of print formatting and layout description of nested structures,
+arrays, sequences, and variants.
+
+Feedback is welcome!
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
