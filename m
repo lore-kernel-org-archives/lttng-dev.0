@@ -1,20 +1,19 @@
-From: Anders Wallin <wallinux@gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: snapshot data corrupted after the output buffer is
-	filled
-Date: Mon, 17 Nov 2014 10:45:37 +0100
-Message-ID: <CAF2baFcfh8h769xaxLQpW4=9nmWRBcmi7tP79mW=w1DyqJm9Hw__28973.2238431045$1416217596$gmane$org@mail.gmail.com>
+ filled
+Date: Mon, 17 Nov 2014 11:45:14 +0000 (UTC)
+Message-ID: <2137471544.14585.1416224714944.JavaMail.zimbra__9519.11794622919$1416224774$gmane$org@efficios.com>
 References: <CAF2baFfMNzRQnx-FC7kFRr5m4NpZBEcEohnwf50uOs2vv9=GBw@mail.gmail.com>
  <734976879.13957.1416074394667.JavaMail.zimbra@efficios.com>
+ <CAF2baFcfh8h769xaxLQpW4=9nmWRBcmi7tP79mW=w1DyqJm9Hw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1450103209=="
+Content-Type: multipart/mixed; boundary="===============0906234386=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f43.google.com ([209.85.192.43])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <wallinux@gmail.com>) id 1XqIsQ-0007yb-RF
- for lttng-dev@lists.lttng.org; Mon, 17 Nov 2014 04:45:45 -0500
-Received: by mail-qg0-f43.google.com with SMTP id f51so14695793qge.2
- for <lttng-dev@lists.lttng.org>; Mon, 17 Nov 2014 01:45:37 -0800 (PST)
-In-Reply-To: <734976879.13957.1416074394667.JavaMail.zimbra@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1XqKkC-00009I-9Y
+ for lttng-dev@lists.lttng.org; Mon, 17 Nov 2014 06:45:23 -0500
+In-Reply-To: <CAF2baFcfh8h769xaxLQpW4=9nmWRBcmi7tP79mW=w1DyqJm9Hw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,356 +22,824 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Anders Wallin <wallinux@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1450103209==
-Content-Type: multipart/alternative; boundary=001a11c2ebf2396f7205080ad751
+--===============0906234386==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_14584_1358994827.1416224714942"
 
---001a11c2ebf2396f7205080ad751
-Content-Type: text/plain; charset=UTF-8
+------=_Part_14584_1358994827.1416224714942
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Thx Mathieu,
+Hi Anders,=20
 
-if I'm running my test on one cpu (taskset -c 1 ./test.run) it works as
-expected and described by you.
-The babeltrace flag would be a good solution! Do you want me to file a
-bug/enhancement on this?
+Yes, please file a feature request against Babeltrace on=20
+the bug tracker pointing the this email thread and=20
+describing the feature.=20
 
-Regards
+Thanks!=20
 
+Mathieu=20
 
+----- Original Message -----
 
-Anders Wallin
+> From: "Anders Wallin" <wallinux@gmail.com>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Monday, November 17, 2014 10:45:37 AM
+> Subject: Re: [lttng-dev] snapshot data corrupted after the output buffer =
+is
+> filled
 
-On Sat, Nov 15, 2014 at 6:59 PM, Mathieu Desnoyers <
-mathieu.desnoyers@efficios.com> wrote:
+> Thx Mathieu,
 
-> ------------------------------
->
-> *From: *"Anders Wallin" <wallinux@gmail.com>
-> *To: *lttng-dev@lists.lttng.org
-> *Sent: *Friday, November 14, 2014 8:28:18 AM
-> *Subject: *[lttng-dev] snapshot data corrupted after the output buffer
-> is        filled
->
-> Hi,
->
-> it looks like snapshot events became faulty after the output max size is
-> reached.
-> The next snapshot get mixed events from different buffers. I have tested
-> it on 2.3, 2.4 and 2.5
-> and it's in all of them, but it hits earlier in 2.5 due to the  problem
-> reported in
-> http://lists.lttng.org/pipermail/lttng-dev/2014-November/023773.html
->
-> There should never be more then 2 HUNKS in a diff between 2 consecutive
-> snapshots, here I got
-> 11 as the worst case.
->
-> Hi Anders,
->
-> This is not a bug, rather just per-cpu buffering at work.It does have som=
-e
-> rather non-obvious consequences in terms of snapshot event flow.
->
-> To understand this, we need to keep in mind that LTTng does everything
-> in per-cpu buffers, and that overwrite of oldest events in buffer full
-> conditions
-> happens per-cpu.
->
-> The use-case you show below really makes sense when you start to consider
-> on which CPU (and thus per-cpu buffer) the application is running.
-> Initially,
-> the first app runs on CPU 6. As long as the following applications run on
-> other cpus, we keep the same first event. Then when enough events are
-> written in cpu 6 buffer to overwrite the first event, we see a first even=
-t
-> change.
-> Then, depending on the scheduling of applications, older parts of per-cpu
-> buffers are overwritten, and others are not (if there are less events in
-> those
-> buffer). This means some per-cpu buffers will have events going further
-> back
-> in time compared to other higher-throughput CPUs.
->
-> This is why you see more than 2 hunks in your diff. Babeltrace merges tho=
-se
-> per-cpu buffers back into a single text output, and the fact that some
-> events
-> have been overwritten for a time-range for high-throughput buffers, but n=
-ot
-> for low-throughput buffers, make it appear as if events are missing in th=
-e
-> stream if your model is a single system-wide buffer, but the missing even=
-ts
-> make sense if you see it as a merge of per-cpu buffers.
->
-> Our current behavior is to gather all available data when taking a
-> snapshot,
-> and babeltrace behavior is to show all events available in the streams. W=
-e
-> could perhaps consider a different babeltrace behavior (a flag) that woul=
-d
-> allow it to only show the events for the intersection of time range of al=
-l
-> streams, based on the packet header timestamp begin/end. This would
-> take care of hiding events that happen in low-throughput streams when
-> there is no intersection with snapshotted high-throughput streams.
->
-> And perhaps this should be the default ?
->
-> Thanks!
->
-> Mathieu
->
->
-> TESTCASE;
->
-> tracetest code:
-> ---------------------------------------------------------------
-> #include <stdio.h>
-> #include "tracetest-tp.h"
->
-> int main(int argc, char* argv[])
-> {
->         int i;
->         for (i =3D 0; i < 1000; i++) {
->                 tracepoint(tracetest, first_tp, i, "test");
->         }
->         return 0;
-> }
-> ---------------------------------------------------------------
->
-> test script:
-> ---------------------------------------------------------------
-> #!/bin/bash
-> : ${NO_OF_SUBBUF:=3D6}
-> : ${SUBBUF_SIZE:=3D4096}
-> : ${KERNEL_TRACE:=3DNO}
-> : ${LOOPS:=3D10}
->
-> SESSION=3Dtest
-> CHANNEL1=3Dch1
-> CHANNEL2=3Dch2
->
-> CH2_SUBBUF_SIZE=3D$(($SUBBUF_SIZE*$NO_OF_SUBBUF))
->
->
-> LTTNG=3D'lttng -n'
-> killall lttng-consumerd > /dev/null 2>&1
-> killall lttng-sessiond > /dev/null 2>&1
-> if [ -z $DEBUG ]; then
->     lttng-sessiond --no-kernel -d
-> else
->     lttng-sessiond -v --no-kernel --verbose-consumer -b
-> fi
-> sleep 1
->
-> if [ ! -z $DEBUG ]; then
->     export LTTNG_UST_DEBUG=3D1
-> fi
->
-> rm -rf $HOME/lttng-traces
-> rm snapshot/*.bt
->
-> $LTTNG --version
->
-> $LTTNG create $SESSION --snapshot
-> $LTTNG enable-channel -u --subbuf-size $SUBBUF_SIZE --num-subbuf
-> $NO_OF_SUBBUF --overwrite $CHANNEL1
-> $LTTNG enable-channel -u --subbuf-size $CH2_SUBBUF_SIZE --num-subbuf 2
-> --overwrite $CHANNEL2
-> $LTTNG enable-event -u -c $CHANNEL1 "*"
-> $LTTNG start
-> $LTTNG list $SESSION
->
-> mkdir -p snapshot/
->
-> h=3D1
-> for i in $(seq 1 $LOOPS); do
->     $APP
->     $LTTNG snapshot record
->     # print no of events and first and last event
->
->
->     last=3D$(ls -1drt $HOME/lttng-traces/$SESSION*/* | tail -1)
->     babeltrace $last > snapshot/$i.bt
->     cat snapshot/$i.bt | wc -l
->     cat snapshot/$i.bt | head -1
->     cat snapshot/$i.bt | tail -1
->     diff -u snapshot/$i.bt snapshot/$h.bt > snapshot/$i_$h.diff
->     cat snapshot/$i_$h.diff | grep "@@" | wc -l | xargs echo "NUMBER OF
-> DIFF HUNKS =3D "
->     h=3D$i
-> done
->
-> $LTTNG stop
-> $LTTNG destroy $SESSION
->
-> ---------------------------------------------------------------
->
-> result from run (removed some output lines for readability)
-> ---------------------------------------------------------------
-> lttng (LTTng Trace Control) 2.4.2 - =C3=89poque Opaque
-> Snapshot mode set. Every channel enabled for that session will be set in
-> overwrite mode and mmap output.
-> Warning: The number of subbuffers (6) is rounded to the next power of 2 (=
-8)
-> UST channel ch1 enabled for session test
-> Warning: The subbuf size (24576) is rounded to the next power of 2 (32768=
-)
-> UST channel ch2 enabled for session test
-> UST event * created in channel ch1
-> Tracing started for session test
-> Tracing session test: [active snapshot]
->     Trace path:
->
-> =3D=3D=3D Domain: UST global =3D=3D=3D
->
-> Buffer type: per UID
->
-> Channels:
-> -------------
-> - ch1: [enabled]
->
->     Attributes:
->       overwrite mode: 1
->       subbufers size: 4096
->       number of subbufers: 8
->       switch timer interval: 0
->       read timer interval: 0
->       output: mmap()
->
->     Events:
->       * (type: tracepoint) [enabled]
-> - ch2: [enabled]
->
->     Attributes:
->       overwrite mode: 1
->       subbufers size: 32768
->       number of subbufers: 2
->       switch timer interval: 0
->       read timer interval: 0
->       output: mmap()
->
->     Events:
->       None
->
-> Snapshot recorded successfully for session test
-> 1011
-> [07:09:43.278933559] (+?.?????????) 07f8cf84a38f
-> ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000,
-> sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-> [07:09:43.279975100] (+0.000000975) 07f8cf84a38f tracetest:first_tp: {
-> cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-> NUMBER OF DIFF HUNKS =3D  0
-> Snapshot recorded successfully for session test
-> 2022
-> [07:09:43.278933559] (+?.?????????) 07f8cf84a38f
-> ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000,
-> sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-> [07:09:43.337703508] (+0.000001238) 07f8cf84a38f tracetest:first_tp: {
-> cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-> NUMBER OF DIFF HUNKS =3D  1
-> Snapshot recorded successfully for session test
-> 3033
-> [07:09:43.278933559] (+?.?????????) 07f8cf84a38f
-> ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000,
-> sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-> [07:09:43.432827051] (+0.000000308) 07f8cf84a38f tracetest:first_tp: {
-> cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-> NUMBER OF DIFF HUNKS =3D  1
-> Snapshot recorded successfully for session test
-> 4044
-> [07:09:43.278933559] (+?.?????????) 07f8cf84a38f
-> ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000,
-> sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-> [07:09:43.475784825] (+0.000000501) 07f8cf84a38f tracetest:first_tp: {
-> cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-> NUMBER OF DIFF HUNKS =3D  1
-> Snapshot recorded successfully for session test
-> 4735
-> [07:09:43.279031320] (+?.?????????) 07f8cf84a38f tracetest:first_tp: {
-> cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 0 }
-> [07:09:43.549945106] (+0.000000517) 07f8cf84a38f tracetest:first_tp: {
-> cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-> NUMBER OF DIFF HUNKS =3D  12
-> Snapshot recorded successfully for session test
-> 4437
-> [07:09:43.335916076] (+?.?????????) 07f8cf84a38f
-> ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000,
-> sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-> [07:09:43.654229030] (+0.000000436) 07f8cf84a38f tracetest:first_tp: {
-> cpu_id =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-> NUMBER OF DIFF HUNKS =3D  3
-> Snapshot recorded successfully for session test
-> 4746
-> [07:09:43.335916076] (+?.?????????) 07f8cf84a38f
-> ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000,
-> sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-> [07:09:43.747509349] (+0.000000502) 07f8cf84a38f tracetest:first_tp: {
-> cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-> NUMBER OF DIFF HUNKS =3D  11
-> Snapshot recorded successfully for session test
-> 5757
-> [07:09:43.335916076] (+?.?????????) 07f8cf84a38f
-> ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000,
-> sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-> [07:09:43.814938128] (+0.000001371) 07f8cf84a38f tracetest:first_tp: {
-> cpu_id =3D 4 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-> NUMBER OF DIFF HUNKS =3D  1
-> Snapshot recorded successfully for session test
-> 6066
-> [07:09:43.335916076] (+?.?????????) 07f8cf84a38f
-> ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000,
-> sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-> [07:09:43.919112586] (+0.000000990) 07f8cf84a38f tracetest:first_tp: {
-> cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-> NUMBER OF DIFF HUNKS =3D  11
-> Snapshot recorded successfully for session test
-> 6077
-> [07:09:43.335916076] (+?.?????????) 07f8cf84a38f
-> ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000,
-> sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }
-> [07:09:44.004234933] (+0.000001213) 07f8cf84a38f tracetest:first_tp: {
-> cpu_id =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
-> NUMBER OF DIFF HUNKS =3D  2
-> Waiting for data availability
-> Tracing stopped for session test
-> Session test destroyed
-> ---------------------------------------------------------------
->
+> if I'm running my test on one cpu (taskset -c 1 ./test.run) it works as
+> expected and described by you.
+> The babeltrace flag would be a good solution! Do you want me to file a
+> bug/enhancement on this?
+
 > Regards
->
-> Anders Wallin
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
->
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
->
 
---001a11c2ebf2396f7205080ad751
-Content-Type: text/html; charset=UTF-8
+> Anders Wallin
+
+> On Sat, Nov 15, 2014 at 6:59 PM, Mathieu Desnoyers <
+> mathieu.desnoyers@efficios.com > wrote:
+
+> > > From: "Anders Wallin" < wallinux@gmail.com >
+> >=20
+>=20
+> > > To: lttng-dev@lists.lttng.org
+> >=20
+>=20
+> > > Sent: Friday, November 14, 2014 8:28:18 AM
+> >=20
+>=20
+> > > Subject: [lttng-dev] snapshot data corrupted after the output buffer =
+is
+> > > filled
+> >=20
+>=20
+
+> > > Hi,
+> >=20
+>=20
+
+> > > it looks like snapshot events became faulty after the output max size=
+ is
+> > > reached.
+> >=20
+>=20
+> > > The next snapshot get mixed events from different buffers. I have tes=
+ted
+> > > it
+> > > on 2.3, 2.4 and 2.5
+> >=20
+>=20
+> > > and it's in all of them, but it hits earlier in 2.5 due to the proble=
+m
+> > > reported in
+> >=20
+>=20
+> > > http://lists.lttng.org/pipermail/lttng-dev/2014-November/023773.html
+> >=20
+>=20
+
+> > > There should never be more then 2 HUNKS in a diff between 2 consecuti=
+ve
+> > > snapshots, here I got
+> >=20
+>=20
+> > > 11 as the worst case.
+> >=20
+>=20
+
+> > Hi Anders,
+>=20
+
+> > This is not a bug, rather just per-cpu buffering at work.It does have s=
+ome
+>=20
+> > rather non-obvious consequences in terms of snapshot event flow.
+>=20
+
+> > To understand this, we need to keep in mind that LTTng does everything
+>=20
+> > in per-cpu buffers, and that overwrite of oldest events in buffer full
+> > conditions
+>=20
+> > happens per-cpu.
+>=20
+
+> > The use-case you show below really makes sense when you start to consid=
+er
+>=20
+> > on which CPU (and thus per-cpu buffer) the application is running.
+> > Initially,
+>=20
+> > the first app runs on CPU 6. As long as the following applications run =
+on
+>=20
+> > other cpus, we keep the same first event. Then when enough events are
+>=20
+> > written in cpu 6 buffer to overwrite the first event, we see a first ev=
+ent
+> > change.
+>=20
+> > Then, depending on the scheduling of applications, older parts of per-c=
+pu
+>=20
+> > buffers are overwritten, and others are not (if there are less events i=
+n
+> > those
+>=20
+> > buffer). This means some per-cpu buffers will have events going further
+> > back
+>=20
+> > in time compared to other higher-throughput CPUs.
+>=20
+
+> > This is why you see more than 2 hunks in your diff. Babeltrace merges t=
+hose
+>=20
+> > per-cpu buffers back into a single text output, and the fact that some
+> > events
+>=20
+> > have been overwritten for a time-range for high-throughput buffers, but=
+ not
+>=20
+> > for low-throughput buffers, make it appear as if events are missing in =
+the
+>=20
+> > stream if your model is a single system-wide buffer, but the missing ev=
+ents
+>=20
+> > make sense if you see it as a merge of per-cpu buffers.
+>=20
+
+> > Our current behavior is to gather all available data when taking a
+> > snapshot,
+>=20
+> > and babeltrace behavior is to show all events available in the streams.=
+ We
+>=20
+> > could perhaps consider a different babeltrace behavior (a flag) that wo=
+uld
+>=20
+> > allow it to only show the events for the intersection of time range of =
+all
+>=20
+> > streams, based on the packet header timestamp begin/end. This would
+>=20
+> > take care of hiding events that happen in low-throughput streams when
+>=20
+> > there is no intersection with snapshotted high-throughput streams.
+>=20
+
+> > And perhaps this should be the default ?
+>=20
+
+> > Thanks!
+>=20
+
+> > Mathieu
+>=20
+
+> > > TESTCASE;
+> >=20
+>=20
+
+> > > tracetest code:
+> >=20
+>=20
+> > > ---------------------------------------------------------------
+> >=20
+>=20
+> > > #include <stdio.h>
+> >=20
+>=20
+> > > #include "tracetest-tp.h"
+> >=20
+>=20
+
+> > > int main(int argc, char* argv[])
+> >=20
+>=20
+> > > {
+> >=20
+>=20
+> > > int i;
+> >=20
+>=20
+> > > for (i =3D 0; i < 1000; i++) {
+> >=20
+>=20
+> > > tracepoint(tracetest, first_tp, i, "test");
+> >=20
+>=20
+> > > }
+> >=20
+>=20
+> > > return 0;
+> >=20
+>=20
+> > > }
+> >=20
+>=20
+> > > ---------------------------------------------------------------
+> >=20
+>=20
+
+> > > test script:
+> >=20
+>=20
+> > > ---------------------------------------------------------------
+> >=20
+>=20
+> > > #!/bin/bash
+> >=20
+>=20
+> > > : ${NO_OF_SUBBUF:=3D6}
+> >=20
+>=20
+> > > : ${SUBBUF_SIZE:=3D4096}
+> >=20
+>=20
+> > > : ${KERNEL_TRACE:=3DNO}
+> >=20
+>=20
+> > > : ${LOOPS:=3D10}
+> >=20
+>=20
+
+> > > SESSION=3Dtest
+> >=20
+>=20
+> > > CHANNEL1=3Dch1
+> >=20
+>=20
+> > > CHANNEL2=3Dch2
+> >=20
+>=20
+
+> > > CH2_SUBBUF_SIZE=3D$(($SUBBUF_SIZE*$NO_OF_SUBBUF))
+> >=20
+>=20
+
+> > > LTTNG=3D'lttng -n'
+> >=20
+>=20
+> > > killall lttng-consumerd > /dev/null 2>&1
+> >=20
+>=20
+> > > killall lttng-sessiond > /dev/null 2>&1
+> >=20
+>=20
+> > > if [ -z $DEBUG ]; then
+> >=20
+>=20
+> > > lttng-sessiond --no-kernel -d
+> >=20
+>=20
+> > > else
+> >=20
+>=20
+> > > lttng-sessiond -v --no-kernel --verbose-consumer -b
+> >=20
+>=20
+> > > fi
+> >=20
+>=20
+> > > sleep 1
+> >=20
+>=20
+
+> > > if [ ! -z $DEBUG ]; then
+> >=20
+>=20
+> > > export LTTNG_UST_DEBUG=3D1
+> >=20
+>=20
+> > > fi
+> >=20
+>=20
+
+> > > rm -rf $HOME/lttng-traces
+> >=20
+>=20
+> > > rm snapshot/*.bt
+> >=20
+>=20
+
+> > > $LTTNG --version
+> >=20
+>=20
+
+> > > $LTTNG create $SESSION --snapshot
+> >=20
+>=20
+> > > $LTTNG enable-channel -u --subbuf-size $SUBBUF_SIZE --num-subbuf
+> > > $NO_OF_SUBBUF --overwrite $CHANNEL1
+> >=20
+>=20
+> > > $LTTNG enable-channel -u --subbuf-size $CH2_SUBBUF_SIZE --num-subbuf =
+2
+> > > --overwrite $CHANNEL2
+> >=20
+>=20
+> > > $LTTNG enable-event -u -c $CHANNEL1 "*"
+> >=20
+>=20
+> > > $LTTNG start
+> >=20
+>=20
+> > > $LTTNG list $SESSION
+> >=20
+>=20
+
+> > > mkdir -p snapshot/
+> >=20
+>=20
+
+> > > h=3D1
+> >=20
+>=20
+> > > for i in $(seq 1 $LOOPS); do
+> >=20
+>=20
+> > > $APP
+> >=20
+>=20
+> > > $LTTNG snapshot record
+> >=20
+>=20
+> > > # print no of events and first and last event
+> >=20
+>=20
+> > > last=3D$(ls -1drt $HOME/lttng-traces/$SESSION*/* | tail -1)
+> >=20
+>=20
+> > > babeltrace $last > snapshot/$ i.bt
+> >=20
+>=20
+> > > cat snapshot/$ i.bt | wc -l
+> >=20
+>=20
+> > > cat snapshot/$ i.bt | head -1
+> >=20
+>=20
+> > > cat snapshot/$ i.bt | tail -1
+> >=20
+>=20
+> > > diff -u snapshot/$ i.bt snapshot/$ h.bt > snapshot/$i_$h.diff
+> >=20
+>=20
+> > > cat snapshot/$i_$h.diff | grep "@@" | wc -l | xargs echo "NUMBER OF D=
+IFF
+> > > HUNKS =3D "
+> >=20
+>=20
+> > > h=3D$i
+> >=20
+>=20
+> > > done
+> >=20
+>=20
+
+> > > $LTTNG stop
+> >=20
+>=20
+> > > $LTTNG destroy $SESSION
+> >=20
+>=20
+
+> > > ---------------------------------------------------------------
+> >=20
+>=20
+
+> > > result from run (removed some output lines for readability)
+> >=20
+>=20
+> > > ---------------------------------------------------------------
+> >=20
+>=20
+> > > lttng (LTTng Trace Control) 2.4.2 - =C3=89poque Opaque
+> >=20
+>=20
+> > > Snapshot mode set. Every channel enabled for that session will be set=
+ in
+> > > overwrite mode and mmap output.
+> >=20
+>=20
+> > > Warning: The number of subbuffers (6) is rounded to the next power of=
+ 2
+> > > (8)
+> >=20
+>=20
+> > > UST channel ch1 enabled for session test
+> >=20
+>=20
+> > > Warning: The subbuf size (24576) is rounded to the next power of 2
+> > > (32768)
+> >=20
+>=20
+> > > UST channel ch2 enabled for session test
+> >=20
+>=20
+> > > UST event * created in channel ch1
+> >=20
+>=20
+> > > Tracing started for session test
+> >=20
+>=20
+> > > Tracing session test: [active snapshot]
+> >=20
+>=20
+> > > Trace path:
+> >=20
+>=20
+
+> > > =3D=3D=3D Domain: UST global =3D=3D=3D
+> >=20
+>=20
+
+> > > Buffer type: per UID
+> >=20
+>=20
+
+> > > Channels:
+> >=20
+>=20
+> > > -------------
+> >=20
+>=20
+> > > - ch1: [enabled]
+> >=20
+>=20
+
+> > > Attributes:
+> >=20
+>=20
+> > > overwrite mode: 1
+> >=20
+>=20
+> > > subbufers size: 4096
+> >=20
+>=20
+> > > number of subbufers: 8
+> >=20
+>=20
+> > > switch timer interval: 0
+> >=20
+>=20
+> > > read timer interval: 0
+> >=20
+>=20
+> > > output: mmap()
+> >=20
+>=20
+
+> > > Events:
+> >=20
+>=20
+> > > * (type: tracepoint) [enabled]
+> >=20
+>=20
+> > > - ch2: [enabled]
+> >=20
+>=20
+
+> > > Attributes:
+> >=20
+>=20
+> > > overwrite mode: 1
+> >=20
+>=20
+> > > subbufers size: 32768
+> >=20
+>=20
+> > > number of subbufers: 2
+> >=20
+>=20
+> > > switch timer interval: 0
+> >=20
+>=20
+> > > read timer interval: 0
+> >=20
+>=20
+> > > output: mmap()
+> >=20
+>=20
+
+> > > Events:
+> >=20
+>=20
+> > > None
+> >=20
+>=20
+
+> > > Snapshot recorded successfully for session test
+> >=20
+>=20
+> > > 1011
+> >=20
+>=20
+> > > [07:09:43.278933559] (+?.?????????) 07f8cf84a38f
+> > > ust_baddr_statedump:soinfo:
+> > > { cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000, sopath =3D "[vdso]", si=
+ze =3D 0,
+> > > mtime
+> > > =3D -1 }
+> >=20
+>=20
+> > > [07:09:43.279975100] (+0.000000975) 07f8cf84a38f tracetest:first_tp: =
+{
+> > > cpu_id
+> > > =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 999 }
+> >=20
+>=20
+> > > NUMBER OF DIFF HUNKS =3D 0
+> >=20
+>=20
+> > > Snapshot recorded successfully for session test
+> >=20
+>=20
+> > > 2022
+> >=20
+>=20
+> > > [07:09:43.278933559] (+?.?????????) 07f8cf84a38f
+> > > ust_baddr_statedump:soinfo:
+> > > { cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000, sopath =3D "[vdso]", si=
+ze =3D 0,
+> > > mtime
+> > > =3D -1 }
+> >=20
+>=20
+> > > [07:09:43.337703508] (+0.000001238) 07f8cf84a38f tracetest:first_tp: =
+{
+> > > cpu_id
+> > > =3D 4 }, { my_string_field =3D "test", my_integer_field =3D 999 }
+> >=20
+>=20
+> > > NUMBER OF DIFF HUNKS =3D 1
+> >=20
+>=20
+> > > Snapshot recorded successfully for session test
+> >=20
+>=20
+> > > 3033
+> >=20
+>=20
+> > > [07:09:43.278933559] (+?.?????????) 07f8cf84a38f
+> > > ust_baddr_statedump:soinfo:
+> > > { cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000, sopath =3D "[vdso]", si=
+ze =3D 0,
+> > > mtime
+> > > =3D -1 }
+> >=20
+>=20
+> > > [07:09:43.432827051] (+0.000000308) 07f8cf84a38f tracetest:first_tp: =
+{
+> > > cpu_id
+> > > =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
+> >=20
+>=20
+> > > NUMBER OF DIFF HUNKS =3D 1
+> >=20
+>=20
+> > > Snapshot recorded successfully for session test
+> >=20
+>=20
+> > > 4044
+> >=20
+>=20
+> > > [07:09:43.278933559] (+?.?????????) 07f8cf84a38f
+> > > ust_baddr_statedump:soinfo:
+> > > { cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000, sopath =3D "[vdso]", si=
+ze =3D 0,
+> > > mtime
+> > > =3D -1 }
+> >=20
+>=20
+> > > [07:09:43.475784825] (+0.000000501) 07f8cf84a38f tracetest:first_tp: =
+{
+> > > cpu_id
+> > > =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 999 }
+> >=20
+>=20
+> > > NUMBER OF DIFF HUNKS =3D 1
+> >=20
+>=20
+> > > Snapshot recorded successfully for session test
+> >=20
+>=20
+> > > 4735
+> >=20
+>=20
+> > > [07:09:43.279031320] (+?.?????????) 07f8cf84a38f tracetest:first_tp: =
+{
+> > > cpu_id
+> > > =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 0 }
+> >=20
+>=20
+> > > [07:09:43.549945106] (+0.000000517) 07f8cf84a38f tracetest:first_tp: =
+{
+> > > cpu_id
+> > > =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
+> >=20
+>=20
+> > > NUMBER OF DIFF HUNKS =3D 12
+> >=20
+>=20
+> > > Snapshot recorded successfully for session test
+> >=20
+>=20
+> > > 4437
+> >=20
+>=20
+> > > [07:09:43.335916076] (+?.?????????) 07f8cf84a38f
+> > > ust_baddr_statedump:soinfo:
+> > > { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000, sopath =3D "[vdso]", si=
+ze =3D 0,
+> > > mtime
+> > > =3D -1 }
+> >=20
+>=20
+> > > [07:09:43.654229030] (+0.000000436) 07f8cf84a38f tracetest:first_tp: =
+{
+> > > cpu_id
+> > > =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 999 }
+> >=20
+>=20
+> > > NUMBER OF DIFF HUNKS =3D 3
+> >=20
+>=20
+> > > Snapshot recorded successfully for session test
+> >=20
+>=20
+> > > 4746
+> >=20
+>=20
+> > > [07:09:43.335916076] (+?.?????????) 07f8cf84a38f
+> > > ust_baddr_statedump:soinfo:
+> > > { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000, sopath =3D "[vdso]", si=
+ze =3D 0,
+> > > mtime
+> > > =3D -1 }
+> >=20
+>=20
+> > > [07:09:43.747509349] (+0.000000502) 07f8cf84a38f tracetest:first_tp: =
+{
+> > > cpu_id
+> > > =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
+> >=20
+>=20
+> > > NUMBER OF DIFF HUNKS =3D 11
+> >=20
+>=20
+> > > Snapshot recorded successfully for session test
+> >=20
+>=20
+> > > 5757
+> >=20
+>=20
+> > > [07:09:43.335916076] (+?.?????????) 07f8cf84a38f
+> > > ust_baddr_statedump:soinfo:
+> > > { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000, sopath =3D "[vdso]", si=
+ze =3D 0,
+> > > mtime
+> > > =3D -1 }
+> >=20
+>=20
+> > > [07:09:43.814938128] (+0.000001371) 07f8cf84a38f tracetest:first_tp: =
+{
+> > > cpu_id
+> > > =3D 4 }, { my_string_field =3D "test", my_integer_field =3D 999 }
+> >=20
+>=20
+> > > NUMBER OF DIFF HUNKS =3D 1
+> >=20
+>=20
+> > > Snapshot recorded successfully for session test
+> >=20
+>=20
+> > > 6066
+> >=20
+>=20
+> > > [07:09:43.335916076] (+?.?????????) 07f8cf84a38f
+> > > ust_baddr_statedump:soinfo:
+> > > { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000, sopath =3D "[vdso]", si=
+ze =3D 0,
+> > > mtime
+> > > =3D -1 }
+> >=20
+>=20
+> > > [07:09:43.919112586] (+0.000000990) 07f8cf84a38f tracetest:first_tp: =
+{
+> > > cpu_id
+> > > =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
+> >=20
+>=20
+> > > NUMBER OF DIFF HUNKS =3D 11
+> >=20
+>=20
+> > > Snapshot recorded successfully for session test
+> >=20
+>=20
+> > > 6077
+> >=20
+>=20
+> > > [07:09:43.335916076] (+?.?????????) 07f8cf84a38f
+> > > ust_baddr_statedump:soinfo:
+> > > { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000, sopath =3D "[vdso]", si=
+ze =3D 0,
+> > > mtime
+> > > =3D -1 }
+> >=20
+>=20
+> > > [07:09:44.004234933] (+0.000001213) 07f8cf84a38f tracetest:first_tp: =
+{
+> > > cpu_id
+> > > =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }
+> >=20
+>=20
+> > > NUMBER OF DIFF HUNKS =3D 2
+> >=20
+>=20
+> > > Waiting for data availability
+> >=20
+>=20
+> > > Tracing stopped for session test
+> >=20
+>=20
+> > > Session test destroyed
+> >=20
+>=20
+> > > ---------------------------------------------------------------
+> >=20
+>=20
+
+> > > Regards
+> >=20
+>=20
+
+> > > Anders Wallin
+> >=20
+>=20
+
+> > > _______________________________________________
+> >=20
+>=20
+> > > lttng-dev mailing list
+> >=20
+>=20
+> > > lttng-dev@lists.lttng.org
+> >=20
+>=20
+> > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >=20
+>=20
+
+> > --
+>=20
+> > Mathieu Desnoyers
+>=20
+> > EfficiOS Inc.
+>=20
+> > http://www.efficios.com
+>=20
+
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
+
+------=_Part_14584_1358994827.1416224714942
+Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Thx Mathieu,<div><br></div><div>if I&#39;m running my test=
- on one cpu (taskset -c 1 ./test.run) it works as expected and described by=
- you.</div><div>The babeltrace flag would be a good solution! Do you want m=
-e to file a bug/enhancement on this?=C2=A0</div><div><br></div><div>Regards=
-</div><div><br></div><div><br></div></div><div class=3D"gmail_extra"><br cl=
-ear=3D"all"><div><div class=3D"gmail_signature">Anders Wallin</div></div>
+<html><body><div style=3D"font-family: times new roman, new york, times, se=
+rif; font-size: 12pt; color: #000000"><div>Hi Anders,<br></div><div><br></d=
+iv><div>Yes, please file a feature request against Babeltrace on<br></div><=
+div>the bug tracker pointing the this email thread and<br></div><div>descri=
+bing the feature.<br></div><div><br></div><div>Thanks!<br></div><div><br></=
+div><div>Mathieu<br></div><div><br></div><div><br></div><hr id=3D"zwchr"><b=
+lockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-le=
+ft:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none=
+;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><b>From: </b>"Ande=
+rs Wallin" &lt;wallinux@gmail.com&gt;<br><b>To: </b>"Mathieu Desnoyers" &lt=
+;mathieu.desnoyers@efficios.com&gt;<br><b>Cc: </b>lttng-dev@lists.lttng.org=
+<br><b>Sent: </b>Monday, November 17, 2014 10:45:37 AM<br><b>Subject: </b>R=
+e: [lttng-dev] snapshot data corrupted after the output buffer is filled<br=
+><div><br></div><div dir=3D"ltr">Thx Mathieu,<div><br></div><div>if I'm run=
+ning my test on one cpu (taskset -c 1 ./test.run) it works as expected and =
+described by you.</div><div>The babeltrace flag would be a good solution! D=
+o you want me to file a bug/enhancement on this?&nbsp;</div><div><br></div>=
+<div>Regards</div><div><br></div><div><br></div></div><div class=3D"gmail_e=
+xtra"><br clear=3D"all"><div><div class=3D"gmail_signature">Anders Wallin</=
+div></div>
 <br><div class=3D"gmail_quote">On Sat, Nov 15, 2014 at 6:59 PM, Mathieu Des=
 noyers <span dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoyers@efficios.c=
 om" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;</span> wrote:<=
@@ -381,219 +848,218 @@ br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left=
 roman,new york,times,serif;font-size:12pt;color:#000000"><hr><blockquote st=
 yle=3D"border-left:2px solid #1010ff;margin-left:5px;padding-left:5px;color=
 :#000;font-weight:normal;font-style:normal;text-decoration:none;font-family=
-:Helvetica,Arial,sans-serif;font-size:12pt"><b>From: </b>&quot;Anders Walli=
-n&quot; &lt;<a href=3D"mailto:wallinux@gmail.com" target=3D"_blank">wallinu=
-x@gmail.com</a>&gt;<br><b>To: </b><a href=3D"mailto:lttng-dev@lists.lttng.o=
-rg" target=3D"_blank">lttng-dev@lists.lttng.org</a><br><b>Sent: </b>Friday,=
- November 14, 2014 8:28:18 AM<br><b>Subject: </b>[lttng-dev] snapshot data =
-corrupted after the output buffer is=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0filled<span class=3D""><br><div><br></div><div dir=3D"ltr"><div>Hi=
-,</div><div><br></div><div>it looks like snapshot events became faulty afte=
-r the output max size is reached.</div><div>The next snapshot get mixed eve=
-nts from different buffers. I have tested it on 2.3, 2.4 and 2.5</div><div>=
-and it&#39;s in all of them, but it hits earlier in 2.5 due to the =C2=A0pr=
-oblem reported in</div><div><a href=3D"http://lists.lttng.org/pipermail/ltt=
-ng-dev/2014-November/023773.html" target=3D"_blank">http://lists.lttng.org/=
-pipermail/lttng-dev/2014-November/023773.html</a><br></div><div><br></div><=
-div>There should never be more then 2 HUNKS in a diff between 2 consecutive=
- snapshots, here I got=C2=A0</div><div>11 as the worst case.</div></div></s=
-pan></blockquote><div>Hi Anders,<br></div><div><br></div><div>This is not a=
- bug, rather just per-cpu buffering at work.It does have some<br></div><div=
->rather non-obvious consequences in terms of snapshot event flow.<br></div>=
-<div><br></div><div>To understand this, we need to keep in mind that LTTng =
-does everything<br></div><div>in per-cpu buffers, and that overwrite of old=
-est events in buffer full conditions<br></div><div>happens per-cpu.<br></di=
-v><div><br></div><div>The use-case you show below really makes sense when y=
-ou start to consider<br></div><div>on which CPU (and thus per-cpu buffer) t=
-he application is running. Initially,<br></div><div>the first app runs on C=
-PU 6. As long as the following applications run on<br></div><div>other cpus=
-, we keep the same first event. Then when enough events are<br></div><div>w=
-ritten in cpu 6 buffer to overwrite the first event, we see a first event c=
-hange.<br></div><div>Then, depending on the scheduling of applications, old=
-er parts of per-cpu<br></div><div>buffers are overwritten, and others are n=
-ot (if there are less events in those<br></div><div>buffer). This means som=
-e per-cpu buffers will have events going further back<br></div><div>in time=
- compared to other higher-throughput CPUs.<br></div><div><br></div><div>Thi=
-s is why you see more than 2 hunks in your diff. Babeltrace merges those<br=
-></div><div>per-cpu buffers back into a single text output, and the fact th=
-at some events<br></div><div>have been overwritten for a time-range for hig=
-h-throughput buffers, but not<br></div><div>for low-throughput buffers, mak=
-e it appear as if events are missing in the<br></div><div>stream if your mo=
-del is a single system-wide buffer, but the missing events<br></div><div>ma=
-ke sense if you see it as a merge of per-cpu buffers.<br></div><div><br></d=
-iv><div>Our current behavior is to gather all available data when taking a =
-snapshot,<br></div><div>and babeltrace behavior is to show all events avail=
-able in the streams. We<br></div><div>could perhaps consider a different ba=
-beltrace behavior (a flag) that would<br></div><div>allow it to only show t=
-he events for the intersection of time range of all<br></div><div>streams, =
-based on the packet header timestamp begin/end. This would<br></div><div>ta=
-ke care of hiding events that happen in low-throughput streams when<br></di=
-v><div>there is no intersection with snapshotted high-throughput streams.<b=
-r></div><div><br></div><div>And perhaps this should be the default ?<br></d=
-iv><div><br></div><div>Thanks!<br></div><div><br></div><div>Mathieu<br></di=
-v><div><br></div><blockquote style=3D"border-left:2px solid #1010ff;margin-=
-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;t=
-ext-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt">=
-<div><div class=3D"h5"><div dir=3D"ltr"><div><br></div><div>TESTCASE;</div>=
-<div><br></div><div>tracetest code:</div><div>-----------------------------=
-----------------------------------</div><div>#include &lt;stdio.h&gt;</div>=
-<div>#include &quot;tracetest-tp.h&quot;</div><div><br></div><div>int main(=
-int argc, char* argv[])</div><div>{</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 i=
-nt i;</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 for (i =3D 0; i &lt; 1000; i++)=
- {</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 tracep=
-oint(tracetest, first_tp, i, &quot;test&quot;);</div><div>=C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 }</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 return 0;</div><div>}</d=
-iv><div>---------------------------------------------------------------</di=
-v><div><br></div><div>test script:</div><div>------------------------------=
----------------------------------</div><div>#!/bin/bash=C2=A0</div><div>: $=
-{NO_OF_SUBBUF:=3D6}</div><div>: ${SUBBUF_SIZE:=3D4096}</div><div>: ${KERNEL=
-_TRACE:=3DNO}</div><div>: ${LOOPS:=3D10}</div><div><br></div><div>SESSION=
-=3Dtest</div><div>CHANNEL1=3Dch1</div><div>CHANNEL2=3Dch2</div><div><br></d=
-iv><div>CH2_SUBBUF_SIZE=3D$(($SUBBUF_SIZE*$NO_OF_SUBBUF))</div><div><br></d=
-iv><div><br></div><div>LTTNG=3D&#39;lttng -n&#39;</div><div>killall lttng-c=
-onsumerd &gt; /dev/null 2&gt;&amp;1</div><div>killall lttng-sessiond &gt; /=
-dev/null 2&gt;&amp;1</div><div>if [ -z $DEBUG ]; then</div><div>=C2=A0 =C2=
-=A0 lttng-sessiond --no-kernel -d</div><div>else</div><div>=C2=A0 =C2=A0 lt=
-tng-sessiond -v --no-kernel --verbose-consumer -b</div><div>fi</div><div>sl=
-eep 1</div><div><br></div><div>if [ ! -z $DEBUG ]; then</div><div>=C2=A0 =
-=C2=A0 export LTTNG_UST_DEBUG=3D1</div><div>fi</div><div><br></div><div>rm =
--rf $HOME/lttng-traces</div><div>rm snapshot/*.bt</div><div><br></div><div>=
-$LTTNG --version</div><div><br></div><div>$LTTNG create $SESSION --snapshot=
-</div><div>$LTTNG enable-channel -u --subbuf-size $SUBBUF_SIZE --num-subbuf=
- $NO_OF_SUBBUF --overwrite $CHANNEL1</div><div>$LTTNG enable-channel -u --s=
-ubbuf-size $CH2_SUBBUF_SIZE --num-subbuf 2 --overwrite $CHANNEL2</div><div>=
-$LTTNG enable-event -u -c $CHANNEL1 &quot;*&quot;</div><div>$LTTNG start</d=
-iv><div>$LTTNG list $SESSION</div><div><br></div><div>mkdir -p snapshot/</d=
-iv><div><br></div><div>h=3D1</div><div>for i in $(seq 1 $LOOPS); do</div><d=
-iv>=C2=A0 =C2=A0 $APP</div><div>=C2=A0 =C2=A0 $LTTNG snapshot record</div><=
-div>=C2=A0 =C2=A0 # print no of events and first and last event =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0</div><div>=C2=A0 =C2=A0 last=3D$(ls -1drt $HOME/lttng-traces/$SESSION*/=
-* | tail -1)</div><div>=C2=A0 =C2=A0 babeltrace $last &gt; snapshot/$<a hre=
-f=3D"http://i.bt" target=3D"_blank">i.bt</a><br></div><div>=C2=A0 =C2=A0 ca=
-t snapshot/$<a href=3D"http://i.bt" target=3D"_blank">i.bt</a> | wc -l</div=
-><div>=C2=A0 =C2=A0 cat snapshot/$<a href=3D"http://i.bt" target=3D"_blank"=
->i.bt</a> | head -1</div><div>=C2=A0 =C2=A0 cat snapshot/$<a href=3D"http:/=
-/i.bt" target=3D"_blank">i.bt</a> | tail -1</div><div>=C2=A0 =C2=A0 diff -u=
- snapshot/$<a href=3D"http://i.bt" target=3D"_blank">i.bt</a> snapshot/$<a =
-href=3D"http://h.bt" target=3D"_blank">h.bt</a> &gt; snapshot/$i_$h.diff</d=
-iv><div>=C2=A0 =C2=A0 cat snapshot/$i_$h.diff | grep &quot;@@&quot; | wc -l=
- | xargs echo &quot;NUMBER OF DIFF HUNKS =3D &quot;</div><div>=C2=A0 =C2=A0=
- h=3D$i</div><div>done</div><div><br></div><div><div><div>$LTTNG stop</div>=
-<div>$LTTNG destroy $SESSION</div><div><br></div><div>---------------------=
-------------------------------------------</div><div><br></div><div>result =
-from run (removed some output lines for readability)</div><div>------------=
----------------------------------------------------</div><div>lttng (LTTng =
-Trace Control) 2.4.2 - =C3=89poque Opaque</div><div>Snapshot mode set. Ever=
-y channel enabled for that session will be set in overwrite mode and mmap o=
-utput.</div><div>Warning: The number of subbuffers (6) is rounded to the ne=
-xt power of 2 (8)</div><div>UST channel ch1 enabled for session test</div><=
-div>Warning: The subbuf size (24576) is rounded to the next power of 2 (327=
-68)</div><div>UST channel ch2 enabled for session test</div><div>UST event =
-* created in channel ch1</div><div>Tracing started for session test</div><d=
-iv>Tracing session test: [active snapshot]</div><div>=C2=A0 =C2=A0 Trace pa=
-th:=C2=A0</div><div><br></div><div>=3D=3D=3D Domain: UST global =3D=3D=3D</=
-div><div><br></div><div>Buffer type: per UID</div><div><br></div><div>Chann=
-els:</div><div>-------------</div><div>- ch1: [enabled]</div><div><br></div=
-><div>=C2=A0 =C2=A0 Attributes:</div><div>=C2=A0 =C2=A0 =C2=A0 overwrite mo=
-de: 1</div><div>=C2=A0 =C2=A0 =C2=A0 subbufers size: 4096</div><div>=C2=A0 =
-=C2=A0 =C2=A0 number of subbufers: 8</div><div>=C2=A0 =C2=A0 =C2=A0 switch =
-timer interval: 0</div><div>=C2=A0 =C2=A0 =C2=A0 read timer interval: 0</di=
-v><div>=C2=A0 =C2=A0 =C2=A0 output: mmap()</div><div><br></div><div>=C2=A0 =
-=C2=A0 Events:</div><div>=C2=A0 =C2=A0 =C2=A0 * (type: tracepoint) [enabled=
-]</div><div>- ch2: [enabled]</div><div><br></div><div>=C2=A0 =C2=A0 Attribu=
-tes:</div><div>=C2=A0 =C2=A0 =C2=A0 overwrite mode: 1</div><div>=C2=A0 =C2=
-=A0 =C2=A0 subbufers size: 32768</div><div>=C2=A0 =C2=A0 =C2=A0 number of s=
-ubbufers: 2</div><div>=C2=A0 =C2=A0 =C2=A0 switch timer interval: 0</div><d=
-iv>=C2=A0 =C2=A0 =C2=A0 read timer interval: 0</div><div>=C2=A0 =C2=A0 =C2=
-=A0 output: mmap()</div><div><br></div><div>=C2=A0 =C2=A0 Events:</div><div=
->=C2=A0 =C2=A0 =C2=A0 None</div><div><br></div><div>Snapshot recorded succe=
-ssfully for session test</div><div>1011</div><div>[07:09:43.278933559] (+?.=
-?????????) 07f8cf84a38f ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { bad=
-dr =3D 0x7FFF645EE000, sopath =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D=
- -1 }</div><div>[07:09:43.279975100] (+0.000000975) 07f8cf84a38f tracetest:=
-first_tp: { cpu_id =3D 5 }, { my_string_field =3D &quot;test&quot;, my_inte=
-ger_field =3D 999 }</div><div>NUMBER OF DIFF HUNKS =3D =C2=A00</div><div>Sn=
-apshot recorded successfully for session test</div><div>2022</div><div>[07:=
-09:43.278933559] (+?.?????????) 07f8cf84a38f ust_baddr_statedump:soinfo: { =
-cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000, sopath =3D &quot;[vdso]&quot;, =
-size =3D 0, mtime =3D -1 }</div><div>[07:09:43.337703508] (+0.000001238) 07=
-f8cf84a38f tracetest:first_tp: { cpu_id =3D 4 }, { my_string_field =3D &quo=
-t;test&quot;, my_integer_field =3D 999 }</div><div>NUMBER OF DIFF HUNKS =3D=
- =C2=A01</div><div>Snapshot recorded successfully for session test</div><di=
-v>3033</div><div>[07:09:43.278933559] (+?.?????????) 07f8cf84a38f ust_baddr=
-_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FFF645EE000, sopath =3D=
- &quot;[vdso]&quot;, size =3D 0, mtime =3D -1 }</div><div>[07:09:43.4328270=
-51] (+0.000000308) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 6 }, { my_=
-string_field =3D &quot;test&quot;, my_integer_field =3D 999 }</div><div>NUM=
-BER OF DIFF HUNKS =3D =C2=A01</div><div>Snapshot recorded successfully for =
-session test</div><div>4044</div><div>[07:09:43.278933559] (+?.?????????) 0=
+:Helvetica,Arial,sans-serif;font-size:12pt"><b>From: </b>"Anders Wallin" &l=
+t;<a href=3D"mailto:wallinux@gmail.com" target=3D"_blank">wallinux@gmail.co=
+m</a>&gt;<br><b>To: </b><a href=3D"mailto:lttng-dev@lists.lttng.org" target=
+=3D"_blank">lttng-dev@lists.lttng.org</a><br><b>Sent: </b>Friday, November =
+14, 2014 8:28:18 AM<br><b>Subject: </b>[lttng-dev] snapshot data corrupted =
+after the output buffer is&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f=
+illed<span class=3D""><br><div><br></div><div dir=3D"ltr"><div>Hi,</div><di=
+v><br></div><div>it looks like snapshot events became faulty after the outp=
+ut max size is reached.</div><div>The next snapshot get mixed events from d=
+ifferent buffers. I have tested it on 2.3, 2.4 and 2.5</div><div>and it's i=
+n all of them, but it hits earlier in 2.5 due to the &nbsp;problem reported=
+ in</div><div><a href=3D"http://lists.lttng.org/pipermail/lttng-dev/2014-No=
+vember/023773.html" target=3D"_blank">http://lists.lttng.org/pipermail/lttn=
+g-dev/2014-November/023773.html</a><br></div><div><br></div><div>There shou=
+ld never be more then 2 HUNKS in a diff between 2 consecutive snapshots, he=
+re I got&nbsp;</div><div>11 as the worst case.</div></div></span></blockquo=
+te><div>Hi Anders,<br></div><div><br></div><div>This is not a bug, rather j=
+ust per-cpu buffering at work.It does have some<br></div><div>rather non-ob=
+vious consequences in terms of snapshot event flow.<br></div><div><br></div=
+><div>To understand this, we need to keep in mind that LTTng does everythin=
+g<br></div><div>in per-cpu buffers, and that overwrite of oldest events in =
+buffer full conditions<br></div><div>happens per-cpu.<br></div><div><br></d=
+iv><div>The use-case you show below really makes sense when you start to co=
+nsider<br></div><div>on which CPU (and thus per-cpu buffer) the application=
+ is running. Initially,<br></div><div>the first app runs on CPU 6. As long =
+as the following applications run on<br></div><div>other cpus, we keep the =
+same first event. Then when enough events are<br></div><div>written in cpu =
+6 buffer to overwrite the first event, we see a first event change.<br></di=
+v><div>Then, depending on the scheduling of applications, older parts of pe=
+r-cpu<br></div><div>buffers are overwritten, and others are not (if there a=
+re less events in those<br></div><div>buffer). This means some per-cpu buff=
+ers will have events going further back<br></div><div>in time compared to o=
+ther higher-throughput CPUs.<br></div><div><br></div><div>This is why you s=
+ee more than 2 hunks in your diff. Babeltrace merges those<br></div><div>pe=
+r-cpu buffers back into a single text output, and the fact that some events=
+<br></div><div>have been overwritten for a time-range for high-throughput b=
+uffers, but not<br></div><div>for low-throughput buffers, make it appear as=
+ if events are missing in the<br></div><div>stream if your model is a singl=
+e system-wide buffer, but the missing events<br></div><div>make sense if yo=
+u see it as a merge of per-cpu buffers.<br></div><div><br></div><div>Our cu=
+rrent behavior is to gather all available data when taking a snapshot,<br><=
+/div><div>and babeltrace behavior is to show all events available in the st=
+reams. We<br></div><div>could perhaps consider a different babeltrace behav=
+ior (a flag) that would<br></div><div>allow it to only show the events for =
+the intersection of time range of all<br></div><div>streams, based on the p=
+acket header timestamp begin/end. This would<br></div><div>take care of hid=
+ing events that happen in low-throughput streams when<br></div><div>there i=
+s no intersection with snapshotted high-throughput streams.<br></div><div><=
+br></div><div>And perhaps this should be the default ?<br></div><div><br></=
+div><div>Thanks!<br></div><div><br></div><div>Mathieu<br></div><div><br></d=
+iv><blockquote style=3D"border-left:2px solid #1010ff;margin-left:5px;paddi=
+ng-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration=
+:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt"><div><div clas=
+s=3D"h5"><div dir=3D"ltr"><div><br></div><div>TESTCASE;</div><div><br></div=
+><div>tracetest code:</div><div>-------------------------------------------=
+--------------------</div><div>#include &lt;stdio.h&gt;</div><div>#include =
+"tracetest-tp.h"</div><div><br></div><div>int main(int argc, char* argv[])<=
+/div><div>{</div><div>&nbsp; &nbsp; &nbsp; &nbsp; int i;</div><div>&nbsp; &=
+nbsp; &nbsp; &nbsp; for (i =3D 0; i &lt; 1000; i++) {</div><div>&nbsp; &nbs=
+p; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; tracepoint(tracetest, first_tp=
+, i, "test");</div><div>&nbsp; &nbsp; &nbsp; &nbsp; }</div><div>&nbsp; &nbs=
+p; &nbsp; &nbsp; return 0;</div><div>}</div><div>--------------------------=
+-------------------------------------</div><div><br></div><div>test script:=
+</div><div>---------------------------------------------------------------<=
+/div><div>#!/bin/bash&nbsp;</div><div>: ${NO_OF_SUBBUF:=3D6}</div><div>: ${=
+SUBBUF_SIZE:=3D4096}</div><div>: ${KERNEL_TRACE:=3DNO}</div><div>: ${LOOPS:=
+=3D10}</div><div><br></div><div>SESSION=3Dtest</div><div>CHANNEL1=3Dch1</di=
+v><div>CHANNEL2=3Dch2</div><div><br></div><div>CH2_SUBBUF_SIZE=3D$(($SUBBUF=
+_SIZE*$NO_OF_SUBBUF))</div><div><br></div><div><br></div><div>LTTNG=3D'lttn=
+g -n'</div><div>killall lttng-consumerd &gt; /dev/null 2&gt;&amp;1</div><di=
+v>killall lttng-sessiond &gt; /dev/null 2&gt;&amp;1</div><div>if [ -z $DEBU=
+G ]; then</div><div>&nbsp; &nbsp; lttng-sessiond --no-kernel -d</div><div>e=
+lse</div><div>&nbsp; &nbsp; lttng-sessiond -v --no-kernel --verbose-consume=
+r -b</div><div>fi</div><div>sleep 1</div><div><br></div><div>if [ ! -z $DEB=
+UG ]; then</div><div>&nbsp; &nbsp; export LTTNG_UST_DEBUG=3D1</div><div>fi<=
+/div><div><br></div><div>rm -rf $HOME/lttng-traces</div><div>rm snapshot/*.=
+bt</div><div><br></div><div>$LTTNG --version</div><div><br></div><div>$LTTN=
+G create $SESSION --snapshot</div><div>$LTTNG enable-channel -u --subbuf-si=
+ze $SUBBUF_SIZE --num-subbuf $NO_OF_SUBBUF --overwrite $CHANNEL1</div><div>=
+$LTTNG enable-channel -u --subbuf-size $CH2_SUBBUF_SIZE --num-subbuf 2 --ov=
+erwrite $CHANNEL2</div><div>$LTTNG enable-event -u -c $CHANNEL1 "*"</div><d=
+iv>$LTTNG start</div><div>$LTTNG list $SESSION</div><div><br></div><div>mkd=
+ir -p snapshot/</div><div><br></div><div>h=3D1</div><div>for i in $(seq 1 $=
+LOOPS); do</div><div>&nbsp; &nbsp; $APP</div><div>&nbsp; &nbsp; $LTTNG snap=
+shot record</div><div>&nbsp; &nbsp; # print no of events and first and last=
+ event &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp=
+; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nb=
+sp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &=
+nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbs=
+p; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &n=
+bsp; &nbsp;</div><div>&nbsp; &nbsp; last=3D$(ls -1drt $HOME/lttng-traces/$S=
+ESSION*/* | tail -1)</div><div>&nbsp; &nbsp; babeltrace $last &gt; snapshot=
+/$<a href=3D"http://i.bt" target=3D"_blank">i.bt</a><br></div><div>&nbsp; &=
+nbsp; cat snapshot/$<a href=3D"http://i.bt" target=3D"_blank">i.bt</a> | wc=
+ -l</div><div>&nbsp; &nbsp; cat snapshot/$<a href=3D"http://i.bt" target=3D=
+"_blank">i.bt</a> | head -1</div><div>&nbsp; &nbsp; cat snapshot/$<a href=
+=3D"http://i.bt" target=3D"_blank">i.bt</a> | tail -1</div><div>&nbsp; &nbs=
+p; diff -u snapshot/$<a href=3D"http://i.bt" target=3D"_blank">i.bt</a> sna=
+pshot/$<a href=3D"http://h.bt" target=3D"_blank">h.bt</a> &gt; snapshot/$i_=
+$h.diff</div><div>&nbsp; &nbsp; cat snapshot/$i_$h.diff | grep "@@" | wc -l=
+ | xargs echo "NUMBER OF DIFF HUNKS =3D "</div><div>&nbsp; &nbsp; h=3D$i</d=
+iv><div>done</div><div><br></div><div><div><div>$LTTNG stop</div><div>$LTTN=
+G destroy $SESSION</div><div><br></div><div>-------------------------------=
+--------------------------------</div><div><br></div><div>result from run (=
+removed some output lines for readability)</div><div>----------------------=
+-----------------------------------------</div><div>lttng (LTTng Trace Cont=
+rol) 2.4.2 - =C3=89poque Opaque</div><div>Snapshot mode set. Every channel =
+enabled for that session will be set in overwrite mode and mmap output.</di=
+v><div>Warning: The number of subbuffers (6) is rounded to the next power o=
+f 2 (8)</div><div>UST channel ch1 enabled for session test</div><div>Warnin=
+g: The subbuf size (24576) is rounded to the next power of 2 (32768)</div><=
+div>UST channel ch2 enabled for session test</div><div>UST event * created =
+in channel ch1</div><div>Tracing started for session test</div><div>Tracing=
+ session test: [active snapshot]</div><div>&nbsp; &nbsp; Trace path:&nbsp;<=
+/div><div><br></div><div>=3D=3D=3D Domain: UST global =3D=3D=3D</div><div><=
+br></div><div>Buffer type: per UID</div><div><br></div><div>Channels:</div>=
+<div>-------------</div><div>- ch1: [enabled]</div><div><br></div><div>&nbs=
+p; &nbsp; Attributes:</div><div>&nbsp; &nbsp; &nbsp; overwrite mode: 1</div=
+><div>&nbsp; &nbsp; &nbsp; subbufers size: 4096</div><div>&nbsp; &nbsp; &nb=
+sp; number of subbufers: 8</div><div>&nbsp; &nbsp; &nbsp; switch timer inte=
+rval: 0</div><div>&nbsp; &nbsp; &nbsp; read timer interval: 0</div><div>&nb=
+sp; &nbsp; &nbsp; output: mmap()</div><div><br></div><div>&nbsp; &nbsp; Eve=
+nts:</div><div>&nbsp; &nbsp; &nbsp; * (type: tracepoint) [enabled]</div><di=
+v>- ch2: [enabled]</div><div><br></div><div>&nbsp; &nbsp; Attributes:</div>=
+<div>&nbsp; &nbsp; &nbsp; overwrite mode: 1</div><div>&nbsp; &nbsp; &nbsp; =
+subbufers size: 32768</div><div>&nbsp; &nbsp; &nbsp; number of subbufers: 2=
+</div><div>&nbsp; &nbsp; &nbsp; switch timer interval: 0</div><div>&nbsp; &=
+nbsp; &nbsp; read timer interval: 0</div><div>&nbsp; &nbsp; &nbsp; output: =
+mmap()</div><div><br></div><div>&nbsp; &nbsp; Events:</div><div>&nbsp; &nbs=
+p; &nbsp; None</div><div><br></div><div>Snapshot recorded successfully for =
+session test</div><div>1011</div><div>[07:09:43.278933559] (+?.?????????) 0=
 7f8cf84a38f ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7FF=
-F645EE000, sopath =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D -1 }</div><=
-div>[07:09:43.475784825] (+0.000000501) 07f8cf84a38f tracetest:first_tp: { =
-cpu_id =3D 5 }, { my_string_field =3D &quot;test&quot;, my_integer_field =
-=3D 999 }</div><div>NUMBER OF DIFF HUNKS =3D =C2=A01</div><div>Snapshot rec=
-orded successfully for session test</div><div>4735</div><div>[07:09:43.2790=
-31320] (+?.?????????) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 5 }, { =
-my_string_field =3D &quot;test&quot;, my_integer_field =3D 0 }</div><div>[0=
-7:09:43.549945106] (+0.000000517) 07f8cf84a38f tracetest:first_tp: { cpu_id=
- =3D 6 }, { my_string_field =3D &quot;test&quot;, my_integer_field =3D 999 =
-}</div><div>NUMBER OF DIFF HUNKS =3D =C2=A012</div><div>Snapshot recorded s=
-uccessfully for session test</div><div>4437</div><div>[07:09:43.335916076] =
-(+?.?????????) 07f8cf84a38f ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, {=
- baddr =3D 0x7FFFAD1FE000, sopath =3D &quot;[vdso]&quot;, size =3D 0, mtime=
- =3D -1 }</div><div>[07:09:43.654229030] (+0.000000436) 07f8cf84a38f tracet=
-est:first_tp: { cpu_id =3D 5 }, { my_string_field =3D &quot;test&quot;, my_=
-integer_field =3D 999 }</div><div>NUMBER OF DIFF HUNKS =3D =C2=A03</div><di=
-v>Snapshot recorded successfully for session test</div><div>4746</div><div>=
-[07:09:43.335916076] (+?.?????????) 07f8cf84a38f ust_baddr_statedump:soinfo=
-: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000, sopath =3D &quot;[vdso]&quo=
-t;, size =3D 0, mtime =3D -1 }</div><div>[07:09:43.747509349] (+0.000000502=
-) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 6 }, { my_string_field =3D =
-&quot;test&quot;, my_integer_field =3D 999 }</div><div>NUMBER OF DIFF HUNKS=
- =3D =C2=A011</div><div>Snapshot recorded successfully for session test</di=
-v><div>5757</div><div>[07:09:43.335916076] (+?.?????????) 07f8cf84a38f ust_=
-baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000, sopat=
-h =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D -1 }</div><div>[07:09:43.81=
-4938128] (+0.000001371) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 4 }, =
-{ my_string_field =3D &quot;test&quot;, my_integer_field =3D 999 }</div><di=
-v>NUMBER OF DIFF HUNKS =3D =C2=A01</div><div>Snapshot recorded successfully=
- for session test</div><div>6066</div><div>[07:09:43.335916076] (+?.???????=
-??) 07f8cf84a38f ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D =
-0x7FFFAD1FE000, sopath =3D &quot;[vdso]&quot;, size =3D 0, mtime =3D -1 }</=
-div><div>[07:09:43.919112586] (+0.000000990) 07f8cf84a38f tracetest:first_t=
-p: { cpu_id =3D 6 }, { my_string_field =3D &quot;test&quot;, my_integer_fie=
-ld =3D 999 }</div><div>NUMBER OF DIFF HUNKS =3D =C2=A011</div><div>Snapshot=
- recorded successfully for session test</div><div>6077</div><div>[07:09:43.=
-335916076] (+?.?????????) 07f8cf84a38f ust_baddr_statedump:soinfo: { cpu_id=
- =3D 2 }, { baddr =3D 0x7FFFAD1FE000, sopath =3D &quot;[vdso]&quot;, size =
-=3D 0, mtime =3D -1 }</div><div>[07:09:44.004234933] (+0.000001213) 07f8cf8=
-4a38f tracetest:first_tp: { cpu_id =3D 6 }, { my_string_field =3D &quot;tes=
-t&quot;, my_integer_field =3D 999 }</div><div>NUMBER OF DIFF HUNKS =3D =C2=
-=A02</div><div>Waiting for data availability</div><div>Tracing stopped for =
-session test</div><div>Session test destroyed</div><div>-------------------=
---------------------------------------------</div><div><br></div><div>Regar=
-ds</div><div><br></div><div>Anders Wallin</div></div></div></div><br></div>=
-</div><span class=3D"">_______________________________________________<br>l=
-ttng-dev mailing list<br><a href=3D"mailto:lttng-dev@lists.lttng.org" targe=
-t=3D"_blank">lttng-dev@lists.lttng.org</a><br><a href=3D"http://lists.lttng=
-.org/cgi-bin/mailman/listinfo/lttng-dev" target=3D"_blank">http://lists.ltt=
-ng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br></span></blockquote><span =
-class=3D"HOEnZb"><font color=3D"#888888"><div><br><br></div><div><br></div>=
-<div>-- <br></div><div><span name=3D"x"></span>Mathieu Desnoyers<br>EfficiO=
+F645EE000, sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }</div><div>[07:09=
+:43.279975100] (+0.000000975) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D=
+ 5 }, { my_string_field =3D "test", my_integer_field =3D 999 }</div><div>NU=
+MBER OF DIFF HUNKS =3D &nbsp;0</div><div>Snapshot recorded successfully for=
+ session test</div><div>2022</div><div>[07:09:43.278933559] (+?.?????????) =
+07f8cf84a38f ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0x7F=
+FF645EE000, sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }</div><div>[07:0=
+9:43.337703508] (+0.000001238) 07f8cf84a38f tracetest:first_tp: { cpu_id =
+=3D 4 }, { my_string_field =3D "test", my_integer_field =3D 999 }</div><div=
+>NUMBER OF DIFF HUNKS =3D &nbsp;1</div><div>Snapshot recorded successfully =
+for session test</div><div>3033</div><div>[07:09:43.278933559] (+?.????????=
+?) 07f8cf84a38f ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D 0=
+x7FFF645EE000, sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }</div><div>[0=
+7:09:43.432827051] (+0.000000308) 07f8cf84a38f tracetest:first_tp: { cpu_id=
+ =3D 6 }, { my_string_field =3D "test", my_integer_field =3D 999 }</div><di=
+v>NUMBER OF DIFF HUNKS =3D &nbsp;1</div><div>Snapshot recorded successfully=
+ for session test</div><div>4044</div><div>[07:09:43.278933559] (+?.???????=
+??) 07f8cf84a38f ust_baddr_statedump:soinfo: { cpu_id =3D 6 }, { baddr =3D =
+0x7FFF645EE000, sopath =3D "[vdso]", size =3D 0, mtime =3D -1 }</div><div>[=
+07:09:43.475784825] (+0.000000501) 07f8cf84a38f tracetest:first_tp: { cpu_i=
+d =3D 5 }, { my_string_field =3D "test", my_integer_field =3D 999 }</div><d=
+iv>NUMBER OF DIFF HUNKS =3D &nbsp;1</div><div>Snapshot recorded successfull=
+y for session test</div><div>4735</div><div>[07:09:43.279031320] (+?.??????=
+???) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 5 }, { my_string_field =
+=3D "test", my_integer_field =3D 0 }</div><div>[07:09:43.549945106] (+0.000=
+000517) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 6 }, { my_string_fiel=
+d =3D "test", my_integer_field =3D 999 }</div><div>NUMBER OF DIFF HUNKS =3D=
+ &nbsp;12</div><div>Snapshot recorded successfully for session test</div><d=
+iv>4437</div><div>[07:09:43.335916076] (+?.?????????) 07f8cf84a38f ust_badd=
+r_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000, sopath =
+=3D "[vdso]", size =3D 0, mtime =3D -1 }</div><div>[07:09:43.654229030] (+0=
+.000000436) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 5 }, { my_string_=
+field =3D "test", my_integer_field =3D 999 }</div><div>NUMBER OF DIFF HUNKS=
+ =3D &nbsp;3</div><div>Snapshot recorded successfully for session test</div=
+><div>4746</div><div>[07:09:43.335916076] (+?.?????????) 07f8cf84a38f ust_b=
+addr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000, sopath=
+ =3D "[vdso]", size =3D 0, mtime =3D -1 }</div><div>[07:09:43.747509349] (+=
+0.000000502) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 6 }, { my_string=
+_field =3D "test", my_integer_field =3D 999 }</div><div>NUMBER OF DIFF HUNK=
+S =3D &nbsp;11</div><div>Snapshot recorded successfully for session test</d=
+iv><div>5757</div><div>[07:09:43.335916076] (+?.?????????) 07f8cf84a38f ust=
+_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000, sopa=
+th =3D "[vdso]", size =3D 0, mtime =3D -1 }</div><div>[07:09:43.814938128] =
+(+0.000001371) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 4 }, { my_stri=
+ng_field =3D "test", my_integer_field =3D 999 }</div><div>NUMBER OF DIFF HU=
+NKS =3D &nbsp;1</div><div>Snapshot recorded successfully for session test</=
+div><div>6066</div><div>[07:09:43.335916076] (+?.?????????) 07f8cf84a38f us=
+t_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000, sop=
+ath =3D "[vdso]", size =3D 0, mtime =3D -1 }</div><div>[07:09:43.919112586]=
+ (+0.000000990) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 6 }, { my_str=
+ing_field =3D "test", my_integer_field =3D 999 }</div><div>NUMBER OF DIFF H=
+UNKS =3D &nbsp;11</div><div>Snapshot recorded successfully for session test=
+</div><div>6077</div><div>[07:09:43.335916076] (+?.?????????) 07f8cf84a38f =
+ust_baddr_statedump:soinfo: { cpu_id =3D 2 }, { baddr =3D 0x7FFFAD1FE000, s=
+opath =3D "[vdso]", size =3D 0, mtime =3D -1 }</div><div>[07:09:44.00423493=
+3] (+0.000001213) 07f8cf84a38f tracetest:first_tp: { cpu_id =3D 6 }, { my_s=
+tring_field =3D "test", my_integer_field =3D 999 }</div><div>NUMBER OF DIFF=
+ HUNKS =3D &nbsp;2</div><div>Waiting for data availability</div><div>Tracin=
+g stopped for session test</div><div>Session test destroyed</div><div>-----=
+----------------------------------------------------------</div><div><br></=
+div><div>Regards</div><div><br></div><div>Anders Wallin</div></div></div></=
+div><br></div></div><span class=3D"">______________________________________=
+_________<br>lttng-dev mailing list<br><a href=3D"mailto:lttng-dev@lists.lt=
+tng.org" target=3D"_blank">lttng-dev@lists.lttng.org</a><br><a href=3D"http=
+://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" target=3D"_blank">ht=
+tp://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br></span></blo=
+ckquote><span class=3D"HOEnZb"><span style=3D"color: #888888;" data-mce-sty=
+le=3D"color: #888888;" color=3D"#888888"><div><br><div><br></div></div><div=
+><br></div><div>-- <br></div><div><span></span>Mathieu Desnoyers<br>EfficiO=
 S Inc.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http://www.=
-efficios.com</a><span name=3D"x"></span><br></div></font></span></div></div=
-></blockquote></div><br></div>
+efficios.com</a><span></span><br></div></span></span></div></div></blockquo=
+te></div><br></div>
+</blockquote><div><br><br></div><div><br></div><div>-- <br></div><div><span=
+ name=3D"x"></span>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficio=
+s.com<span name=3D"x"></span><br></div></div></body></html>
+------=_Part_14584_1358994827.1416224714942--
 
---001a11c2ebf2396f7205080ad751--
 
-
---===============1450103209==
+--===============0906234386==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -604,4 +1070,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1450103209==--
+--===============0906234386==--
