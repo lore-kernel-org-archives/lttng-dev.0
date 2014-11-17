@@ -1,20 +1,18 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: Add missing URCU_TLS
- access to error_log_time
-Date: Mon, 17 Nov 2014 13:07:08 -0500
-Message-ID: <CA+jJMxsq_YOAdavPjaKS7B1R5y2R+-ByKfrGO1Vt1dMWk4bL5g__732.367291539226$1416247677$gmane$org@mail.gmail.com>
-References: <1415380622-22533-1-git-send-email-christian.babeux@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust] Add a configure check for weak
+ symbols support
+Date: Mon, 17 Nov 2014 18:16:56 +0000 (UTC)
+Message-ID: <1609688976.15040.1416248216519.JavaMail.zimbra__35204.0542908528$1416248268$gmane$org@efficios.com>
+References: <1415820921-8106-1-git-send-email-christian.babeux@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-la0-f47.google.com ([209.85.215.47])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1XqQhm-0002Zq-LZ
- for lttng-dev@lists.lttng.org; Mon, 17 Nov 2014 13:07:20 -0500
-Received: by mail-la0-f47.google.com with SMTP id gq15so3104990lab.34
- for <lttng-dev@lists.lttng.org>; Mon, 17 Nov 2014 10:07:08 -0800 (PST)
-In-Reply-To: <1415380622-22533-1-git-send-email-christian.babeux@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1XqQrN-0002es-3Z
+ for lttng-dev@lists.lttng.org; Mon, 17 Nov 2014 13:17:13 -0500
+In-Reply-To: <1415820921-8106-1-git-send-email-christian.babeux@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,28 +22,411 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Christian Babeux <christian.babeux@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIEZyaSwgTm92IDcsIDIwMTQgYXQgMTI6MTcg
-UE0sIENocmlzdGlhbiBCYWJldXgKPGNocmlzdGlhbi5iYWJldXhAZWZmaWNpb3MuY29tPiB3cm90
-ZToKPiBTaWduZWQtb2ZmLWJ5OiBDaHJpc3RpYW4gQmFiZXV4IDxjaHJpc3RpYW4uYmFiZXV4QGVm
-ZmljaW9zLmNvbT4KPiAtLS0KPiAgc3JjL2NvbW1vbi9lcnJvci5jIHwgMiArLQo+ICAxIGZpbGUg
-Y2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPgo+IGRpZmYgLS1naXQgYS9z
-cmMvY29tbW9uL2Vycm9yLmMgYi9zcmMvY29tbW9uL2Vycm9yLmMKPiBpbmRleCA1NWQ1NmU2Li41
-NzcwNzBlIDEwMDY0NAo+IC0tLSBhL3NyYy9jb21tb24vZXJyb3IuYwo+ICsrKyBiL3NyYy9jb21t
-b24vZXJyb3IuYwo+IEBAIC00OSw3ICs0OSw3IEBAIGNvbnN0IGNoYXIgKmxvZ19hZGRfdGltZSh2
-b2lkKQo+ICAgICAgICAgfQo+Cj4gICAgICAgICAvKiBGb3JtYXQgdGltZSBpbiB0aGUgVExTIHZh
-cmlhYmxlLiAqLwo+IC0gICAgICAgcmV0ID0gc25wcmludGYoVVJDVV9UTFMoZXJyb3JfbG9nX3Rp
-bWUpLnN0ciwgc2l6ZW9mKGVycm9yX2xvZ190aW1lLnN0ciksCj4gKyAgICAgICByZXQgPSBzbnBy
-aW50ZihVUkNVX1RMUyhlcnJvcl9sb2dfdGltZSkuc3RyLCBzaXplb2YoVVJDVV9UTFMoZXJyb3Jf
-bG9nX3RpbWUpLnN0ciksCj4gICAgICAgICAgICAgICAgICAgICAgICAgIiUwMmQ6JTAyZDolMDJk
-LiUwNmxkIiwKPiAgICAgICAgICAgICAgICAgICAgICAgICB0bS50bV9ob3VyLCB0bS50bV9taW4s
-IHRtLnRtX3NlYywgdHAudHZfbnNlYyk7Cj4gICAgICAgICBpZiAocmV0IDwgMCkgewo+IC0tCj4g
-Mi4xLjEKPgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+
-IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
-dgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZm
-aWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDov
-L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Merged into master, stable-2.6, stable-2.5, stable-2.4.
+
+A big thanks to jgalar for reminding me to email
+this reply.
+
+:-P
+
+Mathieu
+
+----- Original Message -----
+> From: "Christian Babeux" <christian.babeux@efficios.com>
+> To: lttng-dev@lists.lttng.org
+> Cc: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, "Christian Babeux" <christian.babeux@efficios.com>
+> Sent: Wednesday, November 12, 2014 8:35:21 PM
+> Subject: [PATCH lttng-ust] Add a configure check for weak symbols support
+> 
+> Fixes #236
+> 
+> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
+> ---
+>  config/ax_sys_weak_alias.m4 | 337
+>  ++++++++++++++++++++++++++++++++++++++++++++
+>  configure.ac                |   7 +
+>  2 files changed, 344 insertions(+)
+>  create mode 100644 config/ax_sys_weak_alias.m4
+> 
+> diff --git a/config/ax_sys_weak_alias.m4 b/config/ax_sys_weak_alias.m4
+> new file mode 100644
+> index 0000000..e1bfd33
+> --- /dev/null
+> +++ b/config/ax_sys_weak_alias.m4
+> @@ -0,0 +1,337 @@
+> +#
+> ===========================================================================
+> +#     http://www.gnu.org/software/autoconf-archive/ax_sys_weak_alias.html
+> +#
+> ===========================================================================
+> +#
+> +# SYNOPSIS
+> +#
+> +#   AX_SYS_WEAK_ALIAS
+> +#
+> +# DESCRIPTION
+> +#
+> +#   Determines whether weak aliases are supported on the system, and if so,
+> +#   what scheme is used to declare them. Also checks to see if aliases can
+> +#   cross object file boundaries, as some systems don't permit them to.
+> +#
+> +#   Most systems permit something called a "weak alias" or "weak symbol."
+> +#   These aliases permit a library to provide a stub form of a routine
+> +#   defined in another library, thus allowing the first library to operate
+> +#   even if the other library is not linked. This macro will check for
+> +#   support of weak aliases, figure out what schemes are available, and
+> +#   determine some characteristics of the weak alias support -- primarily,
+> +#   whether a weak alias declared in one object file may be referenced from
+> +#   another object file.
+> +#
+> +#   There are four known schemes of declaring weak symbols; each scheme is
+> +#   checked in turn, and the first one found is prefered. Note that only one
+> +#   of the mentioned preprocessor macros will be defined!
+> +#
+> +#   1. Function attributes
+> +#
+> +#   This scheme was first introduced by the GNU C compiler, and attaches
+> +#   attributes to particular functions. It is among the easiest to use, and
+> +#   so is the first one checked. If this scheme is detected, the
+> +#   preprocessor macro HAVE_SYS_WEAK_ALIAS_ATTRIBUTE will be defined to 1.
+> +#   This scheme is used as in the following code fragment:
+> +#
+> +#     void __weakf(int c)
+> +#     {
+> +#       /* Function definition... */
+> +#     }
+> +#
+> +#     void weakf(int c) __attribute__((weak, alias("__weakf")));
+> +#
+> +#   2. #pragma weak
+> +#
+> +#   This scheme is in use by many compilers other than the GNU C compiler.
+> +#   It is also particularly easy to use, and fairly portable -- well, as
+> +#   portable as these things get. If this scheme is detected first, the
+> +#   preprocessor macro HAVE_SYS_WEAK_ALIAS_PRAGMA will be defined to 1. This
+> +#   scheme is used as in the following code fragment:
+> +#
+> +#     extern void weakf(int c);
+> +#     #pragma weak weakf = __weakf
+> +#     void __weakf(int c)
+> +#     {
+> +#       /* Function definition... */
+> +#     }
+> +#
+> +#   3. #pragma _HP_SECONDARY_DEF
+> +#
+> +#   This scheme appears to be in use by the HP compiler. As it is rather
+> +#   specialized, this is one of the last schemes checked. If it is the first
+> +#   one detected, the preprocessor macro HAVE_SYS_WEAK_ALIAS_HPSECONDARY
+> +#   will be defined to 1. This scheme is used as in the following code
+> +#   fragment:
+> +#
+> +#     extern void weakf(int c);
+> +#     #pragma _HP_SECONDARY_DEF __weakf weakf
+> +#     void __weakf(int c)
+> +#     {
+> +#       /* Function definition... */
+> +#     }
+> +#
+> +#   4. #pragma _CRI duplicate
+> +#
+> +#   This scheme appears to be in use by the Cray compiler. As it is rather
+> +#   specialized, it too is one of the last schemes checked. If it is the
+> +#   first one detected, the preprocessor macro
+> +#   HAVE_SYS_WEAK_ALIAS_CRIDUPLICATE will be defined to 1. This scheme is
+> +#   used as in the following code fragment:
+> +#
+> +#     extern void weakf(int c);
+> +#     #pragma _CRI duplicate weakf as __weakf
+> +#     void __weakf(int c)
+> +#     {
+> +#       /* Function definition... */
+> +#     }
+> +#
+> +#   In addition to the preprocessor macros listed above, if any scheme is
+> +#   found, the preprocessor macro HAVE_SYS_WEAK_ALIAS will also be defined
+> +#   to 1.
+> +#
+> +#   Once a weak aliasing scheme has been found, a check will be performed to
+> +#   see if weak aliases are honored across object file boundaries. If they
+> +#   are, the HAVE_SYS_WEAK_ALIAS_CROSSFILE preprocessor macro is defined to
+> +#   1.
+> +#
+> +#   This Autoconf macro also makes two substitutions. The first, WEAK_ALIAS,
+> +#   contains the name of the scheme found (one of "attribute", "pragma",
+> +#   "hpsecondary", or "criduplicate"), or "no" if no weak aliasing scheme
+> +#   was found. The second, WEAK_ALIAS_CROSSFILE, is set to "yes" or "no"
+> +#   depending on whether or not weak aliases may cross object file
+> +#   boundaries.
+> +#
+> +# LICENSE
+> +#
+> +#   Copyright (c) 2008 Kevin L. Mitchell <klmitch@mit.edu>
+> +#
+> +#   Copying and distribution of this file, with or without modification, are
+> +#   permitted in any medium without royalty provided the copyright notice
+> +#   and this notice are preserved. This file is offered as-is, without any
+> +#   warranty.
+> +
+> +#serial 6
+> +
+> +AU_ALIAS([KLM_SYS_WEAK_ALIAS], [AX_SYS_WEAK_ALIAS])
+> +AC_DEFUN([AX_SYS_WEAK_ALIAS], [
+> +  # starting point: no aliasing scheme yet...
+> +  ax_sys_weak_alias=no
+> +
+> +  # Figure out what kind of aliasing may be supported...
+> +  _AX_SYS_WEAK_ALIAS_ATTRIBUTE
+> +  _AX_SYS_WEAK_ALIAS_PRAGMA
+> +  _AX_SYS_WEAK_ALIAS_HPSECONDARY
+> +  _AX_SYS_WEAK_ALIAS_CRIDUPLICATE
+> +
+> +  # Do we actually support aliasing?
+> +  AC_CACHE_CHECK([how to create weak aliases with $CC],
+> +                 [ax_cv_sys_weak_alias],
+> +                 [ax_cv_sys_weak_alias=$ax_sys_weak_alias])
+> +
+> +  # OK, set a #define
+> +  AS_IF([test $ax_cv_sys_weak_alias != no], [
+> +    AC_DEFINE([HAVE_SYS_WEAK_ALIAS], 1,
+> +              [Define this if your system can create weak aliases])
+> +  ])
+> +
+> +  # Can aliases cross object file boundaries?
+> +  _AX_SYS_WEAK_ALIAS_CROSSFILE
+> +
+> +  # OK, remember the results
+> +  AC_SUBST([WEAK_ALIAS], [$ax_cv_sys_weak_alias])
+> +  AC_SUBST([WEAK_ALIAS_CROSSFILE], [$ax_cv_sys_weak_alias_crossfile])
+> +])
+> +
+> +AC_DEFUN([_AX_SYS_WEAK_ALIAS_ATTRIBUTE],
+> +[ # Test whether compiler accepts __attribute__ form of weak aliasing
+> +  AC_CACHE_CHECK([whether $CC accepts function
+> __attribute__((weak,alias()))],
+> +  [ax_cv_sys_weak_alias_attribute], [
+> +    # We add -Werror if it's gcc to force an error exit if the weak
+> attribute
+> +    # isn't understood
+> +    AS_IF([test $GCC = yes], [
+> +      save_CFLAGS=$CFLAGS
+> +      CFLAGS=-Werror])
+> +
+> +    # Try linking with a weak alias...
+> +    AC_LINK_IFELSE([
+> +      AC_LANG_PROGRAM([
+> +void __weakf(int c) {}
+> +void weakf(int c) __attribute__((weak, alias("__weakf")));],
+> +        [weakf(0)])],
+> +      [ax_cv_sys_weak_alias_attribute=yes],
+> +      [ax_cv_sys_weak_alias_attribute=no])
+> +
+> +    # Restore original CFLAGS
+> +    AS_IF([test $GCC = yes], [
+> +      CFLAGS=$save_CFLAGS])
+> +  ])
+> +
+> +  # What was the result of the test?
+> +  AS_IF([test $ax_sys_weak_alias = no &&
+> +         test $ax_cv_sys_weak_alias_attribute = yes], [
+> +    ax_sys_weak_alias=attribute
+> +    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_ATTRIBUTE], 1,
+> +              [Define this if weak aliases may be created with
+> __attribute__])
+> +  ])
+> +])
+> +
+> +AC_DEFUN([_AX_SYS_WEAK_ALIAS_PRAGMA],
+> +[ # Test whether compiler accepts #pragma form of weak aliasing
+> +  AC_CACHE_CHECK([whether $CC supports @%:@pragma weak],
+> +  [ax_cv_sys_weak_alias_pragma], [
+> +
+> +    # Try linking with a weak alias...
+> +    AC_LINK_IFELSE([
+> +      AC_LANG_PROGRAM([
+> +extern void weakf(int c);
+> +@%:@pragma weak weakf = __weakf
+> +void __weakf(int c) {}],
+> +        [weakf(0)])],
+> +      [ax_cv_sys_weak_alias_pragma=yes],
+> +      [ax_cv_sys_weak_alias_pragma=no])
+> +  ])
+> +
+> +  # What was the result of the test?
+> +  AS_IF([test $ax_sys_weak_alias = no &&
+> +         test $ax_cv_sys_weak_alias_pragma = yes], [
+> +    ax_sys_weak_alias=pragma
+> +    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_PRAGMA], 1,
+> +              [Define this if weak aliases may be created with @%:@pragma
+> weak])
+> +  ])
+> +])
+> +
+> +AC_DEFUN([_AX_SYS_WEAK_ALIAS_HPSECONDARY],
+> +[ # Test whether compiler accepts _HP_SECONDARY_DEF pragma from HP...
+> +  AC_CACHE_CHECK([whether $CC supports @%:@pragma _HP_SECONDARY_DEF],
+> +  [ax_cv_sys_weak_alias_hpsecondary], [
+> +
+> +    # Try linking with a weak alias...
+> +    AC_LINK_IFELSE([
+> +      AC_LANG_PROGRAM([
+> +extern void weakf(int c);
+> +@%:@pragma _HP_SECONDARY_DEF __weakf weakf
+> +void __weakf(int c) {}],
+> +        [weakf(0)])],
+> +      [ax_cv_sys_weak_alias_hpsecondary=yes],
+> +      [ax_cv_sys_weak_alias_hpsecondary=no])
+> +  ])
+> +
+> +  # What was the result of the test?
+> +  AS_IF([test $ax_sys_weak_alias = no &&
+> +         test $ax_cv_sys_weak_alias_hpsecondary = yes], [
+> +    ax_sys_weak_alias=hpsecondary
+> +    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_HPSECONDARY], 1,
+> +              [Define this if weak aliases may be created with @%:@pragma
+> _HP_SECONDARY_DEF])
+> +  ])
+> +])
+> +
+> +AC_DEFUN([_AX_SYS_WEAK_ALIAS_CRIDUPLICATE],
+> +[ # Test whether compiler accepts "_CRI duplicate" pragma from Cray
+> +  AC_CACHE_CHECK([whether $CC supports @%:@pragma _CRI duplicate],
+> +  [ax_cv_sys_weak_alias_criduplicate], [
+> +
+> +    # Try linking with a weak alias...
+> +    AC_LINK_IFELSE([
+> +      AC_LANG_PROGRAM([
+> +extern void weakf(int c);
+> +@%:@pragma _CRI duplicate weakf as __weakf
+> +void __weakf(int c) {}],
+> +        [weakf(0)])],
+> +      [ax_cv_sys_weak_alias_criduplicate=yes],
+> +      [ax_cv_sys_weak_alias_criduplicate=no])
+> +  ])
+> +
+> +  # What was the result of the test?
+> +  AS_IF([test $ax_sys_weak_alias = no &&
+> +         test $ax_cv_sys_weak_alias_criduplicate = yes], [
+> +    ax_sys_weak_alias=criduplicate
+> +    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_CRIDUPLICATE], 1,
+> +              [Define this if weak aliases may be created with @%:@pragma
+> _CRI duplicate])
+> +  ])
+> +])
+> +
+> +dnl Note: This macro is modeled closely on AC_LINK_IFELSE, and in fact
+> +dnl depends on some implementation details of that macro, particularly
+> +dnl its use of _AC_MSG_LOG_CONFTEST to log the failed test program and
+> +dnl its use of ac_link for running the linker.
+> +AC_DEFUN([_AX_SYS_WEAK_ALIAS_CROSSFILE],
+> +[ # Check to see if weak aliases can cross object file boundaries
+> +  AC_CACHE_CHECK([whether $CC supports weak aliases across object file
+> boundaries],
+> +  [ax_cv_sys_weak_alias_crossfile], [
+> +    AS_IF([test $ax_cv_sys_weak_alias = no],
+> +          [ax_cv_sys_weak_alias_crossfile=no], [
+> +dnl Must build our own test files...
+> +      # conftest1 contains our weak alias definition...
+> +      cat >conftest1.$ac_ext <<_ACEOF
+> +/* confdefs.h.  */
+> +_ACEOF
+> +      cat confdefs.h >>conftest1.$ac_ext
+> +      cat >>conftest1.$ac_ext <<_ACEOF
+> +/* end confdefs.h.  */
+> +
+> +@%:@ifndef HAVE_SYS_WEAK_ALIAS_ATTRIBUTE
+> +extern void weakf(int c);
+> +@%:@endif
+> +@%:@if defined(HAVE_SYS_WEAK_ALIAS_PRAGMA)
+> +@%:@pragma weak weakf = __weakf
+> +@%:@elif defined(HAVE_SYS_WEAK_ALIAS_HPSECONDARY)
+> +@%:@pragma _HP_SECONDARY_DEF __weakf weakf
+> +@%:@elif defined(HAVE_SYS_WEAK_ALIAS_CRIDUPLICATE)
+> +@%:@pragma _CRI duplicate weakf as __weakf
+> +@%:@endif
+> +void __weakf(int c) {}
+> +@%:@ifdef HAVE_SYS_WEAK_ALIAS_ATTRIBUTE
+> +void weakf(int c) __attribute((weak, alias("__weakf")));
+> +@%:@endif
+> +_ACEOF
+> +      # And conftest2 contains our main routine that calls it
+> +      cat >conftest2.$ac_ext <<_ACEOF
+> +/* confdefs.h.  */
+> +_ACEOF
+> +      cat confdefs.h >> conftest2.$ac_ext
+> +      cat >>conftest2.$ac_ext <<_ACEOF
+> +/* end confdefs.h.  */
+> +
+> +extern void weakf(int c);
+> +int
+> +main ()
+> +{
+> +  weakf(0);
+> +  return 0;
+> +}
+> +_ACEOF
+> +      # We must remove the object files (if any) ourselves...
+> +      rm -f conftest2.$ac_objext conftest$ac_exeext
+> +
+> +      # Change ac_link to compile *2* files together
+> +      save_aclink=$ac_link
+> +      ac_link=`echo "$ac_link" | \
+> +               sed -e 's/conftest\(\.\$ac_ext\)/conftest1\1 conftest2\1/'`
+> +dnl Substitute our own routine for logging the conftest
+> +m4_pushdef([_AC_MSG_LOG_CONFTEST],
+> +[echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
+> +echo ">>> conftest1.$ac_ext" >&AS_MESSAGE_LOG_FD
+> +sed "s/^/| /" conftest1.$ac_ext >&AS_MESSAGE_LOG_FD
+> +echo ">>> conftest2.$ac_ext" >&AS_MESSAGE_LOG_FD
+> +sed "s/^/| /" conftest2.$ac_ext >&AS_MESSAGE_LOG_FD
+> +])dnl
+> +      # Since we created the files ourselves, don't use SOURCE argument
+> +      AC_LINK_IFELSE(, [ax_cv_sys_weak_alias_crossfile=yes],
+> +                     [ax_cv_sys_weak_alias_crossfile=no])
+> +dnl Restore _AC_MSG_LOG_CONFTEST
+> +m4_popdef([_AC_MSG_LOG_CONFTEST])dnl
+> +      # Restore ac_link
+> +      ac_link=$save_aclink
+> +
+> +      # We must remove the object files (if any) and C files ourselves...
+> +      rm -f conftest1.$ac_ext conftest2.$ac_ext \
+> +            conftest1.$ac_objext conftest2.$ac_objext
+> +    ])
+> +  ])
+> +
+> +  # What were the results of the test?
+> +  AS_IF([test $ax_cv_sys_weak_alias_crossfile = yes], [
+> +    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_CROSSFILE], 1,
+> +              [Define this if weak aliases in other files are honored])
+> +  ])
+> +])
+> diff --git a/configure.ac b/configure.ac
+> index 18f3739..f84f426 100644
+> --- a/configure.ac
+> +++ b/configure.ac
+> @@ -106,6 +106,13 @@ AC_CACHE_CHECK([whether the C++ compiler works],
+>  
+>  AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
+>  
+> +# Check if the compiler support weak symbols
+> +AX_SYS_WEAK_ALIAS
+> +
+> +if test "x${ax_cv_sys_weak_alias}" = "xno"; then
+> +   AC_MSG_ERROR([Your platform doesn't support weak symbols.])
+> +fi
+> +
+>  ## Checks for libraries.
+>  AC_CHECK_LIB([dl], [dlopen],
+>  [
+> --
+> 2.1.1
+> 
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
