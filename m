@@ -1,18 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
 Subject: Re: [PATCH lttng-ust] Add a configure check for weak
  symbols support
-Date: Mon, 17 Nov 2014 18:16:56 +0000 (UTC)
-Message-ID: <1609688976.15040.1416248216519.JavaMail.zimbra__35204.0542908528$1416248268$gmane$org@efficios.com>
+Date: Mon, 17 Nov 2014 13:20:01 -0500
+Message-ID: <CA+jJMxuydnKB_V6wW_7DeSggjr2LBKovHD1REraDhdwQB2FCdg__393.215023405169$1416248447$gmane$org@mail.gmail.com>
 References: <1415820921-8106-1-git-send-email-christian.babeux@efficios.com>
+ <1609688976.15040.1416248216519.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-lb0-f180.google.com ([209.85.217.180])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XqQrN-0002es-3Z
- for lttng-dev@lists.lttng.org; Mon, 17 Nov 2014 13:17:13 -0500
-In-Reply-To: <1415820921-8106-1-git-send-email-christian.babeux@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XqQuF-0002i4-8K
+ for lttng-dev@lists.lttng.org; Mon, 17 Nov 2014 13:20:09 -0500
+Received: by mail-lb0-f180.google.com with SMTP id z11so9726881lbi.11
+ for <lttng-dev@lists.lttng.org>; Mon, 17 Nov 2014 10:20:01 -0800 (PST)
+In-Reply-To: <1609688976.15040.1416248216519.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,412 +24,280 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Babeux <christian.babeux@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged into master, stable-2.6, stable-2.5, stable-2.4.
-
-A big thanks to jgalar for reminding me to email
-this reply.
-
-:-P
-
-Mathieu
-
------ Original Message -----
-> From: "Christian Babeux" <christian.babeux@efficios.com>
-> To: lttng-dev@lists.lttng.org
-> Cc: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, "Christian Babeux" <christian.babeux@efficios.com>
-> Sent: Wednesday, November 12, 2014 8:35:21 PM
-> Subject: [PATCH lttng-ust] Add a configure check for weak symbols support
-> 
-> Fixes #236
-> 
-> Signed-off-by: Christian Babeux <christian.babeux@efficios.com>
-> ---
->  config/ax_sys_weak_alias.m4 | 337
->  ++++++++++++++++++++++++++++++++++++++++++++
->  configure.ac                |   7 +
->  2 files changed, 344 insertions(+)
->  create mode 100644 config/ax_sys_weak_alias.m4
-> 
-> diff --git a/config/ax_sys_weak_alias.m4 b/config/ax_sys_weak_alias.m4
-> new file mode 100644
-> index 0000000..e1bfd33
-> --- /dev/null
-> +++ b/config/ax_sys_weak_alias.m4
-> @@ -0,0 +1,337 @@
-> +#
-> ===========================================================================
-> +#     http://www.gnu.org/software/autoconf-archive/ax_sys_weak_alias.html
-> +#
-> ===========================================================================
-> +#
-> +# SYNOPSIS
-> +#
-> +#   AX_SYS_WEAK_ALIAS
-> +#
-> +# DESCRIPTION
-> +#
-> +#   Determines whether weak aliases are supported on the system, and if so,
-> +#   what scheme is used to declare them. Also checks to see if aliases can
-> +#   cross object file boundaries, as some systems don't permit them to.
-> +#
-> +#   Most systems permit something called a "weak alias" or "weak symbol."
-> +#   These aliases permit a library to provide a stub form of a routine
-> +#   defined in another library, thus allowing the first library to operate
-> +#   even if the other library is not linked. This macro will check for
-> +#   support of weak aliases, figure out what schemes are available, and
-> +#   determine some characteristics of the weak alias support -- primarily,
-> +#   whether a weak alias declared in one object file may be referenced from
-> +#   another object file.
-> +#
-> +#   There are four known schemes of declaring weak symbols; each scheme is
-> +#   checked in turn, and the first one found is prefered. Note that only one
-> +#   of the mentioned preprocessor macros will be defined!
-> +#
-> +#   1. Function attributes
-> +#
-> +#   This scheme was first introduced by the GNU C compiler, and attaches
-> +#   attributes to particular functions. It is among the easiest to use, and
-> +#   so is the first one checked. If this scheme is detected, the
-> +#   preprocessor macro HAVE_SYS_WEAK_ALIAS_ATTRIBUTE will be defined to 1.
-> +#   This scheme is used as in the following code fragment:
-> +#
-> +#     void __weakf(int c)
-> +#     {
-> +#       /* Function definition... */
-> +#     }
-> +#
-> +#     void weakf(int c) __attribute__((weak, alias("__weakf")));
-> +#
-> +#   2. #pragma weak
-> +#
-> +#   This scheme is in use by many compilers other than the GNU C compiler.
-> +#   It is also particularly easy to use, and fairly portable -- well, as
-> +#   portable as these things get. If this scheme is detected first, the
-> +#   preprocessor macro HAVE_SYS_WEAK_ALIAS_PRAGMA will be defined to 1. This
-> +#   scheme is used as in the following code fragment:
-> +#
-> +#     extern void weakf(int c);
-> +#     #pragma weak weakf = __weakf
-> +#     void __weakf(int c)
-> +#     {
-> +#       /* Function definition... */
-> +#     }
-> +#
-> +#   3. #pragma _HP_SECONDARY_DEF
-> +#
-> +#   This scheme appears to be in use by the HP compiler. As it is rather
-> +#   specialized, this is one of the last schemes checked. If it is the first
-> +#   one detected, the preprocessor macro HAVE_SYS_WEAK_ALIAS_HPSECONDARY
-> +#   will be defined to 1. This scheme is used as in the following code
-> +#   fragment:
-> +#
-> +#     extern void weakf(int c);
-> +#     #pragma _HP_SECONDARY_DEF __weakf weakf
-> +#     void __weakf(int c)
-> +#     {
-> +#       /* Function definition... */
-> +#     }
-> +#
-> +#   4. #pragma _CRI duplicate
-> +#
-> +#   This scheme appears to be in use by the Cray compiler. As it is rather
-> +#   specialized, it too is one of the last schemes checked. If it is the
-> +#   first one detected, the preprocessor macro
-> +#   HAVE_SYS_WEAK_ALIAS_CRIDUPLICATE will be defined to 1. This scheme is
-> +#   used as in the following code fragment:
-> +#
-> +#     extern void weakf(int c);
-> +#     #pragma _CRI duplicate weakf as __weakf
-> +#     void __weakf(int c)
-> +#     {
-> +#       /* Function definition... */
-> +#     }
-> +#
-> +#   In addition to the preprocessor macros listed above, if any scheme is
-> +#   found, the preprocessor macro HAVE_SYS_WEAK_ALIAS will also be defined
-> +#   to 1.
-> +#
-> +#   Once a weak aliasing scheme has been found, a check will be performed to
-> +#   see if weak aliases are honored across object file boundaries. If they
-> +#   are, the HAVE_SYS_WEAK_ALIAS_CROSSFILE preprocessor macro is defined to
-> +#   1.
-> +#
-> +#   This Autoconf macro also makes two substitutions. The first, WEAK_ALIAS,
-> +#   contains the name of the scheme found (one of "attribute", "pragma",
-> +#   "hpsecondary", or "criduplicate"), or "no" if no weak aliasing scheme
-> +#   was found. The second, WEAK_ALIAS_CROSSFILE, is set to "yes" or "no"
-> +#   depending on whether or not weak aliases may cross object file
-> +#   boundaries.
-> +#
-> +# LICENSE
-> +#
-> +#   Copyright (c) 2008 Kevin L. Mitchell <klmitch@mit.edu>
-> +#
-> +#   Copying and distribution of this file, with or without modification, are
-> +#   permitted in any medium without royalty provided the copyright notice
-> +#   and this notice are preserved. This file is offered as-is, without any
-> +#   warranty.
-> +
-> +#serial 6
-> +
-> +AU_ALIAS([KLM_SYS_WEAK_ALIAS], [AX_SYS_WEAK_ALIAS])
-> +AC_DEFUN([AX_SYS_WEAK_ALIAS], [
-> +  # starting point: no aliasing scheme yet...
-> +  ax_sys_weak_alias=no
-> +
-> +  # Figure out what kind of aliasing may be supported...
-> +  _AX_SYS_WEAK_ALIAS_ATTRIBUTE
-> +  _AX_SYS_WEAK_ALIAS_PRAGMA
-> +  _AX_SYS_WEAK_ALIAS_HPSECONDARY
-> +  _AX_SYS_WEAK_ALIAS_CRIDUPLICATE
-> +
-> +  # Do we actually support aliasing?
-> +  AC_CACHE_CHECK([how to create weak aliases with $CC],
-> +                 [ax_cv_sys_weak_alias],
-> +                 [ax_cv_sys_weak_alias=$ax_sys_weak_alias])
-> +
-> +  # OK, set a #define
-> +  AS_IF([test $ax_cv_sys_weak_alias != no], [
-> +    AC_DEFINE([HAVE_SYS_WEAK_ALIAS], 1,
-> +              [Define this if your system can create weak aliases])
-> +  ])
-> +
-> +  # Can aliases cross object file boundaries?
-> +  _AX_SYS_WEAK_ALIAS_CROSSFILE
-> +
-> +  # OK, remember the results
-> +  AC_SUBST([WEAK_ALIAS], [$ax_cv_sys_weak_alias])
-> +  AC_SUBST([WEAK_ALIAS_CROSSFILE], [$ax_cv_sys_weak_alias_crossfile])
-> +])
-> +
-> +AC_DEFUN([_AX_SYS_WEAK_ALIAS_ATTRIBUTE],
-> +[ # Test whether compiler accepts __attribute__ form of weak aliasing
-> +  AC_CACHE_CHECK([whether $CC accepts function
-> __attribute__((weak,alias()))],
-> +  [ax_cv_sys_weak_alias_attribute], [
-> +    # We add -Werror if it's gcc to force an error exit if the weak
-> attribute
-> +    # isn't understood
-> +    AS_IF([test $GCC = yes], [
-> +      save_CFLAGS=$CFLAGS
-> +      CFLAGS=-Werror])
-> +
-> +    # Try linking with a weak alias...
-> +    AC_LINK_IFELSE([
-> +      AC_LANG_PROGRAM([
-> +void __weakf(int c) {}
-> +void weakf(int c) __attribute__((weak, alias("__weakf")));],
-> +        [weakf(0)])],
-> +      [ax_cv_sys_weak_alias_attribute=yes],
-> +      [ax_cv_sys_weak_alias_attribute=no])
-> +
-> +    # Restore original CFLAGS
-> +    AS_IF([test $GCC = yes], [
-> +      CFLAGS=$save_CFLAGS])
-> +  ])
-> +
-> +  # What was the result of the test?
-> +  AS_IF([test $ax_sys_weak_alias = no &&
-> +         test $ax_cv_sys_weak_alias_attribute = yes], [
-> +    ax_sys_weak_alias=attribute
-> +    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_ATTRIBUTE], 1,
-> +              [Define this if weak aliases may be created with
-> __attribute__])
-> +  ])
-> +])
-> +
-> +AC_DEFUN([_AX_SYS_WEAK_ALIAS_PRAGMA],
-> +[ # Test whether compiler accepts #pragma form of weak aliasing
-> +  AC_CACHE_CHECK([whether $CC supports @%:@pragma weak],
-> +  [ax_cv_sys_weak_alias_pragma], [
-> +
-> +    # Try linking with a weak alias...
-> +    AC_LINK_IFELSE([
-> +      AC_LANG_PROGRAM([
-> +extern void weakf(int c);
-> +@%:@pragma weak weakf = __weakf
-> +void __weakf(int c) {}],
-> +        [weakf(0)])],
-> +      [ax_cv_sys_weak_alias_pragma=yes],
-> +      [ax_cv_sys_weak_alias_pragma=no])
-> +  ])
-> +
-> +  # What was the result of the test?
-> +  AS_IF([test $ax_sys_weak_alias = no &&
-> +         test $ax_cv_sys_weak_alias_pragma = yes], [
-> +    ax_sys_weak_alias=pragma
-> +    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_PRAGMA], 1,
-> +              [Define this if weak aliases may be created with @%:@pragma
-> weak])
-> +  ])
-> +])
-> +
-> +AC_DEFUN([_AX_SYS_WEAK_ALIAS_HPSECONDARY],
-> +[ # Test whether compiler accepts _HP_SECONDARY_DEF pragma from HP...
-> +  AC_CACHE_CHECK([whether $CC supports @%:@pragma _HP_SECONDARY_DEF],
-> +  [ax_cv_sys_weak_alias_hpsecondary], [
-> +
-> +    # Try linking with a weak alias...
-> +    AC_LINK_IFELSE([
-> +      AC_LANG_PROGRAM([
-> +extern void weakf(int c);
-> +@%:@pragma _HP_SECONDARY_DEF __weakf weakf
-> +void __weakf(int c) {}],
-> +        [weakf(0)])],
-> +      [ax_cv_sys_weak_alias_hpsecondary=yes],
-> +      [ax_cv_sys_weak_alias_hpsecondary=no])
-> +  ])
-> +
-> +  # What was the result of the test?
-> +  AS_IF([test $ax_sys_weak_alias = no &&
-> +         test $ax_cv_sys_weak_alias_hpsecondary = yes], [
-> +    ax_sys_weak_alias=hpsecondary
-> +    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_HPSECONDARY], 1,
-> +              [Define this if weak aliases may be created with @%:@pragma
-> _HP_SECONDARY_DEF])
-> +  ])
-> +])
-> +
-> +AC_DEFUN([_AX_SYS_WEAK_ALIAS_CRIDUPLICATE],
-> +[ # Test whether compiler accepts "_CRI duplicate" pragma from Cray
-> +  AC_CACHE_CHECK([whether $CC supports @%:@pragma _CRI duplicate],
-> +  [ax_cv_sys_weak_alias_criduplicate], [
-> +
-> +    # Try linking with a weak alias...
-> +    AC_LINK_IFELSE([
-> +      AC_LANG_PROGRAM([
-> +extern void weakf(int c);
-> +@%:@pragma _CRI duplicate weakf as __weakf
-> +void __weakf(int c) {}],
-> +        [weakf(0)])],
-> +      [ax_cv_sys_weak_alias_criduplicate=yes],
-> +      [ax_cv_sys_weak_alias_criduplicate=no])
-> +  ])
-> +
-> +  # What was the result of the test?
-> +  AS_IF([test $ax_sys_weak_alias = no &&
-> +         test $ax_cv_sys_weak_alias_criduplicate = yes], [
-> +    ax_sys_weak_alias=criduplicate
-> +    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_CRIDUPLICATE], 1,
-> +              [Define this if weak aliases may be created with @%:@pragma
-> _CRI duplicate])
-> +  ])
-> +])
-> +
-> +dnl Note: This macro is modeled closely on AC_LINK_IFELSE, and in fact
-> +dnl depends on some implementation details of that macro, particularly
-> +dnl its use of _AC_MSG_LOG_CONFTEST to log the failed test program and
-> +dnl its use of ac_link for running the linker.
-> +AC_DEFUN([_AX_SYS_WEAK_ALIAS_CROSSFILE],
-> +[ # Check to see if weak aliases can cross object file boundaries
-> +  AC_CACHE_CHECK([whether $CC supports weak aliases across object file
-> boundaries],
-> +  [ax_cv_sys_weak_alias_crossfile], [
-> +    AS_IF([test $ax_cv_sys_weak_alias = no],
-> +          [ax_cv_sys_weak_alias_crossfile=no], [
-> +dnl Must build our own test files...
-> +      # conftest1 contains our weak alias definition...
-> +      cat >conftest1.$ac_ext <<_ACEOF
-> +/* confdefs.h.  */
-> +_ACEOF
-> +      cat confdefs.h >>conftest1.$ac_ext
-> +      cat >>conftest1.$ac_ext <<_ACEOF
-> +/* end confdefs.h.  */
-> +
-> +@%:@ifndef HAVE_SYS_WEAK_ALIAS_ATTRIBUTE
-> +extern void weakf(int c);
-> +@%:@endif
-> +@%:@if defined(HAVE_SYS_WEAK_ALIAS_PRAGMA)
-> +@%:@pragma weak weakf = __weakf
-> +@%:@elif defined(HAVE_SYS_WEAK_ALIAS_HPSECONDARY)
-> +@%:@pragma _HP_SECONDARY_DEF __weakf weakf
-> +@%:@elif defined(HAVE_SYS_WEAK_ALIAS_CRIDUPLICATE)
-> +@%:@pragma _CRI duplicate weakf as __weakf
-> +@%:@endif
-> +void __weakf(int c) {}
-> +@%:@ifdef HAVE_SYS_WEAK_ALIAS_ATTRIBUTE
-> +void weakf(int c) __attribute((weak, alias("__weakf")));
-> +@%:@endif
-> +_ACEOF
-> +      # And conftest2 contains our main routine that calls it
-> +      cat >conftest2.$ac_ext <<_ACEOF
-> +/* confdefs.h.  */
-> +_ACEOF
-> +      cat confdefs.h >> conftest2.$ac_ext
-> +      cat >>conftest2.$ac_ext <<_ACEOF
-> +/* end confdefs.h.  */
-> +
-> +extern void weakf(int c);
-> +int
-> +main ()
-> +{
-> +  weakf(0);
-> +  return 0;
-> +}
-> +_ACEOF
-> +      # We must remove the object files (if any) ourselves...
-> +      rm -f conftest2.$ac_objext conftest$ac_exeext
-> +
-> +      # Change ac_link to compile *2* files together
-> +      save_aclink=$ac_link
-> +      ac_link=`echo "$ac_link" | \
-> +               sed -e 's/conftest\(\.\$ac_ext\)/conftest1\1 conftest2\1/'`
-> +dnl Substitute our own routine for logging the conftest
-> +m4_pushdef([_AC_MSG_LOG_CONFTEST],
-> +[echo "$as_me: failed program was:" >&AS_MESSAGE_LOG_FD
-> +echo ">>> conftest1.$ac_ext" >&AS_MESSAGE_LOG_FD
-> +sed "s/^/| /" conftest1.$ac_ext >&AS_MESSAGE_LOG_FD
-> +echo ">>> conftest2.$ac_ext" >&AS_MESSAGE_LOG_FD
-> +sed "s/^/| /" conftest2.$ac_ext >&AS_MESSAGE_LOG_FD
-> +])dnl
-> +      # Since we created the files ourselves, don't use SOURCE argument
-> +      AC_LINK_IFELSE(, [ax_cv_sys_weak_alias_crossfile=yes],
-> +                     [ax_cv_sys_weak_alias_crossfile=no])
-> +dnl Restore _AC_MSG_LOG_CONFTEST
-> +m4_popdef([_AC_MSG_LOG_CONFTEST])dnl
-> +      # Restore ac_link
-> +      ac_link=$save_aclink
-> +
-> +      # We must remove the object files (if any) and C files ourselves...
-> +      rm -f conftest1.$ac_ext conftest2.$ac_ext \
-> +            conftest1.$ac_objext conftest2.$ac_objext
-> +    ])
-> +  ])
-> +
-> +  # What were the results of the test?
-> +  AS_IF([test $ax_cv_sys_weak_alias_crossfile = yes], [
-> +    AC_DEFINE([HAVE_SYS_WEAK_ALIAS_CROSSFILE], 1,
-> +              [Define this if weak aliases in other files are honored])
-> +  ])
-> +])
-> diff --git a/configure.ac b/configure.ac
-> index 18f3739..f84f426 100644
-> --- a/configure.ac
-> +++ b/configure.ac
-> @@ -106,6 +106,13 @@ AC_CACHE_CHECK([whether the C++ compiler works],
->  
->  AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
->  
-> +# Check if the compiler support weak symbols
-> +AX_SYS_WEAK_ALIAS
-> +
-> +if test "x${ax_cv_sys_weak_alias}" = "xno"; then
-> +   AC_MSG_ERROR([Your platform doesn't support weak symbols.])
-> +fi
-> +
->  ## Checks for libraries.
->  AC_CHECK_LIB([dl], [dlopen],
->  [
-> --
-> 2.1.1
-> 
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+T24gTW9uLCBOb3YgMTcsIDIwMTQgYXQgMToxNiBQTSwgTWF0aGlldSBEZXNub3llcnMKPG1hdGhp
+ZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gTWVyZ2VkIGludG8gbWFzdGVyLCBz
+dGFibGUtMi42LCBzdGFibGUtMi41LCBzdGFibGUtMi40Lgo+Cj4gQSBiaWcgdGhhbmtzIHRvIGpn
+YWxhciBmb3IgcmVtaW5kaW5nIG1lIHRvIGVtYWlsCj4gdGhpcyByZXBseS4KClRoYXQncyB3aGF0
+IHlvdSBnZXQgZm9yIGJ1Z2dpbmcgbWUgYWJvdXQgbXkgIm1lcmdlZCIgZS1tYWlscyEgOykKCkrD
+qXLDqW1pZQoKPgo+IDotUAo+Cj4gTWF0aGlldQo+Cj4gLS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAt
+LS0tLQo+PiBGcm9tOiAiQ2hyaXN0aWFuIEJhYmV1eCIgPGNocmlzdGlhbi5iYWJldXhAZWZmaWNp
+b3MuY29tPgo+PiBUbzogbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiBDYzogIm1hdGhpZXUg
+ZGVzbm95ZXJzIiA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPiwgIkNocmlzdGlhbiBC
+YWJldXgiIDxjaHJpc3RpYW4uYmFiZXV4QGVmZmljaW9zLmNvbT4KPj4gU2VudDogV2VkbmVzZGF5
+LCBOb3ZlbWJlciAxMiwgMjAxNCA4OjM1OjIxIFBNCj4+IFN1YmplY3Q6IFtQQVRDSCBsdHRuZy11
+c3RdIEFkZCBhIGNvbmZpZ3VyZSBjaGVjayBmb3Igd2VhayBzeW1ib2xzIHN1cHBvcnQKPj4KPj4g
+Rml4ZXMgIzIzNgo+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBDaHJpc3RpYW4gQmFiZXV4IDxjaHJpc3Rp
+YW4uYmFiZXV4QGVmZmljaW9zLmNvbT4KPj4gLS0tCj4+ICBjb25maWcvYXhfc3lzX3dlYWtfYWxp
+YXMubTQgfCAzMzcKPj4gICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrCj4+ICBjb25maWd1cmUuYWMgICAgICAgICAgICAgICAgfCAgIDcgKwo+PiAgMiBmaWxlcyBj
+aGFuZ2VkLCAzNDQgaW5zZXJ0aW9ucygrKQo+PiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGNvbmZpZy9h
+eF9zeXNfd2Vha19hbGlhcy5tNAo+Pgo+PiBkaWZmIC0tZ2l0IGEvY29uZmlnL2F4X3N5c193ZWFr
+X2FsaWFzLm00IGIvY29uZmlnL2F4X3N5c193ZWFrX2FsaWFzLm00Cj4+IG5ldyBmaWxlIG1vZGUg
+MTAwNjQ0Cj4+IGluZGV4IDAwMDAwMDAuLmUxYmZkMzMKPj4gLS0tIC9kZXYvbnVsbAo+PiArKysg
+Yi9jb25maWcvYXhfc3lzX3dlYWtfYWxpYXMubTQKPj4gQEAgLTAsMCArMSwzMzcgQEAKPj4gKyMK
+Pj4gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09Cj4+ICsjICAgICBodHRwOi8vd3d3LmdudS5vcmcvc29mdHdh
+cmUvYXV0b2NvbmYtYXJjaGl2ZS9heF9zeXNfd2Vha19hbGlhcy5odG1sCj4+ICsjCj4+ID09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PQo+PiArIwo+PiArIyBTWU5PUFNJUwo+PiArIwo+PiArIyAgIEFYX1NZU19X
+RUFLX0FMSUFTCj4+ICsjCj4+ICsjIERFU0NSSVBUSU9OCj4+ICsjCj4+ICsjICAgRGV0ZXJtaW5l
+cyB3aGV0aGVyIHdlYWsgYWxpYXNlcyBhcmUgc3VwcG9ydGVkIG9uIHRoZSBzeXN0ZW0sIGFuZCBp
+ZiBzbywKPj4gKyMgICB3aGF0IHNjaGVtZSBpcyB1c2VkIHRvIGRlY2xhcmUgdGhlbS4gQWxzbyBj
+aGVja3MgdG8gc2VlIGlmIGFsaWFzZXMgY2FuCj4+ICsjICAgY3Jvc3Mgb2JqZWN0IGZpbGUgYm91
+bmRhcmllcywgYXMgc29tZSBzeXN0ZW1zIGRvbid0IHBlcm1pdCB0aGVtIHRvLgo+PiArIwo+PiAr
+IyAgIE1vc3Qgc3lzdGVtcyBwZXJtaXQgc29tZXRoaW5nIGNhbGxlZCBhICJ3ZWFrIGFsaWFzIiBv
+ciAid2VhayBzeW1ib2wuIgo+PiArIyAgIFRoZXNlIGFsaWFzZXMgcGVybWl0IGEgbGlicmFyeSB0
+byBwcm92aWRlIGEgc3R1YiBmb3JtIG9mIGEgcm91dGluZQo+PiArIyAgIGRlZmluZWQgaW4gYW5v
+dGhlciBsaWJyYXJ5LCB0aHVzIGFsbG93aW5nIHRoZSBmaXJzdCBsaWJyYXJ5IHRvIG9wZXJhdGUK
+Pj4gKyMgICBldmVuIGlmIHRoZSBvdGhlciBsaWJyYXJ5IGlzIG5vdCBsaW5rZWQuIFRoaXMgbWFj
+cm8gd2lsbCBjaGVjayBmb3IKPj4gKyMgICBzdXBwb3J0IG9mIHdlYWsgYWxpYXNlcywgZmlndXJl
+IG91dCB3aGF0IHNjaGVtZXMgYXJlIGF2YWlsYWJsZSwgYW5kCj4+ICsjICAgZGV0ZXJtaW5lIHNv
+bWUgY2hhcmFjdGVyaXN0aWNzIG9mIHRoZSB3ZWFrIGFsaWFzIHN1cHBvcnQgLS0gcHJpbWFyaWx5
+LAo+PiArIyAgIHdoZXRoZXIgYSB3ZWFrIGFsaWFzIGRlY2xhcmVkIGluIG9uZSBvYmplY3QgZmls
+ZSBtYXkgYmUgcmVmZXJlbmNlZCBmcm9tCj4+ICsjICAgYW5vdGhlciBvYmplY3QgZmlsZS4KPj4g
+KyMKPj4gKyMgICBUaGVyZSBhcmUgZm91ciBrbm93biBzY2hlbWVzIG9mIGRlY2xhcmluZyB3ZWFr
+IHN5bWJvbHM7IGVhY2ggc2NoZW1lIGlzCj4+ICsjICAgY2hlY2tlZCBpbiB0dXJuLCBhbmQgdGhl
+IGZpcnN0IG9uZSBmb3VuZCBpcyBwcmVmZXJlZC4gTm90ZSB0aGF0IG9ubHkgb25lCj4+ICsjICAg
+b2YgdGhlIG1lbnRpb25lZCBwcmVwcm9jZXNzb3IgbWFjcm9zIHdpbGwgYmUgZGVmaW5lZCEKPj4g
+KyMKPj4gKyMgICAxLiBGdW5jdGlvbiBhdHRyaWJ1dGVzCj4+ICsjCj4+ICsjICAgVGhpcyBzY2hl
+bWUgd2FzIGZpcnN0IGludHJvZHVjZWQgYnkgdGhlIEdOVSBDIGNvbXBpbGVyLCBhbmQgYXR0YWNo
+ZXMKPj4gKyMgICBhdHRyaWJ1dGVzIHRvIHBhcnRpY3VsYXIgZnVuY3Rpb25zLiBJdCBpcyBhbW9u
+ZyB0aGUgZWFzaWVzdCB0byB1c2UsIGFuZAo+PiArIyAgIHNvIGlzIHRoZSBmaXJzdCBvbmUgY2hl
+Y2tlZC4gSWYgdGhpcyBzY2hlbWUgaXMgZGV0ZWN0ZWQsIHRoZQo+PiArIyAgIHByZXByb2Nlc3Nv
+ciBtYWNybyBIQVZFX1NZU19XRUFLX0FMSUFTX0FUVFJJQlVURSB3aWxsIGJlIGRlZmluZWQgdG8g
+MS4KPj4gKyMgICBUaGlzIHNjaGVtZSBpcyB1c2VkIGFzIGluIHRoZSBmb2xsb3dpbmcgY29kZSBm
+cmFnbWVudDoKPj4gKyMKPj4gKyMgICAgIHZvaWQgX193ZWFrZihpbnQgYykKPj4gKyMgICAgIHsK
+Pj4gKyMgICAgICAgLyogRnVuY3Rpb24gZGVmaW5pdGlvbi4uLiAqLwo+PiArIyAgICAgfQo+PiAr
+Iwo+PiArIyAgICAgdm9pZCB3ZWFrZihpbnQgYykgX19hdHRyaWJ1dGVfXygod2VhaywgYWxpYXMo
+Il9fd2Vha2YiKSkpOwo+PiArIwo+PiArIyAgIDIuICNwcmFnbWEgd2Vhawo+PiArIwo+PiArIyAg
+IFRoaXMgc2NoZW1lIGlzIGluIHVzZSBieSBtYW55IGNvbXBpbGVycyBvdGhlciB0aGFuIHRoZSBH
+TlUgQyBjb21waWxlci4KPj4gKyMgICBJdCBpcyBhbHNvIHBhcnRpY3VsYXJseSBlYXN5IHRvIHVz
+ZSwgYW5kIGZhaXJseSBwb3J0YWJsZSAtLSB3ZWxsLCBhcwo+PiArIyAgIHBvcnRhYmxlIGFzIHRo
+ZXNlIHRoaW5ncyBnZXQuIElmIHRoaXMgc2NoZW1lIGlzIGRldGVjdGVkIGZpcnN0LCB0aGUKPj4g
+KyMgICBwcmVwcm9jZXNzb3IgbWFjcm8gSEFWRV9TWVNfV0VBS19BTElBU19QUkFHTUEgd2lsbCBi
+ZSBkZWZpbmVkIHRvIDEuIFRoaXMKPj4gKyMgICBzY2hlbWUgaXMgdXNlZCBhcyBpbiB0aGUgZm9s
+bG93aW5nIGNvZGUgZnJhZ21lbnQ6Cj4+ICsjCj4+ICsjICAgICBleHRlcm4gdm9pZCB3ZWFrZihp
+bnQgYyk7Cj4+ICsjICAgICAjcHJhZ21hIHdlYWsgd2Vha2YgPSBfX3dlYWtmCj4+ICsjICAgICB2
+b2lkIF9fd2Vha2YoaW50IGMpCj4+ICsjICAgICB7Cj4+ICsjICAgICAgIC8qIEZ1bmN0aW9uIGRl
+ZmluaXRpb24uLi4gKi8KPj4gKyMgICAgIH0KPj4gKyMKPj4gKyMgICAzLiAjcHJhZ21hIF9IUF9T
+RUNPTkRBUllfREVGCj4+ICsjCj4+ICsjICAgVGhpcyBzY2hlbWUgYXBwZWFycyB0byBiZSBpbiB1
+c2UgYnkgdGhlIEhQIGNvbXBpbGVyLiBBcyBpdCBpcyByYXRoZXIKPj4gKyMgICBzcGVjaWFsaXpl
+ZCwgdGhpcyBpcyBvbmUgb2YgdGhlIGxhc3Qgc2NoZW1lcyBjaGVja2VkLiBJZiBpdCBpcyB0aGUg
+Zmlyc3QKPj4gKyMgICBvbmUgZGV0ZWN0ZWQsIHRoZSBwcmVwcm9jZXNzb3IgbWFjcm8gSEFWRV9T
+WVNfV0VBS19BTElBU19IUFNFQ09OREFSWQo+PiArIyAgIHdpbGwgYmUgZGVmaW5lZCB0byAxLiBU
+aGlzIHNjaGVtZSBpcyB1c2VkIGFzIGluIHRoZSBmb2xsb3dpbmcgY29kZQo+PiArIyAgIGZyYWdt
+ZW50Ogo+PiArIwo+PiArIyAgICAgZXh0ZXJuIHZvaWQgd2Vha2YoaW50IGMpOwo+PiArIyAgICAg
+I3ByYWdtYSBfSFBfU0VDT05EQVJZX0RFRiBfX3dlYWtmIHdlYWtmCj4+ICsjICAgICB2b2lkIF9f
+d2Vha2YoaW50IGMpCj4+ICsjICAgICB7Cj4+ICsjICAgICAgIC8qIEZ1bmN0aW9uIGRlZmluaXRp
+b24uLi4gKi8KPj4gKyMgICAgIH0KPj4gKyMKPj4gKyMgICA0LiAjcHJhZ21hIF9DUkkgZHVwbGlj
+YXRlCj4+ICsjCj4+ICsjICAgVGhpcyBzY2hlbWUgYXBwZWFycyB0byBiZSBpbiB1c2UgYnkgdGhl
+IENyYXkgY29tcGlsZXIuIEFzIGl0IGlzIHJhdGhlcgo+PiArIyAgIHNwZWNpYWxpemVkLCBpdCB0
+b28gaXMgb25lIG9mIHRoZSBsYXN0IHNjaGVtZXMgY2hlY2tlZC4gSWYgaXQgaXMgdGhlCj4+ICsj
+ICAgZmlyc3Qgb25lIGRldGVjdGVkLCB0aGUgcHJlcHJvY2Vzc29yIG1hY3JvCj4+ICsjICAgSEFW
+RV9TWVNfV0VBS19BTElBU19DUklEVVBMSUNBVEUgd2lsbCBiZSBkZWZpbmVkIHRvIDEuIFRoaXMg
+c2NoZW1lIGlzCj4+ICsjICAgdXNlZCBhcyBpbiB0aGUgZm9sbG93aW5nIGNvZGUgZnJhZ21lbnQ6
+Cj4+ICsjCj4+ICsjICAgICBleHRlcm4gdm9pZCB3ZWFrZihpbnQgYyk7Cj4+ICsjICAgICAjcHJh
+Z21hIF9DUkkgZHVwbGljYXRlIHdlYWtmIGFzIF9fd2Vha2YKPj4gKyMgICAgIHZvaWQgX193ZWFr
+ZihpbnQgYykKPj4gKyMgICAgIHsKPj4gKyMgICAgICAgLyogRnVuY3Rpb24gZGVmaW5pdGlvbi4u
+LiAqLwo+PiArIyAgICAgfQo+PiArIwo+PiArIyAgIEluIGFkZGl0aW9uIHRvIHRoZSBwcmVwcm9j
+ZXNzb3IgbWFjcm9zIGxpc3RlZCBhYm92ZSwgaWYgYW55IHNjaGVtZSBpcwo+PiArIyAgIGZvdW5k
+LCB0aGUgcHJlcHJvY2Vzc29yIG1hY3JvIEhBVkVfU1lTX1dFQUtfQUxJQVMgd2lsbCBhbHNvIGJl
+IGRlZmluZWQKPj4gKyMgICB0byAxLgo+PiArIwo+PiArIyAgIE9uY2UgYSB3ZWFrIGFsaWFzaW5n
+IHNjaGVtZSBoYXMgYmVlbiBmb3VuZCwgYSBjaGVjayB3aWxsIGJlIHBlcmZvcm1lZCB0bwo+PiAr
+IyAgIHNlZSBpZiB3ZWFrIGFsaWFzZXMgYXJlIGhvbm9yZWQgYWNyb3NzIG9iamVjdCBmaWxlIGJv
+dW5kYXJpZXMuIElmIHRoZXkKPj4gKyMgICBhcmUsIHRoZSBIQVZFX1NZU19XRUFLX0FMSUFTX0NS
+T1NTRklMRSBwcmVwcm9jZXNzb3IgbWFjcm8gaXMgZGVmaW5lZCB0bwo+PiArIyAgIDEuCj4+ICsj
+Cj4+ICsjICAgVGhpcyBBdXRvY29uZiBtYWNybyBhbHNvIG1ha2VzIHR3byBzdWJzdGl0dXRpb25z
+LiBUaGUgZmlyc3QsIFdFQUtfQUxJQVMsCj4+ICsjICAgY29udGFpbnMgdGhlIG5hbWUgb2YgdGhl
+IHNjaGVtZSBmb3VuZCAob25lIG9mICJhdHRyaWJ1dGUiLCAicHJhZ21hIiwKPj4gKyMgICAiaHBz
+ZWNvbmRhcnkiLCBvciAiY3JpZHVwbGljYXRlIiksIG9yICJubyIgaWYgbm8gd2VhayBhbGlhc2lu
+ZyBzY2hlbWUKPj4gKyMgICB3YXMgZm91bmQuIFRoZSBzZWNvbmQsIFdFQUtfQUxJQVNfQ1JPU1NG
+SUxFLCBpcyBzZXQgdG8gInllcyIgb3IgIm5vIgo+PiArIyAgIGRlcGVuZGluZyBvbiB3aGV0aGVy
+IG9yIG5vdCB3ZWFrIGFsaWFzZXMgbWF5IGNyb3NzIG9iamVjdCBmaWxlCj4+ICsjICAgYm91bmRh
+cmllcy4KPj4gKyMKPj4gKyMgTElDRU5TRQo+PiArIwo+PiArIyAgIENvcHlyaWdodCAoYykgMjAw
+OCBLZXZpbiBMLiBNaXRjaGVsbCA8a2xtaXRjaEBtaXQuZWR1Pgo+PiArIwo+PiArIyAgIENvcHlp
+bmcgYW5kIGRpc3RyaWJ1dGlvbiBvZiB0aGlzIGZpbGUsIHdpdGggb3Igd2l0aG91dCBtb2RpZmlj
+YXRpb24sIGFyZQo+PiArIyAgIHBlcm1pdHRlZCBpbiBhbnkgbWVkaXVtIHdpdGhvdXQgcm95YWx0
+eSBwcm92aWRlZCB0aGUgY29weXJpZ2h0IG5vdGljZQo+PiArIyAgIGFuZCB0aGlzIG5vdGljZSBh
+cmUgcHJlc2VydmVkLiBUaGlzIGZpbGUgaXMgb2ZmZXJlZCBhcy1pcywgd2l0aG91dCBhbnkKPj4g
+KyMgICB3YXJyYW50eS4KPj4gKwo+PiArI3NlcmlhbCA2Cj4+ICsKPj4gK0FVX0FMSUFTKFtLTE1f
+U1lTX1dFQUtfQUxJQVNdLCBbQVhfU1lTX1dFQUtfQUxJQVNdKQo+PiArQUNfREVGVU4oW0FYX1NZ
+U19XRUFLX0FMSUFTXSwgWwo+PiArICAjIHN0YXJ0aW5nIHBvaW50OiBubyBhbGlhc2luZyBzY2hl
+bWUgeWV0Li4uCj4+ICsgIGF4X3N5c193ZWFrX2FsaWFzPW5vCj4+ICsKPj4gKyAgIyBGaWd1cmUg
+b3V0IHdoYXQga2luZCBvZiBhbGlhc2luZyBtYXkgYmUgc3VwcG9ydGVkLi4uCj4+ICsgIF9BWF9T
+WVNfV0VBS19BTElBU19BVFRSSUJVVEUKPj4gKyAgX0FYX1NZU19XRUFLX0FMSUFTX1BSQUdNQQo+
+PiArICBfQVhfU1lTX1dFQUtfQUxJQVNfSFBTRUNPTkRBUlkKPj4gKyAgX0FYX1NZU19XRUFLX0FM
+SUFTX0NSSURVUExJQ0FURQo+PiArCj4+ICsgICMgRG8gd2UgYWN0dWFsbHkgc3VwcG9ydCBhbGlh
+c2luZz8KPj4gKyAgQUNfQ0FDSEVfQ0hFQ0soW2hvdyB0byBjcmVhdGUgd2VhayBhbGlhc2VzIHdp
+dGggJENDXSwKPj4gKyAgICAgICAgICAgICAgICAgW2F4X2N2X3N5c193ZWFrX2FsaWFzXSwKPj4g
+KyAgICAgICAgICAgICAgICAgW2F4X2N2X3N5c193ZWFrX2FsaWFzPSRheF9zeXNfd2Vha19hbGlh
+c10pCj4+ICsKPj4gKyAgIyBPSywgc2V0IGEgI2RlZmluZQo+PiArICBBU19JRihbdGVzdCAkYXhf
+Y3Zfc3lzX3dlYWtfYWxpYXMgIT0gbm9dLCBbCj4+ICsgICAgQUNfREVGSU5FKFtIQVZFX1NZU19X
+RUFLX0FMSUFTXSwgMSwKPj4gKyAgICAgICAgICAgICAgW0RlZmluZSB0aGlzIGlmIHlvdXIgc3lz
+dGVtIGNhbiBjcmVhdGUgd2VhayBhbGlhc2VzXSkKPj4gKyAgXSkKPj4gKwo+PiArICAjIENhbiBh
+bGlhc2VzIGNyb3NzIG9iamVjdCBmaWxlIGJvdW5kYXJpZXM/Cj4+ICsgIF9BWF9TWVNfV0VBS19B
+TElBU19DUk9TU0ZJTEUKPj4gKwo+PiArICAjIE9LLCByZW1lbWJlciB0aGUgcmVzdWx0cwo+PiAr
+ICBBQ19TVUJTVChbV0VBS19BTElBU10sIFskYXhfY3Zfc3lzX3dlYWtfYWxpYXNdKQo+PiArICBB
+Q19TVUJTVChbV0VBS19BTElBU19DUk9TU0ZJTEVdLCBbJGF4X2N2X3N5c193ZWFrX2FsaWFzX2Ny
+b3NzZmlsZV0pCj4+ICtdKQo+PiArCj4+ICtBQ19ERUZVTihbX0FYX1NZU19XRUFLX0FMSUFTX0FU
+VFJJQlVURV0sCj4+ICtbICMgVGVzdCB3aGV0aGVyIGNvbXBpbGVyIGFjY2VwdHMgX19hdHRyaWJ1
+dGVfXyBmb3JtIG9mIHdlYWsgYWxpYXNpbmcKPj4gKyAgQUNfQ0FDSEVfQ0hFQ0soW3doZXRoZXIg
+JENDIGFjY2VwdHMgZnVuY3Rpb24KPj4gX19hdHRyaWJ1dGVfXygod2VhayxhbGlhcygpKSldLAo+
+PiArICBbYXhfY3Zfc3lzX3dlYWtfYWxpYXNfYXR0cmlidXRlXSwgWwo+PiArICAgICMgV2UgYWRk
+IC1XZXJyb3IgaWYgaXQncyBnY2MgdG8gZm9yY2UgYW4gZXJyb3IgZXhpdCBpZiB0aGUgd2Vhawo+
+PiBhdHRyaWJ1dGUKPj4gKyAgICAjIGlzbid0IHVuZGVyc3Rvb2QKPj4gKyAgICBBU19JRihbdGVz
+dCAkR0NDID0geWVzXSwgWwo+PiArICAgICAgc2F2ZV9DRkxBR1M9JENGTEFHUwo+PiArICAgICAg
+Q0ZMQUdTPS1XZXJyb3JdKQo+PiArCj4+ICsgICAgIyBUcnkgbGlua2luZyB3aXRoIGEgd2VhayBh
+bGlhcy4uLgo+PiArICAgIEFDX0xJTktfSUZFTFNFKFsKPj4gKyAgICAgIEFDX0xBTkdfUFJPR1JB
+TShbCj4+ICt2b2lkIF9fd2Vha2YoaW50IGMpIHt9Cj4+ICt2b2lkIHdlYWtmKGludCBjKSBfX2F0
+dHJpYnV0ZV9fKCh3ZWFrLCBhbGlhcygiX193ZWFrZiIpKSk7XSwKPj4gKyAgICAgICAgW3dlYWtm
+KDApXSldLAo+PiArICAgICAgW2F4X2N2X3N5c193ZWFrX2FsaWFzX2F0dHJpYnV0ZT15ZXNdLAo+
+PiArICAgICAgW2F4X2N2X3N5c193ZWFrX2FsaWFzX2F0dHJpYnV0ZT1ub10pCj4+ICsKPj4gKyAg
+ICAjIFJlc3RvcmUgb3JpZ2luYWwgQ0ZMQUdTCj4+ICsgICAgQVNfSUYoW3Rlc3QgJEdDQyA9IHll
+c10sIFsKPj4gKyAgICAgIENGTEFHUz0kc2F2ZV9DRkxBR1NdKQo+PiArICBdKQo+PiArCj4+ICsg
+ICMgV2hhdCB3YXMgdGhlIHJlc3VsdCBvZiB0aGUgdGVzdD8KPj4gKyAgQVNfSUYoW3Rlc3QgJGF4
+X3N5c193ZWFrX2FsaWFzID0gbm8gJiYKPj4gKyAgICAgICAgIHRlc3QgJGF4X2N2X3N5c193ZWFr
+X2FsaWFzX2F0dHJpYnV0ZSA9IHllc10sIFsKPj4gKyAgICBheF9zeXNfd2Vha19hbGlhcz1hdHRy
+aWJ1dGUKPj4gKyAgICBBQ19ERUZJTkUoW0hBVkVfU1lTX1dFQUtfQUxJQVNfQVRUUklCVVRFXSwg
+MSwKPj4gKyAgICAgICAgICAgICAgW0RlZmluZSB0aGlzIGlmIHdlYWsgYWxpYXNlcyBtYXkgYmUg
+Y3JlYXRlZCB3aXRoCj4+IF9fYXR0cmlidXRlX19dKQo+PiArICBdKQo+PiArXSkKPj4gKwo+PiAr
+QUNfREVGVU4oW19BWF9TWVNfV0VBS19BTElBU19QUkFHTUFdLAo+PiArWyAjIFRlc3Qgd2hldGhl
+ciBjb21waWxlciBhY2NlcHRzICNwcmFnbWEgZm9ybSBvZiB3ZWFrIGFsaWFzaW5nCj4+ICsgIEFD
+X0NBQ0hFX0NIRUNLKFt3aGV0aGVyICRDQyBzdXBwb3J0cyBAJTpAcHJhZ21hIHdlYWtdLAo+PiAr
+ICBbYXhfY3Zfc3lzX3dlYWtfYWxpYXNfcHJhZ21hXSwgWwo+PiArCj4+ICsgICAgIyBUcnkgbGlu
+a2luZyB3aXRoIGEgd2VhayBhbGlhcy4uLgo+PiArICAgIEFDX0xJTktfSUZFTFNFKFsKPj4gKyAg
+ICAgIEFDX0xBTkdfUFJPR1JBTShbCj4+ICtleHRlcm4gdm9pZCB3ZWFrZihpbnQgYyk7Cj4+ICtA
+JTpAcHJhZ21hIHdlYWsgd2Vha2YgPSBfX3dlYWtmCj4+ICt2b2lkIF9fd2Vha2YoaW50IGMpIHt9
+XSwKPj4gKyAgICAgICAgW3dlYWtmKDApXSldLAo+PiArICAgICAgW2F4X2N2X3N5c193ZWFrX2Fs
+aWFzX3ByYWdtYT15ZXNdLAo+PiArICAgICAgW2F4X2N2X3N5c193ZWFrX2FsaWFzX3ByYWdtYT1u
+b10pCj4+ICsgIF0pCj4+ICsKPj4gKyAgIyBXaGF0IHdhcyB0aGUgcmVzdWx0IG9mIHRoZSB0ZXN0
+Pwo+PiArICBBU19JRihbdGVzdCAkYXhfc3lzX3dlYWtfYWxpYXMgPSBubyAmJgo+PiArICAgICAg
+ICAgdGVzdCAkYXhfY3Zfc3lzX3dlYWtfYWxpYXNfcHJhZ21hID0geWVzXSwgWwo+PiArICAgIGF4
+X3N5c193ZWFrX2FsaWFzPXByYWdtYQo+PiArICAgIEFDX0RFRklORShbSEFWRV9TWVNfV0VBS19B
+TElBU19QUkFHTUFdLCAxLAo+PiArICAgICAgICAgICAgICBbRGVmaW5lIHRoaXMgaWYgd2VhayBh
+bGlhc2VzIG1heSBiZSBjcmVhdGVkIHdpdGggQCU6QHByYWdtYQo+PiB3ZWFrXSkKPj4gKyAgXSkK
+Pj4gK10pCj4+ICsKPj4gK0FDX0RFRlVOKFtfQVhfU1lTX1dFQUtfQUxJQVNfSFBTRUNPTkRBUlld
+LAo+PiArWyAjIFRlc3Qgd2hldGhlciBjb21waWxlciBhY2NlcHRzIF9IUF9TRUNPTkRBUllfREVG
+IHByYWdtYSBmcm9tIEhQLi4uCj4+ICsgIEFDX0NBQ0hFX0NIRUNLKFt3aGV0aGVyICRDQyBzdXBw
+b3J0cyBAJTpAcHJhZ21hIF9IUF9TRUNPTkRBUllfREVGXSwKPj4gKyAgW2F4X2N2X3N5c193ZWFr
+X2FsaWFzX2hwc2Vjb25kYXJ5XSwgWwo+PiArCj4+ICsgICAgIyBUcnkgbGlua2luZyB3aXRoIGEg
+d2VhayBhbGlhcy4uLgo+PiArICAgIEFDX0xJTktfSUZFTFNFKFsKPj4gKyAgICAgIEFDX0xBTkdf
+UFJPR1JBTShbCj4+ICtleHRlcm4gdm9pZCB3ZWFrZihpbnQgYyk7Cj4+ICtAJTpAcHJhZ21hIF9I
+UF9TRUNPTkRBUllfREVGIF9fd2Vha2Ygd2Vha2YKPj4gK3ZvaWQgX193ZWFrZihpbnQgYykge31d
+LAo+PiArICAgICAgICBbd2Vha2YoMCldKV0sCj4+ICsgICAgICBbYXhfY3Zfc3lzX3dlYWtfYWxp
+YXNfaHBzZWNvbmRhcnk9eWVzXSwKPj4gKyAgICAgIFtheF9jdl9zeXNfd2Vha19hbGlhc19ocHNl
+Y29uZGFyeT1ub10pCj4+ICsgIF0pCj4+ICsKPj4gKyAgIyBXaGF0IHdhcyB0aGUgcmVzdWx0IG9m
+IHRoZSB0ZXN0Pwo+PiArICBBU19JRihbdGVzdCAkYXhfc3lzX3dlYWtfYWxpYXMgPSBubyAmJgo+
+PiArICAgICAgICAgdGVzdCAkYXhfY3Zfc3lzX3dlYWtfYWxpYXNfaHBzZWNvbmRhcnkgPSB5ZXNd
+LCBbCj4+ICsgICAgYXhfc3lzX3dlYWtfYWxpYXM9aHBzZWNvbmRhcnkKPj4gKyAgICBBQ19ERUZJ
+TkUoW0hBVkVfU1lTX1dFQUtfQUxJQVNfSFBTRUNPTkRBUlldLCAxLAo+PiArICAgICAgICAgICAg
+ICBbRGVmaW5lIHRoaXMgaWYgd2VhayBhbGlhc2VzIG1heSBiZSBjcmVhdGVkIHdpdGggQCU6QHBy
+YWdtYQo+PiBfSFBfU0VDT05EQVJZX0RFRl0pCj4+ICsgIF0pCj4+ICtdKQo+PiArCj4+ICtBQ19E
+RUZVTihbX0FYX1NZU19XRUFLX0FMSUFTX0NSSURVUExJQ0FURV0sCj4+ICtbICMgVGVzdCB3aGV0
+aGVyIGNvbXBpbGVyIGFjY2VwdHMgIl9DUkkgZHVwbGljYXRlIiBwcmFnbWEgZnJvbSBDcmF5Cj4+
+ICsgIEFDX0NBQ0hFX0NIRUNLKFt3aGV0aGVyICRDQyBzdXBwb3J0cyBAJTpAcHJhZ21hIF9DUkkg
+ZHVwbGljYXRlXSwKPj4gKyAgW2F4X2N2X3N5c193ZWFrX2FsaWFzX2NyaWR1cGxpY2F0ZV0sIFsK
+Pj4gKwo+PiArICAgICMgVHJ5IGxpbmtpbmcgd2l0aCBhIHdlYWsgYWxpYXMuLi4KPj4gKyAgICBB
+Q19MSU5LX0lGRUxTRShbCj4+ICsgICAgICBBQ19MQU5HX1BST0dSQU0oWwo+PiArZXh0ZXJuIHZv
+aWQgd2Vha2YoaW50IGMpOwo+PiArQCU6QHByYWdtYSBfQ1JJIGR1cGxpY2F0ZSB3ZWFrZiBhcyBf
+X3dlYWtmCj4+ICt2b2lkIF9fd2Vha2YoaW50IGMpIHt9XSwKPj4gKyAgICAgICAgW3dlYWtmKDAp
+XSldLAo+PiArICAgICAgW2F4X2N2X3N5c193ZWFrX2FsaWFzX2NyaWR1cGxpY2F0ZT15ZXNdLAo+
+PiArICAgICAgW2F4X2N2X3N5c193ZWFrX2FsaWFzX2NyaWR1cGxpY2F0ZT1ub10pCj4+ICsgIF0p
+Cj4+ICsKPj4gKyAgIyBXaGF0IHdhcyB0aGUgcmVzdWx0IG9mIHRoZSB0ZXN0Pwo+PiArICBBU19J
+RihbdGVzdCAkYXhfc3lzX3dlYWtfYWxpYXMgPSBubyAmJgo+PiArICAgICAgICAgdGVzdCAkYXhf
+Y3Zfc3lzX3dlYWtfYWxpYXNfY3JpZHVwbGljYXRlID0geWVzXSwgWwo+PiArICAgIGF4X3N5c193
+ZWFrX2FsaWFzPWNyaWR1cGxpY2F0ZQo+PiArICAgIEFDX0RFRklORShbSEFWRV9TWVNfV0VBS19B
+TElBU19DUklEVVBMSUNBVEVdLCAxLAo+PiArICAgICAgICAgICAgICBbRGVmaW5lIHRoaXMgaWYg
+d2VhayBhbGlhc2VzIG1heSBiZSBjcmVhdGVkIHdpdGggQCU6QHByYWdtYQo+PiBfQ1JJIGR1cGxp
+Y2F0ZV0pCj4+ICsgIF0pCj4+ICtdKQo+PiArCj4+ICtkbmwgTm90ZTogVGhpcyBtYWNybyBpcyBt
+b2RlbGVkIGNsb3NlbHkgb24gQUNfTElOS19JRkVMU0UsIGFuZCBpbiBmYWN0Cj4+ICtkbmwgZGVw
+ZW5kcyBvbiBzb21lIGltcGxlbWVudGF0aW9uIGRldGFpbHMgb2YgdGhhdCBtYWNybywgcGFydGlj
+dWxhcmx5Cj4+ICtkbmwgaXRzIHVzZSBvZiBfQUNfTVNHX0xPR19DT05GVEVTVCB0byBsb2cgdGhl
+IGZhaWxlZCB0ZXN0IHByb2dyYW0gYW5kCj4+ICtkbmwgaXRzIHVzZSBvZiBhY19saW5rIGZvciBy
+dW5uaW5nIHRoZSBsaW5rZXIuCj4+ICtBQ19ERUZVTihbX0FYX1NZU19XRUFLX0FMSUFTX0NST1NT
+RklMRV0sCj4+ICtbICMgQ2hlY2sgdG8gc2VlIGlmIHdlYWsgYWxpYXNlcyBjYW4gY3Jvc3Mgb2Jq
+ZWN0IGZpbGUgYm91bmRhcmllcwo+PiArICBBQ19DQUNIRV9DSEVDSyhbd2hldGhlciAkQ0Mgc3Vw
+cG9ydHMgd2VhayBhbGlhc2VzIGFjcm9zcyBvYmplY3QgZmlsZQo+PiBib3VuZGFyaWVzXSwKPj4g
+KyAgW2F4X2N2X3N5c193ZWFrX2FsaWFzX2Nyb3NzZmlsZV0sIFsKPj4gKyAgICBBU19JRihbdGVz
+dCAkYXhfY3Zfc3lzX3dlYWtfYWxpYXMgPSBub10sCj4+ICsgICAgICAgICAgW2F4X2N2X3N5c193
+ZWFrX2FsaWFzX2Nyb3NzZmlsZT1ub10sIFsKPj4gK2RubCBNdXN0IGJ1aWxkIG91ciBvd24gdGVz
+dCBmaWxlcy4uLgo+PiArICAgICAgIyBjb25mdGVzdDEgY29udGFpbnMgb3VyIHdlYWsgYWxpYXMg
+ZGVmaW5pdGlvbi4uLgo+PiArICAgICAgY2F0ID5jb25mdGVzdDEuJGFjX2V4dCA8PF9BQ0VPRgo+
+PiArLyogY29uZmRlZnMuaC4gICovCj4+ICtfQUNFT0YKPj4gKyAgICAgIGNhdCBjb25mZGVmcy5o
+ID4+Y29uZnRlc3QxLiRhY19leHQKPj4gKyAgICAgIGNhdCA+PmNvbmZ0ZXN0MS4kYWNfZXh0IDw8
+X0FDRU9GCj4+ICsvKiBlbmQgY29uZmRlZnMuaC4gICovCj4+ICsKPj4gK0AlOkBpZm5kZWYgSEFW
+RV9TWVNfV0VBS19BTElBU19BVFRSSUJVVEUKPj4gK2V4dGVybiB2b2lkIHdlYWtmKGludCBjKTsK
+Pj4gK0AlOkBlbmRpZgo+PiArQCU6QGlmIGRlZmluZWQoSEFWRV9TWVNfV0VBS19BTElBU19QUkFH
+TUEpCj4+ICtAJTpAcHJhZ21hIHdlYWsgd2Vha2YgPSBfX3dlYWtmCj4+ICtAJTpAZWxpZiBkZWZp
+bmVkKEhBVkVfU1lTX1dFQUtfQUxJQVNfSFBTRUNPTkRBUlkpCj4+ICtAJTpAcHJhZ21hIF9IUF9T
+RUNPTkRBUllfREVGIF9fd2Vha2Ygd2Vha2YKPj4gK0AlOkBlbGlmIGRlZmluZWQoSEFWRV9TWVNf
+V0VBS19BTElBU19DUklEVVBMSUNBVEUpCj4+ICtAJTpAcHJhZ21hIF9DUkkgZHVwbGljYXRlIHdl
+YWtmIGFzIF9fd2Vha2YKPj4gK0AlOkBlbmRpZgo+PiArdm9pZCBfX3dlYWtmKGludCBjKSB7fQo+
+PiArQCU6QGlmZGVmIEhBVkVfU1lTX1dFQUtfQUxJQVNfQVRUUklCVVRFCj4+ICt2b2lkIHdlYWtm
+KGludCBjKSBfX2F0dHJpYnV0ZSgod2VhaywgYWxpYXMoIl9fd2Vha2YiKSkpOwo+PiArQCU6QGVu
+ZGlmCj4+ICtfQUNFT0YKPj4gKyAgICAgICMgQW5kIGNvbmZ0ZXN0MiBjb250YWlucyBvdXIgbWFp
+biByb3V0aW5lIHRoYXQgY2FsbHMgaXQKPj4gKyAgICAgIGNhdCA+Y29uZnRlc3QyLiRhY19leHQg
+PDxfQUNFT0YKPj4gKy8qIGNvbmZkZWZzLmguICAqLwo+PiArX0FDRU9GCj4+ICsgICAgICBjYXQg
+Y29uZmRlZnMuaCA+PiBjb25mdGVzdDIuJGFjX2V4dAo+PiArICAgICAgY2F0ID4+Y29uZnRlc3Qy
+LiRhY19leHQgPDxfQUNFT0YKPj4gKy8qIGVuZCBjb25mZGVmcy5oLiAgKi8KPj4gKwo+PiArZXh0
+ZXJuIHZvaWQgd2Vha2YoaW50IGMpOwo+PiAraW50Cj4+ICttYWluICgpCj4+ICt7Cj4+ICsgIHdl
+YWtmKDApOwo+PiArICByZXR1cm4gMDsKPj4gK30KPj4gK19BQ0VPRgo+PiArICAgICAgIyBXZSBt
+dXN0IHJlbW92ZSB0aGUgb2JqZWN0IGZpbGVzIChpZiBhbnkpIG91cnNlbHZlcy4uLgo+PiArICAg
+ICAgcm0gLWYgY29uZnRlc3QyLiRhY19vYmpleHQgY29uZnRlc3QkYWNfZXhlZXh0Cj4+ICsKPj4g
+KyAgICAgICMgQ2hhbmdlIGFjX2xpbmsgdG8gY29tcGlsZSAqMiogZmlsZXMgdG9nZXRoZXIKPj4g
+KyAgICAgIHNhdmVfYWNsaW5rPSRhY19saW5rCj4+ICsgICAgICBhY19saW5rPWBlY2hvICIkYWNf
+bGluayIgfCBcCj4+ICsgICAgICAgICAgICAgICBzZWQgLWUgJ3MvY29uZnRlc3RcKFwuXCRhY19l
+eHRcKS9jb25mdGVzdDFcMSBjb25mdGVzdDJcMS8nYAo+PiArZG5sIFN1YnN0aXR1dGUgb3VyIG93
+biByb3V0aW5lIGZvciBsb2dnaW5nIHRoZSBjb25mdGVzdAo+PiArbTRfcHVzaGRlZihbX0FDX01T
+R19MT0dfQ09ORlRFU1RdLAo+PiArW2VjaG8gIiRhc19tZTogZmFpbGVkIHByb2dyYW0gd2FzOiIg
+PiZBU19NRVNTQUdFX0xPR19GRAo+PiArZWNobyAiPj4+IGNvbmZ0ZXN0MS4kYWNfZXh0IiA+JkFT
+X01FU1NBR0VfTE9HX0ZECj4+ICtzZWQgInMvXi98IC8iIGNvbmZ0ZXN0MS4kYWNfZXh0ID4mQVNf
+TUVTU0FHRV9MT0dfRkQKPj4gK2VjaG8gIj4+PiBjb25mdGVzdDIuJGFjX2V4dCIgPiZBU19NRVNT
+QUdFX0xPR19GRAo+PiArc2VkICJzL14vfCAvIiBjb25mdGVzdDIuJGFjX2V4dCA+JkFTX01FU1NB
+R0VfTE9HX0ZECj4+ICtdKWRubAo+PiArICAgICAgIyBTaW5jZSB3ZSBjcmVhdGVkIHRoZSBmaWxl
+cyBvdXJzZWx2ZXMsIGRvbid0IHVzZSBTT1VSQ0UgYXJndW1lbnQKPj4gKyAgICAgIEFDX0xJTktf
+SUZFTFNFKCwgW2F4X2N2X3N5c193ZWFrX2FsaWFzX2Nyb3NzZmlsZT15ZXNdLAo+PiArICAgICAg
+ICAgICAgICAgICAgICAgW2F4X2N2X3N5c193ZWFrX2FsaWFzX2Nyb3NzZmlsZT1ub10pCj4+ICtk
+bmwgUmVzdG9yZSBfQUNfTVNHX0xPR19DT05GVEVTVAo+PiArbTRfcG9wZGVmKFtfQUNfTVNHX0xP
+R19DT05GVEVTVF0pZG5sCj4+ICsgICAgICAjIFJlc3RvcmUgYWNfbGluawo+PiArICAgICAgYWNf
+bGluaz0kc2F2ZV9hY2xpbmsKPj4gKwo+PiArICAgICAgIyBXZSBtdXN0IHJlbW92ZSB0aGUgb2Jq
+ZWN0IGZpbGVzIChpZiBhbnkpIGFuZCBDIGZpbGVzIG91cnNlbHZlcy4uLgo+PiArICAgICAgcm0g
+LWYgY29uZnRlc3QxLiRhY19leHQgY29uZnRlc3QyLiRhY19leHQgXAo+PiArICAgICAgICAgICAg
+Y29uZnRlc3QxLiRhY19vYmpleHQgY29uZnRlc3QyLiRhY19vYmpleHQKPj4gKyAgICBdKQo+PiAr
+ICBdKQo+PiArCj4+ICsgICMgV2hhdCB3ZXJlIHRoZSByZXN1bHRzIG9mIHRoZSB0ZXN0Pwo+PiAr
+ICBBU19JRihbdGVzdCAkYXhfY3Zfc3lzX3dlYWtfYWxpYXNfY3Jvc3NmaWxlID0geWVzXSwgWwo+
+PiArICAgIEFDX0RFRklORShbSEFWRV9TWVNfV0VBS19BTElBU19DUk9TU0ZJTEVdLCAxLAo+PiAr
+ICAgICAgICAgICAgICBbRGVmaW5lIHRoaXMgaWYgd2VhayBhbGlhc2VzIGluIG90aGVyIGZpbGVz
+IGFyZSBob25vcmVkXSkKPj4gKyAgXSkKPj4gK10pCj4+IGRpZmYgLS1naXQgYS9jb25maWd1cmUu
+YWMgYi9jb25maWd1cmUuYWMKPj4gaW5kZXggMThmMzczOS4uZjg0ZjQyNiAxMDA2NDQKPj4gLS0t
+IGEvY29uZmlndXJlLmFjCj4+ICsrKyBiL2NvbmZpZ3VyZS5hYwo+PiBAQCAtMTA2LDYgKzEwNiwx
+MyBAQCBBQ19DQUNIRV9DSEVDSyhbd2hldGhlciB0aGUgQysrIGNvbXBpbGVyIHdvcmtzXSwKPj4K
+Pj4gIEFNX0NPTkRJVElPTkFMKFtDWFhfV09SS1NdLCBbdGVzdCAieCRyd19jdl9wcm9nX2N4eF93
+b3JrcyIgPSAieHllcyJdKQo+Pgo+PiArIyBDaGVjayBpZiB0aGUgY29tcGlsZXIgc3VwcG9ydCB3
+ZWFrIHN5bWJvbHMKPj4gK0FYX1NZU19XRUFLX0FMSUFTCj4+ICsKPj4gK2lmIHRlc3QgIngke2F4
+X2N2X3N5c193ZWFrX2FsaWFzfSIgPSAieG5vIjsgdGhlbgo+PiArICAgQUNfTVNHX0VSUk9SKFtZ
+b3VyIHBsYXRmb3JtIGRvZXNuJ3Qgc3VwcG9ydCB3ZWFrIHN5bWJvbHMuXSkKPj4gK2ZpCj4+ICsK
+Pj4gICMjIENoZWNrcyBmb3IgbGlicmFyaWVzLgo+PiAgQUNfQ0hFQ0tfTElCKFtkbF0sIFtkbG9w
+ZW5dLAo+PiAgWwo+PiAtLQo+PiAyLjEuMQo+Pgo+Pgo+Cj4gLS0KPiBNYXRoaWV1IERlc25veWVy
+cwo+IEVmZmljaU9TIEluYy4KPiBodHRwOi8vd3d3LmVmZmljaW9zLmNvbQo+Cj4gX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGlu
+ZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5v
+cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKCgotLSAKSsOpcsOpbWllIEdh
+bGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBs
+aXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
+YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
