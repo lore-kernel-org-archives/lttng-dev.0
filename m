@@ -1,17 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Strange result from LTTng porting to ARM
-Date: Mon, 17 Nov 2014 16:53:36 +0000 (UTC)
-Message-ID: <1715996455.14931.1416243216473.JavaMail.zimbra__12850.4338478253$1416243265$gmane$org@efficios.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD6FBC890A@VAL-E-02.valcartier.drdc-rddc.gc.ca>
- <CACtA8QRE5Y70-Tiss4siDufPyoUzgKBR7BUWR_XYwNSL0UkKuQ@mail.gmail.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: filter bytecode and string
+ memory leak on error
+Date: Mon, 17 Nov 2014 12:03:51 -0500
+Message-ID: <CA+jJMxv8fWt4K_RcMNB1ji0m98o6pEUcm01KK9JcqXf0enuyrg__35592.2877941795$1416243879$gmane$org@mail.gmail.com>
+References: <1415917096-26182-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0783175507=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-lb0-f175.google.com ([209.85.217.175])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1XqPYe-00022R-93
- for lttng-dev@lists.lttng.org; Mon, 17 Nov 2014 11:53:46 -0500
-In-Reply-To: <CACtA8QRE5Y70-Tiss4siDufPyoUzgKBR7BUWR_XYwNSL0UkKuQ@mail.gmail.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XqPiX-000299-Hx
+ for lttng-dev@lists.lttng.org; Mon, 17 Nov 2014 12:03:59 -0500
+Received: by mail-lb0-f175.google.com with SMTP id n15so16587978lbi.34
+ for <lttng-dev@lists.lttng.org>; Mon, 17 Nov 2014 09:03:51 -0800 (PST)
+In-Reply-To: <1415917096-26182-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,283 +23,137 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: J Lin <jmlin.jmlin@gmail.com>
-Cc: lttng-dev@lists.lttng.org, Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0783175507==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_14930_867043050.1416243216472"
-
-------=_Part_14930_867043050.1416243216472
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi,=20
-
-There is little we can do without information about the kernel=20
-customization that have been done in your use-case. Most likely,=20
-there might be one customization that breaks tracepoints located=20
-in the core kernel. It appears that only the tracepoints present in=20
-the lttng-module modules are traced.=20
-
-Just as a guess, do you have CONFIG_JUMP_LABEL=3Dy=20
-in your config ? Try setting it to "n'. Just in case they would=20
-happen to be broken on your specific kernel version/customization.=20
-
-Good luck!=20
-
-Mathieu=20
-
------ Original Message -----
-
-> From: "J Lin" <jmlin.jmlin@gmail.com>
-> To: "Daniel Thibault" <Daniel.Thibault@drdc-rddc.gc.ca>
-> Cc: lttng-dev@lists.lttng.org
-> Sent: Thursday, November 13, 2014 6:12:14 AM
-> Subject: Re: [lttng-dev] Strange result from LTTng porting to ARM
-
-> Hello Daniel,
-
-> I should correct myself and say cross compiled LTTng to run on ARM. We
-> installed lttng-modules via insmod and verified with lsmod. Regarding
-> lttng-modules, there was a problem compiling where duplicate definition
-> occurred. We use kernel version 3.8 and in the source code saw the
-> conflicting section "should be" guarded for version less than 3.15. So we
-> added version check to work around it.
-
-> We have not tested ust yet. But have compiled all three (lttng-ust,
-> lttng-tools, lttng-modules) and placed on development board. Right now, w=
-e
-> are just doing a simple trace for a certain irq that triggers every 4ms.
-> This is the most information we got:
-> [00:01:36.985006316] (+0.001175688) (none) lttng_statedump_interrupt: {
-> cpu_id =3D 0 }, { irq =3D 29, name =3D "GIC", action =3D "twd" }
-
-> Also noticed this when creating a session:
-> [ 2][ 64.512057] ##### send signal SIG : 10, lttng-sessiond(373)->lttng(2=
-62)
-> __send_signal
-
-> Thanks,
-> MIKE
-
-> 2014-11-13 3:10 GMT+08:00 Thibault, Daniel < Daniel.Thibault@drdc-rddc.gc=
-.ca
-> > :
-
-> > ----------------------------------------------------------------------
->=20
-> > Date: Wed, 12 Nov 2014 23:26:41 +0800
->=20
-> > From: J Lin < jmlin.jmlin@gmail.com >
->=20
-
-> > > I've recently ported LTTng to ARM and I can't seem to understand what=
- is
-> > > going wrong with my results. I ran a typical session with "lttng
-> > > enable-event -k -a" for test. Here are the observations:
->=20
-> > >
->=20
-> > > 1. only "lttng_xxx (e.g, lttng_statedump_interrupts)" are recorded 2.
-> > > different sessions yield trace on different CPU (the system has 4) bu=
-t
-> > > not
-> > > for all 4, just 1 cpu 3. no recorded session span more than 1 second
-> > > though I would run sleep (i.e., 10s) between "start" and "stop"
->=20
-> > >
->=20
-> > > This leads me to believe LTTng might be dependent on something in the
-> > > system that isn't present. This is a customized kernel of a client. I=
-t
-> > > has
-> > > all required configs.
->=20
-> > >
->=20
-> > > If there is a trigger mechanism after running "lttng start", what wou=
-ld
-> > > it
-> > > be? It seems it grabs items initially then doesn't continue. I read i=
-n
-> > > one
-> > > of the papers that LTTng is architecture dependent. Any help is
-> > > appreciated.
->=20
-> > >
->=20
-> > > Mike
->=20
-
-> > How exactly did you "port" LTTng to ARM? As far as I know, you need onl=
-y
-> > rebuild it there. Your symptoms lead me to believe you may have not
-> > installed the requisite lttng-modules. Did you test user-space tracing?
->=20
-
-> > Daniel U. Thibault
->=20
-> > Protection des syst=C3=A8mes et contremesures (PSC) | Systems Protectio=
-n &
-> > Countermeasures (SPC)
->=20
-> > Cyber s=C3=A9curit=C3=A9 pour les missions essentielles (CME) | Mission=
- Critical
-> > Cyber
-> > Security (MCCS)
->=20
-> > RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research
-> > Centre
->=20
-> > 2459 route de la Bravoure
->=20
-> > Qu=C3=A9bec QC G3J 1X5
->=20
-> > CANADA
->=20
-> > Vox : (418) 844-4000 x4245
->=20
-> > Fax : (418) 844-4538
->=20
-> > NAC : 918V QSDJ < http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ >
->=20
-> > Gouvernement du Canada | Government of Canada
->=20
-> > < http://www.valcartier.drdc-rddc.gc.ca/ >
->=20
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---=20
-Mathieu Desnoyers=20
-EfficiOS Inc.=20
-http://www.efficios.com=20
-
-------=_Part_14930_867043050.1416243216472
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: times new roman, new york, times, se=
-rif; font-size: 12pt; color: #000000"><div>Hi,<br></div><div><br></div><div=
->There is little we can do without information about the kernel<br></div><d=
-iv>customization that have been done in your use-case. Most likely,<br></di=
-v><div>there might be one customization that breaks tracepoints located<br>=
-</div><div>in the core kernel. It appears that only the tracepoints present=
- in<br></div><div>the lttng-module modules are traced.<br></div><div><br></=
-div><div>Just as a guess, do you have CONFIG_JUMP_LABEL=3Dy<br></div><div>i=
-n your config ? Try setting it to "n'. Just in case they would<br></div><di=
-v>happen to be broken on your specific kernel version/customization.<br></d=
-iv><div><br></div><div>Good luck!<br></div><div><br></div><div>Mathieu<br><=
-/div><div><br></div><hr id=3D"zwchr"><blockquote style=3D"border-left:2px s=
-olid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal=
-;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-se=
-rif;font-size:12pt;" data-mce-style=3D"border-left: 2px solid #1010FF; marg=
-in-left: 5px; padding-left: 5px; color: #000; font-weight: normal; font-sty=
-le: normal; text-decoration: none; font-family: Helvetica,Arial,sans-serif;=
- font-size: 12pt;"><b>From: </b>"J Lin" &lt;jmlin.jmlin@gmail.com&gt;<br><b=
->To: </b>"Daniel Thibault" &lt;Daniel.Thibault@drdc-rddc.gc.ca&gt;<br><b>Cc=
-: </b>lttng-dev@lists.lttng.org<br><b>Sent: </b>Thursday, November 13, 2014=
- 6:12:14 AM<br><b>Subject: </b>Re: [lttng-dev] Strange result from LTTng po=
-rting to ARM<br><div><br></div><div dir=3D"ltr"><span style=3D"font-family:=
-arial,sans-serif;font-size:14px" data-mce-style=3D"font-family: arial,sans-=
-serif; font-size: 14px;">Hello Daniel,</span><div style=3D"font-family:aria=
-l,sans-serif;font-size:14px" data-mce-style=3D"font-family: arial,sans-seri=
-f; font-size: 14px;"><br></div><div style=3D"font-family:arial,sans-serif;f=
-ont-size:14px" data-mce-style=3D"font-family: arial,sans-serif; font-size: =
-14px;">I should correct myself and say cross compiled LTTng to run on ARM. =
-We installed lttng-modules via insmod and verified with lsmod. Regarding lt=
-tng-modules, there was a problem compiling where duplicate definition occur=
-red. We use kernel version 3.8 and in the source code saw the conflicting s=
-ection "should be" guarded for version less than 3.15. So we added version =
-check to work around it.</div><div style=3D"font-family:arial,sans-serif;fo=
-nt-size:14px" data-mce-style=3D"font-family: arial,sans-serif; font-size: 1=
-4px;"><br></div><div style=3D"font-family:arial,sans-serif;font-size:14px" =
-data-mce-style=3D"font-family: arial,sans-serif; font-size: 14px;">We have =
-not tested ust yet. But have compiled all three (lttng-ust, lttng-tools, lt=
-tng-modules) and placed on development board. Right now, we are just doing =
-a simple trace for a certain irq that triggers every 4ms. This is the most =
-information we got:<br></div><div style=3D"font-family:arial,sans-serif;fon=
-t-size:14px" data-mce-style=3D"font-family: arial,sans-serif; font-size: 14=
-px;">[00:01:36.985006316] (+0.001175688) (none) lttng_statedump_interrupt: =
-{ cpu_id =3D 0 }, { irq =3D 29, name =3D "GIC", action =3D "twd" }<br></div=
-><div style=3D"font-family:arial,sans-serif;font-size:14px" data-mce-style=
-=3D"font-family: arial,sans-serif; font-size: 14px;"><br></div><div style=
-=3D"font-family:arial,sans-serif;font-size:14px" data-mce-style=3D"font-fam=
-ily: arial,sans-serif; font-size: 14px;">Also noticed this when creating a =
-session:</div><div style=3D"font-family:arial,sans-serif;font-size:14px" da=
-ta-mce-style=3D"font-family: arial,sans-serif; font-size: 14px;">[ 2][ &nbs=
-p; 64.512057] ##### send signal SIG : 10, lttng-sessiond(373)-&gt;lttng(262=
-) __send_signal</div><div style=3D"font-family:arial,sans-serif;font-size:1=
-4px" data-mce-style=3D"font-family: arial,sans-serif; font-size: 14px;"><br=
-></div><div style=3D"font-family:arial,sans-serif;font-size:14px" data-mce-=
-style=3D"font-family: arial,sans-serif; font-size: 14px;">Thanks,</div><div=
- style=3D"font-family:arial,sans-serif;font-size:14px" data-mce-style=3D"fo=
-nt-family: arial,sans-serif; font-size: 14px;">MIKE</div><div class=3D"gmai=
-l_extra"><br><div class=3D"gmail_quote">2014-11-13 3:10 GMT+08:00 Thibault,=
- Daniel <span dir=3D"ltr">&lt;<a href=3D"mailto:Daniel.Thibault@drdc-rddc.g=
-c.ca" target=3D"_blank" data-mce-href=3D"mailto:Daniel.Thibault@drdc-rddc.g=
-c.ca">Daniel.Thibault@drdc-rddc.gc.ca</a>&gt;</span>:<br><blockquote class=
-=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
-ing-left:1ex" data-mce-style=3D"margin: 0 0 0 .8ex; border-left: 1px #ccc s=
-olid; padding-left: 1ex;">-------------------------------------------------=
----------------------<br> Date: Wed, 12 Nov 2014 23:26:41 +0800<br> From: J=
- Lin &lt;<a href=3D"mailto:jmlin.jmlin@gmail.com" target=3D"_blank" data-mc=
-e-href=3D"mailto:jmlin.jmlin@gmail.com">jmlin.jmlin@gmail.com</a>&gt;<br><d=
-iv><div class=3D"h5"><br> &gt; I've recently ported LTTng to ARM and I can'=
-t seem to understand what is going wrong with my results. I ran a typical s=
-ession with "lttng enable-event -k -a" for test. Here are the observations:=
-<br> &gt;<br> &gt; 1. only "lttng_xxx (e.g, lttng_statedump_interrupts)" ar=
-e recorded 2. different sessions yield trace on different CPU (the system h=
-as 4) but not for all 4, just 1 cpu 3. no recorded session span more than 1=
- second though I would run sleep (i.e., 10s) between "start" and "stop"<br>=
- &gt;<br> &gt; This leads me to believe LTTng might be dependent on somethi=
-ng in the system that isn't present. This is a customized kernel of a clien=
-t. It has all required configs.<br> &gt;<br> &gt; If there is a trigger mec=
-hanism after running "lttng start", what would it be? It seems it grabs ite=
-ms initially then doesn't continue. I read in one of the papers that LTTng =
-is architecture dependent. Any help is appreciated.<br> &gt;<br></div></div=
->&gt; Mike<br> <br> &nbsp; &nbsp;How exactly did you "port" LTTng to ARM?&n=
-bsp; As far as I know, you need only rebuild it there.&nbsp; Your symptoms =
-lead me to believe you may have not installed the requisite lttng-modules.&=
-nbsp; Did you test user-space tracing?<br> <br> Daniel U. Thibault<br> Prot=
-ection des syst=C3=A8mes et contremesures (PSC) | Systems Protection &amp; =
-Countermeasures (SPC)<br> Cyber s=C3=A9curit=C3=A9 pour les missions essent=
-ielles (CME) | Mission Critical Cyber Security (MCCS)<br> RDDC - Centre de =
-recherches de Valcartier | DRDC - Valcartier Research Centre<br> 2459 route=
- de la Bravoure<br> Qu=C3=A9bec QC&nbsp; G3J 1X5<br> CANADA<br> Vox : <a hr=
-ef=3D"tel:%28418%29%20844-4000%20x4245" target=3D"_blank" data-mce-href=3D"=
-tel:%28418%29%20844-4000%20x4245">(418) 844-4000 x4245</a><br> Fax : <a hre=
-f=3D"tel:%28418%29%20844-4538" target=3D"_blank" data-mce-href=3D"tel:%2841=
-8%29%20844-4538">(418) 844-4538</a><br> NAC : 918V QSDJ &lt;<a href=3D"http=
-://www.travelgis.com/map.asp?addr=3D918V%20QSDJ" target=3D"_blank" data-mce=
--href=3D"http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ">http://www.tr=
-avelgis.com/map.asp?addr=3D918V%20QSDJ</a>&gt;<br> Gouvernement du Canada |=
- Government of Canada<br> &lt;<a href=3D"http://www.valcartier.drdc-rddc.gc=
-.ca/" target=3D"_blank" data-mce-href=3D"http://www.valcartier.drdc-rddc.gc=
-.ca/">http://www.valcartier.drdc-rddc.gc.ca/</a>&gt;<br></blockquote></div>=
-<br></div></div><br>_______________________________________________<br>lttn=
-g-dev mailing list<br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/c=
-gi-bin/mailman/listinfo/lttng-dev<br></blockquote><div><br><br></div><div><=
-br></div><div>-- <br></div><div><span name=3D"x"></span>Mathieu Desnoyers<b=
-r>EfficiOS Inc.<br>http://www.efficios.com<span name=3D"x"></span><br></div=
-></div></body></html>
-------=_Part_14930_867043050.1416243216472--
-
-
---===============0783175507==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0783175507==--
+TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIFRodSwgTm92IDEzLCAyMDE0IGF0IDU6MTgg
+UE0sIE1hdGhpZXUgRGVzbm95ZXJzCjxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+IHdy
+b3RlOgo+IFNpZ25lZC1vZmYtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVy
+c0BlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvY21kLmMgICAg
+ICAgfCAxMSArKysrKysrKysrKwo+ICBzcmMvYmluL2x0dG5nLXNlc3Npb25kL2V2ZW50LmMgICAg
+IHwgMTIgKysrKysrKysrKysrCj4gIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQva2VybmVsLmMgICAg
+fCAgMSArCj4gIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5jICAgICAgfCAgNCArKysrCj4g
+IHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdHJhY2UtdXN0LmMgfCAgNCArKysrCj4gIDUgZmlsZXMg
+Y2hhbmdlZCwgMzIgaW5zZXJ0aW9ucygrKQo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmct
+c2Vzc2lvbmQvY21kLmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2NtZC5jCj4gaW5kZXggYzJi
+MDI0OC4uMjU5ODAyOSAxMDA2NDQKPiAtLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2NtZC5j
+Cj4gKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jbWQuYwo+IEBAIC0xMzg1LDYgKzEzODUs
+NyBAQCBlbmQ6Cj4KPiAgLyoKPiAgICogQ29tbWFuZCBMVFROR19FTkFCTEVfRVZFTlQgcHJvY2Vz
+c2VkIGJ5IHRoZSBjbGllbnQgdGhyZWFkLgo+ICsgKiBXZSBvd24gZmlsdGVyLCBleGNsdXNpb24s
+IGFuZCBmaWx0ZXJfZXhwcmVzc2lvbi4KPiAgICovCj4gIGludCBjbWRfZW5hYmxlX2V2ZW50KHN0
+cnVjdCBsdHRfc2Vzc2lvbiAqc2Vzc2lvbiwgc3RydWN0IGx0dG5nX2RvbWFpbiAqZG9tYWluLAo+
+ICAgICAgICAgICAgICAgICBjaGFyICpjaGFubmVsX25hbWUsIHN0cnVjdCBsdHRuZ19ldmVudCAq
+ZXZlbnQsCj4gQEAgLTE1MzYsNiArMTUzNywxMCBAQCBpbnQgY21kX2VuYWJsZV9ldmVudChzdHJ1
+Y3QgbHR0X3Nlc3Npb24gKnNlc3Npb24sIHN0cnVjdCBsdHRuZ19kb21haW4gKmRvbWFpbiwKPiAg
+ICAgICAgICAgICAgICAgLyogQXQgdGhpcyBwb2ludCwgdGhlIHNlc3Npb24gYW5kIGNoYW5uZWwg
+ZXhpc3Qgb24gdGhlIHRyYWNlciAqLwo+ICAgICAgICAgICAgICAgICByZXQgPSBldmVudF91c3Rf
+ZW5hYmxlX3RyYWNlcG9pbnQodXNlc3MsIHVjaGFuLCBldmVudCwKPiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIGZpbHRlcl9leHByZXNzaW9uLCBmaWx0ZXIsIGV4Y2x1c2lvbik7Cj4g
+KyAgICAgICAgICAgICAgIC8qIFdlIGhhdmUgcGFzc2VkIG93bmVyc2hpcCAqLwo+ICsgICAgICAg
+ICAgICAgICBmaWx0ZXJfZXhwcmVzc2lvbiA9IE5VTEw7Cj4gKyAgICAgICAgICAgICAgIGZpbHRl
+ciA9IE5VTEw7Cj4gKyAgICAgICAgICAgICAgIGV4Y2x1c2lvbiA9IE5VTEw7Cj4gICAgICAgICAg
+ICAgICAgIGlmIChyZXQgIT0gTFRUTkdfT0spIHsKPiAgICAgICAgICAgICAgICAgICAgICAgICBn
+b3RvIGVycm9yOwo+ICAgICAgICAgICAgICAgICB9Cj4gQEAgLTE2MDAsNiArMTYwNSw5IEBAIGlu
+dCBjbWRfZW5hYmxlX2V2ZW50KHN0cnVjdCBsdHRfc2Vzc2lvbiAqc2Vzc2lvbiwgc3RydWN0IGx0
+dG5nX2RvbWFpbiAqZG9tYWluLAo+Cj4gICAgICAgICAgICAgICAgIHJldCA9IGNtZF9lbmFibGVf
+ZXZlbnQoc2Vzc2lvbiwgJnRtcF9kb20sIChjaGFyICopIGRlZmF1bHRfY2hhbl9uYW1lLAo+ICAg
+ICAgICAgICAgICAgICAgICAgICAgICZ1ZXZlbnQsIGZpbHRlcl9leHByZXNzaW9uLCBmaWx0ZXIs
+IE5VTEwsIHdwaXBlKTsKPiArICAgICAgICAgICAgICAgLyogV2UgaGF2ZSBwYXNzZWQgb3duZXJz
+aGlwICovCj4gKyAgICAgICAgICAgICAgIGZpbHRlcl9leHByZXNzaW9uID0gTlVMTDsKPiArICAg
+ICAgICAgICAgICAgZmlsdGVyID0gTlVMTDsKPiAgICAgICAgICAgICAgICAgaWYgKHJldCAhPSBM
+VFROR19PSyAmJiByZXQgIT0gTFRUTkdfRVJSX1VTVF9FVkVOVF9FTkFCTEVEKSB7Cj4gICAgICAg
+ICAgICAgICAgICAgICAgICAgZ290byBlcnJvcjsKPiAgICAgICAgICAgICAgICAgfQo+IEBAIC0x
+NjI5LDYgKzE2MzcsOSBAQCBpbnQgY21kX2VuYWJsZV9ldmVudChzdHJ1Y3QgbHR0X3Nlc3Npb24g
+KnNlc3Npb24sIHN0cnVjdCBsdHRuZ19kb21haW4gKmRvbWFpbiwKPiAgICAgICAgIHJldCA9IExU
+VE5HX09LOwo+Cj4gIGVycm9yOgo+ICsgICAgICAgZnJlZShmaWx0ZXJfZXhwcmVzc2lvbik7Cj4g
+KyAgICAgICBmcmVlKGZpbHRlcik7Cj4gKyAgICAgICBmcmVlKGV4Y2x1c2lvbik7Cj4gICAgICAg
+ICByY3VfcmVhZF91bmxvY2soKTsKPiAgICAgICAgIHJldHVybiByZXQ7Cj4gIH0KPiBkaWZmIC0t
+Z2l0IGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9ldmVudC5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNz
+aW9uZC9ldmVudC5jCj4gaW5kZXggMTgxOTI2Yi4uNWU5Y2ExOSAxMDA2NDQKPiAtLS0gYS9zcmMv
+YmluL2x0dG5nLXNlc3Npb25kL2V2ZW50LmMKPiArKysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25k
+L2V2ZW50LmMKPiBAQCAtMTgwLDYgKzE4MCw3IEBAIGludCBldmVudF9rZXJuZWxfZGlzYWJsZV9h
+bGwoc3RydWN0IGx0dF9rZXJuZWxfY2hhbm5lbCAqa2NoYW4pCj4KPiAgLyoKPiAgICogRW5hYmxl
+IGtlcm5lbCB0cmFjZXBvaW50IGV2ZW50IGZvciBhIGNoYW5uZWwgZnJvbSB0aGUga2VybmVsIHNl
+c3Npb24uCj4gKyAqIFdlIG93biBmaWx0ZXJfZXhwcmVzc2lvbiBhbmQgZmlsdGVyLgo+ICAgKi8K
+PiAgaW50IGV2ZW50X2tlcm5lbF9lbmFibGVfdHJhY2Vwb2ludChzdHJ1Y3QgbHR0X2tlcm5lbF9j
+aGFubmVsICprY2hhbiwKPiAgICAgICAgICAgICAgICAgc3RydWN0IGx0dG5nX2V2ZW50ICpldmVu
+dCkKPiBAQCAtNDA3LDYgKzQwOCw3IEBAIGVycm9yOgo+Cj4gIC8qCj4gICAqIEVuYWJsZSBVU1Qg
+dHJhY2Vwb2ludCBldmVudCBmb3IgYSBjaGFubmVsIGZyb20gYSBVU1Qgc2Vzc2lvbi4KPiArICog
+V2Ugb3duIGZpbHRlcl9leHByZXNzaW9uLCBmaWx0ZXIsIGFuZCBleGNsdXNpb24uCj4gICAqLwo+
+ICBpbnQgZXZlbnRfdXN0X2VuYWJsZV90cmFjZXBvaW50KHN0cnVjdCBsdHRfdXN0X3Nlc3Npb24g
+KnVzZXNzLAo+ICAgICAgICAgICAgICAgICBzdHJ1Y3QgbHR0X3VzdF9jaGFubmVsICp1Y2hhbiwg
+c3RydWN0IGx0dG5nX2V2ZW50ICpldmVudCwKPiBAQCAtNDI4LDYgKzQzMCwxMCBAQCBpbnQgZXZl
+bnRfdXN0X2VuYWJsZV90cmFjZXBvaW50KHN0cnVjdCBsdHRfdXN0X3Nlc3Npb24gKnVzZXNzLAo+
+ICAgICAgICAgaWYgKHVldmVudCA9PSBOVUxMKSB7Cj4gICAgICAgICAgICAgICAgIHVldmVudCA9
+IHRyYWNlX3VzdF9jcmVhdGVfZXZlbnQoZXZlbnQsIGZpbHRlcl9leHByZXNzaW9uLAo+ICAgICAg
+ICAgICAgICAgICAgICAgICAgIGZpbHRlciwgZXhjbHVzaW9uKTsKPiArICAgICAgICAgICAgICAg
+LyogV2UgaGF2ZSBwYXNzZWQgb3duZXJzaGlwICovCj4gKyAgICAgICAgICAgICAgIGZpbHRlcl9l
+eHByZXNzaW9uID0gTlVMTDsKPiArICAgICAgICAgICAgICAgZmlsdGVyID0gTlVMTDsKPiArICAg
+ICAgICAgICAgICAgZXhjbHVzaW9uID0gTlVMTDsKPiAgICAgICAgICAgICAgICAgaWYgKHVldmVu
+dCA9PSBOVUxMKSB7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gTFRUTkdfRVJSX1VT
+VF9FTkFCTEVfRkFJTDsKPiAgICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVycm9yOwo+IEBA
+IC00NzUsNiArNDgxLDkgQEAgaW50IGV2ZW50X3VzdF9lbmFibGVfdHJhY2Vwb2ludChzdHJ1Y3Qg
+bHR0X3VzdF9zZXNzaW9uICp1c2VzcywKPgo+ICBlbmQ6Cj4gICAgICAgICByY3VfcmVhZF91bmxv
+Y2soKTsKPiArICAgICAgIGZyZWUoZmlsdGVyX2V4cHJlc3Npb24pOwo+ICsgICAgICAgZnJlZShm
+aWx0ZXIpOwo+ICsgICAgICAgZnJlZShleGNsdXNpb24pOwo+ICAgICAgICAgcmV0dXJuIHJldDsK
+Pgo+ICBlcnJvcjoKPiBAQCAtNDkwLDYgKzQ5OSw5IEBAIGVycm9yOgo+ICAgICAgICAgICAgICAg
+ICB0cmFjZV91c3RfZGVzdHJveV9ldmVudCh1ZXZlbnQpOwo+ICAgICAgICAgfQo+ICAgICAgICAg
+cmN1X3JlYWRfdW5sb2NrKCk7Cj4gKyAgICAgICBmcmVlKGZpbHRlcl9leHByZXNzaW9uKTsKPiAr
+ICAgICAgIGZyZWUoZmlsdGVyKTsKPiArICAgICAgIGZyZWUoZXhjbHVzaW9uKTsKPiAgICAgICAg
+IHJldHVybiByZXQ7Cj4gIH0KPgo+IGRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nLXNlc3Npb25k
+L2tlcm5lbC5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9rZXJuZWwuYwo+IGluZGV4IDAwYmZi
+YmMuLmE5MTUxZjQgMTAwNjQ0Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9rZXJuZWwu
+Ywo+ICsrKyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQva2VybmVsLmMKPiBAQCAtMTczLDYgKzE3
+Myw3IEBAIGVycm9yOgo+ICAvKgo+ICAgKiBDcmVhdGUgYSBrZXJuZWwgZXZlbnQsIGVuYWJsZSBp
+dCB0byB0aGUga2VybmVsIHRyYWNlciBhbmQgYWRkIGl0IHRvIHRoZQo+ICAgKiBjaGFubmVsIGV2
+ZW50IGxpc3Qgb2YgdGhlIGtlcm5lbCBzZXNzaW9uLgo+ICsgKiBXZSBvd24gZmlsdGVyX2V4cHJl
+c3Npb24gYW5kIGZpbHRlci4KPiAgICovCj4gIGludCBrZXJuZWxfY3JlYXRlX2V2ZW50KHN0cnVj
+dCBsdHRuZ19ldmVudCAqZXYsCj4gICAgICAgICAgICAgICAgIHN0cnVjdCBsdHRfa2VybmVsX2No
+YW5uZWwgKmNoYW5uZWwpCj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFp
+bi5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKPiBpbmRleCA5NTQyZTY1Li5jZmU4
+YzM1IDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5jCj4gKysrIGIv
+c3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKPiBAQCAtMzIxNywxMiArMzIxNywxNCBAQCBz
+a2lwX2RvbWFpbjoKPgo+ICAgICAgICAgICAgICAgICAgICAgICAgIGlmIChieXRlY29kZV9sZW4g
+PiBMVFROR19GSUxURVJfTUFYX0xFTikgewo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgcmV0ID0gTFRUTkdfRVJSX0ZJTFRFUl9JTlZBTDsKPiArICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIGZyZWUoZmlsdGVyX2V4cHJlc3Npb24pOwo+ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgZnJlZShleGNsdXNpb24pOwo+ICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgZ290byBlcnJvcjsKPiAgICAgICAgICAgICAgICAgICAgICAgICB9Cj4KPiAgICAgICAg
+ICAgICAgICAgICAgICAgICBieXRlY29kZSA9IHptYWxsb2MoYnl0ZWNvZGVfbGVuKTsKPiAgICAg
+ICAgICAgICAgICAgICAgICAgICBpZiAoIWJ5dGVjb2RlKSB7Cj4gKyAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICBmcmVlKGZpbHRlcl9leHByZXNzaW9uKTsKPiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIGZyZWUoZXhjbHVzaW9uKTsKPiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHJldCA9IExUVE5HX0VSUl9GSUxURVJfTk9NRU07Cj4gICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICBnb3RvIGVycm9yOwo+IEBAIC0zMjM0LDYgKzMyMzYsNyBAQCBza2lw
+X2RvbWFpbjoKPiAgICAgICAgICAgICAgICAgICAgICAgICBpZiAocmV0IDw9IDApIHsKPiAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIERCRygiTm90aGluZyByZWN2KCkgZnJvbSBjbGll
+bnQgY2FyIGxlbiBkYXRhLi4uIGNvbnRpbnVpbmciKTsKPiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICpzb2NrX2Vycm9yID0gMTsKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIGZyZWUoZmlsdGVyX2V4cHJlc3Npb24pOwo+ICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgZnJlZShieXRlY29kZSk7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBm
+cmVlKGV4Y2x1c2lvbik7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICByZXQgPSBM
+VFROR19FUlJfRklMVEVSX0lOVkFMOwo+IEBAIC0zMjQxLDYgKzMyNDQsNyBAQCBza2lwX2RvbWFp
+bjoKPiAgICAgICAgICAgICAgICAgICAgICAgICB9Cj4KPiAgICAgICAgICAgICAgICAgICAgICAg
+ICBpZiAoKGJ5dGVjb2RlLT5sZW4gKyBzaXplb2YoKmJ5dGVjb2RlKSkgIT0gYnl0ZWNvZGVfbGVu
+KSB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBmcmVlKGZpbHRlcl9leHByZXNz
+aW9uKTsKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZyZWUoYnl0ZWNvZGUpOwo+
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZnJlZShleGNsdXNpb24pOwo+ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gTFRUTkdfRVJSX0ZJTFRFUl9JTlZBTDsK
+PiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC90cmFjZS11c3QuYyBiL3NyYy9i
+aW4vbHR0bmctc2Vzc2lvbmQvdHJhY2UtdXN0LmMKPiBpbmRleCAxOWExYzk1Li4zM2VlMDcxIDEw
+MDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdHJhY2UtdXN0LmMKPiArKysgYi9z
+cmMvYmluL2x0dG5nLXNlc3Npb25kL3RyYWNlLXVzdC5jCj4gQEAgLTM2NSw2ICszNjUsNyBAQCBl
+cnJvcjoKPgo+ICAvKgo+ICAgKiBBbGxvY2F0ZSBhbmQgaW5pdGlhbGl6ZSBhIHVzdCBldmVudC4g
+U2V0IG5hbWUgYW5kIGV2ZW50IHR5cGUuCj4gKyAqIFdlIG93biBmaWx0ZXJfZXhwcmVzc2lvbiwg
+ZmlsdGVyLCBhbmQgZXhjbHVzaW9uLgo+ICAgKgo+ICAgKiBSZXR1cm4gcG9pbnRlciB0byBzdHJ1
+Y3R1cmUgb3IgTlVMTC4KPiAgICovCj4gQEAgLTQ0MCw2ICs0NDEsOSBAQCBzdHJ1Y3QgbHR0X3Vz
+dF9ldmVudCAqdHJhY2VfdXN0X2NyZWF0ZV9ldmVudChzdHJ1Y3QgbHR0bmdfZXZlbnQgKmV2LAo+
+ICBlcnJvcl9mcmVlX2V2ZW50Ogo+ICAgICAgICAgZnJlZShsdWUpOwo+ICBlcnJvcjoKPiArICAg
+ICAgIGZyZWUoZmlsdGVyX2V4cHJlc3Npb24pOwo+ICsgICAgICAgZnJlZShmaWx0ZXIpOwo+ICsg
+ICAgICAgZnJlZShleGNsdXNpb24pOwo+ICAgICAgICAgcmV0dXJuIE5VTEw7Cj4gIH0KPgo+IC0t
+Cj4gMi4xLjEKPgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6
+Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
+cmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
+ZGV2Cg==
