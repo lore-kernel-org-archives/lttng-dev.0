@@ -1,20 +1,18 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: UST subbuffers silently
- dropped on moderate trace traffic
-Date: Tue, 18 Nov 2014 12:11:58 -0500
-Message-ID: <CA+jJMxv=Tr5L3+wVrasASay_57UciuS_cDiF7rEhwidEhAsQFA__26216.2733627067$1416330765$gmane$org@mail.gmail.com>
-References: <1416328403-28494-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [BABELTRACE PATCH 2/2] Fix: sanity check in iterator
+	creation
+Date: Tue, 18 Nov 2014 12:52:32 -0500
+Message-ID: <1416333152-12536-2-git-send-email-jdesfossez__20952.9940075756$1416333202$gmane$org@efficios.com>
+References: <1416333152-12536-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f177.google.com ([209.85.217.177])
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1XqmJw-0001Qi-FU
- for lttng-dev@lists.lttng.org; Tue, 18 Nov 2014 12:12:05 -0500
-Received: by mail-lb0-f177.google.com with SMTP id z12so10755634lbi.8
- for <lttng-dev@lists.lttng.org>; Tue, 18 Nov 2014 09:11:58 -0800 (PST)
-In-Reply-To: <1416328403-28494-1-git-send-email-mathieu.desnoyers@efficios.com>
+ (envelope-from <jdesfossez@efficios.com>) id 1XqmxH-0001dG-BG
+ for lttng-dev@lists.lttng.org; Tue, 18 Nov 2014 12:52:46 -0500
+In-Reply-To: <1416333152-12536-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,42 +21,32 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-R29vZCBjYXRjaCEgTWVyZ2VkIGluIG1hc3RlciBhbmQgYWxsIHN0YWJsZSBicmFuY2hlcyBkb3du
-IHRvIDIuNC4KCkrDqXLDqW1pZQoKT24gVHVlLCBOb3YgMTgsIDIwMTQgYXQgMTE6MzMgQU0sIE1h
-dGhpZXUgRGVzbm95ZXJzCjxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+
-IFdlbGwsIGl0IGxvb2tzIGxpa2Ugd2UgcmVhbGx5IHNjcmV3ZWQgdXAgb24gdGhpcyBvbmUuCj4K
-PiBsdHRuZy10b29scyBjb21taXQgMDJiM2QxNzY5ZDVmOGEzM2U0MTA5YjFlNjgxMTQxYzkyOTVk
-ZmRhNiBpbnRyb2R1Y2VkCj4gYW4gaW1wb3J0YW50IHJlZ3Jlc3Npb24gZm9yIGx0dG5nLXVzdCB0
-cmFjaW5nIGluIHRoZSBjb25zdW1lciBkYWVtb246Cj4gYWZ0ZXIgcmVhZGluZyBhIHN1Yi1idWZm
-ZXIsIGEgY2hlY2sgaGFzIGJlZW4gYWRkZWQgdG8gc2VlIHdoZXRoZXIgdGhlcmUKPiBhcmUgbW9y
-ZSBzdWItYnVmZmVycyBhdmFpbGFibGUgdG8gcmVhZCwgYW5kIGlmIGl0IGlzIHRoZSBjYXNlLCBp
-dAo+IGVuc3VyZXMgdGhlIHdha2V1cCBwaXBlIHdpbGwgYmUgYXdha2VuZWQgYWdhaW4uCj4KPiBU
-aGUgaXNzdWUgbGllcyBpbiB0aGUgdXNlIG9mIHVzdGN0bF9wdXRfbmV4dF9zdWJidWYoKSBpbiB0
-aGlzIGNoZWNrLgo+IFRoaXMgYWN0cyBhcyBpZiB0aGUgc3ViLWJ1ZmZlciBoYXMgYmVlbiByZWFk
-LCB3aGVuIGluIHJlYWxpdHkgaXQgaGFzIG5vdAo+IGJlZW4gcmVhZC4gSXQgdGhlcmVmb3JlIHRy
-YXNoZXMgdGhlIGRhdGEgY29udGFpbmVkIGJ5IHRoaXMgc3ViLWJ1ZmZlci4KPgo+IFRoaXMgY2hl
-Y2sgc2hvdWxkIHVzZSB1c3RjdGxfcHV0X3N1YmJ1ZigpLCB3aGljaCBkb2VzIG5vdCBtb3ZlIHRo
-ZQo+IGNvbnN1bWVyIHBvc2l0aW9uLgo+Cj4gVGhpcyBpcyBhIHNldmVyZSBidWcsIGFuZCB0aGUg
-Zml4IG5lZWRzIHRvIGJlIGFwcGxpZWQgdG8gc3RhYmxlLTIuNiwKPiBzdGFibGUtMi41LCBhbmQg
-c3RhYmxlLTIuNC4KPgo+IEZpeGVzICM4NjEKPgo+IFNpZ25lZC1vZmYtYnk6IE1hdGhpZXUgRGVz
-bm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIHNyYy9jb21t
-b24vdXN0LWNvbnN1bWVyL3VzdC1jb25zdW1lci5jIHwgMiArLQo+ICAxIGZpbGUgY2hhbmdlZCwg
-MSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPgo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9u
-L3VzdC1jb25zdW1lci91c3QtY29uc3VtZXIuYyBiL3NyYy9jb21tb24vdXN0LWNvbnN1bWVyL3Vz
-dC1jb25zdW1lci5jCj4gaW5kZXggNTJiNjk3OS4uMjRiYTM4NyAxMDA2NDQKPiAtLS0gYS9zcmMv
-Y29tbW9uL3VzdC1jb25zdW1lci91c3QtY29uc3VtZXIuYwo+ICsrKyBiL3NyYy9jb21tb24vdXN0
-LWNvbnN1bWVyL3VzdC1jb25zdW1lci5jCj4gQEAgLTE4ODIsNyArMTg4Miw3IEBAIHN0YXRpYyBp
-bnQgbm90aWZ5X2lmX21vcmVfZGF0YShzdHJ1Y3QgbHR0bmdfY29uc3VtZXJfc3RyZWFtICpzdHJl
-YW0sCj4gICAgICAgICAgICAgICAgIGdvdG8gZW5kOwo+ICAgICAgICAgfQo+Cj4gLSAgICAgICBy
-ZXQgPSB1c3RjdGxfcHV0X25leHRfc3ViYnVmKHVzdHJlYW0pOwo+ICsgICAgICAgcmV0ID0gdXN0
-Y3RsX3B1dF9zdWJidWYodXN0cmVhbSk7Cj4gICAgICAgICBhc3NlcnQoIXJldCk7Cj4KPiAgICAg
-ICAgIC8qIFRoaXMgc3RyZWFtIHN0aWxsIGhhcyBkYXRhLiBGbGFnIGl0IGFuZCB3YWtlIHVwIHRo
-ZSBkYXRhIHRocmVhZC4gKi8KPiAtLQo+IDIuMS4xCj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5l
-YXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+This function is part of the API, so we need more sanity checks before
+using the structures provided by the caller.
+
+Refs: #827
+
+Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+---
+ lib/iterator.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/iterator.c b/lib/iterator.c
+index d2464ab..540d5e9 100644
+--- a/lib/iterator.c
++++ b/lib/iterator.c
+@@ -720,7 +720,7 @@ int bt_iter_init(struct bt_iter *iter,
+ 	int i;
+ 	int ret = 0;
+ 
+-	if (!iter || !ctx)
++	if (!iter || !ctx || !ctx->tc || !ctx->tc->array)
+ 		return -EINVAL;
+ 
+ 	if (ctx->current_iterator) {
+-- 
+1.9.1
