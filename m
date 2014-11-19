@@ -1,17 +1,15 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: Question about TRACEPOINT_EVENT_CLASS and
- TRACEPOINT_EVENT_INSTANCE
-Date: Wed, 19 Nov 2014 18:14:26 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD6FBC92BD__24724.255273077$1416420932$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools 0/8] Fix racy lttng-tools tests
+Date: Wed, 19 Nov 2014 22:40:24 +0100
+Message-ID: <1416433232-20080-1-git-send-email-mathieu.desnoyers__23105.1652030603$1416433293$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Xr9lw-0001Dl-Qn
- for lttng-dev@lists.lttng.org; Wed, 19 Nov 2014 13:14:35 -0500
-Content-Language: fr-FR
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1XrCzX-0002NG-F1
+ for lttng-dev@lists.lttng.org; Wed, 19 Nov 2014 16:40:50 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,67 +18,48 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-> Date: Wed, 19 Nov 2014 15:35:01 +0400
-> From: Eugene Ivanov <eiva@tbricks.com>
->
-> I found description of TRACEPOINT_EVENT_CLASS on the website and in ust-t=
-racepoint-event.h as well, but it is not documented in the lttng-ust man pa=
-ge.
-> According the header TRACEPOINT_EVENT_INSTANCE declares an instance of a =
-tracepoint, with its own provider and name.
-> Does it mean that I can define classes for usage in different providers? =
-Why do we need provider in _CLASS then?
-> According the code on the first glance it seems that it is required that =
-CLASS and INSTANCE must share in same provider.
+Mathieu Desnoyers (8):
+  Fix: tests: don't use pidof to wait for test apps
+  Fix: test flaky sleep and wait patterns
+  Document test anti-patterns
+  Fix: tests: add missing wait, document missing synchro
+  Fix: high throughput test: reset bw limit on sigterm
+  Fix: tests: remove killall, add missing SIGTERM handlers
+  Fix: tests: wait output hide Terminate errors
+  Fix: add missing synchronization point for before app test case
 
-   You will also have seen that the "default" macro TRACEPOINT_EVENT simply=
- wraps both TRACEPOINT_EVENT_CLASS and TRACEPOINT_EVENT_INSTANCE together. =
- When used separately, the TRACEPOINT_EVENT_INSTANCE must match its templat=
-e's params; the event class then takes care of the mapping of parameters to=
- fields in the event output.  This allows you to declare a single event cla=
-ss somewhere, then declare various instances that vary by name only, typica=
-lly because they're events of the same nature but occurring in varying cont=
-exts.  Having the trace label them under different names makes the analyst'=
-s life easier.
+ tests/Makefile.am                                  |  2 +-
+ tests/README                                       | 63 +++++++++++++++++
+ tests/regression/tools/live/test_kernel            | 12 ++--
+ tests/regression/tools/live/test_ust               | 12 ++--
+ .../regression/tools/live/test_ust_tracefile_count | 12 ++--
+ tests/regression/tools/mi/test_mi                  |  6 +-
+ .../regression/tools/snapshots/test_ust_streaming  | 45 +++++++------
+ tests/regression/tools/snapshots/ust_test          | 28 +++++---
+ .../tools/streaming/test_high_throughput_limits    | 16 ++---
+ tests/regression/tools/streaming/test_kernel       |  7 --
+ tests/regression/tools/streaming/test_ust          | 26 +++++++-
+ .../regression/ust/before-after/test_before_after  | 14 +++-
+ tests/regression/ust/buffers-pid/test_buffers_pid  | 50 ++++++++------
+ .../ust/high-throughput/test_high_throughput       |  9 ++-
+ tests/regression/ust/java-jul/test_java_jul        | 19 +++++-
+ tests/regression/ust/java-log4j/test_java_log4j    | 19 ++++--
+ .../ust/multi-session/test_multi_session           |  2 +-
+ tests/regression/ust/nprocesses/test_nprocesses    | 37 ++++++----
+ tests/regression/ust/overlap/test_overlap          |  3 +-
+ .../test_periodical_metadata_flush                 | 78 ++++++++++++++++------
+ .../ust/python-logging/test_python_logging         | 10 ++-
+ tests/stress/test_multi_sessions_per_uid_10app     | 13 ++--
+ .../test_multi_sessions_per_uid_5app_streaming     | 13 ++--
+ ...lti_sessions_per_uid_5app_streaming_kill_relayd | 20 ++++--
+ .../utils/testapp/gen-ust-events/gen-ust-events.c  | 71 ++++++++++++++++----
+ tests/utils/utils.sh                               |  2 +-
+ 26 files changed, 411 insertions(+), 178 deletions(-)
+ create mode 100644 tests/README
 
-   Normally you use TRACEPOINT_EVENT_CLASS and _INSTANCE within the same pr=
-ovider, but you could theoretically have varying instances rely on differen=
-t providers.  I guess this would allow you some flexibility in picking whic=
-h sets of instances to enable/disable by picking which provider shared obje=
-cts (.so) to preload or not.
-
-   Kernel space has essentially the same macros under the names DECLARE_EVE=
-NT_CLASS and TRACE_EVENT, respectively.  You can see those at work in the l=
-ttng-modules package and in some kernel modules such as drivers/staging/and=
-roid/binder_trace.h.  In the latter, for example, you see a binder_lock_cla=
-ss which is then instantiated as binder_lock, binder_locked, and binder_unl=
-ock.  These three events carry very different semantics, but they have prec=
-isely the same parameter signatures.  Grouping them under an event class av=
-oids a lot of cutting-and-pasting and diminishes the risk of errors later o=
-n (e.g. if you had to modify the field layout of binder_lock and forgot to =
-copy it to binder_unlock).
-
-   "Why do we need provider in _CLASS then?"  Because the provider name is =
-part of the fully-qualified event class name.  This allows different event =
-classes (and event instances) to have the same short names within different=
- providers.  You would be bound to run into collisions if all the event cla=
-ss or event instance names were global.
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
+-- 
+2.1.1
