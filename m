@@ -1,16 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools v2] Fix: add missing synchronization
-	point for before app test case
-Date: Thu, 20 Nov 2014 07:40:41 +0100
-Message-ID: <1416465641-1663-1-git-send-email-mathieu.desnoyers__15045.4176743098$1416465696$gmane$org@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: CTF stress tests
+Date: Thu, 20 Nov 2014 14:27:58 -0500
+Message-ID: <CA+jJMxuXX-h74Lxy1xrcQ5awJ_qQLVbuV0H_cjPKiYX_kArorQ__16744.5868989036$1416511728$gmane$org@mail.gmail.com>
+References: <546B5CD0.3070402@ericsson.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qa0-f48.google.com ([209.85.216.48])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1XrLQD-0005Uc-Na
- for lttng-dev@lists.lttng.org; Thu, 20 Nov 2014 01:40:55 -0500
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XrXOe-00019D-2H
+ for lttng-dev@lists.lttng.org; Thu, 20 Nov 2014 14:28:08 -0500
+Received: by mail-qa0-f48.google.com with SMTP id v10so2398910qac.21
+ for <lttng-dev@lists.lttng.org>; Thu, 20 Nov 2014 11:27:58 -0800 (PST)
+In-Reply-To: <546B5CD0.3070402@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,495 +22,114 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, tracecompass-dev@eclipse.org
 List-Id: lttng-dev@lists.lttng.org
 
-Fixes a race where the application could generate all its events before
-trace start.
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- .../regression/tools/snapshots/test_ust_streaming  |  2 +-
- tests/regression/tools/snapshots/ust_test          |  2 +-
- tests/regression/tools/streaming/test_ust          | 21 ++++++--
- .../regression/ust/before-after/test_before_after  | 11 ++--
- tests/regression/ust/buffers-pid/test_buffers_pid  | 26 ++++++---
- tests/regression/ust/java-jul/test_java_jul        | 11 +++-
- tests/regression/ust/java-log4j/test_java_log4j    | 11 +++-
- tests/regression/ust/nprocesses/test_nprocesses    | 14 +++--
- .../test_periodical_metadata_flush                 |  2 +-
- .../utils/testapp/gen-ust-events/gen-ust-events.c  | 63 +++++++++++++++++-----
- 10 files changed, 126 insertions(+), 37 deletions(-)
-
-diff --git a/tests/regression/tools/snapshots/test_ust_streaming b/tests/regression/tools/snapshots/test_ust_streaming
-index 55c1087..ef38bd5 100755
---- a/tests/regression/tools/snapshots/test_ust_streaming
-+++ b/tests/regression/tools/snapshots/test_ust_streaming
-@@ -58,7 +58,7 @@ function snapshot_add_output ()
- # Start trace application and return once one event has been hit.
- function start_test_app()
- {
--	local tmp_file="/tmp/lttng_test_ust.42.file"
-+	local tmp_file=$(mktemp -u)
- 
- 	# Start application with a temporary file.
- 	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT $tmp_file &
-diff --git a/tests/regression/tools/snapshots/ust_test b/tests/regression/tools/snapshots/ust_test
-index 1541e6e..cbc2058 100755
---- a/tests/regression/tools/snapshots/ust_test
-+++ b/tests/regression/tools/snapshots/ust_test
-@@ -49,7 +49,7 @@ NUM_TESTS=$(($NUM_TESTS + ($NR_SNAPSHOT * 2)))
- 
- function start_test_app()
- {
--	local tmp_file="/tmp/lttng_test_ust.42.file"
-+	local tmp_file=$(mktemp -u)
- 
- 	# Start application with a temporary file.
- 	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT $tmp_file &
-diff --git a/tests/regression/tools/streaming/test_ust b/tests/regression/tools/streaming/test_ust
-index 4807175..e6a0bb8 100755
---- a/tests/regression/tools/streaming/test_ust
-+++ b/tests/regression/tools/streaming/test_ust
-@@ -49,40 +49,51 @@ function lttng_create_session_uri
- 
- function test_ust_before_start ()
- {
-+	local file_sync_after_first=$(mktemp -u)
-+	local file_sync_before_last=$(mktemp -u)
-+
- 	diag "Test UST streaming BEFORE tracing starts"
- 	lttng_create_session_uri
- 	enable_ust_lttng_event $SESSION_NAME $EVENT_NAME
- 
- 	# Run 5 times with a 1 second delay
--	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1 &
--
--	#FIXME: racy missing synchro
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT ${file_sync_after_first} ${file_sync_before_last} /dev/null 2>&1 &
- 
- 	start_lttng_tracing $SESSION_NAME
-+
-+	touch ${file_sync_before_last}
-+
- 	# Wait for the applications started in background
- 	wait
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
-+	rm -f ${file_sync_after_first}
-+	rm -f ${file_sync_before_last}
- }
- 
- function test_ust_after_start ()
- {
-+	local file_sync_after_first=$(mktemp -u)
-+
- 	diag "Test UST streaming AFTER tracing starts"
- 	lttng_create_session_uri
- 	enable_ust_lttng_event $SESSION_NAME $EVENT_NAME
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay
--	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT ${file_sync_after_first} >/dev/null 2>&1
- 
--	#FIXME: racy missing synchro
-+	while [ ! -f "${file_sync_after_first}" ]; do
-+		sleep 0.5
-+	done
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
- 
- 	# Wait for the applications started in background
- 	wait
-+	rm -f ${file_sync_after_first}
- }
- 
- plan_tests $NUM_TESTS
-diff --git a/tests/regression/ust/before-after/test_before_after b/tests/regression/ust/before-after/test_before_after
-index 1535f36..460b04c 100755
---- a/tests/regression/ust/before-after/test_before_after
-+++ b/tests/regression/ust/before-after/test_before_after
-@@ -57,22 +57,27 @@ function test_before_apps()
- function test_after_apps()
- {
- 	local out
-+	local file_sync_after_first=$(mktemp -u)
-+	local file_sync_before_last=$(mktemp -u)
- 
- 	create_lttng_session $SESSION_NAME $TRACE_PATH
- 	enable_ust_lttng_event $SESSION_NAME $EVENT_NAME
- 
--	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT &
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT ${file_sync_after_first} ${file_sync_before_last} &
- 	ok $? "Application started in background."
- 
--	#FIXME: racy missing synchronization
--
- 	start_lttng_tracing $SESSION_NAME
- 
-+	touch ${file_sync_before_last}
-+
- 	wait
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
- 
-+	rm -f ${file_sync_after_first}
-+	rm -f ${file_sync_before_last}
-+
- 	validate_trace $EVENT_NAME $TRACE_PATH
- 	out=$?
- 
-diff --git a/tests/regression/ust/buffers-pid/test_buffers_pid b/tests/regression/ust/buffers-pid/test_buffers_pid
-index 0258e89..c95a4a1 100755
---- a/tests/regression/ust/buffers-pid/test_buffers_pid
-+++ b/tests/regression/ust/buffers-pid/test_buffers_pid
-@@ -74,22 +74,26 @@ test_after_multiple_apps() {
- test_before_multiple_apps() {
- 	local out
- 	local i
-+	local file_sync_after_first=$(mktemp -u)
-+	local file_sync_before_last=$(mktemp -u)
- 
- 	diag "Start multiple applications BEFORE tracing is started"
- 
- 	for i in `seq 1 5`; do
--		$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1 &
-+		$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT ${file_sync_after_first}_${i} ${file_sync_before_last}_${i} >/dev/null 2>&1 &
- 		ok $? "Start application $i for tracing"
- 	done
- 
--	#FIXME: racy missing synchronization
--
- 	# BEFORE application is spawned
- 	create_lttng_session $SESSION_NAME $TRACE_PATH
- 	enable_channel_per_pid $SESSION_NAME "channel0"
- 	enable_ust_lttng_event $SESSION_NAME $EVENT_NAME "channel0"
- 	start_lttng_tracing $SESSION_NAME
- 
-+	for i in `seq 1 5`; do
-+		touch ${file_sync_before_last}_${i}
-+	done
-+
- 	diag "Waiting for applications to end"
- 	wait
- 	pass "Waiting done"
-@@ -97,6 +101,11 @@ test_before_multiple_apps() {
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
- 
-+	for i in `seq 1 5`; do
-+		rm -f ${file_sync_after_first}_${i}
-+		rm -f ${file_sync_before_last}_${i}
-+	done
-+
- 	out=$(babeltrace $TRACE_PATH | grep $EVENT_NAME | wc -l)
- 	if [ $out -eq 0 ]; then
- 		fail "Trace validation"
-@@ -136,6 +145,8 @@ test_after_app() {
- 
- test_before_app() {
- 	local out
-+	local file_sync_after_first=$(mktemp -u)
-+	local file_sync_before_last=$(mktemp -u)
- 
- 	diag "Start application BEFORE tracing is started"
- 
-@@ -145,18 +156,21 @@ test_before_app() {
- 	enable_channel_per_pid $SESSION_NAME "channel0"
- 	enable_ust_lttng_event $SESSION_NAME $EVENT_NAME "channel0"
- 
--	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT &
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT ${file_sync_after_first} ${file_sync_before_last} &
- 	ok $? "Start application to trace"
- 
--	#FIXME: racy missing synchronization
--
- 	start_lttng_tracing $SESSION_NAME
- 
-+	touch ${file_sync_before_last}
-+
- 	wait
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
- 
-+	rm -f ${file_sync_after_first}
-+	rm -f ${file_sync_before_last}
-+
- 	out=$(babeltrace $TRACE_PATH | grep $EVENT_NAME | wc -l)
- 	if [ $out -eq 0 ]; then
- 		fail "Trace validation"
-diff --git a/tests/regression/ust/java-jul/test_java_jul b/tests/regression/ust/java-jul/test_java_jul
-index d16880f..d32d9ed 100755
---- a/tests/regression/ust/java-jul/test_java_jul
-+++ b/tests/regression/ust/java-jul/test_java_jul
-@@ -38,6 +38,7 @@ function run_app
- 	local finest_tp=$1
- 	local fire_second_tp=$2
- 
-+	#FIXME: app should have synchro.
- 	java -cp $JAVA_CP -Djava.library.path="/usr/local/lib:/usr/lib" $TESTAPP_NAME $NR_ITER $NR_MSEC_WAIT $finest_tp $fire_second_tp >/dev/null 2>&1
- }
- 
-@@ -89,6 +90,9 @@ function enable_jul_filter_loglevel_only()
- 
- function test_jul_before_start ()
- {
-+	local file_sync_after_first=$(mktemp -u)
-+	local file_sync_before_last=$(mktemp -u)
-+
- 	diag "Test JUL application BEFORE tracing starts"
- 	create_lttng_session $SESSION_NAME $TRACE_PATH
- 	enable_jul_lttng_event $SESSION_NAME $EVENT_NAME
-@@ -96,16 +100,19 @@ function test_jul_before_start ()
- 	# Run 5 times with a 1 second delay
- 	run_app_background
- 
--	#FIXME: racy missing synchronization
--
- 	start_lttng_tracing $SESSION_NAME
- 
-+	touch ${file_sync_before_last}
-+
- 	# Wait for the applications started in background
- 	wait
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
- 
-+	rm -f ${file_sync_after_first}
-+	rm -f ${file_sync_before_last}
-+
- 	# Validate test. Expecting all events.
- 	trace_match_only $EVENT_NAME $NR_ITER $TRACE_PATH
- 	if [ $? -ne 0 ]; then
-diff --git a/tests/regression/ust/java-log4j/test_java_log4j b/tests/regression/ust/java-log4j/test_java_log4j
-index 11845a0..a0b7cdc 100755
---- a/tests/regression/ust/java-log4j/test_java_log4j
-+++ b/tests/regression/ust/java-log4j/test_java_log4j
-@@ -39,6 +39,7 @@ function run_app
- 	local debug_tp=$1
- 	local fire_second_tp=$2
- 
-+	# FIXME: test app should have synchro.
- 	java -cp $JAVA_CP -Djava.library.path="/usr/local/lib:/usr/lib" $TESTAPP_NAME $NR_ITER $NR_MSEC_WAIT $debug_tp $fire_second_tp >/dev/null 2>&1
- }
- 
-@@ -90,6 +91,9 @@ function enable_log4j_filter_loglevel_only()
- 
- function test_log4j_before_start ()
- {
-+	local file_sync_after_first=$(mktemp -u)
-+	local file_sync_before_last=$(mktemp -u)
-+
- 	diag "Test LOG4J application BEFORE tracing starts"
- 	create_lttng_session $SESSION_NAME $TRACE_PATH
- 	enable_log4j_lttng_event $SESSION_NAME $EVENT_NAME
-@@ -97,16 +101,19 @@ function test_log4j_before_start ()
- 	# Run 5 times with a 1 second delay
- 	run_app_background
- 
--	#FIXME: racy missing synchronization
--
- 	start_lttng_tracing $SESSION_NAME
- 
-+	touch ${file_sync_before_last}
-+
- 	# Wait for the applications started in background
- 	wait
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
- 
-+	rm -f ${file_sync_after_first}
-+	rm -f ${file_sync_before_last}
-+
- 	# Validate test. Expecting all events.
- 	trace_match_only $EVENT_NAME $NR_ITER $TRACE_PATH
- 	if [ $? -ne 0 ]; then
-diff --git a/tests/regression/ust/nprocesses/test_nprocesses b/tests/regression/ust/nprocesses/test_nprocesses
-index ca0f9d4..8eed95f 100755
---- a/tests/regression/ust/nprocesses/test_nprocesses
-+++ b/tests/regression/ust/nprocesses/test_nprocesses
-@@ -46,15 +46,16 @@ start_lttng_sessiond
- 
- # Start tests. Each is an infinite tracing loop.
- 
-+file_sync_after_first=$(mktemp -u)
-+file_sync_before_last=$(mktemp -u)
-+
- diag "Starting $NUM_PROCESS test applications"
- for i in `seq 1 $NUM_PROCESS`
- do
--	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1 &
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT ${file_sync_after_first} ${file_sync_before_last} >/dev/null 2>&1 &
- 	APPS_PID="${APPS_PID} ${!}"
- done
- 
--#FIXME: racy missing synchronization
--
- diag "Waiting for applications to be registered to sessiond"
- 
- reg_app_count=0
-@@ -72,13 +73,15 @@ create_lttng_session $SESSION_NAME $TRACE_PATH
- enable_ust_lttng_event $SESSION_NAME $EVENT_NAME
- start_lttng_tracing $SESSION_NAME
- 
-+touch ${file_sync_before_last}
-+
- # We don't validate whether the applications have traced here, rather
- # just that they registered to sessiond (above).
- 
- stop_lttng_tracing $SESSION_NAME
- destroy_lttng_session $SESSION_NAME
- 
--#FIXME/TODO: add validation after fixing racy synchroniaation
-+#TODO: add trace validation.
- 
- rm -rf $TRACE_PATH
- 
-@@ -90,4 +93,7 @@ done
- APPS_PID=
- pass "Stopped all spawned applications"
- 
-+rm -f ${file_sync_after_first}
-+rm -f ${file_sync_before_last}
-+
- stop_lttng_sessiond
-diff --git a/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush b/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush
-index 53db813..7937fa2 100755
---- a/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush
-+++ b/tests/regression/ust/periodical-metadata-flush/test_periodical_metadata_flush
-@@ -27,7 +27,7 @@ SESSION_NAME="periodical-flush"
- EVENT_NAME="tp:tptest"
- BIN_NAME="gen-nevents"
- NUM_TESTS=38
--APP_TMP_FILE="/tmp/lttng_test_ust.42.file"
-+APP_TMP_FILE=$(mktemp -u)
- APPS_PID=
- 
- source $TESTDIR/utils/utils.sh
-diff --git a/tests/utils/testapp/gen-ust-events/gen-ust-events.c b/tests/utils/testapp/gen-ust-events/gen-ust-events.c
-index 42fa082..5fb2683 100644
---- a/tests/utils/testapp/gen-ust-events/gen-ust-events.c
-+++ b/tests/utils/testapp/gen-ust-events/gen-ust-events.c
-@@ -15,6 +15,7 @@
-  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-  */
- 
-+#define _GNU_SOURCE
- #include <assert.h>
- #include <arpa/inet.h>
- #include <fcntl.h>
-@@ -27,15 +28,21 @@
- #include <sys/types.h>
- #include <unistd.h>
- #include <stdbool.h>
-+#include <signal.h>
-+#include <poll.h>
-+#include <errno.h>
- 
- #define TRACEPOINT_DEFINE
- #include "tp.h"
- 
- void create_file(const char *path)
- {
-+	static bool file_created = false;
- 	int ret;
- 
--	assert(path);
-+	if (!path || file_created) {
-+		return;
-+	}
- 
- 	ret = creat(path, S_IRWXU);
- 	if (ret < 0) {
-@@ -44,6 +51,30 @@ void create_file(const char *path)
- 	}
- 
- 	(void) close(ret);
-+	file_created = true;
-+}
-+
-+static
-+void wait_on_file(const char *path)
-+{
-+	if (!path) {
-+		return;
-+	}
-+	for (;;) {
-+		int ret;
-+		struct stat buf;
-+
-+		ret = stat(path, &buf);
-+		if (ret == -1 && errno == ENOENT) {
-+			(void) poll(NULL, 0, 10);	/* 10 ms delay */
-+			continue;			/* retry */
-+		}
-+		if (ret) {
-+			perror("stat");
-+			exit(EXIT_FAILURE);
-+		}
-+		break;	/* found */
-+	}
- }
- 
- int main(int argc, char **argv)
-@@ -55,8 +86,8 @@ int main(int argc, char **argv)
- 	float flt = 2222.0;
- 	int nr_iter = 100;
- 	useconds_t nr_usec = 0;
--	char *tmp_file_path = NULL;
--	bool file_created = false;
-+	char *after_first_event_file_path = NULL;
-+	char *before_last_event_file_path = NULL;
- 
- 	if (argc >= 2) {
- 		/*
-@@ -71,22 +102,30 @@ int main(int argc, char **argv)
- 	}
- 
- 	if (argc >= 4) {
--		tmp_file_path = argv[3];
-+		after_first_event_file_path = argv[3];
-+	}
-+
-+	if (argc >= 5) {
-+		before_last_event_file_path = argv[4];
- 	}
- 
- 	for (i = 0; nr_iter < 0 || i < nr_iter; i++) {
-+		if (nr_iter >= 0 && i == nr_iter - 1) {
-+			/*
-+			 * Wait on synchronization before writing last
-+			 * event.
-+			 */
-+			wait_on_file(before_last_event_file_path);
-+		}
- 		netint = htonl(i);
--		tracepoint(tp, tptest, i, netint, values, text, strlen(text), dbl,
--				flt);
-+		tracepoint(tp, tptest, i, netint, values, text,
-+			strlen(text), dbl, flt);
- 
- 		/*
--		 * First loop we create the file if asked to indicate that at least one
--		 * tracepoint has been hit.
-+		 * First loop we create the file if asked to indicate
-+		 * that at least one tracepoint has been hit.
- 		 */
--		if (!file_created && tmp_file_path) {
--			create_file(tmp_file_path);
--			file_created = true;
--		}
-+		create_file(after_first_event_file_path);
- 		usleep(nr_usec);
- 	}
- 
--- 
-2.1.1
+Q0MtaW5nIGx0dG5nLWRldiBzaW5jZSB0aGlzIGFwcGxpZXMgdG8gQmFiZWx0cmFjZS4KCk9uIFR1
+ZSwgTm92IDE4LCAyMDE0IGF0IDk6NTAgQU0sIE1hdHRoZXcgS2hvdXphbQo8bWF0dGhldy5raG91
+emFtQGVyaWNzc29uLmNvbT4gd3JvdGU6Cj4gSGksCj4gSSB3YXMgbG9va2luZyBpbnRvIHRoZSBD
+VEYgc3RyZXNzIHRlc3RzLgo+IFRoZXkgYXJlIGdvb2QsIGJ1dCBJIGRvbid0IGtub3cgaWYgd2Ug
+d2FudCB0aGVtIGluIG91ciBzdGFuZGFyZCB0ZXN0Cj4gY2FzZXMuIFRoZXkgYmFzaWNhbGx5IGNo
+ZWNrIHRoZSBzY2FsYWJpbGl0eSBvZiB0aGUgY29tcHV0ZXIgaXQgaXMgYmVpbmcKPiBydW4gb24g
+aW4gbW9zdCBjYXNlcyBhbmQgaW4gYWxsIGNhc2VzLCB0aGUgdGVzdCBvZiByZWFkaW5nIDEyZyBv
+ZiBmaWxlcwoKSSByZXNwZWN0ZnVsbHkgZGlzYWdyZWUuCgpJbiBtb3N0IHRlc3RzLCB0aGVyZSBp
+cyBkZWZpbml0ZWx5IGEgc21hcnQgd2F5IHRvIGRlYWwgd2l0aCB0aGUgdHJhY2UuClRoYXQgaXMg
+bm90IHRvIHNheSB0aGF0IGFsbCBpbXBsZW1lbnRhdGlvbnMgYXJlIGV4cGVjdGVkIHRvIHN1cHBv
+cnQKZXZlcnkgaW1hZ2luYWJsZSB0ZXN0IGNhc2VzLiBIb3dldmVyLCB0aGV5IHNob3VsZCBzdHJp
+dmUgdG8sIGF0IHRoZQp2ZXJ5IGxlYXN0LCBncmFjZWZ1bGx5IGhhbmRsZSBmYWlsdXJlcyB0byBy
+ZWFkIHRyYWNlcyBhbmQgZG9jdW1lbnQgdGhlaXIKbGltaXRhdGlvbnMgYXMgdGhlIHNwZWMgaW1w
+b3NlcyB2ZXJ5IGZldy4KCldoaWxlIEkgYWdyZWUgdGhhdCBzb21lIG9mIHRoZXNlIHRlc3RzIGFy
+ZSBmYXItZmV0Y2hlZCAoeW91J3JlIG5vdCBsaWtlbHkKdG8gc2VlIGEgQ1RGIHRyYWNlIHdpdGgg
+YSAzMiA3NjggbGV2ZWwgZGVlcCBzdHJ1Y3R1cmUgYW55IHRpbWUgc29vbiksCnRyYWNlcyB3aXRo
+IGVub3VnaCBzdHJlYW1zIHRvIGV4aGF1c3QgdGhlIG1heCBmZCBjb3VudCBhcmUgbm90CmZhci1m
+ZXRjaGVkIGF0IGFsbC4gSW4gZmFjdCwgdHJhY2luZyBhbnkgZGVjZW50bHktc2l6ZWQgY2x1c3Rl
+ciB3aWxsIGJ1c3QKdGhhdCBsaW1pdCBpbiBubyB0aW1lLgoKSGFuZGxpbmcgYSBtdWx0aS1tZWdh
+Ynl0ZSBzZXF1ZW5jZSAofjEwMG1iKSwgc29tZXRoaW5nIHRoYXQKQmFiZWx0cmFjZSBjYW4ndCBk
+byBhdCB0aGUgbW9tZW50LCBtYXkgc2VlbSB1bnJlYXNvbmFibGUgYXQgZmlyc3QuCkl0IHF1aWNr
+bHkgYmVjb21lcyB2ZXJ5IHBlcnRpbmVudCB3aGVuIHBlb3BsZSBzdGFydCB0YWxraW5nIG9mIGNv
+cmUKZHVtcGluZyB0byBhIENURiB0cmFjZS4KCj4gaXMgcmF0aGVyIHByb2hpYml0aXZlLiBUaGF0
+IGJlaW5nIHNhaWQsIG1heWJlIGhhdmluZyB0aGlzIGFzIGEgd2Vla2x5Cj4gYnVpbGQgY291bGQg
+YmUgYW4gaW50ZXJlc3RpbmcgaWRlYS4gQWxzbywgSSBkb24ndCB0aGluayB0aGUgaWRlYSB0aGF0
+Cj4gYnVzdGluZyB0aGUgaGVhcCBzaXplIGlzIGEgZ29vZCBpbmRpY2F0aW9uIG9mIGEgdGVzdCBm
+YWlsdXJlLiBJIGNhbgo+IGFsd2F5cyBhbGxvY2F0ZSBtb3JlIGhlYXAgYXQgdGhlIHByb2JsZW0u
+IDopCgpVbmZvcnR1bmF0ZWx5LCBteSBtb3RoZXJib2FyZCdzIERJTU0gc2xvdHMgYXJlIGFscmVh
+ZHkgZnVsbC4gOy0pCgo+Cj4gTm93IGZvciBhIGJyZWFrZG93biBvZiB0aGUgdGVzdHM6Cj4g4pSc
+4pSA4pSAIGdlbi5zaAo+IOKUnOKUgOKUgCBtZXRhZGF0YQo+IOKUgiAgIOKUlOKUgOKUgCBwYXNz
+Cj4g4pSCICAgICAgIOKUnOKUgOKUgCBsYXJnZS1tZXRhZGF0YSAtIGludGVyZXN0aW5nIHRlc3Qs
+IEkgdGhpbmsgc29tZXRoaW5nIGxpa2UKPiB0aGlzIHNob3VsZCBiZSB1c2VkIHRvIGltcHJvdmUg
+cm9idXN0bmVzcwo+IOKUgiAgICAgICDilJzilIDilIAgbG9uZy1pZGVudGlmaWVyIC0gdGhpcyBz
+aG91bGQgYmUgb3VyIGFwcHJvYWNoIGhlcmUsIEkgdGhpbmsKPiBodHRwOi8vc3RhY2tvdmVyZmxv
+dy5jb20vcXVlc3Rpb25zLzYwMDc1Njgvd2hhdC1pcy1tYXgtbGVuZ3RoLWZvci1hbi1jLWMtaWRl
+bnRpZmllci1vbi1jb21tb24tYnVpbGQtc3lzdGVtcwoKSWYgeW91IG1lYW4gdGhhdCBhbiBpbXBs
+ZW1lbnRhdGlvbiBzaG91bGQgZG9jdW1lbnQgaXRzIGxpbWl0YXRpb25zLApJIGFncmVlLgoKPiDi
+lIIgICAgICAg4pSc4pSA4pSAIG1hbnktY2FsbHNpdGVzIC0gd29ya3MgaGVyZSB1bnRpbCB3ZSBv
+b21lIGJ1dCBpdCdzIHNsb3cgdG8KPiB0ZXN0IGFuZCB3ZSBkb24ndCBoYXZlIGEgcmVhbCBhcHBs
+aWNhdGlvbiB0byB2YWxpZGF0ZSB0aGUgZGF0YSB5ZXQuIFNvCj4gaXQncyBnb29kLCBidXQgd2Ug
+bWF5IHdpc2ggdG8gcHV0IGVmZm9ydHMgZWxzZXdoZXJlIGZvciBub3cuCj4g4pSCICAgICAgIOKU
+nOKUgOKUgCBtYW55LXN0cmVhbS1jbGFzcyAtIFRoaXMgdGVzdCBpcyBsb29raW5nIGF0IHRoZSBt
+YXggc2l6ZSBvZgo+IGFuIGFycmF5Li4uCgpOb3Qgc3VyZSB3aGF0IHlvdSBtZWFuIGhlcmUgYWx0
+aG91Z2ggSSBhZ3JlZSB0aGF0IHJlYWRpbmcgYSB0cmFjZSB3aXRoCjE2IG1pbGxpb24gc3RyZWFt
+IGNsYXNzZXMgaXMgbm90IGEgInJlYWxpc3RpYyIgdGVzdC4KClRoYXQncyBub3QgdGhlIHBvaW50
+IG9mIHRoZSBDVEYgc3RyZXNzIHRlc3Qgc3VpdGUuIFRoaXMgdGVzdCBzdWl0ZSB3aWxsCmV4cG9z
+ZSBlcnJvcnMgdGhhdCBhcmUgbm90IGhhbmRsZWQgZ3JhY2VmdWxseS4gSW1wbGVtZW50YXRpb25z
+IGFyZQpleHBlY3RlZCB0byBmYWlsLCBidXQgdG8gZG8gc28gaW4gYSBjb250cm9sbGVkIGFuZCBk
+b2N1bWVudGVkIHdheTsKbm90IHNpbGVudGx5IG9yIGJ5IHRyaWdnZXJpbmcgdGhlIE9PTS1raWxs
+ZXIuCgo+IOKUgiAgICAgICDilJzilIDilIAgbWFueS10eXBlYWxpYXMgLSBpbnRlcmVzdGluZyB0
+ZXN0LCB0aGUgcGFyc2VyIHdpbGwgc3VmZmVyLgo+IOKUgiAgICAgICDilJTilIDilIAgbWFueS10
+eXBlZGVmIC0gZGl0dG8KPiDilJTilIDilIAgc3RyZWFtCj4gICAgIOKUlOKUgOKUgCBwYXNzCj4g
+ICAgICAgICDilJzilIDilIAgYXJyYXktbGFyZ2UgLSBUZXN0aW5nIHRoZSBtYXggc2l6ZSBvZiBy
+YW0gYW5kIGFycmF5cy4KClRoZXJlIGlzIG5vIG5lZWQgdG8gbG9hZCB0aGUgZW50aXJlIGFycmF5
+IGluIFJBTS4gSSwgcGVyc29uYWxseSwgaW50ZW5kCm9uIGltcGxlbWVudGluZyBhIHNsb3cgZmFs
+bGJhY2sgdG8gZGlzayB3aGVuIGFycmF5cyBleGNlZWQgYSBnaXZlbgpzaXplLgoKVGhpcyB3aWxs
+IG5vdCB3b3JrIGluIGxpdmUgbW9kZSBhbmQgdGhhdCdzIGNvbXBsZXRlbHkgb2theS4gQXMgbG9u
+ZwphcyBpdCBkb2Vzbid0IG91dHJpZ2h0IGNyYXNoLgoKVGhlcmUgaXMgYWxzbyBhIHNlY3VyaXR5
+IGFzcGVjdCB0byB0aGlzOyBhbiBpbXBsZW1lbnRhdGlvbiBzaG91bGRuJ3QKdHJ1c3QgdGhlIHJl
+bGF5IGRhZW1vbiB0byBzZW5kIHBhY2tldHMgaXQgY2FuIGhhbmRsZSBzYWZlbHkuIFRoaXMKZG9l
+c24ndCByZWFsbHkgYXBwbHkgdG8gYXJyYXlzIGFzIHRoZWlyIGxlbmd0aCBpcyBzdGF0aWNhbGx5
+IGtub3duLApidXQgdW5jaGVja2VkIHNlcXVlbmNlIGxlbmd0aCBhcmUgZGVmaW5pdGVseSBhIHNl
+Y3VyaXR5L3N0YWJpbGl0eQpjb25jZXJuLgoKPiAgICAgICAgIOKUnOKUgOKUgCBtYW55LWV2ZW50
+cyAtIFRoaXMgY2FuIGJlIGFuIGludGVyZXN0aW5nIHRvb2wgZm9yIHByb2ZpbGluZy4KPiBCdXQg
+aXQncyBub3QgcmVhbGx5IGEgdGVzdCBmb3IgdGhlIHJlYWRlci4uLgoKTm90IHN1cmUgd2h5LiBU
+cmFjaW5nIG11bHRpcGxlIFVTVCBhcHBsaWNhdGlvbnMgb3ZlciBhIGxvbmcgdGltZSBpcwpib3Vu
+ZCB0byBzdHJlc3MgdGhpcyBhdCBzb21lIHBvaW50LgoKSnVzdCBpbWFnaW5lIGEgc25hcHNob3Qg
+c2Vzc2lvbiBydW5uaW5nIGZvciBhIHllYXIsIHRocm91Z2ggbXVsdGlwbGUKYXBwbGljYXRpb24g
+dXBkYXRlcy4gVGhlIG51bWJlciBvZiBVU1QgdHJhY2Vwb2ludHMgY2FuIHF1aWNrbHkKYmVjb21l
+IGh1bW9uZ291cy4KCj4gICAgICAgICDilJzilIDilIAgbWFueS1wYWNrZXRzIC0gVGhpcyB3aWxs
+IGJlIGdvb2QgdG8gdGVzdCBkaXN0cmlidXRlZCBpbmRleGVzCj4gICAgICAgICDilJzilIDilIAg
+bWFueS1zdHJlYW1zIC0gR29vZCwgYnV0IGV2ZW4gYmV0dGVyIGlzLi4uCj4gICAgICAgICDilJzi
+lIDilIAgbWFueS10cmFjZXMgLSBpbnRlcmVzdGluZyBhbmQgYSByZWFsIHByb2JsZW0KPiAgICAg
+ICAgIOKUnOKUgOKUgCBwYWNrZXQtbGFyZ2UgLSB0aGlzIGlzIGFjdHVhbGx5IGVhc2llciB0aGFu
+IG1hbnktZXZlbnRzCgpTcGVhayBmb3IgeW91cnNlbGYhIEJhYmVsdHJhY2UgbW1hcHMgZW50aXJl
+IHBhY2tldHMhIDstKQpXZSBoYXZlIG91ciBvd24gc2hhcmUgb2YgZW1iYXJyYXNzaW5nIGxpbWl0
+YXRpb25zIDotUAoKPiAgICAgICAgIOKUnOKUgOKUgCBzZXF1ZW5jZS1sYXJnZSAtIHNlZSBhcnJh
+eS1sYXJnZQo+ICAgICAgICAg4pSc4pSA4pSAIHN0cmluZy1sYXJnZSAtIHNlZSBhcnJheS1sYXJn
+ZQo+ICAgICAgICAg4pSc4pSA4pSAIHN0cnVjdC1tYW55LWZpZWxkcyAtIHNlZSBhcnJheS1sYXJn
+ZQo+ICAgICAgICAg4pSc4pSA4pSAIHN0cnVjdC1uZXN0LW4tZGVlcCAtIEkgbGlrZSB0aGlzIG9u
+ZSwgaXQgaGlnaGxpZ2h0cyBvbmUgb2YKPiBvdXIgb3B0aW1pc2F0aW9ucwoKSG1tLCBpbnRlcmVz
+dGluZyEgQ2FyZSB0byBleHBsYWluIHRoZSBnaXN0IG9mIGl0PwoKPiAgICAgICAgIOKUlOKUgOKU
+gCB2YXJpYW50LW1hbnktdGFncyAtIHNlZSBhcnJheS1sYXJnZQoKQWdhaW4sIHRoaXMgaXMgc29t
+ZXRoaW5nIEkgY2FuIGVhc2lseSBzZWUgYmVpbmcgcHJvZHVjZWQgYnkgYQpkeW5hbWljYWxseS10
+eXBlZCBsYW5ndWFnZS4gSW1hZ2luZSBhIFZNIGltcGxlbWVudGF0aW9uIHRoYXQKd291bGQgdHJh
+Y2UgZXZlcnkgZnVuY3Rpb24gY2FsbCBmb3IgZXZlcnkgcG9zc2libGUgYXJndW1lbnQgdHlwZQpw
+ZXJtdXRhdGlvbi4KCj4KPiBXaHkgbm8gZGVlcCB2YXJpYW50cz8ganVzdCBjdXJpb3VzLgoKR29v
+ZCBwb2ludCwgd2Ugc2hvdWxkIGFkZCB0aGF0IQpXZSBzaG91bGQgYWxzbyBoYXZlIG5lc3RlZCBz
+ZXF1ZW5jZXMsIGFycmF5cyBhbmQgbWl4ZXMKb2YgdmFyaWFudHMsIHNlcXVlbmNlcyBhbmQgYXJy
+YXlzLgoKT3VyIGFzc3VtcHRpb24gaXMgdGhhdCB0aGUgbmVzdGluZy1oYW5kbGluZyBjb2RlIGlz
+IHNoYXJlZApiZXR3ZWVuIHZhcmlvdXMgdHlwZXM7IHRoZSBuZXN0ZWQtc3RydWN0dXJlcyB0ZXN0
+IHNob3VsZCBpZGVhbGx5CnRyaWdnZXIgaXQuCgpQZXJoYXBzIHdlIHNob3VsZCBub3QgcHJlc3Vt
+ZSBzdWNoIGltcGxlbWVudGF0aW9uIGRldGFpbHMuLi4KVGhlIHRlc3Qgc3VpdGUgaXMgc3RpbGwg
+YSB3b3JrIGluIHByb2dyZXNzOyBhbnkgd2VpcmQgdGVzdCBjYXNlCnlvdSBjYW4gdGhpbmsgb2Yg
+aXMgd2VsY29tZSEKCj4KPiBzbywgdGw7ZHIgdGhlIHRlc3RzIGFyZSBnb29kIGF0IG1ha2luZyBh
+IHN5c3RlbSBzdWZmZXIgYW5kIHF1YWxpZnlpbmcKPiBpdHMgYm91bmRhcmllcy4gSSB0aGluayB0
+aGlzIGlzIGdyZWF0IGZvciBwcm9maWxpbmcsIGJ1dCBmb3IgYWN0dWFsCj4gdGVzdGluZywgaXQg
+c2hvdWxkIG5vdCBiZSBwYXJ0IG9mIHRoZSBwZXItcGF0Y2ggc3lzdGVtIHdlIGhhdmUgc2V0IHVw
+Lgo+Cj4gQW55IHRob3VnaHRzPwoKSSB0aGluayB0aGUgcmVhbCBwcm9ibGVtIGlzIGFzc3VtaW5n
+IHRoYXQgYSBmYWlsaW5nIHRlc3QgaXMgbmVjZXNzYXJpbHkKYSBkZWFsLWJyZWFrZXIuCgpJIHNl
+ZSB0aGlzIHRlc3Qgc3VpdGUgYXMgQ1RGJ3MgQUNJRCBlcXVpdmFsZW50IFsxXS4gTW9zdCB3ZWIg
+YnJvd3NlcnMKa25vd2luZ2x5IGZhaWwgdGhpcyB0ZXN0LCBpdCBkb2Vzbid0IG1ha2UgaXQgYW55
+IGxlc3MgcmVsZXZhbnQuCgpKw6lyw6ltaWUKClsxXSBodHRwOi8vd3d3LmFjaWR0ZXN0cy5vcmcv
+CgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNp
+b3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xp
+c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
