@@ -1,19 +1,18 @@
-From: Eugene Ivanov <eiva@tbricks.com>
-Subject: Re: Question about TRACEPOINT_EVENT_CLASS and
-	TRACEPOINT_EVENT_INSTANCE
-Date: Fri, 21 Nov 2014 15:28:30 +0400
-Message-ID: <CAF1eGnQ2_CTcifSqvLr5hb33tRdgqGK5+yMpGfWvbx=9TRr3Hw__36878.1731267974$1416569361$gmane$org@mail.gmail.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFD6FBC92BD@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Subject: Re: CTF stress tests
+Date: Fri, 21 Nov 2014 09:54:24 -0500
+Message-ID: <546F5220.2000707__25349.6863217608$1416581731$gmane$org@ericsson.com>
+References: <546B5CD0.3070402@ericsson.com>
+ <CA+jJMxuXX-h74Lxy1xrcQ5awJ_qQLVbuV0H_cjPKiYX_kArorQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0597138715=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f169.google.com ([209.85.216.169])
+Received: from usevmg20.ericsson.net ([198.24.6.45])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <eiva@tbricks.com>) id 1XrmOC-0005sz-M9
- for lttng-dev@lists.lttng.org; Fri, 21 Nov 2014 06:28:39 -0500
-Received: by mail-qc0-f169.google.com with SMTP id w7so3589890qcr.14
- for <lttng-dev@lists.lttng.org>; Fri, 21 Nov 2014 03:28:31 -0800 (PST)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFD6FBC92BD@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+ (envelope-from <matthew.khouzam@ericsson.com>) id 1XrpbW-0007AH-Bx
+ for lttng-dev@lists.lttng.org; Fri, 21 Nov 2014 09:54:37 -0500
+In-Reply-To: <CA+jJMxuXX-h74Lxy1xrcQ5awJ_qQLVbuV0H_cjPKiYX_kArorQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,218 +21,142 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: =?UTF-8?B?SsOpcsOpbWllIEdhbGFybmVhdQ==?= <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, tracecompass-dev@eclipse.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0597138715==
-Content-Type: multipart/alternative; boundary=001a11c2be4295712705085cbe5b
-
---001a11c2be4295712705085cbe5b
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Thanks for the explanation, Daniel! Unfortunately using class defined in
-another provider doesn't work. I get an error about undefined
-__event_probe__instance_provider_name___class_name_from_another_provider=E2=
-=80=99.
-Connecting it with your description, I guess it's probably a feature and
- intended behavior. Though it would be a nice feature to be able to specify
-provider of class separately from provider of instance.
-
-On Wed, Nov 19, 2014 at 9:14 PM, Thibault, Daniel <
-Daniel.Thibault@drdc-rddc.gc.ca> wrote:
-
-> > Date: Wed, 19 Nov 2014 15:35:01 +0400
-> > From: Eugene Ivanov <eiva@tbricks.com>
-> >
-> > I found description of TRACEPOINT_EVENT_CLASS on the website and in
-> ust-tracepoint-event.h as well, but it is not documented in the lttng-ust
-> man page.
-> > According the header TRACEPOINT_EVENT_INSTANCE declares an instance of =
-a
-> tracepoint, with its own provider and name.
-> > Does it mean that I can define classes for usage in different providers=
-?
-> Why do we need provider in _CLASS then?
-> > According the code on the first glance it seems that it is required tha=
-t
-> CLASS and INSTANCE must share in same provider.
->
->    You will also have seen that the "default" macro TRACEPOINT_EVENT
-> simply wraps both TRACEPOINT_EVENT_CLASS and TRACEPOINT_EVENT_INSTANCE
-> together.  When used separately, the TRACEPOINT_EVENT_INSTANCE must match
-> its template's params; the event class then takes care of the mapping of
-> parameters to fields in the event output.  This allows you to declare a
-> single event class somewhere, then declare various instances that vary by
-> name only, typically because they're events of the same nature but
-> occurring in varying contexts.  Having the trace label them under differe=
-nt
-> names makes the analyst's life easier.
->
->    Normally you use TRACEPOINT_EVENT_CLASS and _INSTANCE within the same
-> provider, but you could theoretically have varying instances rely on
-> different providers.  I guess this would allow you some flexibility in
-> picking which sets of instances to enable/disable by picking which provid=
-er
-> shared objects (.so) to preload or not.
->
->    Kernel space has essentially the same macros under the names
-> DECLARE_EVENT_CLASS and TRACE_EVENT, respectively.  You can see those at
-> work in the lttng-modules package and in some kernel modules such as
-> drivers/staging/android/binder_trace.h.  In the latter, for example, you
-> see a binder_lock_class which is then instantiated as binder_lock,
-> binder_locked, and binder_unlock.  These three events carry very differen=
-t
-> semantics, but they have precisely the same parameter signatures.  Groupi=
-ng
-> them under an event class avoids a lot of cutting-and-pasting and
-> diminishes the risk of errors later on (e.g. if you had to modify the fie=
-ld
-> layout of binder_lock and forgot to copy it to binder_unlock).
->
->    "Why do we need provider in _CLASS then?"  Because the provider name i=
-s
-> part of the fully-qualified event class name.  This allows different even=
-t
-> classes (and event instances) to have the same short names within differe=
-nt
-> providers.  You would be bound to run into collisions if all the event
-> class or event instance names were global.
->
-> Daniel U. Thibault
-> Protection des syst=C3=A8mes et contremesures (PSC) | Systems Protection =
-&
-> Countermeasures (SPC)
-> Cyber s=C3=A9curit=C3=A9 pour les missions essentielles (CME) | Mission C=
-ritical
-> Cyber Security (MCCS)
-> RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research
-> Centre
-> 2459 route de la Bravoure
-> Qu=C3=A9bec QC  G3J 1X5
-> CANADA
-> Vox : (418) 844-4000 x4245
-> Fax : (418) 844-4538
-> NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-> Gouvernement du Canada | Government of Canada
-> <http://www.valcartier.drdc-rddc.gc.ca/>
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
-
-
---=20
-Eugene
-
---001a11c2be4295712705085cbe5b
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Thanks for the explanation, Daniel!=C2=A0Unfortunately usi=
-ng class defined in another provider doesn&#39;t work. I get an error about=
- undefined __event_probe__instance_provider_name___class_name_from_another_=
-provider=E2=80=99. Connecting it with your description, I guess it&#39;s pr=
-obably a feature and =C2=A0intended behavior. Though it would be a nice fea=
-ture to be able to specify provider of class separately from provider of in=
-stance.<br></div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">=
-On Wed, Nov 19, 2014 at 9:14 PM, Thibault, Daniel <span dir=3D"ltr">&lt;<a =
-href=3D"mailto:Daniel.Thibault@drdc-rddc.gc.ca" target=3D"_blank">Daniel.Th=
-ibault@drdc-rddc.gc.ca</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_=
-quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1=
-ex">&gt; Date: Wed, 19 Nov 2014 15:35:01 +0400<br>
-&gt; From: Eugene Ivanov &lt;<a href=3D"mailto:eiva@tbricks.com">eiva@tbric=
-ks.com</a>&gt;<br>
-&gt;<br>
-&gt; I found description of TRACEPOINT_EVENT_CLASS on the website and in us=
-t-tracepoint-event.h as well, but it is not documented in the lttng-ust man=
- page.<br>
-&gt; According the header TRACEPOINT_EVENT_INSTANCE declares an instance of=
- a tracepoint, with its own provider and name.<br>
-&gt; Does it mean that I can define classes for usage in different provider=
-s? Why do we need provider in _CLASS then?<br>
-&gt; According the code on the first glance it seems that it is required th=
-at CLASS and INSTANCE must share in same provider.<br>
-<br>
-=C2=A0 =C2=A0You will also have seen that the &quot;default&quot; macro TRA=
-CEPOINT_EVENT simply wraps both TRACEPOINT_EVENT_CLASS and TRACEPOINT_EVENT=
-_INSTANCE together.=C2=A0 When used separately, the TRACEPOINT_EVENT_INSTAN=
-CE must match its template&#39;s params; the event class then takes care of=
- the mapping of parameters to fields in the event output.=C2=A0 This allows=
- you to declare a single event class somewhere, then declare various instan=
-ces that vary by name only, typically because they&#39;re events of the sam=
-e nature but occurring in varying contexts.=C2=A0 Having the trace label th=
-em under different names makes the analyst&#39;s life easier.<br>
-<br>
-=C2=A0 =C2=A0Normally you use TRACEPOINT_EVENT_CLASS and _INSTANCE within t=
-he same provider, but you could theoretically have varying instances rely o=
-n different providers.=C2=A0 I guess this would allow you some flexibility =
-in picking which sets of instances to enable/disable by picking which provi=
-der shared objects (.so) to preload or not.<br>
-<br>
-=C2=A0 =C2=A0Kernel space has essentially the same macros under the names D=
-ECLARE_EVENT_CLASS and TRACE_EVENT, respectively.=C2=A0 You can see those a=
-t work in the lttng-modules package and in some kernel modules such as driv=
-ers/staging/android/binder_trace.h.=C2=A0 In the latter, for example, you s=
-ee a binder_lock_class which is then instantiated as binder_lock, binder_lo=
-cked, and binder_unlock.=C2=A0 These three events carry very different sema=
-ntics, but they have precisely the same parameter signatures.=C2=A0 Groupin=
-g them under an event class avoids a lot of cutting-and-pasting and diminis=
-hes the risk of errors later on (e.g. if you had to modify the field layout=
- of binder_lock and forgot to copy it to binder_unlock).<br>
-<br>
-=C2=A0 =C2=A0&quot;Why do we need provider in _CLASS then?&quot;=C2=A0 Beca=
-use the provider name is part of the fully-qualified event class name.=C2=
-=A0 This allows different event classes (and event instances) to have the s=
-ame short names within different providers.=C2=A0 You would be bound to run=
- into collisions if all the event class or event instance names were global=
-.<br>
-<br>
-Daniel U. Thibault<br>
-Protection des syst=C3=A8mes et contremesures (PSC) | Systems Protection &a=
-mp; Countermeasures (SPC)<br>
-Cyber s=C3=A9curit=C3=A9 pour les missions essentielles (CME) | Mission Cri=
-tical Cyber Security (MCCS)<br>
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re<br>
-2459 route de la Bravoure<br>
-Qu=C3=A9bec QC=C2=A0 G3J 1X5<br>
-CANADA<br>
-Vox : (418) 844-4000 x4245<br>
-Fax : (418) 844-4538<br>
-NAC : 918V QSDJ &lt;<a href=3D"http://www.travelgis.com/map.asp?addr=3D918V=
-%20QSDJ" target=3D"_blank">http://www.travelgis.com/map.asp?addr=3D918V%20Q=
-SDJ</a>&gt;<br>
-Gouvernement du Canada | Government of Canada<br>
-&lt;<a href=3D"http://www.valcartier.drdc-rddc.gc.ca/" target=3D"_blank">ht=
-tp://www.valcartier.drdc-rddc.gc.ca/</a>&gt;<br>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-br>
-</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br><div class=
-=3D"gmail_signature"><div dir=3D"ltr">Eugene</div></div>
-</div>
-
---001a11c2be4295712705085cbe5b--
-
-
---===============0597138715==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0597138715==--
+R3JlYXQgcG9pbnRzIQoKSSBsaWtlIHRoZSB2aWV3OiB0aGlzIGlzIGxpa2UgdGhlIGFjaWQgdGVz
+dCwgc2luY2UgdGhhdCB0ZXN0IGlzIG5vdCBydW4KYXQgZXZlcnkgYnVpbGQsIGJ1dCByYXRoZXIg
+cGVyaW9kaWNhbGx5LiBUaGF0IGlzIG11Y2ggbW9yZSByZWFzb25hYmxlLgoKVGhlIHJlYXNvbiBm
+b3IgbXkgaW5pdGlhbCBlbWFpbCBpcyB0aGF0IHdoZW4gSSByYW4gdGhlIHN0cmVzcyB0ZXN0IG9u
+CnRoZSBwYXJzZXIsIDE0NyB0ZXN0cyBmYWlsZWQuIFdoZW4gSSB0d2Vha2VkIHRoZSB0aW1lb3V0
+cyBhbmQgdGhlIHN0YWNrCmFuZCBoZWFwIHNpemUsIGl0IHdlbnQgZG93biB0byA3LiBBcyBpdCBp
+cyBhIHN0cmVzcyB0ZXN0LCBpdCBoYWQKcmVwZXRpdGl2ZSBkYXRhIGFuZCB3YXMgb25seSB0ZXN0
+aW5nIG5hcnJvdyBjb2RlIHBhdGhzLgoKVGhlIG1haW4gcG9pbnQgSSBnb3QgZnJvbSB0aGUgcmVw
+bHkgaXMgdGhhdCB0aGUgcHJvZ3JhbSBzaG91bGQgYmUgY2xlYXIKaW4gd2h5IGl0IGZhaWxlZCwg
+bm90IGp1c3QgZnJlZXplIG9yIGRpc2FwcGVhci4gV2UgYXJlIHByb2JhYmx5IGFsbCBpbgphZ3Jl
+ZW1lbnQgb24gdGhhdC4gRWZmb3J0cyB3aWxsIGJlIG1hZGUgb24gdGhhdCBmcm9udC4KCkkgc3Rp
+bGwgZG9uJ3Qgc2VlIHRoaXMgYmVpbmcgcnVuIGFzIGEgdGVzdCBvbiBhIHBlci1wYXRjaCBiYXNp
+cywgYnV0CnJhdGhlciBhIHBlcmlvZGljIGFjdGl2aXR5IG9uIHRoZSB3ZWVrZW5kLCBsZXN0IG91
+ciBidWlsZHMgdGFrZSA0LTUKaG91cnMgaW5zdGVhZCBvZiAyMCBtaW4uCgpPbiAxNC0xMS0yMCAw
+MjoyNyBQTSwgSsOpcsOpbWllIEdhbGFybmVhdSB3cm90ZToKPiBDQy1pbmcgbHR0bmctZGV2IHNp
+bmNlIHRoaXMgYXBwbGllcyB0byBCYWJlbHRyYWNlLgo+Cj4gT24gVHVlLCBOb3YgMTgsIDIwMTQg
+YXQgOTo1MCBBTSwgTWF0dGhldyBLaG91emFtCj4gPG1hdHRoZXcua2hvdXphbUBlcmljc3Nvbi5j
+b20+IHdyb3RlOgo+PiBIaSwKPj4gSSB3YXMgbG9va2luZyBpbnRvIHRoZSBDVEYgc3RyZXNzIHRl
+c3RzLgo+PiBUaGV5IGFyZSBnb29kLCBidXQgSSBkb24ndCBrbm93IGlmIHdlIHdhbnQgdGhlbSBp
+biBvdXIgc3RhbmRhcmQgdGVzdAo+PiBjYXNlcy4gVGhleSBiYXNpY2FsbHkgY2hlY2sgdGhlIHNj
+YWxhYmlsaXR5IG9mIHRoZSBjb21wdXRlciBpdCBpcyBiZWluZwo+PiBydW4gb24gaW4gbW9zdCBj
+YXNlcyBhbmQgaW4gYWxsIGNhc2VzLCB0aGUgdGVzdCBvZiByZWFkaW5nIDEyZyBvZiBmaWxlcwo+
+IEkgcmVzcGVjdGZ1bGx5IGRpc2FncmVlLgo+Cj4gSW4gbW9zdCB0ZXN0cywgdGhlcmUgaXMgZGVm
+aW5pdGVseSBhIHNtYXJ0IHdheSB0byBkZWFsIHdpdGggdGhlIHRyYWNlLgo+IFRoYXQgaXMgbm90
+IHRvIHNheSB0aGF0IGFsbCBpbXBsZW1lbnRhdGlvbnMgYXJlIGV4cGVjdGVkIHRvIHN1cHBvcnQK
+PiBldmVyeSBpbWFnaW5hYmxlIHRlc3QgY2FzZXMuIEhvd2V2ZXIsIHRoZXkgc2hvdWxkIHN0cml2
+ZSB0bywgYXQgdGhlCj4gdmVyeSBsZWFzdCwgZ3JhY2VmdWxseSBoYW5kbGUgZmFpbHVyZXMgdG8g
+cmVhZCB0cmFjZXMgYW5kIGRvY3VtZW50IHRoZWlyCj4gbGltaXRhdGlvbnMgYXMgdGhlIHNwZWMg
+aW1wb3NlcyB2ZXJ5IGZldy4KPgo+IFdoaWxlIEkgYWdyZWUgdGhhdCBzb21lIG9mIHRoZXNlIHRl
+c3RzIGFyZSBmYXItZmV0Y2hlZCAoeW91J3JlIG5vdCBsaWtlbHkKPiB0byBzZWUgYSBDVEYgdHJh
+Y2Ugd2l0aCBhIDMyIDc2OCBsZXZlbCBkZWVwIHN0cnVjdHVyZSBhbnkgdGltZSBzb29uKSwKPiB0
+cmFjZXMgd2l0aCBlbm91Z2ggc3RyZWFtcyB0byBleGhhdXN0IHRoZSBtYXggZmQgY291bnQgYXJl
+IG5vdAo+IGZhci1mZXRjaGVkIGF0IGFsbC4gSW4gZmFjdCwgdHJhY2luZyBhbnkgZGVjZW50bHkt
+c2l6ZWQgY2x1c3RlciB3aWxsIGJ1c3QKPiB0aGF0IGxpbWl0IGluIG5vIHRpbWUuCj4KPiBIYW5k
+bGluZyBhIG11bHRpLW1lZ2FieXRlIHNlcXVlbmNlICh+MTAwbWIpLCBzb21ldGhpbmcgdGhhdAo+
+IEJhYmVsdHJhY2UgY2FuJ3QgZG8gYXQgdGhlIG1vbWVudCwgbWF5IHNlZW0gdW5yZWFzb25hYmxl
+IGF0IGZpcnN0Lgo+IEl0IHF1aWNrbHkgYmVjb21lcyB2ZXJ5IHBlcnRpbmVudCB3aGVuIHBlb3Bs
+ZSBzdGFydCB0YWxraW5nIG9mIGNvcmUKPiBkdW1waW5nIHRvIGEgQ1RGIHRyYWNlLgo+Cj4+IGlz
+IHJhdGhlciBwcm9oaWJpdGl2ZS4gVGhhdCBiZWluZyBzYWlkLCBtYXliZSBoYXZpbmcgdGhpcyBh
+cyBhIHdlZWtseQo+PiBidWlsZCBjb3VsZCBiZSBhbiBpbnRlcmVzdGluZyBpZGVhLiBBbHNvLCBJ
+IGRvbid0IHRoaW5rIHRoZSBpZGVhIHRoYXQKPj4gYnVzdGluZyB0aGUgaGVhcCBzaXplIGlzIGEg
+Z29vZCBpbmRpY2F0aW9uIG9mIGEgdGVzdCBmYWlsdXJlLiBJIGNhbgo+PiBhbHdheXMgYWxsb2Nh
+dGUgbW9yZSBoZWFwIGF0IHRoZSBwcm9ibGVtLiA6KQo+IFVuZm9ydHVuYXRlbHksIG15IG1vdGhl
+cmJvYXJkJ3MgRElNTSBzbG90cyBhcmUgYWxyZWFkeSBmdWxsLiA7LSkKPgo+PiBOb3cgZm9yIGEg
+YnJlYWtkb3duIG9mIHRoZSB0ZXN0czoKPj4g4pSc4pSA4pSAIGdlbi5zaAo+PiDilJzilIDilIAg
+bWV0YWRhdGEKPj4g4pSCICAg4pSU4pSA4pSAIHBhc3MKPj4g4pSCICAgICAgIOKUnOKUgOKUgCBs
+YXJnZS1tZXRhZGF0YSAtIGludGVyZXN0aW5nIHRlc3QsIEkgdGhpbmsgc29tZXRoaW5nIGxpa2UK
+Pj4gdGhpcyBzaG91bGQgYmUgdXNlZCB0byBpbXByb3ZlIHJvYnVzdG5lc3MKPj4g4pSCICAgICAg
+IOKUnOKUgOKUgCBsb25nLWlkZW50aWZpZXIgLSB0aGlzIHNob3VsZCBiZSBvdXIgYXBwcm9hY2gg
+aGVyZSwgSSB0aGluawo+PiBodHRwOi8vc3RhY2tvdmVyZmxvdy5jb20vcXVlc3Rpb25zLzYwMDc1
+Njgvd2hhdC1pcy1tYXgtbGVuZ3RoLWZvci1hbi1jLWMtaWRlbnRpZmllci1vbi1jb21tb24tYnVp
+bGQtc3lzdGVtcwo+IElmIHlvdSBtZWFuIHRoYXQgYW4gaW1wbGVtZW50YXRpb24gc2hvdWxkIGRv
+Y3VtZW50IGl0cyBsaW1pdGF0aW9ucywKPiBJIGFncmVlLgorMQo+Cj4+IOKUgiAgICAgICDilJzi
+lIDilIAgbWFueS1jYWxsc2l0ZXMgLSB3b3JrcyBoZXJlIHVudGlsIHdlIG9vbWUgYnV0IGl0J3Mg
+c2xvdyB0bwo+PiB0ZXN0IGFuZCB3ZSBkb24ndCBoYXZlIGEgcmVhbCBhcHBsaWNhdGlvbiB0byB2
+YWxpZGF0ZSB0aGUgZGF0YSB5ZXQuIFNvCj4+IGl0J3MgZ29vZCwgYnV0IHdlIG1heSB3aXNoIHRv
+IHB1dCBlZmZvcnRzIGVsc2V3aGVyZSBmb3Igbm93Lgo+PiDilIIgICAgICAg4pSc4pSA4pSAIG1h
+bnktc3RyZWFtLWNsYXNzIC0gVGhpcyB0ZXN0IGlzIGxvb2tpbmcgYXQgdGhlIG1heCBzaXplIG9m
+Cj4+IGFuIGFycmF5Li4uCj4gTm90IHN1cmUgd2hhdCB5b3UgbWVhbiBoZXJlIGFsdGhvdWdoIEkg
+YWdyZWUgdGhhdCByZWFkaW5nIGEgdHJhY2Ugd2l0aAo+IDE2IG1pbGxpb24gc3RyZWFtIGNsYXNz
+ZXMgaXMgbm90IGEgInJlYWxpc3RpYyIgdGVzdC4KPgo+IFRoYXQncyBub3QgdGhlIHBvaW50IG9m
+IHRoZSBDVEYgc3RyZXNzIHRlc3Qgc3VpdGUuIFRoaXMgdGVzdCBzdWl0ZSB3aWxsCj4gZXhwb3Nl
+IGVycm9ycyB0aGF0IGFyZSBub3QgaGFuZGxlZCBncmFjZWZ1bGx5LgpJIGFtIGd1ZXNzaW5nIHRo
+aXMgaXMgdGhlIG1haW4gaXNzdWUsIGFuZCBzaG91bGQgYmUgYWRkcmVzc2VkIGZpcnN0LgpUaGFu
+ayB5b3UgZm9yIGhpZ2hsaWdodGluZyBpdC4KCj4gIEltcGxlbWVudGF0aW9ucyBhcmUKPiBleHBl
+Y3RlZCB0byBmYWlsLCBidXQgdG8gZG8gc28gaW4gYSBjb250cm9sbGVkIGFuZCBkb2N1bWVudGVk
+IHdheTsKPiBub3Qgc2lsZW50bHkgb3IgYnkgdHJpZ2dlcmluZyB0aGUgT09NLWtpbGxlci4KPgo+
+PiDilIIgICAgICAg4pSc4pSA4pSAIG1hbnktdHlwZWFsaWFzIC0gaW50ZXJlc3RpbmcgdGVzdCwg
+dGhlIHBhcnNlciB3aWxsIHN1ZmZlci4KPj4g4pSCICAgICAgIOKUlOKUgOKUgCBtYW55LXR5cGVk
+ZWYgLSBkaXR0bwo+PiDilJTilIDilIAgc3RyZWFtCj4+ICAgICDilJTilIDilIAgcGFzcwo+PiAg
+ICAgICAgIOKUnOKUgOKUgCBhcnJheS1sYXJnZSAtIFRlc3RpbmcgdGhlIG1heCBzaXplIG9mIHJh
+bSBhbmQgYXJyYXlzLgo+IFRoZXJlIGlzIG5vIG5lZWQgdG8gbG9hZCB0aGUgZW50aXJlIGFycmF5
+IGluIFJBTS4gSSwgcGVyc29uYWxseSwgaW50ZW5kCj4gb24gaW1wbGVtZW50aW5nIGEgc2xvdyBm
+YWxsYmFjayB0byBkaXNrIHdoZW4gYXJyYXlzIGV4Y2VlZCBhIGdpdmVuCj4gc2l6ZS4KPgo+IFRo
+aXMgd2lsbCBub3Qgd29yayBpbiBsaXZlIG1vZGUgYW5kIHRoYXQncyBjb21wbGV0ZWx5IG9rYXku
+IEFzIGxvbmcKPiBhcyBpdCBkb2Vzbid0IG91dHJpZ2h0IGNyYXNoLgo+Cj4gVGhlcmUgaXMgYWxz
+byBhIHNlY3VyaXR5IGFzcGVjdCB0byB0aGlzOyBhbiBpbXBsZW1lbnRhdGlvbiBzaG91bGRuJ3QK
+PiB0cnVzdCB0aGUgcmVsYXkgZGFlbW9uIHRvIHNlbmQgcGFja2V0cyBpdCBjYW4gaGFuZGxlIHNh
+ZmVseS4gVGhpcwo+IGRvZXNuJ3QgcmVhbGx5IGFwcGx5IHRvIGFycmF5cyBhcyB0aGVpciBsZW5n
+dGggaXMgc3RhdGljYWxseSBrbm93biwKPiBidXQgdW5jaGVja2VkIHNlcXVlbmNlIGxlbmd0aCBh
+cmUgZGVmaW5pdGVseSBhIHNlY3VyaXR5L3N0YWJpbGl0eQo+IGNvbmNlcm4uCj4KPj4gICAgICAg
+ICDilJzilIDilIAgbWFueS1ldmVudHMgLSBUaGlzIGNhbiBiZSBhbiBpbnRlcmVzdGluZyB0b29s
+IGZvciBwcm9maWxpbmcuCj4+IEJ1dCBpdCdzIG5vdCByZWFsbHkgYSB0ZXN0IGZvciB0aGUgcmVh
+ZGVyLi4uCj4gTm90IHN1cmUgd2h5LiBUcmFjaW5nIG11bHRpcGxlIFVTVCBhcHBsaWNhdGlvbnMg
+b3ZlciBhIGxvbmcgdGltZSBpcwo+IGJvdW5kIHRvIHN0cmVzcyB0aGlzIGF0IHNvbWUgcG9pbnQu
+Cj4KPiBKdXN0IGltYWdpbmUgYSBzbmFwc2hvdCBzZXNzaW9uIHJ1bm5pbmcgZm9yIGEgeWVhciwg
+dGhyb3VnaCBtdWx0aXBsZQo+IGFwcGxpY2F0aW9uIHVwZGF0ZXMuIFRoZSBudW1iZXIgb2YgVVNU
+IHRyYWNlcG9pbnRzIGNhbiBxdWlja2x5Cj4gYmVjb21lIGh1bW9uZ291cy4KPgo+PiAgICAgICAg
+IOKUnOKUgOKUgCBtYW55LXBhY2tldHMgLSBUaGlzIHdpbGwgYmUgZ29vZCB0byB0ZXN0IGRpc3Ry
+aWJ1dGVkIGluZGV4ZXMKPj4gICAgICAgICDilJzilIDilIAgbWFueS1zdHJlYW1zIC0gR29vZCwg
+YnV0IGV2ZW4gYmV0dGVyIGlzLi4uCj4+ICAgICAgICAg4pSc4pSA4pSAIG1hbnktdHJhY2VzIC0g
+aW50ZXJlc3RpbmcgYW5kIGEgcmVhbCBwcm9ibGVtCj4+ICAgICAgICAg4pSc4pSA4pSAIHBhY2tl
+dC1sYXJnZSAtIHRoaXMgaXMgYWN0dWFsbHkgZWFzaWVyIHRoYW4gbWFueS1ldmVudHMKPiBTcGVh
+ayBmb3IgeW91cnNlbGYhIEJhYmVsdHJhY2UgbW1hcHMgZW50aXJlIHBhY2tldHMhIDstKQo+IFdl
+IGhhdmUgb3VyIG93biBzaGFyZSBvZiBlbWJhcnJhc3NpbmcgbGltaXRhdGlvbnMgOi1QCj4KPj4g
+ICAgICAgICDilJzilIDilIAgc2VxdWVuY2UtbGFyZ2UgLSBzZWUgYXJyYXktbGFyZ2UKPj4gICAg
+ICAgICDilJzilIDilIAgc3RyaW5nLWxhcmdlIC0gc2VlIGFycmF5LWxhcmdlCj4+ICAgICAgICAg
+4pSc4pSA4pSAIHN0cnVjdC1tYW55LWZpZWxkcyAtIHNlZSBhcnJheS1sYXJnZQo+PiAgICAgICAg
+IOKUnOKUgOKUgCBzdHJ1Y3QtbmVzdC1uLWRlZXAgLSBJIGxpa2UgdGhpcyBvbmUsIGl0IGhpZ2hs
+aWdodHMgb25lIG9mCj4+IG91ciBvcHRpbWlzYXRpb25zCj4gSG1tLCBpbnRlcmVzdGluZyEgQ2Fy
+ZSB0byBleHBsYWluIHRoZSBnaXN0IG9mIGl0PwpXZSBoYXZlIGEgc3RydWN0IGZsYXRlbm5lciwg
+aWYgYSBzdHJ1Y3Qgb25seSBjb250YWlucyBzdHJ1Y3RzLCB0aGUgc2NvcGUKaXMgbWFpbnRhaW5l
+ZCB3aXRoIGEgc2VwYXJhdG9yIGFuZCB0aGUgdmFsdWUgYXJlIGJyb3VnaHQgdXAgYSBsZXZlbC4K
+VGhpcyBtZWFucyB0aGF0IHlvdXIgbmVzdC1uLWRlZXAgdGVzdHMgYXJlIGFsd2F5cyBvZiBhIGRl
+cHRoIG9yIDEgZm9yCnRoZSByZWFkZXIuIFBsZWFzZSBwaW5nIG1lIGZvciBtb3JlIGRldGFpbHMu
+IDopCgpSZWFkaW5nIHRoZSBzdHJ1Y3Qgc3RpbGwgZG9lcyBhd2Z1bCB0aGluZ3MgdG8gdGhlIHN0
+YWNrIHRob3VnaC4KTWlncmF0aW5nIHRvIEFudGxyNCBhbmQgSmF2YSA4IHdvdWxkIGhlbHAgdGhh
+dCBwcm9iYWJseS4KPj4gICAgICAgICDilJTilIDilIAgdmFyaWFudC1tYW55LXRhZ3MgLSBzZWUg
+YXJyYXktbGFyZ2UKPiBBZ2FpbiwgdGhpcyBpcyBzb21ldGhpbmcgSSBjYW4gZWFzaWx5IHNlZSBi
+ZWluZyBwcm9kdWNlZCBieSBhCj4gZHluYW1pY2FsbHktdHlwZWQgbGFuZ3VhZ2UuIEltYWdpbmUg
+YSBWTSBpbXBsZW1lbnRhdGlvbiB0aGF0Cj4gd291bGQgdHJhY2UgZXZlcnkgZnVuY3Rpb24gY2Fs
+bCBmb3IgZXZlcnkgcG9zc2libGUgYXJndW1lbnQgdHlwZQo+IHBlcm11dGF0aW9uLgo+Cj4+IFdo
+eSBubyBkZWVwIHZhcmlhbnRzPyBqdXN0IGN1cmlvdXMuCj4gR29vZCBwb2ludCwgd2Ugc2hvdWxk
+IGFkZCB0aGF0IQo+IFdlIHNob3VsZCBhbHNvIGhhdmUgbmVzdGVkIHNlcXVlbmNlcywgYXJyYXlz
+IGFuZCBtaXhlcwo+IG9mIHZhcmlhbnRzLCBzZXF1ZW5jZXMgYW5kIGFycmF5cy4KPgo+IE91ciBh
+c3N1bXB0aW9uIGlzIHRoYXQgdGhlIG5lc3RpbmctaGFuZGxpbmcgY29kZSBpcyBzaGFyZWQKPiBi
+ZXR3ZWVuIHZhcmlvdXMgdHlwZXM7IHRoZSBuZXN0ZWQtc3RydWN0dXJlcyB0ZXN0IHNob3VsZCBp
+ZGVhbGx5Cj4gdHJpZ2dlciBpdC4KPgo+IFBlcmhhcHMgd2Ugc2hvdWxkIG5vdCBwcmVzdW1lIHN1
+Y2ggaW1wbGVtZW50YXRpb24gZGV0YWlscy4uLgo+IFRoZSB0ZXN0IHN1aXRlIGlzIHN0aWxsIGEg
+d29yayBpbiBwcm9ncmVzczsgYW55IHdlaXJkIHRlc3QgY2FzZQo+IHlvdSBjYW4gdGhpbmsgb2Yg
+aXMgd2VsY29tZSEKQSBkZWVwIG5lc3RlZCBzb21ldGhpbmcgdGhhdCBoYXMgYW4gaW50KDEgYml0
+KSBhdCBldmVyeSBsZXZlbApBIGRlZXAgbmVzdGVkIHNvbWV0aGluZyB0aGF0IGhhcyBhIHNlcXVl
+bmNlIGF0IGV2ZXJ5IG9kZCBsZXZlbCBhbmQgaXQncwpzaXplIGF0IGV2ZXJ5IGV2ZW4gbGV2ZWwu
+Cj4+IHNvLCB0bDtkciB0aGUgdGVzdHMgYXJlIGdvb2QgYXQgbWFraW5nIGEgc3lzdGVtIHN1ZmZl
+ciBhbmQgcXVhbGlmeWluZwo+PiBpdHMgYm91bmRhcmllcy4gSSB0aGluayB0aGlzIGlzIGdyZWF0
+IGZvciBwcm9maWxpbmcsIGJ1dCBmb3IgYWN0dWFsCj4+IHRlc3RpbmcsIGl0IHNob3VsZCBub3Qg
+YmUgcGFydCBvZiB0aGUgcGVyLXBhdGNoIHN5c3RlbSB3ZSBoYXZlIHNldCB1cC4KPj4KPj4gQW55
+IHRob3VnaHRzPwo+IEkgdGhpbmsgdGhlIHJlYWwgcHJvYmxlbSBpcyBhc3N1bWluZyB0aGF0IGEg
+ZmFpbGluZyB0ZXN0IGlzIG5lY2Vzc2FyaWx5Cj4gYSBkZWFsLWJyZWFrZXIuCj4KPiBJIHNlZSB0
+aGlzIHRlc3Qgc3VpdGUgYXMgQ1RGJ3MgQUNJRCBlcXVpdmFsZW50IFsxXS4gTW9zdCB3ZWIgYnJv
+d3NlcnMKPiBrbm93aW5nbHkgZmFpbCB0aGlzIHRlc3QsIGl0IGRvZXNuJ3QgbWFrZSBpdCBhbnkg
+bGVzcyByZWxldmFudC4KPgo+IErDqXLDqW1pZQo+Cj4gWzFdIGh0dHA6Ly93d3cuYWNpZHRlc3Rz
+Lm9yZy8KPgoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8v
+bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
