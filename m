@@ -1,16 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix: relayd: unbalanced RCU read
-	lock/unlock
-Date: Fri, 21 Nov 2014 18:42:05 +0100
-Message-ID: <1416591725-8204-1-git-send-email-mathieu.desnoyers__46662.2747750536$1416591771$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools] Fix: lttng-relayd: unhandled out of
+	memory error
+Date: Fri, 21 Nov 2014 18:47:52 +0100
+Message-ID: <1416592072-11067-1-git-send-email-mathieu.desnoyers__36128.2992213548$1416592125$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1XrsDm-0008A8-2B
- for lttng-dev@lists.lttng.org; Fri, 21 Nov 2014 12:42:14 -0500
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1XrsJP-0008DP-Nf
+ for lttng-dev@lists.lttng.org; Fri, 21 Nov 2014 12:48:04 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,20 +25,24 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- src/bin/lttng-relayd/main.c | 1 +
- 1 file changed, 1 insertion(+)
+ src/bin/lttng-relayd/main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/src/bin/lttng-relayd/main.c b/src/bin/lttng-relayd/main.c
-index 03ea108..c9f2021 100644
+index c9f2021..27a428a 100644
 --- a/src/bin/lttng-relayd/main.c
 +++ b/src/bin/lttng-relayd/main.c
-@@ -2616,6 +2616,7 @@ restart:
- 
- 				if (revents & LPOLLIN) {
- 					if (conn->type != RELAY_DATA) {
-+						rcu_read_unlock();
- 						continue;
- 					}
- 
+@@ -234,6 +234,11 @@ int set_option(int opt, const char *arg, const char *optname)
+ 		break;
+ 	case 'g':
+ 		tracing_group_name = strdup(arg);
++		if (tracing_group_name == NULL) {
++			ret = -errno;
++			PERROR("strdup");
++			goto end;
++		}
+ 		tracing_group_name_override = 1;
+ 		break;
+ 	case 'h':
 -- 
 2.1.1
