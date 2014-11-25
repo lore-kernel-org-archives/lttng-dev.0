@@ -1,16 +1,31 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [BABELTRACE PATCH] Automatic Python trace parser
-	generator
-Date: Fri, 21 Nov 2014 16:55:21 -0500
-Message-ID: <1416606921-16187-1-git-send-email-jdesfossez__39330.9606625282$1416606976$gmane$org@efficios.com>
+From: David Goulet <dgoulet@ev0ke.net>
+Subject: UST improvement ideas
+Date: Tue, 25 Nov 2014 14:04:04 -0500
+Message-ID: <20141125190404.GG6628__42173.2030263685$1416942298$gmane$org@thessa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0790068062=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1XrwAv-00012i-Ku
- for lttng-dev@lists.lttng.org; Fri, 21 Nov 2014 16:55:36 -0500
+ (envelope-from <dgoulet@ev0ke.net>) id 1XtLPG-0003in-S2
+ for lttng-dev@lists.lttng.org; Tue, 25 Nov 2014 14:04:11 -0500
+Received: from localhost (localhost [127.0.0.1])
+ by smtp.ini-tech.com (Postfix) with ESMTP id 243FA89F5B
+ for <lttng-dev@lists.lttng.org>; Tue, 25 Nov 2014 19:04:39 +0000 (UTC)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+ by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id HAniX41NqBRE for <lttng-dev@lists.lttng.org>;
+ Tue, 25 Nov 2014 19:04:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp.ini-tech.com (Postfix) with ESMTP id 7B0FA8A000
+ for <lttng-dev@lists.lttng.org>; Tue, 25 Nov 2014 19:04:38 +0000 (UTC)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+ by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id hezV4Uw2R1AG for <lttng-dev@lists.lttng.org>;
+ Tue, 25 Nov 2014 19:04:38 +0000 (UTC)
+Received: from thessa (unknown [96.127.212.51])
+ by smtp.ini-tech.com (Postfix) with ESMTPSA id 50EC189F5B
+ for <lttng-dev@lists.lttng.org>; Tue, 25 Nov 2014 19:04:38 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,174 +34,116 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: jgalar@efficios.com, mathieu.desnoyers@efficios.com
-Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This script takes a trace in parameter and generates a ready to use
-Python script customized for the events and fields present in the trace.
 
-Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
----
- bindings/python/examples/parser_generator.py | 150 +++++++++++++++++++++++++++
- 1 file changed, 150 insertions(+)
- create mode 100755 bindings/python/examples/parser_generator.py
+--===============0790068062==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="O8XZ+2Hy8Kj8wLPZ"
+Content-Disposition: inline
 
-diff --git a/bindings/python/examples/parser_generator.py b/bindings/python/examples/parser_generator.py
-new file mode 100755
-index 0000000..ad219bd
---- /dev/null
-+++ b/bindings/python/examples/parser_generator.py
-@@ -0,0 +1,150 @@
-+#!/usr/bin/env python3
-+#
-+# Copyright 2014 Julien Desfossez <jdesfossez@efficios.com>
-+#
-+# This script takes a trace in argument and generates a Python parser ready to
-+# process the events (and all the fields) of the trace. It is used to generate
-+# all the boilerplate required to create an analysis script of a CTF trace in
-+# Python and allow the user to focus on the core logic of the analysis.
-+#
-+# The default resulting script can process all the events of the trace, and
-+# print all the fields for each event (except if you pass -q/--quiet). At the
-+# end of the trace, it displays also global statistics about the number of each
-+# event encountered.
-+#
-+# Permission is hereby granted, free of charge, to any person obtaining a copy
-+# of this software and associated documentation files (the "Software"), to deal
-+# in the Software without restriction, including without limitation the rights
-+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+# copies of the Software, and to permit persons to whom the Software is
-+# furnished to do so, subject to the following conditions:
-+#
-+# The above copyright notice and this permission notice shall be included in
-+# all copies or substantial portions of the Software.
-+
-+import sys
-+import os
-+import stat
-+import argparse
-+
-+try:
-+    from babeltrace import TraceCollection, CTFScope
-+except ImportError:
-+    # quick fix for debian-based distros
-+    sys.path.append("/usr/local/lib/python%d.%d/site-packages" %
-+                    (sys.version_info.major, sys.version_info.minor))
-+    from babeltrace import TraceCollection, CTFScope
-+
-+preambule = """#!/usr/bin/env python3
-+
-+import sys
-+import time
-+import argparse
-+
-+NSEC_PER_SEC = 1000000000
-+
-+try:
-+    from babeltrace import TraceCollection
-+except ImportError:
-+    # quick fix for debian-based distros
-+    sys.path.append("/usr/local/lib/python%d.%d/site-packages" %
-+                    (sys.version_info.major, sys.version_info.minor))
-+    from babeltrace import TraceCollection
-+
-+
-+class TraceParser:
-+    def __init__(self, trace):
-+        self.trace = trace
-+        self.event_count = {}
-+
-+    def ns_to_hour_nsec(self, ns):
-+        d = time.localtime(ns/NSEC_PER_SEC)
-+        return "%02d:%02d:%02d.%09d" % (d.tm_hour, d.tm_min, d.tm_sec,
-+                                        ns % NSEC_PER_SEC)
-+
-+    def parse(self):
-+        # iterate over all the events
-+        for event in self.trace.events:
-+            if not event.name in self.event_count.keys():
-+                self.event_count[event.name] = 0
-+            method_name = "handle_%s" % event.name.replace(":", "_").replace("+", "_")
-+            # call the function to handle each event individually
-+            if hasattr(TraceParser, method_name):
-+                func = getattr(TraceParser, method_name)
-+                func(self, event)
-+        # print statistics after parsing the trace
-+        print("Total event count:")
-+        for e in self.event_count.keys():
-+            print("- %s: %d" % (e, self.event_count[e]))
-+
-+"""
-+
-+end = """
-+if __name__ == "__main__":
-+    parser = argparse.ArgumentParser(description='Trace parser')
-+    parser.add_argument('path', metavar="<path/to/trace>", help='Trace path')
-+    args = parser.parse_args()
-+
-+    traces = TraceCollection()
-+    handle = traces.add_trace(args.path, "ctf")
-+    if handle is None:
-+        sys.exit(1)
-+
-+    t = TraceParser(traces)
-+    t.parse()
-+
-+    traces.remove_trace(handle)
-+"""
-+
-+
-+def gen_parser(handle, fd, args):
-+    for event in handle.events:
-+        fmt_str = "[%s] %s: { cpu_id = %s }, { "
-+        fmt_fields = "self.ns_to_hour_nsec(timestamp), event.name, cpu_id, "
-+        name = event.name.replace(":", "_").replace("+", "_")
-+        fd.write("    def handle_%s(self, event):\n" % (name))
-+        fd.write("        timestamp = event.timestamp\n")
-+        fd.write("        cpu_id = event[\"cpu_id\"]\n")
-+        for field in event.fields:
-+            if field.scope == CTFScope.EVENT_FIELDS:
-+                fd.write("        %s = event[\"%s\"]\n" % (field.name,
-+                                                           field.name))
-+                fmt_str = fmt_str + field.name + " = %s, "
-+                fmt_fields = fmt_fields + "%s, " % (field.name)
-+        fd.write("\n        self.event_count[event.name] += 1\n")
-+        if not args.quiet:
-+            fd.write("        print(\"%s }\" %% (%s))\n\n" % (fmt_str[0:-2],
-+                                                              fmt_fields[0:-1]))
-+
-+
-+if __name__ == "__main__":
-+    parser = argparse.ArgumentParser(description='Trace parser generator')
-+    parser.add_argument('path', metavar="<path/to/trace>", help='Trace path')
-+    parser.add_argument('-o', '--output', type=str, default=0,
-+                        metavar="<output-script-name>",
-+                        help='Output script name')
-+    parser.add_argument('-q', '--quiet', action="store_true",
-+            help='Generate a quiet parser (no print)')
-+    args = parser.parse_args()
-+
-+    traces = TraceCollection()
-+    handle = traces.add_trace(args.path, "ctf")
-+    if handle is None:
-+        sys.exit(1)
-+
-+    if args.output == 0:
-+        output = "generated-parser.py"
-+    else:
-+        output = args.output
-+
-+    fd = open(output, "w")
-+    fd.write(preambule)
-+    gen_parser(handle, fd, args)
-+
-+    traces.remove_trace(handle)
-+    fd.write(end)
-+    fd.close()
-+    os.chmod(output, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR |
-+             stat.S_IRGRP | stat.S_IXGRP |
-+             stat.S_IROTH | stat.S_IXOTH)
-+    print("A trace parser for this trace has been written in", output)
--- 
-1.9.1
+
+--O8XZ+2Hy8Kj8wLPZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hello LTTng!
+
+Yes, I'm not involved in development anymore BUT that does not mean I'm
+not using LTTng :).
+
+Let me share with all of you some improvement ideas for LTTng-UST after
+using it a bit more extensively in a large application. In a nutshell,
+we use LTTng to do measurements of certain subsystem of the application
+to come up with a performance baseline. With this, we can notice
+regressions and also measure improvements. We also use it to identify
+unexpected behaviors for some use cases of which we know the expected
+behavior.
+
+Here it is:
+
+1) Having a way to use counters in the trace.
+
+So basically, lots of our measurements are based on timing things which
+tracepoints are really useful for that but we also gather stuff like
+"How many elements seen of an object in the past hour?". It's doable
+with tracepoint but when the number goes up to millions quickly, it does
+not really scale to have a million tp for one single counter.
+
+The rough idea is this:
+
+	[...]
+	tracepoint_counter_inc(mycomponent, mycounter, n);
+	[...]
+
+where "n" is the amount to increment the counter designated by
+mycomponent:mycounter.
+
+When the buffers are flushed or/and the tracing stop, this counter could
+simply be updated in the trace and, for instance, babeltrace could print
+them at the beginning of the output.
+
+Also, inspired by Julien Desfossez latency tracker,
+https://github.com/jdesfossez/latency_tracker, having a facility for
+that in UST would be amazing. A way to say "ok call this TP if this
+value reaches X" would be extremely useful. Basically, an easy way to do
+sampling in user space with LTTng. For multithreaded application, it
+seems to me that it makes sense to use the awesomness of UST thread
+safety to gather counters.
+
+2) By default, adding the PID context is really a must I think for
+usability. As soon as we have two different PID with the same procname,
+the trace is useless without that PID attached to the event.
+
+3) I really think liblttng-ust-fork should be used by default somehow in
+lttng-ust. As soon as the application goes in daemon mode, we lose UST
+which seems a bit weird. I understand the mechanics why lttng does that
+but still I think it can be hackable to make it by default for
+usability.
+
+For instance, with a python launcher that does that, UST will bail out.
+
+	subprocess.Popen(["app", "opt1", "opt2", "--daemon"])
+
+
+My two cents! I think the above would greatly improve UST usability and
+make the user happier. I would be happy to open issue on the tracker if
+the above make sense :).
+
+Cheers!
+David
+
+--O8XZ+2Hy8Kj8wLPZ
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQF8BAEBCABmBQJUdNKkXxSAAAAAAC4AKGlzc3Vlci1mcHJAbm90YXRpb25zLm9w
+ZW5wZ3AuZmlmdGhob3JzZW1hbi5uZXRCNzQ0MTdFRERGMjJBQzlGOUU5MEY0OTE0
+MkU4NkEyQTExRjQ4RDM2AAoJEELoaioR9I02Q9cIAI+r7wYoP2rgTmTzbxbyT4fM
+sTGrN2SxaNYqus0sajYMSUP+G5gMD8dsJugrfwDlEH3msYb/tH+cx6edOb61/3ta
+N9HL4y+cse39gOyEbfUsMyA8IEA9YDOhT6/usU9AT0kG+nEhTH5ZG+yAumoT5AX8
+Xvluizn9AbQD2y1UqLhTVLXGRxZzO38yrNDbpJ6JOCiaeEkJ3fwz5z3F1prsRToh
+0hYXU+H8R96fgnLUDWemUYTF/Kl1qKva5A/JQzD/g3wpMtr/xz6u6YFsElqluyEX
+VpVHjc0LND8BYiNNPqSnxab2vMcY27kXuiPsw3Qy2RLZq4MOstvKAsGFwAm/SNM=
+=xa9A
+-----END PGP SIGNATURE-----
+
+--O8XZ+2Hy8Kj8wLPZ--
+
+
+--===============0790068062==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0790068062==--
