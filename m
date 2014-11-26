@@ -1,23 +1,20 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: [lttng-ust] Fix: man: you can't link a lib with a
-	static lib
-Date: Wed, 26 Nov 2014 16:50:56 -0500
-Message-ID: <1417038656-21690-1-git-send-email-eeppeliteloop__49040.6585894108$1417038660$gmane$org@gmail.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [GIT PULL] out of memory handling fix branch
+Date: Wed, 26 Nov 2014 17:22:01 -0500
+Message-ID: <CA+jJMxtYXbkCWEN2e9yuATspya=rmkRfnZp88Hpg2erwJ3OAxg__20592.780217021$1417040560$gmane$org@mail.gmail.com>
+References: <1413444805.19790.1417031910243.JavaMail.zimbra@efficios.com>
+ <804803052.19793.1417031975181.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f46.google.com ([209.85.216.46])
+Received: from mail-qc0-f177.google.com ([209.85.216.177])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <eeppeliteloop@gmail.com>) id 1XtkTh-0003Wc-I5
- for lttng-dev@lists.lttng.org; Wed, 26 Nov 2014 16:50:26 -0500
-Received: by mail-qa0-f46.google.com with SMTP id u7so2521605qaz.19
- for <lttng-dev@lists.lttng.org>; Wed, 26 Nov 2014 13:50:20 -0800 (PST)
-Received: from archeepp.internal.efficios.com ([173.246.22.116])
- by mx.google.com with ESMTPSA id y3sm5001887qae.2.2014.11.26.13.50.18
- for <lttng-dev@lists.lttng.org>
- (version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
- Wed, 26 Nov 2014 13:50:18 -0800 (PST)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XtkyM-0003i4-NB
+ for lttng-dev@lists.lttng.org; Wed, 26 Nov 2014 17:22:10 -0500
+Received: by mail-qc0-f177.google.com with SMTP id x3so2764123qcv.22
+ for <lttng-dev@lists.lttng.org>; Wed, 26 Nov 2014 14:22:01 -0800 (PST)
+In-Reply-To: <804803052.19793.1417031975181.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,42 +23,18 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Fixes: #825
-
-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
----
- doc/man/lttng-ust.3 | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
-
-diff --git a/doc/man/lttng-ust.3 b/doc/man/lttng-ust.3
-index 0c8405f..3d52bc0 100644
---- a/doc/man/lttng-ust.3
-+++ b/doc/man/lttng-ust.3
-@@ -299,17 +299,13 @@ There are 2 ways to compile the Tracepoint Provider with the
- application: either statically or dynamically. Please follow
- carefully:
- 
--  1.1) Compile the Tracepoint provider with the application, either
--       directly or through a static library (.a):
--    - Into exactly one object of your application: define
-+  1) Compile the Tracepoint Provider with the application, either
-+     directly or through a static library (.a):
-+    - Into exactly one object of your application, define
-       "TRACEPOINT_DEFINE" and include the tracepoint provider.
-     - Use "\-I." for the compilation unit containing the tracepoint
--      provider include (e.g. tp.c).
--    - Link application with "\-ldl".
--    - If building the provider directly into the application,
--      link the application with "\-llttng-ust".
--    - If building a static library for the provider, link the static
--      library with "\-llttng-ust".
-+      provider include (e.g., tp.c).
-+    - Link the application with "\-llttng-ust" and "\-ldl".
-     - Include the tracepoint provider header into all C files using
-       the provider.
-     - Examples:
--- 
-2.1.3
+TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIFdlZCwgTm92IDI2LCAyMDE0IGF0IDI6NTkg
+UE0sIE1hdGhpZXUgRGVzbm95ZXJzCjxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+IHdy
+b3RlOgo+IEhpIErDqXLDqW1pZSwKPgo+IFBsZWFzZSBwdWxsIGZyb206Cj4KPiBodHRwczovL2dp
+dGh1Yi5jb20vY29tcHVkai9sdHRuZy10b29scy1kZXYvdHJlZS9maXgtb29tLWhhbmRsaW5nLXB1
+bGwKPgo+IFRoZSB0b3AgY29tbWl0IGlzOgo+Cj4gY29tbWl0IGU3NTIyMjRkNWMxMmJkYjUyOTMy
+OTg5YjBiY2UwOWY2OTcxOTI4YTIKPgo+IFRoYW5rcyEKPgo+IE1hdGhpZXUKPgo+IC0tCj4gTWF0
+aGlldSBEZXNub3llcnMKPiBFZmZpY2lPUyBJbmMuCj4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
+CgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmlj
+aW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9s
+aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
