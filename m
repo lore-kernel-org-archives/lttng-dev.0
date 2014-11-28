@@ -1,23 +1,21 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: [PATCH lttng-tools] Fix: channel names are not validated
-Date: Thu, 27 Nov 2014 17:35:32 -0500
-Message-ID: <1417127732-24968-1-git-send-email-eeppeliteloop__36170.6623611555$1417127735$gmane$org@gmail.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [lttng-tools 2/2] Fix: relayd: revents may be 0
+ when using poll()
+Date: Thu, 27 Nov 2014 21:21:38 -0500
+Message-ID: <CA+jJMxv6onXMX75aMRFbHvyBoLOodScM6+iF-OXoUmfdncvCLA__9040.42987754128$1417141350$gmane$org@mail.gmail.com>
+References: <1417037359-20877-1-git-send-email-eeppeliteloop@gmail.com>
+ <1417037359-20877-3-git-send-email-eeppeliteloop@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f53.google.com ([209.85.216.53])
+Received: from mail-qg0-f44.google.com ([209.85.192.44])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <eeppeliteloop@gmail.com>) id 1Xu7eO-0002sT-6u
- for lttng-dev@lists.lttng.org; Thu, 27 Nov 2014 17:35:01 -0500
-Received: by mail-qa0-f53.google.com with SMTP id bm13so3777244qab.40
- for <lttng-dev@lists.lttng.org>; Thu, 27 Nov 2014 14:34:54 -0800 (PST)
-Received: from archeepp.internal.efficios.com
- (cable-22.246.173-116.electronicbox.net. [173.246.22.116])
- by mx.google.com with ESMTPSA id p78sm7659184qgp.44.2014.11.27.14.34.53
- for <lttng-dev@lists.lttng.org>
- (version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
- Thu, 27 Nov 2014 14:34:53 -0800 (PST)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XuBBn-0003y3-Jy
+ for lttng-dev@lists.lttng.org; Thu, 27 Nov 2014 21:21:45 -0500
+Received: by mail-qg0-f44.google.com with SMTP id z60so4277587qgd.3
+ for <lttng-dev@lists.lttng.org>; Thu, 27 Nov 2014 18:21:38 -0800 (PST)
+In-Reply-To: <1417037359-20877-3-git-send-email-eeppeliteloop@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,122 +24,202 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Philippe Proulx <eeppeliteloop@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This patch ensures:
-
-  1. A channel name does not contain any '/' character, since
-     relative paths may be injected in the channel name
-     otherwise (knowing that the channel name is eventually
-     part of a file name)
-  2. A channel name does not start with a '.' character, since
-     trace readers (Babeltrace is one of them) could interpret
-     files starting with a dot as hidden files and ignore
-     them when opening the CTF trace
-
-Fixes: #751
-
-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
----
- include/lttng/lttng-error.h              |  1 +
- src/bin/lttng-sessiond/cmd.c             |  6 ++++++
- src/bin/lttng/commands/enable_channels.c | 20 +++++++++++++++++---
- src/common/error.c                       |  1 +
- 4 files changed, 25 insertions(+), 3 deletions(-)
-
-diff --git a/include/lttng/lttng-error.h b/include/lttng/lttng-error.h
-index 1220e48..efdca65 100644
---- a/include/lttng/lttng-error.h
-+++ b/include/lttng/lttng-error.h
-@@ -133,6 +133,7 @@ enum lttng_error_code {
- 	LTTNG_ERR_EXCLUSION_INVAL        = 110, /* Invalid event exclusion data */
- 	LTTNG_ERR_EXCLUSION_NOMEM        = 111, /* Lack of memory while processing event exclusions */
- 	LTTNG_ERR_INVALID_EVENT_NAME     = 112, /* Invalid event name */
-+	LTTNG_ERR_INVALID_CHANNEL_NAME   = 113, /* Invalid channel name */
- 
- 	/* MUST be last element */
- 	LTTNG_ERR_NR,                           /* Last element */
-diff --git a/src/bin/lttng-sessiond/cmd.c b/src/bin/lttng-sessiond/cmd.c
-index 33ab492..1ede96f 100644
---- a/src/bin/lttng-sessiond/cmd.c
-+++ b/src/bin/lttng-sessiond/cmd.c
-@@ -18,6 +18,7 @@
- #define _GNU_SOURCE
- #define _LGPL_SOURCE
- #include <assert.h>
-+#include <string.h>
- #include <inttypes.h>
- #include <urcu/list.h>
- #include <urcu/uatomic.h>
-@@ -944,6 +945,11 @@ int cmd_enable_channel(struct ltt_session *session,
- 	assert(attr);
- 	assert(domain);
- 
-+	/* Validate channel name */
-+	if (attr->name[0] == '.' || strchr(attr->name, '/') != NULL) {
-+		return LTTNG_ERR_INVALID_CHANNEL_NAME;
-+	}
-+
- 	DBG("Enabling channel %s for session %s", attr->name, session->name);
- 
- 	rcu_read_lock();
-diff --git a/src/bin/lttng/commands/enable_channels.c b/src/bin/lttng/commands/enable_channels.c
-index f8272e9..b49c20d 100644
---- a/src/bin/lttng/commands/enable_channels.c
-+++ b/src/bin/lttng/commands/enable_channels.c
-@@ -275,9 +275,16 @@ static int enable_channel(char *session_name)
- 	/* Strip channel list (format: chan1,chan2,...) */
- 	channel_name = strtok(opt_channels, ",");
- 	while (channel_name != NULL) {
--		/* Copy channel name and normalize it */
--		strncpy(chan.name, channel_name, NAME_MAX);
--		chan.name[NAME_MAX - 1] = '\0';
-+		/* Validate channel name's length */
-+		if (strlen(channel_name) >= NAME_MAX) {
-+			ERR("Channel name is too long (max. %u characters)",
-+			    NAME_MAX - 1);
-+			error = 1;
-+			goto skip_enable;
-+		}
-+
-+		/* Copy channel name */
-+		strcpy(chan.name, channel_name);
- 
- 		DBG("Enabling channel %s", channel_name);
- 
-@@ -292,6 +299,12 @@ static int enable_channel(char *session_name)
- 						lttng_strerror(ret), session_name);
- 				warn = 1;
- 				break;
-+			case LTTNG_ERR_INVALID_CHANNEL_NAME:
-+				ERR("Invalid channel name: \"%s\". "
-+				    "Channel names may not start with '.', and "
-+				    "may not contain '/'.", channel_name);
-+				error = 1;
-+				break;
- 			default:
- 				ERR("Channel %s: %s (session %s)", channel_name,
- 						lttng_strerror(ret), session_name);
-@@ -304,6 +317,7 @@ static int enable_channel(char *session_name)
- 			success = 1;
- 		}
- 
-+skip_enable:
- 		if (lttng_opt_mi) {
- 			/* Mi print the channel element and leave it open */
- 			ret = mi_lttng_channel(writer, &chan, 1);
-diff --git a/src/common/error.c b/src/common/error.c
-index 2cebbf9..d3e3b94 100644
---- a/src/common/error.c
-+++ b/src/common/error.c
-@@ -166,6 +166,7 @@ static const char *error_string_array[] = {
- 	[ ERROR_INDEX(LTTNG_ERR_MI_IO_FAIL) ] = "IO error while writing MI output",
- 	[ ERROR_INDEX(LTTNG_ERR_MI_NOT_IMPLEMENTED) ] = "Mi feature not implemented",
- 	[ ERROR_INDEX(LTTNG_ERR_INVALID_EVENT_NAME) ] = "Invalid event name",
-+	[ ERROR_INDEX(LTTNG_ERR_INVALID_CHANNEL_NAME) ] = "Invalid channel name",
- 
- 	/* Last element */
- 	[ ERROR_INDEX(LTTNG_ERR_NR) ] = "Unknown error code"
--- 
-2.1.3
+SSBhcHBsaWVkIGJvdGggcGF0Y2hlcyBhbmQgdGhlCnRlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvc3Ry
+ZWFtaW5nL3Rlc3RfdXN0IHNlZW1zIHRvIGJlIGhhbmdpbmcgd2hlbiBpdAp0cmllcyB0byBlbmFi
+bGUgZXZlbnRzLgpNYWtlIHN1cmUgeW91IGJ1aWxkIHdpdGggLS1kaXNhYmxlLWVwb2xsLgoKSGVy
+ZSdzIHRoZSBzZXNzaW9uIGRhZW1vbidzIChhbm5vdGF0ZWQpIGJhY2t0cmFjZSwgdGhyZWFkcyA4
+IGFuZCA5IGFyZQpyZWxldmFudCBoZXJlOgoKVGhyZWFkIDExIChUaHJlYWQgMHg3ZmQzMDFiYmI3
+MDAgKExXUCAyMDkwNikpOgojMCAgMHgwMDAwN2ZkMzAyMGNiN2JkIGluIHBvbGwgKCkgZnJvbSAv
+dXNyL2xpYi9saWJjLnNvLjYKIzEgIDB4MDAwMDAwMDAwMDQ1ZTQwYiBpbiBjb21wYXRfcG9sbF93
+YWl0IChldmVudHM9MHg3ZmQzMDFiYmFiZDAsIHRpbWVvdXQ9LTEpCiAgICBhdCBjb21wYXQtcG9s
+bC5jOjI3OQojMiAgMHgwMDAwMDAwMDAwNDIwNTJhIGluIHRocmVhZF9odF9jbGVhbnVwIChkYXRh
+PTB4MCkgYXQgaHQtY2xlYW51cC5jOjcwCiMzICAweDAwMDA3ZmQzMDI1YWMzMTQgaW4gc3RhcnRf
+dGhyZWFkICgpIGZyb20gL3Vzci9saWIvbGlicHRocmVhZC5zby4wCiM0ICAweDAwMDA3ZmQzMDIw
+ZDQ1YmQgaW4gY2xvbmUgKCkgZnJvbSAvdXNyL2xpYi9saWJjLnNvLjYKClRocmVhZCAxMCAoVGhy
+ZWFkIDB4N2ZkMzAxM2JhNzAwIChMV1AgMjA5MDgpKToKIzAgIDB4MDAwMDdmZDMwMjBjYjdiZCBp
+biBwb2xsICgpIGZyb20gL3Vzci9saWIvbGliYy5zby42CiMxICAweDAwMDAwMDAwMDA0NWU0MGIg
+aW4gY29tcGF0X3BvbGxfd2FpdCAoZXZlbnRzPTB4N2ZkMzAxM2I5YmEwLCB0aW1lb3V0PS0xKQog
+ICAgYXQgY29tcGF0LXBvbGwuYzoyNzkKIzIgIDB4MDAwMDAwMDAwMDQ0N2Y3NyBpbiB0aHJlYWRf
+bWFuYWdlX2hlYWx0aCAoZGF0YT0weDApIGF0IG1haW4uYzozODc1CiMzICAweDAwMDA3ZmQzMDI1
+YWMzMTQgaW4gc3RhcnRfdGhyZWFkICgpIGZyb20gL3Vzci9saWIvbGlicHRocmVhZC5zby4wCiM0
+ICAweDAwMDA3ZmQzMDIwZDQ1YmQgaW4gY2xvbmUgKCkgZnJvbSAvdXNyL2xpYi9saWJjLnNvLjYK
+ClRocmVhZCA5IChUaHJlYWQgMHg3ZmQzMDBiYjk3MDAgKExXUCAyMDkwOSkpOgoqKiogT2theSwg
+d2UncmUgd2FpdGluZyBmb3IgdGhlIGNvbnN1bWVyJ3Mgc3RhdHVzLi4uIFRha2luZyBhbiBhd2Z1
+bGx5CmxvbmcgdGltZS4uLiAqKioKIzAgIDB4MDAwMDdmZDMwMjViNDc4ZCBpbiByZWN2bXNnICgp
+IGZyb20gL3Vzci9saWIvbGlicHRocmVhZC5zby4wCiMxICAweDAwMDAwMDAwMDA0NGU0NzEgaW4g
+bHR0Y29tbV9yZWN2X3VuaXhfc29jayAoc29jaz0yMiwKYnVmPTB4N2ZkMzAwYmI2ZjcwLCBsZW49
+NCkKICAgIGF0IHVuaXguYzoxNzYKIzIgIDB4MDAwMDAwMDAwMDQxMGQ0ZSBpbiBjb25zdW1lcl9z
+b2NrZXRfcmVjdiAoc29ja2V0PTB4N2ZkMmRjMDA0OTQwLAptc2c9MHg3ZmQzMDBiYjZmNzAsCiAg
+ICBsZW49NCkgYXQgY29uc3VtZXIuYzoxMDYKIzMgIDB4MDAwMDAwMDAwMDQxMGU1OSBpbiBjb25z
+dW1lcl9yZWN2X3N0YXR1c19yZXBseQooc29jaz0weDdmZDJkYzAwNDk0MCkgYXQgY29uc3VtZXIu
+YzoxNDEKIzQgIDB4MDAwMDAwMDAwMDQxMjU5YSBpbiBjb25zdW1lcl9zZW5kX21zZyAoc29jaz0w
+eDdmZDJkYzAwNDk0MCwKbXNnPTB4N2ZkMzAwYmI2ZmUwKQogICAgYXQgY29uc3VtZXIuYzo3NTIK
+IzUgIDB4MDAwMDAwMDAwMDQzOWZkMyBpbiB1c3RfY29uc3VtZXJfZ2V0X2NoYW5uZWwgKHNvY2tl
+dD0weDdmZDJkYzAwNDk0MCwKICAgIHVhX2NoYW49MHg3ZmQyZGMwMTM5YzApIGF0IHVzdC1jb25z
+dW1lci5jOjI2MgojNiAgMHgwMDAwMDAwMDAwNDMxN2ZmIGluIGRvX2NvbnN1bWVyX2NyZWF0ZV9j
+aGFubmVsICh1c2Vzcz0weDdmZDJkYzAwM2NkMCwKICAgIHVhX3Nlc3M9MHg3ZmQyZGMwMDYyYjAs
+IHVhX2NoYW49MHg3ZmQyZGMwMTM5YzAsIGJpdG5lc3M9NjQsCnJlZ2lzdHJ5PTB4N2ZkMmRjMDA0
+ZDUwKQogICAgYXQgdXN0LWFwcC5jOjIyMDAKIzcgIDB4MDAwMDAwMDAwMDQzMjQzZCBpbiBjcmVh
+dGVfY2hhbm5lbF9wZXJfdWlkIChhcHA9MHg3ZmQyZDgwMDA4ZTAsCnVzZXNzPTB4N2ZkMmRjMDAz
+Y2QwLAogICAgdWFfc2Vzcz0weDdmZDJkYzAwNjJiMCwgdWFfY2hhbj0weDdmZDJkYzAxMzljMCkg
+YXQgdXN0LWFwcC5jOjI1MzQKIzggIDB4MDAwMDAwMDAwMDQzMjgwYSBpbiBkb19jcmVhdGVfY2hh
+bm5lbCAoYXBwPTB4N2ZkMmQ4MDAwOGUwLAp1c2Vzcz0weDdmZDJkYzAwM2NkMCwKICAgIHVhX3Nl
+c3M9MHg3ZmQyZGMwMDYyYjAsIHVhX2NoYW49MHg3ZmQyZGMwMTM5YzApIGF0IHVzdC1hcHAuYzoy
+NjU0CiM5ICAweDAwMDAwMDAwMDA0MzI5YmEgaW4gY3JlYXRlX3VzdF9hcHBfY2hhbm5lbCAodWFf
+c2Vzcz0weDdmZDJkYzAwNjJiMCwKICAgIHVjaGFuPTB4N2ZkMmRjMDA1NjEwLCBhcHA9MHg3ZmQy
+ZDgwMDA4ZTAsIHR5cGU9TFRUTkdfVVNUX0NIQU5fUEVSX0NQVSwKICAgIHVzZXNzPTB4N2ZkMmRj
+MDAzY2QwLCB1YV9jaGFucD0weDApIGF0IHVzdC1hcHAuYzoyNzI3CiMxMCAweDAwMDAwMDAwMDA0
+MzU1NjAgaW4gdXN0X2FwcF9jcmVhdGVfY2hhbm5lbF9nbGIgKHVzZXNzPTB4N2ZkMmRjMDAzY2Qw
+LAogICAgdWNoYW49MHg3ZmQyZGMwMDU2MTApIGF0IHVzdC1hcHAuYzozNjY4CiMxMSAweDAwMDAw
+MDAwMDA0MGUwYTUgaW4gY2hhbm5lbF91c3RfY3JlYXRlICh1c2Vzcz0weDdmZDJkYzAwM2NkMCwK
+YXR0cj0weDdmZDJkYzAwNTNhMCwKICAgIHR5cGU9TFRUTkdfQlVGRkVSX1BFUl9VSUQpIGF0IGNo
+YW5uZWwuYzozNjIKIzEyIDB4MDAwMDAwMDAwMDQxOTliYSBpbiBjbWRfZW5hYmxlX2NoYW5uZWwg
+KHNlc3Npb249MHg3ZmQyZGMwMDdkMDAsCmRvbWFpbj0weDdmZDJkYzAwMWE1YywKICAgIGF0dHI9
+MHg3ZmQyZGMwMDUzYTAsIHdwaXBlPS0xKSBhdCBjbWQuYzoxMDExCiMxMyAweDAwMDAwMDAwMDA0
+MWE3MmMgaW4gY21kX2VuYWJsZV9ldmVudCAoc2Vzc2lvbj0weDdmZDJkYzAwN2QwMCwKZG9tYWlu
+PTB4N2ZkMmRjMDAxYTVjLAogICAgY2hhbm5lbF9uYW1lPTB4N2ZkMmRjMDAxYjkwICIiLCBldmVu
+dD0weDdmZDJkYzAwMWM5MCwKZmlsdGVyX2V4cHJlc3Npb249MHgwLCBmaWx0ZXI9MHgwLAogICAg
+ZXhjbHVzaW9uPTB4MCwgd3BpcGU9LTEpIGF0IGNtZC5jOjE1MjcKIzE0IDB4MDAwMDAwMDAwMDQ0
+NjY2OCBpbiBwcm9jZXNzX2NsaWVudF9tc2cgKGNtZF9jdHg9MHg3ZmQyZGMwMDA5MDAsIHNvY2s9
+MjAsCiAgICBzb2NrX2Vycm9yPTB4N2ZkMzAwYmI4YmNjKSBhdCBtYWluLmM6MzI2NgojMTUgMHgw
+MDAwMDAwMDAwNDQ4Yzk2IGluIHRocmVhZF9tYW5hZ2VfY2xpZW50cyAoZGF0YT0weDApIGF0IG1h
+aW4uYzo0MTUyCiMxNiAweDAwMDA3ZmQzMDI1YWMzMTQgaW4gc3RhcnRfdGhyZWFkICgpIGZyb20g
+L3Vzci9saWIvbGlicHRocmVhZC5zby4wCiMxNyAweDAwMDA3ZmQzMDIwZDQ1YmQgaW4gY2xvbmUg
+KCkgZnJvbSAvdXNyL2xpYi9saWJjLnNvLjYKClRocmVhZCA4IChUaHJlYWQgMHg3ZmQzMDAzYjg3
+MDAgKExXUCAyMDkxMCkpOgoKIzAgIDB4MDAwMDdmZDMwMjViNDExYyBpbiBfX2xsbF9sb2NrX3dh
+aXQgKCkgZnJvbSAvdXNyL2xpYi9saWJwdGhyZWFkLnNvLjAKXgoqKiogVGhyZWFkIDkgaXMgdGFr
+aW5nIHRoaXMgbG9jayBpbiB1c3RfYXBwX2NyZWF0ZV9jaGFubmVsX2dsYigpICoqKgoKIzEgIDB4
+MDAwMDdmZDMwMjVhZTg5NSBpbiBwdGhyZWFkX211dGV4X2xvY2sgKCkgZnJvbSAvdXNyL2xpYi9s
+aWJwdGhyZWFkLnNvLjAKIzIgIDB4MDAwMDAwMDAwMDQxNDA1YyBpbiBzZXNzaW9uX2xvY2tfbGlz
+dCAoKSBhdCBzZXNzaW9uLmM6MTI4CiMzICAweDAwMDAwMDAwMDA0NDJhODUgaW4gdGhyZWFkX2Rp
+c3BhdGNoX3VzdF9yZWdpc3RyYXRpb24gKGRhdGE9MHgwKQphdCBtYWluLmM6MTg0NQojNCAgMHgw
+MDAwN2ZkMzAyNWFjMzE0IGluIHN0YXJ0X3RocmVhZCAoKSBmcm9tIC91c3IvbGliL2xpYnB0aHJl
+YWQuc28uMAojNSAgMHgwMDAwN2ZkMzAyMGQ0NWJkIGluIGNsb25lICgpIGZyb20gL3Vzci9saWIv
+bGliYy5zby42CgpUaHJlYWQgNyAoVGhyZWFkIDB4N2ZkMmZmYmI3NzAwIChMV1AgMjA5MTEpKToK
+IzAgIDB4MDAwMDdmZDMwMjBjYjdiZCBpbiBwb2xsICgpIGZyb20gL3Vzci9saWIvbGliYy5zby42
+CiMxICAweDAwMDAwMDAwMDA0NWU0MGIgaW4gY29tcGF0X3BvbGxfd2FpdCAoZXZlbnRzPTB4N2Zk
+MmZmYmI2YjkwLCB0aW1lb3V0PS0xKQogICAgYXQgY29tcGF0LXBvbGwuYzoyNzkKIzIgIDB4MDAw
+MDAwMDAwMDQ0MmU5YyBpbiB0aHJlYWRfcmVnaXN0cmF0aW9uX2FwcHMgKGRhdGE9MHgwKSBhdCBt
+YWluLmM6MTk5MQojMyAgMHgwMDAwN2ZkMzAyNWFjMzE0IGluIHN0YXJ0X3RocmVhZCAoKSBmcm9t
+IC91c3IvbGliL2xpYnB0aHJlYWQuc28uMAojNCAgMHgwMDAwN2ZkMzAyMGQ0NWJkIGluIGNsb25l
+ICgpIGZyb20gL3Vzci9saWIvbGliYy5zby42CgpUaHJlYWQgNiAoVGhyZWFkIDB4N2ZkMmZmM2I2
+NzAwIChMV1AgMjA5MTIpKToKIzAgIDB4MDAwMDdmZDMwMjBjYjdiZCBpbiBwb2xsICgpIGZyb20g
+L3Vzci9saWIvbGliYy5zby42CiMxICAweDAwMDAwMDAwMDA0NWU0MGIgaW4gY29tcGF0X3BvbGxf
+d2FpdCAoZXZlbnRzPTB4N2ZkMmZmM2I1YmQwLCB0aW1lb3V0PS0xKQogICAgYXQgY29tcGF0LXBv
+bGwuYzoyNzkKIzIgIDB4MDAwMDAwMDAwMDQ0MWI1NyBpbiB0aHJlYWRfbWFuYWdlX2FwcHMgKGRh
+dGE9MHgwKSBhdCBtYWluLmM6MTQ2OQojMyAgMHgwMDAwN2ZkMzAyNWFjMzE0IGluIHN0YXJ0X3Ro
+cmVhZCAoKSBmcm9tIC91c3IvbGliL2xpYnB0aHJlYWQuc28uMAojNCAgMHgwMDAwN2ZkMzAyMGQ0
+NWJkIGluIGNsb25lICgpIGZyb20gL3Vzci9saWIvbGliYy5zby42CgpUaHJlYWQgNSAoVGhyZWFk
+IDB4N2ZkMmZlYmI1NzAwIChMV1AgMjA5MTQpKToKIzAgIDB4MDAwMDdmZDMwMjBjYjdiZCBpbiBw
+b2xsICgpIGZyb20gL3Vzci9saWIvbGliYy5zby42CiMxICAweDAwMDAwMDAwMDA0NWU0MGIgaW4g
+Y29tcGF0X3BvbGxfd2FpdCAoZXZlbnRzPTB4N2ZkMmZlYmI0YmMwLCB0aW1lb3V0PS0xKQogICAg
+YXQgY29tcGF0LXBvbGwuYzoyNzkKIzIgIDB4MDAwMDAwMDAwMDQzYjE2OSBpbiB1c3RfdGhyZWFk
+X21hbmFnZV9ub3RpZnkgKGRhdGE9MHgwKSBhdCB1c3QtdGhyZWFkLmM6NzQKIzMgIDB4MDAwMDdm
+ZDMwMjVhYzMxNCBpbiBzdGFydF90aHJlYWQgKCkgZnJvbSAvdXNyL2xpYi9saWJwdGhyZWFkLnNv
+LjAKIzQgIDB4MDAwMDdmZDMwMjBkNDViZCBpbiBjbG9uZSAoKSBmcm9tIC91c3IvbGliL2xpYmMu
+c28uNgoKVGhyZWFkIDQgKFRocmVhZCAweDdmZDJmZTNiNDcwMCAoTFdQIDIwOTE1KSk6CiMwICAw
+eDAwMDA3ZmQzMDIwY2I3YmQgaW4gcG9sbCAoKSBmcm9tIC91c3IvbGliL2xpYmMuc28uNgojMSAg
+MHgwMDAwMDAwMDAwNDVlNDBiIGluIGNvbXBhdF9wb2xsX3dhaXQgKGV2ZW50cz0weDdmZDJmZTNi
+M2JkMCwgdGltZW91dD0tMSkKICAgIGF0IGNvbXBhdC1wb2xsLmM6Mjc5CiMyICAweDAwMDAwMDAw
+MDA0M2QzNzYgaW4gYWdlbnRfdGhyZWFkX21hbmFnZV9yZWdpc3RyYXRpb24gKGRhdGE9MHgwKQph
+dCBhZ2VudC10aHJlYWQuYzozMTUKIzMgIDB4MDAwMDdmZDMwMjVhYzMxNCBpbiBzdGFydF90aHJl
+YWQgKCkgZnJvbSAvdXNyL2xpYi9saWJwdGhyZWFkLnNvLjAKIzQgIDB4MDAwMDdmZDMwMjBkNDVi
+ZCBpbiBjbG9uZSAoKSBmcm9tIC91c3IvbGliL2xpYmMuc28uNgoKVGhyZWFkIDMgKFRocmVhZCAw
+eDdmZDJmZGJiMzcwMCAoTFdQIDIwOTYyKSk6CiMwICAweDAwMDA3ZmQzMDIwY2I3YmQgaW4gcG9s
+bCAoKSBmcm9tIC91c3IvbGliL2xpYmMuc28uNgojMSAgMHgwMDAwMDAwMDAwNDVlNDBiIGluIGNv
+bXBhdF9wb2xsX3dhaXQgKGV2ZW50cz0weDdmZDJmZGJiMmI5MCwgdGltZW91dD0tMSkKICAgIGF0
+IGNvbXBhdC1wb2xsLmM6Mjc5CiMyICAweDAwMDAwMDAwMDA0NDEzODUgaW4gdGhyZWFkX21hbmFn
+ZV9jb25zdW1lciAoZGF0YT0weDY4ZmNjMAo8dXN0Y29uc3VtZXI2NF9kYXRhPikKICAgIGF0IG1h
+aW4uYzoxMjkzCiMzICAweDAwMDA3ZmQzMDI1YWMzMTQgaW4gc3RhcnRfdGhyZWFkICgpIGZyb20g
+L3Vzci9saWIvbGlicHRocmVhZC5zby4wCiM0ICAweDAwMDA3ZmQzMDIwZDQ1YmQgaW4gY2xvbmUg
+KCkgZnJvbSAvdXNyL2xpYi9saWJjLnNvLjYKClRocmVhZCAyIChUaHJlYWQgMHg3ZmQyZmQzYjI3
+MDAgKExXUCAyMDk3MCkpOgojMCAgMHgwMDAwN2ZkMzAyMGNiN2JkIGluIHBvbGwgKCkgZnJvbSAv
+dXNyL2xpYi9saWJjLnNvLjYKIzEgIDB4MDAwMDAwMDAwMDQ1ZTQwYiBpbiBjb21wYXRfcG9sbF93
+YWl0IChldmVudHM9MHg3ZmQyZmQzYjFiOTAsIHRpbWVvdXQ9LTEpCiAgICBhdCBjb21wYXQtcG9s
+bC5jOjI3OQojMiAgMHgwMDAwMDAwMDAwNDQxMzg1IGluIHRocmVhZF9tYW5hZ2VfY29uc3VtZXIg
+KGRhdGE9MHg2OTFlMDAKPHVzdGNvbnN1bWVyMzJfZGF0YT4pCiAgICBhdCBtYWluLmM6MTI5Mwoj
+MyAgMHgwMDAwN2ZkMzAyNWFjMzE0IGluIHN0YXJ0X3RocmVhZCAoKSBmcm9tIC91c3IvbGliL2xp
+YnB0aHJlYWQuc28uMAojNCAgMHgwMDAwN2ZkMzAyMGQ0NWJkIGluIGNsb25lICgpIGZyb20gL3Vz
+ci9saWIvbGliYy5zby42CgpUaHJlYWQgMSAoVGhyZWFkIDB4N2ZkMzA0NmRjYTAwIChMV1AgMjA5
+MDUpKToKIzAgIDB4MDAwMDdmZDMwMjVhZDUwNSBpbiBwdGhyZWFkX2pvaW4gKCkgZnJvbSAvdXNy
+L2xpYi9saWJwdGhyZWFkLnNvLjAKIzEgIDB4MDAwMDAwMDAwMDQ0Y2JkMyBpbiBtYWluIChhcmdj
+PTQsIGFyZ3Y9MHg3ZmZmMDg5OGU0MTgpIGF0IG1haW4uYzo1NDg5CgoKCkJhc2ljYWxseSwgdGhl
+IHNlc3Npb24gZGFlbW9uIHNlZW1zIHRvIGJlIHdhaXRpbmcgb24gdGhlIGNvbnN1bWVyJ3MKcmVw
+bHkuLi4gTGV0J3MgbG9vayBhdCB0aGF0IHNpZGUgb2YgdGhlIGVxdWF0aW9uLgoKVGhyZWFkIDcg
+KFRocmVhZCAweDdmZTg1YzIyZTcwMCAoTFdQIDIwOTcxKSk6CiMwICAweDAwMDA3ZmU4NWM1MzE3
+YmQgaW4gcG9sbCAoKSBmcm9tIC91c3IvbGliL2xpYmMuc28uNgojMSAgMHgwMDAwMDAwMDAwNDI0
+ZTQwIGluIGNvbXBhdF9wb2xsX3dhaXQgKGV2ZW50cz0weDdmZTg1YzIyZGI5MCwgdGltZW91dD0t
+MSkKICAgIGF0IGNvbXBhdC1wb2xsLmM6Mjc5CiMyICAweDAwMDAwMDAwMDA0MDRkNGMgaW4gdGhy
+ZWFkX21hbmFnZV9oZWFsdGggKGRhdGE9MHgwKSBhdApoZWFsdGgtY29uc3VtZXJkLmM6MjQ2CiMz
+ICAweDAwMDA3ZmU4NWNhMTIzMTQgaW4gc3RhcnRfdGhyZWFkICgpIGZyb20gL3Vzci9saWIvbGli
+cHRocmVhZC5zby4wCiM0ICAweDAwMDA3ZmU4NWM1M2E1YmQgaW4gY2xvbmUgKCkgZnJvbSAvdXNy
+L2xpYi9saWJjLnNvLjYKClRocmVhZCA2IChUaHJlYWQgMHg3ZmU4NWJhMmQ3MDAgKExXUCAyMDk3
+MikpOgojMCAgMHgwMDAwN2ZlODVjNTMxN2JkIGluIHBvbGwgKCkgZnJvbSAvdXNyL2xpYi9saWJj
+LnNvLjYKIzEgIDB4MDAwMDAwMDAwMDQyNGU0MCBpbiBjb21wYXRfcG9sbF93YWl0IChldmVudHM9
+MHg3ZmU4NWJhMmNiNTAsIHRpbWVvdXQ9LTEpCiAgICBhdCBjb21wYXQtcG9sbC5jOjI3OQojMiAg
+MHgwMDAwMDAwMDAwNDBkMjIwIGluIGNvbnN1bWVyX3RocmVhZF9jaGFubmVsX3BvbGwgKGRhdGE9
+MHhiZjMwMTApCmF0IGNvbnN1bWVyLmM6Mjc2NQojMyAgMHgwMDAwN2ZlODVjYTEyMzE0IGluIHN0
+YXJ0X3RocmVhZCAoKSBmcm9tIC91c3IvbGliL2xpYnB0aHJlYWQuc28uMAojNCAgMHgwMDAwN2Zl
+ODVjNTNhNWJkIGluIGNsb25lICgpIGZyb20gL3Vzci9saWIvbGliYy5zby42CgpUaHJlYWQgNSAo
+VGhyZWFkIDB4N2ZlODViMjJjNzAwIChMV1AgMjA5NzMpKToKIzAgIDB4MDAwMDdmZTg1YzUzMTdi
+ZCBpbiBwb2xsICgpIGZyb20gL3Vzci9saWIvbGliYy5zby42CiMxICAweDAwMDAwMDAwMDA0MjRl
+NDAgaW4gY29tcGF0X3BvbGxfd2FpdCAoZXZlbnRzPTB4N2ZlODViMjJiYjkwLCB0aW1lb3V0PS0x
+KQogICAgYXQgY29tcGF0LXBvbGwuYzoyNzkKIzIgIDB4MDAwMDAwMDAwMDQwYjExOCBpbiBjb25z
+dW1lcl90aHJlYWRfbWV0YWRhdGFfcG9sbAooZGF0YT0weGJmMzAxMCkgYXQgY29uc3VtZXIuYzoy
+MTk1CiMzICAweDAwMDA3ZmU4NWNhMTIzMTQgaW4gc3RhcnRfdGhyZWFkICgpIGZyb20gL3Vzci9s
+aWIvbGlicHRocmVhZC5zby4wCiM0ICAweDAwMDA3ZmU4NWM1M2E1YmQgaW4gY2xvbmUgKCkgZnJv
+bSAvdXNyL2xpYi9saWJjLnNvLjYKClRocmVhZCA0IChUaHJlYWQgMHg3ZmU4NWFhMmI3MDAgKExX
+UCAyMDk3NSkpOgojMCAgMHgwMDAwN2ZlODVjNTMxN2JkIGluIHBvbGwgKCkgZnJvbSAvdXNyL2xp
+Yi9saWJjLnNvLjYKIzEgIDB4MDAwMDAwMDAwMDQwYmUyZCBpbiBjb25zdW1lcl90aHJlYWRfZGF0
+YV9wb2xsIChkYXRhPTB4YmYzMDEwKSBhdApjb25zdW1lci5jOjI0MzYKIzIgIDB4MDAwMDdmZTg1
+Y2ExMjMxNCBpbiBzdGFydF90aHJlYWQgKCkgZnJvbSAvdXNyL2xpYi9saWJwdGhyZWFkLnNvLjAK
+IzMgIDB4MDAwMDdmZTg1YzUzYTViZCBpbiBjbG9uZSAoKSBmcm9tIC91c3IvbGliL2xpYmMuc28u
+NgoKVGhyZWFkIDMgKFRocmVhZCAweDdmZTg1YTIyYTcwMCAoTFdQIDIwOTc2KSk6CiMwICAweDAw
+MDA3ZmU4NWM1MzE3YmQgaW4gcG9sbCAoKSBmcm9tIC91c3IvbGliL2xpYmMuc28uNgojMSAgMHgw
+MDAwMDAwMDAwNDA4MGM0IGluIGx0dG5nX2NvbnN1bWVyX3BvbGxfc29ja2V0Cihjb25zdW1lcl9z
+b2NrcG9sbD0weDdmZTg1YTIyOWJlMCkKICAgIGF0IGNvbnN1bWVyLmM6MTExMQojMiAgMHgwMDAw
+MDAwMDAwNDBlMjViIGluIGNvbnN1bWVyX3RocmVhZF9zZXNzaW9uZF9wb2xsCihkYXRhPTB4YmYz
+MDEwKSBhdCBjb25zdW1lci5jOjMwNjcKIzMgIDB4MDAwMDdmZTg1Y2ExMjMxNCBpbiBzdGFydF90
+aHJlYWQgKCkgZnJvbSAvdXNyL2xpYi9saWJwdGhyZWFkLnNvLjAKIzQgIDB4MDAwMDdmZTg1YzUz
+YTViZCBpbiBjbG9uZSAoKSBmcm9tIC91c3IvbGliL2xpYmMuc28uNgoKVGhyZWFkIDIgKFRocmVh
+ZCAweDdmZTg1OWEyOTcwMCAoTFdQIDIwOTc3KSk6CiMwICAweDAwMDA3ZmU4NWM0ODY5MWYgaW4g
+ZG9fc2lnd2FpdGluZm8gKCkgZnJvbSAvdXNyL2xpYi9saWJjLnNvLjYKIzEgIDB4MDAwMDdmZTg1
+YzQ4NjliZCBpbiBzaWd3YWl0aW5mbyAoKSBmcm9tIC91c3IvbGliL2xpYmMuc28uNgojMiAgMHgw
+MDAwMDAwMDAwNDExNTNkIGluIGNvbnN1bWVyX3RpbWVyX3RocmVhZCAoZGF0YT0weGJmMzAxMCkg
+YXQKY29uc3VtZXItdGltZXIuYzo1MDQKIzMgIDB4MDAwMDdmZTg1Y2ExMjMxNCBpbiBzdGFydF90
+aHJlYWQgKCkgZnJvbSAvdXNyL2xpYi9saWJwdGhyZWFkLnNvLjAKIzQgIDB4MDAwMDdmZTg1YzUz
+YTViZCBpbiBjbG9uZSAoKSBmcm9tIC91c3IvbGliL2xpYmMuc28uNgoKVGhyZWFkIDEgKFRocmVh
+ZCAweDdmZTg1ZThmZGEwMCAoTFdQIDIwOTY5KSk6CiMwICAweDAwMDA3ZmU4NWNhMTM1MDUgaW4g
+cHRocmVhZF9qb2luICgpIGZyb20gL3Vzci9saWIvbGlicHRocmVhZC5zby4wCiMxICAweDAwMDAw
+MDAwMDA0MDQ0NWYgaW4gbWFpbiAoYXJnYz05LCBhcmd2PTB4N2ZmZjc5OTNlODQ4KSBhdApsdHRu
+Zy1jb25zdW1lcmQuYzo0ODYKCkknbSB0aGlua2luZyB5b3VyIHBhdGNoIGlzIG9ubHkgbWlzc2lu
+ZyBhIGNhbGxzaXRlIHdoaWNoIGlzIGNhdXNpbmcKdGhlIGNvbnN1bWVyIHRvIG5vdCBwaWNrLXVw
+IG9uIHRoZSBzb2NrZXQncyBQT0xMSU4gZXZlbnQuCgpJJ20gbG9va2luZyBpbnRvIHRoaXMsIGJ1
+dCB3YW50ZWQgdG8ga2VlcCB5b3UgaW4gdGhlIGxvb3AuCgpSZWdhcmRzLApKw6lyw6ltaWUKCk9u
+IFdlZCwgTm92IDI2LCAyMDE0IGF0IDQ6MjkgUE0sIFBoaWxpcHBlIFByb3VseAo8ZWVwcGVsaXRl
+bG9vcEBnbWFpbC5jb20+IHdyb3RlOgo+IFJlZnM6ICM3NDcKPgo+IFNpZ25lZC1vZmYtYnk6IFBo
+aWxpcHBlIFByb3VseCA8ZWVwcGVsaXRlbG9vcEBnbWFpbC5jb20+Cj4gLS0tCj4gIHNyYy9iaW4v
+bHR0bmctcmVsYXlkL21haW4uYyB8IDUgKysrKysKPiAgMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0
+aW9ucygrKQo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctcmVsYXlkL21haW4uYyBiL3Ny
+Yy9iaW4vbHR0bmctcmVsYXlkL21haW4uYwo+IGluZGV4IDAwYjg3MzUuLjA3Y2I4ZjUgMTAwNjQ0
+Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1yZWxheWQvbWFpbi5jCj4gKysrIGIvc3JjL2Jpbi9sdHRu
+Zy1yZWxheWQvbWFpbi5jCj4gQEAgLTI0OTksNiArMjQ5OSwxMSBAQCByZXN0YXJ0Ogo+Cj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgaGVhbHRoX2NvZGVfdXBkYXRlKCk7Cj4KPiArICAgICAgICAg
+ICAgICAgICAgICAgICAvKiBEbyBub3Qgd2FzdGUgdGltZSBpZiBubyByZXR1cm5lZCBldmVudHMg
+Zm9yIHRoaXMgZmQgKi8KPiArICAgICAgICAgICAgICAgICAgICAgICBpZiAoIXJldmVudHMpIHsK
+PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRpbnVlOwo+ICsgICAgICAgICAg
+ICAgICAgICAgICAgIH0KPiArCj4gICAgICAgICAgICAgICAgICAgICAgICAgLyogVGhyZWFkIHF1
+aXQgcGlwZSBoYXMgYmVlbiBjbG9zZWQuIEtpbGxpbmcgdGhyZWFkLiAqLwo+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIHJldCA9IGNoZWNrX3RocmVhZF9xdWl0X3BpcGUocG9sbGZkLCByZXZlbnRz
+KTsKPiAgICAgICAgICAgICAgICAgICAgICAgICBpZiAocmV0KSB7Cj4gLS0KPiAyLjEuMwo+Cj4K
+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xp
+c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgoKCi0tIApK
+w6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
+diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
