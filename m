@@ -1,22 +1,15 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: not able to read 32-bit app traces running on a
- 64-bit system with relayd
-Date: Wed, 3 Dec 2014 17:58:46 -0500
-Message-ID: <CA+jJMxvOgsZudn3fK3fdTk5n5kUax=6jpJJ1=e0u70VUkSOg7Q__15116.4908231751$1417647579$gmane$org@mail.gmail.com>
-References: <CAM5kDqwPV+vjutz54Jss+mYUT+__DLFmyvQ81qrgDHwwnCOpwg@mail.gmail.com>
- <CA+jJMxsjoYPtY5izafcerH04UPm1uB9B0x_nhCu5D0K4nob1TA@mail.gmail.com>
- <CAM5kDqwQRsHgvJe6SO8nOuVrRWD9U1bKRbQiqE6GxJe=+Hz==g@mail.gmail.com>
+From: "Chao Xie" <xiechao_mail@163.com>
+Subject: lttng for android
+Date: Fri, 5 Dec 2014 18:23:46 +0800 (CST)
+Message-ID: <5ecef07d.ad2c.14a19fa11dd.Coremail.xiechao_mail__48842.0503250838$1417775088$gmane$org@163.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f44.google.com ([209.85.216.44])
+Received: from m13-142.163.com ([220.181.13.142])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1XwIsm-0004L9-9A
- for lttng-dev@lists.lttng.org; Wed, 03 Dec 2014 17:58:54 -0500
-Received: by mail-qa0-f44.google.com with SMTP id i13so10988567qae.17
- for <lttng-dev@lists.lttng.org>; Wed, 03 Dec 2014 14:58:46 -0800 (PST)
-In-Reply-To: <CAM5kDqwQRsHgvJe6SO8nOuVrRWD9U1bKRbQiqE6GxJe=+Hz==g@mail.gmail.com>
+ (envelope-from <xiechao_mail@163.com>) id 1Xwq3D-0006TM-Mi
+ for lttng-dev@lists.lttng.org; Fri, 05 Dec 2014 05:23:52 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,60 +18,10 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Anand Neeli <anand.neeli@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gVHVlLCBEZWMgMiwgMjAxNCBhdCAxOjEwIFBNLCBBbmFuZCBOZWVsaSA8YW5hbmQubmVlbGlA
-Z21haWwuY29tPiB3cm90ZToKPiBIaSBKw6lyw6ltaWUsCj4gVGhhbmtzIGZvciB2ZXJpZnlpbmcg
-dGhpcy4KPgo+IElzIHRoaXMgYSBpc3N1ZSB3aXRoIHJlbGF5ZD8gb3IgYmFiZWx0cmFjZT8KPiBD
-b3ogaSBzZWUgdGhpcyBvbmx5IHdpdGggMzItYml0IGFwcGxpY2F0aW9ucyBydW5uaW5nIG9uIGEg
-NjQtYml0IHN5c3RlbSwKPiBhbG9uZyB3aXRoIHJlbGF5IG9mIHRyYWNlcyB1c2luZyByZWxheWQK
-Ckl0J3MgY2F1c2VkIGJ5IGEgYnVnIGluIHRoZSBjb21tdW5pY2F0aW9uIGJldHdlZW4gdGhlIHNl
-c3Npb24gYW5kCmNvbnN1bWVyIGRhZW1vbnMgb2YgZGlmZmVyZW50IGJpdG5lc3MuCkknbSB3b3Jr
-aW5nIG9uIGEgZml4IHdoaWNoIHdpbGwgYmUgYmFjay1wb3J0ZWQgdG8gMi40LCAyLjUgYW5kIDIu
-Ni4KCkknbGwga2VlcCB5b3UgcG9zdGVkIGFzIHNvb24gYXMgaXQgaXMgYXZhaWxhYmxlLgoKUmVn
-YXJkcywKSsOpcsOpbWllCgo+Cj4gVGhhbmtzLAo+IEFuYW5kIE5lZWxpCj4KPiBPbiBUdWUsIERl
-YyAyLCAyMDE0IGF0IDExOjAzIFBNLCBKw6lyw6ltaWUgR2FsYXJuZWF1Cj4gPGplcmVtaWUuZ2Fs
-YXJuZWF1QGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4+Cj4+IE9uIFR1ZSwgRGVjIDIsIDIwMTQgYXQg
-ODowMSBBTSwgQW5hbmQgTmVlbGkgPGFuYW5kLm5lZWxpQGdtYWlsLmNvbT4gd3JvdGU6Cj4+ID4g
-SGkgQWxsLAo+PiA+IEkgaGF2ZSB2ZXJpZmllZCB0aGF0IGknbSBhYmxlIHRvIHJlYWQgdGhlIGF0
-dGFjaGVkIDMyLWJpdCBhbmQgNjQtYml0Cj4+ID4gdHJhY2VzCj4+ID4gdXNpbmcgZWNsaXBzZSB0
-cmFjZSBjb21wYXNzLgo+PiA+IFdoZXJlIGFzIGJhYmVsdHJhY2UgZmFpbHMgdG8gcmVhZCAzMi1i
-aXQgdHJhY2VzLgo+PiA+IENhbiBhbnlvbmUgcGxlYXNlIGxldCBtZSBrbm93IHdoYXQgY291bGQg
-YmUgdGhlIGlzc3VlIGhlcmUuCj4+ID4KPj4KPj4gRGVsZXRpbmcgdGhlIGluZGV4IGZvbGRlciBv
-ZiB0aGUgMzIgYml0IHRyYWNlIHNlZW1zIHRvIG1ha2UgaXQKPj4gcG9zc2libGUgZm9yIGJhYmVs
-dHJhY2UgdG8gcmVhZCB0aGUgdHJhY2UuLi4gUmVwcm9kdWNpYmxlIG9uCj4+IEJhYmVsdHJhY2Ug
-bWFzdGVyLgo+Pgo+PiBXb3VsZCB5b3UgbWluZCBvcGVuaW5nIGEgYnVnIHJlcG9ydCBhZ2FpbnN0
-IEJhYmVsdHJhY2Ugb24gYnVncy5sdHRuZy5vcmc/Cj4+Cj4+IFRoYW5rcywKPj4gSsOpcsOpbWll
-Cj4+Cj4+ID4gVGhhbmtzLAo+PiA+IEFuYW5kIE5lZWxpCj4+ID4KPj4gPiAtLS0tLS0tLS0tIEZv
-cndhcmRlZCBtZXNzYWdlIC0tLS0tLS0tLS0KPj4gPiBGcm9tOiBBbmFuZCBOZWVsaSA8YW5hbmQu
-bmVlbGlAZ21haWwuY29tPgo+PiA+IERhdGU6IFRodSwgTm92IDI3LCAyMDE0IGF0IDU6MDEgUE0K
-Pj4gPiBTdWJqZWN0OiBub3QgYWJsZSB0byByZWFkIDMyLWJpdCBhcHAgdHJhY2VzIHJ1bm5pbmcg
-b24gYSA2NC1iaXQgc3lzdGVtCj4+ID4gd2l0aAo+PiA+IHJlbGF5ZAo+PiA+IFRvOiAibHR0bmct
-ZGV2QGxpc3RzLmx0dG5nLm9yZyIgPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+Cj4+ID4KPj4g
-Pgo+PiA+IEhpIEFsbCwKPj4gPiBJJ20gcnVubmluZyBib3RoIDMyLWJpdCBhbmQgNjQtYml0IGFw
-cCdzIG9uIGEgNjQtYml0IHN5c3RlbS4gIEkgaGF2ZQo+PiA+IGNvbnN1bWVyZCdzIGJ1aWxkIGZv
-ciBib3RoIDMyLWJpdCBhbmQgNjQtYml0cyAoZm9sbG93ZWQKPj4gPiBodHRwOi8vbHR0bmcub3Jn
-L2RvY3MvI2RvYy1pbnN0cnVtZW50aW5nLTMyLWJpdC1hcHAtb24tNjQtYml0LXN5c3RlbSkKPj4g
-Pgo+PiA+IEknbSBzZWVpbmcgcHJvYmxlbSBpbiByZWFkaW5nIDMyLWJpdCBhcHAgdHJhY2VzLCBh
-bHRob3VnaCBpdCBpcyBsb2dnaW5nCj4+ID4gc29tZXRoaW5nIGFuZCBsb2dmaWxlIHNpemUgaW4g
-bHR0bmctdHJhY2VzLyBpcyBpbmNyZWFzaW5nLgo+PiA+IEkgaGF2ZSBjb21waWxlZCBzYW1lIGFw
-cCBmb3IgNjQtYml0IGFuZCBpdCB3b3JrcyBmaW5lLgo+PiA+Cj4+ID4gT25lIG1vcmUgcG9pbnQg
-aGVyZSBpcyB0aGF0LCB0aGlzIGhhcHBlbnMgb25seSB3aGVuIHJlbGF5aW5nIHRyYWNlcy4KPj4g
-PiBXaXRob3V0Cj4+ID4gdXNpbmcgcmVsYXlkIGFuZCBieSB1c2luZyBsb2NhbCB0cmFjaW5nIGkg
-ZG9udCBzZWUgYW55IGlzc3Vlcy4KPj4gPgo+PiA+IEF0dGFjaGVkIGFyZSB0aGUgbG9ncyBmcm9t
-IDMyLWJpdCBhbmQgNjQtYml0IGFwcCdzLiBUaGVyZSBzaXplcyBhcmUgc2FtZQo+PiA+IGV4Y2Vw
-dCB0aGUgZmlsZXMgaW4gaW5kZXgvCj4+ID4KPj4gPiBJJ20gdXNpbmcgMi40LjEgbHR0bmcgYW5k
-IHRyaWVkIDEuMi4wIGFuZCAxLjIuMSB2ZXJzaW9uIG9mIGJhYmVsdHJhY2UuCj4+ID4KPj4gPiBD
-YW4gYW55b25lIHBsZWFzZSB0ZWxsIG1lIGhvdyBjYW4gaSBhdm9pZCB0aGlzIHByb2JsZW0uCj4+
-ID4KPj4gPiBUaGFua3MsCj4+ID4gQW5hbmQgTmVlbGkKPj4gPgo+PiA+Cj4+ID4gX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gPiBsdHRuZy1kZXYgbWFp
-bGluZyBsaXN0Cj4+ID4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiA+IGh0dHA6Ly9saXN0
-cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+PiA+Cj4+Cj4+
-Cj4+Cj4+IC0tCj4+IErDqXLDqW1pZSBHYWxhcm5lYXUKPj4gRWZmaWNpT1MgSW5jLgo+PiBodHRw
-Oi8vd3d3LmVmZmljaW9zLmNvbQo+Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNp
-T1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
-c3RpbmZvL2x0dG5nLWRldgo=
+
+
+Hi
+If i want to collect the trace data from the target system which is the android platform with ARM chip, how can i compile the lttng and collect the trace data?
