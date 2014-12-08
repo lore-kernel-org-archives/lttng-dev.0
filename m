@@ -1,25 +1,23 @@
-From: David OShea <David.OShea@quantum.com>
-Subject: Segfault at v_read() called from
- lib_ring_buffer_try_reserve_slow() in LTTng-UST traced app - CPU/VMware
- dependent
-Date: Mon, 8 Dec 2014 03:30:04 +0000
-Message-ID: <20998D40D9A2B7499CA5A3A2666CB1EB2D9DDA59__37837.7013876618$1418009466$gmane$org@ZURMSG1.QUANTUM.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: not able to read 32-bit app traces running on a
+ 64-bit system with relayd
+Date: Mon, 8 Dec 2014 18:08:58 -0500
+Message-ID: <CA+jJMxvp-UcjCE5cqH1LJfxdS+YrGi4cxiN8WvyJY-2eh3T4Rw__24046.1771646098$1418080200$gmane$org@mail.gmail.com>
+References: <CAM5kDqwPV+vjutz54Jss+mYUT+__DLFmyvQ81qrgDHwwnCOpwg@mail.gmail.com>
+ <CA+jJMxsjoYPtY5izafcerH04UPm1uB9B0x_nhCu5D0K4nob1TA@mail.gmail.com>
+ <CAM5kDqwQRsHgvJe6SO8nOuVrRWD9U1bKRbQiqE6GxJe=+Hz==g@mail.gmail.com>
+ <CA+jJMxvOgsZudn3fK3fdTk5n5kUax=6jpJJ1=e0u70VUkSOg7Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0989734319=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0b-000ceb01.pphosted.com ([67.231.152.126])
+Received: from mail-qg0-f48.google.com ([209.85.192.48])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <prvs=241962d08c=david.oshea@quantum.com>)
- id 1Xxp1W-0000jN-2m
- for lttng-dev@lists.lttng.org; Sun, 07 Dec 2014 22:30:13 -0500
-Received: from pps.filterd (m0001151 [127.0.0.1])
- by mx0b-000ceb01.pphosted.com (8.14.5/8.14.5) with SMTP id sB83U9Pt009423
- for <lttng-dev@lists.lttng.org>; Sun, 7 Dec 2014 19:30:09 -0800
-Received: from ppoxedge2.quantum.com ([146.174.252.28])
- by mx0b-000ceb01.pphosted.com with ESMTP id 1r4nvt0est-1
- (version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=NOT)
- for <lttng-dev@lists.lttng.org>; Sun, 07 Dec 2014 19:30:09 -0800
-Content-Language: en-US
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Xy7QN-0006h8-Tb
+ for lttng-dev@lists.lttng.org; Mon, 08 Dec 2014 18:09:06 -0500
+Received: by mail-qg0-f48.google.com with SMTP id f51so1345908qge.21
+ for <lttng-dev@lists.lttng.org>; Mon, 08 Dec 2014 15:08:58 -0800 (PST)
+In-Reply-To: <CA+jJMxvOgsZudn3fK3fdTk5n5kUax=6jpJJ1=e0u70VUkSOg7Q@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -28,304 +26,67 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: Anand Neeli <anand.neeli@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0989734319==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_20998D40D9A2B7499CA5A3A2666CB1EB2D9DDA59ZURMSG1QUANTUMc_"
-
---_000_20998D40D9A2B7499CA5A3A2666CB1EB2D9DDA59ZURMSG1QUANTUMc_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-We have encountered a problem with using LTTng-UST tracing with our applica=
-tion, where on a particular VMware vCenter cluster we almost ways get segfa=
-ults when tracepoints are enabled, whereas on another vCenter cluster, and =
-on every other machine we've ever used, we don't hit this problem.
-
-I can reproduce this using lttng-ust/tests/hello after using:
-
-"""
-lttng create
-lttng enable-channel channel0 --userspace
-lttng add-context --userspace -t vpid -t vtid -t procname
-lttng enable-event --userspace "ust_tests_hello:*" -c channel0
-lttng start
-"""
-
-In which case I get the following stack trace with an obvious NULL pointer =
-dereference:
-
-"""
-Program terminated with signal SIGSEGV, Segmentation fault.
-#0  v_read (config=3D<optimized out>, v_a=3D0x0) at vatomic.h:48
-48              return uatomic_read(&v_a->a);
-[...]
-#0  v_read (config=3D<optimized out>, v_a=3D0x0) at vatomic.h:48
-#1  0x00007f4aa10a4804 in lib_ring_buffer_try_reserve_slow (
-    buf=3D0x7f4a98008a00, chan=3D0x7f4a98008a00, offsets=3D0x7fffef67c620,
-    ctx=3D0x7fffef67ca40) at ring_buffer_frontend.c:1677
-#2  0x00007f4aa10a6c9f in lib_ring_buffer_reserve_slow (ctx=3D0x7fffef67ca4=
-0)
-    at ring_buffer_frontend.c:1819
-#3  0x00007f4aa1095b75 in lib_ring_buffer_reserve (ctx=3D0x7fffef67ca40,
-    config=3D0x7f4aa12b8ae0 <client_config>)
-    at ../libringbuffer/frontend_api.h:211
-#4  lttng_event_reserve (ctx=3D0x7fffef67ca40, event_id=3D0)
-    at lttng-ring-buffer-client.h:473
-#5  0x000000000040135f in __event_probe__ust_tests_hello___tptest (
-    __tp_data=3D0xed3410, anint=3D0, netint=3D0, values=3D0x7fffef67cb50,
-    text=3D0x7fffef67cb70 "test", textlen=3D<optimized out>, doublearg=3D2,
-    floatarg=3D2222, boolarg=3Dtrue) at ././ust_tests_hello.h:32
-#6  0x0000000000400d2c in __tracepoint_cb_ust_tests_hello___tptest (
-    boolarg=3Dtrue, floatarg=3D2222, doublearg=3D2, textlen=3D4,
-    text=3D0x7fffef67cb70 "test", values=3D0x7fffef67cb50,
-    netint=3D<optimized out>, anint=3D0) at ust_tests_hello.h:32
-#7  main (argc=3D<optimized out>, argv=3D<optimized out>) at hello.c:92
-"""
-
-I hit this segfault 10 out of 10 times I ran "hello" on a VM on one vCenter=
- and 0 out of 10 times I ran it on the other, and the VMs otherwise had the=
- same software installed on them:
-
-- CentOS 6-based
-- kernel-2.6.32-504.1.3.el6 with some minor changes made in networking
-- userspace-rcu-0.8.3, lttng-ust-2.3.2 and lttng-tools-2.3.2 which might ha=
-ve some minor patches backported, and leftovers of changes to get them to b=
-uild on CentOS 5
-
-On the "good" vCenter, I tested on two different VM hosts:
-
-Processor Type: Intel(R) Xeon(R) CPU E5530 @ 2.40GHz
-EVC Mode: Intel(R) "Nehalem" Generation
-Image Profile: (Updated) ESXi-5.1.0-799733-standard
-
-Processor Type: Intel(R) Core(TM) i7-3930K CPU @ 3.20GHz
-EVC Mode: Intel(R) "Nehalem" Generation
-Image Profile: (Updated) ESXi-5.1.0-799733-standard
-
-The "bad" vCenter VM host that I tested on had this configuration:
-
-ESX Version: VMware ESXi, 5.0.0, 469512
-Processor Type: Intel(R) Xeon(R) CPU X7550 @ 2.00GHz
-
-Any ideas?
-
-Thanks in advance,
-David
-
-----------------------------------------------------------------------
-The information contained in this transmission may be confidential. Any dis=
-closure, copying, or further distribution of confidential information is no=
-t permitted unless such privilege is explicitly granted in writing by Quant=
-um. Quantum reserves the right to have electronic communications, including=
- email and attachments, sent across its networks filtered through anti viru=
-s and spam software programs and retain such messages in order to comply wi=
-th applicable data security and retention requirements. Quantum is not resp=
-onsible for the proper and complete transmission of the substance of this c=
-ommunication or for any delay in its receipt.
-
---_000_20998D40D9A2B7499CA5A3A2666CB1EB2D9DDA59ZURMSG1QUANTUMc_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii">
-<meta name=3D"Generator" content=3D"Microsoft Word 12 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0cm;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:blue;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:purple;
-	text-decoration:underline;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri","sans-serif";
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;}
-@page WordSection1
-	{size:612.0pt 792.0pt;
-	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-AU" link=3D"blue" vlink=3D"purple">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal">Hi all,<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">We have encountered a problem with using LTTng-UST t=
-racing with our application, where on a particular VMware vCenter cluster w=
-e almost ways get segfaults when tracepoints are enabled, whereas on anothe=
-r vCenter cluster, and on every other
- machine we&#8217;ve ever used, we don&#8217;t hit this problem.<o:p></o:p>=
-</p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">I can reproduce this using lttng-ust/tests/hello aft=
-er using:<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">&quot;&quot;&quot;<o:p></o:p></p>
-<p class=3D"MsoNormal">lttng create<o:p></o:p></p>
-<p class=3D"MsoNormal">lttng enable-channel channel0 --userspace<o:p></o:p>=
-</p>
-<p class=3D"MsoNormal">lttng add-context --userspace -t vpid -t vtid -t pro=
-cname<o:p></o:p></p>
-<p class=3D"MsoNormal">lttng enable-event --userspace &quot;ust_tests_hello=
-:*&quot; -c channel0<o:p></o:p></p>
-<p class=3D"MsoNormal">lttng start<o:p></o:p></p>
-<p class=3D"MsoNormal">&quot;&quot;&quot;<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">In which case I get the following stack trace with a=
-n obvious NULL pointer dereference:<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">&quot;&quot;&quot;<o:p></o:p></p>
-<p class=3D"MsoNormal">Program terminated with signal SIGSEGV, Segmentation=
- fault.<o:p></o:p></p>
-<p class=3D"MsoNormal">#0&nbsp; v_read (config=3D&lt;optimized out&gt;, v_a=
-=3D0x0) at vatomic.h:48<o:p></o:p></p>
-<p class=3D"MsoNormal">48&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp; return uatomic_read(&amp;v_a-&gt;a);<o:p></o:p=
-></p>
-<p class=3D"MsoNormal">[...]<o:p></o:p></p>
-<p class=3D"MsoNormal">#0&nbsp; v_read (config=3D&lt;optimized out&gt;, v_a=
-=3D0x0) at vatomic.h:48<o:p></o:p></p>
-<p class=3D"MsoNormal">#1&nbsp; 0x00007f4aa10a4804 in lib_ring_buffer_try_r=
-eserve_slow (<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp; buf=3D0x7f4a98008a00, chan=3D0x7f=
-4a98008a00, offsets=3D0x7fffef67c620,<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp; ctx=3D0x7fffef67ca40) at ring_buf=
-fer_frontend.c:1677<o:p></o:p></p>
-<p class=3D"MsoNormal">#2&nbsp; 0x00007f4aa10a6c9f in lib_ring_buffer_reser=
-ve_slow (ctx=3D0x7fffef67ca40)<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp; at ring_buffer_frontend.c:1819<o:=
-p></o:p></p>
-<p class=3D"MsoNormal">#3&nbsp; 0x00007f4aa1095b75 in lib_ring_buffer_reser=
-ve (ctx=3D0x7fffef67ca40,<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp; config=3D0x7f4aa12b8ae0 &lt;clien=
-t_config&gt;)<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp; at ../libringbuffer/frontend_api.=
-h:211<o:p></o:p></p>
-<p class=3D"MsoNormal">#4&nbsp; lttng_event_reserve (ctx=3D0x7fffef67ca40, =
-event_id=3D0)<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp; at lttng-ring-buffer-client.h:473=
-<o:p></o:p></p>
-<p class=3D"MsoNormal">#5&nbsp; 0x000000000040135f in __event_probe__ust_te=
-sts_hello___tptest (<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp; __tp_data=3D0xed3410, anint=3D0, =
-netint=3D0, values=3D0x7fffef67cb50,<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp; text=3D0x7fffef67cb70 &quot;test&=
-quot;, textlen=3D&lt;optimized out&gt;, doublearg=3D2,<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp; floatarg=3D2222, boolarg=3Dtrue) =
-at ././ust_tests_hello.h:32<o:p></o:p></p>
-<p class=3D"MsoNormal">#6&nbsp; 0x0000000000400d2c in __tracepoint_cb_ust_t=
-ests_hello___tptest (<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp; boolarg=3Dtrue, floatarg=3D2222, =
-doublearg=3D2, textlen=3D4,<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp; text=3D0x7fffef67cb70 &quot;test&=
-quot;, values=3D0x7fffef67cb50,<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp; netint=3D&lt;optimized out&gt;, a=
-nint=3D0) at ust_tests_hello.h:32<o:p></o:p></p>
-<p class=3D"MsoNormal">#7&nbsp; main (argc=3D&lt;optimized out&gt;, argv=3D=
-&lt;optimized out&gt;) at hello.c:92<o:p></o:p></p>
-<p class=3D"MsoNormal">&quot;&quot;&quot;<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">I hit this segfault 10 out of 10 times I ran &#8220;=
-hello&#8221; on a VM on one vCenter and 0 out of 10 times I ran it on the o=
-ther, and the VMs otherwise had the same software installed on them:<o:p></=
-o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">- CentOS 6-based<o:p></o:p></p>
-<p class=3D"MsoNormal">- kernel-2.6.32-504.1.3.el6 with some minor changes =
-made in networking<o:p></o:p></p>
-<p class=3D"MsoNormal">- userspace-rcu-0.8.3, lttng-ust-2.3.2 and lttng-too=
-ls-2.3.2 which might have some minor patches backported, and leftovers of c=
-hanges to get them to build on CentOS 5<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">On the &#8220;good&#8221; vCenter, I tested on two d=
-ifferent VM hosts:<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Processor Type: Intel(R) Xeon(R) CPU E5530 @ 2.40GHz=
-<o:p></o:p></p>
-<p class=3D"MsoNormal">EVC Mode: Intel(R) &quot;Nehalem&quot; Generation<o:=
-p></o:p></p>
-<p class=3D"MsoNormal">Image Profile: (Updated) ESXi-5.1.0-799733-standard<=
-o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Processor Type: Intel(R) Core(TM) i7-3930K CPU @ 3.2=
-0GHz<o:p></o:p></p>
-<p class=3D"MsoNormal">EVC Mode: Intel(R) &quot;Nehalem&quot; Generation<o:=
-p></o:p></p>
-<p class=3D"MsoNormal">Image Profile: (Updated) ESXi-5.1.0-799733-standard<=
-o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">The &#8220;bad&#8221; vCenter VM host that I tested =
-on had this configuration:<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">ESX Version: VMware ESXi, 5.0.0, 469512<o:p></o:p></=
-p>
-<p class=3D"MsoNormal">Processor Type: Intel(R) Xeon(R) CPU X7550 @ 2.00GHz=
-<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Any ideas?<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Thanks in advance,<br>
-David<o:p></o:p></p>
-</div>
-
-<HR>The information contained in this transmission may be confidential. Any=
- disclosure, copying, or further distribution of confidential information i=
-s not permitted unless such privilege is explicitly granted in writing by Q=
-uantum. Quantum reserves the right to have electronic communications, inclu=
-ding email and attachments, sent across its networks filtered through anti =
-virus and spam software programs and retain such messages in order to compl=
-y with applicable data security and retention requirements. Quantum is not =
-responsible for the proper and complete transmission of the substance of th=
-is communication or for any delay in its receipt.<BR>
-</body>
-</html>
-
---_000_20998D40D9A2B7499CA5A3A2666CB1EB2D9DDA59ZURMSG1QUANTUMc_--
-
-
---===============0989734319==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0989734319==--
+SGkgQW5hbmQsCgpXb3VsZCB5b3UgbWluZCB0ZXN0aW5nIHRoaXMgZml4IChiYXNlZCBvbiBtYXN0
+ZXIpPwpodHRwczovL2dpdGh1Yi5jb20vamdhbGFyL2x0dG5nLXRvb2xzL3RyZWUvY29uc3VtZXJk
+X2NvbW1fZml4CgpSZWdhcmRzLApKw6lyw6ltaWUKCk9uIFdlZCwgRGVjIDMsIDIwMTQgYXQgNTo1
+OCBQTSwgSsOpcsOpbWllIEdhbGFybmVhdQo8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29t
+PiB3cm90ZToKPiBPbiBUdWUsIERlYyAyLCAyMDE0IGF0IDE6MTAgUE0sIEFuYW5kIE5lZWxpIDxh
+bmFuZC5uZWVsaUBnbWFpbC5jb20+IHdyb3RlOgo+PiBIaSBKw6lyw6ltaWUsCj4+IFRoYW5rcyBm
+b3IgdmVyaWZ5aW5nIHRoaXMuCj4+Cj4+IElzIHRoaXMgYSBpc3N1ZSB3aXRoIHJlbGF5ZD8gb3Ig
+YmFiZWx0cmFjZT8KPj4gQ296IGkgc2VlIHRoaXMgb25seSB3aXRoIDMyLWJpdCBhcHBsaWNhdGlv
+bnMgcnVubmluZyBvbiBhIDY0LWJpdCBzeXN0ZW0sCj4+IGFsb25nIHdpdGggcmVsYXkgb2YgdHJh
+Y2VzIHVzaW5nIHJlbGF5ZAo+Cj4gSXQncyBjYXVzZWQgYnkgYSBidWcgaW4gdGhlIGNvbW11bmlj
+YXRpb24gYmV0d2VlbiB0aGUgc2Vzc2lvbiBhbmQKPiBjb25zdW1lciBkYWVtb25zIG9mIGRpZmZl
+cmVudCBiaXRuZXNzLgo+IEknbSB3b3JraW5nIG9uIGEgZml4IHdoaWNoIHdpbGwgYmUgYmFjay1w
+b3J0ZWQgdG8gMi40LCAyLjUgYW5kIDIuNi4KPgo+IEknbGwga2VlcCB5b3UgcG9zdGVkIGFzIHNv
+b24gYXMgaXQgaXMgYXZhaWxhYmxlLgo+Cj4gUmVnYXJkcywKPiBKw6lyw6ltaWUKPgo+Pgo+PiBU
+aGFua3MsCj4+IEFuYW5kIE5lZWxpCj4+Cj4+IE9uIFR1ZSwgRGVjIDIsIDIwMTQgYXQgMTE6MDMg
+UE0sIErDqXLDqW1pZSBHYWxhcm5lYXUKPj4gPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNv
+bT4gd3JvdGU6Cj4+Pgo+Pj4gT24gVHVlLCBEZWMgMiwgMjAxNCBhdCA4OjAxIEFNLCBBbmFuZCBO
+ZWVsaSA8YW5hbmQubmVlbGlAZ21haWwuY29tPiB3cm90ZToKPj4+ID4gSGkgQWxsLAo+Pj4gPiBJ
+IGhhdmUgdmVyaWZpZWQgdGhhdCBpJ20gYWJsZSB0byByZWFkIHRoZSBhdHRhY2hlZCAzMi1iaXQg
+YW5kIDY0LWJpdAo+Pj4gPiB0cmFjZXMKPj4+ID4gdXNpbmcgZWNsaXBzZSB0cmFjZSBjb21wYXNz
+Lgo+Pj4gPiBXaGVyZSBhcyBiYWJlbHRyYWNlIGZhaWxzIHRvIHJlYWQgMzItYml0IHRyYWNlcy4K
+Pj4+ID4gQ2FuIGFueW9uZSBwbGVhc2UgbGV0IG1lIGtub3cgd2hhdCBjb3VsZCBiZSB0aGUgaXNz
+dWUgaGVyZS4KPj4+ID4KPj4+Cj4+PiBEZWxldGluZyB0aGUgaW5kZXggZm9sZGVyIG9mIHRoZSAz
+MiBiaXQgdHJhY2Ugc2VlbXMgdG8gbWFrZSBpdAo+Pj4gcG9zc2libGUgZm9yIGJhYmVsdHJhY2Ug
+dG8gcmVhZCB0aGUgdHJhY2UuLi4gUmVwcm9kdWNpYmxlIG9uCj4+PiBCYWJlbHRyYWNlIG1hc3Rl
+ci4KPj4+Cj4+PiBXb3VsZCB5b3UgbWluZCBvcGVuaW5nIGEgYnVnIHJlcG9ydCBhZ2FpbnN0IEJh
+YmVsdHJhY2Ugb24gYnVncy5sdHRuZy5vcmc/Cj4+Pgo+Pj4gVGhhbmtzLAo+Pj4gSsOpcsOpbWll
+Cj4+Pgo+Pj4gPiBUaGFua3MsCj4+PiA+IEFuYW5kIE5lZWxpCj4+PiA+Cj4+PiA+IC0tLS0tLS0t
+LS0gRm9yd2FyZGVkIG1lc3NhZ2UgLS0tLS0tLS0tLQo+Pj4gPiBGcm9tOiBBbmFuZCBOZWVsaSA8
+YW5hbmQubmVlbGlAZ21haWwuY29tPgo+Pj4gPiBEYXRlOiBUaHUsIE5vdiAyNywgMjAxNCBhdCA1
+OjAxIFBNCj4+PiA+IFN1YmplY3Q6IG5vdCBhYmxlIHRvIHJlYWQgMzItYml0IGFwcCB0cmFjZXMg
+cnVubmluZyBvbiBhIDY0LWJpdCBzeXN0ZW0KPj4+ID4gd2l0aAo+Pj4gPiByZWxheWQKPj4+ID4g
+VG86ICJsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+Zz4KPj4+ID4KPj4+ID4KPj4+ID4gSGkgQWxsLAo+Pj4gPiBJJ20gcnVubmluZyBib3RoIDMyLWJp
+dCBhbmQgNjQtYml0IGFwcCdzIG9uIGEgNjQtYml0IHN5c3RlbS4gIEkgaGF2ZQo+Pj4gPiBjb25z
+dW1lcmQncyBidWlsZCBmb3IgYm90aCAzMi1iaXQgYW5kIDY0LWJpdHMgKGZvbGxvd2VkCj4+PiA+
+IGh0dHA6Ly9sdHRuZy5vcmcvZG9jcy8jZG9jLWluc3RydW1lbnRpbmctMzItYml0LWFwcC1vbi02
+NC1iaXQtc3lzdGVtKQo+Pj4gPgo+Pj4gPiBJJ20gc2VlaW5nIHByb2JsZW0gaW4gcmVhZGluZyAz
+Mi1iaXQgYXBwIHRyYWNlcywgYWx0aG91Z2ggaXQgaXMgbG9nZ2luZwo+Pj4gPiBzb21ldGhpbmcg
+YW5kIGxvZ2ZpbGUgc2l6ZSBpbiBsdHRuZy10cmFjZXMvIGlzIGluY3JlYXNpbmcuCj4+PiA+IEkg
+aGF2ZSBjb21waWxlZCBzYW1lIGFwcCBmb3IgNjQtYml0IGFuZCBpdCB3b3JrcyBmaW5lLgo+Pj4g
+Pgo+Pj4gPiBPbmUgbW9yZSBwb2ludCBoZXJlIGlzIHRoYXQsIHRoaXMgaGFwcGVucyBvbmx5IHdo
+ZW4gcmVsYXlpbmcgdHJhY2VzLgo+Pj4gPiBXaXRob3V0Cj4+PiA+IHVzaW5nIHJlbGF5ZCBhbmQg
+YnkgdXNpbmcgbG9jYWwgdHJhY2luZyBpIGRvbnQgc2VlIGFueSBpc3N1ZXMuCj4+PiA+Cj4+PiA+
+IEF0dGFjaGVkIGFyZSB0aGUgbG9ncyBmcm9tIDMyLWJpdCBhbmQgNjQtYml0IGFwcCdzLiBUaGVy
+ZSBzaXplcyBhcmUgc2FtZQo+Pj4gPiBleGNlcHQgdGhlIGZpbGVzIGluIGluZGV4Lwo+Pj4gPgo+
+Pj4gPiBJJ20gdXNpbmcgMi40LjEgbHR0bmcgYW5kIHRyaWVkIDEuMi4wIGFuZCAxLjIuMSB2ZXJz
+aW9uIG9mIGJhYmVsdHJhY2UuCj4+PiA+Cj4+PiA+IENhbiBhbnlvbmUgcGxlYXNlIHRlbGwgbWUg
+aG93IGNhbiBpIGF2b2lkIHRoaXMgcHJvYmxlbS4KPj4+ID4KPj4+ID4gVGhhbmtzLAo+Pj4gPiBB
+bmFuZCBOZWVsaQo+Pj4gPgo+Pj4gPgo+Pj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwo+Pj4gPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+PiA+IGx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4+ID4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
+YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4+PiA+Cj4+Pgo+Pj4KPj4+Cj4+PiAtLQo+
+Pj4gSsOpcsOpbWllIEdhbGFybmVhdQo+Pj4gRWZmaWNpT1MgSW5jLgo+Pj4gaHR0cDovL3d3dy5l
+ZmZpY2lvcy5jb20KPj4KPj4KPgo+Cj4KPiAtLQo+IErDqXLDqW1pZSBHYWxhcm5lYXUKPiBFZmZp
+Y2lPUyBJbmMuCj4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCgoKLS0gCkrDqXLDqW1pZSBHYWxh
+cm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
+dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
