@@ -1,23 +1,15 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: not able to read 32-bit app traces running on a
- 64-bit system with relayd
-Date: Mon, 8 Dec 2014 18:08:58 -0500
-Message-ID: <CA+jJMxvp-UcjCE5cqH1LJfxdS+YrGi4cxiN8WvyJY-2eh3T4Rw__24046.1771646098$1418080200$gmane$org@mail.gmail.com>
-References: <CAM5kDqwPV+vjutz54Jss+mYUT+__DLFmyvQ81qrgDHwwnCOpwg@mail.gmail.com>
- <CA+jJMxsjoYPtY5izafcerH04UPm1uB9B0x_nhCu5D0K4nob1TA@mail.gmail.com>
- <CAM5kDqwQRsHgvJe6SO8nOuVrRWD9U1bKRbQiqE6GxJe=+Hz==g@mail.gmail.com>
- <CA+jJMxvOgsZudn3fK3fdTk5n5kUax=6jpJJ1=e0u70VUkSOg7Q@mail.gmail.com>
+From: Ranganadh Kanitmahanti <ranganadh1991@yahoo.com>
+Subject: Trace loss in Lttng
+Date: Tue, 9 Dec 2014 05:20:50 +0000 (UTC)
+Message-ID: <33305750.4337780.1418102450225.JavaMail.yahoo__1942.59185013852$1418102678$gmane$org@jws10928.mail.sg3.yahoo.com>
+Reply-To: Ranganadh Kanitmahanti <ranganadh1991@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1451856652=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f48.google.com ([209.85.192.48])
+Received: from nm38-vm1.bullet.mail.gq1.yahoo.com ([98.136.217.60])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Xy7QN-0006h8-Tb
- for lttng-dev@lists.lttng.org; Mon, 08 Dec 2014 18:09:06 -0500
-Received: by mail-qg0-f48.google.com with SMTP id f51so1345908qge.21
- for <lttng-dev@lists.lttng.org>; Mon, 08 Dec 2014 15:08:58 -0800 (PST)
-In-Reply-To: <CA+jJMxvOgsZudn3fK3fdTk5n5kUax=6jpJJ1=e0u70VUkSOg7Q@mail.gmail.com>
+ (envelope-from <ranganadh1991@yahoo.com>) id 1XyDH5-0008Qw-Iw
+ for lttng-dev@lists.lttng.org; Tue, 09 Dec 2014 00:23:52 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,67 +18,43 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Anand Neeli <anand.neeli@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgQW5hbmQsCgpXb3VsZCB5b3UgbWluZCB0ZXN0aW5nIHRoaXMgZml4IChiYXNlZCBvbiBtYXN0
-ZXIpPwpodHRwczovL2dpdGh1Yi5jb20vamdhbGFyL2x0dG5nLXRvb2xzL3RyZWUvY29uc3VtZXJk
-X2NvbW1fZml4CgpSZWdhcmRzLApKw6lyw6ltaWUKCk9uIFdlZCwgRGVjIDMsIDIwMTQgYXQgNTo1
-OCBQTSwgSsOpcsOpbWllIEdhbGFybmVhdQo8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29t
-PiB3cm90ZToKPiBPbiBUdWUsIERlYyAyLCAyMDE0IGF0IDE6MTAgUE0sIEFuYW5kIE5lZWxpIDxh
-bmFuZC5uZWVsaUBnbWFpbC5jb20+IHdyb3RlOgo+PiBIaSBKw6lyw6ltaWUsCj4+IFRoYW5rcyBm
-b3IgdmVyaWZ5aW5nIHRoaXMuCj4+Cj4+IElzIHRoaXMgYSBpc3N1ZSB3aXRoIHJlbGF5ZD8gb3Ig
-YmFiZWx0cmFjZT8KPj4gQ296IGkgc2VlIHRoaXMgb25seSB3aXRoIDMyLWJpdCBhcHBsaWNhdGlv
-bnMgcnVubmluZyBvbiBhIDY0LWJpdCBzeXN0ZW0sCj4+IGFsb25nIHdpdGggcmVsYXkgb2YgdHJh
-Y2VzIHVzaW5nIHJlbGF5ZAo+Cj4gSXQncyBjYXVzZWQgYnkgYSBidWcgaW4gdGhlIGNvbW11bmlj
-YXRpb24gYmV0d2VlbiB0aGUgc2Vzc2lvbiBhbmQKPiBjb25zdW1lciBkYWVtb25zIG9mIGRpZmZl
-cmVudCBiaXRuZXNzLgo+IEknbSB3b3JraW5nIG9uIGEgZml4IHdoaWNoIHdpbGwgYmUgYmFjay1w
-b3J0ZWQgdG8gMi40LCAyLjUgYW5kIDIuNi4KPgo+IEknbGwga2VlcCB5b3UgcG9zdGVkIGFzIHNv
-b24gYXMgaXQgaXMgYXZhaWxhYmxlLgo+Cj4gUmVnYXJkcywKPiBKw6lyw6ltaWUKPgo+Pgo+PiBU
-aGFua3MsCj4+IEFuYW5kIE5lZWxpCj4+Cj4+IE9uIFR1ZSwgRGVjIDIsIDIwMTQgYXQgMTE6MDMg
-UE0sIErDqXLDqW1pZSBHYWxhcm5lYXUKPj4gPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNv
-bT4gd3JvdGU6Cj4+Pgo+Pj4gT24gVHVlLCBEZWMgMiwgMjAxNCBhdCA4OjAxIEFNLCBBbmFuZCBO
-ZWVsaSA8YW5hbmQubmVlbGlAZ21haWwuY29tPiB3cm90ZToKPj4+ID4gSGkgQWxsLAo+Pj4gPiBJ
-IGhhdmUgdmVyaWZpZWQgdGhhdCBpJ20gYWJsZSB0byByZWFkIHRoZSBhdHRhY2hlZCAzMi1iaXQg
-YW5kIDY0LWJpdAo+Pj4gPiB0cmFjZXMKPj4+ID4gdXNpbmcgZWNsaXBzZSB0cmFjZSBjb21wYXNz
-Lgo+Pj4gPiBXaGVyZSBhcyBiYWJlbHRyYWNlIGZhaWxzIHRvIHJlYWQgMzItYml0IHRyYWNlcy4K
-Pj4+ID4gQ2FuIGFueW9uZSBwbGVhc2UgbGV0IG1lIGtub3cgd2hhdCBjb3VsZCBiZSB0aGUgaXNz
-dWUgaGVyZS4KPj4+ID4KPj4+Cj4+PiBEZWxldGluZyB0aGUgaW5kZXggZm9sZGVyIG9mIHRoZSAz
-MiBiaXQgdHJhY2Ugc2VlbXMgdG8gbWFrZSBpdAo+Pj4gcG9zc2libGUgZm9yIGJhYmVsdHJhY2Ug
-dG8gcmVhZCB0aGUgdHJhY2UuLi4gUmVwcm9kdWNpYmxlIG9uCj4+PiBCYWJlbHRyYWNlIG1hc3Rl
-ci4KPj4+Cj4+PiBXb3VsZCB5b3UgbWluZCBvcGVuaW5nIGEgYnVnIHJlcG9ydCBhZ2FpbnN0IEJh
-YmVsdHJhY2Ugb24gYnVncy5sdHRuZy5vcmc/Cj4+Pgo+Pj4gVGhhbmtzLAo+Pj4gSsOpcsOpbWll
-Cj4+Pgo+Pj4gPiBUaGFua3MsCj4+PiA+IEFuYW5kIE5lZWxpCj4+PiA+Cj4+PiA+IC0tLS0tLS0t
-LS0gRm9yd2FyZGVkIG1lc3NhZ2UgLS0tLS0tLS0tLQo+Pj4gPiBGcm9tOiBBbmFuZCBOZWVsaSA8
-YW5hbmQubmVlbGlAZ21haWwuY29tPgo+Pj4gPiBEYXRlOiBUaHUsIE5vdiAyNywgMjAxNCBhdCA1
-OjAxIFBNCj4+PiA+IFN1YmplY3Q6IG5vdCBhYmxlIHRvIHJlYWQgMzItYml0IGFwcCB0cmFjZXMg
-cnVubmluZyBvbiBhIDY0LWJpdCBzeXN0ZW0KPj4+ID4gd2l0aAo+Pj4gPiByZWxheWQKPj4+ID4g
-VG86ICJsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-Zz4KPj4+ID4KPj4+ID4KPj4+ID4gSGkgQWxsLAo+Pj4gPiBJJ20gcnVubmluZyBib3RoIDMyLWJp
-dCBhbmQgNjQtYml0IGFwcCdzIG9uIGEgNjQtYml0IHN5c3RlbS4gIEkgaGF2ZQo+Pj4gPiBjb25z
-dW1lcmQncyBidWlsZCBmb3IgYm90aCAzMi1iaXQgYW5kIDY0LWJpdHMgKGZvbGxvd2VkCj4+PiA+
-IGh0dHA6Ly9sdHRuZy5vcmcvZG9jcy8jZG9jLWluc3RydW1lbnRpbmctMzItYml0LWFwcC1vbi02
-NC1iaXQtc3lzdGVtKQo+Pj4gPgo+Pj4gPiBJJ20gc2VlaW5nIHByb2JsZW0gaW4gcmVhZGluZyAz
-Mi1iaXQgYXBwIHRyYWNlcywgYWx0aG91Z2ggaXQgaXMgbG9nZ2luZwo+Pj4gPiBzb21ldGhpbmcg
-YW5kIGxvZ2ZpbGUgc2l6ZSBpbiBsdHRuZy10cmFjZXMvIGlzIGluY3JlYXNpbmcuCj4+PiA+IEkg
-aGF2ZSBjb21waWxlZCBzYW1lIGFwcCBmb3IgNjQtYml0IGFuZCBpdCB3b3JrcyBmaW5lLgo+Pj4g
-Pgo+Pj4gPiBPbmUgbW9yZSBwb2ludCBoZXJlIGlzIHRoYXQsIHRoaXMgaGFwcGVucyBvbmx5IHdo
-ZW4gcmVsYXlpbmcgdHJhY2VzLgo+Pj4gPiBXaXRob3V0Cj4+PiA+IHVzaW5nIHJlbGF5ZCBhbmQg
-YnkgdXNpbmcgbG9jYWwgdHJhY2luZyBpIGRvbnQgc2VlIGFueSBpc3N1ZXMuCj4+PiA+Cj4+PiA+
-IEF0dGFjaGVkIGFyZSB0aGUgbG9ncyBmcm9tIDMyLWJpdCBhbmQgNjQtYml0IGFwcCdzLiBUaGVy
-ZSBzaXplcyBhcmUgc2FtZQo+Pj4gPiBleGNlcHQgdGhlIGZpbGVzIGluIGluZGV4Lwo+Pj4gPgo+
-Pj4gPiBJJ20gdXNpbmcgMi40LjEgbHR0bmcgYW5kIHRyaWVkIDEuMi4wIGFuZCAxLjIuMSB2ZXJz
-aW9uIG9mIGJhYmVsdHJhY2UuCj4+PiA+Cj4+PiA+IENhbiBhbnlvbmUgcGxlYXNlIHRlbGwgbWUg
-aG93IGNhbiBpIGF2b2lkIHRoaXMgcHJvYmxlbS4KPj4+ID4KPj4+ID4gVGhhbmtzLAo+Pj4gPiBB
-bmFuZCBOZWVsaQo+Pj4gPgo+Pj4gPgo+Pj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwo+Pj4gPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+PiA+IGx0
-dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4+ID4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
-YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4+PiA+Cj4+Pgo+Pj4KPj4+Cj4+PiAtLQo+
-Pj4gSsOpcsOpbWllIEdhbGFybmVhdQo+Pj4gRWZmaWNpT1MgSW5jLgo+Pj4gaHR0cDovL3d3dy5l
-ZmZpY2lvcy5jb20KPj4KPj4KPgo+Cj4KPiAtLQo+IErDqXLDqW1pZSBHYWxhcm5lYXUKPiBFZmZp
-Y2lPUyBJbmMuCj4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCgoKLS0gCkrDqXLDqW1pZSBHYWxh
-cm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
-dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
-bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============1451856652==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_4337779_1440322701.1418102450221"
+Content-Length: 1438
+
+------=_Part_4337779_1440322701.1418102450221
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+I am using Lttng in an application. I have enabled heavy traces and I have =
+found that there is a loss in traces.=C2=A0 Is there any way of knowing if =
+there is any trace loss or any information regarding about it . Are there a=
+ny API calls to know about them.
+Thanks & Regards.,K.V.Ranganadh.
+
+------=_Part_4337779_1440322701.1418102450221
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<html><body><div style="color:#000; background-color:#fff; font-family:HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, Sans-Serif;font-size:12px"><div dir="ltr" id="yui_3_16_0_1_1418101997484_7275">Hi,</div><div id="yui_3_16_0_1_1418101997484_7329" dir="ltr"><br></div><div id="yui_3_16_0_1_1418101997484_7276" dir="ltr">I am using Lttng in an application. I have enabled heavy traces and I have found that there is a loss in traces.&nbsp; Is there any way of knowing if there is any trace loss or any information regarding about it . Are there any API calls to know about them.</div><div id="yui_3_16_0_1_1418101997484_7488" dir="ltr"><br></div><div id="yui_3_16_0_1_1418101997484_7489" dir="ltr">Thanks &amp; Regards.,</div><div id="yui_3_16_0_1_1418101997484_7490" dir="ltr">K.V.Ra
+ nganadh.<br></div></div></body></html>
+------=_Part_4337779_1440322701.1418102450221--
+
+
+--===============1451856652==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1451856652==--
