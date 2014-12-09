@@ -1,15 +1,19 @@
-From: Ranganadh Kanitmahanti <ranganadh1991@yahoo.com>
-Subject: Trace loss in Lttng
-Date: Tue, 9 Dec 2014 05:20:50 +0000 (UTC)
-Message-ID: <33305750.4337780.1418102450225.JavaMail.yahoo__1942.59185013852$1418102678$gmane$org@jws10928.mail.sg3.yahoo.com>
-Reply-To: Ranganadh Kanitmahanti <ranganadh1991@yahoo.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Trace loss in Lttng
+Date: Tue, 9 Dec 2014 11:40:50 -0500
+Message-ID: <CA+jJMxvtm+jBbn1-hqQoBcG0+P9sLz+J1uZYD5jFigUpBDa=Zw__19108.8389292874$1418143300$gmane$org@mail.gmail.com>
+References: <33305750.4337780.1418102450225.JavaMail.yahoo@jws10928.mail.sg3.yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1451856652=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from nm38-vm1.bullet.mail.gq1.yahoo.com ([98.136.217.60])
+Received: from mail-qc0-f173.google.com ([209.85.216.173])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <ranganadh1991@yahoo.com>) id 1XyDH5-0008Qw-Iw
- for lttng-dev@lists.lttng.org; Tue, 09 Dec 2014 00:23:52 -0500
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XyNqK-0004O4-7b
+ for lttng-dev@lists.lttng.org; Tue, 09 Dec 2014 11:41:01 -0500
+Received: by mail-qc0-f173.google.com with SMTP id i17so707725qcy.18
+ for <lttng-dev@lists.lttng.org>; Tue, 09 Dec 2014 08:40:50 -0800 (PST)
+In-Reply-To: <33305750.4337780.1418102450225.JavaMail.yahoo@jws10928.mail.sg3.yahoo.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -18,43 +22,28 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Ranganadh Kanitmahanti <ranganadh1991@yahoo.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1451856652==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_4337779_1440322701.1418102450221"
-Content-Length: 1438
-
-------=_Part_4337779_1440322701.1418102450221
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-I am using Lttng in an application. I have enabled heavy traces and I have =
-found that there is a loss in traces.=C2=A0 Is there any way of knowing if =
-there is any trace loss or any information regarding about it . Are there a=
-ny API calls to know about them.
-Thanks & Regards.,K.V.Ranganadh.
-
-------=_Part_4337779_1440322701.1418102450221
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-<html><body><div style="color:#000; background-color:#fff; font-family:HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, Sans-Serif;font-size:12px"><div dir="ltr" id="yui_3_16_0_1_1418101997484_7275">Hi,</div><div id="yui_3_16_0_1_1418101997484_7329" dir="ltr"><br></div><div id="yui_3_16_0_1_1418101997484_7276" dir="ltr">I am using Lttng in an application. I have enabled heavy traces and I have found that there is a loss in traces.&nbsp; Is there any way of knowing if there is any trace loss or any information regarding about it . Are there any API calls to know about them.</div><div id="yui_3_16_0_1_1418101997484_7488" dir="ltr"><br></div><div id="yui_3_16_0_1_1418101997484_7489" dir="ltr">Thanks &amp; Regards.,</div><div id="yui_3_16_0_1_1418101997484_7490" dir="ltr">K.V.Ra
- nganadh.<br></div></div></body></html>
-------=_Part_4337779_1440322701.1418102450221--
-
-
---===============1451856652==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1451856652==--
+T24gVHVlLCBEZWMgOSwgMjAxNCBhdCAxMjoyMCBBTSwgUmFuZ2FuYWRoIEthbml0bWFoYW50aQo8
+cmFuZ2FuYWRoMTk5MUB5YWhvby5jb20+IHdyb3RlOgo+IEhpLAo+Cj4gSSBhbSB1c2luZyBMdHRu
+ZyBpbiBhbiBhcHBsaWNhdGlvbi4gSSBoYXZlIGVuYWJsZWQgaGVhdnkgdHJhY2VzIGFuZCBJIGhh
+dmUKPiBmb3VuZCB0aGF0IHRoZXJlIGlzIGEgbG9zcyBpbiB0cmFjZXMuICBJcyB0aGVyZSBhbnkg
+d2F5IG9mIGtub3dpbmcgaWYgdGhlcmUKPiBpcyBhbnkgdHJhY2UgbG9zcyBvciBhbnkgaW5mb3Jt
+YXRpb24gcmVnYXJkaW5nIGFib3V0IGl0IC4gQXJlIHRoZXJlIGFueSBBUEkKPiBjYWxscyB0byBr
+bm93IGFib3V0IHRoZW0uCgpUaGVyZSBpcyBubyB3YXkgdG8ga25vdyBmcm9tIHRoZSBhcHBsaWNh
+dGlvbiB3aGlsZSB0aGUgdHJhY2UgaXMgYmVpbmcKY2FwdHVyZWQuIEkgd29uZGVyIHdoYXQgZm9y
+bSBzdWNoIGEgbWVjaGFuaXNtIHdvdWxkIHRha2UgdG8sCmJhc2ljYWxseSwgcXVlcnkgdGhlIHRy
+YWNlci9yaW5nIGJ1ZmZlciBmb3IgdGhlIGV2ZW50c19kaXNjYXJkZWQKY291bnRlci4uLiBUaGlz
+IHdvdWxkIGFyZ3VhYmx5IGJlIG9mIGxpdHRsZSB1c2UgaW4gcGVyLXVpZCBtb2RlIChzaW5jZQph
+IHVzZXIncyBhcHBzIHNoYXJlIHRoZSBzYW1lIGJ1ZmZlciksIGJ1dCBJIGNvdWxkIHNlZSB0aGlz
+IGJlaW5nCnVzZWZ1bCBpbiBwZXItcGlkIG1vZGUuCkFueSBpZGVhcz8KCkrDqXLDqW1pZQoKPgo+
+IFRoYW5rcyAmIFJlZ2FyZHMuLAo+IEsuVi5SYW5nYW5hZGguCj4KPiBfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
+YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5l
+YXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
+YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
