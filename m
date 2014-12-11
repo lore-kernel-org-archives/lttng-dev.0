@@ -1,18 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [lttng-ust] Fix: man: you can't link a lib with
-	a	static lib
-Date: Thu, 11 Dec 2014 16:00:56 +0000 (UTC)
-Message-ID: <1604578754.26232.1418313656174.JavaMail.zimbra__44691.5350076326$1418313703$gmane$org@efficios.com>
-References: <1417038656-21690-1-git-send-email-eeppeliteloop@gmail.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Errors compiling converted tp file
+Date: Thu, 11 Dec 2014 12:08:01 -0500
+Message-ID: <CA+jJMxuf5wHG2MBSh4bFmn=BOi2b=O2vH+THT9mphVZR0_asfw__23752.7631725699$1418317731$gmane$org@mail.gmail.com>
+References: <48CF5AC71E61DB46B70D0F388054EFFD6FBE18D6@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+ <9F3E07F7-AA26-49A3-BE48-E117868890E2@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qa0-f48.google.com ([209.85.216.48])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Xz6Al-00021j-IP
- for lttng-dev@lists.lttng.org; Thu, 11 Dec 2014 11:01:00 -0500
-In-Reply-To: <1417038656-21690-1-git-send-email-eeppeliteloop@gmail.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Xz7Dj-0002ND-6x
+ for lttng-dev@lists.lttng.org; Thu, 11 Dec 2014 12:08:08 -0500
+Received: by mail-qa0-f48.google.com with SMTP id v10so3849241qac.21
+ for <lttng-dev@lists.lttng.org>; Thu, 11 Dec 2014 09:08:01 -0800 (PST)
+In-Reply-To: <9F3E07F7-AA26-49A3-BE48-E117868890E2@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,66 +23,35 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: Yan Grange <ygrange@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "Thibault,
+ Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged into master down to stable-2.4, thanks!
-
-Mathieu
-
------ Original Message -----
-> From: "Philippe Proulx" <eeppeliteloop@gmail.com>
-> To: lttng-dev@lists.lttng.org
-> Sent: Wednesday, November 26, 2014 4:50:56 PM
-> Subject: [lttng-dev] [lttng-ust] Fix: man: you can't link a lib with a	static lib
-> 
-> Fixes: #825
-> 
-> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
-> ---
->  doc/man/lttng-ust.3 | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
-> 
-> diff --git a/doc/man/lttng-ust.3 b/doc/man/lttng-ust.3
-> index 0c8405f..3d52bc0 100644
-> --- a/doc/man/lttng-ust.3
-> +++ b/doc/man/lttng-ust.3
-> @@ -299,17 +299,13 @@ There are 2 ways to compile the Tracepoint Provider
-> with the
->  application: either statically or dynamically. Please follow
->  carefully:
->  
-> -  1.1) Compile the Tracepoint provider with the application, either
-> -       directly or through a static library (.a):
-> -    - Into exactly one object of your application: define
-> +  1) Compile the Tracepoint Provider with the application, either
-> +     directly or through a static library (.a):
-> +    - Into exactly one object of your application, define
->        "TRACEPOINT_DEFINE" and include the tracepoint provider.
->      - Use "\-I." for the compilation unit containing the tracepoint
-> -      provider include (e.g. tp.c).
-> -    - Link application with "\-ldl".
-> -    - If building the provider directly into the application,
-> -      link the application with "\-llttng-ust".
-> -    - If building a static library for the provider, link the static
-> -      library with "\-llttng-ust".
-> +      provider include (e.g., tp.c).
-> +    - Link the application with "\-llttng-ust" and "\-ldl".
->      - Include the tracepoint provider header into all C files using
->        the provider.
->      - Examples:
-> --
-> 2.1.3
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+T24gVGh1LCBEZWMgMTEsIDIwMTQgYXQgODo1NiBBTSwgWWFuIEdyYW5nZSA8eWdyYW5nZUBnbWFp
+bC5jb20+IHdyb3RlOgo+IEhpLAo+Cj4gSSBjYW4ndCByZWFsbHkgbWFrZSBvdXQKPj4KPj4+IEhv
+d2V2ZXIgaXQgYWN0dWFsbHkgd29ya3MgdG8gY3JlYXRlIGEgaGVhZGVyIGZpbGUgZnJvbSBhIHRw
+IGZpbGUgYW5kIGNvbXBpbGUgKGFuZCBydW4pIHRoZSBjb2RlLiBIb3dldmVyIEkgbm93IGdldCBp
+biB0cm91YmxlIHdoZW4gZXhlY3V0aW5nOgo+Pj4KPj4+ICQgbHR0bmcgbGlzdCAtLXVzZXJzcGFj
+ZQo+Pj4gRXJyb3I6IFVuYWJsZSB0byBsaXN0IFVTVCBldmVudHM6IFVuZGVmaW5lZCBjb21tYW5k
+Cj4+PiBFcnJvcjogQ29tbWFuZCBlcnJvcgo+Pj4KPj4+IFNvIEkgZ3Vlc3Mgc29tZXRoaW5nIHN0
+aWxsIHdlbnQgc29tZXdoYXQgd3JvbmcgYnV0IEkgY2FuJ3QgcmVhbGx5IHNlZSB3aGF0Lgo+Pj4K
+Pj4+IFlhbiBHcmFuZ2UKPj4KPj4gICBJbiBvcmRlciB0byB0cmFjZSB1c2VyLXNwYWNlLCB5b3Ug
+bXVzdCBpbnN0YWxsLCBpbiBzZXF1ZW5jZSwgdGhlIGZvbGxvd2luZyBwYWNrYWdlczogdXNlcnNw
+YWNlLXJjdSwgbHR0bmctdXN0LCBsdHRuZy10b29scy4gIFdhcyB0aGlzIGRvbmU/Cj4+Cj4gSSB0
+cmllZCB0byBpbnN0YWxsIHRoZSByaWdodCBwYWNrYWdlcyBidXQgdGhlcmUgZG9uJ3Qgc2VlbSB0
+byBiZSBwYWNrYWdlcyBuYW1lZCBsaWtlIHRoYXQgaW4gZWl0aGVyIHRoZSB1YnVudHUgcmVwb3Np
+dG9yeSBvciB0aGUgcHBhIHByb3ZpZGVkIGJ5IHlvdS4KPgo+IEkgaGF2ZSB0aGUgZm9sbG93aW5n
+IHBhY2thZ2VzIGluc3RhbGxlZDoKPiBsdHRuZy10b29scwo+IGxpYmx0dG5nLXVzdDAKPiBsaWJs
+dHRuZy11c3QtZGV2Cj4gbGlibHR0bmctdXN0LWN0bDIKPiBsaWJsdHRuZy1jdGwwCj4gbGlidXJj
+dS1kZXYKPiBsaWJ1cmN1MgoKU29tZSBvZiB0aGVzZSBwYWNrYWdlcyBhcHBlYXIgdG8gYmUgY29u
+ZmxpY3RpbmcuIFlvdSdkIGJlIGJldHRlciBvZmYKcmVtb3ZpbmcgdGhlbSBhbGwgYW5kIHN0YXJ0
+aW5nIGZyZXNoIGZyb20gdGhlIFBQQS4KCkrDqXLDqW1pZQoKPgo+IFdpdGggYWxsIHRoaXMgaW5z
+dGFsbGVkLCBJIHN0aWxsIGRvbid0IGdldCBpdCB0byB3b3JrLgo+Cj4gQ2hlZXJzCj4KPiBZYW4g
+R3JhbmdlCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0
+dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoK
+CgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNp
+b3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xp
+c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
