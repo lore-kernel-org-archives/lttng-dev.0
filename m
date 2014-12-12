@@ -1,19 +1,19 @@
-From: Nathan Lynch <Nathan_Lynch@mentor.com>
-Subject: lttng-tools 2.6-rc vs. lttng-ust master
-Date: Fri, 12 Dec 2014 12:36:54 -0600
-Message-ID: <548B35C6.30604__25643.8310527757$1418409465$gmane$org@mentor.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: lttng-tools 2.6-rc vs. lttng-ust master
+Date: Fri, 12 Dec 2014 14:33:28 -0500
+Message-ID: <CA+jJMxttofQRq6cR6bZ=1SRTah0eX9Sm+Yt6gu1ZMrJPpF+i0g__19160.6728280478$1418412848$gmane$org@mail.gmail.com>
+References: <548B35C6.30604@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail-qg0-f46.google.com ([209.85.192.46])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Nathan_Lynch@mentor.com>) id 1XzV5O-0001o1-Ar
- for lttng-dev@lists.lttng.org; Fri, 12 Dec 2014 13:37:08 -0500
-Received: from svr-orw-fem-04.mgc.mentorg.com ([147.34.97.41])
- by relay1.mentorg.com with esmtp
- id 1XzV5D-0003ve-Do from Nathan_Lynch@mentor.com
- for lttng-dev@lists.lttng.org; Fri, 12 Dec 2014 10:36:55 -0800
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1XzVy2-00027J-FF
+ for lttng-dev@lists.lttng.org; Fri, 12 Dec 2014 14:33:35 -0500
+Received: by mail-qg0-f46.google.com with SMTP id q107so3853955qgd.33
+ for <lttng-dev@lists.lttng.org>; Fri, 12 Dec 2014 11:33:29 -0800 (PST)
+In-Reply-To: <548B35C6.30604@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,45 +22,51 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Nathan Lynch <Nathan_Lynch@mentor.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-By accident I attempted to build lttng-tools stable-2.6 branch
-against current lttng-ust master, and got:
-
-trace-ust.c: In function 'trace_ust_create_event':
-trace-ust.c:430:11: error: 'struct lttng_ust_event' has no member named 'disabled'
-  lue->attr.disabled = 1;
-           ^
-I found the commit below, which seems to indicate that this may be
-anticipated/intentional, but I figured I'd raise the issue in case
-it's not.  Breaking source compatibility with lttng-tools doesn't
-seem like a big deal, but does the removal of the 'disabled' field in
-lttng-ust/master present a problem for other users of the library?
-
-
-commit 3a4009667b330f62fc4d6100ead0bcfd5f5526d6
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Wed Nov 12 18:18:32 2014 -0500
-
-    Fix: filter attach vs event enable race
-    
-    In order to correctly handle the use-case where events are enabled
-    _after_ trace is started, and _after_ applications are already being
-    traced, the event should be created in a "disabled" state, so that it
-    does not trace events until its filter is attached.
-    
-    This fix needs to be done both in lttng-tools and lttng-ust. In order to
-    keep ABI compatibility between tools and ust within a stable release
-    cycle, we introduce a new "disabled" within struct lttng_ust_event
-    padding (previously zeroed). Newer LTTng-UST checks this flag, and
-    fallback on the old racy behavior (enabling the event on creation) if it
-    is unset.
-    
-    Therefore, old session daemon works with newer lttng-ust of the same
-    stable release, and vice-versa. However, building lttng-tools requires
-    an upgraded lttng-ust, which contains the communication protocol with
-    the new "disabled" field.
-    
-    This patch should be backported to stable-2.4, stable-2.5, stable-2.6
-    branches.
+T24gRnJpLCBEZWMgMTIsIDIwMTQgYXQgMTozNiBQTSwgTmF0aGFuIEx5bmNoIDxOYXRoYW5fTHlu
+Y2hAbWVudG9yLmNvbT4gd3JvdGU6Cj4gQnkgYWNjaWRlbnQgSSBhdHRlbXB0ZWQgdG8gYnVpbGQg
+bHR0bmctdG9vbHMgc3RhYmxlLTIuNiBicmFuY2gKPiBhZ2FpbnN0IGN1cnJlbnQgbHR0bmctdXN0
+IG1hc3RlciwgYW5kIGdvdDoKPgo+IHRyYWNlLXVzdC5jOiBJbiBmdW5jdGlvbiAndHJhY2VfdXN0
+X2NyZWF0ZV9ldmVudCc6Cj4gdHJhY2UtdXN0LmM6NDMwOjExOiBlcnJvcjogJ3N0cnVjdCBsdHRu
+Z191c3RfZXZlbnQnIGhhcyBubyBtZW1iZXIgbmFtZWQgJ2Rpc2FibGVkJwo+ICAgbHVlLT5hdHRy
+LmRpc2FibGVkID0gMTsKPiAgICAgICAgICAgIF4KPiBJIGZvdW5kIHRoZSBjb21taXQgYmVsb3cs
+IHdoaWNoIHNlZW1zIHRvIGluZGljYXRlIHRoYXQgdGhpcyBtYXkgYmUKPiBhbnRpY2lwYXRlZC9p
+bnRlbnRpb25hbCwgYnV0IEkgZmlndXJlZCBJJ2QgcmFpc2UgdGhlIGlzc3VlIGluIGNhc2UKPiBp
+dCdzIG5vdC4gIEJyZWFraW5nIHNvdXJjZSBjb21wYXRpYmlsaXR5IHdpdGggbHR0bmctdG9vbHMg
+ZG9lc24ndAo+IHNlZW0gbGlrZSBhIGJpZyBkZWFsLCBidXQgZG9lcyB0aGUgcmVtb3ZhbCBvZiB0
+aGUgJ2Rpc2FibGVkJyBmaWVsZCBpbgo+IGx0dG5nLXVzdC9tYXN0ZXIgcHJlc2VudCBhIHByb2Js
+ZW0gZm9yIG90aGVyIHVzZXJzIG9mIHRoZSBsaWJyYXJ5PwoKSXQncyBub3QgYSBwcm9ibGVtIGZv
+ciBpbnN0cnVtZW50ZWQgYXBwbGljYXRpb25zIGFzIHRoaXMgaXMgc3RyaWN0bHkgYQpzZXNzaW9u
+ZCA8LT4gVVNUIGNvbW11bmljYXRpb24gY2hhbmdlLgoKUmVnYXJkcywKSsOpcsOpbWllCgo+Cj4K
+PiBjb21taXQgM2E0MDA5NjY3YjMzMGY2MmZjNGQ2MTAwZWFkMGJjZmQ1ZjU1MjZkNgo+IEF1dGhv
+cjogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiBE
+YXRlOiAgIFdlZCBOb3YgMTIgMTg6MTg6MzIgMjAxNCAtMDUwMAo+Cj4gICAgIEZpeDogZmlsdGVy
+IGF0dGFjaCB2cyBldmVudCBlbmFibGUgcmFjZQo+Cj4gICAgIEluIG9yZGVyIHRvIGNvcnJlY3Rs
+eSBoYW5kbGUgdGhlIHVzZS1jYXNlIHdoZXJlIGV2ZW50cyBhcmUgZW5hYmxlZAo+ICAgICBfYWZ0
+ZXJfIHRyYWNlIGlzIHN0YXJ0ZWQsIGFuZCBfYWZ0ZXJfIGFwcGxpY2F0aW9ucyBhcmUgYWxyZWFk
+eSBiZWluZwo+ICAgICB0cmFjZWQsIHRoZSBldmVudCBzaG91bGQgYmUgY3JlYXRlZCBpbiBhICJk
+aXNhYmxlZCIgc3RhdGUsIHNvIHRoYXQgaXQKPiAgICAgZG9lcyBub3QgdHJhY2UgZXZlbnRzIHVu
+dGlsIGl0cyBmaWx0ZXIgaXMgYXR0YWNoZWQuCj4KPiAgICAgVGhpcyBmaXggbmVlZHMgdG8gYmUg
+ZG9uZSBib3RoIGluIGx0dG5nLXRvb2xzIGFuZCBsdHRuZy11c3QuIEluIG9yZGVyIHRvCj4gICAg
+IGtlZXAgQUJJIGNvbXBhdGliaWxpdHkgYmV0d2VlbiB0b29scyBhbmQgdXN0IHdpdGhpbiBhIHN0
+YWJsZSByZWxlYXNlCj4gICAgIGN5Y2xlLCB3ZSBpbnRyb2R1Y2UgYSBuZXcgImRpc2FibGVkIiB3
+aXRoaW4gc3RydWN0IGx0dG5nX3VzdF9ldmVudAo+ICAgICBwYWRkaW5nIChwcmV2aW91c2x5IHpl
+cm9lZCkuIE5ld2VyIExUVG5nLVVTVCBjaGVja3MgdGhpcyBmbGFnLCBhbmQKPiAgICAgZmFsbGJh
+Y2sgb24gdGhlIG9sZCByYWN5IGJlaGF2aW9yIChlbmFibGluZyB0aGUgZXZlbnQgb24gY3JlYXRp
+b24pIGlmIGl0Cj4gICAgIGlzIHVuc2V0Lgo+Cj4gICAgIFRoZXJlZm9yZSwgb2xkIHNlc3Npb24g
+ZGFlbW9uIHdvcmtzIHdpdGggbmV3ZXIgbHR0bmctdXN0IG9mIHRoZSBzYW1lCj4gICAgIHN0YWJs
+ZSByZWxlYXNlLCBhbmQgdmljZS12ZXJzYS4gSG93ZXZlciwgYnVpbGRpbmcgbHR0bmctdG9vbHMg
+cmVxdWlyZXMKPiAgICAgYW4gdXBncmFkZWQgbHR0bmctdXN0LCB3aGljaCBjb250YWlucyB0aGUg
+Y29tbXVuaWNhdGlvbiBwcm90b2NvbCB3aXRoCj4gICAgIHRoZSBuZXcgImRpc2FibGVkIiBmaWVs
+ZC4KPgo+ICAgICBUaGlzIHBhdGNoIHNob3VsZCBiZSBiYWNrcG9ydGVkIHRvIHN0YWJsZS0yLjQs
+IHN0YWJsZS0yLjUsIHN0YWJsZS0yLjYKPiAgICAgYnJhbmNoZXMuCj4KPgo+IF9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcg
+bGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3Jn
+L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCgoKLS0gCkrDqXLDqW1pZSBHYWxh
+cm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
+dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
