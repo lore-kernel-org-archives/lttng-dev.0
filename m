@@ -1,22 +1,21 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 Subject: Re: Errors compiling converted tp file
-Date: Fri, 12 Dec 2014 08:58:29 -0500
-Message-ID: <CA+jJMxu9mQRhvWejQJEBgq5Uw3=jLFBn8mob=CXZggm1JzuGAQ__31961.412743158$1418392763$gmane$org@mail.gmail.com>
+Date: Fri, 12 Dec 2014 14:13:16 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD6FBE3A22__8037.261296022$1418393652$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 References: <48CF5AC71E61DB46B70D0F388054EFFD6FBE18D6@VAL-E-02.valcartier.drdc-rddc.gc.ca>
  <9F3E07F7-AA26-49A3-BE48-E117868890E2@gmail.com>
  <CA+jJMxuf5wHG2MBSh4bFmn=BOi2b=O2vH+THT9mphVZR0_asfw@mail.gmail.com>
  <BE7D65EA-876D-4CB9-A935-659200D5BE77@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f41.google.com ([209.85.216.41])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1XzQjr-0000DL-Gb
- for lttng-dev@lists.lttng.org; Fri, 12 Dec 2014 08:58:37 -0500
-Received: by mail-qa0-f41.google.com with SMTP id f12so5229854qad.28
- for <lttng-dev@lists.lttng.org>; Fri, 12 Dec 2014 05:58:30 -0800 (PST)
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1XzQyG-0000Kk-QG
+ for lttng-dev@lists.lttng.org; Fri, 12 Dec 2014 09:13:30 -0500
 In-Reply-To: <BE7D65EA-876D-4CB9-A935-659200D5BE77@gmail.com>
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,77 +24,132 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yan Grange <ygrange@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Alexandre Montplaisir <alexandre.montplaisir-gon.alves@ericsson.com>, "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+To: Yan Grange <ygrange@gmail.com>, =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gRnJpLCBEZWMgMTIsIDIwMTQgYXQgNTo1OSBBTSwgWWFuIEdyYW5nZSA8eWdyYW5nZUBnbWFp
-bC5jb20+IHdyb3RlOgo+IEhpLAo+Cj4gTGV0IG1lIHN0YXJ0IGJ5IHRoYW5raW5nIHlvdSBmb3Ig
-YWxsIHRoZSBzdXBwb3J0IHlvdSBnaXZlIChpdCBpcyBpbXByZXNzaW5nbHkgZmFzdCkuCj4KPiBT
-byBpZiBJIGxvb2sgaW4gdGhlIHJlcG8sIHdpdGggdGhlIHBwYSBpbnN0YWxsZWQsIEkgY2FuJ3Qg
-ZmluZCBsaWJ1cmN1Ogo+Cj4gJCBjYXQgL2V0Yy9hcHQvc291cmNlcy5saXN0LmQvbHR0bmctcHBh
-LXByZWNpc2UubGlzdAo+IGRlYiBodHRwOi8vcHBhLmxhdW5jaHBhZC5uZXQvbHR0bmcvcHBhL3Vi
-dW50dSBwcmVjaXNlIG1haW4KPiBkZWItc3JjIGh0dHA6Ly9wcGEubGF1bmNocGFkLm5ldC9sdHRu
-Zy9wcGEvdWJ1bnR1IHByZWNpc2UgbWFpbgo+Cj4gKEkgaGF2ZSBhc2tlZCBteSBhZG1pbiB0byBk
-byBhbiBhcHQtZ2V0IHVwZGF0ZSkKPgo+ICQgYXB0LWNhY2hlIHNlYXJjaCBsdHRuZwo+IGx0dG5n
-LW1vZHVsZXMtZGttcyAtIExpbnV4IFRyYWNlIFRvb2xraXQgKExUVG5nKSBrZXJuZWwgbW9kdWxl
-cyAoREtNUykKPiBsdHRuZy10b29scyAtIExUVG5nIGNvbnRyb2wgYW5kIHV0aWxpdHkgcHJvZ3Jh
-bXMKPiBsaWJsdHRuZy11c3QwIC0gTFRUbmcgMi4wIFVzZXJzcGFjZSBUcmFjZXIgKGxpYnJhcmll
-cykKPiBsaWJsdHRuZy11c3QtZGV2IC0gTFRUbmcgMi4wIFVzZXJzcGFjZSBUcmFjZXIgKGRldmVs
-b3BtZW50IGZpbGVzKQo+IGxpYmx0dG5nLWN0bC1kZXYgLSBMVFRuZyBjb250cm9sIGFuZCB1dGls
-aXR5IGxpYnJhcnkgKGRldmVsb3BtZW50IGZpbGVzKQo+IGxpYmx0dG5nLWN0bDAgLSBMVFRuZyBj
-b250cm9sIGFuZCB1dGlsaXR5IGxpYnJhcnkKPiBsaWJsdHRuZy11c3QtamF2YS1qbmkgLSBMVFRu
-ZyAyLjAgVXNlcnNwYWNlIFRyYWNlciAoSk5JIGludGVyZmFjZSkKPiBsaWJsdHRuZy11c3QtamF2
-YSAtIExUVG5nIDIuMCBVc2Vyc3BhY2UgVHJhY2VyIChKYXZhIHN1cHBvcnQgbGlicmFyeSkKPiBw
-eXRob24tbHR0bmcgLSBQeXRob24gYmluZGluZ3MgZm9yIExUVG5nCj4gbGlibHR0bmctdXN0LWN0
-bDIgLSBMVFRuZyAyLjAgVXNlcnNwYWNlIFRyYWNlciAodHJhY2UgY29udHJvbCBsaWJyYXJ5KQo+
-Cj4gJCBhcHQtY2FjaGUgc2VhcmNoIGxpYnVyY3UKPiBsaWJ1cmN1LWRldiAtIGEgdXNlcnNwYWNl
-IFJDVSAocmVhZC1jb3B5LXVwZGF0ZSkgbGlicmFyeSAtIGRldmVsb3BtZW50IGZpbGVzCj4gbGli
-dXJjdTEgLSBhIHVzZXJzcGFjZSBSQ1UgKHJlYWQtY29weS11cGRhdGUpIGxpYnJhcnkKPiBsaWJ1
-cmN1MiAtIGEgdXNlcnNwYWNlIFJDVSAocmVhZC1jb3B5LXVwZGF0ZSkgbGlicmFyeQo+Cj4gU28g
-aXQgbG9va3MgbGlrZSBteSBhcHRpdHVkZSBpcyBub3QgYXdhcmUgb2YgYSBwYWNrYWdlIGNhbGxl
-ZCBsaWJ1cmN1IHdpdGhvdXQgYSBwb3N0Zml44oCmIEV2ZW4gaWYgSSdkIHB1cmdlIGFuZCByZWlu
-c3RhbGwgKHdoaWNoIHNlZW1zIGxpa2UgYSB2ZXJ5IGdvb2QgaWRlYSkgSSBkb24ndCBzZWUgaWYg
-SSBjYW4gYWNjZXNzIHRoZSByaWdodCBsaWJyYXJ5IHRoaXMgd2F5Lgo+CgpUaGUgcGFja2FnaW5n
-IHNpdHVhdGlvbiBvbiBVYnVudHUgMTIuMDQgaXMgYSBsaXR0bGUgY29uZnVzaW5nLi4uCgpBcyBm
-YXIgYXMgSSBjYW4gdGVsbCwgeW91IGhhdmUKCmxpYnVyY3UgKHRoZSBvbmUgYXZhaWxhYmxlIGlu
-IHRoZSBvZmZpY2lhbCBVYnVudHUgMTIuMDQgcmVwb3MsIHYwLjYuNykKbGlidXJjdTEgKHYwLjcu
-eCkKbGlidXJjdTIgKHYwLjgueCkKClRoZSBMVFRuZyB2ZXJzaW9uIG9uIHRoZSBQUEEgKHYyLjUu
-eCkgZGVwZW5kcyBvbiB0aGUgMC44IGxpYnVyY3UuClRoZXJlZm9yZSwgbGlidXJjdTIgaXMgdGhl
-IG9uZSB5b3Ugd2FudCB0byBpbnN0YWxsLgoKTG9va2luZyBhdCB0aGUgZGVwZW5kZW5jaWVzLCBp
-dCBzZWVtcyB0aGF0IGluc3RhbGxpbmcgbHR0bmctdG9vbHMgYW5kCmx0dG5nLW1vZHVsZXMtZGtt
-cyAoZnJvbSB0aGUgUFBBKSBzaG91bGQgaGF2ZSB5b3UgY292ZXJlZCBhbmQgaW5zdGFsbApldmVy
-eXRoaW5nIHlvdSBuZWVkLgoKQ0MtaW5nIEFsZXhhbmRyZSBNb250cGxhaXNpciB3aG8gbWFpbnRh
-aW5zIG1vc3Qgb2YgdGhlc2UgcGFja2FnZXMuCgpSZWdhcmRzLApKw6lyw6ltaWUKCj4gQ2hlZXJz
-Cj4KPiBZYW4gR3JhbmdlCj4KPiBPbiAxMSBkZWMuIDIwMTQsIGF0IDE4OjA4LCBKw6lyw6ltaWUg
-R2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+IHdyb3RlOgo+Cj4+IE9u
-IFRodSwgRGVjIDExLCAyMDE0IGF0IDg6NTYgQU0sIFlhbiBHcmFuZ2UgPHlncmFuZ2VAZ21haWwu
-Y29tPiB3cm90ZToKPj4+IEhpLAo+Pj4KPj4+IEkgY2FuJ3QgcmVhbGx5IG1ha2Ugb3V0Cj4+Pj4K
-Pj4+Pj4gSG93ZXZlciBpdCBhY3R1YWxseSB3b3JrcyB0byBjcmVhdGUgYSBoZWFkZXIgZmlsZSBm
-cm9tIGEgdHAgZmlsZSBhbmQgY29tcGlsZSAoYW5kIHJ1bikgdGhlIGNvZGUuIEhvd2V2ZXIgSSBu
-b3cgZ2V0IGluIHRyb3VibGUgd2hlbiBleGVjdXRpbmc6Cj4+Pj4+Cj4+Pj4+ICQgbHR0bmcgbGlz
-dCAtLXVzZXJzcGFjZQo+Pj4+PiBFcnJvcjogVW5hYmxlIHRvIGxpc3QgVVNUIGV2ZW50czogVW5k
-ZWZpbmVkIGNvbW1hbmQKPj4+Pj4gRXJyb3I6IENvbW1hbmQgZXJyb3IKPj4+Pj4KPj4+Pj4gU28g
-SSBndWVzcyBzb21ldGhpbmcgc3RpbGwgd2VudCBzb21ld2hhdCB3cm9uZyBidXQgSSBjYW4ndCBy
-ZWFsbHkgc2VlIHdoYXQuCj4+Pj4+Cj4+Pj4+IFlhbiBHcmFuZ2UKPj4+Pgo+Pj4+ICBJbiBvcmRl
-ciB0byB0cmFjZSB1c2VyLXNwYWNlLCB5b3UgbXVzdCBpbnN0YWxsLCBpbiBzZXF1ZW5jZSwgdGhl
-IGZvbGxvd2luZyBwYWNrYWdlczogdXNlcnNwYWNlLXJjdSwgbHR0bmctdXN0LCBsdHRuZy10b29s
-cy4gIFdhcyB0aGlzIGRvbmU/Cj4+Pj4KPj4+IEkgdHJpZWQgdG8gaW5zdGFsbCB0aGUgcmlnaHQg
-cGFja2FnZXMgYnV0IHRoZXJlIGRvbid0IHNlZW0gdG8gYmUgcGFja2FnZXMgbmFtZWQgbGlrZSB0
-aGF0IGluIGVpdGhlciB0aGUgdWJ1bnR1IHJlcG9zaXRvcnkgb3IgdGhlIHBwYSBwcm92aWRlZCBi
-eSB5b3UuCj4+Pgo+Pj4gSSBoYXZlIHRoZSBmb2xsb3dpbmcgcGFja2FnZXMgaW5zdGFsbGVkOgo+
-Pj4gbHR0bmctdG9vbHMKPj4+IGxpYmx0dG5nLXVzdDAKPj4+IGxpYmx0dG5nLXVzdC1kZXYKPj4+
-IGxpYmx0dG5nLXVzdC1jdGwyCj4+PiBsaWJsdHRuZy1jdGwwCj4+PiBsaWJ1cmN1LWRldgo+Pj4g
-bGlidXJjdTIKPj4KPj4gU29tZSBvZiB0aGVzZSBwYWNrYWdlcyBhcHBlYXIgdG8gYmUgY29uZmxp
-Y3RpbmcuIFlvdSdkIGJlIGJldHRlciBvZmYKPj4gcmVtb3ZpbmcgdGhlbSBhbGwgYW5kIHN0YXJ0
-aW5nIGZyZXNoIGZyb20gdGhlIFBQQS4KPj4KPj4gSsOpcsOpbWllCj4+Cj4+Pgo+Pj4gV2l0aCBh
-bGwgdGhpcyBpbnN0YWxsZWQsIEkgc3RpbGwgZG9uJ3QgZ2V0IGl0IHRvIHdvcmsuCj4+Pgo+Pj4g
-Q2hlZXJzCj4+Pgo+Pj4gWWFuIEdyYW5nZQo+Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KPj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4+IGx0dG5n
-LWRldkBsaXN0cy5sdHRuZy5vcmcKPj4+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+Pgo+Pgo+Pgo+PiAtLQo+PiBKw6lyw6ltaWUgR2Fs
-YXJuZWF1Cj4+IEVmZmljaU9TIEluYy4KPj4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KPgoKCgot
-LSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3Mu
-Y29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+> Let me start by thanking you for all the support you give (it is impressi=
+ngly fast).
+> =
+
+> So if I look in the repo, with the ppa installed, I can't find liburcu:
+>
+> $ cat /etc/apt/sources.list.d/lttng-ppa-precise.list
+> deb http://ppa.launchpad.net/lttng/ppa/ubuntu precise main deb-src http:/=
+/ppa.launchpad.net/lttng/ppa/ubuntu precise main
+>
+> (I have asked my admin to do an apt-get update)
+>
+> $ apt-cache search lttng
+> lttng-modules-dkms - Linux Trace Toolkit (LTTng) kernel modules (DKMS) lt=
+tng-tools - LTTng control and utility programs
+> liblttng-ust0 - LTTng 2.0 Userspace Tracer (libraries) liblttng-ust-dev -=
+ LTTng 2.0 Userspace Tracer (development files) liblttng-ctl-dev - LTTng co=
+ntrol and utility library (development files)
+> liblttng-ctl0 - LTTng control and utility library liblttng-ust-java-jni -=
+ LTTng 2.0 Userspace Tracer (JNI interface) liblttng-ust-java - LTTng 2.0 U=
+serspace Tracer (Java support library) python-lttng - Python bindings for L=
+TTng
+> liblttng-ust-ctl2 - LTTng 2.0 Userspace Tracer (trace control library)
+>
+> $ apt-cache search liburcu
+> liburcu-dev - a userspace RCU (read-copy-update) library - development fi=
+les
+> liburcu1 - a userspace RCU (read-copy-update) library
+> liburcu2 - a userspace RCU (read-copy-update) library
+>
+> So it looks like my aptitude is not aware of a package called liburcu wit=
+hout a postfix. Even if I'd purge and reinstall (which seems like a very go=
+od idea) I don't see if I can access the right library this way.
+>
+> Yan Grange
+
+If you visit https://launchpad.net/~lttng/+archive/ppa you'll see
+
+babeltrace 	1.2.y+stable+bzr710+pack25+201412120847~ubuntu15.04.1
+liburcu	 	0.8.x+stable+bzr1060+pack22+201411140046~ubuntu15.04.1
+lttng-modules 	2.5.x+stable+bzr634+pack21+201412111931~ubuntu15.04.1
+lttng-tools 	2.5.x+stable+bzr2423+pack12+201412110246~ubuntu15.04.1
+lttng-ust 	2.5.x+stable+bzr1802+pack45+201412111801~ubuntu15.04.1
+
+   The packages you see in http://ppa.launchpad.net/lttng/ppa/ubuntu depend=
+ on your hardware.  We have:
+
+amd64:
+liburcu-dev
+lttng-modules-dkms
+lttng-tools
+babeltrace
+libbabeltrace0
+liburcu1
+libbabeltrace-dev
+liblttng-ust0
+liblttng-ust-dev
+liblttng-ctl-dev
+liblttng-ctl0
+libbabeltrace-ctf-dev
+libbabeltrace-ctf0
+liblttng-ust-java-jni
+liblttng-ust-java
+liburcu2
+python-lttng
+liblttng-ust-ctl2
+libbabeltrace1
+libbabeltrace-ctf1
+python3-babeltrace
+
+armel:
+lttng-modules-dkms
+liblttng-ust-java
+
+armhf:
+lttng-modules-dkms
+liblttng-ust-java
+
+i386:
+liburcu-dev
+lttng-modules-dkms
+lttng-tools
+babeltrace
+libbabeltrace0
+liburcu1
+libbabeltrace-dev
+liblttng-ust0
+liblttng-ust-dev
+liblttng-ctl-dev
+liblttng-ctl0
+libbabeltrace-ctf-dev
+libbabeltrace-ctf0
+liblttng-ust-java-jni
+liblttng-ust-java
+liburcu2
+python-lttng
+liblttng-ust-ctl2
+libbabeltrace1
+libbabeltrace-ctf1
+python3-babeltrace
+
+   Your listings seem all right; the difference is source vs binary: the so=
+urce package liburcu builds the binary packages liburcu-dev, liburcu1 and l=
+iburcu2, for instance.  (I'm more used to building from source)
+
+   Ignoring the babeltrace packages, the dependencies are such that this is=
+ the minimal install: liblttng-ust-dev, liblttng-ctl-dev, lttng-tools.  Opt=
+ionally, liblttng-ust-java, python-lttng, lttng-modules-dkms.  Turns out li=
+burcu1 is not connected to anything (I think it's for older releases).
+
+Daniel U. Thibault
+Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
+ntermeasures (SPC)
+Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
+Cyber Security (MCCS)
+RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
+re
+2459 route de la Bravoure
+Qu=E9bec QC  G3J 1X5
+CANADA
+Vox : (418) 844-4000 x4245
+Fax : (418) 844-4538
+NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
+Gouvernement du Canada | Government of Canada
+<http://www.valcartier.drdc-rddc.gc.ca/>
