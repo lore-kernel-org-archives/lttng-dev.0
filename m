@@ -1,21 +1,17 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: Errors compiling converted tp file
-Date: Fri, 12 Dec 2014 16:49:30 -0500
-Message-ID: <548B62EA.1080302__16360.6720198461$1418421022$gmane$org@voxpopuli.im>
-References: <48CF5AC71E61DB46B70D0F388054EFFD6FBE18D6@VAL-E-02.valcartier.drdc-rddc.gc.ca>
- <9F3E07F7-AA26-49A3-BE48-E117868890E2@gmail.com>
- <CA+jJMxuf5wHG2MBSh4bFmn=BOi2b=O2vH+THT9mphVZR0_asfw@mail.gmail.com>
- <BE7D65EA-876D-4CB9-A935-659200D5BE77@gmail.com>
- <CA+jJMxu9mQRhvWejQJEBgq5Uw3=jLFBn8mob=CXZggm1JzuGAQ@mail.gmail.com>
+From: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Subject: Bug in LTTng-UST
+Date: Sat, 13 Dec 2014 00:54:35 +0000
+Message-ID: <1418432075.9766.6.camel__23853.9499849596$1418432135$gmane$org@moya>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.181])
+Received: from usevmg20.ericsson.net ([198.24.6.45])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <alexmonthy@voxpopuli.im>) id 1XzY5h-0002ub-Nh
- for lttng-dev@lists.lttng.org; Fri, 12 Dec 2014 16:49:40 -0500
-In-Reply-To: <CA+jJMxu9mQRhvWejQJEBgq5Uw3=jLFBn8mob=CXZggm1JzuGAQ@mail.gmail.com>
+ (envelope-from <matthew.khouzam@ericsson.com>) id 1Xzayp-0003mM-6T
+ for lttng-dev@lists.lttng.org; Fri, 12 Dec 2014 19:54:50 -0500
+Content-Language: en-US
+Content-ID: <DA05CBC2A5E1F343A47FC56D8BDA26EC@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,94 +20,25 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yan Grange <ygrange@gmail.com>
-Cc: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpUaGVyZSBpcyBpbmRlZWQgc29tZXRoaW5nIHdlaXJkIHdpdGggdGhlIGx0dG5nLW1vZHVs
-ZXMgcGFja2FnZSBvbiAxMi4wNC4gCkJ1dCBpZiB5b3UgYXJlIG9ubHkgZG9pbmcgdXNlcnNwYWNl
-IHRyYWNpbmcsIHRoZW4gdGhhdCBwYXJ0IHNob3VsZCBub3QgCm1hdHRlciwgYWxsIHlvdSBuZWVk
-IGlzICJsdHRuZy10b29scyIgYW5kICJsaWJsdHRuZy11c3QtZGV2Ii4KCllvdSBhbHNvIHNlZW0g
-dG8gaGF2ZSBsb3RzIG9mIG9sZGVyIHBhY2thZ2UgdmVyc2lvbnMgaW5zdGFsbGVkLiBUaGlzIGNh
-biAKc29tZXRpbWVzIGNyZWF0ZSBwcm9ibGVtcywgYXMgYW4gYXBwbGljYXRpb24gY2FuIGxpbmsg
-YWdhaW5zdCBvbmUgCnZlcnNpb24gb2YgdGhlIFVTVCBsaWJyYXJ5LCBidXQgdGhlIHRyYWNlciBj
-b250cm9sIHdpbGwgdXNlIGFub3RoZXIsIAp3aGljaCB3aWxsIHJlc3VsdCBpbiBubyB0cmFjZXBv
-aW50cyBiZWluZyB0YWtlbi4KClRvIGJlIHNhZmUgeW91IG1pZ2h0IHdhbnQgdG8gcmVtb3ZlICh3
-aXRoICJhcHQtZ2V0IHB1cmdlIikgZXZlcnl0aGluZyAKdGhhdCBpcyBsaXN0ZWQgdGhlcmUsIGFu
-ZCBvbmx5IHJlaW5zdGFsbCB0aG9zZSB5b3UgbmVlZCBmcm9tIHRoZSBQUEEuIApUaGlzIHNob3Vs
-ZCBhdm9pZCBkdXBsaWNhdGUgdmVyc2lvbnMgb2YgbGlidXJjdSBhbmQgbGlibHR0bmctdXN0Ki4K
-QWxzbyBtYWtlIHN1cmUgeW91IGhhdmUgbm8gbGluZ2VyaW5nIGxpYnJhcmllcyBpbiAvdXNyL2xv
-Y2FsLiBUaGlzIGlzIAphbm90aGVyIHZlcnkgY29tbW9uIHByb2JsZW0hCgpMZXQgdXMga25vdyBp
-ZiBpdCBzdGlsbCBkb2Vzbid0IHdvcmsuCgpDaGVlcnMsCkFsZXhhbmRyZQoKCgpPbiAxMi8xMi8y
-MDE0IDA4OjU4IEFNLCBKw6lyw6ltaWUgR2FsYXJuZWF1IHdyb3RlOgo+IE9uIEZyaSwgRGVjIDEy
-LCAyMDE0IGF0IDU6NTkgQU0sIFlhbiBHcmFuZ2UgPHlncmFuZ2VAZ21haWwuY29tPiB3cm90ZToK
-Pj4gSGksCj4+Cj4+IExldCBtZSBzdGFydCBieSB0aGFua2luZyB5b3UgZm9yIGFsbCB0aGUgc3Vw
-cG9ydCB5b3UgZ2l2ZSAoaXQgaXMgaW1wcmVzc2luZ2x5IGZhc3QpLgo+Pgo+PiBTbyBpZiBJIGxv
-b2sgaW4gdGhlIHJlcG8sIHdpdGggdGhlIHBwYSBpbnN0YWxsZWQsIEkgY2FuJ3QgZmluZCBsaWJ1
-cmN1Ogo+Pgo+PiAkIGNhdCAvZXRjL2FwdC9zb3VyY2VzLmxpc3QuZC9sdHRuZy1wcGEtcHJlY2lz
-ZS5saXN0Cj4+IGRlYiBodHRwOi8vcHBhLmxhdW5jaHBhZC5uZXQvbHR0bmcvcHBhL3VidW50dSBw
-cmVjaXNlIG1haW4KPj4gZGViLXNyYyBodHRwOi8vcHBhLmxhdW5jaHBhZC5uZXQvbHR0bmcvcHBh
-L3VidW50dSBwcmVjaXNlIG1haW4KPj4KPj4gKEkgaGF2ZSBhc2tlZCBteSBhZG1pbiB0byBkbyBh
-biBhcHQtZ2V0IHVwZGF0ZSkKPj4KPj4gJCBhcHQtY2FjaGUgc2VhcmNoIGx0dG5nCj4+IGx0dG5n
-LW1vZHVsZXMtZGttcyAtIExpbnV4IFRyYWNlIFRvb2xraXQgKExUVG5nKSBrZXJuZWwgbW9kdWxl
-cyAoREtNUykKPj4gbHR0bmctdG9vbHMgLSBMVFRuZyBjb250cm9sIGFuZCB1dGlsaXR5IHByb2dy
-YW1zCj4+IGxpYmx0dG5nLXVzdDAgLSBMVFRuZyAyLjAgVXNlcnNwYWNlIFRyYWNlciAobGlicmFy
-aWVzKQo+PiBsaWJsdHRuZy11c3QtZGV2IC0gTFRUbmcgMi4wIFVzZXJzcGFjZSBUcmFjZXIgKGRl
-dmVsb3BtZW50IGZpbGVzKQo+PiBsaWJsdHRuZy1jdGwtZGV2IC0gTFRUbmcgY29udHJvbCBhbmQg
-dXRpbGl0eSBsaWJyYXJ5IChkZXZlbG9wbWVudCBmaWxlcykKPj4gbGlibHR0bmctY3RsMCAtIExU
-VG5nIGNvbnRyb2wgYW5kIHV0aWxpdHkgbGlicmFyeQo+PiBsaWJsdHRuZy11c3QtamF2YS1qbmkg
-LSBMVFRuZyAyLjAgVXNlcnNwYWNlIFRyYWNlciAoSk5JIGludGVyZmFjZSkKPj4gbGlibHR0bmct
-dXN0LWphdmEgLSBMVFRuZyAyLjAgVXNlcnNwYWNlIFRyYWNlciAoSmF2YSBzdXBwb3J0IGxpYnJh
-cnkpCj4+IHB5dGhvbi1sdHRuZyAtIFB5dGhvbiBiaW5kaW5ncyBmb3IgTFRUbmcKPj4gbGlibHR0
-bmctdXN0LWN0bDIgLSBMVFRuZyAyLjAgVXNlcnNwYWNlIFRyYWNlciAodHJhY2UgY29udHJvbCBs
-aWJyYXJ5KQo+Pgo+PiAkIGFwdC1jYWNoZSBzZWFyY2ggbGlidXJjdQo+PiBsaWJ1cmN1LWRldiAt
-IGEgdXNlcnNwYWNlIFJDVSAocmVhZC1jb3B5LXVwZGF0ZSkgbGlicmFyeSAtIGRldmVsb3BtZW50
-IGZpbGVzCj4+IGxpYnVyY3UxIC0gYSB1c2Vyc3BhY2UgUkNVIChyZWFkLWNvcHktdXBkYXRlKSBs
-aWJyYXJ5Cj4+IGxpYnVyY3UyIC0gYSB1c2Vyc3BhY2UgUkNVIChyZWFkLWNvcHktdXBkYXRlKSBs
-aWJyYXJ5Cj4+Cj4+IFNvIGl0IGxvb2tzIGxpa2UgbXkgYXB0aXR1ZGUgaXMgbm90IGF3YXJlIG9m
-IGEgcGFja2FnZSBjYWxsZWQgbGlidXJjdSB3aXRob3V0IGEgcG9zdGZpeOKApiBFdmVuIGlmIEkn
-ZCBwdXJnZSBhbmQgcmVpbnN0YWxsICh3aGljaCBzZWVtcyBsaWtlIGEgdmVyeSBnb29kIGlkZWEp
-IEkgZG9uJ3Qgc2VlIGlmIEkgY2FuIGFjY2VzcyB0aGUgcmlnaHQgbGlicmFyeSB0aGlzIHdheS4K
-Pj4KPiBUaGUgcGFja2FnaW5nIHNpdHVhdGlvbiBvbiBVYnVudHUgMTIuMDQgaXMgYSBsaXR0bGUg
-Y29uZnVzaW5nLi4uCj4KPiBBcyBmYXIgYXMgSSBjYW4gdGVsbCwgeW91IGhhdmUKPgo+IGxpYnVy
-Y3UgKHRoZSBvbmUgYXZhaWxhYmxlIGluIHRoZSBvZmZpY2lhbCBVYnVudHUgMTIuMDQgcmVwb3Ms
-IHYwLjYuNykKPiBsaWJ1cmN1MSAodjAuNy54KQo+IGxpYnVyY3UyICh2MC44LngpCj4KPiBUaGUg
-TFRUbmcgdmVyc2lvbiBvbiB0aGUgUFBBICh2Mi41LngpIGRlcGVuZHMgb24gdGhlIDAuOCBsaWJ1
-cmN1Lgo+IFRoZXJlZm9yZSwgbGlidXJjdTIgaXMgdGhlIG9uZSB5b3Ugd2FudCB0byBpbnN0YWxs
-Lgo+Cj4gTG9va2luZyBhdCB0aGUgZGVwZW5kZW5jaWVzLCBpdCBzZWVtcyB0aGF0IGluc3RhbGxp
-bmcgbHR0bmctdG9vbHMgYW5kCj4gbHR0bmctbW9kdWxlcy1ka21zIChmcm9tIHRoZSBQUEEpIHNo
-b3VsZCBoYXZlIHlvdSBjb3ZlcmVkIGFuZCBpbnN0YWxsCj4gZXZlcnl0aGluZyB5b3UgbmVlZC4K
-Pgo+IENDLWluZyBBbGV4YW5kcmUgTW9udHBsYWlzaXIgd2hvIG1haW50YWlucyBtb3N0IG9mIHRo
-ZXNlIHBhY2thZ2VzLgo+Cj4gUmVnYXJkcywKPiBKw6lyw6ltaWUKPgo+PiBDaGVlcnMKPj4KPj4g
-WWFuIEdyYW5nZQo+Pgo+PiBPbiAxMSBkZWMuIDIwMTQsIGF0IDE4OjA4LCBKw6lyw6ltaWUgR2Fs
-YXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+IHdyb3RlOgo+Pgo+Pj4gT24g
-VGh1LCBEZWMgMTEsIDIwMTQgYXQgODo1NiBBTSwgWWFuIEdyYW5nZSA8eWdyYW5nZUBnbWFpbC5j
-b20+IHdyb3RlOgo+Pj4+IEhpLAo+Pj4+Cj4+Pj4gSSBjYW4ndCByZWFsbHkgbWFrZSBvdXQKPj4+
-Pj4+IEhvd2V2ZXIgaXQgYWN0dWFsbHkgd29ya3MgdG8gY3JlYXRlIGEgaGVhZGVyIGZpbGUgZnJv
-bSBhIHRwIGZpbGUgYW5kIGNvbXBpbGUgKGFuZCBydW4pIHRoZSBjb2RlLiBIb3dldmVyIEkgbm93
-IGdldCBpbiB0cm91YmxlIHdoZW4gZXhlY3V0aW5nOgo+Pj4+Pj4KPj4+Pj4+ICQgbHR0bmcgbGlz
-dCAtLXVzZXJzcGFjZQo+Pj4+Pj4gRXJyb3I6IFVuYWJsZSB0byBsaXN0IFVTVCBldmVudHM6IFVu
-ZGVmaW5lZCBjb21tYW5kCj4+Pj4+PiBFcnJvcjogQ29tbWFuZCBlcnJvcgo+Pj4+Pj4KPj4+Pj4+
-IFNvIEkgZ3Vlc3Mgc29tZXRoaW5nIHN0aWxsIHdlbnQgc29tZXdoYXQgd3JvbmcgYnV0IEkgY2Fu
-J3QgcmVhbGx5IHNlZSB3aGF0Lgo+Pj4+Pj4KPj4+Pj4+IFlhbiBHcmFuZ2UKPj4+Pj4gICBJbiBv
-cmRlciB0byB0cmFjZSB1c2VyLXNwYWNlLCB5b3UgbXVzdCBpbnN0YWxsLCBpbiBzZXF1ZW5jZSwg
-dGhlIGZvbGxvd2luZyBwYWNrYWdlczogdXNlcnNwYWNlLXJjdSwgbHR0bmctdXN0LCBsdHRuZy10
-b29scy4gIFdhcyB0aGlzIGRvbmU/Cj4+Pj4+Cj4+Pj4gSSB0cmllZCB0byBpbnN0YWxsIHRoZSBy
-aWdodCBwYWNrYWdlcyBidXQgdGhlcmUgZG9uJ3Qgc2VlbSB0byBiZSBwYWNrYWdlcyBuYW1lZCBs
-aWtlIHRoYXQgaW4gZWl0aGVyIHRoZSB1YnVudHUgcmVwb3NpdG9yeSBvciB0aGUgcHBhIHByb3Zp
-ZGVkIGJ5IHlvdS4KPj4+Pgo+Pj4+IEkgaGF2ZSB0aGUgZm9sbG93aW5nIHBhY2thZ2VzIGluc3Rh
-bGxlZDoKPj4+PiBsdHRuZy10b29scwo+Pj4+IGxpYmx0dG5nLXVzdDAKPj4+PiBsaWJsdHRuZy11
-c3QtZGV2Cj4+Pj4gbGlibHR0bmctdXN0LWN0bDIKPj4+PiBsaWJsdHRuZy1jdGwwCj4+Pj4gbGli
-dXJjdS1kZXYKPj4+PiBsaWJ1cmN1Mgo+Pj4gU29tZSBvZiB0aGVzZSBwYWNrYWdlcyBhcHBlYXIg
-dG8gYmUgY29uZmxpY3RpbmcuIFlvdSdkIGJlIGJldHRlciBvZmYKPj4+IHJlbW92aW5nIHRoZW0g
-YWxsIGFuZCBzdGFydGluZyBmcmVzaCBmcm9tIHRoZSBQUEEuCj4+Pgo+Pj4gSsOpcsOpbWllCj4+
-Pgo+Pj4+IFdpdGggYWxsIHRoaXMgaW5zdGFsbGVkLCBJIHN0aWxsIGRvbid0IGdldCBpdCB0byB3
-b3JrLgo+Pj4+Cj4+Pj4gQ2hlZXJzCj4+Pj4KPj4+PiBZYW4gR3JhbmdlCj4+Pj4gX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+PiBsdHRuZy1kZXYgbWFp
-bGluZyBsaXN0Cj4+Pj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+Pj4+IGh0dHA6Ly9saXN0
-cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+Pj4KPj4+Cj4+
-PiAtLQo+Pj4gSsOpcsOpbWllIEdhbGFybmVhdQo+Pj4gRWZmaWNpT1MgSW5jLgo+Pj4gaHR0cDov
-L3d3dy5lZmZpY2lvcy5jb20KPgo+CgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo=
+Hi, it appears as though if a tracepoint is in a so, loading it,
+unloading it and reloading it makes it no longer visible.
+
+To confirm this you can try out this repo : 
+https://github.com/TheMatthew/yquake2 
+(I know, it's not a serious program... but the bug is serious, I think)
+You can get the demo files here
+http://www.fileplanet.com/6584/0/fileinfo/Quake-2-Demo-v3.14
+make the program (make from the git dir)
+copy the contents of the baseq2 in the demo into the release/baseq2
+directory
+
+start a ust session
+run the program.
+Ignore the baddr deadlocks :)
+The tracepoint is not visible, it is located in the game.so file. 
+
+Chances are though that the problem is on my side, but the evidence
+(single registration ) seems to indicate that this is an actual problem.
