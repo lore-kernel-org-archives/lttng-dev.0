@@ -1,57 +1,91 @@
-From: Matt Fleming <matt@console-pimps.org>
-Subject: Re: Progress on system crash traces with LTTng using DAX and pmem
-Date: Sat, 13 Dec 2014 11:48:27 +0000
-Message-ID: <20141213114827.GA7761@console-pimps.org>
-References: <1254279794.1957.1414240389301.JavaMail.zimbra@efficios.com>
- <465653369.1985.1414241485934.JavaMail.zimbra@efficios.com>
- <20141028105458.GA9768@node.dhcp.inet.fi>
- <864133911.4806.1414681896478.JavaMail.zimbra@efficios.com>
+From: craig harmer <charmster@gmail.com>
+Subject: bug #857 -- babeltrace may core dump if index file is
+	too short (with patch)
+Date: Sat, 13 Dec 2014 19:08:19 -0800
+Message-ID: <CADjtVtb6J6ird2fYgWibLzq4tFmjNtv8G23Z+Krk6Fqabcc5Pw__34199.373125057$1418545131$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <owner-linux-mm@kvack.org>
-Content-Disposition: inline
-In-Reply-To: <864133911.4806.1414681896478.JavaMail.zimbra@efficios.com>
-Sender: owner-linux-mm@kvack.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "Kirill A. Shutemov" <kirill@shutemov.name>, Matthew Wilcox <willy@linux.intel.com>, Ross Zwisler <ross.zwisler@linux.intel.com>, lttng-dev <lttng-dev@lists.lttng.org>, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org, Andi Kleen <andi@firstfloor.org>, linux-efi@vger.kernel.org, Tony Luck <tony.luck@gmail.com>
+Content-Type: multipart/mixed; boundary="===============0580963730=="
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-ig0-f172.google.com ([209.85.213.172])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <charmster@gmail.com>) id 1XzzXl-0003CS-7F
+ for lttng-dev@lists.lttng.org; Sat, 13 Dec 2014 22:08:29 -0500
+Received: by mail-ig0-f172.google.com with SMTP id hl2so3385953igb.17
+ for <lttng-dev@lists.lttng.org>; Sat, 13 Dec 2014 19:08:19 -0800 (PST)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: charmer-lttng.org@punchdown.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Thu, 30 Oct, at 03:11:36PM, Mathieu Desnoyers wrote:
-> 
-> Hi Kirill,
-> 
-> This is a good point,
-> 
-> There are a few more aspects to consider here:
-> 
-> - Other architectures appear to have different guarantees, for
->   instance ARM which, AFAIK, does not reset memory on soft
->   reboot (well at least for my customer's boards). So I guess
->   if x86 wants to be competitive, it would be good for them to
->   offer a similar feature,
-> 
-> - Already having a subset of machines supporting this is useful,
->   e.g. storing trace buffers and recovering them after a crash,
-> 
-> - Since we are in a world of dynamically upgradable BIOS, perhaps
->   if we can show that there is value in having a BIOS option to
->   specify a memory range that should not be reset on soft reboot,
->   BIOS vendors might be inclined to include an option for it,
-> 
-> - Perhaps UEFI BIOS already have some way of specifying that a
->   memory range should not be reset on soft reboot ?
+--===============0580963730==
+Content-Type: multipart/alternative; boundary=20cf30244df91daa5b050a2470c1
 
-We've achieved this in the past using UEFI capsules with the
-EFI_CAPSULE_PERSIST_ACROSS_RESET header flag.
+--20cf30244df91daa5b050a2470c1
+Content-Type: text/plain; charset=UTF-8
 
-Unfortunately, runtime capsule support is pretty spotty, so it's not a
-general solution right now.
+hi all,
 
--- 
-Matt Fleming, Intel Open Source Technology Center
+i opened a bug at bugs.lttng.org about a problem that i had where
+babeltrace would exit, possibly with a core dump, if one the trace's index
+files was too short.
 
---
-To unsubscribe, send a message with 'unsubscribe linux-mm' in
-the body to majordomo@kvack.org.  For more info on Linux MM,
-see: http://www.linux-mm.org/ .
-Don't email: <a href=mailto:"dont@kvack.org"> email@kvack.org </a>
+you can read the bug, with patch, at Bug #857 babeltrace will exit (often
+with a core dump) if an index file is too short
+<https://bugs.lttng.org/issues/857>
+
+i submitted a patch for the problem also fixes a few other places that
+short reads are not handled properly.
+
+there hasn't been any activity on the bug since i submitted the patch about
+1 month ago, so i'm wondering if i need to submit the patch to this list as
+well.
+
+cheers,
+
+craig.
+
+--20cf30244df91daa5b050a2470c1
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-family:trebuche=
+t ms,sans-serif">hi all,<br><br></div><div class=3D"gmail_default" style=3D=
+"font-family:trebuchet ms,sans-serif">i opened a bug at <a href=3D"http://b=
+ugs.lttng.org">bugs.lttng.org</a> about a problem that i had where babeltra=
+ce would exit, possibly with a core dump, if one the trace&#39;s index file=
+s was too short.<br><br></div><div class=3D"gmail_default" style=3D"font-fa=
+mily:trebuchet ms,sans-serif">you can read the bug, with patch, at <a href=
+=3D"https://bugs.lttng.org/issues/857">Bug #857 babeltrace will exit (often=
+ with a core dump) if an index file is too short</a><br></div><div class=3D=
+"gmail_default" style=3D"font-family:trebuchet ms,sans-serif"><br></div><di=
+v class=3D"gmail_default" style=3D"font-family:trebuchet ms,sans-serif">i s=
+ubmitted a patch for the problem also fixes a few other places that short r=
+eads are not handled properly.<br><br></div><div class=3D"gmail_default" st=
+yle=3D"font-family:trebuchet ms,sans-serif">there hasn&#39;t been any activ=
+ity on the bug since i submitted the patch about 1 month ago, so i&#39;m wo=
+ndering if i need to submit the patch to this list as well.<br><br></div><d=
+iv class=3D"gmail_default" style=3D"font-family:trebuchet ms,sans-serif">ch=
+eers,<br><br>craig.<br></div></div>
+
+--20cf30244df91daa5b050a2470c1--
+
+
+--===============0580963730==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0580963730==--
