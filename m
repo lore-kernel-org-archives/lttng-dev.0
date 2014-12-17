@@ -1,33 +1,20 @@
-From: Ali Maredia <ali@cohortfs.com>
-Subject: Babeltrace lttng-live API
-Date: Wed, 17 Dec 2014 17:45:40 -0500 (EST)
-Message-ID: <1806351258.304.1418856340823.JavaMail.root__13280.1285516054$1418856718$gmane$org@thunderbeast.private.linuxbox.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Babeltrace lttng-live API
+Date: Wed, 17 Dec 2014 18:11:26 -0500
+Message-ID: <CA+jJMxuDjRRY9=DF-kQsRLTHsogcNyyK-sx_DaiEcaqC4CHSvQ__6093.68632217429$1418857929$gmane$org@mail.gmail.com>
 References: <2141428292.302.1418856273696.JavaMail.root@thunderbeast.private.linuxbox.com>
+ <1806351258.304.1418856340823.JavaMail.root@thunderbeast.private.linuxbox.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from aa.linuxbox.com ([69.128.83.226])
+Received: from mail-qa0-f46.google.com ([209.85.216.46])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <ali@linuxbox.com>) id 1Y1NLy-0005Gl-PJ
- for lttng-dev@lists.lttng.org; Wed, 17 Dec 2014 17:46:03 -0500
-Received: from thunderbeast.private.linuxbox.com
- (thunderbeast.private.linuxbox.com [10.1.1.55])
- by aa.linuxbox.com (8.13.1/8.13.1/SuSE Linux 0.7) with ESMTP id sBHMjpqq028759
- for <lttng-dev@lists.lttng.org>; Wed, 17 Dec 2014 17:45:51 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by thunderbeast.private.linuxbox.com (Postfix) with ESMTP id E308F3FC8497
- for <lttng-dev@lists.lttng.org>; Wed, 17 Dec 2014 17:45:50 -0500 (EST)
-Received: from thunderbeast.private.linuxbox.com ([127.0.0.1])
- by localhost (thunderbeast.private.linuxbox.com [127.0.0.1]) (amavisd-new,
- port 10024)
- with ESMTP id 3culO+DWgdig for <lttng-dev@lists.lttng.org>;
- Wed, 17 Dec 2014 17:45:41 -0500 (EST)
-Received: from thunderbeast.private.linuxbox.com
- (thunderbeast.private.linuxbox.com [10.1.1.55])
- by thunderbeast.private.linuxbox.com (Postfix) with ESMTP id 15C1C3FC848B
- for <lttng-dev@lists.lttng.org>; Wed, 17 Dec 2014 17:45:41 -0500 (EST)
-In-Reply-To: <2141428292.302.1418856273696.JavaMail.root@thunderbeast.private.linuxbox.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Y1Nki-0005S4-BQ
+ for lttng-dev@lists.lttng.org; Wed, 17 Dec 2014 18:11:33 -0500
+Received: by mail-qa0-f46.google.com with SMTP id w8so7638qac.33
+ for <lttng-dev@lists.lttng.org>; Wed, 17 Dec 2014 15:11:26 -0800 (PST)
+In-Reply-To: <1806351258.304.1418856340823.JavaMail.root@thunderbeast.private.linuxbox.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -36,15 +23,25 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Ali Maredia <ali@cohortfs.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello,
-
-I am wondering whether I would be able to implement traces using the lttng-live format using the Babeltrace API, or whether there is development towards implementing that format in releases soon to come? 
-
-All I see in API.txt (which hasn't changed in a few years) are methods to implement traces that are ctf-format.   
-
-Best,
-
-Ali
+T24gV2VkLCBEZWMgMTcsIDIwMTQgYXQgNTo0NSBQTSwgQWxpIE1hcmVkaWEgPGFsaUBjb2hvcnRm
+cy5jb20+IHdyb3RlOgo+IEhlbGxvLAo+Cj4gSSBhbSB3b25kZXJpbmcgd2hldGhlciBJIHdvdWxk
+IGJlIGFibGUgdG8gaW1wbGVtZW50IHRyYWNlcyB1c2luZyB0aGUgbHR0bmctbGl2ZSBmb3JtYXQg
+dXNpbmcgdGhlIEJhYmVsdHJhY2UgQVBJLCBvciB3aGV0aGVyIHRoZXJlIGlzIGRldmVsb3BtZW50
+IHRvd2FyZHMgaW1wbGVtZW50aW5nIHRoYXQgZm9ybWF0IGluIHJlbGVhc2VzIHNvb24gdG8gY29t
+ZT8KCkhpIEFsaSwKClRoZSBwbGFuIGlzIHRvIHN1cHBvcnQgbGl2ZSB0cmFjZSByZWFkaW5nIGZy
+b20gdGhlIHB1YmxpYyBBUEkgaW4gdGhlCm5leHQgQmFiZWx0cmFjZSByZWxlYXNlICh2MS4zKSB3
+aGljaCBpcyBzY2hlZHVsZWQgZm9yIGVhcmx5IDIwMTUuCgpSZWdhcmRzLApKw6lyw6ltaWUKCj4K
+PiBBbGwgSSBzZWUgaW4gQVBJLnR4dCAod2hpY2ggaGFzbid0IGNoYW5nZWQgaW4gYSBmZXcgeWVh
+cnMpIGFyZSBtZXRob2RzIHRvIGltcGxlbWVudCB0cmFjZXMgdGhhdCBhcmUgY3RmLWZvcm1hdC4K
+Pgo+IEJlc3QsCj4KPiBBbGkKPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5s
+dHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
+by9sdHRuZy1kZXYKCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRw
+Oi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcu
+b3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
+LWRldgo=
