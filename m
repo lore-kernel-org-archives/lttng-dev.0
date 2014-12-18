@@ -1,15 +1,17 @@
-From: David Engraf <david.engraf@sysgo.com>
-Subject: [PATCH] Fix compile error on kernel 3.0.101 with
-	CONFIG_PERF_EVENTS
-Date: Thu, 18 Dec 2014 11:57:00 +0100
-Message-ID: <5492B2FC.9030406__32328.3221027397$1418939473$gmane$org@sysgo.com>
+From: Ali Maredia <ali@linuxbox.com>
+Subject: Re: Babeltrace lttng-live API
+Date: Thu, 18 Dec 2014 13:40:19 -0500 (EST)
+Message-ID: <1885144785.116.1418928019474.JavaMail.root__7303.8017181263$1418939488$gmane$org@thunderbeast.private.linuxbox.com>
+References: <193077300.114.1418927924681.JavaMail.root@thunderbeast.private.linuxbox.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------030401020509080305030908"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.sysgo.com ([176.9.53.133])
+Received: from aa.linuxbox.com ([69.128.83.226])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <david.engraf@sysgo.com>) id 1Y1YlY-0000vP-9Y
- for lttng-dev@lists.lttng.org; Thu, 18 Dec 2014 05:57:09 -0500
+ (envelope-from <ali@linuxbox.com>) id 1Y1g02-0003S2-NK
+ for lttng-dev@lists.lttng.org; Thu, 18 Dec 2014 13:40:35 -0500
+In-Reply-To: <193077300.114.1418927924681.JavaMail.root@thunderbeast.private.linuxbox.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -18,84 +20,32 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: mathieu.desnoyers@efficios.com, lttng-dev@lists.lttng.org
+To: =?utf-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
---------------030401020509080305030908
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-
-
---------------030401020509080305030908
-Content-Type: text/x-diff;
- name="0001-Fix-compile-error-on-kernel-3.0.101-with-CONFIG_PERF.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename*0="0001-Fix-compile-error-on-kernel-3.0.101-with-CONFIG_PERF.pa";
- filename*1="tch"
-
-From bed03bd7571b7b54d6b7af832f618d3b4faa7bdb Mon Sep 17 00:00:00 2001
-From: David Engraf <david.engraf@sysgo.com>
-Date: Thu, 18 Dec 2014 11:45:22 +0100
-Subject: [PATCH] Fix compile error on kernel 3.0.101 with CONFIG_PERF_EVENTS
-
-The context parameter of perf_event_create_kernel_counter() was introduced
-with kernel 3.1.
-
-Signed-off-by: David Engraf <david.engraf@sysgo.com>
----
- wrapper/perf.h | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/wrapper/perf.h b/wrapper/perf.h
-index 5de205c..6bd2a5d 100644
---- a/wrapper/perf.h
-+++ b/wrapper/perf.h
-@@ -23,7 +23,9 @@
- 
- #include <linux/perf_event.h>
- 
--#if defined(CONFIG_PERF_EVENTS) && (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,99))
-+#ifdef CONFIG_PERF_EVENTS
-+
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0))
- static inline struct perf_event *
- wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
- 				int cpu,
-@@ -32,7 +34,7 @@ wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
- {
- 	return perf_event_create_kernel_counter(attr, cpu, task, callback, NULL);
- }
--#else /* defined(CONFIG_PERF_EVENTS) && (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,99)) */
-+#else /* (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0)) */
- 
- #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
- static inline struct perf_event *
-@@ -66,6 +68,8 @@ wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
- #define local64_read(l)		atomic64_read(l)
- #endif
- 
--#endif /* defined(CONFIG_PERF_EVENTS) && (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,99)) */
-+#endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0)) */
-+
-+#endif /* CONFIG_PERF_EVENTS */
- 
- #endif /* _LTTNG_WRAPPER_PERF_H */
--- 
-1.9.1
-
-
---------------030401020509080305030908
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---------------030401020509080305030908--
+VGhhbmsgeW91IHNvIG11Y2ggZm9yIHRoZSBwcm9tcHQgcmVzcG9uc2UhIEkgbG9vayBmb3J3YXJk
+IHRvIHNlZWluZyB0aG9zZSBmZWF0dXJlcyBpbiB0aGUgbmV4dCByZWxlYXNlLiBJZiB5b3UgaGF2
+ZSBhbnl0aGluZyB1cCB0aGF0IEkgY2FuIHRlc3QsIEknZCBsb3ZlIHRvIGRvIHNvLgoKQmVzdCwK
+CkFsaQotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCkZyb206ICJKw6lyw6ltaWUgR2FsYXJu
+ZWF1IiA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgpUbzogIkFsaSBNYXJlZGlhIiA8
+YWxpQGNvaG9ydGZzLmNvbT4KQ2M6IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKU2VudDogV2Vk
+bmVzZGF5LCBEZWNlbWJlciAxNywgMjAxNCA2OjExOjI2IFBNClN1YmplY3Q6IFJlOiBbbHR0bmct
+ZGV2XSBCYWJlbHRyYWNlIGx0dG5nLWxpdmUgQVBJCgpPbiBXZWQsIERlYyAxNywgMjAxNCBhdCA1
+OjQ1IFBNLCBBbGkgTWFyZWRpYSA8YWxpQGNvaG9ydGZzLmNvbT4gd3JvdGU6Cj4gSGVsbG8sCj4K
+PiBJIGFtIHdvbmRlcmluZyB3aGV0aGVyIEkgd291bGQgYmUgYWJsZSB0byBpbXBsZW1lbnQgdHJh
+Y2VzIHVzaW5nIHRoZSBsdHRuZy1saXZlIGZvcm1hdCB1c2luZyB0aGUgQmFiZWx0cmFjZSBBUEks
+IG9yIHdoZXRoZXIgdGhlcmUgaXMgZGV2ZWxvcG1lbnQgdG93YXJkcyBpbXBsZW1lbnRpbmcgdGhh
+dCBmb3JtYXQgaW4gcmVsZWFzZXMgc29vbiB0byBjb21lPwoKSGkgQWxpLAoKVGhlIHBsYW4gaXMg
+dG8gc3VwcG9ydCBsaXZlIHRyYWNlIHJlYWRpbmcgZnJvbSB0aGUgcHVibGljIEFQSSBpbiB0aGUK
+bmV4dCBCYWJlbHRyYWNlIHJlbGVhc2UgKHYxLjMpIHdoaWNoIGlzIHNjaGVkdWxlZCBmb3IgZWFy
+bHkgMjAxNS4KClJlZ2FyZHMsCkrDqXLDqW1pZQoKPgo+IEFsbCBJIHNlZSBpbiBBUEkudHh0ICh3
+aGljaCBoYXNuJ3QgY2hhbmdlZCBpbiBhIGZldyB5ZWFycykgYXJlIG1ldGhvZHMgdG8gaW1wbGVt
+ZW50IHRyYWNlcyB0aGF0IGFyZSBjdGYtZm9ybWF0Lgo+Cj4gQmVzdCwKPgo+IEFsaQo+Cj4gX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYg
+bWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5s
+dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKCgotLSAKSsOpcsOp
+bWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
+bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9y
+Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
