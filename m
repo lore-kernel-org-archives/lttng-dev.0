@@ -1,17 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: issue with lttng-tools 2.5.3 tarball release version
-Date: Wed, 24 Dec 2014 15:54:03 +0000 (UTC)
-Message-ID: <1721058393.32163.1419436443460.JavaMail.zimbra__31796.895483467$1419436493$gmane$org@efficios.com>
-References: <366858222.32159.1419436364322.JavaMail.zimbra@efficios.com>
+Subject: Re: [PATCH] Fix compile error on kernel 3.0.101 with
+ CONFIG_PERF_EVENTS
+Date: Wed, 24 Dec 2014 16:13:33 +0000 (UTC)
+Message-ID: <1778465056.32271.1419437613827.JavaMail.zimbra__45849.3099119098$1419437657$gmane$org@efficios.com>
+References: <5492B2FC.9030406@sysgo.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Y3oGD-0003CG-Uo
- for lttng-dev@lists.lttng.org; Wed, 24 Dec 2014 10:54:06 -0500
-In-Reply-To: <366858222.32159.1419436364322.JavaMail.zimbra@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1Y3oZ5-0003M3-Mr
+ for lttng-dev@lists.lttng.org; Wed, 24 Dec 2014 11:13:36 -0500
+In-Reply-To: <5492B2FC.9030406@sysgo.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,31 +21,22 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jeremie Galarneau <jgalar@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: David Engraf <david.engraf@sysgo.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Jeremie,
-
-Just to make sure you get this when you come
-back from vacation: (from #lttng on irc)
-
-13:56 < emalape> Hi guys! I just installed lttng-tools 2.5.3 from the source 
-                 tarball. If I do "lttng -V" it reports a wrong version string: 
-                 lttng (LTTng Trace Control) heads/stable-2.5-0-g5f82d26 - 
-                 Fumisterie
-13:56 < emalape> I think this happened before and someone recreated the tarball 
-                 to fix this. Would it be possible to fix again :)
-13:57 < emalape> For comparison, 2.5.1 prints this: lttng (LTTng Trace Control) 
-                 2.5.1 - Fumisterie
-
-I think we'll need to do a 2.5.4 lttng-tools release
-to fix this mistake from the 2.5.3 release. Probably that
-you need to tag your git repo before issuing make dist.
-
-Thanks,
+Merged, thanks!
 
 Mathieu
+
+----- Original Message -----
+> From: "David Engraf" <david.engraf@sysgo.com>
+> To: "mathieu desnoyers" <mathieu.desnoyers@efficios.com>, lttng-dev@lists.lttng.org
+> Sent: Thursday, December 18, 2014 5:57:00 AM
+> Subject: [PATCH] Fix compile error on kernel 3.0.101 with CONFIG_PERF_EVENTS
+> 
+> 
+> 
 
 -- 
 Mathieu Desnoyers
