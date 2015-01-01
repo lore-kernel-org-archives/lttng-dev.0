@@ -1,17 +1,18 @@
-From: Ranganadh Kanitmahanti <ranganadh1991@yahoo.com>
-Subject: Re: Trace loss in Lttng
-Date: Mon, 29 Dec 2014 12:19:42 +0000 (UTC)
-Message-ID: <1917307066.1594933.1419855582576.JavaMail.yahoo__37326.8617237501$1419855644$gmane$org@jws10968.mail.sg3.yahoo.com>
-References: <CA+jJMxvtm+jBbn1-hqQoBcG0+P9sLz+J1uZYD5jFigUpBDa=Zw@mail.gmail.com>
-Reply-To: Ranganadh Kanitmahanti <ranganadh1991@yahoo.com>
+From: Sudhagar Chinnaswamy <sudhagar@gmail.com>
+Subject: Re: Use LTTng in legacy codebase/variable arguments
+Date: Thu, 1 Jan 2015 21:39:21 +0530
+Message-ID: <CA+XthnRoUT+dmF+svNUf7T0JMCzYQqm-zw8c3RzQU5dhdC-d9A__16536.2615873621$1420128656$gmane$org@mail.gmail.com>
+References: <CA+XthnSaxt2EJuJzm7J7EUAbUnbdh07LnbodQfFbf4bDm4JEKw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0583868898=="
+Content-Type: multipart/mixed; boundary="===============0622709544=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from nm14-vm1.bullet.mail.sg3.yahoo.com ([106.10.149.32])
+Received: from mail-yk0-f180.google.com ([209.85.160.180])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <ranganadh1991@yahoo.com>) id 1Y5ZId-0003so-7q
- for lttng-dev@lists.lttng.org; Mon, 29 Dec 2014 07:19:54 -0500
-In-Reply-To: <CA+jJMxvtm+jBbn1-hqQoBcG0+P9sLz+J1uZYD5jFigUpBDa=Zw@mail.gmail.com>
+ (envelope-from <sudhagar@gmail.com>) id 1Y6iK6-00010U-SU
+ for lttng-dev@lists.lttng.org; Thu, 01 Jan 2015 11:10:09 -0500
+Received: by mail-yk0-f180.google.com with SMTP id 9so8301600ykp.25
+ for <lttng-dev@lists.lttng.org>; Thu, 01 Jan 2015 08:10:01 -0800 (PST)
+In-Reply-To: <CA+XthnSaxt2EJuJzm7J7EUAbUnbdh07LnbodQfFbf4bDm4JEKw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,143 +21,144 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0583868898==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_1594932_638351885.1419855582569"
-Content-Length: 6015
+--===============0622709544==
+Content-Type: multipart/alternative; boundary=001a113aba9cd04265050b997428
 
-------=_Part_1594932_638351885.1419855582569
+--001a113aba9cd04265050b997428
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jeremie,
-Thank you, events_discarded may be of some help for us.=C2=A0 Our main requ=
-irement is to find the number of discarded events per session
-Ex: We use lttng_create_session() to create an session and then enabled cer=
-tain events using lttng_enable_event(). The events=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 come=C2=A0 from different processes.=20
-Now, as a whole, can we get the number of discarded events for the whole se=
-ssion??=20
+Would appreciate any input/suggestion on this. Thanks a lot.
 
-Thanks &Regards,K.V.Ranganadh.
+Regards,
+Sudhagar
 
-     On Tuesday, 9 December 2014 10:10 PM, J=C3=A9r=C3=A9mie Galarneau <jer=
-emie.galarneau@efficios.com> wrote:
-  =20
+Visit my blog at: http://sudhagarc.blogspot.com
 
- On Tue, Dec 9, 2014 at 12:20 AM, Ranganadh Kanitmahanti
-<ranganadh1991@yahoo.com> wrote:
-> Hi,
+On Tue, Dec 23, 2014 at 3:16 AM, Sudhagar Chinnaswamy <sudhagar@gmail.com>
+wrote:
+
+> Hi:
 >
-> I am using Lttng in an application. I have enabled heavy traces and I hav=
-e
-> found that there is a loss in traces.=C2=A0 Is there any way of knowing i=
-f there
-> is any trace loss or any information regarding about it . Are there any A=
-PI
-> calls to know about them.
-
-There is no way to know from the application while the trace is being
-captured. I wonder what form such a mechanism would take to,
-basically, query the tracer/ring buffer for the events_discarded
-counter... This would arguably be of little use in per-uid mode (since
-a user's apps share the same buffer), but I could see this being
-useful in per-pid mode.
-Any ideas?
-
-J=C3=A9r=C3=A9mie
-
+> I have the same need as discussed in the below mentioned thread. I want t=
+o
+> use LTTng, but most of the cases we need to log different parameters unde=
+r
+> the same provider and event.
 >
-> Thanks & Regards.,
-> K.V.Ranganadh.
+> http://lists.lttng.org/pipermail/lttng-dev/2013-December/022134.html
 >
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> When I tried a simple program to log the variable arguments under same
+> provider/event as suggested in the above thread using the macro below, I
+> found that the function "my_snprintf" is called "twice" when the logging
+> for the event is enabled for each tracepoint call. It seems inefficient t=
+o
+> call the same function twice. Is there something that could be done to ma=
+ke
+> it efficient or am I missing something?
+>
+> =E2=80=94 8< =E2=80=94
+>
+> #define tracepoint_for_format_string(provider, name, =E2=80=A6) \
+>
+>       do { \
+>
+>             char msg_buf[MAX_BUFFER_SIZE]; \
+>
+>             tracepoint(provider, name, my_snprintf(msg_buf, MAX_BUFFER_SI=
+ZE, __VA_ARGS__)); \
+>
+>       } while (0)
+>
+> =E2=80=94 8< =E2=80=94
+>
+> Alternatively, is there any other approach to achieve my requirement: Nee=
+d
+> to use same provider & event name to log variable arguments?
+>
+> For e.g.,
+> my_tracepoint(hello_world, test, "argc=3D%d, argv=3D%p", argc, argv);
+> my_tracepoint(hello_world, test, "argv[%u] :: %s", x, argv[x]);
+> my_tracepoint(hello_world, test, "Quitting now!");
+>
+> Thanks in advance.
+>
+> Regards,
+> Sudhagar
+>
 >
 
-
-
---=20
-J=C3=A9r=C3=A9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-
-   
-------=_Part_1594932_638351885.1419855582569
+--001a113aba9cd04265050b997428
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<html><body><div style=3D"color:#000; background-color:#fff; font-family:He=
-lveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, Sans-Serif;fo=
-nt-size:12px"><div dir=3D"ltr" id=3D"yui_3_16_0_1_1419855527555_3355"><span=
->Hi Jeremie,</span></div><div id=3D"yui_3_16_0_1_1419855527555_3358" dir=3D=
-"ltr"><br><span></span><span id=3D"yui_3_16_0_1_1419855527555_3357">Thank y=
-ou, events_discarded may be of some help for us.&nbsp; Our main requirement=
- is to find the number of discarded events per session<br style=3D"" class=
-=3D"">Ex: We use lttng_create_session() to create an session and then enabl=
-ed certain events using lttng_enable_event(). The events&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp; come&nbsp; from different processes. <br style=3D"" class=3D"">=
-Now, as a whole, can we get the number of discarded events for the whole se=
-ssion?? <br style=3D"" class=3D""></span></div><div id=3D"yui_3_16_0_1_1419=
-855527555_3377" dir=3D"ltr"><span id=3D"yui_3_16_0_1_1419855527555_3357"><b=
-r></span></div><div id=3D"yui_3_16_0_1_1419855527555_3380" dir=3D"ltr"><spa=
-n id=3D"yui_3_16_0_1_1419855527555_3357">Thanks &amp;Regards,</span></div><=
-div id=3D"yui_3_16_0_1_1419855527555_3378" dir=3D"ltr">K.V.Ranganadh.</div>=
-<div class=3D"qtdSeparateBR"><br><br></div><div style=3D"display: block;" c=
-lass=3D"yahoo_quoted"> <div style=3D"font-family: HelveticaNeue, Helvetica =
-Neue, Helvetica, Arial, Lucida Grande, Sans-Serif; font-size: 12px;"> <div =
-style=3D"font-family: HelveticaNeue, Helvetica Neue, Helvetica, Arial, Luci=
-da Grande, Sans-Serif; font-size: 12px;"> <div dir=3D"ltr"> <font size=3D"2=
-" face=3D"Arial"> On Tuesday, 9 December 2014 10:10 PM, J=C3=A9r=C3=A9mie G=
-alarneau &lt;jeremie.galarneau@efficios.com&gt; wrote:<br> </font> </div>  =
-<br><br> <div class=3D"y_msg_container">On Tue, Dec 9, 2014 at 12:20 AM, Ra=
-nganadh Kanitmahanti<br clear=3D"none">&lt;<a shape=3D"rect" ymailto=3D"mai=
-lto:ranganadh1991@yahoo.com" href=3D"mailto:ranganadh1991@yahoo.com">rangan=
-adh1991@yahoo.com</a>&gt; wrote:<br clear=3D"none">&gt; Hi,<br clear=3D"non=
-e">&gt;<br clear=3D"none">&gt; I am using Lttng in an application. I have e=
-nabled heavy traces and I have<br clear=3D"none">&gt; found that there is a=
- loss in traces.&nbsp; Is there any way of knowing if there<br clear=3D"non=
-e">&gt; is any trace loss or any information regarding about it . Are there=
- any API<br clear=3D"none">&gt; calls to know about them.<br clear=3D"none"=
-><br clear=3D"none">There is no way to know from the application while the =
-trace is being<br clear=3D"none">captured. I wonder what form such a mechan=
-ism would take to,<br clear=3D"none">basically, query the tracer/ring buffe=
-r for the events_discarded<br clear=3D"none">counter... This would arguably=
- be of little use in per-uid mode (since<br clear=3D"none">a user's apps sh=
-are the same buffer), but I could see this being<br clear=3D"none">useful i=
-n per-pid mode.<br clear=3D"none">Any ideas?<br clear=3D"none"><br clear=3D=
-"none">J=C3=A9r=C3=A9mie<div class=3D"yqt1967503046" id=3D"yqtfd90429"><br =
-clear=3D"none"><br clear=3D"none">&gt;<br clear=3D"none">&gt; Thanks &amp; =
-Regards.,<br clear=3D"none">&gt; K.V.Ranganadh.</div><br clear=3D"none">&gt=
-;<br clear=3D"none">&gt; _______________________________________________<br=
- clear=3D"none">&gt; lttng-dev mailing list<br clear=3D"none">&gt; <a shape=
-=3D"rect" ymailto=3D"mailto:lttng-dev@lists.lttng.org" href=3D"mailto:lttng=
--dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><br clear=3D"none">&gt; =
-<a shape=3D"rect" href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/l=
-ttng-dev" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo=
-/lttng-dev</a><br clear=3D"none">&gt;<br clear=3D"none"><br clear=3D"none">=
-<br clear=3D"none"><br clear=3D"none">-- <br clear=3D"none">J=C3=A9r=C3=A9m=
-ie Galarneau<br clear=3D"none">EfficiOS Inc.<br clear=3D"none"><a shape=3D"=
-rect" href=3D"http://www.efficios.com/" target=3D"_blank">http://www.effici=
-os.com</a><br><br></div>  </div> </div>  </div> </div></body></html>
-------=_Part_1594932_638351885.1419855582569--
+<div dir=3D"ltr">Would appreciate any input/suggestion on this. Thanks a lo=
+t.</div><div class=3D"gmail_extra"><br clear=3D"all"><div><div class=3D"gma=
+il_signature">Regards,<br>Sudhagar<br><br>Visit my blog at: <a href=3D"http=
+://sudhagarc.blogspot.com">http://sudhagarc.blogspot.com</a></div></div>
+<br><div class=3D"gmail_quote">On Tue, Dec 23, 2014 at 3:16 AM, Sudhagar Ch=
+innaswamy <span dir=3D"ltr">&lt;<a href=3D"mailto:sudhagar@gmail.com" targe=
+t=3D"_blank">sudhagar@gmail.com</a>&gt;</span> wrote:<br><blockquote class=
+=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
+ing-left:1ex"><div dir=3D"ltr"><div>Hi:</div><div><br></div><div>I have the=
+ same need as discussed in the below mentioned thread. I want to use LTTng,=
+ but most of the cases we need to log different parameters under the same p=
+rovider and event.=C2=A0</div><div><br></div><a href=3D"http://lists.lttng.=
+org/pipermail/lttng-dev/2013-December/022134.html" target=3D"_blank">http:/=
+/lists.lttng.org/pipermail/lttng-dev/2013-December/022134.html</a><div><br>=
+</div><div>When I tried a simple program to log the variable arguments unde=
+r same provider/event as suggested in the above thread using the macro belo=
+w, I found that the function &quot;my_snprintf&quot; is called &quot;twice&=
+quot; when the logging for the event is enabled for each tracepoint call. I=
+t seems inefficient to call the same function twice. Is there something tha=
+t could be done to make it efficient or am I missing something?</div><div><=
+div style=3D"color:rgb(0,0,0);font-family:Helvetica;font-size:medium"><p cl=
+ass=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt;font-size:12pt;font-fami=
+ly:&#39;Times New Roman&#39;,serif"><span style=3D"font-size:10.5pt;font-fa=
+mily:Helvetica,sans-serif">=E2=80=94 8&lt; =E2=80=94</span></p></div><div s=
+tyle=3D"color:rgb(0,0,0);font-family:Helvetica;font-size:medium"><pre style=
+=3D"margin:0in 0in 0.0001pt;font-size:10pt;font-family:&#39;Courier New&#39=
+;;white-space:pre-wrap">#define tracepoint_for_format_string(provider, name=
+, =E2=80=A6) \</pre><pre style=3D"margin:0in 0in 0.0001pt;font-size:10pt;fo=
+nt-family:&#39;Courier New&#39;">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 do { \</pre=
+><pre style=3D"margin:0in 0in 0.0001pt;font-size:10pt;font-family:&#39;Cour=
+ier New&#39;">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 char msg_buf[MAX_BUFFER_SIZE]; \</pre><pre style=3D"margin:0in 0in 0=
+.0001pt;font-size:10pt;font-family:&#39;Courier New&#39;">=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tracepoint(provider, na=
+me, my_snprintf(msg_buf, MAX_BUFFER_SIZE, __VA_ARGS__)); \</pre><pre style=
+=3D"margin:0in 0in 0.0001pt;font-size:10pt;font-family:&#39;Courier New&#39=
+;">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } while (0)</pre><div><p class=3D"MsoNorm=
+al" style=3D"margin:0in 0in 0.0001pt;font-size:12pt;font-family:&#39;Times =
+New Roman&#39;,serif"><span style=3D"font-size:10.5pt;font-family:Helvetica=
+,sans-serif">=E2=80=94 8&lt; =E2=80=94</span></p></div></div><div style=3D"=
+color:rgb(0,0,0);font-family:Helvetica;font-size:medium"></div></div><div><=
+br></div><div>Alternatively, is there any other approach to achieve my requ=
+irement: Need to use same provider &amp; event name to log variable argumen=
+ts?</div><div><br></div><div>For e.g.,</div><div><div>my_tracepoint(hello_w=
+orld, test, &quot;argc=3D%d, argv=3D%p&quot;, argc, argv);</div><div>my_tra=
+cepoint(hello_world, test, &quot;argv[%u] :: %s&quot;, x, argv[x]);</div><d=
+iv>my_tracepoint(hello_world, test, &quot;Quitting now!&quot;);</div></div>=
+<div><br></div><div>Thanks in advance.</div><div><br clear=3D"all"><div><di=
+v>Regards,<br>Sudhagar<br><br></div></div>
+</div></div>
+</blockquote></div><br></div>
+
+--001a113aba9cd04265050b997428--
 
 
---===============0583868898==
+--===============0622709544==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Disposition: inline
 Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0583868898==--
+--===============0622709544==--
