@@ -1,17 +1,16 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: lttng module error
-Date: Mon, 05 Jan 2015 15:42:44 -0500
-Message-ID: <54AAF744.10503__39585.1716436029$1420490597$gmane$org@voxpopuli.im>
-References: <CA+=dQ-_34nLvPf5iJ2oV2tbJNzgCZ4ma-vYwMbm=0UPnZtFp+A@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools] Cleanup: lock file already taken is
+	error, not warning
+Date: Mon,  5 Jan 2015 15:58:49 -0500
+Message-ID: <1420491529-12389-1-git-send-email-mathieu.desnoyers__47908.706990029$1420491655$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="windows-1252"; Format="flowed"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.181])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <alexmonthy@voxpopuli.im>) id 1Y8ETz-0005Gn-Qg
- for lttng-dev@lists.lttng.org; Mon, 05 Jan 2015 15:42:36 -0500
-In-Reply-To: <CA+=dQ-_34nLvPf5iJ2oV2tbJNzgCZ4ma-vYwMbm=0UPnZtFp+A@mail.gmail.com>
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1Y8Ejs-0005Mf-5O
+ for lttng-dev@lists.lttng.org; Mon, 05 Jan 2015 15:59:01 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,53 +19,27 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Divya Vyas <dvyas@mvista.com>, lttng-dev <lttng-dev@lists.lttng.org>
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ src/common/utils.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-On 01/05/2015 12:58 AM, Divya Vyas wrote:
-> Hi,
->
-> I am getting this error while building lttng-modules folder:
->
-> In function =91lttng_statedump_process_ns=92:
-> /home/divya/Downloads/lttng-modules-a94de96/lttng-statedump-impl.c:301:2:
-> error: implicit declaration of function =91task_nsproxy=92
-> [-Werror=3Dimplicit-function-declaration]
->    proxy =3D task_nsproxy(p);
->    ^
-> /home/divya/Downloads/lttng-modules-a94de96/lttng-statedump-impl.c:301:8:
-> warning: assignment makes pointer from integer without a cast [enabled by
-> default]
->    proxy =3D task_nsproxy(p);
->          ^
-
-I experienced this issue with a distro kernel that had backported =
-
-patches that changed some internal APIs. That kernel was still =
-
-advertizing the same version number, so lttng-modules ended up using the =
-
-wrong code path.
-
-See http://bugs.lttng.org/issues/838
-
-I'm not sure about your other compilation error though, I don't remember =
-
-seeing that one. But it may be due to the same reason.
-
-
-HTH,
-Alex
-
-> /home/divya/Downloads/lttng-modules-a94de96/lttng-statedump-impl.c: In
-> function =91do_lttng_statedump=92:
-> /home/divya/Downloads/lttng-modules-a94de96/lttng-statedump-impl.c:395:2:
-> error: implicit declaration of function =91lttng_list_interrupts=92
-> [-Werror=3Dimplicit-function-declaration]
->    lttng_list_interrupts(session);
->
-> Has anybody faced this issue?
->
+diff --git a/src/common/utils.c b/src/common/utils.c
+index 3428d31..7f91dcb 100644
+--- a/src/common/utils.c
++++ b/src/common/utils.c
+@@ -516,7 +516,7 @@ int utils_create_lock_file(const char *filepath)
+ 	 */
+ 	ret = flock(fd, LOCK_EX | LOCK_NB);
+ 	if (ret) {
+-		WARN("Could not get lock file %s, another instance is running.",
++		ERR("Could not get lock file %s, another instance is running.",
+ 			filepath);
+ 		if (close(fd)) {
+ 			PERROR("close lock file");
+-- 
+2.1.1
