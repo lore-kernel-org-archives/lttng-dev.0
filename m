@@ -1,18 +1,19 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: Re: LTTng unreliable and useless under heavy loaded
-	systems?
-Date: Wed, 07 Jan 2015 11:56:47 -0500
-Message-ID: <54AD654F.4060206__5569.64157517559$1420649902$gmane$org@efficios.com>
-References: <54AD5A76.7070004@indel.ch>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools 00/13] lttng-tools leak fixes
+Date: Wed, 7 Jan 2015 16:10:27 -0500
+Message-ID: <CA+jJMxuhpNccqpNOqWTP0Af3J_HXf+Ju++4=Ah=4HA83VgAghA__41625.8134333932$1420665108$gmane$org@mail.gmail.com>
+References: <1418867124-17343-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fukushima.klipix.org ([85.12.144.25])
+Received: from mail-qa0-f47.google.com ([209.85.216.47])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1Y8tuh-00022w-I0
- for lttng-dev@lists.lttng.org; Wed, 07 Jan 2015 11:57:00 -0500
-In-Reply-To: <54AD5A76.7070004@indel.ch>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Y8xs9-0003Hv-FI
+ for lttng-dev@lists.lttng.org; Wed, 07 Jan 2015 16:10:42 -0500
+Received: by mail-qa0-f47.google.com with SMTP id n4so4481701qaq.6
+ for <lttng-dev@lists.lttng.org>; Wed, 07 Jan 2015 13:10:27 -0800 (PST)
+In-Reply-To: <1418867124-17343-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,131 +22,46 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Raphael Zulliger <zulliger@indel.ch>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Raphael,
-
-First of all, thanks for your input, it is really interesting for us to
-have detailled use cases like that.
-
-One first thing that come to mind is the amount of events enabled. When
-you use "lttng enable-event -k --all", you enable around 240 trace
-points (and all the syscalls), and much more if you have the sources of
-your kernel on the same machine (which allows the compilation and
-installation of the ext4/btrfs/kvm events). There are some very verbose
-tracepoint in the default list that might not be useful for the analysis
-you are trying to perform.
-
-I understand that, you want as much information as possible since you
-don't know what is exactly the problem, but instead of enabling
-everything, I would suggest a more iterative approach: first just enable
-the sched_switch and syscall events, and then when you get a better idea
-of what is going on, enable some specific subsystems.
-
-Also, when you increase the amount of subbuffers (and lower the
-subbuf-size), you increase the rate of subbuffer switches, which is the
-heaviest operation in the tracer. So you could maybe try other
-parameters such as 4x8 (if you want to limit to 32MB per CPU per
-channel). For the crash you got, it might be related to an out-of-memory
-problem, but it will be interesting to investigate this issue.
-I don't think there is a proper methodology to identify the perfect size
-for your use-case (other than trial/error), writing the trace on a
-dedicated and faster disk helps a lot.
-
-I know this can be frustrating to wait for hours for a problem to appear
-and end up with a huge trace that misses the important events. If the
-iterative strategy is not an option for you, you might be interested by
-a project I have started recently to automate the triggering of
-recording LTTng snapshots based on unusual latencies detected from the
-kernel [1]. The idea is to only write the trace in memory (no I/O) with
-the ring-buffer in flight-recorder mode, and when an interesting event
-is detected, extract the content of the ring-buffer and write it on
-disk/network. The amount of background information you get in your
-snapshot depends on the rate of events and size of the ring-buffer.
-This project is in a really early phase and I would not advise it yet
-for production use, but if you are interested by it, you can try it, the
-examples work reliably for me, and if you need help setting it up or
-adapting it to your needs, don't hesitate to contact me, at this stage
-all the feedbacks/suggestions are important.
-
-I hope this gives you some ideas on what could be your next steps.
-Please, let us know if you manage to find a way to solve this problem.
-
-Thanks,
-
-Julien
-
-[1] https://github.com/jdesfossez/latency_tracker
-
-On 15-01-07 11:10 AM, Raphael Zulliger wrote:
-> First of all: LTTng seems to be a great piece of software. Great docs
-> and good visualization tools (Eclipse) are available. I mention this to
-> clarify that I like LTTng...
-> 
-> ... unfortunately, for the issue I've started using it, it doesn't work
-> very well. I contact the list because I hope you have some tips and
-> tricks for me.
-> 
-> I have a Ubuntu 14.04/32, i5 Quadcore. The goal is to run an existing
-> application as jitter less as possible. To tune the system, I've
-> programmed a simple test-application which sends a UDP frame to an
-> embedded system and waits for the response. If the time until test-app
-> receives the response is bigger than 5ms, it consider that a big jitter
-> and exits. In that case, I want to find out what caused the jitter of >
-> 5ms. NOTE: I run my application with real-time prio 99 (which could
-> matter in this case, I guess)
-> 
-> Here's how I initially run my measurement (all as sudo):
->   lttng create
->   lttng enable-channel channel0 -k
->   lttng enable-event -k --all -c channel0
->   lttng start
->   chrt -f 50 ./run_my_test-application_here
->   lttng stop
->   lttng destroy
-> Then, I start compiling a kernel image and run bonnie++ to generate
-> system load. It takes about 1h until a jitter > 5ms occurs... but it
-> happens.
-> 
-> Unfortunately, whenever the big jitter (which are around 6ms up to 25ms)
-> occur, LTTng is not able to record the events around the time the delay
-> happened. Means: I got really nice graphs in Eclipse - but not at the
-> points where it would be useful... I also verified this with "babeltrace
-> .... > /dev/null" which reported the loss of various events.
-> 
-> I read the docs and then tried to increase the buffers. I tried several
-> numbers, the final version is:
->   lttng enable-channel channel0 -k --num-subbuf 32 --subbuf-size 1M
-> But it doesn't help. From my point of view, the result is still the same
-> as before it doesn't obviously loose less events than before. (Side
-> note: Actually, I also tried with "subbuf 16" and "subbuf-size 10M" but
-> then my system crashed: X gone, no keyboard input possible anymore but
-> (surprisingly) no kernel dump)
-> 
-> (Side note: There's one more thing to mention: The system is setup with
-> isolcpu=1,2,3 (because core 1..3 run real-time apps other than the one
-> mentioned here) - thus everything, including lttng daemons, ran on CPU0
-> so far.)
-> 
-> Finally, I tried to run lttng-sessiond and lttng-consumerd on a separate
-> CPU core (CPU3) and even changed policy to SCHED_FIFO and prio to 99 -
-> but lttng still looses events. This really surpises me...
-> 
-> I do understand that it is a good feature that lttng discards events
-> when buffers are full... but in my case, it seems to render lttng useless.
-> (Note: I did not yes use the "buffer overwrite" feature, but I guess the
-> events of interest will still be lost)
-> 
-> My question: Is there anything else I can do on my system (which is a
-> not a production system, just a developer machine) to make lttng work
-> for my scenario?
-> 
-> Any input is very welcome!
-> Raphael
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+QWxsIG1lcmdlZCwgdGhhbmtzIQoKSsOpcsOpbWllCgpPbiBXZWQsIERlYyAxNywgMjAxNCBhdCA4
+OjQ1IFBNLCBNYXRoaWV1IERlc25veWVycwo8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29t
+PiB3cm90ZToKPiBUaGlzIHBhdGNoc2V0IGZpeGVzIHZhcmlvdXMgbGVha3MuIFRoZSBtYWluIHJl
+YXNvbiBmb3IgcmVmYWN0b3JpbmcgdGhlCj4gZGFlbW9uIG1haW4gZnVuY3Rpb25zIGlzIHRvIG1h
+a2UgaXQgcG9zc2libGUgdG8gdXNlIHZhbGdyaW5kIHRvIHNwb3QKPiBvdGhlciBsZWFrcyB3aXRo
+b3V0IGJlaW5nIGluY3VtYmVyZWQgYnkgcHJvY2VzcyB0ZWFyZG93biBsZWFrcy4KPgo+IE1hdGhp
+ZXUgRGVzbm95ZXJzICgxMyk6Cj4gICBGaXg6IGFnZW50cyBodCBsZWFrcyBvbiBkZXN0cm95IHNl
+c3Npb24KPiAgIEZpeDogbGVhayBvbiBVU1QgYnVmZmVyIHJlZ2lzdHJ5IGNyZWF0aW9uIGVycm9y
+Cj4gICBGaXg6IHVzdCBhcHAgbGVhayBvbiBVU1QgYnVmZmVyIGNyZWF0aW9uIGVycm9yCj4gICBN
+aXNzaW5nIGVycm9yIGhhbmRsaW5nOiB1c3RfYXBwX2h0X2FsbG9jIHNob3VsZCByZXR1cm4gZXJy
+b3Igc3RhdHVzCj4gICBNaXNzaW5nIGVycm9yIGhhbmRsaW5nOiBjb25zdW1lcmQgcGFyc2VfYXJn
+cyBzaG91bGQgcmV0dXJuIGVycm9ycyB0bwo+ICAgICBjYWxsZXIKPiAgIE1pc2xlYWRpbmcgZXJy
+b3IgaGFuZGxpbmc6IHV0aWxzX2NyZWF0ZV9waWRfZmlsZSgpIHNob3VsZCByZXR1cm4gMCBvbgo+
+ICAgICBzdWNjZXNzCj4gICBDbGVhbnVwOiBsdHRuZy1jb25zdW1lcmQ6IHJlbW92ZSBzdGFsZSBU
+T0RPIGNvbW1lbnQKPiAgIENsZWFudXA6IGNvbnN1bWVyZDogdXNlIFBFUlJPUiByYXRoZXIgdGhh
+biBwZXJyb3IKPiAgIENsZWFudXA6IGNvbnN1bWVyZDogbGluZXMgb3ZlciA4MCBjb2x1bW5zCj4g
+ICBNaXNzaW5nIGVycm9yIGhhbmRsaW5nOiBjb25zdW1lcl9zaWduYWxfaW5pdCBzaG91bGQgcmV0
+dXJuIGl0cyBlcnJvcgo+ICAgICBzdGF0dXMKPiAgIFJlZmFjdG9yIHNlc3Npb25kIG1haW4vY2xl
+YW51cC9odC1jbGVhbnVwCj4gICBSZWZhY3RvciBjb25zdW1lcmQgbWFpbi9jbGVhbnVwCj4gICBS
+ZWZhY3RvciByZWxheWQgbWFpbi9zZXRfb3B0aW9ucy9jbGVhbnVwCj4KPiAgc3JjL2Jpbi9sdHRu
+Zy1jb25zdW1lcmQvbHR0bmctY29uc3VtZXJkLmMgfCAyODYgKysrKysrKy0tLS0KPiAgc3JjL2Jp
+bi9sdHRuZy1yZWxheWQvbGl2ZS5jICAgICAgICAgICAgICAgfCAxMjcgKysrLS0KPiAgc3JjL2Jp
+bi9sdHRuZy1yZWxheWQvbGl2ZS5oICAgICAgICAgICAgICAgfCAgIDUgKy0KPiAgc3JjL2Jpbi9s
+dHRuZy1yZWxheWQvbWFpbi5jICAgICAgICAgICAgICAgfCAyMDcgKysrKy0tLS0KPiAgc3JjL2Jp
+bi9sdHRuZy1zZXNzaW9uZC9odC1jbGVhbnVwLmMgICAgICAgfCAgNDEgKy0KPiAgc3JjL2Jpbi9s
+dHRuZy1zZXNzaW9uZC9sdHRuZy1zZXNzaW9uZC5oICAgfCAgIDQgKwo+ICBzcmMvYmluL2x0dG5n
+LXNlc3Npb25kL21haW4uYyAgICAgICAgICAgICB8IDc4MSArKysrKysrKysrKysrKysrKysrLS0t
+LS0tLS0tLS0KPiAgc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC90cmFjZS11c3QuYyAgICAgICAgfCAg
+IDIgKwo+ICBzcmMvYmluL2x0dG5nLXNlc3Npb25kL3VzdC1hcHAuYyAgICAgICAgICB8ICAzNSAr
+LQo+ICBzcmMvYmluL2x0dG5nLXNlc3Npb25kL3VzdC1hcHAuaCAgICAgICAgICB8ICAgMiArLQo+
+ICBzcmMvYmluL2x0dG5nLXNlc3Npb25kL3VzdC1yZWdpc3RyeS5jICAgICB8ICAgNCArLQo+ICBz
+cmMvY29tbW9uL2NvbnN1bWVyLXRpbWVyLmMgICAgICAgICAgICAgICB8ICAgNCArLQo+ICBzcmMv
+Y29tbW9uL2NvbnN1bWVyLXRpbWVyLmggICAgICAgICAgICAgICB8ICAgMiArLQo+ICBzcmMvY29t
+bW9uL3V0aWxzLmMgICAgICAgICAgICAgICAgICAgICAgICB8ICAgNiArLQo+ICAxNCBmaWxlcyBj
+aGFuZ2VkLCA5NjMgaW5zZXJ0aW9ucygrKSwgNTQzIGRlbGV0aW9ucygtKQo+Cj4gLS0KPiAyLjEu
+MQo+CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5l
+ZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
+Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
