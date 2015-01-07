@@ -1,20 +1,18 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Cleanup: lock file already
- taken is error, not warning
-Date: Wed, 7 Jan 2015 16:10:57 -0500
-Message-ID: <CA+jJMxsvSVoqDt1qzYyx3bWUfsG4OsPegPNT_3o6xGQ_aAc0Hg__27117.3830064528$1420665223$gmane$org@mail.gmail.com>
-References: <1420491529-12389-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: LTTng unreliable and useless under heavy
+	loaded	systems?
+Date: Wed, 7 Jan 2015 21:37:17 +0000 (UTC)
+Message-ID: <1266401093.36326.1420666636994.JavaMail.zimbra__19935.5457131334$1420666706$gmane$org@efficios.com>
+References: <54AD5A76.7070004@indel.ch> <54AD654F.4060206@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f170.google.com ([209.85.216.170])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Y8xsd-0003JI-BP
- for lttng-dev@lists.lttng.org; Wed, 07 Jan 2015 16:11:05 -0500
-Received: by mail-qc0-f170.google.com with SMTP id x3so1546674qcv.29
- for <lttng-dev@lists.lttng.org>; Wed, 07 Jan 2015 13:10:58 -0800 (PST)
-In-Reply-To: <1420491529-12389-1-git-send-email-mathieu.desnoyers@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1Y8yI2-0003Wc-M4
+ for lttng-dev@lists.lttng.org; Wed, 07 Jan 2015 16:37:25 -0500
+In-Reply-To: <54AD654F.4060206@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,27 +21,159 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: Julien Desfossez <jdesfossez@efficios.com>, Raphael Zulliger <zulliger@indel.ch>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIE1vbiwgSmFuIDUsIDIwMTUgYXQgMzo1OCBQ
-TSwgTWF0aGlldSBEZXNub3llcnMKPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4gd3Jv
-dGU6Cj4gU2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJz
-QGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgc3JjL2NvbW1vbi91dGlscy5jIHwgMiArLQo+ICAxIGZp
-bGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPgo+IGRpZmYgLS1naXQg
-YS9zcmMvY29tbW9uL3V0aWxzLmMgYi9zcmMvY29tbW9uL3V0aWxzLmMKPiBpbmRleCAzNDI4ZDMx
-Li43ZjkxZGNiIDEwMDY0NAo+IC0tLSBhL3NyYy9jb21tb24vdXRpbHMuYwo+ICsrKyBiL3NyYy9j
-b21tb24vdXRpbHMuYwo+IEBAIC01MTYsNyArNTE2LDcgQEAgaW50IHV0aWxzX2NyZWF0ZV9sb2Nr
-X2ZpbGUoY29uc3QgY2hhciAqZmlsZXBhdGgpCj4gICAgICAgICAgKi8KPiAgICAgICAgIHJldCA9
-IGZsb2NrKGZkLCBMT0NLX0VYIHwgTE9DS19OQik7Cj4gICAgICAgICBpZiAocmV0KSB7Cj4gLSAg
-ICAgICAgICAgICAgIFdBUk4oIkNvdWxkIG5vdCBnZXQgbG9jayBmaWxlICVzLCBhbm90aGVyIGlu
-c3RhbmNlIGlzIHJ1bm5pbmcuIiwKPiArICAgICAgICAgICAgICAgRVJSKCJDb3VsZCBub3QgZ2V0
-IGxvY2sgZmlsZSAlcywgYW5vdGhlciBpbnN0YW5jZSBpcyBydW5uaW5nLiIsCj4gICAgICAgICAg
-ICAgICAgICAgICAgICAgZmlsZXBhdGgpOwo+ICAgICAgICAgICAgICAgICBpZiAoY2xvc2UoZmQp
-KSB7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgUEVSUk9SKCJjbG9zZSBsb2NrIGZpbGUiKTsK
-PiAtLQo+IDIuMS4xCj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpo
-dHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo=
+----- Original Message -----
+> From: "Julien Desfossez" <jdesfossez@efficios.com>
+> To: "Raphael Zulliger" <zulliger@indel.ch>
+> Cc: lttng-dev@lists.lttng.org
+> Sent: Wednesday, January 7, 2015 11:56:47 AM
+> Subject: Re: [lttng-dev] LTTng unreliable and useless under heavy loaded	systems?
+> 
+> Hi Raphael,
+> 
+> First of all, thanks for your input, it is really interesting for us to
+> have detailled use cases like that.
+> 
+> One first thing that come to mind is the amount of events enabled. When
+> you use "lttng enable-event -k --all", you enable around 240 trace
+> points (and all the syscalls), and much more if you have the sources of
+> your kernel on the same machine (which allows the compilation and
+> installation of the ext4/btrfs/kvm events). There are some very verbose
+> tracepoint in the default list that might not be useful for the analysis
+> you are trying to perform.
+> 
+> I understand that, you want as much information as possible since you
+> don't know what is exactly the problem, but instead of enabling
+> everything, I would suggest a more iterative approach: first just enable
+> the sched_switch and syscall events, and then when you get a better idea
+> of what is going on, enable some specific subsystems.
+> 
+> Also, when you increase the amount of subbuffers (and lower the
+> subbuf-size), you increase the rate of subbuffer switches, which is the
+> heaviest operation in the tracer. So you could maybe try other
+> parameters such as 4x8 (if you want to limit to 32MB per CPU per
+> channel). For the crash you got, it might be related to an out-of-memory
+> problem, but it will be interesting to investigate this issue.
+> I don't think there is a proper methodology to identify the perfect size
+> for your use-case (other than trial/error), writing the trace on a
+> dedicated and faster disk helps a lot.
+> 
+> I know this can be frustrating to wait for hours for a problem to appear
+> and end up with a huge trace that misses the important events. If the
+> iterative strategy is not an option for you, you might be interested by
+> a project I have started recently to automate the triggering of
+> recording LTTng snapshots based on unusual latencies detected from the
+> kernel [1]. The idea is to only write the trace in memory (no I/O) with
+> the ring-buffer in flight-recorder mode, and when an interesting event
+> is detected, extract the content of the ring-buffer and write it on
+> disk/network. The amount of background information you get in your
+> snapshot depends on the rate of events and size of the ring-buffer.
+> This project is in a really early phase and I would not advise it yet
+> for production use, but if you are interested by it, you can try it, the
+> examples work reliably for me, and if you need help setting it up or
+> adapting it to your needs, don't hesitate to contact me, at this stage
+> all the feedbacks/suggestions are important.
+
+Along these lines: if Raphael already has a way to detect those latencies,
+he could use the "flight recorder" tracing feature of lttng (lttng create
+--snapshot), and grab snapshot when latencies are detected (lttng snapshot
+record). IMO, this approach would fit his use-case quite well.
+
+Thanks,
+
+Mathieu
+
+> 
+> I hope this gives you some ideas on what could be your next steps.
+> Please, let us know if you manage to find a way to solve this problem.
+> 
+> Thanks,
+> 
+> Julien
+> 
+> [1] https://github.com/jdesfossez/latency_tracker
+> 
+> On 15-01-07 11:10 AM, Raphael Zulliger wrote:
+> > First of all: LTTng seems to be a great piece of software. Great docs
+> > and good visualization tools (Eclipse) are available. I mention this to
+> > clarify that I like LTTng...
+> > 
+> > ... unfortunately, for the issue I've started using it, it doesn't work
+> > very well. I contact the list because I hope you have some tips and
+> > tricks for me.
+> > 
+> > I have a Ubuntu 14.04/32, i5 Quadcore. The goal is to run an existing
+> > application as jitter less as possible. To tune the system, I've
+> > programmed a simple test-application which sends a UDP frame to an
+> > embedded system and waits for the response. If the time until test-app
+> > receives the response is bigger than 5ms, it consider that a big jitter
+> > and exits. In that case, I want to find out what caused the jitter of >
+> > 5ms. NOTE: I run my application with real-time prio 99 (which could
+> > matter in this case, I guess)
+> > 
+> > Here's how I initially run my measurement (all as sudo):
+> >   lttng create
+> >   lttng enable-channel channel0 -k
+> >   lttng enable-event -k --all -c channel0
+> >   lttng start
+> >   chrt -f 50 ./run_my_test-application_here
+> >   lttng stop
+> >   lttng destroy
+> > Then, I start compiling a kernel image and run bonnie++ to generate
+> > system load. It takes about 1h until a jitter > 5ms occurs... but it
+> > happens.
+> > 
+> > Unfortunately, whenever the big jitter (which are around 6ms up to 25ms)
+> > occur, LTTng is not able to record the events around the time the delay
+> > happened. Means: I got really nice graphs in Eclipse - but not at the
+> > points where it would be useful... I also verified this with "babeltrace
+> > .... > /dev/null" which reported the loss of various events.
+> > 
+> > I read the docs and then tried to increase the buffers. I tried several
+> > numbers, the final version is:
+> >   lttng enable-channel channel0 -k --num-subbuf 32 --subbuf-size 1M
+> > But it doesn't help. From my point of view, the result is still the same
+> > as before it doesn't obviously loose less events than before. (Side
+> > note: Actually, I also tried with "subbuf 16" and "subbuf-size 10M" but
+> > then my system crashed: X gone, no keyboard input possible anymore but
+> > (surprisingly) no kernel dump)
+> > 
+> > (Side note: There's one more thing to mention: The system is setup with
+> > isolcpu=1,2,3 (because core 1..3 run real-time apps other than the one
+> > mentioned here) - thus everything, including lttng daemons, ran on CPU0
+> > so far.)
+> > 
+> > Finally, I tried to run lttng-sessiond and lttng-consumerd on a separate
+> > CPU core (CPU3) and even changed policy to SCHED_FIFO and prio to 99 -
+> > but lttng still looses events. This really surpises me...
+> > 
+> > I do understand that it is a good feature that lttng discards events
+> > when buffers are full... but in my case, it seems to render lttng useless.
+> > (Note: I did not yes use the "buffer overwrite" feature, but I guess the
+> > events of interest will still be lost)
+> > 
+> > My question: Is there anything else I can do on my system (which is a
+> > not a production system, just a developer machine) to make lttng work
+> > for my scenario?
+> > 
+> > Any input is very welcome!
+> > Raphael
+> > 
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
