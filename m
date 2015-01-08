@@ -1,33 +1,23 @@
-From: Divya Vyas <dvyas@mvista.com>
-Subject: Re: Merge two LTTng CTF traces into one
-Date: Thu, 8 Jan 2015 22:58:15 +0530
-Message-ID: <CA+=dQ-_DGAtobYX8W=mQUyJMPD8LD4b6FQDrnC9SqmQr_0gWAA__13034.131381619$1420738233$gmane$org@mail.gmail.com>
-References: <1431870336.8158578.1419253660346.JavaMail.root@polymtl.ca>
- <549835FE.8090508@ericsson.com> <54985ACE.1000502@ericsson.com>
- <CA+=dQ-_sjNg3jj11Psm+wrKbbyS1Ox1kHZyoFwQ2MSfP+SqvuQ@mail.gmail.com>
- <5499C549.2@ericsson.com> <5499CF78.3090301@versatic.net>
- <CA+=dQ-9zwf=0Qnf8mCwWionoOo-BxRyScb607-0wfoi2hBO8XA@mail.gmail.com>
- <54AAB14E.70004@versatic.net>
- <CA+=dQ--wqUbkbW3MXh-4X1NrJ-qp=8B4dh6ydutgGzEcOXHxUA@mail.gmail.com>
- <CA+=dQ-9ZmQJJKZOcoL6kQX5kSMKDZ9HMS2xkjstMiw-5bz79EQ@mail.gmail.com>
- <CA+=dQ-8oGmyKDfNEfLwu_WLeouu0XXxQVigciVBDV3T6dQJ+pg@mail.gmail.com>
- <54AC0D33.80805@versatic.net>
- <CA+=dQ-_CaEvWV6uF+01tZFmfhSoHE0g=OGBKoKNC5cwMaWDSew@mail.gmail.com>
- <54AD41E8.7050604@versatic.net>
- <CA+=dQ--GJj1rt4jTFOc-sV4YMNb+jpWXnWT_7oULab-FiXRJaQ@mail.gmail.com>
- <54AD844D.4000800@versatic.net>
- <CA+=dQ-_u2D47dkEt_20YeGBZYBOTiADX6BWq8FR-7XWaOko10A@mail.gmail.com>
- <54AEB378.8090101@versatic.net>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools 3/3] Fix: ust-app: per-PID app
+ unregister vs tracing stop races
+Date: Thu, 8 Jan 2015 12:29:43 -0500
+Message-ID: <CA+jJMxvhBm8b0VSVSQXdHAdM0ObdFaBGt7b5KhwdT+mMEcHtrg__47091.0599608489$1420738302$gmane$org@mail.gmail.com>
+References: <1420424709-15095-1-git-send-email-mathieu.desnoyers@efficios.com>
+ <1420424709-15095-3-git-send-email-mathieu.desnoyers@efficios.com>
+ <CA+jJMxuk2ThtqjV3J98JSznEigqGnCS23MGozdv2xKe-wkZJSg@mail.gmail.com>
+ <1219768004.36443.1420689087719.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1708584563=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f181.google.com ([209.85.212.181])
+Received: from mail-qc0-f178.google.com ([209.85.216.178])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dvyas@mvista.com>) id 1Y9Gsf-00019j-4J
- for lttng-dev@lists.lttng.org; Thu, 08 Jan 2015 12:28:23 -0500
-Received: by mail-wi0-f181.google.com with SMTP id r20so4786581wiv.2
- for <lttng-dev@lists.lttng.org>; Thu, 08 Jan 2015 09:28:15 -0800 (PST)
-In-Reply-To: <54AEB378.8090101@versatic.net>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Y9Gu4-0001Bu-ST
+ for lttng-dev@lists.lttng.org; Thu, 08 Jan 2015 12:29:50 -0500
+Received: by mail-qc0-f178.google.com with SMTP id p6so3253304qcv.9
+ for <lttng-dev@lists.lttng.org>; Thu, 08 Jan 2015 09:29:43 -0800 (PST)
+In-Reply-To: <1219768004.36443.1420689087719.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -36,439 +26,245 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?Q?Genevi=C3=A8ve_Bastien?= <gbastien@versatic.net>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, =?UTF-8?Q?Fran=C3=A7ois_Doray?= <francois.doray@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1708584563==
-Content-Type: multipart/alternative; boundary=001a11c2691e7ffb02050c275df0
-
---001a11c2691e7ffb02050c275df0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-On Jan 8, 2015 10:12 PM, "Genevi=C3=A8ve Bastien" <gbastien@versatic.net> w=
-rote:
->
-> Hi Divya,
->
-> I'm putting you back on the lttng-dev mailing list, please reply to that
-list in the future so other people can answer, because I think that trace
-synchronization is not exactly what you are looking for here...
-
-I am sorry I clicked reply instead of reply to all.
-
-I have a host and on top of that I have multiple guests. Suppose like from
-9 to 9:30 I want to analyze the host information as well as guest
-information in single view and in a synchronized way. As the guest time is
-different from host . I need the guest traces referenced at host time . and
-I tracecompass I can see the host traces as well as guest traces in a
-synchronized way.
-
-I hope now I gave the clear picture of what I am doing. Please let me know
-if u need some explanation.
->
->> I tried the sessions at same time and communication events in between
-and it worked :)
->> I am getting quality as accurate and I can see both traces merged .
->
-> Excellent!
->
->>
->> Now I come at my second  point i.e taking traces from lttng sessions at
-different machines and at different time and may be communication events or
-might be not.
->
-> If the sessions are taken are different moments, they can _never_
-synchronize.
-
-Yes I think you told that they can be analyzed by applying offset but not
-synchronized.
-
-Trace synchronization first matches events such that one single event from
-a trace (for example "sending a packet") can be correlated to exactly one
-event in the second trace (the reception of that packet). If that is the
-case, the first event can have a timestamp of now and the second be timed
-to January 1st 1970, trace synchronization will work and the 2 traces will
-have a common time reference after synchronization.
-
-What is the criteria of timestamps to be synchronized? How much two
-timestamps matched for synchronization
->
->
->>
->> So In my opinion I need to apply time offset on one of the trace to
-match the beginning so that they can be synchronized .
->>
->> So like first trace timestamp starts at 07:13:59 .499 222 870 and other
-starts at 11:21:35.537 682 885 . Then I can apply timeoffset ( How much
-offset ? In apply time offset advanced option If reference time is 7:13....
-then target time will be 11:21:35... it will calculate the offset ) on one
-of the trace to match traces .
->>
->> Is it possible to synchronize the traces then ? Actually I tried these
-steps but not getting the synchronized traces but then both traces
-beginning is exactly same ( obviously it will as applied by the offset)
->>
->> Please let me know how can I synchronize the traces from different
-machines and at different time
->
-> I'm not sure what your end goal is exactly. Do you want to compare trace
-executions? I am cc'ing Fran=C3=A7ois Doray who is currently working on a t=
-race
-comparison utility. Here's a presentation he did recently:
-http://ahls.dorsal.polymtl.ca/system/files/Comparison%20of%20Traces%20to%20=
-Diagnose%20Performance%20Variations.pdf
->
-> His work is still experimental and available on github. If that's what
-you're interested in, he might give you some information on how to use it.
->
-> Otherwise, please explain what you are trying to achieve.
->
-> Genevi=C3=A8ve
->
->
->
->>
->>
->>
->> On Thu, Jan 8, 2015 at 12:39 AM, Genevi=C3=A8ve Bastien <gbastien@versat=
-ic.net>
-wrote:
->>>
->>> On 15-01-07 11:32 AM, Divya Vyas wrote:
->>>>
->>>> Hi ,
->>>>
->>>> I have some comments below and thanks a lot for your help
->>>>
->>>> On Jan 7, 2015 7:55 PM, "Genevi=C3=A8ve Bastien" <gbastien@versatic.ne=
-t>
-wrote:
->>>> >
->>>> > Hi Divya,
->>>> >
->>>> >
->>>> > On 15-01-07 01:24 AM, Divya Vyas wrote:
->>>> >>
->>>> >>
->>>> >> Hi Genevieve,
->>>> >>
->>>> >> My target to is merge the traces of two different machines taken on
-different time or same time .
->>>> >
->>>> > Trace synchronization works by first matching events corresponding
-to the sending and the reception of a TCP packet from both traces, and then
-taking those matched events and computing a formula that will transform
-timestamps from one trace to the same clock as another trace. So only
-traces taken at the same time (meaning together, not the same clock time of
-course) will work.
->>>>
->>>> I am not getting this last point , where the traces are taken
-together. You mean that we start lttng session on two machines at around
-same time and then during  session use some communication events . Then
-take the traces into tracecompass for synchronization in experiment.  I am
-not getting in which cases time offset is needed?
->>>
->>>
->>> Yes, two sessions on two machines at the same time and they communicate
-during those sessions. Then you can synchronize traces. The following
-traces are used in unit tests to test trace synchronization if you wish to
-see what it looks like:
-http://archive.eclipse.org/tracecompass/test-traces/ctf/synctraces.tar.gz
->>>
->>>> In what traces I need to apply time offset so that their beginning
-matches. Is it applicable on the above case which I am thinking above.
->>>
->>>
->>> You never _need_ to apply time offset. It is if you have traces that do
-not contain communication events, and you want one of them to be offsetted
-by a certain time. For example, you have a trace taken GST-5 and one at
-GST, you cannot synchronize them because they don't have communication
-events but you want to analyze them with the same time reference, you would
-offset the one at GST-5 by +5 hours.
->>>
->>> Or if you have a custom event that you know happened at the same time
-on both traces, but synchronization does not support that event, then you
-can offset one trace so that both events from both traces have the same
-timestamp.
->>>
->>> Time offsetting is a manual process by the user, while trace
-synchronization is an automatic analysis using pre-defined events to
-compute a formula to transform timestamps from one trace to the same clock
-as the other.
->>>
->>>> >
->>>> >
->>>> >>
->>>> >> Actually synchronization was not working on different machine so I
-tried on same machine.  But now I got it correctly I think so :)
->>>> >
->>>> > Indeed, you have the right events now, with the net_dev_queue and
-netif_receive_skb. So you should be OK. But I *think* this method works
-only when on a LAN. If your computers communicate through internet, you're
-better off with the inet_sock_local_[in|out] method
->>>>
->>>> They are connected through LAN only.
->>>>
->>>> >
->>>> >>
->>>> >> For different time we need to apply offset so that their beginning
-matches. I think I need to do this .
->>>> >>
->>>> >> I tried applying offset on eclipse luna ( I added linux tools in
-install new software)   but I am not getting this option " Apply time
-offset ".
->>>> >
->>>> > It is in master only so far, so you should use tracecompass to have
-this option.
->>>> >
->>>> >>
->>>> >> I tried on tracecompass also, where I am getting time offset option
-but the synchronization view is empty . The window is not showing anything.
-The tracecompass version is 0.1.0
->>>> >
->>>> > The time offset does not involve synchronization at all, it is just
-an offset, so you would not see anything in the synchronization view. But
-in the "Properties" view, when you select the trace, the time offset is
-displayed.
->>>>
->>>> I meant to say that I tried synchronizing the traces in tracecompass
-without time offset . The synchronizing view is empty.
->>>> It should show at least quality absent etc.
->>>
->>>
->>> Quality absent would show only if the traces are from different
-machines. If you are trying to synchronize traces from the same machine,
-that view will stay empty.
->>>
->>> Genevi=C3=A8ve
->>>
->>>
->>
->
-
---001a11c2691e7ffb02050c275df0
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<p dir=3D"ltr"><br>
-On Jan 8, 2015 10:12 PM, &quot;Genevi=C3=A8ve Bastien&quot; &lt;<a href=3D"=
-mailto:gbastien@versatic.net">gbastien@versatic.net</a>&gt; wrote:<br>
-&gt;<br>
-&gt; Hi Divya,<br>
-&gt;<br>
-&gt; I&#39;m putting you back on the lttng-dev mailing list, please reply t=
-o that list in the future so other people can answer, because I think that =
-trace synchronization is not exactly what you are looking for here...<br></=
-p>
-<p dir=3D"ltr">I am sorry I clicked reply instead of reply to all.</p>
-<p dir=3D"ltr">I have a host and on top of that I have multiple guests. Sup=
-pose like from 9 to 9:30 I want to analyze the host information as well as =
-guest information in single view and in a synchronized way. As the guest ti=
-me is different from host . I need the guest traces referenced at host time=
- . and I tracecompass I can see the host traces as well as guest traces in =
-a synchronized way.</p>
-<p dir=3D"ltr">I hope now I gave the clear picture of what I am doing. Plea=
-se let me know if u need some explanation.=C2=A0 <br>
-&gt;<br>
-&gt;&gt; I tried the sessions at same time and communication events in betw=
-een and it worked :)<br>
-&gt;&gt; I am getting quality as accurate and I can see both traces merged =
-.<br>
-&gt;<br>
-&gt; Excellent!<br>
-&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; Now I come at my second=C2=A0 point i.e taking traces from lttng s=
-essions at different machines and at different time and may be communicatio=
-n events or might be not.<br>
-&gt;<br>
-&gt; If the sessions are taken are different moments, they can _never_ sync=
-hronize.</p>
-<p dir=3D"ltr">Yes I think you told that they can be analyzed by applying o=
-ffset but not synchronized. </p>
-<p dir=3D"ltr"> Trace synchronization first matches events such that one si=
-ngle event from a trace (for example &quot;sending a packet&quot;) can be c=
-orrelated to exactly one event in the second trace (the reception of that p=
-acket). If that is the case, the first event can have a timestamp of now an=
-d the second be timed to January 1st 1970, trace synchronization will work =
-and the 2 traces will have a common time reference after synchronization.</=
-p>
-<p dir=3D"ltr">What is the criteria of timestamps to be synchronized? How m=
-uch two timestamps matched for synchronization<br>
-&gt;<br>
-&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; So In my opinion I need to apply time offset on one of the trace t=
-o match the beginning so that they can be synchronized . <br>
-&gt;&gt;<br>
-&gt;&gt; So like first trace timestamp starts at 07:13:59 .499 222 870 and =
-other starts at 11:21:35.537 682 885 . Then I can apply timeoffset ( How mu=
-ch offset ? In apply time offset advanced option If reference time is 7:13.=
-... then target time will be 11:21:35... it will calculate the offset ) on =
-one of the trace to match traces .<br>
-&gt;&gt;<br>
-&gt;&gt; Is it possible to synchronize the traces then ? Actually I tried t=
-hese steps but not getting the synchronized traces but then both traces beg=
-inning is exactly same ( obviously it will as applied by the offset) <br>
-&gt;&gt;<br>
-&gt;&gt; Please let me know how can I synchronize the traces from different=
- machines and at different time <br>
-&gt;<br>
-&gt; I&#39;m not sure what your end goal is exactly. Do you want to compare=
- trace executions? I am cc&#39;ing Fran=C3=A7ois Doray who is currently wor=
-king on a trace comparison utility. Here&#39;s a presentation he did recent=
-ly: <a href=3D"http://ahls.dorsal.polymtl.ca/system/files/Comparison%20of%2=
-0Traces%20to%20Diagnose%20Performance%20Variations.pdf">http://ahls.dorsal.=
-polymtl.ca/system/files/Comparison%20of%20Traces%20to%20Diagnose%20Performa=
-nce%20Variations.pdf</a><br>
-&gt;<br>
-&gt; His work is still experimental and available on github. If that&#39;s =
-what you&#39;re interested in, he might give you some information on how to=
- use it.<br>
-&gt;<br>
-&gt; Otherwise, please explain what you are trying to achieve.<br>
-&gt;<br>
-&gt; Genevi=C3=A8ve<br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-&gt;&gt; =C2=A0<br>
-&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;&gt; On Thu, Jan 8, 2015 at 12:39 AM, Genevi=C3=A8ve Bastien &lt;<a hre=
-f=3D"mailto:gbastien@versatic.net">gbastien@versatic.net</a>&gt; wrote:<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; On 15-01-07 11:32 AM, Divya Vyas wrote:<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; Hi ,<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; I have some comments below and thanks a lot for your help<=
-br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; On Jan 7, 2015 7:55 PM, &quot;Genevi=C3=A8ve Bastien&quot;=
- &lt;<a href=3D"mailto:gbastien@versatic.net">gbastien@versatic.net</a>&gt;=
- wrote:<br>
-&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt;&gt;&gt; &gt; Hi Divya,<br>
-&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt;&gt;&gt; &gt; On 15-01-07 01:24 AM, Divya Vyas wrote:<br>
-&gt;&gt;&gt;&gt; &gt;&gt;<br>
-&gt;&gt;&gt;&gt; &gt;&gt;<br>
-&gt;&gt;&gt;&gt; &gt;&gt; Hi Genevieve,<br>
-&gt;&gt;&gt;&gt; &gt;&gt;<br>
-&gt;&gt;&gt;&gt; &gt;&gt; My target to is merge the traces of two different=
- machines taken on different time or same time .<br>
-&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt;&gt;&gt; &gt; Trace synchronization works by first matching events =
-corresponding to the sending and the reception of a TCP packet from both tr=
-aces, and then taking those matched events and computing a formula that wil=
-l transform timestamps from one trace to the same clock as another trace. S=
-o only traces taken at the same time (meaning together, not the same clock =
-time of course) will work.<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; I am not getting this last point , where the traces are ta=
-ken together. You mean that we start lttng session on two machines at aroun=
-d same time and then during=C2=A0 session use some communication events . T=
-hen take the traces into tracecompass for synchronization in experiment.=C2=
-=A0 I am not getting in which cases time offset is needed?<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; Yes, two sessions on two machines at the same time and they co=
-mmunicate during those sessions. Then you can synchronize traces. The follo=
-wing traces are used in unit tests to test trace synchronization if you wis=
-h to see what it looks like: <a href=3D"http://archive.eclipse.org/tracecom=
-pass/test-traces/ctf/synctraces.tar.gz">http://archive.eclipse.org/tracecom=
-pass/test-traces/ctf/synctraces.tar.gz</a><br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; In what traces I need to apply time offset so that their b=
-eginning matches. Is it applicable on the above case which I am thinking ab=
-ove.<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; You never _need_ to apply time offset. It is if you have trace=
-s that do not contain communication events, and you want one of them to be =
-offsetted by a certain time. For example, you have a trace taken GST-5 and =
-one at GST, you cannot synchronize them because they don&#39;t have communi=
-cation events but you want to analyze them with the same time reference, yo=
-u would offset the one at GST-5 by +5 hours.<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; Or if you have a custom event that you know happened at the sa=
-me time on both traces, but synchronization does not support that event, th=
-en you can offset one trace so that both events from both traces have the s=
-ame timestamp.<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; Time offsetting is a manual process by the user, while trace s=
-ynchronization is an automatic analysis using pre-defined events to compute=
- a formula to transform timestamps from one trace to the same clock as the =
-other.<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt;&gt;&gt; &gt;&gt;<br>
-&gt;&gt;&gt;&gt; &gt;&gt; Actually synchronization was not working on diffe=
-rent machine so I tried on same machine.=C2=A0 But now I got it correctly I=
- think so :)<br>
-&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt;&gt;&gt; &gt; Indeed, you have the right events now, with the net_d=
-ev_queue and netif_receive_skb. So you should be OK. But I *think* this met=
-hod works only when on a LAN. If your computers communicate through interne=
-t, you&#39;re better off with the inet_sock_local_[in|out] method<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; They are connected through LAN only.<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt;&gt;&gt; &gt;&gt;<br>
-&gt;&gt;&gt;&gt; &gt;&gt; For different time we need to apply offset so tha=
-t their beginning matches. I think I need to do this .<br>
-&gt;&gt;&gt;&gt; &gt;&gt;<br>
-&gt;&gt;&gt;&gt; &gt;&gt; I tried applying offset on eclipse luna ( I added=
- linux tools in install new software)=C2=A0=C2=A0 but I am not getting this=
- option &quot; Apply time offset &quot;. <br>
-&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt;&gt;&gt; &gt; It is in master only so far, so you should use tracec=
-ompass to have this option.<br>
-&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt;&gt;&gt; &gt;&gt;<br>
-&gt;&gt;&gt;&gt; &gt;&gt; I tried on tracecompass also, where I am getting =
-time offset option but the synchronization view is empty . The window is no=
-t showing anything. The tracecompass version is 0.1.0<br>
-&gt;&gt;&gt;&gt; &gt;<br>
-&gt;&gt;&gt;&gt; &gt; The time offset does not involve synchronization at a=
-ll, it is just an offset, so you would not see anything in the synchronizat=
-ion view. But in the &quot;Properties&quot; view, when you select the trace=
-, the time offset is displayed.<br>
-&gt;&gt;&gt;&gt;<br>
-&gt;&gt;&gt;&gt; I meant to say that I tried synchronizing the traces in tr=
-acecompass without time offset . The synchronizing view is empty.<br>
-&gt;&gt;&gt;&gt; It should show at least quality absent etc.<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; Quality absent would show only if the traces are from differen=
-t machines. If you are trying to synchronize traces from the same machine, =
-that view will stay empty. <br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt; Genevi=C3=A8ve<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;&gt;<br>
-&gt;&gt;<br>
-&gt;<br>
-</p>
-
---001a11c2691e7ffb02050c275df0--
-
-
---===============1708584563==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1708584563==--
+T24gV2VkLCBKYW4gNywgMjAxNSBhdCAxMDo1MSBQTSwgTWF0aGlldSBEZXNub3llcnMKPG1hdGhp
+ZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gLS0tLS0gT3JpZ2luYWwgTWVzc2Fn
+ZSAtLS0tLQo+PiBGcm9tOiAiSsOpcsOpbWllIEdhbGFybmVhdSIgPGplcmVtaWUuZ2FsYXJuZWF1
+QGVmZmljaW9zLmNvbT4KPj4gVG86ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95
+ZXJzQGVmZmljaW9zLmNvbT4KPj4gQ2M6ICJKZXJlbWllIEdhbGFybmVhdSIgPGpnYWxhckBlZmZp
+Y2lvcy5jb20+LCBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+IFNlbnQ6IFdlZG5lc2RheSwg
+SmFudWFyeSA3LCAyMDE1IDY6MTQ6MTQgUE0KPj4gU3ViamVjdDogUmU6IFtQQVRDSCBsdHRuZy10
+b29scyAzLzNdIEZpeDogdXN0LWFwcDogcGVyLVBJRCBhcHAgdW5yZWdpc3RlciB2cyB0cmFjaW5n
+IHN0b3AgcmFjZXMKPj4KPj4gT24gU3VuLCBKYW4gNCwgMjAxNSBhdCA5OjI1IFBNLCBNYXRoaWV1
+IERlc25veWVycwo+PiA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPiB3cm90ZToKPj4g
+PiBUaGVyZSBhcmUgdmFyaW91cyByYWNlcyB3aXRoIFVTVCBhcHBsaWNhdGlvbiB1bnJlZ2lzdGVy
+IHBlcmZvcm1lZAo+PiA+IGNvbmN1cnJlbnRseSB3aXRoIHRyYWNpbmcgc3RvcCBvcGVyYXRpb24g
+d2hlbiB0cmFjaW5nIHdpdGggcGVyLXBpZAo+PiA+IGJ1ZmZlcnMuIFRoaXMgcmFuZG9tbHkgYWZm
+ZWN0cyBhdmFpbGFiaWxpdHkgb2YgZGF0YSBzaG9ydGx5IGFmdGVyIHRoZQo+PiA+IGRhdGEgcGVu
+ZGluZyBjaGVjayByZXR1cm5zIHRoYXQgbm8gbW9yZSBkYXRhIGlzIGF2YWlsYWJsZS4KPj4gPgo+
+PiA+IHVzdF9hcHBfc3RvcF90cmFjZV9hbGwoKSBpdGVyYXRlcyBvbiBhbGwgYXBwbGljYXRpb25z
+IGluIHRoZSB1c3RfYXBwX2h0Cj4+ID4gaGFzaCB0YWJsZSB0byBpc3N1ZSBhIGZsdXNoIG9uIGFs
+bCBidWZmZXJzLiBUaGlzIGlzIG5lZWRlZCB0byBlbnN1cmUKPj4gPiB0aGF0IHRoZSBzdWItYnVm
+ZmVycyBiZWluZyB3cml0dGVuIHRvIGFyZSBtYWRlIGF2YWlsYWJsZSB0byB0aGUKPj4gPiBjb25z
+dW1lciwgZm9yIGJvdGggZGF0YSBjb25zdW1wdGlvbiwgYW5kIGZvciB0aGUgZGF0YSBwZW5kaW5n
+IGNoZWNrLgo+PiA+IEZhaWx1cmUgdG8gZXhlY3V0ZSB0aGUgc3ViLWJ1ZmZlciBmbHVzaCBtYWtl
+cyBmb2xsb3dpbmcgZGF0YSBwZW5kaW5nCj4+ID4gY2hlY2sgcmV0dXJuIHRoYXQgdGhlcmUgaXMg
+bm8gZGF0YSBpbiB0aGUgYnVmZmVycyB0b28gZWFybHksIHRodXMKPj4gPiByZXN1bHRpbmcgaW4g
+YW4gaW5jb21wbGV0ZSB0cmFjZS4KPj4gPgo+PiA+IEl0IGlzIHRoZXJlZm9yZSBpbXBvcnRhbnQg
+dGhhdCBhbiBhcHBsaWNhdGlvbiBmbHVzaGVzIGFsbCBpdHMgYnVmZmVycwo+PiA+IGJlZm9yZSBp
+dCBpcyByZW1vdmVkIGZyb20gdGhlIHVzdF9hcHBfaHQuCj4+ID4KPj4gPiBUaGlzIGlzIHdoZXJl
+IHVzdF9hcHBfdW5yZWdpc3RlcigpIG5lZWRzIHRvIGJlIGZpeGVkLiBOb3RlIHRoYXQKPj4gPiB1
+c3RfYXBwX3VucmVnaXN0ZXIoKSBleGVjdXRlcyBjb25jdXJyZW50bHkgd2l0aAo+PiA+IHVzdF9h
+cHBfc3RvcF90cmFjZV9hbGwoKSwgb25seSB0YWtpbmcgdGhlIHBlci1zZXNzaW9uIGxvY2suIFRo
+ZSBvcmRlciBvZgo+PiA+IGZsdXNoIHZzIGhhc2ggdGFibGUgcmVtb3ZhbCB0aGVyZWZvcmUgbWF0
+dGVyczoKPj4gPgo+PiA+IFdlIG5lZWQgdG8gcHVzaCB0aGUgbWV0YWRhdGEgYmVmb3JlIHJlbW92
+aW5nIGFwcGxpY2F0aW9uIGZyb20KPj4gPiB1c3RfYXBwX2h0LiBXZSBhbHNvIG5lZWQgdG8gaXNz
+dWUgYSBmbHVzaCBmb3IgYWxsIGFwcGxpY2F0aW9uIGJ1ZmZlcnMKPj4gPiBiZWZvcmUgcmVtb3Zp
+bmcgdGhlIGFwcGxpY2F0aW9uIGZyb20gdXN0X2FwcF9odC4KPj4gPgo+PiA+IE9uY2UgdGhpcyBp
+cyBmaXhlZCwgdGhlcmUgaXMgeWV0IGFub3RoZXIgcmFjZSwgdGhpcyB0aW1lIGluCj4+ID4gdXN0
+X2FwcF9mbHVzaF90cmFjZSgpIChub3cgcmVuYW1lZCB1c3RfYXBwX2ZsdXNoX3Nlc3Npb24oKSku
+IEl0IGlzCj4+ID4gY2F1c2VkIGJ5IHRoZSB1c2Ugb2YgdXN0Y3RsX3NvY2tfZmx1c2hfYnVmZmVy
+KCkgd2hpY2ggYXNrcyB0aGUKPj4gPiBhcHBsaWNhdGlvbiB0byBwZXJmb3JtIHRoZSBidWZmZXIg
+Zmx1c2guIFVuZm9ydHVuYXRlbHksIGlmIHRoZQo+PiA+IGFwcGxpY2F0aW9uIHZhbmlzaGVzIChu
+b3QgcmVhY2hhYmxlIGFueW1vcmUpLCBidXQgaXRzIHVucmVnaXN0cmF0aW9uIGhhcwo+PiA+IG5v
+dCB5ZXQgYmVlbiBwcm9jZXNzZWQgYnkgc2Vzc2lvbmQsIHRoZW4gdXN0X2FwcF9zdG9wX3RyYWNl
+X2FsbCgpIHdpbGwKPj4gPiBmYWlsIHRvIGZsdXNoIHRoZSBhcHBsaWNhdGlvbiBidWZmZXJzLCBi
+ZWNhdXNlCj4+ID4gdXN0Y3RsX3NvY2tfZmx1c2hfYnVmZmVyKCkgd2lsbCBmYWlsLgo+PiA+Cj4+
+ID4gVGhpcyBmaW5hbCBpc3N1ZSBpcyBmaXhlZCBieSBhc2tpbmcgdGhlIGNvbnN1bWVyIGRhZW1v
+biB0byBmbHVzaCB0aGUKPj4gPiBhc3NvY2lhdGVkIGNoYW5uZWwgcmF0aGVyIHRoYW4gcmVseWlu
+ZyBvbiB0aGUgYXBwbGljYXRpb24uCj4+ID4KPj4gPiBTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERl
+c25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+PiA+IC0tLQo+PiA+ICBz
+cmMvYmluL2x0dG5nLXNlc3Npb25kL3VzdC1hcHAuYyB8IDEzNwo+PiA+ICArKysrKysrKysrKysr
+KysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0KPj4gPiAgMSBmaWxlIGNoYW5nZWQsIDgwIGluc2Vy
+dGlvbnMoKyksIDU3IGRlbGV0aW9ucygtKQo+PiA+Cj4+ID4gZGlmZiAtLWdpdCBhL3NyYy9iaW4v
+bHR0bmctc2Vzc2lvbmQvdXN0LWFwcC5jCj4+ID4gYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3Vz
+dC1hcHAuYwo+PiA+IGluZGV4IDg5MWQ3NWYuLjY0ZDJlZDIgMTAwNjQ0Cj4+ID4gLS0tIGEvc3Jj
+L2Jpbi9sdHRuZy1zZXNzaW9uZC91c3QtYXBwLmMKPj4gPiArKysgYi9zcmMvYmluL2x0dG5nLXNl
+c3Npb25kL3VzdC1hcHAuYwo+PiA+IEBAIC00MSw2ICs0MSw5IEBACj4+ID4gICNpbmNsdWRlICJ1
+c3QtY3RsLmgiCj4+ID4gICNpbmNsdWRlICJ1dGlscy5oIgo+PiA+Cj4+ID4gK3N0YXRpYwo+PiA+
+ICtpbnQgdXN0X2FwcF9mbHVzaF9hcHBfc2Vzc2lvbihzdHJ1Y3QgdXN0X2FwcCAqYXBwLCBzdHJ1
+Y3QgdXN0X2FwcF9zZXNzaW9uCj4+ID4gKnVhX3Nlc3MpOwo+PiA+ICsKPj4gPiAgLyogTmV4dCBh
+dmFpbGFibGUgY2hhbm5lbCBrZXkuIEFjY2VzcyB1bmRlciBuZXh0X2NoYW5uZWxfa2V5X2xvY2su
+ICovCj4+ID4gIHN0YXRpYyB1aW50NjRfdCBfbmV4dF9jaGFubmVsX2tleTsKPj4gPiAgc3RhdGlj
+IHB0aHJlYWRfbXV0ZXhfdCBuZXh0X2NoYW5uZWxfa2V5X2xvY2sgPSBQVEhSRUFEX01VVEVYX0lO
+SVRJQUxJWkVSOwo+PiA+IEBAIC0zMDYyLDYgKzMwNjUsNyBAQCB2b2lkIHVzdF9hcHBfdW5yZWdp
+c3RlcihpbnQgc29jaykKPj4gPiAgewo+PiA+ICAgICAgICAgc3RydWN0IHVzdF9hcHAgKmx0YTsK
+Pj4gPiAgICAgICAgIHN0cnVjdCBsdHRuZ19odF9ub2RlX3Vsb25nICpub2RlOwo+PiA+ICsgICAg
+ICAgc3RydWN0IGx0dG5nX2h0X2l0ZXIgdXN0X2FwcF9zb2NrX2l0ZXI7Cj4+ID4gICAgICAgICBz
+dHJ1Y3QgbHR0bmdfaHRfaXRlciBpdGVyOwo+PiA+ICAgICAgICAgc3RydWN0IHVzdF9hcHBfc2Vz
+c2lvbiAqdWFfc2VzczsKPj4gPiAgICAgICAgIGludCByZXQ7Cj4+ID4gQEAgLTMwNjksMzkgKzMw
+NzMsMTkgQEAgdm9pZCB1c3RfYXBwX3VucmVnaXN0ZXIoaW50IHNvY2spCj4+ID4gICAgICAgICBy
+Y3VfcmVhZF9sb2NrKCk7Cj4+ID4KPj4gPiAgICAgICAgIC8qIEdldCB0aGUgbm9kZSByZWZlcmVu
+Y2UgZm9yIGEgY2FsbF9yY3UgKi8KPj4gPiAtICAgICAgIGx0dG5nX2h0X2xvb2t1cCh1c3RfYXBw
+X2h0X2J5X3NvY2ssICh2b2lkICopKCh1bnNpZ25lZCBsb25nKSBzb2NrKSwKPj4gPiAmaXRlcik7
+Cj4+ID4gLSAgICAgICBub2RlID0gbHR0bmdfaHRfaXRlcl9nZXRfbm9kZV91bG9uZygmaXRlcik7
+Cj4+ID4gKyAgICAgICBsdHRuZ19odF9sb29rdXAodXN0X2FwcF9odF9ieV9zb2NrLCAodm9pZCAq
+KSgodW5zaWduZWQgbG9uZykgc29jayksCj4+ID4gJnVzdF9hcHBfc29ja19pdGVyKTsKPj4gPiAr
+ICAgICAgIG5vZGUgPSBsdHRuZ19odF9pdGVyX2dldF9ub2RlX3Vsb25nKCZ1c3RfYXBwX3NvY2tf
+aXRlcik7Cj4+ID4gICAgICAgICBhc3NlcnQobm9kZSk7Cj4+ID4KPj4gPiAgICAgICAgIGx0YSA9
+IGNhYV9jb250YWluZXJfb2Yobm9kZSwgc3RydWN0IHVzdF9hcHAsIHNvY2tfbik7Cj4+ID4gICAg
+ICAgICBEQkcoIlBJRCAlZCB1bnJlZ2lzdGVyaW5nIHdpdGggc29jayAlZCIsIGx0YS0+cGlkLCBz
+b2NrKTsKPj4gPgo+PiA+IC0gICAgICAgLyogUmVtb3ZlIGFwcGxpY2F0aW9uIGZyb20gUElEIGhh
+c2ggdGFibGUgKi8KPj4gPiAtICAgICAgIHJldCA9IGx0dG5nX2h0X2RlbCh1c3RfYXBwX2h0X2J5
+X3NvY2ssICZpdGVyKTsKPj4gPiAtICAgICAgIGFzc2VydCghcmV0KTsKPj4gPiAtCj4+ID4gICAg
+ICAgICAvKgo+PiA+IC0gICAgICAgICogUmVtb3ZlIGFwcGxpY2F0aW9uIGZyb20gbm90aWZ5IGhh
+c2ggdGFibGUuIFRoZSB0aHJlYWQgaGFuZGxpbmcKPj4gPiB0aGUKPj4gPiAtICAgICAgICAqIG5v
+dGlmeSBzb2NrZXQgY291bGQgaGF2ZSBkZWxldGVkIHRoZSBub2RlIHNvIGlnbm9yZSBvbiBlcnJv
+cgo+PiA+IGJlY2F1c2UKPj4gPiAtICAgICAgICAqIGVpdGhlciB3YXkgaXQncyB2YWxpZC4gVGhl
+IGNsb3NlIG9mIHRoYXQgc29ja2V0IGlzIGhhbmRsZWQgYnkKPj4gPiB0aGUgb3RoZXIKPj4gPiAt
+ICAgICAgICAqIHRocmVhZC4KPj4gPiArICAgICAgICAqIFBlcmZvcm0gInB1c2ggbWV0YWRhdGEi
+IGFuZCBmbHVzaCBhbGwgYXBwbGljYXRpb24gc3RyZWFtcwo+PiA+ICsgICAgICAgICogYmVmb3Jl
+IHJlbW92aW5nIGFwcCBmcm9tIGhhc2ggdGFibGVzLCBlbnN1cmluZyBwcm9wZXIKPj4gPiArICAg
+ICAgICAqIGJlaGF2aW9yIG9mIGRhdGFfcGVuZGluZyBjaGVjay4KPj4gPiArICAgICAgICAqIFJl
+bW92ZSBzZXNzaW9ucyBzbyB0aGV5IGFyZSBub3QgdmlzaWJsZSBkdXJpbmcgZGVsZXRpb24uCj4+
+ID4gICAgICAgICAgKi8KPj4gPiAtICAgICAgIGl0ZXIuaXRlci5ub2RlID0gJmx0YS0+bm90aWZ5
+X3NvY2tfbi5ub2RlOwo+PiA+IC0gICAgICAgKHZvaWQpIGx0dG5nX2h0X2RlbCh1c3RfYXBwX2h0
+X2J5X25vdGlmeV9zb2NrLCAmaXRlcik7Cj4+ID4gLQo+PiA+IC0gICAgICAgLyoKPj4gPiAtICAg
+ICAgICAqIElnbm9yZSByZXR1cm4gdmFsdWUgc2luY2UgdGhlIG5vZGUgbWlnaHQgaGF2ZSBiZWVu
+IHJlbW92ZWQKPj4gPiBiZWZvcmUgYnkgYW4KPj4gPiAtICAgICAgICAqIGFkZCByZXBsYWNlIGR1
+cmluZyBhcHAgcmVnaXN0cmF0aW9uIGJlY2F1c2UgdGhlIFBJRCBjYW4gYmUKPj4gPiByZWFzc2ln
+bmVkIGJ5Cj4+ID4gLSAgICAgICAgKiB0aGUgT1MuCj4+ID4gLSAgICAgICAgKi8KPj4gPiAtICAg
+ICAgIGl0ZXIuaXRlci5ub2RlID0gJmx0YS0+cGlkX24ubm9kZTsKPj4gPiAtICAgICAgIHJldCA9
+IGx0dG5nX2h0X2RlbCh1c3RfYXBwX2h0LCAmaXRlcik7Cj4+ID4gLSAgICAgICBpZiAocmV0KSB7
+Cj4+ID4gLSAgICAgICAgICAgICAgIERCRzMoIlVucmVnaXN0ZXIgYXBwIGJ5IFBJRCAlZCBmYWls
+ZWQuIFRoaXMgY2FuIGhhcHBlbiBvbgo+PiA+IHBpZCByZXVzZSIsCj4+ID4gLSAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICBsdGEtPnBpZCk7Cj4+ID4gLSAgICAgICB9Cj4+ID4gLQo+PiA+
+IC0gICAgICAgLyogUmVtb3ZlIHNlc3Npb25zIHNvIHRoZXkgYXJlIG5vdCB2aXNpYmxlIGR1cmlu
+ZyBkZWxldGlvbi4qLwo+PiA+ICAgICAgICAgY2RzX2xmaHRfZm9yX2VhY2hfZW50cnkobHRhLT5z
+ZXNzaW9ucy0+aHQsICZpdGVyLml0ZXIsIHVhX3Nlc3MsCj4+ID4gICAgICAgICAgICAgICAgICAg
+ICAgICAgbm9kZS5ub2RlKSB7Cj4+ID4gICAgICAgICAgICAgICAgIHN0cnVjdCB1c3RfcmVnaXN0
+cnlfc2Vzc2lvbiAqcmVnaXN0cnk7Cj4+ID4gQEAgLTMxMTIsNiArMzA5Niw4IEBAIHZvaWQgdXN0
+X2FwcF91bnJlZ2lzdGVyKGludCBzb2NrKQo+PiA+ICAgICAgICAgICAgICAgICAgICAgICAgIGNv
+bnRpbnVlOwo+PiA+ICAgICAgICAgICAgICAgICB9Cj4+ID4KPj4gPiArICAgICAgICAgICAgICAg
+KHZvaWQpIHVzdF9hcHBfZmx1c2hfYXBwX3Nlc3Npb24obHRhLCB1YV9zZXNzKTsKPj4gPiArCj4+
+ID4gICAgICAgICAgICAgICAgIC8qCj4+ID4gICAgICAgICAgICAgICAgICAqIEFkZCBzZXNzaW9u
+IHRvIGxpc3QgZm9yIHRlYXJkb3duLiBUaGlzIGlzIHNhZmUgc2luY2UgYXQKPj4gPiAgICAgICAg
+ICAgICAgICAgIHRoaXMgcG9pbnQgd2UKPj4gPiAgICAgICAgICAgICAgICAgICogYXJlIHRoZSBv
+bmx5IG9uZSB1c2luZyB0aGlzIGxpc3QuCj4+ID4gQEAgLTMxNDYsMTEgKzMxMzIsMzYgQEAgdm9p
+ZCB1c3RfYXBwX3VucmVnaXN0ZXIoaW50IHNvY2spCj4+ID4gICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAodm9pZCkgY2xvc2VfbWV0YWRhdGEocmVnaXN0cnksCj4+ID4gICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICB1YV9zZXNzLT5jb25zdW1lcik7Cj4+ID4gICAgICAgICAg
+ICAgICAgICAgICAgICAgfQo+PiA+ICAgICAgICAgICAgICAgICB9Cj4+ID4gLQo+PiA+ICAgICAg
+ICAgICAgICAgICBjZHNfbGlzdF9hZGQoJnVhX3Nlc3MtPnRlYXJkb3duX25vZGUsICZsdGEtPnRl
+YXJkb3duX2hlYWQpOwo+PiA+ICsKPj4gPiAgICAgICAgICAgICAgICAgcHRocmVhZF9tdXRleF91
+bmxvY2soJnVhX3Nlc3MtPmxvY2spOwo+PiA+ICAgICAgICAgfQo+PiA+Cj4+ID4gKyAgICAgICAv
+KiBSZW1vdmUgYXBwbGljYXRpb24gZnJvbSBQSUQgaGFzaCB0YWJsZSAqLwo+PiA+ICsgICAgICAg
+cmV0ID0gbHR0bmdfaHRfZGVsKHVzdF9hcHBfaHRfYnlfc29jaywgJnVzdF9hcHBfc29ja19pdGVy
+KTsKPj4gPiArICAgICAgIGFzc2VydCghcmV0KTsKPj4gPiArCj4+ID4gKyAgICAgICAvKgo+PiA+
+ICsgICAgICAgICogUmVtb3ZlIGFwcGxpY2F0aW9uIGZyb20gbm90aWZ5IGhhc2ggdGFibGUuIFRo
+ZSB0aHJlYWQgaGFuZGxpbmcKPj4gPiB0aGUKPj4gPiArICAgICAgICAqIG5vdGlmeSBzb2NrZXQg
+Y291bGQgaGF2ZSBkZWxldGVkIHRoZSBub2RlIHNvIGlnbm9yZSBvbiBlcnJvcgo+PiA+IGJlY2F1
+c2UKPj4gPiArICAgICAgICAqIGVpdGhlciB3YXkgaXQncyB2YWxpZC4gVGhlIGNsb3NlIG9mIHRo
+YXQgc29ja2V0IGlzIGhhbmRsZWQgYnkKPj4gPiB0aGUgb3RoZXIKPj4gPiArICAgICAgICAqIHRo
+cmVhZC4KPj4gPiArICAgICAgICAqLwo+PiA+ICsgICAgICAgaXRlci5pdGVyLm5vZGUgPSAmbHRh
+LT5ub3RpZnlfc29ja19uLm5vZGU7Cj4+ID4gKyAgICAgICAodm9pZCkgbHR0bmdfaHRfZGVsKHVz
+dF9hcHBfaHRfYnlfbm90aWZ5X3NvY2ssICZpdGVyKTsKPj4gPiArCj4+ID4gKyAgICAgICAvKgo+
+PiA+ICsgICAgICAgICogSWdub3JlIHJldHVybiB2YWx1ZSBzaW5jZSB0aGUgbm9kZSBtaWdodCBo
+YXZlIGJlZW4gcmVtb3ZlZAo+PiA+IGJlZm9yZSBieSBhbgo+PiA+ICsgICAgICAgICogYWRkIHJl
+cGxhY2UgZHVyaW5nIGFwcCByZWdpc3RyYXRpb24gYmVjYXVzZSB0aGUgUElEIGNhbiBiZQo+PiA+
+IHJlYXNzaWduZWQgYnkKPj4gPiArICAgICAgICAqIHRoZSBPUy4KPj4gPiArICAgICAgICAqLwo+
+PiA+ICsgICAgICAgaXRlci5pdGVyLm5vZGUgPSAmbHRhLT5waWRfbi5ub2RlOwo+PiA+ICsgICAg
+ICAgcmV0ID0gbHR0bmdfaHRfZGVsKHVzdF9hcHBfaHQsICZpdGVyKTsKPj4gPiArICAgICAgIGlm
+IChyZXQpIHsKPj4gPiArICAgICAgICAgICAgICAgREJHMygiVW5yZWdpc3RlciBhcHAgYnkgUElE
+ICVkIGZhaWxlZC4gVGhpcyBjYW4gaGFwcGVuIG9uCj4+ID4gcGlkIHJldXNlIiwKPj4gPiArICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIGx0YS0+cGlkKTsKPj4gPiArICAgICAgIH0KPj4g
+PiArCj4+ID4gICAgICAgICAvKiBGcmVlIG1lbW9yeSAqLwo+PiA+ICAgICAgICAgY2FsbF9yY3Uo
+Jmx0YS0+cGlkX24uaGVhZCwgZGVsZXRlX3VzdF9hcHBfcmN1KTsKPj4gPgo+PiA+IEBAIC00MDA4
+LDI4ICs0MDE5LDIxIEBAIGVycm9yX3JjdV91bmxvY2s6Cj4+ID4gICAgICAgICByZXR1cm4gLTE7
+Cj4+ID4gIH0KPj4gPgo+PiA+IC0vKgo+PiA+IC0gKiBGbHVzaCBidWZmZXJzIGZvciBhIHNwZWNp
+ZmljIFVTVCBzZXNzaW9uIGFuZCBhcHAuCj4+ID4gLSAqLwo+PiA+ICBzdGF0aWMKPj4gPiAtaW50
+IHVzdF9hcHBfZmx1c2hfdHJhY2Uoc3RydWN0IGx0dF91c3Rfc2Vzc2lvbiAqdXNlc3MsIHN0cnVj
+dCB1c3RfYXBwCj4+ID4gKmFwcCkKPj4gPiAraW50IHVzdF9hcHBfZmx1c2hfYXBwX3Nlc3Npb24o
+c3RydWN0IHVzdF9hcHAgKmFwcCwKPj4gPiArICAgICAgICAgICAgICAgc3RydWN0IHVzdF9hcHBf
+c2Vzc2lvbiAqdWFfc2VzcykKPj4gPiAgewo+PiA+IC0gICAgICAgaW50IHJldCA9IDA7Cj4+ID4g
+KyAgICAgICBpbnQgcmV0LCByZXR2YWwgPSAwOwo+PiA+ICAgICAgICAgc3RydWN0IGx0dG5nX2h0
+X2l0ZXIgaXRlcjsKPj4gPiAtICAgICAgIHN0cnVjdCB1c3RfYXBwX3Nlc3Npb24gKnVhX3Nlc3M7
+Cj4+ID4gICAgICAgICBzdHJ1Y3QgdXN0X2FwcF9jaGFubmVsICp1YV9jaGFuOwo+PiA+ICsgICAg
+ICAgc3RydWN0IGNvbnN1bWVyX3NvY2tldCAqc29ja2V0Owo+PiA+Cj4+ID4gLSAgICAgICBEQkco
+IkZsdXNoaW5nIGJ1ZmZlcnMgZm9yIHVzdCBhcHAgcGlkICVkIiwgYXBwLT5waWQpOwo+PiA+ICsg
+ICAgICAgREJHKCJGbHVzaGluZyBhcHAgc2Vzc2lvbiBidWZmZXJzIGZvciB1c3QgYXBwIHBpZCAl
+ZCIsIGFwcC0+cGlkKTsKPj4gPgo+PiA+ICAgICAgICAgcmN1X3JlYWRfbG9jaygpOwo+PiA+Cj4+
+ID4gICAgICAgICBpZiAoIWFwcC0+Y29tcGF0aWJsZSkgewo+PiA+IC0gICAgICAgICAgICAgICBn
+b3RvIGVuZF9ub19zZXNzaW9uOwo+PiA+IC0gICAgICAgfQo+PiA+IC0KPj4gPiAtICAgICAgIHVh
+X3Nlc3MgPSBsb29rdXBfc2Vzc2lvbl9ieV9hcHAodXNlc3MsIGFwcCk7Cj4+ID4gLSAgICAgICBp
+ZiAodWFfc2VzcyA9PSBOVUxMKSB7Cj4+ID4gLSAgICAgICAgICAgICAgIGdvdG8gZW5kX25vX3Nl
+c3Npb247Cj4+ID4gKyAgICAgICAgICAgICAgIGdvdG8gZW5kX25vdF9jb21wYXRpYmxlOwo+PiA+
+ICAgICAgICAgfQo+PiA+Cj4+ID4gICAgICAgICBwdGhyZWFkX211dGV4X2xvY2soJnVhX3Nlc3Mt
+PmxvY2spOwo+PiA+IEBAIC00MDM3LDI1ICs0MDQxLDE2IEBAIGludCB1c3RfYXBwX2ZsdXNoX3Ry
+YWNlKHN0cnVjdCBsdHRfdXN0X3Nlc3Npb24KPj4gPiAqdXNlc3MsIHN0cnVjdCB1c3RfYXBwICph
+cHApCj4+ID4gICAgICAgICBoZWFsdGhfY29kZV91cGRhdGUoKTsKPj4gPgo+PiA+ICAgICAgICAg
+LyogRmx1c2hpbmcgYnVmZmVycyAqLwo+PiA+ICsgICAgICAgc29ja2V0ID0gY29uc3VtZXJfZmlu
+ZF9zb2NrZXRfYnlfYml0bmVzcyhhcHAtPmJpdHNfcGVyX2xvbmcsCj4+ID4gKyAgICAgICAgICAg
+ICAgICAgICAgICAgdWFfc2Vzcy0+Y29uc3VtZXIpOwo+PiA+ICAgICAgICAgY2RzX2xmaHRfZm9y
+X2VhY2hfZW50cnkodWFfc2Vzcy0+Y2hhbm5lbHMtPmh0LCAmaXRlci5pdGVyLCB1YV9jaGFuLAo+
+PiA+ICAgICAgICAgICAgICAgICAgICAgICAgIG5vZGUubm9kZSkgewo+PiA+ICAgICAgICAgICAg
+ICAgICBoZWFsdGhfY29kZV91cGRhdGUoKTsKPj4gPiAgICAgICAgICAgICAgICAgYXNzZXJ0KHVh
+X2NoYW4tPmlzX3NlbnQpOwo+PiA+IC0gICAgICAgICAgICAgICByZXQgPSB1c3RjdGxfc29ja19m
+bHVzaF9idWZmZXIoYXBwLT5zb2NrLCB1YV9jaGFuLT5vYmopOwo+PiA+IC0gICAgICAgICAgICAg
+ICBpZiAocmV0IDwgMCkgewo+PiA+IC0gICAgICAgICAgICAgICAgICAgICAgIGlmIChyZXQgIT0g
+LUVQSVBFICYmIHJldCAhPSAtTFRUTkdfVVNUX0VSUl9FWElUSU5HKQo+PiA+IHsKPj4gPiAtICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIEVSUigiVVNUIGFwcCBQSUQgJWQgY2hhbm5lbCAl
+cyBmbHVzaCBmYWlsZWQKPj4gPiB3aXRoIHJldCAlZCIsCj4+ID4gLSAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYXBwLT5waWQsIHVhX2NoYW4tPm5hbWUsCj4+
+ID4gcmV0KTsKPj4gPiAtICAgICAgICAgICAgICAgICAgICAgICB9IGVsc2Ugewo+PiA+IC0gICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgREJHMygiVVNUIGFwcCBmYWlsZWQgdG8gZmx1c2gg
+JXMuCj4+ID4gQXBwbGljYXRpb24gaXMgZGVhZC4iLAo+PiA+IC0gICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHVhX2NoYW4tPm5hbWUpOwo+PiA+IC0gICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgLyoKPj4gPiAtICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAqIFRoaXMgaXMgbm9ybWFsIGJlaGF2aW9yLCBhbiBhcHBsaWNhdGlvbgo+PiA+IGNh
+biBkaWUgZHVyaW5nIHRoZQo+PiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICog
+Y3JlYXRpb24gcHJvY2Vzcy4gRG9uJ3QgcmVwb3J0IGFuIGVycm9yCj4+ID4gc28gdGhlIGV4ZWN1
+dGlvbiBjYW4KPj4gPiAtICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAqIGNvbnRpbnVl
+IG5vcm1hbGx5Lgo+PiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICovCj4+ID4g
+LSAgICAgICAgICAgICAgICAgICAgICAgfQo+PiA+IC0gICAgICAgICAgICAgICAgICAgICAgIC8q
+IENvbnRpbnVpbmcgZmx1c2hpbmcgYWxsIGJ1ZmZlcnMgKi8KPj4gPiArICAgICAgICAgICAgICAg
+cmV0ID0gY29uc3VtZXJfZmx1c2hfY2hhbm5lbChzb2NrZXQsIHVhX2NoYW4tPmtleSk7Cj4+ID4g
+KyAgICAgICAgICAgICAgIGlmIChyZXQpIHsKPj4gPiArICAgICAgICAgICAgICAgICAgICAgICBF
+UlIoIkVycm9yIGZsdXNoaW5nIGNvbnN1bWVyIGNoYW5uZWwiKTsKPj4gPiArICAgICAgICAgICAg
+ICAgICAgICAgICByZXR2YWwgPSAtMTsKPj4gPiAgICAgICAgICAgICAgICAgICAgICAgICBjb250
+aW51ZTsKPj4gPiAgICAgICAgICAgICAgICAgfQo+PiA+ICAgICAgICAgfQo+PiA+IEBAIC00MDYz
+LDEwICs0MDU4LDM4IEBAIGludCB1c3RfYXBwX2ZsdXNoX3RyYWNlKHN0cnVjdCBsdHRfdXN0X3Nl
+c3Npb24KPj4gPiAqdXNlc3MsIHN0cnVjdCB1c3RfYXBwICphcHApCj4+ID4gICAgICAgICBoZWFs
+dGhfY29kZV91cGRhdGUoKTsKPj4gPgo+PiA+ICAgICAgICAgcHRocmVhZF9tdXRleF91bmxvY2so
+JnVhX3Nlc3MtPmxvY2spOwo+PiA+ICtlbmRfbm90X2NvbXBhdGlibGU6Cj4+ID4gKyAgICAgICBy
+Y3VfcmVhZF91bmxvY2soKTsKPj4gPiArICAgICAgIGhlYWx0aF9jb2RlX3VwZGF0ZSgpOwo+PiA+
+ICsgICAgICAgcmV0dXJuIHJldHZhbDsKPj4gPiArfQo+PiA+ICsKPj4gPiArLyoKPj4gPiArICog
+Rmx1c2ggYnVmZmVycyBmb3IgYSBzcGVjaWZpYyBVU1Qgc2Vzc2lvbiBhbmQgYXBwLgo+PiA+ICsg
+Ki8KPj4gPiArc3RhdGljCj4+ID4gK2ludCB1c3RfYXBwX2ZsdXNoX3Nlc3Npb24oc3RydWN0IHVz
+dF9hcHAgKmFwcCwgc3RydWN0IGx0dF91c3Rfc2Vzc2lvbgo+PiA+ICp1c2VzcykKPj4gPiArCj4+
+ID4gK3sKPj4gPiArICAgICAgIGludCByZXQ7Cj4+ID4gKyAgICAgICBzdHJ1Y3QgbHR0bmdfaHRf
+aXRlciBpdGVyOwo+Pgo+PiBpdGVyIGFwcGVhcnMgdG8gYmUgdW51c2VkIGhlcmUuIElzIHNvbWV0
+aGluZyBtaXNzaW5nPwo+Cj4gTm8sIGp1c3QgZm9yZ290IHRvIHJlbW92ZSBpdC4KCkFsbCBnb29k
+IHRoZW47IG1lcmdlZCBpbiBtYXN0ZXIgYW5kIHN0YWJsZSBicmFuY2hlcyBkb3duIHRvIDIuNC4K
+ClRoYW5rcyEKSsOpcsOpbWllCgo+Cj4gVGhhbmtzLAo+Cj4gTWF0aGlldQo+Cj4+Cj4+IFJlZ2Fy
+ZHMsCj4+IErDqXLDqW1pZQo+Pgo+PiA+ICsgICAgICAgc3RydWN0IHVzdF9hcHBfc2Vzc2lvbiAq
+dWFfc2VzczsKPj4gPiArCj4+ID4gKyAgICAgICBEQkcoIkZsdXNoaW5nIHNlc3Npb24gYnVmZmVy
+cyBmb3IgdXN0IGFwcCBwaWQgJWQiLCBhcHAtPnBpZCk7Cj4+ID4gKwo+PiA+ICsgICAgICAgcmN1
+X3JlYWRfbG9jaygpOwo+PiA+ICsKPj4gPiArICAgICAgIHVhX3Nlc3MgPSBsb29rdXBfc2Vzc2lv
+bl9ieV9hcHAodXNlc3MsIGFwcCk7Cj4+ID4gKyAgICAgICBpZiAodWFfc2VzcyA9PSBOVUxMKSB7
+Cj4+ID4gKyAgICAgICAgICAgICAgIHJldCA9IC0xOwo+PiA+ICsgICAgICAgICAgICAgICBnb3Rv
+IGVuZF9ub19zZXNzaW9uOwo+PiA+ICsgICAgICAgfQo+PiA+ICsgICAgICAgcmV0ID0gdXN0X2Fw
+cF9mbHVzaF9hcHBfc2Vzc2lvbihhcHAsIHVhX3Nlc3MpOwo+PiA+ICsKPj4gPiAgZW5kX25vX3Nl
+c3Npb246Cj4+ID4gICAgICAgICByY3VfcmVhZF91bmxvY2soKTsKPj4gPiAgICAgICAgIGhlYWx0
+aF9jb2RlX3VwZGF0ZSgpOwo+PiA+IC0gICAgICAgcmV0dXJuIDA7Cj4+ID4gKyAgICAgICByZXR1
+cm4gcmV0Owo+PiA+ICB9Cj4+ID4KPj4gPiAgLyoKPj4gPiBAQCAtNDIwMCw3ICs0MjIzLDcgQEAg
+aW50IHVzdF9hcHBfc3RvcF90cmFjZV9hbGwoc3RydWN0IGx0dF91c3Rfc2Vzc2lvbgo+PiA+ICp1
+c2VzcykKPj4gPiAgICAgICAgIH0KPj4gPiAgICAgICAgIGNhc2UgTFRUTkdfQlVGRkVSX1BFUl9Q
+SUQ6Cj4+ID4gICAgICAgICAgICAgICAgIGNkc19sZmh0X2Zvcl9lYWNoX2VudHJ5KHVzdF9hcHBf
+aHQtPmh0LCAmaXRlci5pdGVyLCBhcHAsCj4+ID4gICAgICAgICAgICAgICAgIHBpZF9uLm5vZGUp
+IHsKPj4gPiAtICAgICAgICAgICAgICAgICAgICAgICByZXQgPSB1c3RfYXBwX2ZsdXNoX3RyYWNl
+KHVzZXNzLCBhcHApOwo+PiA+ICsgICAgICAgICAgICAgICAgICAgICAgIHJldCA9IHVzdF9hcHBf
+Zmx1c2hfc2Vzc2lvbihhcHAsIHVzZXNzKTsKPj4gPiAgICAgICAgICAgICAgICAgICAgICAgICBp
+ZiAocmV0IDwgMCkgewo+PiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLyogQ29u
+dGludWUgdG8gbmV4dCBhcHBzIGV2ZW4gb24gZXJyb3IgKi8KPj4gPiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIGNvbnRpbnVlOwo+PiA+IC0tCj4+ID4gMi4xLjEKPj4gPgo+Pgo+Pgo+
+Pgo+PiAtLQo+PiBKw6lyw6ltaWUgR2FsYXJuZWF1Cj4+IEVmZmljaU9TIEluYy4KPj4gaHR0cDov
+L3d3dy5lZmZpY2lvcy5jb20KPj4KPgo+IC0tCj4gTWF0aGlldSBEZXNub3llcnMKPiBFZmZpY2lP
+UyBJbmMuCj4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5l
+YXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
+YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
