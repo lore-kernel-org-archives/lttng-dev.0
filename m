@@ -1,20 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools 3/3] Fix: ust-app: per-PID app
- unregister vs tracing stop races
-Date: Thu, 8 Jan 2015 03:51:27 +0000 (UTC)
-Message-ID: <1219768004.36443.1420689087719.JavaMail.zimbra__7024.69686880267$1420689153$gmane$org@efficios.com>
-References: <1420424709-15095-1-git-send-email-mathieu.desnoyers@efficios.com>
- <1420424709-15095-3-git-send-email-mathieu.desnoyers@efficios.com>
- <CA+jJMxuk2ThtqjV3J98JSznEigqGnCS23MGozdv2xKe-wkZJSg@mail.gmail.com>
+From: Raphael Zulliger <zulliger@indel.ch>
+Subject: Re: LTTng unreliable and useless under heavy loaded
+	systems?
+Date: Thu, 08 Jan 2015 14:54:13 +0100
+Message-ID: <54AE8C05.5070001__25817.4839117148$1420725572$gmane$org@indel.ch>
+References: <54AD5A76.7070004@indel.ch> <54AD654F.4060206@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from ms9.webland.ch ([92.43.217.109] helo=ms9smtp.webland.ch)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Y9489-0005Is-EQ
- for lttng-dev@lists.lttng.org; Wed, 07 Jan 2015 22:51:33 -0500
-In-Reply-To: <CA+jJMxuk2ThtqjV3J98JSznEigqGnCS23MGozdv2xKe-wkZJSg@mail.gmail.com>
+ (envelope-from <mailadmin@indel.ch>) id 1Y9DXj-00005W-RY
+ for lttng-dev@lists.lttng.org; Thu, 08 Jan 2015 08:54:36 -0500
+In-Reply-To: <54AD654F.4060206@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,235 +21,198 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org, Jeremie Galarneau <jgalar@efficios.com>
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEZyb206ICJKw6lyw6ltaWUgR2FsYXJuZWF1
-IiA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+IFRvOiAiTWF0aGlldSBEZXNub3ll
-cnMiIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gQ2M6ICJKZXJlbWllIEdhbGFy
-bmVhdSIgPGpnYWxhckBlZmZpY2lvcy5jb20+LCBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4g
-U2VudDogV2VkbmVzZGF5LCBKYW51YXJ5IDcsIDIwMTUgNjoxNDoxNCBQTQo+IFN1YmplY3Q6IFJl
-OiBbUEFUQ0ggbHR0bmctdG9vbHMgMy8zXSBGaXg6IHVzdC1hcHA6IHBlci1QSUQgYXBwIHVucmVn
-aXN0ZXIgdnMgdHJhY2luZyBzdG9wIHJhY2VzCj4gCj4gT24gU3VuLCBKYW4gNCwgMjAxNSBhdCA5
-OjI1IFBNLCBNYXRoaWV1IERlc25veWVycwo+IDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5j
-b20+IHdyb3RlOgo+ID4gVGhlcmUgYXJlIHZhcmlvdXMgcmFjZXMgd2l0aCBVU1QgYXBwbGljYXRp
-b24gdW5yZWdpc3RlciBwZXJmb3JtZWQKPiA+IGNvbmN1cnJlbnRseSB3aXRoIHRyYWNpbmcgc3Rv
-cCBvcGVyYXRpb24gd2hlbiB0cmFjaW5nIHdpdGggcGVyLXBpZAo+ID4gYnVmZmVycy4gVGhpcyBy
-YW5kb21seSBhZmZlY3RzIGF2YWlsYWJpbGl0eSBvZiBkYXRhIHNob3J0bHkgYWZ0ZXIgdGhlCj4g
-PiBkYXRhIHBlbmRpbmcgY2hlY2sgcmV0dXJucyB0aGF0IG5vIG1vcmUgZGF0YSBpcyBhdmFpbGFi
-bGUuCj4gPgo+ID4gdXN0X2FwcF9zdG9wX3RyYWNlX2FsbCgpIGl0ZXJhdGVzIG9uIGFsbCBhcHBs
-aWNhdGlvbnMgaW4gdGhlIHVzdF9hcHBfaHQKPiA+IGhhc2ggdGFibGUgdG8gaXNzdWUgYSBmbHVz
-aCBvbiBhbGwgYnVmZmVycy4gVGhpcyBpcyBuZWVkZWQgdG8gZW5zdXJlCj4gPiB0aGF0IHRoZSBz
-dWItYnVmZmVycyBiZWluZyB3cml0dGVuIHRvIGFyZSBtYWRlIGF2YWlsYWJsZSB0byB0aGUKPiA+
-IGNvbnN1bWVyLCBmb3IgYm90aCBkYXRhIGNvbnN1bXB0aW9uLCBhbmQgZm9yIHRoZSBkYXRhIHBl
-bmRpbmcgY2hlY2suCj4gPiBGYWlsdXJlIHRvIGV4ZWN1dGUgdGhlIHN1Yi1idWZmZXIgZmx1c2gg
-bWFrZXMgZm9sbG93aW5nIGRhdGEgcGVuZGluZwo+ID4gY2hlY2sgcmV0dXJuIHRoYXQgdGhlcmUg
-aXMgbm8gZGF0YSBpbiB0aGUgYnVmZmVycyB0b28gZWFybHksIHRodXMKPiA+IHJlc3VsdGluZyBp
-biBhbiBpbmNvbXBsZXRlIHRyYWNlLgo+ID4KPiA+IEl0IGlzIHRoZXJlZm9yZSBpbXBvcnRhbnQg
-dGhhdCBhbiBhcHBsaWNhdGlvbiBmbHVzaGVzIGFsbCBpdHMgYnVmZmVycwo+ID4gYmVmb3JlIGl0
-IGlzIHJlbW92ZWQgZnJvbSB0aGUgdXN0X2FwcF9odC4KPiA+Cj4gPiBUaGlzIGlzIHdoZXJlIHVz
-dF9hcHBfdW5yZWdpc3RlcigpIG5lZWRzIHRvIGJlIGZpeGVkLiBOb3RlIHRoYXQKPiA+IHVzdF9h
-cHBfdW5yZWdpc3RlcigpIGV4ZWN1dGVzIGNvbmN1cnJlbnRseSB3aXRoCj4gPiB1c3RfYXBwX3N0
-b3BfdHJhY2VfYWxsKCksIG9ubHkgdGFraW5nIHRoZSBwZXItc2Vzc2lvbiBsb2NrLiBUaGUgb3Jk
-ZXIgb2YKPiA+IGZsdXNoIHZzIGhhc2ggdGFibGUgcmVtb3ZhbCB0aGVyZWZvcmUgbWF0dGVyczoK
-PiA+Cj4gPiBXZSBuZWVkIHRvIHB1c2ggdGhlIG1ldGFkYXRhIGJlZm9yZSByZW1vdmluZyBhcHBs
-aWNhdGlvbiBmcm9tCj4gPiB1c3RfYXBwX2h0LiBXZSBhbHNvIG5lZWQgdG8gaXNzdWUgYSBmbHVz
-aCBmb3IgYWxsIGFwcGxpY2F0aW9uIGJ1ZmZlcnMKPiA+IGJlZm9yZSByZW1vdmluZyB0aGUgYXBw
-bGljYXRpb24gZnJvbSB1c3RfYXBwX2h0Lgo+ID4KPiA+IE9uY2UgdGhpcyBpcyBmaXhlZCwgdGhl
-cmUgaXMgeWV0IGFub3RoZXIgcmFjZSwgdGhpcyB0aW1lIGluCj4gPiB1c3RfYXBwX2ZsdXNoX3Ry
-YWNlKCkgKG5vdyByZW5hbWVkIHVzdF9hcHBfZmx1c2hfc2Vzc2lvbigpKS4gSXQgaXMKPiA+IGNh
-dXNlZCBieSB0aGUgdXNlIG9mIHVzdGN0bF9zb2NrX2ZsdXNoX2J1ZmZlcigpIHdoaWNoIGFza3Mg
-dGhlCj4gPiBhcHBsaWNhdGlvbiB0byBwZXJmb3JtIHRoZSBidWZmZXIgZmx1c2guIFVuZm9ydHVu
-YXRlbHksIGlmIHRoZQo+ID4gYXBwbGljYXRpb24gdmFuaXNoZXMgKG5vdCByZWFjaGFibGUgYW55
-bW9yZSksIGJ1dCBpdHMgdW5yZWdpc3RyYXRpb24gaGFzCj4gPiBub3QgeWV0IGJlZW4gcHJvY2Vz
-c2VkIGJ5IHNlc3Npb25kLCB0aGVuIHVzdF9hcHBfc3RvcF90cmFjZV9hbGwoKSB3aWxsCj4gPiBm
-YWlsIHRvIGZsdXNoIHRoZSBhcHBsaWNhdGlvbiBidWZmZXJzLCBiZWNhdXNlCj4gPiB1c3RjdGxf
-c29ja19mbHVzaF9idWZmZXIoKSB3aWxsIGZhaWwuCj4gPgo+ID4gVGhpcyBmaW5hbCBpc3N1ZSBp
-cyBmaXhlZCBieSBhc2tpbmcgdGhlIGNvbnN1bWVyIGRhZW1vbiB0byBmbHVzaCB0aGUKPiA+IGFz
-c29jaWF0ZWQgY2hhbm5lbCByYXRoZXIgdGhhbiByZWx5aW5nIG9uIHRoZSBhcHBsaWNhdGlvbi4K
-PiA+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3ll
-cnNAZWZmaWNpb3MuY29tPgo+ID4gLS0tCj4gPiAgc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC91c3Qt
-YXBwLmMgfCAxMzcKPiA+ICArKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0K
-PiA+ICAxIGZpbGUgY2hhbmdlZCwgODAgaW5zZXJ0aW9ucygrKSwgNTcgZGVsZXRpb25zKC0pCj4g
-Pgo+ID4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdXN0LWFwcC5jCj4gPiBi
-L3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdXN0LWFwcC5jCj4gPiBpbmRleCA4OTFkNzVmLi42NGQy
-ZWQyIDEwMDY0NAo+ID4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC91c3QtYXBwLmMKPiA+
-ICsrKyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdXN0LWFwcC5jCj4gPiBAQCAtNDEsNiArNDEs
-OSBAQAo+ID4gICNpbmNsdWRlICJ1c3QtY3RsLmgiCj4gPiAgI2luY2x1ZGUgInV0aWxzLmgiCj4g
-Pgo+ID4gK3N0YXRpYwo+ID4gK2ludCB1c3RfYXBwX2ZsdXNoX2FwcF9zZXNzaW9uKHN0cnVjdCB1
-c3RfYXBwICphcHAsIHN0cnVjdCB1c3RfYXBwX3Nlc3Npb24KPiA+ICp1YV9zZXNzKTsKPiA+ICsK
-PiA+ICAvKiBOZXh0IGF2YWlsYWJsZSBjaGFubmVsIGtleS4gQWNjZXNzIHVuZGVyIG5leHRfY2hh
-bm5lbF9rZXlfbG9jay4gKi8KPiA+ICBzdGF0aWMgdWludDY0X3QgX25leHRfY2hhbm5lbF9rZXk7
-Cj4gPiAgc3RhdGljIHB0aHJlYWRfbXV0ZXhfdCBuZXh0X2NoYW5uZWxfa2V5X2xvY2sgPSBQVEhS
-RUFEX01VVEVYX0lOSVRJQUxJWkVSOwo+ID4gQEAgLTMwNjIsNiArMzA2NSw3IEBAIHZvaWQgdXN0
-X2FwcF91bnJlZ2lzdGVyKGludCBzb2NrKQo+ID4gIHsKPiA+ICAgICAgICAgc3RydWN0IHVzdF9h
-cHAgKmx0YTsKPiA+ICAgICAgICAgc3RydWN0IGx0dG5nX2h0X25vZGVfdWxvbmcgKm5vZGU7Cj4g
-PiArICAgICAgIHN0cnVjdCBsdHRuZ19odF9pdGVyIHVzdF9hcHBfc29ja19pdGVyOwo+ID4gICAg
-ICAgICBzdHJ1Y3QgbHR0bmdfaHRfaXRlciBpdGVyOwo+ID4gICAgICAgICBzdHJ1Y3QgdXN0X2Fw
-cF9zZXNzaW9uICp1YV9zZXNzOwo+ID4gICAgICAgICBpbnQgcmV0Owo+ID4gQEAgLTMwNjksMzkg
-KzMwNzMsMTkgQEAgdm9pZCB1c3RfYXBwX3VucmVnaXN0ZXIoaW50IHNvY2spCj4gPiAgICAgICAg
-IHJjdV9yZWFkX2xvY2soKTsKPiA+Cj4gPiAgICAgICAgIC8qIEdldCB0aGUgbm9kZSByZWZlcmVu
-Y2UgZm9yIGEgY2FsbF9yY3UgKi8KPiA+IC0gICAgICAgbHR0bmdfaHRfbG9va3VwKHVzdF9hcHBf
-aHRfYnlfc29jaywgKHZvaWQgKikoKHVuc2lnbmVkIGxvbmcpIHNvY2spLAo+ID4gJml0ZXIpOwo+
-ID4gLSAgICAgICBub2RlID0gbHR0bmdfaHRfaXRlcl9nZXRfbm9kZV91bG9uZygmaXRlcik7Cj4g
-PiArICAgICAgIGx0dG5nX2h0X2xvb2t1cCh1c3RfYXBwX2h0X2J5X3NvY2ssICh2b2lkICopKCh1
-bnNpZ25lZCBsb25nKSBzb2NrKSwKPiA+ICZ1c3RfYXBwX3NvY2tfaXRlcik7Cj4gPiArICAgICAg
-IG5vZGUgPSBsdHRuZ19odF9pdGVyX2dldF9ub2RlX3Vsb25nKCZ1c3RfYXBwX3NvY2tfaXRlcik7
-Cj4gPiAgICAgICAgIGFzc2VydChub2RlKTsKPiA+Cj4gPiAgICAgICAgIGx0YSA9IGNhYV9jb250
-YWluZXJfb2Yobm9kZSwgc3RydWN0IHVzdF9hcHAsIHNvY2tfbik7Cj4gPiAgICAgICAgIERCRygi
-UElEICVkIHVucmVnaXN0ZXJpbmcgd2l0aCBzb2NrICVkIiwgbHRhLT5waWQsIHNvY2spOwo+ID4K
-PiA+IC0gICAgICAgLyogUmVtb3ZlIGFwcGxpY2F0aW9uIGZyb20gUElEIGhhc2ggdGFibGUgKi8K
-PiA+IC0gICAgICAgcmV0ID0gbHR0bmdfaHRfZGVsKHVzdF9hcHBfaHRfYnlfc29jaywgJml0ZXIp
-Owo+ID4gLSAgICAgICBhc3NlcnQoIXJldCk7Cj4gPiAtCj4gPiAgICAgICAgIC8qCj4gPiAtICAg
-ICAgICAqIFJlbW92ZSBhcHBsaWNhdGlvbiBmcm9tIG5vdGlmeSBoYXNoIHRhYmxlLiBUaGUgdGhy
-ZWFkIGhhbmRsaW5nCj4gPiB0aGUKPiA+IC0gICAgICAgICogbm90aWZ5IHNvY2tldCBjb3VsZCBo
-YXZlIGRlbGV0ZWQgdGhlIG5vZGUgc28gaWdub3JlIG9uIGVycm9yCj4gPiBiZWNhdXNlCj4gPiAt
-ICAgICAgICAqIGVpdGhlciB3YXkgaXQncyB2YWxpZC4gVGhlIGNsb3NlIG9mIHRoYXQgc29ja2V0
-IGlzIGhhbmRsZWQgYnkKPiA+IHRoZSBvdGhlcgo+ID4gLSAgICAgICAgKiB0aHJlYWQuCj4gPiAr
-ICAgICAgICAqIFBlcmZvcm0gInB1c2ggbWV0YWRhdGEiIGFuZCBmbHVzaCBhbGwgYXBwbGljYXRp
-b24gc3RyZWFtcwo+ID4gKyAgICAgICAgKiBiZWZvcmUgcmVtb3ZpbmcgYXBwIGZyb20gaGFzaCB0
-YWJsZXMsIGVuc3VyaW5nIHByb3Blcgo+ID4gKyAgICAgICAgKiBiZWhhdmlvciBvZiBkYXRhX3Bl
-bmRpbmcgY2hlY2suCj4gPiArICAgICAgICAqIFJlbW92ZSBzZXNzaW9ucyBzbyB0aGV5IGFyZSBu
-b3QgdmlzaWJsZSBkdXJpbmcgZGVsZXRpb24uCj4gPiAgICAgICAgICAqLwo+ID4gLSAgICAgICBp
-dGVyLml0ZXIubm9kZSA9ICZsdGEtPm5vdGlmeV9zb2NrX24ubm9kZTsKPiA+IC0gICAgICAgKHZv
-aWQpIGx0dG5nX2h0X2RlbCh1c3RfYXBwX2h0X2J5X25vdGlmeV9zb2NrLCAmaXRlcik7Cj4gPiAt
-Cj4gPiAtICAgICAgIC8qCj4gPiAtICAgICAgICAqIElnbm9yZSByZXR1cm4gdmFsdWUgc2luY2Ug
-dGhlIG5vZGUgbWlnaHQgaGF2ZSBiZWVuIHJlbW92ZWQKPiA+IGJlZm9yZSBieSBhbgo+ID4gLSAg
-ICAgICAgKiBhZGQgcmVwbGFjZSBkdXJpbmcgYXBwIHJlZ2lzdHJhdGlvbiBiZWNhdXNlIHRoZSBQ
-SUQgY2FuIGJlCj4gPiByZWFzc2lnbmVkIGJ5Cj4gPiAtICAgICAgICAqIHRoZSBPUy4KPiA+IC0g
-ICAgICAgICovCj4gPiAtICAgICAgIGl0ZXIuaXRlci5ub2RlID0gJmx0YS0+cGlkX24ubm9kZTsK
-PiA+IC0gICAgICAgcmV0ID0gbHR0bmdfaHRfZGVsKHVzdF9hcHBfaHQsICZpdGVyKTsKPiA+IC0g
-ICAgICAgaWYgKHJldCkgewo+ID4gLSAgICAgICAgICAgICAgIERCRzMoIlVucmVnaXN0ZXIgYXBw
-IGJ5IFBJRCAlZCBmYWlsZWQuIFRoaXMgY2FuIGhhcHBlbiBvbgo+ID4gcGlkIHJldXNlIiwKPiA+
-IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbHRhLT5waWQpOwo+ID4gLSAgICAgICB9
-Cj4gPiAtCj4gPiAtICAgICAgIC8qIFJlbW92ZSBzZXNzaW9ucyBzbyB0aGV5IGFyZSBub3Qgdmlz
-aWJsZSBkdXJpbmcgZGVsZXRpb24uKi8KPiA+ICAgICAgICAgY2RzX2xmaHRfZm9yX2VhY2hfZW50
-cnkobHRhLT5zZXNzaW9ucy0+aHQsICZpdGVyLml0ZXIsIHVhX3Nlc3MsCj4gPiAgICAgICAgICAg
-ICAgICAgICAgICAgICBub2RlLm5vZGUpIHsKPiA+ICAgICAgICAgICAgICAgICBzdHJ1Y3QgdXN0
-X3JlZ2lzdHJ5X3Nlc3Npb24gKnJlZ2lzdHJ5Owo+ID4gQEAgLTMxMTIsNiArMzA5Niw4IEBAIHZv
-aWQgdXN0X2FwcF91bnJlZ2lzdGVyKGludCBzb2NrKQo+ID4gICAgICAgICAgICAgICAgICAgICAg
-ICAgY29udGludWU7Cj4gPiAgICAgICAgICAgICAgICAgfQo+ID4KPiA+ICsgICAgICAgICAgICAg
-ICAodm9pZCkgdXN0X2FwcF9mbHVzaF9hcHBfc2Vzc2lvbihsdGEsIHVhX3Nlc3MpOwo+ID4gKwo+
-ID4gICAgICAgICAgICAgICAgIC8qCj4gPiAgICAgICAgICAgICAgICAgICogQWRkIHNlc3Npb24g
-dG8gbGlzdCBmb3IgdGVhcmRvd24uIFRoaXMgaXMgc2FmZSBzaW5jZSBhdAo+ID4gICAgICAgICAg
-ICAgICAgICB0aGlzIHBvaW50IHdlCj4gPiAgICAgICAgICAgICAgICAgICogYXJlIHRoZSBvbmx5
-IG9uZSB1c2luZyB0aGlzIGxpc3QuCj4gPiBAQCAtMzE0NiwxMSArMzEzMiwzNiBAQCB2b2lkIHVz
-dF9hcHBfdW5yZWdpc3RlcihpbnQgc29jaykKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgKHZvaWQpIGNsb3NlX21ldGFkYXRhKHJlZ2lzdHJ5LAo+ID4gICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICB1YV9zZXNzLT5jb25zdW1lcik7Cj4gPiAgICAgICAgICAgICAgICAg
-ICAgICAgICB9Cj4gPiAgICAgICAgICAgICAgICAgfQo+ID4gLQo+ID4gICAgICAgICAgICAgICAg
-IGNkc19saXN0X2FkZCgmdWFfc2Vzcy0+dGVhcmRvd25fbm9kZSwgJmx0YS0+dGVhcmRvd25faGVh
-ZCk7Cj4gPiArCj4gPiAgICAgICAgICAgICAgICAgcHRocmVhZF9tdXRleF91bmxvY2soJnVhX3Nl
-c3MtPmxvY2spOwo+ID4gICAgICAgICB9Cj4gPgo+ID4gKyAgICAgICAvKiBSZW1vdmUgYXBwbGlj
-YXRpb24gZnJvbSBQSUQgaGFzaCB0YWJsZSAqLwo+ID4gKyAgICAgICByZXQgPSBsdHRuZ19odF9k
-ZWwodXN0X2FwcF9odF9ieV9zb2NrLCAmdXN0X2FwcF9zb2NrX2l0ZXIpOwo+ID4gKyAgICAgICBh
-c3NlcnQoIXJldCk7Cj4gPiArCj4gPiArICAgICAgIC8qCj4gPiArICAgICAgICAqIFJlbW92ZSBh
-cHBsaWNhdGlvbiBmcm9tIG5vdGlmeSBoYXNoIHRhYmxlLiBUaGUgdGhyZWFkIGhhbmRsaW5nCj4g
-PiB0aGUKPiA+ICsgICAgICAgICogbm90aWZ5IHNvY2tldCBjb3VsZCBoYXZlIGRlbGV0ZWQgdGhl
-IG5vZGUgc28gaWdub3JlIG9uIGVycm9yCj4gPiBiZWNhdXNlCj4gPiArICAgICAgICAqIGVpdGhl
-ciB3YXkgaXQncyB2YWxpZC4gVGhlIGNsb3NlIG9mIHRoYXQgc29ja2V0IGlzIGhhbmRsZWQgYnkK
-PiA+IHRoZSBvdGhlcgo+ID4gKyAgICAgICAgKiB0aHJlYWQuCj4gPiArICAgICAgICAqLwo+ID4g
-KyAgICAgICBpdGVyLml0ZXIubm9kZSA9ICZsdGEtPm5vdGlmeV9zb2NrX24ubm9kZTsKPiA+ICsg
-ICAgICAgKHZvaWQpIGx0dG5nX2h0X2RlbCh1c3RfYXBwX2h0X2J5X25vdGlmeV9zb2NrLCAmaXRl
-cik7Cj4gPiArCj4gPiArICAgICAgIC8qCj4gPiArICAgICAgICAqIElnbm9yZSByZXR1cm4gdmFs
-dWUgc2luY2UgdGhlIG5vZGUgbWlnaHQgaGF2ZSBiZWVuIHJlbW92ZWQKPiA+IGJlZm9yZSBieSBh
-bgo+ID4gKyAgICAgICAgKiBhZGQgcmVwbGFjZSBkdXJpbmcgYXBwIHJlZ2lzdHJhdGlvbiBiZWNh
-dXNlIHRoZSBQSUQgY2FuIGJlCj4gPiByZWFzc2lnbmVkIGJ5Cj4gPiArICAgICAgICAqIHRoZSBP
-Uy4KPiA+ICsgICAgICAgICovCj4gPiArICAgICAgIGl0ZXIuaXRlci5ub2RlID0gJmx0YS0+cGlk
-X24ubm9kZTsKPiA+ICsgICAgICAgcmV0ID0gbHR0bmdfaHRfZGVsKHVzdF9hcHBfaHQsICZpdGVy
-KTsKPiA+ICsgICAgICAgaWYgKHJldCkgewo+ID4gKyAgICAgICAgICAgICAgIERCRzMoIlVucmVn
-aXN0ZXIgYXBwIGJ5IFBJRCAlZCBmYWlsZWQuIFRoaXMgY2FuIGhhcHBlbiBvbgo+ID4gcGlkIHJl
-dXNlIiwKPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbHRhLT5waWQpOwo+ID4g
-KyAgICAgICB9Cj4gPiArCj4gPiAgICAgICAgIC8qIEZyZWUgbWVtb3J5ICovCj4gPiAgICAgICAg
-IGNhbGxfcmN1KCZsdGEtPnBpZF9uLmhlYWQsIGRlbGV0ZV91c3RfYXBwX3JjdSk7Cj4gPgo+ID4g
-QEAgLTQwMDgsMjggKzQwMTksMjEgQEAgZXJyb3JfcmN1X3VubG9jazoKPiA+ICAgICAgICAgcmV0
-dXJuIC0xOwo+ID4gIH0KPiA+Cj4gPiAtLyoKPiA+IC0gKiBGbHVzaCBidWZmZXJzIGZvciBhIHNw
-ZWNpZmljIFVTVCBzZXNzaW9uIGFuZCBhcHAuCj4gPiAtICovCj4gPiAgc3RhdGljCj4gPiAtaW50
-IHVzdF9hcHBfZmx1c2hfdHJhY2Uoc3RydWN0IGx0dF91c3Rfc2Vzc2lvbiAqdXNlc3MsIHN0cnVj
-dCB1c3RfYXBwCj4gPiAqYXBwKQo+ID4gK2ludCB1c3RfYXBwX2ZsdXNoX2FwcF9zZXNzaW9uKHN0
-cnVjdCB1c3RfYXBwICphcHAsCj4gPiArICAgICAgICAgICAgICAgc3RydWN0IHVzdF9hcHBfc2Vz
-c2lvbiAqdWFfc2VzcykKPiA+ICB7Cj4gPiAtICAgICAgIGludCByZXQgPSAwOwo+ID4gKyAgICAg
-ICBpbnQgcmV0LCByZXR2YWwgPSAwOwo+ID4gICAgICAgICBzdHJ1Y3QgbHR0bmdfaHRfaXRlciBp
-dGVyOwo+ID4gLSAgICAgICBzdHJ1Y3QgdXN0X2FwcF9zZXNzaW9uICp1YV9zZXNzOwo+ID4gICAg
-ICAgICBzdHJ1Y3QgdXN0X2FwcF9jaGFubmVsICp1YV9jaGFuOwo+ID4gKyAgICAgICBzdHJ1Y3Qg
-Y29uc3VtZXJfc29ja2V0ICpzb2NrZXQ7Cj4gPgo+ID4gLSAgICAgICBEQkcoIkZsdXNoaW5nIGJ1
-ZmZlcnMgZm9yIHVzdCBhcHAgcGlkICVkIiwgYXBwLT5waWQpOwo+ID4gKyAgICAgICBEQkcoIkZs
-dXNoaW5nIGFwcCBzZXNzaW9uIGJ1ZmZlcnMgZm9yIHVzdCBhcHAgcGlkICVkIiwgYXBwLT5waWQp
-Owo+ID4KPiA+ICAgICAgICAgcmN1X3JlYWRfbG9jaygpOwo+ID4KPiA+ICAgICAgICAgaWYgKCFh
-cHAtPmNvbXBhdGlibGUpIHsKPiA+IC0gICAgICAgICAgICAgICBnb3RvIGVuZF9ub19zZXNzaW9u
-Owo+ID4gLSAgICAgICB9Cj4gPiAtCj4gPiAtICAgICAgIHVhX3Nlc3MgPSBsb29rdXBfc2Vzc2lv
-bl9ieV9hcHAodXNlc3MsIGFwcCk7Cj4gPiAtICAgICAgIGlmICh1YV9zZXNzID09IE5VTEwpIHsK
-PiA+IC0gICAgICAgICAgICAgICBnb3RvIGVuZF9ub19zZXNzaW9uOwo+ID4gKyAgICAgICAgICAg
-ICAgIGdvdG8gZW5kX25vdF9jb21wYXRpYmxlOwo+ID4gICAgICAgICB9Cj4gPgo+ID4gICAgICAg
-ICBwdGhyZWFkX211dGV4X2xvY2soJnVhX3Nlc3MtPmxvY2spOwo+ID4gQEAgLTQwMzcsMjUgKzQw
-NDEsMTYgQEAgaW50IHVzdF9hcHBfZmx1c2hfdHJhY2Uoc3RydWN0IGx0dF91c3Rfc2Vzc2lvbgo+
-ID4gKnVzZXNzLCBzdHJ1Y3QgdXN0X2FwcCAqYXBwKQo+ID4gICAgICAgICBoZWFsdGhfY29kZV91
-cGRhdGUoKTsKPiA+Cj4gPiAgICAgICAgIC8qIEZsdXNoaW5nIGJ1ZmZlcnMgKi8KPiA+ICsgICAg
-ICAgc29ja2V0ID0gY29uc3VtZXJfZmluZF9zb2NrZXRfYnlfYml0bmVzcyhhcHAtPmJpdHNfcGVy
-X2xvbmcsCj4gPiArICAgICAgICAgICAgICAgICAgICAgICB1YV9zZXNzLT5jb25zdW1lcik7Cj4g
-PiAgICAgICAgIGNkc19sZmh0X2Zvcl9lYWNoX2VudHJ5KHVhX3Nlc3MtPmNoYW5uZWxzLT5odCwg
-Jml0ZXIuaXRlciwgdWFfY2hhbiwKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgIG5vZGUubm9k
-ZSkgewo+ID4gICAgICAgICAgICAgICAgIGhlYWx0aF9jb2RlX3VwZGF0ZSgpOwo+ID4gICAgICAg
-ICAgICAgICAgIGFzc2VydCh1YV9jaGFuLT5pc19zZW50KTsKPiA+IC0gICAgICAgICAgICAgICBy
-ZXQgPSB1c3RjdGxfc29ja19mbHVzaF9idWZmZXIoYXBwLT5zb2NrLCB1YV9jaGFuLT5vYmopOwo+
-ID4gLSAgICAgICAgICAgICAgIGlmIChyZXQgPCAwKSB7Cj4gPiAtICAgICAgICAgICAgICAgICAg
-ICAgICBpZiAocmV0ICE9IC1FUElQRSAmJiByZXQgIT0gLUxUVE5HX1VTVF9FUlJfRVhJVElORykK
-PiA+IHsKPiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRVJSKCJVU1QgYXBwIFBJ
-RCAlZCBjaGFubmVsICVzIGZsdXNoIGZhaWxlZAo+ID4gd2l0aCByZXQgJWQiLAo+ID4gLSAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYXBwLT5waWQsIHVhX2No
-YW4tPm5hbWUsCj4gPiByZXQpOwo+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgfSBlbHNlIHsK
-PiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgREJHMygiVVNUIGFwcCBmYWlsZWQg
-dG8gZmx1c2ggJXMuCj4gPiBBcHBsaWNhdGlvbiBpcyBkZWFkLiIsCj4gPiAtICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB1YV9jaGFuLT5uYW1lKTsKPiA+IC0g
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLyoKPiA+IC0gICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICogVGhpcyBpcyBub3JtYWwgYmVoYXZpb3IsIGFuIGFwcGxpY2F0aW9uCj4g
-PiBjYW4gZGllIGR1cmluZyB0aGUKPiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICogY3JlYXRpb24gcHJvY2Vzcy4gRG9uJ3QgcmVwb3J0IGFuIGVycm9yCj4gPiBzbyB0aGUgZXhl
-Y3V0aW9uIGNhbgo+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKiBjb250aW51
-ZSBub3JtYWxseS4KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICovCj4gPiAt
-ICAgICAgICAgICAgICAgICAgICAgICB9Cj4gPiAtICAgICAgICAgICAgICAgICAgICAgICAvKiBD
-b250aW51aW5nIGZsdXNoaW5nIGFsbCBidWZmZXJzICovCj4gPiArICAgICAgICAgICAgICAgcmV0
-ID0gY29uc3VtZXJfZmx1c2hfY2hhbm5lbChzb2NrZXQsIHVhX2NoYW4tPmtleSk7Cj4gPiArICAg
-ICAgICAgICAgICAgaWYgKHJldCkgewo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgRVJSKCJF
-cnJvciBmbHVzaGluZyBjb25zdW1lciBjaGFubmVsIik7Cj4gPiArICAgICAgICAgICAgICAgICAg
-ICAgICByZXR2YWwgPSAtMTsKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRpbnVlOwo+
-ID4gICAgICAgICAgICAgICAgIH0KPiA+ICAgICAgICAgfQo+ID4gQEAgLTQwNjMsMTAgKzQwNTgs
-MzggQEAgaW50IHVzdF9hcHBfZmx1c2hfdHJhY2Uoc3RydWN0IGx0dF91c3Rfc2Vzc2lvbgo+ID4g
-KnVzZXNzLCBzdHJ1Y3QgdXN0X2FwcCAqYXBwKQo+ID4gICAgICAgICBoZWFsdGhfY29kZV91cGRh
-dGUoKTsKPiA+Cj4gPiAgICAgICAgIHB0aHJlYWRfbXV0ZXhfdW5sb2NrKCZ1YV9zZXNzLT5sb2Nr
-KTsKPiA+ICtlbmRfbm90X2NvbXBhdGlibGU6Cj4gPiArICAgICAgIHJjdV9yZWFkX3VubG9jaygp
-Owo+ID4gKyAgICAgICBoZWFsdGhfY29kZV91cGRhdGUoKTsKPiA+ICsgICAgICAgcmV0dXJuIHJl
-dHZhbDsKPiA+ICt9Cj4gPiArCj4gPiArLyoKPiA+ICsgKiBGbHVzaCBidWZmZXJzIGZvciBhIHNw
-ZWNpZmljIFVTVCBzZXNzaW9uIGFuZCBhcHAuCj4gPiArICovCj4gPiArc3RhdGljCj4gPiAraW50
-IHVzdF9hcHBfZmx1c2hfc2Vzc2lvbihzdHJ1Y3QgdXN0X2FwcCAqYXBwLCBzdHJ1Y3QgbHR0X3Vz
-dF9zZXNzaW9uCj4gPiAqdXNlc3MpCj4gPiArCj4gPiArewo+ID4gKyAgICAgICBpbnQgcmV0Owo+
-ID4gKyAgICAgICBzdHJ1Y3QgbHR0bmdfaHRfaXRlciBpdGVyOwo+IAo+IGl0ZXIgYXBwZWFycyB0
-byBiZSB1bnVzZWQgaGVyZS4gSXMgc29tZXRoaW5nIG1pc3Npbmc/CgpObywganVzdCBmb3Jnb3Qg
-dG8gcmVtb3ZlIGl0LgoKVGhhbmtzLAoKTWF0aGlldQoKPiAKPiBSZWdhcmRzLAo+IErDqXLDqW1p
-ZQo+IAo+ID4gKyAgICAgICBzdHJ1Y3QgdXN0X2FwcF9zZXNzaW9uICp1YV9zZXNzOwo+ID4gKwo+
-ID4gKyAgICAgICBEQkcoIkZsdXNoaW5nIHNlc3Npb24gYnVmZmVycyBmb3IgdXN0IGFwcCBwaWQg
-JWQiLCBhcHAtPnBpZCk7Cj4gPiArCj4gPiArICAgICAgIHJjdV9yZWFkX2xvY2soKTsKPiA+ICsK
-PiA+ICsgICAgICAgdWFfc2VzcyA9IGxvb2t1cF9zZXNzaW9uX2J5X2FwcCh1c2VzcywgYXBwKTsK
-PiA+ICsgICAgICAgaWYgKHVhX3Nlc3MgPT0gTlVMTCkgewo+ID4gKyAgICAgICAgICAgICAgIHJl
-dCA9IC0xOwo+ID4gKyAgICAgICAgICAgICAgIGdvdG8gZW5kX25vX3Nlc3Npb247Cj4gPiArICAg
-ICAgIH0KPiA+ICsgICAgICAgcmV0ID0gdXN0X2FwcF9mbHVzaF9hcHBfc2Vzc2lvbihhcHAsIHVh
-X3Nlc3MpOwo+ID4gKwo+ID4gIGVuZF9ub19zZXNzaW9uOgo+ID4gICAgICAgICByY3VfcmVhZF91
-bmxvY2soKTsKPiA+ICAgICAgICAgaGVhbHRoX2NvZGVfdXBkYXRlKCk7Cj4gPiAtICAgICAgIHJl
-dHVybiAwOwo+ID4gKyAgICAgICByZXR1cm4gcmV0Owo+ID4gIH0KPiA+Cj4gPiAgLyoKPiA+IEBA
-IC00MjAwLDcgKzQyMjMsNyBAQCBpbnQgdXN0X2FwcF9zdG9wX3RyYWNlX2FsbChzdHJ1Y3QgbHR0
-X3VzdF9zZXNzaW9uCj4gPiAqdXNlc3MpCj4gPiAgICAgICAgIH0KPiA+ICAgICAgICAgY2FzZSBM
-VFROR19CVUZGRVJfUEVSX1BJRDoKPiA+ICAgICAgICAgICAgICAgICBjZHNfbGZodF9mb3JfZWFj
-aF9lbnRyeSh1c3RfYXBwX2h0LT5odCwgJml0ZXIuaXRlciwgYXBwLAo+ID4gICAgICAgICAgICAg
-ICAgIHBpZF9uLm5vZGUpIHsKPiA+IC0gICAgICAgICAgICAgICAgICAgICAgIHJldCA9IHVzdF9h
-cHBfZmx1c2hfdHJhY2UodXNlc3MsIGFwcCk7Cj4gPiArICAgICAgICAgICAgICAgICAgICAgICBy
-ZXQgPSB1c3RfYXBwX2ZsdXNoX3Nlc3Npb24oYXBwLCB1c2Vzcyk7Cj4gPiAgICAgICAgICAgICAg
-ICAgICAgICAgICBpZiAocmV0IDwgMCkgewo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAvKiBDb250aW51ZSB0byBuZXh0IGFwcHMgZXZlbiBvbiBlcnJvciAqLwo+ID4gICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBjb250aW51ZTsKPiA+IC0tCj4gPiAyLjEuMQo+ID4K
-PiAKPiAKPiAKPiAtLQo+IErDqXLDqW1pZSBHYWxhcm5lYXUKPiBFZmZpY2lPUyBJbmMuCj4gaHR0
-cDovL3d3dy5lZmZpY2lvcy5jb20KPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJ
-bmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0
-cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
-Zm8vbHR0bmctZGV2Cg==
+Hi
+
+Thanks for your detailed inputs! I read the Readme of latency_tracker. 
+The watch-block-event.sh you provide brought me on the track of using 
+"--snapshot" which is, as Mathieu mentioned, exactly what I need. Thanks 
+Mathieu as well! I'm now able to trace my system and I can successfully 
+analyze the traces with Eclipse. Thanks to the --snapshot mode, the 
+events that are actually important to me are now part of the trace. When 
+I initially read the LTTng docs, and I came to the chapter "snapshot", I 
+unfortunately decided to skip it because I (for whatever reason) 
+expected something different for "snapshots" (something like the current 
+state/callstacks of the CPUs).
+
+Btw: While latency_tracker looks really great, I didn't use it so far, 
+as I already have a very good trigger if a jitter occurs. But I'm glad 
+to know it exists, maybe I'll use it the next time I have to optimize a 
+system.
+
+For the records, if someone finds this message on the net, I briefly 
+describe how I perform the measurement:
+     lttng create --snapshot victory
+     lttng enable-channel channel0 -k --subbuf-size 16M --num-subbuf 2
+     lttng add-context -k -t procname -c channel0
+     lttng enable-event -k --all -c channel0
+     lttng start
+     chrt -f 50 ./run_my_test-application_here
+     lttng stop
+     lttng destroy
+I've extended my test application to execute 'lttng snapshot record' 
+when a certain jitter occurred (cMaxMs):
+     if( dRoundTripTime > cMaxMs ) {
+        system("lttng snapshot record");
+     }
+
+A few notes:
+   * In my case, I had to increase the subbuf sizes. The default sizes 
+were to small, because my system is intentionally under heavy load.
+   * I first tried to use 'num-subbuf 1' because I thought that's ok in 
+'snapshot mode', but that caused LTTng to misbehave: it didn't create 
+proper trace files. Unfortunately, it didn't yield any warning/error. 
+Wouldn't it make sense to print an warning/error in that case?
+   * Just as a side note: With the measurement above, the trace 
+sometimes still doesn't contain the events I'm interested in. But I 
+guess this is just because the call to "system()" and the execution of 
+lttng-consumerd may take that long so that the event in the buffer have 
+already been overwritten. (I wonder whether 'lttng snapshot record' is 
+optimized so that it immediately causes the tracer to stop overwriting 
+old events in the buffer?)
+
+Although it's not that important anymore, I'm curious about the 
+following: Assuming that the occurrence of "my" jitter is not depending 
+on timings. I could then claim that I don't care about the system slow 
+down due to tracing. That said, I claim I don't really care about how 
+may times LTTng must switch the subbuffers, because I guess that this 
+happens right in the context of "tracing an event" - so the only thing 
+the additional switchings do is to consume some CPU. But it does not 
+cause more events to be lost. Am I right? (If not: How is buffer 
+switching implemented, roughly?)
+
+Thanks for your great & immediate help and keep up the great work on 
+LTTng & co!
+Raphael
+
+P.S. Just in case someone cares: So far, I found that among others, 
+kswapd0 and khugepaged are two components that cause jitter on my system.
+
+On 01/07/2015 05:56 PM, Julien Desfossez wrote:
+> Hi Raphael,
+>
+> First of all, thanks for your input, it is really interesting for us to
+> have detailled use cases like that.
+>
+> One first thing that come to mind is the amount of events enabled. When
+> you use "lttng enable-event -k --all", you enable around 240 trace
+> points (and all the syscalls), and much more if you have the sources of
+> your kernel on the same machine (which allows the compilation and
+> installation of the ext4/btrfs/kvm events). There are some very verbose
+> tracepoint in the default list that might not be useful for the analysis
+> you are trying to perform.
+>
+> I understand that, you want as much information as possible since you
+> don't know what is exactly the problem, but instead of enabling
+> everything, I would suggest a more iterative approach: first just enable
+> the sched_switch and syscall events, and then when you get a better idea
+> of what is going on, enable some specific subsystems.
+>
+> Also, when you increase the amount of subbuffers (and lower the
+> subbuf-size), you increase the rate of subbuffer switches, which is the
+> heaviest operation in the tracer. So you could maybe try other
+> parameters such as 4x8 (if you want to limit to 32MB per CPU per
+> channel). For the crash you got, it might be related to an out-of-memory
+> problem, but it will be interesting to investigate this issue.
+> I don't think there is a proper methodology to identify the perfect size
+> for your use-case (other than trial/error), writing the trace on a
+> dedicated and faster disk helps a lot.
+>
+> I know this can be frustrating to wait for hours for a problem to appear
+> and end up with a huge trace that misses the important events. If the
+> iterative strategy is not an option for you, you might be interested by
+> a project I have started recently to automate the triggering of
+> recording LTTng snapshots based on unusual latencies detected from the
+> kernel [1]. The idea is to only write the trace in memory (no I/O) with
+> the ring-buffer in flight-recorder mode, and when an interesting event
+> is detected, extract the content of the ring-buffer and write it on
+> disk/network. The amount of background information you get in your
+> snapshot depends on the rate of events and size of the ring-buffer.
+> This project is in a really early phase and I would not advise it yet
+> for production use, but if you are interested by it, you can try it, the
+> examples work reliably for me, and if you need help setting it up or
+> adapting it to your needs, don't hesitate to contact me, at this stage
+> all the feedbacks/suggestions are important.
+>
+> I hope this gives you some ideas on what could be your next steps.
+> Please, let us know if you manage to find a way to solve this problem.
+>
+> Thanks,
+>
+> Julien
+>
+> [1] https://github.com/jdesfossez/latency_tracker
+>
+> On 15-01-07 11:10 AM, Raphael Zulliger wrote:
+>> First of all: LTTng seems to be a great piece of software. Great docs
+>> and good visualization tools (Eclipse) are available. I mention this to
+>> clarify that I like LTTng...
+>>
+>> ... unfortunately, for the issue I've started using it, it doesn't work
+>> very well. I contact the list because I hope you have some tips and
+>> tricks for me.
+>>
+>> I have a Ubuntu 14.04/32, i5 Quadcore. The goal is to run an existing
+>> application as jitter less as possible. To tune the system, I've
+>> programmed a simple test-application which sends a UDP frame to an
+>> embedded system and waits for the response. If the time until test-app
+>> receives the response is bigger than 5ms, it consider that a big jitter
+>> and exits. In that case, I want to find out what caused the jitter of >
+>> 5ms. NOTE: I run my application with real-time prio 99 (which could
+>> matter in this case, I guess)
+>>
+>> Here's how I initially run my measurement (all as sudo):
+>>    lttng create
+>>    lttng enable-channel channel0 -k
+>>    lttng enable-event -k --all -c channel0
+>>    lttng start
+>>    chrt -f 50 ./run_my_test-application_here
+>>    lttng stop
+>>    lttng destroy
+>> Then, I start compiling a kernel image and run bonnie++ to generate
+>> system load. It takes about 1h until a jitter > 5ms occurs... but it
+>> happens.
+>>
+>> Unfortunately, whenever the big jitter (which are around 6ms up to 25ms)
+>> occur, LTTng is not able to record the events around the time the delay
+>> happened. Means: I got really nice graphs in Eclipse - but not at the
+>> points where it would be useful... I also verified this with "babeltrace
+>> .... > /dev/null" which reported the loss of various events.
+>>
+>> I read the docs and then tried to increase the buffers. I tried several
+>> numbers, the final version is:
+>>    lttng enable-channel channel0 -k --num-subbuf 32 --subbuf-size 1M
+>> But it doesn't help. From my point of view, the result is still the same
+>> as before it doesn't obviously loose less events than before. (Side
+>> note: Actually, I also tried with "subbuf 16" and "subbuf-size 10M" but
+>> then my system crashed: X gone, no keyboard input possible anymore but
+>> (surprisingly) no kernel dump)
+>>
+>> (Side note: There's one more thing to mention: The system is setup with
+>> isolcpu=1,2,3 (because core 1..3 run real-time apps other than the one
+>> mentioned here) - thus everything, including lttng daemons, ran on CPU0
+>> so far.)
+>>
+>> Finally, I tried to run lttng-sessiond and lttng-consumerd on a separate
+>> CPU core (CPU3) and even changed policy to SCHED_FIFO and prio to 99 -
+>> but lttng still looses events. This really surpises me...
+>>
+>> I do understand that it is a good feature that lttng discards events
+>> when buffers are full... but in my case, it seems to render lttng useless.
+>> (Note: I did not yes use the "buffer overwrite" feature, but I guess the
+>> events of interest will still be lost)
+>>
+>> My question: Is there anything else I can do on my system (which is a
+>> not a production system, just a developer machine) to make lttng work
+>> for my scenario?
+>>
+>> Any input is very welcome!
+>> Raphael
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
