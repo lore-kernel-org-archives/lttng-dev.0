@@ -1,20 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools 1/4] Fix: print format type
-	mismatch
-Date: Mon, 12 Jan 2015 12:05:35 -0500
-Message-ID: <CA+jJMxuRQbv=VAv36wjNE5iBqu8OuSxfCtLOdyJ8dsmgwqLNyw__44151.0080280297$1421082396$gmane$org@mail.gmail.com>
-References: <1417558872-25339-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools] Fix: add missing UST perf counter
+	support check
+Date: Mon, 12 Jan 2015 17:14:52 -0500
+Message-ID: <1421100892-7029-1-git-send-email-mathieu.desnoyers__32583.4042895169$1421100982$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f48.google.com ([209.85.192.48])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1YAiQv-0004RI-9D
- for lttng-dev@lists.lttng.org; Mon, 12 Jan 2015 12:05:45 -0500
-Received: by mail-qg0-f48.google.com with SMTP id j5so18514003qga.7
- for <lttng-dev@lists.lttng.org>; Mon, 12 Jan 2015 09:05:35 -0800 (PST)
-In-Reply-To: <1417558872-25339-1-git-send-email-mathieu.desnoyers@efficios.com>
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1YAnGJ-0005tL-M3
+ for lttng-dev@lists.lttng.org; Mon, 12 Jan 2015 17:15:08 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,29 +19,37 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIHRoZSBzZXJpZXMgYWxsIHRoZSB3YXkgdG8gMi40IChleGNlcHQgZm9yIHRoZSBmaXJz
-dCBwYXRjaCwKd2hpY2ggb25seSBtYWtlcyBzZW5zZSBmb3IgMi42KykuCgpUaGFua3MhCkrDqXLD
-qW1pZQoKT24gVHVlLCBEZWMgMiwgMjAxNCBhdCA1OjIxIFBNLCBNYXRoaWV1IERlc25veWVycwo8
-bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPiB3cm90ZToKPiBTaWduZWQtb2ZmLWJ5OiBN
-YXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+IC0tLQo+
-ICBzcmMvYmluL2x0dG5nLXNlc3Npb25kL3N5c2NhbGwuYyB8IDIgKy0KPiAgMSBmaWxlIGNoYW5n
-ZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4KPiBkaWZmIC0tZ2l0IGEvc3JjL2Jp
-bi9sdHRuZy1zZXNzaW9uZC9zeXNjYWxsLmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3N5c2Nh
-bGwuYwo+IGluZGV4IGMzOGY4OTEuLmE2ZjBlMWUgMTAwNjQ0Cj4gLS0tIGEvc3JjL2Jpbi9sdHRu
-Zy1zZXNzaW9uZC9zeXNjYWxsLmMKPiArKysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3N5c2Nh
-bGwuYwo+IEBAIC03Myw3ICs3Myw3IEBAIGludCBzeXNjYWxsX2luaXRfdGFibGUodm9pZCkKPiAg
-ICAgICAgIH0KPgo+ICAgICAgICAgd2hpbGUgKGZzY2FuZihmcCwKPiAtICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICJzeXNjYWxsIHsgaW5kZXggPSAlbHU7IFwKPiArICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICJzeXNjYWxsIHsgaW5kZXggPSAlenU7IFwKPiAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIG5hbWUgPSAlIiBYU1RSKFNZU0NBTExfTkFNRV9MRU4pICJb
-XjtdOyBcCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBiaXRuZXNzID0gJXU7IH07
-XG4iLAo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgJmluZGV4LCBuYW1lLCAmYml0
-bmVzcykgPT0gMykgewo+IC0tCj4gMi4xLjEKPgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpF
-ZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
-LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
-YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Report whether performance counters are supported by UST on the
+architecture as soon as the user try to enable a perf counter context.
+
+Fixes #851
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ src/bin/lttng-sessiond/trace-ust.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/bin/lttng-sessiond/trace-ust.c b/src/bin/lttng-sessiond/trace-ust.c
+index a3e25aa..4f06f1b 100644
+--- a/src/bin/lttng-sessiond/trace-ust.c
++++ b/src/bin/lttng-sessiond/trace-ust.c
+@@ -470,7 +470,12 @@ int trace_ust_context_type_event_to_ust(enum lttng_event_context_type type)
+ 		utype = LTTNG_UST_CONTEXT_IP;
+ 		break;
+ 	case LTTNG_EVENT_CONTEXT_PERF_THREAD_COUNTER:
+-		utype = LTTNG_UST_CONTEXT_PERF_THREAD_COUNTER;
++		if (!ustctl_has_perf_counters()) {
++			utype = -1;
++			WARN("Perf counters not implemented in UST");
++		} else {
++			utype = LTTNG_UST_CONTEXT_PERF_THREAD_COUNTER;
++		}
+ 		break;
+ 	default:
+ 		ERR("Invalid UST context");
+-- 
+2.1.1
