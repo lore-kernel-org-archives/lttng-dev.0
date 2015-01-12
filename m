@@ -1,18 +1,22 @@
-From: =?UTF-8?B?R2VuZXZpw6h2ZSBCYXN0aWVu?= <gbastien@versatic.net>
-Subject: Re: Merge two LTTng CTF traces into one
-Date: Fri, 09 Jan 2015 12:08:31 -0500
-Message-ID: <54B00B0F.2060500__11072.58415218$1420823429$gmane$org@versatic.net>
-References: <1431870336.8158578.1419253660346.JavaMail.root@polymtl.ca>	<549835FE.8090508@ericsson.com>	<54985ACE.1000502@ericsson.com>	<CA+=dQ-_sjNg3jj11Psm+wrKbbyS1Ox1kHZyoFwQ2MSfP+SqvuQ@mail.gmail.com>	<5499C549.2@ericsson.com>	<5499CF78.3090301@versatic.net>	<CA+=dQ-9zwf=0Qnf8mCwWionoOo-BxRyScb607-0wfoi2hBO8XA@mail.gmail.com>	<54AAB14E.70004@versatic.net>	<CA+=dQ--wqUbkbW3MXh-4X1NrJ-qp=8B4dh6ydutgGzEcOXHxUA@mail.gmail.com>	<CA+=dQ-9ZmQJJKZOcoL6kQX5kSMKDZ9HMS2xkjstMiw-5bz79EQ@mail.gmail.com>	<CA+=dQ-8oGmyKDfNEfLwu_WLeouu0XXxQVigciVBDV3T6dQJ+pg@mail.gmail.com>	<54AC0D33.80805@versatic.net>	<CA+=dQ-_CaEvWV6uF+01tZFmfhSoHE0g=OGBKoKNC5cwMaWDSew@mail.gmail.com>	<54AD41E8.7050604@versatic.net>	<CA+=dQ--GJj1rt4jTFOc-sV4YMNb+jpWXnWT_7oULab-FiXRJaQ@mail.gmail.com>	<54AD844D.4000800@versatic.net>
- 	<CA+=dQ-_u2D47dkEt_20YeGBZYBOTiADX6BWq8FR-7XWaOko10A@mail.gmail.com>	<54AEB378.8090101@versatic.net>
- <CA+=dQ-_DGAtobYX8W=mQUyJMPD8LD4b6FQDrnC9SqmQr_0gWAA@mail.gmail.com>
+From: David OShea <David.OShea@quantum.com>
+Subject: Re: Segfault at v_read() called from
+ lib_ring_buffer_try_reserve_slow() in LTTng-UST traced app - CPU/VMware
+ dependent
+Date: Mon, 12 Jan 2015 06:33:07 +0000
+Message-ID: <20998D40D9A2B7499CA5A3A2666CB1EB2D9E464C__46399.6903542013$1421044462$gmane$org@ZURMSG1.QUANTUM.com>
+References: <20998D40D9A2B7499CA5A3A2666CB1EB2D9DDA59@ZURMSG1.QUANTUM.com>
+ <1745838195.26177.1418312190246.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1918409413=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailout.easydns.com ([64.68.201.141])
+Received: from mx0a-000ceb01.pphosted.com ([67.231.144.126])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <gbastien@versatic.net>) id 1Y9d34-0008I9-7R
- for lttng-dev@lists.lttng.org; Fri, 09 Jan 2015 12:08:36 -0500
-In-Reply-To: <CA+=dQ-_DGAtobYX8W=mQUyJMPD8LD4b6FQDrnC9SqmQr_0gWAA@mail.gmail.com>
+ (envelope-from <prvs=3454da0e9d=david.oshea@quantum.com>)
+ id 1YAYYx-00016Y-6D
+ for lttng-dev@lists.lttng.org; Mon, 12 Jan 2015 01:33:23 -0500
+In-Reply-To: <1745838195.26177.1418312190246.JavaMail.zimbra@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,589 +25,137 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Divya Vyas <dvyas@mvista.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
---===============1918409413==
-Content-Type: multipart/alternative;
- boundary="------------040005020701090407020802"
-
-This is a multi-part message in MIME format.
---------------040005020701090407020802
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-MIME-Autoconverted: from 8bit to quoted-printable by smtp.polymtl.ca id t09H8mvZ017115
-
-On 01/08/2015 12:28 PM, Divya Vyas wrote:
->
->
-> On Jan 8, 2015 10:12 PM, "Genevi=C3=A8ve Bastien" <gbastien@versatic.ne=
-t=20
-> <mailto:gbastien@versatic.net>> wrote:
-> >
-> > Hi Divya,
-> >
-> > I'm putting you back on the lttng-dev mailing list, please reply to=20
-> that list in the future so other people can answer, because I think=20
-> that trace synchronization is not exactly what you are looking for here=
-...
->
-> I am sorry I clicked reply instead of reply to all.
->
-> I have a host and on top of that I have multiple guests. Suppose like=20
-> from 9 to 9:30 I want to analyze the host information as well as guest=20
-> information in single view and in a synchronized way. As the guest=20
-> time is different from host . I need the guest traces referenced at=20
-> host time . and I tracecompass I can see the host traces as well as=20
-> guest traces in a synchronized way.
->
-Then your traces are taken at the same time.  The ideal in your case is=20
-to have your machines communicate, at least a few TCP packets during the=20
-duration of the trace so they can be synchronized. If you trace a=20
-virtual machine guest and host for 30 minutes, chances are the time=20
-drift between the clocks is important so simple time offsetting at a=20
-point that you know (either the beginnings of the trace or a precise=20
-point in the trace) will correlate justly the traces at this point but=20
-the further you go from there, the less accurate the time will be. Trace=20
-synchronization accounts for the time drift so if you have accurate=20
-synchronization, then the same accuracy applies to the whole trace.
-
-Also, I may point you to a recently contributed Virtual Machine=20
-Analysis. Part of it is in master, some still on gerrit (the view for=20
-instance). The documentation is still unexistent. It works with the=20
-Qemu/KVM virtualizer, and needs some custom compilation of lttng-modules=20
-on both guest and host. It is still experimental. It allows to associate=20
-a host process with a guest CPU so that you can see on the guest whether=20
-the CPU was actually running or preempted on the host. If you're using=20
-Qemu/KVM and are interested in this analysis, I can work on the=20
-documentation sooner than later.
-
-
-> I hope now I gave the clear picture of what I am doing. Please let me=20
-> know if u need some explanation.
-> >
-> >> I tried the sessions at same time and communication events in=20
-> between and it worked :)
-> >> I am getting quality as accurate and I can see both traces merged .
-> >
-> > Excellent!
-> >
-> >>
-> >> Now I come at my second  point i.e taking traces from lttng=20
-> sessions at different machines and at different time and may be=20
-> communication events or might be not.
-> >
-> > If the sessions are taken are different moments, they can _never_=20
-> synchronize.
->
-> Yes I think you told that they can be analyzed by applying offset but=20
-> not synchronized.
->
-> Trace synchronization first matches events such that one single event=20
-> from a trace (for example "sending a packet") can be correlated to=20
-> exactly one event in the second trace (the reception of that packet).=20
-> If that is the case, the first event can have a timestamp of now and=20
-> the second be timed to January 1st 1970, trace synchronization will=20
-> work and the 2 traces will have a common time reference after=20
-> synchronization.
->
-> What is the criteria of timestamps to be synchronized? How much two=20
-> timestamps matched for synchronization
->
-There is no criteria for the timestamp. Matching events is the important=20
-part of the process. If you are interested in trace synchronization, I=20
-invite you to read this article by Masoume Jabbarifar [1]. It is at the=20
-base of what is implemented in Trace Compass.
-
-[1] http://link.springer.com/article/10.1007/s10922-014-9331-7#page-1
-
-
-Genevi=C3=A8ve
-
-
-
-> >
-> >
-> >>
-> >> So In my opinion I need to apply time offset on one of the trace to=20
-> match the beginning so that they can be synchronized .
-> >>
-> >> So like first trace timestamp starts at 07:13:59 .499 222 870 and=20
-> other starts at 11:21:35.537 682 885 . Then I can apply timeoffset (=20
-> How much offset ? In apply time offset advanced option If reference=20
-> time is 7:13.... then target time will be 11:21:35... it will=20
-> calculate the offset ) on one of the trace to match traces .
-> >>
-> >> Is it possible to synchronize the traces then ? Actually I tried=20
-> these steps but not getting the synchronized traces but then both=20
-> traces beginning is exactly same ( obviously it will as applied by the=20
-> offset)
-> >>
-> >> Please let me know how can I synchronize the traces from different=20
-> machines and at different time
-> >
-> > I'm not sure what your end goal is exactly. Do you want to compare=20
-> trace executions? I am cc'ing Fran=C3=A7ois Doray who is currently work=
-ing=20
-> on a trace comparison utility. Here's a presentation he did recently:=20
-> http://ahls.dorsal.polymtl.ca/system/files/Comparison%20of%20Traces%20t=
-o%20Diagnose%20Performance%20Variations.pdf
-> >
-> > His work is still experimental and available on github. If that's=20
-> what you're interested in, he might give you some information on how=20
-> to use it.
-> >
-> > Otherwise, please explain what you are trying to achieve.
-> >
-> > Genevi=C3=A8ve
-> >
-> >
-> >
-> >>
-> >>
-> >>
-> >> On Thu, Jan 8, 2015 at 12:39 AM, Genevi=C3=A8ve Bastien=20
-> <gbastien@versatic.net <mailto:gbastien@versatic.net>> wrote:
-> >>>
-> >>> On 15-01-07 11:32 AM, Divya Vyas wrote:
-> >>>>
-> >>>> Hi ,
-> >>>>
-> >>>> I have some comments below and thanks a lot for your help
-> >>>>
-> >>>> On Jan 7, 2015 7:55 PM, "Genevi=C3=A8ve Bastien"=20
-> <gbastien@versatic.net <mailto:gbastien@versatic.net>> wrote:
-> >>>> >
-> >>>> > Hi Divya,
-> >>>> >
-> >>>> >
-> >>>> > On 15-01-07 01:24 AM, Divya Vyas wrote:
-> >>>> >>
-> >>>> >>
-> >>>> >> Hi Genevieve,
-> >>>> >>
-> >>>> >> My target to is merge the traces of two different machines=20
-> taken on different time or same time .
-> >>>> >
-> >>>> > Trace synchronization works by first matching events=20
-> corresponding to the sending and the reception of a TCP packet from=20
-> both traces, and then taking those matched events and computing a=20
-> formula that will transform timestamps from one trace to the same=20
-> clock as another trace. So only traces taken at the same time (meaning=20
-> together, not the same clock time of course) will work.
-> >>>>
-> >>>> I am not getting this last point , where the traces are taken=20
-> together. You mean that we start lttng session on two machines at=20
-> around same time and then during  session use some communication=20
-> events . Then take the traces into tracecompass for synchronization in=20
-> experiment.  I am not getting in which cases time offset is needed?
-> >>>
-> >>>
-> >>> Yes, two sessions on two machines at the same time and they=20
-> communicate during those sessions. Then you can synchronize traces.=20
-> The following traces are used in unit tests to test trace=20
-> synchronization if you wish to see what it looks like:=20
-> http://archive.eclipse.org/tracecompass/test-traces/ctf/synctraces.tar.=
-gz
-> >>>
-> >>>> In what traces I need to apply time offset so that their=20
-> beginning matches. Is it applicable on the above case which I am=20
-> thinking above.
-> >>>
-> >>>
-> >>> You never _need_ to apply time offset. It is if you have traces=20
-> that do not contain communication events, and you want one of them to=20
-> be offsetted by a certain time. For example, you have a trace taken=20
-> GST-5 and one at GST, you cannot synchronize them because they don't=20
-> have communication events but you want to analyze them with the same=20
-> time reference, you would offset the one at GST-5 by +5 hours.
-> >>>
-> >>> Or if you have a custom event that you know happened at the same=20
-> time on both traces, but synchronization does not support that event,=20
-> then you can offset one trace so that both events from both traces=20
-> have the same timestamp.
-> >>>
-> >>> Time offsetting is a manual process by the user, while trace=20
-> synchronization is an automatic analysis using pre-defined events to=20
-> compute a formula to transform timestamps from one trace to the same=20
-> clock as the other.
-> >>>
-> >>>> >
-> >>>> >
-> >>>> >>
-> >>>> >> Actually synchronization was not working on different machine=20
-> so I tried on same machine.  But now I got it correctly I think so :)
-> >>>> >
-> >>>> > Indeed, you have the right events now, with the net_dev_queue=20
-> and netif_receive_skb. So you should be OK. But I *think* this method=20
-> works only when on a LAN. If your computers communicate through=20
-> internet, you're better off with the inet_sock_local_[in|out] method
-> >>>>
-> >>>> They are connected through LAN only.
-> >>>>
-> >>>> >
-> >>>> >>
-> >>>> >> For different time we need to apply offset so that their=20
-> beginning matches. I think I need to do this .
-> >>>> >>
-> >>>> >> I tried applying offset on eclipse luna ( I added linux tools=20
-> in install new software)   but I am not getting this option " Apply=20
-> time offset ".
-> >>>> >
-> >>>> > It is in master only so far, so you should use tracecompass to=20
-> have this option.
-> >>>> >
-> >>>> >>
-> >>>> >> I tried on tracecompass also, where I am getting time offset=20
-> option but the synchronization view is empty . The window is not=20
-> showing anything. The tracecompass version is 0.1.0
-> >>>> >
-> >>>> > The time offset does not involve synchronization at all, it is=20
-> just an offset, so you would not see anything in the synchronization=20
-> view. But in the "Properties" view, when you select the trace, the=20
-> time offset is displayed.
-> >>>>
-> >>>> I meant to say that I tried synchronizing the traces in=20
-> tracecompass without time offset . The synchronizing view is empty.
-> >>>> It should show at least quality absent etc.
-> >>>
-> >>>
-> >>> Quality absent would show only if the traces are from different=20
-> machines. If you are trying to synchronize traces from the same=20
-> machine, that view will stay empty.
-> >>>
-> >>> Genevi=C3=A8ve
-> >>>
-> >>>
-> >>
-> >
->
-
-
---------------040005020701090407020802
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-MIME-Autoconverted: from 8bit to quoted-printable by smtp.polymtl.ca id t09H8mvZ017115
-
-<html>
-  <head>
-    <meta content=3D"text/html; charset=3Dutf-8" http-equiv=3D"Content-Ty=
-pe">
-  </head>
-  <body bgcolor=3D"#FFFFFF" text=3D"#000000">
-    <div class=3D"moz-cite-prefix">On 01/08/2015 12:28 PM, Divya Vyas
-      wrote:<br>
-    </div>
-    <blockquote
-cite=3D"mid:CA+=3DdQ-_DGAtobYX8W=3DmQUyJMPD8LD4b6FQDrnC9SqmQr_0gWAA@mail.=
-gmail.com"
-      type=3D"cite">
-      <p dir=3D"ltr"><br>
-        On Jan 8, 2015 10:12 PM, "Genevi=C3=A8ve Bastien" &lt;<a
-          moz-do-not-send=3D"true" href=3D"mailto:gbastien@versatic.net">=
-gbastien@versatic.net</a>&gt;
-        wrote:<br>
-        &gt;<br>
-        &gt; Hi Divya,<br>
-        &gt;<br>
-        &gt; I'm putting you back on the lttng-dev mailing list, please
-        reply to that list in the future so other people can answer,
-        because I think that trace synchronization is not exactly what
-        you are looking for here...<br>
-      </p>
-      <p dir=3D"ltr">I am sorry I clicked reply instead of reply to all.<=
-/p>
-      <p dir=3D"ltr">I have a host and on top of that I have multiple
-        guests. Suppose like from 9 to 9:30 I want to analyze the host
-        information as well as guest information in single view and in a
-        synchronized way. As the guest time is different from host . I
-        need the guest traces referenced at host time . and I
-        tracecompass I can see the host traces as well as guest traces
-        in a synchronized way.</p>
-    </blockquote>
-    Then your traces are taken at the same time.=C2=A0 The ideal in your =
-case
-    is to have your machines communicate, at least a few TCP packets
-    during the duration of the trace so they can be synchronized. If you
-    trace a virtual machine guest and host for 30 minutes, chances are
-    the time drift between the clocks is important so simple time
-    offsetting at a point that you know (either the beginnings of the
-    trace or a precise point in the trace) will correlate justly the
-    traces at this point but the further you go from there, the less
-    accurate the time will be. Trace synchronization accounts for the
-    time drift so if you have accurate synchronization, then the same
-    accuracy applies to the whole trace.<br>
-    <br>
-    Also, I may point you to a recently contributed Virtual Machine
-    Analysis. Part of it is in master, some still on gerrit (the view
-    for instance). The documentation is still unexistent. It works with
-    the Qemu/KVM virtualizer, and needs some custom compilation of
-    lttng-modules on both guest and host. It is still experimental. It
-    allows to associate a host process with a guest CPU so that you can
-    see on the guest whether the CPU was actually running or preempted
-    on the host. If you're using Qemu/KVM and are interested in this
-    analysis, I can work on the documentation sooner than later.<br>
-    <br>
-    <br>
-    <blockquote
-cite=3D"mid:CA+=3DdQ-_DGAtobYX8W=3DmQUyJMPD8LD4b6FQDrnC9SqmQr_0gWAA@mail.=
-gmail.com"
-      type=3D"cite">
-      <p dir=3D"ltr">I hope now I gave the clear picture of what I am
-        doing. Please let me know if u need some explanation.=C2=A0 <br>
-        &gt;<br>
-        &gt;&gt; I tried the sessions at same time and communication
-        events in between and it worked :)<br>
-        &gt;&gt; I am getting quality as accurate and I can see both
-        traces merged .<br>
-        &gt;<br>
-        &gt; Excellent!<br>
-        &gt;<br>
-        &gt;&gt;<br>
-        &gt;&gt; Now I come at my second=C2=A0 point i.e taking traces fr=
-om
-        lttng sessions at different machines and at different time and
-        may be communication events or might be not.<br>
-        &gt;<br>
-        &gt; If the sessions are taken are different moments, they can
-        _never_ synchronize.</p>
-      <p dir=3D"ltr">Yes I think you told that they can be analyzed by
-        applying offset but not synchronized. </p>
-      <p dir=3D"ltr"> Trace synchronization first matches events such tha=
-t
-        one single event from a trace (for example "sending a packet")
-        can be correlated to exactly one event in the second trace (the
-        reception of that packet). If that is the case, the first event
-        can have a timestamp of now and the second be timed to January
-        1st 1970, trace synchronization will work and the 2 traces will
-        have a common time reference after synchronization.</p>
-      <p dir=3D"ltr">What is the criteria of timestamps to be
-        synchronized? How much two timestamps matched for
-        synchronization<br>
-      </p>
-    </blockquote>
-    There is no criteria for the timestamp. Matching events is the
-    important part of the process. If you are interested in trace
-    synchronization, I invite you to read this article by Masoume
-    Jabbarifar [1]. It is at the base of what is implemented in Trace
-    Compass.<br>
-    <br>
-    [1]
-    <a class=3D"moz-txt-link-freetext" href=3D"http://link.springer.com/a=
-rticle/10.1007/s10922-014-9331-7#page-1">http://link.springer.com/article=
-/10.1007/s10922-014-9331-7#page-1</a><br>
-    <br>
-    <br>
-    Genevi=C3=A8ve<br>
-    <br>
-    <br>
-    <br>
-    <blockquote
-cite=3D"mid:CA+=3DdQ-_DGAtobYX8W=3DmQUyJMPD8LD4b6FQDrnC9SqmQr_0gWAA@mail.=
-gmail.com"
-      type=3D"cite">
-      <p dir=3D"ltr">
-        &gt;<br>
-        &gt;<br>
-        &gt;&gt;<br>
-        &gt;&gt; So In my opinion I need to apply time offset on one of
-        the trace to match the beginning so that they can be
-        synchronized . <br>
-        &gt;&gt;<br>
-        &gt;&gt; So like first trace timestamp starts at 07:13:59 .499
-        222 870 and other starts at 11:21:35.537 682 885 . Then I can
-        apply timeoffset ( How much offset ? In apply time offset
-        advanced option If reference time is 7:13.... then target time
-        will be 11:21:35... it will calculate the offset ) on one of the
-        trace to match traces .<br>
-        &gt;&gt;<br>
-        &gt;&gt; Is it possible to synchronize the traces then ?
-        Actually I tried these steps but not getting the synchronized
-        traces but then both traces beginning is exactly same (
-        obviously it will as applied by the offset) <br>
-        &gt;&gt;<br>
-        &gt;&gt; Please let me know how can I synchronize the traces
-        from different machines and at different time <br>
-        &gt;<br>
-        &gt; I'm not sure what your end goal is exactly. Do you want to
-        compare trace executions? I am cc'ing Fran=C3=A7ois Doray who is
-        currently working on a trace comparison utility. Here's a
-        presentation he did recently: <a moz-do-not-send=3D"true"
-href=3D"http://ahls.dorsal.polymtl.ca/system/files/Comparison%20of%20Trac=
-es%20to%20Diagnose%20Performance%20Variations.pdf">http://ahls.dorsal.pol=
-ymtl.ca/system/files/Comparison%20of%20Traces%20to%20Diagnose%20Performan=
-ce%20Variations.pdf</a><br>
-        &gt;<br>
-        &gt; His work is still experimental and available on github. If
-        that's what you're interested in, he might give you some
-        information on how to use it.<br>
-        &gt;<br>
-        &gt; Otherwise, please explain what you are trying to achieve.<br=
->
-        &gt;<br>
-        &gt; Genevi=C3=A8ve<br>
-        &gt;<br>
-        &gt;<br>
-        &gt;<br>
-        &gt;&gt; =C2=A0<br>
-        &gt;&gt;<br>
-        &gt;&gt;<br>
-        &gt;&gt; On Thu, Jan 8, 2015 at 12:39 AM, Genevi=C3=A8ve Bastien =
-&lt;<a
-          moz-do-not-send=3D"true" href=3D"mailto:gbastien@versatic.net">=
-gbastien@versatic.net</a>&gt;
-        wrote:<br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;&gt; On 15-01-07 11:32 AM, Divya Vyas wrote:<br>
-        &gt;&gt;&gt;&gt;<br>
-        &gt;&gt;&gt;&gt; Hi ,<br>
-        &gt;&gt;&gt;&gt;<br>
-        &gt;&gt;&gt;&gt; I have some comments below and thanks a lot for
-        your help<br>
-        &gt;&gt;&gt;&gt;<br>
-        &gt;&gt;&gt;&gt; On Jan 7, 2015 7:55 PM, "Genevi=C3=A8ve Bastien"
-        &lt;<a moz-do-not-send=3D"true"
-          href=3D"mailto:gbastien@versatic.net">gbastien@versatic.net</a>=
-&gt;
-        wrote:<br>
-        &gt;&gt;&gt;&gt; &gt;<br>
-        &gt;&gt;&gt;&gt; &gt; Hi Divya,<br>
-        &gt;&gt;&gt;&gt; &gt;<br>
-        &gt;&gt;&gt;&gt; &gt;<br>
-        &gt;&gt;&gt;&gt; &gt; On 15-01-07 01:24 AM, Divya Vyas wrote:<br>
-        &gt;&gt;&gt;&gt; &gt;&gt;<br>
-        &gt;&gt;&gt;&gt; &gt;&gt;<br>
-        &gt;&gt;&gt;&gt; &gt;&gt; Hi Genevieve,<br>
-        &gt;&gt;&gt;&gt; &gt;&gt;<br>
-        &gt;&gt;&gt;&gt; &gt;&gt; My target to is merge the traces of
-        two different machines taken on different time or same time .<br>
-        &gt;&gt;&gt;&gt; &gt;<br>
-        &gt;&gt;&gt;&gt; &gt; Trace synchronization works by first
-        matching events corresponding to the sending and the reception
-        of a TCP packet from both traces, and then taking those matched
-        events and computing a formula that will transform timestamps
-        from one trace to the same clock as another trace. So only
-        traces taken at the same time (meaning together, not the same
-        clock time of course) will work.<br>
-        &gt;&gt;&gt;&gt;<br>
-        &gt;&gt;&gt;&gt; I am not getting this last point , where the
-        traces are taken together. You mean that we start lttng session
-        on two machines at around same time and then during=C2=A0 session=
- use
-        some communication events . Then take the traces into
-        tracecompass for synchronization in experiment.=C2=A0 I am not
-        getting in which cases time offset is needed?<br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;&gt; Yes, two sessions on two machines at the same time
-        and they communicate during those sessions. Then you can
-        synchronize traces. The following traces are used in unit tests
-        to test trace synchronization if you wish to see what it looks
-        like: <a moz-do-not-send=3D"true"
-href=3D"http://archive.eclipse.org/tracecompass/test-traces/ctf/synctrace=
-s.tar.gz">http://archive.eclipse.org/tracecompass/test-traces/ctf/synctra=
-ces.tar.gz</a><br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;&gt;&gt; In what traces I need to apply time offset so
-        that their beginning matches. Is it applicable on the above case
-        which I am thinking above.<br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;&gt; You never _need_ to apply time offset. It is if you
-        have traces that do not contain communication events, and you
-        want one of them to be offsetted by a certain time. For example,
-        you have a trace taken GST-5 and one at GST, you cannot
-        synchronize them because they don't have communication events
-        but you want to analyze them with the same time reference, you
-        would offset the one at GST-5 by +5 hours.<br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;&gt; Or if you have a custom event that you know
-        happened at the same time on both traces, but synchronization
-        does not support that event, then you can offset one trace so
-        that both events from both traces have the same timestamp.<br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;&gt; Time offsetting is a manual process by the user,
-        while trace synchronization is an automatic analysis using
-        pre-defined events to compute a formula to transform timestamps
-        from one trace to the same clock as the other.<br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;&gt;&gt; &gt;<br>
-        &gt;&gt;&gt;&gt; &gt;<br>
-        &gt;&gt;&gt;&gt; &gt;&gt;<br>
-        &gt;&gt;&gt;&gt; &gt;&gt; Actually synchronization was not
-        working on different machine so I tried on same machine.=C2=A0 Bu=
-t
-        now I got it correctly I think so :)<br>
-        &gt;&gt;&gt;&gt; &gt;<br>
-        &gt;&gt;&gt;&gt; &gt; Indeed, you have the right events now,
-        with the net_dev_queue and netif_receive_skb. So you should be
-        OK. But I *think* this method works only when on a LAN. If your
-        computers communicate through internet, you're better off with
-        the inet_sock_local_[in|out] method<br>
-        &gt;&gt;&gt;&gt;<br>
-        &gt;&gt;&gt;&gt; They are connected through LAN only.<br>
-        &gt;&gt;&gt;&gt;<br>
-        &gt;&gt;&gt;&gt; &gt;<br>
-        &gt;&gt;&gt;&gt; &gt;&gt;<br>
-        &gt;&gt;&gt;&gt; &gt;&gt; For different time we need to apply
-        offset so that their beginning matches. I think I need to do
-        this .<br>
-        &gt;&gt;&gt;&gt; &gt;&gt;<br>
-        &gt;&gt;&gt;&gt; &gt;&gt; I tried applying offset on eclipse
-        luna ( I added linux tools in install new software)=C2=A0=C2=A0 b=
-ut I am
-        not getting this option " Apply time offset ". <br>
-        &gt;&gt;&gt;&gt; &gt;<br>
-        &gt;&gt;&gt;&gt; &gt; It is in master only so far, so you should
-        use tracecompass to have this option.<br>
-        &gt;&gt;&gt;&gt; &gt;<br>
-        &gt;&gt;&gt;&gt; &gt;&gt;<br>
-        &gt;&gt;&gt;&gt; &gt;&gt; I tried on tracecompass also, where I
-        am getting time offset option but the synchronization view is
-        empty . The window is not showing anything. The tracecompass
-        version is 0.1.0<br>
-        &gt;&gt;&gt;&gt; &gt;<br>
-        &gt;&gt;&gt;&gt; &gt; The time offset does not involve
-        synchronization at all, it is just an offset, so you would not
-        see anything in the synchronization view. But in the
-        "Properties" view, when you select the trace, the time offset is
-        displayed.<br>
-        &gt;&gt;&gt;&gt;<br>
-        &gt;&gt;&gt;&gt; I meant to say that I tried synchronizing the
-        traces in tracecompass without time offset . The synchronizing
-        view is empty.<br>
-        &gt;&gt;&gt;&gt; It should show at least quality absent etc.<br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;&gt; Quality absent would show only if the traces are
-        from different machines. If you are trying to synchronize traces
-        from the same machine, that view will stay empty. <br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;&gt; Genevi=C3=A8ve<br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;&gt;<br>
-        &gt;&gt;<br>
-        &gt;<br>
-      </p>
-    </blockquote>
-    <br>
-  </body>
-</html>
-
---------------040005020701090407020802--
-
-
---===============1918409413==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1918409413==--
+SGkgTWF0aGlldSwNCg0KQXBvbG9naWVzIGZvciB0aGUgZGVsYXkgaW4gZ2V0dGluZyBiYWNrIHRv
+IHlvdSwgcGxlYXNlIHNlZSBiZWxvdzoNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0K
+PiBGcm9tOiBNYXRoaWV1IERlc25veWVycyBbbWFpbHRvOm1hdGhpZXUuZGVzbm95ZXJzQGVmZmlj
+aW9zLmNvbV0NCj4gU2VudDogRnJpZGF5LCAxMiBEZWNlbWJlciAyMDE0IDI6MDcgQU0NCj4gVG86
+IERhdmlkIE9TaGVhDQo+IENjOiBsdHRuZy1kZXYNCj4gU3ViamVjdDogUmU6IFtsdHRuZy1kZXZd
+IFNlZ2ZhdWx0IGF0IHZfcmVhZCgpIGNhbGxlZCBmcm9tDQo+IGxpYl9yaW5nX2J1ZmZlcl90cnlf
+cmVzZXJ2ZV9zbG93KCkgaW4gTFRUbmctVVNUIHRyYWNlZCBhcHAgLSBDUFUvVk13YXJlDQo+IGRl
+cGVuZGVudA0KPiANCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCj4gDQo+IAlG
+cm9tOiAiRGF2aWQgT1NoZWEiIDxEYXZpZC5PU2hlYUBxdWFudHVtLmNvbT4NCj4gCVRvOiAibHR0
+bmctZGV2IiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4NCj4gCVNlbnQ6IFN1bmRheSwgRGVj
+ZW1iZXIgNywgMjAxNCAxMDozMDowNCBQTQ0KPiAJU3ViamVjdDogW2x0dG5nLWRldl0gU2VnZmF1
+bHQgYXQgdl9yZWFkKCkgY2FsbGVkIGZyb20NCj4gbGliX3JpbmdfYnVmZmVyX3RyeV9yZXNlcnZl
+X3Nsb3coKSBpbiBMVFRuZy1VU1QgdHJhY2VkIGFwcCAtIENQVS9WTXdhcmUNCj4gZGVwZW5kZW50
+DQo+IA0KPiANCj4gDQo+IAlIaSBhbGwsDQo+IA0KPiAJV2UgaGF2ZSBlbmNvdW50ZXJlZCBhIHBy
+b2JsZW0gd2l0aCB1c2luZyBMVFRuZy1VU1QgdHJhY2luZyB3aXRoDQo+IG91ciBhcHBsaWNhdGlv
+biwgd2hlcmUgb24gYSBwYXJ0aWN1bGFyIFZNd2FyZSB2Q2VudGVyIGNsdXN0ZXIgd2UgYWxtb3N0
+DQo+IHdheXMgZ2V0IHNlZ2ZhdWx0cyB3aGVuIHRyYWNlcG9pbnRzIGFyZSBlbmFibGVkLCB3aGVy
+ZWFzIG9uIGFub3RoZXINCj4gdkNlbnRlciBjbHVzdGVyLCBhbmQgb24gZXZlcnkgb3RoZXIgbWFj
+aGluZSB3ZeKAmXZlIGV2ZXIgdXNlZCwgd2UgZG9u4oCZdA0KPiBoaXQgdGhpcyBwcm9ibGVtLg0K
+PiANCj4gCUkgY2FuIHJlcHJvZHVjZSB0aGlzIHVzaW5nIGx0dG5nLXVzdC90ZXN0cy9oZWxsbyBh
+ZnRlciB1c2luZzoNCj4gDQo+IAkiIiINCj4gDQo+IAlsdHRuZyBjcmVhdGUNCj4gDQo+IAlsdHRu
+ZyBlbmFibGUtY2hhbm5lbCBjaGFubmVsMCAtLXVzZXJzcGFjZQ0KPiANCj4gCWx0dG5nIGFkZC1j
+b250ZXh0IC0tdXNlcnNwYWNlIC10IHZwaWQgLXQgdnRpZCAtdCBwcm9jbmFtZQ0KPiANCj4gCWx0
+dG5nIGVuYWJsZS1ldmVudCAtLXVzZXJzcGFjZSAidXN0X3Rlc3RzX2hlbGxvOioiIC1jIGNoYW5u
+ZWwwDQo+IA0KPiAJbHR0bmcgc3RhcnQNCj4gDQo+IAkiIiINCj4gDQo+IAlJbiB3aGljaCBjYXNl
+IEkgZ2V0IHRoZSBmb2xsb3dpbmcgc3RhY2sgdHJhY2Ugd2l0aCBhbiBvYnZpb3VzDQo+IE5VTEwg
+cG9pbnRlciBkZXJlZmVyZW5jZToNCj4gDQo+IAkiIiINCj4gDQo+IAlQcm9ncmFtIHRlcm1pbmF0
+ZWQgd2l0aCBzaWduYWwgU0lHU0VHViwgU2VnbWVudGF0aW9uIGZhdWx0Lg0KPiANCj4gCSMwICB2
+X3JlYWQgKGNvbmZpZz08b3B0aW1pemVkIG91dD4sIHZfYT0weDApIGF0IHZhdG9taWMuaDo0OA0K
+PiANCj4gCTQ4ICAgICAgICAgICAgICByZXR1cm4gdWF0b21pY19yZWFkKCZ2X2EtPmEpOw0KPiAN
+Cj4gCVsuLi5dDQo+IA0KPiAJIzAgIHZfcmVhZCAoY29uZmlnPTxvcHRpbWl6ZWQgb3V0Piwgdl9h
+PTB4MCkgYXQgdmF0b21pYy5oOjQ4DQo+IA0KPiAJIzEgIDB4MDAwMDdmNGFhMTBhNDgwNCBpbiBs
+aWJfcmluZ19idWZmZXJfdHJ5X3Jlc2VydmVfc2xvdyAoDQo+IA0KPiAJICAgIGJ1Zj0weDdmNGE5
+ODAwOGEwMCwgY2hhbj0weDdmNGE5ODAwOGEwMCwNCj4gb2Zmc2V0cz0weDdmZmZlZjY3YzYyMCwN
+Cj4gDQo+IAkgICAgY3R4PTB4N2ZmZmVmNjdjYTQwKSBhdCByaW5nX2J1ZmZlcl9mcm9udGVuZC5j
+OjE2NzcNCj4gDQo+IAkjMiAgMHgwMDAwN2Y0YWExMGE2YzlmIGluIGxpYl9yaW5nX2J1ZmZlcl9y
+ZXNlcnZlX3Nsb3cNCj4gKGN0eD0weDdmZmZlZjY3Y2E0MCkNCj4gDQo+IAkgICAgYXQgcmluZ19i
+dWZmZXJfZnJvbnRlbmQuYzoxODE5DQo+IA0KPiAJIzMgIDB4MDAwMDdmNGFhMTA5NWI3NSBpbiBs
+aWJfcmluZ19idWZmZXJfcmVzZXJ2ZQ0KPiAoY3R4PTB4N2ZmZmVmNjdjYTQwLA0KPiANCj4gCSAg
+ICBjb25maWc9MHg3ZjRhYTEyYjhhZTAgPGNsaWVudF9jb25maWc+KQ0KPiANCj4gCSAgICBhdCAu
+Li9saWJyaW5nYnVmZmVyL2Zyb250ZW5kX2FwaS5oOjIxMQ0KPiANCj4gCSM0ICBsdHRuZ19ldmVu
+dF9yZXNlcnZlIChjdHg9MHg3ZmZmZWY2N2NhNDAsIGV2ZW50X2lkPTApDQo+IA0KPiAJICAgIGF0
+IGx0dG5nLXJpbmctYnVmZmVyLWNsaWVudC5oOjQ3Mw0KPiANCj4gCSM1ICAweDAwMDAwMDAwMDA0
+MDEzNWYgaW4gX19ldmVudF9wcm9iZV9fdXN0X3Rlc3RzX2hlbGxvX19fdHB0ZXN0DQo+ICgNCj4g
+DQo+IAkgICAgX190cF9kYXRhPTB4ZWQzNDEwLCBhbmludD0wLCBuZXRpbnQ9MCwgdmFsdWVzPTB4
+N2ZmZmVmNjdjYjUwLA0KPiANCj4gCSAgICB0ZXh0PTB4N2ZmZmVmNjdjYjcwICJ0ZXN0IiwgdGV4
+dGxlbj08b3B0aW1pemVkIG91dD4sDQo+IGRvdWJsZWFyZz0yLA0KPiANCj4gCSAgICBmbG9hdGFy
+Zz0yMjIyLCBib29sYXJnPXRydWUpIGF0IC4vLi91c3RfdGVzdHNfaGVsbG8uaDozMg0KPiANCj4g
+CSM2ICAweDAwMDAwMDAwMDA0MDBkMmMgaW4NCj4gX190cmFjZXBvaW50X2NiX3VzdF90ZXN0c19o
+ZWxsb19fX3RwdGVzdCAoDQo+IA0KPiAJICAgIGJvb2xhcmc9dHJ1ZSwgZmxvYXRhcmc9MjIyMiwg
+ZG91YmxlYXJnPTIsIHRleHRsZW49NCwNCj4gDQo+IAkgICAgdGV4dD0weDdmZmZlZjY3Y2I3MCAi
+dGVzdCIsIHZhbHVlcz0weDdmZmZlZjY3Y2I1MCwNCj4gDQo+IAkgICAgbmV0aW50PTxvcHRpbWl6
+ZWQgb3V0PiwgYW5pbnQ9MCkgYXQgdXN0X3Rlc3RzX2hlbGxvLmg6MzINCj4gDQo+IAkjNyAgbWFp
+biAoYXJnYz08b3B0aW1pemVkIG91dD4sIGFyZ3Y9PG9wdGltaXplZCBvdXQ+KSBhdA0KPiBoZWxs
+by5jOjkyDQo+IA0KPiAJIiIiDQo+IA0KPiAJSSBoaXQgdGhpcyBzZWdmYXVsdCAxMCBvdXQgb2Yg
+MTAgdGltZXMgSSByYW4g4oCcaGVsbG/igJ0gb24gYSBWTSBvbg0KPiBvbmUgdkNlbnRlciBhbmQg
+MCBvdXQgb2YgMTAgdGltZXMgSSByYW4gaXQgb24gdGhlIG90aGVyLCBhbmQgdGhlIFZNcw0KPiBv
+dGhlcndpc2UgaGFkIHRoZSBzYW1lIHNvZnR3YXJlIGluc3RhbGxlZCBvbiB0aGVtOg0KPiANCj4g
+CS0gQ2VudE9TIDYtYmFzZWQNCj4gDQo+IAktIGtlcm5lbC0yLjYuMzItNTA0LjEuMy5lbDYgd2l0
+aCBzb21lIG1pbm9yIGNoYW5nZXMgbWFkZSBpbg0KPiBuZXR3b3JraW5nDQo+IA0KPiAJLSB1c2Vy
+c3BhY2UtcmN1LTAuOC4zLCBsdHRuZy11c3QtMi4zLjIgYW5kIGx0dG5nLXRvb2xzLTIuMy4yDQo+
+IHdoaWNoIG1pZ2h0IGhhdmUgc29tZSBtaW5vciBwYXRjaGVzIGJhY2twb3J0ZWQsIGFuZCBsZWZ0
+b3ZlcnMgb2YNCj4gY2hhbmdlcyB0byBnZXQgdGhlbSB0byBidWlsZCBvbiBDZW50T1MgNQ0KPiAN
+Cj4gCU9uIHRoZSDigJxnb29k4oCdIHZDZW50ZXIsIEkgdGVzdGVkIG9uIHR3byBkaWZmZXJlbnQg
+Vk0gaG9zdHM6DQo+IA0KPiAJUHJvY2Vzc29yIFR5cGU6IEludGVsKFIpIFhlb24oUikgQ1BVIEU1
+NTMwIEAgMi40MEdIeg0KPiANCj4gCUVWQyBNb2RlOiBJbnRlbChSKSAiTmVoYWxlbSIgR2VuZXJh
+dGlvbg0KPiANCj4gCUltYWdlIFByb2ZpbGU6IChVcGRhdGVkKSBFU1hpLTUuMS4wLTc5OTczMy1z
+dGFuZGFyZA0KPiANCj4gCVByb2Nlc3NvciBUeXBlOiBJbnRlbChSKSBDb3JlKFRNKSBpNy0zOTMw
+SyBDUFUgQCAzLjIwR0h6DQo+IA0KPiAJRVZDIE1vZGU6IEludGVsKFIpICJOZWhhbGVtIiBHZW5l
+cmF0aW9uDQo+IA0KPiAJSW1hZ2UgUHJvZmlsZTogKFVwZGF0ZWQpIEVTWGktNS4xLjAtNzk5NzMz
+LXN0YW5kYXJkDQo+IA0KPiAJVGhlIOKAnGJhZOKAnSB2Q2VudGVyIFZNIGhvc3QgdGhhdCBJIHRl
+c3RlZCBvbiBoYWQgdGhpcw0KPiBjb25maWd1cmF0aW9uOg0KPiANCj4gCUVTWCBWZXJzaW9uOiBW
+TXdhcmUgRVNYaSwgNS4wLjAsIDQ2OTUxMg0KPiANCj4gCVByb2Nlc3NvciBUeXBlOiBJbnRlbChS
+KSBYZW9uKFIpIENQVSBYNzU1MCBAIDIuMDBHSHoNCj4gDQo+IAlBbnkgaWRlYXM/DQo+IA0KPiAN
+Cj4gTXkgYmV0IHdvdWxkIGJlIHRoYXQgdGhlIE9TIGlzIGx5aW5nIHRvIHVzZXJzcGFjZSBhYm91
+dCB0aGUNCj4gbnVtYmVyIG9mIHBvc3NpYmxlIENQVXMuIEkgd29uZGVyIHdoYXQgbGlibHR0bmct
+dXN0DQo+IGxpYnJpbmdidWZmZXIvc2htLmggbnVtX3Bvc3NpYmxlX2NwdXMoKSBpcyByZXR1cm5p
+bmcgY29tcGFyZWQNCj4gdG8gd2hhdCBsaWJfcmluZ19idWZmZXJfZ2V0X2NwdSgpIHJldHVybnMu
+DQo+IA0KPiANCj4gQ2FuIHlvdSBjaGVjayB0aGlzIG91dCA/DQoNClllcywgdGhpcyBzZWVtcyB0
+byBiZSB0aGUgY2FzZSAtICdnZGInIG9uIHRoZSBjb3JlIGR1bXAgc2hvd3M6DQoNCihnZGIpIHAg
+X19udW1fcG9zc2libGVfY3B1cw0KJDEgPSAyDQoNCndoaWNoIGlzIGNvbnNpc3RlbnQgd2l0aCBo
+b3cgSSBjb25maWd1cmVkIHRoZSB2aXJ0dWFsIG1hY2hpbmUsIHdoaWNoIGlzIGNvbnNpc3RlbnQg
+d2l0aCB0aGlzIG91dHB1dDoNCg0KIyBsc2NwdQ0KQXJjaGl0ZWN0dXJlOiAgICAgICAgICB4ODZf
+NjQNCkNQVSBvcC1tb2RlKHMpOiAgICAgICAgMzItYml0LCA2NC1iaXQNCkJ5dGUgT3JkZXI6ICAg
+ICAgICAgICAgTGl0dGxlIEVuZGlhbg0KQ1BVKHMpOiAgICAgICAgICAgICAgICAyDQpPbi1saW5l
+IENQVShzKSBsaXN0OiAgIDAsMQ0KVGhyZWFkKHMpIHBlciBjb3JlOiAgICAxDQpDb3JlKHMpIHBl
+ciBzb2NrZXQ6ICAgIDENClNvY2tldChzKTogICAgICAgICAgICAgMg0KTlVNQSBub2RlKHMpOiAg
+ICAgICAgICAxDQpWZW5kb3IgSUQ6ICAgICAgICAgICAgIEdlbnVpbmVJbnRlbA0KQ1BVIGZhbWls
+eTogICAgICAgICAgICA2DQpNb2RlbDogICAgICAgICAgICAgICAgIDI2DQpTdGVwcGluZzogICAg
+ICAgICAgICAgIDQNCkNQVSBNSHo6ICAgICAgICAgICAgICAgMTk5NS4wMDANCkJvZ29NSVBTOiAg
+ICAgICAgICAgICAgMzk5MC4wMA0KSHlwZXJ2aXNvciB2ZW5kb3I6ICAgICBWTXdhcmUNClZpcnR1
+YWxpemF0aW9uIHR5cGU6ICAgZnVsbA0KTDFkIGNhY2hlOiAgICAgICAgICAgICAzMksNCkwxaSBj
+YWNoZTogICAgICAgICAgICAgMzJLDQpMMiBjYWNoZTogICAgICAgICAgICAgIDI1NksNCkwzIGNh
+Y2hlOiAgICAgICAgICAgICAgMTg0MzJLDQpOVU1BIG5vZGUwIENQVShzKTogICAgIDAsMQ0KDQpE
+ZXNwaXRlIHRoZSBmYWN0IHRoYXQgdGhlcmUgYXJlIDIgQ1BVcywgd2hlbiBJIGhhY2tlZCBsdHRu
+Zy1yaW5nLWJ1ZmZlci1jbGllbnQuaCB0byBvdXRwdXQgdGhlIHJlc3VsdCBvZiBsaWJfcmluZ19i
+dWZmZXJfZ2V0X2NwdSgpIGFuZCB0aGVuIHJhbiB0ZXN0cy9oZWxsbyB3aXRoIHRyYWNpbmcgZW5h
+YmxlZCwgSSBjb3VsZCBzZWUgaXQgd291bGQgc2l0IG9uIENQVSAwIGZvciBhIHdoaWxlLCBvciBD
+UFUgMSwgYW5kIHBlcmhhcHMgbW92ZSBiZXR3ZWVuIHRoZSB0d28sIGJ1dCBldmVudHVhbGx5IGVp
+dGhlciAyIG9yIDMgd291bGQgYXBwZWFyLCBpbW1lZGlhdGVseSBmb2xsb3dlZCBieSB0aGUgc2Vn
+ZmF1bHQuDQoNClRoZSBWTSBob3N0IGhhcyA0IHNvY2tldHMsIDggY29yZXMgcGVyIHNvY2tldCwg
+d2l0aCBIeXBlci1UaHJlYWRpbmcgZW5hYmxlZC4gIFRoZSBWTSBoYXMgaXRzICJIVCBTaGFyaW5n
+IiBvcHRpb24gc2V0IHRvICJBbnkiLCB3aGljaCBhY2NvcmRpbmcgdG8gaHR0cHM6Ly9wdWJzLnZt
+d2FyZS5jb20vdnNwaGVyZS01MC9pbmRleC5qc3A/dG9waWM9JTJGY29tLnZtd2FyZS52c3BoZXJl
+LnZtX2FkbWluLmRvY181MCUyRkdVSUQtMTAxMTc2RDQtOTg2Ni00MjBELUFCNEYtNjM3NDAyNUNB
+QkRBLmh0bWwgbWVhbnMgdGhhdCBlYWNoIG9uZSBvZiB0aGUgdmlydHVhbCBtYWNoaW5lJ3Mgdmly
+dHVhbCBjb3JlcyBjYW4gc2hhcmUgYSBwaHlzaWNhbCBjb3JlIHdpdGggYW5vdGhlciB2aXJ0dWFs
+IG1hY2hpbmUsIGVhY2ggdmlydHVhbCBjb3JlIHVzaW5nIGEgZGlmZmVyZW50IHRocmVhZCBvbiB0
+aGF0IHBoeXNpY2FsIGNvcmUuICBJIGFzc3VtZSBub25lIG9mIHRoaXMgc2hvdWxkIGJlIHJlbGV2
+YW50IGV4Y2VwdCBwZXJoYXBzIGlmIHRoZXJlIGFyZSBidWdzIGluIFZNd2FyZS4NCg0KSXMgaXQg
+cG9zc2libGUgdGhhdCB0aGlzIGlzIGFuIGlzc3VlIGluIExUVG5nLCBvciBzaG91bGQgSSB3b3Jr
+IG91dCBob3cgdGhlIGtlcm5lbCB3b3JrcyBvdXQgd2hpY2ggQ1BVIGl0IGlzIHJ1bm5pbmcgb24g
+YW5kIHRoZW4gbG9vayBpbnRvIHdoZXRoZXIgdGhlcmUgYXJlIGFueSBWTXdhcmUgYnVncyBpbiB0
+aGlzIGFyZWE/DQoNClRoYW5rcyBpbiBhZHZhbmNlLA0KRGF2aWQNCgotLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tClRo
+ZSBpbmZvcm1hdGlvbiBjb250YWluZWQgaW4gdGhpcyB0cmFuc21pc3Npb24gbWF5IGJlIGNvbmZp
+ZGVudGlhbC4gQW55IGRpc2Nsb3N1cmUsIGNvcHlpbmcsIG9yIGZ1cnRoZXIgZGlzdHJpYnV0aW9u
+IG9mIGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiBpcyBub3QgcGVybWl0dGVkIHVubGVzcyBzdWNo
+IHByaXZpbGVnZSBpcyBleHBsaWNpdGx5IGdyYW50ZWQgaW4gd3JpdGluZyBieSBRdWFudHVtLiBR
+dWFudHVtIHJlc2VydmVzIHRoZSByaWdodCB0byBoYXZlIGVsZWN0cm9uaWMgY29tbXVuaWNhdGlv
+bnMsIGluY2x1ZGluZyBlbWFpbCBhbmQgYXR0YWNobWVudHMsIHNlbnQgYWNyb3NzIGl0cyBuZXR3
+b3JrcyBmaWx0ZXJlZCB0aHJvdWdoIGFudGkgdmlydXMgYW5kIHNwYW0gc29mdHdhcmUgcHJvZ3Jh
+bXMgYW5kIHJldGFpbiBzdWNoIG1lc3NhZ2VzIGluIG9yZGVyIHRvIGNvbXBseSB3aXRoIGFwcGxp
+Y2FibGUgZGF0YSBzZWN1cml0eSBhbmQgcmV0ZW50aW9uIHJlcXVpcmVtZW50cy4gUXVhbnR1bSBp
+cyBub3QgcmVzcG9uc2libGUgZm9yIHRoZSBwcm9wZXIgYW5kIGNvbXBsZXRlIHRyYW5zbWlzc2lv
+biBvZiB0aGUgc3Vic3RhbmNlIG9mIHRoaXMgY29tbXVuaWNhdGlvbiBvciBmb3IgYW55IGRlbGF5
+IGluIGl0cyByZWNlaXB0LgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
+aHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
+Cg==
