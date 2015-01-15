@@ -1,27 +1,25 @@
-From: Charles Briere <c.briere@samsung.com>
-Subject: UST tracing problem on ARM/Android
-Date: Wed, 14 Jan 2015 22:17:56 +0000
-Message-ID: <1421273876.3881.68.camel__16131.6042453565$1421273936$gmane$org@samsung.com>
+From: David OShea <David.OShea@quantum.com>
+Subject: Re: Segfault at v_read() called from
+ lib_ring_buffer_try_reserve_slow() in LTTng-UST traced app - CPU/VMware
+ dependent
+Date: Thu, 15 Jan 2015 02:45:01 +0000
+Message-ID: <20998D40D9A2B7499CA5A3A2666CB1EB2D9E72E6__16604.3371464641$1421289954$gmane$org@ZURMSG1.QUANTUM.com>
+References: <20998D40D9A2B7499CA5A3A2666CB1EB2D9DDA59@ZURMSG1.QUANTUM.com>
+ <1745838195.26177.1418312190246.JavaMail.zimbra@efficios.com>
+ <20998D40D9A2B7499CA5A3A2666CB1EB2D9E464C@ZURMSG1.QUANTUM.com>
+ <1205251820.37907.1421076877053.JavaMail.zimbra@efficios.com>
+ <1686087516.37913.1421076968595.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailout1.w2.samsung.com ([211.189.100.11]
- helo=usmailout1.samsung.com) by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <c.briere@samsung.com>) id 1YBWGL-0003WS-71
- for lttng-dev@lists.lttng.org; Wed, 14 Jan 2015 17:18:09 -0500
-Received: from uscpsbgex1.samsung.com
- (u122.gpu85.samsung.co.kr [203.254.195.122]) by mailout1.w2.samsung.com
- (Oracle Communications Messaging Server 7u4-24.01(7.0.4.24.0) 64bit (built Nov
- 17 2011)) with ESMTP id <0NI600HFOTXYUY60@mailout1.w2.samsung.com> for
- lttng-dev@lists.lttng.org; Wed, 14 Jan 2015 17:17:58 -0500 (EST)
-Received: from sisasmtp.sisa.samsung.com ([105.144.21.115])
- by usmmp2.samsung.com
- (Oracle Communications Messaging Server 7u4-27.01(7.0.4.27.0) 64bit (built Aug
- 30 2012)) with ESMTP id <0NI6004DATXYJH30@usmmp2.samsung.com> for
- lttng-dev@lists.lttng.org; Wed, 14 Jan 2015 17:17:58 -0500 (EST)
-Content-language: en-US
-Content-id: <6DF0F6BE6AEB874DA7AFC10C823383A9@samsung.com>
+Received: from mx0b-000ceb01.pphosted.com ([67.231.152.126])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <prvs=3457e1f506=david.oshea@quantum.com>)
+ id 1YBaQn-0004kk-P1
+ for lttng-dev@lists.lttng.org; Wed, 14 Jan 2015 21:45:10 -0500
+In-Reply-To: <1686087516.37913.1421076968595.JavaMail.zimbra@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -30,36 +28,103 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello world,
+Hi Mathieu,
 
-I've been running in some inssues lately with UST on ARM/Android. Using
-the following to configure my session, I enable every ust event.
+> -----Original Message-----
+> From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
+> Sent: Tuesday, 13 January 2015 2:06 AM
+> To: David OShea
+> Cc: lttng-dev
+> Subject: Re: [lttng-dev] Segfault at v_read() called from
+> lib_ring_buffer_try_reserve_slow() in LTTng-UST traced app - CPU/VMware
+> dependent
+[...]
+> > > Is it possible that this is an issue in LTTng, or should I work out
+> how the
+> > > kernel works out which CPU it is running on and then look into
+> whether
+> > > there
+> > > are any VMware bugs in this area?
+> >
+> > This appears to be very likely a VMware bug. /proc/cpuinfo should
+> show
+> > 4 CPUs (and sysconf(_SC_NPROCESSORS_CONF) should return 4) if the
+> current
+> > CPU number can be 0, 1, 2, 3 throughout execution.
 
-lttng create
-lttng enable-event -ua
+/proc/cpuinfo shows two CPUs:
 
-Although, when a tracepoint is called, its state ( struct
-lttng_ust_tracepoint -> state) is 0. 
+processor       : 0
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 26
+model name      : Intel(R) Xeon(R) CPU           X7550  @ 2.00GHz
+stepping        : 4
+microcode       : 8
+cpu MHz         : 1995.000
+cache size      : 18432 KB
+physical id     : 0
+siblings        : 1
+core id         : 0
+cpu cores       : 1
+apicid          : 0
+initial apicid  : 0
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 11
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss syscall nx rdtscp lm constant_tsc arch_perfmon pebs bts xtopology tsc_reliable nonstop_tsc aperfmperf unfair_spinlock pni ssse3 cx16 sse4_1 sse4_2 popcnt hypervisor lahf_lm ida dts
+bogomips        : 3990.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 40 bits physical, 48 bits virtual
+power management:
 
-My understanding of the whole registration process is limited, so the
-following reasoning is probably flawed, so please correct me if that
-happens. 
+processor       : 1
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 26
+model name      : Intel(R) Xeon(R) CPU           X7550  @ 2.00GHz
+stepping        : 4
+microcode       : 8
+cpu MHz         : 1995.000
+cache size      : 18432 KB
+physical id     : 2
+siblings        : 1
+core id         : 0
+cpu cores       : 1
+apicid          : 2
+initial apicid  : 2
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 11
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss syscall nx rdtscp lm constant_tsc arch_perfmon pebs bts xtopology tsc_reliable nonstop_tsc aperfmperf unfair_spinlock pni ssse3 cx16 sse4_1 sse4_2 popcnt hypervisor lahf_lm ida dts
+bogomips        : 3990.00
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 40 bits physical, 48 bits virtual
+power management:
 
-I found out, that when registering the library
-(tracepoint_register_lib), callsite_table is populated. But later on
-when it comes to register the probes (lttng_prove_register),
-callsite_table 's address is different and the list is empty. As a
-result, when tracepoint_sync_callsite() is called, set_tracepoint() is
-never executed as looping through an empty list. 
+> You might want to look at the sysconf(3) manpage, especially the parts
+> about
+> _SC_NPROCESSORS_CONF and _SC_NPROCESSORS_ONLN. My guess is that vmware
+> is lying
+> about the number of "possible" CPUs (_SC_NPROCESSORS_CONF).
 
-What I don't understand in here, is that the callsite_table pointer is
-not the same during the lib registration and probe registration. Both
-are ran sequentially in the same thread and I can't figure what other
-operation could affect the variable. Any hint/help would be much
-appreciated.
+_SC_NPROCESSORS_CONF = 2
+_SC_NPROCESSORS_ONLN = 2
+
+Thanks for the pointers, I will look into possible VMware bugs.
+
+Out of curiosity, what happens if I happened to have a system with hot-pluggable CPUs - does _SC_NPROCESSORS_CONF reflect the maximum number of CPUs I can insert, and that is how many LTTng will support?
 
 Thanks,
-Charles
+David
+
+----------------------------------------------------------------------
+The information contained in this transmission may be confidential. Any disclosure, copying, or further distribution of confidential information is not permitted unless such privilege is explicitly granted in writing by Quantum. Quantum reserves the right to have electronic communications, including email and attachments, sent across its networks filtered through anti virus and spam software programs and retain such messages in order to comply with applicable data security and retention requirements. Quantum is not responsible for the proper and complete transmission of the substance of this communication or for any delay in its receipt.
