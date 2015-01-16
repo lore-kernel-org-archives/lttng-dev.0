@@ -1,17 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Addition of the return address
-	to	liblttng-ust-libc-wrapper
-Date: Fri, 16 Jan 2015 20:41:06 +0000 (UTC)
-Message-ID: <54250547.44000.1421440866572.JavaMail.zimbra__39786.3795551986$1421440905$gmane$org@efficios.com>
+From: Olivier Delbeke <olivier.delbeke@gmail.com>
+Subject: Re: Addition of the return address to
+	liblttng-ust-libc-wrapper
+Date: Fri, 16 Jan 2015 21:57:22 +0100
+Message-ID: <CAO6pHzgVd5sAPzTq-FUoaOTUj6bxH9sRu-acMxWY4AY_FJ5yXw__17558.0984134742$1421441888$gmane$org@mail.gmail.com>
 References: <OF7097A1B1.090ABAC2-ONC1257DCC.0053FE7C-C1257DCC.00570880@LocalDomain>
+ <54250547.44000.1421440866572.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1245539168=="
+Content-Type: multipart/mixed; boundary="===============1726629834=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-we0-f176.google.com ([74.125.82.176])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1YCDhb-0001AP-4n
- for lttng-dev@lists.lttng.org; Fri, 16 Jan 2015 15:41:10 -0500
-In-Reply-To: <OF7097A1B1.090ABAC2-ONC1257DCC.0053FE7C-C1257DCC.00570880@LocalDomain>
+ (envelope-from <olivier.delbeke@gmail.com>) id 1YCDxQ-0001Gx-8v
+ for lttng-dev@lists.lttng.org; Fri, 16 Jan 2015 15:57:30 -0500
+Received: by mail-we0-f176.google.com with SMTP id w61so22226007wes.7
+ for <lttng-dev@lists.lttng.org>; Fri, 16 Jan 2015 12:57:22 -0800 (PST)
+In-Reply-To: <54250547.44000.1421440866572.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,28 +23,44 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Olivier Delbeke <Olivier.Delbeke@awtce.be>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1245539168==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_43992_1583671601.1421440866564"
+--===============1726629834==
+Content-Type: multipart/related; boundary=f46d044306ae16ef02050ccb38cd
 
-------=_Part_43992_1583671601.1421440866564
-Content-Type: text/plain; charset=utf-8
+--f46d044306ae16ef02050ccb38cd
+Content-Type: multipart/alternative; boundary=f46d044306ae16eefe050ccb38cc
+
+--f46d044306ae16eefe050ccb38cc
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
------ Original Message -----
+Hi,
 
-> From: "Olivier Delbeke" <Olivier.Delbeke@awtce.be>
-> To: lttng-dev@lists.lttng.org
-> Sent: Tuesday, January 13, 2015 10:50:38 AM
-> Subject: [lttng-dev] Addition of the return address to
-> liblttng-ust-libc-wrapper
+The first thing I tried was indeed to add "ip" to the context, and the
+result was always the same (the location of the tracepoint macro call
+(useless in this case)).
 
+I will send the patch on Monday. Thanks a lot.
+
+Best regards,
+Olivier
+
+On Fri, Jan 16, 2015 at 9:41 PM, Mathieu Desnoyers <
+mathieu.desnoyers@efficios.com> wrote:
+
+> ------------------------------
+>
+> *From: *"Olivier Delbeke" <Olivier.Delbeke@awtce.be>
+> *To: *lttng-dev@lists.lttng.org
+> *Sent: *Tuesday, January 13, 2015 10:50:38 AM
+> *Subject: *[lttng-dev] Addition of the return address
+> to        liblttng-ust-libc-wrapper
+>
 > Hi guys,
-
+>
 > I am using liblttng-ust-libc-wrapper to detect memory leaks in my
 > applications.
 > In order to identify not only the thread where the unfreed allocations ar=
@@ -53,15 +72,18 @@ It
 > solves my problem and does not affect Trace Compass.
 > Was this the right thing to do ?
 > If it is, then I guess that it might interest other people too.
-After further thought, I'm interested to merge this into UST master.=20
-
-Can you re-send either as an attachment, or as plain text without the=20
-base64 encoding ?=20
-
-Thanks!=20
-
-Mathieu=20
-
+>
+> After further thought, I'm interested to merge this into UST master.
+>
+> Can you re-send either as an attachment, or as plain text without the
+> base64 encoding ?
+>
+> Thanks!
+>
+> Mathieu
+>
+>
+>
 > diff -Nurd b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
 > c/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
 > --- b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c 2015-01-06
@@ -69,63 +91,63 @@ Mathieu=20
 > +++ c/liblttng-ust-libc-wrapper/lttng-ust-malloc.c 2015-01-06
 > 17:16:40.811145106 +0100
 > @@ -260,7 +260,7 @@
-> }
-> retval =3D cur_alloc.malloc(size);
-> if (URCU_TLS(malloc_nesting) =3D=3D 1) {
+>   }
+>   retval =3D cur_alloc.malloc(size);
+>   if (URCU_TLS(malloc_nesting) =3D=3D 1) {
 > - tracepoint(ust_libc, malloc, size, retval);
 > + tracepoint(ust_libc, malloc, size, retval, __builtin_return_address(0) =
 );
-> }
-> URCU_TLS(malloc_nesting)--;
-> return retval;
+>   }
+>   URCU_TLS(malloc_nesting)--;
+>   return retval;
 > @@ -279,7 +279,7 @@
-> }
-
-> if (URCU_TLS(malloc_nesting) =3D=3D 1) {
+>   }
+>
+>   if (URCU_TLS(malloc_nesting) =3D=3D 1) {
 > - tracepoint(ust_libc, free, ptr);
 > + tracepoint(ust_libc, free, ptr, __builtin_return_address(0) );
-> }
-
-> if (cur_alloc.free =3D=3D NULL) {
+>   }
+>
+>   if (cur_alloc.free =3D=3D NULL) {
 > @@ -308,7 +308,7 @@
-> }
-> retval =3D cur_alloc.calloc(nmemb, size);
-> if (URCU_TLS(malloc_nesting) =3D=3D 1) {
+>   }
+>   retval =3D cur_alloc.calloc(nmemb, size);
+>   if (URCU_TLS(malloc_nesting) =3D=3D 1) {
 > - tracepoint(ust_libc, calloc, nmemb, size, retval);
 > + tracepoint(ust_libc, calloc, nmemb, size, retval,
 > __builtin_return_address(0) );
-> }
-> URCU_TLS(malloc_nesting)--;
-> return retval;
+>   }
+>   URCU_TLS(malloc_nesting)--;
+>   return retval;
 > @@ -360,7 +360,7 @@
-> retval =3D cur_alloc.realloc(ptr, size);
-> end:
-> if (URCU_TLS(malloc_nesting) =3D=3D 1) {
+>   retval =3D cur_alloc.realloc(ptr, size);
+>  end:
+>   if (URCU_TLS(malloc_nesting) =3D=3D 1) {
 > - tracepoint(ust_libc, realloc, ptr, size, retval);
 > + tracepoint(ust_libc, realloc, ptr, size, retval,
 > __builtin_return_address(0) );
-> }
-> URCU_TLS(malloc_nesting)--;
-> return retval;
+>   }
+>   URCU_TLS(malloc_nesting)--;
+>   return retval;
 > @@ -380,7 +380,7 @@
-> }
-> retval =3D cur_alloc.memalign(alignment, size);
-> if (URCU_TLS(malloc_nesting) =3D=3D 1) {
+>   }
+>   retval =3D cur_alloc.memalign(alignment, size);
+>   if (URCU_TLS(malloc_nesting) =3D=3D 1) {
 > - tracepoint(ust_libc, memalign, alignment, size, retval);
 > + tracepoint(ust_libc, memalign, alignment, size, retval,
 > __builtin_return_address(0) );
-> }
-> URCU_TLS(malloc_nesting)--;
-> return retval;
+>   }
+>   URCU_TLS(malloc_nesting)--;
+>   return retval;
 > @@ -401,7 +401,7 @@
-> retval =3D cur_alloc.posix_memalign(memptr, alignment, size);
-> if (URCU_TLS(malloc_nesting) =3D=3D 1) {
-> tracepoint(ust_libc, posix_memalign, *memptr, alignment, size,
+>   retval =3D cur_alloc.posix_memalign(memptr, alignment, size);
+>   if (URCU_TLS(malloc_nesting) =3D=3D 1) {
+>   tracepoint(ust_libc, posix_memalign, *memptr, alignment, size,
 > - retval);
 > + retval, __builtin_return_address(0) );
-> }
-> URCU_TLS(malloc_nesting)--;
-> return retval;
+>   }
+>   URCU_TLS(malloc_nesting)--;
+>   return retval;
 > diff -Nurd b/liblttng-ust-libc-wrapper/ust_libc.h
 > c/liblttng-ust-libc-wrapper/ust_libc.h
 > --- b/liblttng-ust-libc-wrapper/ust_libc.h 2015-01-06 17:14:34.000000000
@@ -133,531 +155,426 @@ Mathieu=20
 > +++ c/liblttng-ust-libc-wrapper/ust_libc.h 2015-01-06 17:16:40.811145106
 > +0100
 > @@ -33,54 +33,60 @@
-> #include <lttng/tracepoint.h>
-
-> TRACEPOINT_EVENT(ust_libc, malloc,
+>  #include <lttng/tracepoint.h>
+>
+>  TRACEPOINT_EVENT(ust_libc, malloc,
 > - TP_ARGS(size_t, size, void *, ptr),
 > + TP_ARGS(size_t, size, void *, ptr, void *, ra),
-> TP_FIELDS(
-> ctf_integer(size_t, size, size)
-> ctf_integer_hex(void *, ptr, ptr)
+>   TP_FIELDS(
+>   ctf_integer(size_t, size, size)
+>   ctf_integer_hex(void *, ptr, ptr)
 > + ctf_integer_hex(void *, ra, ra)
-> )
-> )
-
-> TRACEPOINT_EVENT(ust_libc, free,
+>   )
+>  )
+>
+>  TRACEPOINT_EVENT(ust_libc, free,
 > - TP_ARGS(void *, ptr),
 > + TP_ARGS(void *, ptr, void *, ra),
-> TP_FIELDS(
-> ctf_integer_hex(void *, ptr, ptr)
+>   TP_FIELDS(
+>   ctf_integer_hex(void *, ptr, ptr)
 > + ctf_integer_hex(void *, ra, ra)
-> )
-> )
-
-> TRACEPOINT_EVENT(ust_libc, calloc,
+>   )
+>  )
+>
+>  TRACEPOINT_EVENT(ust_libc, calloc,
 > - TP_ARGS(size_t, nmemb, size_t, size, void *, ptr),
 > + TP_ARGS(size_t, nmemb, size_t, size, void *, ptr, void *, ra),
-> TP_FIELDS(
-> ctf_integer(size_t, nmemb, nmemb)
-> ctf_integer(size_t, size, size)
-> ctf_integer_hex(void *, ptr, ptr)
+>   TP_FIELDS(
+>   ctf_integer(size_t, nmemb, nmemb)
+>   ctf_integer(size_t, size, size)
+>   ctf_integer_hex(void *, ptr, ptr)
 > + ctf_integer_hex(void *, ra, ra)
-> )
-> )
-
-> TRACEPOINT_EVENT(ust_libc, realloc,
+>   )
+>  )
+>
+>  TRACEPOINT_EVENT(ust_libc, realloc,
 > - TP_ARGS(void *, in_ptr, size_t, size, void *, ptr),
 > + TP_ARGS(void *, in_ptr, size_t, size, void *, ptr, void *, ra),
-> TP_FIELDS(
-> ctf_integer_hex(void *, in_ptr, in_ptr)
-> ctf_integer(size_t, size, size)
-> ctf_integer_hex(void *, ptr, ptr)
+>   TP_FIELDS(
+>   ctf_integer_hex(void *, in_ptr, in_ptr)
+>   ctf_integer(size_t, size, size)
+>   ctf_integer_hex(void *, ptr, ptr)
 > + ctf_integer_hex(void *, ra, ra)
-> )
-> )
-
-> TRACEPOINT_EVENT(ust_libc, memalign,
+>   )
+>  )
+>
+>  TRACEPOINT_EVENT(ust_libc, memalign,
 > - TP_ARGS(size_t, alignment, size_t, size, void *, ptr),
 > + TP_ARGS(size_t, alignment, size_t, size, void *, ptr, void *, ra),
-> TP_FIELDS(
-> ctf_integer(size_t, alignment, alignment)
-> ctf_integer(size_t, size, size)
-> ctf_integer_hex(void *, ptr, ptr)
+>   TP_FIELDS(
+>   ctf_integer(size_t, alignment, alignment)
+>   ctf_integer(size_t, size, size)
+>   ctf_integer_hex(void *, ptr, ptr)
 > + ctf_integer_hex(void *, ra, ra)
-> )
-> )
-
-> TRACEPOINT_EVENT(ust_libc, posix_memalign,
+>   )
+>  )
+>
+>  TRACEPOINT_EVENT(ust_libc, posix_memalign,
 > - TP_ARGS(void *, out_ptr, size_t, alignment, size_t, size, int, result),
-> + TP_ARGS(void *, out_ptr, size_t, alignment, size_t, size, int, result, =
-void
-> *, ra),
-> TP_FIELDS(
-> ctf_integer_hex(void *, out_ptr, out_ptr)
-> ctf_integer(size_t, alignment, alignment)
-> ctf_integer(size_t, size, size)
-> ctf_integer(int, result, result)
+> + TP_ARGS(void *, out_ptr, size_t, alignment, size_t, size, int, result,
+> void *, ra),
+>   TP_FIELDS(
+>   ctf_integer_hex(void *, out_ptr, out_ptr)
+>   ctf_integer(size_t, alignment, alignment)
+>   ctf_integer(size_t, size, size)
+>   ctf_integer(int, result, result)
 > + ctf_integer_hex(void *, ra, ra)
-> )
-> )
-
+>   )
+>  )
+>
 > Best regards,
->=20
-
-> Olivier Delbeke Senior Software Engineer Olivier.Delbeke@awtce.be / T. +3=
-2 2
-> 389 25 53 AWTC Europe S.A. - Avenue de l=E2=80=99Industrie, 19 - 1420
-> Braine-l=E2=80=99Alleud - Belgium - www.aweurope.eu - www.aisin-aw.co.jp =
-VAT : BE
-> 0474.474.114 - RPM Nivelles
+>
+>    *Olivier Delbeke **Senior Software Engineer*
+>    Olivier.Delbeke@awtce.be / T. +32 2 389 25 53
+>    ------------------------------
+>     *AWTC Europe S.A. *- Avenue de l=E2=80=99Industrie, 19 - 1420 Braine-=
+l=E2=80=99Alleud
+>    - Belgium - www.aweurope.eu - www.aisin-aw.co.jp
+>    VAT : BE 0474.474.114 - RPM Nivelles
+>
+>
 > This mail, and any attachments thereto, is intended only for use by the
 > addressee(s) named herein and may contain legally privileged and/or
-> confidential information. If you are not the intended recipient, please n=
-ote
-> that any review, dissemination, disclosure, alteration, printing, copying=
- or
-> transmission of this mail and/or any file transmitted with it, is strictl=
-y
-> prohibited and may be unlawful. If you have received this mail by mistake=
-,
-> please immediately notify the sender as well as our mail administrator at
-> postmaster@aweurope.be, and permanently destroy the original as well as a=
-ny
-> copy thereof.
+> confidential information. If you are not the intended recipient, please
+> note that any review, dissemination, disclosure, alteration, printing,
+> copying or transmission of this mail and/or any file transmitted with it,
+> is strictly prohibited and may be unlawful. If you have received this mai=
+l
+> by mistake, please immediately notify the sender as well as our mail
+> administrator at postmaster@aweurope.be, and permanently destroy the
+> original as well as any copy thereof.
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
+>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
 
---=20
-Mathieu Desnoyers=20
-EfficiOS Inc.=20
-http://www.efficios.com=20
-
-------=_Part_43992_1583671601.1421440866564
-Content-Type: multipart/related;
-	boundary="----=_Part_43993_856277089.1421440866565"
-
-------=_Part_43993_856277089.1421440866565
-Content-Type: text/html; charset=utf-8
+--f46d044306ae16eefe050ccb38cc
+Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<html><body><div style=3D"font-family: times new roman, new york, times, se=
-rif; font-size: 12pt; color: #000000"><hr id=3D"zwchr"><blockquote style=3D=
-"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;=
-font-weight:normal;font-style:normal;text-decoration:none;font-family:Helve=
-tica,Arial,sans-serif;font-size:12pt;"><b>From: </b>"Olivier Delbeke" &lt;O=
-livier.Delbeke@awtce.be&gt;<br><b>To: </b>lttng-dev@lists.lttng.org<br><b>S=
-ent: </b>Tuesday, January 13, 2015 10:50:38 AM<br><b>Subject: </b>[lttng-de=
-v] Addition of the return address to&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;liblttng-ust-libc-wrapper<br><div><br></div><p><span style=3D"font=
--family: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans=
--serif; font-size: small;" face=3D"sans-serif" size=3D"2">Hi guys,</span><b=
-r></p><div><br></div><span style=3D"font-family: sans-serif; font-size: sma=
-ll;" data-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"=
-sans-serif" size=3D"2">I am using liblttng-ust-libc-wrapper to detect memor=
-y leaks in my applications. </span><br><span style=3D"font-family: sans-ser=
-if; font-size: small;" data-mce-style=3D"font-family: sans-serif; font-size=
-: small;" face=3D"sans-serif" size=3D"2">In order to identify not only the =
-thread where the unfreed allocations are done, but also the calling functio=
-n, I extended the liblttng-ust-libc-wrapper to log the "return address" (__=
-builtin_return_address(0)) in addition to the parameters of malloc(). It so=
-lves my problem and does not affect Trace Compass.</span><br><span style=3D=
-"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-family:=
- sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">Was this the=
- right thing to do ? </span><br><span style=3D"font-family: sans-serif; fon=
-t-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: small=
-;" face=3D"sans-serif" size=3D"2">If it is, then I guess that it might inte=
-rest other people too.</span></blockquote><div>After further thought, I'm i=
-nterested to merge this into UST master.<br></div><div><br></div><div>Can y=
-ou re-send either as an attachment, or as plain text without the<br></div><=
-div>base64 encoding ?<br></div><div><br></div><div>Thanks!<br></div><div><b=
-r></div><div>Mathieu<br></div><div><br></div><div><br></div><blockquote sty=
-le=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:=
-#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:=
-Helvetica,Arial,sans-serif;font-size:12pt;"><div><br></div><span style=3D"f=
-ont-family: sans-serif; font-size: small;" data-mce-style=3D"font-family: s=
-ans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">diff -Nurd b/l=
-iblttng-ust-libc-wrapper/lttng-ust-malloc.c c/liblttng-ust-libc-wrapper/ltt=
-ng-ust-malloc.c</span><br><span style=3D"font-family: sans-serif; font-size=
-: small;" data-mce-style=3D"font-family: sans-serif; font-size: small;" fac=
-e=3D"sans-serif" size=3D"2">--- b/liblttng-ust-libc-wrapper/lttng-ust-mallo=
-c.c        2015-01-06 17:14:34.000000000 +0100</span><br><span style=3D"fon=
-t-family: sans-serif; font-size: small;" data-mce-style=3D"font-family: san=
-s-serif; font-size: small;" face=3D"sans-serif" size=3D"2">+++ c/liblttng-u=
-st-libc-wrapper/lttng-ust-malloc.c        2015-01-06 17:16:40.811145106 +01=
-00</span><br><span style=3D"font-family: sans-serif; font-size: small;" dat=
-a-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-ser=
-if" size=3D"2">@@ -260,7 +260,7 @@</span><br><span style=3D"font-family: sa=
-ns-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; fon=
-t-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;        }</span><br><s=
-pan style=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"=
-font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">=
-&nbsp;        retval =3D cur_alloc.malloc(size);</span><br><span style=3D"f=
-ont-family: sans-serif; font-size: small;" data-mce-style=3D"font-family: s=
-ans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;        =
-if (URCU_TLS(malloc_nesting) =3D=3D 1) {</span><br><span style=3D"font-fami=
-ly: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-seri=
-f; font-size: small;" face=3D"sans-serif" size=3D"2">-                trace=
-point(ust_libc, malloc, size, retval);</span><br><span style=3D"font-family=
-: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif;=
- font-size: small;" face=3D"sans-serif" size=3D"2">+                tracepo=
-int(ust_libc, malloc, size, retval, __builtin_return_address(0) );</span><b=
-r><span style=3D"font-family: sans-serif; font-size: small;" data-mce-style=
-=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D=
-"2">&nbsp;        }</span><br><span style=3D"font-family: sans-serif; font-=
-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: small;"=
- face=3D"sans-serif" size=3D"2">&nbsp;        URCU_TLS(malloc_nesting)--;</=
-span><br><span style=3D"font-family: sans-serif; font-size: small;" data-mc=
-e-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" =
-size=3D"2">&nbsp;        return retval;</span><br><span style=3D"font-famil=
-y: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif=
-; font-size: small;" face=3D"sans-serif" size=3D"2">@@ -279,7 +279,7 @@</sp=
-an><br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-=
-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" si=
-ze=3D"2">&nbsp;        }</span><br><span style=3D"font-family: sans-serif; =
-font-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: sm=
-all;" face=3D"sans-serif" size=3D"2">&nbsp;</span><br><span style=3D"font-f=
-amily: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-s=
-erif; font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;        if (U=
-RCU_TLS(malloc_nesting) =3D=3D 1) {</span><br><span style=3D"font-family: s=
-ans-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; fo=
-nt-size: small;" face=3D"sans-serif" size=3D"2">-                tracepoint=
-(ust_libc, free, ptr);</span><br><span style=3D"font-family: sans-serif; fo=
-nt-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: smal=
-l;" face=3D"sans-serif" size=3D"2">+                tracepoint(ust_libc, fr=
-ee, ptr, __builtin_return_address(0) );</span><br><span style=3D"font-famil=
-y: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif=
-; font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;        }</span><=
-br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-styl=
-e=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=
-=3D"2">&nbsp;</span><br><span style=3D"font-family: sans-serif; font-size: =
-small;" data-mce-style=3D"font-family: sans-serif; font-size: small;" face=
-=3D"sans-serif" size=3D"2">&nbsp;        if (cur_alloc.free =3D=3D NULL) {<=
-/span><br><span style=3D"font-family: sans-serif; font-size: small;" data-m=
-ce-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif"=
- size=3D"2">@@ -308,7 +308,7 @@</span><br><span style=3D"font-family: sans-=
-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; font-s=
-ize: small;" face=3D"sans-serif" size=3D"2">&nbsp;        }</span><br><span=
- style=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"fon=
-t-family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">&nb=
-sp;        retval =3D cur_alloc.calloc(nmemb, size);</span><br><span style=
-=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-fami=
-ly: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;   =
-     if (URCU_TLS(malloc_nesting) =3D=3D 1) {</span><br><span style=3D"font=
--family: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans=
--serif; font-size: small;" face=3D"sans-serif" size=3D"2">-                =
-tracepoint(ust_libc, calloc, nmemb, size, retval);</span><br><span style=3D=
-"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-family:=
- sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">+           =
-     tracepoint(ust_libc, calloc, nmemb, size, retval, __builtin_return_add=
-ress(0) );</span><br><span style=3D"font-family: sans-serif; font-size: sma=
-ll;" data-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"=
-sans-serif" size=3D"2">&nbsp;        }</span><br><span style=3D"font-family=
-: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif;=
- font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;        URCU_TLS(m=
-alloc_nesting)--;</span><br><span style=3D"font-family: sans-serif; font-si=
-ze: small;" data-mce-style=3D"font-family: sans-serif; font-size: small;" f=
-ace=3D"sans-serif" size=3D"2">&nbsp;        return retval;</span><br><span =
-style=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"font=
--family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">@@ -=
-360,7 +360,7 @@</span><br><span style=3D"font-family: sans-serif; font-size=
-: small;" data-mce-style=3D"font-family: sans-serif; font-size: small;" fac=
-e=3D"sans-serif" size=3D"2">&nbsp;        retval =3D cur_alloc.realloc(ptr,=
- size);</span><br><span style=3D"font-family: sans-serif; font-size: small;=
-" data-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"san=
-s-serif" size=3D"2">&nbsp;end:</span><br><span style=3D"font-family: sans-s=
-erif; font-size: small;" data-mce-style=3D"font-family: sans-serif; font-si=
-ze: small;" face=3D"sans-serif" size=3D"2">&nbsp;        if (URCU_TLS(mallo=
-c_nesting) =3D=3D 1) {</span><br><span style=3D"font-family: sans-serif; fo=
-nt-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: smal=
-l;" face=3D"sans-serif" size=3D"2">-                tracepoint(ust_libc, re=
-alloc, ptr, size, retval);</span><br><span style=3D"font-family: sans-serif=
-; font-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: =
-small;" face=3D"sans-serif" size=3D"2">+                tracepoint(ust_libc=
-, realloc, ptr, size, retval, __builtin_return_address(0) );</span><br><spa=
-n style=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"fo=
-nt-family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">&n=
-bsp;        }</span><br><span style=3D"font-family: sans-serif; font-size: =
-small;" data-mce-style=3D"font-family: sans-serif; font-size: small;" face=
-=3D"sans-serif" size=3D"2">&nbsp;        URCU_TLS(malloc_nesting)--;</span>=
-<br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-sty=
-le=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=
-=3D"2">&nbsp;        return retval;</span><br><span style=3D"font-family: s=
-ans-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; fo=
-nt-size: small;" face=3D"sans-serif" size=3D"2">@@ -380,7 +380,7 @@</span><=
-br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-styl=
-e=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=
-=3D"2">&nbsp;        }</span><br><span style=3D"font-family: sans-serif; fo=
-nt-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: smal=
-l;" face=3D"sans-serif" size=3D"2">&nbsp;        retval =3D cur_alloc.memal=
-ign(alignment, size);</span><br><span style=3D"font-family: sans-serif; fon=
-t-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: small=
-;" face=3D"sans-serif" size=3D"2">&nbsp;        if (URCU_TLS(malloc_nesting=
-) =3D=3D 1) {</span><br><span style=3D"font-family: sans-serif; font-size: =
-small;" data-mce-style=3D"font-family: sans-serif; font-size: small;" face=
-=3D"sans-serif" size=3D"2">-                tracepoint(ust_libc, memalign, =
-alignment, size, retval);</span><br><span style=3D"font-family: sans-serif;=
- font-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: s=
-mall;" face=3D"sans-serif" size=3D"2">+                tracepoint(ust_libc,=
- memalign, alignment, size, retval, __builtin_return_address(0) );</span><b=
-r><span style=3D"font-family: sans-serif; font-size: small;" data-mce-style=
-=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D=
-"2">&nbsp;        }</span><br><span style=3D"font-family: sans-serif; font-=
-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: small;"=
- face=3D"sans-serif" size=3D"2">&nbsp;        URCU_TLS(malloc_nesting)--;</=
-span><br><span style=3D"font-family: sans-serif; font-size: small;" data-mc=
-e-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" =
-size=3D"2">&nbsp;        return retval;</span><br><span style=3D"font-famil=
-y: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif=
-; font-size: small;" face=3D"sans-serif" size=3D"2">@@ -401,7 +401,7 @@</sp=
-an><br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-=
-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" si=
-ze=3D"2">&nbsp;        retval =3D cur_alloc.posix_memalign(memptr, alignmen=
-t, size);</span><br><span style=3D"font-family: sans-serif; font-size: smal=
-l;" data-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"s=
-ans-serif" size=3D"2">&nbsp;        if (URCU_TLS(malloc_nesting) =3D=3D 1) =
-{</span><br><span style=3D"font-family: sans-serif; font-size: small;" data=
--mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-seri=
-f" size=3D"2">&nbsp;                tracepoint(ust_libc, posix_memalign, *m=
-emptr, alignment, size,</span><br><span style=3D"font-family: sans-serif; f=
-ont-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: sma=
-ll;" face=3D"sans-serif" size=3D"2">-                        retval);</span=
-><br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-st=
-yle=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=
-=3D"2">+                        retval, __builtin_return_address(0) );</spa=
-n><br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-s=
-tyle=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" siz=
-e=3D"2">&nbsp;        }</span><br><span style=3D"font-family: sans-serif; f=
-ont-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: sma=
-ll;" face=3D"sans-serif" size=3D"2">&nbsp;        URCU_TLS(malloc_nesting)-=
--;</span><br><span style=3D"font-family: sans-serif; font-size: small;" dat=
-a-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-ser=
-if" size=3D"2">&nbsp;        return retval;</span><br><span style=3D"font-f=
-amily: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-s=
-erif; font-size: small;" face=3D"sans-serif" size=3D"2">diff -Nurd b/libltt=
-ng-ust-libc-wrapper/ust_libc.h c/liblttng-ust-libc-wrapper/ust_libc.h</span=
-><br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-st=
-yle=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=
-=3D"2">--- b/liblttng-ust-libc-wrapper/ust_libc.h        2015-01-06 17:14:3=
-4.000000000 +0100</span><br><span style=3D"font-family: sans-serif; font-si=
-ze: small;" data-mce-style=3D"font-family: sans-serif; font-size: small;" f=
-ace=3D"sans-serif" size=3D"2">+++ c/liblttng-ust-libc-wrapper/ust_libc.h   =
-     2015-01-06 17:16:40.811145106 +0100</span><br><span style=3D"font-fami=
-ly: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-seri=
-f; font-size: small;" face=3D"sans-serif" size=3D"2">@@ -33,54 +33,60 @@</s=
-pan><br><span style=3D"font-family: sans-serif; font-size: small;" data-mce=
--style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" s=
-ize=3D"2">&nbsp;#include &lt;lttng/tracepoint.h&gt;</span><br><span style=
-=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-fami=
-ly: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;</s=
-pan><br><span style=3D"font-family: sans-serif; font-size: small;" data-mce=
--style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" s=
-ize=3D"2">&nbsp;TRACEPOINT_EVENT(ust_libc, malloc,</span><br><span style=3D=
-"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-family:=
- sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">-        TP_=
-ARGS(size_t, size, void *, ptr),</span><br><span style=3D"font-family: sans=
--serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; font-=
-size: small;" face=3D"sans-serif" size=3D"2">+        TP_ARGS(size_t, size,=
- void *, ptr, void *, ra),</span><br><span style=3D"font-family: sans-serif=
-; font-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: =
-small;" face=3D"sans-serif" size=3D"2">&nbsp;        TP_FIELDS(</span><br><=
-span style=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D=
-"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2"=
->&nbsp;                ctf_integer(size_t, size, size)</span><br><span styl=
-e=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-fam=
-ily: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;  =
-              ctf_integer_hex(void *, ptr, ptr)</span><br><span style=3D"fo=
-nt-family: sans-serif; font-size: small;" data-mce-style=3D"font-family: sa=
-ns-serif; font-size: small;" face=3D"sans-serif" size=3D"2">+              =
-  ctf_integer_hex(void *, ra, ra)</span><br><span style=3D"font-family: san=
-s-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; font=
--size: small;" face=3D"sans-serif" size=3D"2">&nbsp;        )</span><br><sp=
-an style=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"f=
-ont-family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">&=
-nbsp;)</span><br><span style=3D"font-family: sans-serif; font-size: small;"=
- data-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans=
--serif" size=3D"2">&nbsp;</span><br><span style=3D"font-family: sans-serif;=
- font-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: s=
-mall;" face=3D"sans-serif" size=3D"2">&nbsp;TRACEPOINT_EVENT(ust_libc, free=
-,</span><br><span style=3D"font-family: sans-serif; font-size: small;" data=
--mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-seri=
-f" size=3D"2">-        TP_ARGS(void *, ptr),</span><br><span style=3D"font-=
-family: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-=
-serif; font-size: small;" face=3D"sans-serif" size=3D"2">+        TP_ARGS(v=
-oid *, ptr, void *, ra),</span><br><span style=3D"font-family: sans-serif; =
-font-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: sm=
-all;" face=3D"sans-serif" size=3D"2">&nbsp;        TP_FIELDS(</span><br><sp=
-an style=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"f=
-ont-family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">&=
-nbsp;                ctf_integer_hex(void *, ptr, ptr)</span><br><span styl=
-e=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-fam=
-ily: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">+       =
-         ctf_integer_hex(void *, ra, ra)</span><br><span style=3D"font-fami=
-ly: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-seri=
-f; font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;        )</span>=
-<br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-sty=
-le=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=
-=3D"2">&nbsp;)</span><br><span style=3D"font-family: sans-serif; font-size:=
- small;" data-mce-style=3D"font-family: sans-serif; font-size: small;" face=
-=3D"sans-serif" size=3D"2">&nbsp;</span><br><span style=3D"font-family: san=
-s-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; font=
--size: small;" face=3D"sans-serif" size=3D"2">&nbsp;TRACEPOINT_EVENT(ust_li=
-bc, calloc,</span><br><span style=3D"font-family: sans-serif; font-size: sm=
-all;" data-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D=
-"sans-serif" size=3D"2">-        TP_ARGS(size_t, nmemb, size_t, size, void =
-*, ptr),</span><br><span style=3D"font-family: sans-serif; font-size: small=
-;" data-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"sa=
-ns-serif" size=3D"2">+        TP_ARGS(size_t, nmemb, size_t, size, void *, =
-ptr, void *, ra),</span><br><span style=3D"font-family: sans-serif; font-si=
-ze: small;" data-mce-style=3D"font-family: sans-serif; font-size: small;" f=
-ace=3D"sans-serif" size=3D"2">&nbsp;        TP_FIELDS(</span><br><span styl=
-e=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-fam=
-ily: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;  =
-              ctf_integer(size_t, nmemb, nmemb)</span><br><span style=3D"fo=
-nt-family: sans-serif; font-size: small;" data-mce-style=3D"font-family: sa=
-ns-serif; font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;         =
-       ctf_integer(size_t, size, size)</span><br><span style=3D"font-family=
-: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif;=
- font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;                ct=
-f_integer_hex(void *, ptr, ptr)</span><br><span style=3D"font-family: sans-=
-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; font-s=
-ize: small;" face=3D"sans-serif" size=3D"2">+                ctf_integer_he=
-x(void *, ra, ra)</span><br><span style=3D"font-family: sans-serif; font-si=
-ze: small;" data-mce-style=3D"font-family: sans-serif; font-size: small;" f=
-ace=3D"sans-serif" size=3D"2">&nbsp;        )</span><br><span style=3D"font=
--family: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans=
--serif; font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;)</span><br=
-><span style=3D"font-family: sans-serif; font-size: small;" data-mce-style=
-=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D=
-"2">&nbsp;</span><br><span style=3D"font-family: sans-serif; font-size: sma=
-ll;" data-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"=
-sans-serif" size=3D"2">&nbsp;TRACEPOINT_EVENT(ust_libc, realloc,</span><br>=
-<span style=3D"font-family: sans-serif; font-size: small;" data-mce-style=
-=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D=
-"2">-        TP_ARGS(void *, in_ptr, size_t, size, void *, ptr),</span><br>=
-<span style=3D"font-family: sans-serif; font-size: small;" data-mce-style=
-=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D=
-"2">+        TP_ARGS(void *, in_ptr, size_t, size, void *, ptr, void *, ra)=
-,</span><br><span style=3D"font-family: sans-serif; font-size: small;" data=
--mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-seri=
-f" size=3D"2">&nbsp;        TP_FIELDS(</span><br><span style=3D"font-family=
-: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif;=
- font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;                ct=
-f_integer_hex(void *, in_ptr, in_ptr)</span><br><span style=3D"font-family:=
- sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; =
-font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;                ctf=
-_integer(size_t, size, size)</span><br><span style=3D"font-family: sans-ser=
-if; font-size: small;" data-mce-style=3D"font-family: sans-serif; font-size=
-: small;" face=3D"sans-serif" size=3D"2">&nbsp;                ctf_integer_=
-hex(void *, ptr, ptr)</span><br><span style=3D"font-family: sans-serif; fon=
-t-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: small=
-;" face=3D"sans-serif" size=3D"2">+                ctf_integer_hex(void *, =
-ra, ra)</span><br><span style=3D"font-family: sans-serif; font-size: small;=
-" data-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"san=
-s-serif" size=3D"2">&nbsp;        )</span><br><span style=3D"font-family: s=
-ans-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; fo=
-nt-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;)</span><br><span sty=
-le=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-fa=
-mily: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;<=
-/span><br><span style=3D"font-family: sans-serif; font-size: small;" data-m=
-ce-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif"=
- size=3D"2">&nbsp;TRACEPOINT_EVENT(ust_libc, memalign,</span><br><span styl=
-e=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-fam=
-ily: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">-       =
- TP_ARGS(size_t, alignment, size_t, size, void *, ptr),</span><br><span sty=
-le=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-fa=
-mily: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">+      =
-  TP_ARGS(size_t, alignment, size_t, size, void *, ptr, void *, ra),</span>=
-<br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-sty=
-le=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=
-=3D"2">&nbsp;        TP_FIELDS(</span><br><span style=3D"font-family: sans-=
-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; font-s=
-ize: small;" face=3D"sans-serif" size=3D"2">&nbsp;                ctf_integ=
-er(size_t, alignment, alignment)</span><br><span style=3D"font-family: sans=
--serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; font-=
-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;                ctf_inte=
-ger(size_t, size, size)</span><br><span style=3D"font-family: sans-serif; f=
-ont-size: small;" data-mce-style=3D"font-family: sans-serif; font-size: sma=
-ll;" face=3D"sans-serif" size=3D"2">&nbsp;                ctf_integer_hex(v=
-oid *, ptr, ptr)</span><br><span style=3D"font-family: sans-serif; font-siz=
-e: small;" data-mce-style=3D"font-family: sans-serif; font-size: small;" fa=
-ce=3D"sans-serif" size=3D"2">+                ctf_integer_hex(void *, ra, r=
-a)</span><br><span style=3D"font-family: sans-serif; font-size: small;" dat=
-a-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-ser=
-if" size=3D"2">&nbsp;        )</span><br><span style=3D"font-family: sans-s=
-erif; font-size: small;" data-mce-style=3D"font-family: sans-serif; font-si=
-ze: small;" face=3D"sans-serif" size=3D"2">&nbsp;)</span><br><span style=3D=
-"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-family:=
- sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;</span=
-><br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-st=
-yle=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=
-=3D"2">&nbsp;TRACEPOINT_EVENT(ust_libc, posix_memalign,</span><br><span sty=
-le=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-fa=
-mily: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">-      =
-  TP_ARGS(void *, out_ptr, size_t, alignment, size_t, size, int, result),</=
-span><br><span style=3D"font-family: sans-serif; font-size: small;" data-mc=
-e-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" =
-size=3D"2">+        TP_ARGS(void *, out_ptr, size_t, alignment, size_t, siz=
-e, int, result, void *, ra),</span><br><span style=3D"font-family: sans-ser=
-if; font-size: small;" data-mce-style=3D"font-family: sans-serif; font-size=
-: small;" face=3D"sans-serif" size=3D"2">&nbsp;        TP_FIELDS(</span><br=
-><span style=3D"font-family: sans-serif; font-size: small;" data-mce-style=
-=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D=
-"2">&nbsp;                ctf_integer_hex(void *, out_ptr, out_ptr)</span><=
-br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-styl=
-e=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=
-=3D"2">&nbsp;                ctf_integer(size_t, alignment, alignment)</spa=
-n><br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-s=
-tyle=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" siz=
-e=3D"2">&nbsp;                ctf_integer(size_t, size, size)</span><br><sp=
-an style=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"f=
-ont-family: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">&=
-nbsp;                ctf_integer(int, result, result)</span><br><span style=
-=3D"font-family: sans-serif; font-size: small;" data-mce-style=3D"font-fami=
-ly: sans-serif; font-size: small;" face=3D"sans-serif" size=3D"2">+        =
-        ctf_integer_hex(void *, ra, ra)</span><br><span style=3D"font-famil=
-y: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif=
-; font-size: small;" face=3D"sans-serif" size=3D"2">&nbsp;        )</span><=
-br><span style=3D"font-family: sans-serif; font-size: small;" data-mce-styl=
-e=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif" size=
-=3D"2">&nbsp;)</span><br><span style=3D"font-family: sans-serif; font-size:=
- small;" data-mce-style=3D"font-family: sans-serif; font-size: small;" face=
-=3D"sans-serif" size=3D"2">&nbsp;</span><br><span style=3D"font-family: san=
-s-serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; font=
--size: small;" face=3D"sans-serif" size=3D"2">Best regards,</span><table cl=
-ass=3D"mceItemTable" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tbod=
-y><tr valign=3D"top"><td rowspan=3D"2" valign=3D"middle" width=3D"108"><div=
- align=3D"center"><img src=3D"cid:1__=3D4EBBF75FDFC078EC8f9e8a93df93@aweuro=
-pe.be" height=3D"98" width=3D"107" align=3D"bottom"></div></td><td width=3D=
-"788"><img src=3D"cid:2__=3D4EBBF75FDFC078EC8f9e8a93df93@aweurope.be" alt=
-=3D"" height=3D"1" width=3D"1" border=3D"0"></td></tr><tr valign=3D"top"><t=
-d valign=3D"middle" width=3D"788"><ul style=3D"padding-left: 0pt"><span sty=
-le=3D"color: #000080; font-family: Calibri; font-size: medium;" data-mce-st=
-yle=3D"color: #000080; font-family: Calibri; font-size: medium;" face=3D"Ca=
-libri" color=3D"#000080" size=3D"3"><b>Olivier Delbeke </b></span><span sty=
-le=3D"color: #000080; font-family: Calibri; font-size: medium;" data-mce-st=
-yle=3D"color: #000080; font-family: Calibri; font-size: medium;" face=3D"Ca=
-libri" color=3D"#000080" size=3D"3"><i>Senior Software Engineer</i></span><=
-span style=3D"color: #565051; font-family: Calibri; font-size: medium;" dat=
-a-mce-style=3D"color: #565051; font-family: Calibri; font-size: medium;" fa=
-ce=3D"Calibri" color=3D"#565051" size=3D"3"><br>Olivier.Delbeke@awtce.be / =
-T. +32 2 389 25 53</span><hr style=3D"color:#333399; " size=3D"2" noshade=
-=3D"" width=3D"100%" align=3D"left"><span style=3D"font-family: serif; font=
--size: medium;" data-mce-style=3D"font-family: serif; font-size: medium;" f=
-ace=3D"serif" size=3D"3">&nbsp;</span><span style=3D"color: #000080; font-f=
-amily: Calibri; font-size: xx-small;" data-mce-style=3D"color: #000080; fon=
-t-family: Calibri; font-size: xx-small;" face=3D"Calibri" color=3D"#000080"=
- size=3D"1"><b>AWTC Europe S.A. </b></span><span style=3D"color: #565051; f=
-ont-family: Calibri; font-size: xx-small;" data-mce-style=3D"color: #565051=
-; font-family: Calibri; font-size: xx-small;" face=3D"Calibri" color=3D"#56=
-5051" size=3D"1">- Avenue de l=E2=80=99Industrie, 19 - 1420 Braine-l=E2=80=
-=99Alleud - Belgium - www.aweurope.eu - www.aisin-aw.co.jp<br>VAT : BE 0474=
-.474.114 - RPM Nivelles</span><span style=3D"font-family: serif; font-size:=
- medium;" data-mce-style=3D"font-family: serif; font-size: medium;" face=3D=
-"serif" size=3D"3">&nbsp;</span></ul></td></tr></tbody></table><br><span st=
-yle=3D"font-family: sans-serif;" data-mce-style=3D"font-family: sans-serif;=
-" face=3D"sans-serif">
+<div dir=3D"ltr"><div><div><div><div>Hi,<br><br></div>The first thing I tri=
+ed was indeed to add &quot;ip&quot; to the context, and the result was alwa=
+ys the same (the location of the tracepoint macro call (useless in this cas=
+e)). <br><br></div>I will send the patch on Monday. Thanks a lot.<br><br></=
+div>Best regards,<br></div>Olivier<br>
+</div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Fri, Jan=
+ 16, 2015 at 9:41 PM, Mathieu Desnoyers <span dir=3D"ltr">&lt;<a href=3D"ma=
+ilto:mathieu.desnoyers@efficios.com" target=3D"_blank">mathieu.desnoyers@ef=
+ficios.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=
+=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div><di=
+v style=3D"font-family:times new roman,new york,times,serif;font-size:12pt;=
+color:#000000"><hr><blockquote style=3D"border-left:2px solid #1010ff;margi=
+n-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal=
+;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt=
+"><span class=3D""><b>From: </b>&quot;Olivier Delbeke&quot; &lt;<a href=3D"=
+mailto:Olivier.Delbeke@awtce.be" target=3D"_blank">Olivier.Delbeke@awtce.be=
+</a>&gt;<br><b>To: </b><a href=3D"mailto:lttng-dev@lists.lttng.org" target=
+=3D"_blank">lttng-dev@lists.lttng.org</a><br><b>Sent: </b>Tuesday, January =
+13, 2015 10:50:38 AM<br><b>Subject: </b>[lttng-dev] Addition of the return =
+address to=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0liblttng-ust-libc=
+-wrapper<br><div><br></div></span><span class=3D""><p><span style=3D"font-f=
+amily:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">Hi guys,</=
+span><br></p><div><br></div><span style=3D"font-family:sans-serif;font-size=
+:small" face=3D"sans-serif" size=3D"2">I am using liblttng-ust-libc-wrapper=
+ to detect memory leaks in my applications. </span><br><span style=3D"font-=
+family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">In order =
+to identify not only the thread where the unfreed allocations are done, but=
+ also the calling function, I extended the liblttng-ust-libc-wrapper to log=
+ the &quot;return address&quot; (__builtin_return_address(0)) in addition t=
+o the parameters of malloc(). It solves my problem and does not affect Trac=
+e Compass.</span><br><span style=3D"font-family:sans-serif;font-size:small"=
+ face=3D"sans-serif" size=3D"2">Was this the right thing to do ? </span><br=
+><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif"=
+ size=3D"2">If it is, then I guess that it might interest other people too.=
+</span></span></blockquote><div>After further thought, I&#39;m interested t=
+o merge this into UST master.<br></div><div><br></div><div>Can you re-send =
+either as an attachment, or as plain text without the<br></div><div>base64 =
+encoding ?<br></div><div><br></div><div>Thanks!<span class=3D"HOEnZb"><font=
+ color=3D"#888888"><br></font></span></div><span class=3D"HOEnZb"><font col=
+or=3D"#888888"><div><br></div><div>Mathieu<br></div><div><br></div><div><br=
+></div></font></span><blockquote style=3D"border-left:2px solid #1010ff;mar=
+gin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:norm=
+al;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12=
+pt"><div><div class=3D"h5"><div><br></div><span style=3D"font-family:sans-s=
+erif;font-size:small" face=3D"sans-serif" size=3D"2">diff -Nurd b/liblttng-=
+ust-libc-wrapper/lttng-ust-malloc.c c/liblttng-ust-libc-wrapper/lttng-ust-m=
+alloc.c</span><br><span style=3D"font-family:sans-serif;font-size:small" fa=
+ce=3D"sans-serif" size=3D"2">--- b/liblttng-ust-libc-wrapper/lttng-ust-mall=
+oc.c        2015-01-06 17:14:34.000000000 +0100</span><br><span style=3D"fo=
+nt-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">+++ c/=
+liblttng-ust-libc-wrapper/lttng-ust-malloc.c        2015-01-06 17:16:40.811=
+145106 +0100</span><br><span style=3D"font-family:sans-serif;font-size:smal=
+l" face=3D"sans-serif" size=3D"2">@@ -260,7 +260,7 @@</span><br><span style=
+=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=
+=C2=A0        }</span><br><span style=3D"font-family:sans-serif;font-size:s=
+mall" face=3D"sans-serif" size=3D"2">=C2=A0        retval =3D cur_alloc.mal=
+loc(size);</span><br><span style=3D"font-family:sans-serif;font-size:small"=
+ face=3D"sans-serif" size=3D"2">=C2=A0        if (URCU_TLS(malloc_nesting) =
+=3D=3D 1) {</span><br><span style=3D"font-family:sans-serif;font-size:small=
+" face=3D"sans-serif" size=3D"2">-                tracepoint(ust_libc, mall=
+oc, size, retval);</span><br><span style=3D"font-family:sans-serif;font-siz=
+e:small" face=3D"sans-serif" size=3D"2">+                tracepoint(ust_lib=
+c, malloc, size, retval, __builtin_return_address(0) );</span><br><span sty=
+le=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2=
+">=C2=A0        }</span><br><span style=3D"font-family:sans-serif;font-size=
+:small" face=3D"sans-serif" size=3D"2">=C2=A0        URCU_TLS(malloc_nestin=
+g)--;</span><br><span style=3D"font-family:sans-serif;font-size:small" face=
+=3D"sans-serif" size=3D"2">=C2=A0        return retval;</span><br><span sty=
+le=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2=
+">@@ -279,7 +279,7 @@</span><br><span style=3D"font-family:sans-serif;font-=
+size:small" face=3D"sans-serif" size=3D"2">=C2=A0        }</span><br><span =
+style=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=
+=3D"2">=C2=A0</span><br><span style=3D"font-family:sans-serif;font-size:sma=
+ll" face=3D"sans-serif" size=3D"2">=C2=A0        if (URCU_TLS(malloc_nestin=
+g) =3D=3D 1) {</span><br><span style=3D"font-family:sans-serif;font-size:sm=
+all" face=3D"sans-serif" size=3D"2">-                tracepoint(ust_libc, f=
+ree, ptr);</span><br><span style=3D"font-family:sans-serif;font-size:small"=
+ face=3D"sans-serif" size=3D"2">+                tracepoint(ust_libc, free,=
+ ptr, __builtin_return_address(0) );</span><br><span style=3D"font-family:s=
+ans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0        }</=
+span><br><span style=3D"font-family:sans-serif;font-size:small" face=3D"san=
+s-serif" size=3D"2">=C2=A0</span><br><span style=3D"font-family:sans-serif;=
+font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0        if (cur_alloc=
+.free =3D=3D NULL) {</span><br><span style=3D"font-family:sans-serif;font-s=
+ize:small" face=3D"sans-serif" size=3D"2">@@ -308,7 +308,7 @@</span><br><sp=
+an style=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" siz=
+e=3D"2">=C2=A0        }</span><br><span style=3D"font-family:sans-serif;fon=
+t-size:small" face=3D"sans-serif" size=3D"2">=C2=A0        retval =3D cur_a=
+lloc.calloc(nmemb, size);</span><br><span style=3D"font-family:sans-serif;f=
+ont-size:small" face=3D"sans-serif" size=3D"2">=C2=A0        if (URCU_TLS(m=
+alloc_nesting) =3D=3D 1) {</span><br><span style=3D"font-family:sans-serif;=
+font-size:small" face=3D"sans-serif" size=3D"2">-                tracepoint=
+(ust_libc, calloc, nmemb, size, retval);</span><br><span style=3D"font-fami=
+ly:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">+            =
+    tracepoint(ust_libc, calloc, nmemb, size, retval, __builtin_return_addr=
+ess(0) );</span><br><span style=3D"font-family:sans-serif;font-size:small" =
+face=3D"sans-serif" size=3D"2">=C2=A0        }</span><br><span style=3D"fon=
+t-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0 =
+       URCU_TLS(malloc_nesting)--;</span><br><span style=3D"font-family:san=
+s-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0        retur=
+n retval;</span><br><span style=3D"font-family:sans-serif;font-size:small" =
+face=3D"sans-serif" size=3D"2">@@ -360,7 +360,7 @@</span><br><span style=3D=
+"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=
+=A0        retval =3D cur_alloc.realloc(ptr, size);</span><br><span style=
+=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=
+=C2=A0end:</span><br><span style=3D"font-family:sans-serif;font-size:small"=
+ face=3D"sans-serif" size=3D"2">=C2=A0        if (URCU_TLS(malloc_nesting) =
+=3D=3D 1) {</span><br><span style=3D"font-family:sans-serif;font-size:small=
+" face=3D"sans-serif" size=3D"2">-                tracepoint(ust_libc, real=
+loc, ptr, size, retval);</span><br><span style=3D"font-family:sans-serif;fo=
+nt-size:small" face=3D"sans-serif" size=3D"2">+                tracepoint(u=
+st_libc, realloc, ptr, size, retval, __builtin_return_address(0) );</span><=
+br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-seri=
+f" size=3D"2">=C2=A0        }</span><br><span style=3D"font-family:sans-ser=
+if;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0        URCU_TLS(m=
+alloc_nesting)--;</span><br><span style=3D"font-family:sans-serif;font-size=
+:small" face=3D"sans-serif" size=3D"2">=C2=A0        return retval;</span><=
+br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-seri=
+f" size=3D"2">@@ -380,7 +380,7 @@</span><br><span style=3D"font-family:sans=
+-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0        }</spa=
+n><br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-s=
+erif" size=3D"2">=C2=A0        retval =3D cur_alloc.memalign(alignment, siz=
+e);</span><br><span style=3D"font-family:sans-serif;font-size:small" face=
+=3D"sans-serif" size=3D"2">=C2=A0        if (URCU_TLS(malloc_nesting) =3D=
+=3D 1) {</span><br><span style=3D"font-family:sans-serif;font-size:small" f=
+ace=3D"sans-serif" size=3D"2">-                tracepoint(ust_libc, memalig=
+n, alignment, size, retval);</span><br><span style=3D"font-family:sans-seri=
+f;font-size:small" face=3D"sans-serif" size=3D"2">+                tracepoi=
+nt(ust_libc, memalign, alignment, size, retval, __builtin_return_address(0)=
+ );</span><br><span style=3D"font-family:sans-serif;font-size:small" face=
+=3D"sans-serif" size=3D"2">=C2=A0        }</span><br><span style=3D"font-fa=
+mily:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0     =
+   URCU_TLS(malloc_nesting)--;</span><br><span style=3D"font-family:sans-se=
+rif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0        return re=
+tval;</span><br><span style=3D"font-family:sans-serif;font-size:small" face=
+=3D"sans-serif" size=3D"2">@@ -401,7 +401,7 @@</span><br><span style=3D"fon=
+t-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0 =
+       retval =3D cur_alloc.posix_memalign(memptr, alignment, size);</span>=
+<br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-ser=
+if" size=3D"2">=C2=A0        if (URCU_TLS(malloc_nesting) =3D=3D 1) {</span=
+><br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-se=
+rif" size=3D"2">=C2=A0                tracepoint(ust_libc, posix_memalign, =
+*memptr, alignment, size,</span><br><span style=3D"font-family:sans-serif;f=
+ont-size:small" face=3D"sans-serif" size=3D"2">-                        ret=
+val);</span><br><span style=3D"font-family:sans-serif;font-size:small" face=
+=3D"sans-serif" size=3D"2">+                        retval, __builtin_retur=
+n_address(0) );</span><br><span style=3D"font-family:sans-serif;font-size:s=
+mall" face=3D"sans-serif" size=3D"2">=C2=A0        }</span><br><span style=
+=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=
+=C2=A0        URCU_TLS(malloc_nesting)--;</span><br><span style=3D"font-fam=
+ily:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0      =
+  return retval;</span><br><span style=3D"font-family:sans-serif;font-size:=
+small" face=3D"sans-serif" size=3D"2">diff -Nurd b/liblttng-ust-libc-wrappe=
+r/ust_libc.h c/liblttng-ust-libc-wrapper/ust_libc.h</span><br><span style=
+=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=
+--- b/liblttng-ust-libc-wrapper/ust_libc.h        2015-01-06 17:14:34.00000=
+0000 +0100</span><br><span style=3D"font-family:sans-serif;font-size:small"=
+ face=3D"sans-serif" size=3D"2">+++ c/liblttng-ust-libc-wrapper/ust_libc.h =
+       2015-01-06 17:16:40.811145106 +0100</span><br><span style=3D"font-fa=
+mily:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">@@ -33,54 +=
+33,60 @@</span><br><span style=3D"font-family:sans-serif;font-size:small" f=
+ace=3D"sans-serif" size=3D"2">=C2=A0#include &lt;lttng/tracepoint.h&gt;</sp=
+an><br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-=
+serif" size=3D"2">=C2=A0</span><br><span style=3D"font-family:sans-serif;fo=
+nt-size:small" face=3D"sans-serif" size=3D"2">=C2=A0TRACEPOINT_EVENT(ust_li=
+bc, malloc,</span><br><span style=3D"font-family:sans-serif;font-size:small=
+" face=3D"sans-serif" size=3D"2">-        TP_ARGS(size_t, size, void *, ptr=
+),</span><br><span style=3D"font-family:sans-serif;font-size:small" face=3D=
+"sans-serif" size=3D"2">+        TP_ARGS(size_t, size, void *, ptr, void *,=
+ ra),</span><br><span style=3D"font-family:sans-serif;font-size:small" face=
+=3D"sans-serif" size=3D"2">=C2=A0        TP_FIELDS(</span><br><span style=
+=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=
+=C2=A0                ctf_integer(size_t, size, size)</span><br><span style=
+=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=
+=C2=A0                ctf_integer_hex(void *, ptr, ptr)</span><br><span sty=
+le=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2=
+">+                ctf_integer_hex(void *, ra, ra)</span><br><span style=3D=
+"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=
+=A0        )</span><br><span style=3D"font-family:sans-serif;font-size:smal=
+l" face=3D"sans-serif" size=3D"2">=C2=A0)</span><br><span style=3D"font-fam=
+ily:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0</span=
+><br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-se=
+rif" size=3D"2">=C2=A0TRACEPOINT_EVENT(ust_libc, free,</span><br><span styl=
+e=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2"=
+>-        TP_ARGS(void *, ptr),</span><br><span style=3D"font-family:sans-s=
+erif;font-size:small" face=3D"sans-serif" size=3D"2">+        TP_ARGS(void =
+*, ptr, void *, ra),</span><br><span style=3D"font-family:sans-serif;font-s=
+ize:small" face=3D"sans-serif" size=3D"2">=C2=A0        TP_FIELDS(</span><b=
+r><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif=
+" size=3D"2">=C2=A0                ctf_integer_hex(void *, ptr, ptr)</span>=
+<br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-ser=
+if" size=3D"2">+                ctf_integer_hex(void *, ra, ra)</span><br><=
+span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" s=
+ize=3D"2">=C2=A0        )</span><br><span style=3D"font-family:sans-serif;f=
+ont-size:small" face=3D"sans-serif" size=3D"2">=C2=A0)</span><br><span styl=
+e=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2"=
+>=C2=A0</span><br><span style=3D"font-family:sans-serif;font-size:small" fa=
+ce=3D"sans-serif" size=3D"2">=C2=A0TRACEPOINT_EVENT(ust_libc, calloc,</span=
+><br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-se=
+rif" size=3D"2">-        TP_ARGS(size_t, nmemb, size_t, size, void *, ptr),=
+</span><br><span style=3D"font-family:sans-serif;font-size:small" face=3D"s=
+ans-serif" size=3D"2">+        TP_ARGS(size_t, nmemb, size_t, size, void *,=
+ ptr, void *, ra),</span><br><span style=3D"font-family:sans-serif;font-siz=
+e:small" face=3D"sans-serif" size=3D"2">=C2=A0        TP_FIELDS(</span><br>=
+<span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" =
+size=3D"2">=C2=A0                ctf_integer(size_t, nmemb, nmemb)</span><b=
+r><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif=
+" size=3D"2">=C2=A0                ctf_integer(size_t, size, size)</span><b=
+r><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif=
+" size=3D"2">=C2=A0                ctf_integer_hex(void *, ptr, ptr)</span>=
+<br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-ser=
+if" size=3D"2">+                ctf_integer_hex(void *, ra, ra)</span><br><=
+span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" s=
+ize=3D"2">=C2=A0        )</span><br><span style=3D"font-family:sans-serif;f=
+ont-size:small" face=3D"sans-serif" size=3D"2">=C2=A0)</span><br><span styl=
+e=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2"=
+>=C2=A0</span><br><span style=3D"font-family:sans-serif;font-size:small" fa=
+ce=3D"sans-serif" size=3D"2">=C2=A0TRACEPOINT_EVENT(ust_libc, realloc,</spa=
+n><br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-s=
+erif" size=3D"2">-        TP_ARGS(void *, in_ptr, size_t, size, void *, ptr=
+),</span><br><span style=3D"font-family:sans-serif;font-size:small" face=3D=
+"sans-serif" size=3D"2">+        TP_ARGS(void *, in_ptr, size_t, size, void=
+ *, ptr, void *, ra),</span><br><span style=3D"font-family:sans-serif;font-=
+size:small" face=3D"sans-serif" size=3D"2">=C2=A0        TP_FIELDS(</span><=
+br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-seri=
+f" size=3D"2">=C2=A0                ctf_integer_hex(void *, in_ptr, in_ptr)=
+</span><br><span style=3D"font-family:sans-serif;font-size:small" face=3D"s=
+ans-serif" size=3D"2">=C2=A0                ctf_integer(size_t, size, size)=
+</span><br><span style=3D"font-family:sans-serif;font-size:small" face=3D"s=
+ans-serif" size=3D"2">=C2=A0                ctf_integer_hex(void *, ptr, pt=
+r)</span><br><span style=3D"font-family:sans-serif;font-size:small" face=3D=
+"sans-serif" size=3D"2">+                ctf_integer_hex(void *, ra, ra)</s=
+pan><br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans=
+-serif" size=3D"2">=C2=A0        )</span><br><span style=3D"font-family:san=
+s-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0)</span><br><=
+span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" s=
+ize=3D"2">=C2=A0</span><br><span style=3D"font-family:sans-serif;font-size:=
+small" face=3D"sans-serif" size=3D"2">=C2=A0TRACEPOINT_EVENT(ust_libc, mema=
+lign,</span><br><span style=3D"font-family:sans-serif;font-size:small" face=
+=3D"sans-serif" size=3D"2">-        TP_ARGS(size_t, alignment, size_t, size=
+, void *, ptr),</span><br><span style=3D"font-family:sans-serif;font-size:s=
+mall" face=3D"sans-serif" size=3D"2">+        TP_ARGS(size_t, alignment, si=
+ze_t, size, void *, ptr, void *, ra),</span><br><span style=3D"font-family:=
+sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0        TP=
+_FIELDS(</span><br><span style=3D"font-family:sans-serif;font-size:small" f=
+ace=3D"sans-serif" size=3D"2">=C2=A0                ctf_integer(size_t, ali=
+gnment, alignment)</span><br><span style=3D"font-family:sans-serif;font-siz=
+e:small" face=3D"sans-serif" size=3D"2">=C2=A0                ctf_integer(s=
+ize_t, size, size)</span><br><span style=3D"font-family:sans-serif;font-siz=
+e:small" face=3D"sans-serif" size=3D"2">=C2=A0                ctf_integer_h=
+ex(void *, ptr, ptr)</span><br><span style=3D"font-family:sans-serif;font-s=
+ize:small" face=3D"sans-serif" size=3D"2">+                ctf_integer_hex(=
+void *, ra, ra)</span><br><span style=3D"font-family:sans-serif;font-size:s=
+mall" face=3D"sans-serif" size=3D"2">=C2=A0        )</span><br><span style=
+=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=
+=C2=A0)</span><br><span style=3D"font-family:sans-serif;font-size:small" fa=
+ce=3D"sans-serif" size=3D"2">=C2=A0</span><br><span style=3D"font-family:sa=
+ns-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0TRACEPOINT_E=
+VENT(ust_libc, posix_memalign,</span><br><span style=3D"font-family:sans-se=
+rif;font-size:small" face=3D"sans-serif" size=3D"2">-        TP_ARGS(void *=
+, out_ptr, size_t, alignment, size_t, size, int, result),</span><br><span s=
+tyle=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D=
+"2">+        TP_ARGS(void *, out_ptr, size_t, alignment, size_t, size, int,=
+ result, void *, ra),</span><br><span style=3D"font-family:sans-serif;font-=
+size:small" face=3D"sans-serif" size=3D"2">=C2=A0        TP_FIELDS(</span><=
+br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sans-seri=
+f" size=3D"2">=C2=A0                ctf_integer_hex(void *, out_ptr, out_pt=
+r)</span><br><span style=3D"font-family:sans-serif;font-size:small" face=3D=
+"sans-serif" size=3D"2">=C2=A0                ctf_integer(size_t, alignment=
+, alignment)</span><br><span style=3D"font-family:sans-serif;font-size:smal=
+l" face=3D"sans-serif" size=3D"2">=C2=A0                ctf_integer(size_t,=
+ size, size)</span><br><span style=3D"font-family:sans-serif;font-size:smal=
+l" face=3D"sans-serif" size=3D"2">=C2=A0                ctf_integer(int, re=
+sult, result)</span><br><span style=3D"font-family:sans-serif;font-size:sma=
+ll" face=3D"sans-serif" size=3D"2">+                ctf_integer_hex(void *,=
+ ra, ra)</span><br><span style=3D"font-family:sans-serif;font-size:small" f=
+ace=3D"sans-serif" size=3D"2">=C2=A0        )</span><br><span style=3D"font=
+-family:sans-serif;font-size:small" face=3D"sans-serif" size=3D"2">=C2=A0)<=
+/span><br><span style=3D"font-family:sans-serif;font-size:small" face=3D"sa=
+ns-serif" size=3D"2">=C2=A0</span><br><span style=3D"font-family:sans-serif=
+;font-size:small" face=3D"sans-serif" size=3D"2">Best regards,</span><table=
+ border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tbody><tr valign=3D"top"=
+><td rowspan=3D"2" valign=3D"middle" width=3D"108"><div align=3D"center"><i=
+mg src=3D"cid:1__=3D4EBBF75FDFC078EC8f9e8a93df93@aweurope.be" width=3D"107"=
+ height=3D"98" align=3D"bottom"></div></td><td width=3D"788"><img src=3D"ci=
+d:2__=3D4EBBF75FDFC078EC8f9e8a93df93@aweurope.be" alt=3D"" width=3D"1" heig=
+ht=3D"1" border=3D"0"></td></tr><tr valign=3D"top"><td valign=3D"middle" wi=
+dth=3D"788"><ul style=3D"padding-left:0pt"><span style=3D"color:#000080;fon=
+t-family:Calibri;font-size:medium" face=3D"Calibri" color=3D"#000080" size=
+=3D"3"><b>Olivier Delbeke </b></span><span style=3D"color:#000080;font-fami=
+ly:Calibri;font-size:medium" face=3D"Calibri" color=3D"#000080" size=3D"3">=
+<i>Senior Software Engineer</i></span><span style=3D"color:#565051;font-fam=
+ily:Calibri;font-size:medium" face=3D"Calibri" color=3D"#565051" size=3D"3"=
+><br><a href=3D"mailto:Olivier.Delbeke@awtce.be" target=3D"_blank">Olivier.=
+Delbeke@awtce.be</a> / T. <a href=3D"tel:%2B32%202%20389%2025%2053" value=
+=3D"+3223892553" target=3D"_blank">+32 2 389 25 53</a></span><hr style=3D"c=
+olor:#333399" noshade size=3D"2" width=3D"100%" align=3D"left"><span style=
+=3D"font-family:serif;font-size:medium" face=3D"serif" size=3D"3">=C2=A0</s=
+pan><span style=3D"color:#000080;font-family:Calibri;font-size:xx-small" fa=
+ce=3D"Calibri" color=3D"#000080" size=3D"1"><b>AWTC Europe S.A. </b></span>=
+<span style=3D"color:#565051;font-family:Calibri;font-size:xx-small" face=
+=3D"Calibri" color=3D"#565051" size=3D"1">- Avenue de l=E2=80=99Industrie, =
+19 - 1420 Braine-l=E2=80=99Alleud - Belgium - <a href=3D"http://www.aweurop=
+e.eu" target=3D"_blank">www.aweurope.eu</a> - <a href=3D"http://www.aisin-a=
+w.co.jp" target=3D"_blank">www.aisin-aw.co.jp</a><br>VAT : BE 0474.474.114 =
+- RPM Nivelles</span><span style=3D"font-family:serif;font-size:medium" fac=
+e=3D"serif" size=3D"3">=C2=A0</span></ul></td></tr></tbody></table><br><spa=
+n style=3D"font-family:sans-serif" face=3D"sans-serif">
 
 
 This mail, and any attachments thereto, is intended only for use by the add=
@@ -666,20 +583,35 @@ al information.  If you are not the intended recipient, please note that an=
 y review, dissemination, disclosure, alteration, printing, copying or trans=
 mission of this mail and/or any file transmitted with it, is strictly prohi=
 bited and may be unlawful.  If you have received this mail by mistake, plea=
-se immediately notify the sender as well as our mail administrator at postm=
-aster@aweurope.be, and permanently destroy the original as well as any copy=
- thereof.
-</span><br>_______________________________________________<br>lttng-dev mai=
-ling list<br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bin/ma=
-ilman/listinfo/lttng-dev<br></blockquote><div><br><br></div><div><br></div>=
-<div>-- <br></div><div><span name=3D"x"></span>Mathieu Desnoyers<br>EfficiO=
-S Inc.<br>http://www.efficios.com<span name=3D"x"></span><br></div></div></=
-body></html>
-------=_Part_43993_856277089.1421440866565
-Content-Type: image/jpeg; name=1E482660.jpg
-Content-Disposition: attachment; filename=1E482660.jpg
+se immediately notify the sender as well as our mail administrator at <a hr=
+ef=3D"mailto:postmaster@aweurope.be" target=3D"_blank">postmaster@aweurope.=
+be</a>, and permanently destroy the original as well as any copy thereof.
+</span><br></div></div><span class=3D"">___________________________________=
+____________<br>lttng-dev mailing list<br><a href=3D"mailto:lttng-dev@lists=
+.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.org</a><br><a href=3D"h=
+ttp://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" target=3D"_blank"=
+>http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br></span></=
+blockquote><span class=3D""><div><br><br></div><div><br></div><div>-- <br><=
+/div><div><span name=3D"x"></span>Mathieu Desnoyers<br>EfficiOS Inc.<br><a =
+href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.com<=
+/a><span name=3D"x"></span><br></div></span></div></div><br>_______________=
+________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
+br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+br>
+<br></blockquote></div><br></div>
+
+--f46d044306ae16eefe050ccb38cc--
+
+--f46d044306ae16ef02050ccb38cd
+Content-Type: image/jpeg; name="1E482660.jpg"
+Content-Disposition: inline; filename="1E482660.jpg"
 Content-Transfer-Encoding: base64
 Content-ID: <1__=4EBBF75FDFC078EC8f9e8a93df93@aweurope.be>
+X-Attachment-Id: 17584a0c5f313717_0.0.1.1
 
 /9j/4AAQSkZJRgABAQEAMgAyAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB
 AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEB
@@ -847,19 +779,18 @@ O5h1Pxjo/hkXo8IaJ4x1OC9v4tR8V6NoFhr98t5OLrUH3uG6M3zngGEczweByFV67p1qWBzOhh4U
 8KoyhiYUaMMNLHUJ/uZVaGIhnHuYydTDU8PXy+eFdd4iMJhM8f1arWxqhHmi62HnOUqmkqUnVclh
 3G81GcHhG3TjGbkqvPZR+yraRpIkdl2MyKSvI2k7srgk9Dnv1yO1WKgtovJiSPjCqBgZwME8DP8A
 CBgKAAAAAowBU9flx9J8reV728r9bdwooooAKKKKACiiigAooooAKKKKACiiigAooooA/9k=
-------=_Part_43993_856277089.1421440866565
-Content-Type: image/gif; name=ecblank.gif
-Content-Disposition: attachment; filename=ecblank.gif
+--f46d044306ae16ef02050ccb38cd
+Content-Type: image/gif; name="ecblank.gif"
+Content-Disposition: inline; filename="ecblank.gif"
 Content-Transfer-Encoding: base64
 Content-ID: <2__=4EBBF75FDFC078EC8f9e8a93df93@aweurope.be>
+X-Attachment-Id: 17584a0c5f313717_0.0.1.2
 
 R0lGODlhEAABAIAAAAAAAP///yH5BAEAAAEALAAAAAAQAAEAAAIEjI8ZBQA7
-------=_Part_43993_856277089.1421440866565--
-
-------=_Part_43992_1583671601.1421440866564--
+--f46d044306ae16ef02050ccb38cd--
 
 
---===============1245539168==
+--===============1726629834==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -870,4 +801,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1245539168==--
+--===============1726629834==--
