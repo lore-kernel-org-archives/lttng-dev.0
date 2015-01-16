@@ -1,16 +1,22 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 1/2] Fix: per-uid flush and ust
-	registry locking
-Date: Thu, 15 Jan 2015 17:24:26 -0500
-Message-ID: <1421360667-9017-1-git-send-email-mathieu.desnoyers__42517.3234464184$1421360785$gmane$org@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [diamon-discuss] [BUG] perf data convert to ctf
+	fail.
+Date: Fri, 16 Jan 2015 11:18:16 -0500
+Message-ID: <CA+jJMxsbeH3hhcKM8CosQpuAHimY=oSinpBJtRSJYg0OY6jtCg__8821.69481269575$1421425149$gmane$org@mail.gmail.com>
+References: <54B8A03D.3050508@huawei.com> <54B8C3D5.9010809@voxpopuli.im>
+ <20150116081428.GA22505@krava.brq.redhat.com>
+ <20150116103843.GB22505@krava.brq.redhat.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qg0-f49.google.com ([209.85.192.49])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1YBsqK-0002pg-LV
- for lttng-dev@lists.lttng.org; Thu, 15 Jan 2015 17:24:48 -0500
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1YC9bK-0008Co-0t
+ for lttng-dev@lists.lttng.org; Fri, 16 Jan 2015 11:18:26 -0500
+Received: by mail-qg0-f49.google.com with SMTP id f51so16920391qge.8
+ for <lttng-dev@lists.lttng.org>; Fri, 16 Jan 2015 08:18:16 -0800 (PST)
+In-Reply-To: <20150116103843.GB22505@krava.brq.redhat.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,465 +25,82 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: Jiri Olsa <jolsa@redhat.com>
+Cc: Wang Nan <wangnan0@huawei.com>, "diamon-discuss@lists.linuxfoundation.org" <diamon-discuss@lists.linuxfoundation.org>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Li Zefan <lizefan@huawei.com>, Jiri Olsa <jolsa@kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Commit c4b88406 "Fix: ust-app: per-PID app unregister vs tracing stop
-races" introduces a regression for per-UID flush. It can be triggered by
-the test_high_throughput_limits (root regression) test. For per-UID
-tracing, we need to use the registry channel ID, not the per-application
-channel ID, when asking the consumer daemon to flush.
-
-When doing this fix, we notice that the locking rules of push_metadata()
-are weird. A per-ust app session lock is protecting registry data, which
-makes it impossible to call push_metadata from a ust session level (for
-the entire session) in the case of per-UID tracing. Moreover, it's
-unclear how holding a per-application lock can protect a registry shared
-across applications in per-UID tracing. Therefore, we move all accesses
-to the registry metadata_key and metadata_closed fields into the
-registry lock critical section. We now only rely on RCU to ensure
-existance of registry across push_metadata(), rather than relying on the
-per-application session lock.
-
-It also takes care of a documentation vs code mismatch: push_metadata()
-documents that "The session lock MUST be acquired here before calling
-this.", but in reality, it's the application session lock which is held
-across those calls. Removing this requirement, and relying on RCU
-instead, fixes this mismatch.
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- src/bin/lttng-sessiond/ust-app.c | 243 +++++++++++++++++++++------------------
- 1 file changed, 132 insertions(+), 111 deletions(-)
-
-diff --git a/src/bin/lttng-sessiond/ust-app.c b/src/bin/lttng-sessiond/ust-app.c
-index dcb6e7c..0c4045c 100644
---- a/src/bin/lttng-sessiond/ust-app.c
-+++ b/src/bin/lttng-sessiond/ust-app.c
-@@ -442,21 +442,28 @@ ssize_t ust_app_push_metadata(struct ust_registry_session *registry,
- 	assert(registry);
- 	assert(socket);
- 
-+	pthread_mutex_lock(&registry->lock);
-+
-+	/*
-+	 * Means that no metadata was assigned to the session. This can happens if
-+	 * no start has been done previously.
-+	 */
-+	if (!registry->metadata_key) {
-+		pthread_mutex_unlock(&registry->lock);
-+		return 0;
-+	}
-+
- 	/*
- 	 * On a push metadata error either the consumer is dead or the metadata
- 	 * channel has been destroyed because its endpoint might have died (e.g:
- 	 * relayd). If so, the metadata closed flag is set to 1 so we deny pushing
- 	 * metadata again which is not valid anymore on the consumer side.
--	 *
--	 * The ust app session mutex locked allows us to make this check without
--	 * the registry lock.
- 	 */
- 	if (registry->metadata_closed) {
-+		pthread_mutex_unlock(&registry->lock);
- 		return -EPIPE;
- 	}
- 
--	pthread_mutex_lock(&registry->lock);
--
- 	offset = registry->metadata_len_sent;
- 	len = registry->metadata_len - registry->metadata_len_sent;
- 	if (len == 0) {
-@@ -514,6 +521,14 @@ push_data:
- 
- end:
- error:
-+	if (ret_val) {
-+		/*
-+		 * On error, flag the registry that the metadata is closed. We were unable
-+		 * to push anything and this means that either the consumer is not
-+		 * responding or the metadata cache has been destroyed on the consumer.
-+		 */
-+		registry->metadata_closed = 1;
-+	}
- 	pthread_mutex_unlock(&registry->lock);
- error_push:
- 	free(metadata_str);
-@@ -521,11 +536,12 @@ error_push:
- }
- 
- /*
-- * For a given application and session, push metadata to consumer. The session
-- * lock MUST be acquired here before calling this.
-+ * For a given application and session, push metadata to consumer.
-  * Either sock or consumer is required : if sock is NULL, the default
-  * socket to send the metadata is retrieved from consumer, if sock
-  * is not NULL we use it to send the metadata.
-+ * RCU read-side lock must be held while calling this function,
-+ * therefore ensuring existance of registry.
-  *
-  * Return 0 on success else a negative error.
-  */
-@@ -539,23 +555,20 @@ static int push_metadata(struct ust_registry_session *registry,
- 	assert(registry);
- 	assert(consumer);
- 
--	rcu_read_lock();
-+	pthread_mutex_lock(&registry->lock);
- 
--	/*
--	 * Means that no metadata was assigned to the session. This can happens if
--	 * no start has been done previously.
--	 */
--	if (!registry->metadata_key) {
--		ret_val = 0;
--		goto end_rcu_unlock;
-+	if (registry->metadata_closed) {
-+		pthread_mutex_unlock(&registry->lock);
-+		return -EPIPE;
- 	}
- 
- 	/* Get consumer socket to use to push the metadata.*/
- 	socket = consumer_find_socket_by_bitness(registry->bits_per_long,
- 			consumer);
-+	pthread_mutex_unlock(&registry->lock);
- 	if (!socket) {
- 		ret_val = -1;
--		goto error_rcu_unlock;
-+		goto error;
- 	}
- 
- 	/*
-@@ -573,21 +586,13 @@ static int push_metadata(struct ust_registry_session *registry,
- 	pthread_mutex_unlock(socket->lock);
- 	if (ret < 0) {
- 		ret_val = ret;
--		goto error_rcu_unlock;
-+		goto error;
- 	}
- 
--	rcu_read_unlock();
- 	return 0;
- 
--error_rcu_unlock:
--	/*
--	 * On error, flag the registry that the metadata is closed. We were unable
--	 * to push anything and this means that either the consumer is not
--	 * responding or the metadata cache has been destroyed on the consumer.
--	 */
--	registry->metadata_closed = 1;
--end_rcu_unlock:
--	rcu_read_unlock();
-+error:
-+end:
- 	return ret_val;
- }
- 
-@@ -610,6 +615,8 @@ static int close_metadata(struct ust_registry_session *registry,
- 
- 	rcu_read_lock();
- 
-+	pthread_mutex_lock(&registry->lock);
-+
- 	if (!registry->metadata_key || registry->metadata_closed) {
- 		ret = 0;
- 		goto end;
-@@ -636,6 +643,7 @@ error:
- 	 */
- 	registry->metadata_closed = 1;
- end:
-+	pthread_mutex_unlock(&registry->lock);
- 	rcu_read_unlock();
- 	return ret;
- }
-@@ -674,7 +682,7 @@ void delete_ust_app_session(int sock, struct ust_app_session *ua_sess,
- 	pthread_mutex_lock(&ua_sess->lock);
- 
- 	registry = get_session_registry(ua_sess);
--	if (registry && !registry->metadata_closed) {
-+	if (registry) {
- 		/* Push metadata for application before freeing the application. */
- 		(void) push_metadata(registry, ua_sess->consumer);
- 
-@@ -684,8 +692,7 @@ void delete_ust_app_session(int sock, struct ust_app_session *ua_sess,
- 		 * previous push metadata could have flag the metadata registry to
- 		 * close so don't send a close command if closed.
- 		 */
--		if (ua_sess->buffer_type != LTTNG_BUFFER_PER_UID &&
--				!registry->metadata_closed) {
-+		if (ua_sess->buffer_type != LTTNG_BUFFER_PER_UID) {
- 			/* And ask to close it for this session registry. */
- 			(void) close_metadata(registry, ua_sess->consumer);
- 		}
-@@ -2841,6 +2848,8 @@ static int create_ust_app_metadata(struct ust_app_session *ua_sess,
- 	registry = get_session_registry(ua_sess);
- 	assert(registry);
- 
-+	pthread_mutex_lock(&registry->lock);
-+
- 	/* Metadata already exists for this registry or it was closed previously */
- 	if (registry->metadata_key || registry->metadata_closed) {
- 		ret = 0;
-@@ -2913,6 +2922,7 @@ error_consumer:
- 	lttng_fd_put(LTTNG_FD_APPS, 1);
- 	delete_ust_app_channel(-1, metadata, app);
- error:
-+	pthread_mutex_unlock(&registry->lock);
- 	return ret;
- }
- 
-@@ -3098,9 +3108,9 @@ void ust_app_unregister(int sock)
- 	DBG("PID %d unregistering with sock %d", lta->pid, sock);
- 
- 	/*
--	 * Perform "push metadata" and flush all application streams
--	 * before removing app from hash tables, ensuring proper
--	 * behavior of data_pending check.
-+	 * For per-PID buffers, perform "push metadata" and flush all
-+	 * application streams before removing app from hash tables,
-+	 * ensuring proper behavior of data_pending check.
- 	 * Remove sessions so they are not visible during deletion.
- 	 */
- 	cds_lfht_for_each_entry(lta->sessions->ht, &iter.iter, ua_sess,
-@@ -3113,7 +3123,9 @@ void ust_app_unregister(int sock)
- 			continue;
- 		}
- 
--		(void) ust_app_flush_app_session(lta, ua_sess);
-+		if (ua_sess->buffer_type == LTTNG_BUFFER_PER_PID) {
-+			(void) ust_app_flush_app_session(lta, ua_sess);
-+		}
- 
- 		/*
- 		 * Add session to list for teardown. This is safe since at this point we
-@@ -3133,7 +3145,7 @@ void ust_app_unregister(int sock)
- 		 * session so the delete session will NOT push/close a second time.
- 		 */
- 		registry = get_session_registry(ua_sess);
--		if (registry && !registry->metadata_closed) {
-+		if (registry) {
- 			/* Push metadata for application before freeing the application. */
- 			(void) push_metadata(registry, ua_sess->consumer);
- 
-@@ -3143,8 +3155,7 @@ void ust_app_unregister(int sock)
- 			 * previous push metadata could have flag the metadata registry to
- 			 * close so don't send a close command if closed.
- 			 */
--			if (ua_sess->buffer_type != LTTNG_BUFFER_PER_UID &&
--					!registry->metadata_closed) {
-+			if (ua_sess->buffer_type != LTTNG_BUFFER_PER_UID) {
- 				/* And ask to close it for this session registry. */
- 				(void) close_metadata(registry, ua_sess->consumer);
- 			}
-@@ -4039,10 +4050,8 @@ int ust_app_stop_trace(struct ltt_ust_session *usess, struct ust_app *app)
- 	registry = get_session_registry(ua_sess);
- 	assert(registry);
- 
--	if (!registry->metadata_closed) {
--		/* Push metadata for application before freeing the application. */
--		(void) push_metadata(registry, ua_sess->consumer);
--	}
-+	/* Push metadata for application before freeing the application. */
-+	(void) push_metadata(registry, ua_sess->consumer);
- 
- end_unlock:
- 	pthread_mutex_unlock(&ua_sess->lock);
-@@ -4082,21 +4091,32 @@ int ust_app_flush_app_session(struct ust_app *app,
- 	/* Flushing buffers */
- 	socket = consumer_find_socket_by_bitness(app->bits_per_long,
- 			ua_sess->consumer);
--	cds_lfht_for_each_entry(ua_sess->channels->ht, &iter.iter, ua_chan,
--			node.node) {
--		health_code_update();
--		assert(ua_chan->is_sent);
--		ret = consumer_flush_channel(socket, ua_chan->key);
--		if (ret) {
--			ERR("Error flushing consumer channel");
--			retval = -1;
--			continue;
-+
-+	/* Flush buffers and push metadata. */
-+	switch (ua_sess->buffer_type) {
-+	case LTTNG_BUFFER_PER_PID:
-+		cds_lfht_for_each_entry(ua_sess->channels->ht, &iter.iter, ua_chan,
-+				node.node) {
-+			health_code_update();
-+			assert(ua_chan->is_sent);
-+			ret = consumer_flush_channel(socket, ua_chan->key);
-+			if (ret) {
-+				ERR("Error flushing consumer channel");
-+				retval = -1;
-+				continue;
-+			}
- 		}
-+		break;
-+	case LTTNG_BUFFER_PER_UID:
-+	default:
-+		assert(0);
-+		break;
- 	}
- 
- 	health_code_update();
- 
- 	pthread_mutex_unlock(&ua_sess->lock);
-+
- end_not_compatible:
- 	rcu_read_unlock();
- 	health_code_update();
-@@ -4104,25 +4124,76 @@ end_not_compatible:
- }
- 
- /*
-- * Flush buffers for a specific UST session and app.
-+ * Flush buffers for all applications for a specific UST session.
-+ * Called with UST session lock held.
-  */
- static
--int ust_app_flush_session(struct ust_app *app, struct ltt_ust_session *usess)
-+int ust_app_flush_session(struct ltt_ust_session *usess)
- 
- {
- 	int ret;
--	struct ust_app_session *ua_sess;
- 
--	DBG("Flushing session buffers for ust app pid %d", app->pid);
-+	DBG("Flushing session buffers for all ust apps");
- 
- 	rcu_read_lock();
- 
--	ua_sess = lookup_session_by_app(usess, app);
--	if (ua_sess == NULL) {
--		ret = -1;
--		goto end_no_session;
-+	/* Flush buffers and push metadata. */
-+	switch (usess->buffer_type) {
-+	case LTTNG_BUFFER_PER_UID:
-+	{
-+		struct buffer_reg_uid *reg;
-+		struct lttng_ht_iter iter;
-+
-+		/* Flush all per UID buffers associated to that session. */
-+		cds_list_for_each_entry(reg, &usess->buffer_reg_uid_list, lnode) {
-+			struct ust_registry_session *ust_session_reg;
-+			struct buffer_reg_channel *reg_chan;
-+			struct consumer_socket *socket;
-+
-+			/* Get consumer socket to use to push the metadata.*/
-+			socket = consumer_find_socket_by_bitness(reg->bits_per_long,
-+					usess->consumer);
-+			if (!socket) {
-+				/* Ignore request if no consumer is found for the session. */
-+				continue;
-+			}
-+
-+			cds_lfht_for_each_entry(reg->registry->channels->ht, &iter.iter,
-+					reg_chan, node.node) {
-+				/*
-+				 * The following call will print error values so the return
-+				 * code is of little importance because whatever happens, we
-+				 * have to try them all.
-+				 */
-+				(void) consumer_flush_channel(socket, reg_chan->consumer_key);
-+			}
-+
-+			ust_session_reg = reg->registry->reg.ust;
-+			/* Push metadata. */
-+			(void) push_metadata(ust_session_reg, usess->consumer);
-+		}
-+		ret = 0;
-+		break;
-+	}
-+	case LTTNG_BUFFER_PER_PID:
-+	{
-+		struct ust_app_session *ua_sess;
-+		struct lttng_ht_iter iter;
-+		struct ust_app *app;
-+
-+		cds_lfht_for_each_entry(ust_app_ht->ht, &iter.iter, app, pid_n.node) {
-+			ua_sess = lookup_session_by_app(usess, app);
-+			if (ua_sess == NULL) {
-+				continue;
-+			}
-+			(void) ust_app_flush_app_session(app, ua_sess);
-+		}
-+		break;
-+	}
-+	default:
-+		assert(0);
-+		break;
- 	}
--	ret = ust_app_flush_app_session(app, ua_sess);
- 
- end_no_session:
- 	rcu_read_unlock();
-@@ -4201,6 +4272,7 @@ int ust_app_start_trace_all(struct ltt_ust_session *usess)
- 
- /*
-  * Start tracing for the UST session.
-+ * Called with UST session lock held.
-  */
- int ust_app_stop_trace_all(struct ltt_ust_session *usess)
- {
-@@ -4220,58 +4292,7 @@ int ust_app_stop_trace_all(struct ltt_ust_session *usess)
- 		}
- 	}
- 
--	/* Flush buffers and push metadata (for UID buffers). */
--	switch (usess->buffer_type) {
--	case LTTNG_BUFFER_PER_UID:
--	{
--		struct buffer_reg_uid *reg;
--
--		/* Flush all per UID buffers associated to that session. */
--		cds_list_for_each_entry(reg, &usess->buffer_reg_uid_list, lnode) {
--			struct ust_registry_session *ust_session_reg;
--			struct buffer_reg_channel *reg_chan;
--			struct consumer_socket *socket;
--
--			/* Get consumer socket to use to push the metadata.*/
--			socket = consumer_find_socket_by_bitness(reg->bits_per_long,
--					usess->consumer);
--			if (!socket) {
--				/* Ignore request if no consumer is found for the session. */
--				continue;
--			}
--
--			cds_lfht_for_each_entry(reg->registry->channels->ht, &iter.iter,
--					reg_chan, node.node) {
--				/*
--				 * The following call will print error values so the return
--				 * code is of little importance because whatever happens, we
--				 * have to try them all.
--				 */
--				(void) consumer_flush_channel(socket, reg_chan->consumer_key);
--			}
--
--			ust_session_reg = reg->registry->reg.ust;
--			if (!ust_session_reg->metadata_closed) {
--				/* Push metadata. */
--				(void) push_metadata(ust_session_reg, usess->consumer);
--			}
--		}
--
--		break;
--	}
--	case LTTNG_BUFFER_PER_PID:
--		cds_lfht_for_each_entry(ust_app_ht->ht, &iter.iter, app, pid_n.node) {
--			ret = ust_app_flush_session(app, usess);
--			if (ret < 0) {
--				/* Continue to next apps even on error */
--				continue;
--			}
--		}
--		break;
--	default:
--		assert(0);
--		break;
--	}
-+	(void) ust_app_flush_session(usess);
- 
- 	rcu_read_unlock();
- 
--- 
-2.1.1
+T24gRnJpLCBKYW4gMTYsIDIwMTUgYXQgNTozOCBBTSwgSmlyaSBPbHNhIDxqb2xzYUByZWRoYXQu
+Y29tPiB3cm90ZToKPiBPbiBGcmksIEphbiAxNiwgMjAxNSBhdCAwOToxNDoyOEFNICswMTAwLCBK
+aXJpIE9sc2Egd3JvdGU6Cj4+IE9uIEZyaSwgSmFuIDE2LCAyMDE1IGF0IDAyOjU1OjAxQU0gLTA1
+MDAsIEFsZXhhbmRyZSBNb250cGxhaXNpciB3cm90ZToKPj4gPiBIaSBXYW5nLAo+PiA+Cj4+ID4g
+SSBjYW4gcmVwcm9kdWNlIHlvdXIgaXNzdWUsIHVzaW5nIEJhYmVsdHJhY2UgY29tbWl0IDM2MzM2
+ZDkzMyAoZnJvbSBKYW4KPj4gPiA2dGgpLiBJIGhhZCBpdCB3b3JraW5nIGF0IHNvbWUgcG9pbnQg
+YmVmb3JlLCBzbyB0aGVyZSBtdXN0IGhhdmUgYmVlbiBzb21lCj4+ID4gY2hhbmdlcyB0byB0aGUg
+QmFiZWx0cmFjZSBBUEkgc2luY2UgdGhlbi4KPj4gPgo+PiA+IElmIEkgdXBkYXRlIHRvIEJhYmVs
+dHJhY2UgbWFzdGVyICg5ZjQ3Njk2NiksIEkgdGhlbiBoaXQKPj4gPiBodHRwczovL2J1Z3MubHR0
+bmcub3JnL2lzc3Vlcy84NzQgLiBGaXhpbmcgaXQgbWFudWFsbHkgSSBjYW4gZ2V0IGl0Cj4+ID4g
+YnVpbGRpbmcsIGJ1dCB0aGVuIHRoZSAicGVyZiBkYXRhIGNvbnZlcnQiIGNvbW1hbmQgbm93IGZh
+aWxzIHdpdGggYSBuZXcKPj4gPiBlcnJvcjoKPj4gPgo+PiA+IHBlcmYgZGF0YSBjb252ZXJ0IC0t
+dG8tY3RmPS4vY3RmCj4+ID4gcGVyZjogZXZlbnQuYzoyOTI6IGJ0X2N0Zl9ldmVudF9jcmVhdGU6
+IEFzc2VydGlvbgo+PiA+IGBldmVudF9jbGFzcy0+c3RyZWFtX2NsYXNzLT5ldmVudF9oZWFkZXJf
+dHlwZScgZmFpbGVkLgo+PiA+IEFib3J0ZWQKPj4KPj4gaHVtLCBoYXZlbid0IHNlZW4gdGhpcyBv
+bmUgYmVmb3JlLi4gSSdsbCBjaGVjayB3aXRoIGxhdGVzdCBiYWJlbHRyYWNlCj4+Cj4+ID4KPj4g
+PiBJJ3ZlIENDJ2VkIE1hdGhpZXUgYW5kIErDqXLDqW1pZSwgcGVyaGFwcyB0aGV5IGNhbiBnaXZl
+IHVzIHNvbWUgcG9pbnRlcnMgYXMgdG8KPj4gPiB3aGF0IHNob3VsZCBiZSB1cGRhdGVkIGluIHRo
+ZSBwZXJmIHBhdGNoIHNldD8KPj4gPgo+PiA+IENoZWVycywKPj4gPiBBbGV4Cj4+ID4KPj4gPgo+
+PiA+IE9uIDIwMTUtMDEtMTYgMTI6MjMgQU0sIFdhbmcgTmFuIHdyb3RlOgo+PiA+ID5IaSBKaXJp
+IE9sc2EsCj4+ID4gPgo+PiA+ID5XZSBhcmUgd29ya2luZyBvbiB5b3VyIHBlcmYgY29udmVydCB0
+byBjdGYgcGF0Y2hlcyBhbmQgdHJ5aW5nIHRvCj4+ID4gPmNvbnZlcnQgcGVyZi5kYXRhIGludG8g
+Q1RGIHRyYWNlLiBCeSBpbnRyb2R1Y2luZyA4IHBhdGNoZXMgZnJvbSB5b3VyCj4+ID4gPnJlcG9z
+aXRvcnkgKHRoZSBsYXN0IDggcGF0Y2hlcyBvZiBicmFuY2ggcGVyZi9jb3JlX2N0Zl9jb252ZXJ0
+KSB3ZSBjYW4KPj4gPiA+dXNlICdwZXJmIGRhdGEgY29udmVydCAtLXRvLWN0ZicgY29tbWFuZC4g
+SG93ZXZlciwgaXQgZG9lc24ndCB3b3JrIHByb3Blcmx5Ogo+PiA+ID4KPj4gPiA+ICAkIHBlcmYg
+cmVjb3JkIGxzCj4+ID4gPiAgJCBwZXJmIGRhdGEgY29udmVydCAtLXRvLWN0ZiAuL291dC5jdGYK
+Pj4gPiA+Y2xvc2U6IEJhZCBmaWxlIGRlc2NyaXB0b3IKPj4gPiA+RmFpbGVkIHRvIGNyZWF0ZSBD
+VEYgc3RyZWFtCj4+ID4gPlsgcGVyZiBkYXRhIGNvbnZlcnQ6IENvbnZlcnRlZCAncGVyZi5kYXRh
+JyBpbnRvIENURiBkYXRhICcuL291dC5jdGYnIF0KPj4gPiA+WyBwZXJmIGRhdGEgY29udmVydDog
+Q29udmVydGVkIGFuZCB3cm90ZSAwLjAwMCBNQiAoMSBzYW1wbGVzKSBdCj4+Cj4KPiBzbyBJJ3Zl
+IGdvdCBib3RoIGVycm9ycyBpbiB0aGUgZW5kIDstKQo+Cj4gbG9va3MgbGlrZSB0aGUgYmFiZWx0
+cmFjZSB3cml0ZXIgQVBJIGdvdCBjaGFuZ2VkIG9yCj4gd2VyZSBub3QgdXNpbmcgaXQgcmlnaHQu
+Lgo+Cj4gSSBwdXQgc29tZSBmaXhlcyBvbiB0b3Agb2YgbXkgcGVyZi9jb3JlX2N0Zl9jb252ZXJ0
+Cj4gYnJhbmNoIGFuZCBpdCdzIHdvcmtpbmcgZm9yIG1lIG5vdywgYnV0IEkgbmVlZCB0bwo+IGRp
+c2N1c3MgdGhlIEFQSSB1c2FnZQo+Cj4gSsOpcsOpbWllLAo+IG15IGJhYmVsdHJhY2UgZ2l0IHNv
+dXJjZXMgSEVBRCBpcyA5ZjQ3Njk2NmFhNDAuCj4KPiBJIG5lZWRlZCB0byBkbyBmb2xsb3dpbmcg
+Y2hhbmdlcy9jb21taXRzIGluIHBlcmY6Cj4gKHBsZWFzZSBjaGVjayBteSBnaXQgdHJlZSBbMV0g
+YnJhbmNoIHBlcmYvY29yZV9jdGZfY29udmVydCkKPgo+ICAgLSBwZXJmIGRhdGE6IERlZmluZSBj
+dXN0b20gZXZlbnRfaGVhZGVyX3R5cGUKPiAgICAgZGVmaW5lIG91ciBvd24gZXZlbnRfaGVhZGVy
+X3R5cGUgYmVjYXVzZSBpdCdzIG5vIGxvbmdlcgo+ICAgICBnZW5lcmF0ZWQgYnkgZGVmYXVsdCBi
+eSB0aGUgbGlicmFyeS4uIGlzIGl0IGNvcnJlY3QgYmVoYXZpb3VyPwo+Cj4gICAtIHBlcmYgZGF0
+YTogRGlzYWJsZSBXZXJyb3IgY29udmVydCBvYmplY3QKPiAgICAgdGhpcyBpcyBwcm9iYWJseSBi
+YWJlbHRyYWNlIGJ1ZywgYmVjYXVzZSBpZiBJIGVuYWJsZSAtV2Vycm9yIEknbGwgZ2V0Ogo+Cj4g
+ICAgICAgICAgICAgICAgIEluIGZpbGUgaW5jbHVkZWQgZnJvbSAvb3B0L2xpYmJhYmVsdHJhY2Uv
+L2luY2x1ZGUvYmFiZWx0cmFjZS9jdGYtd3JpdGVyL3N0cmVhbS5oOjMwOjAsCj4gICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgZnJvbSB1dGlsL2RhdGEtY29udmVydC1idC5jOjEzOgo+
+ICAgICAgICAgICAgICAgICAvb3B0L2xpYmJhYmVsdHJhY2UvL2luY2x1ZGUvYmFiZWx0cmFjZS9j
+dGYtaXIvc3RyZWFtLmg6MTk2OjEyOiBlcnJvcjogcmVkdW5kYW50IHJlZGVjbGFyYXRpb24gb2Yg
+4oCYYnRfY3RmX3N0cmVhbV9zZXRfZXZlbnRfY29udGV4dOKAmSBbLVdlcnJvcj1yZWR1bmRhbnQt
+ZGVjbHNdCj4gICAgICAgICAgICAgICAgICBleHRlcm4gaW50IGJ0X2N0Zl9zdHJlYW1fc2V0X2V2
+ZW50X2NvbnRleHQoCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgIF4KPiAgICAgICAgICAg
+ICAgICAgL29wdC9saWJiYWJlbHRyYWNlLy9pbmNsdWRlL2JhYmVsdHJhY2UvY3RmLWlyL3N0cmVh
+bS5oOjE3MToxMjogbm90ZTogcHJldmlvdXMgZGVjbGFyYXRpb24gb2Yg4oCYYnRfY3RmX3N0cmVh
+bV9zZXRfZXZlbnRfY29udGV4dOKAmSB3YXMgaGVyZQo+ICAgICAgICAgICAgICAgICAgZXh0ZXJu
+IGludCBidF9jdGZfc3RyZWFtX3NldF9ldmVudF9jb250ZXh0KAo+ICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBeCj4KPiAgIC0gcGVyZiBkYXRhOiBJbml0IHN0cmFtX2NsYXNzIHdpdGggSUQK
+PiAgICAgdGhlIGJ0X2N0Zl90cmFjZV9jcmVhdGVfc3RyZWFtIGZ1bmN0aW9uIHRyaWVzIHRvIHNl
+dCBJRCBvbgo+ICAgICBzdHJlYW1fY2xhc3Mgd2hpY2ggZ2V0cyBmcm96ZW4ganVzdCBmZXcgbW9t
+ZW50cyBhZ28gaW4KPiAgICAgYnRfY3RmX3N0cmVhbV9jcmVhdGUgY2FsbC4uCj4KPiAgICAgdGhp
+cyB0cmlnZXJzIGZhaWx1cmUgYW5kIGNsb3NlIHVwIG9mIHN0cmVhbSBmZCB3aGljaCBpcyBub3Qg
+c2V0IHlldDoKPgo+ICAgICAgICAgaWYgKGNsb3NlKHN0cmVhbS0+cG9zLmZkKSkgewo+ICAgICAg
+ICAgICAgICAgICBwZXJyb3IoImNsb3NlIik7Cj4gICAgICAgICB9Cj4KPiAgICAgaGVuY2UgdGhl
+ICdjbG9zZTogQmFkIGZpbGUgZGVzY3JpcHRvcicgbWVzc2FnZQo+ICAgICBzbyB0aGlzIG9uZSBs
+b29rcyBsaWtlIGEgYnVnIHRvIG1lLCBidXQgd2UgbWlnaHQgYmUgbWlzdXNpbmcgdGhlIEFQSSBh
+bHNvLi4KPgo+Cj4gZmVlbCBmcmVlIHRvIG1vdmUgdGhpcyBkaXNjdXNzaW9uIHRvIGJhYmVsdHJh
+Y2UtZGV2ZWwgbGlzdCA7LSkKCkNDLWluZyBsdHRuZy1kZXYuClRoYW5rcyBmb3IgdGhlIHF1aWNr
+IHJlcG9ydCEgSSdtIG9uIGl0IGFuZCBJJ2xsIGtlZXAgeW91IHVwZGF0ZWQgYXMKc29vbiBhcyBJ
+IGhhdmUgcHVzaGVkIGEgZml4LgoKSsOpcsOpbWllCgo+Cj4gdGhhbmtzIGZvciBjb21tZW50cywK
+PiBqaXJrYQo+Cj4gWzFdIGdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVs
+L2dpdC9qb2xzYS9wZXJmLmdpdAoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJ
+bmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
+Zm8vbHR0bmctZGV2Cg==
