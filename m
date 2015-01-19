@@ -1,19 +1,22 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Olivier Delbeke <olivier.delbeke@gmail.com>
 Subject: Re: Addition of the return address
- toliblttng-ust-libc-wrapper
-Date: Mon, 19 Jan 2015 16:48:44 +0000 (UTC)
-Message-ID: <1097959140.8621.1421686124960.JavaMail.zimbra__24889.5251811065$1421686245$gmane$org@efficios.com>
+	toliblttng-ust-libc-wrapper
+Date: Mon, 19 Jan 2015 18:19:41 +0100
+Message-ID: <CAO6pHzgetc1HSYvmOzh5u7oMt5LANv1Ttb=qxTdqchspXaGhdg__39643.1099194617$1421688100$gmane$org@mail.gmail.com>
 References: <OF7097A1B1.090ABAC2-ONC1257DCC.0053FE7C-C1257DCC.00570880@LocalDomain>
  <54250547.44000.1421440866572.JavaMail.zimbra@efficios.com>
  <OF208CF361.F3A478C1-ONC1257DD2.00266C5D-C1257DD2.0026BC70@LocalDomain>
+ <1097959140.8621.1421686124960.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0273562784=="
+Content-Type: multipart/mixed; boundary="===============0012685485=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-wg0-f52.google.com ([74.125.82.52])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1YDFVN-0004OV-Jj
- for lttng-dev@lists.lttng.org; Mon, 19 Jan 2015 11:48:53 -0500
-In-Reply-To: <OF208CF361.F3A478C1-ONC1257DD2.00266C5D-C1257DD2.0026BC70@LocalDomain>
+ (envelope-from <olivier.delbeke@gmail.com>) id 1YDFzP-0004ae-Ur
+ for lttng-dev@lists.lttng.org; Mon, 19 Jan 2015 12:19:53 -0500
+Received: by mail-wg0-f52.google.com with SMTP id l2so10860952wgh.11
+ for <lttng-dev@lists.lttng.org>; Mon, 19 Jan 2015 09:19:41 -0800 (PST)
+In-Reply-To: <1097959140.8621.1421686124960.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,528 +25,608 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Olivier Delbeke <Olivier.Delbeke@awtce.be>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0273562784==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_8613_2125482905.1421686124956"
+--===============0012685485==
+Content-Type: multipart/related; boundary=047d7bf0d3262388fb050d0487b1
 
-------=_Part_8613_2125482905.1421686124956
-Content-Type: text/plain; charset=utf-8
+--047d7bf0d3262388fb050d0487b1
+Content-Type: multipart/alternative; boundary=047d7bf0d3262388f6050d0487b0
+
+--047d7bf0d3262388f6050d0487b0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
------ Original Message -----
+Hi Mathieu,
 
-> From: "Olivier Delbeke" <Olivier.Delbeke@awtce.be>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Sent: Monday, January 19, 2015 2:03:07 AM
-> Subject: Re: [lttng-dev] Addition of the return address
+Yes, feel free to add my Signed-off-by tag to the patch header. I would
+just ask you to use my gmail address.
+
+Have a nice evening,
+
+Best regards,
+Olivier
+
+On Mon, Jan 19, 2015 at 5:48 PM, Mathieu Desnoyers <
+mathieu.desnoyers@efficios.com> wrote:
+
+> ------------------------------
+>
+> *From: *"Olivier Delbeke" <Olivier.Delbeke@awtce.be>
+> *To: *"Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> *Sent: *Monday, January 19, 2015 2:03:07 AM
+> *Subject: *Re: [lttng-dev] Addition of the return address
 > toliblttng-ust-libc-wrapper
-
+>
 > Hi Mathieu,
-
-> Here is the patch you asked me : (See attached file:
-> lttng-return-address.patch)
-
+>
+> Here is the patch you asked me : *(See attached file:
+> lttng-return-address.patch)*
+>
 > First , I named the variable for return address "ra", then changed it to
-> "caller". Of course, you're free to change it (to make it more clear or m=
-ore
-> in line with the rest of your code).
-Great!=20
-
-Can I add your Signed-off-by tag to the patch header ?=20
-
-Thanks,=20
-
-Mathieu=20
-
+> "caller". Of course, you're free to change it (to make it more clear or
+> more in line with the rest of your code).
+>
+>
+> Great!
+>
+> Can I add your Signed-off-by tag to the patch header ?
+>
+> Thanks,
+>
+> Mathieu
+>
+>
 > Best regards,
-
->=20
-
-> Olivier Delbeke Senior Software Engineer Olivier.Delbeke@awtce.be / T. +3=
-2 2
-> 389 25 53 AWTC Europe S.A. - Avenue de l=E2=80=99Industrie, 19 - 1420
-> Braine-l=E2=80=99Alleud - Belgium - www.aweurope.eu - www.aisin-aw.co.jp =
-VAT : BE
-> 0474.474.114 - RPM Nivelles
-
-> Mathieu Desnoyers ---01/16/2015 09:41:08 PM---Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com>
-
-> Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-> 01/16/2015 09:41 PM
+>
+>
+>    *Olivier Delbeke **Senior Software Engineer*
+>    Olivier.Delbeke@awtce.be / T. +32 2 389 25 53
+>    ------------------------------
+>     *AWTC Europe S.A. *- Avenue de l=E2=80=99Industrie, 19 - 1420 Braine-=
+l=E2=80=99Alleud
+>    - Belgium - www.aweurope.eu - www.aisin-aw.co.jp
+>    VAT : BE 0474.474.114 - RPM Nivelles
+>
+>
+>
+> [image: Inactive hide details for Mathieu Desnoyers ---01/16/2015 09:41:0=
+8
+> PM---Mathieu Desnoyers <mathieu.desnoyers@efficios.com>]Mathieu Desnoyers
+> ---01/16/2015 09:41:08 PM---Mathieu Desnoyers <
+> mathieu.desnoyers@efficios.com>
+>
+>
+>    *Mathieu Desnoyers <mathieu.desnoyers@efficios.com
+>    <mathieu.desnoyers@efficios.com>>*
+>
+>    01/16/2015 09:41 PM
+>
+>
 > To
->=20
-
-> Olivier Delbeke <Olivier.Delbeke@awtce.be>
-
+>
+>
+>    Olivier Delbeke <Olivier.Delbeke@awtce.be>
+>
+>
 > cc
->=20
-
-> lttng-dev@lists.lttng.org
-
+>
+>
+>    lttng-dev@lists.lttng.org
+>
+>
 > Subject
->=20
-
-> Re: [lttng-dev] Addition of the return address to liblttng-ust-libc-wrapp=
-er
-> ----- Original Message -----
-
-> From: "Olivier Delbeke" <Olivier.Delbeke@awtce.be> To:
-> lttng-dev@lists.lttng.org Sent: Tuesday, January 13, 2015 10:50:38 AM
-> Subject: [lttng-dev] Addition of the return address to
-> liblttng-ust-libc-wrapper
-
-> Hi guys,
-
-> I am using liblttng-ust-libc-wrapper to detect memory leaks in my
-> applications. In order to identify not only the thread where the unfreed
-> allocations are done, but also the calling function, I extended the
-> liblttng-ust-libc-wrapper to log the "return address"
-> (__builtin_return_address(0)) in addition to the parameters of malloc(). =
-It
-> solves my problem and does not affect Trace Compass. Was this the right
-> thing to do ? If it is, then I guess that it might interest other people
-> too.
+>
+>
+>    Re: [lttng-dev] Addition of the return address to
+>    liblttng-ust-libc-wrapper
+>
+>
+> ------------------------------
+>
+>    *From: *"Olivier Delbeke" <Olivier.Delbeke@awtce.be>
+> * To: *lttng-dev@lists.lttng.org
+> * Sent: *Tuesday, January 13, 2015 10:50:38 AM
+> * Subject: *[lttng-dev] Addition of the return address to
+>     liblttng-ust-libc-wrapper
+>
+>    Hi guys,
+>
+>
+>    I am using liblttng-ust-libc-wrapper to detect memory leaks in my
+>    applications.
+>    In order to identify not only the thread where the unfreed allocations
+>    are done, but also the calling function, I extended the
+>    liblttng-ust-libc-wrapper to log the "return address"
+>    (__builtin_return_address(0)) in addition to the parameters of malloc(=
+). It
+>    solves my problem and does not affect Trace Compass.
+>    Was this the right thing to do ?
+>    If it is, then I guess that it might interest other people too.
+>
 > After further thought, I'm interested to merge this into UST master.
-
+>
 > Can you re-send either as an attachment, or as plain text without the
 > base64 encoding ?
-
+>
 > Thanks!
-
+>
 > Mathieu
-
-> diff -Nurd b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
-> c/liblttng-ust-libc-wrapper/lttng-ust-malloc.c ---
-> b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c 2015-01-06 17:14:34.000000=
-000
-> +0100 +++ c/liblttng-ust-libc-wrapper/lttng-ust-malloc.c 2015-01-06
-> 17:16:40.811145106 +0100 @@ -260,7 +260,7 @@ } retval =3D
-> cur_alloc.malloc(size); if (URCU_TLS(malloc_nesting) =3D=3D 1) { -
-> tracepoint(ust_libc, malloc, size, retval); + tracepoint(ust_libc, malloc=
-,
-> size, retval, __builtin_return_address(0) ); } URCU_TLS(malloc_nesting)--=
-;
-> return retval; @@ -279,7 +279,7 @@ } if (URCU_TLS(malloc_nesting) =3D=3D =
-1) { -
-> tracepoint(ust_libc, free, ptr); + tracepoint(ust_libc, free, ptr,
-> __builtin_return_address(0) ); } if (cur_alloc.free =3D=3D NULL) { @@ -30=
-8,7
-> +308,7 @@ } retval =3D cur_alloc.calloc(nmemb, size); if
-> (URCU_TLS(malloc_nesting) =3D=3D 1) { - tracepoint(ust_libc, calloc, nmem=
-b,
-> size, retval); + tracepoint(ust_libc, calloc, nmemb, size, retval,
-> __builtin_return_address(0) ); } URCU_TLS(malloc_nesting)--; return retva=
-l;
-> @@ -360,7 +360,7 @@ retval =3D cur_alloc.realloc(ptr, size); end: if
-> (URCU_TLS(malloc_nesting) =3D=3D 1) { - tracepoint(ust_libc, realloc, ptr=
-, size,
-> retval); + tracepoint(ust_libc, realloc, ptr, size, retval,
-> __builtin_return_address(0) ); } URCU_TLS(malloc_nesting)--; return retva=
-l;
-> @@ -380,7 +380,7 @@ } retval =3D cur_alloc.memalign(alignment, size); if
-> (URCU_TLS(malloc_nesting) =3D=3D 1) { - tracepoint(ust_libc, memalign,
-> alignment, size, retval); + tracepoint(ust_libc, memalign, alignment, siz=
-e,
-> retval, __builtin_return_address(0) ); } URCU_TLS(malloc_nesting)--; retu=
-rn
-> retval; @@ -401,7 +401,7 @@ retval =3D cur_alloc.posix_memalign(memptr,
-> alignment, size); if (URCU_TLS(malloc_nesting) =3D=3D 1) { tracepoint(ust=
-_libc,
-> posix_memalign, *memptr, alignment, size, - retval); + retval,
-> __builtin_return_address(0) ); } URCU_TLS(malloc_nesting)--; return retva=
-l;
-> diff -Nurd b/liblttng-ust-libc-wrapper/ust_libc.h
-> c/liblttng-ust-libc-wrapper/ust_libc.h ---
-> b/liblttng-ust-libc-wrapper/ust_libc.h 2015-01-06 17:14:34.000000000 +010=
-0
-> +++ c/liblttng-ust-libc-wrapper/ust_libc.h 2015-01-06 17:16:40.811145106
-> +0100 @@ -33,54 +33,60 @@ #include <lttng/tracepoint.h>
-> TRACEPOINT_EVENT(ust_libc, malloc, - TP_ARGS(size_t, size, void *, ptr), =
-+
-> TP_ARGS(size_t, size, void *, ptr, void *, ra), TP_FIELDS(
-> ctf_integer(size_t, size, size) ctf_integer_hex(void *, ptr, ptr) +
-> ctf_integer_hex(void *, ra, ra) ) ) TRACEPOINT_EVENT(ust_libc, free, -
-> TP_ARGS(void *, ptr), + TP_ARGS(void *, ptr, void *, ra), TP_FIELDS(
-> ctf_integer_hex(void *, ptr, ptr) + ctf_integer_hex(void *, ra, ra) ) )
-> TRACEPOINT_EVENT(ust_libc, calloc, - TP_ARGS(size_t, nmemb, size_t, size,
-> void *, ptr), + TP_ARGS(size_t, nmemb, size_t, size, void *, ptr, void *,
-> ra), TP_FIELDS( ctf_integer(size_t, nmemb, nmemb) ctf_integer(size_t, siz=
-e,
-> size) ctf_integer_hex(void *, ptr, ptr) + ctf_integer_hex(void *, ra, ra)=
- )
-> ) TRACEPOINT_EVENT(ust_libc, realloc, - TP_ARGS(void *, in_ptr, size_t,
-> size, void *, ptr), + TP_ARGS(void *, in_ptr, size_t, size, void *, ptr,
-> void *, ra), TP_FIELDS( ctf_integer_hex(void *, in_ptr, in_ptr)
-> ctf_integer(size_t, size, size) ctf_integer_hex(void *, ptr, ptr) +
-> ctf_integer_hex(void *, ra, ra) ) ) TRACEPOINT_EVENT(ust_libc, memalign, =
--
-> TP_ARGS(size_t, alignment, size_t, size, void *, ptr), + TP_ARGS(size_t,
-> alignment, size_t, size, void *, ptr, void *, ra), TP_FIELDS(
-> ctf_integer(size_t, alignment, alignment) ctf_integer(size_t, size, size)
-> ctf_integer_hex(void *, ptr, ptr) + ctf_integer_hex(void *, ra, ra) ) )
-> TRACEPOINT_EVENT(ust_libc, posix_memalign, - TP_ARGS(void *, out_ptr,
-> size_t, alignment, size_t, size, int, result), + TP_ARGS(void *, out_ptr,
-> size_t, alignment, size_t, size, int, result, void *, ra), TP_FIELDS(
-> ctf_integer_hex(void *, out_ptr, out_ptr) ctf_integer(size_t, alignment,
-> alignment) ctf_integer(size_t, size, size) ctf_integer(int, result, resul=
-t)
-> + ctf_integer_hex(void *, ra, ra) ) ) Best regards,
->=20
-
-> Olivier Delbeke Senior Software Engineer Olivier.Delbeke@awtce.be / T. +3=
-2 2
-> 389 25 53 AWTC Europe S.A. - Avenue de l=E2=80=99Industrie, 19 - 1420
-> Braine-l=E2=80=99Alleud - Belgium - www.aweurope.eu - www.aisin-aw.co.jp =
-VAT : BE
-> 0474.474.114 - RPM Nivelles This mail, and any attachments thereto, is
-> intended only for use by the addressee(s) named herein and may contain
-> legally privileged and/or confidential information. If you are not the
-> intended recipient, please note that any review, dissemination, disclosur=
-e,
-> alteration, printing, copying or transmission of this mail and/or any fil=
+>
+>
+>
+>    diff -Nurd b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
+>    c/liblttng-ust-libc-wrapper/lttng-ust-malloc.c
+>    --- b/liblttng-ust-libc-wrapper/lttng-ust-malloc.c 2015-01-06
+>    17:14:34.000000000 +0100
+>    +++ c/liblttng-ust-libc-wrapper/lttng-ust-malloc.c 2015-01-06
+>    17:16:40.811145106 +0100
+>    @@ -260,7 +260,7 @@
+>     }
+>     retval =3D cur_alloc.malloc(size);
+>     if (URCU_TLS(malloc_nesting) =3D=3D 1) {
+>    - tracepoint(ust_libc, malloc, size, retval);
+>    + tracepoint(ust_libc, malloc, size, retval,
+>    __builtin_return_address(0) );
+>     }
+>     URCU_TLS(malloc_nesting)--;
+>     return retval;
+>    @@ -279,7 +279,7 @@
+>     }
+>
+>     if (URCU_TLS(malloc_nesting) =3D=3D 1) {
+>    - tracepoint(ust_libc, free, ptr);
+>    + tracepoint(ust_libc, free, ptr, __builtin_return_address(0) );
+>     }
+>
+>     if (cur_alloc.free =3D=3D NULL) {
+>    @@ -308,7 +308,7 @@
+>     }
+>     retval =3D cur_alloc.calloc(nmemb, size);
+>     if (URCU_TLS(malloc_nesting) =3D=3D 1) {
+>    - tracepoint(ust_libc, calloc, nmemb, size, retval);
+>    + tracepoint(ust_libc, calloc, nmemb, size, retval,
+>    __builtin_return_address(0) );
+>     }
+>     URCU_TLS(malloc_nesting)--;
+>     return retval;
+>    @@ -360,7 +360,7 @@
+>     retval =3D cur_alloc.realloc(ptr, size);
+>    end:
+>     if (URCU_TLS(malloc_nesting) =3D=3D 1) {
+>    - tracepoint(ust_libc, realloc, ptr, size, retval);
+>    + tracepoint(ust_libc, realloc, ptr, size, retval,
+>    __builtin_return_address(0) );
+>     }
+>     URCU_TLS(malloc_nesting)--;
+>     return retval;
+>    @@ -380,7 +380,7 @@
+>     }
+>     retval =3D cur_alloc.memalign(alignment, size);
+>     if (URCU_TLS(malloc_nesting) =3D=3D 1) {
+>    - tracepoint(ust_libc, memalign, alignment, size, retval);
+>    + tracepoint(ust_libc, memalign, alignment, size, retval,
+>    __builtin_return_address(0) );
+>     }
+>     URCU_TLS(malloc_nesting)--;
+>     return retval;
+>    @@ -401,7 +401,7 @@
+>     retval =3D cur_alloc.posix_memalign(memptr, alignment, size);
+>     if (URCU_TLS(malloc_nesting) =3D=3D 1) {
+>     tracepoint(ust_libc, posix_memalign, *memptr, alignment, size,
+>    - retval);
+>    + retval, __builtin_return_address(0) );
+>     }
+>     URCU_TLS(malloc_nesting)--;
+>     return retval;
+>    diff -Nurd b/liblttng-ust-libc-wrapper/ust_libc.h
+>    c/liblttng-ust-libc-wrapper/ust_libc.h
+>    --- b/liblttng-ust-libc-wrapper/ust_libc.h 2015-01-06
+>    17:14:34.000000000 +0100
+>    +++ c/liblttng-ust-libc-wrapper/ust_libc.h 2015-01-06
+>    17:16:40.811145106 +0100
+>    @@ -33,54 +33,60 @@
+>    #include <lttng/tracepoint.h>
+>
+>    TRACEPOINT_EVENT(ust_libc, malloc,
+>    - TP_ARGS(size_t, size, void *, ptr),
+>    + TP_ARGS(size_t, size, void *, ptr, void *, ra),
+>     TP_FIELDS(
+>     ctf_integer(size_t, size, size)
+>     ctf_integer_hex(void *, ptr, ptr)
+>    + ctf_integer_hex(void *, ra, ra)
+>     )
+>    )
+>
+>    TRACEPOINT_EVENT(ust_libc, free,
+>    - TP_ARGS(void *, ptr),
+>    + TP_ARGS(void *, ptr, void *, ra),
+>     TP_FIELDS(
+>     ctf_integer_hex(void *, ptr, ptr)
+>    + ctf_integer_hex(void *, ra, ra)
+>     )
+>    )
+>
+>    TRACEPOINT_EVENT(ust_libc, calloc,
+>    - TP_ARGS(size_t, nmemb, size_t, size, void *, ptr),
+>    + TP_ARGS(size_t, nmemb, size_t, size, void *, ptr, void *, ra),
+>     TP_FIELDS(
+>     ctf_integer(size_t, nmemb, nmemb)
+>     ctf_integer(size_t, size, size)
+>     ctf_integer_hex(void *, ptr, ptr)
+>    + ctf_integer_hex(void *, ra, ra)
+>     )
+>    )
+>
+>    TRACEPOINT_EVENT(ust_libc, realloc,
+>    - TP_ARGS(void *, in_ptr, size_t, size, void *, ptr),
+>    + TP_ARGS(void *, in_ptr, size_t, size, void *, ptr, void *, ra),
+>     TP_FIELDS(
+>     ctf_integer_hex(void *, in_ptr, in_ptr)
+>     ctf_integer(size_t, size, size)
+>     ctf_integer_hex(void *, ptr, ptr)
+>    + ctf_integer_hex(void *, ra, ra)
+>     )
+>    )
+>
+>    TRACEPOINT_EVENT(ust_libc, memalign,
+>    - TP_ARGS(size_t, alignment, size_t, size, void *, ptr),
+>    + TP_ARGS(size_t, alignment, size_t, size, void *, ptr, void *, ra),
+>     TP_FIELDS(
+>     ctf_integer(size_t, alignment, alignment)
+>     ctf_integer(size_t, size, size)
+>     ctf_integer_hex(void *, ptr, ptr)
+>    + ctf_integer_hex(void *, ra, ra)
+>     )
+>    )
+>
+>    TRACEPOINT_EVENT(ust_libc, posix_memalign,
+>    - TP_ARGS(void *, out_ptr, size_t, alignment, size_t, size, int,
+>    result),
+>    + TP_ARGS(void *, out_ptr, size_t, alignment, size_t, size, int,
+>    result, void *, ra),
+>     TP_FIELDS(
+>     ctf_integer_hex(void *, out_ptr, out_ptr)
+>     ctf_integer(size_t, alignment, alignment)
+>     ctf_integer(size_t, size, size)
+>     ctf_integer(int, result, result)
+>    + ctf_integer_hex(void *, ra, ra)
+>     )
+>    )
+>
+>    Best regards,
+>    *Olivier Delbeke **Senior Software Engineer*
+>       Olivier.Delbeke@awtce.be / T. +32 2 389 25 53
+>       ------------------------------
+>        *AWTC Europe S.A. *- Avenue de l=E2=80=99Industrie, 19 - 1420
+>       Braine-l=E2=80=99Alleud - Belgium - www.aweurope.eu - www.aisin-aw.=
+co.jp
+>       VAT : BE 0474.474.114 - RPM Nivelles
+>
+>    This mail, and any attachments thereto, is intended only for use by
+>    the addressee(s) named herein and may contain legally privileged and/o=
+r
+>    confidential information. If you are not the intended recipient, pleas=
 e
-> transmitted with it, is strictly prohibited and may be unlawful. If you h=
-ave
-> received this mail by mistake, please immediately notify the sender as we=
-ll
-> as our mail administrator at postmaster@aweurope.be, and permanently dest=
-roy
-> the original as well as any copy thereof.
-> _______________________________________________ lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+>    note that any review, dissemination, disclosure, alteration, printing,
+>    copying or transmission of this mail and/or any file transmitted with =
+it,
+>    is strictly prohibited and may be unlawful. If you have received this =
+mail
+>    by mistake, please immediately notify the sender as well as our mail
+>    administrator at postmaster@aweurope.be, and permanently destroy the
+>    original as well as any copy thereof.
+>    _______________________________________________
+>    lttng-dev mailing list
+>    lttng-dev@lists.lttng.org
+>    http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
+>
+>
 > --
 > Mathieu Desnoyers
 > EfficiOS Inc.
 > http://www.efficios.com
-> (See attached file: 1E482660.jpg) (See attached file: ecblank.gif)
+> *(See attached file: 1E482660.jpg)**(See attached file: ecblank.gif)*
 > This mail, and any attachments thereto, is intended only for use by the
 > addressee(s) named herein and may contain legally privileged and/or
-> confidential information. If you are not the intended recipient, please n=
-ote
-> that any review, dissemination, disclosure, alteration, printing, copying=
- or
-> transmission of this mail and/or any file transmitted with it, is strictl=
-y
-> prohibited and may be unlawful. If you have received this mail by mistake=
-,
-> please immediately notify the sender as well as our mail administrator at
-> postmaster@aweurope.be, and permanently destroy the original as well as a=
-ny
-> copy thereof.
---=20
-Mathieu Desnoyers=20
-EfficiOS Inc.=20
-http://www.efficios.com=20
+> confidential information. If you are not the intended recipient, please
+> note that any review, dissemination, disclosure, alteration, printing,
+> copying or transmission of this mail and/or any file transmitted with it,
+> is strictly prohibited and may be unlawful. If you have received this mai=
+l
+> by mistake, please immediately notify the sender as well as our mail
+> administrator at postmaster@aweurope.be, and permanently destroy the
+> original as well as any copy thereof.
+>
+>
+>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
 
-------=_Part_8613_2125482905.1421686124956
-Content-Type: multipart/related;
-	boundary="----=_Part_8614_1748200137.1421686124956"
-
-------=_Part_8614_1748200137.1421686124956
-Content-Type: text/html; charset=utf-8
+--047d7bf0d3262388f6050d0487b0
+Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<html><body><div style=3D"font-family: times new roman, new york, times, se=
-rif; font-size: 12pt; color: #000000"><hr id=3D"zwchr"><blockquote style=3D=
-"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;=
-font-weight:normal;font-style:normal;text-decoration:none;font-family:Helve=
-tica,Arial,sans-serif;font-size:12pt;"><b>From: </b>"Olivier Delbeke" &lt;O=
-livier.Delbeke@awtce.be&gt;<br><b>To: </b>"Mathieu Desnoyers" &lt;mathieu.d=
-esnoyers@efficios.com&gt;<br><b>Sent: </b>Monday, January 19, 2015 2:03:07 =
+<div dir=3D"ltr"><div><div><div><div>Hi Mathieu,<br><br></div>Yes, feel fre=
+e to add my Signed-off-by tag to the patch header. I would just ask you to =
+use my gmail address. <br><br></div>Have a nice evening,<br><br></div>Best =
+regards,<br></div>Olivier<br></div><div class=3D"gmail_extra"><br><div clas=
+s=3D"gmail_quote">On Mon, Jan 19, 2015 at 5:48 PM, Mathieu Desnoyers <span =
+dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com" target=3D=
+"_blank">mathieu.desnoyers@efficios.com</a>&gt;</span> wrote:<br><blockquot=
+e class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc sol=
+id;padding-left:1ex"><div><div style=3D"font-family:times new roman,new yor=
+k,times,serif;font-size:12pt;color:#000000"><hr><blockquote style=3D"border=
+-left:2px solid #1010ff;margin-left:5px;padding-left:5px;color:#000;font-we=
+ight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Ar=
+ial,sans-serif;font-size:12pt"><b>From: </b>&quot;Olivier Delbeke&quot; &lt=
+;<a href=3D"mailto:Olivier.Delbeke@awtce.be" target=3D"_blank">Olivier.Delb=
+eke@awtce.be</a>&gt;<br><b>To: </b>&quot;Mathieu Desnoyers&quot; &lt;<a hre=
+f=3D"mailto:mathieu.desnoyers@efficios.com" target=3D"_blank">mathieu.desno=
+yers@efficios.com</a>&gt;<br><b>Sent: </b>Monday, January 19, 2015 2:03:07 =
 AM<br><b>Subject: </b>Re: [lttng-dev] Addition of the return address tolibl=
-ttng-ust-libc-wrapper<br><div><br></div><p><span style=3D"font-family: sans=
--serif; font-size: small;" data-mce-style=3D"font-family: sans-serif; font-=
-size: small;" face=3D"sans-serif" size=3D"2">Hi Mathieu,</span><br></p><div=
-><br></div><span style=3D"font-family: sans-serif; font-size: small;" data-=
-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans-serif=
-" size=3D"2">Here is the patch you asked me : </span><i>(See attached file:=
- lttng-return-address.patch)</i><br><div><br></div><span style=3D"font-fami=
-ly: sans-serif; font-size: small;" data-mce-style=3D"font-family: sans-seri=
-f; font-size: small;" face=3D"sans-serif" size=3D"2">First , I named the va=
-riable for return address "ra", then changed it to "caller". Of course, you=
-'re free to change it (to make it more clear or more in line with the rest =
-of your code).</span></blockquote><div><br></div><div>Great!<br></div><div>=
-<br></div><div>Can I add your Signed-off-by tag to the patch header ?<br></=
-div><div><br></div><div>Thanks,<br></div><div><br></div><div>Mathieu<br></d=
-iv><div><br></div><blockquote style=3D"border-left:2px solid #1010FF;margin=
--left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;=
-text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;=
-"><div><br></div><span style=3D"font-family: sans-serif; font-size: small;"=
- data-mce-style=3D"font-family: sans-serif; font-size: small;" face=3D"sans=
--serif" size=3D"2">Best regards,</span><br><div><br></div><table class=3D"m=
-ceItemTable" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tbody><tr va=
-lign=3D"top"><td rowspan=3D"2" valign=3D"middle" width=3D"108"><div align=
-=3D"center"><img src=3D"cid:2__=3D4EBBF741DFB5EACD8f9e8a93df93@aweurope.be"=
- height=3D"98" width=3D"107" align=3D"bottom"></div></td><td width=3D"788">=
-<img src=3D"cid:3__=3D4EBBF741DFB5EACD8f9e8a93df93@aweurope.be" alt=3D"" he=
-ight=3D"1" width=3D"1" border=3D"0"></td></tr><tr valign=3D"top"><td valign=
-=3D"middle" width=3D"788"><ul style=3D"padding-left: 0pt"><span style=3D"co=
-lor: #000080; font-family: serif; font-size: medium;" data-mce-style=3D"col=
-or: #000080; font-family: serif; font-size: medium;" face=3D"serif" color=
-=3D"#000080" size=3D"3"><b>Olivier Delbeke </b></span><span style=3D"color:=
- #000080; font-family: serif; font-size: medium;" data-mce-style=3D"color: =
-#000080; font-family: serif; font-size: medium;" face=3D"serif" color=3D"#0=
-00080" size=3D"3"><i>Senior Software Engineer</i></span><span style=3D"colo=
-r: #565051; font-family: serif; font-size: medium;" data-mce-style=3D"color=
-: #565051; font-family: serif; font-size: medium;" face=3D"serif" color=3D"=
-#565051" size=3D"3"><br>Olivier.Delbeke@awtce.be / T. +32 2 389 25 53</span=
-><hr style=3D"color:#333399; " size=3D"2" noshade=3D"" width=3D"100%" align=
-=3D"left"><span style=3D"font-family: serif; font-size: medium;" data-mce-s=
-tyle=3D"font-family: serif; font-size: medium;" face=3D"serif" size=3D"3">&=
-nbsp;</span><span style=3D"color: #000080; font-family: serif; font-size: x=
-x-small;" data-mce-style=3D"color: #000080; font-family: serif; font-size: =
-xx-small;" face=3D"serif" color=3D"#000080" size=3D"1"><b>AWTC Europe S.A. =
-</b></span><span style=3D"color: #565051; font-family: serif; font-size: xx=
--small;" data-mce-style=3D"color: #565051; font-family: serif; font-size: x=
-x-small;" face=3D"serif" color=3D"#565051" size=3D"1">- Avenue de l=E2=80=
-=99Industrie, 19 - 1420 Braine-l=E2=80=99Alleud - Belgium - www.aweurope.eu=
- - www.aisin-aw.co.jp<br>VAT : BE 0474.474.114 - RPM Nivelles</span><span s=
-tyle=3D"font-family: serif; font-size: medium;" data-mce-style=3D"font-fami=
-ly: serif; font-size: medium;" face=3D"serif" size=3D"3">&nbsp;</span></ul>=
-</td></tr></tbody></table><br><div><br></div><img src=3D"cid:4__=3D4EBBF741=
-DFB5EACD8f9e8a93df93@aweurope.be" alt=3D"Inactive hide details for Mathieu =
-Desnoyers ---01/16/2015 09:41:08 PM---Mathieu Desnoyers <mathieu.desnoyers@=
-efficios.com>" height=3D"16" width=3D"16" border=3D"0"><span style=3D"color=
-: #424282; font-family: sans-serif; font-size: small;" data-mce-style=3D"co=
-lor: #424282; font-family: sans-serif; font-size: small;" face=3D"sans-seri=
-f" color=3D"#424282" size=3D"2">Mathieu Desnoyers ---01/16/2015 09:41:08 PM=
----Mathieu Desnoyers &lt;mathieu.desnoyers@efficios.com&gt;</span><br><div>=
-<br></div><table class=3D"mceItemTable" width=3D"100%" border=3D"0" cellpad=
-ding=3D"0" cellspacing=3D"0"><tbody><tr valign=3D"top"><td style=3D"backgro=
-und-image:; background-repeat: no-repeat; " width=3D"40%"><ul style=3D"padd=
-ing-left: 72pt"><span style=3D"font-family: sans-serif; font-size: xx-small=
-;" data-mce-style=3D"font-family: sans-serif; font-size: xx-small;" face=3D=
-"sans-serif" size=3D"1"><b>Mathieu Desnoyers &lt;mathieu.desnoyers@efficios=
-.com&gt;</b></span><span style=3D"font-family: sans-serif; font-size: xx-sm=
-all;" data-mce-style=3D"font-family: sans-serif; font-size: xx-small;" face=
-=3D"sans-serif" size=3D"1">&nbsp;</span><p><span style=3D"font-family: sans=
--serif; font-size: xx-small;" data-mce-style=3D"font-family: sans-serif; fo=
-nt-size: xx-small;" face=3D"sans-serif" size=3D"1">01/16/2015 09:41 PM</spa=
-n></p></ul></td><td width=3D"60%"><table class=3D"mceItemTable" width=3D"10=
-0%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tbody><tr valign=3D"t=
-op"><td width=3D"1%"><img src=3D"cid:3__=3D4EBBF741DFB5EACD8f9e8a93df93@awe=
-urope.be" alt=3D"" height=3D"1" width=3D"58" border=3D"0"><br><div align=3D=
-"right"><span style=3D"font-family: sans-serif; font-size: xx-small;" data-=
-mce-style=3D"font-family: sans-serif; font-size: xx-small;" face=3D"sans-se=
-rif" size=3D"1">To</span></div></td><td width=3D"100%"><img src=3D"cid:3__=
-=3D4EBBF741DFB5EACD8f9e8a93df93@aweurope.be" alt=3D"" height=3D"1" width=3D=
-"1" border=3D"0"><br><ul style=3D"padding-left: 7pt"><span style=3D"font-fa=
-mily: sans-serif; font-size: xx-small;" data-mce-style=3D"font-family: sans=
--serif; font-size: xx-small;" face=3D"sans-serif" size=3D"1">Olivier Delbek=
-e &lt;Olivier.Delbeke@awtce.be&gt;</span></ul></td></tr><tr valign=3D"top">=
+ttng-ust-libc-wrapper<br><div><br></div><p><span style=3D"font-family:sans-=
+serif;font-size:small" face=3D"sans-serif" size=3D"2">Hi Mathieu,</span><br=
+></p><div><br></div><span style=3D"font-family:sans-serif;font-size:small" =
+face=3D"sans-serif" size=3D"2">Here is the patch you asked me : </span><i>(=
+See attached file: lttng-return-address.patch)</i><br><div><br></div><span =
+style=3D"font-family:sans-serif;font-size:small" face=3D"sans-serif" size=
+=3D"2">First , I named the variable for return address &quot;ra&quot;, then=
+ changed it to &quot;caller&quot;. Of course, you&#39;re free to change it =
+(to make it more clear or more in line with the rest of your code).</span><=
+/blockquote><div><br></div><div>Great!<br></div><div><br></div><div>Can I a=
+dd your Signed-off-by tag to the patch header ?<br></div><div><br></div><di=
+v>Thanks,<br></div><div><br></div><div>Mathieu<br></div><div><br></div><blo=
+ckquote style=3D"border-left:2px solid #1010ff;margin-left:5px;padding-left=
+:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;f=
+ont-family:Helvetica,Arial,sans-serif;font-size:12pt"><span class=3D""><div=
+><br></div><span style=3D"font-family:sans-serif;font-size:small" face=3D"s=
+ans-serif" size=3D"2">Best regards,</span><br><div><br></div><table border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tbody><tr valign=3D"top"><td ro=
+wspan=3D"2" valign=3D"middle" width=3D"108"><div align=3D"center"><img src=
+=3D"cid:2__=3D4EBBF741DFB5EACD8f9e8a93df93@aweurope.be" width=3D"107" align=
+=3D"bottom" height=3D"98"></div></td><td width=3D"788"><img src=3D"cid:3__=
+=3D4EBBF741DFB5EACD8f9e8a93df93@aweurope.be" alt=3D"" width=3D"1" border=3D=
+"0" height=3D"1"></td></tr><tr valign=3D"top"><td valign=3D"middle" width=
+=3D"788"><ul style=3D"padding-left:0pt"><span style=3D"color:#000080;font-f=
+amily:serif;font-size:medium" face=3D"serif" color=3D"#000080" size=3D"3"><=
+b>Olivier Delbeke </b></span><span style=3D"color:#000080;font-family:serif=
+;font-size:medium" face=3D"serif" color=3D"#000080" size=3D"3"><i>Senior So=
+ftware Engineer</i></span><span style=3D"color:#565051;font-family:serif;fo=
+nt-size:medium" face=3D"serif" color=3D"#565051" size=3D"3"><br><a href=3D"=
+mailto:Olivier.Delbeke@awtce.be" target=3D"_blank">Olivier.Delbeke@awtce.be=
+</a> / T. <a href=3D"tel:%2B32%202%20389%2025%2053" value=3D"+3223892553" t=
+arget=3D"_blank">+32 2 389 25 53</a></span><hr style=3D"color:#333399" nosh=
+ade size=3D"2" width=3D"100%" align=3D"left"><span style=3D"font-family:ser=
+if;font-size:medium" face=3D"serif" size=3D"3">=C2=A0</span><span style=3D"=
+color:#000080;font-family:serif;font-size:xx-small" face=3D"serif" color=3D=
+"#000080" size=3D"1"><b>AWTC Europe S.A. </b></span><span style=3D"color:#5=
+65051;font-family:serif;font-size:xx-small" face=3D"serif" color=3D"#565051=
+" size=3D"1">- Avenue de l=E2=80=99Industrie, 19 - 1420 Braine-l=E2=80=99Al=
+leud - Belgium - <a href=3D"http://www.aweurope.eu" target=3D"_blank">www.a=
+weurope.eu</a> - <a href=3D"http://www.aisin-aw.co.jp" target=3D"_blank">ww=
+w.aisin-aw.co.jp</a><br>VAT : BE 0474.474.114 - RPM Nivelles</span><span st=
+yle=3D"font-family:serif;font-size:medium" face=3D"serif" size=3D"3">=C2=A0=
+</span></ul></td></tr></tbody></table><br><div><br></div></span><img src=3D=
+"cid:4__=3D4EBBF741DFB5EACD8f9e8a93df93@aweurope.be" alt=3D"Inactive hide d=
+etails for Mathieu Desnoyers ---01/16/2015 09:41:08 PM---Mathieu Desnoyers =
+&lt;mathieu.desnoyers@efficios.com&gt;" width=3D"16" border=3D"0" height=3D=
+"16"><span style=3D"color:#424282;font-family:sans-serif;font-size:small" f=
+ace=3D"sans-serif" color=3D"#424282" size=3D"2">Mathieu Desnoyers ---01/16/=
+2015 09:41:08 PM---Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyer=
+s@efficios.com" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;</s=
+pan><br><div><br></div><table width=3D"100%" border=3D"0" cellpadding=3D"0"=
+ cellspacing=3D"0"><tbody><tr valign=3D"top"><td width=3D"40%"><ul style=3D=
+"padding-left:72pt"><span style=3D"font-family:sans-serif;font-size:xx-smal=
+l" face=3D"sans-serif" size=3D"1"><b>Mathieu Desnoyers &lt;<a href=3D"mailt=
+o:mathieu.desnoyers@efficios.com" target=3D"_blank">mathieu.desnoyers@effic=
+ios.com</a>&gt;</b></span><span style=3D"font-family:sans-serif;font-size:x=
+x-small" face=3D"sans-serif" size=3D"1">=C2=A0</span><p><span style=3D"font=
+-family:sans-serif;font-size:xx-small" face=3D"sans-serif" size=3D"1">01/16=
+/2015 09:41 PM</span></p></ul></td><td width=3D"60%"><table width=3D"100%" =
+border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tbody><tr valign=3D"top">=
 <td width=3D"1%"><img src=3D"cid:3__=3D4EBBF741DFB5EACD8f9e8a93df93@aweurop=
-e.be" alt=3D"" height=3D"1" width=3D"58" border=3D"0"><br><div align=3D"rig=
-ht"><span style=3D"font-family: sans-serif; font-size: xx-small;" data-mce-=
-style=3D"font-family: sans-serif; font-size: xx-small;" face=3D"sans-serif"=
- size=3D"1">cc</span></div></td><td width=3D"100%"><img src=3D"cid:3__=3D4E=
-BBF741DFB5EACD8f9e8a93df93@aweurope.be" alt=3D"" height=3D"1" width=3D"1" b=
-order=3D"0"><br><ul style=3D"padding-left: 7pt"><span style=3D"font-family:=
- sans-serif; font-size: xx-small;" data-mce-style=3D"font-family: sans-seri=
-f; font-size: xx-small;" face=3D"sans-serif" size=3D"1">lttng-dev@lists.ltt=
-ng.org</span></ul></td></tr><tr valign=3D"top"><td width=3D"1%"><img src=3D=
-"cid:3__=3D4EBBF741DFB5EACD8f9e8a93df93@aweurope.be" alt=3D"" height=3D"1" =
-width=3D"58" border=3D"0"><br><div align=3D"right"><span style=3D"font-fami=
-ly: sans-serif; font-size: xx-small;" data-mce-style=3D"font-family: sans-s=
-erif; font-size: xx-small;" face=3D"sans-serif" size=3D"1">Subject</span></=
-div></td><td width=3D"100%"><img src=3D"cid:3__=3D4EBBF741DFB5EACD8f9e8a93d=
-f93@aweurope.be" alt=3D"" height=3D"1" width=3D"1" border=3D"0"><br><ul sty=
-le=3D"padding-left: 7pt"><span style=3D"font-family: sans-serif; font-size:=
- xx-small;" data-mce-style=3D"font-family: sans-serif; font-size: xx-small;=
-" face=3D"sans-serif" size=3D"1">Re: [lttng-dev] Addition of the return add=
-ress to        liblttng-ust-libc-wrapper</span></ul></td></tr></tbody></tab=
-le><table class=3D"mceItemTable" border=3D"0" cellpadding=3D"0" cellspacing=
-=3D"0"><tbody><tr valign=3D"top"><td width=3D"58"><img src=3D"cid:3__=3D4EB=
-BF741DFB5EACD8f9e8a93df93@aweurope.be" alt=3D"" height=3D"1" width=3D"1" bo=
-rder=3D"0"></td><td width=3D"336"><img src=3D"cid:3__=3D4EBBF741DFB5EACD8f9=
-e8a93df93@aweurope.be" alt=3D"" height=3D"1" width=3D"1" border=3D"0"></td>=
-</tr></tbody></table></td></tr></tbody></table><br><hr id=3D"zwchr" size=3D=
-"2" width=3D"100%" align=3D"left"><ul style=3D"padding-left: 3pt"><span sty=
-le=3D"font-family: Arial; font-size: medium;" data-mce-style=3D"font-family=
-: Arial; font-size: medium;" face=3D"Arial" size=3D"3"><b>From: </b></span>=
-<span style=3D"font-family: Arial; font-size: medium;" data-mce-style=3D"fo=
-nt-family: Arial; font-size: medium;" face=3D"Arial" size=3D"3">"Olivier De=
-lbeke" &lt;Olivier.Delbeke@awtce.be&gt;</span><span style=3D"font-family: A=
-rial; font-size: medium;" data-mce-style=3D"font-family: Arial; font-size: =
-medium;" face=3D"Arial" size=3D"3"><b><br>To: </b></span><span style=3D"fon=
-t-family: Arial; font-size: medium;" data-mce-style=3D"font-family: Arial; =
-font-size: medium;" face=3D"Arial" size=3D"3">lttng-dev@lists.lttng.org</sp=
-an><span style=3D"font-family: Arial; font-size: medium;" data-mce-style=3D=
-"font-family: Arial; font-size: medium;" face=3D"Arial" size=3D"3"><b><br>S=
-ent: </b></span><span style=3D"font-family: Arial; font-size: medium;" data=
--mce-style=3D"font-family: Arial; font-size: medium;" face=3D"Arial" size=
-=3D"3">Tuesday, January 13, 2015 10:50:38 AM</span><span style=3D"font-fami=
-ly: Arial; font-size: medium;" data-mce-style=3D"font-family: Arial; font-s=
-ize: medium;" face=3D"Arial" size=3D"3"><b><br>Subject: </b></span><span st=
-yle=3D"font-family: Arial; font-size: medium;" data-mce-style=3D"font-famil=
-y: Arial; font-size: medium;" face=3D"Arial" size=3D"3">[lttng-dev] Additio=
-n of the return address to &nbsp; &nbsp; &nbsp; &nbsp;liblttng-ust-libc-wra=
-pper</span><br><p><span style=3D"font-family: Arial; font-size: small;" dat=
-a-mce-style=3D"font-family: Arial; font-size: small;" face=3D"Arial" size=
-=3D"2">Hi guys,</span></p><p><br><span style=3D"font-family: Arial; font-si=
-ze: small;" data-mce-style=3D"font-family: Arial; font-size: small;" face=
-=3D"Arial" size=3D"2">I am using liblttng-ust-libc-wrapper to detect memory=
- leaks in my applications. <br>In order to identify not only the thread whe=
-re the unfreed allocations are done, but also the calling function, I exten=
-ded the liblttng-ust-libc-wrapper to log the "return address" (__builtin_re=
-turn_address(0)) in addition to the parameters of malloc(). It solves my pr=
-oblem and does not affect Trace Compass.<br>Was this the right thing to do =
-? <br>If it is, then I guess that it might interest other people too.</span=
-></p></ul><span style=3D"font-family: serif; font-size: medium;" data-mce-s=
-tyle=3D"font-family: serif; font-size: medium;" face=3D"serif" size=3D"3">A=
-fter further thought, I'm interested to merge this into UST master.</span><=
-br><div><br></div><span style=3D"font-family: serif; font-size: medium;" da=
-ta-mce-style=3D"font-family: serif; font-size: medium;" face=3D"serif" size=
-=3D"3">Can you re-send either as an attachment, or as plain text without th=
-e</span><br><span style=3D"font-family: serif; font-size: medium;" data-mce=
--style=3D"font-family: serif; font-size: medium;" face=3D"serif" size=3D"3"=
->base64 encoding ?</span><br><div><br></div><span style=3D"font-family: ser=
-if; font-size: medium;" data-mce-style=3D"font-family: serif; font-size: me=
-dium;" face=3D"serif" size=3D"3">Thanks!</span><br><div><br></div><span sty=
-le=3D"font-family: serif; font-size: medium;" data-mce-style=3D"font-family=
-: serif; font-size: medium;" face=3D"serif" size=3D"3">Mathieu</span><br><d=
-iv><br></div><ul style=3D"padding-left: 3pt"><br><span style=3D"font-family=
-: Arial; font-size: small;" data-mce-style=3D"font-family: Arial; font-size=
-: small;" face=3D"Arial" size=3D"2">diff -Nurd b/liblttng-ust-libc-wrapper/=
-lttng-ust-malloc.c c/liblttng-ust-libc-wrapper/lttng-ust-malloc.c<br>--- b/=
-liblttng-ust-libc-wrapper/lttng-ust-malloc.c 2015-01-06 17:14:34.000000000 =
-+0100<br>+++ c/liblttng-ust-libc-wrapper/lttng-ust-malloc.c 2015-01-06 17:1=
-6:40.811145106 +0100<br>@@ -260,7 +260,7 @@<br> &nbsp;}<br> &nbsp;retval =
-=3D cur_alloc.malloc(size);<br> &nbsp;if (URCU_TLS(malloc_nesting) =3D=3D 1=
-) {<br>- tracepoint(ust_libc, malloc, size, retval);<br>+ tracepoint(ust_li=
-bc, malloc, size, retval, __builtin_return_address(0) );<br> &nbsp;}<br> &n=
-bsp;URCU_TLS(malloc_nesting)--;<br> &nbsp;return retval;<br>@@ -279,7 +279,=
-7 @@<br> &nbsp;}<br> <br> &nbsp;if (URCU_TLS(malloc_nesting) =3D=3D 1) {<br=
->- tracepoint(ust_libc, free, ptr);<br>+ tracepoint(ust_libc, free, ptr, __=
-builtin_return_address(0) );<br> &nbsp;}<br> <br> &nbsp;if (cur_alloc.free =
-=3D=3D NULL) {<br>@@ -308,7 +308,7 @@<br> &nbsp;}<br> &nbsp;retval =3D cur_=
-alloc.calloc(nmemb, size);<br> &nbsp;if (URCU_TLS(malloc_nesting) =3D=3D 1)=
- {<br>- tracepoint(ust_libc, calloc, nmemb, size, retval);<br>+ tracepoint(=
-ust_libc, calloc, nmemb, size, retval, __builtin_return_address(0) );<br> &=
-nbsp;}<br> &nbsp;URCU_TLS(malloc_nesting)--;<br> &nbsp;return retval;<br>@@=
- -360,7 +360,7 @@<br> &nbsp;retval =3D cur_alloc.realloc(ptr, size);<br> en=
-d:<br> &nbsp;if (URCU_TLS(malloc_nesting) =3D=3D 1) {<br>- tracepoint(ust_l=
-ibc, realloc, ptr, size, retval);<br>+ tracepoint(ust_libc, realloc, ptr, s=
-ize, retval, __builtin_return_address(0) );<br> &nbsp;}<br> &nbsp;URCU_TLS(=
-malloc_nesting)--;<br> &nbsp;return retval;<br>@@ -380,7 +380,7 @@<br> &nbs=
-p;}<br> &nbsp;retval =3D cur_alloc.memalign(alignment, size);<br> &nbsp;if =
-(URCU_TLS(malloc_nesting) =3D=3D 1) {<br>- tracepoint(ust_libc, memalign, a=
-lignment, size, retval);<br>+ tracepoint(ust_libc, memalign, alignment, siz=
-e, retval, __builtin_return_address(0) );<br> &nbsp;}<br> &nbsp;URCU_TLS(ma=
-lloc_nesting)--;<br> &nbsp;return retval;<br>@@ -401,7 +401,7 @@<br> &nbsp;=
-retval =3D cur_alloc.posix_memalign(memptr, alignment, size);<br> &nbsp;if =
-(URCU_TLS(malloc_nesting) =3D=3D 1) {<br> &nbsp;tracepoint(ust_libc, posix_=
-memalign, *memptr, alignment, size,<br>- retval);<br>+ retval, __builtin_re=
-turn_address(0) );<br> &nbsp;}<br> &nbsp;URCU_TLS(malloc_nesting)--;<br> &n=
-bsp;return retval;<br>diff -Nurd b/liblttng-ust-libc-wrapper/ust_libc.h c/l=
-iblttng-ust-libc-wrapper/ust_libc.h<br>--- b/liblttng-ust-libc-wrapper/ust_=
-libc.h 2015-01-06 17:14:34.000000000 +0100<br>+++ c/liblttng-ust-libc-wrapp=
-er/ust_libc.h 2015-01-06 17:16:40.811145106 +0100<br>@@ -33,54 +33,60 @@<br=
-> #include &lt;lttng/tracepoint.h&gt;<br> <br> TRACEPOINT_EVENT(ust_libc, m=
-alloc,<br>- TP_ARGS(size_t, size, void *, ptr),<br>+ TP_ARGS(size_t, size, =
-void *, ptr, void *, ra),<br> &nbsp;TP_FIELDS(<br> &nbsp;ctf_integer(size_t=
-, size, size)<br> &nbsp;ctf_integer_hex(void *, ptr, ptr)<br>+ ctf_integer_=
-hex(void *, ra, ra)<br> &nbsp;)<br> )<br> <br> TRACEPOINT_EVENT(ust_libc, f=
-ree,<br>- TP_ARGS(void *, ptr),<br>+ TP_ARGS(void *, ptr, void *, ra),<br> =
-&nbsp;TP_FIELDS(<br> &nbsp;ctf_integer_hex(void *, ptr, ptr)<br>+ ctf_integ=
-er_hex(void *, ra, ra)<br> &nbsp;)<br> )<br> <br> TRACEPOINT_EVENT(ust_libc=
-, calloc,<br>- TP_ARGS(size_t, nmemb, size_t, size, void *, ptr),<br>+ TP_A=
-RGS(size_t, nmemb, size_t, size, void *, ptr, void *, ra),<br> &nbsp;TP_FIE=
-LDS(<br> &nbsp;ctf_integer(size_t, nmemb, nmemb)<br> &nbsp;ctf_integer(size=
-_t, size, size)<br> &nbsp;ctf_integer_hex(void *, ptr, ptr)<br>+ ctf_intege=
-r_hex(void *, ra, ra)<br> &nbsp;)<br> )<br> <br> TRACEPOINT_EVENT(ust_libc,=
- realloc,<br>- TP_ARGS(void *, in_ptr, size_t, size, void *, ptr),<br>+ TP_=
-ARGS(void *, in_ptr, size_t, size, void *, ptr, void *, ra),<br> &nbsp;TP_F=
-IELDS(<br> &nbsp;ctf_integer_hex(void *, in_ptr, in_ptr)<br> &nbsp;ctf_inte=
-ger(size_t, size, size)<br> &nbsp;ctf_integer_hex(void *, ptr, ptr)<br>+ ct=
-f_integer_hex(void *, ra, ra)<br> &nbsp;)<br> )<br> <br> TRACEPOINT_EVENT(u=
-st_libc, memalign,<br>- TP_ARGS(size_t, alignment, size_t, size, void *, pt=
-r),<br>+ TP_ARGS(size_t, alignment, size_t, size, void *, ptr, void *, ra),=
-<br> &nbsp;TP_FIELDS(<br> &nbsp;ctf_integer(size_t, alignment, alignment)<b=
-r> &nbsp;ctf_integer(size_t, size, size)<br> &nbsp;ctf_integer_hex(void *, =
-ptr, ptr)<br>+ ctf_integer_hex(void *, ra, ra)<br> &nbsp;)<br> )<br> <br> T=
-RACEPOINT_EVENT(ust_libc, posix_memalign,<br>- TP_ARGS(void *, out_ptr, siz=
-e_t, alignment, size_t, size, int, result),<br>+ TP_ARGS(void *, out_ptr, s=
-ize_t, alignment, size_t, size, int, result, void *, ra),<br> &nbsp;TP_FIEL=
-DS(<br> &nbsp;ctf_integer_hex(void *, out_ptr, out_ptr)<br> &nbsp;ctf_integ=
-er(size_t, alignment, alignment)<br> &nbsp;ctf_integer(size_t, size, size)<=
-br> &nbsp;ctf_integer(int, result, result)<br>+ ctf_integer_hex(void *, ra,=
- ra)<br> &nbsp;)<br> )<br> <br>Best regards,</span><table class=3D"mceItemT=
-able" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tbody><tr valign=3D=
-"top"><td rowspan=3D"2" valign=3D"middle" width=3D"108"><div align=3D"cente=
-r"><img src=3D"cid:2__=3D4EBBF741DFB5EACD8f9e8a93df93@aweurope.be" height=
-=3D"98" width=3D"107" align=3D"bottom"></div></td><td width=3D"788"><img sr=
-c=3D"cid:3__=3D4EBBF741DFB5EACD8f9e8a93df93@aweurope.be" height=3D"1" width=
-=3D"1" align=3D"bottom"></td></tr><tr valign=3D"top"><td valign=3D"middle" =
-width=3D"788"><ul style=3D"padding-left: 36pt"><span style=3D"color: #00008=
-0; font-family: serif; font-size: medium;" data-mce-style=3D"color: #000080=
-; font-family: serif; font-size: medium;" face=3D"serif" color=3D"#000080" =
-size=3D"3"><b>Olivier Delbeke </b></span><span style=3D"color: #000080; fon=
-t-family: serif; font-size: medium;" data-mce-style=3D"color: #000080; font=
--family: serif; font-size: medium;" face=3D"serif" color=3D"#000080" size=
-=3D"3"><i>Senior Software Engineer</i></span><span style=3D"color: #565051;=
- font-family: serif; font-size: medium;" data-mce-style=3D"color: #565051; =
-font-family: serif; font-size: medium;" face=3D"serif" color=3D"#565051" si=
-ze=3D"3"><br>Olivier.Delbeke@awtce.be / T. +32 2 389 25 53</span><hr size=
-=3D"2" noshade=3D"" width=3D"100%" align=3D"left"><span style=3D"font-famil=
-y: serif; font-size: medium;" data-mce-style=3D"font-family: serif; font-si=
-ze: medium;" face=3D"serif" size=3D"3">&nbsp;</span><span style=3D"color: #=
-000080; font-family: serif; font-size: xx-small;" data-mce-style=3D"color: =
-#000080; font-family: serif; font-size: xx-small;" face=3D"serif" color=3D"=
-#000080" size=3D"1"><b>AWTC Europe S.A. </b></span><span style=3D"color: #5=
-65051; font-family: serif; font-size: xx-small;" data-mce-style=3D"color: #=
-565051; font-family: serif; font-size: xx-small;" face=3D"serif" color=3D"#=
-565051" size=3D"1">- Avenue de l=E2=80=99Industrie, 19 - 1420 Braine-l=E2=
-=80=99Alleud - Belgium - </span><span style=3D"color: #565051; font-family:=
- serif; font-size: xx-small;" data-mce-style=3D"color: #565051; font-family=
-: serif; font-size: xx-small;" face=3D"serif" color=3D"#565051" size=3D"1">=
-www.aweurope.eu</span><span style=3D"color: #565051; font-family: serif; fo=
-nt-size: xx-small;" data-mce-style=3D"color: #565051; font-family: serif; f=
-ont-size: xx-small;" face=3D"serif" color=3D"#565051" size=3D"1">&nbsp;- </=
-span><span style=3D"color: #565051; font-family: serif; font-size: xx-small=
-;" data-mce-style=3D"color: #565051; font-family: serif; font-size: xx-smal=
-l;" face=3D"serif" color=3D"#565051" size=3D"1">www.aisin-aw.co.jp</span><s=
-pan style=3D"color: #565051; font-family: serif; font-size: xx-small;" data=
--mce-style=3D"color: #565051; font-family: serif; font-size: xx-small;" fac=
-e=3D"serif" color=3D"#565051" size=3D"1"><br>VAT : BE 0474.474.114 - RPM Ni=
-velles</span><span style=3D"font-family: serif; font-size: medium;" data-mc=
-e-style=3D"font-family: serif; font-size: medium;" face=3D"serif" size=3D"3=
-">&nbsp;</span></ul></td></tr></tbody></table><span style=3D"font-family: A=
-rial; font-size: medium;" data-mce-style=3D"font-family: Arial; font-size: =
-medium;" face=3D"Arial" size=3D"3"><br>This mail, and any attachments there=
-to, is intended only for use by the addressee(s) named herein and may conta=
-in legally privileged and/or confidential information. If you are not the i=
-ntended recipient, please note that any review, dissemination, disclosure, =
-alteration, printing, copying or transmission of this mail and/or any file =
-transmitted with it, is strictly prohibited and may be unlawful. If you hav=
-e received this mail by mistake, please immediately notify the sender as we=
-ll as our mail administrator at postmaster@aweurope.be, and permanently des=
-troy the original as well as any copy thereof. <br>________________________=
-_______________________<br>lttng-dev mailing list<br>lttng-dev@lists.lttng.=
-org<br></span><span style=3D"font-family: Arial; font-size: medium;" data-m=
-ce-style=3D"font-family: Arial; font-size: medium;" face=3D"Arial" size=3D"=
-3"><a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" ta=
-rget=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</=
-a></span><br data-mce-bogus=3D"1"></ul><span style=3D"font-family: serif; f=
-ont-size: medium;" data-mce-style=3D"font-family: serif; font-size: medium;=
-" face=3D"serif" size=3D"3"><br></span><br><div><br></div><span style=3D"fo=
-nt-family: serif; font-size: medium;" data-mce-style=3D"font-family: serif;=
- font-size: medium;" face=3D"serif" size=3D"3">-- </span><br><span style=3D=
-"font-family: serif; font-size: medium;" data-mce-style=3D"font-family: ser=
-if; font-size: medium;" face=3D"serif" size=3D"3">Mathieu Desnoyers<br>Effi=
-ciOS Inc.<br></span><span style=3D"font-family: serif; font-size: medium;" =
-data-mce-style=3D"font-family: serif; font-size: medium;" face=3D"serif" si=
-ze=3D"3"><a href=3D"http://www.efficios.com" target=3D"_blank">http://www.e=
-fficios.com</a></span><br><i>(See attached file: 1E482660.jpg)</i><i>(See a=
-ttached file: ecblank.gif)</i><br><span style=3D"font-family: sans-serif;" =
-data-mce-style=3D"font-family: sans-serif;" face=3D"sans-serif">
+e.be" alt=3D"" width=3D"58" border=3D"0" height=3D"1"><br><div align=3D"rig=
+ht"><span style=3D"font-family:sans-serif;font-size:xx-small" face=3D"sans-=
+serif" size=3D"1">To</span></div></td><td width=3D"100%"><img src=3D"cid:3_=
+_=3D4EBBF741DFB5EACD8f9e8a93df93@aweurope.be" alt=3D"" width=3D"1" border=
+=3D"0" height=3D"1"><br><ul style=3D"padding-left:7pt"><span style=3D"font-=
+family:sans-serif;font-size:xx-small" face=3D"sans-serif" size=3D"1">Olivie=
+r Delbeke &lt;<a href=3D"mailto:Olivier.Delbeke@awtce.be" target=3D"_blank"=
+>Olivier.Delbeke@awtce.be</a>&gt;</span></ul></td></tr><tr valign=3D"top"><=
+td width=3D"1%"><img src=3D"cid:3__=3D4EBBF741DFB5EACD8f9e8a93df93@aweurope=
+.be" alt=3D"" width=3D"58" border=3D"0" height=3D"1"><br><div align=3D"righ=
+t"><span style=3D"font-family:sans-serif;font-size:xx-small" face=3D"sans-s=
+erif" size=3D"1">cc</span></div></td><td width=3D"100%"><img src=3D"cid:3__=
+=3D4EBBF741DFB5EACD8f9e8a93df93@aweurope.be" alt=3D"" width=3D"1" border=3D=
+"0" height=3D"1"><br><ul style=3D"padding-left:7pt"><span style=3D"font-fam=
+ily:sans-serif;font-size:xx-small" face=3D"sans-serif" size=3D"1"><a href=
+=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.ltt=
+ng.org</a></span></ul></td></tr><tr valign=3D"top"><td width=3D"1%"><img sr=
+c=3D"cid:3__=3D4EBBF741DFB5EACD8f9e8a93df93@aweurope.be" alt=3D"" width=3D"=
+58" border=3D"0" height=3D"1"><br><div align=3D"right"><span style=3D"font-=
+family:sans-serif;font-size:xx-small" face=3D"sans-serif" size=3D"1">Subjec=
+t</span></div></td><td width=3D"100%"><img src=3D"cid:3__=3D4EBBF741DFB5EAC=
+D8f9e8a93df93@aweurope.be" alt=3D"" width=3D"1" border=3D"0" height=3D"1"><=
+br><ul style=3D"padding-left:7pt"><span style=3D"font-family:sans-serif;fon=
+t-size:xx-small" face=3D"sans-serif" size=3D"1">Re: [lttng-dev] Addition of=
+ the return address to        liblttng-ust-libc-wrapper</span></ul></td></t=
+r></tbody></table><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><=
+tbody><tr valign=3D"top"><td width=3D"58"><img src=3D"cid:3__=3D4EBBF741DFB=
+5EACD8f9e8a93df93@aweurope.be" alt=3D"" width=3D"1" border=3D"0" height=3D"=
+1"></td><td width=3D"336"><img src=3D"cid:3__=3D4EBBF741DFB5EACD8f9e8a93df9=
+3@aweurope.be" alt=3D"" width=3D"1" border=3D"0" height=3D"1"></td></tr></t=
+body></table></td></tr></tbody></table><div><div class=3D"h5"><br><hr size=
+=3D"2" width=3D"100%" align=3D"left"><ul style=3D"padding-left:3pt"><span s=
+tyle=3D"font-family:Arial;font-size:medium" face=3D"Arial" size=3D"3"><b>Fr=
+om: </b></span><span style=3D"font-family:Arial;font-size:medium" face=3D"A=
+rial" size=3D"3">&quot;Olivier Delbeke&quot; &lt;<a href=3D"mailto:Olivier.=
+Delbeke@awtce.be" target=3D"_blank">Olivier.Delbeke@awtce.be</a>&gt;</span>=
+<span style=3D"font-family:Arial;font-size:medium" face=3D"Arial" size=3D"3=
+"><b><br>To: </b></span><span style=3D"font-family:Arial;font-size:medium" =
+face=3D"Arial" size=3D"3"><a href=3D"mailto:lttng-dev@lists.lttng.org" targ=
+et=3D"_blank">lttng-dev@lists.lttng.org</a></span><span style=3D"font-famil=
+y:Arial;font-size:medium" face=3D"Arial" size=3D"3"><b><br>Sent: </b></span=
+><span style=3D"font-family:Arial;font-size:medium" face=3D"Arial" size=3D"=
+3">Tuesday, January 13, 2015 10:50:38 AM</span><span style=3D"font-family:A=
+rial;font-size:medium" face=3D"Arial" size=3D"3"><b><br>Subject: </b></span=
+><span style=3D"font-family:Arial;font-size:medium" face=3D"Arial" size=3D"=
+3">[lttng-dev] Addition of the return address to =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0liblttng-ust-libc-wrapper</span><br><p><span style=3D"font-family:Arial;=
+font-size:small" face=3D"Arial" size=3D"2">Hi guys,</span></p><p><br><span =
+style=3D"font-family:Arial;font-size:small" face=3D"Arial" size=3D"2">I am =
+using liblttng-ust-libc-wrapper to detect memory leaks in my applications. =
+<br>In order to identify not only the thread where the unfreed allocations =
+are done, but also the calling function, I extended the liblttng-ust-libc-w=
+rapper to log the &quot;return address&quot; (__builtin_return_address(0)) =
+in addition to the parameters of malloc(). It solves my problem and does no=
+t affect Trace Compass.<br>Was this the right thing to do ? <br>If it is, t=
+hen I guess that it might interest other people too.</span></p></ul><span s=
+tyle=3D"font-family:serif;font-size:medium" face=3D"serif" size=3D"3">After=
+ further thought, I&#39;m interested to merge this into UST master.</span><=
+br><div><br></div><span style=3D"font-family:serif;font-size:medium" face=
+=3D"serif" size=3D"3">Can you re-send either as an attachment, or as plain =
+text without the</span><br><span style=3D"font-family:serif;font-size:mediu=
+m" face=3D"serif" size=3D"3">base64 encoding ?</span><br><div><br></div><sp=
+an style=3D"font-family:serif;font-size:medium" face=3D"serif" size=3D"3">T=
+hanks!</span><br><div><br></div><span style=3D"font-family:serif;font-size:=
+medium" face=3D"serif" size=3D"3">Mathieu</span><br><div><br></div><ul styl=
+e=3D"padding-left:3pt"><br><span style=3D"font-family:Arial;font-size:small=
+" face=3D"Arial" size=3D"2">diff -Nurd b/liblttng-ust-libc-wrapper/lttng-us=
+t-malloc.c c/liblttng-ust-libc-wrapper/lttng-ust-malloc.c<br>--- b/liblttng=
+-ust-libc-wrapper/lttng-ust-malloc.c 2015-01-06 17:14:34.000000000 +0100<br=
+>+++ c/liblttng-ust-libc-wrapper/lttng-ust-malloc.c 2015-01-06 17:16:40.811=
+145106 +0100<br>@@ -260,7 +260,7 @@<br> =C2=A0}<br> =C2=A0retval =3D cur_al=
+loc.malloc(size);<br> =C2=A0if (URCU_TLS(malloc_nesting) =3D=3D 1) {<br>- t=
+racepoint(ust_libc, malloc, size, retval);<br>+ tracepoint(ust_libc, malloc=
+, size, retval, __builtin_return_address(0) );<br> =C2=A0}<br> =C2=A0URCU_T=
+LS(malloc_nesting)--;<br> =C2=A0return retval;<br>@@ -279,7 +279,7 @@<br> =
+=C2=A0}<br> <br> =C2=A0if (URCU_TLS(malloc_nesting) =3D=3D 1) {<br>- tracep=
+oint(ust_libc, free, ptr);<br>+ tracepoint(ust_libc, free, ptr, __builtin_r=
+eturn_address(0) );<br> =C2=A0}<br> <br> =C2=A0if (cur_alloc.free =3D=3D NU=
+LL) {<br>@@ -308,7 +308,7 @@<br> =C2=A0}<br> =C2=A0retval =3D cur_alloc.cal=
+loc(nmemb, size);<br> =C2=A0if (URCU_TLS(malloc_nesting) =3D=3D 1) {<br>- t=
+racepoint(ust_libc, calloc, nmemb, size, retval);<br>+ tracepoint(ust_libc,=
+ calloc, nmemb, size, retval, __builtin_return_address(0) );<br> =C2=A0}<br=
+> =C2=A0URCU_TLS(malloc_nesting)--;<br> =C2=A0return retval;<br>@@ -360,7 +=
+360,7 @@<br> =C2=A0retval =3D cur_alloc.realloc(ptr, size);<br> end:<br> =
+=C2=A0if (URCU_TLS(malloc_nesting) =3D=3D 1) {<br>- tracepoint(ust_libc, re=
+alloc, ptr, size, retval);<br>+ tracepoint(ust_libc, realloc, ptr, size, re=
+tval, __builtin_return_address(0) );<br> =C2=A0}<br> =C2=A0URCU_TLS(malloc_=
+nesting)--;<br> =C2=A0return retval;<br>@@ -380,7 +380,7 @@<br> =C2=A0}<br>=
+ =C2=A0retval =3D cur_alloc.memalign(alignment, size);<br> =C2=A0if (URCU_T=
+LS(malloc_nesting) =3D=3D 1) {<br>- tracepoint(ust_libc, memalign, alignmen=
+t, size, retval);<br>+ tracepoint(ust_libc, memalign, alignment, size, retv=
+al, __builtin_return_address(0) );<br> =C2=A0}<br> =C2=A0URCU_TLS(malloc_ne=
+sting)--;<br> =C2=A0return retval;<br>@@ -401,7 +401,7 @@<br> =C2=A0retval =
+=3D cur_alloc.posix_memalign(memptr, alignment, size);<br> =C2=A0if (URCU_T=
+LS(malloc_nesting) =3D=3D 1) {<br> =C2=A0tracepoint(ust_libc, posix_memalig=
+n, *memptr, alignment, size,<br>- retval);<br>+ retval, __builtin_return_ad=
+dress(0) );<br> =C2=A0}<br> =C2=A0URCU_TLS(malloc_nesting)--;<br> =C2=A0ret=
+urn retval;<br>diff -Nurd b/liblttng-ust-libc-wrapper/ust_libc.h c/liblttng=
+-ust-libc-wrapper/ust_libc.h<br>--- b/liblttng-ust-libc-wrapper/ust_libc.h =
+2015-01-06 17:14:34.000000000 +0100<br>+++ c/liblttng-ust-libc-wrapper/ust_=
+libc.h 2015-01-06 17:16:40.811145106 +0100<br>@@ -33,54 +33,60 @@<br> #incl=
+ude &lt;lttng/tracepoint.h&gt;<br> <br> TRACEPOINT_EVENT(ust_libc, malloc,<=
+br>- TP_ARGS(size_t, size, void *, ptr),<br>+ TP_ARGS(size_t, size, void *,=
+ ptr, void *, ra),<br> =C2=A0TP_FIELDS(<br> =C2=A0ctf_integer(size_t, size,=
+ size)<br> =C2=A0ctf_integer_hex(void *, ptr, ptr)<br>+ ctf_integer_hex(voi=
+d *, ra, ra)<br> =C2=A0)<br> )<br> <br> TRACEPOINT_EVENT(ust_libc, free,<br=
+>- TP_ARGS(void *, ptr),<br>+ TP_ARGS(void *, ptr, void *, ra),<br> =C2=A0T=
+P_FIELDS(<br> =C2=A0ctf_integer_hex(void *, ptr, ptr)<br>+ ctf_integer_hex(=
+void *, ra, ra)<br> =C2=A0)<br> )<br> <br> TRACEPOINT_EVENT(ust_libc, callo=
+c,<br>- TP_ARGS(size_t, nmemb, size_t, size, void *, ptr),<br>+ TP_ARGS(siz=
+e_t, nmemb, size_t, size, void *, ptr, void *, ra),<br> =C2=A0TP_FIELDS(<br=
+> =C2=A0ctf_integer(size_t, nmemb, nmemb)<br> =C2=A0ctf_integer(size_t, siz=
+e, size)<br> =C2=A0ctf_integer_hex(void *, ptr, ptr)<br>+ ctf_integer_hex(v=
+oid *, ra, ra)<br> =C2=A0)<br> )<br> <br> TRACEPOINT_EVENT(ust_libc, reallo=
+c,<br>- TP_ARGS(void *, in_ptr, size_t, size, void *, ptr),<br>+ TP_ARGS(vo=
+id *, in_ptr, size_t, size, void *, ptr, void *, ra),<br> =C2=A0TP_FIELDS(<=
+br> =C2=A0ctf_integer_hex(void *, in_ptr, in_ptr)<br> =C2=A0ctf_integer(siz=
+e_t, size, size)<br> =C2=A0ctf_integer_hex(void *, ptr, ptr)<br>+ ctf_integ=
+er_hex(void *, ra, ra)<br> =C2=A0)<br> )<br> <br> TRACEPOINT_EVENT(ust_libc=
+, memalign,<br>- TP_ARGS(size_t, alignment, size_t, size, void *, ptr),<br>=
++ TP_ARGS(size_t, alignment, size_t, size, void *, ptr, void *, ra),<br> =
+=C2=A0TP_FIELDS(<br> =C2=A0ctf_integer(size_t, alignment, alignment)<br> =
+=C2=A0ctf_integer(size_t, size, size)<br> =C2=A0ctf_integer_hex(void *, ptr=
+, ptr)<br>+ ctf_integer_hex(void *, ra, ra)<br> =C2=A0)<br> )<br> <br> TRAC=
+EPOINT_EVENT(ust_libc, posix_memalign,<br>- TP_ARGS(void *, out_ptr, size_t=
+, alignment, size_t, size, int, result),<br>+ TP_ARGS(void *, out_ptr, size=
+_t, alignment, size_t, size, int, result, void *, ra),<br> =C2=A0TP_FIELDS(=
+<br> =C2=A0ctf_integer_hex(void *, out_ptr, out_ptr)<br> =C2=A0ctf_integer(=
+size_t, alignment, alignment)<br> =C2=A0ctf_integer(size_t, size, size)<br>=
+ =C2=A0ctf_integer(int, result, result)<br>+ ctf_integer_hex(void *, ra, ra=
+)<br> =C2=A0)<br> )<br> <br>Best regards,</span><table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0"><tbody><tr valign=3D"top"><td rowspan=3D"2" va=
+lign=3D"middle" width=3D"108"><div align=3D"center"><img src=3D"cid:2__=3D4=
+EBBF741DFB5EACD8f9e8a93df93@aweurope.be" width=3D"107" align=3D"bottom" hei=
+ght=3D"98"></div></td><td width=3D"788"><img src=3D"cid:3__=3D4EBBF741DFB5E=
+ACD8f9e8a93df93@aweurope.be" width=3D"1" align=3D"bottom" height=3D"1"></td=
+></tr><tr valign=3D"top"><td valign=3D"middle" width=3D"788"><ul style=3D"p=
+adding-left:36pt"><span style=3D"color:#000080;font-family:serif;font-size:=
+medium" face=3D"serif" color=3D"#000080" size=3D"3"><b>Olivier Delbeke </b>=
+</span><span style=3D"color:#000080;font-family:serif;font-size:medium" fac=
+e=3D"serif" color=3D"#000080" size=3D"3"><i>Senior Software Engineer</i></s=
+pan><span style=3D"color:#565051;font-family:serif;font-size:medium" face=
+=3D"serif" color=3D"#565051" size=3D"3"><br><a href=3D"mailto:Olivier.Delbe=
+ke@awtce.be" target=3D"_blank">Olivier.Delbeke@awtce.be</a> / T. <a href=3D=
+"tel:%2B32%202%20389%2025%2053" value=3D"+3223892553" target=3D"_blank">+32=
+ 2 389 25 53</a></span><hr noshade size=3D"2" width=3D"100%" align=3D"left"=
+><span style=3D"font-family:serif;font-size:medium" face=3D"serif" size=3D"=
+3">=C2=A0</span><span style=3D"color:#000080;font-family:serif;font-size:xx=
+-small" face=3D"serif" color=3D"#000080" size=3D"1"><b>AWTC Europe S.A. </b=
+></span><span style=3D"color:#565051;font-family:serif;font-size:xx-small" =
+face=3D"serif" color=3D"#565051" size=3D"1">- Avenue de l=E2=80=99Industrie=
+, 19 - 1420 Braine-l=E2=80=99Alleud - Belgium - </span><span style=3D"color=
+:#565051;font-family:serif;font-size:xx-small" face=3D"serif" color=3D"#565=
+051" size=3D"1"><a href=3D"http://www.aweurope.eu" target=3D"_blank">www.aw=
+europe.eu</a></span><span style=3D"color:#565051;font-family:serif;font-siz=
+e:xx-small" face=3D"serif" color=3D"#565051" size=3D"1">=C2=A0- </span><spa=
+n style=3D"color:#565051;font-family:serif;font-size:xx-small" face=3D"seri=
+f" color=3D"#565051" size=3D"1"><a href=3D"http://www.aisin-aw.co.jp" targe=
+t=3D"_blank">www.aisin-aw.co.jp</a></span><span style=3D"color:#565051;font=
+-family:serif;font-size:xx-small" face=3D"serif" color=3D"#565051" size=3D"=
+1"><br>VAT : BE 0474.474.114 - RPM Nivelles</span><span style=3D"font-famil=
+y:serif;font-size:medium" face=3D"serif" size=3D"3">=C2=A0</span></ul></td>=
+</tr></tbody></table><span style=3D"font-family:Arial;font-size:medium" fac=
+e=3D"Arial" size=3D"3"><br>This mail, and any attachments thereto, is inten=
+ded only for use by the addressee(s) named herein and may contain legally p=
+rivileged and/or confidential information. If you are not the intended reci=
+pient, please note that any review, dissemination, disclosure, alteration, =
+printing, copying or transmission of this mail and/or any file transmitted =
+with it, is strictly prohibited and may be unlawful. If you have received t=
+his mail by mistake, please immediately notify the sender as well as our ma=
+il administrator at <a href=3D"mailto:postmaster@aweurope.be" target=3D"_bl=
+ank">postmaster@aweurope.be</a>, and permanently destroy the original as we=
+ll as any copy thereof. <br>_______________________________________________=
+<br>lttng-dev mailing list<br><a href=3D"mailto:lttng-dev@lists.lttng.org" =
+target=3D"_blank">lttng-dev@lists.lttng.org</a><br></span><span style=3D"fo=
+nt-family:Arial;font-size:medium" face=3D"Arial" size=3D"3"><a href=3D"http=
+://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" target=3D"_blank">ht=
+tp://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a></span><br></ul>=
+<span style=3D"font-family:serif;font-size:medium" face=3D"serif" size=3D"3=
+"><br></span><br><div><br></div><span style=3D"font-family:serif;font-size:=
+medium" face=3D"serif" size=3D"3">-- </span><br><span style=3D"font-family:=
+serif;font-size:medium" face=3D"serif" size=3D"3">Mathieu Desnoyers<br>Effi=
+ciOS Inc.<br></span><span style=3D"font-family:serif;font-size:medium" face=
+=3D"serif" size=3D"3"><a href=3D"http://www.efficios.com" target=3D"_blank"=
+>http://www.efficios.com</a></span><br></div></div><i>(See attached file: 1=
+E482660.jpg)</i><i>(See attached file: ecblank.gif)</i><span class=3D""><br=
+><span style=3D"font-family:sans-serif" face=3D"sans-serif">
 
 
 This mail, and any attachments thereto, is intended only for use by the add=
@@ -552,17 +635,47 @@ al information.  If you are not the intended recipient, please note that an=
 y review, dissemination, disclosure, alteration, printing, copying or trans=
 mission of this mail and/or any file transmitted with it, is strictly prohi=
 bited and may be unlawful.  If you have received this mail by mistake, plea=
-se immediately notify the sender as well as our mail administrator at postm=
-aster@aweurope.be, and permanently destroy the original as well as any copy=
- thereof.
-</span></blockquote><div><br><br></div><div><br></div><div>-- <br></div><di=
-v><span name=3D"x"></span>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.=
-efficios.com<span name=3D"x"></span><br></div></div></body></html>
-------=_Part_8614_1748200137.1421686124956
-Content-Type: image/jpeg; name=1D220451.jpg
-Content-Disposition: attachment; filename=1D220451.jpg
+se immediately notify the sender as well as our mail administrator at <a hr=
+ef=3D"mailto:postmaster@aweurope.be" target=3D"_blank">postmaster@aweurope.=
+be</a>, and permanently destroy the original as well as any copy thereof.
+</span></span></blockquote><div><br><br></div><span class=3D""><div><br></d=
+iv><div>-- <br></div><div><span name=3D"x"></span>Mathieu Desnoyers<br>Effi=
+ciOS Inc.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http://w=
+ww.efficios.com</a><span name=3D"x"></span><br></div></span></div></div><br=
+>_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
+br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+br>
+<br></blockquote></div><br></div>
+
+--047d7bf0d3262388f6050d0487b0--
+
+--047d7bf0d3262388fb050d0487b1
+Content-Type: image/gif; name="ecblank.gif"
+Content-Disposition: inline; filename="ecblank.gif"
+Content-Transfer-Encoding: base64
+Content-ID: <3__=4EBBF741DFB5EACD8f9e8a93df93@aweurope.be>
+X-Attachment-Id: 44913c1560747550_0.0.1.2
+
+R0lGODlhEAABAIAAAAAAAP///yH5BAEAAAEALAAAAAAQAAEAAAIEjI8ZBQA7
+--047d7bf0d3262388fb050d0487b1
+Content-Type: image/gif; name="graycol.gif"
+Content-Disposition: inline; filename="graycol.gif"
+Content-Transfer-Encoding: base64
+Content-ID: <4__=4EBBF741DFB5EACD8f9e8a93df93@aweurope.be>
+X-Attachment-Id: 44913c1560747550_0.0.1.3
+
+R0lGODlhEAAQAKECAMzMzAAAAP///wAAACH5BAEAAAIALAAAAAAQABAAAAIXlI+py+0PopwxUbpu
+ZRfKZ2zgSJbmSRYAIf4fT3B0aW1pemVkIGJ5IFVsZWFkIFNtYXJ0U2F2ZXIhAAA7
+--047d7bf0d3262388fb050d0487b1
+Content-Type: image/jpeg; name="1D220451.jpg"
+Content-Disposition: inline; filename="1D220451.jpg"
 Content-Transfer-Encoding: base64
 Content-ID: <2__=4EBBF741DFB5EACD8f9e8a93df93@aweurope.be>
+X-Attachment-Id: 44913c1560747550_0.0.1.1
 
 /9j/4AAQSkZJRgABAQEAMgAyAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB
 AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEB
@@ -730,29 +843,10 @@ O5h1Pxjo/hkXo8IaJ4x1OC9v4tR8V6NoFhr98t5OLrUH3uG6M3zngGEczweByFV67p1qWBzOhh4U
 8KoyhiYUaMMNLHUJ/uZVaGIhnHuYydTDU8PXy+eFdd4iMJhM8f1arWxqhHmi62HnOUqmkqUnVclh
 3G81GcHhG3TjGbkqvPZR+yraRpIkdl2MyKSvI2k7srgk9Dnv1yO1WKgtovJiSPjCqBgZwME8DP8A
 CBgKAAAAAowBU9flx9J8reV728r9bdwooooAKKKKACiiigAooooAKKKKACiiigAooooA/9k=
-------=_Part_8614_1748200137.1421686124956
-Content-Type: image/gif; name=ecblank.gif
-Content-Disposition: attachment; filename=ecblank.gif
-Content-Transfer-Encoding: base64
-Content-ID: <3__=4EBBF741DFB5EACD8f9e8a93df93@aweurope.be>
-
-R0lGODlhEAABAIAAAAAAAP///yH5BAEAAAEALAAAAAAQAAEAAAIEjI8ZBQA7
-------=_Part_8614_1748200137.1421686124956
-Content-Type: image/gif; name=graycol.gif
-Content-Disposition: attachment; filename=graycol.gif
-Content-Transfer-Encoding: base64
-Content-ID: <4__=4EBBF741DFB5EACD8f9e8a93df93@aweurope.be>
-
-R0lGODlhEAAQAKECAMzMzAAAAP///wAAACH5BAEAAAIALAAAAAAQABAAAAIXlI+py+0PopwxUbpu
-ZRfKZ2zgSJbmSRYAIf4fT3B0aW1pemVkIGJ5IFVsZWFkIFNtYXJ0U2F2ZXIhAAA7
-------=_Part_8614_1748200137.1421686124956--
-
-------=_Part_8613_2125482905.1421686124956--
+--047d7bf0d3262388fb050d0487b1--
 
 
-
-
---===============0273562784==
+--===============0012685485==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -763,4 +857,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0273562784==--
+--===============0012685485==--
