@@ -1,16 +1,19 @@
-From: Francis Giraldeau <francis.giraldeau@gmail.com>
-Subject: Sequence of strings
-Date: Mon, 19 Jan 2015 17:50:07 -0500
-Message-ID: <CAC6yHM74MO8UN7d8B2WLj0EM8mZuhJLiaudGoSMDmNDOSwDa3A__7902.96785203299$1421707918$gmane$org@mail.gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: Re: Sequence of strings
+Date: Mon, 19 Jan 2015 19:16:03 -0500
+Message-ID: <CAB4xu_3RVyy3R_rypKh7NdTD=hUaweBj=kQ5x+ZaOcu+M9oVLQ__5978.1048134484$1421713045$gmane$org@mail.gmail.com>
+References: <CAC6yHM74MO8UN7d8B2WLj0EM8mZuhJLiaudGoSMDmNDOSwDa3A@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0031572708=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f179.google.com ([209.85.216.179])
+Received: from mail-lb0-f175.google.com ([209.85.217.175])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <francis.giraldeau@gmail.com>) id 1YDL9C-0006Dd-2T
- for lttng-dev@lists.lttng.org; Mon, 19 Jan 2015 17:50:16 -0500
-Received: by mail-qc0-f179.google.com with SMTP id w7so7997555qcr.10
- for <lttng-dev@lists.lttng.org>; Mon, 19 Jan 2015 14:50:08 -0800 (PST)
+ (envelope-from <eeppeliteloop@gmail.com>) id 1YDMUp-0006el-8L
+ for lttng-dev@lists.lttng.org; Mon, 19 Jan 2015 19:16:44 -0500
+Received: by mail-lb0-f175.google.com with SMTP id z11so30946528lbi.6
+ for <lttng-dev@lists.lttng.org>; Mon, 19 Jan 2015 16:16:33 -0800 (PST)
+In-Reply-To: <CAC6yHM74MO8UN7d8B2WLj0EM8mZuhJLiaudGoSMDmNDOSwDa3A@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,64 +22,82 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Francis Giraldeau <francis.giraldeau@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0031572708==
-Content-Type: multipart/alternative; boundary=001a11c04006ddc083050d0924af
+On Mon, Jan 19, 2015 at 5:50 PM, Francis Giraldeau
+<francis.giraldeau@gmail.com> wrote:
+>
+> Hi,
+>
+> I would like to record a sequence of strings. Here is an example:
+>
+> struct foo {
+>   string _my_string;
+> };
+>
+> event {
+>   ...
+>   fields := struct {
+>     uint8_t _num;
+>     struct foo _items[_num];
+>   };
+> };
+>
+> The program barectf does not allow it, and I wanted to know whether it's an implementation limitation or if CTF supports it at all.
 
---001a11c04006ddc083050d0924af
-Content-Type: text/plain; charset=UTF-8
+Hi Francis,
 
-Hi,
+CTF and Babeltrace certainly allow this.
 
-I would like to record a sequence of strings. Here is an example:
+It's a current barectf limitation: inner structures, as well as array/sequence
+elements must have a fixed size. This is because they are currently copied
+to the packet buffer as is using memcpy() with this precomputed fixed size.
 
-struct foo {
-  string _my_string;
-};
+Your best approach today is to precompute the total length of all the
+concatenated strings (including terminating null characters) in your application
+code, and use a sequence of bytes instead, also keeping the original number
+of strings:
 
-event {
-  ...
-  fields := struct {
-    uint8_t _num;
-    struct foo _items[_num];
-  };
-};
+    event {
+      ...
+      fields := struct {
+        uint32_t _len; /* length of all strings */
+        uint8_t _num; /* number of concatenated strings */
+        uint8_t _strings[_len];
+      };
+    };
 
-The program barectf does not allow it, and I wanted to know whether it's an
-implementation limitation or if CTF supports it at all.
+Then, after running barectf, change this for:
 
-Thanks,
+    event {
+      ...
+      fields := struct {
+        uint32_t _len;
+        uint8_t _num;
+        string _strings[_num];
+      };
+    };
 
-Francis
+and you should be able to see a sequence of strings in Babeltrace once
+your streams are produced by barectf C code.
 
---001a11c04006ddc083050d0924af
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Ugly, but should work!
 
-<div dir=3D"ltr">Hi,<div><br></div><div>I would like to record a sequence o=
-f strings. Here is an example:</div><div><br></div><div><div>struct foo {</=
-div><div>=C2=A0 string _my_string;</div><div>};=C2=A0</div></div><div><br><=
-/div><div>event {</div><div>=C2=A0 ...</div><div>=C2=A0 fields :=3D struct =
-{</div><div>=C2=A0 =C2=A0 uint8_t _num;</div><div>=C2=A0 =C2=A0 struct foo =
-_items[_num];</div><div>=C2=A0 };</div><div>};</div><div><br></div><div>The=
- program barectf does not allow it, and I wanted to know whether it&#39;s a=
-n implementation limitation or if CTF supports it at all.</div><div><br></d=
-iv><div>Thanks,</div><div><br></div><div>Francis</div></div>
+Supporting variable-length inner structures and array/sequence elements
+is definitely on the TODO list for a future barectf release.
 
---001a11c04006ddc083050d0924af--
+Thanks for the input,
+Phil
 
-
---===============0031572708==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0031572708==--
+>
+> Thanks,
+>
+> Francis
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
