@@ -1,19 +1,19 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: Re: Sequence of strings
-Date: Mon, 19 Jan 2015 19:16:03 -0500
-Message-ID: <CAB4xu_3RVyy3R_rypKh7NdTD=hUaweBj=kQ5x+ZaOcu+M9oVLQ__5978.1048134484$1421713045$gmane$org@mail.gmail.com>
-References: <CAC6yHM74MO8UN7d8B2WLj0EM8mZuhJLiaudGoSMDmNDOSwDa3A@mail.gmail.com>
+From: Anand Neeli <anand.neeli@gmail.com>
+Subject: Re: c/c++ wrappers for lttng commands
+Date: Tue, 20 Jan 2015 17:55:30 +0530
+Message-ID: <CAM5kDqxMireO=eTo9soCqBgw2t0b0ohafczjF7Tm4a0x4F1Eng__12966.1039136865$1421756782$gmane$org@mail.gmail.com>
+References: <CAM5kDqy6L5nSvs=GYwmXTgHSE+uH5p0d8YPYGeR-_E61mr4TqA@mail.gmail.com>
+ <CAFXXi0mntrDSz7j5CZKzm6o0KqU6hw1dF6E9HHEXyanYrHnsHA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1435703031=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f175.google.com ([209.85.217.175])
+Received: from mail-wi0-f174.google.com ([209.85.212.174])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <eeppeliteloop@gmail.com>) id 1YDMUp-0006el-8L
- for lttng-dev@lists.lttng.org; Mon, 19 Jan 2015 19:16:44 -0500
-Received: by mail-lb0-f175.google.com with SMTP id z11so30946528lbi.6
- for <lttng-dev@lists.lttng.org>; Mon, 19 Jan 2015 16:16:33 -0800 (PST)
-In-Reply-To: <CAC6yHM74MO8UN7d8B2WLj0EM8mZuhJLiaudGoSMDmNDOSwDa3A@mail.gmail.com>
+ (envelope-from <anand.neeli@gmail.com>) id 1YDXsG-00021K-EX
+ for lttng-dev@lists.lttng.org; Tue, 20 Jan 2015 07:25:39 -0500
+Received: by mail-wi0-f174.google.com with SMTP id n3so2323954wiv.1
+ for <lttng-dev@lists.lttng.org>; Tue, 20 Jan 2015 04:25:30 -0800 (PST)
+In-Reply-To: <CAFXXi0mntrDSz7j5CZKzm6o0KqU6hw1dF6E9HHEXyanYrHnsHA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,82 +22,129 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Francis Giraldeau <francis.giraldeau@gmail.com>
+To: Simon Marchi <simon.marchi@polymtl.ca>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Mon, Jan 19, 2015 at 5:50 PM, Francis Giraldeau
-<francis.giraldeau@gmail.com> wrote:
+--===============1435703031==
+Content-Type: multipart/alternative; boundary=047d7b624dfee49d56050d148863
+
+--047d7b624dfee49d56050d148863
+Content-Type: text/plain; charset=UTF-8
+
+Hi All,
+i'm writing a wrapper code to start and stop tracing sessions. And i am
+using lttng-ctl library for this.
+I have setup session using lttng commands and using the wrapper to
+start/stop session.
+in the wrapper i'm calling lttng_start_tracing(char* session_name), i see
+that that the program gets stuck and doesnt return from lttng_start_tracing.
+Does anyone know what is the issue i'm seeing. (before i can start
+debugger). I see that lttng-ctl connects checks for sessiond and send some
+data to it, suspect something here.
+
+Thanks,
+Anand Neeli
+
+
+On Thu, Jan 15, 2015 at 12:54 AM, Simon Marchi <simon.marchi@polymtl.ca>
+wrote:
+
+> On 14 January 2015 at 14:02, Anand Neeli <anand.neeli@gmail.com> wrote:
+> > Hi All,
+> >
+> > Is there any code (or did anyone implement) c/c++ wrappers API's to
+> > create,delete, add event to lttng session.
+> > The conventional way to create, add event, delete lttng sessions is
+> through
+> > lttng shell commands, i'm looking to do this using a c/c++ API's.
+> >
+> > Thanks,
+> > Anand Neeli
 >
-> Hi,
+> Hi Arnand,
 >
-> I would like to record a sequence of strings. Here is an example:
+> I think you are looking for the liblttng-ctl library.
 >
-> struct foo {
->   string _my_string;
-> };
+> http://git.lttng.org/?p=lttng-tools.git;a=tree;f=src/lib/lttng-ctl;hb=HEAD
 >
-> event {
->   ...
->   fields := struct {
->     uint8_t _num;
->     struct foo _items[_num];
->   };
-> };
+> It is the library that the lttng command is based on, but you can also
+> use it in your program. I don't know if there is an official
+> documentation, but if you want to know how to do something using the
+> API, you can always look up the lttng command code and see what it
+> does.
 >
-> The program barectf does not allow it, and I wanted to know whether it's an implementation limitation or if CTF supports it at all.
-
-Hi Francis,
-
-CTF and Babeltrace certainly allow this.
-
-It's a current barectf limitation: inner structures, as well as array/sequence
-elements must have a fixed size. This is because they are currently copied
-to the packet buffer as is using memcpy() with this precomputed fixed size.
-
-Your best approach today is to precompute the total length of all the
-concatenated strings (including terminating null characters) in your application
-code, and use a sequence of bytes instead, also keeping the original number
-of strings:
-
-    event {
-      ...
-      fields := struct {
-        uint32_t _len; /* length of all strings */
-        uint8_t _num; /* number of concatenated strings */
-        uint8_t _strings[_len];
-      };
-    };
-
-Then, after running barectf, change this for:
-
-    event {
-      ...
-      fields := struct {
-        uint32_t _len;
-        uint8_t _num;
-        string _strings[_num];
-      };
-    };
-
-and you should be able to see a sequence of strings in Babeltrace once
-your streams are produced by barectf C code.
-
-Ugly, but should work!
-
-Supporting variable-length inner structures and array/sequence elements
-is definitely on the TODO list for a future barectf release.
-
-Thanks for the input,
-Phil
-
+> It is in C, however. If you want to make an wrapper that is more C++
+> oriented, I am sure it would be a very appreciated contribution :).
 >
-> Thanks,
+> Simon
 >
-> Francis
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+
+--047d7b624dfee49d56050d148863
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi All,<div>i&#39;m writing a wrapper code to start and st=
+op tracing sessions. And i am using lttng-ctl library for this.</div><div>I=
+ have setup session using lttng commands and using the wrapper to start/sto=
+p session.</div><div>in the wrapper i&#39;m calling lttng_start_tracing(cha=
+r* session_name), i see that that the program gets stuck and doesnt return =
+from lttng_start_tracing.<br></div><div>Does anyone know what is the issue =
+i&#39;m seeing. (before i can start debugger). I see that lttng-ctl connect=
+s checks for sessiond and send some data to it, suspect something here.</di=
+v><div><br></div><div>Thanks,</div><div>Anand Neeli</div><div><br></div></d=
+iv><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Thu, Jan 15=
+, 2015 at 12:54 AM, Simon Marchi <span dir=3D"ltr">&lt;<a href=3D"mailto:si=
+mon.marchi@polymtl.ca" target=3D"_blank">simon.marchi@polymtl.ca</a>&gt;</s=
+pan> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex=
+;border-left:1px #ccc solid;padding-left:1ex"><div class=3D"HOEnZb"><div cl=
+ass=3D"h5">On 14 January 2015 at 14:02, Anand Neeli &lt;<a href=3D"mailto:a=
+nand.neeli@gmail.com">anand.neeli@gmail.com</a>&gt; wrote:<br>
+&gt; Hi All,<br>
+&gt;<br>
+&gt; Is there any code (or did anyone implement) c/c++ wrappers API&#39;s t=
+o<br>
+&gt; create,delete, add event to lttng session.<br>
+&gt; The conventional way to create, add event, delete lttng sessions is th=
+rough<br>
+&gt; lttng shell commands, i&#39;m looking to do this using a c/c++ API&#39=
+;s.<br>
+&gt;<br>
+&gt; Thanks,<br>
+&gt; Anand Neeli<br>
+<br>
+</div></div>Hi Arnand,<br>
+<br>
+I think you are looking for the liblttng-ctl library.<br>
+<br>
+<a href=3D"http://git.lttng.org/?p=3Dlttng-tools.git;a=3Dtree;f=3Dsrc/lib/l=
+ttng-ctl;hb=3DHEAD" target=3D"_blank">http://git.lttng.org/?p=3Dlttng-tools=
+.git;a=3Dtree;f=3Dsrc/lib/lttng-ctl;hb=3DHEAD</a><br>
+<br>
+It is the library that the lttng command is based on, but you can also<br>
+use it in your program. I don&#39;t know if there is an official<br>
+documentation, but if you want to know how to do something using the<br>
+API, you can always look up the lttng command code and see what it<br>
+does.<br>
+<br>
+It is in C, however. If you want to make an wrapper that is more C++<br>
+oriented, I am sure it would be a very appreciated contribution :).<br>
+<span class=3D"HOEnZb"><font color=3D"#888888"><br>
+Simon<br>
+</font></span></blockquote></div><br></div>
+
+--047d7b624dfee49d56050d148863--
+
+
+--===============1435703031==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1435703031==--
