@@ -1,18 +1,17 @@
-From: Wang Nan <wangnan0@huawei.com>
-Subject: Re: Fwd: perf data convert error
-Date: Wed, 21 Jan 2015 09:45:30 +0800
-Message-ID: <54BF04BA.7080406__28363.9883077287$1421806855$gmane$org@huawei.com>
-References: <CAGfiMvBRRRGRJdgkQpubc4BUTeh3m43tFGtCiz1nshjTzikFkg@mail.gmail.com>
- <CAGfiMvA6+P0MeBCFH16BA4j0BHRvWw+baGWc=q_JC-pWVgndQw@mail.gmail.com>
+From: Jonathan Haws <Jonathan.Haws@sdl.usu.edu>
+Subject: Out of Tree Kernel Module
+Date: Wed, 21 Jan 2015 20:55:28 +0000
+Message-ID: <1421873728.21263.3.camel__8093.18703036315$1421873773$gmane$org@c00941>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from szxga01-in.huawei.com ([119.145.14.64])
+Received: from echo.usurf.usu.edu ([129.123.194.129])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <wangnan0@huawei.com>) id 1YDkNO-0005le-0w
- for lttng-dev@lists.lttng.org; Tue, 20 Jan 2015 20:46:37 -0500
-In-Reply-To: <CAGfiMvA6+P0MeBCFH16BA4j0BHRvWw+baGWc=q_JC-pWVgndQw@mail.gmail.com>
+ (envelope-from <Jonathan.Haws@sdl.usu.edu>) id 1YE2JK-00039R-VQ
+ for lttng-dev@lists.lttng.org; Wed, 21 Jan 2015 15:55:37 -0500
+Content-Language: en-US
+Content-ID: <62C28223C4C99646A8342E261468C682@sdl.usu.edu>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,71 +20,55 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Divya Vyas <edivya.vyas@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On 2015/1/20 20:15, Divya Vyas wrote:
-> ---------- Forwarded message ----------
-> From: Divya Vyas <edivya.vyas@gmail.com>
-> Date: Tue, Jan 20, 2015 at 5:17 PM
-> Subject: perf data convert error
-> To: LKML <linux-kernel@vger.kernel.org>
-> 
-> 
-> Hi,
-> 
-> 
-> I am getting one error while converting the perf.data to CTF format .
-> 
-> 
-> ./perf data convert -i perf.data --to-ctf dv_ctf
-> ./perf: symbol lookup error: ./perf: undefined symbol:
-> bt_ctf_stream_class_get_packet_context_type
-> 
-> While I created perf binary and below is the output :
-> 
-> make DEBUG=1 LIBBABELTRACE_DIR=/opt/libbabeltrace/
->   BUILD:   Doing 'make -j4' parallel build
-> config/Makefile:139: The path 'python-config' is not executable.
-> config/Makefile:507: Missing perl devel files. Disabling perl
-> scripting support, consider installing perl-ExtUtils-Embed
-> config/Makefile:538: No python-config tool was found
-> config/Makefile:538: Python support will not be built
-> config/Makefile:610: No bfd.h/libbfd found, install
-> binutils-dev[el]/zlib-static to gain symbol demangling
-> 
-> Auto-detecting system features:
-> ...                         dwarf: [ on  ]
-> ...                         glibc: [ on  ]
-> ...                          gtk2: [ on  ]
-> ...                      libaudit: [ on  ]
-> ...                        libbfd: [ OFF ]
-> ...                        libelf: [ on  ]
-> ...                       libnuma: [ on  ]
-> ...                       libperl: [ OFF ]
-> ...                     libpython: [ OFF ]
-> ...                      libslang: [ on  ]
-> ...                     libunwind: [ on  ]
-> ...            libdw-dwarf-unwind: [ on  ]
-> ...                 libbabeltrace: [ on  ]
-> ...                          zlib: [ on  ]
-> ...     DWARF post unwind library: libunwind
-> 
+I am developing an out-of-tree kernel module and would like to
+instrument it for tracing.  I understand I will need to create an LTTng
+probe in the modules source tree, however when I try to build my module,
+I get errors stating that a header file for the subsystem doesn't exist
+in the source tree.
 
-Have you installed your libbabeltrace shared libraries properly?
-Looks like libraries you used for compiling and for execution are different.
+Here is my trace event file:
 
-Try 'ldd perf' and you should find something like:
+#undef TRACE_SYSTEM
+#define TRACE_SYSTEM sigma
 
-$ ldd /path/to/perf
-	...
-	libbabeltrace-ctf.so.1 => /path/to/libbabeltrace-ctf.so.1 (0x00007f312c861000)
-	...
+#if !defined(_TRACE_SIGMA_H) || defined(TRACE_HEADER_MULTI_READ)
+#define _TRACE_SIGMA_H
 
-then nm:
+#include <linux/tracepoint.h>
 
-$ nm /path/to/libbabeltrace-ctf.so.1 | grep bt_ctf_stream_class_get_packet_context_type
-000000000002b3f0 T bt_ctf_stream_class_get_packet_context_type
+TRACE_EVENT(
+    sigma_exarioctl,
+    TP_PROTO(int cmd, int pin, int value),
+    TP_ARGS(cmd, pin, value),
 
-If you don't get that symbol you should update your libbabeltrace runtime libraries.
+    /* LTTng doesn't need those */
+    TP_STRUCT__entry(),
+    TP_fast_assign(),
+    TP_printk("", 0)
+);
+
+#endif
+
+/* this part must be outside protection */
+#include <trace/define_trace.h>
+
+
+When I include that in my module, I do this:
+
+#define CREATE_TRACE_POINTS
+#include "exartrace.h"
+
+
+However, when I build, I get the error:
+<KERNELDIR>/include/trace/define_trace.h:83:43: fatal error:
+trace/events/sigma.h: No such file or directory
+ #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+
+
+Any thoughts on what I am doing wrong?
+
+Thanks!
+Jon
