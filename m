@@ -1,17 +1,18 @@
-From: Yan Grange <ygrange@gmail.com>
-Subject: python bindings for babel trace example fails
-Date: Fri, 23 Jan 2015 17:00:41 +0100
-Message-ID: <1409D42E-76EA-4C95-8437-5C0384BFD80A__34321.2961838164$1422030717$gmane$org@gmail.com>
-Mime-Version: 1.0 (Mac OS X Mail 8.1 \(1993\))
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: [diamon-discuss] My experience on perf,
+ CTF and TraceCompass, and some suggection.
+Date: Fri, 23 Jan 2015 11:30:07 -0500
+Message-ID: <54C2770F.4080305__32046.8360245743$1422030775$gmane$org@voxpopuli.im>
+References: <54C215D6.1030804@huawei.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f174.google.com ([74.125.82.174])
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <ygrange@gmail.com>) id 1YEgfA-0007tD-QC
- for lttng-dev@lists.lttng.org; Fri, 23 Jan 2015 11:00:53 -0500
-Received: by mail-we0-f174.google.com with SMTP id x3so8384853wes.5
- for <lttng-dev@lists.lttng.org>; Fri, 23 Jan 2015 08:00:43 -0800 (PST)
+ (envelope-from <alexmonthy@voxpopuli.im>) id 1YEh7F-00083W-Ln
+ for lttng-dev@lists.lttng.org; Fri, 23 Jan 2015 11:29:52 -0500
+In-Reply-To: <54C215D6.1030804@huawei.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,52 +21,127 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Wang Nan <wangnan0@huawei.com>
+Cc: "diamon-discuss@lists.linuxfoundation.org" <diamon-discuss@lists.linuxfoundation.org>, lttng-dev@lists.lttng.org, tracecompass developer discussions <tracecompass-dev@eclipse.org>
 List-Id: lttng-dev@lists.lttng.org
 
-R29vZCBhZnRlcm5vb24sCgpJIGhhdmUgYmVlbiBhYmxlIHRvIGdldCBsdHRuZyBydW5uaW5nIG9u
-IGEgbWFjaGluZSBhbmQgbm93IHdvdWxkIGxpa2UgdG8gZG8gc29tZSBleHBlcmltZW50cyB3aXRo
-IGJhYmVsdHJhY2UuIEnigJlkIGxpa2UgdG8gd3JpdGUgb3V0IGEgY3RmIGZpbGUgdXNpbmcgYmFi
-ZWx0cmFjZS4gVGhlcmVmb3JlIEkgd2FudGVkIHRvIHRyeSBvdXQgdGhlIGJhYmVsdHJhY2UgcHl0
-aG9uIGJpbmRpbmdzIG91dCBhbmQgc2luY2UgeW91IHByb3ZpZGUgYSBzZXQgb2YgZXhhbXBsZXMs
-IG9mIHdoaWNoIG9uZSBpcyBhYm91dCB3cml0aW5nIGEgY3RmLCBJIHdhbnRlZCB0byB0cnkgdGhh
-dCBvbmUgb3V0LgoKV2hlbiBJIHVzZSB0aGUgbGF0c3RlIHJlbGVhc2Ugb2YgYmFiZWx0cmFjZSAo
-MS4yLjQpLCB0aGUgbGlicmFyeSBmYWlscyBvbiB0aGUgZm9sbG93aW5nIGxpbmU6CgpwcmludCgi
-Q2xvY2sgbmFtZSBpcyBcInt9XCIiLmZvcm1hdChjbG9jay5uYW1lKSkKCmJlY2F1c2UgaXQgc2Vl
-bXMgbGlrZSB0aGUgZ2V0dGVyIGZvciBjbG9jay5uYW1lIGRvZXNu4oCZdCBleGlzdC4gdG8gc29s
-dmUgdGhlIGlzc3VlcyBJIGhhdmUgd2l0aCB0aGlzIGV4YW1wbGUsIEkgaGF2ZSBjaGVja2VkIG91
-dCB0aGUgbW9zdCByZWNlbnQgdmVyc2lvbiBvZiBiYWJlbHRyYWNlIGZyb20gdGhlIGdpdCByZXBv
-LiBJZiBJIHJ1biB0aGUgY3RmX3dyaXRlciB1c2luZyBweXRob24sIEkgZ2V0Cgp5YW5AcGF1bCB+
-L2J1aWxkX2JidC9iYWJlbHRyYWNlL2JpbmRpbmdzL3B5dGhvbi9leGFtcGxlcyAkIHB5dGhvbjMg
-Y3RmX3dyaXRlci5weQpXcml0aW5nIHRyYWNlIGF0IC90bXAvdG1wdGxocTNpCkNsb2NrIG5hbWUg
-aXMgIkFfY2xvY2siCkNsb2NrIGRlc2NyaXB0aW9uIGlzICJTaW1wbGUgY2xvY2siCkNsb2NrIGZy
-ZXF1ZW5jeSBpcyAxMDAwMDAwMDAwCkNsb2NrIHByZWNpc2lvbiBpcyAxCkNsb2NrIG9mZnNldF9z
-ZWNvbmRzIGlzIDAKQ2xvY2sgb2Zmc2V0IGlzIDAKQ2xvY2sgaXMgYWJzb2x1dGU6IEZhbHNlCkNs
-b2NrIHRpbWUgaXMgMApDbG9jayBVVUlEIGlzIDg3NGJlOTBjLTZjNjgtNDZlZS1hYzBkLTYxNDJj
-YWZlMjNmNQoKRmllbGRzIGluIGRlZmF1bHQgcGFja2V0IGNvbnRleHQ6CjxjbGFzcyAnYmFiZWx0
-cmFjZS5DVEZXcml0ZXIuSW50ZWdlckZpZWxkRGVjbGFyYXRpb24nPiB0aW1lc3RhbXBfYmVnaW4K
-PGNsYXNzICdiYWJlbHRyYWNlLkNURldyaXRlci5JbnRlZ2VyRmllbGREZWNsYXJhdGlvbic+IHRp
-bWVzdGFtcF9lbmQKPGNsYXNzICdiYWJlbHRyYWNlLkNURldyaXRlci5JbnRlZ2VyRmllbGREZWNs
-YXJhdGlvbic+IGNvbnRlbnRfc2l6ZQo8Y2xhc3MgJ2JhYmVsdHJhY2UuQ1RGV3JpdGVyLkludGVn
-ZXJGaWVsZERlY2xhcmF0aW9uJz4gcGFja2V0X3NpemUKPGNsYXNzICdiYWJlbHRyYWNlLkNURldy
-aXRlci5JbnRlZ2VyRmllbGREZWNsYXJhdGlvbic+IGV2ZW50c19kaXNjYXJkZWQKPGJhYmVsdHJh
-Y2UuQ1RGV3JpdGVyLldyaXRlciBvYmplY3QgYXQgMHg3ZjU3MDU4MzYwZDA+CmNsb3NlOiBCYWQg
-ZmlsZSBkZXNjcmlwdG9yClRyYWNlYmFjayAobW9zdCByZWNlbnQgY2FsbCBsYXN0KToKICBGaWxl
-ICJjdGZfd3JpdGVyLnB5IiwgbGluZSAxMzAsIGluIDxtb2R1bGU+CiAgICBzdHJlYW0uYXBwZW5k
-X2V2ZW50KGV2ZW50KQogIEZpbGUgIi91c3IvbGliNjQvcHl0aG9uMy4zL3NpdGUtcGFja2FnZXMv
-YmFiZWx0cmFjZS5weSIsIGxpbmUgMzQ2MiwgaW4gYXBwZW5kX2V2ZW50CiAgICByYWlzZSBWYWx1
-ZUVycm9yKCJDb3VsZCBub3QgYXBwZW5kIGV2ZW50IHRvIHN0cmVhbS4iKQpWYWx1ZUVycm9yOiBD
-b3VsZCBub3QgYXBwZW5kIGV2ZW50IHRvIHN0cmVhbS4KCgpJcyB0aGlzIGEgcmVwcm9kdWNpYmxl
-IGlzc3VlPyBJIGFtIG9uIGEgZ2VudG9vIHN5c3RlbSAoMy4xNy43KSwgd2l0aCBweXRob24zIHZl
-cnNpb24gUHl0aG9uIDMuMy41IChkZWZhdWx0LCBKYW4gMTQgMjAxNSwgMTk6MDE6MTIpIFtHQ0Mg
-NC44LjNdIG9uIGxpbnV4CgpGb3IgY29tcGlsYXRpb24sIEkgdXNlZCB0aGUgZm9sbG93aW5nIGZs
-YWdzIG9mIHRoZSBjb25maWd1cmUgc2NyaXB0OgoKLi9jb25maWd1cmUgLS1wcmVmaXg9L3VzciAt
-LWJ1aWxkPXg4Nl82NC1wYy1saW51eC1nbnUgLS1ob3N0PXg4Nl82NC1wYy1saW51eC1nbnUgLS1t
-YW5kaXI9L3Vzci9zaGFyZS9tYW4gLS1pbmZvZGlyPS91c3Ivc2hhcmUvaW5mbyAtLWRhdGFkaXI9
-L3Vzci9zaGFyZSAtLXN5c2NvbmZkaXI9L2V0YyAtLWxvY2Fsc3RhdGVkaXI9L3Zhci9saWIgLS1k
-aXNhYmxlLWRlcGVuZGVuY3ktdHJhY2tpbmcgLS1kaXNhYmxlLXNpbGVudC1ydWxlcyAtLWxpYmRp
-cj0vdXNyL2xpYjY0IC0tZW5hYmxlLWdsaWJ0ZXN0IC0tZW5hYmxlLXB5dGhvbi1iaW5kaW5ncwoK
-SXMgdGhlcmUgYW55dGhpbmcgSSBjb2xkIGRvIHRvIGZpeCB0aGlzPwoKUmVnYXJkcywKCllhbiBH
-cmFuZ2UKCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9s
-aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi Wang,
+
+First of all, thank you very much for posting this use case. This is 
+exactly the type of user feedback that will help make the toolchain 
+better and more useful for users!
+
+Some comments and questions below,
+
+
+On 01/23/2015 04:35 AM, Wang Nan wrote:
+> [...]
+>
+> Then I need to convert perf.data to ctf. It tooks 140.57s to convert
+> 2598513 samples, which are collected during only 1 second execution. My
+> working server has 64 2.0GHz Intel Xeon cores, but perf conversion
+> utilizes only 1 of them. I think this is another thing can be improved.
+
+Out of curiosity, approximately how big (in bytes) is the generated CTF 
+trace directory?
+
+>
+> The next step is visualization. Output ctf trace can be opened with
+> TraceCompass without problem. The most important views for me should be
+> resources view (I use them to check CPU usage) and control flow view (I
+> use them to check thread activities).
+>
+> The first uncomfortable thing is TraceCompass' slow response time. For
+> the trace I mentioned above, on resource view, after I click on CPU
+> idle area, I have to wait more than 10 seconds for event list updating
+> to get the previous event before the idle area.
+
+Interesting. It is expected that opening a very large trace would take a 
+long time to load the first time, as everything gets indexed. But once 
+that step is done, seeking within the trace should be relatively quick 
+((log n) wrt to the trace size). In theory ;)
+
+The perf-to-CTF conversion brings a completely new type of CTF traces 
+that was not seen before. It is possible that the CTF parser in Trace 
+Compass has some inefficiencies that were not exposed by other trace 
+types. Are you able to share that trace publicly? Or a trace taken in 
+the same environment, with no sensible information in it? It could be 
+very helpful in finding such problem.
+
+> Then I found through resources view that perf itself tooks lots of CPU
+> time. In my case 33.5% samples are generated by perf itself. One core is
+> dedicated to perf and never idle or taken by others. I think this should
+> be another thing needs to be improved: perf should give a way to
+> blacklist itself when tracing all CPUs.
+
+I don't want to start a tracer-war here :) but have you investigated 
+using LTTng for recording syscall/sched events ? Compared to perf, LTTng 
+is only about "getting trace events", and is a bit more involved to set 
+up, but it is more focused on performance and minimizing the impact on 
+the traced applications. And it outputs in CTF format too.
+
+I remember when testing the perf-CTF patches, comparing a perf trace to 
+an LTTng one, perf would be doing system calls continuously on one of 
+the CPUs for the whole duration of the trace. Whereas in LTTng traces, 
+the session daemon would be a bit active at the beginning and at then 
+end, but otherwise completely invisible from the trace.
+
+> TraceCompass doesn't recognize syscall:* tracepoints as CPU status
+> changing point. I have to also catch raw_syscall:*, and which doubles
+> the number of samples.
+
+This is a gap in the definition of the analysis it seems. I don't 
+remember implementing two types of "syscall" events in the perf 
+analysis, so it should just be a matter of getting the exact event name 
+and adding it to the list. I will take a look and keep you posted!
+
+> Finally I found the syscall which cause idle. However I need to write a
+> script to do statistics. TraceCompass itself is lack a mean to count
+> different events in my way.
+
+Could you elaborate on this please? I agree the "Statistics" view in TC 
+is severely lacking, we could be gathering and displaying much more 
+information. The only question is what information would actually be useful.
+
+What exactly would you have liked to be able to see in the tool?
+
+> [...]
+>
+>
+>   5. Ad-Hoc visualization and statistics. Currently TraceCompass only
+>      support dwaring pre-defined events and processes. When I try to
+>      capture syscalls:*, I won't get benefit from TraceCompass because it
+>      doesn't know them. I believe that during system tuning we will
+>      finally get somewhere unable to be pre-defined by TraceCompass
+>      designer. Therefore give users abilities to define their own events
+>      and model should be much helpful.
+
+As I mentioned earlier, the pre-defined "perf analysis" in Trace Compass 
+should be fixed to handle the syscall events.
+
+
+But it's interesting that you mention wanting to add your own events and 
+model. I completely agree with you, we will never be able to predict 
+every and all use cases the users will want to use the tool for, so 
+there should be a way for the user to add their own.
+
+Well good news, it *is* possible for the user to define their own 
+analysis and views! This is still undergoing a lot of development, and 
+there is no nice UI yet, which is why it is not really advertized. But 
+starting from any supported trace type, a user today can define a time 
+graph view (like the Resource View for example) or a XY chart, using a 
+data-driven XML syntax.
+
+If you are curious, you can take a look at a full example of doing such 
+a thing on this page:
+https://github.com/alexmonthy/ust-tc-example
+(the example uses an LTTng UST trace as a source, but it could work with 
+any supported trace type, even a custom text trace defined in the UI).
+
+>
+> Thank you.
+
+Thanks again for taking the time to write about your experience!
+
+Cheers,
+Alexandre
