@@ -1,16 +1,16 @@
-From: Wang Nan <wangnan0@huawei.com>
-Subject: My experience on perf, CTF and TraceCompass,
-	and some suggection.
-Date: Fri, 23 Jan 2015 17:35:18 +0800
-Message-ID: <54C215D6.1030804__19580.3354880356$1422005804$gmane$org@huawei.com>
+From: Anand Neeli <anand.neeli@gmail.com>
+Subject: enable-channel switch timer not getting updated
+Date: Fri, 23 Jan 2015 15:46:31 +0530
+Message-ID: <CAM5kDqyYjQFnU3bO9j0rxSzLPgDD_kcWP9PmJzf+ZRWeqhYm3w__25736.9452542209$1422008230$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0401637678=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from szxga02-in.huawei.com ([119.145.14.65])
+Received: from mail-we0-f178.google.com ([74.125.82.178])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <wangnan0@huawei.com>) id 1YEaex-0005l0-Ar
- for lttng-dev@lists.lttng.org; Fri, 23 Jan 2015 04:36:12 -0500
+ (envelope-from <anand.neeli@gmail.com>) id 1YEbI4-0005zC-Uf
+ for lttng-dev@lists.lttng.org; Fri, 23 Jan 2015 05:16:39 -0500
+Received: by mail-we0-f178.google.com with SMTP id k48so6666343wev.9
+ for <lttng-dev@lists.lttng.org>; Fri, 23 Jan 2015 02:16:31 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,105 +19,108 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "diamon-discuss@lists.linuxfoundation.org" <diamon-discuss@lists.linuxfoundation.org>, lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi folks,
+--===============0401637678==
+Content-Type: multipart/alternative; boundary=f46d043c7dd21c9ef2050d4f1584
 
-I'd like to share my first tuning experience with perf, ctf and
-TraceCompass here, and I hope my experience helpful to diamon.org. Most
-part of this mail is talking about my work. If you don't
-interest in it, you can directly jump to conclusion part.
+--f46d043c7dd21c9ef2050d4f1584
+Content-Type: text/plain; charset=UTF-8
 
-*My Task*
+Hi All,
+I'm using 2.4.1 version.
+and i dont see switch timer being updated in output of "lttng list
+<session>"
+i'm using default subbuf-size and default sub-buf count.
 
-What I'm working on is finding the reason why CPU idle rate is high when
-we benchmarking a database. I think it should be a very simple task:
-tracing scheduling and system calls, finding the previous syscall issued
-before idle, then based on statistics, collecting some user spaces call
-stack, I can give an answer. I use perf to collect trace,
-perf-convert-to-ctf to get ctf output and TraceCompass for
-visualization.
+output :
+
+$ # lttng list mys4
+Tracing session mys4: [active]
+    Trace path: net4://127.0.0.1:5342/ [data: 5343]
+
+=== Domain: UST global ===
+Buffer type: per PID
+Channels:
+-------------
+- myc4: [enabled]
+
+    Attributes:
+      overwrite mode: 0
+      subbufers size: 4096
+      number of subbufers: 4
+*      switch timer interval: 0   <<<<<<<< doesnt show switch-timer*
+      read timer interval: 0
+      output: mmap()
+
+    Events:
+      * (type: tracepoint) [enabled] [has exclusions]
 
 
-*My Experience*
+i used following commands to create session
 
-First of all I use perf to collect trace:
+lttng  --no-sessiond create mys4 --live 200000 -U net://localhost
 
- # perf record -a -e sched:* -e raw_syscalls:* sleep 1
+lttng enable-channel myc4 --userspace --buffers-pid -s mys4
+--tracefile-size 8388608 --tracefile-count 8 *--switch-timer 1000*
 
-then
+lttng enable-event --channel myc4 --userspace --all --exclude 'ust_libc:*'
+-s mys4
 
- # perf data convert --to-ctf out.ctf
+lttng start mys4
 
-Which is simple. However, raw_syscalls:* tracepoints export less
-information than syscalls:* tracepoints. Without them I have to manually
-find syscall name from syscall id. I prefer to use:
 
- # perf record -a -e sched:* -e syscalls:* sleep 1
+Please let me know if i missed anything.
 
-However there are some bugs and I have to make some patches. They are
-posted and being disscussed currently, those bugs are still exist
-upstream.
+Thanks,
 
-Then I need to convert perf.data to ctf. It tooks 140.57s to convert
-2598513 samples, which are collected during only 1 second execution. My
-working server has 64 2.0GHz Intel Xeon cores, but perf conversion
-utilizes only 1 of them. I think this is another thing can be improved.
+Anand Neeli
 
-The next step is visualization. Output ctf trace can be opened with
-TraceCompass without problem. The most important views for me should be
-resources view (I use them to check CPU usage) and control flow view (I
-use them to check thread activities).
+--f46d043c7dd21c9ef2050d4f1584
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-The first uncomfortable thing is TraceCompass' slow response time. For
-the trace I mentioned above, on resource view, after I click on CPU
-idle area, I have to wait more than 10 seconds for event list updating
-to get the previous event before the idle area.
+<div dir=3D"ltr">Hi All,<div>I&#39;m using 2.4.1 version.</div><div>and i d=
+ont see switch timer being updated in output of &quot;lttng list &lt;sessio=
+n&gt;&quot;</div><div>i&#39;m using default subbuf-size and default sub-buf=
+ count.</div><div><br></div><div>output :</div><div><br></div><div>$ # lttn=
+g list mys4<br></div><div><div>Tracing session mys4: [active]</div><div>=C2=
+=A0 =C2=A0 Trace path: net4://<a href=3D"http://127.0.0.1:5342/">127.0.0.1:=
+5342/</a> [data: 5343]</div><div><br></div><div>=3D=3D=3D Domain: UST globa=
+l =3D=3D=3D</div><div>Buffer type: per PID</div><div>Channels:</div><div>--=
+-----------</div><div>- myc4: [enabled]</div><div><br></div><div>=C2=A0 =C2=
+=A0 Attributes:</div><div>=C2=A0 =C2=A0 =C2=A0 overwrite mode: 0</div><div>=
+=C2=A0 =C2=A0 =C2=A0 subbufers size: 4096</div><div>=C2=A0 =C2=A0 =C2=A0 nu=
+mber of subbufers: 4</div><div><b>=C2=A0 =C2=A0 =C2=A0 switch timer interva=
+l: 0 =C2=A0 &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; doesnt show switch-timer</b></=
+div><div>=C2=A0 =C2=A0 =C2=A0 read timer interval: 0</div><div>=C2=A0 =C2=
+=A0 =C2=A0 output: mmap()</div><div><br></div><div>=C2=A0 =C2=A0 Events:</d=
+iv><div>=C2=A0 =C2=A0 =C2=A0 * (type: tracepoint) [enabled] [has exclusions=
+]</div><div><br></div></div><div><br></div><div>i used following commands t=
+o create session</div><div><p class=3D"">lttng=C2=A0 --no-sessiond create m=
+ys4 --live 200000 -U net://localhost</p><p class=3D"">lttng enable-channel =
+myc4 --userspace --buffers-pid -s mys4 --tracefile-size 8388608 --tracefile=
+-count 8=C2=A0<span style=3D"font-family:&#39;Arial,Bold&#39;;font-size:11p=
+t"><b>--switch-timer 1000</b></span></p>
+<p class=3D"">lttng enable-event --channel myc4 --userspace --all <span cla=
+ss=3D"">--exclude &#39;ust_libc:*&#39;</span> -s mys4<br></p>
+<p class=3D"">lttng start mys4<br></p><p class=3D""><br></p><p class=3D"">P=
+lease let me know if i missed anything.</p><p class=3D"">Thanks,</p><p clas=
+s=3D"">Anand Neeli</p></div></div>
 
-Then I found through resources view that perf itself tooks lots of CPU
-time. In my case 33.5% samples are generated by perf itself. One core is
-dedicated to perf and never idle or taken by others. I think this should
-be another thing needs to be improved: perf should give a way to
-blacklist itself when tracing all CPUs.
+--f46d043c7dd21c9ef2050d4f1584--
 
-TraceCompass doesn't recognize syscall:* tracepoints as CPU status
-changing point. I have to also catch raw_syscall:*, and which doubles
-the number of samples.
 
-Finally I found the syscall which cause idle. However I need to write a
-script to do statistics. TraceCompass itself is lack a mean to count
-different events in my way.
+--===============0401637678==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-The next thing I should do is to find the calltrace which issue the
-syscall. This time TraceCompass won't help, mostly because perf
-convertion now doesn't support converting calltrace.
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-*Conclusion*
-
-I suggest perf and TraceCompass to think about following improvements:
-
- 1. Reducing the cost of perf recording. There are one third events are
-    generated by perf itself in my case. Is it possible that perf could
-    provide an ability that blacklist itself and collect all other
-    events?
-
- 2. Improving perf converting performance. Converting perf.data to CTF is
-    slow, but it should be offline most of the time. We can utilize the
-    abilities multi-core server to make it working in parallel.
-
- 3. Improving TraceCompass responding performance, especially when
-    synchronizing different views.
-
- 4. Support converting userspace call trace. I think perf side should already
-    have a plan on it.
-
- 5. Ad-Hoc visualization and statistics. Currently TraceCompass only
-    support dwaring pre-defined events and processes. When I try to
-    capture syscalls:*, I won't get benefit from TraceCompass because it
-    doesn't know them. I believe that during system tuning we will
-    finally get somewhere unable to be pre-defined by TraceCompass
-    designer. Therefore give users abilities to define their own events
-    and model should be much helpful.
-
-Thank you.
+--===============0401637678==--
