@@ -1,16 +1,16 @@
-From: Mattias Johansson <matjo75@gmail.com>
-Subject: Strange sequence of events
-Date: Fri, 23 Jan 2015 10:29:57 +0100
-Message-ID: <CAC1wc0BFK3UHKD0-O4U5miZEQxT5MeJmob4MyFzNBb7h9B3qYw__4759.91611970148$1422005442$gmane$org@mail.gmail.com>
+From: Wang Nan <wangnan0@huawei.com>
+Subject: My experience on perf, CTF and TraceCompass,
+	and some suggection.
+Date: Fri, 23 Jan 2015 17:35:18 +0800
+Message-ID: <54C215D6.1030804__19580.3354880356$1422005804$gmane$org@huawei.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1307934772=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pa0-f42.google.com ([209.85.220.42])
+Received: from szxga02-in.huawei.com ([119.145.14.65])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <matjo75@gmail.com>) id 1YEaZ1-0005hZ-Dg
- for lttng-dev@lists.lttng.org; Fri, 23 Jan 2015 04:30:06 -0500
-Received: by mail-pa0-f42.google.com with SMTP id bj1so6554492pad.1
- for <lttng-dev@lists.lttng.org>; Fri, 23 Jan 2015 01:29:57 -0800 (PST)
+ (envelope-from <wangnan0@huawei.com>) id 1YEaex-0005l0-Ar
+ for lttng-dev@lists.lttng.org; Fri, 23 Jan 2015 04:36:12 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,90 +19,105 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "diamon-discuss@lists.linuxfoundation.org" <diamon-discuss@lists.linuxfoundation.org>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1307934772==
-Content-Type: multipart/alternative; boundary=047d7b5dbb66978da9050d4e6eed
+Hi folks,
 
---047d7b5dbb66978da9050d4e6eed
-Content-Type: text/plain; charset=UTF-8
+I'd like to share my first tuning experience with perf, ctf and
+TraceCompass here, and I hope my experience helpful to diamon.org. Most
+part of this mail is talking about my work. If you don't
+interest in it, you can directly jump to conclusion part.
 
-Hi lttng-people!
+*My Task*
 
-I have been using lttng to make a combined kernel and userspace trace and I
-can't make sense of a simple sequence of events. I am using a two core cpu,
-a custom distro (by yocto), linux kernel version is 3.12.15 with the
-PREEMPT RT patches, the lttng probe module lttng-probe-sched loaded.
-This is my strange sequence:
-
-[13:26:17.542825060] (+0.000003659) unit1 sched_switch: { cpu_id = 1 }, {
-pid = 2390 }, { prev_comm = "ThreadA", prev_tid = 2547, prev_prio = -19,
-prev_state = 1024, next_comm = "KernelThreadB", next_tid = 2410, next_prio
-= -51 }
-[13:26:17.542831008] (+0.000005948) unit1 sched_migrate_task: { cpu_id = 0
-}, { pid = 2408 }, { comm = "ThreadA", tid = 2547, prio = -19, orig_cpu =
-1, dest_cpu = 0 }
-[13:26:17.542837060] (+0.000003256) unit1 ust_event:my_ust_event: { cpu_id
-= 1 }, { vtid = 2547 }, { }
-
-ThreadA makes the userspace trace event 'my_ust_event'.
-
-What is strange to me is either the timestamp of 'my_ust_event' is "wrong"
-(it should have been a time before the sched_switch), or the cpu_id of the
-ust_event is "wrong" (it should be 0 since ThreadA has been migrated to
-cpu_id 0 at 13:26:17.542831008).
-
-Or am I interpreting the sequence wrong?
-
-Or could it be that the my_ust_event itself got interrupted and had already
-sampled the cpu_id, and after the migration completed the event, thus the
-trace is "correct"?
-
-Thanks!
-/Mattias
-
---047d7b5dbb66978da9050d4e6eed
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi lttng-people!<div><br></div><div>I have been using lttn=
-g to make a combined kernel and userspace trace and I can&#39;t make sense =
-of a simple sequence of events. I am using a two core cpu, a custom distro =
-(by yocto), linux kernel version is 3.12.15 with the PREEMPT RT patches, th=
-e lttng probe module lttng-probe-sched loaded.</div><div>This is my strange=
- sequence:</div><div><div><br></div><div>[13:26:17.542825060] (+0.000003659=
-) unit1 sched_switch: { cpu_id =3D 1 }, { pid =3D 2390 }, { prev_comm =3D &=
-quot;ThreadA&quot;, prev_tid =3D 2547, prev_prio =3D -19, prev_state =3D 10=
-24, next_comm =3D &quot;KernelThreadB&quot;, next_tid =3D 2410, next_prio =
-=3D -51 }</div><div>[13:26:17.542831008] (+0.000005948) unit1 sched_migrate=
-_task: { cpu_id =3D 0 }, { pid =3D 2408 }, { comm =3D &quot;ThreadA&quot;, =
-tid =3D 2547, prio =3D -19, orig_cpu =3D 1, dest_cpu =3D 0 }</div><div>[13:=
-26:17.542837060] (+0.000003256) unit1 ust_event:my_ust_event: { cpu_id =3D =
-1 }, { vtid =3D 2547 }, { }</div></div><div><br></div><div>ThreadA makes th=
-e userspace trace event &#39;my_ust_event&#39;.</div><div><br></div><div>Wh=
-at is strange to me is either the timestamp of &#39;my_ust_event&#39; is &q=
-uot;wrong&quot; (it should have been a time before the sched_switch), or th=
-e cpu_id of the ust_event is &quot;wrong&quot; (it should be 0 since=C2=A0T=
-hreadA=C2=A0has=C2=A0been migrated to cpu_id 0 at 13:26:17.542831008).</div=
-><div><br></div><div>Or am I interpreting the sequence wrong?</div><div><br=
-></div><div>Or could it be that the=C2=A0my_ust_event=C2=A0itself got inter=
-rupted and had already sampled the cpu_id,=C2=A0and after the migration com=
-pleted the event, thus the trace is &quot;correct&quot;?</div><div><br></di=
-v><div>Thanks!</div><div>/Mattias</div><div><br></div></div>
-
---047d7b5dbb66978da9050d4e6eed--
+What I'm working on is finding the reason why CPU idle rate is high when
+we benchmarking a database. I think it should be a very simple task:
+tracing scheduling and system calls, finding the previous syscall issued
+before idle, then based on statistics, collecting some user spaces call
+stack, I can give an answer. I use perf to collect trace,
+perf-convert-to-ctf to get ctf output and TraceCompass for
+visualization.
 
 
---===============1307934772==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+*My Experience*
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+First of all I use perf to collect trace:
 
---===============1307934772==--
+ # perf record -a -e sched:* -e raw_syscalls:* sleep 1
+
+then
+
+ # perf data convert --to-ctf out.ctf
+
+Which is simple. However, raw_syscalls:* tracepoints export less
+information than syscalls:* tracepoints. Without them I have to manually
+find syscall name from syscall id. I prefer to use:
+
+ # perf record -a -e sched:* -e syscalls:* sleep 1
+
+However there are some bugs and I have to make some patches. They are
+posted and being disscussed currently, those bugs are still exist
+upstream.
+
+Then I need to convert perf.data to ctf. It tooks 140.57s to convert
+2598513 samples, which are collected during only 1 second execution. My
+working server has 64 2.0GHz Intel Xeon cores, but perf conversion
+utilizes only 1 of them. I think this is another thing can be improved.
+
+The next step is visualization. Output ctf trace can be opened with
+TraceCompass without problem. The most important views for me should be
+resources view (I use them to check CPU usage) and control flow view (I
+use them to check thread activities).
+
+The first uncomfortable thing is TraceCompass' slow response time. For
+the trace I mentioned above, on resource view, after I click on CPU
+idle area, I have to wait more than 10 seconds for event list updating
+to get the previous event before the idle area.
+
+Then I found through resources view that perf itself tooks lots of CPU
+time. In my case 33.5% samples are generated by perf itself. One core is
+dedicated to perf and never idle or taken by others. I think this should
+be another thing needs to be improved: perf should give a way to
+blacklist itself when tracing all CPUs.
+
+TraceCompass doesn't recognize syscall:* tracepoints as CPU status
+changing point. I have to also catch raw_syscall:*, and which doubles
+the number of samples.
+
+Finally I found the syscall which cause idle. However I need to write a
+script to do statistics. TraceCompass itself is lack a mean to count
+different events in my way.
+
+The next thing I should do is to find the calltrace which issue the
+syscall. This time TraceCompass won't help, mostly because perf
+convertion now doesn't support converting calltrace.
+
+*Conclusion*
+
+I suggest perf and TraceCompass to think about following improvements:
+
+ 1. Reducing the cost of perf recording. There are one third events are
+    generated by perf itself in my case. Is it possible that perf could
+    provide an ability that blacklist itself and collect all other
+    events?
+
+ 2. Improving perf converting performance. Converting perf.data to CTF is
+    slow, but it should be offline most of the time. We can utilize the
+    abilities multi-core server to make it working in parallel.
+
+ 3. Improving TraceCompass responding performance, especially when
+    synchronizing different views.
+
+ 4. Support converting userspace call trace. I think perf side should already
+    have a plan on it.
+
+ 5. Ad-Hoc visualization and statistics. Currently TraceCompass only
+    support dwaring pre-defined events and processes. When I try to
+    capture syscalls:*, I won't get benefit from TraceCompass because it
+    doesn't know them. I believe that during system tuning we will
+    finally get somewhere unable to be pre-defined by TraceCompass
+    designer. Therefore give users abilities to define their own events
+    and model should be much helpful.
+
+Thank you.
