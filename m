@@ -1,121 +1,88 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: UST tracing problem on ARM/Android
-Date: Sat, 24 Jan 2015 14:54:52 +0000 (UTC)
-Message-ID: <2025041545.47062.1422111292883.JavaMail.zimbra__7026.14530823684$1422111343$gmane$org@efficios.com>
-References: <1421273876.3881.68.camel@samsung.com>
- <1422040541.12886.146.camel@samsung.com>
+Subject: Re: Progress on system crash traces with LTTng using DAX and pmem
+Date: Sun, 25 Jan 2015 14:55:18 +0000 (UTC)
+Message-ID: <8237170.50348.1422197718126.JavaMail.zimbra@efficios.com>
+References: <1254279794.1957.1414240389301.JavaMail.zimbra@efficios.com> <465653369.1985.1414241485934.JavaMail.zimbra@efficios.com> <20141027184809.GW11522@wil.cx>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1YF26v-0007Bh-V0
- for lttng-dev@lists.lttng.org; Sat, 24 Jan 2015 09:54:56 -0500
-In-Reply-To: <1422040541.12886.146.camel@samsung.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Charles Briere <c.briere@samsung.com>
-Cc: lttng-dev@lists.lttng.org
+Return-path: <owner-linux-mm@kvack.org>
+In-Reply-To: <20141027184809.GW11522@wil.cx>
+Sender: owner-linux-mm@kvack.org
+To: Matthew Wilcox <willy@linux.intel.com>
+Cc: Ross Zwisler <ross.zwisler@linux.intel.com>, lttng-dev <lttng-dev@lists.lttng.org>, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
 List-Id: lttng-dev@lists.lttng.org
 
 ----- Original Message -----
-> From: "Charles Briere" <c.briere@samsung.com>
-> To: lttng-dev@lists.lttng.org
-> Sent: Friday, January 23, 2015 2:15:40 PM
-> Subject: Re: [lttng-dev] UST tracing problem on ARM/Android
+> From: "Matthew Wilcox" <willy@linux.intel.com>
+> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> Cc: "Matthew Wilcox" <willy@linux.intel.com>, "Ross Zwisler" <ross.zwisler@linux.intel.com>, "lttng-dev"
+> <lttng-dev@lists.lttng.org>, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+> Sent: Monday, October 27, 2014 2:48:09 PM
+> Subject: Re: Progress on system crash traces with LTTng using DAX and pmem
 > 
-> So I just found out why this was hapenning and thought I would share my
-> findings.
+> On Sat, Oct 25, 2014 at 12:51:25PM +0000, Mathieu Desnoyers wrote:
+> > A quick follow up on my progress on using DAX and pmem with
+> > LTTng. I've been able to successfully gather a user-space
+> > trace into buffers mmap'd into an ext4 filesystem within
+> > a pmem block device mounted with -o dax to bypass the page
+> > cache. After a soft reboot, I'm able to mount the partition
+> > again, and gather the very last data collected in the buffers
+> > by the applications. I created a "lttng-crash" program that
+> > extracts data from those buffers and converts the content
+> > into a readable Common Trace Format trace. So I guess
+> > you have a use-case for your patchsets on commodity hardware
+> > right there. :)
 > 
-> The Android linker will load a shared library twice in memory if it has
-> a different path (even symbolic link). Therefore when
-> dl_opening("lttng-ust-tracepoint.so.0", ...), even if that library is
-> already loaded as it has been defined at link time, it will duplicate
-> all it's symbols. The function add_calliste will populate the
-> callsite_table which is local to the dl_open(ed) library while
-> tracepoint_sync_callsites will try to read an unitialized one, local to
-> it's own symbols.
+> Sweet!
 > 
-> That brings me to ask, why not passing "liblttng-ust-tracepoint.so" to
-> dl_open()? What is the reason for versioning here as anyway at link
-> time, liblttng-ust-tracepoint.so is the one beeing used?
+> > I've been asked by my customers if DAX would work well with
+> > mtd-ram, which they are using. To you foresee any roadblock
+> > with this approach ?
+> 
+> Looks like we'd need to add support to mtd-blkdevs.c for DAX.  I assume
+> they're already using one of the block-based ways to expose MTD to
+> filesystems, rather than jffs2/logfs/ubifs?
+> 
+> I'm thinking we might want to add a flag somewhere in the block_dev / bdi
+> that indicates whether DAX is supported.  Currently we rely on whether
+> ->direct_access is present in the block_device_operations to indicate
+> that, so we'd have to have two block_dev_operations in mtd-blkdevs,
+> depending on whether direct access is supported by the underlying
+> MTD device.  Not a show-stopper.
+> 
+> > Please keep me in CC on your next patch versions. I'm willing
+> > to spend some more time reviewing them if needed. By the way,
+> > do you guys have a target time-frame/kernel version you aim
+> > at for getting this work upstream ?
+> 
+> We're trying to get it upstream ASAP.  We've been working on it
+> publically since December last year, and it's getting frustrating that
+> it's not upstream already.  I sent a v12 a few minutes before you sent
+> this message ...  I thought git would add you to the cc's since your
+> Reviewed-by is on some of the patches.
 
-Versioning would allow us to change the ABI if we really, really need
-to do it in the future. Ideally we would never change it, but you
-never know what the future has in store.
+Hi Matthew,
 
-According to the opengroup POSIX spec:
+I've noticed that Andrew Morton picked up your DAX patchset, which is
+really good news!
 
-http://pubs.opengroup.org/onlinepubs/009695399/functions/dlopen.html
+About the topic of DAX support on mtd-ram: I'm wonder if we would
+need the pmem patchset at all if mtd-ram gets DAX support ? How
+do the two approaches differ ? Has anyone tried out mtd-ram over
+DAX at this point ?
 
-"Only a single copy of an object file is brought into the address space, even if dlopen() is invoked multiple times in reference to the file, and even if different pathnames are used to reference the file."
-
-So it appears to be a bug in Android's implementation of their libc.
-You might want to report it to them.
-
-One possible work-around we could implement in lttng-ust would be do
-to a wrapper for Android dlopen (let's call it lttng_ust_dlopen_wrapper)
-that first calls realpath(3) to first resolve the symlinks, and call
-dlopen on the result. This wrapper could be directly built into
-liblttng-ust.
-
-Thoughts ?
-
-Thanks,
+Thanks for the great work! :)
 
 Mathieu
-
-
-> 
-> Thanks,
-> Charles
-> 
-> On Wed, 2015-01-14 at 14:17 -0800, Charles Briere wrote:
-> > Hello world,
-> > 
-> > I've been running in some inssues lately with UST on ARM/Android. Using
-> > the following to configure my session, I enable every ust event.
-> > 
-> > lttng create
-> > lttng enable-event -ua
-> > 
-> > Although, when a tracepoint is called, its state ( struct
-> > lttng_ust_tracepoint -> state) is 0.
-> > 
-> > My understanding of the whole registration process is limited, so the
-> > following reasoning is probably flawed, so please correct me if that
-> > happens.
-> > 
-> > I found out, that when registering the library
-> > (tracepoint_register_lib), callsite_table is populated. But later on
-> > when it comes to register the probes (lttng_prove_register),
-> > callsite_table 's address is different and the list is empty. As a
-> > result, when tracepoint_sync_callsite() is called, set_tracepoint() is
-> > never executed as looping through an empty list.
-> > 
-> > What I don't understand in here, is that the callsite_table pointer is
-> > not the same during the lib registration and probe registration. Both
-> > are ran sequentially in the same thread and I can't figure what other
-> > operation could affect the variable. Any hint/help would be much
-> > appreciated.
-> > 
-> > Thanks,
-> > Charles
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
 
 -- 
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
+
+--
+To unsubscribe, send a message with 'unsubscribe linux-mm' in
+the body to majordomo@kvack.org.  For more info on Linux MM,
+see: http://www.linux-mm.org/ .
+Don't email: <a href=mailto:"dont@kvack.org"> email@kvack.org </a>
