@@ -1,20 +1,20 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [diamon-discuss] My experience on perf,
- CTF and TraceCompass, and some suggection.
-Date: Mon, 26 Jan 2015 11:25:18 -0500
-Message-ID: <CA+jJMxt1KWXRNntRwn4Co2zJhY6T=sHZFBkpsWdmwFYGU8pbQg__43970.5164790668$1422289566$gmane$org@mail.gmail.com>
-References: <54C215D6.1030804@huawei.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-ust 1/2] Fix: make dist: python agent file
+	handling
+Date: Mon, 26 Jan 2015 11:50:30 -0500
+Message-ID: <1422291031-28246-1-git-send-email-jonathan.rajotte-julien__6819.50498042188$1422291091$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f53.google.com ([209.85.192.53])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1YFmTh-0005Jz-7E
- for lttng-dev@lists.lttng.org; Mon, 26 Jan 2015 11:25:32 -0500
-Received: by mail-qg0-f53.google.com with SMTP id a108so7503739qge.12
- for <lttng-dev@lists.lttng.org>; Mon, 26 Jan 2015 08:25:18 -0800 (PST)
-In-Reply-To: <54C215D6.1030804@huawei.com>
+ (envelope-from <jonathan.rajotte-julien@efficios.com>)
+ id 1YFmsH-0005SU-Eq
+ for lttng-dev@lists.lttng.org; Mon, 26 Jan 2015 11:50:54 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 84CE23401C5
+ for <lttng-dev@lists.lttng.org>; Mon, 26 Jan 2015 16:50:54 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,93 +23,32 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Wang Nan <wangnan0@huawei.com>
-Cc: "diamon-discuss@lists.linuxfoundation.org" <diamon-discuss@lists.linuxfoundation.org>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gRnJpLCBKYW4gMjMsIDIwMTUgYXQgNDozNSBBTSwgV2FuZyBOYW4gPHdhbmduYW4wQGh1YXdl
-aS5jb20+IHdyb3RlOgo+IEhpIGZvbGtzLAo+Cj4gSSdkIGxpa2UgdG8gc2hhcmUgbXkgZmlyc3Qg
-dHVuaW5nIGV4cGVyaWVuY2Ugd2l0aCBwZXJmLCBjdGYgYW5kCj4gVHJhY2VDb21wYXNzIGhlcmUs
-IGFuZCBJIGhvcGUgbXkgZXhwZXJpZW5jZSBoZWxwZnVsIHRvIGRpYW1vbi5vcmcuIE1vc3QKPiBw
-YXJ0IG9mIHRoaXMgbWFpbCBpcyB0YWxraW5nIGFib3V0IG15IHdvcmsuIElmIHlvdSBkb24ndAo+
-IGludGVyZXN0IGluIGl0LCB5b3UgY2FuIGRpcmVjdGx5IGp1bXAgdG8gY29uY2x1c2lvbiBwYXJ0
-Lgo+Cj4gKk15IFRhc2sqCj4KPiBXaGF0IEknbSB3b3JraW5nIG9uIGlzIGZpbmRpbmcgdGhlIHJl
-YXNvbiB3aHkgQ1BVIGlkbGUgcmF0ZSBpcyBoaWdoIHdoZW4KPiB3ZSBiZW5jaG1hcmtpbmcgYSBk
-YXRhYmFzZS4gSSB0aGluayBpdCBzaG91bGQgYmUgYSB2ZXJ5IHNpbXBsZSB0YXNrOgo+IHRyYWNp
-bmcgc2NoZWR1bGluZyBhbmQgc3lzdGVtIGNhbGxzLCBmaW5kaW5nIHRoZSBwcmV2aW91cyBzeXNj
-YWxsIGlzc3VlZAo+IGJlZm9yZSBpZGxlLCB0aGVuIGJhc2VkIG9uIHN0YXRpc3RpY3MsIGNvbGxl
-Y3Rpbmcgc29tZSB1c2VyIHNwYWNlcyBjYWxsCj4gc3RhY2ssIEkgY2FuIGdpdmUgYW4gYW5zd2Vy
-LiBJIHVzZSBwZXJmIHRvIGNvbGxlY3QgdHJhY2UsCj4gcGVyZi1jb252ZXJ0LXRvLWN0ZiB0byBn
-ZXQgY3RmIG91dHB1dCBhbmQgVHJhY2VDb21wYXNzIGZvcgo+IHZpc3VhbGl6YXRpb24uCj4KPgo+
-ICpNeSBFeHBlcmllbmNlKgo+Cj4gRmlyc3Qgb2YgYWxsIEkgdXNlIHBlcmYgdG8gY29sbGVjdCB0
-cmFjZToKPgo+ICAjIHBlcmYgcmVjb3JkIC1hIC1lIHNjaGVkOiogLWUgcmF3X3N5c2NhbGxzOiog
-c2xlZXAgMQo+Cj4gdGhlbgo+Cj4gICMgcGVyZiBkYXRhIGNvbnZlcnQgLS10by1jdGYgb3V0LmN0
-Zgo+Cj4gV2hpY2ggaXMgc2ltcGxlLiBIb3dldmVyLCByYXdfc3lzY2FsbHM6KiB0cmFjZXBvaW50
-cyBleHBvcnQgbGVzcwo+IGluZm9ybWF0aW9uIHRoYW4gc3lzY2FsbHM6KiB0cmFjZXBvaW50cy4g
-V2l0aG91dCB0aGVtIEkgaGF2ZSB0byBtYW51YWxseQo+IGZpbmQgc3lzY2FsbCBuYW1lIGZyb20g
-c3lzY2FsbCBpZC4gSSBwcmVmZXIgdG8gdXNlOgo+Cj4gICMgcGVyZiByZWNvcmQgLWEgLWUgc2No
-ZWQ6KiAtZSBzeXNjYWxsczoqIHNsZWVwIDEKPgo+IEhvd2V2ZXIgdGhlcmUgYXJlIHNvbWUgYnVn
-cyBhbmQgSSBoYXZlIHRvIG1ha2Ugc29tZSBwYXRjaGVzLiBUaGV5IGFyZQo+IHBvc3RlZCBhbmQg
-YmVpbmcgZGlzc2N1c3NlZCBjdXJyZW50bHksIHRob3NlIGJ1Z3MgYXJlIHN0aWxsIGV4aXN0Cj4g
-dXBzdHJlYW0uCj4KPiBUaGVuIEkgbmVlZCB0byBjb252ZXJ0IHBlcmYuZGF0YSB0byBjdGYuIEl0
-IHRvb2tzIDE0MC41N3MgdG8gY29udmVydAo+IDI1OTg1MTMgc2FtcGxlcywgd2hpY2ggYXJlIGNv
-bGxlY3RlZCBkdXJpbmcgb25seSAxIHNlY29uZCBleGVjdXRpb24uIE15Cj4gd29ya2luZyBzZXJ2
-ZXIgaGFzIDY0IDIuMEdIeiBJbnRlbCBYZW9uIGNvcmVzLCBidXQgcGVyZiBjb252ZXJzaW9uCj4g
-dXRpbGl6ZXMgb25seSAxIG9mIHRoZW0uIEkgdGhpbmsgdGhpcyBpcyBhbm90aGVyIHRoaW5nIGNh
-biBiZSBpbXByb3ZlZC4KClRoYW5rcyBmb3IgdGFraW5nIHRoZSB0aW1lIHRvIGRvIHRoaXMgd3Jp
-dGUtdXAhCgpXb3VsZCBpdCBiZSBwb3NzaWJsZSB0byBwcm9maWxlIHBlcmYtdG8tY3RmIHNvIHdl
-IGNhbiBzcG90IHRoZSBib3R0bGVuZWNrPwoKUmVnYXJkcywKSsOpcsOpbWllCgo+Cj4gVGhlIG5l
-eHQgc3RlcCBpcyB2aXN1YWxpemF0aW9uLiBPdXRwdXQgY3RmIHRyYWNlIGNhbiBiZSBvcGVuZWQg
-d2l0aAo+IFRyYWNlQ29tcGFzcyB3aXRob3V0IHByb2JsZW0uIFRoZSBtb3N0IGltcG9ydGFudCB2
-aWV3cyBmb3IgbWUgc2hvdWxkIGJlCj4gcmVzb3VyY2VzIHZpZXcgKEkgdXNlIHRoZW0gdG8gY2hl
-Y2sgQ1BVIHVzYWdlKSBhbmQgY29udHJvbCBmbG93IHZpZXcgKEkKPiB1c2UgdGhlbSB0byBjaGVj
-ayB0aHJlYWQgYWN0aXZpdGllcykuCj4KPiBUaGUgZmlyc3QgdW5jb21mb3J0YWJsZSB0aGluZyBp
-cyBUcmFjZUNvbXBhc3MnIHNsb3cgcmVzcG9uc2UgdGltZS4gRm9yCj4gdGhlIHRyYWNlIEkgbWVu
-dGlvbmVkIGFib3ZlLCBvbiByZXNvdXJjZSB2aWV3LCBhZnRlciBJIGNsaWNrIG9uIENQVQo+IGlk
-bGUgYXJlYSwgSSBoYXZlIHRvIHdhaXQgbW9yZSB0aGFuIDEwIHNlY29uZHMgZm9yIGV2ZW50IGxp
-c3QgdXBkYXRpbmcKPiB0byBnZXQgdGhlIHByZXZpb3VzIGV2ZW50IGJlZm9yZSB0aGUgaWRsZSBh
-cmVhLgo+Cj4gVGhlbiBJIGZvdW5kIHRocm91Z2ggcmVzb3VyY2VzIHZpZXcgdGhhdCBwZXJmIGl0
-c2VsZiB0b29rcyBsb3RzIG9mIENQVQo+IHRpbWUuIEluIG15IGNhc2UgMzMuNSUgc2FtcGxlcyBh
-cmUgZ2VuZXJhdGVkIGJ5IHBlcmYgaXRzZWxmLiBPbmUgY29yZSBpcwo+IGRlZGljYXRlZCB0byBw
-ZXJmIGFuZCBuZXZlciBpZGxlIG9yIHRha2VuIGJ5IG90aGVycy4gSSB0aGluayB0aGlzIHNob3Vs
-ZAo+IGJlIGFub3RoZXIgdGhpbmcgbmVlZHMgdG8gYmUgaW1wcm92ZWQ6IHBlcmYgc2hvdWxkIGdp
-dmUgYSB3YXkgdG8KPiBibGFja2xpc3QgaXRzZWxmIHdoZW4gdHJhY2luZyBhbGwgQ1BVcy4KPgo+
-IFRyYWNlQ29tcGFzcyBkb2Vzbid0IHJlY29nbml6ZSBzeXNjYWxsOiogdHJhY2Vwb2ludHMgYXMg
-Q1BVIHN0YXR1cwo+IGNoYW5naW5nIHBvaW50LiBJIGhhdmUgdG8gYWxzbyBjYXRjaCByYXdfc3lz
-Y2FsbDoqLCBhbmQgd2hpY2ggZG91Ymxlcwo+IHRoZSBudW1iZXIgb2Ygc2FtcGxlcy4KPgo+IEZp
-bmFsbHkgSSBmb3VuZCB0aGUgc3lzY2FsbCB3aGljaCBjYXVzZSBpZGxlLiBIb3dldmVyIEkgbmVl
-ZCB0byB3cml0ZSBhCj4gc2NyaXB0IHRvIGRvIHN0YXRpc3RpY3MuIFRyYWNlQ29tcGFzcyBpdHNl
-bGYgaXMgbGFjayBhIG1lYW4gdG8gY291bnQKPiBkaWZmZXJlbnQgZXZlbnRzIGluIG15IHdheS4K
-Pgo+IFRoZSBuZXh0IHRoaW5nIEkgc2hvdWxkIGRvIGlzIHRvIGZpbmQgdGhlIGNhbGx0cmFjZSB3
-aGljaCBpc3N1ZSB0aGUKPiBzeXNjYWxsLiBUaGlzIHRpbWUgVHJhY2VDb21wYXNzIHdvbid0IGhl
-bHAsIG1vc3RseSBiZWNhdXNlIHBlcmYKPiBjb252ZXJ0aW9uIG5vdyBkb2Vzbid0IHN1cHBvcnQg
-Y29udmVydGluZyBjYWxsdHJhY2UuCj4KPiAqQ29uY2x1c2lvbioKPgo+IEkgc3VnZ2VzdCBwZXJm
-IGFuZCBUcmFjZUNvbXBhc3MgdG8gdGhpbmsgYWJvdXQgZm9sbG93aW5nIGltcHJvdmVtZW50czoK
-Pgo+ICAxLiBSZWR1Y2luZyB0aGUgY29zdCBvZiBwZXJmIHJlY29yZGluZy4gVGhlcmUgYXJlIG9u
-ZSB0aGlyZCBldmVudHMgYXJlCj4gICAgIGdlbmVyYXRlZCBieSBwZXJmIGl0c2VsZiBpbiBteSBj
-YXNlLiBJcyBpdCBwb3NzaWJsZSB0aGF0IHBlcmYgY291bGQKPiAgICAgcHJvdmlkZSBhbiBhYmls
-aXR5IHRoYXQgYmxhY2tsaXN0IGl0c2VsZiBhbmQgY29sbGVjdCBhbGwgb3RoZXIKPiAgICAgZXZl
-bnRzPwo+Cj4gIDIuIEltcHJvdmluZyBwZXJmIGNvbnZlcnRpbmcgcGVyZm9ybWFuY2UuIENvbnZl
-cnRpbmcgcGVyZi5kYXRhIHRvIENURiBpcwo+ICAgICBzbG93LCBidXQgaXQgc2hvdWxkIGJlIG9m
-ZmxpbmUgbW9zdCBvZiB0aGUgdGltZS4gV2UgY2FuIHV0aWxpemUgdGhlCj4gICAgIGFiaWxpdGll
-cyBtdWx0aS1jb3JlIHNlcnZlciB0byBtYWtlIGl0IHdvcmtpbmcgaW4gcGFyYWxsZWwuCj4KPiAg
-My4gSW1wcm92aW5nIFRyYWNlQ29tcGFzcyByZXNwb25kaW5nIHBlcmZvcm1hbmNlLCBlc3BlY2lh
-bGx5IHdoZW4KPiAgICAgc3luY2hyb25pemluZyBkaWZmZXJlbnQgdmlld3MuCj4KPiAgNC4gU3Vw
-cG9ydCBjb252ZXJ0aW5nIHVzZXJzcGFjZSBjYWxsIHRyYWNlLiBJIHRoaW5rIHBlcmYgc2lkZSBz
-aG91bGQgYWxyZWFkeQo+ICAgICBoYXZlIGEgcGxhbiBvbiBpdC4KPgo+ICA1LiBBZC1Ib2Mgdmlz
-dWFsaXphdGlvbiBhbmQgc3RhdGlzdGljcy4gQ3VycmVudGx5IFRyYWNlQ29tcGFzcyBvbmx5Cj4g
-ICAgIHN1cHBvcnQgZHdhcmluZyBwcmUtZGVmaW5lZCBldmVudHMgYW5kIHByb2Nlc3Nlcy4gV2hl
-biBJIHRyeSB0bwo+ICAgICBjYXB0dXJlIHN5c2NhbGxzOiosIEkgd29uJ3QgZ2V0IGJlbmVmaXQg
-ZnJvbSBUcmFjZUNvbXBhc3MgYmVjYXVzZSBpdAo+ICAgICBkb2Vzbid0IGtub3cgdGhlbS4gSSBi
-ZWxpZXZlIHRoYXQgZHVyaW5nIHN5c3RlbSB0dW5pbmcgd2Ugd2lsbAo+ICAgICBmaW5hbGx5IGdl
-dCBzb21ld2hlcmUgdW5hYmxlIHRvIGJlIHByZS1kZWZpbmVkIGJ5IFRyYWNlQ29tcGFzcwo+ICAg
-ICBkZXNpZ25lci4gVGhlcmVmb3JlIGdpdmUgdXNlcnMgYWJpbGl0aWVzIHRvIGRlZmluZSB0aGVp
-ciBvd24gZXZlbnRzCj4gICAgIGFuZCBtb2RlbCBzaG91bGQgYmUgbXVjaCBoZWxwZnVsLgo+Cj4g
-VGhhbmsgeW91Lgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KPiBkaWFtb24tZGlzY3VzcyBtYWlsaW5nIGxpc3QKPiBkaWFtb24tZGlzY3Vzc0BsaXN0
-cy5saW51eGZvdW5kYXRpb24ub3JnCj4gaHR0cHM6Ly9saXN0cy5saW51eGZvdW5kYXRpb24ub3Jn
-L21haWxtYW4vbGlzdGluZm8vZGlhbW9uLWRpc2N1c3MKCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5l
-YXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Fresh make dist tried to package a build time file:lttng_agent.py
+and make dist tried to package a non-existent file.
+
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+ liblttng-ust-python-agent/Makefile.am | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/liblttng-ust-python-agent/Makefile.am b/liblttng-ust-python-agent/Makefile.am
+index 7b51447..5d5b6ab 100644
+--- a/liblttng-ust-python-agent/Makefile.am
++++ b/liblttng-ust-python-agent/Makefile.am
+@@ -2,9 +2,9 @@
+ AM_CPPFLAGS = $(PYTHON_INCLUDE) -I$(top_srcdir)/include/
+ AM_CFLAGS = -fno-strict-aliasing
+ 
+-EXTRA_DIST = lttng-agent.py.in
++EXTRA_DIST = lttng_agent.py.in
+ 
+-lttng_agent_PYTHON = lttng_agent.py
++nodist_lttng_agent_PYTHON = lttng_agent.py
+ lttng_agentdir = $(pythondir)
+ 
+ lib_LTLIBRARIES = liblttng-ust-python-agent.la
+-- 
+1.9.1
