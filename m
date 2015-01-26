@@ -1,88 +1,72 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Progress on system crash traces with LTTng using DAX and pmem
-Date: Sun, 25 Jan 2015 14:55:18 +0000 (UTC)
-Message-ID: <8237170.50348.1422197718126.JavaMail.zimbra@efficios.com>
-References: <1254279794.1957.1414240389301.JavaMail.zimbra@efficios.com> <465653369.1985.1414241485934.JavaMail.zimbra@efficios.com> <20141027184809.GW11522@wil.cx>
+From: Wang Nan <wangnan0@huawei.com>
+Subject: Re: [diamon-discuss] My experience on perf,
+ CTF and TraceCompass, and some suggection.
+Date: Mon, 26 Jan 2015 12:08:30 +0800
+Message-ID: <54C5BDBE.30000__42682.1192763329$1422245411$gmane$org@huawei.com>
+References: <54C215D6.1030804@huawei.com> <54C2AB2B.6000105@voxpopuli.im>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <owner-linux-mm@kvack.org>
-In-Reply-To: <20141027184809.GW11522@wil.cx>
-Sender: owner-linux-mm@kvack.org
-To: Matthew Wilcox <willy@linux.intel.com>
-Cc: Ross Zwisler <ross.zwisler@linux.intel.com>, lttng-dev <lttng-dev@lists.lttng.org>, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from szxga03-in.huawei.com ([119.145.14.66])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <wangnan0@huawei.com>) id 1YFazS-0001QB-CR
+ for lttng-dev@lists.lttng.org; Sun, 25 Jan 2015 23:09:36 -0500
+In-Reply-To: <54C2AB2B.6000105@voxpopuli.im>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Cc: "diamon-discuss@lists.linuxfoundation.org" <diamon-discuss@lists.linuxfoundation.org>, lttng-dev@lists.lttng.org, tracecompass developer discussions <tracecompass-dev@eclipse.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "Matthew Wilcox" <willy@linux.intel.com>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: "Matthew Wilcox" <willy@linux.intel.com>, "Ross Zwisler" <ross.zwisler@linux.intel.com>, "lttng-dev"
-> <lttng-dev@lists.lttng.org>, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-> Sent: Monday, October 27, 2014 2:48:09 PM
-> Subject: Re: Progress on system crash traces with LTTng using DAX and pmem
+On 2015/1/24 4:12, Alexandre Montplaisir wrote:
 > 
-> On Sat, Oct 25, 2014 at 12:51:25PM +0000, Mathieu Desnoyers wrote:
-> > A quick follow up on my progress on using DAX and pmem with
-> > LTTng. I've been able to successfully gather a user-space
-> > trace into buffers mmap'd into an ext4 filesystem within
-> > a pmem block device mounted with -o dax to bypass the page
-> > cache. After a soft reboot, I'm able to mount the partition
-> > again, and gather the very last data collected in the buffers
-> > by the applications. I created a "lttng-crash" program that
-> > extracts data from those buffers and converts the content
-> > into a readable Common Trace Format trace. So I guess
-> > you have a use-case for your patchsets on commodity hardware
-> > right there. :)
+> On 01/23/2015 04:35 AM, Wang Nan wrote:
+>> [...] I prefer to use:
+>>
+>>   # perf record -a -e sched:* -e syscalls:* sleep 1
+>>
+>> However there are some bugs and I have to make some patches. They are
+>> posted and being disscussed currently, those bugs are still exist
+>> upstream.
 > 
-> Sweet!
+> Hmm, I can confirm this problem, when trying to convert a trace taken with these events enabled, I get the following error:
 > 
-> > I've been asked by my customers if DAX would work well with
-> > mtd-ram, which they are using. To you foresee any roadblock
-> > with this approach ?
+> Failed to add field 'nr
+> Failed to add event 'syscalls:sys_enter_io_submit'.
 > 
-> Looks like we'd need to add support to mtd-blkdevs.c for DAX.  I assume
-> they're already using one of the block-based ways to expose MTD to
-> filesystems, rather than jffs2/logfs/ubifs?
+> Good to know it's being looked at!
 > 
-> I'm thinking we might want to add a flag somewhere in the block_dev / bdi
-> that indicates whether DAX is supported.  Currently we rely on whether
-> ->direct_access is present in the block_device_operations to indicate
-> that, so we'd have to have two block_dev_operations in mtd-blkdevs,
-> depending on whether direct access is supported by the underlying
-> MTD device.  Not a show-stopper.
 > 
-> > Please keep me in CC on your next patch versions. I'm willing
-> > to spend some more time reviewing them if needed. By the way,
-> > do you guys have a target time-frame/kernel version you aim
-> > at for getting this work upstream ?
+> But when you say:
 > 
-> We're trying to get it upstream ASAP.  We've been working on it
-> publically since December last year, and it's getting frustrating that
-> it's not upstream already.  I sent a v12 a few minutes before you sent
-> this message ...  I thought git would add you to the cc's since your
-> Reviewed-by is on some of the patches.
+>> TraceCompass doesn't recognize syscall:* tracepoints as CPU status
+>> changing point. I have to also catch raw_syscall:*, and which doubles
+>> the number of samples.
+> 
+> I assume this was that with your patches applied, so that you could take a trace of the syscall:* tracepoints?
+> 
+> Do you have a link to those patches somewhere? Or just let us know when it gets integrated upstream. I was trying to update the analysis in Trace Compass to handle syscall:* too, but we can't really do it without knowing how it will look like in CTF format ;)
+> 
+> 
 
-Hi Matthew,
+Hi,
 
-I've noticed that Andrew Morton picked up your DAX patchset, which is
-really good news!
+You can follow this thread in LKML:
 
-About the topic of DAX support on mtd-ram: I'm wonder if we would
-need the pmem patchset at all if mtd-ram gets DAX support ? How
-do the two approaches differ ? Has anyone tried out mtd-ram over
-DAX at this point ?
+https://lkml.org/lkml/2015/1/20/330
 
-Thanks for the great work! :)
+In https://lkml.org/lkml/2015/1/22/24 , I posted 2 RFC patches can solve the problem.
+However I'm still waiting response from Steven Rostedt whether he allow us to improve
+traceevent.
 
-Mathieu
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
-
---
-To unsubscribe, send a message with 'unsubscribe linux-mm' in
-the body to majordomo@kvack.org.  For more info on Linux MM,
-see: http://www.linux-mm.org/ .
-Don't email: <a href=mailto:"dont@kvack.org"> email@kvack.org </a>
+> Cheers,
+> Alexandre
+> 
