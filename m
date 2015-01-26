@@ -1,26 +1,34 @@
-From: Charles Briere <c.briere@samsung.com>
-Subject: Re: UST tracing problem on ARM/Android
-Date: Mon, 26 Jan 2015 18:58:55 +0000
-Message-ID: <1422298736.12886.168.camel__20976.6433727511$1422298791$gmane$org@samsung.com>
-References: <1421273876.3881.68.camel@samsung.com>
- <1422040541.12886.146.camel@samsung.com>
- <2025041545.47062.1422111292883.JavaMail.zimbra@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-UST 2.6.0 (Gaia)
+Date: Mon, 26 Jan 2015 19:58:38 +0000 (UTC)
+Message-ID: <1799409529.53124.1422302318422.JavaMail.zimbra__30505.4791192108$1422302364$gmane$org@efficios.com>
+References: <739551800.53106.1422302087713.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailout3.w2.samsung.com ([211.189.100.13]
- helo=usmailout3.samsung.com) by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <c.briere@samsung.com>) id 1YFosK-00069j-IZ
- for lttng-dev@lists.lttng.org; Mon, 26 Jan 2015 13:59:08 -0500
-Received: from uscpsbgex1.samsung.com
- (u122.gpu85.samsung.co.kr [203.254.195.122]) by usmailout3.samsung.com
- (Oracle Communications Messaging Server 7u4-24.01(7.0.4.24.0) 64bit (built Nov
- 17 2011)) with ESMTP id <0NIS0063HSQ9MGA0@usmailout3.samsung.com> for
- lttng-dev@lists.lttng.org; Mon, 26 Jan 2015 13:58:57 -0500 (EST)
-In-reply-to: <2025041545.47062.1422111292883.JavaMail.zimbra@efficios.com>
-Content-language: en-US
-Content-id: <3F9645976061864EA7B8D663720E1908@samsung.com>
+Received: from mail.efficios.com ([78.47.125.74])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <compudj@efficios.com>) id 1YFpny-0006TG-3q
+ for lttng-dev@lists.lttng.org; Mon, 26 Jan 2015 14:58:42 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id BD55D340046
+ for <lttng-dev@lists.lttng.org>; Mon, 26 Jan 2015 19:58:39 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id SDaF_LI5dR5l for <lttng-dev@lists.lttng.org>;
+ Mon, 26 Jan 2015 19:58:39 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id EBE7A3401E0
+ for <lttng-dev@lists.lttng.org>; Mon, 26 Jan 2015 19:58:38 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id vxftrk8oJaAq for <lttng-dev@lists.lttng.org>;
+ Mon, 26 Jan 2015 19:58:38 +0000 (UTC)
+Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
+ by mail.efficios.com (Postfix) with ESMTP id BB72534003B
+ for <lttng-dev@lists.lttng.org>; Mon, 26 Jan 2015 19:58:38 +0000 (UTC)
+In-Reply-To: <739551800.53106.1422302087713.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -29,106 +37,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Sat, 2015-01-24 at 14:54 +0000, Mathieu Desnoyers wrote:
-> ----- Original Message -----
-> > From: "Charles Briere" <c.briere@samsung.com>
-> > To: lttng-dev@lists.lttng.org
-> > Sent: Friday, January 23, 2015 2:15:40 PM
-> > Subject: Re: [lttng-dev] UST tracing problem on ARM/Android
-> > 
-> > So I just found out why this was hapenning and thought I would share my
-> > findings.
-> > 
-> > The Android linker will load a shared library twice in memory if it has
-> > a different path (even symbolic link). Therefore when
-> > dl_opening("lttng-ust-tracepoint.so.0", ...), even if that library is
-> > already loaded as it has been defined at link time, it will duplicate
-> > all it's symbols. The function add_calliste will populate the
-> > callsite_table which is local to the dl_open(ed) library while
-> > tracepoint_sync_callsites will try to read an unitialized one, local to
-> > it's own symbols.
-> > 
-> > That brings me to ask, why not passing "liblttng-ust-tracepoint.so" to
-> > dl_open()? What is the reason for versioning here as anyway at link
-> > time, liblttng-ust-tracepoint.so is the one beeing used?
-> 
-> Versioning would allow us to change the ABI if we really, really need
-> to do it in the future. Ideally we would never change it, but you
-> never know what the future has in store.
-> 
-> According to the opengroup POSIX spec:
-> 
-> http://pubs.opengroup.org/onlinepubs/009695399/functions/dlopen.html
-> 
-> "Only a single copy of an object file is brought into the address space, even if dlopen() is invoked multiple times in reference to the file, and even if different pathnames are used to reference the file."
-> 
-> So it appears to be a bug in Android's implementation of their libc.
-> You might want to report it to them.
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
-Thanks for pointing that out and confirming it's a bug, I'll report it.
+New & noteworthy in this LTTng-UST release: it includes Java LOG4J
+logger integration. Java LOG4J is a Java logging API. Java applications
+can therefore use either JUL (since LTTng-UST 2.5) or LOG4J (since
+LTTng-UST 2.6) to send their logs to LTTng-UST through the LTTng Log
+Handler. See https://logging.apache.org/log4j/1.2/ for details.
 
-> 
-> One possible work-around we could implement in lttng-ust would be do
-> to a wrapper for Android dlopen (let's call it lttng_ust_dlopen_wrapper)
-> that first calls realpath(3) to first resolve the symlinks, and call
-> dlopen on the result. This wrapper could be directly built into
-> liblttng-ust.
-> 
-> Thoughts ?
+Changelog since 2.6.0-rc3:
+2015-01-26 lttng-ust 2.6.0
+        * Fix: java-agent: out-of-tree path to java manifest
+        * Fix: missing parenthesis in offset_align_floor
+        * Fix: add ustctl_has_perf_counters
+        * Fix: add urcu-bp TLS fixup
+        * Fix: add missing poll.h include
+        * Fix: get_subbuf: bound number of consumerd retry
 
-Agreed with this solution.
-
-Thanks for the feedback,
-Charles
-
-> Thanks,
-> 
-> Mathieu
-> 
-> 
-> > 
-> > Thanks,
-> > Charles
-> > 
-> > On Wed, 2015-01-14 at 14:17 -0800, Charles Briere wrote:
-> > > Hello world,
-> > > 
-> > > I've been running in some inssues lately with UST on ARM/Android. Using
-> > > the following to configure my session, I enable every ust event.
-> > > 
-> > > lttng create
-> > > lttng enable-event -ua
-> > > 
-> > > Although, when a tracepoint is called, its state ( struct
-> > > lttng_ust_tracepoint -> state) is 0.
-> > > 
-> > > My understanding of the whole registration process is limited, so the
-> > > following reasoning is probably flawed, so please correct me if that
-> > > happens.
-> > > 
-> > > I found out, that when registering the library
-> > > (tracepoint_register_lib), callsite_table is populated. But later on
-> > > when it comes to register the probes (lttng_prove_register),
-> > > callsite_table 's address is different and the list is empty. As a
-> > > result, when tracepoint_sync_callsite() is called, set_tracepoint() is
-> > > never executed as looping through an empty list.
-> > > 
-> > > What I don't understand in here, is that the callsite_table pointer is
-> > > not the same during the lib registration and probe registration. Both
-> > > are ran sequentially in the same thread and I can't figure what other
-> > > operation could affect the variable. Any hint/help would be much
-> > > appreciated.
-> > > 
-> > > Thanks,
-> > > Charles
-> > 
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> > 
-> 
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
