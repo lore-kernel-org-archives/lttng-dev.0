@@ -1,64 +1,50 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.6.0 (Gaia)
-Date: Mon, 26 Jan 2015 19:58:38 +0000 (UTC)
-Message-ID: <1799409529.53124.1422302318422.JavaMail.zimbra__30505.4791192108$1422302364$gmane$org@efficios.com>
-References: <739551800.53106.1422302087713.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng modules 2.6.0 (Gaia)
+Date: Mon, 26 Jan 2015 20:04:45 +0000 (UTC)
+Message-ID: <1224618254.53158.1422302685749.JavaMail.zimbra@efficios.com>
+References: <314636431.53126.1422302376219.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1YFpny-0006TG-3q
- for lttng-dev@lists.lttng.org; Mon, 26 Jan 2015 14:58:42 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id BD55D340046
- for <lttng-dev@lists.lttng.org>; Mon, 26 Jan 2015 19:58:39 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id SDaF_LI5dR5l for <lttng-dev@lists.lttng.org>;
- Mon, 26 Jan 2015 19:58:39 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id EBE7A3401E0
- for <lttng-dev@lists.lttng.org>; Mon, 26 Jan 2015 19:58:38 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id vxftrk8oJaAq for <lttng-dev@lists.lttng.org>;
- Mon, 26 Jan 2015 19:58:38 +0000 (UTC)
-Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
- by mail.efficios.com (Postfix) with ESMTP id BB72534003B
- for <lttng-dev@lists.lttng.org>; Mon, 26 Jan 2015 19:58:38 +0000 (UTC)
-In-Reply-To: <739551800.53106.1422302087713.JavaMail.zimbra@efficios.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+Return-path: <linux-kernel-owner@vger.kernel.org>
+In-Reply-To: <314636431.53126.1422302376219.JavaMail.zimbra@efficios.com>
+Sender: linux-kernel-owner@vger.kernel.org
+To: lttng-dev@lists.lttng.org
+Cc: LKML <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
-port of the low-overhead tracing capabilities of the LTTng kernel tracer
-to user-space. The library "liblttng-ust" enables tracing of
-applications and libraries.
+We are now releasing the 2.6.0 LTTng modules Linux kernel tracer.
 
-New & noteworthy in this LTTng-UST release: it includes Java LOG4J
-logger integration. Java LOG4J is a Java logging API. Java applications
-can therefore use either JUL (since LTTng-UST 2.5) or LOG4J (since
-LTTng-UST 2.6) to send their logs to LTTng-UST through the LTTng Log
-Handler. See https://logging.apache.org/log4j/1.2/ for details.
+New & Noteworthy features in the LTTng Linux kernel tracer 2.6.0: 
 
-Changelog since 2.6.0-rc3:
-2015-01-26 lttng-ust 2.6.0
-        * Fix: java-agent: out-of-tree path to java manifest
+- System call filtering! Fine-tune which system calls you want
+  to trace or not,
+- We now gather in/out parameters of system calls at entry and
+  exit of the syscall. Please note that the system call event
+  semantic (naming) have changed in this release. You may have
+  to update your analysis if they depended on the old semantic,
+- Trace NMI handlers, using the new NMI-safe clock monotonic
+  available in kernels >= 3.17.
+
+Changelog since LTTng modules 2.6.0-rc2:
+
+2015-01-26 LTTng modules 2.6.0
         * Fix: missing parenthesis in offset_align_floor
-        * Fix: add ustctl_has_perf_counters
-        * Fix: add urcu-bp TLS fixup
-        * Fix: add missing poll.h include
-        * Fix: get_subbuf: bound number of consumerd retry
+        * Fix: implement time.h wrapper for FD_ISSET
+        * Fix: update sched instrumentation for 3.19+ kernels
+        * Fix: update rcu instrumentation for 3.19+ kernels
+        * Fix: update scsi instrumentation for 3.19+ kernels
+        * Fix: update module instrumentation for 3.19+ kernels
+        * Fix: Add f_dentry wrapper for 3.19+ kernels
+        * Fix: introduce lttng_get_unused_fd() wrapper for 3.19 kernels
+        * Fix: lttng_this_cpu_ptr wrapper for kernel 3.19+
+        * Fix: Update btrfs instrumentation for 3.18 Linux kernel
+        * Fix compile error on kernel 3.0.101 with CONFIG_PERF_EVENTS
+        * Conditional compilation introduced by lttng-modules commit
+
+Project website: http://lttng.org
+Documentation: http://lttng.org/docs
+Download link: http://lttng.org/download
 
 -- 
 Mathieu Desnoyers
