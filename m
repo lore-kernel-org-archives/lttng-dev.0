@@ -1,46 +1,59 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.6.0 (Gaia)
-Date: Mon, 26 Jan 2015 20:04:45 +0000 (UTC)
-Message-ID: <1224618254.53158.1422302685749.JavaMail.zimbra@efficios.com>
-References: <314636431.53126.1422302376219.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng-UST 2.5.3
+Date: Mon, 26 Jan 2015 20:14:02 +0000 (UTC)
+Message-ID: <859580996.53164.1422303242389.JavaMail.zimbra__29455.63597973$1422303274$gmane$org@efficios.com>
+References: <1925350532.53162.1422303212935.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <314636431.53126.1422302376219.JavaMail.zimbra@efficios.com>
-Sender: linux-kernel-owner@vger.kernel.org
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.efficios.com ([78.47.125.74])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <compudj@efficios.com>) id 1YFq2r-0006ce-KZ
+ for lttng-dev@lists.lttng.org; Mon, 26 Jan 2015 15:14:02 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 4A2CF340279
+ for <lttng-dev@lists.lttng.org>; Mon, 26 Jan 2015 20:14:03 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id PW-q8qyufHDB for <lttng-dev@lists.lttng.org>;
+ Mon, 26 Jan 2015 20:14:02 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id D63AE340286
+ for <lttng-dev@lists.lttng.org>; Mon, 26 Jan 2015 20:14:02 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id Uq-PNWthhQUY for <lttng-dev@lists.lttng.org>;
+ Mon, 26 Jan 2015 20:14:02 +0000 (UTC)
+Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
+ by mail.efficios.com (Postfix) with ESMTP id B0FBB340279
+ for <lttng-dev@lists.lttng.org>; Mon, 26 Jan 2015 20:14:02 +0000 (UTC)
+In-Reply-To: <1925350532.53162.1422303212935.JavaMail.zimbra@efficios.com>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
-Cc: LKML <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-We are now releasing the 2.6.0 LTTng modules Linux kernel tracer.
+LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
+port of the low-overhead tracing capabilities of the LTTng kernel tracer
+to user-space. The library "liblttng-ust" enables tracing of
+applications and libraries.
 
-New & Noteworthy features in the LTTng Linux kernel tracer 2.6.0: 
+This is a bugfix release.
 
-- System call filtering! Fine-tune which system calls you want
-  to trace or not,
-- We now gather in/out parameters of system calls at entry and
-  exit of the syscall. Please note that the system call event
-  semantic (naming) have changed in this release. You may have
-  to update your analysis if they depended on the old semantic,
-- Trace NMI handlers, using the new NMI-safe clock monotonic
-  available in kernels >= 3.17.
+Changelog since lttng-ust 2.5.2:
 
-Changelog since LTTng modules 2.6.0-rc2:
-
-2015-01-26 LTTng modules 2.6.0
+2015-01-26 lttng-ust 2.5.3
         * Fix: missing parenthesis in offset_align_floor
-        * Fix: implement time.h wrapper for FD_ISSET
-        * Fix: update sched instrumentation for 3.19+ kernels
-        * Fix: update rcu instrumentation for 3.19+ kernels
-        * Fix: update scsi instrumentation for 3.19+ kernels
-        * Fix: update module instrumentation for 3.19+ kernels
-        * Fix: Add f_dentry wrapper for 3.19+ kernels
-        * Fix: introduce lttng_get_unused_fd() wrapper for 3.19 kernels
-        * Fix: lttng_this_cpu_ptr wrapper for kernel 3.19+
-        * Fix: Update btrfs instrumentation for 3.18 Linux kernel
-        * Fix compile error on kernel 3.0.101 with CONFIG_PERF_EVENTS
-        * Conditional compilation introduced by lttng-modules commit
+        * Fix: add urcu-bp TLS fixup
+        * Fix: add missing poll.h include
+        * Fix: get_subbuf: bound number of consumerd retry
 
 Project website: http://lttng.org
 Documentation: http://lttng.org/docs
