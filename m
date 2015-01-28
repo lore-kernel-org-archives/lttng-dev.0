@@ -1,17 +1,20 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tool] Fix: out-of-tree build: missing xsd
-	file for mi tests and save-load tests
-Date: Wed, 28 Jan 2015 16:45:29 -0500
-Message-ID: <1422481529-5558-1-git-send-email-jonathan.rajotte-julien__35431.140746414$1422481631$gmane$org@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tool] Fix: out-of-tree build: missing
+ xsd file for mi tests and save-load tests
+Date: Wed, 28 Jan 2015 16:57:18 -0500
+Message-ID: <CA+jJMxtm72VU_nymzrqmr4rJ4bQ0Uc8je7KjaaTnHqbCVRXc1A__34928.0872535475$1422482287$gmane$org@mail.gmail.com>
+References: <1422481529-5558-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qg0-f43.google.com ([209.85.192.43])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1YGaQn-0008Gv-Jh
- for lttng-dev@lists.lttng.org; Wed, 28 Jan 2015 16:45:57 -0500
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1YGabz-0008ME-RH
+ for lttng-dev@lists.lttng.org; Wed, 28 Jan 2015 16:57:28 -0500
+Received: by mail-qg0-f43.google.com with SMTP id e89so20162525qgf.2
+ for <lttng-dev@lists.lttng.org>; Wed, 28 Jan 2015 13:57:18 -0800 (PST)
+In-Reply-To: <1422481529-5558-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,58 +23,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
----
- src/common/Makefile.am        | 14 ++++++++++++++
- src/common/config/Makefile.am | 14 ++++++++++++++
- 2 files changed, 28 insertions(+)
-
-diff --git a/src/common/Makefile.am b/src/common/Makefile.am
-index 3a2f4f0..97d0ecc 100644
---- a/src/common/Makefile.am
-+++ b/src/common/Makefile.am
-@@ -41,3 +41,17 @@ if HAVE_LIBLTTNG_UST_CTL
- libconsumer_la_LIBADD += \
- 		$(top_builddir)/src/common/ust-consumer/libust-consumer.la
- endif
-+
-+all-local:
-+	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
-+		for script in $(EXTRA_DIST); do \
-+		cp -f $(srcdir)/$$script $(builddir); \
-+		done; \
-+	fi
-+
-+clean-local:
-+	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
-+		for script in $(EXTRA_DIST); do \
-+		rm -f $(builddir)/$$script; \
-+		done; \
-+	fi
-diff --git a/src/common/config/Makefile.am b/src/common/config/Makefile.am
-index 5acc89d..e36b42f 100644
---- a/src/common/config/Makefile.am
-+++ b/src/common/config/Makefile.am
-@@ -9,3 +9,17 @@ libconfig_la_LIBADD = $(XML_LIBS)
- xmldir = $(datadir)/xml/lttng
- dist_xml_DATA = session.xsd
- EXTRA_DIST = session.xsd
-+
-+all-local:
-+	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
-+		for script in $(EXTRA_DIST); do \
-+		cp -f $(srcdir)/$$script $(builddir); \
-+		done; \
-+	fi
-+
-+clean-local:
-+	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
-+		for script in $(EXTRA_DIST); do \
-+		rm -f $(builddir)/$$script; \
-+		done; \
-+	fi
--- 
-1.9.1
+T24gV2VkLCBKYW4gMjgsIDIwMTUgYXQgNDo0NSBQTSwgSm9uYXRoYW4gUmFqb3R0ZQo8am9uYXRo
+YW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPiB3cm90ZToKPiBTaWduZWQtb2ZmLWJ5OiBK
+b25hdGhhbiBSYWpvdHRlIDxqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+Cj4g
+LS0tCj4gIHNyYy9jb21tb24vTWFrZWZpbGUuYW0gICAgICAgIHwgMTQgKysrKysrKysrKysrKysK
+PiAgc3JjL2NvbW1vbi9jb25maWcvTWFrZWZpbGUuYW0gfCAxNCArKysrKysrKysrKysrKwo+ICAy
+IGZpbGVzIGNoYW5nZWQsIDI4IGluc2VydGlvbnMoKykKPgo+IGRpZmYgLS1naXQgYS9zcmMvY29t
+bW9uL01ha2VmaWxlLmFtIGIvc3JjL2NvbW1vbi9NYWtlZmlsZS5hbQo+IGluZGV4IDNhMmY0ZjAu
+Ljk3ZDBlY2MgMTAwNjQ0Cj4gLS0tIGEvc3JjL2NvbW1vbi9NYWtlZmlsZS5hbQo+ICsrKyBiL3Ny
+Yy9jb21tb24vTWFrZWZpbGUuYW0KPiBAQCAtNDEsMyArNDEsMTcgQEAgaWYgSEFWRV9MSUJMVFRO
+R19VU1RfQ1RMCj4gIGxpYmNvbnN1bWVyX2xhX0xJQkFERCArPSBcCj4gICAgICAgICAgICAgICAg
+ICQodG9wX2J1aWxkZGlyKS9zcmMvY29tbW9uL3VzdC1jb25zdW1lci9saWJ1c3QtY29uc3VtZXIu
+bGEKPiAgZW5kaWYKPiArCj4gK2FsbC1sb2NhbDoKPiArICAgICAgIEBpZiBbIHgiJChzcmNkaXIp
+IiAhPSB4IiQoYnVpbGRkaXIpIiBdOyB0aGVuIFwKPiArICAgICAgICAgICAgICAgZm9yIHNjcmlw
+dCBpbiAkKEVYVFJBX0RJU1QpOyBkbyBcCgpKdXN0IGN1cmlvdXMsIHdoeSBuYW1lIHRoaXMgdmFy
+aWFibGUgInNjcmlwdCI/CgpKw6lyw6ltaWUKCj4gKyAgICAgICAgICAgICAgIGNwIC1mICQoc3Jj
+ZGlyKS8kJHNjcmlwdCAkKGJ1aWxkZGlyKTsgXAo+ICsgICAgICAgICAgICAgICBkb25lOyBcCj4g
+KyAgICAgICBmaQo+ICsKPiArY2xlYW4tbG9jYWw6Cj4gKyAgICAgICBAaWYgWyB4IiQoc3JjZGly
+KSIgIT0geCIkKGJ1aWxkZGlyKSIgXTsgdGhlbiBcCj4gKyAgICAgICAgICAgICAgIGZvciBzY3Jp
+cHQgaW4gJChFWFRSQV9ESVNUKTsgZG8gXAo+ICsgICAgICAgICAgICAgICBybSAtZiAkKGJ1aWxk
+ZGlyKS8kJHNjcmlwdDsgXAo+ICsgICAgICAgICAgICAgICBkb25lOyBcCj4gKyAgICAgICBmaQo+
+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL2NvbmZpZy9NYWtlZmlsZS5hbSBiL3NyYy9jb21tb24v
+Y29uZmlnL01ha2VmaWxlLmFtCj4gaW5kZXggNWFjYzg5ZC4uZTM2YjQyZiAxMDA2NDQKPiAtLS0g
+YS9zcmMvY29tbW9uL2NvbmZpZy9NYWtlZmlsZS5hbQo+ICsrKyBiL3NyYy9jb21tb24vY29uZmln
+L01ha2VmaWxlLmFtCj4gQEAgLTksMyArOSwxNyBAQCBsaWJjb25maWdfbGFfTElCQUREID0gJChY
+TUxfTElCUykKPiAgeG1sZGlyID0gJChkYXRhZGlyKS94bWwvbHR0bmcKPiAgZGlzdF94bWxfREFU
+QSA9IHNlc3Npb24ueHNkCj4gIEVYVFJBX0RJU1QgPSBzZXNzaW9uLnhzZAo+ICsKPiArYWxsLWxv
+Y2FsOgo+ICsgICAgICAgQGlmIFsgeCIkKHNyY2RpcikiICE9IHgiJChidWlsZGRpcikiIF07IHRo
+ZW4gXAo+ICsgICAgICAgICAgICAgICBmb3Igc2NyaXB0IGluICQoRVhUUkFfRElTVCk7IGRvIFwK
+PiArICAgICAgICAgICAgICAgY3AgLWYgJChzcmNkaXIpLyQkc2NyaXB0ICQoYnVpbGRkaXIpOyBc
+Cj4gKyAgICAgICAgICAgICAgIGRvbmU7IFwKPiArICAgICAgIGZpCj4gKwo+ICtjbGVhbi1sb2Nh
+bDoKPiArICAgICAgIEBpZiBbIHgiJChzcmNkaXIpIiAhPSB4IiQoYnVpbGRkaXIpIiBdOyB0aGVu
+IFwKPiArICAgICAgICAgICAgICAgZm9yIHNjcmlwdCBpbiAkKEVYVFJBX0RJU1QpOyBkbyBcCj4g
+KyAgICAgICAgICAgICAgIHJtIC1mICQoYnVpbGRkaXIpLyQkc2NyaXB0OyBcCj4gKyAgICAgICAg
+ICAgICAgIGRvbmU7IFwKPiArICAgICAgIGZpCj4gLS0KPiAxLjkuMQo+CgoKCi0tIApKw6lyw6lt
+aWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
+aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3Jn
+L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
