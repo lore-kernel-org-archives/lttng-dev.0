@@ -1,16 +1,17 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Subject: Re: Dynamic probes list
-Date: Tue, 27 Jan 2015 17:06:02 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD706D3CD1__11580.8964278132$1422378420$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tool] Fix: out-of-tree build: missing xsd
+	file for mi tests and save-load tests
+Date: Wed, 28 Jan 2015 16:45:29 -0500
+Message-ID: <1422481529-5558-1-git-send-email-jonathan.rajotte-julien__35431.140746414$1422481631$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1YG9ab-0004kX-2x
- for lttng-dev@lists.lttng.org; Tue, 27 Jan 2015 12:06:10 -0500
-Content-Language: fr-FR
+ (envelope-from <jonathan.rajotte-julien@efficios.com>)
+ id 1YGaQn-0008Gv-Jh
+ for lttng-dev@lists.lttng.org; Wed, 28 Jan 2015 16:45:57 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,37 +20,58 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-----------------------------------------------------------------------
-Date: Tue, 27 Jan 2015 12:59:09 +0530
-From: Divya Vyas <dvyas@mvista.com>
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+ src/common/Makefile.am        | 14 ++++++++++++++
+ src/common/config/Makefile.am | 14 ++++++++++++++
+ 2 files changed, 28 insertions(+)
 
-> Is there any option where I can list out the function which I can give in=
- dynamic probes?
->
-> Thanks, Divya
-----------------------------------------------------------------------
-
-   The list of kernel code symbols eligible for k[ret]probe-ing can be obta=
-ined by the following command: 'cat /proc/kallsyms | grep " [Tt] "'.  It ty=
-pically contains around 40,000 entries.
-
-Daniel U. Thibault
-Protection des syst=E8mes et contremesures (PSC) | Systems Protection & Cou=
-ntermeasures (SPC)
-Cyber s=E9curit=E9 pour les missions essentielles (CME) | Mission Critical =
-Cyber Security (MCCS)
-RDDC - Centre de recherches de Valcartier | DRDC - Valcartier Research Cent=
-re
-2459 route de la Bravoure
-Qu=E9bec QC  G3J 1X5
-CANADA
-Vox : (418) 844-4000 x4245
-Fax : (418) 844-4538
-NAC : 918V QSDJ <http://www.travelgis.com/map.asp?addr=3D918V%20QSDJ>
-Gouvernement du Canada | Government of Canada
-<http://www.valcartier.drdc-rddc.gc.ca/>
- LinkedIn: <http://ca.linkedin.com/in/daniel-u-thibault/>
- Research Gate: <https://www.researchgate.net/profile/Daniel_Thibault/>
+diff --git a/src/common/Makefile.am b/src/common/Makefile.am
+index 3a2f4f0..97d0ecc 100644
+--- a/src/common/Makefile.am
++++ b/src/common/Makefile.am
+@@ -41,3 +41,17 @@ if HAVE_LIBLTTNG_UST_CTL
+ libconsumer_la_LIBADD += \
+ 		$(top_builddir)/src/common/ust-consumer/libust-consumer.la
+ endif
++
++all-local:
++	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
++		for script in $(EXTRA_DIST); do \
++		cp -f $(srcdir)/$$script $(builddir); \
++		done; \
++	fi
++
++clean-local:
++	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
++		for script in $(EXTRA_DIST); do \
++		rm -f $(builddir)/$$script; \
++		done; \
++	fi
+diff --git a/src/common/config/Makefile.am b/src/common/config/Makefile.am
+index 5acc89d..e36b42f 100644
+--- a/src/common/config/Makefile.am
++++ b/src/common/config/Makefile.am
+@@ -9,3 +9,17 @@ libconfig_la_LIBADD = $(XML_LIBS)
+ xmldir = $(datadir)/xml/lttng
+ dist_xml_DATA = session.xsd
+ EXTRA_DIST = session.xsd
++
++all-local:
++	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
++		for script in $(EXTRA_DIST); do \
++		cp -f $(srcdir)/$$script $(builddir); \
++		done; \
++	fi
++
++clean-local:
++	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
++		for script in $(EXTRA_DIST); do \
++		rm -f $(builddir)/$$script; \
++		done; \
++	fi
+-- 
+1.9.1
