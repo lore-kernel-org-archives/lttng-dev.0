@@ -1,8 +1,9 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tool 1/2] Fix: out-of-tree build: missing
-	xsd file for save-load test execution
-Date: Fri, 30 Jan 2015 13:30:10 -0500
-Message-ID: <1422642611-28785-1-git-send-email-jonathan.rajotte-julien__5423.83666984296$1422642704$gmane$org@efficios.com>
+Subject: [PATCH lttng-tool 2/2] Fix: out-of-tree build: missing
+	xsd file for mi test execution
+Date: Fri, 30 Jan 2015 13:30:11 -0500
+Message-ID: <1422642611-28785-2-git-send-email-jonathan.rajotte-julien__19225.521622184$1422642715$gmane$org@efficios.com>
+References: <1422642611-28785-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,8 +11,9 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
  (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1YHGKy-0004hl-Ht
- for lttng-dev@lists.lttng.org; Fri, 30 Jan 2015 13:30:43 -0500
+ id 1YHGL1-0004hm-9h
+ for lttng-dev@lists.lttng.org; Fri, 30 Jan 2015 13:30:46 -0500
+In-Reply-To: <1422642611-28785-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,21 +25,21 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This need to be backported to stable 2.6 and stable 2.5
+This need to be backported to stable 2.6.
 
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- src/common/config/Makefile.am | 14 ++++++++++++++
+ src/common/Makefile.am | 14 ++++++++++++++
  1 file changed, 14 insertions(+)
 
-diff --git a/src/common/config/Makefile.am b/src/common/config/Makefile.am
-index 5acc89d..e36b42f 100644
---- a/src/common/config/Makefile.am
-+++ b/src/common/config/Makefile.am
-@@ -9,3 +9,17 @@ libconfig_la_LIBADD = $(XML_LIBS)
- xmldir = $(datadir)/xml/lttng
- dist_xml_DATA = session.xsd
- EXTRA_DIST = session.xsd
+diff --git a/src/common/Makefile.am b/src/common/Makefile.am
+index 3a2f4f0..97d0ecc 100644
+--- a/src/common/Makefile.am
++++ b/src/common/Makefile.am
+@@ -41,3 +41,17 @@ if HAVE_LIBLTTNG_UST_CTL
+ libconsumer_la_LIBADD += \
+ 		$(top_builddir)/src/common/ust-consumer/libust-consumer.la
+ endif
 +
 +all-local:
 +	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
