@@ -1,19 +1,18 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tool 2/2] Fix: test: log4j: missing static
-	test files for dist and out of tree build
-Date: Fri, 30 Jan 2015 17:04:57 -0500
-Message-ID: <1422655497-12445-2-git-send-email-jonathan.rajotte-julien__42343.6384102844$1422655592$gmane$org@efficios.com>
-References: <1422655497-12445-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+From: Wang Nan <wangnan0@huawei.com>
+Subject: Re: [diamon-discuss] My experience on perf,
+ CTF and TraceCompass, and some suggection.
+Date: Sat, 31 Jan 2015 15:14:18 +0800
+Message-ID: <54CC80CA.2020603__49903.4676737667$1422688605$gmane$org@huawei.com>
+References: <54C215D6.1030804@huawei.com> <54C2770F.4080305@voxpopuli.im>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from szxga01-in.huawei.com ([119.145.14.64])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1YHJh6-0005mt-Sw
- for lttng-dev@lists.lttng.org; Fri, 30 Jan 2015 17:05:41 -0500
-In-Reply-To: <1422655497-12445-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ (envelope-from <wangnan0@huawei.com>) id 1YHSHZ-0008W9-KX
+ for lttng-dev@lists.lttng.org; Sat, 31 Jan 2015 02:15:57 -0500
+In-Reply-To: <54C2770F.4080305@voxpopuli.im>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,49 +21,91 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Cc: Xinwei Hu <huxinwei@huawei.com>, "diamon-discuss@lists.linuxfoundation.org" <diamon-discuss@lists.linuxfoundation.org>, lttng-dev@lists.lttng.org, tracecompass developer discussions <tracecompass-dev@eclipse.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
----
- tests/regression/ust/java-log4j/Makefile.am | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/tests/regression/ust/java-log4j/Makefile.am b/tests/regression/ust/java-log4j/Makefile.am
-index 7035ecf..7d6c048 100644
---- a/tests/regression/ust/java-log4j/Makefile.am
-+++ b/tests/regression/ust/java-log4j/Makefile.am
-@@ -1,4 +1,3 @@
--if BUILD_JAVA_LOG4J_AGENT
- 
- noinst_SCRIPTS = test_java_log4j JTestLTTng.java
- EXTRA_DIST = test_java_log4j JTestLTTng.java
-@@ -9,14 +8,19 @@ else
- JCC=javac
- endif
- 
--all-local: JTestLTTng.class
-+# We still need to copy static files for out of tree and dist build
-+if BUILD_JAVA_LOG4J_AGENT
-+all-local: static_file JTestLTTng.class
- 
- %.class: %.java
- 	$(JCC) -d "$(builddir)" $(JAVACFLAGS) $<
-+else
-+all-local: static_file
-+endif # BUILD_JAVA_LOG4J_AGENT
- 
- JTestLTTng.class: JTestLTTng.java
- 
--all-local:
-+static_file:
- 	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
- 		for script in $(EXTRA_DIST); do \
- 			cp -f $(srcdir)/$$script $(builddir); \
-@@ -31,4 +35,3 @@ clean-local:
- 		done; \
- 	fi
- 
--endif # BUILD_JAVA_LOG4J_AGENT
--- 
-1.9.1
+> This is a gap in the definition of the analysis it seems. I don't remember implementing two types of "syscall" events in the perf analysis, so it should just be a matter of getting the exact event name and adding it to the list. I will take a look and keep you posted!
+> 
+>> Finally I found the syscall which cause idle. However I need to write a
+>> script to do statistics. TraceCompass itself is lack a mean to count
+>> different events in my way.
+> 
+> Could you elaborate on this please? I agree the "Statistics" view in TC is severely lacking, we could be gathering and displaying much more information. The only question is what information would actually be useful.
+
+I'd like to describe some cases of ad-hoc statisics, which I have to write python
+scripts to do.
+
+*First case: matching sys_enter and sys_exit*
+
+The first case is to find the reason why most of CPUs are idle. From TraceCompass
+resource view, I find some gray gaps for about 300us. During these gaps, there is only
+1 running CPU, all other CPUs are idle. I can find the reason why a particular CPU
+is idle using TraceCompass with following steps:
+
+  1. In TraceCompass resource view, click the idle gap of that CPU, find next event
+     with the 'Select Next Event' button, continous select next event until find
+     a 'raw_syscalls:sys_exit' event, then by checking 'id' field I can find what syscall
+     cause the CPU idle. (I have mentioned before, that in my case, each time when I click
+     that button, I have to wait for 8 to 10 seconds for the trace table update so I can kown
+     which event it is. This is painful for me...)
+
+  2. Then I need to find corresponding "raw_syscalls:sys_enter" event to see when the syscall
+     is issued. I switch to control flow view then use 'Select Previous Event' to find it, then
+     back to resource view I can understand how long this syscall takes, whether the CPU
+     does some work or simply idle after the syscall is issued, and whether the task is scheduled
+     across CPUs.
+
+  3. For each CPU do step 1 and step 2.
+
+In some high-end servers the number of cores may exceeds 100. Even in my case the number of traced
+CPUs is 32. Doing such searching is time consuming. I have to write a python script to do that.
+My result is: half of cores are waiting on different futexs, half of then are waiting on
+pselect() (caused by sleep()).
+
+*Second case: matching futex WAKE and WAIT*
+
+Therefore the next case I'd like to share is to maching futex wait, futex wakeup and futex waken
+events. This time TraceCompass can't help much. However, the python script is also not very easy
+to design. I have to track CPU and process state transition by myself, match all futex sys_enter
+and sys_exit events, consider different cases including FUTEX_WAKE before FUTEX_WAIT, failures,
+timeout and compare retval of futex wake and the number of threads waken by it. This
+disposable python script has 115 lines of code (I have to admit that I'm not a very good python
+programmer), I create and debug it for serval hours.
+
+My final result is: threads wakeup each other in a tree-like manner. The first futex WAKE command is
+issued by the only running CPU, wakeup only one thread. It wakeups others, other wakeup more, finally
+nearly all CPUs are wakenup. There are some threads get executed after a relative long time
+after the corresponding futex WAKE command, even if there are idle CPUs at that time. Therefore we
+should look into scheduler. However, the gap itself should be a normal phenomenon.
+
+*Third case: device utilization*
+
+We have a high-speed storage device, but writing to filesystems on it is not as fast as we expected.
+I deploy serval tracepoints at device driver to track device activities. However, I have to create
+some tools to draw cumulative curve and speed curve to find whether there is irregular idle. I use
+gnuplot for ploting, but have to write another python script to extrace data. I think languages like
+R should be useful in this case but I'm not familiary with it.
+
+*Conclusion*
+
+In this email I list 3 use cases related to Ad-Hoc statistics I mentioned earlier. Case 1 and 2 are
+in fact not a statistics problem. They should be considered as query problems. I suspect case
+1 and 2 can be expressed using SQL. If TraceCompass can provide a query language like SQL, we can quickly
+find the information we need to know so will have more time for tuning. I expressed my SQL-like query
+idea on one of my early email:
+
+http://lists.linuxfoundation.org/pipermail/diamon-discuss/2014-November/000003.html
+
+However I was not very sure the query problem we would meet.
+
+Case 3 requires a plotting tool like gnuplot or R. I don't know whether TraceCompass designers want to
+integrate such function, but at lease TraceCompass should export data for those tools.
+
+In case 1 and 2, I spent a lot of time to analyze a phenomenon which is finally shown to be normal.
+I think this should be common in real performance analysis and tuning tasks. Many ideas may
+appear after the first trace is collected. I think tools like TraceCompass should consider a
+way to reduce the cost of trials and error.
+
+Thank you for reading this!
