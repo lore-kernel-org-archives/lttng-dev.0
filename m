@@ -1,19 +1,19 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools 3/4] configure: add check for
-	compiler inline keyword support
-Date: Mon,  2 Feb 2015 16:33:56 -0500
-Message-ID: <1422912837-5003-4-git-send-email-jonathan.rajotte-julien__43622.6531201557$1422912998$gmane$org@efficios.com>
-References: <1422912837-5003-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: python bindings for babel trace example fails
+Date: Tue, 3 Feb 2015 09:59:56 -0500
+Message-ID: <CA+jJMxtp+TjOuzWgNvDJfUVfvZbdAmdb2Rmii+NydBXuzT=4RQ__29460.9949611642$1422975693$gmane$org@mail.gmail.com>
+References: <1409D42E-76EA-4C95-8437-5C0384BFD80A@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qg0-f41.google.com ([209.85.192.41])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1YIOdU-0001Uj-3E
- for lttng-dev@lists.lttng.org; Mon, 02 Feb 2015 16:34:26 -0500
-In-Reply-To: <1422912837-5003-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1YIexO-0006or-Fg
+ for lttng-dev@lists.lttng.org; Tue, 03 Feb 2015 10:00:05 -0500
+Received: by mail-qg0-f41.google.com with SMTP id q108so52601046qgd.0
+ for <lttng-dev@lists.lttng.org>; Tue, 03 Feb 2015 06:59:57 -0800 (PST)
+In-Reply-To: <1409D42E-76EA-4C95-8437-5C0384BFD80A@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,44 +22,76 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Yan Grange <ygrange@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Check support of the inline keyword by the compiler.
-If not supported, inline is replaced by the appropriate keyword or nothing.[1]
-
-Based on autoscan diagnostic
-
-[1]http://www.gnu.org/software/autoconf/manual/autoconf.html#AC_005fC_005fINLINE
-
-Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
----
- configure.ac | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/configure.ac b/configure.ac
-index 5290add..8871889 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -70,6 +70,7 @@ AC_CHECK_FUNCS([ \
- 	strncasecmp strndup strpbrk strrchr strstr strtol strtoul \
- 	strtoull \
- ])
-+
- # Babeltrace viewer check
- AC_ARG_WITH([babeltrace-bin],
- 	AS_HELP_STRING([--with-babeltrace-bin],
-@@ -414,7 +415,11 @@ fi
- AM_CONDITIONAL([BUILD_JAVA_LOG4J_AGENT], [test "x$build_java_log4j_agent" = "xyes"])
- 
- AC_SYS_LARGEFILE
-+
-+# C compiler tests
- AC_PROG_CC
-+AC_C_INLINE
-+
- LT_INIT
- AC_PROG_YACC
- AC_PROG_LEX
--- 
-1.9.1
+SGkgWWFuLAoKVGhlIGlzc3VlIHlvdSBhcmUgZW5jb3VudGVyaW5nIG9uIG1hc3RlciBzZWVtcyBy
+ZWxhdGVkIHRvIHdoYXQgaGFzIGJlZW4gZml4ZWQgYnkKCmNvbW1pdCAyOWQ5ZDc2YzQ3NmNiZjNm
+ZGY2ZmE3MDliZmJkYzI0MzA5OTc0ZjA2CkF1dGhvcjogSsOpcsOpbWllIEdhbGFybmVhdSA8amVy
+ZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgpEYXRlOiAgIFdlZCBKYW4gMjggMTY6NTI6Mjgg
+MjAxNSAtMDUwMAoKICAgIEZpeDogbG9jayBzdHJlYW0gY2xhc3MgYWZ0ZXIgYXNzaWduaW5nIHN0
+cmVhbSBpZAoKICAgIEZpeGVzIGEgYnVnIHRoYXQgd2FzIGludHJvZHVjZWQgYnkgMmYxMDA3ODIg
+d2hpY2ggbWFkZSBpdCBwb3NzaWJsZQogICAgdG8gc2V0IGN1c3RvbSBzdHJlYW0gY2xhc3MgSURz
+LgoKICAgIFRoZSBzdHJlYW0gY2xhc3MgaXMgZnJvemVuIHdoZW4gYSBzdHJlYW0gb2YgaXRzIHR5
+cGUgaXMgaW5zdGFuY2lhdGVkLgogICAgSG93ZXZlciwgdGhlIHRyYWNlIG9yIHdyaXRlciBtdXN0
+IHN0aWxsIGFzc2lnbiBhIHVuaXF1ZSBJRCB0byB0aGUgc3RyZWFtCiAgICBjbGFzcyBpZiBub25l
+IHdlcmUgc2V0IHByaW9yLiBUaGlzIG1vZGlmaWNhdGlvbiBtb3ZlcyB0aGUgc3RyZWFtIGNsYXNz
+CiAgICBsb2NraW5nIChmcmVlemUpIGFmdGVyIHRoZSBJRCBhc3NpZ25tZW50IGNoZWNrLgoKICAg
+IFJlcG9ydGVkLWJ5OiBKaXJpIE9sc2EgPGpvbHNhQHJlZGhhdC5jb20+CiAgICBTaWduZWQtb2Zm
+LWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+
+CgpXb3VsZCB5b3UgbWluZCByZS10ZXN0aW5nPwoKSSdsbCBoYXZlIGEgbG9vayBhdCB0aGUgcHJv
+YmxlbSB5b3UgZXhwZXJpZW5jZWQgd2l0aCB0aGUgMS4yLjQgcmVsZWFzZS4KClRoYW5rcywKSsOp
+csOpbWllCgoKT24gRnJpLCBKYW4gMjMsIDIwMTUgYXQgMTE6MDAgQU0sIFlhbiBHcmFuZ2UgPHln
+cmFuZ2VAZ21haWwuY29tPiB3cm90ZToKPiBHb29kIGFmdGVybm9vbiwKPgo+IEkgaGF2ZSBiZWVu
+IGFibGUgdG8gZ2V0IGx0dG5nIHJ1bm5pbmcgb24gYSBtYWNoaW5lIGFuZCBub3cgd291bGQgbGlr
+ZSB0byBkbyBzb21lIGV4cGVyaW1lbnRzIHdpdGggYmFiZWx0cmFjZS4gSeKAmWQgbGlrZSB0byB3
+cml0ZSBvdXQgYSBjdGYgZmlsZSB1c2luZyBiYWJlbHRyYWNlLiBUaGVyZWZvcmUgSSB3YW50ZWQg
+dG8gdHJ5IG91dCB0aGUgYmFiZWx0cmFjZSBweXRob24gYmluZGluZ3Mgb3V0IGFuZCBzaW5jZSB5
+b3UgcHJvdmlkZSBhIHNldCBvZiBleGFtcGxlcywgb2Ygd2hpY2ggb25lIGlzIGFib3V0IHdyaXRp
+bmcgYSBjdGYsIEkgd2FudGVkIHRvIHRyeSB0aGF0IG9uZSBvdXQuCj4KPiBXaGVuIEkgdXNlIHRo
+ZSBsYXRzdGUgcmVsZWFzZSBvZiBiYWJlbHRyYWNlICgxLjIuNCksIHRoZSBsaWJyYXJ5IGZhaWxz
+IG9uIHRoZSBmb2xsb3dpbmcgbGluZToKPgo+IHByaW50KCJDbG9jayBuYW1lIGlzIFwie31cIiIu
+Zm9ybWF0KGNsb2NrLm5hbWUpKQo+Cj4gYmVjYXVzZSBpdCBzZWVtcyBsaWtlIHRoZSBnZXR0ZXIg
+Zm9yIGNsb2NrLm5hbWUgZG9lc27igJl0IGV4aXN0LiB0byBzb2x2ZSB0aGUgaXNzdWVzIEkgaGF2
+ZSB3aXRoIHRoaXMgZXhhbXBsZSwgSSBoYXZlIGNoZWNrZWQgb3V0IHRoZSBtb3N0IHJlY2VudCB2
+ZXJzaW9uIG9mIGJhYmVsdHJhY2UgZnJvbSB0aGUgZ2l0IHJlcG8uIElmIEkgcnVuIHRoZSBjdGZf
+d3JpdGVyIHVzaW5nIHB5dGhvbiwgSSBnZXQKPgo+IHlhbkBwYXVsIH4vYnVpbGRfYmJ0L2JhYmVs
+dHJhY2UvYmluZGluZ3MvcHl0aG9uL2V4YW1wbGVzICQgcHl0aG9uMyBjdGZfd3JpdGVyLnB5Cj4g
+V3JpdGluZyB0cmFjZSBhdCAvdG1wL3RtcHRsaHEzaQo+IENsb2NrIG5hbWUgaXMgIkFfY2xvY2si
+Cj4gQ2xvY2sgZGVzY3JpcHRpb24gaXMgIlNpbXBsZSBjbG9jayIKPiBDbG9jayBmcmVxdWVuY3kg
+aXMgMTAwMDAwMDAwMAo+IENsb2NrIHByZWNpc2lvbiBpcyAxCj4gQ2xvY2sgb2Zmc2V0X3NlY29u
+ZHMgaXMgMAo+IENsb2NrIG9mZnNldCBpcyAwCj4gQ2xvY2sgaXMgYWJzb2x1dGU6IEZhbHNlCj4g
+Q2xvY2sgdGltZSBpcyAwCj4gQ2xvY2sgVVVJRCBpcyA4NzRiZTkwYy02YzY4LTQ2ZWUtYWMwZC02
+MTQyY2FmZTIzZjUKPgo+IEZpZWxkcyBpbiBkZWZhdWx0IHBhY2tldCBjb250ZXh0Ogo+IDxjbGFz
+cyAnYmFiZWx0cmFjZS5DVEZXcml0ZXIuSW50ZWdlckZpZWxkRGVjbGFyYXRpb24nPiB0aW1lc3Rh
+bXBfYmVnaW4KPiA8Y2xhc3MgJ2JhYmVsdHJhY2UuQ1RGV3JpdGVyLkludGVnZXJGaWVsZERlY2xh
+cmF0aW9uJz4gdGltZXN0YW1wX2VuZAo+IDxjbGFzcyAnYmFiZWx0cmFjZS5DVEZXcml0ZXIuSW50
+ZWdlckZpZWxkRGVjbGFyYXRpb24nPiBjb250ZW50X3NpemUKPiA8Y2xhc3MgJ2JhYmVsdHJhY2Uu
+Q1RGV3JpdGVyLkludGVnZXJGaWVsZERlY2xhcmF0aW9uJz4gcGFja2V0X3NpemUKPiA8Y2xhc3Mg
+J2JhYmVsdHJhY2UuQ1RGV3JpdGVyLkludGVnZXJGaWVsZERlY2xhcmF0aW9uJz4gZXZlbnRzX2Rp
+c2NhcmRlZAo+IDxiYWJlbHRyYWNlLkNURldyaXRlci5Xcml0ZXIgb2JqZWN0IGF0IDB4N2Y1NzA1
+ODM2MGQwPgo+IGNsb3NlOiBCYWQgZmlsZSBkZXNjcmlwdG9yCj4gVHJhY2ViYWNrIChtb3N0IHJl
+Y2VudCBjYWxsIGxhc3QpOgo+ICAgRmlsZSAiY3RmX3dyaXRlci5weSIsIGxpbmUgMTMwLCBpbiA8
+bW9kdWxlPgo+ICAgICBzdHJlYW0uYXBwZW5kX2V2ZW50KGV2ZW50KQo+ICAgRmlsZSAiL3Vzci9s
+aWI2NC9weXRob24zLjMvc2l0ZS1wYWNrYWdlcy9iYWJlbHRyYWNlLnB5IiwgbGluZSAzNDYyLCBp
+biBhcHBlbmRfZXZlbnQKPiAgICAgcmFpc2UgVmFsdWVFcnJvcigiQ291bGQgbm90IGFwcGVuZCBl
+dmVudCB0byBzdHJlYW0uIikKPiBWYWx1ZUVycm9yOiBDb3VsZCBub3QgYXBwZW5kIGV2ZW50IHRv
+IHN0cmVhbS4KPgo+Cj4gSXMgdGhpcyBhIHJlcHJvZHVjaWJsZSBpc3N1ZT8gSSBhbSBvbiBhIGdl
+bnRvbyBzeXN0ZW0gKDMuMTcuNyksIHdpdGggcHl0aG9uMyB2ZXJzaW9uIFB5dGhvbiAzLjMuNSAo
+ZGVmYXVsdCwgSmFuIDE0IDIwMTUsIDE5OjAxOjEyKSBbR0NDIDQuOC4zXSBvbiBsaW51eAo+Cj4g
+Rm9yIGNvbXBpbGF0aW9uLCBJIHVzZWQgdGhlIGZvbGxvd2luZyBmbGFncyBvZiB0aGUgY29uZmln
+dXJlIHNjcmlwdDoKPgo+IC4vY29uZmlndXJlIC0tcHJlZml4PS91c3IgLS1idWlsZD14ODZfNjQt
+cGMtbGludXgtZ251IC0taG9zdD14ODZfNjQtcGMtbGludXgtZ251IC0tbWFuZGlyPS91c3Ivc2hh
+cmUvbWFuIC0taW5mb2Rpcj0vdXNyL3NoYXJlL2luZm8gLS1kYXRhZGlyPS91c3Ivc2hhcmUgLS1z
+eXNjb25mZGlyPS9ldGMgLS1sb2NhbHN0YXRlZGlyPS92YXIvbGliIC0tZGlzYWJsZS1kZXBlbmRl
+bmN5LXRyYWNraW5nIC0tZGlzYWJsZS1zaWxlbnQtcnVsZXMgLS1saWJkaXI9L3Vzci9saWI2NCAt
+LWVuYWJsZS1nbGlidGVzdCAtLWVuYWJsZS1weXRob24tYmluZGluZ3MKPgo+IElzIHRoZXJlIGFu
+eXRoaW5nIEkgY29sZCBkbyB0byBmaXggdGhpcz8KPgo+IFJlZ2FyZHMsCj4KPiBZYW4gR3Jhbmdl
+Cj4KPgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0
+dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoK
+CgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNp
+b3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xp
+c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
