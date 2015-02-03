@@ -1,19 +1,19 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: python bindings for babel trace example fails
-Date: Tue, 3 Feb 2015 10:10:38 -0500
-Message-ID: <CA+jJMxs=A-CikfVL88ONZPni6SB5Ev8jrU8URMBLvNJQXb46ZA__6780.20214331827$1422976316$gmane$org@mail.gmail.com>
-References: <1409D42E-76EA-4C95-8437-5C0384BFD80A@gmail.com>
+From: "Emilio G. Cota" <cota@braap.org>
+Subject: [urcu][PATCH] trivial: urcu-pointer.h:
+	s/rcu_dereference_pointer/rcu_dereference/
+Date: Tue,  3 Feb 2015 12:53:46 -0500
+Message-ID: <1422986026-32124-1-git-send-email-cota__47832.0160219029$1422986016$gmane$org@braap.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f178.google.com ([209.85.216.178])
+Received: from out1-smtp.messagingengine.com ([66.111.4.25])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1YIf7j-0006vC-Og
- for lttng-dev@lists.lttng.org; Tue, 03 Feb 2015 10:10:49 -0500
-Received: by mail-qc0-f178.google.com with SMTP id b13so35784576qcw.9
- for <lttng-dev@lists.lttng.org>; Tue, 03 Feb 2015 07:10:38 -0800 (PST)
-In-Reply-To: <1409D42E-76EA-4C95-8437-5C0384BFD80A@gmail.com>
+ (envelope-from <cota@braap.org>) id 1YIheg-0007hJ-AI
+ for lttng-dev@lists.lttng.org; Tue, 03 Feb 2015 12:53:00 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+ by mailout.nyi.internal (Postfix) with ESMTP id 7AA93210C7
+ for <lttng-dev@lists.lttng.org>; Tue,  3 Feb 2015 12:52:46 -0500 (EST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,64 +22,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yan Grange <ygrange@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Rm9yZ290IHRvIENDIGx0dG5nLWRldjoKCk9uIHNlY29uZCB0aG91Z2h0LCB0aGlzIGlzIGV4cGVj
-dGVkIHNpbmNlIHRoaXMgaXMgdGhlIGV4YW1wbGUgZnJvbQptYXN0ZXIgd2hpY2ggZGVtb25zdHJh
-dGVzIHRoZSB1c2Ugb2YgbmV3IEFQSXMuClRoZSAibmFtZSIgcHJvcGVydHkgZGlkbid0IGV4aXN0
-IGluIDEuMi4KClJlZ2FyZHMsCkrDqXLDqW1pZQoKT24gRnJpLCBKYW4gMjMsIDIwMTUgYXQgMTE6
-MDAgQU0sIFlhbiBHcmFuZ2UgPHlncmFuZ2VAZ21haWwuY29tPiB3cm90ZToKPiBHb29kIGFmdGVy
-bm9vbiwKPgo+IEkgaGF2ZSBiZWVuIGFibGUgdG8gZ2V0IGx0dG5nIHJ1bm5pbmcgb24gYSBtYWNo
-aW5lIGFuZCBub3cgd291bGQgbGlrZSB0byBkbyBzb21lIGV4cGVyaW1lbnRzIHdpdGggYmFiZWx0
-cmFjZS4gSeKAmWQgbGlrZSB0byB3cml0ZSBvdXQgYSBjdGYgZmlsZSB1c2luZyBiYWJlbHRyYWNl
-LiBUaGVyZWZvcmUgSSB3YW50ZWQgdG8gdHJ5IG91dCB0aGUgYmFiZWx0cmFjZSBweXRob24gYmlu
-ZGluZ3Mgb3V0IGFuZCBzaW5jZSB5b3UgcHJvdmlkZSBhIHNldCBvZiBleGFtcGxlcywgb2Ygd2hp
-Y2ggb25lIGlzIGFib3V0IHdyaXRpbmcgYSBjdGYsIEkgd2FudGVkIHRvIHRyeSB0aGF0IG9uZSBv
-dXQuCj4KPiBXaGVuIEkgdXNlIHRoZSBsYXRzdGUgcmVsZWFzZSBvZiBiYWJlbHRyYWNlICgxLjIu
-NCksIHRoZSBsaWJyYXJ5IGZhaWxzIG9uIHRoZSBmb2xsb3dpbmcgbGluZToKPgo+IHByaW50KCJD
-bG9jayBuYW1lIGlzIFwie31cIiIuZm9ybWF0KGNsb2NrLm5hbWUpKQo+Cj4gYmVjYXVzZSBpdCBz
-ZWVtcyBsaWtlIHRoZSBnZXR0ZXIgZm9yIGNsb2NrLm5hbWUgZG9lc27igJl0IGV4aXN0LiB0byBz
-b2x2ZSB0aGUgaXNzdWVzIEkgaGF2ZSB3aXRoIHRoaXMgZXhhbXBsZSwgSSBoYXZlIGNoZWNrZWQg
-b3V0IHRoZSBtb3N0IHJlY2VudCB2ZXJzaW9uIG9mIGJhYmVsdHJhY2UgZnJvbSB0aGUgZ2l0IHJl
-cG8uIElmIEkgcnVuIHRoZSBjdGZfd3JpdGVyIHVzaW5nIHB5dGhvbiwgSSBnZXQKPgo+IHlhbkBw
-YXVsIH4vYnVpbGRfYmJ0L2JhYmVsdHJhY2UvYmluZGluZ3MvcHl0aG9uL2V4YW1wbGVzICQgcHl0
-aG9uMyBjdGZfd3JpdGVyLnB5Cj4gV3JpdGluZyB0cmFjZSBhdCAvdG1wL3RtcHRsaHEzaQo+IENs
-b2NrIG5hbWUgaXMgIkFfY2xvY2siCj4gQ2xvY2sgZGVzY3JpcHRpb24gaXMgIlNpbXBsZSBjbG9j
-ayIKPiBDbG9jayBmcmVxdWVuY3kgaXMgMTAwMDAwMDAwMAo+IENsb2NrIHByZWNpc2lvbiBpcyAx
-Cj4gQ2xvY2sgb2Zmc2V0X3NlY29uZHMgaXMgMAo+IENsb2NrIG9mZnNldCBpcyAwCj4gQ2xvY2sg
-aXMgYWJzb2x1dGU6IEZhbHNlCj4gQ2xvY2sgdGltZSBpcyAwCj4gQ2xvY2sgVVVJRCBpcyA4NzRi
-ZTkwYy02YzY4LTQ2ZWUtYWMwZC02MTQyY2FmZTIzZjUKPgo+IEZpZWxkcyBpbiBkZWZhdWx0IHBh
-Y2tldCBjb250ZXh0Ogo+IDxjbGFzcyAnYmFiZWx0cmFjZS5DVEZXcml0ZXIuSW50ZWdlckZpZWxk
-RGVjbGFyYXRpb24nPiB0aW1lc3RhbXBfYmVnaW4KPiA8Y2xhc3MgJ2JhYmVsdHJhY2UuQ1RGV3Jp
-dGVyLkludGVnZXJGaWVsZERlY2xhcmF0aW9uJz4gdGltZXN0YW1wX2VuZAo+IDxjbGFzcyAnYmFi
-ZWx0cmFjZS5DVEZXcml0ZXIuSW50ZWdlckZpZWxkRGVjbGFyYXRpb24nPiBjb250ZW50X3NpemUK
-PiA8Y2xhc3MgJ2JhYmVsdHJhY2UuQ1RGV3JpdGVyLkludGVnZXJGaWVsZERlY2xhcmF0aW9uJz4g
-cGFja2V0X3NpemUKPiA8Y2xhc3MgJ2JhYmVsdHJhY2UuQ1RGV3JpdGVyLkludGVnZXJGaWVsZERl
-Y2xhcmF0aW9uJz4gZXZlbnRzX2Rpc2NhcmRlZAo+IDxiYWJlbHRyYWNlLkNURldyaXRlci5Xcml0
-ZXIgb2JqZWN0IGF0IDB4N2Y1NzA1ODM2MGQwPgo+IGNsb3NlOiBCYWQgZmlsZSBkZXNjcmlwdG9y
-Cj4gVHJhY2ViYWNrIChtb3N0IHJlY2VudCBjYWxsIGxhc3QpOgo+ICAgRmlsZSAiY3RmX3dyaXRl
-ci5weSIsIGxpbmUgMTMwLCBpbiA8bW9kdWxlPgo+ICAgICBzdHJlYW0uYXBwZW5kX2V2ZW50KGV2
-ZW50KQo+ICAgRmlsZSAiL3Vzci9saWI2NC9weXRob24zLjMvc2l0ZS1wYWNrYWdlcy9iYWJlbHRy
-YWNlLnB5IiwgbGluZSAzNDYyLCBpbiBhcHBlbmRfZXZlbnQKPiAgICAgcmFpc2UgVmFsdWVFcnJv
-cigiQ291bGQgbm90IGFwcGVuZCBldmVudCB0byBzdHJlYW0uIikKPiBWYWx1ZUVycm9yOiBDb3Vs
-ZCBub3QgYXBwZW5kIGV2ZW50IHRvIHN0cmVhbS4KPgo+Cj4gSXMgdGhpcyBhIHJlcHJvZHVjaWJs
-ZSBpc3N1ZT8gSSBhbSBvbiBhIGdlbnRvbyBzeXN0ZW0gKDMuMTcuNyksIHdpdGggcHl0aG9uMyB2
-ZXJzaW9uIFB5dGhvbiAzLjMuNSAoZGVmYXVsdCwgSmFuIDE0IDIwMTUsIDE5OjAxOjEyKSBbR0ND
-IDQuOC4zXSBvbiBsaW51eAo+Cj4gRm9yIGNvbXBpbGF0aW9uLCBJIHVzZWQgdGhlIGZvbGxvd2lu
-ZyBmbGFncyBvZiB0aGUgY29uZmlndXJlIHNjcmlwdDoKPgo+IC4vY29uZmlndXJlIC0tcHJlZml4
-PS91c3IgLS1idWlsZD14ODZfNjQtcGMtbGludXgtZ251IC0taG9zdD14ODZfNjQtcGMtbGludXgt
-Z251IC0tbWFuZGlyPS91c3Ivc2hhcmUvbWFuIC0taW5mb2Rpcj0vdXNyL3NoYXJlL2luZm8gLS1k
-YXRhZGlyPS91c3Ivc2hhcmUgLS1zeXNjb25mZGlyPS9ldGMgLS1sb2NhbHN0YXRlZGlyPS92YXIv
-bGliIC0tZGlzYWJsZS1kZXBlbmRlbmN5LXRyYWNraW5nIC0tZGlzYWJsZS1zaWxlbnQtcnVsZXMg
-LS1saWJkaXI9L3Vzci9saWI2NCAtLWVuYWJsZS1nbGlidGVzdCAtLWVuYWJsZS1weXRob24tYmlu
-ZGluZ3MKPgo+IElzIHRoZXJlIGFueXRoaW5nIEkgY29sZCBkbyB0byBmaXggdGhpcz8KPgo+IFJl
-Z2FyZHMsCj4KPiBZYW4gR3JhbmdlCj4KPgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
-L2xpc3RpbmZvL2x0dG5nLWRldgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJ
-bmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0
-cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
-Zm8vbHR0bmctZGV2Cg==
+Signed-off-by: Emilio G. Cota <cota@braap.org>
+---
+ urcu/static/urcu-pointer.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/urcu/static/urcu-pointer.h b/urcu/static/urcu-pointer.h
+index 4361156..a5b3e4b 100644
+--- a/urcu/static/urcu-pointer.h
++++ b/urcu/static/urcu-pointer.h
+@@ -122,21 +122,21 @@ extern "C" {
+ /**
+  * _rcu_assign_pointer - assign (publicize) a pointer to a new data structure
+  * meant to be read by RCU read-side critical sections. Returns the assigned
+  * value.
+  *
+  * Documents which pointers will be dereferenced by RCU read-side critical
+  * sections and adds the required memory barriers on architectures requiring
+  * them. It also makes sure the compiler does not reorder code initializing the
+  * data structure before its publication.
+  *
+- * Should match rcu_dereference_pointer().
++ * Should match rcu_dereference().
+  *
+  * This macro is less than 10 lines long.  The intent is that this macro
+  * meets the 10-line criterion in LGPL, allowing this function to be
+  * expanded directly in non-LGPL code.
+  */
+ #define _rcu_assign_pointer(p, v)	_rcu_set_pointer(&(p), v)
+ 
+ #ifdef __cplusplus 
+ }
+ #endif
+-- 
+1.8.3
