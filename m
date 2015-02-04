@@ -1,15 +1,18 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [RELEASE] LTTng-analyses v0.1
-Date: Wed, 04 Feb 2015 11:06:21 -0500
-Message-ID: <54D2437D.7030802__15350.7189163522$1423066064$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [urcu][PATCH] trivial:
+	urcu-pointer.h:	s/rcu_dereference_pointer/rcu_dereference/
+Date: Wed, 4 Feb 2015 17:07:49 +0000 (UTC)
+Message-ID: <1774806450.75512.1423069669516.JavaMail.zimbra__18921.8875057579$1423070013$gmane$org@efficios.com>
+References: <1422986026-32124-1-git-send-email-cota@braap.org>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fukushima.klipix.org ([85.12.144.25])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1YJ2TG-0005vm-Di
- for lttng-dev@lists.lttng.org; Wed, 04 Feb 2015 11:06:32 -0500
+ (envelope-from <compudj@efficios.com>) id 1YJ3Qb-0006FN-0X
+ for lttng-dev@lists.lttng.org; Wed, 04 Feb 2015 12:07:51 -0500
+In-Reply-To: <1422986026-32124-1-git-send-email-cota@braap.org>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -18,47 +21,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: diamon-discuss@lists.linuxfoundation.org, linux-kernel@vger.kernel.org
+To: "Emilio G. Cota" <cota@braap.org>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi everyone,
+Added "Fix: documentation" to the title, merged into
+master, stable-0.8 and stable-0.7, thanks!
 
-I am glad to announce the very first release of the lttng-analyses project !
-https://github.com/lttng/lttng-analyses
+Mathieu
 
-This project is a collection of tools to extract metrics and
-higher-level informations from LTTng kernel traces.
+----- Original Message -----
+> From: "Emilio G. Cota" <cota@braap.org>
+> To: lttng-dev@lists.lttng.org
+> Sent: Tuesday, February 3, 2015 12:53:46 PM
+> Subject: [lttng-dev] [urcu][PATCH] trivial: urcu-pointer.h:	s/rcu_dereference_pointer/rcu_dereference/
+> 
+> Signed-off-by: Emilio G. Cota <cota@braap.org>
+> ---
+>  urcu/static/urcu-pointer.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/urcu/static/urcu-pointer.h b/urcu/static/urcu-pointer.h
+> index 4361156..a5b3e4b 100644
+> --- a/urcu/static/urcu-pointer.h
+> +++ b/urcu/static/urcu-pointer.h
+> @@ -122,21 +122,21 @@ extern "C" {
+>  /**
+>   * _rcu_assign_pointer - assign (publicize) a pointer to a new data
+>   structure
+>   * meant to be read by RCU read-side critical sections. Returns the assigned
+>   * value.
+>   *
+>   * Documents which pointers will be dereferenced by RCU read-side critical
+>   * sections and adds the required memory barriers on architectures requiring
+>   * them. It also makes sure the compiler does not reorder code initializing
+>   the
+>   * data structure before its publication.
+>   *
+> - * Should match rcu_dereference_pointer().
+> + * Should match rcu_dereference().
+>   *
+>   * This macro is less than 10 lines long.  The intent is that this macro
+>   * meets the 10-line criterion in LGPL, allowing this function to be
+>   * expanded directly in non-LGPL code.
+>   */
+>  #define _rcu_assign_pointer(p, v)	_rcu_set_pointer(&(p), v)
+>  
+>  #ifdef __cplusplus
+>  }
+>  #endif
+> --
+> 1.8.3
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
 
-Here is a complete example that illustrates how to solve a real-world
-problem with this project:
-http://lttng.org/blog/2015/02/04/web-request-latency-root-cause/
-
-The workflow with these tools is different from the traditional
-debugging/monitoring tools. We trace the whole system and then analyse
-the trace offline. So the cost of analysing the trace is done outside of
-production. The project benefits from the low overhead of LTTng to
-mostly target hard to identify performance/latency problems.
-
-Here is the list of the implemented analyses in this release:
-- CPU usage per-process and system-wide
-- Process CPU migration count
-- Memory usage per-process and system-wide (as seen by the kernel)
-- I/O usage (syscalls, disk, network)
-- I/O operations log (with latency and usage)
-- I/O latency statistics (aggregated open, read, write, sync operations)
-- I/O latency frequency distribution
-- Interrupt handler duration statistics (count, min, max, average stdev)
-- Interrupt handler duration top
-- Interrupt handler duration log
-- Interrupt handler duration frequency distribution
-- SoftIRQ handler latency statistics
-- Syscalls usage statistics
-
-We appreciate all kinds of feedback, use-cases and real-world
-experiences, so please test it and let us know what you think about it.
-
-I would like to thank everyone who contributed ideas, code, reviews and
-funding on this project that started almost a year ago !
-
-Julien
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
