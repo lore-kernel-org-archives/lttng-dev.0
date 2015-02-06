@@ -1,20 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tool 1/2] Fix: out-of-tree build:
- missing xsd file for save-load test execution
-Date: Fri, 6 Feb 2015 12:07:42 -0500
-Message-ID: <CA+jJMxsAv=+0uQi90BP3aDLcFLKE+VM7XOLi6Y-5tNZJj3G_7Q__12694.1779898063$1423242519$gmane$org@mail.gmail.com>
-References: <1422642611-28785-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+From: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Subject: Parsing external datasources in trace compass for
+ regions of interest in a trace
+Date: Fri, 6 Feb 2015 17:13:42 -0500
+Message-ID: <54D53C96.8030805__23860.2589270615$1423260913$gmane$org@ericsson.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f52.google.com ([209.85.192.52])
+Received: from usevmg20.ericsson.net ([198.24.6.45])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1YJmNg-0003jH-5C
- for lttng-dev@lists.lttng.org; Fri, 06 Feb 2015 12:07:49 -0500
-Received: by mail-qg0-f52.google.com with SMTP id h3so8231363qgf.11
- for <lttng-dev@lists.lttng.org>; Fri, 06 Feb 2015 09:07:42 -0800 (PST)
-In-Reply-To: <1422642611-28785-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ (envelope-from <matthew.khouzam@ericsson.com>) id 1YJrAL-0005Ap-BM
+ for lttng-dev@lists.lttng.org; Fri, 06 Feb 2015 17:14:28 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,32 +19,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: tracecompass developer discussions <tracecompass-dev@eclipse.org>, diamon-discuss@lists.linuxfoundation.org, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Qm90aCBwYXRjaGVzIHdlcmUgbWVyZ2VkIGluIG1hc3RlciBhbmQgdGhlIGFmZmVjdGVkIHN0YWJs
-ZSBicmFuY2hlcy4KClRoYW5rcyEKSsOpcsOpbWllCgpPbiBGcmksIEphbiAzMCwgMjAxNSBhdCAx
-OjMwIFBNLCBKb25hdGhhbiBSYWpvdHRlCjxqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lv
-cy5jb20+IHdyb3RlOgo+IFRoaXMgbmVlZCB0byBiZSBiYWNrcG9ydGVkIHRvIHN0YWJsZSAyLjYg
-YW5kIHN0YWJsZSAyLjUKPgo+IFNpZ25lZC1vZmYtYnk6IEpvbmF0aGFuIFJham90dGUgPGpvbmF0
-aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgc3JjL2NvbW1vbi9jb25m
-aWcvTWFrZWZpbGUuYW0gfCAxNCArKysrKysrKysrKysrKwo+ICAxIGZpbGUgY2hhbmdlZCwgMTQg
-aW5zZXJ0aW9ucygrKQo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vY29uZmlnL01ha2VmaWxl
-LmFtIGIvc3JjL2NvbW1vbi9jb25maWcvTWFrZWZpbGUuYW0KPiBpbmRleCA1YWNjODlkLi5lMzZi
-NDJmIDEwMDY0NAo+IC0tLSBhL3NyYy9jb21tb24vY29uZmlnL01ha2VmaWxlLmFtCj4gKysrIGIv
-c3JjL2NvbW1vbi9jb25maWcvTWFrZWZpbGUuYW0KPiBAQCAtOSwzICs5LDE3IEBAIGxpYmNvbmZp
-Z19sYV9MSUJBREQgPSAkKFhNTF9MSUJTKQo+ICB4bWxkaXIgPSAkKGRhdGFkaXIpL3htbC9sdHRu
-Zwo+ICBkaXN0X3htbF9EQVRBID0gc2Vzc2lvbi54c2QKPiAgRVhUUkFfRElTVCA9IHNlc3Npb24u
-eHNkCj4gKwo+ICthbGwtbG9jYWw6Cj4gKyAgICAgICBAaWYgWyB4IiQoc3JjZGlyKSIgIT0geCIk
-KGJ1aWxkZGlyKSIgXTsgdGhlbiBcCj4gKyAgICAgICAgICAgICAgIGZvciBzY3JpcHQgaW4gJChF
-WFRSQV9ESVNUKTsgZG8gXAo+ICsgICAgICAgICAgICAgICBjcCAtZiAkKHNyY2RpcikvJCRzY3Jp
-cHQgJChidWlsZGRpcik7IFwKPiArICAgICAgICAgICAgICAgZG9uZTsgXAo+ICsgICAgICAgZmkK
-PiArCj4gK2NsZWFuLWxvY2FsOgo+ICsgICAgICAgQGlmIFsgeCIkKHNyY2RpcikiICE9IHgiJChi
-dWlsZGRpcikiIF07IHRoZW4gXAo+ICsgICAgICAgICAgICAgICBmb3Igc2NyaXB0IGluICQoRVhU
-UkFfRElTVCk7IGRvIFwKPiArICAgICAgICAgICAgICAgcm0gLWYgJChidWlsZGRpcikvJCRzY3Jp
-cHQ7IFwKPiArICAgICAgICAgICAgICAgZG9uZTsgXAo+ICsgICAgICAgZmkKPiAtLQo+IDEuOS4x
-Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVm
-ZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6
-Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hello,
+
+I am right now looking getting external datasources to supply
+information for a trace, like a region of interest.
+
+Background: we can run an analysis on a trace manually, in python, excel
+or what have you and come up with something interesting, like: around
+12:30pm something happened to a trace. Let's dig deeper with tracecompass.
+
+To make this work: we need to find a way to import the data, so we
+should agree on a standard data standard. I personally like the LTTng
+analysis outputs so I am picking that for now. :)
+
+Here are some formats that could be acceptable as regions of interest
+ * [2015-01-15 12:18:37.216484041, 2015-01-15 12:18:53.821580313] name
+ * [2015-01-15 12:18:37.216484041, 2015-01-15 12:18:53.821580313] name
+boookmark
+ * [ 2015-01-15 12:18:37.216484041] name boookmark
+ * [12:18:37.216484041] name boookmark
+ * [ 12:18:37.216484041, 12:18:53.821580313] name boookmark
+ * [ 2014-12-12 17:29:43.802588035] name with space
+ * [ 2014-12-12 17:29:43] irrational title
+ * [17:29:43.802588035] rational title
+ * [ 17:29:43] test test test
+ * [17:29:43,17:29:44] thing
+ * [12:18:37.216484041   ] (no text)
+
+When there is one timestamp, we will create one bookmark.
+When there is a range, we would create two bookmarks in a given trace,
+the first one being appended with " start" the second with " end"
+
+This should allow tracecompass to marginally benefit from the lttng
+analyses that are looking pretty nice, and later perhaps from tcp
+analyses from tshark and syslog stuff.
+
+Does anyone have an objection to this way of working?
