@@ -1,22 +1,19 @@
-From: "Emilio G. Cota" <cota@braap.org>
-Subject: [urcu] Google Summer of Code for userspace RCU
-Date: Thu, 5 Feb 2015 11:48:44 -0500
-Message-ID: <20150205164844.GA28184__18386.4709608772$1423154910$gmane$org@flamenco>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [urcu] Google Summer of Code for userspace RCU
+Date: Thu, 5 Feb 2015 20:45:28 -0500
+Message-ID: <CA+jJMxvdk8VgMmZKSYQNonsA1ieguTbBQotYZ8S0Zw7kLYwmOA__16737.6381498345$1423187169$gmane$org@mail.gmail.com>
+References: <20150205164844.GA28184@flamenco>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out1-smtp.messagingengine.com ([66.111.4.25])
+Received: from mail-qc0-f182.google.com ([209.85.216.182])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <cota@braap.org>) id 1YJPai-0004wi-GQ
- for lttng-dev@lists.lttng.org; Thu, 05 Feb 2015 11:47:47 -0500
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
- by mailout.nyi.internal (Postfix) with ESMTP id 0050A206EB
- for <lttng-dev@lists.lttng.org>; Thu,  5 Feb 2015 11:47:41 -0500 (EST)
-Received: from localhost (unknown [128.59.20.216])
- by mail.messagingengine.com (Postfix) with ESMTPA id B6292680118
- for <lttng-dev@lists.lttng.org>; Thu,  5 Feb 2015 11:47:41 -0500 (EST)
-Content-Disposition: inline
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1YJXzC-0007RP-E6
+ for lttng-dev@lists.lttng.org; Thu, 05 Feb 2015 20:45:38 -0500
+Received: by mail-qc0-f182.google.com with SMTP id l6so9593309qcy.13
+ for <lttng-dev@lists.lttng.org>; Thu, 05 Feb 2015 17:45:29 -0800 (PST)
+In-Reply-To: <20150205164844.GA28184@flamenco>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,40 +22,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "Emilio G. Cota" <cota@braap.org>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-As you might know--I see LTTng participated in it in previous
-years--the Google Summer of Code (GSoC) application deadline
-for organisations is in 4 days.
-
-I wonder if there would be interest in proposing urcu-related
-projects for GSoC. So far I've got one project idea:
-
-* Port liburcu to Windows, plus extensive testing on the BSD's
-  and Darwin so that support for those can be officially
-  claimed.  The motivation for this is that at least one
-  multi-platform open-source project (QEMU) is already using
-  RCU, and its lack of Windows support has forced them to
-  effectively fork RCU.[1]
-  I have no experience doing Windows development but I volunteer
-  to mentor if needed. Of course somebody with experience
-  developing for Windows would be more appropriate.
-
-I don't know under what open-source organisation this could
-be done, but since LLTng has a good track record with GSoC
-maybe that's the best option we have. Thoughts?
-
-Thanks,
-
-		Emilio
-
-[1] http://thread.gmane.org/gmane.comp.emulators.qemu/317087
-    for pull request. Final pull request here:
-    http://thread.gmane.org/gmane.comp.emulators.qemu/317371
-
-    I brought up the issue of (among other options) adding Windows
-    support in urcu to avoid the fork here:
-    http://thread.gmane.org/gmane.comp.emulators.qemu/317656/
+T24gVGh1LCBGZWIgNSwgMjAxNSBhdCAxMTo0OCBBTSwgRW1pbGlvIEcuIENvdGEgPGNvdGFAYnJh
+YXAub3JnPiB3cm90ZToKPiBIaSwKPgo+IEFzIHlvdSBtaWdodCBrbm93LS1JIHNlZSBMVFRuZyBw
+YXJ0aWNpcGF0ZWQgaW4gaXQgaW4gcHJldmlvdXMKPiB5ZWFycy0tdGhlIEdvb2dsZSBTdW1tZXIg
+b2YgQ29kZSAoR1NvQykgYXBwbGljYXRpb24gZGVhZGxpbmUKPiBmb3Igb3JnYW5pc2F0aW9ucyBp
+cyBpbiA0IGRheXMuCgpNeSBoZWFydCBza2lwcGVkIGEgYmVhdCBoZXJlISBUaGUgYXBwbGljYXRp
+b25zIHN0YXJ0IGluIDQgZGF5cywgd2UKc3RpbGwgaGF2ZSB1bnRpIEZlYnJ1YXJ5IDIwdGguCgo+
+Cj4gSSB3b25kZXIgaWYgdGhlcmUgd291bGQgYmUgaW50ZXJlc3QgaW4gcHJvcG9zaW5nIHVyY3Ut
+cmVsYXRlZAo+IHByb2plY3RzIGZvciBHU29DLiBTbyBmYXIgSSd2ZSBnb3Qgb25lIHByb2plY3Qg
+aWRlYToKPgo+ICogUG9ydCBsaWJ1cmN1IHRvIFdpbmRvd3MsIHBsdXMgZXh0ZW5zaXZlIHRlc3Rp
+bmcgb24gdGhlIEJTRCdzCj4gICBhbmQgRGFyd2luIHNvIHRoYXQgc3VwcG9ydCBmb3IgdGhvc2Ug
+Y2FuIGJlIG9mZmljaWFsbHkKPiAgIGNsYWltZWQuICBUaGUgbW90aXZhdGlvbiBmb3IgdGhpcyBp
+cyB0aGF0IGF0IGxlYXN0IG9uZQo+ICAgbXVsdGktcGxhdGZvcm0gb3Blbi1zb3VyY2UgcHJvamVj
+dCAoUUVNVSkgaXMgYWxyZWFkeSB1c2luZwo+ICAgUkNVLCBhbmQgaXRzIGxhY2sgb2YgV2luZG93
+cyBzdXBwb3J0IGhhcyBmb3JjZWQgdGhlbSB0bwo+ICAgZWZmZWN0aXZlbHkgZm9yayBSQ1UuWzFd
+Cj4gICBJIGhhdmUgbm8gZXhwZXJpZW5jZSBkb2luZyBXaW5kb3dzIGRldmVsb3BtZW50IGJ1dCBJ
+IHZvbHVudGVlcgo+ICAgdG8gbWVudG9yIGlmIG5lZWRlZC4gT2YgY291cnNlIHNvbWVib2R5IHdp
+dGggZXhwZXJpZW5jZQo+ICAgZGV2ZWxvcGluZyBmb3IgV2luZG93cyB3b3VsZCBiZSBtb3JlIGFw
+cHJvcHJpYXRlLgo+Cj4gSSBkb24ndCBrbm93IHVuZGVyIHdoYXQgb3Blbi1zb3VyY2Ugb3JnYW5p
+c2F0aW9uIHRoaXMgY291bGQKPiBiZSBkb25lLCBidXQgc2luY2UgTExUbmcgaGFzIGEgZ29vZCB0
+cmFjayByZWNvcmQgd2l0aCBHU29DCj4gbWF5YmUgdGhhdCdzIHRoZSBiZXN0IG9wdGlvbiB3ZSBo
+YXZlLiBUaG91Z2h0cz8KCkl0IGNvdWxkIGNlcnRhaW5seSBiZSBhIHByb2plY3QgZG9uZSBhcyBw
+YXJ0IG9mIG91ciBvcmdhbml6YXRpb24uIEknbGwKa2VlcCBpdCBpbiBtaW5kIGFuZCBzZWUgd2hh
+dCBNYXRoaWV1IGhhcyB0byBzYXksIGNvbnNpZGVyaW5nIGhlJ3MgdGhlClVSQ1UgbWFpbnRhaW5l
+ci4KClRoYW5rcyEKSsOpcsOpbWllCgo+Cj4gVGhhbmtzLAo+Cj4gICAgICAgICAgICAgICAgIEVt
+aWxpbwo+Cj4gWzFdIGh0dHA6Ly90aHJlYWQuZ21hbmUub3JnL2dtYW5lLmNvbXAuZW11bGF0b3Jz
+LnFlbXUvMzE3MDg3Cj4gICAgIGZvciBwdWxsIHJlcXVlc3QuIEZpbmFsIHB1bGwgcmVxdWVzdCBo
+ZXJlOgo+ICAgICBodHRwOi8vdGhyZWFkLmdtYW5lLm9yZy9nbWFuZS5jb21wLmVtdWxhdG9ycy5x
+ZW11LzMxNzM3MQo+Cj4gICAgIEkgYnJvdWdodCB1cCB0aGUgaXNzdWUgb2YgKGFtb25nIG90aGVy
+IG9wdGlvbnMpIGFkZGluZyBXaW5kb3dzCj4gICAgIHN1cHBvcnQgaW4gdXJjdSB0byBhdm9pZCB0
+aGUgZm9yayBoZXJlOgo+ICAgICBodHRwOi8vdGhyZWFkLmdtYW5lLm9yZy9nbWFuZS5jb21wLmVt
+dWxhdG9ycy5xZW11LzMxNzY1Ni8KPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
+aW5mby9sdHRuZy1kZXYKCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpo
+dHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
+dG5nLWRldgo=
