@@ -1,16 +1,20 @@
-From: =?UTF-8?q?Andr=C3=A9=20Goddard=20Rosa?= <andre.rosa@lge.com>
-Subject: [PATCH] Set appropriate thread names for processes
-	loading UST lib
-Date: Fri, 6 Feb 2015 19:36:49 -0800
-Message-ID: <1423280209-17335-1-git-send-email-andre.rosa__46453.5767715008$1423286173$gmane$org@lge.com>
+From: Wang Nan <wangnan0@huawei.com>
+Subject: Re: [diamon-discuss] My experience on perf,
+ CTF and TraceCompass, and some suggection.
+Date: Sat, 7 Feb 2015 15:25:01 +0800
+Message-ID: <54D5BDCD.5040407__4874.64281400225$1423294069$gmane$org@huawei.com>
+References: <54C215D6.1030804@huawei.com> <54C2770F.4080305@voxpopuli.im>
+ <54CC80CA.2020603@huawei.com> <54D2800B.3050808@voxpopuli.im>
+ <54D582E9.4010709@huawei.com> <54D59F4B.4060608@voxpopuli.im>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from lgeamrelo02.lge.com ([156.147.1.126])
+Received: from szxga02-in.huawei.com ([119.145.14.65])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <andre.rosa@lge.com>) id 1YJwDJ-0006jj-I1
- for lttng-dev@lists.lttng.org; Fri, 06 Feb 2015 22:37:52 -0500
+ (envelope-from <wangnan0@huawei.com>) id 1YJznF-00080g-Q0
+ for lttng-dev@lists.lttng.org; Sat, 07 Feb 2015 02:27:09 -0500
+In-Reply-To: <54D59F4B.4060608@voxpopuli.im>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,52 +23,112 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: =?UTF-8?q?Andr=C3=A9=20Goddard=20Rosa?= <andre.rosa@lge.com>
+To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Cc: Xinwei Hu <huxinwei@huawei.com>, "diamon-discuss@lists.linuxfoundation.org" <diamon-discuss@lists.linuxfoundation.org>, lttng-dev@lists.lttng.org, tracecompass developer discussions <tracecompass-dev@eclipse.org>
 List-Id: lttng-dev@lists.lttng.org
 
-V2hlbiBhIHByb2Nlc3MgbG9hZHMgVVNUIGxpYnJhcnksIHNldCBhcHByb3ByaWF0ZSBpbmRpdmlk
-dWFsIHRocmVhZHMgbmFtZXMKc28gdGhhdCBpdCBiZWNvbWVzIGVhc2llciB0byBkaXN0aW5ndWlz
-aCBiZXR3ZWVuIGl0cyBvd24gdGhyZWFkcyBmcm9tIHRob3NlCmNvbWluZyBmcm9tIFVTVC4KClRo
-YXQgbWFrZXMgZm9yIGVhc2llciB1bmRlcnN0YW5kaW5nIG9mIHByb2ZpbGluZyBkYXRhIHdoZXJl
-IGN5Y2xlcyBhcmUKYWNjb3VudGVkIHRvIGluZGl2aWR1YWwgdGhyZWFkcywgYWxsb3dpbmcgdG8g
-ZGlzdGluZ3Vpc2ggdGhlIG9yaWdpbmF0aW5nCmxpYnJhcmllcyBhbmQgZnVuY3Rpb25zIGZvciB0
-aGUgZ2F0aGVyZWQgcHJvZmlsaW5nIGRhdGEuCgpDYXZlYXQ6IG5vdCB0ZXN0ZWQgb24gX19GcmVl
-QlNEX18gZW52aXJvbm1lbnQuIERvZXMgc29tZWJvZHkgYWxyZWFkeSBoYXMKRnJlZUJTRCBlbnZp
-cm9ubWVudCBzZXR1cCB0byB0cnk/CgpTaWduZWQtb2ZmLWJ5OiBBbmRyw6kgR29kZGFyZCBSb3Nh
-IDxhbmRyZS5nb2RkYXJkQGdtYWlsLmNvbT4KCmRpZmYgLS1naXQgYS9saWJsdHRuZy11c3QvY29t
-cGF0LmggYi9saWJsdHRuZy11c3QvY29tcGF0LmgKaW5kZXggNDNiMjIyMy4uNjU3NzAzZSAxMDA2
-NDQKLS0tIGEvbGlibHR0bmctdXN0L2NvbXBhdC5oCisrKyBiL2xpYmx0dG5nLXVzdC9jb21wYXQu
-aApAQCAtMjAsNyArMjAsNyBAQAogICovCiAKIC8qCi0gKiBsdHRuZ191c3RfZ2V0cHJvY25hbWUu
-CisgKiBsdHRuZ191c3RfZ2V0cHJvY25hbWUsIGx0dG5nX3VzdF9zZXRwcm9jbmFtZS4KICAqLwog
-I2lmZGVmIF9fbGludXhfXwogCkBAIC0zNCw5ICszNCwxNiBAQCB2b2lkIGx0dG5nX3VzdF9nZXRw
-cm9jbmFtZShjaGFyICpuYW1lKQogCSh2b2lkKSBwcmN0bChQUl9HRVRfTkFNRSwgKHVuc2lnbmVk
-IGxvbmcpIG5hbWUsIDAsIDAsIDApOwogfQogCitzdGF0aWMgaW5saW5lCit2b2lkIGx0dG5nX3Vz
-dF9zZXRwcm9jbmFtZShjaGFyICpuYW1lKQoreworCSh2b2lkKSBwcmN0bChQUl9TRVRfTkFNRSwg
-KHVuc2lnbmVkIGxvbmcpIG5hbWUsIDAsIDAsIDApOworfQorCiAjZWxpZiBkZWZpbmVkKF9fRnJl
-ZUJTRF9fKQogI2luY2x1ZGUgPHN0ZGxpYi5oPgogI2luY2x1ZGUgPHN0cmluZy5oPgorI2luY2x1
-ZGUgPHB0aHJlYWQuaD4KIAogLyoKICAqIExpbWl0IGltcG9zZWQgYnkgTGludXggVVNULXNlc3Np
-b25kIEFCSS4KQEAgLTU5LDYgKzY2LDEyIEBAIHZvaWQgbHR0bmdfdXN0X2dldHByb2NuYW1lKGNo
-YXIgKm5hbWUpCiAJCXN0cm5jcHkobmFtZSwgYnNkX25hbWUsIExUVE5HX1VTVF9QUk9DTkFNRV9M
-RU4gLSAxKTsKIH0KIAorc3RhdGljIGlubGluZQordm9pZCBsdHRuZ191c3Rfc2V0cHJvY25hbWUo
-Y2hhciAqbmFtZSkKK3sKKwkodm9pZCkgcHRocmVhZF9zZXRfbmFtZV9ucChwdGhyZWFkX3NlbGYo
-KSwgbmFtZSk7Cit9CisKICNlbmRpZgogCiAjaW5jbHVkZSA8ZXJybm8uaD4KZGlmZiAtLWdpdCBh
-L2xpYmx0dG5nLXVzdC9sdHRuZy11c3QtY29tbS5jIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1j
-b21tLmMKaW5kZXggMzc4Y2EyMS4uMjU2NzUyYiAxMDA2NDQKLS0tIGEvbGlibHR0bmctdXN0L2x0
-dG5nLXVzdC1jb21tLmMKKysrIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMKQEAgLTEx
-NzMsNiArMTE3Myw4IEBAIHZvaWQgKnVzdF9saXN0ZW5lcl90aHJlYWQodm9pZCAqYXJnKQogCWlu
-dCBzb2NrLCByZXQsIHByZXZfY29ubmVjdF9mYWlsZWQgPSAwLCBoYXNfd2FpdGVkID0gMDsKIAls
-b25nIHRpbWVvdXQ7CiAKKwlsdHRuZ191c3Rfc2V0cHJvY25hbWUoIlVTVCBMaXN0ZW5lciIpOwor
-CiAJLyogUmVzdGFydCB0cnlpbmcgdG8gY29ubmVjdCB0byB0aGUgc2Vzc2lvbiBkYWVtb24gKi8K
-IHJlc3RhcnQ6CiAJaWYgKHByZXZfY29ubmVjdF9mYWlsZWQpIHsKZGlmZiAtLWdpdCBhL2xpYnJp
-bmdidWZmZXIvcmluZ19idWZmZXJfZnJvbnRlbmQuYyBiL2xpYnJpbmdidWZmZXIvcmluZ19idWZm
-ZXJfZnJvbnRlbmQuYwppbmRleCBhZWI3ZjdkLi42NzVhYmI2IDEwMDY0NAotLS0gYS9saWJyaW5n
-YnVmZmVyL3JpbmdfYnVmZmVyX2Zyb250ZW5kLmMKKysrIGIvbGlicmluZ2J1ZmZlci9yaW5nX2J1
-ZmZlcl9mcm9udGVuZC5jCkBAIC0zOTgsNiArMzk4LDggQEAgdm9pZCAqc2lnX3RocmVhZCh2b2lk
-ICphcmcpCiAJc2lnaW5mb190IGluZm87CiAJaW50IHNpZ25yOwogCisJbHR0bmdfdXN0X3NldHBy
-b2NuYW1lKCJVU1QgU2lnIik7CisKIAkvKiBPbmx5IHNlbGYgdGhyZWFkIHdpbGwgcmVjZWl2ZSBz
-aWduYWwgbWFzay4gKi8KIAlyYl9zZXRtYXNrKCZtYXNrKTsKIAlDTU1fU1RPUkVfU0hBUkVEKHRp
-bWVyX3NpZ25hbC50aWQsIHB0aHJlYWRfc2VsZigpKTsKLS0gCjIuMy4wLnJjMQoKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
-IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+On 2015/2/7 13:14, Alexandre Montplaisir wrote:
+> On 2015-02-06 10:13 PM, Wang Nan wrote:
+>>> I think such an approach could help in all 3 use cases you have presented. What do you think?
+>>> >
+>> Good to see you are looking at this problem.
+>>
+>> "Frequency analysis" you mentioned is a good viewpoint for finding outliner. However, it should not be the only one we consider. Could you please explain how "frequency analysis" can solve my first problem "finding the reason why most of CPUs are idle by matching syscalls events?"
+>>
+>> Thank you!
+>>
+> 
+> I was thinking of the automatic event matching, for example matching syscall_entry_* events with their corresponding syscall_exit_*. This is a pre-requisite of doing frequency analysis, but could be useful on its own. (Re-reading myself now I notice I didn't mention event matching at all, my bad!)
+> 
+> If I understand your first problem correctly, it boils down to wanting to identify the system call that is ongoing when a CPU is idle. And this is not straightforward, because the Select Next/Previous Event buttons in the time graph views will stop at every state transition, like CPU idle or IRQs, which are "in the way" of the system call entry event. Correct?
+> 
+> 
+> Now, what if we had a view that simply lists all the system calls in the trace? Each row would contain the complete information of a system call, so its start time (timestamp of the sys_entry event), end time (timestamp of the sys_exit event), duration, name/id, arguments, return value, etc.
+> 
+> And this view could be synchronized with the other ones, where clicking on a row would bring you to the corresponding syscall_entry event. And inversely, clicking on any timestamp would bring this view to the row corresponding to the system call that was active at that time, if there is one. I believe this could speed up your problem of identifying the running system call for any arbitrary point in the trace.
+> 
+> Also, that view could be re-used for other types of intervals, like IRQs, IO operations, and so on. And if the user sorts by the Duration column, bam, they have a sorted list of the worst offenders for longer system calls, IRQs, etc.
+> 
+> 
+> Would this be helpful?
+> 
+
+Correct, it should be helpful. If I understand your description correctly, you are thinking another time
+chart view like resource view and control flow view, this time each row is a syscall, like this:
+
+         <-------- time -------->
+          /-------------------
+sys_write |      ***
+          +-------------------
+sys_read  |   ***        ****
+          +-------------------
+sys_poll  |  **************
+          +-------------------
+.................
+
+And it will be synchronized with other ones. So if I click on the idle area on resource view, then switch
+to this new view, I can realize which syscall is ongoing at that time.
+
+However, unlike CPUs, types of syscalls are not stateful entities. If we are going to draw such diagram, it should looks like:
+
+                    <-------- time -------->
+                     /-------------------
+sys_write(pid: 1234) |      ***
+                     +-------------------
+sys_write(pid: 5678) |
+                     +-------------------
+sys_read(pid: 5678)  |              ****
+                     +-------------------
+sys_read(pid: 4321)  |    ****
+                     +------------------
+sys_poll(pid: 1212)  |      *******
+                     +-------------------
+sys_poll(pid: 1213)  |  **************
+                     +-------------------
+sys_poll(pid: 1214)  |   *****
+                     +-------------------
+.................
+
+We must draw one raw for each syscall (there are hundreds of then) issued by each pid (also hundreds of).
+This view will be extremely large and sparse and we should have a mean to sort them for finding meanful
+rows at a specific time. But correct, it is still useful.
+
+We can also aggregate same syscalls, use different color to express how many procedures are ongoing at that
+time, like this:
+
+         <-------- time -------->
+          /-------------------
+sys_write |      ~~~
+          +-------------------
+sys_read  |    ~~~~      ~~~~
+          +------------------
+sys_poll  |  ~~~~==!!====~~~
+          +-------------------
+.................
+
+Is your "frequency analysis" something like that?
+
+
+
+However, when I working on the first problem, what I think about is a SQL query like:
+
+select * from events
+inner join
+  ( select max(timestamp) as lasttime from events groupby cpu sortby timestamp where
+    events.timestamp < xxxxxxx and
+    events.type == "raw_syscalls:sys_exit"
+    group by cpu ) X
+on
+events.timestamp = X.lasttime and
+events.cpu = X.cpu and
+events.type = "raw_syscalls:sys_exit"
+
+(I'm not sure whether it works or need some debugging, but I think my idea is expressed.)
+
+I think query like that should be more expressive than timechart (but yes, SQL is not suitable
+for query events). Think about my 'matching futex WAIT and WAKE' then, I must first define my
+futex model use XML, then pass it to TraceCompass, reprocess the trace then I can open the new
+view.
+
+> Cheers,
+> Alexandre
