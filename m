@@ -1,20 +1,21 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: Re: [diamon-discuss] Parsing external datasources in
- trace compass for regions of interest in a trace
-Date: Mon, 09 Feb 2015 13:49:39 -0500
-Message-ID: <54D90143.5040401__6426.30672450668$1423507827$gmane$org@efficios.com>
-References: <54D53C96.8030805@ericsson.com>
- <1226582540.88170.1423261373714.JavaMail.zimbra@efficios.com>
- <54D54848.3040807@efficios.com> <54D8FF55.7040602@ericsson.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: [diamon-discuss] My experience on perf,
+ CTF and TraceCompass, and some suggection.
+Date: Mon, 09 Feb 2015 15:13:04 -0500
+Message-ID: <54D914D0.6000206__23403.5512120046$1423512800$gmane$org@voxpopuli.im>
+References: <54C215D6.1030804@huawei.com> <54C2770F.4080305@voxpopuli.im>
+ <54CC80CA.2020603@huawei.com> <54D2800B.3050808@voxpopuli.im>
+ <54D582E9.4010709@huawei.com> <54D59F4B.4060608@voxpopuli.im>
+ <54D5BDCD.5040407@huawei.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from fukushima.klipix.org ([85.12.144.25])
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1YKtP1-0000Tu-IR
- for lttng-dev@lists.lttng.org; Mon, 09 Feb 2015 13:49:49 -0500
-In-Reply-To: <54D8FF55.7040602@ericsson.com>
+ (envelope-from <alexmonthy@voxpopuli.im>) id 1YKuhH-0000us-2k
+ for lttng-dev@lists.lttng.org; Mon, 09 Feb 2015 15:12:44 -0500
+In-Reply-To: <54D5BDCD.5040407@huawei.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,111 +24,130 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Matthew Khouzam <matthew.khouzam@ericsson.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: diamon-discuss@lists.linuxfoundation.org, lttng-dev@lists.lttng.org, tracecompass developer discussions <tracecompass-dev@eclipse.org>
+To: Wang Nan <wangnan0@huawei.com>
+Cc: Xinwei Hu <huxinwei@huawei.com>, "diamon-discuss@lists.linuxfoundation.org" <diamon-discuss@lists.linuxfoundation.org>, lttng-dev@lists.lttng.org, tracecompass developer discussions <tracecompass-dev@eclipse.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On 15-02-09 01:41 PM, Matthew Khouzam wrote:
-> Great feedback. I think for a first draft, this will work out swimmingly.
-> 
-> Right now, I was actually finding the first group of [], splitting with
-> "," [1], then for every timestamp, creating a bookmark.
-That's a good first start I think.
 
-> 
-> so [12:20:23 , 12:23:22] some range
-> would give
-> bookmark 1-> 12:20:23 -> some range start
-> bookmark 2-> 12:23:22 -> some range end
-I'm not sure exactly how clear it will be with overlapping ranges in the
-TraceCompass list of bookmarks, but I guess it will be handled in a next
-phase.
-
-> 
-> and
-> [22:33:44 ] [key : value] [name = value] [id -> ref ] ...
-> would parse as everything after the timestamp would be read as a string.
-> 
-> text [22:33:44] text2
-> would discard text.
-> 
-> Is this ok?
-Yes, let's start with that. As we discussed, if we need to output
-differently from the analyses, we will make the changes.
-
-> [1]note, it will not work with https://github.com/lttng/lttng-analyses
-> where dash is used.
-Oh if you are referring to the "Work in progress" section, you are
-right, don't worry about this, it is a prototype and cannot even be used
-from the scripts in the master branch. When this is ready it will use
-the standard format.
-
-Thanks,
-
-Julien
-
-> 
-> On 15-02-06 06:03 PM, Julien Desfossez wrote:
->>
->> On 15-02-06 05:22 PM, Mathieu Desnoyers wrote:
->>> ----- Original Message -----
->>>> From: "Matthew Khouzam" <matthew.khouzam@ericsson.com>
->>>> To: "tracecompass developer discussions" <tracecompass-dev@eclipse.org>, diamon-discuss@lists.linuxfoundation.org,
->>>> lttng-dev@lists.lttng.org
->>>> Sent: Friday, February 6, 2015 5:13:42 PM
->>>> Subject: [diamon-discuss] Parsing external datasources in trace compass for regions of interest in a trace
->>>>
->>>> Hello,
->>>>
->>>> I am right now looking getting external datasources to supply
->>>> information for a trace, like a region of interest.
->>>>
->>>> Background: we can run an analysis on a trace manually, in python, excel
->>>> or what have you and come up with something interesting, like: around
->>>> 12:30pm something happened to a trace. Let's dig deeper with tracecompass.
->>>>
->>>> To make this work: we need to find a way to import the data, so we
->>>> should agree on a standard data standard. I personally like the LTTng
->>>> analysis outputs so I am picking that for now. :)
->>>>
->>>> Here are some formats that could be acceptable as regions of interest
->>>>  * [2015-01-15 12:18:37.216484041, 2015-01-15 12:18:53.821580313] name
->>>>  * [2015-01-15 12:18:37.216484041, 2015-01-15 12:18:53.821580313] name
->>>> boookmark
->>>>  * [ 2015-01-15 12:18:37.216484041] name boookmark
->>>>  * [12:18:37.216484041] name boookmark
->>>>  * [ 12:18:37.216484041, 12:18:53.821580313] name boookmark
->>>>  * [ 2014-12-12 17:29:43.802588035] name with space
->>>>  * [ 2014-12-12 17:29:43] irrational title
->>>>  * [17:29:43.802588035] rational title
->>>>  * [ 17:29:43] test test test
->>>>  * [17:29:43,17:29:44] thing
->>>>  * [12:18:37.216484041   ] (no text)
->>>>
->>>> When there is one timestamp, we will create one bookmark.
->>>> When there is a range, we would create two bookmarks in a given trace,
->>>> the first one being appended with " start" the second with " end"
->>>>
->>>> This should allow tracecompass to marginally benefit from the lttng
->>>> analyses that are looking pretty nice, and later perhaps from tcp
->>>> analyses from tshark and syslog stuff.
->>>>
->>>> Does anyone have an objection to this way of working?
->>> Do you intend on supporting timestamps that appear elsewhere than
->>> the beginning of lines ? Do you consider all text at the right of
->>> the timestamp or timestamp range to be part of the naming of the
->>> region of interest linked to the timestamp/timestamp range ?
+On 02/07/2015 02:25 AM, Wang Nan wrote:
+> On 2015/2/7 13:14, Alexandre Montplaisir wrote:
+>> On 2015-02-06 10:13 PM, Wang Nan wrote:
+>>>> I think such an approach could help in all 3 use cases you have presented. What do you think?
+>>> Good to see you are looking at this problem.
 >>>
->>> Julien, did we want to reserve [] for only timestamp range or
->>> we also want them for single timestamps ?
->> Right now the [] are only valid with time ranges (they are not accepted
->> with --begin and --end). I don't mind allowing the brackets for all
->> timestamps (like in dmesg), we still have the "," to identify if it's a
->> range or not.
->> But for convenience, they will remain optional for --begin and --end.
+>>> "Frequency analysis" you mentioned is a good viewpoint for finding outliner. However, it should not be the only one we consider. Could you please explain how "frequency analysis" can solve my first problem "finding the reason why most of CPUs are idle by matching syscalls events?"
+>>>
+>>> Thank you!
+>>>
+>> I was thinking of the automatic event matching, for example matching syscall_entry_* events with their corresponding syscall_exit_*. This is a pre-requisite of doing frequency analysis, but could be useful on its own. (Re-reading myself now I notice I didn't mention event matching at all, my bad!)
 >>
->> We just have to keep in mind, that [32,64] could be a range of
->> values/frequency and not necessarily timestamps.
+>> If I understand your first problem correctly, it boils down to wanting to identify the system call that is ongoing when a CPU is idle. And this is not straightforward, because the Select Next/Previous Event buttons in the time graph views will stop at every state transition, like CPU idle or IRQs, which are "in the way" of the system call entry event. Correct?
 >>
->> Julien
-> 
+>>
+>> Now, what if we had a view that simply lists all the system calls in the trace? Each row would contain the complete information of a system call, so its start time (timestamp of the sys_entry event), end time (timestamp of the sys_exit event), duration, name/id, arguments, return value, etc.
+>>
+>> And this view could be synchronized with the other ones, where clicking on a row would bring you to the corresponding syscall_entry event. And inversely, clicking on any timestamp would bring this view to the row corresponding to the system call that was active at that time, if there is one. I believe this could speed up your problem of identifying the running system call for any arbitrary point in the trace.
+>>
+>> Also, that view could be re-used for other types of intervals, like IRQs, IO operations, and so on. And if the user sorts by the Duration column, bam, they have a sorted list of the worst offenders for longer system calls, IRQs, etc.
+>>
+>>
+>> Would this be helpful?
+>>
+> Correct, it should be helpful. If I understand your description correctly, you are thinking another time
+> chart view like resource view and control flow view, this time each row is a syscall, like this:
+
+In fact, for the "event matching" what I had in mind was a simple text 
+table, where every line represents one (entire) system call, so you 
+would have columns like:
+
+start | end | duration | name/id |     arguments       | return
+
+------|-----|----------|---------|---------------------|-------
+10    | 15  |    5     | open    | path=abc, flags=... |   4
+20    | 23  |    3     | close   | fd=4                |   0
+....
+
+
+It would then be easy to synchronize this view with the others, so that 
+it would point to the ongoing system call(s) whenever the user selects a 
+timestamp in another view. And vice versa, clicking on an entry in this 
+table would move to the corresponding syscall_entry event.
+
+The view could also be generalized for other things (IRQs?), either in 
+different views, or the same view with a drop-down showing which type of 
+information to display.
+
+
+And for the so-called frequency analysis, you use the data from the 
+"duration" column to populate a histogram (or point cloud?) showing how 
+the distribution of latency of every system call (Y axis represents the 
+absolute number of occurrences):
+
+
+|
+
+|           ___
+
+|           ___
+
+|     ___   ___         ___
+
+|__   ___   ___   ___   ___
+
++-----------------------------
+
+  0-5  5-10  10-15 15-20 20+
+    duration of syscall (ms)
+
+
+So in this example we could see right away that the average duration is 
+around 10-15 ms, but we have some outliers that took more than 20 ms, so 
+it would be interesting to zoom in there to get more details. And 
+eventually clicking on one particular occurrence could bring you to the 
+exact point in the trace where it happened (or create bookmarks for the 
+outlier entries, etc.)
+
+
+> [...]
+>
+>
+> However, when I working on the first problem, what I think about is a SQL query like:
+>
+> select * from events
+> inner join
+>    ( select max(timestamp) as lasttime from events groupby cpu sortby timestamp where
+>      events.timestamp < xxxxxxx and
+>      events.type == "raw_syscalls:sys_exit"
+>      group by cpu ) X
+> on
+> events.timestamp = X.lasttime and
+> events.cpu = X.cpu and
+> events.type = "raw_syscalls:sys_exit"
+>
+> (I'm not sure whether it works or need some debugging, but I think my idea is expressed.)
+
+Interesting, and what would the output of such a query look like? Would 
+it be a list of events, but with the "groupby" that would be more like a 
+tree? Like this:
+
+CPU0
+   |__event 1
+   |__event 2
+   |__...
+CPU1
+   |__event 4
+   |__event 5
+   |__...
+...
+
+?
+
+We already have the Event table, on which we can apply filters of this 
+type (timestamp == something && cpu == otherthing...). But we only show 
+the results in the same flat list. I'm not sure what would be best here. 
+Showing results in a separate view, or supporting sub-trees in the base 
+Event table?
+
+
+Cheers,
+Alexandre
