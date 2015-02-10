@@ -1,16 +1,22 @@
-From: Anand Neeli <anand.neeli@gmail.com>
-Subject: Warning: HOME environment variable not set
-Date: Tue, 10 Feb 2015 12:25:14 +0530
-Message-ID: <CAM5kDqwOHYBAt_=7eeXrm_xHZPMVizMWaT1NiBtQQmxK2d_tsA__40838.1784022369$1423551369$gmane$org@mail.gmail.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: [diamon-discuss] My experience on perf,
+ CTF and TraceCompass, and some suggection.
+Date: Tue, 10 Feb 2015 03:02:20 -0500
+Message-ID: <54D9BB0C.4040408__6435.86430601335$1423555414$gmane$org@voxpopuli.im>
+References: <54C215D6.1030804@huawei.com> <54C2770F.4080305@voxpopuli.im>
+ <54CC80CA.2020603@huawei.com> <54D2800B.3050808@voxpopuli.im>
+ <54D582E9.4010709@huawei.com> <54D59F4B.4060608@voxpopuli.im>
+ <54D5BDCD.5040407@huawei.com> <54D914D0.6000206@voxpopuli.im>
+ <54D98F3A.8020202@huawei.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0687003328=="
+Content-Type: text/plain; charset="windows-1252"; Format="flowed"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-we0-f172.google.com ([74.125.82.172])
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <anand.neeli@gmail.com>) id 1YL4j9-00047k-W8
- for lttng-dev@lists.lttng.org; Tue, 10 Feb 2015 01:55:20 -0500
-Received: by mail-we0-f172.google.com with SMTP id k48so10556690wev.3
- for <lttng-dev@lists.lttng.org>; Mon, 09 Feb 2015 22:55:14 -0800 (PST)
+ (envelope-from <alexmonthy@voxpopuli.im>) id 1YL5m7-0004TL-C7
+ for lttng-dev@lists.lttng.org; Tue, 10 Feb 2015 03:02:30 -0500
+In-Reply-To: <54D98F3A.8020202@huawei.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,84 +25,65 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Wang Nan <wangnan0@huawei.com>
+Cc: Xinwei Hu <huxinwei@huawei.com>, "diamon-discuss@lists.linuxfoundation.org" <diamon-discuss@lists.linuxfoundation.org>, lttng-dev@lists.lttng.org, tracecompass developer discussions <tracecompass-dev@eclipse.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0687003328==
-Content-Type: multipart/alternative; boundary=f46d0418254a69bce1050eb65e2a
+On 2015-02-09 11:55 PM, Wang Nan wrote:
+> On 2015/2/10 4:13, Alexandre Montplaisir wrote:
+>> [...]
+>>
+>> So in this example we could see right away that the average duration is =
+around 10-15 ms, but we have some outliers that took more than 20 ms, so it=
+ would be interesting to zoom in there to get more details. And eventually =
+clicking on one particular occurrence could bring you to the exact point in=
+ the trace where it happened (or create bookmarks for the outlier entries, =
+etc.)
+>>
+> Looks good. It should be better if users are able to define their own mat=
+ching rules.
 
---f46d0418254a69bce1050eb65e2a
-Content-Type: text/plain; charset=UTF-8
+Absolutely! We can have pre-defined rules for the known domain (system =
 
-Hi All,
-I get the following warning in my app.
-App has included lttng libraries, but doesnt have any instrumented code
-with trace points.
+calls, IRQs, and so on), but then it'd be easy to let the user enter an =
 
-Can anyone tell me the issue here?
-i'm using 2.4.1 version
+event name for the "start" and an event name for the "end".
 
-app: libust[2628/2628]: Warning: HOME environment variable not set.
-Disabling LTTng-UST per-user tracing. (in setup_local_apps() at
-lttng-ust-comm.c:305)
+I was also thinking, we could even use general filters to define what is =
 
-app: libust[2634/2634]: Warning: HOME environment variable not set.
-Disabling LTTng-UST per-user tracing. (in setup_local_apps() at
-lttng-ust-comm.c:305)
+a start and an end event. It would require some refactoring due to the =
 
-app: libust[2636/2636]: Warning: HOME environment variable not set.
-Disabling LTTng-UST per-user tracing. (in setup_local_apps() at
-lttng-ust-comm.c:305)
+way filters are organized at the moment, so it wouldn't be trivial, but =
 
-app: libust[2638/2638]: Warning: HOME environment variable not set.
-Disabling LTTng-UST per-user tracing. (in setup_local_apps() at
-lttng-ust-comm.c:305)
+eventually we may want to get there.
 
+I'm currently working on the side on a prototype of the "event matching" =
 
-Thanks,
+table view, I will let you know once I have an initial version working, =
 
-Anand Neeli
+so we can see if/how useful it is.
 
---f46d0418254a69bce1050eb65e2a
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+>
+> In addition, do you think about chaining more than 2 events together? Som=
+e procedures, such as IO and network, can be traced at different layers, an=
+d we are able to chain events caused by same sources together with some cul=
+es. Please refer to:
+>
+> http://comments.gmane.org/gmane.linux.kernel/1883569
+>
+> Which we are working on.
+>
 
-<div dir=3D"ltr">Hi All,<div>I get the following warning in my app.</div><d=
-iv>App has included lttng libraries, but doesnt have any instrumented code =
-with trace points.</div><div><br></div><div>Can anyone tell me the issue he=
-re?</div><div>i&#39;m using 2.4.1 version</div><div><br></div><div>
+Genevi=E8ve (added in CC) is currently working on virtual machine =
 
+analyses, where we can match events from a kernel trace on a host to a =
 
+kernel trace in a guest, and so on. The "layering" and general matching =
 
+of events should be similar. Maybe she has some ideas if the event =
 
-
-
-
-<p class=3D"">app: libust[2628/2628]: Warning: HOME environment variable no=
-t set. Disabling LTTng-UST per-user tracing. (in setup_local_apps() at lttn=
-g-ust-comm.c:305)</p><p class=3D"">app: libust[2634/2634]: Warning: HOME en=
-vironment variable not set. Disabling LTTng-UST per-user tracing. (in setup=
-_local_apps() at lttng-ust-comm.c:305)</p>
-<p class=3D"">app: libust[2636/2636]: Warning: HOME environment variable no=
-t set. Disabling LTTng-UST per-user tracing. (in setup_local_apps() at lttn=
-g-ust-comm.c:305)</p>
-<p class=3D"">app: libust[2638/2638]: Warning: HOME environment variable no=
-t set. Disabling LTTng-UST per-user tracing. (in setup_local_apps() at lttn=
-g-ust-comm.c:305)</p><p class=3D""><br></p><p class=3D"">Thanks,</p><p clas=
-s=3D"">Anand Neeli</p></div></div>
-
---f46d0418254a69bce1050eb65e2a--
+matching part could be reused somehow?
 
 
---===============0687003328==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0687003328==--
+Cheers,
+Alexandre
