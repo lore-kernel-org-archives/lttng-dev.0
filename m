@@ -1,17 +1,37 @@
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
+From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
 Subject: Re: Google Summer of Code 2015
-Date: Tue, 10 Feb 2015 11:32:35 -0500
-Message-ID: <54DA32A3.6050500__11243.2600385093$1423586078$gmane$org@ericsson.com>
+Date: Tue, 10 Feb 2015 14:16:10 -0500
+Message-ID: <54DA58FA.8090809__40076.1939971291$1423595867$gmane$org@efficios.com>
 References: <CA+jJMxsJ1q5KbUMRfQ_PzmP+BGYFikBvnJ0MTndOFH65KpFXsA@mail.gmail.com>
+ <54DA32A3.6050500@ericsson.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="windows-1252"; Format="flowed"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from usevmg20.ericsson.net ([198.24.6.45])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <matthew.khouzam@ericsson.com>) id 1YLDkV-0007E3-1P
- for lttng-dev@lists.lttng.org; Tue, 10 Feb 2015 11:33:25 -0500
-In-Reply-To: <CA+jJMxsJ1q5KbUMRfQ_PzmP+BGYFikBvnJ0MTndOFH65KpFXsA@mail.gmail.com>
+ (envelope-from <Jonathan.rajotte-julien@efficios.com>)
+ id 1YLGIF-00080x-36
+ for lttng-dev@lists.lttng.org; Tue, 10 Feb 2015 14:16:27 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 8F95E3400E1
+ for <lttng-dev@lists.lttng.org>; Tue, 10 Feb 2015 19:16:21 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id FK8r9xhS3qHA for <lttng-dev@lists.lttng.org>;
+ Tue, 10 Feb 2015 19:16:21 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 1B8E3340232
+ for <lttng-dev@lists.lttng.org>; Tue, 10 Feb 2015 19:16:21 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id EerecQkk2GpC for <lttng-dev@lists.lttng.org>;
+ Tue, 10 Feb 2015 19:16:21 +0000 (UTC)
+Received: from [172.16.0.150] (cable-22.246.173-116.electronicbox.net
+ [173.246.22.116])
+ by mail.efficios.com (Postfix) with ESMTPSA id AD5C33400E1
+ for <lttng-dev@lists.lttng.org>; Tue, 10 Feb 2015 19:16:20 +0000 (UTC)
+In-Reply-To: <54DA32A3.6050500@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,27 +43,67 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGVyZSBpcyBzb21ldGhpbmcgSSB3YW50ZWQgZm9yIGEgd2hpbGU6CgpWTXMgZm9yIGV2ZXJ5IE1h
-am9yIHJlbGVhc2Ugb2YgTFRUbmcKClRoZSB2bSB3b3VsZCBoYXZlOgoKKiBhbiB1cCB0byBkYXRl
-LWlzaCBrZXJuZWwsIGxldCdzIHNheSAzLjArIDopCiogbHR0bmcga2VybmVsIG1vZHVsZXMKKiBs
-dHRuZyB1c2Vyc3BhY2UgbGlicwoqIE5vIFgKKiBzc2ggc2VydmVyIGNvbmZpZ3VyZWQgd2l0aCBh
-IHVzZXIgaW4gdGhlIHRyYWNpbmcgZ3JvdXAKKiBhIHNpbXBsZSBwcm9ncmFtIHJ1bm5pbmcgdGhh
-dCBoYXMgdHdvIGxvb3BpbmcgdGhyZWFkcyB0aGF0IHNsZWVwIGZvcgpzYXkgLjUgYW5kIC4zIHNl
-Y29uZHMgZWFjaCwgdGhlbiByZWNvcmQgYW4gZXZlbnQuCgpUaGlzIHdvdWxkIG1ha2UgcmVncmVz
-c2lvbiB0ZXN0aW5nIG11Y2ggZWFzaWVyLCBJIGRvbid0IGtub3cgaWYgaXQncwpzZXh5IGVub3Vn
-aCB0aG91Z2gsIGl0IGhhcyB2bXMgSSBndWVzcy4KClBTLiBncmVhdCB0byBzZWUgU09DIGlzIHdv
-cmtpbmcgb3V0IGZvciB5b3UgZ3V5cyEKCgpPbiAxNS0wMi0wOSAwMzo0MyBQTSwgSsOpcsOpbWll
-IEdhbGFybmVhdSB3cm90ZToKPiBIaSBldmVyeW9uZSwKPgo+IFdlIGFyZSBwbGFubmluZyB0byB0
-YWtlIHBhcnQgaW4gR29vZ2xlIFN1bW1lciBvZiBDb2RlIGFzIGEgbWVudG9yaW5nCj4gb3JnYW5p
-emF0aW9uIGZvciBhIHRoaXJkIHllYXIhCj4KPiBOb3cgaXMgeW91ciBjaGFuY2UgdG8gc2hhcmUg
-eW91ciBmZWF0dXJlIHdpc2hsaXN0LiBXZSBhcmUgbG9va2luZyBmb3IKPiBwcm9qZWN0IGlkZWFz
-IHlvdSB0aGluayBhIHN0dWRlbnQsIHByZXN1bWFibHkgdW5mYW1pbGlhciB3aXRoIHRoZQo+IHBy
-b2plY3QsIGNvdWxkIHVuZGVydGFrZSBpbiB0aHJlZSBtb250aHMuIEFueXRoaW5nIGdvZXMhCj4K
-PiBLZWVwIGluIG1pbmQgdGhlIGFwcGxpY2F0aW9uIGRlYWRsaW5lIGlzIEZlYnJ1YXJ5IDIwdGgu
-Cj4KPiBTb21lIHBhc3QgcHJvamVjdCBpZGVhcyBmb3IgaW5zcGlyYXRpb246Cj4gaHR0cDovL2J1
-Z3MubHR0bmcub3JnL3Byb2plY3RzL2x0dG5nL3dpa2kvR29vZ2xlX1N1bW1lcl9vZl9Db2RlXzIw
-MTQKPiBodHRwOi8vYnVncy5sdHRuZy5vcmcvcHJvamVjdHMvbHR0bmcvd2lraS9Hb29nbGVfU3Vt
-bWVyX29mX0NvZGVfMjAxMwo+Cj4gVGhhbmtzLAo+IErDqXLDqW1pZQo+CgoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
-dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
-bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hey Matthew,
+
+This would be very nice indeed. But it might probably be done sooner =
+
+than you think ;). We are currently revamping our CI and we will =
+
+certainly need a way to easily deploy&test on multiple distro/kernel =
+
+(regression and stress test). This work will be a good start and I'll =
+
+make sure we provide ready to deploy VM/script to the community.
+
+Thanks!
+
+On 15-02-10 11:32 AM, Matthew Khouzam wrote:
+> Here is something I wanted for a while:
+>
+> VMs for every Major release of LTTng
+>
+> The vm would have:
+>
+> * an up to date-ish kernel, let's say 3.0+ :)
+> * lttng kernel modules
+> * lttng userspace libs
+> * No X
+> * ssh server configured with a user in the tracing group
+> * a simple program running that has two looping threads that sleep for
+> say .5 and .3 seconds each, then record an event.
+>
+> This would make regression testing much easier, I don't know if it's
+> sexy enough though, it has vms I guess.
+>
+> PS. great to see SOC is working out for you guys!
+>
+>
+> On 15-02-09 03:43 PM, J=E9r=E9mie Galarneau wrote:
+>> Hi everyone,
+>>
+>> We are planning to take part in Google Summer of Code as a mentoring
+>> organization for a third year!
+>>
+>> Now is your chance to share your feature wishlist. We are looking for
+>> project ideas you think a student, presumably unfamiliar with the
+>> project, could undertake in three months. Anything goes!
+>>
+>> Keep in mind the application deadline is February 20th.
+>>
+>> Some past project ideas for inspiration:
+>> http://bugs.lttng.org/projects/lttng/wiki/Google_Summer_of_Code_2014
+>> http://bugs.lttng.org/projects/lttng/wiki/Google_Summer_of_Code_2013
+>>
+>> Thanks,
+>> J=E9r=E9mie
+>>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- =
+
+Jonathan R. Julien
+Efficios
