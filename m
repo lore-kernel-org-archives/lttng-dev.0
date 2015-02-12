@@ -1,37 +1,19 @@
-From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-Subject: Re: Google Summer of Code 2015
-Date: Tue, 10 Feb 2015 14:16:10 -0500
-Message-ID: <54DA58FA.8090809__40076.1939971291$1423595867$gmane$org@efficios.com>
-References: <CA+jJMxsJ1q5KbUMRfQ_PzmP+BGYFikBvnJ0MTndOFH65KpFXsA@mail.gmail.com>
- <54DA32A3.6050500@ericsson.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools] Autoconf script update
+Date: Wed, 11 Feb 2015 19:51:39 -0500
+Message-ID: <CA+jJMxvO1PA+KVTD6Av2GD1K-AMfEeZiGbACQz_TCoGc4CTG+g__10193.4825456285$1423702396$gmane$org@mail.gmail.com>
+References: <1422912837-5003-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="windows-1252"; Format="flowed"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qc0-f177.google.com ([209.85.216.177])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Jonathan.rajotte-julien@efficios.com>)
- id 1YLGIF-00080x-36
- for lttng-dev@lists.lttng.org; Tue, 10 Feb 2015 14:16:27 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 8F95E3400E1
- for <lttng-dev@lists.lttng.org>; Tue, 10 Feb 2015 19:16:21 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id FK8r9xhS3qHA for <lttng-dev@lists.lttng.org>;
- Tue, 10 Feb 2015 19:16:21 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 1B8E3340232
- for <lttng-dev@lists.lttng.org>; Tue, 10 Feb 2015 19:16:21 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id EerecQkk2GpC for <lttng-dev@lists.lttng.org>;
- Tue, 10 Feb 2015 19:16:21 +0000 (UTC)
-Received: from [172.16.0.150] (cable-22.246.173-116.electronicbox.net
- [173.246.22.116])
- by mail.efficios.com (Postfix) with ESMTPSA id AD5C33400E1
- for <lttng-dev@lists.lttng.org>; Tue, 10 Feb 2015 19:16:20 +0000 (UTC)
-In-Reply-To: <54DA32A3.6050500@ericsson.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1YLi0O-0008DG-Jc
+ for lttng-dev@lists.lttng.org; Wed, 11 Feb 2015 19:51:48 -0500
+Received: by mail-qc0-f177.google.com with SMTP id s11so6139934qcv.8
+ for <lttng-dev@lists.lttng.org>; Wed, 11 Feb 2015 16:51:39 -0800 (PST)
+In-Reply-To: <1422912837-5003-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -40,70 +22,22 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hey Matthew,
-
-This would be very nice indeed. But it might probably be done sooner =
-
-than you think ;). We are currently revamping our CI and we will =
-
-certainly need a way to easily deploy&test on multiple distro/kernel =
-
-(regression and stress test). This work will be a good start and I'll =
-
-make sure we provide ready to deploy VM/script to the community.
-
-Thanks!
-
-On 15-02-10 11:32 AM, Matthew Khouzam wrote:
-> Here is something I wanted for a while:
->
-> VMs for every Major release of LTTng
->
-> The vm would have:
->
-> * an up to date-ish kernel, let's say 3.0+ :)
-> * lttng kernel modules
-> * lttng userspace libs
-> * No X
-> * ssh server configured with a user in the tracing group
-> * a simple program running that has two looping threads that sleep for
-> say .5 and .3 seconds each, then record an event.
->
-> This would make regression testing much easier, I don't know if it's
-> sexy enough though, it has vms I guess.
->
-> PS. great to see SOC is working out for you guys!
->
->
-> On 15-02-09 03:43 PM, J=E9r=E9mie Galarneau wrote:
->> Hi everyone,
->>
->> We are planning to take part in Google Summer of Code as a mentoring
->> organization for a third year!
->>
->> Now is your chance to share your feature wishlist. We are looking for
->> project ideas you think a student, presumably unfamiliar with the
->> project, could undertake in three months. Anything goes!
->>
->> Keep in mind the application deadline is February 20th.
->>
->> Some past project ideas for inspiration:
->> http://bugs.lttng.org/projects/lttng/wiki/Google_Summer_of_Code_2014
->> http://bugs.lttng.org/projects/lttng/wiki/Google_Summer_of_Code_2013
->>
->> Thanks,
->> J=E9r=E9mie
->>
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- =
-
-Jonathan R. Julien
-Efficios
+QWxsIDQgcGF0Y2hlcyBoYXZlIGJlZW4gbWVyZ2VkLiBJIGRpZG4ndCBrbm93IGFib3V0IGF1dG9z
+Y2FuLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIE1vbiwgRmViIDIsIDIwMTUgYXQgNDozMyBQTSwg
+Sm9uYXRoYW4gUmFqb3R0ZQo8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPiB3
+cm90ZToKPiBIaSwKPgo+IFdoaWxlIHdvcmtpbmcgb24gaW1wcm92aW5nIHN1cHBvcnQgb2YgamF2
+YSB0ZXN0IGluIGZvciBDSShKZW5raW5zKSBhbmQgaGF2aW5nCj4gZnVuIHdpdGggYXV0b2NvbmYg
+SSBkZWNpZGVkIHRvIHJ1biBhdXRvc2Nhbi4gSXQgbG9vayBsaWtlIHRoZSBsdHRuZyBhdXRvY29u
+Zgo+IHNjcmlwdCBpcyBtaXNzaW5nIHNvbWUgY2hlY2sgaGVyZSBhbmQgdGhlcmUuIFRoaXMgcGF0
+Y2ggc2V0IGFpbXMgdG8gaGVscCBhIGxpdHRsZS4KPgo+IFNvbWUgb2YgdGhvc2UgY2hlY2tzIG1p
+Z2h0IGhhdmUgYmVlbiBsZWZ0IG91dCBwdXJwb3NlbHkuIElmIHNvIHdlIG1pZ2h0IHdhbnQgdG8K
+PiBkb2N1bWVudCB3aHkgc29tZXdoZXJlIGZvciBmdXR1cmUgcmVmZXJlbmNlLgo+Cj4gQ2hlZXJz
+IQo+Cj4gSm9uYXRoYW4KPgo+CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIElu
+Yy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
+Lmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
+by9sdHRuZy1kZXYK
