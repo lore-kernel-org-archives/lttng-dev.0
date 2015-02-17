@@ -1,21 +1,23 @@
 From: Francis Deslauriers <francis.deslauriers@mail.utoronto.ca>
-Subject: Re: Can lttng support kernel function tracer
-Date: Mon, 16 Feb 2015 11:53:00 -0500
-Message-ID: <CADcCL0jj+wMX3ZX2dRBpjg5goGAz8_o7OWk=fqpJ1w8n3GTrDg__38619.9148641483$1424105687$gmane$org@mail.gmail.com>
+Subject: Re: =?utf-8?b?562U5aSN77yaIENhbiBsdHRuZyBzdXBwb3J0IGtl?=
+	=?utf-8?q?rnel_function_tracer?=
+Date: Tue, 17 Feb 2015 10:09:30 -0500
+Message-ID: <CADcCL0jDKp5TS+tSZuphAe=SK_Xbr8DQraoeNL4Xofg9nNmYpg__18436.2488020726$1424185994$gmane$org@mail.gmail.com>
 References: <5a55c10f-2991-4d2c-ae9f-71bf32a96867@aliyun.com>
+ <0ecb9733-2e6d-4778-a764-48e139d116f0@aliyun.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-bn1on0095.outbound.protection.outlook.com ([157.56.110.95]
- helo=na01-bn1-obe.outbound.protection.outlook.com)
+Received: from mail-by2on0070.outbound.protection.outlook.com ([207.46.100.70]
+ helo=na01-by2-obe.outbound.protection.outlook.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
  (envelope-from <francis.deslauriers@mail.utoronto.ca>)
- id 1YNOvP-0007h0-G3
- for lttng-dev@lists.lttng.org; Mon, 16 Feb 2015 11:53:38 -0500
-Received: by mail-qa0-f50.google.com with SMTP id f12so22864058qad.9
- for <lttng-dev@lists.lttng.org>; Mon, 16 Feb 2015 08:53:21 -0800 (PST)
-In-Reply-To: <5a55c10f-2991-4d2c-ae9f-71bf32a96867@aliyun.com>
+ id 1YNjmt-0005q0-VT
+ for lttng-dev@lists.lttng.org; Tue, 17 Feb 2015 10:10:16 -0500
+Received: by mail-qg0-f44.google.com with SMTP id j5so28313613qga.3
+ for <lttng-dev@lists.lttng.org>; Tue, 17 Feb 2015 07:09:50 -0800 (PST)
+In-Reply-To: <0ecb9733-2e6d-4778-a764-48e139d116f0@aliyun.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,38 +27,52 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Zhenyu,
-
-If I understandd your question correctly, I can think of two ways to
-trace an arbitrary kernel function. First, you can hook the tracer on
-a dynamic probe[1] using something like this:
-"lttng enable-event customEventName -k --probe kernelFunctionName".
-You can also hook the tracer on both entry and exit of a function
-using "--function" instead of "--probe".
-To list your kernel symbols use "cat /proc/kallsyms"
-Second, you can create custom kernel tracepoints and compile them in
-you kernel. Have a look at the online documentation [2].
-
-Don't hesitate to explain further if this doesn't answer your question.
-
-Cheers!
-Francis
-
-[1] http://git.lttng.org/?p=lttng-tools.git;a=blob;f=doc/quickstart.txt;h=018c27b2b939ef7cd075255fd01bcfd8b2b21b1e;hb=HEAD#l93
-[2] http://lttng.org/docs/#doc-instrumenting-linux-kernel-itself
-
-On Thu, Feb 12, 2015 at 7:49 PM, zhenyu.ren <zhenyu.ren@aliyun.com> wrote:
-> Hi,
->
->    It's well known that lttng can make use of kernel tracepoints to do block tracing ,system call tracing etc.Is it possible that  lttng can produce anything like kernel function tracer does?
->
-> Thanks
-> zhenyu.ren
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+Q0NpbmcgbHR0bmctZGV2IGJhY2sgaW4gdGhlIHRocmVhZC4KCkkgbWlnaHQgYmUgd3JvbmcgYnV0
+IEkgdGhpbmsgdGhhdCBtaWdodCBiZSBhIHVzZWNhc2UgZm9yIGEgcHJvZmlsZXIKcmF0aGVyIHRo
+YW4gYSB1c2VjYXNlIGZvciBhIHRyYWNlci4gQ2FuIHNvbWVvbmUgZWxzZSBjb25maXJtPwpUbyBk
+byB0aGF0IGtpbmQgb2Ygd29yaywgeW91IGNvdWxkIGNvbXBpbGUgeW91ciBrZXJuZWwgd2l0aCBn
+cHJvZiBzdXBwb3J0LgoKVGhhbmtzLApGcmFuY2lzCgoKT24gVHVlLCBGZWIgMTcsIDIwMTUgYXQg
+MzozOCBBTSwgemhlbnl1LnJlbiA8emhlbnl1LnJlbkBhbGl5dW4uY29tPiB3cm90ZToKPiBIaSxG
+cmFuY2lzCj4gICAgSW4gZmFjdCwgSSB3YW50IHRvIHRyYWNlIGFsbCBrZXJuZWwgZnVuY3Rpb25z
+IHJlbGF0ZWQgdG8gc29tZQo+IGJlaGF2aW9yLkZvciBleGFtcGxlLEkgd3JpdGUoKSAgYW5kIGl0
+IHJldHVybnMgMTAwbXMgbGF0ZXIgLHNvICBJIHdhbnQgdG8KPiBrbm93IHdoaWNoIGtlcm5lbCAg
+ZnVuY3Rpb24gaXMgdG9vIHNsb3cuIEluIHRoaXMgY2FzZSxJIGNhbiB1c2UgZnVuY3Rpb24KPiB0
+cmFjZXIgdG8gdHJhY2UgImFsbCIga2VybmVsIGZ1bmN0aW9uIGluIHRoZSB3cml0ZSgpIHRpbWUg
+d2luZG93Lkhvd2V2ZXIsSQo+IHdhbnQgdG8ga25vdyBpcyBpdCBwb3NzaWJsZSB0aGF0IGx0dG5n
+IGNhbiBiZSB1c2VmdWwgaW4gdGhpcyBjYXNlLgo+Cj4gVGhhbmtzCj4gemhlbnl1LnJlbgo+Cj4K
+PiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0KPiDlj5Hku7bkurrvvJpGcmFuY2lzIERlc2xhdXJpZXJzIDxmcmFuY2lzLmRl
+c2xhdXJpZXJzQG1haWwudXRvcm9udG8uY2E+Cj4g5Y+R6YCB5pe26Ze077yaMjAxNeW5tDLmnIgx
+N+aXpSjmmJ/mnJ/kuowpIDAwOjUzCj4g5pS25Lu25Lq677yaemhlbnl1LnJlbiA8emhlbnl1LnJl
+bkBhbGl5dW4uY29tPgo+IOaKhOOAgOmAge+8mmx0dG5nLWRldiA8bHR0bmctZGV2QGxpc3RzLmx0
+dG5nLm9yZz4KPiDkuLvjgIDpopjvvJpSZTogW2x0dG5nLWRldl0gQ2FuIGx0dG5nIHN1cHBvcnQg
+a2VybmVsIGZ1bmN0aW9uIHRyYWNlcgo+Cj4gSGkgWmhlbnl1LAo+Cj4gSWYgSSB1bmRlcnN0YW5k
+ZCB5b3VyIHF1ZXN0aW9uIGNvcnJlY3RseSwgSSBjYW4gdGhpbmsgb2YgdHdvIHdheXMgdG8KPiB0
+cmFjZSBhbiBhcmJpdHJhcnkga2VybmVsIGZ1bmN0aW9uLiBGaXJzdCwgeW91IGNhbiBob29rIHRo
+ZSB0cmFjZXIgb24KPiBhIGR5bmFtaWMgcHJvYmVbMV0gdXNpbmcgc29tZXRoaW5nIGxpa2UgdGhp
+czoKPiAibHR0bmcgZW5hYmxlLWV2ZW50IGN1c3RvbUV2ZW50TmFtZSAtayAtLXByb2JlIGtlcm5l
+bEZ1bmN0aW9uTmFtZSIuCj4gWW91IGNhbiBhbHNvIGhvb2sgdGhlIHRyYWNlciBvbiBib3RoIGVu
+dHJ5IGFuZCBleGl0IG9mIGEgZnVuY3Rpb24KPiB1c2luZyAiLS1mdW5jdGlvbiIgaW5zdGVhZCBv
+ZiAiLS1wcm9iZSIuCj4gVG8gbGlzdCB5b3VyIGtlcm5lbCBzeW1ib2xzIHVzZSAiY2F0IC9wcm9j
+L2thbGxzeW1zIgo+IFNlY29uZCwgeW91IGNhbiBjcmVhdGUgY3VzdG9tIGtlcm5lbCB0cmFjZXBv
+aW50cyBhbmQgY29tcGlsZSB0aGVtIGluCj4geW91IGtlcm5lbC4gSGF2ZSBhIGxvb2sgYXQgdGhl
+IG9ubGluZSBkb2N1bWVudGF0aW9uIFsyXS4KPgo+IERvbid0IGhlc2l0YXRlIHRvIGV4cGxhaW4g
+ZnVydGhlciBpZiB0aGlzIGRvZXNuJ3QgYW5zd2VyIHlvdXIgcXVlc3Rpb24uCj4KPiBDaGVlcnMh
+Cj4gRnJhbmNpcwo+Cj4gWzFdCj4gaHR0cDovL2dpdC5sdHRuZy5vcmcvP3A9bHR0bmctdG9vbHMu
+Z2l0O2E9YmxvYjtmPWRvYy9xdWlja3N0YXJ0LnR4dDtoPTAxOGMyN2IyYjkzOWVmN2NkMDc1MjU1
+ZmQwMWJjZmQ4YjJiMjFiMWU7aGI9SEVBRCNsOTMKPiBbMl0gaHR0cDovL2x0dG5nLm9yZy9kb2Nz
+LyNkb2MtaW5zdHJ1bWVudGluZy1saW51eC1rZXJuZWwtaXRzZWxmCj4KPiBPbiBUaHUsIEZlYiAx
+MiwgMjAxNSBhdCA3OjQ5IFBNLCB6aGVueXUucmVuIDx6aGVueXUucmVuQGFsaXl1bi5jb20+IHdy
+b3RlOgo+PiBIaSwKPj4KPj4gSXQncyB3ZWxsIGtub3duIHRoYXQgbHR0bmcgY2FuIG1ha2UgdXNl
+IG9mIGtlcm5lbCB0cmFjZXBvaW50cyB0byBkbyBibG9jawo+PiB0cmFjaW5nICxzeXN0ZW0gY2Fs
+bCB0cmFjaW5nIGV0Yy5JcyBpdCBwb3NzaWJsZSB0aGF0IGx0dG5nIGNhbiBwcm9kdWNlCj4+IGFu
+eXRoaW5nIGxpa2Uga2VybmVsIGZ1bmN0aW9uIHRyYWNlciBkb2VzPwo+Pgo+PiBUaGFua3MKPj4g
+emhlbnl1LnJlbgo+Pgo+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwo+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+IGx0dG5nLWRldkBsaXN0cy5sdHRu
+Zy5vcmcKPj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
+bHR0bmctZGV2CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDov
+L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
