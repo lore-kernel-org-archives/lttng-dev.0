@@ -1,17 +1,21 @@
-From: Nathan Lynch <Nathan_Lynch@mentor.com>
-Subject: Re: lttng-tracer missing
-Date: Tue, 17 Feb 2015 13:00:15 -0600
-Message-ID: <54E38FBF.2000900__27100.2754140229$1424199701$gmane$org@mentor.com>
-References: <8369DAE2C5B8814998E89CE414A915381F6B7AF4@IT-Mailbox3.TTPGroup.com>
+From: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+Subject: =?utf-8?b?562U5aSN77ya562U5aSN77yaIENhbiBsdHRuZyBz?=
+ =?utf-8?q?upport_kernel_function_tracer?=
+Date: Wed, 18 Feb 2015 14:29:30 +0800
+Message-ID: <bde879bd-bc81-40a0-98ae-705947c3f5b6__29637.9385087223$1424241047$gmane$org@aliyun.com>
+References: <5a55c10f-2991-4d2c-ae9f-71bf32a96867@aliyun.com>
+ <0ecb9733-2e6d-4778-a764-48e139d116f0@aliyun.com>,
+ CADcCL0jDKp5TS+tSZuphAe=SK_Xbr8DQraoeNL4Xofg9nNmYpg@mail.gmail.com
+Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from smtpcm9-309.freemail.mail.aliyun.com ([110.75.46.9])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Nathan_Lynch@mentor.com>) id 1YNnNf-0006yb-Io
- for lttng-dev@lists.lttng.org; Tue, 17 Feb 2015 14:00:28 -0500
-In-Reply-To: <8369DAE2C5B8814998E89CE414A915381F6B7AF4@IT-Mailbox3.TTPGroup.com>
+ (envelope-from <zhenyu.ren@aliyun.com>) id 1YNy8o-0001rq-CF
+ for lttng-dev@lists.lttng.org; Wed, 18 Feb 2015 01:29:49 -0500
+In-Reply-To: CADcCL0jDKp5TS+tSZuphAe=SK_Xbr8DQraoeNL4Xofg9nNmYpg@mail.gmail.com
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,36 +24,65 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Neil Bryan <Neil.Bryan@ttp.com>
+To: Francis Deslauriers <francis.deslauriers@mail.utoronto.ca>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On 02/17/2015 11:02 AM, Neil Bryan wrote:
-> Following the bitbake build I see these kernel modules in the build
-> output directory:
-> 
-> ./altera-image-1.0-r0/rootfs/lib/modules/3.7.0/kernel/lttng-modules/lib/lib-ring-buffer.ko
-> ./altera-image-1.0-r0/rootfs/lib/modules/3.7.0/kernel/lttng-modules/ltt-ring-buffer-client-overwrite.ko
-> ./altera-image-1.0-r0/rootfs/lib/modules/3.7.0/kernel/lttng-modules/probes/lttng-probe-irq.ko
-> ./altera-image-1.0-r0/rootfs/lib/modules/3.7.0/kernel/lttng-modules/probes/lttng-probe-lttng.ko
-> ./altera-image-1.0-r0/rootfs/lib/modules/3.7.0/kernel/lttng-modules/probes/lttng-probe-block.ko
-> ./altera-image-1.0-r0/rootfs/lib/modules/3.7.0/kernel/lttng-modules/probes/lttng-probe-sched.ko
-> ./altera-image-1.0-r0/rootfs/lib/modules/3.7.0/kernel/lttng-modules/probes/lttng-types.ko
-> ./altera-image-1.0-r0/rootfs/lib/modules/3.7.0/kernel/lttng-modules/ltt-ring-buffer-metadata-mmap-client.ko
-> ./altera-image-1.0-r0/rootfs/lib/modules/3.7.0/kernel/lttng-modules/ltt-relay.ko
-> ./altera-image-1.0-r0/rootfs/lib/modules/3.7.0/kernel/lttng-modules/ltt-ring-buffer-metadata-client.ko
-
-I'm guessing you have a rather old version of lttng-modules?  The "ltt-"
-prefix was replaced with "lttng-" about three years ago:
-
-commit a90917c3f8c4
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Sun Jan 22 16:13:41 2012 -0500
-
-    Mass rename: ltt_*/ltt-* to LTTNG_*/LTTNG-*
-
-$ git describe --all  a90917c3f8c4
-tags/v2.0-pre11-5-ga90917c3f8c4
-
-Make sure you're not inadvertently using an old unsupported 0.x version
-of the modules.
+PiBJIHRoaW5rIHRoYXQgbWlnaHQgYmUgYSB1c2VjYXNlIGZvciBhIHByb2ZpbGVyIHJhdGhlciB0
+aGFuIGEgdXNlY2FzZSBmb3IgYSB0cmFjZXIKCkkgYW0gc29ycnkgdGhhdCBJIGhhdmUgbWlzbGVk
+IHlvdS5Ob3QgYWxsIHdyaXRlIGluc3RhbmNlcyhhIGNoYW5jZSBpbiBhIG1pbGxpb24pIHRha2Ug
+MTAwbXMrIHRvIGNvbXBsZXRlLlNvIEkgaGF2ZSB0byB0cmFjZSBhbGwgd3JpdGUgaW5zdGFuY2Vz
+IHRvIGNhcHR1cmUgdGhlIGRldmlhbnQgb25lcy4KClRoYW5rcwp6aGVueXUucmVuCgoKCgoKCi0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLQrlj5Hku7bkurrvvJpGcmFuY2lzIERlc2xhdXJpZXJzIDxmcmFuY2lzLmRlc2xhdXJp
+ZXJzQG1haWwudXRvcm9udG8uY2E+CgoK5Y+R6YCB5pe26Ze077yaMjAxNeW5tDLmnIgxN+aXpSjm
+mJ/mnJ/kuowpIDIzOjA5CuaUtuS7tuS6uu+8mnpoZW55dS5yZW4gPHpoZW55dS5yZW5AYWxpeXVu
+LmNvbT4K5oqE44CA6YCB77yabHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyA8bHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZz4K5Li744CA6aKY77yaUmU6IOetlOWkje+8mltsdHRuZy1kZXZdIENhbiBs
+dHRuZyBzdXBwb3J0IGtlcm5lbCBmdW5jdGlvbiB0cmFjZXIKCgpDQ2luZyBsdHRuZy1kZXYgYmFj
+ayBpbiB0aGUgdGhyZWFkLgoKSSBtaWdodCBiZSB3cm9uZyBidXQgSSB0aGluayB0aGF0IG1pZ2h0
+IGJlIGEgdXNlY2FzZSBmb3IgYSBwcm9maWxlcgpyYXRoZXIgdGhhbiBhIHVzZWNhc2UgZm9yIGEg
+dHJhY2VyLiBDYW4gc29tZW9uZSBlbHNlIGNvbmZpcm0/ClRvIGRvIHRoYXQga2luZCBvZiB3b3Jr
+LCB5b3UgY291bGQgY29tcGlsZSB5b3VyIGtlcm5lbCB3aXRoIGdwcm9mIHN1cHBvcnQuCgpUaGFu
+a3MsCkZyYW5jaXMKCgpPbiBUdWUsIEZlYiAxNywgMjAxNSBhdCAzOjM4IEFNLCB6aGVueXUucmVu
+IDx6aGVueXUucmVuQGFsaXl1bi5jb20+IHdyb3RlOgo+IEhpLEZyYW5jaXMKPiAgICBJbiBmYWN0
+LCBJIHdhbnQgdG8gdHJhY2UgYWxsIGtlcm5lbCBmdW5jdGlvbnMgcmVsYXRlZCB0byBzb21lCj4g
+YmVoYXZpb3IuRm9yIGV4YW1wbGUsSSB3cml0ZSgpICBhbmQgaXQgcmV0dXJucyAxMDBtcyBsYXRl
+ciAsc28gIEkgd2FudCB0bwo+IGtub3cgd2hpY2gga2VybmVsICBmdW5jdGlvbiBpcyB0b28gc2xv
+dy4gSW4gdGhpcyBjYXNlLEkgY2FuIHVzZSBmdW5jdGlvbgo+IHRyYWNlciB0byB0cmFjZSAiYWxs
+IiBrZXJuZWwgZnVuY3Rpb24gaW4gdGhlIHdyaXRlKCkgdGltZSB3aW5kb3cuSG93ZXZlcixJCj4g
+d2FudCB0byBrbm93IGlzIGl0IHBvc3NpYmxlIHRoYXQgbHR0bmcgY2FuIGJlIHVzZWZ1bCBpbiB0
+aGlzIGNhc2UuCj4KPiBUaGFua3MKPiB6aGVueXUucmVuCj4KPgo+IC0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+IOWPkeS7
+tuS6uu+8mkZyYW5jaXMgRGVzbGF1cmllcnMgPGZyYW5jaXMuZGVzbGF1cmllcnNAbWFpbC51dG9y
+b250by5jYT4KPiDlj5HpgIHml7bpl7TvvJoyMDE15bm0MuaciDE35pelKOaYn+acn+S6jCkgMDA6
+NTMKPiDmlLbku7bkurrvvJp6aGVueXUucmVuIDx6aGVueXUucmVuQGFsaXl1bi5jb20+Cj4g5oqE
+44CA6YCB77yabHR0bmctZGV2IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPgo+IOS4u+OAgOmi
+mO+8mlJlOiBbbHR0bmctZGV2XSBDYW4gbHR0bmcgc3VwcG9ydCBrZXJuZWwgZnVuY3Rpb24gdHJh
+Y2VyCj4KPiBIaSBaaGVueXUsCj4KPiBJZiBJIHVuZGVyc3RhbmRkIHlvdXIgcXVlc3Rpb24gY29y
+cmVjdGx5LCBJIGNhbiB0aGluayBvZiB0d28gd2F5cyB0bwo+IHRyYWNlIGFuIGFyYml0cmFyeSBr
+ZXJuZWwgZnVuY3Rpb24uIEZpcnN0LCB5b3UgY2FuIGhvb2sgdGhlIHRyYWNlciBvbgo+IGEgZHlu
+YW1pYyBwcm9iZVsxXSB1c2luZyBzb21ldGhpbmcgbGlrZSB0aGlzOgo+ICJsdHRuZyBlbmFibGUt
+ZXZlbnQgY3VzdG9tRXZlbnROYW1lIC1rIC0tcHJvYmUga2VybmVsRnVuY3Rpb25OYW1lIi4KPiBZ
+b3UgY2FuIGFsc28gaG9vayB0aGUgdHJhY2VyIG9uIGJvdGggZW50cnkgYW5kIGV4aXQgb2YgYSBm
+dW5jdGlvbgo+IHVzaW5nICItLWZ1bmN0aW9uIiBpbnN0ZWFkIG9mICItLXByb2JlIi4KPiBUbyBs
+aXN0IHlvdXIga2VybmVsIHN5bWJvbHMgdXNlICJjYXQgL3Byb2Mva2FsbHN5bXMiCj4gU2Vjb25k
+LCB5b3UgY2FuIGNyZWF0ZSBjdXN0b20ga2VybmVsIHRyYWNlcG9pbnRzIGFuZCBjb21waWxlIHRo
+ZW0gaW4KPiB5b3Uga2VybmVsLiBIYXZlIGEgbG9vayBhdCB0aGUgb25saW5lIGRvY3VtZW50YXRp
+b24gWzJdLgo+Cj4gRG9uJ3QgaGVzaXRhdGUgdG8gZXhwbGFpbiBmdXJ0aGVyIGlmIHRoaXMgZG9l
+c24ndCBhbnN3ZXIgeW91ciBxdWVzdGlvbi4KPgo+IENoZWVycyEKPiBGcmFuY2lzCj4KPiBbMV0K
+PiBodHRwOi8vZ2l0Lmx0dG5nLm9yZy8/cD1sdHRuZy10b29scy5naXQ7YT1ibG9iO2Y9ZG9jL3F1
+aWNrc3RhcnQudHh0O2g9MDE4YzI3YjJiOTM5ZWY3Y2QwNzUyNTVmZDAxYmNmZDhiMmIyMWIxZTto
+Yj1IRUFEI2w5Mwo+IFsyXSBodHRwOi8vbHR0bmcub3JnL2RvY3MvI2RvYy1pbnN0cnVtZW50aW5n
+LWxpbnV4LWtlcm5lbC1pdHNlbGYKPgo+IE9uIFRodSwgRmViIDEyLCAyMDE1IGF0IDc6NDkgUE0s
+IHpoZW55dS5yZW4gPHpoZW55dS5yZW5AYWxpeXVuLmNvbT4gd3JvdGU6Cj4+IEhpLAo+Pgo+PiBJ
+dCdzIHdlbGwga25vd24gdGhhdCBsdHRuZyBjYW4gbWFrZSB1c2Ugb2Yga2VybmVsIHRyYWNlcG9p
+bnRzIHRvIGRvIGJsb2NrCj4+IHRyYWNpbmcgLHN5c3RlbSBjYWxsIHRyYWNpbmcgZXRjLklzIGl0
+IHBvc3NpYmxlIHRoYXQgbHR0bmcgY2FuIHByb2R1Y2UKPj4gYW55dGhpbmcgbGlrZSBrZXJuZWwg
+ZnVuY3Rpb24gdHJhY2VyIGRvZXM/Cj4+Cj4+IFRoYW5rcwo+PiB6aGVueXUucmVuCj4+Cj4+IF9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+IGx0dG5nLWRl
+diBtYWlsaW5nIGxpc3QKPj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiBodHRwOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2Nn
+aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
