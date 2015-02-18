@@ -1,21 +1,15 @@
-From: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-Subject: =?utf-8?b?562U5aSN77ya562U5aSN77yaIENhbiBsdHRuZyBz?=
- =?utf-8?q?upport_kernel_function_tracer?=
-Date: Wed, 18 Feb 2015 14:29:30 +0800
-Message-ID: <bde879bd-bc81-40a0-98ae-705947c3f5b6__29637.9385087223$1424241047$gmane$org@aliyun.com>
-References: <5a55c10f-2991-4d2c-ae9f-71bf32a96867@aliyun.com>
- <0ecb9733-2e6d-4778-a764-48e139d116f0@aliyun.com>,
- CADcCL0jDKp5TS+tSZuphAe=SK_Xbr8DQraoeNL4Xofg9nNmYpg@mail.gmail.com
-Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+From: Venkata Kantimahanthi <venkata.kantimahanthi@tcs.com>
+Subject: Error is thrown when  continously using  babeltrace
+Date: Wed, 18 Feb 2015 14:28:25 +0530
+Message-ID: <OF7DCFE37A.3C0C46F9-ON65257DF0.002DDA9D-65257DF0.00314E6D__7057.06042140282$1424249974$gmane$org@tcs.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="=_mixed 00314E6765257DF0_="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtpcm9-309.freemail.mail.aliyun.com ([110.75.46.9])
+Received: from inblrg01.tcs.com ([121.242.48.3])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <zhenyu.ren@aliyun.com>) id 1YNy8o-0001rq-CF
- for lttng-dev@lists.lttng.org; Wed, 18 Feb 2015 01:29:49 -0500
-In-Reply-To: CADcCL0jDKp5TS+tSZuphAe=SK_Xbr8DQraoeNL4Xofg9nNmYpg@mail.gmail.com
+ (envelope-from <prvs=484fb0b90=venkata.kantimahanthi@tcs.com>)
+ id 1YO0Sp-0002Yq-TJ
+ for lttng-dev@lists.lttng.org; Wed, 18 Feb 2015 03:58:39 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,65 +18,387 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Francis Deslauriers <francis.deslauriers@mail.utoronto.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-PiBJIHRoaW5rIHRoYXQgbWlnaHQgYmUgYSB1c2VjYXNlIGZvciBhIHByb2ZpbGVyIHJhdGhlciB0
-aGFuIGEgdXNlY2FzZSBmb3IgYSB0cmFjZXIKCkkgYW0gc29ycnkgdGhhdCBJIGhhdmUgbWlzbGVk
-IHlvdS5Ob3QgYWxsIHdyaXRlIGluc3RhbmNlcyhhIGNoYW5jZSBpbiBhIG1pbGxpb24pIHRha2Ug
-MTAwbXMrIHRvIGNvbXBsZXRlLlNvIEkgaGF2ZSB0byB0cmFjZSBhbGwgd3JpdGUgaW5zdGFuY2Vz
-IHRvIGNhcHR1cmUgdGhlIGRldmlhbnQgb25lcy4KClRoYW5rcwp6aGVueXUucmVuCgoKCgoKCi0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLQrlj5Hku7bkurrvvJpGcmFuY2lzIERlc2xhdXJpZXJzIDxmcmFuY2lzLmRlc2xhdXJp
-ZXJzQG1haWwudXRvcm9udG8uY2E+CgoK5Y+R6YCB5pe26Ze077yaMjAxNeW5tDLmnIgxN+aXpSjm
-mJ/mnJ/kuowpIDIzOjA5CuaUtuS7tuS6uu+8mnpoZW55dS5yZW4gPHpoZW55dS5yZW5AYWxpeXVu
-LmNvbT4K5oqE44CA6YCB77yabHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyA8bHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZz4K5Li744CA6aKY77yaUmU6IOetlOWkje+8mltsdHRuZy1kZXZdIENhbiBs
-dHRuZyBzdXBwb3J0IGtlcm5lbCBmdW5jdGlvbiB0cmFjZXIKCgpDQ2luZyBsdHRuZy1kZXYgYmFj
-ayBpbiB0aGUgdGhyZWFkLgoKSSBtaWdodCBiZSB3cm9uZyBidXQgSSB0aGluayB0aGF0IG1pZ2h0
-IGJlIGEgdXNlY2FzZSBmb3IgYSBwcm9maWxlcgpyYXRoZXIgdGhhbiBhIHVzZWNhc2UgZm9yIGEg
-dHJhY2VyLiBDYW4gc29tZW9uZSBlbHNlIGNvbmZpcm0/ClRvIGRvIHRoYXQga2luZCBvZiB3b3Jr
-LCB5b3UgY291bGQgY29tcGlsZSB5b3VyIGtlcm5lbCB3aXRoIGdwcm9mIHN1cHBvcnQuCgpUaGFu
-a3MsCkZyYW5jaXMKCgpPbiBUdWUsIEZlYiAxNywgMjAxNSBhdCAzOjM4IEFNLCB6aGVueXUucmVu
-IDx6aGVueXUucmVuQGFsaXl1bi5jb20+IHdyb3RlOgo+IEhpLEZyYW5jaXMKPiAgICBJbiBmYWN0
-LCBJIHdhbnQgdG8gdHJhY2UgYWxsIGtlcm5lbCBmdW5jdGlvbnMgcmVsYXRlZCB0byBzb21lCj4g
-YmVoYXZpb3IuRm9yIGV4YW1wbGUsSSB3cml0ZSgpICBhbmQgaXQgcmV0dXJucyAxMDBtcyBsYXRl
-ciAsc28gIEkgd2FudCB0bwo+IGtub3cgd2hpY2gga2VybmVsICBmdW5jdGlvbiBpcyB0b28gc2xv
-dy4gSW4gdGhpcyBjYXNlLEkgY2FuIHVzZSBmdW5jdGlvbgo+IHRyYWNlciB0byB0cmFjZSAiYWxs
-IiBrZXJuZWwgZnVuY3Rpb24gaW4gdGhlIHdyaXRlKCkgdGltZSB3aW5kb3cuSG93ZXZlcixJCj4g
-d2FudCB0byBrbm93IGlzIGl0IHBvc3NpYmxlIHRoYXQgbHR0bmcgY2FuIGJlIHVzZWZ1bCBpbiB0
-aGlzIGNhc2UuCj4KPiBUaGFua3MKPiB6aGVueXUucmVuCj4KPgo+IC0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+IOWPkeS7
-tuS6uu+8mkZyYW5jaXMgRGVzbGF1cmllcnMgPGZyYW5jaXMuZGVzbGF1cmllcnNAbWFpbC51dG9y
-b250by5jYT4KPiDlj5HpgIHml7bpl7TvvJoyMDE15bm0MuaciDE35pelKOaYn+acn+S6jCkgMDA6
-NTMKPiDmlLbku7bkurrvvJp6aGVueXUucmVuIDx6aGVueXUucmVuQGFsaXl1bi5jb20+Cj4g5oqE
-44CA6YCB77yabHR0bmctZGV2IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPgo+IOS4u+OAgOmi
-mO+8mlJlOiBbbHR0bmctZGV2XSBDYW4gbHR0bmcgc3VwcG9ydCBrZXJuZWwgZnVuY3Rpb24gdHJh
-Y2VyCj4KPiBIaSBaaGVueXUsCj4KPiBJZiBJIHVuZGVyc3RhbmRkIHlvdXIgcXVlc3Rpb24gY29y
-cmVjdGx5LCBJIGNhbiB0aGluayBvZiB0d28gd2F5cyB0bwo+IHRyYWNlIGFuIGFyYml0cmFyeSBr
-ZXJuZWwgZnVuY3Rpb24uIEZpcnN0LCB5b3UgY2FuIGhvb2sgdGhlIHRyYWNlciBvbgo+IGEgZHlu
-YW1pYyBwcm9iZVsxXSB1c2luZyBzb21ldGhpbmcgbGlrZSB0aGlzOgo+ICJsdHRuZyBlbmFibGUt
-ZXZlbnQgY3VzdG9tRXZlbnROYW1lIC1rIC0tcHJvYmUga2VybmVsRnVuY3Rpb25OYW1lIi4KPiBZ
-b3UgY2FuIGFsc28gaG9vayB0aGUgdHJhY2VyIG9uIGJvdGggZW50cnkgYW5kIGV4aXQgb2YgYSBm
-dW5jdGlvbgo+IHVzaW5nICItLWZ1bmN0aW9uIiBpbnN0ZWFkIG9mICItLXByb2JlIi4KPiBUbyBs
-aXN0IHlvdXIga2VybmVsIHN5bWJvbHMgdXNlICJjYXQgL3Byb2Mva2FsbHN5bXMiCj4gU2Vjb25k
-LCB5b3UgY2FuIGNyZWF0ZSBjdXN0b20ga2VybmVsIHRyYWNlcG9pbnRzIGFuZCBjb21waWxlIHRo
-ZW0gaW4KPiB5b3Uga2VybmVsLiBIYXZlIGEgbG9vayBhdCB0aGUgb25saW5lIGRvY3VtZW50YXRp
-b24gWzJdLgo+Cj4gRG9uJ3QgaGVzaXRhdGUgdG8gZXhwbGFpbiBmdXJ0aGVyIGlmIHRoaXMgZG9l
-c24ndCBhbnN3ZXIgeW91ciBxdWVzdGlvbi4KPgo+IENoZWVycyEKPiBGcmFuY2lzCj4KPiBbMV0K
-PiBodHRwOi8vZ2l0Lmx0dG5nLm9yZy8/cD1sdHRuZy10b29scy5naXQ7YT1ibG9iO2Y9ZG9jL3F1
-aWNrc3RhcnQudHh0O2g9MDE4YzI3YjJiOTM5ZWY3Y2QwNzUyNTVmZDAxYmNmZDhiMmIyMWIxZTto
-Yj1IRUFEI2w5Mwo+IFsyXSBodHRwOi8vbHR0bmcub3JnL2RvY3MvI2RvYy1pbnN0cnVtZW50aW5n
-LWxpbnV4LWtlcm5lbC1pdHNlbGYKPgo+IE9uIFRodSwgRmViIDEyLCAyMDE1IGF0IDc6NDkgUE0s
-IHpoZW55dS5yZW4gPHpoZW55dS5yZW5AYWxpeXVuLmNvbT4gd3JvdGU6Cj4+IEhpLAo+Pgo+PiBJ
-dCdzIHdlbGwga25vd24gdGhhdCBsdHRuZyBjYW4gbWFrZSB1c2Ugb2Yga2VybmVsIHRyYWNlcG9p
-bnRzIHRvIGRvIGJsb2NrCj4+IHRyYWNpbmcgLHN5c3RlbSBjYWxsIHRyYWNpbmcgZXRjLklzIGl0
-IHBvc3NpYmxlIHRoYXQgbHR0bmcgY2FuIHByb2R1Y2UKPj4gYW55dGhpbmcgbGlrZSBrZXJuZWwg
-ZnVuY3Rpb24gdHJhY2VyIGRvZXM/Cj4+Cj4+IFRoYW5rcwo+PiB6aGVueXUucmVuCj4+Cj4+IF9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+IGx0dG5nLWRl
-diBtYWlsaW5nIGxpc3QKPj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiBodHRwOi8vbGlz
-dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
-IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--=_mixed 00314E6765257DF0_=
+Content-Type: multipart/alternative; boundary="=_alternative 00314E6765257DF0_="
+
+
+--=_alternative 00314E6765257DF0_=
+Content-Type: text/plain; charset="US-ASCII"
+
+Hi,
+
+We are using babeltrace 1.2.4 and LTTng Trace Control 2.5.3.  Continously 
+giving babeltrace is throwing this error.  I am actually getting this 
+while reading a snapshot session . I have given continously babeltrace and 
+path to read the traces . Then I am getting this error.
+
+************************************************ 
+[error] Unexpected end of packet. Either the trace data stream is 
+corrupted or metadata description does not match data layout. 
+[error] Reading event failed. 
+Error printing trace. 
+ 
+************************************************ 
+As you said previously "The corrupted stream probably can't be handled by 
+Babeltrace anymore at that point." 
+
+Please see the  below code snippet how we are using the lttng calls to 
+handle our requirement
+creation of session:
+           lttng create s1 --snapshot -o /pramfs/telog
+           lttng enable-channel ch1 -u --buffers-uid --subbuf-size 4096 
+--num-subbuf 16
+           # Enable default events
+           lttng enable-event -u -c ch1 --loglevel TRACE_INFO '*'
+
+After succesful creation of the session we are able to read the traces 
+using babeltrace successfully. But we have written a wrappers for using 
+lttng API calls in such a way to meet our requirement which is reading 
+only traces inside the buffer at that instant by writing into a file by 
+removing previously created snapshots.
+
+lttng_sessions[0].path contains /pramfs/telog
+myrm is a function pointer which cleans the directory and returns 770 
+permissions to that particular snapshot path.
+
+        if (ted_ss_reboot == SS_RB_CONF) {
+                /* Only read snapshot from last reboot once */
+                ted_ss_reboot = SS_RB_DONE;
+                extra = FCORRELATE;
+        } else {
+                /* Remove all previous snapshots from output folder
+                 * This way filesystem will not be flooded by snapshots
+                 * taken every time user reads the log. OBS, All dirs 
+under
+                 * path will be deleted.
+                 */
+                if (nftw(lttng_sessions[0].path, myrm, FOPEN_MAX, 
+FTW_DEPTH) < 0) {
+                        ERR("Failed to clean path, %s", 
+lttng_sessions[0].path);
+                        goto send_rsp;
+                }
+        }
+
+        /*
+         * Take a snapshot of lttng buffers  for a given session
+         */
+        /* Create a output handle */
+        if ((lttng_out = lttng_snapshot_output_create()) == NULL) {
+                ERR("lttng_snapshot_output_create failed");
+                ret = -1;
+                goto send_rsp;
+        }
+
+        /* Take a snapshot, output path used is same as configured for the 
+session */
+        ret = lttng_snapshot_record(lttng_sessions[0].name, lttng_out, 0);
+        if (ret < 0) {
+                ERR("lttng_snapshot_record failed, ses:%s, %s",
+                    lttng_sessions[0].name, lttng_strerror(ret));
+                ret = -1;
+                goto send_rsp;
+        }
+
+
+        lttng_snapshot_output_destroy(lttng_out);
+
+        /*
+         * snapshot folder created by root lttng-sessiond and all its
+         * subfolders have permissions set to 770, meaning non-privileged
+         * user cant read/write from/to that folder. A regular user should
+         * be able to read traces generated by root sessiond.
+         * Changing permissions to this file tree.
+         */
+        nftw(lttng_sessions[0].path, mychmod, FOPEN_MAX, FTW_DEPTH);
+
+babeltrace --clock-date  --clock-force-correlate /pramfs/telog
+which was giving the logs which we were expecting but if we keep this 
+process repeatedly above mentioned error was coming. I am sharing the log 
+file (there te log read is the wrapper call for above process which I 
+mentioned).Please tell if any other logs were required.
+
+
+
+
+Thanks & Regards
+Venkata Ranganadh Kantimahanthi
+=====-----=====-----=====
+Notice: The information contained in this e-mail
+message and/or attachments to it may contain 
+confidential or privileged information. If you are 
+not the intended recipient, any dissemination, use, 
+review, distribution, printing or copying of the 
+information contained in this e-mail message 
+and/or attachments to it are strictly prohibited. If 
+you have received this communication in error, 
+please notify us by reply e-mail or telephone and 
+immediately and permanently delete the message 
+and any attachments. Thank you
+
+
+
+--=_alternative 00314E6765257DF0_=
+Content-Type: text/html; charset="US-ASCII"
+
+<font size=2 face="sans-serif">Hi,</font>
+<br>
+<br><font size=2 face="sans-serif">We are using babeltrace 1.2.4 and LTTng
+Trace Control 2.5.3.&nbsp; Continously giving babeltrace is throwing this
+error. &nbsp;I am actually getting this while reading a snapshot session
+. I have given continously babeltrace and path to read the traces . Then
+I am getting this error.</font>
+<br>
+<br><font size=2 color=#ff0041 face="Calibri">************************************************</font><font size=1 color=#ff0041 face="Arial">
+</font><font size=2 color=#ff0041 face="Calibri"><br>
+[error] Unexpected end of packet. Either the trace data stream is corrupted
+or metadata description does not match data layout.</font><font size=1 color=#ff0041 face="Arial">
+</font><font size=2 color=#ff0041 face="Calibri"><br>
+[error] Reading event failed.</font><font size=1 color=#ff0041 face="Arial">
+</font><font size=2 color=#ff0041 face="Calibri"><br>
+Error printing trace.</font><font size=1 color=#ff0041 face="Arial"> <br>
+&nbsp;</font><font size=2 color=#ff0041 face="Calibri"><br>
+************************************************</font><font size=1 color=#ff0041 face="Arial">
+</font>
+<br><font size=1 face="Arial">As you said previously &quot;</font><font size=2 face="Arial"><b>The
+corrupted stream probably can't be handled by Babeltrace anymore at that
+point.</b></font><font size=1 face="Arial">&quot; </font>
+<br>
+<br><font size=2 face="sans-serif">Please see the &nbsp;below code snippet
+how we are using the lttng calls to handle our requirement</font>
+<br><font size=2 face="sans-serif"><b>creation of session:</b></font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;lttng
+create s1 --snapshot -o /pramfs/telog</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;lttng
+enable-channel ch1 -u --buffers-uid --subbuf-size 4096 --num-subbuf 16</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#
+Enable default events</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;lttng
+enable-event -u -c ch1 --loglevel TRACE_INFO '*'</font>
+<br>
+<br><font size=2 face="sans-serif">After succesful creation of the session
+we are able to read the traces using babeltrace successfully. But we have
+written a wrappers for using lttng API calls in such a way to meet our
+requirement which is reading only traces inside the buffer at that instant
+by writing into a file by removing previously created snapshots.</font>
+<br>
+<br><font size=2 face="sans-serif">lttng_sessions[0].path contains</font><font size=2 color=blue face="sans-serif">
+/pramfs/telog</font>
+<br><font size=2 face="sans-serif">myrm is a function pointer which cleans
+the directory and returns 770 permissions to that particular snapshot path.</font>
+<br>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; if (ted_ss_reboot
+== SS_RB_CONF) {</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; /* Only read snapshot from last reboot once */</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; ted_ss_reboot = SS_RB_DONE;</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; extra = FCORRELATE;</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; } else {</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; /* Remove all previous snapshots from output folder</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp;* This way filesystem will not be flooded by snapshots</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp;* taken every time user reads the log. OBS, All dirs
+under</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp;* path will be deleted.</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp;*/</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; if (nftw(lttng_sessions[0].path, myrm, FOPEN_MAX, FTW_DEPTH)
+&lt; 0) {</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ERR(&quot;Failed to clean path,
+%s&quot;, lttng_sessions[0].path);</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; goto send_rsp;</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; }</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; }</font>
+<br>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; /*</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*
+Take a snapshot of lttng buffers &nbsp;for a given session</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*/</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; /* Create
+a output handle */</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; if ((lttng_out
+= </font><font size=2 color=blue face="sans-serif">lttng_snapshot_output_create</font><font size=2 face="sans-serif">())
+== NULL) {</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; ERR(&quot;lttng_snapshot_output_create failed&quot;);</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; ret = -1;</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; goto send_rsp;</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; }</font>
+<br>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; /* Take
+a snapshot, output path used is same as configured for the session */</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; ret =</font><font size=2 color=blue face="sans-serif">
+lttng_snapshot_record</font><font size=2 face="sans-serif">(lttng_sessions[0].name,
+lttng_out, 0);</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; if (ret
+&lt; 0) {</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; ERR(&quot;lttng_snapshot_record failed, ses:%s, %s&quot;,</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; &nbsp; &nbsp; lttng_sessions[0].name, lttng_strerror(ret));</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; ret = -1;</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+&nbsp; &nbsp; goto send_rsp;</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; }</font>
+<br>
+<br>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; lttng_snapshot_output_destroy(lttng_out);</font>
+<br>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; /*</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*
+snapshot folder created by root lttng-sessiond and all its</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*
+subfolders have permissions set to 770, meaning non-privileged</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*
+user cant read/write from/to that folder. A regular user should</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*
+be able to read traces generated by root sessiond.</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*
+Changing permissions to this file tree.</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*/</font>
+<br><font size=2 face="sans-serif">&nbsp; &nbsp; &nbsp; &nbsp; nftw(lttng_sessions[0].path,
+mychmod, FOPEN_MAX, FTW_DEPTH);<br>
+</font>
+<br><font size=2 face="sans-serif">babeltrace --clock-date &nbsp;--clock-force-correlate
+/pramfs/telog</font>
+<br><font size=2 face="sans-serif">which was giving the logs which we were
+expecting but if we keep this process repeatedly above mentioned error
+was coming. I am sharing the log file (there te log read is the wrapper
+call for above process which I mentioned).Please tell if any other logs
+were required.</font>
+<br>
+<br>
+<br>
+<br><font size=2 face="sans-serif"><br>
+Thanks &amp; Regards<br>
+Venkata Ranganadh Kantimahanthi<br>
+</font><p>=====-----=====-----=====<br>
+Notice: The information contained in this e-mail<br>
+message and/or attachments to it may contain <br>
+confidential or privileged information. If you are <br>
+not the intended recipient, any dissemination, use, <br>
+review, distribution, printing or copying of the <br>
+information contained in this e-mail message <br>
+and/or attachments to it are strictly prohibited. If <br>
+you have received this communication in error, <br>
+please notify us by reply e-mail or telephone and <br>
+immediately and permanently delete the message <br>
+and any attachments. Thank you</p>
+
+<p></p>
+--=_alternative 00314E6765257DF0_=--
+
+--=_mixed 00314E6765257DF0_=
+Content-Type: text/plain; name="lttng_logs.txt.txt"
+Content-Disposition: attachment; filename="lttng_logs.txt.txt"
+Content-Transfer-Encoding: quoted-printable
+
+# te log read |grep ERROR
+[warning] Forcibly correlating trace clock sources (--clock-force-correlate=
+).
+[warning] Forcibly correlating trace clock sources (--clock-force-correlate=
+).
+[warning] Forcibly correlating trace clock sources (--clock-force-correlate=
+).
+[warning] Forcibly correlating trace clock sources (--clock-force-correlate=
+).
+[warning] Forcibly correlating trace clock sources (--clock-force-correlate=
+).
+[warning] Forcibly correlating trace clock sources (--clock-force-correlate=
+).
+[
+[2015-02-18 08:08:44.687776921] (+0.130724586) oamhost com=5Fericsson=5Ftri=
+thread:ERROR: { cpu=5Fid =3D 2 }, { process =3D "Osa=5FlsiServer=5Fproc", f=
+ileAndLine =3D "logserver.c:2872", msg =3D "The program is not reliable!" }
+[2015-02-18 08:08:44.687777001] (+0.000000080) oamhost com=5Fericsson=5Ftri=
+thread:ERROR: { cpu=5Fid =3D 5 }, { process =3D "Osa=5FoeiServer=5Fproc", f=
+ileAndLine =3D "objevidserver.c:380", msg =3D "OEI Server : CelloCli=5FgetR=
+puReq ERROR" }
+[2015-02-18 08:08:44.687788948] (+0.000011947) oamhost com=5Fericsson=5Ftri=
+thread:ERROR: { cpu=5Fid =3D 4 }, { process =3D "Osa=5FavliServer=5Fproc", =
+fileAndLine =3D "avli=5Fserver.c:1545", msg =3D "The program is not reliabl=
+e" }
+[2015-02-18 08:08:44.687885934] (+0.000096986) oamhost com=5Fericsson=5Ftri=
+thread:ERROR: { cpu=5Fid =3D 5 }, { process =3D "Osa=5FoeiServer=5Fproc", f=
+ileAndLine =3D "objevidserver.c:381", msg =3D "OEI Server : Error code is 1=
+" }
+[2015-02-18 08:08:44.687979934] (+0.000066000) oamhost com=5Fericsson=5Ftri=
+thread:ERROR: { cpu=5Fid =3D 4 }, { process =3D "Osa=5FhiliServer=5Fproc", =
+fileAndLine =3D "hili=5Fserver.c:1634", msg =3D "The program is not reliabl=
+e" }
+# te log read |grep ERROR
+[2015-02-18 08:08:44.458478388] (+0.008982213) oamhost com=5Fericsson=5Ftri=
+thread:ERROR: { cpu=5Fid =3D 1 }, { process =3D "Osa=5FupgradeControl=5Fpro=
+c", fileAndLine =3D "upgrade=5Fcontrol=5Fserver.c:1965", msg =3D "The progr=
+am is not reliable!" }
+[error] Unexpected end of packet. Either the trace data stream is corrupted=
+ or metadata description does not match data layout.
+[error] Reading event failed.
+Error printing trace.
+
+[2015-02-18 08:08:44.687776921] (+0.130724586) oamhost com=5Fericsson=5Ftri=
+thread:ERROR: { cpu=5Fid =3D 2 }, { process =3D "Osa=5FlsiServer=5Fproc", f=
+ileAndLine =3D "logserver.c:2872", msg =3D "The program is not reliable!" }
+[2015-02-18 08:08:44.687777001] (+0.000000080) oamhost com=5Fericsson=5Ftri=
+thread:ERROR: { cpu=5Fid =3D 5 }, { process =3D "Osa=5FoeiServer=5Fproc", f=
+ileAndLine =3D "objevidserver.c:380", msg =3D "OEI Server : CelloCli=5FgetR=
+puReq ERROR" }
+[2015-02-18 08:08:44.687885934] (+0.000108933) oamhost com=5Fericsson=5Ftri=
+thread:ERROR: { cpu=5Fid =3D 5 }, { process =3D "Osa=5FoeiServer=5Fproc", f=
+ileAndLine =3D "objevidserver.c:381", msg =3D "OEI Server : Error code is 1=
+" }
+Error: Command error
+# lttng list s1         =20
+Tracing session s1: [active snapshot]
+    Trace path:=20
+    Live timer interval (usec): 4294967295
+
+=3D=3D=3D Domain: UST global =3D=3D=3D
+
+Buffer type: per UID
+
+Channels:
+-------------
+- ch1: [enabled]
+
+    Attributes:
+      overwrite mode: 1
+      subbufers size: 4096
+      number of subbufers: 16
+      switch timer interval: 0
+      read timer interval: 0
+      trace file count: 0
+      trace file size (bytes): 0
+      output: mmap()
+
+    Events:
+      * (loglevel <=3D TRACE=5FINFO (6)) (type: tracepoint) [enabled]
+      com=5Fericsson=5Ftri* (loglevel <=3D TRACE=5FDEBUG (14)) (type: trace=
+point) [enabled]
+--=_mixed 00314E6765257DF0_=
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--=_mixed 00314E6765257DF0_=--
