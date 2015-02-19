@@ -1,24 +1,18 @@
-From: Francis Deslauriers <francis.deslauriers@mail.utoronto.ca>
-Subject: Re: =?utf-8?b?562U5aSN77ya562U5aSN77yaIENhbiBsdHRuZyBz?=
-	=?utf-8?q?upport_kernel_function_tracer?=
-Date: Thu, 19 Feb 2015 14:14:44 -0500
-Message-ID: <CADcCL0hjcJ0mgaFJLCpjfcWErZhzX6fndFw9rOKBCLgiTepKEg__39572.9416203268$1424373379$gmane$org@mail.gmail.com>
-References: <5a55c10f-2991-4d2c-ae9f-71bf32a96867@aliyun.com>
- <0ecb9733-2e6d-4778-a764-48e139d116f0@aliyun.com>
- <bde879bd-bc81-40a0-98ae-705947c3f5b6@aliyun.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH babeltrace] Fix running tests out of tree
+Date: Thu, 19 Feb 2015 15:01:58 -0500
+Message-ID: <CA+jJMxsfxHALU18fNGP=qQZFgQk05XmEe5Enjuw3t0uVirFhLQ__46324.5688043118$1424376195$gmane$org@mail.gmail.com>
+References: <1423939778-1788-1-git-send-email-simon.marchi@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0149228897=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-bn1on0061.outbound.protection.outlook.com ([157.56.110.61]
- helo=na01-bn1-obe.outbound.protection.outlook.com)
+Received: from mail-qg0-f52.google.com ([209.85.192.52])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <francis.deslauriers@mail.utoronto.ca>)
- id 1YOWZI-0004h0-PY
- for lttng-dev@lists.lttng.org; Thu, 19 Feb 2015 14:15:26 -0500
-Received: by mail-qa0-f48.google.com with SMTP id dc16so7713830qab.7
- for <lttng-dev@lists.lttng.org>; Thu, 19 Feb 2015 11:15:04 -0800 (PST)
-In-Reply-To: <bde879bd-bc81-40a0-98ae-705947c3f5b6@aliyun.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1YOXIS-0004vg-PM
+ for lttng-dev@lists.lttng.org; Thu, 19 Feb 2015 15:02:08 -0500
+Received: by mail-qg0-f52.google.com with SMTP id h3so9043457qgf.11
+ for <lttng-dev@lists.lttng.org>; Thu, 19 Feb 2015 12:01:58 -0800 (PST)
+In-Reply-To: <1423939778-1788-1-git-send-email-simon.marchi@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -27,73 +21,117 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+To: Simon Marchi <simon.marchi@polymtl.ca>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-WW91IGNhbiB1c2UgdGhlIHNuYXBzaG90IGZlYXR1cmUgdG8gc3RhcnQgcmVjb3JkaW5nIHdoZW5l
-dmVyIHlvdQp3aXRuZXNzIGEgc2lnbmlmaWNhbnQgbGF0ZW5jeVsxXS4KWW91IGNhbiB1c2UgdGhl
-IHN5c3RlbSgpIGZ1bmN0aW9uIHRvIHRyaWdnZXIgYSByZWNvcmQgZnJvbSB5b3VyIGFwcC4KZS5n
-LiBzeXN0ZW0oImx0dG5nIHNuYXBzaG90IHJlY29yZCIpOwoKWzFdIGh0dHA6Ly9sdHRuZy5vcmcv
-ZG9jcy8jZG9jLXRha2luZy1hLXNuYXBzaG90CgpJIGhvcGUgaXQgaGVscHMuCgpGcmFuY2lzCgpP
-biBXZWQsIEZlYiAxOCwgMjAxNSBhdCAxOjI5IEFNLCB6aGVueXUucmVuIDx6aGVueXUucmVuQGFs
-aXl1bi5jb20+IHdyb3RlOgo+PiBJIHRoaW5rIHRoYXQgbWlnaHQgYmUgYSB1c2VjYXNlIGZvciBh
-IHByb2ZpbGVyIHJhdGhlciB0aGFuIGEgdXNlY2FzZSBmb3IgYSB0cmFjZXIKPgo+IEkgYW0gc29y
-cnkgdGhhdCBJIGhhdmUgbWlzbGVkIHlvdS5Ob3QgYWxsIHdyaXRlIGluc3RhbmNlcyhhIGNoYW5j
-ZSBpbiBhIG1pbGxpb24pIHRha2UgMTAwbXMrIHRvIGNvbXBsZXRlLlNvIEkgaGF2ZSB0byB0cmFj
-ZSBhbGwgd3JpdGUgaW5zdGFuY2VzIHRvIGNhcHR1cmUgdGhlIGRldmlhbnQgb25lcy4KPgo+IFRo
-YW5rcwo+IHpoZW55dS5yZW4KPgo+Cj4KPgo+Cj4KPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiDlj5Hku7bkurrvvJpG
-cmFuY2lzIERlc2xhdXJpZXJzIDxmcmFuY2lzLmRlc2xhdXJpZXJzQG1haWwudXRvcm9udG8uY2E+
-Cj4KPgo+IOWPkemAgeaXtumXtO+8mjIwMTXlubQy5pyIMTfml6Uo5pif5pyf5LqMKSAyMzowOQo+
-IOaUtuS7tuS6uu+8mnpoZW55dS5yZW4gPHpoZW55dS5yZW5AYWxpeXVuLmNvbT4KPiDmioTjgIDp
-gIHvvJpsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-Pgo+IOS4u+OAgOmimO+8mlJlOiDnrZTlpI3vvJpbbHR0bmctZGV2XSBDYW4gbHR0bmcgc3VwcG9y
-dCBrZXJuZWwgZnVuY3Rpb24gdHJhY2VyCj4KPgo+IENDaW5nIGx0dG5nLWRldiBiYWNrIGluIHRo
-ZSB0aHJlYWQuCj4KPiBJIG1pZ2h0IGJlIHdyb25nIGJ1dCBJIHRoaW5rIHRoYXQgbWlnaHQgYmUg
-YSB1c2VjYXNlIGZvciBhIHByb2ZpbGVyCj4gcmF0aGVyIHRoYW4gYSB1c2VjYXNlIGZvciBhIHRy
-YWNlci4gQ2FuIHNvbWVvbmUgZWxzZSBjb25maXJtPwo+IFRvIGRvIHRoYXQga2luZCBvZiB3b3Jr
-LCB5b3UgY291bGQgY29tcGlsZSB5b3VyIGtlcm5lbCB3aXRoIGdwcm9mIHN1cHBvcnQuCj4KPiBU
-aGFua3MsCj4gRnJhbmNpcwo+Cj4KPiBPbiBUdWUsIEZlYiAxNywgMjAxNSBhdCAzOjM4IEFNLCB6
-aGVueXUucmVuIDx6aGVueXUucmVuQGFsaXl1bi5jb20+IHdyb3RlOgo+PiBIaSxGcmFuY2lzCj4+
-ICAgIEluIGZhY3QsIEkgd2FudCB0byB0cmFjZSBhbGwga2VybmVsIGZ1bmN0aW9ucyByZWxhdGVk
-IHRvIHNvbWUKPj4gYmVoYXZpb3IuRm9yIGV4YW1wbGUsSSB3cml0ZSgpICBhbmQgaXQgcmV0dXJu
-cyAxMDBtcyBsYXRlciAsc28gIEkgd2FudCB0bwo+PiBrbm93IHdoaWNoIGtlcm5lbCAgZnVuY3Rp
-b24gaXMgdG9vIHNsb3cuIEluIHRoaXMgY2FzZSxJIGNhbiB1c2UgZnVuY3Rpb24KPj4gdHJhY2Vy
-IHRvIHRyYWNlICJhbGwiIGtlcm5lbCBmdW5jdGlvbiBpbiB0aGUgd3JpdGUoKSB0aW1lIHdpbmRv
-dy5Ib3dldmVyLEkKPj4gd2FudCB0byBrbm93IGlzIGl0IHBvc3NpYmxlIHRoYXQgbHR0bmcgY2Fu
-IGJlIHVzZWZ1bCBpbiB0aGlzIGNhc2UuCj4+Cj4+IFRoYW5rcwo+PiB6aGVueXUucmVuCj4+Cj4+
-Cj4+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLQo+PiDlj5Hku7bkurrvvJpGcmFuY2lzIERlc2xhdXJpZXJzIDxmcmFuY2lz
-LmRlc2xhdXJpZXJzQG1haWwudXRvcm9udG8uY2E+Cj4+IOWPkemAgeaXtumXtO+8mjIwMTXlubQy
-5pyIMTfml6Uo5pif5pyf5LqMKSAwMDo1Mwo+PiDmlLbku7bkurrvvJp6aGVueXUucmVuIDx6aGVu
-eXUucmVuQGFsaXl1bi5jb20+Cj4+IOaKhOOAgOmAge+8mmx0dG5nLWRldiA8bHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZz4KPj4g5Li744CA6aKY77yaUmU6IFtsdHRuZy1kZXZdIENhbiBsdHRuZyBz
-dXBwb3J0IGtlcm5lbCBmdW5jdGlvbiB0cmFjZXIKPj4KPj4gSGkgWmhlbnl1LAo+Pgo+PiBJZiBJ
-IHVuZGVyc3RhbmRkIHlvdXIgcXVlc3Rpb24gY29ycmVjdGx5LCBJIGNhbiB0aGluayBvZiB0d28g
-d2F5cyB0bwo+PiB0cmFjZSBhbiBhcmJpdHJhcnkga2VybmVsIGZ1bmN0aW9uLiBGaXJzdCwgeW91
-IGNhbiBob29rIHRoZSB0cmFjZXIgb24KPj4gYSBkeW5hbWljIHByb2JlWzFdIHVzaW5nIHNvbWV0
-aGluZyBsaWtlIHRoaXM6Cj4+ICJsdHRuZyBlbmFibGUtZXZlbnQgY3VzdG9tRXZlbnROYW1lIC1r
-IC0tcHJvYmUga2VybmVsRnVuY3Rpb25OYW1lIi4KPj4gWW91IGNhbiBhbHNvIGhvb2sgdGhlIHRy
-YWNlciBvbiBib3RoIGVudHJ5IGFuZCBleGl0IG9mIGEgZnVuY3Rpb24KPj4gdXNpbmcgIi0tZnVu
-Y3Rpb24iIGluc3RlYWQgb2YgIi0tcHJvYmUiLgo+PiBUbyBsaXN0IHlvdXIga2VybmVsIHN5bWJv
-bHMgdXNlICJjYXQgL3Byb2Mva2FsbHN5bXMiCj4+IFNlY29uZCwgeW91IGNhbiBjcmVhdGUgY3Vz
-dG9tIGtlcm5lbCB0cmFjZXBvaW50cyBhbmQgY29tcGlsZSB0aGVtIGluCj4+IHlvdSBrZXJuZWwu
-IEhhdmUgYSBsb29rIGF0IHRoZSBvbmxpbmUgZG9jdW1lbnRhdGlvbiBbMl0uCj4+Cj4+IERvbid0
-IGhlc2l0YXRlIHRvIGV4cGxhaW4gZnVydGhlciBpZiB0aGlzIGRvZXNuJ3QgYW5zd2VyIHlvdXIg
-cXVlc3Rpb24uCj4+Cj4+IENoZWVycyEKPj4gRnJhbmNpcwo+Pgo+PiBbMV0KPj4gaHR0cDovL2dp
-dC5sdHRuZy5vcmcvP3A9bHR0bmctdG9vbHMuZ2l0O2E9YmxvYjtmPWRvYy9xdWlja3N0YXJ0LnR4
-dDtoPTAxOGMyN2IyYjkzOWVmN2NkMDc1MjU1ZmQwMWJjZmQ4YjJiMjFiMWU7aGI9SEVBRCNsOTMK
-Pj4gWzJdIGh0dHA6Ly9sdHRuZy5vcmcvZG9jcy8jZG9jLWluc3RydW1lbnRpbmctbGludXgta2Vy
-bmVsLWl0c2VsZgo+Pgo+PiBPbiBUaHUsIEZlYiAxMiwgMjAxNSBhdCA3OjQ5IFBNLCB6aGVueXUu
-cmVuIDx6aGVueXUucmVuQGFsaXl1bi5jb20+IHdyb3RlOgo+Pj4gSGksCj4+Pgo+Pj4gSXQncyB3
-ZWxsIGtub3duIHRoYXQgbHR0bmcgY2FuIG1ha2UgdXNlIG9mIGtlcm5lbCB0cmFjZXBvaW50cyB0
-byBkbyBibG9jawo+Pj4gdHJhY2luZyAsc3lzdGVtIGNhbGwgdHJhY2luZyBldGMuSXMgaXQgcG9z
-c2libGUgdGhhdCBsdHRuZyBjYW4gcHJvZHVjZQo+Pj4gYW55dGhpbmcgbGlrZSBrZXJuZWwgZnVu
-Y3Rpb24gdHJhY2VyIGRvZXM/Cj4+Pgo+Pj4gVGhhbmtzCj4+PiB6aGVueXUucmVuCj4+Pgo+Pj4g
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+IGx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKPj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4+IGh0dHA6
-Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
-aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5v
-cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============0149228897==
+Content-Type: multipart/alternative; boundary=001a1134ee6e971552050f7668a2
+
+--001a1134ee6e971552050f7668a2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Merged, thanks!
+
+J=C3=A9r=C3=A9mie
+
+On Sat, Feb 14, 2015 at 1:49 PM, Simon Marchi <simon.marchi@polymtl.ca>
+wrote:
+
+> When building out of tree, make check fails because the "tests" file is
+> not found.
+>
+> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+> ---
+>  tests/Makefile.am | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tests/Makefile.am b/tests/Makefile.am
+> index 8d84b16..2e307f4 100644
+> --- a/tests/Makefile.am
+> +++ b/tests/Makefile.am
+> @@ -21,4 +21,4 @@ clean-local:
+>         fi
+>
+>  check-am:
+> -       ./run.sh tests
+> +       ./run.sh $(srcdir)/tests
+> --
+> 2.3.0
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+
+
+
+--=20
+J=C3=A9r=C3=A9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
+
+--001a1134ee6e971552050f7668a2
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Merged, thanks!<div><br></div><div>J=C3=A9r=C3=A9mie</div>=
+</div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Sat, Feb=
+ 14, 2015 at 1:49 PM, Simon Marchi <span dir=3D"ltr">&lt;<a href=3D"mailto:=
+simon.marchi@polymtl.ca" target=3D"_blank">simon.marchi@polymtl.ca</a>&gt;<=
+/span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8=
+ex;border-left:1px #ccc solid;padding-left:1ex">When building out of tree, =
+make check fails because the &quot;tests&quot; file is<br>
+not found.<br>
+<br>
+Signed-off-by: Simon Marchi &lt;<a href=3D"mailto:simon.marchi@polymtl.ca">=
+simon.marchi@polymtl.ca</a>&gt;<br>
+---<br>
+=C2=A0tests/Makefile.am | 2 +-<br>
+=C2=A01 file changed, 1 insertion(+), 1 deletion(-)<br>
+<br>
+diff --git a/tests/Makefile.am b/tests/Makefile.am<br>
+index 8d84b16..2e307f4 100644<br>
+--- a/tests/Makefile.am<br>
++++ b/tests/Makefile.am<br>
+@@ -21,4 +21,4 @@ clean-local:<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
+<br>
+=C2=A0check-am:<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0./run.sh tests<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0./run.sh $(srcdir)/tests<br>
+<span class=3D"HOEnZb"><font color=3D"#888888">--<br>
+2.3.0<br>
+<br>
+<br>
+_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
+br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+br>
+</font></span></blockquote></div><br><br clear=3D"all"><div><br></div>-- <b=
+r><div class=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS In=
+c.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http://www.effi=
+cios.com</a></div>
+</div>
+
+--001a1134ee6e971552050f7668a2--
+
+
+--===============0149228897==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0149228897==--
