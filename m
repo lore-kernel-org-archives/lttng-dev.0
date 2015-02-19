@@ -1,17 +1,24 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: Limited event types displayed.
-Date: Thu, 19 Feb 2015 13:52:51 -0500
-Message-ID: <54E63103.2060207__47041.6763484993$1424372054$gmane$org@voxpopuli.im>
-References: <8369DAE2C5B8814998E89CE414A915381F6B7DFB@IT-Mailbox3.TTPGroup.com>
+From: Francis Deslauriers <francis.deslauriers@mail.utoronto.ca>
+Subject: Re: =?utf-8?b?562U5aSN77ya562U5aSN77yaIENhbiBsdHRuZyBz?=
+	=?utf-8?q?upport_kernel_function_tracer?=
+Date: Thu, 19 Feb 2015 14:14:44 -0500
+Message-ID: <CADcCL0hjcJ0mgaFJLCpjfcWErZhzX6fndFw9rOKBCLgiTepKEg__39572.9416203268$1424373379$gmane$org@mail.gmail.com>
+References: <5a55c10f-2991-4d2c-ae9f-71bf32a96867@aliyun.com>
+ <0ecb9733-2e6d-4778-a764-48e139d116f0@aliyun.com>
+ <bde879bd-bc81-40a0-98ae-705947c3f5b6@aliyun.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.181])
+Received: from mail-bn1on0061.outbound.protection.outlook.com ([157.56.110.61]
+ helo=na01-bn1-obe.outbound.protection.outlook.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <alexmonthy@voxpopuli.im>) id 1YOWDZ-0004Xc-OW
- for lttng-dev@lists.lttng.org; Thu, 19 Feb 2015 13:53:02 -0500
-In-Reply-To: <8369DAE2C5B8814998E89CE414A915381F6B7DFB@IT-Mailbox3.TTPGroup.com>
+ (envelope-from <francis.deslauriers@mail.utoronto.ca>)
+ id 1YOWZI-0004h0-PY
+ for lttng-dev@lists.lttng.org; Thu, 19 Feb 2015 14:15:26 -0500
+Received: by mail-qa0-f48.google.com with SMTP id dc16so7713830qab.7
+ for <lttng-dev@lists.lttng.org>; Thu, 19 Feb 2015 11:15:04 -0800 (PST)
+In-Reply-To: <bde879bd-bc81-40a0-98ae-705947c3f5b6@aliyun.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,46 +27,73 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Neil Bryan <Neil.Bryan@ttp.com>
+To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-On 02/19/2015 06:31 AM, Neil Bryan wrote:
-> Hello Forum,
->
-> Now that I have got LTTng built, I have tried some preliminary tests. Unfortunately the results are not quite as I expect.
-> I have used LTTng previously, although I did not perform the kernel integration. Using Eclipse TFM I could see various processes in the Control Flow tab.
-> With low-level kernel events (interrupts, sched_wakeup etc) causing threads to run or remain blocked. On my system I only see event data in the Histogram view and in the Statistics tab.
-> Something has not been enabled in my build (tracepoints?) and I only have a limited amount of instrumentation. My Control Flow tab is blank and I don't see any driver threads or stuff
-> that I am interested. Any clues as to what is missing?
-
-If you import a kernel trace as a "Generic CTF Trace", the viewer will 
-only use information common to all CTF traces, which is not much. To get 
-the kernel-specific views and anlaysis working, it needs to be imported 
-as a "LTTng kernel trace". But then you said this was not working:
-
-> I imported this into eclipse as a Generic CTF Trace. Using LTTng kernel trace gave me a Validation Failed error.
-
-Which version of LTTng are you using? As mentioned in the other thread, 
-you should make sure to use a recent version. To validate kernel traces, 
-we verify that the trace's metadata (in the "metadata" file) contains 
-"domain = kernel" in its environment. I don't remember in which version 
-exactly this was added, and I'm not sure it was present in LTTng 2.0.
-
-> I have checked the plug-ins and features on eclipse (Version: Kepler Service Release 2
-> Build id: 20140224-0627) and all looks sensible.
-
-This is also quite old ;) The LTTng integration plugins for Eclipse have 
-recently moved to the Trace Compass project [1]. You can find the latest 
-versions on the Downloads page [2], both for the stand-alone program, 
-and the plugins to add to an existing Eclipse installation.
-
-
-Cheers,
-Alexandre
-
-
-[1] http://www.eclipse.org/tracecompass
-[2] http://projects.eclipse.org/projects/tools.tracecompass/downloads
+WW91IGNhbiB1c2UgdGhlIHNuYXBzaG90IGZlYXR1cmUgdG8gc3RhcnQgcmVjb3JkaW5nIHdoZW5l
+dmVyIHlvdQp3aXRuZXNzIGEgc2lnbmlmaWNhbnQgbGF0ZW5jeVsxXS4KWW91IGNhbiB1c2UgdGhl
+IHN5c3RlbSgpIGZ1bmN0aW9uIHRvIHRyaWdnZXIgYSByZWNvcmQgZnJvbSB5b3VyIGFwcC4KZS5n
+LiBzeXN0ZW0oImx0dG5nIHNuYXBzaG90IHJlY29yZCIpOwoKWzFdIGh0dHA6Ly9sdHRuZy5vcmcv
+ZG9jcy8jZG9jLXRha2luZy1hLXNuYXBzaG90CgpJIGhvcGUgaXQgaGVscHMuCgpGcmFuY2lzCgpP
+biBXZWQsIEZlYiAxOCwgMjAxNSBhdCAxOjI5IEFNLCB6aGVueXUucmVuIDx6aGVueXUucmVuQGFs
+aXl1bi5jb20+IHdyb3RlOgo+PiBJIHRoaW5rIHRoYXQgbWlnaHQgYmUgYSB1c2VjYXNlIGZvciBh
+IHByb2ZpbGVyIHJhdGhlciB0aGFuIGEgdXNlY2FzZSBmb3IgYSB0cmFjZXIKPgo+IEkgYW0gc29y
+cnkgdGhhdCBJIGhhdmUgbWlzbGVkIHlvdS5Ob3QgYWxsIHdyaXRlIGluc3RhbmNlcyhhIGNoYW5j
+ZSBpbiBhIG1pbGxpb24pIHRha2UgMTAwbXMrIHRvIGNvbXBsZXRlLlNvIEkgaGF2ZSB0byB0cmFj
+ZSBhbGwgd3JpdGUgaW5zdGFuY2VzIHRvIGNhcHR1cmUgdGhlIGRldmlhbnQgb25lcy4KPgo+IFRo
+YW5rcwo+IHpoZW55dS5yZW4KPgo+Cj4KPgo+Cj4KPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiDlj5Hku7bkurrvvJpG
+cmFuY2lzIERlc2xhdXJpZXJzIDxmcmFuY2lzLmRlc2xhdXJpZXJzQG1haWwudXRvcm9udG8uY2E+
+Cj4KPgo+IOWPkemAgeaXtumXtO+8mjIwMTXlubQy5pyIMTfml6Uo5pif5pyf5LqMKSAyMzowOQo+
+IOaUtuS7tuS6uu+8mnpoZW55dS5yZW4gPHpoZW55dS5yZW5AYWxpeXVuLmNvbT4KPiDmioTjgIDp
+gIHvvJpsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+Pgo+IOS4u+OAgOmimO+8mlJlOiDnrZTlpI3vvJpbbHR0bmctZGV2XSBDYW4gbHR0bmcgc3VwcG9y
+dCBrZXJuZWwgZnVuY3Rpb24gdHJhY2VyCj4KPgo+IENDaW5nIGx0dG5nLWRldiBiYWNrIGluIHRo
+ZSB0aHJlYWQuCj4KPiBJIG1pZ2h0IGJlIHdyb25nIGJ1dCBJIHRoaW5rIHRoYXQgbWlnaHQgYmUg
+YSB1c2VjYXNlIGZvciBhIHByb2ZpbGVyCj4gcmF0aGVyIHRoYW4gYSB1c2VjYXNlIGZvciBhIHRy
+YWNlci4gQ2FuIHNvbWVvbmUgZWxzZSBjb25maXJtPwo+IFRvIGRvIHRoYXQga2luZCBvZiB3b3Jr
+LCB5b3UgY291bGQgY29tcGlsZSB5b3VyIGtlcm5lbCB3aXRoIGdwcm9mIHN1cHBvcnQuCj4KPiBU
+aGFua3MsCj4gRnJhbmNpcwo+Cj4KPiBPbiBUdWUsIEZlYiAxNywgMjAxNSBhdCAzOjM4IEFNLCB6
+aGVueXUucmVuIDx6aGVueXUucmVuQGFsaXl1bi5jb20+IHdyb3RlOgo+PiBIaSxGcmFuY2lzCj4+
+ICAgIEluIGZhY3QsIEkgd2FudCB0byB0cmFjZSBhbGwga2VybmVsIGZ1bmN0aW9ucyByZWxhdGVk
+IHRvIHNvbWUKPj4gYmVoYXZpb3IuRm9yIGV4YW1wbGUsSSB3cml0ZSgpICBhbmQgaXQgcmV0dXJu
+cyAxMDBtcyBsYXRlciAsc28gIEkgd2FudCB0bwo+PiBrbm93IHdoaWNoIGtlcm5lbCAgZnVuY3Rp
+b24gaXMgdG9vIHNsb3cuIEluIHRoaXMgY2FzZSxJIGNhbiB1c2UgZnVuY3Rpb24KPj4gdHJhY2Vy
+IHRvIHRyYWNlICJhbGwiIGtlcm5lbCBmdW5jdGlvbiBpbiB0aGUgd3JpdGUoKSB0aW1lIHdpbmRv
+dy5Ib3dldmVyLEkKPj4gd2FudCB0byBrbm93IGlzIGl0IHBvc3NpYmxlIHRoYXQgbHR0bmcgY2Fu
+IGJlIHVzZWZ1bCBpbiB0aGlzIGNhc2UuCj4+Cj4+IFRoYW5rcwo+PiB6aGVueXUucmVuCj4+Cj4+
+Cj4+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLQo+PiDlj5Hku7bkurrvvJpGcmFuY2lzIERlc2xhdXJpZXJzIDxmcmFuY2lz
+LmRlc2xhdXJpZXJzQG1haWwudXRvcm9udG8uY2E+Cj4+IOWPkemAgeaXtumXtO+8mjIwMTXlubQy
+5pyIMTfml6Uo5pif5pyf5LqMKSAwMDo1Mwo+PiDmlLbku7bkurrvvJp6aGVueXUucmVuIDx6aGVu
+eXUucmVuQGFsaXl1bi5jb20+Cj4+IOaKhOOAgOmAge+8mmx0dG5nLWRldiA8bHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZz4KPj4g5Li744CA6aKY77yaUmU6IFtsdHRuZy1kZXZdIENhbiBsdHRuZyBz
+dXBwb3J0IGtlcm5lbCBmdW5jdGlvbiB0cmFjZXIKPj4KPj4gSGkgWmhlbnl1LAo+Pgo+PiBJZiBJ
+IHVuZGVyc3RhbmRkIHlvdXIgcXVlc3Rpb24gY29ycmVjdGx5LCBJIGNhbiB0aGluayBvZiB0d28g
+d2F5cyB0bwo+PiB0cmFjZSBhbiBhcmJpdHJhcnkga2VybmVsIGZ1bmN0aW9uLiBGaXJzdCwgeW91
+IGNhbiBob29rIHRoZSB0cmFjZXIgb24KPj4gYSBkeW5hbWljIHByb2JlWzFdIHVzaW5nIHNvbWV0
+aGluZyBsaWtlIHRoaXM6Cj4+ICJsdHRuZyBlbmFibGUtZXZlbnQgY3VzdG9tRXZlbnROYW1lIC1r
+IC0tcHJvYmUga2VybmVsRnVuY3Rpb25OYW1lIi4KPj4gWW91IGNhbiBhbHNvIGhvb2sgdGhlIHRy
+YWNlciBvbiBib3RoIGVudHJ5IGFuZCBleGl0IG9mIGEgZnVuY3Rpb24KPj4gdXNpbmcgIi0tZnVu
+Y3Rpb24iIGluc3RlYWQgb2YgIi0tcHJvYmUiLgo+PiBUbyBsaXN0IHlvdXIga2VybmVsIHN5bWJv
+bHMgdXNlICJjYXQgL3Byb2Mva2FsbHN5bXMiCj4+IFNlY29uZCwgeW91IGNhbiBjcmVhdGUgY3Vz
+dG9tIGtlcm5lbCB0cmFjZXBvaW50cyBhbmQgY29tcGlsZSB0aGVtIGluCj4+IHlvdSBrZXJuZWwu
+IEhhdmUgYSBsb29rIGF0IHRoZSBvbmxpbmUgZG9jdW1lbnRhdGlvbiBbMl0uCj4+Cj4+IERvbid0
+IGhlc2l0YXRlIHRvIGV4cGxhaW4gZnVydGhlciBpZiB0aGlzIGRvZXNuJ3QgYW5zd2VyIHlvdXIg
+cXVlc3Rpb24uCj4+Cj4+IENoZWVycyEKPj4gRnJhbmNpcwo+Pgo+PiBbMV0KPj4gaHR0cDovL2dp
+dC5sdHRuZy5vcmcvP3A9bHR0bmctdG9vbHMuZ2l0O2E9YmxvYjtmPWRvYy9xdWlja3N0YXJ0LnR4
+dDtoPTAxOGMyN2IyYjkzOWVmN2NkMDc1MjU1ZmQwMWJjZmQ4YjJiMjFiMWU7aGI9SEVBRCNsOTMK
+Pj4gWzJdIGh0dHA6Ly9sdHRuZy5vcmcvZG9jcy8jZG9jLWluc3RydW1lbnRpbmctbGludXgta2Vy
+bmVsLWl0c2VsZgo+Pgo+PiBPbiBUaHUsIEZlYiAxMiwgMjAxNSBhdCA3OjQ5IFBNLCB6aGVueXUu
+cmVuIDx6aGVueXUucmVuQGFsaXl1bi5jb20+IHdyb3RlOgo+Pj4gSGksCj4+Pgo+Pj4gSXQncyB3
+ZWxsIGtub3duIHRoYXQgbHR0bmcgY2FuIG1ha2UgdXNlIG9mIGtlcm5lbCB0cmFjZXBvaW50cyB0
+byBkbyBibG9jawo+Pj4gdHJhY2luZyAsc3lzdGVtIGNhbGwgdHJhY2luZyBldGMuSXMgaXQgcG9z
+c2libGUgdGhhdCBsdHRuZyBjYW4gcHJvZHVjZQo+Pj4gYW55dGhpbmcgbGlrZSBrZXJuZWwgZnVu
+Y3Rpb24gdHJhY2VyIGRvZXM/Cj4+Pgo+Pj4gVGhhbmtzCj4+PiB6aGVueXUucmVuCj4+Pgo+Pj4g
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+IGx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKPj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4+IGh0dHA6
+Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
+aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5v
+cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
