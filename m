@@ -1,17 +1,20 @@
-From: Chidhu R <chid1989@gmail.com>
-Subject: Error opening shm /lttng-ust-wait-5-0 (in
-	get_wait_shm() at lttng-ust-comm.c:958)
-Date: Thu, 19 Feb 2015 14:46:27 -0800
-Message-ID: <CAL1ZhOOW7yuQMWMvavjUz=+hZhOgE=P8CHRfDAhMTo6hZTyO7A__11796.640061266$1424386097$gmane$org@mail.gmail.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH babeltrace] Fix: test: add automake variable for
+	test trace folders copy on oot build
+Date: Fri, 20 Feb 2015 10:55:25 -0500
+Message-ID: <1424447725-8813-2-git-send-email-jonathan.rajotte-julien__11963.8474927799$1424447855$gmane$org@efficios.com>
+References: <CAFXXi0nY4x+bsv9=d2e6CgpNxB-MQQJ+BNNbA=W2-c1J0pXJ2Q@mail.gmail.com>
+ <1424447725-8813-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2043665806=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f173.google.com ([209.85.217.173])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <chid1989@gmail.com>) id 1YOZsH-0005hF-Fd
- for lttng-dev@lists.lttng.org; Thu, 19 Feb 2015 17:47:17 -0500
-Received: by lbvn10 with SMTP id n10so2895300lbv.6
- for <lttng-dev@lists.lttng.org>; Thu, 19 Feb 2015 14:47:07 -0800 (PST)
+ (envelope-from <jonathan.rajotte-julien@efficios.com>)
+ id 1YOpvw-0002OG-9F
+ for lttng-dev@lists.lttng.org; Fri, 20 Feb 2015 10:56:08 -0500
+In-Reply-To: <1424447725-8813-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,57 +24,49 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
+Cc: thundersim@gmail.comi
 List-Id: lttng-dev@lists.lttng.org
 
---===============2043665806==
-Content-Type: multipart/alternative; boundary=089e011767f92f1545050f78b744
+Reported-by: Simon Marchi <simon.marchi@polymtl.ca>
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+ tests/Makefile.am | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
---089e011767f92f1545050f78b744
-Content-Type: text/plain; charset=UTF-8
-
-Hello,
-
-I am getting an error (mentioned in the subject) while starting an
-application which I wanted to trace. I am using the following  version of
-LTTng. *lttng (LTTng Trace Control) 2.5.0 - Fumisterie*
-
-I tried to look the web if some of them have previously faced this error
-and found this one.
-
-https://bugs.launchpad.net/ubuntu/+source/ust/+bug/1404302
-
-Can you please help solve this issue. I am using 3.15.10 LK.
-
-Thanks
-Chid
-
---089e011767f92f1545050f78b744
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello,=C2=A0<div><br></div><div>I am getting an error (men=
-tioned in the subject) while starting an application which I wanted to trac=
-e. I am using the following =C2=A0version of LTTng.=C2=A0<u>lttng (LTTng Tr=
-ace Control) 2.5.0 - Fumisterie</u></div><div><br></div><div>I tried to loo=
-k the web if some of them have previously faced this error and found this o=
-ne.=C2=A0</div><div><br></div><div><a href=3D"https://bugs.launchpad.net/ub=
-untu/+source/ust/+bug/1404302">https://bugs.launchpad.net/ubuntu/+source/us=
-t/+bug/1404302</a>=C2=A0<br></div><div><br></div><div>Can you please help s=
-olve this issue. I am using 3.15.10 LK.</div><div><br></div><div>Thanks</di=
-v><div>Chid</div></div>
-
---089e011767f92f1545050f78b744--
-
-
---===============2043665806==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2043665806==--
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index 2e307f4..03d8b12 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -2,7 +2,9 @@ SUBDIRS = utils bin lib
+ 
+ EXTRA_DIST = ctf-traces/** tests
+ 
+-SCRIPT_LIST = run.sh
++SCRIPT_LIST = run.sh tests
++
++TRACE_FOLDER = ctf-traces
+ 
+ dist_noinst_SCRIPTS = $(SCRIPT_LIST)
+ 
+@@ -11,6 +13,9 @@ all-local:
+ 		for script in $(SCRIPT_LIST); do \
+ 			cp -f $(srcdir)/$$script $(builddir); \
+ 		done; \
++		for script in $(TRACE_FOLDER); do \
++			cp -a $(srcdir)/$$script $(builddir); \
++		done; \
+ 	fi
+ 
+ clean-local:
+@@ -18,6 +23,9 @@ clean-local:
+ 		for script in $(SCRIPT_LIST); do \
+ 			rm -f $(builddir)/$$script; \
+ 		done; \
++		for script in $(TRACE_FOLDER); do \
++			rm -rf $(builddir)/$$script; \
++		done; \
+ 	fi
+ 
+ check-am:
+-- 
+1.9.1
