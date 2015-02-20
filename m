@@ -1,16 +1,19 @@
-From: Anand Neeli <anand.neeli@gmail.com>
-Subject: adding new channel
-Date: Sat, 21 Feb 2015 00:30:02 +0530
-Message-ID: <CAM5kDqydAEebJm0_MotZ0xTAMJo51j+Zxxw5-skppaJYcN6g0Q__42857.051784131$1424458861$gmane$org@mail.gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: Re: adding new channel
+Date: Fri, 20 Feb 2015 14:05:06 -0500
+Message-ID: <CAB4xu_3QRDuKefYVY4Bc_eTs5tnmaYDb4+Um1Rf3t2zYtZO1jQ__33961.3507771448$1424459184$gmane$org@mail.gmail.com>
+References: <CAM5kDqydAEebJm0_MotZ0xTAMJo51j+Zxxw5-skppaJYcN6g0Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2113310650=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f47.google.com ([74.125.82.47])
+Received: from mail-la0-f51.google.com ([209.85.215.51])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <anand.neeli@gmail.com>) id 1YOso3-0003OT-Vu
- for lttng-dev@lists.lttng.org; Fri, 20 Feb 2015 14:00:10 -0500
-Received: by mail-wg0-f47.google.com with SMTP id x12so14851683wgg.6
- for <lttng-dev@lists.lttng.org>; Fri, 20 Feb 2015 11:00:02 -0800 (PST)
+ (envelope-from <eeppeliteloop@gmail.com>) id 1YOstS-0003Rd-5P
+ for lttng-dev@lists.lttng.org; Fri, 20 Feb 2015 14:05:44 -0500
+Received: by lams18 with SMTP id s18so8028372lam.13
+ for <lttng-dev@lists.lttng.org>; Fri, 20 Feb 2015 11:05:36 -0800 (PST)
+In-Reply-To: <CAM5kDqydAEebJm0_MotZ0xTAMJo51j+Zxxw5-skppaJYcN6g0Q@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,50 +22,47 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Anand Neeli <anand.neeli@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============2113310650==
-Content-Type: multipart/alternative; boundary=f46d0418257ce6e425050f89a8f2
+On Fri, Feb 20, 2015 at 2:00 PM, Anand Neeli <anand.neeli@gmail.com> wrote:
+> Hi All,
+> Is adding a new channel to an existing(running) session supported?
 
---f46d0418257ce6e425050f89a8f2
-Content-Type: text/plain; charset=UTF-8
+No.
+>
+> i get following error when doing this.
+> Error: Channel myc5: Tracing already started
+>
+> Is there any way to add channels on the fly?
 
-Hi All,
-Is adding a new channel to an existing(running) session supported?
+No. LTTng's documentation [1] states:
 
-i get following error when doing this.
-Error: Channel myc5: Tracing already started
+    Note: Because of a current limitation, all channels must be
+    created prior to beginning tracing in a given tracing session,
+    i.e. before the first time you do lttng start.
 
-Is there any way to add channels on the fly?
-I'm using 2.4.1 version
+    Since a channel is automatically created by enable-event
+    only for the specified domain, you cannot, for example, enable
+    a kernel domain event, start tracing and then enable a user
+    space domain event because no user space channel exists
+    yet and it's too late to create one.
 
-Thanks,
-Anand Neeli
+    For this reason, make sure to configure your channels
+    properly before starting the tracers for the first time!
 
---f46d0418257ce6e425050f89a8f2
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Phil
 
-<div dir=3D"ltr">Hi All,<div>Is adding a new channel to an existing(running=
-) session supported?</div><div><br></div><div>i get following error when do=
-ing this.</div><div>Error: Channel myc5: Tracing already started</div><div>=
-<br></div><div>Is there any way to add channels on the fly?</div><div>I&#39=
-;m using 2.4.1 version</div><div><br></div><div>Thanks,</div><div>Anand Nee=
-li</div></div>
+[1] http://lttng.org/docs/#doc-enabling-disabling-channels
 
---f46d0418257ce6e425050f89a8f2--
-
-
---===============2113310650==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2113310650==--
+> I'm using 2.4.1 version
+>
+> Thanks,
+> Anand Neeli
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
