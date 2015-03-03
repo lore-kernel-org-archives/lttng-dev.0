@@ -1,16 +1,22 @@
-From: Divya Vyas <dvyas@mvista.com>
-Subject: LTTng timestamp from NTP ( Network transfer protocol)
-Date: Tue, 3 Mar 2015 12:40:18 +0530
-Message-ID: <CA+=dQ-_436i0B1vOs=tKMRuK89jd=wHEsA=7N0uOEgEG1nYBVg__6856.04667892239$1425366714$gmane$org@mail.gmail.com>
+From: Jeff Layton <jlayton@poochiereds.net>
+Subject: URCU and pthread mutex/cond variable hang
+Date: Tue, 3 Mar 2015 15:40:14 -0500
+Message-ID: <20150303154014.6a166f6e__14790.2805860669$1425415288$gmane$org@tlielax.poochiereds.net>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0908784296=="
+Content-Type: multipart/mixed; boundary="MP_/UPM1ZePaAxp0v9nkHZOS6Gp"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f182.google.com ([209.85.212.182])
+Received: from mail-qa0-f51.google.com ([209.85.216.51])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dvyas@mvista.com>) id 1YSgyb-0003kZ-Cj
- for lttng-dev@lists.lttng.org; Tue, 03 Mar 2015 02:10:50 -0500
-Received: by widex7 with SMTP id ex7so20366431wid.4
- for <lttng-dev@lists.lttng.org>; Mon, 02 Mar 2015 23:10:39 -0800 (PST)
+ (envelope-from <jlayton@poochiereds.net>) id 1YStc8-0007nx-IG
+ for lttng-dev@lists.lttng.org; Tue, 03 Mar 2015 15:40:28 -0500
+Received: by mail-qa0-f51.google.com with SMTP id k15so4013846qaq.10
+ for <lttng-dev@lists.lttng.org>; Tue, 03 Mar 2015 12:40:19 -0800 (PST)
+Received: from tlielax.poochiereds.net
+ ([2606:a000:1105:196:3a60:77ff:fe93:a95d])
+ by mx.google.com with ESMTPSA id v65sm1044630qgd.20.2015.03.03.12.40.18
+ for <lttng-dev@lists.lttng.org>
+ (version=TLSv1.2 cipher=ECDHE-RSA-RC4-SHA bits=128/128);
+ Tue, 03 Mar 2015 12:40:18 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,40 +25,113 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0908784296==
-Content-Type: multipart/alternative; boundary=089e0122896c3cb57005105d08b7
+--MP_/UPM1ZePaAxp0v9nkHZOS6Gp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
---089e0122896c3cb57005105d08b7
-Content-Type: text/plain; charset=UTF-8
+I've been using urcu to develop some userland code, and I've run into a
+problem that I don't quite understand. If I register a thread and then
+have that thread block on a pthread condition variable, then it seems
+to cause synchronize_rcu in another thread to hang.
 
-Hi,
+I've attached a testcase that demonstrates the problem. You have to
+build it and link it against -lpthread and -lurcu-qsbr:
 
-I am looking at synchronization of traces from guest and host according to
-timestamps.
+    $ gcc -Wall -o ./urcu_hang -lpthread -lurcu-qsbr urcu_hang.c
 
-Does LTTng uses timestamps generated from NTP (Network transfer protocol) ?
-How I can use NTP to synchronize the timestamps of guest and host ?
+...it will run fine. If you comment out the rcu_thread_offline/online
+calls though, it will hang.
 
-Thanks,
-Divya Vyas
+Why? Is this expected behavior or a bug in urcu?
 
---089e0122896c3cb57005105d08b7
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Thanks in advance!
+-- 
+Jeff Layton <jlayton@poochiereds.net>
 
-<div dir=3D"ltr"><div><div><div><div><div>Hi,<br><br></div>I am looking at =
-synchronization of traces from guest and host according to timestamps. <br>=
-<br></div>Does LTTng uses timestamps generated from NTP (Network transfer p=
-rotocol) ? <br></div>How I can use NTP to synchronize the timestamps of gue=
-st and host ?<br><br></div>Thanks,<br></div>Divya Vyas<br></div>
+--MP_/UPM1ZePaAxp0v9nkHZOS6Gp
+Content-Type: text/x-c++src
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=urcu_hang.c
 
---089e0122896c3cb57005105d08b7--
+#include <urcu-qsbr.h>
+#include <stdio.h>
+#include <errno.h>
+#include <pthread.h>
+#include <stdbool.h>
 
+static bool			done = false;
+static pthread_mutex_t		mtx;
+static pthread_cond_t		cond;
 
---===============0908784296==
+static void *
+test_rcu(void __attribute__((unused)) *foo)
+{
+	rcu_register_thread();
+	rcu_read_lock();
+	rcu_read_unlock();
+	synchronize_rcu();
+	rcu_unregister_thread();
+
+	pthread_mutex_lock(&mtx);
+	done = true;
+	pthread_cond_signal(&cond);
+        pthread_mutex_unlock(&mtx);
+
+	return NULL;
+}
+
+int
+main(void)
+{
+	int 			ret;
+	pthread_t		tid;
+	pthread_attr_t		attr;
+
+	rcu_register_thread();
+
+	ret = pthread_mutex_init(&mtx, NULL);
+	if (ret)
+		return 1;
+
+	pthread_cond_init(&cond, NULL);
+	if (ret)
+		return 1;
+
+	ret = pthread_attr_init(&attr);
+	if (ret)
+		return 1;
+
+	ret = pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+	if (ret)
+		return 1;
+
+	ret = pthread_create(&tid, &attr, test_rcu, NULL);
+	if (ret)
+		return 1;
+
+	rcu_quiescent_state();
+
+	/*
+	 * If you comment out the offline/online below, then the
+	 * synchronize_rcu command in test_rcu will hang. Why?
+	 */
+//	rcu_thread_offline();
+	pthread_mutex_lock(&mtx);
+	while(!done)
+		pthread_cond_wait(&cond, &mtx);
+	pthread_mutex_unlock(&mtx);
+//	rcu_thread_online();
+
+	rcu_unregister_thread();
+
+	return 0;
+}
+
+--MP_/UPM1ZePaAxp0v9nkHZOS6Gp
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -63,4 +142,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0908784296==--
+--MP_/UPM1ZePaAxp0v9nkHZOS6Gp--
