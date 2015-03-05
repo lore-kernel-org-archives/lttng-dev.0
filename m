@@ -1,18 +1,18 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+From: Neil Bryan <Neil.Bryan@ttp.com>
 Subject: Re: LTTng 2.6.0: Corrupt metadata?
-Date: Thu, 5 Mar 2015 11:50:21 -0500
-Message-ID: <CA+jJMxtSeBmaaRf0_8_PUDnH-XCFtd4YhqNN6hP5AouwqEJdLQ__17654.5295319103$1425574314$gmane$org@mail.gmail.com>
+Date: Thu, 5 Mar 2015 16:56:53 +0000
+Message-ID: <8369DAE2C5B8814998E89CE414A915381F6B93DD__30881.0229799294$1425574715$gmane$org@IT-Mailbox3.TTPGroup.com>
 References: <8369DAE2C5B8814998E89CE414A915381F6B9325@IT-Mailbox3.TTPGroup.com>
+ <CA+jJMxtSeBmaaRf0_8_PUDnH-XCFtd4YhqNN6hP5AouwqEJdLQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1087060901=="
+Content-Type: multipart/mixed; boundary="===============0305017362=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qa0-f54.google.com ([209.85.216.54])
+Received: from mail1.bemta3.messagelabs.com ([195.245.230.163])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1YTYyh-0004HK-6v
- for lttng-dev@lists.lttng.org; Thu, 05 Mar 2015 11:50:31 -0500
-Received: by mail-qa0-f54.google.com with SMTP id x12so2670734qac.13
- for <lttng-dev@lists.lttng.org>; Thu, 05 Mar 2015 08:50:21 -0800 (PST)
-In-Reply-To: <8369DAE2C5B8814998E89CE414A915381F6B9325@IT-Mailbox3.TTPGroup.com>
+ (envelope-from <Neil.Bryan@ttp.com>) id 1YTZ4x-0004Ko-My
+ for lttng-dev@lists.lttng.org; Thu, 05 Mar 2015 11:56:56 -0500
+In-Reply-To: <CA+jJMxtSeBmaaRf0_8_PUDnH-XCFtd4YhqNN6hP5AouwqEJdLQ@mail.gmail.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,167 +21,209 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Neil Bryan <Neil.Bryan@ttp.com>
+To: =?utf-8?B?SsOpcsOpbWllIEdhbGFybmVhdQ==?= <jeremie.galarneau@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1087060901==
-Content-Type: multipart/alternative; boundary=001a11355fd2175c4d05108d5dce
+--===============0305017362==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_8369DAE2C5B8814998E89CE414A915381F6B93DDITMailbox3TTPGr_"
 
---001a11355fd2175c4d05108d5dce
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+--_000_8369DAE2C5B8814998E89CE414A915381F6B93DDITMailbox3TTPGr_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-On Thu, Mar 5, 2015 at 8:58 AM, Neil Bryan <Neil.Bryan@ttp.com> wrote:
+VGhhbmtzIGZvciB0aGUgdXBkYXRlIErDqXLDqW1pZS4NCg0KV2hlbiBzb21ldGhpbmcgaXMgbm90
+IHdvcmtpbmcgYW5kIHlvdSBhcmUgbG9va2luZyBmb3IgYW4gZXhwbGFuYXRpb24sIGJsb2JzIG9m
+IGJpbmFyeSBpbiBhIG1vc3RseSB0ZXh0IGZpbGUgcmluZyBhbGFybSBiZWxscy4NCknigJltIGlt
+cHJlc3NlZCB0aGF0IHRoZSBwYXJzZXIgZm9yIHRoZSBtZXRhZGF0YSBjYW4gZGVhbCB3aXRoIHRo
+aXMuIEl0IGlzIHZlcnkgaGVscGZ1bCB0byBoYXZlIGEgcmVmZXJlbmNlIGxpa2UgdGhpcyBvbiB0
+aGUgbWFpbGluZyBsaXN0IGZvciBmdXR1cmUgZGV2cyBsb29raW5nIGZvciBhbnN3ZXJzLg0KDQpU
+aGFua3MgdG8geW91IGFsbC4NCg0KRnJvbTogamVyZW1pZS5nYWxhcm5lYXVAZ21haWwuY29tIFtt
+YWlsdG86amVyZW1pZS5nYWxhcm5lYXVAZ21haWwuY29tXSBPbiBCZWhhbGYgT2YgSmVyZW1pZSBH
+YWxhcm5lYXUNClNlbnQ6IFRodXJzZGF5LCBNYXJjaCAwNSwgMjAxNSA0OjUwIFBNDQpUbzogTmVp
+bCBCcnlhbg0KQ2M6IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc7IGdsZW5rZWFuZS45NEBnbWFp
+bC5jb20NClN1YmplY3Q6IFJlOiBbbHR0bmctZGV2XSBMVFRuZyAyLjYuMDogQ29ycnVwdCBtZXRh
+ZGF0YT8NCg0KT24gVGh1LCBNYXIgNSwgMjAxNSBhdCA4OjU4IEFNLCBOZWlsIEJyeWFuIDxOZWls
+LkJyeWFuQHR0cC5jb208bWFpbHRvOk5laWwuQnJ5YW5AdHRwLmNvbT4+IHdyb3RlOg0KRnJvbSBt
+eSBmaXJzdCBwb3N0Og0KSWYgSSB0cnkgYW5kIHBhcnNlIHJlY292ZXJlZCB0cmFjZXMgdXNpbmcg
+QmFiZWx0cmFjZSwgaXQgZmFpbHMgd2l0aCBhIHNlZ21lbnRhdGlvbiBmYXVsdC4NCm5icnlhbkBt
+ZXRlb3J1YnVudHUtT3B0aVBsZXgtNzAxMDovZGF0YS9uYnJ5YW4vTWV0ZW9yL2FsdGVyYV90cmFj
+ZSQgYmFiZWx0cmFjZSAtLWhlbHANCkJhYmVsVHJhY2UgVHJhY2UgVmlld2VyIGFuZCBDb252ZXJ0
+ZXIgMS4wLjAtcmMxDQpuYnJ5YW5AbWV0ZW9ydWJ1bnR1LU9wdGlQbGV4LTcwMTA6L2RhdGEvbmJy
+eWFuL01ldGVvci9hbHRlcmFfdHJhY2UkIGJhYmVsdHJhY2UgYXV0by0yMDE1MDMwNC0wOTExMDkv
+DQpTZWdtZW50YXRpb24gZmF1bHQgKGNvcmUgZHVtcGVkKQ0KSSBkb3dubG9hZGVkLCBidWlsdCBh
+bmQgaW5zdGFsbGVkIHRoaXMgdmVyc2lvbjoNCm5icnlhbkBtZXRlb3J1YnVudHUtT3B0aVBsZXgt
+NzAxMDovZGF0YS9uYnJ5YW4vTWV0ZW9yL2FsdGVyYV90cmFjZSQgYmFiZWx0cmFjZSAtLWhlbHAN
+CkJhYmVsVHJhY2UgVHJhY2UgVmlld2VyIGFuZCBDb252ZXJ0ZXIgMS4yLjQNCkFuZCBpdCBub3cg
+cGFyc2VzIHRoZSBjYXB0dXJlZCB0cmFjZXMuIFRoaXMgaXMgaW50ZXJlc3RpbmcgYXMgbWF5YmUg
+dGhlIG1ldGFkYXRhIGlzIHdlbGwtZm9ybWVkIGFmdGVyIGFsbCENCkkgc2hhbGwgbm93IGludmVz
+dGlnYXRlIHRoZSBFY2xpcHNlLXNpZGUgb2YgdGhpbmdzLg0KR2xhZCB0byBrbm93IGl0IGFsbCB3
+b3JrZWQgb3V0IQ0KDQpUbyBhZGQgdG8gR2xlbidzIGdyZWF0IGV4cGxhbmF0aW9uLCB0aGUgYmlu
+YXJ5IGJsb2JzIHlvdSBzZWUgbWlkLXdheSBpbiB0aGUgbWV0YWRhdGEgZmlsZSBhcmUgcGFkZGlu
+ZyArIHRoZSBuZXh0IHBhY2tldCdzIGhlYWRlci4gVGhlIGFtb3VudCBvZiBwYWRkaW5nIGlzIHRo
+ZSBkaWZmZXJlbmNlIGJldHdlZW4gdGhlIHBhY2tldF9zaXplIGFuZCB0aGUgY29udGVudF9zaXpl
+Lg0KDQpKw6lyw6ltaWUNCg0KDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXw0KbHR0bmctZGV2IG1haWxpbmcgbGlzdA0KbHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZzxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4NCmh0dHA6Ly9saXN0cy5sdHRu
+Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldg0KLS0NCkrDqXLDqW1pZSBH
+YWxhcm5lYXUNCkVmZmljaU9TIEluYy4NCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tDQo=
 
->    From my first post:
->
-> If I try and parse recovered traces using Babeltrace, it fails with a
-> segmentation fault.
->
-> nbryan@meteorubuntu-OptiPlex-7010:/data/nbryan/Meteor/altera_trace$
-> babeltrace --help
->
-> BabelTrace Trace Viewer and Converter 1.0.0-rc1
->
->
->
-> nbryan@meteorubuntu-OptiPlex-7010:/data/nbryan/Meteor/altera_trace$
-> babeltrace auto-20150304-091109/
->
-> Segmentation fault (core dumped)
->
-> I downloaded, built and installed this version:
->
-> nbryan@meteorubuntu-OptiPlex-7010:/data/nbryan/Meteor/altera_trace$
-> babeltrace --help
->
-> BabelTrace Trace Viewer and Converter 1.2.4
->
-> And it now parses the captured traces. This is interesting as maybe the
-> metadata is well-formed after all!
->
-> I shall now investigate the Eclipse-side of things.
->
->
->
+--_000_8369DAE2C5B8814998E89CE414A915381F6B93DDITMailbox3TTPGr_
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-Glad to know it all worked out!
+PGh0bWwgeG1sbnM6dj0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp2bWwiIHhtbG5zOm89InVy
+bjpzY2hlbWFzLW1pY3Jvc29mdC1jb206b2ZmaWNlOm9mZmljZSIgeG1sbnM6dz0idXJuOnNjaGVt
+YXMtbWljcm9zb2Z0LWNvbTpvZmZpY2U6d29yZCIgeG1sbnM6bT0iaHR0cDovL3NjaGVtYXMubWlj
+cm9zb2Z0LmNvbS9vZmZpY2UvMjAwNC8xMi9vbW1sIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv
+VFIvUkVDLWh0bWw0MCI+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIg
+Y29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxtZXRhIG5hbWU9IkdlbmVyYXRv
+ciIgY29udGVudD0iTWljcm9zb2Z0IFdvcmQgMTIgKGZpbHRlcmVkIG1lZGl1bSkiPg0KPHN0eWxl
+PjwhLS0NCi8qIEZvbnQgRGVmaW5pdGlvbnMgKi8NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1pbHk6
+IkNhbWJyaWEgTWF0aCI7DQoJcGFub3NlLTE6MiA0IDUgMyA1IDQgNiAzIDIgNDt9DQpAZm9udC1m
+YWNlDQoJe2ZvbnQtZmFtaWx5OkNhbGlicmk7DQoJcGFub3NlLTE6MiAxNSA1IDIgMiAyIDQgMyAy
+IDQ7fQ0KQGZvbnQtZmFjZQ0KCXtmb250LWZhbWlseTpUYWhvbWE7DQoJcGFub3NlLTE6MiAxMSA2
+IDQgMyA1IDQgNCAyIDQ7fQ0KLyogU3R5bGUgRGVmaW5pdGlvbnMgKi8NCnAuTXNvTm9ybWFsLCBs
+aS5Nc29Ob3JtYWwsIGRpdi5Nc29Ob3JtYWwNCgl7bWFyZ2luOjBjbTsNCgltYXJnaW4tYm90dG9t
+Oi4wMDAxcHQ7DQoJZm9udC1zaXplOjEyLjBwdDsNCglmb250LWZhbWlseToiVGltZXMgTmV3IFJv
+bWFuIiwic2VyaWYiO30NCmE6bGluaywgc3Bhbi5Nc29IeXBlcmxpbmsNCgl7bXNvLXN0eWxlLXBy
+aW9yaXR5Ojk5Ow0KCWNvbG9yOmJsdWU7DQoJdGV4dC1kZWNvcmF0aW9uOnVuZGVybGluZTt9DQph
+OnZpc2l0ZWQsIHNwYW4uTXNvSHlwZXJsaW5rRm9sbG93ZWQNCgl7bXNvLXN0eWxlLXByaW9yaXR5
+Ojk5Ow0KCWNvbG9yOnB1cnBsZTsNCgl0ZXh0LWRlY29yYXRpb246dW5kZXJsaW5lO30NCnNwYW4u
+RW1haWxTdHlsZTE3DQoJe21zby1zdHlsZS10eXBlOnBlcnNvbmFsLXJlcGx5Ow0KCWZvbnQtZmFt
+aWx5OiJDYWxpYnJpIiwic2Fucy1zZXJpZiI7DQoJY29sb3I6IzFGNDk3RDt9DQouTXNvQ2hwRGVm
+YXVsdA0KCXttc28tc3R5bGUtdHlwZTpleHBvcnQtb25seTt9DQpAcGFnZSBXb3JkU2VjdGlvbjEN
+Cgl7c2l6ZTo2MTIuMHB0IDc5Mi4wcHQ7DQoJbWFyZ2luOjIuMGNtIDQyLjVwdCAyLjBjbSAzLjBj
+bTt9DQpkaXYuV29yZFNlY3Rpb24xDQoJe3BhZ2U6V29yZFNlY3Rpb24xO30NCi0tPjwvc3R5bGU+
+PCEtLVtpZiBndGUgbXNvIDldPjx4bWw+DQo8bzpzaGFwZWRlZmF1bHRzIHY6ZXh0PSJlZGl0IiBz
+cGlkbWF4PSIxMDI2IiAvPg0KPC94bWw+PCFbZW5kaWZdLS0+PCEtLVtpZiBndGUgbXNvIDldPjx4
+bWw+DQo8bzpzaGFwZWxheW91dCB2OmV4dD0iZWRpdCI+DQo8bzppZG1hcCB2OmV4dD0iZWRpdCIg
+ZGF0YT0iMSIgLz4NCjwvbzpzaGFwZWxheW91dD48L3htbD48IVtlbmRpZl0tLT4NCjwvaGVhZD4N
+Cjxib2R5IGxhbmc9IkVOLVVTIiBsaW5rPSJibHVlIiB2bGluaz0icHVycGxlIj4NCjxkaXYgY2xh
+c3M9IldvcmRTZWN0aW9uMSI+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9u
+dC1zaXplOjExLjBwdDtmb250LWZhbWlseTomcXVvdDtDYWxpYnJpJnF1b3Q7LCZxdW90O3NhbnMt
+c2VyaWYmcXVvdDs7Y29sb3I6IzFGNDk3RCI+VGhhbmtzIGZvciB0aGUgdXBkYXRlIErDqXLDqW1p
+ZS48bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHls
+ZT0iZm9udC1zaXplOjExLjBwdDtmb250LWZhbWlseTomcXVvdDtDYWxpYnJpJnF1b3Q7LCZxdW90
+O3NhbnMtc2VyaWYmcXVvdDs7Y29sb3I6IzFGNDk3RCI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+
+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQ7
+Zm9udC1mYW1pbHk6JnF1b3Q7Q2FsaWJyaSZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2Nv
+bG9yOiMxRjQ5N0QiPldoZW4gc29tZXRoaW5nIGlzIG5vdCB3b3JraW5nIGFuZCB5b3UgYXJlIGxv
+b2tpbmcgZm9yIGFuIGV4cGxhbmF0aW9uLCBibG9icyBvZiBiaW5hcnkgaW4gYSBtb3N0bHkgdGV4
+dCBmaWxlIHJpbmcgYWxhcm0gYmVsbHMuPG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9
+Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQ7Zm9udC1mYW1pbHk6JnF1
+b3Q7Q2FsaWJyaSZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOiMxRjQ5N0QiPkni
+gJltIGltcHJlc3NlZCB0aGF0IHRoZSBwYXJzZXIgZm9yIHRoZSBtZXRhZGF0YSBjYW4gZGVhbCB3
+aXRoIHRoaXMuIEl0IGlzIHZlcnkgaGVscGZ1bCB0byBoYXZlIGEgcmVmZXJlbmNlIGxpa2UgdGhp
+cyBvbiB0aGUgbWFpbGluZyBsaXN0IGZvciBmdXR1cmUgZGV2cyBsb29raW5nDQogZm9yIGFuc3dl
+cnMuPG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5
+bGU9ImZvbnQtc2l6ZToxMS4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7Q2FsaWJyaSZxdW90OywmcXVv
+dDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOiMxRjQ5N0QiPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFu
+PjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0
+O2ZvbnQtZmFtaWx5OiZxdW90O0NhbGlicmkmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztj
+b2xvcjojMUY0OTdEIj5UaGFua3MgdG8geW91IGFsbC48bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8
+cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdDtmb250LWZh
+bWlseTomcXVvdDtDYWxpYnJpJnF1b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29sb3I6IzFG
+NDk3RCI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPGRpdiBzdHlsZT0iYm9yZGVyOm5v
+bmU7Ym9yZGVyLXRvcDpzb2xpZCAjQjVDNERGIDEuMHB0O3BhZGRpbmc6My4wcHQgMGNtIDBjbSAw
+Y20iPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PGI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMC4w
+cHQ7Zm9udC1mYW1pbHk6JnF1b3Q7VGFob21hJnF1b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDsi
+PkZyb206PC9zcGFuPjwvYj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEwLjBwdDtmb250LWZhbWls
+eTomcXVvdDtUYWhvbWEmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90OyI+IGplcmVtaWUuZ2Fs
+YXJuZWF1QGdtYWlsLmNvbSBbbWFpbHRvOmplcmVtaWUuZ2FsYXJuZWF1QGdtYWlsLmNvbV0NCjxi
+Pk9uIEJlaGFsZiBPZiA8L2I+SmVyZW1pZSBHYWxhcm5lYXU8YnI+DQo8Yj5TZW50OjwvYj4gVGh1
+cnNkYXksIE1hcmNoIDA1LCAyMDE1IDQ6NTAgUE08YnI+DQo8Yj5Ubzo8L2I+IE5laWwgQnJ5YW48
+YnI+DQo8Yj5DYzo8L2I+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc7IGdsZW5rZWFuZS45NEBn
+bWFpbC5jb208YnI+DQo8Yj5TdWJqZWN0OjwvYj4gUmU6IFtsdHRuZy1kZXZdIExUVG5nIDIuNi4w
+OiBDb3JydXB0IG1ldGFkYXRhPzxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4N
+CjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48bzpwPiZuYnNwOzwvbzpwPjwvcD4NCjxkaXY+
+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj5PbiBUaHUsIE1hciA1LCAyMDE1IGF0IDg6NTggQU0sIE5l
+aWwgQnJ5YW4gJmx0OzxhIGhyZWY9Im1haWx0bzpOZWlsLkJyeWFuQHR0cC5jb20iIHRhcmdldD0i
+X2JsYW5rIj5OZWlsLkJyeWFuQHR0cC5jb208L2E+Jmd0OyB3cm90ZTo8bzpwPjwvbzpwPjwvcD4N
+CjxkaXY+DQo8ZGl2Pg0KPGRpdj4NCjxkaXY+DQo8ZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29O
+b3JtYWwiIHN0eWxlPSJtc28tbWFyZ2luLXRvcC1hbHQ6YXV0bzttc28tbWFyZ2luLWJvdHRvbS1h
+bHQ6YXV0byI+PHNwYW4gc3R5bGU9ImNvbG9yOiMxRjQ5N0QiPkZyb20gbXkgZmlyc3QgcG9zdDo8
+L3NwYW4+Jm5ic3A7PG86cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIiBzdHlsZT0i
+bXNvLW1hcmdpbi10b3AtYWx0OmF1dG87bXNvLW1hcmdpbi1ib3R0b20tYWx0OmF1dG8iPklmIEkg
+dHJ5IGFuZCBwYXJzZSByZWNvdmVyZWQgdHJhY2VzIHVzaW5nIEJhYmVsdHJhY2UsIGl0IGZhaWxz
+IHdpdGggYSBzZWdtZW50YXRpb24gZmF1bHQuDQo8bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJN
+c29Ob3JtYWwiIHN0eWxlPSJtc28tbWFyZ2luLXRvcC1hbHQ6YXV0bzttc28tbWFyZ2luLWJvdHRv
+bS1hbHQ6YXV0byI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O0NvdXJpZXIgTmV3JnF1
+b3Q7Ij5uYnJ5YW5AbWV0ZW9ydWJ1bnR1LU9wdGlQbGV4LTcwMTA6L2RhdGEvbmJyeWFuL01ldGVv
+ci9hbHRlcmFfdHJhY2UkIGJhYmVsdHJhY2UgLS1oZWxwPC9zcGFuPjxvOnA+PC9vOnA+PC9wPg0K
+PHAgY2xhc3M9Ik1zb05vcm1hbCIgc3R5bGU9Im1zby1tYXJnaW4tdG9wLWFsdDphdXRvO21zby1t
+YXJnaW4tYm90dG9tLWFsdDphdXRvIj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7Q291
+cmllciBOZXcmcXVvdDsiPkJhYmVsVHJhY2UgVHJhY2UgVmlld2VyIGFuZCBDb252ZXJ0ZXIgMS4w
+LjAtcmMxPC9zcGFuPiZuYnNwOzxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCIg
+c3R5bGU9Im1zby1tYXJnaW4tdG9wLWFsdDphdXRvO21zby1tYXJnaW4tYm90dG9tLWFsdDphdXRv
+Ij48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7Q291cmllciBOZXcmcXVvdDsiPm5icnlh
+bkBtZXRlb3J1YnVudHUtT3B0aVBsZXgtNzAxMDovZGF0YS9uYnJ5YW4vTWV0ZW9yL2FsdGVyYV90
+cmFjZSQgYmFiZWx0cmFjZSBhdXRvLTIwMTUwMzA0LTA5MTEwOS88L3NwYW4+PG86cD48L286cD48
+L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIiBzdHlsZT0ibXNvLW1hcmdpbi10b3AtYWx0OmF1dG87
+bXNvLW1hcmdpbi1ib3R0b20tYWx0OmF1dG8iPjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTomcXVv
+dDtDb3VyaWVyIE5ldyZxdW90OyI+U2VnbWVudGF0aW9uIGZhdWx0IChjb3JlIGR1bXBlZCk8L3Nw
+YW4+PG86cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIiBzdHlsZT0ibXNvLW1hcmdp
+bi10b3AtYWx0OmF1dG87bXNvLW1hcmdpbi1ib3R0b20tYWx0OmF1dG8iPjxzcGFuIHN0eWxlPSJj
+b2xvcjojMUY0OTdEIj5JIGRvd25sb2FkZWQsIGJ1aWx0IGFuZCBpbnN0YWxsZWQgdGhpcyB2ZXJz
+aW9uOjwvc3Bhbj48bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiIHN0eWxlPSJt
+c28tbWFyZ2luLXRvcC1hbHQ6YXV0bzttc28tbWFyZ2luLWJvdHRvbS1hbHQ6YXV0byI+PHNwYW4g
+c3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7Q2FsaWJyaSZxdW90Oywm
+cXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOiMxRjQ5N0QiPm5icnlhbkBtZXRlb3J1YnVudHUt
+T3B0aVBsZXgtNzAxMDovZGF0YS9uYnJ5YW4vTWV0ZW9yL2FsdGVyYV90cmFjZSQgYmFiZWx0cmFj
+ZSAtLWhlbHA8L3NwYW4+PG86cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIiBzdHls
+ZT0ibXNvLW1hcmdpbi10b3AtYWx0OmF1dG87bXNvLW1hcmdpbi1ib3R0b20tYWx0OmF1dG8iPjxz
+cGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0NhbGlicmkmcXVv
+dDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjojMUY0OTdEIj5CYWJlbFRyYWNlIFRyYWNl
+IFZpZXdlciBhbmQgQ29udmVydGVyIDEuMi40PC9zcGFuPjxvOnA+PC9vOnA+PC9wPg0KPHAgY2xh
+c3M9Ik1zb05vcm1hbCIgc3R5bGU9Im1zby1tYXJnaW4tdG9wLWFsdDphdXRvO21zby1tYXJnaW4t
+Ym90dG9tLWFsdDphdXRvIj48c3BhbiBzdHlsZT0iY29sb3I6IzFGNDk3RCI+QW5kIGl0IG5vdyBw
+YXJzZXMgdGhlIGNhcHR1cmVkIHRyYWNlcy4gVGhpcyBpcyBpbnRlcmVzdGluZyBhcyBtYXliZSB0
+aGUgbWV0YWRhdGEgaXMgd2VsbC1mb3JtZWQgYWZ0ZXIgYWxsITwvc3Bhbj48bzpwPjwvbzpwPjwv
+cD4NCjwvZGl2Pg0KPC9kaXY+DQo8L2Rpdj4NCjwvZGl2Pg0KPC9kaXY+DQo8L2Rpdj4NCjxkaXY+
+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIiBzdHlsZT0ibXNvLW1hcmdpbi10b3AtYWx0OmF1dG87bXNv
+LW1hcmdpbi1ib3R0b20tYWx0OmF1dG8iPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTEuMHB0O2Zv
+bnQtZmFtaWx5OiZxdW90O0NhbGlicmkmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xv
+cjojMUY0OTdEIj5JIHNoYWxsIG5vdyBpbnZlc3RpZ2F0ZSB0aGUgRWNsaXBzZS1zaWRlIG9mIHRo
+aW5ncy48L3NwYW4+Jm5ic3A7PG86cD48L286cD48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFz
+cz0iTXNvTm9ybWFsIj5HbGFkIHRvIGtub3cgaXQgYWxsIHdvcmtlZCBvdXQhPG86cD48L286cD48
+L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48bzpwPiZuYnNwOzwvbzpw
+PjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPlRvIGFkZCB0byBHbGVu
+J3MgZ3JlYXQgZXhwbGFuYXRpb24sIHRoZSBiaW5hcnkgYmxvYnMgeW91IHNlZSBtaWQtd2F5IGlu
+IHRoZSBtZXRhZGF0YSBmaWxlIGFyZSBwYWRkaW5nICYjNDM7IHRoZSBuZXh0IHBhY2tldCdzIGhl
+YWRlci4gVGhlIGFtb3VudCBvZiBwYWRkaW5nIGlzIHRoZSBkaWZmZXJlbmNlIGJldHdlZW4gdGhl
+IHBhY2tldF9zaXplIGFuZCB0aGUgY29udGVudF9zaXplLjxvOnA+PC9vOnA+PC9wPg0KPC9kaXY+
+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PG86cD4mbmJzcDs8L286cD48L3A+DQo8L2Rp
+dj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj5Kw6lyw6ltaWU8bzpwPjwvbzpwPjwvcD4N
+CjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPiZuYnNwOzxvOnA+PC9vOnA+PC9w
+Pg0KPC9kaXY+DQo8YmxvY2txdW90ZSBzdHlsZT0iYm9yZGVyOm5vbmU7Ym9yZGVyLWxlZnQ6c29s
+aWQgI0NDQ0NDQyAxLjBwdDtwYWRkaW5nOjBjbSAwY20gMGNtIDYuMHB0O21hcmdpbi1sZWZ0OjQu
+OHB0O21hcmdpbi1yaWdodDowY20iPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCIgc3R5bGU9Im1hcmdp
+bi1ib3R0b206MTIuMHB0Ij48YnI+DQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXzxicj4NCmx0dG5nLWRldiBtYWlsaW5nIGxpc3Q8YnI+DQo8YSBocmVmPSJt
+YWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyI+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+ZzwvYT48YnI+DQo8YSBocmVmPSJodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
+bi9saXN0aW5mby9sdHRuZy1kZXYiIHRhcmdldD0iX2JsYW5rIj5odHRwOi8vbGlzdHMubHR0bmcu
+b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXY8L2E+PG86cD48L286cD48L3A+
+DQo8L2Jsb2NrcXVvdGU+DQo8L2Rpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPi0tIDxvOnA+PC9v
+OnA+PC9wPg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPkrDqXLDqW1pZSBHYWxhcm5lYXU8
+YnI+DQpFZmZpY2lPUyBJbmMuPGJyPg0KPGEgaHJlZj0iaHR0cDovL3d3dy5lZmZpY2lvcy5jb20i
+IHRhcmdldD0iX2JsYW5rIj5odHRwOi8vd3d3LmVmZmljaW9zLmNvbTwvYT48bzpwPjwvbzpwPjwv
+cD4NCjwvZGl2Pg0KPC9kaXY+DQo8L2Rpdj4NCjwvZGl2Pg0KPC9ib2R5Pg0KPC9odG1sPg0K
 
-To add to Glen's great explanation, the binary blobs you see mid-way in the
-metadata file are padding + the next packet's header. The amount of padding
-is the difference between the packet_size and the content_size.
-
-J=C3=A9r=C3=A9mie
+--_000_8369DAE2C5B8814998E89CE414A915381F6B93DDITMailbox3TTPGr_--
 
 
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
-
-
---=20
-J=C3=A9r=C3=A9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-
---001a11355fd2175c4d05108d5dce
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><br><div class=3D"gmail_extra"><br><div class=3D"gmail_quo=
-te">On Thu, Mar 5, 2015 at 8:58 AM, Neil Bryan <span dir=3D"ltr">&lt;<a hre=
-f=3D"mailto:Neil.Bryan@ttp.com" target=3D"_blank">Neil.Bryan@ttp.com</a>&gt=
-;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0px 0p=
-x 0px 0.8ex;border-left-width:1px;border-left-color:rgb(204,204,204);border=
--left-style:solid;padding-left:1ex">
-
-
-
-
-
-<div lang=3D"EN-US" link=3D"blue" vlink=3D"purple">
-<div>
-<div>
-<div>
-<div>
-<div>
-<p class=3D"MsoNormal"><span style=3D"color:rgb(31,73,125)">From my first p=
-ost:</span>=C2=A0<u></u><u></u></p><span class=3D"">
-<p class=3D"MsoNormal">If I try and parse recovered traces using Babeltrace=
-, it fails with a segmentation fault.
-<u></u><u></u></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&#39;Courier New&#39;">nb=
-ryan@meteorubuntu-OptiPlex-7010:/data/nbryan/Meteor/altera_trace$ babeltrac=
-e --help</span><u></u><u></u></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&#39;Courier New&#39;">Ba=
-belTrace Trace Viewer and Converter 1.0.0-rc1</span><u></u><u></u></p>
-<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&#39;Courier New&#39;">nb=
-ryan@meteorubuntu-OptiPlex-7010:/data/nbryan/Meteor/altera_trace$ babeltrac=
-e auto-20150304-091109/</span><u></u><u></u></p>
-<p class=3D"MsoNormal"><span style=3D"font-family:&#39;Courier New&#39;">Se=
-gmentation fault (core dumped)<u></u><u></u></span></p>
-</span><p class=3D"MsoNormal"><span style=3D"color:rgb(31,73,125)">I downlo=
-aded, built and installed this version:<u></u><u></u></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:11pt;font-family:Calibri,sa=
-ns-serif;color:rgb(31,73,125)">nbryan@meteorubuntu-OptiPlex-7010:/data/nbry=
-an/Meteor/altera_trace$ babeltrace --help<u></u><u></u></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:11pt;font-family:Calibri,sa=
-ns-serif;color:rgb(31,73,125)">BabelTrace Trace Viewer and Converter 1.2.4<=
-u></u><u></u></span></p>
-<p class=3D"MsoNormal"><span style=3D"color:rgb(31,73,125)">And it now pars=
-es the captured traces. This is interesting as maybe the metadata is well-f=
-ormed after all!<u></u><u></u></span></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:11pt;font-family:Calibri,sa=
-ns-serif;color:rgb(31,73,125)">I shall now investigate the Eclipse-side of =
-things.<u></u><u></u></span></p>
-</div>
-</div>
-</div>
-<p class=3D"MsoNormal"><u></u>=C2=A0</p></div></div></div></blockquote><div=
-><br></div><div>Glad to know it all worked out!</div><div><br></div><div>To=
- add to Glen&#39;s great explanation, the binary blobs you see mid-way in t=
-he metadata file are padding + the next packet&#39;s header. The amount of =
-padding is the difference between the packet_size and the content_size.</di=
-v><div><br></div><div>J=C3=A9r=C3=A9mie<br></div><div>=C2=A0</div><blockquo=
-te class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left-widt=
-h:1px;border-left-color:rgb(204,204,204);border-left-style:solid;padding-le=
-ft:1ex"><div lang=3D"EN-US" link=3D"blue" vlink=3D"purple"><div><div><p cla=
-ss=3D"MsoNormal"><u></u></p>
-</div>
-</div>
-</div>
-
-<br>_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-br>
-<br></blockquote></div><br><br clear=3D"all"><div><br></div>-- <br><div cla=
-ss=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS Inc.<br><a h=
-ref=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.com</=
-a></div>
-</div></div>
-
---001a11355fd2175c4d05108d5dce--
-
-
---===============1087060901==
+--===============0305017362==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1087060901==--
+--===============0305017362==--
