@@ -1,20 +1,19 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
 Subject: Re: LTTng timestamp from NTP ( Network transfer
 	protocol)
-Date: Mon, 9 Mar 2015 13:45:36 -0400
-Message-ID: <CA+jJMxut0Ne0HhWW0PmcLxh-3-0AxTMVAO2eK6Jdsr8pth=KEw__20890.4148698368$1425923239$gmane$org@mail.gmail.com>
+Date: Mon, 09 Mar 2015 13:56:48 -0400
+Message-ID: <54FDDEE0.6060509__37342.6514598124$1425923895$gmane$org@voxpopuli.im>
 References: <CA+=dQ-_436i0B1vOs=tKMRuK89jd=wHEsA=7N0uOEgEG1nYBVg@mail.gmail.com>
+ <CA+jJMxut0Ne0HhWW0PmcLxh-3-0AxTMVAO2eK6Jdsr8pth=KEw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f180.google.com ([209.85.216.180])
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1YV1kL-0007nL-M2
- for lttng-dev@lists.lttng.org; Mon, 09 Mar 2015 13:45:52 -0400
-Received: by qcwb13 with SMTP id b13so30980148qcw.9
- for <lttng-dev@lists.lttng.org>; Mon, 09 Mar 2015 10:45:36 -0700 (PDT)
-In-Reply-To: <CA+=dQ-_436i0B1vOs=tKMRuK89jd=wHEsA=7N0uOEgEG1nYBVg@mail.gmail.com>
+ (envelope-from <alexmonthy@voxpopuli.im>) id 1YV1vC-0007sU-KN
+ for lttng-dev@lists.lttng.org; Mon, 09 Mar 2015 13:57:03 -0400
+In-Reply-To: <CA+jJMxut0Ne0HhWW0PmcLxh-3-0AxTMVAO2eK6Jdsr8pth=KEw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,44 +22,20 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Divya Vyas <dvyas@mvista.com>
+To: =?UTF-8?B?SsOpcsOpbWllIEdhbGFybmVhdQ==?= <jeremie.galarneau@efficios.com>, Divya Vyas <dvyas@mvista.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gVHVlLCBNYXIgMywgMjAxNSBhdCAyOjEwIEFNLCBEaXZ5YSBWeWFzIDxkdnlhc0BtdmlzdGEu
-Y29tPiB3cm90ZToKPgo+IEhpLAo+Cj4gSSBhbSBsb29raW5nIGF0IHN5bmNocm9uaXphdGlvbiBv
-ZiB0cmFjZXMgZnJvbSBndWVzdCBhbmQgaG9zdCBhY2NvcmRpbmcgdG8gdGltZXN0YW1wcy4KPgo+
-IERvZXMgTFRUbmcgdXNlcyB0aW1lc3RhbXBzIGdlbmVyYXRlZCBmcm9tIE5UUCAoTmV0d29yayB0
-cmFuc2ZlciBwcm90b2NvbCkgPwo+IEhvdyBJIGNhbiB1c2UgTlRQIHRvIHN5bmNocm9uaXplIHRo
-ZSB0aW1lc3RhbXBzIG9mIGd1ZXN0IGFuZCBob3N0ID8KPgoKSGkgRGl2eWEsCgpBcyB5b3UgbWF5
-IGtub3csIGV2ZW50cyBwcm9kdWNlZCBieSBMVFRuZyAoYm90aCBVU1QgYW5kIGtlcm5lbAp0cmFj
-ZXJzKSBhcmUgdGltZXN0YW1wZWQgdXNpbmcgdGhlIGNsb2NrX2dldHRpbWUoKSAiQ0xPQ0tfTU9O
-T1RPTklDIgpjbG9jay4gRnJvbSB0aGUgY2xvY2tfZ2V0dGltZSgpIG1hbiBwYWdlWzFdOgoKQ0xP
-Q0tfTU9OT1RPTklDCiAgICAgICAgICAgICAgQ2xvY2sgdGhhdCBjYW5ub3QgYmUgc2V0IGFuZCAg
-cmVwcmVzZW50cyAgbW9ub3RvbmljICB0aW1lCiAgICAgICAgICAgICAgc2luY2Ugc29tZSB1bnNw
-ZWNpZmllZCBzdGFydGluZyBwb2ludC4gIFRoaXMgY2xvY2sgaXMgbm90CiAgICAgICAgICAgICAg
-YWZmZWN0ZWQgYnkgZGlzY29udGludW91cyBqdW1wcyBpbiB0aGUgc3lzdGVtIHRpbWUgKGUuZy4s
-CiAgICAgICAgICAgICAgaWYgIHRoZSBzeXN0ZW0gYWRtaW5pc3RyYXRvciBtYW51YWxseSBjaGFu
-Z2VzIHRoZSBjbG9jayksCiAgICAgICAgICAgICAgYnV0IGlzIGFmZmVjdGVkIGJ5IHRoZSBpbmNy
-ZW1lbnRhbCBhZGp1c3RtZW50cyAgcGVyZm9ybWVkCiAgICAgICAgICAgICAgYnkgYWRqdGltZSgz
-KSBhbmQgTlRQLgoKSW4gdGhpcyByZWdhcmQsIExUVG5nIGRvZXMgbm90IHVzZSBOVFAgZGlyZWN0
-bHkgYW5kIHJlbGllcyBvbiB0aGlzCmJlaGF2aW9yIHRvIGFjY291bnQgZm9yIHNtYWxsIGNvcnJl
-Y3Rpb25zIGR1ZSB0byBpbmV2aXRhYmxlIGNsb2NrCmRyaWZ0cy4KCkhvd2V2ZXIsIHRoZSBjbG9j
-ayBhdHRyaWJ1dGVzIChzdWNoIGFzIHRoZSBtb25vdG9uaWMgdGltZXN0YW1wJ3MKb2Zmc2V0IGZy
-b20gRXBvY2gpIGFyZSBzYW1wbGVkIHdoZW4gdHJhY2luZyBzdGFydHMuIFRoaXMgbWVhbnMgdGhh
-dAp5b3Ugc2hvdWxkIG1ha2Ugc3VyZSB0aGF0IGFsbCBzeXN0ZW1zJyB0aW1lIGhhcyBiZWVuIGNv
-cnJlY3RlZCBieSBOVFAKYmVmb3JlIHN0YXJ0aW5nIHRyYWNpbmcgc2Vzc2lvbnMuIFRoaXMgd2F5
-LCBpdCBzaG91bGQgYmUgcG9zc2libGUgdG8KY29ycmVsYXRlIHRyYWNlcyB3aXRoaW4gTlRQJ3Mg
-cHJlY2lzaW9uLgoKVG8gY29ycmVsYXRlIG11bHRpcGxlIHRyYWNlcyB3aXRoIGRpZmZlcmVudCBj
-bG9ja3MsIGhhdmUgYSBsb29rIGF0CkJhYmVsdHJhY2UncyAtLWNsb2NrLWZvcmNlLWNvcnJlbGF0
-ZSBvcHRpb24uIEknbSBub3Qgc3VyZSBhYm91dCBUcmFjZQpDb21wYXNzLCBjYy1pbmcgQWxleGFu
-ZHJlIE1vbnRwbGFpc2lyLgoKUmVnYXJkcywKSsOpcsOpbWllCgpbMV0gaHR0cDovL21hbnBhZ2Vz
-LnVidW50dS5jb20vbWFucGFnZXMvdHJ1c3R5L21hbjIvY2xvY2tfZ2V0dGltZS4yLmh0bWwKCj4K
-PiBUaGFua3MsCj4gRGl2eWEgVnlhcwo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
-c3RpbmZvL2x0dG5nLWRldgo+CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIElu
-Yy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
-by9sdHRuZy1kZXYK
+T24gMjAxNS0wMy0wOSAwMTo0NSBQTSwgSsOpcsOpbWllIEdhbGFybmVhdSB3cm90ZToKPiBJJ20g
+bm90IHN1cmUgYWJvdXQgVHJhY2UgQ29tcGFzcywgY2MtaW5nIEFsZXhhbmRyZSBNb250cGxhaXNp
+ci4KClRyYWNlIENvbXBhc3MgY2FuIGNvcnJlbGF0ZSB0cmFjZXMgdGFrZW4gb24gZGlmZmVyZW50
+IGhvc3RzIGJ5IHVzaW5nIApuZXR3b3JrIGV2ZW50cyBiZXR3ZWVuIHRoZW0uIFNlZQpodHRwOi8v
+YXJjaGl2ZS5lY2xpcHNlLm9yZy90cmFjZWNvbXBhc3MvZG9jL29yZy5lY2xpcHNlLnRyYWNlY29t
+cGFzcy5kb2MudXNlci9UcmFjZS1zeW5jaHJvbml6YXRpb24uaHRtbAoKRm9yIG1vcmUgc2ltcGxl
+IHVzZSBjYXNlcywgaXQncyBhbHNvIHBvc3NpYmxlIHRvIG9mZnNldCBhIHRyYWNlIG1hbnVhbGx5
+IApieSBzcGVjaWZ5aW5nIGEgdmFsdWU6Cmh0dHA6Ly9hcmNoaXZlLmVjbGlwc2Uub3JnL3RyYWNl
+Y29tcGFzcy9kb2Mvb3JnLmVjbGlwc2UudHJhY2Vjb21wYXNzLmRvYy51c2VyL1RpbWUtb2Zmc2V0
+dGluZy5odG1sCgoKQ2hlZXJzLApBbGV4YW5kcmUKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
+aW5mby9sdHRuZy1kZXYK
