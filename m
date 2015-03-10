@@ -1,18 +1,18 @@
-From: Suchakrapani Datt Sharma <suchakrapani.sharma@polymtl.ca>
-Subject: Re: Regarding lttng enable-event using filter option
-Date: Tue, 10 Mar 2015 11:53:17 +0000
-Message-ID: <20150310115317.Horde.7cvQTfxFiSqai0TJwZ3JPA1__17859.9883839071$1425988450$gmane$org@www.imp.polymtl.ca>
-References: <OF2679224C.7D5F648E-ON65257E04.001D6D14-65257E04.001E1BBD@tcs.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Using same provider:tracepoint probe in
+	several	processes
+Date: Tue, 10 Mar 2015 13:05:08 +0000 (UTC)
+Message-ID: <1293113871.267320.1425992707678.JavaMail.zimbra__32622.8715050549$1425992799$gmane$org@efficios.com>
+References: <54F9C841.4080304@oneaccess-net.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"; DelSp="Yes"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <suchakrapani.sharma@polymtl.ca>) id 1YVIiq-00054u-0q
- for lttng-dev@lists.lttng.org; Tue, 10 Mar 2015 07:53:18 -0400
-In-Reply-To: <OF2679224C.7D5F648E-ON65257E04.001D6D14-65257E04.001E1BBD@tcs.com>
-Content-Disposition: inline
+ (envelope-from <compudj@efficios.com>) id 1YVJqe-0005T4-FO
+ for lttng-dev@lists.lttng.org; Tue, 10 Mar 2015 09:05:28 -0400
+In-Reply-To: <54F9C841.4080304@oneaccess-net.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,34 +21,46 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org, venkata.kantimahanthi@tcs.com
+To: Franck Balazot <franck.balazot@oneaccess-net.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+----- Original Message -----
+> From: "Franck Balazot" <franck.balazot@oneaccess-net.com>
+> To: lttng-dev@lists.lttng.org
+> Sent: Friday, March 6, 2015 10:31:13 AM
+> Subject: [lttng-dev] Using same provider:tracepoint probe in several	processes
+> 
+> Hi all,
+> 
+> I would like to know if it is possible to use the same
+> provider:tracepoint probe in several processes, without getting
+> following error :
+> 
+> LTTng-UST: Error (-17) while registering tracepoint probe. Duplicate
+> registration of tracepoint probes having the same name is not allowed.
+> Aborted (core dumped)
+> 
+> And how to do it ?
 
-> o/p
-> Event com_ericsson_tri*: Filter 'strfield == "TRACE_UTS"' successfully set
->
-> So , If I have enabled above event with filter , the traces which have
-> string field with TRACE_UTS as data should not be logged. This is as per
-> my understanding. Is is correct ?
+Yes, it is possible, but they need to have _exactly_ the
+same signature. (same parameters and fields).
 
-No, its not correct. There is no field with the name "strfield" in  
-your trace playload.
+Thanks,
 
-For example, if this is what your tracepoint records in a usual case,
+Mathieu
 
-[07:45:08.810173787] (+0.000017406) isengard retlif_tp:tpfilt: {  
-cpu_id = 1 }, { var0 = "str0", var1 = "str1", var2 = "str2", var3 =  
-"str3", var4 = "str4", var5 = "str5", var6 = "str6", var7 = "str7",  
-var8 = "str8", lyf = 42 }
+> 
+> Franck
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
 
-Then you can set a filter like this,
-
-lttng enable-event -u retlif_tp:tpfilt --filter '(var0 == "str0") &&  
-(var1 == "Jon") && (var2 == "Doe") && (lyf == 42)'
-
-This works for me.
-
---
-Suchakra
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
