@@ -1,19 +1,17 @@
-From: Michael Sullivan <sully@msully.net>
-Subject: Re: Alternative to signals/sys_membarrier() in liburcu
-Date: Thu, 12 Mar 2015 12:04:07 -0400
-Message-ID: <CANW5cDkiZoysNM3rqb4v6Tj996ocsaSh=OZoBLfp4h7ZGb4bxg__10149.6212454096$1426179786$gmane$org@mail.gmail.com>
-References: <CANW5cDmTCM9ZmhN7-2eWUEYvD+Y=sGt2i7mecdPTTLHMcT8fPg@mail.gmail.com>
- <867044376.285926.1426172227750.JavaMail.zimbra@efficios.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: userspace-rcu-0.8.6 problems on MacOSX
+Date: Thu, 12 Mar 2015 13:24:53 -0400
+Message-ID: <5501CBE5.1020702__12674.0471846007$1426181191$gmane$org@voxpopuli.im>
+References: <18312E03-EE49-4807-8227-7DE555AFFD28@rfc1035.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1630573324=="
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f173.google.com ([209.85.216.173])
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <msully4321@gmail.com>) id 1YW5an-0003xQ-84
- for lttng-dev@lists.lttng.org; Thu, 12 Mar 2015 12:04:15 -0400
-Received: by qcwr17 with SMTP id r17so19599132qcw.11
- for <lttng-dev@lists.lttng.org>; Thu, 12 Mar 2015 09:04:07 -0700 (PDT)
-In-Reply-To: <867044376.285926.1426172227750.JavaMail.zimbra@efficios.com>
+ (envelope-from <alexmonthy@voxpopuli.im>) id 1YW6r0-0004Mb-N7
+ for lttng-dev@lists.lttng.org; Thu, 12 Mar 2015 13:25:09 -0400
+In-Reply-To: <18312E03-EE49-4807-8227-7DE555AFFD28@rfc1035.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,78 +20,52 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Jim Reid <jim@rfc1035.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1630573324==
-Content-Type: multipart/alternative; boundary=001a11c0b36aa01cb90511198851
+Hi,
 
---001a11c0b36aa01cb90511198851
-Content-Type: text/plain; charset=UTF-8
+Technically, liburcu is not supported on Mac, but if we can easily make 
+it work, why not try!
 
-On Thu, Mar 12, 2015 at 10:57 AM, Mathieu Desnoyers <
-mathieu.desnoyers@efficios.com> wrote:
+I tried compiling it on an OS X system (Yosemite, autoconf/automake 
+installed from Homebrew), but got many errors like this one:
 
+In file included from wfcqueue.c:26:
+
+./urcu/static/wfcqueue.h:260:22: error: passing 'struct __cds_wfcq_head *' to parameter of incompatible type 'cds_wfcq_head_ptr_t'
+
+         if (_cds_wfcq_empty(head, tail))
+
+                             ^~~~
+
+./urcu/static/wfcqueue.h:132:56: note: passing argument to parameter 'u_head' here
+
+static inline bool _cds_wfcq_empty(cds_wfcq_head_ptr_t u_head,
+
+                                                        ^
+
+What steps did you use to make it compile?
+
+Cheers,
+Alexandre
+
+
+On 2015-03-11 11:50 AM, Jim Reid wrote:
+> Hi. There are some problems getting this to compile on MacOSX (10.9.5):
 >
-> Even though it depends on internal behavior not currently specified by
-> mprotect,
-> I'd very much like to see the prototype you have,
+> 1) Many of the make regtest tests fail because the time command use command line arguments. eg:
+>
+> ...
+> ./test_urcu_lgc 4 4 10 -d 2 -b 32768
+> /usr/bin/time: illegal option -- a
+> usage: time [-lp] command.
+> ...
+>
+> 2) The generated Makefiles feed Linuxy linker arguments (-Wl,-rpath==) to the compiler.
+> I kludged that by manually editing the Makefile(s) to just use -L././libs instead. Which would seem to be a better solution in general. YMMV.
+>
+> Could you please fix these for a future release? Thanks.
 >
 >
-I ended up posting my code at
-https://github.com/msullivan/userspace-rcu/tree/msync-barrier.
-The interesting patch is
-https://github.com/msullivan/userspace-rcu/commit/04656b468d418efbc5d934ab07954eb8395a7ab0
-.
-
-Quick blog post I wrote about it at
-http://www.msully.net/blog/2015/02/24/forcing-memory-barriers-on-other-cpus-with-mprotect2/
-.
-(I talked briefly about sys_membarrier in the post as best as I could piece
-together from LKML; if my comment on it is inaccurate I can edit the post.)
-
--Michael Sullivan
-
---001a11c0b36aa01cb90511198851
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">On Thu, Mar 12, 2015 at 10:57 AM, Mathieu Desnoyers <span =
-dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com" target=3D=
-"_blank">mathieu.desnoyers@efficios.com</a>&gt;</span> wrote:<br><div class=
-=3D"gmail_extra"><div class=3D"gmail_quote"><blockquote class=3D"gmail_quot=
-e" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204)=
-;padding-left:1ex"><div><div style=3D"font-family:times new roman,new york,=
-times,serif;font-size:12pt;color:rgb(0,0,0)"><br><div>Even though it depend=
-s on internal behavior not currently specified by mprotect,<br></div><div>I=
-&#39;d very much like to see the prototype you have,<br></div><div><br></di=
-v></div></div></blockquote><div><br>I ended up posting my code at <a href=
-=3D"https://github.com/msullivan/userspace-rcu/tree/msync-barrier">https://=
-github.com/msullivan/userspace-rcu/tree/msync-barrier</a>.<br>The interesti=
-ng patch is <a href=3D"https://github.com/msullivan/userspace-rcu/commit/04=
-656b468d418efbc5d934ab07954eb8395a7ab0">https://github.com/msullivan/usersp=
-ace-rcu/commit/04656b468d418efbc5d934ab07954eb8395a7ab0</a>.<br><br></div><=
-div>Quick blog post I wrote about it at <a href=3D"http://www.msully.net/bl=
-og/2015/02/24/forcing-memory-barriers-on-other-cpus-with-mprotect2/">http:/=
-/www.msully.net/blog/2015/02/24/forcing-memory-barriers-on-other-cpus-with-=
-mprotect2/</a>.<br></div><div>(I talked briefly about sys_membarrier in the=
- post as best as I could piece together from LKML; if my comment on it is i=
-naccurate I can edit the post.)<br></div><div><br></div><div>-Michael Sulli=
-van<br></div></div></div></div>
-
---001a11c0b36aa01cb90511198851--
-
-
---===============1630573324==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1630573324==--
