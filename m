@@ -1,89 +1,106 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Ingo Molnar <mingo@kernel.org>
 Subject: Re: Alternative to signals/sys_membarrier() in liburcu
-Date: Fri, 13 Mar 2015 00:43:58 +0000 (UTC)
-Message-ID: <1510717200.289089.1426207438871.JavaMail.zimbra@efficios.com>
-References: <666590480.287502.1426193588471.JavaMail.zimbra@efficios.com> <1243872207.287578.1426193760572.JavaMail.zimbra@efficios.com> <20150312235938.3f7b3245@lxorguk.ukuu.org.uk>
+Date: Fri, 13 Mar 2015 09:07:43 +0100
+Message-ID: <20150313080743.GA21156@gmail.com>
+References: <CANW5cDmTCM9ZmhN7-2eWUEYvD+Y=sGt2i7mecdPTTLHMcT8fPg@mail.gmail.com>
+ <867044376.285926.1426172227750.JavaMail.zimbra@efficios.com>
+ <CANW5cDkiZoysNM3rqb4v6Tj996ocsaSh=OZoBLfp4h7ZGb4bxg@mail.gmail.com>
+ <666590480.287502.1426193588471.JavaMail.zimbra@efficios.com>
+ <CA+55aFzq75Da-VLMeLWVUbvz_KoLLnftTyVynL1s2rgBK75-Og@mail.gmail.com>
+ <1601505044.287659.1426199435904.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
 Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <20150312235938.3f7b3245@lxorguk.ukuu.org.uk>
+Content-Disposition: inline
+In-Reply-To: <1601505044.287659.1426199435904.JavaMail.zimbra@efficios.com>
 Sender: linux-kernel-owner@vger.kernel.org
-To: One Thousand Gnomes <gnomes@lxorguk.ukuu.org.uk>
-Cc: Michael Sullivan <sully@msully.net>, Peter Zijlstra <peterz@infradead.org>, LKML <linux-kernel@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>, lttng-dev@lists.lttng.org, Thomas Gleixner <tglx@linutronix.de>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Linus Torvalds <torvalds@linux-foundation.org>, Ingo Molnar <mingo@kernel.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Michael Sullivan <sully@msully.net>, lttng-dev@lists.lttng.org, LKML <linux-kernel@vger.kernel.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, Steven Rostedt <rostedt@goodmis.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> From: "One Thousand Gnomes" <gnomes@lxorguk.ukuu.org.uk>
-> To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
-> Cc: "Michael Sullivan" <sully@msully.net>, "Peter Zijlstra" <peterz@infradead.org>, "LKML"
-> <linux-kernel@vger.kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>, lttng-dev@lists.lttng.org, "Thomas Gleixner"
-> <tglx@linutronix.de>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, "Linus Torvalds"
-> <torvalds@linux-foundation.org>, "Ingo Molnar" <mingo@kernel.org>
-> Sent: Thursday, March 12, 2015 7:59:38 PM
-> Subject: Re: Alternative to signals/sys_membarrier() in liburcu
-> 
-> On Thu, 12 Mar 2015 20:56:00 +0000 (UTC)
-> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> 
-> > (sorry for re-send, my mail client tricked me into posting HTML
-> > to lkml)
+
+* Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+
+> ----- Original Message -----
+> > From: "Linus Torvalds" <torvalds@linux-foundation.org>
+> > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> > Cc: "Michael Sullivan" <sully@msully.net>, lttng-dev@lists.lttng.org, "LKML" <linux-kernel@vger.kernel.org>, "Paul E.
+> > McKenney" <paulmck@linux.vnet.ibm.com>, "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@kernel.org>,
+> > "Thomas Gleixner" <tglx@linutronix.de>, "Steven Rostedt" <rostedt@goodmis.org>
+> > Sent: Thursday, March 12, 2015 5:47:05 PM
+> > Subject: Re: Alternative to signals/sys_membarrier() in liburcu
 > > 
-> > Hi,
+> > On Thu, Mar 12, 2015 at 1:53 PM, Mathieu Desnoyers
+> > <mathieu.desnoyers@efficios.com> wrote:
+> > >
+> > > So the question as it stands appears to be: would you be comfortable
+> > > having users abuse mprotect(), relying on its side-effect of issuing
+> > > a smp_mb() on each targeted CPU for the TLB shootdown, as
+> > > an effective implementation of process-wide memory barrier ?
 > > 
-> > Michael Sullivan proposed a clever hack abusing mprotect() to
-> > perform the same effect as sys_membarrier() I submitted a few
-> > years ago ( https://lkml.org/lkml/2010/4/18/15 ).
+> > Be *very* careful.
 > > 
-> > At that time, the sys_membarrier implementation was deemed
-> > technically sound, but there were not enough users of the system call
-> > to justify its inclusion.
+> > Just yesterday, in another thread (discussing the auto-numa TLB 
+> > performance regression), we were discussing skipping the TLB 
+> > invalidates entirely if the mprotect relaxes the protections.
+
+We have such code already in mm/mprotect.c, introduced in:
+
+  10c1045f28e8 mm: numa: avoid unnecessary TLB flushes when setting NUMA hinting entries
+
+which does:
+
+                                /* Avoid TLB flush if possible */
+                                if (pte_protnone(oldpte))
+                                        continue;
+
+> > Because if you *used* to be read-only, and them mprotect() 
+> > something so that it is read-write, there really is no need to 
+> > send a TLB invalidate, at least on x86. You can just change the 
+> > page tables, and *if* any entries are stale in the TLB they'll 
+> > take a microfault on access and then just reload the TLB.
 > > 
-> > So far, the number of users of liburcu has increased, but liburcu
-> > still appears to be the only direct user of sys_membarrier. On this
-> > front, we could argue that many other system calls have only
-> > one user: glibc. In that respect, liburcu is quite similar to glibc.
-> > 
-> > So the question as it stands appears to be: would you be comfortable
-> > having users abuse mprotect(), relying on its side-effect of issuing
-> > a smp_mb() on each targeted CPU for the TLB shootdown, as
-> > an effective implementation of process-wide memory barrier ?
+> > So mprotect() to a more permissive mode is not necessarily 
+> > serializing.
 > 
-> What are you going to do if some future ARM or x86 CPU update with
-> hardware TLB shootdown appears ? All your code will start to fail on new
-> kernels using that property, and in nasty insidious ways.
+> The idea here is to always mprotect() to a more restrictive mode, 
+> which should trigger the TLB shootdown.
 
-I'd claim that removing the IPIs breaks userspace, of course. :-P
+So what happens if a CPU comes around that integrates TLB shootdown 
+management into its cache coherency protocol? In such a case IPI 
+traffic can be skipped: the memory bus messages take care of TLB 
+flushes in most cases.
 
-If we start relying on mprotect() implying memory barriers issued
-on all CPUs associated with the memory mapping in core user-space
-libraries, then whenever those shiny new CPUs show up, we might be
-stuck with the IPIs, otherwise we could claim that removing them
-breaks userspace. I would really hate to tie in an assumption like
-that on mprotect, because that would really be painting ourselves in
-a corner.
+It's a natural optimization IMHO, because TLB flushes are conceptually 
+pretty close to the synchronization mechanisms inherent in data cache 
+coherency protocols:
 
-> 
-> Also doesn't sun4d have hardware shootdown for 16 processors or less ?
+This could be implemented for example by a CPU that knows about ptes 
+and handles their modification differently: when a pte is modified it 
+will broadcast a MESI invalidation message not just for the cacheline 
+belonging to the pte's physical address, but also an 'invalidate TLB' 
+MESI message for the pte value's page.
 
-That's possible. I'm no sun expert though.
+The TLB shootdown would either be guaranteed within the MESI 
+transaction, or there would either be a deterministic timing 
+guarantee, or some explicit synchronization mechanism (new 
+instruction) to make sure the remote TLB(s) got shot down.
 
-> 
-> I would have thought a membarrier was a lot safer and it can be made to
-> do whatever horrible things are needed on different processors (indeed it
-> could even be a pure libc hotpath if some future cpu grows this ability)
+Every form of this would be way faster than sending interrupts. New 
+OSs could support this by the hardware telling them in which cases the 
+TLBs are 'auto-flushed', while old OSs would still be compatible by 
+sending (now pointless) TLB shootdown IPIs.
 
-I'd really prefer a well-documented system call for that purpose too.
+So it's a relatively straightforward hardware optimization IMHO: 
+assuming TLB flushes are considered important enough to complicate the 
+cacheline state machine (which I think they currently aren't).
+
+So in this case there's no interrupt and no other interruption of the 
+remote CPU's flow of execution in any fashion that could advance the 
+RCU state machine.
+
+What do you think?
 
 Thanks,
 
-Mathieu
-
-> 
-> Alan
-> 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+	Ingo
