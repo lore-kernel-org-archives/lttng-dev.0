@@ -1,157 +1,114 @@
-From: Zifei Tong <zifeitong@gmail.com>
-Subject: Re: userspace-rcu-0.8.6 problems on MacOSX
-Date: Fri, 13 Mar 2015 17:05:25 +0800
-Message-ID: <CAJ7wx-FMimiOxdDp0jbvXjzHmE-FB_q3k5fqwJmoim+Srw8Jxg__23962.5622438782$1426237617$gmane$org@mail.gmail.com>
-References: <18312E03-EE49-4807-8227-7DE555AFFD28@rfc1035.com>
- <5501CBE5.1020702@voxpopuli.im>
+From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+Subject: Re: Alternative to signals/sys_membarrier() in liburcu
+Date: Fri, 13 Mar 2015 07:18:53 -0700
+Message-ID: <20150313141853.GE5412@linux.vnet.ibm.com>
+References: <CANW5cDmTCM9ZmhN7-2eWUEYvD+Y=sGt2i7mecdPTTLHMcT8fPg@mail.gmail.com>
+ <867044376.285926.1426172227750.JavaMail.zimbra@efficios.com>
+ <CANW5cDkiZoysNM3rqb4v6Tj996ocsaSh=OZoBLfp4h7ZGb4bxg@mail.gmail.com>
+ <666590480.287502.1426193588471.JavaMail.zimbra@efficios.com>
+ <CA+55aFzq75Da-VLMeLWVUbvz_KoLLnftTyVynL1s2rgBK75-Og@mail.gmail.com>
+ <1601505044.287659.1426199435904.JavaMail.zimbra@efficios.com>
+ <20150313080743.GA21156@gmail.com>
+Reply-To: paulmck@linux.vnet.ibm.com
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ob0-f169.google.com ([209.85.214.169])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <soariez@gmail.com>) id 1YWLXm-0000lR-Nc
- for lttng-dev@lists.lttng.org; Fri, 13 Mar 2015 05:06:11 -0400
-Received: by obbnt9 with SMTP id nt9so18373751obb.12
- for <lttng-dev@lists.lttng.org>; Fri, 13 Mar 2015 02:06:05 -0700 (PDT)
-In-Reply-To: <5501CBE5.1020702@voxpopuli.im>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Cc: Jim Reid <jim@rfc1035.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset=us-ascii
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <20150313080743.GA21156@gmail.com>
+Sender: linux-kernel-owner@vger.kernel.org
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Linus Torvalds <torvalds@linux-foundation.org>, Michael Sullivan <sully@msully.net>, lttng-dev@lists.lttng.org, LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, Steven Rostedt <rostedt@goodmis.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+On Fri, Mar 13, 2015 at 09:07:43AM +0100, Ingo Molnar wrote:
+> 
+> * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> 
+> > ----- Original Message -----
+> > > From: "Linus Torvalds" <torvalds@linux-foundation.org>
+> > > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+> > > Cc: "Michael Sullivan" <sully@msully.net>, lttng-dev@lists.lttng.org, "LKML" <linux-kernel@vger.kernel.org>, "Paul E.
+> > > McKenney" <paulmck@linux.vnet.ibm.com>, "Peter Zijlstra" <peterz@infradead.org>, "Ingo Molnar" <mingo@kernel.org>,
+> > > "Thomas Gleixner" <tglx@linutronix.de>, "Steven Rostedt" <rostedt@goodmis.org>
+> > > Sent: Thursday, March 12, 2015 5:47:05 PM
+> > > Subject: Re: Alternative to signals/sys_membarrier() in liburcu
+> > > 
+> > > On Thu, Mar 12, 2015 at 1:53 PM, Mathieu Desnoyers
+> > > <mathieu.desnoyers@efficios.com> wrote:
+> > > >
+> > > > So the question as it stands appears to be: would you be comfortable
+> > > > having users abuse mprotect(), relying on its side-effect of issuing
+> > > > a smp_mb() on each targeted CPU for the TLB shootdown, as
+> > > > an effective implementation of process-wide memory barrier ?
+> > > 
+> > > Be *very* careful.
+> > > 
+> > > Just yesterday, in another thread (discussing the auto-numa TLB 
+> > > performance regression), we were discussing skipping the TLB 
+> > > invalidates entirely if the mprotect relaxes the protections.
+> 
+> We have such code already in mm/mprotect.c, introduced in:
+> 
+>   10c1045f28e8 mm: numa: avoid unnecessary TLB flushes when setting NUMA hinting entries
+> 
+> which does:
+> 
+>                                 /* Avoid TLB flush if possible */
+>                                 if (pte_protnone(oldpte))
+>                                         continue;
+> 
+> > > Because if you *used* to be read-only, and them mprotect() 
+> > > something so that it is read-write, there really is no need to 
+> > > send a TLB invalidate, at least on x86. You can just change the 
+> > > page tables, and *if* any entries are stale in the TLB they'll 
+> > > take a microfault on access and then just reload the TLB.
+> > > 
+> > > So mprotect() to a more permissive mode is not necessarily 
+> > > serializing.
+> > 
+> > The idea here is to always mprotect() to a more restrictive mode, 
+> > which should trigger the TLB shootdown.
+> 
+> So what happens if a CPU comes around that integrates TLB shootdown 
+> management into its cache coherency protocol? In such a case IPI 
+> traffic can be skipped: the memory bus messages take care of TLB 
+> flushes in most cases.
+> 
+> It's a natural optimization IMHO, because TLB flushes are conceptually 
+> pretty close to the synchronization mechanisms inherent in data cache 
+> coherency protocols:
+> 
+> This could be implemented for example by a CPU that knows about ptes 
+> and handles their modification differently: when a pte is modified it 
+> will broadcast a MESI invalidation message not just for the cacheline 
+> belonging to the pte's physical address, but also an 'invalidate TLB' 
+> MESI message for the pte value's page.
+> 
+> The TLB shootdown would either be guaranteed within the MESI 
+> transaction, or there would either be a deterministic timing 
+> guarantee, or some explicit synchronization mechanism (new 
+> instruction) to make sure the remote TLB(s) got shot down.
+> 
+> Every form of this would be way faster than sending interrupts. New 
+> OSs could support this by the hardware telling them in which cases the 
+> TLBs are 'auto-flushed', while old OSs would still be compatible by 
+> sending (now pointless) TLB shootdown IPIs.
+> 
+> So it's a relatively straightforward hardware optimization IMHO: 
+> assuming TLB flushes are considered important enough to complicate the 
+> cacheline state machine (which I think they currently aren't).
+> 
+> So in this case there's no interrupt and no other interruption of the 
+> remote CPU's flow of execution in any fashion that could advance the 
+> RCU state machine.
+> 
+> What do you think?
 
-I tried building urcu on my Yosemite laptop.
+I agree -- there really have been systems able to flush remote TLBs
+without interrupting the remote CPU.
 
-On Fri, Mar 13, 2015 at 1:24 AM, Alexandre Montplaisir
-<alexmonthy@voxpopuli.im> wrote:
-> Hi,
->
-> Technically, liburcu is not supported on Mac, but if we can easily make it
-> work, why not try!
->
-> I tried compiling it on an OS X system (Yosemite, autoconf/automake
-> installed from Homebrew), but got many errors like this one:
->
-> In file included from wfcqueue.c:26:
->
-> ./urcu/static/wfcqueue.h:260:22: error: passing 'struct __cds_wfcq_head *'
-> to parameter of incompatible type 'cds_wfcq_head_ptr_t'
->
->         if (_cds_wfcq_empty(head, tail))
->
->                             ^~~~
->
-> ./urcu/static/wfcqueue.h:132:56: note: passing argument to parameter
-> 'u_head' here
->
-> static inline bool _cds_wfcq_empty(cds_wfcq_head_ptr_t u_head,
->
->                                                        ^
->
-> What steps did you use to make it compile?
+So, given the fact that the userspace RCU library does now see
+some real-world use, is it now time for Mathieu to resubmit his
+sys_membarrier() patch?
 
-gcc 4.9 from Homebrew works fine. For clang I have to apply a patch to move
-'__attribute__((__transparent_union__))' after the union declaration.
-I think this
-might be a clang bug.
-
-diff --git a/urcu/lfstack.h b/urcu/lfstack.h
-index cd8e958..fa58054 100644
---- a/urcu/lfstack.h
-+++ b/urcu/lfstack.h
-@@ -84,10 +84,10 @@ struct cds_lfs_stack {
-  * struct cds_lfs_stack and struct __cds_lfs_stack on any of those two
-  * types.
-  */
--typedef union __attribute__((__transparent_union__)) {
-+typedef union {
-  struct __cds_lfs_stack *_s;
-  struct cds_lfs_stack *s;
--} cds_lfs_stack_ptr_t;
-+} __attribute__((__transparent_union__)) cds_lfs_stack_ptr_t;
-
- #ifdef _LGPL_SOURCE
-
-diff --git a/urcu/wfcqueue.h b/urcu/wfcqueue.h
-index df26e33..9d78d1b 100644
---- a/urcu/wfcqueue.h
-+++ b/urcu/wfcqueue.h
-@@ -79,10 +79,10 @@ struct cds_wfcq_head {
-  * struct cds_wfcq_head and struct __cds_wfcq_head on any of those two
-  * types.
-  */
--typedef union __attribute__((__transparent_union__)) {
-+typedef union {
-  struct __cds_wfcq_head *_h;
-  struct cds_wfcq_head *h;
--} cds_wfcq_head_ptr_t;
-+} __attribute__((__transparent_union__))  cds_wfcq_head_ptr_t;
-
- struct cds_wfcq_tail {
-  struct cds_wfcq_node *p;
-diff --git a/urcu/wfstack.h b/urcu/wfstack.h
-index 362cacc..3ac3be4 100644
---- a/urcu/wfstack.h
-+++ b/urcu/wfstack.h
-@@ -97,10 +97,10 @@ struct cds_wfs_stack {
-  * struct cds_wfs_stack and struct __cds_wfs_stack on any of those two
-  * types.
-  */
--typedef union __attribute__((__transparent_union__)) {
-+typedef union {
-  struct __cds_wfs_stack *_s;
-  struct cds_wfs_stack *s;
--} cds_wfs_stack_ptr_t;
-+} __attribute__((__transparent_union__))  cds_wfs_stack_ptr_t;
-
- #ifdef _LGPL_SOURCE
-
-> Cheers,
-> Alexandre
->
->
->
-> On 2015-03-11 11:50 AM, Jim Reid wrote:
->>
->> Hi. There are some problems getting this to compile on MacOSX (10.9.5):
->>
->> 1) Many of the make regtest tests fail because the time command use
->> command line arguments. eg:
->>
->> ...
->> ./test_urcu_lgc 4 4 10 -d 2 -b 32768
->> /usr/bin/time: illegal option -- a
->> usage: time [-lp] command.
->> ...
->>
->> 2) The generated Makefiles feed Linuxy linker arguments (-Wl,-rpath==) to
->> the compiler.
->> I kludged that by manually editing the Makefile(s) to just use -L././libs
->> instead. Which would seem to be a better solution in general. YMMV.
-
-Apparently, ld in OS X does not support -Wl,-rpath="/foo/bar" syntax,
-simply replace '='
-with space like -Wl,-rpath "/foo/bar" did the trick. I can send a
-patch for this.
-
-Thanks,
-Zifei Tong
-
->> Could you please fix these for a future release? Thanks.
->>
->>
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+							Thanx, Paul
