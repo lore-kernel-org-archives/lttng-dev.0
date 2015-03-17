@@ -1,24 +1,16 @@
-From: Brian Robbins <brianrob@microsoft.com>
-Subject: Re: Userspace Tracing and Backtraces
-Date: Tue, 17 Mar 2015 00:35:11 +0000
-Message-ID: <BY2SR01MB59586D89F6A546404D75DE3C8030__1985.99028303779$1426552621$gmane$org@BY2SR01MB595.namsdf01.sdf.exchangelabs.com>
-References: <BY2SR01MB595A5A400E2211CC7567298C81F0@BY2SR01MB595.namsdf01.sdf.exchangelabs.com>
- <CAC6yHM6VLGQgjF4tS1dLg749rEZ8DKMMda=DsrihLCoQ9sHPdw@mail.gmail.com>
- <BY2SR01MB5952376CA9DE7B8211078C8C81C0@BY2SR01MB595.namsdf01.sdf.exchangelabs.com>
- <CAC6yHM4AXG5btHdaoHjuCwzCDvPn9AORyh8gvo-VOua7ndWF2w@mail.gmail.com>
- <CH1SR01MB5996051E5E9E51406F6502DC81B0@CH1SR01MB599.namsdf01.sdf.exchangelabs.com>
- <353474327.273521.1426038464379.JavaMail.zimbra@efficios.com>
- <CAC6yHM4QSUhv4mw0HzhENDY32BrmckQwvX==gAvw0ej3mwBGAg@mail.gmail.com>
+From: "Wolfgang Rostek" <wolfgang.rostek@gmx.de>
+Subject: Fw: Re:  Can't get any event output from the demo exe
+Date: Tue, 17 Mar 2015 08:31:46 +0100
+Message-ID: <trinity-c6f922e4-1df6-4643-b9f0-f17380c6f9ec-1426577506346__37956.8284297877$1426577597$gmane$org@3capp-gmx-bs43>
+References: <trinity-e73e3633-440b-429c-ad5e-bf48c3413989-1426531801924@3capp-gmx-bs44>,
+ <55073522.6080006@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1342380477=="
+Content-Type: multipart/mixed; boundary="===============1887556274=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from na01-sn2-obe.ptr.o365filtering.com ([157.55.158.29]
- helo=na01-sn2-obe.outbound.o365filtering.com)
+Received: from mout.gmx.net ([212.227.17.20])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <brianrob@microsoft.com>) id 1YXfTy-0001se-Ey
- for lttng-dev@lists.lttng.org; Mon, 16 Mar 2015 20:35:47 -0400
-In-Reply-To: <CAC6yHM4QSUhv4mw0HzhENDY32BrmckQwvX==gAvw0ej3mwBGAg@mail.gmail.com>
-Content-Language: en-US
+ (envelope-from <wolfgang.rostek@gmx.de>) id 1YXlyi-00042o-A3
+ for lttng-dev@lists.lttng.org; Tue, 17 Mar 2015 03:31:59 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -27,342 +19,374 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Francis Giraldeau <francis.giraldeau@gmail.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1342380477==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_BY2SR01MB59586D89F6A546404D75DE3C8030BY2SR01MB595namsdf_"
+--===============1887556274==
+Content-Type: text/html; charset=UTF-8
 
---_000_BY2SR01MB59586D89F6A546404D75DE3C8030BY2SR01MB595namsdf_
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+<html><head></head><body><div style="font-family: Verdana;font-size: 12.0px;"><div>
+<div>Hi Jonathan,</div>
 
-SGkgQWxsLA0KDQpUaGlzIGlzIGdyZWF0LiAgVGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgdGhlIGlu
-Zm9ybWF0aW9uLg0KDQotQnJpYW4NCg0KRnJvbTogRnJhbmNpcyBHaXJhbGRlYXUgW21haWx0bzpm
-cmFuY2lzLmdpcmFsZGVhdUBnbWFpbC5jb21dDQpTZW50OiBUaHVyc2RheSwgTWFyY2ggMTIsIDIw
-MTUgMTE6MzQgQU0NClRvOiBNYXRoaWV1IERlc25veWVycw0KQ2M6IEJyaWFuIFJvYmJpbnM7IGx0
-dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcNClN1YmplY3Q6IFJlOiBbbHR0bmctZGV2XSBVc2Vyc3Bh
-Y2UgVHJhY2luZyBhbmQgQmFja3RyYWNlcw0KDQoyMDE1LTAzLTEwIDIxOjQ3IEdNVC0wNDowMCBN
-YXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPG1haWx0bzpt
-YXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+PjoNCkZyYW5jaXM6IERpZCB5b3UgZGVmaW5l
-IFVOV19MT0NBTF9PTkxZIGJlZm9yZSBpbmNsdWRpbmcNCnRoZSBsaWJ1bndpbmQgaGVhZGVyIGlu
-IHlvdXIgYmVuY2htYXJrcyA/IChzZWUNCmh0dHA6Ly93d3cubm9uZ251Lm9yZy9saWJ1bndpbmQv
-bWFuL2xpYnVud2luZCUyODMlMjkuaHRtbCkNCg0KVGhlIHNlZW1zIHRvIGNoYW5nZSBwZXJmb3Jt
-YW5jZSBkcmFtYXRpY2FsbHkgYWNjb3JkaW5nIHRvIHRoZSBkb2N1bWVudGF0aW9uLg0KDQoNClll
-cywgdGhpcyBpcyB0aGUgY2FzZS4gVGltZSB0byB1bndpbmQgaXMgaGlnaGVyIGF0IHRoZSBiZWdp
-bm5pbmcgKHByb2JhYmx5IHJlbGF0ZWQgdG8gaW50ZXJuYWwgY2FjaGUgYnVpbGQpLCBhbmQgYWxz
-byB2YXJ5IGFjY29yZGluZyB0byBjYWxsLXN0YWNrIGRlcHRoLg0KDQpBZ3JlZWQgb24gaGF2aW5n
-IHRoZSBiYWNrdHJhY2UgYXMgYSBjb250ZXh0LiBUaGUgbWFpbiBxdWVzdGlvbiBsZWZ0IGlzDQp0
-byBmaWd1cmUgb3V0IGlmIHdlIHdhbnQgdG8gY2FsbCBsaWJ1bndpbmQgZnJvbSB3aXRoaW4gdGhl
-IHRyYWNlZCBhcHBsaWNhdGlvbg0KZXhlY3V0aW9uIGNvbnRleHQuDQoNClVuZm9ydHVuYXRlbHks
-IGxpYnVud2luZCBpcyBub3QgcmVlbnRyYW50IHdydCBzaWduYWxzLiBUaGlzIGlzIGFscmVhZHkN
-CmEgZ29vZCBhcmd1bWVudCBmb3Igbm90IGNhbGxpbmcgaXQgZnJvbSB3aXRoaW4gYSB0cmFjZXBv
-aW50LiBJIHdvbmRlcg0KaWYgdGhlIGF1dGhvcnMgb2YgbGlidW53aW5kIHdvdWxkIGJlIG9wZW4g
-dG8gbWFrZSBpdCBzaWduYWwtcmVlbnRyYW50DQppbiB0aGUgZnV0dXJlIChub3QgYnkgZGlzYWJs
-aW5nIHNpZ25hbHMsIGJ1dCByYXRoZXIgYnkga2VlcGluZyBhIFRMUw0KbmVzdGluZyBjb3VudGVy
-LCBhbmQgcmV0dXJuaW5nIGFuIGVycm9yIGlmIG5lc3RlZCwgZm9yIHBlcmZvcm1hbmNlDQpjb25z
-aWRlcmF0aW9ucykuDQoNClRoZSBmdW5jdGlvbnMgdW53X2luaXRfbG9jYWwoKSBhbmQgdW53X3N0
-ZXAoKSBhcmUgc2lnbmFsIHNhZmUgWzFdLiBUaGUgY3JpdGljYWwgc2VjdGlvbnMgYXJlIHByb3Rl
-Y3RlZCB1c2luZyBsb2NrX2FjcXVpcmUoKSB0aGF0IGJsb2NrcyBhbGwgc2lnbmFscyBiZWZvcmUg
-dGFraW5nIHRoZSBtdXRleCwgd2hpY2ggcHJldmVudCB0aGUgcmVjdXJzaW9uLg0KDQojZGVmaW5l
-IGxvY2tfYWNxdWlyZShsLG0pICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCmRvIHsg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXA0KICBT
-SUdQUk9DTUFTSyAoU0lHX1NFVE1BU0ssICZ1bndpX2Z1bGxfbWFzaywgJihtKSk7ICAgICBcDQog
-IG11dGV4X2xvY2sgKGwpOyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwN
-Cn0gd2hpbGUgKDApDQojZGVmaW5lIGxvY2tfcmVsZWFzZShsLG0pICAgICAgICAgICAgICAgICAg
-ICAgICBcDQpkbyB7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBc
-DQogIG11dGV4X3VubG9jayAobCk7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcDQogIFNJ
-R1BST0NNQVNLIChTSUdfU0VUTUFTSywgJihtKSwgTlVMTCk7ICAgICAgICBcDQp9IHdoaWxlICgw
-KQ0KDQpUbyB1bmRlcnN0YW5kIHRoZSBpbXBsaWNhdGlvbnMsIEkgZGlkIGEgc21hbGwgcHJvZ3Jh
-bSB0byBzdHVkeSBuZXN0ZWQgc2lnbmFscyBbMl0sIHdoZXJlIGEgc2lnbmFsIGlzIHNlbnQgZnJv
-bSB3aXRoaW4gYSBzaWduYWwsIG9yIHdoZW4gc2VnbWVudGF0aW9uIGZhdWx0IG9jY3VycyBpbiBh
-IHNpZ25hbCBoYW5kbGVyLiBCbG9ja2luZyBhIHNpZ25hbCBkaWZmZXJzIGl0IHdoZW4gaXQgaXMg
-dW5ibG9ja2VkLCB3aGlsZSBpZ25vcmVkIHNpZ25hbHMgYXJlIGRpc2NhcmRlZC4gQmxvY2tlZCBz
-aWduYWxzIHRoYXQgY2FuJ3QgYmUgaWdub3JlZCBoYXZlIHRoZWlyIGRlZmF1bHQgYmVoYXZpb3Vy
-LiBJdCBwcmV2ZW50cyBhIHBvc3NpYmxlIGRlYWRsb2NrLCBsZXQncyBzYXkgaWYgbG9ja19hY3F1
-aXJlKCkgd2FzIG5lc3Rpbmcgd2l0aCBhIGN1c3RvbSBTSUdTRUdWIGhhbmRsZXIgdHJ5aW5nIHRv
-IGdldCB0aGUgc2FtZSBsb2NrLg0KDQpTbywgbGV0J3Mgc2F5IHRoYXQgaW5zdGVhZCBvZiBibG9j
-a2luZyBzaWduYWxzLCB3ZSBoYXZlIGEgcGVyLXRocmVhZCBtdXRleCwgdGhhdCByZXR1cm5zIGlm
-IHRyeV9sb2NrKCkgZmFpbHMuIEl0IHdvdWxkIGJlIGZhc3RlciwgYnV0IGZyb20gdGhlIHVzZXIn
-cyBwb2ludCBvZiB2aWV3LCB0aGUgYmFja3RyYWNlIHdpbGwgYmUgZHJvcHBlZCByYW5kb21seS4g
-SSB3b3VsZCBwcmVmZXIgaXQgYSBiaXQgc2xvd2VyLCBidXQgcmVsaWFibGUuDQoNCkluIGFkZGl0
-aW9uLCBjb3VsZCBpdCBiZSBwb3NzaWJsZSB0aGF0IFRMUyBpcyBub3Qgc2lnbmFsIHNhZmUgWzNd
-Pw0Kb3IgdXNpbmcgdGhlIHBlcmYgY2FwdHVyZSBtZWNoYW5pc20gdGhhdCB5b3UgZGVzY3JpYmUg
-YmVsb3c/DQpQZXJmIGlzIHBlZWtpbmcgYXQgdGhlIHVzZXJzcGFjZSBmcm9tIGtlcm5lbCBzcGFj
-ZSwgaXQncyBhbm90aGVyIHN0b3J5LiBJIGd1ZXNzIHRoYXQgbGlidW53aW5kIHdhcyBub3QgcG9y
-dGVkIHRvIHRoZSBrZXJuZWwgYmVjYXVzZSBpdCBpcyBhIGxhcmdlIGNodW5rIG9mIGNvbXBsaWNh
-dGVkIGNvZGUgdGhhdCBwZXJmb3JtcyBhIGxvdCBvZiBJL08gYW5kIGNvbXB1dGF0aW9uLCB3aGls
-ZSBjb3B5aW5nIGEgcG9ydGlvbiBvZiB0aGUgc3RhY2sgaXMgcmVhbGx5IGFib3V0IEtJU1MgYW5k
-IGxvdyBydW50aW1lIG92ZXJoZWFkLg0KSWYgdXNpbmcgbGlidW53aW5kIGRvZXMgbm90IHdvcmsg
-b3V0LCBhbm90aGVyIGFsdGVybmF0aXZlIEkgd291bGQgY29uc2lkZXINCndvdWxkIGJlIHRvIGNv
-cHkgdGhlIHN0YWNrIGxpa2UgcGVyZiBpcyBkb2luZyBmcm9tIHRoZSBrZXJuZWwuIEhvd2V2ZXIs
-DQppbiB0aGUgc3Bpcml0IG9mIGNvbXBhY3RpbmcgdHJhY2UgZGF0YSwgSSB3b3VsZCBiZSB0ZW1w
-dGVkIHRvIGRvIHRoZSBmb2xsb3dpbmcNCmlmIHdlIGdvIGRvd24gdGhhdCByb3V0ZTogY2hlY2sg
-ZWFjaCBwb2ludGVyLWFsaWduZWQgYWRkcmVzcyBmb3IgaXRzIGNvbnRlbnQuDQpJZiBpdCBsb29r
-cyBsaWtlIGEgcG9pbnRlciB0byBhbiBleGVjdXRhYmxlIG1lbW9yeSBhcmVhIChsaWJyYXJ5LCBl
-eGVjdXRhYmxlLCBvcg0KSklUJ2QgY29kZSksIHdlIGtlZXAgaXQuIEVsc2UsIHdlIHplcm8gdGhp
-cyBpbmZvcm1hdGlvbiAobm90IG5lZWRlZCkuIFdlIGNhbg0KdGhlbiBkbyBhIFJMRS1hbGlrZSBj
-b21wcmVzc2lvbiBvbiB0aGUgemVyb2VzLCBzbyB3ZSBjYW4ga2VlcCB0aGUgbGF5b3V0DQpvZiB0
-aGUgc3RhY2sgYWZ0ZXIgdW5jb21wcmVzc2lvbi4NCg0KDQpJbnRlcmVzdGluZyEgRm9yIGNvbXBh
-cmlzb24sIGhlcmUgaXMgYSBwZXJmIGV2ZW50IFs0XSB0aGF0IHNob3dzIHRoZXJlIGlzIGEgbG90
-IG9mIHJvb20gZm9yIHJlZHVjaW5nIHRoZSBldmVudCBzaXplLiBXZSBzaG91bGQgY2hlY2sgaWYg
-ZGlzY2FyZGluZyBvdGhlciBzYXZlZCByZWdpc3RlciB2YWx1ZXMgb24gdGhlIHN0YWNrIGltcGFj
-dHMgcmVzdG9yaW5nIHRoZSBpbnN0cnVjdGlvbiBwb2ludGVyIHJlZ2lzdGVyLiBEb2luZyB0aGUg
-dW53aW5kIG9mZmxpbmUgYWxzbyBzb2x2ZXMgc2lnbmFsIHNhZmV0eSwgc2hvdWxkIGJlIGZhc3Qg
-YW5kIHNjYWxhYmxlLg0KDQpGcmFuY2lzDQoNClsxXSBodHRwOi8vd3d3Lm5vbmdudS5vcmcvbGli
-dW53aW5kL21hbi91bndfaW5pdF9sb2NhbCgzKS5odG1sDQpbMl0gaHR0cHM6Ly9naXN0LmdpdGh1
-Yi5jb20vZ2lyYWxkZWF1Lzk4ZjA4MTYxZTgzYTdhYjgwMGVhDQpbM10gaHR0cHM6Ly9zb3VyY2V3
-YXJlLm9yZy9nbGliYy93aWtpL1RMU2FuZFNpZ25hbHMNCls0XSBodHRwOi8vcGFzdGViaW4uY29t
-L3NCeWZYWEFRDQo=
+<div>&nbsp;</div>
 
---_000_BY2SR01MB59586D89F6A546404D75DE3C8030BY2SR01MB595namsdf_
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: base64
+<div>as I&#39;m struggling with the Internet style response I&#39;ll recap it here</div>
 
-PGh0bWwgeG1sbnM6dj0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp2bWwiIHhtbG5zOm89InVy
-bjpzY2hlbWFzLW1pY3Jvc29mdC1jb206b2ZmaWNlOm9mZmljZSIgeG1sbnM6dz0idXJuOnNjaGVt
-YXMtbWljcm9zb2Z0LWNvbTpvZmZpY2U6d29yZCIgeG1sbnM6bT0iaHR0cDovL3NjaGVtYXMubWlj
-cm9zb2Z0LmNvbS9vZmZpY2UvMjAwNC8xMi9vbW1sIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv
-VFIvUkVDLWh0bWw0MCI+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIg
-Y29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxtZXRhIG5hbWU9IkdlbmVyYXRv
-ciIgY29udGVudD0iTWljcm9zb2Z0IFdvcmQgMTUgKGZpbHRlcmVkIG1lZGl1bSkiPg0KPHN0eWxl
-PjwhLS0NCi8qIEZvbnQgRGVmaW5pdGlvbnMgKi8NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1pbHk6
-IkNhbWJyaWEgTWF0aCI7DQoJcGFub3NlLTE6MiA0IDUgMyA1IDQgNiAzIDIgNDt9DQpAZm9udC1m
-YWNlDQoJe2ZvbnQtZmFtaWx5OkNhbGlicmk7DQoJcGFub3NlLTE6MiAxNSA1IDIgMiAyIDQgMyAy
-IDQ7fQ0KLyogU3R5bGUgRGVmaW5pdGlvbnMgKi8NCnAuTXNvTm9ybWFsLCBsaS5Nc29Ob3JtYWws
-IGRpdi5Nc29Ob3JtYWwNCgl7bWFyZ2luOjBpbjsNCgltYXJnaW4tYm90dG9tOi4wMDAxcHQ7DQoJ
-Zm9udC1zaXplOjEyLjBwdDsNCglmb250LWZhbWlseToiVGltZXMgTmV3IFJvbWFuIixzZXJpZjt9
-DQphOmxpbmssIHNwYW4uTXNvSHlwZXJsaW5rDQoJe21zby1zdHlsZS1wcmlvcml0eTo5OTsNCglj
-b2xvcjpibHVlOw0KCXRleHQtZGVjb3JhdGlvbjp1bmRlcmxpbmU7fQ0KYTp2aXNpdGVkLCBzcGFu
-Lk1zb0h5cGVybGlua0ZvbGxvd2VkDQoJe21zby1zdHlsZS1wcmlvcml0eTo5OTsNCgljb2xvcjpw
-dXJwbGU7DQoJdGV4dC1kZWNvcmF0aW9uOnVuZGVybGluZTt9DQpzcGFuLkVtYWlsU3R5bGUxNw0K
-CXttc28tc3R5bGUtdHlwZTpwZXJzb25hbC1yZXBseTsNCglmb250LWZhbWlseToiQ2FsaWJyaSIs
-c2Fucy1zZXJpZjsNCgljb2xvcjojMUY0OTdEO30NCi5Nc29DaHBEZWZhdWx0DQoJe21zby1zdHls
-ZS10eXBlOmV4cG9ydC1vbmx5Ow0KCWZvbnQtZmFtaWx5OiJDYWxpYnJpIixzYW5zLXNlcmlmO30N
-CkBwYWdlIFdvcmRTZWN0aW9uMQ0KCXtzaXplOjguNWluIDExLjBpbjsNCgltYXJnaW46MS4waW4g
-MS4waW4gMS4waW4gMS4waW47fQ0KZGl2LldvcmRTZWN0aW9uMQ0KCXtwYWdlOldvcmRTZWN0aW9u
-MTt9DQotLT48L3N0eWxlPjwhLS1baWYgZ3RlIG1zbyA5XT48eG1sPg0KPG86c2hhcGVkZWZhdWx0
-cyB2OmV4dD0iZWRpdCIgc3BpZG1heD0iMTAyNiIgLz4NCjwveG1sPjwhW2VuZGlmXS0tPjwhLS1b
-aWYgZ3RlIG1zbyA5XT48eG1sPg0KPG86c2hhcGVsYXlvdXQgdjpleHQ9ImVkaXQiPg0KPG86aWRt
-YXAgdjpleHQ9ImVkaXQiIGRhdGE9IjEiIC8+DQo8L286c2hhcGVsYXlvdXQ+PC94bWw+PCFbZW5k
-aWZdLS0+DQo8L2hlYWQ+DQo8Ym9keSBsYW5nPSJFTi1VUyIgbGluaz0iYmx1ZSIgdmxpbms9InB1
-cnBsZSI+DQo8ZGl2IGNsYXNzPSJXb3JkU2VjdGlvbjEiPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+
-PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7Q2FsaWJyaSZx
-dW90OyxzYW5zLXNlcmlmO2NvbG9yOiMxRjQ5N0QiPkhpIEFsbCw8bzpwPjwvbzpwPjwvc3Bhbj48
-L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdDtm
-b250LWZhbWlseTomcXVvdDtDYWxpYnJpJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6IzFGNDk3RCI+
-PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4g
-c3R5bGU9ImZvbnQtc2l6ZToxMS4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7Q2FsaWJyaSZxdW90Oyxz
-YW5zLXNlcmlmO2NvbG9yOiMxRjQ5N0QiPlRoaXMgaXMgZ3JlYXQuJm5ic3A7IFRoYW5rIHlvdSB2
-ZXJ5IG11Y2ggZm9yIHRoZSBpbmZvcm1hdGlvbi48bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBj
-bGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdDtmb250LWZhbWls
-eTomcXVvdDtDYWxpYnJpJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6IzFGNDk3RCI+PG86cD4mbmJz
-cDs8L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZv
-bnQtc2l6ZToxMS4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7Q2FsaWJyaSZxdW90OyxzYW5zLXNlcmlm
-O2NvbG9yOiMxRjQ5N0QiPi1CcmlhbjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJN
-c29Ob3JtYWwiPjxhIG5hbWU9Il9NYWlsRW5kQ29tcG9zZSI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6
-ZToxMS4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7Q2FsaWJyaSZxdW90OyxzYW5zLXNlcmlmO2NvbG9y
-OiMxRjQ5N0QiPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvYT48L3A+DQo8cCBjbGFzcz0iTXNv
-Tm9ybWFsIj48Yj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjExLjBwdDtmb250LWZhbWlseTomcXVv
-dDtDYWxpYnJpJnF1b3Q7LHNhbnMtc2VyaWYiPkZyb206PC9zcGFuPjwvYj48c3BhbiBzdHlsZT0i
-Zm9udC1zaXplOjExLjBwdDtmb250LWZhbWlseTomcXVvdDtDYWxpYnJpJnF1b3Q7LHNhbnMtc2Vy
-aWYiPiBGcmFuY2lzIEdpcmFsZGVhdSBbbWFpbHRvOmZyYW5jaXMuZ2lyYWxkZWF1QGdtYWlsLmNv
-bV0NCjxicj4NCjxiPlNlbnQ6PC9iPiBUaHVyc2RheSwgTWFyY2ggMTIsIDIwMTUgMTE6MzQgQU08
-YnI+DQo8Yj5Ubzo8L2I+IE1hdGhpZXUgRGVzbm95ZXJzPGJyPg0KPGI+Q2M6PC9iPiBCcmlhbiBS
-b2JiaW5zOyBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPGJyPg0KPGI+U3ViamVjdDo8L2I+IFJl
-OiBbbHR0bmctZGV2XSBVc2Vyc3BhY2UgVHJhY2luZyBhbmQgQmFja3RyYWNlczxvOnA+PC9vOnA+
-PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxvOnA+Jm5ic3A7PC9vOnA+PC9wPg0K
-PGRpdj4NCjxkaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+MjAxNS0wMy0xMCAyMTo0
-NyBHTVQtMDQ6MDAgTWF0aGlldSBEZXNub3llcnMgJmx0OzxhIGhyZWY9Im1haWx0bzptYXRoaWV1
-LmRlc25veWVyc0BlZmZpY2lvcy5jb20iIHRhcmdldD0iX2JsYW5rIj5tYXRoaWV1LmRlc25veWVy
-c0BlZmZpY2lvcy5jb208L2E+Jmd0Ozo8bzpwPjwvbzpwPjwvcD4NCjxibG9ja3F1b3RlIHN0eWxl
-PSJib3JkZXI6bm9uZTtib3JkZXItbGVmdDpzb2xpZCAjQ0NDQ0NDIDEuMHB0O3BhZGRpbmc6MGlu
-IDBpbiAwaW4gNi4wcHQ7bWFyZ2luLWxlZnQ6NC44cHQ7bWFyZ2luLXJpZ2h0OjBpbiI+DQo8ZGl2
-Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjpibGFjayI+
-RnJhbmNpczogRGlkIHlvdSBkZWZpbmUgVU5XX0xPQ0FMX09OTFkgYmVmb3JlIGluY2x1ZGluZzxv
-OnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwi
-PjxzcGFuIHN0eWxlPSJjb2xvcjpibGFjayI+dGhlIGxpYnVud2luZCBoZWFkZXIgaW4geW91ciBi
-ZW5jaG1hcmtzID8gKHNlZTxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxw
-IGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjpibGFjayI+PGEgaHJlZj0iaHR0
-cDovL3d3dy5ub25nbnUub3JnL2xpYnVud2luZC9tYW4vbGlidW53aW5kJTI4MyUyOS5odG1sIiB0
-YXJnZXQ9Il9ibGFuayI+aHR0cDovL3d3dy5ub25nbnUub3JnL2xpYnVud2luZC9tYW4vbGlidW53
-aW5kJTI4MyUyOS5odG1sPC9hPik8L3NwYW4+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90
-O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6IzIyMjIyMiI+Jm5ic3A7PC9zcGFuPjxzcGFu
-IHN0eWxlPSJjb2xvcjpibGFjayI+PG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8L2Rp
-dj4NCjwvYmxvY2txdW90ZT4NCjxibG9ja3F1b3RlIHN0eWxlPSJib3JkZXI6bm9uZTtib3JkZXIt
-bGVmdDpzb2xpZCAjQ0NDQ0NDIDEuMHB0O3BhZGRpbmc6MGluIDBpbiAwaW4gNi4wcHQ7bWFyZ2lu
-LWxlZnQ6NC44cHQ7bWFyZ2luLXJpZ2h0OjBpbiI+DQo8ZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJN
-c29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjpibGFjayI+PG86cD4mbmJzcDs8L286cD48L3Nw
-YW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9
-ImNvbG9yOmJsYWNrIj5UaGUgc2VlbXMgdG8gY2hhbmdlIHBlcmZvcm1hbmNlIGRyYW1hdGljYWxs
-eSBhY2NvcmRpbmcgdG8gdGhlIGRvY3VtZW50YXRpb24uPG86cD48L286cD48L3NwYW4+PC9wPg0K
-PC9kaXY+DQo8L2Rpdj4NCjwvYmxvY2txdW90ZT4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFs
-Ij48bzpwPiZuYnNwOzwvbzpwPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3Jt
-YWwiPjxvOnA+Jm5ic3A7PC9vOnA+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05v
-cm1hbCI+WWVzLCB0aGlzIGlzIHRoZSBjYXNlLiBUaW1lIHRvIHVud2luZCBpcyBoaWdoZXIgYXQg
-dGhlIGJlZ2lubmluZyAocHJvYmFibHkgcmVsYXRlZCB0byBpbnRlcm5hbCBjYWNoZSBidWlsZCks
-IGFuZCBhbHNvIHZhcnkgYWNjb3JkaW5nIHRvIGNhbGwtc3RhY2sgZGVwdGguPG86cD48L286cD48
-L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj4mbmJzcDs8bzpwPjwvbzpw
-PjwvcD4NCjwvZGl2Pg0KPGJsb2NrcXVvdGUgc3R5bGU9ImJvcmRlcjpub25lO2JvcmRlci1sZWZ0
-OnNvbGlkICNDQ0NDQ0MgMS4wcHQ7cGFkZGluZzowaW4gMGluIDBpbiA2LjBwdDttYXJnaW4tbGVm
-dDo0LjhwdDttYXJnaW4tcmlnaHQ6MGluIj4NCjxkaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05v
-cm1hbCI+PHNwYW4gc3R5bGU9ImNvbG9yOmJsYWNrIj5BZ3JlZWQgb24gaGF2aW5nIHRoZSBiYWNr
-dHJhY2UgYXMgYSBjb250ZXh0LiBUaGUgbWFpbiBxdWVzdGlvbiBsZWZ0IGlzPG86cD48L286cD48
-L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5
-bGU9ImNvbG9yOmJsYWNrIj50byBmaWd1cmUgb3V0IGlmIHdlIHdhbnQgdG8gY2FsbCBsaWJ1bndp
-bmQgZnJvbSB3aXRoaW4gdGhlIHRyYWNlZCBhcHBsaWNhdGlvbjxvOnA+PC9vOnA+PC9zcGFuPjwv
-cD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xv
-cjpibGFjayI+ZXhlY3V0aW9uIGNvbnRleHQuPG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+
-DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImNvbG9yOmJsYWNrIj48
-bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNv
-Tm9ybWFsIj48c3BhbiBzdHlsZT0iY29sb3I6YmxhY2siPlVuZm9ydHVuYXRlbHksIGxpYnVud2lu
-ZCBpcyBub3QgcmVlbnRyYW50IHdydCBzaWduYWxzLiBUaGlzIGlzIGFscmVhZHk8bzpwPjwvbzpw
-Pjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBz
-dHlsZT0iY29sb3I6YmxhY2siPmEgZ29vZCBhcmd1bWVudCBmb3Igbm90IGNhbGxpbmcgaXQgZnJv
-bSB3aXRoaW4gYSB0cmFjZXBvaW50LiBJIHdvbmRlcjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwv
-ZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjpibGFj
-ayI+aWYgdGhlIGF1dGhvcnMgb2YgbGlidW53aW5kIHdvdWxkIGJlIG9wZW4gdG8gbWFrZSBpdCBz
-aWduYWwtcmVlbnRyYW50PG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAg
-Y2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImNvbG9yOmJsYWNrIj5pbiB0aGUgZnV0dXJl
-IChub3QgYnkgZGlzYWJsaW5nIHNpZ25hbHMsIGJ1dCByYXRoZXIgYnkga2VlcGluZyBhIFRMUzxv
-OnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwi
-PjxzcGFuIHN0eWxlPSJjb2xvcjpibGFjayI+bmVzdGluZyBjb3VudGVyLCBhbmQgcmV0dXJuaW5n
-IGFuIGVycm9yIGlmIG5lc3RlZCwgZm9yIHBlcmZvcm1hbmNlPG86cD48L286cD48L3NwYW4+PC9w
-Pg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImNvbG9y
-OmJsYWNrIj5jb25zaWRlcmF0aW9ucykuPG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8
-L2Rpdj4NCjwvYmxvY2txdW90ZT4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48bzpwPiZu
-YnNwOzwvbzpwPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPlRoZSBm
-dW5jdGlvbnMgdW53X2luaXRfbG9jYWwoKSBhbmQgdW53X3N0ZXAoKSBhcmUgc2lnbmFsIHNhZmUg
-WzFdLiBUaGUgY3JpdGljYWwgc2VjdGlvbnMgYXJlIHByb3RlY3RlZCB1c2luZyBsb2NrX2FjcXVp
-cmUoKSB0aGF0IGJsb2NrcyBhbGwgc2lnbmFscyBiZWZvcmUgdGFraW5nIHRoZSBtdXRleCwgd2hp
-Y2ggcHJldmVudCB0aGUgcmVjdXJzaW9uLjxvOnA+PC9vOnA+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0K
-PHAgY2xhc3M9Ik1zb05vcm1hbCI+PG86cD4mbmJzcDs8L286cD48L3A+DQo8L2Rpdj4NCjxkaXY+
-DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+I2RlZmluZSBsb2NrX2FjcXVpcmUobCxtKSAm
-bmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZu
-YnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyBcPG86cD48L286
-cD48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj5kbyB7ICZuYnNwOyAm
-bmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZu
-YnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5i
-c3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJz
-cDtcPG86cD48L286cD48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj4m
-bmJzcDsgU0lHUFJPQ01BU0sgKFNJR19TRVRNQVNLLCAmYW1wO3Vud2lfZnVsbF9tYXNrLCAmYW1w
-OyhtKSk7ICZuYnNwOyAmbmJzcDsgXDxvOnA+PC9vOnA+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAg
-Y2xhc3M9Ik1zb05vcm1hbCI+Jm5ic3A7IG11dGV4X2xvY2sgKGwpOyAmbmJzcDsgJm5ic3A7ICZu
-YnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5i
-c3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJz
-cDsgXDxvOnA+PC9vOnA+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+
-fSB3aGlsZSAoMCk8bzpwPjwvbzpwPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29O
-b3JtYWwiPiNkZWZpbmUgbG9ja19yZWxlYXNlKGwsbSkgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5i
-c3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyBcPG86
-cD48L286cD48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj5kbyB7ICZu
-YnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5i
-c3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJz
-cDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwO1w8bzpwPjwvbzpwPjwvcD4NCjwv
-ZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPiZuYnNwOyBtdXRleF91bmxvY2sgKGwp
-OyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7
-ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7IFw8bzpwPjwvbzpwPjwv
-cD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPiZuYnNwOyBTSUdQUk9DTUFT
-SyAoU0lHX1NFVE1BU0ssICZhbXA7KG0pLCBOVUxMKTsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5i
-c3A7XDxvOnA+PC9vOnA+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+
-fSB3aGlsZSAoMCk8bzpwPjwvbzpwPjwvcD4NCjwvZGl2Pg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xh
-c3M9Ik1zb05vcm1hbCI+PG86cD4mbmJzcDs8L286cD48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBj
-bGFzcz0iTXNvTm9ybWFsIj5UbyB1bmRlcnN0YW5kIHRoZSBpbXBsaWNhdGlvbnMsIEkgZGlkIGEg
-c21hbGwgcHJvZ3JhbSB0byBzdHVkeSBuZXN0ZWQgc2lnbmFscyBbMl0sIHdoZXJlIGEgc2lnbmFs
-IGlzIHNlbnQgZnJvbSB3aXRoaW4gYSBzaWduYWwsIG9yIHdoZW4gc2VnbWVudGF0aW9uIGZhdWx0
-IG9jY3VycyBpbiBhIHNpZ25hbCBoYW5kbGVyLiBCbG9ja2luZyBhIHNpZ25hbCBkaWZmZXJzIGl0
-IHdoZW4gaXQgaXMgdW5ibG9ja2VkLCB3aGlsZQ0KIGlnbm9yZWQgc2lnbmFscyBhcmUgZGlzY2Fy
-ZGVkLiBCbG9ja2VkIHNpZ25hbHMgdGhhdCBjYW4ndCBiZSBpZ25vcmVkIGhhdmUgdGhlaXIgZGVm
-YXVsdCBiZWhhdmlvdXIuIEl0IHByZXZlbnRzIGEgcG9zc2libGUgZGVhZGxvY2ssIGxldCdzIHNh
-eSBpZiBsb2NrX2FjcXVpcmUoKSB3YXMgbmVzdGluZyB3aXRoIGEgY3VzdG9tIFNJR1NFR1YgaGFu
-ZGxlciB0cnlpbmcgdG8gZ2V0IHRoZSBzYW1lIGxvY2suPG86cD48L286cD48L3A+DQo8L2Rpdj4N
-CjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48bzpwPiZuYnNwOzwvbzpwPjwvcD4NCjwvZGl2
-Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPlNvLCBsZXQncyBzYXkgdGhhdCBpbnN0ZWFk
-IG9mIGJsb2NraW5nIHNpZ25hbHMsIHdlIGhhdmUgYSBwZXItdGhyZWFkIG11dGV4LCB0aGF0IHJl
-dHVybnMgaWYgdHJ5X2xvY2soKSBmYWlscy4gSXQgd291bGQgYmUgZmFzdGVyLCBidXQgZnJvbSB0
-aGUgdXNlcidzIHBvaW50IG9mIHZpZXcsIHRoZSBiYWNrdHJhY2Ugd2lsbCBiZSBkcm9wcGVkIHJh
-bmRvbWx5LiBJIHdvdWxkIHByZWZlciBpdCBhIGJpdCBzbG93ZXIsDQogYnV0IHJlbGlhYmxlLjxv
-OnA+PC9vOnA+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PG86cD4m
-bmJzcDs8L286cD48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj5JbiBh
-ZGRpdGlvbiwgY291bGQgaXQgYmUgcG9zc2libGUgdGhhdCBUTFMgaXMgbm90IHNpZ25hbCBzYWZl
-IFszXT8mbmJzcDs8bzpwPjwvbzpwPjwvcD4NCjwvZGl2Pg0KPGJsb2NrcXVvdGUgc3R5bGU9ImJv
-cmRlcjpub25lO2JvcmRlci1sZWZ0OnNvbGlkICNDQ0NDQ0MgMS4wcHQ7cGFkZGluZzowaW4gMGlu
-IDBpbiA2LjBwdDttYXJnaW4tbGVmdDo0LjhwdDttYXJnaW4tcmlnaHQ6MGluIj4NCjxkaXY+DQo8
-YmxvY2txdW90ZSBzdHlsZT0iYm9yZGVyOm5vbmU7Ym9yZGVyLWxlZnQ6c29saWQgIzEwMTBGRiAx
-LjVwdDtwYWRkaW5nOjBpbiAwaW4gMGluIDQuMHB0O21hcmdpbi1sZWZ0OjMuNzVwdDttYXJnaW4t
-dG9wOjUuMHB0O21hcmdpbi1ib3R0b206NS4wcHQiPg0KPGRpdj4NCjxkaXY+DQo8ZGl2Pg0KPGRp
-dj4NCjxibG9ja3F1b3RlIHN0eWxlPSJib3JkZXI6bm9uZTtib3JkZXItbGVmdDpzb2xpZCAjQ0ND
-Q0NDIDEuMHB0O3BhZGRpbmc6MGluIDBpbiAwaW4gNi4wcHQ7bWFyZ2luLWxlZnQ6NC44cHQ7bWFy
-Z2luLXRvcDo1LjBwdDttYXJnaW4tcmlnaHQ6MGluO21hcmdpbi1ib3R0b206NS4wcHQiPg0KPGRp
-dj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIiBzdHlsZT0ibXNvLW1hcmdpbi10b3AtYWx0
-OmF1dG87bXNvLW1hcmdpbi1ib3R0b20tYWx0OmF1dG8iPjxzcGFuIHN0eWxlPSJmb250LXNpemU6
-MTEuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0NhbGlicmkmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjoj
-MUY0OTdEIj5vciB1c2luZyB0aGUgcGVyZiBjYXB0dXJlIG1lY2hhbmlzbSB0aGF0IHlvdSBkZXNj
-cmliZSBiZWxvdz88L3NwYW4+PHNwYW4gc3R5bGU9ImNvbG9yOmJsYWNrIj48bzpwPjwvbzpwPjwv
-c3Bhbj48L3A+DQo8L2Rpdj4NCjwvZGl2Pg0KPC9ibG9ja3F1b3RlPg0KPGRpdj4NCjxwIGNsYXNz
-PSJNc29Ob3JtYWwiIHN0eWxlPSJtc28tbWFyZ2luLXRvcC1hbHQ6YXV0bzttc28tbWFyZ2luLWJv
-dHRvbS1hbHQ6YXV0byI+PHNwYW4gc3R5bGU9ImNvbG9yOmJsYWNrIj5QZXJmIGlzIHBlZWtpbmcg
-YXQgdGhlIHVzZXJzcGFjZSBmcm9tIGtlcm5lbCBzcGFjZSwgaXQncyBhbm90aGVyIHN0b3J5LiBJ
-IGd1ZXNzIHRoYXQgbGlidW53aW5kIHdhcyBub3QgcG9ydGVkIHRvIHRoZSBrZXJuZWwgYmVjYXVz
-ZSBpdCBpcyBhIGxhcmdlIGNodW5rDQogb2YgY29tcGxpY2F0ZWQgY29kZSB0aGF0IHBlcmZvcm1z
-IGEgbG90IG9mIEkvTyBhbmQgY29tcHV0YXRpb24sIHdoaWxlIGNvcHlpbmcgYSBwb3J0aW9uIG9m
-IHRoZSBzdGFjayBpcyByZWFsbHkgYWJvdXQgS0lTUyBhbmQgbG93IHJ1bnRpbWUgb3ZlcmhlYWQu
-PG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8L2Rpdj4NCjwvZGl2Pg0KPC9kaXY+DQo8
-L2Rpdj4NCjwvYmxvY2txdW90ZT4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBz
-dHlsZT0iY29sb3I6YmxhY2siPklmIHVzaW5nIGxpYnVud2luZCBkb2VzIG5vdCB3b3JrIG91dCwg
-YW5vdGhlciBhbHRlcm5hdGl2ZSBJIHdvdWxkIGNvbnNpZGVyPG86cD48L286cD48L3NwYW4+PC9w
-Pg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImNvbG9y
-OmJsYWNrIj53b3VsZCBiZSB0byBjb3B5IHRoZSBzdGFjayBsaWtlIHBlcmYgaXMgZG9pbmcgZnJv
-bSB0aGUga2VybmVsLiBIb3dldmVyLDxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRp
-dj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjpibGFjayI+aW4gdGhl
-IHNwaXJpdCBvZiBjb21wYWN0aW5nIHRyYWNlIGRhdGEsIEkgd291bGQgYmUgdGVtcHRlZCB0byBk
-byB0aGUgZm9sbG93aW5nPG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAg
-Y2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImNvbG9yOmJsYWNrIj5pZiB3ZSBnbyBkb3du
-IHRoYXQgcm91dGU6IGNoZWNrIGVhY2ggcG9pbnRlci1hbGlnbmVkIGFkZHJlc3MgZm9yIGl0cyBj
-b250ZW50LjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJN
-c29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjpibGFjayI+SWYgaXQgbG9va3MgbGlrZSBhIHBv
-aW50ZXIgdG8gYW4gZXhlY3V0YWJsZSBtZW1vcnkgYXJlYSAobGlicmFyeSwgZXhlY3V0YWJsZSwg
-b3I8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9y
-bWFsIj48c3BhbiBzdHlsZT0iY29sb3I6YmxhY2siPkpJVCdkIGNvZGUpLCB3ZSBrZWVwIGl0LiBF
-bHNlLCB3ZSB6ZXJvIHRoaXMgaW5mb3JtYXRpb24gKG5vdCBuZWVkZWQpLiBXZSBjYW48bzpwPjwv
-bzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3Bh
-biBzdHlsZT0iY29sb3I6YmxhY2siPnRoZW4gZG8gYSBSTEUtYWxpa2UgY29tcHJlc3Npb24gb24g
-dGhlIHplcm9lcywgc28gd2UgY2FuIGtlZXAgdGhlIGxheW91dDxvOnA+PC9vOnA+PC9zcGFuPjwv
-cD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xv
-cjpibGFjayI+b2YgdGhlIHN0YWNrIGFmdGVyIHVuY29tcHJlc3Npb24uPG86cD48L286cD48L3Nw
-YW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9
-ImNvbG9yOmJsYWNrIj48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjwvZGl2
-Pg0KPC9ibG9ja3F1b3RlPg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxvOnA+Jm5ic3A7
-PC9vOnA+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+SW50ZXJlc3Rp
-bmchIEZvciBjb21wYXJpc29uLCBoZXJlIGlzIGEgcGVyZiBldmVudCBbNF0gdGhhdCBzaG93cyB0
-aGVyZSBpcyBhIGxvdCBvZiByb29tIGZvciByZWR1Y2luZyB0aGUgZXZlbnQgc2l6ZS4gV2Ugc2hv
-dWxkIGNoZWNrIGlmIGRpc2NhcmRpbmcgb3RoZXIgc2F2ZWQgcmVnaXN0ZXIgdmFsdWVzIG9uIHRo
-ZSBzdGFjayBpbXBhY3RzIHJlc3RvcmluZyB0aGUgaW5zdHJ1Y3Rpb24gcG9pbnRlciByZWdpc3Rl
-ci4NCiBEb2luZyB0aGUgdW53aW5kIG9mZmxpbmUgYWxzbyBzb2x2ZXMgc2lnbmFsIHNhZmV0eSwg
-c2hvdWxkIGJlIGZhc3QgYW5kIHNjYWxhYmxlLjxvOnA+PC9vOnA+PC9wPg0KPC9kaXY+DQo8ZGl2
-Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PG86cD4mbmJzcDs8L286cD48L3A+DQo8L2Rpdj4NCjxk
-aXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj5GcmFuY2lzPG86cD48L286cD48L3A+DQo8L2Rpdj4N
-CjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48bzpwPiZuYnNwOzwvbzpwPjwvcD4NCjwvZGl2
-Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPlsxXSZuYnNwOzxhIGhyZWY9Imh0dHA6Ly93
-d3cubm9uZ251Lm9yZy9saWJ1bndpbmQvbWFuL3Vud19pbml0X2xvY2FsKDMpLmh0bWwiPmh0dHA6
-Ly93d3cubm9uZ251Lm9yZy9saWJ1bndpbmQvbWFuL3Vud19pbml0X2xvY2FsKDMpLmh0bWw8L2E+
-PG86cD48L286cD48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj5bMl0m
-bmJzcDs8YSBocmVmPSJodHRwczovL2dpc3QuZ2l0aHViLmNvbS9naXJhbGRlYXUvOThmMDgxNjFl
-ODNhN2FiODAwZWEiPmh0dHBzOi8vZ2lzdC5naXRodWIuY29tL2dpcmFsZGVhdS85OGYwODE2MWU4
-M2E3YWI4MDBlYTwvYT48bzpwPjwvbzpwPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJN
-c29Ob3JtYWwiPlszXSZuYnNwOzxhIGhyZWY9Imh0dHBzOi8vc291cmNld2FyZS5vcmcvZ2xpYmMv
-d2lraS9UTFNhbmRTaWduYWxzIj5odHRwczovL3NvdXJjZXdhcmUub3JnL2dsaWJjL3dpa2kvVExT
-YW5kU2lnbmFsczwvYT48bzpwPjwvbzpwPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJN
-c29Ob3JtYWwiPls0XSZuYnNwOzxhIGhyZWY9Imh0dHA6Ly9wYXN0ZWJpbi5jb20vc0J5ZlhYQVEi
-Pmh0dHA6Ly9wYXN0ZWJpbi5jb20vc0J5ZlhYQVE8L2E+PG86cD48L286cD48L3A+DQo8L2Rpdj4N
-CjwvZGl2Pg0KPC9kaXY+DQo8L2Rpdj4NCjwvZGl2Pg0KPC9ib2R5Pg0KPC9odG1sPg0K
+<div>&nbsp;</div>
 
---_000_BY2SR01MB59586D89F6A546404D75DE3C8030BY2SR01MB595namsdf_--
+<div>&gt; On session creation you can use -o to specify an output PATH.</div>
+
+<div>Have tried to redirect to /tmp but no output there as well</div>
+
+<div>&nbsp;</div>
+
+<div>&gt; Did you build from source or you got binary from a package manager ?</div>
+
+<div>yes, via git clone etc.</div>
+
+<div>&nbsp;</div>
+
+<div>&gt; What do you mean by talk to it?<br/>
+I see daemon logs in response to the lttng commands. The exception is</div>
+
+<div>that there is no reaction for the demo-trace run.</div>
+
+<div>&nbsp;</div>
+
+<div>&gt; Any particuliar reason to do an export LD_LIBRARY_PATH?<br/>
+Ok, is no longer needed.</div>
+
+<div>&nbsp;</div>
+
+<div>I&#39;ve added the sleep but provider output is still like in my original post.</div>
+
+<div>&nbsp;</div>
+
+<div>Below the steps I run again. Is it possible to get more info from the</div>
+
+<div>demo-trace provider? Is the marked line ok?</div>
+
+<div>&nbsp;</div>
+
+<div>thanks</div>
+
+<div>Wolfgang R.</div>
+
+<div>&nbsp;</div>
+
+<div>&nbsp;</div>
+
+<div><font face="Arial, Helvetica"><font face="Courier New,Courier">row@cobra7:~&#36; lsb_release -sd<br/>
+Ubuntu 14.04.1 LTS<br/>
+<br/>
+row@cobra7:~&#36; file /sbin/init<br/>
+/sbin/init: ELF 32-bit LSB&nbsp;&nbsp;shared object, Intel 80386, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.24, BuildID[sha1]=c394677bccc720a3bb4f4c42a48e008ff33e39b1, stripped<br/>
+=&gt; 32bit<br/>
+<br/>
+<br/>
+row@cobra7:~&#36; lttng-sessiond -vvv<br/>
+...<br/>
+<br/>
+row@cobra7:~/lttng_source/lttng-ust/doc/examples/demo&#36; export LTTNG_UST_DEBUG=1<br/>
+row@cobra7:~/lttng_source/lttng-ust/doc/examples/demo&#36; lttng create<br/>
+Session auto-20150317-075322 created.<br/>
+Traces will be written in /home/local/ESG_GMBH/row/lttng-traces/auto-20150317-075322&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ####### not found<br/>
+row@cobra7:~/lttng_source/lttng-ust/doc/examples/demo&#36; lttng enable-event -u -a<br/>
+All UST events are enabled in channel channel0<br/>
+<br/>
+row@cobra7:~&#36; ps -aux &#124; grep ltt<br/>
+root&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4664&nbsp;&nbsp;0.0&nbsp;&nbsp;0.0&nbsp;&nbsp;84416&nbsp;&nbsp;3376 ?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ssl&nbsp;&nbsp;07:51&nbsp;&nbsp;&nbsp;0:00 lttng-sessiond<br/>
+row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4683&nbsp;&nbsp;0.0&nbsp;&nbsp;0.1&nbsp;&nbsp;76220 13788 pts/1&nbsp;&nbsp;&nbsp;&nbsp;Sl+&nbsp;&nbsp;07:52&nbsp;&nbsp;&nbsp;0:00 lttng-sessiond -vvv<br/>
+row&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4709&nbsp;&nbsp;0.0&nbsp;&nbsp;0.0&nbsp;&nbsp;56096&nbsp;&nbsp;&nbsp;672 pts/1&nbsp;&nbsp;&nbsp;&nbsp;Sl+&nbsp;&nbsp;07:53&nbsp;&nbsp;&nbsp;0:00 lttng-consumerd --quiet -u --consumerd-cmd-sock /home/local/ESG_GMBH/row/.lttng/ustconsumerd32/command --consumerd-err-sock /home/local/ESG_GMBH/row/.lttng/ustconsumerd32/error --group tracing<br/>
+<br/>
+row@cobra7:~/lttng_source/lttng-ust/doc/examples/demo&#36; lttng start<br/>
+Tracing started for session auto-20150317-075322<br/>
+<br/>
+row@cobra7:~/lttng_source/lttng-ust/doc/examples/demo&#36; ./demo-trace<br/>
+liblttng_ust_tracepoint[5381/5381]: just registered a tracepoints section from 0xb7589780 and having 2 tracepoints (in tracepoint_register_lib() at tracepoint.c:767)<br/>
+...<br/>
+libust[5389/5390]: Info: sessiond not accepting connections to global apps socket (in ust_listener_thread() at lttng-ust-comm.c:1221)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#########&nbsp;&nbsp;is this OK ?<br/>
+libust[5389/5390]: Waiting for global apps sessiond (in wait_for_sessiond() at lttng-ust-comm.c:1132)<br/>
+libust[5389/5391]: Info: sessiond not accepting connections to local apps socket (in ust_listener_thread() at lttng-ust-comm.c:1221)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#########&nbsp;&nbsp;is this OK ?<br/>
+libust[5389/5391]: Waiting for local apps sessiond (in wait_for_sessiond() at lttng-ust-comm.c:1132)<br/>
+libust[5389/5389]: Provider &quot;lttng_ust_tracef&quot; accepted, version 1.0 is compatible with LTTng UST provider version 1.0. (in check_provider_version() at lttng-<br/>
+...<br/>
+<br/>
+<br/>
+row@cobra7:~&#36; lttng list&nbsp;&nbsp;-u<br/>
+UST events:<br/>
+-------------<br/>
+None </font></font></div>
+
+<div>&nbsp;</div>
+
+<div>&nbsp;</div>
+
+<div>&nbsp;</div>
+
+<div>&nbsp;</div>
+
+<div>&nbsp;</div>
+
+<div>&nbsp;
+<div name="quote" style="margin:10px 5px 5px 10px; padding: 10px 0 10px 10px; border-left:2px solid #C3D9E5; word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
+<div style="margin:0 0 10px 0;"><b>Gesendet:</b>&nbsp;Montag, 16. M&auml;rz 2015 um 20:55 Uhr<br/>
+<b>Von:</b>&nbsp;&quot;Jonathan Rajotte Julien&quot; &lt;Jonathan.rajotte-julien@efficios.com&gt;<br/>
+<b>An:</b>&nbsp;lttng-dev@lists.lttng.org<br/>
+<b>Betreff:</b>&nbsp;Re: [lttng-dev] Can&#39;t get any event output from the demo exe</div>
+
+<div name="quoted-content">Hi Wolfgang,<br/>
+<br/>
+See inline edit.<br/>
+<br/>
+On 2015-03-16 02:50 PM, Wolfgang Rostek wrote:<br/>
+&gt; Hi group,<br/>
+&gt; I&#39;m a bit frustrated not passing the hello world level.<br/>
+&gt; But I&#39;m eager to get access to this nice tooling.<br/>
+We&#39;ll make sure this happen :).<br/>
+<br/>
+&gt; For now I&#39;m assuming problems in access rights or<br/>
+&gt; may be a 32/64bit library mismatch. Here my stackoverflow<br/>
+<br/>
+On session creation you can use -o to specify an output PATH.<br/>
+<br/>
+&gt; post which wasn&#39;t responded. Hope I&#39;ll get a push here.<br/>
+&gt; thanks<br/>
+&gt; Wolfgang R.<br/>
+&gt; ========================================================<br/>
+&gt; LTTng at the very beginning<br/>
+&gt; just at step zero of using lttng but can&#39;t pass it. Hope a small hint<br/>
+&gt; gives me a push.<br/>
+&gt; Trying the run the most simple demo of the distribution<br/>
+&gt; lttng-ust/doc/examples/demo.<br/>
+<br/>
+Okai so just to be sure I tested the demo and everything work as<br/>
+expected let&#39;s see what is missing on your side.<br/>
+Did you build from source or you got binary from a package manager ?<br/>
+<br/>
+&gt; cat README<br/>
+&gt; ...<br/>
+&gt; The simplest command to trace the demo program are:<br/>
+&gt; lttng create<br/>
+&gt; lttng enable-event -u -a<br/>
+&gt; lttng start<br/>
+&gt; ./demo-trace<br/>
+&gt; lttng destroy<br/>
+&gt; That will create a trace in your &#36;HOME/lttng-traces directory.<br/>
+&gt; ...<br/>
+&gt; Put my user lttng-sessiond in verbose mode and can talk to it. Here<br/>
+&gt; the state when the demo-trace starts<br/>
+<br/>
+What do you mean by talk to it?<br/>
+<br/>
+&gt; row@cobra7:/&#36; lttng list auto-20150313-091148<br/>
+&gt; Tracing session auto-20150313-091148: [active]<br/>
+&gt; Trace path: /home/local/ESG_GMBH/row/lttng-traces/auto-20150313-091148<br/>
+&gt; === Domain: UST global ===<br/>
+&gt; Buffer type: per UID<br/>
+&gt; Channels:<br/>
+&gt; -------------<br/>
+&gt; - channel0: [enabled]<br/>
+&gt; Attributes:<br/>
+&gt; overwrite mode: 0<br/>
+&gt; subbufers size: 131072<br/>
+&gt; number of subbufers: 4<br/>
+&gt; switch timer interval: 0<br/>
+&gt; read timer interval: 0<br/>
+&gt; output: mmap()<br/>
+&gt; Events:<br/>
+&gt; * (type: tracepoint) [enabled]<br/>
+<br/>
+Looks fine so far.<br/>
+<br/>
+&gt; Executing the demo-trace shows no reaction in the daemon shell and no<br/>
+&gt; output file created. Below the client log.<br/>
+&gt; I can&#39;t see any problem reported and don&#39;t know what to check next.<br/>
+<br/>
+Are you sure you got nothing ? Try lttng view if you have babeltrace<br/>
+installed.<br/>
+Also did you start the daemon in verbose mode ? Otherwise it is expected<br/>
+to have no output.<br/>
+<br/>
+&gt; thanks in advance for feedback<br/>
+&gt; Wolfgang R.<br/>
+&gt; row@cobra7:~/lttng_source/lttng-ust/doc/examples/demo&#36; export<br/>
+&gt; LD_LIBRARY_PATH=/lib:/usr/lib:/usr/local/lib<br/>
+<br/>
+Any particuliar reason to do an export LD_LIBRARY_PATH?<br/>
+<br/>
+&gt; row@cobra7:~/lttng_source/lttng-ust/doc/examples/demo&#36; ./demo-trace<br/>
+<br/>
+If you want to have more time to test you might want to add a sleep()<br/>
+into the for loop in demo.c and put a higher loop threshold.<br/>
+You will be able to test lttng list -u. Even if it looks like the events<br/>
+got registered, it is a good start to pinpoint the problem.<br/>
+Also you can start the sessiond with -vvv for a more verbose mode as you<br/>
+probably know it.<br/>
+<br/>
+<br/>
+Cheers!<br/>
+&gt; liblttng_ust_tracepoint[17268/17268]: just registered a tracepoints<br/>
+&gt; section from 0xb754f780 and having 2 tracepoints (in<br/>
+&gt; tracepoint_register_lib() at tracepoint.c:767)<br/>
+&gt; liblttng_ust_tracepoint[17268/17268]: registered tracepoint:<br/>
+&gt; ust_baddr_statedump:soinfo (in tracepoint_register_lib() at<br/>
+&gt; tracepoint.c:772)<br/>
+&gt; liblttng_ust_tracepoint[17268/17268]: registered tracepoint:<br/>
+&gt; lttng_ust_tracef:event (in tracepoint_register_lib() at tracepoint.c:772)<br/>
+&gt; libust[17268/17268]: Provider &quot;ust_baddr_statedump&quot; accepted, version<br/>
+&gt; 1.0 is compatible with LTTng UST provider version 1.0. (in<br/>
+&gt; check_provider_version() at lttng-probes.c:174)<br/>
+&gt; libust[17268/17268]: adding probe ust_baddr_statedump containing 1<br/>
+&gt; events to lazy registration list (in lttng_probe_register() at<br/>
+&gt; lttng-probes.c:216)<br/>
+&gt; libust[17268/17268]: LTT : ltt ring buffer client<br/>
+&gt; &quot;relay-metadata-mmap&quot; init<br/>
+&gt; (in lttng_ring_buffer_metadata_client_init() at<br/>
+&gt; lttng-ring-buffer-metadata-client.h:330)<br/>
+&gt; libust[17268/17268]: LTT : ltt ring buffer client<br/>
+&gt; &quot;relay-overwrite-mmap&quot; init<br/>
+&gt; (in lttng_ring_buffer_client_overwrite_init() at<br/>
+&gt; lttng-ring-buffer-client.h:681)<br/>
+&gt; libust[17268/17268]: LTT : ltt ring buffer client<br/>
+&gt; &quot;relay-overwrite-rt-mmap&quot; init<br/>
+&gt; (in lttng_ring_buffer_client_overwrite_rt_init() at<br/>
+&gt; lttng-ring-buffer-client.h:681)<br/>
+&gt; libust[17268/17268]: LTT : ltt ring buffer client &quot;relay-discard-mmap&quot;<br/>
+&gt; init<br/>
+&gt; (in lttng_ring_buffer_client_discard_init() at<br/>
+&gt; lttng-ring-buffer-client.h:681)<br/>
+&gt; libust[17268/17268]: LTT : ltt ring buffer client<br/>
+&gt; &quot;relay-discard-rt-mmap&quot; init<br/>
+&gt; (in lttng_ring_buffer_client_discard_rt_init() at<br/>
+&gt; lttng-ring-buffer-client.h:681)<br/>
+&gt; libust[17268/17269]: Info: sessiond not accepting connections to<br/>
+&gt; global apps socket (in ust_listener_thread() at lttng-ust-comm.c:1221)<br/>
+&gt; libust[17268/17269]: Waiting for global apps sessiond (in<br/>
+&gt; wait_for_sessiond() at lttng-ust-comm.c:1132)<br/>
+&gt; libust[17268/17270]: Info: sessiond not accepting connections to local<br/>
+&gt; apps socket (in ust_listener_thread() at lttng-ust-comm.c:1221)<br/>
+&gt; libust[17268/17270]: Waiting for local apps sessiond (in<br/>
+&gt; wait_for_sessiond() at lttng-ust-comm.c:1132)<br/>
+&gt; libust[17268/17268]: Provider &quot;lttng_ust_tracef&quot; accepted, version 1.0<br/>
+&gt; is compatible with LTTng UST provider version 1.0. (in<br/>
+&gt; check_provider_version() at lttng-probes.c:174)<br/>
+&gt; libust[17268/17268]: just registered probe ust_baddr_statedump<br/>
+&gt; containing 1 events (in lttng_lazy_probe_register() at lttng-probes.c:115)<br/>
+&gt; libust[17268/17268]: adding probe lttng_ust_tracef containing 1 events<br/>
+&gt; to lazy registration list (in lttng_probe_register() at<br/>
+&gt; lttng-probes.c:216)<br/>
+&gt; libust[17268/17268]: Provider &quot;ust_tests_demo3&quot; accepted, version 1.0<br/>
+&gt; is compatible with LTTng UST provider version 1.0. (in<br/>
+&gt; check_provider_version() at lttng-probes.c:174)<br/>
+&gt; libust[17268/17268]: just registered probe lttng_ust_tracef containing<br/>
+&gt; 1 events (in lttng_lazy_probe_register() at lttng-probes.c:115)<br/>
+&gt; libust[17268/17268]: adding probe ust_tests_demo3 containing 1 events<br/>
+&gt; to lazy registration list (in lttng_probe_register() at<br/>
+&gt; lttng-probes.c:216)<br/>
+&gt; libust[17268/17268]: Provider &quot;ust_tests_demo&quot; accepted, version 1.0<br/>
+&gt; is compatible with LTTng UST provider version 1.0. (in<br/>
+&gt; check_provider_version() at lttng-probes.c:174)<br/>
+&gt; libust[17268/17268]: just registered probe ust_tests_demo3 containing<br/>
+&gt; 1 events (in lttng_lazy_probe_register() at lttng-probes.c:115)<br/>
+&gt; libust[17268/17268]: adding probe ust_tests_demo containing 2 events<br/>
+&gt; to lazy registration list (in lttng_probe_register() at<br/>
+&gt; lttng-probes.c:216)<br/>
+&gt; libust[17268/17268]: Provider &quot;ust_tests_demo2&quot; accepted, version 1.0<br/>
+&gt; is compatible with LTTng UST provider version 1.0. (in<br/>
+&gt; check_provider_version() at lttng-probes.c:174)<br/>
+&gt; libust[17268/17268]: just registered probe ust_tests_demo containing 2<br/>
+&gt; events (in lttng_lazy_probe_register() at lttng-probes.c:115)<br/>
+&gt; libust[17268/17268]: adding probe ust_tests_demo2 containing 1 events<br/>
+&gt; to lazy registration list (in lttng_probe_register() at<br/>
+&gt; lttng-probes.c:216)<br/>
+&gt; liblttng_ust_tracepoint[17268/17268]: just registered a tracepoints<br/>
+&gt; section from 0x804b144 and having 4 tracepoints (in<br/>
+&gt; tracepoint_register_lib() at tracepoint.c:767)<br/>
+&gt; liblttng_ust_tracepoint[17268/17268]: registered tracepoint:<br/>
+&gt; ust_tests_demo:starting (in tracepoint_register_lib() at tracepoint.c:772)<br/>
+&gt; liblttng_ust_tracepoint[17268/17268]: registered tracepoint:<br/>
+&gt; ust_tests_demo:done (in tracepoint_register_lib() at tracepoint.c:772)<br/>
+&gt; liblttng_ust_tracepoint[17268/17268]: registered tracepoint:<br/>
+&gt; ust_tests_demo2:loop (in tracepoint_register_lib() at tracepoint.c:772)<br/>
+&gt; liblttng_ust_tracepoint[17268/17268]: registered tracepoint:<br/>
+&gt; ust_tests_demo3:done (in tracepoint_register_lib() at tracepoint.c:772)<br/>
+&gt; Demo program starting.<br/>
+&gt; Tracing... done.<br/>
+&gt; liblttng_ust_tracepoint[17268/17268]: just unregistered a tracepoints<br/>
+&gt; section from 0x804b144 (in tracepoint_unregister_lib() at<br/>
+&gt; tracepoint.c:797)<br/>
+&gt; libust[17268/17268]: Provider &quot;ust_tests_demo2&quot; accepted, version 1.0<br/>
+&gt; is compatible with LTTng UST provider version 1.0. (in<br/>
+&gt; check_provider_version() at lttng-probes.c:174)<br/>
+&gt; libust[17268/17268]: just unregistered probe ust_tests_demo2 (in<br/>
+&gt; lttng_probe_unregister() at lttng-probes.c:245)<br/>
+&gt; libust[17268/17268]: Provider &quot;ust_tests_demo&quot; accepted, version 1.0<br/>
+&gt; is compatible with LTTng UST provider version 1.0. (in<br/>
+&gt; check_provider_version() at lttng-probes.c:174)<br/>
+&gt; libust[17268/17268]: just unregistered probe ust_tests_demo (in<br/>
+&gt; lttng_probe_unregister() at lttng-probes.c:245)<br/>
+&gt; libust[17268/17268]: Provider &quot;ust_tests_demo3&quot; accepted, version 1.0<br/>
+&gt; is compatible with LTTng UST provider version 1.0. (in<br/>
+&gt; check_provider_version() at lttng-probes.c:174)<br/>
+&gt; libust[17268/17268]: just unregistered probe ust_tests_demo3 (in<br/>
+&gt; lttng_probe_unregister() at lttng-probes.c:245)<br/>
+&gt; libust[17268/17268]: Provider &quot;lttng_ust_tracef&quot; accepted, version 1.0<br/>
+&gt; is compatible with LTTng UST provider version 1.0. (in<br/>
+&gt; check_provider_version() at lttng-probes.c:174)<br/>
+&gt; libust[17268/17268]: just unregistered probe lttng_ust_tracef (in<br/>
+&gt; lttng_probe_unregister() at lttng-probes.c:245)<br/>
+&gt; libust[17268/17268]: LTT : ltt ring buffer client<br/>
+&gt; &quot;relay-discard-rt-mmap&quot; exit<br/>
+&gt; (in lttng_ring_buffer_client_discard_rt_exit() at<br/>
+&gt; lttng-ring-buffer-client.h:688)<br/>
+&gt; libust[17268/17268]: LTT : ltt ring buffer client &quot;relay-discard-mmap&quot;<br/>
+&gt; exit<br/>
+&gt; (in lttng_ring_buffer_client_discard_exit() at<br/>
+&gt; lttng-ring-buffer-client.h:688)<br/>
+&gt; libust[17268/17268]: LTT : ltt ring buffer client<br/>
+&gt; &quot;relay-overwrite-rt-mmap&quot; exit<br/>
+&gt; (in lttng_ring_buffer_client_overwrite_rt_exit() at<br/>
+&gt; lttng-ring-buffer-client.h:688)<br/>
+&gt; libust[17268/17268]: LTT : ltt ring buffer client<br/>
+&gt; &quot;relay-overwrite-mmap&quot; exit<br/>
+&gt; (in lttng_ring_buffer_client_overwrite_exit() at<br/>
+&gt; lttng-ring-buffer-client.h:688)<br/>
+&gt; libust[17268/17268]: LTT : ltt ring buffer client<br/>
+&gt; &quot;relay-metadata-mmap&quot; exit<br/>
+&gt; (in lttng_ring_buffer_metadata_client_exit() at<br/>
+&gt; lttng-ring-buffer-metadata-client.h:337)<br/>
+&gt; libust[17268/17268]: Provider &quot;ust_baddr_statedump&quot; accepted, version<br/>
+&gt; 1.0 is compatible with LTTng UST provider version 1.0. (in<br/>
+&gt; check_provider_version() at lttng-probes.c:174)<br/>
+&gt; libust[17268/17268]: just unregistered probe ust_baddr_statedump (in<br/>
+&gt; lttng_probe_unregister() at lttng-probes.c:245)<br/>
+&gt; liblttng_ust_tracepoint[17268/17268]: just unregistered a tracepoints<br/>
+&gt; section from 0xb754f780 (in tracepoint_unregister_lib() at<br/>
+&gt; tracepoint.c:797)<br/>
+&gt; row@cobra7:~/lttng_source/lttng-ust/doc/examples/demo&#36;<br/>
+&gt;<br/>
+&gt;<br/>
+&gt; _______________________________________________<br/>
+&gt; lttng-dev mailing list<br/>
+&gt; lttng-dev@lists.lttng.org<br/>
+&gt; <a href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" target="_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br/>
+<br/>
+--<br/>
+Jonathan R. Julien<br/>
+Efficios<br/>
+<br/>
+<br/>
+_______________________________________________<br/>
+lttng-dev mailing list<br/>
+lttng-dev@lists.lttng.org<br/>
+<a href="http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" target="_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a></div>
+</div>
+</div>
+</div></div></body></html>
 
 
---===============1342380477==
+--===============1887556274==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -373,4 +397,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1342380477==--
+--===============1887556274==--
