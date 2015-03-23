@@ -1,18 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Unable to make lttng run for multiple instances
-	in	parallel
-Date: Mon, 23 Mar 2015 13:49:54 +0000 (UTC)
-Message-ID: <831190398.75671.1427118594032.JavaMail.zimbra__25066.1079226576$1427118652$gmane$org@efficios.com>
-References: <CAL1ZhON-ZwP_C6VvzPv9Jj530fRRVdevuCk+zAq9zVM-enApiA@mail.gmail.com>
+Subject: Re: Can't get any event output from the demo exe
+Date: Mon, 23 Mar 2015 13:58:22 +0000 (UTC)
+Message-ID: <1948116446.75706.1427119102220.JavaMail.zimbra__2832.42011578313$1427119160$gmane$org@efficios.com>
+References: <trinity-e73e3633-440b-429c-ad5e-bf48c3413989-1426531801924@3capp-gmx-bs44>
+ <55073522.6080006@efficios.com>
+ <trinity-6a4fab60-3c7e-4785-a2f2-e42bba49fcb4-1426578599498@3capp-gmx-bs25>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Ya2jt-0007l6-Nc
- for lttng-dev@lists.lttng.org; Mon, 23 Mar 2015 09:49:58 -0400
-In-Reply-To: <CAL1ZhON-ZwP_C6VvzPv9Jj530fRRVdevuCk+zAq9zVM-enApiA@mail.gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1Ya2s6-0007pJ-04
+ for lttng-dev@lists.lttng.org; Mon, 23 Mar 2015 09:58:27 -0400
+In-Reply-To: <trinity-6a4fab60-3c7e-4785-a2f2-e42bba49fcb4-1426578599498@3capp-gmx-bs25>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,106 +22,79 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Chidhu R <chid1989@gmail.com>
+To: Wolfgang Rostek <wolfgang.rostek@gmx.de>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message ----- 
-
-> Hello,
-
-> When I try to execute the following code, I always run into errors. Can
-> someone help me.
-
-> Code:
-
-> int lttng_init() {
-> int err;
-> int l_fd = -1;
-
-> if(0 != system("mkdir /tmp/mk_lttng")) {
-> printf("Directory exists\n");
-> }
-
-> setenv("LTTNG_HOME", "/tmp/mk_lttng", 1);
-> fprintf(stderr, "LTTNG_HOME is %s\n",getenv("LTTNG_HOME"));
-
-> l_fd = open("/tmp/lttng_test.lck", O_CREAT | O_WRONLY | O_EXCL, 0644);
-> err = errno;
-
-> if(l_fd != -1) {
-> fprintf(stderr, "Creating lock file l_fd = %d\n", l_fd);
-> if(0 != system("lttng destroy -a")) {
-> return -1;
-> }
-
-> if(0 != system("lttng create")) {
-> return -1;
-> }
-
-> if(0 != system("lttng enable-event -u -a")) {
-> return -1;
-> }
-
-> if(0 != system("lttng start")) {
-> return -1;
-> }
-
-> }
-> else {
-> fprintf(stderr, "Unable to get lock err = %d\n",err);
-> // Someone has already created a session. We just dump into their buffer
-> }
-> }
-
-> int main() {
-> if( -1 == lttng_init())
-> assert(0);
-> }
-
-> When I compile and run the above code, I am getting these errors.
-
-> cycl01:~/hello-tp% ./hello
-> mkdir: cannot create directory `/tmp/mk_lttng': File exists
-> Directory exists
-> LTTNG_HOME is /tmp/mk_lttng
-> Creating lock file l_fd = 4
-> Spawning a session daemon
-> I/O warning : failed to load external entity
-> "/usr/share/xml/lttng/session.xsd"
-> XML Error: Failed to locate the main schema resource at
-> '/usr/share/xml/lttng/session.xsd'.
-> Error: XSD parsing failed
-> Error: Session load failed: Invalid session configuration
-> No session found, nothing to do.
-> PERROR - 09:20:36.889067 [7142/7150]: bind inet: Address already in use (in
-> lttcomm_bind_inet_sock() at inet.c:109)
-> Warning: Another session daemon is using this JUL port. JUL support will be
-> deactivated to prevent interfering with the tracing.
-
-> I am trying to run multiple of these programs in parallel . So I am trying to
-> incorporate a locking mechanism so that only one instance succeeds and
-> creates the session, and other instances just dump into the existing
-> session.
-
-You might wait to try starting the lttng-sessiond daemon explicitly 
-before running your program. This might help a bit. 
-
-Thanks, 
-
-Mathieu 
-
-> Thanks
-> Chid
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEhpIEpvbmF0aGFuLAo+ICAKPiBhcyBJJ20g
+c3RydWdnbGluZyB3aXRoIHRoZSBJbnRlcm5ldCBzdHlsZSByZXNwb25zZSBJJ2xsIHJlY2FwIGl0
+IGhlcmUKPiAgCj4gPiBPbiBzZXNzaW9uIGNyZWF0aW9uIHlvdSBjYW4gdXNlIC1vIHRvIHNwZWNp
+ZnkgYW4gb3V0cHV0IFBBVEguCj4gSGF2ZSB0cmllZCB0byByZWRpcmVjdCB0byAvdG1wIGJ1dCBu
+byBvdXRwdXQgdGhlcmUgYXMgd2VsbAo+ICAKPiA+IERpZCB5b3UgYnVpbGQgZnJvbSBzb3VyY2Ug
+b3IgeW91IGdvdCBiaW5hcnkgZnJvbSBhIHBhY2thZ2UgbWFuYWdlciA/Cj4geWVzLCB2aWEgZ2l0
+IGNsb25lIGV0Yy4KPiAgCj4gPiBXaGF0IGRvIHlvdSBtZWFuIGJ5IHRhbGsgdG8gaXQ/Cj4gSSBz
+ZWUgZGFlbW9uIGxvZ3MgaW4gcmVzcG9uc2UgdG8gdGhlIGx0dG5nIGNvbW1hbmRzLiBUaGUgZXhj
+ZXB0aW9uIGlzCj4gdGhhdCB0aGVyZSBpcyBubyByZWFjdGlvbiBmb3IgdGhlIGRlbW8tdHJhY2Ug
+cnVuLgoKSSBzZWUgdGhhdCBVU1QgZGVidWcgdGVsbHMgdXMgdGhpczoKCiJsaWJ1c3RbNTM4OS81
+MzkxXTogSW5mbzogc2Vzc2lvbmQgbm90IGFjY2VwdGluZyBjb25uZWN0aW9ucyB0byBsb2NhbCBh
+cHBzCnNvY2tldCAoaW4gdXN0X2xpc3RlbmVyX3RocmVhZCgpIGF0IGx0dG5nLXVzdC1jb21tLmM6
+MTIyMSkiCgphbmQgYWxzbyBmb3IgZ2xvYmFsIGFwcHMgc29ja2V0LgoKU28gaXQgbWVhbnMgVVNU
+IGNhbm5vdCB0YWxrIHRvIHRoZSBzZXNzaW9uIGRhZW1vbi4KCkFyZSB5b3UgVVNUIGFuZCBzZXNz
+aW9uZCB2ZXJzaW9ucyBjb21wYXRpYmxlID8gVGhlIG91dHB1dCBvZgpsdHRuZy1zZXNzaW9uZCAt
+dnZ2IHNob3VsZCBoZWxwIHVzIHVuZGVyc3RhbmQgd2h5IFVTVCBjYW5ub3QKY29ubmVjdCB0byBp
+dC4KClRoYW5rcywKCk1hdGhpZXUKCgo+ICAKPiA+IEFueSBwYXJ0aWN1bGlhciByZWFzb24gdG8g
+ZG8gYW4gZXhwb3J0IExEX0xJQlJBUllfUEFUSD8KPiBPaywgaXMgbm8gbG9uZ2VyIG5lZWRlZC4K
+PiAgCj4gSSd2ZSBhZGRlZCB0aGUgc2xlZXAgYnV0IHByb3ZpZGVyIG91dHB1dCBpcyBzdGlsbCBs
+aWtlIGluIG15IG9yaWdpbmFsIHBvc3QuCj4gIAo+IEJlbG93IHRoZSBzdGVwcyBJIHJ1biBhZ2Fp
+bi4gSXMgaXQgcG9zc2libGUgdG8gZ2V0IG1vcmUgaW5mbyBmcm9tIHRoZQo+IGRlbW8tdHJhY2Ug
+cHJvdmlkZXI/IElzIHRoZSBtYXJrZWQgbGluZSBvaz8KPiAgCj4gdGhhbmtzCj4gV29sZmdhbmcg
+Ui4KPiAgCj4gIAo+IHJvd0Bjb2JyYTc6fiQgbHNiX3JlbGVhc2UgLXNkCj4gVWJ1bnR1IDE0LjA0
+LjEgTFRTCj4gCj4gcm93QGNvYnJhNzp+JCBmaWxlIC9zYmluL2luaXQKPiAvc2Jpbi9pbml0OiBF
+TEYgMzItYml0IExTQiAgc2hhcmVkIG9iamVjdCwgSW50ZWwgODAzODYsIHZlcnNpb24gMSAoU1lT
+ViksCj4gZHluYW1pY2FsbHkgbGlua2VkICh1c2VzIHNoYXJlZCBsaWJzKSwgZm9yIEdOVS9MaW51
+eCAyLjYuMjQsCj4gQnVpbGRJRFtzaGExXT1jMzk0Njc3YmNjYzcyMGEzYmI0ZjRjNDJhNDhlMDA4
+ZmYzM2UzOWIxLCBzdHJpcHBlZAo+ID0+IDMyYml0Cj4gCj4gCj4gcm93QGNvYnJhNzp+JCBsdHRu
+Zy1zZXNzaW9uZCAtdnZ2Cj4gLi4uCj4gCj4gcm93QGNvYnJhNzp+L2x0dG5nX3NvdXJjZS9sdHRu
+Zy11c3QvZG9jL2V4YW1wbGVzL2RlbW8kIGV4cG9ydAo+IExUVE5HX1VTVF9ERUJVRz0xCj4gcm93
+QGNvYnJhNzp+L2x0dG5nX3NvdXJjZS9sdHRuZy11c3QvZG9jL2V4YW1wbGVzL2RlbW8kIGx0dG5n
+IGNyZWF0ZQo+IFNlc3Npb24gYXV0by0yMDE1MDMxNy0wNzUzMjIgY3JlYXRlZC4KPiBUcmFjZXMg
+d2lsbCBiZSB3cml0dGVuIGluCj4gL2hvbWUvbG9jYWwvRVNHX0dNQkgvcm93L2x0dG5nLXRyYWNl
+cy9hdXRvLTIwMTUwMzE3LTA3NTMyMgo+ICMjIyMjIyMgbm90IGZvdW5kCj4gcm93QGNvYnJhNzp+
+L2x0dG5nX3NvdXJjZS9sdHRuZy11c3QvZG9jL2V4YW1wbGVzL2RlbW8kIGx0dG5nIGVuYWJsZS1l
+dmVudCAtdQo+IC1hCj4gQWxsIFVTVCBldmVudHMgYXJlIGVuYWJsZWQgaW4gY2hhbm5lbCBjaGFu
+bmVsMAo+IAo+IHJvd0Bjb2JyYTc6fiQgcHMgLWF1eCB8IGdyZXAgbHR0Cj4gcm9vdCAgICAgIDQ2
+NjQgIDAuMCAgMC4wICA4NDQxNiAgMzM3NiA/ICAgICAgICBTc2wgIDA3OjUxICAgMDowMAo+IGx0
+dG5nLXNlc3Npb25kCj4gcm93ICAgICAgIDQ2ODMgIDAuMCAgMC4xICA3NjIyMCAxMzc4OCBwdHMv
+MSAgICBTbCsgIDA3OjUyICAgMDowMAo+IGx0dG5nLXNlc3Npb25kIC12dnYKPiByb3cgICAgICAg
+NDcwOSAgMC4wICAwLjAgIDU2MDk2ICAgNjcyIHB0cy8xICAgIFNsKyAgMDc6NTMgICAwOjAwCj4g
+bHR0bmctY29uc3VtZXJkIC0tcXVpZXQgLXUgLS1jb25zdW1lcmQtY21kLXNvY2sKPiAvaG9tZS9s
+b2NhbC9FU0dfR01CSC9yb3cvLmx0dG5nL3VzdGNvbnN1bWVyZDMyL2NvbW1hbmQgLS1jb25zdW1l
+cmQtZXJyLXNvY2sKPiAvaG9tZS9sb2NhbC9FU0dfR01CSC9yb3cvLmx0dG5nL3VzdGNvbnN1bWVy
+ZDMyL2Vycm9yIC0tZ3JvdXAgdHJhY2luZwo+IAo+IHJvd0Bjb2JyYTc6fi9sdHRuZ19zb3VyY2Uv
+bHR0bmctdXN0L2RvYy9leGFtcGxlcy9kZW1vJCBsdHRuZyBzdGFydAo+IFRyYWNpbmcgc3RhcnRl
+ZCBmb3Igc2Vzc2lvbiBhdXRvLTIwMTUwMzE3LTA3NTMyMgo+IAo+IHJvd0Bjb2JyYTc6fi9sdHRu
+Z19zb3VyY2UvbHR0bmctdXN0L2RvYy9leGFtcGxlcy9kZW1vJCAuL2RlbW8tdHJhY2UKPiBsaWJs
+dHRuZ191c3RfdHJhY2Vwb2ludFs1MzgxLzUzODFdOiBqdXN0IHJlZ2lzdGVyZWQgYSB0cmFjZXBv
+aW50cyBzZWN0aW9uCj4gZnJvbSAweGI3NTg5NzgwIGFuZCBoYXZpbmcgMiB0cmFjZXBvaW50cyAo
+aW4gdHJhY2Vwb2ludF9yZWdpc3Rlcl9saWIoKSBhdAo+IHRyYWNlcG9pbnQuYzo3NjcpCj4gLi4u
+Cj4gbGlidXN0WzUzODkvNTM5MF06IEluZm86IHNlc3Npb25kIG5vdCBhY2NlcHRpbmcgY29ubmVj
+dGlvbnMgdG8gZ2xvYmFsIGFwcHMKPiBzb2NrZXQgKGluIHVzdF9saXN0ZW5lcl90aHJlYWQoKSBh
+dCBsdHRuZy11c3QtY29tbS5jOjEyMjEpCj4gIyMjIyMjIyMjICBpcyB0aGlzIE9LID8KPiBsaWJ1
+c3RbNTM4OS81MzkwXTogV2FpdGluZyBmb3IgZ2xvYmFsIGFwcHMgc2Vzc2lvbmQgKGluIHdhaXRf
+Zm9yX3Nlc3Npb25kKCkKPiBhdCBsdHRuZy11c3QtY29tbS5jOjExMzIpCj4gbGlidXN0WzUzODkv
+NTM5MV06IEluZm86IHNlc3Npb25kIG5vdCBhY2NlcHRpbmcgY29ubmVjdGlvbnMgdG8gbG9jYWwg
+YXBwcwo+IHNvY2tldCAoaW4gdXN0X2xpc3RlbmVyX3RocmVhZCgpIGF0IGx0dG5nLXVzdC1jb21t
+LmM6MTIyMSkKPiAjIyMjIyMjIyMgIGlzIHRoaXMgT0sgPwo+IGxpYnVzdFs1Mzg5LzUzOTFdOiBX
+YWl0aW5nIGZvciBsb2NhbCBhcHBzIHNlc3Npb25kIChpbiB3YWl0X2Zvcl9zZXNzaW9uZCgpIGF0
+Cj4gbHR0bmctdXN0LWNvbW0uYzoxMTMyKQo+IGxpYnVzdFs1Mzg5LzUzODldOiBQcm92aWRlciAi
+bHR0bmdfdXN0X3RyYWNlZiIgYWNjZXB0ZWQsIHZlcnNpb24gMS4wIGlzCj4gY29tcGF0aWJsZSB3
+aXRoIExUVG5nIFVTVCBwcm92aWRlciB2ZXJzaW9uIDEuMC4gKGluIGNoZWNrX3Byb3ZpZGVyX3Zl
+cnNpb24oKQo+IGF0IGx0dG5nLQo+IC4uLgo+IAo+IAo+IHJvd0Bjb2JyYTc6fiQgbHR0bmcgbGlz
+dCAgLXUKPiBVU1QgZXZlbnRzOgo+IC0tLS0tLS0tLS0tLS0KPiBOb25lCj4gIAo+IMKgCj4gCj4g
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1k
+ZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0
+cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IAoKLS0gCk1h
+dGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
+YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcu
+b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
