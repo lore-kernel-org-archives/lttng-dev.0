@@ -1,15 +1,15 @@
 From: Jesper Derehag <jderehag@hotmail.com>
-Subject: relayd TCP reconnect?
-Date: Wed, 25 Mar 2015 15:16:32 +0000
-Message-ID: <DUB123-W281E1610272EFEB7FEBDA2DD0B0__28358.7241349325$1427296667$gmane$org@phx.gbl>
+Subject: Configurable tracepath?
+Date: Wed, 25 Mar 2015 15:52:48 +0000
+Message-ID: <DUB123-W464BA7F0C2F678C748C48EDD0B0__24653.4247221009$1427298838$gmane$org@phx.gbl>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from dub004-omc3s36.hotmail.com ([157.55.2.45])
+Received: from dub004-omc3s1.hotmail.com ([157.55.2.10])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jderehag@hotmail.com>) id 1Yan2s-0005uF-OT
- for lttng-dev@lists.lttng.org; Wed, 25 Mar 2015 11:16:42 -0400
+ (envelope-from <jderehag@hotmail.com>) id 1Yanby-00065G-B4
+ for lttng-dev@lists.lttng.org; Wed, 25 Mar 2015 11:53:01 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,32 +21,40 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi All,
+Hi,
 
-I know the issue with relayd reconnects have been discussed earlier here:
-http://lists.lttng.org/pipermail/lttng-dev/2014-October/023650.html
+We have run into an issue with unique per-session tracepaths.=A0
 
-But has there been any further development on this?=A0
-I would actually go as far as calling it a bug and submitting it to redmine=
- tracker, but want to get approval here first.
+In my particular setup I am using relayd to centralize alot of consumers (n=
+ot really important to this discussion, but thought I'd mention it anyway).
+So the problem is that=A0I have very limited quota for %outputpath. So to m=
+anage the quota fairly between channels I am using=A0--tracefile-size to li=
+mit the size of each channel and thus preventing them from starving eachoth=
+er out.
+BUT, say I would want to restart the session for some reason, in my case it=
+ might be that the card running a specific session reboots, and then relayd=
+ would get a new session & channel, and thus create a new folder for that d=
+ata. But since the old data still remains, I would run into the quota limit=
+..=A0
 
-I would argue that its *always* a good idea to do reconnects due to that yo=
-u really dont have any end-to-end control of the TCP flow.=A0
-Some random router might decide to spuriously drop your connection, not to =
-mention more modern queuing disciplines which might randomly throw away pac=
-kets.
+Below is how the tracepaths are created in pseudo-code:
 
-On automated systems, that would mean that you have to somehow automagicall=
-y detect that you got a disconnect, and then externally restart the session=
-, which seems like a very weird workaround...
+per-pid tracing:
+=A0 =A0tracepath =3D %outputpath/%pid/%session_name-%pid-%datetime
 
-I would be happy to file such a issue to the tracker if people thinks its a=
- good idea, (and depending on if I have the time I *might* look into solvin=
-g it myself).=A0
-But it might be some time away in that case..
+per-uid tracing:
+=A0 =A0tracepath =3D %outputpath/uid/%uid/%arch-bit
+
+So just reading this little snippet I am guessing one could avoid this part=
+icular problem by doing per-uid tracing, but that seems like an unnecessary=
+ workaround for what would seem like a trivial problem?
+
+Would it instead be feasable to have the channel->path_name configurable, s=
+o that you essentially could avoid the uniqueness of the path (pid & dateti=
+me)?
+
+Or is that instead opening pandoras box w.r.t. to tracefile consistency and=
+ contention?
 
 Regards,
-Jesper
-
-
- 		 	   		  =
+Jesper 		 	   		  =
