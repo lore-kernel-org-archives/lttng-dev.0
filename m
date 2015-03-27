@@ -1,18 +1,15 @@
 From: Michael Haberler <mail17@mah.priv.at>
-Subject: Re: introduction  & usage of LTTNG in machinekit
-Date: Fri, 27 Mar 2015 19:41:56 +0100
-Message-ID: <69E17552-7BEB-4DDF-9060-72717D06676B__10138.9291733087$1427481793$gmane$org@mah.priv.at>
-References: <887B7027-5FE6-4D13-B35A-7DCBD785DC57@mah.priv.at>
- <711173584.2718642.1427481342189.JavaMail.zimbra@polymtl.ca>
+Subject: basic questions on LTTng
+Date: Fri, 27 Mar 2015 19:46:34 +0100
+Message-ID: <2C003D10-DDBA-4D4C-B807-0A93A49BF6CB__18247.1731598072$1427482063$gmane$org@mah.priv.at>
 Mime-Version: 1.0 (Mac OS X Mail 8.2 \(2070.6\))
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mah2.mah.priv.at ([86.59.12.251] helo=mah.priv.at)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mail17@mah.priv.at>) id 1YbZCh-0004hH-7d
- for lttng-dev@lists.lttng.org; Fri, 27 Mar 2015 14:42:04 -0400
-In-Reply-To: <711173584.2718642.1427481342189.JavaMail.zimbra@polymtl.ca>
+ (envelope-from <mail17@mah.priv.at>) id 1YbZHB-0004kg-L4
+ for lttng-dev@lists.lttng.org; Fri, 27 Mar 2015 14:46:38 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,43 +18,32 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michel Dagenais <michel.dagenais@polymtl.ca>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Michel,
+hello,
+
+I've perused the docs and some of the code, and have the following questions:
 
 
-> Am 27.03.2015 um 19:35 schrieb Michel Dagenais <michel.dagenais@polymtl.ca>:
-> 
-> 
->> I am involved in machinekit.io, a portable realtime application for motion control
->> machinekit runs on several kernels - starting from vanilla (no time
->> guarantees), RT-PREEMPT, Xenomai, and RTAI; on x86, amd64 and ARM platforms.
-> 
-> I am actually using LinuxCNC on a small CNC mill and would love to get that running directly on PREEMPT-RT instead of Xenomai (modified Sieg SX3 mill, cncfusion conversion kit, servo motors on X, Y and Z axis, mesa FPGA and H bridge boards for control).
+- is it possible to use LTTng from Xenomai RT threads? (old mails on the Xenomai list suggest so, but it is unclear if special precautions/incantations/patches are needed)
 
-machinekit is a fork of LinuxCNC and does all that stock, we've moved well beyond the original project's capabilities. Runs on x86, amd64 and arm7+; the beaglebones are quite popular around here, especially with the 3d printer users.
+- do tracepoints use ANY linux system services (system calls in the UST context, and kernel API in the kernel context)? (background - if that is the case with Xenomai, an RT thread could be relaxed; with RTAI things could go really haywire as RT threads are running in something similar to an IRQ context)
 
-See http://www.machinekit.io/docs/packages-debian/ for packages, maybe join the mailing list.
+- are there any precautions to take when using an RT-PREEMPT kernel?
 
-> 
->> As some of the processing is highly time sensitive, I'm looking into
->> integrating LTTNG into the machinekit build so we have options beyond
->> logging and timestamping manually. For instance, currently some
->> transcendental math functions on ARM overrun the time budget.
->> 
->> I've started integrating the build support and am running into my first
->> problems. So, that's the context of my following questions - thanks in
->> advance for guiding me through any blunders.
-> 
-> This is an excellent application for LTTng. My group has been looking for good use cases of real-time applications. We have a significant expertise with Linux for real-time and PREEMPT-RT. We could easily help you with the machinekit tracing: kernel and user-space instrumentation, specific views and analysis for this application... 
+- is there a ballpark figure for the cost (roundabout ns on typical hardware) for a dormant and a fired tracepoint?
 
-Yes, I have the impression this could be a very good match. Thanks! right now I'm climbing the learning curve and integrating basic examples into the machinekit repo so others can follow and explore. No showstoppers so far.
+- related - does it make sense to conditionally compile in tracepoints, or are they so cheap they could just as well stay in production code?
 
-well, my first round of questions is about to hit the list..
+- in our scenario, we'd like to find sources of delay which could vary according to arguments (e.g. the math library function I mentioned, which runs exceedingly long for certain argument values). Is there a way to trigger on the time delta between tracepoints, like as a filter? would the Python API help me here?
 
 
-thanks! drop me a line if you need help using machinekit.
+Our usage scenario will be mostly UST and maybe some kernel tracing.
+Right now I'm using self-built 2.6.0 on x86 and 2.5.1 on arm7hf from the jessie stream. Xenomai is 2.6.3 and 2.6.4 on kernels at and beyond 3.8.13 at the moment. RTAI is also 3.8.13, but not the platform of choice.
 
-- Michael
+A note on demons and tracing: one demon we use does the classic double fork to go into the background, and in that case the "LD_PRELOAD=liblttng-ust-fork.so" support seems not to work. Not an issue, I patched it so it can stay in the foreground which takes care of the problem. It's this piece I disabled with an option: https://github.com/machinekit/machinekit/blob/master/src/rtapi/rtapi_app.cc#L1311-L1334
+
+thanks in advance for,
+
+Michael
