@@ -1,22 +1,26 @@
-From: Michael Haberler <mail17@mah.priv.at>
-Subject: Re: introduction  & usage of LTTNG in machinekit
-Date: Sun, 29 Mar 2015 18:06:09 +0200
-Message-ID: <5DF2E8F0-B241-43FB-8811-C2CCAC028482__34011.3223800019$1427645246$gmane$org@mah.priv.at>
-References: <887B7027-5FE6-4D13-B35A-7DCBD785DC57@mah.priv.at>
- <711173584.2718642.1427481342189.JavaMail.zimbra@polymtl.ca>
- <8187A8CE-F16D-4CDE-B969-380DE308A8D5@mah.priv.at>
- <826926538.3126946.1427639461728.JavaMail.zimbra@polymtl.ca>
- <76BAB974-2B32-469C-82AD-4D5630AFA28E@mah.priv.at>
- <55181EA5.7020402@efficios.com>
-Mime-Version: 1.0 (Mac OS X Mail 8.2 \(2070.6\))
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Subject: Re: Can't get any event output from the demo exe
+	[solved]
+Date: Sun, 29 Mar 2015 15:01:23 -0700
+Message-ID: <55187633.8000203__1543.22008970684$1427666578$gmane$org@voxpopuli.im>
+References: <trinity-e73e3633-440b-429c-ad5e-bf48c3413989-1426531801924@3capp-gmx-bs44>
+ <55073522.6080006@efficios.com>
+ <trinity-6a4fab60-3c7e-4785-a2f2-e42bba49fcb4-1426578599498@3capp-gmx-bs25>
+ <1948116446.75706.1427119102220.JavaMail.zimbra@efficios.com>
+ <trinity-7f4e3d2c-257e-4b0c-92c6-b4db5e00c863-1427125168642@3capp-gmx-bs67>
+ <430207063.77873.1427126336840.JavaMail.zimbra@efficios.com>
+ <trinity-d22c7eac-b7c9-427b-9b66-822ed9615dc9-1427444856982@3capp-gmx-bs08>,
+ <2124338345.119592.1427464333584.JavaMail.zimbra@efficios.com>
+ <trinity-3a517d85-a1a4-4e19-a307-e67ef4d6a1a7-1427464856332@3capp-gmx-bs16>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mah2.mah.priv.at ([86.59.12.251] helo=mah.priv.at)
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mail17@mah.priv.at>) id 1YcFj1-0001ge-LX
- for lttng-dev@lists.lttng.org; Sun, 29 Mar 2015 12:06:21 -0400
-In-Reply-To: <55181EA5.7020402@efficios.com>
+ (envelope-from <alexmonthy@voxpopuli.im>) id 1YcLGu-0003Mh-NO
+ for lttng-dev@lists.lttng.org; Sun, 29 Mar 2015 18:01:35 -0400
+In-Reply-To: <trinity-3a517d85-a1a4-4e19-a307-e67ef4d6a1a7-1427464856332@3capp-gmx-bs16>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,44 +29,58 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <jdesfossez@efficios.com>
+To: Wolfgang Rostek <wolfgang.rostek@gmx.de>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Julien -
-
-thanks a lot - cloned, and quickly at it!
-
-bets regards
-
-Michael
-
-> Am 29.03.2015 um 17:47 schrieb Julien Desfossez <jdesfossez@efficios.com>:
-> 
-> Hi,
-> 
-> On 15-03-29 11:17 AM, Michael Haberler wrote:
->> Michel,
->> 
->>> Am 29.03.2015 um 16:31 schrieb Michel Dagenais <michel.dagenais@polymtl.ca>:
->>> 
->>> 
->>>> - is there a complete example out-of-tree kernel module instrumented for
->>>> LTTng? I worked through Steve Rostedt's sillymod
->>>> (http://lwn.net/Articles/379903 ff) but am fuzzy on "Adding the LTTng
->>>> adaptation layer" - is the example from the manual available in toto
->>>> somewhere?
->>> 
->>> A few people in my group have done so. I will check on Monday to get sample code for you.
->> 
->> on re-reading, I am almost there, but I'd appreciate an example anyway
-> 
-> I have a complete example of instrumenting an out-of-tree module in the
-> latency_tracker and the patch for lttng-modules (master) in the "extras"
-> folder:
-> https://github.com/jdesfossez/latency_tracker
-> 
-> It might be very slow due to access the page to the DDoS in progress, if
-> you need it quickly, I'll send you a tar.
-> 
-> Julien
+T24gMTUtMDMtMjcgMDc6MDAgQU0sIFdvbGZnYW5nIFJvc3RlayB3cm90ZToKPiBIaSBNYXRoaWV1
+LAo+Cj4gd2Vla3MgYWdvIEkgZGlkIGEgZGlmZmVyZW50IGFwcHJvYWNoIGluc3RhbGxpbmcgcGFj
+a2FnZXMuCj4gVGhhdCBvbmUgSSBjYW4ndCByZWNhcC4KCldoYXQgSSBzdXNwZWN0IGhhcHBlbmVk
+IGhlcmUgaXMgdGhhdCB5b3UgaW5zdGFsbGVkIHNvbWUgb2YgdGhlIHBhY2thZ2VzIApmcm9tIHNv
+dXJjZSB1c2luZyAibWFrZSBpbnN0YWxsIiwgd2hpY2ggY29waWVzIHRoZSBsaWJyYXJpZXMgaW4g
+Ci91c3IvbG9jYWwvbGliLyogLgoKKlRoZW4qIHlvdSBpbnN0YWxsZWQgdGhlIHBhY2thZ2VkIHZl
+cnNpb25zLCB3aGljaCBnbyBpbiAvdXNyL2xpYi8qLiBCdXQgCnRoZSB0cmlja3kgcGFydCBpcyB0
+aGF0IG9uIFVidW50dSBhbmQgbWFueSBvdGhlciAobW9zdD8pIGRpc3Ryb3MsIHRoZSAKbGQuc28u
+Y29uZiBpcyBjb25maWd1cmVkIHRvIGxvb2sgaW4gL3Vzci9sb2NhbC9saWIgZmlyc3QgZm9yIHNo
+YXJlZCAKbGlicmFyaWVzLiBJZiBpdCBmaW5kcyBhIHVzZWFibGUgb25lLCBpdCBsb2FkcyB0aGF0
+IG9uZSBhbmQgc3RvcHMgdGhlcmUuCgpJbiBzdWNoIGEgY2FzZSwgL3Vzci9iaW4vbHR0bmcsIGlu
+c3RhbGxlZCBmcm9tIHBhY2thZ2VzLCB3b3VsZCBlbmQgdXAgCnVzaW5nIC91c3IvbG9jYWwvbGli
+L2xpYmx0dG5nLXVzdCouc28sIGFuZCBzbyBvbi4gSWYgYm90aCBhcmUgbm90IG9mIHRoZSAKZXhh
+Y3Qgc2FtZSB2ZXJzaW9uLCBpdCBjYW4gY2F1c2Ugb2JzY3VyZSBwcm9ibGVtcyBsaWtlIHRoZSBv
+bmUgeW91IGhhZC4KCgpUaGlzIGlzIGEgdmVyeSBjb21tb24gc291cmNlIG9mIHByb2JsZW1zIGlu
+IGZhY3QuIEkgZG9uJ3Qga25vdyBvZiBhbnkgCmVhc3kgZml4IHVuZm9ydHVuYXRlbHksIHNob3J0
+IG9mIHRlYWNoaW5nIHBlb3BsZSBhYm91dCBsaWJyYXJ5IG1hbmdlbWVudCAKOykgb3IgYnVtcGlu
+ZyB0aGUgc29uYW1lIG9mIGx0dG5nLXRvb2xzIGFuZCBVU1QncyBzaGFyZWQgbGlicmFyaWVzIGV2
+ZXJ5IApyZWxlYXNlLCB0byBtYWtlIHN1cmUgbm9uLWNvbXBhdGlibGUgbGlicmFyaWVzIGFyZSBu
+b3QgbG9hZGVkLgoKQ2hlZXJzLApBbGV4YW5kcmUKCj4KPiBUb2RheSBJIHRyaWVkIHRoaXMgb25l
+IGFuZCBzaW1wbHkgc3RhcnRlZCB0byBnZXQgcmlkIG9mIGV4aXN0aW5nIHRoaW5ncy4KPgo+IEkg
+d291bGQgc2VlIHRoaXMgYXMgYSBiZWdpbm5lcnMgY29uZnVzaW9uIGFuZCBub3Qgd29ydGgKPiB0
+byBzcGVuZCB0aW1lIGhlcmUuCj4KPiBJJ20gcXVpdGUgaGFwcHkgdG8gc2VlIHRoZSBuaWNlIExU
+VG5nIG91dHB1dCA7KQo+Cj4gV29sZmdhbmcgUi4KPgo+Cj4+IEdlc2VuZGV0OiBGcmVpdGFnLCAy
+Ny4gTcOkcnogMjAxNSB1bSAxNDo1MiBVaHIKPj4gVm9uOiAiTWF0aGlldSBEZXNub3llcnMiIDxt
+YXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4+IEFuOiAiV29sZmdhbmcgUm9zdGVrIiA8
+d29sZmdhbmcucm9zdGVrQGdteC5kZT4sICJBbGV4YW5kcmUgTW9udHBsYWlzaXIiIDxhbGV4bW9u
+dGh5QHZveHBvcHVsaS5pbT4KPj4gQ2M6IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4gQmV0
+cmVmZjogUmU6IEF3OiBSZTogIFJlOiBbbHR0bmctZGV2XSBDYW4ndCBnZXQgYW55IGV2ZW50IG91
+dHB1dCBmcm9tIHRoZSBkZW1vIGV4ZSBbc29sdmVkXQo+Pgo+PiBBbGV4YW5kcmUsIG1haW50YWlu
+ZXIgb2YgdGhlIFBQQSBwYWNrYWdlcywgd2lsbCBiZQo+PiBiYWNrIGZyb20gdmFjYXRpb24gaW4g
+MiB3ZWVrcy4KPj4KPj4gUGVyaGFwcyBoZSBjb3VsZCBsb29rIGludG8gd2h5IHlvdSBoYWQgdG8g
+ZXhwbGljaXRseQo+PiB1bmluc3RhbGwgcGFja2FnZXMgYmVmb3JlIGluc3RhbGxpbmcgdGhlIFBQ
+QSB0aGVuLgo+PiBOb3JtYWxseSAiY29uZmxpY3RzIHdpdGgiIHNob3VsZCBiZSB0YWtpbmcgY2Fy
+ZQo+PiBvZiB0aGlzIGtpbmQgb2YgZGVwZW5kZW5jeS4KPj4KPj4gVGhhbmtzLAo+Pgo+PiBNYXRo
+aWV1Cj4+Cj4+IC0tLS0tIE9yaWdpbmFsIE1lc3NhZ2UgLS0tLS0KPj4+IEp1c3QgcmlnaHQgYmVm
+b3JlIHRoZSB3ZWVrZW5kIEkgY291bGQgcmVwYWlyIGl0Lgo+Pj4gU2VlbXMgdGhhdCBJIGhhZCBz
+b21lIHRyb3VibGUgd2l0aCB0aGUgaW5zdGFsbGVkIHBhY2thZ2VzLgo+Pj4KPj4+IEhlcmUgdGhl
+IHN0ZXBzIHdvcmtpbmcgZm9yIG1lIG9uIFVidW50dSAxNCBMVFMKPj4+Cj4+PiBodHRwOi8vaW5z
+dGFsbGlvbi5jby51ay91YnVudHUvdXRvcGljL3VuaXZlcnNlL2wvbHR0bmctdG9vbHMvdW5pbnN0
+YWxsL2luZGV4Lmh0bWwKPj4+IHN1ZG8gYXB0LWdldCByZW1vdmUgLS1hdXRvLXJlbW92ZSBsdHRu
+Zy10b29scwo+Pj4KPj4+IGh0dHBzOi8vbGF1bmNocGFkLm5ldC9+bHR0bmcvK2FyY2hpdmUvdWJ1
+bnR1L3BwYQo+Pj4gc3VkbyBhcHQtYWRkLXJlcG9zaXRvcnkgcHBhOmx0dG5nL3BwYQo+Pj4gc3Vk
+byBhcHQtZ2V0IHVwZGF0ZQo+Pj4gc3VkbyBhcHQtZ2V0IGluc3RhbGwgbHR0bmctdG9vbHMgbHR0
+bmctbW9kdWxlcy1ka21zIGJhYmVsdHJhY2UKPj4+IGxpYmx0dG5nLXVzdC1kZXYgcHl0aG9uMy1i
+YWJlbHRyYWNlCj4+Pgo+Pj4gdGhhbmtzIGZvciB5b3VyIGludmVzdGlnYXRpb25zCj4+PiBXb2xm
+Z2FuZyBSLgo+Pj4KPj4gLS0gCj4+IE1hdGhpZXUgRGVzbm95ZXJzCj4+IEVmZmljaU9TIEluYy4K
+Pj4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KPj4KCgpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBs
+aXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2Cg==
