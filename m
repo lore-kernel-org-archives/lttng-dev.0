@@ -1,27 +1,19 @@
-From: "Wolfgang Rostek" <wolfgang.rostek@gmx.de>
-Subject: Re: Can't get any event output from the demo exe
- [solved]
-Date: Mon, 30 Mar 2015 13:19:46 +0200
-Message-ID: <trinity-598dc7ef-857a-4448-b65d-8804b10d4a92-1427714386238__3015.7936191701$1427714447$gmane$org@3capp-gmx-bs08>
-References: <trinity-e73e3633-440b-429c-ad5e-bf48c3413989-1426531801924@3capp-gmx-bs44>
- <55073522.6080006@efficios.com>
- <trinity-6a4fab60-3c7e-4785-a2f2-e42bba49fcb4-1426578599498@3capp-gmx-bs25>
- <1948116446.75706.1427119102220.JavaMail.zimbra@efficios.com>
- <trinity-7f4e3d2c-257e-4b0c-92c6-b4db5e00c863-1427125168642@3capp-gmx-bs67>
- <430207063.77873.1427126336840.JavaMail.zimbra@efficios.com>
- <trinity-d22c7eac-b7c9-427b-9b66-822ed9615dc9-1427444856982@3capp-gmx-bs08>,
- <2124338345.119592.1427464333584.JavaMail.zimbra@efficios.com>
- <trinity-3a517d85-a1a4-4e19-a307-e67ef4d6a1a7-1427464856332@3capp-gmx-bs16>,
- <55187633.8000203@voxpopuli.im>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Configurable tracepath?
+Date: Mon, 30 Mar 2015 11:55:55 -0400
+Message-ID: <CA+jJMxsAaVD2xYJ=po2w+ZajfzDwZ1Los3nbxdRL7RMyJSFLrw__37300.9165436544$1427731064$gmane$org@mail.gmail.com>
+References: <DUB408-EAS865D8F72981E73E7C512A8DDF50@phx.gbl>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mout.gmx.net ([212.227.15.19])
+Received: from mail-qg0-f43.google.com ([209.85.192.43])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <wolfgang.rostek@gmx.de>) id 1YcXjU-0007Xu-N8
- for lttng-dev@lists.lttng.org; Mon, 30 Mar 2015 07:19:55 -0400
-In-Reply-To: <55187633.8000203@voxpopuli.im>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Ycc2j-0000Ot-2O
+ for lttng-dev@lists.lttng.org; Mon, 30 Mar 2015 11:56:09 -0400
+Received: by qgh3 with SMTP id 3so176621119qgh.2
+ for <lttng-dev@lists.lttng.org>; Mon, 30 Mar 2015 08:55:55 -0700 (PDT)
+In-Reply-To: <DUB408-EAS865D8F72981E73E7C512A8DDF50@phx.gbl>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -30,13 +22,54 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Cc: lttng-dev@lists.lttng.org
+To: Jesper Derehag <jderehag@hotmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-thanks Alexandre for investigating and it seems the way I did it
-
-At least when I start working on the sources I should have better
-tracked what make install is going to do. 
-
-Wolfgang R.
+T24gTW9uLCBNYXIgMzAsIDIwMTUgYXQgNToyMSBBTSwgSmVzcGVyIERlcmVoYWcgPGpkZXJlaGFn
+QGhvdG1haWwuY29tPiB3cm90ZToKPiBObyB0aG91Z2h0cyBvbiB0aGlzIG9uZT8KPgo+IERlbiAy
+NSBtYXIgMjAxNSAxNjo1MyBza3JldiBKZXNwZXIgRGVyZWhhZyA8amRlcmVoYWdAaG90bWFpbC5j
+b20+Ogo+Cj4gSGksCj4KPiBXZSBoYXZlIHJ1biBpbnRvIGFuIGlzc3VlIHdpdGggdW5pcXVlIHBl
+ci1zZXNzaW9uIHRyYWNlcGF0aHMuCj4KPiBJbiBteSBwYXJ0aWN1bGFyIHNldHVwIEkgYW0gdXNp
+bmcgcmVsYXlkIHRvIGNlbnRyYWxpemUgYWxvdCBvZiBjb25zdW1lcnMKPiAobm90IHJlYWxseSBp
+bXBvcnRhbnQgdG8gdGhpcyBkaXNjdXNzaW9uLCBidXQgdGhvdWdodCBJJ2QgbWVudGlvbiBpdAo+
+IGFueXdheSkuCj4gU28gdGhlIHByb2JsZW0gaXMgdGhhdCBJIGhhdmUgdmVyeSBsaW1pdGVkIHF1
+b3RhIGZvciAlb3V0cHV0cGF0aC4gU28gdG8KPiBtYW5hZ2UgdGhlIHF1b3RhIGZhaXJseSBiZXR3
+ZWVuIGNoYW5uZWxzIEkgYW0gdXNpbmcgLS10cmFjZWZpbGUtc2l6ZSB0bwo+IGxpbWl0IHRoZSBz
+aXplIG9mIGVhY2ggY2hhbm5lbCBhbmQgdGh1cyBwcmV2ZW50aW5nIHRoZW0gZnJvbSBzdGFydmlu
+Zwo+IGVhY2hvdGhlciBvdXQuCj4gQlVULCBzYXkgSSB3b3VsZCB3YW50IHRvIHJlc3RhcnQgdGhl
+IHNlc3Npb24gZm9yIHNvbWUgcmVhc29uLCBpbiBteSBjYXNlIGl0Cj4gbWlnaHQgYmUgdGhhdCB0
+aGUgY2FyZCBydW5uaW5nIGEgc3BlY2lmaWMgc2Vzc2lvbiByZWJvb3RzLCBhbmQgdGhlbiByZWxh
+eWQKPiB3b3VsZCBnZXQgYSBuZXcgc2Vzc2lvbiAmIGNoYW5uZWwsIGFuZCB0aHVzIGNyZWF0ZSBh
+IG5ldyBmb2xkZXIgZm9yIHRoYXQKPiBkYXRhLiBCdXQgc2luY2UgdGhlIG9sZCBkYXRhIHN0aWxs
+IHJlbWFpbnMsIEkgd291bGQgcnVuIGludG8gdGhlIHF1b3RhCj4gbGltaXQuLgo+Cj4gQmVsb3cg
+aXMgaG93IHRoZSB0cmFjZXBhdGhzIGFyZSBjcmVhdGVkIGluIHBzZXVkby1jb2RlOgo+Cj4gcGVy
+LXBpZCB0cmFjaW5nOgo+ICAgIHRyYWNlcGF0aCA9ICVvdXRwdXRwYXRoLyVwaWQvJXNlc3Npb25f
+bmFtZS0lcGlkLSVkYXRldGltZQo+Cj4gcGVyLXVpZCB0cmFjaW5nOgo+ICAgIHRyYWNlcGF0aCA9
+ICVvdXRwdXRwYXRoL3VpZC8ldWlkLyVhcmNoLWJpdAo+Cj4gU28ganVzdCByZWFkaW5nIHRoaXMg
+bGl0dGxlIHNuaXBwZXQgSSBhbSBndWVzc2luZyBvbmUgY291bGQgYXZvaWQgdGhpcwo+IHBhcnRp
+Y3VsYXIgcHJvYmxlbSBieSBkb2luZyBwZXItdWlkIHRyYWNpbmcsIGJ1dCB0aGF0IHNlZW1zIGxp
+a2UgYW4KPiB1bm5lY2Vzc2FyeSB3b3JrYXJvdW5kIGZvciB3aGF0IHdvdWxkIHNlZW0gbGlrZSBh
+IHRyaXZpYWwgcHJvYmxlbT8KPgo+IFdvdWxkIGl0IGluc3RlYWQgYmUgZmVhc2FibGUgdG8gaGF2
+ZSB0aGUgY2hhbm5lbC0+cGF0aF9uYW1lIGNvbmZpZ3VyYWJsZSwgc28KPiB0aGF0IHlvdSBlc3Nl
+bnRpYWxseSBjb3VsZCBhdm9pZCB0aGUgdW5pcXVlbmVzcyBvZiB0aGUgcGF0aCAocGlkICYKPiBk
+YXRldGltZSk/Cj4KPiBPciBpcyB0aGF0IGluc3RlYWQgb3BlbmluZyBwYW5kb3JhcyBib3ggdy5y
+LnQuIHRvIHRyYWNlZmlsZSBjb25zaXN0ZW5jeSBhbmQKPiBjb250ZW50aW9uPwoKSSAqdGhpbmsq
+IHRoaXMgd2FzIGRvbmUgdG8gcmVhc29uYWJseSBlbnN1cmUgdGhlIHVuaXF1ZW5lc3Mgb2YgdGhl
+CnRyYWNlIHBhdGggc2luY2UgdGhlIGNvbnN1bWVyIGFuZCByZWxheSBkYWVtb25zIHdpbGwgbm90
+IGRlYWwgd2l0aApleGlzdGluZyBmaWxlcyBncmFjZWZ1bGx5LgoKSSBjYW4gc2VlIHRoZSB1c2Ug
+Y2FzZSB0aG91Z2guLi4gSXQgd291bGQgcHJvYmFibHkgcmVxdWlyZSBtYWtpbmcgdGhlCmNvbnN1
+bWVyIGFuZCByZWxheSBkYWVtb25zIGEgYml0IHNtYXJ0ZXIgaWYgd2Ugd2FudCB0aGVtIHRvIHBp
+Y2stdXAKd2hlcmUgdGhleSBsZWZ0LiBOZXZlcnRoZWxlc3MsIGl0IHdvdWxkIGJlIGEgbmVhdCBm
+ZWF0dXJlLgoKSW4gdGhlIG1lYW50aW1lLCBJIGRvbid0IHJlYWxseSBoYXZlIGEgZ29vZCByZWNv
+bW1lbmRhdGlvbiBmb3IgeW91Li4uIDotLwoKSsOpcsOpbWllCgo+Cj4gUmVnYXJkcywKPiBKZXNw
+ZXIKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0
+dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDov
+L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KPgo+
+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmct
+ZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPgoKCgotLSAK
+SsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29t
+CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1k
+ZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0
+dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
