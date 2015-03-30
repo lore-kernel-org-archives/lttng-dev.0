@@ -1,14 +1,19 @@
-From: Jesper Derehag <jderehag@hotmail.com>
-Subject: Re: Configurable tracepath?
-Date: Mon, 30 Mar 2015 11:21:21 +0200
-Message-ID: <DUB408-EAS865D8F72981E73E7C512A8DDF50__25089.1845360913$1427707350$gmane$org@phx.gbl>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1633317797=="
+From: Michael Haberler <mail17@mah.priv.at>
+Subject: LTTng + Xenomai - status?
+Date: Mon, 30 Mar 2015 12:48:32 +0200
+Message-ID: <CF3812DE-9DF1-49FB-98D4-5A4D2B673529__8370.63371805034$1427712576$gmane$org@mah.priv.at>
+Mime-Version: 1.0 (Mac OS X Mail 8.2 \(2070.6\))
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from dub004-omc3s2.hotmail.com ([157.55.2.11])
+Received: from mah2.mah.priv.at ([86.59.12.251] helo=mah.priv.at)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jderehag@hotmail.com>) id 1YcVsv-0006ee-9t
- for lttng-dev@lists.lttng.org; Mon, 30 Mar 2015 05:21:32 -0400
+ (envelope-from <mail17@mah.priv.at>) id 1YcXFC-0007Lz-D1
+ for lttng-dev@lists.lttng.org; Mon, 30 Mar 2015 06:48:38 -0400
+Received: from bigmac.stiwoll.mah.priv.at (bigmac.stiwoll.mah.priv.at
+ [193.228.47.194])
+ by mah.priv.at (Postfix) with ESMTPSA id C93CB2C00AC
+ for <lttng-dev@lists.lttng.org>; Mon, 30 Mar 2015 12:48:32 +0200 (CEST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,61 +25,14 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1633317797==
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: base64
+hi,
 
-PHAgZGlyPSJsdHIiPk5vIHRob3VnaHRzIG9uIHRoaXMgb25lPzwvcD4KPGRpdiBjbGFzcz0iZ21h
-aWxfcXVvdGUiPkRlbiAyNSBtYXIgMjAxNSAxNjo1MyBza3JldiBKZXNwZXIgRGVyZWhhZyAmbHQ7
-amRlcmVoYWdAaG90bWFpbC5jb20mZ3Q7OjxiciB0eXBlPSdhdHRyaWJ1dGlvbic+PGJsb2NrcXVv
-dGUgY2xhc3M9InF1b3RlIiBzdHlsZT0ibWFyZ2luOjAgMCAwIC44ZXg7Ym9yZGVyLWxlZnQ6MXB4
-ICNjY2Mgc29saWQ7cGFkZGluZy1sZWZ0OjFleCI+DQoNCg0KDQo8ZGl2Pg0KPGRpdj5IaSw8YnIg
-Lz4NCjxiciAvPg0KV2UgaGF2ZSBydW4gaW50byBhbiBpc3N1ZSB3aXRoIHVuaXF1ZSBwZXItc2Vz
-c2lvbiB0cmFjZXBhdGhzLsKgPGJyIC8+DQo8YnIgLz4NCkluIG15IHBhcnRpY3VsYXIgc2V0dXAg
-SSBhbSB1c2luZyByZWxheWQgdG8gY2VudHJhbGl6ZSBhbG90IG9mIGNvbnN1bWVycyAobm90IHJl
-YWxseSBpbXBvcnRhbnQgdG8gdGhpcyBkaXNjdXNzaW9uLCBidXQgdGhvdWdodCBJJiMzOTtkIG1l
-bnRpb24gaXQgYW55d2F5KS48YnIgLz4NClNvIHRoZSBwcm9ibGVtIGlzIHRoYXTCoEkgaGF2ZSB2
-ZXJ5IGxpbWl0ZWQgcXVvdGEgZm9yICVvdXRwdXRwYXRoLiBTbyB0byBtYW5hZ2UgdGhlIHF1b3Rh
-IGZhaXJseSBiZXR3ZWVuIGNoYW5uZWxzIEkgYW0gdXNpbmfCoC0tdHJhY2VmaWxlLXNpemUgdG8g
-bGltaXQgdGhlIHNpemUgb2YgZWFjaCBjaGFubmVsIGFuZCB0aHVzIHByZXZlbnRpbmcgdGhlbSBm
-cm9tIHN0YXJ2aW5nIGVhY2hvdGhlciBvdXQuPGJyIC8+DQpCVVQsIHNheSBJIHdvdWxkIHdhbnQg
-dG8gcmVzdGFydCB0aGUgc2Vzc2lvbiBmb3Igc29tZSByZWFzb24sIGluIG15IGNhc2UgaXQgbWln
-aHQgYmUgdGhhdCB0aGUgY2FyZCBydW5uaW5nIGEgc3BlY2lmaWMgc2Vzc2lvbiByZWJvb3RzLCBh
-bmQgdGhlbiByZWxheWQgd291bGQgZ2V0IGEgbmV3IHNlc3Npb24gJmFtcDsgY2hhbm5lbCwgYW5k
-IHRodXMgY3JlYXRlIGEgbmV3IGZvbGRlciBmb3IgdGhhdCBkYXRhLiBCdXQgc2luY2UgdGhlIG9s
-ZCBkYXRhIHN0aWxsIHJlbWFpbnMsIEkgd291bGQgcnVuIGludG8gdGhlIHF1b3RhIGxpbWl0Li7C
-oDxiciAvPg0KPGJyIC8+DQpCZWxvdyBpcyBob3cgdGhlIHRyYWNlcGF0aHMgYXJlIGNyZWF0ZWQg
-aW4gcHNldWRvLWNvZGU6PGJyIC8+DQo8YnIgLz4NCnBlci1waWQgdHJhY2luZzo8YnIgLz4NCsKg
-IMKgdHJhY2VwYXRoICYjNjE7ICVvdXRwdXRwYXRoLyVwaWQvJXNlc3Npb25fbmFtZS0lcGlkLSVk
-YXRldGltZTxiciAvPg0KPGJyIC8+DQpwZXItdWlkIHRyYWNpbmc6PGJyIC8+DQrCoCDCoHRyYWNl
-cGF0aCAmIzYxOyAlb3V0cHV0cGF0aC91aWQvJXVpZC8lYXJjaC1iaXQ8YnIgLz4NCjxiciAvPg0K
-U28ganVzdCByZWFkaW5nIHRoaXMgbGl0dGxlIHNuaXBwZXQgSSBhbSBndWVzc2luZyBvbmUgY291
-bGQgYXZvaWQgdGhpcyBwYXJ0aWN1bGFyIHByb2JsZW0gYnkgZG9pbmcgcGVyLXVpZCB0cmFjaW5n
-LCBidXQgdGhhdCBzZWVtcyBsaWtlIGFuIHVubmVjZXNzYXJ5IHdvcmthcm91bmQgZm9yIHdoYXQg
-d291bGQgc2VlbSBsaWtlIGEgdHJpdmlhbCBwcm9ibGVtPzxiciAvPg0KPGJyIC8+DQpXb3VsZCBp
-dCBpbnN0ZWFkIGJlIGZlYXNhYmxlIHRvIGhhdmUgdGhlIGNoYW5uZWwtJmd0O3BhdGhfbmFtZSBj
-b25maWd1cmFibGUsIHNvIHRoYXQgeW91IGVzc2VudGlhbGx5IGNvdWxkIGF2b2lkIHRoZSB1bmlx
-dWVuZXNzIG9mIHRoZSBwYXRoIChwaWQgJmFtcDsgZGF0ZXRpbWUpPzxiciAvPg0KPGJyIC8+DQpP
-ciBpcyB0aGF0IGluc3RlYWQgb3BlbmluZyBwYW5kb3JhcyBib3ggdy5yLnQuIHRvIHRyYWNlZmls
-ZSBjb25zaXN0ZW5jeSBhbmQgY29udGVudGlvbj88YnIgLz4NCjxiciAvPg0KUmVnYXJkcyw8YnIg
-Lz4NCkplc3BlcsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgPGJyIC8+DQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXzxiciAvPg0KbHR0bmctZGV2IG1haWxpbmcgbGlzdDxiciAvPg0KbHR0
-bmctZGV2JiM2NDtsaXN0cy5sdHRuZy5vcmc8YnIgLz4NCjxhIGhyZWY9Imh0dHA6Ly9saXN0cy5s
-dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldiI+aHR0cDovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2PC9hPjxiciAvPg0K
-PC9kaXY+DQo8L2Rpdj4NCg0KPC9ibG9ja3F1b3RlPjwvZGl2Pg==
+Xenomai is the primary RT kernel we use, in particular on embedded ARM's, so I want to be sure this works
 
+I cannot fully decode this thread: https://xenomai.org/pipermail/xenomai/2015-March/033783.html
 
---===============1633317797==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+so I thought I'd ask here - am I in safe territory?
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+thanks in advance,
 
---===============1633317797==--
+Michael
