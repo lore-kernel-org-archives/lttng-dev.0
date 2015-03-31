@@ -1,21 +1,16 @@
-From: Michel Dagenais <michel.dagenais@polymtl.ca>
-Subject: Re: introduction  & usage of LTTNG in machinekit
-Date: Mon, 30 Mar 2015 15:06:59 -0400 (EDT)
-Message-ID: <488566376.3628603.1427742419795.JavaMail.zimbra__24163.7286650532$1427742485$gmane$org@polymtl.ca>
-References: <887B7027-5FE6-4D13-B35A-7DCBD785DC57@mah.priv.at>
- <711173584.2718642.1427481342189.JavaMail.zimbra@polymtl.ca>
- <8187A8CE-F16D-4CDE-B969-380DE308A8D5@mah.priv.at>
- <826926538.3126946.1427639461728.JavaMail.zimbra@polymtl.ca>
- <76BAB974-2B32-469C-82AD-4D5630AFA28E@mah.priv.at>
+From: Anand Neeli <anand.neeli@gmail.com>
+Subject: Creating session on 64-bit system using a 32-bit wrapper
+Date: Tue, 31 Mar 2015 19:14:14 +0530
+Message-ID: <CAM5kDqyvCmxmiSEOLi22dWqj7qNgqq=Hyr=-NO9bFttEbGBYjA__29655.775280162$1427809549$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0542619972=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from mail-wi0-f177.google.com ([209.85.212.177])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <michel.dagenais@polymtl.ca>) id 1Ycf1a-0001P4-56
- for lttng-dev@lists.lttng.org; Mon, 30 Mar 2015 15:07:05 -0400
-In-Reply-To: <76BAB974-2B32-469C-82AD-4D5630AFA28E@mah.priv.at>
+ (envelope-from <anand.neeli@gmail.com>) id 1YcwSq-0006zu-0w
+ for lttng-dev@lists.lttng.org; Tue, 31 Mar 2015 09:44:26 -0400
+Received: by wixo5 with SMTP id o5so14281261wix.1
+ for <lttng-dev@lists.lttng.org>; Tue, 31 Mar 2015 06:44:14 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,50 +19,124 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Haberler <mail17@mah.priv.at>
-Cc: lttng-dev@lists.lttng.org, Mathieu =?utf-8?B?Q8O0dMOp?= <mathieu.cote@polymtl.ca>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Cj4gPj4gLSBpcyB0aGVyZSBhIGNvbXBsZXRlIGV4YW1wbGUgb3V0LW9mLXRyZWUga2VybmVsIG1v
-ZHVsZSBpbnN0cnVtZW50ZWQgZm9yIExUVG5nPyAKPiA+IEEgZmV3IHBlb3BsZSBpbiBteSBncm91
-cCBoYXZlIGRvbmUgc28uIEkgd2lsbCBjaGVjayBvbiBNb25kYXkgdG8gZ2V0IHNhbXBsZQo+ID4g
-Y29kZSBmb3IgeW91Lgo+IG9uIHJlLXJlYWRpbmcsIEkgYW0gYWxtb3N0IHRoZXJlLCBidXQgSSdk
-IGFwcHJlY2lhdGUgYW4gZXhhbXBsZSBhbnl3YXkKCkp1bGllbiBoYXMgc2VudCBhbiBleGFtcGxl
-LiBOb3cgdGhhdCB5b3Ugd2lsbCBiZSBnZXR0aW5nIHJlYWwtdGltZSB0cmFjZXMsIHNvbWVvbmUg
-aW4gbXkgZ3JvdXAsIE1hdGhpZXUgQ8O0dMOpLCBpcyB3b3JraW5nIHNwZWNpZmljYWxseSBvbiB2
-aWV3cyB0byBoZWxwIGRpYWdub3NlIHJlYWwtdGltZSBwcm9ibGVtcy4gSGUgd2lsbCBiZSBpbiBh
-IHBvc2l0aW9uIHRvIGhlbHAgeW91IGFuZCBjYW4gZXZlbiBpbXByb3ZlIHRoZSBjdXJyZW50IFRy
-YWNlQ29tcGFzcyB2aWV3cyBpZiB5b3UgaGF2ZSBzcGVjaWZpYyAicmVhbC10aW1lIHByb2dyYW1t
-aW5nIiAidXNlIGNhc2VzIiBub3QgY3VycmVudGx5IHdlbGwgY292ZXJlZC4gIAoKPiA+PiAtIG11
-Y2ggb2YgdGhlIG1hY2hpbmVraXQgUlQgY29kZSAoSEFMIGxpYnJhcnkgYW5kIGNvbXBvbmVudHMp
-IGNhbiBiZSBjb21waWxlZAo+ID4+IGFzIHVzZXJsYW5kIHNoYXJlZCBvYmplY3RzIChQb3NpeCwg
-UlQtUFJFRU1QUCwgWGVub21haSB0aHJlYWRzKSBvciBrZXJuZWwKPiA+PiBtb2R1bGVzIChSVEFJ
-LCBhbmQgdGhlIGRlcHJlY2F0ZWQgWGVub21haSBrZXJuZWwgQVBJKSwgc2l0dGluZyBvbnRvcCBv
-ZiBhbgo+ID4+IGFic3RyYWN0ZWQgcmVhbHRpbWUgQVBJICgiUlRBUEkiKS4gSWRlYWxseSB0aGUg
-dHJhY2Vwb2ludHMgd291bGQgd29yawo+ID4+IHVuY2hhbmdlZCBleGNlcHQgZm9yIHRoZSBkaWZm
-ZXJlbnQgY29udGV4dC4KCkkgY2hlY2tlZCB3aXRoIE1hdGhpZXUgRGVzbm95ZXJzIGFib3V0IExU
-VG5nIGFuZCBYZW5vbWFpLiBIZSBoYXMgbm90IGxvb2tlZCBhdCBpdC4gS2FyaW0gWWFnaG1vdXIg
-ZGV2ZWxvcGVkIHRoZSBvcmlnaW5hbCBMVFQgd2hpbGUgd29ya2luZyBpbiBteSBncm91cCBhbmQg
-YWRhcHRlZCBpdCB0byBYZW5vbWFpLiBMYXRlciBvbiwgSSBiZWxpZXZlIHRoYXQgc29tZW9uZSBl
-bHNlIHdpdGhpbiBYZW5vbWFpIHN3aXRjaGVkIFhlbm9tYWkgZnJvbSBMVFQgdG8gTFRUbmcgYnV0
-IHRoaXMgaGFzIG5vdCBuZWNlc3NhcmlseSBiZWVuIG1haW50YWluZWQuIExUVG5nIGlzIGJ1aWx0
-IHRvIHdvcmsgZXZlbiBpbiBOTUkgY29uZXh0IGFuZCB0aHVzIHJlbGllcyBvbiB2ZXJ5IGZldyBr
-ZXJuZWwgc2VydmljZXMuIEl0IG1vc3RseSB1c2VzIFJDVSBjcml0aWNhbCBzZWN0aW9uczogZGlz
-YWJsaW5nIHByZWVtcHRpb24gYmV0d2VlbiByZWFkIGxvY2sgYW5kIHJlYWQgdW5sb2NrLCBhbmQg
-Y2FsbGluZyBzeW5jaHJvbml6ZV9yY3UuCgo+ID4gTWFyaWFEQiBhbmQgb3RoZXJzIGNhbiB0YXJn
-ZXQgZGlmZmVyZW50IHRyYWNlcnMgKExUVG5nLCBEVHJhY2UsIG5vbmUpLi4uCj4gPiBBZ2Fpbiwg
-SSB3aWxsIHRyeSB0byBnZXQgeW91IGdvb2Qgc2FtcGxlIGNvZGUgZWFybHkgbmV4dCB3ZWVrLgoK
-UUVNVSBpcyBhbm90aGVyIGV4YW1wbGUgb2YgcHJvamVjdCB3aGljaCBpbnRlcmZhY2VzIHRvIExU
-VG5nIGJ1dCBjYW4gaGF2ZSBvdGhlciBvciBubyB0cmFjZXIgYXMgd2VsbC4KCj4gc2VtaS1yZWxh
-dGVkIGJlY2F1c2UgSSB3YXMgYml0dGVuIGJ5IGl0OiB0aGUgWGVub21haSBjb25maWdzIHJlZmVy
-ZW5jZWQgaGVyZToKPiBodHRwOi8vd3d3Lnhlbm9tYWkub3JnL3BpcGVybWFpbC94ZW5vbWFpLzIw
-MTMtSmFudWFyeS8wMjcyNzIuaHRtbCB0dXJuCj4gQ09ORklHX0ZUUkFDRSBvZmYsIGNpdGluZyBw
-ZXJmb3JtYW5jZSByZWFzb25zLiBJIHRoaW5rIHdlJ2xsIHR1cm4gaXQgYmFjayBvbgo+IGluIG91
-ciBrZXJuZWxzLCBjYW50IGJlIHRoYXQgbXVjaCBleHRyYSBvdmVyaGVhZC4KCklmIHRoZSBvcHRp
-b24gaXMgZW5hYmxlZCBidXQgdHJhY2luZyBpcyBub3QgYWN0aXZlLCB0aGVyZSBhcmUgc2ltcGx5
-IGEgZmV3IGJ5dGVzIG9mIG5vcHMgYWRkZWQgYXQgdGhlIGJlZ2lubmluZyBvZiBlYWNoIGZ1bmN0
-aW9uLiBUaGUgcHJvY2Vzc29yIHBpcGVsaW5lIGlzIGluZGVlZCBleHRyZW1lbHkgZWZmaWNpZW50
-IGF0IHNraXBwaW5nIHRob3NlIGFuZCB0aGUgaW1wYWN0IGlzIGJhcmVseSBtZWFzdXJhYmxlLgoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============0542619972==
+Content-Type: multipart/alternative; boundary=001a11c363ce566377051295cb1b
+
+--001a11c363ce566377051295cb1b
+Content-Type: text/plain; charset=UTF-8
+
+Hi,
+I have a wrapper app which is 32-bit which is similar to lttng binary, it
+links to liblttng-ctl for creating lttng sessions (similar to lttng) . But
+the session create is stuck with below logs.
+
+To simulate this i have done following
+1) On a 64-bit system replace /usr/bin/lttng with a 32-bit version of lttng
+binary
+2) Spawn lttng-sessiond (sessiond is 64-bit, we have not changed it)
+3) Now create lttng session using the 32-bit lttng binary using command
+"lttng -vvv --no-sessiond create mysession --live 2000000 -U
+net://localhost"
+
+After step 3, the console is stuck and doesn't return.
+
+Can anyone please tell me why cant we use 32-bit lttng (or any other
+wrapper) which can link to liblttng-ctl and launch sessions? is there any
+limitation?
+
+Thanks,
+Anand Neeli
+
+
+
+
+
+
+
+
+
+
+root@fpc0:/usr/bin# lttng  -vvv --no-sessiond create mysession --live
+2000000 -U net://128.0.0.4
+DEBUG1 - 13:16:49.240956 [840/840]: Session live timer interval set to
+2000000 (in cmd_create() at commands/create.c:575)
+DEBUG3 - 13:16:49.241199 [840/840]: URI string: net://128.0.0.4 (in
+uri_parse() at uri.c:293)
+DEBUG2 - 13:16:49.241228 [840/840]: IP address resolved to 128.0.0.4 (in
+set_ip_address() at uri.c:134)
+DEBUG3 - 13:16:49.241235 [840/840]: URI dtype: 1, proto: 1, host:
+128.0.0.4, subdir: , ctrl: 0, data: 0 (in uri_parse() at uri.c:507)
+DEBUG1 - 13:16:49.241380 [840/840]: LSM cmd type : 30 (in
+send_session_msg() at lttng-ctl.c:133)
+DEBUG1 - 13:16:49.241452 [830/833]: Wait for client response (in
+thread_manage_clients() at main.c:4090)
+DEBUG1 - 13:16:49.241498 [830/833]: Receiving data from client ... (in
+thread_manage_clients() at main.c:4135)
+DEBUG1 - 13:16:49.241753 [830/833]: Processing client command 30 (in
+process_client_msg() at main.c:2813)
+DEBUG1 - 13:16:49.241775 [830/833]: Waiting for 2 URIs from client ... (in
+process_client_msg() at main.c:3740)
+
+--001a11c363ce566377051295cb1b
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div>I have a wrapper app which is 32-bit which is simi=
+lar to lttng binary, it links to liblttng-ctl for creating lttng sessions (=
+similar to lttng) . But the session create is stuck with below logs.</div><=
+div><br></div><div>To simulate this i have done following</div><div>1) On a=
+ 64-bit system replace /usr/bin/lttng with a 32-bit version of lttng binary=
+</div><div>2) Spawn lttng-sessiond (sessiond is 64-bit, we have not changed=
+ it)</div><div>3) Now create lttng session using the 32-bit lttng binary us=
+ing command &quot;lttng -vvv=C2=A0--no-sessiond create mysession --live 200=
+0000 -U net://localhost&quot;</div><div><br></div><div>After step 3, the co=
+nsole is stuck and doesn&#39;t return.</div><div><br></div><div>Can anyone =
+please tell me why cant we use 32-bit lttng (or any other wrapper) which ca=
+n link to liblttng-ctl and launch sessions? is there any limitation?</div><=
+div><br></div><div>Thanks,</div><div>Anand Neeli</div>
+
+
+
+
+
+
+
+<div><br></div><div><br></div><div><br><div><br></div><div><br></div><div><=
+br></div><div><br></div><div><br></div><div><br></div><div><br></div><div><=
+div>root@fpc0:/usr/bin# lttng =C2=A0-vvv --no-sessiond create mysession --l=
+ive 2000000 -U net://<a href=3D"http://128.0.0.4">128.0.0.4</a></div><div>D=
+EBUG1 - 13:16:49.240956 [840/840]: Session live timer interval set to 20000=
+00 (in cmd_create() at commands/create.c:575)</div><div>DEBUG3 - 13:16:49.2=
+41199 [840/840]: URI string: net://<a href=3D"http://128.0.0.4">128.0.0.4</=
+a> (in uri_parse() at uri.c:293)</div><div>DEBUG2 - 13:16:49.241228 [840/84=
+0]: IP address resolved to 128.0.0.4 (in set_ip_address() at uri.c:134)</di=
+v><div>DEBUG3 - 13:16:49.241235 [840/840]: URI dtype: 1, proto: 1, host: 12=
+8.0.0.4, subdir: , ctrl: 0, data: 0 (in uri_parse() at uri.c:507)</div><div=
+>DEBUG1 - 13:16:49.241380 [840/840]: LSM cmd type : 30 (in send_session_msg=
+() at lttng-ctl.c:133)</div><div>DEBUG1 - 13:16:49.241452 [830/833]: Wait f=
+or client response (in thread_manage_clients() at main.c:4090)</div><div>DE=
+BUG1 - 13:16:49.241498 [830/833]: Receiving data from client ... (in thread=
+_manage_clients() at main.c:4135)</div><div>DEBUG1 - 13:16:49.241753 [830/8=
+33]: Processing client command 30 (in process_client_msg() at main.c:2813)<=
+/div><div>DEBUG1 - 13:16:49.241775 [830/833]: Waiting for 2 URIs from clien=
+t ... (in process_client_msg() at main.c:3740)</div><div><br></div></div></=
+div></div>
+
+--001a11c363ce566377051295cb1b--
+
+
+--===============0542619972==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0542619972==--
