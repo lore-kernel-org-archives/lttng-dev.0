@@ -1,24 +1,19 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: [PATCH lttng-tools] Tests: Python agent: update after
-	Python agent refactoring
-Date: Tue, 31 Mar 2015 20:10:07 -0400
-Message-ID: <1427847007-29752-1-git-send-email-eeppeliteloop__46540.387281175$1427847109$gmane$org@gmail.com>
+From: Jesper Derehag <jderehag@hotmail.com>
+Subject: Re: Configurable tracepath?
+Date: Wed, 1 Apr 2015 07:14:05 +0000
+Message-ID: <DUB123-W1898C83913C30D339E7BEADDF30__30589.6018202931$1427872525$gmane$org@phx.gbl>
+References: <DUB408-EAS865D8F72981E73E7C512A8DDF50@phx.gbl>
+ <CA+jJMxsAaVD2xYJ=po2w+ZajfzDwZ1Los3nbxdRL7RMyJSFLrw@mail.gmail.com>,
+ <1579587492.151507.1427736869150.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f49.google.com ([209.85.192.49])
+Received: from dub004-omc2s36.hotmail.com ([157.55.1.175])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <eeppeliteloop@gmail.com>) id 1Yd6D1-0001Z7-4B
- for lttng-dev@lists.lttng.org; Tue, 31 Mar 2015 20:08:41 -0400
-Received: by qgep97 with SMTP id p97so29820751qge.1
- for <lttng-dev@lists.lttng.org>; Tue, 31 Mar 2015 17:08:33 -0700 (PDT)
-Received: from archeepp.internal.efficios.com
- (cable-22.246.173-116.electronicbox.net. [173.246.22.116])
- by mx.google.com with ESMTPSA id q129sm164384qha.4.2015.03.31.17.08.32
- for <lttng-dev@lists.lttng.org>
- (version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
- Tue, 31 Mar 2015 17:08:32 -0700 (PDT)
+ (envelope-from <jderehag@hotmail.com>) id 1YdCqp-0003kj-Ps
+ for lttng-dev@lists.lttng.org; Wed, 01 Apr 2015 03:14:21 -0400
+In-Reply-To: <1579587492.151507.1427736869150.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -27,441 +22,149 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, =?iso-8859-1?B?Suly6W1pZSBHYWxhcm5lYXU=?= <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This patch makes the tests follow the recent refactoring
-of the LTTng-UST Python agent.
 
-You need both python2 and python3 in your $PATH to run this
-test now (since the agent is compatible with both versions
-of Python).
 
-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
----
- tests/regression/ust/python-logging/LTTngTest.py   | 76 ----------------------
- tests/regression/ust/python-logging/test.py        | 71 ++++++++++++++++++++
- .../ust/python-logging/test_python_logging         | 76 ++++++++++++----------
- 3 files changed, 112 insertions(+), 111 deletions(-)
- delete mode 100644 tests/regression/ust/python-logging/LTTngTest.py
- create mode 100644 tests/regression/ust/python-logging/test.py
+----------------------------------------
+> Date: Mon, 30 Mar 2015 17:34:29 +0000
+> From: mathieu.desnoyers@efficios.com
+> To: jeremie.galarneau@efficios.com
+> CC: jderehag@hotmail.com; lttng-dev@lists.lttng.org
+> Subject: Re: [lttng-dev] Configurable tracepath?
+>
+> ----- Original Message -----
+>> On Mon, Mar 30, 2015 at 5:21 AM, Jesper Derehag <jderehag@hotmail.com> w=
+rote:
+>>> No thoughts on this one?
+>>>
+>>> Den 25 mar 2015 16:53 skrev Jesper Derehag <jderehag@hotmail.com>:
+>>>
+>>> Hi,
+>>>
+>>> We have run into an issue with unique per-session tracepaths.
+>>>
+>>> In my particular setup I am using relayd to centralize alot of consumers
+>>> (not really important to this discussion, but thought I'd mention it
+>>> anyway).
+>>> So the problem is that I have very limited quota for %outputpath. So to
+>>> manage the quota fairly between channels I am using --tracefile-size to
+>>> limit the size of each channel and thus preventing them from starving
+>>> eachother out.
+>>> BUT, say I would want to restart the session for some reason, in my cas=
+e it
+>>> might be that the card running a specific session reboots, and then rel=
+ayd
+>>> would get a new session & channel, and thus create a new folder for that
+>>> data. But since the old data still remains, I would run into the quota
+>>> limit..
+>>>
+>>> Below is how the tracepaths are created in pseudo-code:
+>>>
+>>> per-pid tracing:
+>>> tracepath =3D %outputpath/%pid/%session_name-%pid-%datetime
+>>>
+>>> per-uid tracing:
+>>> tracepath =3D %outputpath/uid/%uid/%arch-bit
+>>>
+>>> So just reading this little snippet I am guessing one could avoid this
+>>> particular problem by doing per-uid tracing, but that seems like an
+>>> unnecessary workaround for what would seem like a trivial problem?
+>>>
+>>> Would it instead be feasable to have the channel->path_name configurabl=
+e,
+>>> so
+>>> that you essentially could avoid the uniqueness of the path (pid &
+>>> datetime)?
+>>>
+>>> Or is that instead opening pandoras box w.r.t. to tracefile consistency=
+ and
+>>> contention?
+>>
+>> I *think* this was done to reasonably ensure the uniqueness of the
+>> trace path since the consumer and relay daemons will not deal with
+>> existing files gracefully.
+>>
+>> I can see the use case though... It would probably require making the
+>> consumer and relay daemons a bit smarter if we want them to pick-up
+>> where they left. Nevertheless, it would be a neat feature.
+>>
+>> In the meantime, I don't really have a good recommendation for you... :-/
+>
+> Also, in per-PID tracing, we also need to have separate output files for
+> each process that runs concurrently. Per-UID tracing is meant to share
+> the ring buffer across processes from the same user, which is not the
+> case for per-PID tracing.
 
-diff --git a/tests/regression/ust/python-logging/LTTngTest.py b/tests/regression/ust/python-logging/LTTngTest.py
-deleted file mode 100644
-index a3ed8f9..0000000
---- a/tests/regression/ust/python-logging/LTTngTest.py
-+++ /dev/null
-@@ -1,76 +0,0 @@
--#!/usr/bin/env python
--#
--# Copyright (C) 2014 - David Goulet <dgoulet@efficios.com>
--#
--# This library is free software; you can redistribute it and/or modify it under
--# the terms of the GNU Lesser General Public License as published by the Free
--# Software Foundation; version 2.1 of the License.
--#
--# This library is distributed in the hope that it will be useful, but WITHOUT
--# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
--# FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
--# details.
--#
--# You should have received a copy of the GNU Lesser General Public License
--# along with this library; if not, write to the Free Software Foundation, Inc.,
--# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
--
--import sys
--import logging
--import errno
--
--from time import sleep
--
--def cleanup(code, agent = None):
--    """
--    Cleanup agent and exit with given code.
--    """
--    if agent is not None:
--        agent.destroy()
--
--    sys.exit(code)
--
--try:
--    import lttng_agent
--except ImportError as e:
--    print("LTTng Agent not found. Aborting")
--    cleanup(errno.ENOSYS)
--
--def run():
--    """
--    Main for this test program. Based on the Java testing program that behaves
--    exactly the same.
--    """
--
--    agent = lttng_agent.LTTngAgent()
--    ev1 = logging.getLogger("python-ev-test1");
--    ev2 = logging.getLogger("python-ev-test2");
--
--    try:
--        nr_iter = int(sys.argv[1])
--        wait_time = int(sys.argv[2])
--        fire_debug_ev = 0
--        fire_second_ev = 0
--    except IndexError as e:
--        print("Missing arguments. Aborting")
--        cleanup(errno.EINVAL, agent)
--    except ValueError as e:
--        print("Invalid arguments. Aborting")
--        cleanup(errno.EINVAL, agent)
--
--    if len(sys.argv) > 3:
--        fire_debug_ev = int(sys.argv[3])
--    if len(sys.argv) > 4:
--        fire_second_ev = int(sys.argv[4])
--
--    for i in range(0, nr_iter):
--        ev1.info("%s fired" % ev1.name)
--        if fire_debug_ev != 0:
--            ev1.debug("%s DEBUG fired" % ev1.name)
--        sleep(wait_time)
--
--    if fire_second_ev != 0:
--        ev2.info("%s fired" % ev2.name)
--
--if __name__ == "__main__":
--    run()
-diff --git a/tests/regression/ust/python-logging/test.py b/tests/regression/ust/python-logging/test.py
-new file mode 100644
-index 0000000..d08e623
---- /dev/null
-+++ b/tests/regression/ust/python-logging/test.py
-@@ -0,0 +1,71 @@
-+# Copyright (C) 2015 - Philippe Proulx <pproulx@efficios.com>
-+# Copyright (C) 2014 - David Goulet <dgoulet@efficios.com>
-+#
-+# This library is free software; you can redistribute it and/or modify it under
-+# the terms of the GNU Lesser General Public License as published by the Free
-+# Software Foundation; version 2.1 of the License.
-+#
-+# This library is distributed in the hope that it will be useful, but WITHOUT
-+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-+# FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more
-+# details.
-+#
-+# You should have received a copy of the GNU Lesser General Public License
-+# along with this library; if not, write to the Free Software Foundation, Inc.,
-+# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
-+
-+from __future__ import unicode_literals, print_function
-+import logging
-+import time
-+import sys
-+
-+
-+def _perror(msg):
-+    print(msg, file=sys.stderr)
-+    sys.exit(1)
-+
-+
-+try:
-+    import lttngust
-+except (ImportError) as e:
-+    _perror('lttngust package not found: {}'.format(e))
-+
-+
-+def _main():
-+    ev1 = logging.getLogger('python-ev-test1');
-+    ev2 = logging.getLogger('python-ev-test2');
-+
-+    logging.basicConfig()
-+
-+    try:
-+        nr_iter = int(sys.argv[1])
-+        wait_time = float(sys.argv[2])
-+        fire_debug_ev = False
-+        fire_second_ev = False
-+    except (IndexError) as e:
-+        _perror('missing arguments: {}'.format(e))
-+    except (ValueError) as e:
-+        _perror('invalid arguments: {}'.format(e))
-+
-+    try:
-+        if len(sys.argv) > 3:
-+            fire_debug_ev = int(sys.argv[3])
-+        if len(sys.argv) > 4:
-+            fire_second_ev = int(sys.argv[4])
-+    except (ValueError) as e:
-+        _perror('invalid arguments: {}'.format(e))
-+
-+    for i in range(nr_iter):
-+        ev1.info('{} fired [INFO]'.format(ev1.name))
-+
-+        if fire_debug_ev:
-+            ev1.debug('{} fired [DEBUG]'.format(ev1.name))
-+
-+        time.sleep(wait_time)
-+
-+    if fire_second_ev:
-+        ev2.info('{} fired [INFO]'.format(ev2.name))
-+
-+
-+if __name__ == '__main__':
-+    _main()
-diff --git a/tests/regression/ust/python-logging/test_python_logging b/tests/regression/ust/python-logging/test_python_logging
-index cb960da..4c2a3c6 100755
---- a/tests/regression/ust/python-logging/test_python_logging
-+++ b/tests/regression/ust/python-logging/test_python_logging
-@@ -1,5 +1,6 @@
- #!/bin/bash
- #
-+# Copyright (C) - 2015 Philippe Proulx <pproulx@efficios.com>
- # Copyright (C) - 2014 David Goulet <dgoulet@efficios.com>
- #
- # This program is free software; you can redistribute it and/or modify it under
-@@ -15,13 +16,13 @@
- # this program; if not, write to the Free Software Foundation, Inc., 51
- # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- 
--TEST_DESC="Java Python support"
-+TEST_DESC="Python support"
- 
- CURDIR=$(dirname $0)/
- TESTDIR=$CURDIR/../../..
- NR_ITER=5
- NR_SEC_WAIT=1
--TESTAPP_NAME="LTTngTest"
-+TESTAPP_NAME="test"
- TESTAPP_BIN="$TESTAPP_NAME.py"
- TESTAPP_PATH="$CURDIR"
- SESSION_NAME="python-test"
-@@ -29,16 +30,17 @@ EVENT_NAME="python-ev-test1"
- EVENT_NAME2="python-ev-test2"
- OUTPUT_DEST="/dev/null"
- 
--NUM_TESTS=156
-+NUM_TESTS=310
- 
- source $TESTDIR/utils/utils.sh
- 
- function run_app
- {
--	local debug_tp=$1
--	local fire_second_tp=$2
-+	local python=$1
-+	local debug_tp=$2
-+	local fire_second_tp=$3
- 
--	python $TESTAPP_PATH/$TESTAPP_BIN $NR_ITER $NR_SEC_WAIT $debug_tp $fire_second_tp
-+	$python $TESTAPP_PATH/$TESTAPP_BIN $NR_ITER $NR_SEC_WAIT $debug_tp $fire_second_tp
- }
- 
- function run_app_background
-@@ -94,7 +96,7 @@ function test_python_before_start ()
- 	enable_python_lttng_event $SESSION_NAME $EVENT_NAME
- 
- 	# Run 5 times with a 1 second delay
--	run_app_background
-+	run_app_background $1
- 
- 	start_lttng_tracing $SESSION_NAME
- 
-@@ -120,7 +122,7 @@ function test_python_after_start ()
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay
--	run_app
-+	run_app $1
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
-@@ -141,7 +143,7 @@ function test_python_loglevel ()
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay
--	run_app
-+	run_app $1
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
-@@ -159,7 +161,7 @@ function test_python_loglevel ()
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay
--	run_app
-+	run_app $1
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
-@@ -177,7 +179,7 @@ function test_python_loglevel ()
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay
--	run_app
-+	run_app $1
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
-@@ -197,7 +199,7 @@ function test_python_loglevel_multiple ()
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay and fire two TP.
--	run_app 1
-+	run_app $1 1
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
-@@ -214,7 +216,7 @@ function test_python_loglevel_multiple ()
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay and fire two TP.
--	run_app 1
-+	run_app $1 1
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
-@@ -239,7 +241,7 @@ function test_python_multi_session_loglevel()
- 	start_lttng_tracing $SESSION_NAME-2
- 
- 	# Run 5 times with a 1 second delay and fire second TP.
--	run_app 1 1
-+	run_app $1 1 1
- 
- 	stop_lttng_tracing $SESSION_NAME-1
- 	stop_lttng_tracing $SESSION_NAME-2
-@@ -278,7 +280,7 @@ function test_python_multi_session_disable()
- 	start_lttng_tracing $SESSION_NAME-2
- 
- 	# Run 5 times with a 1 second delay and fire second TP.
--	run_app 0 1
-+	run_app $1 0 1
- 
- 	stop_lttng_tracing $SESSION_NAME-1
- 	stop_lttng_tracing $SESSION_NAME-2
-@@ -313,7 +315,7 @@ function test_python_multi_session_disable_wildcard()
- 	start_lttng_tracing $SESSION_NAME-1
- 	start_lttng_tracing $SESSION_NAME-2
- 
--	run_app
-+	run_app $1
- 
- 	stop_lttng_tracing $SESSION_NAME-1
- 	stop_lttng_tracing $SESSION_NAME-2
-@@ -346,7 +348,7 @@ function test_python_disable_all()
- 
- 	start_lttng_tracing $SESSION_NAME
- 
--	run_app 0 1
-+	run_app $1 0 1
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
-@@ -372,7 +374,7 @@ function test_python_multi_session()
- 	start_lttng_tracing $SESSION_NAME-2
- 
- 	# Run 5 times with a 1 second delay and fire second TP.
--	run_app 0 1
-+	run_app $1 0 1
- 
- 	stop_lttng_tracing $SESSION_NAME-1
- 	stop_lttng_tracing $SESSION_NAME-2
-@@ -401,7 +403,7 @@ function test_python_destroy_session()
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay
--	run_app_background 0 1
-+	run_app_background $1 0 1
- 
- 	# Wait for the applications started in background
- 	wait
-@@ -420,7 +422,7 @@ function test_python_destroy_session()
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay
--	run_app_background 0 1
-+	run_app_background $1 0 1
- 
- 	# Wait for the applications started in background
- 	wait
-@@ -441,11 +443,11 @@ function test_python_filtering()
- 
- 	create_lttng_session $SESSION_NAME $TRACE_PATH/$SESSION_NAME
- 	# Enable all event with a filter.
--	enable_python_filter $SESSION_NAME '*' 'msg == "python-ev-test2 fired"'
-+	enable_python_filter $SESSION_NAME '*' 'msg == "python-ev-test2 fired [INFO]"'
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay and fire second TP.
--	run_app 0 1
-+	run_app $1 0 1
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
-@@ -459,11 +461,11 @@ function test_python_filtering()
- 	create_lttng_session $SESSION_NAME $TRACE_PATH/$SESSION_NAME
- 	# Enable first Logger but filter msg payload for the INFO one while
- 	# triggering the debug and second TP.
--	enable_python_filter $SESSION_NAME $EVENT_NAME 'msg == "python-ev-test1 fired"'
-+	enable_python_filter $SESSION_NAME $EVENT_NAME 'msg == "python-ev-test1 fired [INFO]"'
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay, fire debug and second TP.
--	run_app 1 1
-+	run_app $1 1 1
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
-@@ -487,7 +489,7 @@ function test_python_disable()
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay and fire second TP.
--	run_app 0 1
-+	run_app $1 0 1
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
-@@ -511,7 +513,7 @@ function test_python_disable_enable()
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay and fire second TP.
--	run_app 0 1
-+	run_app $1 0 1
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
-@@ -539,7 +541,7 @@ function test_python_filter_loglevel()
- 	start_lttng_tracing $SESSION_NAME
- 
- 	# Run 5 times with a 1 second delay and fire second TP.
--	run_app 0 1
-+	run_app $1 0 1
- 
- 	stop_lttng_tracing $SESSION_NAME
- 	destroy_lttng_session $SESSION_NAME
-@@ -582,15 +584,19 @@ skip $withapp "Python support is needed. Skipping all tests." $NUM_TESTS ||
- 		test_python_filter_loglevel
- 	)
- 
--	for fct_test in ${tests[@]};
-+	for python_version in 2 3;
- 	do
--		TRACE_PATH=$(mktemp -d)
--
--		${fct_test}
--		if [ $? -ne 0 ]; then
--			break;
--		fi
--		rm -rf $TRACE_PATH
-+		for fct_test in ${tests[@]};
-+		do
-+			TRACE_PATH=$(mktemp -d)
-+
-+			diag "(Python $python_version)"
-+			${fct_test} python$python_version
-+			if [ $? -ne 0 ]; then
-+				break;
-+			fi
-+			rm -rf $TRACE_PATH
-+		done
- 	done
- 
- 	stop_lttng_sessiond
--- 
-2.3.0
+Well, yes. This was what I was worring about when talking about concurrency=
+ above (allthough its not about CPU concurrency but rather file concurrency=
+).
+
+>
+> You might want to try erasing the old trace before starting to record
+> the new session.
+
+Yeah thats the obvious solution.=A0
+But that introduces other problems on the other hand. Say you are running f=
+light-recorder, your task crashes (and thus you need to restart session), i=
+f we would then erase tracefile we would miss the entire flightrecorder ses=
+sion.
+Another issue might be like in our case where we are aiming at replacing sy=
+slog (in logrotate fashion), with lttng. So if we would have a reboot (grac=
+eful or non-graceful), we would have gaps in the tracefile around the inter=
+esting events (and usually most issues do happen during startup/shutdown ph=
+ases, so in this case we would have gaps in the most interesting region-of-=
+interests).
+
+So yeah, your solution solves the quota issue but also introduces some othe=
+r maybe-not-so-desirable properties.
+
+I think the takeaway here is that to solve this is really not trivial. So w=
+e need to go back to the drawing board a little bit and maybe rethink our s=
+toring scheme...
+It does not sound like "re-use tracefiles" feature is coming anytime soon..=
+ =3D)
+
+>
+> Thanks,
+>
+> Mathieu
+>
+>>
+>> J=E9r=E9mie
+>>
+>>>
+>>> Regards,
+>>> Jesper
+>>> _______________________________________________
+>>> lttng-dev mailing list
+>>> lttng-dev@lists.lttng.org
+>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>>
+>>>
+>>> _______________________________________________
+>>> lttng-dev mailing list
+>>> lttng-dev@lists.lttng.org
+>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>>
+>>
+>>
+>>
+>> --
+>> J=E9r=E9mie Galarneau
+>> EfficiOS Inc.
+>> http://www.efficios.com
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+ 		 	   		  =
