@@ -1,21 +1,20 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+From: "Wolfgang Rostek" <wolfgang.rostek@gmx.de>
 Subject: Re: major variations in perfomance figures
-Date: Fri, 3 Apr 2015 11:21:05 -0400
-Message-ID: <CA+jJMxuOT-zRW4k74C-gD3n4XP3mWO4HGYCLu=LT+EnMuRncAQ__31783.5239381113$1428074522$gmane$org@mail.gmail.com>
+Date: Fri, 3 Apr 2015 17:34:44 +0200
+Message-ID: <trinity-a202c764-638a-4c9a-b09f-c588cfe2cdb8-1428075284708__24167.7028978758$1428075344$gmane$org@3capp-gmx-bs13>
 References: <trinity-1e9921b3-666b-4656-bcb8-a2125944698f-1427831168919@3capp-gmx-bs39>
  <CA+jJMxuEdC4aaAZci3rwWM3sGJbyqchBeuVG2iTM5Ag11zKPwg@mail.gmail.com>
- <trinity-44577199-4bb4-4bf1-8595-785637f25968-1428072450572@3capp-gmx-bs60>
+ <trinity-44577199-4bb4-4bf1-8595-785637f25968-1428072450572@3capp-gmx-bs60>,
+ <CA+jJMxuOT-zRW4k74C-gD3n4XP3mWO4HGYCLu=LT+EnMuRncAQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f45.google.com ([209.85.192.45])
+Received: from mout.gmx.net ([212.227.17.22])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Ye3PC-0003mm-M3
- for lttng-dev@lists.lttng.org; Fri, 03 Apr 2015 11:21:12 -0400
-Received: by qgdy78 with SMTP id y78so32487610qgd.0
- for <lttng-dev@lists.lttng.org>; Fri, 03 Apr 2015 08:21:05 -0700 (PDT)
-In-Reply-To: <trinity-44577199-4bb4-4bf1-8595-785637f25968-1428072450572@3capp-gmx-bs60>
+ (envelope-from <wolfgang.rostek@gmx.de>) id 1Ye3cQ-0003sr-O5
+ for lttng-dev@lists.lttng.org; Fri, 03 Apr 2015 11:34:53 -0400
+In-Reply-To: <CA+jJMxuOT-zRW4k74C-gD3n4XP3mWO4HGYCLu=LT+EnMuRncAQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,60 +23,26 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Wolfgang Rostek <wolfgang.rostek@gmx.de>
+To: =?UTF-8?Q?=22J=C3=A9r=C3=A9mie_Galarneau=22?= <jeremie.galarneau@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gRnJpLCBBcHIgMywgMjAxNSBhdCAxMDo0NyBBTSwgV29sZmdhbmcgUm9zdGVrIDx3b2xmZ2Fu
-Zy5yb3N0ZWtAZ214LmRlPiB3cm90ZToKPiBIaSBKw6lyw6ltaWUsCj4KPiB0aGFua3MgZm9yIHlv
-dXIgZmVlZGJhY2suCj4KPiBJJ3ZlIGFkZGVkIG9ubHkgYSBsb29wIHRvIHRoZSBlbmQgb2YgdGhl
-IGRlbW8gcHJvZ3JhbW0uCj4KPiBGcmVxdWVuY2Ugc2NhbGluZyBJIGNhbid0IGltYWdpbmUgb24g
-bXkgZGVrdG9wIG1hY2hpbmUuCj4gSXQgaXMgYSBqdW1wIGJldHdlZW4gMzUwbnMgYW5kIDgwMG5z
-LiBJbiB0aGUgbG9vcCBiZWxvdwo+IGFsbCB0aGUgZXZlbnRzIG9mIG9uZSB0ZXN0IHJ1biBhcmUg
-b2YgZXF1YWwgdGltZSBkaXN0YW5jZSwKPiBlaXRoZXIgc2xvdyBvciBmYXN0LgoKRnJlcXVlbmN5
-IHNjYWxpbmcgY2FuIHN0aWxsIGRlZmluaXRlbHkgcGxheSBhIHJvbGUsIGV2ZW4gb24gYSBkZXNr
-dG9wIG1hY2hpbmUuCkFsc28sIENvcmUgaTUgY2hpcHMgc3VwcG9ydCBUdXJibyBCb29zdCB3aGlj
-aCBzaG91bGQgYmUgZGlzYWJsZWQgdG8KcGVyZm9ybSBiZW5jaG1hcmtzLgoKSSdtIGd1ZXNzaW5n
-IHlvdSBnZXQgeW91ciB0aW1lIG1lYXN1cmVtZW50cyBmcm9tIHRoZSB0aW1lc3RhbXBzIGluIHRo
-ZQp0cmFjZT8KCkrDqXLDqW1pZQoKPgo+IFdvbGZnYW5nIFIuCj4KPgo+IGh0dHBzOi8vZ2l0aHVi
-LmNvbS9sdHRuZy9sdHRuZy11c3QvYmxvYi9tYXN0ZXIvZG9jL2V4YW1wbGVzL2RlbW8vZGVtby5j
-Cj4gLi4uCj4gdHJhY2Vwb2ludCh1c3RfdGVzdHNfZGVtbywgc3RhcnRpbmcsIDEyMyk7Cj4gZm9y
-IChpID0gMDsgaSA8IDU7IGkrKykgewo+IG5ldGludCA9IGh0b25sKGkpOwo+IHRyYWNlcG9pbnQo
-dXN0X3Rlc3RzX2RlbW8yLCBsb29wLCBpLCBuZXRpbnQsIHZhbHVlcywKPiB0ZXh0LCBzdHJsZW4o
-dGV4dCksIGRibCwgZmx0KTsKPiB9Cj4gdHJhY2Vwb2ludCh1c3RfdGVzdHNfZGVtbywgZG9uZSwg
-NDU2KTsKPiB0cmFjZXBvaW50KHVzdF90ZXN0c19kZW1vMywgZG9uZSwgNDIpOwo+Cj4gZm9yIChp
-ID0gMDsgaSA8IDMwMDsgaSsrKSB7Cj4gaWYoaSAlIDEwID09IDApIHsKPiB0cmFjZXBvaW50KHVz
-dF90ZXN0c19kZW1vLCBkb25lLCBpKTsgICAgICAgICA8PT09PT09PT09Cj4gfQo+IH0KPgo+IGZw
-cmludGYoc3RkZXJyLCAiIGRvbmUuXG4iKTsKPiByZXR1cm4gMDsKPiB9Cj4KPj4gR2VzZW5kZXQ6
-IEZyZWl0YWcsIDAzLiBBcHJpbCAyMDE1IHVtIDE2OjIyIFVocgo+PiBWb246ICJKw6lyw6ltaWUg
-R2FsYXJuZWF1IiA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+PiBBbjogIldvbGZn
-YW5nIFJvc3RlayIgPHdvbGZnYW5nLnJvc3Rla0BnbXguZGU+Cj4+IENjOiAibHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZyIgPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+Cj4+IEJldHJlZmY6IFJl
-OiBbbHR0bmctZGV2XSBtYWpvciB2YXJpYXRpb25zIGluIHBlcmZvbWFuY2UgZmlndXJlcwo+Pgo+
-PiBPbiBUdWUsIE1hciAzMSwgMjAxNSBhdCAzOjQ2IFBNLCBXb2xmZ2FuZyBSb3N0ZWsgPHdvbGZn
-YW5nLnJvc3Rla0BnbXguZGU+IHdyb3RlOgo+PiA+IEhpIGFsbCwKPj4gPgo+PiA+IEkgZGlkIGEg
-Zmlyc3QgcGVyZm9tYW5jZSB0ZXN0IGV4dGVuZGluZyB0aGUgZGVtbyBleGFtcGxlCj4+ID4gYnkg
-dHJhY2luZyAzMCBzaW1wbGUgaW50ZWdlcnMgaW4gYSBsb29wLgo+PiA+Cj4+ID4gRm9yIGEgc2lt
-aWxhciBDUFUgKGk1IHF1YWQgY29yZSAyLjhHSHopIEkgc2F3IHZhbHVlcwo+PiA+IG1lbnRpb25l
-ZCBhcm91bmQgMjUwbnMgaW4gdGhlIGZvcnVtLgo+PiA+Cj4+ID4gSSd2ZSB0cmllZCB0aGUgdGVz
-dCBzZXZlcmFsIHRpbWUgYW5kIGNvdWxkIGNvbWUgZG93bgo+PiA+IHRvIGFib3V0IDM1MG5zLiBU
-aGUgbWFjaGluZSB3YXMgYWxtb3N0IGlkbGUgZm9yIGFsbAo+PiA+IHRlc3RzLgo+PiA+Cj4+ID4g
-V2hhdCBtYWtlcyBtZSB3b25kZXIgaXMgYSBsYXJnZSB2YXJpYXRpb24gd2l0aCBmcmVxdWVudAo+
-PiA+IHJ1bnMgZ2l2aW5nIG1lIDc1MC04MDBucy4KPj4gPgo+PiA+IE5vdCB0aGUgYWJzb2x1dGUg
-dGltZSBidXQgdGhlIHZhcmlhdGlvbnMgaXNuJ3QgY2xlYXIKPj4gPiB0byBtZS4gRnJvbSBteSB1
-bmRlcnN0YW5kaW5nIHRoZSBjYWxsZXIgcGF0aCBpcyBtb3JlCj4+ID4gb3IgbGVzcyBzdHJhaWdo
-dCB0byBzaGFyZWQgbWVtb3J5LiBXaHkgZG8gZGlmZmVyZW50Cj4+ID4gcnVucyBzaG93IG1vcmUg
-dGhhbiBkb3VibGUgdGhlIHRpbWUgZm9yIHRoZSB0cmFjZXM/Cj4+Cj4+IEdvb2QgcXVlc3Rpb24u
-IENhbiB5b3Ugc2hhcmUgdGhlIGJlbmNobWFyaydzIGNvZGU/Cj4+IEFsc28sIG1ha2Ugc3VyZSBm
-cmVxdWVuY3kgc2NhbGluZyBpcyBkaXNhYmxlZCBvbiB5b3VyIHN5c3RlbTsgaXQgY291bGQKPj4g
-ZXhwbGFpbiB0aGVzZSBraW5kcyBvZiB2YXJpYXRpb25zLgo+Pgo+PiBKw6lyw6ltaWUKPj4KPj4g
-Pgo+PiA+IFdvbGZnYW5nIFIuCj4+ID4KPj4gPgo+PiA+Cj4+ID4gX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0
-Cj4+ID4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiA+IGh0dHA6Ly9saXN0cy5sdHRuZy5v
-cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+Pgo+Pgo+Pgo+PiAtLQo+PiBK
-w6lyw6ltaWUgR2FsYXJuZWF1Cj4+IEVmZmljaU9TIEluYy4KPj4gaHR0cDovL3d3dy5lZmZpY2lv
-cy5jb20KPj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8v
-d3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-Cmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
-dgo=
+...
+> > Frequence scaling I can't imagine on my dektop machine.
+> > It is a jump between 350ns and 800ns. In the loop below
+> > all the events of one test run are of equal time distance,
+> > either slow or fast.
+> 
+> Frequency scaling can still definitely play a role, even on a desktop machine.
+> Also, Core i5 chips support Turbo Boost which should be disabled to
+> perform benchmarks.
+> 
+> I'm guessing you get your time measurements from the timestamps in the
+> trace?
+Yes
+
+I'm not hunting for a detailed benchmark. Only such a large variance makes
+me thoughtful. For such a test I did expect some 10-30% but not this more 
+than 200%.
+
+Wolfgang R.
