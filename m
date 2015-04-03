@@ -1,14 +1,19 @@
-From: Jesper Derehag <jderehag@hotmail.com>
-Subject: Re: major variations in perfomance figures
-Date: Fri, 3 Apr 2015 18:49:31 +0200
-Message-ID: <DUB408-EAS1338E733D04CF537A7034EADDF10__45423.3404402204$1428079846$gmane$org@phx.gbl>
+From: Chidhu R <chid1989@gmail.com>
+Subject: Re: Printing complex data types with LTTng
+Date: Fri, 3 Apr 2015 13:26:47 -0700
+Message-ID: <CAL1ZhOOHWw3BprGNGtOEahAohKvjvy1Zc1mr_DOmo9RyC0ARVw__18923.2114622884$1428092930$gmane$org@mail.gmail.com>
+References: <CAL1ZhONSOm9F8GkQ_z9LSkKwPGzg0C-BROu1AmxtCsZJLnzRzg@mail.gmail.com>
+ <CA+jJMxuPQWT0qMXdZRRv3Nw_zCf=1MDcKg1EM30itOsnyO9BEA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0653804410=="
+Content-Type: multipart/mixed; boundary="===============0174330766=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from dub004-omc3s22.hotmail.com ([157.55.2.31])
+Received: from mail-lb0-f181.google.com ([209.85.217.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jderehag@hotmail.com>) id 1Ye4mr-0004Gv-Pd
- for lttng-dev@lists.lttng.org; Fri, 03 Apr 2015 12:49:47 -0400
+ (envelope-from <chid1989@gmail.com>) id 1Ye8Bh-0005Id-KO
+ for lttng-dev@lists.lttng.org; Fri, 03 Apr 2015 16:27:39 -0400
+Received: by lbbzk7 with SMTP id zk7so68575963lbb.0
+ for <lttng-dev@lists.lttng.org>; Fri, 03 Apr 2015 13:27:27 -0700 (PDT)
+In-Reply-To: <CA+jJMxuPQWT0qMXdZRRv3Nw_zCf=1MDcKg1EM30itOsnyO9BEA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -17,49 +22,152 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Wolfgang Rostek <wolfgang.rostek@gmx.de>
-Cc: lttng-dev@lists.lttng.org
+To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Philippe Proulx <philippe.proulx@efficios.com>, =?UTF-8?Q?Genevi=C3=A8ve_Bastien?= <genevieve.bastien@polymtl.ca>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0653804410==
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: base64
+--===============0174330766==
+Content-Type: multipart/alternative; boundary=001a11c350b8e423aa0512d7c68f
 
-PHAgZGlyPSJsdHIiPkFsc28sIGZvciBzdWNoIGEgc2hvcnQgdGVzdCwgcHJlZW1wdGlvbiBpcyBh
-bHNvIGxpa2VseSBhIGZhY3Rvci4gTWVhbmluZyBhbm90aGVyIHRhc2sgbWlnaHQgZ2V0IHNjaGVk
-dWxlZCBpbiBiZXR3ZWVuIGFuZCB0aHVzIGRpc3RvcnRpbmcgeW91ciBwZXJjZXB0aW9uIG9mIHRp
-bWUuPGJyPgpGb3IgcHJvcGVyIHBlcmZvcm1hbmNlIHRlc3RpbmcgeW91IGVpdGhlciBuZWVkIHRv
-IHVzZSBzb21lIG90aGVyIG1ldHJpYyByYXRoZXIgdGhhbiB0aW1lLCBvciB5b3UgbmVlZCB0byBo
-YXZlIHlvdXIgdGVzdCBydW4gbG9uZyBlbm91Z2ggc28gdGhhdCB2YXJpYW5jZSBsaWtlIHRoaXMg
-d291bGQgYmUgaW5zaWduaWZpY2FudC4uPC9wPgo8cCBkaXI9Imx0ciI+L0plc3BlcjwvcD4KPGRp
-diBjbGFzcz0iZ21haWxfcXVvdGUiPkRlbiAzIGFwciAyMDE1IDU6MzUgZW0gc2tyZXYgV29sZmdh
-bmcgUm9zdGVrICZsdDt3b2xmZ2FuZy5yb3N0ZWtAZ214LmRlJmd0Ozo8YnIgdHlwZT0nYXR0cmli
-dXRpb24nPjxibG9ja3F1b3RlIGNsYXNzPSJxdW90ZSIgc3R5bGU9Im1hcmdpbjowIDAgMCAuOGV4
-O2JvcmRlci1sZWZ0OjFweCAjY2NjIHNvbGlkO3BhZGRpbmctbGVmdDoxZXgiPg0KDQoNCg0KPGRp
-dj4NCjxkaXY+Li4uPGJyIC8+DQomZ3Q7ICZndDsgRnJlcXVlbmNlIHNjYWxpbmcgSSBjYW4mIzM5
-O3QgaW1hZ2luZSBvbiBteSBkZWt0b3AgbWFjaGluZS48YnIgLz4NCiZndDsgJmd0OyBJdCBpcyBh
-IGp1bXAgYmV0d2VlbiAzNTBucyBhbmQgODAwbnMuIEluIHRoZSBsb29wIGJlbG93PGJyIC8+DQom
-Z3Q7ICZndDsgYWxsIHRoZSBldmVudHMgb2Ygb25lIHRlc3QgcnVuIGFyZSBvZiBlcXVhbCB0aW1l
-IGRpc3RhbmNlLDxiciAvPg0KJmd0OyAmZ3Q7IGVpdGhlciBzbG93IG9yIGZhc3QuPGJyIC8+DQom
-Z3Q7IDxiciAvPg0KJmd0OyBGcmVxdWVuY3kgc2NhbGluZyBjYW4gc3RpbGwgZGVmaW5pdGVseSBw
-bGF5IGEgcm9sZSwgZXZlbiBvbiBhIGRlc2t0b3AgbWFjaGluZS48YnIgLz4NCiZndDsgQWxzbywg
-Q29yZSBpNSBjaGlwcyBzdXBwb3J0IFR1cmJvIEJvb3N0IHdoaWNoIHNob3VsZCBiZSBkaXNhYmxl
-ZCB0bzxiciAvPg0KJmd0OyBwZXJmb3JtIGJlbmNobWFya3MuPGJyIC8+DQomZ3Q7IDxiciAvPg0K
-Jmd0OyBJJiMzOTttIGd1ZXNzaW5nIHlvdSBnZXQgeW91ciB0aW1lIG1lYXN1cmVtZW50cyBmcm9t
-IHRoZSB0aW1lc3RhbXBzIGluIHRoZTxiciAvPg0KJmd0OyB0cmFjZT88YnIgLz4NClllczxiciAv
-Pg0KPGJyIC8+DQpJJiMzOTttIG5vdCBodW50aW5nIGZvciBhIGRldGFpbGVkIGJlbmNobWFyay4g
-T25seSBzdWNoIGEgbGFyZ2UgdmFyaWFuY2UgbWFrZXM8YnIgLz4NCm1lIHRob3VnaHRmdWwuIEZv
-ciBzdWNoIGEgdGVzdCBJIGRpZCBleHBlY3Qgc29tZSAxMC0zMCUgYnV0IG5vdCB0aGlzIG1vcmUg
-PGJyIC8+DQp0aGFuIDIwMCUuPGJyIC8+DQo8YnIgLz4NCldvbGZnYW5nIFIuPGJyIC8+DQo8YnIg
-Lz4NCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fPGJyIC8+
-DQpsdHRuZy1kZXYgbWFpbGluZyBsaXN0PGJyIC8+DQpsdHRuZy1kZXYmIzY0O2xpc3RzLmx0dG5n
-Lm9yZzxiciAvPg0KPGEgaHJlZj0iaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
-YW4vbGlzdGluZm8vbHR0bmctZGV2Ij5odHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
-bG1hbi9saXN0aW5mby9sdHRuZy1kZXY8L2E+PGJyIC8+DQo8L2Rpdj4NCjwvZGl2Pg0KDQo8L2Js
-b2NrcXVvdGU+PC9kaXY+
+--001a11c350b8e423aa0512d7c68f
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Great. Thanks for the response. I wish that patch rolls out soon.
+
+BTW, did you mean there is a different approach with the current version of
+LTTng?
+
+-- Chid
+
+On Fri, Apr 3, 2015 at 7:28 AM, J=C3=A9r=C3=A9mie Galarneau <
+jeremie.galarneau@efficios.com> wrote:
+
+> On Tue, Mar 31, 2015 at 12:39 PM, Chidhu R <chid1989@gmail.com> wrote:
+> > Hi,
+> >
+> > I wanted to know if there is a way to print complex data types, given t=
+he
+> > pointer to it.
+> >
+> > For ex,
+> >
+> > class Msg {
+> > int a;
+> > char *str
+> > };
+> >
+> > // Create an object for Msg
+> > // pass the address of the object to LTTng and make LTTng print the
+> values
+> > of a and str. I do not want to dereference the pointer and send the
+> > individual values. Or, if there is a function which can be written to
+> > dereference the values and this function could be called each time I pa=
+ss
+> > the address of the object is also fine.
+> >
+> > Is there a way to achieve this with LTTng?
+>
+> Not for the moment. Genevi=C3=A8ve Bastien (CC-ed) has worked on it and
+> proposed a patch set. However, I'm not sure of the status of this
+> feature. I think Mathieu wanted to go with a different approach.
+>
+> Regards,
+> J=C3=A9r=C3=A9mie
+>
+> >
+> > Thanks
+> > Chid
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >
+>
+>
+>
+> --
+> J=C3=A9r=C3=A9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+
+--001a11c350b8e423aa0512d7c68f
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Great. Thanks for the response. I wish that patch rolls ou=
+t soon.<div><br></div><div>BTW, did you mean there is a different approach =
+with the current version of LTTng?</div><div><br></div><div>-- Chid</div></=
+div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Fri, Apr 3=
+, 2015 at 7:28 AM, J=C3=A9r=C3=A9mie Galarneau <span dir=3D"ltr">&lt;<a hre=
+f=3D"mailto:jeremie.galarneau@efficios.com" target=3D"_blank">jeremie.galar=
+neau@efficios.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote=
+" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><=
+div class=3D"HOEnZb"><div class=3D"h5">On Tue, Mar 31, 2015 at 12:39 PM, Ch=
+idhu R &lt;<a href=3D"mailto:chid1989@gmail.com">chid1989@gmail.com</a>&gt;=
+ wrote:<br>
+&gt; Hi,<br>
+&gt;<br>
+&gt; I wanted to know if there is a way to print complex data types, given =
+the<br>
+&gt; pointer to it.<br>
+&gt;<br>
+&gt; For ex,<br>
+&gt;<br>
+&gt; class Msg {<br>
+&gt; int a;<br>
+&gt; char *str<br>
+&gt; };<br>
+&gt;<br>
+&gt; // Create an object for Msg<br>
+&gt; // pass the address of the object to LTTng and make LTTng print the va=
+lues<br>
+&gt; of a and str. I do not want to dereference the pointer and send the<br=
+>
+&gt; individual values. Or, if there is a function which can be written to<=
+br>
+&gt; dereference the values and this function could be called each time I p=
+ass<br>
+&gt; the address of the object is also fine.<br>
+&gt;<br>
+&gt; Is there a way to achieve this with LTTng?<br>
+<br>
+</div></div>Not for the moment. Genevi=C3=A8ve Bastien (CC-ed) has worked o=
+n it and<br>
+proposed a patch set. However, I&#39;m not sure of the status of this<br>
+feature. I think Mathieu wanted to go with a different approach.<br>
+<br>
+Regards,<br>
+J=C3=A9r=C3=A9mie<br>
+<br>
+&gt;<br>
+&gt; Thanks<br>
+&gt; Chid<br>
+&gt;<br>
+&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
+</a><br>
+&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
+target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
+</a><br>
+&gt;<br>
+<span class=3D"HOEnZb"><font color=3D"#888888"><br>
+<br>
+<br>
+--<br>
+J=C3=A9r=C3=A9mie Galarneau<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
+om</a><br>
+</font></span></blockquote></div><br></div>
+
+--001a11c350b8e423aa0512d7c68f--
 
 
---===============0653804410==
+--===============0174330766==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -70,4 +178,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0653804410==--
+--===============0174330766==--
