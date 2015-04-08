@@ -1,16 +1,23 @@
-From: Chandru Mohan <chandru.dav@gmail.com>
-Subject: Source code of tracepoint
-Date: Wed, 8 Apr 2015 20:49:47 +0530
-Message-ID: <CAO6ksyfAEv4i++rNtckvs3JWJCjTOJG2A09bF+0tuebG2PE3Ug__32615.7967014753$1428506447$gmane$org@mail.gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: [PATCH lttng-tools] man pages: use standard NAME format
+Date: Wed,  8 Apr 2015 15:11:41 -0400
+Message-ID: <1428520301-31140-1-git-send-email-eeppeliteloop__13310.6833360673$1428520383$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0179774145=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f181.google.com ([209.85.223.181])
+Received: from mail-qg0-f42.google.com ([209.85.192.42])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <chandru.dav@gmail.com>) id 1Yfrlh-0006dv-Fk
- for lttng-dev@lists.lttng.org; Wed, 08 Apr 2015 11:19:54 -0400
-Received: by iebmp1 with SMTP id mp1so76925083ieb.0
- for <lttng-dev@lists.lttng.org>; Wed, 08 Apr 2015 08:19:48 -0700 (PDT)
+ (envelope-from <eeppeliteloop@gmail.com>) id 1YfvOE-0007kZ-HG
+ for lttng-dev@lists.lttng.org; Wed, 08 Apr 2015 15:11:57 -0400
+Received: by qgfi89 with SMTP id i89so33211056qgf.1
+ for <lttng-dev@lists.lttng.org>; Wed, 08 Apr 2015 12:11:48 -0700 (PDT)
+Received: from eeppdesk.localdomain (cable-192.222.140.14.electronicbox.net.
+ [192.222.140.14])
+ by mx.google.com with ESMTPSA id 10sm8074221qhe.29.2015.04.08.12.11.46
+ for <lttng-dev@lists.lttng.org>
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+ Wed, 08 Apr 2015 12:11:47 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,73 +29,51 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0179774145==
-Content-Type: multipart/alternative; boundary=001a1141b9acd0ca8d0513380f63
-
---001a1141b9acd0ca8d0513380f63
-Content-Type: text/plain; charset=UTF-8
-
-Can someone point to the source code of tracepoint in LTTng ? Basically i
-would like to understand how the applications communicate with the consumer
-daemon and how the traces are being sent by the application.
-
-I could find a definition in tracepoint.h
-define tracepoint(provider, name, ...) \
-
-do {                                    \
-    STAP_PROBEV(provider, name, ## __VA_ARGS__);            \
-    if (caa_unlikely(__tracepoint_##provider##___##name.state)) \
-        __tracepoint_cb_##provider##___##name(__VA_ARGS__); \
-} while (0)
-
-but could not map it to the exact definition. Kindly provide me your
-suggestions.
-
---001a1141b9acd0ca8d0513380f63
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><p style=3D"margin:0px 0px 1em;padding:0px;border:0px;font=
--size:15px;clear:both;font-family:&#39;Helvetica Neue&#39;,Helvetica,Arial,=
-sans-serif;line-height:19.5px">Can someone point to the source code of trac=
-epoint in LTTng ? Basically i would like to understand how the applications=
- communicate with the consumer daemon and how the traces are being sent by =
-the application.</p><p style=3D"margin:0px 0px 1em;padding:0px;border:0px;f=
-ont-size:15px;clear:both;font-family:&#39;Helvetica Neue&#39;,Helvetica,Ari=
-al,sans-serif;line-height:19.5px">I could find a definition in tracepoint.h=
-</p><h1 style=3D"margin:0px 0px 1em;padding:0px;border:0px;font-size:21px;l=
-ine-height:1.3;word-wrap:break-word;font-family:&#39;Helvetica Neue&#39;,He=
-lvetica,Arial,sans-serif">define tracepoint(provider, name, ...) \</h1><pre=
- style=3D"margin-top:0px;padding:5px;border:0px;font-size:13px;overflow:aut=
-o;width:auto;max-height:600px;font-family:Consolas,Menlo,Monaco,&#39;Lucida=
- Console&#39;,&#39;Liberation Mono&#39;,&#39;DejaVu Sans Mono&#39;,&#39;Bit=
-stream Vera Sans Mono&#39;,&#39;Courier New&#39;,monospace,sans-serif;word-=
-wrap:normal;background-color:rgb(238,238,238)"><code style=3D"margin:0px;pa=
-dding:0px;border:0px;font-family:Consolas,Menlo,Monaco,&#39;Lucida Console&=
-#39;,&#39;Liberation Mono&#39;,&#39;DejaVu Sans Mono&#39;,&#39;Bitstream Ve=
-ra Sans Mono&#39;,&#39;Courier New&#39;,monospace,sans-serif;white-space:in=
-herit">do {                                    \
-    STAP_PROBEV(provider, name, ## __VA_ARGS__);            \
-    if (caa_unlikely(__tracepoint_##provider##___##name.state)) \
-        __tracepoint_cb_##provider##___##name(__VA_ARGS__); \
-} while (0)
-</code></pre><p style=3D"margin:0px 0px 1em;padding:0px;border:0px;font-siz=
-e:15px;clear:both;font-family:&#39;Helvetica Neue&#39;,Helvetica,Arial,sans=
--serif;line-height:19.5px">but could not map it to the exact definition. Ki=
-ndly provide me your suggestions.</p></div>
-
---001a1141b9acd0ca8d0513380f63--
-
-
---===============0179774145==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0179774145==--
+QXMgcGVyIG1hbig3KToKCiAgICBUaGUgb25seSBtYW5kYXRvcnkgaGVhZGluZyBpcyBOQU1FLCB3
+aGljaCBzaG91bGQKICAgIGJlIHRoZSBmaXJzdCBzZWN0aW9uIGFuZCBiZSBmb2xsb3dlZCBvbiB0
+aGUgbmV4dAogICAgbGluZSBieSBhIG9uZS1saW5lIGRlc2NyaXB0aW9uIG9mIHRoZSBwcm9ncmFt
+OgoKICAgICAgICAuU0ggTkFNRQogICAgICAgIGl0ZW0gXC0gZGVzY3JpcHRpb24KCiAgICBJdCBp
+cyBleHRyZW1lbHkgaW1wb3J0YW50IHRoYXQgdGhpcyBmb3JtYXQgaXMgZm9sbG93ZWQsCiAgICBh
+bmQgdGhhdCB0aGVyZSBpcyBhIGJhY2tzbGFzaCBiZWZvcmUgdGhlIHNpbmdsZSBkYXNoCiAgICB3
+aGljaCBmb2xsb3dzIHRoZSBpdGVtIG5hbWUuIFRoaXMgc3ludGF4IGlzIHVzZWQgYnkgdGhlCiAg
+ICBtYW5kYig4KSBwcm9ncmFtIHRvIGNyZWF0ZSBhIGRhdGFiYXNlIG9mIHNob3J0CiAgICBkZXNj
+cmlwdGlvbnMgZm9yIHRoZSB3aGF0aXMoMSkgYW5kIGFwcm9wb3MoMSkgY29tbWFuZHMuCgpGdXJ0
+aGVybW9yZSAobGV4Z3JvZygxKSk6CgogICAgV2hlbiB1c2luZyB0aGUgdHJhZGl0aW9uYWwgbWFu
+IG1hY3JvIHNldCwgYSBjb3JyZWN0IE5BTUUKICAgIHNlY3Rpb24gbG9va3Mgc29tZXRoaW5nIGxp
+a2UgdGhpczoKCiAgICAgICAgLlNIIE5BTUUKICAgICAgICBmb28gXC0gcHJvZ3JhbSB0byBkbyBz
+b21ldGhpbmcKCiAgICBTb21lIG1hbnVhbCBwYWdlcnMgcmVxdWlyZSB0aGUg4oCYXC3igJkgdG8g
+YmUgZXhhY3RseSBhcyBzaG93bjsKICAgIG1hbmRiIGlzIG1vcmUgdG9sZXJhbnQsIGJ1dCBmb3Ig
+Y29tcGF0aWJpbGl0eSB3aXRoIG90aGVyCiAgICBzeXN0ZW1zIGl0IGlzIG5ldmVydGhlbGVzcyBh
+IGdvb2QgaWRlYSB0byByZXRhaW4gdGhlCiAgICBiYWNrc2xhc2guCgpTaWduZWQtb2ZmLWJ5OiBQ
+aGlsaXBwZSBQcm91bHggPGVlcHBlbGl0ZWxvb3BAZ21haWwuY29tPgotLS0KIGRvYy9tYW4vbHR0
+bmctY3Jhc2guMSAgICB8IDIgKy0KIGRvYy9tYW4vbHR0bmctcmVsYXlkLjggICB8IDIgKy0KIGRv
+Yy9tYW4vbHR0bmctc2Vzc2lvbmQuOCB8IDIgKy0KIGRvYy9tYW4vbHR0bmcuMSAgICAgICAgICB8
+IDIgKy0KIDQgZmlsZXMgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQoK
+ZGlmZiAtLWdpdCBhL2RvYy9tYW4vbHR0bmctY3Jhc2guMSBiL2RvYy9tYW4vbHR0bmctY3Jhc2gu
+MQppbmRleCA0YWY5M2YzLi44MDk3MTA4IDEwMDY0NAotLS0gYS9kb2MvbWFuL2x0dG5nLWNyYXNo
+LjEKKysrIGIvZG9jL21hbi9sdHRuZy1jcmFzaC4xCkBAIC0xLDcgKzEsNyBAQAogLlRIICJMVFRO
+Ry1DUkFTSCIgIjEiICJNYXJjaCAyNnRoLCAyMDE1IiAiIiAiIgogCiAuU0ggIk5BTUUiCi1sdHRu
+Zy1jcmFzaCBcKGVtIExUVG5nIENyYXNoIFRyYWNlIFZpZXdlcgorbHR0bmctY3Jhc2ggXC0gTFRU
+bmcgQ3Jhc2ggVHJhY2UgVmlld2VyCiAKIC5TSCAiU1lOT1BTSVMiCiAKZGlmZiAtLWdpdCBhL2Rv
+Yy9tYW4vbHR0bmctcmVsYXlkLjggYi9kb2MvbWFuL2x0dG5nLXJlbGF5ZC44CmluZGV4IDNhNTE4
+NzcuLmZjZGUxNWUgMTAwNjQ0Ci0tLSBhL2RvYy9tYW4vbHR0bmctcmVsYXlkLjgKKysrIGIvZG9j
+L21hbi9sdHRuZy1yZWxheWQuOApAQCAtMSw3ICsxLDcgQEAKIC5USCAiTFRUTkctUkVMQVlEIiAi
+OCIgIkp1bHkgMTUsIDIwMTIiICIiICIiCiAKIC5TSCAiTkFNRSIKLWx0dG5nLXJlbGF5ZCBcKGVt
+IExUVG5nIHJlbW90ZSB0cmFjZSBjb2xsZWN0aW9uIGRhZW1vbgorbHR0bmctcmVsYXlkIFwtIExU
+VG5nIHJlbW90ZSB0cmFjZSBjb2xsZWN0aW9uIGRhZW1vbgogCiAuU0ggIlNZTk9QU0lTIgogCmRp
+ZmYgLS1naXQgYS9kb2MvbWFuL2x0dG5nLXNlc3Npb25kLjggYi9kb2MvbWFuL2x0dG5nLXNlc3Np
+b25kLjgKaW5kZXggOGMyOWU2MS4uZDNhYjMyMyAxMDA2NDQKLS0tIGEvZG9jL21hbi9sdHRuZy1z
+ZXNzaW9uZC44CisrKyBiL2RvYy9tYW4vbHR0bmctc2Vzc2lvbmQuOApAQCAtMSw3ICsxLDcgQEAK
+IC5USCAiTFRUTkctU0VTU0lPTkQiICI4IiAiSmFudWFyeSAzMSwgMjAxMiIgIiIgIiIKIAogLlNI
+ICJOQU1FIgotbHR0bmctc2Vzc2lvbmQgXChlbSBMVFRuZyAyLnggY2VudHJhbCB0cmFjaW5nIHJl
+Z2lzdHJ5IHNlc3Npb24gZGFlbW9uLgorbHR0bmctc2Vzc2lvbmQgXC0gTFRUbmcgMi54IGNlbnRy
+YWwgdHJhY2luZyByZWdpc3RyeSBzZXNzaW9uIGRhZW1vbi4KIAogLlNIICJTWU5PUFNJUyIKIApk
+aWZmIC0tZ2l0IGEvZG9jL21hbi9sdHRuZy4xIGIvZG9jL21hbi9sdHRuZy4xCmluZGV4IDU2NGY4
+ODguLmUwNzdiMDkgMTAwNjQ0Ci0tLSBhL2RvYy9tYW4vbHR0bmcuMQorKysgYi9kb2MvbWFuL2x0
+dG5nLjEKQEAgLTEsNyArMSw3IEBACiAuVEggIkxUVE5HIiAiMSIgIk1heSAxM3RoLCAyMDE0IiAi
+IiAiIgogCiAuU0ggIk5BTUUiCi1sdHRuZyBcKGVtIExUVG5nIDIueCB0cmFjZXIgY29udHJvbCBj
+b21tYW5kIGxpbmUgdG9vbAorbHR0bmcgXC0gTFRUbmcgMi54IHRyYWNlciBjb250cm9sIGNvbW1h
+bmQgbGluZSB0b29sCiAKIC5TSCAiU1lOT1BTSVMiCiAKLS0gCjIuMi4xCgoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
+dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
