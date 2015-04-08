@@ -1,23 +1,19 @@
 From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: [PATCH lttng-tools] man pages: use standard NAME format
-Date: Wed,  8 Apr 2015 15:11:41 -0400
-Message-ID: <1428520301-31140-1-git-send-email-eeppeliteloop__13310.6833360673$1428520383$gmane$org@gmail.com>
+Subject: Re: CTF 2.0 and lttng indexes
+Date: Wed, 8 Apr 2015 15:44:01 -0400
+Message-ID: <CAB4xu_2wiicqTA8L5dg=jTC56hTHXGu33eiiJxvZ_bffe00ZNw__48265.7249471687$1428522351$gmane$org@mail.gmail.com>
+References: <5523E325.9010602@ericsson.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f42.google.com ([209.85.192.42])
+Received: from mail-la0-f52.google.com ([209.85.215.52])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <eeppeliteloop@gmail.com>) id 1YfvOE-0007kZ-HG
- for lttng-dev@lists.lttng.org; Wed, 08 Apr 2015 15:11:57 -0400
-Received: by qgfi89 with SMTP id i89so33211056qgf.1
- for <lttng-dev@lists.lttng.org>; Wed, 08 Apr 2015 12:11:48 -0700 (PDT)
-Received: from eeppdesk.localdomain (cable-192.222.140.14.electronicbox.net.
- [192.222.140.14])
- by mx.google.com with ESMTPSA id 10sm8074221qhe.29.2015.04.08.12.11.46
- for <lttng-dev@lists.lttng.org>
- (version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
- Wed, 08 Apr 2015 12:11:47 -0700 (PDT)
+ (envelope-from <eeppeliteloop@gmail.com>) id 1Yfvtu-0007uw-18
+ for lttng-dev@lists.lttng.org; Wed, 08 Apr 2015 15:44:47 -0400
+Received: by labbd9 with SMTP id bd9so62627936lab.2
+ for <lttng-dev@lists.lttng.org>; Wed, 08 Apr 2015 12:44:32 -0700 (PDT)
+In-Reply-To: <5523E325.9010602@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,54 +22,61 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Matthew Khouzam <matthew.khouzam@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-QXMgcGVyIG1hbig3KToKCiAgICBUaGUgb25seSBtYW5kYXRvcnkgaGVhZGluZyBpcyBOQU1FLCB3
-aGljaCBzaG91bGQKICAgIGJlIHRoZSBmaXJzdCBzZWN0aW9uIGFuZCBiZSBmb2xsb3dlZCBvbiB0
-aGUgbmV4dAogICAgbGluZSBieSBhIG9uZS1saW5lIGRlc2NyaXB0aW9uIG9mIHRoZSBwcm9ncmFt
-OgoKICAgICAgICAuU0ggTkFNRQogICAgICAgIGl0ZW0gXC0gZGVzY3JpcHRpb24KCiAgICBJdCBp
-cyBleHRyZW1lbHkgaW1wb3J0YW50IHRoYXQgdGhpcyBmb3JtYXQgaXMgZm9sbG93ZWQsCiAgICBh
-bmQgdGhhdCB0aGVyZSBpcyBhIGJhY2tzbGFzaCBiZWZvcmUgdGhlIHNpbmdsZSBkYXNoCiAgICB3
-aGljaCBmb2xsb3dzIHRoZSBpdGVtIG5hbWUuIFRoaXMgc3ludGF4IGlzIHVzZWQgYnkgdGhlCiAg
-ICBtYW5kYig4KSBwcm9ncmFtIHRvIGNyZWF0ZSBhIGRhdGFiYXNlIG9mIHNob3J0CiAgICBkZXNj
-cmlwdGlvbnMgZm9yIHRoZSB3aGF0aXMoMSkgYW5kIGFwcm9wb3MoMSkgY29tbWFuZHMuCgpGdXJ0
-aGVybW9yZSAobGV4Z3JvZygxKSk6CgogICAgV2hlbiB1c2luZyB0aGUgdHJhZGl0aW9uYWwgbWFu
-IG1hY3JvIHNldCwgYSBjb3JyZWN0IE5BTUUKICAgIHNlY3Rpb24gbG9va3Mgc29tZXRoaW5nIGxp
-a2UgdGhpczoKCiAgICAgICAgLlNIIE5BTUUKICAgICAgICBmb28gXC0gcHJvZ3JhbSB0byBkbyBz
-b21ldGhpbmcKCiAgICBTb21lIG1hbnVhbCBwYWdlcnMgcmVxdWlyZSB0aGUg4oCYXC3igJkgdG8g
-YmUgZXhhY3RseSBhcyBzaG93bjsKICAgIG1hbmRiIGlzIG1vcmUgdG9sZXJhbnQsIGJ1dCBmb3Ig
-Y29tcGF0aWJpbGl0eSB3aXRoIG90aGVyCiAgICBzeXN0ZW1zIGl0IGlzIG5ldmVydGhlbGVzcyBh
-IGdvb2QgaWRlYSB0byByZXRhaW4gdGhlCiAgICBiYWNrc2xhc2guCgpTaWduZWQtb2ZmLWJ5OiBQ
-aGlsaXBwZSBQcm91bHggPGVlcHBlbGl0ZWxvb3BAZ21haWwuY29tPgotLS0KIGRvYy9tYW4vbHR0
-bmctY3Jhc2guMSAgICB8IDIgKy0KIGRvYy9tYW4vbHR0bmctcmVsYXlkLjggICB8IDIgKy0KIGRv
-Yy9tYW4vbHR0bmctc2Vzc2lvbmQuOCB8IDIgKy0KIGRvYy9tYW4vbHR0bmcuMSAgICAgICAgICB8
-IDIgKy0KIDQgZmlsZXMgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQoK
-ZGlmZiAtLWdpdCBhL2RvYy9tYW4vbHR0bmctY3Jhc2guMSBiL2RvYy9tYW4vbHR0bmctY3Jhc2gu
-MQppbmRleCA0YWY5M2YzLi44MDk3MTA4IDEwMDY0NAotLS0gYS9kb2MvbWFuL2x0dG5nLWNyYXNo
-LjEKKysrIGIvZG9jL21hbi9sdHRuZy1jcmFzaC4xCkBAIC0xLDcgKzEsNyBAQAogLlRIICJMVFRO
-Ry1DUkFTSCIgIjEiICJNYXJjaCAyNnRoLCAyMDE1IiAiIiAiIgogCiAuU0ggIk5BTUUiCi1sdHRu
-Zy1jcmFzaCBcKGVtIExUVG5nIENyYXNoIFRyYWNlIFZpZXdlcgorbHR0bmctY3Jhc2ggXC0gTFRU
-bmcgQ3Jhc2ggVHJhY2UgVmlld2VyCiAKIC5TSCAiU1lOT1BTSVMiCiAKZGlmZiAtLWdpdCBhL2Rv
-Yy9tYW4vbHR0bmctcmVsYXlkLjggYi9kb2MvbWFuL2x0dG5nLXJlbGF5ZC44CmluZGV4IDNhNTE4
-NzcuLmZjZGUxNWUgMTAwNjQ0Ci0tLSBhL2RvYy9tYW4vbHR0bmctcmVsYXlkLjgKKysrIGIvZG9j
-L21hbi9sdHRuZy1yZWxheWQuOApAQCAtMSw3ICsxLDcgQEAKIC5USCAiTFRUTkctUkVMQVlEIiAi
-OCIgIkp1bHkgMTUsIDIwMTIiICIiICIiCiAKIC5TSCAiTkFNRSIKLWx0dG5nLXJlbGF5ZCBcKGVt
-IExUVG5nIHJlbW90ZSB0cmFjZSBjb2xsZWN0aW9uIGRhZW1vbgorbHR0bmctcmVsYXlkIFwtIExU
-VG5nIHJlbW90ZSB0cmFjZSBjb2xsZWN0aW9uIGRhZW1vbgogCiAuU0ggIlNZTk9QU0lTIgogCmRp
-ZmYgLS1naXQgYS9kb2MvbWFuL2x0dG5nLXNlc3Npb25kLjggYi9kb2MvbWFuL2x0dG5nLXNlc3Np
-b25kLjgKaW5kZXggOGMyOWU2MS4uZDNhYjMyMyAxMDA2NDQKLS0tIGEvZG9jL21hbi9sdHRuZy1z
-ZXNzaW9uZC44CisrKyBiL2RvYy9tYW4vbHR0bmctc2Vzc2lvbmQuOApAQCAtMSw3ICsxLDcgQEAK
-IC5USCAiTFRUTkctU0VTU0lPTkQiICI4IiAiSmFudWFyeSAzMSwgMjAxMiIgIiIgIiIKIAogLlNI
-ICJOQU1FIgotbHR0bmctc2Vzc2lvbmQgXChlbSBMVFRuZyAyLnggY2VudHJhbCB0cmFjaW5nIHJl
-Z2lzdHJ5IHNlc3Npb24gZGFlbW9uLgorbHR0bmctc2Vzc2lvbmQgXC0gTFRUbmcgMi54IGNlbnRy
-YWwgdHJhY2luZyByZWdpc3RyeSBzZXNzaW9uIGRhZW1vbi4KIAogLlNIICJTWU5PUFNJUyIKIApk
-aWZmIC0tZ2l0IGEvZG9jL21hbi9sdHRuZy4xIGIvZG9jL21hbi9sdHRuZy4xCmluZGV4IDU2NGY4
-ODguLmUwNzdiMDkgMTAwNjQ0Ci0tLSBhL2RvYy9tYW4vbHR0bmcuMQorKysgYi9kb2MvbWFuL2x0
-dG5nLjEKQEAgLTEsNyArMSw3IEBACiAuVEggIkxUVE5HIiAiMSIgIk1heSAxM3RoLCAyMDE0IiAi
-IiAiIgogCiAuU0ggIk5BTUUiCi1sdHRuZyBcKGVtIExUVG5nIDIueCB0cmFjZXIgY29udHJvbCBj
-b21tYW5kIGxpbmUgdG9vbAorbHR0bmcgXC0gTFRUbmcgMi54IHRyYWNlciBjb250cm9sIGNvbW1h
-bmQgbGluZSB0b29sCiAKIC5TSCAiU1lOT1BTSVMiCiAKLS0gCjIuMi4xCgoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
-dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
-bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+On Tue, Apr 7, 2015 at 10:01 AM, Matthew Khouzam
+<matthew.khouzam@ericsson.com> wrote:
+>
+> Hi all,
+>
+> Will the lttng indexes or something more generic be specified in the CTF
+> 2.0 spec?
+
+Mathieu needs to confirm, but AFAIK, I don't think so.
+
+However, here's an idea following what was proposed for the integration
+of base addresses and symbol informations: use CTF events to record
+the packet indexes within stream files. That is, everytime a packet is
+closed by the tracer, append an event to its packet indexes stream,
+following this description:
+
+    event {
+        name = "packet-index";
+        fields := struct {
+            typalias integer {
+                size = 64;
+            } := uint64_t;
+
+            uint64_t offset; /* in bits */
+            uint64_t size; /* in bits */
+            uint64_t ts_begin;
+            uint64_t ts_end;
+        };
+    };
+
+size, ts_begin, and ts_end are actually not needed, but could be useful to
+avoid reading the target stream file when searching for a packet. Since
+all the "packet-index" events have the same size/alignment, a half-interval
+search is possible.
+
+So, one such stream of "packet-index" events per actual stream file...
+what do you think? There are situations to consider, like the trace file
+rotation feature of LTTng, in which case the packet index stream files should
+follow the rotation.
+
+BTW I think this conversation should be moved to the DiaMon ML since
+it's about CTF.
+
+Phil
+
+>
+>
+> Thanks
+> Matthew
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
