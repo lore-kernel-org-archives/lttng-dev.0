@@ -1,18 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Deadlock between call_rcu thread and RCU-bp thread
- doing registration in rcu_read_lock()
-Date: Fri, 10 Apr 2015 20:26:02 +0000 (UTC)
-Message-ID: <570963671.28921.1428697562974.JavaMail.zimbra__20907.1939847947$1428697837$gmane$org@efficios.com>
-References: <551BC1E5.3020809@orc-group.com>
+From: Anand Neeli <anand.neeli@gmail.com>
+Subject: Re: Warning: HOME environment variable not set.
+Date: Sat, 11 Apr 2015 04:42:17 +0530
+Message-ID: <CAM5kDqwuyWS4KvAHXXmFf0aBvRD=3c3uZdrUVH0H+dP8H1H1rA__22593.8525320545$1428707615$gmane$org@mail.gmail.com>
+References: <CAM5kDqw2R5+xy9t+sjet_PWt2+2fPh5ijbkKB_15NUJQUoKU5Q@mail.gmail.com>
+ <CAL1ZhOM+RTpz2iiqYEM2RHTCK+PxBAXk54q8ykmnsac0-w4WoA@mail.gmail.com>
+ <CAM5kDqxMTOj0TqZQjT0i+0MHmPxfvPUocgV0_erw4_7+pBtSDA@mail.gmail.com>
+ <218306271.74676.1427117803698.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1666248541=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-wg0-f45.google.com ([74.125.82.45])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1YgfV8-0005xO-CX
- for lttng-dev@lists.lttng.org; Fri, 10 Apr 2015 16:26:15 -0400
-In-Reply-To: <551BC1E5.3020809@orc-group.com>
+ (envelope-from <anand.neeli@gmail.com>) id 1Ygi62-0006kI-Qi
+ for lttng-dev@lists.lttng.org; Fri, 10 Apr 2015 19:12:31 -0400
+Received: by wgsk9 with SMTP id k9so30972381wgs.3
+ for <lttng-dev@lists.lttng.org>; Fri, 10 Apr 2015 16:12:17 -0700 (PDT)
+In-Reply-To: <218306271.74676.1427117803698.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,167 +24,182 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Eugene Ivanov <eiva@orc-group.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message -----
-> Hi,
-> 
-> I use rcu-bp (0.8.6) and get deadlock between call_rcu thread and
-> threads willing to do rcu_read_lock():
-> 1. Some thread is in read-side critical section.
-> 2. call_rcu thread waits for readers in stack of rcu_bp_register(), i.e.
-> holds mutex.
-> 3. Another thread enters into critical section via rcu_read_lock() and
-> blocks on the mutex taken by thread 2.
-> 
-> Such deadlock is quite unexpected for me. Especially if RCU is used for
-> reference counting.
+--===============1666248541==
+Content-Type: multipart/alternative; boundary=e89a8f3baed93f3d89051366e50f
 
-Hi Eugene,
+--e89a8f3baed93f3d89051366e50f
+Content-Type: text/plain; charset=UTF-8
 
-Let's have a look at the reproducer below,
-
-> 
-> Originally it happened with rculfhash, below is minimized reproducer:
-> 
-> #include <pthread.h>
-> #include <urcu-bp.h>
-> 
-> struct Node
-> {
->          struct rcu_head rcu_head;
-> };
-> 
-> static void free_node(struct rcu_head * head)
-> {
->          struct Node *node = caa_container_of(head, struct Node, rcu_head);
->          free(node);
-> }
-> 
-> static void * reader_thread(void * arg)
-> {
->      rcu_read_lock();
->      rcu_read_unlock();
->      return NULL;
-> }
-> 
-> int main(int argc, char * argv[])
-> {
->      rcu_read_lock();
->      struct Node * node = malloc(sizeof(*node));
->      call_rcu(&node->rcu_head, free_node);
-> 
->      pthread_t read_thread_info;
->      pthread_create(&read_thread_info, NULL, reader_thread, NULL);
->      pthread_join(read_thread_info, NULL);
-
-This "pthread_join" blocks until reader_thread exits. It blocks
-while holding the RCU read-side lock. Quoting README.md:
-
-"### Interaction with mutexes
-
-One must be careful to do not cause deadlocks due to interaction of
-`synchronize_rcu()` and RCU read-side with mutexes. If `synchronize_rcu()`
-is called with a mutex held, this mutex (or any mutex which has this
-mutex in its dependency chain) should not be acquired from within a RCU
-read-side critical section.
-
-This is especially important to understand in the context of the
-QSBR flavor: a registered reader thread being "online" by
-default should be considered as within a RCU read-side critical
-section unless explicitly put "offline". Therefore, if
-`synchronize_rcu()` is called with a mutex held, this mutex, as
-well as any mutex which has this mutex in its dependency chain
-should only be taken when the RCU reader thread is "offline"
-(this can be performed by calling `rcu_thread_offline()`)."
-
-So what appears to happen here is that urcu-bp lazy registration
-grabs the rcu_gp_lock when the first rcu_read_lock is encountered.
-This mutex is also held when synchronize_rcu() is awaiting on
-reader thread's completion. So synchronize_rcu() of the call_rcu
-thread can block on the read-side lock held by main() (awaiting
-on pthread_join), which blocks the lazy registration of reader_thread,
-because it needs to grab that same lock.
-
-So this issue here is caused by holding the RCU read-side lock
-while calling pthread_join.
-
-For the QSBR flavor, you will want to put the main() thread
-offline before awaiting on pthread_join.
-
-Does it answer your question ?
+What will be the effect of HOME env var not being set?
+cant the app log without this env var? or can we ignore this warning?
 
 Thanks,
-
-Mathieu
-
+Anand Neeli
 
 
-> 
->      rcu_read_unlock();
-> 
->      return 0;
-> }
-> 
-> 
-> Stacks:
-> 
-> Thread 3 (Thread 0x7f8e2ab05700 (LWP 7386)):
-> #0  0x00000035cacdf343 in *__GI___poll (fds=<optimized out>,
-> nfds=<optimized out>, timeout=<optimized out>) at
-> ../sysdeps/unix/sysv/linux/poll.c:87
-> #1  0x000000383880233e in wait_for_readers
-> (input_readers=0x7f8e2ab04cf0, cur_snap_readers=0x0,
-> qsreaders=0x7f8e2ab04ce0) at urcu-bp.c:211
-> #2  0x0000003838802af2 in synchronize_rcu_bp () at urcu-bp.c:272
-> #3  0x00000038388043a3 in call_rcu_thread (arg=0x1f7f030) at
-> urcu-call-rcu-impl.h:320
-> #4  0x00000035cb0079d1 in start_thread (arg=0x7f8e2ab05700) at
-> pthread_create.c:301
-> #5  0x00000035cace8b6d in clone () at
-> ../sysdeps/unix/sysv/linux/x86_64/clone.S:115
-> Thread 2 (Thread 0x7f8e2a304700 (LWP 7387)):
-> #0  __lll_lock_wait () at
-> ../nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S:136
-> #1  0x00000035cb009508 in _L_lock_854 () from /lib64/libpthread.so.0
-> #2  0x00000035cb0093d7 in __pthread_mutex_lock (mutex=0x3838a05ca0
-> <rcu_gp_lock>) at pthread_mutex_lock.c:61
-> #3  0x0000003838801ed9 in mutex_lock (mutex=<optimized out>) at
-> urcu-bp.c:147
-> #4  0x000000383880351e in rcu_bp_register () at urcu-bp.c:493
-> #5  0x000000383880382e in _rcu_read_lock_bp () at urcu/static/urcu-bp.h:159
-> #6  rcu_read_lock_bp () at urcu-bp.c:296
-> #7  0x0000000000400801 in reader_thread ()
-> #8  0x00000035cb0079d1 in start_thread (arg=0x7f8e2a304700) at
-> pthread_create.c:301
-> #9  0x00000035cace8b6d in clone () at
-> ../sysdeps/unix/sysv/linux/x86_64/clone.S:115
-> Thread 1 (Thread 0x7f8e2ab06740 (LWP 7385)):
-> #0  0x00000035cb00822d in pthread_join (threadid=140248569890560,
-> thread_return=0x0) at pthread_join.c:89
-> #1  0x000000000040088f in main ()
-> 
-> 
-> --
-> Eugene Ivanov
-> 
-> 
-> ________________________________
-> 
-> This e-mail is confidential and may contain legally privileged information.
-> It is intended only for the addressees. If you have received this e-mail in
-> error, kindly notify us immediately by telephone or e-mail and delete the
-> message from your system.
-> 
+On Mon, Mar 23, 2015 at 7:06 PM, Mathieu Desnoyers <
+mathieu.desnoyers@efficios.com> wrote:
+
+> Perhaps your program is clearing its environment
+> variables ? Or launched by a wrapper that clears
+> the env. var. ?
+>
+> Can you try with a simple demo program to find our
+> what is clearing those ?
+>
+> Thanks,
+>
+> Mathieu
+>
+>
+> ------------------------------
+>
+> Hi All,
+> I'm sorry to bump on this thread again.
+>
+> Is there any way to overcome this issue?
+>
+> Thanks,
+> Anand Neeli
+>
+> On Wed, Mar 18, 2015 at 10:01 PM, Chidhu R <chid1989@gmail.com> wrote:
+>
+>> I too am getting the same errors. Inspite of setting LTTNG_HOME in my
+>> program.
+>>
+>> On Tue, Mar 17, 2015 at 2:18 PM, Anand Neeli <anand.neeli@gmail.com>
+>> wrote:
+>>
+>>> Hi All,
+>>>
+>>> any idea when do we get this error?
+>>>
+>>> app: libust[4745/4745]: Warning: HOME environment variable not set.
+>>> Disabling LTTng-UST per-user tracing. (in setup_local_apps() at
+>>> lttng-ust-comm.c:385)
+>>> app: libust[4751/4751]: Warning: HOME environment variable not set.
+>>> Disabling LTTng-UST per-user tracing. (in setup_local_apps() at
+>>> lttng-ust-comm.c:385)
+>>> app: libust[4760/4760]: Warning: HOME environment variable not set.
+>>> Disabling LTTng-UST per-user tracing. (in setup_local_apps() at
+>>> lttng-ust-comm.c:385)
+>>> app: libust[4780/4780]: Warning: HOME environment variable not set.
+>>> Disabling LTTng-UST per-user tracing. (in setup_local_apps() at
+>>> lttng-ust-comm.c:385)
+>>>
+>>> i have set LTTNG_HOME=HOME=/home/root
+>>> using 2.6
+>>>
+>>> Thanks,
+>>> Anand Neeli
+>>>
+>>>
+>>> _______________________________________________
+>>> lttng-dev mailing list
+>>> lttng-dev@lists.lttng.org
+>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>>
+>>>
+>>
+>
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> 
+>
+>
+>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+>
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--e89a8f3baed93f3d89051366e50f
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">What will be the effect of HOME env var not being set?<div=
+>cant the app log without this env var? or can we ignore this warning?</div=
+><div><br></div><div>Thanks,</div><div>Anand Neeli</div><div><br></div></di=
+v><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Mon, Mar 23,=
+ 2015 at 7:06 PM, Mathieu Desnoyers <span dir=3D"ltr">&lt;<a href=3D"mailto=
+:mathieu.desnoyers@efficios.com" target=3D"_blank">mathieu.desnoyers@effici=
+os.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"=
+margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div><div st=
+yle=3D"font-family:times new roman,new york,times,serif;font-size:12pt;colo=
+r:#000000"><div>Perhaps your program is clearing its environment<br></div><=
+div>variables ? Or launched by a wrapper that clears<br></div><div>the env.=
+ var. ?<br></div><div><br></div><div>Can you try with a simple demo program=
+ to find our<br></div><div>what is clearing those ?<br></div><div><br></div=
+><div>Thanks,<br></div><div><br></div><div>Mathieu<br></div><div><br></div>=
+<div><br></div><hr><div><div class=3D"h5"><blockquote style=3D"border-left:=
+2px solid #1010ff;margin-left:5px;padding-left:5px;color:#000;font-weight:n=
+ormal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sa=
+ns-serif;font-size:12pt"><div dir=3D"ltr">Hi All,<div>I&#39;m sorry to bump=
+ on this thread again.</div><div><br></div><div>Is there any way to overcom=
+e this issue?</div><div><br></div><div>Thanks,</div><div>Anand Neeli</div><=
+/div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Wed, Mar =
+18, 2015 at 10:01 PM, Chidhu R <span dir=3D"ltr">&lt;<a href=3D"mailto:chid=
+1989@gmail.com" target=3D"_blank">chid1989@gmail.com</a>&gt;</span> wrote:<=
+br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left=
+:1px #ccc solid;padding-left:1ex"><div dir=3D"ltr">I too am getting the sam=
+e errors. Inspite of setting LTTNG_HOME in my program.=C2=A0</div><div clas=
+s=3D"gmail_extra"><br><div class=3D"gmail_quote"><div><div>On Tue, Mar 17, =
+2015 at 2:18 PM, Anand Neeli <span dir=3D"ltr">&lt;<a href=3D"mailto:anand.=
+neeli@gmail.com" target=3D"_blank">anand.neeli@gmail.com</a>&gt;</span> wro=
+te:<br></div></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 =
+.8ex;border-left:1px #ccc solid;padding-left:1ex"><div><div><div dir=3D"ltr=
+">Hi All,<div><br></div><div>any idea when do we get this error?</div><div>=
+<br></div><div><div>app: libust[4745/4745]: Warning: HOME environment varia=
+ble not set. Disabling LTTng-UST per-user tracing. (in setup_local_apps() a=
+t lttng-ust-comm.c:385)</div><div>app: libust[4751/4751]: Warning: HOME env=
+ironment variable not set. Disabling LTTng-UST per-user tracing. (in setup_=
+local_apps() at lttng-ust-comm.c:385)</div><div>app: libust[4760/4760]: War=
+ning: HOME environment variable not set. Disabling LTTng-UST per-user traci=
+ng. (in setup_local_apps() at lttng-ust-comm.c:385)</div><div>app: libust[4=
+780/4780]: Warning: HOME environment variable not set. Disabling LTTng-UST =
+per-user tracing. (in setup_local_apps() at lttng-ust-comm.c:385)</div></di=
+v><div><br></div><div>i have set LTTNG_HOME=3DHOME=3D/home/root</div><div>u=
+sing 2.6</div><div><br></div><div>Thanks,</div><div>Anand Neeli</div><div><=
+br></div></div>
+<br></div></div>_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
+sts.lttng.org</a><br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
+t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
+br>
+<br></blockquote></div><br></div>
+</blockquote></div><br></div>
+<br>_______________________________________________<br>lttng-dev mailing li=
+st<br><a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-=
+dev@lists.lttng.org</a><br><a href=3D"http://lists.lttng.org/cgi-bin/mailma=
+n/listinfo/lttng-dev" target=3D"_blank">http://lists.lttng.org/cgi-bin/mail=
+man/listinfo/lttng-dev</a><br></blockquote><div><br><br></div><div><br></di=
+v></div></div><span class=3D"HOEnZb"><font color=3D"#888888"><div>-- <br></=
+div><div><span name=3D"x"></span>Mathieu Desnoyers<br>EfficiOS Inc.<br><a h=
+ref=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.com</=
+a><span name=3D"x"></span><br></div></font></span></div></div></blockquote>=
+</div><br></div>
+
+--e89a8f3baed93f3d89051366e50f--
+
+
+--===============1666248541==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1666248541==--
