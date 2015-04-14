@@ -1,20 +1,16 @@
-From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
-Subject: Re: lttng-modules build error against linux 3.18.x
-	longterm kernels
-Date: Sun, 12 Apr 2015 15:55:59 +0200
-Message-ID: <CAEYzJUGL6Q_o=zESuhhszBKGUCYrTwxBp32xppicQLZa6a4nVg__47728.4852102914$1428847026$gmane$org@mail.gmail.com>
-References: <CAEYzJUH27pYhSZmFEeaCQ7deeH75+GhjrVjdGN6dnyG+DyQhXA@mail.gmail.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: [PATCH lttng-tools v2] Fix python bindings' Makefile
+	for out-of-tree builds
+Date: Tue, 14 Apr 2015 16:45:27 -0400
+Message-ID: <1429044327-31152-1-git-send-email-simon.marchi__38710.3884168484$1429044410$gmane$org@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f174.google.com ([209.85.217.174])
+Received: from [96.127.255.83] (helo=smtp.electronicbox.net)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <bjorn.forsman@gmail.com>) id 1YhIMn-0001Sj-IU
- for lttng-dev@lists.lttng.org; Sun, 12 Apr 2015 09:56:08 -0400
-Received: by lbbzk7 with SMTP id zk7so41927664lbb.0
- for <lttng-dev@lists.lttng.org>; Sun, 12 Apr 2015 06:55:59 -0700 (PDT)
-In-Reply-To: <CAEYzJUH27pYhSZmFEeaCQ7deeH75+GhjrVjdGN6dnyG+DyQhXA@mail.gmail.com>
+ (envelope-from <simon.marchi@polymtl.ca>) id 1Yi7i8-0001Pt-70
+ for lttng-dev@lists.lttng.org; Tue, 14 Apr 2015 16:45:40 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,50 +19,54 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMjYgTWFyY2ggMjAxNSBhdCAyMzoxMSwgQmrDuHJuIEZvcnNtYW4gPGJqb3JuLmZvcnNtYW5A
-Z21haWwuY29tPiB3cm90ZToKPiBIaSBhbGwsCj4KPiAoSSdtIG5vdCBzdWJzY3JpYmVkLCBwbGVh
-c2UgQ0MgbWUuKQo+Cj4gQnVpbGQgZXJyb3Igc25pcHBldDoKPgo+IFsuLi5dCj4gIENDIFtNXSAg
-L3RtcC9uaXgtYnVpbGQtbHR0bmctbW9kdWxlcy0yLjYuMC01LWcxYjJhNTQyLTMuMTguMTAuZHJ2
-LTAvbHR0bmctbW9kdWxlcy0xYjJhNTQyL3Byb2Jlcy9sdHRuZy1wcm9iZS1pcnEubwo+ICBDQyBb
-TV0gIC90bXAvbml4LWJ1aWxkLWx0dG5nLW1vZHVsZXMtMi42LjAtNS1nMWIyYTU0Mi0zLjE4LjEw
-LmRydi0wL2x0dG5nLW1vZHVsZXMtMWIyYTU0Mi9wcm9iZXMvbHR0bmctcHJvYmUtdGltZXIubwo+
-ICBDQyBbTV0gIC90bXAvbml4LWJ1aWxkLWx0dG5nLW1vZHVsZXMtMi42LjAtNS1nMWIyYTU0Mi0z
-LjE4LjEwLmRydi0wL2x0dG5nLW1vZHVsZXMtMWIyYTU0Mi9wcm9iZXMvbHR0bmctcHJvYmUta21l
-bS5vCj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tCj4gL3RtcC9uaXgtYnVpbGQtbHR0bmctbW9kdWxl
-cy0yLjYuMC01LWcxYjJhNTQyLTMuMTguMTAuZHJ2LTAvbHR0bmctbW9kdWxlcy0xYjJhNTQyL3By
-b2Jlcy8uLi9pbnN0cnVtZW50YXRpb24vZXZlbnRzL2x0dG5nLW1vZHVsZS8uLi8uLi8uLi9wcm9i
-ZXMvZGVmaW5lX3RyYWNlLmg6MTM2OjAsCj4gICAgICAgICAgICAgICAgIGZyb20KPiAvdG1wL25p
-eC1idWlsZC1sdHRuZy1tb2R1bGVzLTIuNi4wLTUtZzFiMmE1NDItMy4xOC4xMC5kcnYtMC9sdHRu
-Zy1tb2R1bGVzLTFiMmE1NDIvcHJvYmVzLy4uL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmct
-bW9kdWxlL2ttZW0uaDo0NjYsCj4gICAgICAgICAgICAgICAgIGZyb20KPiAvdG1wL25peC1idWls
-ZC1sdHRuZy1tb2R1bGVzLTIuNi4wLTUtZzFiMmE1NDItMy4xOC4xMC5kcnYtMC9sdHRuZy1tb2R1
-bGVzLTFiMmE1NDIvcHJvYmVzL2x0dG5nLXByb2JlLWttZW0uYzo0MjoKPiAvdG1wL25peC1idWls
-ZC1sdHRuZy1tb2R1bGVzLTIuNi4wLTUtZzFiMmE1NDItMy4xOC4xMC5kcnYtMC9sdHRuZy1tb2R1
-bGVzLTFiMmE1NDIvcHJvYmVzLy4uL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxl
-Ly4uLy4uLy4uL3Byb2Jlcy9sdHRuZy1ldmVudHMuaDoxODA6NjoKPiBlcnJvcjogY29uZmxpY3Rp
-bmcgdHlwZXMgZm9yICd0cmFjZV9tbV9wYWdlX2FsbG9jX2V4dGZyYWcnCj4gdm9pZCB0cmFjZV8j
-I19uYW1lKF9wcm90byk7Cj4gICAgICBeCj4gL3RtcC9uaXgtYnVpbGQtbHR0bmctbW9kdWxlcy0y
-LjYuMC01LWcxYjJhNTQyLTMuMTguMTAuZHJ2LTAvbHR0bmctbW9kdWxlcy0xYjJhNTQyL3Byb2Jl
-cy8uLi9pbnN0cnVtZW50YXRpb24vZXZlbnRzL2x0dG5nLW1vZHVsZS8uLi8uLi8uLi9wcm9iZXMv
-bHR0bmctZXZlbnRzLmg6NDc6MjoKPiBub3RlOiBpbiBleHBhbnNpb24gb2YgbWFjcm8gJ0xUVE5H
-X1RSQUNFUE9JTlRfRVZFTlRfSU5TVEFOQ0VfTUFQJwo+ICBMVFROR19UUkFDRVBPSU5UX0VWRU5U
-X0lOU1RBTkNFX01BUChtYXAsIG5hbWUsIG1hcCwgUEFSQU1TKHByb3RvKSwKPiBQQVJBTVMoYXJn
-cykpCj4gWy4uLl0KPgo+IEJ1aWxkIHJlc3VsdHMgZnJvbSB0aGUgTml4T1MgYnVpbGQgc2VydmVy
-WzFdICh3aGljaCBjb250YWlucyBmdWxsCj4gbG9ncykgc2VlbXMgdG8gaW5kaWNhdGUgdGhhdCB0
-aGlzIGJyZWFrYWdlIHN0YXJ0ZWQgd2l0aCB0aGUgbGludXgKPiAzLjE4LjkgLT4gMy4xOC4xMCB0
-cmFuc2l0aW9uLiBTaW11bHRhbmVvdXNseSwgbHR0bmctbW9kdWxlcyB3YXMKPiB1cGRhdGVkIDIu
-Ni4wLXJjMSAtPiAyLjYuMC01LWcxYjJhNTQyIChsYXRlc3Qgb24gc3RhYmxlLTIuNiBicmFuY2gp
-LAo+IGJ1dCBJIGd1ZXNzL2hvcGUgdGhhdCdzIG5vdCB0aGUgcmVhc29uIGZvciB0aGUgZXJyb3Ig
-Oi0pCj4KPiBbMV06IGh0dHA6Ly9oeWRyYS5uaXhvcy5vcmcvam9iL25peG9zL3RydW5rLWNvbWJp
-bmVkL25peHBrZ3MubGludXhQYWNrYWdlc18zXzE4Lmx0dG5nLW1vZHVsZXMuaTY4Ni1saW51eAoK
-U28gYXBwYXJhbnRseSB0aGlzIGlzIGZpeGVkIGluIG1hc3RlcjoKaHR0cDovL2xpc3RzLmx0dG5n
-Lm9yZy9waXBlcm1haWwvbHR0bmctZGV2LzIwMTUtQXByaWwvMDI0Mzk1Lmh0bWwKCkFyZSB5b3Ug
-cGxhbm5pbmcgdG8gYmFja3BvcnQgdGhlIGZpeCB0byBzdGFibGUtMi42PyBBbmQgcG9zc2libHkg
-bWFrZQphIHJlbGVhc2U/IChTcGVha2luZyBhcyBhIGRpc3RybyBwYWNrYWdlciBoZXJlLikKCkJl
-c3QgcmVnYXJkcywKQmrDuHJuIEZvcnNtYW4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
-by9sdHRuZy1kZXYK
+The references to the built archives should use top_builddir and not
+top_srcdir, because that's where they are.
+
+And new in V2, I got a new error:
+
+  lttng_wrap.c:2970:25: fatal error: lttng/lttng.h: No such file or directory
+   #include <lttng/lttng.h>
+
+I think we are missing the -I$(top_srcdir)/include. I had not noticed this
+previously, probably because I had an lttng/lttng.h in
+/usr/local/include or /usr/include. Also, the other includes seem
+unnecessary. The This is not really related to out-of-tree builds though.
+
+Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
+---
+ extras/bindings/swig/python/Makefile.am | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/extras/bindings/swig/python/Makefile.am b/extras/bindings/swig/python/Makefile.am
+index ec35930..35f28d5 100644
+--- a/extras/bindings/swig/python/Makefile.am
++++ b/extras/bindings/swig/python/Makefile.am
+@@ -1,8 +1,7 @@
+ lttng.i: lttng.i.in
+-	sed "s/LTTNG_VERSION_STR/LTTng $(PACKAGE_VERSION)/g" <lttng.i.in >lttng.i
++	sed "s/LTTNG_VERSION_STR/LTTng $(PACKAGE_VERSION)/g" < $(srcdir)/lttng.i.in >lttng.i
+ 
+-AM_CFLAGS = $(PYTHON_INCLUDE) -I$(top_srcdir)/lib/lttng-ctl -I../common \
+-              $(BUDDY_CFLAGS)
++AM_CFLAGS = $(PYTHON_INCLUDE) -I$(top_srcdir)/include
+ 
+ EXTRA_DIST = lttng.i.in
+ nodist_python_PYTHON = lttng.py
+@@ -12,9 +11,9 @@ MAINTAINERCLEANFILES = lttng_wrap.c lttng.py
+ 
+ nodist__lttng_la_SOURCES = lttng_wrap.c
+ _lttng_la_LDFLAGS = -module
+-_lttng_la_LIBADD = 	$(top_srcdir)/src/lib/lttng-ctl/liblttng-ctl.la 		\
+-			$(top_srcdir)/src/common/sessiond-comm/libsessiond-comm.la		\
+-			$(top_srcdir)/src/common/libcommon.la
++_lttng_la_LIBADD = 	$(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la 		\
++			$(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la		\
++			$(top_builddir)/src/common/libcommon.la
+ 
+ lttng_wrap.c: lttng.i
+ 	$(SWIG) -python -I. -I$(top_srcdir)/src/common/sessiond-comm lttng.i
+-- 
+2.3.5
