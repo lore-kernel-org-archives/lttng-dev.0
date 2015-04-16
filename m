@@ -1,24 +1,20 @@
-From: =?UTF-8?B?U8OpYmFzdGllbiBMb3JyYWlu?=
- <sebastien.lorrain01@gmail.com>
-Subject: Crash on 3.19.3 kernel
-Date: Thu, 16 Apr 2015 14:26:44 -0400
-Message-ID: <552FFEE4.9010101__30262.0993614712$1429208852$gmane$org@gmail.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools v2] Fix python bindings'
+ Makefile for out-of-tree builds
+Date: Thu, 16 Apr 2015 15:40:40 -0400
+Message-ID: <CA+jJMxscH5ytt3uEHC5C+uEt8wC=S0RaSrFQf-8=W-Q95mfayw__27134.4225890518$1429213305$gmane$org@mail.gmail.com>
+References: <1429044327-31152-1-git-send-email-simon.marchi@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f171.google.com ([209.85.213.171])
+Received: from mail-qc0-f179.google.com ([209.85.216.179])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <sebastien.lorrain01@gmail.com>) id 1YioUm-00089A-He
- for lttng-dev@lists.lttng.org; Thu, 16 Apr 2015 14:26:39 -0400
-Received: by igblo3 with SMTP id lo3so120657632igb.1
- for <lttng-dev@lists.lttng.org>; Thu, 16 Apr 2015 11:26:31 -0700 (PDT)
-Received: from [132.207.240.180]
- (Sansfil-Securise-Etudiants-Lassonde-240-180.polymtl.ca. [132.207.240.180])
- by mx.google.com with ESMTPSA id j39sm2002549iod.41.2015.04.16.11.26.29
- for <lttng-dev@lists.lttng.org>
- (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
- Thu, 16 Apr 2015 11:26:29 -0700 (PDT)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1YipeX-0008WE-Uu
+ for lttng-dev@lists.lttng.org; Thu, 16 Apr 2015 15:40:48 -0400
+Received: by qcyk17 with SMTP id k17so12522508qcy.1
+ for <lttng-dev@lists.lttng.org>; Thu, 16 Apr 2015 12:40:40 -0700 (PDT)
+In-Reply-To: <1429044327-31152-1-git-send-email-simon.marchi@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -27,30 +23,54 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Simon Marchi <simon.marchi@polymtl.ca>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello LTTng folks,
-
-I'am using Archlinux with stock 3.19.3 kernel and I'am experiencing a 
-crash with the latest and greatest lttng.
-I compiled lttng-tools without UST support.
-
-$uname -a
-Linux redwind 3.19.3-3-ARCH #1 SMP PREEMPT Wed Apr 8 14:10:00 CEST 2015 
-x86_64 GNU/Linux
-
-Here's the compile log of lttng-modules :
-http://paste.ubuntu.com/10834007/
-
-I noticed I'am missing  CONFIG_KALLSYMS_ALL, but I don't know if it is 
-really relevant as lttng-modules 2.6 was running fine without it.
-
-Here's the syslog/journal after a crash (on a test VM)
-http://paste.ubuntu.com/10833873/
-
-Any help in debugging that would be greatly appreciated!
-
-Thanks!
-Lrouge/
-Sebastien Lorrain.
+TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIFR1ZSwgQXByIDE0LCAyMDE1IGF0IDQ6NDUg
+UE0sIFNpbW9uIE1hcmNoaSA8c2ltb24ubWFyY2hpQHBvbHltdGwuY2E+IHdyb3RlOgo+IFRoZSBy
+ZWZlcmVuY2VzIHRvIHRoZSBidWlsdCBhcmNoaXZlcyBzaG91bGQgdXNlIHRvcF9idWlsZGRpciBh
+bmQgbm90Cj4gdG9wX3NyY2RpciwgYmVjYXVzZSB0aGF0J3Mgd2hlcmUgdGhleSBhcmUuCj4KPiBB
+bmQgbmV3IGluIFYyLCBJIGdvdCBhIG5ldyBlcnJvcjoKPgo+ICAgbHR0bmdfd3JhcC5jOjI5NzA6
+MjU6IGZhdGFsIGVycm9yOiBsdHRuZy9sdHRuZy5oOiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5
+Cj4gICAgI2luY2x1ZGUgPGx0dG5nL2x0dG5nLmg+Cj4KPiBJIHRoaW5rIHdlIGFyZSBtaXNzaW5n
+IHRoZSAtSSQodG9wX3NyY2RpcikvaW5jbHVkZS4gSSBoYWQgbm90IG5vdGljZWQgdGhpcwo+IHBy
+ZXZpb3VzbHksIHByb2JhYmx5IGJlY2F1c2UgSSBoYWQgYW4gbHR0bmcvbHR0bmcuaCBpbgo+IC91
+c3IvbG9jYWwvaW5jbHVkZSBvciAvdXNyL2luY2x1ZGUuIEFsc28sIHRoZSBvdGhlciBpbmNsdWRl
+cyBzZWVtCj4gdW5uZWNlc3NhcnkuIFRoZSBUaGlzIGlzIG5vdCByZWFsbHkgcmVsYXRlZCB0byBv
+dXQtb2YtdHJlZSBidWlsZHMgdGhvdWdoLgo+Cj4gU2lnbmVkLW9mZi1ieTogU2ltb24gTWFyY2hp
+IDxzaW1vbi5tYXJjaGlAcG9seW10bC5jYT4KPiAtLS0KPiAgZXh0cmFzL2JpbmRpbmdzL3N3aWcv
+cHl0aG9uL01ha2VmaWxlLmFtIHwgMTEgKysrKystLS0tLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDUg
+aW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKPgo+IGRpZmYgLS1naXQgYS9leHRyYXMvYmlu
+ZGluZ3Mvc3dpZy9weXRob24vTWFrZWZpbGUuYW0gYi9leHRyYXMvYmluZGluZ3Mvc3dpZy9weXRo
+b24vTWFrZWZpbGUuYW0KPiBpbmRleCBlYzM1OTMwLi4zNWYyOGQ1IDEwMDY0NAo+IC0tLSBhL2V4
+dHJhcy9iaW5kaW5ncy9zd2lnL3B5dGhvbi9NYWtlZmlsZS5hbQo+ICsrKyBiL2V4dHJhcy9iaW5k
+aW5ncy9zd2lnL3B5dGhvbi9NYWtlZmlsZS5hbQo+IEBAIC0xLDggKzEsNyBAQAo+ICBsdHRuZy5p
+OiBsdHRuZy5pLmluCj4gLSAgICAgICBzZWQgInMvTFRUTkdfVkVSU0lPTl9TVFIvTFRUbmcgJChQ
+QUNLQUdFX1ZFUlNJT04pL2ciIDxsdHRuZy5pLmluID5sdHRuZy5pCj4gKyAgICAgICBzZWQgInMv
+TFRUTkdfVkVSU0lPTl9TVFIvTFRUbmcgJChQQUNLQUdFX1ZFUlNJT04pL2ciIDwgJChzcmNkaXIp
+L2x0dG5nLmkuaW4gPmx0dG5nLmkKPgo+IC1BTV9DRkxBR1MgPSAkKFBZVEhPTl9JTkNMVURFKSAt
+SSQodG9wX3NyY2RpcikvbGliL2x0dG5nLWN0bCAtSS4uL2NvbW1vbiBcCj4gLSAgICAgICAgICAg
+ICAgJChCVUREWV9DRkxBR1MpCj4gK0FNX0NGTEFHUyA9ICQoUFlUSE9OX0lOQ0xVREUpIC1JJCh0
+b3Bfc3JjZGlyKS9pbmNsdWRlCj4KPiAgRVhUUkFfRElTVCA9IGx0dG5nLmkuaW4KPiAgbm9kaXN0
+X3B5dGhvbl9QWVRIT04gPSBsdHRuZy5weQo+IEBAIC0xMiw5ICsxMSw5IEBAIE1BSU5UQUlORVJD
+TEVBTkZJTEVTID0gbHR0bmdfd3JhcC5jIGx0dG5nLnB5Cj4KPiAgbm9kaXN0X19sdHRuZ19sYV9T
+T1VSQ0VTID0gbHR0bmdfd3JhcC5jCj4gIF9sdHRuZ19sYV9MREZMQUdTID0gLW1vZHVsZQo+IC1f
+bHR0bmdfbGFfTElCQUREID0gICAgICQodG9wX3NyY2Rpcikvc3JjL2xpYi9sdHRuZy1jdGwvbGli
+bHR0bmctY3RsLmxhICAgICAgICAgICAgICAgICBcCj4gLSAgICAgICAgICAgICAgICAgICAgICAg
+JCh0b3Bfc3JjZGlyKS9zcmMvY29tbW9uL3Nlc3Npb25kLWNvbW0vbGlic2Vzc2lvbmQtY29tbS5s
+YSAgICAgICAgICAgICAgXAo+IC0gICAgICAgICAgICAgICAgICAgICAgICQodG9wX3NyY2Rpcikv
+c3JjL2NvbW1vbi9saWJjb21tb24ubGEKPiArX2x0dG5nX2xhX0xJQkFERCA9ICAgICAkKHRvcF9i
+dWlsZGRpcikvc3JjL2xpYi9sdHRuZy1jdGwvbGlibHR0bmctY3RsLmxhICAgICAgICAgICAgICAg
+XAo+ICsgICAgICAgICAgICAgICAgICAgICAgICQodG9wX2J1aWxkZGlyKS9zcmMvY29tbW9uL3Nl
+c3Npb25kLWNvbW0vbGlic2Vzc2lvbmQtY29tbS5sYSAgICAgICAgICAgIFwKPiArICAgICAgICAg
+ICAgICAgICAgICAgICAkKHRvcF9idWlsZGRpcikvc3JjL2NvbW1vbi9saWJjb21tb24ubGEKPgo+
+ICBsdHRuZ193cmFwLmM6IGx0dG5nLmkKPiAgICAgICAgICQoU1dJRykgLXB5dGhvbiAtSS4gLUkk
+KHRvcF9zcmNkaXIpL3NyYy9jb21tb24vc2Vzc2lvbmQtY29tbSBsdHRuZy5pCj4gLS0KPiAyLjMu
+NQo+Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+
+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0
+cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgoK
+Ci0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lv
+cy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0
+dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
