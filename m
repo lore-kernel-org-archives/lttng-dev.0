@@ -1,16 +1,19 @@
-From: Anand Neeli <anand.neeli@gmail.com>
-Subject: sessiond health error
-Date: Mon, 20 Apr 2015 18:53:25 +0530
-Message-ID: <CAM5kDqyeS-qXUPWMTDWN_iarhV=f-jusW16PH3qt9Jn7iYphTg__7745.41745563528$1429536264$gmane$org@mail.gmail.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: Re: Crash on 3.19.3 kernel
+Date: Mon, 20 Apr 2015 10:15:14 -0400
+Message-ID: <CAFXXi0kR3Lb_LehT-Yid6SqaLwG8ZnXqfS+dSc+4EGZde97jow__9580.26543162323$1429539419$gmane$org@mail.gmail.com>
+References: <552FFEE4.9010101@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1133832383=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f181.google.com ([209.85.212.181])
+Received: from mail-ob0-f181.google.com ([209.85.214.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <anand.neeli@gmail.com>) id 1YkBfe-0002Br-Li
- for lttng-dev@lists.lttng.org; Mon, 20 Apr 2015 09:23:33 -0400
-Received: by wizk4 with SMTP id k4so99076020wiz.1
- for <lttng-dev@lists.lttng.org>; Mon, 20 Apr 2015 06:23:25 -0700 (PDT)
+ (envelope-from <thundersim@gmail.com>) id 1YkCUI-0002Sh-0N
+ for lttng-dev@lists.lttng.org; Mon, 20 Apr 2015 10:15:55 -0400
+Received: by obfe9 with SMTP id e9so118912031obf.1
+ for <lttng-dev@lists.lttng.org>; Mon, 20 Apr 2015 07:15:44 -0700 (PDT)
+In-Reply-To: <552FFEE4.9010101@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,65 +22,28 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: =?UTF-8?Q?S=C3=A9bastien_Lorrain?= <sebastien.lorrain01@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1133832383==
-Content-Type: multipart/alternative; boundary=f46d04428cdcb24a89051427d5b2
-
---f46d04428cdcb24a89051427d5b2
-Content-Type: text/plain; charset=UTF-8
-
-Hi All,
-I'm using 2.6.0
-and after spawning a session, i monitor health of sessiond using the test
-app at lttng-tools-2.6.0/tests/regression/tools/health/ every 5-seconds.
-
-I'm getting following error:
-
- ERROR:  Component "sessiond" is in error.
- ERROR:  Thread "Session daemon consumer manager" is not responding in
-component "sessiond".
-
-And after that i'm not able to spawn and new sessions, although existing
-session continue to work.
-
-Can anyone Please help.
-Is this a known issue?
-Does anyone know the problem i'm facing here?
-
-Thanks,
-Anand Neeli
-
---f46d04428cdcb24a89051427d5b2
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi All,<div>I&#39;m using 2.6.0</div><div>and after spawni=
-ng a session, i monitor health of sessiond using the test app at=C2=A0lttng=
--tools-2.6.0/tests/regression/tools/health/ every 5-seconds.</div><div><br>=
-</div><div>I&#39;m getting following error:</div><div><br></div><div><div>=
-=C2=A0ERROR: =C2=A0Component &quot;sessiond&quot; is in error.</div><div>=
-=C2=A0ERROR: =C2=A0Thread &quot;Session daemon consumer manager&quot; is no=
-t responding in component &quot;sessiond&quot;.</div></div><div><br></div><=
-div>And after that i&#39;m not able to spawn and new sessions, although exi=
-sting session continue to work.</div><div><br></div><div>Can anyone Please =
-help.</div><div>Is this a known issue?</div><div>Does anyone know the probl=
-em i&#39;m facing here?</div><div><br></div><div>Thanks,</div><div>Anand Ne=
-eli</div></div>
-
---f46d04428cdcb24a89051427d5b2--
-
-
---===============1133832383==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1133832383==--
+T24gMTYgQXByaWwgMjAxNSBhdCAxNDoyNiwgU8OpYmFzdGllbiBMb3JyYWluCjxzZWJhc3RpZW4u
+bG9ycmFpbjAxQGdtYWlsLmNvbT4gd3JvdGU6Cj4gSGVsbG8gTFRUbmcgZm9sa3MsCj4KPiBJJ2Ft
+IHVzaW5nIEFyY2hsaW51eCB3aXRoIHN0b2NrIDMuMTkuMyBrZXJuZWwgYW5kIEknYW0gZXhwZXJp
+ZW5jaW5nIGEgY3Jhc2gKPiB3aXRoIHRoZSBsYXRlc3QgYW5kIGdyZWF0ZXN0IGx0dG5nLgo+IEkg
+Y29tcGlsZWQgbHR0bmctdG9vbHMgd2l0aG91dCBVU1Qgc3VwcG9ydC4KPgo+ICR1bmFtZSAtYQo+
+IExpbnV4IHJlZHdpbmQgMy4xOS4zLTMtQVJDSCAjMSBTTVAgUFJFRU1QVCBXZWQgQXByIDggMTQ6
+MTA6MDAgQ0VTVCAyMDE1Cj4geDg2XzY0IEdOVS9MaW51eAo+Cj4gSGVyZSdzIHRoZSBjb21waWxl
+IGxvZyBvZiBsdHRuZy1tb2R1bGVzIDoKPiBodHRwOi8vcGFzdGUudWJ1bnR1LmNvbS8xMDgzNDAw
+Ny8KPgo+IEkgbm90aWNlZCBJJ2FtIG1pc3NpbmcgIENPTkZJR19LQUxMU1lNU19BTEwsIGJ1dCBJ
+IGRvbid0IGtub3cgaWYgaXQgaXMKPiByZWFsbHkgcmVsZXZhbnQgYXMgbHR0bmctbW9kdWxlcyAy
+LjYgd2FzIHJ1bm5pbmcgZmluZSB3aXRob3V0IGl0Lgo+Cj4gSGVyZSdzIHRoZSBzeXNsb2cvam91
+cm5hbCBhZnRlciBhIGNyYXNoIChvbiBhIHRlc3QgVk0pCj4gaHR0cDovL3Bhc3RlLnVidW50dS5j
+b20vMTA4MzM4NzMvCj4KPiBBbnkgaGVscCBpbiBkZWJ1Z2dpbmcgdGhhdCB3b3VsZCBiZSBncmVh
+dGx5IGFwcHJlY2lhdGVkIQo+Cj4gVGhhbmtzIQo+IExyb3VnZS8KPiBTZWJhc3RpZW4gTG9ycmFp
+bi4KCgpIaSBTw6liYXN0aWVuLAoKSSBjYW4gcmVwcm9kdWNlIHRoaXMgYXMgd2VsbC4gSSBzdWdn
+ZXN0IHlvdSBmaWxlIGEgYnVnCihodHRwOi8vYnVncy5sdHRuZy5vcmcvcHJvamVjdHMvbHR0bmct
+bW9kdWxlcyksIHNvIHRoYXQgdGhlIGlzc3VlIGlzCnRyYWNrZWQgYW5kIGZpeGVkIGJlZm9yZSB0
+aGUgbmV4dCByZWxlYXNlLgoKU2ltb24KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0
+dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
+dHRuZy1kZXYK
