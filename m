@@ -1,19 +1,15 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Trace to console
-Date: Tue, 21 Apr 2015 20:27:10 -0400
-Message-ID: <CA+jJMxvroXRJuEtHgdJiCP7Y4HWK32RqNSyk6+ubqeQ3xH7i9A__28029.0211587728$1429662493$gmane$org@mail.gmail.com>
-References: <CAL1ZhONFm1+bXP_j4X=kUKnsQFaqTqdVTY-Cc_uY4Ni-Ok-LiQ@mail.gmail.com>
+From: Venkata Kantimahanthi <venkata.kantimahanthi@tcs.com>
+Subject: Does babeltrace has options for filtering logs?
+Date: Wed, 22 Apr 2015 15:23:26 +0530
+Message-ID: <OF3258FC75.B456C4D8-ON65257E2F.0034E674-65257E2F.00365D77__12558.8738629178$1429696516$gmane$org@tcs.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0510988978=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f179.google.com ([209.85.216.179])
+Received: from inblrg02.tcs.com ([121.242.48.116])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1YkiVX-00045G-Tc
- for lttng-dev@lists.lttng.org; Tue, 21 Apr 2015 20:27:17 -0400
-Received: by qcbii10 with SMTP id ii10so85298110qcb.2
- for <lttng-dev@lists.lttng.org>; Tue, 21 Apr 2015 17:27:10 -0700 (PDT)
-In-Reply-To: <CAL1ZhONFm1+bXP_j4X=kUKnsQFaqTqdVTY-Cc_uY4Ni-Ok-LiQ@mail.gmail.com>
+ (envelope-from <prvs=547387ec5=venkata.kantimahanthi@tcs.com>)
+ id 1YkrM2-0006vR-BV
+ for lttng-dev@lists.lttng.org; Wed, 22 Apr 2015 05:54:07 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,26 +18,87 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Chidhu R <chid1989@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgQ2hpZGh1LAoKTFRUbmcgZG9lcyBub3Qgc3VwcG9ydCBzZWxlY3RpdmUgb3V0cHV0IG9mIHRy
-YWNlcG9pbnRzIHRvIHRoZSBjb25zb2xlLgpUaGUgY2xvc2VzdCB0aGluZyBJIGNhbiByZWNvbW1l
-bmQgaXMgdXNpbmcgdGhlICJsaXZlIiBtb2RlIGxvY2FsbHkuCgpKw6lyw6ltaWUKCk9uIE1vbiwg
-QXByIDIwLCAyMDE1IGF0IDM6NTggUE0sIENoaWRodSBSIDxjaGlkMTk4OUBnbWFpbC5jb20+IHdy
-b3RlOgo+IEhlbGxvLAo+Cj4gSSB3YXMgbG9va2luZyBmb3IgYSB3YXkgdG8gdHJhY2UgdG8gY29u
-c29sZSByYXRoZXIgdGhhbiBzYXZlIHRvIGRpc2sgLwo+IHN0cmVhbS4gSSByZWFkIGFib3V0IGx0
-dG5nIHRyYWNlZiBmZWF0dXJlLiBCdXQgaXQgZG9lcyBub3QgaW5jbHVkZSB0aGUgd2lkZQo+IHJh
-bmdlIG9mIGJlbmVmaXRzIGJyb3VnaHQgYnkgdHJhY2Vwb2ludHMuIFNvIHdoYXQgSSB3YW50IGlz
-IHRvIHVzZSB0aGUKPiB0cmFjZXBvaW50cyBhbmQgdHJhY2UgdG8gY29uc29sZSBpbnN0ZWFkLiBG
-b3IgZXhhbXBsZSwgaWYgdGhlcmUgYXJlIDUKPiB0cmFjZXBvaW50IGV2ZW50cywgSSB3YW50IHRv
-IHRyYWNlIDMgb2YgdGhlbSB0byBjb25zb2xlIGFuZCBsZXQgdGhlIG90aGVyIGdvCj4gdGhlIGRp
-c2sgb3Igd2hhdGV2ZXIuIEhvdyB0byBhY2hpZXZlIHRoaXMuCj4KPiBUaGFua3MKPiBDaGlkCj4K
-PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xp
-c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KCgoKLS0g
-CkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNv
-bQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmct
-ZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5s
-dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+This is a multipart message in MIME format.
+--===============0510988978==
+Content-Type: multipart/alternative; boundary="=_alternative 00365D7765257E2F_="
+
+This is a multipart message in MIME format.
+--=_alternative 00365D7765257E2F_=
+Content-Type: text/plain; charset="US-ASCII"
+
+Hi,
+
+Is there a possibility of filtering the traces using LOG_LEVEL using 
+babeltrace / Any API calls for that. I have a use case where I have to log 
+the traces into seperate files depending on their log_level. Is there a 
+possibility of achieving this use case using babeltrace. How can we filter 
+the logs.
+Is there a option of printing log level in the trace directly.
+
+
+Thanks & Regards
+Venkata Ranganadh Kantimahanthi
+=====-----=====-----=====
+Notice: The information contained in this e-mail
+message and/or attachments to it may contain 
+confidential or privileged information. If you are 
+not the intended recipient, any dissemination, use, 
+review, distribution, printing or copying of the 
+information contained in this e-mail message 
+and/or attachments to it are strictly prohibited. If 
+you have received this communication in error, 
+please notify us by reply e-mail or telephone and 
+immediately and permanently delete the message 
+and any attachments. Thank you
+
+
+
+--=_alternative 00365D7765257E2F_=
+Content-Type: text/html; charset="US-ASCII"
+
+<font size=2 face="sans-serif">Hi,</font>
+<br>
+<br><font size=2 face="sans-serif">Is there a possibility of filtering
+the traces using LOG_LEVEL using babeltrace / Any API calls for that. I
+have a use case where I have to log the traces into seperate files depending
+on their log_level. Is there a possibility of achieving this use case using
+babeltrace. How can we filter the logs.</font>
+<br><font size=2 face="sans-serif">Is there a option of printing log level
+in the trace directly.</font>
+<br><font size=2 face="sans-serif"><br>
+<br>
+Thanks &amp; Regards<br>
+Venkata Ranganadh Kantimahanthi<br>
+</font><p>=====-----=====-----=====<br>
+Notice: The information contained in this e-mail<br>
+message and/or attachments to it may contain <br>
+confidential or privileged information. If you are <br>
+not the intended recipient, any dissemination, use, <br>
+review, distribution, printing or copying of the <br>
+information contained in this e-mail message <br>
+and/or attachments to it are strictly prohibited. If <br>
+you have received this communication in error, <br>
+please notify us by reply e-mail or telephone and <br>
+immediately and permanently delete the message <br>
+and any attachments. Thank you</p>
+
+<p></p>
+--=_alternative 00365D7765257E2F_=--
+
+
+
+--===============0510988978==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0510988978==--
