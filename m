@@ -1,19 +1,20 @@
 From: Chidhu R <chid1989@gmail.com>
 Subject: Re: Trace to console
-Date: Thu, 23 Apr 2015 11:14:53 -0700
-Message-ID: <CAL1ZhOO=w0rCAcEf5StxWe1tk95Vy-L9WVwxjbSxQXKO7L0BEw__15381.6400947564$1429813013$gmane$org@mail.gmail.com>
+Date: Thu, 23 Apr 2015 11:58:57 -0700
+Message-ID: <CAL1ZhOPtw4iPv0tiEtd4uMjt1sRFFdYSztNDGywD-kLDO-v-hg__33775.2989413731$1429815675$gmane$org@mail.gmail.com>
 References: <CAL1ZhONFm1+bXP_j4X=kUKnsQFaqTqdVTY-Cc_uY4Ni-Ok-LiQ@mail.gmail.com>
  <CA+jJMxvroXRJuEtHgdJiCP7Y4HWK32RqNSyk6+ubqeQ3xH7i9A@mail.gmail.com>
+ <CAL1ZhOO=w0rCAcEf5StxWe1tk95Vy-L9WVwxjbSxQXKO7L0BEw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1206563112=="
+Content-Type: multipart/mixed; boundary="===============1047767950=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-la0-f42.google.com ([209.85.215.42])
+Received: from mail-la0-f41.google.com ([209.85.215.41])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <chid1989@gmail.com>) id 1YlLf1-0000Ax-Az
- for lttng-dev@lists.lttng.org; Thu, 23 Apr 2015 14:15:46 -0400
-Received: by laat2 with SMTP id t2so18781527laa.1
- for <lttng-dev@lists.lttng.org>; Thu, 23 Apr 2015 11:15:33 -0700 (PDT)
-In-Reply-To: <CA+jJMxvroXRJuEtHgdJiCP7Y4HWK32RqNSyk6+ubqeQ3xH7i9A@mail.gmail.com>
+ (envelope-from <chid1989@gmail.com>) id 1YlMLg-0000Oe-Kr
+ for lttng-dev@lists.lttng.org; Thu, 23 Apr 2015 14:59:53 -0400
+Received: by laat2 with SMTP id t2so19617360laa.1
+ for <lttng-dev@lists.lttng.org>; Thu, 23 Apr 2015 11:59:38 -0700 (PDT)
+In-Reply-To: <CAL1ZhOO=w0rCAcEf5StxWe1tk95Vy-L9WVwxjbSxQXKO7L0BEw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,73 +27,86 @@ To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1206563112==
-Content-Type: multipart/alternative; boundary=089e0122970400121005146844ee
+--===============1047767950==
+Content-Type: multipart/alternative; boundary=089e0160b7caa3dbcb051468e14c
 
---089e0122970400121005146844ee
+--089e0160b7caa3dbcb051468e14c
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Thanks Jeremie.
+Also, is there a way to redirect all tracepoints to console instead of
+selective?
 
-On Tue, Apr 21, 2015 at 5:27 PM, J=C3=A9r=C3=A9mie Galarneau <
-jeremie.galarneau@efficios.com> wrote:
+On Thu, Apr 23, 2015 at 11:14 AM, Chidhu R <chid1989@gmail.com> wrote:
 
-> Hi Chidhu,
+> Thanks Jeremie.
 >
-> LTTng does not support selective output of tracepoints to the console.
-> The closest thing I can recommend is using the "live" mode locally.
+> On Tue, Apr 21, 2015 at 5:27 PM, J=C3=A9r=C3=A9mie Galarneau <
+> jeremie.galarneau@efficios.com> wrote:
 >
-> J=C3=A9r=C3=A9mie
+>> Hi Chidhu,
+>>
+>> LTTng does not support selective output of tracepoints to the console.
+>> The closest thing I can recommend is using the "live" mode locally.
+>>
+>> J=C3=A9r=C3=A9mie
+>>
+>> On Mon, Apr 20, 2015 at 3:58 PM, Chidhu R <chid1989@gmail.com> wrote:
+>> > Hello,
+>> >
+>> > I was looking for a way to trace to console rather than save to disk /
+>> > stream. I read about lttng tracef feature. But it does not include the
+>> wide
+>> > range of benefits brought by tracepoints. So what I want is to use the
+>> > tracepoints and trace to console instead. For example, if there are 5
+>> > tracepoint events, I want to trace 3 of them to console and let the
+>> other go
+>> > the disk or whatever. How to achieve this.
+>> >
+>> > Thanks
+>> > Chid
+>> >
+>> > _______________________________________________
+>> > lttng-dev mailing list
+>> > lttng-dev@lists.lttng.org
+>> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>> >
+>>
+>>
+>>
+>> --
+>> J=C3=A9r=C3=A9mie Galarneau
+>> EfficiOS Inc.
+>> http://www.efficios.com
+>>
 >
-> On Mon, Apr 20, 2015 at 3:58 PM, Chidhu R <chid1989@gmail.com> wrote:
-> > Hello,
-> >
-> > I was looking for a way to trace to console rather than save to disk /
-> > stream. I read about lttng tracef feature. But it does not include the
-> wide
-> > range of benefits brought by tracepoints. So what I want is to use the
-> > tracepoints and trace to console instead. For example, if there are 5
-> > tracepoint events, I want to trace 3 of them to console and let the
-> other go
-> > the disk or whatever. How to achieve this.
-> >
-> > Thanks
-> > Chid
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >
->
->
->
-> --
-> J=C3=A9r=C3=A9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
 >
 
---089e0122970400121005146844ee
+--089e0160b7caa3dbcb051468e14c
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Thanks Jeremie.</div><div class=3D"gmail_extra"><br><div c=
-lass=3D"gmail_quote">On Tue, Apr 21, 2015 at 5:27 PM, J=C3=A9r=C3=A9mie Gal=
-arneau <span dir=3D"ltr">&lt;<a href=3D"mailto:jeremie.galarneau@efficios.c=
-om" target=3D"_blank">jeremie.galarneau@efficios.com</a>&gt;</span> wrote:<=
-br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left=
-:1px #ccc solid;padding-left:1ex">Hi Chidhu,<br>
+<div dir=3D"ltr">Also, is there a way to redirect all tracepoints to consol=
+e instead of selective?</div><div class=3D"gmail_extra"><br><div class=3D"g=
+mail_quote">On Thu, Apr 23, 2015 at 11:14 AM, Chidhu R <span dir=3D"ltr">&l=
+t;<a href=3D"mailto:chid1989@gmail.com" target=3D"_blank">chid1989@gmail.co=
+m</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margi=
+n:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div dir=3D"ltr">=
+Thanks Jeremie.</div><div class=3D"HOEnZb"><div class=3D"h5"><div class=3D"=
+gmail_extra"><br><div class=3D"gmail_quote">On Tue, Apr 21, 2015 at 5:27 PM=
+, J=C3=A9r=C3=A9mie Galarneau <span dir=3D"ltr">&lt;<a href=3D"mailto:jerem=
+ie.galarneau@efficios.com" target=3D"_blank">jeremie.galarneau@efficios.com=
+</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin=
+:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Hi Chidhu,<br>
 <br>
 LTTng does not support selective output of tracepoints to the console.<br>
 The closest thing I can recommend is using the &quot;live&quot; mode locall=
 y.<br>
 <br>
 J=C3=A9r=C3=A9mie<br>
-<div><div class=3D"h5"><br>
+<div><div><br>
 On Mon, Apr 20, 2015 at 3:58 PM, Chidhu R &lt;<a href=3D"mailto:chid1989@gm=
-ail.com">chid1989@gmail.com</a>&gt; wrote:<br>
+ail.com" target=3D"_blank">chid1989@gmail.com</a>&gt; wrote:<br>
 &gt; Hello,<br>
 &gt;<br>
 &gt; I was looking for a way to trace to console rather than save to disk /=
@@ -112,13 +126,13 @@ her go<br>
 &gt;<br>
 </div></div>&gt; _______________________________________________<br>
 &gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
-</a><br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
+ev@lists.lttng.org</a><br>
 &gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
 target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
 </a><br>
 &gt;<br>
-<span class=3D"HOEnZb"><font color=3D"#888888"><br>
+<span><font color=3D"#888888"><br>
 <br>
 <br>
 --<br>
@@ -127,11 +141,12 @@ EfficiOS Inc.<br>
 <a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
 om</a><br>
 </font></span></blockquote></div><br></div>
+</div></div></blockquote></div><br></div>
 
---089e0122970400121005146844ee--
+--089e0160b7caa3dbcb051468e14c--
 
 
---===============1206563112==
+--===============1047767950==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Disposition: inline
@@ -142,4 +157,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1206563112==--
+--===============1047767950==--
