@@ -1,26 +1,19 @@
-From: Hannes Weisbach <hannes.weisbach@mailbox.tu-dresden.de>
-Subject: [BUG] lttng-sessiond
-Date: Thu, 23 Apr 2015 12:04:04 +0200
-Message-ID: <3E06425C-5C41-4BF7-8156-A62C4E9B5E60__35580.826996784$1429804988$gmane$org@mailbox.tu-dresden.de>
-Mime-Version: 1.0 (Mac OS X Mail 7.3 \(1878.6\))
-Content-Type: multipart/mixed; boundary="===============1052452971=="
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+ <jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-ust] Fix: Don't wait during registration
+	if clock_gettime() fails
+Date: Thu, 23 Apr 2015 13:07:38 -0400
+Message-ID: <1429808858-30769-1-git-send-email-jeremie.galarneau__29058.0541980036$1429808967$gmane$org@efficios.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mailout1.zih.tu-dresden.de ([141.30.67.72])
+Received: from mail-vn0-f50.google.com ([209.85.216.50])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <hannes.weisbach@mailbox.tu-dresden.de>)
- id 1YlDzJ-0005p4-2A
- for lttng-dev@lists.lttng.org; Thu, 23 Apr 2015 06:04:12 -0400
-Received: from mail.zih.tu-dresden.de ([141.76.14.4])
- by mailout1.zih.tu-dresden.de with esmtp (Exim 4.63)
- (envelope-from <hannes.weisbach@mailbox.tu-dresden.de>)
- id 1YlDzH-0004dp-Pn
- for lttng-dev@lists.lttng.org; Thu, 23 Apr 2015 12:04:03 +0200
-Received: from [141.76.49.4] (helo=os-dhcp004.inf.tu-dresden.de)
- by server-50.mailclusterdns.zih.tu-dresden.de with esmtpsa
- (TLSv1:AES128-SHA:128)
- (envelope-from <hannes.weisbach@mailbox.tu-dresden.de>)
- id 1YlDzH-00048w-Jc
- for lttng-dev@lists.lttng.org; Thu, 23 Apr 2015 12:04:03 +0200
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1YlKbU-0008BM-Fk
+ for lttng-dev@lists.lttng.org; Thu, 23 Apr 2015 13:08:04 -0400
+Received: by vnbg62 with SMTP id g62so1866966vnb.7
+ for <lttng-dev@lists.lttng.org>; Thu, 23 Apr 2015 10:07:51 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -32,155 +25,38 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-
---===============1052452971==
-Content-Type: multipart/signed; boundary="Apple-Mail=_BCC5FD06-9C9B-4132-A23E-A2E0ACB071C2"; protocol="application/pgp-signature"; micalg=pgp-sha1
-
-
---Apple-Mail=_BCC5FD06-9C9B-4132-A23E-A2E0ACB071C2
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=us-ascii
-
-Hello,
-
-I'm using LTTng with a kernel that has lock debugging enabled.  I
-familiarized myself with LTTng using the "Hello world" example, where
-I encountered two bugs.
-
-1) Using multiple probes for the lttng-sessiond arguments
---kmod-probes and --extra-kmod-probes does not work:
-
-$ sudo lttng-sessiond --kmod-probes=3D"hello,sched" -vvv
-[...]
-DEBUG1 - 11:54:22.413830 [17827/17827]: Modprobe successfully =
-lttng-probe-sched (in modprobe_lttng() at modprobe.c:285)
-sh: 1: Syntax error: "(" unexpected
-DEBUG1 - 11:54:22.415273 [17827/17827]: Unable to load optional module =
-(null); continuing (in modprobe_lttng() at modprobe.c:281)
-[...]
-
-$ sudo lttng-sessiond --kmod-probes=3D"sched,hello" -vvv
-[...]
-DEBUG1 - 11:55:13.879976 [17896/17896]: Modprobe successfully =
-lttng-probe-hello (in modprobe_lttng() at modprobe.c:285)
-sh: 1: Syntax error: "(" unexpected
-DEBUG1 - 11:55:13.881183 [17896/17896]: Unable to load optional module =
-(null); continuing (in modprobe_lttng() at modprobe.c:281)
-[...]
-
-$ sudo lttng-sessiond --extra-kmod-probes=3D"sched,hello" -vvv
-[...]
-DEBUG1 - 11:55:54.244515 [17966/17966]: Modprobe successfully =
-lttng-probe-hello (in modprobe_lttng() at modprobe.c:285)
-sh: 1: Syntax error: "(" unexpected
-DEBUG1 - 11:55:54.245758 [17966/17966]: Unable to load optional module =
-(null); continuing (in modprobe_lttng() at modprobe.c:281)
-[...]
-
-It seems, only the last argument (module) is loaded correctly.
-
-2) Having lttng-sessiond started:
-$ sudo lttng-sessiond --kmod-probes=3Dhello
-And the tracer configured:
-lttng create
-lttng enable-event hello_world -k
-
-'lttng start' causes a locking failure to be reported:
-[  159.783420]
-[  159.783922] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-[  159.784067] [ BUG: bad unlock balance detected! ]
-[  159.784067] 4.0.0-rc4-atlas+ #200 Tainted: G           O
-[  159.784067] -------------------------------------
-[  159.784067] lttng-sessiond/1441 is trying to release lock =
-(sessions_mutex) at:
-[  159.784067] [<ffffffff81808c3e>] mutex_unlock+0xe/0x10
-[  159.784067] but there are no more locks to release!
-[  159.784067]
-[  159.784067] other info that might help us debug this:
-[  159.784067] no locks held by lttng-sessiond/1441.
-[  159.784067]
-[  159.784067] stack backtrace:
-[  159.784067] CPU: 0 PID: 1441 Comm: lttng-sessiond Tainted: G          =
- O    4.0.0-rc4-atlas+ #200
-[  159.784067] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), =
-BIOS Bochs 01/01/2011
-[  159.784067]  ffffffff81808c3e ffff88005d24fa28 ffffffff818029e0 =
-0000000000000007
-[  159.784067]  ffff880057c9cd60 ffff88005d24fa58 ffffffff810c1924 =
-ffff88005d24fad8
-[  159.784067]  ffff880057c9cd60 ffffffffa01ce070 ffffffff81808c3e =
-ffff88005d24fa98
-[  159.784067] Call Trace:
-[  159.784067]  [<ffffffff81808c3e>] ? mutex_unlock+0xe/0x10
-[  159.784067]  [<ffffffff818029e0>] dump_stack+0x4c/0x65
-[  159.784067]  [<ffffffff810c1924>] =
-print_unlock_imbalance_bug+0xf4/0x100
-[  159.784067]  [<ffffffff81808c3e>] ? mutex_unlock+0xe/0x10
-[  159.784067]  [<ffffffff810c6986>] lock_release+0x2e6/0x460
-[  159.784067]  [<ffffffff81808b16>] __mutex_unlock_slowpath+0x76/0x190
-[  159.784067]  [<ffffffff81808c3e>] mutex_unlock+0xe/0x10
-[  159.784067]  [<ffffffffa00bcc98>] lttng_session_enable+0x208/0x5b0 =
-[lttng_tracer]
-[  159.784067]  [<ffffffffa00bdd75>] lttng_session_ioctl+0x155/0x300 =
-[lttng_tracer]
-[  159.784067]  [<ffffffff810c3a80>] ? __lock_acquire+0x570/0x1f60
-[  159.784067]  [<ffffffff8109d095>] ? sched_clock_local+0x25/0x90
-[  159.784067]  [<ffffffff811d41c7>] ? do_wp_page+0x3a7/0x900
-[  159.784067]  [<ffffffff8109d2d8>] ? sched_clock_cpu+0x98/0xc0
-[  159.784067]  [<ffffffff8109d355>] ? local_clock+0x15/0x30
-[  159.784067]  [<ffffffff8109d095>] ? sched_clock_local+0x25/0x90
-[  159.784067]  [<ffffffff811d41c7>] ? do_wp_page+0x3a7/0x900
-[  159.784067]  [<ffffffff810c3a80>] ? __lock_acquire+0x570/0x1f60
-[  159.784067]  [<ffffffff811d41c7>] ? do_wp_page+0x3a7/0x900
-[  159.784067]  [<ffffffff811d5820>] ? handle_mm_fault+0x310/0x18b0
-[  159.784067]  [<ffffffff8109d095>] ? sched_clock_local+0x25/0x90
-[  159.784067]  [<ffffffff8109d095>] ? sched_clock_local+0x25/0x90
-[  159.784067]  [<ffffffff81248e41>] ? __fget+0x111/0x260
-[  159.784067]  [<ffffffff8109d2d8>] ? sched_clock_cpu+0x98/0xc0
-[  159.784067]  [<ffffffff8109d355>] ? local_clock+0x15/0x30
-[  159.784067]  [<ffffffff81248e41>] ? __fget+0x111/0x260
-[  159.784067]  [<ffffffff8123c998>] do_vfs_ioctl+0x308/0x560
-[  159.784067]  [<ffffffff81248d35>] ? __fget+0x5/0x260
-[  159.784067]  [<ffffffff8104f201>] ? __do_page_fault+0x1f1/0x4c0
-[  159.784067]  [<ffffffff8123cc71>] SyS_ioctl+0x81/0xa0
-[  159.784067]  [<ffffffff8180cfb6>] system_call_fastpath+0x16/0x1b
-
-I hope this helps.
-
---=20
-Best regards,
-Hannes
-
---Apple-Mail=_BCC5FD06-9C9B-4132-A23E-A2E0ACB071C2
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
-	filename=signature.asc
-Content-Type: application/pgp-signature;
-	name=signature.asc
-Content-Description: Message signed with OpenPGP using GPGMail
-
------BEGIN PGP SIGNATURE-----
-Comment: GPGTools - http://gpgtools.org
-
-iEYEARECAAYFAlU4w5UACgkQ74te23KpN+mhaACfQZulXXvZm66o7+P2BVFg5kFV
-Q3wAn2KXnMFyrouqNQ6KJOSAuqcwJVwf
-=OSeE
------END PGP SIGNATURE-----
-
---Apple-Mail=_BCC5FD06-9C9B-4132-A23E-A2E0ACB071C2--
-
-
---===============1052452971==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1052452971==--
+Z2V0X2NvbnN0cnVjdG9yX3RpbWVvdXQoKSBjdXJyZW50bHkgcmV0dXJucyAtMSB3aGljaCwgYWNj
+b3JkaW5nIHRvCnRoZSBsdHRuZy11c3QoMykgbWFuIHBhZ2UgYW5kIGx0dG5nX3VzdF9pbml0KCkg
+aW1wbGVtZW50YXRpb24sCiJ3YWl0cyBmb3JldmVyIi4KClRoaXMgY2hhbmdlcyB0aGUgYmVoYXZp
+b3IgdG8gbWF0Y2ggd2hhdCBpcyBleHByZXNzZWQgaW4gdGhlIGNvbW1lbnRzLgoKQ29tbWVudHMg
+aW4gZ2V0X2NvbnN0cnVjdG9yX3RpbWVvdXQoKSBhbmQgZ2V0X3RpbWVvdXQoKSBhcmUgYWxzbwpt
+b2RpZmllZCB0byBtYXRjaCB0aGUgZm9sbG93aW5nIGNvbnZlbnRpb246CgotMTogd2FpdCBmb3Jl
+dmVyCjA6IGRvbid0IHdhaXQKMTogd2FpdCBmb3IgImNvbnN0cnVjdG9yX2RlbGF5X21zIgoKU2ln
+bmVkLW9mZi1ieTogSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNp
+b3MuY29tPgotLS0KIGxpYmx0dG5nLXVzdC9sdHRuZy11c3QtY29tbS5jIHwgOCArKysrKy0tLQog
+MSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1n
+aXQgYS9saWJsdHRuZy11c3QvbHR0bmctdXN0LWNvbW0uYyBiL2xpYmx0dG5nLXVzdC9sdHRuZy11
+c3QtY29tbS5jCmluZGV4IDE0YmJiOTYuLjUyZGMyZGEgMTAwNjQ0Ci0tLSBhL2xpYmx0dG5nLXVz
+dC9sdHRuZy11c3QtY29tbS5jCisrKyBiL2xpYmx0dG5nLXVzdC9sdHRuZy11c3QtY29tbS5jCkBA
+IC00MDIsNyArNDAyLDcgQEAgaW50IHNldHVwX2xvY2FsX2FwcHModm9pZCkKIAogLyoKICAqIEdl
+dCBub3RpZnlfc29jayB0aW1lb3V0LCBpbiBtcy4KLSAqIC0xOiBkb24ndCB3YWl0LiAwOiB3YWl0
+IGZvcmV2ZXIuID4wOiB0aW1lb3V0LCBpbiBtcy4KKyAqIC0xOiB3YWl0IGZvcmV2ZXIuIDA6IGRv
+bid0IHdhaXQuID4wOiB0aW1lb3V0LCBpbiBtcy4KICAqLwogc3RhdGljCiBsb25nIGdldF90aW1l
+b3V0KHZvaWQpCkBAIC00MjcsNyArNDI3LDcgQEAgbG9uZyBnZXRfbm90aWZ5X3NvY2tfdGltZW91
+dCh2b2lkKQogfQogCiAvKgotICogUmV0dXJuIHZhbHVlczogLTE6IGRvbid0IHdhaXQuIDA6IHdh
+aXQgZm9yZXZlci4gMTogdGltZW91dCB3YWl0LgorICogUmV0dXJuIHZhbHVlczogLTE6IHdhaXQg
+Zm9yZXZlci4gMDogZG9uJ3Qgd2FpdC4gMTogdGltZW91dCB3YWl0LgogICovCiBzdGF0aWMKIGlu
+dCBnZXRfY29uc3RydWN0b3JfdGltZW91dChzdHJ1Y3QgdGltZXNwZWMgKmNvbnN0cnVjdG9yX3Rp
+bWVvdXQpCkBAIC00NTAsNyArNDUwLDggQEAgaW50IGdldF9jb25zdHJ1Y3Rvcl90aW1lb3V0KHN0
+cnVjdCB0aW1lc3BlYyAqY29uc3RydWN0b3JfdGltZW91dCkKIAkgKi8KIAlyZXQgPSBjbG9ja19n
+ZXR0aW1lKENMT0NLX1JFQUxUSU1FLCBjb25zdHJ1Y3Rvcl90aW1lb3V0KTsKIAlpZiAocmV0KSB7
+Ci0JCXJldHVybiAtMTsKKwkJLyogZG9uJ3Qgd2FpdCAqLworCQlyZXR1cm4gMDsKIAl9CiAJY29u
+c3RydWN0b3JfdGltZW91dC0+dHZfc2VjICs9IGNvbnN0cnVjdG9yX2RlbGF5X21zIC8gMTAwMFVM
+OwogCWNvbnN0cnVjdG9yX3RpbWVvdXQtPnR2X25zZWMgKz0KQEAgLTQ1OSw2ICs0NjAsNyBAQCBp
+bnQgZ2V0X2NvbnN0cnVjdG9yX3RpbWVvdXQoc3RydWN0IHRpbWVzcGVjICpjb25zdHJ1Y3Rvcl90
+aW1lb3V0KQogCQljb25zdHJ1Y3Rvcl90aW1lb3V0LT50dl9zZWMrKzsKIAkJY29uc3RydWN0b3Jf
+dGltZW91dC0+dHZfbnNlYyAtPSAxMDAwMDAwMDAwVUw7CiAJfQorCS8qIHRpbWVvdXQgd2FpdCAo
+Y29uc3RydWN0b3JfZGVsYXlfbXMpICovCiAJcmV0dXJuIDE7CiB9CiAKLS0gCjIuMy42CgoKX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
+aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5v
+cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
