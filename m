@@ -1,18 +1,21 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: Don't wait during
- registration if clock_gettime() fails
-Date: Thu, 23 Apr 2015 17:15:56 +0000 (UTC)
-Message-ID: <15252488.35019.1429809356280.JavaMail.zimbra__8455.84328421882$1429809442$gmane$org@efficios.com>
-References: <1429808858-30769-1-git-send-email-jeremie.galarneau@efficios.com>
+Subject: Re: Deadlock between call_rcu thread and RCU-bp thread
+ doing registration in rcu_read_lock()
+Date: Thu, 23 Apr 2015 17:51:26 +0000 (UTC)
+Message-ID: <759330507.35035.1429811486992.JavaMail.zimbra__39617.2067303725$1429811705$gmane$org@efficios.com>
+References: <551BC1E5.3020809@orc-group.com>
+ <570963671.28921.1428697562974.JavaMail.zimbra@efficios.com>
+ <5530D122.7060709@orc-group.com> <20150417141818.GM23685@linux.vnet.ibm.com>
+ <20150417145545.GA28785@linux.vnet.ibm.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1YlKjG-0008Fd-Aw
- for lttng-dev@lists.lttng.org; Thu, 23 Apr 2015 13:16:06 -0400
-In-Reply-To: <1429808858-30769-1-git-send-email-jeremie.galarneau@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1YlLHi-0008Qk-1A
+ for lttng-dev@lists.lttng.org; Thu, 23 Apr 2015 13:51:40 -0400
+In-Reply-To: <20150417145545.GA28785@linux.vnet.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,49 +24,262 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: paulmck@linux.vnet.ibm.com
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGludG8gc3RhYmxlLTIuNSwgMi42LCBtYXN0ZXIsIGdvb2QgY2F0Y2ggIQoKSSB1cGRh
-dGVkIDIgY29tbWVudHMgdG8gZW5zdXJlIHRoZXkgc3RhcnQgd2l0aCBhIGNhcGl0YWwKbGV0dGVy
-IGFuZCBlbmQgd2l0aCBhIGRvdC4KClRoYW5rcyEKCk1hdGhpZXUKCi0tLS0tIE9yaWdpbmFsIE1l
-c3NhZ2UgLS0tLS0KPiBnZXRfY29uc3RydWN0b3JfdGltZW91dCgpIGN1cnJlbnRseSByZXR1cm5z
-IC0xIHdoaWNoLCBhY2NvcmRpbmcgdG8KPiB0aGUgbHR0bmctdXN0KDMpIG1hbiBwYWdlIGFuZCBs
-dHRuZ191c3RfaW5pdCgpIGltcGxlbWVudGF0aW9uLAo+ICJ3YWl0cyBmb3JldmVyIi4KPiAKPiBU
-aGlzIGNoYW5nZXMgdGhlIGJlaGF2aW9yIHRvIG1hdGNoIHdoYXQgaXMgZXhwcmVzc2VkIGluIHRo
-ZSBjb21tZW50cy4KPiAKPiBDb21tZW50cyBpbiBnZXRfY29uc3RydWN0b3JfdGltZW91dCgpIGFu
-ZCBnZXRfdGltZW91dCgpIGFyZSBhbHNvCj4gbW9kaWZpZWQgdG8gbWF0Y2ggdGhlIGZvbGxvd2lu
-ZyBjb252ZW50aW9uOgo+IAo+IC0xOiB3YWl0IGZvcmV2ZXIKPiAwOiBkb24ndCB3YWl0Cj4gMTog
-d2FpdCBmb3IgImNvbnN0cnVjdG9yX2RlbGF5X21zIgo+IAo+IFNpZ25lZC1vZmYtYnk6IErDqXLD
-qW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPiAtLS0KPiAg
-bGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMgfCA4ICsrKysrLS0tCj4gIDEgZmlsZSBjaGFu
-Z2VkLCA1IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2xp
-Ymx0dG5nLXVzdC9sdHRuZy11c3QtY29tbS5jIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21t
-LmMKPiBpbmRleCAxNGJiYjk2Li41MmRjMmRhIDEwMDY0NAo+IC0tLSBhL2xpYmx0dG5nLXVzdC9s
-dHRuZy11c3QtY29tbS5jCj4gKysrIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMKPiBA
-QCAtNDAyLDcgKzQwMiw3IEBAIGludCBzZXR1cF9sb2NhbF9hcHBzKHZvaWQpCj4gIAo+ICAvKgo+
-ICAgKiBHZXQgbm90aWZ5X3NvY2sgdGltZW91dCwgaW4gbXMuCj4gLSAqIC0xOiBkb24ndCB3YWl0
-LiAwOiB3YWl0IGZvcmV2ZXIuID4wOiB0aW1lb3V0LCBpbiBtcy4KPiArICogLTE6IHdhaXQgZm9y
-ZXZlci4gMDogZG9uJ3Qgd2FpdC4gPjA6IHRpbWVvdXQsIGluIG1zLgo+ICAgKi8KPiAgc3RhdGlj
-Cj4gIGxvbmcgZ2V0X3RpbWVvdXQodm9pZCkKPiBAQCAtNDI3LDcgKzQyNyw3IEBAIGxvbmcgZ2V0
-X25vdGlmeV9zb2NrX3RpbWVvdXQodm9pZCkKPiAgfQo+ICAKPiAgLyoKPiAtICogUmV0dXJuIHZh
-bHVlczogLTE6IGRvbid0IHdhaXQuIDA6IHdhaXQgZm9yZXZlci4gMTogdGltZW91dCB3YWl0Lgo+
-ICsgKiBSZXR1cm4gdmFsdWVzOiAtMTogd2FpdCBmb3JldmVyLiAwOiBkb24ndCB3YWl0LiAxOiB0
-aW1lb3V0IHdhaXQuCj4gICAqLwo+ICBzdGF0aWMKPiAgaW50IGdldF9jb25zdHJ1Y3Rvcl90aW1l
-b3V0KHN0cnVjdCB0aW1lc3BlYyAqY29uc3RydWN0b3JfdGltZW91dCkKPiBAQCAtNDUwLDcgKzQ1
-MCw4IEBAIGludCBnZXRfY29uc3RydWN0b3JfdGltZW91dChzdHJ1Y3QgdGltZXNwZWMKPiAqY29u
-c3RydWN0b3JfdGltZW91dCkKPiAgCSAqLwo+ICAJcmV0ID0gY2xvY2tfZ2V0dGltZShDTE9DS19S
-RUFMVElNRSwgY29uc3RydWN0b3JfdGltZW91dCk7Cj4gIAlpZiAocmV0KSB7Cj4gLQkJcmV0dXJu
-IC0xOwo+ICsJCS8qIGRvbid0IHdhaXQgKi8KPiArCQlyZXR1cm4gMDsKPiAgCX0KPiAgCWNvbnN0
-cnVjdG9yX3RpbWVvdXQtPnR2X3NlYyArPSBjb25zdHJ1Y3Rvcl9kZWxheV9tcyAvIDEwMDBVTDsK
-PiAgCWNvbnN0cnVjdG9yX3RpbWVvdXQtPnR2X25zZWMgKz0KPiBAQCAtNDU5LDYgKzQ2MCw3IEBA
-IGludCBnZXRfY29uc3RydWN0b3JfdGltZW91dChzdHJ1Y3QgdGltZXNwZWMKPiAqY29uc3RydWN0
-b3JfdGltZW91dCkKPiAgCQljb25zdHJ1Y3Rvcl90aW1lb3V0LT50dl9zZWMrKzsKPiAgCQljb25z
-dHJ1Y3Rvcl90aW1lb3V0LT50dl9uc2VjIC09IDEwMDAwMDAwMDBVTDsKPiAgCX0KPiArCS8qIHRp
-bWVvdXQgd2FpdCAoY29uc3RydWN0b3JfZGVsYXlfbXMpICovCj4gIAlyZXR1cm4gMTsKPiAgfQo+
-ICAKPiAtLQo+IDIuMy42Cj4gCj4gCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5j
-LgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
-L2x0dG5nLWRldgo=
+----- Original Message -----
+> On Fri, Apr 17, 2015 at 07:18:18AM -0700, Paul E. McKenney wrote:
+> > On Fri, Apr 17, 2015 at 12:23:46PM +0300, Eugene Ivanov wrote:
+> > > Hi Mathieu,
+> > > 
+> > > On 04/10/2015 11:26 PM, Mathieu Desnoyers wrote:
+> > > >----- Original Message -----
+> > > >>Hi,
+> > > >>
+> > > >>I use rcu-bp (0.8.6) and get deadlock between call_rcu thread and
+> > > >>threads willing to do rcu_read_lock():
+> > > >>1. Some thread is in read-side critical section.
+> > > >>2. call_rcu thread waits for readers in stack of rcu_bp_register(),
+> > > >>i.e.
+> > > >>holds mutex.
+> > > >>3. Another thread enters into critical section via rcu_read_lock() and
+> > > >>blocks on the mutex taken by thread 2.
+> > > >>
+> > > >>Such deadlock is quite unexpected for me. Especially if RCU is used for
+> > > >>reference counting.
+> > > >Hi Eugene,
+> > > >
+> > > >Let's have a look at the reproducer below,
+> > > >
+> > > >>Originally it happened with rculfhash, below is minimized reproducer:
+> > > >>
+> > > >>#include <pthread.h>
+> > > >>#include <urcu-bp.h>
+> > > >>
+> > > >>struct Node
+> > > >>{
+> > > >>          struct rcu_head rcu_head;
+> > > >>};
+> > > >>
+> > > >>static void free_node(struct rcu_head * head)
+> > > >>{
+> > > >>          struct Node *node = caa_container_of(head, struct Node,
+> > > >>          rcu_head);
+> > > >>          free(node);
+> > > >>}
+> > > >>
+> > > >>static void * reader_thread(void * arg)
+> > > >>{
+> > > >>      rcu_read_lock();
+> > > >>      rcu_read_unlock();
+> > > >>      return NULL;
+> > > >>}
+> > > >>
+> > > >>int main(int argc, char * argv[])
+> > > >>{
+> > > >>      rcu_read_lock();
+> > > >>      struct Node * node = malloc(sizeof(*node));
+> > > >>      call_rcu(&node->rcu_head, free_node);
+> > > >>
+> > > >>      pthread_t read_thread_info;
+> > > >>      pthread_create(&read_thread_info, NULL, reader_thread, NULL);
+> > > >>      pthread_join(read_thread_info, NULL);
+> > > >This "pthread_join" blocks until reader_thread exits. It blocks
+> > > >while holding the RCU read-side lock. Quoting README.md:
+> > > >
+> > > >"### Interaction with mutexes
+> > > >
+> > > >One must be careful to do not cause deadlocks due to interaction of
+> > > >`synchronize_rcu()` and RCU read-side with mutexes. If
+> > > >`synchronize_rcu()`
+> > > >is called with a mutex held, this mutex (or any mutex which has this
+> > > >mutex in its dependency chain) should not be acquired from within a RCU
+> > > >read-side critical section.
+> > > >
+> > > >This is especially important to understand in the context of the
+> > > >QSBR flavor: a registered reader thread being "online" by
+> > > >default should be considered as within a RCU read-side critical
+> > > >section unless explicitly put "offline". Therefore, if
+> > > >`synchronize_rcu()` is called with a mutex held, this mutex, as
+> > > >well as any mutex which has this mutex in its dependency chain
+> > > >should only be taken when the RCU reader thread is "offline"
+> > > >(this can be performed by calling `rcu_thread_offline()`)."
+> > > >
+> > > >So what appears to happen here is that urcu-bp lazy registration
+> > > >grabs the rcu_gp_lock when the first rcu_read_lock is encountered.
+> > > >This mutex is also held when synchronize_rcu() is awaiting on
+> > > >reader thread's completion. So synchronize_rcu() of the call_rcu
+> > > >thread can block on the read-side lock held by main() (awaiting
+> > > >on pthread_join), which blocks the lazy registration of reader_thread,
+> > > >because it needs to grab that same lock.
+> > > >
+> > > >So this issue here is caused by holding the RCU read-side lock
+> > > >while calling pthread_join.
+> > > >
+> > > >For the QSBR flavor, you will want to put the main() thread
+> > > >offline before awaiting on pthread_join.
+> > > >
+> > > >Does it answer your question ?
+> > > 
+> > > Thank you for thorough explanation. The thing I still don't get is
+> > > related to the case, when either thread wants to hold read lock for
+> > > arbitrary long time to do some complicated data processing, e.g. walk
+> > > through huge hash table and send some network responses related to the
+> > > data in the table. pthread_join() can be moved out from the CS and
+> > > instead in CS we can have sleep(1000) or just a long loop to demonstrate
+> > > the case. Thread creation can be done somewhere else as well. Do I
+> > > understand it correctly, that if synchronize_rcu() is executed same time
+> > > by call_rcu thread, no other threads can be registered and unregistered
+> > > until reader has finished? Regarding documentation it looks as a correct
+> > > RCU usage, because I don't have any mutexes, just one of the threads
+> > > stays in CS for very long time and the only mutex involved is
+> > > rcu_gp_lock.
+> > 
+> > Hmmm...
+> > 
+> > One possible way to allow this use case (if desired) is to make
+> > thread registration use trylock on rcu_gp_lock.  If this fails, they
+> > unconditionally acquire an rcu_gp_fallback_lock, and add the thread
+> > to a secondary list.  Then, while still holding rcu_gp_fallback_lock,
+> > again trylock rcu_gp_lock.  If this succeeds, move the thread(s) to the
+> > real list and release both locks, otherwise, release rcu_gp_fallback_lock
+> > and leave.
+> > 
+> > In addition, just after the grace-period machinery releases rcu_gp_lock,
+> > it acquires rcu_gp_fallback_lock.  If the secondary list is non-empty,
+> > it then re-acquires rcu_gp_lock and moves the threads to the real list.
+> > Finally, of course, it releases all the locks that it acquired.
+> > 
+> > The reason that this works is that a given grace period need not wait on
+> > threads that didn't exist before that grace period started.  Note that
+> > this relies on trylock never having spurious failures, which is guaranteed
+> > by POSIX (but sadly not C/C++'s shiny new part-of-language locks).
+> > 
+> > Seem reasonable?
+> 
+> No, it does not.  The list movement must occur at the start of the grace
+> period, otherwise the next grace period might incorrectly ignore recently
+> added threads.  There will therefore be some ticklishness interacting
+> with the grace-period-sharing optimization.  The problem is that if we
+> harvest the queue after moving the new threads to the list, we might
+> fail to wait for some readers that other updaters need us to wait on.
+> 
+> So perhaps a better approach is to use a simple lock hierarchy, acquiring
+> rcu_gp_lock before rcu_gp_fallback_lock.  Then the grace-period code
+> moves new threads just after harvesting updaters by simply unconditionally
+> acquiring rcu_gp_fallback_lock while still holding rcu_gp_lock.
+> 
+> New threads (and nearly dead threads) can then simply unconditionally
+> acquire rcu_gp_fallback_lock (which needs a better name) and always
+> placing themselves on the secondary list.
+> 
+> But nearly dead threads are a big fly in this ointment because their
+> TLS is guarded by the big ugly lock.  This can be handled by having a
+> mutex in the TLS, then making nearly-dead threads walk the list to their
+> element, doing hand-over-hand locking.  The resulting long thread-removal
+> times could be handled via a hash table or some such, but that might be
+> starting to get into more trouble than it is worth...
+
+I don't think we need 2 lists. All we need IMO is 2 locks: a rcu_gp_lock
+and a rcu_registry_lock. The trick is to ensure that wait_for_readers()
+releases the rcu_registry_lock between iterations on the registry.
+
+I'll email a patch shortly, and await for feedback.
+
+Thanks!
+
+Mathieu
+
+> 
+> 							Thanx, Paul
+> 
+> > > >Thanks,
+> > > >
+> > > >Mathieu
+> > > >
+> > > >
+> > > >
+> > > >>      rcu_read_unlock();
+> > > >>
+> > > >>      return 0;
+> > > >>}
+> > > >>
+> > > >>
+> > > >>Stacks:
+> > > >>
+> > > >>Thread 3 (Thread 0x7f8e2ab05700 (LWP 7386)):
+> > > >>#0  0x00000035cacdf343 in *__GI___poll (fds=<optimized out>,
+> > > >>nfds=<optimized out>, timeout=<optimized out>) at
+> > > >>../sysdeps/unix/sysv/linux/poll.c:87
+> > > >>#1  0x000000383880233e in wait_for_readers
+> > > >>(input_readers=0x7f8e2ab04cf0, cur_snap_readers=0x0,
+> > > >>qsreaders=0x7f8e2ab04ce0) at urcu-bp.c:211
+> > > >>#2  0x0000003838802af2 in synchronize_rcu_bp () at urcu-bp.c:272
+> > > >>#3  0x00000038388043a3 in call_rcu_thread (arg=0x1f7f030) at
+> > > >>urcu-call-rcu-impl.h:320
+> > > >>#4  0x00000035cb0079d1 in start_thread (arg=0x7f8e2ab05700) at
+> > > >>pthread_create.c:301
+> > > >>#5  0x00000035cace8b6d in clone () at
+> > > >>../sysdeps/unix/sysv/linux/x86_64/clone.S:115
+> > > >>Thread 2 (Thread 0x7f8e2a304700 (LWP 7387)):
+> > > >>#0  __lll_lock_wait () at
+> > > >>../nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S:136
+> > > >>#1  0x00000035cb009508 in _L_lock_854 () from /lib64/libpthread.so.0
+> > > >>#2  0x00000035cb0093d7 in __pthread_mutex_lock (mutex=0x3838a05ca0
+> > > >><rcu_gp_lock>) at pthread_mutex_lock.c:61
+> > > >>#3  0x0000003838801ed9 in mutex_lock (mutex=<optimized out>) at
+> > > >>urcu-bp.c:147
+> > > >>#4  0x000000383880351e in rcu_bp_register () at urcu-bp.c:493
+> > > >>#5  0x000000383880382e in _rcu_read_lock_bp () at
+> > > >>urcu/static/urcu-bp.h:159
+> > > >>#6  rcu_read_lock_bp () at urcu-bp.c:296
+> > > >>#7  0x0000000000400801 in reader_thread ()
+> > > >>#8  0x00000035cb0079d1 in start_thread (arg=0x7f8e2a304700) at
+> > > >>pthread_create.c:301
+> > > >>#9  0x00000035cace8b6d in clone () at
+> > > >>../sysdeps/unix/sysv/linux/x86_64/clone.S:115
+> > > >>Thread 1 (Thread 0x7f8e2ab06740 (LWP 7385)):
+> > > >>#0  0x00000035cb00822d in pthread_join (threadid=140248569890560,
+> > > >>thread_return=0x0) at pthread_join.c:89
+> > > >>#1  0x000000000040088f in main ()
+> > > >>
+> > > >>
+> > > >>--
+> > > >>Eugene Ivanov
+> > > >>
+> > > >>
+> > > >>________________________________
+> > > >>
+> > > >>This e-mail is confidential and may contain legally privileged
+> > > >>information.
+> > > >>It is intended only for the addressees. If you have received this
+> > > >>e-mail in
+> > > >>error, kindly notify us immediately by telephone or e-mail and delete
+> > > >>the
+> > > >>message from your system.
+> > > >>
+> > > >>_______________________________________________
+> > > >>lttng-dev mailing list
+> > > >>lttng-dev@lists.lttng.org
+> > > >>http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > > >>
+> > > 
+> > > --
+> > > Eugene Ivanov
+> > > 
+> > > 
+> > > ________________________________
+> > > 
+> > > This e-mail is confidential and may contain legally privileged
+> > > information. It is intended only for the addressees. If you have
+> > > received this e-mail in error, kindly notify us immediately by telephone
+> > > or e-mail and delete the message from your system.
+> > > 
+> 
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
