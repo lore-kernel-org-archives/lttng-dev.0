@@ -1,21 +1,17 @@
-From: Chidhu R <chid1989@gmail.com>
-Subject: Re: Trace to console
-Date: Thu, 23 Apr 2015 12:01:43 -0700
-Message-ID: <CAL1ZhOOavOfBXOqJ1hxD-WSV+FTMRX_AZ-vT0vsC0QfYYbgShA__18179.4828888544$1429815863$gmane$org@mail.gmail.com>
-References: <CAL1ZhONFm1+bXP_j4X=kUKnsQFaqTqdVTY-Cc_uY4Ni-Ok-LiQ@mail.gmail.com>
- <CA+jJMxvroXRJuEtHgdJiCP7Y4HWK32RqNSyk6+ubqeQ3xH7i9A@mail.gmail.com>
- <CAL1ZhOO=w0rCAcEf5StxWe1tk95Vy-L9WVwxjbSxQXKO7L0BEw@mail.gmail.com>
- <CAL1ZhOPtw4iPv0tiEtd4uMjt1sRFFdYSztNDGywD-kLDO-v-hg@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [BUG] lttng-sessiond
+Date: Thu, 23 Apr 2015 19:26:40 +0000 (UTC)
+Message-ID: <1230298824.35208.1429817200877.JavaMail.zimbra__25381.5153883354$1429817269$gmane$org@efficios.com>
+References: <3E06425C-5C41-4BF7-8156-A62C4E9B5E60@mailbox.tu-dresden.de>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1747841269=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-la0-f43.google.com ([209.85.215.43])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <chid1989@gmail.com>) id 1YlMOM-0000SP-0d
- for lttng-dev@lists.lttng.org; Thu, 23 Apr 2015 15:02:38 -0400
-Received: by lagv1 with SMTP id v1so19640263lag.3
- for <lttng-dev@lists.lttng.org>; Thu, 23 Apr 2015 12:02:24 -0700 (PDT)
-In-Reply-To: <CAL1ZhOPtw4iPv0tiEtd4uMjt1sRFFdYSztNDGywD-kLDO-v-hg@mail.gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1YlMlo-0000af-WE
+ for lttng-dev@lists.lttng.org; Thu, 23 Apr 2015 15:26:47 -0400
+In-Reply-To: <3E06425C-5C41-4BF7-8156-A62C4E9B5E60@mailbox.tu-dresden.de>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,153 +20,139 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Hannes Weisbach <hannes.weisbach@mailbox.tu-dresden.de>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1747841269==
-Content-Type: multipart/alternative; boundary=001a11c235dc88ca72051468eb9f
+----- Original Message -----
+> Hello,
+> 
+> I'm using LTTng with a kernel that has lock debugging enabled.  I
+> familiarized myself with LTTng using the "Hello world" example, where
+> I encountered two bugs.
 
---001a11c235dc88ca72051468eb9f
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Hi Hannes,
 
-Ok. I will try the live mode. Looks like it will solve the purpose.
+Can you share with us the code of your "hello" probe ?
 
-On Thu, Apr 23, 2015 at 11:58 AM, Chidhu R <chid1989@gmail.com> wrote:
+Which version or git commit of lttng-modules are you
+using ?
 
-> Also, is there a way to redirect all tracepoints to console instead of
-> selective?
->
-> On Thu, Apr 23, 2015 at 11:14 AM, Chidhu R <chid1989@gmail.com> wrote:
->
->> Thanks Jeremie.
->>
->> On Tue, Apr 21, 2015 at 5:27 PM, J=C3=A9r=C3=A9mie Galarneau <
->> jeremie.galarneau@efficios.com> wrote:
->>
->>> Hi Chidhu,
->>>
->>> LTTng does not support selective output of tracepoints to the console.
->>> The closest thing I can recommend is using the "live" mode locally.
->>>
->>> J=C3=A9r=C3=A9mie
->>>
->>> On Mon, Apr 20, 2015 at 3:58 PM, Chidhu R <chid1989@gmail.com> wrote:
->>> > Hello,
->>> >
->>> > I was looking for a way to trace to console rather than save to disk =
-/
->>> > stream. I read about lttng tracef feature. But it does not include th=
-e
->>> wide
->>> > range of benefits brought by tracepoints. So what I want is to use th=
-e
->>> > tracepoints and trace to console instead. For example, if there are 5
->>> > tracepoint events, I want to trace 3 of them to console and let the
->>> other go
->>> > the disk or whatever. How to achieve this.
->>> >
->>> > Thanks
->>> > Chid
->>> >
->>> > _______________________________________________
->>> > lttng-dev mailing list
->>> > lttng-dev@lists.lttng.org
->>> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>> >
->>>
->>>
->>>
->>> --
->>> J=C3=A9r=C3=A9mie Galarneau
->>> EfficiOS Inc.
->>> http://www.efficios.com
->>>
->>
->>
->
+Thanks,
 
---001a11c235dc88ca72051468eb9f
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Mathieu
 
-<div dir=3D"ltr">Ok. I will try the live mode. Looks like it will solve the=
- purpose.=C2=A0</div><div class=3D"gmail_extra"><br><div class=3D"gmail_quo=
-te">On Thu, Apr 23, 2015 at 11:58 AM, Chidhu R <span dir=3D"ltr">&lt;<a hre=
-f=3D"mailto:chid1989@gmail.com" target=3D"_blank">chid1989@gmail.com</a>&gt=
-;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 =
-.8ex;border-left:1px #ccc solid;padding-left:1ex"><div dir=3D"ltr">Also, is=
- there a way to redirect all tracepoints to console instead of selective?</=
-div><div class=3D"HOEnZb"><div class=3D"h5"><div class=3D"gmail_extra"><br>=
-<div class=3D"gmail_quote">On Thu, Apr 23, 2015 at 11:14 AM, Chidhu R <span=
- dir=3D"ltr">&lt;<a href=3D"mailto:chid1989@gmail.com" target=3D"_blank">ch=
-id1989@gmail.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote"=
- style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><d=
-iv dir=3D"ltr">Thanks Jeremie.</div><div><div><div class=3D"gmail_extra"><b=
-r><div class=3D"gmail_quote">On Tue, Apr 21, 2015 at 5:27 PM, J=C3=A9r=C3=
-=A9mie Galarneau <span dir=3D"ltr">&lt;<a href=3D"mailto:jeremie.galarneau@=
-efficios.com" target=3D"_blank">jeremie.galarneau@efficios.com</a>&gt;</spa=
-n> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;b=
-order-left:1px #ccc solid;padding-left:1ex">Hi Chidhu,<br>
-<br>
-LTTng does not support selective output of tracepoints to the console.<br>
-The closest thing I can recommend is using the &quot;live&quot; mode locall=
-y.<br>
-<br>
-J=C3=A9r=C3=A9mie<br>
-<div><div><br>
-On Mon, Apr 20, 2015 at 3:58 PM, Chidhu R &lt;<a href=3D"mailto:chid1989@gm=
-ail.com" target=3D"_blank">chid1989@gmail.com</a>&gt; wrote:<br>
-&gt; Hello,<br>
-&gt;<br>
-&gt; I was looking for a way to trace to console rather than save to disk /=
-<br>
-&gt; stream. I read about lttng tracef feature. But it does not include the=
- wide<br>
-&gt; range of benefits brought by tracepoints. So what I want is to use the=
-<br>
-&gt; tracepoints and trace to console instead. For example, if there are 5<=
-br>
-&gt; tracepoint events, I want to trace 3 of them to console and let the ot=
-her go<br>
-&gt; the disk or whatever. How to achieve this.<br>
-&gt;<br>
-&gt; Thanks<br>
-&gt; Chid<br>
-&gt;<br>
-</div></div>&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
-ev@lists.lttng.org</a><br>
-&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
-target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
-</a><br>
-&gt;<br>
-<span><font color=3D"#888888"><br>
-<br>
-<br>
---<br>
-J=C3=A9r=C3=A9mie Galarneau<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
-om</a><br>
-</font></span></blockquote></div><br></div>
-</div></div></blockquote></div><br></div>
-</div></div></blockquote></div><br></div>
+> 
+> 1) Using multiple probes for the lttng-sessiond arguments
+> --kmod-probes and --extra-kmod-probes does not work:
+> 
+> $ sudo lttng-sessiond --kmod-probes="hello,sched" -vvv
+> [...]
+> DEBUG1 - 11:54:22.413830 [17827/17827]: Modprobe successfully
+> lttng-probe-sched (in modprobe_lttng() at modprobe.c:285)
+> sh: 1: Syntax error: "(" unexpected
+> DEBUG1 - 11:54:22.415273 [17827/17827]: Unable to load optional module
+> (null); continuing (in modprobe_lttng() at modprobe.c:281)
+> [...]
+> 
+> $ sudo lttng-sessiond --kmod-probes="sched,hello" -vvv
+> [...]
+> DEBUG1 - 11:55:13.879976 [17896/17896]: Modprobe successfully
+> lttng-probe-hello (in modprobe_lttng() at modprobe.c:285)
+> sh: 1: Syntax error: "(" unexpected
+> DEBUG1 - 11:55:13.881183 [17896/17896]: Unable to load optional module
+> (null); continuing (in modprobe_lttng() at modprobe.c:281)
+> [...]
+> 
+> $ sudo lttng-sessiond --extra-kmod-probes="sched,hello" -vvv
+> [...]
+> DEBUG1 - 11:55:54.244515 [17966/17966]: Modprobe successfully
+> lttng-probe-hello (in modprobe_lttng() at modprobe.c:285)
+> sh: 1: Syntax error: "(" unexpected
+> DEBUG1 - 11:55:54.245758 [17966/17966]: Unable to load optional module
+> (null); continuing (in modprobe_lttng() at modprobe.c:281)
+> [...]
+> 
+> It seems, only the last argument (module) is loaded correctly.
+> 
+> 2) Having lttng-sessiond started:
+> $ sudo lttng-sessiond --kmod-probes=hello
+> And the tracer configured:
+> lttng create
+> lttng enable-event hello_world -k
+> 
+> 'lttng start' causes a locking failure to be reported:
+> [  159.783420]
+> [  159.783922] =====================================
+> [  159.784067] [ BUG: bad unlock balance detected! ]
+> [  159.784067] 4.0.0-rc4-atlas+ #200 Tainted: G           O
+> [  159.784067] -------------------------------------
+> [  159.784067] lttng-sessiond/1441 is trying to release lock (sessions_mutex)
+> at:
+> [  159.784067] [<ffffffff81808c3e>] mutex_unlock+0xe/0x10
+> [  159.784067] but there are no more locks to release!
+> [  159.784067]
+> [  159.784067] other info that might help us debug this:
+> [  159.784067] no locks held by lttng-sessiond/1441.
+> [  159.784067]
+> [  159.784067] stack backtrace:
+> [  159.784067] CPU: 0 PID: 1441 Comm: lttng-sessiond Tainted: G           O
+> 4.0.0-rc4-atlas+ #200
+> [  159.784067] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> Bochs 01/01/2011
+> [  159.784067]  ffffffff81808c3e ffff88005d24fa28 ffffffff818029e0
+> 0000000000000007
+> [  159.784067]  ffff880057c9cd60 ffff88005d24fa58 ffffffff810c1924
+> ffff88005d24fad8
+> [  159.784067]  ffff880057c9cd60 ffffffffa01ce070 ffffffff81808c3e
+> ffff88005d24fa98
+> [  159.784067] Call Trace:
+> [  159.784067]  [<ffffffff81808c3e>] ? mutex_unlock+0xe/0x10
+> [  159.784067]  [<ffffffff818029e0>] dump_stack+0x4c/0x65
+> [  159.784067]  [<ffffffff810c1924>] print_unlock_imbalance_bug+0xf4/0x100
+> [  159.784067]  [<ffffffff81808c3e>] ? mutex_unlock+0xe/0x10
+> [  159.784067]  [<ffffffff810c6986>] lock_release+0x2e6/0x460
+> [  159.784067]  [<ffffffff81808b16>] __mutex_unlock_slowpath+0x76/0x190
+> [  159.784067]  [<ffffffff81808c3e>] mutex_unlock+0xe/0x10
+> [  159.784067]  [<ffffffffa00bcc98>] lttng_session_enable+0x208/0x5b0
+> [lttng_tracer]
+> [  159.784067]  [<ffffffffa00bdd75>] lttng_session_ioctl+0x155/0x300
+> [lttng_tracer]
+> [  159.784067]  [<ffffffff810c3a80>] ? __lock_acquire+0x570/0x1f60
+> [  159.784067]  [<ffffffff8109d095>] ? sched_clock_local+0x25/0x90
+> [  159.784067]  [<ffffffff811d41c7>] ? do_wp_page+0x3a7/0x900
+> [  159.784067]  [<ffffffff8109d2d8>] ? sched_clock_cpu+0x98/0xc0
+> [  159.784067]  [<ffffffff8109d355>] ? local_clock+0x15/0x30
+> [  159.784067]  [<ffffffff8109d095>] ? sched_clock_local+0x25/0x90
+> [  159.784067]  [<ffffffff811d41c7>] ? do_wp_page+0x3a7/0x900
+> [  159.784067]  [<ffffffff810c3a80>] ? __lock_acquire+0x570/0x1f60
+> [  159.784067]  [<ffffffff811d41c7>] ? do_wp_page+0x3a7/0x900
+> [  159.784067]  [<ffffffff811d5820>] ? handle_mm_fault+0x310/0x18b0
+> [  159.784067]  [<ffffffff8109d095>] ? sched_clock_local+0x25/0x90
+> [  159.784067]  [<ffffffff8109d095>] ? sched_clock_local+0x25/0x90
+> [  159.784067]  [<ffffffff81248e41>] ? __fget+0x111/0x260
+> [  159.784067]  [<ffffffff8109d2d8>] ? sched_clock_cpu+0x98/0xc0
+> [  159.784067]  [<ffffffff8109d355>] ? local_clock+0x15/0x30
+> [  159.784067]  [<ffffffff81248e41>] ? __fget+0x111/0x260
+> [  159.784067]  [<ffffffff8123c998>] do_vfs_ioctl+0x308/0x560
+> [  159.784067]  [<ffffffff81248d35>] ? __fget+0x5/0x260
+> [  159.784067]  [<ffffffff8104f201>] ? __do_page_fault+0x1f1/0x4c0
+> [  159.784067]  [<ffffffff8123cc71>] SyS_ioctl+0x81/0xa0
+> [  159.784067]  [<ffffffff8180cfb6>] system_call_fastpath+0x16/0x1b
+> 
+> I hope this helps.
+> 
+> --
+> Best regards,
+> Hannes
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
 
---001a11c235dc88ca72051468eb9f--
-
-
---===============1747841269==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1747841269==--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
