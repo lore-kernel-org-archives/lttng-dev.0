@@ -1,17 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [BUG] lttng-sessiond
-Date: Thu, 23 Apr 2015 19:26:40 +0000 (UTC)
-Message-ID: <1230298824.35208.1429817200877.JavaMail.zimbra__25381.5153883354$1429817269$gmane$org@efficios.com>
-References: <3E06425C-5C41-4BF7-8156-A62C4E9B5E60@mailbox.tu-dresden.de>
+Subject: Re: DEBUG_RCU vs RCU_DEBUG
+Date: Thu, 23 Apr 2015 19:44:40 +0000 (UTC)
+Message-ID: <1338447584.35237.1429818280158.JavaMail.zimbra__2377.28503202579$1429818353$gmane$org@efficios.com>
+References: <5534B3CA.6030306@free.fr>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1YlMlo-0000af-WE
- for lttng-dev@lists.lttng.org; Thu, 23 Apr 2015 15:26:47 -0400
-In-Reply-To: <3E06425C-5C41-4BF7-8156-A62C4E9B5E60@mailbox.tu-dresden.de>
+ (envelope-from <compudj@efficios.com>) id 1YlN3E-0000hv-5r
+ for lttng-dev@lists.lttng.org; Thu, 23 Apr 2015 15:44:46 -0400
+In-Reply-To: <5534B3CA.6030306@free.fr>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,131 +20,28 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Hannes Weisbach <hannes.weisbach@mailbox.tu-dresden.de>
+To: Duncan Sands <duncan.sands@deepbluecap.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 ----- Original Message -----
-> Hello,
-> 
-> I'm using LTTng with a kernel that has lock debugging enabled.  I
-> familiarized myself with LTTng using the "Hello world" example, where
-> I encountered two bugs.
+> I noticed that urcu-qsbr.h checks for RCU_DEBUG being defined while the rest
+> of
+> userspace-rcu (0.8.6) checks DEBUG_RCU.  Is this a mistake or a cunning plan?
 
-Hi Hannes,
+Good catch! Even urcu/static/urcu-qsbr.h has a ifdef based on
+DEBUG_RCU.
 
-Can you share with us the code of your "hello" probe ?
+Will rename the urcu-qsbr.[ch] RCU_DEBUG to DEBUG_RCU, and I will
+define RCU_DEBUG if DEBUG_RCU is defined in qsbr (for backward compat).
+Fixes pushed into master, stable-0.8 and stable-0.7.
 
-Which version or git commit of lttng-modules are you
-using ?
-
-Thanks,
+Thanks!
 
 Mathieu
 
 > 
-> 1) Using multiple probes for the lttng-sessiond arguments
-> --kmod-probes and --extra-kmod-probes does not work:
-> 
-> $ sudo lttng-sessiond --kmod-probes="hello,sched" -vvv
-> [...]
-> DEBUG1 - 11:54:22.413830 [17827/17827]: Modprobe successfully
-> lttng-probe-sched (in modprobe_lttng() at modprobe.c:285)
-> sh: 1: Syntax error: "(" unexpected
-> DEBUG1 - 11:54:22.415273 [17827/17827]: Unable to load optional module
-> (null); continuing (in modprobe_lttng() at modprobe.c:281)
-> [...]
-> 
-> $ sudo lttng-sessiond --kmod-probes="sched,hello" -vvv
-> [...]
-> DEBUG1 - 11:55:13.879976 [17896/17896]: Modprobe successfully
-> lttng-probe-hello (in modprobe_lttng() at modprobe.c:285)
-> sh: 1: Syntax error: "(" unexpected
-> DEBUG1 - 11:55:13.881183 [17896/17896]: Unable to load optional module
-> (null); continuing (in modprobe_lttng() at modprobe.c:281)
-> [...]
-> 
-> $ sudo lttng-sessiond --extra-kmod-probes="sched,hello" -vvv
-> [...]
-> DEBUG1 - 11:55:54.244515 [17966/17966]: Modprobe successfully
-> lttng-probe-hello (in modprobe_lttng() at modprobe.c:285)
-> sh: 1: Syntax error: "(" unexpected
-> DEBUG1 - 11:55:54.245758 [17966/17966]: Unable to load optional module
-> (null); continuing (in modprobe_lttng() at modprobe.c:281)
-> [...]
-> 
-> It seems, only the last argument (module) is loaded correctly.
-> 
-> 2) Having lttng-sessiond started:
-> $ sudo lttng-sessiond --kmod-probes=hello
-> And the tracer configured:
-> lttng create
-> lttng enable-event hello_world -k
-> 
-> 'lttng start' causes a locking failure to be reported:
-> [  159.783420]
-> [  159.783922] =====================================
-> [  159.784067] [ BUG: bad unlock balance detected! ]
-> [  159.784067] 4.0.0-rc4-atlas+ #200 Tainted: G           O
-> [  159.784067] -------------------------------------
-> [  159.784067] lttng-sessiond/1441 is trying to release lock (sessions_mutex)
-> at:
-> [  159.784067] [<ffffffff81808c3e>] mutex_unlock+0xe/0x10
-> [  159.784067] but there are no more locks to release!
-> [  159.784067]
-> [  159.784067] other info that might help us debug this:
-> [  159.784067] no locks held by lttng-sessiond/1441.
-> [  159.784067]
-> [  159.784067] stack backtrace:
-> [  159.784067] CPU: 0 PID: 1441 Comm: lttng-sessiond Tainted: G           O
-> 4.0.0-rc4-atlas+ #200
-> [  159.784067] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> Bochs 01/01/2011
-> [  159.784067]  ffffffff81808c3e ffff88005d24fa28 ffffffff818029e0
-> 0000000000000007
-> [  159.784067]  ffff880057c9cd60 ffff88005d24fa58 ffffffff810c1924
-> ffff88005d24fad8
-> [  159.784067]  ffff880057c9cd60 ffffffffa01ce070 ffffffff81808c3e
-> ffff88005d24fa98
-> [  159.784067] Call Trace:
-> [  159.784067]  [<ffffffff81808c3e>] ? mutex_unlock+0xe/0x10
-> [  159.784067]  [<ffffffff818029e0>] dump_stack+0x4c/0x65
-> [  159.784067]  [<ffffffff810c1924>] print_unlock_imbalance_bug+0xf4/0x100
-> [  159.784067]  [<ffffffff81808c3e>] ? mutex_unlock+0xe/0x10
-> [  159.784067]  [<ffffffff810c6986>] lock_release+0x2e6/0x460
-> [  159.784067]  [<ffffffff81808b16>] __mutex_unlock_slowpath+0x76/0x190
-> [  159.784067]  [<ffffffff81808c3e>] mutex_unlock+0xe/0x10
-> [  159.784067]  [<ffffffffa00bcc98>] lttng_session_enable+0x208/0x5b0
-> [lttng_tracer]
-> [  159.784067]  [<ffffffffa00bdd75>] lttng_session_ioctl+0x155/0x300
-> [lttng_tracer]
-> [  159.784067]  [<ffffffff810c3a80>] ? __lock_acquire+0x570/0x1f60
-> [  159.784067]  [<ffffffff8109d095>] ? sched_clock_local+0x25/0x90
-> [  159.784067]  [<ffffffff811d41c7>] ? do_wp_page+0x3a7/0x900
-> [  159.784067]  [<ffffffff8109d2d8>] ? sched_clock_cpu+0x98/0xc0
-> [  159.784067]  [<ffffffff8109d355>] ? local_clock+0x15/0x30
-> [  159.784067]  [<ffffffff8109d095>] ? sched_clock_local+0x25/0x90
-> [  159.784067]  [<ffffffff811d41c7>] ? do_wp_page+0x3a7/0x900
-> [  159.784067]  [<ffffffff810c3a80>] ? __lock_acquire+0x570/0x1f60
-> [  159.784067]  [<ffffffff811d41c7>] ? do_wp_page+0x3a7/0x900
-> [  159.784067]  [<ffffffff811d5820>] ? handle_mm_fault+0x310/0x18b0
-> [  159.784067]  [<ffffffff8109d095>] ? sched_clock_local+0x25/0x90
-> [  159.784067]  [<ffffffff8109d095>] ? sched_clock_local+0x25/0x90
-> [  159.784067]  [<ffffffff81248e41>] ? __fget+0x111/0x260
-> [  159.784067]  [<ffffffff8109d2d8>] ? sched_clock_cpu+0x98/0xc0
-> [  159.784067]  [<ffffffff8109d355>] ? local_clock+0x15/0x30
-> [  159.784067]  [<ffffffff81248e41>] ? __fget+0x111/0x260
-> [  159.784067]  [<ffffffff8123c998>] do_vfs_ioctl+0x308/0x560
-> [  159.784067]  [<ffffffff81248d35>] ? __fget+0x5/0x260
-> [  159.784067]  [<ffffffff8104f201>] ? __do_page_fault+0x1f1/0x4c0
-> [  159.784067]  [<ffffffff8123cc71>] SyS_ioctl+0x81/0xa0
-> [  159.784067]  [<ffffffff8180cfb6>] system_call_fastpath+0x16/0x1b
-> 
-> I hope this helps.
-> 
-> --
-> Best regards,
-> Hannes
+> Ciao, Duncan.
 > 
 > _______________________________________________
 > lttng-dev mailing list
