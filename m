@@ -1,85 +1,35 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: lttng-modules build error against linux
-	3.18.x	longterm kernels
-Date: Thu, 23 Apr 2015 21:29:48 +0000 (UTC)
-Message-ID: <36268991.35303.1429824588031.JavaMail.zimbra__44679.3925053955$1429824656$gmane$org@efficios.com>
-References: <CAEYzJUH27pYhSZmFEeaCQ7deeH75+GhjrVjdGN6dnyG+DyQhXA@mail.gmail.com>
- <CAEYzJUGL6Q_o=zESuhhszBKGUCYrTwxBp32xppicQLZa6a4nVg@mail.gmail.com>
+Subject: LTTng modules kernels supported now 2.6.36 to 4.0+
+Date: Thu, 23 Apr 2015 22:29:10 +0000 (UTC)
+Message-ID: <1097020830.35320.1429828150828.JavaMail.zimbra@efficios.com>
+References: <126421825.35307.1429827688665.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1YlOh2-0001Jh-Dg
- for lttng-dev@lists.lttng.org; Thu, 23 Apr 2015 17:30:03 -0400
-In-Reply-To: <CAEYzJUGL6Q_o=zESuhhszBKGUCYrTwxBp32xppicQLZa6a4nVg@mail.gmail.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?Q?Bj=C3=B8rn?= Forsman <bjorn.forsman@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-kernel-owner@vger.kernel.org>
+In-Reply-To: <126421825.35307.1429827688665.JavaMail.zimbra@efficios.com>
+Sender: linux-kernel-owner@vger.kernel.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: LKML <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IE9uIDI2IE1hcmNoIDIwMTUgYXQgMjM6MTEs
-IEJqw7hybiBGb3JzbWFuIDxiam9ybi5mb3JzbWFuQGdtYWlsLmNvbT4gd3JvdGU6Cj4gPiBIaSBh
-bGwsCj4gPgo+ID4gKEknbSBub3Qgc3Vic2NyaWJlZCwgcGxlYXNlIENDIG1lLikKPiA+Cj4gPiBC
-dWlsZCBlcnJvciBzbmlwcGV0Ogo+ID4KPiA+IFsuLi5dCj4gPiAgQ0MgW01dCj4gPiAgL3RtcC9u
-aXgtYnVpbGQtbHR0bmctbW9kdWxlcy0yLjYuMC01LWcxYjJhNTQyLTMuMTguMTAuZHJ2LTAvbHR0
-bmctbW9kdWxlcy0xYjJhNTQyL3Byb2Jlcy9sdHRuZy1wcm9iZS1pcnEubwo+ID4gIENDIFtNXQo+
-ID4gIC90bXAvbml4LWJ1aWxkLWx0dG5nLW1vZHVsZXMtMi42LjAtNS1nMWIyYTU0Mi0zLjE4LjEw
-LmRydi0wL2x0dG5nLW1vZHVsZXMtMWIyYTU0Mi9wcm9iZXMvbHR0bmctcHJvYmUtdGltZXIubwo+
-ID4gIENDIFtNXQo+ID4gIC90bXAvbml4LWJ1aWxkLWx0dG5nLW1vZHVsZXMtMi42LjAtNS1nMWIy
-YTU0Mi0zLjE4LjEwLmRydi0wL2x0dG5nLW1vZHVsZXMtMWIyYTU0Mi9wcm9iZXMvbHR0bmctcHJv
-YmUta21lbS5vCj4gPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20KPiA+IC90bXAvbml4LWJ1aWxkLWx0
-dG5nLW1vZHVsZXMtMi42LjAtNS1nMWIyYTU0Mi0zLjE4LjEwLmRydi0wL2x0dG5nLW1vZHVsZXMt
-MWIyYTU0Mi9wcm9iZXMvLi4vaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9sdHRuZy1tb2R1bGUvLi4v
-Li4vLi4vcHJvYmVzL2RlZmluZV90cmFjZS5oOjEzNjowLAo+ID4gICAgICAgICAgICAgICAgIGZy
-b20KPiA+IC90bXAvbml4LWJ1aWxkLWx0dG5nLW1vZHVsZXMtMi42LjAtNS1nMWIyYTU0Mi0zLjE4
-LjEwLmRydi0wL2x0dG5nLW1vZHVsZXMtMWIyYTU0Mi9wcm9iZXMvLi4vaW5zdHJ1bWVudGF0aW9u
-L2V2ZW50cy9sdHRuZy1tb2R1bGUva21lbS5oOjQ2NiwKPiA+ICAgICAgICAgICAgICAgICBmcm9t
-Cj4gPiAvdG1wL25peC1idWlsZC1sdHRuZy1tb2R1bGVzLTIuNi4wLTUtZzFiMmE1NDItMy4xOC4x
-MC5kcnYtMC9sdHRuZy1tb2R1bGVzLTFiMmE1NDIvcHJvYmVzL2x0dG5nLXByb2JlLWttZW0uYzo0
-MjoKPiA+IC90bXAvbml4LWJ1aWxkLWx0dG5nLW1vZHVsZXMtMi42LjAtNS1nMWIyYTU0Mi0zLjE4
-LjEwLmRydi0wL2x0dG5nLW1vZHVsZXMtMWIyYTU0Mi9wcm9iZXMvLi4vaW5zdHJ1bWVudGF0aW9u
-L2V2ZW50cy9sdHRuZy1tb2R1bGUvLi4vLi4vLi4vcHJvYmVzL2x0dG5nLWV2ZW50cy5oOjE4MDo2
-Ogo+ID4gZXJyb3I6IGNvbmZsaWN0aW5nIHR5cGVzIGZvciAndHJhY2VfbW1fcGFnZV9hbGxvY19l
-eHRmcmFnJwo+ID4gdm9pZCB0cmFjZV8jI19uYW1lKF9wcm90byk7Cj4gPiAgICAgIF4KPiA+IC90
-bXAvbml4LWJ1aWxkLWx0dG5nLW1vZHVsZXMtMi42LjAtNS1nMWIyYTU0Mi0zLjE4LjEwLmRydi0w
-L2x0dG5nLW1vZHVsZXMtMWIyYTU0Mi9wcm9iZXMvLi4vaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9s
-dHRuZy1tb2R1bGUvLi4vLi4vLi4vcHJvYmVzL2x0dG5nLWV2ZW50cy5oOjQ3OjI6Cj4gPiBub3Rl
-OiBpbiBleHBhbnNpb24gb2YgbWFjcm8gJ0xUVE5HX1RSQUNFUE9JTlRfRVZFTlRfSU5TVEFOQ0Vf
-TUFQJwo+ID4gIExUVE5HX1RSQUNFUE9JTlRfRVZFTlRfSU5TVEFOQ0VfTUFQKG1hcCwgbmFtZSwg
-bWFwLCBQQVJBTVMocHJvdG8pLAo+ID4gUEFSQU1TKGFyZ3MpKQo+ID4gWy4uLl0KPiA+Cj4gPiBC
-dWlsZCByZXN1bHRzIGZyb20gdGhlIE5peE9TIGJ1aWxkIHNlcnZlclsxXSAod2hpY2ggY29udGFp
-bnMgZnVsbAo+ID4gbG9ncykgc2VlbXMgdG8gaW5kaWNhdGUgdGhhdCB0aGlzIGJyZWFrYWdlIHN0
-YXJ0ZWQgd2l0aCB0aGUgbGludXgKPiA+IDMuMTguOSAtPiAzLjE4LjEwIHRyYW5zaXRpb24uIFNp
-bXVsdGFuZW91c2x5LCBsdHRuZy1tb2R1bGVzIHdhcwo+ID4gdXBkYXRlZCAyLjYuMC1yYzEgLT4g
-Mi42LjAtNS1nMWIyYTU0MiAobGF0ZXN0IG9uIHN0YWJsZS0yLjYgYnJhbmNoKSwKPiA+IGJ1dCBJ
-IGd1ZXNzL2hvcGUgdGhhdCdzIG5vdCB0aGUgcmVhc29uIGZvciB0aGUgZXJyb3IgOi0pCj4gPgo+
-ID4gWzFdOgo+ID4gaHR0cDovL2h5ZHJhLm5peG9zLm9yZy9qb2Ivbml4b3MvdHJ1bmstY29tYmlu
-ZWQvbml4cGtncy5saW51eFBhY2thZ2VzXzNfMTgubHR0bmctbW9kdWxlcy5pNjg2LWxpbnV4Cj4g
-Cj4gU28gYXBwYXJhbnRseSB0aGlzIGlzIGZpeGVkIGluIG1hc3RlcjoKPiBodHRwOi8vbGlzdHMu
-bHR0bmcub3JnL3BpcGVybWFpbC9sdHRuZy1kZXYvMjAxNS1BcHJpbC8wMjQzOTUuaHRtbAo+IAo+
-IEFyZSB5b3UgcGxhbm5pbmcgdG8gYmFja3BvcnQgdGhlIGZpeCB0byBzdGFibGUtMi42PyBBbmQg
-cG9zc2libHkgbWFrZQo+IGEgcmVsZWFzZT8gKFNwZWFraW5nIGFzIGEgZGlzdHJvIHBhY2thZ2Vy
-IGhlcmUuKQoKSXQgYXBwZWFycyB0byBiZSBhbHJlYWR5IGJhY2twb3J0ZWQgdG8gc3RhYmxlLTIu
-NiAoYnVpbGRzIGZpbmUgaGVyZQphZ2FpbnN0IDMuMTguMTApLgoKSSdkIHZlcnkgbXVjaCBsaWtl
-IHRvIGRvIGEgcmVsZWFzZSwgYnV0IEknbSBjdXJyZW50bHkgYXdhaXRpbmcKZmVlZGJhY2sgZnJv
-bSBEZWJpYW4gYWJvdXQgYW4gaW5jb21wYXRpYmxlIGNoYW5nZSB0aGV5IHNsaXBwZWQKaW50byB0
-aGVpciAzLjE2LjctY2t0OS0yIGRpc3RybyBrZXJuZWwsIGZvciB3aGljaCBJIGRvbid0IGhhdmUg
-dGhlIGluZm8KdG8gZGlzdGluZ3Vpc2ggYmV0d2VlbiB1cHN0cmVhbSAzLjE2LjcgYW5kIERlYmlh
-biAzLjE2LjcuCgpPbmNlIHdlIGdldCB0aGlzIHJlc29sdmVkLCBJJ2xsIGxvb2sgaW50byBkb2lu
-ZyBhIHJlbGVhc2UuCgpUaGFua3MhCgpNYXRoaWV1Cgo+IAo+IEJlc3QgcmVnYXJkcywKPiBCasO4
-cm4gRm9yc21hbgo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
-Zy1kZXYKPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cu
-ZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
-cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Hi,
+
+We have updated the LTTng modules readme files to
+document that kernels below 2.6.36 are not supported
+anymore. Linux 2.6.36 was released back in October
+2010, so supporting roughly 5 years of kernel versions
+seems to be enough. There was previously partial support
+in older LTTng modules versions for kernels 2.6.32 to
+2.6.35 with a few patches needed.
+
+If this is a major inconvenience, please let us know.
+
+Thanks!
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
