@@ -1,20 +1,25 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [BUG] lttng-sessiond
-Date: Fri, 24 Apr 2015 18:32:15 +0000 (UTC)
-Message-ID: <480136718.35882.1429900335415.JavaMail.zimbra__6011.8991452784$1429900399$gmane$org@efficios.com>
-References: <3E06425C-5C41-4BF7-8156-A62C4E9B5E60@mailbox.tu-dresden.de>
- <1230298824.35208.1429817200877.JavaMail.zimbra@efficios.com>
- <1795330554.35257.1429820009277.JavaMail.zimbra@efficios.com>
- <DE838679-50E7-464E-B47B-934EF31813A9@mailbox.tu-dresden.de>
+From: Jon Bernard <jbernard@debian.org>
+Subject: Re: Debian 3.16.7-ckt9-2 issue with lttng-modules kmem
+	probe
+Date: Fri, 24 Apr 2015 15:40:45 -0400
+Message-ID: <20150424194045.GA18076__13927.8605966412$1429904519$gmane$org@helmut>
+References: <1082981755.35270.1429823095435.JavaMail.zimbra@efficios.com>
+ <844104542.35292.1429823245769.JavaMail.zimbra@efficios.com>
+ <20150424165935.GA5843@helmut>
+ <1563471161.35791.1429897556370.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from out4-smtp.messagingengine.com ([66.111.4.28])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1YliOi-0007xW-3v
- for lttng-dev@lists.lttng.org; Fri, 24 Apr 2015 14:32:21 -0400
-In-Reply-To: <DE838679-50E7-464E-B47B-934EF31813A9@mailbox.tu-dresden.de>
+ (envelope-from <jbernard@debian.org>) id 1YljSw-0008JE-O0
+ for lttng-dev@lists.lttng.org; Fri, 24 Apr 2015 15:40:50 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+ by mailout.nyi.internal (Postfix) with ESMTP id 9844720B4D
+ for <lttng-dev@lists.lttng.org>; Fri, 24 Apr 2015 15:40:46 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <1563471161.35791.1429897556370.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,91 +28,49 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Hannes Weisbach <hannes.weisbach@mailbox.tu-dresden.de>
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Alexandre Montplaisir <alexmonthy@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+IEhlbGxvLAo+IAo+ID4+IENhbiB5b3Ugc2hh
-cmUgd2l0aCB1cyB0aGUgY29kZSBvZiB5b3VyICJoZWxsbyIgcHJvYmUgPwo+IEkgdXNlZCB0aGUg
-ZXhhbXBsZSBjb2RlIGZyb20KPiBodHRwOi8vbHR0bmcub3JnL2RvY3MvI2RvYy1pbnN0cnVtZW50
-aW5nLWxpbnV4LWtlcm5lbC1pdHNlbGYgLgo+IAo+ID4+IFdoaWNoIHZlcnNpb24gb3IgZ2l0IGNv
-bW1pdCBvZiBsdHRuZy1tb2R1bGVzIGFyZSB5b3UKPiA+PiB1c2luZyA/Cj4gSSB1c2VkIHRoZSBj
-dXJyZW50IG1hc3RlciBvZiB0aGUgZ2l0aHViIG1pcnJvcnMsIHNwZWNpZmljYWxseToKPiBsdHRu
-Zy10b29sczogOTRmZmIwNWQ2Nzc3ZWZjMGM0MDM5NGQzZGY0NGEwNGZlZWQ5Mjk1Mwo+IGx0dG5n
-LW1vZHVsZXM6IGQwNTU4ZGUyOWNhNTE2ZTgzYjM4OGI4MDI4NjUxZjhiNjkyODhlNGUKPiBsdHRu
-Zy11c3Q6IDRiYzFjY2Q3MjExMTQ2OTFjNmYwZGJkNjUzMzViM2M0M2M5Zjg5NWYKPiAKPiA+IEkg
-dGhpbmsgdGhlIHR3byBpc3N1ZXMgc2hvdWxkIGJlIGZpeGVkIGJ5IHRoaXMgbmV3Cj4gPiBnaXQg
-Y29tbWl0IGluIGx0dG5nLW1vZHVsZXMgbWFzdGVyIGJyYW5jaDoKPiA+IAo+ID4gY29tbWl0IDY2
-ZmQ4ZDVlNGE2MDgwZjFiMmRiMGY1MjVjMjZjMDdlNWI3MjNhYWIKPiA+IEF1dGhvcjogTWF0aGll
-dSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiA+IERhdGU6ICAg
-VGh1IEFwciAyMyAxNjoxMToxNSAyMDE1IC0wNDAwCj4gPiAKPiA+ICAgIEZpeDogZG91YmxlLXVu
-bG9jayBvZiBzZXNzaW9uIG11dGV4Cj4gPiAKPiA+ICAgIFNpZ25lZC1vZmYtYnk6IE1hdGhpZXUg
-RGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gPiAKPiA+IENhbiB5
-b3UgZ2l2ZSBpdCBhIHRyeSA/Cj4gWWVzLCB0aGUgbXV0ZXggZXJyb3IgZ29lcyBhd2F5LgoKR29v
-ZCEKCj4gSG93ZXZlciwgbG9hZGluZyBtdWx0aXBsZSBwcm9iZXMgd2l0aAo+IGVpdGhlciAtLWtt
-b2QtcHJvYmVzIG9yIC0tZXh0cmEta21vZC1wcm9iZXMgc3RpbGwgZG9lcyBub3Qgd29yazoKPiAk
-IHN1ZG8gbHR0bmctc2Vzc2lvbmQgLXZ2diAtLWV4dHJhLWttb2QtcHJvYmVzPXNjaGVkLG5hcGkK
-PiBbLi4uXQo+IERFQlVHMSAtIDExOjQyOjE4LjQ5Mjg3MCBbNTM1OC81MzU4XTogTW9kcHJvYmUg
-c3VjY2Vzc2Z1bGx5IGx0dG5nLXByb2JlLW5hcGkKPiAoaW4gbW9kcHJvYmVfbHR0bmcoKSBhdCBt
-b2Rwcm9iZS5jOjI4NSkKPiBzaDogMTogU3ludGF4IGVycm9yOiAiKCIgdW5leHBlY3RlZAo+IERF
-QlVHMSAtIDExOjQyOjE4LjQ5NTAzNyBbNTM1OC81MzU4XTogVW5hYmxlIHRvIGxvYWQgb3B0aW9u
-YWwgbW9kdWxlIChudWxsKTsKPiBjb250aW51aW5nIChpbiBtb2Rwcm9iZV9sdHRuZygpIGF0IG1v
-ZHByb2JlLmM6MjgxKQo+IFsuLi5dCgpXaHkgZG8geW91IG5lZWQgdG8gbG9hZCB0aG9zZSBleHBs
-aWNpdGx5ID8gVGhleSBzaG91bGQgYmUKYWxyZWFkeSBsb2FkZWQgYnkgZGVmYXVsdC4gSSBkb24n
-dCBnZXQgdGhvc2UgZXJyb3JzIGhlcmUuCldoaWNoIHNoZWxsIGFyZSB5b3UgdXNpbmcgKHNoIHN5
-bWxpbmspID8gQ2FuIHlvdSByZXByb2R1Y2UKdXNpbmcgYmFzaCA/Cgo+IAo+IEFsc28sIGx0dG5n
-LXByb2JlLXJlZ21hcCBkb2VzIG5vdCBjb21waWxlLCBidXQgdGhhdCBtaWdodCBoYXZlIHRvIGRv
-Cj4gd2l0aCBteSBrZXJuZWwgdmVyc2lvbiBvZiA0LjAuMC1yYzQgKGNvbW1pdAo+IGIzMTRhY2Fj
-Y2Q3ZTBkNTUzMTRkOTZiZTRhMzNiNWY1MGQwYjMzNDQgZnJvbQo+IGh0dHBzOi8vZ2l0aHViLmNv
-bS90b3J2YWxkcy9saW51eCk6Cj4gCj4gbHR0bmctbW9kdWxlcyQgbWFrZSBLRVJORUxESVI9L3Vz
-ci9zcmMvbGludXgtNC4wLjAtcmM0LWF0bGFzKwo+IG1ha2UgLUMgL3Vzci9zcmMvbGludXgtNC4w
-LjAtcmM0LWF0bGFzKwo+IE09L2hvbWUvaGFubmVzd2Vpc2JhY2gvYXRsYXMvbHR0bmctbW9kdWxl
-cyBtb2R1bGVzCj4gbWFrZVsxXTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvdXNyL3NyYy9saW51eC00
-LjAuMC1yYzQtYXRsYXMrJwo+ICAgQ0MgW01dCj4gICAvaG9tZS9oYW5uZXN3ZWlzYmFjaC9hdGxh
-cy9sdHRuZy1tb2R1bGVzL3Byb2Jlcy9sdHRuZy1wcm9iZS1yZWdtYXAubwo+IEluIGZpbGUgaW5j
-bHVkZWQgZnJvbQo+IC9ob21lL2hhbm5lc3dlaXNiYWNoL2F0bGFzL2x0dG5nLW1vZHVsZXMvcHJv
-YmVzLy4uL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxlLy4uLy4uLy4uL3Byb2Jl
-cy9kZWZpbmVfdHJhY2UuaDoxMDA6MCwKPiAgICAgICAgICAgICAgICAgIGZyb20KPiAgICAgICAg
-ICAgICAgICAgIC9ob21lL2hhbm5lc3dlaXNiYWNoL2F0bGFzL2x0dG5nLW1vZHVsZXMvcHJvYmVz
-Ly4uL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxlL3JlZ21hcC5oOjI3OCwKPiAg
-ICAgICAgICAgICAgICAgIGZyb20KPiAgICAgICAgICAgICAgICAgIC9ob21lL2hhbm5lc3dlaXNi
-YWNoL2F0bGFzL2x0dG5nLW1vZHVsZXMvcHJvYmVzL2x0dG5nLXByb2JlLXJlZ21hcC5jOjQxOgo+
-IC9ob21lL2hhbm5lc3dlaXNiYWNoL2F0bGFzL2x0dG5nLW1vZHVsZXMvcHJvYmVzLy4uL2luc3Ry
-dW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxlLy4uLy4uLy4uL3Byb2Jlcy9sdHRuZy1ldmVu
-dHMuaDoxMzQ6NjoKPiBlcnJvcjogY29uZmxpY3RpbmcgdHlwZXMgZm9yIOKAmHRyYWNlX3JlZ21h
-cF9yZWdfd3JpdGXigJkKPiAgdm9pZCB0cmFjZV8jI19uYW1lKF9wcm90byk7Cj4gICAgICAgXgo+
-IC9ob21lL2hhbm5lc3dlaXNiYWNoL2F0bGFzL2x0dG5nLW1vZHVsZXMvcHJvYmVzLy4uL2luc3Ry
-dW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxlLy4uLy4uLy4uL3Byb2Jlcy9sdHRuZy1ldmVu
-dHMuaDo5OToyOgo+IG5vdGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybyDigJhMVFROR19UUkFDRVBP
-SU5UX0VWRU5UX0lOU1RBTkNFX01BUOKAmQo+ICAgTFRUTkdfVFJBQ0VQT0lOVF9FVkVOVF9JTlNU
-QU5DRV9NQVAodGVtcGxhdGUsIG5hbWUsIG5hbWUsIFBBUkFNUyhwcm90byksCj4gICBQQVJBTVMo
-YXJncykpCj4gICBeCj4gL2hvbWUvaGFubmVzd2Vpc2JhY2gvYXRsYXMvbHR0bmctbW9kdWxlcy9w
-cm9iZXMvLi4vaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9sdHRuZy1tb2R1bGUvLi4vLi4vLi4vcHJv
-YmVzLy4uL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxlL3JlZ21hcC5oOjM0OjE6
-Cj4gbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvIOKAmExUVE5HX1RSQUNFUE9JTlRfRVZFTlRf
-SU5TVEFOQ0XigJkKPiAgTFRUTkdfVFJBQ0VQT0lOVF9FVkVOVF9JTlNUQU5DRShyZWdtYXBfcmVn
-LCByZWdtYXBfcmVnX3dyaXRlLAo+ICBeCj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIGluY2x1ZGUv
-dHJhY2UvZXZlbnRzL3JlZ21hcC5oOjg6MCwKPiAgICAgICAgICAgICAgICAgIGZyb20KPiAgICAg
-ICAgICAgICAgICAgIC9ob21lL2hhbm5lc3dlaXNiYWNoL2F0bGFzL2x0dG5nLW1vZHVsZXMvcHJv
-YmVzL2x0dG5nLXByb2JlLXJlZ21hcC5jOjMyOgo+IGluY2x1ZGUvbGludXgvdHJhY2Vwb2ludC5o
-OjE2OToyMTogbm90ZTogcHJldmlvdXMgZGVmaW5pdGlvbiBvZgo+IOKAmHRyYWNlX3JlZ21hcF9y
-ZWdfd3JpdGXigJkgd2FzIGhlcmUKPiAgIHN0YXRpYyBpbmxpbmUgdm9pZCB0cmFjZV8jI25hbWUo
-cHJvdG8pICAgIFwKPiAgICAgICAgICAgICAgICAgICAgICBeCj4gaW5jbHVkZS9saW51eC90cmFj
-ZXBvaW50Lmg6MzI1OjM6IG5vdGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybwo+IOKAmF9fREVDTEFS
-RV9UUkFDReKAmQo+ICAgIF9fREVDTEFSRV9UUkFDRShuYW1lLCBQQVJBTVMocHJvdG8pLCBQQVJB
-TVMoYXJncyksIDEsIFwKPiAgICBeCj4gaW5jbHVkZS9saW51eC90cmFjZXBvaW50Lmg6NDQ4OjI6
-IG5vdGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybyDigJhERUNMQVJFX1RSQUNF4oCZCj4gICBERUNM
-QVJFX1RSQUNFKG5hbWUsIFBBUkFNUyhwcm90byksIFBBUkFNUyhhcmdzKSkKPiAgIF4KPiBpbmNs
-dWRlL3RyYWNlL2V2ZW50cy9yZWdtYXAuaDo0MDoxOiBub3RlOiBpbiBleHBhbnNpb24gb2YgbWFj
-cm8KPiDigJhERUZJTkVfRVZFTlTigJkKPiAgREVGSU5FX0VWRU5UKHJlZ21hcF9yZWcsIHJlZ21h
-cF9yZWdfd3JpdGUsCj4gIF4KPiAKPiBbIGFuZCBzbyBvbiwgYW5kIHNvIG9uIOKApiBdCj4gCj4g
-U2luY2UgSSBkb24ndCBuZWVkIHRoZSByZWdtYXAgcHJvYmUgSSBzaW1wbHkgZGlzYWJsZWQgaXQg
-aW4KPiBwcm9iZXMvTWFrZWZpbGUuICBVbmZvcnR1bmF0ZWx5LCBJIGRvbid0IGhhdmUgdGltZSB0
-byBkZWJ1ZyBpdCBteXNlbGYuCj4gSWYgeW91IHdhbnQgbWUgdG8gdHJ5IGFub3RoZXIgdmVyc2lv
-biwgbGV0IG1lIGtub3cuCgpGb3IgcmVnbWFwLCB5b3UnbGwgaGF2ZSB0byB0cnkgd2l0aCBMaW51
-eCA0LjAgZmluYWwsIGl0IHdvcmtzIGhlcmUuCgpUaGFua3MsCgpNYXRoaWV1Cgo+IAo+IEJlc3Qg
-cmVnYXJkcywKPiBIYW5uZXMKPiAKPiAKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJ
-bmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0
-cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
-Zm8vbHR0bmctZGV2Cg==
+* Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> ----- Original Message -----
+> > * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+> > > Hi Jon,
+> > > 
+> > > It appears that lttng-modules cannot build on the
+> > > Debian kernel 3.16.0-4-amd64 #1 SMP Debian 3.16.7-ckt9-2 (2015-04-13)
+> > > x86_64 GNU/Linux.
+> > > 
+> > > It appears that their exported kmem.h header differs from
+> > > the upstream stable branch, but AFAIK there is no Debian-specific
+> > > version number available to distinguish between upstream stable
+> > > and the Debian kernel.
+> > 
+> > Indeed.  The only distinguishing characteristic I see is EXTRAVERSION
+> > defined to '-ckt9'.  I haven't had a chance to try yet, but could that
+> > be acceptable?
+> 
+> No, because we need to do conditionals comparing numeric values
+> both in Makefiles and within C.
+> 
+> > 
+> > > We have been hit by this in the past for Ubuntu kernels, and the
+> > > solution has been to introduce a UTS_UBUNTU_RELEASE_ABI define
+> > > into their kernels, which can be used to follow their own kernel
+> > > versions.
+> > > 
+> > > Do you think we could ask Debian to do the same ?
+> > 
+> > I'm happy to ask, the argument is certainly sound.
+> 
+> Thanks!
+
+No problem, bug filed: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=783259
+
+There may be a workaround I can put into the debian package as
+a short term fix, maybe a conditional patch depending on those differing
+3.16 versions.  We'll see how the bug progresses and I'll keep you
+posted.
+
+-- 
+Jon
