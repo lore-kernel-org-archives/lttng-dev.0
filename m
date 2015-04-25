@@ -1,25 +1,22 @@
-From: Jon Bernard <jbernard@debian.org>
-Subject: Re: Debian 3.16.7-ckt9-2 issue with lttng-modules kmem
-	probe
-Date: Fri, 24 Apr 2015 15:40:45 -0400
-Message-ID: <20150424194045.GA18076__13927.8605966412$1429904519$gmane$org@helmut>
-References: <1082981755.35270.1429823095435.JavaMail.zimbra@efficios.com>
- <844104542.35292.1429823245769.JavaMail.zimbra@efficios.com>
- <20150424165935.GA5843@helmut>
- <1563471161.35791.1429897556370.JavaMail.zimbra@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [BUG] lttng-sessiond
+Date: Sat, 25 Apr 2015 15:37:25 +0000 (UTC)
+Message-ID: <196643977.36058.1429976245491.JavaMail.zimbra__12652.4064610296$1429976305$gmane$org@efficios.com>
+References: <3E06425C-5C41-4BF7-8156-A62C4E9B5E60@mailbox.tu-dresden.de>
+ <1230298824.35208.1429817200877.JavaMail.zimbra@efficios.com>
+ <1795330554.35257.1429820009277.JavaMail.zimbra@efficios.com>
+ <DE838679-50E7-464E-B47B-934EF31813A9@mailbox.tu-dresden.de>
+ <480136718.35882.1429900335415.JavaMail.zimbra@efficios.com>
+ <9E6E6DE2-E219-4F79-9687-BE7A45910C34@mailbox.tu-dresden.de>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out4-smtp.messagingengine.com ([66.111.4.28])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jbernard@debian.org>) id 1YljSw-0008JE-O0
- for lttng-dev@lists.lttng.org; Fri, 24 Apr 2015 15:40:50 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
- by mailout.nyi.internal (Postfix) with ESMTP id 9844720B4D
- for <lttng-dev@lists.lttng.org>; Fri, 24 Apr 2015 15:40:46 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <1563471161.35791.1429897556370.JavaMail.zimbra@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1Ym291-0005nU-R1
+ for lttng-dev@lists.lttng.org; Sat, 25 Apr 2015 11:37:28 -0400
+In-Reply-To: <9E6E6DE2-E219-4F79-9687-BE7A45910C34@mailbox.tu-dresden.de>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -28,49 +25,41 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Alexandre Montplaisir <alexmonthy@efficios.com>
+To: Hannes Weisbach <hannes.weisbach@mailbox.tu-dresden.de>, philippe proulx <philippe.proulx@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> ----- Original Message -----
-> > * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> > > Hi Jon,
-> > > 
-> > > It appears that lttng-modules cannot build on the
-> > > Debian kernel 3.16.0-4-amd64 #1 SMP Debian 3.16.7-ckt9-2 (2015-04-13)
-> > > x86_64 GNU/Linux.
-> > > 
-> > > It appears that their exported kmem.h header differs from
-> > > the upstream stable branch, but AFAIK there is no Debian-specific
-> > > version number available to distinguish between upstream stable
-> > > and the Debian kernel.
+----- Original Message -----
 > > 
-> > Indeed.  The only distinguishing characteristic I see is EXTRAVERSION
-> > defined to '-ckt9'.  I haven't had a chance to try yet, but could that
-> > be acceptable?
+> > Why do you need to load those explicitly ? They should be
+> > already loaded by default. I don't get those errors here.
+> > Which shell are you using (sh symlink) ? Can you reproduce
+> > using bash ?
+> Ok.  Found the bug.  In append_list_to_probes() index is used to get
+> the current index into the probes array.  However in the loop, index
+> is never incremented.  Therefore, the first entry of probes is
+> overwritten, but nr_probes is incremented, and later those "empty"
+> entries are referenced.
 > 
-> No, because we need to do conditionals comparing numeric values
-> both in Makefiles and within C.
-> 
-> > 
-> > > We have been hit by this in the past for Ubuntu kernels, and the
-> > > solution has been to introduce a UTS_UBUNTU_RELEASE_ABI define
-> > > into their kernels, which can be used to follow their own kernel
-> > > versions.
-> > > 
-> > > Do you think we could ask Debian to do the same ?
-> > 
-> > I'm happy to ask, the argument is certainly sound.
-> 
-> Thanks!
+> There is also a memory leak in append_list_to_probes():
+>  
+> tmp_list = strdup(list); // uses malloc()
+> next = strtok(tmp_list, ","); // tmp_list needs to be NULL except in the
+> first iteration
+> tmp_list = NULL; // so set it NULL
+> free(tmp_list); // good intention, does not work.
 
-No problem, bug filed: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=783259
+Thanks for spotting those issues! I'm CCing the
+author of this code.
 
-There may be a workaround I can put into the debian package as
-a short term fix, maybe a conditional patch depending on those differing
-3.16 versions.  We'll see how the bug progresses and I'll keep you
-posted.
+Mathieu
+
+> 
+> Best regards,
+> Hannes
+> 
 
 -- 
-Jon
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
