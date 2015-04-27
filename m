@@ -1,27 +1,24 @@
-From: Jon Bernard <jbernard@debian.org>
-Subject: Re: Debian 3.16.7-ckt9-2 issue with lttng-modules kmem
- probe
-Date: Mon, 27 Apr 2015 11:25:11 -0400
-Message-ID: <20150427152511.GA20948__16614.6256299273$1430148374$gmane$org@helmut>
-References: <1082981755.35270.1429823095435.JavaMail.zimbra@efficios.com>
- <844104542.35292.1429823245769.JavaMail.zimbra@efficios.com>
- <20150424165935.GA5843@helmut>
- <1563471161.35791.1429897556370.JavaMail.zimbra@efficios.com>
- <20150424194045.GA18076@helmut> <20150427143532.GA21372@helmut>
- <198139162.36696.1430147217813.JavaMail.zimbra@efficios.com>
-Mime-Version: 1.0
+From: Michael Haberler <mail17@mah.priv.at>
+Subject: Re: introduction  & usage of LTTNG in machinekit
+Date: Mon, 27 Apr 2015 22:41:05 +0200
+Message-ID: <AC8E2872-A806-4F43-A1E1-0E077697979D__12631.7450115041$1430167330$gmane$org@mah.priv.at>
+References: <887B7027-5FE6-4D13-B35A-7DCBD785DC57@mah.priv.at>
+ <711173584.2718642.1427481342189.JavaMail.zimbra@polymtl.ca>
+ <8187A8CE-F16D-4CDE-B969-380DE308A8D5@mah.priv.at>
+ <826926538.3126946.1427639461728.JavaMail.zimbra@polymtl.ca>
+ <76BAB974-2B32-469C-82AD-4D5630AFA28E@mah.priv.at>
+ <381678352.13569741.1430055111345.JavaMail.zimbra@polymtl.ca>
+ <A0DF7795-1940-45E4-A12B-ED0D340883D4@mah.priv.at>
+ <1024078202.13732013.1430137815501.JavaMail.zimbra@polymtl.ca>
+Mime-Version: 1.0 (Mac OS X Mail 8.2 \(2098\))
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from out1-smtp.messagingengine.com ([66.111.4.25])
+Received: from mah2.mah.priv.at ([86.59.12.251] helo=mah.priv.at)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jbernard@debian.org>) id 1YmkuG-0003R2-BN
- for lttng-dev@lists.lttng.org; Mon, 27 Apr 2015 11:25:13 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
- by mailout.nyi.internal (Postfix) with ESMTP id 2D6A520B07
- for <lttng-dev@lists.lttng.org>; Mon, 27 Apr 2015 11:25:12 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <198139162.36696.1430147217813.JavaMail.zimbra@efficios.com>
+ (envelope-from <mail17@mah.priv.at>) id 1Ymppy-0004wa-Rj
+ for lttng-dev@lists.lttng.org; Mon, 27 Apr 2015 16:41:08 -0400
+In-Reply-To: <1024078202.13732013.1430137815501.JavaMail.zimbra@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -30,82 +27,55 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Alexandre Montplaisir <alexmonthy@efficios.com>
+To: Michel Dagenais <michel.dagenais@polymtl.ca>
+Cc: =?utf-8?Q?Rafa=C3=ABl_Blanchet-Lecomte?= <rafael.blanchet-lecomte@polymtl.ca>, lttng-dev@lists.lttng.org, =?utf-8?Q?Alexander_R=C3=B6ssler?= <mail@roessler.systems>
 List-Id: lttng-dev@lists.lttng.org
 
-* Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> ----- Original Message -----
-> > * Jon Bernard <jbernard@debian.org> wrote:
-> > > * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> > > > ----- Original Message -----
-> > > > > * Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> > > > > > Hi Jon,
-> > > > > > 
-> > > > > > It appears that lttng-modules cannot build on the
-> > > > > > Debian kernel 3.16.0-4-amd64 #1 SMP Debian 3.16.7-ckt9-2 (2015-04-13)
-> > > > > > x86_64 GNU/Linux.
-> > > > > > 
-> > > > > > It appears that their exported kmem.h header differs from
-> > > > > > the upstream stable branch, but AFAIK there is no Debian-specific
-> > > > > > version number available to distinguish between upstream stable
-> > > > > > and the Debian kernel.
-> > > > > 
-> > > > > Indeed.  The only distinguishing characteristic I see is EXTRAVERSION
-> > > > > defined to '-ckt9'.  I haven't had a chance to try yet, but could that
-> > > > > be acceptable?
-> > > > 
-> > > > No, because we need to do conditionals comparing numeric values
-> > > > both in Makefiles and within C.
-> > > > 
-> > > > > 
-> > > > > > We have been hit by this in the past for Ubuntu kernels, and the
-> > > > > > solution has been to introduce a UTS_UBUNTU_RELEASE_ABI define
-> > > > > > into their kernels, which can be used to follow their own kernel
-> > > > > > versions.
-> > > > > > 
-> > > > > > Do you think we could ask Debian to do the same ?
-> > > > > 
-> > > > > I'm happy to ask, the argument is certainly sound.
-> > > > 
-> > > > Thanks!
-> > > 
-> > > No problem, bug filed:
-> > > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=783259
-> > > 
-> > > There may be a workaround I can put into the debian package as
-> > > a short term fix, maybe a conditional patch depending on those differing
-> > > 3.16 versions.  We'll see how the bug progresses and I'll keep you
-> > > posted.
-> > 
-> > Right, so I'll take a look at making a package update to resolve the
-> > issue and get that into the stable archive so that lttng is again
-> > working in the new release.
-> > 
-> > Sorry about this, it didn't occur to me that an API change would happen
-> > and so I didn't continue testing 3.16 updates.  I'll get this sorted.
-> 
-> Surprise surprise! The fixes are pushed upstream in master and stable-2.6.
-> 
-> commit ffc696db884c44a49780bcd9e3b0f97ef82d2382
-> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Date:   Mon Apr 27 11:03:17 2015 -0400
-> 
->     Fix: update get_pfnblock_flags_mask wrapper for debian kernels
->     
->     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> 
-> commit 72e6c528aad2cdd1152af21258a5f84870155b41
-> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Date:   Mon Apr 27 10:57:34 2015 -0400
-> 
->     Fix: discover Debian API
->     
->     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> 
-> Enjoy :)
 
-Great, thank you,
+> Am 27.04.2015 um 14:30 schrieb Michel Dagenais <michel.dagenais@polymtl.ca>:
+> 
+> 
+>> That said, the folks which have timing problems have not caught on yet.. it
+>> looks some more guidance, examples and a bit of a machinekit-specific
+>> writeup is needed, competing with the other 247 priority projects on my desk
+>> ;)
+> 
+> If we can reproduce easily the problems, bad latency on Linux Prempt-RT in a specific configuration, we can take care of tracing and diagnosing the problems. Otherwise, the users will have to activate the tracing themselves on their setup and we can guide them for the diagnosis. 
 
--- 
-Jon
+The problem at hand has these characteristics:
+
+- it happens only on low-end ARM platforms
+- the code is part of the trajectory planner, which involves fp and transcendental functions
+- the code is executed from a period Xenomai thread and once in a while execution time exceeds the cycle time budget
+- no interrupts, system call, or Xenomai API call is involved, so kernel or ipipe tracing will not help to narrow it down
+
+my idea was to insert trace points in the tp code and one triggered on 'time window exceeded' so one could look backwards in history to determine which span of code used excessive time; does this sound reasonable?
+
+Alex (in cc) has a test case which reproducibly triggers the problem
+
+> 
+>> Let me add a question out of the blue: I've read the literature on observing
+>> time and distributed systems and am aware of the theoretical issues, as well
+>> as clock synchronisation. Still - has any thought been given to merge traces
+>> of several systems based on synchronisation points (known causality),
+>> well-synchronized  clocks, or other forms of hardware synchronisation?
+> 
+> I suppose that you mean something like this which we offer in TraceCompass:
+> 
+> http://archive.eclipse.org/tracecompass/doc/org.eclipse.tracecompass.doc.user/Trace-synchronization.html
+> 
+> We have two use cases supported already, distributed systems exchanging packets through TCP and physical / virtual machines communicating through vmenter / exit and tracepoints on both sides of those transitions. This framework can easily be extended to other cases. We could in the future make it available declaratively (define event types and unique identifiers that should be used to match causality-related events).
+
+That's pretty impressive. I'll try to reproduce an example and think through how this could fit into what we're doing.
+
+Background is - we're getting more into supporting fieldbus-connected components, some of which might run our code, so distributed tracing would become an option
+
+with CANbus in particular, an open question is if driving a remote motion controller is within the range of bus throughput; ballpark - no, but there are some drives which have quite intelligent features and it might work. If not, it would help to know where we loose out, and up to which rates it would still work.
+
+It would good to have such a tool at hand, and the developers aware of it, and how to use it. I could actually see a use case for mixed software tracing and hardware-visible events, like from a logic analyzer.
+
+The other area where I could find use for such a capability is UI/server interaction (could it be there might be much wider interest for this than just me?)
+
+Those is a more 'researchy' applications than the one above though. That one we need to nail.
+
+- Michael
