@@ -1,19 +1,24 @@
-From: Zifei Tong <zifeitong@gmail.com>
-Subject: Re: [PATCH] Fix: multiple definition error with gcc 5.1
-Date: Mon, 27 Apr 2015 23:39:20 +0200
-Message-ID: <CAJ7wx-Eze7hKh3ZTcxDTREois10BjoQ_118W2W8k4vUQd0bOSg__16624.011231079$1430170847$gmane$org@mail.gmail.com>
-References: <1430170305-26566-1-git-send-email-zifeitong@gmail.com>
+From: Michel Dagenais <michel.dagenais@polymtl.ca>
+Subject: Re: introduction  & usage of LTTNG in machinekit
+Date: Mon, 27 Apr 2015 17:40:31 -0400 (EDT)
+Message-ID: <1701154511.14233563.1430170831219.JavaMail.zimbra__17956.7144172781$1430170877$gmane$org@polymtl.ca>
+References: <887B7027-5FE6-4D13-B35A-7DCBD785DC57@mah.priv.at>
+ <8187A8CE-F16D-4CDE-B969-380DE308A8D5@mah.priv.at>
+ <826926538.3126946.1427639461728.JavaMail.zimbra@polymtl.ca>
+ <76BAB974-2B32-469C-82AD-4D5630AFA28E@mah.priv.at>
+ <381678352.13569741.1430055111345.JavaMail.zimbra@polymtl.ca>
+ <A0DF7795-1940-45E4-A12B-ED0D340883D4@mah.priv.at>
+ <1024078202.13732013.1430137815501.JavaMail.zimbra@polymtl.ca>
+ <AC8E2872-A806-4F43-A1E1-0E077697979D@mah.priv.at>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-oi0-f42.google.com ([209.85.218.42])
+Received: from smtp.polymtl.ca ([132.207.4.11])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <soariez@gmail.com>) id 1Ymql4-0005Gj-1g
- for lttng-dev@lists.lttng.org; Mon, 27 Apr 2015 17:40:07 -0400
-Received: by oiko83 with SMTP id o83so101171308oik.1
- for <lttng-dev@lists.lttng.org>; Mon, 27 Apr 2015 14:40:00 -0700 (PDT)
-In-Reply-To: <1430170305-26566-1-git-send-email-zifeitong@gmail.com>
+ (envelope-from <michel.dagenais@polymtl.ca>) id 1YmqlV-0005Ii-I2
+ for lttng-dev@lists.lttng.org; Mon, 27 Apr 2015 17:40:34 -0400
+In-Reply-To: <AC8E2872-A806-4F43-A1E1-0E077697979D@mah.priv.at>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,13 +27,48 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Michael Haberler <mail17@mah.priv.at>
+Cc: =?utf-8?Q?Rafa=C3=ABl?= Blanchet-Lecomte <rafael.blanchet-lecomte@polymtl.ca>, lttng-dev@lists.lttng.org, Alexander =?utf-8?Q?R=C3=B6ssler?= <mail@roessler.systems>
 List-Id: lttng-dev@lists.lttng.org
 
-I created a minimal reproducer [1] for the UB if you are interested.
-
-[1]: https://gist.github.com/5kg/7304cf74bc0fe13a9f70
-
-Thanks,
-Zifei Tong
+Cj4gVGhlIHByb2JsZW0gYXQgaGFuZCBoYXMgdGhlc2UgY2hhcmFjdGVyaXN0aWNzOgo+IAo+IC0g
+aXQgaGFwcGVucyBvbmx5IG9uIGxvdy1lbmQgQVJNIHBsYXRmb3Jtcwo+IC0gdGhlIGNvZGUgaXMg
+cGFydCBvZiB0aGUgdHJhamVjdG9yeSBwbGFubmVyLCB3aGljaCBpbnZvbHZlcyBmcCBhbmQKPiB0
+cmFuc2NlbmRlbnRhbCBmdW5jdGlvbnMKPiAtIHRoZSBjb2RlIGlzIGV4ZWN1dGVkIGZyb20gYSBw
+ZXJpb2QgWGVub21haSB0aHJlYWQgYW5kIG9uY2UgaW4gYSB3aGlsZQo+IGV4ZWN1dGlvbiB0aW1l
+IGV4Y2VlZHMgdGhlIGN5Y2xlIHRpbWUgYnVkZ2V0Cj4gLSBubyBpbnRlcnJ1cHRzLCBzeXN0ZW0g
+Y2FsbCwgb3IgWGVub21haSBBUEkgY2FsbCBpcyBpbnZvbHZlZCwgc28ga2VybmVsIG9yCj4gaXBp
+cGUgdHJhY2luZyB3aWxsIG5vdCBoZWxwIHRvIG5hcnJvdyBpdCBkb3duCgpJIHN1cHBvc2UgdGhh
+dCB0aGUgdGltZSBwZXJpb2QgaXMgaW4gdGhlIG9yZGVyIG9mIDEwMHVzIG9yIG1vcmU/Cgo+IG15
+IGlkZWEgd2FzIHRvIGluc2VydCB0cmFjZSBwb2ludHMgaW4gdGhlIHRwIGNvZGUgYW5kIG9uZSB0
+cmlnZ2VyZWQgb24gJ3RpbWUKPiB3aW5kb3cgZXhjZWVkZWQnIHNvIG9uZSBjb3VsZCBsb29rIGJh
+Y2t3YXJkcyBpbiBoaXN0b3J5IHRvIGRldGVybWluZSB3aGljaAo+IHNwYW4gb2YgY29kZSB1c2Vk
+IGV4Y2Vzc2l2ZSB0aW1lOyBkb2VzIHRoaXMgc291bmQgcmVhc29uYWJsZT8KCkluIG1vc3QgY2Fz
+ZXMgdGhlIHN1cnByaXNlcyBjb21lIGZyb20gaW50ZXJydXB0cyBhbmQgY29tcGV0aXRpb24gZm9y
+IHJlc291cmNlcy4gSWYgZXZlcnl0aGluZyBpcyB3aXRoaW4gdGhlIHRwIGNvZGUsIGluZGVlZCBp
+bnRlcm5hbCB0cmFjZXBvaW50cyB3aWxsIGhlbHAuIElmIHlvdSB3YW50IHRvIGJlIG1vcmUgZmFu
+Y3ksIHRoZXJlIGFyZSBhIGZldyBtb3JlIGNvbXBsaWNhdGVkIG9wdGlvbnMuIFlvdSBjb3VsZCB0
+cmFjZSBpbiAiZmxpZ2h0IHJlY29yZGVyIiBtb2RlLCB3aXRob3V0IHJlY29yZGluZyB0byBkaXNr
+LCBhbmQgdHJpZ2dlciBhIHNuYXBzaG90IG9mIHRoZSBjaXJjdWxhciBidWZmZXIgY29udGVudCBv
+bmx5IHdoZW4gYSBjeWNsZSB0aW1lIGJ1ZGdldCBvdmVyZmxvdyBpcyBkZXRlY3RlZC4gWW91IGNv
+dWxkIGFsc28gaGF2ZSBhIHRpbWVyLCBhcm1lZCBmb3IgdGhlIHRpbWUgd2luZG93IGxpbWl0LCB0
+aGF0IHRyaWdnZXJzIGEgc3RhY2sgZHVtcCBvbiB0aGUgaW50ZXJydXB0ZWQgdGFzayB3aGVuIGZp
+cmVkLgoKPiBBbGV4IChpbiBjYykgaGFzIGEgdGVzdCBjYXNlIHdoaWNoIHJlcHJvZHVjaWJseSB0
+cmlnZ2VycyB0aGUgcHJvYmxlbQoKUmFmYcOrbCB3aWxsIHN0YXJ0IG5leHQgd2Vlay4gVGhhdCB3
+b3VsZCBpbmRlZWQgYmUgYW4gaW50ZXJlc3RpbmcgcHJvYmxlbSBnaXZlbiB0aGF0IGl0IGlzIHJl
+cHJvZHVjaWJsZS4KCgo+IFRoYXQncyBwcmV0dHkgaW1wcmVzc2l2ZS4gSSdsbCB0cnkgdG8gcmVw
+cm9kdWNlIGFuIGV4YW1wbGUgYW5kIHRoaW5rIHRocm91Z2gKPiBob3cgdGhpcyBjb3VsZCBmaXQg
+aW50byB3aGF0IHdlJ3JlIGRvaW5nLgo+IAo+IEJhY2tncm91bmQgaXMgLSB3ZSdyZSBnZXR0aW5n
+IG1vcmUgaW50byBzdXBwb3J0aW5nIGZpZWxkYnVzLWNvbm5lY3RlZAo+IGNvbXBvbmVudHMsIHNv
+bWUgb2Ygd2hpY2ggbWlnaHQgcnVuIG91ciBjb2RlLCBzbyBkaXN0cmlidXRlZCB0cmFjaW5nIHdv
+dWxkCj4gYmVjb21lIGFuIG9wdGlvbgouLi4KPiBUaGUgb3RoZXIgYXJlYSB3aGVyZSBJIGNvdWxk
+IGZpbmQgdXNlIGZvciBzdWNoIGEgY2FwYWJpbGl0eSBpcyBVSS9zZXJ2ZXIKPiBpbnRlcmFjdGlv
+biAoY291bGQgaXQgYmUgdGhlcmUgbWlnaHQgYmUgbXVjaCB3aWRlciBpbnRlcmVzdCBmb3IgdGhp
+cyB0aGFuCj4ganVzdCBtZT8pCgpJbmRlZWQsIGFzIGxvbmcgYXMgeW91IGNhbiByZWNvcmQgYSB0
+cmFjZSBvbiBlYWNoIG5vZGUgd2l0aCBsb2NhbCB0aW1lc3RhbXBzLCBhbmQgaGF2ZSBldmVudCBw
+YWlycyB3aXRoIGEgY2F1c2FsIHJlbGF0aW9uc2hpcCBpbiBlYWNoIGRpcmVjdGlvbiwgaXQgc2hv
+dWxkIHdvcmsuIFlvdSBicmluZyB0aGUgdHJhY2VzIHRvZ2V0aGVyIGZvciBhbmFseXNpcyBhbmQg
+c3luY2hyb25pemUgdGhlbSB1c2luZyB0aGVzZSBldmVudCBwYWlycy4KCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
+bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
