@@ -1,24 +1,16 @@
 From: Michel Dagenais <michel.dagenais@polymtl.ca>
 Subject: Re: introduction  & usage of LTTNG in machinekit
-Date: Mon, 27 Apr 2015 17:40:31 -0400 (EDT)
-Message-ID: <1701154511.14233563.1430170831219.JavaMail.zimbra__17956.7144172781$1430170877$gmane$org@polymtl.ca>
-References: <887B7027-5FE6-4D13-B35A-7DCBD785DC57@mah.priv.at>
- <8187A8CE-F16D-4CDE-B969-380DE308A8D5@mah.priv.at>
- <826926538.3126946.1427639461728.JavaMail.zimbra@polymtl.ca>
- <76BAB974-2B32-469C-82AD-4D5630AFA28E@mah.priv.at>
- <381678352.13569741.1430055111345.JavaMail.zimbra@polymtl.ca>
- <A0DF7795-1940-45E4-A12B-ED0D340883D4@mah.priv.at>
- <1024078202.13732013.1430137815501.JavaMail.zimbra@polymtl.ca>
- <AC8E2872-A806-4F43-A1E1-0E077697979D@mah.priv.at>
+Date: Mon, 27 Apr 2015 22:00:54 -0400 (EDT)
+Message-ID: <574727031.14339994.1430186454057.JavaMail.zimbra__5369.41426476023$1430186514$gmane$org@polymtl.ca>
+References: <1024078202.13732013.1430137815501.JavaMail.zimbra@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0368616696=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.polymtl.ca ([132.207.4.11])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <michel.dagenais@polymtl.ca>) id 1YmqlV-0005Ii-I2
- for lttng-dev@lists.lttng.org; Mon, 27 Apr 2015 17:40:34 -0400
-In-Reply-To: <AC8E2872-A806-4F43-A1E1-0E077697979D@mah.priv.at>
+ (envelope-from <michel.dagenais@polymtl.ca>) id 1YmupV-0006Wa-Rq
+ for lttng-dev@lists.lttng.org; Mon, 27 Apr 2015 22:00:58 -0400
+In-Reply-To: <1024078202.13732013.1430137815501.JavaMail.zimbra@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -27,48 +19,98 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Haberler <mail17@mah.priv.at>
-Cc: =?utf-8?Q?Rafa=C3=ABl?= Blanchet-Lecomte <rafael.blanchet-lecomte@polymtl.ca>, lttng-dev@lists.lttng.org, Alexander =?utf-8?Q?R=C3=B6ssler?= <mail@roessler.systems>
+To: machinekit@googlegroups.com
+Cc: =?utf-8?Q?Rafa=C3=ABl?= Blanchet-Lecomte <rafael.blanchet-lecomte@polymtl.ca>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Cj4gVGhlIHByb2JsZW0gYXQgaGFuZCBoYXMgdGhlc2UgY2hhcmFjdGVyaXN0aWNzOgo+IAo+IC0g
-aXQgaGFwcGVucyBvbmx5IG9uIGxvdy1lbmQgQVJNIHBsYXRmb3Jtcwo+IC0gdGhlIGNvZGUgaXMg
-cGFydCBvZiB0aGUgdHJhamVjdG9yeSBwbGFubmVyLCB3aGljaCBpbnZvbHZlcyBmcCBhbmQKPiB0
-cmFuc2NlbmRlbnRhbCBmdW5jdGlvbnMKPiAtIHRoZSBjb2RlIGlzIGV4ZWN1dGVkIGZyb20gYSBw
-ZXJpb2QgWGVub21haSB0aHJlYWQgYW5kIG9uY2UgaW4gYSB3aGlsZQo+IGV4ZWN1dGlvbiB0aW1l
-IGV4Y2VlZHMgdGhlIGN5Y2xlIHRpbWUgYnVkZ2V0Cj4gLSBubyBpbnRlcnJ1cHRzLCBzeXN0ZW0g
-Y2FsbCwgb3IgWGVub21haSBBUEkgY2FsbCBpcyBpbnZvbHZlZCwgc28ga2VybmVsIG9yCj4gaXBp
-cGUgdHJhY2luZyB3aWxsIG5vdCBoZWxwIHRvIG5hcnJvdyBpdCBkb3duCgpJIHN1cHBvc2UgdGhh
-dCB0aGUgdGltZSBwZXJpb2QgaXMgaW4gdGhlIG9yZGVyIG9mIDEwMHVzIG9yIG1vcmU/Cgo+IG15
-IGlkZWEgd2FzIHRvIGluc2VydCB0cmFjZSBwb2ludHMgaW4gdGhlIHRwIGNvZGUgYW5kIG9uZSB0
-cmlnZ2VyZWQgb24gJ3RpbWUKPiB3aW5kb3cgZXhjZWVkZWQnIHNvIG9uZSBjb3VsZCBsb29rIGJh
-Y2t3YXJkcyBpbiBoaXN0b3J5IHRvIGRldGVybWluZSB3aGljaAo+IHNwYW4gb2YgY29kZSB1c2Vk
-IGV4Y2Vzc2l2ZSB0aW1lOyBkb2VzIHRoaXMgc291bmQgcmVhc29uYWJsZT8KCkluIG1vc3QgY2Fz
-ZXMgdGhlIHN1cnByaXNlcyBjb21lIGZyb20gaW50ZXJydXB0cyBhbmQgY29tcGV0aXRpb24gZm9y
-IHJlc291cmNlcy4gSWYgZXZlcnl0aGluZyBpcyB3aXRoaW4gdGhlIHRwIGNvZGUsIGluZGVlZCBp
-bnRlcm5hbCB0cmFjZXBvaW50cyB3aWxsIGhlbHAuIElmIHlvdSB3YW50IHRvIGJlIG1vcmUgZmFu
-Y3ksIHRoZXJlIGFyZSBhIGZldyBtb3JlIGNvbXBsaWNhdGVkIG9wdGlvbnMuIFlvdSBjb3VsZCB0
-cmFjZSBpbiAiZmxpZ2h0IHJlY29yZGVyIiBtb2RlLCB3aXRob3V0IHJlY29yZGluZyB0byBkaXNr
-LCBhbmQgdHJpZ2dlciBhIHNuYXBzaG90IG9mIHRoZSBjaXJjdWxhciBidWZmZXIgY29udGVudCBv
-bmx5IHdoZW4gYSBjeWNsZSB0aW1lIGJ1ZGdldCBvdmVyZmxvdyBpcyBkZXRlY3RlZC4gWW91IGNv
-dWxkIGFsc28gaGF2ZSBhIHRpbWVyLCBhcm1lZCBmb3IgdGhlIHRpbWUgd2luZG93IGxpbWl0LCB0
-aGF0IHRyaWdnZXJzIGEgc3RhY2sgZHVtcCBvbiB0aGUgaW50ZXJydXB0ZWQgdGFzayB3aGVuIGZp
-cmVkLgoKPiBBbGV4IChpbiBjYykgaGFzIGEgdGVzdCBjYXNlIHdoaWNoIHJlcHJvZHVjaWJseSB0
-cmlnZ2VycyB0aGUgcHJvYmxlbQoKUmFmYcOrbCB3aWxsIHN0YXJ0IG5leHQgd2Vlay4gVGhhdCB3
-b3VsZCBpbmRlZWQgYmUgYW4gaW50ZXJlc3RpbmcgcHJvYmxlbSBnaXZlbiB0aGF0IGl0IGlzIHJl
-cHJvZHVjaWJsZS4KCgo+IFRoYXQncyBwcmV0dHkgaW1wcmVzc2l2ZS4gSSdsbCB0cnkgdG8gcmVw
-cm9kdWNlIGFuIGV4YW1wbGUgYW5kIHRoaW5rIHRocm91Z2gKPiBob3cgdGhpcyBjb3VsZCBmaXQg
-aW50byB3aGF0IHdlJ3JlIGRvaW5nLgo+IAo+IEJhY2tncm91bmQgaXMgLSB3ZSdyZSBnZXR0aW5n
-IG1vcmUgaW50byBzdXBwb3J0aW5nIGZpZWxkYnVzLWNvbm5lY3RlZAo+IGNvbXBvbmVudHMsIHNv
-bWUgb2Ygd2hpY2ggbWlnaHQgcnVuIG91ciBjb2RlLCBzbyBkaXN0cmlidXRlZCB0cmFjaW5nIHdv
-dWxkCj4gYmVjb21lIGFuIG9wdGlvbgouLi4KPiBUaGUgb3RoZXIgYXJlYSB3aGVyZSBJIGNvdWxk
-IGZpbmQgdXNlIGZvciBzdWNoIGEgY2FwYWJpbGl0eSBpcyBVSS9zZXJ2ZXIKPiBpbnRlcmFjdGlv
-biAoY291bGQgaXQgYmUgdGhlcmUgbWlnaHQgYmUgbXVjaCB3aWRlciBpbnRlcmVzdCBmb3IgdGhp
-cyB0aGFuCj4ganVzdCBtZT8pCgpJbmRlZWQsIGFzIGxvbmcgYXMgeW91IGNhbiByZWNvcmQgYSB0
-cmFjZSBvbiBlYWNoIG5vZGUgd2l0aCBsb2NhbCB0aW1lc3RhbXBzLCBhbmQgaGF2ZSBldmVudCBw
-YWlycyB3aXRoIGEgY2F1c2FsIHJlbGF0aW9uc2hpcCBpbiBlYWNoIGRpcmVjdGlvbiwgaXQgc2hv
-dWxkIHdvcmsuIFlvdSBicmluZyB0aGUgdHJhY2VzIHRvZ2V0aGVyIGZvciBhbmFseXNpcyBhbmQg
-c3luY2hyb25pemUgdGhlbSB1c2luZyB0aGVzZSBldmVudCBwYWlycy4KCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
-bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============0368616696==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_14339993_152467586.1430186454056"
+
+------=_Part_14339993_152467586.1430186454056
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+
+> That said, the folks which have timing problems have not caught on yet.. it 
+> looks some more guidance, examples and a bit of a machinekit-specific 
+> writeup is needed, competing with the other 247 priority projects on my desk 
+> ;) 
+
+Many people interested in MachineKit wonder about the control platform to select, from the most inexpensive (Raspberry PI) with more latency issues to the more expensive (Intel with FPGA card), with many interesting alternatives in between. The big question is always the real-time response for a typical challenging target such as 5 axis servo + spindle (3 phase variable frequency). We have the ability with LTTng to diagnose such real-time problems and thus to properly tune and then evaluate these different solutions. At the same time, it provides a challenging testbed for the LTTng toolchain. Your comments and suggestions on the hardware setup to test are most welcome! 
+
+Here is my current list of popular and interesting hardware that we would like to try out and properly assess this Summer: 
+
+- Raspberry PI 2, low end and most inexpensive. 
+
+- BeagleBone Black and eventually BeagleBoard X15, slightly more expensive but very interesting for control applications with PRUs, PWM and eQEP. 
+
+- Combined ARM and FPGA with Xilinx chips like Zedboards. The Adapteva Parallela board comes with a Xilinx Z-7010 or Z-7020. You get a dual-core A9, and FPGA for custom logic for encoder inputs and PWM or step generation. 
+
+- Intel board (Atom or better, suggestions for model welcome) with parallel port I/O or any of the available FPGA I/O cards. 
+
+Indeed, while some of the platforms may work without additional hardware (BeagleBone or Zedboard), an FPGA board provides a robust and high performance solution. I have a MesaNet 5I20 but the PCI bus is becoming legacy. Many newer models are offered using high speed data connections which are very convenient but not normally relied upon for real-time work (USB and Ethernet). However, given their high speed and with a dedicated link, it may be workable. Again an excellent testbed for the LTTng toolchain and some hardware measurements. We could test: 
+
+- Mesanet 6I24 FPGA PCIe card with 72 GPIO (baseline for low latency) 
+
+- Mesanet 7I80HD FPGA Ethernet with 72GPIO 
+
+- Mesanet 7I61 FPGA USB with 96 GPIO 
+
+
+------=_Part_14339993_152467586.1430186454056
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: times new roman, new york, times, se=
+rif; font-size: 12pt; color: #000000"><div><br>&gt; That said, the folks wh=
+ich have timing problems have not caught on yet.. it<br>&gt; looks some mor=
+e guidance, examples and a bit of a machinekit-specific<br>&gt; writeup is =
+needed, competing with the other 247 priority projects on my desk<br>&gt; ;=
+)<br></div><div><br></div><div>Many people interested in MachineKit wonder =
+about the control platform to select, from the most inexpensive (Raspberry =
+PI) with more latency issues to the more expensive (Intel with FPGA card), =
+with many interesting alternatives in between. The big question is always t=
+he real-time response for a typical challenging target such as 5 axis servo=
+ + spindle (3 phase variable frequency). We have the ability with LTTng to =
+diagnose such real-time problems and thus to properly tune and then evaluat=
+e these different solutions. At the same time, it provides a challenging te=
+stbed for the LTTng toolchain. Your comments and suggestions on the hardwar=
+e setup to test are most welcome!</div><div><br></div><div>Here is my curre=
+nt list of popular and interesting hardware that we would like to try out a=
+nd properly assess this Summer:</div><div><br></div><div>- Raspberry PI 2, =
+low end and most inexpensive.</div><div><br></div><div>- BeagleBone Black a=
+nd eventually BeagleBoard X15, slightly more expensive but very interesting=
+ for control applications with PRUs, PWM and eQEP.</div><div><br></div><div=
+>- Combined ARM and FPGA with Xilinx chips like Zedboards. The Adapteva Par=
+allela board comes with a Xilinx Z-7010 or Z-7020. You get a dual-core A9, =
+and FPGA for custom logic for encoder inputs and PWM or step generation.</d=
+iv><div><br></div><div>- Intel board (Atom or better, suggestions for model=
+ welcome) with parallel port I/O or any of the available FPGA I/O cards.</d=
+iv><div><br></div><div>Indeed, while some of the platforms may work without=
+ additional hardware (BeagleBone or Zedboard), an FPGA board provides a rob=
+ust and high performance solution. I have a MesaNet 5I20 but the PCI bus is=
+ becoming legacy. Many newer models are offered using high speed data conne=
+ctions which are very convenient but not normally relied upon for real-time=
+ work (USB and Ethernet). However, given their high speed and with a dedica=
+ted link, it may be workable. Again an excellent testbed for the LTTng tool=
+chain and some hardware measurements. We could test:</div><div><br></div><d=
+iv>- Mesanet 6I24 FPGA PCIe card with 72 GPIO (baseline for low latency)</d=
+iv><div><br></div><div>- Mesanet &nbsp;7I80HD FPGA Ethernet with 72GPIO</di=
+v><div><br></div><div>- Mesanet 7I61 FPGA USB with 96 GPIO</div><div><br></=
+div></div></body></html>
+------=_Part_14339993_152467586.1430186454056--
+
+
+--===============0368616696==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0368616696==--
