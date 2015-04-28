@@ -1,55 +1,53 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.7.14 and 0.8.7
-Date: Tue, 28 Apr 2015 19:03:32 +0000 (UTC)
-Message-ID: <494761687.39781.1430247812360.JavaMail.zimbra@efficios.com>
-References: <1682718787.39775.1430247648847.JavaMail.zimbra@efficios.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: [PATCH lttng-tools 1/2] Fix: append_list_to_probes():
+	increment index
+Date: Tue, 28 Apr 2015 17:08:58 -0400
+Message-ID: <1430255338-6461-1-git-send-email-eeppeliteloop__22512.2400712737$1430255330$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <1682718787.39775.1430247648847.JavaMail.zimbra@efficios.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Stephen Hemminger <shemminger@vyatta.com>, Alan Stern <stern@rowland.harvard.edu>
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-qc0-f174.google.com ([209.85.216.174])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <eeppeliteloop@gmail.com>) id 1YnCiw-00046I-TX
+ for lttng-dev@lists.lttng.org; Tue, 28 Apr 2015 17:07:32 -0400
+Received: by qcpm10 with SMTP id m10so4129642qcp.3
+ for <lttng-dev@lists.lttng.org>; Tue, 28 Apr 2015 14:07:17 -0700 (PDT)
+Received: from archeepp.internal.efficios.com
+ (cable-192.222.194.238.electronicbox.net. [192.222.194.238])
+ by mx.google.com with ESMTPSA id j93sm13477134qkh.29.2015.04.28.14.07.16
+ for <lttng-dev@lists.lttng.org>
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+ Tue, 28 Apr 2015 14:07:16 -0700 (PDT)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Here are two new releases of userspace RCU for the 0.7 and 0.8
-stable branches currently maintained. Those are bugfix releases.
+Reported-by: Hannes Weisbach <hannes.weisbach@mailbox.tu-dresden.de>
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+---
+ src/bin/lttng-sessiond/modprobe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
-data synchronization library provides read-side access which scales
-linearly with the number of cores. It does so by allowing multiples
-copies of a given data structure to live at the same time, and by
-monitoring the data structure accesses to detect grace periods after
-which memory reclamation is possible.
-
-liburcu-cds provides efficient data structures based on RCU and
-lock-free algorithms. Those structures include hash tables, queues,
-stacks, and doubly-linked lists.
-
-Changelog for Userspace RCU 0.7.14:
-2015-04-28 Userspace RCU 0.7.14
-        * Fix: call rcu should call internal RCU API
-        * Fix: deadlock when thread join is issued in read-side C.S.
-        * Fix: rename RCU_DEBUG to DEBUG_RCU in urcu-qsbr.h
-        * Mark braced-groups within expressions with __extension__
-        * Fix: compat_futex_noasync race condition
-        * Fix: documentation: urcu-pointer.h: s/rcu_dereference_pointer/rcu_dereference/
-        * Fix: silence gcc -Wextra warning
-
-Changelog for Userspace RCU 0.8.7:
-2015-04-28 Userspace RCU 0.8.7
-        * Fix: deadlock when thread join is issued in read-side C.S.
-        * Fix: rename RCU_DEBUG to DEBUG_RCU in urcu-qsbr.h
-        * Mark braced-groups within expressions with __extension__
-        * Fix: compat_futex_noasync race condition
-        * Fix: documentation: urcu-pointer.h: s/rcu_dereference_pointer/rcu_dereference/
-        * Fix: call rcu should call internal RCU API
-
-Project website: http://urcu.so
-Git repository: git://git.urcu.so/urcu.git
-
+diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/modprobe.c
+index a9035da..d730a1d 100644
+--- a/src/bin/lttng-sessiond/modprobe.c
++++ b/src/bin/lttng-sessiond/modprobe.c
+@@ -395,7 +395,7 @@ static int append_list_to_probes(const char *list)
+ 		/* Length 13 is "lttng-probe-" + \0 */
+ 		name_len = strlen(next) + 13;
+ 
+-		cur_mod = &probes[index];
++		cur_mod = &probes[index++];
+ 		cur_mod->name = zmalloc(name_len);
+ 		if (!cur_mod->name) {
+ 			PERROR("malloc probe list");
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.3.0
