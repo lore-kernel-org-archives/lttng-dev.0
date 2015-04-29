@@ -1,19 +1,34 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: set UST register timeout
-	to -1 as test default
-Date: Wed, 29 Apr 2015 11:12:44 -0400
-Message-ID: <CA+jJMxukjRGWk_4hYp-EETiXYpADtzTFzpkjSzJMDoNdqqJSCg__34401.6519179151$1430320478$gmane$org@mail.gmail.com>
-References: <1430230597-25836-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng modules 2.5.4 and 2.6.1
+Date: Wed, 29 Apr 2015 15:17:42 +0000 (UTC)
+Message-ID: <1873773903.40702.1430320662881.JavaMail.zimbra__218.461376107548$1430320760$gmane$org@efficios.com>
+References: <1814803923.40695.1430320559235.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0976130306=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f179.google.com ([209.85.216.179])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1YnTfO-0001Ez-3z
- for lttng-dev@lists.lttng.org; Wed, 29 Apr 2015 11:13:03 -0400
-Received: by qcyk17 with SMTP id k17so14525114qcy.1
- for <lttng-dev@lists.lttng.org>; Wed, 29 Apr 2015 08:12:44 -0700 (PDT)
-In-Reply-To: <1430230597-25836-1-git-send-email-mathieu.desnoyers@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1YnTkB-0001I8-Qy
+ for lttng-dev@lists.lttng.org; Wed, 29 Apr 2015 11:17:58 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id BE12D3402F9
+ for <lttng-dev@lists.lttng.org>; Wed, 29 Apr 2015 15:17:53 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id zH8_fZREB5so for <lttng-dev@lists.lttng.org>;
+ Wed, 29 Apr 2015 15:17:43 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 57AA83403A7
+ for <lttng-dev@lists.lttng.org>; Wed, 29 Apr 2015 15:17:43 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id AV0R_EbGb7zf for <lttng-dev@lists.lttng.org>;
+ Wed, 29 Apr 2015 15:17:43 +0000 (UTC)
+Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
+ by mail.efficios.com (Postfix) with ESMTP id 2F82D340344
+ for <lttng-dev@lists.lttng.org>; Wed, 29 Apr 2015 15:17:43 +0000 (UTC)
+In-Reply-To: <1814803923.40695.1430320559235.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,121 +37,67 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0976130306==
-Content-Type: multipart/alternative; boundary=001a11495a103c3cfd0514de6981
+Those releases cover bugfixes, and support for newer kernels (up
+to 4.0) in the 2.6.1 release.
 
---001a11495a103c3cfd0514de6981
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+The LTTng modules provide Linux kernel tracing capability to the LTTng
+2.x tracer toolset.
 
-Merged in master, 2.6 and 2.5.
+Changelogs:
 
-Thanks!
-J=C3=A9r=C3=A9mie
+2015-04-29 LTTng modules 2.5.4
+        * Fix: mmutrace warnings about redefined macros
+        * Fix: x86 mmutrace event extra field for kernels >= 3.11
+        * Fix: add missing x86 mmutrace kernel header include
+        * Fix: update README file to match reality: kernels >= 2.6.36 are supported
+        * Fix: add struct file_handle forward declaration
+        * Fix: atomic.h wrapper for kernels < 2.6.37
+        * Fix: disable x86 kvm instrumentation for kernels < 2.6.38
+        * Fix: mm_page_alloc_extfrag instrumentation for kernel 3.14.36
+        * Fix: update backported kmem patches to lttng-modules 2.5 API
+        * Fix: kmem instrumentation update for mm_page_alloc_extfrag kernel 3.19.2+
+        * Fix: kmem instrumentation: mm_page_alloc extfrag change_ownership field
 
-On Tue, Apr 28, 2015 at 10:16 AM, Mathieu Desnoyers <
-mathieu.desnoyers@efficios.com> wrote:
+2015-04-29 LTTng modules 2.6.1
+        * Fix: regmap build against kernel 4.0 kernel headers
+        * Fix: mmutrace warnings about redefined macros
+        * Fix: add missing x86 mmutrace kernel header include
+        * Fix: x86 mmutrace event extra field for kernels >= 3.11
+        * Fix: remove execute flag from kvm.h file
+        * Fix: build x86 kvm probes on kernels >= 4.1-rc1
+        * Fix: compilation warnings on 4.1-rc1 kernel
+        * Fix: compilation on 4.1-rc1 kernel, remove unused WB_WORK_REASON
+        * Fix: 4.1-rc1 Linux build and regmap instrumentation
+        * Fix: don't clash with older Debian kernel versions
+        * Fix: update get_pfnblock_flags_mask wrapper for debian kernels
+        * Fix: discover Debian API
+        * Fix: Update README.md to match reality: kernels >= 2.6.36 are supported
+        * Fix: add struct file_handle forward declaration
+        * Fix: atomic.h wrapper for kernels < 2.6.37
+        * Fix: disable x86 kvm instrumentation for kernels < 2.6.38
+        * Fix: check that class and instance prototype match
+        * Fix: lttng-events.h check function takes void
+        * Update regmap instrumentation for Linux 3.19.4 and 4.0
+        * Fix: kernels >= 2.6.33 put utsrelease.h in generated/
+        * Fix: Include utsrelease.h in lttng-kernel-version.h
+        * Fix: old kernels need module.h included before vermagic.h
+        * Fix: version condition in makefile
+        * Implement wrapper around get_pfnblock_flags_mask
+        * Fix: Support 4.x kernel versions in Makefile
+        * Fix: mm_page_alloc_extfrag instrumentation for kernel 3.14.36
+        * Fix: update writeback instrumentation for kernel 4.0+
+        * Fix: compaction mm_compaction_isolate_template update for Linux 4.0+
+        * Fix: kmem instrumentation update for mm_page_alloc_extfrag kernel 3.19.2+
+        * Fix: kmem instrumentation: mm_page_alloc extfrag change_ownership field
 
-> On busy systems, it's possible to spuriously hit the default 3 seconds
-> timeout for UST registration to sessiond, thus causing tests to be flaky
-> on those systems.
->
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
->  tests/utils/utils.sh | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
-> index c3d8bd4..5f86ece 100644
-> --- a/tests/utils/utils.sh
-> +++ b/tests/utils/utils.sh
-> @@ -27,6 +27,11 @@ KERNEL_MAJOR_VERSION=3D2
->  KERNEL_MINOR_VERSION=3D6
->  KERNEL_PATCHLEVEL_VERSION=3D27
->
-> +# We set the default UST register timeout to "wait forever", so that
-> +# basic tests don't have to worry about hitting timeouts on busy
-> +# systems. Specialized tests should test those corner-cases.
-> +export LTTNG_UST_REGISTER_TIMEOUT=3D-1
-> +
->  source $TESTDIR/utils/tap/tap.sh
->
->  function print_ok ()
-> --
-> 2.1.4
->
->
+Project website: http://lttng.org
+Documentation: http://lttng.org/docs
+Download link: http://lttng.org/download
 
-
---=20
-J=C3=A9r=C3=A9mie Galarneau
+-- 
+Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
-
---001a11495a103c3cfd0514de6981
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Merged in master, 2.6 and 2.5.<div><br></div><div>Thanks!<=
-/div><div>J=C3=A9r=C3=A9mie</div></div><div class=3D"gmail_extra"><br><div =
-class=3D"gmail_quote">On Tue, Apr 28, 2015 at 10:16 AM, Mathieu Desnoyers <=
-span dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com" targ=
-et=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;</span> wrote:<br><bloc=
-kquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #cc=
-c solid;padding-left:1ex">On busy systems, it&#39;s possible to spuriously =
-hit the default 3 seconds<br>
-timeout for UST registration to sessiond, thus causing tests to be flaky<br=
->
-on those systems.<br>
-<br>
-Signed-off-by: Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers@ef=
-ficios.com">mathieu.desnoyers@efficios.com</a>&gt;<br>
----<br>
-=C2=A0tests/utils/utils.sh | 5 +++++<br>
-=C2=A01 file changed, 5 insertions(+)<br>
-<br>
-diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh<br>
-index c3d8bd4..5f86ece 100644<br>
---- a/tests/utils/utils.sh<br>
-+++ b/tests/utils/utils.sh<br>
-@@ -27,6 +27,11 @@ KERNEL_MAJOR_VERSION=3D2<br>
-=C2=A0KERNEL_MINOR_VERSION=3D6<br>
-=C2=A0KERNEL_PATCHLEVEL_VERSION=3D27<br>
-<br>
-+# We set the default UST register timeout to &quot;wait forever&quot;, so =
-that<br>
-+# basic tests don&#39;t have to worry about hitting timeouts on busy<br>
-+# systems. Specialized tests should test those corner-cases.<br>
-+export LTTNG_UST_REGISTER_TIMEOUT=3D-1<br>
-+<br>
-=C2=A0source $TESTDIR/utils/tap/tap.sh<br>
-<br>
-=C2=A0function print_ok ()<br>
-<span class=3D"HOEnZb"><font color=3D"#888888">--<br>
-2.1.4<br>
-<br>
-</font></span></blockquote></div><br><br clear=3D"all"><div><br></div>-- <b=
-r><div class=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS In=
-c.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http://www.effi=
-cios.com</a></div>
-</div>
-
---001a11495a103c3cfd0514de6981--
-
-
---===============0976130306==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0976130306==--
