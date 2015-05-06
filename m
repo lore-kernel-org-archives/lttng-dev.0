@@ -1,18 +1,19 @@
 From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Lttng user application tracing
-Date: Tue, 5 May 2015 19:32:42 -0400
-Message-ID: <CA+jJMxt-FcdWRmidAWXP0fHrmY6eX4XJEKukBvNs_YhOaNg=EQ__23289.8747236051$1430868844$gmane$org@mail.gmail.com>
-References: <5548F60C.7000403@bsc.es>
+Subject: Re: [PATCH lttng-tools 1/2] Fix:
+ append_list_to_probes(): increment index
+Date: Wed, 6 May 2015 12:14:08 -0400
+Message-ID: <CA+jJMxtsO65u+fYjfmUfdMLnSNWbCZvgHUOw-KQHUSoi-i2kZw__44067.2174365774$1430928944$gmane$org@mail.gmail.com>
+References: <1430255338-6461-1-git-send-email-eeppeliteloop@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1363106426=="
+Content-Type: multipart/mixed; boundary="===============1712428601=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f181.google.com ([209.85.216.181])
+Received: from mail-qg0-f46.google.com ([209.85.192.46])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1YpmKW-00041m-4T
- for lttng-dev@lists.lttng.org; Tue, 05 May 2015 19:32:57 -0400
-Received: by qctx5 with SMTP id x5so12109422qct.0
- for <lttng-dev@lists.lttng.org>; Tue, 05 May 2015 16:32:42 -0700 (PDT)
-In-Reply-To: <5548F60C.7000403@bsc.es>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Yq1xe-0000eg-Ex
+ for lttng-dev@lists.lttng.org; Wed, 06 May 2015 12:14:24 -0400
+Received: by qgej70 with SMTP id j70so7077309qge.2
+ for <lttng-dev@lists.lttng.org>; Wed, 06 May 2015 09:14:08 -0700 (PDT)
+In-Reply-To: <1430255338-6461-1-git-send-email-eeppeliteloop@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,77 +22,47 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Beatriz Aguilar <beatriz.aguilar@bsc.es>
+To: Philippe Proulx <eeppeliteloop@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1363106426==
-Content-Type: multipart/alternative; boundary=001a114273ee52b80c05155e1820
+--===============1712428601==
+Content-Type: multipart/alternative; boundary=001a1147ba8cb972c005156c155a
 
---001a114273ee52b80c05155e1820
+--001a1147ba8cb972c005156c155a
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 5, 2015 at 12:55 PM, Beatriz Aguilar <beatriz.aguilar@bsc.es>
-wrote:
+Merged in both master and stable-2.6, thanks!
 
-> Hi,
->
-> I am trying to trace a user application with Lttng.
-> I would like to know if it is possible to do it without introducing
-> tracepoints in the user code like when the kernel is traced.
->
-> For example, I would like to see what every CPU/process is doing in an MP=
-I
-> + OpenMP application without putting  tracepoints in it.
->
-
-Hi Beatriz,
-
-Without instrumenting your application, you will be limited to the
-information provided by the kernel instrumentation which includes syscalls.
-Those can already provide you with quite a bit of information to understand
-what an application is doing.
-
-Moreover, you can use a couple of lttng-ust helper libraries to trace calls
-to some libc functions [1]. You could probably develop other helpers based
-around the same idea (overloading symbols) to trace MPI and OpenMP calls
-[2].
-
-Unfortunately, if you really want to instrument your application's
-internals, you will have to manually add tracepoints to the code. Dynamic
-tracing, which we don't support yet, would let you insert probes at runtime
-without the need for this static instrumentation.
-
-Regards,
 J=C3=A9r=C3=A9mie
 
-[1] http://lttng.org/docs/#doc-prebuilt-ust-helpers
-[2] https://github.com/lttng/lttng-ust/tree/master/liblttng-ust-libc-wrappe=
-r
+On Tue, Apr 28, 2015 at 5:08 PM, Philippe Proulx <eeppeliteloop@gmail.com>
+wrote:
 
-
+> Reported-by: Hannes Weisbach <hannes.weisbach@mailbox.tu-dresden.de>
+> Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+> ---
+>  src/bin/lttng-sessiond/modprobe.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Is that possible or is there any alternative to Lttng to generate ctf
-> traces?
+> diff --git a/src/bin/lttng-sessiond/modprobe.c
+> b/src/bin/lttng-sessiond/modprobe.c
+> index a9035da..d730a1d 100644
+> --- a/src/bin/lttng-sessiond/modprobe.c
+> +++ b/src/bin/lttng-sessiond/modprobe.c
+> @@ -395,7 +395,7 @@ static int append_list_to_probes(const char *list)
+>                 /* Length 13 is "lttng-probe-" + \0 */
+>                 name_len =3D strlen(next) + 13;
 >
-> Thank you very much.
-> Your help is very much appreciated =3D)
+> -               cur_mod =3D &probes[index];
+> +               cur_mod =3D &probes[index++];
+>                 cur_mod->name =3D zmalloc(name_len);
+>                 if (!cur_mod->name) {
+>                         PERROR("malloc probe list");
+> --
+> 2.3.0
 >
->
-> Beatriz Aguilar
->
-> WARNING / LEGAL TEXT: This message is intended only for the use of the
-> individual or entity to which it is addressed and may contain
-> information which is privileged, confidential, proprietary, or exempt
-> from disclosure under applicable law. If you are not the intended
-> recipient or the person responsible for delivering the message to the
-> intended recipient, you are strictly prohibited from disclosing,
-> distributing, copying, or in any way using this message. If you have
-> received this communication in error, please notify the sender and
-> destroy and delete any copies you may have received.
->
-> http://www.bsc.es/disclaimer
 >
 > _______________________________________________
 > lttng-dev mailing list
@@ -106,91 +77,74 @@ J=C3=A9r=C3=A9mie Galarneau
 EfficiOS Inc.
 http://www.efficios.com
 
---001a114273ee52b80c05155e1820
+--001a1147ba8cb972c005156c155a
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><br><div class=3D"gmail_extra"><br><div class=3D"gmail_quo=
-te">On Tue, May 5, 2015 at 12:55 PM, Beatriz Aguilar <span dir=3D"ltr">&lt;=
-<a href=3D"mailto:beatriz.aguilar@bsc.es" target=3D"_blank">beatriz.aguilar=
-@bsc.es</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D=
-"margin:0px 0px 0px 0.8ex;border-left-width:1px;border-left-color:rgb(204,2=
-04,204);border-left-style:solid;padding-left:1ex">Hi,<br>
+<div dir=3D"ltr">Merged in both master and stable-2.6, thanks!<div><br></di=
+v><div>J=C3=A9r=C3=A9mie</div></div><div class=3D"gmail_extra"><br><div cla=
+ss=3D"gmail_quote">On Tue, Apr 28, 2015 at 5:08 PM, Philippe Proulx <span d=
+ir=3D"ltr">&lt;<a href=3D"mailto:eeppeliteloop@gmail.com" target=3D"_blank"=
+>eeppeliteloop@gmail.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmai=
+l_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left=
+:1ex">Reported-by: Hannes Weisbach &lt;<a href=3D"mailto:hannes.weisbach@ma=
+ilbox.tu-dresden.de">hannes.weisbach@mailbox.tu-dresden.de</a>&gt;<br>
+Signed-off-by: Philippe Proulx &lt;<a href=3D"mailto:eeppeliteloop@gmail.co=
+m">eeppeliteloop@gmail.com</a>&gt;<br>
+---<br>
+=C2=A0src/bin/lttng-sessiond/modprobe.c | 2 +-<br>
+=C2=A01 file changed, 1 insertion(+), 1 deletion(-)<br>
 <br>
-I am trying to trace a user application with Lttng.<br>
-I would like to know if it is possible to do it without introducing tracepo=
-ints in the user code like when the kernel is traced.<br>
+diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/mod=
+probe.c<br>
+index a9035da..d730a1d 100644<br>
+--- a/src/bin/lttng-sessiond/modprobe.c<br>
++++ b/src/bin/lttng-sessiond/modprobe.c<br>
+@@ -395,7 +395,7 @@ static int append_list_to_probes(const char *list)<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 /* Length 13 is &qu=
+ot;lttng-probe-&quot; + \0 */<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 name_len =3D strlen=
+(next) + 13;<br>
 <br>
-For example, I would like to see what every CPU/process is doing in an MPI =
-+ OpenMP application without putting=C2=A0 tracepoints in it.<br></blockquo=
-te><div><br></div><div>Hi Beatriz,</div><div><br></div><div>Without instrum=
-enting your application, you will be limited to the information provided by=
- the kernel instrumentation which includes syscalls. Those can already prov=
-ide you with quite a bit of information to understand what an application i=
-s doing.</div><div><br></div><div>Moreover, you can use a couple of lttng-u=
-st helper libraries to trace calls to some libc functions [1]. You could pr=
-obably develop other helpers based around the same idea (overloading symbol=
-s) to trace MPI and OpenMP calls [2].</div><div><br></div><div>Unfortunatel=
-y, if you really want to instrument your application&#39;s internals, you w=
-ill have to manually add tracepoints to the code. Dynamic tracing, which we=
- don&#39;t support yet, would let you insert probes at runtime without the =
-need for this static instrumentation.</div><div><br></div><div>Regards,</di=
-v><div>J=C3=A9r=C3=A9mie</div><div><br></div><div>[1]=C2=A0<a href=3D"http:=
-//lttng.org/docs/#doc-prebuilt-ust-helpers">http://lttng.org/docs/#doc-preb=
-uilt-ust-helpers</a></div><div>[2]=C2=A0<a href=3D"https://github.com/lttng=
-/lttng-ust/tree/master/liblttng-ust-libc-wrapper">https://github.com/lttng/=
-lttng-ust/tree/master/liblttng-ust-libc-wrapper</a></div><div>=C2=A0</div><=
-blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-l=
-eft-width:1px;border-left-color:rgb(204,204,204);border-left-style:solid;pa=
-dding-left:1ex">
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0cur_mod =3D &amp;pr=
+obes[index];<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0cur_mod =3D &amp;pr=
+obes[index++];<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 cur_mod-&gt;name =
+=3D zmalloc(name_len);<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if (!cur_mod-&gt;na=
+me) {<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 PERROR(&quot;malloc probe list&quot;);<br>
+<span class=3D"HOEnZb"><font color=3D"#888888">--<br>
+2.3.0<br>
 <br>
-Is that possible or is there any alternative to Lttng to generate ctf trace=
-s?<br>
-<br>
-Thank you very much.<br>
-Your help is very much appreciated =3D)<br>
-<br>
-<br>
-Beatriz Aguilar<br>
-<br>
-WARNING / LEGAL TEXT: This message is intended only for the use of the<br>
-individual or entity to which it is addressed and may contain<br>
-information which is privileged, confidential, proprietary, or exempt<br>
-from disclosure under applicable law. If you are not the intended<br>
-recipient or the person responsible for delivering the message to the<br>
-intended recipient, you are strictly prohibited from disclosing,<br>
-distributing, copying, or in any way using this message. If you have<br>
-received this communication in error, please notify the sender and<br>
-destroy and delete any copies you may have received.<br>
-<br>
-<a href=3D"http://www.bsc.es/disclaimer" target=3D"_blank">http://www.bsc.e=
-s/disclaimer</a><br>
 <br>
 _______________________________________________<br>
 lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
+br>
 <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
 t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
 br>
-</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br><div class=
-=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS Inc.<br><a hre=
-f=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.com</a>=
+</font></span></blockquote></div><br><br clear=3D"all"><div><br></div>-- <b=
+r><div class=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS In=
+c.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http://www.effi=
+cios.com</a></div>
 </div>
-</div></div>
 
---001a114273ee52b80c05155e1820--
+--001a1147ba8cb972c005156c155a--
 
 
---===============1363106426==
+--===============1712428601==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1363106426==--
+--===============1712428601==--
