@@ -1,18 +1,17 @@
-From: Robert Daniels <robert.daniels@vantagecontrols.com>
-Subject: ARM C++ segfaulting - follow-up
-Date: Thu, 7 May 2015 14:41:17 +0000
-Message-ID: <1431009677311.26279__48253.0050249354$1431009773$gmane$org@vantagecontrols.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: ARM C++ segfaulting - follow-up
+Date: Thu, 7 May 2015 17:31:37 +0000 (UTC)
+Message-ID: <141212120.45547.1431019897760.JavaMail.zimbra__11996.1011958823$1431019988$gmane$org@efficios.com>
+References: <1431009677311.26279@vantagecontrols.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-db3on0117.outbound.protection.outlook.com
- ([157.55.234.117] helo=emea01-db3-obe.outbound.protection.outlook.com)
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <robert.daniels@vantagecontrols.com>)
- id 1YqMzP-0007WJ-0R
- for lttng-dev@lists.lttng.org; Thu, 07 May 2015 10:41:36 -0400
-Content-Language: en-US
+ (envelope-from <compudj@efficios.com>) id 1YqPe9-0008Kq-Jd
+ for lttng-dev@lists.lttng.org; Thu, 07 May 2015 13:31:51 -0400
+In-Reply-To: <1431009677311.26279@vantagecontrols.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,63 +20,79 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Robert Daniels <robert.daniels@vantagecontrols.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-> I'm attempting to use lttng userspace tracing with a C++ application on a=
-n ARM platform. I'm using
-> GCC 4.8.4 on Linux 3.14 with the 2.6 release of lttng. I've compiled lttn=
-g-modules, lttng-ust, and
-> lttng-tools and have been able to get a simple test working with C code. =
-When I attempt to run the
-> hello.cxx test on my target it will segfault.
-
-
-I spent a little time digging into this issue and finally discovered the ca=
-use of my segfault with ARM C++ tracepoints.
-
-There is a struct called 'lttng_event' in ust-events.h which contains an em=
-pty union 'u'.  This was the cause of my issue.  Under C, this empty union =
-compiles to a zero byte member while under C++ it compiles to a one byte me=
-mber, and in my case was four-byte aligned which caused my C++ code to have=
- the 'cds_list_head node' offset incorrectly by four bytes.  This lead to a=
-n incorrect linked list structure which caused my issue.
-
-Since this union is empty, I simply removed it from the struct and everythi=
-ng worked correctly.
-
-I don't know the history or purpose behind this empty union so I'd like to =
-know if this is a safe fix.  If it is I can submit a patch with the union r=
-emoved.
-
-Thanks,
-
-Robert Daniels
-
-
-________________________________
-
-Ce message, ainsi que tous les fichiers joints =E0 ce message, peuvent cont=
-enir des informations sensibles et/ ou confidentielles ne devant pas =EAtre=
- divulgu=E9es. Si vous n'=EAtes pas le destinataire de ce message (ou que v=
-ous recevez ce message par erreur), nous vous remercions de le notifier imm=
-=E9diatement =E0 son exp=E9diteur, et de d=E9truire ce message. Toute copie=
-, divulgation, modification, utilisation ou diffusion, non autoris=E9e, dir=
-ecte ou indirecte, de tout ou partie de ce message, est strictement interdi=
-te.
-Se d=E9sabonner: Si vous souhaitez =EAtre retir=E9 de notre liste de diffus=
-ion, s'il vous pla=EEt envoyer vos coordonn=E9es =E0 CASL.unsubscribe@legra=
-nd.ca<mailto:casl.unsubscribe@legrand.ca> et indiquer quels sont les messag=
-es que vous ne souhaitez plus recevoir.
-
-
-This e-mail, and any document attached hereby, may contain confidential and=
-/or privileged information. If you are not the intended recipient (or have =
-received this e-mail in error) please notify the sender immediately and des=
-troy this e-mail. Any unauthorized, direct or indirect, copying, disclosure=
-, distribution or other use of the material or parts thereof is strictly fo=
-rbidden.
-Unsubscribe: If you would like to be removed from our mailing list, please =
-send your contact information to CASL.unsubscribe@legrand.ca<mailto:casl.un=
-subscribe@legrand.ca> and indicate what messages you no longer wish to rece=
-ive.
+LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQo+ID4gSSdtIGF0dGVtcHRpbmcgdG8gdXNlIGx0
+dG5nIHVzZXJzcGFjZSB0cmFjaW5nIHdpdGggYSBDKysgYXBwbGljYXRpb24gb24gYW4KPiA+IEFS
+TSBwbGF0Zm9ybS4gSSdtIHVzaW5nCj4gPiBHQ0MgNC44LjQgb24gTGludXggMy4xNCB3aXRoIHRo
+ZSAyLjYgcmVsZWFzZSBvZiBsdHRuZy4gSSd2ZSBjb21waWxlZAo+ID4gbHR0bmctbW9kdWxlcywg
+bHR0bmctdXN0LCBhbmQKPiA+IGx0dG5nLXRvb2xzIGFuZCBoYXZlIGJlZW4gYWJsZSB0byBnZXQg
+YSBzaW1wbGUgdGVzdCB3b3JraW5nIHdpdGggQyBjb2RlLgo+ID4gV2hlbiBJIGF0dGVtcHQgdG8g
+cnVuIHRoZQo+ID4gaGVsbG8uY3h4IHRlc3Qgb24gbXkgdGFyZ2V0IGl0IHdpbGwgc2VnZmF1bHQu
+Cj4gCj4gCj4gSSBzcGVudCBhIGxpdHRsZSB0aW1lIGRpZ2dpbmcgaW50byB0aGlzIGlzc3VlIGFu
+ZCBmaW5hbGx5IGRpc2NvdmVyZWQgdGhlCj4gY2F1c2Ugb2YgbXkgc2VnZmF1bHQgd2l0aCBBUk0g
+QysrIHRyYWNlcG9pbnRzLgo+IAo+IFRoZXJlIGlzIGEgc3RydWN0IGNhbGxlZCAnbHR0bmdfZXZl
+bnQnIGluIHVzdC1ldmVudHMuaCB3aGljaCBjb250YWlucyBhbgo+IGVtcHR5IHVuaW9uICd1Jy4g
+IFRoaXMgd2FzIHRoZSBjYXVzZSBvZiBteSBpc3N1ZS4gIFVuZGVyIEMsIHRoaXMgZW1wdHkgdW5p
+b24KPiBjb21waWxlcyB0byBhIHplcm8gYnl0ZSBtZW1iZXIgd2hpbGUgdW5kZXIgQysrIGl0IGNv
+bXBpbGVzIHRvIGEgb25lIGJ5dGUKPiBtZW1iZXIsIGFuZCBpbiBteSBjYXNlIHdhcyBmb3VyLWJ5
+dGUgYWxpZ25lZCB3aGljaCBjYXVzZWQgbXkgQysrIGNvZGUgdG8KPiBoYXZlIHRoZSAnY2RzX2xp
+c3RfaGVhZCBub2RlJyBvZmZzZXQgaW5jb3JyZWN0bHkgYnkgZm91ciBieXRlcy4gIFRoaXMgbGVh
+ZAo+IHRvIGFuIGluY29ycmVjdCBsaW5rZWQgbGlzdCBzdHJ1Y3R1cmUgd2hpY2ggY2F1c2VkIG15
+IGlzc3VlLgo+IAo+IFNpbmNlIHRoaXMgdW5pb24gaXMgZW1wdHksIEkgc2ltcGx5IHJlbW92ZWQg
+aXQgZnJvbSB0aGUgc3RydWN0IGFuZCBldmVyeXRoaW5nCj4gd29ya2VkIGNvcnJlY3RseS4KPiAK
+PiBJIGRvbid0IGtub3cgdGhlIGhpc3Rvcnkgb3IgcHVycG9zZSBiZWhpbmQgdGhpcyBlbXB0eSB1
+bmlvbiBzbyBJJ2QgbGlrZSB0bwo+IGtub3cgaWYgdGhpcyBpcyBhIHNhZmUgZml4LiAgSWYgaXQg
+aXMgSSBjYW4gc3VibWl0IGEgcGF0Y2ggd2l0aCB0aGUgdW5pb24KPiByZW1vdmVkLgoKVGhhdCdz
+IGEgdmVyeSBuaWNlIGNhdGNoIQoKV2UgZG8gbm90IHN1cHBvcnQgYnVpbGRpbmcgdHJhY2Vwb2lu
+dCBwcm9iZSBwcm92aWRlciB3aXRoCmcrKyB5ZXQsIGFzIHN0YXRlZCBpbiBsdHRuZy11c3QoMyk6
+CgoiICAgICAgICAtIE5vdGUgZm9yIEMrKyBzdXBwb3J0OiBhbHRob3VnaCBhbiBhcHBsaWNhdGlv
+biBpbnN0cnVtZW50ZWQgd2l0aAogICAgICAgICAgIHRyYWNlcG9pbnRzIGNhbiBiZSBjb21waWxl
+ZCB3aXRoIGcrKywgdHJhY2Vwb2ludCBwcm9iZXMgc2hvdWxkIGJlCiAgICAgICAgICAgY29tcGls
+ZWQgd2l0aCBnY2MgKG9ubHkgdGVzdGVkIHdpdGggZ2NjIHNvIGZhcikuIgoKSG93ZXZlciwgaWYg
+aXQgd29ya3MgZmluZSB3aXRoIHRoaXMgZml4LCB0aGVuIEknbSB0ZW1wdGVkIHRvIHRha2UgaXQs
+CmVzcGVjaWFsbHkgYmVjYXVzZSByZW1vdmluZyB0aGUgZW1wdHkgdW5pb24gZG9lcyBub3QgYXBw
+ZWFyIHRvIGFmZmVjdAp0aGUgbGF5b3V0IG9mIHN0cnVjdCBsdHRuZ19ldmVudCBhcyBzZWVuIGZy
+b20gbGlibHR0bmctdXN0LCB3aGljaCBtdXN0CmJlIGNvbXBpbGVkIHdpdGggYSBDIGNvbXBpbGVy
+LCAgYW5kIGZyb20gcHJvYmUgcHJvdmlkZXJzIGNvbXBpbGVkIHdpdGgKYSBDIGNvbXBpbGVyLiBT
+byBhbGwgd2UgYXJlIGNoYW5naW5nIGlzIHRoZSBsYXlvdXQgb2YgYSBwcm9iZSBwcm92aWRlcgpj
+b21waWxlZCB3aXRoIGEgQysrIGNvbXBpbGVyLCB3aGljaCBpcyBhbnl3YXkgYnVnZ3kgYXQgdGhl
+IG1vbWVudCwKYmVjYXVzZSBpdCBpcyBub3QgY29tcGF0aWJsZSB3aXRoIHRoZSBsYXlvdXQgZXhw
+ZWN0ZWQgYnkgbGlibHR0bmctdXN0CmNvbXBpbGVkIHdpdGggYSBDIGNvbXBpbGVyLgoKSSdsbCBw
+dXNoIHRoZSBmaXggaW4gbWFzdGVyLCBzdGFibGUtMi42LCBhbmQgc3RhYmxlLTIuNS4KClRoYW5r
+cyEKCk1hdGhpZXUKCgo+IAo+IFRoYW5rcywKPiAKPiBSb2JlcnQgRGFuaWVscwo+IAo+IAo+IF9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gCj4gQ2UgbWVzc2FnZSwgYWluc2kgcXVl
+IHRvdXMgbGVzIGZpY2hpZXJzIGpvaW50cyDDoCBjZSBtZXNzYWdlLCBwZXV2ZW50IGNvbnRlbmly
+Cj4gZGVzIGluZm9ybWF0aW9ucyBzZW5zaWJsZXMgZXQvIG91IGNvbmZpZGVudGllbGxlcyBuZSBk
+ZXZhbnQgcGFzIMOqdHJlCj4gZGl2dWxndcOpZXMuIFNpIHZvdXMgbifDqnRlcyBwYXMgbGUgZGVz
+dGluYXRhaXJlIGRlIGNlIG1lc3NhZ2UgKG91IHF1ZSB2b3VzCj4gcmVjZXZleiBjZSBtZXNzYWdl
+IHBhciBlcnJldXIpLCBub3VzIHZvdXMgcmVtZXJjaW9ucyBkZSBsZSBub3RpZmllcgo+IGltbcOp
+ZGlhdGVtZW50IMOgIHNvbiBleHDDqWRpdGV1ciwgZXQgZGUgZMOpdHJ1aXJlIGNlIG1lc3NhZ2Uu
+IFRvdXRlIGNvcGllLAo+IGRpdnVsZ2F0aW9uLCBtb2RpZmljYXRpb24sIHV0aWxpc2F0aW9uIG91
+IGRpZmZ1c2lvbiwgbm9uIGF1dG9yaXPDqWUsIGRpcmVjdGUKPiBvdSBpbmRpcmVjdGUsIGRlIHRv
+dXQgb3UgcGFydGllIGRlIGNlIG1lc3NhZ2UsIGVzdCBzdHJpY3RlbWVudCBpbnRlcmRpdGUuCj4g
+U2UgZMOpc2Fib25uZXI6IFNpIHZvdXMgc291aGFpdGV6IMOqdHJlIHJldGlyw6kgZGUgbm90cmUg
+bGlzdGUgZGUgZGlmZnVzaW9uLAo+IHMnaWwgdm91cyBwbGHDrnQgZW52b3llciB2b3MgY29vcmRv
+bm7DqWVzIMOgCj4gQ0FTTC51bnN1YnNjcmliZUBsZWdyYW5kLmNhPG1haWx0bzpjYXNsLnVuc3Vi
+c2NyaWJlQGxlZ3JhbmQuY2E+IGV0IGluZGlxdWVyCj4gcXVlbHMgc29udCBsZXMgbWVzc2FnZXMg
+cXVlIHZvdXMgbmUgc291aGFpdGV6IHBsdXMgcmVjZXZvaXIuCj4gCj4gCj4gVGhpcyBlLW1haWws
+IGFuZCBhbnkgZG9jdW1lbnQgYXR0YWNoZWQgaGVyZWJ5LCBtYXkgY29udGFpbiBjb25maWRlbnRp
+YWwKPiBhbmQvb3IgcHJpdmlsZWdlZCBpbmZvcm1hdGlvbi4gSWYgeW91IGFyZSBub3QgdGhlIGlu
+dGVuZGVkIHJlY2lwaWVudCAob3IKPiBoYXZlIHJlY2VpdmVkIHRoaXMgZS1tYWlsIGluIGVycm9y
+KSBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgaW1tZWRpYXRlbHkgYW5kCj4gZGVzdHJveSB0aGlz
+IGUtbWFpbC4gQW55IHVuYXV0aG9yaXplZCwgZGlyZWN0IG9yIGluZGlyZWN0LCBjb3B5aW5nLAo+
+IGRpc2Nsb3N1cmUsIGRpc3RyaWJ1dGlvbiBvciBvdGhlciB1c2Ugb2YgdGhlIG1hdGVyaWFsIG9y
+IHBhcnRzIHRoZXJlb2YgaXMKPiBzdHJpY3RseSBmb3JiaWRkZW4uCj4gVW5zdWJzY3JpYmU6IElm
+IHlvdSB3b3VsZCBsaWtlIHRvIGJlIHJlbW92ZWQgZnJvbSBvdXIgbWFpbGluZyBsaXN0LCBwbGVh
+c2UKPiBzZW5kIHlvdXIgY29udGFjdCBpbmZvcm1hdGlvbiB0bwo+IENBU0wudW5zdWJzY3JpYmVA
+bGVncmFuZC5jYTxtYWlsdG86Y2FzbC51bnN1YnNjcmliZUBsZWdyYW5kLmNhPiBhbmQgaW5kaWNh
+dGUKPiB3aGF0IG1lc3NhZ2VzIHlvdSBubyBsb25nZXIgd2lzaCB0byByZWNlaXZlLgo+IAo+IF9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2
+IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMu
+bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPiAKCi0tIApNYXRo
+aWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
+bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9y
+Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
