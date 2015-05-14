@@ -1,19 +1,21 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Subject: Re: No kernel tracer available
-Date: Thu, 14 May 2015 11:30:16 -0400
-Message-ID: <CAFXXi0nWomHwkmgE7njmq3vv6PaGk4XiJ-GSo9ATxSda98RVOg__36127.2085262046$1431617572$gmane$org@mail.gmail.com>
-References: <CAG4vvd4Fa2dWpWoO_sJqm+6=K4g9W5Cmvz3LuzkzUAQsGTSPPw@mail.gmail.com>
+From: Engel Sanchez <engel@basho.com>
+Subject: Re: lttng-modules 2.6.1 compilation error on Ubuntu
+	14.04
+Date: Thu, 14 May 2015 13:03:23 -0400
+Message-ID: <CABx-oYz4WhUitnFsWRT4UDN92TZhn-4DprhasJUJ=qhY0AxU1Q__2834.99153233624$1431623092$gmane$org@mail.gmail.com>
+References: <CABx-oYzx7CRvzMF52sSMJy1DQMvc-GXC+rPhgERe3TZmMZ8JtQ@mail.gmail.com>
+ <499393386.662.1431609527328.JavaMail.zimbra@efficios.com>
+ <1729124733.954.1431617303791.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1013456068=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ie0-f180.google.com ([209.85.223.180])
+Received: from mail-ob0-f175.google.com ([209.85.214.175])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <thundersim@gmail.com>) id 1Ysv64-0007YP-7t
- for lttng-dev@lists.lttng.org; Thu, 14 May 2015 11:31:06 -0400
-Received: by iecmd7 with SMTP id md7so63519461iec.1
- for <lttng-dev@lists.lttng.org>; Thu, 14 May 2015 08:30:46 -0700 (PDT)
-In-Reply-To: <CAG4vvd4Fa2dWpWoO_sJqm+6=K4g9W5Cmvz3LuzkzUAQsGTSPPw@mail.gmail.com>
+ (envelope-from <engel@basho.com>) id 1YswXh-00085i-Iy
+ for lttng-dev@lists.lttng.org; Thu, 14 May 2015 13:03:35 -0400
+Received: by obblk2 with SMTP id lk2so57703001obb.0
+ for <lttng-dev@lists.lttng.org>; Thu, 14 May 2015 10:03:24 -0700 (PDT)
+In-Reply-To: <1729124733.954.1431617303791.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,46 +24,262 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Francis Rivest <francis.rivest13@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-> Hello, I'm a student at Polytechnique Montreal and we are trying to use
-> lttng on ubuntu(Ubuntu 14.04.2 LTS) but always encounter the same problem :
+--===============1013456068==
+Content-Type: multipart/alternative; boundary=001a1134b02c98ab1305160db4be
+
+--001a1134b02c98ab1305160db4be
+Content-Type: text/plain; charset=UTF-8
+
+Thanks Mathieu! In the meantime I'm using 2.6.0 for the moment and will try
+your fix when it's ready.
+
+On Thu, May 14, 2015 at 11:28 AM, Mathieu Desnoyers <
+mathieu.desnoyers@efficios.com> wrote:
+
+> ----- Original Message -----
+> > ----- Original Message -----
+> >
+> > > Hello there. I was wondering if anybody knew what is causing this
+> > > compilation
+> > > error I'm getting on a new Ubuntu 14.04 VM with a 3.13.0 kernel. It
+> does
+> > > not
+> > > find the DEBIAN_API_VERSION symbol. The use of that was introduced in
+> 2.6.1
+> > > apparently:
+> >
+> > >
+> http://fossies.org/diffs/lttng-modules/2.6.0_vs_2.6.1/lttng-kernel-version.h-diff.html
+> >
+> > > I'm following the instructions in the Download page to install from
+> the PPA
+> > > :
+> > > http://lttng.org/download/#ubuntu
+> >
+> > > This the error I'm getting. Thanks in advance for any help!
+> >
+> > > In file included from
+> > >
+> /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+201504291801~ubuntu14.04.1/build/wrapper/page_alloc.h:28:0,
+> > >     from
+> > >
+> /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+201504291801~ubuntu14.04.1/build/lttng-events.c:27:
+> > >
+>  /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+201504291801~ubuntu14.04.1/build/wrapper/../lttng-kernel-version.h:60:57:
+> > > error: operator '+' has no right operand    ((LINUX_VERSION_CODE *
+> > > 1000000ULL)
+> > > + DEBIAN_API_VERSION)
+> >
+> > I pushed the following fix into master and stable-2.6 branches
+> > of lttng-modules. Can you give it a try ?
+> >
+> > commit a748963b76f353d459a3faf85eecc96f52811eee
+> > Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > Date:   Thu May 14 09:13:49 2015 -0400
+> >
+> >     Fix: build against Ubuntu kernels
+> >
+> >     Recent Ubuntu kernels appear to define DEBIAN_API_VERSION, but they
+> are
+> >     not really a Debian kernel per-se: the abi-debian-version.sh cannot
+> find
+> >     the expected Debian kernel version string layout.
+> >
+> >     Therefore, change the conditional check to use directly the
+> >     LTTNG_DEBIAN_VERSION_CODE define, which is defined only when the
+> >     abi-debian-version.sh script figures out it builds against a Debian
+> >     kernel.
+> >
+> >     Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 >
-> "Error: Unable to list kernel events: Kernel tracer not available"
+> I reverted this commit. DEBIAN_API_VERSION is actually
+> the define I use to communicate between the makefile
+> and the C code. It should work even if not defined
+> (see the check in LTTNG_DEBIAN_KERNEL_RANGE()).
 >
-> This happens even though we are root using the command line : sudo su
+> Hrm. But it appears that the operators generated by
+> those macros end up being invalid if DEBIAN_API_VERSION
+> is undefined. Will fix and push upstream.
 >
-> We reinstalled the packages multiples time for lttng.org and from this
-> source : https://launchpad.net/~lttng/+archive/ubuntu/ppa/
+> Thanks,
 >
-> We are able to create a session but we can't enable event (kernel tracer not
-> available) or start tracing (error : no channel found).
+> Mathieu
 >
-> If someone has advice on how to deal we this, it would be appreciated a lot.
+> >
+> > Thanks,
+> >
+> > Mathieu
+> >
+> > > _______________________________________________
+> > > lttng-dev mailing list
+> > > lttng-dev@lists.lttng.org
+> > > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >
+> > --
+> >
+> > --
+> > Mathieu Desnoyers
+> > EfficiOS Inc.
+> > http://www.efficios.com
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >
 >
-> Thank you,
->
-> -Francis R.
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
 >
 
-Hi Francis,
+--001a1134b02c98ab1305160db4be
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-I'll start with the obvious stuff. After the "enable-event" command
-fails (btw, could you give the exact commands you run?), please check:
+<div dir=3D"ltr">Thanks Mathieu! In the meantime I&#39;m using 2.6.0 for th=
+e moment and will try your fix when it&#39;s ready.</div><div class=3D"gmai=
+l_extra"><br><div class=3D"gmail_quote">On Thu, May 14, 2015 at 11:28 AM, M=
+athieu Desnoyers <span dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoyers@=
+efficios.com" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;</spa=
+n> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;b=
+order-left:1px #ccc solid;padding-left:1ex"><div class=3D"HOEnZb"><div clas=
+s=3D"h5">----- Original Message -----<br>
+&gt; ----- Original Message -----<br>
+&gt;<br>
+&gt; &gt; Hello there. I was wondering if anybody knew what is causing this=
+<br>
+&gt; &gt; compilation<br>
+&gt; &gt; error I&#39;m getting on a new Ubuntu 14.04 VM with a 3.13.0 kern=
+el. It does<br>
+&gt; &gt; not<br>
+&gt; &gt; find the DEBIAN_API_VERSION symbol. The use of that was introduce=
+d in 2.6.1<br>
+&gt; &gt; apparently:<br>
+&gt;<br>
+&gt; &gt; <a href=3D"http://fossies.org/diffs/lttng-modules/2.6.0_vs_2.6.1/=
+lttng-kernel-version.h-diff.html" target=3D"_blank">http://fossies.org/diff=
+s/lttng-modules/2.6.0_vs_2.6.1/lttng-kernel-version.h-diff.html</a><br>
+&gt;<br>
+&gt; &gt; I&#39;m following the instructions in the Download page to instal=
+l from the PPA<br>
+&gt; &gt; :<br>
+&gt; &gt; <a href=3D"http://lttng.org/download/#ubuntu" target=3D"_blank">h=
+ttp://lttng.org/download/#ubuntu</a><br>
+&gt;<br>
+&gt; &gt; This the error I&#39;m getting. Thanks in advance for any help!<b=
+r>
+&gt;<br>
+&gt; &gt; In file included from<br>
+&gt; &gt; /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+2015042918=
+01~ubuntu14.04.1/build/wrapper/page_alloc.h:28:0,<br>
+&gt; &gt;=C2=A0 =C2=A0 =C2=A0from<br>
+&gt; &gt; /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+2015042918=
+01~ubuntu14.04.1/build/lttng-events.c:27:<br>
+&gt; &gt;=C2=A0 =C2=A0 =C2=A0/var/lib/dkms/lttng-modules/2.6.x+stable+bzr72=
+7+pack22+201504291801~ubuntu14.04.1/build/wrapper/../lttng-kernel-version.h=
+:60:57:<br>
+&gt; &gt; error: operator &#39;+&#39; has no right operand=C2=A0 =C2=A0 ((L=
+INUX_VERSION_CODE *<br>
+&gt; &gt; 1000000ULL)<br>
+&gt; &gt; + DEBIAN_API_VERSION)<br>
+&gt;<br>
+&gt; I pushed the following fix into master and stable-2.6 branches<br>
+&gt; of lttng-modules. Can you give it a try ?<br>
+&gt;<br>
+&gt; commit a748963b76f353d459a3faf85eecc96f52811eee<br>
+&gt; Author: Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers@effi=
+cios.com">mathieu.desnoyers@efficios.com</a>&gt;<br>
+&gt; Date:=C2=A0 =C2=A0Thu May 14 09:13:49 2015 -0400<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Fix: build against Ubuntu kernels<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Recent Ubuntu kernels appear to define DEBIAN_API_V=
+ERSION, but they are<br>
+&gt;=C2=A0 =C2=A0 =C2=A0not really a Debian kernel per-se: the abi-debian-v=
+ersion.sh cannot find<br>
+&gt;=C2=A0 =C2=A0 =C2=A0the expected Debian kernel version string layout.<b=
+r>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Therefore, change the conditional check to use dire=
+ctly the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0LTTNG_DEBIAN_VERSION_CODE define, which is defined =
+only when the<br>
+&gt;=C2=A0 =C2=A0 =C2=A0abi-debian-version.sh script figures out it builds =
+against a Debian<br>
+&gt;=C2=A0 =C2=A0 =C2=A0kernel.<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Signed-off-by: Mathieu Desnoyers &lt;<a href=3D"mai=
+lto:mathieu.desnoyers@efficios.com">mathieu.desnoyers@efficios.com</a>&gt;<=
+br>
+<br>
+</div></div>I reverted this commit. DEBIAN_API_VERSION is actually<br>
+the define I use to communicate between the makefile<br>
+and the C code. It should work even if not defined<br>
+(see the check in LTTNG_DEBIAN_KERNEL_RANGE()).<br>
+<br>
+Hrm. But it appears that the operators generated by<br>
+those macros end up being invalid if DEBIAN_API_VERSION<br>
+is undefined. Will fix and push upstream.<br>
+<br>
+Thanks,<br>
+<br>
+Mathieu<br>
+<div class=3D"HOEnZb"><div class=3D"h5"><br>
+&gt;<br>
+&gt; Thanks,<br>
+&gt;<br>
+&gt; Mathieu<br>
+&gt;<br>
+&gt; &gt; _______________________________________________<br>
+&gt; &gt; lttng-dev mailing list<br>
+&gt; &gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttn=
+g.org</a><br>
+&gt; &gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-=
+dev" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttn=
+g-dev</a><br>
+&gt;<br>
+&gt; --<br>
+&gt;<br>
+&gt; --<br>
+&gt; Mathieu Desnoyers<br>
+&gt; EfficiOS Inc.<br>
+&gt; <a href=3D"http://www.efficios.com" target=3D"_blank">http://www.effic=
+ios.com</a><br>
+&gt;<br>
+&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
+</a><br>
+&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
+target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
+</a><br>
+&gt;<br>
+<br>
+--<br>
+Mathieu Desnoyers<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
+om</a><br>
+</div></div></blockquote></div><br></div>
 
-1. Is there an "lttng-sessiond" process owned by the root user active
-(ps aux | grep lttng-sessiond) ?
-2. Are the LTTng kernel modules loaded (lsmod | grep lttng) ?
+--001a1134b02c98ab1305160db4be--
 
-If the answer to any of those two is no, you will need to investigate
-why that is. Perhaps you could provide the output of "dpkg -l | grep
-lttng" to see what you have installed exactly.
 
-Simon
+--===============1013456068==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1013456068==--
