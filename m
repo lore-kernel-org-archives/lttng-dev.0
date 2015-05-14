@@ -1,18 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: lttng-modules 2.6.1 compilation error on Ubuntu
- 14.04
-Date: Thu, 14 May 2015 13:18:47 +0000 (UTC)
-Message-ID: <499393386.662.1431609527328.JavaMail.zimbra__40521.0987934426$1431609607$gmane$org@efficios.com>
-References: <CABx-oYzx7CRvzMF52sSMJy1DQMvc-GXC+rPhgERe3TZmMZ8JtQ@mail.gmail.com>
+From: Francis Rivest <francis.rivest13@gmail.com>
+Subject: No kernel tracer available
+Date: Thu, 14 May 2015 09:52:06 -0400
+Message-ID: <CAG4vvd4Fa2dWpWoO_sJqm+6=K4g9W5Cmvz3LuzkzUAQsGTSPPw__42942.3445290469$1431615467$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0213184887=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-yk0-f173.google.com ([209.85.160.173])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Yst2L-0006q5-PA
- for lttng-dev@lists.lttng.org; Thu, 14 May 2015 09:18:59 -0400
-In-Reply-To: <CABx-oYzx7CRvzMF52sSMJy1DQMvc-GXC+rPhgERe3TZmMZ8JtQ@mail.gmail.com>
+ (envelope-from <francis.rivest13@gmail.com>) id 1YstYa-00071N-Cb
+ for lttng-dev@lists.lttng.org; Thu, 14 May 2015 09:52:15 -0400
+Received: by ykft189 with SMTP id t189so24408481ykf.1
+ for <lttng-dev@lists.lttng.org>; Thu, 14 May 2015 06:52:07 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,64 +19,64 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Engel Sanchez <engel@basho.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ Original Message ----- 
+--===============0213184887==
+Content-Type: multipart/alternative; boundary=001a1139c086847d8c05160b0844
 
-> Hello there. I was wondering if anybody knew what is causing this compilation
-> error I'm getting on a new Ubuntu 14.04 VM with a 3.13.0 kernel. It does not
-> find the DEBIAN_API_VERSION symbol. The use of that was introduced in 2.6.1
-> apparently:
+--001a1139c086847d8c05160b0844
+Content-Type: text/plain; charset=UTF-8
 
-> http://fossies.org/diffs/lttng-modules/2.6.0_vs_2.6.1/lttng-kernel-version.h-diff.html
+Hello, I'm a student at Polytechnique Montreal and we are trying to use
+lttng on ubuntu(Ubuntu 14.04.2 LTS) but always encounter the same problem :
 
-> I'm following the instructions in the Download page to install from the PPA :
-> http://lttng.org/download/#ubuntu
+"Error: Unable to list kernel events: Kernel tracer not available"
 
-> This the error I'm getting. Thanks in advance for any help!
+This happens even though we are root using the command line : sudo su
 
-> In file included from
-> /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+201504291801~ubuntu14.04.1/build/wrapper/page_alloc.h:28:0,
-> 	from
-> /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+201504291801~ubuntu14.04.1/build/lttng-events.c:27:
-> 	/var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+201504291801~ubuntu14.04.1/build/wrapper/../lttng-kernel-version.h:60:57:
-> error: operator '+' has no right operand 	((LINUX_VERSION_CODE * 1000000ULL)
-> + DEBIAN_API_VERSION)
+We reinstalled the packages multiples time for lttng.org and from this
+source : https://launchpad.net/~lttng/+archive/ubuntu/ppa/
 
-I pushed the following fix into master and stable-2.6 branches
-of lttng-modules. Can you give it a try ?
+We are able to create a session but we can't enable event (kernel tracer
+not available) or start tracing (error : no channel found).
 
-commit a748963b76f353d459a3faf85eecc96f52811eee
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Thu May 14 09:13:49 2015 -0400
+If someone has advice on how to deal we this, it would be appreciated a lot.
 
-    Fix: build against Ubuntu kernels
-    
-    Recent Ubuntu kernels appear to define DEBIAN_API_VERSION, but they are
-    not really a Debian kernel per-se: the abi-debian-version.sh cannot find
-    the expected Debian kernel version string layout.
-    
-    Therefore, change the conditional check to use directly the
-    LTTNG_DEBIAN_VERSION_CODE define, which is defined only when the
-    abi-debian-version.sh script figures out it builds against a Debian
-    kernel.
-    
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Thank you,
 
-Thanks,
+-Francis R.
 
-Mathieu
+--001a1139c086847d8c05160b0844
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+<div dir=3D"ltr"><div><div><div><div><div><div><div>Hello, I&#39;m a studen=
+t at Polytechnique Montreal and we are trying to use lttng on ubuntu(Ubuntu=
+ 14.04.2 LTS) but always encounter the same problem : <br><br></div>&quot;E=
+rror: Unable to list kernel events: Kernel tracer not available&quot;<br><b=
+r></div>This happens even though we are root using the command line : sudo =
+su<br><br></div>We reinstalled the packages multiples time for <a href=3D"h=
+ttp://lttng.org">lttng.org</a> and from this source : <a href=3D"https://la=
+unchpad.net/~lttng/+archive/ubuntu/ppa/">https://launchpad.net/~lttng/+arch=
+ive/ubuntu/ppa/</a><br><br></div>We are able to create a session but we can=
+&#39;t enable event (kernel tracer not available) or start tracing (error :=
+ no channel found).<br><br></div>If someone has advice on how to deal we th=
+is, it would be appreciated a lot.<br><br></div>Thank you, <br><br></div>-F=
+rancis R.<br></div>
 
--- 
+--001a1139c086847d8c05160b0844--
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+
+--===============0213184887==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0213184887==--
