@@ -1,18 +1,36 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: (no subject)
-Date: Sat, 16 May 2015 11:35:20 -0400
-Message-ID: <555763B8.3010804__8221.43139453164$1431790594$gmane$org@voxpopuli.im>
-References: <CAG4vvd49JfNUgN9p9vW0bQXoRkBjER74zVbTAg-CmtETZeDn2Q@mail.gmail.com>
- <CAFXXi0kf0aWS7vS9m8HmdPoXR3RL=bjtaL_y+coR7T2npE=eWQ@mail.gmail.com>
+From: Antoine Busque <abusque@efficios.com>
+Subject: [lttng dev] [PATCH lttng-ust 2/2] Refactor
+	ust_baddr_statedump functions to reduce duplicated code
+Date: Tue, 19 May 2015 18:17:36 -0400
+Message-ID: <1432073856-458-2-git-send-email-abusque__34796.9255912632$1432073990$gmane$org@efficios.com>
+References: <1432073856-458-1-git-send-email-abusque@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.181])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <alexmonthy@voxpopuli.im>) id 1Yte7d-0005Eg-O2
- for lttng-dev@lists.lttng.org; Sat, 16 May 2015 11:35:36 -0400
-In-Reply-To: <CAFXXi0kf0aWS7vS9m8HmdPoXR3RL=bjtaL_y+coR7T2npE=eWQ@mail.gmail.com>
+ (envelope-from <abusque@efficios.com>) id 1YuppZ-00031z-2T
+ for lttng-dev@lists.lttng.org; Tue, 19 May 2015 18:17:51 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 59101340056
+ for <lttng-dev@lists.lttng.org>; Tue, 19 May 2015 22:17:51 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id bXq0ChpvdIv6 for <lttng-dev@lists.lttng.org>;
+ Tue, 19 May 2015 22:17:50 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id D520E340262
+ for <lttng-dev@lists.lttng.org>; Tue, 19 May 2015 22:17:50 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id JUW7WI14sg8r for <lttng-dev@lists.lttng.org>;
+ Tue, 19 May 2015 22:17:50 +0000 (UTC)
+Received: from colossus.internal.efficios.com
+ (cable-192.222.194.238.electronicbox.net [192.222.194.238])
+ by mail.efficios.com (Postfix) with ESMTPSA id 7BF64340056
+ for <lttng-dev@lists.lttng.org>; Tue, 19 May 2015 22:17:50 +0000 (UTC)
+In-Reply-To: <1432073856-458-1-git-send-email-abusque@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,117 +39,246 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>, Francis Rivest <francis.rivest13@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hey,
+This refactoring allows the reuse of code that handles the iteration
+over the sessions, used for all ust_baddr_statedump events.
 
-Ok, after some investigation, I found the problem.
+Signed-off-by: Antoine Busque <abusque@efficios.com>
+---
+ liblttng-ust/lttng-ust-baddr.c | 133 ++++++++++++++++++++++-------------------
+ 1 file changed, 71 insertions(+), 62 deletions(-)
 
-We specify "*" in the .install file, so I was wondering why that script 
-was not being installed. Turns out that it gets ignored because it 
-contains "debian" in its name. I assume the package building scripts 
-want to ignore any debian/ folder that may be present in the original 
-source. To do this, they probably use an unbounded regex, which also 
-ignores anything that contains "debian". Oops!
-
-If we rename that script to abi-version.sh for instance, both the file 
-name and in the Makefile, then it installs fine. So I think the easiest 
-is just to rename the script (either with a package patch, or upstream 
-if they want to change it).
-
-I get another compilation error on Vivid's kernel though, I'll look into 
-that next.
-
-Cheers,
-Alexandre
-
-
-
-On 2015-05-14 05:14 PM, Simon Marchi wrote:
-> Ah, this is because we need to add abi-debian-version.sh to the Ubuntu
-> package. I don't have time to do it right away, but perhaps Alexandre
-> (in CC) does :).
->
-> On 14 May 2015 at 15:33, Francis Rivest <francis.rivest13@gmail.com> wrote:
->> Hello again,
->>
->> We tried to install the lttng-modules-dkms package using apt and the
->> "ppa:lttng/ppa" repository, but we get the following information and error:
->>
->> Unpacking lttng-modules-dkms (from .../lttng-modules-dkms_2.6.x+
->> stable+bzr727+pack22+201504291801~ubuntu12.04.1_all.deb) ...
->> Setting up lttng-modules-dkms
->> (2.6.x+stable+bzr727+pack22+201504291801~ubuntu12.04.1)
->> ...
->> Loading new
->> lttng-modules-2.6.x+stable+bzr727+pack22+201504291801~ubuntu12.04.1
->> DKMS files...
->> First Installation: checking all kernels...
->> Building only for 3.13.0-32-generic
->> Building initial module for 3.13.0-32-generic
->> Error! Bad return status for module build on kernel: 3.13.0-32-generic
->> (x86_64)
->> Consult /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/make.log for more information.
->>
->>
->> The contain of the make.log file is the following:
->>
->> DKMS make.log for
->> lttng-modules-2.6.x+stable+bzr727+pack22+201504291801~ubuntu12.04.1
->> for kernel 3.13.0-32-generic (x86_64)
->> Thu May 14 15:00:16 EDT 2015
->> make: Entering directory `/usr/src/linux-headers-3.13.0-32-generic'
->> /bin/sh: 1: /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/abi-debian-version.sh: not found
->> /bin/sh: 1: /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/abi-debian-version.sh: not found
->>     CC [M]  /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/lttng-ring-buffer-client-discard.o
->>     CC [M]  /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/lttng-ring-buffer-client-overwrite.o
->>     CC [M]  /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/lttng-ring-buffer-metadata-client.o
->>     CC [M]  /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/lttng-ring-buffer-client-mmap-discard.o
->>     CC [M]  /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/lttng-ring-buffer-client-mmap-overwrite.o
->>     CC [M]  /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/lttng-ring-buffer-metadata-mmap-client.o
->>     CC [M]  /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/lttng-statedump-impl.o
->>     CC [M]  /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/wrapper/irqdesc.o
->>     CC [M]  /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/wrapper/fdtable.o
->>     CC [M]  /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/lttng-events.o
->> In file included from /var/lib/dkms/lttng-modules/2.
->> 6.x+stable+bzr727+pack22+201504291801~ubuntu12.04.1/
->> build/lttng-events.c:27:0:
->> /var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/wrapper/page_alloc.h:36:58: error:
->> operator '+' has no right operand
->> make[1]: *** [/var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+pack22+
->> 201504291801~ubuntu12.04.1/build/lttng-events.o] Error 1
->> make: *** [_module_/var/lib/dkms/lttng-modules/2.6.x+stable+bzr727+
->> pack22+201504291801~ubuntu12.04.1/build] Error 2
->> make: Leaving directory `/usr/src/linux-headers-3.13.0-32-generic'
->>
->>
->> We know that "abi-debian-version.sh" isn't found and that might be the
->> cause of our problem but it is supposed to be in the package...
->>
->> In addition we tried to include manually this file but it didn't work.
->>
->> Thanks again for helping me out.
->>
->> -Francis R
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
+diff --git a/liblttng-ust/lttng-ust-baddr.c b/liblttng-ust/lttng-ust-baddr.c
+index 5ec3d40..26f234f 100644
+--- a/liblttng-ust/lttng-ust-baddr.c
++++ b/liblttng-ust/lttng-ust-baddr.c
+@@ -44,24 +44,27 @@ struct extract_data {
+ 	void *exec_baddr;	/* executable base address */
+ };
+ 
++struct soinfo_data {
++	void *base_addr_ptr;
++	const char *resolved_path;
++	int vdso;
++	off_t size;
++	time_t mtime;
++};
++
++typedef void (*tracepoint_cb)(struct lttng_session *session,
++			      void *extra_tp_args);
++
+ /*
+- * Trace baddr into all sessions for which statedump is pending owned by
+- * the caller thread.
++ * Trace statedump event into all sessions for which statedump is
++ * pending owned by the caller thread.
+  */
+ static
+-int trace_baddr(void *base_addr_ptr,
+-	const char *resolved_path,
+-	int vdso,
+-	void *owner)
++int trace_statedump_event(tracepoint_cb tp_cb, void *owner, void *extra_tp_args)
+ {
+ 	struct cds_list_head *sessionsp;
+ 	struct lttng_session *session;
+-	struct stat sostat;
+ 
+-	if (vdso || stat(resolved_path, &sostat)) {
+-		sostat.st_size = 0;
+-		sostat.st_mtime = -1;
+-	}
+ 	/*
+ 	 * UST lock nests within dynamic loader lock.
+ 	 */
+@@ -79,61 +82,63 @@ int trace_baddr(void *base_addr_ptr,
+ 			continue;
+ 		if (!session->statedump_pending)
+ 			continue;
+-		tracepoint(ust_baddr_statedump, soinfo,
+-				session, base_addr_ptr,
+-				resolved_path, sostat.st_size,
+-				sostat.st_mtime);
++		tp_cb(session, extra_tp_args);
+ 	}
+ 	ust_unlock();
+ 	return 0;
+ }
+ 
+ static
+-int trace_statedump_start(void *owner)
++void trace_soinfo_cb(struct lttng_session *session, void *extra_tp_args)
+ {
+-	struct cds_list_head *sessionsp;
+-	struct lttng_session *session;
++	struct soinfo_data *so_data = (struct soinfo_data *)extra_tp_args;
+ 
+-	if (ust_lock()) {
+-		ust_unlock();
+-		return 1;
+-	}
++	tracepoint(ust_baddr_statedump, soinfo,
++		   session, so_data->base_addr_ptr,
++		   so_data->resolved_path, so_data->size,
++		   so_data->mtime);
++}
+ 
+-	sessionsp = _lttng_get_sessions();
+-	cds_list_for_each_entry(session, sessionsp, node) {
+-		if (session->owner != owner)
+-			continue;
+-		if (!session->statedump_pending)
+-			continue;
+-		tracepoint(ust_baddr_statedump, start,
+-				session);
+-	}
+-	ust_unlock();
+-	return 0;
++static
++void trace_start_cb(struct lttng_session *session, void *extra_tp_args)
++{
++	tracepoint(ust_baddr_statedump, start,
++		   session);
+ }
+ 
+ static
+-int trace_statedump_end(void *owner)
++void trace_end_cb(struct lttng_session *session, void *extra_tp_args)
+ {
+-	struct cds_list_head *sessionsp;
+-	struct lttng_session *session;
++	tracepoint(ust_baddr_statedump, end,
++		   session);
++}
+ 
+-	if (ust_lock()) {
+-		ust_unlock();
+-		return 1;
+-	}
++static
++int trace_baddr(void *owner, struct soinfo_data *so_data)
++{
++	struct stat sostat;
+ 
+-	sessionsp = _lttng_get_sessions();
+-	cds_list_for_each_entry(session, sessionsp, node) {
+-		if (session->owner != owner)
+-			continue;
+-		if (!session->statedump_pending)
+-			continue;
+-		tracepoint(ust_baddr_statedump, end,
+-				session);
++	if (so_data->vdso || stat(so_data->resolved_path, &sostat)) {
++		sostat.st_size = 0;
++		sostat.st_mtime = -1;
+ 	}
+-	ust_unlock();
+-	return 0;
++
++	so_data->size = sostat.st_size;
++	so_data->mtime = sostat.st_mtime;
++
++	return trace_statedump_event(trace_soinfo_cb, owner, so_data);
++}
++
++static
++int trace_statedump_start(void *owner)
++{
++	return trace_statedump_event(trace_start_cb, owner, NULL);
++}
++
++static
++int trace_statedump_end(void *owner)
++{
++	return trace_statedump_event(trace_end_cb, owner, NULL);
+ }
+ 
+ static
+@@ -141,18 +146,18 @@ int extract_soinfo_events(struct dl_phdr_info *info, size_t size, void *_data)
+ {
+ 	int j;
+ 	struct extract_data *data = _data;
++	struct soinfo_data so_data;
+ 	void *owner = data->owner;
+ 
+ 	for (j = 0; j < info->dlpi_phnum; j++) {
+ 		char resolved_path[PATH_MAX];
+-		void *base_addr_ptr;
+-		int vdso = 0;
++		so_data.vdso = 0;
+ 
+ 		if (info->dlpi_phdr[j].p_type != PT_LOAD)
+ 			continue;
+ 
+ 		/* Calculate virtual memory address of the loadable segment */
+-		base_addr_ptr = (void *) info->dlpi_addr
++		so_data.base_addr_ptr = (void *) info->dlpi_addr
+ 			+ info->dlpi_phdr[j].p_vaddr;
+ 
+ 		if ((info->dlpi_name == NULL || info->dlpi_name[0] == 0)
+@@ -163,7 +168,7 @@ int extract_soinfo_events(struct dl_phdr_info *info, size_t size, void *_data)
+ 			 * could be e.g. vdso. Don't mistakenly dump
+ 			 * them as being the program executable.
+ 			 */
+-			data->exec_baddr = base_addr_ptr;
++			data->exec_baddr = so_data.base_addr_ptr;
+ 			/*
+ 			 * Deal with program executable outside of phdr
+ 			 * iteration.
+@@ -173,7 +178,7 @@ int extract_soinfo_events(struct dl_phdr_info *info, size_t size, void *_data)
+ 		if (info->dlpi_name == NULL || info->dlpi_name[0] == 0) {
+ 			/* Found vDSO. */
+ 			snprintf(resolved_path, PATH_MAX - 1, "[vdso]");
+-			vdso = 1;
++			so_data.vdso = 1;
+ 		} else {
+ 			/*
+ 			 * For regular dl_phdr_info entries we have to check if
+@@ -183,10 +188,13 @@ int extract_soinfo_events(struct dl_phdr_info *info, size_t size, void *_data)
+ 				/* Path unknown, put the 'path' into brackets */
+ 				snprintf(resolved_path, PATH_MAX - 1, "[%s]",
+ 					info->dlpi_name);
+-				vdso = 1;
++				so_data.vdso = 1;
+ 			}
+ 		}
+-		if (trace_baddr(base_addr_ptr, resolved_path, vdso, owner)) {
++
++		so_data.resolved_path = resolved_path;
++
++		if (trace_baddr(owner, &so_data)) {
+ 			return 1;
+ 		}
+ 		/*
+@@ -201,13 +209,13 @@ int extract_soinfo_events(struct dl_phdr_info *info, size_t size, void *_data)
+ static
+ void dump_exec_baddr(struct extract_data *data)
+ {
+-	void *owner = data->owner;
+-	void *base_addr_ptr;
++	struct soinfo_data so_data;
+ 	char exe_path[PATH_MAX];
+ 	ssize_t exe_len;
+ 
+-	base_addr_ptr = data->exec_baddr;
+-	if (!base_addr_ptr)
++	so_data.vdso = 0;
++	so_data.base_addr_ptr = data->exec_baddr;
++	if (!so_data.base_addr_ptr)
+ 		return;
+ 	/*
+ 	 * We have to use /proc/self/exe to determine the executable full
+@@ -217,7 +225,8 @@ void dump_exec_baddr(struct extract_data *data)
+ 	if (exe_len <= 0)
+ 		return;
+ 	exe_path[exe_len] = '\0';
+-	trace_baddr(base_addr_ptr, exe_path, 0, owner);
++	so_data.resolved_path = exe_path;
++	trace_baddr(data->owner, &so_data);
+ }
+ 
+ int lttng_ust_baddr_statedump(void *owner)
+-- 
+2.4.1
