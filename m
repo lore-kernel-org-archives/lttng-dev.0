@@ -1,36 +1,34 @@
 From: Antoine Busque <abusque@efficios.com>
-Subject: [lttng dev] [PATCH lttng-ust 2/2] Refactor
-	ust_baddr_statedump functions to reduce duplicated code
-Date: Tue, 19 May 2015 18:17:36 -0400
-Message-ID: <1432073856-458-2-git-send-email-abusque__34796.9255912632$1432073990$gmane$org@efficios.com>
-References: <1432073856-458-1-git-send-email-abusque@efficios.com>
+Subject: [PATCH lttng-ust 1/2] Add ust_baddr_statedump start and
+	end events
+Date: Tue, 19 May 2015 18:17:35 -0400
+Message-ID: <1432073856-458-1-git-send-email-abusque__20613.9964204796$1432074008$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <abusque@efficios.com>) id 1YuppZ-00031z-2T
+ (envelope-from <abusque@efficios.com>) id 1YuppY-00031y-Va
  for lttng-dev@lists.lttng.org; Tue, 19 May 2015 18:17:51 -0400
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 59101340056
- for <lttng-dev@lists.lttng.org>; Tue, 19 May 2015 22:17:51 +0000 (UTC)
+ by mail.efficios.com (Postfix) with ESMTP id DD5983402AA
+ for <lttng-dev@lists.lttng.org>; Tue, 19 May 2015 22:17:50 +0000 (UTC)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id bXq0ChpvdIv6 for <lttng-dev@lists.lttng.org>;
+ with ESMTP id 6BYKCi_-ILna for <lttng-dev@lists.lttng.org>;
  Tue, 19 May 2015 22:17:50 +0000 (UTC)
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id D520E340262
+ by mail.efficios.com (Postfix) with ESMTP id 5F45334020B
  for <lttng-dev@lists.lttng.org>; Tue, 19 May 2015 22:17:50 +0000 (UTC)
 Received: from mail.efficios.com ([127.0.0.1])
  by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id JUW7WI14sg8r for <lttng-dev@lists.lttng.org>;
+ with ESMTP id TkaYeovuXeIs for <lttng-dev@lists.lttng.org>;
  Tue, 19 May 2015 22:17:50 +0000 (UTC)
 Received: from colossus.internal.efficios.com
  (cable-192.222.194.238.electronicbox.net [192.222.194.238])
- by mail.efficios.com (Postfix) with ESMTPSA id 7BF64340056
- for <lttng-dev@lists.lttng.org>; Tue, 19 May 2015 22:17:50 +0000 (UTC)
-In-Reply-To: <1432073856-458-1-git-send-email-abusque@efficios.com>
+ by mail.efficios.com (Postfix) with ESMTPSA id DA0E5340056
+ for <lttng-dev@lists.lttng.org>; Tue, 19 May 2015 22:17:49 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -42,243 +40,122 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This refactoring allows the reuse of code that handles the iteration
-over the sessions, used for all ust_baddr_statedump events.
+These events mark the beginning and end of base addresses state dump,
+which happens once per traced application. Note that there is no
+guarantee concerning the relative order of multiple start/end events
+in the case of overlapping statedumps.  That is to say. if there are
+two start events, and two end events, the first end event does not
+necessarily correspond to the first start event, and similarly with
+the second events.
 
 Signed-off-by: Antoine Busque <abusque@efficios.com>
 ---
- liblttng-ust/lttng-ust-baddr.c | 133 ++++++++++++++++++++++-------------------
- 1 file changed, 71 insertions(+), 62 deletions(-)
+ liblttng-ust/lttng-ust-baddr.c     | 50 ++++++++++++++++++++++++++++++++++++++
+ liblttng-ust/ust_baddr_statedump.h | 10 ++++++++
+ 2 files changed, 60 insertions(+)
 
 diff --git a/liblttng-ust/lttng-ust-baddr.c b/liblttng-ust/lttng-ust-baddr.c
-index 5ec3d40..26f234f 100644
+index 922899b..5ec3d40 100644
 --- a/liblttng-ust/lttng-ust-baddr.c
 +++ b/liblttng-ust/lttng-ust-baddr.c
-@@ -44,24 +44,27 @@ struct extract_data {
- 	void *exec_baddr;	/* executable base address */
- };
- 
-+struct soinfo_data {
-+	void *base_addr_ptr;
-+	const char *resolved_path;
-+	int vdso;
-+	off_t size;
-+	time_t mtime;
-+};
-+
-+typedef void (*tracepoint_cb)(struct lttng_session *session,
-+			      void *extra_tp_args);
-+
- /*
-- * Trace baddr into all sessions for which statedump is pending owned by
-- * the caller thread.
-+ * Trace statedump event into all sessions for which statedump is
-+ * pending owned by the caller thread.
-  */
- static
--int trace_baddr(void *base_addr_ptr,
--	const char *resolved_path,
--	int vdso,
--	void *owner)
-+int trace_statedump_event(tracepoint_cb tp_cb, void *owner, void *extra_tp_args)
- {
- 	struct cds_list_head *sessionsp;
- 	struct lttng_session *session;
--	struct stat sostat;
- 
--	if (vdso || stat(resolved_path, &sostat)) {
--		sostat.st_size = 0;
--		sostat.st_mtime = -1;
--	}
- 	/*
- 	 * UST lock nests within dynamic loader lock.
- 	 */
-@@ -79,61 +82,63 @@ int trace_baddr(void *base_addr_ptr,
- 			continue;
- 		if (!session->statedump_pending)
- 			continue;
--		tracepoint(ust_baddr_statedump, soinfo,
--				session, base_addr_ptr,
--				resolved_path, sostat.st_size,
--				sostat.st_mtime);
-+		tp_cb(session, extra_tp_args);
- 	}
- 	ust_unlock();
- 	return 0;
+@@ -89,6 +89,54 @@ int trace_baddr(void *base_addr_ptr,
  }
  
  static
--int trace_statedump_start(void *owner)
-+void trace_soinfo_cb(struct lttng_session *session, void *extra_tp_args)
- {
--	struct cds_list_head *sessionsp;
--	struct lttng_session *session;
-+	struct soinfo_data *so_data = (struct soinfo_data *)extra_tp_args;
- 
--	if (ust_lock()) {
--		ust_unlock();
--		return 1;
--	}
-+	tracepoint(ust_baddr_statedump, soinfo,
-+		   session, so_data->base_addr_ptr,
-+		   so_data->resolved_path, so_data->size,
-+		   so_data->mtime);
-+}
- 
--	sessionsp = _lttng_get_sessions();
--	cds_list_for_each_entry(session, sessionsp, node) {
--		if (session->owner != owner)
--			continue;
--		if (!session->statedump_pending)
--			continue;
--		tracepoint(ust_baddr_statedump, start,
--				session);
--	}
--	ust_unlock();
--	return 0;
-+static
-+void trace_start_cb(struct lttng_session *session, void *extra_tp_args)
-+{
-+	tracepoint(ust_baddr_statedump, start,
-+		   session);
- }
- 
- static
--int trace_statedump_end(void *owner)
-+void trace_end_cb(struct lttng_session *session, void *extra_tp_args)
- {
--	struct cds_list_head *sessionsp;
--	struct lttng_session *session;
-+	tracepoint(ust_baddr_statedump, end,
-+		   session);
-+}
- 
--	if (ust_lock()) {
--		ust_unlock();
--		return 1;
--	}
-+static
-+int trace_baddr(void *owner, struct soinfo_data *so_data)
-+{
-+	struct stat sostat;
- 
--	sessionsp = _lttng_get_sessions();
--	cds_list_for_each_entry(session, sessionsp, node) {
--		if (session->owner != owner)
--			continue;
--		if (!session->statedump_pending)
--			continue;
--		tracepoint(ust_baddr_statedump, end,
--				session);
-+	if (so_data->vdso || stat(so_data->resolved_path, &sostat)) {
-+		sostat.st_size = 0;
-+		sostat.st_mtime = -1;
- 	}
--	ust_unlock();
--	return 0;
-+
-+	so_data->size = sostat.st_size;
-+	so_data->mtime = sostat.st_mtime;
-+
-+	return trace_statedump_event(trace_soinfo_cb, owner, so_data);
-+}
-+
-+static
 +int trace_statedump_start(void *owner)
 +{
-+	return trace_statedump_event(trace_start_cb, owner, NULL);
++	struct cds_list_head *sessionsp;
++	struct lttng_session *session;
++
++	if (ust_lock()) {
++		ust_unlock();
++		return 1;
++	}
++
++	sessionsp = _lttng_get_sessions();
++	cds_list_for_each_entry(session, sessionsp, node) {
++		if (session->owner != owner)
++			continue;
++		if (!session->statedump_pending)
++			continue;
++		tracepoint(ust_baddr_statedump, start,
++				session);
++	}
++	ust_unlock();
++	return 0;
 +}
 +
 +static
 +int trace_statedump_end(void *owner)
 +{
-+	return trace_statedump_event(trace_end_cb, owner, NULL);
- }
- 
- static
-@@ -141,18 +146,18 @@ int extract_soinfo_events(struct dl_phdr_info *info, size_t size, void *_data)
++	struct cds_list_head *sessionsp;
++	struct lttng_session *session;
++
++	if (ust_lock()) {
++		ust_unlock();
++		return 1;
++	}
++
++	sessionsp = _lttng_get_sessions();
++	cds_list_for_each_entry(session, sessionsp, node) {
++		if (session->owner != owner)
++			continue;
++		if (!session->statedump_pending)
++			continue;
++		tracepoint(ust_baddr_statedump, end,
++				session);
++	}
++	ust_unlock();
++	return 0;
++}
++
++static
+ int extract_soinfo_events(struct dl_phdr_info *info, size_t size, void *_data)
  {
  	int j;
- 	struct extract_data *data = _data;
-+	struct soinfo_data so_data;
- 	void *owner = data->owner;
+@@ -179,6 +227,7 @@ int lttng_ust_baddr_statedump(void *owner)
+ 	if (getenv("LTTNG_UST_WITHOUT_BADDR_STATEDUMP"))
+ 		return 0;
  
- 	for (j = 0; j < info->dlpi_phnum; j++) {
- 		char resolved_path[PATH_MAX];
--		void *base_addr_ptr;
--		int vdso = 0;
-+		so_data.vdso = 0;
- 
- 		if (info->dlpi_phdr[j].p_type != PT_LOAD)
- 			continue;
- 
- 		/* Calculate virtual memory address of the loadable segment */
--		base_addr_ptr = (void *) info->dlpi_addr
-+		so_data.base_addr_ptr = (void *) info->dlpi_addr
- 			+ info->dlpi_phdr[j].p_vaddr;
- 
- 		if ((info->dlpi_name == NULL || info->dlpi_name[0] == 0)
-@@ -163,7 +168,7 @@ int extract_soinfo_events(struct dl_phdr_info *info, size_t size, void *_data)
- 			 * could be e.g. vdso. Don't mistakenly dump
- 			 * them as being the program executable.
- 			 */
--			data->exec_baddr = base_addr_ptr;
-+			data->exec_baddr = so_data.base_addr_ptr;
- 			/*
- 			 * Deal with program executable outside of phdr
- 			 * iteration.
-@@ -173,7 +178,7 @@ int extract_soinfo_events(struct dl_phdr_info *info, size_t size, void *_data)
- 		if (info->dlpi_name == NULL || info->dlpi_name[0] == 0) {
- 			/* Found vDSO. */
- 			snprintf(resolved_path, PATH_MAX - 1, "[vdso]");
--			vdso = 1;
-+			so_data.vdso = 1;
- 		} else {
- 			/*
- 			 * For regular dl_phdr_info entries we have to check if
-@@ -183,10 +188,13 @@ int extract_soinfo_events(struct dl_phdr_info *info, size_t size, void *_data)
- 				/* Path unknown, put the 'path' into brackets */
- 				snprintf(resolved_path, PATH_MAX - 1, "[%s]",
- 					info->dlpi_name);
--				vdso = 1;
-+				so_data.vdso = 1;
- 			}
- 		}
--		if (trace_baddr(base_addr_ptr, resolved_path, vdso, owner)) {
-+
-+		so_data.resolved_path = resolved_path;
-+
-+		if (trace_baddr(owner, &so_data)) {
- 			return 1;
- 		}
- 		/*
-@@ -201,13 +209,13 @@ int extract_soinfo_events(struct dl_phdr_info *info, size_t size, void *_data)
- static
- void dump_exec_baddr(struct extract_data *data)
- {
--	void *owner = data->owner;
--	void *base_addr_ptr;
-+	struct soinfo_data so_data;
- 	char exe_path[PATH_MAX];
- 	ssize_t exe_len;
- 
--	base_addr_ptr = data->exec_baddr;
--	if (!base_addr_ptr)
-+	so_data.vdso = 0;
-+	so_data.base_addr_ptr = data->exec_baddr;
-+	if (!so_data.base_addr_ptr)
- 		return;
++	trace_statedump_start(owner);
+ 	data.owner = owner;
+ 	data.exec_baddr = NULL;
  	/*
- 	 * We have to use /proc/self/exe to determine the executable full
-@@ -217,7 +225,8 @@ void dump_exec_baddr(struct extract_data *data)
- 	if (exe_len <= 0)
- 		return;
- 	exe_path[exe_len] = '\0';
--	trace_baddr(base_addr_ptr, exe_path, 0, owner);
-+	so_data.resolved_path = exe_path;
-+	trace_baddr(data->owner, &so_data);
+@@ -194,6 +243,7 @@ int lttng_ust_baddr_statedump(void *owner)
+ 	 * iteration.
+ 	 */
+ 	dump_exec_baddr(&data);
++	trace_statedump_end(owner);
+ 	return 0;
  }
  
- int lttng_ust_baddr_statedump(void *owner)
+diff --git a/liblttng-ust/ust_baddr_statedump.h b/liblttng-ust/ust_baddr_statedump.h
+index 77a9af4..99fb849 100644
+--- a/liblttng-ust/ust_baddr_statedump.h
++++ b/liblttng-ust/ust_baddr_statedump.h
+@@ -37,6 +37,11 @@ extern "C" {
+ #define LTTNG_UST_BADDR_STATEDUMP_PROVIDER
+ #include <lttng/tracepoint.h>
+ 
++TRACEPOINT_EVENT(ust_baddr_statedump, start,
++	TP_ARGS(struct lttng_session *, session),
++	TP_FIELDS()
++)
++
+ TRACEPOINT_EVENT(ust_baddr_statedump, soinfo,
+ 	TP_ARGS(struct lttng_session *, session, void *, baddr, const char*, sopath, int64_t, size, int64_t, mtime),
+ 	TP_FIELDS(
+@@ -47,6 +52,11 @@ TRACEPOINT_EVENT(ust_baddr_statedump, soinfo,
+ 	)
+ )
+ 
++TRACEPOINT_EVENT(ust_baddr_statedump, end,
++	TP_ARGS(struct lttng_session *, session),
++	TP_FIELDS()
++)
++
+ #endif /* _TRACEPOINT_UST_BADDR_STATEDUMP_H */
+ 
+ #undef TRACEPOINT_INCLUDE
 -- 
 2.4.1
