@@ -1,16 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: lttng function tracing nginx problem
-Date: Wed, 20 May 2015 16:28:41 +0000 (UTC)
-Message-ID: <638476085.4659.1432139321124.JavaMail.zimbra__49060.1818463348$1432139411$gmane$org@efficios.com>
-References: <SNT146-W4B20B8ED37731C883223FB8C20@phx.gbl>
+Subject: Re: [PATCH lttng-ust 1/2] Add ust_baddr_statedump start
+ and	end events
+Date: Wed, 20 May 2015 16:33:34 +0000 (UTC)
+Message-ID: <790405337.4690.1432139614791.JavaMail.zimbra__22137.081254232$1432139691$gmane$org@efficios.com>
+References: <1432073856-458-1-git-send-email-abusque@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2111375222=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Yv6rO-00007m-A2
- for lttng-dev@lists.lttng.org; Wed, 20 May 2015 12:28:54 -0400
-In-Reply-To: <SNT146-W4B20B8ED37731C883223FB8C20@phx.gbl>
+ (envelope-from <compudj@efficios.com>) id 1Yv6w2-0000Aq-HN
+ for lttng-dev@lists.lttng.org; Wed, 20 May 2015 12:33:39 -0400
+In-Reply-To: <1432073856-458-1-git-send-email-abusque@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,173 +21,164 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: gang li <portlet@outlook.com>
+To: Antoine Busque <abusque@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============2111375222==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_4658_1261798030.1432139321123"
-
-------=_Part_4658_1261798030.1432139321123
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
 ----- Original Message -----
+> These events mark the beginning and end of base addresses state dump,
+> which happens once per traced application.
 
-> hi all,
+.. once per traced application per session.
 
-> I compile the nginx-1.4.7 with FLAG -finstrument-functions , and start nginx
-> like this:
 
-> LD_PRELOAD=liblttng-ust-cyg-profile-fast.so ./nginx
+> Note that there is no
+> guarantee concerning the relative order of multiple start/end events
+> in the case of overlapping statedumps.  That is to say. if there are
 
-> Then I use the command lttng list --userspace and got nothing like this:
+That is to say, if ...
 
-> UST events:
+> two start events, and two end events, the first end event does not
+> necessarily correspond to the first start event, and similarly with
+> the second events.
 
-> -------------
+For a given (process, session), the pairs of statedump begin/end
+should match. The fact that only a single thread is issuing them
+ensures that we serialize them over a single (process, session)
+tuple.
 
-> None
+It's the statedump begin/end across different processes (vpid)
+that may be interleaved.
 
-> I don't understand why I can't get the func_exit/entry events from nginx.
+Thanks,
 
-Is the "ngix" executable a binary executable or a shell script ? 
+Mathieu
 
-Can you give us the output of "file ./ngix" ? 
-
-You might want to try 
-
-export LD_PRELOAD=liblttng-ust-cyg-profile-fast.so 
-./ngix 
-
-Thanks, 
-
-Mathieu 
-
-> By the way, I test function tracing with a single c source file and works
-> well, output like this:
-
-> UST events:
-
-> -------------
-
-> PID: 4687 - Name: ./tt
-
-> lttng_ust_cyg_profile:func_exit (loglevel: TRACE_DEBUG_FUNCTION (12)) (type:
-> tracepoint)
-
-> lttng_ust_cyg_profile:func_entry (loglevel: TRACE_DEBUG_FUNCTION (12)) (type:
-> tracepoint)
-
-> lttng_ust_tracef:event (loglevel: TRACE_DEBUG (14)) (type: tracepoint)
-
-> ust_baddr_statedump:soinfo (loglevel: TRACE_DEBUG_LINE (13)) (type:
-> tracepoint)
-
-> Wishing for help.
-
+> 
+> Signed-off-by: Antoine Busque <abusque@efficios.com>
+> ---
+>  liblttng-ust/lttng-ust-baddr.c     | 50
+>  ++++++++++++++++++++++++++++++++++++++
+>  liblttng-ust/ust_baddr_statedump.h | 10 ++++++++
+>  2 files changed, 60 insertions(+)
+> 
+> diff --git a/liblttng-ust/lttng-ust-baddr.c b/liblttng-ust/lttng-ust-baddr.c
+> index 922899b..5ec3d40 100644
+> --- a/liblttng-ust/lttng-ust-baddr.c
+> +++ b/liblttng-ust/lttng-ust-baddr.c
+> @@ -89,6 +89,54 @@ int trace_baddr(void *base_addr_ptr,
+>  }
+>  
+>  static
+> +int trace_statedump_start(void *owner)
+> +{
+> +	struct cds_list_head *sessionsp;
+> +	struct lttng_session *session;
+> +
+> +	if (ust_lock()) {
+> +		ust_unlock();
+> +		return 1;
+> +	}
+> +
+> +	sessionsp = _lttng_get_sessions();
+> +	cds_list_for_each_entry(session, sessionsp, node) {
+> +		if (session->owner != owner)
+> +			continue;
+> +		if (!session->statedump_pending)
+> +			continue;
+> +		tracepoint(ust_baddr_statedump, start,
+> +				session);
+> +	}
+> +	ust_unlock();
+> +	return 0;
+> +}
+> +
+> +static
+> +int trace_statedump_end(void *owner)
+> +{
+> +	struct cds_list_head *sessionsp;
+> +	struct lttng_session *session;
+> +
+> +	if (ust_lock()) {
+> +		ust_unlock();
+> +		return 1;
+> +	}
+> +
+> +	sessionsp = _lttng_get_sessions();
+> +	cds_list_for_each_entry(session, sessionsp, node) {
+> +		if (session->owner != owner)
+> +			continue;
+> +		if (!session->statedump_pending)
+> +			continue;
+> +		tracepoint(ust_baddr_statedump, end,
+> +				session);
+> +	}
+> +	ust_unlock();
+> +	return 0;
+> +}
+> +
+> +static
+>  int extract_soinfo_events(struct dl_phdr_info *info, size_t size, void
+>  *_data)
+>  {
+>  	int j;
+> @@ -179,6 +227,7 @@ int lttng_ust_baddr_statedump(void *owner)
+>  	if (getenv("LTTNG_UST_WITHOUT_BADDR_STATEDUMP"))
+>  		return 0;
+>  
+> +	trace_statedump_start(owner);
+>  	data.owner = owner;
+>  	data.exec_baddr = NULL;
+>  	/*
+> @@ -194,6 +243,7 @@ int lttng_ust_baddr_statedump(void *owner)
+>  	 * iteration.
+>  	 */
+>  	dump_exec_baddr(&data);
+> +	trace_statedump_end(owner);
+>  	return 0;
+>  }
+>  
+> diff --git a/liblttng-ust/ust_baddr_statedump.h
+> b/liblttng-ust/ust_baddr_statedump.h
+> index 77a9af4..99fb849 100644
+> --- a/liblttng-ust/ust_baddr_statedump.h
+> +++ b/liblttng-ust/ust_baddr_statedump.h
+> @@ -37,6 +37,11 @@ extern "C" {
+>  #define LTTNG_UST_BADDR_STATEDUMP_PROVIDER
+>  #include <lttng/tracepoint.h>
+>  
+> +TRACEPOINT_EVENT(ust_baddr_statedump, start,
+> +	TP_ARGS(struct lttng_session *, session),
+> +	TP_FIELDS()
+> +)
+> +
+>  TRACEPOINT_EVENT(ust_baddr_statedump, soinfo,
+>  	TP_ARGS(struct lttng_session *, session, void *, baddr, const char*,
+>  	sopath, int64_t, size, int64_t, mtime),
+>  	TP_FIELDS(
+> @@ -47,6 +52,11 @@ TRACEPOINT_EVENT(ust_baddr_statedump, soinfo,
+>  	)
+>  )
+>  
+> +TRACEPOINT_EVENT(ust_baddr_statedump, end,
+> +	TP_ARGS(struct lttng_session *, session),
+> +	TP_FIELDS()
+> +)
+> +
+>  #endif /* _TRACEPOINT_UST_BADDR_STATEDUMP_H */
+>  
+>  #undef TRACEPOINT_INCLUDE
+> --
+> 2.4.1
+> 
+> 
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
 
 -- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
-------=_Part_4658_1261798030.1432139321123
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: times new roman, new york, times, se=
-rif; font-size: 12pt; color: #000000"><div><br></div><hr id=3D"zwchr"><bloc=
-kquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:=
-5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;fo=
-nt-family:Helvetica,Arial,sans-serif;font-size:12pt;"><style><!--
-.hmmessage P
-{
-margin:0px;
-padding:0px
-}
-body.hmmessage
-{
-font-size: 12pt;
-font-family:Calibri
-}
---></style><div dir=3D"ltr">hi all,<div><br></div><div>I compile the nginx-=
-1.4.7 with FLAG&nbsp;<span style=3D"font-size: 12pt;">-finstrument-function=
-s</span><span style=3D"font-size: 12pt;">&nbsp;, and start nginx like this:=
-</span></div><div><span style=3D"font-size: 12pt;"><br></span></div><div><p=
- class=3D"p1"><span class=3D"s1">LD_PRELOAD=3Dliblttng-ust-cyg-profile-fast=
-.so &nbsp;./nginx</span></p><p class=3D"p1"><span class=3D"s1"><br></span><=
-/p><p class=3D"p1"><span class=3D"s1">Then I use the command&nbsp;</span><s=
-pan style=3D"font-size: 12pt;">lttng list --userspace and got nothing like =
-this:</span></p><p class=3D"p1"><br></p><p class=3D"p1"><span class=3D"s1">=
-UST events:</span></p><p class=3D"p1"><span class=3D"s1">-------------</spa=
-n></p><p class=3D"p1"><span class=3D"s1">None</span></p><p class=3D"p1"><sp=
-an class=3D"s1"><br></span></p><p class=3D"p1"><span class=3D"s1"><br class=
-=3D"Apple-interchange-newline">I don't understand why I can't get the func_=
-exit/entry events from nginx.</span></p></div></div></blockquote><div><br><=
-/div><div>Is the "ngix" executable a binary executable or a shell script ?<=
-br></div><div><br></div><div>Can you give us the output of "file ./ngix" ?<=
-br></div><div><br></div><div>You might want to try<br></div><div><br></div>=
-<div>export LD_PRELOAD=3Dliblttng-ust-cyg-profile-fast.so<br></div><div>./n=
-gix<br></div><div><br></div><div>Thanks,<br></div><div><br></div><div>Mathi=
-eu<br></div><div><br></div><div><br></div><blockquote style=3D"border-left:=
-2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:n=
-ormal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sa=
-ns-serif;font-size:12pt;"><div dir=3D"ltr"><div><p class=3D"p1"><span style=
-=3D"font-size: 12pt;"><br></span></p><p class=3D"p1"><span style=3D"font-si=
-ze: 12pt;">By the way, I test function tracing with a single c source file =
-and works well, output like this:</span></p><p class=3D"p1"><span class=3D"=
-s1"><br></span></p><p class=3D"p1"><span class=3D"s1">UST events:</span></p=
-><p class=3D"p1"><span class=3D"s1">-------------</span></p><p class=3D"p2"=
-><br></p><p class=3D"p1"><span class=3D"s1">PID: 4687 - Name: ./tt</span></=
-p><p class=3D"p1"><span class=3D"s1">&nbsp; &nbsp; &nbsp; lttng_ust_cyg_pro=
-file:func_exit (loglevel: TRACE_DEBUG_FUNCTION (12)) (type: tracepoint)</sp=
-an></p><p class=3D"p1"><span class=3D"s1">&nbsp; &nbsp; &nbsp; lttng_ust_cy=
-g_profile:func_entry (loglevel: TRACE_DEBUG_FUNCTION (12)) (type: tracepoin=
-t)</span></p><p class=3D"p1"><span class=3D"s1">&nbsp; &nbsp; &nbsp; lttng_=
-ust_tracef:event (loglevel: TRACE_DEBUG (14)) (type: tracepoint)</span></p>=
-<p class=3D"p1"><span class=3D"s1">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</span></p><p class=3D"p1"><span class=3D"s1">&nbsp; &nbsp; &nbsp;&nbsp;ust=
-_baddr_statedump:soinfo (loglevel: TRACE_DEBUG_LINE (13)) (type: tracepoint=
-)</span></p><p class=3D"p1"><span class=3D"s1"><br></span></p><p class=3D"p=
-1"><span class=3D"s1"><br></span></p><p class=3D"p1">Wishing for help.</p><=
-/div></div><br>_______________________________________________<br>lttng-dev=
- mailing list<br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bi=
-n/mailman/listinfo/lttng-dev<br></blockquote><div><br><br></div><div><br></=
-div><div>-- <br></div><div><span name=3D"x"></span>Mathieu Desnoyers<br>Eff=
-iciOS Inc.<br>http://www.efficios.com<span name=3D"x"></span><br></div></di=
-v></body></html>
-------=_Part_4658_1261798030.1432139321123--
-
-
---===============2111375222==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2111375222==--
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
