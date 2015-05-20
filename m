@@ -1,34 +1,14 @@
-From: Antoine Busque <abusque@efficios.com>
-Subject: [PATCH lttng-ust 1/2] Add ust_baddr_statedump start and
-	end events
-Date: Tue, 19 May 2015 18:17:35 -0400
-Message-ID: <1432073856-458-1-git-send-email-abusque__20613.9964204796$1432074008$gmane$org@efficios.com>
+From: gang li <portlet@outlook.com>
+Subject: lttng function tracing nginx problem
+Date: Wed, 20 May 2015 23:45:34 +0800
+Message-ID: <SNT146-W4B20B8ED37731C883223FB8C20__6297.54873593829$1432136871$gmane$org@phx.gbl>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1254700897=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from snt004-omc3s10.hotmail.com ([65.55.90.149])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <abusque@efficios.com>) id 1YuppY-00031y-Va
- for lttng-dev@lists.lttng.org; Tue, 19 May 2015 18:17:51 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id DD5983402AA
- for <lttng-dev@lists.lttng.org>; Tue, 19 May 2015 22:17:50 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id 6BYKCi_-ILna for <lttng-dev@lists.lttng.org>;
- Tue, 19 May 2015 22:17:50 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 5F45334020B
- for <lttng-dev@lists.lttng.org>; Tue, 19 May 2015 22:17:50 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id TkaYeovuXeIs for <lttng-dev@lists.lttng.org>;
- Tue, 19 May 2015 22:17:50 +0000 (UTC)
-Received: from colossus.internal.efficios.com
- (cable-192.222.194.238.electronicbox.net [192.222.194.238])
- by mail.efficios.com (Postfix) with ESMTPSA id DA0E5340056
- for <lttng-dev@lists.lttng.org>; Tue, 19 May 2015 22:17:49 +0000 (UTC)
+ (envelope-from <portlet@outlook.com>) id 1Yv6Bg-0008Ja-92
+ for lttng-dev@lists.lttng.org; Wed, 20 May 2015 11:45:42 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -37,125 +17,95 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-These events mark the beginning and end of base addresses state dump,
-which happens once per traced application. Note that there is no
-guarantee concerning the relative order of multiple start/end events
-in the case of overlapping statedumps.  That is to say. if there are
-two start events, and two end events, the first end event does not
-necessarily correspond to the first start event, and similarly with
-the second events.
+--===============1254700897==
+Content-Type: multipart/alternative;
+	boundary="_87c23071-d6c9-47b3-890e-ababe6ecd60d_"
 
-Signed-off-by: Antoine Busque <abusque@efficios.com>
----
- liblttng-ust/lttng-ust-baddr.c     | 50 ++++++++++++++++++++++++++++++++++++++
- liblttng-ust/ust_baddr_statedump.h | 10 ++++++++
- 2 files changed, 60 insertions(+)
+--_87c23071-d6c9-47b3-890e-ababe6ecd60d_
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 
-diff --git a/liblttng-ust/lttng-ust-baddr.c b/liblttng-ust/lttng-ust-baddr.c
-index 922899b..5ec3d40 100644
---- a/liblttng-ust/lttng-ust-baddr.c
-+++ b/liblttng-ust/lttng-ust-baddr.c
-@@ -89,6 +89,54 @@ int trace_baddr(void *base_addr_ptr,
- }
- 
- static
-+int trace_statedump_start(void *owner)
-+{
-+	struct cds_list_head *sessionsp;
-+	struct lttng_session *session;
-+
-+	if (ust_lock()) {
-+		ust_unlock();
-+		return 1;
-+	}
-+
-+	sessionsp = _lttng_get_sessions();
-+	cds_list_for_each_entry(session, sessionsp, node) {
-+		if (session->owner != owner)
-+			continue;
-+		if (!session->statedump_pending)
-+			continue;
-+		tracepoint(ust_baddr_statedump, start,
-+				session);
-+	}
-+	ust_unlock();
-+	return 0;
-+}
-+
-+static
-+int trace_statedump_end(void *owner)
-+{
-+	struct cds_list_head *sessionsp;
-+	struct lttng_session *session;
-+
-+	if (ust_lock()) {
-+		ust_unlock();
-+		return 1;
-+	}
-+
-+	sessionsp = _lttng_get_sessions();
-+	cds_list_for_each_entry(session, sessionsp, node) {
-+		if (session->owner != owner)
-+			continue;
-+		if (!session->statedump_pending)
-+			continue;
-+		tracepoint(ust_baddr_statedump, end,
-+				session);
-+	}
-+	ust_unlock();
-+	return 0;
-+}
-+
-+static
- int extract_soinfo_events(struct dl_phdr_info *info, size_t size, void *_data)
- {
- 	int j;
-@@ -179,6 +227,7 @@ int lttng_ust_baddr_statedump(void *owner)
- 	if (getenv("LTTNG_UST_WITHOUT_BADDR_STATEDUMP"))
- 		return 0;
- 
-+	trace_statedump_start(owner);
- 	data.owner = owner;
- 	data.exec_baddr = NULL;
- 	/*
-@@ -194,6 +243,7 @@ int lttng_ust_baddr_statedump(void *owner)
- 	 * iteration.
- 	 */
- 	dump_exec_baddr(&data);
-+	trace_statedump_end(owner);
- 	return 0;
- }
- 
-diff --git a/liblttng-ust/ust_baddr_statedump.h b/liblttng-ust/ust_baddr_statedump.h
-index 77a9af4..99fb849 100644
---- a/liblttng-ust/ust_baddr_statedump.h
-+++ b/liblttng-ust/ust_baddr_statedump.h
-@@ -37,6 +37,11 @@ extern "C" {
- #define LTTNG_UST_BADDR_STATEDUMP_PROVIDER
- #include <lttng/tracepoint.h>
- 
-+TRACEPOINT_EVENT(ust_baddr_statedump, start,
-+	TP_ARGS(struct lttng_session *, session),
-+	TP_FIELDS()
-+)
-+
- TRACEPOINT_EVENT(ust_baddr_statedump, soinfo,
- 	TP_ARGS(struct lttng_session *, session, void *, baddr, const char*, sopath, int64_t, size, int64_t, mtime),
- 	TP_FIELDS(
-@@ -47,6 +52,11 @@ TRACEPOINT_EVENT(ust_baddr_statedump, soinfo,
- 	)
- )
- 
-+TRACEPOINT_EVENT(ust_baddr_statedump, end,
-+	TP_ARGS(struct lttng_session *, session),
-+	TP_FIELDS()
-+)
-+
- #endif /* _TRACEPOINT_UST_BADDR_STATEDUMP_H */
- 
- #undef TRACEPOINT_INCLUDE
--- 
-2.4.1
+aGkgYWxsLA0KSSBjb21waWxlIHRoZSBuZ2lueC0xLjQuNyB3aXRoIEZMQUcgLWZpbnN0cnVtZW50
+LWZ1bmN0aW9ucyAsIGFuZCBzdGFydCBuZ2lueCBsaWtlIHRoaXM6DQoKCgoKCgoKCkxEX1BSRUxP
+QUQ9bGlibHR0bmctdXN0LWN5Zy1wcm9maWxlLWZhc3Quc28gIC4vbmdpbngNClRoZW4gSSB1c2Ug
+dGhlIGNvbW1hbmQgbHR0bmcgbGlzdCAtLXVzZXJzcGFjZSBhbmQgZ290IG5vdGhpbmcgbGlrZSB0
+aGlzOg0KVVNUIGV2ZW50czotLS0tLS0tLS0tLS0tCgoKCgoKCgoKCk5vbmUNCkkgZG9uJ3QgdW5k
+ZXJzdGFuZCB3aHkgSSBjYW4ndCBnZXQgdGhlIGZ1bmNfZXhpdC9lbnRyeSBldmVudHMgZnJvbSBu
+Z2lueC4NCkJ5IHRoZSB3YXksIEkgdGVzdCBmdW5jdGlvbiB0cmFjaW5nIHdpdGggYSBzaW5nbGUg
+YyBzb3VyY2UgZmlsZSBhbmQgd29ya3Mgd2VsbCwgb3V0cHV0IGxpa2UgdGhpczoNClVTVCBldmVu
+dHM6LS0tLS0tLS0tLS0tLQ0KUElEOiA0Njg3IC0gTmFtZTogLi90dCAgICAgIGx0dG5nX3VzdF9j
+eWdfcHJvZmlsZTpmdW5jX2V4aXQgKGxvZ2xldmVsOiBUUkFDRV9ERUJVR19GVU5DVElPTiAoMTIp
+KSAodHlwZTogdHJhY2Vwb2ludCkgICAgICBsdHRuZ191c3RfY3lnX3Byb2ZpbGU6ZnVuY19lbnRy
+eSAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHX0ZVTkNUSU9OICgxMikpICh0eXBlOiB0cmFjZXBvaW50
+KSAgICAgIGx0dG5nX3VzdF90cmFjZWY6ZXZlbnQgKGxvZ2xldmVsOiBUUkFDRV9ERUJVRyAoMTQp
+KSAodHlwZTogdHJhY2Vwb2ludCkKCgoKCgoKCgoKCgoKCgogICAgICB1c3RfYmFkZHJfc3RhdGVk
+dW1wOnNvaW5mbyAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHX0xJTkUgKDEzKSkgKHR5cGU6IHRyYWNl
+cG9pbnQpDQoNCldpc2hpbmcgZm9yIGhlbHAuCgoKCgoKCgoKCgoKCgoKCiAJCSAJICAgCQkgIA==
+
+--_87c23071-d6c9-47b3-890e-ababe6ecd60d_
+Content-Type: text/html; charset="gb2312"
+Content-Transfer-Encoding: base64
+
+PGh0bWw+DQo8aGVhZD4NCjxzdHlsZT48IS0tDQouaG1tZXNzYWdlIFANCnsNCm1hcmdpbjowcHg7
+DQpwYWRkaW5nOjBweA0KfQ0KYm9keS5obW1lc3NhZ2UNCnsNCmZvbnQtc2l6ZTogMTJwdDsNCmZv
+bnQtZmFtaWx5OkNhbGlicmkNCn0NCi0tPjwvc3R5bGU+PC9oZWFkPg0KPGJvZHkgY2xhc3M9J2ht
+bWVzc2FnZSc+PGRpdiBkaXI9J2x0cic+aGkgYWxsLDxkaXY+PGJyPjwvZGl2PjxkaXY+SSBjb21w
+aWxlIHRoZSBuZ2lueC0xLjQuNyB3aXRoIEZMQUcmbmJzcDs8c3BhbiBzdHlsZT0iZm9udC1zaXpl
+OiAxMnB0OyI+LWZpbnN0cnVtZW50LWZ1bmN0aW9uczwvc3Bhbj48c3BhbiBzdHlsZT0iZm9udC1z
+aXplOiAxMnB0OyI+Jm5ic3A7LCBhbmQgc3RhcnQgbmdpbnggbGlrZSB0aGlzOjwvc3Bhbj48L2Rp
+dj48ZGl2PjxzcGFuIHN0eWxlPSJmb250LXNpemU6IDEycHQ7Ij48YnI+PC9zcGFuPjwvZGl2Pjxk
+aXY+CgoKCgoKCgo8cCBjbGFzcz0icDEiPjxzcGFuIGNsYXNzPSJzMSI+TERfUFJFTE9BRD1saWJs
+dHRuZy11c3QtY3lnLXByb2ZpbGUtZmFzdC5zbyAmbmJzcDsuL25naW54PC9zcGFuPjwvcD48cCBj
+bGFzcz0icDEiPjxzcGFuIGNsYXNzPSJzMSI+PGJyPjwvc3Bhbj48L3A+PHAgY2xhc3M9InAxIj48
+c3BhbiBjbGFzcz0iczEiPlRoZW4gSSB1c2UgdGhlIGNvbW1hbmQmbmJzcDs8L3NwYW4+PHNwYW4g
+c3R5bGU9ImZvbnQtc2l6ZTogMTJwdDsiPmx0dG5nIGxpc3QgLS11c2Vyc3BhY2UgYW5kIGdvdCBu
+b3RoaW5nIGxpa2UgdGhpczo8L3NwYW4+PC9wPjxwIGNsYXNzPSJwMSI+PGJyPjwvcD48cCBjbGFz
+cz0icDEiPjxzcGFuIGNsYXNzPSJzMSI+VVNUIGV2ZW50czo8L3NwYW4+PC9wPjxwIGNsYXNzPSJw
+MSI+PHNwYW4gY2xhc3M9InMxIj4tLS0tLS0tLS0tLS0tPC9zcGFuPjwvcD48cCBjbGFzcz0icDEi
+PgoKCgoKCgoKCgo8L3A+PHAgY2xhc3M9InAxIj48c3BhbiBjbGFzcz0iczEiPk5vbmU8L3NwYW4+
+PC9wPjxwIGNsYXNzPSJwMSI+PHNwYW4gY2xhc3M9InMxIj48YnI+PC9zcGFuPjwvcD48cCBjbGFz
+cz0icDEiPjxzcGFuIGNsYXNzPSJzMSI+PGJyIGNsYXNzPSJBcHBsZS1pbnRlcmNoYW5nZS1uZXds
+aW5lIj5JIGRvbid0IHVuZGVyc3RhbmQgd2h5IEkgY2FuJ3QgZ2V0IHRoZSBmdW5jX2V4aXQvZW50
+cnkgZXZlbnRzIGZyb20gbmdpbnguPC9zcGFuPjwvcD48cCBjbGFzcz0icDEiPjxzcGFuIHN0eWxl
+PSJmb250LXNpemU6IDEycHQ7Ij48YnI+PC9zcGFuPjwvcD48cCBjbGFzcz0icDEiPjxzcGFuIHN0
+eWxlPSJmb250LXNpemU6IDEycHQ7Ij5CeSB0aGUgd2F5LCBJIHRlc3QgZnVuY3Rpb24gdHJhY2lu
+ZyB3aXRoIGEgc2luZ2xlIGMgc291cmNlIGZpbGUgYW5kIHdvcmtzIHdlbGwsIG91dHB1dCBsaWtl
+IHRoaXM6PC9zcGFuPjwvcD48cCBjbGFzcz0icDEiPjxzcGFuIGNsYXNzPSJzMSI+PGJyPjwvc3Bh
+bj48L3A+PHAgY2xhc3M9InAxIj48c3BhbiBjbGFzcz0iczEiPlVTVCBldmVudHM6PC9zcGFuPjwv
+cD48cCBjbGFzcz0icDEiPjxzcGFuIGNsYXNzPSJzMSI+LS0tLS0tLS0tLS0tLTwvc3Bhbj48L3A+
+PHAgY2xhc3M9InAyIj48c3BhbiBjbGFzcz0iczEiPjwvc3Bhbj48YnI+PC9wPjxwIGNsYXNzPSJw
+MSI+PHNwYW4gY2xhc3M9InMxIj5QSUQ6IDQ2ODcgLSBOYW1lOiAuL3R0PC9zcGFuPjwvcD48cCBj
+bGFzcz0icDEiPjxzcGFuIGNsYXNzPSJzMSI+Jm5ic3A7ICZuYnNwOyAmbmJzcDsgbHR0bmdfdXN0
+X2N5Z19wcm9maWxlOmZ1bmNfZXhpdCAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHX0ZVTkNUSU9OICgx
+MikpICh0eXBlOiB0cmFjZXBvaW50KTwvc3Bhbj48L3A+PHAgY2xhc3M9InAxIj48c3BhbiBjbGFz
+cz0iczEiPiZuYnNwOyAmbmJzcDsgJm5ic3A7IGx0dG5nX3VzdF9jeWdfcHJvZmlsZTpmdW5jX2Vu
+dHJ5IChsb2dsZXZlbDogVFJBQ0VfREVCVUdfRlVOQ1RJT04gKDEyKSkgKHR5cGU6IHRyYWNlcG9p
+bnQpPC9zcGFuPjwvcD48cCBjbGFzcz0icDEiPjxzcGFuIGNsYXNzPSJzMSI+Jm5ic3A7ICZuYnNw
+OyAmbmJzcDsgbHR0bmdfdXN0X3RyYWNlZjpldmVudCAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHICgx
+NCkpICh0eXBlOiB0cmFjZXBvaW50KTwvc3Bhbj48L3A+PHAgY2xhc3M9InAxIj48c3BhbiBjbGFz
+cz0iczEiPgoKCgoKCgoKCgoKCgoKCjwvc3Bhbj48L3A+PHAgY2xhc3M9InAxIj48c3BhbiBjbGFz
+cz0iczEiPiZuYnNwOyAmbmJzcDsgJm5ic3A7Jm5ic3A7dXN0X2JhZGRyX3N0YXRlZHVtcDpzb2lu
+Zm8gKGxvZ2xldmVsOiBUUkFDRV9ERUJVR19MSU5FICgxMykpICh0eXBlOiB0cmFjZXBvaW50KTwv
+c3Bhbj48L3A+PHAgY2xhc3M9InAxIj48c3BhbiBjbGFzcz0iczEiPjxicj48L3NwYW4+PC9wPjxw
+IGNsYXNzPSJwMSI+PHNwYW4gY2xhc3M9InMxIj48YnI+PC9zcGFuPjwvcD48cCBjbGFzcz0icDEi
+Pldpc2hpbmcgZm9yIGhlbHAuPC9wPgoKCgoKCgoKPC9kaXY+CgoKCgoKCgogCQkgCSAgIAkJICA8
+L2Rpdj48L2JvZHk+DQo8L2h0bWw+
+
+--_87c23071-d6c9-47b3-890e-ababe6ecd60d_--
+
+
+--===============1254700897==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1254700897==--
