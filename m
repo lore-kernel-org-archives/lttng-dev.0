@@ -1,17 +1,19 @@
-From: gang li <portlet@outlook.com>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
 Subject: Re: lttng function tracing nginx problem
-Date: Thu, 21 May 2015 09:02:40 +0800
-Message-ID: <SNT146-W298EB3CDE57BAF7044769B8C10__14059.3069409535$1432170259$gmane$org@phx.gbl>
+Date: Wed, 20 May 2015 22:32:27 -0400
+Message-ID: <555D43BB.4050906__41332.5816778981$1432175673$gmane$org@voxpopuli.im>
 References: <SNT146-W4B20B8ED37731C883223FB8C20@phx.gbl>,
  <638476085.4659.1432139321124.JavaMail.zimbra@efficios.com>
+ <SNT146-W298EB3CDE57BAF7044769B8C10@phx.gbl>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1549175249=="
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from snt004-omc2s20.hotmail.com ([65.55.90.95])
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <portlet@outlook.com>) id 1YvEsp-0002pN-9t
- for lttng-dev@lists.lttng.org; Wed, 20 May 2015 21:02:58 -0400
-In-Reply-To: <638476085.4659.1432139321124.JavaMail.zimbra@efficios.com>
+ (envelope-from <alexmonthy@voxpopuli.im>) id 1YvGHi-0003HZ-4K
+ for lttng-dev@lists.lttng.org; Wed, 20 May 2015 22:32:38 -0400
+In-Reply-To: <SNT146-W298EB3CDE57BAF7044769B8C10@phx.gbl>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,269 +22,90 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: gang li <portlet@outlook.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1549175249==
-Content-Type: multipart/alternative;
-	boundary="_dd7b26c3-2485-45cb-b9ff-3f99e49b74af_"
+Hi,
 
---_dd7b26c3-2485-45cb-b9ff-3f99e49b74af_
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+Is it possible that nginx forks other processes, and the main process 
+stays there doing almost nothing? In such a case, you would need to also 
+preload "liblttng-ust-fork.so", so that UST can follow through fork() 
+calls. See the section USING LTTNG UST WITH DAEMONS of "man lttng-ust".
 
-CgoKCgoKCgoNCltxdWVoYW5AbG9jYWxob3N0IG9ianNdJCBmaWxlIC4vbmdpbngKLi9uZ2lueDog
-RUxGIDY0LWJpdCBMU0IgZXhlY3V0YWJsZSwgeDg2LTY0LCB2ZXJzaW9uIDEgKFNZU1YpLCBkeW5h
-bWljYWxseSBsaW5rZWQgKHVzZXMgc2hhcmVkIGxpYnMpLCBmb3IgR05VL0xpbnV4IDIuNi4zMiwg
-QnVpbGRJRFtzaGExXT0weGI3NjU5YWJkNmJkOTYyYjcwMzNmM2NjNDk1YWM4YmI0NGFjOWYwNDQs
-IG5vdCBzdHJpcHBlZA0KCgoKCgoKCgpDRkxBR1MgPSAtZmluc3RydW1lbnQtZnVuY3Rpb25zIC1w
-aXBlIC1XIC1XYWxsIC1XcG9pbnRlci1hcml0aCAtV25vLXVudXNlZC1wYXJhbWV0ZXIgLVdlcnJv
-ciAtZw0KW3F1ZWhhbkBsb2NhbGhvc3Qgb2Jqc10kIG5tIC4vbmdpbnggfCBncmVwIF9fY3lnX3By
-b2ZpbGVfZnVuYyAgICAgICAgICAgICAgICAgVSBfX2N5Z19wcm9maWxlX2Z1bmNfZW50ZXJAQEdM
-SUJDXzIuMi41CgoKCgoKCgoKCiAgICAgICAgICAgICAgICAgVSBfX2N5Z19wcm9maWxlX2Z1bmNf
-ZXhpdEBAR0xJQkNfMi4yLjUNCltxdWVoYW5AbG9jYWxob3N0IG9ianNdJCBjYXQgL3Byb2MvMjA0
-Ni9tYXBzIHwgZ3JlcCBsdHRuZzdmMjI5ODAwMDAwMC03ZjIyOTgwMDkwMDAgci14cCAwMDAwMDAw
-MCBmZDowMSAxMDM4NzA5NDQgICAgICAgICAgICAgICAgICAvdXNyL2xpYi9saWJsdHRuZy11c3Qt
-dHJhY2Vwb2ludC5zby4wLjAuMDdmMjI5ODAwOTAwMC03ZjIyOTgyMDgwMDAgLS0tcCAwMDAwOTAw
-MCBmZDowMSAxMDM4NzA5NDQgICAgICAgICAgICAgICAgICAvdXNyL2xpYi9saWJsdHRuZy11c3Qt
-dHJhY2Vwb2ludC5zby4wLjAuMDdmMjI5ODIwODAwMC03ZjIyOTgyMDkwMDAgci0tcCAwMDAwODAw
-MCBmZDowMSAxMDM4NzA5NDQgICAgICAgICAgICAgICAgICAvdXNyL2xpYi9saWJsdHRuZy11c3Qt
-dHJhY2Vwb2ludC5zby4wLjAuMDdmMjI5ODIwOTAwMC03ZjIyOTgyMGEwMDAgcnctcCAwMDAwOTAw
-MCBmZDowMSAxMDM4NzA5NDQgICAgICAgICAgICAgICAgICAvdXNyL2xpYi9saWJsdHRuZy11c3Qt
-dHJhY2Vwb2ludC5zby4wLjAuMDdmMjI5OGFhYTAwMC03ZjIyOThhZjIwMDAgci14cCAwMDAwMDAw
-MCBmZDowMSAxMDM4NzA5NTEgICAgICAgICAgICAgICAgICAvdXNyL2xpYi9saWJsdHRuZy11c3Qu
-c28uMC4wLjA3ZjIyOThhZjIwMDAtN2YyMjk4Y2YyMDAwIC0tLXAgMDAwNDgwMDAgZmQ6MDEgMTAz
-ODcwOTUxICAgICAgICAgICAgICAgICAgL3Vzci9saWIvbGlibHR0bmctdXN0LnNvLjAuMC4wN2Yy
-Mjk4Y2YyMDAwLTdmMjI5OGNmNDAwMCByLS1wIDAwMDQ4MDAwIGZkOjAxIDEwMzg3MDk1MSAgICAg
-ICAgICAgICAgICAgIC91c3IvbGliL2xpYmx0dG5nLXVzdC5zby4wLjAuMDdmMjI5OGNmNDAwMC03
-ZjIyOThjZjkwMDAgcnctcCAwMDA0YTAwMCBmZDowMSAxMDM4NzA5NTEgICAgICAgICAgICAgICAg
-ICAvdXNyL2xpYi9saWJsdHRuZy11c3Quc28uMC4wLjA3ZjIyOTlkNmEwMDAtN2YyMjk5ZDZjMDAw
-IHIteHAgMDAwMDAwMDAgZmQ6MDEgMTAzODcwOTgxICAgICAgICAgICAgICAgICAgL3Vzci9saWIv
-bGlibHR0bmctdXN0LWN5Zy1wcm9maWxlLWZhc3Quc28uMC4wLjA3ZjIyOTlkNmMwMDAtN2YyMjk5
-ZjZjMDAwIC0tLXAgMDAwMDIwMDAgZmQ6MDEgMTAzODcwOTgxICAgICAgICAgICAgICAgICAgL3Vz
-ci9saWIvbGlibHR0bmctdXN0LWN5Zy1wcm9maWxlLWZhc3Quc28uMC4wLjA3ZjIyOTlmNmMwMDAt
-N2YyMjk5ZjZkMDAwIHItLXAgMDAwMDIwMDAgZmQ6MDEgMTAzODcwOTgxICAgICAgICAgICAgICAg
-ICAgL3Vzci9saWIvbGlibHR0bmctdXN0LWN5Zy1wcm9maWxlLWZhc3Quc28uMC4wLjA3ZjIyOTlm
-NmQwMDAtN2YyMjk5ZjZlMDAwIHJ3LXAgMDAwMDMwMDAgZmQ6MDEgMTAzODcwOTgxICAgICAgICAg
-ICAgICAgICAgL3Vzci9saWIvbGlibHR0bmctdXN0LWN5Zy1wcm9maWxlLWZhc3Quc28uMC4wLjA3
-ZjIyOWExOGEwMDAtN2YyMjlhMThiMDAwIHItLXMgMDAwMDAwMDAgMDA6MTEgMTg3MjggICAgICAg
-ICAgICAgICAgICAgICAgL2Rldi9zaG0vbHR0bmctdXN0LXdhaXQtNS0xMDAwCgoKCgoKCgoKCgoK
-CgoKCgoKCgoKCjdmMjI5YTE4YjAwMC03ZjIyOWExOGMwMDAgci0tcyAwMDAwMDAwMCAwMDoxMSAx
-ODcyNyAgICAgICAgICAgICAgICAgICAgICAvZGV2L3NobS9sdHRuZy11c3Qtd2FpdC01DQoNCk5n
-aW54IGlzIGEgdmVyeSBmYW1vdXMgbGlnaHR3ZWlnaHQgaHR0cCBzZXJ2ZXIsIGFuZCBJIHVzZSB0
-aGUgbGF0ZXN0IGx0dG5nIHN1aXRzLCBJIGNhbid0IHJlc29sdmUgdGhpcy4NCg0KRGF0ZTogV2Vk
-LCAyMCBNYXkgMjAxNSAxNjoyODo0MSArMDAwMA0KRnJvbTogbWF0aGlldS5kZXNub3llcnNAZWZm
-aWNpb3MuY29tDQpUbzogcG9ydGxldEBvdXRsb29rLmNvbQ0KQ0M6IGx0dG5nLWRldkBsaXN0cy5s
-dHRuZy5vcmcNClN1YmplY3Q6IFJlOiBbbHR0bmctZGV2XSBsdHRuZyBmdW5jdGlvbiB0cmFjaW5n
-IG5naW54IHByb2JsZW0NCg0KDQpoaSBhbGwsDQpJIGNvbXBpbGUgdGhlIG5naW54LTEuNC43IHdp
-dGggRkxBRyAtZmluc3RydW1lbnQtZnVuY3Rpb25zICwgYW5kIHN0YXJ0IG5naW54IGxpa2UgdGhp
-czoNCkxEX1BSRUxPQUQ9bGlibHR0bmctdXN0LWN5Zy1wcm9maWxlLWZhc3Quc28gIC4vbmdpbngN
-ClRoZW4gSSB1c2UgdGhlIGNvbW1hbmQgbHR0bmcgbGlzdCAtLXVzZXJzcGFjZSBhbmQgZ290IG5v
-dGhpbmcgbGlrZSB0aGlzOg0KVVNUIGV2ZW50czotLS0tLS0tLS0tLS0tTm9uZQ0KSSBkb24ndCB1
-bmRlcnN0YW5kIHdoeSBJIGNhbid0IGdldCB0aGUgZnVuY19leGl0L2VudHJ5IGV2ZW50cyBmcm9t
-IG5naW54Lg0KSXMgdGhlICJuZ2l4IiBleGVjdXRhYmxlIGEgYmluYXJ5IGV4ZWN1dGFibGUgb3Ig
-YSBzaGVsbCBzY3JpcHQgPw0KDQpDYW4geW91IGdpdmUgdXMgdGhlIG91dHB1dCBvZiAiZmlsZSAu
-L25naXgiID8NCg0KWW91IG1pZ2h0IHdhbnQgdG8gdHJ5DQoNCmV4cG9ydCBMRF9QUkVMT0FEPWxp
-Ymx0dG5nLXVzdC1jeWctcHJvZmlsZS1mYXN0LnNvDQouL25naXgNCg0KVGhhbmtzLA0KDQpNYXRo
-aWV1DQoNCg0KDQpCeSB0aGUgd2F5LCBJIHRlc3QgZnVuY3Rpb24gdHJhY2luZyB3aXRoIGEgc2lu
-Z2xlIGMgc291cmNlIGZpbGUgYW5kIHdvcmtzIHdlbGwsIG91dHB1dCBsaWtlIHRoaXM6DQpVU1Qg
-ZXZlbnRzOi0tLS0tLS0tLS0tLS0NClBJRDogNDY4NyAtIE5hbWU6IC4vdHQgICAgICBsdHRuZ191
-c3RfY3lnX3Byb2ZpbGU6ZnVuY19leGl0IChsb2dsZXZlbDogVFJBQ0VfREVCVUdfRlVOQ1RJT04g
-KDEyKSkgKHR5cGU6IHRyYWNlcG9pbnQpICAgICAgbHR0bmdfdXN0X2N5Z19wcm9maWxlOmZ1bmNf
-ZW50cnkgKGxvZ2xldmVsOiBUUkFDRV9ERUJVR19GVU5DVElPTiAoMTIpKSAodHlwZTogdHJhY2Vw
-b2ludCkgICAgICBsdHRuZ191c3RfdHJhY2VmOmV2ZW50IChsb2dsZXZlbDogVFJBQ0VfREVCVUcg
-KDE0KSkgKHR5cGU6IHRyYWNlcG9pbnQpCgoKCgoKCgoKCgoKCgoKICAgICAgdXN0X2JhZGRyX3N0
-YXRlZHVtcDpzb2luZm8gKGxvZ2xldmVsOiBUUkFDRV9ERUJVR19MSU5FICgxMykpICh0eXBlOiB0
-cmFjZXBvaW50KQ0KDQpXaXNoaW5nIGZvciBoZWxwLg0KX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18NCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QNCmx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmcNCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
-L2xpc3RpbmZvL2x0dG5nLWRldg0KDQoNCg0KLS0gDQpNYXRoaWV1IERlc25veWVycw0KRWZmaWNp
-T1MgSW5jLg0KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20NCiAJCSAJICAgCQkgIA==
-
---_dd7b26c3-2485-45cb-b9ff-3f99e49b74af_
-Content-Type: text/html; charset="gb2312"
-Content-Transfer-Encoding: base64
-
-PGh0bWw+DQo8aGVhZD4NCjxzdHlsZT48IS0tDQouaG1tZXNzYWdlIFANCnsNCm1hcmdpbjowcHg7
-DQpwYWRkaW5nOjBweA0KfQ0KYm9keS5obW1lc3NhZ2UNCnsNCmZvbnQtc2l6ZTogMTJwdDsNCmZv
-bnQtZmFtaWx5OkNhbGlicmkNCn0NCi0tPjwvc3R5bGU+PC9oZWFkPg0KPGJvZHkgY2xhc3M9J2ht
-bWVzc2FnZSc+PGRpdiBkaXI9J2x0cic+CgoKCgoKCgo8cCBjbGFzcz0icDEiPjxzcGFuIGNsYXNz
-PSJzMSI+PGJyPjwvc3Bhbj48L3A+PHAgY2xhc3M9InAxIj48c3BhbiBjbGFzcz0iczEiPltxdWVo
-YW5AbG9jYWxob3N0IG9ianNdJCBmaWxlIC4vbmdpbng8L3NwYW4+PC9wPgo8cCBjbGFzcz0icDEi
-PjxzcGFuIGNsYXNzPSJzMSI+Li9uZ2lueDogRUxGIDY0LWJpdCBMU0IgZXhlY3V0YWJsZSwgeDg2
-LTY0LCB2ZXJzaW9uIDEgKFNZU1YpLCBkeW5hbWljYWxseSBsaW5rZWQgKHVzZXMgc2hhcmVkIGxp
-YnMpLCBmb3IgR05VL0xpbnV4IDIuNi4zMiwgQnVpbGRJRFtzaGExXT0weGI3NjU5YWJkNmJkOTYy
-YjcwMzNmM2NjNDk1YWM4YmI0NGFjOWYwNDQsIG5vdCBzdHJpcHBlZDwvc3Bhbj48L3A+PHAgY2xh
-c3M9InAxIj48c3BhbiBjbGFzcz0iczEiPjxicj48L3NwYW4+PC9wPjxwIGNsYXNzPSJwMSI+PHNw
-YW4gY2xhc3M9InMxIj4KCgoKCgoKCjwvc3Bhbj48L3A+PHAgY2xhc3M9InAxIj48c3BhbiBjbGFz
-cz0iczEiPkNGTEFHUzwvc3Bhbj48c3BhbiBjbGFzcz0iczIiPiA8L3NwYW4+PHNwYW4gY2xhc3M9
-InMzIj49IC1maW5zdHJ1bWVudC1mdW5jdGlvbnMgLXBpcGUgLVcgLVdhbGwgLVdwb2ludGVyLWFy
-aXRoIC1Xbm8tdW51c2VkLXBhcmFtZXRlciAtV2Vycm9yIC1nPC9zcGFuPjwvcD48cCBjbGFzcz0i
-cDEiPjxzcGFuIGNsYXNzPSJzMyI+PGJyPjwvc3Bhbj48L3A+PHAgY2xhc3M9InAxIj48c3BhbiBj
-bGFzcz0iczEiPltxdWVoYW5AbG9jYWxob3N0IG9ianNdJCBubSAuL25naW54IHwgZ3JlcCBfX2N5
-Z19wcm9maWxlX2Z1bmM8L3NwYW4+PC9wPjxwIGNsYXNzPSJwMSI+PHNwYW4gY2xhc3M9InMxIj4m
-bmJzcDsmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5i
-c3A7IFUgPC9zcGFuPjxzcGFuIGNsYXNzPSJzMiI+X19jeWdfcHJvZmlsZV9mdW5jPC9zcGFuPjxz
-cGFuIGNsYXNzPSJzMSI+X2VudGVyQEBHTElCQ18yLjIuNTwvc3Bhbj48L3A+PHAgY2xhc3M9InAx
-Ij48c3BhbiBjbGFzcz0iczMiPgoKCgoKCgoKCgo8L3NwYW4+PC9wPjxwIGNsYXNzPSJwMSI+PHNw
-YW4gY2xhc3M9InMxIj4mbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAm
-bmJzcDsgJm5ic3A7ICZuYnNwO1UgPC9zcGFuPjxzcGFuIGNsYXNzPSJzMiI+X19jeWdfcHJvZmls
-ZV9mdW5jPC9zcGFuPjxzcGFuIGNsYXNzPSJzMSI+X2V4aXRAQEdMSUJDXzIuMi41PC9zcGFuPjwv
-cD48cCBjbGFzcz0icDEiPjxzcGFuIGNsYXNzPSJzMSI+PGJyPjwvc3Bhbj48L3A+PHAgY2xhc3M9
-InAxIj48c3BhbiBjbGFzcz0iczEiPltxdWVoYW5AbG9jYWxob3N0IG9ianNdJCBjYXQgL3Byb2Mv
-MjA0Ni9tYXBzIHwgZ3JlcCBsdHRuZzwvc3Bhbj48L3A+PHAgY2xhc3M9InAxIj48c3BhbiBjbGFz
-cz0iczEiPjdmMjI5ODAwMDAwMC03ZjIyOTgwMDkwMDAgci14cCAwMDAwMDAwMCBmZDowMSAxMDM4
-NzA5NDQmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5i
-c3A7ICZuYnNwOyAvdXNyL2xpYi9saWI8L3NwYW4+PHNwYW4gY2xhc3M9InMyIj5sdHRuZzwvc3Bh
-bj48c3BhbiBjbGFzcz0iczEiPi11c3QtdHJhY2Vwb2ludC5zby4wLjAuMDwvc3Bhbj48L3A+PHAg
-Y2xhc3M9InAxIj48c3BhbiBjbGFzcz0iczEiPjdmMjI5ODAwOTAwMC03ZjIyOTgyMDgwMDAgLS0t
-cCAwMDAwOTAwMCBmZDowMSAxMDM4NzA5NDQmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5i
-c3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAvdXNyL2xpYi9saWI8L3NwYW4+PHNwYW4g
-Y2xhc3M9InMyIj5sdHRuZzwvc3Bhbj48c3BhbiBjbGFzcz0iczEiPi11c3QtdHJhY2Vwb2ludC5z
-by4wLjAuMDwvc3Bhbj48L3A+PHAgY2xhc3M9InAxIj48c3BhbiBjbGFzcz0iczEiPjdmMjI5ODIw
-ODAwMC03ZjIyOTgyMDkwMDAgci0tcCAwMDAwODAwMCBmZDowMSAxMDM4NzA5NDQmbmJzcDsgJm5i
-c3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAvdXNy
-L2xpYi9saWI8L3NwYW4+PHNwYW4gY2xhc3M9InMyIj5sdHRuZzwvc3Bhbj48c3BhbiBjbGFzcz0i
-czEiPi11c3QtdHJhY2Vwb2ludC5zby4wLjAuMDwvc3Bhbj48L3A+PHAgY2xhc3M9InAxIj48c3Bh
-biBjbGFzcz0iczEiPjdmMjI5ODIwOTAwMC03ZjIyOTgyMGEwMDAgcnctcCAwMDAwOTAwMCBmZDow
-MSAxMDM4NzA5NDQmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJz
-cDsgJm5ic3A7ICZuYnNwOyAvdXNyL2xpYi9saWI8L3NwYW4+PHNwYW4gY2xhc3M9InMyIj5sdHRu
-Zzwvc3Bhbj48c3BhbiBjbGFzcz0iczEiPi11c3QtdHJhY2Vwb2ludC5zby4wLjAuMDwvc3Bhbj48
-L3A+PHAgY2xhc3M9InAxIj48c3BhbiBjbGFzcz0iczEiPjdmMjI5OGFhYTAwMC03ZjIyOThhZjIw
-MDAgci14cCAwMDAwMDAwMCBmZDowMSAxMDM4NzA5NTEmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJz
-cDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAvdXNyL2xpYi9saWI8L3NwYW4+
-PHNwYW4gY2xhc3M9InMyIj5sdHRuZzwvc3Bhbj48c3BhbiBjbGFzcz0iczEiPi11c3Quc28uMC4w
-LjA8L3NwYW4+PC9wPjxwIGNsYXNzPSJwMSI+PHNwYW4gY2xhc3M9InMxIj43ZjIyOThhZjIwMDAt
-N2YyMjk4Y2YyMDAwIC0tLXAgMDAwNDgwMDAgZmQ6MDEgMTAzODcwOTUxJm5ic3A7ICZuYnNwOyAm
-bmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgL3Vzci9saWIv
-bGliPC9zcGFuPjxzcGFuIGNsYXNzPSJzMiI+bHR0bmc8L3NwYW4+PHNwYW4gY2xhc3M9InMxIj4t
-dXN0LnNvLjAuMC4wPC9zcGFuPjwvcD48cCBjbGFzcz0icDEiPjxzcGFuIGNsYXNzPSJzMSI+N2Yy
-Mjk4Y2YyMDAwLTdmMjI5OGNmNDAwMCByLS1wIDAwMDQ4MDAwIGZkOjAxIDEwMzg3MDk1MSZuYnNw
-OyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7
-IC91c3IvbGliL2xpYjwvc3Bhbj48c3BhbiBjbGFzcz0iczIiPmx0dG5nPC9zcGFuPjxzcGFuIGNs
-YXNzPSJzMSI+LXVzdC5zby4wLjAuMDwvc3Bhbj48L3A+PHAgY2xhc3M9InAxIj48c3BhbiBjbGFz
-cz0iczEiPjdmMjI5OGNmNDAwMC03ZjIyOThjZjkwMDAgcnctcCAwMDA0YTAwMCBmZDowMSAxMDM4
-NzA5NTEmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5i
-c3A7ICZuYnNwOyAvdXNyL2xpYi9saWI8L3NwYW4+PHNwYW4gY2xhc3M9InMyIj5sdHRuZzwvc3Bh
-bj48c3BhbiBjbGFzcz0iczEiPi11c3Quc28uMC4wLjA8L3NwYW4+PC9wPjxwIGNsYXNzPSJwMSI+
-PHNwYW4gY2xhc3M9InMxIj43ZjIyOTlkNmEwMDAtN2YyMjk5ZDZjMDAwIHIteHAgMDAwMDAwMDAg
-ZmQ6MDEgMTAzODcwOTgxJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsg
-Jm5ic3A7ICZuYnNwOyAmbmJzcDsgL3Vzci9saWIvbGliPC9zcGFuPjxzcGFuIGNsYXNzPSJzMiI+
-bHR0bmc8L3NwYW4+PHNwYW4gY2xhc3M9InMxIj4tdXN0LWN5Zy1wcm9maWxlLWZhc3Quc28uMC4w
-LjA8L3NwYW4+PC9wPjxwIGNsYXNzPSJwMSI+PHNwYW4gY2xhc3M9InMxIj43ZjIyOTlkNmMwMDAt
-N2YyMjk5ZjZjMDAwIC0tLXAgMDAwMDIwMDAgZmQ6MDEgMTAzODcwOTgxJm5ic3A7ICZuYnNwOyAm
-bmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgL3Vzci9saWIv
-bGliPC9zcGFuPjxzcGFuIGNsYXNzPSJzMiI+bHR0bmc8L3NwYW4+PHNwYW4gY2xhc3M9InMxIj4t
-dXN0LWN5Zy1wcm9maWxlLWZhc3Quc28uMC4wLjA8L3NwYW4+PC9wPjxwIGNsYXNzPSJwMSI+PHNw
-YW4gY2xhc3M9InMxIj43ZjIyOTlmNmMwMDAtN2YyMjk5ZjZkMDAwIHItLXAgMDAwMDIwMDAgZmQ6
-MDEgMTAzODcwOTgxJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5i
-c3A7ICZuYnNwOyAmbmJzcDsgL3Vzci9saWIvbGliPC9zcGFuPjxzcGFuIGNsYXNzPSJzMiI+bHR0
-bmc8L3NwYW4+PHNwYW4gY2xhc3M9InMxIj4tdXN0LWN5Zy1wcm9maWxlLWZhc3Quc28uMC4wLjA8
-L3NwYW4+PC9wPjxwIGNsYXNzPSJwMSI+PHNwYW4gY2xhc3M9InMxIj43ZjIyOTlmNmQwMDAtN2Yy
-Mjk5ZjZlMDAwIHJ3LXAgMDAwMDMwMDAgZmQ6MDEgMTAzODcwOTgxJm5ic3A7ICZuYnNwOyAmbmJz
-cDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgL3Vzci9saWIvbGli
-PC9zcGFuPjxzcGFuIGNsYXNzPSJzMiI+bHR0bmc8L3NwYW4+PHNwYW4gY2xhc3M9InMxIj4tdXN0
-LWN5Zy1wcm9maWxlLWZhc3Quc28uMC4wLjA8L3NwYW4+PC9wPjxwIGNsYXNzPSJwMSI+PHNwYW4g
-Y2xhc3M9InMxIj43ZjIyOWExOGEwMDAtN2YyMjlhMThiMDAwIHItLXMgMDAwMDAwMDAgMDA6MTEg
-MTg3MjgmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5i
-c3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7IC9kZXYvc2htLzwvc3Bhbj48c3BhbiBjbGFzcz0iczIi
-Pmx0dG5nPC9zcGFuPjxzcGFuIGNsYXNzPSJzMSI+LXVzdC13YWl0LTUtMTAwMDwvc3Bhbj48L3A+
-PHAgY2xhc3M9InAxIj48c3BhbiBjbGFzcz0iczEiPgoKCgoKCgoKCgoKCgoKCgoKCgoKCgo8L3Nw
-YW4+PC9wPjxwIGNsYXNzPSJwMSI+PHNwYW4gY2xhc3M9InMxIj43ZjIyOWExOGIwMDAtN2YyMjlh
-MThjMDAwIHItLXMgMDAwMDAwMDAgMDA6MTEgMTg3MjcmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJz
-cDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7ICZuYnNwOyAmbmJzcDsgJm5ic3A7IC9kZXYv
-c2htLzwvc3Bhbj48c3BhbiBjbGFzcz0iczIiPmx0dG5nPC9zcGFuPjxzcGFuIGNsYXNzPSJzMSI+
-LXVzdC13YWl0LTU8L3NwYW4+PC9wPjxwIGNsYXNzPSJwMSI+PHNwYW4gY2xhc3M9InMxIj48YnI+
-PC9zcGFuPjwvcD48cCBjbGFzcz0icDEiPjxzcGFuIGNsYXNzPSJzMSI+PGJyPjwvc3Bhbj48L3A+
-PHAgY2xhc3M9InAxIj48c3BhbiBjbGFzcz0iczMiPk5naW54IGlzIGEgdmVyeSBmYW1vdXMgbGln
-aHR3ZWlnaHQgaHR0cCBzZXJ2ZXIsIGFuZCBJIHVzZSB0aGUgbGF0ZXN0IGx0dG5nIHN1aXRzLCBJ
-IGNhbid0IHJlc29sdmUgdGhpcy48L3NwYW4+PC9wPjxwIGNsYXNzPSJwMSI+PHNwYW4gY2xhc3M9
-InMzIj48YnI+PC9zcGFuPjwvcD48YnI+PGRpdj48aHIgaWQ9InN0b3BTcGVsbGluZyI+RGF0ZTog
-V2VkLCAyMCBNYXkgMjAxNSAxNjoyODo0MSArMDAwMDxicj5Gcm9tOiBtYXRoaWV1LmRlc25veWVy
-c0BlZmZpY2lvcy5jb208YnI+VG86IHBvcnRsZXRAb3V0bG9vay5jb208YnI+Q0M6IGx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmc8YnI+U3ViamVjdDogUmU6IFtsdHRuZy1kZXZdIGx0dG5nIGZ1bmN0
-aW9uIHRyYWNpbmcgbmdpbnggcHJvYmxlbTxicj48YnI+PGRpdiBzdHlsZT0iZm9udC1mYW1pbHk6
-dGltZXMgbmV3IHJvbWFuLCBuZXcgeW9yaywgdGltZXMsIHNlcmlmO2ZvbnQtc2l6ZToxMnB0O2Nv
-bG9yOiMwMDAwMDA7Ij48ZGl2Pjxicj48L2Rpdj48aHIgaWQ9ImVjeHp3Y2hyIj48YmxvY2txdW90
-ZSBzdHlsZT0iYm9yZGVyLWxlZnQ6MnB4IHNvbGlkICMxMDEwRkY7cGFkZGluZy1sZWZ0OjVweDtj
-b2xvcjojMDAwO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXN0eWxlOm5vcm1hbDt0ZXh0LWRlY29y
-YXRpb246bm9uZTtmb250LWZhbWlseTpIZWx2ZXRpY2EsQXJpYWwsc2Fucy1zZXJpZjtmb250LXNp
-emU6MTJwdDsiPjxzdHlsZT48IS0tCi5FeHRlcm5hbENsYXNzIC5lY3hobW1lc3NhZ2UgUCB7CnBh
-ZGRpbmc6MHB4Owp9CgouRXh0ZXJuYWxDbGFzcyBib2R5LmVjeGhtbWVzc2FnZSB7CmZvbnQtc2l6
-ZToxMnB0Owpmb250LWZhbWlseTpDYWxpYnJpOwp9CgotLT48L3N0eWxlPjxkaXYgZGlyPSJsdHIi
-PmhpIGFsbCw8ZGl2Pjxicj48L2Rpdj48ZGl2PkkgY29tcGlsZSB0aGUgbmdpbngtMS40Ljcgd2l0
-aCBGTEFHJm5ic3A7PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMnB0OyI+LWZpbnN0cnVtZW50LWZ1
-bmN0aW9uczwvc3Bhbj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEycHQ7Ij4mbmJzcDssIGFuZCBz
-dGFydCBuZ2lueCBsaWtlIHRoaXM6PC9zcGFuPjwvZGl2PjxkaXY+PHNwYW4gc3R5bGU9ImZvbnQt
-c2l6ZToxMnB0OyI+PGJyPjwvc3Bhbj48L2Rpdj48ZGl2PjxwIGNsYXNzPSJlY3hwMSI+PHNwYW4g
-Y2xhc3M9ImVjeHMxIj5MRF9QUkVMT0FEPWxpYmx0dG5nLXVzdC1jeWctcHJvZmlsZS1mYXN0LnNv
-ICZuYnNwOy4vbmdpbng8L3NwYW4+PC9wPjxwIGNsYXNzPSJlY3hwMSI+PHNwYW4gY2xhc3M9ImVj
-eHMxIj48YnI+PC9zcGFuPjwvcD48cCBjbGFzcz0iZWN4cDEiPjxzcGFuIGNsYXNzPSJlY3hzMSI+
-VGhlbiBJIHVzZSB0aGUgY29tbWFuZCZuYnNwOzwvc3Bhbj48c3BhbiBzdHlsZT0iZm9udC1zaXpl
-OjEycHQ7Ij5sdHRuZyBsaXN0IC0tdXNlcnNwYWNlIGFuZCBnb3Qgbm90aGluZyBsaWtlIHRoaXM6
-PC9zcGFuPjwvcD48cCBjbGFzcz0iZWN4cDEiPjxicj48L3A+PHAgY2xhc3M9ImVjeHAxIj48c3Bh
-biBjbGFzcz0iZWN4czEiPlVTVCBldmVudHM6PC9zcGFuPjwvcD48cCBjbGFzcz0iZWN4cDEiPjxz
-cGFuIGNsYXNzPSJlY3hzMSI+LS0tLS0tLS0tLS0tLTwvc3Bhbj48L3A+PHAgY2xhc3M9ImVjeHAx
-Ij48c3BhbiBjbGFzcz0iZWN4czEiPk5vbmU8L3NwYW4+PC9wPjxwIGNsYXNzPSJlY3hwMSI+PHNw
-YW4gY2xhc3M9ImVjeHMxIj48YnI+PC9zcGFuPjwvcD48cCBjbGFzcz0iZWN4cDEiPjxzcGFuIGNs
-YXNzPSJlY3hzMSI+PGJyIGNsYXNzPSJlY3hBcHBsZS1pbnRlcmNoYW5nZS1uZXdsaW5lIj5JIGRv
-bid0IHVuZGVyc3RhbmQgd2h5IEkgY2FuJ3QgZ2V0IHRoZSBmdW5jX2V4aXQvZW50cnkgZXZlbnRz
-IGZyb20gbmdpbnguPC9zcGFuPjwvcD48L2Rpdj48L2Rpdj48L2Jsb2NrcXVvdGU+PGRpdj48YnI+
-PC9kaXY+PGRpdj5JcyB0aGUgIm5naXgiIGV4ZWN1dGFibGUgYSBiaW5hcnkgZXhlY3V0YWJsZSBv
-ciBhIHNoZWxsIHNjcmlwdCA/PGJyPjwvZGl2PjxkaXY+PGJyPjwvZGl2PjxkaXY+Q2FuIHlvdSBn
-aXZlIHVzIHRoZSBvdXRwdXQgb2YgImZpbGUgLi9uZ2l4IiA/PGJyPjwvZGl2PjxkaXY+PGJyPjwv
-ZGl2PjxkaXY+WW91IG1pZ2h0IHdhbnQgdG8gdHJ5PGJyPjwvZGl2PjxkaXY+PGJyPjwvZGl2Pjxk
-aXY+ZXhwb3J0IExEX1BSRUxPQUQ9bGlibHR0bmctdXN0LWN5Zy1wcm9maWxlLWZhc3Quc288YnI+
-PC9kaXY+PGRpdj4uL25naXg8YnI+PC9kaXY+PGRpdj48YnI+PC9kaXY+PGRpdj5UaGFua3MsPGJy
-PjwvZGl2PjxkaXY+PGJyPjwvZGl2PjxkaXY+TWF0aGlldTxicj48L2Rpdj48ZGl2Pjxicj48L2Rp
-dj48ZGl2Pjxicj48L2Rpdj48YmxvY2txdW90ZSBzdHlsZT0iYm9yZGVyLWxlZnQ6MnB4IHNvbGlk
-ICMxMDEwRkY7cGFkZGluZy1sZWZ0OjVweDtjb2xvcjojMDAwO2ZvbnQtd2VpZ2h0Om5vcm1hbDtm
-b250LXN0eWxlOm5vcm1hbDt0ZXh0LWRlY29yYXRpb246bm9uZTtmb250LWZhbWlseTpIZWx2ZXRp
-Y2EsQXJpYWwsc2Fucy1zZXJpZjtmb250LXNpemU6MTJwdDsiPjxkaXYgZGlyPSJsdHIiPjxkaXY+
-PHAgY2xhc3M9ImVjeHAxIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEycHQ7Ij48YnI+PC9zcGFu
-PjwvcD48cCBjbGFzcz0iZWN4cDEiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTJwdDsiPkJ5IHRo
-ZSB3YXksIEkgdGVzdCBmdW5jdGlvbiB0cmFjaW5nIHdpdGggYSBzaW5nbGUgYyBzb3VyY2UgZmls
-ZSBhbmQgd29ya3Mgd2VsbCwgb3V0cHV0IGxpa2UgdGhpczo8L3NwYW4+PC9wPjxwIGNsYXNzPSJl
-Y3hwMSI+PHNwYW4gY2xhc3M9ImVjeHMxIj48YnI+PC9zcGFuPjwvcD48cCBjbGFzcz0iZWN4cDEi
-PjxzcGFuIGNsYXNzPSJlY3hzMSI+VVNUIGV2ZW50czo8L3NwYW4+PC9wPjxwIGNsYXNzPSJlY3hw
-MSI+PHNwYW4gY2xhc3M9ImVjeHMxIj4tLS0tLS0tLS0tLS0tPC9zcGFuPjwvcD48cCBjbGFzcz0i
-ZWN4cDIiPjxicj48L3A+PHAgY2xhc3M9ImVjeHAxIj48c3BhbiBjbGFzcz0iZWN4czEiPlBJRDog
-NDY4NyAtIE5hbWU6IC4vdHQ8L3NwYW4+PC9wPjxwIGNsYXNzPSJlY3hwMSI+PHNwYW4gY2xhc3M9
-ImVjeHMxIj4mbmJzcDsgJm5ic3A7ICZuYnNwOyBsdHRuZ191c3RfY3lnX3Byb2ZpbGU6ZnVuY19l
-eGl0IChsb2dsZXZlbDogVFJBQ0VfREVCVUdfRlVOQ1RJT04gKDEyKSkgKHR5cGU6IHRyYWNlcG9p
-bnQpPC9zcGFuPjwvcD48cCBjbGFzcz0iZWN4cDEiPjxzcGFuIGNsYXNzPSJlY3hzMSI+Jm5ic3A7
-ICZuYnNwOyAmbmJzcDsgbHR0bmdfdXN0X2N5Z19wcm9maWxlOmZ1bmNfZW50cnkgKGxvZ2xldmVs
-OiBUUkFDRV9ERUJVR19GVU5DVElPTiAoMTIpKSAodHlwZTogdHJhY2Vwb2ludCk8L3NwYW4+PC9w
-PjxwIGNsYXNzPSJlY3hwMSI+PHNwYW4gY2xhc3M9ImVjeHMxIj4mbmJzcDsgJm5ic3A7ICZuYnNw
-OyBsdHRuZ191c3RfdHJhY2VmOmV2ZW50IChsb2dsZXZlbDogVFJBQ0VfREVCVUcgKDE0KSkgKHR5
-cGU6IHRyYWNlcG9pbnQpPC9zcGFuPjwvcD48cCBjbGFzcz0iZWN4cDEiPjxzcGFuIGNsYXNzPSJl
-Y3hzMSI+CgoKCgoKCgoKCgoKCgoKPC9zcGFuPjwvcD48cCBjbGFzcz0iZWN4cDEiPjxzcGFuIGNs
-YXNzPSJlY3hzMSI+Jm5ic3A7ICZuYnNwOyAmbmJzcDsmbmJzcDt1c3RfYmFkZHJfc3RhdGVkdW1w
-OnNvaW5mbyAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHX0xJTkUgKDEzKSkgKHR5cGU6IHRyYWNlcG9p
-bnQpPC9zcGFuPjwvcD48cCBjbGFzcz0iZWN4cDEiPjxzcGFuIGNsYXNzPSJlY3hzMSI+PGJyPjwv
-c3Bhbj48L3A+PHAgY2xhc3M9ImVjeHAxIj48c3BhbiBjbGFzcz0iZWN4czEiPjxicj48L3NwYW4+
-PC9wPjxwIGNsYXNzPSJlY3hwMSI+V2lzaGluZyBmb3IgaGVscC48L3A+PC9kaXY+PC9kaXY+PGJy
-Pl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fPGJyPmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3Q8YnI+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZzxicj5odHRwOi8v
-bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXY8YnI+PC9i
-bG9ja3F1b3RlPjxkaXY+PGJyPjxicj48L2Rpdj48ZGl2Pjxicj48L2Rpdj48ZGl2Pi0tIDxicj48
-L2Rpdj48ZGl2PjxzcGFuPjwvc3Bhbj5NYXRoaWV1IERlc25veWVyczxicj5FZmZpY2lPUyBJbmMu
-PGJyPmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tPHNwYW4+PC9zcGFuPjxicj48L2Rpdj48L2Rpdj48
-L2Rpdj4gCQkgCSAgIAkJICA8L2Rpdj48L2JvZHk+DQo8L2h0bWw+
-
---_dd7b26c3-2485-45cb-b9ff-3f99e49b74af_--
+Cheers,
+Alexandre
 
 
---===============1549175249==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1549175249==--
+On 2015-05-20 09:02 PM, gang li wrote:
+>
+> [quehan@localhost objs]$ file ./nginx
+> ./nginx: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.32, BuildID[sha1]=0xb7659abd6bd962b7033f3cc495ac8bb44ac9f044, not stripped
+>
+>
+>
+> CFLAGS = -finstrument-functions -pipe -W -Wall -Wpointer-arith -Wno-unused-parameter -Werror -g
+> [quehan@localhost objs]$ nm ./nginx | grep __cyg_profile_func                 U __cyg_profile_func_enter@@GLIBC_2.2.5
+>
+>
+>                   U __cyg_profile_func_exit@@GLIBC_2.2.5
+> [quehan@localhost objs]$ cat /proc/2046/maps | grep lttng7f2298000000-7f2298009000 r-xp 00000000 fd:01 103870944                  /usr/lib/liblttng-ust-tracepoint.so.0.0.07f2298009000-7f2298208000 ---p 00009000 fd:01 103870944                  /usr/lib/liblttng-ust-tracepoint.so.0.0.07f2298208000-7f2298209000 r--p 00008000 fd:01 103870944                  /usr/lib/liblttng-ust-tracepoint.so.0.0.07f2298209000-7f229820a000 rw-p 00009000 fd:01 103870944                  /usr/lib/liblttng-ust-tracepoint.so.0.0.07f2298aaa000-7f2298af2000 r-xp 00000000 fd:01 103870951                  /usr/lib/liblttng-ust.so.0.0.07f2298af2000-7f2298cf2000 ---p 00048000 fd:01 103870951                  /usr/lib/liblttng-ust.so.0.0.07f2298cf2000-7f2298cf4000 r--p 00048000 fd:01 103870951                  /usr/l
+ ib/liblttng-ust.so.0.0.07f2298cf4000-7f2298cf9000 rw-p 0004a000 fd:01 103870951                  /usr/lib/liblttng-ust.so.0.0.07f2299d6a000-7f2299d6c000 r-xp 00000000 fd:01 103870981       !
+            /usr/lib/liblttng-ust-cyg-profile-fast.so.0.0.07f2299d6c000-7f2299f6c000 ---p 00002000 fd:01 103870981                  /usr/lib/liblttng-ust-cyg-profile-fast.so.0.0.07f2299f6c000-7f2299f6d000 r--p 00002000 fd:01 103870981                  /usr/lib/liblttng-ust-cyg-profile-fast.so.0.0.07f2299f6d000-7f2299f6e000 rw-p 00003000 fd:01 103870981                  /usr/lib/liblttng-ust-cyg-profile-fast.so.0.0.07f229a18a000-7f229a18b000 r--s 00000000 00:11 18728                      /dev/shm/lttng-ust-wait-5-1000
+>
+>
+>
+>
+>
+> 7f229a18b000-7f229a18c000 r--s 00000000 00:11 18727                      /dev/shm/lttng-ust-wait-5
+>
+> Nginx is a very famous lightweight http server, and I use the latest lttng suits, I can't resolve this.
+>
+> Date: Wed, 20 May 2015 16:28:41 +0000
+> From: mathieu.desnoyers@efficios.com
+> To: portlet@outlook.com
+> CC: lttng-dev@lists.lttng.org
+> Subject: Re: [lttng-dev] lttng function tracing nginx problem
+>
+>
+> hi all,
+> I compile the nginx-1.4.7 with FLAG -finstrument-functions , and start nginx like this:
+> LD_PRELOAD=liblttng-ust-cyg-profile-fast.so  ./nginx
+> Then I use the command lttng list --userspace and got nothing like this:
+> UST events:-------------None
+> I don't understand why I can't get the func_exit/entry events from nginx.
+> Is the "ngix" executable a binary executable or a shell script ?
+>
+> Can you give us the output of "file ./ngix" ?
+>
+> You might want to try
+>
+> export LD_PRELOAD=liblttng-ust-cyg-profile-fast.so
+> ./ngix
+>
+> Thanks,
+>
+> Mathieu
+>
+>
+>
+> By the way, I test function tracing with a single c source file and works well, output like this:
+> UST events:-------------
+> PID: 4687 - Name: ./tt      lttng_ust_cyg_profile:func_exit (loglevel: TRACE_DEBUG_FUNCTION (12)) (type: tracepoint)      lttng_ust_cyg_profile:func_entry (loglevel: TRACE_DEBUG_FUNCTION (12)) (type: tracepoint)      lttng_ust_tracef:event (loglevel: TRACE_DEBUG (14)) (type: tracepoint)
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>        ust_baddr_statedump:soinfo (loglevel: TRACE_DEBUG_LINE (13)) (type: tracepoint)
+>
+> Wishing for help.
