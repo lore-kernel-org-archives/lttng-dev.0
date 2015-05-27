@@ -1,18 +1,18 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Install kmod-lttng-modules error on CentOS 7
-Date: Wed, 27 May 2015 11:09:54 -0400
-Message-ID: <CA+jJMxuYqG18z0KWiZ9AaFmTs9jRfkvw=X3KfLSaLGtbecF8zQ__47454.2850781747$1432739476$gmane$org@mail.gmail.com>
-References: <CA+MhoaPNB3hqU0QWG3qxo9WjsmJ0DgfK1X88WMUwsN8wX=5C+Q@mail.gmail.com>
+From: Aravind HT <aravind.ht@gmail.com>
+Subject: Re: Lttng Soft Hang issue
+Date: Wed, 27 May 2015 15:49:51 +0530
+Message-ID: <CACd+_b4MtdbAVjHCeQ6EnK5J3KRYzMK7Niq_c18pcKcdpnq07w__34766.8207170956$1432741230$gmane$org@mail.gmail.com>
+References: <CACd+_b7pakrUPzfzj=kXYYtkezpwxOLUgGs_Hy7yMYOh-f-PqQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1671529023=="
+Content-Type: multipart/mixed; boundary="===============1955381986=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qc0-f169.google.com ([209.85.216.169])
+Received: from mail-la0-f46.google.com ([209.85.215.46])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Yxcxz-0004Zl-Lu
- for lttng-dev@lists.lttng.org; Wed, 27 May 2015 11:10:03 -0400
-Received: by qchk10 with SMTP id k10so5071220qch.2
- for <lttng-dev@lists.lttng.org>; Wed, 27 May 2015 08:09:54 -0700 (PDT)
-In-Reply-To: <CA+MhoaPNB3hqU0QWG3qxo9WjsmJ0DgfK1X88WMUwsN8wX=5C+Q@mail.gmail.com>
+ (envelope-from <aravind.ht@gmail.com>) id 1YxYRK-0002xc-1G
+ for lttng-dev@lists.lttng.org; Wed, 27 May 2015 06:20:00 -0400
+Received: by laat2 with SMTP id t2so3789797laa.1
+ for <lttng-dev@lists.lttng.org>; Wed, 27 May 2015 03:19:52 -0700 (PDT)
+In-Reply-To: <CACd+_b7pakrUPzfzj=kXYYtkezpwxOLUgGs_Hy7yMYOh-f-PqQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,323 +21,194 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Nan Xiao <xiaonan830818@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org, jdesfossez@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
---===============1671529023==
-Content-Type: multipart/alternative; boundary=001a113ea656a469fc051711a2cc
+--===============1955381986==
+Content-Type: multipart/alternative; boundary=001a113496f2658d2805170d95be
 
---001a113ea656a469fc051711a2cc
+--001a113496f2658d2805170d95be
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-CentOS might be using a different kernel (not binary compatible). Have you
-tried installing from the source RPM [1]?
+Request someone to kindly help with this. Blocked at this point, unable to
+continue as any application crash leads to lttng not working.
 
-$ wget
-http://packages.efficios.com/rhel/7/SRPMS/latest/lttng-modules/lttng-module=
-s-2.5.0-1.el7.src.rpm
-$ rpm -i lttng-modules-2.5.0-1.el7.src.rpm
-$ cd ~/rpmbuild/SPECS
-$ rpmbuild -bb lttng-modules.spec
+Thanks,
+Aravind.
 
-Trying this here on a RHEL7 machine seems to fail since the latest kernel
-update (3.10.0-229.4.2.el7.x86_64) with:
+On Thu, May 21, 2015 at 12:18 AM, Aravind HT <aravind.ht@gmail.com> wrote:
 
-In file included from
-/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/probes/../instru=
-mentation/events/lttng-module/../../../probes/define_trace.h:139:0,
-                 from
-/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/probes/../instru=
-mentation/events/lttng-module/kvm.h:381,
-                 from
-/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/probes/lttng-pro=
-be-kvm.c:42:
-/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/probes/../instru=
-mentation/events/lttng-module/../../../probes/lttng-events.h:151:6:
-error: conflicting types for 'trace_kvm_async_pf_completed'
- void trace_##_name(_proto);
-      ^
-/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/probes/../instru=
-mentation/events/lttng-module/../../../probes/lttng-events.h:47:2:
-note: in expansion of macro 'DEFINE_EVENT_MAP'
-  DEFINE_EVENT_MAP(map, name, map, PARAMS(proto), PARAMS(args))
-  ^
-/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/probes/../instru=
-mentation/events/lttng-module/../../../probes/lttng-events.h:89:2:
-note: in expansion of macro 'TRACE_EVENT_MAP'
-  TRACE_EVENT_MAP(name, name,    \
-  ^
-/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/probes/../instru=
-mentation/events/lttng-module/../../../probes/../instrumentation/events/ltt=
-ng-module/kvm.h:351:1:
-note: in expansion of macro 'TRACE_EVENT'
- TRACE_EVENT(
- ^
-In file included from include/linux/module.h:18:0,
-                 from
-/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/probes/lttng-pro=
-be-kvm.c:23:
-include/linux/tracepoint.h:162:21: note: previous definition of
-'trace_kvm_async_pf_completed' was here
-  static inline void trace_##name(proto)    \
-                     ^
-include/linux/tracepoint.h:259:3: note: in expansion of macro
-'__DECLARE_TRACE'
-   __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args), 1, \
-   ^
-include/linux/tracepoint.h:391:2: note: in expansion of macro
-'DECLARE_TRACE'
-  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-  ^
-include/trace/events/kvm.h:317:1: note: in expansion of macro 'TRACE_EVENT'
- TRACE_EVENT(
- ^
-make[2]: ***
-[/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/probes/lttng-pr=
-obe-kvm.o]
-Error 1
-make[1]: ***
-[/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/probes] Error 2
-make: ***
-[_module_/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default] Error =
-2
-make: Leaving directory `/usr/src/kernels/3.10.0-229.4.2.el7.x86_64'
-error: Bad exit status from /var/tmp/rpm-tmp.75xMIN (%build)
-
-I guess this is caused by a patch backported to Red Hat's 3.10 kernel. I'll
-investigate and see what can be done.
-
-Regards,
-J=C3=A9r=C3=A9mie
-
-[1]
-http://packages.efficios.com/rhel/7/SRPMS/latest/lttng-modules/lttng-module=
-s-2.5.0-1.el7.src.rpm
-
-On Wed, May 27, 2015 at 5:40 AM, Nan Xiao <xiaonan830818@gmail.com> wrote:
-
-> Hi all,
->
-> I am following this page (http://packages.efficios.com/) , and try to
-> install lttng on CentOS 7. All the modules are installed OK,
-> except kmod-lttng-modules, and the error info likes this:
->
-> [root@mawent3 ~]# yum install kmod-lttng-modules
-> Loaded plugins: fastestmirror
-> Loading mirror speeds from cached hostfile
->  * base: centos.mirrors.tds.net
->  * extras: bay.uchicago.edu
->  * updates: dallas.tx.mirror.xygenhosting.com
-> Resolving Dependencies
-> --> Running transaction check
-> ---> Package kmod-lttng-modules.x86_64 0:2.5.0-1.el7 will be installed
-> --> Processing Dependency: kernel(__alloc_pages_nodemask) =3D 0xfb29f2e9 =
-for
-> package: kmod-lttng-modules-2.5.0-1.el7.x86_64
-> --> Processing Dependency: kernel(node_data) =3D 0xc0ebbdec for package:
-> kmod-lttng-modules-2.5.0-1.el7.x86_64
-> --> Finished Dependency Resolution
-> Error: Package: kmod-lttng-modules-2.5.0-1.el7.x86_64
-> (EfficiOS-RHEL7-x86-64)
->            Requires: kernel(node_data) =3D 0xc0ebbdec
->            Installed: kernel-3.10.0-229.el7.x86_64 (@anaconda)
->                kernel(node_data) =3D 0x3142b10b
->            Installed: kernel-3.10.0-229.4.2.el7.x86_64 (@updates)
->                kernel(node_data) =3D 0x3142b10b
->            Available: kernel-3.10.0-229.1.2.el7.x86_64 (updates)
->                kernel(node_data) =3D 0x3142b10b
->            Available: kernel-debug-3.10.0-229.el7.x86_64 (base)
->                kernel(node_data) =3D 0x7881b78f
->            Available: kernel-debug-3.10.0-229.1.2.el7.x86_64 (updates)
->                kernel(node_data) =3D 0x7881b78f
->            Available: kernel-debug-3.10.0-229.4.2.el7.x86_64 (updates)
->                kernel(node_data) =3D 0x7881b78f
-> Error: Package: kmod-lttng-modules-2.5.0-1.el7.x86_64
-> (EfficiOS-RHEL7-x86-64)
->            Requires: kernel(__alloc_pages_nodemask) =3D 0xfb29f2e9
->            Installed: kernel-3.10.0-229.el7.x86_64 (@anaconda)
->                kernel(__alloc_pages_nodemask) =3D 0x8616cca3
->            Installed: kernel-3.10.0-229.4.2.el7.x86_64 (@updates)
->                kernel(__alloc_pages_nodemask) =3D 0x8616cca3
->            Available: kernel-3.10.0-229.1.2.el7.x86_64 (updates)
->                kernel(__alloc_pages_nodemask) =3D 0x8616cca3
->            Available: kernel-debug-3.10.0-229.el7.x86_64 (base)
->                kernel(__alloc_pages_nodemask) =3D 0xcc655c2a
->            Available: kernel-debug-3.10.0-229.1.2.el7.x86_64 (updates)
->                kernel(__alloc_pages_nodemask) =3D 0xcc655c2a
->            Available: kernel-debug-3.10.0-229.4.2.el7.x86_64 (updates)
->                kernel(__alloc_pages_nodemask) =3D 0xcc655c2a
->  You could try using --skip-broken to work around the problem
->  You could try running: rpm -Va --nofiles --nodigest
+> Hi,
 >
 >
-> Could someone give help on this issue? Thanks very much in advance!
 >
-> Best Regards
-> Nan Xiao
+> I have recently started trying lttng 2.6 for a few applications on my
+> Ubuntu 12.04 and I noticed that the health check on sessiond and consumer=
+d
+> failed soon after starting the session.
 >
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 >
+> On investigating, I found that thread_manage_consumer() had exited causin=
+g
+> an overall health check failure.
+>
+>
+> Here are the sequence of steps that I found contributed to
+> *thread_manage_consumer()* exiting.
+>
+>
+> 1.       In *thread_manage_apps() : 1558 , ust_app_unregister(pollfd)* is
+> being called. This happens when there is an error detected by *revents =
+=3D
+> LTTNG_POLL_GETEV(&events, i)*
+>
+> My initial guess here is that as one of my apps has crashed, producing a =
+*LPOLLERR
+> | LPOLLHUP | LPOLLRDHUP *to be generated for *epoll()* causing
+> *ust_app_unregister()* to be called for that app.
+>
+>
+>
+> 2.       In *ust_app_unregister():3154 , close_metadata(registry,
+> ua_sess->consumer)  *in which* registry->metadata_closed =3D 1 *is set*.*
+>
+>
+>
+> (2.a) Note:* close_metadata() *also calls* consumer_close_metadata() *whi=
+ch
+> sends* LTTNG_CONSUMER_CLOSE_METADATA *and* metadata_key *to the consumerd
+> to stop it from further dealing with the concerned app. Somehow this
+> doesn=E2=80=99t seem to help*.*
+>
+>
+>
+> 3.       Next, I see that the *thread_manage_consumer():1353* for some
+> reason has ignored the above 2.a and gets to do request/reply for that ap=
+p
+> by calling*ust_consumer_metadata_request():491 ->
+> ust_app_push_metadat(ust_reg, socket,1) *which at line 460 checks for
+> *registry->metadata_closed* and returns an *=E2=80=93EPIPE*
+>
+>
+>
+> 4.       This *=E2=80=93EPIPE* error cascades all the way back up to
+> *thread_manage_consumer():1353* at which point *thread_manage_consumer()*=
+ decides
+> to exit causing health_check() to fail.
+>
+>
+>
+>
+>
+> So it looks like under some scenario, an application crash could cause th=
+e
+> lttng some problems.
+>
+>
+>
+> I think a possible fix for this scenario, is to instead of 4, send an
+> *ERROR* message back to *consumerd()* . This could be done from
+> *ust_consumer_metadata_request()* call. Can someone please let me know if
+> this is correct and shed more light on the issue ?
+>
+>
+>
+>
+>
+> Please forgive if there are any guideline omissions for posting here from
+> my part. This is my first post.
+>
+>
+> Regards,
+>
+> Aravind.
 >
 
-
---=20
-J=C3=A9r=C3=A9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-
---001a113ea656a469fc051711a2cc
+--001a113496f2658d2805170d95be
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">CentOS might be using a different kernel (not binary compa=
-tible). Have you tried installing from the source RPM [1]?<div><br></div><d=
-iv>$ wget=C2=A0<a href=3D"http://packages.efficios.com/rhel/7/SRPMS/latest/=
-lttng-modules/lttng-modules-2.5.0-1.el7.src.rpm">http://packages.efficios.c=
-om/rhel/7/SRPMS/latest/lttng-modules/lttng-modules-2.5.0-1.el7.src.rpm</a><=
-/div><div>$ rpm -i lttng-modules-2.5.0-1.el7.src.rpm</div><div>$ cd ~/rpmbu=
-ild/SPECS</div><div>$ rpmbuild -bb lttng-modules.spec</div><div><br></div><=
-div>Trying this here on a RHEL7 machine seems to fail since the latest kern=
-el update (3.10.0-229.4.2.el7.x86_64) with:</div><div><br></div><div><div>I=
-n file included from /home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/def=
-ault/probes/../instrumentation/events/lttng-module/../../../probes/define_t=
-race.h:139:0,</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0from /home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/defaul=
-t/probes/../instrumentation/events/lttng-module/kvm.h:381,</div><div>=C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from /home/build/rp=
-mbuild/BUILD/lttng-modules-2.5.0/obj/default/probes/lttng-probe-kvm.c:42:</=
-div><div>/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/probes/=
-../instrumentation/events/lttng-module/../../../probes/lttng-events.h:151:6=
-: error: conflicting types for &#39;trace_kvm_async_pf_completed&#39;</div>=
-<div>=C2=A0void trace_##_name(_proto);</div><div>=C2=A0 =C2=A0 =C2=A0 ^</di=
-v><div>/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/probes/..=
-/instrumentation/events/lttng-module/../../../probes/lttng-events.h:47:2: n=
-ote: in expansion of macro &#39;DEFINE_EVENT_MAP&#39;</div><div>=C2=A0 DEFI=
-NE_EVENT_MAP(map, name, map, PARAMS(proto), PARAMS(args))</div><div>=C2=A0 =
-^</div><div>/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/prob=
-es/../instrumentation/events/lttng-module/../../../probes/lttng-events.h:89=
-:2: note: in expansion of macro &#39;TRACE_EVENT_MAP&#39;</div><div>=C2=A0 =
-TRACE_EVENT_MAP(name, name, =C2=A0 =C2=A0\</div><div>=C2=A0 ^</div><div>/ho=
-me/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/default/probes/../instrumen=
-tation/events/lttng-module/../../../probes/../instrumentation/events/lttng-=
-module/kvm.h:351:1: note: in expansion of macro &#39;TRACE_EVENT&#39;</div>=
-<div>=C2=A0TRACE_EVENT(</div><div>=C2=A0^</div><div>In file included from i=
-nclude/linux/module.h:18:0,</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0from /home/build/rpmbuild/BUILD/lttng-modules-2.=
-5.0/obj/default/probes/lttng-probe-kvm.c:23:</div><div>include/linux/tracep=
-oint.h:162:21: note: previous definition of &#39;trace_kvm_async_pf_complet=
-ed&#39; was here</div><div>=C2=A0 static inline void trace_##name(proto) =
-=C2=A0 =C2=A0\</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0^</div><div>include/linux/tracepoint.h:259:3: no=
-te: in expansion of macro &#39;__DECLARE_TRACE&#39;</div><div>=C2=A0 =C2=A0=
-__DECLARE_TRACE(name, PARAMS(proto), PARAMS(args), 1, \</div><div>=C2=A0 =
-=C2=A0^</div><div>include/linux/tracepoint.h:391:2: note: in expansion of m=
-acro &#39;DECLARE_TRACE&#39;</div><div>=C2=A0 DECLARE_TRACE(name, PARAMS(pr=
-oto), PARAMS(args))</div><div>=C2=A0 ^</div><div>include/trace/events/kvm.h=
-:317:1: note: in expansion of macro &#39;TRACE_EVENT&#39;</div><div>=C2=A0T=
-RACE_EVENT(</div><div>=C2=A0^</div><div>make[2]: *** [/home/build/rpmbuild/=
-BUILD/lttng-modules-2.5.0/obj/default/probes/lttng-probe-kvm.o] Error 1</di=
-v><div>make[1]: *** [/home/build/rpmbuild/BUILD/lttng-modules-2.5.0/obj/def=
-ault/probes] Error 2</div><div>make: *** [_module_/home/build/rpmbuild/BUIL=
-D/lttng-modules-2.5.0/obj/default] Error 2</div><div>make: Leaving director=
-y `/usr/src/kernels/3.10.0-229.4.2.el7.x86_64&#39;</div><div>error: Bad exi=
-t status from /var/tmp/rpm-tmp.75xMIN (%build)</div></div><div><br></div><d=
-iv>I guess this is caused by a patch backported to Red Hat&#39;s 3.10 kerne=
-l. I&#39;ll investigate and see what can be done.</div><div><br></div><div>=
-Regards,</div><div>J=C3=A9r=C3=A9mie</div><div><br></div><div>[1]=C2=A0<a h=
-ref=3D"http://packages.efficios.com/rhel/7/SRPMS/latest/lttng-modules/lttng=
--modules-2.5.0-1.el7.src.rpm">http://packages.efficios.com/rhel/7/SRPMS/lat=
-est/lttng-modules/lttng-modules-2.5.0-1.el7.src.rpm</a></div></div><div cla=
-ss=3D"gmail_extra"><br><div class=3D"gmail_quote">On Wed, May 27, 2015 at 5=
-:40 AM, Nan Xiao <span dir=3D"ltr">&lt;<a href=3D"mailto:xiaonan830818@gmai=
-l.com" target=3D"_blank">xiaonan830818@gmail.com</a>&gt;</span> wrote:<br><=
-blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px=
- #ccc solid;padding-left:1ex"><div dir=3D"ltr">Hi all,<div><br></div><div>I=
- am following this page (<a href=3D"http://packages.efficios.com/" target=
-=3D"_blank">http://packages.efficios.com/</a>) , and try to install lttng o=
-n CentOS 7. All the modules are installed OK, except=C2=A0kmod-lttng-module=
-s, and the error info likes this: =C2=A0</div><div><br></div><div><div>[roo=
-t@mawent3 ~]# yum install kmod-lttng-modules</div><div>Loaded plugins: fast=
-estmirror</div><div>Loading mirror speeds from cached hostfile</div><div>=
-=C2=A0* base: <a href=3D"http://centos.mirrors.tds.net" target=3D"_blank">c=
-entos.mirrors.tds.net</a></div><div>=C2=A0* extras: <a href=3D"http://bay.u=
-chicago.edu" target=3D"_blank">bay.uchicago.edu</a></div><div>=C2=A0* updat=
-es: <a href=3D"http://dallas.tx.mirror.xygenhosting.com" target=3D"_blank">=
-dallas.tx.mirror.xygenhosting.com</a></div><div>Resolving Dependencies</div=
-><div>--&gt; Running transaction check</div><div>---&gt; Package kmod-lttng=
--modules.x86_64 0:2.5.0-1.el7 will be installed</div><div>--&gt; Processing=
- Dependency: kernel(__alloc_pages_nodemask) =3D 0xfb29f2e9 for package: kmo=
-d-lttng-modules-2.5.0-1.el7.x86_64</div><div>--&gt; Processing Dependency: =
-kernel(node_data) =3D 0xc0ebbdec for package: kmod-lttng-modules-2.5.0-1.el=
-7.x86_64</div><div>--&gt; Finished Dependency Resolution</div><div>Error: P=
-ackage: kmod-lttng-modules-2.5.0-1.el7.x86_64 (EfficiOS-RHEL7-x86-64)</div>=
-<div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Requires: kernel(node_data) =
-=3D 0xc0ebbdec</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Installed=
-: kernel-3.10.0-229.el7.x86_64 (@anaconda)</div><div>=C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0kernel(node_data) =3D 0x3142b10b</div><di=
-v>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Installed: kernel-3.10.0-229.4.2=
-.el7.x86_64 (@updates)</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0kernel(node_data) =3D 0x3142b10b</div><div>=C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0Available: kernel-3.10.0-229.1.2.el7.x86_64 (update=
-s)</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0kernel(=
-node_data) =3D 0x3142b10b</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0Available: kernel-debug-3.10.0-229.el7.x86_64 (base)</div><div>=C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0kernel(node_data) =3D 0x788=
-1b78f</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Available: kernel-=
-debug-3.10.0-229.1.2.el7.x86_64 (updates)</div><div>=C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0kernel(node_data) =3D 0x7881b78f</div><di=
-v>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Available: kernel-debug-3.10.0-2=
-29.4.2.el7.x86_64 (updates)</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0kernel(node_data) =3D 0x7881b78f</div><div>Error: Packa=
-ge: kmod-lttng-modules-2.5.0-1.el7.x86_64 (EfficiOS-RHEL7-x86-64)</div><div=
->=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Requires: kernel(__alloc_pages_no=
-demask) =3D 0xfb29f2e9</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0I=
-nstalled: kernel-3.10.0-229.el7.x86_64 (@anaconda)</div><div>=C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0kernel(__alloc_pages_nodemask) =3D=
- 0x8616cca3</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Installed: k=
-ernel-3.10.0-229.4.2.el7.x86_64 (@updates)</div><div>=C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0kernel(__alloc_pages_nodemask) =3D 0x8616=
-cca3</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Available: kernel-3=
-.10.0-229.1.2.el7.x86_64 (updates)</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0kernel(__alloc_pages_nodemask) =3D 0x8616cca3</d=
-iv><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Available: kernel-debug-3.=
-10.0-229.el7.x86_64 (base)</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0kernel(__alloc_pages_nodemask) =3D 0xcc655c2a</div><div>=
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Available: kernel-debug-3.10.0-229=
-.1.2.el7.x86_64 (updates)</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0kernel(__alloc_pages_nodemask) =3D 0xcc655c2a</div><div>=
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Available: kernel-debug-3.10.0-229=
-.4.2.el7.x86_64 (updates)</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0kernel(__alloc_pages_nodemask) =3D 0xcc655c2a</div><div>=
-=C2=A0You could try using --skip-broken to work around the problem</div><di=
-v>=C2=A0You could try running: rpm -Va --nofiles --nodigest</div><div><br><=
-/div><div><br></div><div>Could someone give help on this issue? Thanks very=
- much in advance!</div><div><br></div><div><div><div dir=3D"ltr">Best Regar=
-ds<span class=3D"HOEnZb"><font color=3D"#888888"><div>Nan Xiao</div></font>=
-</span></div></div></div>
-</div></div>
-<br>_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-br>
-<br></blockquote></div><br><br clear=3D"all"><div><br></div>-- <br><div cla=
-ss=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS Inc.<br><a h=
-ref=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.com</=
-a></div>
-</div>
+<div dir=3D"ltr">Request someone to kindly help with this. Blocked at this =
+point, unable to continue as any application crash leads to lttng not worki=
+ng.<div><br></div><div>Thanks,</div><div>Aravind.</div></div><div class=3D"=
+gmail_extra"><br><div class=3D"gmail_quote">On Thu, May 21, 2015 at 12:18 A=
+M, Aravind HT <span dir=3D"ltr">&lt;<a href=3D"mailto:aravind.ht@gmail.com"=
+ target=3D"_blank">aravind.ht@gmail.com</a>&gt;</span> wrote:<br><blockquot=
+e class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc sol=
+id;padding-left:1ex"><div dir=3D"ltr"><p class=3D"MsoNormal" style=3D"font-=
+size:12.8000001907349px">Hi,</p><p class=3D"MsoNormal" style=3D"font-size:1=
+2.8000001907349px">=C2=A0</p><p class=3D"MsoNormal" style=3D"font-size:12.8=
+000001907349px">I have recently started trying lttng 2.6 for a few applicat=
+ions on my Ubuntu 12.04 and I noticed that the health check on sessiond and=
+ consumerd failed soon after starting the session.</p><p class=3D"MsoNormal=
+" style=3D"font-size:12.8000001907349px"><br></p><p class=3D"MsoNormal" sty=
+le=3D"font-size:12.8000001907349px">On investigating, I found that thread_m=
+anage_consumer() had exited causing an overall health check failure.</p><p =
+class=3D"MsoNormal" style=3D"font-size:12.8000001907349px"><br></p><p class=
+=3D"MsoNormal" style=3D"font-size:12.8000001907349px">Here are the sequence=
+ of steps that I found contributed to=C2=A0<b>thread_manage_consumer()</b>=
+=C2=A0exiting.</p><p class=3D"MsoNormal" style=3D"font-size:12.800000190734=
+9px"></p><p class=3D"MsoNormal" style=3D"font-size:12.8000001907349px"><br>=
+</p><p style=3D"font-size:12.8000001907349px">1.<span style=3D"font-stretch=
+:normal;font-size:7pt;font-family:&#39;Times New Roman&#39;">=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0</span>In=C2=A0<b>thread_manage_apps() : 1558=
+ , ust_app_unregister(pollfd)</b>=C2=A0is being called. This happens when t=
+here is an error detected by=C2=A0<b>revents =3D LTTNG_POLL_GETEV(&amp;even=
+ts, i)</b></p><p style=3D"font-size:12.8000001907349px">My initial guess he=
+re is that as one of my apps has crashed, producing a=C2=A0<b>LPOLLERR | LP=
+OLLHUP | LPOLLRDHUP=C2=A0</b>to be generated for=C2=A0<b>epoll()</b>=C2=A0c=
+ausing=C2=A0<b>ust_app_unregister()</b>=C2=A0to be called for that app.</p>=
+<p style=3D"font-size:12.8000001907349px">=C2=A0</p><p style=3D"font-size:1=
+2.8000001907349px">2.<span style=3D"font-stretch:normal;font-size:7pt;font-=
+family:&#39;Times New Roman&#39;">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0</span>In=C2=A0<b>ust_app_unregister():3154 , close_metadata(registry, u=
+a_sess-&gt;consumer)=C2=A0=C2=A0</b>in which<b>=C2=A0registry-&gt;metadata_=
+closed =3D 1=C2=A0</b>is set<b>.</b></p><p style=3D"font-size:12.8000001907=
+349px;text-indent:0.5in">=C2=A0</p><p style=3D"font-size:12.8000001907349px=
+;text-indent:0.5in">(2.a) Note:<b>=C2=A0close_metadata()=C2=A0</b>also call=
+s<b>=C2=A0consumer_close_metadata()=C2=A0</b>which sends<b>=C2=A0LTTNG_CONS=
+UMER_CLOSE_METADATA=C2=A0</b>and<b>=C2=A0metadata_key=C2=A0</b>to the consu=
+merd to stop it from further dealing with the concerned app. Somehow this d=
+oesn=E2=80=99t seem to help<b>.</b></p><p style=3D"font-size:12.80000019073=
+49px"><b>=C2=A0</b></p><p style=3D"font-size:12.8000001907349px">3.<span st=
+yle=3D"font-stretch:normal;font-size:7pt;font-family:&#39;Times New Roman&#=
+39;">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0</span>Next, I see that the=
+=C2=A0<b>thread_manage_consumer():1353</b>=C2=A0for some reason has ignored=
+ the above 2.a and gets to do request/reply for that app by calling<b>ust_c=
+onsumer_metadata_request():491 -&gt; ust_app_push_metadat(ust_reg, socket,1=
+)=C2=A0</b>which at line 460 checks for=C2=A0<b>registry-&gt;metadata_close=
+d</b>=C2=A0and returns an=C2=A0<b>=E2=80=93EPIPE</b></p><p class=3D"MsoNorm=
+al" style=3D"font-size:12.8000001907349px">=C2=A0</p><p style=3D"font-size:=
+12.8000001907349px">4.<span style=3D"font-stretch:normal;font-size:7pt;font=
+-family:&#39;Times New Roman&#39;">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0</span>This=C2=A0<b>=E2=80=93EPIPE</b>=C2=A0error cascades all the way b=
+ack up to=C2=A0<b>thread_manage_consumer():1353</b>=C2=A0at which point=C2=
+=A0<b>thread_manage_consumer()</b>=C2=A0decides to exit causing health_chec=
+k() to fail.</p><p style=3D"font-size:12.8000001907349px">=C2=A0</p><p clas=
+s=3D"MsoNormal" style=3D"font-size:12.8000001907349px">=C2=A0</p><p class=
+=3D"MsoNormal" style=3D"font-size:12.8000001907349px">So it looks like unde=
+r some scenario, an application crash could cause the lttng some problems.<=
+/p><p class=3D"MsoNormal" style=3D"font-size:12.8000001907349px">=C2=A0</p>=
+<p class=3D"MsoNormal" style=3D"font-size:12.8000001907349px">I think a pos=
+sible fix for this scenario, is to instead of 4, send an=C2=A0<b>ERROR</b>=
+=C2=A0message back to=C2=A0<b>consumerd()</b>=C2=A0. This could be done fro=
+m=C2=A0<b>ust_consumer_metadata_request()</b>=C2=A0call. Can someone please=
+ let me know if this is correct and shed more light on the issue ?</p><p cl=
+ass=3D"MsoNormal" style=3D"font-size:12.8000001907349px">=C2=A0</p><p class=
+=3D"MsoNormal" style=3D"font-size:12.8000001907349px">=C2=A0</p><p class=3D=
+"MsoNormal" style=3D"font-size:12.8000001907349px">Please forgive if there =
+are any guideline omissions for posting here from my part. This is my first=
+ post.</p><p class=3D"MsoNormal" style=3D"font-size:12.8000001907349px"><br=
+></p><p class=3D"MsoNormal" style=3D"font-size:12.8000001907349px">Regards,=
+</p><p class=3D"MsoNormal" style=3D"font-size:12.8000001907349px">Aravind.<=
+/p></div>
+</blockquote></div><br></div>
 
---001a113ea656a469fc051711a2cc--
+--001a113496f2658d2805170d95be--
 
 
---===============1671529023==
+--===============1955381986==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -348,4 +219,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1671529023==--
+--===============1955381986==--
