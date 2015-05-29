@@ -1,23 +1,18 @@
-From: Nan Xiao <xiaonan830818@gmail.com>
-Subject: Re: Fwd: Install kmod-lttng-modules error on CentOS 7
-Date: Fri, 29 May 2015 09:56:22 +0800
-Message-ID: <CA+MhoaMoRAENGmu-kGzBM-r8qU6syH5ZC_-ckeJUUDKZm6rzOA__19991.4554520094$1432864649$gmane$org@mail.gmail.com>
-References: <CA+MhoaPNB3hqU0QWG3qxo9WjsmJ0DgfK1X88WMUwsN8wX=5C+Q@mail.gmail.com>
- <CA+jJMxuYqG18z0KWiZ9AaFmTs9jRfkvw=X3KfLSaLGtbecF8zQ@mail.gmail.com>
- <CA+MhoaNbPdAT3ZoEqH+TftM6O9PaaqwCAY_vgsmM+kd10a8DHw@mail.gmail.com>
- <CA+MhoaP0P3jicWGLPbjMpRyPdkG7g0YCqMSk5nYP9vyN=_1JUQ@mail.gmail.com>
- <CA+jJMxsg749A6MfXE1mEMiNnJMNWXo+VTuTg_b0A0+nnQwvZhg@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-modules] Fix: Update kmem event
+	for	Ubuntu's 3.16 kernel too
+Date: Fri, 29 May 2015 20:24:13 +0000 (UTC)
+Message-ID: <1307631030.105.1432931053011.JavaMail.zimbra__26304.4769912542$1432931127$gmane$org@efficios.com>
+References: <1432671120-15661-1-git-send-email-alexmonthy@voxpopuli.im>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wg0-f49.google.com ([74.125.82.49])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <xiaonan830818@gmail.com>) id 1Yy9X9-0006Ud-TN
- for lttng-dev@lists.lttng.org; Thu, 28 May 2015 21:56:28 -0400
-Received: by wgez8 with SMTP id z8so50664333wge.0
- for <lttng-dev@lists.lttng.org>; Thu, 28 May 2015 18:56:22 -0700 (PDT)
-In-Reply-To: <CA+jJMxsg749A6MfXE1mEMiNnJMNWXo+VTuTg_b0A0+nnQwvZhg@mail.gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1YyQpR-0003h3-Lg
+ for lttng-dev@lists.lttng.org; Fri, 29 May 2015 16:24:36 -0400
+In-Reply-To: <1432671120-15661-1-git-send-email-alexmonthy@voxpopuli.im>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,11 +21,61 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgSsOpcsOpbWllLAoKWWVzLCBpdCB3b3JrcyEgVGhhbmtzIHZlcnkgbXVjaCEKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
-IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+merged, thanks!
+
+Mathieu
+
+----- On May 26, 2015, at 4:12 PM, Alexandre Montplaisir alexmonthy@voxpopuli.im wrote:
+
+> The upstream patch in question in commit 72906e1 was also
+> cherry-picked into Ubuntu's 3.16 kernel backport branch
+> (called lts-utopic).
+> The version check should also include this branch.
+> 
+> The other backport branch, lts-vivid, and all following ones
+> will be covered by the standard
+> 
+>  LINUX_VERSION_CODE >= KERNEL_VERSION(3,19,2)
+> 
+> check, so should not require other workarounds.
+> 
+> References #889.
+> 
+> Signed-off-by: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+> ---
+> instrumentation/events/lttng-module/kmem.h | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/instrumentation/events/lttng-module/kmem.h
+> b/instrumentation/events/lttng-module/kmem.h
+> index 1d4eb62..6461788 100644
+> --- a/instrumentation/events/lttng-module/kmem.h
+> +++ b/instrumentation/events/lttng-module/kmem.h
+> @@ -203,7 +203,8 @@ LTTNG_TRACEPOINT_EVENT_INSTANCE_MAP(kmem_mm_page,
+> mm_page_pcpu_drain,
+> #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,19,2)	\
+> 	|| LTTNG_KERNEL_RANGE(3,14,36, 3,15,0)		\
+> 	|| LTTNG_DEBIAN_KERNEL_RANGE(3,16,7,9,0,0, 3,17,0,0,0,0)	\
+> -	|| LTTNG_UBUNTU_KERNEL_RANGE(3,13,0,50, 3,14,0,0))
+> +	|| LTTNG_UBUNTU_KERNEL_RANGE(3,13,0,50, 3,14,0,0)	\
+> +	|| LTTNG_UBUNTU_KERNEL_RANGE(3,16,0,38, 3,17,0,0))
+> 
+> LTTNG_TRACEPOINT_EVENT_MAP(mm_page_alloc_extfrag,
+> 
+> --
+> 2.1.4
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
