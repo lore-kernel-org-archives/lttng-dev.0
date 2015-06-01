@@ -1,19 +1,15 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] urcu: fix deprecation warning with new glibc
-Date: Mon, 1 Jun 2015 15:25:28 +0000 (UTC)
-Message-ID: <1110938568.1498.1433172328929.JavaMail.zimbra__8679.05469281158$1433172475$gmane$org@efficios.com>
-References: <1433164590-9078-1-git-send-email-mkl@pengutronix.de>
- <1237864258.1418.1433168737082.JavaMail.zimbra@efficios.com>
- <556C774B.8090206@pengutronix.de>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [RELEASE] LTTngTop v0.3
+Date: Mon, 01 Jun 2015 14:48:41 -0400
+Message-ID: <556CA909.6000705__43591.1403307275$1433184587$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1YzRay-0006vM-Qc
- for lttng-dev@lists.lttng.org; Mon, 01 Jun 2015 11:25:53 -0400
-In-Reply-To: <556C774B.8090206@pengutronix.de>
+ (envelope-from <jdesfossez@efficios.com>) id 1YzUlU-0007tX-CW
+ for lttng-dev@lists.lttng.org; Mon, 01 Jun 2015 14:48:54 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,39 +18,44 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-CgotLS0tLSBPbiBKdW4gMSwgMjAxNSwgYXQgNToxNiBQTSwgTWFyYyBLbGVpbmUtQnVkZGUgbWts
-QHBlbmd1dHJvbml4LmRlIHdyb3RlOgoKPiBPbiAwNi8wMS8yMDE1IDA0OjI1IFBNLCBNYXRoaWV1
-IERlc25veWVycyB3cm90ZToKPj4gLS0tLS0gT24gSnVuIDEsIDIwMTUsIGF0IDM6MTYgUE0sIE1h
-cmMgS2xlaW5lLUJ1ZGRlIG1rbEBwZW5ndXRyb25peC5kZSB3cm90ZToKPj4gCj4+PiBUaGlzIHBh
-dGNoIGZpeGVzIHRoZSBmb2xsb3dpbmcgd2FybmluZzoKPj4+Cj4+PiAvdXNyL2luY2x1ZGUvZmVh
-dHVyZXMuaDoxNDg6Mzogd2FybmluZzogI3dhcm5pbmcgIl9CU0RfU09VUkNFIGFuZCBfU1ZJRF9T
-T1VSQ0UKPj4+IGFyZSBkZXByZWNhdGVkLCB1c2UgX0RFRkFVTFRfU09VUkNFIiBbLVdjcHBdCj4+
-PiAjIHdhcm5pbmcgIl9CU0RfU09VUkNFIGFuZCBfU1ZJRF9TT1VSQ0UgYXJlIGRlcHJlY2F0ZWQs
-IHVzZSBfREVGQVVMVF9TT1VSQ0UiCj4+IAo+PiBBbmQgd2h5IGRvZXMgdGhpcyBwYXRjaCBqdXN0
-IGFkZCBfREVGQVVMVF9TT1VSQ0Ugd2l0aG91dCByZW1vdmluZyBfQlNEX1NPVVJDRSA/Cj4+IElz
-IGl0IHRoZSBpbnRlbmRlZCB0cmFuc2l0aW9uIHBhdGggPyBJcyBpdCBkb2N1bWVudGVkIHNvbWV3
-aGVyZSA/Cj4gCj4gRnJvbSBodHRwOi8vbWFuNy5vcmcvbGludXgvbWFuLXBhZ2VzL21hbjcvZmVh
-dHVyZV90ZXN0X21hY3Jvcy43Lmh0bWw6Cj4gCj4gX0JTRF9TT1VSQ0UgKGRlcHJlY2F0ZWQgc2lu
-Y2UgZ2xpYmMgMi4yMCkKPiBbLi4uXQo+IFNpbmNlIGdsaWJjIDIuMjAsIHRoaXMgbWFjcm8gaXMg
-ZGVwcmVjYXRlZC4gIEl0IG5vdyBoYXMgdGhlCj4gICAgICAgICAgICAgIHNhbWUgZWZmZWN0IGFz
-IGRlZmluaW5nIF9ERUZBVUxUX1NPVVJDRSwgYnV0IGdlbmVyYXRlcyBhIGNvbeKAkAo+ICAgICAg
-ICAgICAgICBwaWxlLXRpbWUgd2FybmluZyAodW5sZXNzIF9ERUZBVUxUX1NPVVJDRSBpcyBhbHNv
-IGRlZmluZWQpLgo+ICAgICAgICAgICAgICBVc2UgX0RFRkFVTFRfU09VUkNFIGluc3RlYWQuICBU
-byBhbGxvdyBjb2RlIHRoYXQgcmVxdWlyZXMKPiAgICAgICAgICAgICAgX0JTRF9TT1VSQ0UgaW4g
-Z2xpYmMgMi4xOSBhbmQgZWFybGllciBhbmQgX0RFRkFVTFRfU09VUkNFIGluCj4gICAgICAgICAg
-ICAgIGdsaWJjIDIuMjAgYW5kIGxhdGVyIHRvIGNvbXBpbGUgd2l0aG91dCB3YXJuaW5ncywgZGVm
-aW5lIGJvdGgKPiAgICAgICAgICAgICAgX0JTRF9TT1VSQ0UgYW5kIF9ERUZBVUxUX1NPVVJDRS4K
-CkNvb2wsIHRoYW5rcyBmb3IgdGhlIHBhdGNoIQoKTWF0aGlldQoKPiAKPiBNYXJjCj4gCj4gLS0K
-PiBQZW5ndXRyb25peCBlLksuICAgICAgICAgICAgICAgICAgfCBNYXJjIEtsZWluZS1CdWRkZSAg
-ICAgICAgICAgfAo+IEluZHVzdHJpYWwgTGludXggU29sdXRpb25zICAgICAgICB8IFBob25lOiAr
-NDktMjMxLTI4MjYtOTI0ICAgICB8Cj4gVmVydHJldHVuZyBXZXN0L0RvcnRtdW5kICAgICAgICAg
-IHwgRmF4OiAgICs0OS01MTIxLTIwNjkxNy01NTU1IHwKPiBBbXRzZ2VyaWNodCBIaWxkZXNoZWlt
-LCBIUkEgMjY4NiAgfCBodHRwOi8vd3d3LnBlbmd1dHJvbml4LmRlICAgfAoKLS0gCk1hdGhpZXUg
-RGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
-IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Hi everyone,
+
+I am glad to announce the new release of LTTngTop !
+git://git.lttng.org/lttngtop.git
+
+LttngTop is an ncurses interface for reading and browsing traces
+recorded by the LTTng tracer and displaying various statistics.
+As of now, the cpu usage, per file/process I/O bandwidth, perf counters
+and kprobe hits are displayed.
+
+This release is the first one that handles live and offline sessions, so
+you can just run "lttngtop" without any arguments and it will
+automatically create and attach a local live session. You can also use
+the -r argument to connect to a remote relay and attach to a remote trace.
+
+Along with this release comes the lttngtoptrace tool that aims to
+simplify the usage of LTTng live in situation where you want something
+strace-alike but with more flexibility (multi-processes, whole system,
+kprobe support, CPU migrations, etc) and less perturbation on the target
+system.
+
+If someone is interested to contribute to this software, I have tons of
+improvement ideas and no time to implement them, so please feel free to
+step in !
+The 2 main topics are: rewrite in C++ with a proper state system
+library, more complete I/O syscall support, semi-live enabling of perf
+counters and kprobes, getting rid of the contexts (requires the state
+system rework), etc.
+
+Special thanks to Michael Jeanson for pressuring me to do this long
+overdue release !
+
+We appreciate all kinds of feedbacks, so please test it and let us know
+what you think about it.
+
+Thanks,
+
+Julien
