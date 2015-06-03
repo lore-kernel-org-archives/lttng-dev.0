@@ -1,17 +1,12 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Unable to use stalled-cycles-frontend perf counter
-Date: Wed, 3 Jun 2015 05:15:31 +0000 (UTC)
-Message-ID: <1493169627.2550.1433308531176.JavaMail.zimbra__4720.88862811706$1433308609$gmane$org@efficios.com>
-References: <556DBE8C.7030306@orc-group.com>
+Subject: Re: lttng kernel events
+Date: Wed, 3 Jun 2015 07:24:37 +0000 (UTC)
+Message-ID: <1913613869.2576.1433316277001.JavaMail.zimbra__47244.0912425101$1433316378$gmane$org@efficios.com>
+References: <CAPxN80CcSme-h=OJ3L33+1FAW-X8qCYFF7Trpy=LSX2D6QouOA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0746789529=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Z011n-00038l-9B
- for lttng-dev@lists.lttng.org; Wed, 03 Jun 2015 01:15:49 -0400
-In-Reply-To: <556DBE8C.7030306@orc-group.com>
+In-Reply-To: <CAPxN80CcSme-h=OJ3L33+1FAW-X8qCYFF7Trpy=LSX2D6QouOA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,101 +15,98 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Andrei Burov <aburov@orc-group.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Jessica Foest <jessica.foest@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, lttng-dev-request@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ On Jun 2, 2015, at 4:32 PM, Andrei Burov aburov@orc-group.com wrote:
+--===============0746789529==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_2575_1689409624.1433316277000"
 
-> Hello!
-> 
-> I've encountered a problem with lttng (LTTng Trace Control) 2.5.0 -
-> Fumisterie. When I am trying to access stalled-cycles-frontend perf
-> counter, it somehow corrupts the tracefile. Below is a simple test which
-> is using code of hello program from lttng doc.
+------=_Part_2575_1689409624.1433316277000
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-See https://lists.lttng.org/pipermail/lttng-dev/2015-June/024573.html
+----- On Jun 1, 2015, at 5:15 PM, Jessica Foest <jessica.foest@gmail.com> wrote: 
 
-Short story: this looks like a known fixed issue. Try upgrading your
-lttng-ust and lttng-tools versions.
+> Hi all,
+> Normally the following perf software event means the same thing :
 
-Thanks,
+> page-faults OR faults
+> context-switches OR cs
+> cpu-migrations OR migrations
 
-Mathieu
+> The questions is why both of them (the two representation of the event) are
+> presented in the context options of LTTng?
 
-> 
-> $ls
-> hello  hello.c  hello-tp.c  hello-tp.h  hello-tp.o  hello-tp.tp
-> $lttng create
-> Session auto-20150602-160131 created.
-> Traces will be written in /home/user/lttng-traces/auto-20150602-160131
-> $lttng enable-event -u hello_world:my_first_tracepoint
-> UST event hello_world:my_first_tracepoint created in channel channel0
-> $lttng add-context -u -t perf:thread:stalled-cycles-frontend
-> UST context perf:thread:stalled-cycles-frontend added to all channels
-> $lttng start
-> Tracing started for session auto-20150602-160131
-> $./hello
-> Hello, World!
-> Press Enter to continue...
-> 
-> Quitting now!
-> lttng stop
-> Waiting for data availability.
-> Tracing stopped for session auto-20150602-160131
-> $lttng view
-> Trace directory: /home/user/lttng-traces/auto-20150602-160131
-> [error] Cannot open any trace for reading.
-> [error] opening trace "/home/user/lttng-traces/auto-20150602-160131" for
-> reading.
-> [error] none of the specified trace paths could be opened.
-> $lttng destroy && lttng create
-> Session auto-20150602-160131 destroyed
-> Session auto-20150602-160224 created.
-> Traces will be written in /home/user/lttng-traces/auto-20150602-160224
-> $lttng enable-event -u hello_world:my_first_tracepoint
-> UST event hello_world:my_first_tracepoint created in channel channel0
-> $lttng add-context -u -t perf:thread:cycles
-> UST context perf:thread:cycles added to all channels
-> $lttng start
-> Tracing started for session auto-20150602-160224
-> $./hello
-> Hello, World!
-> Press Enter to continue...
-> 
-> Quitting now!
-> $lttng stop
-> Waiting for data availability.
-> Tracing stopped for session auto-20150602-160224
-> $lttng view
-> Trace directory: /home/user/lttng-traces/auto-20150602-160224
-> 
-> [16:03:14.431724221] (+?.?????????) krypton.com
-> hello_world:my_first_tracepoint: { cpu_id = 1 }, { perf_thread_cycles =
-> 281474976715686 }, { my_string_field = "hi there!", my_integer_field = 23 }
-> [16:03:14.432296656] (+0.000572435) krypton.com
-> hello_world:my_first_tracepoint: { cpu_id = 1 }, { perf_thread_cycles =
-> 281474976722947 }, { my_string_field = "./hello", my_integer_field = 0 }
-> [16:03:14.432300284] (+0.000003628) krypton.com
-> hello_world:my_first_tracepoint: { cpu_id = 1 }, { perf_thread_cycles =
-> 281474976726469 }, { my_string_field = "x^2", my_integer_field = 1 }
-> 
-> Thanks for your help!
-> Andrei
-> 
-> ________________________________
-> 
-> This e-mail is confidential and may contain legally privileged information. It
-> is intended only for the addressees. If you have received this e-mail in error,
-> kindly notify us immediately by telephone or e-mail and delete the message from
-> your system.
-> 
+> When i try to activate them when tracing the kernel activities no error
+> displayed, it means that both of them works fine.
+
+> is that normal ?
+
+Yes, we support both the long forms and the shortcuts. Those may have the 
+same meaning indeed. 
+
+Thanks, 
+
+Mathieu 
+
+> Regards
+
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+------=_Part_2575_1689409624.1433316277000
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><br></div><div><br></div><span id=3D"zwchr"=
+ data-marker=3D"__DIVIDER__">----- On Jun 1, 2015, at 5:15 PM, Jessica Foes=
+t &lt;jessica.foest@gmail.com&gt; wrote:<br></span><div data-marker=3D"__QU=
+OTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-left=
+:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-=
+decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><di=
+v dir=3D"ltr">Hi all,<br><div>Normally the following perf software event me=
+ans the same thing :<br></div><div><br><div>page-faults OR faults</div><div=
+>context-switches OR cs&nbsp;</div><div>cpu-migrations OR migrations&nbsp;<=
+/div></div><br><div>The questions is why both of them (the two representati=
+on of the event) are presented in the context options of LTTng?</div><br><d=
+iv>When i try to activate them when tracing the kernel activities no error =
+displayed, it means that both of them works fine.</div><br><div>is that nor=
+mal ?</div></div></blockquote><div>Yes, we support both the long forms and =
+the shortcuts. Those may have the<br></div><div>same meaning indeed.<br dat=
+a-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks,<br=
+ data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathie=
+u<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div><b=
+r data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid #10=
+10FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-st=
+yle:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font=
+-size:12pt;"><div dir=3D"ltr"><br><div>Regards<br></div><div><br></div></di=
+v><br>_______________________________________________<br>lttng-dev mailing =
+list<br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bin/mailman=
+/listinfo/lttng-dev<br></blockquote></div><br><div data-marker=3D"__SIG_POS=
+T__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.eff=
+icios.com</div></div></body></html>
+------=_Part_2575_1689409624.1433316277000--
+
+
+--===============0746789529==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0746789529==--
