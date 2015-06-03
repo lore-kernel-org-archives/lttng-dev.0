@@ -1,20 +1,21 @@
 From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
 Subject: Re: [LTTNG-TOOLS PATCH 2/2] Test the viewer detach
 	command
-Date: Wed, 3 Jun 2015 12:04:04 +0200
-Message-ID: <CA+jJMxv4a8Pt-5P55e2ZTf_ka5sL36N_bWLuqSc4j06g3s6jng__13155.067273374$1433325922$gmane$org@mail.gmail.com>
+Date: Wed, 3 Jun 2015 12:06:44 +0200
+Message-ID: <CA+jJMxsak7PKxUSszJ+mpvnf23VMA9x7X0kKQax2B6WM_UZtDQ__2620.31355309791$1433326082$gmane$org@mail.gmail.com>
 References: <1427389072-3763-1-git-send-email-jdesfossez@efficios.com>
  <1427389072-3763-2-git-send-email-jdesfossez@efficios.com>
+ <CA+jJMxv4a8Pt-5P55e2ZTf_ka5sL36N_bWLuqSc4j06g3s6jng@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0414007306=="
+Content-Type: multipart/mixed; boundary="===============1586397351=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-la0-f52.google.com ([209.85.215.52])
+Received: from mail-la0-f47.google.com ([209.85.215.47])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Z05Wr-0004Vc-9F
- for lttng-dev@lists.lttng.org; Wed, 03 Jun 2015 06:04:11 -0400
-Received: by labpy14 with SMTP id py14so4080178lab.0
- for <lttng-dev@lists.lttng.org>; Wed, 03 Jun 2015 03:04:05 -0700 (PDT)
-In-Reply-To: <1427389072-3763-2-git-send-email-jdesfossez@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Z05ZQ-0004YI-Jf
+ for lttng-dev@lists.lttng.org; Wed, 03 Jun 2015 06:06:51 -0400
+Received: by laew7 with SMTP id w7so4098084lae.1
+ for <lttng-dev@lists.lttng.org>; Wed, 03 Jun 2015 03:06:45 -0700 (PDT)
+In-Reply-To: <CA+jJMxv4a8Pt-5P55e2ZTf_ka5sL36N_bWLuqSc4j06g3s6jng@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -27,129 +28,165 @@ To: Julien Desfossez <jdesfossez@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0414007306==
-Content-Type: multipart/alternative; boundary=089e0160b6f0d77cad05179a2dfc
+--===============1586397351==
+Content-Type: multipart/alternative; boundary=001a11c38d1a5fa83305179a3720
 
---089e0160b6f0d77cad05179a2dfc
+--001a11c38d1a5fa83305179a3720
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 26, 2015 at 5:57 PM, Julien Desfossez <jdesfossez@efficios.com>
-wrote:
+To add to the previous comments, this commit introduced
+the lttng_live_recv() and lttng_live_send() wrappers based on those in
+Babeltrace. The patch should be adapted to use them.
 
-> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
-> ---
->  tests/regression/tools/live/live_test.c | 64
-> ++++++++++++++++++++++++++++++++-
->  1 file changed, 63 insertions(+), 1 deletion(-)
->
-> diff --git a/tests/regression/tools/live/live_test.c
-> b/tests/regression/tools/live/live_test.c
-> index e30c391..8d718f6 100644
-> --- a/tests/regression/tools/live/live_test.c
-> +++ b/tests/regression/tools/live/live_test.c
-> @@ -50,7 +50,7 @@
->  #define LIVE_TIMER 2000000
->
->  /* Number of TAP tests in this file */
-> -#define NUM_TESTS 8
-> +#define NUM_TESTS 11
->  #define mmap_size 524288
->
->  int ust_consumerd32_fd;
-> @@ -257,6 +257,59 @@ error:
->         return ret;
->  }
->
-> +int detach_viewer_session(uint64_t id)
-> +{
-> +       struct lttng_viewer_cmd cmd;
-> +       struct lttng_viewer_detach_session_response resp;
-> +       struct lttng_viewer_detach_session_request rq;
-> +       int ret;
-> +       ssize_t ret_len;
-> +
-> +       cmd.cmd =3D htobe32(LTTNG_VIEWER_DETACH_SESSION);
-> +       cmd.data_size =3D sizeof(rq);
-> +       cmd.cmd_version =3D 0;
-> +
-> +       memset(&rq, 0, sizeof(rq));
-> +       rq.session_id =3D htobe64(id);
-> +
-> +       do {
-> +               ret_len =3D send(control_sock, &cmd, sizeof(cmd), 0);
-> +       } while (ret_len < 0 && errno =3D=3D EINTR);
-> +       if (ret_len < 0) {
-> +               fprintf(stderr, "[error] Error sending cmd\n");
-> +               ret =3D ret_len;
-> +               goto error;
-> +       }
-> +       assert(ret_len =3D=3D sizeof(cmd));
->
+commit 102369184926015f7e68c4af93dda14ab48d474d
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Tue Apr 28 17:23:34 2015 -0400
 
-Please fail the test without asserting if this happens.
+    Fix: live_test regression on large number of cpus
 
+    Merge fixes from Babeltrace lttng-live plugin, especially about
+    incorrect use of send() and recv().
 
-> +       do {
-> +               ret =3D send(control_sock, &rq, sizeof(rq), 0);
-> +       } while (ret < 0 && errno =3D=3D EINTR);
-> +       if (ret < 0) {
-> +               fprintf(stderr, "Error sending attach request\n");
-> +               goto error;
-> +       }
-> +
-> +       do {
-> +               ret_len =3D recv(control_sock, &resp, sizeof(resp), 0);
-> +       } while (ret_len < 0 && errno =3D=3D EINTR);
-> +       if (ret_len < 0) {
-> +               fprintf(stderr, "[error] Error receiving detach session
-> reply\n");
-> +               ret =3D ret_len;
-> +               goto error;
-> +       }
-> +       assert(ret_len =3D=3D sizeof(resp));
->
+    Can be triggered with 32 virtual processors visible on the system with
+    the root_regression test suite.
 
-Same here.
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    Signed-off-by: J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@efficios.=
+com>
 
-Thanks!
 J=C3=A9r=C3=A9mie
 
-+
-> +       if (be32toh(resp.status) !=3D LTTNG_VIEWER_DETACH_SESSION_OK) {
-> +               fprintf(stderr, "[error] Error detaching viewer
-> session\n");
-> +               ret =3D -1;
-> +               goto error;
-> +       }
-> +       ret =3D 0;
-> +
-> +error:
-> +       return ret;
-> +}
-> +
->  int attach_session(int id)
->  {
->         struct lttng_viewer_cmd cmd;
-> @@ -643,5 +696,14 @@ int main(int argc, char **argv)
->                         first_packet_stream_id, first_packet_offset,
->                         first_packet_len);
+On Wed, Jun 3, 2015 at 12:04 PM, J=C3=A9r=C3=A9mie Galarneau <
+jeremie.galarneau@efficios.com> wrote:
+
 >
-> +       ret =3D detach_viewer_session(session_id);
-> +       ok(ret =3D=3D 0, "Detach viewer session");
+>
+> On Thu, Mar 26, 2015 at 5:57 PM, Julien Desfossez <jdesfossez@efficios.co=
+m
+> > wrote:
+>
+>> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+>> ---
+>>  tests/regression/tools/live/live_test.c | 64
+>> ++++++++++++++++++++++++++++++++-
+>>  1 file changed, 63 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tests/regression/tools/live/live_test.c
+>> b/tests/regression/tools/live/live_test.c
+>> index e30c391..8d718f6 100644
+>> --- a/tests/regression/tools/live/live_test.c
+>> +++ b/tests/regression/tools/live/live_test.c
+>> @@ -50,7 +50,7 @@
+>>  #define LIVE_TIMER 2000000
+>>
+>>  /* Number of TAP tests in this file */
+>> -#define NUM_TESTS 8
+>> +#define NUM_TESTS 11
+>>  #define mmap_size 524288
+>>
+>>  int ust_consumerd32_fd;
+>> @@ -257,6 +257,59 @@ error:
+>>         return ret;
+>>  }
+>>
+>> +int detach_viewer_session(uint64_t id)
+>> +{
+>> +       struct lttng_viewer_cmd cmd;
+>> +       struct lttng_viewer_detach_session_response resp;
+>> +       struct lttng_viewer_detach_session_request rq;
+>> +       int ret;
+>> +       ssize_t ret_len;
+>> +
+>> +       cmd.cmd =3D htobe32(LTTNG_VIEWER_DETACH_SESSION);
+>> +       cmd.data_size =3D sizeof(rq);
+>> +       cmd.cmd_version =3D 0;
+>> +
+>> +       memset(&rq, 0, sizeof(rq));
+>> +       rq.session_id =3D htobe64(id);
+>> +
+>> +       do {
+>> +               ret_len =3D send(control_sock, &cmd, sizeof(cmd), 0);
+>> +       } while (ret_len < 0 && errno =3D=3D EINTR);
+>> +       if (ret_len < 0) {
+>> +               fprintf(stderr, "[error] Error sending cmd\n");
+>> +               ret =3D ret_len;
+>> +               goto error;
+>> +       }
+>> +       assert(ret_len =3D=3D sizeof(cmd));
+>>
+>
+> Please fail the test without asserting if this happens.
+>
+>
+>> +       do {
+>> +               ret =3D send(control_sock, &rq, sizeof(rq), 0);
+>> +       } while (ret < 0 && errno =3D=3D EINTR);
+>> +       if (ret < 0) {
+>> +               fprintf(stderr, "Error sending attach request\n");
+>> +               goto error;
+>> +       }
+>> +
+>> +       do {
+>> +               ret_len =3D recv(control_sock, &resp, sizeof(resp), 0);
+>> +       } while (ret_len < 0 && errno =3D=3D EINTR);
+>> +       if (ret_len < 0) {
+>> +               fprintf(stderr, "[error] Error receiving detach session
+>> reply\n");
+>> +               ret =3D ret_len;
+>> +               goto error;
+>> +       }
+>> +       assert(ret_len =3D=3D sizeof(resp));
+>>
+>
+> Same here.
+>
+> Thanks!
+> J=C3=A9r=C3=A9mie
+>
 > +
-> +       ret =3D list_sessions(&session_id);
-> +       ok(ret > 0, "List sessions : %d session(s)", ret);
-> +
-> +       ret =3D attach_session(session_id);
-> +       ok(ret > 0, "Attach to session, %d streams received", ret);
-> +
->         return exit_status();
->  }
+>> +       if (be32toh(resp.status) !=3D LTTNG_VIEWER_DETACH_SESSION_OK) {
+>> +               fprintf(stderr, "[error] Error detaching viewer
+>> session\n");
+>> +               ret =3D -1;
+>> +               goto error;
+>> +       }
+>> +       ret =3D 0;
+>> +
+>> +error:
+>> +       return ret;
+>> +}
+>> +
+>>  int attach_session(int id)
+>>  {
+>>         struct lttng_viewer_cmd cmd;
+>> @@ -643,5 +696,14 @@ int main(int argc, char **argv)
+>>                         first_packet_stream_id, first_packet_offset,
+>>                         first_packet_len);
+>>
+>> +       ret =3D detach_viewer_session(session_id);
+>> +       ok(ret =3D=3D 0, "Detach viewer session");
+>> +
+>> +       ret =3D list_sessions(&session_id);
+>> +       ok(ret > 0, "List sessions : %d session(s)", ret);
+>> +
+>> +       ret =3D attach_session(session_id);
+>> +       ok(ret > 0, "Attach to session, %d streams received", ret);
+>> +
+>>         return exit_status();
+>>  }
+>> --
+>> 1.9.1
+>>
+>>
+>
+>
 > --
-> 1.9.1
+> J=C3=A9r=C3=A9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
 >
->
+
 
 
 --=20
@@ -157,17 +194,40 @@ J=C3=A9r=C3=A9mie Galarneau
 EfficiOS Inc.
 http://www.efficios.com
 
---089e0160b6f0d77cad05179a2dfc
+--001a11c38d1a5fa83305179a3720
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><br><div class=3D"gmail_extra"><br><div class=3D"gmail_quo=
-te">On Thu, Mar 26, 2015 at 5:57 PM, Julien Desfossez <span dir=3D"ltr">&lt=
-;<a href=3D"mailto:jdesfossez@efficios.com" target=3D"_blank">jdesfossez@ef=
-ficios.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=
-=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Signed-o=
-ff-by: Julien Desfossez &lt;<a href=3D"mailto:jdesfossez@efficios.com">jdes=
-fossez@efficios.com</a>&gt;<br>
+<div dir=3D"ltr"><div>To add to the previous comments, this commit introduc=
+ed the=C2=A0lttng_live_recv() and lttng_live_send() wrappers based on those=
+ in Babeltrace. The patch should be adapted to use them.</div><div><br></di=
+v><div>commit 102369184926015f7e68c4af93dda14ab48d474d</div><div>Author: Ma=
+thieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com">mathi=
+eu.desnoyers@efficios.com</a>&gt;</div><div>Date: =C2=A0 Tue Apr 28 17:23:3=
+4 2015 -0400</div><div><br></div><div>=C2=A0 =C2=A0 Fix: live_test regressi=
+on on large number of cpus</div><div>=C2=A0 =C2=A0=C2=A0</div><div>=C2=A0 =
+=C2=A0 Merge fixes from Babeltrace lttng-live plugin, especially about</div=
+><div>=C2=A0 =C2=A0 incorrect use of send() and recv().</div><div>=C2=A0 =
+=C2=A0=C2=A0</div><div>=C2=A0 =C2=A0 Can be triggered with 32 virtual proce=
+ssors visible on the system with</div><div>=C2=A0 =C2=A0 the root_regressio=
+n test suite.</div><div>=C2=A0 =C2=A0=C2=A0</div><div>=C2=A0 =C2=A0 Signed-=
+off-by: Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.=
+com">mathieu.desnoyers@efficios.com</a>&gt;</div><div>=C2=A0 =C2=A0 Signed-=
+off-by: J=C3=A9r=C3=A9mie Galarneau &lt;<a href=3D"mailto:jeremie.galarneau=
+@efficios.com">jeremie.galarneau@efficios.com</a>&gt;</div><div><br></div><=
+div>J=C3=A9r=C3=A9mie</div></div><div class=3D"gmail_extra"><br><div class=
+=3D"gmail_quote">On Wed, Jun 3, 2015 at 12:04 PM, J=C3=A9r=C3=A9mie Galarne=
+au <span dir=3D"ltr">&lt;<a href=3D"mailto:jeremie.galarneau@efficios.com" =
+target=3D"_blank">jeremie.galarneau@efficios.com</a>&gt;</span> wrote:<br><=
+blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px=
+ #ccc solid;padding-left:1ex"><div dir=3D"ltr"><br><div class=3D"gmail_extr=
+a"><br><div class=3D"gmail_quote"><div><div class=3D"h5">On Thu, Mar 26, 20=
+15 at 5:57 PM, Julien Desfossez <span dir=3D"ltr">&lt;<a href=3D"mailto:jde=
+sfossez@efficios.com" target=3D"_blank">jdesfossez@efficios.com</a>&gt;</sp=
+an> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;=
+border-left:1px #ccc solid;padding-left:1ex">Signed-off-by: Julien Desfosse=
+z &lt;<a href=3D"mailto:jdesfossez@efficios.com" target=3D"_blank">jdesfoss=
+ez@efficios.com</a>&gt;<br>
 ---<br>
 =C2=A0tests/regression/tools/live/live_test.c | 64 ++++++++++++++++++++++++=
 ++++++++-<br>
@@ -222,9 +282,10 @@ ot;[error] Error sending cmd\n&quot;);<br>
 +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0goto error;<br>
 +=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
 +=C2=A0 =C2=A0 =C2=A0 =C2=A0assert(ret_len =3D=3D sizeof(cmd));<br></blockq=
-uote><div><br></div><div>Please fail the test without asserting if this hap=
-pens.</div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"marg=
-in:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
+uote><div><br></div></div></div><div>Please fail the test without asserting=
+ if this happens.</div><span class=3D""><div>=C2=A0</div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
+ing-left:1ex">
 +=C2=A0 =C2=A0 =C2=A0 =C2=A0do {<br>
 +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D send(contro=
 l_sock, &amp;rq, sizeof(rq), 0);<br>
@@ -249,10 +310,10 @@ ot;[error] Error receiving detach session reply\n&quot;);<br>
 +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0goto error;<br>
 +=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
 +=C2=A0 =C2=A0 =C2=A0 =C2=A0assert(ret_len =3D=3D sizeof(resp));<br>
-</blockquote><div><br></div><div>Same here.</div><div>=C2=A0</div><div>Than=
-ks!</div><div>J=C3=A9r=C3=A9mie</div><div><br></div><blockquote class=3D"gm=
-ail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-le=
-ft:1ex">+<br>
+</blockquote><div><br></div></span><div>Same here.</div><div>=C2=A0</div><d=
+iv>Thanks!</div><div>J=C3=A9r=C3=A9mie</div><div><div class=3D"h5"><div><br=
+></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-=
+left:1px #ccc solid;padding-left:1ex">+<br>
 +=C2=A0 =C2=A0 =C2=A0 =C2=A0if (be32toh(resp.status) !=3D LTTNG_VIEWER_DETA=
 CH_SESSION_OK) {<br>
 +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fprintf(stderr, &qu=
@@ -289,19 +350,24 @@ ams received&quot;, ret);<br>
 +<br>
 =C2=A0 =C2=A0 =C2=A0 =C2=A0 return exit_status();<br>
 =C2=A0}<br>
-<span class=3D"HOEnZb"><font color=3D"#888888">--<br>
+<span><font color=3D"#888888">--<br>
 1.9.1<br>
 <br>
-</font></span></blockquote></div><br><br clear=3D"all"><div><br></div>-- <b=
-r><div class=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS In=
-c.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http://www.effi=
-cios.com</a></div>
-</div></div>
+</font></span></blockquote></div></div></div><span class=3D"HOEnZb"><font c=
+olor=3D"#888888"><br><br clear=3D"all"><div><br></div>-- <br><div>J=C3=A9r=
+=C3=A9mie Galarneau<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com"=
+ target=3D"_blank">http://www.efficios.com</a></div>
+</font></span></div></div>
+</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br><div class=
+=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS Inc.<br><a hre=
+f=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.com</a>=
+</div>
+</div>
 
---089e0160b6f0d77cad05179a2dfc--
+--001a11c38d1a5fa83305179a3720--
 
 
---===============0414007306==
+--===============1586397351==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -312,4 +378,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0414007306==--
+--===============1586397351==--
