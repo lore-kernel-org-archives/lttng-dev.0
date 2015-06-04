@@ -1,18 +1,17 @@
-From: Deepak Kumar <dekumar1976@gmail.com>
-Subject: Re: confirm c4ffe9cce5044a3711020b355aa9133ec1268447
-Date: Wed, 3 Jun 2015 19:22:45 -0700
-Message-ID: <CAG6yzexQjo2856DcndLzsQ9UU0OL81MYUBSMAgBHTPJehux46A__14611.8249897429$1433384644$gmane$org@mail.gmail.com>
-References: <mailman.0.1433384331.3379.lttng-dev@lists.lttng.org>
+From: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+Subject: =?utf-8?q?lttng_list_-u_return_=22Error=3A_Command_er?=
+	=?utf-8?q?ror=22?=
+Date: Thu, 04 Jun 2015 11:00:42 +0800
+Message-ID: <---.GY------rzHGY$b39120f9-2664-4e5c-bb89-379e7494cb0d__36508.9254956276$1433386922$gmane$org@aliyun.com>
+Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2145887000=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pd0-f177.google.com ([209.85.192.177])
+Received: from smtpcm9-301.freemail.mail.aliyun.com ([110.75.46.1])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <dekumar1976@gmail.com>) id 1Z0Knx-0000ts-Do
- for lttng-dev@lists.lttng.org; Wed, 03 Jun 2015 22:22:52 -0400
-Received: by pdbki1 with SMTP id ki1so20050699pdb.1
- for <lttng-dev@lists.lttng.org>; Wed, 03 Jun 2015 19:22:45 -0700 (PDT)
-In-Reply-To: <mailman.0.1433384331.3379.lttng-dev@lists.lttng.org>
+ (envelope-from <zhenyu.ren@aliyun.com>) id 1Z0LOo-00017A-RU
+ for lttng-dev@lists.lttng.org; Wed, 03 Jun 2015 23:01:00 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,52 +20,22 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============2145887000==
-Content-Type: multipart/alternative; boundary=001a11c3e104db66f70517a7d922
+Hi,dev-team
 
---001a11c3e104db66f70517a7d922
-Content-Type: text/plain; charset=UTF-8
+   As the subject is my problem. It seems that the function get_cmdline_by_pid() will fail if kernel.pid_max > 100000 (i.e. 131072) 
 
-Hi,
-
-I am trying to output the inpute lttng live stream to ctf-metadata and
-still it shows as text.
-I tried ctf and dummy also. Am I using the command wrong?
-
-babeltrace -o ctf-metadata -i lttng-live
-net://localho/host/dekumar-VirtualBox/auto-20150603-183122
+static char *get_cmdline_by_pid(pid_t pid)
+{
+        int ret;
+        FILE *fp = NULL;
+        char *cmdline = NULL;
+        char path[20];        /* Can't go bigger than /proc/65535/cmdline */
 
 
-Thanks,
-Deepak
+ I think path[20] is not big enough .Do you have any better idea?
 
---001a11c3e104db66f70517a7d922
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi,<div><br></div><div>I am trying to output the inpute lt=
-tng live stream to ctf-metadata and still it shows as text.</div><div>I tri=
-ed ctf and dummy also. Am I using the command wrong?<br><div><br></div><div=
-><div>babeltrace -o ctf-metadata -i lttng-live net://localho/host/dekumar-V=
-irtualBox/auto-20150603-183122</div><div><br></div><div><br></div><div>Than=
-ks,</div><div>Deepak<br><div class=3D"gmail_extra"><br></div></div></div></=
-div></div>
-
---001a11c3e104db66f70517a7d922--
-
-
---===============2145887000==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2145887000==--
+Thanks
+zhenyu.ren
