@@ -1,142 +1,66 @@
-From: Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC PATCH] sched: Fix sched_wakeup tracepoint
-Date: Tue, 9 Jun 2015 11:13:36 +0200
-Message-ID: <20150609091336.GQ3644@twins.programming.kicks-ass.net>
-References: <1433504509-17013-1-git-send-email-mathieu.desnoyers@efficios.com>
- <20150605120909.GG19282@twins.programming.kicks-ass.net>
- <479621151.4836.1433507522491.JavaMail.zimbra@efficios.com>
- <1433508695.1495.16.camel@twins>
- <600031664.4911.1433510581646.JavaMail.zimbra@efficios.com>
- <1433592142.1495.22.camel@twins>
- <1960877063.5553.1433672414640.JavaMail.zimbra@efficios.com>
- <20150608132735.0763ad27@gandalf.local.home>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: LTTng-UST new tracelog() feature
+Date: Tue, 9 Jun 2015 14:42:40 +0000 (UTC)
+Message-ID: <2128314805.7287.1433860960349.JavaMail.zimbra__24356.2984666371$1433861038$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20150608132735.0763ad27@gandalf.local.home>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, Francis Giraldeau <francis.giraldeau@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>, Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.efficios.com ([78.47.125.74])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <compudj@efficios.com>) id 1Z2Kjw-0006b1-Jj
+ for lttng-dev@lists.lttng.org; Tue, 09 Jun 2015 10:42:59 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id C243D34024A
+ for <lttng-dev@lists.lttng.org>; Tue,  9 Jun 2015 14:42:52 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id oXGmUpEyoy7G for <lttng-dev@lists.lttng.org>;
+ Tue,  9 Jun 2015 14:42:41 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id E80FA340352
+ for <lttng-dev@lists.lttng.org>; Tue,  9 Jun 2015 14:42:40 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id BhOSXNlv1MuY for <lttng-dev@lists.lttng.org>;
+ Tue,  9 Jun 2015 14:42:40 +0000 (UTC)
+Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
+ by mail.efficios.com (Postfix) with ESMTP id 9885634024A
+ for <lttng-dev@lists.lttng.org>; Tue,  9 Jun 2015 14:42:40 +0000 (UTC)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-
-So how about we introduce the 'waking' tracepoint and leave the existing
-wakeup one in place and preserve its woken semantics.
-
-Steven, can we do aliases? Where one tracepoint is known to userspace
-under multiple names? In that case we could rename the thing to woken
-and have an alias wakeup which we can phase out over time.
-
-The patch also takes away the success parameter to the tracepoint, but
-does not quite go as far as actually removing it from the tracepoint
-itself.
-
-We can do that in a follow up patch which we can quickly revert if it
-turns out people are actually still using that for something.
-
----
- include/trace/events/sched.h | 28 ++++++++++++++++++++--------
- kernel/sched/core.c          |  9 ++++++---
- 2 files changed, 26 insertions(+), 11 deletions(-)
-
-diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
-index d57a575fe31f..b1608d5679e2 100644
---- a/include/trace/events/sched.h
-+++ b/include/trace/events/sched.h
-@@ -55,7 +55,7 @@ TRACE_EVENT(sched_kthread_stop_ret,
-  */
- DECLARE_EVENT_CLASS(sched_wakeup_template,
- 
--	TP_PROTO(struct task_struct *p, int success),
-+	TP_PROTO(struct task_struct *p),
- 
- 	TP_ARGS(__perf_task(p), success),
- 
-@@ -71,25 +71,37 @@ DECLARE_EVENT_CLASS(sched_wakeup_template,
- 		memcpy(__entry->comm, p->comm, TASK_COMM_LEN);
- 		__entry->pid		= p->pid;
- 		__entry->prio		= p->prio;
--		__entry->success	= success;
-+		__entry->success	= 1; /* rudiment, kill when possible */
- 		__entry->target_cpu	= task_cpu(p);
- 	),
- 
--	TP_printk("comm=%s pid=%d prio=%d success=%d target_cpu=%03d",
-+	TP_printk("comm=%s pid=%d prio=%d target_cpu=%03d",
- 		  __entry->comm, __entry->pid, __entry->prio,
--		  __entry->success, __entry->target_cpu)
-+		  __entry->target_cpu)
- );
- 
-+/*
-+ * Tracepoint called when waking a task; this tracepoint is guaranteed to be
-+ * called from the waking context.
-+ */
-+DEFINE_EVENT(sched_wakeup_template, sched_waking,
-+	     TP_PROTO(struct task_struct *p),
-+	     TP_ARGS(p));
-+
-+/*
-+ * Tracepoint called when the task is actually woken; p->state == TASK_RUNNNG.
-+ * It it not always called from the waking context.
-+ */
- DEFINE_EVENT(sched_wakeup_template, sched_wakeup,
--	     TP_PROTO(struct task_struct *p, int success),
--	     TP_ARGS(p, success));
-+	     TP_PROTO(struct task_struct *p),
-+	     TP_ARGS(p));
- 
- /*
-  * Tracepoint for waking up a new task:
-  */
- DEFINE_EVENT(sched_wakeup_template, sched_wakeup_new,
--	     TP_PROTO(struct task_struct *p, int success),
--	     TP_ARGS(p, success));
-+	     TP_PROTO(struct task_struct *p),
-+	     TP_ARGS(p));
- 
- #ifdef CREATE_TRACE_POINTS
- static inline long __trace_sched_switch_state(struct task_struct *p)
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index d5078c0f20e6..354e667620a9 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -1487,9 +1487,9 @@ static void
- ttwu_do_wakeup(struct rq *rq, struct task_struct *p, int wake_flags)
- {
- 	check_preempt_curr(rq, p, wake_flags);
--	trace_sched_wakeup(p, true);
--
- 	p->state = TASK_RUNNING;
-+	trace_sched_wakeup(p);
-+
- #ifdef CONFIG_SMP
- 	if (p->sched_class->task_woken)
- 		p->sched_class->task_woken(rq, p);
-@@ -1695,6 +1695,7 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
- 		goto out;
- 
- 	success = 1; /* we're going to change ->state */
-+	trace_sched_waking(p);
- 	cpu = task_cpu(p);
- 
- 	if (p->on_rq && ttwu_remote(p, wake_flags))
-@@ -1761,6 +1762,8 @@ static void try_to_wake_up_local(struct task_struct *p)
- 	if (!(p->state & TASK_NORMAL))
- 		goto out;
- 
-+	trace_sched_waking(p);
-+
- 	if (!task_on_rq_queued(p))
- 		ttwu_activate(rq, p, ENQUEUE_WAKEUP);
- 
-@@ -2119,7 +2122,7 @@ void wake_up_new_task(struct task_struct *p)
- 	rq = __task_rq_lock(p);
- 	activate_task(rq, p, 0);
- 	p->on_rq = TASK_ON_RQ_QUEUED;
--	trace_sched_wakeup_new(p, true);
-+	trace_sched_wakeup_new(p);
- 	check_preempt_curr(rq, p, WF_FORK);
- #ifdef CONFIG_SMP
- 	if (p->sched_class->task_woken)
+SGksCgpJIGp1c3QgcHVzaGVkIGEgbmV3IGluc3RydW1lbnRhdGlvbiBmZWF0dXJlIGludG8gbHR0
+bmctdXN0CnRhcmdldGluZyBhcHBsaWNhdGlvbnMgdGhhdCB3YW50IHRvIG1vdmUgdGhlaXIgZXhp
+c3RpbmcgbG9nZ2luZwpmYWNpbGl0aWVzIHRvIExUVG5nLVVTVC4gRnJvbSB0aGUgdXBkYXRlZCBs
+dHRuZy11c3QoMykgbWFucGFnZToKClVTQUdFIFdJVEggVFJBQ0VMT0cKICAgICAgIElmIHlvdSB3
+YW50IHRvIG1pZ3JhdGUgZXhpc3RpbmcgbG9nZ2luZyAoaW5mbywgZXJyb3JzLCAuLi4pICAgdG8g
+IExUVG5nCiAgICAgICBVU1QsIHlvdSBjYW4gdXNlIHRoZSB0cmFjZWxvZygpIGludGVyZmFjZS4g
+IFRvIGRvIGl0LCBpbiBhIG51dHNoZWxsOgoKICAgICAgIDEpICNpbmNsdWRlIDxsdHRuZy90cmFj
+ZWxvZy5oPgoKICAgICAgIDIpIC8qIGluIHlvdXIgY29kZSwgdXNlIGxpa2UgYSBwcmludGYsIHdp
+dGggZXh0cmEgbG9nbGV2ZWwgaW5mby4gKi8KICAgICAgICAgIHRyYWNlbG9nKFRSQUNFX0lORk8s
+ICJNZXNzYWdlIHdpdGggaW50ZWdlciAlZCIsIDEyMzQpOwoKICAgICAgIDMpIExpbmsgeW91ciBw
+cm9ncmFtIGFnYWluc3QgbGlibHR0bmctdXN0LnNvLgoKICAgICAgIDQpICBFbmFibGUgIFVTVCBl
+dmVudHMgd2hlbiB0cmFjaW5nIHdpdGggdGhlIGZvbGxvd2luZyBzZXF1ZW5jZSBvZiBjb23igJAK
+ICAgICAgIG1hbmRzCiAgICAgICAgICBmcm9tIGx0dG5nLXRvb2xzOgoKICAgICAgICAgIGx0dG5n
+IGNyZWF0ZQogICAgICAgICAgbHR0bmcgZW5hYmxlLWV2ZW50IC11ICJsdHRuZ191c3RfdHJhY2Vs
+b2c6KiIKICAgICAgICAgIGx0dG5nIHN0YXJ0CiAgICAgICAgICBbLi4uIHJ1biB5b3VyIHByb2dy
+YW0gLi4uXQogICAgICAgICAgbHR0bmcgc3RvcAogICAgICAgICAgbHR0bmcgdmlldwoKICAgICAg
+IFRoYXQncyBpdCEKCiAgICAgICBZb3UgY2FuIHJlcGxhY2UgIHRoZSAgZW5hYmxlLWV2ZW50ICBs
+aW5lICBhYm92ZSAgd2l0aCAgYSAgc2VsZWN0aW9uICBvZgogICAgICAgbG9nbGV2ZWxzLCBlLmcu
+OgoKICAgICAgICAgIGx0dG5nIGVuYWJsZS1ldmVudCAtdSAtYSAtLWxvZ2xldmVsIFRSQUNFX0lO
+Rk8KCiAgICAgICBXaGljaCAgd2lsbCAgZ2F0aGVyICBhbGwgIGV2ZW50cyAgZnJvbSAgVFJBQ0Vf
+SU5GTyAgYW5kICBtb3JlIGltcG9ydGFudAogICAgICAgbG9nbGV2ZWxzLgoKRmVlZGJhY2sgaXMg
+d2VsY29tZSEKClRoYW5rcywKCk1hdGhpZXUKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lP
+UyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBs
+aXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2Cg==
