@@ -1,123 +1,142 @@
-From: Steven Rostedt <rostedt@goodmis.org>
+From: Peter Zijlstra <peterz@infradead.org>
 Subject: Re: [RFC PATCH] sched: Fix sched_wakeup tracepoint
-Date: Mon, 8 Jun 2015 13:27:35 -0400
-Message-ID: <20150608132735.0763ad27@gandalf.local.home>
+Date: Tue, 9 Jun 2015 11:13:36 +0200
+Message-ID: <20150609091336.GQ3644@twins.programming.kicks-ass.net>
 References: <1433504509-17013-1-git-send-email-mathieu.desnoyers@efficios.com>
-	<20150605120909.GG19282@twins.programming.kicks-ass.net>
-	<479621151.4836.1433507522491.JavaMail.zimbra@efficios.com>
-	<1433508695.1495.16.camel@twins>
-	<600031664.4911.1433510581646.JavaMail.zimbra@efficios.com>
-	<1433592142.1495.22.camel@twins>
-	<1960877063.5553.1433672414640.JavaMail.zimbra@efficios.com>
+ <20150605120909.GG19282@twins.programming.kicks-ass.net>
+ <479621151.4836.1433507522491.JavaMail.zimbra@efficios.com>
+ <1433508695.1495.16.camel@twins>
+ <600031664.4911.1433510581646.JavaMail.zimbra@efficios.com>
+ <1433592142.1495.22.camel@twins>
+ <1960877063.5553.1433672414640.JavaMail.zimbra@efficios.com>
+ <20150608132735.0763ad27@gandalf.local.home>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
 Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <1960877063.5553.1433672414640.JavaMail.zimbra@efficios.com>
+Content-Disposition: inline
+In-Reply-To: <20150608132735.0763ad27@gandalf.local.home>
 Sender: linux-kernel-owner@vger.kernel.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, Francis Giraldeau <francis.giraldeau@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>, Linus Torvalds <torvalds@linux-foundation.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, Francis Giraldeau <francis.giraldeau@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>, Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: lttng-dev@lists.lttng.org
 
 
-[ Keeping entire email because I added Linus ]
+So how about we introduce the 'waking' tracepoint and leave the existing
+wakeup one in place and preserve its woken semantics.
 
-On Sun, 7 Jun 2015 10:20:14 +0000 (UTC)
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+Steven, can we do aliases? Where one tracepoint is known to userspace
+under multiple names? In that case we could rename the thing to woken
+and have an alias wakeup which we can phase out over time.
 
-> ----- On Jun 6, 2015, at 2:02 PM, Peter Zijlstra peterz@infradead.org wrote:
-> 
-> > On Fri, 2015-06-05 at 13:23 +0000, Mathieu Desnoyers wrote:
-> >> OK, so considering the definition naming feedback you provided, we
-> >> may need a 3 tracepoint if we want to calculate both wakeup latency
-> >> and scheduling latency (naming ofc open to discussion):
-> >> 
-> >> sched_wakeup: when try_to_wake_up{,_local} is called in the waker.
-> >> sched_activate_task: when the wakee is marked runnable.
-> >> sched_switch: when scheduling actually happens.
-> > 
-> > I would propose:
-> > 
-> >	sched_waking: upon calling try_to_wake_up() as soon as we know we need
-> > to change state; guaranteed to be called from the context doing the
-> > wakeup.
-> > 
-> >	sched_woken: the wakeup is complete (task is runnable, any delay
-> > between this and actually getting on a cpu is down to the scheduler).
-> > 
-> >	sched_switch: when switching from task @prev to @next.
-> 
-> Agreed,
-> 
-> > 
-> > This means abandoning trace_sched_wakeup(); which might be a problem,
-> > which is why I bloody hate tracepoints :-(
-> 
-> OK. I guess it's about time we dive into that question. Should tracepoint
-> semantic be kept cast in stone forever ? Not in my opinion, and here is why.
-> 
-> Most of the Linux kernel ABI exposed to userspace serves as support to
-> runtime (system calls, virtual file systems, etc). For all that, it makes
-> tons of sense to keep it stable, following the Documentation/ABI/README
-> guidelines. Even there, we have provisions for obsolescence and removal
-> of an ABI if need be, which provides userspace some time to adapt to
-> changes.
-> 
-> How are tracepoints different ? Well, those are not meant to be used in
-> runtime support, but rather for analyzing systems, which means that
-> userspace tools using the tracepoint content do not need it to _run_,
-> but rather as information source to perform analyses.
-> 
-> Even though I dislike analogies, I think we need one here. Let's consider
-> CAN bus ports for car debugging. Even though the transport is covered by
-> standards, it does not mandate the semantics of the data per se. I would
-> not expect a debugging device made in 2005 to work for newest generations
-> of car. However, I would expect that new debug devices are compatible with
-> older cars, and that those debug devices have means to query which type of
-> car it is debugging. Otherwise, the debugging device is simply crap,
-> because it cannot adapt to change. What should a debug device created in
-> 2005 do if connected to a new car ? Ideally, it should gracefully decline
-> to interact with this car, and require a software upgrade.
-> 
-> OK, now back to kernel tracepoints. My opinion is that it is a fundamental
-> requirement that trace analysis tools should be able to detect that they
-> are unable understand tracepoint data they care about. It seems perfectly
-> fine to me to require that analysis tool upgrades are needed to interact
-> with a new kernel. However, a tool should be able to handle a range of
-> older kernel versions too.
-> 
-> This can be done by many means, including making sure preexisting event name
-> and fields semantic are immutable, or by versioning of tracepoints on a
-> per-event basis.
-> 
-> Here, in the case of sched_wakeup: we end up noticing that it accidentally
-> changed location in the kernel across versions, which makes it useless for
-> many analyses unless they use kernel version information to get the right
-> semantic associated with this event.
-> 
-> So here, for introducing sched_waking/sched_woken, we have a few ways
-> forward:
-> 
-> 1) Keep sched_wakeup as it is, and add those two new events. Analyses
->    can then continue using the old event for a while, and if they sees
->    that sched_waking/sched_woken are there, they can use those more
->    precise events instead. This could allow us to do a gradual
->    deprecation phase for the sched_wakeup tracepoint.
-> 
-> 2) Remove sched_wakeup event, replacing it by sched_waking/sched_woken.
->    Require immediate analysis tool upgrade to deal with this new
->    information. Old tools should gracefully fail and ask users to
->    upgrade. If they don't, fix them so they can handle change.
+The patch also takes away the success parameter to the tracepoint, but
+does not quite go as far as actually removing it from the tracepoint
+itself.
 
-2 will break tools and even if they fail "gracefully" that probably
-still isn't acceptable as the sched_wakeup tracepoint is a popular one.
+We can do that in a follow up patch which we can quickly revert if it
+turns out people are actually still using that for something.
 
+---
+ include/trace/events/sched.h | 28 ++++++++++++++++++++--------
+ kernel/sched/core.c          |  9 ++++++---
+ 2 files changed, 26 insertions(+), 11 deletions(-)
 
-  3) Add the two tracepoints and remove the sched_wakeup() one, but
-  then add a manual tracepoint for perf and ftrace that can simulate
-  the sched_wakeup() from the other two tracepoints. This should keep
-  tools working and we can have better wake up tracepoints implemented,
-  without the overhead of the third "obsolete" tracepoint in the
-  scheduling code.
-
--- Steve
+diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
+index d57a575fe31f..b1608d5679e2 100644
+--- a/include/trace/events/sched.h
++++ b/include/trace/events/sched.h
+@@ -55,7 +55,7 @@ TRACE_EVENT(sched_kthread_stop_ret,
+  */
+ DECLARE_EVENT_CLASS(sched_wakeup_template,
+ 
+-	TP_PROTO(struct task_struct *p, int success),
++	TP_PROTO(struct task_struct *p),
+ 
+ 	TP_ARGS(__perf_task(p), success),
+ 
+@@ -71,25 +71,37 @@ DECLARE_EVENT_CLASS(sched_wakeup_template,
+ 		memcpy(__entry->comm, p->comm, TASK_COMM_LEN);
+ 		__entry->pid		= p->pid;
+ 		__entry->prio		= p->prio;
+-		__entry->success	= success;
++		__entry->success	= 1; /* rudiment, kill when possible */
+ 		__entry->target_cpu	= task_cpu(p);
+ 	),
+ 
+-	TP_printk("comm=%s pid=%d prio=%d success=%d target_cpu=%03d",
++	TP_printk("comm=%s pid=%d prio=%d target_cpu=%03d",
+ 		  __entry->comm, __entry->pid, __entry->prio,
+-		  __entry->success, __entry->target_cpu)
++		  __entry->target_cpu)
+ );
+ 
++/*
++ * Tracepoint called when waking a task; this tracepoint is guaranteed to be
++ * called from the waking context.
++ */
++DEFINE_EVENT(sched_wakeup_template, sched_waking,
++	     TP_PROTO(struct task_struct *p),
++	     TP_ARGS(p));
++
++/*
++ * Tracepoint called when the task is actually woken; p->state == TASK_RUNNNG.
++ * It it not always called from the waking context.
++ */
+ DEFINE_EVENT(sched_wakeup_template, sched_wakeup,
+-	     TP_PROTO(struct task_struct *p, int success),
+-	     TP_ARGS(p, success));
++	     TP_PROTO(struct task_struct *p),
++	     TP_ARGS(p));
+ 
+ /*
+  * Tracepoint for waking up a new task:
+  */
+ DEFINE_EVENT(sched_wakeup_template, sched_wakeup_new,
+-	     TP_PROTO(struct task_struct *p, int success),
+-	     TP_ARGS(p, success));
++	     TP_PROTO(struct task_struct *p),
++	     TP_ARGS(p));
+ 
+ #ifdef CREATE_TRACE_POINTS
+ static inline long __trace_sched_switch_state(struct task_struct *p)
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index d5078c0f20e6..354e667620a9 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -1487,9 +1487,9 @@ static void
+ ttwu_do_wakeup(struct rq *rq, struct task_struct *p, int wake_flags)
+ {
+ 	check_preempt_curr(rq, p, wake_flags);
+-	trace_sched_wakeup(p, true);
+-
+ 	p->state = TASK_RUNNING;
++	trace_sched_wakeup(p);
++
+ #ifdef CONFIG_SMP
+ 	if (p->sched_class->task_woken)
+ 		p->sched_class->task_woken(rq, p);
+@@ -1695,6 +1695,7 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
+ 		goto out;
+ 
+ 	success = 1; /* we're going to change ->state */
++	trace_sched_waking(p);
+ 	cpu = task_cpu(p);
+ 
+ 	if (p->on_rq && ttwu_remote(p, wake_flags))
+@@ -1761,6 +1762,8 @@ static void try_to_wake_up_local(struct task_struct *p)
+ 	if (!(p->state & TASK_NORMAL))
+ 		goto out;
+ 
++	trace_sched_waking(p);
++
+ 	if (!task_on_rq_queued(p))
+ 		ttwu_activate(rq, p, ENQUEUE_WAKEUP);
+ 
+@@ -2119,7 +2122,7 @@ void wake_up_new_task(struct task_struct *p)
+ 	rq = __task_rq_lock(p);
+ 	activate_task(rq, p, 0);
+ 	p->on_rq = TASK_ON_RQ_QUEUED;
+-	trace_sched_wakeup_new(p, true);
++	trace_sched_wakeup_new(p);
+ 	check_preempt_curr(rq, p, WF_FORK);
+ #ifdef CONFIG_SMP
+ 	if (p->sched_class->task_woken)
