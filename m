@@ -1,16 +1,19 @@
-From: Chidhu R <chid1989@gmail.com>
-Subject: Printing bit fields with LTTng
-Date: Wed, 10 Jun 2015 14:16:53 -0700
-Message-ID: <CAL1ZhON=nEPuoXks2AKq4k7nCpK_W_FQ96TM3299V69V6RgW_w__8527.15857695348$1433971136$gmane$org@mail.gmail.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: Re: Printing bit fields with LTTng
+Date: Wed, 10 Jun 2015 17:28:42 -0400
+Message-ID: <CAFXXi0k-HfWxPVmmF8=nap20pS-HRQwWwMc0P8jj0-RRhjXkYw__22233.3071790219$1433971818$gmane$org@mail.gmail.com>
+References: <CAL1ZhON=nEPuoXks2AKq4k7nCpK_W_FQ96TM3299V69V6RgW_w@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1548756921=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-la0-f46.google.com ([209.85.215.46])
+Received: from mail-ie0-f174.google.com ([209.85.223.174])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <chid1989@gmail.com>) id 1Z2nNR-0007Ac-8i
- for lttng-dev@lists.lttng.org; Wed, 10 Jun 2015 17:17:42 -0400
-Received: by laew7 with SMTP id w7so40937355lae.1
- for <lttng-dev@lists.lttng.org>; Wed, 10 Jun 2015 14:17:33 -0700 (PDT)
+ (envelope-from <thundersim@gmail.com>) id 1Z2nYi-0007Fb-8T
+ for lttng-dev@lists.lttng.org; Wed, 10 Jun 2015 17:29:18 -0400
+Received: by iebps5 with SMTP id ps5so4018615ieb.3
+ for <lttng-dev@lists.lttng.org>; Wed, 10 Jun 2015 14:29:13 -0700 (PDT)
+In-Reply-To: <CAL1ZhON=nEPuoXks2AKq4k7nCpK_W_FQ96TM3299V69V6RgW_w@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,103 +22,33 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Chidhu R <chid1989@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1548756921==
-Content-Type: multipart/alternative; boundary=089e01419f68442fc70518306781
-
---089e01419f68442fc70518306781
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-I am getting compilation issues while trying to print bit field values with
-LTTng.
-
-Error:
-
-hello.c: In function =E2=80=98main=E2=80=99:
-hello.c:36:1: error: =E2=80=98typeof=E2=80=99 applied to a bit-field
-hello.c:36:1: error: =E2=80=98typeof=E2=80=99 applied to a bit-field
-hello.c:36:1: error: =E2=80=98typeof=E2=80=99 applied to a bit-field
-hello.c:36:1: error: =E2=80=98sizeof=E2=80=99 applied to a bit-field
-
-Snippet:
-
-struct abc{
-        int a:16;
-        int b:8;
-};
-
-Line 36: tracepoint(hello_world, my_third_tracepoint, aa.a, "welcome");
-Line 37: printf("val =3D %x\n",aa.a);
-
-tracepoint line results in compilation error.
-printf succeeds.
-
-Tp definition looks like this.
-
-TRACEPOINT_EVENT(
-    hello_world,
-    my_third_tracepoint,
-    TP_ARGS(
-        uint32_t, arg,
-        const char * , my_string_arg
-    ),
-    TP_FIELDS(
-        ctf_integer_hex(uint32_t, my_arg, arg)
-        ctf_string(field, my_string_arg)
-    )
-)
-
-How to print bit field values?
-
-Thanks
-Chid
-
---089e01419f68442fc70518306781
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello,<div><br></div><div>I am getting compilation issues =
-while trying to print bit field values with LTTng.</div><div><br></div><div=
->Error:</div><div><br></div><div><div>hello.c: In function =E2=80=98main=E2=
-=80=99:</div><div>hello.c:36:1: error: =E2=80=98typeof=E2=80=99 applied to =
-a bit-field</div><div>hello.c:36:1: error: =E2=80=98typeof=E2=80=99 applied=
- to a bit-field</div><div>hello.c:36:1: error: =E2=80=98typeof=E2=80=99 app=
-lied to a bit-field</div><div>hello.c:36:1: error: =E2=80=98sizeof=E2=80=99=
- applied to a bit-field</div></div><div><br></div><div>Snippet:</div><div><=
-br></div><div><div>struct abc{</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 int a:=
-16;</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 int b:8;</div><div>};</div></div>=
-<div><br></div><div>Line 36: tracepoint(hello_world, my_third_tracepoint, a=
-a.a, &quot;welcome&quot;);<br></div><div>Line 37: printf(&quot;val =3D %x\n=
-&quot;,aa.a);<br></div><div><br></div><div>tracepoint line results in compi=
-lation error.</div><div>printf succeeds.=C2=A0</div><div><br></div><div>Tp =
-definition looks like this.</div><div><br></div><div><div>TRACEPOINT_EVENT(=
-</div><div>=C2=A0 =C2=A0 hello_world,</div><div>=C2=A0 =C2=A0 my_third_trac=
-epoint,</div><div>=C2=A0 =C2=A0 TP_ARGS(</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 uint32_t, arg,</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 const char * , my_=
-string_arg</div><div>=C2=A0 =C2=A0 ),</div><div>=C2=A0 =C2=A0 TP_FIELDS(</d=
-iv><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 ctf_integer_hex(uint32_t, my_arg, arg)<=
-/div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 ctf_string(field, my_string_arg)</div=
-><div>=C2=A0 =C2=A0 )</div><div>)</div></div><div><br></div><div>How to pri=
-nt bit field values?</div><div><br></div><div>Thanks</div><div>Chid</div></=
-div>
-
---089e01419f68442fc70518306781--
-
-
---===============1548756921==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1548756921==--
+T24gMTAgSnVuZSAyMDE1IGF0IDE3OjE2LCBDaGlkaHUgUiA8Y2hpZDE5ODlAZ21haWwuY29tPiB3
+cm90ZToKPiBIZWxsbywKPgo+IEkgYW0gZ2V0dGluZyBjb21waWxhdGlvbiBpc3N1ZXMgd2hpbGUg
+dHJ5aW5nIHRvIHByaW50IGJpdCBmaWVsZCB2YWx1ZXMgd2l0aAo+IExUVG5nLgo+Cj4gRXJyb3I6
+Cj4KPiBoZWxsby5jOiBJbiBmdW5jdGlvbiDigJhtYWlu4oCZOgo+IGhlbGxvLmM6MzY6MTogZXJy
+b3I6IOKAmHR5cGVvZuKAmSBhcHBsaWVkIHRvIGEgYml0LWZpZWxkCj4gaGVsbG8uYzozNjoxOiBl
+cnJvcjog4oCYdHlwZW9m4oCZIGFwcGxpZWQgdG8gYSBiaXQtZmllbGQKPiBoZWxsby5jOjM2OjE6
+IGVycm9yOiDigJh0eXBlb2bigJkgYXBwbGllZCB0byBhIGJpdC1maWVsZAo+IGhlbGxvLmM6MzY6
+MTogZXJyb3I6IOKAmHNpemVvZuKAmSBhcHBsaWVkIHRvIGEgYml0LWZpZWxkCj4KPiBTbmlwcGV0
+Ogo+Cj4gc3RydWN0IGFiY3sKPiAgICAgICAgIGludCBhOjE2Owo+ICAgICAgICAgaW50IGI6ODsK
+PiB9Owo+Cj4gTGluZSAzNjogdHJhY2Vwb2ludChoZWxsb193b3JsZCwgbXlfdGhpcmRfdHJhY2Vw
+b2ludCwgYWEuYSwgIndlbGNvbWUiKTsKPiBMaW5lIDM3OiBwcmludGYoInZhbCA9ICV4XG4iLGFh
+LmEpOwo+Cj4gdHJhY2Vwb2ludCBsaW5lIHJlc3VsdHMgaW4gY29tcGlsYXRpb24gZXJyb3IuCj4g
+cHJpbnRmIHN1Y2NlZWRzLgo+Cj4gVHAgZGVmaW5pdGlvbiBsb29rcyBsaWtlIHRoaXMuCj4KPiBU
+UkFDRVBPSU5UX0VWRU5UKAo+ICAgICBoZWxsb193b3JsZCwKPiAgICAgbXlfdGhpcmRfdHJhY2Vw
+b2ludCwKPiAgICAgVFBfQVJHUygKPiAgICAgICAgIHVpbnQzMl90LCBhcmcsCj4gICAgICAgICBj
+b25zdCBjaGFyICogLCBteV9zdHJpbmdfYXJnCj4gICAgICksCj4gICAgIFRQX0ZJRUxEUygKPiAg
+ICAgICAgIGN0Zl9pbnRlZ2VyX2hleCh1aW50MzJfdCwgbXlfYXJnLCBhcmcpCj4gICAgICAgICBj
+dGZfc3RyaW5nKGZpZWxkLCBteV9zdHJpbmdfYXJnKQo+ICAgICApCj4gKQo+Cj4gSG93IHRvIHBy
+aW50IGJpdCBmaWVsZCB2YWx1ZXM/Cj4KPiBUaGFua3MKPiBDaGlkCgpJIGhhdmUgbm8gaWRlYSB3
+aGF0IHRoZSByaWdodCBmaXggd291bGQgYmUsIGJ1dCBhbiBlYXN5IHdvcmthcm91bmQKY291bGQg
+YmUgdG8gYWRkIDAgdG8geW91ciB2YWx1ZToKCiAgICB0cmFjZXBvaW50KGhlbGxvX3dvcmxkLCBt
+eV90aGlyZF90cmFjZXBvaW50LCBhYS5hICsgMCwgIndlbGNvbWUiKTsKCkkganVzdCB0cmllZCBp
+dCBhbmQgaXQgd29ya3MuCgpTaW1vbgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
+dG5nLWRldgo=
