@@ -1,169 +1,140 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC PATCH] sched: Fix sched_wakeup tracepoint
-Date: Tue, 9 Jun 2015 18:48:13 +0000 (UTC)
-Message-ID: <1740949161.7418.1433875693769.JavaMail.zimbra@efficios.com>
-References: <1433504509-17013-1-git-send-email-mathieu.desnoyers@efficios.com> <479621151.4836.1433507522491.JavaMail.zimbra@efficios.com> <1433508695.1495.16.camel@twins> <600031664.4911.1433510581646.JavaMail.zimbra@efficios.com> <1433592142.1495.22.camel@twins> <1960877063.5553.1433672414640.JavaMail.zimbra@efficios.com> <20150608132735.0763ad27@gandalf.local.home> <20150609091336.GQ3644@twins.programming.kicks-ass.net>
+Subject: Re: [PATCH lttng-modules] Fix: Building the event list
+ fails on fragmented memory
+Date: Wed, 10 Jun 2015 07:14:54 +0000 (UTC)
+Message-ID: <1905517223.241.1433920494952.JavaMail.zimbra__1877.84000668234$1433920574$gmane$org@efficios.com>
+References: <55755E0D.7010902@leisener.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <20150609091336.GQ3644@twins.programming.kicks-ass.net>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, Francis Giraldeau <francis.giraldeau@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>, Linus Torvalds <torvalds@linux-foundation.org>
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.efficios.com ([78.47.125.74])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <compudj@efficios.com>) id 1Z2aED-0002sY-Dp
+ for lttng-dev@lists.lttng.org; Wed, 10 Jun 2015 03:15:16 -0400
+In-Reply-To: <55755E0D.7010902@leisener.de>
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: Martin Leisener <martin@leisener.de>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On Jun 9, 2015, at 11:13 AM, Peter Zijlstra peterz@infradead.org wrote:
+Hi Martin,
 
-> So how about we introduce the 'waking' tracepoint and leave the existing
-> wakeup one in place and preserve its woken semantics.
+Can you reformat your patch with diff -urN so I can apply it with patch ?
 
-That would work for me, but leaves me wondering how you would move
-to the new 'woken' name.
-
-> 
-> Steven, can we do aliases? Where one tracepoint is known to userspace
-> under multiple names? In that case we could rename the thing to woken
-> and have an alias wakeup which we can phase out over time.
-
-In LTTng, I have a LTTNG_TRACEPOINT_EVENT_MAP() macro, which allows me
-to map a kernel event to my own event naming scheme. It allows me
-to correct namespacing of some odd kernel tracepoints from within the
-tracer. A similar implementation could be used to implement a tracepoint
-alias within the kernel: one parameter is the named as exposed to userspace,
-and the other field is the name of the tracepoint it hooks to.
-
-You could then rename the tracepoint name from 'wakeup' to 'woken', and
-create an alias exposing the old 'wakeup' event.
-
-> 
-> The patch also takes away the success parameter to the tracepoint, but
-> does not quite go as far as actually removing it from the tracepoint
-> itself.
-
-Sounds like a good intermediate step. If you ensure that the alias
-declaration allows you to show a different set of fields for the alias,
-you could even remove the success parameter from 'woken', and only show
-it for the 'wakeup' alias.
-
-> 
-> We can do that in a follow up patch which we can quickly revert if it
-> turns out people are actually still using that for something.
-
-Or just pull the plug on the old 'wakeup' event after a deprecation
-phase (to be defined).
-
-Thanks,
+Thanks!
 
 Mathieu
 
+----- On Jun 8, 2015, at 11:19 AM, Martin Leisener martin@leisener.de wrote:
+
+> Hi Mathieu,
 > 
+> thanks for merging my arm patch! I found one more issue during my lttng-modules
+> usages,
+> which can happen in low/fragmented memory situations. Please have a look, if you
+> find this
+> patch useful/mergable. Again it is tested on x86 Ubuntu 12.04 LTS as well as my
+> imx6 arm board.
+> 
+> Regards Martin
+> 
+> 
+> On a small arm imx6 solo with 256MB RAM it often happens that memory becomes
+> fragmented rather
+> quickly, so that kmalloc will not be able to get enough consecutive pages
+> (enocuntered for
+> example if you enable all kernel events: lttng enable-event -k syscall --all).
+> 
+> This patch switches the allocation to vmalloc. Tested for x86 on Ubuntu 12.04
+> Lts
+> and on imx6 solo 256MB RAM
+> 
+> If this patch is not applied, you can identify low and/or fragmented memory
+> failures by
+> looking at the kernel ring buffer (please ignore DMA, it is due to some memory
+> setup
+> misconfiguration, should read Normal):
+> 
+> ...
+> [  321.993820] lttng-sessiond: page allocation failure: order:4, mode:0x1040d0
+> ...
+> [  321.994711] lowmem_reserve[]: 0 0 0
+> [  321.994727] DMA: 801*4kB (UEMC) 424*8kB (EMC) 355*16kB (UEMC) 344*32kB (MC)
+> 340*64kB (C) 8*128kB (C) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB 0*8192kB
+> 0*16384kB 0*32768kB = 46068kB
+> 
+> Signed-off-by: Martin Leisener <martin@leisener.de>
 > ---
-> include/trace/events/sched.h | 28 ++++++++++++++++++++--------
-> kernel/sched/core.c          |  9 ++++++---
-> 2 files changed, 26 insertions(+), 11 deletions(-)
+> lttng-events.c |   16 +++++++++++-----
+> 1 file changed, 11 insertions(+), 5 deletions(-)
 > 
-> diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
-> index d57a575fe31f..b1608d5679e2 100644
-> --- a/include/trace/events/sched.h
-> +++ b/include/trace/events/sched.h
-> @@ -55,7 +55,7 @@ TRACE_EVENT(sched_kthread_stop_ret,
->  */
-> DECLARE_EVENT_CLASS(sched_wakeup_template,
-> 
-> -	TP_PROTO(struct task_struct *p, int success),
-> +	TP_PROTO(struct task_struct *p),
-> 
-> 	TP_ARGS(__perf_task(p), success),
-> 
-> @@ -71,25 +71,37 @@ DECLARE_EVENT_CLASS(sched_wakeup_template,
-> 		memcpy(__entry->comm, p->comm, TASK_COMM_LEN);
-> 		__entry->pid		= p->pid;
-> 		__entry->prio		= p->prio;
-> -		__entry->success	= success;
-> +		__entry->success	= 1; /* rudiment, kill when possible */
-> 		__entry->target_cpu	= task_cpu(p);
-> 	),
-> 
-> -	TP_printk("comm=%s pid=%d prio=%d success=%d target_cpu=%03d",
-> +	TP_printk("comm=%s pid=%d prio=%d target_cpu=%03d",
-> 		  __entry->comm, __entry->pid, __entry->prio,
-> -		  __entry->success, __entry->target_cpu)
-> +		  __entry->target_cpu)
-> );
-> 
-> +/*
-> + * Tracepoint called when waking a task; this tracepoint is guaranteed to be
-> + * called from the waking context.
-> + */
-> +DEFINE_EVENT(sched_wakeup_template, sched_waking,
-> +	     TP_PROTO(struct task_struct *p),
-> +	     TP_ARGS(p));
-> +
-> +/*
-> + * Tracepoint called when the task is actually woken; p->state == TASK_RUNNNG.
-> + * It it not always called from the waking context.
-> + */
-> DEFINE_EVENT(sched_wakeup_template, sched_wakeup,
-> -	     TP_PROTO(struct task_struct *p, int success),
-> -	     TP_ARGS(p, success));
-> +	     TP_PROTO(struct task_struct *p),
-> +	     TP_ARGS(p));
-> 
-> /*
->  * Tracepoint for waking up a new task:
->  */
-> DEFINE_EVENT(sched_wakeup_template, sched_wakeup_new,
-> -	     TP_PROTO(struct task_struct *p, int success),
-> -	     TP_ARGS(p, success));
-> +	     TP_PROTO(struct task_struct *p),
-> +	     TP_ARGS(p));
-> 
-> #ifdef CREATE_TRACE_POINTS
-> static inline long __trace_sched_switch_state(struct task_struct *p)
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index d5078c0f20e6..354e667620a9 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -1487,9 +1487,9 @@ static void
-> ttwu_do_wakeup(struct rq *rq, struct task_struct *p, int wake_flags)
+> diff --git a/lttng-events.c b/lttng-events.c
+> index 7eec04c..c861f71 100644
+> --- a/lttng-events.c
+> +++ b/lttng-events.c
+> @@ -39,6 +39,7 @@
+> #include "wrapper/file.h"
+> #include <linux/jhash.h>
+> #include <linux/uaccess.h>
+> +#include <linux/vmalloc.h>
+>  #include "wrapper/uuid.h"
+> #include "wrapper/vmalloc.h"	/* for wrapper_vmalloc_sync_all() */
+> @@ -132,10 +133,10 @@ struct lttng_session *lttng_session_create(void)
+> 			GFP_KERNEL);
+> 	if (!metadata_cache)
+> 		goto err_free_session;
+> -	metadata_cache->data = kzalloc(METADATA_CACHE_DEFAULT_SIZE,
+> -			GFP_KERNEL);
+> +	metadata_cache->data = vmalloc(METADATA_CACHE_DEFAULT_SIZE);
+> 	if (!metadata_cache->data)
+> 		goto err_free_cache;
+> +	memset(metadata_cache->data, 0, METADATA_CACHE_DEFAULT_SIZE);
+> 	metadata_cache->cache_alloc = METADATA_CACHE_DEFAULT_SIZE;
+> 	kref_init(&metadata_cache->refcount);
+> 	session->metadata_cache = metadata_cache;
+> @@ -162,7 +163,7 @@ void metadata_cache_destroy(struct kref *kref)
 > {
-> 	check_preempt_curr(rq, p, wake_flags);
-> -	trace_sched_wakeup(p, true);
-> -
-> 	p->state = TASK_RUNNING;
-> +	trace_sched_wakeup(p);
+> 	struct lttng_metadata_cache *cache =
+> 		container_of(kref, struct lttng_metadata_cache, refcount);
+> -	kfree(cache->data);
+> +	vfree(cache->data);
+> 	kfree(cache);
+> }
+> @@ -1523,10 +1524,15 @@ int lttng_metadata_printf(struct lttng_session *session,
+> 		tmp_cache_alloc_size = max_t(unsigned int,
+> 				session->metadata_cache->cache_alloc + len,
+> 				session->metadata_cache->cache_alloc << 1);
+> -		tmp_cache_realloc = krealloc(session->metadata_cache->data,
+> -				tmp_cache_alloc_size, GFP_KERNEL);
+> +		tmp_cache_realloc = vmalloc(tmp_cache_alloc_size);
+> 		if (!tmp_cache_realloc)
+> 			goto err;
+> +		else if (session->metadata_cache->data) {
+> +			memset(tmp_cache_realloc, 0, tmp_cache_alloc_size);
+> +			memcpy(tmp_cache_realloc, session->metadata_cache->data,
+> session->metadata_cache->cache_alloc);
+> +			vfree(session->metadata_cache->data);
+> +		}
 > +
-> #ifdef CONFIG_SMP
-> 	if (p->sched_class->task_woken)
-> 		p->sched_class->task_woken(rq, p);
-> @@ -1695,6 +1695,7 @@ try_to_wake_up(struct task_struct *p, unsigned int state,
-> int wake_flags)
-> 		goto out;
+> 		session->metadata_cache->cache_alloc = tmp_cache_alloc_size;
+> 		session->metadata_cache->data = tmp_cache_realloc;
+> 	}
+> --
+> 1.7.9.5
 > 
-> 	success = 1; /* we're going to change ->state */
-> +	trace_sched_waking(p);
-> 	cpu = task_cpu(p);
 > 
-> 	if (p->on_rq && ttwu_remote(p, wake_flags))
-> @@ -1761,6 +1762,8 @@ static void try_to_wake_up_local(struct task_struct *p)
-> 	if (!(p->state & TASK_NORMAL))
-> 		goto out;
-> 
-> +	trace_sched_waking(p);
-> +
-> 	if (!task_on_rq_queued(p))
-> 		ttwu_activate(rq, p, ENQUEUE_WAKEUP);
-> 
-> @@ -2119,7 +2122,7 @@ void wake_up_new_task(struct task_struct *p)
-> 	rq = __task_rq_lock(p);
-> 	activate_task(rq, p, 0);
-> 	p->on_rq = TASK_ON_RQ_QUEUED;
-> -	trace_sched_wakeup_new(p, true);
-> +	trace_sched_wakeup_new(p);
-> 	check_preempt_curr(rq, p, WF_FORK);
-> #ifdef CONFIG_SMP
->  	if (p->sched_class->task_woken)
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 -- 
 Mathieu Desnoyers
