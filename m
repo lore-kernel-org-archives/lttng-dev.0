@@ -1,20 +1,20 @@
-From: Chidhu R <chid1989@gmail.com>
-Subject: Re: Printing bit fields with LTTng
-Date: Thu, 11 Jun 2015 11:11:02 -0700
-Message-ID: <CAL1ZhOOjJfTPCwcf-oFE1d+7WD0FVMWbCqFrrpkr+LXfcZjRUg__6636.43133962086$1434046372$gmane$org@mail.gmail.com>
-References: <CAL1ZhON=nEPuoXks2AKq4k7nCpK_W_FQ96TM3299V69V6RgW_w@mail.gmail.com>
- <CAFXXi0k-HfWxPVmmF8=nap20pS-HRQwWwMc0P8jj0-RRhjXkYw@mail.gmail.com>
- <CAFXXi0=kTqTy-V843a3v+6qs0SmOPFsP6-2sVZoE6mi8LB0vhA@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-modules] Fix: Building the event list
+ fails on fragmented memory
+Date: Sat, 13 Jun 2015 19:32:28 +0000 (UTC)
+Message-ID: <1586680029.1815.1434223948187.JavaMail.zimbra__37155.8669292883$1434224032$gmane$org@efficios.com>
+References: <55755E0D.7010902@leisener.de>
+ <1905517223.241.1433920494952.JavaMail.zimbra@efficios.com>
+ <557838F1.9020808@leisener.de>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0131831931=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-la0-f49.google.com ([209.85.215.49])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <chid1989@gmail.com>) id 1Z36x8-0004vb-H6
- for lttng-dev@lists.lttng.org; Thu, 11 Jun 2015 14:11:51 -0400
-Received: by lazv15 with SMTP id v15so8482192laz.3
- for <lttng-dev@lists.lttng.org>; Thu, 11 Jun 2015 11:11:42 -0700 (PDT)
-In-Reply-To: <CAFXXi0=kTqTy-V843a3v+6qs0SmOPFsP6-2sVZoE6mi8LB0vhA@mail.gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1Z3rAd-0002RF-Qg
+ for lttng-dev@lists.lttng.org; Sat, 13 Jun 2015 15:32:50 -0400
+In-Reply-To: <557838F1.9020808@leisener.de>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,218 +23,240 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Martin Leisener <martin@leisener.de>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0131831931==
-Content-Type: multipart/alternative; boundary=089e01419f6877e402051841ecb8
+----- On Jun 10, 2015, at 9:17 AM, Martin Leisener martin@leisener.de wrote:
 
---089e01419f6877e402051841ecb8
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+> Hi Mathieu,
+> 
+> sorry for sending the broken patch, I fell for some "smart" formating of my
+> email client, I cannot utilize it myself the way I send it.
+> Hence I now send the patch again as it was original intended. Sent to myself, I
+> can apply it, so I hope it now works in general as well
+> I examined as recommended diff -urN, it seems the output can be utilized by
+> patch the same way as git diff.
+> Hope it is now received the way I intended.
 
-Great. Thanks for sharing your inputs. I too learned something new.
+Hi Martin,
 
-On Wed, Jun 10, 2015 at 3:20 PM, Simon Marchi <simon.marchi@polymtl.ca>
-wrote:
+I tried you patch on a x86-64 machine (my laptop), and although taking a
+single kernel trace worked fine, it appears to OOPS when I run
 
-> On 10 June 2015 at 17:28, Simon Marchi <simon.marchi@polymtl.ca> wrote:
-> > On 10 June 2015 at 17:16, Chidhu R <chid1989@gmail.com> wrote:
-> >> Hello,
-> >>
-> >> I am getting compilation issues while trying to print bit field values
-> with
-> >> LTTng.
-> >>
-> >> Error:
-> >>
-> >> hello.c: In function =E2=80=98main=E2=80=99:
-> >> hello.c:36:1: error: =E2=80=98typeof=E2=80=99 applied to a bit-field
-> >> hello.c:36:1: error: =E2=80=98typeof=E2=80=99 applied to a bit-field
-> >> hello.c:36:1: error: =E2=80=98typeof=E2=80=99 applied to a bit-field
-> >> hello.c:36:1: error: =E2=80=98sizeof=E2=80=99 applied to a bit-field
-> >>
-> >> Snippet:
-> >>
-> >> struct abc{
-> >>         int a:16;
-> >>         int b:8;
-> >> };
-> >>
-> >> Line 36: tracepoint(hello_world, my_third_tracepoint, aa.a, "welcome")=
-;
-> >> Line 37: printf("val =3D %x\n",aa.a);
-> >>
-> >> tracepoint line results in compilation error.
-> >> printf succeeds.
-> >>
-> >> Tp definition looks like this.
-> >>
-> >> TRACEPOINT_EVENT(
-> >>     hello_world,
-> >>     my_third_tracepoint,
-> >>     TP_ARGS(
-> >>         uint32_t, arg,
-> >>         const char * , my_string_arg
-> >>     ),
-> >>     TP_FIELDS(
-> >>         ctf_integer_hex(uint32_t, my_arg, arg)
-> >>         ctf_string(field, my_string_arg)
-> >>     )
-> >> )
-> >>
-> >> How to print bit field values?
-> >>
-> >> Thanks
-> >> Chid
-> >
-> > I have no idea what the right fix would be, but an easy workaround
-> > could be to add 0 to your value:
-> >
-> >     tracepoint(hello_world, my_third_tracepoint, aa.a + 0, "welcome");
-> >
-> > I just tried it and it works.
-> >
-> > Simon
->
-> Alright, after a bit more investigation (thanks to Philippe Proulx),
-> we found that this is caused by the SystemTap integration. If the
-> SystemTap integration is enabled, each LTTng tracepoint also defines a
-> SystemTap tracepoint.
->
-> SystemTap uses sizeof() on the tracepoint's input arguments to find
-> their sizes and typeof() to find their signedness. It encodes this
-> info into a special section that then allows tools like gdb to re-use
-> the tracepoints and get the argument values. For more information,
-> look at the definitions of _SDT_ARGSIZE and _SDT_ARGSIGNED in
-> /usr/include/sys/sdt.h.
->
-> Pragmatically, I think that the "+ 0" trick is good enough, since it
-> pleases SystemTap and is otherwise harmless. You could get the same
-> result by casting your value to an integer type. However, you would
-> need to carefully choose the size and signedness of the type you cast
-> to, or it might alter your value. With + 0, it should work with any
-> type.
->
-> Thanks for raising this, I learned something new today.
->
+(in lttng-tools)
+cd tests
+./run.sh root_regression
 
---089e01419f6877e402051841ecb8
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Not sure if it's a race within lttng-modules that gets triggered by using
+virtual mem rather than linear mapping, or if it's something else...
 
-<div dir=3D"ltr">Great. Thanks for sharing your inputs. I too learned somet=
-hing new.</div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On=
- Wed, Jun 10, 2015 at 3:20 PM, Simon Marchi <span dir=3D"ltr">&lt;<a href=
-=3D"mailto:simon.marchi@polymtl.ca" target=3D"_blank">simon.marchi@polymtl.=
-ca</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"marg=
-in:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div class=3D"HO=
-EnZb"><div class=3D"h5">On 10 June 2015 at 17:28, Simon Marchi &lt;<a href=
-=3D"mailto:simon.marchi@polymtl.ca">simon.marchi@polymtl.ca</a>&gt; wrote:<=
-br>
-&gt; On 10 June 2015 at 17:16, Chidhu R &lt;<a href=3D"mailto:chid1989@gmai=
-l.com">chid1989@gmail.com</a>&gt; wrote:<br>
-&gt;&gt; Hello,<br>
-&gt;&gt;<br>
-&gt;&gt; I am getting compilation issues while trying to print bit field va=
-lues with<br>
-&gt;&gt; LTTng.<br>
-&gt;&gt;<br>
-&gt;&gt; Error:<br>
-&gt;&gt;<br>
-&gt;&gt; hello.c: In function =E2=80=98main=E2=80=99:<br>
-&gt;&gt; hello.c:36:1: error: =E2=80=98typeof=E2=80=99 applied to a bit-fie=
-ld<br>
-&gt;&gt; hello.c:36:1: error: =E2=80=98typeof=E2=80=99 applied to a bit-fie=
-ld<br>
-&gt;&gt; hello.c:36:1: error: =E2=80=98typeof=E2=80=99 applied to a bit-fie=
-ld<br>
-&gt;&gt; hello.c:36:1: error: =E2=80=98sizeof=E2=80=99 applied to a bit-fie=
-ld<br>
-&gt;&gt;<br>
-&gt;&gt; Snippet:<br>
-&gt;&gt;<br>
-&gt;&gt; struct abc{<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0int a:16;<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0int b:8;<br>
-&gt;&gt; };<br>
-&gt;&gt;<br>
-&gt;&gt; Line 36: tracepoint(hello_world, my_third_tracepoint, aa.a, &quot;=
-welcome&quot;);<br>
-&gt;&gt; Line 37: printf(&quot;val =3D %x\n&quot;,aa.a);<br>
-&gt;&gt;<br>
-&gt;&gt; tracepoint line results in compilation error.<br>
-&gt;&gt; printf succeeds.<br>
-&gt;&gt;<br>
-&gt;&gt; Tp definition looks like this.<br>
-&gt;&gt;<br>
-&gt;&gt; TRACEPOINT_EVENT(<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0hello_world,<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0my_third_tracepoint,<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0TP_ARGS(<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0uint32_t, arg,<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0const char * , my_string_arg<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0),<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0TP_FIELDS(<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ctf_integer_hex(uint32_t, my_arg,=
- arg)<br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ctf_string(field, my_string_arg)<=
-br>
-&gt;&gt;=C2=A0 =C2=A0 =C2=A0)<br>
-&gt;&gt; )<br>
-&gt;&gt;<br>
-&gt;&gt; How to print bit field values?<br>
-&gt;&gt;<br>
-&gt;&gt; Thanks<br>
-&gt;&gt; Chid<br>
-&gt;<br>
-&gt; I have no idea what the right fix would be, but an easy workaround<br>
-&gt; could be to add 0 to your value:<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0tracepoint(hello_world, my_third_tracepoint, aa.a +=
- 0, &quot;welcome&quot;);<br>
-&gt;<br>
-&gt; I just tried it and it works.<br>
-&gt;<br>
-&gt; Simon<br>
-<br>
-</div></div>Alright, after a bit more investigation (thanks to Philippe Pro=
-ulx),<br>
-we found that this is caused by the SystemTap integration. If the<br>
-SystemTap integration is enabled, each LTTng tracepoint also defines a<br>
-SystemTap tracepoint.<br>
-<br>
-SystemTap uses sizeof() on the tracepoint&#39;s input arguments to find<br>
-their sizes and typeof() to find their signedness. It encodes this<br>
-info into a special section that then allows tools like gdb to re-use<br>
-the tracepoints and get the argument values. For more information,<br>
-look at the definitions of _SDT_ARGSIZE and _SDT_ARGSIGNED in<br>
-/usr/include/sys/sdt.h.<br>
-<br>
-Pragmatically, I think that the &quot;+ 0&quot; trick is good enough, since=
- it<br>
-pleases SystemTap and is otherwise harmless. You could get the same<br>
-result by casting your value to an integer type. However, you would<br>
-need to carefully choose the size and signedness of the type you cast<br>
-to, or it might alter your value. With + 0, it should work with any<br>
-type.<br>
-<br>
-Thanks for raising this, I learned something new today.<br>
-</blockquote></div><br></div>
+Thoughts ?
 
---089e01419f6877e402051841ecb8--
+Thanks,
 
+Mathieu
 
---===============0131831931==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
+> 
+> Regards Martin
+> 
+> 
+> 
+> On a small arm imx6 solo with 256MB RAM it often happens that memory becomes
+> fragmented rather
+> quickly, so that kmalloc will not be able to get enough consecutive pages
+> (enocuntered for
+> example if you enable all kernel events: lttng enable-event -k syscall --all).
+> 
+> This patch switches the allocation to vmalloc. Tested for x86 on Ubuntu 12.04
+> Lts
+> and on imx6 solo 256MB RAM
+> 
+> If this patch is not applied, you can identify low and/or fragmented memory
+> failures by
+> looking at the kernel ring buffer (please ignore DMA, it is due to some memory
+> setup
+> misconfiguration, should read Normal):
+> 
+> ...
+> [  321.993820] lttng-sessiond: page allocation failure: order:4, mode:0x1040d0
+> ...
+> [  321.994711] lowmem_reserve[]: 0 0 0
+> [  321.994727] DMA: 801*4kB (UEMC) 424*8kB (EMC) 355*16kB (UEMC) 344*32kB (MC)
+> 340*64kB (C) 8*128kB (C) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB 0*8192kB
+> 0*16384kB 0*32768kB = 46068kB
+> 
+> Signed-off-by: Martin Leisener <martin@leisener.de>
+> 
+> diff -urN a/lttng-events.c lttng-modules/lttng-events.c
+> --- a/lttng-events.c	2015-06-10 14:36:51.143083012 +0200
+> +++ lttng-modules/lttng-events.c	2015-06-10 14:48:05.846662088 +0200
+> @@ -39,6 +39,7 @@
+> #include "wrapper/file.h"
+> #include <linux/jhash.h>
+> #include <linux/uaccess.h>
+> +#include <linux/vmalloc.h>
+> 
+> #include "wrapper/uuid.h"
+> #include "wrapper/vmalloc.h"	/* for wrapper_vmalloc_sync_all() */
+> @@ -132,10 +133,10 @@
+> 			GFP_KERNEL);
+> 	if (!metadata_cache)
+> 		goto err_free_session;
+> -	metadata_cache->data = kzalloc(METADATA_CACHE_DEFAULT_SIZE,
+> -			GFP_KERNEL);
+> +	metadata_cache->data = vmalloc(METADATA_CACHE_DEFAULT_SIZE);
+> 	if (!metadata_cache->data)
+> 		goto err_free_cache;
+> +	memset(metadata_cache->data, 0, METADATA_CACHE_DEFAULT_SIZE);
+> 	metadata_cache->cache_alloc = METADATA_CACHE_DEFAULT_SIZE;
+> 	kref_init(&metadata_cache->refcount);
+> 	session->metadata_cache = metadata_cache;
+> @@ -162,7 +163,7 @@
+> {
+> 	struct lttng_metadata_cache *cache =
+> 		container_of(kref, struct lttng_metadata_cache, refcount);
+> -	kfree(cache->data);
+> +	vfree(cache->data);
+> 	kfree(cache);
+> }
+> 
+> @@ -1523,10 +1524,15 @@
+> 		tmp_cache_alloc_size = max_t(unsigned int,
+> 				session->metadata_cache->cache_alloc + len,
+> 				session->metadata_cache->cache_alloc << 1);
+> -		tmp_cache_realloc = krealloc(session->metadata_cache->data,
+> -				tmp_cache_alloc_size, GFP_KERNEL);
+> +		tmp_cache_realloc = vmalloc(tmp_cache_alloc_size);
+> 		if (!tmp_cache_realloc)
+> 			goto err;
+> +		else if (session->metadata_cache->data) {
+> +			memset(tmp_cache_realloc, 0, tmp_cache_alloc_size);
+> +			memcpy(tmp_cache_realloc, session->metadata_cache->data,
+> session->metadata_cache->cache_alloc);
+> +			vfree(session->metadata_cache->data);
+> +		}
+> +
+> 		session->metadata_cache->cache_alloc = tmp_cache_alloc_size;
+> 		session->metadata_cache->data = tmp_cache_realloc;
+> 	}
+> 
+> 
+> 
+> 
+> On 06/10/2015 09:14 AM, Mathieu Desnoyers wrote:
+>> Hi Martin,
+>> 
+>> Can you reformat your patch with diff -urN so I can apply it with patch ?
+>> 
+>> Thanks!
+>> 
+>> Mathieu
+>> 
+>> ----- On Jun 8, 2015, at 11:19 AM, Martin Leisener martin@leisener.de wrote:
+>> 
+>>> Hi Mathieu,
+>>>
+>>> thanks for merging my arm patch! I found one more issue during my lttng-modules
+>>> usages,
+>>> which can happen in low/fragmented memory situations. Please have a look, if you
+>>> find this
+>>> patch useful/mergable. Again it is tested on x86 Ubuntu 12.04 LTS as well as my
+>>> imx6 arm board.
+>>>
+>>> Regards Martin
+>>>
+>>>
+>>> On a small arm imx6 solo with 256MB RAM it often happens that memory becomes
+>>> fragmented rather
+>>> quickly, so that kmalloc will not be able to get enough consecutive pages
+>>> (enocuntered for
+>>> example if you enable all kernel events: lttng enable-event -k syscall --all).
+>>>
+>>> This patch switches the allocation to vmalloc. Tested for x86 on Ubuntu 12.04
+>>> Lts
+>>> and on imx6 solo 256MB RAM
+>>>
+>>> If this patch is not applied, you can identify low and/or fragmented memory
+>>> failures by
+>>> looking at the kernel ring buffer (please ignore DMA, it is due to some memory
+>>> setup
+>>> misconfiguration, should read Normal):
+>>>
+>>> ...
+>>> [  321.993820] lttng-sessiond: page allocation failure: order:4, mode:0x1040d0
+>>> ...
+>>> [  321.994711] lowmem_reserve[]: 0 0 0
+>>> [  321.994727] DMA: 801*4kB (UEMC) 424*8kB (EMC) 355*16kB (UEMC) 344*32kB (MC)
+>>> 340*64kB (C) 8*128kB (C) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB 0*8192kB
+>>> 0*16384kB 0*32768kB = 46068kB
+>>>
+>>> Signed-off-by: Martin Leisener <martin@leisener.de>
+>>> ---
+>>> lttng-events.c |   16 +++++++++++-----
+>>> 1 file changed, 11 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/lttng-events.c b/lttng-events.c
+>>> index 7eec04c..c861f71 100644
+>>> --- a/lttng-events.c
+>>> +++ b/lttng-events.c
+>>> @@ -39,6 +39,7 @@
+>>> #include "wrapper/file.h"
+>>> #include <linux/jhash.h>
+>>> #include <linux/uaccess.h>
+>>> +#include <linux/vmalloc.h>
+>>>  #include "wrapper/uuid.h"
+>>> #include "wrapper/vmalloc.h"	/* for wrapper_vmalloc_sync_all() */
+>>> @@ -132,10 +133,10 @@ struct lttng_session *lttng_session_create(void)
+>>> 			GFP_KERNEL);
+>>> 	if (!metadata_cache)
+>>> 		goto err_free_session;
+>>> -	metadata_cache->data = kzalloc(METADATA_CACHE_DEFAULT_SIZE,
+>>> -			GFP_KERNEL);
+>>> +	metadata_cache->data = vmalloc(METADATA_CACHE_DEFAULT_SIZE);
+>>> 	if (!metadata_cache->data)
+>>> 		goto err_free_cache;
+>>> +	memset(metadata_cache->data, 0, METADATA_CACHE_DEFAULT_SIZE);
+>>> 	metadata_cache->cache_alloc = METADATA_CACHE_DEFAULT_SIZE;
+>>> 	kref_init(&metadata_cache->refcount);
+>>> 	session->metadata_cache = metadata_cache;
+>>> @@ -162,7 +163,7 @@ void metadata_cache_destroy(struct kref *kref)
+>>> {
+>>> 	struct lttng_metadata_cache *cache =
+>>> 		container_of(kref, struct lttng_metadata_cache, refcount);
+>>> -	kfree(cache->data);
+>>> +	vfree(cache->data);
+>>> 	kfree(cache);
+>>> }
+>>> @@ -1523,10 +1524,15 @@ int lttng_metadata_printf(struct lttng_session *session,
+>>> 		tmp_cache_alloc_size = max_t(unsigned int,
+>>> 				session->metadata_cache->cache_alloc + len,
+>>> 				session->metadata_cache->cache_alloc << 1);
+>>> -		tmp_cache_realloc = krealloc(session->metadata_cache->data,
+>>> -				tmp_cache_alloc_size, GFP_KERNEL);
+>>> +		tmp_cache_realloc = vmalloc(tmp_cache_alloc_size);
+>>> 		if (!tmp_cache_realloc)
+>>> 			goto err;
+>>> +		else if (session->metadata_cache->data) {
+>>> +			memset(tmp_cache_realloc, 0, tmp_cache_alloc_size);
+>>> +			memcpy(tmp_cache_realloc, session->metadata_cache->data,
+>>> session->metadata_cache->cache_alloc);
+>>> +			vfree(session->metadata_cache->data);
+>>> +		}
+>>> +
+>>> 		session->metadata_cache->cache_alloc = tmp_cache_alloc_size;
+>>> 		session->metadata_cache->data = tmp_cache_realloc;
+>>> 	}
+>>> --
+>>> 1.7.9.5
+>>>
+>>>
+>>> _______________________________________________
+>>> lttng-dev mailing list
+>>> lttng-dev@lists.lttng.org
+>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0131831931==--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
