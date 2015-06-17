@@ -1,103 +1,48 @@
-From: Michael Haberler <mail17@mah.priv.at>
-Subject: RTLWS 17 Call for Papers
-Date: Wed, 17 Jun 2015 19:26:20 +0200
-Message-ID: <1541E2FA-8C82-4C56-9643-90A62F878202__29106.7352555276$1434562063$gmane$org@mah.priv.at>
-Mime-Version: 1.0 (Mac OS X Mail 8.2 \(2098\))
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mah2.mah.priv.at ([86.59.12.251] helo=mah.priv.at)
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mail17@mah.priv.at>) id 1Z5H6X-0005My-Ez
- for lttng-dev@lists.lttng.org; Wed, 17 Jun 2015 13:26:28 -0400
-Received: from [172.16.0.12] (next.stiwoll.mah.priv.at [193.228.47.167])
- by mah.priv.at (Postfix) with ESMTPSA id 7001C2C15A9
- for <lttng-dev@lists.lttng.org>; Wed, 17 Jun 2015 19:26:20 +0200 (CEST)
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+From: Cong Wang <xiyou.wangcong@gmail.com>
+Subject: Re: [RFC PATCH] sched: Fix sched_wakeup tracepoint
+Date: Wed, 17 Jun 2015 11:23:00 -0700
+Message-ID: <CAM_iQpXaWwgN6rYXsbpV9yNnrpgrX9mfzc5ZRLpHtSw_wYAxTg@mail.gmail.com>
+References: <1433504509-17013-1-git-send-email-mathieu.desnoyers@efficios.com>
+	<20150605120909.GG19282@twins.programming.kicks-ass.net>
+	<479621151.4836.1433507522491.JavaMail.zimbra@efficios.com>
+	<1433508695.1495.16.camel@twins>
+	<600031664.4911.1433510581646.JavaMail.zimbra@efficios.com>
+	<1433592142.1495.22.camel@twins>
+	<1960877063.5553.1433672414640.JavaMail.zimbra@efficios.com>
+	<20150608132735.0763ad27@gandalf.local.home>
+	<20150609091336.GQ3644@twins.programming.kicks-ass.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Return-path: <linux-kernel-owner@vger.kernel.org>
+In-Reply-To: <20150609091336.GQ3644@twins.programming.kicks-ass.net>
+Sender: linux-kernel-owner@vger.kernel.org
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, LKML <linux-kernel@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, Francis Giraldeau <francis.giraldeau@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>, Linus Torvalds <torvalds@linux-foundation.org>
 List-Id: lttng-dev@lists.lttng.org
 
-aGVsbG8sCgp0aGUgMTd0aCBSZWFsIFRpbWUgTGludXggV29ya3Nob3Agd2lsbCBiZSBpbiBHcmF6
-LCBBdXN0cmlhIHRoaXMKeWVhciAtIGZpbmQgdGhlIENhbGwgZm9yIFBhcGVycyBiZWxvdyAtIGxv
-b2tpbmcgZm9yd2FyZCB0byBzZWVpbmcKc29tZSBvZiB5b3UgYXQgUlRMV1MxNyEKCi0gTWljaGFl
-bAoKCiAgICAgICAgICAgICAgICAgICAxN3RoIFJlYWwgVGltZSBMaW51eCBXb3Jrc2hvcAogICAg
-ICAgICAgICAgICAgICAgICAgICAgIENhbGwgZm9yIFBhcGVycwogICAgICAgICAgICAgICAgICAg
-ICAgT2N0b2JlciAyMSB0byAyMiwgMjAxNQogICAgICAgICAgICAgICAgICBWaXJ0dWFsIFZlaGlj
-bGUgUmVzZWFyY2ggQ2VudGVyCiAgICAgICAgICAgICAgICAgICBHcmF6IFVuaXZlcnNpdHkgb2Yg
-VGVjaG5vbG9neQogICAgICAgICAgICAgICAgSW5mZmVsZGdhc3NlIDE4LCA4MDEwIEdyYXosIEF1
-c3RyaWEKCgpGb2xsb3dpbmcgdGhlIG1lZXRpbmdzIG9mIGFjYWRlbWljcywgZGV2ZWxvcGVycyBh
-bmQgdXNlcnMgb2YgcmVhbC10aW1lCmFuZCBlbWJlZGRlZCBMaW51eCBhdCB0aGUgcHJldmlvdXMg
-MTYgUmVhbCBUaW1lIExpbnV4IFdvcmtzaG9wcyBoZWxkCndvcmxkLXdpZGUgKFZpZW5uYSwgT3Js
-YW5kbywgTWlsYW5vLCBCb3N0b24sIFZhbGVuY2lhLCBTaW5nYXBvcmUsIExpbGxlLApMYW56aG91
-LCBMaW56LCBHdWFkYWxhamFyYSwgRHJlc2RlbiwgTmFpcm9iaSwgUHJhZ3VlLCBDaGFwZWwgSGls
-bCwKTHVnYW5vIGFuZCBEw7xzc2VsZG9yZikgLSB0aGUgMjAxNSBSZWFsIFRpbWUgTGludXggV29y
-a3Nob3Agd2lsbCBjb21lIHRvCnRoZSBWaXJ0dWFsIFZlaGljbGUgUmVzZWFyY2ggQ2VudGVyIGlu
-IEdyYXosIEF1c3RyaWEuIEl0IHdpbGwgYmUgaGVsZApmcm9tIE9jdG9iZXIgMjEgdG8gT2N0b2Jl
-ciAyMiwgMjAxNS4gV2UgZ3JhdGVmdWxseSBhY2tub3dsZWRnZSB0aGUKb2ZmZXJpbmcgb2YgVmly
-dHVhbCBWZWhpY2xlIHRvIGhvc3QgYW5kIGNvLW9yZ2FuaXplIHRoaXMgeWVhcidzIFJUTFdTIGlu
-CkdyYXouCgoKQ2FsbCBmb3IgcGFwZXJzCgpBdXRob3JzIGZyb20gcmVndWxhdG9yeSBib2RpZXMs
-IGFjYWRlbWljcywgaW5kdXN0cnkgYXMgd2VsbCBhcyB0aGUKdXNlci1jb21tdW5pdHkgYXJlIGlu
-dml0ZWQgdG8gc3VibWl0IG9yaWdpbmFsIHdvcmsgZGVhbGluZyB3aXRoIGdlbmVyYWwKdG9waWNz
-IHJlbGF0ZWQgdG8gT3BlbiBTb3VyY2UgYW5kIEZyZWUgU29mdHdhcmUgYmFzZWQgcmVhbC10aW1l
-IHN5c3RlbXMKcmVzZWFyY2gsIGV4cGVyaW1lbnRzIGFuZCBjYXNlIHN0dWRpZXMsIGFzIHdlbGwg
-YXMgaXNzdWVzIG9mIGludGVncmF0aW9uCm9mIG9wZW4tc291cmNlIHJlYWwtdGltZSBhbmQgZW1i
-ZWRkZWQgT1MuIEEgc3BlY2lhbCBmb2N1cyB3aWxsIGJlIG9uCmluZHVzdHJpYWwgY2FzZSBzdHVk
-aWVzIGFuZCBzYWZldHkgcmVsYXRlZCBzeXN0ZW1zLiBUb3BpY3Mgb2YgaW50ZXJlc3QKaW5jbHVk
-ZSwgYnV0IGFyZSBub3QgbGltaXRlZCB0bzoKCi0gTW9kaWZpY2F0aW9ucyBhbmQgdmFyaWFudHMg
-b2YgdGhlIEdOVS9MaW51eCBvcGVyYXRpbmcgc3lzdGVtIGFuZApleHRlbmRpbmcgaXRzIHJlYWwt
-dGltZSBjYXBhYmlsaXRpZXMsCi0gQ29udHJpYnV0aW9ucyB0byByZWFsLXRpbWUgTGludXggdmFy
-aWFudHMsIGRyaXZlcnMgYW5kIGV4dGVuc2lvbnMsCi0gVG9vbHMgZm9yIHRoZSB2ZXJpZmljYXRp
-b24gYW5kIHZhbGlkYXRpb24gb2YgcmVhbC10aW1lIHByb3BlcnRpZXMsCi0gVXNlci1tb2RlIHJl
-YWwtdGltZSBjb25jZXB0cywgaW1wbGVtZW50YXRpb24gYW5kIGV4cGVyaWVuY2UsCi0gUmVhbC10
-aW1lIExpbnV4IGFwcGxpY2F0aW9ucywgaW4gYWNhZGVtaWEsIHJlc2VhcmNoIGFuZCBpbmR1c3Ry
-eSwKLSBTYWZldHkgcmVsYXRlZCBGTE9TUyBzeXN0ZW1zLAotIFNhZmV0eSByZWxhdGVkIHN5c3Rl
-bXMgdXNpbmcgRkxPU1MgY29tcG9uZW50cywKLSBGTE9TUyBUb29scyB1c2VkIHRvIGFuYWx5emUs
-IHZlcmlmeSBvciB2YWxpZGF0ZSBzYWZldHkgcHJvcGVydGllcywKLSBXb3JrIGluIHByb2dyZXNz
-IHJlcG9ydHMsIGNvdmVyaW5nIHJlY2VudCBkZXZlbG9wbWVudHMsCi0gRWR1Y2F0aW9uYWwgbWF0
-ZXJpYWwgb24gcmVhbC10aW1lIExpbnV4LAotIFJUT1MgY29yZSBjb25jZXB0cywgUlQtc2FmZSBz
-eW5jaHJvbml6YXRpb24gbWVjaGFuaXNtcywKLSBSVC1zYWZlIElQQyBtZWNoYW5pc21zIGZvciBS
-VCBhbmQgbm9uIFJUIGNvbXBvbmVudHMsCi0gQW5hbHlzaXMgYW5kIGJlbmNobWFya2luZyBtZXRo
-b2RzIGFuZCByZXN1bHRzIG9mIHJlYWwtdGltZQpHTlUvTGludXggdmFyaWFudHMsCi0gRGVidWdn
-aW5nIHRlY2huaXF1ZXMgYW5kIHRvb2xzLCBib3RoIGZvciBjb2RlIGFuZCB0ZW1wb3JhbApkZWJ1
-Z2dpbmcgb2YgY29yZSBSVE9TIGNvbXBvbmVudHMsIGRyaXZlcnMgYW5kIHJlYWwtdGltZQphcHBs
-aWNhdGlvbnMsCi0gUmVhbC10aW1lIHJlbGF0ZWQgZXh0ZW5zaW9ucyB0byBkZXZlbG9wbWVudCBl
-bnZpcm9ubWVudHMsCi0gTGVnYWwgYXNwZWN0cyB3aXRoIHJlZ2FyZCB0byB1c2luZyBPcGVuIFNv
-dXJjZSBpbiB0aGUgaW5kdXN0cnksCi0gSW9UIChJbnRlcm5ldCBvZiBUcm91YmxlcykKCgpBYnN0
-cmFjdCBzdWJtaXNzaW9uIAoKSWYgeW91IHdpc2ggdG8gcHJlc2VudCBhIHBhcGVyIGF0IHRoZSB3
-b3Jrc2hvcCwgcGxlYXNlIHN1Ym1pdCBhbgphYnN0cmFjdCB1c2luZyB0aGUgc3VibWlzc2lvbiBw
-YWdlIGF0OgpodHRwczovL3d3dy5vc2FkbC5vcmcvUlRMV1MxNy1BYnN0cmFjdC5zdWJtaXNzaW9u
-LWZvcm0uMC5odG1sCgoKRmluYWwgcGFwZXIKClVwb24gYWNjZXB0YW5jZSBvZiBhbiBhYnN0cmFj
-dCBieSB0aGUgUlRMV1MxNyBQcm9ncmFtIENvbW1pdHRlZSwgdGhlCmF1dGhvciB3aWxsIGJlIGlu
-dml0ZWQgdG8gc3VibWl0IGEgZnVsbCBwYXBlciBpbiBhIGZvcm0gZGVmaW5lZCBieQpodHRwczov
-L3d3dy5vc2FkbC5vcmcvcGFwZXIudGd6LiBBIGRldGFpbGVkIGRlc2NyaXB0aW9uIG9mIHRoZSBl
-ZGl0aW5nCmFuZCBmb3JtYXR0aW5nIHByb2Nlc3Mgd2lsbCBiZSBwcm92aWRlZCBhbG9uZyB3aXRo
-IHRoZSBub3RpZmljYXRpb24KZW1haWwuIFRoZSBmdWxsIHBhcGVyIHdpbGwgYmUgaW5jbHVkZWQg
-aW4gdGhlIFJUTFdTMTcgcHJvY2VlZGluZ3MuCgoKSW1wb3J0YW50IGRhdGVzCgpBdWd1c3QgMiwg
-MjAxNSAtIEFic3RyYWN0IHN1Ym1pc3Npb24gZGVhZGxpbmUKQXVndXN0IDMwLCAyMDE1IC0gTm90
-aWZpY2F0aW9uIG9mIGFjY2VwdGFuY2UKU2VwdGVtYmVyIDI3LCAyMDE1IC0gU3VibWlzc2lvbiBv
-ZiBmaW5hbCBwYXBlcgpPY3RvYmVyIDIxLTIyLCAyMDE1IC0gV29ya3Nob3AKCgpQcm9ncmFtIGNv
-bW1pdHRlZQoKQWxleGV5IEtob3Jvc2hpbG92LCBJU1BSQVMsIFJ1c3NpYQpBbmRyZWEgTGVpdG5l
-ciwgVmlydHVhbCBWZWhpY2xlLCBBdXN0cmlhCkFuZHJlYXMgUGxhdHNjaGVrLCBUVSBXaWVuLCBB
-dXN0cmlhIApDYXJzdGVuIEVtZGUsIE9TQURMLCBHZXJtYW55CkRhbmllbCBXYXR6ZW5pZywgVmly
-dHVhbCBWZWhpY2xlLCBBdXN0cmlhCkdlb3JnIFNjaGllc3NlciwgT3BlblRlY2ggRURWIFJlc2Vh
-cmNoLCBBdXN0cmlhCkpvc2VwaCBXZW5uaW5nZXIsIFRVIFdpZW4sIEF1c3RyaWEKSnVsaWEgTGF3
-YWxsLCBJbnJpYSwgRnJhbmNlCk1pY2hhZWwgSGFiZXJsZXIsIG1hY2hpbmVraXQuaW8sIEF1c3Ry
-aWEKTmljaG9sYXMgTWMgR3VpcmUsIE9wZW5UZWNoIEVEViBSZXNlYXJjaCwgQXVzdHJpYQpQYW9s
-byBNYW50ZWdhenphLCBQb2xpdGVjbmljbyBkaSBNaWxhbm8sIEl0YWx5ClBhdWwgTWNLZW5uZXks
-IElCTSBMaW51eCBUZWNobm9sb2d5IENlbnRlciwgVVNBClJvYmVydG8gQnVjaGVyLCBTVVBTSSwg
-U3dpdHplcmxhbmQKU2ViYXN0aWFuIEFuZHJ6ZWogU2lld2lvciwgTGludXRyb25peCwgR2VybWFu
-eQpTaGF3biBDaG9vLCBXZXNsYWIsIFNpbmdhcHVyClRpbG1hbm4gT2NocywgQk1XIENhci1JVCwg
-R2VybWFueQpaaG91IFFpbmdndW8sIERTTGFiLCBMYW56aG91IFVuaXZlcnNpdHksIENoaW5hCgoK
-V29ya3Nob3Agb3JnYW5pemVycwoKT3BlbiBTb3VyY2UgQXV0b21hdGlvbiBEZXZlbG9wbWVudCBM
-YWIgKE9TQURMKSwgSGVpZGVsYmVyZywgR2VybWFueQpWaXJ0dWFsIFZlaGljbGUgUmVzZWFyY2gg
-Q2VudGVyLCBHcmF6LCBBdXN0cmlhCgpDYXJzdGVuIEVtZGUKTmljaG9sYXMgTWMgR3VpcmUKQW5k
-cmVhcyBQbGF0c2NoZWsKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
-dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+On Tue, Jun 9, 2015 at 2:13 AM, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> So how about we introduce the 'waking' tracepoint and leave the existing
+> wakeup one in place and preserve its woken semantics.
+>
+> Steven, can we do aliases? Where one tracepoint is known to userspace
+> under multiple names? In that case we could rename the thing to woken
+> and have an alias wakeup which we can phase out over time.
+>
+> The patch also takes away the success parameter to the tracepoint, but
+> does not quite go as far as actually removing it from the tracepoint
+> itself.
+>
+> We can do that in a follow up patch which we can quickly revert if it
+> turns out people are actually still using that for something.
+
++1 to this patch. How is it going?
+
+Here at Twitter, we are analyzing scheduling latencies too, with our
+own tool using existing tracepoints, it would be nice to have more
+granularity on the scheduling latency.
+
+And, you probably want to change perf sched to respect this
+new 'waking' event too. ;)
+
+Thanks.
