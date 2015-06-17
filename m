@@ -1,22 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules] Fix: Building the event list
- fails on fragmented memory
-Date: Mon, 15 Jun 2015 19:30:19 +0000 (UTC)
-Message-ID: <396384157.3602.1434396619563.JavaMail.zimbra__25185.8997311958$1434396706$gmane$org@efficios.com>
-References: <55755E0D.7010902@leisener.de>
- <1905517223.241.1433920494952.JavaMail.zimbra@efficios.com>
- <557838F1.9020808@leisener.de>
- <1586680029.1815.1434223948187.JavaMail.zimbra@efficios.com>
- <557F18FB.5020701@leisener.de>
-Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Michael Haberler <mail17@mah.priv.at>
+Subject: RTLWS 17 Call for Papers
+Date: Wed, 17 Jun 2015 19:26:20 +0200
+Message-ID: <1541E2FA-8C82-4C56-9643-90A62F878202__29106.7352555276$1434562063$gmane$org@mah.priv.at>
+Mime-Version: 1.0 (Mac OS X Mail 8.2 \(2098\))
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mah2.mah.priv.at ([86.59.12.251] helo=mah.priv.at)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Z4a5c-0008TA-24
- for lttng-dev@lists.lttng.org; Mon, 15 Jun 2015 15:30:38 -0400
-In-Reply-To: <557F18FB.5020701@leisener.de>
+ (envelope-from <mail17@mah.priv.at>) id 1Z5H6X-0005My-Ez
+ for lttng-dev@lists.lttng.org; Wed, 17 Jun 2015 13:26:28 -0400
+Received: from [172.16.0.12] (next.stiwoll.mah.priv.at [193.228.47.167])
+ by mah.priv.at (Postfix) with ESMTPSA id 7001C2C15A9
+ for <lttng-dev@lists.lttng.org>; Wed, 17 Jun 2015 19:26:20 +0200 (CEST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,305 +21,83 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Martin Leisener <martin@leisener.de>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On Jun 15, 2015, at 2:27 PM, Martin Leisener martin@leisener.de wrote:
-
-> On 06/13/2015 09:32 PM, Mathieu Desnoyers wrote:
->> ----- On Jun 10, 2015, at 9:17 AM, Martin Leisener martin@leisener.de wrote:
->> 
->>> Hi Mathieu,
->>>
->>> sorry for sending the broken patch, I fell for some "smart" formating of my
->>> email client, I cannot utilize it myself the way I send it.
->>> Hence I now send the patch again as it was original intended. Sent to myself, I
->>> can apply it, so I hope it now works in general as well
->>> I examined as recommended diff -urN, it seems the output can be utilized by
->>> patch the same way as git diff.
->>> Hope it is now received the way I intended.
->> 
->> Hi Martin,
->> 
->> I tried you patch on a x86-64 machine (my laptop), and although taking a
->> single kernel trace worked fine, it appears to OOPS when I run
->> 
->> (in lttng-tools)
->> cd tests
->> ./run.sh root_regression
->> 
->> Not sure if it's a race within lttng-modules that gets triggered by using
->> virtual mem rather than linear mapping, or if it's something else...
->> 
->> Thoughts ?
->> 
-> Hi Mathieu,
-> 
-> thanks for testing my patch. I tried the root regression with patched and
-> unpatched
-> lttng-modules, and found the following result (x86 Ubuntu 12.04 LTS):
-> 
-> martin@OEKAN42PVB:~/src/lttng-tools/tests$ ./run.sh root_regression
-> regression/kernel/test_all_events ....................... ok
-> regression/kernel/test_event_basic ...................... ok
-> regression/kernel/test_syscall .......................... ok
-> regression/tools/live/test_kernel ....................... No subtests run
-> regression/tools/live/test_lttng_kernel ................. ok
-> regression/tools/streaming/test_high_throughput_limits .. ok
-> regression/tools/streaming/test_kernel .................. ok
-> regression/tools/snapshots/test_kernel .................. ok
-> regression/tools/snapshots/test_kernel_streaming ........ ok
-> regression/tools/health/test_thread_ok .................. ok
-> 
-> Test Summary Report
-> -------------------
-> regression/tools/live/test_kernel                     (Wstat: 0 Tests: 0 Failed:
-> 0)
->  Parse errors: No plan found in TAP output
-> Files=10, Tests=2402, 32 wallclock secs ( 0.16 usr  0.02 sys +  0.23 cusr  0.42
-> csys =  0.83 CPU)
-> Result: FAIL
-> 
-> Everything runs the same, but for the test_thread_ok, which executes 1-17 with
-> different speeds
-> sometimes 1/17 takes longer, sometimes 4/17, but I couldn't make it fail.
-> Same behaviour with patched and unpatched modules.
-> 
-> It always fails (patched and unpatched) when I execute with sudo:
-> regression/kernel/test_all_events ....................... Dubious, test returned
-> 6 (wstat 1536, 0x600)
-> ...
-> 
-> Since it is not appearing on my system, but in yours it would point more into
-> the direction
-> of a race.
-> If it is a race it would be interesting if it can be also triggered via a long
-> running test,
-> also with the unpatched version (and the patched version on my system)
-> 
-> I will not be able to look into this for the next 3 weeks, unfortunately,
-> but I plan to setup some long running tests, once I find time again.
-
-OK. FYI, I have had this issue on a
-Linux thinkos 3.16.0-4-amd64 #1 SMP Debian 3.16.7-ckt9-3~deb8u1 (2015-04-24) x86_64 GNU/Linux
-kernel.
-
-I had modified your patch very slightly though, so I will double-check
-with your original patch to see if I somehow introduced a regression
-by using vzalloc rather than vmalloc+memset(0).
-
-Thanks,
-
-Mathieu
-
-> 
-> Regard Martin
-> 
->> Thanks,
->> 
->> Mathieu
->> 
->>>
->>> Regards Martin
->>>
->>>
->>>
->>> On a small arm imx6 solo with 256MB RAM it often happens that memory becomes
->>> fragmented rather
->>> quickly, so that kmalloc will not be able to get enough consecutive pages
->>> (enocuntered for
->>> example if you enable all kernel events: lttng enable-event -k syscall --all).
->>>
->>> This patch switches the allocation to vmalloc. Tested for x86 on Ubuntu 12.04
->>> Lts
->>> and on imx6 solo 256MB RAM
->>>
->>> If this patch is not applied, you can identify low and/or fragmented memory
->>> failures by
->>> looking at the kernel ring buffer (please ignore DMA, it is due to some memory
->>> setup
->>> misconfiguration, should read Normal):
->>>
->>> ...
->>> [  321.993820] lttng-sessiond: page allocation failure: order:4, mode:0x1040d0
->>> ...
->>> [  321.994711] lowmem_reserve[]: 0 0 0
->>> [  321.994727] DMA: 801*4kB (UEMC) 424*8kB (EMC) 355*16kB (UEMC) 344*32kB (MC)
->>> 340*64kB (C) 8*128kB (C) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB 0*8192kB
->>> 0*16384kB 0*32768kB = 46068kB
->>>
->>> Signed-off-by: Martin Leisener <martin@leisener.de>
->>>
->>> diff -urN a/lttng-events.c lttng-modules/lttng-events.c
->>> --- a/lttng-events.c	2015-06-10 14:36:51.143083012 +0200
->>> +++ lttng-modules/lttng-events.c	2015-06-10 14:48:05.846662088 +0200
->>> @@ -39,6 +39,7 @@
->>> #include "wrapper/file.h"
->>> #include <linux/jhash.h>
->>> #include <linux/uaccess.h>
->>> +#include <linux/vmalloc.h>
->>>
->>> #include "wrapper/uuid.h"
->>> #include "wrapper/vmalloc.h"	/* for wrapper_vmalloc_sync_all() */
->>> @@ -132,10 +133,10 @@
->>> 			GFP_KERNEL);
->>> 	if (!metadata_cache)
->>> 		goto err_free_session;
->>> -	metadata_cache->data = kzalloc(METADATA_CACHE_DEFAULT_SIZE,
->>> -			GFP_KERNEL);
->>> +	metadata_cache->data = vmalloc(METADATA_CACHE_DEFAULT_SIZE);
->>> 	if (!metadata_cache->data)
->>> 		goto err_free_cache;
->>> +	memset(metadata_cache->data, 0, METADATA_CACHE_DEFAULT_SIZE);
->>> 	metadata_cache->cache_alloc = METADATA_CACHE_DEFAULT_SIZE;
->>> 	kref_init(&metadata_cache->refcount);
->>> 	session->metadata_cache = metadata_cache;
->>> @@ -162,7 +163,7 @@
->>> {
->>> 	struct lttng_metadata_cache *cache =
->>> 		container_of(kref, struct lttng_metadata_cache, refcount);
->>> -	kfree(cache->data);
->>> +	vfree(cache->data);
->>> 	kfree(cache);
->>> }
->>>
->>> @@ -1523,10 +1524,15 @@
->>> 		tmp_cache_alloc_size = max_t(unsigned int,
->>> 				session->metadata_cache->cache_alloc + len,
->>> 				session->metadata_cache->cache_alloc << 1);
->>> -		tmp_cache_realloc = krealloc(session->metadata_cache->data,
->>> -				tmp_cache_alloc_size, GFP_KERNEL);
->>> +		tmp_cache_realloc = vmalloc(tmp_cache_alloc_size);
->>> 		if (!tmp_cache_realloc)
->>> 			goto err;
->>> +		else if (session->metadata_cache->data) {
->>> +			memset(tmp_cache_realloc, 0, tmp_cache_alloc_size);
->>> +			memcpy(tmp_cache_realloc, session->metadata_cache->data,
->>> session->metadata_cache->cache_alloc);
->>> +			vfree(session->metadata_cache->data);
->>> +		}
->>> +
->>> 		session->metadata_cache->cache_alloc = tmp_cache_alloc_size;
->>> 		session->metadata_cache->data = tmp_cache_realloc;
->>> 	}
->>>
->>>
->>>
->>>
->>> On 06/10/2015 09:14 AM, Mathieu Desnoyers wrote:
->>>> Hi Martin,
->>>>
->>>> Can you reformat your patch with diff -urN so I can apply it with patch ?
->>>>
->>>> Thanks!
->>>>
->>>> Mathieu
->>>>
->>>> ----- On Jun 8, 2015, at 11:19 AM, Martin Leisener martin@leisener.de wrote:
->>>>
->>>>> Hi Mathieu,
->>>>>
->>>>> thanks for merging my arm patch! I found one more issue during my lttng-modules
->>>>> usages,
->>>>> which can happen in low/fragmented memory situations. Please have a look, if you
->>>>> find this
->>>>> patch useful/mergable. Again it is tested on x86 Ubuntu 12.04 LTS as well as my
->>>>> imx6 arm board.
->>>>>
->>>>> Regards Martin
->>>>>
->>>>>
->>>>> On a small arm imx6 solo with 256MB RAM it often happens that memory becomes
->>>>> fragmented rather
->>>>> quickly, so that kmalloc will not be able to get enough consecutive pages
->>>>> (enocuntered for
->>>>> example if you enable all kernel events: lttng enable-event -k syscall --all).
->>>>>
->>>>> This patch switches the allocation to vmalloc. Tested for x86 on Ubuntu 12.04
->>>>> Lts
->>>>> and on imx6 solo 256MB RAM
->>>>>
->>>>> If this patch is not applied, you can identify low and/or fragmented memory
->>>>> failures by
->>>>> looking at the kernel ring buffer (please ignore DMA, it is due to some memory
->>>>> setup
->>>>> misconfiguration, should read Normal):
->>>>>
->>>>> ...
->>>>> [  321.993820] lttng-sessiond: page allocation failure: order:4, mode:0x1040d0
->>>>> ...
->>>>> [  321.994711] lowmem_reserve[]: 0 0 0
->>>>> [  321.994727] DMA: 801*4kB (UEMC) 424*8kB (EMC) 355*16kB (UEMC) 344*32kB (MC)
->>>>> 340*64kB (C) 8*128kB (C) 0*256kB 0*512kB 0*1024kB 0*2048kB 0*4096kB 0*8192kB
->>>>> 0*16384kB 0*32768kB = 46068kB
->>>>>
->>>>> Signed-off-by: Martin Leisener <martin@leisener.de>
->>>>> ---
->>>>> lttng-events.c |   16 +++++++++++-----
->>>>> 1 file changed, 11 insertions(+), 5 deletions(-)
->>>>>
->>>>> diff --git a/lttng-events.c b/lttng-events.c
->>>>> index 7eec04c..c861f71 100644
->>>>> --- a/lttng-events.c
->>>>> +++ b/lttng-events.c
->>>>> @@ -39,6 +39,7 @@
->>>>> #include "wrapper/file.h"
->>>>> #include <linux/jhash.h>
->>>>> #include <linux/uaccess.h>
->>>>> +#include <linux/vmalloc.h>
->>>>>  #include "wrapper/uuid.h"
->>>>> #include "wrapper/vmalloc.h"	/* for wrapper_vmalloc_sync_all() */
->>>>> @@ -132,10 +133,10 @@ struct lttng_session *lttng_session_create(void)
->>>>> 			GFP_KERNEL);
->>>>> 	if (!metadata_cache)
->>>>> 		goto err_free_session;
->>>>> -	metadata_cache->data = kzalloc(METADATA_CACHE_DEFAULT_SIZE,
->>>>> -			GFP_KERNEL);
->>>>> +	metadata_cache->data = vmalloc(METADATA_CACHE_DEFAULT_SIZE);
->>>>> 	if (!metadata_cache->data)
->>>>> 		goto err_free_cache;
->>>>> +	memset(metadata_cache->data, 0, METADATA_CACHE_DEFAULT_SIZE);
->>>>> 	metadata_cache->cache_alloc = METADATA_CACHE_DEFAULT_SIZE;
->>>>> 	kref_init(&metadata_cache->refcount);
->>>>> 	session->metadata_cache = metadata_cache;
->>>>> @@ -162,7 +163,7 @@ void metadata_cache_destroy(struct kref *kref)
->>>>> {
->>>>> 	struct lttng_metadata_cache *cache =
->>>>> 		container_of(kref, struct lttng_metadata_cache, refcount);
->>>>> -	kfree(cache->data);
->>>>> +	vfree(cache->data);
->>>>> 	kfree(cache);
->>>>> }
->>>>> @@ -1523,10 +1524,15 @@ int lttng_metadata_printf(struct lttng_session *session,
->>>>> 		tmp_cache_alloc_size = max_t(unsigned int,
->>>>> 				session->metadata_cache->cache_alloc + len,
->>>>> 				session->metadata_cache->cache_alloc << 1);
->>>>> -		tmp_cache_realloc = krealloc(session->metadata_cache->data,
->>>>> -				tmp_cache_alloc_size, GFP_KERNEL);
->>>>> +		tmp_cache_realloc = vmalloc(tmp_cache_alloc_size);
->>>>> 		if (!tmp_cache_realloc)
->>>>> 			goto err;
->>>>> +		else if (session->metadata_cache->data) {
->>>>> +			memset(tmp_cache_realloc, 0, tmp_cache_alloc_size);
->>>>> +			memcpy(tmp_cache_realloc, session->metadata_cache->data,
->>>>> session->metadata_cache->cache_alloc);
->>>>> +			vfree(session->metadata_cache->data);
->>>>> +		}
->>>>> +
->>>>> 		session->metadata_cache->cache_alloc = tmp_cache_alloc_size;
->>>>> 		session->metadata_cache->data = tmp_cache_realloc;
->>>>> 	}
->>>>> --
->>>>> 1.7.9.5
->>>>>
->>>>>
->>>>> _______________________________________________
->>>>> lttng-dev mailing list
->>>>> lttng-dev@lists.lttng.org
->>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+aGVsbG8sCgp0aGUgMTd0aCBSZWFsIFRpbWUgTGludXggV29ya3Nob3Agd2lsbCBiZSBpbiBHcmF6
+LCBBdXN0cmlhIHRoaXMKeWVhciAtIGZpbmQgdGhlIENhbGwgZm9yIFBhcGVycyBiZWxvdyAtIGxv
+b2tpbmcgZm9yd2FyZCB0byBzZWVpbmcKc29tZSBvZiB5b3UgYXQgUlRMV1MxNyEKCi0gTWljaGFl
+bAoKCiAgICAgICAgICAgICAgICAgICAxN3RoIFJlYWwgVGltZSBMaW51eCBXb3Jrc2hvcAogICAg
+ICAgICAgICAgICAgICAgICAgICAgIENhbGwgZm9yIFBhcGVycwogICAgICAgICAgICAgICAgICAg
+ICAgT2N0b2JlciAyMSB0byAyMiwgMjAxNQogICAgICAgICAgICAgICAgICBWaXJ0dWFsIFZlaGlj
+bGUgUmVzZWFyY2ggQ2VudGVyCiAgICAgICAgICAgICAgICAgICBHcmF6IFVuaXZlcnNpdHkgb2Yg
+VGVjaG5vbG9neQogICAgICAgICAgICAgICAgSW5mZmVsZGdhc3NlIDE4LCA4MDEwIEdyYXosIEF1
+c3RyaWEKCgpGb2xsb3dpbmcgdGhlIG1lZXRpbmdzIG9mIGFjYWRlbWljcywgZGV2ZWxvcGVycyBh
+bmQgdXNlcnMgb2YgcmVhbC10aW1lCmFuZCBlbWJlZGRlZCBMaW51eCBhdCB0aGUgcHJldmlvdXMg
+MTYgUmVhbCBUaW1lIExpbnV4IFdvcmtzaG9wcyBoZWxkCndvcmxkLXdpZGUgKFZpZW5uYSwgT3Js
+YW5kbywgTWlsYW5vLCBCb3N0b24sIFZhbGVuY2lhLCBTaW5nYXBvcmUsIExpbGxlLApMYW56aG91
+LCBMaW56LCBHdWFkYWxhamFyYSwgRHJlc2RlbiwgTmFpcm9iaSwgUHJhZ3VlLCBDaGFwZWwgSGls
+bCwKTHVnYW5vIGFuZCBEw7xzc2VsZG9yZikgLSB0aGUgMjAxNSBSZWFsIFRpbWUgTGludXggV29y
+a3Nob3Agd2lsbCBjb21lIHRvCnRoZSBWaXJ0dWFsIFZlaGljbGUgUmVzZWFyY2ggQ2VudGVyIGlu
+IEdyYXosIEF1c3RyaWEuIEl0IHdpbGwgYmUgaGVsZApmcm9tIE9jdG9iZXIgMjEgdG8gT2N0b2Jl
+ciAyMiwgMjAxNS4gV2UgZ3JhdGVmdWxseSBhY2tub3dsZWRnZSB0aGUKb2ZmZXJpbmcgb2YgVmly
+dHVhbCBWZWhpY2xlIHRvIGhvc3QgYW5kIGNvLW9yZ2FuaXplIHRoaXMgeWVhcidzIFJUTFdTIGlu
+CkdyYXouCgoKQ2FsbCBmb3IgcGFwZXJzCgpBdXRob3JzIGZyb20gcmVndWxhdG9yeSBib2RpZXMs
+IGFjYWRlbWljcywgaW5kdXN0cnkgYXMgd2VsbCBhcyB0aGUKdXNlci1jb21tdW5pdHkgYXJlIGlu
+dml0ZWQgdG8gc3VibWl0IG9yaWdpbmFsIHdvcmsgZGVhbGluZyB3aXRoIGdlbmVyYWwKdG9waWNz
+IHJlbGF0ZWQgdG8gT3BlbiBTb3VyY2UgYW5kIEZyZWUgU29mdHdhcmUgYmFzZWQgcmVhbC10aW1l
+IHN5c3RlbXMKcmVzZWFyY2gsIGV4cGVyaW1lbnRzIGFuZCBjYXNlIHN0dWRpZXMsIGFzIHdlbGwg
+YXMgaXNzdWVzIG9mIGludGVncmF0aW9uCm9mIG9wZW4tc291cmNlIHJlYWwtdGltZSBhbmQgZW1i
+ZWRkZWQgT1MuIEEgc3BlY2lhbCBmb2N1cyB3aWxsIGJlIG9uCmluZHVzdHJpYWwgY2FzZSBzdHVk
+aWVzIGFuZCBzYWZldHkgcmVsYXRlZCBzeXN0ZW1zLiBUb3BpY3Mgb2YgaW50ZXJlc3QKaW5jbHVk
+ZSwgYnV0IGFyZSBub3QgbGltaXRlZCB0bzoKCi0gTW9kaWZpY2F0aW9ucyBhbmQgdmFyaWFudHMg
+b2YgdGhlIEdOVS9MaW51eCBvcGVyYXRpbmcgc3lzdGVtIGFuZApleHRlbmRpbmcgaXRzIHJlYWwt
+dGltZSBjYXBhYmlsaXRpZXMsCi0gQ29udHJpYnV0aW9ucyB0byByZWFsLXRpbWUgTGludXggdmFy
+aWFudHMsIGRyaXZlcnMgYW5kIGV4dGVuc2lvbnMsCi0gVG9vbHMgZm9yIHRoZSB2ZXJpZmljYXRp
+b24gYW5kIHZhbGlkYXRpb24gb2YgcmVhbC10aW1lIHByb3BlcnRpZXMsCi0gVXNlci1tb2RlIHJl
+YWwtdGltZSBjb25jZXB0cywgaW1wbGVtZW50YXRpb24gYW5kIGV4cGVyaWVuY2UsCi0gUmVhbC10
+aW1lIExpbnV4IGFwcGxpY2F0aW9ucywgaW4gYWNhZGVtaWEsIHJlc2VhcmNoIGFuZCBpbmR1c3Ry
+eSwKLSBTYWZldHkgcmVsYXRlZCBGTE9TUyBzeXN0ZW1zLAotIFNhZmV0eSByZWxhdGVkIHN5c3Rl
+bXMgdXNpbmcgRkxPU1MgY29tcG9uZW50cywKLSBGTE9TUyBUb29scyB1c2VkIHRvIGFuYWx5emUs
+IHZlcmlmeSBvciB2YWxpZGF0ZSBzYWZldHkgcHJvcGVydGllcywKLSBXb3JrIGluIHByb2dyZXNz
+IHJlcG9ydHMsIGNvdmVyaW5nIHJlY2VudCBkZXZlbG9wbWVudHMsCi0gRWR1Y2F0aW9uYWwgbWF0
+ZXJpYWwgb24gcmVhbC10aW1lIExpbnV4LAotIFJUT1MgY29yZSBjb25jZXB0cywgUlQtc2FmZSBz
+eW5jaHJvbml6YXRpb24gbWVjaGFuaXNtcywKLSBSVC1zYWZlIElQQyBtZWNoYW5pc21zIGZvciBS
+VCBhbmQgbm9uIFJUIGNvbXBvbmVudHMsCi0gQW5hbHlzaXMgYW5kIGJlbmNobWFya2luZyBtZXRo
+b2RzIGFuZCByZXN1bHRzIG9mIHJlYWwtdGltZQpHTlUvTGludXggdmFyaWFudHMsCi0gRGVidWdn
+aW5nIHRlY2huaXF1ZXMgYW5kIHRvb2xzLCBib3RoIGZvciBjb2RlIGFuZCB0ZW1wb3JhbApkZWJ1
+Z2dpbmcgb2YgY29yZSBSVE9TIGNvbXBvbmVudHMsIGRyaXZlcnMgYW5kIHJlYWwtdGltZQphcHBs
+aWNhdGlvbnMsCi0gUmVhbC10aW1lIHJlbGF0ZWQgZXh0ZW5zaW9ucyB0byBkZXZlbG9wbWVudCBl
+bnZpcm9ubWVudHMsCi0gTGVnYWwgYXNwZWN0cyB3aXRoIHJlZ2FyZCB0byB1c2luZyBPcGVuIFNv
+dXJjZSBpbiB0aGUgaW5kdXN0cnksCi0gSW9UIChJbnRlcm5ldCBvZiBUcm91YmxlcykKCgpBYnN0
+cmFjdCBzdWJtaXNzaW9uIAoKSWYgeW91IHdpc2ggdG8gcHJlc2VudCBhIHBhcGVyIGF0IHRoZSB3
+b3Jrc2hvcCwgcGxlYXNlIHN1Ym1pdCBhbgphYnN0cmFjdCB1c2luZyB0aGUgc3VibWlzc2lvbiBw
+YWdlIGF0OgpodHRwczovL3d3dy5vc2FkbC5vcmcvUlRMV1MxNy1BYnN0cmFjdC5zdWJtaXNzaW9u
+LWZvcm0uMC5odG1sCgoKRmluYWwgcGFwZXIKClVwb24gYWNjZXB0YW5jZSBvZiBhbiBhYnN0cmFj
+dCBieSB0aGUgUlRMV1MxNyBQcm9ncmFtIENvbW1pdHRlZSwgdGhlCmF1dGhvciB3aWxsIGJlIGlu
+dml0ZWQgdG8gc3VibWl0IGEgZnVsbCBwYXBlciBpbiBhIGZvcm0gZGVmaW5lZCBieQpodHRwczov
+L3d3dy5vc2FkbC5vcmcvcGFwZXIudGd6LiBBIGRldGFpbGVkIGRlc2NyaXB0aW9uIG9mIHRoZSBl
+ZGl0aW5nCmFuZCBmb3JtYXR0aW5nIHByb2Nlc3Mgd2lsbCBiZSBwcm92aWRlZCBhbG9uZyB3aXRo
+IHRoZSBub3RpZmljYXRpb24KZW1haWwuIFRoZSBmdWxsIHBhcGVyIHdpbGwgYmUgaW5jbHVkZWQg
+aW4gdGhlIFJUTFdTMTcgcHJvY2VlZGluZ3MuCgoKSW1wb3J0YW50IGRhdGVzCgpBdWd1c3QgMiwg
+MjAxNSAtIEFic3RyYWN0IHN1Ym1pc3Npb24gZGVhZGxpbmUKQXVndXN0IDMwLCAyMDE1IC0gTm90
+aWZpY2F0aW9uIG9mIGFjY2VwdGFuY2UKU2VwdGVtYmVyIDI3LCAyMDE1IC0gU3VibWlzc2lvbiBv
+ZiBmaW5hbCBwYXBlcgpPY3RvYmVyIDIxLTIyLCAyMDE1IC0gV29ya3Nob3AKCgpQcm9ncmFtIGNv
+bW1pdHRlZQoKQWxleGV5IEtob3Jvc2hpbG92LCBJU1BSQVMsIFJ1c3NpYQpBbmRyZWEgTGVpdG5l
+ciwgVmlydHVhbCBWZWhpY2xlLCBBdXN0cmlhCkFuZHJlYXMgUGxhdHNjaGVrLCBUVSBXaWVuLCBB
+dXN0cmlhIApDYXJzdGVuIEVtZGUsIE9TQURMLCBHZXJtYW55CkRhbmllbCBXYXR6ZW5pZywgVmly
+dHVhbCBWZWhpY2xlLCBBdXN0cmlhCkdlb3JnIFNjaGllc3NlciwgT3BlblRlY2ggRURWIFJlc2Vh
+cmNoLCBBdXN0cmlhCkpvc2VwaCBXZW5uaW5nZXIsIFRVIFdpZW4sIEF1c3RyaWEKSnVsaWEgTGF3
+YWxsLCBJbnJpYSwgRnJhbmNlCk1pY2hhZWwgSGFiZXJsZXIsIG1hY2hpbmVraXQuaW8sIEF1c3Ry
+aWEKTmljaG9sYXMgTWMgR3VpcmUsIE9wZW5UZWNoIEVEViBSZXNlYXJjaCwgQXVzdHJpYQpQYW9s
+byBNYW50ZWdhenphLCBQb2xpdGVjbmljbyBkaSBNaWxhbm8sIEl0YWx5ClBhdWwgTWNLZW5uZXks
+IElCTSBMaW51eCBUZWNobm9sb2d5IENlbnRlciwgVVNBClJvYmVydG8gQnVjaGVyLCBTVVBTSSwg
+U3dpdHplcmxhbmQKU2ViYXN0aWFuIEFuZHJ6ZWogU2lld2lvciwgTGludXRyb25peCwgR2VybWFu
+eQpTaGF3biBDaG9vLCBXZXNsYWIsIFNpbmdhcHVyClRpbG1hbm4gT2NocywgQk1XIENhci1JVCwg
+R2VybWFueQpaaG91IFFpbmdndW8sIERTTGFiLCBMYW56aG91IFVuaXZlcnNpdHksIENoaW5hCgoK
+V29ya3Nob3Agb3JnYW5pemVycwoKT3BlbiBTb3VyY2UgQXV0b21hdGlvbiBEZXZlbG9wbWVudCBM
+YWIgKE9TQURMKSwgSGVpZGVsYmVyZywgR2VybWFueQpWaXJ0dWFsIFZlaGljbGUgUmVzZWFyY2gg
+Q2VudGVyLCBHcmF6LCBBdXN0cmlhCgpDYXJzdGVuIEVtZGUKTmljaG9sYXMgTWMgR3VpcmUKQW5k
+cmVhcyBQbGF0c2NoZWsKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
+dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
