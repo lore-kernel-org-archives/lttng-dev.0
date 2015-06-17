@@ -1,60 +1,83 @@
-From: Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RFC PATCH] sched: Fix sched_wakeup tracepoint
-Date: Wed, 17 Jun 2015 14:47:09 -0400
-Message-ID: <20150617144709.5814a48d@gandalf.local.home>
-References: <1433504509-17013-1-git-send-email-mathieu.desnoyers@efficios.com>
-	<20150605120909.GG19282@twins.programming.kicks-ass.net>
-	<479621151.4836.1433507522491.JavaMail.zimbra@efficios.com>
-	<1433508695.1495.16.camel@twins>
-	<600031664.4911.1433510581646.JavaMail.zimbra@efficios.com>
-	<1433592142.1495.22.camel@twins>
-	<1960877063.5553.1433672414640.JavaMail.zimbra@efficios.com>
-	<20150608132735.0763ad27@gandalf.local.home>
-	<20150609091336.GQ3644@twins.programming.kicks-ass.net>
-	<CAM_iQpXaWwgN6rYXsbpV9yNnrpgrX9mfzc5ZRLpHtSw_wYAxTg@mail.gmail.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-modules] Fix: version checks for kernel 4.0
+Date: Wed, 17 Jun 2015 16:28:02 -0400
+Message-ID: <1434572882-29119-1-git-send-email-mjeanson__17384.0701034807$1434572986$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <CAM_iQpXaWwgN6rYXsbpV9yNnrpgrX9mfzc5ZRLpHtSw_wYAxTg@mail.gmail.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, LKML <linux-kernel@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, Francis Giraldeau <francis.giraldeau@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>, Linus Torvalds <torvalds@linux-foundation.org>
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.efficios.com ([78.47.125.74])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <mjeanson@efficios.com>) id 1Z5Jwt-0006JY-Bu
+ for lttng-dev@lists.lttng.org; Wed, 17 Jun 2015 16:28:41 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id C9C2A340334
+ for <lttng-dev@lists.lttng.org>; Wed, 17 Jun 2015 20:28:33 +0000 (UTC)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, 17 Jun 2015 11:23:00 -0700
-Cong Wang <xiyou.wangcong@gmail.com> wrote:
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ probes/Makefile | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-> On Tue, Jun 9, 2015 at 2:13 AM, Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > So how about we introduce the 'waking' tracepoint and leave the existing
-> > wakeup one in place and preserve its woken semantics.
-> >
-> > Steven, can we do aliases? Where one tracepoint is known to userspace
-> > under multiple names? In that case we could rename the thing to woken
-> > and have an alias wakeup which we can phase out over time.
-> >
-> > The patch also takes away the success parameter to the tracepoint, but
-> > does not quite go as far as actually removing it from the tracepoint
-> > itself.
-> >
-> > We can do that in a follow up patch which we can quickly revert if it
-> > turns out people are actually still using that for something.
-> 
-> +1 to this patch. How is it going?
-
-It's not a top priority. But it shouldn't be too hard to implement.
-This could be something I do after the 4.2 merge window closes.
-
--- Steve
-
-
-> 
-> Here at Twitter, we are analyzing scheduling latencies too, with our
-> own tool using existing tracepoints, it would be nice to have more
-> granularity on the scheduling latency.
-> 
-> And, you probably want to change perf sched to respect this
-> new 'waking' event too. ;)
-> 
-> Thanks.
+diff --git a/probes/Makefile b/probes/Makefile
+index 4de157b..f0325c8 100644
+--- a/probes/Makefile
++++ b/probes/Makefile
+@@ -61,10 +61,12 @@ obj-m +=  $(shell \
+ 		-o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -ge 6 -a $(SUBLEVEL) -ge 37 \) ] ; then \
+ 		echo "lttng-probe-net.o" ; fi;)
+ obj-m +=  $(shell \
+-	if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 1 ] ; then \
++	if [ $(VERSION) -ge 4 \
++		-o \( $(VERSION) -eq 3 -a $(PATCHLEVEL) -ge 1 \) ] ; then \
+ 		echo "lttng-probe-sock.o" ; fi;)
+ obj-m +=  $(shell \
+-	if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 1 ] ; then \
++	if [ $(VERSION) -ge 4 \
++		-o \( $(VERSION) -eq 3 -a $(PATCHLEVEL) -ge 1 \) ] ; then \
+ 		echo "lttng-probe-udp.o" ; fi;)
+ endif
+ 
+@@ -79,8 +81,8 @@ ifneq ($(CONFIG_EXT3_FS),)
+ ext3_dep = $(srctree)/fs/ext3/*.h
+ ext3_dep_check = $(wildcard $(ext3_dep))
+ ext3 = $(shell \
+-	if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 1 ] ; then \
+-		if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 4 -a \
++	if [ $(VERSION) -ge 4 -o \( $(VERSION) -eq 3 -a $(PATCHLEVEL) -ge 1 \) ] ; then \
++		if [ \( $(VERSION) -ge 4 -o \( $(VERSION) -eq 3 -a $(PATCHLEVEL) -ge 4 \) \) -a \
+ 			-z "$(ext3_dep_check)" ] ; then \
+ 			echo "warn" ; \
+ 			exit ; \
+@@ -106,7 +108,8 @@ endif
+ 
+ ifneq ($(CONFIG_JBD),)
+ obj-m +=  $(shell \
+-	if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 1 ] ; then \
++	if [ $(VERSION) -ge 4 \
++		-o \( $(VERSION) -eq 3 -a $(PATCHLEVEL) -ge 1 \) ] ; then \
+ 		echo "lttng-probe-jbd.o" ; fi;)
+ endif
+ 
+@@ -172,7 +175,8 @@ obj-m += $(ext4)
+ endif
+ 
+ obj-m +=  $(shell \
+-	if [ $(VERSION) -ge 3 -a $(PATCHLEVEL) -ge 4 ] ; then \
++	if [ $(VERSION) -ge 4 \
++		-o \( $(VERSION) -eq 3 -a $(PATCHLEVEL) -ge 4 \) ] ; then \
+ 		echo "lttng-probe-printk.o" ; fi;)
+ ifneq ($(CONFIG_FRAME_WARN),0)
+ CFLAGS_lttng-probe-printk.o += -Wframe-larger-than=2200
+-- 
+1.9.1
