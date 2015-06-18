@@ -1,15 +1,18 @@
-From: Jeffrey Chen <cpthk@hotmail.com>
-Subject: String format based events
-Date: Thu, 18 Jun 2015 00:49:49 -0700
-Message-ID: <BLU169-W872AF3E2846656BC64AC76ABA50__10317.0618917376$1434613860$gmane$org@phx.gbl>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: Re: String format based events
+Date: Thu, 18 Jun 2015 09:43:36 -0400
+Message-ID: <CAB4xu_3pvQTvcKmi28fS8159CSSL_Fr8f_DR+j_CdZEomAkMZg__34990.5108836994$1434635140$gmane$org@mail.gmail.com>
 References: <BLU169-W69F0861B21CA9AE09E8C75ABA60@phx.gbl>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0461367814=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from blu004-omc3s4.hotmail.com ([65.55.116.79])
+Received: from mail-lb0-f169.google.com ([209.85.217.169])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <cpthk@hotmail.com>) id 1Z5UaA-0001Kj-T1
- for lttng-dev@lists.lttng.org; Thu, 18 Jun 2015 03:50:00 -0400
+ (envelope-from <eeppeliteloop@gmail.com>) id 1Z5a73-0003NI-0v
+ for lttng-dev@lists.lttng.org; Thu, 18 Jun 2015 09:44:20 -0400
+Received: by lbbvz5 with SMTP id vz5so4484125lbb.0
+ for <lttng-dev@lists.lttng.org>; Thu, 18 Jun 2015 06:44:07 -0700 (PDT)
 In-Reply-To: <BLU169-W69F0861B21CA9AE09E8C75ABA60@phx.gbl>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -19,96 +22,65 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Jeffrey Chen <cpthk@hotmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0461367814==
-Content-Type: multipart/alternative;
-	boundary="_7e6428fc-6d22-4efe-94e5-bea65a273b29_"
+On Wed, Jun 17, 2015 at 7:51 PM, Jeffrey Chen <cpthk@hotmail.com> wrote:
+> I have a question while reading the lttng documentation. Could anyone answer
+> me? Thanks a lot.
+>
+> It looks like lttng events are all key-value pairs. Like { my_val1 = 10,
+> my_val2 = "OK" }. Does lttng supports regular string format based events,
+> like Windows ETW. I want a human readable sentences in the event like "My
+> CPU usage is 50 , my memory usage is 100". Of course, I know I could
+> manually construct the string myself and pass the result in one string down
+> to lttng. But, the idea is that, string format is slow. So, Windows ETW does
+> the string formatting only when you read the logs.
+> For example, if I want to write many "My CPU usage is {0} , my memory usage
+> is {1}" to log. Windows ETW does not write this whole string to log. It only
+> writes the 2 variable values of this trace to the log, and construct back
+> the original string when you are reading the logs.
 
---_7e6428fc-6d22-4efe-94e5-bea65a273b29_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Hello Jeffrey!
 
+We (EfficiOS) are currently working on such a feature, which involves
+changes to all the following projects:
 
-=0A=
-=0A=
-=0A=
-I have a question while reading the lttng documentation. Could anyone answe=
-r me? Thanks a lot.
-It looks like lttng events are all key-value pairs. Like { my_val1 =3D 10=
-=2C my_val2 =3D "OK" }. Does lttng supports regular string format based eve=
-nts=2C like Windows ETW. I want a human readable sentences in the event lik=
-e "My CPU usage is 50 =2C my memory usage is 100". Of course=2C I know I co=
-uld manually construct the string myself and pass the result in one string =
-down to lttng. But=2C the idea is that=2C string format is slow. So=2C Wind=
-ows ETW does the string formatting only when you read the logs.
-For example=2C if I want to write many "My CPU usage is {0} =2C my memory u=
-sage is {1}" to log. Windows ETW does not write this whole string to log. I=
-t only writes the 2 variable values of this trace to the log=2C and constru=
-ct back the original string when you are reading the logs.
+  * CTF (trace format used by LTTng): allow custom user attributes to
+    be assigned to types and events in the trace metadata (this is where
+    the format string would go)
+  * LTTng-UST: add a macro to be used in tracepoint providers to
+    assign a format string to a specific event
+  * Babeltrace: upgrade the ctf-text plugin so that it takes into
+    account the format string of an event, if available, to print it in a
+    custom way
 
- 		 	   		   		 	   		  =
+We could also think about a tool, or a Babeltrace input plugin perhaps,
+which converts the Windows ETW format to CTF; we would need to
+parse the format strings and convert them to our own syntax.
 
---_7e6428fc-6d22-4efe-94e5-bea65a273b29_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+The format string syntax we're intending to use is Python's format()
+one [1], or at least a subset of its features. It is very flexible and
+allows to name fields, modify them, and place them where you
+want, e.g.:
 
-<html>
-<head>
-<style><!--
-.hmmessage P
-{
-margin:0px=3B
-padding:0px
-}
-body.hmmessage
-{
-font-size: 12pt=3B
-font-family:Calibri
-}
---></style></head>
-<body class=3D'hmmessage'><div dir=3D'ltr'><br><div>=0A=
-=0A=
-<style><!--=0A=
-.ExternalClass .ecxhmmessage P {=0A=
-padding:0px=3B=0A=
-}=0A=
-=0A=
-.ExternalClass body.ecxhmmessage {=0A=
-font-size:12pt=3B=0A=
-font-family:Calibri=3B=0A=
-}=0A=
-=0A=
---></style>=0A=
-<div dir=3D"ltr">I have a question while reading the lttng documentation. C=
-ould anyone answer me? Thanks a lot.<br>It looks like lttng events are all =
-key-value pairs. Like <i>{ my_val1 =3D 10=2C my_val2 =3D "OK" }</i>. Does l=
-ttng supports regular string format based events=2C like Windows ETW. I wan=
-t a human readable sentences in the event like "My CPU usage is 50 =2C my m=
-emory usage is 100". Of course=2C I know I could manually construct the str=
-ing myself and pass the result in one string down to lttng. But=2C the idea=
- is that=2C string format is slow. So=2C Windows ETW does the string format=
-ting only when you read the logs.<br>For example=2C if I want to write many=
- "My CPU usage is {0} =2C my memory usage is {1}" to log. Windows ETW does =
-not write this whole string to log. It only writes the 2 variable values of=
- this trace to the log=2C and construct back the original string when you a=
-re reading the logs.<br><br> 		 	   		  </div></div> 		 	   		  </div></bod=
-y>
-</html>=
+"My field is {field}, which is {field:x} in hex, and also: {other_field}"
 
---_7e6428fc-6d22-4efe-94e5-bea65a273b29_--
+Replacement fields may also be empty to be position-based:
 
+"My field is {}, and also: {}"
 
---===============0461367814==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+(you would need exactly two fields here).
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+[1] https://docs.python.org/3/library/string.html#formatstrings
 
---===============0461367814==--
+Phil
+
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
