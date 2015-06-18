@@ -1,18 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Test: mi: test for greater or
- equal	to a minimum of events on ust listing.
-Date: Thu, 18 Jun 2015 14:18:40 +0000 (UTC)
-Message-ID: <579469314.862.1434637120162.JavaMail.zimbra__44564.6123298959$1434637203$gmane$org@efficios.com>
-References: <1433950061-27364-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-ust] Add aarch64 support to configure
+Date: Thu, 18 Jun 2015 10:41:55 -0400
+Message-ID: <1434638515-20300-1-git-send-email-mjeanson__14126.2794648812$1434638586$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Z5aed-0003Ze-Mb
- for lttng-dev@lists.lttng.org; Thu, 18 Jun 2015 10:19:01 -0400
-In-Reply-To: <1433950061-27364-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ (envelope-from <mjeanson@efficios.com>) id 1Z5b1A-0003iD-Np
+ for lttng-dev@lists.lttng.org; Thu, 18 Jun 2015 10:42:15 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 3B94134047C
+ for <lttng-dev@lists.lttng.org>; Thu, 18 Jun 2015 14:42:07 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,55 +21,25 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jeremie Galarneau <jgalar@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-YnVtcDogSsOpcsOpbWllLCBJIGtub3cgeW91IGFyZSBidXN5IHdpdGggQmFiZWx0cmFjZSwgYnV0
-IGNhbiB5b3UgcXVpY2tseQpsb29rIGludG8gbWVyZ2luZyB0aGlzIGZpeCA/IEl0IHdvdWxkIHJl
-cGFpciB0aGUgQ0kuCgpUaGFua3MsCgpNYXRoaWV1CgotLS0tLSBPbiBKdW4gMTAsIDIwMTUsIGF0
-IDExOjI3IEFNLCBKb25hdGhhbiBSYWpvdHRlIGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmlj
-aW9zLmNvbSB3cm90ZToKCj4gU2luY2UgdGhlIG51bWJlciBvZiBldmVudHMgcHJlc2VudCBpbiB0
-aGUgdGVzdHMgYXBwcyBpbiBwcm9uZSB0byBjaGFuZ2UgaXQKPiBtYWtlIG1vcmUgc2Vuc2UgdG8g
-bG9vayBmb3IgYSBtaW5pbXVtIG9mIGV2ZW50cy4gVGhpcyBpcyBsZXNzIHJpZ291cm91cwo+IGJ1
-dCBtb3JlIGZsZXhpYmxlIHRvIGNoYW5nZS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKb25hdGhhbiBS
-YWpvdHRlIDxqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gdGVz
-dHMvcmVncmVzc2lvbi90b29scy9taS90ZXN0X21pIHwgMTUgKysrKysrKysrKy0tLS0tCj4gMSBm
-aWxlIGNoYW5nZWQsIDEwIGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAt
-LWdpdCBhL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvbWkvdGVzdF9taQo+IGIvdGVzdHMvcmVncmVz
-c2lvbi90b29scy9taS90ZXN0X21pCj4gaW5kZXggY2NmOTIzNi4uYzQ0YjU5OCAxMDA3NTUKPiAt
-LS0gYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL21pL3Rlc3RfbWkKPiArKysgYi90ZXN0cy9yZWdy
-ZXNzaW9uL3Rvb2xzL21pL3Rlc3RfbWkKPiBAQCAtMzI4LDcgKzMyOCw3IEBAIGZ1bmN0aW9uIHRl
-c3RfdXN0X2x0dG5nX2V2ZW50ICgpCj4gCSRYTUxfVkFMSURBVEUgJE9VVFBVVF9ERVNUCj4gCW9r
-ICQ/ICJNaSB0ZXN0OiBNdWx0aXBsZSBlbmFibGUgdXN0IGV2ZW50IHdpdGggaW5zaWRlIGZhaWwg
-eHNkIHZhbGlkYXRpb24iCj4gCj4gLQkjQ2hlY2sgZm9yIDIgc3VjY2VzcyA9IHRydWUgZXQgMSBm
-YWxzZQo+ICsJI0NoZWNrIGZvciAyIHN1Y2Nlc3MgPSB0cnVlIGFuZCAxIHN1Y2Nlc3MgPSBmYWxz
-ZQo+IAlleHRyYWN0X3htbCAkT1VUUFVUX0RFU1QgJFhQQVRIX0VOQUJMRV9FVkVOVF9TVUNDRVNT
-IHJlc3VsdAo+IAludW1fb2N1cj0kKGdyZXAgLW8gInRydWUiIDw8PCAiJHJlc3VsdCIgfCB3YyAt
-bCkKPiAJdGVzdCAiJG51bV9vY3VyIiAtZXEgIjIiCj4gQEAgLTUxMSwxNiArNTExLDIxIEBAIGZ1
-bmN0aW9uIHRlc3RfbGlzdF91c3RfZXZlbnQgKCkKPiAJJFhNTF9WQUxJREFURSAkT1VUUFVUX0RF
-U1QKPiAJb2sgJD8gIk1pIHRlc3Q6IGxpc3QgdXN0IGV2ZW50IHhzZCB2YWxpZGF0aW9uIgo+IAo+
-IC0JI0V4dHJhY3QgZXZlbnRzIDUgZXZlbnRzIHNob3VsZCBiZSBwcmVzZW50Cj4gKwkjRXh0cmFj
-dCBldmVudHMKPiAJZXh0cmFjdF94bWwgJE9VVFBVVF9ERVNUICIkWFBBVEhfTElTVF9VU1RfRVZF
-TlQiIi9uYW1lL3RleHQoKSIgcmVzdWx0Cj4gCW51bT0kKGVjaG8gIiRyZXN1bHQiIHwgd2MgLWwp
-Cj4gLQl0ZXN0ICIkbnVtIiAtZXEgIjUiCj4gKwo+ICsJI1NpbmNlIHRoZSBudW1iZXIgb2YgZXZl
-bnRzIGlzIHByb25lIHRvIGNoYW5nZSB3ZSBvbmx5IGxvb2sgZm9yID49IGZyb20gYQo+ICsJI2Jh
-c2UgbnVtYmVyLiBBbiBhbHRlcm5hdGl2ZSB3b3VsZCBiZSB0byBsb29rIGZvciBlYWNoIGV2ZW50
-cyBidXQgdGhpcwo+ICsJI2lzIGNvbXBsaWNhdGVkIGZvciBub3RoaW5nLgo+ICsJdGVzdCAiJG51
-bSIgLWdlICI1Igo+IAlvayAkPyAiTWkgdGVzdDogJG51bSAvIDUgdXN0IGV2ZW50cyBkaXNjb3Zl
-cmVkIgo+IAo+IC0JI0V4dHJhY3QgZmllbGQgZnJvbSB0cDp0cHRlc3QgZXZlbnQuIEV4cGVjdCAx
-Mgo+ICsJI0V4dHJhY3QgZmllbGQgZnJvbSB0cDp0cHRlc3QgZXZlbnQuIEV4cGVjdCA+PSB0byAx
-MiBiZWNhdXNlIG51bWJlciBvZgo+ICsJI2ZpZWxkIGlzIHByb25lIHRvIGNoYW5nZS4KPiAJZXh0
-cmFjdF94bWwgJE9VVFBVVF9ERVNUICIkWFBBVEhfTElTVF9VU1RfRVZFTlQiIlsuL25hbWUgPQo+
-IAkndHA6dHB0ZXN0J10vZXZlbnRfZmllbGRzL2V2ZW50X2ZpZWxkL25hbWUvdGV4dCgpIiByZXN1
-bHQKPiAJbnVtPSQoZWNobyAiJHJlc3VsdCIgfCB3YyAtbCkKPiAtCXRlc3QgIiRudW0iIC1lcSAi
-MTIiCj4gKwl0ZXN0ICIkbnVtIiAtZ2UgIjEyIgo+IAlvayAkPyAiTWkgdGVzdDogJG51bSAvIDEy
-IHVzdCBldmVudCBmaWVsZHMgZGlzY292ZXJlZCIKPiAKPiAJI1dhaXQgZm9yIGFsbCBiYWNrZ3Jv
-dW5kIHByb2Nlc3Nlcwo+IC0tCj4gMi4xLjQKPiAKPiAKPiBfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRu
-Zy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
-aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1Mg
-SW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
-bmZvL2x0dG5nLWRldgo=
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ configure.ac | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configure.ac b/configure.ac
+index f84f426..971cf54 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -238,6 +238,7 @@ changequote([,])dnl
+ 	s390) NO_UNALIGNED_ACCESS=1 ;;
+ 	s390x) NO_UNALIGNED_ACCESS=1 ;;
+         arm*) NO_UNALIGNED_ACCESS=1 ;;
++	aarch64) NO_UNALIGNED_ACCESS=1 ;;
+ 	mips*) NO_UNALIGNED_ACCESS=1 ;;
+ 	tile*) NO_UNALIGNED_ACCESS=1 ;;
+ 	*) AC_MSG_ERROR([unable to detect alignment requirements (unsupported architecture ($host_cpu)?)]) ;;
+-- 
+1.9.1
