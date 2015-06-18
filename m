@@ -1,19 +1,18 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: Re: String format based events
-Date: Thu, 18 Jun 2015 09:43:36 -0400
-Message-ID: <CAB4xu_3pvQTvcKmi28fS8159CSSL_Fr8f_DR+j_CdZEomAkMZg__34990.5108836994$1434635140$gmane$org@mail.gmail.com>
-References: <BLU169-W69F0861B21CA9AE09E8C75ABA60@phx.gbl>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools] Test: mi: test for greater or
+ equal	to a minimum of events on ust listing.
+Date: Thu, 18 Jun 2015 14:18:40 +0000 (UTC)
+Message-ID: <579469314.862.1434637120162.JavaMail.zimbra__44564.6123298959$1434637203$gmane$org@efficios.com>
+References: <1433950061-27364-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f169.google.com ([209.85.217.169])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <eeppeliteloop@gmail.com>) id 1Z5a73-0003NI-0v
- for lttng-dev@lists.lttng.org; Thu, 18 Jun 2015 09:44:20 -0400
-Received: by lbbvz5 with SMTP id vz5so4484125lbb.0
- for <lttng-dev@lists.lttng.org>; Thu, 18 Jun 2015 06:44:07 -0700 (PDT)
-In-Reply-To: <BLU169-W69F0861B21CA9AE09E8C75ABA60@phx.gbl>
+ (envelope-from <compudj@efficios.com>) id 1Z5aed-0003Ze-Mb
+ for lttng-dev@lists.lttng.org; Thu, 18 Jun 2015 10:19:01 -0400
+In-Reply-To: <1433950061-27364-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,65 +21,55 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jeffrey Chen <cpthk@hotmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Jeremie Galarneau <jgalar@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, Jun 17, 2015 at 7:51 PM, Jeffrey Chen <cpthk@hotmail.com> wrote:
-> I have a question while reading the lttng documentation. Could anyone answer
-> me? Thanks a lot.
->
-> It looks like lttng events are all key-value pairs. Like { my_val1 = 10,
-> my_val2 = "OK" }. Does lttng supports regular string format based events,
-> like Windows ETW. I want a human readable sentences in the event like "My
-> CPU usage is 50 , my memory usage is 100". Of course, I know I could
-> manually construct the string myself and pass the result in one string down
-> to lttng. But, the idea is that, string format is slow. So, Windows ETW does
-> the string formatting only when you read the logs.
-> For example, if I want to write many "My CPU usage is {0} , my memory usage
-> is {1}" to log. Windows ETW does not write this whole string to log. It only
-> writes the 2 variable values of this trace to the log, and construct back
-> the original string when you are reading the logs.
-
-Hello Jeffrey!
-
-We (EfficiOS) are currently working on such a feature, which involves
-changes to all the following projects:
-
-  * CTF (trace format used by LTTng): allow custom user attributes to
-    be assigned to types and events in the trace metadata (this is where
-    the format string would go)
-  * LTTng-UST: add a macro to be used in tracepoint providers to
-    assign a format string to a specific event
-  * Babeltrace: upgrade the ctf-text plugin so that it takes into
-    account the format string of an event, if available, to print it in a
-    custom way
-
-We could also think about a tool, or a Babeltrace input plugin perhaps,
-which converts the Windows ETW format to CTF; we would need to
-parse the format strings and convert them to our own syntax.
-
-The format string syntax we're intending to use is Python's format()
-one [1], or at least a subset of its features. It is very flexible and
-allows to name fields, modify them, and place them where you
-want, e.g.:
-
-"My field is {field}, which is {field:x} in hex, and also: {other_field}"
-
-Replacement fields may also be empty to be position-based:
-
-"My field is {}, and also: {}"
-
-(you would need exactly two fields here).
-
-[1] https://docs.python.org/3/library/string.html#formatstrings
-
-Phil
-
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+YnVtcDogSsOpcsOpbWllLCBJIGtub3cgeW91IGFyZSBidXN5IHdpdGggQmFiZWx0cmFjZSwgYnV0
+IGNhbiB5b3UgcXVpY2tseQpsb29rIGludG8gbWVyZ2luZyB0aGlzIGZpeCA/IEl0IHdvdWxkIHJl
+cGFpciB0aGUgQ0kuCgpUaGFua3MsCgpNYXRoaWV1CgotLS0tLSBPbiBKdW4gMTAsIDIwMTUsIGF0
+IDExOjI3IEFNLCBKb25hdGhhbiBSYWpvdHRlIGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmlj
+aW9zLmNvbSB3cm90ZToKCj4gU2luY2UgdGhlIG51bWJlciBvZiBldmVudHMgcHJlc2VudCBpbiB0
+aGUgdGVzdHMgYXBwcyBpbiBwcm9uZSB0byBjaGFuZ2UgaXQKPiBtYWtlIG1vcmUgc2Vuc2UgdG8g
+bG9vayBmb3IgYSBtaW5pbXVtIG9mIGV2ZW50cy4gVGhpcyBpcyBsZXNzIHJpZ291cm91cwo+IGJ1
+dCBtb3JlIGZsZXhpYmxlIHRvIGNoYW5nZS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKb25hdGhhbiBS
+YWpvdHRlIDxqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gdGVz
+dHMvcmVncmVzc2lvbi90b29scy9taS90ZXN0X21pIHwgMTUgKysrKysrKysrKy0tLS0tCj4gMSBm
+aWxlIGNoYW5nZWQsIDEwIGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAt
+LWdpdCBhL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvbWkvdGVzdF9taQo+IGIvdGVzdHMvcmVncmVz
+c2lvbi90b29scy9taS90ZXN0X21pCj4gaW5kZXggY2NmOTIzNi4uYzQ0YjU5OCAxMDA3NTUKPiAt
+LS0gYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL21pL3Rlc3RfbWkKPiArKysgYi90ZXN0cy9yZWdy
+ZXNzaW9uL3Rvb2xzL21pL3Rlc3RfbWkKPiBAQCAtMzI4LDcgKzMyOCw3IEBAIGZ1bmN0aW9uIHRl
+c3RfdXN0X2x0dG5nX2V2ZW50ICgpCj4gCSRYTUxfVkFMSURBVEUgJE9VVFBVVF9ERVNUCj4gCW9r
+ICQ/ICJNaSB0ZXN0OiBNdWx0aXBsZSBlbmFibGUgdXN0IGV2ZW50IHdpdGggaW5zaWRlIGZhaWwg
+eHNkIHZhbGlkYXRpb24iCj4gCj4gLQkjQ2hlY2sgZm9yIDIgc3VjY2VzcyA9IHRydWUgZXQgMSBm
+YWxzZQo+ICsJI0NoZWNrIGZvciAyIHN1Y2Nlc3MgPSB0cnVlIGFuZCAxIHN1Y2Nlc3MgPSBmYWxz
+ZQo+IAlleHRyYWN0X3htbCAkT1VUUFVUX0RFU1QgJFhQQVRIX0VOQUJMRV9FVkVOVF9TVUNDRVNT
+IHJlc3VsdAo+IAludW1fb2N1cj0kKGdyZXAgLW8gInRydWUiIDw8PCAiJHJlc3VsdCIgfCB3YyAt
+bCkKPiAJdGVzdCAiJG51bV9vY3VyIiAtZXEgIjIiCj4gQEAgLTUxMSwxNiArNTExLDIxIEBAIGZ1
+bmN0aW9uIHRlc3RfbGlzdF91c3RfZXZlbnQgKCkKPiAJJFhNTF9WQUxJREFURSAkT1VUUFVUX0RF
+U1QKPiAJb2sgJD8gIk1pIHRlc3Q6IGxpc3QgdXN0IGV2ZW50IHhzZCB2YWxpZGF0aW9uIgo+IAo+
+IC0JI0V4dHJhY3QgZXZlbnRzIDUgZXZlbnRzIHNob3VsZCBiZSBwcmVzZW50Cj4gKwkjRXh0cmFj
+dCBldmVudHMKPiAJZXh0cmFjdF94bWwgJE9VVFBVVF9ERVNUICIkWFBBVEhfTElTVF9VU1RfRVZF
+TlQiIi9uYW1lL3RleHQoKSIgcmVzdWx0Cj4gCW51bT0kKGVjaG8gIiRyZXN1bHQiIHwgd2MgLWwp
+Cj4gLQl0ZXN0ICIkbnVtIiAtZXEgIjUiCj4gKwo+ICsJI1NpbmNlIHRoZSBudW1iZXIgb2YgZXZl
+bnRzIGlzIHByb25lIHRvIGNoYW5nZSB3ZSBvbmx5IGxvb2sgZm9yID49IGZyb20gYQo+ICsJI2Jh
+c2UgbnVtYmVyLiBBbiBhbHRlcm5hdGl2ZSB3b3VsZCBiZSB0byBsb29rIGZvciBlYWNoIGV2ZW50
+cyBidXQgdGhpcwo+ICsJI2lzIGNvbXBsaWNhdGVkIGZvciBub3RoaW5nLgo+ICsJdGVzdCAiJG51
+bSIgLWdlICI1Igo+IAlvayAkPyAiTWkgdGVzdDogJG51bSAvIDUgdXN0IGV2ZW50cyBkaXNjb3Zl
+cmVkIgo+IAo+IC0JI0V4dHJhY3QgZmllbGQgZnJvbSB0cDp0cHRlc3QgZXZlbnQuIEV4cGVjdCAx
+Mgo+ICsJI0V4dHJhY3QgZmllbGQgZnJvbSB0cDp0cHRlc3QgZXZlbnQuIEV4cGVjdCA+PSB0byAx
+MiBiZWNhdXNlIG51bWJlciBvZgo+ICsJI2ZpZWxkIGlzIHByb25lIHRvIGNoYW5nZS4KPiAJZXh0
+cmFjdF94bWwgJE9VVFBVVF9ERVNUICIkWFBBVEhfTElTVF9VU1RfRVZFTlQiIlsuL25hbWUgPQo+
+IAkndHA6dHB0ZXN0J10vZXZlbnRfZmllbGRzL2V2ZW50X2ZpZWxkL25hbWUvdGV4dCgpIiByZXN1
+bHQKPiAJbnVtPSQoZWNobyAiJHJlc3VsdCIgfCB3YyAtbCkKPiAtCXRlc3QgIiRudW0iIC1lcSAi
+MTIiCj4gKwl0ZXN0ICIkbnVtIiAtZ2UgIjEyIgo+IAlvayAkPyAiTWkgdGVzdDogJG51bSAvIDEy
+IHVzdCBldmVudCBmaWVsZHMgZGlzY292ZXJlZCIKPiAKPiAJI1dhaXQgZm9yIGFsbCBiYWNrZ3Jv
+dW5kIHByb2Nlc3Nlcwo+IC0tCj4gMi4xLjQKPiAKPiAKPiBfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1Mg
+SW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
+dHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
+bmZvL2x0dG5nLWRldgo=
