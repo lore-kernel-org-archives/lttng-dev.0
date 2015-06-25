@@ -1,19 +1,28 @@
-From: Zifei Tong <zifeitong@gmail.com>
-Subject: Re: LTTng c++ loglevel not being set
-Date: Thu, 25 Jun 2015 13:55:13 +0800
-Message-ID: <CAJ7wx-F5tr_YiJ1z+tyeJP3Kn4Lk+Y9OvFvXSiLsRzchuBMRAg__35180.0770069987$1435211807$gmane$org@mail.gmail.com>
-References: <BLU169-W5812986F014E6A9F9F766AABAE0@phx.gbl>
+From: Jan Glauber <jan.glauber@gmail.com>
+Subject: Re: [PATCH lttng-modules] Fix: Building the event list
+ fails on fragmented memory
+Date: Thu, 25 Jun 2015 10:08:30 +0200
+Message-ID: <20150625080829.GA25618__13021.0132258528$1435219784$gmane$org@hal>
+References: <55755E0D.7010902@leisener.de>
+ <1905517223.241.1433920494952.JavaMail.zimbra@efficios.com>
+ <557838F1.9020808@leisener.de>
+ <1586680029.1815.1434223948187.JavaMail.zimbra@efficios.com>
+ <20150623134638.GA3944@hal>
+ <1503217107.1784.1435088815111.JavaMail.zimbra@efficios.com>
+ <1501535608.1867.1435090872005.JavaMail.zimbra@efficios.com>
+ <600744376.2021.1435093458623.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yh0-f45.google.com ([209.85.213.45])
+Received: from mail-wi0-f175.google.com ([209.85.212.175])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <soariez@gmail.com>) id 1Z808k-0000pF-9U
- for lttng-dev@lists.lttng.org; Thu, 25 Jun 2015 01:55:59 -0400
-Received: by yhjh26 with SMTP id h26so3003352yhj.3
- for <lttng-dev@lists.lttng.org>; Wed, 24 Jun 2015 22:55:52 -0700 (PDT)
-In-Reply-To: <BLU169-W5812986F014E6A9F9F766AABAE0@phx.gbl>
+ (envelope-from <jan.glauber@gmail.com>) id 1Z82DA-0001UY-DQ
+ for lttng-dev@lists.lttng.org; Thu, 25 Jun 2015 04:08:46 -0400
+Received: by wicnd19 with SMTP id nd19so156279729wic.1
+ for <lttng-dev@lists.lttng.org>; Thu, 25 Jun 2015 01:08:34 -0700 (PDT)
+Content-Disposition: inline
+In-Reply-To: <600744376.2021.1435093458623.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,76 +31,193 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jeffrey Chen <cpthk@hotmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+On Tue, Jun 23, 2015 at 09:04:18PM +0000, Mathieu Desnoyers wrote:
+> Nope, it wasn't it. metadata_written is always <= cache_alloc, so the
+> current upstream code looks correct.
+> 
+> I've just tried after changing the CPU configuration from "hypervisor
+> default" to "copy host cpu config" on my machine, and was then unable
+> to reproduce. I wonder if there is not an issue with __memcpy implementation
+> for specific x86_64 processors (e.g. reading too many bytes from the vmalloc'd
+> area).
+> 
+> Thoughts ?
 
-I can confirm this issue (w/ lttng master HEAD + gcc 5.1).
+Just speculation without further debugging data from the hypervisor setup
+where it fails...
 
-In include/lttng/ust-tracepoint-event.h, we have
-#define TRACEPOINT_EVENT_INSTANCE(_provider, _template, _name, _args)          \
-static const int *                                                             \
-        __ref_loglevel___##_provider##___##_name                               \
-        __attribute__((weakref ("_loglevel___" #_provider "___" #_name)));     \
-static const char *                                                            \
-        __ref_model_emf_uri___##_provider##___##_name                          \
-        __attribute__((weakref ("_model_emf_uri___" #_provider "___" #_name)));\
+From my understanding memcpy should work regardless of kmalloc or
+vmalloc.
 
-I think the weakref attributes used here should use mangled symbol
-name when compiling with C++.
+Maybe the length parameter of the memcpy is wrong?
+With kmalloc and the 1:1 mapping this wont matter but if the memcpy
+crosses a page it might fault if the next page is not vmalloc'ed.
 
-A workaround is attached. However, I don't know how to disable symbol
-mangling for a static variable, therefore the 'static' attribute is
-dropped. I am not sure whether exporting the symbol will cause other
-issues.
+But the fault address ffffc900038d995e looks more like src is completely
+messed up.
 
-diff --git a/include/lttng/ust-tracepoint-event.h
-b/include/lttng/ust-tracepoint-event.h
-index 6632f67..7356451 100644
---- a/include/lttng/ust-tracepoint-event.h
-+++ b/include/lttng/ust-tracepoint-event.h
-@@ -676,9 +676,14 @@ const char
-__tp_event_signature___##_provider##___##_name[] =              \
- #include <lttng/ust-tracepoint-event-reset.h>
+What is the difference between the CPU configurations you tried?
 
- #undef TRACEPOINT_LOGLEVEL
-+
-+#ifdef __cplusplus
-+#define DISABLE_MANGLING extern "C"
-+#endif
-+
- #define TRACEPOINT_LOGLEVEL(__provider, __name, __loglevel)               \
- static const int _loglevel_value___##__provider##___##__name = __loglevel; \
--static const int *_loglevel___##__provider##___##__name =                 \
-+DISABLE_MANGLING const int *_loglevel___##__provider##___##__name =
-            \
-                &_loglevel_value___##__provider##___##__name;
+Regards, Jan
 
- #include TRACEPOINT_INCLUDE
 
-Thanks,
-Zifei
-
-On Thu, Jun 25, 2015 at 9:42 AM, Jeffrey Chen <cpthk@hotmail.com> wrote:
->
-> I noticed a macro issue with LTTng under C++. The TRACEPOINT_LOGLEVEL would be ignored.
->
-> Here are my steps to repro the issue. My .tp file has the TRACEPOINT_LOGLEVEL macro set.
-> 1. I generated the hello-tp.c file from the hello-tp.tp file using the lttng-gen-tp tool.
-> 2. I renamed the generated .c file into .cpp and compiled with `g++ -c -I. hello-tp.cpp`
-> 3. I wrote my c++ code called and call tracepoint macro, saved to hello.cpp, compiled with `g++ -c -I. hello.cpp`
-> 4. I compile to an executable with `g++ -o hello hello.o hello-tp.o -llttng-ust -ldl`
-> 5. I run the executable, and noticed the loglevel I set in the .tp file is not working. All the traces are still being written as default loglevel TRACE_DEBUG_LINE.
->
-> I tried confirming it by using `lttng list --userspace` command and I see "hello_world:my_first_tracepoint (loglevel: TRACE_DEBUG_LINE (13)) (type: tracepoint)"
-> You could see the loglevel was not set.
->
-> I tried the same steps without renaming to cpp files and build with `gcc` command and it works fine. I also tried without renaming to cpp files but compiled with `g++` command, but it also does not work. It seems to have something to do with c++ name mangling. Anyone noticed this issue? Thanks.
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+> Thanks,
+> 
+> Mathieu
+> 
+> ----- On Jun 23, 2015, at 4:21 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+> 
+> > I think I found the culprit (testing now):
+> > 
+> > int lttng_metadata_printf(struct lttng_session *session,
+> >                          const char *fmt, ...)
+> > 
+> >                tmp_cache_alloc_size = max_t(unsigned int,
+> >                                session->metadata_cache->cache_alloc + len,
+> >                                session->metadata_cache->cache_alloc << 1)
+> > 
+> > should be:
+> > 
+> >                tmp_cache_alloc_size = max_t(unsigned int,
+> >                                session->metadata_cache->metadata_written + len,
+> >                                session->metadata_cache->cache_alloc << 1);
+> > 
+> > I think we have a possible memory corruption in the upstream code here.
+> > 
+> > More coming soon,
+> > 
+> > Thanks,
+> > 
+> > Mathieu
+> > 
+> > 
+> > ----- On Jun 23, 2015, at 3:46 PM, Mathieu Desnoyers
+> > mathieu.desnoyers@efficios.com wrote:
+> > 
+> >> ----- On Jun 23, 2015, at 9:46 AM, Jan Glauber jan.glauber@gmail.com wrote:
+> >> 
+> >>> On Sat, Jun 13, 2015 at 07:32:28PM +0000, Mathieu Desnoyers wrote:
+> >>>> ----- On Jun 10, 2015, at 9:17 AM, Martin Leisener martin@leisener.de wrote:
+> >>>> 
+> >>>> > Hi Mathieu,
+> >>>> > 
+> >>>> > sorry for sending the broken patch, I fell for some "smart" formating of my
+> >>>> > email client, I cannot utilize it myself the way I send it.
+> >>>> > Hence I now send the patch again as it was original intended. Sent to myself, I
+> >>>> > can apply it, so I hope it now works in general as well
+> >>>> > I examined as recommended diff -urN, it seems the output can be utilized by
+> >>>> > patch the same way as git diff.
+> >>>> > Hope it is now received the way I intended.
+> >>>> 
+> >>>> Hi Martin,
+> >>>> 
+> >>>> I tried you patch on a x86-64 machine (my laptop), and although taking a
+> >>>> single kernel trace worked fine, it appears to OOPS when I run
+> >>>> 
+> >>>> (in lttng-tools)
+> >>>> cd tests
+> >>>> ./run.sh root_regression
+> >>> 
+> >>> Hi Mathieu,
+> >>> 
+> >>> can you please share the oops message so I can have a look?
+> >> 
+> >> Sure,
+> >> 
+> >> Here is the backtrace happening with the attached patch over lttng-modules
+> >> commit 8c6e7f13c778701dec2d6549f1e2ca98970907a0. I modified your patch
+> >> slightly.
+> >> 
+> >> [ 4078.314978] BUG: unable to handle kernel paging request at ffffc900038d995e
+> >> [ 4078.315824] IP: [<ffffffff81316f12>] __memcpy+0x12/0x20
+> >> [ 4078.315824] PGD 236c92067 PUD 236c93067 PMD bac0c067 PTE 0
+> >> [ 4078.315824] Oops: 0000 [#1] SMP
+> >> [ 4078.315824] Modules linked in: lttng_probe_workqueue(O) lttng_probe_vmscan(O)
+> >> lttng_probe_udp(O) lttng_probe_timer(O) lttng_probe_sunrpc(O)
+> >> lttng_probe_statedump(O) lttng_probe_sock(O) lttng_probe_skb(O)
+> >> lttng_probe_signal(O) lttng_probe_scsi(O) lttng_probe_sched(O)
+> >> lttng_probe_regmap(O) lttng_probe_rcu(O) lttng_probe_random(O)
+> >> lttng_probe_printk(O) lttng_probe_power(O) lttng_probe_net(O)
+> >> lttng_probe_napi(O) lttng_probe_module(O) lttng_probe_kmem(O)
+> >> lttng_probe_jbd2(O) lttng_probe_irq(O) lttng_probe_ext4(O)
+> >> lttng_probe_compaction(O) lttng_probe_block(O) lttng_types(O)
+> >> lttng_ring_buffer_metadata_mmap_client(O)
+> >> lttng_ring_buffer_client_mmap_overwrite(O)
+> >> lttng_ring_buffer_client_mmap_discard(O) lttng_ring_buffer_metadata_client(O)
+> >> lttng_ring_buffer_client_overwrite(O) lttng_ring_buffer_client_discard(O)
+> >> lttng_tracer(O) lttng_statedump(O) lttng_kprobes(O) lttng_lib_ring_buffer(O)
+> >> lttng_kretprobes(O) virtio_blk virtio_net virtio_pci virtio_ring virtio
+> >> [ 4078.315824] CPU: 5 PID: 4258 Comm: lttng-consumerd Tainted: G           O
+> >> 4.1.0 #7
+> >> [ 4078.315824] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs
+> >> 01/01/2011
+> >> [ 4078.315824] task: ffff8802350c3660 ti: ffff8800bae84000 task.ti:
+> >> ffff8800bae84000
+> >> [ 4078.315824] RIP: 0010:[<ffffffff81316f12>]  [<ffffffff81316f12>]
+> >> __memcpy+0x12/0x20
+> >> [ 4078.315824] RSP: 0018:ffff8800bae87da0  EFLAGS: 00010246
+> >> [ 4078.315824] RAX: ffff880235439025 RBX: 0000000000000fd8 RCX: 00000000000001fb
+> >> [ 4078.315824] RDX: 0000000000000000 RSI: ffffc900038d995e RDI: ffff880235439025
+> >> [ 4078.315824] RBP: ffff8800bae87db8 R08: ffff8800bacecc00 R09: 0000000000008000
+> >> [ 4078.315824] R10: 0000000000000000 R11: 0000000000000246 R12: ffff8800bae87dc8
+> >> [ 4078.315824] R13: ffff88023466e800 R14: 0000000000000fd8 R15: 0000000000000fd8
+> >> [ 4078.315824] FS:  00007f5d3b1cc700(0000) GS:ffff8802372a0000(0000)
+> >> knlGS:0000000000000000
+> >> [ 4078.315824] CS:  0010 DS: 0000 ES: 0000 CR0: 000000008005003b
+> >> [ 4078.315824] CR2: ffffc900038d995e CR3: 00000000bb1ed000 CR4: 00000000000006e0
+> >> [ 4078.315824] Stack:
+> >> [ 4078.315824]  ffffffffa01ac797 ffff8800bb5bd480 ffff8800bb5bd4d0
+> >> ffff8800bae87e48
+> >> [ 4078.315824]  ffffffffa0073060 ffff88023466e800 0000000000000000
+> >> 0000000000000fd8
+> >> [ 4078.315824]  ffffffff00000001 ffff8800bacecc00 0000000000000fd8
+> >> 0000000000008025
+> >> [ 4078.315824] Call Trace:
+> >> [ 4078.315824]  [<ffffffffa01ac797>] ? lttng_event_write+0x87/0xb0
+> >> [lttng_ring_buffer_metadata_client]
+> >> [ 4078.315824]  [<ffffffffa0073060>] lttng_metadata_output_channel+0xd0/0x120
+> >> [lttng_tracer]
+> >> [ 4078.315824]  [<ffffffffa00755f9>] lttng_metadata_ring_buffer_ioctl+0x79/0xd0
+> >> [lttng_tracer]
+> >> [ 4078.315824]  [<ffffffff8117ba10>] do_vfs_ioctl+0x2e0/0x4e0
+> >> [ 4078.315824]  [<ffffffff812b35c7>] ? file_has_perm+0x87/0xa0
+> >> [ 4078.315824]  [<ffffffff8117bc91>] SyS_ioctl+0x81/0xa0
+> >> [ 4078.315824]  [<ffffffff810115d1>] ? syscall_trace_leave+0xd1/0xe0
+> >> [ 4078.315824]  [<ffffffff818bbd37>] tracesys_phase2+0x84/0x89
+> >> [ 4078.315824] Code: 5b 5d c3 66 0f 1f 44 00 00 e8 6b fc ff ff eb e1 90 90 90 90
+> >> 90 90 90 90 90 0f 1f 44 00 00 48 89 f8 48 89 d1 48 c1 e9 03 83 e2 07 <f3> 48 a5
+> >> 89 d1 f3 a4 c3 66 0f 1f 44 00 00 48 89 f8 48 89 d1 f3
+> >> [ 4078.315824] RIP  [<ffffffff81316f12>] __memcpy+0x12/0x20
+> >> [ 4078.315824]  RSP <ffff8800bae87da0>
+> >> [ 4078.315824] CR2: ffffc900038d995e
+> >> [ 4078.315824] ---[ end trace a05b652829ceda48 ]---
+> >> [ 4078.433848] LTTng: block device enumeration is not supported by kernel
+> >> 
+> >> 
+> >> --
+> >> Mathieu Desnoyers
+> >> EfficiOS Inc.
+> >> http://www.efficios.com
+> >> _______________________________________________
+> >> lttng-dev mailing list
+> >> lttng-dev@lists.lttng.org
+> >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> > 
+> > --
+> > Mathieu Desnoyers
+> > EfficiOS Inc.
+> > http://www.efficios.com
+> > 
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 
+> -- 
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
