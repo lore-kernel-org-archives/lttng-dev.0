@@ -1,36 +1,19 @@
-From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
+From: Daniel Olivier <daniel.olivier@ericsson.com>
 Subject: Re: Compilation error in lttng-tools (version.c)
-Date: Mon, 29 Jun 2015 16:33:09 -0400
-Message-ID: <5591AB85.60903__23133.5875615061$1435610049$gmane$org@efficios.com>
+Date: Mon, 29 Jun 2015 20:52:23 +0000
+Message-ID: <B06A27731337844B9C410EFD0660F0FB0F9BF428__10604.2196312503$1435611211$gmane$org@eusaamb109.ericsson.se>
 References: <B06A27731337844B9C410EFD0660F0FB0F9BF2D0@eusaamb109.ericsson.se>
+ <5591AB85.60903@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from usevmg21.ericsson.net ([198.24.6.65])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Jonathan.rajotte-julien@efficios.com>)
- id 1Z9fjy-0000cn-28
- for lttng-dev@lists.lttng.org; Mon, 29 Jun 2015 16:33:20 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 01EAB34033E
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jun 2015 20:33:13 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id g_248-Jt7fsw for <lttng-dev@lists.lttng.org>;
- Mon, 29 Jun 2015 20:33:12 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id DFE14340349
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jun 2015 20:33:11 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id r_nTUx69NbNp for <lttng-dev@lists.lttng.org>;
- Mon, 29 Jun 2015 20:33:11 +0000 (UTC)
-Received: from [172.16.0.150] (cable-192.222.194.238.electronicbox.net
- [192.222.194.238])
- by mail.efficios.com (Postfix) with ESMTPSA id 7697C34033E
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jun 2015 20:33:11 +0000 (UTC)
-In-Reply-To: <B06A27731337844B9C410EFD0660F0FB0F9BF2D0@eusaamb109.ericsson.se>
+ (envelope-from <daniel.olivier@ericsson.com>) id 1Z9g2Z-0000nK-0V
+ for lttng-dev@lists.lttng.org; Mon, 29 Jun 2015 16:52:37 -0400
+In-Reply-To: <5591AB85.60903@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -39,13 +22,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
+
+Hi,
+
+Indeed, I'm running autoconf 2.63:
+
+SC-1:~/trace_ea/foss/lttng-tools # autoconf --version
+autoconf (GNU Autoconf) 2.63
+...
+SC-1:~/trace_ea/foss/lttng-tools # automake --version
+automake (GNU automake) 1.10.1
+...
+
+The system is SLES11:
+SC-1:~/trace_ea/foss/lttng-tools # uname -a
+Linux SC-1 3.0.101-0.47.52-default #1 SMP Thu Mar 26 10:55:49 UTC 2015 (0e3c7c8) x86_64 x86_64 x86_64 GNU/Linux
+SC-1:~/trace_ea/foss/lttng-tools # cat /etc/issue
+
+Welcome to SUSE Linux Enterprise Server 11 SP3  (x86_64) - Kernel \r (\l).
+
+Is there a way to check the autoconf version (during configuration), in order to make the error more explicit?
+
+Thanks,
+Dan
+
+-----Original Message-----
+From: Jonathan Rajotte Julien [mailto:Jonathan.rajotte-julien@efficios.com] 
+Sent: Monday, June 29, 2015 4:33 PM
+To: lttng-dev@lists.lttng.org
+Subject: Re: [lttng-dev] Compilation error in lttng-tools (version.c)
 
 Hey Daniel,
 
-As you suggested it look like it's not generated on ./configure when it 
-should.
+As you suggested it look like it's not generated on ./configure when it should.
 The problem come from the AC_INIT macro interpretation from Autoconf. 
 The AC_INIT macro we currently use was
 introduced in autoconf 2.64. Look like you are running Autoconf 2.63.
@@ -68,8 +80,10 @@ On 2015-06-29 03:52 PM, Daniel Olivier wrote:
 >          gcc -DHAVE_CONFIG_H -I../../.. -I../../.. -I../../../src -I../../../include -include config.h  -I../../../include -I../../../src -DINSTALL_BIN_PATH=\""/usr/local/bin"\"   -Wall -g -O2 -g -fno-strict-aliasing -MT commands/version.o -MD -MP -MF $depbase.Tpo -c -o commands/version.o commands/version.c &&\
 >          mv -f $depbase.Tpo $depbase.Po
 > commands/version.c: In function 'create_version':
-> commands/version.c:71: error: 'PACKAGE_URL' undeclared (first use in this function)
-> commands/version.c:71: error: (Each undeclared identifier is reported only once
+> commands/version.c:71: error: 'PACKAGE_URL' undeclared (first use in 
+> this function)
+> commands/version.c:71: error: (Each undeclared identifier is reported 
+> only once
 > commands/version.c:71: error: for each function it appears in.)
 > make[3]: *** [commands/version.o] Error 1
 >
@@ -89,6 +103,12 @@ On 2015-06-29 03:52 PM, Daniel Olivier wrote:
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
--- 
+--
 Jonathan R. Julien
 Efficios
+
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
