@@ -1,16 +1,16 @@
-From: jamie explorer <jamieexplorer@gmail.com>
-Subject: application changes to support lttng
-Date: Mon, 29 Jun 2015 10:03:25 -0700
-Message-ID: <CACh_V54iounQNr+jxP85YjPuivjMTgowOCuTaox9fMRC9=ty0w__27236.0269249932$1435603120$gmane$org@mail.gmail.com>
+From: Aravind HT <aravind.ht@gmail.com>
+Subject: Valgrind Memory Error in lttng-relayd
+Date: Mon, 29 Jun 2015 23:51:25 +0530
+Message-ID: <CACd+_b7wB+RQNMBnFj6HZgHi4_a3-_giVfBJFBwkLeCbi8Hr9Q__34253.1556067572$1435603146$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1980416540=="
+Content-Type: multipart/mixed; boundary="===============1784248606=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-oi0-f54.google.com ([209.85.218.54])
+Received: from mail-la0-f51.google.com ([209.85.215.51])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jamieexplorer@gmail.com>) id 1Z9cSx-0007rG-5f
- for lttng-dev@lists.lttng.org; Mon, 29 Jun 2015 13:03:39 -0400
-Received: by oigb199 with SMTP id b199so122622661oig.3
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jun 2015 10:03:25 -0700 (PDT)
+ (envelope-from <aravind.ht@gmail.com>) id 1Z9dgR-0008DK-Ds
+ for lttng-dev@lists.lttng.org; Mon, 29 Jun 2015 14:21:39 -0400
+Received: by lagc2 with SMTP id c2so20147580lag.3
+ for <lttng-dev@lists.lttng.org>; Mon, 29 Jun 2015 11:21:25 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,44 +22,77 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1980416540==
-Content-Type: multipart/alternative; boundary=e89a8fb1ec28666f0f0519ab11fb
+--===============1784248606==
+Content-Type: multipart/alternative; boundary=001a11347920551cd70519ac2810
 
---e89a8fb1ec28666f0f0519ab11fb
+--001a11347920551cd70519ac2810
 Content-Type: text/plain; charset=UTF-8
 
-Hello,
+Hi,
 
-I have just started using lttng and still looking at documentation.
-Can you help me with some info.
+I ran valgrind on lttng-relayd for a soft hang issue that I had reported
+earlier.
+http://lists.lttng.org/pipermail/lttng-dev/2015-May/024533.html
 
-How does the app register to use lttng?
-how do sessiond, app and lttng-ust interact? is there any socket from every
-app to sessiond?
-How is the app modified when instrumented using lttng? are there any
-threads added?
-when lttng instrumentation is linked along with app
-Are there any powerful tools for analysis on collected traces.
+Below are the list of errors that I found.
 
-/Jam
+==793== Thread 4:
+==793== Invalid write of size 8
+==793==    at 0x406038: cds_list_add (list.h:53)
+==793==    by 0x409442: queue_stream (main.c:1175)
+==793==    by 0x409AB7: relay_add_stream (main.c:1274)
+==793==    by 0x40C47A: relay_process_control (main.c:2099)
+==793==    by 0x40DBB1: relay_thread_worker (main.c:2574)
+==793==    by 0x5BDAFE2: start_thread (pthread_create.c:312)
+==793==    by 0x5ED8AFC: clone (clone.S:111)
+==793==  Address 0x6e09040 is 64 bytes inside a block of size 312 free'd
+==793==    at 0x4C2898C: free (in
+/usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so)
+==793==    by 0x418EF8: rcu_destroy_stream (stream.c:33)
+==793==    by 0x5079C94: ??? (in /usr/lib64/liburcu.so.2.0.0)
+==793==    by 0x5BDAFE2: start_thread (pthread_create.c:312)
+==793==    by 0x5ED8AFC: clone (clone.S:111)
+==793==
 
---e89a8fb1ec28666f0f0519ab11fb
+Are there any known bugs/fixes for these ?
+
+
+Regards,
+Aravind.
+
+--001a11347920551cd70519ac2810
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Hello,<div><br></div><div>I have just started using lttng =
-and still looking at documentation.</div><div>Can you help me with some inf=
-o.</div><div><br></div><div>How does the app register to use lttng?</div><d=
-iv>how do sessiond, app and lttng-ust interact? is there any socket from ev=
-ery app to sessiond?</div><div>How is the app modified when instrumented us=
-ing lttng? are there any threads added?</div><div>when lttng instrumentatio=
-n is linked along with app</div><div>Are there any powerful tools for analy=
-sis on collected traces.</div><div><br></div><div>/Jam=C2=A0</div></div>
+<div dir=3D"ltr">Hi,<div><br></div><div>I ran valgrind on lttng-relayd for =
+a soft hang issue that I had reported earlier.</div><div><a href=3D"http://=
+lists.lttng.org/pipermail/lttng-dev/2015-May/024533.html">http://lists.lttn=
+g.org/pipermail/lttng-dev/2015-May/024533.html</a><br></div><div><br></div>=
+<div>Below are the list of errors that I found.</div><div><br></div><div><d=
+iv>=3D=3D793=3D=3D Thread 4:</div><div>=3D=3D793=3D=3D Invalid write of siz=
+e 8</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0at 0x406038: cds_list_add (list.=
+h:53)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x409442: queue_stream (mai=
+n.c:1175)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x409AB7: relay_add_str=
+eam (main.c:1274)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x40C47A: relay=
+_process_control (main.c:2099)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x=
+40DBB1: relay_thread_worker (main.c:2574)</div><div>=3D=3D793=3D=3D =C2=A0 =
+=C2=A0by 0x5BDAFE2: start_thread (pthread_create.c:312)</div><div>=3D=3D793=
+=3D=3D =C2=A0 =C2=A0by 0x5ED8AFC: clone (clone.S:111)</div><div>=3D=3D793=
+=3D=3D =C2=A0Address 0x6e09040 is 64 bytes inside a block of size 312 free&=
+#39;d</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0at 0x4C2898C: free (in /usr/li=
+b64/valgrind/vgpreload_memcheck-amd64-linux.so)</div><div>=3D=3D793=3D=3D =
+=C2=A0 =C2=A0by 0x418EF8: rcu_destroy_stream (stream.c:33)</div><div>=3D=3D=
+793=3D=3D =C2=A0 =C2=A0by 0x5079C94: ??? (in /usr/lib64/liburcu.so.2.0.0)</=
+div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x5BDAFE2: start_thread (pthread_c=
+reate.c:312)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x5ED8AFC: clone (cl=
+one.S:111)</div><div>=3D=3D793=3D=3D</div></div><div><br></div><div>Are the=
+re any known bugs/fixes for these ?</div><div><br></div><div><br></div><div=
+>Regards,</div><div>Aravind.</div><div><br></div></div>
 
---e89a8fb1ec28666f0f0519ab11fb--
+--001a11347920551cd70519ac2810--
 
 
---===============1980416540==
+--===============1784248606==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -70,4 +103,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1980416540==--
+--===============1784248606==--
