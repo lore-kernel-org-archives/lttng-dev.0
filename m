@@ -1,38 +1,20 @@
-From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Subject: Re: [PATCH] Fix: call_rcu_thread() affinity failure
-Date: Mon, 29 Jun 2015 16:15:30 -0700
-Message-ID: <20150629231530.GY3717__34040.9642587931$1435619799$gmane$org@linux.vnet.ibm.com>
-References: <1435618594-16125-1-git-send-email-mathieu.desnoyers@efficios.com>
- <20150629230148.GW3717@linux.vnet.ibm.com>
- <1917360537.1139.1435619175624.JavaMail.zimbra@efficios.com>
-Reply-To: paulmck@linux.vnet.ibm.com
+From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
+Subject: Re: Compilation error in lttng-tools (version.c)
+Date: Tue, 30 Jun 2015 10:21:55 -0400
+Message-ID: <5592A603.9080508__30617.8449224264$1435674190$gmane$org@efficios.com>
+References: <B06A27731337844B9C410EFD0660F0FB0F9BF2D0@eusaamb109.ericsson.se>
+ <5591AB85.60903@efficios.com>
+ <B06A27731337844B9C410EFD0660F0FB0F9BF428@eusaamb109.ericsson.se>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e37.co.us.ibm.com ([32.97.110.158])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <paulmck@linux.vnet.ibm.com>) id 1Z9iH6-0001qD-3Z
- for lttng-dev@lists.lttng.org; Mon, 29 Jun 2015 19:15:44 -0400
-Received: from /spool/local
- by e37.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
- Violators will be prosecuted
- for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
- Mon, 29 Jun 2015 17:15:34 -0600
-Received: from b03cxnp08025.gho.boulder.ibm.com
- (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
- by d03dlp02.boulder.ibm.com (Postfix) with ESMTP id 48A713E40041
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jun 2015 17:15:32 -0600 (MDT)
-Received: from d03av04.boulder.ibm.com (d03av04.boulder.ibm.com [9.17.195.170])
- by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
- t5TNEn2a51839228
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jun 2015 16:14:49 -0700
-Received: from d03av04.boulder.ibm.com (loopback [127.0.0.1])
- by d03av04.boulder.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with ESMTP id
- t5TNFVhi004715
- for <lttng-dev@lists.lttng.org>; Mon, 29 Jun 2015 17:15:32 -0600
-Content-Disposition: inline
-In-Reply-To: <1917360537.1139.1435619175624.JavaMail.zimbra@efficios.com>
+ (envelope-from <Jonathan.rajotte-julien@efficios.com>)
+ id 1Z9wQG-0006UR-E7
+ for lttng-dev@lists.lttng.org; Tue, 30 Jun 2015 10:22:06 -0400
+In-Reply-To: <B06A27731337844B9C410EFD0660F0FB0F9BF428@eusaamb109.ericsson.se>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -41,160 +23,114 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Daniel Olivier <daniel.olivier@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Mon, Jun 29, 2015 at 11:06:15PM +0000, Mathieu Desnoyers wrote:
-> ----- On Jun 29, 2015, at 7:01 PM, Paul E. McKenney paulmck@linux.vnet.ibm.com wrote:
-> 
-> > On Mon, Jun 29, 2015 at 06:56:34PM -0400, Mathieu Desnoyers wrote:
-> >> Make call_rcu_thread() affine itself more persistently
-> >> 
-> >> Currently, URCU simply fails if a call_rcu_thread() fails to affine
-> >> itself. This is problematic when execution is constrained by cgroup
-> >> and hotunplugged CPUs. This commit therefore makes call_rcu_thread()
-> >> retry setting its affinity every 256 grace periods, but only if it
-> >> detects that it migrated to a different CPU. Since sched_getcpu() is
-> >> cheap on many architectures, this check is less costly than going
-> >> through a system call.
-> >> 
-> >> Reported-by: Michael Jeanson <mjeanson@efficios.com>
-> >> Suggested-by: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-> >> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > 
-> > A couple of issues, but otherwise good.  (They might even be issues
-> > with your code rather than my eyes, you never know!)
-> 
-> Your eyes are very good indeed. Fixing those 2 nits, and adding
-> your Acked-by.
 
-Very good!
+Hi,
 
-That said, I would feel better about my eyes had they not inserted the
-bug being fixed.  ;-)
+On 2015-06-29 04:52 PM, Daniel Olivier wrote:
+> Hi,
+>
+> Indeed, I'm running autoconf 2.63:
+>
+> SC-1:~/trace_ea/foss/lttng-tools # autoconf --version
+> autoconf (GNU Autoconf) 2.63
+> ...
+> SC-1:~/trace_ea/foss/lttng-tools # automake --version
+> automake (GNU automake) 1.10.1
+> ...
+>
+> The system is SLES11:
+> SC-1:~/trace_ea/foss/lttng-tools # uname -a
+> Linux SC-1 3.0.101-0.47.52-default #1 SMP Thu Mar 26 10:55:49 UTC 2015 (0e3c7c8) x86_64 x86_64 x86_64 GNU/Linux
+> SC-1:~/trace_ea/foss/lttng-tools # cat /etc/issue
+>
+> Welcome to SUSE Linux Enterprise Server 11 SP3  (x86_64) - Kernel \r (\l).
+>
+> Is there a way to check the autoconf version (during configuration), in order to make the error more explicit?
 
-							Thanx, Paul
+We would add a check for autoconf >= 2.64 during the bootstrap sequence. 
+But this not solve the issue for SLES11sp3.
+I did find people trying to support both 2.63 and >= 2.64 [1] but it has 
+some downside. It might be a way to do it.
 
-> Thanks!
-> 
-> Mathieu
-> 
-> > 
-> >							Thanx, Paul
-> > 
-> >> ---
-> >>  urcu-call-rcu-impl.h | 36 +++++++++++++++++++++++++++++++-----
-> >>  1 file changed, 31 insertions(+), 5 deletions(-)
-> >> 
-> >> diff --git a/urcu-call-rcu-impl.h b/urcu-call-rcu-impl.h
-> >> index 5cc02d9..b82a59b 100644
-> >> --- a/urcu-call-rcu-impl.h
-> >> +++ b/urcu-call-rcu-impl.h
-> >> @@ -45,6 +45,9 @@
-> >>  #include "urcu/ref.h"
-> >>  #include "urcu-die.h"
-> >> 
-> >> +#define SET_AFFINITY_CHECK_PERIOD		(1U << 8)	/* 256 */
-> >> +#define SET_AFFINITY_CHECK_PERIOD_MASK		(SET_AFFINITY_CHECK_PERIOD - 1)
-> >> +
-> >>  /* Data structure that identifies a call_rcu thread. */
-> >> 
-> >>  struct call_rcu_data {
-> >> @@ -62,6 +65,7 @@ struct call_rcu_data {
-> >>  	unsigned long qlen; /* maintained for debugging. */
-> >>  	pthread_t tid;
-> >>  	int cpu_affinity;
-> >> +	unsigned long gp_count;
-> >>  	struct cds_list_head list;
-> >>  } __attribute__((aligned(CAA_CACHE_LINE_SIZE)));
-> >> 
-> >> @@ -203,22 +207,42 @@ static void call_rcu_unlock(pthread_mutex_t *pmp)
-> >>  		urcu_die(ret);
-> >>  }
-> >> 
-> >> +/*
-> >> + * Periodically retry setting CPU affinity if we migrate.
-> >> + * Losing affinity can be caused by CPU hotunplug/hotplug, or by
-> >> + * cpuset(7).
-> >> + */
-> >>  #if HAVE_SCHED_SETAFFINITY
-> >>  static
-> >>  int set_thread_cpu_affinity(struct call_rcu_data *crdp)
-> >>  {
-> >>  	cpu_set_t mask;
-> >> +	int ret;
-> >> 
-> >>  	if (crdp->cpu_affinity < 0)
-> >>  		return 0;
-> >> +	if (++crdp->gp_count & SET_AFFINITY_CHECK_PERIOD_MASK)
-> >> +		return 0;
-> >> +	if (urcu_sched_getcpu() != crdp->cpu_affinity)
-> > 
-> > Don't we want "==" here instead of "!="?
-> > 
-> >> +		return 0;
-> >> 
-> >>  	CPU_ZERO(&mask);
-> >>  	CPU_SET(crdp->cpu_affinity, &mask);
-> >>  #if SCHED_SETAFFINITY_ARGS == 2
-> >> -	return sched_setaffinity(0, &mask);
-> >> +	ret = sched_setaffinity(0, &mask);
-> >>  #else
-> >> -	return sched_setaffinity(0, sizeof(mask), &mask);
-> >> +	ret = sched_setaffinity(0, sizeof(mask), &mask);
-> >>  #endif
-> >> +	/*
-> >> +	 * EINVAL is fine: can be caused by hotunplugged CPUs, or by
-> >> +	 * cpuset(7). This is why we should always retry is we detect
-> > 
-> > s/is we detect/if we detect/
-> > 
-> >> +	 * migration.
-> >> +	 */
-> >> +	if (ret && errno == EINVAL) {
-> >> +		ret = 0;
-> >> +		errno = 0;
-> >> +	}
-> >> +	return ret;
-> >>  }
-> >>  #else
-> >>  static
-> >> @@ -275,10 +299,8 @@ static void *call_rcu_thread(void *arg)
-> >>  	unsigned long cbcount;
-> >>  	struct call_rcu_data *crdp = (struct call_rcu_data *) arg;
-> >>  	int rt = !!(uatomic_read(&crdp->flags) & URCU_CALL_RCU_RT);
-> >> -	int ret;
-> >> 
-> >> -	ret = set_thread_cpu_affinity(crdp);
-> >> -	if (ret)
-> >> +	if (set_thread_cpu_affinity(crdp))
-> >>  		urcu_die(errno);
-> >> 
-> >>  	/*
-> >> @@ -298,6 +320,9 @@ static void *call_rcu_thread(void *arg)
-> >>  		struct cds_wfcq_node *cbs, *cbs_tmp_n;
-> >>  		enum cds_wfcq_ret splice_ret;
-> >> 
-> >> +		if (set_thread_cpu_affinity(crdp))
-> >> +			urcu_die(errno);
-> >> +
-> >>  		if (uatomic_read(&crdp->flags) & URCU_CALL_RCU_PAUSE) {
-> >>  			/*
-> >>  			 * Pause requested. Become quiescent: remove
-> >> @@ -391,6 +416,7 @@ static void call_rcu_data_init(struct call_rcu_data **crdpp,
-> >>  	crdp->flags = flags;
-> >>  	cds_list_add(&crdp->list, &call_rcu_data_list);
-> >>  	crdp->cpu_affinity = cpu_affinity;
-> >> +	crdp->gp_count = 0;
-> >>  	cmm_smp_mb();  /* Structure initialized before pointer is planted. */
-> >>  	*crdpp = crdp;
-> >>  	ret = pthread_create(&crdp->tid, NULL, call_rcu_thread, crdp);
-> >> --
-> >> 2.1.4
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-> 
+One way to solve the issue would be to do daily distribution tarballs 
+(signed of course) so you dont have to bootstrap everything.
+
+Cheers !
+
+[1] https://github.com/gdnsd/gdnsd/blob/master/configure.ac
+
+
+>
+> Thanks,
+> Dan
+>
+> -----Original Message-----
+> From: Jonathan Rajotte Julien [mailto:Jonathan.rajotte-julien@efficios.com]
+> Sent: Monday, June 29, 2015 4:33 PM
+> To: lttng-dev@lists.lttng.org
+> Subject: Re: [lttng-dev] Compilation error in lttng-tools (version.c)
+>
+> Hey Daniel,
+>
+> As you suggested it look like it's not generated on ./configure when it should.
+> The problem come from the AC_INIT macro interpretation from Autoconf.
+> The AC_INIT macro we currently use was
+> introduced in autoconf 2.64. Look like you are running Autoconf 2.63.
+>
+> AC_INIT 2.63:
+> *AC_INIT*(package, version,[bug-report],[tarname])
+>
+> AC_INIT 2.64:
+> *AC_INIT*(package, version,[bug-report],[tarname],[url])
+>
+> Which distribution are you using?
+>
+> Cheers !
+>
+> On 2015-06-29 03:52 PM, Daniel Olivier wrote:
+>> I am getting:
+>>
+>> make[3]: Entering directory `/root/trace_ea/foss/lttng-tools/src/bin/lttng'
+>> depbase=`echo commands/version.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+>>           gcc -DHAVE_CONFIG_H -I../../.. -I../../.. -I../../../src -I../../../include -include config.h  -I../../../include -I../../../src -DINSTALL_BIN_PATH=\""/usr/local/bin"\"   -Wall -g -O2 -g -fno-strict-aliasing -MT commands/version.o -MD -MP -MF $depbase.Tpo -c -o commands/version.o commands/version.c &&\
+>>           mv -f $depbase.Tpo $depbase.Po
+>> commands/version.c: In function 'create_version':
+>> commands/version.c:71: error: 'PACKAGE_URL' undeclared (first use in
+>> this function)
+>> commands/version.c:71: error: (Each undeclared identifier is reported
+>> only once
+>> commands/version.c:71: error: for each function it appears in.)
+>> make[3]: *** [commands/version.o] Error 1
+>>
+>> I gather that PACKAGE_URL should get generated by configure step into config.h (or something)...
+>>
+>> Attached is config.log, but I didn't find that it contained any errors pertaining to this.
+>>
+>> Anybody ever see this?
+>>
+>> Thanks,
+>> Daniel
+>>
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> --
+> Jonathan R. Julien
+> Efficios
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Jonathan R. Julien
+Efficios
