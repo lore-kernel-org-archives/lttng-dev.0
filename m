@@ -1,20 +1,21 @@
-From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-Subject: Re: Compilation error in lttng-tools (version.c)
-Date: Tue, 30 Jun 2015 10:21:55 -0400
-Message-ID: <5592A603.9080508__30617.8449224264$1435674190$gmane$org@efficios.com>
-References: <B06A27731337844B9C410EFD0660F0FB0F9BF2D0@eusaamb109.ericsson.se>
- <5591AB85.60903@efficios.com>
- <B06A27731337844B9C410EFD0660F0FB0F9BF428@eusaamb109.ericsson.se>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH urcu] Fix: make benchmark test run in oot
+	build
+Date: Tue, 30 Jun 2015 15:18:24 +0000 (UTC)
+Message-ID: <2061220050.1315.1435677504889.JavaMail.zimbra__19260.3406533182$1435677598$gmane$org@efficios.com>
+References: <1435676655-16099-1-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Jonathan.rajotte-julien@efficios.com>)
- id 1Z9wQG-0006UR-E7
- for lttng-dev@lists.lttng.org; Tue, 30 Jun 2015 10:22:06 -0400
-In-Reply-To: <B06A27731337844B9C410EFD0660F0FB0F9BF428@eusaamb109.ericsson.se>
+ (envelope-from <compudj@efficios.com>) id 1Z9xJ8-0006nS-Cy
+ for lttng-dev@lists.lttng.org; Tue, 30 Jun 2015 11:18:51 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 77D1C340367
+ for <lttng-dev@lists.lttng.org>; Tue, 30 Jun 2015 15:18:41 +0000 (UTC)
+In-Reply-To: <1435676655-16099-1-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,114 +24,100 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Daniel Olivier <daniel.olivier@ericsson.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
+Merged into master and stable-0.8, thanks!
 
-Hi,
+Mathieu
 
-On 2015-06-29 04:52 PM, Daniel Olivier wrote:
-> Hi,
->
-> Indeed, I'm running autoconf 2.63:
->
-> SC-1:~/trace_ea/foss/lttng-tools # autoconf --version
-> autoconf (GNU Autoconf) 2.63
-> ...
-> SC-1:~/trace_ea/foss/lttng-tools # automake --version
-> automake (GNU automake) 1.10.1
-> ...
->
-> The system is SLES11:
-> SC-1:~/trace_ea/foss/lttng-tools # uname -a
-> Linux SC-1 3.0.101-0.47.52-default #1 SMP Thu Mar 26 10:55:49 UTC 2015 (0e3c7c8) x86_64 x86_64 x86_64 GNU/Linux
-> SC-1:~/trace_ea/foss/lttng-tools # cat /etc/issue
->
-> Welcome to SUSE Linux Enterprise Server 11 SP3  (x86_64) - Kernel \r (\l).
->
-> Is there a way to check the autoconf version (during configuration), in order to make the error more explicit?
+----- On Jun 30, 2015, at 11:04 AM, Michael Jeanson mjeanson@efficios.com wrote:
 
-We would add a check for autoconf >= 2.64 during the bootstrap sequence. 
-But this not solve the issue for SLES11sp3.
-I did find people trying to support both 2.63 and >= 2.64 [1] but it has 
-some downside. It might be a way to do it.
-
-One way to solve the issue would be to do daily distribution tarballs 
-(signed of course) so you dont have to bootstrap everything.
-
-Cheers !
-
-[1] https://github.com/gdnsd/gdnsd/blob/master/configure.ac
-
-
->
-> Thanks,
-> Dan
->
-> -----Original Message-----
-> From: Jonathan Rajotte Julien [mailto:Jonathan.rajotte-julien@efficios.com]
-> Sent: Monday, June 29, 2015 4:33 PM
-> To: lttng-dev@lists.lttng.org
-> Subject: Re: [lttng-dev] Compilation error in lttng-tools (version.c)
->
-> Hey Daniel,
->
-> As you suggested it look like it's not generated on ./configure when it should.
-> The problem come from the AC_INIT macro interpretation from Autoconf.
-> The AC_INIT macro we currently use was
-> introduced in autoconf 2.64. Look like you are running Autoconf 2.63.
->
-> AC_INIT 2.63:
-> *AC_INIT*(package, version,[bug-report],[tarname])
->
-> AC_INIT 2.64:
-> *AC_INIT*(package, version,[bug-report],[tarname],[url])
->
-> Which distribution are you using?
->
-> Cheers !
->
-> On 2015-06-29 03:52 PM, Daniel Olivier wrote:
->> I am getting:
->>
->> make[3]: Entering directory `/root/trace_ea/foss/lttng-tools/src/bin/lttng'
->> depbase=`echo commands/version.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
->>           gcc -DHAVE_CONFIG_H -I../../.. -I../../.. -I../../../src -I../../../include -include config.h  -I../../../include -I../../../src -DINSTALL_BIN_PATH=\""/usr/local/bin"\"   -Wall -g -O2 -g -fno-strict-aliasing -MT commands/version.o -MD -MP -MF $depbase.Tpo -c -o commands/version.o commands/version.c &&\
->>           mv -f $depbase.Tpo $depbase.Po
->> commands/version.c: In function 'create_version':
->> commands/version.c:71: error: 'PACKAGE_URL' undeclared (first use in
->> this function)
->> commands/version.c:71: error: (Each undeclared identifier is reported
->> only once
->> commands/version.c:71: error: for each function it appears in.)
->> make[3]: *** [commands/version.o] Error 1
->>
->> I gather that PACKAGE_URL should get generated by configure step into config.h (or something)...
->>
->> Attached is config.log, but I didn't find that it contained any errors pertaining to this.
->>
->> Anybody ever see this?
->>
->> Thanks,
->> Daniel
->>
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+> ---
+> tests/benchmark/Makefile.am       | 32 ++++++++++++++++++++++++++++++--
+> tests/benchmark/common.sh         |  0
+> tests/benchmark/runpaul-phase5.sh |  0
+> tests/benchmark/runpaul-phase6.sh |  0
+> 4 files changed, 30 insertions(+), 2 deletions(-)
+> mode change 100644 => 100755 tests/benchmark/common.sh
+> mode change 100644 => 100755 tests/benchmark/runpaul-phase5.sh
+> mode change 100644 => 100755 tests/benchmark/runpaul-phase6.sh
+> 
+> diff --git a/tests/benchmark/Makefile.am b/tests/benchmark/Makefile.am
+> index 85d454d..e25dd8f 100644
+> --- a/tests/benchmark/Makefile.am
+> +++ b/tests/benchmark/Makefile.am
+> @@ -3,6 +3,22 @@ AM_LDFLAGS=-lpthread
+> endif
+> AM_CFLAGS=-I$(top_srcdir) -I$(top_builddir) -I$(top_srcdir)/tests/common -g
+> 
+> +SCRIPT_LIST = common.sh \
+> +	runall.sh \
+> +	runhash.sh \
+> +	runtests.sh \
+> +	runpaul-phase1.sh \
+> +	runpaul-phase2.sh \
+> +	runpaul-phase3.sh \
+> +	runpaul-phase4.sh \
+> +	runpaul-phase5.sh \
+> +	runpaul-phase6.sh \
+> +	runpaul-phase7.sh \
+> +	runtests-batch.sh \
+> +	subphase4.sh
+> +
+> +dist_noinst_SCRIPTS = $(SCRIPT_LIST)
+> +
+> noinst_PROGRAMS = test_urcu test_urcu_dynamic_link test_urcu_timing \
+> 	test_urcu_signal test_urcu_signal_dynamic_link test_urcu_signal_timing \
+>         test_rwlock_timing test_rwlock test_perthreadlock_timing \
+> @@ -32,8 +48,6 @@ URCU_CDS_LIB=$(top_builddir)/liburcu-cds.la
+> 
+> DEBUG_YIELD_LIB=$(builddir)/../common/libdebug-yield.la
+> 
+> -EXTRA_DIST = *.sh
+> -
+> test_urcu_SOURCES = test_urcu.c
+> test_urcu_LDADD = $(URCU_LIB)
+> 
+> @@ -194,6 +208,20 @@ test_urcu_hash_SOURCES = test_urcu_hash.c test_urcu_hash.h
+> \
+> test_urcu_hash_CFLAGS = -DRCU_QSBR $(AM_CFLAGS)
+> test_urcu_hash_LDADD = $(URCU_QSBR_LIB) $(URCU_COMMON_LIB) $(URCU_CDS_LIB)
+> 
+> +all-local:
+> +	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
+> +		for script in $(SCRIPT_LIST); do \
+> +			cp -f $(srcdir)/$$script $(builddir); \
+> +		done; \
+> +	fi
+> +
+> +clean-local:
+> +	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
+> +		for script in $(SCRIPT_LIST); do \
+> +			rm -f $(builddir)/$$script; \
+> +		done; \
+> +	fi
+> +
+> .PHONY: bench
+> 
+> bench:
+> diff --git a/tests/benchmark/common.sh b/tests/benchmark/common.sh
+> old mode 100644
+> new mode 100755
+> diff --git a/tests/benchmark/runpaul-phase5.sh
+> b/tests/benchmark/runpaul-phase5.sh
+> old mode 100644
+> new mode 100755
+> diff --git a/tests/benchmark/runpaul-phase6.sh
+> b/tests/benchmark/runpaul-phase6.sh
+> old mode 100644
+> new mode 100755
 > --
-> Jonathan R. Julien
-> Efficios
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 1.9.1
 
 -- 
-Jonathan R. Julien
-Efficios
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
