@@ -1,21 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: java class check when
- uudecode is not present
-Date: Tue, 30 Jun 2015 21:09:12 +0000 (UTC)
-Message-ID: <1332006543.1502.1435698552905.JavaMail.zimbra__40444.5977685556$1435698642$gmane$org@efficios.com>
-References: <1435697994-7682-1-git-send-email-mjeanson@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-ust] Fix: running java examples out of tree
+Date: Tue, 30 Jun 2015 17:32:56 -0400
+Message-ID: <1435699976-8809-1-git-send-email-mjeanson__23006.3853240155$1435700069$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZA2mS-0000AE-Dk
- for lttng-dev@lists.lttng.org; Tue, 30 Jun 2015 17:09:32 -0400
+ (envelope-from <mjeanson@efficios.com>) id 1ZA39V-0000Hr-Sr
+ for lttng-dev@lists.lttng.org; Tue, 30 Jun 2015 17:33:20 -0400
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 8DD2534049E
- for <lttng-dev@lists.lttng.org>; Tue, 30 Jun 2015 21:09:19 +0000 (UTC)
-In-Reply-To: <1435697994-7682-1-git-send-email-mjeanson@efficios.com>
+ by mail.efficios.com (Postfix) with ESMTP id B19183404A9
+ for <lttng-dev@lists.lttng.org>; Tue, 30 Jun 2015 21:33:08 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,47 +21,61 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-merged into stable-2.6 and master, thanks!
+---
+ doc/examples/java-jul/run   | 7 ++++++-
+ doc/examples/java-log4j/run | 7 ++++++-
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-Mathieu
-
------ On Jun 30, 2015, at 4:59 PM, Michael Jeanson mjeanson@efficios.com wrote:
-
-> On systems where 'uudecode' is present, the java class check will
-> run a precompiled class file in the local directory. If the CLASSPATH
-> variable doesn't contain "." the test will fail regardless of the
-> presence of the tested for class on the classpath.
-> 
-> This fix makes the behavior of the test consistant whether 'uudecode'
-> is present or not.
-> 
-> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-> ---
-> config/ax_check_class.m4 | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/config/ax_check_class.m4 b/config/ax_check_class.m4
-> index 098aa77..42b51d7 100644
-> --- a/config/ax_check_class.m4
-> +++ b/config/ax_check_class.m4
-> @@ -118,7 +118,7 @@ EOF
->                         ac_cv_prog_uudecode_base64=no
->                 fi
->         rm -f Test.uue
-> -        if AC_TRY_COMMAND($JAVA $JAVAFLAGS Test $1) >/dev/null 2>&1; then
-> +        if AC_TRY_COMMAND($JAVA -classpath ".:$CLASSPATH" $JAVAFLAGS Test $1)
-> >/dev/null 2>&1; then
->                 eval "ac_cv_class_$ac_var_name=yes"
->         else
->                 eval "ac_cv_class_$ac_var_name=no"
-> --
-> 1.9.1
-
+diff --git a/doc/examples/java-jul/run b/doc/examples/java-jul/run
+index 37a3cfd..6deb6fd 100755
+--- a/doc/examples/java-jul/run
++++ b/doc/examples/java-jul/run
+@@ -8,6 +8,7 @@
+ 
+ DIR=`dirname $0`
+ JARFILE="liblttng-ust-agent.jar"
++JAVA_OPTIONS=""
+ 
+ cd $DIR
+ 
+@@ -20,6 +21,10 @@ else
+ 	#LIBPATH="/usr/local/lib:/usr/lib"
+ fi
+ 
+-java -classpath "$CLASSPATH:." -Djava.library.path="$LIBPATH" Hello
++if [ "x$LIBPATH" != "x" ]; then
++	JAVA_OPTIONS="$JAVA_OPTIONS -Djava.library.path=\"$LIBPATH\""
++fi
++
++java -classpath "$CLASSPATH:." $JAVA_OPTIONS Hello
+ 
+ cd -
+diff --git a/doc/examples/java-log4j/run b/doc/examples/java-log4j/run
+index 9dca608..91f8f5d 100755
+--- a/doc/examples/java-log4j/run
++++ b/doc/examples/java-log4j/run
+@@ -8,6 +8,7 @@
+ 
+ DIR=`dirname $0`
+ JARFILE="liblttng-ust-agent.jar"
++JAVA_OPTIONS=""
+ 
+ # If system classpath is empty, try to guess log4j location
+ if [ "x$CLASSPATH" = "x" ]; then
+@@ -25,6 +26,10 @@ else
+ 	#LIBPATH="/usr/local/lib:/usr/lib"
+ fi
+ 
+-java -classpath "$CLASSPATH:." -Djava.library.path="$LIBPATH" Hello
++if [ "x$LIBPATH" != "x" ]; then
++	JAVA_OPTIONS="$JAVA_OPTIONS -Djava.library.path=\"$LIBPATH\""
++fi
++
++java -classpath "$CLASSPATH:." $JAVA_OPTIONS Hello
+ 
+ cd -
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+1.9.1
