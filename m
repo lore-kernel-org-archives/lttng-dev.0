@@ -1,18 +1,18 @@
-From: jamie explorer <jamieexplorer@gmail.com>
-Subject: Re: application changes to support lttng
-Date: Tue, 30 Jun 2015 17:08:01 -0700
-Message-ID: <CACh_V578QYMi8CvhmvtR+QOY33maFNB6SB-eHBVOGOoJgUZ3HA__48879.4967801825$1435855746$gmane$org@mail.gmail.com>
-References: <CACh_V54iounQNr+jxP85YjPuivjMTgowOCuTaox9fMRC9=ty0w@mail.gmail.com>
+From: Aravind HT <aravind.ht@gmail.com>
+Subject: Re: Valgrind Memory Error in lttng-relayd
+Date: Thu, 2 Jul 2015 22:12:13 +0530
+Message-ID: <CACd+_b70iWNJS50c2ZKiRcN1QEmkaHyDHFHpSH4rSmfHS=qw5g__38472.8848039687$1435855822$gmane$org@mail.gmail.com>
+References: <CACd+_b7wB+RQNMBnFj6HZgHi4_a3-_giVfBJFBwkLeCbi8Hr9Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0274386344=="
+Content-Type: multipart/mixed; boundary="===============0521850073=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-oi0-f51.google.com ([209.85.218.51])
+Received: from mail-la0-f48.google.com ([209.85.215.48])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jamieexplorer@gmail.com>) id 1ZA5ZP-00019N-NZ
- for lttng-dev@lists.lttng.org; Tue, 30 Jun 2015 20:08:18 -0400
-Received: by oigx81 with SMTP id x81so20193074oig.1
- for <lttng-dev@lists.lttng.org>; Tue, 30 Jun 2015 17:08:01 -0700 (PDT)
-In-Reply-To: <CACh_V54iounQNr+jxP85YjPuivjMTgowOCuTaox9fMRC9=ty0w@mail.gmail.com>
+ (envelope-from <aravind.ht@gmail.com>) id 1ZAhZ5-0004lj-JH
+ for lttng-dev@lists.lttng.org; Thu, 02 Jul 2015 12:42:30 -0400
+Received: by lagx9 with SMTP id x9so64969796lag.1
+ for <lttng-dev@lists.lttng.org>; Thu, 02 Jul 2015 09:42:13 -0700 (PDT)
+In-Reply-To: <CACd+_b7wB+RQNMBnFj6HZgHi4_a3-_giVfBJFBwkLeCbi8Hr9Q@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,85 +24,105 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0274386344==
-Content-Type: multipart/alternative; boundary=047d7b676d52bb92b90519c51d87
+--===============0521850073==
+Content-Type: multipart/alternative; boundary=001a1132f6821baccd0519e71f8f
 
---047d7b676d52bb92b90519c51d87
+--001a1132f6821baccd0519e71f8f
 Content-Type: text/plain; charset=UTF-8
 
-Hi lttng-dev,
+Possible Solution :
 
-sorry for asking basic questions.
-Can you guys point me to any documentation which has this info. lttng.org
-documentation doesnt have info about this.
+The following changes seem to be missing from the actual code
 
-How does the app register to use lttng?
-how do sessiond, app and lttng-ust interact? is there any socket from every
-app to sessiond?
-How is the app modified when instrumented using lttng? are there any
-threads added?
-Are there any powerful tools for analysis on collected traces.
-
-/Jam
+http://git.lttng.org/?p=lttng-tools.git;a=commitdiff;h=cd2ef1ef1d54ced9e4d0d03b865bb7fc6a905f80
 
 
-On Mon, Jun 29, 2015 at 10:03 AM, jamie explorer <jamieexplorer@gmail.com>
-wrote:
+only the connection.h changes have been absorbed, while the main.c changes
+left out.
 
-> Hello,
+On Mon, Jun 29, 2015 at 11:51 PM, Aravind HT <aravind.ht@gmail.com> wrote:
+
+> Hi,
 >
-> I have just started using lttng and still looking at documentation.
-> Can you help me with some info.
+> I ran valgrind on lttng-relayd for a soft hang issue that I had reported
+> earlier.
+> http://lists.lttng.org/pipermail/lttng-dev/2015-May/024533.html
 >
-> How does the app register to use lttng?
-> how do sessiond, app and lttng-ust interact? is there any socket from
-> every app to sessiond?
-> How is the app modified when instrumented using lttng? are there any
-> threads added?
-> when lttng instrumentation is linked along with app
-> Are there any powerful tools for analysis on collected traces.
+> Below are the list of errors that I found.
 >
-> /Jam
+> ==793== Thread 4:
+> ==793== Invalid write of size 8
+> ==793==    at 0x406038: cds_list_add (list.h:53)
+> ==793==    by 0x409442: queue_stream (main.c:1175)
+> ==793==    by 0x409AB7: relay_add_stream (main.c:1274)
+> ==793==    by 0x40C47A: relay_process_control (main.c:2099)
+> ==793==    by 0x40DBB1: relay_thread_worker (main.c:2574)
+> ==793==    by 0x5BDAFE2: start_thread (pthread_create.c:312)
+> ==793==    by 0x5ED8AFC: clone (clone.S:111)
+> ==793==  Address 0x6e09040 is 64 bytes inside a block of size 312 free'd
+> ==793==    at 0x4C2898C: free (in
+> /usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so)
+> ==793==    by 0x418EF8: rcu_destroy_stream (stream.c:33)
+> ==793==    by 0x5079C94: ??? (in /usr/lib64/liburcu.so.2.0.0)
+> ==793==    by 0x5BDAFE2: start_thread (pthread_create.c:312)
+> ==793==    by 0x5ED8AFC: clone (clone.S:111)
+> ==793==
+>
+> Are there any known bugs/fixes for these ?
+>
+>
+> Regards,
+> Aravind.
+>
 >
 
---047d7b676d52bb92b90519c51d87
+--001a1132f6821baccd0519e71f8f
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Hi lttng-dev,<div><br></div><div>sorry for asking basic qu=
-estions.</div><div>Can you guys point me to any documentation which has thi=
-s info. <a href=3D"http://lttng.org">lttng.org</a> documentation doesnt hav=
-e info about this.</div><div><br></div><div><div style=3D"font-size:12.8000=
-001907349px">How does the app register to use lttng?</div><div style=3D"fon=
-t-size:12.8000001907349px">how do sessiond, app and lttng-ust interact? is =
-there any socket from every app to sessiond?</div><div style=3D"font-size:1=
-2.8000001907349px">How is the app modified when instrumented using lttng? a=
-re there any threads added?=C2=A0<span style=3D"font-size:12.8000001907349p=
-x"></span></div><div style=3D"font-size:12.8000001907349px"><span style=3D"=
-font-size:12.8000001907349px">Are there any powerful tools for analysis on =
-collected traces.</span><br></div></div><div style=3D"font-size:12.80000019=
-07349px"><span style=3D"font-size:12.8000001907349px"><br></span></div><div=
- style=3D"font-size:12.8000001907349px">/Jam</div><div style=3D"font-size:1=
-2.8000001907349px"><span style=3D"font-size:12.8000001907349px"><br></span>=
-</div></div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Mo=
-n, Jun 29, 2015 at 10:03 AM, jamie explorer <span dir=3D"ltr">&lt;<a href=
-=3D"mailto:jamieexplorer@gmail.com" target=3D"_blank">jamieexplorer@gmail.c=
-om</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"marg=
-in:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div dir=3D"ltr"=
->Hello,<div><br></div><div>I have just started using lttng and still lookin=
-g at documentation.</div><div>Can you help me with some info.</div><div><br=
-></div><div>How does the app register to use lttng?</div><div>how do sessio=
-nd, app and lttng-ust interact? is there any socket from every app to sessi=
-ond?</div><div>How is the app modified when instrumented using lttng? are t=
-here any threads added?</div><div>when lttng instrumentation is linked alon=
-g with app</div><div>Are there any powerful tools for analysis on collected=
- traces.</div><div><br></div><div>/Jam=C2=A0</div></div>
+<div dir=3D"ltr">Possible Solution :<div><br></div><div>The following chang=
+es seem to be missing from the actual code</div><div><p class=3D"MsoNormal"=
+><span style=3D"font-size:11pt;font-family:Calibri,sans-serif;color:rgb(31,=
+73,125)"><a href=3D"http://git.lttng.org/?p=3Dlttng-tools.git;a=3Dcommitdif=
+f;h=3Dcd2ef1ef1d54ced9e4d0d03b865bb7fc6a905f80">http://git.lttng.org/?p=3Dl=
+ttng-tools.git;a=3Dcommitdiff;h=3Dcd2ef1ef1d54ced9e4d0d03b865bb7fc6a905f80<=
+/a></span></p><p class=3D"MsoNormal"><br></p><p class=3D"MsoNormal">only th=
+e connection.h changes have been absorbed, while the main.c changes left ou=
+t.</p></div></div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote"=
+>On Mon, Jun 29, 2015 at 11:51 PM, Aravind HT <span dir=3D"ltr">&lt;<a href=
+=3D"mailto:aravind.ht@gmail.com" target=3D"_blank">aravind.ht@gmail.com</a>=
+&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0=
+ 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div dir=3D"ltr">Hi,<d=
+iv><br></div><div>I ran valgrind on lttng-relayd for a soft hang issue that=
+ I had reported earlier.</div><div><a href=3D"http://lists.lttng.org/piperm=
+ail/lttng-dev/2015-May/024533.html" target=3D"_blank">http://lists.lttng.or=
+g/pipermail/lttng-dev/2015-May/024533.html</a><br></div><div><br></div><div=
+>Below are the list of errors that I found.</div><div><br></div><div><div>=
+=3D=3D793=3D=3D Thread 4:</div><div>=3D=3D793=3D=3D Invalid write of size 8=
+</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0at 0x406038: cds_list_add (list.h:5=
+3)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x409442: queue_stream (main.c=
+:1175)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x409AB7: relay_add_stream=
+ (main.c:1274)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x40C47A: relay_pr=
+ocess_control (main.c:2099)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x40D=
+BB1: relay_thread_worker (main.c:2574)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=
+=A0by 0x5BDAFE2: start_thread (pthread_create.c:312)</div><div>=3D=3D793=3D=
+=3D =C2=A0 =C2=A0by 0x5ED8AFC: clone (clone.S:111)</div><div>=3D=3D793=3D=
+=3D =C2=A0Address 0x6e09040 is 64 bytes inside a block of size 312 free&#39=
+;d</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0at 0x4C2898C: free (in /usr/lib64=
+/valgrind/vgpreload_memcheck-amd64-linux.so)</div><div>=3D=3D793=3D=3D =C2=
+=A0 =C2=A0by 0x418EF8: rcu_destroy_stream (stream.c:33)</div><div>=3D=3D793=
+=3D=3D =C2=A0 =C2=A0by 0x5079C94: ??? (in /usr/lib64/liburcu.so.2.0.0)</div=
+><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x5BDAFE2: start_thread (pthread_crea=
+te.c:312)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x5ED8AFC: clone (clone=
+.S:111)</div><div>=3D=3D793=3D=3D</div></div><div><br></div><div>Are there =
+any known bugs/fixes for these ?</div><div><br></div><div><br></div><div>Re=
+gards,</div><div>Aravind.</div><div><br></div></div>
 </blockquote></div><br></div>
 
---047d7b676d52bb92b90519c51d87--
+--001a1132f6821baccd0519e71f8f--
 
 
---===============0274386344==
+--===============0521850073==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -113,4 +133,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0274386344==--
+--===============0521850073==--
