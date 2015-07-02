@@ -1,18 +1,17 @@
-From: Aravind HT <aravind.ht@gmail.com>
-Subject: Re: Valgrind Memory Error in lttng-relayd
-Date: Thu, 2 Jul 2015 22:12:13 +0530
-Message-ID: <CACd+_b70iWNJS50c2ZKiRcN1QEmkaHyDHFHpSH4rSmfHS=qw5g__38472.8848039687$1435855822$gmane$org@mail.gmail.com>
-References: <CACd+_b7wB+RQNMBnFj6HZgHi4_a3-_giVfBJFBwkLeCbi8Hr9Q@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: application changes to support lttng
+Date: Thu, 2 Jul 2015 17:02:34 +0000 (UTC)
+Message-ID: <389822667.2829.1435856554624.JavaMail.zimbra__31817.031504079$1435856646$gmane$org@efficios.com>
+References: <CACh_V54iounQNr+jxP85YjPuivjMTgowOCuTaox9fMRC9=ty0w@mail.gmail.com>
+ <CACh_V578QYMi8CvhmvtR+QOY33maFNB6SB-eHBVOGOoJgUZ3HA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0521850073=="
+Content-Type: multipart/mixed; boundary="===============1888246325=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-la0-f48.google.com ([209.85.215.48])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <aravind.ht@gmail.com>) id 1ZAhZ5-0004lj-JH
- for lttng-dev@lists.lttng.org; Thu, 02 Jul 2015 12:42:30 -0400
-Received: by lagx9 with SMTP id x9so64969796lag.1
- for <lttng-dev@lists.lttng.org>; Thu, 02 Jul 2015 09:42:13 -0700 (PDT)
-In-Reply-To: <CACd+_b7wB+RQNMBnFj6HZgHi4_a3-_giVfBJFBwkLeCbi8Hr9Q@mail.gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1ZAhst-0004wT-RV
+ for lttng-dev@lists.lttng.org; Thu, 02 Jul 2015 13:02:58 -0400
+In-Reply-To: <CACh_V578QYMi8CvhmvtR+QOY33maFNB6SB-eHBVOGOoJgUZ3HA@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,108 +20,163 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: jamie explorer <jamieexplorer@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0521850073==
-Content-Type: multipart/alternative; boundary=001a1132f6821baccd0519e71f8f
+--===============1888246325==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_2828_174645776.1435856554623"
 
---001a1132f6821baccd0519e71f8f
-Content-Type: text/plain; charset=UTF-8
+------=_Part_2828_174645776.1435856554623
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Possible Solution :
+----- On Jun 30, 2015, at 8:08 PM, jamie explorer <jamieexplorer@gmail.com> wrote: 
 
-The following changes seem to be missing from the actual code
+> Hi lttng-dev,
+> sorry for asking basic questions.
+> Can you guys point me to any documentation which has this info. lttng.org
+> documentation doesnt have info about this.
 
-http://git.lttng.org/?p=lttng-tools.git;a=commitdiff;h=cd2ef1ef1d54ced9e4d0d03b865bb7fc6a905f80
+> How does the app register to use lttng?
 
+It awaits on a futex in a shared memory area, and then connects to the session 
+daemon through a unix socket. 
 
-only the connection.h changes have been absorbed, while the main.c changes
-left out.
+> how do sessiond, app and lttng-ust interact? is there any socket from every app
+> to sessiond?
 
-On Mon, Jun 29, 2015 at 11:51 PM, Aravind HT <aravind.ht@gmail.com> wrote:
+Through unix sockets. Yes, there are two unix sockets between each instrumented 
+application and each session daemon. One for commands (sent by session daemon, 
+reply received from application), the other for notifications (send by app, reply received 
+by session daemon). 
 
-> Hi,
->
-> I ran valgrind on lttng-relayd for a soft hang issue that I had reported
-> earlier.
-> http://lists.lttng.org/pipermail/lttng-dev/2015-May/024533.html
->
-> Below are the list of errors that I found.
->
-> ==793== Thread 4:
-> ==793== Invalid write of size 8
-> ==793==    at 0x406038: cds_list_add (list.h:53)
-> ==793==    by 0x409442: queue_stream (main.c:1175)
-> ==793==    by 0x409AB7: relay_add_stream (main.c:1274)
-> ==793==    by 0x40C47A: relay_process_control (main.c:2099)
-> ==793==    by 0x40DBB1: relay_thread_worker (main.c:2574)
-> ==793==    by 0x5BDAFE2: start_thread (pthread_create.c:312)
-> ==793==    by 0x5ED8AFC: clone (clone.S:111)
-> ==793==  Address 0x6e09040 is 64 bytes inside a block of size 312 free'd
-> ==793==    at 0x4C2898C: free (in
-> /usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so)
-> ==793==    by 0x418EF8: rcu_destroy_stream (stream.c:33)
-> ==793==    by 0x5079C94: ??? (in /usr/lib64/liburcu.so.2.0.0)
-> ==793==    by 0x5BDAFE2: start_thread (pthread_create.c:312)
-> ==793==    by 0x5ED8AFC: clone (clone.S:111)
-> ==793==
->
-> Are there any known bugs/fixes for these ?
->
->
-> Regards,
-> Aravind.
->
->
+> How is the app modified when instrumented using lttng? are there any threads
+> added?
 
---001a1132f6821baccd0519e71f8f
-Content-Type: text/html; charset=UTF-8
+Yes, 2 threads are added. One interacts with root sessiond (if there is one 
+active), the other with per-user sessiond (if one is active). If no sessiond is 
+active, those threads simply wait on futexes. 
+
+> Are there any powerful tools for analysis on collected traces.
+
+Trace Compass (Eclipse UI) 
+lttng-analyses 
+lttngtop 
+and of course babeltrace for the event-by-event text output. 
+
+Best regards, 
+
+Mathieu 
+
+> /Jam
+
+> On Mon, Jun 29, 2015 at 10:03 AM, jamie explorer < jamieexplorer@gmail.com >
+> wrote:
+
+>> Hello,
+>> I have just started using lttng and still looking at documentation.
+>> Can you help me with some info.
+
+>> How does the app register to use lttng?
+>> how do sessiond, app and lttng-ust interact? is there any socket from every app
+>> to sessiond?
+>> How is the app modified when instrumented using lttng? are there any threads
+>> added?
+>> when lttng instrumentation is linked along with app
+>> Are there any powerful tools for analysis on collected traces.
+
+>> /Jam
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+------=_Part_2828_174645776.1435856554623
+Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Possible Solution :<div><br></div><div>The following chang=
-es seem to be missing from the actual code</div><div><p class=3D"MsoNormal"=
-><span style=3D"font-size:11pt;font-family:Calibri,sans-serif;color:rgb(31,=
-73,125)"><a href=3D"http://git.lttng.org/?p=3Dlttng-tools.git;a=3Dcommitdif=
-f;h=3Dcd2ef1ef1d54ced9e4d0d03b865bb7fc6a905f80">http://git.lttng.org/?p=3Dl=
-ttng-tools.git;a=3Dcommitdiff;h=3Dcd2ef1ef1d54ced9e4d0d03b865bb7fc6a905f80<=
-/a></span></p><p class=3D"MsoNormal"><br></p><p class=3D"MsoNormal">only th=
-e connection.h changes have been absorbed, while the main.c changes left ou=
-t.</p></div></div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote"=
->On Mon, Jun 29, 2015 at 11:51 PM, Aravind HT <span dir=3D"ltr">&lt;<a href=
-=3D"mailto:aravind.ht@gmail.com" target=3D"_blank">aravind.ht@gmail.com</a>=
-&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0=
- 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div dir=3D"ltr">Hi,<d=
-iv><br></div><div>I ran valgrind on lttng-relayd for a soft hang issue that=
- I had reported earlier.</div><div><a href=3D"http://lists.lttng.org/piperm=
-ail/lttng-dev/2015-May/024533.html" target=3D"_blank">http://lists.lttng.or=
-g/pipermail/lttng-dev/2015-May/024533.html</a><br></div><div><br></div><div=
->Below are the list of errors that I found.</div><div><br></div><div><div>=
-=3D=3D793=3D=3D Thread 4:</div><div>=3D=3D793=3D=3D Invalid write of size 8=
-</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0at 0x406038: cds_list_add (list.h:5=
-3)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x409442: queue_stream (main.c=
-:1175)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x409AB7: relay_add_stream=
- (main.c:1274)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x40C47A: relay_pr=
-ocess_control (main.c:2099)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x40D=
-BB1: relay_thread_worker (main.c:2574)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=
-=A0by 0x5BDAFE2: start_thread (pthread_create.c:312)</div><div>=3D=3D793=3D=
-=3D =C2=A0 =C2=A0by 0x5ED8AFC: clone (clone.S:111)</div><div>=3D=3D793=3D=
-=3D =C2=A0Address 0x6e09040 is 64 bytes inside a block of size 312 free&#39=
-;d</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0at 0x4C2898C: free (in /usr/lib64=
-/valgrind/vgpreload_memcheck-amd64-linux.so)</div><div>=3D=3D793=3D=3D =C2=
-=A0 =C2=A0by 0x418EF8: rcu_destroy_stream (stream.c:33)</div><div>=3D=3D793=
-=3D=3D =C2=A0 =C2=A0by 0x5079C94: ??? (in /usr/lib64/liburcu.so.2.0.0)</div=
-><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x5BDAFE2: start_thread (pthread_crea=
-te.c:312)</div><div>=3D=3D793=3D=3D =C2=A0 =C2=A0by 0x5ED8AFC: clone (clone=
-.S:111)</div><div>=3D=3D793=3D=3D</div></div><div><br></div><div>Are there =
-any known bugs/fixes for these ?</div><div><br></div><div><br></div><div>Re=
-gards,</div><div>Aravind.</div><div><br></div></div>
-</blockquote></div><br></div>
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><br></div><span id=3D"zwchr" data-marker=3D=
+"__DIVIDER__">----- On Jun 30, 2015, at 8:08 PM, jamie explorer &lt;jamieex=
+plorer@gmail.com&gt; wrote:<br></span><div data-marker=3D"__QUOTED_TEXT__">=
+<blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-=
+left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:no=
+ne;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"=
+>Hi lttng-dev,<br><div>sorry for asking basic questions.</div><div>Can you =
+guys point me to any documentation which has this info. <a href=3D"http://l=
+ttng.org" target=3D"_blank">lttng.org</a> documentation doesnt have info ab=
+out this.</div><br><div><div style=3D"font-size:12.8000001907349px">How doe=
+s the app register to use lttng?</div></div></div></blockquote><div>It awai=
+ts on a futex in a shared memory area, and then connects to the session<br>=
+</div><div>daemon through a unix socket.<br data-mce-bogus=3D"1"></div><div=
+><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid =
+#1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font=
+-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;f=
+ont-size:12pt;"><div dir=3D"ltr"><div><div style=3D"font-size:12.8000001907=
+349px">how do sessiond, app and lttng-ust interact? is there any socket fro=
+m every app to sessiond?</div></div></div></blockquote><div>Through unix so=
+ckets. Yes, there are two unix sockets between each instrumented<br></div><=
+div>application and each session daemon. One for commands (sent by session =
+daemon,<br></div><div>reply received from application), the other for notif=
+ications (send by app, reply received<br data-mce-bogus=3D"1"></div><div>by=
+ session daemon).<br data-mce-bogus=3D"1"></div><blockquote style=3D"border=
+-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-we=
+ight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Ar=
+ial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div><div style=3D"font-si=
+ze:12.8000001907349px">How is the app modified when instrumented using lttn=
+g? are there any threads added?&nbsp;</div></div></div></blockquote><div>Ye=
+s, 2 threads are added. One interacts with root sessiond (if there is one<b=
+r></div><div>active), the other with per-user sessiond (if one is active). =
+If no sessiond is<br data-mce-bogus=3D"1"></div><div>active, those threads =
+simply wait on futexes.<br data-mce-bogus=3D"1"></div><blockquote style=3D"=
+border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;f=
+ont-weight:normal;font-style:normal;text-decoration:none;font-family:Helvet=
+ica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div><div style=3D"f=
+ont-size:12.8000001907349px"><span style=3D"font-size:12.8000001907349px">A=
+re there any powerful tools for analysis on collected traces.</span></div><=
+/div></div></blockquote><div>Trace Compass (Eclipse UI)<br></div><div>lttng=
+-analyses<br data-mce-bogus=3D"1"></div><div>lttngtop<br data-mce-bogus=3D"=
+1"></div><div>and of course babeltrace for the event-by-event text output.<=
+br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Best=
+ regards,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div=
+><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"><=
+/div><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;pad=
+ding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decorati=
+on:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D=
+"ltr"><div><div style=3D"font-size:12.8000001907349px"><br></div></div><div=
+ style=3D"font-size:12.8000001907349px"><span style=3D"font-size:12.8000001=
+907349px"><br></span></div><div style=3D"font-size:12.8000001907349px">/Jam=
+</div><div style=3D"font-size:12.8000001907349px"><span style=3D"font-size:=
+12.8000001907349px"><br></span></div></div><div class=3D"gmail_extra"><br><=
+div class=3D"gmail_quote">On Mon, Jun 29, 2015 at 10:03 AM, jamie explorer =
+<span dir=3D"ltr">&lt;<a href=3D"mailto:jamieexplorer@gmail.com" target=3D"=
+_blank">jamieexplorer@gmail.com</a>&gt;</span> wrote:<br><blockquote class=
+=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
+ing-left:1ex"><div dir=3D"ltr">Hello,<br><div>I have just started using ltt=
+ng and still looking at documentation.</div><div>Can you help me with some =
+info.</div><br><div>How does the app register to use lttng?</div><div>how d=
+o sessiond, app and lttng-ust interact? is there any socket from every app =
+to sessiond?</div><div>How is the app modified when instrumented using lttn=
+g? are there any threads added?</div><div>when lttng instrumentation is lin=
+ked along with app</div><div>Are there any powerful tools for analysis on c=
+ollected traces.</div><br><div>/Jam&nbsp;</div></div></blockquote></div><br=
+></div><br>_______________________________________________<br>lttng-dev mai=
+ling list<br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bin/ma=
+ilman/listinfo/lttng-dev<br></blockquote></div><br><div data-marker=3D"__SI=
+G_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://ww=
+w.efficios.com</div></div></body></html>
+------=_Part_2828_174645776.1435856554623--
 
---001a1132f6821baccd0519e71f8f--
 
-
---===============0521850073==
+--===============1888246325==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -133,4 +187,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0521850073==--
+--===============1888246325==--
