@@ -1,20 +1,19 @@
-From: Dilong Zheng <Dilong.Zheng@mitel.com>
-Subject: Re: UST Create Channel Failed, Why?
-Date: Tue, 7 Jul 2015 15:28:46 +0000
-Message-ID: <SN1PR12MB0319E6C9EB60A3165E259BD99B920__22631.1606159017$1436282983$gmane$org@SN1PR12MB0319.namprd12.prod.outlook.com>
-References: <SN1PR12MB0319A4CF7ED35B7D250426BC9B930@SN1PR12MB0319.namprd12.prod.outlook.com>,
- <CA+jJMxs9SYDJpYyk8jMxRGfxZ1SzaBQbmqkA5dNFOvELJ1N40Q@mail.gmail.com>,
- <SN1PR12MB03190B1482175C51A50586249B920@SN1PR12MB0319.namprd12.prod.outlook.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+ <jeremie.galarneau@efficios.com>
+Subject: [RFC PATCH LTTNG-UST] Fix: Decrement sem_count when
+	disabling local apps
+Date: Tue,  7 Jul 2015 12:48:02 -0400
+Message-ID: <1436287682-3445-1-git-send-email-jeremie.galarneau__45286.6258602173$1436287739$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1011663276=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-bn1on0092.outbound.protection.outlook.com ([157.56.110.92]
- helo=na01-bn1-obe.outbound.protection.outlook.com)
+Received: from mail-qk0-f176.google.com ([209.85.220.176])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Dilong.Zheng@mitel.com>) id 1ZCUnl-00078H-Qh
- for lttng-dev@lists.lttng.org; Tue, 07 Jul 2015 11:28:57 -0400
-In-Reply-To: <SN1PR12MB03190B1482175C51A50586249B920@SN1PR12MB0319.namprd12.prod.outlook.com>
-Content-Language: en-US
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZCW2U-0007Wy-IC
+ for lttng-dev@lists.lttng.org; Tue, 07 Jul 2015 12:48:13 -0400
+Received: by qkbp125 with SMTP id p125so143954898qkb.2
+ for <lttng-dev@lists.lttng.org>; Tue, 07 Jul 2015 09:48:05 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,276 +22,46 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1011663276==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_SN1PR12MB0319E6C9EB60A3165E259BD99B920SN1PR12MB0319namp_"
-
---_000_SN1PR12MB0319E6C9EB60A3165E259BD99B920SN1PR12MB0319namp_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Jeremie,
-
-
-Had some grammatical mistakes in my last email.... this should be clearer.
-
-
-I am using LTTng v2.5. I am not explicitly creating any channels. I am only=
- creating a session via: lttng create [session-name] . I used to always jus=
-t create a session and then enable whichever available user tracepoint that=
- I need (without explicitly creating any channels).
-
-
-Thanks,
-
-
-Dilong
-
-
-________________________________
-From: Dilong Zheng
-Sent: Tuesday, July 7, 2015 11:26 AM
-To: J=E9r=E9mie Galarneau
-Cc: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] UST Create Channel Failed, Why?
-
-
-Hi Jeremie,
-
-
-I am using LTTng v2.5. I am not explicitly creating channels. I am only cre=
-ating a session: lttng create [session-name] . It used to always just creat=
-e a session and then enable whichever available user tracepoint that I need=
- (which out explicitly creating any channels).
-
-
-Thanks,
-
-
-Dilong
-
-________________________________
-From: jeremie.galarneau@gmail.com <jeremie.galarneau@gmail.com> on behalf o=
-f J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-Sent: Tuesday, July 7, 2015 11:20 AM
-To: Dilong Zheng
-Cc: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] UST Create Channel Failed, Why?
-
-Hi Dilong,
-
-How do you create this channel and using which version of LTTng?
-
-J=E9r=E9mie
-
-On Mon, Jul 6, 2015 at 2:11 PM, Dilong Zheng <Dilong.Zheng@mitel.com<mailto=
-:Dilong.Zheng@mitel.com>> wrote:
-
-Hi all,
-
-
-While trying to enable UST events, I get the following error message:
-
-
-Error: Event mitel:sem_wait_entry: UST create channel failed (channel chann=
-el0, session mcdUST3)
-
-
-When I type: lttng list -u I am able to see a list of all my UST tracepoint=
-s.
-
-Could someone please provide some insight as to why this error is appearing=
- and steps I could take to fix this error. Thanks.
-
-
-
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org<mailto:lttng-dev@lists.lttng.org>
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
-
-
---
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-
---_000_SN1PR12MB0319E6C9EB60A3165E259BD99B920SN1PR12MB0319namp_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style type=3D"text/css" style=3D"display:none;"><!-- P {margin-top:0;margi=
-n-bottom:0;} --></style>
-</head>
-<body dir=3D"ltr">
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;back=
-ground-color:#FFFFFF;font-family:Calibri,Arial,Helvetica,sans-serif;">
-<p>Hi Jeremie,</p>
-<p><br>
-</p>
-<p>Had some grammatical mistakes in my last email.... this should be cleare=
-r.<br>
-</p>
-<p><br>
-</p>
-<p>I am using LTTng v2.5. I am not explicitly creating any channels. I am o=
-nly creating a session via:
-<span style=3D"font-family:&quot;Courier New&quot;,monospace">lttng create =
-[session-name]</span>&nbsp;. I used to always just create a session and the=
-n enable whichever available user tracepoint that I need (without explicitl=
-y creating any channels).</p>
-<p><br>
-</p>
-<p>Thanks,</p>
-<p><br>
-</p>
-<p>Dilong<br style=3D"font-family:&quot;Courier New&quot;,monospace">
-</p>
-<br>
-<br>
-<div style=3D"color: rgb(46, 52, 54);">
-<hr tabindex=3D"-1" style=3D"display:inline-block; width:98%">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font style=3D"font-size:11pt" face=
-=3D"Calibri, sans-serif" color=3D"#000000"><b>From:</b> Dilong Zheng<br>
-<b>Sent:</b> Tuesday, July 7, 2015 11:26 AM<br>
-<b>To:</b> J=E9r=E9mie Galarneau<br>
-<b>Cc:</b> lttng-dev@lists.lttng.org<br>
-<b>Subject:</b> Re: [lttng-dev] UST Create Channel Failed, Why?</font>
-<div>&nbsp;</div>
-</div>
-<div>
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt; color:#000000; ba=
-ckground-color:#FFFFFF; font-family:Calibri,Arial,Helvetica,sans-serif">
-<p>Hi Jeremie,</p>
-<p><br>
-</p>
-<p>I am using LTTng v2.5. I am not explicitly creating channels. I am only =
-creating a session:
-<span style=3D"font-family:&quot;Courier New&quot;,monospace">lttng create =
-[session-name]</span>&nbsp;. It used to always just create a session and th=
-en enable whichever available user tracepoint that I need (which out explic=
-itly creating any channels).</p>
-<p><br>
-</p>
-<p>Thanks,</p>
-<p><br>
-</p>
-<p>Dilong<br style=3D"font-family:&quot;Courier New&quot;,monospace">
-</p>
-<br>
-<div style=3D"color:rgb(46,52,54)">
-<hr tabindex=3D"-1" style=3D"display:inline-block; width:98%">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font style=3D"font-size:11pt" face=
-=3D"Calibri, sans-serif" color=3D"#000000"><b>From:</b> jeremie.galarneau@g=
-mail.com &lt;jeremie.galarneau@gmail.com&gt; on behalf of J=E9r=E9mie Galar=
-neau &lt;jeremie.galarneau@efficios.com&gt;<br>
-<b>Sent:</b> Tuesday, July 7, 2015 11:20 AM<br>
-<b>To:</b> Dilong Zheng<br>
-<b>Cc:</b> lttng-dev@lists.lttng.org<br>
-<b>Subject:</b> Re: [lttng-dev] UST Create Channel Failed, Why?</font>
-<div>&nbsp;</div>
-</div>
-<div>
-<div dir=3D"ltr">Hi Dilong,
-<div><br>
-</div>
-<div>How do you create this channel and using which version of LTTng?</div>
-<div><br>
-</div>
-<div>J=E9r=E9mie</div>
-</div>
-<div class=3D"gmail_extra"><br>
-<div class=3D"gmail_quote">On Mon, Jul 6, 2015 at 2:11 PM, Dilong Zheng <sp=
-an dir=3D"ltr">
-&lt;<a title=3D"Ctrl&#43;Click or tap to follow the link" href=3D"mailto:Di=
-long.Zheng@mitel.com" target=3D"_blank">Dilong.Zheng@mitel.com</a>&gt;</spa=
-n> wrote:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex; border-left:1=
-px #ccc solid; padding-left:1ex">
-<div dir=3D"ltr">
-<div style=3D"font-size:12pt; color:#000000; background-color:#ffffff; font=
--family:Calibri,Arial,Helvetica,sans-serif">
-<p>Hi all,</p>
-<p><br>
-</p>
-<p>While trying to enable UST events, I get the following error message:</p=
->
-<p><br>
-</p>
-<p><span style=3D"font-family:&quot;Courier New&quot;,monospace">Error: Eve=
-nt mitel:sem_wait_entry: UST create channel failed (channel channel0, sessi=
-on mcdUST3)</span></p>
-<p><br>
-</p>
-<p>When I type: <span style=3D"font-family:&quot;Courier New&quot;,monospac=
-e"></span><span style=3D"font-family:&quot;Courier New&quot;,monospace">ltt=
-ng list -u</span>
-<span style=3D"font-family:Calibri,Arial,Helvetica,sans-serif">I am able to=
- see a list of all my UST tracepoints.</span><br>
-</p>
-<p>Could someone please provide some insight as to why this error is appear=
-ing and steps I could take to fix this error. Thanks.</p>
-<p><br>
-</p>
-<p><br>
-<br>
-</p>
-</div>
-</div>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/li=
-stinfo/lttng-dev</a><br>
-<br>
-</blockquote>
-</div>
-<br>
-<br clear=3D"all">
-<div><br>
-</div>
--- <br>
-<div class=3D"gmail_signature">J=E9r=E9mie Galarneau<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
-om</a></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</body>
-</html>
-
---_000_SN1PR12MB0319E6C9EB60A3165E259BD99B920SN1PR12MB0319namp_--
-
-
---===============1011663276==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1011663276==--
+TFRUbmctVVNUIHdpbGwgZGVhZGxvY2sgd2FpdGluZyBvbiB0aGUgImNvbnN0cnVjdG9yX3dhaXQi
+IHNlbWFwaG9yZQppZiBsb2NhbCBhcHBzLCBoYW5kbGVkIHRoZSBzZXNzaW9uIGRhZW1vbiBydW5u
+aW5nIHVuZGVyIHRoZSBjdXJyZW50IFVJRCwKYXJlIGRpc2FibGVkIG9yICJub3RfYWxsb3dlZCIu
+CgpUaGlzIGRlYWRsb2NrIGNhbiBiZSB0cmlnZ2VyZWQgYnkgc2V0dGluZyBhbiBpbmZpbml0ZSBy
+ZWdpc3RyYXRpb24KdGltZW91dCBhbmQgY2xlYXJpbmcgdGhlIEhPTUUgZW52aXJvbm1lbnQgdmFy
+aWFibGUsIHdoaWNoIHdpbGwgY2F1c2UKc2V0dXBfbG9jYWxfYXBwcygpIHRvIGZhaWwgdG8gZGV0
+ZXJtaW5lIHRoZSBsb2NhbF9hcHBzIHNvY2tfcGF0aCwgdGh1cwpsZWF2aW5nIGxvY2FsX2FwcHMu
+YWxsb3dlZCA9PSAwLgoKR2l2ZW4gdGhhdCBsb2NhbF9hcHBzIGFyZSBub3QgYWxsb3dlZCBhdCB0
+aGlzIHBvaW50LCB0aGUgbG9jYWxfYXBwcwpsaXN0ZW5lciB0aHJlYWQgd2lsbCBub3QgYmUgbGF1
+bmNoZWQuIFRoZXJlZm9yZSwgdGhlIGNvbnN0cnVjdG9yX3dhaXQKd2lsbCBub3QgYmUgd2FpdGVk
+IG9uLgoKVGhlIGZpeCBwcm9wb3NlZCBoZXJlIGNvbnNpc3RzIGluIGRlY3JlbWVudGluZyAic2Vt
+X2NvdW50IiBpZiBhbiBlcnJvcgpwcmVjbHVkaW5nIHRoZSBsYXVuY2ggdGhlIHRoZSBsb2NhbF9h
+cHBzIGxpc3RlbmVyIHRocmVhZCBvY2N1cnMuCgpTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2Fs
+YXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Ci0tLQogbGlibHR0bmctdXN0
+L2x0dG5nLXVzdC1jb21tLmMgfCAxOCArKysrKysrKysrKysrKystLS0KIDEgZmlsZSBjaGFuZ2Vk
+LCAxNSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2xpYmx0dG5n
+LXVzdC9sdHRuZy11c3QtY29tbS5jIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMKaW5k
+ZXggYjI5MDIwNC4uYzkxNjI3ZiAxMDA2NDQKLS0tIGEvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1j
+b21tLmMKKysrIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMKQEAgLTM3Myw2ICszNzMs
+NyBAQCB2b2lkIHByaW50X2NtZChpbnQgY21kLCBpbnQgaGFuZGxlKQogc3RhdGljCiBpbnQgc2V0
+dXBfbG9jYWxfYXBwcyh2b2lkKQogeworCWludCByZXQgPSAwOwogCWNvbnN0IGNoYXIgKmhvbWVf
+ZGlyOwogCXVpZF90IHVpZDsKIApAQCAtMzgyLDEzICszODMsMTYgQEAgaW50IHNldHVwX2xvY2Fs
+X2FwcHModm9pZCkKIAkgKi8KIAlpZiAodWlkICE9IGdldGV1aWQoKSkgewogCQlhc3NlcnQobG9j
+YWxfYXBwcy5hbGxvd2VkID09IDApOwotCQlyZXR1cm4gMDsKKwkJZ290byBlbmQ7CiAJfQogCWhv
+bWVfZGlyID0gZ2V0X2x0dG5nX2hvbWVfZGlyKCk7CiAJaWYgKCFob21lX2RpcikgewogCQlXQVJO
+KCJIT01FIGVudmlyb25tZW50IHZhcmlhYmxlIG5vdCBzZXQuIERpc2FibGluZyBMVFRuZy1VU1Qg
+cGVyLXVzZXIgdHJhY2luZy4iKTsKIAkJYXNzZXJ0KGxvY2FsX2FwcHMuYWxsb3dlZCA9PSAwKTsK
+LQkJcmV0dXJuIC1FTk9FTlQ7CisJCXJldCA9IC1FTk9FTlQ7CisJCWdvdG8gZW5kOworCX0gZWxz
+ZSB7CisJCURCRygiaG9tZV9kaXI6ICVzIiwgaG9tZV9kaXIpOwogCX0KIAlsb2NhbF9hcHBzLmFs
+bG93ZWQgPSAxOwogCXNucHJpbnRmKGxvY2FsX2FwcHMuc29ja19wYXRoLCBQQVRIX01BWCwgIiVz
+LyVzLyVzIiwKQEAgLTM5OCw3ICs0MDIsMTUgQEAgaW50IHNldHVwX2xvY2FsX2FwcHModm9pZCkK
+IAlzbnByaW50Zihsb2NhbF9hcHBzLndhaXRfc2htX3BhdGgsIFBBVEhfTUFYLCAiLyVzLSV1IiwK
+IAkJTFRUTkdfVVNUX1dBSVRfRklMRU5BTUUsCiAJCXVpZCk7Ci0JcmV0dXJuIDA7CitlbmQ6CisJ
+aWYgKCFsb2NhbF9hcHBzLmFsbG93ZWQpIHsKKwkJLyoKKwkJICogRG9uJ3Qgd2FpdCBvbiB0aGUg
+ImxvY2FsIiBsaXN0ZW5lciB0aHJlYWQgc2luY2Ugd2Ugd29uJ3QgYmUKKwkJICogY29tbXVuaWNh
+dGluZyB3aXRoIHRoZSBsb2NhbCBzZXNzaW9uIGRhZW1vbi4KKwkJICovCisJCXVhdG9taWNfYWRk
+KCZzZW1fY291bnQsIC0xKTsKKwl9CisJcmV0dXJuIHJldDsKIH0KIAogLyoKLS0gCjIuNC40CgoK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRu
+Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
