@@ -1,19 +1,19 @@
-From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
- <jeremie.galarneau@efficios.com>
-Subject: [RFC PATCH LTTNG-UST] Fix: Decrement sem_count when
-	disabling local apps
-Date: Tue,  7 Jul 2015 12:48:02 -0400
-Message-ID: <1436287682-3445-1-git-send-email-jeremie.galarneau__45286.6258602173$1436287739$gmane$org@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [RFC PATCH LTTNG-UST] Fix: Decrement sem_count when
+ disabling local apps
+Date: Tue, 7 Jul 2015 12:49:17 -0400
+Message-ID: <CA+jJMxvrzcpd-mMSk0uDi4sc1k-yCH1qqS-PYFOps_HrmZSjTg__12055.5084351965$1436287810$gmane$org@mail.gmail.com>
+References: <1436287682-3445-1-git-send-email-jeremie.galarneau@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0572030738=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-f176.google.com ([209.85.220.176])
+Received: from mail-pa0-f54.google.com ([209.85.220.54])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZCW2U-0007Wy-IC
- for lttng-dev@lists.lttng.org; Tue, 07 Jul 2015 12:48:13 -0400
-Received: by qkbp125 with SMTP id p125so143954898qkb.2
- for <lttng-dev@lists.lttng.org>; Tue, 07 Jul 2015 09:48:05 -0700 (PDT)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZCW3f-0007Z7-JU
+ for lttng-dev@lists.lttng.org; Tue, 07 Jul 2015 12:49:24 -0400
+Received: by pacws9 with SMTP id ws9so117382187pac.0
+ for <lttng-dev@lists.lttng.org>; Tue, 07 Jul 2015 09:49:18 -0700 (PDT)
+In-Reply-To: <1436287682-3445-1-git-send-email-jeremie.galarneau@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,46 +22,229 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TFRUbmctVVNUIHdpbGwgZGVhZGxvY2sgd2FpdGluZyBvbiB0aGUgImNvbnN0cnVjdG9yX3dhaXQi
-IHNlbWFwaG9yZQppZiBsb2NhbCBhcHBzLCBoYW5kbGVkIHRoZSBzZXNzaW9uIGRhZW1vbiBydW5u
-aW5nIHVuZGVyIHRoZSBjdXJyZW50IFVJRCwKYXJlIGRpc2FibGVkIG9yICJub3RfYWxsb3dlZCIu
-CgpUaGlzIGRlYWRsb2NrIGNhbiBiZSB0cmlnZ2VyZWQgYnkgc2V0dGluZyBhbiBpbmZpbml0ZSBy
-ZWdpc3RyYXRpb24KdGltZW91dCBhbmQgY2xlYXJpbmcgdGhlIEhPTUUgZW52aXJvbm1lbnQgdmFy
-aWFibGUsIHdoaWNoIHdpbGwgY2F1c2UKc2V0dXBfbG9jYWxfYXBwcygpIHRvIGZhaWwgdG8gZGV0
-ZXJtaW5lIHRoZSBsb2NhbF9hcHBzIHNvY2tfcGF0aCwgdGh1cwpsZWF2aW5nIGxvY2FsX2FwcHMu
-YWxsb3dlZCA9PSAwLgoKR2l2ZW4gdGhhdCBsb2NhbF9hcHBzIGFyZSBub3QgYWxsb3dlZCBhdCB0
-aGlzIHBvaW50LCB0aGUgbG9jYWxfYXBwcwpsaXN0ZW5lciB0aHJlYWQgd2lsbCBub3QgYmUgbGF1
-bmNoZWQuIFRoZXJlZm9yZSwgdGhlIGNvbnN0cnVjdG9yX3dhaXQKd2lsbCBub3QgYmUgd2FpdGVk
-IG9uLgoKVGhlIGZpeCBwcm9wb3NlZCBoZXJlIGNvbnNpc3RzIGluIGRlY3JlbWVudGluZyAic2Vt
-X2NvdW50IiBpZiBhbiBlcnJvcgpwcmVjbHVkaW5nIHRoZSBsYXVuY2ggdGhlIHRoZSBsb2NhbF9h
-cHBzIGxpc3RlbmVyIHRocmVhZCBvY2N1cnMuCgpTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2Fs
-YXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Ci0tLQogbGlibHR0bmctdXN0
-L2x0dG5nLXVzdC1jb21tLmMgfCAxOCArKysrKysrKysrKysrKystLS0KIDEgZmlsZSBjaGFuZ2Vk
-LCAxNSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2xpYmx0dG5n
-LXVzdC9sdHRuZy11c3QtY29tbS5jIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMKaW5k
-ZXggYjI5MDIwNC4uYzkxNjI3ZiAxMDA2NDQKLS0tIGEvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1j
-b21tLmMKKysrIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMKQEAgLTM3Myw2ICszNzMs
-NyBAQCB2b2lkIHByaW50X2NtZChpbnQgY21kLCBpbnQgaGFuZGxlKQogc3RhdGljCiBpbnQgc2V0
-dXBfbG9jYWxfYXBwcyh2b2lkKQogeworCWludCByZXQgPSAwOwogCWNvbnN0IGNoYXIgKmhvbWVf
-ZGlyOwogCXVpZF90IHVpZDsKIApAQCAtMzgyLDEzICszODMsMTYgQEAgaW50IHNldHVwX2xvY2Fs
-X2FwcHModm9pZCkKIAkgKi8KIAlpZiAodWlkICE9IGdldGV1aWQoKSkgewogCQlhc3NlcnQobG9j
-YWxfYXBwcy5hbGxvd2VkID09IDApOwotCQlyZXR1cm4gMDsKKwkJZ290byBlbmQ7CiAJfQogCWhv
-bWVfZGlyID0gZ2V0X2x0dG5nX2hvbWVfZGlyKCk7CiAJaWYgKCFob21lX2RpcikgewogCQlXQVJO
-KCJIT01FIGVudmlyb25tZW50IHZhcmlhYmxlIG5vdCBzZXQuIERpc2FibGluZyBMVFRuZy1VU1Qg
-cGVyLXVzZXIgdHJhY2luZy4iKTsKIAkJYXNzZXJ0KGxvY2FsX2FwcHMuYWxsb3dlZCA9PSAwKTsK
-LQkJcmV0dXJuIC1FTk9FTlQ7CisJCXJldCA9IC1FTk9FTlQ7CisJCWdvdG8gZW5kOworCX0gZWxz
-ZSB7CisJCURCRygiaG9tZV9kaXI6ICVzIiwgaG9tZV9kaXIpOwogCX0KIAlsb2NhbF9hcHBzLmFs
-bG93ZWQgPSAxOwogCXNucHJpbnRmKGxvY2FsX2FwcHMuc29ja19wYXRoLCBQQVRIX01BWCwgIiVz
-LyVzLyVzIiwKQEAgLTM5OCw3ICs0MDIsMTUgQEAgaW50IHNldHVwX2xvY2FsX2FwcHModm9pZCkK
-IAlzbnByaW50Zihsb2NhbF9hcHBzLndhaXRfc2htX3BhdGgsIFBBVEhfTUFYLCAiLyVzLSV1IiwK
-IAkJTFRUTkdfVVNUX1dBSVRfRklMRU5BTUUsCiAJCXVpZCk7Ci0JcmV0dXJuIDA7CitlbmQ6CisJ
-aWYgKCFsb2NhbF9hcHBzLmFsbG93ZWQpIHsKKwkJLyoKKwkJICogRG9uJ3Qgd2FpdCBvbiB0aGUg
-ImxvY2FsIiBsaXN0ZW5lciB0aHJlYWQgc2luY2Ugd2Ugd29uJ3QgYmUKKwkJICogY29tbXVuaWNh
-dGluZyB3aXRoIHRoZSBsb2NhbCBzZXNzaW9uIGRhZW1vbi4KKwkJICovCisJCXVhdG9taWNfYWRk
-KCZzZW1fY291bnQsIC0xKTsKKwl9CisJcmV0dXJuIHJldDsKIH0KIAogLyoKLS0gCjIuNC40CgoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============0572030738==
+Content-Type: multipart/alternative; boundary=047d7bd74d169b4f15051a4bcd54
+
+--047d7bd74d169b4f15051a4bcd54
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Jul 7, 2015 at 12:48 PM, J=C3=A9r=C3=A9mie Galarneau <
+jeremie.galarneau@efficios.com> wrote:
+
+> LTTng-UST will deadlock waiting on the "constructor_wait" semaphore
+> if local apps, handled the session daemon running under the current UID,
+> are disabled or "not_allowed".
+>
+> This deadlock can be triggered by setting an infinite registration
+> timeout and clearing the HOME environment variable, which will cause
+> setup_local_apps() to fail to determine the local_apps sock_path, thus
+> leaving local_apps.allowed =3D=3D 0.
+>
+> Given that local_apps are not allowed at this point, the local_apps
+> listener thread will not be launched. Therefore, the constructor_wait
+> will not be waited on.
+>
+
+This should say "will not be posted".
+
+J=C3=A9r=C3=A9mie
+
+
+>
+> The fix proposed here consists in decrementing "sem_count" if an error
+> precluding the launch the the local_apps listener thread occurs.
+>
+> Signed-off-by: J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@efficios.co=
+m>
+> ---
+>  liblttng-ust/lttng-ust-comm.c | 18 +++++++++++++++---
+>  1 file changed, 15 insertions(+), 3 deletions(-)
+>
+> diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.=
+c
+> index b290204..c91627f 100644
+> --- a/liblttng-ust/lttng-ust-comm.c
+> +++ b/liblttng-ust/lttng-ust-comm.c
+> @@ -373,6 +373,7 @@ void print_cmd(int cmd, int handle)
+>  static
+>  int setup_local_apps(void)
+>  {
+> +       int ret =3D 0;
+>         const char *home_dir;
+>         uid_t uid;
+>
+> @@ -382,13 +383,16 @@ int setup_local_apps(void)
+>          */
+>         if (uid !=3D geteuid()) {
+>                 assert(local_apps.allowed =3D=3D 0);
+> -               return 0;
+> +               goto end;
+>         }
+>         home_dir =3D get_lttng_home_dir();
+>         if (!home_dir) {
+>                 WARN("HOME environment variable not set. Disabling
+> LTTng-UST per-user tracing.");
+>                 assert(local_apps.allowed =3D=3D 0);
+> -               return -ENOENT;
+> +               ret =3D -ENOENT;
+> +               goto end;
+> +       } else {
+> +               DBG("home_dir: %s", home_dir);
+>         }
+>         local_apps.allowed =3D 1;
+>         snprintf(local_apps.sock_path, PATH_MAX, "%s/%s/%s",
+> @@ -398,7 +402,15 @@ int setup_local_apps(void)
+>         snprintf(local_apps.wait_shm_path, PATH_MAX, "/%s-%u",
+>                 LTTNG_UST_WAIT_FILENAME,
+>                 uid);
+> -       return 0;
+> +end:
+> +       if (!local_apps.allowed) {
+> +               /*
+> +                * Don't wait on the "local" listener thread since we
+> won't be
+> +                * communicating with the local session daemon.
+> +                */
+> +               uatomic_add(&sem_count, -1);
+> +       }
+> +       return ret;
+>  }
+>
+>  /*
+> --
+> 2.4.4
+>
+>
+
+
+--=20
+J=C3=A9r=C3=A9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
+
+--047d7bd74d169b4f15051a4bcd54
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><br><div class=3D"gmail_extra"><br><div class=3D"gmail_quo=
+te">On Tue, Jul 7, 2015 at 12:48 PM, J=C3=A9r=C3=A9mie Galarneau <span dir=
+=3D"ltr">&lt;<a href=3D"mailto:jeremie.galarneau@efficios.com" target=3D"_b=
+lank">jeremie.galarneau@efficios.com</a>&gt;</span> wrote:<br><blockquote c=
+lass=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;=
+padding-left:1ex">LTTng-UST will deadlock waiting on the &quot;constructor_=
+wait&quot; semaphore<br>
+if local apps, handled the session daemon running under the current UID,<br=
+>
+are disabled or &quot;not_allowed&quot;.<br>
+<br>
+This deadlock can be triggered by setting an infinite registration<br>
+timeout and clearing the HOME environment variable, which will cause<br>
+setup_local_apps() to fail to determine the local_apps sock_path, thus<br>
+leaving local_apps.allowed =3D=3D 0.<br>
+<br>
+Given that local_apps are not allowed at this point, the local_apps<br>
+listener thread will not be launched. Therefore, the constructor_wait<br>
+will not be waited on.<br></blockquote><div><br></div><div>This should say =
+&quot;will not be posted&quot;.</div><div><br></div><div>J=C3=A9r=C3=A9mie<=
+/div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0 0=
+ 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
+<br>
+The fix proposed here consists in decrementing &quot;sem_count&quot; if an =
+error<br>
+precluding the launch the the local_apps listener thread occurs.<br>
+<br>
+Signed-off-by: J=C3=A9r=C3=A9mie Galarneau &lt;<a href=3D"mailto:jeremie.ga=
+larneau@efficios.com">jeremie.galarneau@efficios.com</a>&gt;<br>
+---<br>
+=C2=A0liblttng-ust/lttng-ust-comm.c | 18 +++++++++++++++---<br>
+=C2=A01 file changed, 15 insertions(+), 3 deletions(-)<br>
+<br>
+diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c<=
+br>
+index b290204..c91627f 100644<br>
+--- a/liblttng-ust/lttng-ust-comm.c<br>
++++ b/liblttng-ust/lttng-ust-comm.c<br>
+@@ -373,6 +373,7 @@ void print_cmd(int cmd, int handle)<br>
+=C2=A0static<br>
+=C2=A0int setup_local_apps(void)<br>
+=C2=A0{<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0int ret =3D 0;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 const char *home_dir;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 uid_t uid;<br>
+<br>
+@@ -382,13 +383,16 @@ int setup_local_apps(void)<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0*/<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 if (uid !=3D geteuid()) {<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 assert(local_apps.a=
+llowed =3D=3D 0);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return 0;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0goto end;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 }<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 home_dir =3D get_lttng_home_dir();<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 if (!home_dir) {<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 WARN(&quot;HOME env=
+ironment variable not set. Disabling LTTng-UST per-user tracing.&quot;);<br=
+>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 assert(local_apps.a=
+llowed =3D=3D 0);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return -ENOENT;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D -ENOENT;<br=
+>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0goto end;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0} else {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0DBG(&quot;home_dir:=
+ %s&quot;, home_dir);<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 }<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 local_apps.allowed =3D 1;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 snprintf(local_apps.sock_path, PATH_MAX, &quot;=
+%s/%s/%s&quot;,<br>
+@@ -398,7 +402,15 @@ int setup_local_apps(void)<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 snprintf(local_apps.wait_shm_path, PATH_MAX, &q=
+uot;/%s-%u&quot;,<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 LTTNG_UST_WAIT_FILE=
+NAME,<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 uid);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0return 0;<br>
++end:<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0if (!local_apps.allowed) {<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/*<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 * Don&#39;t wait o=
+n the &quot;local&quot; listener thread since we won&#39;t be<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 * communicating wi=
+th the local session daemon.<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 */<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0uatomic_add(&amp;se=
+m_count, -1);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0return ret;<br>
+=C2=A0}<br>
+<br>
+=C2=A0/*<br>
+<span class=3D"HOEnZb"><font color=3D"#888888">--<br>
+2.4.4<br>
+<br>
+</font></span></blockquote></div><br><br clear=3D"all"><div><br></div>-- <b=
+r><div class=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS In=
+c.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http://www.effi=
+cios.com</a></div>
+</div></div>
+
+--047d7bd74d169b4f15051a4bcd54--
+
+
+--===============0572030738==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0572030738==--
