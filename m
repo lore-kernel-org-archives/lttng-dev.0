@@ -1,16 +1,19 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools 1/2] Build: add Bison version check
-Date: Fri, 10 Jul 2015 17:03:17 -0400
-Message-ID: <1436562198-14747-1-git-send-email-jonathan.rajotte-julien__40454.5450852767$1436562317$gmane$org@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH babeltrace] Build: Update m4 for bison &
+ flex version check to match autoconf-archive file
+Date: Fri, 10 Jul 2015 17:35:01 -0400
+Message-ID: <CA+jJMxuszvHmnUAacgkKUhpaoqJ_=6rveH22cYGJbZDY2qq86w__42990.854002028$1436564160$gmane$org@mail.gmail.com>
+References: <1436542605-22356-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0377202191=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-pd0-f171.google.com ([209.85.192.171])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1ZDfSU-0005ES-0W
- for lttng-dev@lists.lttng.org; Fri, 10 Jul 2015 17:03:50 -0400
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZDfwp-0005Ql-IM
+ for lttng-dev@lists.lttng.org; Fri, 10 Jul 2015 17:35:11 -0400
+Received: by pdbep18 with SMTP id ep18so190554790pdb.1
+ for <lttng-dev@lists.lttng.org>; Fri, 10 Jul 2015 14:35:02 -0700 (PDT)
+In-Reply-To: <1436542605-22356-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,291 +22,361 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
----
- config/ax_compare_version.m4    | 177 ++++++++++++++++++++++++++++++++++++++++
- config/ax_prog_bison_version.m4 |  69 ++++++++++++++++
- configure.ac                    |   4 +
- 3 files changed, 250 insertions(+)
- create mode 100644 config/ax_compare_version.m4
- create mode 100644 config/ax_prog_bison_version.m4
+--===============0377202191==
+Content-Type: multipart/alternative; boundary=047d7bfe9aa4fc9bbb051a8c24a8
 
-diff --git a/config/ax_compare_version.m4 b/config/ax_compare_version.m4
-new file mode 100644
-index 0000000..74dc0fd
---- /dev/null
-+++ b/config/ax_compare_version.m4
-@@ -0,0 +1,177 @@
-+# ===========================================================================
-+#    http://www.gnu.org/software/autoconf-archive/ax_compare_version.html
-+# ===========================================================================
-+#
-+# SYNOPSIS
-+#
-+#   AX_COMPARE_VERSION(VERSION_A, OP, VERSION_B, [ACTION-IF-TRUE], [ACTION-IF-FALSE])
-+#
-+# DESCRIPTION
-+#
-+#   This macro compares two version strings. Due to the various number of
-+#   minor-version numbers that can exist, and the fact that string
-+#   comparisons are not compatible with numeric comparisons, this is not
-+#   necessarily trivial to do in a autoconf script. This macro makes doing
-+#   these comparisons easy.
-+#
-+#   The six basic comparisons are available, as well as checking equality
-+#   limited to a certain number of minor-version levels.
-+#
-+#   The operator OP determines what type of comparison to do, and can be one
-+#   of:
-+#
-+#    eq  - equal (test A == B)
-+#    ne  - not equal (test A != B)
-+#    le  - less than or equal (test A <= B)
-+#    ge  - greater than or equal (test A >= B)
-+#    lt  - less than (test A < B)
-+#    gt  - greater than (test A > B)
-+#
-+#   Additionally, the eq and ne operator can have a number after it to limit
-+#   the test to that number of minor versions.
-+#
-+#    eq0 - equal up to the length of the shorter version
-+#    ne0 - not equal up to the length of the shorter version
-+#    eqN - equal up to N sub-version levels
-+#    neN - not equal up to N sub-version levels
-+#
-+#   When the condition is true, shell commands ACTION-IF-TRUE are run,
-+#   otherwise shell commands ACTION-IF-FALSE are run. The environment
-+#   variable 'ax_compare_version' is always set to either 'true' or 'false'
-+#   as well.
-+#
-+#   Examples:
-+#
-+#     AX_COMPARE_VERSION([3.15.7],[lt],[3.15.8])
-+#     AX_COMPARE_VERSION([3.15],[lt],[3.15.8])
-+#
-+#   would both be true.
-+#
-+#     AX_COMPARE_VERSION([3.15.7],[eq],[3.15.8])
-+#     AX_COMPARE_VERSION([3.15],[gt],[3.15.8])
-+#
-+#   would both be false.
-+#
-+#     AX_COMPARE_VERSION([3.15.7],[eq2],[3.15.8])
-+#
-+#   would be true because it is only comparing two minor versions.
-+#
-+#     AX_COMPARE_VERSION([3.15.7],[eq0],[3.15])
-+#
-+#   would be true because it is only comparing the lesser number of minor
-+#   versions of the two values.
-+#
-+#   Note: The characters that separate the version numbers do not matter. An
-+#   empty string is the same as version 0. OP is evaluated by autoconf, not
-+#   configure, so must be a string, not a variable.
-+#
-+#   The author would like to acknowledge Guido Draheim whose advice about
-+#   the m4_case and m4_ifvaln functions make this macro only include the
-+#   portions necessary to perform the specific comparison specified by the
-+#   OP argument in the final configure script.
-+#
-+# LICENSE
-+#
-+#   Copyright (c) 2008 Tim Toolan <toolan@ele.uri.edu>
-+#
-+#   Copying and distribution of this file, with or without modification, are
-+#   permitted in any medium without royalty provided the copyright notice
-+#   and this notice are preserved. This file is offered as-is, without any
-+#   warranty.
-+
-+#serial 11
-+
-+dnl #########################################################################
-+AC_DEFUN([AX_COMPARE_VERSION], [
-+  AC_REQUIRE([AC_PROG_AWK])
-+
-+  # Used to indicate true or false condition
-+  ax_compare_version=false
-+
-+  # Convert the two version strings to be compared into a format that
-+  # allows a simple string comparison.  The end result is that a version
-+  # string of the form 1.12.5-r617 will be converted to the form
-+  # 0001001200050617.  In other words, each number is zero padded to four
-+  # digits, and non digits are removed.
-+  AS_VAR_PUSHDEF([A],[ax_compare_version_A])
-+  A=`echo "$1" | sed -e 's/\([[0-9]]*\)/Z\1Z/g' \
-+                     -e 's/Z\([[0-9]]\)Z/Z0\1Z/g' \
-+                     -e 's/Z\([[0-9]][[0-9]]\)Z/Z0\1Z/g' \
-+                     -e 's/Z\([[0-9]][[0-9]][[0-9]]\)Z/Z0\1Z/g' \
-+                     -e 's/[[^0-9]]//g'`
-+
-+  AS_VAR_PUSHDEF([B],[ax_compare_version_B])
-+  B=`echo "$3" | sed -e 's/\([[0-9]]*\)/Z\1Z/g' \
-+                     -e 's/Z\([[0-9]]\)Z/Z0\1Z/g' \
-+                     -e 's/Z\([[0-9]][[0-9]]\)Z/Z0\1Z/g' \
-+                     -e 's/Z\([[0-9]][[0-9]][[0-9]]\)Z/Z0\1Z/g' \
-+                     -e 's/[[^0-9]]//g'`
-+
-+  dnl # In the case of le, ge, lt, and gt, the strings are sorted as necessary
-+  dnl # then the first line is used to determine if the condition is true.
-+  dnl # The sed right after the echo is to remove any indented white space.
-+  m4_case(m4_tolower($2),
-+  [lt],[
-+    ax_compare_version=`echo "x$A
-+x$B" | sed 's/^ *//' | sort -r | sed "s/x${A}/false/;s/x${B}/true/;1q"`
-+  ],
-+  [gt],[
-+    ax_compare_version=`echo "x$A
-+x$B" | sed 's/^ *//' | sort | sed "s/x${A}/false/;s/x${B}/true/;1q"`
-+  ],
-+  [le],[
-+    ax_compare_version=`echo "x$A
-+x$B" | sed 's/^ *//' | sort | sed "s/x${A}/true/;s/x${B}/false/;1q"`
-+  ],
-+  [ge],[
-+    ax_compare_version=`echo "x$A
-+x$B" | sed 's/^ *//' | sort -r | sed "s/x${A}/true/;s/x${B}/false/;1q"`
-+  ],[
-+    dnl Split the operator from the subversion count if present.
-+    m4_bmatch(m4_substr($2,2),
-+    [0],[
-+      # A count of zero means use the length of the shorter version.
-+      # Determine the number of characters in A and B.
-+      ax_compare_version_len_A=`echo "$A" | $AWK '{print(length)}'`
-+      ax_compare_version_len_B=`echo "$B" | $AWK '{print(length)}'`
-+
-+      # Set A to no more than B's length and B to no more than A's length.
-+      A=`echo "$A" | sed "s/\(.\{$ax_compare_version_len_B\}\).*/\1/"`
-+      B=`echo "$B" | sed "s/\(.\{$ax_compare_version_len_A\}\).*/\1/"`
-+    ],
-+    [[0-9]+],[
-+      # A count greater than zero means use only that many subversions
-+      A=`echo "$A" | sed "s/\(\([[0-9]]\{4\}\)\{m4_substr($2,2)\}\).*/\1/"`
-+      B=`echo "$B" | sed "s/\(\([[0-9]]\{4\}\)\{m4_substr($2,2)\}\).*/\1/"`
-+    ],
-+    [.+],[
-+      AC_WARNING(
-+        [illegal OP numeric parameter: $2])
-+    ],[])
-+
-+    # Pad zeros at end of numbers to make same length.
-+    ax_compare_version_tmp_A="$A`echo $B | sed 's/./0/g'`"
-+    B="$B`echo $A | sed 's/./0/g'`"
-+    A="$ax_compare_version_tmp_A"
-+
-+    # Check for equality or inequality as necessary.
-+    m4_case(m4_tolower(m4_substr($2,0,2)),
-+    [eq],[
-+      test "x$A" = "x$B" && ax_compare_version=true
-+    ],
-+    [ne],[
-+      test "x$A" != "x$B" && ax_compare_version=true
-+    ],[
-+      AC_WARNING([illegal OP parameter: $2])
-+    ])
-+  ])
-+
-+  AS_VAR_POPDEF([A])dnl
-+  AS_VAR_POPDEF([B])dnl
-+
-+  dnl # Execute ACTION-IF-TRUE / ACTION-IF-FALSE.
-+  if test "$ax_compare_version" = "true" ; then
-+    m4_ifvaln([$4],[$4],[:])dnl
-+    m4_ifvaln([$5],[else $5])dnl
-+  fi
-+]) dnl AX_COMPARE_VERSION
-diff --git a/config/ax_prog_bison_version.m4 b/config/ax_prog_bison_version.m4
-new file mode 100644
-index 0000000..5da478c
---- /dev/null
-+++ b/config/ax_prog_bison_version.m4
-@@ -0,0 +1,69 @@
-+# ===========================================================================
-+#   http://www.gnu.org/software/autoconf-archive/ax_prog_bison_version.html
-+# ===========================================================================
-+#
-+# SYNOPSIS
-+#
-+#   AX_PROG_BISON_VERSION([VERSION],[ACTION-IF-TRUE],[ACTION-IF-FALSE])
-+#
-+# DESCRIPTION
-+#
-+#   Makes sure that bison version is greater or equal to the version
-+#   indicated. If true the shell commands in ACTION-IF-TRUE are executed. If
-+#   not the shell commands in commands in ACTION-IF-TRUE are executed. If
-+#   not the shell commands in ACTION-IF-FALSE are run. Note if $BISON is not
-+#   set (for example by running AC_CHECK_PROG or AC_PATH_PROG) the macro
-+#   will fail.
-+#
-+#   Example:
-+#
-+#     AC_PATH_PROG([BISON],[bison])
-+#     AX_PROG_BISON_VERSION([3.0.2],[ ... ],[ ... ])
-+#
-+#   This will check to make sure that the bison you have is at least version
-+#   3.0.2 or greater.
-+#
-+#   NOTE: This macro uses the $BISON variable to perform the check.
-+#
-+# LICENSE
-+#
-+#   Copyright (c) 2015 Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-+#
-+#   Copying and distribution of this file, with or without modification, are
-+#   permitted in any medium without royalty provided the copyright notice
-+#   and this notice are preserved. This file is offered as-is, without any
-+#   warranty.
-+
-+#serial 2
-+
-+AC_DEFUN([AX_PROG_BISON_VERSION],[
-+    AC_REQUIRE([AC_PROG_SED])
-+    AC_REQUIRE([AC_PROG_GREP])
-+
-+    AS_IF([test -n "$BISON"],[
-+        ax_bison_version="$1"
-+
-+        AC_MSG_CHECKING([for bison version])
-+        changequote(<<,>>)
-+        bison_version=`$BISON --version 2>&1 \
-+          | $SED -n -e '/bison (GNU Bison)/b inspect
-+b
-+: inspect
-+s/.* (\{0,1\}\([0-9]*\.[0-9]*\.[0-9]*\))\{0,1\}.*/\1/;p'`
-+        changequote([,])
-+        AC_MSG_RESULT($bison_version)
-+
-+	AC_SUBST([BISON_VERSION],[$bison_version])
-+
-+        AX_COMPARE_VERSION([$bison_version],[ge],[$ax_bison_version],[
-+	    :
-+            $2
-+        ],[
-+	    :
-+            $3
-+        ])
-+    ],[
-+        AC_MSG_WARN([could not find bison])
-+        $3
-+    ])
-+])
-diff --git a/configure.ac b/configure.ac
-index 1fcac72..b274ead 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -444,6 +444,10 @@ if test ! -f "$srcdir/src/lib/lttng-ctl/filter/filter-parser.h"; then
- 		AC_MSG_ERROR([[bison not found and is required when building from git.
- 		Please install bison]])
- 	fi
-+	AC_PATH_PROG([BISON],[bison])
-+	AX_PROG_BISON_VERSION([2.4], [],[
-+		AC_MSG_ERROR([[Bison >= 2.4 is required when building from git]])
-+	])
- fi
- 
- if test ! -f "$srcdir/src/lib/lttng-ctl/filter/filter-lexer.c"; then
--- 
-2.1.4
+--047d7bfe9aa4fc9bbb051a8c24a8
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Merged in master and stable-1.2.
+
+Thanks!
+J=C3=A9r=C3=A9mie
+
+On Fri, Jul 10, 2015 at 11:36 AM, Jonathan Rajotte <
+jonathan.rajotte-julien@efficios.com> wrote:
+
+> Officials m4 were merged in [1][2].
+>
+> [1]
+> https://github.com/peti/autoconf-archive/commit/b2bdd8591b2d6b1eb580ead5f=
+978a30e3ecfc36c
+> [2]
+> https://github.com/peti/autoconf-archive/commit/fd1f2862c1524e73495d67646=
+d26000e2e85e807
+>
+> Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+> ---
+>  m4/ax_prog_bison_version.m4 | 21 +++++++++++++--------
+>  m4/ax_prog_flex_version.m4  | 19 ++++++++++++-------
+>  2 files changed, 25 insertions(+), 15 deletions(-)
+>
+> diff --git a/m4/ax_prog_bison_version.m4 b/m4/ax_prog_bison_version.m4
+> index 6b95585..5da478c 100644
+> --- a/m4/ax_prog_bison_version.m4
+> +++ b/m4/ax_prog_bison_version.m4
+> @@ -1,22 +1,27 @@
+> +#
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> +#
+> http://www.gnu.org/software/autoconf-archive/ax_prog_bison_version.html
+> +#
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> +#
+>  # SYNOPSIS
+>  #
+>  #   AX_PROG_BISON_VERSION([VERSION],[ACTION-IF-TRUE],[ACTION-IF-FALSE])
+>  #
+>  # DESCRIPTION
+>  #
+> -#   Makes sure that bison version is greater or equal to the version
+> indicated.
+> -#   If true the shell commands in ACTION-IF-TRUE are executed. If not th=
+e
+> shell
+> -#   commands in commands in ACTION-IF-TRUE are executed. If not the shel=
+l
+> -#   commands in ACTION-IF-FALSE are run. Note if $BISON is not set (for
+> example
+> -#   by running AC_CHECK_PROG or AC_PATH_PROG) the macro will fail.
+> +#   Makes sure that bison version is greater or equal to the version
+> +#   indicated. If true the shell commands in ACTION-IF-TRUE are executed=
+.
+> If
+> +#   not the shell commands in commands in ACTION-IF-TRUE are executed. I=
+f
+> +#   not the shell commands in ACTION-IF-FALSE are run. Note if $BISON is
+> not
+> +#   set (for example by running AC_CHECK_PROG or AC_PATH_PROG) the macro
+> +#   will fail.
+>  #
+>  #   Example:
+>  #
+>  #     AC_PATH_PROG([BISON],[bison])
+>  #     AX_PROG_BISON_VERSION([3.0.2],[ ... ],[ ... ])
+>  #
+> -#   This will check to make sure that the bison you have is at least
+> -#   version 3.0.2 or greater.
+> +#   This will check to make sure that the bison you have is at least
+> version
+> +#   3.0.2 or greater.
+>  #
+>  #   NOTE: This macro uses the $BISON variable to perform the check.
+>  #
+> @@ -29,7 +34,7 @@
+>  #   and this notice are preserved. This file is offered as-is, without a=
+ny
+>  #   warranty.
+>
+> -#serial 12
+> +#serial 2
+>
+>  AC_DEFUN([AX_PROG_BISON_VERSION],[
+>      AC_REQUIRE([AC_PROG_SED])
+> diff --git a/m4/ax_prog_flex_version.m4 b/m4/ax_prog_flex_version.m4
+> index f1ad9ef..da60e00 100644
+> --- a/m4/ax_prog_flex_version.m4
+> +++ b/m4/ax_prog_flex_version.m4
+> @@ -1,22 +1,27 @@
+> +#
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> +#
+> http://www.gnu.org/software/autoconf-archive/ax_prog_flex_version.html
+> +#
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> +#
+>  # SYNOPSIS
+>  #
+>  #   AX_PROG_FLEX_VERSION([VERSION],[ACTION-IF-TRUE],[ACTION-IF-FALSE])
+>  #
+>  # DESCRIPTION
+>  #
+> -#   Makes sure that flex version is greater or equal to the version
+> indicated.
+> -#   If true the shell commands in ACTION-IF-TRUE are executed. If not th=
+e
+> shell
+> -#   commands in commands in ACTION-IF-TRUE are executed. If not the shel=
+l
+> -#   commands in ACTION-IF-FALSE are run. Note if $FLEX is not set (for
+> example
+> -#   by running AC_CHECK_PROG or AC_PATH_PROG) the macro will fail.
+> +#   Makes sure that flex version is greater or equal to the version
+> +#   indicated. If true the shell commands in ACTION-IF-TRUE are executed=
+.
+> If
+> +#   not the shell commands in commands in ACTION-IF-TRUE are executed. I=
+f
+> +#   not the shell commands in ACTION-IF-FALSE are run. Note if $FLEX is
+> not
+> +#   set (for example by running AC_CHECK_PROG or AC_PATH_PROG) the macro
+> +#   will fail.
+>  #
+>  #   Example:
+>  #
+>  #     AC_PATH_PROG([FLEX],[flex])
+>  #     AX_PROG_FLEX_VERSION([2.5.39],[ ... ],[ ... ])
+>  #
+> -#   This will check to make sure that the flex you have is at least
+> -#   version 2.5.39 or greater.
+> +#   This will check to make sure that the flex you have is at least
+> version
+> +#   2.5.39 or greater.
+>  #
+>  #   NOTE: This macro uses the $FLEX variable to perform the check.
+>  #
+> --
+> 2.1.4
+>
+>
+
+
+--=20
+J=C3=A9r=C3=A9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
+
+--047d7bfe9aa4fc9bbb051a8c24a8
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Merged in master and stable-1.2.<div><br></div><div>Thanks=
+!</div><div>J=C3=A9r=C3=A9mie</div></div><div class=3D"gmail_extra"><br><di=
+v class=3D"gmail_quote">On Fri, Jul 10, 2015 at 11:36 AM, Jonathan Rajotte =
+<span dir=3D"ltr">&lt;<a href=3D"mailto:jonathan.rajotte-julien@efficios.co=
+m" target=3D"_blank">jonathan.rajotte-julien@efficios.com</a>&gt;</span> wr=
+ote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border=
+-left:1px #ccc solid;padding-left:1ex">Officials m4 were merged in [1][2].<=
+br>
+<br>
+[1] <a href=3D"https://github.com/peti/autoconf-archive/commit/b2bdd8591b2d=
+6b1eb580ead5f978a30e3ecfc36c" rel=3D"noreferrer" target=3D"_blank">https://=
+github.com/peti/autoconf-archive/commit/b2bdd8591b2d6b1eb580ead5f978a30e3ec=
+fc36c</a><br>
+[2] <a href=3D"https://github.com/peti/autoconf-archive/commit/fd1f2862c152=
+4e73495d67646d26000e2e85e807" rel=3D"noreferrer" target=3D"_blank">https://=
+github.com/peti/autoconf-archive/commit/fd1f2862c1524e73495d67646d26000e2e8=
+5e807</a><br>
+<br>
+Signed-off-by: Jonathan Rajotte &lt;<a href=3D"mailto:jonathan.rajotte-juli=
+en@efficios.com">jonathan.rajotte-julien@efficios.com</a>&gt;<br>
+---<br>
+=C2=A0m4/ax_prog_bison_version.m4 | 21 +++++++++++++--------<br>
+=C2=A0m4/ax_prog_flex_version.m4=C2=A0 | 19 ++++++++++++-------<br>
+=C2=A02 files changed, 25 insertions(+), 15 deletions(-)<br>
+<br>
+diff --git a/m4/ax_prog_bison_version.m4 b/m4/ax_prog_bison_version.m4<br>
+index 6b95585..5da478c 100644<br>
+--- a/m4/ax_prog_bison_version.m4<br>
++++ b/m4/ax_prog_bison_version.m4<br>
+@@ -1,22 +1,27 @@<br>
++# =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D<br>
++#=C2=A0 =C2=A0<a href=3D"http://www.gnu.org/software/autoconf-archive/ax_p=
+rog_bison_version.html" rel=3D"noreferrer" target=3D"_blank">http://www.gnu=
+.org/software/autoconf-archive/ax_prog_bison_version.html</a><br>
++# =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D<br>
++#<br>
+=C2=A0# SYNOPSIS<br>
+=C2=A0#<br>
+=C2=A0#=C2=A0 =C2=A0AX_PROG_BISON_VERSION([VERSION],[ACTION-IF-TRUE],[ACTIO=
+N-IF-FALSE])<br>
+=C2=A0#<br>
+=C2=A0# DESCRIPTION<br>
+=C2=A0#<br>
+-#=C2=A0 =C2=A0Makes sure that bison version is greater or equal to the ver=
+sion indicated.<br>
+-#=C2=A0 =C2=A0If true the shell commands in ACTION-IF-TRUE are executed. I=
+f not the shell<br>
+-#=C2=A0 =C2=A0commands in commands in ACTION-IF-TRUE are executed. If not =
+the shell<br>
+-#=C2=A0 =C2=A0commands in ACTION-IF-FALSE are run. Note if $BISON is not s=
+et (for example<br>
+-#=C2=A0 =C2=A0by running AC_CHECK_PROG or AC_PATH_PROG) the macro will fai=
+l.<br>
++#=C2=A0 =C2=A0Makes sure that bison version is greater or equal to the ver=
+sion<br>
++#=C2=A0 =C2=A0indicated. If true the shell commands in ACTION-IF-TRUE are =
+executed. If<br>
++#=C2=A0 =C2=A0not the shell commands in commands in ACTION-IF-TRUE are exe=
+cuted. If<br>
++#=C2=A0 =C2=A0not the shell commands in ACTION-IF-FALSE are run. Note if $=
+BISON is not<br>
++#=C2=A0 =C2=A0set (for example by running AC_CHECK_PROG or AC_PATH_PROG) t=
+he macro<br>
++#=C2=A0 =C2=A0will fail.<br>
+=C2=A0#<br>
+=C2=A0#=C2=A0 =C2=A0Example:<br>
+=C2=A0#<br>
+=C2=A0#=C2=A0 =C2=A0 =C2=A0AC_PATH_PROG([BISON],[bison])<br>
+=C2=A0#=C2=A0 =C2=A0 =C2=A0AX_PROG_BISON_VERSION([3.0.2],[ ... ],[ ... ])<b=
+r>
+=C2=A0#<br>
+-#=C2=A0 =C2=A0This will check to make sure that the bison you have is at l=
+east<br>
+-#=C2=A0 =C2=A0version 3.0.2 or greater.<br>
++#=C2=A0 =C2=A0This will check to make sure that the bison you have is at l=
+east version<br>
++#=C2=A0 =C2=A03.0.2 or greater.<br>
+=C2=A0#<br>
+=C2=A0#=C2=A0 =C2=A0NOTE: This macro uses the $BISON variable to perform th=
+e check.<br>
+=C2=A0#<br>
+@@ -29,7 +34,7 @@<br>
+=C2=A0#=C2=A0 =C2=A0and this notice are preserved. This file is offered as-=
+is, without any<br>
+=C2=A0#=C2=A0 =C2=A0warranty.<br>
+<br>
+-#serial 12<br>
++#serial 2<br>
+<br>
+=C2=A0AC_DEFUN([AX_PROG_BISON_VERSION],[<br>
+=C2=A0 =C2=A0 =C2=A0AC_REQUIRE([AC_PROG_SED])<br>
+diff --git a/m4/ax_prog_flex_version.m4 b/m4/ax_prog_flex_version.m4<br>
+index f1ad9ef..da60e00 100644<br>
+--- a/m4/ax_prog_flex_version.m4<br>
++++ b/m4/ax_prog_flex_version.m4<br>
+@@ -1,22 +1,27 @@<br>
++# =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D<br>
++#=C2=A0 =C2=A0<a href=3D"http://www.gnu.org/software/autoconf-archive/ax_p=
+rog_flex_version.html" rel=3D"noreferrer" target=3D"_blank">http://www.gnu.=
+org/software/autoconf-archive/ax_prog_flex_version.html</a><br>
++# =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D<br>
++#<br>
+=C2=A0# SYNOPSIS<br>
+=C2=A0#<br>
+=C2=A0#=C2=A0 =C2=A0AX_PROG_FLEX_VERSION([VERSION],[ACTION-IF-TRUE],[ACTION=
+-IF-FALSE])<br>
+=C2=A0#<br>
+=C2=A0# DESCRIPTION<br>
+=C2=A0#<br>
+-#=C2=A0 =C2=A0Makes sure that flex version is greater or equal to the vers=
+ion indicated.<br>
+-#=C2=A0 =C2=A0If true the shell commands in ACTION-IF-TRUE are executed. I=
+f not the shell<br>
+-#=C2=A0 =C2=A0commands in commands in ACTION-IF-TRUE are executed. If not =
+the shell<br>
+-#=C2=A0 =C2=A0commands in ACTION-IF-FALSE are run. Note if $FLEX is not se=
+t (for example<br>
+-#=C2=A0 =C2=A0by running AC_CHECK_PROG or AC_PATH_PROG) the macro will fai=
+l.<br>
++#=C2=A0 =C2=A0Makes sure that flex version is greater or equal to the vers=
+ion<br>
++#=C2=A0 =C2=A0indicated. If true the shell commands in ACTION-IF-TRUE are =
+executed. If<br>
++#=C2=A0 =C2=A0not the shell commands in commands in ACTION-IF-TRUE are exe=
+cuted. If<br>
++#=C2=A0 =C2=A0not the shell commands in ACTION-IF-FALSE are run. Note if $=
+FLEX is not<br>
++#=C2=A0 =C2=A0set (for example by running AC_CHECK_PROG or AC_PATH_PROG) t=
+he macro<br>
++#=C2=A0 =C2=A0will fail.<br>
+=C2=A0#<br>
+=C2=A0#=C2=A0 =C2=A0Example:<br>
+=C2=A0#<br>
+=C2=A0#=C2=A0 =C2=A0 =C2=A0AC_PATH_PROG([FLEX],[flex])<br>
+=C2=A0#=C2=A0 =C2=A0 =C2=A0AX_PROG_FLEX_VERSION([2.5.39],[ ... ],[ ... ])<b=
+r>
+=C2=A0#<br>
+-#=C2=A0 =C2=A0This will check to make sure that the flex you have is at le=
+ast<br>
+-#=C2=A0 =C2=A0version 2.5.39 or greater.<br>
++#=C2=A0 =C2=A0This will check to make sure that the flex you have is at le=
+ast version<br>
++#=C2=A0 =C2=A02.5.39 or greater.<br>
+=C2=A0#<br>
+=C2=A0#=C2=A0 =C2=A0NOTE: This macro uses the $FLEX variable to perform the=
+ check.<br>
+=C2=A0#<br>
+<span class=3D"HOEnZb"><font color=3D"#888888">--<br>
+2.1.4<br>
+<br>
+</font></span></blockquote></div><br><br clear=3D"all"><div><br></div>-- <b=
+r><div class=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS In=
+c.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http://www.effi=
+cios.com</a></div>
+</div>
+
+--047d7bfe9aa4fc9bbb051a8c24a8--
+
+
+--===============0377202191==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0377202191==--
