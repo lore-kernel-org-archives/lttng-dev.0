@@ -1,8 +1,8 @@
 From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [LTTNG-TOOLS PATCH 7/9] Account the lost packets in
-	snapshot mode
-Date: Mon, 13 Jul 2015 11:28:07 -0400
-Message-ID: <1436801289-17554-8-git-send-email-jdesfossez__39124.5774379515$1436801738$gmane$org@efficios.com>
+Subject: [LTTNG-TOOLS PATCH 9/9] Store the instance id and
+	packet_seq_num in indexes
+Date: Mon, 13 Jul 2015 11:28:09 -0400
+Message-ID: <1436801289-17554-10-git-send-email-jdesfossez__40571.9767710709$1436801782$gmane$org@efficios.com>
 References: <1436801289-17554-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1ZEfeh-0008PZ-Uq
+ (envelope-from <jdesfossez@efficios.com>) id 1ZEfei-0008Ph-Mr
  for lttng-dev@lists.lttng.org; Mon, 13 Jul 2015 11:28:33 -0400
 In-Reply-To: <1436801289-17554-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -25,128 +25,163 @@ To: jgalar@efficios.com, mathieu.desnoyers@efficios.com
 Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-When working in flight-recorder, we cannot rely on the absolute sequence
-number because we only extract the content of the ring buffer
-periodically. Moreover, we don't want to account the lost packets at the
-beginning or the end of the snapshot since the "holes" don't appear in
-the resulting snapshot, so we make sure we only account lost packets
-locate between extracted packets.
-
 Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
 ---
- src/common/kernel-consumer/kernel-consumer.c | 23 ++++++++++++++++++++++-
- src/common/ust-consumer/ust-consumer.c       | 23 ++++++++++++++++++++++-
- 2 files changed, 44 insertions(+), 2 deletions(-)
+ src/bin/lttng-relayd/main.c                  | 12 +++++++++---
+ src/common/index/ctf-index.h                 |  7 +++++--
+ src/common/kernel-consumer/kernel-consumer.c | 14 ++++++++++++++
+ src/common/relayd/relayd.c                   |  5 +++++
+ src/common/sessiond-comm/relayd.h            |  2 ++
+ src/common/ust-consumer/ust-consumer.c       | 14 ++++++++++++++
+ 6 files changed, 49 insertions(+), 5 deletions(-)
 
+diff --git a/src/bin/lttng-relayd/main.c b/src/bin/lttng-relayd/main.c
+index a554aed..c2c4a01 100644
+--- a/src/bin/lttng-relayd/main.c
++++ b/src/bin/lttng-relayd/main.c
+@@ -1127,7 +1127,8 @@ static void destroy_session(struct relay_session *session,
+  * Copy index data from the control port to a given index object.
+  */
+ static void copy_index_control_data(struct relay_index *index,
+-		struct lttcomm_relayd_index *data)
++		struct lttcomm_relayd_index *data,
++		struct relay_connection *conn)
+ {
+ 	assert(index);
+ 	assert(data);
+@@ -1143,6 +1144,11 @@ static void copy_index_control_data(struct relay_index *index,
+ 	index->index_data.timestamp_end = data->timestamp_end;
+ 	index->index_data.events_discarded = data->events_discarded;
+ 	index->index_data.stream_id = data->stream_id;
++
++	if (conn->minor >= 7) {
++		index->index_data.stream_instance_id = data->stream_instance_id;
++		index->index_data.packet_seq_num = data->packet_seq_num;
++	}
+ }
+ 
+ /*
+@@ -2041,7 +2047,7 @@ int relay_recv_index(struct lttcomm_relayd_hdr *recv_hdr,
+ 		stream->indexes_in_flight++;
+ 	}
+ 
+-	copy_index_control_data(index, &index_info);
++	copy_index_control_data(index, &index_info, conn);
+ 	if (stream->ctf_stream_id == -1ULL) {
+ 		stream->ctf_stream_id = be64toh(index_info.stream_id);
+ 	}
+@@ -2054,7 +2060,7 @@ int relay_recv_index(struct lttcomm_relayd_hdr *recv_hdr,
+ 		 */
+ 		relay_index_add(index, &wr_index);
+ 		if (wr_index) {
+-			copy_index_control_data(wr_index, &index_info);
++			copy_index_control_data(wr_index, &index_info, conn);
+ 			free(index);
+ 		}
+ 	} else {
+diff --git a/src/common/index/ctf-index.h b/src/common/index/ctf-index.h
+index 0efa888..95dd5f7 100644
+--- a/src/common/index/ctf-index.h
++++ b/src/common/index/ctf-index.h
+@@ -29,7 +29,7 @@
+ 
+ #define CTF_INDEX_MAGIC 0xC1F1DCC1
+ #define CTF_INDEX_MAJOR 1
+-#define CTF_INDEX_MINOR 0
++#define CTF_INDEX_MINOR 1
+ 
+ /*
+  * Header at the beginning of each index file.
+@@ -54,7 +54,10 @@ struct ctf_packet_index {
+ 	uint64_t timestamp_begin;
+ 	uint64_t timestamp_end;
+ 	uint64_t events_discarded;
+-	uint64_t stream_id;
++	uint64_t stream_id;		/* ID of the channel */
++	/* CTF_INDEX 1.0 limit */
++	uint64_t stream_instance_id;	/* ID of the channel instance */
++	uint64_t packet_seq_num;	/* packet sequence number */
+ } __attribute__((__packed__));
+ 
+ #endif /* LTTNG_INDEX_H */
 diff --git a/src/common/kernel-consumer/kernel-consumer.c b/src/common/kernel-consumer/kernel-consumer.c
-index 52ab2ef..66c40c2 100644
+index 66c40c2..17dbce6 100644
 --- a/src/common/kernel-consumer/kernel-consumer.c
 +++ b/src/common/kernel-consumer/kernel-consumer.c
-@@ -118,7 +118,7 @@ int lttng_kconsumer_snapshot_channel(uint64_t key, char *path,
- 		uint64_t relayd_id, uint64_t nb_packets_per_stream,
- 		struct lttng_consumer_local_data *ctx)
- {
--	int ret;
-+	int ret, first, lost;
- 	unsigned long consumed_pos, produced_pos;
- 	struct lttng_consumer_channel *channel;
- 	struct lttng_consumer_stream *stream;
-@@ -225,6 +225,8 @@ int lttng_kconsumer_snapshot_channel(uint64_t key, char *path,
- 				produced_pos, nb_packets_per_stream,
- 				stream->max_sb_size);
+@@ -1093,6 +1093,20 @@ static int get_index_values(struct ctf_packet_index *index, int infd)
+ 	}
+ 	index->stream_id = htobe64(index->stream_id);
  
-+		first = 1;
-+		lost = 0;
- 		while (consumed_pos < produced_pos) {
- 			ssize_t read_len;
- 			unsigned long len, padded_len;
-@@ -242,6 +244,15 @@ int lttng_kconsumer_snapshot_channel(uint64_t key, char *path,
- 				}
- 				DBG("Kernel consumer get subbuf failed. Skipping it.");
- 				consumed_pos += stream->max_sb_size;
++	ret = kernctl_get_instance_id(infd, &index->stream_instance_id);
++	if (ret < 0) {
++		PERROR("kernctl_get_instance_id");
++		goto error;
++	}
++	index->stream_instance_id = htobe64(index->stream_instance_id);
 +
-+				/*
-+				 * Start accounting lost packets only when we
-+				 * already have extracted packets (to match the
-+				 * content of the final snapshot).
-+				 */
-+				if (!first) {
-+					lost++;
-+				}
- 				continue;
- 			}
- 
-@@ -285,6 +296,16 @@ int lttng_kconsumer_snapshot_channel(uint64_t key, char *path,
- 				goto end_unlock;
- 			}
- 			consumed_pos += stream->max_sb_size;
++	ret = kernctl_get_sequence_number(infd, &index->packet_seq_num);
++	if (ret < 0) {
++		PERROR("kernctl_get_sequence_number");
++		goto error;
++	}
++	index->packet_seq_num = htobe64(index->packet_seq_num);
 +
-+			/*
-+			 * Only account lost packets located between
-+			 * succesfully extracted packets (do not account before
-+			 * and after since they are not visible in the
-+			 * resulting snapshot).
-+			 */
-+			stream->chan->lost_packets += lost;
-+			lost = 0;
-+			first = 0;
- 		}
+ error:
+ 	return ret;
+ }
+diff --git a/src/common/relayd/relayd.c b/src/common/relayd/relayd.c
+index 47db408..586a4e9 100644
+--- a/src/common/relayd/relayd.c
++++ b/src/common/relayd/relayd.c
+@@ -828,6 +828,11 @@ int relayd_send_index(struct lttcomm_relayd_sock *rsock,
+ 	msg.events_discarded = index->events_discarded;
+ 	msg.stream_id = index->stream_id;
  
- 		if (relayd_id == (uint64_t) -1ULL) {
++	if (rsock->minor >= 7) {
++		msg.stream_instance_id = index->stream_instance_id;
++		msg.packet_seq_num = index->packet_seq_num;
++	}
++
+ 	/* Send command */
+ 	ret = send_command(rsock, RELAYD_SEND_INDEX, &msg, sizeof(msg), 0);
+ 	if (ret < 0) {
+diff --git a/src/common/sessiond-comm/relayd.h b/src/common/sessiond-comm/relayd.h
+index ff56d3a..924434e 100644
+--- a/src/common/sessiond-comm/relayd.h
++++ b/src/common/sessiond-comm/relayd.h
+@@ -162,6 +162,8 @@ struct lttcomm_relayd_index {
+ 	uint64_t timestamp_end;
+ 	uint64_t events_discarded;
+ 	uint64_t stream_id;
++	uint64_t stream_instance_id;
++	uint64_t packet_seq_num;
+ } LTTNG_PACKED;
+ 
+ /*
 diff --git a/src/common/ust-consumer/ust-consumer.c b/src/common/ust-consumer/ust-consumer.c
-index d39f4e6..282580a 100644
+index 282580a..c0a0e7e 100644
 --- a/src/common/ust-consumer/ust-consumer.c
 +++ b/src/common/ust-consumer/ust-consumer.c
-@@ -1001,7 +1001,7 @@ error:
- static int snapshot_channel(uint64_t key, char *path, uint64_t relayd_id,
- 		uint64_t nb_packets_per_stream, struct lttng_consumer_local_data *ctx)
- {
--	int ret;
-+	int ret, first, lost;
- 	unsigned use_relayd = 0;
- 	unsigned long consumed_pos, produced_pos;
- 	struct lttng_consumer_channel *channel;
-@@ -1089,6 +1089,8 @@ static int snapshot_channel(uint64_t key, char *path, uint64_t relayd_id,
- 				produced_pos, nb_packets_per_stream,
- 				stream->max_sb_size);
+@@ -2053,6 +2053,20 @@ static int get_index_values(struct ctf_packet_index *index,
+ 	}
+ 	index->stream_id = htobe64(index->stream_id);
  
-+		first = 1;
-+		lost = 0;
- 		while (consumed_pos < produced_pos) {
- 			ssize_t read_len;
- 			unsigned long len, padded_len;
-@@ -1105,6 +1107,15 @@ static int snapshot_channel(uint64_t key, char *path, uint64_t relayd_id,
- 				}
- 				DBG("UST consumer get subbuf failed. Skipping it.");
- 				consumed_pos += stream->max_sb_size;
++	ret = ustctl_get_instance_id(ustream, &index->stream_instance_id);
++	if (ret < 0) {
++		PERROR("ustctl_get_instance_id");
++		goto error;
++	}
++	index->stream_instance_id = htobe64(index->stream_instance_id);
 +
-+				/*
-+				 * Start accounting lost packets only when we
-+				 * already have extracted packets (to match the
-+				 * content of the final snapshot).
-+				 */
-+				if (!first) {
-+					lost++;
-+				}
- 				continue;
- 			}
- 
-@@ -1140,6 +1151,16 @@ static int snapshot_channel(uint64_t key, char *path, uint64_t relayd_id,
- 				goto error_close_stream;
- 			}
- 			consumed_pos += stream->max_sb_size;
++	ret = ustctl_get_sequence_number(ustream, &index->packet_seq_num);
++	if (ret < 0) {
++		PERROR("ustctl_get_sequence_number");
++		goto error;
++	}
++	index->packet_seq_num = htobe64(index->packet_seq_num);
 +
-+			/*
-+			 * Only account lost packets located between
-+			 * succesfully extracted packets (do not account before
-+			 * and after since they are not visible in the
-+			 * resulting snapshot).
-+			 */
-+			stream->chan->lost_packets += lost;
-+			lost = 0;
-+			first = 0;
- 		}
- 
- 		/* Simply close the stream so we can use it on the next snapshot. */
+ error:
+ 	return ret;
+ }
 -- 
 1.9.1
