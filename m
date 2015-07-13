@@ -1,22 +1,19 @@
-From: Aravind HT <aravind.ht@gmail.com>
-Subject: Re: Lttng Soft Hang issue
-Date: Sat, 11 Jul 2015 12:56:51 +0530
-Message-ID: <CACd+_b7Gz6be-+0cc4gnQi92hSoPDDuu7fWw6t=Qn19WdNc2jA__726.427060044621$1436599673$gmane$org@mail.gmail.com>
-References: <CACd+_b7pakrUPzfzj=kXYYtkezpwxOLUgGs_Hy7yMYOh-f-PqQ@mail.gmail.com>
- <CACd+_b4MtdbAVjHCeQ6EnK5J3KRYzMK7Niq_c18pcKcdpnq07w@mail.gmail.com>
- <CA+jJMxuHWhy1n9Ty1Q6=eGd7bRe-brh3Mqog1uzw5EXbKDPJ0w@mail.gmail.com>
- <CA+jJMxt2Dph0yhuE3tQ3aYKyAmX8t1DnmT6kDbnWVSgNN=rmUA@mail.gmail.com>
- <CACd+_b5v5mpfBqNRQNHiJnA51niK0BchdAgf90VRpSQQpNn_7w@mail.gmail.com>
+From: =?GB2312?B?SWRtZHdrbXJhIEVkaWZhY3llZaOozai5/SBHb29nbGUgse21paOp?=
+ <forms-shares-noreply@google.com>
+Subject: =?gb2312?b?wcu94tfUvLq1xLL6xrcgssXE3Nf2usPP+srb?=
+Date: Mon, 13 Jul 2015 08:16:59 +0000
+Message-ID: <089e0158b36879a263051abd5862__23555.2200036638$1436775479$gmane$org@google.com>
+Reply-To: edifwkmra4@gmail.com
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1506431252=="
+Content-Type: multipart/mixed; boundary="===============0505905880=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f178.google.com ([209.85.217.178])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <aravind.ht@gmail.com>) id 1ZDpBZ-0008Kg-RX
- for lttng-dev@lists.lttng.org; Sat, 11 Jul 2015 03:27:02 -0400
-Received: by lbbyj8 with SMTP id yj8so17915278lbb.0
- for <lttng-dev@lists.lttng.org>; Sat, 11 Jul 2015 00:26:51 -0700 (PDT)
-In-Reply-To: <CACd+_b5v5mpfBqNRQNHiJnA51niK0BchdAgf90VRpSQQpNn_7w@mail.gmail.com>
+Received: from mail-oi0-f78.google.com ([209.85.218.78])
+ by ltt.polymtl.ca with esmtp (Exim 4.80) (envelope-from
+ <3-3OjVRQKACQFORMS-SHARES-NOREPLYGOOGLE.COM@trix.bounces.google.com>)
+ id 1ZEYvB-0005nu-7A
+ for lttng-dev@lists.lttng.org; Mon, 13 Jul 2015 04:17:06 -0400
+Received: by oibw187 with SMTP id w187so235019oib.2
+ for <lttng-dev@lists.lttng.org>; Mon, 13 Jul 2015 01:16:59 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,322 +22,114 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1506431252==
-Content-Type: multipart/alternative; boundary=047d7b3a81fe895b84051a94693e
+--===============0505905880==
+Content-Type: multipart/alternative; boundary=089e0158b368817610051abd58e2
 
---047d7b3a81fe895b84051a94693e
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+--089e0158b368817610051abd58e2
+Content-Type: text/plain; charset=GB2312; format=flowed; delsp=yes
+Content-Transfer-Encoding: base64
 
-To try this fix, I also needed the changes talked about in
-http://lists.lttng.org/pipermail/lttng-dev/2015-July/024689.html ,
-otherwise, I would see relayd coring.
-Once I took them I could see that the soft hang issue was no longer
-reproducible.
+ZGVhcg0KxL/HsEIyQr661fnMq7ykwdK1xKOstrzKx8i6t6K1xNGvxcyjrNW5u+G827jxsLq586Os
+zai5/cvRy/fS/cfmv6q3or/Nu6cNCtLRvq3Kx9K71taxyL3P1vfB97XEx/fKxsHLoaMNCta70qrE
++rXExL+x6r/Nu6fT0M341b4go6zIw8jtvP6w78T6y9HL97P2wLSjrNK7zOzBqs+1yc/N8rj2v827
+p6OhDQrT0NK7tqjWysG/tcTG89K1o6y49sjLvvW1w6O6zai5/cvRy/fS/cfm1ve2r7P2u/e/qrei
+DQrTxdbKv827p9T1w7S2vLj41/i1xLXItP2/zbunusO147XEoaMNCsurz7LN4sOzv827p7+qt6LI
+7bz+o7oNCsirx/IyMDC24Lj2ufq80qOsNzAwtuC49rXYx/jL0cv30v3H5qOs0rvM7Lei0MXJz83y
+tcS6o83it/7O8cb3o6zIw8T61ve2rw0Ks/a796Os0bDV0tPF1sq/zbuno6yyu9TZtci0/aGjDQq4
+/Lbgz+rH6SDXydGvIDI4OTkyODYxMTUgo6hRUSkgw+K30dTaz9/R3cq+yO28/rXEuabE3LrN0Ke5
++yzR3cq+yOe6zsvRy/cNCsirx/K1xL/Nu6cNCsrWu/qhqqGqMTM1MzM1NjM0MDIgxbfPyMn6DQoN
+Cg0KDQoNCg0KDQrO0tLR0fvH68T6zO7QtLHttaUgwcu94tfUvLq1xLL6xrcgssXE3Nf2usPP+srb
+oaMg0qrM7tC0tMux7bWlo6zH67fDzsqjug0KaHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZm9ybXMv
+ZC8xaUxuOTN6UGlCMVJkTFZhWGZ5Y1h1S3hSYnpDMUhJd0FJQUlhcTBHWFNvRS92aWV3Zm9ybT9j
+PTAmdz0xJnVzcD1tYWlsX2Zvcm1fbGluaw0K
+--089e0158b368817610051abd58e2
+Content-Type: text/html; charset=GB2312
+Content-Transfer-Encoding: base64
 
-Thanks for helping.
-
-On Wed, Jul 8, 2015 at 9:49 AM, Aravind HT <aravind.ht@gmail.com> wrote:
-
-> Sure, I will try the fix and update.
->
-> On Mon, Jul 6, 2015 at 10:12 PM, J=C3=A9r=C3=A9mie Galarneau <
-> jeremie.galarneau@efficios.com> wrote:
->
->> Would you mind testing Mathieu's patch?
->>
->> I have rebased it on stable-2.6:
->> git clone https://github.com/jgalar/lttng-tools.git -b hang-fix
->>
->> Thanks,
->> J=C3=A9r=C3=A9mie=EF=BF=BC
->>
->>
->> On Mon, Jul 6, 2015 at 11:23 AM, J=C3=A9r=C3=A9mie Galarneau <
->> jeremie.galarneau@efficios.com> wrote:
->>
->>> Hi,
->>>
->>> What do you observe when this happens? Does the session daemon become
->>> unresponsive?
->>>
->>> J=C3=A9r=C3=A9mie
->>>
->>> On Wed, May 27, 2015 at 6:19 AM, Aravind HT <aravind.ht@gmail.com>
->>> wrote:
->>>
->>>> Request someone to kindly help with this. Blocked at this point, unabl=
-e
->>>> to continue as any application crash leads to lttng not working.
->>>>
->>>> Thanks,
->>>> Aravind.
->>>>
->>>> On Thu, May 21, 2015 at 12:18 AM, Aravind HT <aravind.ht@gmail.com>
->>>> wrote:
->>>>
->>>>> Hi,
->>>>>
->>>>>
->>>>>
->>>>> I have recently started trying lttng 2.6 for a few applications on my
->>>>> Ubuntu 12.04 and I noticed that the health check on sessiond and cons=
-umerd
->>>>> failed soon after starting the session.
->>>>>
->>>>>
->>>>> On investigating, I found that thread_manage_consumer() had exited
->>>>> causing an overall health check failure.
->>>>>
->>>>>
->>>>> Here are the sequence of steps that I found contributed to
->>>>> *thread_manage_consumer()* exiting.
->>>>>
->>>>>
->>>>> 1.       In *thread_manage_apps() : 1558 , ust_app_unregister(pollfd)=
-* is
->>>>> being called. This happens when there is an error detected by *revent=
-s
->>>>> =3D LTTNG_POLL_GETEV(&events, i)*
->>>>>
->>>>> My initial guess here is that as one of my apps has crashed, producin=
-g
->>>>> a *LPOLLERR | LPOLLHUP | LPOLLRDHUP *to be generated for *epoll()*
->>>>>  causing *ust_app_unregister()* to be called for that app.
->>>>>
->>>>>
->>>>>
->>>>> 2.       In *ust_app_unregister():3154 , close_metadata(registry,
->>>>> ua_sess->consumer)  *in which* registry->metadata_closed =3D 1 *is se=
-t
->>>>> *.*
->>>>>
->>>>>
->>>>>
->>>>> (2.a) Note:* close_metadata() *also calls* consumer_close_metadata() =
-*which
->>>>> sends* LTTNG_CONSUMER_CLOSE_METADATA *and* metadata_key *to the
->>>>> consumerd to stop it from further dealing with the concerned app. Som=
-ehow
->>>>> this doesn=E2=80=99t seem to help*.*
->>>>>
->>>>>
->>>>>
->>>>> 3.       Next, I see that the *thread_manage_consumer():1353* for
->>>>> some reason has ignored the above 2.a and gets to do request/reply fo=
-r that
->>>>> app by calling*ust_consumer_metadata_request():491 ->
->>>>> ust_app_push_metadat(ust_reg, socket,1) *which at line 460 checks for
->>>>> *registry->metadata_closed* and returns an *=E2=80=93EPIPE*
->>>>>
->>>>>
->>>>>
->>>>> 4.       This *=E2=80=93EPIPE* error cascades all the way back up to
->>>>> *thread_manage_consumer():1353* at which point
->>>>> *thread_manage_consumer()* decides to exit causing health_check() to
->>>>> fail.
->>>>>
->>>>>
->>>>>
->>>>>
->>>>>
->>>>> So it looks like under some scenario, an application crash could caus=
-e
->>>>> the lttng some problems.
->>>>>
->>>>>
->>>>>
->>>>> I think a possible fix for this scenario, is to instead of 4, send an
->>>>> *ERROR* message back to *consumerd()* . This could be done from
->>>>> *ust_consumer_metadata_request()* call. Can someone please let me
->>>>> know if this is correct and shed more light on the issue ?
->>>>>
->>>>>
->>>>>
->>>>>
->>>>>
->>>>> Please forgive if there are any guideline omissions for posting here
->>>>> from my part. This is my first post.
->>>>>
->>>>>
->>>>> Regards,
->>>>>
->>>>> Aravind.
->>>>>
->>>>
->>>>
->>>> _______________________________________________
->>>> lttng-dev mailing list
->>>> lttng-dev@lists.lttng.org
->>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>>
->>>>
->>>
->>>
->>> --
->>> J=C3=A9r=C3=A9mie Galarneau
->>> EfficiOS Inc.
->>> http://www.efficios.com
->>>
->>
->>
->>
->> --
->> J=C3=A9r=C3=A9mie Galarneau
->> EfficiOS Inc.
->> http://www.efficios.com
->>
->
->
-
---047d7b3a81fe895b84051a94693e
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">To try this fix, I also needed the changes talked about in=
-=C2=A0<a href=3D"http://lists.lttng.org/pipermail/lttng-dev/2015-July/02468=
-9.html">http://lists.lttng.org/pipermail/lttng-dev/2015-July/024689.html</a=
-> , otherwise, I would see relayd coring.<div>Once I took them I could see =
-that the soft hang issue was no longer reproducible.=C2=A0</div><div><br></=
-div><div>Thanks for helping.</div></div><div class=3D"gmail_extra"><br><div=
- class=3D"gmail_quote">On Wed, Jul 8, 2015 at 9:49 AM, Aravind HT <span dir=
-=3D"ltr">&lt;<a href=3D"mailto:aravind.ht@gmail.com" target=3D"_blank">arav=
-ind.ht@gmail.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote"=
- style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><d=
-iv dir=3D"ltr">Sure, I will try the fix and update.</div><div class=3D"HOEn=
-Zb"><div class=3D"h5"><div class=3D"gmail_extra"><br><div class=3D"gmail_qu=
-ote">On Mon, Jul 6, 2015 at 10:12 PM, J=C3=A9r=C3=A9mie Galarneau <span dir=
-=3D"ltr">&lt;<a href=3D"mailto:jeremie.galarneau@efficios.com" target=3D"_b=
-lank">jeremie.galarneau@efficios.com</a>&gt;</span> wrote:<br><blockquote c=
-lass=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;=
-padding-left:1ex"><div dir=3D"ltr">Would you mind testing Mathieu&#39;s pat=
-ch?<div><br></div><div>I have rebased it on stable-2.6:</div><div><div>git =
-clone <a href=3D"https://github.com/jgalar/lttng-tools.git" target=3D"_blan=
-k">https://github.com/jgalar/lttng-tools.git</a> -b hang-fix<br></div></div=
-><div><br></div><div><div>Thanks,</div><div>J=C3=A9r=C3=A9mie=EF=BF=BC</div=
-></div><div><br></div></div><div><div><div class=3D"gmail_extra"><br><div c=
-lass=3D"gmail_quote">On Mon, Jul 6, 2015 at 11:23 AM, J=C3=A9r=C3=A9mie Gal=
-arneau <span dir=3D"ltr">&lt;<a href=3D"mailto:jeremie.galarneau@efficios.c=
-om" target=3D"_blank">jeremie.galarneau@efficios.com</a>&gt;</span> wrote:<=
-br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left=
-:1px #ccc solid;padding-left:1ex"><div dir=3D"ltr">Hi,<div><br></div><div>W=
-hat do you observe when this happens? Does the session daemon become unresp=
-onsive?</div><div><br></div><div>J=C3=A9r=C3=A9mie</div></div><div class=3D=
-"gmail_extra"><br><div class=3D"gmail_quote"><div><div>On Wed, May 27, 2015=
- at 6:19 AM, Aravind HT <span dir=3D"ltr">&lt;<a href=3D"mailto:aravind.ht@=
-gmail.com" target=3D"_blank">aravind.ht@gmail.com</a>&gt;</span> wrote:<br>=
-</div></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;bo=
-rder-left:1px #ccc solid;padding-left:1ex"><div><div><div dir=3D"ltr">Reque=
-st someone to kindly help with this. Blocked at this point, unable to conti=
-nue as any application crash leads to lttng not working.<div><br></div><div=
->Thanks,</div><div>Aravind.</div></div><div><div><div class=3D"gmail_extra"=
-><br><div class=3D"gmail_quote">On Thu, May 21, 2015 at 12:18 AM, Aravind H=
-T <span dir=3D"ltr">&lt;<a href=3D"mailto:aravind.ht@gmail.com" target=3D"_=
-blank">aravind.ht@gmail.com</a>&gt;</span> wrote:<br><blockquote class=3D"g=
-mail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-l=
-eft:1ex"><div dir=3D"ltr"><p class=3D"MsoNormal" style=3D"font-size:12.8000=
-001907349px">Hi,</p><p class=3D"MsoNormal" style=3D"font-size:12.8000001907=
-349px">=C2=A0</p><p class=3D"MsoNormal" style=3D"font-size:12.8000001907349=
-px">I have recently started trying lttng 2.6 for a few applications on my U=
-buntu 12.04 and I noticed that the health check on sessiond and consumerd f=
-ailed soon after starting the session.</p><p class=3D"MsoNormal" style=3D"f=
-ont-size:12.8000001907349px"><br></p><p class=3D"MsoNormal" style=3D"font-s=
-ize:12.8000001907349px">On investigating, I found that thread_manage_consum=
-er() had exited causing an overall health check failure.</p><p class=3D"Mso=
-Normal" style=3D"font-size:12.8000001907349px"><br></p><p class=3D"MsoNorma=
-l" style=3D"font-size:12.8000001907349px">Here are the sequence of steps th=
-at I found contributed to=C2=A0<b>thread_manage_consumer()</b>=C2=A0exiting=
-.</p><p class=3D"MsoNormal" style=3D"font-size:12.8000001907349px"></p><p c=
-lass=3D"MsoNormal" style=3D"font-size:12.8000001907349px"><br></p><p style=
-=3D"font-size:12.8000001907349px">1.<span style=3D"font-stretch:normal;font=
--size:7pt;font-family:&#39;Times New Roman&#39;">=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0</span>In=C2=A0<b>thread_manage_apps() : 1558 , ust_app_u=
-nregister(pollfd)</b>=C2=A0is being called. This happens when there is an e=
-rror detected by=C2=A0<b>revents =3D LTTNG_POLL_GETEV(&amp;events, i)</b></=
-p><p style=3D"font-size:12.8000001907349px">My initial guess here is that a=
-s one of my apps has crashed, producing a=C2=A0<b>LPOLLERR | LPOLLHUP | LPO=
-LLRDHUP=C2=A0</b>to be generated for=C2=A0<b>epoll()</b>=C2=A0causing=C2=A0=
-<b>ust_app_unregister()</b>=C2=A0to be called for that app.</p><p style=3D"=
-font-size:12.8000001907349px">=C2=A0</p><p style=3D"font-size:12.8000001907=
-349px">2.<span style=3D"font-stretch:normal;font-size:7pt;font-family:&#39;=
-Times New Roman&#39;">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0</span>In=
-=C2=A0<b>ust_app_unregister():3154 , close_metadata(registry, ua_sess-&gt;c=
-onsumer)=C2=A0=C2=A0</b>in which<b>=C2=A0registry-&gt;metadata_closed =3D 1=
-=C2=A0</b>is set<b>.</b></p><p style=3D"font-size:12.8000001907349px;text-i=
-ndent:0.5in">=C2=A0</p><p style=3D"font-size:12.8000001907349px;text-indent=
-:0.5in">(2.a) Note:<b>=C2=A0close_metadata()=C2=A0</b>also calls<b>=C2=A0co=
-nsumer_close_metadata()=C2=A0</b>which sends<b>=C2=A0LTTNG_CONSUMER_CLOSE_M=
-ETADATA=C2=A0</b>and<b>=C2=A0metadata_key=C2=A0</b>to the consumerd to stop=
- it from further dealing with the concerned app. Somehow this doesn=E2=80=
-=99t seem to help<b>.</b></p><p style=3D"font-size:12.8000001907349px"><b>=
-=C2=A0</b></p><p style=3D"font-size:12.8000001907349px">3.<span style=3D"fo=
-nt-stretch:normal;font-size:7pt;font-family:&#39;Times New Roman&#39;">=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0</span>Next, I see that the=C2=A0<b>=
-thread_manage_consumer():1353</b>=C2=A0for some reason has ignored the abov=
-e 2.a and gets to do request/reply for that app by calling<b>ust_consumer_m=
-etadata_request():491 -&gt; ust_app_push_metadat(ust_reg, socket,1)=C2=A0</=
-b>which at line 460 checks for=C2=A0<b>registry-&gt;metadata_closed</b>=C2=
-=A0and returns an=C2=A0<b>=E2=80=93EPIPE</b></p><p class=3D"MsoNormal" styl=
-e=3D"font-size:12.8000001907349px">=C2=A0</p><p style=3D"font-size:12.80000=
-01907349px">4.<span style=3D"font-stretch:normal;font-size:7pt;font-family:=
-&#39;Times New Roman&#39;">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0</span=
->This=C2=A0<b>=E2=80=93EPIPE</b>=C2=A0error cascades all the way back up to=
-=C2=A0<b>thread_manage_consumer():1353</b>=C2=A0at which point=C2=A0<b>thre=
-ad_manage_consumer()</b>=C2=A0decides to exit causing health_check() to fai=
-l.</p><p style=3D"font-size:12.8000001907349px">=C2=A0</p><p class=3D"MsoNo=
-rmal" style=3D"font-size:12.8000001907349px">=C2=A0</p><p class=3D"MsoNorma=
-l" style=3D"font-size:12.8000001907349px">So it looks like under some scena=
-rio, an application crash could cause the lttng some problems.</p><p class=
-=3D"MsoNormal" style=3D"font-size:12.8000001907349px">=C2=A0</p><p class=3D=
-"MsoNormal" style=3D"font-size:12.8000001907349px">I think a possible fix f=
-or this scenario, is to instead of 4, send an=C2=A0<b>ERROR</b>=C2=A0messag=
-e back to=C2=A0<b>consumerd()</b>=C2=A0. This could be done from=C2=A0<b>us=
-t_consumer_metadata_request()</b>=C2=A0call. Can someone please let me know=
- if this is correct and shed more light on the issue ?</p><p class=3D"MsoNo=
-rmal" style=3D"font-size:12.8000001907349px">=C2=A0</p><p class=3D"MsoNorma=
-l" style=3D"font-size:12.8000001907349px">=C2=A0</p><p class=3D"MsoNormal" =
-style=3D"font-size:12.8000001907349px">Please forgive if there are any guid=
-eline omissions for posting here from my part. This is my first post.</p><p=
- class=3D"MsoNormal" style=3D"font-size:12.8000001907349px"><br></p><p clas=
-s=3D"MsoNormal" style=3D"font-size:12.8000001907349px">Regards,</p><p class=
-=3D"MsoNormal" style=3D"font-size:12.8000001907349px">Aravind.</p></div>
-</blockquote></div><br></div>
-</div></div><br></div></div>_______________________________________________=
-<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/li=
-stinfo/lttng-dev</a><br>
-<br></blockquote></div><span><font color=3D"#888888"><br><br clear=3D"all">=
-<div><br></div>-- <br><div>J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS Inc.<br>=
-<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
-om</a></div>
-</font></span></div>
-</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br><div>J=C3=A9=
-r=C3=A9mie Galarneau<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com=
-" target=3D"_blank">http://www.efficios.com</a></div>
-</div>
-</div></div></blockquote></div><br></div>
-</div></div></blockquote></div><br></div>
-
---047d7b3a81fe895b84051a94693e--
+PGh0bWw+PGJvZHkgaXRlbXNjb3BlIGl0ZW10eXBlPSJodHRwOi8vc2NoZW1hLm9yZy9FbWFpbE1l
+c3NhZ2UiIHN0eWxlPSIiPjxkaXYgY2xhc3M9InNzLWVtYWlsLWJvZHkiIHN0eWxlPSJkaXNwbGF5
+OmlubGluZTt3aWR0aDo1NzZweDsiPjxkaXYgaXRlbXByb3A9ImFjdGlvbiIgaXRlbXNjb3BlIGl0
+ZW10eXBlPSJodHRwOi8vc2NoZW1hLm9yZy9WaWV3QWN0aW9uIiBzdHlsZT0iIj48bWV0YSBpdGVt
+cHJvcD0ibmFtZSIgY29udGVudD0izO7QtLHttaUiIHN0eWxlPSIiPgo8bWV0YSBpdGVtcHJvcD0i
+dXJsIiBjb250ZW50PSJodHRwczovL2RvY3MuZ29vZ2xlLmNvbS9mb3Jtcy9kLzFpTG45M3pQaUIx
+UmRMVmFYZnljWHVLeFJiekMxSEl3QUlBSWFxMEdYU29FL3ZpZXdmb3JtP2M9MCZhbXA7dz0xJmFt
+cDt1c3A9bWFpbF9nb3RvX2Zvcm0iIHN0eWxlPSIiPjwvZGl2Pgo8cCBpdGVtcHJvcD0iZGVzY3Jp
+cHRpb24iIHN0eWxlPSIiPmRlYXIgPGJyPsS/x7BCMkK+utX5zKu8pMHStcSjrLa8ysfIureitcTR
+r8XMo6zVubvhvNu48bC6ufOjrM2ouf3L0cv30v3H5r+qt6K/zbun0tG+rcrH0rvW1rHIvc/W98H3
+tcTH98rGwcuhozxwPta70qrE+rXExL+x6r/Nu6fT0M341b4go6zIw8jtvP6w78T6y9HL97P2wLSj
+rNK7zOzBqs+1yc/N8rj2v827p6OhPHA+09DSu7ao1srBv7XExvPStaOsuPbIy771tcOjus2ouf3L
+0cv30v3H5tb3tq+z9rv3v6q3ojxwPtPF1sq/zbun1PXDtLa8uPjX+LXEtci0/b/Nu6e6w7XjtcSh
+ozxwPsurz7LN4sOzv827p7+qt6LI7bz+o7o8YnI+yKvH8jIwMLbguPa5+rzSo6w3MDC24Lj2tdjH
++MvRy/fS/cfmo6zSu8zst6LQxcnPzfK1xLqjzeK3/s7xxvejrMjDxPrW97avs/a796Os0bDV0tPF
+1sq/zbuno6yyu9TZtci0/aGjPHA+uPy24M/qx+kg18nRryAyODk5Mjg2MTE1IKOoUVEpICDD4rfR
+1NrP39Hdyr7I7bz+tcS5psTcus3Qp7n7LNHdyr7I57rOy9HL98irx/K1xL/Nu6c8cD7K1rv6oaqh
+qjEzNTMzNTYzNDAyIMW3z8jJ+jwvcD48L3A+PC9wPjwvcD48L3A+PC9wPjwvcD4KyOe5+8T6zt63
+qLLpv7S78szhvbu0y7HttaWjrL/J0tQ8YSBocmVmPSJodHRwczovL2RvY3MuZ29vZ2xlLmNvbS9m
+b3Jtcy9kLzFpTG45M3pQaUIxUmRMVmFYZnljWHVLeFJiekMxSEl3QUlBSWFxMEdYU29FL3ZpZXdm
+b3JtP2M9MCZhbXA7dz0xJmFtcDt1c3A9bWFpbF9mb3JtX2xpbmsiIHN0eWxlPSIiPtTaIEdvb2ds
+ZSCx7bWl1tDM7tC0PC9hPqGjCjxwPjwvcD4KPGRpdiBkaXI9Imx0ciIgc3R5bGU9IiI+PGRpdiBj
+bGFzcz0iZm9ybS1ib2R5IiBzdHlsZT0iIj48aDEgY2xhc3M9InNzLWZvcm0tdGl0bGUiIGRpcj0i
+bHRyIiBzdHlsZT0ibWFyZ2luOi42N2VtIDA7Ij7By73i19S8urXEsvrGtyCyxcTc1/a6w8/6yts8
+L2gxPjwvZGl2Pgo8ZGl2IHN0eWxlPSJ3aGl0ZS1zcGFjZTogcHJlLXdyYXA7IGRpc3BsYXk6IGlu
+bGluZSI+Cgo8L2Rpdj4KPGRpdiBjbGFzcz0iZm9ybS1ib2R5IiBzdHlsZT0iIj48ZGl2IGNsYXNz
+PSJzcy1mb3JtIiBzdHlsZT0iIj48Zm9ybSBhY3Rpb249Imh0dHBzOi8vZG9jcy5nb29nbGUuY29t
+L2Zvcm1zL2QvMWlMbjkzelBpQjFSZExWYVhmeWNYdUt4UmJ6QzFISXdBSUFJYXEwR1hTb0UvZm9y
+bVJlc3BvbnNlIiBtZXRob2Q9IlBPU1QiIGlkPSJzcy1mb3JtIiB0YXJnZXQ9Il9zZWxmIiBvbnN1
+Ym1pdD0iIiBzdHlsZT0iIj48b2wgcm9sZT0ibGlzdCIgY2xhc3M9InNzLXF1ZXN0aW9uLWxpc3Qi
+IHN0eWxlPSJwYWRkaW5nLWxlZnQ6IDBsaXN0LXN0eWxlLXR5cGU6bm9uZTsiPgoKPGlucHV0IHR5
+cGU9ImhpZGRlbiIgbmFtZT0iZHJhZnRSZXNwb25zZSIgdmFsdWU9IlssLCZxdW90Oy00ODM0MDY3
+NjYzNzQ4MzQ4MDUmcXVvdDtdCiIgc3R5bGU9IiI+CjxpbnB1dCB0eXBlPSJoaWRkZW4iIG5hbWU9
+InBhZ2VIaXN0b3J5IiB2YWx1ZT0iMCIgc3R5bGU9IiI+CjxpbnB1dCB0eXBlPSJoaWRkZW4iIG5h
+bWU9InVzcCIgdmFsdWU9Im1haWxfZm9ybV9zdWJtaXQiIHN0eWxlPSIiPgoKPGlucHV0IHR5cGU9
+ImhpZGRlbiIgbmFtZT0iZmJ6eCIgdmFsdWU9Ii00ODM0MDY3NjYzNzQ4MzQ4MDUiIHN0eWxlPSIi
+PgoKPGRpdiBjbGFzcz0ic3MtaXRlbSBzcy1uYXZpZ2F0ZSIgc3R5bGU9Im1hcmdpbjoxMnB4IDA7
+Ij48dGFibGUgaWQ9Im5hdmlnYXRpb24tdGFibGUiIHN0eWxlPSIiPjx0Ym9keT48dHI+PHRkIGNs
+YXNzPSJzcy1mb3JtLWVudHJ5IGdvb2ctaW5saW5lLWJsb2NrIiBpZD0ibmF2aWdhdGlvbi1idXR0
+b25zIiBkaXI9Imx0ciIgc3R5bGU9Im1hcmdpbi1ib3R0b206MS41ZW07dmVydGljYWwtYWxpZ246
+bWlkZGxlO21hcmdpbi1sZWZ0OjA7bWFyZ2luLXRvcDowO21heC13aWR0aDoxMDAlO3Bvc2l0aW9u
+OnJlbGF0aXZlO2Rpc3BsYXk6aW5saW5lLWJsb2NrOyI+CjxpbnB1dCB0eXBlPSJzdWJtaXQiIG5h
+bWU9InN1Ym1pdCIgdmFsdWU9IszhvbsiIGlkPSJzcy1zdWJtaXQiIGNsYXNzPSJqZmstYnV0dG9u
+IGpmay1idXR0b24tYWN0aW9uICIgc3R5bGU9IiI+CjwvdGQ+CjwvdHI+PC90Ym9keT48L3RhYmxl
+PjwvZGl2Pjwvb2w+PC9mb3JtPjwvZGl2Pgo8ZGl2IGNsYXNzPSJzcy1mb290ZXIiIHN0eWxlPSIi
+PjxkaXYgY2xhc3M9InNzLWF0dHJpYnV0aW9uIiBzdHlsZT0iIj48L2Rpdj4KPGRpdiBjbGFzcz0i
+c3MtbGVnYWwiIHN0eWxlPSIiPjxkaXYgY2xhc3M9ImRpc2NsYWltZXItc2VwYXJhdG9yIiBzdHls
+ZT0iIj48L2Rpdj4KPGRpdiBjbGFzcz0iZGlzY2xhaW1lciIgZGlyPSJsdHIiIHN0eWxlPSIiPjxk
+aXYgY2xhc3M9InBvd2VyZWQtYnktbG9nbyIgc3R5bGU9Im1hcmdpbi10b3A6MmVtOyI+PHNwYW4g
+Y2xhc3M9InBvd2VyZWQtYnktdGV4dCIgc3R5bGU9IiI+vLzK9czhuamjujwvc3Bhbj4KPGEgaHJl
+Zj0iaHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS9mb3Jtcy9hYm91dC8/dXRtX3NvdXJjZT1wcm9kdWN0
+JmFtcDt1dG1fbWVkaXVtPWZvcm1zX2xvZ28mYW1wO3V0bV9jYW1wYWlnbj1mb3JtcyIgc3R5bGU9
+IiI+PGRpdiBjbGFzcz0ic3MtbG9nby1jb250YWluZXIiIHN0eWxlPSIiPjxpbWcgc3JjPSJodHRw
+czovL3NzbC5nc3RhdGljLmNvbS9kb2NzL2Zvcm1zL2Zvcm1zX2xvZ29fc21hbGxfZGFyay5wbmci
+IGFsdD0iR29vZ2xlILHttaUiIHN0eWxlPSIiPjwvZGl2PjwvYT48L2Rpdj4KPGRpdiBjbGFzcz0i
+c3MtdGVybXMiIHN0eWxlPSJjb2xvcjojNzc3O2ZvbnQtc2l6ZToxMXB4O21hcmdpbi10b3A6MS41
+ZW07Ij48c3BhbiBjbGFzcz0iZGlzY2xhaW1lci1tc2ciIHN0eWxlPSIiPrTLxNrI3bK7ysfTySBH
+b29nbGUgy/m0tL2oo6xHb29nbGUgsru21Mbk1/fIzrrOtaOxo6GjPC9zcGFuPgo8YnI+CjxhIGhy
+ZWY9Imh0dHBzOi8vZG9jcy5nb29nbGUuY29tL2Zvcm1zL2QvMWlMbjkzelBpQjFSZExWYVhmeWNY
+dUt4UmJ6QzFISXdBSUFJYXEwR1hTb0UvcmVwb3J0YWJ1c2U/c291cmNlPWh0dHBzOi8vZG9jcy5n
+b29nbGUuY29tL2Zvcm1zL2QvMWlMbjkzelBpQjFSZExWYVhmeWNYdUt4UmJ6QzFISXdBSUFJYXEw
+R1hTb0Uvdmlld2Zvcm0/c2lkJTNENmNlYmFmZGZkYzUwNDU1OCUyNmMlM0QwJTI2dyUzRDElMjZ0
+b2tlbiUzREdLZXpoazRCQUFBLm95NGlpYWpCdzZ1NlBYR3dGNzBpUGcuaGNTa2FyaXdydm9DR3Iz
+QWxTZzJvUSIgc3R5bGU9IiI+vtmxqMDE08PQ0M6qPC9hPgotCjxhIGhyZWY9Imh0dHA6Ly93d3cu
+Z29vZ2xlLmNvbS9hY2NvdW50cy9UT1MiIHN0eWxlPSIiPrf+zvHM9b/uPC9hPgotCjxhIGhyZWY9
+Imh0dHA6Ly93d3cuZ29vZ2xlLmNvbS9nb29nbGUtZC1zL3Rlcm1zLmh0bWwiIHN0eWxlPSIiPsbk
+y/vM9b/uPC9hPjwvZGl2PjwvZGl2PjwvZGl2PjwvZGl2Pgo8L2Rpdj48L2Rpdj4KPGJyPgo8c3R5
+bGUgdHlwZT0idGV4dC9jc3MiIG1lZGlhPSJzY3JlZW4iIHN0eWxlPSIiPjwvc3R5bGU+PC9kaXY+
+PC9ib2R5PjwvaHRtbD4=
+--089e0158b368817610051abd58e2--
 
 
---===============1506431252==
+--===============0505905880==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1506431252==--
+--===============0505905880==--
