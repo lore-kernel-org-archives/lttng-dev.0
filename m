@@ -1,19 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: SIGSEGV __event_probe,
- C++ application (static linking)
-Date: Fri, 17 Jul 2015 14:39:36 +0000 (UTC)
-Message-ID: <1005452943.905.1437143976249.JavaMail.zimbra__30931.4306047328$1437144059$gmane$org@efficios.com>
-References: <DM2PR12MB0314151E294EC13D1F7FF39A9B9C0@DM2PR12MB0314.namprd12.prod.outlook.com>
- <1746034392.1239.1437019247456.JavaMail.zimbra@efficios.com>
- <DM2PR12MB0314AF5D3CF156AE6E20EE769B980@DM2PR12MB0314.namprd12.prod.outlook.com>
+From: Francis Giraldeau <francis.giraldeau@gmail.com>
+Subject: Re: [PATCH] Fix: Rename kvm TRACE_SYSTEM to avoid name
+	clash
+Date: Wed, 22 Jul 2015 20:25:24 +0000
+Message-ID: <CAC6yHM7ttA6FfJeMrxq6NtbW+uRs0n9riBbPAX32wEy8ZPgvGA__34279.93191076$1437596801$gmane$org@mail.gmail.com>
+References: <1436899428-26416-1-git-send-email-francis.giraldeau@gmail.com>
+ <265205524.235.1437064862252.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1645624839=="
+Content-Type: multipart/mixed; boundary="===============0513497181=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-qk0-f173.google.com ([209.85.220.173])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZG6nn-0003s1-Bi
- for lttng-dev@lists.lttng.org; Fri, 17 Jul 2015 10:39:57 -0400
-In-Reply-To: <DM2PR12MB0314AF5D3CF156AE6E20EE769B980@DM2PR12MB0314.namprd12.prod.outlook.com>
+ (envelope-from <francis.giraldeau@gmail.com>) id 1ZI0aA-0007lk-W3
+ for lttng-dev@lists.lttng.org; Wed, 22 Jul 2015 16:25:40 -0400
+Received: by qkbm65 with SMTP id m65so106813879qkb.2
+ for <lttng-dev@lists.lttng.org>; Wed, 22 Jul 2015 13:25:33 -0700 (PDT)
+In-Reply-To: <265205524.235.1437064862252.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,273 +23,201 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Dilong Zheng <Dilong.Zheng@mitel.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, =?UTF-8?Q?C=C3=A9dric_Biancheri?= <cedric.biancheri@polymtl.ca>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1645624839==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_904_1053545550.1437143976227"
+--===============0513497181==
+Content-Type: multipart/alternative; boundary=001a1146ed3aa2c532051b7c924e
 
-------=_Part_904_1053545550.1437143976227
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+--001a1146ed3aa2c532051b7c924e
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-OK (re-adding lttng-dev) 
+Le jeu. 16 juil. 2015 =C3=A0 12:41, Mathieu Desnoyers <
+mathieu.desnoyers@efficios.com> a =C3=A9crit :
 
------ On Jul 17, 2015, at 9:09 AM, Dilong Zheng <Dilong.Zheng@mitel.com> wrote: 
+> I cannot reproduce this issue with a kernel 4.1.1 and with
+> lttng-modules master and stable-2.6 HEAD.
+>
+> Can you double-check ?
+>
 
-> I was using lttng-ust 2.5.4 but now I'm moving up to lttng-ust 2.5.5 (which
-> should be the latest 2.5 version)
+Thanks for this follow-up. I confirm that the bug is reproducible with
+lttng-modules master on linux 4.1. I opened an issue in the bug tracker for
+further details. I added a script to reproduce the bug easily.
 
-> Thanks,
+https://bugs.lttng.org/issues/895
 
-> Dilong
 
-> From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Sent: Thursday, July 16, 2015 12:00 AM
-> To: Dilong Zheng
-> Cc: lttng-dev
-> Subject: Re: [lttng-dev] SIGSEGV __event_probe, C++ application (static linking)
-> ----- On Jul 13, 2015, at 4:37 PM, Dilong Zheng <Dilong.Zheng@mitel.com> wrote:
+> Moreover, just changing the TRACE_SYSTEM without changing
+> the tracepoint namespacing prefix from kvm_ to kvm_x86 in the
+> whole file is wrong.
 
->> Hi,
 
->> I have instrumented a C++ application with user space tracepoints. When I run
->> the application and do a: "lttng list -u" command, I am able to see all my
->> available tracepoints for the application. However when I enable those user
->> space tracepoints and then start the trace, a core gets dumped and examining
->> the core file in gdb I see the following error:
+I do not understand. In lttng-ust, there is a TRACEPOINT_PROVIDER string
+that must be repeated into each TRACEPOINT_EVENT declaration, but this is
+not the case for the kernel LTTNG_TRACEPOINT_EVENT macro. Can you explain
+what you mean by "namespace"?
 
->> Program terminated with signal SIGSEGV, Segmentation fault.
->> #0 0x00000000 in ?? ()
 
->> ...
+> And if we do this, we would need the _MAP
+> flavor of the macros to map to the original kernel names.
+>
 
->> (gdb) bt
->> #0 0x00000000 in ?? ()
->> #1 0x08dd1088 in __event_probe__mike___sem_wait_entry (__tp_data=0xef92d818)
->> at /localhome/zhengd/override_mcd/System/SS_Inc/./sem_wrapper.h:67
->> #2 0x08dd44d9 in __tracepoint_cb_mike___sem_wait_entry () at
->> /localhome/zhengd/override_mc /System/SS_Inc/sem_wrapper.h:67
->> #3 __wrap_sem_wait (sem=0xf43014c8) at
->> /localhome/zhengd/override_mcd/System/System_Services/SysServices_Linux/SystemLinux.cpp:1877
+In fact, event names are not modified by the patch, such that backward
+compatibility seems preserved AFAIK. Do I miss something?
 
->> Contextual Information: I would like to trace all calls to sem_wait() in my
->> application. I am simply using a wrapper sem_wait function where I can place
->> tracepoint() calls. Here's what the sem_wait wrapper looks like:
+Francis
 
->> extern "C" int __real_sem_wait(sem_t*);
 
->> extern "C" int __wrap_sem_wait(sem_t* sem)
-
->> {
-
->> tracepoint(mike, sem_wait_entry);
-
->> int ret = __real_sem_wait(sem);
-
->> tracepoint(mike, sem_wait_exit, ret);
-
->> return ret;
-
->> }
-
->> Here is the TRACEPOINT_EVENT macro found in my tracepoint provider header file
->> (which was generated using lttng-gen-tp command line utility):
-
->> TRACEPOINT_EVENT(mike,
-
->> sem_wait_entry,
-
->> TP_ARGS(),
-
->> TP_FIELDS()
-
->> )
-
->> And I am statically linking by using an existing CPP file (file with the
->> __wrap_sem_wait() function) to create probes. I would just like to know any
->> possible reasons why this error may be happening given the above mentioned
->> circumstances and what I may be able to try in order to fix this.
-
-> Which UST version do you use ? Make sure you upgrade to latest,
-> since we have fixed a similar segfault issue with probes compiled in
-> C++ not so long ago.
-
-> Thanks,
-
-> Mathieu
-
->> Thanks,
-
->> Dilong
-
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+> ----- On Jul 14, 2015, at 2:43 PM, Francis Giraldeau
+> francis.giraldeau@gmail.com wrote:
+>
+> > From: C=C3=A9dric Biancheri <cedric.biancheri@polymtl.ca>
+> >
+> > The lttng-probe-kvm and lttng-probe-kvm-x86 had the same TRACE_SYSTEM
+> string.
+> > Because of that, both modules can't be loaded at the same time. The
+> second
+> > module fails to load silently. This patch rename the TRACE_SYSTEM of
+> > lttng-probe-kvm-x86 to avoid the clash.
+> >
+> > Signed-off-by: Francis Giraldeau <francis.giraldeau@gmail.com>
+> > ---
+> > instrumentation/events/lttng-module/arch/x86/kvm/trace.h | 2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
+> > b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
+> > index 32c4743..ddbfda7 100644
+> > --- a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
+> > +++ b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
+> > @@ -12,7 +12,7 @@
+> > #include <../arch/x86/kvm/kvm_cache_regs.h>
+> >
+> > #undef TRACE_SYSTEM
+> > -#define TRACE_SYSTEM kvm
+> > +#define TRACE_SYSTEM kvm_x86
+> >
+> > /*
+> >  * Tracepoint for guest mode entry.
+> > --
+> > 2.1.4
+> >
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
 > --
 > Mathieu Desnoyers
 > EfficiOS Inc.
 > http://www.efficios.com
+>
 
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
+--001a1146ed3aa2c532051b7c924e
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-------=_Part_904_1053545550.1437143976227
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
-<html><body><div style="font-family: arial, helvetica, sans-serif; font-size: 12pt; color: #000000"><div>OK (re-adding lttng-dev)<br></div><div><br></div><span id="zwchr" data-marker="__DIVIDER__">----- On Jul 17, 2015, at 9:09 AM, Dilong Zheng &lt;Dilong.Zheng@mitel.com&gt; wrote:<br></span><div data-marker="__QUOTED_TEXT__"><blockquote style="border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><style style="display:none;"><!-- P {margin-top:0;margin-bottom:0;} --></style>
-
-
-<div id="divtagdefaultwrapper" style="font-size:12pt;color:#000000;background-color:#FFFFFF;font-family:Calibri,Arial,Helvetica,sans-serif;">
-<p><br>
-</p>
-I was using lttng-ust 2.5.4 but now I'm moving up to lttng-ust 2.5.5 (which should be the latest 2.5 version)
-<div><br>
-</div>
-<div>Thanks,</div>
-<div><br>
-</div>
-<div>Dilong<br>
+<div dir=3D"ltr"><div>Le=C2=A0jeu. 16 juil. 2015 =C3=A0=C2=A012:41, Mathieu=
+ Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com">mathieu.de=
+snoyers@efficios.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><div class=3D"gma=
+il_quote"><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;bord=
+er-left:1px #ccc solid;padding-left:1ex">I cannot reproduce this issue with=
+ a kernel 4.1.1 and with<br>
+lttng-modules master and stable-2.6 HEAD.<br>
 <br>
-<div style="color: rgb(0, 0, 0);">
-<hr style="display:inline-block; width:98%">
-<div id="divRplyFwdMsg" dir="ltr"><span style="font-size: 11pt; color: #000000; font-family: Calibri,sans-serif;" data-mce-style="font-size: 11pt; color: #000000; font-family: Calibri,sans-serif;" face="Calibri, sans-serif" color="#000000"><b>From:</b> Mathieu Desnoyers &lt;mathieu.desnoyers@efficios.com&gt;<br>
-<b>Sent:</b> Thursday, July 16, 2015 12:00 AM<br>
-<b>To:</b> Dilong Zheng<br>
-<b>Cc:</b> lttng-dev<br>
-<b>Subject:</b> Re: [lttng-dev] SIGSEGV __event_probe, C++ application (static linking)</span>
-<div>&nbsp;</div>
-</div>
-<div>
-<div style="font-family:arial,helvetica,sans-serif; font-size:12pt; color:#000000">
-<div><span id="zwchr">----- On Jul 13, 2015, at 4:37 PM, Dilong Zheng &lt;Dilong.Zheng@mitel.com&gt; wrote:<br>
-</span></div>
-<div>
-<blockquote style="border-left:2px solid #1010FF; margin-left:5px; padding-left:5px; color:#000; font-weight:normal; font-style:normal; text-decoration:none; font-family:Helvetica,Arial,sans-serif; font-size:12pt">
-<div id="divtagdefaultwrapper" style="font-size:12pt; color:#000000; background-color:#FFFFFF; font-family:Calibri,Arial,Helvetica,sans-serif">
-<p>Hi,</p>
-<p><br>
-</p>
-<p>I have instrumented a C++ application with user space tracepoints. When I run the application and do a: "lttng list -u" command, I am able to see all my available tracepoints for the application. However when I&nbsp;enable&nbsp;those&nbsp;user space tracepoints&nbsp;and then
- start the trace, a core gets dumped and&nbsp;examining the core file in gdb I see&nbsp;the following error:</p>
-<p><br>
-</p>
-<p><span style="font-size:10pt; color:rgb(255,0,0)"><span style="font-family:&quot;Courier New&quot;,monospace; color:rgb(255,0,0)"><span style="color:rgb(255,0,0)">Program terminated with signal SIGSEGV, Segmentation fault.</span></span><br style="font-family:&quot;Courier New&quot;,monospace; color:rgb(255,0,0)">
-<span style="font-family:&quot;Courier New&quot;,monospace; color:rgb(255,0,0)"><span style="color:rgb(255,0,0)">#0&nbsp; 0x00000000 in ?? ()</span></span></span></p>
-<p>...</p>
-<p><span style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt">(gdb) bt</span><br style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt">
-<span style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt; color:rgb(255,0,0)"><span style="color:rgb(255,0,0)">#0&nbsp; 0x00000000 in ?? ()</span></span><br style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt; color:rgb(255,0,0)">
-<span style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt; color:rgb(255,0,0)"><span style="color:rgb(255,0,0)">#1&nbsp; 0x08dd1088 in __event_probe__mike___sem_wait_entry (__tp_data=0xef92d818)</span></span><br style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt; color:rgb(255,0,0)">
-<span style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt; color:rgb(255,0,0)"><span style="color:rgb(255,0,0)">&nbsp;&nbsp;&nbsp; at /localhome/zhengd/override_mcd/System/SS_Inc/./sem_wrapper.h:67</span></span><br style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt; color:rgb(255,0,0)">
-<span style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt; color:rgb(255,0,0)"><span style="color:rgb(255,0,0)">#2&nbsp; 0x08dd44d9 in __tracepoint_cb_mike___sem_wait_entry () at /localhome/zhengd/override_mc /System/SS_Inc/sem_wrapper.h:67</span></span><br style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt; color:rgb(255,0,0)">
-<span style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt; color:rgb(255,0,0)"><span style="color:rgb(255,0,0)">#3&nbsp; __wrap_sem_wait (sem=0xf43014c8) at /localhome/zhengd/override_mcd/System/System_Services/SysServices_Linux/SystemLinux.cpp:1877</span></span></p>
-<p><br>
-</p>
-<p><b>Contextual Information:</b> I would like to trace all calls to <span style="font-size:10pt; font-family:&quot;Courier New&quot;,monospace">
-<span style="font-family:&quot;Courier New&quot;,monospace">sem_wait()</span></span> in my application. I am simply using a wrapper sem_wait function where I can place
-<span style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt">tracepoint()</span> calls. Here's what the sem_wait wrapper looks like:</p>
-<p><br>
-</p>
-<div>
-<div dir="ltr">
-<div id="x_divtagdefaultwrapper" style="color:rgb(0,0,0); background-color:rgb(255,255,255)">
-<p><span style="font-size:10pt; font-family:&quot;Courier New&quot;,monospace"><span style="font-family:&quot;Courier New&quot;,monospace">extern "C" int __real_sem_wait(sem_t*);</span></span></p>
-<p><span style="font-size:10pt; font-family:&quot;Courier New&quot;,monospace"><span style="font-family:&quot;Courier New&quot;,monospace">extern "C" int __wrap_sem_wait(sem_t* sem)&nbsp;</span></span></p>
-<p><span style="font-size:10pt; font-family:&quot;Courier New&quot;,monospace"><span style="font-family:&quot;Courier New&quot;,monospace">{</span></span></p>
-<p><span style="font-size:10pt; font-family:&quot;Courier New&quot;,monospace"><span style="font-family:&quot;Courier New&quot;,monospace">&nbsp;&nbsp;&nbsp;&nbsp;tracepoint(mike, sem_wait_entry); &nbsp;</span></span></p>
-<p><span style="font-size:10pt; font-family:&quot;Courier New&quot;,monospace"><span style="font-family:&quot;Courier New&quot;,monospace">&nbsp;&nbsp;&nbsp;&nbsp;int ret = __real_sem_wait(sem);</span></span></p>
-<p><span style="font-size:10pt; font-family:&quot;Courier New&quot;,monospace"><span style="font-family:&quot;Courier New&quot;,monospace">&nbsp;&nbsp;&nbsp;&nbsp;tracepoint(mike, sem_wait_exit, ret);</span></span></p>
-<p><span style="font-size:10pt; font-family:&quot;Courier New&quot;,monospace"><br style="font-family:&quot;Courier New&quot;,monospace">
-</span></p>
-<p><span style="font-size:10pt; font-family:&quot;Courier New&quot;,monospace"><span style="font-family:&quot;Courier New&quot;,monospace">&nbsp;&nbsp;&nbsp;&nbsp;return ret;&nbsp;</span></span></p>
-<p><span style="font-size:10pt; font-family:&quot;Courier New&quot;,monospace"><span style="font-family:&quot;Courier New&quot;,monospace">}</span></span></p>
-</div>
-</div>
-</div>
-<p><br>
-</p>
-<p>Here is the TRACEPOINT_EVENT macro found in my tracepoint provider header file (which was generated using lttng-gen-tp command line utility):</p>
-<p><br>
-</p>
-<p><span style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt">TRACEPOINT_EVENT(mike,
-</span></p>
-<p><span style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt">&nbsp;&nbsp;&nbsp;&nbsp;sem_wait_entry,</span></p>
-<p><span style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt">&nbsp;&nbsp;&nbsp;&nbsp;TP_ARGS(),</span></p>
-<p><span style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt">&nbsp;&nbsp;&nbsp;&nbsp;TP_FIELDS()</span></p>
-<p><span style="font-family:&quot;Courier New&quot;,monospace; font-size:10pt">)</span><br>
-</p>
-<p><br>
-</p>
-<p>And I am statically linking by using an existing CPP file&nbsp;(file with the&nbsp;__wrap_sem_wait() function) to create probes. I would just like to know any possible reasons why this error may be happening given the above mentioned circumstances and what I may be
- able to try in order to fix this.</p>
-</div>
-</blockquote>
-<div>Which UST version do you use ? Make sure you upgrade to latest,<br>
-</div>
-<div>since we have fixed a similar segfault issue with probes compiled in<br>
-</div>
-<div>C++ not so long ago.<br>
-</div>
-<div><br>
-</div>
-<div>Thanks,<br>
-</div>
-<div><br>
-</div>
-<div>Mathieu<br>
-</div>
-<div><br>
-</div>
-<div><br>
-</div>
-<blockquote style="border-left:2px solid #1010FF; margin-left:5px; padding-left:5px; color:#000; font-weight:normal; font-style:normal; text-decoration:none; font-family:Helvetica,Arial,sans-serif; font-size:12pt">
-<div id="divtagdefaultwrapper" style="font-size:12pt; color:#000000; background-color:#FFFFFF; font-family:Calibri,Arial,Helvetica,sans-serif">
-<p><br>
-</p>
-<p>Thanks,</p>
-<p><br>
-</p>
-<p>Dilong <br>
-</p>
-</div>
+Can you double-check ?<br></blockquote><div><br></div><div>Thanks for this =
+follow-up. I confirm that the bug is reproducible with lttng-modules master=
+ on linux 4.1. I opened an issue in the bug tracker for further details. I =
+added a script to reproduce the bug easily.=C2=A0<div><br></div><div><a hre=
+f=3D"https://bugs.lttng.org/issues/895">https://bugs.lttng.org/issues/895</=
+a><br></div></div><div>=C2=A0<br></div><blockquote class=3D"gmail_quote" st=
+yle=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
+Moreover, just changing the TRACE_SYSTEM without changing<br>
+the tracepoint namespacing prefix from kvm_ to kvm_x86 in the<br>
+whole file is wrong.</blockquote><div><br></div><div>I do not understand. I=
+n lttng-ust, there is a=C2=A0TRACEPOINT_PROVIDER string that must be repeat=
+ed into each=C2=A0TRACEPOINT_EVENT declaration, but this is not the case fo=
+r the kernel=C2=A0LTTNG_TRACEPOINT_EVENT macro. Can you explain what you me=
+an by &quot;namespace&quot;?</div><div>=C2=A0</div><blockquote class=3D"gma=
+il_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-lef=
+t:1ex">And if we do this, we would need the _MAP<br>
+flavor of the macros to map to the original kernel names.<br></blockquote><=
+div><br></div><div>In fact, event names are not modified by the patch, such=
+ that backward compatibility seems preserved AFAIK. Do I miss something?</d=
+iv><div><br></div><div>Francis<br></div><div><br></div><blockquote class=3D=
+"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding=
+-left:1ex"><br>
+----- On Jul 14, 2015, at 2:43 PM, Francis Giraldeau <a href=3D"mailto:fran=
+cis.giraldeau@gmail.com" target=3D"_blank">francis.giraldeau@gmail.com</a> =
+wrote:<br>
 <br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-lttng-dev@lists.lttng.org<br>
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br>
-</blockquote>
-</div>
-<div><br>
-</div>
-<div>-- <br>
-</div>
-<div>Mathieu Desnoyers<br>
+&gt; From: C=C3=A9dric Biancheri &lt;<a href=3D"mailto:cedric.biancheri@pol=
+ymtl.ca" target=3D"_blank">cedric.biancheri@polymtl.ca</a>&gt;<br>
+&gt;<br>
+&gt; The lttng-probe-kvm and lttng-probe-kvm-x86 had the same TRACE_SYSTEM =
+string.<br>
+&gt; Because of that, both modules can&#39;t be loaded at the same time. Th=
+e second<br>
+&gt; module fails to load silently. This patch rename the TRACE_SYSTEM of<b=
+r>
+&gt; lttng-probe-kvm-x86 to avoid the clash.<br>
+&gt;<br>
+&gt; Signed-off-by: Francis Giraldeau &lt;<a href=3D"mailto:francis.giralde=
+au@gmail.com" target=3D"_blank">francis.giraldeau@gmail.com</a>&gt;<br>
+&gt; ---<br>
+&gt; instrumentation/events/lttng-module/arch/x86/kvm/trace.h | 2 +-<br>
+&gt; 1 file changed, 1 insertion(+), 1 deletion(-)<br>
+&gt;<br>
+&gt; diff --git a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h<=
+br>
+&gt; b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h<br>
+&gt; index 32c4743..ddbfda7 100644<br>
+&gt; --- a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h<br>
+&gt; +++ b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h<br>
+&gt; @@ -12,7 +12,7 @@<br>
+&gt; #include &lt;../arch/x86/kvm/kvm_cache_regs.h&gt;<br>
+&gt;<br>
+&gt; #undef TRACE_SYSTEM<br>
+&gt; -#define TRACE_SYSTEM kvm<br>
+&gt; +#define TRACE_SYSTEM kvm_x86<br>
+&gt;<br>
+&gt; /*<br>
+&gt;=C2=A0 * Tracepoint for guest mode entry.<br>
+&gt; --<br>
+&gt; 2.1.4<br>
+&gt;<br>
+&gt;<br>
+&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
+ev@lists.lttng.org</a><br>
+&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
+rel=3D"noreferrer" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman=
+/listinfo/lttng-dev</a><br>
+<br>
+--<br>
+Mathieu Desnoyers<br>
 EfficiOS Inc.<br>
-http://www.efficios.com</div>
-</div>
-</div>
-</div>
-</div>
-</div><br></blockquote></div><br><div data-marker="__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></html>
-------=_Part_904_1053545550.1437143976227--
+<a href=3D"http://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">ht=
+tp://www.efficios.com</a><br>
+</blockquote></div></div>
+
+--001a1146ed3aa2c532051b7c924e--
 
 
---===============1645624839==
+--===============0513497181==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1645624839==--
+--===============0513497181==--
