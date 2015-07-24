@@ -1,23 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH v2 lttng-ust 2/2] Doc: add
- LTTNG_UST_CLOCK_PLUGIN to man page
-Date: Fri, 24 Jul 2015 02:22:37 +0000 (UTC)
-Message-ID: <945101272.2595.1437704557575.JavaMail.zimbra__45444.6220108823$1437704612$gmane$org@efficios.com>
-References: <1437674396-13934-1-git-send-email-jonathan.rajotte-julien@efficios.com>
- <1437681771-7495-1-git-send-email-jonathan.rajotte-julien@efficios.com>
- <1437681771-7495-2-git-send-email-jonathan.rajotte-julien@efficios.com>
+From: Chris J Arges <chris.j.arges@canonical.com>
+Subject: [PATCH lttng-modules] Fix: disable kvm probe if lapic.h
+	isn't found
+Date: Fri, 24 Jul 2015 13:18:59 -0500
+Message-ID: <1437761939-1782-1-git-send-email-chris.j.arges__5479.53579011864$1437764918$gmane$org@canonical.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from youngberry.canonical.com ([91.189.89.112])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZISdH-0008LY-4x
- for lttng-dev@lists.lttng.org; Thu, 23 Jul 2015 22:22:44 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 366863402CC
- for <lttng-dev@lists.lttng.org>; Fri, 24 Jul 2015 02:22:39 +0000 (UTC)
-In-Reply-To: <1437681771-7495-2-git-send-email-jonathan.rajotte-julien@efficios.com>
+ (envelope-from <chris.j.arges@canonical.com>) id 1ZIhYp-0004ke-Fv
+ for lttng-dev@lists.lttng.org; Fri, 24 Jul 2015 14:19:16 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,74 +19,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: Chris J Arges <chris.j.arges@canonical.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged those 2 patches, with a small modification:
+In a typical distribution if just linux-headers is installed, lapic.h will
+not be installed. We should check if that file exists and not build the module.
 
-"An example can be found in the lttng-ust documentation under
-examples/getcpu-override ."
+Signed-off-by: Chris J Arges <chris.j.arges@canonical.com>
+---
+ probes/Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-and
-
-"An example can be found in the lttng-ust documentation under
-doc/examples/clock-override ."
-
-Otherwise we end up with an installed manpage that points to
-subdirectories within the source tree, which is weird. The
-examples files are installed too (see e.g.
-/usr/local/share/doc/lttng-ust/examples/).
-
-Thanks,
-
-Mathieu
-
------ On Jul 23, 2015, at 4:02 PM, Jonathan Rajotte jonathan.rajotte-julien@efficios.com wrote:
-
-> Also add indications on how to use the plugin with lttng-tools.
-> 
-> Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-> ---
-> doc/examples/clock-override/README | 4 ++++
-> doc/man/lttng-ust.3                | 5 +++++
-> 2 files changed, 9 insertions(+)
-> 
-> diff --git a/doc/examples/clock-override/README
-> b/doc/examples/clock-override/README
-> index e3ddf22..aabbee2 100644
-> --- a/doc/examples/clock-override/README
-> +++ b/doc/examples/clock-override/README
-> @@ -2,3 +2,7 @@ This clock override example shows how to implement and load a
-> clock
-> override plugin for LTTng-UST. This can be useful in cases where direct
-> hardware access is available for architecture-specific clocks, and where
-> it should be used rather than the Linux kernel Monotonic clock.
-> +
-> +When using LTTng-tools keep in mind that lttng-sessiond uses lttng-ust's clock
-> +definition and functions. Thus LTTNG_UST_CLOCK_PLUGIN needs to be defined when
-> +launching lttng-sessiond.
-> diff --git a/doc/man/lttng-ust.3 b/doc/man/lttng-ust.3
-> index e66ab88..8b399aa 100644
-> --- a/doc/man/lttng-ust.3
-> +++ b/doc/man/lttng-ust.3
-> @@ -502,6 +502,11 @@ Used by the getcpu override plugin system. The environment
-> variable
-> provides the path to the shared object which will act as the getcpu override
-> plugin. An example can be found under doc/examples/getcpu-override .
-> .PP
-> +.IP "LTTNG_UST_CLOCK_PLUGIN"
-> +Used by the clock override plugin system. The environment variable
-> +provides the path to the shared object wich will act as the clock override
-> +plugin. An example can be found under doc/examples/clock-override .
-> +.PP
-> 
-> .SH "SEE ALSO"
-> 
-> --
-> 2.1.4
-
+diff --git a/probes/Makefile b/probes/Makefile
+index 0314a5e..cc4c352 100644
+--- a/probes/Makefile
++++ b/probes/Makefile
+@@ -25,6 +25,8 @@ obj-m += lttng-probe-statedump.o
+ ifneq ($(CONFIG_KVM),)
+ obj-m += lttng-probe-kvm.o
+ ifneq ($(CONFIG_X86),)
++kvm_dep_lapic = $(srctree)/arch/x86/kvm/lapic.h
++ifneq ($(wildcard $(kvm_dep_lapic)),)
+ kvm_dep = $(srctree)/virt/kvm/iodev.h $(srctree)/include/kvm/iodev.h
+ ifneq ($(wildcard $(kvm_dep)),)
+ CFLAGS_lttng-probe-kvm-x86.o += -I$(srctree)/virt/kvm
+@@ -40,6 +42,9 @@ obj-m +=  $(shell \
+ else
+ $(warning File $(kvm_dep) not found. Probe "kvm" x86-specific is disabled. Use full kernel source tree to enable it.)
+ endif
++else
++$(warning File $(kvm_dep_lapic) not found. Probe "kvm" x86-specific is disabled. Use full kernel source tree to enable it.)
++endif
+ endif
+ endif
+ 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.1.4
