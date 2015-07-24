@@ -1,16 +1,16 @@
-From: Chris J Arges <chris.j.arges@canonical.com>
-Subject: [PATCH lttng-modules] Fix: disable kvm probe if lapic.h
-	isn't found
-Date: Fri, 24 Jul 2015 13:18:59 -0500
-Message-ID: <1437761939-1782-1-git-send-email-chris.j.arges__5479.53579011864$1437764918$gmane$org@canonical.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools 1/2] Fix: pids should be numbers only
+Date: Fri, 24 Jul 2015 17:42:59 -0400
+Message-ID: <1437774180-32746-1-git-send-email-jonathan.rajotte-julien__43634.3087618754$1437774256$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from youngberry.canonical.com ([91.189.89.112])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <chris.j.arges@canonical.com>) id 1ZIhYp-0004ke-Fv
- for lttng-dev@lists.lttng.org; Fri, 24 Jul 2015 14:19:16 -0400
+ (envelope-from <jonathan.rajotte-julien@efficios.com>)
+ id 1ZIkkN-0005kH-OL
+ for lttng-dev@lists.lttng.org; Fri, 24 Jul 2015 17:43:16 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,39 +20,47 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
-Cc: Chris J Arges <chris.j.arges@canonical.com>
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-In a typical distribution if just linux-headers is installed, lapic.h will
-not be installed. We should check if that file exists and not build the module.
+Ruled out cases: word, number+word, word+number, number+word+number
+Ex: foo, 123foo, foo123, 123foo123
 
-Signed-off-by: Chris J Arges <chris.j.arges@canonical.com>
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- probes/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+ src/bin/lttng/commands/track-untrack.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/probes/Makefile b/probes/Makefile
-index 0314a5e..cc4c352 100644
---- a/probes/Makefile
-+++ b/probes/Makefile
-@@ -25,6 +25,8 @@ obj-m += lttng-probe-statedump.o
- ifneq ($(CONFIG_KVM),)
- obj-m += lttng-probe-kvm.o
- ifneq ($(CONFIG_X86),)
-+kvm_dep_lapic = $(srctree)/arch/x86/kvm/lapic.h
-+ifneq ($(wildcard $(kvm_dep_lapic)),)
- kvm_dep = $(srctree)/virt/kvm/iodev.h $(srctree)/include/kvm/iodev.h
- ifneq ($(wildcard $(kvm_dep)),)
- CFLAGS_lttng-probe-kvm-x86.o += -I$(srctree)/virt/kvm
-@@ -40,6 +42,9 @@ obj-m +=  $(shell \
- else
- $(warning File $(kvm_dep) not found. Probe "kvm" x86-specific is disabled. Use full kernel source tree to enable it.)
- endif
-+else
-+$(warning File $(kvm_dep_lapic) not found. Probe "kvm" x86-specific is disabled. Use full kernel source tree to enable it.)
-+endif
- endif
- endif
+diff --git a/src/bin/lttng/commands/track-untrack.c b/src/bin/lttng/commands/track-untrack.c
+index 52442cc..639e184 100644
+--- a/src/bin/lttng/commands/track-untrack.c
++++ b/src/bin/lttng/commands/track-untrack.c
+@@ -96,6 +96,7 @@ int parse_pid_string(const char *_pid_string,
+ 	int count = 0;
+ 	int *pid_list = NULL;
+ 	char *pid_string = NULL;
++	char *endptr;
  
+ 	if (all && _pid_string) {
+ 		ERR("An empty PID string is expected with --all");
+@@ -132,13 +133,16 @@ int parse_pid_string(const char *_pid_string,
+ 	while (one_pid_str != NULL) {
+ 		unsigned long v;
+ 
+-		v = strtoul(one_pid_str, NULL, 10);
++		errno = 0;
++		v = strtoul(one_pid_str, &endptr, 10);
+ 		if ((v == 0 && errno == EINVAL)
+-				|| (v == ULONG_MAX && errno == ERANGE)) {
++				|| (v == ULONG_MAX && errno == ERANGE)
++				|| (*one_pid_str != '\0' && *endptr != '\0')){
+ 			ERR("Error parsing PID %s", one_pid_str);
+ 			retval = CMD_ERROR;
+ 			goto error;
+ 		}
++
+ 		if ((long) v > INT_MAX || (int) v < 0) {
+ 			ERR("Invalid PID value %ld", (long) v);
+ 			retval = CMD_ERROR;
 -- 
 2.1.4
