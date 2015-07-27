@@ -1,19 +1,19 @@
-From: Eugene Ivanov <Eugene.Ivanov@orc-group.com>
-Subject: Re: cds_lfht_resize() and QSBR
-Date: Mon, 27 Jul 2015 20:20:25 +0300
-Message-ID: <55B66859.6050300__14173.4404060573$1438017698$gmane$org@orc-group.com>
-References: <55B65654.7030503@orc-group.com>
- <2071601215.2020.1438017123033.JavaMail.zimbra@efficios.com>
+From: Chris J Arges <chris.j.arges@canonical.com>
+Subject: Re: [PATCH lttng-modules] Fix: disable kvm probe if
+ lapic.h isn't found
+Date: Mon, 27 Jul 2015 11:09:54 -0500
+Message-ID: <55B657D2.2080204__29989.2948977233$1438024682$gmane$org@canonical.com>
+References: <1437761939-1782-1-git-send-email-chris.j.arges@canonical.com>
+ <293728491.1868.1438012137255.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx02.orcsoftware.com ([89.202.167.90]
- helo=ungol.ad.orcsoftware.com)
+Received: from youngberry.canonical.com ([91.189.89.112])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Eugene.Ivanov@orc-group.com>) id 1ZJm4p-0000gd-Sg
- for lttng-dev@lists.lttng.org; Mon, 27 Jul 2015 13:20:36 -0400
-In-Reply-To: <2071601215.2020.1438017123033.JavaMail.zimbra@efficios.com>
+ (envelope-from <chris.j.arges@canonical.com>) id 1ZJkyT-0000Gy-Ow
+ for lttng-dev@lists.lttng.org; Mon, 27 Jul 2015 12:09:58 -0400
+In-Reply-To: <293728491.1868.1438012137255.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,52 +26,77 @@ To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Thank you, Mathieu!
+Mathieu,
 
-On 07/27/2015 08:12 PM, Mathieu Desnoyers wrote:
-> Hi Eugene,
->
-> It's fine to use both lfht resize and destroy from URCU QSBR, because
-> we explicitly mark the threads "offline" (saving the old state),
-> and restore the original state, at the beginning and end of those
-> functions.
->
-> However, calls to cds_lfht_resize() and cds_lfht_destroy are considered
-> as an explicit quiescent state in URCU QSBR, therefore, don't expect
-> your RCU read-side critical section to extend across those 2 calls.
->
-> Thanks,
->
+I'm testing with Ubuntu Wily using a 4.1 series kernel.
+
+include/kvm/iodev.h is installed by linux-headers with the 4.1 kernel,
+and therefore the probe Makefile tries to install the kvm probe, but
+then fails to compile because arch/x86/kvm/lapic.h isn't found. All this
+obviously works if you point at full sources.
+
+--chris
+
+On 07/27/2015 10:48 AM, Mathieu Desnoyers wrote:
+> ----- On Jul 24, 2015, at 2:18 PM, Chris J Arges chris.j.arges@canonical.com wrote:
+> 
+>> In a typical distribution if just linux-headers is installed, lapic.h will
+>> not be installed. We should check if that file exists and not build the module.
+> 
+> Hi Chris,
+> 
+> Although this patch looks technically correct, I'd like to understand
+> how you triggered this issue in the first place.
+> 
+> If we look at this Makefile, we skip building KVM probes altogether
+> if neither $(srctree)/virt/kvm/iodev.h nor $(srctree)/include/kvm/iodev.h
+> are found. AFAIU, none of those headers are installed as linux-headers.
+> 
+> Which of those headers are found in your distribution headers ? Is it
+> due to a modification specific to Ubuntu or is it something that
+> appears in mainline kernel ?
+> 
+> Thanks!
+> 
 > Mathieu
->
-> ----- On Jul 27, 2015, at 12:03 PM, Eugene Ivanov Eugene.Ivanov@orc-group.com wrote:
->
->> Hi,
+> 
 >>
->> According documentation "cds_lfht_resize should *not* be called from a
->> RCU read-side critical section", can I use this function with QSBR,
->> where almost everything is read-side CS? And cds_lfht_destroy()?
+>> Signed-off-by: Chris J Arges <chris.j.arges@canonical.com>
+>> ---
+>> probes/Makefile | 5 +++++
+>> 1 file changed, 5 insertions(+)
+>>
+>> diff --git a/probes/Makefile b/probes/Makefile
+>> index 0314a5e..cc4c352 100644
+>> --- a/probes/Makefile
+>> +++ b/probes/Makefile
+>> @@ -25,6 +25,8 @@ obj-m += lttng-probe-statedump.o
+>> ifneq ($(CONFIG_KVM),)
+>> obj-m += lttng-probe-kvm.o
+>> ifneq ($(CONFIG_X86),)
+>> +kvm_dep_lapic = $(srctree)/arch/x86/kvm/lapic.h
+>> +ifneq ($(wildcard $(kvm_dep_lapic)),)
+>> kvm_dep = $(srctree)/virt/kvm/iodev.h $(srctree)/include/kvm/iodev.h
+>> ifneq ($(wildcard $(kvm_dep)),)
+>> CFLAGS_lttng-probe-kvm-x86.o += -I$(srctree)/virt/kvm
+>> @@ -40,6 +42,9 @@ obj-m +=  $(shell \
+>> else
+>> $(warning File $(kvm_dep) not found. Probe "kvm" x86-specific is disabled. Use
+>> full kernel source tree to enable it.)
+>> endif
+>> +else
+>> +$(warning File $(kvm_dep_lapic) not found. Probe "kvm" x86-specific is
+>> disabled. Use full kernel source tree to enable it.)
+>> +endif
+>> endif
+>> endif
 >>
 >> --
->> Eugene Ivanov
+>> 2.1.4
 >>
->>
->> ________________________________
->>
->> This e-mail is confidential and may contain legally privileged information. It
->> is intended only for the addressees. If you have received this e-mail in error,
->> kindly notify us immediately by telephone or e-mail and delete the message from
->> your system.
 >>
 >> _______________________________________________
 >> lttng-dev mailing list
 >> lttng-dev@lists.lttng.org
 >> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---
-Eugene Ivanov
-
-
-________________________________
-
-This e-mail is confidential and may contain legally privileged information. It is intended only for the addressees. If you have received this e-mail in error, kindly notify us immediately by telephone or e-mail and delete the message from your system.
+> 
