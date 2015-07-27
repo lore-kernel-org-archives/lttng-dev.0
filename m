@@ -1,18 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules] Fix: disable kvm probe if
- lapic.h	isn't found
-Date: Mon, 27 Jul 2015 20:02:55 +0000 (UTC)
-Message-ID: <2106664185.144.1438027375165.JavaMail.zimbra__11143.0355151699$1438027436$gmane$org@efficios.com>
-References: <1437761939-1782-1-git-send-email-chris.j.arges@canonical.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Need help in using lttng - module crashes
+Date: Mon, 27 Jul 2015 17:14:48 -0400
+Message-ID: <CA+jJMxuXpc_UJ1oOzwrCGLfVdFR90K6yQ_VhGkuvMLTDuabJuA__21915.4067723595$1438031748$gmane$org@mail.gmail.com>
+References: <D1D6890E.19C60%selvamani.ramasamy@ericsson.com>
+ <CA+jJMxu7qREnekhwcVQFp=HT-1yBwsu7kpNtr3JWj_Xs_6YFKg@mail.gmail.com>
+ <D1DBEB02.19DE7%selvamani.ramasamy@ericsson.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1843576760=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-pa0-f47.google.com ([209.85.220.47])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZJoc6-0001VN-HZ
- for lttng-dev@lists.lttng.org; Mon, 27 Jul 2015 16:03:08 -0400
-In-Reply-To: <1437761939-1782-1-git-send-email-chris.j.arges@canonical.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZJpja-0001t6-7d
+ for lttng-dev@lists.lttng.org; Mon, 27 Jul 2015 17:14:55 -0400
+Received: by padck2 with SMTP id ck2so57286980pad.0
+ for <lttng-dev@lists.lttng.org>; Mon, 27 Jul 2015 14:14:48 -0700 (PDT)
+In-Reply-To: <D1DBEB02.19DE7%selvamani.ramasamy@ericsson.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,59 +23,362 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Chris J Arges <chris.j.arges@canonical.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Selvamani Ramasamy <selvamani.ramasamy@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged into master and stable-2.6, thanks!
+--===============1843576760==
+Content-Type: multipart/alternative; boundary=047d7b86e414f74532051be1d753
 
-Mathieu
+--047d7b86e414f74532051be1d753
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
------ On Jul 24, 2015, at 2:18 PM, Chris J Arges chris.j.arges@canonical.com wrote:
+You could also try the latest 2.3.x releases which may already contain a
+fix for this issue. However, note that the 2.3.x release is no longer
+maintained.
 
-> In a typical distribution if just linux-headers is installed, lapic.h will
-> not be installed. We should check if that file exists and not build the module.
-> 
-> Signed-off-by: Chris J Arges <chris.j.arges@canonical.com>
-> ---
-> probes/Makefile | 5 +++++
-> 1 file changed, 5 insertions(+)
-> 
-> diff --git a/probes/Makefile b/probes/Makefile
-> index 0314a5e..cc4c352 100644
-> --- a/probes/Makefile
-> +++ b/probes/Makefile
-> @@ -25,6 +25,8 @@ obj-m += lttng-probe-statedump.o
-> ifneq ($(CONFIG_KVM),)
-> obj-m += lttng-probe-kvm.o
-> ifneq ($(CONFIG_X86),)
-> +kvm_dep_lapic = $(srctree)/arch/x86/kvm/lapic.h
-> +ifneq ($(wildcard $(kvm_dep_lapic)),)
-> kvm_dep = $(srctree)/virt/kvm/iodev.h $(srctree)/include/kvm/iodev.h
-> ifneq ($(wildcard $(kvm_dep)),)
-> CFLAGS_lttng-probe-kvm-x86.o += -I$(srctree)/virt/kvm
-> @@ -40,6 +42,9 @@ obj-m +=  $(shell \
-> else
-> $(warning File $(kvm_dep) not found. Probe "kvm" x86-specific is disabled. Use
-> full kernel source tree to enable it.)
-> endif
-> +else
-> +$(warning File $(kvm_dep_lapic) not found. Probe "kvm" x86-specific is
-> disabled. Use full kernel source tree to enable it.)
-> +endif
-> endif
-> endif
-> 
-> --
-> 2.1.4
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+lttng-tools 2.3.2 [1]
+lttng-ust 2.3.2 [2]
+lttng-modules 2.3.5 [3]
 
--- 
-Mathieu Desnoyers
+Regards,
+J=C3=A9r=C3=A9mie
+
+[1] https://lttng.org/files/lttng-tools/lttng-tools-2.3.2.tar.bz2
+[2] https://lttng.org/files/lttng-ust/lttng-ust-2.3.2.tar.bz2
+[3] https://lttng.org/files/lttng-modules/lttng-modules-2.3.5.tar.bz2
+
+On Mon, Jul 27, 2015 at 5:05 PM, Selvamani Ramasamy <
+selvamani.ramasamy@ericsson.com> wrote:
+
+>  Thank you for your response.  We will try with 2.6 and let you know.
+> BTB, is there any workaround in 2.3 itself?
+>
+>   From: <jeremie.galarneau@gmail.com> on behalf of J=C3=A9r=C3=A9mie Gala=
+rneau <
+> jeremie.galarneau@efficios.com>
+> Date: Thursday, July 23, 2015 at 4:33 PM
+> To: Ericsson <selvamani.ramasamy@ericsson.com>
+> Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+> Subject: Re: [lttng-dev] Need help in using lttng - module crashes
+>
+>
+>
+> On Thu, Jul 23, 2015 at 3:05 PM, Selvamani Ramasamy <
+> selvamani.ramasamy@ericsson.com> wrote:
+>
+>>  Hi,
+>> I am from Ericsson and we are trying to use lttng for one of our routing
+>> stack module.  We are facing issue in using lttng with our code base.  W=
+e
+>> are facing crash in our module when we register tracepoints.  We are usi=
+ng
+>> lttng version 2.3.0.   Any input will be appreciated.  Thanks in advance=
+.
+>>
+>
+>  That's from a while ago. Any chance you can try with 2.6.0 and see if
+> the problem persists?
+>
+>  Regards,
+> J=C3=A9r=C3=A9mie
+>
+>
+>>
+>>  Core was generated by `/usr/lib/siara/bin/bgpd'.
+>>
+>> Program terminated with signal 6, Aborted.
+>>
+>> #0  __lll_lock_wait () at
+>> ../nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S:135
+>>
+>> 135        ../nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S: No suc=
+h
+>> file or directory.
+>>
+>> (gdb) bt
+>>
+>> #0  __lll_lock_wait () at
+>> ../nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S:135
+>>
+>> #1  0x00000035f640a6f7 in _L_lock_942 () from /lib64/libpthread.so.0
+>>
+>> #2  0x00000035f640a520 in __GI___pthread_mutex_lock (mutex=3D0x2ae5bdc47=
+340
+>> <_biglock>) at ../nptl/pthread_mutex_lock.c:79
+>>
+>> #3  0x00002ae5bda382b8 in _biglock_grab_for_group (thread_group=3D0,
+>> initial=3Dinitial@entry=3D0) at
+>> sw/se/xc/bsd/libsrc/rboslib/osdeps/linux/interceptor/src/interceptor_big=
+lock.c:174
+>>
+>> #4  0x00002ae5bda38325 in __biglock_grab (initial=3Dinitial@entry=3D0) a=
+t
+>> sw/se/xc/bsd/libsrc/rboslib/osdeps/linux/interceptor/src/interceptor_big=
+lock.c:191
+>>
+>> #5  0x00002ae5bda3a032 in fgets (s=3Ds@entry=3D0x2ae5c09b8960
+>> <metalib_pname> "/usr/lib/siara/bin/bgpd", size=3Dsize@entry=3D63,
+>> stream=3Dstream@entry=3D0x807690)
+>>
+>>     at
+>> sw/se/xc/bsd/libsrc/rboslib/osdeps/linux/interceptor/src/interceptor_fil=
+estream.c:51
+>>
+>> #6  0x00002ae5c06b5818 in rbos_get_name_from_pid (pid=3D<optimized out>,
+>> pname=3Dpname@entry=3D0x2ae5c09b8960 <metalib_pname>
+>> "/usr/lib/siara/bin/bgpd", len=3Dlen@entry=3D63) at
+>> sw/se/xc/bsd/libsrc/rboslib/osdeps/linux/src/rbos_sysfunc.c:421
+>>
+>> #7  0x00002ae5c05c9d83 in proc_get_name_from_pid (pid=3D<optimized out>,
+>> pname=3Dpname@entry=3D0x2ae5c09b8960 <metalib_pname>
+>> "/usr/lib/siara/bin/bgpd", len=3Dlen@entry=3D63) at
+>> sw/se/xc/bsd/libsrc/utils/src/pmUtils.c:736
+>>
+>> #8  0x00002ae5c061535f in metalib_init () at
+>> sw/se/xc/bsd/libsrc/issu/src/metalib.c:93
+>>
+>> #9  0x00002ae5be095c62 in rbos_event_startup (attr=3Dattr@entry=3D0x7fff=
+8ada6810)
+>> at sw/se/xc/bsd/comp/events/lib/src/rbos_event_api.c:918
+>>
+>> #10 0x0000000000505ca6 in bgp_ffn_eti_init () at
+>> sw/se/xc/bsd/routing/bgp/src/bgp_util_daemon.c:2727
+>>
+>> #11 0x0000000000488d4e in bgp_main ()
+>>
+>> #12 0x0000000000411fd9 in main (argc=3D<optimized out>, argv=3D<optimize=
+d
+>> out>) at sw/se/xc/bsd/routing/bgp/src/bgpd.c:6
+>>
+>>
+>>  Regards,
+>>
+>> Selva
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
+>>
+>
+>
+>  --
+> J=C3=A9r=C3=A9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+
+
+
+--=20
+J=C3=A9r=C3=A9mie Galarneau
 EfficiOS Inc.
 http://www.efficios.com
+
+--047d7b86e414f74532051be1d753
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">You could also try the latest 2.3.x releases which may alr=
+eady contain a fix for this issue. However, note that the 2.3.x release is =
+no longer maintained.<div><br></div><div>lttng-tools 2.3.2 [1]</div><div>lt=
+tng-ust 2.3.2 [2]</div><div>lttng-modules 2.3.5 [3]</div><div><br></div><di=
+v>Regards,</div><div>J=C3=A9r=C3=A9mie</div><div><br></div><div>[1] <a href=
+=3D"https://lttng.org/files/lttng-tools/lttng-tools-2.3.2.tar.bz2">https://=
+lttng.org/files/lttng-tools/lttng-tools-2.3.2.tar.bz2</a></div><div>[2]=C2=
+=A0<a href=3D"https://lttng.org/files/lttng-ust/lttng-ust-2.3.2.tar.bz2">ht=
+tps://lttng.org/files/lttng-ust/lttng-ust-2.3.2.tar.bz2</a></div><div>[3]=
+=C2=A0<a href=3D"https://lttng.org/files/lttng-modules/lttng-modules-2.3.5.=
+tar.bz2">https://lttng.org/files/lttng-modules/lttng-modules-2.3.5.tar.bz2<=
+/a></div></div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On=
+ Mon, Jul 27, 2015 at 5:05 PM, Selvamani Ramasamy <span dir=3D"ltr">&lt;<a =
+href=3D"mailto:selvamani.ramasamy@ericsson.com" target=3D"_blank">selvamani=
+.ramasamy@ericsson.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_=
+quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1=
+ex">
+
+
+
+<div style=3D"word-wrap:break-word;color:rgb(0,0,0);font-size:12px;font-fam=
+ily:Calibri,sans-serif">
+<div>Thank you for your response.=C2=A0 We will try with 2.6 and let you kn=
+ow.=C2=A0 BTB, is there any workaround in 2.3 itself?</div>
+<div><br>
+</div>
+<span>
+<div style=3D"font-family:Calibri;font-size:11pt;text-align:left;color:blac=
+k;BORDER-BOTTOM:medium none;BORDER-LEFT:medium none;PADDING-BOTTOM:0in;PADD=
+ING-LEFT:0in;PADDING-RIGHT:0in;BORDER-TOP:#b5c4df 1pt solid;BORDER-RIGHT:me=
+dium none;PADDING-TOP:3pt">
+<span style=3D"font-weight:bold">From: </span>&lt;<a href=3D"mailto:jeremie=
+.galarneau@gmail.com" target=3D"_blank">jeremie.galarneau@gmail.com</a>&gt;=
+ on behalf of J=C3=A9r=C3=A9mie Galarneau &lt;<a href=3D"mailto:jeremie.gal=
+arneau@efficios.com" target=3D"_blank">jeremie.galarneau@efficios.com</a>&g=
+t;<br>
+<span style=3D"font-weight:bold">Date: </span>Thursday, July 23, 2015 at 4:=
+33 PM<br>
+<span style=3D"font-weight:bold">To: </span>Ericsson &lt;<a href=3D"mailto:=
+selvamani.ramasamy@ericsson.com" target=3D"_blank">selvamani.ramasamy@erics=
+son.com</a>&gt;<br>
+<span style=3D"font-weight:bold">Cc: </span>&quot;<a href=3D"mailto:lttng-d=
+ev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.org</a>&quot; &=
+lt;<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev=
+@lists.lttng.org</a>&gt;<br>
+<span style=3D"font-weight:bold">Subject: </span>Re: [lttng-dev] Need help =
+in using lttng - module crashes<br>
+</div><div><div class=3D"h5">
+<div><br>
+</div>
+<div>
+<div>
+<div dir=3D"ltr"><br>
+<div class=3D"gmail_extra"><br>
+<div class=3D"gmail_quote">On Thu, Jul 23, 2015 at 3:05 PM, Selvamani Ramas=
+amy <span dir=3D"ltr">
+&lt;<a href=3D"mailto:selvamani.ramasamy@ericsson.com" target=3D"_blank">se=
+lvamani.ramasamy@ericsson.com</a>&gt;</span> wrote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+<div style=3D"word-wrap:break-word;color:rgb(0,0,0);font-family:Calibri,san=
+s-serif;font-size:12px">
+<div style=3D"font-size:12px">Hi,</div>
+<div style=3D"font-size:12px">I am from Ericsson and we are trying to use l=
+ttng for one of our routing stack module.=C2=A0 We are facing issue in usin=
+g lttng with our code base.=C2=A0 We are facing crash in our module when we=
+ register tracepoints.=C2=A0 We are using lttng version
+ 2.3.0. =C2=A0 Any input will be appreciated.=C2=A0 Thanks in advance.</div=
+>
+</div>
+</blockquote>
+<div><br>
+</div>
+<div>That&#39;s from a while ago. Any chance you can try with 2.6.0 and see=
+ if the problem persists?</div>
+<div><br>
+</div>
+<div>Regards,</div>
+<div>J=C3=A9r=C3=A9mie</div>
+<div>=C2=A0</div>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+<div style=3D"word-wrap:break-word;color:rgb(0,0,0);font-family:Calibri,san=
+s-serif;font-size:12px">
+<div style=3D"font-size:12px"><br>
+</div>
+<div>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">Core was generated=
+ by `/usr/lib/siara/bin/bgpd&#39;.<u></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">Program terminated=
+ with signal 6, Aborted.<u></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#0=C2=A0 __lll_loc=
+k_wait () at ../nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S:135<u></=
+u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">135=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 ../nptl/sysdeps/unix/sysv/linux/x86_64/lowlevel=
+lock.S: No such file or directory.<u></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">(gdb) bt<u></u><u>=
+</u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#0=C2=A0 __lll_loc=
+k_wait () at ../nptl/sysdeps/unix/sysv/linux/x86_64/lowlevellock.S:135<u></=
+u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#1=C2=A0 0x0000003=
+5f640a6f7 in _L_lock_942 () from /lib64/libpthread.so.0<u></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#2=C2=A0 0x0000003=
+5f640a520 in __GI___pthread_mutex_lock (mutex=3D0x2ae5bdc47340 &lt;_biglock=
+&gt;) at ../nptl/pthread_mutex_lock.c:79<u></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#3=C2=A0 0x00002ae=
+5bda382b8 in _biglock_grab_for_group (thread_group=3D0, initial=3Dinitial@e=
+ntry=3D0) at sw/se/xc/bsd/libsrc/rboslib/osdeps/linux/interceptor/src/inter=
+ceptor_biglock.c:174<u></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#4=C2=A0 0x00002ae=
+5bda38325 in __biglock_grab (initial=3Dinitial@entry=3D0) at sw/se/xc/bsd/l=
+ibsrc/rboslib/osdeps/linux/interceptor/src/interceptor_biglock.c:191<u></u>=
+<u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#5=C2=A0 0x00002ae=
+5bda3a032 in fgets (s=3Ds@entry=3D0x2ae5c09b8960 &lt;metalib_pname&gt; &quo=
+t;/usr/lib/siara/bin/bgpd&quot;, size=3Dsize@entry=3D63, stream=3Dstream@en=
+try=3D0x807690)<u></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">=C2=A0=C2=A0=C2=A0=
+ at sw/se/xc/bsd/libsrc/rboslib/osdeps/linux/interceptor/src/interceptor_fi=
+lestream.c:51<u></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#6=C2=A0 0x00002ae=
+5c06b5818 in rbos_get_name_from_pid (pid=3D&lt;optimized out&gt;, pname=3Dp=
+name@entry=3D0x2ae5c09b8960 &lt;metalib_pname&gt; &quot;/usr/lib/siara/bin/=
+bgpd&quot;, len=3Dlen@entry=3D63) at sw/se/xc/bsd/libsrc/rboslib/osdeps/lin=
+ux/src/rbos_sysfunc.c:421<u></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#7=C2=A0 0x00002ae=
+5c05c9d83 in proc_get_name_from_pid (pid=3D&lt;optimized out&gt;, pname=3Dp=
+name@entry=3D0x2ae5c09b8960 &lt;metalib_pname&gt; &quot;/usr/lib/siara/bin/=
+bgpd&quot;, len=3Dlen@entry=3D63) at sw/se/xc/bsd/libsrc/utils/src/pmUtils.=
+c:736<u></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#8=C2=A0 0x00002ae=
+5c061535f in metalib_init () at sw/se/xc/bsd/libsrc/issu/src/metalib.c:93<u=
+></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#9=C2=A0 0x00002ae=
+5be095c62 in rbos_event_startup (attr=3Dattr@entry=3D0x7fff8ada6810) at sw/=
+se/xc/bsd/comp/events/lib/src/rbos_event_api.c:918<u></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#10 0x000000000050=
+5ca6 in bgp_ffn_eti_init () at sw/se/xc/bsd/routing/bgp/src/bgp_util_daemon=
+.c:2727<u></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#11 0x000000000048=
+8d4e in bgp_main ()<u></u><u></u></p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">#12 0x000000000041=
+1fd9 in main (argc=3D&lt;optimized out&gt;, argv=3D&lt;optimized out&gt;) a=
+t sw/se/xc/bsd/routing/bgp/src/bgpd.c:6</p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt"><br>
+</p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">Regards,</p>
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 0.0001pt">Selva</p>
+</div>
+</div>
+<br>
+_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
+sts.lttng.org</a><br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
+=3D"noreferrer" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/li=
+stinfo/lttng-dev</a><br>
+<br>
+</blockquote>
+</div>
+<br>
+<br clear=3D"all">
+<div><br>
+</div>
+-- <br>
+<div>J=C3=A9r=C3=A9mie Galarneau<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
+om</a></div>
+</div>
+</div>
+</div>
+</div>
+</div></div></span>
+</div>
+
+</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br><div class=
+=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS Inc.<br><a hre=
+f=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.com</a>=
+</div>
+</div>
+
+--047d7b86e414f74532051be1d753--
+
+
+--===============1843576760==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1843576760==--
