@@ -1,20 +1,16 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: Re: [LTTNG-TOOLS PATCH] Fix: only cleanup the
- agent_apps_ht_by_sock as root
-Date: Thu, 30 Jul 2015 13:40:24 -0400
-Message-ID: <55BA6188.2070207__16877.801079727$1438278113$gmane$org@efficios.com>
-References: <1438269157-1473-1-git-send-email-jdesfossez@efficios.com>
- <CA+jJMxtq7wLdQnf8QH97hY9=1f5jcs6O9dpKTkghxP5w=FktPQ@mail.gmail.com>
- <CA+jJMxtDov8wEtZp=T3+2LRieRjAcfMQ6WxESgzaw+Gj1KhfKw@mail.gmail.com>
+From: Alexandre Montplaisir <alexmonthy@efficios.com>
+Subject: [PATCH lttng-ust] Rename Java Agent event names to
+	"event"
+Date: Thu, 30 Jul 2015 16:11:55 -0400
+Message-ID: <1438287115-3503-1-git-send-email-alexmonthy__35898.8736792982$1438287209$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
+Received: from ironport2-out.teksavvy.com ([206.248.154.181])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1ZKrol-00063R-OH
- for lttng-dev@lists.lttng.org; Thu, 30 Jul 2015 13:40:41 -0400
-In-Reply-To: <CA+jJMxtDov8wEtZp=T3+2LRieRjAcfMQ6WxESgzaw+Gj1KhfKw@mail.gmail.com>
+ (envelope-from <alexmonthy@efficios.com>) id 1ZKuBQ-0006oC-4E
+ for lttng-dev@lists.lttng.org; Thu, 30 Jul 2015 16:12:12 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,162 +19,83 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?windows-1252?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: Alexandre Montplaisir <alexmonthy@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-I confirm it fixes the problem I was seeing.
+Previously, separate event names were used for events targeting
+a root session daemon or a user one. Those were "sys_event" and
+"user_event", respectively.
 
-Thanks,
+Now that the Java side only sends one event type, we can rename
+it to simply "event".
 
-Julien
+This patch is dependant on a similar update on the lttng-tools
+side.
 
-On 15-07-30 12:53 PM, J=E9r=E9mie Galarneau wrote:
-> Here is my proposed fix. Can you test it on your end?
-> =
+Signed-off-by: Alexandre Montplaisir <alexmonthy@efficios.com>
+---
+ liblttng-ust-java-agent/jni/jul/lttng_ust_jul.c     | 3 +--
+ liblttng-ust-java-agent/jni/jul/lttng_ust_jul.h     | 3 +--
+ liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.c | 3 +--
+ liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.h | 3 +--
+ 4 files changed, 4 insertions(+), 8 deletions(-)
 
-> https://github.com/jgalar/lttng-tools/commits/sessiond-agent-crash
-> =
-
-> commit 5e249e09a2bd68f96e546bf83b4710596518f675
-> Author: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com
-> <mailto:jeremie.galarneau@efficios.com>>
-> Date:   Thu Jul 30 12:48:52 2015 -0400
-> =
-
->     Clean-up: Move agent_apps_ht_by_sock definition to main.c
->     =
-
->     Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com
-> <mailto:jeremie.galarneau@efficios.com>>
-> =
-
-> commit 1af8b99faa625033f9e0c2a6eaa9b3006cfadadd
-> Author: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com
-> <mailto:jeremie.galarneau@efficios.com>>
-> Date:   Thu Jul 30 12:46:56 2015 -0400
-> =
-
->     Fix: Initialize global agent_apps_ht_by_sock on session daemon launch
->     =
-
->     Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com
-> <mailto:jeremie.galarneau@efficios.com>>
-> =
-
-> =
-
-> J=E9r=E9mie
-> =
-
-> =
-
-> On Thu, Jul 30, 2015 at 12:02 PM, J=E9r=E9mie Galarneau
-> <jeremie.galarneau@efficios.com <mailto:jeremie.galarneau@efficios.com>>
-> wrote:
-> =
-
-> =
-
-> =
-
->     On Thu, Jul 30, 2015 at 11:12 AM, Julien Desfossez
->     <jdesfossez@efficios.com <mailto:jdesfossez@efficios.com>> wrote:
-> =
-
->         Commit 6a4e403927ffef4cae8726064dcf53c463eb128c introduced a bug
->         where
->         we could end up iterating over the agent_apps_ht_by_sock
->         regardless if
->         it was allocated or not (only when the sessiond is launched as
->         root).
-> =
-
->         Steps to reproduce:
->         $ sudo lttng-sessiond -d
->         $ lttng-sessiond
->         Error: Already running daemon.
->         Segmentation fault (core dumped)
-> =
-
->         Signed-off-by: Julien Desfossez <jdesfossez@efficios.com
->         <mailto:jdesfossez@efficios.com>>
->         ---
->          src/bin/lttng-sessiond/main.c | 4 +++-
->          1 file changed, 3 insertions(+), 1 deletion(-)
-> =
-
->         diff --git a/src/bin/lttng-sessiond/main.c
->         b/src/bin/lttng-sessiond/main.c
->         index 91dd047..5840165 100644
->         --- a/src/bin/lttng-sessiond/main.c
->         +++ b/src/bin/lttng-sessiond/main.c
->         @@ -677,7 +677,9 @@ static void sessiond_cleanup(void)
->                 }
-> =
-
->                 DBG("Cleaning up all agent apps");
->         -       agent_app_ht_clean();
->         +       if (is_root) {
->         +               agent_app_ht_clean();
->         +       }
-> =
-
-> =
-
->     This will leak the hash table if the session daemon was launched as
->     an unprivileged user. However, the problem can also be reproduced by
->     launching two session daemons under the same unprivileged user.
-> =
-
->     The real issue here seems to be that the session daemon will enter
->     the "exit_init_data" code path before creating the hash table if it
->     can't acquire the lock file and that there are no NULL checks
->     performed during the sessiond_cleanup().
-> =
-
->     Thanks,
->     J=E9r=E9mie
->      =
-
-> =
-
->                 DBG("Closing all UST sockets");
->                 ust_app_clean_list();
->         --
->         1.9.1
-> =
-
-> =
-
-> =
-
-> =
-
->     -- =
-
->     J=E9r=E9mie Galarneau
->     EfficiOS Inc.
->     http://www.efficios.com
-> =
-
-> =
-
-> =
-
-> =
-
-> -- =
-
-> J=E9r=E9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
-> =
-
-> =
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> =
+diff --git a/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.c b/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.c
+index 7363f65..0e86fbc 100644
+--- a/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.c
++++ b/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.c
+@@ -41,8 +41,7 @@ JNIEXPORT void JNICALL Java_org_lttng_ust_agent_jul_LttngLogHandler_tracepoint(J
+ 	const char *class_name_cstr = (*env)->GetStringUTFChars(env, class_name, &iscopy);
+ 	const char *method_name_cstr = (*env)->GetStringUTFChars(env, method_name, &iscopy);
+ 
+-	// FIXME Change "sys_event" to "event" once lttng-tools is updated
+-	tracepoint(lttng_jul, sys_event, msg_cstr, logger_name_cstr,
++	tracepoint(lttng_jul, event, msg_cstr, logger_name_cstr,
+ 			class_name_cstr, method_name_cstr, millis, log_level, thread_id);
+ 
+ 	(*env)->ReleaseStringUTFChars(env, msg, msg_cstr);
+diff --git a/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.h b/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.h
+index 1482d90..ebbe2c3 100644
+--- a/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.h
++++ b/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.h
+@@ -27,8 +27,7 @@
+ /*
+  * Tracepoint used by Java applications using the JUL handler.
+  */
+-// FIXME Change "sys_event" to "event" once lttng-tools is updated
+-TRACEPOINT_EVENT(lttng_jul, sys_event,
++TRACEPOINT_EVENT(lttng_jul, event,
+ 	TP_ARGS(
+ 		const char *, msg,
+ 		const char *, logger_name,
+diff --git a/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.c b/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.c
+index d5df70e..73d4eee 100644
+--- a/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.c
++++ b/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.c
+@@ -45,8 +45,7 @@ JNIEXPORT void JNICALL Java_org_lttng_ust_agent_log4j_LttngLogAppender_tracepoin
+ 	const char *file_name_cstr = (*env)->GetStringUTFChars(env, file_name, &iscopy);
+ 	const char *thread_name_cstr = (*env)->GetStringUTFChars(env, thread_name, &iscopy);
+ 
+-	// FIXME Change "sys_event" to "event" once lttng-tools is updated
+-	tracepoint(lttng_log4j, sys_event, msg_cstr, logger_name_cstr,
++	tracepoint(lttng_log4j, event, msg_cstr, logger_name_cstr,
+ 		   class_name_cstr, method_name_cstr, file_name_cstr,
+ 		   line_number, timestamp, loglevel, thread_name_cstr);
+ 
+diff --git a/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.h b/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.h
+index 7e20b69..d9b592d 100644
+--- a/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.h
++++ b/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.h
+@@ -27,8 +27,7 @@
+ /*
+  * Tracepoint used by Java applications using the log4j log appender.
+  */
+-// FIXME Change "sys_event" to "event" once lttng-tools is updated
+-TRACEPOINT_EVENT(lttng_log4j, sys_event,
++TRACEPOINT_EVENT(lttng_log4j, event,
+ 	TP_ARGS(
+ 		const char *, msg,
+ 		const char *, logger_name,
+-- 
+2.5.0
