@@ -1,16 +1,19 @@
-From: Alexandre Montplaisir <alexmonthy@efficios.com>
-Subject: [PATCH lttng-ust] Rename Java Agent event names to
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+ <jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-ust] Rename Python agent tracepoint to
 	"event"
-Date: Thu, 30 Jul 2015 16:11:55 -0400
-Message-ID: <1438287115-3503-1-git-send-email-alexmonthy__35898.8736792982$1438287209$gmane$org@efficios.com>
+Date: Thu, 30 Jul 2015 16:43:21 -0400
+Message-ID: <1438289001-29144-1-git-send-email-jeremie.galarneau__44771.9901254915$1438289096$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.181])
+Received: from mail-io0-f193.google.com ([209.85.223.193])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <alexmonthy@efficios.com>) id 1ZKuBQ-0006oC-4E
- for lttng-dev@lists.lttng.org; Thu, 30 Jul 2015 16:12:12 -0400
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZKufp-0006yj-8G
+ for lttng-dev@lists.lttng.org; Thu, 30 Jul 2015 16:43:40 -0400
+Received: by iodz133 with SMTP id z133so4903113iod.0
+ for <lttng-dev@lists.lttng.org>; Thu, 30 Jul 2015 13:43:23 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,82 +23,35 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
-Cc: Alexandre Montplaisir <alexmonthy@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Previously, separate event names were used for events targeting
-a root session daemon or a user one. Those were "sys_event" and
-"user_event", respectively.
-
-Now that the Java side only sends one event type, we can rename
-it to simply "event".
-
-This patch is dependant on a similar update on the lttng-tools
-side.
-
-Signed-off-by: Alexandre Montplaisir <alexmonthy@efficios.com>
----
- liblttng-ust-java-agent/jni/jul/lttng_ust_jul.c     | 3 +--
- liblttng-ust-java-agent/jni/jul/lttng_ust_jul.h     | 3 +--
- liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.c | 3 +--
- liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.h | 3 +--
- 4 files changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.c b/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.c
-index 7363f65..0e86fbc 100644
---- a/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.c
-+++ b/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.c
-@@ -41,8 +41,7 @@ JNIEXPORT void JNICALL Java_org_lttng_ust_agent_jul_LttngLogHandler_tracepoint(J
- 	const char *class_name_cstr = (*env)->GetStringUTFChars(env, class_name, &iscopy);
- 	const char *method_name_cstr = (*env)->GetStringUTFChars(env, method_name, &iscopy);
- 
--	// FIXME Change "sys_event" to "event" once lttng-tools is updated
--	tracepoint(lttng_jul, sys_event, msg_cstr, logger_name_cstr,
-+	tracepoint(lttng_jul, event, msg_cstr, logger_name_cstr,
- 			class_name_cstr, method_name_cstr, millis, log_level, thread_id);
- 
- 	(*env)->ReleaseStringUTFChars(env, msg, msg_cstr);
-diff --git a/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.h b/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.h
-index 1482d90..ebbe2c3 100644
---- a/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.h
-+++ b/liblttng-ust-java-agent/jni/jul/lttng_ust_jul.h
-@@ -27,8 +27,7 @@
- /*
-  * Tracepoint used by Java applications using the JUL handler.
-  */
--// FIXME Change "sys_event" to "event" once lttng-tools is updated
--TRACEPOINT_EVENT(lttng_jul, sys_event,
-+TRACEPOINT_EVENT(lttng_jul, event,
- 	TP_ARGS(
- 		const char *, msg,
- 		const char *, logger_name,
-diff --git a/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.c b/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.c
-index d5df70e..73d4eee 100644
---- a/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.c
-+++ b/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.c
-@@ -45,8 +45,7 @@ JNIEXPORT void JNICALL Java_org_lttng_ust_agent_log4j_LttngLogAppender_tracepoin
- 	const char *file_name_cstr = (*env)->GetStringUTFChars(env, file_name, &iscopy);
- 	const char *thread_name_cstr = (*env)->GetStringUTFChars(env, thread_name, &iscopy);
- 
--	// FIXME Change "sys_event" to "event" once lttng-tools is updated
--	tracepoint(lttng_log4j, sys_event, msg_cstr, logger_name_cstr,
-+	tracepoint(lttng_log4j, event, msg_cstr, logger_name_cstr,
- 		   class_name_cstr, method_name_cstr, file_name_cstr,
- 		   line_number, timestamp, loglevel, thread_name_cstr);
- 
-diff --git a/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.h b/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.h
-index 7e20b69..d9b592d 100644
---- a/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.h
-+++ b/liblttng-ust-java-agent/jni/log4j/lttng_ust_log4j.h
-@@ -27,8 +27,7 @@
- /*
-  * Tracepoint used by Java applications using the log4j log appender.
-  */
--// FIXME Change "sys_event" to "event" once lttng-tools is updated
--TRACEPOINT_EVENT(lttng_log4j, sys_event,
-+TRACEPOINT_EVENT(lttng_log4j, event,
- 	TP_ARGS(
- 		const char *, msg,
- 		const char *, logger_name,
--- 
-2.5.0
+VGhpcyByZW5hbWUgY29tZXMgYXMgYW4gZWZmb3J0IHRvIHJlbWFpbiBjb25zaXN0ZW50IHdpdGgg
+dGhlIHRyYWNlcG9pbnQKbmFtaW5nIHNjaGVtZSB1c2VkIGJ5IExvZzRKIGFuZCBKVUwuCgpUaGUg
+YXNzb2NpYXRlZCBjaGFuZ2UgaW4gbHR0bmctdG9vbHMgaXMgaW50cm9kdWNlZCBhcyBvZiBkOGM3
+YmRhMC4KClNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJu
+ZWF1QGVmZmljaW9zLmNvbT4KLS0tCiBsaWJsdHRuZy11c3QtcHl0aG9uLWFnZW50L2x0dG5nX3Vz
+dF9weXRob24uYyB8IDIgKy0KIGxpYmx0dG5nLXVzdC1weXRob24tYWdlbnQvbHR0bmdfdXN0X3B5
+dGhvbi5oIHwgMiArLQogMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRp
+b25zKC0pCgpkaWZmIC0tZ2l0IGEvbGlibHR0bmctdXN0LXB5dGhvbi1hZ2VudC9sdHRuZ191c3Rf
+cHl0aG9uLmMgYi9saWJsdHRuZy11c3QtcHl0aG9uLWFnZW50L2x0dG5nX3VzdF9weXRob24uYwpp
+bmRleCBkMTBkYWYxLi5iZTUzNGM2IDEwMDY0NAotLS0gYS9saWJsdHRuZy11c3QtcHl0aG9uLWFn
+ZW50L2x0dG5nX3VzdF9weXRob24uYworKysgYi9saWJsdHRuZy11c3QtcHl0aG9uLWFnZW50L2x0
+dG5nX3VzdF9weXRob24uYwpAQCAtMjcsNiArMjcsNiBAQCB2b2lkIHB5X3RyYWNlcG9pbnQoY29u
+c3QgY2hhciAqYXNjdGltZSwgY29uc3QgY2hhciAqbXNnLAogCQljb25zdCBjaGFyICpsb2dnZXJf
+bmFtZSwgY29uc3QgY2hhciAqZnVuY05hbWUsIHVuc2lnbmVkIGludCBsaW5lbm8sCiAJCXVuc2ln
+bmVkIGludCBpbnRfbG9nbGV2ZWwsIHVuc2lnbmVkIGludCB0aHJlYWQsIGNvbnN0IGNoYXIgKnRo
+cmVhZE5hbWUpCiB7Ci0JdHJhY2Vwb2ludChsdHRuZ19weXRob24sIHVzZXJfZXZlbnQsIGFzY3Rp
+bWUsIG1zZywgbG9nZ2VyX25hbWUsIGZ1bmNOYW1lLAorCXRyYWNlcG9pbnQobHR0bmdfcHl0aG9u
+LCBldmVudCwgYXNjdGltZSwgbXNnLCBsb2dnZXJfbmFtZSwgZnVuY05hbWUsCiAJCQlsaW5lbm8s
+IGludF9sb2dsZXZlbCwgdGhyZWFkLCB0aHJlYWROYW1lKTsKIH0KZGlmZiAtLWdpdCBhL2xpYmx0
+dG5nLXVzdC1weXRob24tYWdlbnQvbHR0bmdfdXN0X3B5dGhvbi5oIGIvbGlibHR0bmctdXN0LXB5
+dGhvbi1hZ2VudC9sdHRuZ191c3RfcHl0aG9uLmgKaW5kZXggOGFjNzYwNC4uNTU1NGM1OSAxMDA2
+NDQKLS0tIGEvbGlibHR0bmctdXN0LXB5dGhvbi1hZ2VudC9sdHRuZ191c3RfcHl0aG9uLmgKKysr
+IGIvbGlibHR0bmctdXN0LXB5dGhvbi1hZ2VudC9sdHRuZ191c3RfcHl0aG9uLmgKQEAgLTI0LDcg
+KzI0LDcgQEAKICNpbmNsdWRlIDxsdHRuZy90cmFjZXBvaW50Lmg+CiAjaW5jbHVkZSA8c3RkYm9v
+bC5oPgogCi1UUkFDRVBPSU5UX0VWRU5UKGx0dG5nX3B5dGhvbiwgdXNlcl9ldmVudCwKK1RSQUNF
+UE9JTlRfRVZFTlQobHR0bmdfcHl0aG9uLCBldmVudCwKIAlUUF9BUkdTKAogCQljb25zdCBjaGFy
+ICosIGFzY3RpbWUsCiAJCWNvbnN0IGNoYXIgKiwgbXNnLAotLSAKMi40LjYKCgpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBs
+aXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
+YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
