@@ -1,16 +1,16 @@
-From: Joe VanAndel <vanandel@ucar.edu>
-Subject: custom probe for loadable device driver - no output?
-Date: Tue, 4 Aug 2015 15:46:10 -0600
-Message-ID: <CAJrJ9eH0F=AiiwjmC5QacBomDMUF_jTjeuoauyavFQUpiTQkVg__25005.8925398209$1438724902$gmane$org@mail.gmail.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-tools] Tests: Java agent: update after
+	Java agent refactoring
+Date: Tue,  4 Aug 2015 18:21:40 -0400
+Message-ID: <1438726900-17234-1-git-send-email-mjeanson__7946.73457644439$1438726991$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1772686578=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ob0-f169.google.com ([209.85.214.169])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <vanandel@ucar.edu>) id 1ZMk2n-0000qC-7f
- for lttng-dev@lists.lttng.org; Tue, 04 Aug 2015 17:46:52 -0400
-Received: by obnw1 with SMTP id w1so17623037obn.3
- for <lttng-dev@lists.lttng.org>; Tue, 04 Aug 2015 14:46:39 -0700 (PDT)
+ (envelope-from <mjeanson@efficios.com>) id 1ZMkb7-00013O-Je
+ for lttng-dev@lists.lttng.org; Tue, 04 Aug 2015 18:22:19 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,297 +20,414 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
---===============1772686578==
-Content-Type: multipart/alternative; boundary=089e01537dea9d6668051c8338ea
-
---089e01537dea9d6668051c8338ea
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-I=E2=80=99m trying to add LTTng probes to a driver module, but I don=E2=80=
-=99t get any
-output from my probe in the LTTng session.
-
-
-Any idea what else I need to configure to get the output from my probe?
-
-
-Kernel: 3.10.0
-
-OS:  Centos 7.1.1503
-
-LTTng tools : from EfficiOS-RHEL7-x86-64 repository
-
-lttng-modules:  2.6.2
-
-
-The running kernel has the following enabled:
-
-CONFIG_MODULES
-
-CONFIG_KALLSYMS
-
-CONFIG_HIGH_RES_TIMERS
-
-CONFIG_TRACEPOINTS
-
-
-I=E2=80=99ve defined/used tracepoints in my driver with the mainline TRACE_=
-EVENT()
-macros.  My tracepoints are on the open/close entry points of the device.
-
-
-I=E2=80=99ve added the LTTng adaptation layer for my probe in LTTng-modules=
-.
-
-
-I=E2=80=99ve started the daemon to load my custom probe
-
- lttng-sessiond -d --extra-kmod-probes=3Ddb2k
-
-
-I=E2=80=99ve verified that my event is available, by running
-
-
-lttng list --kernel | grep db2k
-
-      db2k_hello (loglevel: TRACE_EMERG (0)) (type: tracepoint)
-
-
-There=E2=80=99s an entry for my probe in
-
-/sys/kernel/debug/tracing/events/db2k/db2k_hello
-
-
-When I run the following as root:
-
-lttng create trace_db2k
-
-lttng enable-event --kernel --tracepoint db2k_hello --tracepoint
-kmem_kmalloc --tracepoint kmem_kfree \
-
-     --tracepoint timer_start --tracepoint timer_cancel
-
-lttng start
-
-=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94
-
-the output is:
-
-Session trace_db2k created.
-
-Traces will be written in /root/lttng-traces/trace_db2k-20150804-193318
-
-Kernel event db2k_hello created in channel channel0
-
-Tracing started for session trace_db2k
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
- I run a test program that uses the driver, and then stop the session.
-
-# lttng stop
-
-Waiting for data availability.
-
-Tracing stopped for session trace_db2k
-
-# lttng view
-
-Trace directory: /root/lttng-traces/trace_db2k-20150804-193318
-
-<No output>
-
-
-Here is the =E2=80=9Cmainline=E2=80=9D db2k.h
-
-http://pastebin.com/0i8eWF1a
-
-
-Here is the
-
-LTTng adaptation db2k.h
-
-http://pastebin.com/fXW9ppqM
-
-
-Here is the
-
-lttng-probe-db2k.c
-
-http://pastebin.com/WHuWKpPZ
-
-
-The drive contains the lines:
-
-#define CREATE_TRACE_POINTS
-
-#include "trace/events/db2k.h"
-
-static int
-db2k_open(struct inode *inode, struct file *file)
-{
-    int minor =3D MINOR(inode->i_rdev);
-    int stat =3D 0;
-    DEVICE_EXTENSION *pde =3D NULL;
-    dbg("db2k_open called");
-    trace_db2k_hello(minor, "open");
-.
-.
-}
-
---=20
-Joe VanAndel
-NCAR/EOL
-
---089e01537dea9d6668051c8338ea
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><p style=3D"margin:0px;font-size:12px;font-family:Helvetic=
-a">I=E2=80=99m trying to add LTTng probes to a driver module, but I don=E2=
-=80=99t get any output from my probe in the LTTng session.</p><p style=3D"m=
-argin:0px;font-size:12px;font-family:Helvetica"><br></p><p style=3D"margin:=
-0px;font-size:12px;font-family:Helvetica">Any idea what else I need to conf=
-igure to get the output from my probe?</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica;min-height:14px=
-"><br></p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">Kernel: 3.10.0=
-</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">OS:=C2=A0 Cent=
-os 7.1.1503</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">LTTng tools : =
-from EfficiOS-RHEL7-x86-64 repository</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">lttng-modules:=
-=C2=A0 2.6.2</p><p style=3D"margin:0px;font-size:12px;font-family:Helvetica=
-"><br></p><p style=3D"margin:0px;font-size:12px;font-family:Helvetica">The =
-running kernel has the following enabled:</p><p style=3D"margin:0px;font-si=
-ze:12px;font-family:Helvetica">CONFIG_MODULES</p><p style=3D"margin:0px;fon=
-t-size:12px;font-family:Helvetica">CONFIG_KALLSYMS</p><p style=3D"margin:0p=
-x;font-size:12px;font-family:Helvetica">CONFIG_HIGH_RES_TIMERS</p><p style=
-=3D"margin:0px;font-size:12px;font-family:Helvetica">CONFIG_TRACEPOINTS</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica;min-height:14px=
-"><br></p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">I=E2=80=99ve d=
-efined/used tracepoints in my driver with the mainline TRACE_EVENT() macros=
-.=C2=A0 My tracepoints are on the open/close entry points of the device.</p=
->
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica;min-height:14px=
-"><br></p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">I=E2=80=99ve a=
-dded the LTTng adaptation layer for my probe in LTTng-modules.=C2=A0</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica;min-height:14px=
-"><br></p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">I=E2=80=99ve s=
-tarted the daemon to load my custom probe</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">=C2=A0lttng-se=
-ssiond -d --extra-kmod-probes=3Ddb2k</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica;min-height:14px=
-"><br></p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">I=E2=80=99ve v=
-erified that my event is available, by running</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica;min-height:14px=
-"><br></p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">lttng list --k=
-ernel | grep db2k</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">=C2=A0 =C2=A0 =
-=C2=A0 db2k_hello (loglevel: TRACE_EMERG (0)) (type: tracepoint)</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica;min-height:14px=
-"><br></p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">There=E2=80=99=
-s an entry for my probe in=C2=A0</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">/sys/kernel/de=
-bug/tracing/events/db2k/db2k_hello</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica;min-height:14px=
-"><br></p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">When I run the=
- following as root:</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">lttng create t=
-race_db2k</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">lttng enable-e=
-vent --kernel --tracepoint db2k_hello --tracepoint kmem_kmalloc --tracepoin=
-t kmem_kfree \</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">=C2=A0=C2=A0 =
-=C2=A0 --tracepoint timer_start --tracepoint timer_cancel</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">lttng start</p=
->
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">=E2=80=94=E2=
-=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">the output is:=
-</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">Session trace_=
-db2k created.</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">Traces will be=
- written in /root/lttng-traces/trace_db2k-20150804-193318</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">Kernel event d=
-b2k_hello created in channel channel0</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">Tracing starte=
-d for session trace_db2k</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">=C2=A0I run a =
-test program that uses the driver, and then stop the session.</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica"># lttng stop</=
-p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">Waiting for da=
-ta availability.</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">Tracing stoppe=
-d for session trace_db2k</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica"># lttng view</=
-p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">Trace director=
-y: /root/lttng-traces/trace_db2k-20150804-193318</p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica">&lt;No output&=
-gt;</p><p style=3D"margin:0px;font-size:12px;font-family:Helvetica"><br></p=
-><p style=3D"margin:0px;font-size:12px;font-family:Helvetica">Here is the =
-=E2=80=9Cmainline=E2=80=9D db2k.h</p><p style=3D"margin:0px;font-size:12px;=
-font-family:Helvetica"><a href=3D"http://pastebin.com/0i8eWF1a">http://past=
-ebin.com/0i8eWF1a</a><br></p><p style=3D"margin:0px;font-size:12px;font-fam=
-ily:Helvetica"><br></p><p style=3D"margin:0px;font-size:12px;font-family:He=
-lvetica">Here is the=C2=A0</p><p style=3D"margin:0px;font-family:Helvetica"=
-><span style=3D"color:rgb(51,51,51);font-family:&#39;segoe ui&#39;,&#39;tre=
-buchet MS&#39;,&#39;Lucida Sans Unicode&#39;,&#39;Lucida Sans&#39;,sans-ser=
-if;line-height:18px">LTTng adaptation db2k.h</span><br></p><p style=3D"marg=
-in:0px;font-size:12px;font-family:Helvetica"><a href=3D"http://pastebin.com=
-/fXW9ppqM">http://pastebin.com/fXW9ppqM</a><span style=3D"color:rgb(51,51,5=
-1);font-family:&#39;segoe ui&#39;,&#39;trebuchet MS&#39;,&#39;Lucida Sans U=
-nicode&#39;,&#39;Lucida Sans&#39;,sans-serif;font-size:15.3600006103516px;f=
-ont-weight:bold;line-height:18px"><br></span></p><p style=3D"margin:0px;fon=
-t-size:12px;font-family:Helvetica"><br></p><p style=3D"margin:0px;font-size=
-:12px;font-family:Helvetica">Here is the=C2=A0</p><p style=3D"margin:0px;fo=
-nt-size:12px;font-family:Helvetica">lttng-probe-db2k.c</p><p style=3D"margi=
-n:0px;font-size:12px;font-family:Helvetica"><a href=3D"http://pastebin.com/=
-WHuWKpPZ">http://pastebin.com/WHuWKpPZ</a><br></p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica;min-height:14px=
-"><br></p>
-<p style=3D"margin:0px;font-size:12px;font-family:Helvetica;min-height:14px=
-">The drive contains the lines:</p><p style=3D"margin:0px;font-size:12px;fo=
-nt-family:Helvetica;min-height:14px">#define CREATE_TRACE_POINTS</p><p styl=
-e=3D"margin:0px;font-size:12px;font-family:Helvetica;min-height:14px">#incl=
-ude &quot;trace/events/db2k.h&quot;</p><div><br></div><div><div>static int<=
-/div><div>db2k_open(struct inode *inode, struct file *file)</div><div>{</di=
-v><div>=C2=A0 =C2=A0 int minor =3D MINOR(inode-&gt;i_rdev);</div><div>=C2=
-=A0 =C2=A0 int stat =3D 0;</div><div>=C2=A0 =C2=A0 DEVICE_EXTENSION *pde =
-=3D NULL;</div><div>=C2=A0 =C2=A0 dbg(&quot;db2k_open called&quot;);</div><=
-div>=C2=A0 =C2=A0 trace_db2k_hello(minor, &quot;open&quot;);</div></div><di=
-v>.</div><div>.</div><div>}</div><div><br></div>-- <br><div class=3D"gmail_=
-signature"><div dir=3D"ltr">Joe VanAndel<div>NCAR/EOL</div></div></div>
-</div>
-
---089e01537dea9d6668051c8338ea--
-
-
---===============1772686578==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1772686578==--
+This patch fixes the Java agent tests which were impossible to run since
+the Jar files have been renamed. It also overhauls the java part of the
+configure script to match what's in UST and replace some hardcoded path
+with configurable values.
+
+The tests are now enabled when corresponding classes are found in the
+CLASSPATH during configure.
+
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ .gitignore                                      |  2 +
+ config/ax_check_class.m4                        |  2 +-
+ configure.ac                                    | 80 +++++++++----------------
+ tests/regression/ust/java-jul/JTestLTTng.java   | 34 ++++++++---
+ tests/regression/ust/java-jul/Makefile.am       | 21 ++-----
+ tests/regression/ust/java-jul/test_java_jul     |  4 +-
+ tests/regression/ust/java-log4j/JTestLTTng.java | 38 +++++++++---
+ tests/regression/ust/java-log4j/Makefile.am     | 17 +-----
+ tests/regression/ust/java-log4j/test_java_log4j |  4 +-
+ 9 files changed, 99 insertions(+), 103 deletions(-)
+
+diff --git a/.gitignore b/.gitignore
+index ff19c8d..5d24bec 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -93,3 +93,5 @@ health_check
+ /benchmark/
+ 
+ /include/version.h
++
++classnoinst.stamp
+diff --git a/config/ax_check_class.m4 b/config/ax_check_class.m4
+index 098aa77..42b51d7 100644
+--- a/config/ax_check_class.m4
++++ b/config/ax_check_class.m4
+@@ -118,7 +118,7 @@ EOF
+                         ac_cv_prog_uudecode_base64=no
+                 fi
+         rm -f Test.uue
+-        if AC_TRY_COMMAND($JAVA $JAVAFLAGS Test $1) >/dev/null 2>&1; then
++        if AC_TRY_COMMAND($JAVA -classpath ".:$CLASSPATH" $JAVAFLAGS Test $1) >/dev/null 2>&1; then
+                 eval "ac_cv_class_$ac_var_name=yes"
+         else
+                 eval "ac_cv_class_$ac_var_name=no"
+diff --git a/configure.ac b/configure.ac
+index 2fc6e53..bfef178 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -355,65 +355,43 @@ AX_CONFIG_FEATURE(
+ )
+ AM_CONDITIONAL([COMPAT_EPOLL], [ test "$enable_epoll" = "yes" ])
+ 
+-# Set compile flags to java include files if given. This is only used to
+-# compile java agent tests.
+-AC_ARG_WITH([java-jdk],
+-	[AS_HELP_STRING([--with-java-jdk=DIR],[use the Java JDK in DIR. Ex : $JAVA_HOME.])],
+-	[JAVA_JDK=$withval],
+-	[JAVA_JDK=""]
+-)
+-AM_CONDITIONAL([HAVE_JAVA_JDK], [test $JAVA_JDK], [Java JDK path])
+-AC_SUBST([JAVA_JDK])
++AX_JAVA_OPTIONS
++AX_PROG_JAVAC
++AX_PROG_JAVA
++AX_PROG_JAR
+ 
+-AS_IF([test $JAVA_JDK],[
+-	AS_IF([test -d $JAVA_JDK],
+-		[
+-			AC_MSG_RESULT([using Java includes in $JAVA_SDK])
+-			SUBDIRS=`find $JAVA_JDK/include -type d`
+-			CPPFLAGS+=" "
+-			CPPFLAGS+=`for x in $SUBDIRS; do echo -n "-I$x "; done`
+-			CPPFLAGS+=" "
+-        ],[AC_MSG_ERROR(Unable to find Java include files in $JAVA_JDK)]
+-	)
+-])
++AX_CHECK_CLASSPATH
+ 
+-# Check for the UST agent jar file in the system. Hardcoded path is added here
+-# since we have *no* idea where this could be installed. Note that this is only
+-# used for agent testing.
+-AC_MSG_CHECKING(Java UST agent jar file)
+-java_agent_jar_path="${prefix}/share/java/liblttng-ust-agent.jar"
+-if test -f $java_agent_jar_path; then
+-	build_java_agent=yes
+-	AC_MSG_RESULT(found)
++# Check for Java UST agent common class first
++AX_CHECK_CLASS(org.lttng.ust.agent.AbstractLttngAgent)
++if test "x$ac_cv_class_org_lttng_ust_agent_AbstractLttngAgent" = "xyes"; then
++	java_agent_common=yes
+ else
+-	build_java_agent=no
+-	AC_MSG_RESULT(not found)
++	java_agent_common=no
+ fi
+-AM_CONDITIONAL([BUILD_JAVA_AGENT], [test "x$build_java_agent" = "xyes"])
+-AC_SUBST([java_agent_jar_path])
+-
+-# Check for log4j support on the system to know if we can build or not the
+-# log4j tests.
+-if test "x$build_java_agent" = "xyes"; then
+-	AC_MSG_CHECKING(Java agent support for log4j)
+-	AX_JAVA_OPTIONS
+-	AX_PROG_JAR
+-	AX_PROG_JAVA
+-	AX_PROG_JAVAC
+-
+-	# By default, use a commonly used classpath on the system to ease things up
+-	# for the Java testing in this directory.
+-	LOG4J_CLASSPATH="$java_agent_jar_path:$CLASSPATH:.:/usr/share/java/*"
+-	JAVAFLAGS="-cp $LOG4J_CLASSPATH"
+-	JAVACFLAGS="$JAVAFLAGS"
++
++# If the common class is available, test for each agent
++if test "x$java_agent_common" = "xyes"; then
++	# Check for JUL
++	AX_CHECK_CLASS(org.lttng.ust.agent.jul.LttngLogHandler)
++	AX_CHECK_CLASS(org.lttng.ust.agent.log4j.LttngLogAppender)
+ 	AX_CHECK_CLASS(org.apache.log4j.Logger)
+ 
+-	if test "x$ac_cv_class_org_apache_log4j_Logger" = "xno"; then
+-		build_java_log4j_agent=no
+-	else
+-		build_java_log4j_agent=yes
++	build_java_jul_agent=no
++	if test "x$ac_cv_class_org_lttng_ust_agent_jul_LttngLogHandler" = "xyes"; then
++		build_java_jul_agent=yes
+ 	fi
++
++	build_java_log4j_agent=no
++	if test "x$ac_cv_class_org_lttng_ust_agent_log4j_LttngLogAppender" = "xyes"; then
++		if test "x$ac_cv_class_org_apache_log4j_Logger" = "xyes"; then
++			build_java_log4j_agent=yes
++		fi
++	fi
++
+ fi
++
++AM_CONDITIONAL([BUILD_JAVA_JUL_AGENT], [test "x$build_java_jul_agent" = "xyes"])
+ AM_CONDITIONAL([BUILD_JAVA_LOG4J_AGENT], [test "x$build_java_log4j_agent" = "xyes"])
+ 
+ AC_SYS_LARGEFILE
+diff --git a/tests/regression/ust/java-jul/JTestLTTng.java b/tests/regression/ust/java-jul/JTestLTTng.java
+index 9431551..741d820 100644
+--- a/tests/regression/ust/java-jul/JTestLTTng.java
++++ b/tests/regression/ust/java-jul/JTestLTTng.java
+@@ -1,4 +1,5 @@
+ /*
++ * Copyright (C) 2015 - Michael Jeanson <mjeanson@efficios.com>
+  * Copyright (C) 2013 - David Goulet <dgoulet@efficios.com>
+  *
+  * This program is free software; you can redistribute it and/or modify it
+@@ -15,20 +16,29 @@
+  * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+  */
+ 
++import java.io.IOException;
+ import java.lang.Integer;
++import java.util.logging.Handler;
+ import java.util.logging.Logger;
+ import java.util.logging.Level;
+ 
+-import org.lttng.ust.agent.LTTngAgent;
++import org.lttng.ust.agent.jul.LttngLogHandler;
+ 
+-public class JTestLTTng
+-{
+-	private static LTTngAgent lttngAgent;
++public class JTestLTTng {
++
++	/**
++	 * Application start
++	 *
++	 * @param args
++	 *            Command-line arguments
++	 * @throws IOException
++	 * @throws InterruptedException
++	 */
++	public static void main(String args[]) throws IOException, InterruptedException {
+ 
+-	public static void main(String args[]) throws Exception
+-	{
+ 		Logger lttng = Logger.getLogger("JTestLTTng");
+ 		Logger lttng2 = Logger.getLogger("JTestLTTng2");
++
+ 		int nrIter = Integer.parseInt(args[0]);
+ 		int waitTime = Integer.parseInt(args[1]);
+ 		int fire_finest_tp = 0;
+@@ -41,7 +51,11 @@ public class JTestLTTng
+ 			fire_second_tp = Integer.parseInt(args[3]);
+ 		}
+ 
+-		lttngAgent = LTTngAgent.getLTTngAgent();
++		/* Instantiate a LTTngLogHandler object, and attach it to our loggers */
++		Handler lttngHandler = new LttngLogHandler();
++		lttng.addHandler(lttngHandler);
++		lttng2.addHandler(lttngHandler);
++
+ 		lttng.setLevel(Level.FINEST);
+ 
+ 		for (int iter = 0; iter < nrIter; iter++) {
+@@ -57,6 +71,10 @@ public class JTestLTTng
+ 			lttng2.info("JUL second logger fired");
+ 		}
+ 
+-		lttngAgent.dispose();
++		/*
++		 * Do not forget to close() all handlers so that the agent can shutdown
++		 * and the session daemon socket gets cleaned up explicitly.
++		 */
++		lttngHandler.close();
+ 	}
+ }
+diff --git a/tests/regression/ust/java-jul/Makefile.am b/tests/regression/ust/java-jul/Makefile.am
+index 286e3df..877237f 100644
+--- a/tests/regression/ust/java-jul/Makefile.am
++++ b/tests/regression/ust/java-jul/Makefile.am
+@@ -1,25 +1,13 @@
++JAVAROOT = .
+ 
+ noinst_SCRIPTS = test_java_jul JTestLTTng.java
+ EXTRA_DIST = test_java_jul JTestLTTng.java
+ 
+-if HAVE_JAVA_JDK
+-JCC=$(JAVA_JDK)/bin/javac
+-else
+-JCC=javac
+-endif
++if BUILD_JAVA_JUL_AGENT
++dist_noinst_JAVA = JTestLTTng.java
++endif # BUILD_JAVA_JUL_AGENT
+ 
+-AGENT_JAR_FILE=$(java_agent_jar_path)
+-
+-
+-# Still need to copy test files in case of out of tree build
+-if BUILD_JAVA_AGENT
+-all-local: static_file JTestLTTng.class
+-%.class: %.java
+-	$(JCC) -d "$(builddir)" -cp "$(AGENT_JAR_FILE):." $<
+-else
+ all-local: static_file
+-endif # BUILD_JAVA_AGENT
+-
+ 
+ static_file:
+ 	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
+@@ -28,7 +16,6 @@ static_file:
+ 		done; \
+ 	fi
+ 
+-
+ clean-local:
+ 	rm -f *.class
+ 	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
+diff --git a/tests/regression/ust/java-jul/test_java_jul b/tests/regression/ust/java-jul/test_java_jul
+index 48c8b74..f9f244b 100755
+--- a/tests/regression/ust/java-jul/test_java_jul
++++ b/tests/regression/ust/java-jul/test_java_jul
+@@ -27,7 +27,7 @@ TESTAPP_PATH="$CURDIR/$TESTAPP_NAME"
+ SESSION_NAME="jul"
+ EVENT_NAME="JTestLTTng"
+ EVENT_NAME2="JTestLTTng2"
+-JAVA_CP="$CURDIR:/usr/local/share/java/liblttng-ust-agent.jar:/usr/share/java/liblttng-ust-agent.jar"
++JAVA_CP="$CURDIR:$CLASSPATH"
+ 
+ NUM_TESTS=155
+ 
+@@ -39,7 +39,7 @@ function run_app
+ 	local fire_second_tp=$2
+ 
+ 	#FIXME: app should have synchro.
+-	java -cp $JAVA_CP -Djava.library.path="/usr/local/lib:/usr/lib" $TESTAPP_NAME $NR_ITER $NR_MSEC_WAIT $finest_tp $fire_second_tp >/dev/null 2>&1
++	java -cp $JAVA_CP -Djava.library.path="$LD_LIBRARY_PATH:/usr/local/lib:/usr/lib" $TESTAPP_NAME $NR_ITER $NR_MSEC_WAIT $finest_tp $fire_second_tp >/dev/null 2>&1
+ }
+ 
+ function run_app_background
+diff --git a/tests/regression/ust/java-log4j/JTestLTTng.java b/tests/regression/ust/java-log4j/JTestLTTng.java
+index 0019cb8..64a471b 100644
+--- a/tests/regression/ust/java-log4j/JTestLTTng.java
++++ b/tests/regression/ust/java-log4j/JTestLTTng.java
+@@ -1,4 +1,5 @@
+ /*
++ * Copyright (C) 2015 - Michael Jeanson <dgoulet@efficios.com>
+  * Copyright (C) 2014 - David Goulet <dgoulet@efficios.com>
+  *                      Christian Babeux <christian.babeux@efficios.com>
+  *
+@@ -19,19 +20,26 @@
+ import java.io.IOException;
+ import java.lang.Integer;
+ 
+-import org.apache.log4j.Logger;
++import org.apache.log4j.Appender;
+ import org.apache.log4j.BasicConfigurator;
++import org.apache.log4j.Logger;
++import org.lttng.ust.agent.log4j.LttngLogAppender;
+ 
+-import org.lttng.ust.agent.LTTngAgent;
++public class JTestLTTng {
+ 
+-public class JTestLTTng
+-{
+-	private static LTTngAgent lttngAgent;
++	/**
++	 * Application start
++	 *
++	 * @param args
++	 *            Command-line arguments
++	 * @throws IOException
++	 * @throws InterruptedException
++	 */
++	public static void main(String args[]) throws IOException, InterruptedException {
+ 
+-	public static void main(String args[]) throws Exception
+-	{
+ 		Logger lttng = Logger.getLogger("log4j-event");
+ 		Logger lttng2 = Logger.getLogger("log4j-event-2");
++
+ 		int nrIter = Integer.parseInt(args[0]);
+ 		int waitTime = Integer.parseInt(args[1]);
+ 		int fire_debug_tp = 0;
+@@ -44,8 +52,16 @@ public class JTestLTTng
+ 			fire_second_tp = Integer.parseInt(args[3]);
+ 		}
+ 
++		/* Start with the default Log4j configuration, which logs to console */
+ 		BasicConfigurator.configure();
+-		lttngAgent = LTTngAgent.getLTTngAgent();
++
++		/*
++		 * Add a LTTng log appender to both loggers, which will also send the
++		 * logged events to UST.
++		 */
++		Appender lttngAppender = new LttngLogAppender();
++		lttng.addAppender(lttngAppender);
++		lttng2.addAppender(lttngAppender);
+ 
+ 		for (int iter = 0; iter < nrIter; iter++) {
+ 			lttng.info("LOG4J tp fired!");
+@@ -59,5 +75,11 @@ public class JTestLTTng
+ 		if (fire_second_tp == 1) {
+ 			lttng2.info("LOG4J second logger fired");
+ 		}
++
++		/*
++		 * Do not forget to close() all handlers so that the agent can shutdown
++		 * and the session daemon socket gets cleaned up explicitly.
++		 */
++		lttngAppender.close();
+ 	}
+ }
+diff --git a/tests/regression/ust/java-log4j/Makefile.am b/tests/regression/ust/java-log4j/Makefile.am
+index 7d6c048..42daab8 100644
+--- a/tests/regression/ust/java-log4j/Makefile.am
++++ b/tests/regression/ust/java-log4j/Makefile.am
+@@ -1,24 +1,13 @@
++JAVAROOT = .
+ 
+ noinst_SCRIPTS = test_java_log4j JTestLTTng.java
+ EXTRA_DIST = test_java_log4j JTestLTTng.java
+ 
+-if HAVE_JAVA_JDK
+-JCC=$(JAVA_JDK)/bin/javac
+-else
+-JCC=javac
+-endif
+-
+-# We still need to copy static files for out of tree and dist build
+ if BUILD_JAVA_LOG4J_AGENT
+-all-local: static_file JTestLTTng.class
+-
+-%.class: %.java
+-	$(JCC) -d "$(builddir)" $(JAVACFLAGS) $<
+-else
+-all-local: static_file
++dist_noinst_JAVA = JTestLTTng.java
+ endif # BUILD_JAVA_LOG4J_AGENT
+ 
+-JTestLTTng.class: JTestLTTng.java
++all-local: static_file
+ 
+ static_file:
+ 	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
+diff --git a/tests/regression/ust/java-log4j/test_java_log4j b/tests/regression/ust/java-log4j/test_java_log4j
+index cdc0c4c..d5c6621 100755
+--- a/tests/regression/ust/java-log4j/test_java_log4j
++++ b/tests/regression/ust/java-log4j/test_java_log4j
+@@ -27,7 +27,7 @@ TESTAPP_PATH="$CURDIR/$TESTAPP_NAME"
+ SESSION_NAME="log4j"
+ EVENT_NAME="log4j-event"
+ EVENT_NAME2="log4j-event-2"
+-JAVA_CP="$CURDIR:/usr/local/share/java/liblttng-ust-agent.jar:/usr/share/java/*"
++JAVA_CP="$CURDIR:$CLASSPATH"
+ OUTPUT_DEST="/dev/null"
+ 
+ NUM_TESTS=155
+@@ -40,7 +40,7 @@ function run_app
+ 	local fire_second_tp=$2
+ 
+ 	# FIXME: test app should have synchro.
+-	java -cp $JAVA_CP -Djava.library.path="/usr/local/lib:/usr/lib" $TESTAPP_NAME $NR_ITER $NR_MSEC_WAIT $debug_tp $fire_second_tp >/dev/null 2>&1
++	java -cp $JAVA_CP -Djava.library.path="$LD_LIBRARY_PATH:/usr/local/lib:/usr/lib" $TESTAPP_NAME $NR_ITER $NR_MSEC_WAIT $debug_tp $fire_second_tp >/dev/null 2>&1
+ }
+ 
+ function run_app_background
+-- 
+1.9.1
