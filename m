@@ -1,18 +1,15 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: test_mi test
-Date: Thu, 6 Aug 2015 16:38:25 -0400
-Message-ID: <CA+jJMxuSfvaHSZbgwdWSXv3SFLhgY7OSzE-Trm_xKuSBEO_1Ng__29280.3713855848$1438893555$gmane$org@mail.gmail.com>
-References: <1438890757-29800-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools] Fix: regression tests
+Date: Thu,  6 Aug 2015 17:15:45 -0400
+Message-ID: <1438895745-15529-1-git-send-email-mathieu.desnoyers__46604.8203678385$1438895821$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1613734783=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f171.google.com ([209.85.160.171])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZNRvt-0006uE-4W
- for lttng-dev@lists.lttng.org; Thu, 06 Aug 2015 16:38:34 -0400
-Received: by ykcq64 with SMTP id q64so67848820ykc.2
- for <lttng-dev@lists.lttng.org>; Thu, 06 Aug 2015 13:38:25 -0700 (PDT)
-In-Reply-To: <1438890757-29800-1-git-send-email-mathieu.desnoyers@efficios.com>
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZNSW9-000782-Sm
+ for lttng-dev@lists.lttng.org; Thu, 06 Aug 2015 17:16:03 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,191 +18,472 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1613734783==
-Content-Type: multipart/alternative; boundary=94eb2c0885be479f15051caa8008
+Fix racy session/relayd wait-after-kill scheme.
+Fix racy live test where application may not have generated events yet
+when we attach to the live trace.
 
---94eb2c0885be479f15051caa8008
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ tests/regression/tools/health/test_health.sh       |   4 +-
+ tests/regression/tools/live/test_kernel            |  47 +---------
+ tests/regression/tools/live/test_ust               |  60 ++++--------
+ .../regression/tools/live/test_ust_tracefile_count |  60 ++++--------
+ tests/regression/tools/save-load/test_load         |   6 +-
+ tests/utils/utils.sh                               | 103 ++++++++++++++++-----
+ 6 files changed, 120 insertions(+), 160 deletions(-)
 
-Merged in master, stable-2.7 and stable-2.6, thanks!
-
-J=C3=A9r=C3=A9mie
-
-On Thu, Aug 6, 2015 at 3:52 PM, Mathieu Desnoyers <
-mathieu.desnoyers@efficios.com> wrote:
-
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
->  tests/regression/tools/mi/test_mi | 20 +++++++++++++++++---
->  1 file changed, 17 insertions(+), 3 deletions(-)
->
-> diff --git a/tests/regression/tools/mi/test_mi
-> b/tests/regression/tools/mi/test_mi
-> index a5c7493..5bd29ed 100755
-> --- a/tests/regression/tools/mi/test_mi
-> +++ b/tests/regression/tools/mi/test_mi
-> @@ -27,8 +27,8 @@ RELAYD_BIN=3D"lttng-relayd"
->  TESTAPP_PATH=3D"$TESTDIR/utils/testapp"
->  TESTAPP_NAME=3D"gen-ust-events"
->  TESTAPP_BIN=3D"$TESTAPP_PATH/$TESTAPP_NAME/$TESTAPP_NAME"
-> -NR_USEC_WAIT=3D10000
-> -
-> +NR_USEC_WAIT=3D0
-> +NR_ITER=3D10000
->
->  #Temp file output
->  OUTPUT_DIR=3D$(mktemp -d)
-> @@ -500,14 +500,25 @@ function test_list_session ()
->
->  function test_list_ust_event ()
->  {
-> +       local file_sync_after_first=3D$(mktemp -u)
-> +       local file_sync_before_last=3D$(mktemp -u)
-> +
->         OUTPUT_FILE=3D"list_ust_event.xml"
->
->         #Test buid up
->         OUTPUT_DEST=3D$OUTPUT_DIR/$OUTPUT_FILE
->
->         #Begin testing
-> -       $TESTAPP_BIN $NR_USEC_WAIT & 2>/dev/null
-> +       $TESTAPP_BIN $NR_ITER $NR_USEC_WAIT ${file_sync_after_first}
-> ${file_sync_before_last} & 2>/dev/null
-> +
-> +       while [ ! -f "${file_sync_after_first}" ]; do
-> +               sleep 0.5
-> +       done
-> +
->         list_lttng_with_opts "-u -f"
-> +
-> +       touch ${file_sync_before_last}
-> +
->         $XML_VALIDATE $OUTPUT_DEST
->         ok $? "Mi test: list ust event xsd validation"
->
-> @@ -530,6 +541,9 @@ function test_list_ust_event ()
->
->         #Wait for all background processes
->         wait
-> +
-> +       rm -f ${file_sync_after_first}
-> +       rm -f ${file_sync_before_last}
->  }
->
->  function test_start_stop () {
-> --
-> 2.1.4
->
->
-
-
---=20
-J=C3=A9r=C3=A9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-
---94eb2c0885be479f15051caa8008
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Merged in master, stable-2.7 and stable-2.6, thanks!<div><=
-br></div><div>J=C3=A9r=C3=A9mie</div></div><div class=3D"gmail_extra"><br><=
-div class=3D"gmail_quote">On Thu, Aug 6, 2015 at 3:52 PM, Mathieu Desnoyers=
- <span dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com" ta=
-rget=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;</span> wrote:<br><bl=
-ockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #=
-ccc solid;padding-left:1ex">Signed-off-by: Mathieu Desnoyers &lt;<a href=3D=
-"mailto:mathieu.desnoyers@efficios.com">mathieu.desnoyers@efficios.com</a>&=
-gt;<br>
----<br>
-=C2=A0tests/regression/tools/mi/test_mi | 20 +++++++++++++++++---<br>
-=C2=A01 file changed, 17 insertions(+), 3 deletions(-)<br>
-<br>
-diff --git a/tests/regression/tools/mi/test_mi b/tests/regression/tools/mi/=
-test_mi<br>
-index a5c7493..5bd29ed 100755<br>
---- a/tests/regression/tools/mi/test_mi<br>
-+++ b/tests/regression/tools/mi/test_mi<br>
-@@ -27,8 +27,8 @@ RELAYD_BIN=3D&quot;lttng-relayd&quot;<br>
-=C2=A0TESTAPP_PATH=3D&quot;$TESTDIR/utils/testapp&quot;<br>
-=C2=A0TESTAPP_NAME=3D&quot;gen-ust-events&quot;<br>
-=C2=A0TESTAPP_BIN=3D&quot;$TESTAPP_PATH/$TESTAPP_NAME/$TESTAPP_NAME&quot;<b=
-r>
--NR_USEC_WAIT=3D10000<br>
--<br>
-+NR_USEC_WAIT=3D0<br>
-+NR_ITER=3D10000<br>
-<br>
-=C2=A0#Temp file output<br>
-=C2=A0OUTPUT_DIR=3D$(mktemp -d)<br>
-@@ -500,14 +500,25 @@ function test_list_session ()<br>
-<br>
-=C2=A0function test_list_ust_event ()<br>
-=C2=A0{<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0local file_sync_after_first=3D$(mktemp -u)<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0local file_sync_before_last=3D$(mktemp -u)<br>
-+<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 OUTPUT_FILE=3D&quot;list_ust_event.xml&quot;<br=
->
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 #Test buid up<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 OUTPUT_DEST=3D$OUTPUT_DIR/$OUTPUT_FILE<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 #Begin testing<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTAPP_BIN $NR_USEC_WAIT &amp; 2&gt;/dev/null=
-<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT ${file_sync=
-_after_first} ${file_sync_before_last} &amp; 2&gt;/dev/null<br>
-+<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0while [ ! -f &quot;${file_sync_after_first}&quo=
-t; ]; do<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0sleep 0.5<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0done<br>
-+<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 list_lttng_with_opts &quot;-u -f&quot;<br>
-+<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0touch ${file_sync_before_last}<br>
-+<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 $XML_VALIDATE $OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Mi test: list ust event xsd validat=
-ion&quot;<br>
-<br>
-@@ -530,6 +541,9 @@ function test_list_ust_event ()<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 #Wait for all background processes<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 wait<br>
-+<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0rm -f ${file_sync_after_first}<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0rm -f ${file_sync_before_last}<br>
-=C2=A0}<br>
-<br>
-=C2=A0function test_start_stop () {<br>
-<span class=3D"HOEnZb"><font color=3D"#888888">--<br>
-2.1.4<br>
-<br>
-</font></span></blockquote></div><br><br clear=3D"all"><div><br></div>-- <b=
-r><div class=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS In=
-c.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http://www.effi=
-cios.com</a></div>
-</div>
-
---94eb2c0885be479f15051caa8008--
-
-
---===============1613734783==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1613734783==--
+diff --git a/tests/regression/tools/health/test_health.sh b/tests/regression/tools/health/test_health.sh
+index ade4b0e..40d2f9e 100644
+--- a/tests/regression/tools/health/test_health.sh
++++ b/tests/regression/tools/health/test_health.sh
+@@ -146,7 +146,9 @@ function test_health
+ 	fi
+ 
+ 	if [ ${test_relayd} -eq 1 ]; then
+-		stop_lttng_relayd_nocheck
++		# We may fail to stop relayd here, and this is OK, since
++		# it may have been killed volountarily by testpoint.
++		stop_lttng_relayd_notap
+ 	fi
+ 	stop_lttng_sessiond
+ 
+diff --git a/tests/regression/tools/live/test_kernel b/tests/regression/tools/live/test_kernel
+index 4b958df..0e542da 100755
+--- a/tests/regression/tools/live/test_kernel
++++ b/tests/regression/tools/live/test_kernel
+@@ -62,22 +62,8 @@ else
+ 	exit 0
+ fi
+ 
+-if [ -z $(pidof lt-$SESSIOND_BIN) ]; then
+-	$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --background --quiet --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
+-	if [ $? -eq 1 ]; then
+-		echo "Fail to start lttng-sessiond"
+-		exit 1
+-	fi
+-fi
+-
+-opt="--background -o $TRACE_PATH"
+-if [ -z $(pidof lt-$RELAYD_BIN) ]; then
+-	$DIR/../src/bin/lttng-relayd/$RELAYD_BIN $opt >/dev/null 2>&1
+-	if [ $? -eq 1 ]; then
+-		echo "Fail to start lttng-relayd (opt: $opt)"
+-		return 1
+-	fi
+-fi
++start_lttng_sessiond_notap
++start_lttng_relayd_notap "-o $TRACE_PATH"
+ 
+ setup_live_tracing
+ 
+@@ -86,30 +72,5 @@ $TESTDIR/regression/tools/live/live_test
+ 
+ clean_live_tracing
+ 
+-# Kill the relayd
+-PID_RELAYD=`pidof lt-$RELAYD_BIN`
+-kill $PID_RELAYD
+-if [ $? -eq 1 ]; then
+-	echo "Kill lttng-relayd (pid: $PID_RELAYD)"
+-	exit 1
+-else
+-	out=1
+-	while [ -n "$out" ]; do
+-		out=$(pidof lt-$RELAYD_BIN)
+-		sleep 0.5
+-	done
+-fi
+-
+-# Kill the sessiond
+-PID_SESSIOND=`pidof lt-$SESSIOND_BIN`
+-kill $PID_SESSIOND
+-if [ $? -eq 1 ]; then
+-	echo "Kill sessiond daemon"
+-	exit 1
+-else
+-	out=1
+-	while [ -n "$out" ]; do
+-		out=$(pidof lt-$SESSIOND_BIN)
+-		sleep 0.5
+-	done
+-fi
++stop_lttng_relayd_notap
++stop_lttng_sessiond_notap
+diff --git a/tests/regression/tools/live/test_ust b/tests/regression/tools/live/test_ust
+index ae69195..0b96858 100755
+--- a/tests/regression/tools/live/test_ust
++++ b/tests/regression/tools/live/test_ust
+@@ -59,57 +59,29 @@ function clean_live_tracing()
+ 	rm -rf $TRACE_PATH
+ }
+ 
+-if [ -z $(pidof lt-$SESSIOND_BIN) ]; then
+-	$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --background --quiet --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
+-	if [ $? -eq 1 ]; then
+-		echo "Fail to start lttng-sessiond"
+-		exit 1
+-	fi
+-fi
+-
+-opt="-o $TRACE_PATH --background"
+-if [ -z $(pidof lt-$RELAYD_BIN) ]; then
+-	$DIR/../src/bin/lttng-relayd/$RELAYD_BIN $opt >/dev/null 2>&1
+-	if [ $? -eq 1 ]; then
+-		echo "Fail to start lttng-relayd (opt: $opt)"
+-		return 1
+-	fi
+-fi
++file_sync_after_first=$(mktemp -u)
++
++start_lttng_sessiond_notap
++start_lttng_relayd_notap "-o $TRACE_PATH"
+ 
+ setup_live_tracing
+ 
+ # Run app in background
+-$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1
++$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT ${file_sync_after_first} >/dev/null 2>&1
++
++while [ ! -f "${file_sync_after_first}" ]; do
++	sleep 0.5
++done
+ 
+ # Start the live test
+ $TESTDIR/regression/tools/live/live_test
+ 
++# Wait for the applications started in background
++wait
++
+ clean_live_tracing
+ 
+-# Kill the relayd
+-PID_RELAYD=`pidof lt-$RELAYD_BIN`
+-kill $PID_RELAYD
+-if [ $? -eq 1 ]; then
+-	echo "Kill lttng-relayd (pid: $PID_RELAYD)"
+-	exit 1
+-else
+-	out=1
+-	while [ -n "$out" ]; do
+-		out=$(pidof lt-$RELAYD_BIN)
+-		sleep 0.5
+-	done
+-fi
+-
+-# Kill the sessiond
+-PID_SESSIOND=`pidof lt-$SESSIOND_BIN`
+-kill $PID_SESSIOND
+-if [ $? -eq 1 ]; then
+-	echo "Kill sessiond daemon"
+-	exit 1
+-else
+-	out=1
+-	while [ -n "$out" ]; do
+-		out=$(pidof lt-$SESSIOND_BIN)
+-		sleep 0.5
+-	done
+-fi
++rm -f ${file_sync_after_first}
++
++stop_lttng_relayd_notap
++stop_lttng_sessiond_notap
+diff --git a/tests/regression/tools/live/test_ust_tracefile_count b/tests/regression/tools/live/test_ust_tracefile_count
+index 68e3722..54d6a52 100755
+--- a/tests/regression/tools/live/test_ust_tracefile_count
++++ b/tests/regression/tools/live/test_ust_tracefile_count
+@@ -60,57 +60,29 @@ function clean_live_tracing()
+ 	rm -rf $TRACE_PATH
+ }
+ 
+-if [ -z $(pidof lt-$SESSIOND_BIN) ]; then
+-	$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --background --quiet --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
+-	if [ $? -eq 1 ]; then
+-		echo "Fail to start lttng-sessiond"
+-		exit 1
+-	fi
+-fi
+-
+-opt="-o $TRACE_PATH --background"
+-if [ -z $(pidof lt-$RELAYD_BIN) ]; then
+-	$DIR/../src/bin/lttng-relayd/$RELAYD_BIN $opt >/dev/null 2>&1
+-	if [ $? -eq 1 ]; then
+-		echo "Fail to start lttng-relayd (opt: $opt)"
+-		return 1
+-	fi
+-fi
++file_sync_after_first=$(mktemp -u)
++
++start_lttng_sessiond_notap
++start_lttng_relayd_notap "-o $TRACE_PATH"
+ 
+ setup_live_tracing
+ 
+ # Run app in background
+-$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1
++$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT ${file_sync_after_first} >/dev/null 2>&1
++
++while [ ! -f "${file_sync_after_first}" ]; do
++	sleep 0.5
++done
+ 
+ # Start the live test
+ $TESTDIR/regression/tools/live/live_test
+ 
++# Wait for the applications started in background
++wait
++
+ clean_live_tracing
+ 
+-# Kill the relayd
+-PID_RELAYD=`pidof lt-$RELAYD_BIN`
+-kill $PID_RELAYD
+-if [ $? -eq 1 ]; then
+-	echo "Kill lttng-relayd (pid: $PID_RELAYD)"
+-	exit 1
+-else
+-	out=1
+-	while [ -n "$out" ]; do
+-		out=$(pidof lt-$RELAYD_BIN)
+-		sleep 0.5
+-	done
+-fi
+-
+-# Kill the sessiond
+-PID_SESSIOND=`pidof lt-$SESSIOND_BIN`
+-kill $PID_SESSIOND
+-if [ $? -eq 1 ]; then
+-	echo "Kill sessiond daemon"
+-	exit 1
+-else
+-	out=1
+-	while [ -n "$out" ]; do
+-		out=$(pidof lt-$SESSIOND_BIN)
+-		sleep 0.5
+-	done
+-fi
++rm -f ${file_sync_after_first}
++
++stop_lttng_relayd_notap
++stop_lttng_sessiond_notap
+diff --git a/tests/regression/tools/save-load/test_load b/tests/regression/tools/save-load/test_load
+index c6234ef..0a7ee3a 100755
+--- a/tests/regression/tools/save-load/test_load
++++ b/tests/regression/tools/save-load/test_load
+@@ -29,7 +29,7 @@ EVENT_NAME="tp:tptest"
+ 
+ DIR=$(readlink -f $TESTDIR)
+ 
+-NUM_TESTS=21
++NUM_TESTS=23
+ 
+ source $TESTDIR/utils/utils.sh
+ 
+@@ -92,7 +92,7 @@ function test_complex_load()
+ 	fi
+ 	destroy_lttng_session_ok $sess
+ 
+-	stop_lttng_relayd_nocheck
++	stop_lttng_relayd
+ }
+ 
+ function test_all_load()
+@@ -108,7 +108,7 @@ function test_all_load()
+ 	destroy_lttng_session_ok $SESSION_NAME
+ 	destroy_lttng_session_ok "$SESSION_NAME-complex"
+ 
+-	stop_lttng_relayd_nocheck
++	stop_lttng_relayd
+ }
+ 
+ function test_overwrite()
+diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
+index 4282fbb..60adb4f 100644
+--- a/tests/utils/utils.sh
++++ b/tests/utils/utils.sh
+@@ -238,9 +238,10 @@ function lttng_disable_kernel_channel_fail()
+ 	lttng_disable_kernel_channel 1 "$@"
+ }
+ 
+-function start_lttng_relayd
++function start_lttng_relayd_opt()
+ {
+-	local opt=$1
++	local withtap=$1
++	local opt=$2
+ 
+ 	DIR=$(readlink -f $TESTDIR)
+ 
+@@ -248,52 +249,77 @@ function start_lttng_relayd
+ 		$DIR/../src/bin/lttng-relayd/$RELAYD_BIN -b $opt >$OUTPUT_DEST
+ 		#$DIR/../src/bin/lttng-relayd/$RELAYD_BIN $opt -vvv >>/tmp/relayd.log 2>&1 &
+ 		if [ $? -eq 1 ]; then
+-			fail "Start lttng-relayd (opt: $opt)"
++			if [ $withtap -eq "1" ]; then
++				fail "Start lttng-relayd (opt: $opt)"
++			fi
+ 			return 1
+ 		else
+-			pass "Start lttng-relayd (opt: $opt)"
++			if [ $withtap -eq "1" ]; then
++				pass "Start lttng-relayd (opt: $opt)"
++			fi
+ 		fi
+ 	else
+ 		pass "Start lttng-relayd (opt: $opt)"
+ 	fi
+ }
+ 
+-function stop_lttng_relayd_nocheck
++function start_lttng_relayd()
+ {
++	start_lttng_relayd_opt 1 "$@"
++}
++
++function start_lttng_relayd_notap()
++{
++	start_lttng_relayd_opt 0 "$@"
++}
++
++function stop_lttng_relayd_opt()
++{
++	local withtap=$1
++
+ 	PID_RELAYD=`pidof lt-$RELAYD_BIN`
+ 
+-	diag "Killing lttng-relayd (pid: $PID_RELAYD)"
++	if [ $withtap -eq "1" ]; then
++		diag "Killing lttng-relayd (pid: $PID_RELAYD)"
++	fi
+ 	kill $PID_RELAYD >$OUTPUT_DEST
+ 	retval=$?
+ 
+-	if [ $retval -eq 1 ]; then
++	if [ $? -eq 1 ]; then
++		if [ $withtap -eq "1" ]; then
++			fail "Kill relay daemon"
++		fi
++		return 1
++	else
+ 		out=1
+ 		while [ -n "$out" ]; do
+ 			out=$(pidof lt-$RELAYD_BIN)
+ 			sleep 0.5
+ 		done
++		if [ $withtap -eq "1" ]; then
++			pass "Kill relay daemon"
++		fi
+ 	fi
+ 	return $retval
+ }
+ 
+-function stop_lttng_relayd
++function stop_lttng_relayd()
+ {
+-	stop_lttng_relayd_nocheck
++	stop_lttng_relayd_opt 1 "$@"
++}
+ 
+-	if [ $? -eq 1 ]; then
+-		fail "Killed lttng-relayd (pid: $PID_RELAYD)"
+-		return 1
+-	else
+-		pass "Killed lttng-relayd (pid: $PID_RELAYD)"
+-		return 0
+-	fi
++function stop_lttng_relayd_notap()
++{
++	stop_lttng_relayd_opt 0 "$@"
+ }
+ 
+-#First argument: load path for automatic loading
+-function start_lttng_sessiond()
++#First arg: show tap output
++#Second argument: load path for automatic loading
++function start_lttng_sessiond_opt()
+ {
++	local withtap=$1
++	local load_path=$2
+ 
+-	local load_path="$1"
+ 	if [ -n $TEST_NO_SESSIOND ] && [ "$TEST_NO_SESSIOND" == "1" ]; then
+ 		# Env variable requested no session daemon
+ 		return
+@@ -311,19 +337,33 @@ function start_lttng_sessiond()
+ 
+ 	if [ -z $(pidof lt-$SESSIOND_BIN) ]; then
+ 		# Have a load path ?
+-		if [ -n "$1" ]; then
++		if [ -n "$load_path" ]; then
+ 			$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --load "$1" --background --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
+ 		else
+ 			$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --background --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
+ 		fi
+ 		#$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --background --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --verbose-consumer >>/tmp/sessiond.log 2>&1
+ 		status=$?
+-		ok $status "Start session daemon"
++		if [ $withtap -eq "1" ]; then
++			ok $status "Start session daemon"
++		fi
+ 	fi
+ }
+ 
+-function stop_lttng_sessiond ()
++function start_lttng_sessiond()
++{
++	start_lttng_sessiond_opt 1 "$@"
++}
++
++function start_lttng_sessiond_notap()
+ {
++	start_lttng_sessiond_opt 0 "$@"
++}
++
++function stop_lttng_sessiond_opt()
++{
++	local withtap=$1
++
+ 	if [ -n $TEST_NO_SESSIOND ] && [ "$TEST_NO_SESSIOND" == "1" ]; then
+ 		# Env variable requested no session daemon
+ 		return
+@@ -334,8 +374,9 @@ function stop_lttng_sessiond ()
+ 	kill $PID_SESSIOND >$OUTPUT_DEST
+ 
+ 	if [ $? -eq 1 ]; then
+-		fail "Kill sessions daemon"
+-		return 1
++		if [ $withtap -eq "1" ]; then
++			fail "Kill sessions daemon"
++		fi
+ 	else
+ 		out=1
+ 		while [ -n "$out" ]; do
+@@ -347,10 +388,22 @@ function stop_lttng_sessiond ()
+ 			out=$(pidof $CONSUMERD_BIN)
+ 			sleep 0.5
+ 		done
+-		pass "Kill session daemon"
++		if [ $withtap -eq "1" ]; then
++			pass "Kill session daemon"
++		fi
+ 	fi
+ }
+ 
++function stop_lttng_sessiond()
++{
++	stop_lttng_sessiond_opt 1 "$@"
++}
++
++function stop_lttng_sessiond_notap()
++{
++	stop_lttng_sessiond_opt 0 "$@"
++}
++
+ function list_lttng_with_opts ()
+ {
+ 	local opts=$1
+-- 
+2.1.4
