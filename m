@@ -1,19 +1,19 @@
-From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
-Subject: Re: [PATCH lttng-tools] Tests: Java agent: update after
- Java agent refactoring
-Date: Wed, 05 Aug 2015 20:32:28 -0400
-Message-ID: <55C2AB1C.7070804__3340.46621942452$1438821223$gmane$org@voxpopuli.im>
-References: <1438726900-17234-1-git-send-email-mjeanson@efficios.com>
- <CA+jJMxuWpP_vVWzFUS1CSvfUYsLZjVM8ZYLzAjjXpTaSAfw8Xg@mail.gmail.com>
+From: jamie explorer <jamieexplorer@gmail.com>
+Subject: Re: 32-bit application crash
+Date: Thu, 6 Aug 2015 21:20:45 +0530
+Message-ID: <CACh_V544Vsom7gnQab_MhcaeRu7jQpzPuCmWWROn-aeFsUFc=Q__1477.22443002767$1438876322$gmane$org@mail.gmail.com>
+References: <CACh_V55XxDDx3rRyGr53XVgqav66SyyJU21YiezyXeUS_p6vKg@mail.gmail.com>
+ <CACh_V56NjOL-asm-CJ7UZXW_7ArTXDqrH5TkVs=PPZhJK8C=jQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="windows-1252"; Format="flowed"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============0919610431=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from ironport2-out.teksavvy.com ([206.248.154.181])
+Received: from mail-oi0-f53.google.com ([209.85.218.53])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <alexmonthy@voxpopuli.im>) id 1ZN96p-0000WS-Se
- for lttng-dev@lists.lttng.org; Wed, 05 Aug 2015 20:32:42 -0400
-In-Reply-To: <CA+jJMxuWpP_vVWzFUS1CSvfUYsLZjVM8ZYLzAjjXpTaSAfw8Xg@mail.gmail.com>
+ (envelope-from <jamieexplorer@gmail.com>) id 1ZNNRT-0005Co-Be
+ for lttng-dev@lists.lttng.org; Thu, 06 Aug 2015 11:50:59 -0400
+Received: by oip136 with SMTP id 136so39623103oip.1
+ for <lttng-dev@lists.lttng.org>; Thu, 06 Aug 2015 08:50:45 -0700 (PDT)
+In-Reply-To: <CACh_V56NjOL-asm-CJ7UZXW_7ArTXDqrH5TkVs=PPZhJK8C=jQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,501 +22,297 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?windows-1252?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>, Michael Jeanson <mjeanson@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This patch now makes lttng-tools have a hard requirement on Java to even =
+--===============0919610431==
+Content-Type: multipart/alternative; boundary=001a113dfc7681bb0f051ca67b14
 
-compile the thing. Is this desirable, given that Java is only needed to =
+--001a113dfc7681bb0f051ca67b14
+Content-Type: text/plain; charset=UTF-8
 
-run some tests?
+Hi All,
+Here is more info.
+I'm using 2.6 lttng-ust
+I'm seeing this crash on 32-bit app's only when compiling with g++
+compiler. Dont see this issue when compiling with gcc.
+is there any known issue or fix for this.
+
+Thanks,
+Anand Neeli
 
 
-On 2015-08-05 12:08 PM, J=E9r=E9mie Galarneau wrote:
-> Merged, thanks!
+
+/Jam
+
+On Wed, Aug 5, 2015 at 10:43 PM, jamie explorer <jamieexplorer@gmail.com>
+wrote:
+
+> Hi All,
+> i looked into this further, generated .c file with expanded macros for
+> debugging
+> Some of the function pointer are not populated correctly.
+> I have attached the expanded source files which i used.
+> please see the following GDB analysis:
 >
-> J=E9r=E9mie
 >
-> On Tue, Aug 4, 2015 at 6:21 PM, Michael Jeanson <mjeanson@efficios.com>
+> (gdb) bt
+> #0  0x00000000 in ?? ()
+> #1  0x080490a0 in __event_probe__sample_tracepoint___message
+> (__tp_data=0x80512d0,
+>     text=0x804ca64 "Hello World\n") at sample_tracepoint.c:8567
+>
+> #2  0x0804ba23 in __tracepoint_cb_sample_tracepoint___message (
+>     text=0x804ca64 "Hello World\n")
+>     at /build/home/jam/gentp/src/sample.c:4026
+> #3  main (argc=1, argv=0xffffdd74)
+>     at /build/home/jam/gentp/src/sample.c:4731
+>
+> ****bc_runtime->filter* --- is not populated correctly, because of which
+> it crashes
+> *(gdb) frame 1*
+> #1  0x080490a0 in __event_probe__sample_tracepoint___message
+> (__tp_data=0x80512d0,
+>     text=0x804ca64 "Hello World\n") at sample_tracepoint.c:8567
+> 8567     if (__builtin_expect(!!(*bc_runtime->filter*(bc_runtime,
+> __stackvar.__filter_stack_data) & LTTNG_FILTER_RECORD_FLAG), 0))
+>
+>
+> *(gdb) list*
+> 8562     (__stackvar.__filter_stack_data, __tp_data,text);
+> 8563     for (bc_runtime = ((__typeof__(*bc_runtime) *) ((char *)
+> ((reinterpret_cast<__typeof__((&__event->bytecode_runtime_head)->next)>(tracepoint_dlopen.rcu_dereference_sym_bp((reinterpret_cast<void
+> *>((&__event->bytecode_runtime_head)->next)))))) - (unsigned long)
+> (&((__typeof__(*bc_runtime) *) 0)->node)));
+> 8564     &bc_runtime->node != (&__event->bytecode_runtime_head);
+> 8565     bc_runtime = ((__typeof__(*bc_runtime) *) ((char *)
+> ((reinterpret_cast<__typeof__(bc_runtime->node.next)>(tracepoint_dlopen.rcu_dereference_sym_bp((reinterpret_cast<void
+> *>(bc_runtime->node.next)))))) - (unsigned long)
+> (&((__typeof__(*bc_runtime) *) 0)->node))))
+> 8566     {
+> *8567     if (__builtin_expect(!!(bc_runtime->filter(bc_runtime,
+> __stackvar.__filter_stack_data) & LTTNG_FILTER_RECORD_FLAG), 0))*
+> 8568      __filter_record = 1;
+> 8569     } if (__builtin_expect(!!(!__filter_record), 1)) return;
+> 8570     } __event_len =
+> 8571
+>
+>
+> *printing bc_runtime shows filter is 0*
+> *(gdb) p *bc_runtime *
+> $3 = {bc = 0x0,* filter = 0x0,* link_failed = 0, node = {next =
+> 0x8051304,
+>     prev = 0x8051304}}
+>
+>
+> *also i see __event->bytecode_runtime_head->prev = 0x1 which may be wrong*
+> *(gdb) p *__event*
+> $4 = {id = 2, chan = 0xf6c047c0, enabled = 1,
+>   desc = 0x804c700 <__event_desc___sample_tracepoint_message>,
+> _deprecated1 = 0x0,
+>   ctx = 0x0, instrumentation = LTTNG_UST_TRACEPOINT, u = {<No data
+> fields>}, node = {
+>     next = 0x8051344, prev = 0x0}, _deprecated2 = {next = 0x0, prev =
+> 0x0},
+>   _deprecated3 = 0x0, _deprecated4 = 0,
+> *bytecode_runtime_head = {next = 0x8051304,     prev = 0x1}*,
+> has_enablers_without_bytecode = 134552592, enablers_ref_head = {
+>     next = 0x8051c10, prev = 0x0}, hlist = {next = 0xf6c00ea0, prev =
+> 0x1},
+>   registered = 89}
+>
+>
+> I guess this structure is populated in tracepoint_register using urcu.
+> Can anyone give me more pointers to debug this. Is this a known issue and
+> is there any patch which i can use
+>
+>
+> /Jam
+>
+>
+>
+> On Mon, Aug 3, 2015 at 4:19 PM, jamie explorer <jamieexplorer@gmail.com>
 > wrote:
 >
->> This patch fixes the Java agent tests which were impossible to run since
->> the Jar files have been renamed. It also overhauls the java part of the
->> configure script to match what's in UST and replace some hardcoded path
->> with configurable values.
+>> Hi,
+>> i am trying to run 32-bit application and see crash at the the line where
+>> "tracepoint" is used.
+>> i am using sample application given in
+>> lttng-ust-2.6.0/doc/examples/gen-tp/
+>> Not able to understand why the problem is seen only with 32-bit apps? Can
+>> experts here pls help me fix this.
 >>
->> The tests are now enabled when corresponding classes are found in the
->> CLASSPATH during configure.
+>> Have tried using ELF 32-bit app on Intel 80386 and PowerPC and see the
+>> crash. Where as 64-bit applications have no problem.
 >>
->> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
->> ---
->>   .gitignore                                      |  2 +
->>   config/ax_check_class.m4                        |  2 +-
->>   configure.ac                                    | 80
->> +++++++++----------------
->>   tests/regression/ust/java-jul/JTestLTTng.java   | 34 ++++++++---
->>   tests/regression/ust/java-jul/Makefile.am       | 21 ++-----
->>   tests/regression/ust/java-jul/test_java_jul     |  4 +-
->>   tests/regression/ust/java-log4j/JTestLTTng.java | 38 +++++++++---
->>   tests/regression/ust/java-log4j/Makefile.am     | 17 +-----
->>   tests/regression/ust/java-log4j/test_java_log4j |  4 +-
->>   9 files changed, 99 insertions(+), 103 deletions(-)
+>> following is the code where it crashes
+>>         for (i = 0; i < 100000; i++) {
+>>                 tracepoint(sample_tracepoint, message,  "Hello World\n");
+>>  <<<< Crash here
+>>                 usleep(1);
+>>         }
 >>
->> diff --git a/.gitignore b/.gitignore
->> index ff19c8d..5d24bec 100644
->> --- a/.gitignore
->> +++ b/.gitignore
->> @@ -93,3 +93,5 @@ health_check
->>   /benchmark/
+>> GDB output:
 >>
->>   /include/version.h
->> +
->> +classnoinst.stamp
->> diff --git a/config/ax_check_class.m4 b/config/ax_check_class.m4
->> index 098aa77..42b51d7 100644
->> --- a/config/ax_check_class.m4
->> +++ b/config/ax_check_class.m4
->> @@ -118,7 +118,7 @@ EOF
->>                           ac_cv_prog_uudecode_base64=3Dno
->>                   fi
->>           rm -f Test.uue
->> -        if AC_TRY_COMMAND($JAVA $JAVAFLAGS Test $1) >/dev/null 2>&1; th=
-en
->> +        if AC_TRY_COMMAND($JAVA -classpath ".:$CLASSPATH" $JAVAFLAGS Te=
-st
->> $1) >/dev/null 2>&1; then
->>                   eval "ac_cv_class_$ac_var_name=3Dyes"
->>           else
->>                   eval "ac_cv_class_$ac_var_name=3Dno"
->> diff --git a/configure.ac b/configure.ac
->> index 2fc6e53..bfef178 100644
->> --- a/configure.ac
->> +++ b/configure.ac
->> @@ -355,65 +355,43 @@ AX_CONFIG_FEATURE(
->>   )
->>   AM_CONDITIONAL([COMPAT_EPOLL], [ test "$enable_epoll" =3D "yes" ])
+>> #0  0x00000000 in ?? ()
+>> #1  0x10001e54 in __event_probe__sample_tracepoint___message (
+>>     __tp_data=0x10015420, text=0x100034a4 "Hello World\n")
+>>     at /build/home/jam/gentp/sample_tracepoint.h:13
+>> #2  0x10000b9c in __tracepoint_cb_sample_tracepoint___message (
+>>     text=0x100034a4 "Hello World\n")
+>>     at //build/home/jam/gentp/sample_tracepoint.h:13
+>> #3  main (argc=<optimized out>, argv=<optimized out>)
+>>     at /build/home/jam/gentp/sample.c:115
 >>
->> -# Set compile flags to java include files if given. This is only used to
->> -# compile java agent tests.
->> -AC_ARG_WITH([java-jdk],
->> -       [AS_HELP_STRING([--with-java-jdk=3DDIR],[use the Java JDK in DIR=
-. Ex
->> : $JAVA_HOME.])],
->> -       [JAVA_JDK=3D$withval],
->> -       [JAVA_JDK=3D""]
->> -)
->> -AM_CONDITIONAL([HAVE_JAVA_JDK], [test $JAVA_JDK], [Java JDK path])
->> -AC_SUBST([JAVA_JDK])
->> +AX_JAVA_OPTIONS
->> +AX_PROG_JAVAC
->> +AX_PROG_JAVA
->> +AX_PROG_JAR
 >>
->> -AS_IF([test $JAVA_JDK],[
->> -       AS_IF([test -d $JAVA_JDK],
->> -               [
->> -                       AC_MSG_RESULT([using Java includes in $JAVA_SDK])
->> -                       SUBDIRS=3D`find $JAVA_JDK/include -type d`
->> -                       CPPFLAGS+=3D" "
->> -                       CPPFLAGS+=3D`for x in $SUBDIRS; do echo -n "-I$x=
- ";
->> done`
->> -                       CPPFLAGS+=3D" "
->> -        ],[AC_MSG_ERROR(Unable to find Java include files in $JAVA_JDK)]
->> -       )
->> -])
->> +AX_CHECK_CLASSPATH
+>> i am running 32-bit version of lttng-sessiond
+>> root@host:~# ps aux | grep lttng
+>> root      4224  0.0  0.0  92212  1648 ?        Ssl  00:42   0:00
+>> /usr/bin/lttng-sessiond --consumerd32-path
+>> /usr/lib/lttng/libexec/lttng-consumerd --consumerd32-libdir /usr/lib/ -b
+>> --no-kernel
+>> root      4243  0.0  0.0  64212   956 ?        Sl   00:42   0:00
+>> lttng-consumerd  -u --consumerd-cmd-sock
+>> /var/run/lttng/ustconsumerd32/command --consumerd-err-sock
+>> /var/run/lttng/ustconsumerd32/error --group tracing
 >>
->> -# Check for the UST agent jar file in the system. Hardcoded path is add=
-ed
->> here
->> -# since we have *no* idea where this could be installed. Note that this
->> is only
->> -# used for agent testing.
->> -AC_MSG_CHECKING(Java UST agent jar file)
->> -java_agent_jar_path=3D"${prefix}/share/java/liblttng-ust-agent.jar"
->> -if test -f $java_agent_jar_path; then
->> -       build_java_agent=3Dyes
->> -       AC_MSG_RESULT(found)
->> +# Check for Java UST agent common class first
->> +AX_CHECK_CLASS(org.lttng.ust.agent.AbstractLttngAgent)
->> +if test "x$ac_cv_class_org_lttng_ust_agent_AbstractLttngAgent" =3D "xye=
-s";
->> then
->> +       java_agent_common=3Dyes
->>   else
->> -       build_java_agent=3Dno
->> -       AC_MSG_RESULT(not found)
->> +       java_agent_common=3Dno
->>   fi
->> -AM_CONDITIONAL([BUILD_JAVA_AGENT], [test "x$build_java_agent" =3D "xyes=
-"])
->> -AC_SUBST([java_agent_jar_path])
->> -
->> -# Check for log4j support on the system to know if we can build or not =
-the
->> -# log4j tests.
->> -if test "x$build_java_agent" =3D "xyes"; then
->> -       AC_MSG_CHECKING(Java agent support for log4j)
->> -       AX_JAVA_OPTIONS
->> -       AX_PROG_JAR
->> -       AX_PROG_JAVA
->> -       AX_PROG_JAVAC
->> -
->> -       # By default, use a commonly used classpath on the system to ease
->> things up
->> -       # for the Java testing in this directory.
->> -
->>   LOG4J_CLASSPATH=3D"$java_agent_jar_path:$CLASSPATH:.:/usr/share/java/*"
->> -       JAVAFLAGS=3D"-cp $LOG4J_CLASSPATH"
->> -       JAVACFLAGS=3D"$JAVAFLAGS"
->> +
->> +# If the common class is available, test for each agent
->> +if test "x$java_agent_common" =3D "xyes"; then
->> +       # Check for JUL
->> +       AX_CHECK_CLASS(org.lttng.ust.agent.jul.LttngLogHandler)
->> +       AX_CHECK_CLASS(org.lttng.ust.agent.log4j.LttngLogAppender)
->>          AX_CHECK_CLASS(org.apache.log4j.Logger)
 >>
->> -       if test "x$ac_cv_class_org_apache_log4j_Logger" =3D "xno"; then
->> -               build_java_log4j_agent=3Dno
->> -       else
->> -               build_java_log4j_agent=3Dyes
->> +       build_java_jul_agent=3Dno
->> +       if test "x$ac_cv_class_org_lttng_ust_agent_jul_LttngLogHandler" =
-=3D
->> "xyes"; then
->> +               build_java_jul_agent=3Dyes
->>          fi
->> +
->> +       build_java_log4j_agent=3Dno
->> +       if test "x$ac_cv_class_org_lttng_ust_agent_log4j_LttngLogAppende=
-r"
->> =3D "xyes"; then
->> +               if test "x$ac_cv_class_org_apache_log4j_Logger" =3D "xye=
-s";
->> then
->> +                       build_java_log4j_agent=3Dyes
->> +               fi
->> +       fi
->> +
->>   fi
->> +
->> +AM_CONDITIONAL([BUILD_JAVA_JUL_AGENT], [test "x$build_java_jul_agent" =
-=3D
->> "xyes"])
->>   AM_CONDITIONAL([BUILD_JAVA_LOG4J_AGENT], [test "x$build_java_log4j_age=
-nt"
->> =3D "xyes"])
 >>
->>   AC_SYS_LARGEFILE
->> diff --git a/tests/regression/ust/java-jul/JTestLTTng.java
->> b/tests/regression/ust/java-jul/JTestLTTng.java
->> index 9431551..741d820 100644
->> --- a/tests/regression/ust/java-jul/JTestLTTng.java
->> +++ b/tests/regression/ust/java-jul/JTestLTTng.java
->> @@ -1,4 +1,5 @@
->>   /*
->> + * Copyright (C) 2015 - Michael Jeanson <mjeanson@efficios.com>
->>    * Copyright (C) 2013 - David Goulet <dgoulet@efficios.com>
->>    *
->>    * This program is free software; you can redistribute it and/or modif=
-y it
->> @@ -15,20 +16,29 @@
->>    * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
->>    */
->>
->> +import java.io.IOException;
->>   import java.lang.Integer;
->> +import java.util.logging.Handler;
->>   import java.util.logging.Logger;
->>   import java.util.logging.Level;
->>
->> -import org.lttng.ust.agent.LTTngAgent;
->> +import org.lttng.ust.agent.jul.LttngLogHandler;
->>
->> -public class JTestLTTng
->> -{
->> -       private static LTTngAgent lttngAgent;
->> +public class JTestLTTng {
->> +
->> +       /**
->> +        * Application start
->> +        *
->> +        * @param args
->> +        *            Command-line arguments
->> +        * @throws IOException
->> +        * @throws InterruptedException
->> +        */
->> +       public static void main(String args[]) throws IOException,
->> InterruptedException {
->>
->> -       public static void main(String args[]) throws Exception
->> -       {
->>                  Logger lttng =3D Logger.getLogger("JTestLTTng");
->>                  Logger lttng2 =3D Logger.getLogger("JTestLTTng2");
->> +
->>                  int nrIter =3D Integer.parseInt(args[0]);
->>                  int waitTime =3D Integer.parseInt(args[1]);
->>                  int fire_finest_tp =3D 0;
->> @@ -41,7 +51,11 @@ public class JTestLTTng
->>                          fire_second_tp =3D Integer.parseInt(args[3]);
->>                  }
->>
->> -               lttngAgent =3D LTTngAgent.getLTTngAgent();
->> +               /* Instantiate a LTTngLogHandler object, and attach it to
->> our loggers */
->> +               Handler lttngHandler =3D new LttngLogHandler();
->> +               lttng.addHandler(lttngHandler);
->> +               lttng2.addHandler(lttngHandler);
->> +
->>                  lttng.setLevel(Level.FINEST);
->>
->>                  for (int iter =3D 0; iter < nrIter; iter++) {
->> @@ -57,6 +71,10 @@ public class JTestLTTng
->>                          lttng2.info("JUL second logger fired");
->>                  }
->>
->> -               lttngAgent.dispose();
->> +               /*
->> +                * Do not forget to close() all handlers so that the age=
-nt
->> can shutdown
->> +                * and the session daemon socket gets cleaned up
->> explicitly.
->> +                */
->> +               lttngHandler.close();
->>          }
->>   }
->> diff --git a/tests/regression/ust/java-jul/Makefile.am
->> b/tests/regression/ust/java-jul/Makefile.am
->> index 286e3df..877237f 100644
->> --- a/tests/regression/ust/java-jul/Makefile.am
->> +++ b/tests/regression/ust/java-jul/Makefile.am
->> @@ -1,25 +1,13 @@
->> +JAVAROOT =3D .
->>
->>   noinst_SCRIPTS =3D test_java_jul JTestLTTng.java
->>   EXTRA_DIST =3D test_java_jul JTestLTTng.java
->>
->> -if HAVE_JAVA_JDK
->> -JCC=3D$(JAVA_JDK)/bin/javac
->> -else
->> -JCC=3Djavac
->> -endif
->> +if BUILD_JAVA_JUL_AGENT
->> +dist_noinst_JAVA =3D JTestLTTng.java
->> +endif # BUILD_JAVA_JUL_AGENT
->>
->> -AGENT_JAR_FILE=3D$(java_agent_jar_path)
->> -
->> -
->> -# Still need to copy test files in case of out of tree build
->> -if BUILD_JAVA_AGENT
->> -all-local: static_file JTestLTTng.class
->> -%.class: %.java
->> -       $(JCC) -d "$(builddir)" -cp "$(AGENT_JAR_FILE):." $<
->> -else
->>   all-local: static_file
->> -endif # BUILD_JAVA_AGENT
->> -
->>
->>   static_file:
->>          @if [ x"$(srcdir)" !=3D x"$(builddir)" ]; then \
->> @@ -28,7 +16,6 @@ static_file:
->>                  done; \
->>          fi
->>
->> -
->>   clean-local:
->>          rm -f *.class
->>          @if [ x"$(srcdir)" !=3D x"$(builddir)" ]; then \
->> diff --git a/tests/regression/ust/java-jul/test_java_jul
->> b/tests/regression/ust/java-jul/test_java_jul
->> index 48c8b74..f9f244b 100755
->> --- a/tests/regression/ust/java-jul/test_java_jul
->> +++ b/tests/regression/ust/java-jul/test_java_jul
->> @@ -27,7 +27,7 @@ TESTAPP_PATH=3D"$CURDIR/$TESTAPP_NAME"
->>   SESSION_NAME=3D"jul"
->>   EVENT_NAME=3D"JTestLTTng"
->>   EVENT_NAME2=3D"JTestLTTng2"
->>
->> -JAVA_CP=3D"$CURDIR:/usr/local/share/java/liblttng-ust-agent.jar:/usr/sh=
-are/java/liblttng-ust-agent.jar"
->> +JAVA_CP=3D"$CURDIR:$CLASSPATH"
->>
->>   NUM_TESTS=3D155
->>
->> @@ -39,7 +39,7 @@ function run_app
->>          local fire_second_tp=3D$2
->>
->>          #FIXME: app should have synchro.
->> -       java -cp $JAVA_CP -Djava.library.path=3D"/usr/local/lib:/usr/lib"
->> $TESTAPP_NAME $NR_ITER $NR_MSEC_WAIT $finest_tp $fire_second_tp >/dev/nu=
-ll
->> 2>&1
->> +       java -cp $JAVA_CP
->> -Djava.library.path=3D"$LD_LIBRARY_PATH:/usr/local/lib:/usr/lib"
->> $TESTAPP_NAME $NR_ITER $NR_MSEC_WAIT $finest_tp $fire_second_tp >/dev/nu=
-ll
->> 2>&1
->>   }
->>
->>   function run_app_background
->> diff --git a/tests/regression/ust/java-log4j/JTestLTTng.java
->> b/tests/regression/ust/java-log4j/JTestLTTng.java
->> index 0019cb8..64a471b 100644
->> --- a/tests/regression/ust/java-log4j/JTestLTTng.java
->> +++ b/tests/regression/ust/java-log4j/JTestLTTng.java
->> @@ -1,4 +1,5 @@
->>   /*
->> + * Copyright (C) 2015 - Michael Jeanson <dgoulet@efficios.com>
->>    * Copyright (C) 2014 - David Goulet <dgoulet@efficios.com>
->>    *                      Christian Babeux <christian.babeux@efficios.co=
-m>
->>    *
->> @@ -19,19 +20,26 @@
->>   import java.io.IOException;
->>   import java.lang.Integer;
->>
->> -import org.apache.log4j.Logger;
->> +import org.apache.log4j.Appender;
->>   import org.apache.log4j.BasicConfigurator;
->> +import org.apache.log4j.Logger;
->> +import org.lttng.ust.agent.log4j.LttngLogAppender;
->>
->> -import org.lttng.ust.agent.LTTngAgent;
->> +public class JTestLTTng {
->>
->> -public class JTestLTTng
->> -{
->> -       private static LTTngAgent lttngAgent;
->> +       /**
->> +        * Application start
->> +        *
->> +        * @param args
->> +        *            Command-line arguments
->> +        * @throws IOException
->> +        * @throws InterruptedException
->> +        */
->> +       public static void main(String args[]) throws IOException,
->> InterruptedException {
->>
->> -       public static void main(String args[]) throws Exception
->> -       {
->>                  Logger lttng =3D Logger.getLogger("log4j-event");
->>                  Logger lttng2 =3D Logger.getLogger("log4j-event-2");
->> +
->>                  int nrIter =3D Integer.parseInt(args[0]);
->>                  int waitTime =3D Integer.parseInt(args[1]);
->>                  int fire_debug_tp =3D 0;
->> @@ -44,8 +52,16 @@ public class JTestLTTng
->>                          fire_second_tp =3D Integer.parseInt(args[3]);
->>                  }
->>
->> +               /* Start with the default Log4j configuration, which logs
->> to console */
->>                  BasicConfigurator.configure();
->> -               lttngAgent =3D LTTngAgent.getLTTngAgent();
->> +
->> +               /*
->> +                * Add a LTTng log appender to both loggers, which will
->> also send the
->> +                * logged events to UST.
->> +                */
->> +               Appender lttngAppender =3D new LttngLogAppender();
->> +               lttng.addAppender(lttngAppender);
->> +               lttng2.addAppender(lttngAppender);
->>
->>                  for (int iter =3D 0; iter < nrIter; iter++) {
->>                          lttng.info("LOG4J tp fired!");
->> @@ -59,5 +75,11 @@ public class JTestLTTng
->>                  if (fire_second_tp =3D=3D 1) {
->>                          lttng2.info("LOG4J second logger fired");
->>                  }
->> +
->> +               /*
->> +                * Do not forget to close() all handlers so that the age=
-nt
->> can shutdown
->> +                * and the session daemon socket gets cleaned up
->> explicitly.
->> +                */
->> +               lttngAppender.close();
->>          }
->>   }
->> diff --git a/tests/regression/ust/java-log4j/Makefile.am
->> b/tests/regression/ust/java-log4j/Makefile.am
->> index 7d6c048..42daab8 100644
->> --- a/tests/regression/ust/java-log4j/Makefile.am
->> +++ b/tests/regression/ust/java-log4j/Makefile.am
->> @@ -1,24 +1,13 @@
->> +JAVAROOT =3D .
->>
->>   noinst_SCRIPTS =3D test_java_log4j JTestLTTng.java
->>   EXTRA_DIST =3D test_java_log4j JTestLTTng.java
->>
->> -if HAVE_JAVA_JDK
->> -JCC=3D$(JAVA_JDK)/bin/javac
->> -else
->> -JCC=3Djavac
->> -endif
->> -
->> -# We still need to copy static files for out of tree and dist build
->>   if BUILD_JAVA_LOG4J_AGENT
->> -all-local: static_file JTestLTTng.class
->> -
->> -%.class: %.java
->> -       $(JCC) -d "$(builddir)" $(JAVACFLAGS) $<
->> -else
->> -all-local: static_file
->> +dist_noinst_JAVA =3D JTestLTTng.java
->>   endif # BUILD_JAVA_LOG4J_AGENT
->>
->> -JTestLTTng.class: JTestLTTng.java
->> +all-local: static_file
->>
->>   static_file:
->>          @if [ x"$(srcdir)" !=3D x"$(builddir)" ]; then \
->> diff --git a/tests/regression/ust/java-log4j/test_java_log4j
->> b/tests/regression/ust/java-log4j/test_java_log4j
->> index cdc0c4c..d5c6621 100755
->> --- a/tests/regression/ust/java-log4j/test_java_log4j
->> +++ b/tests/regression/ust/java-log4j/test_java_log4j
->> @@ -27,7 +27,7 @@ TESTAPP_PATH=3D"$CURDIR/$TESTAPP_NAME"
->>   SESSION_NAME=3D"log4j"
->>   EVENT_NAME=3D"log4j-event"
->>   EVENT_NAME2=3D"log4j-event-2"
->>
->> -JAVA_CP=3D"$CURDIR:/usr/local/share/java/liblttng-ust-agent.jar:/usr/sh=
-are/java/*"
->> +JAVA_CP=3D"$CURDIR:$CLASSPATH"
->>   OUTPUT_DEST=3D"/dev/null"
->>
->>   NUM_TESTS=3D155
->> @@ -40,7 +40,7 @@ function run_app
->>          local fire_second_tp=3D$2
->>
->>          # FIXME: test app should have synchro.
->> -       java -cp $JAVA_CP -Djava.library.path=3D"/usr/local/lib:/usr/lib"
->> $TESTAPP_NAME $NR_ITER $NR_MSEC_WAIT $debug_tp $fire_second_tp >/dev/null
->> 2>&1
->> +       java -cp $JAVA_CP
->> -Djava.library.path=3D"$LD_LIBRARY_PATH:/usr/local/lib:/usr/lib"
->> $TESTAPP_NAME $NR_ITER $NR_MSEC_WAIT $debug_tp $fire_second_tp >/dev/null
->> 2>&1
->>   }
->>
->>   function run_app_background
->> --
->> 1.9.1
->>
+>> /Jam
 >>
 >
 >
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--001a113dfc7681bb0f051ca67b14
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi All,<div>Here is more info.</div><div>I&#39;m using 2.6=
+ lttng-ust</div><div>I&#39;m seeing this crash on 32-bit app&#39;s only whe=
+n compiling with g++ compiler. Dont see this issue when compiling with gcc.=
+</div><div>is there any known issue or fix for this.</div><div><br></div><d=
+iv>Thanks,</div><div>Anand Neeli</div><div><div class=3D"gmail_extra"><br c=
+lear=3D"all"><div><div class=3D"gmail_signature"><div dir=3D"ltr"><div><div=
+ dir=3D"ltr"><br></div><div dir=3D"ltr"><br></div><div dir=3D"ltr">/Jam</di=
+v></div></div></div></div>
+<br><div class=3D"gmail_quote">On Wed, Aug 5, 2015 at 10:43 PM, jamie explo=
+rer <span dir=3D"ltr">&lt;<a href=3D"mailto:jamieexplorer@gmail.com" target=
+=3D"_blank">jamieexplorer@gmail.com</a>&gt;</span> wrote:<br><blockquote cl=
+ass=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;p=
+adding-left:1ex"><div dir=3D"ltr"><span class=3D"">Hi All,<div>i looked int=
+o this further, generated .c file with expanded macros for debugging</div><=
+div>Some of the function pointer are not populated correctly.</div><div>I h=
+ave attached the expanded source files which i used.</div></span><div>pleas=
+e see the following GDB analysis:</div><div><br></div><br>(gdb) bt<span cla=
+ss=3D""><span><br>#0 =C2=A00x00000000 in ?? ()<br></span></span><div><div c=
+lass=3D"h5">#1 =C2=A00x080490a0 in __event_probe__sample_tracepoint___messa=
+ge (__tp_data=3D0x80512d0,=C2=A0<br>=C2=A0 =C2=A0 text=3D0x804ca64 &quot;He=
+llo World\n&quot;) at sample_tracepoint.c:8567<br><br>#2 =C2=A00x0804ba23 i=
+n __tracepoint_cb_sample_tracepoint___message (<br>=C2=A0 =C2=A0 text=3D0x8=
+04ca64 &quot;Hello World\n&quot;)<br>=C2=A0 =C2=A0 at=C2=A0<span style=3D"f=
+ont-size:12.8000001907349px">/build/home/jam/gentp</span>/src/sample.c:4026=
+<br>#3 =C2=A0main (argc=3D1, argv=3D0xffffdd74)<br>=C2=A0 =C2=A0 at=C2=A0<s=
+pan style=3D"font-size:12.8000001907349px">/build/home/jam/gentp/</span>src=
+/sample.c:4731<br><br><b>***bc_runtime-&gt;filter</b>=C2=A0--- is not popul=
+ated correctly, because of which it crashes<br><b>(gdb) frame 1</b><br>#1 =
+=C2=A00x080490a0 in __event_probe__sample_tracepoint___message (__tp_data=
+=3D0x80512d0,=C2=A0<br>=C2=A0 =C2=A0 text=3D0x804ca64 &quot;Hello World\n&q=
+uot;) at sample_tracepoint.c:8567<br>8567 =C2=A0 =C2=A0 if (__builtin_expec=
+t(!!(<b>bc_runtime-&gt;filter</b>(bc_runtime, __stackvar.__filter_stack_dat=
+a) &amp; LTTNG_FILTER_RECORD_FLAG), 0))<br><br><br><b>(gdb) list</b><br>856=
+2 =C2=A0 =C2=A0 (__stackvar.__filter_stack_data, __tp_data,text);<br>8563 =
+=C2=A0 =C2=A0 for (bc_runtime =3D ((__typeof__(*bc_runtime) *) ((char *) ((=
+reinterpret_cast&lt;__typeof__((&amp;__event-&gt;bytecode_runtime_head)-&gt=
+;next)&gt;(tracepoint_dlopen.rcu_dereference_sym_bp((reinterpret_cast&lt;vo=
+id *&gt;((&amp;__event-&gt;bytecode_runtime_head)-&gt;next)))))) - (unsigne=
+d long) (&amp;((__typeof__(*bc_runtime) *) 0)-&gt;node)));<br>8564 =C2=A0 =
+=C2=A0 &amp;bc_runtime-&gt;node !=3D (&amp;__event-&gt;bytecode_runtime_hea=
+d);<br>8565 =C2=A0 =C2=A0 bc_runtime =3D ((__typeof__(*bc_runtime) *) ((cha=
+r *) ((reinterpret_cast&lt;__typeof__(bc_runtime-&gt;node.next)&gt;(tracepo=
+int_dlopen.rcu_dereference_sym_bp((reinterpret_cast&lt;void *&gt;(bc_runtim=
+e-&gt;node.next)))))) - (unsigned long) (&amp;((__typeof__(*bc_runtime) *) =
+0)-&gt;node))))<br>8566 =C2=A0 =C2=A0 {<br><b>8567 =C2=A0 =C2=A0 if (__buil=
+tin_expect(!!(bc_runtime-&gt;filter(bc_runtime, __stackvar.__filter_stack_d=
+ata) &amp; LTTNG_FILTER_RECORD_FLAG), 0))</b><br>8568 =C2=A0 =C2=A0 =C2=A0_=
+_filter_record =3D 1;<br>8569 =C2=A0 =C2=A0 } if (__builtin_expect(!!(!__fi=
+lter_record), 1)) return;<br>8570 =C2=A0 =C2=A0 } __event_len =3D<br>8571<b=
+r><br><br><b>printing bc_runtime shows filter is 0</b><br><b>(gdb) p *bc_ru=
+ntime=C2=A0</b><br>$3 =3D {bc =3D 0x0,<b>=C2=A0filter =3D 0x0,</b>=C2=A0lin=
+k_failed =3D 0, node =3D {next =3D 0x8051304,=C2=A0<br>=C2=A0 =C2=A0 prev =
+=3D 0x8051304}}<br><br><br><b>also i see __event-&gt;bytecode_runtime_head-=
+&gt;prev =3D 0x1 which may be wrong</b><br><b>(gdb) p *__event</b><br>$4 =
+=3D {id =3D 2, chan =3D 0xf6c047c0, enabled =3D 1,=C2=A0<br>=C2=A0 desc =3D=
+ 0x804c700 &lt;__event_desc___sample_tracepoint_message&gt;, _deprecated1 =
+=3D 0x0,=C2=A0<br>=C2=A0 ctx =3D 0x0, instrumentation =3D LTTNG_UST_TRACEPO=
+INT, u =3D {&lt;No data fields&gt;}, node =3D {<br>=C2=A0 =C2=A0 next =3D 0=
+x8051344, prev =3D 0x0}, _deprecated2 =3D {next =3D 0x0, prev =3D 0x0},=C2=
+=A0<br>=C2=A0 _deprecated3 =3D 0x0, _deprecated4 =3D 0,=C2=A0<b>bytecode_ru=
+ntime_head =3D {next =3D 0x8051304,=C2=A0<br>=C2=A0 =C2=A0 prev =3D 0x1}</b=
+>, has_enablers_without_bytecode =3D 134552592, enablers_ref_head =3D {<br>=
+=C2=A0 =C2=A0 next =3D 0x8051c10, prev =3D 0x0}, hlist =3D {next =3D 0xf6c0=
+0ea0, prev =3D 0x1},=C2=A0<br>=C2=A0 registered =3D 89}<div><br></div><div>=
+<br></div><div>I guess this structure is populated in tracepoint_register u=
+sing urcu.</div><div>Can anyone give me more pointers to debug this. Is thi=
+s a known issue and is there any patch which i can use</div><div><br></div>=
+<div><br></div><div class=3D"gmail_extra"><div dir=3D"ltr"><div style=3D"fo=
+nt-size:12.8000001907349px"><div dir=3D"ltr">/Jam</div><div><br></div></div=
+></div></div></div></div><div class=3D"gmail_extra"><div><div><div dir=3D"l=
+tr"><div dir=3D"ltr"><br></div></div></div></div>
+<br><div class=3D"gmail_quote"><div><div class=3D"h5">On Mon, Aug 3, 2015 a=
+t 4:19 PM, jamie explorer <span dir=3D"ltr">&lt;<a href=3D"mailto:jamieexpl=
+orer@gmail.com" target=3D"_blank">jamieexplorer@gmail.com</a>&gt;</span> wr=
+ote:<br></div></div><div><div class=3D"h5"><blockquote class=3D"gmail_quote=
+" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><=
+div dir=3D"ltr">Hi,<div>i am trying to run 32-bit application and see crash=
+ at the the line where &quot;tracepoint&quot; is used.</div><div>i am using=
+ sample application given in lttng-ust-2.6.0/doc/examples/gen-tp/</div><div=
+>Not able to understand why the problem is seen only with 32-bit apps? Can =
+experts here pls help me fix this.</div><div><br></div><div>Have tried usin=
+g=C2=A0ELF 32-bit app on Intel 80386 and PowerPC and see the crash. Where a=
+s 64-bit applications have no problem.</div><div><br></div><div>following i=
+s the code where it crashes</div><div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 for =
+(i =3D 0; i &lt; 100000; i++) {</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 tracepoint(sample_tracepoint, message, =C2=A0&quot=
+;Hello World\n&quot;); =C2=A0&lt;&lt;&lt;&lt; Crash here</div><div>=C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 usleep(1);=C2=A0</div><div=
+>=C2=A0 =C2=A0 =C2=A0 =C2=A0 }</div></div><div><br></div><div>GDB output:</=
+div><div><br></div><div><div><div><div dir=3D"ltr">#0 =C2=A00x00000000 in ?=
+? ()<br>#1 =C2=A00x10001e54 in __event_probe__sample_tracepoint___message (=
+<br>=C2=A0 =C2=A0 __tp_data=3D0x10015420, text=3D0x100034a4 &quot;Hello Wor=
+ld\n&quot;)<br>=C2=A0 =C2=A0 at /build/home/jam/gentp/sample_tracepoint.h:1=
+3<br>#2 =C2=A00x10000b9c in __tracepoint_cb_sample_tracepoint___message (<b=
+r>=C2=A0 =C2=A0 text=3D0x100034a4 &quot;Hello World\n&quot;)<br>=C2=A0 =C2=
+=A0 at //build/home/jam/gentp/sample_tracepoint.h:13<br>#3 =C2=A0main (argc=
+=3D&lt;optimized out&gt;, argv=3D&lt;optimized out&gt;)<br>=C2=A0 =C2=A0 at=
+=C2=A0/build/home/jam/gentp/sample.c:115<br><div dir=3D"ltr"><br></div><div=
+ dir=3D"ltr"><br></div><div>i am running 32-bit version of lttng-sessiond</=
+div><div dir=3D"ltr"><div dir=3D"ltr">root@host:~# ps aux | grep lttng</div=
+><div dir=3D"ltr">root =C2=A0 =C2=A0 =C2=A04224 =C2=A00.0 =C2=A00.0 =C2=A09=
+2212 =C2=A01648 ? =C2=A0 =C2=A0 =C2=A0 =C2=A0Ssl =C2=A000:42 =C2=A0 0:00 /u=
+sr/bin/lttng-sessiond --consumerd32-path /usr/lib/lttng/libexec/lttng-consu=
+merd --consumerd32-libdir /usr/lib/ -b --no-kernel</div><div dir=3D"ltr">ro=
+ot =C2=A0 =C2=A0 =C2=A04243 =C2=A00.0 =C2=A00.0 =C2=A064212 =C2=A0 956 ? =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0Sl =C2=A0 00:42 =C2=A0 0:00 lttng-consumerd =C2=
+=A0-u --consumerd-cmd-sock /var/run/lttng/ustconsumerd32/command --consumer=
+d-err-sock /var/run/lttng/ustconsumerd32/error --group tracing</div><div><b=
+r></div></div><div dir=3D"ltr"><br></div><div dir=3D"ltr"><br></div><div di=
+r=3D"ltr">/Jam</div></div></div></div>
+</div></div>
+</blockquote></div></div></div><br></div></div>
+</blockquote></div><br></div></div></div>
+
+--001a113dfc7681bb0f051ca67b14--
+
+
+--===============0919610431==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0919610431==--
