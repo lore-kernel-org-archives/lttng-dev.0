@@ -1,16 +1,18 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-tools] Tests: Java agent: Add configure
-	switches to enable tests
-Date: Thu,  6 Aug 2015 12:39:13 -0400
-Message-ID: <1438879153-21852-1-git-send-email-mjeanson__9007.88926887817$1438879243$gmane$org@efficios.com>
+From: jamie explorer <jamieexplorer@gmail.com>
+Subject: Re: 32-bit application crash
+Date: Thu, 6 Aug 2015 22:41:19 +0530
+Message-ID: <CACh_V54wXzXj-=yUK-7uta9f4DDnk1OTS0cyFbA1-mupzYALwQ__21968.271994456$1438881142$gmane$org@mail.gmail.com>
+References: <CACh_V55XxDDx3rRyGr53XVgqav66SyyJU21YiezyXeUS_p6vKg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0937641126=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-ob0-f182.google.com ([209.85.214.182])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mjeanson@efficios.com>) id 1ZNOCn-0005UA-1K
- for lttng-dev@lists.lttng.org; Thu, 06 Aug 2015 12:39:49 -0400
+ (envelope-from <jamieexplorer@gmail.com>) id 1ZNOhR-0005fb-Bw
+ for lttng-dev@lists.lttng.org; Thu, 06 Aug 2015 13:11:28 -0400
+Received: by obnw1 with SMTP id w1so60513309obn.3
+ for <lttng-dev@lists.lttng.org>; Thu, 06 Aug 2015 10:11:19 -0700 (PDT)
+In-Reply-To: <CACh_V55XxDDx3rRyGr53XVgqav66SyyJU21YiezyXeUS_p6vKg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,179 +22,267 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-This patch adds the switches --enable-test-java-agent-(jul|log4j|all) to
-the configure script, the tests now need to be explicitly enabled and
-their dependencies are only checked if so.
+--===============0937641126==
+Content-Type: multipart/alternative; boundary=089e013cc2d6a273a9051ca79b8e
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
----
- configure.ac                                | 94 ++++++++++++++++++++---------
- tests/regression/ust/java-jul/Makefile.am   |  4 +-
- tests/regression/ust/java-log4j/Makefile.am |  4 +-
- 3 files changed, 69 insertions(+), 33 deletions(-)
+--089e013cc2d6a273a9051ca79b8e
+Content-Type: text/plain; charset=UTF-8
 
-diff --git a/configure.ac b/configure.ac
-index bfef178..4e6c06e 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -131,6 +131,25 @@ AC_ARG_WITH([lttng-system-rundir],
- 	[LTTNG_SYSTEM_RUNDIR="/var/run/lttng"])
- AC_SUBST([LTTNG_SYSTEM_RUNDIR])
- 
-+AC_ARG_ENABLE([test-java-agent-jul],
-+	[AS_HELP_STRING([--enable-test-java-agent-jul],[enable the LTTng UST Java agent JUL tests [default=no]])],
-+	[test_java_agent_jul=$enableval],
-+	[test_java_agent_jul=no]
-+)
-+
-+AC_ARG_ENABLE([test-java-agent-log4j],
-+        [AS_HELP_STRING([--enable-test-java-agent-log4j],[enable the LTTng UST Java agent Log4j tests [default=no]])],
-+        [test_java_agent_log4j=$enableval],
-+        [test_java_agent_log4j=no]
-+)
-+
-+AC_ARG_ENABLE([test-java-agent-all],
-+        [AS_HELP_STRING([--enable-test-java-agent-all],[enable all the LTTng UST Java agent tests [default=no]])],
-+        [test_java_agent_jul=$enableval
-+         test_java_agent_log4j=$enableval],
-+        [:]
-+)
-+
- AC_DEFINE_UNQUOTED([CONFIG_CONSUMERD32_BIN], "$CONSUMERD32_BIN", [Location of the 32-bit consumerd executable.])
- AC_DEFINE_UNQUOTED([CONFIG_CONSUMERD64_BIN], "$CONSUMERD64_BIN", [Location of the 64-bit consumerd executable])
- AC_DEFINE_UNQUOTED([CONFIG_CONSUMERD32_LIBDIR], "$CONSUMERD32_LIBDIR", [Search for consumerd 32-bit libraries in this location.])
-@@ -355,44 +374,45 @@ AX_CONFIG_FEATURE(
- )
- AM_CONDITIONAL([COMPAT_EPOLL], [ test "$enable_epoll" = "yes" ])
- 
--AX_JAVA_OPTIONS
--AX_PROG_JAVAC
--AX_PROG_JAVA
--AX_PROG_JAR
-+AM_CONDITIONAL([TEST_JAVA_JUL_AGENT], [test "x$test_java_agent_jul" = "xyes"])
-+AM_CONDITIONAL([TEST_JAVA_LOG4J_AGENT], [test "x$test_java_agent_log4j" = "xyes"])
- 
--AX_CHECK_CLASSPATH
-+if test "x$test_java_agent_jul" = "xyes" || test "x$test_java_agent_log4j" = "xyes"; then
-+	AX_JAVA_OPTIONS
-+	AX_PROG_JAVAC
-+	AX_PROG_JAVA
-+	AX_PROG_JAR
- 
--# Check for Java UST agent common class first
--AX_CHECK_CLASS(org.lttng.ust.agent.AbstractLttngAgent)
--if test "x$ac_cv_class_org_lttng_ust_agent_AbstractLttngAgent" = "xyes"; then
--	java_agent_common=yes
--else
--	java_agent_common=no
--fi
--
--# If the common class is available, test for each agent
--if test "x$java_agent_common" = "xyes"; then
--	# Check for JUL
--	AX_CHECK_CLASS(org.lttng.ust.agent.jul.LttngLogHandler)
--	AX_CHECK_CLASS(org.lttng.ust.agent.log4j.LttngLogAppender)
--	AX_CHECK_CLASS(org.apache.log4j.Logger)
-+	AX_CHECK_CLASSPATH
- 
--	build_java_jul_agent=no
--	if test "x$ac_cv_class_org_lttng_ust_agent_jul_LttngLogHandler" = "xyes"; then
--		build_java_jul_agent=yes
-+	# Check for Java UST agent common class first
-+	AX_CHECK_CLASS(org.lttng.ust.agent.AbstractLttngAgent)
-+	if test "x$ac_cv_class_org_lttng_ust_agent_AbstractLttngAgent" = "xno"; then
-+		AC_MSG_ERROR([The UST Java agent common class was not found. Please specify the location of the jar via the Java CLASSPATH e.g: export CLASSPATH="/path/to/lttng-ust-agent-common.jar"])
- 	fi
- 
--	build_java_log4j_agent=no
--	if test "x$ac_cv_class_org_lttng_ust_agent_log4j_LttngLogAppender" = "xyes"; then
--		if test "x$ac_cv_class_org_apache_log4j_Logger" = "xyes"; then
--			build_java_log4j_agent=yes
-+	if test "x$test_java_agent_jul" = "xyes"; then
-+		# Check for JUL agent class
-+		AX_CHECK_CLASS(org.lttng.ust.agent.jul.LttngLogHandler)
-+		if test "x$ac_cv_class_org_lttng_ust_agent_jul_LttngLogHandler" = "xno"; then
-+			AC_MSG_ERROR([The UST Java agent JUL class was not found. Please specify the location of the jar via the Java CLASSPATH e.g: export CLASSPATH="/path/to/lttng-ust-agent-jul.jar"])
- 		fi
- 	fi
- 
--fi
-+	if test "x$test_java_agent_log4j" = "xyes"; then
-+		# Check for Log4j agent class
-+		AX_CHECK_CLASS(org.lttng.ust.agent.log4j.LttngLogAppender)
-+		if test "x$ac_cv_class_org_lttng_ust_agent_log4j_LttngLogAppender" = "xno"; then
-+			AC_MSG_ERROR([The UST Java agent Log4j class was not found. Please specify the location of the jar via the Java CLASSPATH e.g: export CLASSPATH="/path/to/lttng-ust-agent-log4j.jar"])
-+		fi
- 
--AM_CONDITIONAL([BUILD_JAVA_JUL_AGENT], [test "x$build_java_jul_agent" = "xyes"])
--AM_CONDITIONAL([BUILD_JAVA_LOG4J_AGENT], [test "x$build_java_log4j_agent" = "xyes"])
-+		# Check for Log4j class
-+		AX_CHECK_CLASS(org.apache.log4j.Logger)
-+		if test "x$ac_cv_class_org_apache_log4j_Logger" = "xno"; then
-+			AC_MSG_ERROR([The Log4j class was not found. Please specify the location of the jar via the Java CLASSPATH e.g: export CLASSPATH="/path/to/log4j.jar"])
-+		fi
-+	fi
-+fi
- 
- AC_SYS_LARGEFILE
- 
-@@ -570,6 +590,22 @@ AS_IF([test "x$lttng_ust_support" = "xyes"],[
- 	AS_ECHO("Disabled")
- ])
- 
-+# LTTng UST Java agent JUL tests enabled/disabled
-+AS_ECHO_N("LTTng-UST Java agent JUL tests: ")
-+AS_IF([test "x$test_java_agent_jul" = "xyes"],[
-+	AS_ECHO("Enabled")
-+],[
-+	AS_ECHO("Disabled")
-+])
-+
-+# LTTng UST Java agent Log4j tests enabled/disabled
-+AS_ECHO_N("LTTng-UST Java agent Log4j tests: ")
-+AS_IF([test "x$test_java_agent_log4j" = "xyes"],[
-+	AS_ECHO("Enabled")
-+],[
-+	AS_ECHO("Disabled")
-+])
-+
- #Python binding enabled/disabled
- AS_ECHO_N("Python binding: ")
- AS_IF([test "x${enable_python:-yes}" = xyes], [
-diff --git a/tests/regression/ust/java-jul/Makefile.am b/tests/regression/ust/java-jul/Makefile.am
-index 877237f..b0a04f3 100644
---- a/tests/regression/ust/java-jul/Makefile.am
-+++ b/tests/regression/ust/java-jul/Makefile.am
-@@ -3,9 +3,9 @@ JAVAROOT = .
- noinst_SCRIPTS = test_java_jul JTestLTTng.java
- EXTRA_DIST = test_java_jul JTestLTTng.java
- 
--if BUILD_JAVA_JUL_AGENT
-+if TEST_JAVA_JUL_AGENT
- dist_noinst_JAVA = JTestLTTng.java
--endif # BUILD_JAVA_JUL_AGENT
-+endif # TEST_JAVA_JUL_AGENT
- 
- all-local: static_file
- 
-diff --git a/tests/regression/ust/java-log4j/Makefile.am b/tests/regression/ust/java-log4j/Makefile.am
-index 42daab8..60d5c37 100644
---- a/tests/regression/ust/java-log4j/Makefile.am
-+++ b/tests/regression/ust/java-log4j/Makefile.am
-@@ -3,9 +3,9 @@ JAVAROOT = .
- noinst_SCRIPTS = test_java_log4j JTestLTTng.java
- EXTRA_DIST = test_java_log4j JTestLTTng.java
- 
--if BUILD_JAVA_LOG4J_AGENT
-+if TEST_JAVA_LOG4J_AGENT
- dist_noinst_JAVA = JTestLTTng.java
--endif # BUILD_JAVA_LOG4J_AGENT
-+endif # TEST_JAVA_LOG4J_AGENT
- 
- all-local: static_file
- 
--- 
-1.9.1
+Hi All,
+i looked into this further, generated .c file with expanded macros for
+debugging
+Some of the function pointer are not populated correctly.
+as i mentioned this issue is only seen using g++ compiler and not seen with
+gcc
+
+please see the following GDB analysis:
+
+
+(gdb) bt
+
+#0  0x00000000 in ?? ()
+#1  0x080490a0 in __event_probe__sample_tracepoint___message
+(__tp_data=0x80512d0,
+    text=0x804ca64 "Hello World\n") at sample_tracepoint.c:8567
+
+#2  0x0804ba23 in __tracepoint_cb_sample_tracepoint___message (
+    text=0x804ca64 "Hello World\n")
+    at /build/home/jam/gentp/src/sample.c:4026
+#3  main (argc=1, argv=0xffffdd74)
+    at /build/home/jam/gentp/src/sample.c:4731
+
+****bc_runtime->filter* --- is not populated correctly, because of which it
+crashes
+*(gdb) frame 1*
+#1  0x080490a0 in __event_probe__sample_tracepoint___message
+(__tp_data=0x80512d0,
+    text=0x804ca64 "Hello World\n") at sample_tracepoint.c:8567
+8567     if (__builtin_expect(!!(*bc_runtime->filter*(bc_runtime,
+__stackvar.__filter_stack_data) & LTTNG_FILTER_RECORD_FLAG), 0))
+
+
+*(gdb) list*
+8562     (__stackvar.__filter_stack_data, __tp_data,text);
+8563     for (bc_runtime = ((__typeof__(*bc_runtime) *) ((char *)
+((reinterpret_cast<__typeof__((&__event->bytecode_runtime_head)->next)>(tracepoint_dlopen.rcu_dereference_sym_bp((reinterpret_cast<void
+*>((&__event->bytecode_runtime_head)->next)))))) - (unsigned long)
+(&((__typeof__(*bc_runtime) *) 0)->node)));
+8564     &bc_runtime->node != (&__event->bytecode_runtime_head);
+8565     bc_runtime = ((__typeof__(*bc_runtime) *) ((char *)
+((reinterpret_cast<__typeof__(bc_runtime->node.next)>(tracepoint_dlopen.rcu_dereference_sym_bp((reinterpret_cast<void
+*>(bc_runtime->node.next)))))) - (unsigned long)
+(&((__typeof__(*bc_runtime) *) 0)->node))))
+8566     {
+*8567     if (__builtin_expect(!!(bc_runtime->filter(bc_runtime,
+__stackvar.__filter_stack_data) & LTTNG_FILTER_RECORD_FLAG), 0))*
+8568      __filter_record = 1;
+8569     } if (__builtin_expect(!!(!__filter_record), 1)) return;
+8570     } __event_len =
+8571
+
+
+*printing bc_runtime shows filter is 0*
+*(gdb) p *bc_runtime *
+$3 = {bc = 0x0,* filter = 0x0,* link_failed = 0, node = {next = 0x8051304,
+    prev = 0x8051304}}
+
+
+*also i see __event->bytecode_runtime_head->prev = 0x1 which may be wrong*
+*(gdb) p *__event*
+$4 = {id = 2, chan = 0xf6c047c0, enabled = 1,
+  desc = 0x804c700 <__event_desc___sample_tracepoint_message>, _deprecated1
+= 0x0,
+  ctx = 0x0, instrumentation = LTTNG_UST_TRACEPOINT, u = {<No data
+fields>}, node = {
+    next = 0x8051344, prev = 0x0}, _deprecated2 = {next = 0x0, prev = 0x0},
+  _deprecated3 = 0x0, _deprecated4 = 0,
+*bytecode_runtime_head = {next = 0x8051304,     prev = 0x1}*,
+has_enablers_without_bytecode = 134552592, enablers_ref_head = {
+    next = 0x8051c10, prev = 0x0}, hlist = {next = 0xf6c00ea0, prev = 0x1},
+  registered = 89}
+
+
+I guess this structure is populated in tracepoint_register using urcu.
+Can anyone give me more pointers to debug this. Is this a known issue and
+is there any patch which i can use
+
+
+/Jam
+
+
+
+
+
+On Mon, Aug 3, 2015 at 4:19 PM, jamie explorer <jamieexplorer@gmail.com>
+wrote:
+
+> Hi,
+> i am trying to run 32-bit application and see crash at the the line where
+> "tracepoint" is used.
+> i am using sample application given in lttng-ust-2.6.0/doc/examples/gen-tp/
+> Not able to understand why the problem is seen only with 32-bit apps? Can
+> experts here pls help me fix this.
+>
+> Have tried using ELF 32-bit app on Intel 80386 and PowerPC and see the
+> crash. Where as 64-bit applications have no problem.
+>
+> following is the code where it crashes
+>         for (i = 0; i < 100000; i++) {
+>                 tracepoint(sample_tracepoint, message,  "Hello World\n");
+>  <<<< Crash here
+>                 usleep(1);
+>         }
+>
+> GDB output:
+>
+> #0  0x00000000 in ?? ()
+> #1  0x10001e54 in __event_probe__sample_tracepoint___message (
+>     __tp_data=0x10015420, text=0x100034a4 "Hello World\n")
+>     at /build/home/jam/gentp/sample_tracepoint.h:13
+> #2  0x10000b9c in __tracepoint_cb_sample_tracepoint___message (
+>     text=0x100034a4 "Hello World\n")
+>     at //build/home/jam/gentp/sample_tracepoint.h:13
+> #3  main (argc=<optimized out>, argv=<optimized out>)
+>     at /build/home/jam/gentp/sample.c:115
+>
+>
+> i am running 32-bit version of lttng-sessiond
+> root@host:~# ps aux | grep lttng
+> root      4224  0.0  0.0  92212  1648 ?        Ssl  00:42   0:00
+> /usr/bin/lttng-sessiond --consumerd32-path
+> /usr/lib/lttng/libexec/lttng-consumerd --consumerd32-libdir /usr/lib/ -b
+> --no-kernel
+> root      4243  0.0  0.0  64212   956 ?        Sl   00:42   0:00
+> lttng-consumerd  -u --consumerd-cmd-sock
+> /var/run/lttng/ustconsumerd32/command --consumerd-err-sock
+> /var/run/lttng/ustconsumerd32/error --group tracing
+>
+>
+>
+> /Jam
+>
+
+--089e013cc2d6a273a9051ca79b8e
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><span class=3D"im">Hi All,<div>i looked into this further,=
+ generated .c file with expanded macros for debugging</div><div>Some of the=
+ function pointer are not populated correctly.</div><div>as i mentioned thi=
+s issue is only seen using g++ compiler and not seen with gcc</div><div><br=
+></div></span><div>please see the following GDB analysis:</div><div><br></d=
+iv><br>(gdb) bt<div class=3D"adL"><span class=3D"im"><br>#0 =C2=A00x0000000=
+0 in ?? ()<br></span></div><div class=3D"adL"><div class=3D"adm"></div><div=
+ class=3D"im">#1 =C2=A00x080490a0 in __event_probe__sample_tracepoint___mes=
+sage (__tp_data=3D0x80512d0,=C2=A0<br>=C2=A0 =C2=A0 text=3D0x804ca64 &quot;=
+Hello World\n&quot;) at sample_tracepoint.c:8567<br><br>#2 =C2=A00x0804ba23=
+ in __tracepoint_cb_sample_tracepoint___message (<br>=C2=A0 =C2=A0 text=3D0=
+x804ca64 &quot;Hello World\n&quot;)<br>=C2=A0 =C2=A0 at=C2=A0<span style=3D=
+"font-size:12.8000001907349px">/build/home/jam/gentp</span>/src/sample.c:40=
+26<br>#3 =C2=A0main (argc=3D1, argv=3D0xffffdd74)<br>=C2=A0 =C2=A0 at=C2=A0=
+<span style=3D"font-size:12.8000001907349px">/build/home/jam/gentp/</span>s=
+rc/sample.c:4731<br><br><b>***bc_runtime-&gt;filter</b>=C2=A0--- is not pop=
+ulated correctly, because of which it crashes<br><b>(gdb) frame 1</b><br>#1=
+ =C2=A00x080490a0 in __event_probe__sample_tracepoint___message (__tp_data=
+=3D0x80512d0,=C2=A0<br>=C2=A0 =C2=A0 text=3D0x804ca64 &quot;Hello World\n&q=
+uot;) at sample_tracepoint.c:8567<br>8567 =C2=A0 =C2=A0 if (__builtin_expec=
+t(!!(<b>bc_runtime-&gt;filter</b>(bc_runtime, __stackvar.__filter_stack_dat=
+a) &amp; LTTNG_FILTER_RECORD_FLAG), 0))<br><br><br><b>(gdb) list</b><br>856=
+2 =C2=A0 =C2=A0 (__stackvar.__filter_stack_data, __tp_data,text);<br>8563 =
+=C2=A0 =C2=A0 for (bc_runtime =3D ((__typeof__(*bc_runtime) *) ((char *) ((=
+reinterpret_cast&lt;__typeof__((&amp;__event-&gt;bytecode_runtime_head)-&gt=
+;next)&gt;(tracepoint_dlopen.rcu_dereference_sym_bp((reinterpret_cast&lt;vo=
+id *&gt;((&amp;__event-&gt;bytecode_runtime_head)-&gt;next)))))) - (unsigne=
+d long) (&amp;((__typeof__(*bc_runtime) *) 0)-&gt;node)));<br>8564 =C2=A0 =
+=C2=A0 &amp;bc_runtime-&gt;node !=3D (&amp;__event-&gt;bytecode_runtime_hea=
+d);<br>8565 =C2=A0 =C2=A0 bc_runtime =3D ((__typeof__(*bc_runtime) *) ((cha=
+r *) ((reinterpret_cast&lt;__typeof__(bc_runtime-&gt;node.next)&gt;(tracepo=
+int_dlopen.rcu_dereference_sym_bp((reinterpret_cast&lt;void *&gt;(bc_runtim=
+e-&gt;node.next)))))) - (unsigned long) (&amp;((__typeof__(*bc_runtime) *) =
+0)-&gt;node))))<br>8566 =C2=A0 =C2=A0 {<br><b>8567 =C2=A0 =C2=A0 if (__buil=
+tin_expect(!!(bc_runtime-&gt;filter(bc_runtime, __stackvar.__filter_stack_d=
+ata) &amp; LTTNG_FILTER_RECORD_FLAG), 0))</b><br>8568 =C2=A0 =C2=A0 =C2=A0_=
+_filter_record =3D 1;<br>8569 =C2=A0 =C2=A0 } if (__builtin_expect(!!(!__fi=
+lter_record), 1)) return;<br>8570 =C2=A0 =C2=A0 } __event_len =3D<br>8571<b=
+r><br><br><b>printing bc_runtime shows filter is 0</b><br><b>(gdb) p *bc_ru=
+ntime=C2=A0</b><br>$3 =3D {bc =3D 0x0,<b>=C2=A0filter =3D 0x0,</b>=C2=A0lin=
+k_failed =3D 0, node =3D {next =3D 0x8051304,=C2=A0<br>=C2=A0 =C2=A0 prev =
+=3D 0x8051304}}<br><br><br><b>also i see __event-&gt;bytecode_runtime_head-=
+&gt;prev =3D 0x1 which may be wrong</b><br><b>(gdb) p *__event</b><br>$4 =
+=3D {id =3D 2, chan =3D 0xf6c047c0, enabled =3D 1,=C2=A0<br>=C2=A0 desc =3D=
+ 0x804c700 &lt;__event_desc___sample_tracepoint_message&gt;, _deprecated1 =
+=3D 0x0,=C2=A0<br>=C2=A0 ctx =3D 0x0, instrumentation =3D LTTNG_UST_TRACEPO=
+INT, u =3D {&lt;No data fields&gt;}, node =3D {<br>=C2=A0 =C2=A0 next =3D 0=
+x8051344, prev =3D 0x0}, _deprecated2 =3D {next =3D 0x0, prev =3D 0x0},=C2=
+=A0<br>=C2=A0 _deprecated3 =3D 0x0, _deprecated4 =3D 0,=C2=A0<b>bytecode_ru=
+ntime_head =3D {next =3D 0x8051304,=C2=A0<br>=C2=A0 =C2=A0 prev =3D 0x1}</b=
+>, has_enablers_without_bytecode =3D 134552592, enablers_ref_head =3D {<br>=
+=C2=A0 =C2=A0 next =3D 0x8051c10, prev =3D 0x0}, hlist =3D {next =3D 0xf6c0=
+0ea0, prev =3D 0x1},=C2=A0<br>=C2=A0 registered =3D 89}<div><br></div><div>=
+<br></div><div>I guess this structure is populated in tracepoint_register u=
+sing urcu.</div><div>Can anyone give me more pointers to debug this. Is thi=
+s a known issue and is there any patch which i can use</div><div><br></div>=
+<div><br></div><div class=3D"gmail_extra"><div dir=3D"ltr"><div style=3D"fo=
+nt-size:12.8000001907349px"><div dir=3D"ltr" style=3D"font-size:12.80000019=
+07349px">/Jam</div><div><br></div></div></div></div></div></div><div class=
+=3D"gmail_extra"><br clear=3D"all"><div><div class=3D"gmail_signature"><div=
+ dir=3D"ltr"><div dir=3D"ltr"><br></div><div dir=3D"ltr"><br></div></div></=
+div></div>
+<br><div class=3D"gmail_quote">On Mon, Aug 3, 2015 at 4:19 PM, jamie explor=
+er <span dir=3D"ltr">&lt;<a href=3D"mailto:jamieexplorer@gmail.com" target=
+=3D"_blank">jamieexplorer@gmail.com</a>&gt;</span> wrote:<br><blockquote cl=
+ass=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;p=
+adding-left:1ex"><div dir=3D"ltr">Hi,<div>i am trying to run 32-bit applica=
+tion and see crash at the the line where &quot;tracepoint&quot; is used.</d=
+iv><div>i am using sample application given in lttng-ust-2.6.0/doc/examples=
+/gen-tp/</div><div>Not able to understand why the problem is seen only with=
+ 32-bit apps? Can experts here pls help me fix this.</div><div><br></div><d=
+iv>Have tried using=C2=A0ELF 32-bit app on Intel 80386 and PowerPC and see =
+the crash. Where as 64-bit applications have no problem.</div><div><br></di=
+v><div>following is the code where it crashes</div><div><div>=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 for (i =3D 0; i &lt; 100000; i++) {</div><div>=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 tracepoint(sample_tracepoint, mes=
+sage, =C2=A0&quot;Hello World\n&quot;); =C2=A0&lt;&lt;&lt;&lt; Crash here</=
+div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 usleep(1);=
+=C2=A0</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 }</div></div><div><br></div><d=
+iv>GDB output:</div><div><br></div><div><div><div><div dir=3D"ltr">#0 =C2=
+=A00x00000000 in ?? ()<br>#1 =C2=A00x10001e54 in __event_probe__sample_trac=
+epoint___message (<br>=C2=A0 =C2=A0 __tp_data=3D0x10015420, text=3D0x100034=
+a4 &quot;Hello World\n&quot;)<br>=C2=A0 =C2=A0 at /build/home/jam/gentp/sam=
+ple_tracepoint.h:13<br>#2 =C2=A00x10000b9c in __tracepoint_cb_sample_tracep=
+oint___message (<br>=C2=A0 =C2=A0 text=3D0x100034a4 &quot;Hello World\n&quo=
+t;)<br>=C2=A0 =C2=A0 at //build/home/jam/gentp/sample_tracepoint.h:13<br>#3=
+ =C2=A0main (argc=3D&lt;optimized out&gt;, argv=3D&lt;optimized out&gt;)<br=
+>=C2=A0 =C2=A0 at=C2=A0/build/home/jam/gentp/sample.c:115<br><div dir=3D"lt=
+r"><br></div><div dir=3D"ltr"><br></div><div>i am running 32-bit version of=
+ lttng-sessiond</div><div dir=3D"ltr"><div dir=3D"ltr">root@host:~# ps aux =
+| grep lttng</div><div dir=3D"ltr">root =C2=A0 =C2=A0 =C2=A04224 =C2=A00.0 =
+=C2=A00.0 =C2=A092212 =C2=A01648 ? =C2=A0 =C2=A0 =C2=A0 =C2=A0Ssl =C2=A000:=
+42 =C2=A0 0:00 /usr/bin/lttng-sessiond --consumerd32-path /usr/lib/lttng/li=
+bexec/lttng-consumerd --consumerd32-libdir /usr/lib/ -b --no-kernel</div><d=
+iv dir=3D"ltr">root =C2=A0 =C2=A0 =C2=A04243 =C2=A00.0 =C2=A00.0 =C2=A06421=
+2 =C2=A0 956 ? =C2=A0 =C2=A0 =C2=A0 =C2=A0Sl =C2=A0 00:42 =C2=A0 0:00 lttng=
+-consumerd =C2=A0-u --consumerd-cmd-sock /var/run/lttng/ustconsumerd32/comm=
+and --consumerd-err-sock /var/run/lttng/ustconsumerd32/error --group tracin=
+g</div><div><br></div></div><div dir=3D"ltr"><br></div><div dir=3D"ltr"><br=
+></div><div dir=3D"ltr">/Jam</div></div></div></div>
+</div></div>
+</blockquote></div><br></div></div>
+
+--089e013cc2d6a273a9051ca79b8e--
+
+
+--===============0937641126==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0937641126==--
