@@ -1,15 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix: test_mi test
-Date: Thu,  6 Aug 2015 15:52:37 -0400
-Message-ID: <1438890757-29800-1-git-send-email-mathieu.desnoyers__28091.1551592455$1438890837$gmane$org@efficios.com>
+Subject: Re: [PATCH lttng-ust] Fix: Send the correct Java
+	agent	return code when disabling events
+Date: Thu, 6 Aug 2015 20:04:19 +0000 (UTC)
+Message-ID: <2011207783.15178.1438891459327.JavaMail.zimbra__6587.87476500056$1438891528$gmane$org@efficios.com>
+References: <1438882910-9927-1-git-send-email-alexmonthy@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZNRDf-0006ax-Pb
- for lttng-dev@lists.lttng.org; Thu, 06 Aug 2015 15:52:57 -0400
+ (envelope-from <compudj@efficios.com>) id 1ZNRP0-0006hE-T7
+ for lttng-dev@lists.lttng.org; Thu, 06 Aug 2015 16:04:37 -0400
+In-Reply-To: <1438882910-9927-1-git-send-email-alexmonthy@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -18,66 +21,76 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: Alexandre Montplaisir <alexmonthy@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- tests/regression/tools/mi/test_mi | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+merged in lttng-ust master, thanks!
 
-diff --git a/tests/regression/tools/mi/test_mi b/tests/regression/tools/mi/test_mi
-index a5c7493..5bd29ed 100755
---- a/tests/regression/tools/mi/test_mi
-+++ b/tests/regression/tools/mi/test_mi
-@@ -27,8 +27,8 @@ RELAYD_BIN="lttng-relayd"
- TESTAPP_PATH="$TESTDIR/utils/testapp"
- TESTAPP_NAME="gen-ust-events"
- TESTAPP_BIN="$TESTAPP_PATH/$TESTAPP_NAME/$TESTAPP_NAME"
--NR_USEC_WAIT=10000
--
-+NR_USEC_WAIT=0
-+NR_ITER=10000
- 
- #Temp file output
- OUTPUT_DIR=$(mktemp -d)
-@@ -500,14 +500,25 @@ function test_list_session ()
- 
- function test_list_ust_event ()
- {
-+	local file_sync_after_first=$(mktemp -u)
-+	local file_sync_before_last=$(mktemp -u)
-+
- 	OUTPUT_FILE="list_ust_event.xml"
- 
- 	#Test buid up
- 	OUTPUT_DEST=$OUTPUT_DIR/$OUTPUT_FILE
- 
- 	#Begin testing
--	$TESTAPP_BIN $NR_USEC_WAIT & 2>/dev/null
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT ${file_sync_after_first} ${file_sync_before_last} & 2>/dev/null
-+
-+	while [ ! -f "${file_sync_after_first}" ]; do
-+		sleep 0.5
-+	done
-+
- 	list_lttng_with_opts "-u -f"
-+
-+	touch ${file_sync_before_last}
-+
- 	$XML_VALIDATE $OUTPUT_DEST
- 	ok $? "Mi test: list ust event xsd validation"
- 
-@@ -530,6 +541,9 @@ function test_list_ust_event ()
- 
- 	#Wait for all background processes
- 	wait
-+
-+	rm -f ${file_sync_after_first}
-+	rm -f ${file_sync_before_last}
- }
- 
- function test_start_stop () {
+Mathieu
+
+----- On Aug 6, 2015, at 1:41 PM, Alexandre Montplaisir alexmonthy@efficios.com wrote:
+
+> When receiving a "disable event" command from the sessiond for
+> an event that is not known, the Java agent should send the
+> "unknown logger name" return code, not the "invalid command" one.
+> 
+> Signed-off-by: Alexandre Montplaisir <alexmonthy@efficios.com>
+> ---
+> .../agent/client/SessiondDisableEventCommand.java  | 23 +++++++++++++++++++++-
+> 1 file changed, 22 insertions(+), 1 deletion(-)
+> 
+> diff --git
+> a/liblttng-ust-java-agent/java/lttng-ust-agent-common/org/lttng/ust/agent/client/SessiondDisableEventCommand.java
+> b/liblttng-ust-java-agent/java/lttng-ust-agent-common/org/lttng/ust/agent/client/SessiondDisableEventCommand.java
+> index 39d14b0..31d91e7 100644
+> ---
+> a/liblttng-ust-java-agent/java/lttng-ust-agent-common/org/lttng/ust/agent/client/SessiondDisableEventCommand.java
+> +++
+> b/liblttng-ust-java-agent/java/lttng-ust-agent-common/org/lttng/ust/agent/client/SessiondDisableEventCommand.java
+> @@ -47,6 +47,27 @@ class SessiondDisableEventCommand implements ISessiondCommand
+> {
+> 	@Override
+> 	public ILttngAgentResponse execute(AbstractLttngAgent<?> agent) {
+> 		boolean success = agent.eventDisabled(this.eventName);
+> -		return (success ? ILttngAgentResponse.SUCESS_RESPONSE :
+> ILttngAgentResponse.FAILURE_RESPONSE);
+> +		return (success ? ILttngAgentResponse.SUCESS_RESPONSE :
+> DISABLE_EVENT_FAILURE_RESPONSE);
+> 	}
+> +
+> +	/**
+> +	 * Response sent when the disable-event command asks to disable an
+> +	 * unknown event.
+> +	 */
+> +	private static final ILttngAgentResponse DISABLE_EVENT_FAILURE_RESPONSE = new
+> ILttngAgentResponse() {
+> +
+> +		@Override
+> +		public ReturnCode getReturnCode() {
+> +			return ReturnCode.CODE_UNK_LOGGER_NAME;
+> +		}
+> +
+> +		@Override
+> +		public byte[] getBytes() {
+> +			byte data[] = new byte[INT_SIZE];
+> +			ByteBuffer buf = ByteBuffer.wrap(data);
+> +			buf.order(ByteOrder.BIG_ENDIAN);
+> +			buf.putInt(getReturnCode().getCode());
+> +			return data;
+> +		}
+> +	};
+> }
+> --
+> 2.1.4
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 -- 
-2.1.4
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
