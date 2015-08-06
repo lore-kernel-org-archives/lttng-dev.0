@@ -1,15 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix: regression tests
-Date: Thu,  6 Aug 2015 17:15:45 -0400
-Message-ID: <1438895745-15529-1-git-send-email-mathieu.desnoyers__46604.8203678385$1438895821$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools] Fix: take RCU read-side lock within
+	hash table functions
+Date: Thu,  6 Aug 2015 18:02:21 -0400
+Message-ID: <1438898541-26089-1-git-send-email-mathieu.desnoyers__10123.805239755$1438898633$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZNSW9-000782-Sm
- for lttng-dev@lists.lttng.org; Thu, 06 Aug 2015 17:16:03 -0400
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZNTFe-0007N1-IH
+ for lttng-dev@lists.lttng.org; Thu, 06 Aug 2015 18:03:05 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,468 +23,178 @@ To: jgalar@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Fix racy session/relayd wait-after-kill scheme.
-Fix racy live test where application may not have generated events yet
-when we attach to the live trace.
+After review, a great deal of caller sites miss the RCU read-side lock
+when using the hash table modification functions. This is a case where
+having a slight performance degradation might be worthwhile if we can be
+a bit more stability. So instead of playing whack-a-mole, add the RCU
+read-side lock in the hash table modification functions to ensure
+protection from ABA.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- tests/regression/tools/health/test_health.sh       |   4 +-
- tests/regression/tools/live/test_kernel            |  47 +---------
- tests/regression/tools/live/test_ust               |  60 ++++--------
- .../regression/tools/live/test_ust_tracefile_count |  60 ++++--------
- tests/regression/tools/save-load/test_load         |   6 +-
- tests/utils/utils.sh                               | 103 ++++++++++++++++-----
- 6 files changed, 120 insertions(+), 160 deletions(-)
+ src/common/hashtable/hashtable.c | 45 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 44 insertions(+), 1 deletion(-)
 
-diff --git a/tests/regression/tools/health/test_health.sh b/tests/regression/tools/health/test_health.sh
-index ade4b0e..40d2f9e 100644
---- a/tests/regression/tools/health/test_health.sh
-+++ b/tests/regression/tools/health/test_health.sh
-@@ -146,7 +146,9 @@ function test_health
- 	fi
+diff --git a/src/common/hashtable/hashtable.c b/src/common/hashtable/hashtable.c
+index 3a38cbf..d1049d1 100644
+--- a/src/common/hashtable/hashtable.c
++++ b/src/common/hashtable/hashtable.c
+@@ -34,6 +34,13 @@ static unsigned long min_hash_alloc_size = 1;
+ static unsigned long max_hash_buckets_size = 0;
  
- 	if [ ${test_relayd} -eq 1 ]; then
--		stop_lttng_relayd_nocheck
-+		# We may fail to stop relayd here, and this is OK, since
-+		# it may have been killed volountarily by testpoint.
-+		stop_lttng_relayd_notap
- 	fi
- 	stop_lttng_sessiond
+ /*
++ * Getter/lookup functions need to be called with RCU read-side lock
++ * held. However, modification functions (add, add_unique, replace, del)
++ * take the RCU lock internally, so it does not matter whether the
++ * caller hold the RCU lock or not.
++ */
++
++/*
+  * Match function for string node.
+  */
+ static int match_str(struct cds_lfht_node *node, const void *key)
+@@ -253,8 +260,11 @@ void lttng_ht_add_unique_str(struct lttng_ht *ht,
+ 	assert(ht->ht);
+ 	assert(node);
  
-diff --git a/tests/regression/tools/live/test_kernel b/tests/regression/tools/live/test_kernel
-index 4b958df..0e542da 100755
---- a/tests/regression/tools/live/test_kernel
-+++ b/tests/regression/tools/live/test_kernel
-@@ -62,22 +62,8 @@ else
- 	exit 0
- fi
- 
--if [ -z $(pidof lt-$SESSIOND_BIN) ]; then
--	$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --background --quiet --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
--	if [ $? -eq 1 ]; then
--		echo "Fail to start lttng-sessiond"
--		exit 1
--	fi
--fi
--
--opt="--background -o $TRACE_PATH"
--if [ -z $(pidof lt-$RELAYD_BIN) ]; then
--	$DIR/../src/bin/lttng-relayd/$RELAYD_BIN $opt >/dev/null 2>&1
--	if [ $? -eq 1 ]; then
--		echo "Fail to start lttng-relayd (opt: $opt)"
--		return 1
--	fi
--fi
-+start_lttng_sessiond_notap
-+start_lttng_relayd_notap "-o $TRACE_PATH"
- 
- setup_live_tracing
- 
-@@ -86,30 +72,5 @@ $TESTDIR/regression/tools/live/live_test
- 
- clean_live_tracing
- 
--# Kill the relayd
--PID_RELAYD=`pidof lt-$RELAYD_BIN`
--kill $PID_RELAYD
--if [ $? -eq 1 ]; then
--	echo "Kill lttng-relayd (pid: $PID_RELAYD)"
--	exit 1
--else
--	out=1
--	while [ -n "$out" ]; do
--		out=$(pidof lt-$RELAYD_BIN)
--		sleep 0.5
--	done
--fi
--
--# Kill the sessiond
--PID_SESSIOND=`pidof lt-$SESSIOND_BIN`
--kill $PID_SESSIOND
--if [ $? -eq 1 ]; then
--	echo "Kill sessiond daemon"
--	exit 1
--else
--	out=1
--	while [ -n "$out" ]; do
--		out=$(pidof lt-$SESSIOND_BIN)
--		sleep 0.5
--	done
--fi
-+stop_lttng_relayd_notap
-+stop_lttng_sessiond_notap
-diff --git a/tests/regression/tools/live/test_ust b/tests/regression/tools/live/test_ust
-index ae69195..0b96858 100755
---- a/tests/regression/tools/live/test_ust
-+++ b/tests/regression/tools/live/test_ust
-@@ -59,57 +59,29 @@ function clean_live_tracing()
- 	rm -rf $TRACE_PATH
++	/* RCU read lock protects from ABA. */
++	rcu_read_lock();
+ 	node_ptr = cds_lfht_add_unique(ht->ht, ht->hash_fct(node->key, lttng_ht_seed),
+ 			ht->match_fct, node->key, &node->node);
++	rcu_read_unlock();
+ 	assert(node_ptr == &node->node);
  }
  
--if [ -z $(pidof lt-$SESSIOND_BIN) ]; then
--	$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --background --quiet --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
--	if [ $? -eq 1 ]; then
--		echo "Fail to start lttng-sessiond"
--		exit 1
--	fi
--fi
--
--opt="-o $TRACE_PATH --background"
--if [ -z $(pidof lt-$RELAYD_BIN) ]; then
--	$DIR/../src/bin/lttng-relayd/$RELAYD_BIN $opt >/dev/null 2>&1
--	if [ $? -eq 1 ]; then
--		echo "Fail to start lttng-relayd (opt: $opt)"
--		return 1
--	fi
--fi
-+file_sync_after_first=$(mktemp -u)
-+
-+start_lttng_sessiond_notap
-+start_lttng_relayd_notap "-o $TRACE_PATH"
+@@ -268,8 +278,11 @@ void lttng_ht_add_str(struct lttng_ht *ht,
+ 	assert(ht->ht);
+ 	assert(node);
  
- setup_live_tracing
- 
- # Run app in background
--$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1
-+$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT ${file_sync_after_first} >/dev/null 2>&1
-+
-+while [ ! -f "${file_sync_after_first}" ]; do
-+	sleep 0.5
-+done
- 
- # Start the live test
- $TESTDIR/regression/tools/live/live_test
- 
-+# Wait for the applications started in background
-+wait
-+
- clean_live_tracing
- 
--# Kill the relayd
--PID_RELAYD=`pidof lt-$RELAYD_BIN`
--kill $PID_RELAYD
--if [ $? -eq 1 ]; then
--	echo "Kill lttng-relayd (pid: $PID_RELAYD)"
--	exit 1
--else
--	out=1
--	while [ -n "$out" ]; do
--		out=$(pidof lt-$RELAYD_BIN)
--		sleep 0.5
--	done
--fi
--
--# Kill the sessiond
--PID_SESSIOND=`pidof lt-$SESSIOND_BIN`
--kill $PID_SESSIOND
--if [ $? -eq 1 ]; then
--	echo "Kill sessiond daemon"
--	exit 1
--else
--	out=1
--	while [ -n "$out" ]; do
--		out=$(pidof lt-$SESSIOND_BIN)
--		sleep 0.5
--	done
--fi
-+rm -f ${file_sync_after_first}
-+
-+stop_lttng_relayd_notap
-+stop_lttng_sessiond_notap
-diff --git a/tests/regression/tools/live/test_ust_tracefile_count b/tests/regression/tools/live/test_ust_tracefile_count
-index 68e3722..54d6a52 100755
---- a/tests/regression/tools/live/test_ust_tracefile_count
-+++ b/tests/regression/tools/live/test_ust_tracefile_count
-@@ -60,57 +60,29 @@ function clean_live_tracing()
- 	rm -rf $TRACE_PATH
++	/* RCU read lock protects from ABA. */
++	rcu_read_lock();
+ 	cds_lfht_add(ht->ht, ht->hash_fct(node->key, lttng_ht_seed),
+ 			&node->node);
++	rcu_read_unlock();
  }
  
--if [ -z $(pidof lt-$SESSIOND_BIN) ]; then
--	$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --background --quiet --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
--	if [ $? -eq 1 ]; then
--		echo "Fail to start lttng-sessiond"
--		exit 1
--	fi
--fi
--
--opt="-o $TRACE_PATH --background"
--if [ -z $(pidof lt-$RELAYD_BIN) ]; then
--	$DIR/../src/bin/lttng-relayd/$RELAYD_BIN $opt >/dev/null 2>&1
--	if [ $? -eq 1 ]; then
--		echo "Fail to start lttng-relayd (opt: $opt)"
--		return 1
--	fi
--fi
-+file_sync_after_first=$(mktemp -u)
-+
-+start_lttng_sessiond_notap
-+start_lttng_relayd_notap "-o $TRACE_PATH"
+ /*
+@@ -281,8 +294,11 @@ void lttng_ht_add_ulong(struct lttng_ht *ht, struct lttng_ht_node_ulong *node)
+ 	assert(ht->ht);
+ 	assert(node);
  
- setup_live_tracing
- 
- # Run app in background
--$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1
-+$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT ${file_sync_after_first} >/dev/null 2>&1
-+
-+while [ ! -f "${file_sync_after_first}" ]; do
-+	sleep 0.5
-+done
- 
- # Start the live test
- $TESTDIR/regression/tools/live/live_test
- 
-+# Wait for the applications started in background
-+wait
-+
- clean_live_tracing
- 
--# Kill the relayd
--PID_RELAYD=`pidof lt-$RELAYD_BIN`
--kill $PID_RELAYD
--if [ $? -eq 1 ]; then
--	echo "Kill lttng-relayd (pid: $PID_RELAYD)"
--	exit 1
--else
--	out=1
--	while [ -n "$out" ]; do
--		out=$(pidof lt-$RELAYD_BIN)
--		sleep 0.5
--	done
--fi
--
--# Kill the sessiond
--PID_SESSIOND=`pidof lt-$SESSIOND_BIN`
--kill $PID_SESSIOND
--if [ $? -eq 1 ]; then
--	echo "Kill sessiond daemon"
--	exit 1
--else
--	out=1
--	while [ -n "$out" ]; do
--		out=$(pidof lt-$SESSIOND_BIN)
--		sleep 0.5
--	done
--fi
-+rm -f ${file_sync_after_first}
-+
-+stop_lttng_relayd_notap
-+stop_lttng_sessiond_notap
-diff --git a/tests/regression/tools/save-load/test_load b/tests/regression/tools/save-load/test_load
-index c6234ef..0a7ee3a 100755
---- a/tests/regression/tools/save-load/test_load
-+++ b/tests/regression/tools/save-load/test_load
-@@ -29,7 +29,7 @@ EVENT_NAME="tp:tptest"
- 
- DIR=$(readlink -f $TESTDIR)
- 
--NUM_TESTS=21
-+NUM_TESTS=23
- 
- source $TESTDIR/utils/utils.sh
- 
-@@ -92,7 +92,7 @@ function test_complex_load()
- 	fi
- 	destroy_lttng_session_ok $sess
- 
--	stop_lttng_relayd_nocheck
-+	stop_lttng_relayd
++	/* RCU read lock protects from ABA. */
++	rcu_read_lock();
+ 	cds_lfht_add(ht->ht, ht->hash_fct((void *) node->key, lttng_ht_seed),
+ 			&node->node);
++	rcu_read_unlock();
  }
  
- function test_all_load()
-@@ -108,7 +108,7 @@ function test_all_load()
- 	destroy_lttng_session_ok $SESSION_NAME
- 	destroy_lttng_session_ok "$SESSION_NAME-complex"
+ /*
+@@ -295,8 +311,11 @@ void lttng_ht_add_u64(struct lttng_ht *ht, struct lttng_ht_node_u64 *node)
+ 	assert(ht->ht);
+ 	assert(node);
  
--	stop_lttng_relayd_nocheck
-+	stop_lttng_relayd
++	/* RCU read lock protects from ABA. */
++	rcu_read_lock();
+ 	cds_lfht_add(ht->ht, ht->hash_fct(&node->key, lttng_ht_seed),
+ 			&node->node);
++	rcu_read_unlock();
  }
  
- function test_overwrite()
-diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
-index 4282fbb..60adb4f 100644
---- a/tests/utils/utils.sh
-+++ b/tests/utils/utils.sh
-@@ -238,9 +238,10 @@ function lttng_disable_kernel_channel_fail()
- 	lttng_disable_kernel_channel 1 "$@"
+ /*
+@@ -310,9 +329,12 @@ void lttng_ht_add_unique_ulong(struct lttng_ht *ht,
+ 	assert(ht->ht);
+ 	assert(node);
+ 
++	/* RCU read lock protects from ABA. */
++	rcu_read_lock();
+ 	node_ptr = cds_lfht_add_unique(ht->ht,
+ 			ht->hash_fct((void *) node->key, lttng_ht_seed), ht->match_fct,
+ 			(void *) node->key, &node->node);
++	rcu_read_unlock();
+ 	assert(node_ptr == &node->node);
  }
  
--function start_lttng_relayd
-+function start_lttng_relayd_opt()
+@@ -327,9 +349,12 @@ void lttng_ht_add_unique_u64(struct lttng_ht *ht,
+ 	assert(ht->ht);
+ 	assert(node);
+ 
++	/* RCU read lock protects from ABA. */
++	rcu_read_lock();
+ 	node_ptr = cds_lfht_add_unique(ht->ht,
+ 			ht->hash_fct(&node->key, lttng_ht_seed), ht->match_fct,
+ 			&node->key, &node->node);
++	rcu_read_unlock();
+ 	assert(node_ptr == &node->node);
+ }
+ 
+@@ -344,9 +369,12 @@ void lttng_ht_add_unique_two_u64(struct lttng_ht *ht,
+ 	assert(ht->ht);
+ 	assert(node);
+ 
++	/* RCU read lock protects from ABA. */
++	rcu_read_lock();
+ 	node_ptr = cds_lfht_add_unique(ht->ht,
+ 			ht->hash_fct((void *) &node->key, lttng_ht_seed), ht->match_fct,
+ 			(void *) &node->key, &node->node);
++	rcu_read_unlock();
+ 	assert(node_ptr == &node->node);
+ }
+ 
+@@ -361,9 +389,12 @@ struct lttng_ht_node_ulong *lttng_ht_add_replace_ulong(struct lttng_ht *ht,
+ 	assert(ht->ht);
+ 	assert(node);
+ 
++	/* RCU read lock protects from ABA. */
++	rcu_read_lock();
+ 	node_ptr = cds_lfht_add_replace(ht->ht,
+ 			ht->hash_fct((void *) node->key, lttng_ht_seed), ht->match_fct,
+ 			(void *) node->key, &node->node);
++	rcu_read_unlock();
+ 	if (!node_ptr) {
+ 		return NULL;
+ 	} else {
+@@ -383,9 +414,12 @@ struct lttng_ht_node_u64 *lttng_ht_add_replace_u64(struct lttng_ht *ht,
+ 	assert(ht->ht);
+ 	assert(node);
+ 
++	/* RCU read lock protects from ABA. */
++	rcu_read_lock();
+ 	node_ptr = cds_lfht_add_replace(ht->ht,
+ 			ht->hash_fct(&node->key, lttng_ht_seed), ht->match_fct,
+ 			&node->key, &node->node);
++	rcu_read_unlock();
+ 	if (!node_ptr) {
+ 		return NULL;
+ 	} else {
+@@ -399,11 +433,17 @@ struct lttng_ht_node_u64 *lttng_ht_add_replace_u64(struct lttng_ht *ht,
+  */
+ int lttng_ht_del(struct lttng_ht *ht, struct lttng_ht_iter *iter)
  {
--	local opt=$1
-+	local withtap=$1
-+	local opt=$2
++	int ret;
++
+ 	assert(ht);
+ 	assert(ht->ht);
+ 	assert(iter);
  
- 	DIR=$(readlink -f $TESTDIR)
- 
-@@ -248,52 +249,77 @@ function start_lttng_relayd
- 		$DIR/../src/bin/lttng-relayd/$RELAYD_BIN -b $opt >$OUTPUT_DEST
- 		#$DIR/../src/bin/lttng-relayd/$RELAYD_BIN $opt -vvv >>/tmp/relayd.log 2>&1 &
- 		if [ $? -eq 1 ]; then
--			fail "Start lttng-relayd (opt: $opt)"
-+			if [ $withtap -eq "1" ]; then
-+				fail "Start lttng-relayd (opt: $opt)"
-+			fi
- 			return 1
- 		else
--			pass "Start lttng-relayd (opt: $opt)"
-+			if [ $withtap -eq "1" ]; then
-+				pass "Start lttng-relayd (opt: $opt)"
-+			fi
- 		fi
- 	else
- 		pass "Start lttng-relayd (opt: $opt)"
- 	fi
+-	return cds_lfht_del(ht->ht, iter->iter.node);
++	/* RCU read lock protects from ABA. */
++	rcu_read_lock();
++	ret = cds_lfht_del(ht->ht, iter->iter.node);
++	rcu_read_unlock();
++	return ret;
  }
  
--function stop_lttng_relayd_nocheck
-+function start_lttng_relayd()
- {
-+	start_lttng_relayd_opt 1 "$@"
-+}
-+
-+function start_lttng_relayd_notap()
-+{
-+	start_lttng_relayd_opt 0 "$@"
-+}
-+
-+function stop_lttng_relayd_opt()
-+{
-+	local withtap=$1
-+
- 	PID_RELAYD=`pidof lt-$RELAYD_BIN`
+ /*
+@@ -441,7 +481,10 @@ unsigned long lttng_ht_get_count(struct lttng_ht *ht)
+ 	assert(ht);
+ 	assert(ht->ht);
  
--	diag "Killing lttng-relayd (pid: $PID_RELAYD)"
-+	if [ $withtap -eq "1" ]; then
-+		diag "Killing lttng-relayd (pid: $PID_RELAYD)"
-+	fi
- 	kill $PID_RELAYD >$OUTPUT_DEST
- 	retval=$?
++	/* RCU read lock protects from ABA and allows RCU traversal. */
++	rcu_read_lock();
+ 	cds_lfht_count_nodes(ht->ht, &scb, &count, &sca);
++	rcu_read_unlock();
  
--	if [ $retval -eq 1 ]; then
-+	if [ $? -eq 1 ]; then
-+		if [ $withtap -eq "1" ]; then
-+			fail "Kill relay daemon"
-+		fi
-+		return 1
-+	else
- 		out=1
- 		while [ -n "$out" ]; do
- 			out=$(pidof lt-$RELAYD_BIN)
- 			sleep 0.5
- 		done
-+		if [ $withtap -eq "1" ]; then
-+			pass "Kill relay daemon"
-+		fi
- 	fi
- 	return $retval
+ 	return count;
  }
- 
--function stop_lttng_relayd
-+function stop_lttng_relayd()
- {
--	stop_lttng_relayd_nocheck
-+	stop_lttng_relayd_opt 1 "$@"
-+}
- 
--	if [ $? -eq 1 ]; then
--		fail "Killed lttng-relayd (pid: $PID_RELAYD)"
--		return 1
--	else
--		pass "Killed lttng-relayd (pid: $PID_RELAYD)"
--		return 0
--	fi
-+function stop_lttng_relayd_notap()
-+{
-+	stop_lttng_relayd_opt 0 "$@"
- }
- 
--#First argument: load path for automatic loading
--function start_lttng_sessiond()
-+#First arg: show tap output
-+#Second argument: load path for automatic loading
-+function start_lttng_sessiond_opt()
- {
-+	local withtap=$1
-+	local load_path=$2
- 
--	local load_path="$1"
- 	if [ -n $TEST_NO_SESSIOND ] && [ "$TEST_NO_SESSIOND" == "1" ]; then
- 		# Env variable requested no session daemon
- 		return
-@@ -311,19 +337,33 @@ function start_lttng_sessiond()
- 
- 	if [ -z $(pidof lt-$SESSIOND_BIN) ]; then
- 		# Have a load path ?
--		if [ -n "$1" ]; then
-+		if [ -n "$load_path" ]; then
- 			$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --load "$1" --background --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
- 		else
- 			$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --background --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
- 		fi
- 		#$DIR/../src/bin/lttng-sessiond/$SESSIOND_BIN --background --consumerd32-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --consumerd64-path="$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --verbose-consumer >>/tmp/sessiond.log 2>&1
- 		status=$?
--		ok $status "Start session daemon"
-+		if [ $withtap -eq "1" ]; then
-+			ok $status "Start session daemon"
-+		fi
- 	fi
- }
- 
--function stop_lttng_sessiond ()
-+function start_lttng_sessiond()
-+{
-+	start_lttng_sessiond_opt 1 "$@"
-+}
-+
-+function start_lttng_sessiond_notap()
- {
-+	start_lttng_sessiond_opt 0 "$@"
-+}
-+
-+function stop_lttng_sessiond_opt()
-+{
-+	local withtap=$1
-+
- 	if [ -n $TEST_NO_SESSIOND ] && [ "$TEST_NO_SESSIOND" == "1" ]; then
- 		# Env variable requested no session daemon
- 		return
-@@ -334,8 +374,9 @@ function stop_lttng_sessiond ()
- 	kill $PID_SESSIOND >$OUTPUT_DEST
- 
- 	if [ $? -eq 1 ]; then
--		fail "Kill sessions daemon"
--		return 1
-+		if [ $withtap -eq "1" ]; then
-+			fail "Kill sessions daemon"
-+		fi
- 	else
- 		out=1
- 		while [ -n "$out" ]; do
-@@ -347,10 +388,22 @@ function stop_lttng_sessiond ()
- 			out=$(pidof $CONSUMERD_BIN)
- 			sleep 0.5
- 		done
--		pass "Kill session daemon"
-+		if [ $withtap -eq "1" ]; then
-+			pass "Kill session daemon"
-+		fi
- 	fi
- }
- 
-+function stop_lttng_sessiond()
-+{
-+	stop_lttng_sessiond_opt 1 "$@"
-+}
-+
-+function stop_lttng_sessiond_notap()
-+{
-+	stop_lttng_sessiond_opt 0 "$@"
-+}
-+
- function list_lttng_with_opts ()
- {
- 	local opts=$1
 -- 
 2.1.4
