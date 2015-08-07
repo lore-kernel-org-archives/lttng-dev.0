@@ -1,16 +1,21 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [GIT PULL v4] Accounting packet lost and discarded
- events at runtime
-Date: Thu, 06 Aug 2015 23:55:40 -0400
-Message-ID: <55C42C3C.6060803__49558.0954397612$1438919797$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [BABELTRACE stable-1.2 PATCH] Hide the
+ packet_seq_num field
+Date: Fri, 7 Aug 2015 11:28:55 +0000 (UTC)
+Message-ID: <1434782780.15971.1438946935714.JavaMail.zimbra__18761.5002193072$1438947007$gmane$org@efficios.com>
+References: <1438616138-29252-1-git-send-email-jdesfossez@efficios.com>
+ <819654622.3286.1438616516643.JavaMail.zimbra@efficios.com>
+ <55C4163E.1070404@efficios.com>
+ <CAB4xu_3bYxJSJpEFvbgkoJEwg-zK-TMYTfRobaom1CrsG2uVsg@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1ZNYl1-0000n7-DY
- for lttng-dev@lists.lttng.org; Thu, 06 Aug 2015 23:55:48 -0400
+ (envelope-from <compudj@efficios.com>) id 1ZNfpn-0003MZ-Ic
+ for lttng-dev@lists.lttng.org; Fri, 07 Aug 2015 07:29:15 -0400
+In-Reply-To: <CAB4xu_3bYxJSJpEFvbgkoJEwg-zK-TMYTfRobaom1CrsG2uVsg@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,72 +24,103 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jeremie Galarneau <jgalar@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Philippe Proulx <eeppeliteloop@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-This patchset is composed of commits in lttng-tools, and lttng-ust, it
-allows the sessiond, to report to the user the
-discarded events (when a channel is in discard mode) or the lost packets
-(when a channel is in overwrite mode).
+----- On Aug 6, 2015, at 11:26 PM, Philippe Proulx eeppeliteloop@gmail.com wrote:
 
-Please pull from:
-https://github.com/jdesfossez/lttng-tools-dev/tree/seqnum
-a65a791 Store the instance id and packet_seq_num in indexes
-8049650 kernctl commands to extract the stream instance id
-f947d62 Account the lost packets in snapshot mode
-978bee2 Display discarded and lost events at destroy and stop
-77f57b2 Extract the lost packets and discarded events counters
-133e6c4 Metadata for instance_id and packet_seq_num
-3121370 Add a HT to lookup sessions by id
-bda9cd8 Explicitly stop the session on lttng destroy
+> On Thu, Aug 6, 2015 at 10:21 PM, Julien Desfossez
+> <jdesfossez@efficios.com> wrote:
+>>
+>> On 15-08-03 11:41 AM, Mathieu Desnoyers wrote:
+>> > Acked-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>> >
+>> > Could we backport it to current babeltrace stable releases too ?
+>> This patch is already meant for babeltrace stable-1.2 branch and it
+>> should apply nicely on master as well.
+>>
+>> I think we should merge it soon since the new field is already produced
+>> by lttng-modules master and will probably start confusing the users who
+>> automatically parse the ctf-text output (we have all done it ;-) ).
+> 
+> It's a sin.
 
-https://github.com/jdesfossez/lttng-ust-dev/tree/seqnum
-e25f0ef Export the stream instance ID
-f01b21f Generate and export the sequence number
-593dff9 Add stream instance id to the packet header
+It does show the need for CTF 2.0 with hidden field attributes, but meanwhile
+we need to make progress.
 
-Changes from v3:
-- lttng-modules patches Acked-by and merged in master
-- lttng-ust patches all Acked-by
-- removed the back reference introduced to retrieve the
-lttng_ust_session and channels from the ust_app_chan
-- introduced a new hashtable to find easily ltt_session from their id.
+Thanks,
 
-Changes from v2:
-- actually pushed the updates intended for v1 in UST and tools...
-- fixed the comments from Mathieu on the v2
+Mathieu
 
-Change from v1:
-- the packet sequence number is not dependant on the subbuf_size and now
-always a uint64_t, so it got rid of the need of the
-packet_seq_num_padding field
+> 
+>>
+>> Thanks,
+>>
+>> Julien
+>>
+>> >
+>> > Thanks,
+>> >
+>> > Mathieu
+>> >
+>> > ----- On Aug 3, 2015, at 11:35 AM, Julien Desfossez jdesfossez@efficios.com
+>> > wrote:
+>> >
+>> >> The packet_seq_num is a new field in LTTng 2.8 that should be hidden
+>> >> from the ctf-text output as it is not really relevant for the users of
+>> >> the text output.
+>> >>
+>> >> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+>> >> ---
+>> >> formats/ctf-text/ctf-text.c | 6 +++++-
+>> >> 1 file changed, 5 insertions(+), 1 deletion(-)
+>> >>
+>> >> diff --git a/formats/ctf-text/ctf-text.c b/formats/ctf-text/ctf-text.c
+>> >> index 9d5123a..2ba0823 100644
+>> >> --- a/formats/ctf-text/ctf-text.c
+>> >> +++ b/formats/ctf-text/ctf-text.c
+>> >> @@ -115,7 +115,8 @@ static GQuark Q_STREAM_PACKET_CONTEXT_TIMESTAMP_BEGIN,
+>> >>      Q_STREAM_PACKET_CONTEXT_TIMESTAMP_END,
+>> >>      Q_STREAM_PACKET_CONTEXT_EVENTS_DISCARDED,
+>> >>      Q_STREAM_PACKET_CONTEXT_CONTENT_SIZE,
+>> >> -    Q_STREAM_PACKET_CONTEXT_PACKET_SIZE;
+>> >> +    Q_STREAM_PACKET_CONTEXT_PACKET_SIZE,
+>> >> +    Q_STREAM_PACKET_CONTEXT_PACKET_SEQ_NUM;
+>> >>
+>> >> static
+>> >> void __attribute__((constructor)) init_quarks(void)
+>> >> @@ -125,6 +126,7 @@ void __attribute__((constructor)) init_quarks(void)
+>> >>      Q_STREAM_PACKET_CONTEXT_EVENTS_DISCARDED =
+>> >>      g_quark_from_static_string("stream.packet.context.events_discarded");
+>> >>      Q_STREAM_PACKET_CONTEXT_CONTENT_SIZE =
+>> >>      g_quark_from_static_string("stream.packet.context.content_size");
+>> >>      Q_STREAM_PACKET_CONTEXT_PACKET_SIZE =
+>> >>      g_quark_from_static_string("stream.packet.context.packet_size");
+>> >> +    Q_STREAM_PACKET_CONTEXT_PACKET_SEQ_NUM =
+>> >> g_quark_from_static_string("stream.packet.context.packet_seq_num");
+>> >> }
+>> >>
+>> >> static
+>> >> @@ -152,6 +154,8 @@ int print_field(struct bt_definition *definition)
+>> >>              return 0;
+>> >>      if (definition->path == Q_STREAM_PACKET_CONTEXT_PACKET_SIZE)
+>> >>              return 0;
+>> >> +    if (definition->path == Q_STREAM_PACKET_CONTEXT_PACKET_SEQ_NUM)
+>> >> +            return 0;
+>> >>
+>> >>      return 1;
+>> >> }
+>> >> --
+>> >> 1.9.1
+>> >
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-Original cover letter:
-The reporting is detailled on a per-channel basis in the "lttng list"
-command (and associated API calls) at runtime. On lttng stop/destroy, a
-warning is now displayed to the user if events/packets were
-discarded/lost during the session.
-
-The information about the packet lost is extracted from a packet
-sequence number now written in each CTF packet and CTF index, allowing
-the relayd and the viewers to know when parsing the trace/index that
-entire packets were lost between two data packets.
-
-Finally, a stream_instance_id is now written in each packet, this
-feature allows a viewer to link multiple tracefiles belonging to the
-same channel and stream. This is particularly useful when dealing with
-tracefile rotation because the viewers will now be able to compute the
-accurate number of discarded events.
-
-Julien
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
