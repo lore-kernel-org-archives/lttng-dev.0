@@ -1,8 +1,8 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-ust] Doc: basic lttng ust python agent
-	documentation
-Date: Mon, 10 Aug 2015 14:45:32 -0400
-Message-ID: <1439232334-31308-3-git-send-email-jonathan.rajotte-julien__41395.5773380168$1439232550$gmane$org@efficios.com>
+Subject: [PATCH lttng-ust] Build: add python interpreter used by
+	python agent if builded
+Date: Mon, 10 Aug 2015 14:45:33 -0400
+Message-ID: <1439232334-31308-4-git-send-email-jonathan.rajotte-julien__19303.8363745019$1439232583$gmane$org@efficios.com>
 References: <1439232334-31308-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,11 +11,11 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
  (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1ZOs6s-0001Ts-J0
- for lttng-dev@lists.lttng.org; Mon, 10 Aug 2015 14:47:48 -0400
+ id 1ZOs72-0001UV-Ay
+ for lttng-dev@lists.lttng.org; Mon, 10 Aug 2015 14:47:57 -0400
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 4F47734053E
- for <lttng-dev@lists.lttng.org>; Mon, 10 Aug 2015 18:47:41 +0000 (UTC)
+ by mail.efficios.com (Postfix) with ESMTP id 19CA134053E
+ for <lttng-dev@lists.lttng.org>; Mon, 10 Aug 2015 18:47:51 +0000 (UTC)
 In-Reply-To: <1439232334-31308-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -30,28 +30,21 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- doc/python-agent.txt | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
- create mode 100644 doc/python-agent.txt
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/doc/python-agent.txt b/doc/python-agent.txt
-new file mode 100644
-index 0000000..61ae4d0
---- /dev/null
-+++ b/doc/python-agent.txt
-@@ -0,0 +1,13 @@
-+======================
-+ Using the python agent
-+======================
-+
-+To build the agent:
-+
-+$ ./configure --enable-python-agent
-+
-+The configure script is set to look for the first python version >= 2.7.
-+To build the agent against another version of python:
-+
-+$ export PYTHON=<python path>
-+$ ./configure --enable-python-agent
+diff --git a/configure.ac b/configure.ac
+index ade4ffe..d2f7650 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -426,7 +426,7 @@ AS_IF([test "x$java_agent_log4j" = "xyes"], [AS_ECHO("Enabled")], [AS_ECHO("Disa
+ AS_ECHO_N("JNI interface (JNI): ")
+ AS_IF([test "x$jni_interface" = "xyes"], [AS_ECHO("Enabled")], [AS_ECHO("Disabled")])
+ 
+-AS_ECHO_N("Python agent: ")
++AS_ECHO_N("Python($PYTHON) agent: ")
+ AS_IF([test "x$python_agent" = "xyes"], [AS_ECHO("Enabled")], [AS_ECHO("Disabled")])
+ 
+ AS_ECHO_N("sdt.h integration: ")
 -- 
 2.1.4
