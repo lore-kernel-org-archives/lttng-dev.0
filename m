@@ -1,19 +1,19 @@
 From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: tests: stderr not
-	correctly redirected
-Date: Wed, 12 Aug 2015 17:40:41 -0400
-Message-ID: <CA+jJMxuuW7iZKknY+0yfX6QUEHkCpeOcajQTykBPAja4TXPhOw__49499.7312118814$1439415754$gmane$org@mail.gmail.com>
-References: <1438207072-1122-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: Improve the error
+ reporting of the track/untrack command
+Date: Wed, 12 Aug 2015 18:59:03 -0400
+Message-ID: <CA+jJMxtsOTa_9BBV7fyCG-csMhfor2_b+=Gh1PmXQV8q8=dXMA__19523.7996442758$1439420428$gmane$org@mail.gmail.com>
+References: <1439410096-769-1-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1482546929=="
+Content-Type: multipart/mixed; boundary="===============1907076468=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f177.google.com ([209.85.160.177])
+Received: from mail-yk0-f170.google.com ([209.85.160.170])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZPdlO-0008LZ-Rz
- for lttng-dev@lists.lttng.org; Wed, 12 Aug 2015 17:40:57 -0400
-Received: by ykdz80 with SMTP id z80so25968481ykd.2
- for <lttng-dev@lists.lttng.org>; Wed, 12 Aug 2015 14:40:41 -0700 (PDT)
-In-Reply-To: <1438207072-1122-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZPezE-0000IJ-LD
+ for lttng-dev@lists.lttng.org; Wed, 12 Aug 2015 18:59:18 -0400
+Received: by ykdz80 with SMTP id z80so27376506ykd.2
+ for <lttng-dev@lists.lttng.org>; Wed, 12 Aug 2015 15:59:03 -0700 (PDT)
+In-Reply-To: <1439410096-769-1-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,461 +22,145 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+To: Michael Jeanson <mjeanson@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1482546929==
-Content-Type: multipart/alternative; boundary=94eb2c0885befcf7ba051d2411c7
+--===============1907076468==
+Content-Type: multipart/alternative; boundary=001a11456cbc3d8b15051d252a69
 
---94eb2c0885befcf7ba051d2411c7
+--001a11456cbc3d8b15051d252a69
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Merged, thanks!
+On Wed, Aug 12, 2015 at 4:08 PM, Michael Jeanson <mjeanson@efficios.com>
+wrote:
+
+> This patch adds feedback when a track/untrack command is successful and
+> specific messages on errors. It also changes the behavior when tracking
+> an already tracked PID or untracking a PID that is not tracked from an
+> error to a warning with a successful exit code.
+>
+> Fixes: #898
+>
+> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+> ---
+>  include/lttng/lttng-error.h            |  2 ++
+>  src/bin/lttng-sessiond/trace-ust.c     |  4 ++--
+>  src/bin/lttng/commands/track-untrack.c | 23 +++++++++++++++++++++--
+>  src/common/error.c                     |  2 ++
+>  4 files changed, 27 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/lttng/lttng-error.h b/include/lttng/lttng-error.h
+> index efdca65..a7746fa 100644
+> --- a/include/lttng/lttng-error.h
+> +++ b/include/lttng/lttng-error.h
+> @@ -134,6 +134,8 @@ enum lttng_error_code {
+>         LTTNG_ERR_EXCLUSION_NOMEM        =3D 111, /* Lack of memory while
+> processing event exclusions */
+>         LTTNG_ERR_INVALID_EVENT_NAME     =3D 112, /* Invalid event name *=
+/
+>         LTTNG_ERR_INVALID_CHANNEL_NAME   =3D 113, /* Invalid channel name=
+ */
+> +       LTTNG_ERR_PID_TRACKED            =3D 114, /* PID already tracked =
+*/
+> +       LTTNG_ERR_PID_NOT_TRACKED        =3D 115, /* PID not tracked */
+>
+>         /* MUST be last element */
+>         LTTNG_ERR_NR,                           /* Last element */
+> diff --git a/src/bin/lttng-sessiond/trace-ust.c
+> b/src/bin/lttng-sessiond/trace-ust.c
+> index 2486696..3881084 100644
+> --- a/src/bin/lttng-sessiond/trace-ust.c
+> +++ b/src/bin/lttng-sessiond/trace-ust.c
+> @@ -656,7 +656,7 @@ int pid_tracker_add_pid(struct ust_pid_tracker
+> *pid_tracker, int pid)
+>         tracker_node =3D pid_tracker_lookup(pid_tracker, pid, &iter);
+>         if (tracker_node) {
+>                 /* Already exists. */
+> -               retval =3D LTTNG_ERR_INVALID;
+> +               retval =3D LTTNG_ERR_PID_TRACKED;
+>                 goto end;
+>         }
+>         tracker_node =3D zmalloc(sizeof(*tracker_node));
+> @@ -684,7 +684,7 @@ int pid_tracker_del_pid(struct ust_pid_tracker
+> *pid_tracker, int pid)
+>         tracker_node =3D pid_tracker_lookup(pid_tracker, pid, &iter);
+>         if (!tracker_node) {
+>                 /* Not found */
+> -               retval =3D LTTNG_ERR_INVALID;
+> +               retval =3D LTTNG_ERR_PID_NOT_TRACKED;
+>                 goto end;
+>         }
+>         ret =3D lttng_ht_del(pid_tracker->ht, &iter);
+> diff --git a/src/bin/lttng/commands/track-untrack.c
+> b/src/bin/lttng/commands/track-untrack.c
+> index 9ce8504..b3139c6 100644
+> --- a/src/bin/lttng/commands/track-untrack.c
+> +++ b/src/bin/lttng/commands/track-untrack.c
+> @@ -261,9 +261,28 @@ enum cmd_error_code track_untrack_pid(enum cmd_type
+> cmd_type, const char *cmd_st
+>                 DBG("%s PID %d", cmd_str, pid_list[i]);
+>                 ret =3D lib_func(handle, pid_list[i]);
+>                 if (ret) {
+> -                       success =3D 0;
+> -                       retval =3D CMD_ERROR;
+> +                       switch (-ret) {
+> +                       case LTTNG_ERR_PID_TRACKED:
+> +                               WARN("PID %i already tracked in session
+> %s",
+> +                                               pid_list[i], session_name=
+);
+> +                               success =3D 1;
+> +                               retval =3D CMD_SUCCESS;
+> +                               break;
+> +                       case LTTNG_ERR_PID_NOT_TRACKED:
+> +                               WARN("PID %i not tracked in session %s",
+> +                                               pid_list[i], session_name=
+);
+> +                               success =3D 1;
+> +                               retval =3D CMD_SUCCESS;
+>
+
+I'm wondering if untracking a PID that was not being tracked should be
+reported as an error... Thoughts anyone?
 
 J=C3=A9r=C3=A9mie
 
-On Wed, Jul 29, 2015 at 5:57 PM, Jonathan Rajotte <
-jonathan.rajotte-julien@efficios.com> wrote:
 
-> Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-> ---
->  tests/utils/utils.sh | 75
-> ++++++++++++++++++++++++++--------------------------
->  1 file changed, 38 insertions(+), 37 deletions(-)
->
-> diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
-> index 4282fbb..ba0b10e 100644
-> --- a/tests/utils/utils.sh
-> +++ b/tests/utils/utils.sh
-> @@ -20,7 +20,8 @@ CONSUMERD_BIN=3D"lttng-consumerd"
->  RELAYD_BIN=3D"lttng-relayd"
->  LTTNG_BIN=3D"lttng"
->  BABELTRACE_BIN=3D"babeltrace"
-> -OUTPUT_DEST=3D/dev/null 2>&1
-> +OUTPUT_DEST=3D/dev/null
-> +ERROR_OUTPUT_DEST=3D/dev/null
->
->  # Minimal kernel version supported for session daemon tests
->  KERNEL_MAJOR_VERSION=3D2
-> @@ -103,7 +104,7 @@ function lttng_enable_kernel_event
->                 chan=3D"-c $channel_name"
->         fi
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name"
-> $chan -s $sess_name -k >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name"
-> $chan -s $sess_name -k 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ok $? "Enable kernel event $event_name for session $sess_name"
->  }
->
-> @@ -126,7 +127,7 @@ function lttng_enable_kernel_syscall()
->                 chan=3D"-c $channel_name"
->         fi
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event --syscall
-> "$syscall_name" $chan -s $sess_name -k >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event --syscall
-> "$syscall_name" $chan -s $sess_name -k 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_D=
-EST
->         ret=3D$?
->         if [[ $expected_to_fail -eq "1" ]]; then
->                 test $ret -ne "0"
-> @@ -165,7 +166,7 @@ function lttng_disable_kernel_syscall()
->                 chan=3D"-c $channel_name"
->         fi
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-event --syscall
-> "$syscall_name" $chan -s $sess_name -k >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-event --syscall
-> "$syscall_name" $chan -s $sess_name -k 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_D=
-EST
->
->         ret=3D$?
->         if [[ $expected_to_fail -eq "1" ]]; then
-> @@ -192,7 +193,7 @@ function lttng_enable_kernel_channel()
->         local sess_name=3D$2
->         local channel_name=3D$3
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-channel -k
-> $channel_name -s $sess_name >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-channel -k
-> $channel_name -s $sess_name 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ret=3D$?
->         if [[ $expected_to_fail -eq "1" ]]; then
->                 test "$ret" -ne "0"
-> @@ -218,7 +219,7 @@ function lttng_disable_kernel_channel()
->         local sess_name=3D$2
->         local channel_name=3D$3
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-channel -k
-> $channel_name -s $sess_name >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-channel -k
-> $channel_name -s $sess_name 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ret=3D$?
->         if [[ $expected_to_fail -eq "1" ]]; then
->                 test "$ret" -ne "0"
-> @@ -245,7 +246,7 @@ function start_lttng_relayd
->         DIR=3D$(readlink -f $TESTDIR)
->
->         if [ -z $(pidof lt-$RELAYD_BIN) ]; then
-> -               $DIR/../src/bin/lttng-relayd/$RELAYD_BIN -b $opt
-> >$OUTPUT_DEST
-> +               $DIR/../src/bin/lttng-relayd/$RELAYD_BIN -b $opt 1>
-> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->                 #$DIR/../src/bin/lttng-relayd/$RELAYD_BIN $opt -vvv
-> >>/tmp/relayd.log 2>&1 &
->                 if [ $? -eq 1 ]; then
->                         fail "Start lttng-relayd (opt: $opt)"
-> @@ -263,7 +264,7 @@ function stop_lttng_relayd_nocheck
->         PID_RELAYD=3D`pidof lt-$RELAYD_BIN`
->
->         diag "Killing lttng-relayd (pid: $PID_RELAYD)"
-> -       kill $PID_RELAYD >$OUTPUT_DEST
-> +       kill $PID_RELAYD 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         retval=3D$?
->
->         if [ $retval -eq 1 ]; then
-> @@ -331,7 +332,7 @@ function stop_lttng_sessiond ()
->
->         PID_SESSIOND=3D`pidof lt-$SESSIOND_BIN`
->
-> -       kill $PID_SESSIOND >$OUTPUT_DEST
-> +       kill $PID_SESSIOND 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->
->         if [ $? -eq 1 ]; then
->                 fail "Kill sessions daemon"
-> @@ -354,7 +355,7 @@ function stop_lttng_sessiond ()
->  function list_lttng_with_opts ()
->  {
->         local opts=3D$1
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN list $opts >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN list $opts 1> $OUTPUT_DEST 2=
->
-> $ERROR_OUTPUT_DEST
->         ok $? "Lttng-tool list command with option $opts"
->  }
->
-> @@ -362,7 +363,7 @@ function create_lttng_session_no_output ()
->  {
->         local sess_name=3D$1
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN create $sess_name --no-outpu=
-t
-> >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN create $sess_name --no-outpu=
-t
-> 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ok $? "Create session $sess_name in no-output mode"
->  }
->
-> @@ -399,7 +400,7 @@ function enable_ust_lttng_channel ()
->         local sess_name=3D$2
->         local channel_name=3D$3
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-channel -u
-> $channel_name -s $sess_name >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-channel -u
-> $channel_name -s $sess_name 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ret=3D$?
->         if [[ $expect_fail -eq "1" ]]; then
->                 test "$ret" -ne "0"
-> @@ -424,7 +425,7 @@ function disable_ust_lttng_channel()
->         local sess_name=3D$1
->         local channel_name=3D$2
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-channel -u
-> $channel_name -s $sess_name >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-channel -u
-> $channel_name -s $sess_name 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ok $? "Disable channel $channel_name for session $sess_name"
->  }
->
-> @@ -433,7 +434,7 @@ function enable_lttng_mmap_overwrite_kernel_channel()
->         local sess_name=3D$1
->         local channel_name=3D$2
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-channel -s $sess_name
-> $channel_name -k --output mmap --overwrite >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-channel -s $sess_name
-> $channel_name -k --output mmap --overwrite 1> $OUTPUT_DEST 2>
-> $ERROR_OUTPUT_DEST
->         ok $? "Enable channel $channel_name for session $sess_name"
->  }
->
-> @@ -442,7 +443,7 @@ function enable_lttng_mmap_overwrite_ust_channel()
->         local sess_name=3D$1
->         local channel_name=3D$2
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-channel -s $sess_name
-> $channel_name -u --output mmap --overwrite >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-channel -s $sess_name
-> $channel_name -u --output mmap --overwrite 1> $OUTPUT_DEST 2>
-> $ERROR_OUTPUT_DEST
->         ok $? "Enable channel $channel_name for session $sess_name"
->  }
->
-> @@ -460,7 +461,7 @@ function enable_ust_lttng_event ()
->                 chan=3D"-c $channel_name"
->         fi
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name"
-> $chan -s $sess_name -u >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name"
-> $chan -s $sess_name -u 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ret=3D$?
->         if [[ $expected_to_fail -eq "1" ]]; then
->                 test $ret -ne "0"
-> @@ -493,7 +494,7 @@ function enable_jul_lttng_event()
->                 chan=3D"-c $channel_name"
->         fi
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name"
-> $chan -s $sess_name -j >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name"
-> $chan -s $sess_name -j 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ok $? "Enable JUL event $event_name for session $sess_name"
->  }
->
-> @@ -511,7 +512,7 @@ function enable_jul_lttng_event_loglevel()
->                 chan=3D"-c $channel_name"
->         fi
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event --loglevel
-> $loglevel "$event_name" $chan -s $sess_name -j >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event --loglevel
-> $loglevel "$event_name" $chan -s $sess_name -j 1> $OUTPUT_DEST 2>
-> $ERROR_OUTPUT_DEST
->         ok $? "Enable JUL event $event_name for session $sess_name with
-> loglevel $loglevel"
->  }
->
-> @@ -528,7 +529,7 @@ function enable_log4j_lttng_event()
->                 chan=3D"-c $channel_name"
->         fi
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name"
-> $chan -s $sess_name -l >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name"
-> $chan -s $sess_name -l 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ok $? "Enable LOG4J event $event_name for session $sess_name"
->  }
->
-> @@ -546,7 +547,7 @@ function enable_log4j_lttng_event_loglevel()
->                 chan=3D"-c $channel_name"
->         fi
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event --loglevel
-> $loglevel "$event_name" $chan -s $sess_name -l >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event --loglevel
-> $loglevel "$event_name" $chan -s $sess_name -l 1> $OUTPUT_DEST 2>
-> $ERROR_OUTPUT_DEST
->         ok $? "Enable LOG4J event $event_name for session $sess_name with
-> loglevel $loglevel"
->  }
->
-> @@ -563,7 +564,7 @@ function enable_python_lttng_event()
->                 chan=3D"-c $channel_name"
->         fi
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name"
-> $chan -s $sess_name -p >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name"
-> $chan -s $sess_name -p 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ok $? "Enable Python event $event_name for session $sess_name"
->  }
->
-> @@ -581,7 +582,7 @@ function enable_python_lttng_event_loglevel()
->                 chan=3D"-c $channel_name"
->         fi
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event --loglevel
-> $loglevel "$event_name" $chan -s $sess_name -p >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event --loglevel
-> $loglevel "$event_name" $chan -s $sess_name -p 1> $OUTPUT_DEST 2>
-> $ERROR_OUTPUT_DEST
->         ok $? "Enable Python event $event_name for session $sess_name wit=
-h
-> loglevel $loglevel"
->  }
->
-> @@ -591,7 +592,7 @@ function enable_ust_lttng_event_filter()
->         local event_name=3D"$2"
->         local filter=3D"$3"
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name" -=
-s
-> $sess_name -u --filter "$filter" >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name" -=
-s
-> $sess_name -u --filter "$filter" 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ok $? "Enable event $event_name with filtering for session
-> $sess_name"
->  }
->
-> @@ -601,7 +602,7 @@ function enable_ust_lttng_event_loglevel()
->         local event_name=3D"$2"
->         local loglevel=3D"$3"
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name" -=
-s
-> $sess_name -u --loglevel $loglevel >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name" -=
-s
-> $sess_name -u --loglevel $loglevel 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ok $? "Enable event $event_name with loglevel $loglevel"
->  }
->
-> @@ -611,7 +612,7 @@ function enable_ust_lttng_event_loglevel_only()
->         local event_name=3D"$2"
->         local loglevel=3D"$3"
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name" -=
-s
-> $sess_name -u --loglevel-only $loglevel >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name" -=
-s
-> $sess_name -u --loglevel-only $loglevel 1> $OUTPUT_DEST 2>
-> $ERROR_OUTPUT_DEST
->         ok $? "Enable event $event_name with loglevel-only $loglevel"
->  }
->
-> @@ -628,7 +629,7 @@ function disable_ust_lttng_event ()
->                 chan=3D"-c $channel_name"
->         fi
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-event "$event_name"
-> -s $sess_name $chan -u >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-event "$event_name"
-> -s $sess_name $chan -u 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ok $? "Disable event $event_name for session $sess_name"
->  }
->
-> @@ -655,7 +656,7 @@ function disable_python_lttng_event ()
->         local sess_name=3D"$1"
->         local event_name=3D"$2"
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-event "$event_name"
-> -s $sess_name -p >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-event "$event_name"
-> -s $sess_name -p 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ok $? "Disable Python event $event_name for session $sess_name"
->  }
->
-> @@ -664,7 +665,7 @@ function start_lttng_tracing ()
->         local expected_to_fail=3D$1
->         local sess_name=3D$2
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN start $sess_name >$OUTPUT_DE=
-ST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN start $sess_name 1>
-> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ret=3D$?
->         if [[ $expected_to_fail -eq "1" ]]; then
->                 test "$ret" -ne "0"
-> @@ -689,7 +690,7 @@ function stop_lttng_tracing ()
->         local expected_to_fail=3D$1
->         local sess_name=3D$2
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN stop $sess_name >$OUTPUT_DES=
-T
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN stop $sess_name 1>
-> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ret=3D$?
->         if [[ $expected_to_fail -eq "1" ]]; then
->                 test "$ret" -ne "0"
-> @@ -714,7 +715,7 @@ function destroy_lttng_session ()
->         local expected_to_fail=3D$1
->         local sess_name=3D$2
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN destroy $sess_name
-> >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN destroy $sess_name 1>
-> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ret=3D$?
->         if [[ $expected_to_fail -eq "1" ]]; then
->                 test "$ret" -ne "0"
-> @@ -738,7 +739,7 @@ function destroy_lttng_session_fail ()
->
->  function destroy_lttng_sessions ()
->  {
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN destroy --all >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN destroy --all 1> $OUTPUT_DES=
-T
-> 2> $ERROR_OUTPUT_DEST
->         ok $? "Destroy all lttng sessions"
->  }
->
-> @@ -748,7 +749,7 @@ function lttng_snapshot_add_output ()
->         local sess_name=3D$2
->         local trace_path=3D$3
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot add-output -s
-> $sess_name file://$trace_path >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot add-output -s
-> $sess_name file://$trace_path 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ret=3D$?
->         if [[ $expected_to_fail -eq 1 ]]; then
->                 test "$ret" -ne "0"
-> @@ -774,7 +775,7 @@ function lttng_snapshot_del_output ()
->         local sess_name=3D$2
->         local id=3D$3
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot del-output -s
-> $sess_name $id >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot del-output -s
-> $sess_name $id 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ret=3D$?
->         if [[ $expected_to_fail -eq "1" ]]; then
->                 test "$ret" -ne "0"
-> @@ -799,14 +800,14 @@ function lttng_snapshot_record ()
->         local sess_name=3D$1
->         local trace_path=3D$2
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot record -s $sess_nam=
-e
-> >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot record -s $sess_nam=
-e
-> 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ok $? "Snapshot recorded"
->  }
->
->  function lttng_snapshot_list ()
->  {
->         local sess_name=3D$1
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot list-output -s
-> $sess_name >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot list-output -s
-> $sess_name 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ok $? "Snapshot list"
->  }
->
-> @@ -815,7 +816,7 @@ function lttng_save()
->         local sess_name=3D$1
->         local opts=3D$2
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN save $sess_name $opts
-> >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN save $sess_name $opts 1>
-> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
->         ok $? "Session successfully saved"
->  }
->
-> @@ -823,7 +824,7 @@ function lttng_load()
->  {
->         local opts=3D$1
->
-> -       $TESTDIR/../src/bin/lttng/$LTTNG_BIN load $opts >$OUTPUT_DEST
-> +       $TESTDIR/../src/bin/lttng/$LTTNG_BIN load $opts 1> $OUTPUT_DEST 2=
->
-> $ERROR_OUTPUT_DEST
->         ok $? "Load command successful"
->  }
->
+> +                               break;
+> +                       default:
+> +                               ERR("%s", lttng_strerror(ret));
+> +                               success =3D 0;
+> +                               retval =3D CMD_ERROR;
+> +                               break;
+> +                       }
+>                 } else {
+> +                       MSG("PID %i %sed in session %s",
+> +                                       pid_list[i], cmd_str,
+> session_name);
+>                         success =3D 1;
+>                 }
+>
+> diff --git a/src/common/error.c b/src/common/error.c
+> index d3e3b94..ad0ac51 100644
+> --- a/src/common/error.c
+> +++ b/src/common/error.c
+> @@ -167,6 +167,8 @@ static const char *error_string_array[] =3D {
+>         [ ERROR_INDEX(LTTNG_ERR_MI_NOT_IMPLEMENTED) ] =3D "Mi feature not
+> implemented",
+>         [ ERROR_INDEX(LTTNG_ERR_INVALID_EVENT_NAME) ] =3D "Invalid event
+> name",
+>         [ ERROR_INDEX(LTTNG_ERR_INVALID_CHANNEL_NAME) ] =3D "Invalid chan=
+nel
+> name",
+> +       [ ERROR_INDEX(LTTNG_ERR_PID_TRACKED) ] =3D "PID already tracked",
+> +       [ ERROR_INDEX(LTTNG_ERR_PID_NOT_TRACKED) ] =3D "PID not tracked",
+>
+>         /* Last element */
+>         [ ERROR_INDEX(LTTNG_ERR_NR) ] =3D "Unknown error code"
 > --
-> 2.1.4
+> 1.9.1
 >
 >
 
@@ -486,541 +170,145 @@ J=C3=A9r=C3=A9mie Galarneau
 EfficiOS Inc.
 http://www.efficios.com
 
---94eb2c0885befcf7ba051d2411c7
+--001a11456cbc3d8b15051d252a69
 Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: base64
 
-<div dir=3D"ltr">Merged, thanks!<div><br></div><div>J=C3=A9r=C3=A9mie</div>=
-</div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Wed, Jul=
- 29, 2015 at 5:57 PM, Jonathan Rajotte <span dir=3D"ltr">&lt;<a href=3D"mai=
-lto:jonathan.rajotte-julien@efficios.com" target=3D"_blank">jonathan.rajott=
-e-julien@efficios.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_q=
-uote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1e=
-x">Signed-off-by: Jonathan Rajotte &lt;<a href=3D"mailto:jonathan.rajotte-j=
-ulien@efficios.com">jonathan.rajotte-julien@efficios.com</a>&gt;<br>
----<br>
-=C2=A0tests/utils/utils.sh | 75 ++++++++++++++++++++++++++-----------------=
----------<br>
-=C2=A01 file changed, 38 insertions(+), 37 deletions(-)<br>
-<br>
-diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh<br>
-index 4282fbb..ba0b10e 100644<br>
---- a/tests/utils/utils.sh<br>
-+++ b/tests/utils/utils.sh<br>
-@@ -20,7 +20,8 @@ CONSUMERD_BIN=3D&quot;lttng-consumerd&quot;<br>
-=C2=A0RELAYD_BIN=3D&quot;lttng-relayd&quot;<br>
-=C2=A0LTTNG_BIN=3D&quot;lttng&quot;<br>
-=C2=A0BABELTRACE_BIN=3D&quot;babeltrace&quot;<br>
--OUTPUT_DEST=3D/dev/null 2&gt;&amp;1<br>
-+OUTPUT_DEST=3D/dev/null<br>
-+ERROR_OUTPUT_DEST=3D/dev/null<br>
-<br>
-=C2=A0# Minimal kernel version supported for session daemon tests<br>
-=C2=A0KERNEL_MAJOR_VERSION=3D2<br>
-@@ -103,7 +104,7 @@ function lttng_enable_kernel_event<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 chan=3D&quot;-c $ch=
-annel_name&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; $chan -s $sess_name -k &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; $chan -s $sess_name -k 1&gt; $OUTPUT_DEST 2&gt; =
-$ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Enable kernel event $event_name for=
- session $sess_name&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -126,7 +127,7 @@ function lttng_enable_kernel_syscall()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 chan=3D&quot;-c $ch=
-annel_name&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt --syscall &quot;$syscall_name&quot; $chan -s $sess_name -k &gt;$OUTPUT_D=
-EST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt --syscall &quot;$syscall_name&quot; $chan -s $sess_name -k 1&gt; $OUTPUT=
-_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ret=3D$?<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [[ $expected_to_fail -eq &quot;1&quot; ]]; t=
-hen<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 test $ret -ne &quot=
-;0&quot;<br>
-@@ -165,7 +166,7 @@ function lttng_disable_kernel_syscall()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 chan=3D&quot;-c $ch=
-annel_name&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-ev=
-ent --syscall &quot;$syscall_name&quot; $chan -s $sess_name -k &gt;$OUTPUT_=
-DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-ev=
-ent --syscall &quot;$syscall_name&quot; $chan -s $sess_name -k 1&gt; $OUTPU=
-T_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ret=3D$?<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [[ $expected_to_fail -eq &quot;1&quot; ]]; t=
-hen<br>
-@@ -192,7 +193,7 @@ function lttng_enable_kernel_channel()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$2<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local channel_name=3D$3<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-cha=
-nnel -k $channel_name -s $sess_name &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-cha=
-nnel -k $channel_name -s $sess_name 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_=
-DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ret=3D$?<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [[ $expected_to_fail -eq &quot;1&quot; ]]; t=
-hen<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 test &quot;$ret&quo=
-t; -ne &quot;0&quot;<br>
-@@ -218,7 +219,7 @@ function lttng_disable_kernel_channel()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$2<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local channel_name=3D$3<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-ch=
-annel -k $channel_name -s $sess_name &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-ch=
-annel -k $channel_name -s $sess_name 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT=
-_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ret=3D$?<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [[ $expected_to_fail -eq &quot;1&quot; ]]; t=
-hen<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 test &quot;$ret&quo=
-t; -ne &quot;0&quot;<br>
-@@ -245,7 +246,7 @@ function start_lttng_relayd<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 DIR=3D$(readlink -f $TESTDIR)<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [ -z $(pidof lt-$RELAYD_BIN) ]; then<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$DIR/../src/bin/ltt=
-ng-relayd/$RELAYD_BIN -b $opt &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0$DIR/../src/bin/ltt=
-ng-relayd/$RELAYD_BIN -b $opt 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<b=
-r>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 #$DIR/../src/bin/lt=
-tng-relayd/$RELAYD_BIN $opt -vvv &gt;&gt;/tmp/relayd.log 2&gt;&amp;1 &amp;<=
-br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if [ $? -eq 1 ]; th=
-en<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 fail &quot;Start lttng-relayd (opt: $opt)&quot;<br>
-@@ -263,7 +264,7 @@ function stop_lttng_relayd_nocheck<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 PID_RELAYD=3D`pidof lt-$RELAYD_BIN`<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 diag &quot;Killing lttng-relayd (pid: $PID_RELA=
-YD)&quot;<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0kill $PID_RELAYD &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0kill $PID_RELAYD 1&gt; $OUTPUT_DEST 2&gt; $ERRO=
-R_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 retval=3D$?<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [ $retval -eq 1 ]; then<br>
-@@ -331,7 +332,7 @@ function stop_lttng_sessiond ()<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 PID_SESSIOND=3D`pidof lt-$SESSIOND_BIN`<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0kill $PID_SESSIOND &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0kill $PID_SESSIOND 1&gt; $OUTPUT_DEST 2&gt; $ER=
-ROR_OUTPUT_DEST<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [ $? -eq 1 ]; then<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 fail &quot;Kill ses=
-sions daemon&quot;<br>
-@@ -354,7 +355,7 @@ function stop_lttng_sessiond ()<br>
-=C2=A0function list_lttng_with_opts ()<br>
-=C2=A0{<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local opts=3D$1<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN list $opts=
- &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN list $opts=
- 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Lttng-tool list command with option=
- $opts&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -362,7 +363,7 @@ function create_lttng_session_no_output ()<br>
-=C2=A0{<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$1<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN create $se=
-ss_name --no-output &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN create $se=
-ss_name --no-output 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Create session $sess_name in no-out=
-put mode&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -399,7 +400,7 @@ function enable_ust_lttng_channel ()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$2<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local channel_name=3D$3<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-cha=
-nnel -u $channel_name -s $sess_name &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-cha=
-nnel -u $channel_name -s $sess_name 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_=
-DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ret=3D$?<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [[ $expect_fail -eq &quot;1&quot; ]]; then<b=
-r>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 test &quot;$ret&quo=
-t; -ne &quot;0&quot;<br>
-@@ -424,7 +425,7 @@ function disable_ust_lttng_channel()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$1<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local channel_name=3D$2<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-ch=
-annel -u $channel_name -s $sess_name &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-ch=
-annel -u $channel_name -s $sess_name 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT=
-_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Disable channel $channel_name for s=
-ession $sess_name&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -433,7 +434,7 @@ function enable_lttng_mmap_overwrite_kernel_channel()<b=
-r>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$1<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local channel_name=3D$2<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-cha=
-nnel -s $sess_name $channel_name -k --output mmap --overwrite &gt;$OUTPUT_D=
-EST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-cha=
-nnel -s $sess_name $channel_name -k --output mmap --overwrite 1&gt; $OUTPUT=
-_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Enable channel $channel_name for se=
-ssion $sess_name&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -442,7 +443,7 @@ function enable_lttng_mmap_overwrite_ust_channel()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$1<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local channel_name=3D$2<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-cha=
-nnel -s $sess_name $channel_name -u --output mmap --overwrite &gt;$OUTPUT_D=
-EST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-cha=
-nnel -s $sess_name $channel_name -u --output mmap --overwrite 1&gt; $OUTPUT=
-_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Enable channel $channel_name for se=
-ssion $sess_name&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -460,7 +461,7 @@ function enable_ust_lttng_event ()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 chan=3D&quot;-c $ch=
-annel_name&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; $chan -s $sess_name -u &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; $chan -s $sess_name -u 1&gt; $OUTPUT_DEST 2&gt; =
-$ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ret=3D$?<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [[ $expected_to_fail -eq &quot;1&quot; ]]; t=
-hen<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 test $ret -ne &quot=
-;0&quot;<br>
-@@ -493,7 +494,7 @@ function enable_jul_lttng_event()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 chan=3D&quot;-c $ch=
-annel_name&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; $chan -s $sess_name -j &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; $chan -s $sess_name -j 1&gt; $OUTPUT_DEST 2&gt; =
-$ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Enable JUL event $event_name for se=
-ssion $sess_name&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -511,7 +512,7 @@ function enable_jul_lttng_event_loglevel()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 chan=3D&quot;-c $ch=
-annel_name&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt --loglevel $loglevel &quot;$event_name&quot; $chan -s $sess_name -j &gt;=
-$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt --loglevel $loglevel &quot;$event_name&quot; $chan -s $sess_name -j 1&gt=
-; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Enable JUL event $event_name for se=
-ssion $sess_name with loglevel $loglevel&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -528,7 +529,7 @@ function enable_log4j_lttng_event()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 chan=3D&quot;-c $ch=
-annel_name&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; $chan -s $sess_name -l &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; $chan -s $sess_name -l 1&gt; $OUTPUT_DEST 2&gt; =
-$ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Enable LOG4J event $event_name for =
-session $sess_name&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -546,7 +547,7 @@ function enable_log4j_lttng_event_loglevel()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 chan=3D&quot;-c $ch=
-annel_name&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt --loglevel $loglevel &quot;$event_name&quot; $chan -s $sess_name -l &gt;=
-$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt --loglevel $loglevel &quot;$event_name&quot; $chan -s $sess_name -l 1&gt=
-; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Enable LOG4J event $event_name for =
-session $sess_name with loglevel $loglevel&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -563,7 +564,7 @@ function enable_python_lttng_event()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 chan=3D&quot;-c $ch=
-annel_name&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; $chan -s $sess_name -p &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; $chan -s $sess_name -p 1&gt; $OUTPUT_DEST 2&gt; =
-$ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Enable Python event $event_name for=
- session $sess_name&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -581,7 +582,7 @@ function enable_python_lttng_event_loglevel()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 chan=3D&quot;-c $ch=
-annel_name&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt --loglevel $loglevel &quot;$event_name&quot; $chan -s $sess_name -p &gt;=
-$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt --loglevel $loglevel &quot;$event_name&quot; $chan -s $sess_name -p 1&gt=
-; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Enable Python event $event_name for=
- session $sess_name with loglevel $loglevel&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -591,7 +592,7 @@ function enable_ust_lttng_event_filter()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local event_name=3D&quot;$2&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local filter=3D&quot;$3&quot;<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; -s $sess_name -u --filter &quot;$filter&quot; &g=
-t;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; -s $sess_name -u --filter &quot;$filter&quot; 1&=
-gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Enable event $event_name with filte=
-ring for session $sess_name&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -601,7 +602,7 @@ function enable_ust_lttng_event_loglevel()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local event_name=3D&quot;$2&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local loglevel=3D&quot;$3&quot;<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; -s $sess_name -u --loglevel $loglevel &gt;$OUTPU=
-T_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; -s $sess_name -u --loglevel $loglevel 1&gt; $OUT=
-PUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Enable event $event_name with logle=
-vel $loglevel&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -611,7 +612,7 @@ function enable_ust_lttng_event_loglevel_only()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local event_name=3D&quot;$2&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local loglevel=3D&quot;$3&quot;<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; -s $sess_name -u --loglevel-only $loglevel &gt;$=
-OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-eve=
-nt &quot;$event_name&quot; -s $sess_name -u --loglevel-only $loglevel 1&gt;=
- $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Enable event $event_name with logle=
-vel-only $loglevel&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -628,7 +629,7 @@ function disable_ust_lttng_event ()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 chan=3D&quot;-c $ch=
-annel_name&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 fi<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-ev=
-ent &quot;$event_name&quot; -s $sess_name $chan -u &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-ev=
-ent &quot;$event_name&quot; -s $sess_name $chan -u 1&gt; $OUTPUT_DEST 2&gt;=
- $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Disable event $event_name for sessi=
-on $sess_name&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -655,7 +656,7 @@ function disable_python_lttng_event ()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D&quot;$1&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local event_name=3D&quot;$2&quot;<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-ev=
-ent &quot;$event_name&quot; -s $sess_name -p &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-ev=
-ent &quot;$event_name&quot; -s $sess_name -p 1&gt; $OUTPUT_DEST 2&gt; $ERRO=
-R_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Disable Python event $event_name fo=
-r session $sess_name&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -664,7 +665,7 @@ function start_lttng_tracing ()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local expected_to_fail=3D$1<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$2<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN start $ses=
-s_name &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN start $ses=
-s_name 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ret=3D$?<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [[ $expected_to_fail -eq &quot;1&quot; ]]; t=
-hen<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 test &quot;$ret&quo=
-t; -ne &quot;0&quot;<br>
-@@ -689,7 +690,7 @@ function stop_lttng_tracing ()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local expected_to_fail=3D$1<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$2<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN stop $sess=
-_name &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN stop $sess=
-_name 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ret=3D$?<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [[ $expected_to_fail -eq &quot;1&quot; ]]; t=
-hen<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 test &quot;$ret&quo=
-t; -ne &quot;0&quot;<br>
-@@ -714,7 +715,7 @@ function destroy_lttng_session ()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local expected_to_fail=3D$1<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$2<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN destroy $s=
-ess_name &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN destroy $s=
-ess_name 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ret=3D$?<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [[ $expected_to_fail -eq &quot;1&quot; ]]; t=
-hen<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 test &quot;$ret&quo=
-t; -ne &quot;0&quot;<br>
-@@ -738,7 +739,7 @@ function destroy_lttng_session_fail ()<br>
-<br>
-=C2=A0function destroy_lttng_sessions ()<br>
-=C2=A0{<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN destroy --=
-all &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN destroy --=
-all 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Destroy all lttng sessions&quot;<br=
->
-=C2=A0}<br>
-<br>
-@@ -748,7 +749,7 @@ function lttng_snapshot_add_output ()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$2<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local trace_path=3D$3<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot a=
-dd-output -s $sess_name file://$trace_path &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot a=
-dd-output -s $sess_name file://$trace_path 1&gt; $OUTPUT_DEST 2&gt; $ERROR_=
-OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ret=3D$?<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [[ $expected_to_fail -eq 1 ]]; then<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 test &quot;$ret&quo=
-t; -ne &quot;0&quot;<br>
-@@ -774,7 +775,7 @@ function lttng_snapshot_del_output ()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$2<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local id=3D$3<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot d=
-el-output -s $sess_name $id &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot d=
-el-output -s $sess_name $id 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ret=3D$?<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if [[ $expected_to_fail -eq &quot;1&quot; ]]; t=
-hen<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 test &quot;$ret&quo=
-t; -ne &quot;0&quot;<br>
-@@ -799,14 +800,14 @@ function lttng_snapshot_record ()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$1<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local trace_path=3D$2<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot r=
-ecord -s $sess_name &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot r=
-ecord -s $sess_name 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Snapshot recorded&quot;<br>
-=C2=A0}<br>
-<br>
-=C2=A0function lttng_snapshot_list ()<br>
-=C2=A0{<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$1<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot l=
-ist-output -s $sess_name &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot l=
-ist-output -s $sess_name 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Snapshot list&quot;<br>
-=C2=A0}<br>
-<br>
-@@ -815,7 +816,7 @@ function lttng_save()<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local sess_name=3D$1<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local opts=3D$2<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN save $sess=
-_name $opts &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN save $sess=
-_name $opts 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Session successfully saved&quot;<br=
->
-=C2=A0}<br>
-<br>
-@@ -823,7 +824,7 @@ function lttng_load()<br>
-=C2=A0{<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 local opts=3D$1<br>
-<br>
--=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN load $opts=
- &gt;$OUTPUT_DEST<br>
-+=C2=A0 =C2=A0 =C2=A0 =C2=A0$TESTDIR/../src/bin/lttng/$LTTNG_BIN load $opts=
- 1&gt; $OUTPUT_DEST 2&gt; $ERROR_OUTPUT_DEST<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ok $? &quot;Load command successful&quot;<br>
-=C2=A0}<br>
-<span class=3D"HOEnZb"><font color=3D"#888888"><br>
---<br>
-2.1.4<br>
-<br>
-</font></span></blockquote></div><br><br clear=3D"all"><div><br></div>-- <b=
-r><div class=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS In=
-c.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http://www.effi=
-cios.com</a></div>
-</div>
-
---94eb2c0885befcf7ba051d2411c7--
+PGRpdiBkaXI9Imx0ciI+PGJyPjxkaXYgY2xhc3M9ImdtYWlsX2V4dHJhIj48YnI+PGRpdiBjbGFz
+cz0iZ21haWxfcXVvdGUiPk9uIFdlZCwgQXVnIDEyLCAyMDE1IGF0IDQ6MDggUE0sIE1pY2hhZWwg
+SmVhbnNvbiA8c3BhbiBkaXI9Imx0ciI+Jmx0OzxhIGhyZWY9Im1haWx0bzptamVhbnNvbkBlZmZp
+Y2lvcy5jb20iIHRhcmdldD0iX2JsYW5rIj5tamVhbnNvbkBlZmZpY2lvcy5jb208L2E+Jmd0Ozwv
+c3Bhbj4gd3JvdGU6PGJyPjxibG9ja3F1b3RlIGNsYXNzPSJnbWFpbF9xdW90ZSIgc3R5bGU9Im1h
+cmdpbjowIDAgMCAuOGV4O2JvcmRlci1sZWZ0OjFweCAjY2NjIHNvbGlkO3BhZGRpbmctbGVmdDox
+ZXgiPlRoaXMgcGF0Y2ggYWRkcyBmZWVkYmFjayB3aGVuIGEgdHJhY2svdW50cmFjayBjb21tYW5k
+IGlzIHN1Y2Nlc3NmdWwgYW5kPGJyPg0Kc3BlY2lmaWMgbWVzc2FnZXMgb24gZXJyb3JzLiBJdCBh
+bHNvIGNoYW5nZXMgdGhlIGJlaGF2aW9yIHdoZW4gdHJhY2tpbmc8YnI+DQphbiBhbHJlYWR5IHRy
+YWNrZWQgUElEIG9yIHVudHJhY2tpbmcgYSBQSUQgdGhhdCBpcyBub3QgdHJhY2tlZCBmcm9tIGFu
+PGJyPg0KZXJyb3IgdG8gYSB3YXJuaW5nIHdpdGggYSBzdWNjZXNzZnVsIGV4aXQgY29kZS48YnI+
+DQo8YnI+DQpGaXhlczogIzg5ODxicj4NCjxicj4NClNpZ25lZC1vZmYtYnk6IE1pY2hhZWwgSmVh
+bnNvbiAmbHQ7PGEgaHJlZj0ibWFpbHRvOm1qZWFuc29uQGVmZmljaW9zLmNvbSI+bWplYW5zb25A
+ZWZmaWNpb3MuY29tPC9hPiZndDs8YnI+DQotLS08YnI+DQrCoGluY2x1ZGUvbHR0bmcvbHR0bmct
+ZXJyb3IuaMKgIMKgIMKgIMKgIMKgIMKgIHzCoCAyICsrPGJyPg0KwqBzcmMvYmluL2x0dG5nLXNl
+c3Npb25kL3RyYWNlLXVzdC5jwqAgwqAgwqB8wqAgNCArKy0tPGJyPg0KwqBzcmMvYmluL2x0dG5n
+L2NvbW1hbmRzL3RyYWNrLXVudHJhY2suYyB8IDIzICsrKysrKysrKysrKysrKysrKysrKy0tPGJy
+Pg0KwqBzcmMvY29tbW9uL2Vycm9yLmPCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoHzC
+oCAyICsrPGJyPg0KwqA0IGZpbGVzIGNoYW5nZWQsIDI3IGluc2VydGlvbnMoKyksIDQgZGVsZXRp
+b25zKC0pPGJyPg0KPGJyPg0KZGlmZiAtLWdpdCBhL2luY2x1ZGUvbHR0bmcvbHR0bmctZXJyb3Iu
+aCBiL2luY2x1ZGUvbHR0bmcvbHR0bmctZXJyb3IuaDxicj4NCmluZGV4IGVmZGNhNjUuLmE3NzQ2
+ZmEgMTAwNjQ0PGJyPg0KLS0tIGEvaW5jbHVkZS9sdHRuZy9sdHRuZy1lcnJvci5oPGJyPg0KKysr
+IGIvaW5jbHVkZS9sdHRuZy9sdHRuZy1lcnJvci5oPGJyPg0KQEAgLTEzNCw2ICsxMzQsOCBAQCBl
+bnVtIGx0dG5nX2Vycm9yX2NvZGUgezxicj4NCsKgIMKgIMKgIMKgIExUVE5HX0VSUl9FWENMVVNJ
+T05fTk9NRU3CoCDCoCDCoCDCoCA9IDExMSwgLyogTGFjayBvZiBtZW1vcnkgd2hpbGUgcHJvY2Vz
+c2luZyBldmVudCBleGNsdXNpb25zICovPGJyPg0KwqAgwqAgwqAgwqAgTFRUTkdfRVJSX0lOVkFM
+SURfRVZFTlRfTkFNRcKgIMKgIMKgPSAxMTIsIC8qIEludmFsaWQgZXZlbnQgbmFtZSAqLzxicj4N
+CsKgIMKgIMKgIMKgIExUVE5HX0VSUl9JTlZBTElEX0NIQU5ORUxfTkFNRcKgIMKgPSAxMTMsIC8q
+IEludmFsaWQgY2hhbm5lbCBuYW1lICovPGJyPg0KK8KgIMKgIMKgIMKgTFRUTkdfRVJSX1BJRF9U
+UkFDS0VEwqAgwqAgwqAgwqAgwqAgwqAgPSAxMTQsIC8qIFBJRCBhbHJlYWR5IHRyYWNrZWQgKi88
+YnI+DQorwqAgwqAgwqAgwqBMVFROR19FUlJfUElEX05PVF9UUkFDS0VEwqAgwqAgwqAgwqAgPSAx
+MTUsIC8qIFBJRCBub3QgdHJhY2tlZCAqLzxicj4NCjxicj4NCsKgIMKgIMKgIMKgIC8qIE1VU1Qg
+YmUgbGFzdCBlbGVtZW50ICovPGJyPg0KwqAgwqAgwqAgwqAgTFRUTkdfRVJSX05SLMKgIMKgIMKg
+IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgLyogTGFzdCBlbGVtZW50ICovPGJyPg0K
+ZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdHJhY2UtdXN0LmMgYi9zcmMvYmlu
+L2x0dG5nLXNlc3Npb25kL3RyYWNlLXVzdC5jPGJyPg0KaW5kZXggMjQ4NjY5Ni4uMzg4MTA4NCAx
+MDA2NDQ8YnI+DQotLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3RyYWNlLXVzdC5jPGJyPg0K
+KysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC90cmFjZS11c3QuYzxicj4NCkBAIC02NTYsNyAr
+NjU2LDcgQEAgaW50IHBpZF90cmFja2VyX2FkZF9waWQoc3RydWN0IHVzdF9waWRfdHJhY2tlciAq
+cGlkX3RyYWNrZXIsIGludCBwaWQpPGJyPg0KwqAgwqAgwqAgwqAgdHJhY2tlcl9ub2RlID0gcGlk
+X3RyYWNrZXJfbG9va3VwKHBpZF90cmFja2VyLCBwaWQsICZhbXA7aXRlcik7PGJyPg0KwqAgwqAg
+wqAgwqAgaWYgKHRyYWNrZXJfbm9kZSkgezxicj4NCsKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIC8q
+IEFscmVhZHkgZXhpc3RzLiAqLzxicj4NCi3CoCDCoCDCoCDCoCDCoCDCoCDCoCDCoHJldHZhbCA9
+IExUVE5HX0VSUl9JTlZBTElEOzxicj4NCivCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoHJldHZhbCA9
+IExUVE5HX0VSUl9QSURfVFJBQ0tFRDs8YnI+DQrCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCBnb3Rv
+IGVuZDs8YnI+DQrCoCDCoCDCoCDCoCB9PGJyPg0KwqAgwqAgwqAgwqAgdHJhY2tlcl9ub2RlID0g
+em1hbGxvYyhzaXplb2YoKnRyYWNrZXJfbm9kZSkpOzxicj4NCkBAIC02ODQsNyArNjg0LDcgQEAg
+aW50IHBpZF90cmFja2VyX2RlbF9waWQoc3RydWN0IHVzdF9waWRfdHJhY2tlciAqcGlkX3RyYWNr
+ZXIsIGludCBwaWQpPGJyPg0KwqAgwqAgwqAgwqAgdHJhY2tlcl9ub2RlID0gcGlkX3RyYWNrZXJf
+bG9va3VwKHBpZF90cmFja2VyLCBwaWQsICZhbXA7aXRlcik7PGJyPg0KwqAgwqAgwqAgwqAgaWYg
+KCF0cmFja2VyX25vZGUpIHs8YnI+DQrCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCAvKiBOb3QgZm91
+bmQgKi88YnI+DQotwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqByZXR2YWwgPSBMVFROR19FUlJfSU5W
+QUxJRDs8YnI+DQorwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqByZXR2YWwgPSBMVFROR19FUlJfUElE
+X05PVF9UUkFDS0VEOzxicj4NCsKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIGdvdG8gZW5kOzxicj4N
+CsKgIMKgIMKgIMKgIH08YnI+DQrCoCDCoCDCoCDCoCByZXQgPSBsdHRuZ19odF9kZWwocGlkX3Ry
+YWNrZXItJmd0O2h0LCAmYW1wO2l0ZXIpOzxicj4NCmRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5n
+L2NvbW1hbmRzL3RyYWNrLXVudHJhY2suYyBiL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvdHJhY2st
+dW50cmFjay5jPGJyPg0KaW5kZXggOWNlODUwNC4uYjMxMzljNiAxMDA2NDQ8YnI+DQotLS0gYS9z
+cmMvYmluL2x0dG5nL2NvbW1hbmRzL3RyYWNrLXVudHJhY2suYzxicj4NCisrKyBiL3NyYy9iaW4v
+bHR0bmcvY29tbWFuZHMvdHJhY2stdW50cmFjay5jPGJyPg0KQEAgLTI2MSw5ICsyNjEsMjggQEAg
+ZW51bSBjbWRfZXJyb3JfY29kZSB0cmFja191bnRyYWNrX3BpZChlbnVtIGNtZF90eXBlIGNtZF90
+eXBlLCBjb25zdCBjaGFyICpjbWRfc3Q8YnI+DQrCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCBEQkco
+JnF1b3Q7JXMgUElEICVkJnF1b3Q7LCBjbWRfc3RyLCBwaWRfbGlzdFtpXSk7PGJyPg0KwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgcmV0ID0gbGliX2Z1bmMoaGFuZGxlLCBwaWRfbGlzdFtpXSk7PGJy
+Pg0KwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgaWYgKHJldCkgezxicj4NCi3CoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoHN1Y2Nlc3MgPSAwOzxicj4NCi3CoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoHJldHZhbCA9IENNRF9FUlJPUjs8YnI+DQorwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBzd2l0Y2ggKC1yZXQpIHs8YnI+DQorwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBjYXNlIExUVE5HX0VSUl9QSURfVFJBQ0tFRDo8YnI+DQor
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBXQVJOKCZxdW90
+O1BJRCAlaSBhbHJlYWR5IHRyYWNrZWQgaW4gc2Vzc2lvbiAlcyZxdW90Oyw8YnI+DQorwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqBwaWRfbGlzdFtpXSwgc2Vzc2lvbl9uYW1lKTs8YnI+DQorwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBzdWNjZXNzID0gMTs8YnI+DQorwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqByZXR2YWwgPSBDTURfU1VD
+Q0VTUzs8YnI+DQorwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqBicmVhazs8YnI+DQorwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBjYXNlIExU
+VE5HX0VSUl9QSURfTk9UX1RSQUNLRUQ6PGJyPg0KK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
+IMKgIMKgIMKgIMKgIMKgIMKgIMKgV0FSTigmcXVvdDtQSUQgJWkgbm90IHRyYWNrZWQgaW4gc2Vz
+c2lvbiAlcyZxdW90Oyw8YnI+DQorwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBwaWRfbGlzdFtpXSwgc2Vzc2lvbl9u
+YW1lKTs8YnI+DQorwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqBzdWNjZXNzID0gMTs8YnI+DQorwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqByZXR2YWwgPSBDTURfU1VDQ0VTUzs8YnI+PC9ibG9ja3F1b3RlPjxkaXY+PGJy
+PjwvZGl2PjxkaXY+SSYjMzk7bSB3b25kZXJpbmcgaWYgdW50cmFja2luZyBhIFBJRCB0aGF0IHdh
+cyBub3QgYmVpbmcgdHJhY2tlZCBzaG91bGQgYmUgcmVwb3J0ZWQgYXMgYW4gZXJyb3IuLi4gVGhv
+dWdodHMgYW55b25lPzwvZGl2PjxkaXY+PGJyPjwvZGl2PjxkaXY+SsOpcsOpbWllPC9kaXY+PGRp
+dj7CoDwvZGl2PjxibG9ja3F1b3RlIGNsYXNzPSJnbWFpbF9xdW90ZSIgc3R5bGU9Im1hcmdpbjow
+IDAgMCAuOGV4O2JvcmRlci1sZWZ0OjFweCAjY2NjIHNvbGlkO3BhZGRpbmctbGVmdDoxZXgiPg0K
+K8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgYnJlYWs7PGJy
+Pg0KK8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgZGVmYXVsdDo8YnI+DQorwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBFUlIoJnF1b3Q7JXMm
+cXVvdDssIGx0dG5nX3N0cmVycm9yKHJldCkpOzxicj4NCivCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoHN1Y2Nlc3MgPSAwOzxicj4NCivCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoHJldHZhbCA9IENNRF9FUlJPUjs8YnI+
+DQorwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqBicmVhazs8
+YnI+DQorwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqB9PGJyPg0KwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgfSBlbHNlIHs8YnI+DQorwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqBNU0coJnF1b3Q7UElEICVpICVzZWQgaW4gc2Vzc2lvbiAlcyZxdW90Oyw8YnI+DQor
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqBwaWRfbGlzdFtpXSwgY21kX3N0ciwgc2Vzc2lvbl9uYW1lKTs8YnI+DQrCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCBzdWNjZXNzID0gMTs8YnI+DQrCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCB9PGJyPg0KPGJyPg0KZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vZXJyb3IuYyBiL3Ny
+Yy9jb21tb24vZXJyb3IuYzxicj4NCmluZGV4IGQzZTNiOTQuLmFkMGFjNTEgMTAwNjQ0PGJyPg0K
+LS0tIGEvc3JjL2NvbW1vbi9lcnJvci5jPGJyPg0KKysrIGIvc3JjL2NvbW1vbi9lcnJvci5jPGJy
+Pg0KQEAgLTE2Nyw2ICsxNjcsOCBAQCBzdGF0aWMgY29uc3QgY2hhciAqZXJyb3Jfc3RyaW5nX2Fy
+cmF5W10gPSB7PGJyPg0KwqAgwqAgwqAgwqAgWyBFUlJPUl9JTkRFWChMVFROR19FUlJfTUlfTk9U
+X0lNUExFTUVOVEVEKSBdID0gJnF1b3Q7TWkgZmVhdHVyZSBub3QgaW1wbGVtZW50ZWQmcXVvdDss
+PGJyPg0KwqAgwqAgwqAgwqAgWyBFUlJPUl9JTkRFWChMVFROR19FUlJfSU5WQUxJRF9FVkVOVF9O
+QU1FKSBdID0gJnF1b3Q7SW52YWxpZCBldmVudCBuYW1lJnF1b3Q7LDxicj4NCsKgIMKgIMKgIMKg
+IFsgRVJST1JfSU5ERVgoTFRUTkdfRVJSX0lOVkFMSURfQ0hBTk5FTF9OQU1FKSBdID0gJnF1b3Q7
+SW52YWxpZCBjaGFubmVsIG5hbWUmcXVvdDssPGJyPg0KK8KgIMKgIMKgIMKgWyBFUlJPUl9JTkRF
+WChMVFROR19FUlJfUElEX1RSQUNLRUQpIF0gPSAmcXVvdDtQSUQgYWxyZWFkeSB0cmFja2VkJnF1
+b3Q7LDxicj4NCivCoCDCoCDCoCDCoFsgRVJST1JfSU5ERVgoTFRUTkdfRVJSX1BJRF9OT1RfVFJB
+Q0tFRCkgXSA9ICZxdW90O1BJRCBub3QgdHJhY2tlZCZxdW90Oyw8YnI+DQo8YnI+DQrCoCDCoCDC
+oCDCoCAvKiBMYXN0IGVsZW1lbnQgKi88YnI+DQrCoCDCoCDCoCDCoCBbIEVSUk9SX0lOREVYKExU
+VE5HX0VSUl9OUikgXSA9ICZxdW90O1Vua25vd24gZXJyb3IgY29kZSZxdW90Ozxicj4NCjxzcGFu
+IGNsYXNzPSJIT0VuWmIiPjxmb250IGNvbG9yPSIjODg4ODg4Ij4tLTxicj4NCjEuOS4xPGJyPg0K
+PGJyPg0KPC9mb250Pjwvc3Bhbj48L2Jsb2NrcXVvdGU+PC9kaXY+PGJyPjxiciBjbGVhcj0iYWxs
+Ij48ZGl2Pjxicj48L2Rpdj4tLSA8YnI+PGRpdiBjbGFzcz0iZ21haWxfc2lnbmF0dXJlIj5Kw6ly
+w6ltaWUgR2FsYXJuZWF1PGJyPkVmZmljaU9TIEluYy48YnI+PGEgaHJlZj0iaHR0cDovL3d3dy5l
+ZmZpY2lvcy5jb20iIHRhcmdldD0iX2JsYW5rIj5odHRwOi8vd3d3LmVmZmljaW9zLmNvbTwvYT48
+L2Rpdj4NCjwvZGl2PjwvZGl2Pg0K
+--001a11456cbc3d8b15051d252a69--
 
 
---===============1482546929==
+--===============1907076468==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Disposition: inline
 Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1482546929==--
+--===============1907076468==--
