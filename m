@@ -1,16 +1,16 @@
-From: Brian Robbins <brianrob@microsoft.com>
-Subject: Instrumenting a Shared Object
-Date: Thu, 13 Aug 2015 23:40:03 +0000
-Message-ID: <SN1PR0301MB159862AA83F63780E73A8CFAC87D0__7647.36326314068$1439509285$gmane$org@SN1PR0301MB1598.namprd03.prod.outlook.com>
+From: "jia,fang" <fang.jia@windriver.com>
+Subject: BUG: lttng-tools enable-event with filter, tracing error
+Date: Fri, 14 Aug 2015 14:39:20 +0800
+Message-ID: <55CD8D18.7000500__37861.706785816$1439534469$gmane$org@windriver.com>
+References: <55CB1674.1060605@windriver.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2087146477=="
+Content-Type: multipart/mixed; boundary="------------000205000804080003010508"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-by2on0136.outbound.protection.outlook.com
- ([207.46.100.136] helo=na01-by2-obe.outbound.protection.outlook.com)
+Received: from mail1.windriver.com ([147.11.146.13])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <brianrob@microsoft.com>) id 1ZQ26d-0007ik-ST
- for lttng-dev@lists.lttng.org; Thu, 13 Aug 2015 19:40:22 -0400
-Content-Language: en-US
+ (envelope-from <Fang.Jia@windriver.com>) id 1ZQ8ep-0001Ne-NA
+ for lttng-dev@lists.lttng.org; Fri, 14 Aug 2015 02:40:08 -0400
+In-Reply-To: <55CB1674.1060605@windriver.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,125 +19,121 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
-Cc: Rama Krishnan Raghupathy <ramarag@microsoft.com>
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============2087146477==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_SN1PR0301MB159862AA83F63780E73A8CFAC87D0SN1PR0301MB1598_"
+--------------000205000804080003010508
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 
---_000_SN1PR0301MB159862AA83F63780E73A8CFAC87D0SN1PR0301MB1598_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hello,
+Could you help me to inform this issue ?
 
-I'm looking to instrument a shared object using LTTng-UST tracepoints.  The=
- expectation is that users of the library will use dlopen to open it at the=
- beginning of their application and dlclose right before process exit.  Fro=
-m what I've read at http://lttng.org/docs/#doc-building-tracepoint-provider=
-s-and-user-application, it sounds like there is some complexity with this a=
-s the tracepoint definition must remain in memory, but I want to make sure =
-I fully understand.
+I found that if enable-event with filter and then start tracepoint,
+you can not stop your tracing even if you disable your event.
 
-If I want to instrument a shared object, is my only option to dynamically l=
-ink and use LD_PRELOAD?  Also, do my options change if I know that the proc=
-ess will exit right after it calls dlclose on the library?
+Do you have this problem ?
 
-Thank you very much.
--Brian
+Thanks a lot.
 
 
+Here is my detail info:
 
---_000_SN1PR0301MB159862AA83F63780E73A8CFAC87D0SN1PR0301MB1598_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+My system is Ubuntu14.04, and Lttng-version is lttng version 2.7.0-pre - Gaia -
+v2.6.0-rc1-242-g60f7035.
 
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-@font-face
-	{font-family:"Segoe UI";
-	panose-1:2 11 5 2 4 2 4 2 2 3;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri",sans-serif;}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:#0563C1;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:#954F72;
-	text-decoration:underline;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri",sans-serif;
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-US" link=3D"#0563C1" vlink=3D"#954F72">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal">Hello,<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">I&#8217;m looking to instrument a shared object usin=
-g LTTng-UST tracepoints.&nbsp; The expectation is that users of the library=
- will use dlopen to open it at the beginning of their application and dlclo=
-se right before process exit.&nbsp; From what I&#8217;ve
- read at <span style=3D"font-size:10.0pt;font-family:&quot;Segoe UI&quot;,s=
-ans-serif;color:black">
-http://lttng.org/docs/#doc-building-tracepoint-providers-and-user-applicati=
-on</span>, it sounds like there is some complexity with this as the tracepo=
-int definition must remain in memory, but I want to make sure I fully under=
-stand.<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">If I want to instrument a shared object, is my only =
-option to dynamically link and use LD_PRELOAD?&nbsp; Also, do my options ch=
-ange if I know that the process will exit right after it calls dlclose on t=
-he library?<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Thank you very much.<o:p></o:p></p>
-<p class=3D"MsoNormal">-Brian<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-</div>
-</body>
-</html>
+I build user application "hello" as
+http://lttng.org/docs/v2.6/#doc-tracing-your-own-user-application told. And
+modify part of the hello.c as follow:
+for(;;)
+{
+sleep(2);
+for (x = 0; x < argc; ++x) {
+        tracepoint(hello_world, my_first_tracepoint, x, argv[x]);
+    }
+}
 
---_000_SN1PR0301MB159862AA83F63780E73A8CFAC87D0SN1PR0301MB1598_--
+Then I do this:
+1/ lttng create mysession
+2/ lttng enable-event hello_world:my_first_tracepoint --filter '$ctx.procname ==
+"./hello*"' --session mysession -u -c channel
+
+3/ lttng enable-event hello_world:my_first_tracepoint --session mysession -u -c
+channel
+
+4/ ./hello
+I press Enter to start tracepoint
+
+5/ lttng disable-event --session mysession --channel channel --userspace
+hello_world:my_first_tracepoint
+
+6/ lttng start
+
+7/ lttng stop
+
+8/ lttng view
+
+My detail log is as attachment
 
 
---===============2087146477==
+
+BR,
+Fang
+
+
+
+--------------000205000804080003010508
+Content-Type: text/plain; charset="UTF-8"; name="test_log_of_Ubuntu"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="test_log_of_Ubuntu"
+
+d3JzYWRtaW5AcGVrLWZqaWEtZDE6fi93b3JrcGxhY2UvbHR0bmdfdGVzdCQgbHR0bmcgY3Jl
+YXRlIG15c2Vzc2lvbgpTZXNzaW9uIG15c2Vzc2lvbiBjcmVhdGVkLgpUcmFjZXMgd2lsbCBi
+ZSB3cml0dGVuIGluIC9ob21lL3dyc2FkbWluL2x0dG5nLXRyYWNlcy9teXNlc3Npb24tMjAx
+NTA4MTItMTc0MzIwCndyc2FkbWluQHBlay1mamlhLWQxOn4vd29ya3BsYWNlL2x0dG5nX3Rl
+c3QkCndyc2FkbWluQHBlay1mamlhLWQxOn4vd29ya3BsYWNlL2x0dG5nX3Rlc3QkCndyc2Fk
+bWluQHBlay1mamlhLWQxOn4vd29ya3BsYWNlL2x0dG5nX3Rlc3QkICBsdHRuZyBlbmFibGUt
+ZXZlbnQgaGVsbG9fd29ybGQ6bXlfZmlyc3RfdHJhY2Vwb2ludCAtLWZpbHRlciAnJGN0eC5w
+cm9jbmFtZSA9PSAiLi9oZWxsbyoiJyAtLXNlc3Npb24gbXlzZXNzaW9uIC11IC1jIGNoYW5u
+ZWwKRXZlbnQgaGVsbG9fd29ybGQ6bXlfZmlyc3RfdHJhY2Vwb2ludDogRmlsdGVyICckY3R4
+LnByb2NuYW1lID09ICIuL2hlbGxvKiInIHN1Y2Nlc3NmdWxseSBzZXQKd3JzYWRtaW5AcGVr
+LWZqaWEtZDE6fi93b3JrcGxhY2UvbHR0bmdfdGVzdCQgbHR0bmcgZW5hYmxlLWV2ZW50IGhl
+bGxvX3dvcmxkOm15X2ZpcnN0X3RyYWNlcG9pbnQgLS1zZXNzaW9uIG15c2Vzc2lvbiAtdSAt
+YyBjaGFubmVsClVTVCBldmVudCBoZWxsb193b3JsZDpteV9maXJzdF90cmFjZXBvaW50IGNy
+ZWF0ZWQgaW4gY2hhbm5lbCBjaGFubmVsCndyc2FkbWluQHBlay1mamlhLWQxOn4vd29ya3Bs
+YWNlL2x0dG5nX3Rlc3QkCndyc2FkbWluQHBlay1mamlhLWQxOn4vd29ya3BsYWNlL2x0dG5n
+X3Rlc3QkIGx0dG5nIGRpc2FibGUtZXZlbnQgLS1zZXNzaW9uIG15c2Vzc2lvbiAtLWNoYW5u
+ZWwgY2hhbm5lbCAtLXVzZXJzcGFjZSBoZWxsb193b3JsZDpteV9maXJzdF90cmFjZXBvaW50
+ClVTVCBldmVudCBoZWxsb193b3JsZDpteV9maXJzdF90cmFjZXBvaW50IGRpc2FibGVkIGlu
+IGNoYW5uZWwgY2hhbm5lbCBmb3Igc2Vzc2lvbiBteXNlc3Npb24Kd3JzYWRtaW5AcGVrLWZq
+aWEtZDE6fi93b3JrcGxhY2UvbHR0bmdfdGVzdCQgbHR0bmcgbGlzdCBteXNlc3Npb24KVHJh
+Y2luZyBzZXNzaW9uIG15c2Vzc2lvbjogW2luYWN0aXZlXQogICAgVHJhY2UgcGF0aDogL2hv
+bWUvd3JzYWRtaW4vbHR0bmctdHJhY2VzL215c2Vzc2lvbi0yMDE1MDgxMi0xNzQzMjAKCj09
+PSBEb21haW46IFVTVCBnbG9iYWwgPT09CgpCdWZmZXIgdHlwZTogcGVyIFVJRAoKQ2hhbm5l
+bHM6Ci0tLS0tLS0tLS0tLS0KLSBjaGFubmVsOiBbZW5hYmxlZF0KCiAgICBBdHRyaWJ1dGVz
+OgogICAgICBvdmVyd3JpdGUgbW9kZTogMAogICAgICBzdWJidWZlcnMgc2l6ZTogMTMxMDcy
+CiAgICAgIG51bWJlciBvZiBzdWJidWZlcnM6IDQKICAgICAgc3dpdGNoIHRpbWVyIGludGVy
+dmFsOiAwCiAgICAgIHJlYWQgdGltZXIgaW50ZXJ2YWw6IDAKICAgICAgdHJhY2UgZmlsZSBj
+b3VudDogMAogICAgICB0cmFjZSBmaWxlIHNpemUgKGJ5dGVzKTogMAogICAgICBvdXRwdXQ6
+IG1tYXAoKQoKICAgIEV2ZW50czoKICAgICAgaGVsbG9fd29ybGQ6bXlfZmlyc3RfdHJhY2Vw
+b2ludCAodHlwZTogdHJhY2Vwb2ludCkgW2Rpc2FibGVkXQogICAgICBoZWxsb193b3JsZDpt
+eV9maXJzdF90cmFjZXBvaW50ICh0eXBlOiB0cmFjZXBvaW50KSBbZGlzYWJsZWRdIFt3aXRo
+IGZpbHRlcl0KCndyc2FkbWluQHBlay1mamlhLWQxOn4vd29ya3BsYWNlL2x0dG5nX3Rlc3Qk
+IGx0dG5nIHN0YXJ0ClRyYWNpbmcgc3RhcnRlZCBmb3Igc2Vzc2lvbiBteXNlc3Npb24Kd3Jz
+YWRtaW5AcGVrLWZqaWEtZDE6fi93b3JrcGxhY2UvbHR0bmdfdGVzdCQgbHR0bmcgc3RvcApX
+YWl0aW5nIGZvciBkYXRhIGF2YWlsYWJpbGl0eWwuClRyYWNpbmcgc3RvcHBlZCBmb3Igc2Vz
+c2lvbiBteXNlc3Npb24Kd3JzYWRtaW5AcGVrLWZqaWEtZDE6fi93b3JrcGxhY2UvbHR0bmdf
+dGVzdCQgbHR0bmcgdmlldwpUcmFjZSBkaXJlY3Rvcnk6IC9ob21lL3dyc2FkbWluL2x0dG5n
+LXRyYWNlcy9teXNlc3Npb24tMjAxNTA4MTItMTc0MzIwCgpbMTc6NDQ6NTEuMjU0MjM2NDQx
+XSAoKz8uPz8/Pz8/Pz8/KSBwZWstZmppYS1kMSBoZWxsb193b3JsZDpteV9maXJzdF90cmFj
+ZXBvaW50OiB7IGNwdV9pZCA9IDMgfSwgeyBteV9zdHJpbmdfZmllbGQgPSAiaGkgdGhlcmUh
+IiwgbXlfaW50ZWdlcl9maWVsZCA9IDIzIH0KWzE3OjQ0OjUxLjI1NDI0NTkwMl0gKCswLjAw
+MDAwOTQ2MSkgcGVrLWZqaWEtZDEgaGVsbG9fd29ybGQ6bXlfZmlyc3RfdHJhY2Vwb2ludDog
+eyBjcHVfaWQgPSAzIH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0gIi4vaGVsbG8iLCBteV9pbnRl
+Z2VyX2ZpZWxkID0gMCB9Cg==
+--------------000205000804080003010508
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -148,4 +144,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============2087146477==--
+--------------000205000804080003010508--
