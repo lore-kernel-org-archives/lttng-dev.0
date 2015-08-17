@@ -1,18 +1,16 @@
-From: "jia,fang" <fang.jia@windriver.com>
-Subject: Re: BUG: enable-event with filter, tracing error
-Date: Mon, 17 Aug 2015 19:01:14 +0800
-Message-ID: <55D1BEFA.7000203__15193.5264854275$1439809365$gmane$org@windriver.com>
-References: <55CB1674.1060605@windriver.com> <55CD8D18.7000500@windriver.com>
- <55D1BDA2.3000108@windriver.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools 0/4] Fixes for stability of lttng
+	tools
+Date: Mon, 17 Aug 2015 11:12:06 -0700
+Message-ID: <1439835130-8852-1-git-send-email-mathieu.desnoyers__13688.2874569439$1439835202$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail1.windriver.com ([147.11.146.13])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Fang.Jia@windriver.com>) id 1ZRIAv-0007CH-1h
- for lttng-dev@lists.lttng.org; Mon, 17 Aug 2015 07:01:57 -0400
-In-Reply-To: <55D1BDA2.3000108@windriver.com>
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZROtT-0000qP-5V
+ for lttng-dev@lists.lttng.org; Mon, 17 Aug 2015 14:12:25 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,39 +19,80 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org, jeremie.galarneau@efficios.com
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksIGplcmVtaWUKCkNvdWxkIHlvdSBoZWxwIG1lIHRvIGluZm9ybSB0aGUgZm9sbG93IGlzc3Vl
-ID8/CgpUaGFua3MgYSBsb3QKCk9uIDIwMTXlubQwOOaciDE35pelIDE4OjU1LCBqaWEsZmFuZyB3
-cm90ZToKPiBIaSBtYXRoaWV1Cj4gCj4gQ291bGQgeW91IGhlbHAgbWUgdG8gaW5mb3JtIHRoaXMg
-aXNzdWUgPz8KPiAKPiBUaGFua3MgYSBsb3QuCj4gCj4gCj4gT24gMjAxNeW5tDA45pyIMTTml6Ug
-MTQ6MzksIGppYSxmYW5nIHdyb3RlOgo+PiBIaSwKPj4KPj4gQ291bGQgeW91IGhlbHAgbWUgdG8g
-aW5mb3JtIHRoaXMgaXNzdWUgPwo+Pgo+PiBJIGZvdW5kIHRoYXQgaWYgZW5hYmxlLWV2ZW50IHdp
-dGggZmlsdGVyIGFuZCB0aGVuIHN0YXJ0IHRyYWNlcG9pbnQsCj4+IHlvdSBjYW4gbm90IHN0b3Ag
-eW91ciB0cmFjaW5nIGV2ZW4gaWYgeW91IGRpc2FibGUgeW91ciBldmVudC4KPj4KPj4gRG8geW91
-IGhhdmUgdGhpcyBwcm9ibGVtID8KPj4KPj4gVGhhbmtzIGEgbG90Lgo+Pgo+Pgo+PiBIZXJlIGlz
-IG15IGRldGFpbCBpbmZvOgo+Pgo+PiBNeSBzeXN0ZW0gaXMgVWJ1bnR1MTQuMDQsIGFuZCBMdHRu
-Zy12ZXJzaW9uIGlzIGx0dG5nIHZlcnNpb24gMi43LjAtcHJlIC0gR2FpYSAtCj4+IHYyLjYuMC1y
-YzEtMjQyLWc2MGY3MDM1Lgo+Pgo+PiBJIGJ1aWxkIHVzZXIgYXBwbGljYXRpb24gImhlbGxvIiBh
-cwo+PiBodHRwOi8vbHR0bmcub3JnL2RvY3MvdjIuNi8jZG9jLXRyYWNpbmcteW91ci1vd24tdXNl
-ci1hcHBsaWNhdGlvbiB0b2xkLiBBbmQKPj4gbW9kaWZ5IHBhcnQgb2YgdGhlIGhlbGxvLmMgYXMg
-Zm9sbG93Ogo+PiBmb3IoOzspCj4+IHsKPj4gc2xlZXAoMik7Cj4+IGZvciAoeCA9IDA7IHggPCBh
-cmdjOyArK3gpIHsKPj4gICAgICAgICB0cmFjZXBvaW50KGhlbGxvX3dvcmxkLCBteV9maXJzdF90
-cmFjZXBvaW50LCB4LCBhcmd2W3hdKTsKPj4gICAgIH0KPj4gfQo+Pgo+PiBUaGVuIEkgZG8gdGhp
-czoKPj4gMS8gbHR0bmcgY3JlYXRlIG15c2Vzc2lvbgo+PiAyLyBsdHRuZyBlbmFibGUtZXZlbnQg
-aGVsbG9fd29ybGQ6bXlfZmlyc3RfdHJhY2Vwb2ludCAtLWZpbHRlciAnJGN0eC5wcm9jbmFtZSA9
-PQo+PiAiLi9oZWxsbyoiJyAtLXNlc3Npb24gbXlzZXNzaW9uIC11IC1jIGNoYW5uZWwKPj4KPj4g
-My8gbHR0bmcgZW5hYmxlLWV2ZW50IGhlbGxvX3dvcmxkOm15X2ZpcnN0X3RyYWNlcG9pbnQgLS1z
-ZXNzaW9uIG15c2Vzc2lvbiAtdSAtYwo+PiBjaGFubmVsCj4+Cj4+IDQvIC4vaGVsbG8KPj4gSSBw
-cmVzcyBFbnRlciB0byBzdGFydCB0cmFjZXBvaW50Cj4+Cj4+IDUvIGx0dG5nIGRpc2FibGUtZXZl
-bnQgLS1zZXNzaW9uIG15c2Vzc2lvbiAtLWNoYW5uZWwgY2hhbm5lbCAtLXVzZXJzcGFjZQo+PiBo
-ZWxsb193b3JsZDpteV9maXJzdF90cmFjZXBvaW50Cj4+Cj4+IDYvIGx0dG5nIHN0YXJ0Cj4+Cj4+
-IDcvIGx0dG5nIHN0b3AKPj4KPj4gOC8gbHR0bmcgdmlldwo+Pgo+PiBNeSBkZXRhaWwgbG9nIGlz
-IGFzIGF0dGFjaG1lbnQKPj4KPj4KPj4KPj4gQlIsCj4+IEZhbmcKPj4KPj4KPiAKPiBfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWls
-aW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5n
-Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCgpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0
-Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
-L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+With the fixes within this series, I can successfully run a stress-test
+of:
+
+- 3 loops, each spawning short-lived, UST-traced apps,
+- 2 loops, each creating short-lived sessions, using tracefile rotation.
+- 2 loops, each spawning babeltrace lttng-live view on their respective
+  session (+1 loop trying to attach to the same session as the first).
+
+So far, it survives very well 30+ minutes without complaining.
+
+I did the following verifications too: that lttng-relayd ran under those
+workloads with valgrind does not leak.
+
+It passes tools make check, root regression and long regression tests on
+the CI.
+
+Mathieu Desnoyers (4):
+  Fix: sessiond vs consumerd push/get metadata deadlock
+  Fix: sessiond ust-app session teardown race
+  Fix: sessiond should not error on channel creation vs app exit
+  Fix: Relay daemon ownership and reference counting
+
+ doc/Makefile.am                        |    3 +-
+ doc/relayd-architecture.txt            |   96 +++
+ src/bin/lttng-relayd/Makefile.am       |    4 +-
+ src/bin/lttng-relayd/cmd-2-1.c         |   17 +-
+ src/bin/lttng-relayd/cmd-2-1.h         |   10 +-
+ src/bin/lttng-relayd/cmd-2-2.c         |   22 +-
+ src/bin/lttng-relayd/cmd-2-2.h         |   10 +-
+ src/bin/lttng-relayd/cmd-2-4.c         |   19 +-
+ src/bin/lttng-relayd/cmd-2-4.h         |   10 +-
+ src/bin/lttng-relayd/cmd-generic.c     |    1 +
+ src/bin/lttng-relayd/cmd-generic.h     |    7 +-
+ src/bin/lttng-relayd/cmd.h             |    7 +-
+ src/bin/lttng-relayd/connection.c      |  128 ++--
+ src/bin/lttng-relayd/connection.h      |   63 +-
+ src/bin/lttng-relayd/ctf-trace.c       |  198 +++---
+ src/bin/lttng-relayd/ctf-trace.h       |   66 +-
+ src/bin/lttng-relayd/index.c           |  342 +++++++---
+ src/bin/lttng-relayd/index.h           |   60 +-
+ src/bin/lttng-relayd/live.c            | 1049 ++++++++++++++--------------
+ src/bin/lttng-relayd/live.h            |   10 +-
+ src/bin/lttng-relayd/lttng-relayd.h    |   23 +-
+ src/bin/lttng-relayd/main.c            | 1167 +++++++++++++-------------------
+ src/bin/lttng-relayd/session.c         |  214 +++---
+ src/bin/lttng-relayd/session.h         |  116 ++--
+ src/bin/lttng-relayd/stream-fd.c       |   58 ++
+ src/bin/lttng-relayd/stream-fd.h       |   32 +
+ src/bin/lttng-relayd/stream.c          |  343 ++++++++--
+ src/bin/lttng-relayd/stream.h          |  130 ++--
+ src/bin/lttng-relayd/utils.h           |    7 +-
+ src/bin/lttng-relayd/viewer-session.c  |  164 +++++
+ src/bin/lttng-relayd/viewer-session.h  |   53 ++
+ src/bin/lttng-relayd/viewer-stream.c   |  325 +++++----
+ src/bin/lttng-relayd/viewer-stream.h   |   83 ++-
+ src/bin/lttng-sessiond/consumer.c      |    7 +-
+ src/bin/lttng-sessiond/ust-app.c       |  239 +++++--
+ src/bin/lttng-sessiond/ust-app.h       |    8 +-
+ src/bin/lttng-sessiond/ust-consumer.c  |    5 +-
+ src/common/index/ctf-index.h           |    2 +-
+ src/common/index/index.c               |   13 +
+ src/common/ust-consumer/ust-consumer.c |    9 +
+ src/common/utils.c                     |  109 ++-
+ src/common/utils.h                     |    2 +
+ 42 files changed, 3111 insertions(+), 2120 deletions(-)
+ create mode 100644 doc/relayd-architecture.txt
+ create mode 100644 src/bin/lttng-relayd/stream-fd.c
+ create mode 100644 src/bin/lttng-relayd/stream-fd.h
+ create mode 100644 src/bin/lttng-relayd/viewer-session.c
+ create mode 100644 src/bin/lttng-relayd/viewer-session.h
+
+-- 
+2.1.4
