@@ -1,22 +1,20 @@
 From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: how do I print a value from an array of structs in
- a userspace tracepoint?
-Date: Tue, 18 Aug 2015 17:28:37 -0400
-Message-ID: <CA+jJMxskis2OsO+FnW2R8v2so8zbCEzrf8Jmq727uj35bZpYSA__44306.2402810485$1439933382$gmane$org@mail.gmail.com>
-References: <20150818080030.192debe5@tlielax.poochiereds.net>
- <CA+jJMxtF10b0g=dy2hJmW3ie=MbHSiAZw5SydGL-u02Uz=zWnw@mail.gmail.com>
- <20150818133126.6a067007@tlielax.poochiereds.net>
+Subject: Re: [PATCH] Fix: 32bit values index_major/minor used as
+	64bit
+Date: Tue, 18 Aug 2015 17:36:15 -0400
+Message-ID: <CA+jJMxt3EVUU5fKZKfZGFk1dACwiFfw8w+KX01STa5ta_VXvWQ__24672.7600497708$1439933839$gmane$org@mail.gmail.com>
+References: <1439926781-19841-1-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f171.google.com ([209.85.160.171])
+Received: from mail-yk0-f170.google.com ([209.85.160.170])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZRoR1-0000rd-4y
- for lttng-dev@lists.lttng.org; Tue, 18 Aug 2015 17:28:44 -0400
-Received: by ykbi184 with SMTP id i184so107971605ykb.2
- for <lttng-dev@lists.lttng.org>; Tue, 18 Aug 2015 14:28:37 -0700 (PDT)
-In-Reply-To: <20150818133126.6a067007@tlielax.poochiereds.net>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZRoYO-0000vd-PD
+ for lttng-dev@lists.lttng.org; Tue, 18 Aug 2015 17:36:22 -0400
+Received: by ykfw73 with SMTP id w73so119117306ykf.3
+ for <lttng-dev@lists.lttng.org>; Tue, 18 Aug 2015 14:36:15 -0700 (PDT)
+In-Reply-To: <1439926781-19841-1-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,50 +23,37 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jeff Layton <jlayton@poochiereds.net>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, thomas.haynes@primarydata.com
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gVHVlLCBBdWcgMTgsIDIwMTUgYXQgMTozMSBQTSwgSmVmZiBMYXl0b24gPGpsYXl0b25AcG9v
-Y2hpZXJlZHMubmV0PiB3cm90ZToKPiBPbiBUdWUsIDE4IEF1ZyAyMDE1IDEzOjAxOjIzIC0wNDAw
-Cj4gSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPiB3
-cm90ZToKPgo+PiBPbiBUdWUsIEF1ZyAxOCwgMjAxNSBhdCA4OjAwIEFNLCBKZWZmIExheXRvbiA8
-amxheXRvbkBwb29jaGllcmVkcy5uZXQ+Cj4+IHdyb3RlOgo+Pgo+PiA+IEknZCBsaWtlIHRvIGFk
-ZCBhIHRyYWNlcG9pbnQgdG8gbXkgY29kZSB0aGF0IGNhbiB3YWxrIGEKPj4gPiBkeW5hbWljYWxs
-eS1zaXplZCBhcnJheSBvZiBzdHJ1Y3RzIGFuZCBwcmludCBvbmUgb2YgdGhlIGZpZWxkcyBmcm9t
-Cj4+ID4gZWFjaCBzdHJ1Y3QuIEZvciBpbnN0YW5jZSwgc3VwcG9zZSBJIGhhdmUgYW4gYXJyYXkg
-b2Ygc3RydWN0cyB0aGF0Cj4+ID4gbG9va3MgbGlrZSB0aGlzOgo+PiA+Cj4+ID4gc3RydWN0IGZv
-bwo+PiA+IHsKPj4gPiAgICAgICAgIGludCBiYXI7Cj4+ID4gICAgICAgICBpbnQgYmF6Owo+PiA+
-ICAgICAgICAgLi4uCj4+ID4gfQo+PiA+Cj4+ID4gQXQgdGhlIHRpbWUgb2YgdGhlIHRyYWNlcG9p
-bnQsIEkga25vdyB0aGUgbnVtYmVyIG9mIGVsZW1lbnRzIGluIHRoZQo+PiA+IGFycmF5IGFuZCBj
-YW4gcGFzcyB0aGF0IGluLiBJcyB0aGVyZSBhbnkgd2F5IHRvIGhhdmUgbHR0bmcgd2FsayB0aGUK
-Pj4gPiBhcnJheSBvZiBzdHJ1Y3RzIGFuZCBwcmludCBvdXQgb25seSB0aGUgImJhciIgZmllbGQg
-ZnJvbSBlYWNoPwo+PiA+Cj4+ID4gSSd2ZSB0cmllZCB1c2luZyBjdGZfc2VxdWVuY2UsIGJ1dCBp
-dCBkb2Vzbid0IHNlZW0gdG8gZG8gdGhlIHJpZ2h0Cj4+ID4gdGhpbmcuIFlvdSBjYW4ndCB0ZWxs
-IGl0IHRoYXQgeW91IHdhbnQgdG8gcHJpbnQgb3V0IGFuICJpbnQiIHdoaWxlCj4+ID4gd2Fsa2lu
-ZyBhbiBhcnJheSBvZiBkaWZmZXJlbnRseS1zaXplZCBvYmplY3RzLgo+PiA+Cj4+ID4KPj4gSW5k
-ZWVkLCBzZXF1ZW5jZXMgYXNzdW1lIGVsZW1lbnRzIGFyZSBvZiB0aGUgc2FtZSB0eXBlL3NpemUu
-IFRoYXQgd291bGQsCj4+IHByZXN1bWFibHksIGJlIHBvc3NpYmxlIHVzaW5nIHZhcmlhbnRzLCBi
-dXQgdGhleSByZW1haW4gdW5zdXBwb3J0ZWQgYnkgdGhlCj4+IGN1cnJlbnQgdHJhY2VyIGltcGxl
-bWVudGF0aW9ucy4KPj4KPj4gRm9yIG5vdywgeW91IGNvdWxkIHNlcmlhbGl6ZSB5b3VyIGZpZWxk
-cyB0byBhIGR5bmFtaWNhbGx5LXNpemVkIGFycmF5IGFuZAo+PiBleHRyYWN0IHRoaXMgYXJyYXkg
-dXNpbmcgYSBjdGZfc2VxdWVuY2UuCj4+Cj4+IErDqXLDqW1pZQo+Pgo+Cj4gSSB3YXMgYWZyYWlk
-IHlvdSB3ZXJlIGdvaW5nIHRvIHNheSB0aGF0Li4uSXMgdGhlcmUgYSB3YXkgdG8gZG8gdGhhdAo+
-IHNlcmlhbGl6YXRpb24gb25seSB3aGVuIHRoZSB0cmFjZXBvaW50IGlzIGVuYWJsZWQgb3Igd291
-bGQgSSBoYXZlIHRvIGRvCj4gdGhhdCB1bmNvbmRpdGlvbmFsbHk/Cj4KPiBJIGd1ZXNzIHdlIGNv
-dWxkIGRvIHNvbWV0aGluZyBsaWtlIHRoaXMgKGZpbGxpbmcgaW4gdGhlIGFwcHJvcHJpYXRlCj4g
-bmFtZSBhbmQgcHJvdmlkZXIgb2YgY291cnNlKToKPgo+ICAgICAgICAgaWYgKGNhYV91bmxpa2Vs
-eShfX3RyYWNlcG9pbnRfIyNwcm92aWRlciMjX19fIyNuYW1lLnN0YXRlKSkgewo+ICAgICAgICAg
-ICAgICAgICAvLyBtYXJzaGFsIG9uIHN0YWNrIGFycmF5IGhlcmUKPiAgICAgICAgICAgICAgICAg
-dHJhY2Vwb2ludCguLi4pOwo+ICAgICAgICAgfQo+Cj4gVGhvdWdoIHdlJ2QgbmVlZCB0byBrbm93
-IHRoYXQgX190cmFjZXBvaW50XyMjcHJvdmlkZXIjI19fXyMjbmFtZS5zdGF0ZQo+IGlzIHByb3Bl
-cmx5IHNldCBhdCB0aGF0IHBvaW50LiBJcyBpdD8KClllcywgc3RhcnRpbmcgZnJvbSAyLjcgKGN1
-cnJlbnRseSBpbiBSQyksIHlvdSBjYW4gdXNlIHRoZQoidHJhY2Vwb2ludF9lbmFibGVkIlsxXSBt
-YWNybyB0byBjb25kaXRpb25hbGx5IHBlcmZvcm0geW91cgptYXJzaGFsaW5nLgoKUmVnYXJkcywK
-SsOpcsOpbWllCgpbMV0gaHR0cHM6Ly9naXRodWIuY29tL2x0dG5nL2x0dG5nLXVzdC9ibG9iL21h
-c3Rlci9pbmNsdWRlL2x0dG5nL3RyYWNlcG9pbnQuaCNMNDgKPgo+IC0tCj4gSmVmZiBMYXl0b24g
-PGpsYXl0b25AcG9vY2hpZXJlZHMubmV0PgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZp
-Y2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cg==
+TWVyZ2VkIGluIGJvdGggbWFzdGVyIGFuZCBzdGFibGUtMS4yLgoKVGhhbmtzIQpKw6lyw6ltaWUK
+Ck9uIFR1ZSwgQXVnIDE4LCAyMDE1IGF0IDM6MzkgUE0sIE1pY2hhZWwgSmVhbnNvbiA8bWplYW5z
+b25AZWZmaWNpb3MuY29tPiB3cm90ZToKPiBUaGlzIHBhdGNoIGZpeGVzIGNvbXBpbGVyIHdhcm5p
+bmdzIG9uIGJpZyBlbmRpYW4gYXJjaGl0ZWN0dXJlcyB3aGVyZQo+IGJlNjR0b2goKSBpcyBhIG5v
+cCBhbmQgcmV0dXJucyB0aGUgb3JpZ2luYWwgdHlwZS4KPgo+IFNpZ25lZC1vZmYtYnk6IE1pY2hh
+ZWwgSmVhbnNvbiA8bWplYW5zb25AZWZmaWNpb3MuY29tPgo+IC0tLQo+ICBmb3JtYXRzL2N0Zi9j
+dGYuYyB8IDggKysrKy0tLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBk
+ZWxldGlvbnMoLSkKPgo+IGRpZmYgLS1naXQgYS9mb3JtYXRzL2N0Zi9jdGYuYyBiL2Zvcm1hdHMv
+Y3RmL2N0Zi5jCj4gaW5kZXggNTQzNmMyYS4uNzRmY2I1YiAxMDA2NDQKPiAtLS0gYS9mb3JtYXRz
+L2N0Zi9jdGYuYwo+ICsrKyBiL2Zvcm1hdHMvY3RmL2N0Zi5jCj4gQEAgLTE4NTMsMTAgKzE4NTMs
+MTAgQEAgaW50IGltcG9ydF9zdHJlYW1fcGFja2V0X2luZGV4KHN0cnVjdCBjdGZfdHJhY2UgKnRk
+LAo+ICAgICAgICAgICAgICAgICBnb3RvIGVycm9yOwo+ICAgICAgICAgfQo+ICAgICAgICAgaWYg
+KGJlMzJ0b2goaW5kZXhfaGRyLmluZGV4X21ham9yKSAhPSBDVEZfSU5ERVhfTUFKT1IpIHsKPiAt
+ICAgICAgICAgICAgICAgZnByaW50ZihzdGRlcnIsICJbZXJyb3JdIEluY29tcGF0aWJsZSBpbmRl
+eCBmaWxlICUiIFBSSXU2NAo+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIi4lIiBQ
+Ukl1NjQgIiwgc3VwcG9ydGVkICVkLiVkXG4iLAo+IC0gICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgYmU2NHRvaChpbmRleF9oZHIuaW5kZXhfbWFqb3IpLAo+IC0gICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgYmU2NHRvaChpbmRleF9oZHIuaW5kZXhfbWlub3IpLCBDVEZfSU5ERVhf
+TUFKT1IsCj4gKyAgICAgICAgICAgICAgIGZwcmludGYoc3RkZXJyLCAiW2Vycm9yXSBJbmNvbXBh
+dGlibGUgaW5kZXggZmlsZSAlIiBQUkl1MzIKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICIuJSIgUFJJdTMyICIsIHN1cHBvcnRlZCAlZC4lZFxuIiwKPiArICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIGJlMzJ0b2goaW5kZXhfaGRyLmluZGV4X21ham9yKSwKPiArICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIGJlMzJ0b2goaW5kZXhfaGRyLmluZGV4X21pbm9yKSwg
+Q1RGX0lOREVYX01BSk9SLAo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQ1RGX0lO
+REVYX01JTk9SKTsKPiAgICAgICAgICAgICAgICAgcmV0ID0gLTE7Cj4gICAgICAgICAgICAgICAg
+IGdvdG8gZXJyb3I7Cj4gLS0KPiAxLjkuMQo+CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVm
+ZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmct
+ZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
+bi9saXN0aW5mby9sdHRuZy1kZXYK
