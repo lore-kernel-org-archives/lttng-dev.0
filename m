@@ -1,21 +1,16 @@
-From: Jeff Layton <jlayton@poochiereds.net>
-Subject: Re: how do I print a value from an array of structs in
- a userspace tracepoint?
-Date: Tue, 18 Aug 2015 13:31:26 -0400
-Message-ID: <20150818133126.6a067007__24083.9174054146$1439919175$gmane$org@tlielax.poochiereds.net>
-References: <20150818080030.192debe5@tlielax.poochiereds.net>
- <CA+jJMxtF10b0g=dy2hJmW3ie=MbHSiAZw5SydGL-u02Uz=zWnw@mail.gmail.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH] Fix: 32bit values index_major/minor used as
+	64bit
+Date: Tue, 18 Aug 2015 15:39:41 -0400
+Message-ID: <1439926781-19841-1-git-send-email-mjeanson__12398.9192689352$1439926851$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f50.google.com ([209.85.192.50])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jlayton@poochiereds.net>) id 1ZRkjX-0008AB-1K
- for lttng-dev@lists.lttng.org; Tue, 18 Aug 2015 13:31:44 -0400
-Received: by qgeb6 with SMTP id b6so4232405qge.3
- for <lttng-dev@lists.lttng.org>; Tue, 18 Aug 2015 10:31:29 -0700 (PDT)
-In-Reply-To: <CA+jJMxtF10b0g=dy2hJmW3ie=MbHSiAZw5SydGL-u02Uz=zWnw@mail.gmail.com>
+ (envelope-from <mjeanson@efficios.com>) id 1ZRmjq-0000Ks-Aa
+ for lttng-dev@lists.lttng.org; Tue, 18 Aug 2015 15:40:05 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,42 +19,36 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, thomas.haynes@primarydata.com
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-T24gVHVlLCAxOCBBdWcgMjAxNSAxMzowMToyMyAtMDQwMApKw6lyw6ltaWUgR2FsYXJuZWF1IDxq
-ZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+IHdyb3RlOgoKPiBPbiBUdWUsIEF1ZyAxOCwg
-MjAxNSBhdCA4OjAwIEFNLCBKZWZmIExheXRvbiA8amxheXRvbkBwb29jaGllcmVkcy5uZXQ+Cj4g
-d3JvdGU6Cj4gCj4gPiBJJ2QgbGlrZSB0byBhZGQgYSB0cmFjZXBvaW50IHRvIG15IGNvZGUgdGhh
-dCBjYW4gd2FsayBhCj4gPiBkeW5hbWljYWxseS1zaXplZCBhcnJheSBvZiBzdHJ1Y3RzIGFuZCBw
-cmludCBvbmUgb2YgdGhlIGZpZWxkcyBmcm9tCj4gPiBlYWNoIHN0cnVjdC4gRm9yIGluc3RhbmNl
-LCBzdXBwb3NlIEkgaGF2ZSBhbiBhcnJheSBvZiBzdHJ1Y3RzIHRoYXQKPiA+IGxvb2tzIGxpa2Ug
-dGhpczoKPiA+Cj4gPiBzdHJ1Y3QgZm9vCj4gPiB7Cj4gPiAgICAgICAgIGludCBiYXI7Cj4gPiAg
-ICAgICAgIGludCBiYXo7Cj4gPiAgICAgICAgIC4uLgo+ID4gfQo+ID4KPiA+IEF0IHRoZSB0aW1l
-IG9mIHRoZSB0cmFjZXBvaW50LCBJIGtub3cgdGhlIG51bWJlciBvZiBlbGVtZW50cyBpbiB0aGUK
-PiA+IGFycmF5IGFuZCBjYW4gcGFzcyB0aGF0IGluLiBJcyB0aGVyZSBhbnkgd2F5IHRvIGhhdmUg
-bHR0bmcgd2FsayB0aGUKPiA+IGFycmF5IG9mIHN0cnVjdHMgYW5kIHByaW50IG91dCBvbmx5IHRo
-ZSAiYmFyIiBmaWVsZCBmcm9tIGVhY2g/Cj4gPgo+ID4gSSd2ZSB0cmllZCB1c2luZyBjdGZfc2Vx
-dWVuY2UsIGJ1dCBpdCBkb2Vzbid0IHNlZW0gdG8gZG8gdGhlIHJpZ2h0Cj4gPiB0aGluZy4gWW91
-IGNhbid0IHRlbGwgaXQgdGhhdCB5b3Ugd2FudCB0byBwcmludCBvdXQgYW4gImludCIgd2hpbGUK
-PiA+IHdhbGtpbmcgYW4gYXJyYXkgb2YgZGlmZmVyZW50bHktc2l6ZWQgb2JqZWN0cy4KPiA+Cj4g
-Pgo+IEluZGVlZCwgc2VxdWVuY2VzIGFzc3VtZSBlbGVtZW50cyBhcmUgb2YgdGhlIHNhbWUgdHlw
-ZS9zaXplLiBUaGF0IHdvdWxkLAo+IHByZXN1bWFibHksIGJlIHBvc3NpYmxlIHVzaW5nIHZhcmlh
-bnRzLCBidXQgdGhleSByZW1haW4gdW5zdXBwb3J0ZWQgYnkgdGhlCj4gY3VycmVudCB0cmFjZXIg
-aW1wbGVtZW50YXRpb25zLgo+IAo+IEZvciBub3csIHlvdSBjb3VsZCBzZXJpYWxpemUgeW91ciBm
-aWVsZHMgdG8gYSBkeW5hbWljYWxseS1zaXplZCBhcnJheSBhbmQKPiBleHRyYWN0IHRoaXMgYXJy
-YXkgdXNpbmcgYSBjdGZfc2VxdWVuY2UuCj4gCj4gSsOpcsOpbWllCj4gCgpJIHdhcyBhZnJhaWQg
-eW91IHdlcmUgZ29pbmcgdG8gc2F5IHRoYXQuLi5JcyB0aGVyZSBhIHdheSB0byBkbyB0aGF0CnNl
-cmlhbGl6YXRpb24gb25seSB3aGVuIHRoZSB0cmFjZXBvaW50IGlzIGVuYWJsZWQgb3Igd291bGQg
-SSBoYXZlIHRvIGRvCnRoYXQgdW5jb25kaXRpb25hbGx5PwoKSSBndWVzcyB3ZSBjb3VsZCBkbyBz
-b21ldGhpbmcgbGlrZSB0aGlzIChmaWxsaW5nIGluIHRoZSBhcHByb3ByaWF0ZQpuYW1lIGFuZCBw
-cm92aWRlciBvZiBjb3Vyc2UpOgoKCWlmIChjYWFfdW5saWtlbHkoX190cmFjZXBvaW50XyMjcHJv
-dmlkZXIjI19fXyMjbmFtZS5zdGF0ZSkpIHsKCQkvLyBtYXJzaGFsIG9uIHN0YWNrIGFycmF5IGhl
-cmUKICAgICAgICAgICAgICAgIHRyYWNlcG9pbnQoLi4uKTsKCX0KClRob3VnaCB3ZSdkIG5lZWQg
-dG8ga25vdyB0aGF0IF9fdHJhY2Vwb2ludF8jI3Byb3ZpZGVyIyNfX18jI25hbWUuc3RhdGUKaXMg
-cHJvcGVybHkgc2V0IGF0IHRoYXQgcG9pbnQuIElzIGl0PwoKLS0gCkplZmYgTGF5dG9uIDxqbGF5
-dG9uQHBvb2NoaWVyZWRzLm5ldD4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5n
-Lm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
-Zy1kZXYK
+This patch fixes compiler warnings on big endian architectures where
+be64toh() is a nop and returns the original type.
+
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ formats/ctf/ctf.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
+index 5436c2a..74fcb5b 100644
+--- a/formats/ctf/ctf.c
++++ b/formats/ctf/ctf.c
+@@ -1853,10 +1853,10 @@ int import_stream_packet_index(struct ctf_trace *td,
+ 		goto error;
+ 	}
+ 	if (be32toh(index_hdr.index_major) != CTF_INDEX_MAJOR) {
+-		fprintf(stderr, "[error] Incompatible index file %" PRIu64
+-				".%" PRIu64 ", supported %d.%d\n",
+-				be64toh(index_hdr.index_major),
+-				be64toh(index_hdr.index_minor), CTF_INDEX_MAJOR,
++		fprintf(stderr, "[error] Incompatible index file %" PRIu32
++				".%" PRIu32 ", supported %d.%d\n",
++				be32toh(index_hdr.index_major),
++				be32toh(index_hdr.index_minor), CTF_INDEX_MAJOR,
+ 				CTF_INDEX_MINOR);
+ 		ret = -1;
+ 		goto error;
+-- 
+1.9.1
