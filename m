@@ -1,19 +1,21 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+From: Jeff Layton <jlayton@poochiereds.net>
 Subject: Re: how do I print a value from an array of structs in
  a userspace tracepoint?
-Date: Tue, 18 Aug 2015 13:01:23 -0400
-Message-ID: <CA+jJMxtF10b0g=dy2hJmW3ie=MbHSiAZw5SydGL-u02Uz=zWnw__8456.26262384958$1439917377$gmane$org@mail.gmail.com>
+Date: Tue, 18 Aug 2015 13:31:26 -0400
+Message-ID: <20150818133126.6a067007__24083.9174054146$1439919175$gmane$org@tlielax.poochiereds.net>
 References: <20150818080030.192debe5@tlielax.poochiereds.net>
+ <CA+jJMxtF10b0g=dy2hJmW3ie=MbHSiAZw5SydGL-u02Uz=zWnw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1830931108=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f171.google.com ([209.85.160.171])
+Received: from mail-qg0-f50.google.com ([209.85.192.50])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZRkGP-0007zw-6S
- for lttng-dev@lists.lttng.org; Tue, 18 Aug 2015 13:01:38 -0400
-Received: by ykdt205 with SMTP id t205so165033178ykd.1
- for <lttng-dev@lists.lttng.org>; Tue, 18 Aug 2015 10:01:23 -0700 (PDT)
-In-Reply-To: <20150818080030.192debe5@tlielax.poochiereds.net>
+ (envelope-from <jlayton@poochiereds.net>) id 1ZRkjX-0008AB-1K
+ for lttng-dev@lists.lttng.org; Tue, 18 Aug 2015 13:31:44 -0400
+Received: by qgeb6 with SMTP id b6so4232405qge.3
+ for <lttng-dev@lists.lttng.org>; Tue, 18 Aug 2015 10:31:29 -0700 (PDT)
+In-Reply-To: <CA+jJMxtF10b0g=dy2hJmW3ie=MbHSiAZw5SydGL-u02Uz=zWnw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,136 +24,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jeff Layton <jlayton@poochiereds.net>
+To: =?UTF-8?B?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, thomas.haynes@primarydata.com
 List-Id: lttng-dev@lists.lttng.org
 
---===============1830931108==
-Content-Type: multipart/alternative; boundary=001a11456cbc335ae0051d98dea7
-
---001a11456cbc335ae0051d98dea7
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Aug 18, 2015 at 8:00 AM, Jeff Layton <jlayton@poochiereds.net>
-wrote:
-
-> I'd like to add a tracepoint to my code that can walk a
-> dynamically-sized array of structs and print one of the fields from
-> each struct. For instance, suppose I have an array of structs that
-> looks like this:
->
-> struct foo
-> {
->         int bar;
->         int baz;
->         ...
-> }
->
-> At the time of the tracepoint, I know the number of elements in the
-> array and can pass that in. Is there any way to have lttng walk the
-> array of structs and print out only the "bar" field from each?
->
-> I've tried using ctf_sequence, but it doesn't seem to do the right
-> thing. You can't tell it that you want to print out an "int" while
-> walking an array of differently-sized objects.
->
->
-Indeed, sequences assume elements are of the same type/size. That would,
-presumably, be possible using variants, but they remain unsupported by the
-current tracer implementations.
-
-For now, you could serialize your fields to a dynamically-sized array and
-extract this array using a ctf_sequence.
-
-J=C3=A9r=C3=A9mie
-
-Any help is appreciated!
-> --
-> Jeff Layton <jlayton@poochiereds.net>
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
-
-
---=20
-J=C3=A9r=C3=A9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-
---001a11456cbc335ae0051d98dea7
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">=
-On Tue, Aug 18, 2015 at 8:00 AM, Jeff Layton <span dir=3D"ltr">&lt;<a href=
-=3D"mailto:jlayton@poochiereds.net" target=3D"_blank">jlayton@poochiereds.n=
-et</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"marg=
-in:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">I&#39;d like to =
-add a tracepoint to my code that can walk a<br>
-dynamically-sized array of structs and print one of the fields from<br>
-each struct. For instance, suppose I have an array of structs that<br>
-looks like this:<br>
-<br>
-struct foo<br>
-{<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 int bar;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 int baz;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 ...<br>
-}<br>
-<br>
-At the time of the tracepoint, I know the number of elements in the<br>
-array and can pass that in. Is there any way to have lttng walk the<br>
-array of structs and print out only the &quot;bar&quot; field from each?<br=
->
-<br>
-I&#39;ve tried using ctf_sequence, but it doesn&#39;t seem to do the right<=
-br>
-thing. You can&#39;t tell it that you want to print out an &quot;int&quot; =
-while<br>
-walking an array of differently-sized objects.<br>
-<br></blockquote><div><br></div><div>Indeed, sequences assume elements are =
-of the same type/size. That would, presumably, be possible using variants, =
-but they remain unsupported by the current tracer implementations.</div><di=
-v><br></div><div>For now, you could serialize your fields to a dynamically-=
-sized array and extract this array using a ctf_sequence.</div><div><br></di=
-v><div>J=C3=A9r=C3=A9mie</div><div><br></div><blockquote class=3D"gmail_quo=
-te" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"=
->
-Any help is appreciated!<br>
-<span class=3D"HOEnZb"><font color=3D"#888888">--<br>
-Jeff Layton &lt;<a href=3D"mailto:jlayton@poochiereds.net">jlayton@poochier=
-eds.net</a>&gt;<br>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/li=
-stinfo/lttng-dev</a><br>
-</font></span></blockquote></div><br><br clear=3D"all"><div><br></div>-- <b=
-r><div class=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>EfficiOS In=
-c.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http://www.effi=
-cios.com</a></div>
-</div></div>
-
---001a11456cbc335ae0051d98dea7--
-
-
---===============1830931108==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1830931108==--
+T24gVHVlLCAxOCBBdWcgMjAxNSAxMzowMToyMyAtMDQwMApKw6lyw6ltaWUgR2FsYXJuZWF1IDxq
+ZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+IHdyb3RlOgoKPiBPbiBUdWUsIEF1ZyAxOCwg
+MjAxNSBhdCA4OjAwIEFNLCBKZWZmIExheXRvbiA8amxheXRvbkBwb29jaGllcmVkcy5uZXQ+Cj4g
+d3JvdGU6Cj4gCj4gPiBJJ2QgbGlrZSB0byBhZGQgYSB0cmFjZXBvaW50IHRvIG15IGNvZGUgdGhh
+dCBjYW4gd2FsayBhCj4gPiBkeW5hbWljYWxseS1zaXplZCBhcnJheSBvZiBzdHJ1Y3RzIGFuZCBw
+cmludCBvbmUgb2YgdGhlIGZpZWxkcyBmcm9tCj4gPiBlYWNoIHN0cnVjdC4gRm9yIGluc3RhbmNl
+LCBzdXBwb3NlIEkgaGF2ZSBhbiBhcnJheSBvZiBzdHJ1Y3RzIHRoYXQKPiA+IGxvb2tzIGxpa2Ug
+dGhpczoKPiA+Cj4gPiBzdHJ1Y3QgZm9vCj4gPiB7Cj4gPiAgICAgICAgIGludCBiYXI7Cj4gPiAg
+ICAgICAgIGludCBiYXo7Cj4gPiAgICAgICAgIC4uLgo+ID4gfQo+ID4KPiA+IEF0IHRoZSB0aW1l
+IG9mIHRoZSB0cmFjZXBvaW50LCBJIGtub3cgdGhlIG51bWJlciBvZiBlbGVtZW50cyBpbiB0aGUK
+PiA+IGFycmF5IGFuZCBjYW4gcGFzcyB0aGF0IGluLiBJcyB0aGVyZSBhbnkgd2F5IHRvIGhhdmUg
+bHR0bmcgd2FsayB0aGUKPiA+IGFycmF5IG9mIHN0cnVjdHMgYW5kIHByaW50IG91dCBvbmx5IHRo
+ZSAiYmFyIiBmaWVsZCBmcm9tIGVhY2g/Cj4gPgo+ID4gSSd2ZSB0cmllZCB1c2luZyBjdGZfc2Vx
+dWVuY2UsIGJ1dCBpdCBkb2Vzbid0IHNlZW0gdG8gZG8gdGhlIHJpZ2h0Cj4gPiB0aGluZy4gWW91
+IGNhbid0IHRlbGwgaXQgdGhhdCB5b3Ugd2FudCB0byBwcmludCBvdXQgYW4gImludCIgd2hpbGUK
+PiA+IHdhbGtpbmcgYW4gYXJyYXkgb2YgZGlmZmVyZW50bHktc2l6ZWQgb2JqZWN0cy4KPiA+Cj4g
+Pgo+IEluZGVlZCwgc2VxdWVuY2VzIGFzc3VtZSBlbGVtZW50cyBhcmUgb2YgdGhlIHNhbWUgdHlw
+ZS9zaXplLiBUaGF0IHdvdWxkLAo+IHByZXN1bWFibHksIGJlIHBvc3NpYmxlIHVzaW5nIHZhcmlh
+bnRzLCBidXQgdGhleSByZW1haW4gdW5zdXBwb3J0ZWQgYnkgdGhlCj4gY3VycmVudCB0cmFjZXIg
+aW1wbGVtZW50YXRpb25zLgo+IAo+IEZvciBub3csIHlvdSBjb3VsZCBzZXJpYWxpemUgeW91ciBm
+aWVsZHMgdG8gYSBkeW5hbWljYWxseS1zaXplZCBhcnJheSBhbmQKPiBleHRyYWN0IHRoaXMgYXJy
+YXkgdXNpbmcgYSBjdGZfc2VxdWVuY2UuCj4gCj4gSsOpcsOpbWllCj4gCgpJIHdhcyBhZnJhaWQg
+eW91IHdlcmUgZ29pbmcgdG8gc2F5IHRoYXQuLi5JcyB0aGVyZSBhIHdheSB0byBkbyB0aGF0CnNl
+cmlhbGl6YXRpb24gb25seSB3aGVuIHRoZSB0cmFjZXBvaW50IGlzIGVuYWJsZWQgb3Igd291bGQg
+SSBoYXZlIHRvIGRvCnRoYXQgdW5jb25kaXRpb25hbGx5PwoKSSBndWVzcyB3ZSBjb3VsZCBkbyBz
+b21ldGhpbmcgbGlrZSB0aGlzIChmaWxsaW5nIGluIHRoZSBhcHByb3ByaWF0ZQpuYW1lIGFuZCBw
+cm92aWRlciBvZiBjb3Vyc2UpOgoKCWlmIChjYWFfdW5saWtlbHkoX190cmFjZXBvaW50XyMjcHJv
+dmlkZXIjI19fXyMjbmFtZS5zdGF0ZSkpIHsKCQkvLyBtYXJzaGFsIG9uIHN0YWNrIGFycmF5IGhl
+cmUKICAgICAgICAgICAgICAgIHRyYWNlcG9pbnQoLi4uKTsKCX0KClRob3VnaCB3ZSdkIG5lZWQg
+dG8ga25vdyB0aGF0IF9fdHJhY2Vwb2ludF8jI3Byb3ZpZGVyIyNfX18jI25hbWUuc3RhdGUKaXMg
+cHJvcGVybHkgc2V0IGF0IHRoYXQgcG9pbnQuIElzIGl0PwoKLS0gCkplZmYgTGF5dG9uIDxqbGF5
+dG9uQHBvb2NoaWVyZWRzLm5ldD4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
+Zy1kZXYK
