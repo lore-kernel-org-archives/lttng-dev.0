@@ -1,18 +1,15 @@
 From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [BABELTRACE PATCH 2/2] Output a warning if packets are
-	lost
-Date: Wed, 19 Aug 2015 21:19:58 -0400
-Message-ID: <1440033598-14124-2-git-send-email-jdesfossez__25299.3850656368$1440033669$gmane$org@efficios.com>
-References: <1440033598-14124-1-git-send-email-jdesfossez@efficios.com>
+Subject: [BABELTRACE PATCH 1/2] Support ctf index version 1.1
+Date: Wed, 19 Aug 2015 21:19:57 -0400
+Message-ID: <1440033598-14124-1-git-send-email-jdesfossez__49773.0465991937$1440033690$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1ZSEWZ-0000oB-NE
+ (envelope-from <jdesfossez@efficios.com>) id 1ZSEWZ-0000oA-2b
  for lttng-dev@lists.lttng.org; Wed, 19 Aug 2015 21:20:14 -0400
-In-Reply-To: <1440033598-14124-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,122 +22,93 @@ To: mathieu.desnoyers@efficios.com, jgalar@efficios.com
 Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Depends on the packet_seq_num fields available in the CTF index v1.1
-(produced by LTTng 2.8).
-Same limitation as the events discarded information: if a stream is
-split in multiple files, the counters might not report the appropriate
-information for now.
+Produced by LTTng as of 2.8 (no compatibility breakage with 1.0)
 
 Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
 ---
- formats/ctf/ctf.c                    | 40 +++++++++++++++++++++++++++++++-----
- include/babeltrace/ctf-ir/metadata.h |  2 ++
- 2 files changed, 37 insertions(+), 5 deletions(-)
+ formats/ctf/ctf.c                  | 10 +++++++++-
+ include/babeltrace/ctf/ctf-index.h |  5 ++++-
+ include/babeltrace/ctf/types.h     |  3 +++
+ 3 files changed, 16 insertions(+), 2 deletions(-)
 
 diff --git a/formats/ctf/ctf.c b/formats/ctf/ctf.c
-index c5bb6eb..db237ad 100644
+index 74fcb5b..c5bb6eb 100644
 --- a/formats/ctf/ctf.c
 +++ b/formats/ctf/ctf.c
-@@ -420,16 +420,26 @@ void print_uuid(FILE *fp, unsigned char *uuid)
-  * Given we have discarded counters of those two types merged into the
-  * events_discarded counter, we need to use the union of those ranges:
-  *   [ prev_timestamp_end, timestamp_end ]
-+ *
-+ * Lost packets occur if the tracer overwrote some subbuffer(s) before the
-+ * consumer had time to extract them. We keep track of those gaps with the
-+ * packet sequence number in each packet.
-  */
- static
--void ctf_print_discarded(FILE *fp, struct ctf_stream_definition *stream)
-+void ctf_print_discarded_lost(FILE *fp, struct ctf_stream_definition *stream)
- {
--	if (!stream->events_discarded || !babeltrace_ctf_console_output) {
-+	if ((!stream->events_discarded && !stream->packets_lost) ||
-+			!babeltrace_ctf_console_output) {
- 		return;
+@@ -1547,6 +1547,8 @@ begin:
+ 	packet_index.ts_cycles.timestamp_end = 0;
+ 	packet_index.events_discarded = 0;
+ 	packet_index.events_discarded_len = 0;
++	packet_index.stream_instance_id = 0;
++	packet_index.packet_seq_num = 0;
+ 
+ 	/* read and check header, set stream id (and check) */
+ 	if (file_stream->parent.trace_packet_header) {
+@@ -1833,7 +1835,7 @@ int import_stream_packet_index(struct ctf_trace *td,
+ 	struct ctf_packet_index *ctf_index = NULL;
+ 	struct ctf_packet_index_file_hdr index_hdr;
+ 	struct packet_index index;
+-	uint32_t packet_index_len;
++	uint32_t packet_index_len, index_minor;
+ 	int ret = 0;
+ 	int first_packet = 1;
+ 	size_t len;
+@@ -1861,6 +1863,8 @@ int import_stream_packet_index(struct ctf_trace *td,
+ 		ret = -1;
+ 		goto error;
  	}
- 	fflush(stdout);
--	fprintf(fp, "[warning] Tracer discarded %" PRIu64 " events between [",
--		stream->events_discarded);
-+	if (stream->events_discarded) {
-+		fprintf(fp, "[warning] Tracer discarded %" PRIu64 " events between [",
-+				stream->events_discarded);
-+	} else if (stream->packets_lost) {
-+		fprintf(fp, "[warning] Tracer lost %" PRIu64 " trace packets between [",
-+				stream->packets_lost);
-+	}
- 	if (opt_clock_cycles) {
- 		ctf_print_timestamp(fp, stream,
- 				stream->prev.cycles.end);
-@@ -800,6 +810,7 @@ void ctf_update_current_packet_index(struct ctf_stream_definition *stream,
- 		struct packet_index *cur_index)
- {
- 	uint64_t events_discarded_diff;
-+	uint64_t packets_lost_diff = 0;
- 
- 	/* Update packet index time information */
- 
-@@ -827,6 +838,11 @@ void ctf_update_current_packet_index(struct ctf_stream_definition *stream,
- 			prev_index->ts_real.timestamp_end;
- 
- 		events_discarded_diff -= prev_index->events_discarded;
-+		/* packet_seq_num stays at 0 if not produced by the tracer */
-+		if (cur_index->packet_seq_num) {
-+			packets_lost_diff = cur_index->packet_seq_num -
-+				prev_index->packet_seq_num - 1;
++	index_minor = be32toh(index_hdr.index_minor);
++
+ 	packet_index_len = be32toh(index_hdr.packet_index_len);
+ 	if (packet_index_len == 0) {
+ 		fprintf(stderr, "[error] Packet index length cannot be 0.\n");
+@@ -1887,6 +1891,10 @@ int import_stream_packet_index(struct ctf_trace *td,
+ 		index.events_discarded_len = 64;
+ 		index.data_offset = -1;
+ 		stream_id = be64toh(ctf_index->stream_id);
++		if (index_minor >= 1) {
++			index.stream_instance_id = be64toh(ctf_index->stream_instance_id);
++			index.packet_seq_num = be64toh(ctf_index->packet_seq_num);
 +		}
- 		/*
- 		 * Deal with 32-bit wrap-around if the tracer provided a
- 		 * 32-bit field.
-@@ -847,6 +863,7 @@ void ctf_update_current_packet_index(struct ctf_stream_definition *stream,
- 				stream->current.real.begin;
- 	}
- 	stream->events_discarded = events_discarded_diff;
-+	stream->packets_lost = packets_lost_diff;
- }
+ 
+ 		if (!first_packet) {
+ 			/* add index to packet array */
+diff --git a/include/babeltrace/ctf/ctf-index.h b/include/babeltrace/ctf/ctf-index.h
+index b39b523..8880c2f 100644
+--- a/include/babeltrace/ctf/ctf-index.h
++++ b/include/babeltrace/ctf/ctf-index.h
+@@ -29,7 +29,7 @@
+ 
+ #define CTF_INDEX_MAGIC 0xC1F1DCC1
+ #define CTF_INDEX_MAJOR 1
+-#define CTF_INDEX_MINOR 0
++#define CTF_INDEX_MINOR 1
  
  /*
-@@ -956,7 +973,7 @@ void ctf_packet_seek(struct bt_stream_pos *stream_pos, size_t index, int whence)
- 		 * timestamps.
- 		 */
- 		if ((&file_stream->parent)->stream_class->trace->parent.collection) {
--			ctf_print_discarded(stderr, &file_stream->parent);
-+			ctf_print_discarded_lost(stderr, &file_stream->parent);
- 		}
- 
- 		packet_index = &g_array_index(pos->packet_index,
-@@ -1695,6 +1712,19 @@ begin:
- 			packet_index.events_discarded = bt_get_unsigned_int(field);
- 			packet_index.events_discarded_len = bt_get_int_len(field);
- 		}
-+
-+		/* read packet_seq_num from header */
-+		len_index = bt_struct_declaration_lookup_field_index(
-+				file_stream->parent.stream_packet_context->declaration,
-+				g_quark_from_static_string("packet_seq_num"));
-+		if (len_index >= 0) {
-+			struct bt_definition *field;
-+
-+			field = bt_struct_definition_get_field_from_index(
-+					file_stream->parent.stream_packet_context,
-+					len_index);
-+			packet_index.packet_seq_num = bt_get_unsigned_int(field);
-+		}
- 	} else {
- 		/* Use file size for packet size */
- 		packet_index.packet_size = filesize * CHAR_BIT;
-diff --git a/include/babeltrace/ctf-ir/metadata.h b/include/babeltrace/ctf-ir/metadata.h
-index 6753695..bc68580 100644
---- a/include/babeltrace/ctf-ir/metadata.h
-+++ b/include/babeltrace/ctf-ir/metadata.h
-@@ -74,6 +74,8 @@ struct ctf_stream_definition {
- 
- 	/* Event discarded information */
+  * Header at the beginning of each index file.
+@@ -55,6 +55,9 @@ struct ctf_packet_index {
+ 	uint64_t timestamp_end;
  	uint64_t events_discarded;
-+	/* Trace packets lost */
-+	uint64_t packets_lost;
- 	struct ctf_stream_packet_timestamp prev;
- 	struct ctf_stream_packet_timestamp current;
- 	char path[PATH_MAX];			/* Path to stream. '\0' for mmap traces */
+ 	uint64_t stream_id;
++	/* CTF_INDEX 1.0 limit */
++	uint64_t stream_instance_id;	/* ID of the channel instance */
++	uint64_t packet_seq_num;	/* packet sequence number */
+ } __attribute__((__packed__));
+ 
+ #endif /* LTTNG_INDEX_H */
+diff --git a/include/babeltrace/ctf/types.h b/include/babeltrace/ctf/types.h
+index c336632..cc8acbf 100644
+--- a/include/babeltrace/ctf/types.h
++++ b/include/babeltrace/ctf/types.h
+@@ -58,6 +58,9 @@ struct packet_index {
+ 	uint64_t events_discarded_len;	/* length of the field, in bits */
+ 	struct packet_index_time ts_cycles;	/* timestamp in cycles */
+ 	struct packet_index_time ts_real;	/* realtime timestamp */
++	/* CTF_INDEX 1.0 limit */
++	uint64_t stream_instance_id;	/* ID of the channel instance */
++	uint64_t packet_seq_num;	/* packet sequence number */
+ };
+ 
+ /*
 -- 
 1.9.1
