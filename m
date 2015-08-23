@@ -1,21 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules 2.6] Fix: writeback
- instrumentation for 4.2 kernels
-Date: Fri, 21 Aug 2015 20:27:08 +0000 (UTC)
-Message-ID: <993511977.26954.1440188828447.JavaMail.zimbra__45703.7076507278$1440188914$gmane$org@efficios.com>
-References: <1440183449-14065-1-git-send-email-mjeanson@efficios.com>
+From: Khem Raj <raj.khem@gmail.com>
+Subject: [PATCH] uatomic: Specify complete types for atomic
+	function calls
+Date: Sat, 22 Aug 2015 21:38:30 -0700
+Message-ID: <1440304710-5312-1-git-send-email-raj.khem__12337.4129565947$1440395306$gmane$org@gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-io0-f174.google.com ([209.85.223.174])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZSsuG-0005eM-N9
- for lttng-dev@lists.lttng.org; Fri, 21 Aug 2015 16:27:25 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 9B0B83403F9
- for <lttng-dev@lists.lttng.org>; Fri, 21 Aug 2015 20:27:15 +0000 (UTC)
-In-Reply-To: <1440183449-14065-1-git-send-email-mjeanson@efficios.com>
+ (envelope-from <raj.khem@gmail.com>) id 1ZTN3J-0006WB-Cx
+ for lttng-dev@lists.lttng.org; Sun, 23 Aug 2015 00:38:46 -0400
+Received: by iodv127 with SMTP id v127so118088318iod.3
+ for <lttng-dev@lists.lttng.org>; Sat, 22 Aug 2015 21:38:36 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,104 +21,157 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: Khem Raj <raj.khem@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
-merged, thanks!
+This was unearthed by clang compiler where it complained about parameter
+mismatch, gcc doesnt notice this
 
-Mathieu
+urcu/uatomic/generic.h:190:10: error: address argument to atomic builtin
+must be a pointer to integer or pointer ('void *' invalid)
+                return __sync_add_and_fetch_4(addr, val);
 
------ On Aug 21, 2015, at 11:57 AM, Michael Jeanson mjeanson@efficios.com wrote:
+Fixed all instances thusly
 
-> Bandwidth related fields were moved by this commit:
-> 
-> commit a88a341a73be4ef035ca26170c849f002797da27
-> Author: Tejun Heo <tj@kernel.org>
-> Date:   Fri, 22 May 2015 17:13:28 -0400
-> 
->    writeback: move bandwidth related fields from backing_dev_info into
->    bdi_writeback
-> 
-> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-> ---
-> instrumentation/events/lttng-module/writeback.h | 51 +++++++++++++++++++++++++
-> 1 file changed, 51 insertions(+)
-> 
-> diff --git a/instrumentation/events/lttng-module/writeback.h
-> b/instrumentation/events/lttng-module/writeback.h
-> index 7ea3f8a..dc88886 100644
-> --- a/instrumentation/events/lttng-module/writeback.h
-> +++ b/instrumentation/events/lttng-module/writeback.h
-> @@ -523,6 +523,55 @@ LTTNG_TRACEPOINT_EVENT_MAP(global_dirty_state,
-> 
-> #define KBps(x)			((x) << (PAGE_SHIFT - 10))
-> 
-> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,2,0))
-> +
-> +LTTNG_TRACEPOINT_EVENT_MAP(bdi_dirty_ratelimit,
-> +
-> +	writeback_bdi_dirty_ratelimit,
-> +
-> +	TP_PROTO(struct backing_dev_info *bdi,
-> +		 unsigned long dirty_rate,
-> +		 unsigned long task_ratelimit),
-> +
-> +	TP_ARGS(bdi, dirty_rate, task_ratelimit),
-> +
-> +	TP_STRUCT__entry(
-> +		__array(char,		bdi, 32)
-> +		__field(unsigned long,	write_bw)
-> +		__field(unsigned long,	avg_write_bw)
-> +		__field(unsigned long,	dirty_rate)
-> +		__field(unsigned long,	dirty_ratelimit)
-> +		__field(unsigned long,	task_ratelimit)
-> +		__field(unsigned long,	balanced_dirty_ratelimit)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		tp_memcpy(bdi, dev_name(bdi->dev), 32)
-> +		tp_assign(write_bw, KBps(bdi->wb.write_bandwidth))
-> +		tp_assign(avg_write_bw, KBps(bdi->wb.avg_write_bandwidth))
-> +		tp_assign(dirty_rate, KBps(dirty_rate))
-> +		tp_assign(dirty_ratelimit, KBps(bdi->wb.dirty_ratelimit))
-> +		tp_assign(task_ratelimit, KBps(task_ratelimit))
-> +		tp_assign(balanced_dirty_ratelimit,
-> +					KBps(bdi->wb.balanced_dirty_ratelimit))
-> +	),
-> +
-> +	TP_printk("bdi %s: "
-> +		  "write_bw=%lu awrite_bw=%lu dirty_rate=%lu "
-> +		  "dirty_ratelimit=%lu task_ratelimit=%lu "
-> +		  "balanced_dirty_ratelimit=%lu",
-> +		  __entry->bdi,
-> +		  __entry->write_bw,		/* write bandwidth */
-> +		  __entry->avg_write_bw,	/* avg write bandwidth */
-> +		  __entry->dirty_rate,		/* bdi dirty rate */
-> +		  __entry->dirty_ratelimit,	/* base ratelimit */
-> +		  __entry->task_ratelimit, /* ratelimit with position control */
-> +		  __entry->balanced_dirty_ratelimit /* the balanced ratelimit */
-> +	)
-> +)
-> +
-> +#else
-> +
-> LTTNG_TRACEPOINT_EVENT_MAP(bdi_dirty_ratelimit,
-> 
-> 	writeback_bdi_dirty_ratelimit,
-> @@ -568,6 +617,8 @@ LTTNG_TRACEPOINT_EVENT_MAP(bdi_dirty_ratelimit,
-> 	)
-> )
-> 
-> +#endif
-> +
-> LTTNG_TRACEPOINT_EVENT_MAP(balance_dirty_pages,
-> 
-> 	writeback_balance_dirty_pages,
-> --
-> 1.9.1
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+---
+ urcu/uatomic/generic.h | 40 ++++++++++++++++++++--------------------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
 
+diff --git a/urcu/uatomic/generic.h b/urcu/uatomic/generic.h
+index 37f59cc..0046ffd 100644
+--- a/urcu/uatomic/generic.h
++++ b/urcu/uatomic/generic.h
+@@ -65,17 +65,17 @@ unsigned long _uatomic_cmpxchg(void *addr, unsigned long old,
+ 	switch (len) {
+ #ifdef UATOMIC_HAS_ATOMIC_BYTE
+ 	case 1:
+-		return __sync_val_compare_and_swap_1(addr, old, _new);
++		return __sync_val_compare_and_swap_1((unsigned char *)addr, old, _new);
+ #endif
+ #ifdef UATOMIC_HAS_ATOMIC_SHORT
+ 	case 2:
+-		return __sync_val_compare_and_swap_2(addr, old, _new);
++		return __sync_val_compare_and_swap_2((unsigned short int *)addr, old, _new);
+ #endif
+ 	case 4:
+-		return __sync_val_compare_and_swap_4(addr, old, _new);
++		return __sync_val_compare_and_swap_4((unsigned int *)addr, old, _new);
+ #if (CAA_BITS_PER_LONG == 64)
+ 	case 8:
+-		return __sync_val_compare_and_swap_8(addr, old, _new);
++		return __sync_val_compare_and_swap_8((unsigned long *)addr, old, _new);
+ #endif
+ 	}
+ 	_uatomic_link_error();
+@@ -100,20 +100,20 @@ void _uatomic_and(void *addr, unsigned long val,
+ 	switch (len) {
+ #ifdef UATOMIC_HAS_ATOMIC_BYTE
+ 	case 1:
+-		__sync_and_and_fetch_1(addr, val);
++		__sync_and_and_fetch_1((unsigned char *)addr, val);
+ 		return;
+ #endif
+ #ifdef UATOMIC_HAS_ATOMIC_SHORT
+ 	case 2:
+-		__sync_and_and_fetch_2(addr, val);
++		__sync_and_and_fetch_2((unsigned short int *)addr, val);
+ 		return;
+ #endif
+ 	case 4:
+-		__sync_and_and_fetch_4(addr, val);
++		__sync_and_and_fetch_4((unsigned int *)addr, val);
+ 		return;
+ #if (CAA_BITS_PER_LONG == 64)
+ 	case 8:
+-		__sync_and_and_fetch_8(addr, val);
++		__sync_and_and_fetch_8((unsigned long *)addr, val);
+ 		return;
+ #endif
+ 	}
+@@ -139,20 +139,20 @@ void _uatomic_or(void *addr, unsigned long val,
+ 	switch (len) {
+ #ifdef UATOMIC_HAS_ATOMIC_BYTE
+ 	case 1:
+-		__sync_or_and_fetch_1(addr, val);
++		__sync_or_and_fetch_1((unsigned char *)addr, val);
+ 		return;
+ #endif
+ #ifdef UATOMIC_HAS_ATOMIC_SHORT
+ 	case 2:
+-		__sync_or_and_fetch_2(addr, val);
++		__sync_or_and_fetch_2((unsigned short int *)addr, val);
+ 		return;
+ #endif
+ 	case 4:
+-		__sync_or_and_fetch_4(addr, val);
++		__sync_or_and_fetch_4((unsigned int *)addr, val);
+ 		return;
+ #if (CAA_BITS_PER_LONG == 64)
+ 	case 8:
+-		__sync_or_and_fetch_8(addr, val);
++		__sync_or_and_fetch_8((unsigned long *)addr, val);
+ 		return;
+ #endif
+ 	}
+@@ -180,17 +180,17 @@ unsigned long _uatomic_add_return(void *addr, unsigned long val,
+ 	switch (len) {
+ #ifdef UATOMIC_HAS_ATOMIC_BYTE
+ 	case 1:
+-		return __sync_add_and_fetch_1(addr, val);
++		return __sync_add_and_fetch_1((unsigned char *)addr, val);
+ #endif
+ #ifdef UATOMIC_HAS_ATOMIC_SHORT
+ 	case 2:
+-		return __sync_add_and_fetch_2(addr, val);
++		return __sync_add_and_fetch_2((unsigned short int *)addr, val);
+ #endif
+ 	case 4:
+-		return __sync_add_and_fetch_4(addr, val);
++		return __sync_add_and_fetch_4((unsigned int *)addr, val);
+ #if (CAA_BITS_PER_LONG == 64)
+ 	case 8:
+-		return __sync_add_and_fetch_8(addr, val);
++		return __sync_add_and_fetch_8((unsigned long *)addr, val);
+ #endif
+ 	}
+ 	_uatomic_link_error();
+@@ -218,7 +218,7 @@ unsigned long _uatomic_exchange(void *addr, unsigned long val, int len)
+ 
+ 		do {
+ 			old = uatomic_read((unsigned char *)addr);
+-		} while (!__sync_bool_compare_and_swap_1(addr, old, val));
++		} while (!__sync_bool_compare_and_swap_1((unsigned char *)addr, old, val));
+ 
+ 		return old;
+ 	}
+@@ -230,7 +230,7 @@ unsigned long _uatomic_exchange(void *addr, unsigned long val, int len)
+ 
+ 		do {
+ 			old = uatomic_read((unsigned short *)addr);
+-		} while (!__sync_bool_compare_and_swap_2(addr, old, val));
++		} while (!__sync_bool_compare_and_swap_2((unsigned short int *)addr, old, val));
+ 
+ 		return old;
+ 	}
+@@ -241,7 +241,7 @@ unsigned long _uatomic_exchange(void *addr, unsigned long val, int len)
+ 
+ 		do {
+ 			old = uatomic_read((unsigned int *)addr);
+-		} while (!__sync_bool_compare_and_swap_4(addr, old, val));
++		} while (!__sync_bool_compare_and_swap_4((unsigned int *)addr, old, val));
+ 
+ 		return old;
+ 	}
+@@ -252,7 +252,7 @@ unsigned long _uatomic_exchange(void *addr, unsigned long val, int len)
+ 
+ 		do {
+ 			old = uatomic_read((unsigned long *)addr);
+-		} while (!__sync_bool_compare_and_swap_8(addr, old, val));
++		} while (!__sync_bool_compare_and_swap_8((unsigned long *)addr, old, val));
+ 
+ 		return old;
+ 	}
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.1.4
