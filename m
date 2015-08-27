@@ -1,8 +1,8 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools] Fix: race between kconsumerd and
-	sessiond on tear down
-Date: Tue, 25 Aug 2015 18:06:28 -0400
-Message-ID: <1440540388-2721-1-git-send-email-jonathan.rajotte-julien__3928.05826054445$1440540462$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools] Fix: use pid element instead of
+	process element
+Date: Thu, 27 Aug 2015 15:58:23 -0400
+Message-ID: <1440705503-13691-1-git-send-email-jonathan.rajotte-julien__2034.3461343602$1440705623$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,8 +10,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
  (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1ZUMMb-0000t1-2z
- for lttng-dev@lists.lttng.org; Tue, 25 Aug 2015 18:06:42 -0400
+ id 1ZV3Ju-00067O-Gy
+ for lttng-dev@lists.lttng.org; Thu, 27 Aug 2015 15:58:55 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,73 +24,181 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Kconsumerd and sessiond both have reference on lttng-module. This can lead to a race
-on modprobe_remove_lttng_all which might fail to unload modules due to
-certain modules not having a ref count equal to zero at the time.
+For stable 2.7
 
-waitpid is used to force a synchronization on the child (kconsumer) termination.
+This revert part of changes introduced by [1] and [2].
 
-This also have been applied to ust consumers for the sake of consistency.
+The use of process element break the existing MI xml api.
 
-Fixes: #878
+[1] 46ef4d0715faeef52cd2242b5b895c74507e223a
+[2] a585578f837d992f00eba4f090c8ba251d9de94e
 
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- src/bin/lttng-sessiond/main.c | 28 +++++++++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
+ src/bin/lttng/commands/list.c     | 18 ++++++++---------
+ src/common/mi-lttng.c             | 41 +++++++++++++++++++++++++++++++++++++++
+ src/common/mi-lttng.h             | 19 ++++++++++++++++++
+ tests/regression/tools/mi/test_mi |  2 +-
+ 4 files changed, 70 insertions(+), 10 deletions(-)
 
-diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-index d284deb..efb00c7 100644
---- a/src/bin/lttng-sessiond/main.c
-+++ b/src/bin/lttng-sessiond/main.c
-@@ -587,6 +587,28 @@ static int generate_lock_file_path(char *path, size_t len)
- }
+diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
+index f7f3852..3198eca 100644
+--- a/src/bin/lttng/commands/list.c
++++ b/src/bin/lttng/commands/list.c
+@@ -340,8 +340,8 @@ static int mi_list_agent_ust_events(struct lttng_event *events, int count,
+ 		goto end;
+ 	}
  
- /*
-+ * Wait on consumer process termination
-+ */
-+static void wait_consumer(struct consumer_data *consumer_data)
-+{
-+	pid_t ret;
-+	int status;
-+	if (consumer_data->pid > 0) {
-+		DBG("Waiting for complete teardown of consumerd (PID:%d)",
-+				consumer_data->pid);
-+		ret = waitpid(consumer_data->pid, &status, 0);
-+		if (ret == -1) {
-+			PERROR("consumerd waitpid pid:%d", consumer_data->pid)
-+		}
-+		if (!WIFEXITED(status)) {
-+			PERROR("consumerd termination with error:%d",
-+					WEXITSTATUS(ret));
-+		}
-+		consumer_data->pid = 0;
-+	}
-+}
-+
-+/*
-  * Cleanup the session daemon's data structures.
-  */
- static void sessiond_cleanup(void)
-@@ -680,6 +702,11 @@ static void sessiond_cleanup(void)
+-	/* Open processes element */
+-	ret = mi_lttng_processes_open(writer);
++	/* Open pids element element */
++	ret = mi_lttng_pids_open(writer);
+ 	if (ret) {
+ 		goto end;
+ 	}
+@@ -366,7 +366,7 @@ static int mi_list_agent_ust_events(struct lttng_event *events, int count,
+ 
+ 			if (!pid_element_open) {
+ 				/* Open and write a pid element */
+-				ret = mi_lttng_process(writer, cur_pid, cmdline, 1);
++				ret = mi_lttng_pid(writer, cur_pid, cmdline, 1);
+ 				if (ret) {
+ 					goto error;
+ 				}
+@@ -389,7 +389,7 @@ static int mi_list_agent_ust_events(struct lttng_event *events, int count,
  		}
  	}
  
-+	wait_consumer(&kconsumer_data);
-+	wait_consumer(&ustconsumer64_data);
-+	wait_consumer(&ustconsumer32_data);
+-	/* Close processes */
++	/* Close pids */
+ 	ret = mi_lttng_writer_close_element(writer);
+ 	if (ret) {
+ 		goto end;
+@@ -577,8 +577,8 @@ static int mi_list_ust_event_fields(struct lttng_event_field *fields, int count,
+ 		goto end;
+ 	}
+ 
+-	/* Open processes element */
+-	ret = mi_lttng_processes_open(writer);
++	/* Open pids element */
++	ret = mi_lttng_pids_open(writer);
+ 	if (ret) {
+ 		goto end;
+ 	}
+@@ -606,8 +606,8 @@ static int mi_list_ust_event_fields(struct lttng_event_field *fields, int count,
+ 			cur_pid = fields[i].event.pid;
+ 			cmdline = get_cmdline_by_pid(cur_pid);
+ 			if (!pid_element_open) {
+-				/* Open and write a process element */
+-				ret = mi_lttng_process(writer, cur_pid, cmdline, 1);
++				/* Open and write a pid element */
++				ret = mi_lttng_pid(writer, cur_pid, cmdline, 1);
+ 				if (ret) {
+ 					goto error;
+ 				}
+@@ -661,7 +661,7 @@ static int mi_list_ust_event_fields(struct lttng_event_field *fields, int count,
+ 		}
+ 	}
+ 
+-	/* Close processes, domain, domains */
++	/* Close pid, domain, domains */
+ 	ret = mi_lttng_close_multi_element(writer, 3);
+ end:
+ 	return ret;
+diff --git a/src/common/mi-lttng.c b/src/common/mi-lttng.c
+index 9d6500b..8fbd064 100644
+--- a/src/common/mi-lttng.c
++++ b/src/common/mi-lttng.c
+@@ -1199,6 +1199,47 @@ end:
+ 	return ret;
+ }
+ 
++/*
++ * TODO: move the listing of pid for user agent to process semantic on
++ * mi api bump. The use of process element break the mi api.
++ */
++LTTNG_HIDDEN
++int mi_lttng_pid(struct mi_writer *writer, pid_t pid , const char *name,
++		int is_open)
++{
++	int ret;
 +
++	/* Open pid process */
++	ret = mi_lttng_writer_open_element(writer, config_element_pid);
++	if (ret) {
++		goto end;
++	}
 +
- 	DBG("Cleaning up all agent apps");
- 	agent_app_ht_clean();
- 
-@@ -1497,7 +1524,6 @@ error:
- 
- 	unlink(consumer_data->err_unix_sock_path);
- 	unlink(consumer_data->cmd_unix_sock_path);
--	consumer_data->pid = 0;
- 	pthread_mutex_unlock(&consumer_data->lock);
- 
- 	/* Cleanup metadata socket mutex. */
++	/* Writing pid number */
++	ret = mi_lttng_writer_write_element_signed_int(writer,
++			mi_lttng_element_pid_id, (int)pid);
++	if (ret) {
++		goto end;
++	}
++
++	/* Writing name of the process */
++	if (name) {
++		ret = mi_lttng_writer_write_element_string(writer, config_element_name,
++				name);
++		if (ret) {
++			goto end;
++		}
++	}
++
++	if (!is_open) {
++		/* Closing Pid */
++		ret = mi_lttng_writer_close_element(writer);
++	}
++
++end:
++	return ret;
++}
++
+ LTTNG_HIDDEN
+ int mi_lttng_targets_open(struct mi_writer *writer)
+ {
+diff --git a/src/common/mi-lttng.h b/src/common/mi-lttng.h
+index 23b7810..5344a23 100644
+--- a/src/common/mi-lttng.h
++++ b/src/common/mi-lttng.h
+@@ -619,6 +619,25 @@ int mi_lttng_processes_open(struct mi_writer *writer);
+  */
+ int mi_lttng_process(struct mi_writer *writer, pid_t pid , const char *name,
+ 		int is_open);
++
++/*
++ * TODO: move pid of lttng list -u to process semantic on mi api bump
++ * Machine interface of a Process.
++ *
++ * writer An instance of a machine interface writer.
++ * pid A PID.
++ *
++ * is_open Defines whether or not the session element shall be closed.
++ *         This should be used carefully and the client
++ *         must close the pid element.
++ *         Use case: nested addition information on a domain
++ *                  ex: channel event.
++ *
++ * Returns zero if the element's value could be written.
++ * Negative values indicate an error.
++ */
++int mi_lttng_pid(struct mi_writer *writer, pid_t pid , const char *name,
++		int is_open);
+ /*
+  * Machine interface: open a targets element.
+  *
+diff --git a/tests/regression/tools/mi/test_mi b/tests/regression/tools/mi/test_mi
+index 7f22ee1..47ec1b1 100755
+--- a/tests/regression/tools/mi/test_mi
++++ b/tests/regression/tools/mi/test_mi
+@@ -48,7 +48,7 @@ XPATH_ENABLE_EVENT_SUCCESS="$XPATH_CMD_OUTPUT/events/event/success/text()"
+ XPATH_DISABLE_EVENT_SUCCESS="$XPATH_CMD_OUTPUT/channel/events/event/success/text()"
+ XPATH_LIST_DOMAIN="$XPATH_CMD_OUTPUT/sessions/session/domains/domain"
+ XPATH_LIST_CHANNEL="$XPATH_CMD_OUTPUT/sessions/session/domains/domain/channels/channel"
+-XPATH_LIST_UST_EVENT="$XPATH_CMD_OUTPUT/domains/domain[./type ='UST']/processes/process/events/event"
++XPATH_LIST_UST_EVENT="$XPATH_CMD_OUTPUT/domains/domain[./type ='UST']/pids/pid/events/event"
+ XPATH_SNAPSHOT_ADD_SNAPSHOT="$XPATH_CMD_OUTPUT/snapshot_action[./name = 'add-output']/output"
+ XPATH_SNAPSHOT_LIST="$XPATH_CMD_OUTPUT/snapshot_action[./name = 'list-output']/output"
+ XPATH_SNAPSHOT_DEL="$XPATH_CMD_OUTPUT/snapshot_action[./name = 'del-output']/output"
 -- 
 2.1.4
