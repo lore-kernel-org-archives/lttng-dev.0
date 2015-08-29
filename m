@@ -1,17 +1,39 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools] Fix: use pid element instead of
-	process element
-Date: Thu, 27 Aug 2015 15:58:23 -0400
-Message-ID: <1440705503-13691-1-git-send-email-jonathan.rajotte-julien__2034.3461343602$1440705623$gmane$org@efficios.com>
+From: Antoine Busque <abusque@efficios.com>
+Subject: Re: Userspace C++ Fucntion entry exit insert tracepoints
+Date: Sat, 29 Aug 2015 00:25:00 -0400
+Message-ID: <CA+MZcXs6DULNcVXUOqC=nbo2qZXUVxL_nezYd3icY5L4iN126A__23039.4292892472$1440822399$gmane$org@mail.gmail.com>
+References: <BAY179-W1929B629FBBDDBA12D96AD92750@phx.gbl>
+ <CA+MZcXt0JTMQ8cwthAgAbnxonVQ3UpTYKmBC_w4Rn0qHS9eCyw@mail.gmail.com>
+ <BAY179-W393BA87F5BA841B1432BC5926D0@phx.gbl>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1ZV3Ju-00067O-Gy
- for lttng-dev@lists.lttng.org; Thu, 27 Aug 2015 15:58:55 -0400
+ (envelope-from <abusque@efficios.com>) id 1ZVXhW-00075R-Ar
+ for lttng-dev@lists.lttng.org; Sat, 29 Aug 2015 00:25:18 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 4324F340298
+ for <lttng-dev@lists.lttng.org>; Sat, 29 Aug 2015 04:25:05 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id 9qDFiIczm-tg for <lttng-dev@lists.lttng.org>;
+ Sat, 29 Aug 2015 04:25:03 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 0789D3402C3
+ for <lttng-dev@lists.lttng.org>; Sat, 29 Aug 2015 04:25:03 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id 1mrixNfYYM_a for <lttng-dev@lists.lttng.org>;
+ Sat, 29 Aug 2015 04:25:02 +0000 (UTC)
+Received: from mail-ig0-f180.google.com (mail-ig0-f180.google.com
+ [209.85.213.180])
+ by mail.efficios.com (Postfix) with ESMTPSA id 83729340298
+ for <lttng-dev@lists.lttng.org>; Sat, 29 Aug 2015 04:25:02 +0000 (UTC)
+Received: by igcse8 with SMTP id se8so34346125igc.1
+ for <lttng-dev@lists.lttng.org>; Fri, 28 Aug 2015 21:25:00 -0700 (PDT)
+In-Reply-To: <BAY179-W393BA87F5BA841B1432BC5926D0@phx.gbl>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,185 +42,52 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: Farhan Shariff <farhan.shariff@hotmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-For stable 2.7
-
-This revert part of changes introduced by [1] and [2].
-
-The use of process element break the existing MI xml api.
-
-[1] 46ef4d0715faeef52cd2242b5b895c74507e223a
-[2] a585578f837d992f00eba4f090c8ba251d9de94e
-
-Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
----
- src/bin/lttng/commands/list.c     | 18 ++++++++---------
- src/common/mi-lttng.c             | 41 +++++++++++++++++++++++++++++++++++++++
- src/common/mi-lttng.h             | 19 ++++++++++++++++++
- tests/regression/tools/mi/test_mi |  2 +-
- 4 files changed, 70 insertions(+), 10 deletions(-)
-
-diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/list.c
-index f7f3852..3198eca 100644
---- a/src/bin/lttng/commands/list.c
-+++ b/src/bin/lttng/commands/list.c
-@@ -340,8 +340,8 @@ static int mi_list_agent_ust_events(struct lttng_event *events, int count,
- 		goto end;
- 	}
- 
--	/* Open processes element */
--	ret = mi_lttng_processes_open(writer);
-+	/* Open pids element element */
-+	ret = mi_lttng_pids_open(writer);
- 	if (ret) {
- 		goto end;
- 	}
-@@ -366,7 +366,7 @@ static int mi_list_agent_ust_events(struct lttng_event *events, int count,
- 
- 			if (!pid_element_open) {
- 				/* Open and write a pid element */
--				ret = mi_lttng_process(writer, cur_pid, cmdline, 1);
-+				ret = mi_lttng_pid(writer, cur_pid, cmdline, 1);
- 				if (ret) {
- 					goto error;
- 				}
-@@ -389,7 +389,7 @@ static int mi_list_agent_ust_events(struct lttng_event *events, int count,
- 		}
- 	}
- 
--	/* Close processes */
-+	/* Close pids */
- 	ret = mi_lttng_writer_close_element(writer);
- 	if (ret) {
- 		goto end;
-@@ -577,8 +577,8 @@ static int mi_list_ust_event_fields(struct lttng_event_field *fields, int count,
- 		goto end;
- 	}
- 
--	/* Open processes element */
--	ret = mi_lttng_processes_open(writer);
-+	/* Open pids element */
-+	ret = mi_lttng_pids_open(writer);
- 	if (ret) {
- 		goto end;
- 	}
-@@ -606,8 +606,8 @@ static int mi_list_ust_event_fields(struct lttng_event_field *fields, int count,
- 			cur_pid = fields[i].event.pid;
- 			cmdline = get_cmdline_by_pid(cur_pid);
- 			if (!pid_element_open) {
--				/* Open and write a process element */
--				ret = mi_lttng_process(writer, cur_pid, cmdline, 1);
-+				/* Open and write a pid element */
-+				ret = mi_lttng_pid(writer, cur_pid, cmdline, 1);
- 				if (ret) {
- 					goto error;
- 				}
-@@ -661,7 +661,7 @@ static int mi_list_ust_event_fields(struct lttng_event_field *fields, int count,
- 		}
- 	}
- 
--	/* Close processes, domain, domains */
-+	/* Close pid, domain, domains */
- 	ret = mi_lttng_close_multi_element(writer, 3);
- end:
- 	return ret;
-diff --git a/src/common/mi-lttng.c b/src/common/mi-lttng.c
-index 9d6500b..8fbd064 100644
---- a/src/common/mi-lttng.c
-+++ b/src/common/mi-lttng.c
-@@ -1199,6 +1199,47 @@ end:
- 	return ret;
- }
- 
-+/*
-+ * TODO: move the listing of pid for user agent to process semantic on
-+ * mi api bump. The use of process element break the mi api.
-+ */
-+LTTNG_HIDDEN
-+int mi_lttng_pid(struct mi_writer *writer, pid_t pid , const char *name,
-+		int is_open)
-+{
-+	int ret;
-+
-+	/* Open pid process */
-+	ret = mi_lttng_writer_open_element(writer, config_element_pid);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* Writing pid number */
-+	ret = mi_lttng_writer_write_element_signed_int(writer,
-+			mi_lttng_element_pid_id, (int)pid);
-+	if (ret) {
-+		goto end;
-+	}
-+
-+	/* Writing name of the process */
-+	if (name) {
-+		ret = mi_lttng_writer_write_element_string(writer, config_element_name,
-+				name);
-+		if (ret) {
-+			goto end;
-+		}
-+	}
-+
-+	if (!is_open) {
-+		/* Closing Pid */
-+		ret = mi_lttng_writer_close_element(writer);
-+	}
-+
-+end:
-+	return ret;
-+}
-+
- LTTNG_HIDDEN
- int mi_lttng_targets_open(struct mi_writer *writer)
- {
-diff --git a/src/common/mi-lttng.h b/src/common/mi-lttng.h
-index 23b7810..5344a23 100644
---- a/src/common/mi-lttng.h
-+++ b/src/common/mi-lttng.h
-@@ -619,6 +619,25 @@ int mi_lttng_processes_open(struct mi_writer *writer);
-  */
- int mi_lttng_process(struct mi_writer *writer, pid_t pid , const char *name,
- 		int is_open);
-+
-+/*
-+ * TODO: move pid of lttng list -u to process semantic on mi api bump
-+ * Machine interface of a Process.
-+ *
-+ * writer An instance of a machine interface writer.
-+ * pid A PID.
-+ *
-+ * is_open Defines whether or not the session element shall be closed.
-+ *         This should be used carefully and the client
-+ *         must close the pid element.
-+ *         Use case: nested addition information on a domain
-+ *                  ex: channel event.
-+ *
-+ * Returns zero if the element's value could be written.
-+ * Negative values indicate an error.
-+ */
-+int mi_lttng_pid(struct mi_writer *writer, pid_t pid , const char *name,
-+		int is_open);
- /*
-  * Machine interface: open a targets element.
-  *
-diff --git a/tests/regression/tools/mi/test_mi b/tests/regression/tools/mi/test_mi
-index 7f22ee1..47ec1b1 100755
---- a/tests/regression/tools/mi/test_mi
-+++ b/tests/regression/tools/mi/test_mi
-@@ -48,7 +48,7 @@ XPATH_ENABLE_EVENT_SUCCESS="$XPATH_CMD_OUTPUT/events/event/success/text()"
- XPATH_DISABLE_EVENT_SUCCESS="$XPATH_CMD_OUTPUT/channel/events/event/success/text()"
- XPATH_LIST_DOMAIN="$XPATH_CMD_OUTPUT/sessions/session/domains/domain"
- XPATH_LIST_CHANNEL="$XPATH_CMD_OUTPUT/sessions/session/domains/domain/channels/channel"
--XPATH_LIST_UST_EVENT="$XPATH_CMD_OUTPUT/domains/domain[./type ='UST']/processes/process/events/event"
-+XPATH_LIST_UST_EVENT="$XPATH_CMD_OUTPUT/domains/domain[./type ='UST']/pids/pid/events/event"
- XPATH_SNAPSHOT_ADD_SNAPSHOT="$XPATH_CMD_OUTPUT/snapshot_action[./name = 'add-output']/output"
- XPATH_SNAPSHOT_LIST="$XPATH_CMD_OUTPUT/snapshot_action[./name = 'list-output']/output"
- XPATH_SNAPSHOT_DEL="$XPATH_CMD_OUTPUT/snapshot_action[./name = 'del-output']/output"
--- 
-2.1.4
+T24gRnJpLCBBdWcgMjgsIDIwMTUgYXQgMTA6MTIgUE0sIEZhcmhhbiBTaGFyaWZmCjxmYXJoYW4u
+c2hhcmlmZkBob3RtYWlsLmNvbT4gd3JvdGU6Cj4gSGkgQW50b2luZSwKPgo+IFRoYW5rIHlvdSBm
+b3IgeW91ciByZXBseTopCj4KPiBXaGF0IGlzIHRoZSBtYWpvciBkZXBlbmRlbmN5IG9yIHJlYXNv
+biB0aGF0IGx0dG5nIG1vZHVsZXMgYnVpbGQgb24gMi42LjM4Cj4gYW5kIGhpZ2hlciBhbmQgbm90
+IG9uIGxvd2VyIDIuNi4zMgo+CgpUaGVyZSBoYXZlIGJlZW4gY2hhbmdlcyBpbiB0aGUga2VybmVs
+J3MgdHJhY2Vwb2ludCBBUEkgYmV0d2VlbgoyLjYuMzIgYW5kIDIuNi4zNiwgYW1vbmdzdCBvdGhl
+ciBjaGFuZ2VzLCBjYXVzaW5nCmluY29tcGF0aWJpbGl0aWVzLiBQYXRjaGVzIHRvIHN1cHBvcnQg
+a2VybmVsIHZlcnNpb25zIGxvd2VyIHRoYW4KMi42LjM2IHdlcmUgYXQgb25lIHBvaW50IG1haW50
+YWluZWQsIHVuZGVyIGBsaW51eC1wYXRjaGVzL2AKd2l0aGluIHRoZSBsdHRuZy1tb2R1bGVzIHNv
+dXJjZSB0cmVlLCBidXQgYXMgZGlzY3JlcGFuY2llcwpiZXR3ZWVuIG9sZGVyIGFuZCBuZXdlciBr
+ZXJuZWxzIGdyZXcgaXQgYmVjYW1lIHRvbyBidXJkZW5zb21lIHRvCmFjdGl2ZWx5IG1haW50YWlu
+IHRoZW0uCgo+IGJ0dyAg4oCRY3ln4oCRcHJvZmlsZSBsaWJyYXJ5ICBwcm92aWRlcyBvbmx5IGZ1
+bmN0aW9uIGNhbGwgZ3JhcGggYW5kIE5PVCB0aGUgSS9PCj4gYXJndW1lbnRzLiBJIHByZWZlciB1
+c2luZyBpdCB3aXRoIHRyYWNlcG9pbnRzKCk7Cj4KClJpZ2h0LCB0aGUgZ2VuZXJhdGVkIGluc3Ry
+dW1lbnRhdGlvbiBvbmx5IGhhcyBpbmZvcm1hdGlvbiBhYm91dAp0aGUgZnVuY3Rpb24ncyBhZGRy
+ZXNzIGFuZCBpdHMgY2FsbHNpdGUuIEkgZG8gbm90IGJlbGlldmUgdGhlcmUgYXJlCnJlYWR5LW1h
+ZGUgZmFjaWxpdGllcyB0byBnZW5lcmF0ZSBzaW1pbGFyIGVudHJ5L2V4aXQKaW5zdHJ1bWVudGF0
+aW9uIHRoYXQgYWxzbyBhY2NvdW50cyBmb3IgYWxsIHRoZSBjdXJyZW50IGFyZ3VtZW50cy4KCkFs
+c28sIEkndmUgYWRkZWQgYmFjayBsdHRuZy1kZXYgaW4gQ0MgdG8gdGhpcyBtZXNzYWdlLiBQbGVh
+c2UgdHJ5CnRvIGtlZXAgdGhlIGRpc2N1c3Npb24gb24gdGhlIHB1YmxpYyBtYWlsaW5nIGxpc3Qu
+CgpSZWdhcmRzLApBbnRvaW5lIEJ1c3F1ZQoKPgo+IEJlc3QgUmVnYXJkcwo+IEZhcmhhbiBTaGFy
+aWZmCj4gRGVzaWduIEVuZ2luZWVyCj4gU29mdHdhcmUgRmFjaWxpdGllcyBFVVYgU291cmNlCj4g
+QVNNTCBWZWxkaG92ZW4tIE5ldGhlcmxhbmRzCj4KPgo+PiBEYXRlOiBGcmksIDcgQXVnIDIwMTUg
+MTM6MDc6NDkgLTA0MDAKPj4gU3ViamVjdDogUmU6IFtsdHRuZy1kZXZdIFVzZXJzcGFjZSBDKysg
+RnVjbnRpb24gZW50cnkgZXhpdCBpbnNlcnQKPj4gdHJhY2Vwb2ludHMKPj4gRnJvbTogYWJ1c3F1
+ZUBlZmZpY2lvcy5jb20KPj4gVG86IGZhcmhhbi5zaGFyaWZmQGhvdG1haWwuY29tCj4+IENDOiBs
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4KPj4KPj4gT24gV2VkLCBBdWcgNSwgMjAxNSBhdCAx
+MDozMiBBTSwgRmFyaGFuIFNoYXJpZmYKPj4gPGZhcmhhbi5zaGFyaWZmQGhvdG1haWwuY29tPiB3
+cm90ZToKPj4gPiBIaSwKPj4gPgo+PiA+IEkgYW0gd29ya2luZyB3aXRoIGEgYysrIGFwcGxpY2F0
+aW9uKCB1c2Vyc3BhY2UgKQo+PiA+Cj4+ID4gSSB3YW50IHRvIHBsYWNlIGluIG15IHNvdXJjZSBj
+b2RlCj4+ID4gLSB0cmFjZXBvaW50KHByb3ZpZGUsbmFtZSwuLi4pIGF0IGV2ZXJ5IGZ1bmN0aW9u
+IGVudHJ5IGFuZCBleGl0IC4KPj4gPgo+PiA+IGlzIGl0IHBvc3NpYmxlIHRvIGJ5IGFueSBtZWFu
+cyB0byBhdXRvbWF0ZSB0aGlzIGFzIGl0IGlzIHZlcnkgY3VtYmVyc29tZQo+PiA+IHRvCj4+ID4g
+cGxhY2UgaXQgbWFudWFsbHkuCj4+ID4KPj4gPgo+PiA+Cj4+ID4gQmVzdCBSZWdhcmRzCj4+ID4K
+Pj4gPiBGYXJoYW4gU2hhcmlmZgo+PiA+Cj4+ID4gRmFyaGFuIFNoYXJpZmYKPj4gPgo+Pgo+PiBI
+aSwKPj4KPj4gSSBzdWdnZXN0IHlvdSBoYXZlIGEgbG9vayBhdCB0aGUgTFRUbmcgZG9jdW1lbnRh
+dGlvbiBvbiBmdW5jdGlvbiB0cmFjaW5nOgo+Pgo+PiBodHRwOi8vbHR0bmcub3JnL2RvY3MvI2Rv
+Yy1saWJsdHRuZ+KAkXVzdOKAkWN5Z+KAkXByb2ZpbGUKPj4KPj4gSSBiZWxpZXZlIHRoaXMgbWln
+aHQgc3VpdCB5b3VyIG5lZWRzLgo+Pgo+PiBSZWdhcmRzLAo+PiBBbnRvaW5lLgo+Pgo+PiA+Cj4+
+ID4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gPiBs
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+ID4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiA+
+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo+PiA+CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xp
+c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
