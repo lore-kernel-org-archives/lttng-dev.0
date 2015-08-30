@@ -1,18 +1,16 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules v2] Fix: build failure on 2.6.36
-Date: Sat, 29 Aug 2015 17:55:53 -0400
-Message-ID: <1440885353-1842-1-git-send-email-mjeanson__41079.052075702$1440885420$gmane$org@efficios.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [GIT PULL] Regenerate the metadata file after a major
+ NTP correction
+Date: Sat, 29 Aug 2015 20:38:42 -0400
+Message-ID: <55E25092.2020000__22111.6225854077$1440895211$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mjeanson@efficios.com>) id 1ZVo6Z-0003yN-Pi
- for lttng-dev@lists.lttng.org; Sat, 29 Aug 2015 17:56:10 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 0B1ED3402CC
- for <lttng-dev@lists.lttng.org>; Sat, 29 Aug 2015 21:56:03 +0000 (UTC)
+ (envelope-from <jdesfossez@efficios.com>) id 1ZVqe2-0004jV-50
+ for lttng-dev@lists.lttng.org; Sat, 29 Aug 2015 20:38:58 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,100 +19,28 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jeremie Galarneau <jgalar@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Fixes build failure on the 2.6.36 kernel branch which misses the
-vzalloc() function.
+This patchset for LTTng 2.8 is composed of commits in lttng-tools and
+lttng-modules it allows the user to regenerate the metadata file of a
+running session. This allows to fix the NTP offset located in the
+metadata after a major NTP correction. Works for kernel and per-uid UST
+sessions, local or remote but not live.
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
----
- lttng-events.c    |  5 +++--
- wrapper/vzalloc.h | 46 ++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 49 insertions(+), 2 deletions(-)
- create mode 100644 wrapper/vzalloc.h
+Please pull from:
+https://github.com/jdesfossez/lttng-tools-dev/tree/regenmeta
+d060d4c Tests for metadata regenerate
+e646827 Command metadata regenerate
+ce3ea6b Store the version of the tracer in the UID registry
 
-diff --git a/lttng-events.c b/lttng-events.c
-index b49851b..c49174d 100644
---- a/lttng-events.c
-+++ b/lttng-events.c
-@@ -50,6 +50,7 @@
- #include "lttng-events.h"
- #include "lttng-tracer.h"
- #include "lttng-abi-old.h"
-+#include "wrapper/vzalloc.h"
- 
- #define METADATA_CACHE_DEFAULT_SIZE 4096
- 
-@@ -133,7 +134,7 @@ struct lttng_session *lttng_session_create(void)
- 			GFP_KERNEL);
- 	if (!metadata_cache)
- 		goto err_free_session;
--	metadata_cache->data = vzalloc(METADATA_CACHE_DEFAULT_SIZE);
-+	metadata_cache->data = lttng_vzalloc(METADATA_CACHE_DEFAULT_SIZE);
- 	if (!metadata_cache->data)
- 		goto err_free_cache;
- 	metadata_cache->cache_alloc = METADATA_CACHE_DEFAULT_SIZE;
-@@ -1531,7 +1532,7 @@ int lttng_metadata_printf(struct lttng_session *session,
- 		tmp_cache_alloc_size = max_t(unsigned int,
- 				session->metadata_cache->cache_alloc + len,
- 				session->metadata_cache->cache_alloc << 1);
--		tmp_cache_realloc = vzalloc(tmp_cache_alloc_size);
-+		tmp_cache_realloc = lttng_vzalloc(tmp_cache_alloc_size);
- 		if (!tmp_cache_realloc)
- 			goto err;
- 		if (session->metadata_cache->data) {
-diff --git a/wrapper/vzalloc.h b/wrapper/vzalloc.h
-new file mode 100644
-index 0000000..5b8f2b8
---- /dev/null
-+++ b/wrapper/vzalloc.h
-@@ -0,0 +1,46 @@
-+#ifndef _LTTNG_WRAPPER_VZALLOC_H
-+#define _LTTNG_WRAPPER_VZALLOC_H
-+
-+/*
-+ * wrapper/vzalloc.h
-+ *
-+ * Copyright (C) 2015 Michael Jeanson <mjeanson@efficios.com>
-+ *
-+ * This library is free software; you can redistribute it and/or
-+ * modify it under the terms of the GNU Lesser General Public
-+ * License as published by the Free Software Foundation; only
-+ * version 2.1 of the License.
-+ *
-+ * This library is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-+ * Lesser General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU Lesser General Public
-+ * License along with this library; if not, write to the Free Software
-+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-+ */
-+
-+#include <linux/version.h>
-+#include <linux/vmalloc.h>
-+
-+#if LTTNG_KERNEL_RANGE(2,6,36, 2,6,37)
-+static inline
-+void *lttng_vzalloc(unsigned long size)
-+{
-+	void *ret;
-+	ret = vmalloc(size);
-+	if (ret)
-+		memset(ret, 0, size);
-+	return ret;
-+}
-+#else
-+static inline
-+void *lttng_vzalloc(unsigned long size)
-+{
-+	return vzalloc(size);
-+}
-+#endif
-+
-+
-+#endif /* _LTTNG_WRAPPER_VZALLOC_H */
--- 
-1.9.1
+https://github.com/jdesfossez/lttng-modules-dev/tree/regenmeta
+6b87bf9 Command to regenerate the metadata of a session
+
+These commits are on top of my seqnum branch which is now located on top
+of Mathieu's staging-test-fixes-v2 branch.
+When these branches will be merged in master, I will rebase on master as
+well, but in the meantime it is now ready for review.
+
+Julien
