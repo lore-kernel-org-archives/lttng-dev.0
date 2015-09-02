@@ -1,17 +1,16 @@
-From: "Shelton, Ben" <benjamin.h.shelton@intel.com>
-Subject: Instrumenting code that's common between user and
-	kernel space
-Date: Mon, 31 Aug 2015 14:13:10 -0500
-Message-ID: <20150831191309.GA13818__3189.31878214261$1441048493$gmane$org@bhshelto-vm>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools] Fix: kernel track/untrack error
+	handling
+Date: Wed,  2 Sep 2015 10:45:07 -0400
+Message-ID: <1441205107-28934-1-git-send-email-mathieu.desnoyers__14559.1885121123$1441205213$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mga01.intel.com ([192.55.52.88])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <benjamin.h.shelton@intel.com>) id 1ZWUWC-0000f2-7G
- for lttng-dev@lists.lttng.org; Mon, 31 Aug 2015 15:13:29 -0400
-Content-Disposition: inline
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZX9Hs-00054X-E2
+ for lttng-dev@lists.lttng.org; Wed, 02 Sep 2015 10:45:29 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,18 +19,69 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: timothy.mcdaniel@intel.com
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi all,
+Fixes: #918
 
-I'm working on using LTTng to instrument a driver that has both a kernel
-space portion and a user space portion.  There is quite a bit of code
-that's common between the two.  Is there a recommended way to handle
-generating both the user space template files and the kernel space
-tracepoints / probes for the same code, or is this something we would
-need to build ourselves?
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ src/bin/lttng-sessiond/kernel.c | 34 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 32 insertions(+), 2 deletions(-)
 
-Thanks,
-Ben
+diff --git a/src/bin/lttng-sessiond/kernel.c b/src/bin/lttng-sessiond/kernel.c
+index 570747f..381b83e 100644
+--- a/src/bin/lttng-sessiond/kernel.c
++++ b/src/bin/lttng-sessiond/kernel.c
+@@ -379,16 +379,46 @@ error:
+ 
+ int kernel_track_pid(struct ltt_kernel_session *session, int pid)
+ {
++	int ret;
++
+ 	DBG("Kernel track PID %d for session id %" PRIu64 ".",
+ 			pid, session->id);
+-	return kernctl_track_pid(session->fd, pid);
++	ret = kernctl_track_pid(session->fd, pid);
++	if (!ret) {
++		return LTTNG_OK;
++	}
++	switch (errno) {
++	case EINVAL:
++		return LTTNG_ERR_INVALID;
++	case ENOMEM:
++		return LTTNG_ERR_NOMEM;
++	case EEXIST:
++		return LTTNG_ERR_PID_TRACKED;
++	default:
++		return LTTNG_ERR_UNK;
++	}
+ }
+ 
+ int kernel_untrack_pid(struct ltt_kernel_session *session, int pid)
+ {
++	int ret;
++
+ 	DBG("Kernel untrack PID %d for session id %" PRIu64 ".",
+ 			pid, session->id);
+-	return kernctl_untrack_pid(session->fd, pid);
++	ret = kernctl_untrack_pid(session->fd, pid);
++	if (!ret) {
++		return LTTNG_OK;
++	}
++	switch (errno) {
++	case EINVAL:
++		return LTTNG_ERR_INVALID;
++	case ENOMEM:
++		return LTTNG_ERR_NOMEM;
++	case ENOENT:
++		return LTTNG_ERR_PID_NOT_TRACKED;
++	default:
++		return LTTNG_ERR_UNK;
++	}
+ }
+ 
+ ssize_t kernel_list_tracker_pids(struct ltt_kernel_session *session,
+-- 
+2.1.4
