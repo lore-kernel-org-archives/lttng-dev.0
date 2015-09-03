@@ -1,20 +1,26 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: consumer: do full flush on
-	missed timer
-Date: Wed, 2 Sep 2015 23:51:41 -0400
-Message-ID: <CA+jJMxvXrGH4EHrfwZdoZL1w=Xs0MHSfJv4AjfSNigNffhPmng__43804.5413735837$1441252352$gmane$org@mail.gmail.com>
-References: <1441252015-16528-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Segfault at v_read() called from
+ lib_ring_buffer_try_reserve_slow() in LTTng-UST traced app - CPU/VMware
+ dependent
+Date: Thu, 3 Sep 2015 15:25:47 +0000 (UTC)
+Message-ID: <1234784011.35846.1441293947418.JavaMail.zimbra__5065.81453742019$1441294054$gmane$org@efficios.com>
+References: <20998D40D9A2B7499CA5A3A2666CB1EB2D9DDA59@ZURMSG1.QUANTUM.com>
+ <1745838195.26177.1418312190246.JavaMail.zimbra@efficios.com>
+ <20998D40D9A2B7499CA5A3A2666CB1EB2D9E464C@ZURMSG1.QUANTUM.com>
+ <1205251820.37907.1421076877053.JavaMail.zimbra@efficios.com>
+ <1686087516.37913.1421076968595.JavaMail.zimbra@efficios.com>
+ <20998D40D9A2B7499CA5A3A2666CB1EB2D9E72E6@ZURMSG1.QUANTUM.com>
+ <214724236.41002.1421290246531.JavaMail.zimbra@efficios.com>
+ <20998D40D9A2B7499CA5A3A2666CB1EB5EAD6F13@ZURMSG1.QUANTUM.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f169.google.com ([209.85.160.169])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZXLYx-0000SY-Gk
- for lttng-dev@lists.lttng.org; Wed, 02 Sep 2015 23:51:49 -0400
-Received: by ykdg206 with SMTP id g206so31544737ykd.1
- for <lttng-dev@lists.lttng.org>; Wed, 02 Sep 2015 20:51:42 -0700 (PDT)
-In-Reply-To: <1441252015-16528-1-git-send-email-mathieu.desnoyers@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1ZXWOs-0004E4-Gi
+ for lttng-dev@lists.lttng.org; Thu, 03 Sep 2015 11:26:15 -0400
+In-Reply-To: <20998D40D9A2B7499CA5A3A2666CB1EB5EAD6F13@ZURMSG1.QUANTUM.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,187 +29,196 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: David OShea <David.OShea@quantum.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SSB3aWxsIG1lcmdlIGl0IHNxdWFzaGVkIGludG8gdGhpcyBjb21taXQsIGZyb20geW91ciBwdWxs
-IHJlcXVlc3QgKCMyMykuCgpGaXg6IHNlc3Npb25kIHZzIGNvbnN1bWVyZCBwdXNoL2dldCBtZXRh
-ZGF0YSBkZWFkbG9jawoKV2UgbmVlZCB0byB1bmxvY2sgdGhlIHJlZ2lzdHJ5IHdoaWxlIHdlIHB1
-c2ggbWV0YWRhdGEgdG8gYnJlYWsgYQpjaXJjdWxhciBkZXBlbmRlbmN5IGJldHdlZW4gdGhlIGNv
-bnN1bWVyZCBtZXRhZGF0YSBsb2NrIGFuZCB0aGUgc2Vzc2lvbmQKcmVnaXN0cnkgbG9jay4gSW5k
-ZWVkLCBwdXNoaW5nIG1ldGFkYXRhIHRvIHRoZSBjb25zdW1lcmQgYXdhaXRzIHRoYXQgaXQKZ2V0
-cyBwdXNoZWQgYWxsIHRoZSB3YXkgdG8gcmVsYXlkLCBidXQgZG9pbmcgc28gcmVxdWlyZXMgZ3Jh
-YmJpbmcgdGhlCm1ldGFkYXRhIGxvY2suIElmIGEgY29uY3VycmVudCBtZXRhZGF0YSByZXF1ZXN0
-IGlzIGJlaW5nIHBlcmZvcm1lZCBieQpjb25zdW1lcmQsIHRoaXMgY2FuIHRyeSB0byBncmFiIHRo
-ZSByZWdpc3RyeSBsb2NrIG9uIHRoZSBzZXNzaW9uZCB3aGlsZQpob2xkaW5nIHRoZSBtZXRhZGF0
-YSBsb2NrIG9uIHRoZSBjb25zdW1lciBkYWVtb24uIFRob3NlIHB1c2ggYW5kIHB1bGwKc2NoZW1l
-cyBhcmUgcGVyZm9ybWVkIG9uIHR3byBkaWZmZXJlbnQgYmlkaXJlY3Rpb25uYWwgY29tbXVuaWNh
-dGlvbgpzb2NrZXRzLgoKU2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUu
-ZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KCgpUaGFua3MhCkrDqXLDqW1pZQoKCk9uIFdlZCwgU2Vw
-IDIsIDIwMTUgYXQgMTE6NDYgUE0sIE1hdGhpZXUgRGVzbm95ZXJzCjxtYXRoaWV1LmRlc25veWVy
-c0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+IFNpZ25lZC1vZmYtYnk6IE1hdGhpZXUgRGVzbm95ZXJz
-IDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIHNyYy9jb21tb24vY29u
-c3VtZXItdGltZXIuYyAgICAgICAgICAgICAgICAgIHwgMTE4ICsrKysrKysrKysrKysrKy0tLS0t
-LS0tLS0tLQo+ICBzcmMvY29tbW9uL2NvbnN1bWVyLXRpbWVyLmggICAgICAgICAgICAgICAgICB8
-ICAgMyArCj4gIHNyYy9jb21tb24va2VybmVsLWNvbnN1bWVyL2tlcm5lbC1jb25zdW1lci5jIHwg
-IDE3ICsrKy0KPiAgc3JjL2NvbW1vbi91c3QtY29uc3VtZXIvdXN0LWNvbnN1bWVyLmMgICAgICAg
-fCAgIDIgKy0KPiAgNCBmaWxlcyBjaGFuZ2VkLCA4NSBpbnNlcnRpb25zKCspLCA1NSBkZWxldGlv
-bnMoLSkKPgo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL2NvbnN1bWVyLXRpbWVyLmMgYi9zcmMv
-Y29tbW9uL2NvbnN1bWVyLXRpbWVyLmMKPiBpbmRleCBlMTc2NzFiLi5jM2EwN2VjIDEwMDY0NAo+
-IC0tLSBhL3NyYy9jb21tb24vY29uc3VtZXItdGltZXIuYwo+ICsrKyBiL3NyYy9jb21tb24vY29u
-c3VtZXItdGltZXIuYwo+IEBAIC0xMzMsMTEgKzEzMyw0OCBAQCBlcnJvcjoKPiAgICAgICAgIHJl
-dHVybiByZXQ7Cj4gIH0KPgo+IC1zdGF0aWMgaW50IGNoZWNrX2tlcm5lbF9zdHJlYW0oc3RydWN0
-IGx0dG5nX2NvbnN1bWVyX3N0cmVhbSAqc3RyZWFtKQo+ICtpbnQgY29uc3VtZXJfZmx1c2hfa2Vy
-bmVsX2luZGV4KHN0cnVjdCBsdHRuZ19jb25zdW1lcl9zdHJlYW0gKnN0cmVhbSkKPiAgewo+ICAg
-ICAgICAgdWludDY0X3QgdHMsIHN0cmVhbV9pZDsKPiAgICAgICAgIGludCByZXQ7Cj4KPiArICAg
-ICAgIHJldCA9IGtlcm5jdGxfZ2V0X2N1cnJlbnRfdGltZXN0YW1wKHN0cmVhbS0+d2FpdF9mZCwg
-JnRzKTsKPiArICAgICAgIGlmIChyZXQgPCAwKSB7Cj4gKyAgICAgICAgICAgICAgIEVSUigiRmFp
-bGVkIHRvIGdldCB0aGUgY3VycmVudCB0aW1lc3RhbXAiKTsKPiArICAgICAgICAgICAgICAgZ290
-byBlbmQ7Cj4gKyAgICAgICB9Cj4gKyAgICAgICByZXQgPSBrZXJuY3RsX2J1ZmZlcl9mbHVzaChz
-dHJlYW0tPndhaXRfZmQpOwo+ICsgICAgICAgaWYgKHJldCA8IDApIHsKPiArICAgICAgICAgICAg
-ICAgRVJSKCJGYWlsZWQgdG8gZmx1c2gga2VybmVsIHN0cmVhbSIpOwo+ICsgICAgICAgICAgICAg
-ICBnb3RvIGVuZDsKPiArICAgICAgIH0KPiArICAgICAgIHJldCA9IGtlcm5jdGxfc25hcHNob3Qo
-c3RyZWFtLT53YWl0X2ZkKTsKPiArICAgICAgIGlmIChyZXQgPCAwKSB7Cj4gKyAgICAgICAgICAg
-ICAgIGlmIChlcnJubyAhPSBFQUdBSU4gJiYgZXJybm8gIT0gRU5PREFUQSkgewo+ICsgICAgICAg
-ICAgICAgICAgICAgICAgIFBFUlJPUigibGl2ZSB0aW1lciBrZXJuZWwgc25hcHNob3QiKTsKPiAr
-ICAgICAgICAgICAgICAgICAgICAgICByZXQgPSAtMTsKPiArICAgICAgICAgICAgICAgICAgICAg
-ICBnb3RvIGVuZDsKPiArICAgICAgICAgICAgICAgfQo+ICsgICAgICAgICAgICAgICByZXQgPSBr
-ZXJuY3RsX2dldF9zdHJlYW1faWQoc3RyZWFtLT53YWl0X2ZkLCAmc3RyZWFtX2lkKTsKPiArICAg
-ICAgICAgICAgICAgaWYgKHJldCA8IDApIHsKPiArICAgICAgICAgICAgICAgICAgICAgICBQRVJS
-T1IoImtlcm5jdGxfZ2V0X3N0cmVhbV9pZCIpOwo+ICsgICAgICAgICAgICAgICAgICAgICAgIGdv
-dG8gZW5kOwo+ICsgICAgICAgICAgICAgICB9Cj4gKyAgICAgICAgICAgICAgIERCRygiU3RyZWFt
-ICUiIFBSSXU2NCAiIGVtcHR5LCBzZW5kaW5nIGJlYWNvbiIsIHN0cmVhbS0+a2V5KTsKPiArICAg
-ICAgICAgICAgICAgcmV0ID0gc2VuZF9lbXB0eV9pbmRleChzdHJlYW0sIHRzLCBzdHJlYW1faWQp
-Owo+ICsgICAgICAgICAgICAgICBpZiAocmV0IDwgMCkgewo+ICsgICAgICAgICAgICAgICAgICAg
-ICAgIGdvdG8gZW5kOwo+ICsgICAgICAgICAgICAgICB9Cj4gKyAgICAgICB9Cj4gKyAgICAgICBy
-ZXQgPSAwOwo+ICtlbmQ6Cj4gKyAgICAgICByZXR1cm4gcmV0Owo+ICt9Cj4gKwo+ICtzdGF0aWMg
-aW50IGNoZWNrX2tlcm5lbF9zdHJlYW0oc3RydWN0IGx0dG5nX2NvbnN1bWVyX3N0cmVhbSAqc3Ry
-ZWFtKQo+ICt7Cj4gKyAgICAgICBpbnQgcmV0Owo+ICsKPiAgICAgICAgIC8qCj4gICAgICAgICAg
-KiBXaGlsZSBob2xkaW5nIHRoZSBzdHJlYW0gbXV0ZXgsIHRyeSB0byB0YWtlIGEgc25hcHNob3Qs
-IGlmIGl0Cj4gICAgICAgICAgKiBzdWNjZWVkcywgaXQgbWVhbnMgdGhhdCBkYXRhIGlzIHJlYWR5
-IHRvIGJlIHNlbnQsIGp1c3QgbGV0IHRoZSBkYXRhCj4gQEAgLTE3Myw0NSArMjEwLDUzIEBAIHN0
-YXRpYyBpbnQgY2hlY2tfa2VybmVsX3N0cmVhbShzdHJ1Y3QgbHR0bmdfY29uc3VtZXJfc3RyZWFt
-ICpzdHJlYW0pCj4gICAgICAgICAgICAgICAgIH0KPiAgICAgICAgICAgICAgICAgYnJlYWs7Cj4g
-ICAgICAgICB9Cj4gLSAgICAgICByZXQgPSBrZXJuY3RsX2dldF9jdXJyZW50X3RpbWVzdGFtcChz
-dHJlYW0tPndhaXRfZmQsICZ0cyk7Cj4gLSAgICAgICBpZiAocmV0IDwgMCkgewo+IC0gICAgICAg
-ICAgICAgICBFUlIoIkZhaWxlZCB0byBnZXQgdGhlIGN1cnJlbnQgdGltZXN0YW1wIik7Cj4gLSAg
-ICAgICAgICAgICAgIGdvdG8gZXJyb3JfdW5sb2NrOwo+ICsgICAgICAgcmV0ID0gY29uc3VtZXJf
-Zmx1c2hfa2VybmVsX2luZGV4KHN0cmVhbSk7Cj4gKyAgICAgICBwdGhyZWFkX211dGV4X3VubG9j
-aygmc3RyZWFtLT5sb2NrKTsKPiArZW5kOgo+ICsgICAgICAgcmV0dXJuIHJldDsKPiArfQo+ICsK
-PiAraW50IGNvbnN1bWVyX2ZsdXNoX3VzdF9pbmRleChzdHJ1Y3QgbHR0bmdfY29uc3VtZXJfc3Ry
-ZWFtICpzdHJlYW0pCj4gK3sKPiArICAgICAgIHVpbnQ2NF90IHRzLCBzdHJlYW1faWQ7Cj4gKyAg
-ICAgICBpbnQgcmV0Owo+ICsKPiArICAgICAgIHJldCA9IGNkc19sZmh0X2lzX25vZGVfZGVsZXRl
-ZCgmc3RyZWFtLT5ub2RlLm5vZGUpOwo+ICsgICAgICAgaWYgKHJldCkgewo+ICsgICAgICAgICAg
-ICAgICBnb3RvIGVuZDsKPiAgICAgICAgIH0KPiAtICAgICAgIHJldCA9IGtlcm5jdGxfYnVmZmVy
-X2ZsdXNoKHN0cmVhbS0+d2FpdF9mZCk7Cj4gKwo+ICsgICAgICAgcmV0ID0gbHR0bmdfdXN0Y29u
-c3VtZXJfZ2V0X2N1cnJlbnRfdGltZXN0YW1wKHN0cmVhbSwgJnRzKTsKPiAgICAgICAgIGlmIChy
-ZXQgPCAwKSB7Cj4gLSAgICAgICAgICAgICAgIEVSUigiRmFpbGVkIHRvIGZsdXNoIGtlcm5lbCBz
-dHJlYW0iKTsKPiAtICAgICAgICAgICAgICAgZ290byBlcnJvcl91bmxvY2s7Cj4gKyAgICAgICAg
-ICAgICAgIEVSUigiRmFpbGVkIHRvIGdldCB0aGUgY3VycmVudCB0aW1lc3RhbXAiKTsKPiArICAg
-ICAgICAgICAgICAgZ290byBlbmQ7Cj4gICAgICAgICB9Cj4gLSAgICAgICByZXQgPSBrZXJuY3Rs
-X3NuYXBzaG90KHN0cmVhbS0+d2FpdF9mZCk7Cj4gKyAgICAgICBsdHRuZ191c3Rjb25zdW1lcl9m
-bHVzaF9idWZmZXIoc3RyZWFtLCAxKTsKPiArICAgICAgIHJldCA9IGx0dG5nX3VzdGNvbnN1bWVy
-X3Rha2Vfc25hcHNob3Qoc3RyZWFtKTsKPiAgICAgICAgIGlmIChyZXQgPCAwKSB7Cj4gLSAgICAg
-ICAgICAgICAgIGlmIChlcnJubyAhPSBFQUdBSU4gJiYgZXJybm8gIT0gRU5PREFUQSkgewo+IC0g
-ICAgICAgICAgICAgICAgICAgICAgIFBFUlJPUigibGl2ZSB0aW1lciBrZXJuZWwgc25hcHNob3Qi
-KTsKPiArICAgICAgICAgICAgICAgaWYgKHJldCAhPSAtRUFHQUlOKSB7Cj4gKyAgICAgICAgICAg
-ICAgICAgICAgICAgRVJSKCJUYWtpbmcgVVNUIHNuYXBzaG90Iik7Cj4gICAgICAgICAgICAgICAg
-ICAgICAgICAgcmV0ID0gLTE7Cj4gLSAgICAgICAgICAgICAgICAgICAgICAgZ290byBlcnJvcl91
-bmxvY2s7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgZ290byBlbmQ7Cj4gICAgICAgICAgICAg
-ICAgIH0KPiAtICAgICAgICAgICAgICAgcmV0ID0ga2VybmN0bF9nZXRfc3RyZWFtX2lkKHN0cmVh
-bS0+d2FpdF9mZCwgJnN0cmVhbV9pZCk7Cj4gKyAgICAgICAgICAgICAgIHJldCA9IGx0dG5nX3Vz
-dGNvbnN1bWVyX2dldF9zdHJlYW1faWQoc3RyZWFtLCAmc3RyZWFtX2lkKTsKPiAgICAgICAgICAg
-ICAgICAgaWYgKHJldCA8IDApIHsKPiAtICAgICAgICAgICAgICAgICAgICAgICBQRVJST1IoImtl
-cm5jdGxfZ2V0X3N0cmVhbV9pZCIpOwo+IC0gICAgICAgICAgICAgICAgICAgICAgIGdvdG8gZXJy
-b3JfdW5sb2NrOwo+ICsgICAgICAgICAgICAgICAgICAgICAgIFBFUlJPUigidXN0Y3RsX2dldF9z
-dHJlYW1faWQiKTsKPiArICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVuZDsKPiAgICAgICAg
-ICAgICAgICAgfQo+ICAgICAgICAgICAgICAgICBEQkcoIlN0cmVhbSAlIiBQUkl1NjQgIiBlbXB0
-eSwgc2VuZGluZyBiZWFjb24iLCBzdHJlYW0tPmtleSk7Cj4gICAgICAgICAgICAgICAgIHJldCA9
-IHNlbmRfZW1wdHlfaW5kZXgoc3RyZWFtLCB0cywgc3RyZWFtX2lkKTsKPiAgICAgICAgICAgICAg
-ICAgaWYgKHJldCA8IDApIHsKPiAtICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVycm9yX3Vu
-bG9jazsKPiArICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVuZDsKPiAgICAgICAgICAgICAg
-ICAgfQo+ICAgICAgICAgfQo+ICAgICAgICAgcmV0ID0gMDsKPiAtCj4gLWVycm9yX3VubG9jazoK
-PiAtICAgICAgIHB0aHJlYWRfbXV0ZXhfdW5sb2NrKCZzdHJlYW0tPmxvY2spOwo+ICBlbmQ6Cj4g
-ICAgICAgICByZXR1cm4gcmV0Owo+ICB9Cj4KPiAgc3RhdGljIGludCBjaGVja191c3Rfc3RyZWFt
-KHN0cnVjdCBsdHRuZ19jb25zdW1lcl9zdHJlYW0gKnN0cmVhbSkKPiAgewo+IC0gICAgICAgdWlu
-dDY0X3QgdHMsIHN0cmVhbV9pZDsKPiAgICAgICAgIGludCByZXQ7Cj4KPiAgICAgICAgIGFzc2Vy
-dChzdHJlYW0pOwo+IEBAIC0yNTEsMzggKzI5Niw3IEBAIHN0YXRpYyBpbnQgY2hlY2tfdXN0X3N0
-cmVhbShzdHJ1Y3QgbHR0bmdfY29uc3VtZXJfc3RyZWFtICpzdHJlYW0pCj4gICAgICAgICAgICAg
-ICAgIH0KPiAgICAgICAgICAgICAgICAgYnJlYWs7Cj4gICAgICAgICB9Cj4gLSAgICAgICByZXQg
-PSBjZHNfbGZodF9pc19ub2RlX2RlbGV0ZWQoJnN0cmVhbS0+bm9kZS5ub2RlKTsKPiAtICAgICAg
-IGlmIChyZXQpIHsKPiAtICAgICAgICAgICAgICAgZ290byBlcnJvcl91bmxvY2s7Cj4gLSAgICAg
-ICB9Cj4gLQo+IC0gICAgICAgcmV0ID0gbHR0bmdfdXN0Y29uc3VtZXJfZ2V0X2N1cnJlbnRfdGlt
-ZXN0YW1wKHN0cmVhbSwgJnRzKTsKPiAtICAgICAgIGlmIChyZXQgPCAwKSB7Cj4gLSAgICAgICAg
-ICAgICAgIEVSUigiRmFpbGVkIHRvIGdldCB0aGUgY3VycmVudCB0aW1lc3RhbXAiKTsKPiAtICAg
-ICAgICAgICAgICAgZ290byBlcnJvcl91bmxvY2s7Cj4gLSAgICAgICB9Cj4gLSAgICAgICBsdHRu
-Z191c3Rjb25zdW1lcl9mbHVzaF9idWZmZXIoc3RyZWFtLCAxKTsKPiAtICAgICAgIHJldCA9IGx0
-dG5nX3VzdGNvbnN1bWVyX3Rha2Vfc25hcHNob3Qoc3RyZWFtKTsKPiAtICAgICAgIGlmIChyZXQg
-PCAwKSB7Cj4gLSAgICAgICAgICAgICAgIGlmIChyZXQgIT0gLUVBR0FJTikgewo+IC0gICAgICAg
-ICAgICAgICAgICAgICAgIEVSUigiVGFraW5nIFVTVCBzbmFwc2hvdCIpOwo+IC0gICAgICAgICAg
-ICAgICAgICAgICAgIHJldCA9IC0xOwo+IC0gICAgICAgICAgICAgICAgICAgICAgIGdvdG8gZXJy
-b3JfdW5sb2NrOwo+IC0gICAgICAgICAgICAgICB9Cj4gLSAgICAgICAgICAgICAgIHJldCA9IGx0
-dG5nX3VzdGNvbnN1bWVyX2dldF9zdHJlYW1faWQoc3RyZWFtLCAmc3RyZWFtX2lkKTsKPiAtICAg
-ICAgICAgICAgICAgaWYgKHJldCA8IDApIHsKPiAtICAgICAgICAgICAgICAgICAgICAgICBQRVJS
-T1IoInVzdGN0bF9nZXRfc3RyZWFtX2lkIik7Cj4gLSAgICAgICAgICAgICAgICAgICAgICAgZ290
-byBlcnJvcl91bmxvY2s7Cj4gLSAgICAgICAgICAgICAgIH0KPiAtICAgICAgICAgICAgICAgREJH
-KCJTdHJlYW0gJSIgUFJJdTY0ICIgZW1wdHksIHNlbmRpbmcgYmVhY29uIiwgc3RyZWFtLT5rZXkp
-Owo+IC0gICAgICAgICAgICAgICByZXQgPSBzZW5kX2VtcHR5X2luZGV4KHN0cmVhbSwgdHMsIHN0
-cmVhbV9pZCk7Cj4gLSAgICAgICAgICAgICAgIGlmIChyZXQgPCAwKSB7Cj4gLSAgICAgICAgICAg
-ICAgICAgICAgICAgZ290byBlcnJvcl91bmxvY2s7Cj4gLSAgICAgICAgICAgICAgIH0KPiAtICAg
-ICAgIH0KPiAtICAgICAgIHJldCA9IDA7Cj4gLQo+IC1lcnJvcl91bmxvY2s6Cj4gKyAgICAgICBy
-ZXQgPSBjb25zdW1lcl9mbHVzaF91c3RfaW5kZXgoc3RyZWFtKTsKPiAgICAgICAgIHB0aHJlYWRf
-bXV0ZXhfdW5sb2NrKCZzdHJlYW0tPmxvY2spOwo+ICBlbmQ6Cj4gICAgICAgICByZXR1cm4gcmV0
-Owo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL2NvbnN1bWVyLXRpbWVyLmggYi9zcmMvY29tbW9u
-L2NvbnN1bWVyLXRpbWVyLmgKPiBpbmRleCBiYWFhODJiLi4yMmU3NDU3IDEwMDY0NAo+IC0tLSBh
-L3NyYy9jb21tb24vY29uc3VtZXItdGltZXIuaAo+ICsrKyBiL3NyYy9jb21tb24vY29uc3VtZXIt
-dGltZXIuaAo+IEBAIC01Miw0ICs1Miw3IEBAIHZvaWQgY29uc3VtZXJfdGltZXJfbGl2ZV9zdG9w
-KHN0cnVjdCBsdHRuZ19jb25zdW1lcl9jaGFubmVsICpjaGFubmVsKTsKPiAgdm9pZCAqY29uc3Vt
-ZXJfdGltZXJfdGhyZWFkKHZvaWQgKmRhdGEpOwo+ICBpbnQgY29uc3VtZXJfc2lnbmFsX2luaXQo
-dm9pZCk7Cj4KPiAraW50IGNvbnN1bWVyX2ZsdXNoX2tlcm5lbF9pbmRleChzdHJ1Y3QgbHR0bmdf
-Y29uc3VtZXJfc3RyZWFtICpzdHJlYW0pOwo+ICtpbnQgY29uc3VtZXJfZmx1c2hfdXN0X2luZGV4
-KHN0cnVjdCBsdHRuZ19jb25zdW1lcl9zdHJlYW0gKnN0cmVhbSk7Cj4gKwo+ICAjZW5kaWYgLyog
-Q09OU1VNRVJfVElNRVJfSCAqLwo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL2tlcm5lbC1jb25z
-dW1lci9rZXJuZWwtY29uc3VtZXIuYyBiL3NyYy9jb21tb24va2VybmVsLWNvbnN1bWVyL2tlcm5l
-bC1jb25zdW1lci5jCj4gaW5kZXggNzRjZGQ3ZC4uYWFlNTZmOSAxMDA2NDQKPiAtLS0gYS9zcmMv
-Y29tbW9uL2tlcm5lbC1jb25zdW1lci9rZXJuZWwtY29uc3VtZXIuYwo+ICsrKyBiL3NyYy9jb21t
-b24va2VybmVsLWNvbnN1bWVyL2tlcm5lbC1jb25zdW1lci5jCj4gQEAgLTEyMTksOSArMTIxOSwy
-MiBAQCBzc2l6ZV90IGx0dG5nX2tjb25zdW1lcl9yZWFkX3N1YmJ1ZmZlcihzdHJ1Y3QgbHR0bmdf
-Y29uc3VtZXJfc3RyZWFtICpzdHJlYW0sCj4gICAgICAgICAgICAgICAgIC8qCj4gICAgICAgICAg
-ICAgICAgICAqIEluIGxpdmUsIGJsb2NrIHVudGlsIGFsbCB0aGUgbWV0YWRhdGEgaXMgc2VudC4K
-PiAgICAgICAgICAgICAgICAgICovCj4gLSAgICAgICAgICAgICAgIENNTV9TVE9SRV9TSEFSRUQo
-c3RyZWFtLT53YWl0aW5nX29uX21ldGFkYXRhLCAxKTsKPiArICAgICAgICAgICAgICAgcHRocmVh
-ZF9tdXRleF9sb2NrKCZzdHJlYW0tPm1ldGFkYXRhX3RpbWVyX2xvY2spOwo+ICsgICAgICAgICAg
-ICAgICBhc3NlcnQoIXN0cmVhbS0+bWlzc2VkX21ldGFkYXRhX2ZsdXNoKTsKPiArICAgICAgICAg
-ICAgICAgc3RyZWFtLT53YWl0aW5nX29uX21ldGFkYXRhID0gdHJ1ZTsKPiArICAgICAgICAgICAg
-ICAgcHRocmVhZF9tdXRleF91bmxvY2soJnN0cmVhbS0+bWV0YWRhdGFfdGltZXJfbG9jayk7Cj4g
-Kwo+ICAgICAgICAgICAgICAgICBlcnIgPSBjb25zdW1lcl9zdHJlYW1fc3luY19tZXRhZGF0YShj
-dHgsIHN0cmVhbS0+c2Vzc2lvbl9pZCk7Cj4gLSAgICAgICAgICAgICAgIENNTV9TVE9SRV9TSEFS
-RUQoc3RyZWFtLT53YWl0aW5nX29uX21ldGFkYXRhLCAwKTsKPiArCj4gKyAgICAgICAgICAgICAg
-IHB0aHJlYWRfbXV0ZXhfbG9jaygmc3RyZWFtLT5tZXRhZGF0YV90aW1lcl9sb2NrKTsKPiArICAg
-ICAgICAgICAgICAgc3RyZWFtLT53YWl0aW5nX29uX21ldGFkYXRhID0gZmFsc2U7Cj4gKyAgICAg
-ICAgICAgICAgIGlmIChzdHJlYW0tPm1pc3NlZF9tZXRhZGF0YV9mbHVzaCkgewo+ICsgICAgICAg
-ICAgICAgICAgICAgICAgIHN0cmVhbS0+bWlzc2VkX21ldGFkYXRhX2ZsdXNoID0gZmFsc2U7Cj4g
-KyAgICAgICAgICAgICAgICAgICAgICAgcHRocmVhZF9tdXRleF91bmxvY2soJnN0cmVhbS0+bWV0
-YWRhdGFfdGltZXJfbG9jayk7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgKHZvaWQpIGNvbnN1
-bWVyX2ZsdXNoX2tlcm5lbF9pbmRleChzdHJlYW0pOwo+ICsgICAgICAgICAgICAgICB9IGVsc2Ug
-ewo+ICsgICAgICAgICAgICAgICAgICAgICAgIHB0aHJlYWRfbXV0ZXhfdW5sb2NrKCZzdHJlYW0t
-Pm1ldGFkYXRhX3RpbWVyX2xvY2spOwo+ICsgICAgICAgICAgICAgICB9Cj4gICAgICAgICAgICAg
-ICAgIGlmIChlcnIgPCAwKSB7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgZ290byBlbmQ7Cj4g
-ICAgICAgICAgICAgICAgIH0KPiBkaWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi91c3QtY29uc3VtZXIv
-dXN0LWNvbnN1bWVyLmMgYi9zcmMvY29tbW9uL3VzdC1jb25zdW1lci91c3QtY29uc3VtZXIuYwo+
-IGluZGV4IGExZjFjZWQuLmQ0NTcwN2IgMTAwNjQ0Cj4gLS0tIGEvc3JjL2NvbW1vbi91c3QtY29u
-c3VtZXIvdXN0LWNvbnN1bWVyLmMKPiArKysgYi9zcmMvY29tbW9uL3VzdC1jb25zdW1lci91c3Qt
-Y29uc3VtZXIuYwo+IEBAIC0yMjYwLDcgKzIyNjAsNyBAQCByZXRyeToKPiAgICAgICAgICAgICAg
-ICAgaWYgKHN0cmVhbS0+bWlzc2VkX21ldGFkYXRhX2ZsdXNoKSB7Cj4gICAgICAgICAgICAgICAg
-ICAgICAgICAgc3RyZWFtLT5taXNzZWRfbWV0YWRhdGFfZmx1c2ggPSBmYWxzZTsKPiAgICAgICAg
-ICAgICAgICAgICAgICAgICBwdGhyZWFkX211dGV4X3VubG9jaygmc3RyZWFtLT5tZXRhZGF0YV90
-aW1lcl9sb2NrKTsKPiAtICAgICAgICAgICAgICAgICAgICAgICBsdHRuZ191c3Rjb25zdW1lcl9m
-bHVzaF9idWZmZXIoc3RyZWFtLCAxKTsKPiArICAgICAgICAgICAgICAgICAgICAgICAodm9pZCkg
-Y29uc3VtZXJfZmx1c2hfdXN0X2luZGV4KHN0cmVhbSk7Cj4gICAgICAgICAgICAgICAgIH0gZWxz
-ZSB7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgcHRocmVhZF9tdXRleF91bmxvY2soJnN0cmVh
-bS0+bWV0YWRhdGFfdGltZXJfbG9jayk7Cj4gICAgICAgICAgICAgICAgIH0KPiAtLQo+IDIuMS40
-Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVm
-ZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6
-Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+----- On Sep 2, 2015, at 10:14 PM, David OShea David.OShea@quantum.com wrote:
+
+> For the record, it appears that upgrading from VMware ESXi version 5.0.0, 469512
+> to version 5.5.0, 2068190 ("Update 2") resolved this issue.  However, we had
+> other hosts running version 5.1.0, 799733 which should have been set to the
+> same CPU architecture (Nehalem) which didn't have the issue, so presumably the
+> fix was included in that version.
+
+That's good news, thanks for letting us know!
+
+Mathieu
+
+> 
+> Thanks,
+> David
+> 
+>> -----Original Message-----
+>> From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
+>> Sent: Thursday, 15 January 2015 1:21 PM
+>> To: David OShea
+>> Cc: lttng-dev
+>> Subject: Re: [lttng-dev] Segfault at v_read() called from
+>> lib_ring_buffer_try_reserve_slow() in LTTng-UST traced app - CPU/VMware
+>> dependent
+>> 
+>> ----- Original Message -----
+>> > From: "David OShea" <David.OShea@quantum.com>
+>> > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
+>> > Cc: "lttng-dev" <lttng-dev@lists.lttng.org>
+>> > Sent: Wednesday, January 14, 2015 9:45:01 PM
+>> > Subject: RE: [lttng-dev] Segfault at v_read() called from
+>> lib_ring_buffer_try_reserve_slow() in LTTng-UST traced app
+>> > - CPU/VMware dependent
+>> >
+>> > Hi Mathieu,
+>> >
+>> > > -----Original Message-----
+>> > > From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
+>> > > Sent: Tuesday, 13 January 2015 2:06 AM
+>> > > To: David OShea
+>> > > Cc: lttng-dev
+>> > > Subject: Re: [lttng-dev] Segfault at v_read() called from
+>> > > lib_ring_buffer_try_reserve_slow() in LTTng-UST traced app -
+>> CPU/VMware
+>> > > dependent
+>> > [...]
+>> > > > > Is it possible that this is an issue in LTTng, or should I work
+>> out
+>> > > how the
+>> > > > > kernel works out which CPU it is running on and then look into
+>> > > whether
+>> > > > > there
+>> > > > > are any VMware bugs in this area?
+>> > > >
+>> > > > This appears to be very likely a VMware bug. /proc/cpuinfo should
+>> > > show
+>> > > > 4 CPUs (and sysconf(_SC_NPROCESSORS_CONF) should return 4) if the
+>> > > current
+>> > > > CPU number can be 0, 1, 2, 3 throughout execution.
+>> >
+>> > /proc/cpuinfo shows two CPUs:
+>> >
+>> > processor       : 0
+>> > vendor_id       : GenuineIntel
+>> > cpu family      : 6
+>> > model           : 26
+>> > model name      : Intel(R) Xeon(R) CPU           X7550  @ 2.00GHz
+>> > stepping        : 4
+>> > microcode       : 8
+>> > cpu MHz         : 1995.000
+>> > cache size      : 18432 KB
+>> > physical id     : 0
+>> > siblings        : 1
+>> > core id         : 0
+>> > cpu cores       : 1
+>> > apicid          : 0
+>> > initial apicid  : 0
+>> > fpu             : yes
+>> > fpu_exception   : yes
+>> > cpuid level     : 11
+>> > wp              : yes
+>> > flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr
+>> pge mca
+>> > cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss syscall nx
+>> rdtscp lm
+>> > constant_tsc arch_perfmon pebs bts xtopology tsc_reliable nonstop_tsc
+>> > aperfmperf unfair_spinlock pni ssse3 cx16 sse4_1 sse4_2 popcnt
+>> hypervisor
+>> > lahf_lm ida dts
+>> > bogomips        : 3990.00
+>> > clflush size    : 64
+>> > cache_alignment : 64
+>> > address sizes   : 40 bits physical, 48 bits virtual
+>> > power management:
+>> >
+>> > processor       : 1
+>> > vendor_id       : GenuineIntel
+>> > cpu family      : 6
+>> > model           : 26
+>> > model name      : Intel(R) Xeon(R) CPU           X7550  @ 2.00GHz
+>> > stepping        : 4
+>> > microcode       : 8
+>> > cpu MHz         : 1995.000
+>> > cache size      : 18432 KB
+>> > physical id     : 2
+>> > siblings        : 1
+>> > core id         : 0
+>> > cpu cores       : 1
+>> > apicid          : 2
+>> > initial apicid  : 2
+>> > fpu             : yes
+>> > fpu_exception   : yes
+>> > cpuid level     : 11
+>> > wp              : yes
+>> > flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr
+>> pge mca
+>> > cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss syscall nx
+>> rdtscp lm
+>> > constant_tsc arch_perfmon pebs bts xtopology tsc_reliable nonstop_tsc
+>> > aperfmperf unfair_spinlock pni ssse3 cx16 sse4_1 sse4_2 popcnt
+>> hypervisor
+>> > lahf_lm ida dts
+>> > bogomips        : 3990.00
+>> > clflush size    : 64
+>> > cache_alignment : 64
+>> > address sizes   : 40 bits physical, 48 bits virtual
+>> > power management:
+>> >
+>> > > You might want to look at the sysconf(3) manpage, especially the
+>> parts
+>> > > about
+>> > > _SC_NPROCESSORS_CONF and _SC_NPROCESSORS_ONLN. My guess is that
+>> vmware
+>> > > is lying
+>> > > about the number of "possible" CPUs (_SC_NPROCESSORS_CONF).
+>> >
+>> > _SC_NPROCESSORS_CONF = 2
+>> > _SC_NPROCESSORS_ONLN = 2
+>> >
+>> > Thanks for the pointers, I will look into possible VMware bugs.
+>> >
+>> > Out of curiosity, what happens if I happened to have a system with
+>> > hot-pluggable CPUs - does _SC_NPROCESSORS_CONF reflect the maximum
+>> number of
+>> > CPUs I can insert, and that is how many LTTng will support?
+>> 
+>> Yes, exactly.
+>> 
+>> Thanks,
+>> 
+>> Mathieu
+>> 
+>> >
+>> > Thanks,
+>> > David
+>> >
+>> > ---------------------------------------------------------------------
+>> -
+>> > The information contained in this transmission may be confidential.
+>> Any
+>> > disclosure, copying, or further distribution of confidential
+>> information is
+>> > not permitted unless such privilege is explicitly granted in writing
+>> by
+>> > Quantum. Quantum reserves the right to have electronic
+>> communications,
+>> > including email and attachments, sent across its networks filtered
+>> through
+>> > anti virus and spam software programs and retain such messages in
+>> order to
+>> > comply with applicable data security and retention requirements.
+>> Quantum is
+>> > not responsible for the proper and complete transmission of the
+>> substance of
+>> > this communication or for any delay in its receipt.
+>> >
+>> 
+>> --
+>> Mathieu Desnoyers
+>> EfficiOS Inc.
+>> https://urldefense.proofpoint.com/v1/url?u=http://www.efficios.com/&k=8
+>> F5TVnBDKF32UabxXsxZiA%3D%3D%0A&r=H%2F7L7PqcsBryhdFPEDkMctduZSYZKIU%2Bn0
+>> pwhSRt%2FlE%3D%0A&m=prixRKthxyU%2BMyt%2F6tzAMJHpXUWgy4zX5MfojFJij0w%3D%
+> > 0A&s=d3553cdf8b9f86db71bd2f2a34d4ba415a863c5592a6ca9655ee047b4b017ef3
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
