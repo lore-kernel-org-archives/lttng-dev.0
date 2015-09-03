@@ -1,9 +1,7 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools v2] Fix: race between kconsumerd and
-	sessiond on tear down
-Date: Thu,  3 Sep 2015 17:48:36 -0400
-Message-ID: <1441316916-4018-1-git-send-email-jonathan.rajotte-julien__17876.7891870395$1441317016$gmane$org@efficios.com>
-References: <1440540388-2721-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools 1/2] Fix: lttng-crash: fd leak
+Date: Thu,  3 Sep 2015 17:52:06 -0400
+Message-ID: <1441317127-10878-1-git-send-email-jonathan.rajotte-julien__6216.80744593522$1441317216$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -11,9 +9,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
  (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1ZXcNM-0006Jb-UQ
- for lttng-dev@lists.lttng.org; Thu, 03 Sep 2015 17:49:05 -0400
-In-Reply-To: <1440540388-2721-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ id 1ZXcQs-0006MR-Ta
+ for lttng-dev@lists.lttng.org; Thu, 03 Sep 2015 17:52:39 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,81 +23,87 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-v2: minimize indentation by using return on condition.
-
-Kconsumerd and sessiond both have reference on lttng-module. This can lead to a race
-on modprobe_remove_lttng_all which might fail to unload modules due to
-certain modules not having a ref count equal to zero at the time.
-
-waitpid is used to force a synchronization on the child (kconsumer) termination.
-
-This also have been applied to ust consumers for the sake of consistency.
-
-Fixes: #878
+At the same time make sure to have on one exit-point.
 
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- src/bin/lttng-sessiond/main.c | 34 +++++++++++++++++++++++++++++++++-
- 1 file changed, 33 insertions(+), 1 deletion(-)
+ src/bin/lttng-crash/lttng-crash.c | 30 +++++++++++++++++++++++++-----
+ 1 file changed, 25 insertions(+), 5 deletions(-)
 
-diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-index d284deb..66a6149 100644
---- a/src/bin/lttng-sessiond/main.c
-+++ b/src/bin/lttng-sessiond/main.c
-@@ -587,6 +587,34 @@ static int generate_lock_file_path(char *path, size_t len)
- }
+diff --git a/src/bin/lttng-crash/lttng-crash.c b/src/bin/lttng-crash/lttng-crash.c
+index 4f1efe9..8e57034 100644
+--- a/src/bin/lttng-crash/lttng-crash.c
++++ b/src/bin/lttng-crash/lttng-crash.c
+@@ -103,7 +103,7 @@ enum rb_modes {
  
- /*
-+ * Wait on consumer process termination.
-+ *
-+ * Need to be called with the consumer data lock held or from a context
-+ * ensuring no concurrent access to data (e.g: cleanup).
-+ */
-+static void wait_consumer(struct consumer_data *consumer_data)
-+{
-+	pid_t ret;
-+	int status;
-+
-+	if (consumer_data->pid <= 0) {
-+		return;
-+	}
-+
-+	DBG("Waiting for complete teardown of consumerd (PID: %d)",
-+			consumer_data->pid);
-+	ret = waitpid(consumer_data->pid, &status, 0);
-+	if (ret == -1) {
-+		PERROR("consumerd waitpid pid: %d", consumer_data->pid)
-+	}
-+	if (!WIFEXITED(status)) {
-+		ERR("consumerd termination with error: %d",
-+				WEXITSTATUS(ret));
-+	}
-+	consumer_data->pid = 0;
-+}
-+
-+/*
-  * Cleanup the session daemon's data structures.
-  */
- static void sessiond_cleanup(void)
-@@ -680,6 +708,11 @@ static void sessiond_cleanup(void)
- 		}
+ struct crash_abi_unknown {
+ 	uint8_t magic[RB_CRASH_DUMP_ABI_MAGIC_LEN];
+-	uint64_t mmap_length;	/* Overall lenght of crash record */
++	uint64_t mmap_length;	/* Overall length of crash record */
+ 	uint16_t endian;	/*
+ 				 * { 0x12, 0x34 }: big endian
+ 				 * { 0x34, 0x12 }: little endian
+@@ -326,26 +326,30 @@ int copy_file(const char *file_dest, const char *file_src)
+ 	int fd_src, fd_dest;
+ 	ssize_t readlen, writelen;
+ 	char buf[COPY_BUFLEN];
++	int ret;
+ 
+ 	DBG("Copy metadata file '%s' into '%s'", file_src, file_dest);
+ 
+ 	fd_src = open(file_src, O_RDONLY);
+ 	if (fd_src < 0) {
+ 		PERROR("Error opening %s for reading", file_src);
+-		return fd_src;
++		ret = fd_src;
++		goto error;
+ 	}
+ 	fd_dest = open(file_dest, O_RDWR | O_CREAT | O_EXCL,
+ 			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+ 	if (fd_dest < 0) {
+ 		PERROR("Error opening %s for writing", file_dest);
+-		return fd_dest;
++		ret = fd_dest;
++		goto error;
  	}
  
-+	wait_consumer(&kconsumer_data);
-+	wait_consumer(&ustconsumer64_data);
-+	wait_consumer(&ustconsumer32_data);
+ 	for (;;) {
+ 		readlen = lttng_read(fd_src, buf, COPY_BUFLEN);
+ 		if (readlen < 0) {
+ 			PERROR("Error reading input file");
+-			return -1;
++			ret = -1;
++			goto error;
+ 		}
+ 		if (!readlen) {
+ 			break;
+@@ -353,10 +357,26 @@ int copy_file(const char *file_dest, const char *file_src)
+ 		writelen = lttng_write(fd_dest, buf, readlen);
+ 		if (writelen < readlen) {
+ 			PERROR("Error writing to output file");
+-			return -1;
++			ret = -1;
++			goto error;
+ 		}
+ 	}
 +
++	ret = close(fd_src);
++	if (ret < 0) {
++		PERROR("Error closing %s", file_src);
++		goto error;
++	}
 +
- 	DBG("Cleaning up all agent apps");
- 	agent_app_ht_clean();
++	ret = close(fd_dest);
++	if (ret < 0) {
++		PERROR("Error closing %s", file_dest);
++		goto error;
++	}
++
+ 	return 0;
++error:
++	return ret;
+ }
  
-@@ -1497,7 +1530,6 @@ error:
- 
- 	unlink(consumer_data->err_unix_sock_path);
- 	unlink(consumer_data->cmd_unix_sock_path);
--	consumer_data->pid = 0;
- 	pthread_mutex_unlock(&consumer_data->lock);
- 
- 	/* Cleanup metadata socket mutex. */
+ static
 -- 
 2.1.4
