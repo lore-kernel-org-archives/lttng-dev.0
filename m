@@ -1,26 +1,15 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Segfault at v_read() called from
- lib_ring_buffer_try_reserve_slow() in LTTng-UST traced app - CPU/VMware
- dependent
-Date: Thu, 3 Sep 2015 15:25:47 +0000 (UTC)
-Message-ID: <1234784011.35846.1441293947418.JavaMail.zimbra__5065.81453742019$1441294054$gmane$org@efficios.com>
-References: <20998D40D9A2B7499CA5A3A2666CB1EB2D9DDA59@ZURMSG1.QUANTUM.com>
- <1745838195.26177.1418312190246.JavaMail.zimbra@efficios.com>
- <20998D40D9A2B7499CA5A3A2666CB1EB2D9E464C@ZURMSG1.QUANTUM.com>
- <1205251820.37907.1421076877053.JavaMail.zimbra@efficios.com>
- <1686087516.37913.1421076968595.JavaMail.zimbra@efficios.com>
- <20998D40D9A2B7499CA5A3A2666CB1EB2D9E72E6@ZURMSG1.QUANTUM.com>
- <214724236.41002.1421290246531.JavaMail.zimbra@efficios.com>
- <20998D40D9A2B7499CA5A3A2666CB1EB5EAD6F13@ZURMSG1.QUANTUM.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH babeltrace] Fix: make check in out of tree build
+Date: Thu,  3 Sep 2015 14:13:21 -0400
+Message-ID: <1441304001-12087-1-git-send-email-mjeanson__22362.0930024937$1441304106$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZXWOs-0004E4-Gi
- for lttng-dev@lists.lttng.org; Thu, 03 Sep 2015 11:26:15 -0400
-In-Reply-To: <20998D40D9A2B7499CA5A3A2666CB1EB5EAD6F13@ZURMSG1.QUANTUM.com>
+ (envelope-from <mjeanson@efficios.com>) id 1ZXZ14-00052A-Hq
+ for lttng-dev@lists.lttng.org; Thu, 03 Sep 2015 14:13:52 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -29,196 +18,173 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: David OShea <David.OShea@quantum.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
------ On Sep 2, 2015, at 10:14 PM, David OShea David.OShea@quantum.com wrote:
+Use the tracefiles from the source dir when running make check in an out
+of tree builddir.
 
-> For the record, it appears that upgrading from VMware ESXi version 5.0.0, 469512
-> to version 5.5.0, 2068190 ("Update 2") resolved this issue.  However, we had
-> other hosts running version 5.1.0, 799733 which should have been set to the
-> same CPU architecture (Nehalem) which didn't have the issue, so presumably the
-> fix was included in that version.
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ .gitignore                   |  2 ++
+ tests/bin/Makefile.am        | 22 ++++++--------------
+ tests/bin/test_trace_read    | 48 --------------------------------------------
+ tests/bin/test_trace_read.in | 48 ++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 56 insertions(+), 64 deletions(-)
+ delete mode 100755 tests/bin/test_trace_read
+ create mode 100755 tests/bin/test_trace_read.in
 
-That's good news, thanks for letting us know!
-
-Mathieu
-
-> 
-> Thanks,
-> David
-> 
->> -----Original Message-----
->> From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
->> Sent: Thursday, 15 January 2015 1:21 PM
->> To: David OShea
->> Cc: lttng-dev
->> Subject: Re: [lttng-dev] Segfault at v_read() called from
->> lib_ring_buffer_try_reserve_slow() in LTTng-UST traced app - CPU/VMware
->> dependent
->> 
->> ----- Original Message -----
->> > From: "David OShea" <David.OShea@quantum.com>
->> > To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>
->> > Cc: "lttng-dev" <lttng-dev@lists.lttng.org>
->> > Sent: Wednesday, January 14, 2015 9:45:01 PM
->> > Subject: RE: [lttng-dev] Segfault at v_read() called from
->> lib_ring_buffer_try_reserve_slow() in LTTng-UST traced app
->> > - CPU/VMware dependent
->> >
->> > Hi Mathieu,
->> >
->> > > -----Original Message-----
->> > > From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
->> > > Sent: Tuesday, 13 January 2015 2:06 AM
->> > > To: David OShea
->> > > Cc: lttng-dev
->> > > Subject: Re: [lttng-dev] Segfault at v_read() called from
->> > > lib_ring_buffer_try_reserve_slow() in LTTng-UST traced app -
->> CPU/VMware
->> > > dependent
->> > [...]
->> > > > > Is it possible that this is an issue in LTTng, or should I work
->> out
->> > > how the
->> > > > > kernel works out which CPU it is running on and then look into
->> > > whether
->> > > > > there
->> > > > > are any VMware bugs in this area?
->> > > >
->> > > > This appears to be very likely a VMware bug. /proc/cpuinfo should
->> > > show
->> > > > 4 CPUs (and sysconf(_SC_NPROCESSORS_CONF) should return 4) if the
->> > > current
->> > > > CPU number can be 0, 1, 2, 3 throughout execution.
->> >
->> > /proc/cpuinfo shows two CPUs:
->> >
->> > processor       : 0
->> > vendor_id       : GenuineIntel
->> > cpu family      : 6
->> > model           : 26
->> > model name      : Intel(R) Xeon(R) CPU           X7550  @ 2.00GHz
->> > stepping        : 4
->> > microcode       : 8
->> > cpu MHz         : 1995.000
->> > cache size      : 18432 KB
->> > physical id     : 0
->> > siblings        : 1
->> > core id         : 0
->> > cpu cores       : 1
->> > apicid          : 0
->> > initial apicid  : 0
->> > fpu             : yes
->> > fpu_exception   : yes
->> > cpuid level     : 11
->> > wp              : yes
->> > flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr
->> pge mca
->> > cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss syscall nx
->> rdtscp lm
->> > constant_tsc arch_perfmon pebs bts xtopology tsc_reliable nonstop_tsc
->> > aperfmperf unfair_spinlock pni ssse3 cx16 sse4_1 sse4_2 popcnt
->> hypervisor
->> > lahf_lm ida dts
->> > bogomips        : 3990.00
->> > clflush size    : 64
->> > cache_alignment : 64
->> > address sizes   : 40 bits physical, 48 bits virtual
->> > power management:
->> >
->> > processor       : 1
->> > vendor_id       : GenuineIntel
->> > cpu family      : 6
->> > model           : 26
->> > model name      : Intel(R) Xeon(R) CPU           X7550  @ 2.00GHz
->> > stepping        : 4
->> > microcode       : 8
->> > cpu MHz         : 1995.000
->> > cache size      : 18432 KB
->> > physical id     : 2
->> > siblings        : 1
->> > core id         : 0
->> > cpu cores       : 1
->> > apicid          : 2
->> > initial apicid  : 2
->> > fpu             : yes
->> > fpu_exception   : yes
->> > cpuid level     : 11
->> > wp              : yes
->> > flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr
->> pge mca
->> > cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss syscall nx
->> rdtscp lm
->> > constant_tsc arch_perfmon pebs bts xtopology tsc_reliable nonstop_tsc
->> > aperfmperf unfair_spinlock pni ssse3 cx16 sse4_1 sse4_2 popcnt
->> hypervisor
->> > lahf_lm ida dts
->> > bogomips        : 3990.00
->> > clflush size    : 64
->> > cache_alignment : 64
->> > address sizes   : 40 bits physical, 48 bits virtual
->> > power management:
->> >
->> > > You might want to look at the sysconf(3) manpage, especially the
->> parts
->> > > about
->> > > _SC_NPROCESSORS_CONF and _SC_NPROCESSORS_ONLN. My guess is that
->> vmware
->> > > is lying
->> > > about the number of "possible" CPUs (_SC_NPROCESSORS_CONF).
->> >
->> > _SC_NPROCESSORS_CONF = 2
->> > _SC_NPROCESSORS_ONLN = 2
->> >
->> > Thanks for the pointers, I will look into possible VMware bugs.
->> >
->> > Out of curiosity, what happens if I happened to have a system with
->> > hot-pluggable CPUs - does _SC_NPROCESSORS_CONF reflect the maximum
->> number of
->> > CPUs I can insert, and that is how many LTTng will support?
->> 
->> Yes, exactly.
->> 
->> Thanks,
->> 
->> Mathieu
->> 
->> >
->> > Thanks,
->> > David
->> >
->> > ---------------------------------------------------------------------
->> -
->> > The information contained in this transmission may be confidential.
->> Any
->> > disclosure, copying, or further distribution of confidential
->> information is
->> > not permitted unless such privilege is explicitly granted in writing
->> by
->> > Quantum. Quantum reserves the right to have electronic
->> communications,
->> > including email and attachments, sent across its networks filtered
->> through
->> > anti virus and spam software programs and retain such messages in
->> order to
->> > comply with applicable data security and retention requirements.
->> Quantum is
->> > not responsible for the proper and complete transmission of the
->> substance of
->> > this communication or for any delay in its receipt.
->> >
->> 
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> https://urldefense.proofpoint.com/v1/url?u=http://www.efficios.com/&k=8
->> F5TVnBDKF32UabxXsxZiA%3D%3D%0A&r=H%2F7L7PqcsBryhdFPEDkMctduZSYZKIU%2Bn0
->> pwhSRt%2FlE%3D%0A&m=prixRKthxyU%2BMyt%2F6tzAMJHpXUWgy4zX5MfojFJij0w%3D%
-> > 0A&s=d3553cdf8b9f86db71bd2f2a34d4ba415a863c5592a6ca9655ee047b4b017ef3
-
+diff --git a/.gitignore b/.gitignore
+index 30eadde..bf869af 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,8 +1,10 @@
+ *~
++/tests/bin/test_trace_read
+ /tests/lib/test_bitfield
+ /tests/lib/test_seek
+ /tests/lib/test_ctf_writer
+ /tests/lib/test_bt_objects
++/tests/lib/test_bt_values
+ *.o
+ *.a
+ *.la
+diff --git a/tests/bin/Makefile.am b/tests/bin/Makefile.am
+index e46285f..0245238 100644
+--- a/tests/bin/Makefile.am
++++ b/tests/bin/Makefile.am
+@@ -1,17 +1,7 @@
+-SCRIPT_LIST = test_trace_read
++noinst_SCRIPTS = test_trace_read
++CLEANFILES = $(noinst_SCRIPTS)
++EXTRA_DIST = test_trace_read.in
+ 
+-dist_noinst_SCRIPTS = $(SCRIPT_LIST)
+-
+-all-local:
+-	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
+-		for script in $(SCRIPT_LIST); do \
+-			cp -f $(srcdir)/$$script $(builddir); \
+-		done; \
+-	fi
+-
+-clean-local:
+-	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
+-		for script in $(SCRIPT_LIST); do \
+-			rm -f $(builddir)/$$script; \
+-		done; \
+-	fi
++$(noinst_SCRIPTS): %: %.in
++	sed "s#@TOPSRCDIR@#$(top_srcdir)#g" < $< > $@
++	chmod +x $@
+diff --git a/tests/bin/test_trace_read b/tests/bin/test_trace_read
+deleted file mode 100755
+index b80ca95..0000000
+--- a/tests/bin/test_trace_read
++++ /dev/null
+@@ -1,48 +0,0 @@
+-#!/bin/bash
+-#
+-# Copyright (C) - 2013 Christian Babeux <christian.babeux@efficios.com>
+-#
+-# This program is free software; you can redistribute it and/or modify it
+-# under the terms of the GNU General Public License, version 2 only, as
+-# published by the Free Software Foundation.
+-#
+-# This program is distributed in the hope that it will be useful, but WITHOUT
+-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+-# more details.
+-#
+-# You should have received a copy of the GNU General Public License along with
+-# this program; if not, write to the Free Software Foundation, Inc., 51
+-# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+-
+-CURDIR=$(dirname $0)
+-TESTDIR=$CURDIR/..
+-
+-BABELTRACE_BIN=$CURDIR/../../converter/babeltrace
+-
+-CTF_TRACES=$TESTDIR/ctf-traces
+-
+-source $TESTDIR/utils/tap/tap.sh
+-
+-SUCCESS_TRACES=(${CTF_TRACES}/succeed/*)
+-FAIL_TRACES=(${CTF_TRACES}/fail/*)
+-
+-NUM_TESTS=$((${#SUCCESS_TRACES[@]} + ${#FAIL_TRACES[@]}))
+-
+-plan_tests $NUM_TESTS
+-
+-for path in ${SUCCESS_TRACES[@]}; do
+-	trace=$(basename ${path})
+-	$BABELTRACE_BIN ${path} > /dev/null 2>&1
+-	ok $? "Run babeltrace with trace ${trace}"
+-done
+-
+-for path in ${FAIL_TRACES[@]}; do
+-	trace=$(basename ${path})
+-	$BABELTRACE_BIN ${path} > /dev/null 2>&1
+-	if [ $? -eq 0 ]; then
+-		fail "Run babeltrace with invalid trace ${trace}"
+-	else
+-		pass "Run babeltrace with invalid trace ${trace}"
+-	fi
+-done
+diff --git a/tests/bin/test_trace_read.in b/tests/bin/test_trace_read.in
+new file mode 100755
+index 0000000..f9410e5
+--- /dev/null
++++ b/tests/bin/test_trace_read.in
+@@ -0,0 +1,48 @@
++#!/bin/bash
++#
++# Copyright (C) - 2013 Christian Babeux <christian.babeux@efficios.com>
++#
++# This program is free software; you can redistribute it and/or modify it
++# under the terms of the GNU General Public License, version 2 only, as
++# published by the Free Software Foundation.
++#
++# This program is distributed in the hope that it will be useful, but WITHOUT
++# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++# more details.
++#
++# You should have received a copy of the GNU General Public License along with
++# this program; if not, write to the Free Software Foundation, Inc., 51
++# Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++
++CURDIR=$(dirname $0)
++TESTDIR=$CURDIR/..
++
++BABELTRACE_BIN=$CURDIR/../../converter/babeltrace
++
++CTF_TRACES=$CURDIR/@TOPSRCDIR@/tests/ctf-traces
++
++source $TESTDIR/utils/tap/tap.sh
++
++SUCCESS_TRACES=(${CTF_TRACES}/succeed/*)
++FAIL_TRACES=(${CTF_TRACES}/fail/*)
++
++NUM_TESTS=$((${#SUCCESS_TRACES[@]} + ${#FAIL_TRACES[@]}))
++
++plan_tests $NUM_TESTS
++
++for path in ${SUCCESS_TRACES[@]}; do
++	trace=$(basename ${path})
++	$BABELTRACE_BIN ${path} > /dev/null 2>&1
++	ok $? "Run babeltrace with trace ${trace}"
++done
++
++for path in ${FAIL_TRACES[@]}; do
++	trace=$(basename ${path})
++	$BABELTRACE_BIN ${path} > /dev/null 2>&1
++	if [ $? -eq 0 ]; then
++		fail "Run babeltrace with invalid trace ${trace}"
++	else
++		pass "Run babeltrace with invalid trace ${trace}"
++	fi
++done
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+1.9.1
