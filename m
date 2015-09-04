@@ -1,20 +1,15 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH babeltrace] Fix: make check in out of tree
-	build
-Date: Fri, 4 Sep 2015 15:34:07 -0400
-Message-ID: <CA+jJMxuNkhPqguG1oHgV5P=H6zHOY4DYyHXZQvCdTTMQhzOmvg__41616.9102456935$1441395305$gmane$org@mail.gmail.com>
-References: <1441304001-12087-1-git-send-email-mjeanson@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools] Fix: unpublish stream on close
+Date: Fri,  4 Sep 2015 15:44:23 -0400
+Message-ID: <1441395863-31567-1-git-send-email-mathieu.desnoyers__7742.68142781711$1441395928$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f180.google.com ([209.85.160.180])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZXwkW-0004ca-Pa
- for lttng-dev@lists.lttng.org; Fri, 04 Sep 2015 15:34:14 -0400
-Received: by ykei199 with SMTP id i199so30877362yke.0
- for <lttng-dev@lists.lttng.org>; Fri, 04 Sep 2015 12:34:07 -0700 (PDT)
-In-Reply-To: <1441304001-12087-1-git-send-email-mjeanson@efficios.com>
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZXwuX-0004hP-Oi
+ for lttng-dev@lists.lttng.org; Fri, 04 Sep 2015 15:44:34 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,113 +18,130 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIG1hc3RlciBhbmQgc3RhYmxlLTEuMiAod2l0aG91dCB0aGUgL3Rlc3RzL2xpYi90
-ZXN0X2J0X3ZhbHVlcwppZ25vcmUgaW4gdGhhdCBjYXNlKS4KClRoYW5rcyEKSsOpcsOpbWllCgpP
-biBUaHUsIFNlcCAzLCAyMDE1IGF0IDI6MTMgUE0sIE1pY2hhZWwgSmVhbnNvbiA8bWplYW5zb25A
-ZWZmaWNpb3MuY29tPiB3cm90ZToKPiBVc2UgdGhlIHRyYWNlZmlsZXMgZnJvbSB0aGUgc291cmNl
-IGRpciB3aGVuIHJ1bm5pbmcgbWFrZSBjaGVjayBpbiBhbiBvdXQKPiBvZiB0cmVlIGJ1aWxkZGly
-Lgo+Cj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5j
-b20+Cj4gLS0tCj4gIC5naXRpZ25vcmUgICAgICAgICAgICAgICAgICAgfCAgMiArKwo+ICB0ZXN0
-cy9iaW4vTWFrZWZpbGUuYW0gICAgICAgIHwgMjIgKysrKysrLS0tLS0tLS0tLS0tLS0KPiAgdGVz
-dHMvYmluL3Rlc3RfdHJhY2VfcmVhZCAgICB8IDQ4IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tCj4gIHRlc3RzL2Jpbi90ZXN0X3RyYWNlX3JlYWQuaW4gfCA0OCAr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+ICA0IGZpbGVzIGNo
-YW5nZWQsIDU2IGluc2VydGlvbnMoKyksIDY0IGRlbGV0aW9ucygtKQo+ICBkZWxldGUgbW9kZSAx
-MDA3NTUgdGVzdHMvYmluL3Rlc3RfdHJhY2VfcmVhZAo+ICBjcmVhdGUgbW9kZSAxMDA3NTUgdGVz
-dHMvYmluL3Rlc3RfdHJhY2VfcmVhZC5pbgo+Cj4gZGlmZiAtLWdpdCBhLy5naXRpZ25vcmUgYi8u
-Z2l0aWdub3JlCj4gaW5kZXggMzBlYWRkZS4uYmY4NjlhZiAxMDA2NDQKPiAtLS0gYS8uZ2l0aWdu
-b3JlCj4gKysrIGIvLmdpdGlnbm9yZQo+IEBAIC0xLDggKzEsMTAgQEAKPiAgKn4KPiArL3Rlc3Rz
-L2Jpbi90ZXN0X3RyYWNlX3JlYWQKPiAgL3Rlc3RzL2xpYi90ZXN0X2JpdGZpZWxkCj4gIC90ZXN0
-cy9saWIvdGVzdF9zZWVrCj4gIC90ZXN0cy9saWIvdGVzdF9jdGZfd3JpdGVyCj4gIC90ZXN0cy9s
-aWIvdGVzdF9idF9vYmplY3RzCj4gKy90ZXN0cy9saWIvdGVzdF9idF92YWx1ZXMKPiAgKi5vCj4g
-ICouYQo+ICAqLmxhCj4gZGlmZiAtLWdpdCBhL3Rlc3RzL2Jpbi9NYWtlZmlsZS5hbSBiL3Rlc3Rz
-L2Jpbi9NYWtlZmlsZS5hbQo+IGluZGV4IGU0NjI4NWYuLjAyNDUyMzggMTAwNjQ0Cj4gLS0tIGEv
-dGVzdHMvYmluL01ha2VmaWxlLmFtCj4gKysrIGIvdGVzdHMvYmluL01ha2VmaWxlLmFtCj4gQEAg
-LTEsMTcgKzEsNyBAQAo+IC1TQ1JJUFRfTElTVCA9IHRlc3RfdHJhY2VfcmVhZAo+ICtub2luc3Rf
-U0NSSVBUUyA9IHRlc3RfdHJhY2VfcmVhZAo+ICtDTEVBTkZJTEVTID0gJChub2luc3RfU0NSSVBU
-UykKPiArRVhUUkFfRElTVCA9IHRlc3RfdHJhY2VfcmVhZC5pbgo+Cj4gLWRpc3Rfbm9pbnN0X1ND
-UklQVFMgPSAkKFNDUklQVF9MSVNUKQo+IC0KPiAtYWxsLWxvY2FsOgo+IC0gICAgICAgQGlmIFsg
-eCIkKHNyY2RpcikiICE9IHgiJChidWlsZGRpcikiIF07IHRoZW4gXAo+IC0gICAgICAgICAgICAg
-ICBmb3Igc2NyaXB0IGluICQoU0NSSVBUX0xJU1QpOyBkbyBcCj4gLSAgICAgICAgICAgICAgICAg
-ICAgICAgY3AgLWYgJChzcmNkaXIpLyQkc2NyaXB0ICQoYnVpbGRkaXIpOyBcCj4gLSAgICAgICAg
-ICAgICAgIGRvbmU7IFwKPiAtICAgICAgIGZpCj4gLQo+IC1jbGVhbi1sb2NhbDoKPiAtICAgICAg
-IEBpZiBbIHgiJChzcmNkaXIpIiAhPSB4IiQoYnVpbGRkaXIpIiBdOyB0aGVuIFwKPiAtICAgICAg
-ICAgICAgICAgZm9yIHNjcmlwdCBpbiAkKFNDUklQVF9MSVNUKTsgZG8gXAo+IC0gICAgICAgICAg
-ICAgICAgICAgICAgIHJtIC1mICQoYnVpbGRkaXIpLyQkc2NyaXB0OyBcCj4gLSAgICAgICAgICAg
-ICAgIGRvbmU7IFwKPiAtICAgICAgIGZpCj4gKyQobm9pbnN0X1NDUklQVFMpOiAlOiAlLmluCj4g
-KyAgICAgICBzZWQgInMjQFRPUFNSQ0RJUkAjJCh0b3Bfc3JjZGlyKSNnIiA8ICQ8ID4gJEAKPiAr
-ICAgICAgIGNobW9kICt4ICRACj4gZGlmZiAtLWdpdCBhL3Rlc3RzL2Jpbi90ZXN0X3RyYWNlX3Jl
-YWQgYi90ZXN0cy9iaW4vdGVzdF90cmFjZV9yZWFkCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNzU1
-Cj4gaW5kZXggYjgwY2E5NS4uMDAwMDAwMAo+IC0tLSBhL3Rlc3RzL2Jpbi90ZXN0X3RyYWNlX3Jl
-YWQKPiArKysgL2Rldi9udWxsCj4gQEAgLTEsNDggKzAsMCBAQAo+IC0jIS9iaW4vYmFzaAo+IC0j
-Cj4gLSMgQ29weXJpZ2h0IChDKSAtIDIwMTMgQ2hyaXN0aWFuIEJhYmV1eCA8Y2hyaXN0aWFuLmJh
-YmV1eEBlZmZpY2lvcy5jb20+Cj4gLSMKPiAtIyBUaGlzIHByb2dyYW0gaXMgZnJlZSBzb2Z0d2Fy
-ZTsgeW91IGNhbiByZWRpc3RyaWJ1dGUgaXQgYW5kL29yIG1vZGlmeSBpdAo+IC0jIHVuZGVyIHRo
-ZSB0ZXJtcyBvZiB0aGUgR05VIEdlbmVyYWwgUHVibGljIExpY2Vuc2UsIHZlcnNpb24gMiBvbmx5
-LCBhcwo+IC0jIHB1Ymxpc2hlZCBieSB0aGUgRnJlZSBTb2Z0d2FyZSBGb3VuZGF0aW9uLgo+IC0j
-Cj4gLSMgVGhpcyBwcm9ncmFtIGlzIGRpc3RyaWJ1dGVkIGluIHRoZSBob3BlIHRoYXQgaXQgd2ls
-bCBiZSB1c2VmdWwsIGJ1dCBXSVRIT1VUCj4gLSMgQU5ZIFdBUlJBTlRZOyB3aXRob3V0IGV2ZW4g
-dGhlIGltcGxpZWQgd2FycmFudHkgb2YgTUVSQ0hBTlRBQklMSVRZIG9yCj4gLSMgRklUTkVTUyBG
-T1IgQSBQQVJUSUNVTEFSIFBVUlBPU0UuICBTZWUgdGhlIEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNl
-bnNlIGZvcgo+IC0jIG1vcmUgZGV0YWlscy4KPiAtIwo+IC0jIFlvdSBzaG91bGQgaGF2ZSByZWNl
-aXZlZCBhIGNvcHkgb2YgdGhlIEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlIGFsb25nIHdpdGgK
-PiAtIyB0aGlzIHByb2dyYW07IGlmIG5vdCwgd3JpdGUgdG8gdGhlIEZyZWUgU29mdHdhcmUgRm91
-bmRhdGlvbiwgSW5jLiwgNTEKPiAtIyBGcmFua2xpbiBTdHJlZXQsIEZpZnRoIEZsb29yLCBCb3N0
-b24sIE1BIDAyMTEwLTEzMDEgVVNBLgo+IC0KPiAtQ1VSRElSPSQoZGlybmFtZSAkMCkKPiAtVEVT
-VERJUj0kQ1VSRElSLy4uCj4gLQo+IC1CQUJFTFRSQUNFX0JJTj0kQ1VSRElSLy4uLy4uL2NvbnZl
-cnRlci9iYWJlbHRyYWNlCj4gLQo+IC1DVEZfVFJBQ0VTPSRURVNURElSL2N0Zi10cmFjZXMKPiAt
-Cj4gLXNvdXJjZSAkVEVTVERJUi91dGlscy90YXAvdGFwLnNoCj4gLQo+IC1TVUNDRVNTX1RSQUNF
-Uz0oJHtDVEZfVFJBQ0VTfS9zdWNjZWVkLyopCj4gLUZBSUxfVFJBQ0VTPSgke0NURl9UUkFDRVN9
-L2ZhaWwvKikKPiAtCj4gLU5VTV9URVNUUz0kKCgkeyNTVUNDRVNTX1RSQUNFU1tAXX0gKyAkeyNG
-QUlMX1RSQUNFU1tAXX0pKQo+IC0KPiAtcGxhbl90ZXN0cyAkTlVNX1RFU1RTCj4gLQo+IC1mb3Ig
-cGF0aCBpbiAke1NVQ0NFU1NfVFJBQ0VTW0BdfTsgZG8KPiAtICAgICAgIHRyYWNlPSQoYmFzZW5h
-bWUgJHtwYXRofSkKPiAtICAgICAgICRCQUJFTFRSQUNFX0JJTiAke3BhdGh9ID4gL2Rldi9udWxs
-IDI+JjEKPiAtICAgICAgIG9rICQ/ICJSdW4gYmFiZWx0cmFjZSB3aXRoIHRyYWNlICR7dHJhY2V9
-Igo+IC1kb25lCj4gLQo+IC1mb3IgcGF0aCBpbiAke0ZBSUxfVFJBQ0VTW0BdfTsgZG8KPiAtICAg
-ICAgIHRyYWNlPSQoYmFzZW5hbWUgJHtwYXRofSkKPiAtICAgICAgICRCQUJFTFRSQUNFX0JJTiAk
-e3BhdGh9ID4gL2Rldi9udWxsIDI+JjEKPiAtICAgICAgIGlmIFsgJD8gLWVxIDAgXTsgdGhlbgo+
-IC0gICAgICAgICAgICAgICBmYWlsICJSdW4gYmFiZWx0cmFjZSB3aXRoIGludmFsaWQgdHJhY2Ug
-JHt0cmFjZX0iCj4gLSAgICAgICBlbHNlCj4gLSAgICAgICAgICAgICAgIHBhc3MgIlJ1biBiYWJl
-bHRyYWNlIHdpdGggaW52YWxpZCB0cmFjZSAke3RyYWNlfSIKPiAtICAgICAgIGZpCj4gLWRvbmUK
-PiBkaWZmIC0tZ2l0IGEvdGVzdHMvYmluL3Rlc3RfdHJhY2VfcmVhZC5pbiBiL3Rlc3RzL2Jpbi90
-ZXN0X3RyYWNlX3JlYWQuaW4KPiBuZXcgZmlsZSBtb2RlIDEwMDc1NQo+IGluZGV4IDAwMDAwMDAu
-LmY5NDEwZTUKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvdGVzdHMvYmluL3Rlc3RfdHJhY2VfcmVh
-ZC5pbgo+IEBAIC0wLDAgKzEsNDggQEAKPiArIyEvYmluL2Jhc2gKPiArIwo+ICsjIENvcHlyaWdo
-dCAoQykgLSAyMDEzIENocmlzdGlhbiBCYWJldXggPGNocmlzdGlhbi5iYWJldXhAZWZmaWNpb3Mu
-Y29tPgo+ICsjCj4gKyMgVGhpcyBwcm9ncmFtIGlzIGZyZWUgc29mdHdhcmU7IHlvdSBjYW4gcmVk
-aXN0cmlidXRlIGl0IGFuZC9vciBtb2RpZnkgaXQKPiArIyB1bmRlciB0aGUgdGVybXMgb2YgdGhl
-IEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlLCB2ZXJzaW9uIDIgb25seSwgYXMKPiArIyBwdWJs
-aXNoZWQgYnkgdGhlIEZyZWUgU29mdHdhcmUgRm91bmRhdGlvbi4KPiArIwo+ICsjIFRoaXMgcHJv
-Z3JhbSBpcyBkaXN0cmlidXRlZCBpbiB0aGUgaG9wZSB0aGF0IGl0IHdpbGwgYmUgdXNlZnVsLCBi
-dXQgV0lUSE9VVAo+ICsjIEFOWSBXQVJSQU5UWTsgd2l0aG91dCBldmVuIHRoZSBpbXBsaWVkIHdh
-cnJhbnR5IG9mIE1FUkNIQU5UQUJJTElUWSBvcgo+ICsjIEZJVE5FU1MgRk9SIEEgUEFSVElDVUxB
-UiBQVVJQT1NFLiAgU2VlIHRoZSBHTlUgR2VuZXJhbCBQdWJsaWMgTGljZW5zZSBmb3IKPiArIyBt
-b3JlIGRldGFpbHMuCj4gKyMKPiArIyBZb3Ugc2hvdWxkIGhhdmUgcmVjZWl2ZWQgYSBjb3B5IG9m
-IHRoZSBHTlUgR2VuZXJhbCBQdWJsaWMgTGljZW5zZSBhbG9uZyB3aXRoCj4gKyMgdGhpcyBwcm9n
-cmFtOyBpZiBub3QsIHdyaXRlIHRvIHRoZSBGcmVlIFNvZnR3YXJlIEZvdW5kYXRpb24sIEluYy4s
-IDUxCj4gKyMgRnJhbmtsaW4gU3RyZWV0LCBGaWZ0aCBGbG9vciwgQm9zdG9uLCBNQSAwMjExMC0x
-MzAxIFVTQS4KPiArCj4gK0NVUkRJUj0kKGRpcm5hbWUgJDApCj4gK1RFU1RESVI9JENVUkRJUi8u
-Lgo+ICsKPiArQkFCRUxUUkFDRV9CSU49JENVUkRJUi8uLi8uLi9jb252ZXJ0ZXIvYmFiZWx0cmFj
-ZQo+ICsKPiArQ1RGX1RSQUNFUz0kQ1VSRElSL0BUT1BTUkNESVJAL3Rlc3RzL2N0Zi10cmFjZXMK
-PiArCj4gK3NvdXJjZSAkVEVTVERJUi91dGlscy90YXAvdGFwLnNoCj4gKwo+ICtTVUNDRVNTX1RS
-QUNFUz0oJHtDVEZfVFJBQ0VTfS9zdWNjZWVkLyopCj4gK0ZBSUxfVFJBQ0VTPSgke0NURl9UUkFD
-RVN9L2ZhaWwvKikKPiArCj4gK05VTV9URVNUUz0kKCgkeyNTVUNDRVNTX1RSQUNFU1tAXX0gKyAk
-eyNGQUlMX1RSQUNFU1tAXX0pKQo+ICsKPiArcGxhbl90ZXN0cyAkTlVNX1RFU1RTCj4gKwo+ICtm
-b3IgcGF0aCBpbiAke1NVQ0NFU1NfVFJBQ0VTW0BdfTsgZG8KPiArICAgICAgIHRyYWNlPSQoYmFz
-ZW5hbWUgJHtwYXRofSkKPiArICAgICAgICRCQUJFTFRSQUNFX0JJTiAke3BhdGh9ID4gL2Rldi9u
-dWxsIDI+JjEKPiArICAgICAgIG9rICQ/ICJSdW4gYmFiZWx0cmFjZSB3aXRoIHRyYWNlICR7dHJh
-Y2V9Igo+ICtkb25lCj4gKwo+ICtmb3IgcGF0aCBpbiAke0ZBSUxfVFJBQ0VTW0BdfTsgZG8KPiAr
-ICAgICAgIHRyYWNlPSQoYmFzZW5hbWUgJHtwYXRofSkKPiArICAgICAgICRCQUJFTFRSQUNFX0JJ
-TiAke3BhdGh9ID4gL2Rldi9udWxsIDI+JjEKPiArICAgICAgIGlmIFsgJD8gLWVxIDAgXTsgdGhl
-bgo+ICsgICAgICAgICAgICAgICBmYWlsICJSdW4gYmFiZWx0cmFjZSB3aXRoIGludmFsaWQgdHJh
-Y2UgJHt0cmFjZX0iCj4gKyAgICAgICBlbHNlCj4gKyAgICAgICAgICAgICAgIHBhc3MgIlJ1biBi
-YWJlbHRyYWNlIHdpdGggaW52YWxpZCB0cmFjZSAke3RyYWNlfSIKPiArICAgICAgIGZpCj4gK2Rv
-bmUKPiAtLQo+IDEuOS4xCj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5j
-LgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
-L2x0dG5nLWRldgo=
+Fixes race where data connection can still add indexes after close,
+preventing graceful teardown of the stream.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ src/bin/lttng-relayd/main.c   | 11 +++++++++--
+ src/bin/lttng-relayd/stream.c | 29 ++++++++++++++++-------------
+ src/bin/lttng-relayd/stream.h |  1 +
+ 3 files changed, 26 insertions(+), 15 deletions(-)
+
+diff --git a/src/bin/lttng-relayd/main.c b/src/bin/lttng-relayd/main.c
+index 7b385b4..40ce50a 100644
+--- a/src/bin/lttng-relayd/main.c
++++ b/src/bin/lttng-relayd/main.c
+@@ -1267,8 +1267,16 @@ static int relay_close_stream(struct lttcomm_relayd_hdr *recv_hdr,
+ 		goto end;
+ 	}
+ 	pthread_mutex_lock(&stream->lock);
+-	stream->closed = true;
+ 	stream->last_net_seq_num = be64toh(stream_info.last_net_seq_num);
++	pthread_mutex_unlock(&stream->lock);
++
++	/*
++	 * Set last_net_seq_num before the close flag. Required by data
++	 * pending check.
++	 */
++
++	stream_close(stream);
++
+ 	if (stream->is_metadata) {
+ 		struct relay_viewer_stream *vstream;
+ 
+@@ -1287,7 +1295,6 @@ static int relay_close_stream(struct lttcomm_relayd_hdr *recv_hdr,
+ 			viewer_stream_put(vstream);
+ 		}
+ 	}
+-	pthread_mutex_unlock(&stream->lock);
+ 	stream_put(stream);
+ 
+ end:
+diff --git a/src/bin/lttng-relayd/stream.c b/src/bin/lttng-relayd/stream.c
+index 870b75a..fca358f 100644
+--- a/src/bin/lttng-relayd/stream.c
++++ b/src/bin/lttng-relayd/stream.c
+@@ -168,6 +168,7 @@ struct relay_stream *stream_create(struct ctf_trace *trace,
+ 	 * side of the relayd does not have the concept of session.
+ 	 */
+ 	lttng_ht_add_unique_u64(relay_streams_ht, &stream->node);
++	stream->in_stream_ht = true;
+ 
+ 	DBG("Relay new stream added %s with ID %" PRIu64, stream->channel_name,
+ 			stream->stream_handle);
+@@ -231,14 +232,21 @@ unlock:
+  */
+ static void stream_unpublish(struct relay_stream *stream)
+ {
+-	if (!stream->published) {
+-		return;
++	if (stream->in_stream_ht) {
++		struct lttng_ht_iter iter;
++		int ret;
++
++		iter.iter.node = &stream->node.node;
++		ret = lttng_ht_del(relay_streams_ht, &iter);
++		assert(!ret);
++		stream->in_stream_ht = false;
++	}
++	if (stream->published) {
++		pthread_mutex_lock(&stream->trace->stream_list_lock);
++		cds_list_del_rcu(&stream->stream_node);
++		pthread_mutex_unlock(&stream->trace->stream_list_lock);
++		stream->published = false;
+ 	}
+-	pthread_mutex_lock(&stream->trace->stream_list_lock);
+-	cds_list_del_rcu(&stream->stream_node);
+-	pthread_mutex_unlock(&stream->trace->stream_list_lock);
+-
+-	stream->published = false;
+ }
+ 
+ static void stream_destroy(struct relay_stream *stream)
+@@ -267,8 +275,6 @@ static void stream_release(struct urcu_ref *ref)
+ 	struct relay_stream *stream =
+ 		caa_container_of(ref, struct relay_stream, ref);
+ 	struct relay_session *session;
+-	int ret;
+-	struct lttng_ht_iter iter;
+ 
+ 	session = stream->trace->session;
+ 
+@@ -282,10 +288,6 @@ static void stream_release(struct urcu_ref *ref)
+ 	}
+ 	pthread_mutex_unlock(&session->recv_list_lock);
+ 
+-	iter.iter.node = &stream->node.node;
+-	ret = lttng_ht_del(relay_streams_ht, &iter);
+-	assert(!ret);
+-
+ 	stream_unpublish(stream);
+ 
+ 	if (stream->stream_fd) {
+@@ -333,6 +335,7 @@ void stream_close(struct relay_stream *stream)
+ {
+ 	DBG("closing stream %" PRIu64, stream->stream_handle);
+ 	pthread_mutex_lock(&stream->lock);
++	stream_unpublish(stream);
+ 	stream->closed = true;
+ 	relay_index_close_all(stream);
+ 	pthread_mutex_unlock(&stream->lock);
+diff --git a/src/bin/lttng-relayd/stream.h b/src/bin/lttng-relayd/stream.h
+index ca6be81..542e05c 100644
+--- a/src/bin/lttng-relayd/stream.h
++++ b/src/bin/lttng-relayd/stream.h
+@@ -132,6 +132,7 @@ struct relay_stream {
+ 	 * Node of stream within global stream hash table.
+ 	 */
+ 	struct lttng_ht_node_u64 node;
++	bool in_stream_ht;		/* is stream in stream hash table. */
+ 	struct rcu_head rcu_node;	/* For call_rcu teardown. */
+ };
+ 
+-- 
+2.1.4
