@@ -1,16 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 1/2] Tests: expand UST wildcard
-	tests, move to regression/tools
-Date: Fri,  4 Sep 2015 19:53:18 -0400
-Message-ID: <1441410799-10991-1-git-send-email-mathieu.desnoyers__47723.101944621$1441410907$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 2/2] Test kernel wildcards
+Date: Fri,  4 Sep 2015 19:53:19 -0400
+Message-ID: <1441410799-10991-2-git-send-email-mathieu.desnoyers__32371.4103935801$1441411086$gmane$org@efficios.com>
+References: <1441410799-10991-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZY0nX-00068J-AS
- for lttng-dev@lists.lttng.org; Fri, 04 Sep 2015 19:53:47 -0400
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZY0nb-00068K-VC
+ for lttng-dev@lists.lttng.org; Fri, 04 Sep 2015 19:53:49 -0400
+In-Reply-To: <1441410799-10991-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,221 +26,209 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- configure.ac                                       |  1 +
- tests/fast_regression                              |  2 +-
- tests/long_regression                              |  2 +-
- tests/regression/tools/Makefile.am                 |  3 +-
- tests/regression/tools/wildcard/Makefile.am        | 26 ++++++++++
- .../{ust => tools/wildcard}/test_event_wildcard    | 59 ++++++++++++++++------
- tests/regression/ust/Makefile.am                   |  2 +-
- 7 files changed, 75 insertions(+), 20 deletions(-)
- create mode 100644 tests/regression/tools/wildcard/Makefile.am
- rename tests/regression/{ust => tools/wildcard}/test_event_wildcard (53%)
+ .../regression/tools/wildcard/test_event_wildcard  | 87 ++++++++++++++++------
+ tests/utils/utils.sh                               | 37 +++++++--
+ 2 files changed, 96 insertions(+), 28 deletions(-)
 
-diff --git a/configure.ac b/configure.ac
-index 55977bc..1266431 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -518,6 +518,7 @@ AC_CONFIG_FILES([
- 	tests/regression/tools/exclusion/Makefile
- 	tests/regression/tools/save-load/Makefile
- 	tests/regression/tools/mi/Makefile
-+	tests/regression/tools/wildcard/Makefile
- 	tests/regression/ust/Makefile
- 	tests/regression/ust/nprocesses/Makefile
- 	tests/regression/ust/high-throughput/Makefile
-diff --git a/tests/fast_regression b/tests/fast_regression
-index fa88621..420fffb 100644
---- a/tests/fast_regression
-+++ b/tests/fast_regression
-@@ -14,6 +14,7 @@ regression/tools/snapshots/test_ust_streaming
- regression/tools/save-load/test_save
- regression/tools/save-load/test_load
- regression/tools/mi/test_mi
-+regression/tools/wildcard/test_event_wildcard
- regression/ust/before-after/test_before_after
- regression/ust/buffers-pid/test_buffers_pid
- regression/ust/multi-session/test_multi_session
-@@ -26,5 +27,4 @@ regression/ust/getcpu-override/test_getcpu_override
- regression/ust/clock-override/test_clock_override
- regression/ust/test_event_basic
- regression/ust/test_event_tracef
--regression/ust/test_event_wildcard
- regression/ust/test_event_perf
-diff --git a/tests/long_regression b/tests/long_regression
-index 1fa8514..105dc51 100644
---- a/tests/long_regression
-+++ b/tests/long_regression
-@@ -8,6 +8,7 @@ regression/tools/streaming/test_ust
- regression/tools/snapshots/test_ust_long
- regression/tools/tracefile-limits/test_tracefile_count
- regression/tools/tracefile-limits/test_tracefile_size
-+regression/tools/wildcard/test_event_wildcard
- regression/ust/before-after/test_before_after
- regression/ust/buffers-pid/test_buffers_pid
- regression/ust/high-throughput/test_high_throughput
-@@ -17,4 +18,3 @@ regression/ust/nprocesses/test_nprocesses
- regression/ust/overlap/test_overlap
- regression/ust/test_event_basic
- regression/ust/test_event_tracef
--regression/ust/test_event_wildcard
-diff --git a/tests/regression/tools/Makefile.am b/tests/regression/tools/Makefile.am
-index 09f55b3..a798de3 100644
---- a/tests/regression/tools/Makefile.am
-+++ b/tests/regression/tools/Makefile.am
-@@ -1 +1,2 @@
--SUBDIRS = streaming filtering health tracefile-limits snapshots live exclusion save-load mi
-+SUBDIRS = streaming filtering health tracefile-limits snapshots live exclusion save-load mi \
-+		wildcard
-diff --git a/tests/regression/tools/wildcard/Makefile.am b/tests/regression/tools/wildcard/Makefile.am
-new file mode 100644
-index 0000000..b95b495
---- /dev/null
-+++ b/tests/regression/tools/wildcard/Makefile.am
-@@ -0,0 +1,26 @@
-+AM_CFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src -I$(top_srcdir)/tests -I$(srcdir) -O2 -g
-+AM_LDFLAGS =
-+
-+if LTTNG_TOOLS_BUILD_WITH_LIBDL
-+LIBS += -ldl
-+endif
-+if LTTNG_TOOLS_BUILD_WITH_LIBC_DL
-+LIBS += -lc
-+endif
-+
-+noinst_SCRIPTS = test_event_wildcard
-+EXTRA_DIST = test_event_wildcard
-+
-+all-local:
-+	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
-+		for script in $(EXTRA_DIST); do \
-+			cp -f $(srcdir)/$$script $(builddir); \
-+		done; \
-+	fi
-+
-+clean-local:
-+	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
-+		for script in $(EXTRA_DIST); do \
-+			rm -f $(builddir)/$$script; \
-+		done; \
-+	fi
-diff --git a/tests/regression/ust/test_event_wildcard b/tests/regression/tools/wildcard/test_event_wildcard
-similarity index 53%
-rename from tests/regression/ust/test_event_wildcard
-rename to tests/regression/tools/wildcard/test_event_wildcard
-index 1c0b27a..7fbfc18 100755
---- a/tests/regression/ust/test_event_wildcard
+diff --git a/tests/regression/tools/wildcard/test_event_wildcard b/tests/regression/tools/wildcard/test_event_wildcard
+index 7fbfc18..126bdae 100755
+--- a/tests/regression/tools/wildcard/test_event_wildcard
 +++ b/tests/regression/tools/wildcard/test_event_wildcard
-@@ -1,6 +1,7 @@
- #!/bin/bash
- #
- # Copyright (C) - 2013 Christian Babeux <christian.babeux@efficios.com>
-+# Copyright (C) - 2015 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
- #
- # This program is free software; you can redistribute it and/or modify it
- # under the terms of the GNU General Public License, version 2 only, as
-@@ -20,40 +21,59 @@ TEST_DESC="UST tracer - Event wildcard"
+@@ -16,37 +16,47 @@
+ # this program; if not, write to the Free Software Foundation, Inc., 51
+ # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ 
+-TEST_DESC="UST tracer - Event wildcard"
++TEST_DESC="LTTng - Event wildcard test"
+ 
  CURDIR=$(dirname $0)/
- TESTDIR=$CURDIR/../..
+-TESTDIR=$CURDIR/../..
++TESTDIR=$CURDIR/../../..
  LTTNG_BIN="lttng"
--BIN_NAME="gen-ust-events"
--SESSION_NAME="valid_filter"
-+TESTAPP_PATH="$TESTDIR/utils/testapp"
-+TESTAPP_NAME="gen-ust-events"
-+TESTAPP_BIN="$TESTAPP_PATH/$TESTAPP_NAME/$TESTAPP_NAME"
-+SESSION_NAME="wildcard"
- EVENT_NAME="tp:tptest"
--NUM_TESTS=9
-+NUM_TESTS=39
-+NR_ITER=100
+ TESTAPP_PATH="$TESTDIR/utils/testapp"
+ TESTAPP_NAME="gen-ust-events"
+ TESTAPP_BIN="$TESTAPP_PATH/$TESTAPP_NAME/$TESTAPP_NAME"
+ SESSION_NAME="wildcard"
+-EVENT_NAME="tp:tptest"
+-NUM_TESTS=39
+ NR_ITER=100
++NUM_GLOBAL_TESTS=2
++NUM_UST_TESTS=37
++NUM_KERNEL_TESTS=37
++NUM_TESTS=$(($NUM_UST_TESTS+$NUM_KERNEL_TESTS+$NUM_GLOBAL_TESTS))
  
  source $TESTDIR/utils/utils.sh
  
-+if [ ! -x "$TESTAPP_BIN" ]; then
-+	BAIL_OUT "No UST nevents binary detected."
-+fi
+-if [ ! -x "$TESTAPP_BIN" ]; then
+-	BAIL_OUT "No UST nevents binary detected."
+-fi
++function run_ust
++{
++	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT
++}
 +
++function run_kernel
++{
++	# Trigger the event for 100 iterations
++	echo -n "100" > /proc/lttng-test-filter-event
++}
+ 
  function test_event_wildcard()
  {
  	TRACE_PATH=$(mktemp -d)
--	SESSION_NAME="ust_event_basic"
--	SESSION_NAME2="ust_event_basic2"
--	CHAN_NAME="mychan"
--	CHAN_NAME2="mychan2"
--	EVENT_NAME="*"
--	EVENT_NAME2="abc*"
-+	FIND="${1}"
-+	WILDCARD="${2}"
+-	FIND="${1}"
+-	WILDCARD="${2}"
++	DOMAIN="$1"
++	FIND="$2"
++	WILDCARD="$3"
  
  	create_lttng_session_ok $SESSION_NAME $TRACE_PATH
--
--	enable_ust_lttng_event_ok $SESSION_NAME "$EVENT_NAME"
--	enable_ust_lttng_event_ok $SESSION_NAME "$EVENT_NAME2"
-+	enable_ust_lttng_event_ok $SESSION_NAME "$WILDCARD"
+-	enable_ust_lttng_event_ok $SESSION_NAME "$WILDCARD"
++	enable_${DOMAIN}_lttng_event_ok $SESSION_NAME "$WILDCARD"
  
  	start_lttng_tracing_ok
-+
-+	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT
-+	ok $? "Traced application stopped."
-+
+ 
+-	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT
++	run_${DOMAIN}
+ 	ok $? "Traced application stopped."
+ 
  	stop_lttng_tracing_ok
-+	destroy_lttng_session_ok $SESSION_NAME
-+
-+	if [ ${FIND} -eq 1 ]; then
-+		trace_matches $EVENT_NAME $NR_ITER $TRACE_PATH
-+	else
-+		validate_trace_empty $TRACE_PATH
-+	fi
-+
-+	rm -rf $TRACE_PATH
-+}
+@@ -64,16 +74,16 @@ function test_event_wildcard()
+ function test_event_wildcard_fail()
+ {
+ 	TRACE_PATH=$(mktemp -d)
+-	WILDCARD="${1}"
++	DOMAIN="$1"
++	WILDCARD="$2"
  
--	TODO="Validate trace output is coherent"
--	ok 0 "Validate trace"
--	unset TODO
-+function test_event_wildcard_fail()
-+{
-+	TRACE_PATH=$(mktemp -d)
-+	WILDCARD="${1}"
- 
-+	create_lttng_session_ok $SESSION_NAME $TRACE_PATH
-+	enable_ust_lttng_event_fail $SESSION_NAME "$WILDCARD"
+ 	create_lttng_session_ok $SESSION_NAME $TRACE_PATH
+-	enable_ust_lttng_event_fail $SESSION_NAME "$WILDCARD"
++	enable_${DOMAIN}_lttng_event_fail $SESSION_NAME "$WILDCARD"
  	destroy_lttng_session_ok $SESSION_NAME
  
  	rm -rf $TRACE_PATH
  }
  
-+
+-
  # MUST set TESTDIR before calling those functions
  plan_tests $NUM_TESTS
  
-@@ -61,6 +81,13 @@ print_test_banner "$TEST_DESC"
+@@ -81,13 +91,48 @@ print_test_banner "$TEST_DESC"
  
  start_lttng_sessiond
  
--test_event_wildcard
-+test_event_wildcard 1 'tp:tp*'
-+test_event_wildcard 1 '*'
-+test_event_wildcard 1 'tp:tptest*'
-+test_event_wildcard 0 'tp:abc*'
+-test_event_wildcard 1 'tp:tp*'
+-test_event_wildcard 1 '*'
+-test_event_wildcard 1 'tp:tptest*'
+-test_event_wildcard 0 'tp:abc*'
++diag "Test UST wildcard"
 +
-+test_event_wildcard_fail 'tp:*tp'
-+test_event_wildcard_fail 'tp:tp**'
-+test_event_wildcard_fail '*tp:tp*'
++if [ ! -x "$TESTAPP_BIN" ]; then
++	BAIL_OUT "No UST nevents binary detected."
++fi
++
++EVENT_NAME="tp:tptest"
++
++test_event_wildcard ust 1 'tp:tp*'
++test_event_wildcard ust 1 '*'
++test_event_wildcard ust 1 'tp:tptest*'
++test_event_wildcard ust 0 'tp:abc*'
++
++test_event_wildcard_fail ust 'tp:*tp'
++test_event_wildcard_fail ust 'tp:tp**'
++test_event_wildcard_fail ust '*tp:tp*'
++
++
++if [ "$(id -u)" == "0" ]; then
++	isroot=1
++else
++	isroot=0
++fi
+ 
+-test_event_wildcard_fail 'tp:*tp'
+-test_event_wildcard_fail 'tp:tp**'
+-test_event_wildcard_fail '*tp:tp*'
++skip $isroot "Root access is needed. Skipping all kernel wildcard tests." $NUM_KERNEL_TESTS ||
++{
++	diag "Test kernel wildcards"
++
++	modprobe lttng-test
++
++	EVENT_NAME="lttng_test_filter_event"
++
++	test_event_wildcard kernel 1 'lttng_test_*'
++	test_event_wildcard kernel 1 '*'
++	test_event_wildcard kernel 1 'lttng_test_filter_event*'
++	test_event_wildcard kernel 0 'lttng_test_asdfasdf*'
++
++	test_event_wildcard_fail kernel 'tp_*tp'
++	test_event_wildcard_fail kernel 'tp_tp**'
++	test_event_wildcard_fail kernel '*tp_tp*'
++
++	rmmod lttng-test
++}
  
  stop_lttng_sessiond
-diff --git a/tests/regression/ust/Makefile.am b/tests/regression/ust/Makefile.am
-index 2616dc7..f2afad5 100644
---- a/tests/regression/ust/Makefile.am
-+++ b/tests/regression/ust/Makefile.am
-@@ -4,7 +4,7 @@ SUBDIRS = nprocesses high-throughput low-throughput before-after multi-session \
- 		periodical-metadata-flush java-jul java-log4j python-logging \
- 		getcpu-override clock-override
+diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
+index 1e1e791..d466ee6 100644
+--- a/tests/utils/utils.sh
++++ b/tests/utils/utils.sh
+@@ -86,18 +86,19 @@ function randstring()
+ 	echo
+ }
  
--EXTRA_DIST = test_event_basic test_event_wildcard test_event_tracef test_event_perf
-+EXTRA_DIST = test_event_basic test_event_tracef test_event_perf
+-function lttng_enable_kernel_event
++function enable_kernel_lttng_event
+ {
+-	local sess_name=$1
+-	local event_name=$2
+-	local channel_name=$3
++	local expected_to_fail="$1"
++	local sess_name="$2"
++	local event_name="$3"
++	local channel_name="$4"
  
- all-local:
- 	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
+-	if [ -z $event_name ]; then
++	if [ -z "$event_name" ]; then
+ 		# Enable all event if no event name specified
+ 		event_name="-a"
+ 	fi
+ 
+-	if [ -z $channel_name ]; then
++	if [ -z "$channel_name" ]; then
+ 		# default channel if none specified
+ 		chan=""
+ 	else
+@@ -105,7 +106,29 @@ function lttng_enable_kernel_event
+ 	fi
+ 
+ 	$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name" $chan -s $sess_name -k 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
+-	ok $? "Enable kernel event $event_name for session $sess_name"
++	ret=$?
++	if [[ $expected_to_fail -eq "1" ]]; then
++		test $ret -ne "0"
++		ok $? "Enable kernel event $event_name for session $session_name on channel $channel_name failed as expected"
++	else
++		ok $ret "Enable kernel event $event_name for session $sess_name"
++	fi
++}
++
++function enable_kernel_lttng_event_ok ()
++{
++	enable_kernel_lttng_event 0 "$@"
++}
++
++function enable_kernel_lttng_event_fail ()
++{
++	enable_kernel_lttng_event 1 "$@"
++}
++
++# Old interface
++function lttng_enable_kernel_event
++{
++	enable_kernel_lttng_event_ok "$@"
+ }
+ 
+ function lttng_enable_kernel_syscall()
 -- 
 2.1.4
