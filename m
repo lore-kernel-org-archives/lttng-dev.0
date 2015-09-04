@@ -1,19 +1,21 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools 2/2] Fix: lttng-crash: remove tmp
-	working directory
-Date: Thu,  3 Sep 2015 17:52:07 -0400
-Message-ID: <1441317127-10878-2-git-send-email-jonathan.rajotte-julien__46416.2417957143$1441317333$gmane$org@efficios.com>
-References: <1441317127-10878-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust v3] Fix: make check in out of tree
+	build
+Date: Fri, 4 Sep 2015 04:38:04 +0000 (UTC)
+Message-ID: <2042166294.36316.1441341484472.JavaMail.zimbra__42790.8486839899$1441341586$gmane$org@efficios.com>
+References: <1441311098-2607-1-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1ZXcQv-0006MS-3i
- for lttng-dev@lists.lttng.org; Thu, 03 Sep 2015 17:52:41 -0400
-In-Reply-To: <1441317127-10878-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1ZXilZ-0008HG-Oq
+ for lttng-dev@lists.lttng.org; Fri, 04 Sep 2015 00:38:29 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id BF5583403C2
+ for <lttng-dev@lists.lttng.org>; Fri,  4 Sep 2015 04:38:16 +0000 (UTC)
+In-Reply-To: <1441311098-2607-1-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,126 +24,96 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
----
- src/bin/lttng-crash/lttng-crash.c | 65 +++++++++++++++++++++++++++++----------
- 1 file changed, 48 insertions(+), 17 deletions(-)
+Merged into master, thanks!
 
-diff --git a/src/bin/lttng-crash/lttng-crash.c b/src/bin/lttng-crash/lttng-crash.c
-index 8e57034..00a97df 100644
---- a/src/bin/lttng-crash/lttng-crash.c
-+++ b/src/bin/lttng-crash/lttng-crash.c
-@@ -1053,35 +1053,62 @@ end:
- }
- 
- static
--int delete_trace(const char *trace_path)
-+int delete_recursive_dir(const char *path)
- {
--	DIR *trace_dir;
--	int trace_dir_fd, ret = 0, closeret;
-+	DIR *dir;
-+	int dir_fd, ret = 0, closeret;
- 	struct dirent *entry;
- 
- 	/* Open trace directory */
--	trace_dir = opendir(trace_path);
--	if (!trace_dir) {
--		PERROR("Cannot open '%s' path", trace_path);
-+	dir = opendir(path);
-+	if (!dir) {
-+		PERROR("Cannot open '%s' path", path);
- 		return -1;
- 	}
--	trace_dir_fd = dirfd(trace_dir);
--	if (trace_dir_fd < 0) {
-+	dir_fd = dirfd(dir);
-+	if (dir_fd < 0) {
- 		PERROR("dirfd");
- 		return -1;
- 	}
- 
--	while ((entry = readdir(trace_dir))) {
-+	while ((entry = readdir(dir))) {
- 		if (!strcmp(entry->d_name, ".")
- 				|| !strcmp(entry->d_name, "..")) {
- 			continue;
- 		}
- 		switch (entry->d_type) {
- 		case DT_DIR:
--			unlinkat(trace_dir_fd, entry->d_name, AT_REMOVEDIR);
-+		{
-+			char subpath[PATH_MAX];
-+
-+			strncpy(subpath, path,
-+				sizeof(subpath));
-+			subpath[sizeof(subpath) - 1] = '\0';
-+			strncat(subpath, "/",
-+				sizeof(subpath) - strlen(subpath) - 1);
-+			strncat(subpath, entry->d_name,
-+				sizeof(subpath) - strlen(subpath) - 1);
-+
-+			ret = delete_recursive_dir(subpath);
-+			if (ret) {
-+				goto end;
-+			}
-+
-+			ret = unlinkat(dir_fd, entry->d_name, AT_REMOVEDIR);
-+			if (ret) {
-+				PERROR("Unlinking '%s'", entry->d_name);
-+				goto end;
-+			}
-+
- 			break;
-+		}
- 		case DT_REG:
--			unlinkat(trace_dir_fd, entry->d_name, 0);
-+			ret = unlinkat(dir_fd, entry->d_name, 0);
-+			if (ret) {
-+				PERROR("Unlinking '%s'", entry->d_name);
-+				goto end;
-+			}
-+
- 			break;
- 		default:
- 			ret = -EINVAL;
-@@ -1089,13 +1116,10 @@ int delete_trace(const char *trace_path)
- 		}
- 	}
- end:
--	closeret = closedir(trace_dir);
-+	closeret = closedir(dir);
- 	if (closeret) {
- 		PERROR("closedir");
- 	}
--	if (!ret) {
--		ret = rmdir(trace_path);
--	}
- 	return ret;
- }
- 
-@@ -1178,9 +1202,16 @@ int main(int argc, char *argv[])
- 			has_warning = 1;
- 
- 		/* unlink temporary trace */
--		ret = delete_trace(output_path);
--		if (ret)
-+		ret = delete_recursive_dir(output_path);
-+		if (ret){
- 			has_warning = 1;
-+		}else{
-+			ret = rmdir(output_path);
-+			if (ret) {
-+				PERROR("Deleting '%s'", output_path);
-+				has_warning = 1;
-+			}
-+		}
- 	}
- 	if (has_warning)
- 		exit(EXIT_FAILURE);
+Mathieu
+
+----- On Sep 3, 2015, at 4:11 PM, Michael Jeanson mjeanson@efficios.com wrote:
+
+> Use the elf data files from the source dir when running make check in an
+> out of tree builddir and add the data files to dist.
+> 
+> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+> ---
+> .gitignore                    |  1 +
+> tests/ust-elf/Makefile.am     | 22 ++++++----------------
+> tests/ust-elf/test_ust_elf    |  4 ----
+> tests/ust-elf/test_ust_elf.in |  4 ++++
+> 4 files changed, 11 insertions(+), 20 deletions(-)
+> delete mode 100755 tests/ust-elf/test_ust_elf
+> create mode 100755 tests/ust-elf/test_ust_elf.in
+> 
+> diff --git a/.gitignore b/.gitignore
+> index b1f985b..41966c5 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -50,6 +50,7 @@ tests/tracepoint/benchmark/tracepoint_benchmark
+> tests/tracepoint/tracepoint_test
+> tests/snprintf/prog
+> tests/ust-elf/prog
+> +tests/ust-elf/test_ust_elf
+> tests/benchmark/bench1
+> tests/benchmark/bench2
+> 
+> diff --git a/tests/ust-elf/Makefile.am b/tests/ust-elf/Makefile.am
+> index 3cb5442..368e427 100644
+> --- a/tests/ust-elf/Makefile.am
+> +++ b/tests/ust-elf/Makefile.am
+> @@ -5,20 +5,10 @@ prog_SOURCES = prog.c
+> prog_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la \
+> 	$(top_builddir)/tests/utils/libtap.a
+> 
+> -SCRIPT_LIST = test_ust_elf
+> +noinst_SCRIPTS = test_ust_elf
+> +CLEANFILES = $(noinst_SCRIPTS)
+> +EXTRA_DIST = test_ust_elf.in $(srcdir)/data/**
+> 
+> -dist_noinst_SCRIPTS = $(SCRIPT_LIST)
+> -
+> -all-local:
+> -	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
+> -		for script in $(SCRIPT_LIST); do \
+> -			cp -f $(srcdir)/$$script $(builddir); \
+> -		done; \
+> -	fi
+> -
+> -clean-local:
+> -	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
+> -		for script in $(SCRIPT_LIST); do \
+> -			rm -f $(builddir)/$$script; \
+> -		done; \
+> -	fi
+> +$(noinst_SCRIPTS): %: %.in
+> +	sed "s#@TOPSRCDIR@#$(top_srcdir)#g" < $< > $@
+> +	chmod +x $@
+> diff --git a/tests/ust-elf/test_ust_elf b/tests/ust-elf/test_ust_elf
+> deleted file mode 100755
+> index cb7c7a9..0000000
+> --- a/tests/ust-elf/test_ust_elf
+> +++ /dev/null
+> @@ -1,4 +0,0 @@
+> -#!/bin/bash
+> -
+> -TEST_DIR=$(dirname $0)
+> -./${TEST_DIR}/prog $TEST_DIR
+> diff --git a/tests/ust-elf/test_ust_elf.in b/tests/ust-elf/test_ust_elf.in
+> new file mode 100755
+> index 0000000..5cfbff6
+> --- /dev/null
+> +++ b/tests/ust-elf/test_ust_elf.in
+> @@ -0,0 +1,4 @@
+> +#!/bin/bash
+> +
+> +TEST_DIR=$(dirname $0)
+> +./${TEST_DIR}/prog $TEST_DIR/@TOPSRCDIR@/tests/ust-elf
+> --
+> 1.9.1
+
 -- 
-2.1.4
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
