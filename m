@@ -1,15 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix: unpublish stream on close
-Date: Fri,  4 Sep 2015 15:44:23 -0400
-Message-ID: <1441395863-31567-1-git-send-email-mathieu.desnoyers__7742.68142781711$1441395928$gmane$org@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: use pid element instead of
+	process element
+Date: Fri, 4 Sep 2015 17:09:58 -0400
+Message-ID: <CA+jJMxsexhr2DqMXjqnVbrBbfyGJddgf4s+Aa_5o1h-WwGPRHg__26734.9631678828$1441401203$gmane$org@mail.gmail.com>
+References: <1440705503-13691-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-yk0-f179.google.com ([209.85.160.179])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZXwuX-0004hP-Oi
- for lttng-dev@lists.lttng.org; Fri, 04 Sep 2015 15:44:34 -0400
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZXyFI-00059Z-1N
+ for lttng-dev@lists.lttng.org; Fri, 04 Sep 2015 17:10:11 -0400
+Received: by ykek143 with SMTP id k143so33162202yke.2
+ for <lttng-dev@lists.lttng.org>; Fri, 04 Sep 2015 14:09:58 -0700 (PDT)
+In-Reply-To: <1440705503-13691-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -18,130 +23,137 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Fixes race where data connection can still add indexes after close,
-preventing graceful teardown of the stream.
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- src/bin/lttng-relayd/main.c   | 11 +++++++++--
- src/bin/lttng-relayd/stream.c | 29 ++++++++++++++++-------------
- src/bin/lttng-relayd/stream.h |  1 +
- 3 files changed, 26 insertions(+), 15 deletions(-)
-
-diff --git a/src/bin/lttng-relayd/main.c b/src/bin/lttng-relayd/main.c
-index 7b385b4..40ce50a 100644
---- a/src/bin/lttng-relayd/main.c
-+++ b/src/bin/lttng-relayd/main.c
-@@ -1267,8 +1267,16 @@ static int relay_close_stream(struct lttcomm_relayd_hdr *recv_hdr,
- 		goto end;
- 	}
- 	pthread_mutex_lock(&stream->lock);
--	stream->closed = true;
- 	stream->last_net_seq_num = be64toh(stream_info.last_net_seq_num);
-+	pthread_mutex_unlock(&stream->lock);
-+
-+	/*
-+	 * Set last_net_seq_num before the close flag. Required by data
-+	 * pending check.
-+	 */
-+
-+	stream_close(stream);
-+
- 	if (stream->is_metadata) {
- 		struct relay_viewer_stream *vstream;
- 
-@@ -1287,7 +1295,6 @@ static int relay_close_stream(struct lttcomm_relayd_hdr *recv_hdr,
- 			viewer_stream_put(vstream);
- 		}
- 	}
--	pthread_mutex_unlock(&stream->lock);
- 	stream_put(stream);
- 
- end:
-diff --git a/src/bin/lttng-relayd/stream.c b/src/bin/lttng-relayd/stream.c
-index 870b75a..fca358f 100644
---- a/src/bin/lttng-relayd/stream.c
-+++ b/src/bin/lttng-relayd/stream.c
-@@ -168,6 +168,7 @@ struct relay_stream *stream_create(struct ctf_trace *trace,
- 	 * side of the relayd does not have the concept of session.
- 	 */
- 	lttng_ht_add_unique_u64(relay_streams_ht, &stream->node);
-+	stream->in_stream_ht = true;
- 
- 	DBG("Relay new stream added %s with ID %" PRIu64, stream->channel_name,
- 			stream->stream_handle);
-@@ -231,14 +232,21 @@ unlock:
-  */
- static void stream_unpublish(struct relay_stream *stream)
- {
--	if (!stream->published) {
--		return;
-+	if (stream->in_stream_ht) {
-+		struct lttng_ht_iter iter;
-+		int ret;
-+
-+		iter.iter.node = &stream->node.node;
-+		ret = lttng_ht_del(relay_streams_ht, &iter);
-+		assert(!ret);
-+		stream->in_stream_ht = false;
-+	}
-+	if (stream->published) {
-+		pthread_mutex_lock(&stream->trace->stream_list_lock);
-+		cds_list_del_rcu(&stream->stream_node);
-+		pthread_mutex_unlock(&stream->trace->stream_list_lock);
-+		stream->published = false;
- 	}
--	pthread_mutex_lock(&stream->trace->stream_list_lock);
--	cds_list_del_rcu(&stream->stream_node);
--	pthread_mutex_unlock(&stream->trace->stream_list_lock);
--
--	stream->published = false;
- }
- 
- static void stream_destroy(struct relay_stream *stream)
-@@ -267,8 +275,6 @@ static void stream_release(struct urcu_ref *ref)
- 	struct relay_stream *stream =
- 		caa_container_of(ref, struct relay_stream, ref);
- 	struct relay_session *session;
--	int ret;
--	struct lttng_ht_iter iter;
- 
- 	session = stream->trace->session;
- 
-@@ -282,10 +288,6 @@ static void stream_release(struct urcu_ref *ref)
- 	}
- 	pthread_mutex_unlock(&session->recv_list_lock);
- 
--	iter.iter.node = &stream->node.node;
--	ret = lttng_ht_del(relay_streams_ht, &iter);
--	assert(!ret);
--
- 	stream_unpublish(stream);
- 
- 	if (stream->stream_fd) {
-@@ -333,6 +335,7 @@ void stream_close(struct relay_stream *stream)
- {
- 	DBG("closing stream %" PRIu64, stream->stream_handle);
- 	pthread_mutex_lock(&stream->lock);
-+	stream_unpublish(stream);
- 	stream->closed = true;
- 	relay_index_close_all(stream);
- 	pthread_mutex_unlock(&stream->lock);
-diff --git a/src/bin/lttng-relayd/stream.h b/src/bin/lttng-relayd/stream.h
-index ca6be81..542e05c 100644
---- a/src/bin/lttng-relayd/stream.h
-+++ b/src/bin/lttng-relayd/stream.h
-@@ -132,6 +132,7 @@ struct relay_stream {
- 	 * Node of stream within global stream hash table.
- 	 */
- 	struct lttng_ht_node_u64 node;
-+	bool in_stream_ht;		/* is stream in stream hash table. */
- 	struct rcu_head rcu_node;	/* For call_rcu teardown. */
- };
- 
--- 
-2.1.4
+T24gVGh1LCBBdWcgMjcsIDIwMTUgYXQgMzo1OCBQTSwgSm9uYXRoYW4gUmFqb3R0ZQo8am9uYXRo
+YW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPiB3cm90ZToKPiBGb3Igc3RhYmxlIDIuNwo+
+Cj4gVGhpcyByZXZlcnQgcGFydCBvZiBjaGFuZ2VzIGludHJvZHVjZWQgYnkgWzFdIGFuZCBbMl0u
+Cj4KPiBUaGUgdXNlIG9mIHByb2Nlc3MgZWxlbWVudCBicmVhayB0aGUgZXhpc3RpbmcgTUkgeG1s
+IGFwaS4KPgo+IFsxXSA0NmVmNGQwNzE1ZmFlZWY1MmNkMjI0MmI1Yjg5NWM3NDUwN2UyMjNhCj4g
+WzJdIGE1ODU1NzhmODM3ZDk5MmYwMGViYTRmMDkwYzhiYTI1MWQ5ZGU5NGUKPgo+IFNpZ25lZC1v
+ZmYtYnk6IEpvbmF0aGFuIFJham90dGUgPGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9z
+LmNvbT4KPiAtLS0KPiAgc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9saXN0LmMgICAgIHwgMTggKysr
+KysrKystLS0tLS0tLS0KPiAgc3JjL2NvbW1vbi9taS1sdHRuZy5jICAgICAgICAgICAgIHwgNDEg
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCj4gIHNyYy9jb21tb24vbWkt
+bHR0bmcuaCAgICAgICAgICAgICB8IDE5ICsrKysrKysrKysrKysrKysrKwo+ICB0ZXN0cy9yZWdy
+ZXNzaW9uL3Rvb2xzL21pL3Rlc3RfbWkgfCAgMiArLQo+ICA0IGZpbGVzIGNoYW5nZWQsIDcwIGlu
+c2VydGlvbnMoKyksIDEwIGRlbGV0aW9ucygtKQoKU2hvdWxkbid0IHdlIGNoYW5nZSBtaV9sdHRu
+Zy54c2QgdG9vPwoKSsOpcsOpbWllCgo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmcvY29t
+bWFuZHMvbGlzdC5jIGIvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9saXN0LmMKPiBpbmRleCBmN2Yz
+ODUyLi4zMTk4ZWNhIDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvbGlzdC5j
+Cj4gKysrIGIvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9saXN0LmMKPiBAQCAtMzQwLDggKzM0MCw4
+IEBAIHN0YXRpYyBpbnQgbWlfbGlzdF9hZ2VudF91c3RfZXZlbnRzKHN0cnVjdCBsdHRuZ19ldmVu
+dCAqZXZlbnRzLCBpbnQgY291bnQsCj4gICAgICAgICAgICAgICAgIGdvdG8gZW5kOwo+ICAgICAg
+ICAgfQo+Cj4gLSAgICAgICAvKiBPcGVuIHByb2Nlc3NlcyBlbGVtZW50ICovCj4gLSAgICAgICBy
+ZXQgPSBtaV9sdHRuZ19wcm9jZXNzZXNfb3Blbih3cml0ZXIpOwo+ICsgICAgICAgLyogT3BlbiBw
+aWRzIGVsZW1lbnQgZWxlbWVudCAqLwo+ICsgICAgICAgcmV0ID0gbWlfbHR0bmdfcGlkc19vcGVu
+KHdyaXRlcik7Cj4gICAgICAgICBpZiAocmV0KSB7Cj4gICAgICAgICAgICAgICAgIGdvdG8gZW5k
+Owo+ICAgICAgICAgfQo+IEBAIC0zNjYsNyArMzY2LDcgQEAgc3RhdGljIGludCBtaV9saXN0X2Fn
+ZW50X3VzdF9ldmVudHMoc3RydWN0IGx0dG5nX2V2ZW50ICpldmVudHMsIGludCBjb3VudCwKPgo+
+ICAgICAgICAgICAgICAgICAgICAgICAgIGlmICghcGlkX2VsZW1lbnRfb3Blbikgewo+ICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgLyogT3BlbiBhbmQgd3JpdGUgYSBwaWQgZWxlbWVu
+dCAqLwo+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gbWlfbHR0bmdfcHJv
+Y2Vzcyh3cml0ZXIsIGN1cl9waWQsIGNtZGxpbmUsIDEpOwo+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgcmV0ID0gbWlfbHR0bmdfcGlkKHdyaXRlciwgY3VyX3BpZCwgY21kbGluZSwg
+MSk7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpZiAocmV0KSB7Cj4gICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGdvdG8gZXJyb3I7Cj4gICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICB9Cj4gQEAgLTM4OSw3ICszODksNyBAQCBzdGF0aWMgaW50
+IG1pX2xpc3RfYWdlbnRfdXN0X2V2ZW50cyhzdHJ1Y3QgbHR0bmdfZXZlbnQgKmV2ZW50cywgaW50
+IGNvdW50LAo+ICAgICAgICAgICAgICAgICB9Cj4gICAgICAgICB9Cj4KPiAtICAgICAgIC8qIENs
+b3NlIHByb2Nlc3NlcyAqLwo+ICsgICAgICAgLyogQ2xvc2UgcGlkcyAqLwo+ICAgICAgICAgcmV0
+ID0gbWlfbHR0bmdfd3JpdGVyX2Nsb3NlX2VsZW1lbnQod3JpdGVyKTsKPiAgICAgICAgIGlmIChy
+ZXQpIHsKPiAgICAgICAgICAgICAgICAgZ290byBlbmQ7Cj4gQEAgLTU3Nyw4ICs1NzcsOCBAQCBz
+dGF0aWMgaW50IG1pX2xpc3RfdXN0X2V2ZW50X2ZpZWxkcyhzdHJ1Y3QgbHR0bmdfZXZlbnRfZmll
+bGQgKmZpZWxkcywgaW50IGNvdW50LAo+ICAgICAgICAgICAgICAgICBnb3RvIGVuZDsKPiAgICAg
+ICAgIH0KPgo+IC0gICAgICAgLyogT3BlbiBwcm9jZXNzZXMgZWxlbWVudCAqLwo+IC0gICAgICAg
+cmV0ID0gbWlfbHR0bmdfcHJvY2Vzc2VzX29wZW4od3JpdGVyKTsKPiArICAgICAgIC8qIE9wZW4g
+cGlkcyBlbGVtZW50ICovCj4gKyAgICAgICByZXQgPSBtaV9sdHRuZ19waWRzX29wZW4od3JpdGVy
+KTsKPiAgICAgICAgIGlmIChyZXQpIHsKPiAgICAgICAgICAgICAgICAgZ290byBlbmQ7Cj4gICAg
+ICAgICB9Cj4gQEAgLTYwNiw4ICs2MDYsOCBAQCBzdGF0aWMgaW50IG1pX2xpc3RfdXN0X2V2ZW50
+X2ZpZWxkcyhzdHJ1Y3QgbHR0bmdfZXZlbnRfZmllbGQgKmZpZWxkcywgaW50IGNvdW50LAo+ICAg
+ICAgICAgICAgICAgICAgICAgICAgIGN1cl9waWQgPSBmaWVsZHNbaV0uZXZlbnQucGlkOwo+ICAg
+ICAgICAgICAgICAgICAgICAgICAgIGNtZGxpbmUgPSBnZXRfY21kbGluZV9ieV9waWQoY3VyX3Bp
+ZCk7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgaWYgKCFwaWRfZWxlbWVudF9vcGVuKSB7Cj4g
+LSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAvKiBPcGVuIGFuZCB3cml0ZSBhIHByb2Nl
+c3MgZWxlbWVudCAqLwo+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gbWlf
+bHR0bmdfcHJvY2Vzcyh3cml0ZXIsIGN1cl9waWQsIGNtZGxpbmUsIDEpOwo+ICsgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgLyogT3BlbiBhbmQgd3JpdGUgYSBwaWQgZWxlbWVudCAqLwo+
+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gbWlfbHR0bmdfcGlkKHdyaXRl
+ciwgY3VyX3BpZCwgY21kbGluZSwgMSk7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBpZiAocmV0KSB7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGdv
+dG8gZXJyb3I7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB9Cj4gQEAgLTY2MSw3
+ICs2NjEsNyBAQCBzdGF0aWMgaW50IG1pX2xpc3RfdXN0X2V2ZW50X2ZpZWxkcyhzdHJ1Y3QgbHR0
+bmdfZXZlbnRfZmllbGQgKmZpZWxkcywgaW50IGNvdW50LAo+ICAgICAgICAgICAgICAgICB9Cj4g
+ICAgICAgICB9Cj4KPiAtICAgICAgIC8qIENsb3NlIHByb2Nlc3NlcywgZG9tYWluLCBkb21haW5z
+ICovCj4gKyAgICAgICAvKiBDbG9zZSBwaWQsIGRvbWFpbiwgZG9tYWlucyAqLwo+ICAgICAgICAg
+cmV0ID0gbWlfbHR0bmdfY2xvc2VfbXVsdGlfZWxlbWVudCh3cml0ZXIsIDMpOwo+ICBlbmQ6Cj4g
+ICAgICAgICByZXR1cm4gcmV0Owo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL21pLWx0dG5nLmMg
+Yi9zcmMvY29tbW9uL21pLWx0dG5nLmMKPiBpbmRleCA5ZDY1MDBiLi44ZmJkMDY0IDEwMDY0NAo+
+IC0tLSBhL3NyYy9jb21tb24vbWktbHR0bmcuYwo+ICsrKyBiL3NyYy9jb21tb24vbWktbHR0bmcu
+Ywo+IEBAIC0xMTk5LDYgKzExOTksNDcgQEAgZW5kOgo+ICAgICAgICAgcmV0dXJuIHJldDsKPiAg
+fQo+Cj4gKy8qCj4gKyAqIFRPRE86IG1vdmUgdGhlIGxpc3Rpbmcgb2YgcGlkIGZvciB1c2VyIGFn
+ZW50IHRvIHByb2Nlc3Mgc2VtYW50aWMgb24KPiArICogbWkgYXBpIGJ1bXAuIFRoZSB1c2Ugb2Yg
+cHJvY2VzcyBlbGVtZW50IGJyZWFrIHRoZSBtaSBhcGkuCj4gKyAqLwo+ICtMVFROR19ISURERU4K
+PiAraW50IG1pX2x0dG5nX3BpZChzdHJ1Y3QgbWlfd3JpdGVyICp3cml0ZXIsIHBpZF90IHBpZCAs
+IGNvbnN0IGNoYXIgKm5hbWUsCj4gKyAgICAgICAgICAgICAgIGludCBpc19vcGVuKQo+ICt7Cj4g
+KyAgICAgICBpbnQgcmV0Owo+ICsKPiArICAgICAgIC8qIE9wZW4gcGlkIHByb2Nlc3MgKi8KPiAr
+ICAgICAgIHJldCA9IG1pX2x0dG5nX3dyaXRlcl9vcGVuX2VsZW1lbnQod3JpdGVyLCBjb25maWdf
+ZWxlbWVudF9waWQpOwo+ICsgICAgICAgaWYgKHJldCkgewo+ICsgICAgICAgICAgICAgICBnb3Rv
+IGVuZDsKPiArICAgICAgIH0KPiArCj4gKyAgICAgICAvKiBXcml0aW5nIHBpZCBudW1iZXIgKi8K
+PiArICAgICAgIHJldCA9IG1pX2x0dG5nX3dyaXRlcl93cml0ZV9lbGVtZW50X3NpZ25lZF9pbnQo
+d3JpdGVyLAo+ICsgICAgICAgICAgICAgICAgICAgICAgIG1pX2x0dG5nX2VsZW1lbnRfcGlkX2lk
+LCAoaW50KXBpZCk7Cj4gKyAgICAgICBpZiAocmV0KSB7Cj4gKyAgICAgICAgICAgICAgIGdvdG8g
+ZW5kOwo+ICsgICAgICAgfQo+ICsKPiArICAgICAgIC8qIFdyaXRpbmcgbmFtZSBvZiB0aGUgcHJv
+Y2VzcyAqLwo+ICsgICAgICAgaWYgKG5hbWUpIHsKPiArICAgICAgICAgICAgICAgcmV0ID0gbWlf
+bHR0bmdfd3JpdGVyX3dyaXRlX2VsZW1lbnRfc3RyaW5nKHdyaXRlciwgY29uZmlnX2VsZW1lbnRf
+bmFtZSwKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG5hbWUpOwo+ICsgICAgICAg
+ICAgICAgICBpZiAocmV0KSB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgZ290byBlbmQ7Cj4g
+KyAgICAgICAgICAgICAgIH0KPiArICAgICAgIH0KPiArCj4gKyAgICAgICBpZiAoIWlzX29wZW4p
+IHsKPiArICAgICAgICAgICAgICAgLyogQ2xvc2luZyBQaWQgKi8KPiArICAgICAgICAgICAgICAg
+cmV0ID0gbWlfbHR0bmdfd3JpdGVyX2Nsb3NlX2VsZW1lbnQod3JpdGVyKTsKPiArICAgICAgIH0K
+PiArCj4gK2VuZDoKPiArICAgICAgIHJldHVybiByZXQ7Cj4gK30KPiArCj4gIExUVE5HX0hJRERF
+Tgo+ICBpbnQgbWlfbHR0bmdfdGFyZ2V0c19vcGVuKHN0cnVjdCBtaV93cml0ZXIgKndyaXRlcikK
+PiAgewo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL21pLWx0dG5nLmggYi9zcmMvY29tbW9uL21p
+LWx0dG5nLmgKPiBpbmRleCAyM2I3ODEwLi41MzQ0YTIzIDEwMDY0NAo+IC0tLSBhL3NyYy9jb21t
+b24vbWktbHR0bmcuaAo+ICsrKyBiL3NyYy9jb21tb24vbWktbHR0bmcuaAo+IEBAIC02MTksNiAr
+NjE5LDI1IEBAIGludCBtaV9sdHRuZ19wcm9jZXNzZXNfb3BlbihzdHJ1Y3QgbWlfd3JpdGVyICp3
+cml0ZXIpOwo+ICAgKi8KPiAgaW50IG1pX2x0dG5nX3Byb2Nlc3Moc3RydWN0IG1pX3dyaXRlciAq
+d3JpdGVyLCBwaWRfdCBwaWQgLCBjb25zdCBjaGFyICpuYW1lLAo+ICAgICAgICAgICAgICAgICBp
+bnQgaXNfb3Blbik7Cj4gKwo+ICsvKgo+ICsgKiBUT0RPOiBtb3ZlIHBpZCBvZiBsdHRuZyBsaXN0
+IC11IHRvIHByb2Nlc3Mgc2VtYW50aWMgb24gbWkgYXBpIGJ1bXAKPiArICogTWFjaGluZSBpbnRl
+cmZhY2Ugb2YgYSBQcm9jZXNzLgo+ICsgKgo+ICsgKiB3cml0ZXIgQW4gaW5zdGFuY2Ugb2YgYSBt
+YWNoaW5lIGludGVyZmFjZSB3cml0ZXIuCj4gKyAqIHBpZCBBIFBJRC4KPiArICoKPiArICogaXNf
+b3BlbiBEZWZpbmVzIHdoZXRoZXIgb3Igbm90IHRoZSBzZXNzaW9uIGVsZW1lbnQgc2hhbGwgYmUg
+Y2xvc2VkLgo+ICsgKiAgICAgICAgIFRoaXMgc2hvdWxkIGJlIHVzZWQgY2FyZWZ1bGx5IGFuZCB0
+aGUgY2xpZW50Cj4gKyAqICAgICAgICAgbXVzdCBjbG9zZSB0aGUgcGlkIGVsZW1lbnQuCj4gKyAq
+ICAgICAgICAgVXNlIGNhc2U6IG5lc3RlZCBhZGRpdGlvbiBpbmZvcm1hdGlvbiBvbiBhIGRvbWFp
+bgo+ICsgKiAgICAgICAgICAgICAgICAgIGV4OiBjaGFubmVsIGV2ZW50Lgo+ICsgKgo+ICsgKiBS
+ZXR1cm5zIHplcm8gaWYgdGhlIGVsZW1lbnQncyB2YWx1ZSBjb3VsZCBiZSB3cml0dGVuLgo+ICsg
+KiBOZWdhdGl2ZSB2YWx1ZXMgaW5kaWNhdGUgYW4gZXJyb3IuCj4gKyAqLwo+ICtpbnQgbWlfbHR0
+bmdfcGlkKHN0cnVjdCBtaV93cml0ZXIgKndyaXRlciwgcGlkX3QgcGlkICwgY29uc3QgY2hhciAq
+bmFtZSwKPiArICAgICAgICAgICAgICAgaW50IGlzX29wZW4pOwo+ICAvKgo+ICAgKiBNYWNoaW5l
+IGludGVyZmFjZTogb3BlbiBhIHRhcmdldHMgZWxlbWVudC4KPiAgICoKPiBkaWZmIC0tZ2l0IGEv
+dGVzdHMvcmVncmVzc2lvbi90b29scy9taS90ZXN0X21pIGIvdGVzdHMvcmVncmVzc2lvbi90b29s
+cy9taS90ZXN0X21pCj4gaW5kZXggN2YyMmVlMS4uNDdlYzFiMSAxMDA3NTUKPiAtLS0gYS90ZXN0
+cy9yZWdyZXNzaW9uL3Rvb2xzL21pL3Rlc3RfbWkKPiArKysgYi90ZXN0cy9yZWdyZXNzaW9uL3Rv
+b2xzL21pL3Rlc3RfbWkKPiBAQCAtNDgsNyArNDgsNyBAQCBYUEFUSF9FTkFCTEVfRVZFTlRfU1VD
+Q0VTUz0iJFhQQVRIX0NNRF9PVVRQVVQvZXZlbnRzL2V2ZW50L3N1Y2Nlc3MvdGV4dCgpIgo+ICBY
+UEFUSF9ESVNBQkxFX0VWRU5UX1NVQ0NFU1M9IiRYUEFUSF9DTURfT1VUUFVUL2NoYW5uZWwvZXZl
+bnRzL2V2ZW50L3N1Y2Nlc3MvdGV4dCgpIgo+ICBYUEFUSF9MSVNUX0RPTUFJTj0iJFhQQVRIX0NN
+RF9PVVRQVVQvc2Vzc2lvbnMvc2Vzc2lvbi9kb21haW5zL2RvbWFpbiIKPiAgWFBBVEhfTElTVF9D
+SEFOTkVMPSIkWFBBVEhfQ01EX09VVFBVVC9zZXNzaW9ucy9zZXNzaW9uL2RvbWFpbnMvZG9tYWlu
+L2NoYW5uZWxzL2NoYW5uZWwiCj4gLVhQQVRIX0xJU1RfVVNUX0VWRU5UPSIkWFBBVEhfQ01EX09V
+VFBVVC9kb21haW5zL2RvbWFpblsuL3R5cGUgPSdVU1QnXS9wcm9jZXNzZXMvcHJvY2Vzcy9ldmVu
+dHMvZXZlbnQiCj4gK1hQQVRIX0xJU1RfVVNUX0VWRU5UPSIkWFBBVEhfQ01EX09VVFBVVC9kb21h
+aW5zL2RvbWFpblsuL3R5cGUgPSdVU1QnXS9waWRzL3BpZC9ldmVudHMvZXZlbnQiCj4gIFhQQVRI
+X1NOQVBTSE9UX0FERF9TTkFQU0hPVD0iJFhQQVRIX0NNRF9PVVRQVVQvc25hcHNob3RfYWN0aW9u
+Wy4vbmFtZSA9ICdhZGQtb3V0cHV0J10vb3V0cHV0Igo+ICBYUEFUSF9TTkFQU0hPVF9MSVNUPSIk
+WFBBVEhfQ01EX09VVFBVVC9zbmFwc2hvdF9hY3Rpb25bLi9uYW1lID0gJ2xpc3Qtb3V0cHV0J10v
+b3V0cHV0Igo+ICBYUEFUSF9TTkFQU0hPVF9ERUw9IiRYUEFUSF9DTURfT1VUUFVUL3NuYXBzaG90
+X2FjdGlvblsuL25hbWUgPSAnZGVsLW91dHB1dCddL291dHB1dCIKPiAtLQo+IDIuMS40Cj4KCgoK
+LS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9z
+LmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
+bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0
+cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
