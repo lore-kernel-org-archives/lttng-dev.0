@@ -1,20 +1,21 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools 2/2] Test kernel wildcards
-Date: Sat, 5 Sep 2015 17:08:53 -0400
-Message-ID: <CA+jJMxu3Lrd7OP0S1je4boksWnfg6o=z7AsTrcvgAGivV0dM5A__24583.5806862035$1441487394$gmane$org@mail.gmail.com>
-References: <1441410799-10991-1-git-send-email-mathieu.desnoyers@efficios.com>
- <1441410799-10991-2-git-send-email-mathieu.desnoyers@efficios.com>
+From: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+Subject: Re: [PATCH lttng-tools v2] Fix: use pid element instead
+ of process element
+Date: Sat, 5 Sep 2015 17:40:05 -0400
+Message-ID: <CAF4oYfF8OnqFzdM7mmSJHHM3SNNVrnF19YONerqU5UifLEc0TQ__27040.8931108706$1441489267$gmane$org@mail.gmail.com>
+References: <CA+jJMxsexhr2DqMXjqnVbrBbfyGJddgf4s+Aa_5o1h-WwGPRHg@mail.gmail.com>
+ <1441404168-15913-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ <CA+jJMxt4n9tq6yrtDb5PJLX5JUQGFPmVryCf7fgbeqWvjHh6aQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1139683478=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f175.google.com ([209.85.160.175])
+Received: from mail-yk0-f171.google.com ([209.85.160.171])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZYKhn-0004O5-3Q
- for lttng-dev@lists.lttng.org; Sat, 05 Sep 2015 17:09:02 -0400
-Received: by ykdg206 with SMTP id g206so50400654ykd.1
- for <lttng-dev@lists.lttng.org>; Sat, 05 Sep 2015 14:08:53 -0700 (PDT)
-In-Reply-To: <1441410799-10991-2-git-send-email-mathieu.desnoyers@efficios.com>
+ (envelope-from <jonathan.r.julien@gmail.com>) id 1ZYLBy-0004ZD-Vj
+ for lttng-dev@lists.lttng.org; Sat, 05 Sep 2015 17:40:13 -0400
+Received: by ykei199 with SMTP id i199so50718227yke.0
+ for <lttng-dev@lists.lttng.org>; Sat, 05 Sep 2015 14:40:05 -0700 (PDT)
+In-Reply-To: <CA+jJMxt4n9tq6yrtDb5PJLX5JUQGFPmVryCf7fgbeqWvjHh6aQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,160 +24,771 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-VGhpcyB0ZXN0IGhhbmdzIGhlcmUgb24gdGhlIGxhdGVzdCBsdHRuZy1tb2R1bGVzICg4OTQwNmVj
-ZGEpIGFuZCBMaW51eCA0LjEuNi4KCiQgc3VkbyAuL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvd2ls
-ZGNhcmQvdGVzdF9ldmVudF93aWxkY2FyZAoxLi43NgojIExUVG5nIC0gRXZlbnQgd2lsZGNhcmQg
-dGVzdApvayAxIC0gU3RhcnQgc2Vzc2lvbiBkYWVtb24KIyBUZXN0IFVTVCB3aWxkY2FyZApvayAy
-IC0gQ3JlYXRlIHNlc3Npb24gd2lsZGNhcmQgaW4gL3RtcC90bXAuYk1ZdkE4TG1oQQpvayAzIC0g
-RW5hYmxlIGV2ZW50IHRwOnRwKiBmb3Igc2Vzc2lvbiB3aWxkY2FyZApvayA0IC0gU3RhcnQgdHJh
-Y2luZyBmb3Igc2Vzc2lvbgpvayA1IC0gVHJhY2VkIGFwcGxpY2F0aW9uIHN0b3BwZWQuCm9rIDYg
-LSBTdG9wIGx0dG5nIHRyYWNpbmcgZm9yIHNlc3Npb24Kb2sgNyAtIERlc3Ryb3kgc2Vzc2lvbiB3
-aWxkY2FyZApvayA4IC0gVHJhY2UgbWF0Y2gKb2sgOSAtIENyZWF0ZSBzZXNzaW9uIHdpbGRjYXJk
-IGluIC90bXAvdG1wLjQwbG1lMlpmRTIKb2sgMTAgLSBFbmFibGUgZXZlbnQgKiBmb3Igc2Vzc2lv
-biB3aWxkY2FyZApvayAxMSAtIFN0YXJ0IHRyYWNpbmcgZm9yIHNlc3Npb24Kb2sgMTIgLSBUcmFj
-ZWQgYXBwbGljYXRpb24gc3RvcHBlZC4Kb2sgMTMgLSBTdG9wIGx0dG5nIHRyYWNpbmcgZm9yIHNl
-c3Npb24Kb2sgMTQgLSBEZXN0cm95IHNlc3Npb24gd2lsZGNhcmQKb2sgMTUgLSBUcmFjZSBtYXRj
-aApvayAxNiAtIENyZWF0ZSBzZXNzaW9uIHdpbGRjYXJkIGluIC90bXAvdG1wLlB4MWVRdHFkSlgK
-b2sgMTcgLSBFbmFibGUgZXZlbnQgdHA6dHB0ZXN0KiBmb3Igc2Vzc2lvbiB3aWxkY2FyZApvayAx
-OCAtIFN0YXJ0IHRyYWNpbmcgZm9yIHNlc3Npb24Kb2sgMTkgLSBUcmFjZWQgYXBwbGljYXRpb24g
-c3RvcHBlZC4Kb2sgMjAgLSBTdG9wIGx0dG5nIHRyYWNpbmcgZm9yIHNlc3Npb24Kb2sgMjEgLSBE
-ZXN0cm95IHNlc3Npb24gd2lsZGNhcmQKb2sgMjIgLSBUcmFjZSBtYXRjaApvayAyMyAtIENyZWF0
-ZSBzZXNzaW9uIHdpbGRjYXJkIGluIC90bXAvdG1wLlVFeHFIT1U3aVYKb2sgMjQgLSBFbmFibGUg
-ZXZlbnQgdHA6YWJjKiBmb3Igc2Vzc2lvbiB3aWxkY2FyZApvayAyNSAtIFN0YXJ0IHRyYWNpbmcg
-Zm9yIHNlc3Npb24Kb2sgMjYgLSBUcmFjZWQgYXBwbGljYXRpb24gc3RvcHBlZC4Kb2sgMjcgLSBT
-dG9wIGx0dG5nIHRyYWNpbmcgZm9yIHNlc3Npb24Kb2sgMjggLSBEZXN0cm95IHNlc3Npb24gd2ls
-ZGNhcmQKb2sgMjkgLSBWYWxpZGF0ZSBlbXB0eSB0cmFjZQpvayAzMCAtIENyZWF0ZSBzZXNzaW9u
-IHdpbGRjYXJkIGluIC90bXAvdG1wLlJ2eG9hNzl3Z0UKb2sgMzEgLSBFbmFibGUgdXN0IGV2ZW50
-IHRwOip0cCBmb3Igc2Vzc2lvbiAgb24gY2hhbm5lbCAgZmFpbGVkIGFzIGV4cGVjdGVkCm9rIDMy
-IC0gRGVzdHJveSBzZXNzaW9uIHdpbGRjYXJkCm9rIDMzIC0gQ3JlYXRlIHNlc3Npb24gd2lsZGNh
-cmQgaW4gL3RtcC90bXAua1E5bVB2VFdYTApvayAzNCAtIEVuYWJsZSB1c3QgZXZlbnQgdHA6dHAq
-KiBmb3Igc2Vzc2lvbiAgb24gY2hhbm5lbCAgZmFpbGVkIGFzIGV4cGVjdGVkCm9rIDM1IC0gRGVz
-dHJveSBzZXNzaW9uIHdpbGRjYXJkCm9rIDM2IC0gQ3JlYXRlIHNlc3Npb24gd2lsZGNhcmQgaW4g
-L3RtcC90bXAuRkJtNlNXbzBvdgpvayAzNyAtIEVuYWJsZSB1c3QgZXZlbnQgKnRwOnRwKiBmb3Ig
-c2Vzc2lvbiAgb24gY2hhbm5lbCAgZmFpbGVkIGFzIGV4cGVjdGVkCm9rIDM4IC0gRGVzdHJveSBz
-ZXNzaW9uIHdpbGRjYXJkCiMgVGVzdCBrZXJuZWwgd2lsZGNhcmRzCm9rIDM5IC0gQ3JlYXRlIHNl
-c3Npb24gd2lsZGNhcmQgaW4gL3RtcC90bXAuQkRjdlFtOWpFRwoKXiBIYW5ncyBoZXJlLgoKSXQg
-ZXZlbnR1YWxseSB0aW1lcyBvdXQgd2l0aDoKRXJyb3I6IENvbmRpdGlvbiB0aW1lZCBvdXQuIFRo
-ZSBjb25zdW1lciB0aHJlYWQgd2FzIG5ldmVyIHJlYWR5LiBLaWxsaW5nIGl0CkVycm9yOiBGYXRh
-bCBlcnJvciBzcGF3bmluZyBjb25zdW1lciBjb250cm9sIHRocmVhZApQRVJST1IgLSAxNzowNzo0
-MC43NjczNjUgWzY1NTIvNjU1NV06IHNlbmRtc2c6IEJyb2tlbiBwaXBlIChpbgpsdHRjb21tX3Nl
-bmRfdW5peF9zb2NrKCkgYXQgdW5peC5jOjIxOSkKRXJyb3I6IEZhaWxlZCB0byBzZW5kIGRhdGEg
-YmFjayB0byBjbGllbnQKCkFueSBpZGVhPwoKSsOpcsOpbWllCgpPbiBGcmksIFNlcCA0LCAyMDE1
-IGF0IDc6NTMgUE0sIE1hdGhpZXUgRGVzbm95ZXJzCjxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lv
-cy5jb20+IHdyb3RlOgo+IFNpZ25lZC1vZmYtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1
-LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIC4uLi9yZWdyZXNzaW9uL3Rvb2xzL3dp
-bGRjYXJkL3Rlc3RfZXZlbnRfd2lsZGNhcmQgIHwgODcgKysrKysrKysrKysrKysrKy0tLS0tLQo+
-ICB0ZXN0cy91dGlscy91dGlscy5zaCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IDM3
-ICsrKysrKystLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDk2IGluc2VydGlvbnMoKyksIDI4IGRlbGV0
-aW9ucygtKQo+Cj4gZGlmZiAtLWdpdCBhL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvd2lsZGNhcmQv
-dGVzdF9ldmVudF93aWxkY2FyZCBiL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvd2lsZGNhcmQvdGVz
-dF9ldmVudF93aWxkY2FyZAo+IGluZGV4IDdmYmZjMTguLjEyNmJkYWUgMTAwNzU1Cj4gLS0tIGEv
-dGVzdHMvcmVncmVzc2lvbi90b29scy93aWxkY2FyZC90ZXN0X2V2ZW50X3dpbGRjYXJkCj4gKysr
-IGIvdGVzdHMvcmVncmVzc2lvbi90b29scy93aWxkY2FyZC90ZXN0X2V2ZW50X3dpbGRjYXJkCj4g
-QEAgLTE2LDM3ICsxNiw0NyBAQAo+ICAjIHRoaXMgcHJvZ3JhbTsgaWYgbm90LCB3cml0ZSB0byB0
-aGUgRnJlZSBTb2Z0d2FyZSBGb3VuZGF0aW9uLCBJbmMuLCA1MQo+ICAjIEZyYW5rbGluIFN0cmVl
-dCwgRmlmdGggRmxvb3IsIEJvc3RvbiwgTUEgMDIxMTAtMTMwMSBVU0EuCj4KPiAtVEVTVF9ERVND
-PSJVU1QgdHJhY2VyIC0gRXZlbnQgd2lsZGNhcmQiCj4gK1RFU1RfREVTQz0iTFRUbmcgLSBFdmVu
-dCB3aWxkY2FyZCB0ZXN0Igo+Cj4gIENVUkRJUj0kKGRpcm5hbWUgJDApLwo+IC1URVNURElSPSRD
-VVJESVIvLi4vLi4KPiArVEVTVERJUj0kQ1VSRElSLy4uLy4uLy4uCj4gIExUVE5HX0JJTj0ibHR0
-bmciCj4gIFRFU1RBUFBfUEFUSD0iJFRFU1RESVIvdXRpbHMvdGVzdGFwcCIKPiAgVEVTVEFQUF9O
-QU1FPSJnZW4tdXN0LWV2ZW50cyIKPiAgVEVTVEFQUF9CSU49IiRURVNUQVBQX1BBVEgvJFRFU1RB
-UFBfTkFNRS8kVEVTVEFQUF9OQU1FIgo+ICBTRVNTSU9OX05BTUU9IndpbGRjYXJkIgo+IC1FVkVO
-VF9OQU1FPSJ0cDp0cHRlc3QiCj4gLU5VTV9URVNUUz0zOQo+ICBOUl9JVEVSPTEwMAo+ICtOVU1f
-R0xPQkFMX1RFU1RTPTIKPiArTlVNX1VTVF9URVNUUz0zNwo+ICtOVU1fS0VSTkVMX1RFU1RTPTM3
-Cj4gK05VTV9URVNUUz0kKCgkTlVNX1VTVF9URVNUUyskTlVNX0tFUk5FTF9URVNUUyskTlVNX0dM
-T0JBTF9URVNUUykpCj4KPiAgc291cmNlICRURVNURElSL3V0aWxzL3V0aWxzLnNoCj4KPiAtaWYg
-WyAhIC14ICIkVEVTVEFQUF9CSU4iIF07IHRoZW4KPiAtICAgICAgIEJBSUxfT1VUICJObyBVU1Qg
-bmV2ZW50cyBiaW5hcnkgZGV0ZWN0ZWQuIgo+IC1maQo+ICtmdW5jdGlvbiBydW5fdXN0Cj4gK3sK
-PiArICAgICAgICRURVNUQVBQX0JJTiAkTlJfSVRFUiAkTlJfVVNFQ19XQUlUCj4gK30KPiArCj4g
-K2Z1bmN0aW9uIHJ1bl9rZXJuZWwKPiArewo+ICsgICAgICAgIyBUcmlnZ2VyIHRoZSBldmVudCBm
-b3IgMTAwIGl0ZXJhdGlvbnMKPiArICAgICAgIGVjaG8gLW4gIjEwMCIgPiAvcHJvYy9sdHRuZy10
-ZXN0LWZpbHRlci1ldmVudAo+ICt9Cj4KPiAgZnVuY3Rpb24gdGVzdF9ldmVudF93aWxkY2FyZCgp
-Cj4gIHsKPiAgICAgICAgIFRSQUNFX1BBVEg9JChta3RlbXAgLWQpCj4gLSAgICAgICBGSU5EPSIk
-ezF9Igo+IC0gICAgICAgV0lMRENBUkQ9IiR7Mn0iCj4gKyAgICAgICBET01BSU49IiQxIgo+ICsg
-ICAgICAgRklORD0iJDIiCj4gKyAgICAgICBXSUxEQ0FSRD0iJDMiCj4KPiAgICAgICAgIGNyZWF0
-ZV9sdHRuZ19zZXNzaW9uX29rICRTRVNTSU9OX05BTUUgJFRSQUNFX1BBVEgKPiAtICAgICAgIGVu
-YWJsZV91c3RfbHR0bmdfZXZlbnRfb2sgJFNFU1NJT05fTkFNRSAiJFdJTERDQVJEIgo+ICsgICAg
-ICAgZW5hYmxlXyR7RE9NQUlOfV9sdHRuZ19ldmVudF9vayAkU0VTU0lPTl9OQU1FICIkV0lMRENB
-UkQiCj4KPiAgICAgICAgIHN0YXJ0X2x0dG5nX3RyYWNpbmdfb2sKPgo+IC0gICAgICAgJFRFU1RB
-UFBfQklOICROUl9JVEVSICROUl9VU0VDX1dBSVQKPiArICAgICAgIHJ1bl8ke0RPTUFJTn0KPiAg
-ICAgICAgIG9rICQ/ICJUcmFjZWQgYXBwbGljYXRpb24gc3RvcHBlZC4iCj4KPiAgICAgICAgIHN0
-b3BfbHR0bmdfdHJhY2luZ19vawo+IEBAIC02NCwxNiArNzQsMTYgQEAgZnVuY3Rpb24gdGVzdF9l
-dmVudF93aWxkY2FyZCgpCj4gIGZ1bmN0aW9uIHRlc3RfZXZlbnRfd2lsZGNhcmRfZmFpbCgpCj4g
-IHsKPiAgICAgICAgIFRSQUNFX1BBVEg9JChta3RlbXAgLWQpCj4gLSAgICAgICBXSUxEQ0FSRD0i
-JHsxfSIKPiArICAgICAgIERPTUFJTj0iJDEiCj4gKyAgICAgICBXSUxEQ0FSRD0iJDIiCj4KPiAg
-ICAgICAgIGNyZWF0ZV9sdHRuZ19zZXNzaW9uX29rICRTRVNTSU9OX05BTUUgJFRSQUNFX1BBVEgK
-PiAtICAgICAgIGVuYWJsZV91c3RfbHR0bmdfZXZlbnRfZmFpbCAkU0VTU0lPTl9OQU1FICIkV0lM
-RENBUkQiCj4gKyAgICAgICBlbmFibGVfJHtET01BSU59X2x0dG5nX2V2ZW50X2ZhaWwgJFNFU1NJ
-T05fTkFNRSAiJFdJTERDQVJEIgo+ICAgICAgICAgZGVzdHJveV9sdHRuZ19zZXNzaW9uX29rICRT
-RVNTSU9OX05BTUUKPgo+ICAgICAgICAgcm0gLXJmICRUUkFDRV9QQVRICj4gIH0KPgo+IC0KPiAg
-IyBNVVNUIHNldCBURVNURElSIGJlZm9yZSBjYWxsaW5nIHRob3NlIGZ1bmN0aW9ucwo+ICBwbGFu
-X3Rlc3RzICROVU1fVEVTVFMKPgo+IEBAIC04MSwxMyArOTEsNDggQEAgcHJpbnRfdGVzdF9iYW5u
-ZXIgIiRURVNUX0RFU0MiCj4KPiAgc3RhcnRfbHR0bmdfc2Vzc2lvbmQKPgo+IC10ZXN0X2V2ZW50
-X3dpbGRjYXJkIDEgJ3RwOnRwKicKPiAtdGVzdF9ldmVudF93aWxkY2FyZCAxICcqJwo+IC10ZXN0
-X2V2ZW50X3dpbGRjYXJkIDEgJ3RwOnRwdGVzdConCj4gLXRlc3RfZXZlbnRfd2lsZGNhcmQgMCAn
-dHA6YWJjKicKPiArZGlhZyAiVGVzdCBVU1Qgd2lsZGNhcmQiCj4gKwo+ICtpZiBbICEgLXggIiRU
-RVNUQVBQX0JJTiIgXTsgdGhlbgo+ICsgICAgICAgQkFJTF9PVVQgIk5vIFVTVCBuZXZlbnRzIGJp
-bmFyeSBkZXRlY3RlZC4iCj4gK2ZpCj4gKwo+ICtFVkVOVF9OQU1FPSJ0cDp0cHRlc3QiCj4gKwo+
-ICt0ZXN0X2V2ZW50X3dpbGRjYXJkIHVzdCAxICd0cDp0cConCj4gK3Rlc3RfZXZlbnRfd2lsZGNh
-cmQgdXN0IDEgJyonCj4gK3Rlc3RfZXZlbnRfd2lsZGNhcmQgdXN0IDEgJ3RwOnRwdGVzdConCj4g
-K3Rlc3RfZXZlbnRfd2lsZGNhcmQgdXN0IDAgJ3RwOmFiYyonCj4gKwo+ICt0ZXN0X2V2ZW50X3dp
-bGRjYXJkX2ZhaWwgdXN0ICd0cDoqdHAnCj4gK3Rlc3RfZXZlbnRfd2lsZGNhcmRfZmFpbCB1c3Qg
-J3RwOnRwKionCj4gK3Rlc3RfZXZlbnRfd2lsZGNhcmRfZmFpbCB1c3QgJyp0cDp0cConCj4gKwo+
-ICsKPiAraWYgWyAiJChpZCAtdSkiID09ICIwIiBdOyB0aGVuCj4gKyAgICAgICBpc3Jvb3Q9MQo+
-ICtlbHNlCj4gKyAgICAgICBpc3Jvb3Q9MAo+ICtmaQo+Cj4gLXRlc3RfZXZlbnRfd2lsZGNhcmRf
-ZmFpbCAndHA6KnRwJwo+IC10ZXN0X2V2ZW50X3dpbGRjYXJkX2ZhaWwgJ3RwOnRwKionCj4gLXRl
-c3RfZXZlbnRfd2lsZGNhcmRfZmFpbCAnKnRwOnRwKicKPiArc2tpcCAkaXNyb290ICJSb290IGFj
-Y2VzcyBpcyBuZWVkZWQuIFNraXBwaW5nIGFsbCBrZXJuZWwgd2lsZGNhcmQgdGVzdHMuIiAkTlVN
-X0tFUk5FTF9URVNUUyB8fAo+ICt7Cj4gKyAgICAgICBkaWFnICJUZXN0IGtlcm5lbCB3aWxkY2Fy
-ZHMiCj4gKwo+ICsgICAgICAgbW9kcHJvYmUgbHR0bmctdGVzdAo+ICsKPiArICAgICAgIEVWRU5U
-X05BTUU9Imx0dG5nX3Rlc3RfZmlsdGVyX2V2ZW50Igo+ICsKPiArICAgICAgIHRlc3RfZXZlbnRf
-d2lsZGNhcmQga2VybmVsIDEgJ2x0dG5nX3Rlc3RfKicKPiArICAgICAgIHRlc3RfZXZlbnRfd2ls
-ZGNhcmQga2VybmVsIDEgJyonCj4gKyAgICAgICB0ZXN0X2V2ZW50X3dpbGRjYXJkIGtlcm5lbCAx
-ICdsdHRuZ190ZXN0X2ZpbHRlcl9ldmVudConCj4gKyAgICAgICB0ZXN0X2V2ZW50X3dpbGRjYXJk
-IGtlcm5lbCAwICdsdHRuZ190ZXN0X2FzZGZhc2RmKicKPiArCj4gKyAgICAgICB0ZXN0X2V2ZW50
-X3dpbGRjYXJkX2ZhaWwga2VybmVsICd0cF8qdHAnCj4gKyAgICAgICB0ZXN0X2V2ZW50X3dpbGRj
-YXJkX2ZhaWwga2VybmVsICd0cF90cCoqJwo+ICsgICAgICAgdGVzdF9ldmVudF93aWxkY2FyZF9m
-YWlsIGtlcm5lbCAnKnRwX3RwKicKPiArCj4gKyAgICAgICBybW1vZCBsdHRuZy10ZXN0Cj4gK30K
-Pgo+ICBzdG9wX2x0dG5nX3Nlc3Npb25kCj4gZGlmZiAtLWdpdCBhL3Rlc3RzL3V0aWxzL3V0aWxz
-LnNoIGIvdGVzdHMvdXRpbHMvdXRpbHMuc2gKPiBpbmRleCAxZTFlNzkxLi5kNDY2ZWU2IDEwMDY0
-NAo+IC0tLSBhL3Rlc3RzL3V0aWxzL3V0aWxzLnNoCj4gKysrIGIvdGVzdHMvdXRpbHMvdXRpbHMu
-c2gKPiBAQCAtODYsMTggKzg2LDE5IEBAIGZ1bmN0aW9uIHJhbmRzdHJpbmcoKQo+ICAgICAgICAg
-ZWNobwo+ICB9Cj4KPiAtZnVuY3Rpb24gbHR0bmdfZW5hYmxlX2tlcm5lbF9ldmVudAo+ICtmdW5j
-dGlvbiBlbmFibGVfa2VybmVsX2x0dG5nX2V2ZW50Cj4gIHsKPiAtICAgICAgIGxvY2FsIHNlc3Nf
-bmFtZT0kMQo+IC0gICAgICAgbG9jYWwgZXZlbnRfbmFtZT0kMgo+IC0gICAgICAgbG9jYWwgY2hh
-bm5lbF9uYW1lPSQzCj4gKyAgICAgICBsb2NhbCBleHBlY3RlZF90b19mYWlsPSIkMSIKPiArICAg
-ICAgIGxvY2FsIHNlc3NfbmFtZT0iJDIiCj4gKyAgICAgICBsb2NhbCBldmVudF9uYW1lPSIkMyIK
-PiArICAgICAgIGxvY2FsIGNoYW5uZWxfbmFtZT0iJDQiCj4KPiAtICAgICAgIGlmIFsgLXogJGV2
-ZW50X25hbWUgXTsgdGhlbgo+ICsgICAgICAgaWYgWyAteiAiJGV2ZW50X25hbWUiIF07IHRoZW4K
-PiAgICAgICAgICAgICAgICAgIyBFbmFibGUgYWxsIGV2ZW50IGlmIG5vIGV2ZW50IG5hbWUgc3Bl
-Y2lmaWVkCj4gICAgICAgICAgICAgICAgIGV2ZW50X25hbWU9Ii1hIgo+ICAgICAgICAgZmkKPgo+
-IC0gICAgICAgaWYgWyAteiAkY2hhbm5lbF9uYW1lIF07IHRoZW4KPiArICAgICAgIGlmIFsgLXog
-IiRjaGFubmVsX25hbWUiIF07IHRoZW4KPiAgICAgICAgICAgICAgICAgIyBkZWZhdWx0IGNoYW5u
-ZWwgaWYgbm9uZSBzcGVjaWZpZWQKPiAgICAgICAgICAgICAgICAgY2hhbj0iIgo+ICAgICAgICAg
-ZWxzZQo+IEBAIC0xMDUsNyArMTA2LDI5IEBAIGZ1bmN0aW9uIGx0dG5nX2VuYWJsZV9rZXJuZWxf
-ZXZlbnQKPiAgICAgICAgIGZpCj4KPiAgICAgICAgICRURVNURElSLy4uL3NyYy9iaW4vbHR0bmcv
-JExUVE5HX0JJTiBlbmFibGUtZXZlbnQgIiRldmVudF9uYW1lIiAkY2hhbiAtcyAkc2Vzc19uYW1l
-IC1rIDE+ICRPVVRQVVRfREVTVCAyPiAkRVJST1JfT1VUUFVUX0RFU1QKPiAtICAgICAgIG9rICQ/
-ICJFbmFibGUga2VybmVsIGV2ZW50ICRldmVudF9uYW1lIGZvciBzZXNzaW9uICRzZXNzX25hbWUi
-Cj4gKyAgICAgICByZXQ9JD8KPiArICAgICAgIGlmIFtbICRleHBlY3RlZF90b19mYWlsIC1lcSAi
-MSIgXV07IHRoZW4KPiArICAgICAgICAgICAgICAgdGVzdCAkcmV0IC1uZSAiMCIKPiArICAgICAg
-ICAgICAgICAgb2sgJD8gIkVuYWJsZSBrZXJuZWwgZXZlbnQgJGV2ZW50X25hbWUgZm9yIHNlc3Np
-b24gJHNlc3Npb25fbmFtZSBvbiBjaGFubmVsICRjaGFubmVsX25hbWUgZmFpbGVkIGFzIGV4cGVj
-dGVkIgo+ICsgICAgICAgZWxzZQo+ICsgICAgICAgICAgICAgICBvayAkcmV0ICJFbmFibGUga2Vy
-bmVsIGV2ZW50ICRldmVudF9uYW1lIGZvciBzZXNzaW9uICRzZXNzX25hbWUiCj4gKyAgICAgICBm
-aQo+ICt9Cj4gKwo+ICtmdW5jdGlvbiBlbmFibGVfa2VybmVsX2x0dG5nX2V2ZW50X29rICgpCj4g
-K3sKPiArICAgICAgIGVuYWJsZV9rZXJuZWxfbHR0bmdfZXZlbnQgMCAiJEAiCj4gK30KPiArCj4g
-K2Z1bmN0aW9uIGVuYWJsZV9rZXJuZWxfbHR0bmdfZXZlbnRfZmFpbCAoKQo+ICt7Cj4gKyAgICAg
-ICBlbmFibGVfa2VybmVsX2x0dG5nX2V2ZW50IDEgIiRAIgo+ICt9Cj4gKwo+ICsjIE9sZCBpbnRl
-cmZhY2UKPiArZnVuY3Rpb24gbHR0bmdfZW5hYmxlX2tlcm5lbF9ldmVudAo+ICt7Cj4gKyAgICAg
-ICBlbmFibGVfa2VybmVsX2x0dG5nX2V2ZW50X29rICIkQCIKPiAgfQo+Cj4gIGZ1bmN0aW9uIGx0
-dG5nX2VuYWJsZV9rZXJuZWxfc3lzY2FsbCgpCj4gLS0KPiAyLjEuNAo+CgoKCi0tIApKw6lyw6lt
-aWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
-aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3Jn
-L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============1139683478==
+Content-Type: multipart/alternative; boundary=001a1139d17a0be184051f06dc89
+
+--001a1139d17a0be184051f06dc89
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Looks good thanks
+
+On Sat, Sep 5, 2015 at 4:26 PM, J=C3=A9r=C3=A9mie Galarneau <
+jeremie.galarneau@efficios.com> wrote:
+
+> On Fri, Sep 4, 2015 at 6:02 PM, Jonathan Rajotte
+> <jonathan.rajotte-julien@efficios.com> wrote:
+> > v2: Include change to xsd. Looks like I forgot to squash it. I'll have
+> to make
+> > an offering to the git reflog god on this one.
+>
+> Haha, I'm probably due for one too ;-)
+>
+> Merged, although I have removed the now-unused types process_type and
+> processes_type.
+> We'll add them back when we decide to make the clean-up.
+>
+> Also, there was a missing symbol, mi_lttng_element_pid_id, which I added
+> back.
+>
+> Have a look at the merged version and let me know if I missed anything.
+>
+> commit bf239d4cf83c083459c7672ac8a1965108bacca6
+> Author: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+> Date:   Fri Sep 4 18:02:48 2015 -0400
+>
+>     Fix: use pid element instead of process element
+>
+>     v2: Include change to xsd. Looks like I forgot to squash it. I'll
+> have to make
+>     an offering to the git reflog god on this one.
+>
+>     For stable 2.7
+>
+>     This revert part of changes introduced by [1] and [2].
+>
+>     The use of process element break the existing MI xml api.
+>
+>     [1] 46ef4d0715faeef52cd2242b5b895c74507e223a
+>     [2] a585578f837d992f00eba4f090c8ba251d9de94e
+>
+>     Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com=
+>
+>     Signed-off-by: J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@efficio=
+s.com>
+>
+>
+> Thanks!
+> J=C3=A9r=C3=A9mie
+>
+> >
+> > For stable 2.7
+> >
+> > This revert part of changes introduced by [1] and [2].
+> >
+> > The use of process element break the existing MI xml api.
+> >
+> > [1] 46ef4d0715faeef52cd2242b5b895c74507e223a
+> > [2] a585578f837d992f00eba4f090c8ba251d9de94e
+> >
+> > Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+> > ---
+> >  src/bin/lttng/commands/list.c     | 18 ++++++++---------
+> >  src/common/mi-lttng.c             | 41
+> +++++++++++++++++++++++++++++++++++++++
+> >  src/common/mi-lttng.h             | 19 ++++++++++++++++++
+> >  src/common/mi_lttng.xsd           | 15 +++++++++++---
+> >  tests/regression/tools/mi/test_mi |  2 +-
+> >  5 files changed, 82 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/src/bin/lttng/commands/list.c
+> b/src/bin/lttng/commands/list.c
+> > index f7f3852..3198eca 100644
+> > --- a/src/bin/lttng/commands/list.c
+> > +++ b/src/bin/lttng/commands/list.c
+> > @@ -340,8 +340,8 @@ static int mi_list_agent_ust_events(struct
+> lttng_event *events, int count,
+> >                 goto end;
+> >         }
+> >
+> > -       /* Open processes element */
+> > -       ret =3D mi_lttng_processes_open(writer);
+> > +       /* Open pids element element */
+> > +       ret =3D mi_lttng_pids_open(writer);
+> >         if (ret) {
+> >                 goto end;
+> >         }
+> > @@ -366,7 +366,7 @@ static int mi_list_agent_ust_events(struct
+> lttng_event *events, int count,
+> >
+> >                         if (!pid_element_open) {
+> >                                 /* Open and write a pid element */
+> > -                               ret =3D mi_lttng_process(writer, cur_pi=
+d,
+> cmdline, 1);
+> > +                               ret =3D mi_lttng_pid(writer, cur_pid,
+> cmdline, 1);
+> >                                 if (ret) {
+> >                                         goto error;
+> >                                 }
+> > @@ -389,7 +389,7 @@ static int mi_list_agent_ust_events(struct
+> lttng_event *events, int count,
+> >                 }
+> >         }
+> >
+> > -       /* Close processes */
+> > +       /* Close pids */
+> >         ret =3D mi_lttng_writer_close_element(writer);
+> >         if (ret) {
+> >                 goto end;
+> > @@ -577,8 +577,8 @@ static int mi_list_ust_event_fields(struct
+> lttng_event_field *fields, int count,
+> >                 goto end;
+> >         }
+> >
+> > -       /* Open processes element */
+> > -       ret =3D mi_lttng_processes_open(writer);
+> > +       /* Open pids element */
+> > +       ret =3D mi_lttng_pids_open(writer);
+> >         if (ret) {
+> >                 goto end;
+> >         }
+> > @@ -606,8 +606,8 @@ static int mi_list_ust_event_fields(struct
+> lttng_event_field *fields, int count,
+> >                         cur_pid =3D fields[i].event.pid;
+> >                         cmdline =3D get_cmdline_by_pid(cur_pid);
+> >                         if (!pid_element_open) {
+> > -                               /* Open and write a process element */
+> > -                               ret =3D mi_lttng_process(writer, cur_pi=
+d,
+> cmdline, 1);
+> > +                               /* Open and write a pid element */
+> > +                               ret =3D mi_lttng_pid(writer, cur_pid,
+> cmdline, 1);
+> >                                 if (ret) {
+> >                                         goto error;
+> >                                 }
+> > @@ -661,7 +661,7 @@ static int mi_list_ust_event_fields(struct
+> lttng_event_field *fields, int count,
+> >                 }
+> >         }
+> >
+> > -       /* Close processes, domain, domains */
+> > +       /* Close pid, domain, domains */
+> >         ret =3D mi_lttng_close_multi_element(writer, 3);
+> >  end:
+> >         return ret;
+> > diff --git a/src/common/mi-lttng.c b/src/common/mi-lttng.c
+> > index 9d6500b..8fbd064 100644
+> > --- a/src/common/mi-lttng.c
+> > +++ b/src/common/mi-lttng.c
+> > @@ -1199,6 +1199,47 @@ end:
+> >         return ret;
+> >  }
+> >
+> > +/*
+> > + * TODO: move the listing of pid for user agent to process semantic on
+> > + * mi api bump. The use of process element break the mi api.
+> > + */
+> > +LTTNG_HIDDEN
+> > +int mi_lttng_pid(struct mi_writer *writer, pid_t pid , const char *nam=
+e,
+> > +               int is_open)
+> > +{
+> > +       int ret;
+> > +
+> > +       /* Open pid process */
+> > +       ret =3D mi_lttng_writer_open_element(writer, config_element_pid=
+);
+> > +       if (ret) {
+> > +               goto end;
+> > +       }
+> > +
+> > +       /* Writing pid number */
+> > +       ret =3D mi_lttng_writer_write_element_signed_int(writer,
+> > +                       mi_lttng_element_pid_id, (int)pid);
+> > +       if (ret) {
+> > +               goto end;
+> > +       }
+> > +
+> > +       /* Writing name of the process */
+> > +       if (name) {
+> > +               ret =3D mi_lttng_writer_write_element_string(writer,
+> config_element_name,
+> > +                               name);
+> > +               if (ret) {
+> > +                       goto end;
+> > +               }
+> > +       }
+> > +
+> > +       if (!is_open) {
+> > +               /* Closing Pid */
+> > +               ret =3D mi_lttng_writer_close_element(writer);
+> > +       }
+> > +
+> > +end:
+> > +       return ret;
+> > +}
+> > +
+> >  LTTNG_HIDDEN
+> >  int mi_lttng_targets_open(struct mi_writer *writer)
+> >  {
+> > diff --git a/src/common/mi-lttng.h b/src/common/mi-lttng.h
+> > index 23b7810..5344a23 100644
+> > --- a/src/common/mi-lttng.h
+> > +++ b/src/common/mi-lttng.h
+> > @@ -619,6 +619,25 @@ int mi_lttng_processes_open(struct mi_writer
+> *writer);
+> >   */
+> >  int mi_lttng_process(struct mi_writer *writer, pid_t pid , const char
+> *name,
+> >                 int is_open);
+> > +
+> > +/*
+> > + * TODO: move pid of lttng list -u to process semantic on mi api bump
+> > + * Machine interface of a Process.
+> > + *
+> > + * writer An instance of a machine interface writer.
+> > + * pid A PID.
+> > + *
+> > + * is_open Defines whether or not the session element shall be closed.
+> > + *         This should be used carefully and the client
+> > + *         must close the pid element.
+> > + *         Use case: nested addition information on a domain
+> > + *                  ex: channel event.
+> > + *
+> > + * Returns zero if the element's value could be written.
+> > + * Negative values indicate an error.
+> > + */
+> > +int mi_lttng_pid(struct mi_writer *writer, pid_t pid , const char *nam=
+e,
+> > +               int is_open);
+> >  /*
+> >   * Machine interface: open a targets element.
+> >   *
+> > diff --git a/src/common/mi_lttng.xsd b/src/common/mi_lttng.xsd
+> > index 11d60d0..24978e4 100644
+> > --- a/src/common/mi_lttng.xsd
+> > +++ b/src/common/mi_lttng.xsd
+> > @@ -273,10 +273,19 @@ THE SOFTWARE.
+> >                 </xs:all>
+> >         </xs:complexType>
+> >
+> > -       <!-- Maps to an array of pid -->
+> > +       <!-- map to a pid -->
+> > +       <xs:complexType name=3D"pid_type">
+> > +               <xs:all>
+> > +                       <xs:element name=3D"id" type=3D"xs:int" />
+> > +                       <xs:element name=3D"name" type=3D"name_type" />
+> > +                       <xs:element name=3D"events" type=3D"event_list_=
+type"
+> minOccurs=3D"0" />
+> > +               </xs:all>
+> > +       </xs:complexType>
+> > +
+> > +       <!-- maps to an array of pid -->
+> >         <xs:complexType name=3D"pids_type">
+> >                 <xs:sequence>
+> > -                       <xs:element name=3D"pid" type=3D"xs:int"
+> minOccurs=3D"0" maxOccurs=3D"unbounded" />
+> > +                       <xs:element name=3D"pid" type=3D"pid_type"
+> minOccurs=3D"0" maxOccurs=3D"unbounded" />
+> >                 </xs:sequence>
+> >         </xs:complexType>
+> >
+> > @@ -339,7 +348,7 @@ THE SOFTWARE.
+> >                 <xs:all>
+> >                         <xs:element name=3D"type" type=3D"domain_type_t=
+ype"
+> />
+> >                         <xs:element name=3D"buffer_type"
+> type=3D"domain_buffer_type" />
+> > -                       <xs:element name=3D"processes"
+> type=3D"processes_type" minOccurs=3D"0" />
+> > +                       <xs:element name=3D"pids" type=3D"pids_type"
+> minOccurs=3D"0" />
+> >                         <xs:element name=3D"channels" type=3D"channels_=
+type"
+> minOccurs=3D"0" />
+> >                         <xs:element name=3D"events" type=3D"event_list_=
+type"
+> minOccurs=3D"0" />
+> >                         <xs:element name=3D"trackers" type=3D"trackers_=
+type"
+> minOccurs=3D"0" />
+> > diff --git a/tests/regression/tools/mi/test_mi
+> b/tests/regression/tools/mi/test_mi
+> > index 7f22ee1..47ec1b1 100755
+> > --- a/tests/regression/tools/mi/test_mi
+> > +++ b/tests/regression/tools/mi/test_mi
+> > @@ -48,7 +48,7 @@
+> XPATH_ENABLE_EVENT_SUCCESS=3D"$XPATH_CMD_OUTPUT/events/event/success/text=
+()"
+> >
+> XPATH_DISABLE_EVENT_SUCCESS=3D"$XPATH_CMD_OUTPUT/channel/events/event/suc=
+cess/text()"
+> >  XPATH_LIST_DOMAIN=3D"$XPATH_CMD_OUTPUT/sessions/session/domains/domain=
+"
+> >
+> XPATH_LIST_CHANNEL=3D"$XPATH_CMD_OUTPUT/sessions/session/domains/domain/c=
+hannels/channel"
+> > -XPATH_LIST_UST_EVENT=3D"$XPATH_CMD_OUTPUT/domains/domain[./type
+> =3D'UST']/processes/process/events/event"
+> > +XPATH_LIST_UST_EVENT=3D"$XPATH_CMD_OUTPUT/domains/domain[./type
+> =3D'UST']/pids/pid/events/event"
+> >  XPATH_SNAPSHOT_ADD_SNAPSHOT=3D"$XPATH_CMD_OUTPUT/snapshot_action[./nam=
+e =3D
+> 'add-output']/output"
+> >  XPATH_SNAPSHOT_LIST=3D"$XPATH_CMD_OUTPUT/snapshot_action[./name =3D
+> 'list-output']/output"
+> >  XPATH_SNAPSHOT_DEL=3D"$XPATH_CMD_OUTPUT/snapshot_action[./name =3D
+> 'del-output']/output"
+> > --
+> > 2.1.4
+> >
+>
+>
+>
+> --
+> J=C3=A9r=C3=A9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+
+
+
+--=20
+Jonathan Rajotte Julien
+
+--001a1139d17a0be184051f06dc89
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Looks good thanks</div><div class=3D"gmail_extra"><br><div=
+ class=3D"gmail_quote">On Sat, Sep 5, 2015 at 4:26 PM, J=C3=A9r=C3=A9mie Ga=
+larneau <span dir=3D"ltr">&lt;<a href=3D"mailto:jeremie.galarneau@efficios.=
+com" target=3D"_blank">jeremie.galarneau@efficios.com</a>&gt;</span> wrote:=
+<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-lef=
+t:1px #ccc solid;padding-left:1ex"><span class=3D"">On Fri, Sep 4, 2015 at =
+6:02 PM, Jonathan Rajotte<br>
+&lt;<a href=3D"mailto:jonathan.rajotte-julien@efficios.com">jonathan.rajott=
+e-julien@efficios.com</a>&gt; wrote:<br>
+&gt; v2: Include change to xsd. Looks like I forgot to squash it. I&#39;ll =
+have to make<br>
+&gt; an offering to the git reflog god on this one.<br>
+<br>
+</span>Haha, I&#39;m probably due for one too ;-)<br>
+<br>
+Merged, although I have removed the now-unused types process_type and<br>
+processes_type.<br>
+We&#39;ll add them back when we decide to make the clean-up.<br>
+<br>
+Also, there was a missing symbol, mi_lttng_element_pid_id, which I added ba=
+ck.<br>
+<br>
+Have a look at the merged version and let me know if I missed anything.<br>
+<br>
+commit bf239d4cf83c083459c7672ac8a1965108bacca6<br>
+Author: Jonathan Rajotte &lt;<a href=3D"mailto:jonathan.rajotte-julien@effi=
+cios.com">jonathan.rajotte-julien@efficios.com</a>&gt;<br>
+Date:=C2=A0 =C2=A0Fri Sep 4 18:02:48 2015 -0400<br>
+<br>
+=C2=A0 =C2=A0 Fix: use pid element instead of process element<br>
+<span class=3D""><br>
+=C2=A0 =C2=A0 v2: Include change to xsd. Looks like I forgot to squash it. =
+I&#39;ll<br>
+have to make<br>
+=C2=A0 =C2=A0 an offering to the git reflog god on this one.<br>
+<br>
+=C2=A0 =C2=A0 For stable 2.7<br>
+<br>
+=C2=A0 =C2=A0 This revert part of changes introduced by [1] and [2].<br>
+<br>
+=C2=A0 =C2=A0 The use of process element break the existing MI xml api.<br>
+<br>
+=C2=A0 =C2=A0 [1] 46ef4d0715faeef52cd2242b5b895c74507e223a<br>
+=C2=A0 =C2=A0 [2] a585578f837d992f00eba4f090c8ba251d9de94e<br>
+<br>
+=C2=A0 =C2=A0 Signed-off-by: Jonathan Rajotte &lt;<a href=3D"mailto:jonatha=
+n.rajotte-julien@efficios.com">jonathan.rajotte-julien@efficios.com</a>&gt;=
+<br>
+</span>=C2=A0 =C2=A0 Signed-off-by: J=C3=A9r=C3=A9mie Galarneau &lt;<a href=
+=3D"mailto:jeremie.galarneau@efficios.com">jeremie.galarneau@efficios.com</=
+a>&gt;<br>
+<br>
+<br>
+Thanks!<br>
+<span class=3D"HOEnZb"><font color=3D"#888888">J=C3=A9r=C3=A9mie<br>
+</font></span><div class=3D"HOEnZb"><div class=3D"h5"><br>
+&gt;<br>
+&gt; For stable 2.7<br>
+&gt;<br>
+&gt; This revert part of changes introduced by [1] and [2].<br>
+&gt;<br>
+&gt; The use of process element break the existing MI xml api.<br>
+&gt;<br>
+&gt; [1] 46ef4d0715faeef52cd2242b5b895c74507e223a<br>
+&gt; [2] a585578f837d992f00eba4f090c8ba251d9de94e<br>
+&gt;<br>
+&gt; Signed-off-by: Jonathan Rajotte &lt;<a href=3D"mailto:jonathan.rajotte=
+-julien@efficios.com">jonathan.rajotte-julien@efficios.com</a>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 src/bin/lttng/commands/list.c=C2=A0 =C2=A0 =C2=A0| 18 ++++++++--=
+-------<br>
+&gt;=C2=A0 src/common/mi-lttng.c=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0| 41 +++++++++++++++++++++++++++++++++++++++<br>
+&gt;=C2=A0 src/common/mi-lttng.h=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0| 19 ++++++++++++++++++<br>
+&gt;=C2=A0 src/common/mi_lttng.xsd=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+| 15 +++++++++++---<br>
+&gt;=C2=A0 tests/regression/tools/mi/test_mi |=C2=A0 2 +-<br>
+&gt;=C2=A0 5 files changed, 82 insertions(+), 13 deletions(-)<br>
+&gt;<br>
+&gt; diff --git a/src/bin/lttng/commands/list.c b/src/bin/lttng/commands/li=
+st.c<br>
+&gt; index f7f3852..3198eca 100644<br>
+&gt; --- a/src/bin/lttng/commands/list.c<br>
+&gt; +++ b/src/bin/lttng/commands/list.c<br>
+&gt; @@ -340,8 +340,8 @@ static int mi_list_agent_ust_events(struct lttng_e=
+vent *events, int count,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0goto end;=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt;<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Open processes element */<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_lttng_processes_open(writer);<b=
+r>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Open pids element element */<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_lttng_pids_open(writer);<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (ret) {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0goto end;=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt; @@ -366,7 +366,7 @@ static int mi_list_agent_ust_events(struct lttng_e=
+vent *events, int count,<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0if (!pid_element_open) {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/* Open and write a pid ele=
+ment */<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_lttng_process(writer, =
+cur_pid, cmdline, 1);<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_lttng_pid(writer, cur_=
+pid, cmdline, 1);<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (ret) {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0goto error;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt; @@ -389,7 +389,7 @@ static int mi_list_agent_ust_events(struct lttng_e=
+vent *events, int count,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt;<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Close processes */<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Close pids */<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_lttng_writer_close_element=
+(writer);<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (ret) {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0goto end;=
+<br>
+&gt; @@ -577,8 +577,8 @@ static int mi_list_ust_event_fields(struct lttng_e=
+vent_field *fields, int count,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0goto end;=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt;<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Open processes element */<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_lttng_processes_open(writer);<b=
+r>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Open pids element */<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_lttng_pids_open(writer);<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (ret) {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0goto end;=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt; @@ -606,8 +606,8 @@ static int mi_list_ust_event_fields(struct lttng_e=
+vent_field *fields, int count,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0cur_pid =3D fields[i].event.pid;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0cmdline =3D get_cmdline_by_pid(cur_pid);<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0if (!pid_element_open) {<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/* Open and write a process eleme=
+nt */<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_lttng_process(writer, =
+cur_pid, cmdline, 1);<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/* Open and write a pid element *=
+/<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_lttng_pid(writer, cur_=
+pid, cmdline, 1);<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (ret) {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0goto error;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt; @@ -661,7 +661,7 @@ static int mi_list_ust_event_fields(struct lttng_e=
+vent_field *fields, int count,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt;<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Close processes, domain, domains */<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Close pid, domain, domains */<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_lttng_close_multi_element(=
+writer, 3);<br>
+&gt;=C2=A0 end:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return ret;<br>
+&gt; diff --git a/src/common/mi-lttng.c b/src/common/mi-lttng.c<br>
+&gt; index 9d6500b..8fbd064 100644<br>
+&gt; --- a/src/common/mi-lttng.c<br>
+&gt; +++ b/src/common/mi-lttng.c<br>
+&gt; @@ -1199,6 +1199,47 @@ end:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return ret;<br>
+&gt;=C2=A0 }<br>
+&gt;<br>
+&gt; +/*<br>
+&gt; + * TODO: move the listing of pid for user agent to process semantic o=
+n<br>
+&gt; + * mi api bump. The use of process element break the mi api.<br>
+&gt; + */<br>
+&gt; +LTTNG_HIDDEN<br>
+&gt; +int mi_lttng_pid(struct mi_writer *writer, pid_t pid , const char *na=
+me,<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0int is_open)<b=
+r>
+&gt; +{<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0int ret;<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Open pid process */<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_lttng_writer_open_element(write=
+r, config_element_pid);<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0if (ret) {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0goto end;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Writing pid number */<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_lttng_writer_write_element_sign=
+ed_int(writer,<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0mi_lttng_element_pid_id, (int)pid);<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0if (ret) {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0goto end;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Writing name of the process */<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0if (name) {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_ltt=
+ng_writer_write_element_string(writer, config_element_name,<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0name);<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (ret) {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0goto end;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0if (!is_open) {<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/* Closing Pid=
+ */<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ret =3D mi_ltt=
+ng_writer_close_element(writer);<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
+&gt; +<br>
+&gt; +end:<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0return ret;<br>
+&gt; +}<br>
+&gt; +<br>
+&gt;=C2=A0 LTTNG_HIDDEN<br>
+&gt;=C2=A0 int mi_lttng_targets_open(struct mi_writer *writer)<br>
+&gt;=C2=A0 {<br>
+&gt; diff --git a/src/common/mi-lttng.h b/src/common/mi-lttng.h<br>
+&gt; index 23b7810..5344a23 100644<br>
+&gt; --- a/src/common/mi-lttng.h<br>
+&gt; +++ b/src/common/mi-lttng.h<br>
+&gt; @@ -619,6 +619,25 @@ int mi_lttng_processes_open(struct mi_writer *wri=
+ter);<br>
+&gt;=C2=A0 =C2=A0*/<br>
+&gt;=C2=A0 int mi_lttng_process(struct mi_writer *writer, pid_t pid , const=
+ char *name,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0int is_op=
+en);<br>
+&gt; +<br>
+&gt; +/*<br>
+&gt; + * TODO: move pid of lttng list -u to process semantic on mi api bump=
+<br>
+&gt; + * Machine interface of a Process.<br>
+&gt; + *<br>
+&gt; + * writer An instance of a machine interface writer.<br>
+&gt; + * pid A PID.<br>
+&gt; + *<br>
+&gt; + * is_open Defines whether or not the session element shall be closed=
+.<br>
+&gt; + *=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0This should be used carefully and=
+ the client<br>
+&gt; + *=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0must close the pid element.<br>
+&gt; + *=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Use case: nested addition informa=
+tion on a domain<br>
+&gt; + *=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 ex: =
+channel event.<br>
+&gt; + *<br>
+&gt; + * Returns zero if the element&#39;s value could be written.<br>
+&gt; + * Negative values indicate an error.<br>
+&gt; + */<br>
+&gt; +int mi_lttng_pid(struct mi_writer *writer, pid_t pid , const char *na=
+me,<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0int is_open);<=
+br>
+&gt;=C2=A0 /*<br>
+&gt;=C2=A0 =C2=A0* Machine interface: open a targets element.<br>
+&gt;=C2=A0 =C2=A0*<br>
+&gt; diff --git a/src/common/mi_lttng.xsd b/src/common/mi_lttng.xsd<br>
+&gt; index 11d60d0..24978e4 100644<br>
+&gt; --- a/src/common/mi_lttng.xsd<br>
+&gt; +++ b/src/common/mi_lttng.xsd<br>
+&gt; @@ -273,10 +273,19 @@ THE SOFTWARE.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;/xs:a=
+ll&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;/xs:complexType&gt;<br>
+&gt;<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;!-- Maps to an array of pid --&gt;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;!-- map to a pid --&gt;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;xs:complexType name=3D&quot;pid_type&q=
+uot;&gt;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;xs:all&gt;=
+<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0&lt;xs:element name=3D&quot;id&quot; type=3D&quot;xs:int&quot=
+; /&gt;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0&lt;xs:element name=3D&quot;name&quot; type=3D&quot;name_type=
+&quot; /&gt;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0&lt;xs:element name=3D&quot;events&quot; type=3D&quot;event_l=
+ist_type&quot; minOccurs=3D&quot;0&quot; /&gt;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;/xs:all&gt=
+;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;/xs:complexType&gt;<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;!-- maps to an array of pid --&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;xs:complexType name=3D&quot;pids_=
+type&quot;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;xs:se=
+quence&gt;<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0&lt;xs:element name=3D&quot;pid&quot; type=3D&quot;xs:int&quo=
+t; minOccurs=3D&quot;0&quot; maxOccurs=3D&quot;unbounded&quot; /&gt;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0&lt;xs:element name=3D&quot;pid&quot; type=3D&quot;pid_type&q=
+uot; minOccurs=3D&quot;0&quot; maxOccurs=3D&quot;unbounded&quot; /&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;/xs:s=
+equence&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;/xs:complexType&gt;<br>
+&gt;<br>
+&gt; @@ -339,7 +348,7 @@ THE SOFTWARE.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&lt;xs:al=
+l&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0&lt;xs:element name=3D&quot;type&quot; type=3D&quot;dom=
+ain_type_type&quot; /&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0&lt;xs:element name=3D&quot;buffer_type&quot; type=3D&q=
+uot;domain_buffer_type&quot; /&gt;<br>
+&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0&lt;xs:element name=3D&quot;processes&quot; type=3D&quot;proc=
+esses_type&quot; minOccurs=3D&quot;0&quot; /&gt;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0&lt;xs:element name=3D&quot;pids&quot; type=3D&quot;pids_type=
+&quot; minOccurs=3D&quot;0&quot; /&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0&lt;xs:element name=3D&quot;channels&quot; type=3D&quot=
+;channels_type&quot; minOccurs=3D&quot;0&quot; /&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0&lt;xs:element name=3D&quot;events&quot; type=3D&quot;e=
+vent_list_type&quot; minOccurs=3D&quot;0&quot; /&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0&lt;xs:element name=3D&quot;trackers&quot; type=3D&quot=
+;trackers_type&quot; minOccurs=3D&quot;0&quot; /&gt;<br>
+&gt; diff --git a/tests/regression/tools/mi/test_mi b/tests/regression/tool=
+s/mi/test_mi<br>
+&gt; index 7f22ee1..47ec1b1 100755<br>
+&gt; --- a/tests/regression/tools/mi/test_mi<br>
+&gt; +++ b/tests/regression/tools/mi/test_mi<br>
+&gt; @@ -48,7 +48,7 @@ XPATH_ENABLE_EVENT_SUCCESS=3D&quot;$XPATH_CMD_OUTPUT=
+/events/event/success/text()&quot;<br>
+&gt;=C2=A0 XPATH_DISABLE_EVENT_SUCCESS=3D&quot;$XPATH_CMD_OUTPUT/channel/ev=
+ents/event/success/text()&quot;<br>
+&gt;=C2=A0 XPATH_LIST_DOMAIN=3D&quot;$XPATH_CMD_OUTPUT/sessions/session/dom=
+ains/domain&quot;<br>
+&gt;=C2=A0 XPATH_LIST_CHANNEL=3D&quot;$XPATH_CMD_OUTPUT/sessions/session/do=
+mains/domain/channels/channel&quot;<br>
+&gt; -XPATH_LIST_UST_EVENT=3D&quot;$XPATH_CMD_OUTPUT/domains/domain[./type =
+=3D&#39;UST&#39;]/processes/process/events/event&quot;<br>
+&gt; +XPATH_LIST_UST_EVENT=3D&quot;$XPATH_CMD_OUTPUT/domains/domain[./type =
+=3D&#39;UST&#39;]/pids/pid/events/event&quot;<br>
+&gt;=C2=A0 XPATH_SNAPSHOT_ADD_SNAPSHOT=3D&quot;$XPATH_CMD_OUTPUT/snapshot_a=
+ction[./name =3D &#39;add-output&#39;]/output&quot;<br>
+&gt;=C2=A0 XPATH_SNAPSHOT_LIST=3D&quot;$XPATH_CMD_OUTPUT/snapshot_action[./=
+name =3D &#39;list-output&#39;]/output&quot;<br>
+&gt;=C2=A0 XPATH_SNAPSHOT_DEL=3D&quot;$XPATH_CMD_OUTPUT/snapshot_action[./n=
+ame =3D &#39;del-output&#39;]/output&quot;<br>
+&gt; --<br>
+&gt; 2.1.4<br>
+&gt;<br>
+<br>
+<br>
+<br>
+</div></div><span class=3D"im HOEnZb">--<br>
+J=C3=A9r=C3=A9mie Galarneau<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">ht=
+tp://www.efficios.com</a><br>
+<br>
+</span><div class=3D"HOEnZb"><div class=3D"h5">____________________________=
+___________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
+br>
+<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
+=3D"noreferrer" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/li=
+stinfo/lttng-dev</a><br>
+</div></div></blockquote></div><br><br clear=3D"all"><div><br></div>-- <br>=
+<div class=3D"gmail_signature"><div dir=3D"ltr"><div><div dir=3D"ltr">Jonat=
+han Rajotte Julien<div><br></div></div></div></div></div>
+</div>
+
+--001a1139d17a0be184051f06dc89--
+
+
+--===============1139683478==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1139683478==--
