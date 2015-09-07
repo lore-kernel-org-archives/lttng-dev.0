@@ -1,16 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 1/2] Add rcu_read_ongoing()
-	assertions around process_client_msg
-Date: Mon,  7 Sep 2015 10:36:08 -0400
-Message-ID: <1441636569-3488-1-git-send-email-mathieu.desnoyers__10872.7581719451$1441636629$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 2/2] Fix: unbalanced RCU read-side
+	lock in enable event command
+Date: Mon,  7 Sep 2015 10:36:09 -0400
+Message-ID: <1441636569-3488-2-git-send-email-mathieu.desnoyers__8071.97069884769$1441636655$gmane$org@efficios.com>
+References: <1441636569-3488-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZYxWu-0008Tl-VS
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZYxWw-0008Tm-9R
  for lttng-dev@lists.lttng.org; Mon, 07 Sep 2015 10:36:22 -0400
+In-Reply-To: <1441636569-3488-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,36 +25,33 @@ To: jgalar@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-process_client_msg ensures that RCU read-side lock should not be held
-when calling it. Validate this using rcu_read_ongoing() at the entry and
-exit points of this function. This allows us to catch unbalanced RCU
-read-side lock within commands quickly.
+The event validation fails, an unpaired RCU unlock is performed, thus
+underflowing the RCU nesting counter.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- src/bin/lttng-sessiond/main.c | 3 +++
- 1 file changed, 3 insertions(+)
+ src/bin/lttng-sessiond/cmd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-index 7c48e4d..0e7de6e 100644
---- a/src/bin/lttng-sessiond/main.c
-+++ b/src/bin/lttng-sessiond/main.c
-@@ -2972,6 +2972,8 @@ static int process_client_msg(struct command_ctx *cmd_ctx, int sock,
+diff --git a/src/bin/lttng-sessiond/cmd.c b/src/bin/lttng-sessiond/cmd.c
+index 6237d67..ac5b8ec 100644
+--- a/src/bin/lttng-sessiond/cmd.c
++++ b/src/bin/lttng-sessiond/cmd.c
+@@ -1535,13 +1535,13 @@ static int _cmd_enable_event(struct ltt_session *session,
  
- 	DBG("Processing client command %d", cmd_ctx->lsm->cmd_type);
+ 	DBG("Enable event command for event \'%s\'", event->name);
  
-+	assert(!rcu_read_ongoing());
++	rcu_read_lock();
 +
- 	*sock_error = 0;
- 
- 	switch (cmd_ctx->lsm->cmd_type) {
-@@ -4059,6 +4061,7 @@ setup_error:
- 		session_unlock_list();
+ 	ret = validate_event_name(event->name);
+ 	if (ret) {
+ 		goto error;
  	}
- init_setup_error:
-+	assert(!rcu_read_ongoing());
- 	return ret;
- }
  
+-	rcu_read_lock();
+-
+ 	switch (domain->type) {
+ 	case LTTNG_DOMAIN_KERNEL:
+ 	{
 -- 
 2.1.4
