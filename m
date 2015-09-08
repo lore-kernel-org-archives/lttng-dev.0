@@ -1,8 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: [PATCH lttng-ust] Fix: double free in
 	liblttng-ust-dl
-Date: Tue, 8 Sep 2015 22:29:17 +0000 (UTC)
-Message-ID: <992343929.444.1441751357760.JavaMail.zimbra__25199.8505475514$1441751421$gmane$org@efficios.com>
+Date: Tue, 8 Sep 2015 22:29:29 +0000 (UTC)
+Message-ID: <1922375853.445.1441751369335.JavaMail.zimbra__38414.0396876775$1441751443$gmane$org@efficios.com>
 References: <1441747456-20698-1-git-send-email-abusque@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +10,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZZRON-000196-0b
- for lttng-dev@lists.lttng.org; Tue, 08 Sep 2015 18:29:32 -0400
+ (envelope-from <compudj@efficios.com>) id 1ZZROX-00019T-Qg
+ for lttng-dev@lists.lttng.org; Tue, 08 Sep 2015 18:29:43 -0400
 In-Reply-To: <1441747456-20698-1-git-send-email-abusque@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
