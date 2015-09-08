@@ -1,21 +1,32 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools 2/2] Fix: unbalanced RCU
- read-side lock in enable event command
-Date: Tue, 8 Sep 2015 08:25:12 -0400
-Message-ID: <CA+jJMxtsHZWVz=aCXt4SYgvgQGdQS5GaLvL_gsjG+5iEVtv_fw__21410.2436825216$1441715179$gmane$org@mail.gmail.com>
-References: <1441636569-3488-1-git-send-email-mathieu.desnoyers@efficios.com>
- <1441636569-3488-2-git-send-email-mathieu.desnoyers@efficios.com>
+From: Lars Persson <lars.persson@axis.com>
+Subject: [PATCH lttng-modules] Move pipe override to the arch
+	specific pointers_override.h
+Date: Tue,  8 Sep 2015 15:20:15 +0200
+Message-ID: <1441718415-23808-1-git-send-email-larper__2524.16157532043$1441718484$gmane$org@axis.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f170.google.com ([209.85.160.170])
+Received: from bastet.se.axis.com ([195.60.68.11])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZZHxe-0006Zo-65
- for lttng-dev@lists.lttng.org; Tue, 08 Sep 2015 08:25:19 -0400
-Received: by ykdu9 with SMTP id u9so39596506ykd.2
- for <lttng-dev@lists.lttng.org>; Tue, 08 Sep 2015 05:25:12 -0700 (PDT)
-In-Reply-To: <1441636569-3488-2-git-send-email-mathieu.desnoyers@efficios.com>
+ (envelope-from <lars.persson@axis.com>) id 1ZZIp5-0006tp-Lv
+ for lttng-dev@lists.lttng.org; Tue, 08 Sep 2015 09:20:33 -0400
+Received: from localhost (localhost [127.0.0.1])
+ by bastet.se.axis.com (Postfix) with ESMTP id 5746F181C3
+ for <lttng-dev@lists.lttng.org>; Tue,  8 Sep 2015 15:20:23 +0200 (CEST)
+Received: from bastet.se.axis.com ([IPv6:::ffff:127.0.0.1])
+ by localhost (bastet.se.axis.com [::ffff:127.0.0.1]) (amavisd-new, port 10024)
+ with LMTP id 08TlE9KeWS4c for <lttng-dev@lists.lttng.org>;
+ Tue,  8 Sep 2015 15:20:22 +0200 (CEST)
+Received: from boulder.se.axis.com (boulder.se.axis.com [10.0.2.104])
+ by bastet.se.axis.com (Postfix) with ESMTP id 7EA50180D8
+ for <lttng-dev@lists.lttng.org>; Tue,  8 Sep 2015 15:20:22 +0200 (CEST)
+Received: from boulder.se.axis.com (localhost [127.0.0.1])
+ by postfix.imss71 (Postfix) with ESMTP id 5A5E012B9
+ for <lttng-dev@lists.lttng.org>; Tue,  8 Sep 2015 15:20:22 +0200 (CEST)
+Received: from thoth.se.axis.com (thoth.se.axis.com [10.0.2.173])
+ by boulder.se.axis.com (Postfix) with ESMTP id 456BABFE
+ for <lttng-dev@lists.lttng.org>; Tue,  8 Sep 2015 15:20:22 +0200 (CEST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,29 +35,123 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: lttng-dev@lists.lttng.org
+Cc: Lars Persson <larper@axis.com>
 List-Id: lttng-dev@lists.lttng.org
 
-R29vZCBjYXRjaCwgdGhhbmtzIQoKSsOpcsOpbWllCgpPbiBNb24sIFNlcCA3LCAyMDE1IGF0IDEw
-OjM2IEFNLCBNYXRoaWV1IERlc25veWVycwo8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29t
-PiB3cm90ZToKPiBUaGUgZXZlbnQgdmFsaWRhdGlvbiBmYWlscywgYW4gdW5wYWlyZWQgUkNVIHVu
-bG9jayBpcyBwZXJmb3JtZWQsIHRodXMKPiB1bmRlcmZsb3dpbmcgdGhlIFJDVSBuZXN0aW5nIGNv
-dW50ZXIuCj4KPiBTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNu
-b3llcnNAZWZmaWNpb3MuY29tPgo+IC0tLQo+ICBzcmMvYmluL2x0dG5nLXNlc3Npb25kL2NtZC5j
-IHwgNCArKy0tCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25z
-KC0pCj4KPiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jbWQuYyBiL3NyYy9i
-aW4vbHR0bmctc2Vzc2lvbmQvY21kLmMKPiBpbmRleCA2MjM3ZDY3Li5hYzViOGVjIDEwMDY0NAo+
-IC0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvY21kLmMKPiArKysgYi9zcmMvYmluL2x0dG5n
-LXNlc3Npb25kL2NtZC5jCj4gQEAgLTE1MzUsMTMgKzE1MzUsMTMgQEAgc3RhdGljIGludCBfY21k
-X2VuYWJsZV9ldmVudChzdHJ1Y3QgbHR0X3Nlc3Npb24gKnNlc3Npb24sCj4KPiAgICAgICAgIERC
-RygiRW5hYmxlIGV2ZW50IGNvbW1hbmQgZm9yIGV2ZW50IFwnJXNcJyIsIGV2ZW50LT5uYW1lKTsK
-Pgo+ICsgICAgICAgcmN1X3JlYWRfbG9jaygpOwo+ICsKPiAgICAgICAgIHJldCA9IHZhbGlkYXRl
-X2V2ZW50X25hbWUoZXZlbnQtPm5hbWUpOwo+ICAgICAgICAgaWYgKHJldCkgewo+ICAgICAgICAg
-ICAgICAgICBnb3RvIGVycm9yOwo+ICAgICAgICAgfQo+Cj4gLSAgICAgICByY3VfcmVhZF9sb2Nr
-KCk7Cj4gLQo+ICAgICAgICAgc3dpdGNoIChkb21haW4tPnR5cGUpIHsKPiAgICAgICAgIGNhc2Ug
-TFRUTkdfRE9NQUlOX0tFUk5FTDoKPiAgICAgICAgIHsKPiAtLQo+IDIuMS40Cj4KCgoKLS0gCkrD
-qXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+The MIPS architecture has a non-standard calling convention for pipe()
+and cannot use the provided override for the pipe event.
+
+Signed-off-by: Lars Persson <larper@axis.com>
+---
+ .../headers/arm-32-syscalls-3.4.25_pointers_override.h         |  9 +++++++++
+ .../headers/powerpc-32-syscalls-3.0.34_pointers_override.h     |  9 +++++++++
+ instrumentation/syscalls/headers/syscalls_pointers_override.h  | 10 ----------
+ .../headers/x86-32-syscalls-3.1.0-rc6_pointers_override.h      | 10 ++++++++++
+ .../headers/x86-64-syscalls-3.10.0-rc7_pointers_override.h     |  9 +++++++++
+ 5 files changed, 37 insertions(+), 10 deletions(-)
+
+diff --git a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
+index d515e1d..b27eedb 100644
+--- a/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
++++ b/instrumentation/syscalls/headers/arm-32-syscalls-3.4.25_pointers_override.h
+@@ -18,6 +18,15 @@ SC_LTTNG_TRACEPOINT_EVENT(mmap2,
+ 	)
+ )
+ 
++#define OVERRIDE_32_pipe
++SC_LTTNG_TRACEPOINT_EVENT(pipe,
++	TP_PROTO(sc_exit(long ret,) int * fildes),
++	TP_ARGS(sc_exit(ret,) fildes),
++	TP_FIELDS(sc_exit(ctf_integer(long, ret, ret))
++		sc_out(ctf_user_array(int, fildes, fildes, 2))
++	)
++)
++
+ #else	/* CREATE_SYSCALL_TABLE */
+ 
+ #define OVERRIDE_TABLE_32_execve
+diff --git a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
+index b9e83bc..1fd3ec4 100644
+--- a/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
++++ b/instrumentation/syscalls/headers/powerpc-32-syscalls-3.0.34_pointers_override.h
+@@ -16,6 +16,15 @@ SC_LTTNG_TRACEPOINT_EVENT(mmap2,
+ 	)
+ )
+ 
++#define OVERRIDE_32_pipe
++SC_LTTNG_TRACEPOINT_EVENT(pipe,
++	TP_PROTO(sc_exit(long ret,) int * fildes),
++	TP_ARGS(sc_exit(ret,) fildes),
++	TP_FIELDS(sc_exit(ctf_integer(long, ret, ret))
++		sc_out(ctf_user_array(int, fildes, fildes, 2))
++	)
++)
++
+ #else	/* CREATE_SYSCALL_TABLE */
+ 
+ #define OVERRIDE_TABLE_32_execve
+diff --git a/instrumentation/syscalls/headers/syscalls_pointers_override.h b/instrumentation/syscalls/headers/syscalls_pointers_override.h
+index a552908..c9478f4 100644
+--- a/instrumentation/syscalls/headers/syscalls_pointers_override.h
++++ b/instrumentation/syscalls/headers/syscalls_pointers_override.h
+@@ -41,16 +41,6 @@ SC_LTTNG_TRACEPOINT_EVENT(getcpu,
+ 	)
+ )
+ 
+-#define OVERRIDE_32_pipe
+-#define OVERRIDE_64_pipe
+-SC_LTTNG_TRACEPOINT_EVENT(pipe,
+-	TP_PROTO(sc_exit(long ret,) int * fildes),
+-	TP_ARGS(sc_exit(ret,) fildes),
+-	TP_FIELDS(sc_exit(ctf_integer(long, ret, ret))
+-		sc_out(ctf_user_array(int, fildes, fildes, 2))
+-	)
+-)
+-
+ #define OVERRIDE_32_pipe2
+ #define OVERRIDE_64_pipe2
+ SC_LTTNG_TRACEPOINT_EVENT(pipe2,
+diff --git a/instrumentation/syscalls/headers/x86-32-syscalls-3.1.0-rc6_pointers_override.h b/instrumentation/syscalls/headers/x86-32-syscalls-3.1.0-rc6_pointers_override.h
+index 05c8e21..7c804a6 100644
+--- a/instrumentation/syscalls/headers/x86-32-syscalls-3.1.0-rc6_pointers_override.h
++++ b/instrumentation/syscalls/headers/x86-32-syscalls-3.1.0-rc6_pointers_override.h
+@@ -10,6 +10,16 @@
+ #  define OVERRIDE_32_chown16
+ # endif
+ 
++#define OVERRIDE_32_pipe
++#define OVERRIDE_64_pipe
++SC_LTTNG_TRACEPOINT_EVENT(pipe,
++    TP_PROTO(sc_exit(long ret,) int * fildes),
++    TP_ARGS(sc_exit(ret,) fildes),
++    TP_FIELDS(sc_exit(ctf_integer(long, ret, ret))
++        sc_out(ctf_user_array(int, fildes, fildes, 2))
++    )
++)
++
+ #else	/* CREATE_SYSCALL_TABLE */
+ 
+ # ifndef CONFIG_UID16
+diff --git a/instrumentation/syscalls/headers/x86-64-syscalls-3.10.0-rc7_pointers_override.h b/instrumentation/syscalls/headers/x86-64-syscalls-3.10.0-rc7_pointers_override.h
+index af519cd..702cfb5 100644
+--- a/instrumentation/syscalls/headers/x86-64-syscalls-3.10.0-rc7_pointers_override.h
++++ b/instrumentation/syscalls/headers/x86-64-syscalls-3.10.0-rc7_pointers_override.h
+@@ -106,6 +106,15 @@ SC_LTTNG_TRACEPOINT_EVENT_CODE(accept,
+ 	)
+ )
+ 
++#define OVERRIDE_64_pipe
++SC_LTTNG_TRACEPOINT_EVENT(pipe,
++	TP_PROTO(sc_exit(long ret,) int * fildes),
++	TP_ARGS(sc_exit(ret,) fildes),
++	TP_FIELDS(sc_exit(ctf_integer(long, ret, ret))
++		sc_out(ctf_user_array(int, fildes, fildes, 2))
++	)
++)
++
+ #else	/* CREATE_SYSCALL_TABLE */
+ 
+ #define OVERRIDE_TABLE_64_clone
+-- 
+2.1.4
