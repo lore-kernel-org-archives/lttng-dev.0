@@ -1,7 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 5/5] Print relayd stream indexes
-Date: Wed,  9 Sep 2015 11:56:37 -0400
-Message-ID: <1441814197-9941-5-git-send-email-mathieu.desnoyers__46873.6062678092$1441814312$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 3/5] Fix: consumerd:
+	consumer_stream_write_index error handling
+Date: Wed,  9 Sep 2015 11:56:35 -0400
+Message-ID: <1441814197-9941-3-git-send-email-mathieu.desnoyers__5142.9838444621$1441814315$gmane$org@efficios.com>
 References: <1441814197-9941-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,8 +10,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZZhjv-0006XT-0Y
- for lttng-dev@lists.lttng.org; Wed, 09 Sep 2015 11:56:51 -0400
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZZhjt-0006XS-Uc
+ for lttng-dev@lists.lttng.org; Wed, 09 Sep 2015 11:56:50 -0400
 In-Reply-To: <1441814197-9941-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,53 +25,39 @@ To: jgalar@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-In debug output, print leaking stream index information when exiting
-from relay daemon.
+When consumer_stream_write_index cannot find the relay daemon, it
+currently assumes that the reason for this situation is that it should
+write to a file. Add a check to see if indeed we should write to a file,
+of if this is caused by a removed relayd. Return an error and print an
+error to the console in this situation.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- src/bin/lttng-relayd/stream.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ src/common/consumer-stream.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/src/bin/lttng-relayd/stream.c b/src/bin/lttng-relayd/stream.c
-index cac8763..b604919 100644
---- a/src/bin/lttng-relayd/stream.c
-+++ b/src/bin/lttng-relayd/stream.c
-@@ -416,6 +416,27 @@ void try_stream_close(struct relay_stream *stream)
- 	stream_put(stream);
- }
+diff --git a/src/common/consumer-stream.c b/src/common/consumer-stream.c
+index 604e2f4..23cc882 100644
+--- a/src/common/consumer-stream.c
++++ b/src/common/consumer-stream.c
+@@ -374,10 +374,18 @@ int consumer_stream_write_index(struct lttng_consumer_stream *stream,
+ 		pthread_mutex_lock(&relayd->ctrl_sock_mutex);
+ 		ret = relayd_send_index(&relayd->control_sock, index,
+ 				stream->relayd_stream_id, stream->next_net_seq_num - 1);
++
+ 		pthread_mutex_unlock(&relayd->ctrl_sock_mutex);
+ 	} else {
+ 		ssize_t size_ret;
  
-+static void print_stream_indexes(struct relay_stream *stream)
-+{
-+	struct lttng_ht_iter iter;
-+	struct relay_index *index;
++		if (stream->net_seq_idx != -1ULL) {
++			ERR("Cannot find relayd for write index, net_seq_idx %" PRIu64,
++				stream->net_seq_idx);
++			ret = -1;
++			goto error;
++		}
 +
-+	rcu_read_lock();
-+	cds_lfht_for_each_entry(stream->indexes_ht->ht, &iter.iter, index,
-+			index_n.node) {
-+		DBG("index %p net_seq_num %" PRIu64 " refcount %ld"
-+				" stream %" PRIu64 " trace %" PRIu64
-+				" session %" PRIu64,
-+				index,
-+				index->index_n.key,
-+				stream->ref.refcount,
-+				index->stream->stream_handle,
-+				index->stream->trace->id,
-+				index->stream->trace->session->id);
-+	}
-+	rcu_read_unlock();
-+}
-+
- void print_relay_streams(void)
- {
- 	struct lttng_ht_iter iter;
-@@ -434,6 +455,7 @@ void print_relay_streams(void)
- 				stream->stream_handle,
- 				stream->trace->id,
- 				stream->trace->session->id);
-+		print_stream_indexes(stream);
- 		stream_put(stream);
- 	}
- 	rcu_read_unlock();
+ 		size_ret = index_write(stream->index_fd, index,
+ 				sizeof(struct ctf_packet_index));
+ 		if (size_ret < sizeof(struct ctf_packet_index)) {
 -- 
 2.1.4
