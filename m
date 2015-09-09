@@ -1,32 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.5.6, 2.6.3, 2.7.0-rc2
-Date: Wed, 9 Sep 2015 20:56:48 +0000 (UTC)
-Message-ID: <1083741246.2329.1441832208691.JavaMail.zimbra__42685.4127589197$1441832296$gmane$org@efficios.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools] Fix: sessiond: disable: match app
+	event by name
+Date: Wed,  9 Sep 2015 17:08:20 -0400
+Message-ID: <1441832900-7573-1-git-send-email-jonathan.rajotte-julien__29421.4311092675$1441832975$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZZmQR-0008Kx-4v
- for lttng-dev@lists.lttng.org; Wed, 09 Sep 2015 16:57:04 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C8710340643
- for <lttng-dev@lists.lttng.org>; Wed,  9 Sep 2015 20:56:57 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id Lf6DTLciKgNO for <lttng-dev@lists.lttng.org>;
- Wed,  9 Sep 2015 20:56:49 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 19018340645
- for <lttng-dev@lists.lttng.org>; Wed,  9 Sep 2015 20:56:49 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id F8wK43ayGjXV for <lttng-dev@lists.lttng.org>;
- Wed,  9 Sep 2015 20:56:48 +0000 (UTC)
-Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
- by mail.efficios.com (Postfix) with ESMTP id D8744340643
- for <lttng-dev@lists.lttng.org>; Wed,  9 Sep 2015 20:56:48 +0000 (UTC)
+ (envelope-from <jonathan.rajotte-julien@efficios.com>)
+ id 1ZZmbb-0008Qv-Ch
+ for lttng-dev@lists.lttng.org; Wed, 09 Sep 2015 17:08:37 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -36,66 +21,50 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-2.x tracer toolset.
+The use of a simple lookup and match on event name is insufficient
+to identify the corresponding ust app event.
 
-This announces bugfix releases across the three stable branches:
-stable-2.5 (near EOL), stable-2.6, and stable-2.7 (in release candidate
-stage).
+Fixes #914
 
-Changelog:
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+ src/bin/lttng-sessiond/ust-app.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-2015-09-09 LTTng modules 2.7.0-rc2
-        * Use 3.18 syscall instrumentation for MIPS32
-        * Update the MIPS32 syscall instrumentation to 3.18
-        * Fix: Move pipe override to the arch specific pointers_override.h
-        * Implement lttng test module
-        * Cleanup: remove logically dead code
-        * Fix: filter validator use after free
-        * Fix: use after free in channel release
-        * Fix: non-enabler events should be disabled by default
-        * Fix: build failure on 2.6.36
-        * Cleanup: split bdi_dirty_ratelimit with ifdef into separate macros
-        * Fix: writeback instrumentation for 4.2 kernels
-        * Fix: kmem probe with Ubuntu 3.13 kernels
-        * Fix: disable kvm probe if lapic.h isn't found
-        * Fix: timer instrumentation for 4.2 kernels
-        * Fix: ext4 instrumentation for 4.2 kernels
-        * Fix: kvm instrumentation for 4.2 kernels
-        * Fix: mm_page_alloc_extfrag instrumentation for kernel 3.18.10
-        * Fix: allow LTTng to be built within kernel tree
-
-2015-09-09 LTTng modules 2.6.3
-        * Fix: use after free in channel release
-        * Fix: build failure on 2.6.36
-        * Fix: writeback instrumentation for 4.2 kernels
-        * Fix: mm_page_alloc_extfrag instrumentation for kernel 3.18.10
-        * Fix: kmem probe with Ubuntu 3.13 kernels
-        * Fix: disable kvm probe if lapic.h isn't found
-        * Fix: timer instrumentation for 4.2 kernels
-        * Fix: ext4 instrumentation for 4.2 kernels
-        * Fix: kvm instrumentation for 4.2 kernels
-        * Fix: allow LTTng to be built within kernel tree
-        * Fix: Building the event list fails on fragmented memory
-        * Fix: use after free on metadata cache reallocation
-
-2015-09-09 LTTng modules 2.5.6
-        * Fix: use after free in channel release
-        * Fix: build failure on 2.6.36
-        * Fix: Update kmem event for Ubuntu's 3.16 kernel
-        * Fix: Update kmem event for recent Ubuntu kernel
-        * Fix: kmem probe with Ubuntu 3.13 kernels
-        * Implement wrapper around get_pfnblock_flags_mask
-        * Fix: Building the event list fails on fragmented memory
-        * Fix: use after free on metadata cache reallocation
-
-Project website: http://lttng.org
-Documentation: http://lttng.org/docs
-Download link: http://lttng.org/download
-
+diff --git a/src/bin/lttng-sessiond/ust-app.c b/src/bin/lttng-sessiond/ust-app.c
+index 4066b06..53a6f93 100644
+--- a/src/bin/lttng-sessiond/ust-app.c
++++ b/src/bin/lttng-sessiond/ust-app.c
+@@ -3873,7 +3873,7 @@ int ust_app_disable_event_glb(struct ltt_ust_session *usess,
+ {
+ 	int ret = 0;
+ 	struct lttng_ht_iter iter, uiter;
+-	struct lttng_ht_node_str *ua_chan_node, *ua_event_node;
++	struct lttng_ht_node_str *ua_chan_node;
+ 	struct ust_app *app;
+ 	struct ust_app_session *ua_sess;
+ 	struct ust_app_channel *ua_chan;
+@@ -3910,14 +3910,14 @@ int ust_app_disable_event_glb(struct ltt_ust_session *usess,
+ 		}
+ 		ua_chan = caa_container_of(ua_chan_node, struct ust_app_channel, node);
+ 
+-		lttng_ht_lookup(ua_chan->events, (void *)uevent->attr.name, &uiter);
+-		ua_event_node = lttng_ht_iter_get_node_str(&uiter);
+-		if (ua_event_node == NULL) {
++		ua_event = find_ust_app_event(ua_chan->events, uevent->attr.name,
++				uevent->filter, uevent->attr.loglevel,
++				uevent->exclusion);
++		if (ua_event == NULL) {
+ 			DBG2("Event %s not found in channel %s for app pid %d."
+ 					"Skipping", uevent->attr.name, uchan->name, app->pid);
+ 			continue;
+ 		}
+-		ua_event = caa_container_of(ua_event_node, struct ust_app_event, node);
+ 
+ 		ret = disable_ust_app_event(ua_sess, ua_event, app);
+ 		if (ret < 0) {
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.1.4
