@@ -1,7 +1,8 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools] Tests: use functions from utils.sh
-Date: Thu, 10 Sep 2015 16:07:47 -0400
-Message-ID: <1441915667-871-1-git-send-email-jonathan.rajotte-julien__49731.4508226284$1441915761$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 1/3] Bring back
+	event_ust_disable_all_tracepoints
+Date: Thu, 10 Sep 2015 16:10:55 -0400
+Message-ID: <1441915857-1544-1-git-send-email-jonathan.rajotte-julien__3798.00849264047$1441915943$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -9,8 +10,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
  (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1Za88W-0006wQ-6s
- for lttng-dev@lists.lttng.org; Thu, 10 Sep 2015 16:08:07 -0400
+ id 1Za8Bo-0006zm-Gs
+ for lttng-dev@lists.lttng.org; Thu, 10 Sep 2015 16:11:27 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,140 +24,92 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
+Revert part of be42c96885c522f857f146fa6f7ae53856e3bed2
+
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- tests/regression/ust/test_event_basic | 56 +++++++++--------------------------
- tests/utils/utils.sh                  | 38 ++++++++++++++++++++++++
- 2 files changed, 52 insertions(+), 42 deletions(-)
+ src/bin/lttng-sessiond/event.c | 54 ++++++++++++++++++++++++++++++++++++++++++
+ src/bin/lttng-sessiond/event.h |  3 +++
+ 2 files changed, 57 insertions(+)
 
-diff --git a/tests/regression/ust/test_event_basic b/tests/regression/ust/test_event_basic
-index 31931a9..acc79e5 100755
---- a/tests/regression/ust/test_event_basic
-+++ b/tests/regression/ust/test_event_basic
-@@ -23,39 +23,11 @@ LTTNG_BIN="lttng"
- BIN_NAME="gen-ust-events"
- SESSION_NAME="valid_filter"
- EVENT_NAME="tp:tptest"
--NUM_TESTS=25
--
--source $TESTDIR/utils/utils.sh
--
--function enable_ust_lttng_event_per_chan()
--{
--	sess_name="$1"
--	event_name="$2"
--	chan_name="$3"
--
--	$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name" -s $sess_name -c $chan_name -u >/dev/null 2>&1
--	ok $? "Enable event $event_name for session $sess_name in channel $chan_name"
--}
- 
--function disable_ust_lttng_event_per_chan()
--{
--	sess_name="$1"
--	event_name="$2"
--	chan_name="$3"
--
--	$TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-event "$event_name" -s $sess_name -c $chan_name -u >/dev/null 2>&1
--	ok $? "Disable event $event_name for session $sess_name in channel $chan_name"
--}
- 
--function add_ust_lttng_context()
--{
--	sess_name="$1"
--	chan_name="$2"
--	type="$3"
-+NUM_TESTS=25
- 
--	$TESTDIR/../src/bin/lttng/$LTTNG_BIN add-context -s $sess_name -c $chan_name -t $type -u >/dev/null 2>&1
--	ok $? "Add context $type for session $sess_name in channel $chan_name"
--}
-+source $TESTDIR/utils/utils.sh
- 
- function test_event_basic()
- {
-@@ -74,21 +46,21 @@ function test_event_basic()
- 	enable_ust_lttng_channel_ok $SESSION_NAME $CHAN_NAME
- 	enable_ust_lttng_channel_ok $SESSION_NAME2 $CHAN_NAME2
- 
--	enable_ust_lttng_event_per_chan $SESSION_NAME $EVENT_NAME $CHAN_NAME
--	enable_ust_lttng_event_per_chan $SESSION_NAME $EVENT_NAME2 $CHAN_NAME
--	enable_ust_lttng_event_per_chan $SESSION_NAME2 $EVENT_NAME3 $CHAN_NAME2
-+	enable_ust_lttng_event_ok $SESSION_NAME $EVENT_NAME $CHAN_NAME
-+	enable_ust_lttng_event_ok $SESSION_NAME $EVENT_NAME2 $CHAN_NAME
-+	enable_ust_lttng_event_ok $SESSION_NAME2 $EVENT_NAME3 $CHAN_NAME2
- 
--	add_ust_lttng_context $SESSION_NAME $CHAN_NAME "vpid"
--	add_ust_lttng_context $SESSION_NAME $CHAN_NAME "vtid"
--	add_ust_lttng_context $SESSION_NAME $CHAN_NAME "pthread_id"
--	add_ust_lttng_context $SESSION_NAME $CHAN_NAME "procname"
--	add_ust_lttng_context $SESSION_NAME2 $CHAN_NAME2 "procname"
-+	add_context_ust_ok $SESSION_NAME $CHAN_NAME "vpid"
-+	add_context_ust_ok $SESSION_NAME $CHAN_NAME "vtid"
-+	add_context_ust_ok $SESSION_NAME $CHAN_NAME "pthread_id"
-+	add_context_ust_ok $SESSION_NAME $CHAN_NAME "procname"
-+	add_context_ust_ok $SESSION_NAME2 $CHAN_NAME2 "procname"
- 
--	disable_ust_lttng_event_per_chan $SESSION_NAME $EVENT_NAME $CHAN_NAME
--	disable_ust_lttng_event_per_chan $SESSION_NAME2 $EVENT_NAME3 $CHAN_NAME2
-+	disable_ust_lttng_event $SESSION_NAME $EVENT_NAME $CHAN_NAME
-+	disable_ust_lttng_event $SESSION_NAME2 $EVENT_NAME3 $CHAN_NAME2
- 
--	enable_ust_lttng_event_per_chan $SESSION_NAME $EVENT_NAME $CHAN_NAME
--	enable_ust_lttng_event_per_chan $SESSION_NAME2 $EVENT_NAME3 $CHAN_NAME2
-+	enable_ust_lttng_event_ok $SESSION_NAME $EVENT_NAME $CHAN_NAME
-+	enable_ust_lttng_event_ok $SESSION_NAME2 $EVENT_NAME3 $CHAN_NAME2
- 
- 	start_lttng_tracing_ok
- 	stop_lttng_tracing_ok
-diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
-index d466ee6..2a7b9db 100644
---- a/tests/utils/utils.sh
-+++ b/tests/utils/utils.sh
-@@ -952,6 +952,44 @@ function lttng_untrack_fail()
- 	lttng_untrack 1 "$@"
+diff --git a/src/bin/lttng-sessiond/event.c b/src/bin/lttng-sessiond/event.c
+index 8cca213..b5087a2 100644
+--- a/src/bin/lttng-sessiond/event.c
++++ b/src/bin/lttng-sessiond/event.c
+@@ -354,6 +354,60 @@ error:
  }
  
-+function add_context_lttng()
+ /*
++ * Disable all UST tracepoints for a channel from a UST session.
++ */
++int event_ust_disable_all_tracepoints(struct ltt_ust_session *usess,
++		struct ltt_ust_channel *uchan)
 +{
-+	local expected_to_fail="$1"
-+	local domain="$2"
-+	local session_name="$3"
-+	local channel_name="$4"
-+	local type="$5"
++	int ret, i, size;
++	struct lttng_ht_iter iter;
++	struct ltt_ust_event *uevent = NULL;
++	struct lttng_event *events = NULL;
 +
-+	$TESTDIR/../src/bin/lttng/$LTTNG_BIN add-context -s $session_name -c $channel_name -t $type $domain  1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
-+	ret=$?
-+	if [[ $expected_to_fail -eq "1" ]]; then
-+		test $ret -ne "0"
-+		ok $? "Add context command failed as expected"
-+	else
-+		ok $ret "Add context command success as expected"
-+	fi
++	assert(usess);
++	assert(uchan);
++
++	rcu_read_lock();
++
++	/* Disabling existing events */
++	cds_lfht_for_each_entry(uchan->events->ht, &iter.iter, uevent,
++			node.node) {
++		if (uevent->enabled == 1) {
++			ret = event_ust_disable_tracepoint(usess, uchan,
++					uevent->attr.name);
++			if (ret < 0) {
++				continue;
++			}
++		}
++	}
++
++	/* Get all UST available events */
++	size = ust_app_list_events(&events);
++	if (size < 0) {
++		ret = LTTNG_ERR_UST_LIST_FAIL;
++		goto error;
++	}
++
++	for (i = 0; i < size; i++) {
++		ret = event_ust_disable_tracepoint(usess, uchan,
++				events[i].name);
++		if (ret != LTTNG_OK) {
++			/* Continue to disable the rest... */
++			continue;
++		}
++	}
++	free(events);
++
++	rcu_read_unlock();
++	return LTTNG_OK;
++
++error:
++	free(events);
++	rcu_read_unlock();
++	return ret;
 +}
 +
-+function add_context_ust_ok()
-+{
-+	add_context_lttng 0 -u "$@"
-+}
++/*
+  * Enable all agent event for a given UST session.
+  *
+  * Return LTTNG_OK on success or else a LTTNG_ERR* code.
+diff --git a/src/bin/lttng-sessiond/event.h b/src/bin/lttng-sessiond/event.h
+index 2cf0d5e..7c5231d 100644
+--- a/src/bin/lttng-sessiond/event.h
++++ b/src/bin/lttng-sessiond/event.h
+@@ -41,6 +41,9 @@ int event_ust_enable_tracepoint(struct ltt_ust_session *usess,
+ int event_ust_disable_tracepoint(struct ltt_ust_session *usess,
+ 		struct ltt_ust_channel *uchan, char *event_name);
+ 
++int event_ust_disable_all_tracepoints(struct ltt_ust_session *usess,
++		struct ltt_ust_channel *uchan);
 +
-+function add_context_ust_fail()
-+{
-+	add_context_lttng 1 -u "$@"
-+}
-+
-+function add_context_kernel_ok()
-+{
-+	add_context_lttng 0 -k "$@"
-+}
-+
-+function add_context_kernel_fail()
-+{
-+	add_context_lttng 1 -k "$@"
-+}
-+
- function trace_matches ()
- {
- 	local event_name=$1
+ int event_agent_enable(struct ltt_ust_session *usess, struct agent *agt,
+ 		struct lttng_event *event, struct lttng_filter_bytecode *filter,
+ 		char *filter_expression);
 -- 
 2.1.4
