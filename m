@@ -1,21 +1,16 @@
-From: "Hallsmark, Per" <Per.Hallsmark@windriver.com>
-Subject: Re: Sometimes a session destroy
-	hangs	lttng-consumerd	process
-Date: Thu, 10 Sep 2015 08:37:59 +0000
-Message-ID: <B7B4BB465792624BAF51F33077E9906578D0DC2D__37269.576433073$1441874368$gmane$org@ALA-MBA.corp.ad.wrs.com>
-References: <B7B4BB465792624BAF51F33077E9906578D0D874@ALA-MBA.corp.ad.wrs.com>,
- <344179387.2171.1441826955184.JavaMail.zimbra@efficios.com>,
- <B7B4BB465792624BAF51F33077E9906578D0DB9A@ALA-MBA.corp.ad.wrs.com>
+From: Tony Jones <tonyj@suse.com>
+Subject: [RFC lttng-tools] Do not list or allow unsupported perf
+	events
+Date: Thu, 10 Sep 2015 12:21:32 -0700
+Message-ID: <1441912892-30236-1-git-send-email-tonyj__25942.6928045743$1441913924$gmane$org@suse.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.windriver.com ([147.11.1.11])
+Received: from mx2.suse.de ([195.135.220.15])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Per.Hallsmark@windriver.com>) id 1ZZxMv-0003L7-Fw
- for lttng-dev@lists.lttng.org; Thu, 10 Sep 2015 04:38:12 -0400
-In-Reply-To: <B7B4BB465792624BAF51F33077E9906578D0DB9A@ALA-MBA.corp.ad.wrs.com>
-Content-Language: en-US
+ (envelope-from <tonyj@suse.com>) id 1Za7Ph-0006gr-A7
+ for lttng-dev@lists.lttng.org; Thu, 10 Sep 2015 15:21:43 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,302 +19,170 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: David Goulet <dgoulet@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
+Query the perf api to determine the list of events that are actually
+supported by the PMU.  Reject events that are not supported.   On an
+AMD Opteron 6128 the following currently listed events are not supported:
 
+	perf:bus-cycles, perf:L1-dcache-store-misses,
+	perf:L1-icache-stores, perf:L1-icache-store-misses,
+	perf:L1-icache-prefetch-misses, perf:LLC-store-misses,
+	perf:LLC-prefetches, perf:LLC-prefetch-misses, perf:dTLB-stores,
+	perf:dTLB-store-misses, perf:dTLB-prefetches,
+	perf:dTLB-prefetch-misses
 
---
-Per Hallsmark                        per.hallsmark@windriver.com
-Senior Member Technical Staff        Wind River AB
-Mobile: +46733249340                 Office: +46859461127
-Torshamnsgatan 27                    164 40 Kista
-________________________________________
-From: Hallsmark, Per [Per.Hallsmark@windriver.com]
-Sent: Thursday, September 10, 2015 08:47
-To: Mathieu Desnoyers
-Cc: lttng-dev
-Subject: Re: [lttng-dev] Sometimes a session destroy hangs      lttng-consu=
-merd process
+It's not clear to me (hence the RFC) why parts of the perf ABI definitions
+had been replicated into add_context.c rather than just including
+perf_event.h (other than to avoid an autotools dependancy/check on
+perf_event.h which this patch still needs). It is also possible that 
+querying the available events would be better handled over the lttng 
+user->kernel ABI.
 
-> Hello,
->
-> I'm hit by an issue in that when doing session create/destroy multiple ti=
-mes,
-> during destroy the lttng-consumerd cannot get out of a loop where it want=
-s to
-> flush metadata, but the connection is probably already down at this stage.
->
-> I'm attaching a script that excercise lttng. The issue seems hard to get =
-at,
-> took 9 hours of running and the script console log looks like:
->
-> ....
-> Round 4327
-> Session s1 created.
-> Traces will be written in net://128.224.95.199:53000:53001
-> Live timer set to 1000000 usec
-> UST channel metadata enabled for session s1
-> UST channel c1 enabled for session s1
-> All UST events are enabled in channel c1
-> Tracing started for session s1
-> Waiting for data availability..
-> Tracing stopped for session s1
-> Session s1 destroyed
-> Round 4328
-> Session s1 created.
-> Traces will be written in net://128.224.95.199:53000:53001
-> Live timer set to 1000000 usec
-> UST channel metadata enabled for session s1
-> UST channel c1 enabled for session s1
-> All UST events are enabled in channel c1
-> Tracing started for session s1
-> libust[14905/14905]: Error: Timed out waiting for lttng-sessiond (in
-> lttng_ust_init() at lttng-ust-comm.c:1521)
-> < here it hangs >
->
-> If I'm now trying a simple "lttng list" or so in target, that also hangs:
->
-> root@localhost:~# lttng -vvv list
-> DEBUG2 - 10:23:36.911853 [15122/15122]: Session name: (null) (in cmd_list=
-() at
-> commands/list.c:911)
-> DEBUG1 - 10:23:36.913314 [15122/15122]: LSM cmd type : 13 (in send_sessio=
-n_msg()
-> at lttng-ctl.c:131)
-> < here it hangs >
->
-> If I start lttng-sessiond to log things:
->
-> lttng-sessiond -Z -v -b > lttng-sessiond.log 2>&1
->
-> Then I get a huge log where it after some 9 hours shows like:
->
-> DEBUG1 - 21:06:53.632585 [3807/3810]: Processing client command 17 (in
-> process_client_msg() at main.
-> DEBUG3 - 21:06:53.644582 [3807/3813]: Consumer pushing metadata on sock 3=
-3 of
-> len 686 (in consumer_p
-> DEBUG1 - 21:06:53.656539 [3807/3810]: Getting session s1 by name (in
-> process_client_msg() at main.c:
-> DEBUG1 - 21:06:53.656625 [3823/3829]: UST consumer push metadata key 8658=
- of len
-> 686 (in lttng_ustco
-> DEBUG1 - 21:06:53.693577 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:53.693585 [3823/3827]: Metadata poll return from wait with=
- 2
-> fd(s) (in consumer_threa
-> DEBUG1 - 21:06:53.847615 [3823/3827]: Metadata event catched in thread (in
-> consumer_thread_metadata_
-> DEBUG1 - 21:06:53.847642 [3823/3827]: Metadata available on fd 81 (in
-> consumer_thread_metadata_poll(
-> DEBUG1 - 21:06:54.548885 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:54.264889 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:54.474883 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:54.684874 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:54.894872 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:55.104848 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:55.314850 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_r
->
-> After that I only get these "Waiting for metadata to be flushed" lines.
->
-> Following the code, I see that area in:
->
-> common/ust-consumer/ust-consumer.c::lttng_ustconsumer_recv_metadata() whe=
-re
-> there is a loop like:
->        while (consumer_metadata_cache_flushed(channel, offset + len, time=
-r)) {
->                DBG("Waiting for metadata to be flushed");
->
->                health_code_update();
->
->                usleep(DEFAULT_METADATA_AVAILABILITY_WAIT_TIME);
->        }
->
-> So this loop will carry on forever if consumer_metadata_cache_flushed() i=
-sn't
-> returning 0.
-> It seems to me we have some metadata to flush out, but during session des=
-troy
-> the communication channel is already down so the metadata will never be f=
-lushed
-> out.
-> First thought it may be because consumer_metadata_cache_flushed() is not
-> recognizing channel->metadata_stream is down, but perhaps it is the fact =
-we
-> don't scrap metadata after we have disconnected the channel or so.
-> Still trying to follow the code here which is a bit hard for a newcomer.
->
-> This has been seen using lttng 2.5.4 / lttng-ust 2.5.5, looking at the la=
-test
-> master branch (which at time I fetched was commit fb27f84 ) the code
-> around this look similar.
->
-> I wonder if this is something that has been encountered before? At least a
-> comment some lines up in same function suggest it:
->                /*
->                 * Skip metadata flush on write error since the offset and=
- len might
->                 * not have been updated which could create an infinite lo=
-op below when
->                 * waiting for the metadata cache to be flushed.
->                 */
->
-> But as we unlock metadata_cache and lock it again in the
-> consumer_metadata_cache_flushed(), I guess there is a window here when ot=
-her
-> things could get time todo stuff not thought of.
+Thoughts?
+---
+ src/bin/lttng/commands/add_context.c | 92 ++++++++++--------------------------
+ 1 file changed, 25 insertions(+), 67 deletions(-)
 
-I ran into this situation in my stress-tests recently, and proposed
-the following fix, currently merged in lttng-tools master branch:
-
-commit c585821bc78955b3d747fcd733aa1d2b81a3258e
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Wed Aug 19 14:44:59 2015 -0700
-
-    Fix: sessiond vs consumerd push/get metadata deadlock
-
-    We need to unlock the registry while we push metadata to break a
-    circular dependency between the consumerd metadata lock and the sessiond
-    registry lock. Indeed, pushing metadata to the consumerd awaits that it
-    gets pushed all the way to relayd, but doing so requires grabbing the
-    metadata lock. If a concurrent metadata request is being performed by
-    consumerd, this can try to grab the registry lock on the sessiond while
-    holding the metadata lock on the consumer daemon. Those push and pull
-    schemes are performed on two different bidirectionnal communication
-    sockets.
-
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-    Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-
-Can you reproduce this issue on the master branch of tools, ust and modules?
-
-Oh gosh, if this solves our issue I must say the lttng issue resolution is =
-fast! :-)
-I'll see how I can do that. If not able to update to master branch, would t=
-he commit
-above alone do the work you think?
-
-During night I've been running with a crude workaround like:
-
-diff --git a/src/common/ust-consumer/ust-consumer.c b/src/common/ust-consum=
-er/us
-t-consumer.c
-index f891828..9ded651 100644
---- a/src/common/ust-consumer/ust-consumer.c
-+++ b/src/common/ust-consumer/ust-consumer.c
-@@ -1026,12 +1026,19 @@ error:
- /*
-  * Receive the metadata updates from the sessiond.
-  */
-+int workaround_verifier=3D1;
- int lttng_ustconsumer_recv_metadata(int sock, uint64_t key, uint64_t offse=
-t,
-                uint64_t len, struct lttng_consumer_channel *channel,
-                int timer, int wait)
- {
-        int ret, ret_code =3D LTTCOMM_CONSUMERD_SUCCESS;
-        char *metadata_str;
-+       int workaround_counter;
+diff --git a/src/bin/lttng/commands/add_context.c b/src/bin/lttng/commands/add_context.c
+index cf3f3ef..6f52edb 100644
+--- a/src/bin/lttng/commands/add_context.c
++++ b/src/bin/lttng/commands/add_context.c
+@@ -26,6 +26,8 @@
+ #include <sys/types.h>
+ #include <unistd.h>
+ 
++#include <linux/perf_event.h>
 +
-+       if (workaround_verifier) {
-+               DBG("%s: workaround exist in %s\n", __FILE__, __func__);
-+               workaround_verifier=3D0;
-+       }
-
-        DBG("UST consumer push metadata key %" PRIu64 " of len %" PRIu64, k=
-ey, l
-en);
-
-@@ -1072,7 +1079,11 @@ int lttng_ustconsumer_recv_metadata(int sock, uint64=
-_t ke
-y, uint64_t offset,
-        if (!wait) {
-                goto end_free;
-        }
-+       workaround_counter =3D 42;
-        while (consumer_metadata_cache_flushed(channel, offset + len, timer=
-)) {
-+               if (!workaround_counter--) {
-+                       break;
-+               }
-                DBG("Waiting for metadata to be flushed");
-
-                health_code_update();
---
-1.7.9.5
-
-and it seems to help us get out of the hang, although not fixing why we ent=
-ered there.
-I'll back that out and try to get your patch in...
-
-Ok, tested to use only the commit ontop of our base. Unfortunately it don't=
- work at all then:
-
-root@axm5516:~# sh lttng-hammer1.sh
-Round 0
-Session s1 created.
-Traces will be written in net://128.224.95.199:53000:53001
-Live timer set to 1000000 usec
-UST channel metadata enabled for session s1
-UST channel c1 enabled for session s1
-All UST events are enabled in channel c1
-Tracing started for session s1
-Waiting for data availability..............................................=
-...........................................................................=
-...........................................................................=
-...........................................................................=
-...........................................................................=
-...........................................................................=
-.......^C
-root@axm5516:~# =
-
-
-This may be because only using the commit I guess. It went in fine without =
-any manual change, but perhaps dependant anyway on other changes before.
-Next is then to try a build with latest branch as you want, but that will n=
-ot be as easy here.... I'll see what can be done.
-Any opinion on the crude workaround as a intermediate "fix"?
-
-BR,
-Per
-
-
-Thanks,
-
-Mathieu
-
->
-> Best regards,
-> Per
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+ #include <urcu/list.h>
+ 
+ #include <common/mi-lttng.h>
+@@ -77,72 +79,6 @@ enum context_type {
+ 	CONTEXT_PERF_THREAD_COUNTER = 14,
+ };
+ 
+-/*
+- * Taken from the Perf ABI (all enum perf_*)
+- */
+-enum perf_type {
+-	PERF_TYPE_HARDWARE = 0,
+-	PERF_TYPE_SOFTWARE = 1,
+-	PERF_TYPE_HW_CACHE = 3,
+-};
+-
+-enum perf_count_hard {
+-	PERF_COUNT_HW_CPU_CYCLES		= 0,
+-	PERF_COUNT_HW_INSTRUCTIONS		= 1,
+-	PERF_COUNT_HW_CACHE_REFERENCES		= 2,
+-	PERF_COUNT_HW_CACHE_MISSES		= 3,
+-	PERF_COUNT_HW_BRANCH_INSTRUCTIONS	= 4,
+-	PERF_COUNT_HW_BRANCH_MISSES		= 5,
+-	PERF_COUNT_HW_BUS_CYCLES		= 6,
+-	PERF_COUNT_HW_STALLED_CYCLES_FRONTEND	= 7,
+-	PERF_COUNT_HW_STALLED_CYCLES_BACKEND	= 8,
+-};
+-
+-enum perf_count_soft {
+-	PERF_COUNT_SW_CPU_CLOCK        = 0,
+-	PERF_COUNT_SW_TASK_CLOCK       = 1,
+-	PERF_COUNT_SW_PAGE_FAULTS      = 2,
+-	PERF_COUNT_SW_CONTEXT_SWITCHES = 3,
+-	PERF_COUNT_SW_CPU_MIGRATIONS   = 4,
+-	PERF_COUNT_SW_PAGE_FAULTS_MIN  = 5,
+-	PERF_COUNT_SW_PAGE_FAULTS_MAJ  = 6,
+-	PERF_COUNT_SW_ALIGNMENT_FAULTS = 7,
+-	PERF_COUNT_SW_EMULATION_FAULTS = 8,
+-};
+-
+-/*
+- * Generalized hardware cache events:
+- *
+- *       { L1-D, L1-I, LLC, ITLB, DTLB, BPU } x
+- *       { read, write, prefetch } x
+- *       { accesses, misses }
+- */
+-enum perf_hw_cache_id {
+-	PERF_COUNT_HW_CACHE_L1D			= 0,
+-	PERF_COUNT_HW_CACHE_L1I			= 1,
+-	PERF_COUNT_HW_CACHE_LL			= 2,
+-	PERF_COUNT_HW_CACHE_DTLB		= 3,
+-	PERF_COUNT_HW_CACHE_ITLB		= 4,
+-	PERF_COUNT_HW_CACHE_BPU			= 5,
+-
+-	PERF_COUNT_HW_CACHE_MAX,		/* non-ABI */
+-};
+-
+-enum perf_hw_cache_op_id {
+-	PERF_COUNT_HW_CACHE_OP_READ		= 0,
+-	PERF_COUNT_HW_CACHE_OP_WRITE		= 1,
+-	PERF_COUNT_HW_CACHE_OP_PREFETCH		= 2,
+-
+-	PERF_COUNT_HW_CACHE_OP_MAX,		/* non-ABI */
+-};
+-
+-enum perf_hw_cache_op_result_id {
+-	PERF_COUNT_HW_CACHE_RESULT_ACCESS	= 0,
+-	PERF_COUNT_HW_CACHE_RESULT_MISS		= 1,
+-
+-	PERF_COUNT_HW_CACHE_RESULT_MAX,		/* non-ABI */
+-};
+-
+ static struct poptOption long_options[] = {
+ 	/* longName, shortName, argInfo, argPtr, value, descrip, argDesc */
+ 	{"help",           'h', POPT_ARG_NONE, 0, OPT_HELP, 0, 0},
+@@ -461,6 +397,25 @@ struct ctx_type_list {
+ 	.head = CDS_LIST_HEAD_INIT(ctx_type_list.head),
+ };
+ 
++static int is_event_supported(const struct ctx_opts *ctx)
++{
++	int fd;
++	struct perf_event_attr attr = {
++		.type = ctx->u.perf.type,
++		.config = ctx->u.perf.config,
++		.disabled = 1
++	};
++
++	if (ctx->ctx_type == CONTEXT_PERF_CPU_COUNTER ||
++	    ctx->ctx_type == CONTEXT_PERF_THREAD_COUNTER) {
++		if ((fd = syscall(__NR_perf_event_open, &attr,  0, -1, -1, 0)) < 0)
++			return 0;
++
++		close(fd);
++	}
++	return 1;
++}
++
+ /*
+  * Pretty print context type.
+  */
+@@ -473,6 +428,8 @@ static void print_ctx_type(FILE *ofp)
+ 	fprintf(ofp, "%s", indent);
+ 	len = indent_len;
+ 	while (ctx_opts[i].symbol != NULL) {
++		if (!is_event_supported(&ctx_opts[i]))
++			goto next;
+ 		if (!ctx_opts[i].hide_help) {
+ 			if (len > indent_len) {
+ 				if (len + strlen(ctx_opts[i].symbol) + 2
+@@ -486,6 +443,7 @@ static void print_ctx_type(FILE *ofp)
+ 			}
+ 			len += fprintf(ofp, "%s", ctx_opts[i].symbol);
+ 		}
++next:
+ 		i++;
+ 	}
+ }
+@@ -538,7 +496,7 @@ static int find_ctx_type_idx(const char *opt)
+ 	int ret = -1, i = 0;
+ 
+ 	while (ctx_opts[i].symbol != NULL) {
+-		if (strcmp(opt, ctx_opts[i].symbol) == 0) {
++		if (strcmp(opt, ctx_opts[i].symbol) == 0 && is_event_supported(&ctx_opts[i])) {
+ 			ret = i;
+ 			goto end;
+ 		}
+-- 
+2.4.6
