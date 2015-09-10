@@ -1,19 +1,20 @@
 From: "Hallsmark, Per" <Per.Hallsmark@windriver.com>
-Subject: Re: Sometimes a session destroy hangs
-	lttng-consumerd	process
-Date: Thu, 10 Sep 2015 06:47:47 +0000
-Message-ID: <B7B4BB465792624BAF51F33077E9906578D0DB9A__43912.4707867906$1441867752$gmane$org@ALA-MBA.corp.ad.wrs.com>
+Subject: Re: Sometimes a session destroy
+	hangs	lttng-consumerd	process
+Date: Thu, 10 Sep 2015 08:37:59 +0000
+Message-ID: <B7B4BB465792624BAF51F33077E9906578D0DC2D__37269.576433073$1441874368$gmane$org@ALA-MBA.corp.ad.wrs.com>
 References: <B7B4BB465792624BAF51F33077E9906578D0D874@ALA-MBA.corp.ad.wrs.com>,
- <344179387.2171.1441826955184.JavaMail.zimbra@efficios.com>
+ <344179387.2171.1441826955184.JavaMail.zimbra@efficios.com>,
+ <B7B4BB465792624BAF51F33077E9906578D0DB9A@ALA-MBA.corp.ad.wrs.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.windriver.com ([147.11.1.11])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Per.Hallsmark@windriver.com>) id 1ZZveI-0002o9-CO
- for lttng-dev@lists.lttng.org; Thu, 10 Sep 2015 02:48:00 -0400
-In-Reply-To: <344179387.2171.1441826955184.JavaMail.zimbra@efficios.com>
+ (envelope-from <Per.Hallsmark@windriver.com>) id 1ZZxMv-0003L7-Fw
+ for lttng-dev@lists.lttng.org; Thu, 10 Sep 2015 04:38:12 -0400
+In-Reply-To: <B7B4BB465792624BAF51F33077E9906578D0DB9A@ALA-MBA.corp.ad.wrs.com>
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -28,6 +29,19 @@ Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
 
+
+--
+Per Hallsmark                        per.hallsmark@windriver.com
+Senior Member Technical Staff        Wind River AB
+Mobile: +46733249340                 Office: +46859461127
+Torshamnsgatan 27                    164 40 Kista
+________________________________________
+From: Hallsmark, Per [Per.Hallsmark@windriver.com]
+Sent: Thursday, September 10, 2015 08:47
+To: Mathieu Desnoyers
+Cc: lttng-dev
+Subject: Re: [lttng-dev] Sometimes a session destroy hangs      lttng-consu=
+merd process
 
 > Hello,
 >
@@ -219,45 +233,75 @@ index f891828..9ded651 100644
 +int workaround_verifier=3D1;
  int lttng_ustconsumer_recv_metadata(int sock, uint64_t key, uint64_t offse=
 t,
- 		uint64_t len, struct lttng_consumer_channel *channel,
- 		int timer, int wait)
+                uint64_t len, struct lttng_consumer_channel *channel,
+                int timer, int wait)
  {
- 	int ret, ret_code =3D LTTCOMM_CONSUMERD_SUCCESS;
- 	char *metadata_str;
-+	int workaround_counter;
+        int ret, ret_code =3D LTTCOMM_CONSUMERD_SUCCESS;
+        char *metadata_str;
++       int workaround_counter;
 +
-+	if (workaround_verifier) {
-+		DBG("%s: workaround exist in %s\n", __FILE__, __func__);
-+		workaround_verifier=3D0;
-+	}
- =
++       if (workaround_verifier) {
++               DBG("%s: workaround exist in %s\n", __FILE__, __func__);
++               workaround_verifier=3D0;
++       }
 
- 	DBG("UST consumer push metadata key %" PRIu64 " of len %" PRIu64, key, l
+        DBG("UST consumer push metadata key %" PRIu64 " of len %" PRIu64, k=
+ey, l
 en);
- =
 
 @@ -1072,7 +1079,11 @@ int lttng_ustconsumer_recv_metadata(int sock, uint64=
 _t ke
 y, uint64_t offset,
- 	if (!wait) {
- 		goto end_free;
- 	}
-+	workaround_counter =3D 42;
- 	while (consumer_metadata_cache_flushed(channel, offset + len, timer)) {
-+		if (!workaround_counter--) {
-+			break;
-+		}
- 		DBG("Waiting for metadata to be flushed");
- =
+        if (!wait) {
+                goto end_free;
+        }
++       workaround_counter =3D 42;
+        while (consumer_metadata_cache_flushed(channel, offset + len, timer=
+)) {
++               if (!workaround_counter--) {
++                       break;
++               }
+                DBG("Waiting for metadata to be flushed");
 
- 		health_code_update();
--- =
-
+                health_code_update();
+--
 1.7.9.5
 
 and it seems to help us get out of the hang, although not fixing why we ent=
 ered there.
 I'll back that out and try to get your patch in...
+
+Ok, tested to use only the commit ontop of our base. Unfortunately it don't=
+ work at all then:
+
+root@axm5516:~# sh lttng-hammer1.sh
+Round 0
+Session s1 created.
+Traces will be written in net://128.224.95.199:53000:53001
+Live timer set to 1000000 usec
+UST channel metadata enabled for session s1
+UST channel c1 enabled for session s1
+All UST events are enabled in channel c1
+Tracing started for session s1
+Waiting for data availability..............................................=
+...........................................................................=
+...........................................................................=
+...........................................................................=
+...........................................................................=
+...........................................................................=
+.......^C
+root@axm5516:~# =
+
+
+This may be because only using the commit I guess. It went in fine without =
+any manual change, but perhaps dependant anyway on other changes before.
+Next is then to try a build with latest branch as you want, but that will n=
+ot be as easy here.... I'll see what can be done.
+Any opinion on the crude workaround as a intermediate "fix"?
+
+BR,
+Per
+
 
 Thanks,
 
@@ -275,3 +319,7 @@ Mathieu
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
