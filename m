@@ -1,16 +1,16 @@
-From: Tony Jones <tonyj@suse.com>
-Subject: [RFC lttng-tools] Do not list or allow unsupported perf
-	events
-Date: Thu, 10 Sep 2015 12:21:32 -0700
-Message-ID: <1441912892-30236-1-git-send-email-tonyj__25942.6928045743$1441913924$gmane$org@suse.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools] Tests: use functions from utils.sh
+Date: Thu, 10 Sep 2015 16:07:47 -0400
+Message-ID: <1441915667-871-1-git-send-email-jonathan.rajotte-julien__49731.4508226284$1441915761$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx2.suse.de ([195.135.220.15])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <tonyj@suse.com>) id 1Za7Ph-0006gr-A7
- for lttng-dev@lists.lttng.org; Thu, 10 Sep 2015 15:21:43 -0400
+ (envelope-from <jonathan.rajotte-julien@efficios.com>)
+ id 1Za88W-0006wQ-6s
+ for lttng-dev@lists.lttng.org; Thu, 10 Sep 2015 16:08:07 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,169 +20,143 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
-Cc: David Goulet <dgoulet@efficios.com>
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Query the perf api to determine the list of events that are actually
-supported by the PMU.  Reject events that are not supported.   On an
-AMD Opteron 6128 the following currently listed events are not supported:
-
-	perf:bus-cycles, perf:L1-dcache-store-misses,
-	perf:L1-icache-stores, perf:L1-icache-store-misses,
-	perf:L1-icache-prefetch-misses, perf:LLC-store-misses,
-	perf:LLC-prefetches, perf:LLC-prefetch-misses, perf:dTLB-stores,
-	perf:dTLB-store-misses, perf:dTLB-prefetches,
-	perf:dTLB-prefetch-misses
-
-It's not clear to me (hence the RFC) why parts of the perf ABI definitions
-had been replicated into add_context.c rather than just including
-perf_event.h (other than to avoid an autotools dependancy/check on
-perf_event.h which this patch still needs). It is also possible that 
-querying the available events would be better handled over the lttng 
-user->kernel ABI.
-
-Thoughts?
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- src/bin/lttng/commands/add_context.c | 92 ++++++++++--------------------------
- 1 file changed, 25 insertions(+), 67 deletions(-)
+ tests/regression/ust/test_event_basic | 56 +++++++++--------------------------
+ tests/utils/utils.sh                  | 38 ++++++++++++++++++++++++
+ 2 files changed, 52 insertions(+), 42 deletions(-)
 
-diff --git a/src/bin/lttng/commands/add_context.c b/src/bin/lttng/commands/add_context.c
-index cf3f3ef..6f52edb 100644
---- a/src/bin/lttng/commands/add_context.c
-+++ b/src/bin/lttng/commands/add_context.c
-@@ -26,6 +26,8 @@
- #include <sys/types.h>
- #include <unistd.h>
+diff --git a/tests/regression/ust/test_event_basic b/tests/regression/ust/test_event_basic
+index 31931a9..acc79e5 100755
+--- a/tests/regression/ust/test_event_basic
++++ b/tests/regression/ust/test_event_basic
+@@ -23,39 +23,11 @@ LTTNG_BIN="lttng"
+ BIN_NAME="gen-ust-events"
+ SESSION_NAME="valid_filter"
+ EVENT_NAME="tp:tptest"
+-NUM_TESTS=25
+-
+-source $TESTDIR/utils/utils.sh
+-
+-function enable_ust_lttng_event_per_chan()
+-{
+-	sess_name="$1"
+-	event_name="$2"
+-	chan_name="$3"
+-
+-	$TESTDIR/../src/bin/lttng/$LTTNG_BIN enable-event "$event_name" -s $sess_name -c $chan_name -u >/dev/null 2>&1
+-	ok $? "Enable event $event_name for session $sess_name in channel $chan_name"
+-}
  
-+#include <linux/perf_event.h>
-+
- #include <urcu/list.h>
+-function disable_ust_lttng_event_per_chan()
+-{
+-	sess_name="$1"
+-	event_name="$2"
+-	chan_name="$3"
+-
+-	$TESTDIR/../src/bin/lttng/$LTTNG_BIN disable-event "$event_name" -s $sess_name -c $chan_name -u >/dev/null 2>&1
+-	ok $? "Disable event $event_name for session $sess_name in channel $chan_name"
+-}
  
- #include <common/mi-lttng.h>
-@@ -77,72 +79,6 @@ enum context_type {
- 	CONTEXT_PERF_THREAD_COUNTER = 14,
- };
+-function add_ust_lttng_context()
+-{
+-	sess_name="$1"
+-	chan_name="$2"
+-	type="$3"
++NUM_TESTS=25
  
--/*
-- * Taken from the Perf ABI (all enum perf_*)
-- */
--enum perf_type {
--	PERF_TYPE_HARDWARE = 0,
--	PERF_TYPE_SOFTWARE = 1,
--	PERF_TYPE_HW_CACHE = 3,
--};
--
--enum perf_count_hard {
--	PERF_COUNT_HW_CPU_CYCLES		= 0,
--	PERF_COUNT_HW_INSTRUCTIONS		= 1,
--	PERF_COUNT_HW_CACHE_REFERENCES		= 2,
--	PERF_COUNT_HW_CACHE_MISSES		= 3,
--	PERF_COUNT_HW_BRANCH_INSTRUCTIONS	= 4,
--	PERF_COUNT_HW_BRANCH_MISSES		= 5,
--	PERF_COUNT_HW_BUS_CYCLES		= 6,
--	PERF_COUNT_HW_STALLED_CYCLES_FRONTEND	= 7,
--	PERF_COUNT_HW_STALLED_CYCLES_BACKEND	= 8,
--};
--
--enum perf_count_soft {
--	PERF_COUNT_SW_CPU_CLOCK        = 0,
--	PERF_COUNT_SW_TASK_CLOCK       = 1,
--	PERF_COUNT_SW_PAGE_FAULTS      = 2,
--	PERF_COUNT_SW_CONTEXT_SWITCHES = 3,
--	PERF_COUNT_SW_CPU_MIGRATIONS   = 4,
--	PERF_COUNT_SW_PAGE_FAULTS_MIN  = 5,
--	PERF_COUNT_SW_PAGE_FAULTS_MAJ  = 6,
--	PERF_COUNT_SW_ALIGNMENT_FAULTS = 7,
--	PERF_COUNT_SW_EMULATION_FAULTS = 8,
--};
--
--/*
-- * Generalized hardware cache events:
-- *
-- *       { L1-D, L1-I, LLC, ITLB, DTLB, BPU } x
-- *       { read, write, prefetch } x
-- *       { accesses, misses }
-- */
--enum perf_hw_cache_id {
--	PERF_COUNT_HW_CACHE_L1D			= 0,
--	PERF_COUNT_HW_CACHE_L1I			= 1,
--	PERF_COUNT_HW_CACHE_LL			= 2,
--	PERF_COUNT_HW_CACHE_DTLB		= 3,
--	PERF_COUNT_HW_CACHE_ITLB		= 4,
--	PERF_COUNT_HW_CACHE_BPU			= 5,
--
--	PERF_COUNT_HW_CACHE_MAX,		/* non-ABI */
--};
--
--enum perf_hw_cache_op_id {
--	PERF_COUNT_HW_CACHE_OP_READ		= 0,
--	PERF_COUNT_HW_CACHE_OP_WRITE		= 1,
--	PERF_COUNT_HW_CACHE_OP_PREFETCH		= 2,
--
--	PERF_COUNT_HW_CACHE_OP_MAX,		/* non-ABI */
--};
--
--enum perf_hw_cache_op_result_id {
--	PERF_COUNT_HW_CACHE_RESULT_ACCESS	= 0,
--	PERF_COUNT_HW_CACHE_RESULT_MISS		= 1,
--
--	PERF_COUNT_HW_CACHE_RESULT_MAX,		/* non-ABI */
--};
--
- static struct poptOption long_options[] = {
- 	/* longName, shortName, argInfo, argPtr, value, descrip, argDesc */
- 	{"help",           'h', POPT_ARG_NONE, 0, OPT_HELP, 0, 0},
-@@ -461,6 +397,25 @@ struct ctx_type_list {
- 	.head = CDS_LIST_HEAD_INIT(ctx_type_list.head),
- };
+-	$TESTDIR/../src/bin/lttng/$LTTNG_BIN add-context -s $sess_name -c $chan_name -t $type -u >/dev/null 2>&1
+-	ok $? "Add context $type for session $sess_name in channel $chan_name"
+-}
++source $TESTDIR/utils/utils.sh
  
-+static int is_event_supported(const struct ctx_opts *ctx)
+ function test_event_basic()
+ {
+@@ -74,21 +46,21 @@ function test_event_basic()
+ 	enable_ust_lttng_channel_ok $SESSION_NAME $CHAN_NAME
+ 	enable_ust_lttng_channel_ok $SESSION_NAME2 $CHAN_NAME2
+ 
+-	enable_ust_lttng_event_per_chan $SESSION_NAME $EVENT_NAME $CHAN_NAME
+-	enable_ust_lttng_event_per_chan $SESSION_NAME $EVENT_NAME2 $CHAN_NAME
+-	enable_ust_lttng_event_per_chan $SESSION_NAME2 $EVENT_NAME3 $CHAN_NAME2
++	enable_ust_lttng_event_ok $SESSION_NAME $EVENT_NAME $CHAN_NAME
++	enable_ust_lttng_event_ok $SESSION_NAME $EVENT_NAME2 $CHAN_NAME
++	enable_ust_lttng_event_ok $SESSION_NAME2 $EVENT_NAME3 $CHAN_NAME2
+ 
+-	add_ust_lttng_context $SESSION_NAME $CHAN_NAME "vpid"
+-	add_ust_lttng_context $SESSION_NAME $CHAN_NAME "vtid"
+-	add_ust_lttng_context $SESSION_NAME $CHAN_NAME "pthread_id"
+-	add_ust_lttng_context $SESSION_NAME $CHAN_NAME "procname"
+-	add_ust_lttng_context $SESSION_NAME2 $CHAN_NAME2 "procname"
++	add_context_ust_ok $SESSION_NAME $CHAN_NAME "vpid"
++	add_context_ust_ok $SESSION_NAME $CHAN_NAME "vtid"
++	add_context_ust_ok $SESSION_NAME $CHAN_NAME "pthread_id"
++	add_context_ust_ok $SESSION_NAME $CHAN_NAME "procname"
++	add_context_ust_ok $SESSION_NAME2 $CHAN_NAME2 "procname"
+ 
+-	disable_ust_lttng_event_per_chan $SESSION_NAME $EVENT_NAME $CHAN_NAME
+-	disable_ust_lttng_event_per_chan $SESSION_NAME2 $EVENT_NAME3 $CHAN_NAME2
++	disable_ust_lttng_event $SESSION_NAME $EVENT_NAME $CHAN_NAME
++	disable_ust_lttng_event $SESSION_NAME2 $EVENT_NAME3 $CHAN_NAME2
+ 
+-	enable_ust_lttng_event_per_chan $SESSION_NAME $EVENT_NAME $CHAN_NAME
+-	enable_ust_lttng_event_per_chan $SESSION_NAME2 $EVENT_NAME3 $CHAN_NAME2
++	enable_ust_lttng_event_ok $SESSION_NAME $EVENT_NAME $CHAN_NAME
++	enable_ust_lttng_event_ok $SESSION_NAME2 $EVENT_NAME3 $CHAN_NAME2
+ 
+ 	start_lttng_tracing_ok
+ 	stop_lttng_tracing_ok
+diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
+index d466ee6..2a7b9db 100644
+--- a/tests/utils/utils.sh
++++ b/tests/utils/utils.sh
+@@ -952,6 +952,44 @@ function lttng_untrack_fail()
+ 	lttng_untrack 1 "$@"
+ }
+ 
++function add_context_lttng()
 +{
-+	int fd;
-+	struct perf_event_attr attr = {
-+		.type = ctx->u.perf.type,
-+		.config = ctx->u.perf.config,
-+		.disabled = 1
-+	};
++	local expected_to_fail="$1"
++	local domain="$2"
++	local session_name="$3"
++	local channel_name="$4"
++	local type="$5"
 +
-+	if (ctx->ctx_type == CONTEXT_PERF_CPU_COUNTER ||
-+	    ctx->ctx_type == CONTEXT_PERF_THREAD_COUNTER) {
-+		if ((fd = syscall(__NR_perf_event_open, &attr,  0, -1, -1, 0)) < 0)
-+			return 0;
-+
-+		close(fd);
-+	}
-+	return 1;
++	$TESTDIR/../src/bin/lttng/$LTTNG_BIN add-context -s $session_name -c $channel_name -t $type $domain  1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
++	ret=$?
++	if [[ $expected_to_fail -eq "1" ]]; then
++		test $ret -ne "0"
++		ok $? "Add context command failed as expected"
++	else
++		ok $ret "Add context command success as expected"
++	fi
 +}
 +
- /*
-  * Pretty print context type.
-  */
-@@ -473,6 +428,8 @@ static void print_ctx_type(FILE *ofp)
- 	fprintf(ofp, "%s", indent);
- 	len = indent_len;
- 	while (ctx_opts[i].symbol != NULL) {
-+		if (!is_event_supported(&ctx_opts[i]))
-+			goto next;
- 		if (!ctx_opts[i].hide_help) {
- 			if (len > indent_len) {
- 				if (len + strlen(ctx_opts[i].symbol) + 2
-@@ -486,6 +443,7 @@ static void print_ctx_type(FILE *ofp)
- 			}
- 			len += fprintf(ofp, "%s", ctx_opts[i].symbol);
- 		}
-+next:
- 		i++;
- 	}
- }
-@@ -538,7 +496,7 @@ static int find_ctx_type_idx(const char *opt)
- 	int ret = -1, i = 0;
- 
- 	while (ctx_opts[i].symbol != NULL) {
--		if (strcmp(opt, ctx_opts[i].symbol) == 0) {
-+		if (strcmp(opt, ctx_opts[i].symbol) == 0 && is_event_supported(&ctx_opts[i])) {
- 			ret = i;
- 			goto end;
- 		}
++function add_context_ust_ok()
++{
++	add_context_lttng 0 -u "$@"
++}
++
++function add_context_ust_fail()
++{
++	add_context_lttng 1 -u "$@"
++}
++
++function add_context_kernel_ok()
++{
++	add_context_lttng 0 -k "$@"
++}
++
++function add_context_kernel_fail()
++{
++	add_context_lttng 1 -k "$@"
++}
++
+ function trace_matches ()
+ {
+ 	local event_name=$1
 -- 
-2.4.6
+2.1.4
