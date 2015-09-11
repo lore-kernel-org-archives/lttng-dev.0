@@ -1,18 +1,17 @@
-From: Tony Jones <tonyj@suse.de>
-Subject: Re: [RFC lttng-tools] Do not list or allow unsupported
- perf events
-Date: Thu, 10 Sep 2015 17:15:01 -0700
-Message-ID: <55F21D05.1080002__6555.05683175779$1441930940$gmane$org@suse.de>
-References: <1441912892-30236-1-git-send-email-tonyj@suse.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: [PATCH lttng-tools] Tests: use functions from
+	utils.sh
+Date: Fri, 11 Sep 2015 13:03:31 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD8F0D9827__864.902875810181$1441976690$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx2.suse.de ([195.135.220.15])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <tonyj@suse.de>) id 1ZaC5X-0008F0-1K
- for lttng-dev@lists.lttng.org; Thu, 10 Sep 2015 20:21:16 -0400
-In-Reply-To: <1441912892-30236-1-git-send-email-tonyj@suse.com>
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1ZaNzN-0003lv-IF
+ for lttng-dev@lists.lttng.org; Fri, 11 Sep 2015 09:03:38 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,30 +20,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: David Goulet <dgoulet@efficios.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: "jgalar@efficios.com" <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On 09/10/2015 12:21 PM, Tony Jones wrote:
+------------------------------
+Date: Thu, 10 Sep 2015 16:07:47 -0400
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
+@@ -952,6 +952,44 @@ function lttng_untrack_fail()
++function add_context_lttng()
+[...]
++	if [[ $expected_to_fail -eq "1" ]]; then
++		test $ret -ne "0"
++		ok $? "Add context command failed as expected"
++	else
++		ok $ret "Add context command success as expected"
++	fi
+------------------------------
 
-> +static int is_event_supported(const struct ctx_opts *ctx)
-> +{
-> +	int fd;
-> +	struct perf_event_attr attr = {
-> +		.type = ctx->u.perf.type,
-> +		.config = ctx->u.perf.config,
-> +		.disabled = 1
-> +	};
-> +
-> +	if (ctx->ctx_type == CONTEXT_PERF_CPU_COUNTER ||
-> +	    ctx->ctx_type == CONTEXT_PERF_THREAD_COUNTER) {
+   To be consistent, the second message should be:
 
-obviously CONTEXT_PERF_THREAD_COUNTER is UST.  Regardless, there are  some obvious usability issues (below).  I need to look at the code some more.
++		ok $ret "Add context command succeeded as expected"
 
-# lttng add-context -u -t perf:thread:alignment-faults
-UST context perf:thread:alignment-faults added to all channels
+Daniel U. Thibault, M.Sc.=B2
 
-(invalid, better error needed, also sometimes -k -t perf:thread:* succeeds which seems broken)
-# lttng add-context -k -t perf:thread:alignment-faults
-Error: perf:thread:alignment-faults: Add kernel context failed
-Warning: Some command(s) went wrong
+Scientifique de la d=E9fense, CME-PSC, Centre de recherches de Valcartier
+Recherche et d=E9veloppement pour la d=E9fense Canada / Gouvernement du Can=
+ada
+daniel.thibault@drdc-rddc.gc.ca / T=E9l: 418-844-4000x4245 T=E9l=E9c: 418-8=
+44-4538
+daniel.thibault@forces.gc.ca / T=E9l: 418-844-4000x4245 T=E9l=E9c: 418-844-=
+4538
+
+Defence Scientist, MCCS-SPC, Valcartier Research Centre =
+
+Defence Research and Development Canada=A0/ Government of Canada
+daniel.thibault@drdc-rddc.gc.ca / Tel: 418-844-4000x4245 Fax: 418-844-4538
+daniel.thibault@forces.gc.ca / Tel: 418-844-4000x4245 Fax: 418-844-4538
+
+DRDC is an agency of the Department of National Defence / RDDC est une agen=
+ce du minist=E8re de la D=E9fense nationale
