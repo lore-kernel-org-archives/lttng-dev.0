@@ -1,18 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: [RFC lttng-tools] Do not list or allow unsupported
-	perf events
-Date: Sun, 13 Sep 2015 15:53:40 +0000 (UTC)
-Message-ID: <1702325466.5690.1442159620194.JavaMail.zimbra__38541.3441145376$1442159697$gmane$org@efficios.com>
+ perf events
+Date: Sun, 13 Sep 2015 15:54:38 +0000 (UTC)
+Message-ID: <454119546.5715.1442159678674.JavaMail.zimbra__22168.5028555386$1442159736$gmane$org@efficios.com>
 References: <1441912892-30236-1-git-send-email-tonyj@suse.com>
+ <55F21D05.1080002@suse.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Zb9bH-0001wy-Mq
- for lttng-dev@lists.lttng.org; Sun, 13 Sep 2015 11:53:58 -0400
-In-Reply-To: <1441912892-30236-1-git-send-email-tonyj@suse.com>
+ (envelope-from <compudj@efficios.com>) id 1Zb9cC-0001zT-E8
+ for lttng-dev@lists.lttng.org; Sun, 13 Sep 2015 11:54:53 -0400
+In-Reply-To: <55F21D05.1080002@suse.de>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,105 +22,49 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Tony Jones <tonyj@suse.com>
+To: Tony Jones <tonyj@suse.de>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Q0NpbmcgdGhlIG5ldyBsdHRuZy10b29scyBtYWludGFpbmVyLCBKw6lyw6ltaWUuIE1vcmUgYmVs
-b3csCgotLS0tLSBPbiBTZXAgMTAsIDIwMTUsIGF0IDM6MjEgUE0sIFRvbnkgSm9uZXMgdG9ueWpA
-c3VzZS5jb20gd3JvdGU6Cgo+IFF1ZXJ5IHRoZSBwZXJmIGFwaSB0byBkZXRlcm1pbmUgdGhlIGxp
-c3Qgb2YgZXZlbnRzIHRoYXQgYXJlIGFjdHVhbGx5Cj4gc3VwcG9ydGVkIGJ5IHRoZSBQTVUuICBS
-ZWplY3QgZXZlbnRzIHRoYXQgYXJlIG5vdCBzdXBwb3J0ZWQuICAgT24gYW4KPiBBTUQgT3B0ZXJv
-biA2MTI4IHRoZSBmb2xsb3dpbmcgY3VycmVudGx5IGxpc3RlZCBldmVudHMgYXJlIG5vdCBzdXBw
-b3J0ZWQ6Cj4gCj4JcGVyZjpidXMtY3ljbGVzLCBwZXJmOkwxLWRjYWNoZS1zdG9yZS1taXNzZXMs
-Cj4JcGVyZjpMMS1pY2FjaGUtc3RvcmVzLCBwZXJmOkwxLWljYWNoZS1zdG9yZS1taXNzZXMsCj4J
-cGVyZjpMMS1pY2FjaGUtcHJlZmV0Y2gtbWlzc2VzLCBwZXJmOkxMQy1zdG9yZS1taXNzZXMsCj4J
-cGVyZjpMTEMtcHJlZmV0Y2hlcywgcGVyZjpMTEMtcHJlZmV0Y2gtbWlzc2VzLCBwZXJmOmRUTEIt
-c3RvcmVzLAo+CXBlcmY6ZFRMQi1zdG9yZS1taXNzZXMsIHBlcmY6ZFRMQi1wcmVmZXRjaGVzLAo+
-CXBlcmY6ZFRMQi1wcmVmZXRjaC1taXNzZXMKPiAKPiBJdCdzIG5vdCBjbGVhciB0byBtZSAoaGVu
-Y2UgdGhlIFJGQykgd2h5IHBhcnRzIG9mIHRoZSBwZXJmIEFCSSBkZWZpbml0aW9ucwo+IGhhZCBi
-ZWVuIHJlcGxpY2F0ZWQgaW50byBhZGRfY29udGV4dC5jIHJhdGhlciB0aGFuIGp1c3QgaW5jbHVk
-aW5nCj4gcGVyZl9ldmVudC5oIChvdGhlciB0aGFuIHRvIGF2b2lkIGFuIGF1dG90b29scyBkZXBl
-bmRhbmN5L2NoZWNrIG9uCj4gcGVyZl9ldmVudC5oIHdoaWNoIHRoaXMgcGF0Y2ggc3RpbGwgbmVl
-ZHMpLiBJdCBpcyBhbHNvIHBvc3NpYmxlIHRoYXQKPiBxdWVyeWluZyB0aGUgYXZhaWxhYmxlIGV2
-ZW50cyB3b3VsZCBiZSBiZXR0ZXIgaGFuZGxlZCBvdmVyIHRoZSBsdHRuZwo+IHVzZXItPmtlcm5l
-bCBBQkkuCj4gCj4gVGhvdWdodHM/CgpJdCBtaWdodCBtYWtlIHNlbnNlIHRvIGFkZCBhIGRlcGVu
-ZGVuY3kgb24gcGVyZl9ldmVudC5oLgoKSSdtIHdvbmRlcmluZyBpZiB5b3VyIGRldGVjdGlvbiB0
-ZWNobmlxdWUgYmVsb3cgcmVhbGx5IHRyeSB0bwphbGxvY2F0ZSBhIFBNVSBjb3VudGVyIGZvciBh
-IHNob3J0IHBlcmlvZCBvZiB0aW1lID8gVGhpcyBjb3VsZApiZSBhbiBpc3N1ZSBzaW5jZSB0aGVy
-ZSBpcyBhIGxpbWl0ZWQgYW1vdW50IG9mIGNvdW50ZXJzIGF2YWlsYWJsZS4KClRob3VnaHRzID8K
-ClRoYW5rcywKCk1hdGhpZXUKCj4gLS0tCj4gc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9hZGRfY29u
-dGV4dC5jIHwgOTIgKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gMSBmaWxl
-IGNoYW5nZWQsIDI1IGluc2VydGlvbnMoKyksIDY3IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1n
-aXQgYS9zcmMvYmluL2x0dG5nL2NvbW1hbmRzL2FkZF9jb250ZXh0LmMKPiBiL3NyYy9iaW4vbHR0
-bmcvY29tbWFuZHMvYWRkX2NvbnRleHQuYwo+IGluZGV4IGNmM2YzZWYuLjZmNTJlZGIgMTAwNjQ0
-Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9hZGRfY29udGV4dC5jCj4gKysrIGIvc3Jj
-L2Jpbi9sdHRuZy9jb21tYW5kcy9hZGRfY29udGV4dC5jCj4gQEAgLTI2LDYgKzI2LDggQEAKPiAj
-aW5jbHVkZSA8c3lzL3R5cGVzLmg+Cj4gI2luY2x1ZGUgPHVuaXN0ZC5oPgo+IAo+ICsjaW5jbHVk
-ZSA8bGludXgvcGVyZl9ldmVudC5oPgo+ICsKPiAjaW5jbHVkZSA8dXJjdS9saXN0Lmg+Cj4gCj4g
-I2luY2x1ZGUgPGNvbW1vbi9taS1sdHRuZy5oPgo+IEBAIC03Nyw3MiArNzksNiBAQCBlbnVtIGNv
-bnRleHRfdHlwZSB7Cj4gCUNPTlRFWFRfUEVSRl9USFJFQURfQ09VTlRFUiA9IDE0LAo+IH07Cj4g
-Cj4gLS8qCj4gLSAqIFRha2VuIGZyb20gdGhlIFBlcmYgQUJJIChhbGwgZW51bSBwZXJmXyopCj4g
-LSAqLwo+IC1lbnVtIHBlcmZfdHlwZSB7Cj4gLQlQRVJGX1RZUEVfSEFSRFdBUkUgPSAwLAo+IC0J
-UEVSRl9UWVBFX1NPRlRXQVJFID0gMSwKPiAtCVBFUkZfVFlQRV9IV19DQUNIRSA9IDMsCj4gLX07
-Cj4gLQo+IC1lbnVtIHBlcmZfY291bnRfaGFyZCB7Cj4gLQlQRVJGX0NPVU5UX0hXX0NQVV9DWUNM
-RVMJCT0gMCwKPiAtCVBFUkZfQ09VTlRfSFdfSU5TVFJVQ1RJT05TCQk9IDEsCj4gLQlQRVJGX0NP
-VU5UX0hXX0NBQ0hFX1JFRkVSRU5DRVMJCT0gMiwKPiAtCVBFUkZfQ09VTlRfSFdfQ0FDSEVfTUlT
-U0VTCQk9IDMsCj4gLQlQRVJGX0NPVU5UX0hXX0JSQU5DSF9JTlNUUlVDVElPTlMJPSA0LAo+IC0J
-UEVSRl9DT1VOVF9IV19CUkFOQ0hfTUlTU0VTCQk9IDUsCj4gLQlQRVJGX0NPVU5UX0hXX0JVU19D
-WUNMRVMJCT0gNiwKPiAtCVBFUkZfQ09VTlRfSFdfU1RBTExFRF9DWUNMRVNfRlJPTlRFTkQJPSA3
-LAo+IC0JUEVSRl9DT1VOVF9IV19TVEFMTEVEX0NZQ0xFU19CQUNLRU5ECT0gOCwKPiAtfTsKPiAt
-Cj4gLWVudW0gcGVyZl9jb3VudF9zb2Z0IHsKPiAtCVBFUkZfQ09VTlRfU1dfQ1BVX0NMT0NLICAg
-ICAgICA9IDAsCj4gLQlQRVJGX0NPVU5UX1NXX1RBU0tfQ0xPQ0sgICAgICAgPSAxLAo+IC0JUEVS
-Rl9DT1VOVF9TV19QQUdFX0ZBVUxUUyAgICAgID0gMiwKPiAtCVBFUkZfQ09VTlRfU1dfQ09OVEVY
-VF9TV0lUQ0hFUyA9IDMsCj4gLQlQRVJGX0NPVU5UX1NXX0NQVV9NSUdSQVRJT05TICAgPSA0LAo+
-IC0JUEVSRl9DT1VOVF9TV19QQUdFX0ZBVUxUU19NSU4gID0gNSwKPiAtCVBFUkZfQ09VTlRfU1df
-UEFHRV9GQVVMVFNfTUFKICA9IDYsCj4gLQlQRVJGX0NPVU5UX1NXX0FMSUdOTUVOVF9GQVVMVFMg
-PSA3LAo+IC0JUEVSRl9DT1VOVF9TV19FTVVMQVRJT05fRkFVTFRTID0gOCwKPiAtfTsKPiAtCj4g
-LS8qCj4gLSAqIEdlbmVyYWxpemVkIGhhcmR3YXJlIGNhY2hlIGV2ZW50czoKPiAtICoKPiAtICog
-ICAgICAgeyBMMS1ELCBMMS1JLCBMTEMsIElUTEIsIERUTEIsIEJQVSB9IHgKPiAtICogICAgICAg
-eyByZWFkLCB3cml0ZSwgcHJlZmV0Y2ggfSB4Cj4gLSAqICAgICAgIHsgYWNjZXNzZXMsIG1pc3Nl
-cyB9Cj4gLSAqLwo+IC1lbnVtIHBlcmZfaHdfY2FjaGVfaWQgewo+IC0JUEVSRl9DT1VOVF9IV19D
-QUNIRV9MMUQJCQk9IDAsCj4gLQlQRVJGX0NPVU5UX0hXX0NBQ0hFX0wxSQkJCT0gMSwKPiAtCVBF
-UkZfQ09VTlRfSFdfQ0FDSEVfTEwJCQk9IDIsCj4gLQlQRVJGX0NPVU5UX0hXX0NBQ0hFX0RUTEIJ
-CT0gMywKPiAtCVBFUkZfQ09VTlRfSFdfQ0FDSEVfSVRMQgkJPSA0LAo+IC0JUEVSRl9DT1VOVF9I
-V19DQUNIRV9CUFUJCQk9IDUsCj4gLQo+IC0JUEVSRl9DT1VOVF9IV19DQUNIRV9NQVgsCQkvKiBu
-b24tQUJJICovCj4gLX07Cj4gLQo+IC1lbnVtIHBlcmZfaHdfY2FjaGVfb3BfaWQgewo+IC0JUEVS
-Rl9DT1VOVF9IV19DQUNIRV9PUF9SRUFECQk9IDAsCj4gLQlQRVJGX0NPVU5UX0hXX0NBQ0hFX09Q
-X1dSSVRFCQk9IDEsCj4gLQlQRVJGX0NPVU5UX0hXX0NBQ0hFX09QX1BSRUZFVENICQk9IDIsCj4g
-LQo+IC0JUEVSRl9DT1VOVF9IV19DQUNIRV9PUF9NQVgsCQkvKiBub24tQUJJICovCj4gLX07Cj4g
-LQo+IC1lbnVtIHBlcmZfaHdfY2FjaGVfb3BfcmVzdWx0X2lkIHsKPiAtCVBFUkZfQ09VTlRfSFdf
-Q0FDSEVfUkVTVUxUX0FDQ0VTUwk9IDAsCj4gLQlQRVJGX0NPVU5UX0hXX0NBQ0hFX1JFU1VMVF9N
-SVNTCQk9IDEsCj4gLQo+IC0JUEVSRl9DT1VOVF9IV19DQUNIRV9SRVNVTFRfTUFYLAkJLyogbm9u
-LUFCSSAqLwo+IC19Owo+IC0KPiBzdGF0aWMgc3RydWN0IHBvcHRPcHRpb24gbG9uZ19vcHRpb25z
-W10gPSB7Cj4gCS8qIGxvbmdOYW1lLCBzaG9ydE5hbWUsIGFyZ0luZm8sIGFyZ1B0ciwgdmFsdWUs
-IGRlc2NyaXAsIGFyZ0Rlc2MgKi8KPiAJeyJoZWxwIiwgICAgICAgICAgICdoJywgUE9QVF9BUkdf
-Tk9ORSwgMCwgT1BUX0hFTFAsIDAsIDB9LAo+IEBAIC00NjEsNiArMzk3LDI1IEBAIHN0cnVjdCBj
-dHhfdHlwZV9saXN0IHsKPiAJLmhlYWQgPSBDRFNfTElTVF9IRUFEX0lOSVQoY3R4X3R5cGVfbGlz
-dC5oZWFkKSwKPiB9Owo+IAo+ICtzdGF0aWMgaW50IGlzX2V2ZW50X3N1cHBvcnRlZChjb25zdCBz
-dHJ1Y3QgY3R4X29wdHMgKmN0eCkKPiArewo+ICsJaW50IGZkOwo+ICsJc3RydWN0IHBlcmZfZXZl
-bnRfYXR0ciBhdHRyID0gewo+ICsJCS50eXBlID0gY3R4LT51LnBlcmYudHlwZSwKPiArCQkuY29u
-ZmlnID0gY3R4LT51LnBlcmYuY29uZmlnLAo+ICsJCS5kaXNhYmxlZCA9IDEKPiArCX07Cj4gKwo+
-ICsJaWYgKGN0eC0+Y3R4X3R5cGUgPT0gQ09OVEVYVF9QRVJGX0NQVV9DT1VOVEVSIHx8Cj4gKwkg
-ICAgY3R4LT5jdHhfdHlwZSA9PSBDT05URVhUX1BFUkZfVEhSRUFEX0NPVU5URVIpIHsKPiArCQlp
-ZiAoKGZkID0gc3lzY2FsbChfX05SX3BlcmZfZXZlbnRfb3BlbiwgJmF0dHIsICAwLCAtMSwgLTEs
-IDApKSA8IDApCj4gKwkJCXJldHVybiAwOwo+ICsKPiArCQljbG9zZShmZCk7Cj4gKwl9Cj4gKwly
-ZXR1cm4gMTsKPiArfQo+ICsKPiAvKgo+ICAqIFByZXR0eSBwcmludCBjb250ZXh0IHR5cGUuCj4g
-ICovCj4gQEAgLTQ3Myw2ICs0MjgsOCBAQCBzdGF0aWMgdm9pZCBwcmludF9jdHhfdHlwZShGSUxF
-ICpvZnApCj4gCWZwcmludGYob2ZwLCAiJXMiLCBpbmRlbnQpOwo+IAlsZW4gPSBpbmRlbnRfbGVu
-Owo+IAl3aGlsZSAoY3R4X29wdHNbaV0uc3ltYm9sICE9IE5VTEwpIHsKPiArCQlpZiAoIWlzX2V2
-ZW50X3N1cHBvcnRlZCgmY3R4X29wdHNbaV0pKQo+ICsJCQlnb3RvIG5leHQ7Cj4gCQlpZiAoIWN0
-eF9vcHRzW2ldLmhpZGVfaGVscCkgewo+IAkJCWlmIChsZW4gPiBpbmRlbnRfbGVuKSB7Cj4gCQkJ
-CWlmIChsZW4gKyBzdHJsZW4oY3R4X29wdHNbaV0uc3ltYm9sKSArIDIKPiBAQCAtNDg2LDYgKzQ0
-Myw3IEBAIHN0YXRpYyB2b2lkIHByaW50X2N0eF90eXBlKEZJTEUgKm9mcCkKPiAJCQl9Cj4gCQkJ
-bGVuICs9IGZwcmludGYob2ZwLCAiJXMiLCBjdHhfb3B0c1tpXS5zeW1ib2wpOwo+IAkJfQo+ICtu
-ZXh0Ogo+IAkJaSsrOwo+IAl9Cj4gfQo+IEBAIC01MzgsNyArNDk2LDcgQEAgc3RhdGljIGludCBm
-aW5kX2N0eF90eXBlX2lkeChjb25zdCBjaGFyICpvcHQpCj4gCWludCByZXQgPSAtMSwgaSA9IDA7
-Cj4gCj4gCXdoaWxlIChjdHhfb3B0c1tpXS5zeW1ib2wgIT0gTlVMTCkgewo+IC0JCWlmIChzdHJj
-bXAob3B0LCBjdHhfb3B0c1tpXS5zeW1ib2wpID09IDApIHsKPiArCQlpZiAoc3RyY21wKG9wdCwg
-Y3R4X29wdHNbaV0uc3ltYm9sKSA9PSAwICYmIGlzX2V2ZW50X3N1cHBvcnRlZCgmY3R4X29wdHNb
-aV0pKQo+IHsKPiAJCQlyZXQgPSBpOwo+IAkJCWdvdG8gZW5kOwo+IAkJfQo+IC0tCj4gMi40LjYK
-Ci0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3Mu
-Y29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+CCing Jeremie.
+
+----- On Sep 10, 2015, at 8:15 PM, Tony Jones tonyj@suse.de wrote:
+
+> On 09/10/2015 12:21 PM, Tony Jones wrote:
+> 
+>> +static int is_event_supported(const struct ctx_opts *ctx)
+>> +{
+>> +	int fd;
+>> +	struct perf_event_attr attr = {
+>> +		.type = ctx->u.perf.type,
+>> +		.config = ctx->u.perf.config,
+>> +		.disabled = 1
+>> +	};
+>> +
+>> +	if (ctx->ctx_type == CONTEXT_PERF_CPU_COUNTER ||
+>> +	    ctx->ctx_type == CONTEXT_PERF_THREAD_COUNTER) {
+> 
+> obviously CONTEXT_PERF_THREAD_COUNTER is UST.  Regardless, there are  some
+> obvious usability issues (below).  I need to look at the code some more.
+
+OK, keep us posted. It would be nice if we can list more specifically
+which counters are supported on the machine.
+
+Thanks,
+
+Mathieu
+
+> 
+> # lttng add-context -u -t perf:thread:alignment-faults
+> UST context perf:thread:alignment-faults added to all channels
+> 
+> (invalid, better error needed, also sometimes -k -t perf:thread:* succeeds which
+> seems broken)
+> # lttng add-context -k -t perf:thread:alignment-faults
+> Error: perf:thread:alignment-faults: Add kernel context failed
+> Warning: Some command(s) went wrong
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
