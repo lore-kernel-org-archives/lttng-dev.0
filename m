@@ -1,19 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Tony Jones <tonyj@suse.com>
 Subject: Re: [RFC lttng-tools] Do not list or allow unsupported
- perf events
-Date: Sun, 13 Sep 2015 15:54:38 +0000 (UTC)
-Message-ID: <454119546.5715.1442159678674.JavaMail.zimbra__22168.5028555386$1442159736$gmane$org@efficios.com>
+	perf events
+Date: Sun, 13 Sep 2015 09:03:28 -0700
+Message-ID: <55F59E50.4020307__41211.6419211545$1442160632$gmane$org@suse.com>
 References: <1441912892-30236-1-git-send-email-tonyj@suse.com>
- <55F21D05.1080002@suse.de>
+ <1702325466.5690.1442159620194.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mx2.suse.de ([195.135.220.15])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Zb9cC-0001zT-E8
- for lttng-dev@lists.lttng.org; Sun, 13 Sep 2015 11:54:53 -0400
-In-Reply-To: <55F21D05.1080002@suse.de>
+ (envelope-from <tonyj@suse.com>) id 1Zb9qZ-00027V-Mb
+ for lttng-dev@lists.lttng.org; Sun, 13 Sep 2015 12:09:46 -0400
+In-Reply-To: <1702325466.5690.1442159620194.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,49 +22,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Tony Jones <tonyj@suse.de>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-CCing Jeremie.
-
------ On Sep 10, 2015, at 8:15 PM, Tony Jones tonyj@suse.de wrote:
-
-> On 09/10/2015 12:21 PM, Tony Jones wrote:
-> 
->> +static int is_event_supported(const struct ctx_opts *ctx)
->> +{
->> +	int fd;
->> +	struct perf_event_attr attr = {
->> +		.type = ctx->u.perf.type,
->> +		.config = ctx->u.perf.config,
->> +		.disabled = 1
->> +	};
->> +
->> +	if (ctx->ctx_type == CONTEXT_PERF_CPU_COUNTER ||
->> +	    ctx->ctx_type == CONTEXT_PERF_THREAD_COUNTER) {
-> 
-> obviously CONTEXT_PERF_THREAD_COUNTER is UST.  Regardless, there are  some
-> obvious usability issues (below).  I need to look at the code some more.
-
-OK, keep us posted. It would be nice if we can list more specifically
-which counters are supported on the machine.
-
-Thanks,
-
-Mathieu
-
-> 
-> # lttng add-context -u -t perf:thread:alignment-faults
-> UST context perf:thread:alignment-faults added to all channels
-> 
-> (invalid, better error needed, also sometimes -k -t perf:thread:* succeeds which
-> seems broken)
-> # lttng add-context -k -t perf:thread:alignment-faults
-> Error: perf:thread:alignment-faults: Add kernel context failed
-> Warning: Some command(s) went wrong
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+T24gMDkvMTMvMjAxNSAwODo1MyBBTSwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4gQ0Npbmcg
+dGhlIG5ldyBsdHRuZy10b29scyBtYWludGFpbmVyLCBKw6lyw6ltaWUuIE1vcmUgYmVsb3csCj4g
+Cj4gLS0tLS0gT24gU2VwIDEwLCAyMDE1LCBhdCAzOjIxIFBNLCBUb255IEpvbmVzIHRvbnlqQHN1
+c2UuY29tIHdyb3RlOgo+IAo+PiBRdWVyeSB0aGUgcGVyZiBhcGkgdG8gZGV0ZXJtaW5lIHRoZSBs
+aXN0IG9mIGV2ZW50cyB0aGF0IGFyZSBhY3R1YWxseQo+PiBzdXBwb3J0ZWQgYnkgdGhlIFBNVS4g
+IFJlamVjdCBldmVudHMgdGhhdCBhcmUgbm90IHN1cHBvcnRlZC4gICBPbiBhbgo+PiBBTUQgT3B0
+ZXJvbiA2MTI4IHRoZSBmb2xsb3dpbmcgY3VycmVudGx5IGxpc3RlZCBldmVudHMgYXJlIG5vdCBz
+dXBwb3J0ZWQ6Cj4+Cj4+IAlwZXJmOmJ1cy1jeWNsZXMsIHBlcmY6TDEtZGNhY2hlLXN0b3JlLW1p
+c3NlcywKPj4gCXBlcmY6TDEtaWNhY2hlLXN0b3JlcywgcGVyZjpMMS1pY2FjaGUtc3RvcmUtbWlz
+c2VzLAo+PiAJcGVyZjpMMS1pY2FjaGUtcHJlZmV0Y2gtbWlzc2VzLCBwZXJmOkxMQy1zdG9yZS1t
+aXNzZXMsCj4+IAlwZXJmOkxMQy1wcmVmZXRjaGVzLCBwZXJmOkxMQy1wcmVmZXRjaC1taXNzZXMs
+IHBlcmY6ZFRMQi1zdG9yZXMsCj4+IAlwZXJmOmRUTEItc3RvcmUtbWlzc2VzLCBwZXJmOmRUTEIt
+cHJlZmV0Y2hlcywKPj4gCXBlcmY6ZFRMQi1wcmVmZXRjaC1taXNzZXMKPj4KPj4gSXQncyBub3Qg
+Y2xlYXIgdG8gbWUgKGhlbmNlIHRoZSBSRkMpIHdoeSBwYXJ0cyBvZiB0aGUgcGVyZiBBQkkgZGVm
+aW5pdGlvbnMKPj4gaGFkIGJlZW4gcmVwbGljYXRlZCBpbnRvIGFkZF9jb250ZXh0LmMgcmF0aGVy
+IHRoYW4ganVzdCBpbmNsdWRpbmcKPj4gcGVyZl9ldmVudC5oIChvdGhlciB0aGFuIHRvIGF2b2lk
+IGFuIGF1dG90b29scyBkZXBlbmRhbmN5L2NoZWNrIG9uCj4+IHBlcmZfZXZlbnQuaCB3aGljaCB0
+aGlzIHBhdGNoIHN0aWxsIG5lZWRzKS4gSXQgaXMgYWxzbyBwb3NzaWJsZSB0aGF0Cj4+IHF1ZXJ5
+aW5nIHRoZSBhdmFpbGFibGUgZXZlbnRzIHdvdWxkIGJlIGJldHRlciBoYW5kbGVkIG92ZXIgdGhl
+IGx0dG5nCj4+IHVzZXItPmtlcm5lbCBBQkkuCj4+Cj4+IFRob3VnaHRzPwo+IAo+IEl0IG1pZ2h0
+IG1ha2Ugc2Vuc2UgdG8gYWRkIGEgZGVwZW5kZW5jeSBvbiBwZXJmX2V2ZW50LmguCj4gCj4gSSdt
+IHdvbmRlcmluZyBpZiB5b3VyIGRldGVjdGlvbiB0ZWNobmlxdWUgYmVsb3cgcmVhbGx5IHRyeSB0
+bwo+IGFsbG9jYXRlIGEgUE1VIGNvdW50ZXIgZm9yIGEgc2hvcnQgcGVyaW9kIG9mIHRpbWUgPyBU
+aGlzIGNvdWxkCj4gYmUgYW4gaXNzdWUgc2luY2UgdGhlcmUgaXMgYSBsaW1pdGVkIGFtb3VudCBv
+ZiBjb3VudGVycyBhdmFpbGFibGUuCgpJdCdzIHByZXR0eSBtdWNoIHRoZSB3YXkgJ3BlcmYgbGlz
+dCcgd29ya3MgYnV0IEkgaGVhciB3aGF0IHlvdSBhcmUgc2F5aW5nLiBTaW5jZSBpdCdzIHBvc3Np
+YmxlCnRvIGluY3JlbWVudGFsbHkgYWRkIGV2ZW50cyBJIGV4cGVjdCB0aGUgZGV0ZWN0aW9uIGNv
+dWxkIGZhaWwgdG8gYWxsb2NhdGUgYW55IHRodXMgcmVwb3J0aW5nCm5vIGF2YWlsYWJsZSBldmVu
+dHMuICBJJ2Qgbm90IGNvbnNpZGVyZWQgdGhpcywgSSdsbCBoYXZlIHRvIHRlc3QgdGhlIGh5cG90
+aGVzaXMuIAoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8v
+bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
