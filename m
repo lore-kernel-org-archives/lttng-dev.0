@@ -1,19 +1,22 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC PATCH urcu] Fix: dynamic fallback to compat
- futex on sys_futex ENOSYS
-Date: Sun, 13 Sep 2015 16:45:55 +0000 (UTC)
-Message-ID: <1988019200.5748.1442162755472.JavaMail.zimbra__15133.5644921803$1442162819$gmane$org@efficios.com>
-References: <1441982918-15047-1-git-send-email-mathieu.desnoyers@efficios.com>
- <20150913162906.GN4029@linux.vnet.ibm.com>
+From: "Hallsmark, Per" <Per.Hallsmark@windriver.com>
+Subject: Re: Sometimes a session
+	destroy	hangs	lttng-consumerd	process
+Date: Mon, 14 Sep 2015 11:12:40 +0000
+Message-ID: <B7B4BB465792624BAF51F33077E9906578D0E558__40294.58248192$1442229234$gmane$org@ALA-MBA.corp.ad.wrs.com>
+References: <B7B4BB465792624BAF51F33077E9906578D0D874@ALA-MBA.corp.ad.wrs.com>,
+ <344179387.2171.1441826955184.JavaMail.zimbra@efficios.com>,
+ <B7B4BB465792624BAF51F33077E9906578D0DB9A@ALA-MBA.corp.ad.wrs.com>,
+ <B7B4BB465792624BAF51F33077E9906578D0DC2D@ALA-MBA.corp.ad.wrs.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail.windriver.com ([147.11.1.11])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZbAPq-0002Kq-Hg
- for lttng-dev@lists.lttng.org; Sun, 13 Sep 2015 12:46:13 -0400
-In-Reply-To: <20150913162906.GN4029@linux.vnet.ibm.com>
+ (envelope-from <Per.Hallsmark@windriver.com>) id 1ZbRgp-0007mu-HY
+ for lttng-dev@lists.lttng.org; Mon, 14 Sep 2015 07:12:54 -0400
+In-Reply-To: <B7B4BB465792624BAF51F33077E9906578D0DC2D@ALA-MBA.corp.ad.wrs.com>
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,150 +25,385 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On Sep 13, 2015, at 12:29 PM, Paul E. McKenney paulmck@linux.vnet.ibm.com wrote:
+> Hello,
+>
+> I'm hit by an issue in that when doing session create/destroy multiple ti=
+mes,
+> during destroy the lttng-consumerd cannot get out of a loop where it want=
+s to
+> flush metadata, but the connection is probably already down at this stage.
+>
+> I'm attaching a script that excercise lttng. The issue seems hard to get =
+at,
+> took 9 hours of running and the script console log looks like:
+>
+> ....
+> Round 4327
+> Session s1 created.
+> Traces will be written in net://128.224.95.199:53000:53001
+> Live timer set to 1000000 usec
+> UST channel metadata enabled for session s1
+> UST channel c1 enabled for session s1
+> All UST events are enabled in channel c1
+> Tracing started for session s1
+> Waiting for data availability..
+> Tracing stopped for session s1
+> Session s1 destroyed
+> Round 4328
+> Session s1 created.
+> Traces will be written in net://128.224.95.199:53000:53001
+> Live timer set to 1000000 usec
+> UST channel metadata enabled for session s1
+> UST channel c1 enabled for session s1
+> All UST events are enabled in channel c1
+> Tracing started for session s1
+> libust[14905/14905]: Error: Timed out waiting for lttng-sessiond (in
+> lttng_ust_init() at lttng-ust-comm.c:1521)
+> < here it hangs >
+>
+> If I'm now trying a simple "lttng list" or so in target, that also hangs:
+>
+> root@localhost:~# lttng -vvv list
+> DEBUG2 - 10:23:36.911853 [15122/15122]: Session name: (null) (in cmd_list=
+() at
+> commands/list.c:911)
+> DEBUG1 - 10:23:36.913314 [15122/15122]: LSM cmd type : 13 (in send_sessio=
+n_msg()
+> at lttng-ctl.c:131)
+> < here it hangs >
+>
+> If I start lttng-sessiond to log things:
+>
+> lttng-sessiond -Z -v -b > lttng-sessiond.log 2>&1
+>
+> Then I get a huge log where it after some 9 hours shows like:
+>
+> DEBUG1 - 21:06:53.632585 [3807/3810]: Processing client command 17 (in
+> process_client_msg() at main.
+> DEBUG3 - 21:06:53.644582 [3807/3813]: Consumer pushing metadata on sock 3=
+3 of
+> len 686 (in consumer_p
+> DEBUG1 - 21:06:53.656539 [3807/3810]: Getting session s1 by name (in
+> process_client_msg() at main.c:
+> DEBUG1 - 21:06:53.656625 [3823/3829]: UST consumer push metadata key 8658=
+ of len
+> 686 (in lttng_ustco
+> DEBUG1 - 21:06:53.693577 [3823/3829]: Waiting for metadata to be flushed =
+(in
+> lttng_ustconsumer_recv_
+> DEBUG1 - 21:06:53.693585 [3823/3827]: Metadata poll return from wait with=
+ 2
+> fd(s) (in consumer_threa
+> DEBUG1 - 21:06:53.847615 [3823/3827]: Metadata event catched in thread (in
+> consumer_thread_metadata_
+> DEBUG1 - 21:06:53.847642 [3823/3827]: Metadata available on fd 81 (in
+> consumer_thread_metadata_poll(
+> DEBUG1 - 21:06:54.548885 [3823/3829]: Waiting for metadata to be flushed =
+(in
+> lttng_ustconsumer_recv_
+> DEBUG1 - 21:06:54.264889 [3823/3829]: Waiting for metadata to be flushed =
+(in
+> lttng_ustconsumer_recv_
+> DEBUG1 - 21:06:54.474883 [3823/3829]: Waiting for metadata to be flushed =
+(in
+> lttng_ustconsumer_recv_
+> DEBUG1 - 21:06:54.684874 [3823/3829]: Waiting for metadata to be flushed =
+(in
+> lttng_ustconsumer_recv_
+> DEBUG1 - 21:06:54.894872 [3823/3829]: Waiting for metadata to be flushed =
+(in
+> lttng_ustconsumer_recv_
+> DEBUG1 - 21:06:55.104848 [3823/3829]: Waiting for metadata to be flushed =
+(in
+> lttng_ustconsumer_recv_
+> DEBUG1 - 21:06:55.314850 [3823/3829]: Waiting for metadata to be flushed =
+(in
+> lttng_ustconsumer_r
+>
+> After that I only get these "Waiting for metadata to be flushed" lines.
+>
+> Following the code, I see that area in:
+>
+> common/ust-consumer/ust-consumer.c::lttng_ustconsumer_recv_metadata() whe=
+re
+> there is a loop like:
+>        while (consumer_metadata_cache_flushed(channel, offset + len, time=
+r)) {
+>                DBG("Waiting for metadata to be flushed");
+>
+>                health_code_update();
+>
+>                usleep(DEFAULT_METADATA_AVAILABILITY_WAIT_TIME);
+>        }
+>
+> So this loop will carry on forever if consumer_metadata_cache_flushed() i=
+sn't
+> returning 0.
+> It seems to me we have some metadata to flush out, but during session des=
+troy
+> the communication channel is already down so the metadata will never be f=
+lushed
+> out.
+> First thought it may be because consumer_metadata_cache_flushed() is not
+> recognizing channel->metadata_stream is down, but perhaps it is the fact =
+we
+> don't scrap metadata after we have disconnected the channel or so.
+> Still trying to follow the code here which is a bit hard for a newcomer.
+>
+> This has been seen using lttng 2.5.4 / lttng-ust 2.5.5, looking at the la=
+test
+> master branch (which at time I fetched was commit fb27f84 ) the code
+> around this look similar.
+>
+> I wonder if this is something that has been encountered before? At least a
+> comment some lines up in same function suggest it:
+>                /*
+>                 * Skip metadata flush on write error since the offset and=
+ len might
+>                 * not have been updated which could create an infinite lo=
+op below when
+>                 * waiting for the metadata cache to be flushed.
+>                 */
+>
+> But as we unlock metadata_cache and lock it again in the
+> consumer_metadata_cache_flushed(), I guess there is a window here when ot=
+her
+> things could get time todo stuff not thought of.
 
-> On Fri, Sep 11, 2015 at 10:48:38AM -0400, Mathieu Desnoyers wrote:
->> Some MIPS processors (e.g. Cavium Octeon II) dynamically check if the
->> CPU supports ll/sc within sys_futex, and return a ENOSYS errno if they
->> don't, even though the architecture implements sys_futex.
->> 
->> Handle this situation by always building the sys_futex compatibility
->> layer, and fall-back on it if sys_futex return a ENOSYS errno. This is
->> a tiny compat layer which adds very little space overhead.
->> 
->> This adds an unlikely branch on return from sys_futex, which should
->> not be an issue performance-wise (we've already taken a system call).
->> 
->> Since this is a fall-back mode, don't try to be clever, and don't cache
->> the result, so that the common cases (architectures with a properly
->> working sys_futex) don't get two conditional branches, just one.
-> 
-> Looks like a reasonable approach to me.
-> 
-> Acked-by: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+I ran into this situation in my stress-tests recently, and proposed
+the following fix, currently merged in lttng-tools master branch:
 
-Merged into master, stable-0.8 and stable-0.7,
+commit c585821bc78955b3d747fcd733aa1d2b81a3258e
+Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Date:   Wed Aug 19 14:44:59 2015 -0700
 
-Thanks!
+    Fix: sessiond vs consumerd push/get metadata deadlock
+
+    We need to unlock the registry while we push metadata to break a
+    circular dependency between the consumerd metadata lock and the sessiond
+    registry lock. Indeed, pushing metadata to the consumerd awaits that it
+    gets pushed all the way to relayd, but doing so requires grabbing the
+    metadata lock. If a concurrent metadata request is being performed by
+    consumerd, this can try to grab the registry lock on the sessiond while
+    holding the metadata lock on the consumer daemon. Those push and pull
+    schemes are performed on two different bidirectionnal communication
+    sockets.
+
+    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+    Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
+
+Can you reproduce this issue on the master branch of tools, ust and modules?
+
+Oh gosh, if this solves our issue I must say the lttng issue resolution is =
+fast! :-)
+I'll see how I can do that. If not able to update to master branch, would t=
+he commit
+above alone do the work you think?
+
+During night I've been running with a crude workaround like:
+
+diff --git a/src/common/ust-consumer/ust-consumer.c b/src/common/ust-consum=
+er/us
+t-consumer.c
+index f891828..9ded651 100644
+--- a/src/common/ust-consumer/ust-consumer.c
++++ b/src/common/ust-consumer/ust-consumer.c
+@@ -1026,12 +1026,19 @@ error:
+ /*
+  * Receive the metadata updates from the sessiond.
+  */
++int workaround_verifier=3D1;
+ int lttng_ustconsumer_recv_metadata(int sock, uint64_t key, uint64_t offse=
+t,
+                uint64_t len, struct lttng_consumer_channel *channel,
+                int timer, int wait)
+ {
+        int ret, ret_code =3D LTTCOMM_CONSUMERD_SUCCESS;
+        char *metadata_str;
++       int workaround_counter;
++
++       if (workaround_verifier) {
++               DBG("%s: workaround exist in %s\n", __FILE__, __func__);
++               workaround_verifier=3D0;
++       }
+
+        DBG("UST consumer push metadata key %" PRIu64 " of len %" PRIu64, k=
+ey, l
+en);
+
+@@ -1072,7 +1079,11 @@ int lttng_ustconsumer_recv_metadata(int sock, uint64=
+_t ke
+y, uint64_t offset,
+        if (!wait) {
+                goto end_free;
+        }
++       workaround_counter =3D 42;
+        while (consumer_metadata_cache_flushed(channel, offset + len, timer=
+)) {
++               if (!workaround_counter--) {
++                       break;
++               }
+                DBG("Waiting for metadata to be flushed");
+
+                health_code_update();
+--
+1.7.9.5
+
+and it seems to help us get out of the hang, although not fixing why we ent=
+ered there.
+I'll back that out and try to get your patch in...
+
+Ok, tested to use only the commit ontop of our base. Unfortunately it don't=
+ work at all then:
+
+root@axm5516:~# sh lttng-hammer1.sh
+Round 0
+Session s1 created.
+Traces will be written in net://128.224.95.199:53000:53001
+Live timer set to 1000000 usec
+UST channel metadata enabled for session s1
+UST channel c1 enabled for session s1
+All UST events are enabled in channel c1
+Tracing started for session s1
+Waiting for data availability..............................................=
+...........................................................................=
+...........................................................................=
+...........................................................................=
+...........................................................................=
+...........................................................................=
+.......^C
+root@axm5516:~#
+
+This may be because only using the commit I guess. It went in fine without =
+any manual change, but perhaps dependant anyway on other changes before.
+Next is then to try a build with latest branch as you want, but that will n=
+ot be as easy here.... I'll see what can be done.
+Any opinion on the crude workaround as a intermediate "fix"?
+
+BR,
+Per
+
+Ok, we have now run over the weekend with the latest&greatest on master bra=
+nch.
+After 90000+ rounds, there is a breakdown:
+
+...
+Round 90311        =
+
+Session s1 created.                                      =
+
+Traces will be written in net://128.224.95.15:52000:52001
+Live timer set to 1000000 usec             =
+
+UST channel metadata enabled for session s1
+UST channel c1 enabled for session s1   =
+
+All UST events are enabled in channel c1
+Tracing started for session s1
+Waiting for data availability =
+
+Tracing stopped for session s1
+Session s1 destroyed
+Round 90312        =
+
+Session s1 created.                                      =
+
+Traces will be written in net://128.224.95.15:52000:52001
+Live timer set to 1000000 usec             =
+
+Error: Channel metadata: Unable to connect to lttng-relayd (session s1)
+Error: Command error                    =
+
+Error: Channel c1: Unable to connect to lttng-relayd (session s1)
+Error: Command error         =
+
+Error: Events: Unable to connect to lttng-relayd (channel c1, session s1)
+Error: Command error
+Error: No channel found in the session
+Warning: Tracing already stopped for session s1
+Session s1 destroyed                                     =
+
+...
+
+After that it never get back to a working state again.
+In the lttng-sessiond/consumerd log we see:
+
+...
+DEBUG1 - 12:45:17.205035 [8694/8694]: Cleaning up all agent apps (in sessio=
+nd_cleanup() at main.c:715)
+DEBUG1 - 12:45:17.205084 [8694/8694]: Closing all UST sockets (in sessiond_=
+cleanup() at main.c:718)
+DEBUG3 - 12:45:17.205167 [8694/8695]: [ht-thread] Returning from poll on 2 =
+fds. (in thread_ht_cleanup() at ht-cleanup.c:74)
+DEBUG3 - 12:45:17.205173 [8694/8694]: Buffer registry destroy all registry =
+(in buffer_reg_destroy_registries() at buffer-registry.c:716)
+DEBUG3 - 12:45:17.205240 [8694/8695]: [ht-thread] Polling. (in thread_ht_cl=
+eanup() at ht-cleanup.c:67)
+DEBUG1 - 12:45:17.205280 [8694/8694]: Unloading kernel modules (in sessiond=
+_cleanup() at main.c:730)
+DEBUG3 - 12:45:17.205292 [8694/8695]: [ht-thread] Returning from poll on 2 =
+fds. (in thread_ht_cleanup() at ht-cleanup.c:74)
+DEBUG3 - 12:45:17.205378 [8694/8695]: [ht-thread] Polling. (in thread_ht_cl=
+eanup() at ht-cleanup.c:67)
+DEBUG3 - 12:45:17.205415 [8694/8695]: [ht-thread] Returning from poll on 2 =
+fds. (in thread_ht_cleanup() at ht-cleanup.c:74)
+DEBUG3 - 12:45:17.205450 [8694/8695]: [ht-thread] Polling. (in thread_ht_cl=
+eanup() at ht-cleanup.c:67)
+DEBUG3 - 12:45:17.205487 [8694/8695]: [ht-thread] Returning from poll on 2 =
+fds. (in thread_ht_cleanup() at ht-cleanup.c:74)
+DEBUG3 - 12:45:17.205541 [8694/8695]: [ht-thread] Polling. (in thread_ht_cl=
+eanup() at ht-cleanup.c:67)
+DEBUG3 - 12:45:17.205578 [8694/8695]: [ht-thread] Returning from poll on 2 =
+fds. (in thread_ht_cleanup() at ht-cleanup.c:74)
+DEBUG3 - 12:45:17.205619 [8694/8695]: [ht-thread] Polling. (in thread_ht_cl=
+eanup() at ht-cleanup.c:67)
+DEBUG3 - 12:45:17.209681 [8694/8695]: [ht-thread] Returning from poll on 2 =
+fds. (in thread_ht_cleanup() at ht-cleanup.c:74)
+DEBUG1 - 12:45:17.209711 [8694/8695]: [ht-cleanup] quit. (in thread_ht_clea=
+nup() at ht-cleanup.c:154)
+DEBUG1 - 12:45:17.209778 [8694/8695]: [ht-cleanup] Thread terminates. (in t=
+hread_ht_cleanup() at ht-cleanup.c:165)
+DEBUG1 - 12:45:17.210254 [8694/8694]: Cleaning up options (in sessiond_clea=
+nup_options() at main.c:777)
+DEBUG1 - 12:45:17.210293 [8694/8694]: *** assert failed :-) *** =3D=3D> Mat=
+thew, BEET driven development works! (in sessiond_cleanup_options() at main=
+.c:807)
+root@axm5516:~# =
+
+
+Hard to say if that is same situation but at least it seems to be during a =
+session destroy scenario.
+So the newer code base seems to have issues still.
+
+BR,
+Per
+
+Thanks,
 
 Mathieu
 
-> 
->> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->> CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
->> CC: Michael Jeanson <mjeanson@efficios.com>
->> CC: Jon Bernard <jbernard@debian.org>
->> ---
->>  Makefile.am  |  2 --
->>  urcu/futex.h | 70 +++++++++++++++++++++++++++++++++++++++++++++++++-----------
->>  2 files changed, 57 insertions(+), 15 deletions(-)
->> 
->> diff --git a/Makefile.am b/Makefile.am
->> index 752510d..f9a8888 100644
->> --- a/Makefile.am
->> +++ b/Makefile.am
->> @@ -41,9 +41,7 @@ else
->>  COMPAT=
->>  endif
->> 
->> -if COMPAT_FUTEX
->>  COMPAT+=compat_futex.c
->> -endif
->> 
->>  RCULFHASH = rculfhash.c rculfhash-mm-order.c rculfhash-mm-chunk.c \
->>  		rculfhash-mm-mmap.c
->> diff --git a/urcu/futex.h b/urcu/futex.h
->> index 2be3bb6..13d2b1a 100644
->> --- a/urcu/futex.h
->> +++ b/urcu/futex.h
->> @@ -47,22 +47,66 @@ extern "C" {
->>   * (returns EINTR).
->>   */
->> 
->> +extern int compat_futex_noasync(int32_t *uaddr, int op, int32_t val,
->> +		const struct timespec *timeout, int32_t *uaddr2, int32_t val3);
->> +extern int compat_futex_async(int32_t *uaddr, int op, int32_t val,
->> +		const struct timespec *timeout, int32_t *uaddr2, int32_t val3);
->> +
->>  #ifdef CONFIG_RCU_HAVE_FUTEX
->> +
->> +#include <unistd.h>
->> +#include <errno.h>
->> +#include <urcu/compiler.h>
->>  #include <urcu/syscall-compat.h>
->> -#define futex(...)	syscall(__NR_futex, __VA_ARGS__)
->> -#define futex_noasync(uaddr, op, val, timeout, uaddr2, val3)	\
->> -		futex(uaddr, op, val, timeout, uaddr2, val3)
->> -#define futex_async(uaddr, op, val, timeout, uaddr2, val3)	\
->> -		futex(uaddr, op, val, timeout, uaddr2, val3)
->> +
->> +static inline int futex(int32_t *uaddr, int op, int32_t val,
->> +		const struct timespec *timeout, int32_t *uaddr2, int32_t val3)
->> +{
->> +	return syscall(__NR_futex, uaddr, op, val, timeout,
->> +			uaddr2, val3);
->> +}
->> +
->> +static inline int futex_noasync(int32_t *uaddr, int op, int32_t val,
->> +		const struct timespec *timeout, int32_t *uaddr2, int32_t val3)
->> +{
->> +	int ret;
->> +
->> +	ret = futex(uaddr, op, val, timeout, uaddr2, val3);
->> +	if (caa_unlikely(ret < 0 && errno == ENOSYS)) {
->> +		return compat_futex_noasync(uaddr, op, val, timeout,
->> +				uaddr2, val3);
->> +	}
->> +	return ret;
->> +
->> +}
->> +
->> +static inline int futex_async(int32_t *uaddr, int op, int32_t val,
->> +		const struct timespec *timeout, int32_t *uaddr2, int32_t val3)
->> +{
->> +	int ret;
->> +
->> +	ret = futex(uaddr, op, val, timeout, uaddr2, val3);
->> +	if (caa_unlikely(ret < 0 && errno == ENOSYS)) {
->> +		return compat_futex_async(uaddr, op, val, timeout,
->> +				uaddr2, val3);
->> +	}
->> +	return ret;
->> +}
->> +
->>  #else
->> -extern int compat_futex_noasync(int32_t *uaddr, int op, int32_t val,
->> -	const struct timespec *timeout, int32_t *uaddr2, int32_t val3);
->> -#define futex_noasync(uaddr, op, val, timeout, uaddr2, val3)	\
->> -		compat_futex_noasync(uaddr, op, val, timeout, uaddr2, val3)
->> -extern int compat_futex_async(int32_t *uaddr, int op, int32_t val,
->> -	const struct timespec *timeout, int32_t *uaddr2, int32_t val3);
->> -#define futex_async(uaddr, op, val, timeout, uaddr2, val3)	\
->> -		compat_futex_async(uaddr, op, val, timeout, uaddr2, val3)
->> +
->> +static inline int futex_noasync(int32_t *uaddr, int op, int32_t val,
->> +		const struct timespec *timeout, int32_t *uaddr2, int32_t val3)
->> +{
->> +	return compat_futex_noasync(uaddr, op, val, timeout, uaddr2, val3);
->> +}
->> +
->> +static inline int futex_async(int32_t *uaddr, int op, int32_t val,
->> +		const struct timespec *timeout, int32_t *uaddr2, int32_t val3)
->> +{
->> +	return compat_futex_async(uaddr, op, val, timeout, uaddr2, val3);
->> +}
->> +
->>  #endif
->> 
->>  #ifdef __cplusplus
->> --
->> 2.1.4
+>
+> Best regards,
+> Per
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
--- 
+--
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
