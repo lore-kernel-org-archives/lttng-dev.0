@@ -1,15 +1,15 @@
 From: Farhan Shariff <farhan.shariff@asml.com>
-Subject: Lttng tracepoint(provider,tpname, arg)
-Date: Mon, 14 Sep 2015 08:51:30 +0000
-Message-ID: <D199CBB1905D6A4E83FFCD29C335DF4C3B69BA49__12122.4925308072$1442254134$gmane$org@NLEIDX740.sn-eu.asml.com>
+Subject: FW: Lttng tracepoint(provider,tpname, arg)
+Date: Mon, 14 Sep 2015 11:24:13 +0000
+Message-ID: <D199CBB1905D6A4E83FFCD29C335DF4C3B69BA83__32459.0579294183$1442254163$gmane$org@NLEIDX740.sn-eu.asml.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1239473379=="
+Content-Type: multipart/mixed; boundary="===============0865447105=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-am1on0064.outbound.protection.outlook.com ([157.56.112.64]
- helo=emea01-am1-obe.outbound.protection.outlook.com)
+Received: from mail-db3on0073.outbound.protection.outlook.com ([157.55.234.73]
+ helo=emea01-db3-obe.outbound.protection.outlook.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <farhan.shariff@asml.com>) id 1ZbPUE-0006tj-QY
- for lttng-dev@lists.lttng.org; Mon, 14 Sep 2015 04:51:45 -0400
+ (envelope-from <farhan.shariff@asml.com>) id 1ZbRry-0007sI-EW
+ for lttng-dev@lists.lttng.org; Mon, 14 Sep 2015 07:24:24 -0400
 Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -22,14 +22,21 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1239473379==
+--===============0865447105==
 Content-Language: en-US
 Content-Type: multipart/alternative;
-	boundary="_000_D199CBB1905D6A4E83FFCD29C335DF4C3B69BA49NLEIDX740sneuas_"
+	boundary="_000_D199CBB1905D6A4E83FFCD29C335DF4C3B69BA83NLEIDX740sneuas_"
 
---_000_D199CBB1905D6A4E83FFCD29C335DF4C3B69BA49NLEIDX740sneuas_
+--_000_D199CBB1905D6A4E83FFCD29C335DF4C3B69BA83NLEIDX740sneuas_
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+
+
+
+From: Farhan Shariff
+Sent: Monday, September 14, 2015 10:52 AM
+To: 'lttng-dev@lists.lttng.org'
+Subject: Lttng tracepoint(provider,tpname, arg)
 
  I want to insert tracepoint statements with same traceprovider_name and
   tracepoint_name but with different arguments:
@@ -90,7 +97,7 @@ nd any attachments. The sender nor the company/group of companies he or she=
  information contained in this communication, or for any delay in its recei=
 pt.
 
---_000_D199CBB1905D6A4E83FFCD29C335DF4C3B69BA49NLEIDX740sneuas_
+--_000_D199CBB1905D6A4E83FFCD29C335DF4C3B69BA83NLEIDX740sneuas_
 Content-Type: text/html; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 
@@ -108,11 +115,11 @@ xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
 	{font-family:Calibri;
 	panose-1:2 15 5 2 2 2 4 3 2 4;}
 @font-face
-	{font-family:Verdana;
+	{font-family:Tahoma;
 	panose-1:2 11 6 4 3 5 4 4 2 4;}
 @font-face
-	{font-family:Vijaya;
-	panose-1:2 11 6 4 2 2 2 2 2 4;}
+	{font-family:Verdana;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
 /* Style Definitions */
 p.MsoNormal, li.MsoNormal, div.MsoNormal
 	{margin:0in;
@@ -128,12 +135,16 @@ a:visited, span.MsoHyperlinkFollowed
 	color:purple;
 	text-decoration:underline;}
 span.EmailStyle17
-	{mso-style-type:personal-compose;
+	{mso-style-type:personal;
 	font-family:"Calibri","sans-serif";
 	color:windowtext;}
+span.EmailStyle18
+	{mso-style-type:personal-reply;
+	font-family:"Calibri","sans-serif";
+	color:#1F497D;}
 .MsoChpDefault
 	{mso-style-type:export-only;
-	font-family:"Calibri","sans-serif";}
+	font-size:10.0pt;}
 @page WordSection1
 	{size:8.5in 11.0in;
 	margin:1.0in 1.0in 1.0in 1.0in;}
@@ -148,6 +159,25 @@ div.WordSection1
 </head>
 <body lang=3D"EN-US" link=3D"blue" vlink=3D"purple">
 <div class=3D"WordSection1">
+<p class=3D"MsoNormal"><span style=3D"color:#1F497D"><o:p>&nbsp;</o:p></spa=
+n></p>
+<p class=3D"MsoNormal"><span style=3D"color:#1F497D"><o:p>&nbsp;</o:p></spa=
+n></p>
+<div>
+<div style=3D"border:none;border-top:solid #B5C4DF 1.0pt;padding:3.0pt 0in =
+0in 0in">
+<p class=3D"MsoNormal"><b><span style=3D"font-size:10.0pt;font-family:&quot=
+;Tahoma&quot;,&quot;sans-serif&quot;">From:</span></b><span style=3D"font-s=
+ize:10.0pt;font-family:&quot;Tahoma&quot;,&quot;sans-serif&quot;"> Farhan S=
+hariff
+<br>
+<b>Sent:</b> Monday, September 14, 2015 10:52 AM<br>
+<b>To:</b> 'lttng-dev@lists.lttng.org'<br>
+<b>Subject:</b> Lttng tracepoint(provider,tpname, arg)<o:p></o:p></span></p=
+>
+</div>
+</div>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
 <p class=3D"MsoNormal"><span style=3D"color:#444444;background:white">&nbsp=
 ;I want to insert tracepoint statements with same traceprovider_name and</s=
 pan><span style=3D"color:#444444"><br>
@@ -217,10 +247,10 @@ al&quot;,&quot;sans-serif&quot;">ASML Netherlands B.V. | De Run 6501 | 5504=
 Location: 7G2 | Tel: &#43;31 619084549</span><span style=3D"font-size:8.0pt=
 "><br>
 </span><span style=3D"font-size:8.0pt;font-family:&quot;Arial&quot;,&quot;s=
-ans-serif&quot;"><a href=3D"farhan.shariff@asml.com%20"><span style=3D"colo=
-r:blue">farhan.shariff@asml.com</span></a> |
-<a href=3D"http://www.asml.com/"><span style=3D"color:blue">www.asml.com</s=
-pan></a></span><span style=3D"font-size:8.0pt"><o:p></o:p></span></p>
+ans-serif&quot;"><a href=3D"farhan.shariff@asml.com%20">farhan.shariff@asml=
+.com</a> |
+<a href=3D"http://www.asml.com/">www.asml.com</a></span><span style=3D"font=
+-size:8.0pt"><o:p></o:p></span></p>
 <p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
 </div>
 -- The information contained in this communication and any attachments is c=
@@ -240,10 +270,10 @@ his communication, or for any delay in its receipt.
 </body>
 </html>
 
---_000_D199CBB1905D6A4E83FFCD29C335DF4C3B69BA49NLEIDX740sneuas_--
+--_000_D199CBB1905D6A4E83FFCD29C335DF4C3B69BA83NLEIDX740sneuas_--
 
 
---===============1239473379==
+--===============0865447105==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -254,4 +284,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1239473379==--
+--===============0865447105==--
