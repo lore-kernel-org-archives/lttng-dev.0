@@ -1,22 +1,22 @@
-From: "Hallsmark, Per" <Per.Hallsmark@windriver.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: Sometimes a session
 	destroy	hangs	lttng-consumerd	process
-Date: Mon, 14 Sep 2015 11:12:40 +0000
-Message-ID: <B7B4BB465792624BAF51F33077E9906578D0E558__40294.58248192$1442229234$gmane$org@ALA-MBA.corp.ad.wrs.com>
-References: <B7B4BB465792624BAF51F33077E9906578D0D874@ALA-MBA.corp.ad.wrs.com>,
- <344179387.2171.1441826955184.JavaMail.zimbra@efficios.com>,
- <B7B4BB465792624BAF51F33077E9906578D0DB9A@ALA-MBA.corp.ad.wrs.com>,
+Date: Mon, 14 Sep 2015 14:48:50 +0000 (UTC)
+Message-ID: <896660625.6183.1442242130218.JavaMail.zimbra__22344.3768256859$1442242245$gmane$org@efficios.com>
+References: <B7B4BB465792624BAF51F33077E9906578D0D874@ALA-MBA.corp.ad.wrs.com>
+ <344179387.2171.1441826955184.JavaMail.zimbra@efficios.com>
+ <B7B4BB465792624BAF51F33077E9906578D0DB9A@ALA-MBA.corp.ad.wrs.com>
  <B7B4BB465792624BAF51F33077E9906578D0DC2D@ALA-MBA.corp.ad.wrs.com>
+ <B7B4BB465792624BAF51F33077E9906578D0E558@ALA-MBA.corp.ad.wrs.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.windriver.com ([147.11.1.11])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Per.Hallsmark@windriver.com>) id 1ZbRgp-0007mu-HY
- for lttng-dev@lists.lttng.org; Mon, 14 Sep 2015 07:12:54 -0400
-In-Reply-To: <B7B4BB465792624BAF51F33077E9906578D0DC2D@ALA-MBA.corp.ad.wrs.com>
-Content-Language: en-US
+ (envelope-from <compudj@efficios.com>) id 1ZbV48-0000TC-PX
+ for lttng-dev@lists.lttng.org; Mon, 14 Sep 2015 10:49:18 -0400
+In-Reply-To: <B7B4BB465792624BAF51F33077E9906578D0E558@ALA-MBA.corp.ad.wrs.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,385 +25,257 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Per Hallsmark <Per.Hallsmark@windriver.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-> Hello,
->
-> I'm hit by an issue in that when doing session create/destroy multiple ti=
-mes,
-> during destroy the lttng-consumerd cannot get out of a loop where it want=
-s to
-> flush metadata, but the connection is probably already down at this stage.
->
-> I'm attaching a script that excercise lttng. The issue seems hard to get =
-at,
-> took 9 hours of running and the script console log looks like:
->
-> ....
-> Round 4327
-> Session s1 created.
-> Traces will be written in net://128.224.95.199:53000:53001
-> Live timer set to 1000000 usec
-> UST channel metadata enabled for session s1
-> UST channel c1 enabled for session s1
-> All UST events are enabled in channel c1
-> Tracing started for session s1
-> Waiting for data availability..
-> Tracing stopped for session s1
-> Session s1 destroyed
-> Round 4328
-> Session s1 created.
-> Traces will be written in net://128.224.95.199:53000:53001
-> Live timer set to 1000000 usec
-> UST channel metadata enabled for session s1
-> UST channel c1 enabled for session s1
-> All UST events are enabled in channel c1
-> Tracing started for session s1
-> libust[14905/14905]: Error: Timed out waiting for lttng-sessiond (in
-> lttng_ust_init() at lttng-ust-comm.c:1521)
-> < here it hangs >
->
-> If I'm now trying a simple "lttng list" or so in target, that also hangs:
->
-> root@localhost:~# lttng -vvv list
-> DEBUG2 - 10:23:36.911853 [15122/15122]: Session name: (null) (in cmd_list=
-() at
-> commands/list.c:911)
-> DEBUG1 - 10:23:36.913314 [15122/15122]: LSM cmd type : 13 (in send_sessio=
-n_msg()
-> at lttng-ctl.c:131)
-> < here it hangs >
->
-> If I start lttng-sessiond to log things:
->
-> lttng-sessiond -Z -v -b > lttng-sessiond.log 2>&1
->
-> Then I get a huge log where it after some 9 hours shows like:
->
-> DEBUG1 - 21:06:53.632585 [3807/3810]: Processing client command 17 (in
-> process_client_msg() at main.
-> DEBUG3 - 21:06:53.644582 [3807/3813]: Consumer pushing metadata on sock 3=
-3 of
-> len 686 (in consumer_p
-> DEBUG1 - 21:06:53.656539 [3807/3810]: Getting session s1 by name (in
-> process_client_msg() at main.c:
-> DEBUG1 - 21:06:53.656625 [3823/3829]: UST consumer push metadata key 8658=
- of len
-> 686 (in lttng_ustco
-> DEBUG1 - 21:06:53.693577 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:53.693585 [3823/3827]: Metadata poll return from wait with=
- 2
-> fd(s) (in consumer_threa
-> DEBUG1 - 21:06:53.847615 [3823/3827]: Metadata event catched in thread (in
-> consumer_thread_metadata_
-> DEBUG1 - 21:06:53.847642 [3823/3827]: Metadata available on fd 81 (in
-> consumer_thread_metadata_poll(
-> DEBUG1 - 21:06:54.548885 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:54.264889 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:54.474883 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:54.684874 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:54.894872 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:55.104848 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_recv_
-> DEBUG1 - 21:06:55.314850 [3823/3829]: Waiting for metadata to be flushed =
-(in
-> lttng_ustconsumer_r
->
-> After that I only get these "Waiting for metadata to be flushed" lines.
->
-> Following the code, I see that area in:
->
-> common/ust-consumer/ust-consumer.c::lttng_ustconsumer_recv_metadata() whe=
-re
-> there is a loop like:
->        while (consumer_metadata_cache_flushed(channel, offset + len, time=
-r)) {
->                DBG("Waiting for metadata to be flushed");
->
->                health_code_update();
->
->                usleep(DEFAULT_METADATA_AVAILABILITY_WAIT_TIME);
->        }
->
-> So this loop will carry on forever if consumer_metadata_cache_flushed() i=
-sn't
-> returning 0.
-> It seems to me we have some metadata to flush out, but during session des=
-troy
-> the communication channel is already down so the metadata will never be f=
-lushed
-> out.
-> First thought it may be because consumer_metadata_cache_flushed() is not
-> recognizing channel->metadata_stream is down, but perhaps it is the fact =
-we
-> don't scrap metadata after we have disconnected the channel or so.
-> Still trying to follow the code here which is a bit hard for a newcomer.
->
-> This has been seen using lttng 2.5.4 / lttng-ust 2.5.5, looking at the la=
-test
-> master branch (which at time I fetched was commit fb27f84 ) the code
-> around this look similar.
->
-> I wonder if this is something that has been encountered before? At least a
-> comment some lines up in same function suggest it:
->                /*
->                 * Skip metadata flush on write error since the offset and=
- len might
->                 * not have been updated which could create an infinite lo=
-op below when
->                 * waiting for the metadata cache to be flushed.
->                 */
->
-> But as we unlock metadata_cache and lock it again in the
-> consumer_metadata_cache_flushed(), I guess there is a window here when ot=
-her
-> things could get time todo stuff not thought of.
-
-I ran into this situation in my stress-tests recently, and proposed
-the following fix, currently merged in lttng-tools master branch:
-
-commit c585821bc78955b3d747fcd733aa1d2b81a3258e
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Date:   Wed Aug 19 14:44:59 2015 -0700
-
-    Fix: sessiond vs consumerd push/get metadata deadlock
-
-    We need to unlock the registry while we push metadata to break a
-    circular dependency between the consumerd metadata lock and the sessiond
-    registry lock. Indeed, pushing metadata to the consumerd awaits that it
-    gets pushed all the way to relayd, but doing so requires grabbing the
-    metadata lock. If a concurrent metadata request is being performed by
-    consumerd, this can try to grab the registry lock on the sessiond while
-    holding the metadata lock on the consumer daemon. Those push and pull
-    schemes are performed on two different bidirectionnal communication
-    sockets.
-
-    Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-    Signed-off-by: J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-
-Can you reproduce this issue on the master branch of tools, ust and modules?
-
-Oh gosh, if this solves our issue I must say the lttng issue resolution is =
-fast! :-)
-I'll see how I can do that. If not able to update to master branch, would t=
-he commit
-above alone do the work you think?
-
-During night I've been running with a crude workaround like:
-
-diff --git a/src/common/ust-consumer/ust-consumer.c b/src/common/ust-consum=
-er/us
-t-consumer.c
-index f891828..9ded651 100644
---- a/src/common/ust-consumer/ust-consumer.c
-+++ b/src/common/ust-consumer/ust-consumer.c
-@@ -1026,12 +1026,19 @@ error:
- /*
-  * Receive the metadata updates from the sessiond.
-  */
-+int workaround_verifier=3D1;
- int lttng_ustconsumer_recv_metadata(int sock, uint64_t key, uint64_t offse=
-t,
-                uint64_t len, struct lttng_consumer_channel *channel,
-                int timer, int wait)
- {
-        int ret, ret_code =3D LTTCOMM_CONSUMERD_SUCCESS;
-        char *metadata_str;
-+       int workaround_counter;
-+
-+       if (workaround_verifier) {
-+               DBG("%s: workaround exist in %s\n", __FILE__, __func__);
-+               workaround_verifier=3D0;
-+       }
-
-        DBG("UST consumer push metadata key %" PRIu64 " of len %" PRIu64, k=
-ey, l
-en);
-
-@@ -1072,7 +1079,11 @@ int lttng_ustconsumer_recv_metadata(int sock, uint64=
-_t ke
-y, uint64_t offset,
-        if (!wait) {
-                goto end_free;
-        }
-+       workaround_counter =3D 42;
-        while (consumer_metadata_cache_flushed(channel, offset + len, timer=
-)) {
-+               if (!workaround_counter--) {
-+                       break;
-+               }
-                DBG("Waiting for metadata to be flushed");
-
-                health_code_update();
---
-1.7.9.5
-
-and it seems to help us get out of the hang, although not fixing why we ent=
-ered there.
-I'll back that out and try to get your patch in...
-
-Ok, tested to use only the commit ontop of our base. Unfortunately it don't=
- work at all then:
-
-root@axm5516:~# sh lttng-hammer1.sh
-Round 0
-Session s1 created.
-Traces will be written in net://128.224.95.199:53000:53001
-Live timer set to 1000000 usec
-UST channel metadata enabled for session s1
-UST channel c1 enabled for session s1
-All UST events are enabled in channel c1
-Tracing started for session s1
-Waiting for data availability..............................................=
-...........................................................................=
-...........................................................................=
-...........................................................................=
-...........................................................................=
-...........................................................................=
-.......^C
-root@axm5516:~#
-
-This may be because only using the commit I guess. It went in fine without =
-any manual change, but perhaps dependant anyway on other changes before.
-Next is then to try a build with latest branch as you want, but that will n=
-ot be as easy here.... I'll see what can be done.
-Any opinion on the crude workaround as a intermediate "fix"?
-
-BR,
-Per
-
-Ok, we have now run over the weekend with the latest&greatest on master bra=
-nch.
-After 90000+ rounds, there is a breakdown:
-
-...
-Round 90311        =
-
-Session s1 created.                                      =
-
-Traces will be written in net://128.224.95.15:52000:52001
-Live timer set to 1000000 usec             =
-
-UST channel metadata enabled for session s1
-UST channel c1 enabled for session s1   =
-
-All UST events are enabled in channel c1
-Tracing started for session s1
-Waiting for data availability =
-
-Tracing stopped for session s1
-Session s1 destroyed
-Round 90312        =
-
-Session s1 created.                                      =
-
-Traces will be written in net://128.224.95.15:52000:52001
-Live timer set to 1000000 usec             =
-
-Error: Channel metadata: Unable to connect to lttng-relayd (session s1)
-Error: Command error                    =
-
-Error: Channel c1: Unable to connect to lttng-relayd (session s1)
-Error: Command error         =
-
-Error: Events: Unable to connect to lttng-relayd (channel c1, session s1)
-Error: Command error
-Error: No channel found in the session
-Warning: Tracing already stopped for session s1
-Session s1 destroyed                                     =
-
-...
-
-After that it never get back to a working state again.
-In the lttng-sessiond/consumerd log we see:
-
-...
-DEBUG1 - 12:45:17.205035 [8694/8694]: Cleaning up all agent apps (in sessio=
-nd_cleanup() at main.c:715)
-DEBUG1 - 12:45:17.205084 [8694/8694]: Closing all UST sockets (in sessiond_=
-cleanup() at main.c:718)
-DEBUG3 - 12:45:17.205167 [8694/8695]: [ht-thread] Returning from poll on 2 =
-fds. (in thread_ht_cleanup() at ht-cleanup.c:74)
-DEBUG3 - 12:45:17.205173 [8694/8694]: Buffer registry destroy all registry =
-(in buffer_reg_destroy_registries() at buffer-registry.c:716)
-DEBUG3 - 12:45:17.205240 [8694/8695]: [ht-thread] Polling. (in thread_ht_cl=
-eanup() at ht-cleanup.c:67)
-DEBUG1 - 12:45:17.205280 [8694/8694]: Unloading kernel modules (in sessiond=
-_cleanup() at main.c:730)
-DEBUG3 - 12:45:17.205292 [8694/8695]: [ht-thread] Returning from poll on 2 =
-fds. (in thread_ht_cleanup() at ht-cleanup.c:74)
-DEBUG3 - 12:45:17.205378 [8694/8695]: [ht-thread] Polling. (in thread_ht_cl=
-eanup() at ht-cleanup.c:67)
-DEBUG3 - 12:45:17.205415 [8694/8695]: [ht-thread] Returning from poll on 2 =
-fds. (in thread_ht_cleanup() at ht-cleanup.c:74)
-DEBUG3 - 12:45:17.205450 [8694/8695]: [ht-thread] Polling. (in thread_ht_cl=
-eanup() at ht-cleanup.c:67)
-DEBUG3 - 12:45:17.205487 [8694/8695]: [ht-thread] Returning from poll on 2 =
-fds. (in thread_ht_cleanup() at ht-cleanup.c:74)
-DEBUG3 - 12:45:17.205541 [8694/8695]: [ht-thread] Polling. (in thread_ht_cl=
-eanup() at ht-cleanup.c:67)
-DEBUG3 - 12:45:17.205578 [8694/8695]: [ht-thread] Returning from poll on 2 =
-fds. (in thread_ht_cleanup() at ht-cleanup.c:74)
-DEBUG3 - 12:45:17.205619 [8694/8695]: [ht-thread] Polling. (in thread_ht_cl=
-eanup() at ht-cleanup.c:67)
-DEBUG3 - 12:45:17.209681 [8694/8695]: [ht-thread] Returning from poll on 2 =
-fds. (in thread_ht_cleanup() at ht-cleanup.c:74)
-DEBUG1 - 12:45:17.209711 [8694/8695]: [ht-cleanup] quit. (in thread_ht_clea=
-nup() at ht-cleanup.c:154)
-DEBUG1 - 12:45:17.209778 [8694/8695]: [ht-cleanup] Thread terminates. (in t=
-hread_ht_cleanup() at ht-cleanup.c:165)
-DEBUG1 - 12:45:17.210254 [8694/8694]: Cleaning up options (in sessiond_clea=
-nup_options() at main.c:777)
-DEBUG1 - 12:45:17.210293 [8694/8694]: *** assert failed :-) *** =3D=3D> Mat=
-thew, BEET driven development works! (in sessiond_cleanup_options() at main=
-.c:807)
-root@axm5516:~# =
-
-
-Hard to say if that is same situation but at least it seems to be during a =
-session destroy scenario.
-So the newer code base seems to have issues still.
-
-BR,
-Per
-
-Thanks,
-
-Mathieu
-
->
-> Best regards,
-> Per
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+LS0tLS0gT24gU2VwIDE0LCAyMDE1LCBhdCA3OjEyIEFNLCBQZXIgSGFsbHNtYXJrIFBlci5IYWxs
+c21hcmtAd2luZHJpdmVyLmNvbSB3cm90ZToKCj4+IEhlbGxvLAo+Pgo+PiBJJ20gaGl0IGJ5IGFu
+IGlzc3VlIGluIHRoYXQgd2hlbiBkb2luZyBzZXNzaW9uIGNyZWF0ZS9kZXN0cm95IG11bHRpcGxl
+IHRpbWVzLAo+PiBkdXJpbmcgZGVzdHJveSB0aGUgbHR0bmctY29uc3VtZXJkIGNhbm5vdCBnZXQg
+b3V0IG9mIGEgbG9vcCB3aGVyZSBpdCB3YW50cyB0bwo+PiBmbHVzaCBtZXRhZGF0YSwgYnV0IHRo
+ZSBjb25uZWN0aW9uIGlzIHByb2JhYmx5IGFscmVhZHkgZG93biBhdCB0aGlzIHN0YWdlLgo+Pgo+
+PiBJJ20gYXR0YWNoaW5nIGEgc2NyaXB0IHRoYXQgZXhjZXJjaXNlIGx0dG5nLiBUaGUgaXNzdWUg
+c2VlbXMgaGFyZCB0byBnZXQgYXQsCj4+IHRvb2sgOSBob3VycyBvZiBydW5uaW5nIGFuZCB0aGUg
+c2NyaXB0IGNvbnNvbGUgbG9nIGxvb2tzIGxpa2U6Cj4+Cj4+IC4uLi4KPj4gUm91bmQgNDMyNwo+
+PiBTZXNzaW9uIHMxIGNyZWF0ZWQuCj4+IFRyYWNlcyB3aWxsIGJlIHdyaXR0ZW4gaW4gbmV0Oi8v
+MTI4LjIyNC45NS4xOTk6NTMwMDA6NTMwMDEKPj4gTGl2ZSB0aW1lciBzZXQgdG8gMTAwMDAwMCB1
+c2VjCj4+IFVTVCBjaGFubmVsIG1ldGFkYXRhIGVuYWJsZWQgZm9yIHNlc3Npb24gczEKPj4gVVNU
+IGNoYW5uZWwgYzEgZW5hYmxlZCBmb3Igc2Vzc2lvbiBzMQo+PiBBbGwgVVNUIGV2ZW50cyBhcmUg
+ZW5hYmxlZCBpbiBjaGFubmVsIGMxCj4+IFRyYWNpbmcgc3RhcnRlZCBmb3Igc2Vzc2lvbiBzMQo+
+PiBXYWl0aW5nIGZvciBkYXRhIGF2YWlsYWJpbGl0eS4uCj4+IFRyYWNpbmcgc3RvcHBlZCBmb3Ig
+c2Vzc2lvbiBzMQo+PiBTZXNzaW9uIHMxIGRlc3Ryb3llZAo+PiBSb3VuZCA0MzI4Cj4+IFNlc3Np
+b24gczEgY3JlYXRlZC4KPj4gVHJhY2VzIHdpbGwgYmUgd3JpdHRlbiBpbiBuZXQ6Ly8xMjguMjI0
+Ljk1LjE5OTo1MzAwMDo1MzAwMQo+PiBMaXZlIHRpbWVyIHNldCB0byAxMDAwMDAwIHVzZWMKPj4g
+VVNUIGNoYW5uZWwgbWV0YWRhdGEgZW5hYmxlZCBmb3Igc2Vzc2lvbiBzMQo+PiBVU1QgY2hhbm5l
+bCBjMSBlbmFibGVkIGZvciBzZXNzaW9uIHMxCj4+IEFsbCBVU1QgZXZlbnRzIGFyZSBlbmFibGVk
+IGluIGNoYW5uZWwgYzEKPj4gVHJhY2luZyBzdGFydGVkIGZvciBzZXNzaW9uIHMxCj4+IGxpYnVz
+dFsxNDkwNS8xNDkwNV06IEVycm9yOiBUaW1lZCBvdXQgd2FpdGluZyBmb3IgbHR0bmctc2Vzc2lv
+bmQgKGluCj4+IGx0dG5nX3VzdF9pbml0KCkgYXQgbHR0bmctdXN0LWNvbW0uYzoxNTIxKQo+PiA8
+IGhlcmUgaXQgaGFuZ3MgPgo+Pgo+PiBJZiBJJ20gbm93IHRyeWluZyBhIHNpbXBsZSAibHR0bmcg
+bGlzdCIgb3Igc28gaW4gdGFyZ2V0LCB0aGF0IGFsc28gaGFuZ3M6Cj4+Cj4+IHJvb3RAbG9jYWxo
+b3N0On4jIGx0dG5nIC12dnYgbGlzdAo+PiBERUJVRzIgLSAxMDoyMzozNi45MTE4NTMgWzE1MTIy
+LzE1MTIyXTogU2Vzc2lvbiBuYW1lOiAobnVsbCkgKGluIGNtZF9saXN0KCkgYXQKPj4gY29tbWFu
+ZHMvbGlzdC5jOjkxMSkKPj4gREVCVUcxIC0gMTA6MjM6MzYuOTEzMzE0IFsxNTEyMi8xNTEyMl06
+IExTTSBjbWQgdHlwZSA6IDEzIChpbiBzZW5kX3Nlc3Npb25fbXNnKCkKPj4gYXQgbHR0bmctY3Rs
+LmM6MTMxKQo+PiA8IGhlcmUgaXQgaGFuZ3MgPgo+Pgo+PiBJZiBJIHN0YXJ0IGx0dG5nLXNlc3Np
+b25kIHRvIGxvZyB0aGluZ3M6Cj4+Cj4+IGx0dG5nLXNlc3Npb25kIC1aIC12IC1iID4gbHR0bmct
+c2Vzc2lvbmQubG9nIDI+JjEKPj4KPj4gVGhlbiBJIGdldCBhIGh1Z2UgbG9nIHdoZXJlIGl0IGFm
+dGVyIHNvbWUgOSBob3VycyBzaG93cyBsaWtlOgo+Pgo+PiBERUJVRzEgLSAyMTowNjo1My42MzI1
+ODUgWzM4MDcvMzgxMF06IFByb2Nlc3NpbmcgY2xpZW50IGNvbW1hbmQgMTcgKGluCj4+IHByb2Nl
+c3NfY2xpZW50X21zZygpIGF0IG1haW4uCj4+IERFQlVHMyAtIDIxOjA2OjUzLjY0NDU4MiBbMzgw
+Ny8zODEzXTogQ29uc3VtZXIgcHVzaGluZyBtZXRhZGF0YSBvbiBzb2NrIDMzIG9mCj4+IGxlbiA2
+ODYgKGluIGNvbnN1bWVyX3AKPj4gREVCVUcxIC0gMjE6MDY6NTMuNjU2NTM5IFszODA3LzM4MTBd
+OiBHZXR0aW5nIHNlc3Npb24gczEgYnkgbmFtZSAoaW4KPj4gcHJvY2Vzc19jbGllbnRfbXNnKCkg
+YXQgbWFpbi5jOgo+PiBERUJVRzEgLSAyMTowNjo1My42NTY2MjUgWzM4MjMvMzgyOV06IFVTVCBj
+b25zdW1lciBwdXNoIG1ldGFkYXRhIGtleSA4NjU4IG9mIGxlbgo+PiA2ODYgKGluIGx0dG5nX3Vz
+dGNvCj4+IERFQlVHMSAtIDIxOjA2OjUzLjY5MzU3NyBbMzgyMy8zODI5XTogV2FpdGluZyBmb3Ig
+bWV0YWRhdGEgdG8gYmUgZmx1c2hlZCAoaW4KPj4gbHR0bmdfdXN0Y29uc3VtZXJfcmVjdl8KPj4g
+REVCVUcxIC0gMjE6MDY6NTMuNjkzNTg1IFszODIzLzM4MjddOiBNZXRhZGF0YSBwb2xsIHJldHVy
+biBmcm9tIHdhaXQgd2l0aCAyCj4+IGZkKHMpIChpbiBjb25zdW1lcl90aHJlYQo+PiBERUJVRzEg
+LSAyMTowNjo1My44NDc2MTUgWzM4MjMvMzgyN106IE1ldGFkYXRhIGV2ZW50IGNhdGNoZWQgaW4g
+dGhyZWFkIChpbgo+PiBjb25zdW1lcl90aHJlYWRfbWV0YWRhdGFfCj4+IERFQlVHMSAtIDIxOjA2
+OjUzLjg0NzY0MiBbMzgyMy8zODI3XTogTWV0YWRhdGEgYXZhaWxhYmxlIG9uIGZkIDgxIChpbgo+
+PiBjb25zdW1lcl90aHJlYWRfbWV0YWRhdGFfcG9sbCgKPj4gREVCVUcxIC0gMjE6MDY6NTQuNTQ4
+ODg1IFszODIzLzM4MjldOiBXYWl0aW5nIGZvciBtZXRhZGF0YSB0byBiZSBmbHVzaGVkIChpbgo+
+PiBsdHRuZ191c3Rjb25zdW1lcl9yZWN2Xwo+PiBERUJVRzEgLSAyMTowNjo1NC4yNjQ4ODkgWzM4
+MjMvMzgyOV06IFdhaXRpbmcgZm9yIG1ldGFkYXRhIHRvIGJlIGZsdXNoZWQgKGluCj4+IGx0dG5n
+X3VzdGNvbnN1bWVyX3JlY3ZfCj4+IERFQlVHMSAtIDIxOjA2OjU0LjQ3NDg4MyBbMzgyMy8zODI5
+XTogV2FpdGluZyBmb3IgbWV0YWRhdGEgdG8gYmUgZmx1c2hlZCAoaW4KPj4gbHR0bmdfdXN0Y29u
+c3VtZXJfcmVjdl8KPj4gREVCVUcxIC0gMjE6MDY6NTQuNjg0ODc0IFszODIzLzM4MjldOiBXYWl0
+aW5nIGZvciBtZXRhZGF0YSB0byBiZSBmbHVzaGVkIChpbgo+PiBsdHRuZ191c3Rjb25zdW1lcl9y
+ZWN2Xwo+PiBERUJVRzEgLSAyMTowNjo1NC44OTQ4NzIgWzM4MjMvMzgyOV06IFdhaXRpbmcgZm9y
+IG1ldGFkYXRhIHRvIGJlIGZsdXNoZWQgKGluCj4+IGx0dG5nX3VzdGNvbnN1bWVyX3JlY3ZfCj4+
+IERFQlVHMSAtIDIxOjA2OjU1LjEwNDg0OCBbMzgyMy8zODI5XTogV2FpdGluZyBmb3IgbWV0YWRh
+dGEgdG8gYmUgZmx1c2hlZCAoaW4KPj4gbHR0bmdfdXN0Y29uc3VtZXJfcmVjdl8KPj4gREVCVUcx
+IC0gMjE6MDY6NTUuMzE0ODUwIFszODIzLzM4MjldOiBXYWl0aW5nIGZvciBtZXRhZGF0YSB0byBi
+ZSBmbHVzaGVkIChpbgo+PiBsdHRuZ191c3Rjb25zdW1lcl9yCj4+Cj4+IEFmdGVyIHRoYXQgSSBv
+bmx5IGdldCB0aGVzZSAiV2FpdGluZyBmb3IgbWV0YWRhdGEgdG8gYmUgZmx1c2hlZCIgbGluZXMu
+Cj4+Cj4+IEZvbGxvd2luZyB0aGUgY29kZSwgSSBzZWUgdGhhdCBhcmVhIGluOgo+Pgo+PiBjb21t
+b24vdXN0LWNvbnN1bWVyL3VzdC1jb25zdW1lci5jOjpsdHRuZ191c3Rjb25zdW1lcl9yZWN2X21l
+dGFkYXRhKCkgd2hlcmUKPj4gdGhlcmUgaXMgYSBsb29wIGxpa2U6Cj4+ICAgICAgICB3aGlsZSAo
+Y29uc3VtZXJfbWV0YWRhdGFfY2FjaGVfZmx1c2hlZChjaGFubmVsLCBvZmZzZXQgKyBsZW4sIHRp
+bWVyKSkgewo+PiAgICAgICAgICAgICAgICBEQkcoIldhaXRpbmcgZm9yIG1ldGFkYXRhIHRvIGJl
+IGZsdXNoZWQiKTsKPj4KPj4gICAgICAgICAgICAgICAgaGVhbHRoX2NvZGVfdXBkYXRlKCk7Cj4+
+Cj4+ICAgICAgICAgICAgICAgIHVzbGVlcChERUZBVUxUX01FVEFEQVRBX0FWQUlMQUJJTElUWV9X
+QUlUX1RJTUUpOwo+PiAgICAgICAgfQo+Pgo+PiBTbyB0aGlzIGxvb3Agd2lsbCBjYXJyeSBvbiBm
+b3JldmVyIGlmIGNvbnN1bWVyX21ldGFkYXRhX2NhY2hlX2ZsdXNoZWQoKSBpc24ndAo+PiByZXR1
+cm5pbmcgMC4KPj4gSXQgc2VlbXMgdG8gbWUgd2UgaGF2ZSBzb21lIG1ldGFkYXRhIHRvIGZsdXNo
+IG91dCwgYnV0IGR1cmluZyBzZXNzaW9uIGRlc3Ryb3kKPj4gdGhlIGNvbW11bmljYXRpb24gY2hh
+bm5lbCBpcyBhbHJlYWR5IGRvd24gc28gdGhlIG1ldGFkYXRhIHdpbGwgbmV2ZXIgYmUgZmx1c2hl
+ZAo+PiBvdXQuCj4+IEZpcnN0IHRob3VnaHQgaXQgbWF5IGJlIGJlY2F1c2UgY29uc3VtZXJfbWV0
+YWRhdGFfY2FjaGVfZmx1c2hlZCgpIGlzIG5vdAo+PiByZWNvZ25pemluZyBjaGFubmVsLT5tZXRh
+ZGF0YV9zdHJlYW0gaXMgZG93biwgYnV0IHBlcmhhcHMgaXQgaXMgdGhlIGZhY3Qgd2UKPj4gZG9u
+J3Qgc2NyYXAgbWV0YWRhdGEgYWZ0ZXIgd2UgaGF2ZSBkaXNjb25uZWN0ZWQgdGhlIGNoYW5uZWwg
+b3Igc28uCj4+IFN0aWxsIHRyeWluZyB0byBmb2xsb3cgdGhlIGNvZGUgaGVyZSB3aGljaCBpcyBh
+IGJpdCBoYXJkIGZvciBhIG5ld2NvbWVyLgo+Pgo+PiBUaGlzIGhhcyBiZWVuIHNlZW4gdXNpbmcg
+bHR0bmcgMi41LjQgLyBsdHRuZy11c3QgMi41LjUsIGxvb2tpbmcgYXQgdGhlIGxhdGVzdAo+PiBt
+YXN0ZXIgYnJhbmNoICh3aGljaCBhdCB0aW1lIEkgZmV0Y2hlZCB3YXMgY29tbWl0IGZiMjdmODQg
+KSB0aGUgY29kZQo+PiBhcm91bmQgdGhpcyBsb29rIHNpbWlsYXIuCj4+Cj4+IEkgd29uZGVyIGlm
+IHRoaXMgaXMgc29tZXRoaW5nIHRoYXQgaGFzIGJlZW4gZW5jb3VudGVyZWQgYmVmb3JlPyBBdCBs
+ZWFzdCBhCj4+IGNvbW1lbnQgc29tZSBsaW5lcyB1cCBpbiBzYW1lIGZ1bmN0aW9uIHN1Z2dlc3Qg
+aXQ6Cj4+ICAgICAgICAgICAgICAgIC8qCj4+ICAgICAgICAgICAgICAgICAqIFNraXAgbWV0YWRh
+dGEgZmx1c2ggb24gd3JpdGUgZXJyb3Igc2luY2UgdGhlIG9mZnNldCBhbmQgbGVuIG1pZ2h0Cj4+
+ICAgICAgICAgICAgICAgICAqIG5vdCBoYXZlIGJlZW4gdXBkYXRlZCB3aGljaCBjb3VsZCBjcmVh
+dGUgYW4gaW5maW5pdGUgbG9vcCBiZWxvdyB3aGVuCj4+ICAgICAgICAgICAgICAgICAqIHdhaXRp
+bmcgZm9yIHRoZSBtZXRhZGF0YSBjYWNoZSB0byBiZSBmbHVzaGVkLgo+PiAgICAgICAgICAgICAg
+ICAgKi8KPj4KPj4gQnV0IGFzIHdlIHVubG9jayBtZXRhZGF0YV9jYWNoZSBhbmQgbG9jayBpdCBh
+Z2FpbiBpbiB0aGUKPj4gY29uc3VtZXJfbWV0YWRhdGFfY2FjaGVfZmx1c2hlZCgpLCBJIGd1ZXNz
+IHRoZXJlIGlzIGEgd2luZG93IGhlcmUgd2hlbiBvdGhlcgo+PiB0aGluZ3MgY291bGQgZ2V0IHRp
+bWUgdG9kbyBzdHVmZiBub3QgdGhvdWdodCBvZi4KPiAKPiBJIHJhbiBpbnRvIHRoaXMgc2l0dWF0
+aW9uIGluIG15IHN0cmVzcy10ZXN0cyByZWNlbnRseSwgYW5kIHByb3Bvc2VkCj4gdGhlIGZvbGxv
+d2luZyBmaXgsIGN1cnJlbnRseSBtZXJnZWQgaW4gbHR0bmctdG9vbHMgbWFzdGVyIGJyYW5jaDoK
+PiAKPiBjb21taXQgYzU4NTgyMWJjNzg5NTViM2Q3NDdmY2Q3MzNhYTFkMmI4MWEzMjU4ZQo+IEF1
+dGhvcjogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4K
+PiBEYXRlOiAgIFdlZCBBdWcgMTkgMTQ6NDQ6NTkgMjAxNSAtMDcwMAo+IAo+ICAgIEZpeDogc2Vz
+c2lvbmQgdnMgY29uc3VtZXJkIHB1c2gvZ2V0IG1ldGFkYXRhIGRlYWRsb2NrCj4gCj4gICAgV2Ug
+bmVlZCB0byB1bmxvY2sgdGhlIHJlZ2lzdHJ5IHdoaWxlIHdlIHB1c2ggbWV0YWRhdGEgdG8gYnJl
+YWsgYQo+ICAgIGNpcmN1bGFyIGRlcGVuZGVuY3kgYmV0d2VlbiB0aGUgY29uc3VtZXJkIG1ldGFk
+YXRhIGxvY2sgYW5kIHRoZSBzZXNzaW9uZAo+ICAgIHJlZ2lzdHJ5IGxvY2suIEluZGVlZCwgcHVz
+aGluZyBtZXRhZGF0YSB0byB0aGUgY29uc3VtZXJkIGF3YWl0cyB0aGF0IGl0Cj4gICAgZ2V0cyBw
+dXNoZWQgYWxsIHRoZSB3YXkgdG8gcmVsYXlkLCBidXQgZG9pbmcgc28gcmVxdWlyZXMgZ3JhYmJp
+bmcgdGhlCj4gICAgbWV0YWRhdGEgbG9jay4gSWYgYSBjb25jdXJyZW50IG1ldGFkYXRhIHJlcXVl
+c3QgaXMgYmVpbmcgcGVyZm9ybWVkIGJ5Cj4gICAgY29uc3VtZXJkLCB0aGlzIGNhbiB0cnkgdG8g
+Z3JhYiB0aGUgcmVnaXN0cnkgbG9jayBvbiB0aGUgc2Vzc2lvbmQgd2hpbGUKPiAgICBob2xkaW5n
+IHRoZSBtZXRhZGF0YSBsb2NrIG9uIHRoZSBjb25zdW1lciBkYWVtb24uIFRob3NlIHB1c2ggYW5k
+IHB1bGwKPiAgICBzY2hlbWVzIGFyZSBwZXJmb3JtZWQgb24gdHdvIGRpZmZlcmVudCBiaWRpcmVj
+dGlvbm5hbCBjb21tdW5pY2F0aW9uCj4gICAgc29ja2V0cy4KPiAKPiAgICBTaWduZWQtb2ZmLWJ5
+OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgo+ICAg
+IFNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVm
+ZmljaW9zLmNvbT4KPiAKPiBDYW4geW91IHJlcHJvZHVjZSB0aGlzIGlzc3VlIG9uIHRoZSBtYXN0
+ZXIgYnJhbmNoIG9mIHRvb2xzLCB1c3QgYW5kIG1vZHVsZXM/Cj4gCj4gT2ggZ29zaCwgaWYgdGhp
+cyBzb2x2ZXMgb3VyIGlzc3VlIEkgbXVzdCBzYXkgdGhlIGx0dG5nIGlzc3VlIHJlc29sdXRpb24g
+aXMgZmFzdCEKPiA6LSkKPiBJJ2xsIHNlZSBob3cgSSBjYW4gZG8gdGhhdC4gSWYgbm90IGFibGUg
+dG8gdXBkYXRlIHRvIG1hc3RlciBicmFuY2gsIHdvdWxkIHRoZQo+IGNvbW1pdAo+IGFib3ZlIGFs
+b25lIGRvIHRoZSB3b3JrIHlvdSB0aGluaz8KPiAKPiBEdXJpbmcgbmlnaHQgSSd2ZSBiZWVuIHJ1
+bm5pbmcgd2l0aCBhIGNydWRlIHdvcmthcm91bmQgbGlrZToKPiAKPiBkaWZmIC0tZ2l0IGEvc3Jj
+L2NvbW1vbi91c3QtY29uc3VtZXIvdXN0LWNvbnN1bWVyLmMgYi9zcmMvY29tbW9uL3VzdC1jb25z
+dW1lci91cwo+IHQtY29uc3VtZXIuYwo+IGluZGV4IGY4OTE4MjguLjlkZWQ2NTEgMTAwNjQ0Cj4g
+LS0tIGEvc3JjL2NvbW1vbi91c3QtY29uc3VtZXIvdXN0LWNvbnN1bWVyLmMKPiArKysgYi9zcmMv
+Y29tbW9uL3VzdC1jb25zdW1lci91c3QtY29uc3VtZXIuYwo+IEBAIC0xMDI2LDEyICsxMDI2LDE5
+IEBAIGVycm9yOgo+IC8qCj4gICogUmVjZWl2ZSB0aGUgbWV0YWRhdGEgdXBkYXRlcyBmcm9tIHRo
+ZSBzZXNzaW9uZC4KPiAgKi8KPiAraW50IHdvcmthcm91bmRfdmVyaWZpZXI9MTsKPiBpbnQgbHR0
+bmdfdXN0Y29uc3VtZXJfcmVjdl9tZXRhZGF0YShpbnQgc29jaywgdWludDY0X3Qga2V5LCB1aW50
+NjRfdCBvZmZzZXQsCj4gICAgICAgICAgICAgICAgdWludDY0X3QgbGVuLCBzdHJ1Y3QgbHR0bmdf
+Y29uc3VtZXJfY2hhbm5lbCAqY2hhbm5lbCwKPiAgICAgICAgICAgICAgICBpbnQgdGltZXIsIGlu
+dCB3YWl0KQo+IHsKPiAgICAgICAgaW50IHJldCwgcmV0X2NvZGUgPSBMVFRDT01NX0NPTlNVTUVS
+RF9TVUNDRVNTOwo+ICAgICAgICBjaGFyICptZXRhZGF0YV9zdHI7Cj4gKyAgICAgICBpbnQgd29y
+a2Fyb3VuZF9jb3VudGVyOwo+ICsKPiArICAgICAgIGlmICh3b3JrYXJvdW5kX3ZlcmlmaWVyKSB7
+Cj4gKyAgICAgICAgICAgICAgIERCRygiJXM6IHdvcmthcm91bmQgZXhpc3QgaW4gJXNcbiIsIF9f
+RklMRV9fLCBfX2Z1bmNfXyk7Cj4gKyAgICAgICAgICAgICAgIHdvcmthcm91bmRfdmVyaWZpZXI9
+MDsKPiArICAgICAgIH0KPiAKPiAgICAgICAgREJHKCJVU1QgY29uc3VtZXIgcHVzaCBtZXRhZGF0
+YSBrZXkgJSIgUFJJdTY0ICIgb2YgbGVuICUiIFBSSXU2NCwga2V5LCBsCj4gZW4pOwo+IAo+IEBA
+IC0xMDcyLDcgKzEwNzksMTEgQEAgaW50IGx0dG5nX3VzdGNvbnN1bWVyX3JlY3ZfbWV0YWRhdGEo
+aW50IHNvY2ssIHVpbnQ2NF90IGtlCj4geSwgdWludDY0X3Qgb2Zmc2V0LAo+ICAgICAgICBpZiAo
+IXdhaXQpIHsKPiAgICAgICAgICAgICAgICBnb3RvIGVuZF9mcmVlOwo+ICAgICAgICB9Cj4gKyAg
+ICAgICB3b3JrYXJvdW5kX2NvdW50ZXIgPSA0MjsKPiAgICAgICAgd2hpbGUgKGNvbnN1bWVyX21l
+dGFkYXRhX2NhY2hlX2ZsdXNoZWQoY2hhbm5lbCwgb2Zmc2V0ICsgbGVuLCB0aW1lcikpIHsKPiAr
+ICAgICAgICAgICAgICAgaWYgKCF3b3JrYXJvdW5kX2NvdW50ZXItLSkgewo+ICsgICAgICAgICAg
+ICAgICAgICAgICAgIGJyZWFrOwo+ICsgICAgICAgICAgICAgICB9Cj4gICAgICAgICAgICAgICAg
+REJHKCJXYWl0aW5nIGZvciBtZXRhZGF0YSB0byBiZSBmbHVzaGVkIik7Cj4gCj4gICAgICAgICAg
+ICAgICAgaGVhbHRoX2NvZGVfdXBkYXRlKCk7Cj4gLS0KPiAxLjcuOS41Cj4gCj4gYW5kIGl0IHNl
+ZW1zIHRvIGhlbHAgdXMgZ2V0IG91dCBvZiB0aGUgaGFuZywgYWx0aG91Z2ggbm90IGZpeGluZyB3
+aHkgd2UgZW50ZXJlZAo+IHRoZXJlLgo+IEknbGwgYmFjayB0aGF0IG91dCBhbmQgdHJ5IHRvIGdl
+dCB5b3VyIHBhdGNoIGluLi4uCj4gCj4gT2ssIHRlc3RlZCB0byB1c2Ugb25seSB0aGUgY29tbWl0
+IG9udG9wIG9mIG91ciBiYXNlLiBVbmZvcnR1bmF0ZWx5IGl0IGRvbid0IHdvcmsKPiBhdCBhbGwg
+dGhlbjoKPiAKPiByb290QGF4bTU1MTY6fiMgc2ggbHR0bmctaGFtbWVyMS5zaAo+IFJvdW5kIDAK
+PiBTZXNzaW9uIHMxIGNyZWF0ZWQuCj4gVHJhY2VzIHdpbGwgYmUgd3JpdHRlbiBpbiBuZXQ6Ly8x
+MjguMjI0Ljk1LjE5OTo1MzAwMDo1MzAwMQo+IExpdmUgdGltZXIgc2V0IHRvIDEwMDAwMDAgdXNl
+Ywo+IFVTVCBjaGFubmVsIG1ldGFkYXRhIGVuYWJsZWQgZm9yIHNlc3Npb24gczEKPiBVU1QgY2hh
+bm5lbCBjMSBlbmFibGVkIGZvciBzZXNzaW9uIHMxCj4gQWxsIFVTVCBldmVudHMgYXJlIGVuYWJs
+ZWQgaW4gY2hhbm5lbCBjMQo+IFRyYWNpbmcgc3RhcnRlZCBmb3Igc2Vzc2lvbiBzMQo+IFdhaXRp
+bmcgZm9yIGRhdGEKPiBhdmFpbGFiaWxpdHkuLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLl5D
+Cj4gcm9vdEBheG01NTE2On4jCj4gCj4gVGhpcyBtYXkgYmUgYmVjYXVzZSBvbmx5IHVzaW5nIHRo
+ZSBjb21taXQgSSBndWVzcy4gSXQgd2VudCBpbiBmaW5lIHdpdGhvdXQgYW55Cj4gbWFudWFsIGNo
+YW5nZSwgYnV0IHBlcmhhcHMgZGVwZW5kYW50IGFueXdheSBvbiBvdGhlciBjaGFuZ2VzIGJlZm9y
+ZS4KPiBOZXh0IGlzIHRoZW4gdG8gdHJ5IGEgYnVpbGQgd2l0aCBsYXRlc3QgYnJhbmNoIGFzIHlv
+dSB3YW50LCBidXQgdGhhdCB3aWxsIG5vdCBiZQo+IGFzIGVhc3kgaGVyZS4uLi4gSSdsbCBzZWUg
+d2hhdCBjYW4gYmUgZG9uZS4KPiBBbnkgb3BpbmlvbiBvbiB0aGUgY3J1ZGUgd29ya2Fyb3VuZCBh
+cyBhIGludGVybWVkaWF0ZSAiZml4Ij8KPiAKPiBCUiwKPiBQZXIKPiAKPiBPaywgd2UgaGF2ZSBu
+b3cgcnVuIG92ZXIgdGhlIHdlZWtlbmQgd2l0aCB0aGUgbGF0ZXN0JmdyZWF0ZXN0IG9uIG1hc3Rl
+ciBicmFuY2guCj4gQWZ0ZXIgOTAwMDArIHJvdW5kcywgdGhlcmUgaXMgYSBicmVha2Rvd246Cj4g
+Cj4gLi4uCj4gUm91bmQgOTAzMTEKPiBTZXNzaW9uIHMxIGNyZWF0ZWQuCj4gVHJhY2VzIHdpbGwg
+YmUgd3JpdHRlbiBpbiBuZXQ6Ly8xMjguMjI0Ljk1LjE1OjUyMDAwOjUyMDAxCj4gTGl2ZSB0aW1l
+ciBzZXQgdG8gMTAwMDAwMCB1c2VjCj4gVVNUIGNoYW5uZWwgbWV0YWRhdGEgZW5hYmxlZCBmb3Ig
+c2Vzc2lvbiBzMQo+IFVTVCBjaGFubmVsIGMxIGVuYWJsZWQgZm9yIHNlc3Npb24gczEKPiBBbGwg
+VVNUIGV2ZW50cyBhcmUgZW5hYmxlZCBpbiBjaGFubmVsIGMxCj4gVHJhY2luZyBzdGFydGVkIGZv
+ciBzZXNzaW9uIHMxCj4gV2FpdGluZyBmb3IgZGF0YSBhdmFpbGFiaWxpdHkKPiBUcmFjaW5nIHN0
+b3BwZWQgZm9yIHNlc3Npb24gczEKPiBTZXNzaW9uIHMxIGRlc3Ryb3llZAo+IFJvdW5kIDkwMzEy
+Cj4gU2Vzc2lvbiBzMSBjcmVhdGVkLgo+IFRyYWNlcyB3aWxsIGJlIHdyaXR0ZW4gaW4gbmV0Oi8v
+MTI4LjIyNC45NS4xNTo1MjAwMDo1MjAwMQo+IExpdmUgdGltZXIgc2V0IHRvIDEwMDAwMDAgdXNl
+Ywo+IEVycm9yOiBDaGFubmVsIG1ldGFkYXRhOiBVbmFibGUgdG8gY29ubmVjdCB0byBsdHRuZy1y
+ZWxheWQgKHNlc3Npb24gczEpCj4gRXJyb3I6IENvbW1hbmQgZXJyb3IKPiBFcnJvcjogQ2hhbm5l
+bCBjMTogVW5hYmxlIHRvIGNvbm5lY3QgdG8gbHR0bmctcmVsYXlkIChzZXNzaW9uIHMxKQo+IEVy
+cm9yOiBDb21tYW5kIGVycm9yCj4gRXJyb3I6IEV2ZW50czogVW5hYmxlIHRvIGNvbm5lY3QgdG8g
+bHR0bmctcmVsYXlkIChjaGFubmVsIGMxLCBzZXNzaW9uIHMxKQo+IEVycm9yOiBDb21tYW5kIGVy
+cm9yCj4gRXJyb3I6IE5vIGNoYW5uZWwgZm91bmQgaW4gdGhlIHNlc3Npb24KPiBXYXJuaW5nOiBU
+cmFjaW5nIGFscmVhZHkgc3RvcHBlZCBmb3Igc2Vzc2lvbiBzMQo+IFNlc3Npb24gczEgZGVzdHJv
+eWVkCj4gLi4uCj4gCj4gQWZ0ZXIgdGhhdCBpdCBuZXZlciBnZXQgYmFjayB0byBhIHdvcmtpbmcg
+c3RhdGUgYWdhaW4uCj4gSW4gdGhlIGx0dG5nLXNlc3Npb25kL2NvbnN1bWVyZCBsb2cgd2Ugc2Vl
+Ogo+IAo+IC4uLgo+IERFQlVHMSAtIDEyOjQ1OjE3LjIwNTAzNSBbODY5NC84Njk0XTogQ2xlYW5p
+bmcgdXAgYWxsIGFnZW50IGFwcHMgKGluCj4gc2Vzc2lvbmRfY2xlYW51cCgpIGF0IG1haW4uYzo3
+MTUpCj4gREVCVUcxIC0gMTI6NDU6MTcuMjA1MDg0IFs4Njk0Lzg2OTRdOiBDbG9zaW5nIGFsbCBV
+U1Qgc29ja2V0cyAoaW4KPiBzZXNzaW9uZF9jbGVhbnVwKCkgYXQgbWFpbi5jOjcxOCkKPiBERUJV
+RzMgLSAxMjo0NToxNy4yMDUxNjcgWzg2OTQvODY5NV06IFtodC10aHJlYWRdIFJldHVybmluZyBm
+cm9tIHBvbGwgb24gMiBmZHMuCj4gKGluIHRocmVhZF9odF9jbGVhbnVwKCkgYXQgaHQtY2xlYW51
+cC5jOjc0KQo+IERFQlVHMyAtIDEyOjQ1OjE3LjIwNTE3MyBbODY5NC84Njk0XTogQnVmZmVyIHJl
+Z2lzdHJ5IGRlc3Ryb3kgYWxsIHJlZ2lzdHJ5IChpbgo+IGJ1ZmZlcl9yZWdfZGVzdHJveV9yZWdp
+c3RyaWVzKCkgYXQgYnVmZmVyLXJlZ2lzdHJ5LmM6NzE2KQo+IERFQlVHMyAtIDEyOjQ1OjE3LjIw
+NTI0MCBbODY5NC84Njk1XTogW2h0LXRocmVhZF0gUG9sbGluZy4gKGluCj4gdGhyZWFkX2h0X2Ns
+ZWFudXAoKSBhdCBodC1jbGVhbnVwLmM6NjcpCj4gREVCVUcxIC0gMTI6NDU6MTcuMjA1MjgwIFs4
+Njk0Lzg2OTRdOiBVbmxvYWRpbmcga2VybmVsIG1vZHVsZXMgKGluCj4gc2Vzc2lvbmRfY2xlYW51
+cCgpIGF0IG1haW4uYzo3MzApCj4gREVCVUczIC0gMTI6NDU6MTcuMjA1MjkyIFs4Njk0Lzg2OTVd
+OiBbaHQtdGhyZWFkXSBSZXR1cm5pbmcgZnJvbSBwb2xsIG9uIDIgZmRzLgo+IChpbiB0aHJlYWRf
+aHRfY2xlYW51cCgpIGF0IGh0LWNsZWFudXAuYzo3NCkKPiBERUJVRzMgLSAxMjo0NToxNy4yMDUz
+NzggWzg2OTQvODY5NV06IFtodC10aHJlYWRdIFBvbGxpbmcuIChpbgo+IHRocmVhZF9odF9jbGVh
+bnVwKCkgYXQgaHQtY2xlYW51cC5jOjY3KQo+IERFQlVHMyAtIDEyOjQ1OjE3LjIwNTQxNSBbODY5
+NC84Njk1XTogW2h0LXRocmVhZF0gUmV0dXJuaW5nIGZyb20gcG9sbCBvbiAyIGZkcy4KPiAoaW4g
+dGhyZWFkX2h0X2NsZWFudXAoKSBhdCBodC1jbGVhbnVwLmM6NzQpCj4gREVCVUczIC0gMTI6NDU6
+MTcuMjA1NDUwIFs4Njk0Lzg2OTVdOiBbaHQtdGhyZWFkXSBQb2xsaW5nLiAoaW4KPiB0aHJlYWRf
+aHRfY2xlYW51cCgpIGF0IGh0LWNsZWFudXAuYzo2NykKPiBERUJVRzMgLSAxMjo0NToxNy4yMDU0
+ODcgWzg2OTQvODY5NV06IFtodC10aHJlYWRdIFJldHVybmluZyBmcm9tIHBvbGwgb24gMiBmZHMu
+Cj4gKGluIHRocmVhZF9odF9jbGVhbnVwKCkgYXQgaHQtY2xlYW51cC5jOjc0KQo+IERFQlVHMyAt
+IDEyOjQ1OjE3LjIwNTU0MSBbODY5NC84Njk1XTogW2h0LXRocmVhZF0gUG9sbGluZy4gKGluCj4g
+dGhyZWFkX2h0X2NsZWFudXAoKSBhdCBodC1jbGVhbnVwLmM6NjcpCj4gREVCVUczIC0gMTI6NDU6
+MTcuMjA1NTc4IFs4Njk0Lzg2OTVdOiBbaHQtdGhyZWFkXSBSZXR1cm5pbmcgZnJvbSBwb2xsIG9u
+IDIgZmRzLgo+IChpbiB0aHJlYWRfaHRfY2xlYW51cCgpIGF0IGh0LWNsZWFudXAuYzo3NCkKPiBE
+RUJVRzMgLSAxMjo0NToxNy4yMDU2MTkgWzg2OTQvODY5NV06IFtodC10aHJlYWRdIFBvbGxpbmcu
+IChpbgo+IHRocmVhZF9odF9jbGVhbnVwKCkgYXQgaHQtY2xlYW51cC5jOjY3KQo+IERFQlVHMyAt
+IDEyOjQ1OjE3LjIwOTY4MSBbODY5NC84Njk1XTogW2h0LXRocmVhZF0gUmV0dXJuaW5nIGZyb20g
+cG9sbCBvbiAyIGZkcy4KPiAoaW4gdGhyZWFkX2h0X2NsZWFudXAoKSBhdCBodC1jbGVhbnVwLmM6
+NzQpCj4gREVCVUcxIC0gMTI6NDU6MTcuMjA5NzExIFs4Njk0Lzg2OTVdOiBbaHQtY2xlYW51cF0g
+cXVpdC4gKGluIHRocmVhZF9odF9jbGVhbnVwKCkKPiBhdCBodC1jbGVhbnVwLmM6MTU0KQo+IERF
+QlVHMSAtIDEyOjQ1OjE3LjIwOTc3OCBbODY5NC84Njk1XTogW2h0LWNsZWFudXBdIFRocmVhZCB0
+ZXJtaW5hdGVzLiAoaW4KPiB0aHJlYWRfaHRfY2xlYW51cCgpIGF0IGh0LWNsZWFudXAuYzoxNjUp
+Cj4gREVCVUcxIC0gMTI6NDU6MTcuMjEwMjU0IFs4Njk0Lzg2OTRdOiBDbGVhbmluZyB1cCBvcHRp
+b25zIChpbgo+IHNlc3Npb25kX2NsZWFudXBfb3B0aW9ucygpIGF0IG1haW4uYzo3NzcpCj4gREVC
+VUcxIC0gMTI6NDU6MTcuMjEwMjkzIFs4Njk0Lzg2OTRdOiAqKiogYXNzZXJ0IGZhaWxlZCA6LSkg
+KioqID09PiBNYXR0aGV3LAo+IEJFRVQgZHJpdmVuIGRldmVsb3BtZW50IHdvcmtzISAoaW4gc2Vz
+c2lvbmRfY2xlYW51cF9vcHRpb25zKCkgYXQgbWFpbi5jOjgwNykKPiByb290QGF4bTU1MTY6fiMK
+PiAKPiBIYXJkIHRvIHNheSBpZiB0aGF0IGlzIHNhbWUgc2l0dWF0aW9uIGJ1dCBhdCBsZWFzdCBp
+dCBzZWVtcyB0byBiZSBkdXJpbmcgYQo+IHNlc3Npb24gZGVzdHJveSBzY2VuYXJpby4KPiBTbyB0
+aGUgbmV3ZXIgY29kZSBiYXNlIHNlZW1zIHRvIGhhdmUgaXNzdWVzIHN0aWxsLgoKV2UncmUgbWlz
+c2luZyB0aGUgbG9nIGZyb20gcmVsYXlkIHRvIHVuZGVyc3RhbmQgd2hhdCBpcyBnb2luZyBvbiB0
+aGVyZS4KClRoYW5rcywKCk1hdGhpZXUKCj4gCj4gQlIsCj4gUGVyCj4gCj4gVGhhbmtzLAo+IAo+
+IE1hdGhpZXUKPiAKPj4KPj4gQmVzdCByZWdhcmRzLAo+PiBQZXIKPj4gX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gbHR0bmctZGV2IG1haWxpbmcgbGlz
+dAo+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+IAo+IC0tCj4gTWF0aGlldSBEZXNu
+b3llcnMKPiBFZmZpY2lPUyBJbmMuCj4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KPiBfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWls
+aW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5n
+Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCj4gX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBs
+aXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKLS0gCk1hdGhpZXUgRGVzbm95ZXJz
+CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
+bG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
