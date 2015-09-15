@@ -1,20 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools 5/5] Print relayd stream indexes
-Date: Mon, 14 Sep 2015 18:04:58 -0400
-Message-ID: <CA+jJMxvqRmhBNwR5ca180ck+3GvTKO1jSY1B9WmmqP42sHctaA__27080.1683924676$1442268355$gmane$org@mail.gmail.com>
-References: <1441814197-9941-1-git-send-email-mathieu.desnoyers@efficios.com>
- <1441814197-9941-5-git-send-email-mathieu.desnoyers@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-tools] Fix: add missing test file to
+	EXTRA_DIST
+Date: Tue, 15 Sep 2015 10:37:48 -0400
+Message-ID: <1442327868-9659-1-git-send-email-mjeanson__14497.4188217477$1442327965$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f169.google.com ([209.85.160.169])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Zbbrz-0002jn-KG
- for lttng-dev@lists.lttng.org; Mon, 14 Sep 2015 18:05:05 -0400
-Received: by ykdg206 with SMTP id g206so167069271ykd.1
- for <lttng-dev@lists.lttng.org>; Mon, 14 Sep 2015 15:04:58 -0700 (PDT)
-In-Reply-To: <1441814197-9941-5-git-send-email-mathieu.desnoyers@efficios.com>
+ (envelope-from <mjeanson@efficios.com>) id 1ZbrN4-0007pH-Lb
+ for lttng-dev@lists.lttng.org; Tue, 15 Sep 2015 10:38:15 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,47 +19,26 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIG1hc3RlciBhbmQgc3RhYmxlLTIuNy4KClRoYW5rcyEKSsOpcsOpbWllCgpPbiBX
-ZWQsIFNlcCA5LCAyMDE1IGF0IDExOjU2IEFNLCBNYXRoaWV1IERlc25veWVycwo8bWF0aGlldS5k
-ZXNub3llcnNAZWZmaWNpb3MuY29tPiB3cm90ZToKPiBJbiBkZWJ1ZyBvdXRwdXQsIHByaW50IGxl
-YWtpbmcgc3RyZWFtIGluZGV4IGluZm9ybWF0aW9uIHdoZW4gZXhpdGluZwo+IGZyb20gcmVsYXkg
-ZGFlbW9uLgo+Cj4gU2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVz
-bm95ZXJzQGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgc3JjL2Jpbi9sdHRuZy1yZWxheWQvc3RyZWFt
-LmMgfCAyMiArKysrKysrKysrKysrKysrKysrKysrCj4gIDEgZmlsZSBjaGFuZ2VkLCAyMiBpbnNl
-cnRpb25zKCspCj4KPiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy1yZWxheWQvc3RyZWFtLmMg
-Yi9zcmMvYmluL2x0dG5nLXJlbGF5ZC9zdHJlYW0uYwo+IGluZGV4IGNhYzg3NjMuLmI2MDQ5MTkg
-MTAwNjQ0Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1yZWxheWQvc3RyZWFtLmMKPiArKysgYi9zcmMv
-YmluL2x0dG5nLXJlbGF5ZC9zdHJlYW0uYwo+IEBAIC00MTYsNiArNDE2LDI3IEBAIHZvaWQgdHJ5
-X3N0cmVhbV9jbG9zZShzdHJ1Y3QgcmVsYXlfc3RyZWFtICpzdHJlYW0pCj4gICAgICAgICBzdHJl
-YW1fcHV0KHN0cmVhbSk7Cj4gIH0KPgo+ICtzdGF0aWMgdm9pZCBwcmludF9zdHJlYW1faW5kZXhl
-cyhzdHJ1Y3QgcmVsYXlfc3RyZWFtICpzdHJlYW0pCj4gK3sKPiArICAgICAgIHN0cnVjdCBsdHRu
-Z19odF9pdGVyIGl0ZXI7Cj4gKyAgICAgICBzdHJ1Y3QgcmVsYXlfaW5kZXggKmluZGV4Owo+ICsK
-PiArICAgICAgIHJjdV9yZWFkX2xvY2soKTsKPiArICAgICAgIGNkc19sZmh0X2Zvcl9lYWNoX2Vu
-dHJ5KHN0cmVhbS0+aW5kZXhlc19odC0+aHQsICZpdGVyLml0ZXIsIGluZGV4LAo+ICsgICAgICAg
-ICAgICAgICAgICAgICAgIGluZGV4X24ubm9kZSkgewo+ICsgICAgICAgICAgICAgICBEQkcoImlu
-ZGV4ICVwIG5ldF9zZXFfbnVtICUiIFBSSXU2NCAiIHJlZmNvdW50ICVsZCIKPiArICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICIgc3RyZWFtICUiIFBSSXU2NCAiIHRyYWNlICUiIFBSSXU2
-NAo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIiBzZXNzaW9uICUiIFBSSXU2NCwK
-PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGluZGV4LAo+ICsgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgaW5kZXgtPmluZGV4X24ua2V5LAo+ICsgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgc3RyZWFtLT5yZWYucmVmY291bnQsCj4gKyAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICBpbmRleC0+c3RyZWFtLT5zdHJlYW1faGFuZGxlLAo+ICsgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgaW5kZXgtPnN0cmVhbS0+dHJhY2UtPmlkLAo+ICsgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgaW5kZXgtPnN0cmVhbS0+dHJhY2UtPnNlc3Npb24tPmlk
-KTsKPiArICAgICAgIH0KPiArICAgICAgIHJjdV9yZWFkX3VubG9jaygpOwo+ICt9Cj4gKwo+ICB2
-b2lkIHByaW50X3JlbGF5X3N0cmVhbXModm9pZCkKPiAgewo+ICAgICAgICAgc3RydWN0IGx0dG5n
-X2h0X2l0ZXIgaXRlcjsKPiBAQCAtNDM0LDYgKzQ1NSw3IEBAIHZvaWQgcHJpbnRfcmVsYXlfc3Ry
-ZWFtcyh2b2lkKQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RyZWFtLT5zdHJl
-YW1faGFuZGxlLAo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RyZWFtLT50cmFj
-ZS0+aWQsCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJlYW0tPnRyYWNlLT5z
-ZXNzaW9uLT5pZCk7Cj4gKyAgICAgICAgICAgICAgIHByaW50X3N0cmVhbV9pbmRleGVzKHN0cmVh
-bSk7Cj4gICAgICAgICAgICAgICAgIHN0cmVhbV9wdXQoc3RyZWFtKTsKPiAgICAgICAgIH0KPiAg
-ICAgICAgIHJjdV9yZWFkX3VubG9jaygpOwo+IC0tCj4gMi4xLjQKPgoKCgotLSAKSsOpcsOpbWll
-IEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGlu
-ZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9j
-Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ tests/regression/tools/save-load/Makefile.am | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tests/regression/tools/save-load/Makefile.am b/tests/regression/tools/save-load/Makefile.am
+index 6b496be..d6a6ae3 100644
+--- a/tests/regression/tools/save-load/Makefile.am
++++ b/tests/regression/tools/save-load/Makefile.am
+@@ -1,5 +1,6 @@
+ noinst_SCRIPTS = test_save test_load
+-EXTRA_DIST = $(noinst_SCRIPTS) load-42.lttng load-42-complex.lttng
++EXTRA_DIST = $(noinst_SCRIPTS) load-42.lttng load-42-complex.lttng \
++	     load-42-trackers.lttng
+ 
+ all-local:
+ 	@if [ x"$(srcdir)" != x"$(builddir)" ]; then \
+-- 
+1.9.1
