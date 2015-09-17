@@ -1,16 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 1/2] Fix: relayd: don't call
-	lttng_ht_destroy in RCU read-side C.S.
-Date: Thu, 17 Sep 2015 12:48:40 -0400
-Message-ID: <1442508521-32200-1-git-send-email-mathieu.desnoyers__20681.6532802351$1442508686$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools] Fix: tests: skip UST perf tests if
+	not root
+Date: Thu, 17 Sep 2015 14:10:50 -0400
+Message-ID: <1442513450-8013-1-git-send-email-mathieu.desnoyers__4550.00403239882$1442513542$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZccMd-0006Gn-Ax
- for lttng-dev@lists.lttng.org; Thu, 17 Sep 2015 12:48:52 -0400
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1Zcde8-0006jd-Pi
+ for lttng-dev@lists.lttng.org; Thu, 17 Sep 2015 14:11:09 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,63 +23,45 @@ To: jgalar@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-It is forbidden to call lttng_ht_destroy() within a RCU read-side
-critical section.
+Some distributions like Debian (e.g. Debian kernel 4.1.0-2-amd64) have
+some grsecurity options enabled, such as CONFIG_GRKERNSEC_PERF_HARDEN.
+
+Unfortunately, this option makes it impossible to use the SW page-fault
+perf event as a normal user. It only leaves some HW events. However, we
+can only use SW events within virtual machines.
+
+Therefore, only run this test as root for now until we find a better
+approach.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- src/bin/lttng-relayd/session.c | 15 ++++++++-------
- src/bin/lttng-relayd/stream.c  |  5 +++++
- 2 files changed, 13 insertions(+), 7 deletions(-)
+ tests/regression/ust/test_event_perf | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/src/bin/lttng-relayd/session.c b/src/bin/lttng-relayd/session.c
-index 14ae874..2300e5f 100644
---- a/src/bin/lttng-relayd/session.c
-+++ b/src/bin/lttng-relayd/session.c
-@@ -131,7 +131,14 @@ static void rcu_destroy_session(struct rcu_head *rcu_head)
- 	struct relay_session *session =
- 			caa_container_of(rcu_head, struct relay_session,
- 				rcu_node);
--
-+	/*
-+	 * Since each trace has a reference on the session, it means
-+	 * that if we are at the point where we teardown the session, no
-+	 * trace belonging to that session exist at this point.
-+	 * Calling lttng_ht_destroy in call_rcu worker thread so we
-+	 * don't hold the RCU read-side lock while calling it.
-+	 */
-+	lttng_ht_destroy(session->ctf_traces_ht);
- 	free(session);
- }
+diff --git a/tests/regression/ust/test_event_perf b/tests/regression/ust/test_event_perf
+index 7fb37ed..7dc2168 100755
+--- a/tests/regression/ust/test_event_perf
++++ b/tests/regression/ust/test_event_perf
+@@ -90,8 +90,17 @@ plan_tests $NUM_TESTS
  
-@@ -155,12 +162,6 @@ static void destroy_session(struct relay_session *session)
+ print_test_banner "$TEST_DESC"
  
- 	ret = session_delete(session);
- 	assert(!ret);
--	/*
--	 * Since each trace has a reference on the session, it means
--	 * that if we are at the point where we teardown the session, no
--	 * trace belonging to that session exist at this point.
--	 */
--	lttng_ht_destroy(session->ctf_traces_ht);
- 	call_rcu(&session->rcu_node, rcu_destroy_session);
- }
+-start_lttng_sessiond
++if [ "$(id -u)" == "0" ]; then
++        isroot=1
++else
++        isroot=0
++fi
++
++skip $isroot "Root access is needed. Skipping UST perf tests." ${NUM_TESTS} ||
++{
++	start_lttng_sessiond
  
-diff --git a/src/bin/lttng-relayd/stream.c b/src/bin/lttng-relayd/stream.c
-index b604919..8825d09 100644
---- a/src/bin/lttng-relayd/stream.c
-+++ b/src/bin/lttng-relayd/stream.c
-@@ -253,6 +253,11 @@ static void stream_unpublish(struct relay_stream *stream)
- static void stream_destroy(struct relay_stream *stream)
- {
- 	if (stream->indexes_ht) {
-+		/*
-+		 * Calling lttng_ht_destroy in call_rcu worker thread so
-+		 * we don't hold the RCU read-side lock while calling
-+		 * it.
-+		 */
- 		lttng_ht_destroy(stream->indexes_ht);
- 	}
- 	if (stream->tfa) {
+-test_event_basic
++	test_event_basic
+ 
+-stop_lttng_sessiond
++	stop_lttng_sessiond
++}
 -- 
 2.1.4
