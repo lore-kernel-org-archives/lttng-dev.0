@@ -1,16 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH v3 lttng-tools] Fix: libc internal mutex races
-	with run_as
-Date: Thu, 17 Sep 2015 11:30:29 -0400
-Message-ID: <1442503829-30708-1-git-send-email-mathieu.desnoyers__30748.2115844779$1442504008$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-tools] relay: use
+	urcu_ref_get_unless_zero
+Date: Thu, 17 Sep 2015 12:24:32 -0400
+Message-ID: <1442507072-4178-1-git-send-email-mathieu.desnoyers__4374.94363072819$1442507147$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1Zcb97-0005qb-Dw
- for lttng-dev@lists.lttng.org; Thu, 17 Sep 2015 11:31:04 -0400
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZcbzJ-00068Y-4K
+ for lttng-dev@lists.lttng.org; Thu, 17 Sep 2015 12:24:47 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,929 +23,412 @@ To: jgalar@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Implement a proper run_as worker process scheme to fix internal libc
-mutex races. Those races lead to having the internal mutex held by
-another process when clone() is called, thus hanging the clone child.
-
-Now that we create the worker process when the parent process is
-still single-threaded, we don't run into those issues. Implement a
-standard fork + file descriptor passing over unnamed unix sockets rather
-than the prior clone + shared file descriptor table, which was causing
-issues with valgrind.
-
-This adds a new process called "lttng-runas" for each sessiond
-and consumerd process.
+This allows removing the reflock be performing this check and increment
+atomically.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- src/bin/lttng-consumerd/lttng-consumerd.c |   4 +
- src/bin/lttng-sessiond/main.c             |   7 +
- src/common/Makefile.am                    |   4 +-
- src/common/consumer.c                     |   2 +
- src/common/hashtable/rculfhash.c          |   8 -
- src/common/runas.c                        | 548 ++++++++++++++++++++----------
- src/common/runas.h                        |  15 +-
- src/common/sessiond-comm/Makefile.am      |   2 +-
- src/common/sessiond-comm/unix.c           |  10 +
- src/common/sessiond-comm/unix.h           |   1 +
- 10 files changed, 413 insertions(+), 188 deletions(-)
+ doc/relayd-architecture.txt          |  7 +------
+ src/bin/lttng-relayd/connection.c    | 14 +-------------
+ src/bin/lttng-relayd/connection.h    |  1 -
+ src/bin/lttng-relayd/ctf-trace.c     | 15 +--------------
+ src/bin/lttng-relayd/ctf-trace.h     |  4 ----
+ src/bin/lttng-relayd/index.c         | 15 +--------------
+ src/bin/lttng-relayd/index.h         |  1 -
+ src/bin/lttng-relayd/session.c       | 14 +-------------
+ src/bin/lttng-relayd/session.h       |  2 --
+ src/bin/lttng-relayd/stream.c        | 27 ++-------------------------
+ src/bin/lttng-relayd/stream.h        |  6 ------
+ src/bin/lttng-relayd/viewer-stream.c | 14 +-------------
+ src/bin/lttng-relayd/viewer-stream.h |  1 -
+ 13 files changed, 8 insertions(+), 113 deletions(-)
 
-diff --git a/src/bin/lttng-consumerd/lttng-consumerd.c b/src/bin/lttng-consumerd/lttng-consumerd.c
-index 0d34fee..7ecbe7a 100644
---- a/src/bin/lttng-consumerd/lttng-consumerd.c
-+++ b/src/bin/lttng-consumerd/lttng-consumerd.c
-@@ -422,6 +422,10 @@ int main(int argc, char **argv)
- 		set_ulimit();
- 	}
+diff --git a/doc/relayd-architecture.txt b/doc/relayd-architecture.txt
+index 1491da9..56c8124 100644
+--- a/doc/relayd-architecture.txt
++++ b/doc/relayd-architecture.txt
+@@ -44,10 +44,7 @@ A RCU lookup+refcounting scheme has been introduced for all objects
+ scheme allows looking up the objects or doing a traversal on the RCU
+ linked list or hash table in combination with a getter on the object.
+ This getter validates that there is still at least one reference to the
+-object, else the lookup acts just as if the object does not exist. This
+-scheme is protected by a "reflock" mutex in each object. "reflock"
+-mutexes can be nested from the innermost object to the outermost object.
+-IOW, the session reflock can nest within the ctf-trace reflock.
++object, else the lookup acts just as if the object does not exist.
  
-+	if (run_as_create_worker(argv[0]) < 0) {
-+		goto exit_init_data;
-+	}
-+
- 	/* create the consumer instance with and assign the callbacks */
- 	ctx = lttng_consumer_create(opt_type, lttng_consumer_read_subbuffer,
- 		NULL, lttng_consumer_on_recv_stream, NULL);
-diff --git a/src/bin/lttng-sessiond/main.c b/src/bin/lttng-sessiond/main.c
-index 13bd649..5d098d7 100644
---- a/src/bin/lttng-sessiond/main.c
-+++ b/src/bin/lttng-sessiond/main.c
-@@ -801,6 +801,8 @@ static void sessiond_cleanup_options(void)
- 	free(kmod_probes_list);
- 	free(kmod_extra_probes_list);
+ The relay_connection (connection between the sessiond/consumer and the
+ relayd) is the outermost object of its hierarchy.
+@@ -61,8 +58,6 @@ live.c client thread) when objects are shared. Locks can be nested from
+ the outermost object to the innermost object. IOW, the ctf-trace lock can
+ nest within the session lock.
  
-+	run_as_destroy_worker();
-+
- 	/* <fun> */
- 	DBG("%c[%d;%dm*** assert failed :-) *** ==> %c[%dm%c[%d;%dm"
- 			"Matthew, BEET driven development works!%c[%dm",
-@@ -5510,6 +5512,10 @@ int main(int argc, char **argv)
- 		}
- 	}
- 
-+	if (run_as_create_worker(argv[0]) < 0) {
-+		goto exit_create_run_as_worker_cleanup;
-+	}
-+
- 	/*
- 	 * Starting from here, we can create threads. This needs to be after
- 	 * lttng_daemonize due to RCU.
-@@ -6127,6 +6133,7 @@ exit_ht_cleanup_quit_pipe:
- 
- 	health_app_destroy(health_sessiond);
- exit_health_sessiond_cleanup:
-+exit_create_run_as_worker_cleanup:
- 
- exit_options:
- 	sessiond_cleanup_options();
-diff --git a/src/common/Makefile.am b/src/common/Makefile.am
-index 97d0ecc..64110e6 100644
---- a/src/common/Makefile.am
-+++ b/src/common/Makefile.am
-@@ -18,7 +18,9 @@ libcommon_la_SOURCES = error.h error.c utils.c utils.h runas.c runas.h \
-                        common.h futex.c futex.h uri.c uri.h defaults.c \
-                        pipe.c pipe.h readwrite.c readwrite.h \
-                        mi-lttng.h mi-lttng.c \
--                       daemonize.c daemonize.h
-+                       daemonize.c daemonize.h \
-+                       sessiond-comm/unix.c sessiond-comm/unix.h
-+
- libcommon_la_LIBADD = \
- 		-luuid \
- 		-lrt \
-diff --git a/src/common/consumer.c b/src/common/consumer.c
-index 0299d5e..857201d 100644
---- a/src/common/consumer.c
-+++ b/src/common/consumer.c
-@@ -1212,6 +1212,8 @@ void lttng_consumer_cleanup(void)
- 	 * it.
- 	 */
- 	lttng_ht_destroy(consumer_data.stream_list_ht);
-+
-+	run_as_destroy_worker();
- }
- 
- /*
-diff --git a/src/common/hashtable/rculfhash.c b/src/common/hashtable/rculfhash.c
-index fb44640..9baf407 100644
---- a/src/common/hashtable/rculfhash.c
-+++ b/src/common/hashtable/rculfhash.c
-@@ -281,14 +281,6 @@
- #include <common/common.h>
- 
- /*
-- * We need to lock pthread exit, which deadlocks __nptl_setxid in the runas
-- * clone.  This work-around will be allowed to be removed when runas.c gets
-- * changed to do an exec() before issuing seteuid/setegid. See
-- * http://sourceware.org/bugzilla/show_bug.cgi?id=10184 for details.
-- */
--pthread_mutex_t lttng_libc_state_lock = PTHREAD_MUTEX_INITIALIZER;
+-A "lock" should never nest within a "reflock".
 -
--/*
-  * Split-counters lazily update the global counter each 1024
-  * addition/removal. It automatically keeps track of resize required.
-  * We use the bucket length as indicator for need to expand for small
-diff --git a/src/common/runas.c b/src/common/runas.c
-index 8dda209..2634ae9 100644
---- a/src/common/runas.c
-+++ b/src/common/runas.c
-@@ -33,58 +33,51 @@
+ RCU linked lists are used to iterate using RCU, and are protected by
+ their own mutex for modifications. Iterations should be confirmed using
+ the object "getter" to ensure its refcount is not 0 (except in cases
+diff --git a/src/bin/lttng-relayd/connection.c b/src/bin/lttng-relayd/connection.c
+index fce6c84..b3a9c06 100644
+--- a/src/bin/lttng-relayd/connection.c
++++ b/src/bin/lttng-relayd/connection.c
+@@ -28,16 +28,7 @@
  
- #include <common/common.h>
- #include <common/utils.h>
--#include <common/compat/mman.h>
--#include <common/compat/clone.h>
- #include <common/compat/getenv.h>
-+#include <common/sessiond-comm/unix.h>
- 
- #include "runas.h"
- 
--#define RUNAS_CHILD_STACK_SIZE	10485760
+ bool connection_get(struct relay_connection *conn)
+ {
+-	bool has_ref = false;
 -
--#ifndef MAP_STACK
--#define MAP_STACK		0
--#endif
+-	pthread_mutex_lock(&conn->reflock);
+-	if (conn->ref.refcount != 0) {
+-		has_ref = true;
+-		urcu_ref_get(&conn->ref);
+-	}
+-	pthread_mutex_unlock(&conn->reflock);
 -
--#ifdef __FreeBSD__
--/* FreeBSD MAP_STACK always return -ENOMEM */
--#define LTTNG_MAP_STACK		0
--#else
--#define LTTNG_MAP_STACK		MAP_STACK
--#endif
--
--#ifndef MAP_GROWSDOWN
--#define MAP_GROWSDOWN		0
--#endif
--
--#ifndef MAP_ANONYMOUS
--#define MAP_ANONYMOUS		MAP_ANON
--#endif
--
--struct run_as_data {
--	int (*cmd)(void *data);
--	void *data;
--	uid_t uid;
--	gid_t gid;
--	int retval_pipe;
--};
-+struct run_as_data;
-+typedef int (*run_as_fct)(struct run_as_data *data);
- 
- struct run_as_mkdir_data {
--	const char *path;
-+	char path[PATH_MAX];
- 	mode_t mode;
- };
- 
- struct run_as_open_data {
--	const char *path;
-+	char path[PATH_MAX];
- 	int flags;
- 	mode_t mode;
- };
- 
- struct run_as_unlink_data {
--	const char *path;
-+	char path[PATH_MAX];
- };
- 
--struct run_as_recursive_rmdir_data {
--	const char *path;
-+struct run_as_rmdir_recursive_data {
-+	char path[PATH_MAX];
-+};
-+
-+enum run_as_cmd {
-+	RUN_AS_MKDIR,
-+	RUN_AS_OPEN,
-+	RUN_AS_UNLINK,
-+	RUN_AS_RMDIR_RECURSIVE,
-+	RUN_AS_MKDIR_RECURSIVE,
-+};
-+
-+struct run_as_data {
-+	enum run_as_cmd cmd;
-+	union {
-+		struct run_as_mkdir_data mkdir;
-+		struct run_as_open_data open;
-+		struct run_as_unlink_data unlink;
-+		struct run_as_rmdir_recursive_data rmdir_recursive;
-+	} u;
-+	uid_t uid;
-+	gid_t gid;
- };
- 
- struct run_as_ret {
-@@ -92,6 +85,17 @@ struct run_as_ret {
- 	int _errno;
- };
- 
-+struct run_as_worker {
-+	pid_t pid;	/* Worker PID. */
-+	int sockpair[2];
-+	char *procname;
-+};
-+
-+/* Single global worker per process (for now). */
-+static struct run_as_worker *global_worker;
-+/* Lock protecting the worker. */
-+static pthread_mutex_t worker_lock = PTHREAD_MUTEX_INITIALIZER;
-+
- #ifdef VALGRIND
- static
- int use_clone(void)
-@@ -113,75 +117,152 @@ int _utils_mkdir_recursive_unsafe(const char *path, mode_t mode);
-  * Create recursively directory using the FULL path.
-  */
- static
--int _mkdir_recursive(void *_data)
-+int _mkdir_recursive(struct run_as_data *data)
- {
--	struct run_as_mkdir_data *data = _data;
- 	const char *path;
- 	mode_t mode;
- 
--	path = data->path;
--	mode = data->mode;
-+	path = data->u.mkdir.path;
-+	mode = data->u.mkdir.mode;
- 
- 	/* Safe to call as we have transitioned to the requested uid/gid. */
- 	return _utils_mkdir_recursive_unsafe(path, mode);
+-	return has_ref;
++	return urcu_ref_get_unless_zero(&conn->ref);
  }
  
- static
--int _mkdir(void *_data)
-+int _mkdir(struct run_as_data *data)
- {
--	struct run_as_mkdir_data *data = _data;
-+	return mkdir(data->u.mkdir.path, data->u.mkdir.mode);
-+}
- 
--	return mkdir(data->path, data->mode);
-+static
-+int _open(struct run_as_data *data)
-+{
-+	return open(data->u.open.path, data->u.open.flags, data->u.open.mode);
- }
- 
- static
--int _open(void *_data)
-+int _unlink(struct run_as_data *data)
- {
--	struct run_as_open_data *data = _data;
-+	return unlink(data->u.unlink.path);
-+}
- 
--	return open(data->path, data->flags, data->mode);
-+static
-+int _rmdir_recursive(struct run_as_data *data)
-+{
-+	return utils_recursive_rmdir(data->u.rmdir_recursive.path);
-+}
-+
-+static
-+run_as_fct run_as_enum_to_fct(enum run_as_cmd cmd)
-+{
-+	switch (cmd) {
-+	case RUN_AS_MKDIR:
-+		return _mkdir;
-+	case RUN_AS_OPEN:
-+		return _open;
-+	case RUN_AS_UNLINK:
-+		return _unlink;
-+	case RUN_AS_RMDIR_RECURSIVE:
-+		return _rmdir_recursive;
-+	case RUN_AS_MKDIR_RECURSIVE:
-+		return _mkdir_recursive;
-+	default:
-+		ERR("Unknown command %d", (int) cmd)
-+		return NULL;
-+	}
- }
- 
- static
--int _unlink(void *_data)
-+int do_send_fd(struct run_as_worker *worker,
-+		enum run_as_cmd cmd, int fd)
- {
--	struct run_as_unlink_data *data = _data;
-+	ssize_t len;
- 
--	return unlink(data->path);
-+	switch (cmd) {
-+	case RUN_AS_OPEN:
-+		break;
-+	default:
-+		return 0;
-+	}
-+	if (fd < 0) {
-+		return 0;
-+	}
-+	len = lttcomm_send_fds_unix_sock(worker->sockpair[1], &fd, 1);
-+	if (len < 0) {
-+		PERROR("lttcomm_send_fds_unix_sock");
-+		return -1;
-+	}
-+	if (close(fd) < 0) {
-+		PERROR("close");
-+		return -1;
-+	}
-+	return 0;
- }
- 
- static
--int _recursive_rmdir(void *_data)
-+int do_recv_fd(struct run_as_worker *worker,
-+		enum run_as_cmd cmd, int *fd)
- {
--	struct run_as_recursive_rmdir_data *data = _data;
-+	ssize_t len;
- 
--	return utils_recursive_rmdir(data->path);
-+	switch (cmd) {
-+	case RUN_AS_OPEN:
-+		break;
-+	default:
-+		return 0;
-+	}
-+	if (*fd < 0) {
-+		return 0;
-+	}
-+	len = lttcomm_recv_fds_unix_sock(worker->sockpair[0], fd, 1);
-+	if (len < 0) {
-+		PERROR("lttcomm_recv_fds_unix_sock");
-+		return -1;
-+	}
-+	return 0;
- }
- 
-+/*
-+ * Return < 0 on error, 0 if OK, 1 on hangup.
-+ */
- static
--int child_run_as(void *_data)
-+int handle_one_cmd(struct run_as_worker *worker)
- {
- 	int ret;
--	struct run_as_data *data = _data;
--	ssize_t writelen;
-+	struct run_as_data data;
-+	ssize_t readlen, writelen;
- 	struct run_as_ret sendret;
-+	run_as_fct cmd;
-+	uid_t prev_euid;
-+
-+	/* Read data */
-+	readlen = lttcomm_recv_unix_sock(worker->sockpair[1], &data,
-+			sizeof(data));
-+	if (readlen == 0) {
-+		/* hang up */
-+		return 1;
-+	}
-+	if (readlen < sizeof(data)) {
-+		PERROR("lttcomm_recv_unix_sock error");
-+		return -1;
-+	}
- 
--	/*
--	 * Child: it is safe to drop egid and euid while sharing the
--	 * file descriptors with the parent process, since we do not
--	 * drop "uid": therefore, the user we are dropping egid/euid to
--	 * cannot attach to this process with, e.g. ptrace, nor map this
--	 * process memory.
--	 */
--	if (data->gid != getegid()) {
--		ret = setegid(data->gid);
-+	cmd = run_as_enum_to_fct(data.cmd);
-+	if (!cmd) {
-+		return -1;
-+	}
-+
-+	prev_euid = getuid();
-+	if (data.gid != getegid()) {
-+		ret = setegid(data.gid);
- 		if (ret < 0) {
- 			PERROR("setegid");
- 			goto write_return;
- 		}
- 	}
--	if (data->uid != geteuid()) {
--		ret = seteuid(data->uid);
-+	if (data.uid != prev_euid) {
-+		ret = seteuid(data.uid);
- 		if (ret < 0) {
- 			PERROR("seteuid");
- 			goto write_return;
-@@ -191,33 +272,78 @@ int child_run_as(void *_data)
- 	 * Also set umask to 0 for mkdir executable bit.
- 	 */
- 	umask(0);
--	ret = (*data->cmd)(data->data);
-+	ret = (*cmd)(&data);
- 
- write_return:
- 	sendret.ret = ret;
- 	sendret._errno = errno;
- 	/* send back return value */
--	writelen = lttng_write(data->retval_pipe, &sendret, sizeof(sendret));
-+	writelen = lttcomm_send_unix_sock(worker->sockpair[1], &sendret,
-+			sizeof(sendret));
- 	if (writelen < sizeof(sendret)) {
--		PERROR("lttng_write error");
-+		PERROR("lttcomm_send_unix_sock error");
-+		return -1;
-+	}
-+	ret = do_send_fd(worker, data.cmd, ret);
-+	if (ret) {
-+		PERROR("do_send_fd error");
-+		return -1;
-+	}
-+	if (seteuid(prev_euid) < 0) {
-+		PERROR("seteuid");
-+		return -1;
-+	}
-+	return 0;
-+}
-+
-+static
-+int run_as_worker(struct run_as_worker *worker)
-+{
-+	ssize_t writelen;
-+	struct run_as_ret sendret;
-+	size_t proc_orig_len;
-+
-+	/*
-+	 * Initialize worker. Set a different process cmdline.
-+	 */
-+	proc_orig_len = strlen(worker->procname);
-+	memset(worker->procname, 0, proc_orig_len);
-+	strncpy(worker->procname, "lttng-runas", proc_orig_len);
-+
-+	sendret.ret = 0;
-+	sendret._errno = 0;
-+	writelen = lttcomm_send_unix_sock(worker->sockpair[1], &sendret,
-+			sizeof(sendret));
-+	if (writelen < sizeof(sendret)) {
-+		PERROR("lttcomm_send_unix_sock error");
- 		return EXIT_FAILURE;
--	} else {
--		return EXIT_SUCCESS;
- 	}
-+
-+	for (;;) {
-+		int ret;
-+
-+		ret = handle_one_cmd(worker);
-+		if (ret < 0) {
-+			return EXIT_FAILURE;
-+		} else if (ret > 0) {
-+			break;
-+		} else {
-+			continue;	/* Next command. */
-+		}
-+	}
-+	return EXIT_SUCCESS;
- }
- 
- static
--int run_as_clone(int (*cmd)(void *data), void *data, uid_t uid, gid_t gid)
-+int run_as_cmd(struct run_as_worker *worker,
-+		enum run_as_cmd cmd,
-+		struct run_as_data *data,
-+		uid_t uid, gid_t gid)
- {
--	struct run_as_data run_as_data;
--	int ret = 0;
--	ssize_t readlen;
--	int status;
--	pid_t pid;
--	int retval_pipe[2];
--	void *child_stack;
-+	ssize_t readlen, writelen;
- 	struct run_as_ret recvret;
- 
-+	pthread_mutex_lock(&worker_lock);
- 	/*
- 	 * If we are non-root, we can only deal with our own uid.
- 	 */
-@@ -231,95 +357,56 @@ int run_as_clone(int (*cmd)(void *data), void *data, uid_t uid, gid_t gid)
- 		}
- 	}
- 
--	ret = pipe(retval_pipe);
--	if (ret < 0) {
-+	data->cmd = cmd;
-+	data->uid = uid;
-+	data->gid = gid;
-+
-+	writelen = lttcomm_send_unix_sock(worker->sockpair[0], data,
-+			sizeof(*data));
-+	if (writelen < sizeof(*data)) {
-+		PERROR("Error writing message to run_as");
- 		recvret.ret = -1;
- 		recvret._errno = errno;
--		PERROR("pipe");
+ struct relay_connection *connection_get_by_sock(struct lttng_ht *relay_connections_ht,
+@@ -76,7 +67,6 @@ struct relay_connection *connection_create(struct lttcomm_sock *sock,
+ 		PERROR("zmalloc relay connection");
  		goto end;
  	}
--	run_as_data.data = data;
--	run_as_data.cmd = cmd;
--	run_as_data.uid = uid;
--	run_as_data.gid = gid;
--	run_as_data.retval_pipe = retval_pipe[1];	/* write end */
--	child_stack = mmap(NULL, RUNAS_CHILD_STACK_SIZE,
--		PROT_WRITE | PROT_READ,
--		MAP_PRIVATE | MAP_GROWSDOWN | MAP_ANONYMOUS | LTTNG_MAP_STACK,
--		-1, 0);
--	if (child_stack == MAP_FAILED) {
--		recvret.ret = -1;
--		recvret._errno = ENOMEM;
--		PERROR("mmap");
--		goto close_pipe;
--	}
--	/*
--	 * Pointing to the middle of the stack to support architectures
--	 * where the stack grows up (HPPA).
--	 */
--	pid = lttng_clone_files(child_run_as, child_stack + (RUNAS_CHILD_STACK_SIZE / 2),
--		&run_as_data);
--	if (pid < 0) {
--		recvret.ret = -1;
--		recvret._errno = errno;
--		PERROR("clone");
--		goto unmap_stack;
--	}
-+
- 	/* receive return value */
--	readlen = lttng_read(retval_pipe[0], &recvret, sizeof(recvret));
-+	readlen = lttcomm_recv_unix_sock(worker->sockpair[0], &recvret,
-+			sizeof(recvret));
- 	if (readlen < sizeof(recvret)) {
-+		PERROR("Error reading response from run_as");
- 		recvret.ret = -1;
- 		recvret._errno = errno;
- 	}
--
--	/*
--	 * Parent: wait for child to return, in which case the
--	 * shared memory map will have been created.
--	 */
--	pid = waitpid(pid, &status, 0);
--	if (pid < 0 || !WIFEXITED(status) || WEXITSTATUS(status) != 0) {
--		recvret.ret = -1;
--		recvret._errno = errno;
--		PERROR("wait");
--	}
--unmap_stack:
--	ret = munmap(child_stack, RUNAS_CHILD_STACK_SIZE);
--	if (ret < 0) {
-+	if (do_recv_fd(worker, cmd, &recvret.ret)) {
- 		recvret.ret = -1;
--		recvret._errno = errno;
--		PERROR("munmap");
--	}
--close_pipe:
--	ret = close(retval_pipe[0]);
--	if (ret) {
--		recvret.ret = -1;
--		recvret._errno = errno;
--		PERROR("close");
--	}
--	ret = close(retval_pipe[1]);
--	if (ret) {
--		recvret.ret = -1;
--		recvret._errno = errno;
--		PERROR("close");
-+		recvret._errno = -EIO;
- 	}
-+
- end:
-+	pthread_mutex_unlock(&worker_lock);
- 	errno = recvret._errno;
- 	return recvret.ret;
+-	pthread_mutex_init(&conn->reflock, NULL);
+ 	urcu_ref_init(&conn->ref);
+ 	conn->type = type;
+ 	conn->sock = sock;
+@@ -132,9 +122,7 @@ static void connection_release(struct urcu_ref *ref)
+ void connection_put(struct relay_connection *conn)
+ {
+ 	rcu_read_lock();
+-	pthread_mutex_lock(&conn->reflock);
+ 	urcu_ref_put(&conn->ref, connection_release);
+-	pthread_mutex_unlock(&conn->reflock);
+ 	rcu_read_unlock();
  }
  
- /*
-- * To be used on setups where gdb has issues debugging programs using
-- * clone/rfork. Note that this is for debuging ONLY, and should not be
-- * considered secure.
-+ * That this is for debuging ONLY, and should not be considered secure.
+diff --git a/src/bin/lttng-relayd/connection.h b/src/bin/lttng-relayd/connection.h
+index 4438638..43e8a1d 100644
+--- a/src/bin/lttng-relayd/connection.h
++++ b/src/bin/lttng-relayd/connection.h
+@@ -77,7 +77,6 @@ struct relay_connection {
+ 	uint32_t minor;
+ 
+ 	struct urcu_ref ref;
+-	pthread_mutex_t reflock;
+ 
+ 	bool version_check_done;
+ 
+diff --git a/src/bin/lttng-relayd/ctf-trace.c b/src/bin/lttng-relayd/ctf-trace.c
+index 7c88262..b90e2a1 100644
+--- a/src/bin/lttng-relayd/ctf-trace.c
++++ b/src/bin/lttng-relayd/ctf-trace.c
+@@ -76,17 +76,7 @@ void ctf_trace_release(struct urcu_ref *ref)
   */
- static
--int run_as_noclone(int (*cmd)(void *data), void *data, uid_t uid, gid_t gid)
-+int run_as_noworker(enum run_as_cmd cmd,
-+		struct run_as_data *data, uid_t uid, gid_t gid)
+ bool ctf_trace_get(struct ctf_trace *trace)
  {
- 	int ret, saved_errno;
- 	mode_t old_mask;
-+	run_as_fct fct;
- 
-+	fct = run_as_enum_to_fct(cmd);
-+	if (!fct) {
-+		errno = -ENOSYS;
-+		return -1;
-+	}
- 	old_mask = umask(0);
--	ret = cmd(data);
-+	ret = fct(data);
- 	saved_errno = errno;
- 	umask(old_mask);
- 	errno = saved_errno;
-@@ -328,44 +415,48 @@ int run_as_noclone(int (*cmd)(void *data), void *data, uid_t uid, gid_t gid)
- }
- 
- static
--int run_as(int (*cmd)(void *data), void *data, uid_t uid, gid_t gid)
-+int run_as(struct run_as_worker *worker,
-+		enum run_as_cmd cmd,
-+		struct run_as_data *data, uid_t uid, gid_t gid)
- {
--	if (use_clone()) {
-+	if (worker) {
- 		int ret;
- 
--		DBG("Using run_as_clone");
--		pthread_mutex_lock(&lttng_libc_state_lock);
--		ret = run_as_clone(cmd, data, uid, gid);
--		pthread_mutex_unlock(&lttng_libc_state_lock);
-+		DBG("Using run_as worker");
-+		ret = run_as_cmd(worker, cmd, data, uid, gid);
- 		return ret;
- 	} else {
--		DBG("Using run_as_noclone");
--		return run_as_noclone(cmd, data, uid, gid);
-+		DBG("Using run_as without worker");
-+		return run_as_noworker(cmd, data, uid, gid);
- 	}
- }
- 
- LTTNG_HIDDEN
- int run_as_mkdir_recursive(const char *path, mode_t mode, uid_t uid, gid_t gid)
- {
--	struct run_as_mkdir_data data;
-+	struct run_as_worker *worker = global_worker;
-+	struct run_as_data data;
- 
- 	DBG3("mkdir() recursive %s with mode %d for uid %d and gid %d",
- 			path, mode, uid, gid);
--	data.path = path;
--	data.mode = mode;
--	return run_as(_mkdir_recursive, &data, uid, gid);
-+	strncpy(data.u.mkdir.path, path, PATH_MAX - 1);
-+	data.u.mkdir.path[PATH_MAX - 1] = '\0';
-+	data.u.mkdir.mode = mode;
-+	return run_as(worker, RUN_AS_MKDIR_RECURSIVE, &data, uid, gid);
- }
- 
- LTTNG_HIDDEN
- int run_as_mkdir(const char *path, mode_t mode, uid_t uid, gid_t gid)
- {
--	struct run_as_mkdir_data data;
-+	struct run_as_worker *worker = global_worker;
-+	struct run_as_data data;
- 
- 	DBG3("mkdir() %s with mode %d for uid %d and gid %d",
- 			path, mode, uid, gid);
--	data.path = path;
--	data.mode = mode;
--	return run_as(_mkdir, &data, uid, gid);
-+	strncpy(data.u.mkdir.path, path, PATH_MAX - 1);
-+	data.u.mkdir.path[PATH_MAX - 1] = '\0';
-+	data.u.mkdir.mode = mode;
-+	return run_as(worker, RUN_AS_MKDIR, &data, uid, gid);
+-	bool has_ref = false;
+-
+-	/* Confirm that the trace refcount has not reached 0. */
+-	pthread_mutex_lock(&trace->reflock);
+-	if (trace->ref.refcount != 0) {
+-		has_ref = true;
+-		urcu_ref_get(&trace->ref);
+-	}
+-	pthread_mutex_unlock(&trace->reflock);
+-
+-	return has_ref;
++	return urcu_ref_get_unless_zero(&trace->ref);
  }
  
  /*
-@@ -375,34 +466,147 @@ int run_as_mkdir(const char *path, mode_t mode, uid_t uid, gid_t gid)
- LTTNG_HIDDEN
- int run_as_open(const char *path, int flags, mode_t mode, uid_t uid, gid_t gid)
+@@ -124,7 +114,6 @@ static struct ctf_trace *ctf_trace_create(struct relay_session *session,
+ 	trace->session = session;
+ 	urcu_ref_init(&trace->ref);
+ 	pthread_mutex_init(&trace->lock, NULL);
+-	pthread_mutex_init(&trace->reflock, NULL);
+ 	pthread_mutex_init(&trace->stream_list_lock, NULL);
+ 	lttng_ht_add_str(session->ctf_traces_ht, &trace->node);
+ 
+@@ -169,9 +158,7 @@ end:
+ void ctf_trace_put(struct ctf_trace *trace)
  {
--	struct run_as_open_data data;
-+	struct run_as_worker *worker = global_worker;
-+	struct run_as_data data;
- 
- 	DBG3("open() %s with flags %X mode %d for uid %d and gid %d",
- 			path, flags, mode, uid, gid);
--	data.path = path;
--	data.flags = flags;
--	data.mode = mode;
--	return run_as(_open, &data, uid, gid);
-+	strncpy(data.u.open.path, path, PATH_MAX - 1);
-+	data.u.open.path[PATH_MAX - 1] = '\0';
-+	data.u.open.flags = flags;
-+	data.u.open.mode = mode;
-+	return run_as(worker, RUN_AS_OPEN, &data, uid, gid);
+ 	rcu_read_lock();
+-	pthread_mutex_lock(&trace->reflock);
+ 	urcu_ref_put(&trace->ref, ctf_trace_release);
+-	pthread_mutex_unlock(&trace->reflock);
+ 	rcu_read_unlock();
  }
  
- LTTNG_HIDDEN
- int run_as_unlink(const char *path, uid_t uid, gid_t gid)
+diff --git a/src/bin/lttng-relayd/ctf-trace.h b/src/bin/lttng-relayd/ctf-trace.h
+index d051f80..9903d38 100644
+--- a/src/bin/lttng-relayd/ctf-trace.h
++++ b/src/bin/lttng-relayd/ctf-trace.h
+@@ -30,10 +30,6 @@
+ #include "viewer-stream.h"
+ 
+ struct ctf_trace {
+-	/*
+-	 * The ctf_trace reflock nests inside the stream reflock.
+-	 */
+-	pthread_mutex_t reflock;	/* Protects refcounting */
+ 	struct urcu_ref ref;		/* Every stream has a ref on the trace. */
+ 	struct relay_session *session;	/* Back ref to trace session */
+ 
+diff --git a/src/bin/lttng-relayd/index.c b/src/bin/lttng-relayd/index.c
+index 5b5c711..04aa244 100644
+--- a/src/bin/lttng-relayd/index.c
++++ b/src/bin/lttng-relayd/index.c
+@@ -59,7 +59,6 @@ static struct relay_index *relay_index_create(struct relay_stream *stream,
+ 
+ 	lttng_ht_node_init_u64(&index->index_n, net_seq_num);
+ 	pthread_mutex_init(&index->lock, NULL);
+-	pthread_mutex_init(&index->reflock, NULL);
+ 	urcu_ref_init(&index->ref);
+ 
+ end:
+@@ -99,21 +98,11 @@ static struct relay_index *relay_index_add_unique(struct relay_stream *stream,
+  */
+ static bool relay_index_get(struct relay_index *index)
  {
--	struct run_as_unlink_data data;
-+	struct run_as_worker *worker = global_worker;
-+	struct run_as_data data;
+-	bool has_ref = false;
+-
+ 	DBG2("index get for stream id %" PRIu64 " and seqnum %" PRIu64 " refcount %d",
+ 			index->stream->stream_handle, index->index_n.key,
+ 			(int) index->ref.refcount);
  
- 	DBG3("unlink() %s with for uid %d and gid %d",
- 			path, uid, gid);
--	data.path = path;
--	return run_as(_unlink, &data, uid, gid);
-+	strncpy(data.u.unlink.path, path, PATH_MAX - 1);
-+	data.u.unlink.path[PATH_MAX - 1] = '\0';
-+	return run_as(worker, RUN_AS_UNLINK, &data, uid, gid);
+-	/* Confirm that the index refcount has not reached 0. */
+-	pthread_mutex_lock(&index->reflock);
+-	if (index->ref.refcount != 0) {
+-		has_ref = true;
+-		urcu_ref_get(&index->ref);
+-	}
+-	pthread_mutex_unlock(&index->reflock);
+-
+-	return has_ref;
++	return urcu_ref_get_unless_zero(&index->ref);
  }
  
- LTTNG_HIDDEN
--int run_as_recursive_rmdir(const char *path, uid_t uid, gid_t gid)
-+int run_as_rmdir_recursive(const char *path, uid_t uid, gid_t gid)
- {
--	struct run_as_recursive_rmdir_data data;
-+	struct run_as_worker *worker = global_worker;
-+	struct run_as_data data;
- 
--	DBG3("recursive_rmdir() %s with for uid %d and gid %d",
-+	DBG3("rmdir_recursive() %s with for uid %d and gid %d",
- 			path, uid, gid);
--	data.path = path;
--	return run_as(_recursive_rmdir, &data, uid, gid);
-+	strncpy(data.u.rmdir_recursive.path, path, PATH_MAX - 1);
-+	data.u.rmdir_recursive.path[PATH_MAX - 1] = '\0';
-+	return run_as(worker, RUN_AS_RMDIR_RECURSIVE, &data, uid, gid);
-+}
-+
-+int run_as_create_worker(char *procname)
-+{
-+	struct run_as_worker *worker;
-+	pid_t pid;
-+	ssize_t readlen;
-+	struct run_as_ret recvret;
-+	int i;
-+
-+	if (!use_clone()) {
-+		return 0;
-+	}
-+	worker = zmalloc(sizeof(*worker));
-+	if (!worker) {
-+		return -1;
-+	}
-+	worker->procname = procname;
-+	/* Create unix socket. */
-+	if (lttcomm_create_anon_unix_socketpair(worker->sockpair) < 0) {
-+		goto error_sock;
-+	}
-+	/* Fork worker. */
-+	pid = fork();
-+	if (pid < 0) {
-+		PERROR("fork");
-+		goto error_fork;
-+	} else if (pid == 0) {
-+		int ret;
-+
-+		/* Child */
-+
-+		/* Just close, no shutdown. */
-+		if (close(worker->sockpair[0])) {
-+			PERROR("close");
-+			exit(EXIT_FAILURE);
-+		}
-+		worker->sockpair[0] = -1;
-+		ret = run_as_worker(worker);
-+		if (lttcomm_close_unix_sock(worker->sockpair[1])) {
-+			PERROR("close");
-+			ret = -1;
-+		}
-+		worker->sockpair[1] = -1;
-+		if (ret) {
-+			exit(EXIT_FAILURE);
-+		} else {
-+			exit(EXIT_SUCCESS);
-+		}
-+	} else {
-+		/* Parent */
-+
-+		/* Just close, no shutdown. */
-+		if (close(worker->sockpair[1])) {
-+			PERROR("close");
-+		}
-+		worker->sockpair[1] = -1;
-+		worker->pid = pid;
-+		/* Wait for worker to become ready. */
-+		readlen = lttcomm_recv_unix_sock(worker->sockpair[0],
-+				&recvret, sizeof(recvret));
-+		if (readlen < sizeof(recvret)) {
-+			ERR("readlen: %zd", readlen);
-+			PERROR("Error reading response from run_as at creation");
-+			goto error_fork;
-+		}
-+		global_worker = worker;
-+	}
-+	return 0;
-+
-+	/* Error handling. */
-+error_fork:
-+	for (i = 0; i < 2; i++) {
-+		if (worker->sockpair[i] < 0) {
-+			continue;
-+		}
-+		if (lttcomm_close_unix_sock(worker->sockpair[i])) {
-+			PERROR("close");
-+		}
-+		worker->sockpair[i] = -1;
-+	}
-+error_sock:
-+	free(worker);
-+	return -1;
-+}
-+
-+void run_as_destroy_worker(void)
-+{
-+	struct run_as_worker *worker = global_worker;
-+	int status;
-+	pid_t pid;
-+
-+	if (!worker) {
-+		return;
-+	}
-+	/* Close unix socket */
-+	if (lttcomm_close_unix_sock(worker->sockpair[0])) {
-+		PERROR("close");
-+	}
-+	worker->sockpair[0] = -1;
-+	/* Wait for worker. */
-+	pid = waitpid(worker->pid, &status, 0);
-+	if (pid < 0 || !WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-+		PERROR("wait");
-+	}
-+	free(worker);
-+	global_worker = NULL;
- }
-diff --git a/src/common/runas.h b/src/common/runas.h
-index dc25322..e1269a4 100644
---- a/src/common/runas.h
-+++ b/src/common/runas.h
-@@ -26,12 +26,15 @@ int run_as_mkdir_recursive(const char *path, mode_t mode, uid_t uid, gid_t gid);
- int run_as_mkdir(const char *path, mode_t mode, uid_t uid, gid_t gid);
- int run_as_open(const char *path, int flags, mode_t mode, uid_t uid, gid_t gid);
- int run_as_unlink(const char *path, uid_t uid, gid_t gid);
--int run_as_recursive_rmdir(const char *path, uid_t uid, gid_t gid);
-+int run_as_rmdir_recursive(const char *path, uid_t uid, gid_t gid);
- 
--/*
-- * We need to lock pthread exit, which deadlocks __nptl_setxid in the
-- * clone.
-- */
--extern pthread_mutex_t lttng_libc_state_lock;
-+/* Backward compat. */
-+static inline int run_as_recursive_rmdir(const char *path, uid_t uid, gid_t gid)
-+{
-+	return run_as_rmdir_recursive(path, uid, gid);
-+}
-+
-+int run_as_create_worker(char *procname);
-+void run_as_destroy_worker(void);
- 
- #endif /* _RUNAS_H */
-diff --git a/src/common/sessiond-comm/Makefile.am b/src/common/sessiond-comm/Makefile.am
-index fdffa40..32ec058 100644
---- a/src/common/sessiond-comm/Makefile.am
-+++ b/src/common/sessiond-comm/Makefile.am
-@@ -4,6 +4,6 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/src
- noinst_LTLIBRARIES = libsessiond-comm.la
- 
- libsessiond_comm_la_SOURCES = sessiond-comm.c sessiond-comm.h \
--                              unix.c unix.h inet.c inet.h inet6.c inet6.h \
-+                              inet.c inet.h inet6.c inet6.h \
-                               relayd.h agent.h
- libsessiond_comm_la_LIBADD = -lrt
-diff --git a/src/common/sessiond-comm/unix.c b/src/common/sessiond-comm/unix.c
-index a66bb75..4b64161 100644
---- a/src/common/sessiond-comm/unix.c
-+++ b/src/common/sessiond-comm/unix.c
-@@ -93,6 +93,16 @@ int lttcomm_accept_unix_sock(int sock)
- 	return new_fd;
- }
- 
-+LTTNG_HIDDEN
-+int lttcomm_create_anon_unix_socketpair(int *fds)
-+{
-+	if (socketpair(PF_UNIX, SOCK_STREAM, 0, fds) < 0) {
-+		PERROR("socketpair");
-+		return -1;
-+	}
-+	return 0;
-+}
-+
  /*
-  * Creates a AF_UNIX local socket using pathname bind the socket upon creation
-  * and return the fd.
-diff --git a/src/common/sessiond-comm/unix.h b/src/common/sessiond-comm/unix.h
-index 19b91ce..6859cba 100644
---- a/src/common/sessiond-comm/unix.h
-+++ b/src/common/sessiond-comm/unix.h
-@@ -27,6 +27,7 @@
- #include "sessiond-comm.h"
+@@ -265,10 +254,8 @@ void relay_index_put(struct relay_index *index)
+ 	 * Index lock ensures that concurrent test and update of stream
+ 	 * ref is atomic.
+ 	 */
+-	pthread_mutex_lock(&index->reflock);
+ 	assert(index->ref.refcount != 0);
+ 	urcu_ref_put(&index->ref, index_release);
+-	pthread_mutex_unlock(&index->reflock);
+ 	rcu_read_unlock();
+ }
  
- extern int lttcomm_create_unix_sock(const char *pathname);
-+extern int lttcomm_create_anon_unix_socketpair(int *fds);
- extern int lttcomm_connect_unix_sock(const char *pathname);
- extern int lttcomm_accept_unix_sock(int sock);
- extern int lttcomm_listen_unix_sock(int sock);
+diff --git a/src/bin/lttng-relayd/index.h b/src/bin/lttng-relayd/index.h
+index 15c4ac8..c63f165 100644
+--- a/src/bin/lttng-relayd/index.h
++++ b/src/bin/lttng-relayd/index.h
+@@ -34,7 +34,6 @@ struct relay_index {
+ 	/*
+ 	 * index lock nests inside stream lock.
+ 	 */
+-	pthread_mutex_t reflock;	/* Protects refcounting. */
+ 	struct urcu_ref ref;		/* Reference from getters. */
+ 	struct relay_stream *stream;	/* Back ref to stream */
+ 
+diff --git a/src/bin/lttng-relayd/session.c b/src/bin/lttng-relayd/session.c
+index 14ae874..466229a 100644
+--- a/src/bin/lttng-relayd/session.c
++++ b/src/bin/lttng-relayd/session.c
+@@ -65,7 +65,6 @@ struct relay_session *session_create(const char *session_name,
+ 	urcu_ref_init(&session->ref);
+ 	CDS_INIT_LIST_HEAD(&session->recv_list);
+ 	pthread_mutex_init(&session->lock, NULL);
+-	pthread_mutex_init(&session->reflock, NULL);
+ 	pthread_mutex_init(&session->recv_list_lock, NULL);
+ 
+ 	strncpy(session->session_name, session_name,
+@@ -84,16 +83,7 @@ error:
+ /* Should be called with RCU read-side lock held. */
+ bool session_get(struct relay_session *session)
+ {
+-	bool has_ref = false;
+-
+-	pthread_mutex_lock(&session->reflock);
+-	if (session->ref.refcount != 0) {
+-		has_ref = true;
+-		urcu_ref_get(&session->ref);
+-	}
+-	pthread_mutex_unlock(&session->reflock);
+-
+-	return has_ref;
++	return urcu_ref_get_unless_zero(&session->ref);
+ }
+ 
+ /*
+@@ -175,9 +165,7 @@ void session_release(struct urcu_ref *ref)
+ void session_put(struct relay_session *session)
+ {
+ 	rcu_read_lock();
+-	pthread_mutex_lock(&session->reflock);
+ 	urcu_ref_put(&session->ref, session_release);
+-	pthread_mutex_unlock(&session->reflock);
+ 	rcu_read_unlock();
+ }
+ 
+diff --git a/src/bin/lttng-relayd/session.h b/src/bin/lttng-relayd/session.h
+index 1a37cfe..362216a 100644
+--- a/src/bin/lttng-relayd/session.h
++++ b/src/bin/lttng-relayd/session.h
+@@ -53,8 +53,6 @@ struct relay_session {
+ 	 */
+ 
+ 	struct urcu_ref ref;
+-	/* session reflock nests inside ctf_trace reflock. */
+-	pthread_mutex_t reflock;
+ 
+ 	pthread_mutex_t lock;
+ 
+diff --git a/src/bin/lttng-relayd/stream.c b/src/bin/lttng-relayd/stream.c
+index b604919..3fd5bc0 100644
+--- a/src/bin/lttng-relayd/stream.c
++++ b/src/bin/lttng-relayd/stream.c
+@@ -33,16 +33,7 @@
+ /* Should be called with RCU read-side lock held. */
+ bool stream_get(struct relay_stream *stream)
+ {
+-	bool has_ref = false;
+-
+-	pthread_mutex_lock(&stream->reflock);
+-	if (stream->ref.refcount != 0) {
+-		has_ref = true;
+-		urcu_ref_get(&stream->ref);
+-	}
+-	pthread_mutex_unlock(&stream->reflock);
+-
+-	return has_ref;
++	return urcu_ref_get_unless_zero(&stream->ref);
+ }
+ 
+ /*
+@@ -101,7 +92,6 @@ struct relay_stream *stream_create(struct ctf_trace *trace,
+ 	stream->channel_name = channel_name;
+ 	lttng_ht_node_init_u64(&stream->node, stream->stream_handle);
+ 	pthread_mutex_init(&stream->lock, NULL);
+-	pthread_mutex_init(&stream->reflock, NULL);
+ 	urcu_ref_init(&stream->ref);
+ 	ctf_trace_get(trace);
+ 	stream->trace = trace;
+@@ -228,8 +218,7 @@ unlock:
+ 
+ /*
+  * Stream must be protected by holding the stream lock or by virtue of being
+- * called from stream_destroy, in which case it is guaranteed to be accessed
+- * from a single thread by the reflock.
++ * called from stream_destroy.
+  */
+ static void stream_unpublish(struct relay_stream *stream)
+ {
+@@ -274,9 +263,6 @@ static void stream_destroy_rcu(struct rcu_head *rcu_head)
+ /*
+  * No need to take stream->lock since this is only called on the final
+  * stream_put which ensures that a single thread may act on the stream.
+- *
+- * At that point, the object is also protected by the reflock which
+- * guarantees that no other thread may share ownership of this stream.
+  */
+ static void stream_release(struct urcu_ref *ref)
+ {
+@@ -317,15 +303,7 @@ static void stream_release(struct urcu_ref *ref)
+ void stream_put(struct relay_stream *stream)
+ {
+ 	DBG("stream put for stream id %" PRIu64, stream->stream_handle);
+-	/*
+-	 * Ensure existence of stream->reflock for stream unlock.
+-	 */
+ 	rcu_read_lock();
+-	/*
+-	 * Stream reflock ensures that concurrent test and update of
+-	 * stream ref is atomic.
+-	 */
+-	pthread_mutex_lock(&stream->reflock);
+ 	assert(stream->ref.refcount != 0);
+ 	/*
+ 	 * Wait until we have processed all the stream packets before
+@@ -335,7 +313,6 @@ void stream_put(struct relay_stream *stream)
+ 			stream->stream_handle,
+ 			(int) stream->ref.refcount);
+ 	urcu_ref_put(&stream->ref, stream_release);
+-	pthread_mutex_unlock(&stream->reflock);
+ 	rcu_read_unlock();
+ }
+ 
+diff --git a/src/bin/lttng-relayd/stream.h b/src/bin/lttng-relayd/stream.h
+index 5030e5d..efbbd12 100644
+--- a/src/bin/lttng-relayd/stream.h
++++ b/src/bin/lttng-relayd/stream.h
+@@ -37,12 +37,6 @@
+ struct relay_stream {
+ 	uint64_t stream_handle;
+ 
+-	/*
+-	 * reflock used to synchronize the closing of this stream.
+-	 * stream reflock nests inside viewer stream reflock.
+-	 * stream reflock nests inside index reflock.
+-	 */
+-	pthread_mutex_t reflock;
+ 	struct urcu_ref ref;
+ 	/* Back reference to trace. Protected by refcount on trace object. */
+ 	struct ctf_trace *trace;
+diff --git a/src/bin/lttng-relayd/viewer-stream.c b/src/bin/lttng-relayd/viewer-stream.c
+index 333246a..537db47 100644
+--- a/src/bin/lttng-relayd/viewer-stream.c
++++ b/src/bin/lttng-relayd/viewer-stream.c
+@@ -153,7 +153,6 @@ struct relay_viewer_stream *viewer_stream_create(struct relay_stream *stream,
+ 	lttng_ht_node_init_u64(&vstream->stream_n, stream->stream_handle);
+ 	lttng_ht_add_unique_u64(viewer_streams_ht, &vstream->stream_n);
+ 
+-	pthread_mutex_init(&vstream->reflock, NULL);
+ 	urcu_ref_init(&vstream->ref);
+ 
+ 	return vstream;
+@@ -206,16 +205,7 @@ static void viewer_stream_release(struct urcu_ref *ref)
+ /* Must be called with RCU read-side lock held. */
+ bool viewer_stream_get(struct relay_viewer_stream *vstream)
+ {
+-	bool has_ref = false;
+-
+-	pthread_mutex_lock(&vstream->reflock);
+-	if (vstream->ref.refcount != 0) {
+-		has_ref = true;
+-		urcu_ref_get(&vstream->ref);
+-	}
+-	pthread_mutex_unlock(&vstream->reflock);
+-
+-	return has_ref;
++	return urcu_ref_get_unless_zero(&vstream->ref);
+ }
+ 
+ /*
+@@ -248,9 +238,7 @@ end:
+ void viewer_stream_put(struct relay_viewer_stream *vstream)
+ {
+ 	rcu_read_lock();
+-	pthread_mutex_lock(&vstream->reflock);
+ 	urcu_ref_put(&vstream->ref, viewer_stream_release);
+-	pthread_mutex_unlock(&vstream->reflock);
+ 	rcu_read_unlock();
+ }
+ 
+diff --git a/src/bin/lttng-relayd/viewer-stream.h b/src/bin/lttng-relayd/viewer-stream.h
+index 5dc135d..848f72a 100644
+--- a/src/bin/lttng-relayd/viewer-stream.h
++++ b/src/bin/lttng-relayd/viewer-stream.h
+@@ -45,7 +45,6 @@ struct relay_stream;
+  */
+ struct relay_viewer_stream {
+ 	struct urcu_ref ref;
+-	pthread_mutex_t reflock;
+ 
+ 	/* Back ref to stream. */
+ 	struct relay_stream *stream;
 -- 
 2.1.4
