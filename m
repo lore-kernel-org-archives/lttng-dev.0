@@ -1,16 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RFC PATCH lttng-tools] relay: use
-	urcu_ref_get_unless_zero
-Date: Thu, 17 Sep 2015 12:24:32 -0400
-Message-ID: <1442507072-4178-1-git-send-email-mathieu.desnoyers__4374.94363072819$1442507147$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 2/2] Cleanup: remove duplicated
+	implementation of rculfhash
+Date: Thu, 17 Sep 2015 12:48:41 -0400
+Message-ID: <1442508521-32200-2-git-send-email-mathieu.desnoyers__24671.8376213268$1442508667$gmane$org@efficios.com>
+References: <1442508521-32200-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZcbzJ-00068Y-4K
- for lttng-dev@lists.lttng.org; Thu, 17 Sep 2015 12:24:47 -0400
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZccMq-0006HI-3G
+ for lttng-dev@lists.lttng.org; Thu, 17 Sep 2015 12:49:14 -0400
+In-Reply-To: <1442508521-32200-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,412 +25,3222 @@ To: jgalar@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-This allows removing the reflock be performing this check and increment
-atomically.
+lttng-tools features a duplicated copy of Userspace RCU rculfhash due to
+interaction issues between runas clone() and internal libc mutexes.
+
+Now that the runas implementation has been changed to use fork() and a
+worker process, we don't need this work-around anymore. Remove the
+duplicated rculfhash to lessen the maintenance burden.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- doc/relayd-architecture.txt          |  7 +------
- src/bin/lttng-relayd/connection.c    | 14 +-------------
- src/bin/lttng-relayd/connection.h    |  1 -
- src/bin/lttng-relayd/ctf-trace.c     | 15 +--------------
- src/bin/lttng-relayd/ctf-trace.h     |  4 ----
- src/bin/lttng-relayd/index.c         | 15 +--------------
- src/bin/lttng-relayd/index.h         |  1 -
- src/bin/lttng-relayd/session.c       | 14 +-------------
- src/bin/lttng-relayd/session.h       |  2 --
- src/bin/lttng-relayd/stream.c        | 27 ++-------------------------
- src/bin/lttng-relayd/stream.h        |  6 ------
- src/bin/lttng-relayd/viewer-stream.c | 14 +-------------
- src/bin/lttng-relayd/viewer-stream.h |  1 -
- 13 files changed, 8 insertions(+), 113 deletions(-)
+ src/common/hashtable/Makefile.am          |    7 +-
+ src/common/hashtable/hashtable.h          |    3 +-
+ src/common/hashtable/rculfhash-internal.h |  184 ---
+ src/common/hashtable/rculfhash-mm-chunk.c |   99 --
+ src/common/hashtable/rculfhash-mm-mmap.c  |  162 ---
+ src/common/hashtable/rculfhash-mm-order.c |   92 --
+ src/common/hashtable/rculfhash.c          | 2035 -----------------------------
+ src/common/hashtable/rculfhash.h          |  480 -------
+ src/common/hashtable/urcu-flavor.h        |   65 -
+ 9 files changed, 2 insertions(+), 3125 deletions(-)
+ delete mode 100644 src/common/hashtable/rculfhash-internal.h
+ delete mode 100644 src/common/hashtable/rculfhash-mm-chunk.c
+ delete mode 100644 src/common/hashtable/rculfhash-mm-mmap.c
+ delete mode 100644 src/common/hashtable/rculfhash-mm-order.c
+ delete mode 100644 src/common/hashtable/rculfhash.c
+ delete mode 100644 src/common/hashtable/rculfhash.h
+ delete mode 100644 src/common/hashtable/urcu-flavor.h
 
-diff --git a/doc/relayd-architecture.txt b/doc/relayd-architecture.txt
-index 1491da9..56c8124 100644
---- a/doc/relayd-architecture.txt
-+++ b/doc/relayd-architecture.txt
-@@ -44,10 +44,7 @@ A RCU lookup+refcounting scheme has been introduced for all objects
- scheme allows looking up the objects or doing a traversal on the RCU
- linked list or hash table in combination with a getter on the object.
- This getter validates that there is still at least one reference to the
--object, else the lookup acts just as if the object does not exist. This
--scheme is protected by a "reflock" mutex in each object. "reflock"
--mutexes can be nested from the innermost object to the outermost object.
--IOW, the session reflock can nest within the ctf-trace reflock.
-+object, else the lookup acts just as if the object does not exist.
+diff --git a/src/common/hashtable/Makefile.am b/src/common/hashtable/Makefile.am
+index 021f01c..765f649 100644
+--- a/src/common/hashtable/Makefile.am
++++ b/src/common/hashtable/Makefile.am
+@@ -4,11 +4,6 @@ noinst_LTLIBRARIES = libhashtable.la
  
- The relay_connection (connection between the sessiond/consumer and the
- relayd) is the outermost object of its hierarchy.
-@@ -61,8 +58,6 @@ live.c client thread) when objects are shared. Locks can be nested from
- the outermost object to the innermost object. IOW, the ctf-trace lock can
- nest within the session lock.
+ libhashtable_la_SOURCES = hashtable.c hashtable.h \
+                          utils.c utils.h \
+-                         rculfhash-internal.h urcu-flavor.h \
+-                         rculfhash.h rculfhash.c \
+-                         rculfhash-mm-chunk.c \
+-                         rculfhash-mm-mmap.c \
+-                         rculfhash-mm-order.c \
+                          hashtable-symbols.h
  
--A "lock" should never nest within a "reflock".
+-libhashtable_la_LIBADD = -lurcu-common -lurcu
++libhashtable_la_LIBADD = -lurcu-common -lurcu -lurcu-cds
+diff --git a/src/common/hashtable/hashtable.h b/src/common/hashtable/hashtable.h
+index 826e120..cf758c0 100644
+--- a/src/common/hashtable/hashtable.h
++++ b/src/common/hashtable/hashtable.h
+@@ -21,8 +21,7 @@
+ #include <urcu.h>
+ #include <stdint.h>
+ 
+-#include "rculfhash.h"
+-#include "rculfhash-internal.h"
++#include <urcu/rculfhash.h>
+ 
+ extern unsigned long lttng_ht_seed;
+ 
+diff --git a/src/common/hashtable/rculfhash-internal.h b/src/common/hashtable/rculfhash-internal.h
+deleted file mode 100644
+index e3a59ba..0000000
+--- a/src/common/hashtable/rculfhash-internal.h
++++ /dev/null
+@@ -1,184 +0,0 @@
+-#ifndef URCU_RCULFHASH_INTERNAL_H
+-#define URCU_RCULFHASH_INTERNAL_H
 -
- RCU linked lists are used to iterate using RCU, and are protected by
- their own mutex for modifications. Iterations should be confirmed using
- the object "getter" to ensure its refcount is not 0 (except in cases
-diff --git a/src/bin/lttng-relayd/connection.c b/src/bin/lttng-relayd/connection.c
-index fce6c84..b3a9c06 100644
---- a/src/bin/lttng-relayd/connection.c
-+++ b/src/bin/lttng-relayd/connection.c
-@@ -28,16 +28,7 @@
- 
- bool connection_get(struct relay_connection *conn)
- {
--	bool has_ref = false;
--
--	pthread_mutex_lock(&conn->reflock);
--	if (conn->ref.refcount != 0) {
--		has_ref = true;
--		urcu_ref_get(&conn->ref);
--	}
--	pthread_mutex_unlock(&conn->reflock);
--
--	return has_ref;
-+	return urcu_ref_get_unless_zero(&conn->ref);
- }
- 
- struct relay_connection *connection_get_by_sock(struct lttng_ht *relay_connections_ht,
-@@ -76,7 +67,6 @@ struct relay_connection *connection_create(struct lttcomm_sock *sock,
- 		PERROR("zmalloc relay connection");
- 		goto end;
- 	}
--	pthread_mutex_init(&conn->reflock, NULL);
- 	urcu_ref_init(&conn->ref);
- 	conn->type = type;
- 	conn->sock = sock;
-@@ -132,9 +122,7 @@ static void connection_release(struct urcu_ref *ref)
- void connection_put(struct relay_connection *conn)
- {
- 	rcu_read_lock();
--	pthread_mutex_lock(&conn->reflock);
- 	urcu_ref_put(&conn->ref, connection_release);
--	pthread_mutex_unlock(&conn->reflock);
- 	rcu_read_unlock();
- }
- 
-diff --git a/src/bin/lttng-relayd/connection.h b/src/bin/lttng-relayd/connection.h
-index 4438638..43e8a1d 100644
---- a/src/bin/lttng-relayd/connection.h
-+++ b/src/bin/lttng-relayd/connection.h
-@@ -77,7 +77,6 @@ struct relay_connection {
- 	uint32_t minor;
- 
- 	struct urcu_ref ref;
--	pthread_mutex_t reflock;
- 
- 	bool version_check_done;
- 
-diff --git a/src/bin/lttng-relayd/ctf-trace.c b/src/bin/lttng-relayd/ctf-trace.c
-index 7c88262..b90e2a1 100644
---- a/src/bin/lttng-relayd/ctf-trace.c
-+++ b/src/bin/lttng-relayd/ctf-trace.c
-@@ -76,17 +76,7 @@ void ctf_trace_release(struct urcu_ref *ref)
-  */
- bool ctf_trace_get(struct ctf_trace *trace)
- {
--	bool has_ref = false;
--
--	/* Confirm that the trace refcount has not reached 0. */
--	pthread_mutex_lock(&trace->reflock);
--	if (trace->ref.refcount != 0) {
--		has_ref = true;
--		urcu_ref_get(&trace->ref);
--	}
--	pthread_mutex_unlock(&trace->reflock);
--
--	return has_ref;
-+	return urcu_ref_get_unless_zero(&trace->ref);
- }
- 
- /*
-@@ -124,7 +114,6 @@ static struct ctf_trace *ctf_trace_create(struct relay_session *session,
- 	trace->session = session;
- 	urcu_ref_init(&trace->ref);
- 	pthread_mutex_init(&trace->lock, NULL);
--	pthread_mutex_init(&trace->reflock, NULL);
- 	pthread_mutex_init(&trace->stream_list_lock, NULL);
- 	lttng_ht_add_str(session->ctf_traces_ht, &trace->node);
- 
-@@ -169,9 +158,7 @@ end:
- void ctf_trace_put(struct ctf_trace *trace)
- {
- 	rcu_read_lock();
--	pthread_mutex_lock(&trace->reflock);
- 	urcu_ref_put(&trace->ref, ctf_trace_release);
--	pthread_mutex_unlock(&trace->reflock);
- 	rcu_read_unlock();
- }
- 
-diff --git a/src/bin/lttng-relayd/ctf-trace.h b/src/bin/lttng-relayd/ctf-trace.h
-index d051f80..9903d38 100644
---- a/src/bin/lttng-relayd/ctf-trace.h
-+++ b/src/bin/lttng-relayd/ctf-trace.h
-@@ -30,10 +30,6 @@
- #include "viewer-stream.h"
- 
- struct ctf_trace {
--	/*
--	 * The ctf_trace reflock nests inside the stream reflock.
--	 */
--	pthread_mutex_t reflock;	/* Protects refcounting */
- 	struct urcu_ref ref;		/* Every stream has a ref on the trace. */
- 	struct relay_session *session;	/* Back ref to trace session */
- 
-diff --git a/src/bin/lttng-relayd/index.c b/src/bin/lttng-relayd/index.c
-index 5b5c711..04aa244 100644
---- a/src/bin/lttng-relayd/index.c
-+++ b/src/bin/lttng-relayd/index.c
-@@ -59,7 +59,6 @@ static struct relay_index *relay_index_create(struct relay_stream *stream,
- 
- 	lttng_ht_node_init_u64(&index->index_n, net_seq_num);
- 	pthread_mutex_init(&index->lock, NULL);
--	pthread_mutex_init(&index->reflock, NULL);
- 	urcu_ref_init(&index->ref);
- 
- end:
-@@ -99,21 +98,11 @@ static struct relay_index *relay_index_add_unique(struct relay_stream *stream,
-  */
- static bool relay_index_get(struct relay_index *index)
- {
--	bool has_ref = false;
--
- 	DBG2("index get for stream id %" PRIu64 " and seqnum %" PRIu64 " refcount %d",
- 			index->stream->stream_handle, index->index_n.key,
- 			(int) index->ref.refcount);
- 
--	/* Confirm that the index refcount has not reached 0. */
--	pthread_mutex_lock(&index->reflock);
--	if (index->ref.refcount != 0) {
--		has_ref = true;
--		urcu_ref_get(&index->ref);
--	}
--	pthread_mutex_unlock(&index->reflock);
--
--	return has_ref;
-+	return urcu_ref_get_unless_zero(&index->ref);
- }
- 
- /*
-@@ -265,10 +254,8 @@ void relay_index_put(struct relay_index *index)
- 	 * Index lock ensures that concurrent test and update of stream
- 	 * ref is atomic.
- 	 */
--	pthread_mutex_lock(&index->reflock);
- 	assert(index->ref.refcount != 0);
- 	urcu_ref_put(&index->ref, index_release);
--	pthread_mutex_unlock(&index->reflock);
- 	rcu_read_unlock();
- }
- 
-diff --git a/src/bin/lttng-relayd/index.h b/src/bin/lttng-relayd/index.h
-index 15c4ac8..c63f165 100644
---- a/src/bin/lttng-relayd/index.h
-+++ b/src/bin/lttng-relayd/index.h
-@@ -34,7 +34,6 @@ struct relay_index {
- 	/*
- 	 * index lock nests inside stream lock.
- 	 */
--	pthread_mutex_t reflock;	/* Protects refcounting. */
- 	struct urcu_ref ref;		/* Reference from getters. */
- 	struct relay_stream *stream;	/* Back ref to stream */
- 
-diff --git a/src/bin/lttng-relayd/session.c b/src/bin/lttng-relayd/session.c
-index 14ae874..466229a 100644
---- a/src/bin/lttng-relayd/session.c
-+++ b/src/bin/lttng-relayd/session.c
-@@ -65,7 +65,6 @@ struct relay_session *session_create(const char *session_name,
- 	urcu_ref_init(&session->ref);
- 	CDS_INIT_LIST_HEAD(&session->recv_list);
- 	pthread_mutex_init(&session->lock, NULL);
--	pthread_mutex_init(&session->reflock, NULL);
- 	pthread_mutex_init(&session->recv_list_lock, NULL);
- 
- 	strncpy(session->session_name, session_name,
-@@ -84,16 +83,7 @@ error:
- /* Should be called with RCU read-side lock held. */
- bool session_get(struct relay_session *session)
- {
--	bool has_ref = false;
--
--	pthread_mutex_lock(&session->reflock);
--	if (session->ref.refcount != 0) {
--		has_ref = true;
--		urcu_ref_get(&session->ref);
--	}
--	pthread_mutex_unlock(&session->reflock);
--
--	return has_ref;
-+	return urcu_ref_get_unless_zero(&session->ref);
- }
- 
- /*
-@@ -175,9 +165,7 @@ void session_release(struct urcu_ref *ref)
- void session_put(struct relay_session *session)
- {
- 	rcu_read_lock();
--	pthread_mutex_lock(&session->reflock);
- 	urcu_ref_put(&session->ref, session_release);
--	pthread_mutex_unlock(&session->reflock);
- 	rcu_read_unlock();
- }
- 
-diff --git a/src/bin/lttng-relayd/session.h b/src/bin/lttng-relayd/session.h
-index 1a37cfe..362216a 100644
---- a/src/bin/lttng-relayd/session.h
-+++ b/src/bin/lttng-relayd/session.h
-@@ -53,8 +53,6 @@ struct relay_session {
- 	 */
- 
- 	struct urcu_ref ref;
--	/* session reflock nests inside ctf_trace reflock. */
--	pthread_mutex_t reflock;
- 
- 	pthread_mutex_t lock;
- 
-diff --git a/src/bin/lttng-relayd/stream.c b/src/bin/lttng-relayd/stream.c
-index b604919..3fd5bc0 100644
---- a/src/bin/lttng-relayd/stream.c
-+++ b/src/bin/lttng-relayd/stream.c
-@@ -33,16 +33,7 @@
- /* Should be called with RCU read-side lock held. */
- bool stream_get(struct relay_stream *stream)
- {
--	bool has_ref = false;
--
--	pthread_mutex_lock(&stream->reflock);
--	if (stream->ref.refcount != 0) {
--		has_ref = true;
--		urcu_ref_get(&stream->ref);
--	}
--	pthread_mutex_unlock(&stream->reflock);
--
--	return has_ref;
-+	return urcu_ref_get_unless_zero(&stream->ref);
- }
- 
- /*
-@@ -101,7 +92,6 @@ struct relay_stream *stream_create(struct ctf_trace *trace,
- 	stream->channel_name = channel_name;
- 	lttng_ht_node_init_u64(&stream->node, stream->stream_handle);
- 	pthread_mutex_init(&stream->lock, NULL);
--	pthread_mutex_init(&stream->reflock, NULL);
- 	urcu_ref_init(&stream->ref);
- 	ctf_trace_get(trace);
- 	stream->trace = trace;
-@@ -228,8 +218,7 @@ unlock:
- 
- /*
-  * Stream must be protected by holding the stream lock or by virtue of being
-- * called from stream_destroy, in which case it is guaranteed to be accessed
-- * from a single thread by the reflock.
-+ * called from stream_destroy.
-  */
- static void stream_unpublish(struct relay_stream *stream)
- {
-@@ -274,9 +263,6 @@ static void stream_destroy_rcu(struct rcu_head *rcu_head)
- /*
-  * No need to take stream->lock since this is only called on the final
-  * stream_put which ensures that a single thread may act on the stream.
+-/*
+- * urcu/rculfhash-internal.h
 - *
-- * At that point, the object is also protected by the reflock which
-- * guarantees that no other thread may share ownership of this stream.
-  */
- static void stream_release(struct urcu_ref *ref)
- {
-@@ -317,15 +303,7 @@ static void stream_release(struct urcu_ref *ref)
- void stream_put(struct relay_stream *stream)
- {
- 	DBG("stream put for stream id %" PRIu64, stream->stream_handle);
--	/*
--	 * Ensure existence of stream->reflock for stream unlock.
--	 */
- 	rcu_read_lock();
--	/*
--	 * Stream reflock ensures that concurrent test and update of
--	 * stream ref is atomic.
--	 */
--	pthread_mutex_lock(&stream->reflock);
- 	assert(stream->ref.refcount != 0);
- 	/*
- 	 * Wait until we have processed all the stream packets before
-@@ -335,7 +313,6 @@ void stream_put(struct relay_stream *stream)
- 			stream->stream_handle,
- 			(int) stream->ref.refcount);
- 	urcu_ref_put(&stream->ref, stream_release);
--	pthread_mutex_unlock(&stream->reflock);
- 	rcu_read_unlock();
- }
- 
-diff --git a/src/bin/lttng-relayd/stream.h b/src/bin/lttng-relayd/stream.h
-index 5030e5d..efbbd12 100644
---- a/src/bin/lttng-relayd/stream.h
-+++ b/src/bin/lttng-relayd/stream.h
-@@ -37,12 +37,6 @@
- struct relay_stream {
- 	uint64_t stream_handle;
- 
--	/*
--	 * reflock used to synchronize the closing of this stream.
--	 * stream reflock nests inside viewer stream reflock.
--	 * stream reflock nests inside index reflock.
--	 */
--	pthread_mutex_t reflock;
- 	struct urcu_ref ref;
- 	/* Back reference to trace. Protected by refcount on trace object. */
- 	struct ctf_trace *trace;
-diff --git a/src/bin/lttng-relayd/viewer-stream.c b/src/bin/lttng-relayd/viewer-stream.c
-index 333246a..537db47 100644
---- a/src/bin/lttng-relayd/viewer-stream.c
-+++ b/src/bin/lttng-relayd/viewer-stream.c
-@@ -153,7 +153,6 @@ struct relay_viewer_stream *viewer_stream_create(struct relay_stream *stream,
- 	lttng_ht_node_init_u64(&vstream->stream_n, stream->stream_handle);
- 	lttng_ht_add_unique_u64(viewer_streams_ht, &vstream->stream_n);
- 
--	pthread_mutex_init(&vstream->reflock, NULL);
- 	urcu_ref_init(&vstream->ref);
- 
- 	return vstream;
-@@ -206,16 +205,7 @@ static void viewer_stream_release(struct urcu_ref *ref)
- /* Must be called with RCU read-side lock held. */
- bool viewer_stream_get(struct relay_viewer_stream *vstream)
- {
--	bool has_ref = false;
+- * Internal header for Lock-Free RCU Hash Table
+- *
+- * Copyright 2011 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+- * Copyright 2011 - Lai Jiangshan <laijs@cn.fujitsu.com>
+- *
+- * This library is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public
+- * License as published by the Free Software Foundation; either
+- * version 2.1 of the License, or (at your option) any later version.
+- *
+- * This library is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+- * Lesser General Public License for more details.
+- *
+- * You should have received a copy of the GNU Lesser General Public
+- * License along with this library; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+- */
 -
--	pthread_mutex_lock(&vstream->reflock);
--	if (vstream->ref.refcount != 0) {
--		has_ref = true;
--		urcu_ref_get(&vstream->ref);
+-#include <stdio.h>
+-
+-#include "rculfhash.h"
+-
+-#ifdef DEBUG
+-#define dbg_printf(fmt, args...)     printf("[debug rculfhash] " fmt, ## args)
+-#else
+-#define dbg_printf(fmt, args...)				\
+-do {								\
+-	/* do nothing but check printf format */		\
+-	if (0)							\
+-		printf("[debug rculfhash] " fmt, ## args);	\
+-} while (0)
+-#endif
+-
+-#if (CAA_BITS_PER_LONG == 32)
+-#define MAX_TABLE_ORDER			32
+-#else
+-#define MAX_TABLE_ORDER			64
+-#endif
+-
+-#define MAX_CHUNK_TABLE			(1UL << 10)
+-
+-#ifndef min
+-#define min(a, b)	((a) < (b) ? (a) : (b))
+-#endif
+-
+-#ifndef max
+-#define max(a, b)	((a) > (b) ? (a) : (b))
+-#endif
+-
+-struct ht_items_count;
+-
+-/*
+- * cds_lfht: Top-level data structure representing a lock-free hash
+- * table. Defined in the implementation file to make it be an opaque
+- * cookie to users.
+- *
+- * The fields used in fast-paths are placed near the end of the
+- * structure, because we need to have a variable-sized union to contain
+- * the mm plugin fields, which are used in the fast path.
+- */
+-struct cds_lfht {
+-	/* Initial configuration items */
+-	unsigned long max_nr_buckets;
+-	const struct cds_lfht_mm_type *mm;	/* memory management plugin */
+-	const struct rcu_flavor_struct *flavor;	/* RCU flavor */
+-
+-	long count;			/* global approximate item count */
+-
+-	/*
+-	 * We need to put the work threads offline (QSBR) when taking this
+-	 * mutex, because we use synchronize_rcu within this mutex critical
+-	 * section, which waits on read-side critical sections, and could
+-	 * therefore cause grace-period deadlock if we hold off RCU G.P.
+-	 * completion.
+-	 */
+-	pthread_mutex_t resize_mutex;	/* resize mutex: add/del mutex */
+-	pthread_attr_t *resize_attr;	/* Resize threads attributes */
+-	unsigned int in_progress_resize, in_progress_destroy;
+-	unsigned long resize_target;
+-	int resize_initiated;
+-
+-	/*
+-	 * Variables needed for add and remove fast-paths.
+-	 */
+-	int flags;
+-	unsigned long min_alloc_buckets_order;
+-	unsigned long min_nr_alloc_buckets;
+-	struct ht_items_count *split_count;	/* split item count */
+-
+-	/*
+-	 * Variables needed for the lookup, add and remove fast-paths.
+-	 */
+-	unsigned long size;	/* always a power of 2, shared (RCU) */
+-	/*
+-	 * bucket_at pointer is kept here to skip the extra level of
+-	 * dereference needed to get to "mm" (this is a fast-path).
+-	 */
+-	struct cds_lfht_node *(*bucket_at)(struct cds_lfht *ht,
+-			unsigned long index);
+-	/*
+-	 * Dynamic length "tbl_chunk" needs to be at the end of
+-	 * cds_lfht.
+-	 */
+-	union {
+-		/*
+-		 * Contains the per order-index-level bucket node table.
+-		 * The size of each bucket node table is half the number
+-		 * of hashes contained in this order (except for order 0).
+-		 * The minimum allocation buckets size parameter allows
+-		 * combining the bucket node arrays of the lowermost
+-		 * levels to improve cache locality for small index orders.
+-		 */
+-		struct cds_lfht_node *tbl_order[MAX_TABLE_ORDER];
+-
+-		/*
+-		 * Contains the bucket node chunks. The size of each
+-		 * bucket node chunk is ->min_alloc_size (we avoid to
+-		 * allocate chunks with different size). Chunks improve
+-		 * cache locality for small index orders, and are more
+-		 * friendly with environments where allocation of large
+-		 * contiguous memory areas is challenging due to memory
+-		 * fragmentation concerns or inability to use virtual
+-		 * memory addressing.
+-		 */
+-		struct cds_lfht_node *tbl_chunk[0];
+-
+-		/*
+-		 * Memory mapping with room for all possible buckets.
+-		 * Their memory is allocated when needed.
+-		 */
+-		struct cds_lfht_node *tbl_mmap;
+-	};
+-	/*
+-	 * End of variables needed for the lookup, add and remove
+-	 * fast-paths.
+-	 */
+-};
+-
+-extern unsigned int cds_lfht_fls_ulong(unsigned long x);
+-extern int cds_lfht_get_count_order_ulong(unsigned long x);
+-
+-#ifdef POISON_FREE
+-#define poison_free(ptr)					\
+-	do {							\
+-		if (ptr) {					\
+-			memset(ptr, 0x42, sizeof(*(ptr)));	\
+-			free(ptr);				\
+-		}						\
+-	} while (0)
+-#else
+-#define poison_free(ptr)	free(ptr)
+-#endif
+-
+-static inline
+-struct cds_lfht *__default_alloc_cds_lfht(
+-		const struct cds_lfht_mm_type *mm,
+-		unsigned long cds_lfht_size,
+-		unsigned long min_nr_alloc_buckets,
+-		unsigned long max_nr_buckets)
+-{
+-	struct cds_lfht *ht;
+-
+-	ht = calloc(1, cds_lfht_size);
+-	assert(ht);
+-
+-	ht->mm = mm;
+-	ht->bucket_at = mm->bucket_at;
+-	ht->min_nr_alloc_buckets = min_nr_alloc_buckets;
+-	ht->min_alloc_buckets_order =
+-		cds_lfht_get_count_order_ulong(min_nr_alloc_buckets);
+-	ht->max_nr_buckets = max_nr_buckets;
+-
+-	return ht;
+-}
+-
+-#endif /* _URCU_RCULFHASH_INTERNAL_H */
+diff --git a/src/common/hashtable/rculfhash-mm-chunk.c b/src/common/hashtable/rculfhash-mm-chunk.c
+deleted file mode 100644
+index 2e4e049..0000000
+--- a/src/common/hashtable/rculfhash-mm-chunk.c
++++ /dev/null
+@@ -1,99 +0,0 @@
+-/*
+- * rculfhash-mm-chunk.c
+- *
+- * Chunk based memory management for Lock-Free RCU Hash Table
+- *
+- * Copyright 2011 - Lai Jiangshan <laijs@cn.fujitsu.com>
+- *
+- * This library is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public
+- * License as published by the Free Software Foundation; either
+- * version 2.1 of the License, or (at your option) any later version.
+- *
+- * This library is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+- * Lesser General Public License for more details.
+- *
+- * You should have received a copy of the GNU Lesser General Public
+- * License along with this library; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+- */
+-
+-#define _GNU_SOURCE
+-#define _LGPL_SOURCE
+-#include <stddef.h>
+-#include "rculfhash-internal.h"
+-
+-static
+-void cds_lfht_alloc_bucket_table(struct cds_lfht *ht, unsigned long order)
+-{
+-	if (order == 0) {
+-		ht->tbl_chunk[0] = calloc(ht->min_nr_alloc_buckets,
+-			sizeof(struct cds_lfht_node));
+-		assert(ht->tbl_chunk[0]);
+-	} else if (order > ht->min_alloc_buckets_order) {
+-		unsigned long i, len = 1UL << (order - 1 - ht->min_alloc_buckets_order);
+-
+-		for (i = len; i < 2 * len; i++) {
+-			ht->tbl_chunk[i] = calloc(ht->min_nr_alloc_buckets,
+-				sizeof(struct cds_lfht_node));
+-			assert(ht->tbl_chunk[i]);
+-		}
 -	}
--	pthread_mutex_unlock(&vstream->reflock);
+-	/* Nothing to do for 0 < order && order <= ht->min_alloc_buckets_order */
+-}
 -
--	return has_ref;
-+	return urcu_ref_get_unless_zero(&vstream->ref);
- }
- 
- /*
-@@ -248,9 +238,7 @@ end:
- void viewer_stream_put(struct relay_viewer_stream *vstream)
- {
- 	rcu_read_lock();
--	pthread_mutex_lock(&vstream->reflock);
- 	urcu_ref_put(&vstream->ref, viewer_stream_release);
--	pthread_mutex_unlock(&vstream->reflock);
- 	rcu_read_unlock();
- }
- 
-diff --git a/src/bin/lttng-relayd/viewer-stream.h b/src/bin/lttng-relayd/viewer-stream.h
-index 5dc135d..848f72a 100644
---- a/src/bin/lttng-relayd/viewer-stream.h
-+++ b/src/bin/lttng-relayd/viewer-stream.h
-@@ -45,7 +45,6 @@ struct relay_stream;
-  */
- struct relay_viewer_stream {
- 	struct urcu_ref ref;
--	pthread_mutex_t reflock;
- 
- 	/* Back ref to stream. */
- 	struct relay_stream *stream;
+-/*
+- * cds_lfht_free_bucket_table() should be called with decreasing order.
+- * When cds_lfht_free_bucket_table(0) is called, it means the whole
+- * lfht is destroyed.
+- */
+-static
+-void cds_lfht_free_bucket_table(struct cds_lfht *ht, unsigned long order)
+-{
+-	if (order == 0)
+-		poison_free(ht->tbl_chunk[0]);
+-	else if (order > ht->min_alloc_buckets_order) {
+-		unsigned long i, len = 1UL << (order - 1 - ht->min_alloc_buckets_order);
+-
+-		for (i = len; i < 2 * len; i++)
+-			poison_free(ht->tbl_chunk[i]);
+-	}
+-	/* Nothing to do for 0 < order && order <= ht->min_alloc_buckets_order */
+-}
+-
+-static
+-struct cds_lfht_node *bucket_at(struct cds_lfht *ht, unsigned long index)
+-{
+-	unsigned long chunk, offset;
+-
+-	chunk = index >> ht->min_alloc_buckets_order;
+-	offset = index & (ht->min_nr_alloc_buckets - 1);
+-	return &ht->tbl_chunk[chunk][offset];
+-}
+-
+-static
+-struct cds_lfht *alloc_cds_lfht(unsigned long min_nr_alloc_buckets,
+-		unsigned long max_nr_buckets)
+-{
+-	unsigned long nr_chunks, cds_lfht_size;
+-
+-	min_nr_alloc_buckets = max(min_nr_alloc_buckets,
+-				max_nr_buckets / MAX_CHUNK_TABLE);
+-	nr_chunks = max_nr_buckets / min_nr_alloc_buckets;
+-	cds_lfht_size = offsetof(struct cds_lfht, tbl_chunk) +
+-			sizeof(struct cds_lfht_node *) * nr_chunks;
+-	cds_lfht_size = max(cds_lfht_size, sizeof(struct cds_lfht));
+-
+-	return __default_alloc_cds_lfht(
+-			&cds_lfht_mm_chunk, cds_lfht_size,
+-			min_nr_alloc_buckets, max_nr_buckets);
+-}
+-
+-const struct cds_lfht_mm_type cds_lfht_mm_chunk = {
+-	.alloc_cds_lfht = alloc_cds_lfht,
+-	.alloc_bucket_table = cds_lfht_alloc_bucket_table,
+-	.free_bucket_table = cds_lfht_free_bucket_table,
+-	.bucket_at = bucket_at,
+-};
+diff --git a/src/common/hashtable/rculfhash-mm-mmap.c b/src/common/hashtable/rculfhash-mm-mmap.c
+deleted file mode 100644
+index cd415db..0000000
+--- a/src/common/hashtable/rculfhash-mm-mmap.c
++++ /dev/null
+@@ -1,162 +0,0 @@
+-/*
+- * rculfhash-mm-mmap.c
+- *
+- * mmap/reservation based memory management for Lock-Free RCU Hash Table
+- *
+- * Copyright 2011 - Lai Jiangshan <laijs@cn.fujitsu.com>
+- *
+- * This library is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public
+- * License as published by the Free Software Foundation; either
+- * version 2.1 of the License, or (at your option) any later version.
+- *
+- * This library is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+- * Lesser General Public License for more details.
+- *
+- * You should have received a copy of the GNU Lesser General Public
+- * License along with this library; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+- */
+-
+-#define _GNU_SOURCE
+-#define _LGPL_SOURCE
+-#include <unistd.h>
+-#include <sys/mman.h>
+-#include "rculfhash-internal.h"
+-
+-#ifndef MAP_ANONYMOUS
+-#define MAP_ANONYMOUS MAP_ANON
+-#endif
+-
+-/* reserve inaccessible memory space without allocation any memory */
+-static void *memory_map(size_t length)
+-{
+-	void *ret = mmap(NULL, length, PROT_NONE,
+-			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+-
+-	assert(ret != MAP_FAILED);
+-	return ret;
+-}
+-
+-static void memory_unmap(void *ptr, size_t length)
+-{
+-	int ret __attribute__((unused));
+-
+-	ret = munmap(ptr, length);
+-
+-	assert(ret == 0);
+-}
+-
+-static void memory_populate(void *ptr, size_t length)
+-{
+-	void *ret __attribute__((unused));
+-
+-	ret = mmap(ptr, length, PROT_READ | PROT_WRITE,
+-			MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+-
+-	assert(ret == ptr);
+-}
+-
+-/*
+- * Discard garbage memory and avoid system save it when try to swap it out.
+- * Make it still reserved, inaccessible.
+- */
+-static void memory_discard(void *ptr, size_t length)
+-{
+-	void *ret __attribute__((unused));
+-
+-	ret = mmap(ptr, length, PROT_NONE,
+-			MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+-
+-	assert(ret == ptr);
+-}
+-
+-static
+-void cds_lfht_alloc_bucket_table(struct cds_lfht *ht, unsigned long order)
+-{
+-	if (order == 0) {
+-		if (ht->min_nr_alloc_buckets == ht->max_nr_buckets) {
+-			/* small table */
+-			ht->tbl_mmap = calloc(ht->max_nr_buckets,
+-					sizeof(*ht->tbl_mmap));
+-			assert(ht->tbl_mmap);
+-			return;
+-		}
+-		/* large table */
+-		ht->tbl_mmap = memory_map(ht->max_nr_buckets
+-			* sizeof(*ht->tbl_mmap));
+-		memory_populate(ht->tbl_mmap,
+-			ht->min_nr_alloc_buckets * sizeof(*ht->tbl_mmap));
+-	} else if (order > ht->min_alloc_buckets_order) {
+-		/* large table */
+-		unsigned long len = 1UL << (order - 1);
+-
+-		assert(ht->min_nr_alloc_buckets < ht->max_nr_buckets);
+-		memory_populate(ht->tbl_mmap + len,
+-				len * sizeof(*ht->tbl_mmap));
+-	}
+-	/* Nothing to do for 0 < order && order <= ht->min_alloc_buckets_order */
+-}
+-
+-/*
+- * cds_lfht_free_bucket_table() should be called with decreasing order.
+- * When cds_lfht_free_bucket_table(0) is called, it means the whole
+- * lfht is destroyed.
+- */
+-static
+-void cds_lfht_free_bucket_table(struct cds_lfht *ht, unsigned long order)
+-{
+-	if (order == 0) {
+-		if (ht->min_nr_alloc_buckets == ht->max_nr_buckets) {
+-			/* small table */
+-			poison_free(ht->tbl_mmap);
+-			return;
+-		}
+-		/* large table */
+-		memory_unmap(ht->tbl_mmap,
+-			ht->max_nr_buckets * sizeof(*ht->tbl_mmap));
+-	} else if (order > ht->min_alloc_buckets_order) {
+-		/* large table */
+-		unsigned long len = 1UL << (order - 1);
+-
+-		assert(ht->min_nr_alloc_buckets < ht->max_nr_buckets);
+-		memory_discard(ht->tbl_mmap + len, len * sizeof(*ht->tbl_mmap));
+-	}
+-	/* Nothing to do for 0 < order && order <= ht->min_alloc_buckets_order */
+-}
+-
+-static
+-struct cds_lfht_node *bucket_at(struct cds_lfht *ht, unsigned long index)
+-{
+-	return &ht->tbl_mmap[index];
+-}
+-
+-static
+-struct cds_lfht *alloc_cds_lfht(unsigned long min_nr_alloc_buckets,
+-		unsigned long max_nr_buckets)
+-{
+-	unsigned long page_bucket_size;
+-
+-	page_bucket_size = getpagesize() / sizeof(struct cds_lfht_node);
+-	if (max_nr_buckets <= page_bucket_size) {
+-		/* small table */
+-		min_nr_alloc_buckets = max_nr_buckets;
+-	} else {
+-		/* large table */
+-		min_nr_alloc_buckets = max(min_nr_alloc_buckets,
+-					page_bucket_size);
+-	}
+-
+-	return __default_alloc_cds_lfht(
+-			&cds_lfht_mm_mmap, sizeof(struct cds_lfht),
+-			min_nr_alloc_buckets, max_nr_buckets);
+-}
+-
+-const struct cds_lfht_mm_type cds_lfht_mm_mmap = {
+-	.alloc_cds_lfht = alloc_cds_lfht,
+-	.alloc_bucket_table = cds_lfht_alloc_bucket_table,
+-	.free_bucket_table = cds_lfht_free_bucket_table,
+-	.bucket_at = bucket_at,
+-};
+diff --git a/src/common/hashtable/rculfhash-mm-order.c b/src/common/hashtable/rculfhash-mm-order.c
+deleted file mode 100644
+index 0ce98d7..0000000
+--- a/src/common/hashtable/rculfhash-mm-order.c
++++ /dev/null
+@@ -1,92 +0,0 @@
+-/*
+- * rculfhash-mm-order.c
+- *
+- * Order based memory management for Lock-Free RCU Hash Table
+- *
+- * Copyright 2011 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+- * Copyright 2011 - Lai Jiangshan <laijs@cn.fujitsu.com>
+- *
+- * This library is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public
+- * License as published by the Free Software Foundation; either
+- * version 2.1 of the License, or (at your option) any later version.
+- *
+- * This library is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+- * Lesser General Public License for more details.
+- *
+- * You should have received a copy of the GNU Lesser General Public
+- * License along with this library; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+- */
+-
+-#define _GNU_SOURCE
+-#define _LGPL_SOURCE
+-#include "rculfhash-internal.h"
+-
+-static
+-void cds_lfht_alloc_bucket_table(struct cds_lfht *ht, unsigned long order)
+-{
+-	if (order == 0) {
+-		ht->tbl_order[0] = calloc(ht->min_nr_alloc_buckets,
+-			sizeof(struct cds_lfht_node));
+-		assert(ht->tbl_order[0]);
+-	} else if (order > ht->min_alloc_buckets_order) {
+-		ht->tbl_order[order] = calloc(1UL << (order -1),
+-			sizeof(struct cds_lfht_node));
+-		assert(ht->tbl_order[order]);
+-	}
+-	/* Nothing to do for 0 < order && order <= ht->min_alloc_buckets_order */
+-}
+-
+-/*
+- * cds_lfht_free_bucket_table() should be called with decreasing order.
+- * When cds_lfht_free_bucket_table(0) is called, it means the whole
+- * lfht is destroyed.
+- */
+-static
+-void cds_lfht_free_bucket_table(struct cds_lfht *ht, unsigned long order)
+-{
+-	if (order == 0)
+-		poison_free(ht->tbl_order[0]);
+-	else if (order > ht->min_alloc_buckets_order)
+-		poison_free(ht->tbl_order[order]);
+-	/* Nothing to do for 0 < order && order <= ht->min_alloc_buckets_order */
+-}
+-
+-static
+-struct cds_lfht_node *bucket_at(struct cds_lfht *ht, unsigned long index)
+-{
+-	unsigned long order;
+-
+-	if (index < ht->min_nr_alloc_buckets) {
+-		dbg_printf("bucket index %lu order 0 aridx 0\n", index);
+-		return &ht->tbl_order[0][index];
+-	}
+-	/*
+-	 * equivalent to cds_lfht_get_count_order_ulong(index + 1), but
+-	 * optimizes away the non-existing 0 special-case for
+-	 * cds_lfht_get_count_order_ulong.
+-	 */
+-	order = cds_lfht_fls_ulong(index);
+-	dbg_printf("bucket index %lu order %lu aridx %lu\n",
+-		   index, order, index & ((1UL << (order - 1)) - 1));
+-	return &ht->tbl_order[order][index & ((1UL << (order - 1)) - 1)];
+-}
+-
+-static
+-struct cds_lfht *alloc_cds_lfht(unsigned long min_nr_alloc_buckets,
+-		unsigned long max_nr_buckets)
+-{
+-	return __default_alloc_cds_lfht(
+-			&cds_lfht_mm_order, sizeof(struct cds_lfht),
+-			min_nr_alloc_buckets, max_nr_buckets);
+-}
+-
+-const struct cds_lfht_mm_type cds_lfht_mm_order = {
+-	.alloc_cds_lfht = alloc_cds_lfht,
+-	.alloc_bucket_table = cds_lfht_alloc_bucket_table,
+-	.free_bucket_table = cds_lfht_free_bucket_table,
+-	.bucket_at = bucket_at,
+-};
+diff --git a/src/common/hashtable/rculfhash.c b/src/common/hashtable/rculfhash.c
+deleted file mode 100644
+index 9baf407..0000000
+--- a/src/common/hashtable/rculfhash.c
++++ /dev/null
+@@ -1,2035 +0,0 @@
+-/*
+- * rculfhash.c
+- *
+- * Userspace RCU library - Lock-Free Resizable RCU Hash Table
+- *
+- * Copyright 2010-2011 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+- * Copyright 2011 - Lai Jiangshan <laijs@cn.fujitsu.com>
+- *
+- * This library is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public
+- * License as published by the Free Software Foundation; either
+- * version 2.1 of the License, or (at your option) any later version.
+- *
+- * This library is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+- * Lesser General Public License for more details.
+- *
+- * You should have received a copy of the GNU Lesser General Public
+- * License along with this library; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+- */
+-
+-/*
+- * Based on the following articles:
+- * - Ori Shalev and Nir Shavit. Split-ordered lists: Lock-free
+- *   extensible hash tables. J. ACM 53, 3 (May 2006), 379-405.
+- * - Michael, M. M. High performance dynamic lock-free hash tables
+- *   and list-based sets. In Proceedings of the fourteenth annual ACM
+- *   symposium on Parallel algorithms and architectures, ACM Press,
+- *   (2002), 73-82.
+- *
+- * Some specificities of this Lock-Free Resizable RCU Hash Table
+- * implementation:
+- *
+- * - RCU read-side critical section allows readers to perform hash
+- *   table lookups, as well as traversals, and use the returned objects
+- *   safely by allowing memory reclaim to take place only after a grace
+- *   period.
+- * - Add and remove operations are lock-free, and do not need to
+- *   allocate memory. They need to be executed within RCU read-side
+- *   critical section to ensure the objects they read are valid and to
+- *   deal with the cmpxchg ABA problem.
+- * - add and add_unique operations are supported. add_unique checks if
+- *   the node key already exists in the hash table. It ensures not to
+- *   populate a duplicate key if the node key already exists in the hash
+- *   table.
+- * - The resize operation executes concurrently with
+- *   add/add_unique/add_replace/remove/lookup/traversal.
+- * - Hash table nodes are contained within a split-ordered list. This
+- *   list is ordered by incrementing reversed-bits-hash value.
+- * - An index of bucket nodes is kept. These bucket nodes are the hash
+- *   table "buckets". These buckets are internal nodes that allow to
+- *   perform a fast hash lookup, similarly to a skip list. These
+- *   buckets are chained together in the split-ordered list, which
+- *   allows recursive expansion by inserting new buckets between the
+- *   existing buckets. The split-ordered list allows adding new buckets
+- *   between existing buckets as the table needs to grow.
+- * - The resize operation for small tables only allows expanding the
+- *   hash table. It is triggered automatically by detecting long chains
+- *   in the add operation.
+- * - The resize operation for larger tables (and available through an
+- *   API) allows both expanding and shrinking the hash table.
+- * - Split-counters are used to keep track of the number of
+- *   nodes within the hash table for automatic resize triggering.
+- * - Resize operation initiated by long chain detection is executed by a
+- *   call_rcu thread, which keeps lock-freedom of add and remove.
+- * - Resize operations are protected by a mutex.
+- * - The removal operation is split in two parts: first, a "removed"
+- *   flag is set in the next pointer within the node to remove. Then,
+- *   a "garbage collection" is performed in the bucket containing the
+- *   removed node (from the start of the bucket up to the removed node).
+- *   All encountered nodes with "removed" flag set in their next
+- *   pointers are removed from the linked-list. If the cmpxchg used for
+- *   removal fails (due to concurrent garbage-collection or concurrent
+- *   add), we retry from the beginning of the bucket. This ensures that
+- *   the node with "removed" flag set is removed from the hash table
+- *   (not visible to lookups anymore) before the RCU read-side critical
+- *   section held across removal ends. Furthermore, this ensures that
+- *   the node with "removed" flag set is removed from the linked-list
+- *   before its memory is reclaimed. After setting the "removal" flag,
+- *   only the thread which removal is the first to set the "removal
+- *   owner" flag (with an xchg) into a node's next pointer is considered
+- *   to have succeeded its removal (and thus owns the node to reclaim).
+- *   Because we garbage-collect starting from an invariant node (the
+- *   start-of-bucket bucket node) up to the "removed" node (or find a
+- *   reverse-hash that is higher), we are sure that a successful
+- *   traversal of the chain leads to a chain that is present in the
+- *   linked-list (the start node is never removed) and that it does not
+- *   contain the "removed" node anymore, even if concurrent delete/add
+- *   operations are changing the structure of the list concurrently.
+- * - The add operations perform garbage collection of buckets if they
+- *   encounter nodes with removed flag set in the bucket where they want
+- *   to add their new node. This ensures lock-freedom of add operation by
+- *   helping the remover unlink nodes from the list rather than to wait
+- *   for it do to so.
+- * - There are three memory backends for the hash table buckets: the
+- *   "order table", the "chunks", and the "mmap".
+- * - These bucket containers contain a compact version of the hash table
+- *   nodes.
+- * - The RCU "order table":
+- *   -  has a first level table indexed by log2(hash index) which is
+- *      copied and expanded by the resize operation. This order table
+- *      allows finding the "bucket node" tables.
+- *   - There is one bucket node table per hash index order. The size of
+- *     each bucket node table is half the number of hashes contained in
+- *     this order (except for order 0).
+- * - The RCU "chunks" is best suited for close interaction with a page
+- *   allocator. It uses a linear array as index to "chunks" containing
+- *   each the same number of buckets.
+- * - The RCU "mmap" memory backend uses a single memory map to hold
+- *   all buckets.
+- * - synchronize_rcu is used to garbage-collect the old bucket node table.
+- *
+- * Ordering Guarantees:
+- *
+- * To discuss these guarantees, we first define "read" operation as any
+- * of the the basic cds_lfht_lookup, cds_lfht_next_duplicate,
+- * cds_lfht_first, cds_lfht_next operation, as well as
+- * cds_lfht_add_unique (failure).
+- *
+- * We define "read traversal" operation as any of the following
+- * group of operations
+- *  - cds_lfht_lookup followed by iteration with cds_lfht_next_duplicate
+- *    (and/or cds_lfht_next, although less common).
+- *  - cds_lfht_add_unique (failure) followed by iteration with
+- *    cds_lfht_next_duplicate (and/or cds_lfht_next, although less
+- *    common).
+- *  - cds_lfht_first followed iteration with cds_lfht_next (and/or
+- *    cds_lfht_next_duplicate, although less common).
+- *
+- * We define "write" operations as any of cds_lfht_add,
+- * cds_lfht_add_unique (success), cds_lfht_add_replace, cds_lfht_del.
+- *
+- * When cds_lfht_add_unique succeeds (returns the node passed as
+- * parameter), it acts as a "write" operation. When cds_lfht_add_unique
+- * fails (returns a node different from the one passed as parameter), it
+- * acts as a "read" operation. A cds_lfht_add_unique failure is a
+- * cds_lfht_lookup "read" operation, therefore, any ordering guarantee
+- * referring to "lookup" imply any of "lookup" or cds_lfht_add_unique
+- * (failure).
+- *
+- * We define "prior" and "later" node as nodes observable by reads and
+- * read traversals respectively before and after a write or sequence of
+- * write operations.
+- *
+- * Hash-table operations are often cascaded, for example, the pointer
+- * returned by a cds_lfht_lookup() might be passed to a cds_lfht_next(),
+- * whose return value might in turn be passed to another hash-table
+- * operation. This entire cascaded series of operations must be enclosed
+- * by a pair of matching rcu_read_lock() and rcu_read_unlock()
+- * operations.
+- *
+- * The following ordering guarantees are offered by this hash table:
+- *
+- * A.1) "read" after "write": if there is ordering between a write and a
+- *      later read, then the read is guaranteed to see the write or some
+- *      later write.
+- * A.2) "read traversal" after "write": given that there is dependency
+- *      ordering between reads in a "read traversal", if there is
+- *      ordering between a write and the first read of the traversal,
+- *      then the "read traversal" is guaranteed to see the write or
+- *      some later write.
+- * B.1) "write" after "read": if there is ordering between a read and a
+- *      later write, then the read will never see the write.
+- * B.2) "write" after "read traversal": given that there is dependency
+- *      ordering between reads in a "read traversal", if there is
+- *      ordering between the last read of the traversal and a later
+- *      write, then the "read traversal" will never see the write.
+- * C)   "write" while "read traversal": if a write occurs during a "read
+- *      traversal", the traversal may, or may not, see the write.
+- * D.1) "write" after "write": if there is ordering between a write and
+- *      a later write, then the later write is guaranteed to see the
+- *      effects of the first write.
+- * D.2) Concurrent "write" pairs: The system will assign an arbitrary
+- *      order to any pair of concurrent conflicting writes.
+- *      Non-conflicting writes (for example, to different keys) are
+- *      unordered.
+- * E)   If a grace period separates a "del" or "replace" operation
+- *      and a subsequent operation, then that subsequent operation is
+- *      guaranteed not to see the removed item.
+- * F)   Uniqueness guarantee: given a hash table that does not contain
+- *      duplicate items for a given key, there will only be one item in
+- *      the hash table after an arbitrary sequence of add_unique and/or
+- *      add_replace operations. Note, however, that a pair of
+- *      concurrent read operations might well access two different items
+- *      with that key.
+- * G.1) If a pair of lookups for a given key are ordered (e.g. by a
+- *      memory barrier), then the second lookup will return the same
+- *      node as the previous lookup, or some later node.
+- * G.2) A "read traversal" that starts after the end of a prior "read
+- *      traversal" (ordered by memory barriers) is guaranteed to see the
+- *      same nodes as the previous traversal, or some later nodes.
+- * G.3) Concurrent "read" pairs: concurrent reads are unordered. For
+- *      example, if a pair of reads to the same key run concurrently
+- *      with an insertion of that same key, the reads remain unordered
+- *      regardless of their return values. In other words, you cannot
+- *      rely on the values returned by the reads to deduce ordering.
+- *
+- * Progress guarantees:
+- *
+- * * Reads are wait-free. These operations always move forward in the
+- *   hash table linked list, and this list has no loop.
+- * * Writes are lock-free. Any retry loop performed by a write operation
+- *   is triggered by progress made within another update operation.
+- *
+- * Bucket node tables:
+- *
+- * hash table	hash table	the last	all bucket node tables
+- * order	size		bucket node	0   1   2   3   4   5   6(index)
+- * 				table size
+- * 0		1		1		1
+- * 1		2		1		1   1
+- * 2		4		2		1   1   2
+- * 3		8		4		1   1   2   4
+- * 4		16		8		1   1   2   4   8
+- * 5		32		16		1   1   2   4   8  16
+- * 6		64		32		1   1   2   4   8  16  32
+- *
+- * When growing/shrinking, we only focus on the last bucket node table
+- * which size is (!order ? 1 : (1 << (order -1))).
+- *
+- * Example for growing/shrinking:
+- * grow hash table from order 5 to 6: init the index=6 bucket node table
+- * shrink hash table from order 6 to 5: fini the index=6 bucket node table
+- *
+- * A bit of ascii art explanation:
+- *
+- * The order index is the off-by-one compared to the actual power of 2
+- * because we use index 0 to deal with the 0 special-case.
+- *
+- * This shows the nodes for a small table ordered by reversed bits:
+- *
+- *    bits   reverse
+- * 0  000        000
+- * 4  100        001
+- * 2  010        010
+- * 6  110        011
+- * 1  001        100
+- * 5  101        101
+- * 3  011        110
+- * 7  111        111
+- *
+- * This shows the nodes in order of non-reversed bits, linked by
+- * reversed-bit order.
+- *
+- * order              bits       reverse
+- * 0               0  000        000
+- * 1               |  1  001        100             <-
+- * 2               |  |  2  010        010    <-     |
+- *                 |  |  |  3  011        110  | <-  |
+- * 3               -> |  |  |  4  100        001  |  |
+- *                    -> |  |     5  101        101  |
+- *                       -> |        6  110        011
+- *                          ->          7  111        111
+- */
+-
+-#define _LGPL_SOURCE
+-#define _GNU_SOURCE
+-#include <stdlib.h>
+-#include <errno.h>
+-#include <assert.h>
+-#include <stdio.h>
+-#include <stdint.h>
+-#include <string.h>
+-#include <sched.h>
+-
+-#include "config.h"
+-#include <urcu.h>
+-#include <urcu-call-rcu.h>
+-#include <urcu/arch.h>
+-#include <urcu/uatomic.h>
+-#include <urcu/compiler.h>
+-#include <stdio.h>
+-#include <pthread.h>
+-
+-#include "rculfhash.h"
+-#include "rculfhash-internal.h"
+-#include "urcu-flavor.h"
+-
+-#include <common/common.h>
+-
+-/*
+- * Split-counters lazily update the global counter each 1024
+- * addition/removal. It automatically keeps track of resize required.
+- * We use the bucket length as indicator for need to expand for small
+- * tables and machines lacking per-cpu data suppport.
+- */
+-#define COUNT_COMMIT_ORDER		10
+-#define DEFAULT_SPLIT_COUNT_MASK	0xFUL
+-#define CHAIN_LEN_TARGET		1
+-#define CHAIN_LEN_RESIZE_THRESHOLD	3
+-
+-/*
+- * Define the minimum table size.
+- */
+-#define MIN_TABLE_ORDER			0
+-#define MIN_TABLE_SIZE			(1UL << MIN_TABLE_ORDER)
+-
+-/*
+- * Minimum number of bucket nodes to touch per thread to parallelize grow/shrink.
+- */
+-#define MIN_PARTITION_PER_THREAD_ORDER	12
+-#define MIN_PARTITION_PER_THREAD	(1UL << MIN_PARTITION_PER_THREAD_ORDER)
+-
+-/*
+- * The removed flag needs to be updated atomically with the pointer.
+- * It indicates that no node must attach to the node scheduled for
+- * removal, and that node garbage collection must be performed.
+- * The bucket flag does not require to be updated atomically with the
+- * pointer, but it is added as a pointer low bit flag to save space.
+- * The "removal owner" flag is used to detect which of the "del"
+- * operation that has set the "removed flag" gets to return the removed
+- * node to its caller. Note that the replace operation does not need to
+- * iteract with the "removal owner" flag, because it validates that
+- * the "removed" flag is not set before performing its cmpxchg.
+- */
+-#define REMOVED_FLAG		(1UL << 0)
+-#define BUCKET_FLAG		(1UL << 1)
+-#define REMOVAL_OWNER_FLAG	(1UL << 2)
+-#define FLAGS_MASK		((1UL << 3) - 1)
+-
+-/* Value of the end pointer. Should not interact with flags. */
+-#define END_VALUE		NULL
+-
+-/*
+- * ht_items_count: Split-counters counting the number of node addition
+- * and removal in the table. Only used if the CDS_LFHT_ACCOUNTING flag
+- * is set at hash table creation.
+- *
+- * These are free-running counters, never reset to zero. They count the
+- * number of add/remove, and trigger every (1 << COUNT_COMMIT_ORDER)
+- * operations to update the global counter. We choose a power-of-2 value
+- * for the trigger to deal with 32 or 64-bit overflow of the counter.
+- */
+-struct ht_items_count {
+-	unsigned long add, del;
+-} __attribute__((aligned(CAA_CACHE_LINE_SIZE)));
+-
+-/*
+- * rcu_resize_work: Contains arguments passed to RCU worker thread
+- * responsible for performing lazy resize.
+- */
+-struct rcu_resize_work {
+-	struct rcu_head head;
+-	struct cds_lfht *ht;
+-};
+-
+-/*
+- * partition_resize_work: Contains arguments passed to worker threads
+- * executing the hash table resize on partitions of the hash table
+- * assigned to each processor's worker thread.
+- */
+-struct partition_resize_work {
+-	pthread_t thread_id;
+-	struct cds_lfht *ht;
+-	unsigned long i, start, len;
+-	void (*fct)(struct cds_lfht *ht, unsigned long i,
+-		    unsigned long start, unsigned long len);
+-};
+-
+-/*
+- * Algorithm to reverse bits in a word by lookup table, extended to
+- * 64-bit words.
+- * Source:
+- * http://graphics.stanford.edu/~seander/bithacks.html#BitReverseTable
+- * Originally from Public Domain.
+- */
+-
+-static const uint8_t BitReverseTable256[256] =
+-{
+-#define R2(n) (n),   (n) + 2*64,     (n) + 1*64,     (n) + 3*64
+-#define R4(n) R2(n), R2((n) + 2*16), R2((n) + 1*16), R2((n) + 3*16)
+-#define R6(n) R4(n), R4((n) + 2*4 ), R4((n) + 1*4 ), R4((n) + 3*4 )
+-	R6(0), R6(2), R6(1), R6(3)
+-};
+-#undef R2
+-#undef R4
+-#undef R6
+-
+-static
+-uint8_t bit_reverse_u8(uint8_t v)
+-{
+-	return BitReverseTable256[v];
+-}
+-
+-static __attribute__((unused))
+-uint32_t bit_reverse_u32(uint32_t v)
+-{
+-	return ((uint32_t) bit_reverse_u8(v) << 24) |
+-		((uint32_t) bit_reverse_u8(v >> 8) << 16) |
+-		((uint32_t) bit_reverse_u8(v >> 16) << 8) |
+-		((uint32_t) bit_reverse_u8(v >> 24));
+-}
+-
+-static __attribute__((unused))
+-uint64_t bit_reverse_u64(uint64_t v)
+-{
+-	return ((uint64_t) bit_reverse_u8(v) << 56) |
+-		((uint64_t) bit_reverse_u8(v >> 8)  << 48) |
+-		((uint64_t) bit_reverse_u8(v >> 16) << 40) |
+-		((uint64_t) bit_reverse_u8(v >> 24) << 32) |
+-		((uint64_t) bit_reverse_u8(v >> 32) << 24) |
+-		((uint64_t) bit_reverse_u8(v >> 40) << 16) |
+-		((uint64_t) bit_reverse_u8(v >> 48) << 8) |
+-		((uint64_t) bit_reverse_u8(v >> 56));
+-}
+-
+-static
+-unsigned long bit_reverse_ulong(unsigned long v)
+-{
+-#if (CAA_BITS_PER_LONG == 32)
+-	return bit_reverse_u32(v);
+-#else
+-	return bit_reverse_u64(v);
+-#endif
+-}
+-
+-/*
+- * fls: returns the position of the most significant bit.
+- * Returns 0 if no bit is set, else returns the position of the most
+- * significant bit (from 1 to 32 on 32-bit, from 1 to 64 on 64-bit).
+- */
+-#if defined(__i386) || defined(__x86_64)
+-static inline
+-unsigned int fls_u32(uint32_t x)
+-{
+-	int r;
+-
+-	asm("bsrl %1,%0\n\t"
+-	    "jnz 1f\n\t"
+-	    "movl $-1,%0\n\t"
+-	    "1:\n\t"
+-	    : "=r" (r) : "rm" (x));
+-	return r + 1;
+-}
+-#define HAS_FLS_U32
+-#endif
+-
+-#if defined(__x86_64)
+-static inline
+-unsigned int fls_u64(uint64_t x)
+-{
+-	long r;
+-
+-	asm("bsrq %1,%0\n\t"
+-	    "jnz 1f\n\t"
+-	    "movq $-1,%0\n\t"
+-	    "1:\n\t"
+-	    : "=r" (r) : "rm" (x));
+-	return r + 1;
+-}
+-#define HAS_FLS_U64
+-#endif
+-
+-#ifndef HAS_FLS_U64
+-static __attribute__((unused))
+-unsigned int fls_u64(uint64_t x)
+-{
+-	unsigned int r = 64;
+-
+-	if (!x)
+-		return 0;
+-
+-	if (!(x & 0xFFFFFFFF00000000ULL)) {
+-		x <<= 32;
+-		r -= 32;
+-	}
+-	if (!(x & 0xFFFF000000000000ULL)) {
+-		x <<= 16;
+-		r -= 16;
+-	}
+-	if (!(x & 0xFF00000000000000ULL)) {
+-		x <<= 8;
+-		r -= 8;
+-	}
+-	if (!(x & 0xF000000000000000ULL)) {
+-		x <<= 4;
+-		r -= 4;
+-	}
+-	if (!(x & 0xC000000000000000ULL)) {
+-		x <<= 2;
+-		r -= 2;
+-	}
+-	if (!(x & 0x8000000000000000ULL)) {
+-		x <<= 1;
+-		r -= 1;
+-	}
+-	return r;
+-}
+-#endif
+-
+-#ifndef HAS_FLS_U32
+-static __attribute__((unused))
+-unsigned int fls_u32(uint32_t x)
+-{
+-	unsigned int r = 32;
+-
+-	if (!x)
+-		return 0;
+-	if (!(x & 0xFFFF0000U)) {
+-		x <<= 16;
+-		r -= 16;
+-	}
+-	if (!(x & 0xFF000000U)) {
+-		x <<= 8;
+-		r -= 8;
+-	}
+-	if (!(x & 0xF0000000U)) {
+-		x <<= 4;
+-		r -= 4;
+-	}
+-	if (!(x & 0xC0000000U)) {
+-		x <<= 2;
+-		r -= 2;
+-	}
+-	if (!(x & 0x80000000U)) {
+-		x <<= 1;
+-		r -= 1;
+-	}
+-	return r;
+-}
+-#endif
+-
+-unsigned int cds_lfht_fls_ulong(unsigned long x)
+-{
+-#if (CAA_BITS_PER_LONG == 32)
+-	return fls_u32(x);
+-#else
+-	return fls_u64(x);
+-#endif
+-}
+-
+-/*
+- * Return the minimum order for which x <= (1UL << order).
+- * Return -1 if x is 0.
+- */
+-int cds_lfht_get_count_order_u32(uint32_t x)
+-{
+-	if (!x)
+-		return -1;
+-
+-	return fls_u32(x - 1);
+-}
+-
+-/*
+- * Return the minimum order for which x <= (1UL << order).
+- * Return -1 if x is 0.
+- */
+-int cds_lfht_get_count_order_ulong(unsigned long x)
+-{
+-	if (!x)
+-		return -1;
+-
+-	return cds_lfht_fls_ulong(x - 1);
+-}
+-
+-static
+-void cds_lfht_resize_lazy_grow(struct cds_lfht *ht, unsigned long size, int growth);
+-
+-static
+-void cds_lfht_resize_lazy_count(struct cds_lfht *ht, unsigned long size,
+-				unsigned long count);
+-
+-static long nr_cpus_mask = -1;
+-static long split_count_mask = -1;
+-static int split_count_order = -1;
+-
+-#if defined(HAVE_SYSCONF)
+-static void ht_init_nr_cpus_mask(void)
+-{
+-	long maxcpus;
+-
+-	maxcpus = sysconf(_SC_NPROCESSORS_CONF);
+-	if (maxcpus <= 0) {
+-		nr_cpus_mask = -2;
+-		return;
+-	}
+-	/*
+-	 * round up number of CPUs to next power of two, so we
+-	 * can use & for modulo.
+-	 */
+-	maxcpus = 1UL << cds_lfht_get_count_order_ulong(maxcpus);
+-	nr_cpus_mask = maxcpus - 1;
+-}
+-#else /* #if defined(HAVE_SYSCONF) */
+-static void ht_init_nr_cpus_mask(void)
+-{
+-	nr_cpus_mask = -2;
+-}
+-#endif /* #else #if defined(HAVE_SYSCONF) */
+-
+-static
+-void alloc_split_items_count(struct cds_lfht *ht)
+-{
+-	struct ht_items_count *count;
+-
+-	if (nr_cpus_mask == -1)	{
+-		ht_init_nr_cpus_mask();
+-		if (nr_cpus_mask < 0)
+-			split_count_mask = DEFAULT_SPLIT_COUNT_MASK;
+-		else
+-			split_count_mask = nr_cpus_mask;
+-		split_count_order =
+-			cds_lfht_get_count_order_ulong(split_count_mask + 1);
+-	}
+-
+-	assert(split_count_mask >= 0);
+-
+-	if (ht->flags & CDS_LFHT_ACCOUNTING) {
+-		ht->split_count = calloc(split_count_mask + 1, sizeof(*count));
+-		assert(ht->split_count);
+-	} else {
+-		ht->split_count = NULL;
+-	}
+-}
+-
+-static
+-void free_split_items_count(struct cds_lfht *ht)
+-{
+-	poison_free(ht->split_count);
+-}
+-
+-#if defined(HAVE_SCHED_GETCPU) && !defined(VALGRIND)
+-static
+-int ht_get_split_count_index(unsigned long hash)
+-{
+-	int cpu;
+-
+-	assert(split_count_mask >= 0);
+-	cpu = sched_getcpu();
+-	if (caa_unlikely(cpu < 0))
+-		return hash & split_count_mask;
+-	else
+-		return cpu & split_count_mask;
+-}
+-#else /* #if defined(HAVE_SCHED_GETCPU) */
+-static
+-int ht_get_split_count_index(unsigned long hash)
+-{
+-	return hash & split_count_mask;
+-}
+-#endif /* #else #if defined(HAVE_SCHED_GETCPU) */
+-
+-static
+-void ht_count_add(struct cds_lfht *ht, unsigned long size, unsigned long hash)
+-{
+-	unsigned long split_count;
+-	int index;
+-	long count;
+-
+-	if (caa_unlikely(!ht->split_count))
+-		return;
+-	index = ht_get_split_count_index(hash);
+-	split_count = uatomic_add_return(&ht->split_count[index].add, 1);
+-	if (caa_likely(split_count & ((1UL << COUNT_COMMIT_ORDER) - 1)))
+-		return;
+-	/* Only if number of add multiple of 1UL << COUNT_COMMIT_ORDER */
+-
+-	dbg_printf("add split count %lu\n", split_count);
+-	count = uatomic_add_return(&ht->count,
+-				   1UL << COUNT_COMMIT_ORDER);
+-	if (caa_likely(count & (count - 1)))
+-		return;
+-	/* Only if global count is power of 2 */
+-
+-	if ((count >> CHAIN_LEN_RESIZE_THRESHOLD) < size)
+-		return;
+-	dbg_printf("add set global %ld\n", count);
+-	cds_lfht_resize_lazy_count(ht, size,
+-		count >> (CHAIN_LEN_TARGET - 1));
+-}
+-
+-static
+-void ht_count_del(struct cds_lfht *ht, unsigned long size, unsigned long hash)
+-{
+-	unsigned long split_count;
+-	int index;
+-	long count;
+-
+-	if (caa_unlikely(!ht->split_count))
+-		return;
+-	index = ht_get_split_count_index(hash);
+-	split_count = uatomic_add_return(&ht->split_count[index].del, 1);
+-	if (caa_likely(split_count & ((1UL << COUNT_COMMIT_ORDER) - 1)))
+-		return;
+-	/* Only if number of deletes multiple of 1UL << COUNT_COMMIT_ORDER */
+-
+-	dbg_printf("del split count %lu\n", split_count);
+-	count = uatomic_add_return(&ht->count,
+-				   -(1UL << COUNT_COMMIT_ORDER));
+-	if (caa_likely(count & (count - 1)))
+-		return;
+-	/* Only if global count is power of 2 */
+-
+-	if ((count >> CHAIN_LEN_RESIZE_THRESHOLD) >= size)
+-		return;
+-	dbg_printf("del set global %ld\n", count);
+-	/*
+-	 * Don't shrink table if the number of nodes is below a
+-	 * certain threshold.
+-	 */
+-	if (count < (1UL << COUNT_COMMIT_ORDER) * (split_count_mask + 1))
+-		return;
+-	cds_lfht_resize_lazy_count(ht, size,
+-		count >> (CHAIN_LEN_TARGET - 1));
+-}
+-
+-static
+-void check_resize(struct cds_lfht *ht, unsigned long size, uint32_t chain_len)
+-{
+-	unsigned long count;
+-
+-	if (!(ht->flags & CDS_LFHT_AUTO_RESIZE))
+-		return;
+-	count = uatomic_read(&ht->count);
+-	/*
+-	 * Use bucket-local length for small table expand and for
+-	 * environments lacking per-cpu data support.
+-	 */
+-	if (count >= (1UL << (COUNT_COMMIT_ORDER + split_count_order)))
+-		return;
+-	if (chain_len > 100)
+-		dbg_printf("WARNING: large chain length: %u.\n",
+-			   chain_len);
+-	if (chain_len >= CHAIN_LEN_RESIZE_THRESHOLD) {
+-		int growth;
+-
+-		/*
+-		 * Ideal growth calculated based on chain length.
+-		 */
+-		growth = cds_lfht_get_count_order_u32(chain_len
+-				- (CHAIN_LEN_TARGET - 1));
+-		if ((ht->flags & CDS_LFHT_ACCOUNTING)
+-				&& (size << growth)
+-					>= (1UL << (COUNT_COMMIT_ORDER
+-						+ split_count_order))) {
+-			/*
+-			 * If ideal growth expands the hash table size
+-			 * beyond the "small hash table" sizes, use the
+-			 * maximum small hash table size to attempt
+-			 * expanding the hash table. This only applies
+-			 * when node accounting is available, otherwise
+-			 * the chain length is used to expand the hash
+-			 * table in every case.
+-			 */
+-			growth = COUNT_COMMIT_ORDER + split_count_order
+-				- cds_lfht_get_count_order_ulong(size);
+-			if (growth <= 0)
+-				return;
+-		}
+-		cds_lfht_resize_lazy_grow(ht, size, growth);
+-	}
+-}
+-
+-static
+-struct cds_lfht_node *clear_flag(struct cds_lfht_node *node)
+-{
+-	return (struct cds_lfht_node *) (((unsigned long) node) & ~FLAGS_MASK);
+-}
+-
+-static
+-int is_removed(struct cds_lfht_node *node)
+-{
+-	return ((unsigned long) node) & REMOVED_FLAG;
+-}
+-
+-static
+-int is_bucket(struct cds_lfht_node *node)
+-{
+-	return ((unsigned long) node) & BUCKET_FLAG;
+-}
+-
+-static
+-struct cds_lfht_node *flag_bucket(struct cds_lfht_node *node)
+-{
+-	return (struct cds_lfht_node *) (((unsigned long) node) | BUCKET_FLAG);
+-}
+-
+-static
+-int is_removal_owner(struct cds_lfht_node *node)
+-{
+-	return ((unsigned long) node) & REMOVAL_OWNER_FLAG;
+-}
+-
+-static
+-struct cds_lfht_node *flag_removal_owner(struct cds_lfht_node *node)
+-{
+-	return (struct cds_lfht_node *) (((unsigned long) node) | REMOVAL_OWNER_FLAG);
+-}
+-
+-static
+-struct cds_lfht_node *flag_removed_or_removal_owner(struct cds_lfht_node *node)
+-{
+-	return (struct cds_lfht_node *) (((unsigned long) node) | REMOVED_FLAG | REMOVAL_OWNER_FLAG);
+-}
+-
+-static
+-struct cds_lfht_node *get_end(void)
+-{
+-	return (struct cds_lfht_node *) END_VALUE;
+-}
+-
+-static
+-int is_end(struct cds_lfht_node *node)
+-{
+-	return clear_flag(node) == (struct cds_lfht_node *) END_VALUE;
+-}
+-
+-static
+-unsigned long _uatomic_xchg_monotonic_increase(unsigned long *ptr,
+-		unsigned long v)
+-{
+-	unsigned long old1, old2;
+-
+-	old1 = uatomic_read(ptr);
+-	do {
+-		old2 = old1;
+-		if (old2 >= v)
+-			return old2;
+-	} while ((old1 = uatomic_cmpxchg(ptr, old2, v)) != old2);
+-	return old2;
+-}
+-
+-static
+-void cds_lfht_alloc_bucket_table(struct cds_lfht *ht, unsigned long order)
+-{
+-	return ht->mm->alloc_bucket_table(ht, order);
+-}
+-
+-/*
+- * cds_lfht_free_bucket_table() should be called with decreasing order.
+- * When cds_lfht_free_bucket_table(0) is called, it means the whole
+- * lfht is destroyed.
+- */
+-static
+-void cds_lfht_free_bucket_table(struct cds_lfht *ht, unsigned long order)
+-{
+-	return ht->mm->free_bucket_table(ht, order);
+-}
+-
+-static inline
+-struct cds_lfht_node *bucket_at(struct cds_lfht *ht, unsigned long index)
+-{
+-	return ht->bucket_at(ht, index);
+-}
+-
+-static inline
+-struct cds_lfht_node *lookup_bucket(struct cds_lfht *ht, unsigned long size,
+-		unsigned long hash)
+-{
+-	assert(size > 0);
+-	return bucket_at(ht, hash & (size - 1));
+-}
+-
+-/*
+- * Remove all logically deleted nodes from a bucket up to a certain node key.
+- */
+-static
+-void _cds_lfht_gc_bucket(struct cds_lfht_node *bucket, struct cds_lfht_node *node)
+-{
+-	struct cds_lfht_node *iter_prev, *iter, *next, *new_next;
+-
+-	assert(!is_bucket(bucket));
+-	assert(!is_removed(bucket));
+-	assert(!is_bucket(node));
+-	assert(!is_removed(node));
+-	for (;;) {
+-		iter_prev = bucket;
+-		/* We can always skip the bucket node initially */
+-		iter = rcu_dereference(iter_prev->next);
+-		assert(!is_removed(iter));
+-		assert(iter_prev->reverse_hash <= node->reverse_hash);
+-		/*
+-		 * We should never be called with bucket (start of chain)
+-		 * and logically removed node (end of path compression
+-		 * marker) being the actual same node. This would be a
+-		 * bug in the algorithm implementation.
+-		 */
+-		assert(bucket != node);
+-		for (;;) {
+-			if (caa_unlikely(is_end(iter)))
+-				return;
+-			if (caa_likely(clear_flag(iter)->reverse_hash > node->reverse_hash))
+-				return;
+-			next = rcu_dereference(clear_flag(iter)->next);
+-			if (caa_likely(is_removed(next)))
+-				break;
+-			iter_prev = clear_flag(iter);
+-			iter = next;
+-		}
+-		assert(!is_removed(iter));
+-		if (is_bucket(iter))
+-			new_next = flag_bucket(clear_flag(next));
+-		else
+-			new_next = clear_flag(next);
+-		(void) uatomic_cmpxchg(&iter_prev->next, iter, new_next);
+-	}
+-}
+-
+-static
+-int _cds_lfht_replace(struct cds_lfht *ht, unsigned long size,
+-		struct cds_lfht_node *old_node,
+-		struct cds_lfht_node *old_next,
+-		struct cds_lfht_node *new_node)
+-{
+-	struct cds_lfht_node *bucket, *ret_next;
+-
+-	if (!old_node)	/* Return -ENOENT if asked to replace NULL node */
+-		return -ENOENT;
+-
+-	assert(!is_removed(old_node));
+-	assert(!is_bucket(old_node));
+-	assert(!is_removed(new_node));
+-	assert(!is_bucket(new_node));
+-	assert(new_node != old_node);
+-	for (;;) {
+-		/* Insert after node to be replaced */
+-		if (is_removed(old_next)) {
+-			/*
+-			 * Too late, the old node has been removed under us
+-			 * between lookup and replace. Fail.
+-			 */
+-			return -ENOENT;
+-		}
+-		assert(old_next == clear_flag(old_next));
+-		assert(new_node != old_next);
+-		/*
+-		 * REMOVAL_OWNER flag is _NEVER_ set before the REMOVED
+-		 * flag. It is either set atomically at the same time
+-		 * (replace) or after (del).
+-		 */
+-		assert(!is_removal_owner(old_next));
+-		new_node->next = old_next;
+-		/*
+-		 * Here is the whole trick for lock-free replace: we add
+-		 * the replacement node _after_ the node we want to
+-		 * replace by atomically setting its next pointer at the
+-		 * same time we set its removal flag. Given that
+-		 * the lookups/get next use an iterator aware of the
+-		 * next pointer, they will either skip the old node due
+-		 * to the removal flag and see the new node, or use
+-		 * the old node, but will not see the new one.
+-		 * This is a replacement of a node with another node
+-		 * that has the same value: we are therefore not
+-		 * removing a value from the hash table. We set both the
+-		 * REMOVED and REMOVAL_OWNER flags atomically so we own
+-		 * the node after successful cmpxchg.
+-		 */
+-		ret_next = uatomic_cmpxchg(&old_node->next,
+-			old_next, flag_removed_or_removal_owner(new_node));
+-		if (ret_next == old_next)
+-			break;		/* We performed the replacement. */
+-		old_next = ret_next;
+-	}
+-
+-	/*
+-	 * Ensure that the old node is not visible to readers anymore:
+-	 * lookup for the node, and remove it (along with any other
+-	 * logically removed node) if found.
+-	 */
+-	bucket = lookup_bucket(ht, size, bit_reverse_ulong(old_node->reverse_hash));
+-	_cds_lfht_gc_bucket(bucket, new_node);
+-
+-	assert(is_removed(CMM_LOAD_SHARED(old_node->next)));
+-	return 0;
+-}
+-
+-/*
+- * A non-NULL unique_ret pointer uses the "add unique" (or uniquify) add
+- * mode. A NULL unique_ret allows creation of duplicate keys.
+- */
+-static
+-void _cds_lfht_add(struct cds_lfht *ht,
+-		unsigned long hash,
+-		cds_lfht_match_fct match,
+-		const void *key,
+-		unsigned long size,
+-		struct cds_lfht_node *node,
+-		struct cds_lfht_iter *unique_ret,
+-		int bucket_flag)
+-{
+-	struct cds_lfht_node *iter_prev, *iter, *next, *new_node, *new_next,
+-			*return_node;
+-	struct cds_lfht_node *bucket;
+-
+-	assert(!is_bucket(node));
+-	assert(!is_removed(node));
+-	bucket = lookup_bucket(ht, size, hash);
+-	for (;;) {
+-		uint32_t chain_len = 0;
+-
+-		/*
+-		 * iter_prev points to the non-removed node prior to the
+-		 * insert location.
+-		 */
+-		iter_prev = bucket;
+-		/* We can always skip the bucket node initially */
+-		iter = rcu_dereference(iter_prev->next);
+-		assert(iter_prev->reverse_hash <= node->reverse_hash);
+-		for (;;) {
+-			if (caa_unlikely(is_end(iter)))
+-				goto insert;
+-			if (caa_likely(clear_flag(iter)->reverse_hash > node->reverse_hash))
+-				goto insert;
+-
+-			/* bucket node is the first node of the identical-hash-value chain */
+-			if (bucket_flag && clear_flag(iter)->reverse_hash == node->reverse_hash)
+-				goto insert;
+-
+-			next = rcu_dereference(clear_flag(iter)->next);
+-			if (caa_unlikely(is_removed(next)))
+-				goto gc_node;
+-
+-			/* uniquely add */
+-			if (unique_ret
+-			    && !is_bucket(next)
+-			    && clear_flag(iter)->reverse_hash == node->reverse_hash) {
+-				struct cds_lfht_iter d_iter = { .node = node, .next = iter, };
+-
+-				/*
+-				 * uniquely adding inserts the node as the first
+-				 * node of the identical-hash-value node chain.
+-				 *
+-				 * This semantic ensures no duplicated keys
+-				 * should ever be observable in the table
+-				 * (including traversing the table node by
+-				 * node by forward iterations)
+-				 */
+-				cds_lfht_next_duplicate(ht, match, key, &d_iter);
+-				if (!d_iter.node)
+-					goto insert;
+-
+-				*unique_ret = d_iter;
+-				return;
+-			}
+-
+-			/* Only account for identical reverse hash once */
+-			if (iter_prev->reverse_hash != clear_flag(iter)->reverse_hash
+-			    && !is_bucket(next))
+-				check_resize(ht, size, ++chain_len);
+-			iter_prev = clear_flag(iter);
+-			iter = next;
+-		}
+-
+-	insert:
+-		assert(node != clear_flag(iter));
+-		assert(!is_removed(iter_prev));
+-		assert(!is_removed(iter));
+-		assert(iter_prev != node);
+-		if (!bucket_flag)
+-			node->next = clear_flag(iter);
+-		else
+-			node->next = flag_bucket(clear_flag(iter));
+-		if (is_bucket(iter))
+-			new_node = flag_bucket(node);
+-		else
+-			new_node = node;
+-		if (uatomic_cmpxchg(&iter_prev->next, iter,
+-				    new_node) != iter) {
+-			continue;	/* retry */
+-		} else {
+-			return_node = node;
+-			goto end;
+-		}
+-
+-	gc_node:
+-		assert(!is_removed(iter));
+-		if (is_bucket(iter))
+-			new_next = flag_bucket(clear_flag(next));
+-		else
+-			new_next = clear_flag(next);
+-		(void) uatomic_cmpxchg(&iter_prev->next, iter, new_next);
+-		/* retry */
+-	}
+-end:
+-	if (unique_ret) {
+-		unique_ret->node = return_node;
+-		/* unique_ret->next left unset, never used. */
+-	}
+-}
+-
+-static
+-int _cds_lfht_del(struct cds_lfht *ht, unsigned long size,
+-		struct cds_lfht_node *node)
+-{
+-	struct cds_lfht_node *bucket, *next;
+-
+-	if (!node)	/* Return -ENOENT if asked to delete NULL node */
+-		return -ENOENT;
+-
+-	/* logically delete the node */
+-	assert(!is_bucket(node));
+-	assert(!is_removed(node));
+-	assert(!is_removal_owner(node));
+-
+-	/*
+-	 * We are first checking if the node had previously been
+-	 * logically removed (this check is not atomic with setting the
+-	 * logical removal flag). Return -ENOENT if the node had
+-	 * previously been removed.
+-	 */
+-	next = CMM_LOAD_SHARED(node->next);	/* next is not dereferenced */
+-	if (caa_unlikely(is_removed(next)))
+-		return -ENOENT;
+-	assert(!is_bucket(next));
+-	/*
+-	 * The del operation semantic guarantees a full memory barrier
+-	 * before the uatomic_or atomic commit of the deletion flag.
+-	 */
+-	cmm_smp_mb__before_uatomic_or();
+-	/*
+-	 * We set the REMOVED_FLAG unconditionally. Note that there may
+-	 * be more than one concurrent thread setting this flag.
+-	 * Knowing which wins the race will be known after the garbage
+-	 * collection phase, stay tuned!
+-	 */
+-	uatomic_or(&node->next, REMOVED_FLAG);
+-	/* We performed the (logical) deletion. */
+-
+-	/*
+-	 * Ensure that the node is not visible to readers anymore: lookup for
+-	 * the node, and remove it (along with any other logically removed node)
+-	 * if found.
+-	 */
+-	bucket = lookup_bucket(ht, size, bit_reverse_ulong(node->reverse_hash));
+-	_cds_lfht_gc_bucket(bucket, node);
+-
+-	assert(is_removed(CMM_LOAD_SHARED(node->next)));
+-	/*
+-	 * Last phase: atomically exchange node->next with a version
+-	 * having "REMOVAL_OWNER_FLAG" set. If the returned node->next
+-	 * pointer did _not_ have "REMOVAL_OWNER_FLAG" set, we now own
+-	 * the node and win the removal race.
+-	 * It is interesting to note that all "add" paths are forbidden
+-	 * to change the next pointer starting from the point where the
+-	 * REMOVED_FLAG is set, so here using a read, followed by a
+-	 * xchg() suffice to guarantee that the xchg() will ever only
+-	 * set the "REMOVAL_OWNER_FLAG" (or change nothing if the flag
+-	 * was already set).
+-	 */
+-	if (!is_removal_owner(uatomic_xchg(&node->next,
+-			flag_removal_owner(node->next))))
+-		return 0;
+-	else
+-		return -ENOENT;
+-}
+-
+-static
+-void *partition_resize_thread(void *arg)
+-{
+-	struct partition_resize_work *work = arg;
+-
+-	work->ht->flavor->register_thread();
+-	work->fct(work->ht, work->i, work->start, work->len);
+-	work->ht->flavor->unregister_thread();
+-	return NULL;
+-}
+-
+-static
+-void partition_resize_helper(struct cds_lfht *ht, unsigned long i,
+-		unsigned long len,
+-		void (*fct)(struct cds_lfht *ht, unsigned long i,
+-			unsigned long start, unsigned long len))
+-{
+-	unsigned long partition_len;
+-	struct partition_resize_work *work;
+-	int thread, ret;
+-	unsigned long nr_threads;
+-
+-	/*
+-	 * Note: nr_cpus_mask + 1 is always power of 2.
+-	 * We spawn just the number of threads we need to satisfy the minimum
+-	 * partition size, up to the number of CPUs in the system.
+-	 */
+-	if (nr_cpus_mask > 0) {
+-		nr_threads = min(nr_cpus_mask + 1,
+-				 len >> MIN_PARTITION_PER_THREAD_ORDER);
+-	} else {
+-		nr_threads = 1;
+-	}
+-	partition_len = len >> cds_lfht_get_count_order_ulong(nr_threads);
+-	work = calloc(nr_threads, sizeof(*work));
+-	assert(work);
+-	for (thread = 0; thread < nr_threads; thread++) {
+-		work[thread].ht = ht;
+-		work[thread].i = i;
+-		work[thread].len = partition_len;
+-		work[thread].start = thread * partition_len;
+-		work[thread].fct = fct;
+-		ret = pthread_create(&(work[thread].thread_id), ht->resize_attr,
+-			partition_resize_thread, &work[thread]);
+-		assert(!ret);
+-	}
+-	for (thread = 0; thread < nr_threads; thread++) {
+-		ret = pthread_join(work[thread].thread_id, NULL);
+-		assert(!ret);
+-	}
+-	free(work);
+-}
+-
+-/*
+- * Holding RCU read lock to protect _cds_lfht_add against memory
+- * reclaim that could be performed by other call_rcu worker threads (ABA
+- * problem).
+- *
+- * When we reach a certain length, we can split this population phase over
+- * many worker threads, based on the number of CPUs available in the system.
+- * This should therefore take care of not having the expand lagging behind too
+- * many concurrent insertion threads by using the scheduler's ability to
+- * schedule bucket node population fairly with insertions.
+- */
+-static
+-void init_table_populate_partition(struct cds_lfht *ht, unsigned long i,
+-				   unsigned long start, unsigned long len)
+-{
+-	unsigned long j, size = 1UL << (i - 1);
+-
+-	assert(i > MIN_TABLE_ORDER);
+-	ht->flavor->read_lock();
+-	for (j = size + start; j < size + start + len; j++) {
+-		struct cds_lfht_node *new_node = bucket_at(ht, j);
+-
+-		assert(j >= size && j < (size << 1));
+-		dbg_printf("init populate: order %lu index %lu hash %lu\n",
+-			   i, j, j);
+-		new_node->reverse_hash = bit_reverse_ulong(j);
+-		_cds_lfht_add(ht, j, NULL, NULL, size, new_node, NULL, 1);
+-	}
+-	ht->flavor->read_unlock();
+-}
+-
+-static
+-void init_table_populate(struct cds_lfht *ht, unsigned long i,
+-			 unsigned long len)
+-{
+-	assert(nr_cpus_mask != -1);
+-	if (nr_cpus_mask < 0 || len < 2 * MIN_PARTITION_PER_THREAD) {
+-		ht->flavor->thread_online();
+-		init_table_populate_partition(ht, i, 0, len);
+-		ht->flavor->thread_offline();
+-		return;
+-	}
+-	partition_resize_helper(ht, i, len, init_table_populate_partition);
+-}
+-
+-static
+-void init_table(struct cds_lfht *ht,
+-		unsigned long first_order, unsigned long last_order)
+-{
+-	unsigned long i;
+-
+-	dbg_printf("init table: first_order %lu last_order %lu\n",
+-		   first_order, last_order);
+-	assert(first_order > MIN_TABLE_ORDER);
+-	for (i = first_order; i <= last_order; i++) {
+-		unsigned long len;
+-
+-		len = 1UL << (i - 1);
+-		dbg_printf("init order %lu len: %lu\n", i, len);
+-
+-		/* Stop expand if the resize target changes under us */
+-		if (CMM_LOAD_SHARED(ht->resize_target) < (1UL << i))
+-			break;
+-
+-		cds_lfht_alloc_bucket_table(ht, i);
+-
+-		/*
+-		 * Set all bucket nodes reverse hash values for a level and
+-		 * link all bucket nodes into the table.
+-		 */
+-		init_table_populate(ht, i, len);
+-
+-		/*
+-		 * Update table size.
+-		 */
+-		cmm_smp_wmb();	/* populate data before RCU size */
+-		CMM_STORE_SHARED(ht->size, 1UL << i);
+-
+-		dbg_printf("init new size: %lu\n", 1UL << i);
+-		if (CMM_LOAD_SHARED(ht->in_progress_destroy))
+-			break;
+-	}
+-}
+-
+-/*
+- * Holding RCU read lock to protect _cds_lfht_remove against memory
+- * reclaim that could be performed by other call_rcu worker threads (ABA
+- * problem).
+- * For a single level, we logically remove and garbage collect each node.
+- *
+- * As a design choice, we perform logical removal and garbage collection on a
+- * node-per-node basis to simplify this algorithm. We also assume keeping good
+- * cache locality of the operation would overweight possible performance gain
+- * that could be achieved by batching garbage collection for multiple levels.
+- * However, this would have to be justified by benchmarks.
+- *
+- * Concurrent removal and add operations are helping us perform garbage
+- * collection of logically removed nodes. We guarantee that all logically
+- * removed nodes have been garbage-collected (unlinked) before call_rcu is
+- * invoked to free a hole level of bucket nodes (after a grace period).
+- *
+- * Logical removal and garbage collection can therefore be done in batch
+- * or on a node-per-node basis, as long as the guarantee above holds.
+- *
+- * When we reach a certain length, we can split this removal over many worker
+- * threads, based on the number of CPUs available in the system. This should
+- * take care of not letting resize process lag behind too many concurrent
+- * updater threads actively inserting into the hash table.
+- */
+-static
+-void remove_table_partition(struct cds_lfht *ht, unsigned long i,
+-			    unsigned long start, unsigned long len)
+-{
+-	unsigned long j, size = 1UL << (i - 1);
+-
+-	assert(i > MIN_TABLE_ORDER);
+-	ht->flavor->read_lock();
+-	for (j = size + start; j < size + start + len; j++) {
+-		struct cds_lfht_node *fini_bucket = bucket_at(ht, j);
+-		struct cds_lfht_node *parent_bucket = bucket_at(ht, j - size);
+-
+-		assert(j >= size && j < (size << 1));
+-		dbg_printf("remove entry: order %lu index %lu hash %lu\n",
+-			   i, j, j);
+-		/* Set the REMOVED_FLAG to freeze the ->next for gc */
+-		uatomic_or(&fini_bucket->next, REMOVED_FLAG);
+-		_cds_lfht_gc_bucket(parent_bucket, fini_bucket);
+-	}
+-	ht->flavor->read_unlock();
+-}
+-
+-static
+-void remove_table(struct cds_lfht *ht, unsigned long i, unsigned long len)
+-{
+-
+-	assert(nr_cpus_mask != -1);
+-	if (nr_cpus_mask < 0 || len < 2 * MIN_PARTITION_PER_THREAD) {
+-		ht->flavor->thread_online();
+-		remove_table_partition(ht, i, 0, len);
+-		ht->flavor->thread_offline();
+-		return;
+-	}
+-	partition_resize_helper(ht, i, len, remove_table_partition);
+-}
+-
+-/*
+- * fini_table() is never called for first_order == 0, which is why
+- * free_by_rcu_order == 0 can be used as criterion to know if free must
+- * be called.
+- */
+-static
+-void fini_table(struct cds_lfht *ht,
+-		unsigned long first_order, unsigned long last_order)
+-{
+-	long i;
+-	unsigned long free_by_rcu_order = 0;
+-
+-	dbg_printf("fini table: first_order %lu last_order %lu\n",
+-		   first_order, last_order);
+-	assert(first_order > MIN_TABLE_ORDER);
+-	for (i = last_order; i >= first_order; i--) {
+-		unsigned long len;
+-
+-		len = 1UL << (i - 1);
+-		dbg_printf("fini order %lu len: %lu\n", i, len);
+-
+-		/* Stop shrink if the resize target changes under us */
+-		if (CMM_LOAD_SHARED(ht->resize_target) > (1UL << (i - 1)))
+-			break;
+-
+-		cmm_smp_wmb();	/* populate data before RCU size */
+-		CMM_STORE_SHARED(ht->size, 1UL << (i - 1));
+-
+-		/*
+-		 * We need to wait for all add operations to reach Q.S. (and
+-		 * thus use the new table for lookups) before we can start
+-		 * releasing the old bucket nodes. Otherwise their lookup will
+-		 * return a logically removed node as insert position.
+-		 */
+-		ht->flavor->update_synchronize_rcu();
+-		if (free_by_rcu_order)
+-			cds_lfht_free_bucket_table(ht, free_by_rcu_order);
+-
+-		/*
+-		 * Set "removed" flag in bucket nodes about to be removed.
+-		 * Unlink all now-logically-removed bucket node pointers.
+-		 * Concurrent add/remove operation are helping us doing
+-		 * the gc.
+-		 */
+-		remove_table(ht, i, len);
+-
+-		free_by_rcu_order = i;
+-
+-		dbg_printf("fini new size: %lu\n", 1UL << i);
+-		if (CMM_LOAD_SHARED(ht->in_progress_destroy))
+-			break;
+-	}
+-
+-	if (free_by_rcu_order) {
+-		ht->flavor->update_synchronize_rcu();
+-		cds_lfht_free_bucket_table(ht, free_by_rcu_order);
+-	}
+-}
+-
+-static
+-void cds_lfht_create_bucket(struct cds_lfht *ht, unsigned long size)
+-{
+-	struct cds_lfht_node *prev, *node;
+-	unsigned long order, len, i;
+-
+-	cds_lfht_alloc_bucket_table(ht, 0);
+-
+-	dbg_printf("create bucket: order 0 index 0 hash 0\n");
+-	node = bucket_at(ht, 0);
+-	node->next = flag_bucket(get_end());
+-	node->reverse_hash = 0;
+-
+-	for (order = 1; order < cds_lfht_get_count_order_ulong(size) + 1; order++) {
+-		len = 1UL << (order - 1);
+-		cds_lfht_alloc_bucket_table(ht, order);
+-
+-		for (i = 0; i < len; i++) {
+-			/*
+-			 * Now, we are trying to init the node with the
+-			 * hash=(len+i) (which is also a bucket with the
+-			 * index=(len+i)) and insert it into the hash table,
+-			 * so this node has to be inserted after the bucket
+-			 * with the index=(len+i)&(len-1)=i. And because there
+-			 * is no other non-bucket node nor bucket node with
+-			 * larger index/hash inserted, so the bucket node
+-			 * being inserted should be inserted directly linked
+-			 * after the bucket node with index=i.
+-			 */
+-			prev = bucket_at(ht, i);
+-			node = bucket_at(ht, len + i);
+-
+-			dbg_printf("create bucket: order %lu index %lu hash %lu\n",
+-				   order, len + i, len + i);
+-			node->reverse_hash = bit_reverse_ulong(len + i);
+-
+-			/* insert after prev */
+-			assert(is_bucket(prev->next));
+-			node->next = prev->next;
+-			prev->next = flag_bucket(node);
+-		}
+-	}
+-}
+-
+-struct cds_lfht *_cds_lfht_new(unsigned long init_size,
+-			unsigned long min_nr_alloc_buckets,
+-			unsigned long max_nr_buckets,
+-			int flags,
+-			const struct cds_lfht_mm_type *mm,
+-			const struct rcu_flavor_struct *flavor,
+-			pthread_attr_t *attr)
+-{
+-	struct cds_lfht *ht;
+-	unsigned long order;
+-
+-	/* min_nr_alloc_buckets must be power of two */
+-	if (!min_nr_alloc_buckets || (min_nr_alloc_buckets & (min_nr_alloc_buckets - 1)))
+-		return NULL;
+-
+-	/* init_size must be power of two */
+-	if (!init_size || (init_size & (init_size - 1)))
+-		return NULL;
+-
+-	/*
+-	 * Memory management plugin default.
+-	 */
+-	if (!mm) {
+-		if (CAA_BITS_PER_LONG > 32
+-				&& max_nr_buckets
+-				&& max_nr_buckets <= (1ULL << 32)) {
+-			/*
+-			 * For 64-bit architectures, with max number of
+-			 * buckets small enough not to use the entire
+-			 * 64-bit memory mapping space (and allowing a
+-			 * fair number of hash table instances), use the
+-			 * mmap allocator, which is faster than the
+-			 * order allocator.
+-			 */
+-			mm = &cds_lfht_mm_mmap;
+-		} else {
+-			/*
+-			 * The fallback is to use the order allocator.
+-			 */
+-			mm = &cds_lfht_mm_order;
+-		}
+-	}
+-
+-	/* max_nr_buckets == 0 for order based mm means infinite */
+-	if (mm == &cds_lfht_mm_order && !max_nr_buckets)
+-		max_nr_buckets = 1UL << (MAX_TABLE_ORDER - 1);
+-
+-	/* max_nr_buckets must be power of two */
+-	if (!max_nr_buckets || (max_nr_buckets & (max_nr_buckets - 1)))
+-		return NULL;
+-
+-	min_nr_alloc_buckets = max(min_nr_alloc_buckets, MIN_TABLE_SIZE);
+-	init_size = max(init_size, MIN_TABLE_SIZE);
+-	max_nr_buckets = max(max_nr_buckets, min_nr_alloc_buckets);
+-	init_size = min(init_size, max_nr_buckets);
+-
+-	ht = mm->alloc_cds_lfht(min_nr_alloc_buckets, max_nr_buckets);
+-	assert(ht);
+-	assert(ht->mm == mm);
+-	assert(ht->bucket_at == mm->bucket_at);
+-
+-	ht->flags = flags;
+-	ht->flavor = flavor;
+-	ht->resize_attr = attr;
+-	alloc_split_items_count(ht);
+-	/* this mutex should not nest in read-side C.S. */
+-	pthread_mutex_init(&ht->resize_mutex, NULL);
+-	order = cds_lfht_get_count_order_ulong(init_size);
+-	ht->resize_target = 1UL << order;
+-	cds_lfht_create_bucket(ht, 1UL << order);
+-	ht->size = 1UL << order;
+-	return ht;
+-}
+-
+-void cds_lfht_lookup(struct cds_lfht *ht, unsigned long hash,
+-		cds_lfht_match_fct match, const void *key,
+-		struct cds_lfht_iter *iter)
+-{
+-	struct cds_lfht_node *node, *next, *bucket;
+-	unsigned long reverse_hash, size;
+-
+-	reverse_hash = bit_reverse_ulong(hash);
+-
+-	size = rcu_dereference(ht->size);
+-	bucket = lookup_bucket(ht, size, hash);
+-	/* We can always skip the bucket node initially */
+-	node = rcu_dereference(bucket->next);
+-	node = clear_flag(node);
+-	for (;;) {
+-		if (caa_unlikely(is_end(node))) {
+-			node = next = NULL;
+-			break;
+-		}
+-		if (caa_unlikely(node->reverse_hash > reverse_hash)) {
+-			node = next = NULL;
+-			break;
+-		}
+-		next = rcu_dereference(node->next);
+-		assert(node == clear_flag(node));
+-		if (caa_likely(!is_removed(next))
+-		    && !is_bucket(next)
+-		    && node->reverse_hash == reverse_hash
+-		    && caa_likely(match(node, key))) {
+-				break;
+-		}
+-		node = clear_flag(next);
+-	}
+-	assert(!node || !is_bucket(CMM_LOAD_SHARED(node->next)));
+-	iter->node = node;
+-	iter->next = next;
+-}
+-
+-void cds_lfht_next_duplicate(struct cds_lfht *ht, cds_lfht_match_fct match,
+-		const void *key, struct cds_lfht_iter *iter)
+-{
+-	struct cds_lfht_node *node, *next;
+-	unsigned long reverse_hash;
+-
+-	node = iter->node;
+-	reverse_hash = node->reverse_hash;
+-	next = iter->next;
+-	node = clear_flag(next);
+-
+-	for (;;) {
+-		if (caa_unlikely(is_end(node))) {
+-			node = next = NULL;
+-			break;
+-		}
+-		if (caa_unlikely(node->reverse_hash > reverse_hash)) {
+-			node = next = NULL;
+-			break;
+-		}
+-		next = rcu_dereference(node->next);
+-		if (caa_likely(!is_removed(next))
+-		    && !is_bucket(next)
+-		    && caa_likely(match(node, key))) {
+-				break;
+-		}
+-		node = clear_flag(next);
+-	}
+-	assert(!node || !is_bucket(CMM_LOAD_SHARED(node->next)));
+-	iter->node = node;
+-	iter->next = next;
+-}
+-
+-void cds_lfht_next(struct cds_lfht *ht, struct cds_lfht_iter *iter)
+-{
+-	struct cds_lfht_node *node, *next;
+-
+-	node = clear_flag(iter->next);
+-	for (;;) {
+-		if (caa_unlikely(is_end(node))) {
+-			node = next = NULL;
+-			break;
+-		}
+-		next = rcu_dereference(node->next);
+-		if (caa_likely(!is_removed(next))
+-		    && !is_bucket(next)) {
+-				break;
+-		}
+-		node = clear_flag(next);
+-	}
+-	assert(!node || !is_bucket(CMM_LOAD_SHARED(node->next)));
+-	iter->node = node;
+-	iter->next = next;
+-}
+-
+-void cds_lfht_first(struct cds_lfht *ht, struct cds_lfht_iter *iter)
+-{
+-	/*
+-	 * Get next after first bucket node. The first bucket node is the
+-	 * first node of the linked list.
+-	 */
+-	iter->next = bucket_at(ht, 0)->next;
+-	cds_lfht_next(ht, iter);
+-}
+-
+-void cds_lfht_add(struct cds_lfht *ht, unsigned long hash,
+-		struct cds_lfht_node *node)
+-{
+-	unsigned long size;
+-
+-	node->reverse_hash = bit_reverse_ulong(hash);
+-	size = rcu_dereference(ht->size);
+-	_cds_lfht_add(ht, hash, NULL, NULL, size, node, NULL, 0);
+-	ht_count_add(ht, size, hash);
+-}
+-
+-struct cds_lfht_node *cds_lfht_add_unique(struct cds_lfht *ht,
+-				unsigned long hash,
+-				cds_lfht_match_fct match,
+-				const void *key,
+-				struct cds_lfht_node *node)
+-{
+-	unsigned long size;
+-	struct cds_lfht_iter iter;
+-
+-	node->reverse_hash = bit_reverse_ulong(hash);
+-	size = rcu_dereference(ht->size);
+-	_cds_lfht_add(ht, hash, match, key, size, node, &iter, 0);
+-	if (iter.node == node)
+-		ht_count_add(ht, size, hash);
+-	return iter.node;
+-}
+-
+-struct cds_lfht_node *cds_lfht_add_replace(struct cds_lfht *ht,
+-				unsigned long hash,
+-				cds_lfht_match_fct match,
+-				const void *key,
+-				struct cds_lfht_node *node)
+-{
+-	unsigned long size;
+-	struct cds_lfht_iter iter;
+-
+-	node->reverse_hash = bit_reverse_ulong(hash);
+-	size = rcu_dereference(ht->size);
+-	for (;;) {
+-		_cds_lfht_add(ht, hash, match, key, size, node, &iter, 0);
+-		if (iter.node == node) {
+-			ht_count_add(ht, size, hash);
+-			return NULL;
+-		}
+-
+-		if (!_cds_lfht_replace(ht, size, iter.node, iter.next, node))
+-			return iter.node;
+-	}
+-}
+-
+-int cds_lfht_replace(struct cds_lfht *ht,
+-		struct cds_lfht_iter *old_iter,
+-		unsigned long hash,
+-		cds_lfht_match_fct match,
+-		const void *key,
+-		struct cds_lfht_node *new_node)
+-{
+-	unsigned long size;
+-
+-	new_node->reverse_hash = bit_reverse_ulong(hash);
+-	if (!old_iter->node)
+-		return -ENOENT;
+-	if (caa_unlikely(old_iter->node->reverse_hash != new_node->reverse_hash))
+-		return -EINVAL;
+-	if (caa_unlikely(!match(old_iter->node, key)))
+-		return -EINVAL;
+-	size = rcu_dereference(ht->size);
+-	return _cds_lfht_replace(ht, size, old_iter->node, old_iter->next,
+-			new_node);
+-}
+-
+-int cds_lfht_del(struct cds_lfht *ht, struct cds_lfht_node *node)
+-{
+-	unsigned long size, hash;
+-	int ret;
+-
+-	size = rcu_dereference(ht->size);
+-	ret = _cds_lfht_del(ht, size, node);
+-	if (!ret) {
+-		hash = bit_reverse_ulong(node->reverse_hash);
+-		ht_count_del(ht, size, hash);
+-	}
+-	return ret;
+-}
+-
+-int cds_lfht_is_node_deleted(struct cds_lfht_node *node)
+-{
+-	return is_removed(CMM_LOAD_SHARED(node->next));
+-}
+-
+-static
+-int cds_lfht_delete_bucket(struct cds_lfht *ht)
+-{
+-	struct cds_lfht_node *node;
+-	unsigned long order, i, size;
+-
+-	/* Check that the table is empty */
+-	node = bucket_at(ht, 0);
+-	do {
+-		node = clear_flag(node)->next;
+-		if (!is_bucket(node))
+-			return -EPERM;
+-		assert(!is_removed(node));
+-	} while (!is_end(node));
+-	/*
+-	 * size accessed without rcu_dereference because hash table is
+-	 * being destroyed.
+-	 */
+-	size = ht->size;
+-	/* Internal sanity check: all nodes left should be buckets */
+-	for (i = 0; i < size; i++) {
+-		node = bucket_at(ht, i);
+-		dbg_printf("delete bucket: index %lu expected hash %lu hash %lu\n",
+-			i, i, bit_reverse_ulong(node->reverse_hash));
+-		assert(is_bucket(node->next));
+-	}
+-
+-	for (order = cds_lfht_get_count_order_ulong(size); (long)order >= 0; order--)
+-		cds_lfht_free_bucket_table(ht, order);
+-
+-	return 0;
+-}
+-
+-/*
+- * Should only be called when no more concurrent readers nor writers can
+- * possibly access the table.
+- */
+-int cds_lfht_destroy(struct cds_lfht *ht, pthread_attr_t **attr)
+-{
+-	int ret;
+-#ifdef rcu_read_ongoing_mb
+-	int was_online;
+-#endif
+-
+-	/* Wait for in-flight resize operations to complete */
+-	_CMM_STORE_SHARED(ht->in_progress_destroy, 1);
+-	cmm_smp_mb();	/* Store destroy before load resize */
+-#ifdef rcu_read_ongoing_mb
+-	was_online = ht->flavor->read_ongoing();
+-	if (was_online)
+-		ht->flavor->thread_offline();
+-	/* Calling with RCU read-side held is an error. */
+-	if (ht->flavor->read_ongoing()) {
+-		ret = -EINVAL;
+-		if (was_online)
+-			ht->flavor->thread_online();
+-		goto end;
+-	}
+-#endif
+-	while (uatomic_read(&ht->in_progress_resize))
+-		(void) poll(NULL, 0, 100); /* wait for 100ms */
+-	ret = cds_lfht_delete_bucket(ht);
+-	if (ret)
+-		return ret;
+-	free_split_items_count(ht);
+-	if (attr)
+-		*attr = ht->resize_attr;
+-	poison_free(ht);
+-#ifdef rcu_read_ongoing_mb
+-end:
+-#endif
+-	return ret;
+-}
+-
+-void cds_lfht_count_nodes(struct cds_lfht *ht,
+-		long *approx_before,
+-		unsigned long *count,
+-		long *approx_after)
+-{
+-	struct cds_lfht_node *node, *next;
+-	unsigned long nr_bucket = 0, nr_removed = 0;
+-
+-	*approx_before = 0;
+-	if (ht->split_count) {
+-		int i;
+-
+-		for (i = 0; i < split_count_mask + 1; i++) {
+-			*approx_before += uatomic_read(&ht->split_count[i].add);
+-			*approx_before -= uatomic_read(&ht->split_count[i].del);
+-		}
+-	}
+-
+-	*count = 0;
+-
+-	/* Count non-bucket nodes in the table */
+-	node = bucket_at(ht, 0);
+-	do {
+-		next = rcu_dereference(node->next);
+-		if (is_removed(next)) {
+-			if (!is_bucket(next))
+-				(nr_removed)++;
+-			else
+-				(nr_bucket)++;
+-		} else if (!is_bucket(next))
+-			(*count)++;
+-		else
+-			(nr_bucket)++;
+-		node = clear_flag(next);
+-	} while (!is_end(node));
+-	dbg_printf("number of logically removed nodes: %lu\n", nr_removed);
+-	dbg_printf("number of bucket nodes: %lu\n", nr_bucket);
+-	*approx_after = 0;
+-	if (ht->split_count) {
+-		int i;
+-
+-		for (i = 0; i < split_count_mask + 1; i++) {
+-			*approx_after += uatomic_read(&ht->split_count[i].add);
+-			*approx_after -= uatomic_read(&ht->split_count[i].del);
+-		}
+-	}
+-}
+-
+-/* called with resize mutex held */
+-static
+-void _do_cds_lfht_grow(struct cds_lfht *ht,
+-		unsigned long old_size, unsigned long new_size)
+-{
+-	unsigned long old_order, new_order;
+-
+-	old_order = cds_lfht_get_count_order_ulong(old_size);
+-	new_order = cds_lfht_get_count_order_ulong(new_size);
+-	dbg_printf("resize from %lu (order %lu) to %lu (order %lu) buckets\n",
+-		   old_size, old_order, new_size, new_order);
+-	assert(new_size > old_size);
+-	init_table(ht, old_order + 1, new_order);
+-}
+-
+-/* called with resize mutex held */
+-static
+-void _do_cds_lfht_shrink(struct cds_lfht *ht,
+-		unsigned long old_size, unsigned long new_size)
+-{
+-	unsigned long old_order, new_order;
+-
+-	new_size = max(new_size, MIN_TABLE_SIZE);
+-	old_order = cds_lfht_get_count_order_ulong(old_size);
+-	new_order = cds_lfht_get_count_order_ulong(new_size);
+-	dbg_printf("resize from %lu (order %lu) to %lu (order %lu) buckets\n",
+-		   old_size, old_order, new_size, new_order);
+-	assert(new_size < old_size);
+-
+-	/* Remove and unlink all bucket nodes to remove. */
+-	fini_table(ht, new_order + 1, old_order);
+-}
+-
+-
+-/* called with resize mutex held */
+-static
+-void _do_cds_lfht_resize(struct cds_lfht *ht)
+-{
+-	unsigned long new_size, old_size;
+-
+-	/*
+-	 * Resize table, re-do if the target size has changed under us.
+-	 */
+-	do {
+-		assert(uatomic_read(&ht->in_progress_resize));
+-		if (CMM_LOAD_SHARED(ht->in_progress_destroy))
+-			break;
+-		ht->resize_initiated = 1;
+-		old_size = ht->size;
+-		new_size = CMM_LOAD_SHARED(ht->resize_target);
+-		if (old_size < new_size)
+-			_do_cds_lfht_grow(ht, old_size, new_size);
+-		else if (old_size > new_size)
+-			_do_cds_lfht_shrink(ht, old_size, new_size);
+-		ht->resize_initiated = 0;
+-		/* write resize_initiated before read resize_target */
+-		cmm_smp_mb();
+-	} while (ht->size != CMM_LOAD_SHARED(ht->resize_target));
+-}
+-
+-static
+-unsigned long resize_target_grow(struct cds_lfht *ht, unsigned long new_size)
+-{
+-	return _uatomic_xchg_monotonic_increase(&ht->resize_target, new_size);
+-}
+-
+-static
+-void resize_target_update_count(struct cds_lfht *ht,
+-				unsigned long count)
+-{
+-	count = max(count, MIN_TABLE_SIZE);
+-	count = min(count, ht->max_nr_buckets);
+-	uatomic_set(&ht->resize_target, count);
+-}
+-
+-void cds_lfht_resize(struct cds_lfht *ht, unsigned long new_size)
+-{
+-#ifdef rcu_read_ongoing_mb
+-	int was_online;
+-
+-	was_online = ht->flavor->read_ongoing();
+-	if (was_online)
+-		ht->flavor->thread_offline();
+-	/* Calling with RCU read-side held is an error. */
+-	if (ht->flavor->read_ongoing()) {
+-		static int print_once;
+-
+-		if (!CMM_LOAD_SHARED(print_once))
+-			fprintf(stderr, "[error] rculfhash: cds_lfht_resize "
+-				"called with RCU read-side lock held.\n");
+-		CMM_STORE_SHARED(print_once, 1);
+-		assert(0);
+-		goto end;
+-	}
+-#endif
+-	resize_target_update_count(ht, new_size);
+-	CMM_STORE_SHARED(ht->resize_initiated, 1);
+-	pthread_mutex_lock(&ht->resize_mutex);
+-	_do_cds_lfht_resize(ht);
+-	pthread_mutex_unlock(&ht->resize_mutex);
+-#ifdef rcu_read_ongoing_mb
+-end:
+-	if (was_online)
+-		ht->flavor->thread_online();
+-#endif
+-}
+-
+-static
+-void do_resize_cb(struct rcu_head *head)
+-{
+-	struct rcu_resize_work *work =
+-		caa_container_of(head, struct rcu_resize_work, head);
+-	struct cds_lfht *ht = work->ht;
+-
+-	ht->flavor->thread_offline();
+-	pthread_mutex_lock(&ht->resize_mutex);
+-	_do_cds_lfht_resize(ht);
+-	pthread_mutex_unlock(&ht->resize_mutex);
+-	ht->flavor->thread_online();
+-	poison_free(work);
+-	cmm_smp_mb();	/* finish resize before decrement */
+-	uatomic_dec(&ht->in_progress_resize);
+-}
+-
+-static
+-void __cds_lfht_resize_lazy_launch(struct cds_lfht *ht)
+-{
+-	struct rcu_resize_work *work;
+-
+-	/* Store resize_target before read resize_initiated */
+-	cmm_smp_mb();
+-	if (!CMM_LOAD_SHARED(ht->resize_initiated)) {
+-		uatomic_inc(&ht->in_progress_resize);
+-		cmm_smp_mb();	/* increment resize count before load destroy */
+-		if (CMM_LOAD_SHARED(ht->in_progress_destroy)) {
+-			uatomic_dec(&ht->in_progress_resize);
+-			return;
+-		}
+-		work = zmalloc(sizeof(*work));
+-		if (work == NULL) {
+-			dbg_printf("error allocating resize work, bailing out\n");
+-			uatomic_dec(&ht->in_progress_resize);
+-			return;
+-		}
+-		work->ht = ht;
+-		ht->flavor->update_call_rcu(&work->head, do_resize_cb);
+-		CMM_STORE_SHARED(ht->resize_initiated, 1);
+-	}
+-}
+-
+-static
+-void cds_lfht_resize_lazy_grow(struct cds_lfht *ht, unsigned long size, int growth)
+-{
+-	unsigned long target_size = size << growth;
+-
+-	target_size = min(target_size, ht->max_nr_buckets);
+-	if (resize_target_grow(ht, target_size) >= target_size)
+-		return;
+-
+-	__cds_lfht_resize_lazy_launch(ht);
+-}
+-
+-/*
+- * We favor grow operations over shrink. A shrink operation never occurs
+- * if a grow operation is queued for lazy execution. A grow operation
+- * cancels any pending shrink lazy execution.
+- */
+-static
+-void cds_lfht_resize_lazy_count(struct cds_lfht *ht, unsigned long size,
+-				unsigned long count)
+-{
+-	if (!(ht->flags & CDS_LFHT_AUTO_RESIZE))
+-		return;
+-	count = max(count, MIN_TABLE_SIZE);
+-	count = min(count, ht->max_nr_buckets);
+-	if (count == size)
+-		return;		/* Already the right size, no resize needed */
+-	if (count > size) {	/* lazy grow */
+-		if (resize_target_grow(ht, count) >= count)
+-			return;
+-	} else {		/* lazy shrink */
+-		for (;;) {
+-			unsigned long s;
+-
+-			s = uatomic_cmpxchg(&ht->resize_target, size, count);
+-			if (s == size)
+-				break;	/* no resize needed */
+-			if (s > size)
+-				return;	/* growing is/(was just) in progress */
+-			if (s <= count)
+-				return;	/* some other thread do shrink */
+-			size = s;
+-		}
+-	}
+-	__cds_lfht_resize_lazy_launch(ht);
+-}
+diff --git a/src/common/hashtable/rculfhash.h b/src/common/hashtable/rculfhash.h
+deleted file mode 100644
+index adb5d9d..0000000
+--- a/src/common/hashtable/rculfhash.h
++++ /dev/null
+@@ -1,480 +0,0 @@
+-#ifndef _URCU_RCULFHASH_H
+-#define _URCU_RCULFHASH_H
+-
+-/*
+- * urcu/rculfhash.h
+- *
+- * Userspace RCU library - Lock-Free RCU Hash Table
+- *
+- * Copyright 2011 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+- * Copyright 2011 - Lai Jiangshan <laijs@cn.fujitsu.com>
+- *
+- * This library is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public
+- * License as published by the Free Software Foundation; either
+- * version 2.1 of the License, or (at your option) any later version.
+- *
+- * This library is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+- * Lesser General Public License for more details.
+- *
+- * You should have received a copy of the GNU Lesser General Public
+- * License along with this library; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+- *
+- * Include this file _after_ including your URCU flavor.
+- */
+-
+-#include "hashtable-symbols.h"
+-
+-#include <stdint.h>
+-#include <urcu/compiler.h>
+-#include <urcu-call-rcu.h>
+-
+-#include "urcu-flavor.h"
+-
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-
+-/*
+- * cds_lfht_node: Contains the next pointers and reverse-hash
+- * value required for lookup and traversal of the hash table.
+- *
+- * struct cds_lfht_node should be aligned on 8-bytes boundaries because
+- * the three lower bits are used as flags. It is worth noting that the
+- * information contained within these three bits could be represented on
+- * two bits by re-using the same bit for REMOVAL_OWNER_FLAG and
+- * BUCKET_FLAG. This can be done if we ensure that no iterator nor
+- * updater check the BUCKET_FLAG after it detects that the REMOVED_FLAG
+- * is set. Given the minimum size of struct cds_lfht_node is 8 bytes on
+- * 32-bit architectures, we choose to go for simplicity and reserve
+- * three bits.
+- *
+- * struct cds_lfht_node can be embedded into a structure (as a field).
+- * caa_container_of() can be used to get the structure from the struct
+- * cds_lfht_node after a lookup.
+- *
+- * The structure which embeds it typically holds the key (or key-value
+- * pair) of the object. The caller code is responsible for calculation
+- * of the hash value for cds_lfht APIs.
+- */
+-struct cds_lfht_node {
+-	struct cds_lfht_node *next;	/* ptr | REMOVAL_OWNER_FLAG | BUCKET_FLAG | REMOVED_FLAG */
+-	unsigned long reverse_hash;
+-} __attribute__((aligned(8)));
+-
+-/* cds_lfht_iter: Used to track state while traversing a hash chain. */
+-struct cds_lfht_iter {
+-	struct cds_lfht_node *node, *next;
+-};
+-
+-static inline
+-struct cds_lfht_node *cds_lfht_iter_get_node(struct cds_lfht_iter *iter)
+-{
+-	return iter->node;
+-}
+-
+-struct cds_lfht;
+-
+-/*
+- * Caution !
+- * Ensure reader and writer threads are registered as urcu readers.
+- */
+-
+-typedef int (*cds_lfht_match_fct)(struct cds_lfht_node *node, const void *key);
+-
+-/*
+- * cds_lfht_node_init - initialize a hash table node
+- * @node: the node to initialize.
+- *
+- * This function is kept to be eventually used for debugging purposes
+- * (detection of memory corruption).
+- */
+-static inline
+-void cds_lfht_node_init(struct cds_lfht_node *node)
+-{
+-}
+-
+-/*
+- * Hash table creation flags.
+- */
+-enum {
+-	CDS_LFHT_AUTO_RESIZE = (1U << 0),
+-	CDS_LFHT_ACCOUNTING = (1U << 1),
+-};
+-
+-struct cds_lfht_mm_type {
+-	struct cds_lfht *(*alloc_cds_lfht)(unsigned long min_nr_alloc_buckets,
+-			unsigned long max_nr_buckets);
+-	void (*alloc_bucket_table)(struct cds_lfht *ht, unsigned long order);
+-	void (*free_bucket_table)(struct cds_lfht *ht, unsigned long order);
+-	struct cds_lfht_node *(*bucket_at)(struct cds_lfht *ht,
+-			unsigned long index);
+-};
+-
+-extern const struct cds_lfht_mm_type cds_lfht_mm_order;
+-extern const struct cds_lfht_mm_type cds_lfht_mm_chunk;
+-extern const struct cds_lfht_mm_type cds_lfht_mm_mmap;
+-
+-/*
+- * _cds_lfht_new - API used by cds_lfht_new wrapper. Do not use directly.
+- */
+-struct cds_lfht *_cds_lfht_new(unsigned long init_size,
+-			unsigned long min_nr_alloc_buckets,
+-			unsigned long max_nr_buckets,
+-			int flags,
+-			const struct cds_lfht_mm_type *mm,
+-			const struct rcu_flavor_struct *flavor,
+-			pthread_attr_t *attr);
+-
+-/*
+- * cds_lfht_new - allocate a hash table.
+- * @init_size: number of buckets to allocate initially. Must be power of two.
+- * @min_nr_alloc_buckets: the minimum number of allocated buckets.
+- *                        (must be power of two)
+- * @max_nr_buckets: the maximum number of hash table buckets allowed.
+- *                  (must be power of two)
+- * @flags: hash table creation flags (can be combined with bitwise or: '|').
+- *           0: no flags.
+- *           CDS_LFHT_AUTO_RESIZE: automatically resize hash table.
+- *           CDS_LFHT_ACCOUNTING: count the number of node addition
+- *                                and removal in the table
+- * @attr: optional resize worker thread attributes. NULL for default.
+- *
+- * Return NULL on error.
+- * Note: the RCU flavor must be already included before the hash table header.
+- *
+- * The programmer is responsible for ensuring that resize operation has a
+- * priority equal to hash table updater threads. It should be performed by
+- * specifying the appropriate priority in the pthread "attr" argument, and,
+- * for CDS_LFHT_AUTO_RESIZE, by ensuring that call_rcu worker threads also have
+- * this priority level. Having lower priority for call_rcu and resize threads
+- * does not pose any correctness issue, but the resize operations could be
+- * starved by updates, thus leading to long hash table bucket chains.
+- * Threads calling cds_lfht_new are NOT required to be registered RCU
+- * read-side threads. It can be called very early. (e.g. before RCU is
+- * initialized)
+- */
+-static inline
+-struct cds_lfht *cds_lfht_new(unsigned long init_size,
+-			unsigned long min_nr_alloc_buckets,
+-			unsigned long max_nr_buckets,
+-			int flags,
+-			pthread_attr_t *attr)
+-{
+-	return _cds_lfht_new(init_size, min_nr_alloc_buckets, max_nr_buckets,
+-			flags, NULL, &rcu_flavor, attr);
+-}
+-
+-/*
+- * cds_lfht_destroy - destroy a hash table.
+- * @ht: the hash table to destroy.
+- * @attr: (output) resize worker thread attributes, as received by cds_lfht_new.
+- *        The caller will typically want to free this pointer if dynamically
+- *        allocated. The attr point can be NULL if the caller does not
+- *        need to be informed of the value passed to cds_lfht_new().
+- *
+- * Return 0 on success, negative error value on error.
+- * Threads calling this API need to be registered RCU read-side threads.
+- * cds_lfht_destroy should *not* be called from a RCU read-side critical
+- * section.
+- */
+-int cds_lfht_destroy(struct cds_lfht *ht, pthread_attr_t **attr);
+-
+-/*
+- * cds_lfht_count_nodes - count the number of nodes in the hash table.
+- * @ht: the hash table.
+- * @split_count_before: sample the node count split-counter before traversal.
+- * @count: traverse the hash table, count the number of nodes observed.
+- * @split_count_after: sample the node count split-counter after traversal.
+- *
+- * Call with rcu_read_lock held.
+- * Threads calling this API need to be registered RCU read-side threads.
+- */
+-void cds_lfht_count_nodes(struct cds_lfht *ht,
+-		long *split_count_before,
+-		unsigned long *count,
+-		long *split_count_after);
+-
+-/*
+- * cds_lfht_lookup - lookup a node by key.
+- * @ht: the hash table.
+- * @hash: the key hash.
+- * @match: the key match function.
+- * @key: the current node key.
+- * @iter: node, if found (output). *iter->node set to NULL if not found.
+- *
+- * Call with rcu_read_lock held.
+- * Threads calling this API need to be registered RCU read-side threads.
+- * This function acts as a rcu_dereference() to read the node pointer.
+- */
+-void cds_lfht_lookup(struct cds_lfht *ht, unsigned long hash,
+-		cds_lfht_match_fct match, const void *key,
+-		struct cds_lfht_iter *iter);
+-
+-/*
+- * cds_lfht_next_duplicate - get the next item with same key, after iterator.
+- * @ht: the hash table.
+- * @match: the key match function.
+- * @key: the current node key.
+- * @iter: input: current iterator.
+- *        output: node, if found. *iter->node set to NULL if not found.
+- *
+- * Uses an iterator initialized by a lookup or traversal. Important: the
+- * iterator _needs_ to be initialized before calling
+- * cds_lfht_next_duplicate.
+- * Sets *iter-node to the following node with same key.
+- * Sets *iter->node to NULL if no following node exists with same key.
+- * RCU read-side lock must be held across cds_lfht_lookup and
+- * cds_lfht_next calls, and also between cds_lfht_next calls using the
+- * node returned by a previous cds_lfht_next.
+- * Call with rcu_read_lock held.
+- * Threads calling this API need to be registered RCU read-side threads.
+- * This function acts as a rcu_dereference() to read the node pointer.
+- */
+-void cds_lfht_next_duplicate(struct cds_lfht *ht,
+-		cds_lfht_match_fct match, const void *key,
+-		struct cds_lfht_iter *iter);
+-
+-/*
+- * cds_lfht_first - get the first node in the table.
+- * @ht: the hash table.
+- * @iter: First node, if exists (output). *iter->node set to NULL if not found.
+- *
+- * Output in "*iter". *iter->node set to NULL if table is empty.
+- * Call with rcu_read_lock held.
+- * Threads calling this API need to be registered RCU read-side threads.
+- * This function acts as a rcu_dereference() to read the node pointer.
+- */
+-void cds_lfht_first(struct cds_lfht *ht, struct cds_lfht_iter *iter);
+-
+-/*
+- * cds_lfht_next - get the next node in the table.
+- * @ht: the hash table.
+- * @iter: input: current iterator.
+- *        output: next node, if exists. *iter->node set to NULL if not found.
+- *
+- * Input/Output in "*iter". *iter->node set to NULL if *iter was
+- * pointing to the last table node.
+- * Call with rcu_read_lock held.
+- * Threads calling this API need to be registered RCU read-side threads.
+- * This function acts as a rcu_dereference() to read the node pointer.
+- */
+-void cds_lfht_next(struct cds_lfht *ht, struct cds_lfht_iter *iter);
+-
+-/*
+- * cds_lfht_add - add a node to the hash table.
+- * @ht: the hash table.
+- * @hash: the key hash.
+- * @node: the node to add.
+- *
+- * This function supports adding redundant keys into the table.
+- * Call with rcu_read_lock held.
+- * Threads calling this API need to be registered RCU read-side threads.
+- * This function issues a full memory barrier before and after its
+- * atomic commit.
+- */
+-void cds_lfht_add(struct cds_lfht *ht, unsigned long hash,
+-		struct cds_lfht_node *node);
+-
+-/*
+- * cds_lfht_add_unique - add a node to hash table, if key is not present.
+- * @ht: the hash table.
+- * @hash: the node's hash.
+- * @match: the key match function.
+- * @key: the node's key.
+- * @node: the node to try adding.
+- *
+- * Return the node added upon success.
+- * Return the unique node already present upon failure. If
+- * cds_lfht_add_unique fails, the node passed as parameter should be
+- * freed by the caller. In this case, the caller does NOT need to wait
+- * for a grace period before freeing the node.
+- * Call with rcu_read_lock held.
+- * Threads calling this API need to be registered RCU read-side threads.
+- *
+- * The semantic of this function is that if only this function is used
+- * to add keys into the table, no duplicated keys should ever be
+- * observable in the table. The same guarantee apply for combination of
+- * add_unique and add_replace (see below).
+- *
+- * Upon success, this function issues a full memory barrier before and
+- * after its atomic commit. Upon failure, this function acts like a
+- * simple lookup operation: it acts as a rcu_dereference() to read the
+- * node pointer. The failure case does not guarantee any other memory
+- * barrier.
+- */
+-struct cds_lfht_node *cds_lfht_add_unique(struct cds_lfht *ht,
+-		unsigned long hash,
+-		cds_lfht_match_fct match,
+-		const void *key,
+-		struct cds_lfht_node *node);
+-
+-/*
+- * cds_lfht_add_replace - replace or add a node within hash table.
+- * @ht: the hash table.
+- * @hash: the node's hash.
+- * @match: the key match function.
+- * @key: the node's key.
+- * @node: the node to add.
+- *
+- * Return the node replaced upon success. If no node matching the key
+- * was present, return NULL, which also means the operation succeeded.
+- * This replacement operation should never fail.
+- * Call with rcu_read_lock held.
+- * Threads calling this API need to be registered RCU read-side threads.
+- * After successful replacement, a grace period must be waited for before
+- * freeing the memory reserved for the returned node.
+- *
+- * The semantic of replacement vs lookups and traversals is the
+- * following: if lookups and traversals are performed between a key
+- * unique insertion and its removal, we guarantee that the lookups and
+- * traversals will always find exactly one instance of the key if it is
+- * replaced concurrently with the lookups.
+- *
+- * Providing this semantic allows us to ensure that replacement-only
+- * schemes will never generate duplicated keys. It also allows us to
+- * guarantee that a combination of add_replace and add_unique updates
+- * will never generate duplicated keys.
+- *
+- * This function issues a full memory barrier before and after its
+- * atomic commit.
+- */
+-struct cds_lfht_node *cds_lfht_add_replace(struct cds_lfht *ht,
+-		unsigned long hash,
+-		cds_lfht_match_fct match,
+-		const void *key,
+-		struct cds_lfht_node *node);
+-
+-/*
+- * cds_lfht_replace - replace a node pointed to by iter within hash table.
+- * @ht: the hash table.
+- * @old_iter: the iterator position of the node to replace.
+- * @hash: the node's hash.
+- * @match: the key match function.
+- * @key: the node's key.
+- * @new_node: the new node to use as replacement.
+- *
+- * Return 0 if replacement is successful, negative value otherwise.
+- * Replacing a NULL old node or an already removed node will fail with
+- * -ENOENT.
+- * If the hash or value of the node to replace and the new node differ,
+- * this function returns -EINVAL without proceeding to the replacement.
+- * Old node can be looked up with cds_lfht_lookup and cds_lfht_next.
+- * RCU read-side lock must be held between lookup and replacement.
+- * Call with rcu_read_lock held.
+- * Threads calling this API need to be registered RCU read-side threads.
+- * After successful replacement, a grace period must be waited for before
+- * freeing the memory reserved for the old node (which can be accessed
+- * with cds_lfht_iter_get_node).
+- *
+- * The semantic of replacement vs lookups is the same as
+- * cds_lfht_add_replace().
+- *
+- * Upon success, this function issues a full memory barrier before and
+- * after its atomic commit. Upon failure, this function does not issue
+- * any memory barrier.
+- */
+-int cds_lfht_replace(struct cds_lfht *ht,
+-		struct cds_lfht_iter *old_iter,
+-		unsigned long hash,
+-		cds_lfht_match_fct match,
+-		const void *key,
+-		struct cds_lfht_node *new_node);
+-
+-/*
+- * cds_lfht_del - remove node pointed to by iterator from hash table.
+- * @ht: the hash table.
+- * @node: the node to delete.
+- *
+- * Return 0 if the node is successfully removed, negative value
+- * otherwise.
+- * Deleting a NULL node or an already removed node will fail with a
+- * negative value.
+- * Node can be looked up with cds_lfht_lookup and cds_lfht_next,
+- * followed by use of cds_lfht_iter_get_node.
+- * RCU read-side lock must be held between lookup and removal.
+- * Call with rcu_read_lock held.
+- * Threads calling this API need to be registered RCU read-side threads.
+- * After successful removal, a grace period must be waited for before
+- * freeing the memory reserved for old node (which can be accessed with
+- * cds_lfht_iter_get_node).
+- * Upon success, this function issues a full memory barrier before and
+- * after its atomic commit. Upon failure, this function does not issue
+- * any memory barrier.
+- */
+-int cds_lfht_del(struct cds_lfht *ht, struct cds_lfht_node *node);
+-
+-/*
+- * cds_lfht_is_node_deleted - query whether a node is removed from hash table.
+- *
+- * Return non-zero if the node is deleted from the hash table, 0
+- * otherwise.
+- * Node can be looked up with cds_lfht_lookup and cds_lfht_next,
+- * followed by use of cds_lfht_iter_get_node.
+- * RCU read-side lock must be held between lookup and call to this
+- * function.
+- * Call with rcu_read_lock held.
+- * Threads calling this API need to be registered RCU read-side threads.
+- * This function does not issue any memory barrier.
+- */
+-int cds_lfht_is_node_deleted(struct cds_lfht_node *node);
+-
+-/*
+- * cds_lfht_resize - Force a hash table resize
+- * @ht: the hash table.
+- * @new_size: update to this hash table size.
+- *
+- * Threads calling this API need to be registered RCU read-side threads.
+- * This function does not (necessarily) issue memory barriers.
+- * cds_lfht_resize should *not* be called from a RCU read-side critical
+- * section.
+- */
+-void cds_lfht_resize(struct cds_lfht *ht, unsigned long new_size);
+-
+-/*
+- * Note: it is safe to perform element removal (del), replacement, or
+- * any hash table update operation during any of the following hash
+- * table traversals.
+- * These functions act as rcu_dereference() to read the node pointers.
+- */
+-#define cds_lfht_for_each(ht, iter, node)				\
+-	for (cds_lfht_first(ht, iter),					\
+-			node = cds_lfht_iter_get_node(iter);		\
+-		node != NULL;						\
+-		cds_lfht_next(ht, iter),				\
+-			node = cds_lfht_iter_get_node(iter))
+-
+-#define cds_lfht_for_each_duplicate(ht, hash, match, key, iter, node)	\
+-	for (cds_lfht_lookup(ht, hash, match, key, iter),		\
+-			node = cds_lfht_iter_get_node(iter);		\
+-		node != NULL;						\
+-		cds_lfht_next_duplicate(ht, match, key, iter),		\
+-			node = cds_lfht_iter_get_node(iter))
+-
+-#define cds_lfht_for_each_entry(ht, iter, pos, member)			\
+-	for (cds_lfht_first(ht, iter),					\
+-			pos = caa_container_of(cds_lfht_iter_get_node(iter), \
+-					__typeof__(*(pos)), member);	\
+-		cds_lfht_iter_get_node(iter) != NULL;			\
+-		cds_lfht_next(ht, iter),				\
+-			pos = caa_container_of(cds_lfht_iter_get_node(iter), \
+-					__typeof__(*(pos)), member))
+-
+-#define cds_lfht_for_each_entry_duplicate(ht, hash, match, key,		\
+-				iter, pos, member)			\
+-	for (cds_lfht_lookup(ht, hash, match, key, iter),		\
+-			pos = caa_container_of(cds_lfht_iter_get_node(iter), \
+-					__typeof__(*(pos)), member);	\
+-		cds_lfht_iter_get_node(iter) != NULL;			\
+-		cds_lfht_next_duplicate(ht, match, key, iter),		\
+-			pos = caa_container_of(cds_lfht_iter_get_node(iter), \
+-					__typeof__(*(pos)), member))
+-
+-#ifdef __cplusplus
+-}
+-#endif
+-
+-#endif /* _URCU_RCULFHASH_H */
+diff --git a/src/common/hashtable/urcu-flavor.h b/src/common/hashtable/urcu-flavor.h
+deleted file mode 100644
+index 9af4d0e..0000000
+--- a/src/common/hashtable/urcu-flavor.h
++++ /dev/null
+@@ -1,65 +0,0 @@
+-#ifndef _URCU_FLAVOR_H
+-#define _URCU_FLAVOR_H
+-
+-/*
+- * urcu-flavor.h
+- *
+- * Userspace RCU header - rcu flavor declarations
+- *
+- * Copyright (c) 2011 Lai Jiangshan <laijs@cn.fujitsu.com>
+- *
+- * This library is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Lesser General Public
+- * License as published by the Free Software Foundation; either
+- * version 2.1 of the License, or (at your option) any later version.
+- *
+- * This library is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+- * Lesser General Public License for more details.
+- *
+- * You should have received a copy of the GNU Lesser General Public
+- * License along with this library; if not, write to the Free Software
+- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+- */
+-
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-
+-struct rcu_flavor_struct {
+-	void (*read_lock)(void);
+-	void (*read_unlock)(void);
+-	void (*read_quiescent_state)(void);
+-	void (*update_call_rcu)(struct rcu_head *head,
+-				void (*func)(struct rcu_head *head));
+-	void (*update_synchronize_rcu)(void);
+-	void (*update_defer_rcu)(void (*fct)(void *p), void *p);
+-
+-	void (*thread_offline)(void);
+-	void (*thread_online)(void);
+-	void (*register_thread)(void);
+-	void (*unregister_thread)(void);
+-};
+-
+-#define DEFINE_RCU_FLAVOR(x)				\
+-const struct rcu_flavor_struct x = {			\
+-	.read_lock		= rcu_read_lock,	\
+-	.read_unlock		= rcu_read_unlock,	\
+-	.read_quiescent_state	= rcu_quiescent_state,	\
+-	.update_call_rcu	= call_rcu,		\
+-	.update_synchronize_rcu	= synchronize_rcu,	\
+-	.update_defer_rcu	= defer_rcu,		\
+-	.thread_offline		= rcu_thread_offline,	\
+-	.thread_online		= rcu_thread_online,	\
+-	.register_thread	= rcu_register_thread,	\
+-	.unregister_thread	= rcu_unregister_thread,\
+-}
+-
+-extern const struct rcu_flavor_struct rcu_flavor;
+-
+-#ifdef __cplusplus
+-}
+-#endif
+-
+-#endif /* _URCU_FLAVOR_H */
 -- 
 2.1.4
