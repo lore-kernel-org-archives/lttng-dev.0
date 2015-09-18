@@ -1,16 +1,15 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools] Fix: use start and stop sessiond
-	from utils.sh
-Date: Thu, 17 Sep 2015 16:42:35 -0400
-Message-ID: <1442522555-31856-1-git-send-email-jonathan.rajotte-julien__593.509889631782$1442522957$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH lttng-tools] Fix: runas: set thread name
+Date: Fri, 18 Sep 2015 12:00:04 -0400
+Message-ID: <1442592004-32371-1-git-send-email-mathieu.desnoyers__523.011133964424$1442592089$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1264422057=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1Zcg1G-0007WT-EH
- for lttng-dev@lists.lttng.org; Thu, 17 Sep 2015 16:43:09 -0400
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1Zcy58-0004wE-GR
+ for lttng-dev@lists.lttng.org; Fri, 18 Sep 2015 12:00:15 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,244 +18,43 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1264422057==
-Content-Type: text/plain; charset=y
-Content-Transfer-Encoding: quoted-printable
+In case some system check for the thread name in pidof.
 
-Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- tests/regression/ust/daemon/test_daemon             | 18 +++++----------=
----
- tests/regression/ust/exit-fast/test_exit-fast       | 18 +++++----------=
----
- tests/regression/ust/fork/test_fork                 | 18 +++++----------=
----
- tests/regression/ust/libc-wrapper/test_libc-wrapper | 18 +++++----------=
----
- tests/regression/ust/linking/test_linking           | 18 +++++----------=
----
- 5 files changed, 25 insertions(+), 65 deletions(-)
+ src/common/runas.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/tests/regression/ust/daemon/test_daemon b/tests/regression/u=
-st/daemon/test_daemon
-index 54afd0c..13dda1b 100755
---- a/tests/regression/ust/daemon/test_daemon
-+++ b/tests/regression/ust/daemon/test_daemon
-@@ -1,4 +1,4 @@
--#!/bin/sh
-+#!/bin/bash
- #
- # Copyright (C) - 2013 J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@ef=
-ficios.com>
- #
-@@ -15,21 +15,13 @@
- # this program; if not, write to the Free Software Foundation, Inc., 51
- # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-=20
--# Check for a running sessiond
--`pidof lt-lttng-sessiond`
--STOP_SESSIOND=3D$?
--
- CURDIR=3D$(dirname $0)
- TESTDIR=3D${CURDIR}/../../..
-=20
--# Try to launch a sessiond before invoking the python test script
--if [ $STOP_SESSIOND -ne 0 ]; then
--	DIR=3D$(readlink -f ${TESTDIR})
--	${DIR}/../src/bin/lttng-sessiond/lttng-sessiond --daemonize --quiet --c=
-onsumerd32-path=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --con=
-sumerd64-path=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
--fi
-+source $TESTDIR/utils/utils.sh
+diff --git a/src/common/runas.c b/src/common/runas.c
+index 2634ae9..d313e83 100644
+--- a/src/common/runas.c
++++ b/src/common/runas.c
+@@ -302,6 +302,7 @@ int run_as_worker(struct run_as_worker *worker)
+ 	ssize_t writelen;
+ 	struct run_as_ret sendret;
+ 	size_t proc_orig_len;
++	int ret;
+ 
+ 	/*
+ 	 * Initialize worker. Set a different process cmdline.
+@@ -310,6 +311,14 @@ int run_as_worker(struct run_as_worker *worker)
+ 	memset(worker->procname, 0, proc_orig_len);
+ 	strncpy(worker->procname, "lttng-runas", proc_orig_len);
+ 
++	ret = pthread_setname_np(pthread_self(), "lttng-runas");
++	if (ret) {
++		errno = ret;
++		ret = -1;
++		PERROR("pthread_setname_np");
++		return EXIT_FAILURE;
++	}
 +
-+start_lttng_sessiond_notap
-=20
- python3 ${CURDIR}/test_daemon.py
-=20
--if [ $STOP_SESSIOND -ne 0 ]; then
--    kill `pidof lt-lttng-sessiond`
--fi
-+stop_lttng_sessiond_notap
-diff --git a/tests/regression/ust/exit-fast/test_exit-fast b/tests/regres=
-sion/ust/exit-fast/test_exit-fast
-index e8a0bd6..4b72171 100755
---- a/tests/regression/ust/exit-fast/test_exit-fast
-+++ b/tests/regression/ust/exit-fast/test_exit-fast
-@@ -1,4 +1,4 @@
--#!/bin/sh
-+#!/bin/bash
- #
- # Copyright (C) - 2013 J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@ef=
-ficios.com>
- #
-@@ -15,21 +15,13 @@
- # this program; if not, write to the Free Software Foundation, Inc., 51
- # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-=20
--# Check for a running sessiond
--`pidof lt-lttng-sessiond`
--STOP_SESSIOND=3D$?
--
- CURDIR=3D$(dirname $0)
- TESTDIR=3D${CURDIR}/../../..
-=20
--# Try to launch a sessiond before invoking the python test script
--if [ $STOP_SESSIOND -ne 0 ]; then
--	DIR=3D$(readlink -f ${TESTDIR})
--	${DIR}/../src/bin/lttng-sessiond/lttng-sessiond --daemonize --quiet --c=
-onsumerd32-path=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --con=
-sumerd64-path=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
--fi
-+source $TESTDIR/utils/utils.sh
-+
-+start_lttng_sessiond_notap
-=20
- python3 ${CURDIR}/test_exit-fast.py
-=20
--if [ $STOP_SESSIOND -ne 0 ]; then
--    kill `pidof lt-lttng-sessiond`
--fi
-+stop_lttng_sessiond_notap
-diff --git a/tests/regression/ust/fork/test_fork b/tests/regression/ust/f=
-ork/test_fork
-index e05b556..3d0fb89 100755
---- a/tests/regression/ust/fork/test_fork
-+++ b/tests/regression/ust/fork/test_fork
-@@ -1,4 +1,4 @@
--#!/bin/sh
-+#!/bin/bash
- #
- # Copyright (C) - 2013 J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@ef=
-ficios.com>
- #
-@@ -15,21 +15,13 @@
- # this program; if not, write to the Free Software Foundation, Inc., 51
- # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-=20
--# Check for a running sessiond
--`pidof lt-lttng-sessiond`
--STOP_SESSIOND=3D$?
--
- CURDIR=3D$(dirname $0)
- TESTDIR=3D${CURDIR}/../../..
-=20
--# Try to launch a sessiond before invoking the python test script
--if [ $STOP_SESSIOND -ne 0 ]; then
--	DIR=3D$(readlink -f ${TESTDIR})
--	${DIR}/../src/bin/lttng-sessiond/lttng-sessiond --daemonize --quiet --c=
-onsumerd32-path=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --con=
-sumerd64-path=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
--fi
-+source $TESTDIR/utils/utils.sh
-+
-+start_lttng_sessiond_notap
-=20
- python3 ${CURDIR}/test_fork.py
-=20
--if [ $STOP_SESSIOND -ne 0 ]; then
--    kill `pidof lt-lttng-sessiond`
--fi
-+stop_lttng_sessiond_notap
-diff --git a/tests/regression/ust/libc-wrapper/test_libc-wrapper b/tests/=
-regression/ust/libc-wrapper/test_libc-wrapper
-index 8c6b128..14d227f 100755
---- a/tests/regression/ust/libc-wrapper/test_libc-wrapper
-+++ b/tests/regression/ust/libc-wrapper/test_libc-wrapper
-@@ -1,4 +1,4 @@
--#!/bin/sh
-+#!/bin/bash
- #
- # Copyright (C) - 2013 J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@ef=
-ficios.com>
- #
-@@ -15,21 +15,13 @@
- # this program; if not, write to the Free Software Foundation, Inc., 51
- # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-=20
--# Check for a running sessiond
--`pidof lt-lttng-sessiond`
--STOP_SESSIOND=3D$?
--
- CURDIR=3D$(dirname $0)
- TESTDIR=3D${CURDIR}/../../..
-=20
--# Try to launch a sessiond before invoking the python test script
--if [ $STOP_SESSIOND -ne 0 ]; then
--	DIR=3D$(readlink -f ${TESTDIR})
--	${DIR}/../src/bin/lttng-sessiond/lttng-sessiond --daemonize --quiet --c=
-onsumerd32-path=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --con=
-sumerd64-path=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
--fi
-+source $TESTDIR/utils/utils.sh
-+
-+start_lttng_sessiond_notap
-=20
- python3 ${CURDIR}/test_libc-wrapper.py
-=20
--if [ $STOP_SESSIOND -ne 0 ]; then
--    kill `pidof lt-lttng-sessiond`
--fi
-+stop_lttng_sessiond_notap
-diff --git a/tests/regression/ust/linking/test_linking b/tests/regression=
-/ust/linking/test_linking
-index 77e0b82..e630b09 100755
---- a/tests/regression/ust/linking/test_linking
-+++ b/tests/regression/ust/linking/test_linking
-@@ -1,4 +1,4 @@
--#!/bin/sh
-+#!/bin/bash
- #
- # Copyright (C) - 2013 J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@ef=
-ficios.com>
- #
-@@ -14,22 +14,14 @@
- # You should have received a copy of the GNU General Public License alon=
-g with
- # this program; if not, write to the Free Software Foundation, Inc., 51
- # Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
--
--# Check for a running sessiond
--`pidof lt-lttng-sessiond`
--STOP_SESSIOND=3D$?
--
- CURDIR=3D$(dirname $0)
- TESTDIR=3D${CURDIR}/../../..
-=20
-+source $TESTDIR/utils/utils.sh
-+
- # Try to launch a sessiond before invoking the python test script
--if [ $STOP_SESSIOND -ne 0 ]; then
--	DIR=3D$(readlink -f ${TESTDIR})
--	${DIR}/../src/bin/lttng-sessiond/lttng-sessiond --daemonize --quiet --c=
-onsumerd32-path=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd" --con=
-sumerd64-path=3D"$DIR/../src/bin/lttng-consumerd/lttng-consumerd"
--fi
-+start_lttng_sessiond_notap
-=20
- python3 ${CURDIR}/test_linking.py
-=20
--if [ $STOP_SESSIOND -ne 0 ]; then
--    kill `pidof lt-lttng-sessiond`
--fi
-+stop_lttng_sessiond_notap
---=20
+ 	sendret.ret = 0;
+ 	sendret._errno = 0;
+ 	writelen = lttcomm_send_unix_sock(worker->sockpair[1], &sendret,
+-- 
 2.1.4
-
-
-
---===============1264422057==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1264422057==--
