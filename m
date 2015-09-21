@@ -1,19 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: int printed as uint
-Date: Mon, 21 Sep 2015 16:15:47 -0400
-Message-ID: <CA+jJMxuvNbfKXakOdCg+Hsztq7+2TqMNzOpPfSh4qGjpvjO-WQ__40092.4092311927$1442866629$gmane$org@mail.gmail.com>
-References: <1442863170-18376-1-git-send-email-mjeanson@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-tools] Fix: Possible dereference of null
+	pointers
+Date: Mon, 21 Sep 2015 16:31:25 -0400
+Message-ID: <1442867485-15029-1-git-send-email-mjeanson__21455.0068173141$1442867579$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f169.google.com ([209.85.160.169])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Ze7VB-0002fh-6c
- for lttng-dev@lists.lttng.org; Mon, 21 Sep 2015 16:16:01 -0400
-Received: by ykft14 with SMTP id t14so114457673ykf.0
- for <lttng-dev@lists.lttng.org>; Mon, 21 Sep 2015 13:15:47 -0700 (PDT)
-In-Reply-To: <1442863170-18376-1-git-send-email-mjeanson@efficios.com>
+ (envelope-from <mjeanson@efficios.com>) id 1Ze7kP-0002lz-Cv
+ for lttng-dev@lists.lttng.org; Mon, 21 Sep 2015 16:31:45 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,36 +19,54 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIG1hc3RlciBhbmQgc3RhYmxlLTIuNy4KClRoYW5rcyEKSsOpcsOpbWllCgpPbiBN
-b24sIFNlcCAyMSwgMjAxNSBhdCAzOjE5IFBNLCBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVm
-ZmljaW9zLmNvbT4gd3JvdGU6Cj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVh
-bnNvbkBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIHNyYy9jb21tb24vdXN0LWNvbnN1bWVyL3VzdC1j
-b25zdW1lci5jIHwgNiArKystLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwg
-MyBkZWxldGlvbnMoLSkKPgo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL3VzdC1jb25zdW1lci91
-c3QtY29uc3VtZXIuYyBiL3NyYy9jb21tb24vdXN0LWNvbnN1bWVyL3VzdC1jb25zdW1lci5jCj4g
-aW5kZXggMDhlNmVlMC4uNDgxYmJlYiAxMDA2NDQKPiAtLS0gYS9zcmMvY29tbW9uL3VzdC1jb25z
-dW1lci91c3QtY29uc3VtZXIuYwo+ICsrKyBiL3NyYy9jb21tb24vdXN0LWNvbnN1bWVyL3VzdC1j
-b25zdW1lci5jCj4gQEAgLTQ3LDcgKzQ3LDcgQEAKPgo+ICAjaW5jbHVkZSAidXN0LWNvbnN1bWVy
-LmgiCj4KPiAtI2RlZmluZSBVSU5UX01BWF9TVFJfTEVOIDExICAgIC8qIGluY2x1ZGVzIFwwICov
-Cj4gKyNkZWZpbmUgSU5UX01BWF9TVFJfTEVOIDEyICAgICAvKiBpbmNsdWRlcyBcMCAqLwo+Cj4g
-IGV4dGVybiBzdHJ1Y3QgbHR0bmdfY29uc3VtZXJfZ2xvYmFsX2RhdGEgY29uc3VtZXJfZGF0YTsK
-PiAgZXh0ZXJuIGludCBjb25zdW1lcl9wb2xsX3RpbWVvdXQ7Cj4gQEAgLTI0OCwxMiArMjQ4LDEy
-IEBAIGVycm9yOgo+ICBzdGF0aWMKPiAgaW50IGdldF9zdHJlYW1fc2htX3BhdGgoY2hhciAqc3Ry
-ZWFtX3NobV9wYXRoLCBjb25zdCBjaGFyICpzaG1fcGF0aCwgaW50IGNwdSkKPiAgewo+IC0gICAg
-ICAgY2hhciBjcHVfbnJbVUlOVF9NQVhfU1RSX0xFTl07ICAvKiB1bnNpZ25lZCBpbnQgbWF4IGxl
-biAqLwo+ICsgICAgICAgY2hhciBjcHVfbnJbSU5UX01BWF9TVFJfTEVOXTsgIC8qIGludCBtYXgg
-bGVuICovCj4gICAgICAgICBpbnQgcmV0Owo+Cj4gICAgICAgICBzdHJuY3B5KHN0cmVhbV9zaG1f
-cGF0aCwgc2htX3BhdGgsIFBBVEhfTUFYKTsKPiAgICAgICAgIHN0cmVhbV9zaG1fcGF0aFtQQVRI
-X01BWCAtIDFdID0gJ1wwJzsKPiAtICAgICAgIHJldCA9IHNucHJpbnRmKGNwdV9uciwgVUlOVF9N
-QVhfU1RSX0xFTiwgIiV1IiwgY3B1KTsKPiArICAgICAgIHJldCA9IHNucHJpbnRmKGNwdV9uciwg
-SU5UX01BWF9TVFJfTEVOLCAiJWkiLCBjcHUpOwo+ICAgICAgICAgaWYgKHJldCA8IDApIHsKPiAg
-ICAgICAgICAgICAgICAgUEVSUk9SKCJzbnByaW50ZiIpOwo+ICAgICAgICAgICAgICAgICBnb3Rv
-IGVuZDsKPiAtLQo+IDEuOS4xCj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1Mg
-SW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
-bmZvL2x0dG5nLWRldgo=
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ src/common/sessiond-comm/unix.c                      | 6 ++++++
+ src/lib/lttng-ctl/filter/filter-visitor-set-parent.c | 4 ++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/src/common/sessiond-comm/unix.c b/src/common/sessiond-comm/unix.c
+index 4b64161..77a6013 100644
+--- a/src/common/sessiond-comm/unix.c
++++ b/src/common/sessiond-comm/unix.c
+@@ -281,6 +281,9 @@ ssize_t lttcomm_send_fds_unix_sock(int sock, int *fds, size_t nb_fd)
+ 	msg.msg_controllen = CMSG_LEN(sizeof_fds);
+ 
+ 	cmptr = CMSG_FIRSTHDR(&msg);
++	if (!cmptr) {
++		return -1;
++	}
+ 	cmptr->cmsg_level = SOL_SOCKET;
+ 	cmptr->cmsg_type = SCM_RIGHTS;
+ 	cmptr->cmsg_len = CMSG_LEN(sizeof_fds);
+@@ -408,6 +411,9 @@ ssize_t lttcomm_send_creds_unix_sock(int sock, void *buf, size_t len)
+ 	msg.msg_controllen = CMSG_LEN(sizeof_cred);
+ 
+ 	cmptr = CMSG_FIRSTHDR(&msg);
++	if (!cmptr) {
++		return -1;
++	}
+ 	cmptr->cmsg_level = SOL_SOCKET;
+ 	cmptr->cmsg_type = LTTNG_SOCK_CREDS;
+ 	cmptr->cmsg_len = CMSG_LEN(sizeof_cred);
+diff --git a/src/lib/lttng-ctl/filter/filter-visitor-set-parent.c b/src/lib/lttng-ctl/filter/filter-visitor-set-parent.c
+index 91c89dc..f591fd0 100644
+--- a/src/lib/lttng-ctl/filter/filter-visitor-set-parent.c
++++ b/src/lib/lttng-ctl/filter/filter-visitor-set-parent.c
+@@ -36,6 +36,10 @@ int update_child(struct filter_node *parent,
+ 		struct filter_node *old_child,
+ 		struct filter_node *new_child)
+ {
++	if (!parent) {
++		fprintf(stderr, "[error] %s: NULL parent\n", __func__);
++		return -EINVAL;
++	}
+ 	switch (parent->type) {
+ 	case NODE_UNKNOWN:
+ 	default:
+-- 
+1.9.1
