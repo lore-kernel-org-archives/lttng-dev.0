@@ -1,8 +1,8 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools 3/4 v2] man: update disable-event
-	section
-Date: Mon, 21 Sep 2015 18:43:56 -0400
-Message-ID: <1442875437-15639-3-git-send-email-jonathan.rajotte-julien__16033.9346541607$1442875776$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 4/4 v2] Help: add -j -l -p option to
+	help string
+Date: Mon, 21 Sep 2015 18:43:57 -0400
+Message-ID: <1442875437-15639-4-git-send-email-jonathan.rajotte-julien__5274.31166633523$1442875906$gmane$org@efficios.com>
 References: <CA+jJMxvMk+jb3nNMv9fk=-REKGT2XC4KtihyDR7xCH7_S86h4w@mail.gmail.com>
  <1442875437-15639-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
@@ -12,8 +12,8 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
  (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1Ze9oi-0003cH-RI
- for lttng-dev@lists.lttng.org; Mon, 21 Sep 2015 18:44:28 -0400
+ id 1Ze9oj-0003cI-Lr
+ for lttng-dev@lists.lttng.org; Mon, 21 Sep 2015 18:44:29 -0400
 In-Reply-To: <1442875437-15639-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -29,73 +29,50 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- doc/man/lttng.1 | 33 ++++++++++++++++++++++++---------
- 1 file changed, 24 insertions(+), 9 deletions(-)
+ src/bin/lttng/commands/disable_events.c | 6 +++---
+ src/bin/lttng/commands/enable_events.c  | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/doc/man/lttng.1 b/doc/man/lttng.1
-index cdd816d..db5a7c9 100644
---- a/doc/man/lttng.1
-+++ b/doc/man/lttng.1
-@@ -590,11 +590,7 @@ Dynamic function entry/return probe. Addr and offset can be octal
- (0NNN...), decimal (NNN...) or hexadecimal (0xNNN...)
- .TP
- .BR "\-\-syscall"
--System call event. Enabling syscalls tracing (kernel tracer), you will
--not be able to disable them with disable-event. This is a known
--limitation. You can disable the entire channel to do the trick. Also note
--that per-syscall selection is not supported yet. Use with "-a" to enable
--all syscalls.
-+System call event.
- .TP
- .BR "\-\-filter 'expression'"
- Set a filter on a newly enabled event. Filter expression on event
-@@ -681,7 +677,7 @@ Apply for the user-space tracer
- .PP
- 
- .PP
--\fBdisable-event\fP NAME[,NAME2,...] (\-k | \-u) [OPTIONS]
-+\fBdisable-event\fP NAME[,NAME2,...] (\-k | \-u | \-j | \-l | \-p) [TYPE] [OPTIONS]
- .RS
- Disable tracing event
- 
-@@ -711,8 +707,8 @@ Apply on session name
- Apply on channel name
- .TP
- .BR "\-a, \-\-all-events"
--Disable all events. This does NOT disable "*" but rather every known
--events of the session.
-+Disable all events. This does NOT ONLY disable "*" but rather every known
-+events of the session
- .TP
- .BR "\-k, \-\-kernel"
- Apply for the kernel tracer
-@@ -727,7 +723,26 @@ Apply for Java application using Java Util Logging interface (JUL)
- Apply for Java application using LOG4J
- .TP
- .BR "\-p, \-\-python"
--Apply for Python application using the logging module.
-+Apply for Python application using the logging module
-+
-+.TP
-+.B TYPE (kernel domain only):
-+
-+.TP
-+.BR "\-\-all"
-+Disable event of all type
-+.TP
-+.BR "\-\-tracepoint"
-+Disable event of type tracepoint
-+.TP
-+.BR "\-\-syscall"
-+Disable event of type syscall
-+.TP
-+.BR "\-\-probe"
-+Disable event of type probe
-+.TP
-+.BR "\-\-function"
-+Disable event of type function
- .RE
- .PP
- 
+diff --git a/src/bin/lttng/commands/disable_events.c b/src/bin/lttng/commands/disable_events.c
+index 440d107..9c2f1cc 100644
+--- a/src/bin/lttng/commands/disable_events.c
++++ b/src/bin/lttng/commands/disable_events.c
+@@ -79,7 +79,7 @@ static struct poptOption long_options[] = {
+  */
+ static void usage(FILE *ofp)
+ {
+-	fprintf(ofp, "usage: lttng disable-event NAME[,NAME2,...] (-k | -u) [OPTIONS]\n");
++	fprintf(ofp, "usage: lttng disable-event NAME[,NAME2,...] (-k | -u | -j | -l | -p) [OPTIONS]\n");
+ 	fprintf(ofp, "\n");
+ 	fprintf(ofp, "Options:\n");
+ 	fprintf(ofp, "  -h, --help               Show this help\n");
+@@ -87,9 +87,9 @@ static void usage(FILE *ofp)
+ 	fprintf(ofp, "  -s, --session NAME       Apply to session name\n");
+ 	fprintf(ofp, "  -c, --channel NAME       Apply to this channel\n");
+ 	fprintf(ofp, "  -a, --all-events         Disable all tracepoints\n");
+-	fprintf(ofp, "  -k, --kernel             Apply for the kernel tracer\n");
++	fprintf(ofp, "  -k, --kernel             Apply to the kernel tracer\n");
+ 	fprintf(ofp, "  -u, --userspace          Apply to the user-space tracer\n");
+-	fprintf(ofp, "  -j, --jul                Apply for Java application using JUL\n");
++	fprintf(ofp, "  -j, --jul                Apply to Java application using JUL\n");
+ 	fprintf(ofp, "  -l, --log4j              Apply to Java application using LOG4j\n");
+ 	fprintf(ofp, "  -p, --python             Apply to Python application using logging\n");
+ 	fprintf(ofp, "\n");
+diff --git a/src/bin/lttng/commands/enable_events.c b/src/bin/lttng/commands/enable_events.c
+index 972043e..5dcdd06 100644
+--- a/src/bin/lttng/commands/enable_events.c
++++ b/src/bin/lttng/commands/enable_events.c
+@@ -109,9 +109,9 @@ static void usage(FILE *ofp)
+ 	fprintf(ofp, "  -s, --session NAME       Apply to session name\n");
+ 	fprintf(ofp, "  -c, --channel NAME       Apply to this channel\n");
+ 	fprintf(ofp, "  -a, --all                Enable all tracepoints and syscalls\n");
+-	fprintf(ofp, "  -k, --kernel             Apply for the kernel tracer\n");
++	fprintf(ofp, "  -k, --kernel             Apply to the kernel tracer\n");
+ 	fprintf(ofp, "  -u, --userspace          Apply to the user-space tracer\n");
+-	fprintf(ofp, "  -j, --jul                Apply for Java application using JUL\n");
++	fprintf(ofp, "  -j, --jul                Apply to Java application using JUL\n");
+ 	fprintf(ofp, "  -l, --log4j              Apply for Java application using LOG4j\n");
+ 	fprintf(ofp, "  -p, --python             Apply for Python application\n");
+ 	fprintf(ofp, "\n");
 -- 
 2.1.4
