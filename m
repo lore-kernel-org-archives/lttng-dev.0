@@ -1,15 +1,16 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH babeltrace] Fix: add compat for glib < 2.32
-Date: Tue, 22 Sep 2015 14:46:07 -0400
-Message-ID: <1442947567-7242-1-git-send-email-mjeanson__5082.99571597508$1442947664$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH urcu] lfstack: relax constraints on node
+	re-use
+Date: Tue, 22 Sep 2015 14:49:25 -0400
+Message-ID: <1442947766-12746-1-git-send-email-mathieu.desnoyers__49646.1920942695$1442947880$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mjeanson@efficios.com>) id 1ZeSa4-0001Pt-D0
- for lttng-dev@lists.lttng.org; Tue, 22 Sep 2015 14:46:28 -0400
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZeSdJ-0001ST-2Q
+ for lttng-dev@lists.lttng.org; Tue, 22 Sep 2015 14:49:51 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -18,156 +19,153 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
 List-Id: lttng-dev@lists.lttng.org
 
-A dependency on glib >= 2.32 was introduced in this commit:
+The documentation of the RCU-based synchronization technique in lfstack
+is too strict. It currently states that the cds_lfs_node structure
+cannot be overwritten before a grace period has passed. However, lfstack
+pop only use the next pointer as the replacement value when doing the
+cmpxchg on the head. After the node has been pop'd from the stack,
+concurrent cmpxchg trying to pop that same node will necessarily fail as
+long as there is a grace period before pop/pop_all and re-adding the
+node into the stack.
 
-commit 347829f5b1eaf79a540f4623f7ae5ee4e9e3d4c7
-Author: Philippe Proulx <eeppeliteloop@gmail.com>
-Date:   Thu Mar 12 16:14:31 2015 -0400
+It is therefore sufficient to wait for a grace period between:
+1) pop/pop_all and
+2) freeing the node (to ensure existence for concurrent pop trying to
+   read node->next) or re-adding the node into the stack.
 
-    Add basic object system
+This node re-use constraint relaxation is only possible because we don't
+care about node->next content read by concurrent pop: it will be simply
+discarded by the cmpxchg on head. Be careful not to apply this relaxed
+constraint to other data structures which care about the content of the
+node's next pointer (e.g. wfstack).
 
-To stay compatible with SLES11, keep our dependency on 2.22 and add a
-compatibility header.
+This relaxed constraint allows implementing efficient free-lists (memory
+allocation) with a lock-free allocation/free based on lfstack: it allows
+re-using the memory backing the free-list node immediately after
+allocation. The only requirement with respect to this use-case is to
+wait for a grace period before putting the node back into the free-list.
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+Also update the test_urcu_lfs to poison the next pointer immediately
+after pop/pop_all to make sure we test this relaxed constraint.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+CC: Lai Jiangshan <jiangshanlai@gmail.com>
+CC: lttng-dev@lists.lttng.org
+CC: rp@svcs.cs.pdx.edu
 ---
- include/Makefile.am              |  1 +
- include/babeltrace/compat/glib.h | 80 ++++++++++++++++++++++++++++++++++++++++
- lib/values.c                     |  6 +--
- 3 files changed, 84 insertions(+), 3 deletions(-)
- create mode 100644 include/babeltrace/compat/glib.h
+ tests/benchmark/test_urcu_lfs.c |  4 ++++
+ urcu/lfstack.h                  | 19 ++++++++++++-------
+ urcu/static/lfstack.h           | 20 +++++++++++++-------
+ 3 files changed, 29 insertions(+), 14 deletions(-)
 
-diff --git a/include/Makefile.am b/include/Makefile.am
-index 15159dd..88c28c2 100644
---- a/include/Makefile.am
-+++ b/include/Makefile.am
-@@ -71,5 +71,6 @@ noinst_HEADERS = \
- 	babeltrace/compat/string.h \
- 	babeltrace/compat/utc.h \
- 	babeltrace/compat/limits.h \
-+	babeltrace/compat/glib.h \
- 	babeltrace/endian.h \
- 	babeltrace/mmap-align.h
-diff --git a/include/babeltrace/compat/glib.h b/include/babeltrace/compat/glib.h
-new file mode 100644
-index 0000000..8db2d97
---- /dev/null
-+++ b/include/babeltrace/compat/glib.h
-@@ -0,0 +1,80 @@
-+#ifndef _BABELTRACE_COMPAT_GLIB_H
-+#define _BABELTRACE_COMPAT_GLIB_H
-+
-+/*
-+ * babeltrace/compat/uuid.h
-+ *
-+ * Copyright (C) 2015 Michael Jeanson <mjeanson@efficios.com>
-+ *
-+ * Permission is hereby granted, free of charge, to any person obtaining a copy
-+ * of this software and associated documentation files (the "Software"), to deal
-+ * in the Software without restriction, including without limitation the rights
-+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-+ * copies of the Software, and to permit persons to whom the Software is
-+ * furnished to do so, subject to the following conditions:
-+ *
-+ * The above copyright notice and this permission notice shall be included in
-+ * all copies or substantial portions of the Software.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-+ * SOFTWARE.
-+ */
-+
-+#include <glib.h>
-+
-+#if GLIB_CHECK_VERSION(2,31,8)
-+
-+static inline gboolean
-+babeltrace_g_hash_table_contains(GHashTable *hash_table, gconstpointer key)
-+{
-+	return g_hash_table_contains(hash_table, key);
-+}
-+
-+#else
-+
-+static inline gboolean
-+babeltrace_g_hash_table_contains(GHashTable *hash_table, gconstpointer key)
-+{
-+       const char *value;
-+
-+       value = g_hash_table_lookup(hash_table, key);
-+       if (value == NULL) {
-+               return FALSE;
-+       }
-+
-+       return TRUE;
-+}
-+
-+#endif
-+
-+
-+#if GLIB_CHECK_VERSION(2,29,16)
-+
-+static inline GPtrArray *
-+babeltrace_g_ptr_array_new_full(guint reserved_size,
-+		GDestroyNotify element_free_func)
-+{
-+	return g_ptr_array_new_full(reserved_size, element_free_func);
-+}
-+
-+#else
-+
-+static inline GPtrArray *
-+babeltrace_g_ptr_array_new_full(guint reserved_size,
-+		GDestroyNotify element_free_func)
-+{
-+       GPtrArray *array;
-+
-+       array = g_ptr_array_sized_new(reserved_size);
-+       g_ptr_array_set_free_func(array, element_free_func);
-+
-+       return array;
-+}
-+#endif
-+
-+#endif /* _BABELTRACE_COMPAT_GLIB_H */
-diff --git a/lib/values.c b/lib/values.c
-index 5778528..f75f008 100644
---- a/lib/values.c
-+++ b/lib/values.c
-@@ -33,7 +33,7 @@
- #include <babeltrace/object-internal.h>
- #include <babeltrace/ref.h>
- #include <babeltrace/values.h>
--#include <glib.h>
-+#include <babeltrace/compat/glib.h>
+diff --git a/tests/benchmark/test_urcu_lfs.c b/tests/benchmark/test_urcu_lfs.c
+index 2101532..1d2dc84 100644
+--- a/tests/benchmark/test_urcu_lfs.c
++++ b/tests/benchmark/test_urcu_lfs.c
+@@ -50,6 +50,8 @@
+ #include <urcu.h>
+ #include <urcu/cds.h>
  
- #define BT_VALUE_FROM_CONCRETE(_concrete) ((struct bt_value *) (_concrete))
- #define BT_VALUE_TO_BOOL(_base) ((struct bt_value_bool *) (_base))
-@@ -606,7 +606,7 @@ struct bt_value *bt_value_array_create(void)
- 	}
++#define POISON_PTR	((void *) 0x42UL)
++
+ /*
+  * External synchronization used.
+  */
+@@ -219,6 +221,7 @@ void do_test_pop(enum test_sync sync)
+ 	if (snode) {
+ 		struct test *node;
  
- 	array_obj->base = bt_value_create_base(BT_VALUE_TYPE_ARRAY);
--	array_obj->garray = g_ptr_array_new_full(0,
-+	array_obj->garray = babeltrace_g_ptr_array_new_full(0,
- 		(GDestroyNotify) bt_put);
++		snode->next = POISON_PTR;
+ 		node = caa_container_of(snode,
+ 			struct test, list);
+ 		if (sync == TEST_SYNC_RCU)
+@@ -241,6 +244,7 @@ void do_test_pop_all(enum test_sync sync)
+ 	cds_lfs_for_each_safe(head, snode, n) {
+ 		struct test *node;
  
- 	if (!array_obj->garray) {
-@@ -1028,7 +1028,7 @@ bool bt_value_map_has_key(const struct bt_value *map_obj, const char *key)
- 	}
- 
- 	quark = g_quark_from_string(key);
--	ret = g_hash_table_contains(typed_map_obj->ght,
-+	ret = babeltrace_g_hash_table_contains(typed_map_obj->ght,
- 		GUINT_TO_POINTER(quark));
- 
- end:
++		snode->next = POISON_PTR;
+ 		node = caa_container_of(snode, struct test, list);
+ 		if (sync == TEST_SYNC_RCU)
+ 			call_rcu(&node->rcu, free_node_cb);
+diff --git a/urcu/lfstack.h b/urcu/lfstack.h
+index fa58054..11a63d9 100644
+--- a/urcu/lfstack.h
++++ b/urcu/lfstack.h
+@@ -178,9 +178,12 @@ extern void cds_lfs_pop_unlock(struct cds_lfs_stack *s);
+  * __cds_lfs_pop needs to be synchronized using one of the following
+  * techniques:
+  *
+- * 1) Calling __cds_lfs_pop under rcu read lock critical section. The
+- *    caller must wait for a grace period to pass before freeing the
+- *    returned node or modifying the cds_lfs_node structure.
++ * 1) Calling __cds_lfs_pop under rcu read lock critical section.
++ *    Both __cds_lfs_pop and __cds_lfs_pop_all callers must wait for a
++ *    grace period to pass before freeing the returned node or pushing
++ *    the node back into the stack. It is valid to overwrite the content
++ *    of cds_lfs_node immediately after __cds_lfs_pop and
++ *    __cds_lfs_pop_all.
+  * 2) Using mutual exclusion (e.g. mutexes) to protect __cds_lfs_pop
+  *    and __cds_lfs_pop_all callers.
+  * 3) Ensuring that only ONE thread can call __cds_lfs_pop() and
+@@ -196,10 +199,12 @@ extern struct cds_lfs_node *__cds_lfs_pop(cds_lfs_stack_ptr_t s);
+  * matching the technique used to synchronize __cds_lfs_pop:
+  *
+  * 1) If __cds_lfs_pop is called under rcu read lock critical section,
+- *    both __cds_lfs_pop and cds_lfs_pop_all callers must wait for a
+- *    grace period to pass before freeing the returned node or modifying
+- *    the cds_lfs_node structure. However, no RCU read-side critical
+- *    section is needed around __cds_lfs_pop_all.
++ *    both __cds_lfs_pop and __cds_lfs_pop_all callers must wait for a
++ *    grace period to pass before freeing the returned node or pushing
++ *    the node back into the stack. It is valid to overwrite the content
++ *    of cds_lfs_node immediately after __cds_lfs_pop and
++ *    __cds_lfs_pop_all. No RCU read-side critical section is needed
++ *    around __cds_lfs_pop_all.
+  * 2) Using mutual exclusion (e.g. mutexes) to protect __cds_lfs_pop and
+  *    __cds_lfs_pop_all callers.
+  * 3) Ensuring that only ONE thread can call __cds_lfs_pop() and
+diff --git a/urcu/static/lfstack.h b/urcu/static/lfstack.h
+index 41895a6..7afe71e 100644
+--- a/urcu/static/lfstack.h
++++ b/urcu/static/lfstack.h
+@@ -169,9 +169,13 @@ bool _cds_lfs_push(cds_lfs_stack_ptr_t u_s,
+  * __cds_lfs_pop needs to be synchronized using one of the following
+  * techniques:
+  *
+- * 1) Calling __cds_lfs_pop under rcu read lock critical section. The
+- *    caller must wait for a grace period to pass before freeing the
+- *    returned node or modifying the cds_lfs_node structure.
++ * 1) Calling __cds_lfs_pop under rcu read lock critical section.
++ *    Both __cds_lfs_pop and __cds_lfs_pop_all callers must wait for a
++ *    grace period to pass before freeing the returned node or pushing
++ *    the node back into the stack. It is valid to overwrite the content
++ *    of cds_lfs_node immediately after __cds_lfs_pop and
++ *    __cds_lfs_pop_all. No RCU read-side critical section is needed
++ *    around __cds_lfs_pop_all.
+  * 2) Using mutual exclusion (e.g. mutexes) to protect __cds_lfs_pop
+  *    and __cds_lfs_pop_all callers.
+  * 3) Ensuring that only ONE thread can call __cds_lfs_pop() and
+@@ -213,10 +217,12 @@ struct cds_lfs_node *___cds_lfs_pop(cds_lfs_stack_ptr_t u_s)
+  * matching the technique used to synchronize __cds_lfs_pop:
+  *
+  * 1) If __cds_lfs_pop is called under rcu read lock critical section,
+- *    both __cds_lfs_pop and cds_lfs_pop_all callers must wait for a
+- *    grace period to pass before freeing the returned node or modifying
+- *    the cds_lfs_node structure. However, no RCU read-side critical
+- *    section is needed around __cds_lfs_pop_all.
++ *    both __cds_lfs_pop and __cds_lfs_pop_all callers must wait for a
++ *    grace period to pass before freeing the returned node or pushing
++ *    the node back into the stack. It is valid to overwrite the content
++ *    of cds_lfs_node immediately after __cds_lfs_pop and
++ *    __cds_lfs_pop_all. No RCU read-side critical section is needed
++ *    around __cds_lfs_pop_all.
+  * 2) Using mutual exclusion (e.g. mutexes) to protect __cds_lfs_pop and
+  *    __cds_lfs_pop_all callers.
+  * 3) Ensuring that only ONE thread can call __cds_lfs_pop() and
 -- 
-1.9.1
+2.1.4
