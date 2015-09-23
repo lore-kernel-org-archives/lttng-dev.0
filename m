@@ -1,20 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools v2] Fix: tests: support systems
- where PAGE_SIZE is not 4096
-Date: Wed, 23 Sep 2015 13:42:55 -0400
-Message-ID: <CA+jJMxsFzR55L7Rr+S_OZzrrM-MEdReVS=-r1JPpkx=XWSDYRw__38825.866909656$1443030254$gmane$org@mail.gmail.com>
-References: <1442956485-4540-1-git-send-email-mjeanson@efficios.com>
+From: Mikael Beckius <mikael.beckius@ericsson.com>
+Subject: Sessions are disconnected when disk is full on remote
+	host
+Date: Wed, 23 Sep 2015 09:48:54 +0000
+Message-ID: <FEF43CBBC4664F4D80C53B178C850ADE730271__16873.1102058247$1443033531$gmane$org@ESESSMB305.ericsson.se>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0011826696=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f171.google.com ([209.85.160.171])
+Received: from sesbmg22.ericsson.net ([193.180.251.48])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1Zeo4L-0008O5-DY
- for lttng-dev@lists.lttng.org; Wed, 23 Sep 2015 13:43:05 -0400
-Received: by ykft14 with SMTP id t14so49236770ykf.0
- for <lttng-dev@lists.lttng.org>; Wed, 23 Sep 2015 10:42:56 -0700 (PDT)
-In-Reply-To: <1442956485-4540-1-git-send-email-mjeanson@efficios.com>
+ (envelope-from <mikael.beckius@ericsson.com>) id 1Zegfa-0005sa-Vc
+ for lttng-dev@lists.lttng.org; Wed, 23 Sep 2015 05:49:00 -0400
+Content-Language: sv-SE
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,76 +19,129 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIG1hc3RlciBhbmQgc3RhYmxlLTIuNy4KClRoYW5rcyEKSsOpcsOpbWllCgpPbiBU
-dWUsIFNlcCAyMiwgMjAxNSBhdCA1OjE0IFBNLCBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVm
-ZmljaW9zLmNvbT4gd3JvdGU6Cj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVh
-bnNvbkBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIHRlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvc25hcHNo
-b3RzL3VzdF90ZXN0ICAgICAgICAgIHwgIDUgKy0KPiAgLi4uL3Rvb2xzL3RyYWNlZmlsZS1saW1p
-dHMvdGVzdF90cmFjZWZpbGVfc2l6ZSAgICAgfCA1NiArKysrKysrKysrKysrKysrKysrKystCj4g
-IDIgZmlsZXMgY2hhbmdlZCwgNTggaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKPgo+IGRp
-ZmYgLS1naXQgYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3NuYXBzaG90cy91c3RfdGVzdCBiL3Rl
-c3RzL3JlZ3Jlc3Npb24vdG9vbHMvc25hcHNob3RzL3VzdF90ZXN0Cj4gaW5kZXggZjA1ODQ2Zi4u
-NTRlMWQ4OCAxMDA3NTUKPiAtLS0gYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3NuYXBzaG90cy91
-c3RfdGVzdAo+ICsrKyBiL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvc25hcHNob3RzL3VzdF90ZXN0
-Cj4gQEAgLTE4MSw5ICsxODEsMTIgQEAgZnVuY3Rpb24gdGVzdF91c3RfbG9jYWxfc25hcHNob3Qg
-KCkKPgo+ICBmdW5jdGlvbiB0ZXN0X3VzdF9sb2NhbF9zbmFwc2hvdF9tYXhfc2l6ZSAoKQo+ICB7
-Cj4gLSAgICAgICBzdWJidWZfc2l6ZT04MTkyCj4gKyAgICAgICBwYWdlX3NpemU9YGdldGNvbmYg
-UEFHRV9TSVpFYAo+ICAgICAgICAgbnVtX2NwdXM9YG5wcm9jYAo+Cj4gKyAgICAgICAjIFRoZSBt
-aW5pbXVtIHN1YmJ1ZiBzaXplIGlzIHRoZSBwbGF0Zm9ybSBQQUdFX1NJWkUKPiArICAgICAgIHN1
-YmJ1Zl9zaXplPSQoKCRwYWdlX3NpemUqMikpCj4gKwo+ICAgICAgICAgIyBUaGUgbWluaW11bSBz
-aXplIGxpbWl0IGlzIG1pbihzdWJidWZfc2l6ZSkgKiBuYl9zdHJlYW1zCj4gICAgICAgICBtYXhf
-c2l6ZT0kKCgkc3ViYnVmX3NpemUqJG51bV9jcHVzKSkKPgo+IGRpZmYgLS1naXQgYS90ZXN0cy9y
-ZWdyZXNzaW9uL3Rvb2xzL3RyYWNlZmlsZS1saW1pdHMvdGVzdF90cmFjZWZpbGVfc2l6ZSBiL3Rl
-c3RzL3JlZ3Jlc3Npb24vdG9vbHMvdHJhY2VmaWxlLWxpbWl0cy90ZXN0X3RyYWNlZmlsZV9zaXpl
-Cj4gaW5kZXggOWZlNDYzNy4uODA5NDkwYyAxMDA3NTUKPiAtLS0gYS90ZXN0cy9yZWdyZXNzaW9u
-L3Rvb2xzL3RyYWNlZmlsZS1saW1pdHMvdGVzdF90cmFjZWZpbGVfc2l6ZQo+ICsrKyBiL3Rlc3Rz
-L3JlZ3Jlc3Npb24vdG9vbHMvdHJhY2VmaWxlLWxpbWl0cy90ZXN0X3RyYWNlZmlsZV9zaXplCj4g
-QEAgLTIyLDExICsyMiwxMyBAQCBURVNURElSPSRDVVJESVIvLi4vLi4vLi4KPgo+ICBOUl9JVEVS
-PTEwMDAKPgo+ICtQQUdFX1NJWkU9JChnZXRjb25mIFBBR0VfU0laRSkKPiArCj4gIFRFU1RBUFBf
-UEFUSD0iJFRFU1RESVIvdXRpbHMvdGVzdGFwcCIKPiAgVEVTVEFQUF9OQU1FPSJnZW4tdXN0LWV2
-ZW50cyIKPiAgVEVTVEFQUF9CSU49IiRURVNUQVBQX1BBVEgvJFRFU1RBUFBfTkFNRS8kVEVTVEFQ
-UF9OQU1FIgo+Cj4gLU5VTV9URVNUUz00Mgo+ICtOVU1fVEVTVFM9NTgKPgo+ICBzb3VyY2UgJFRF
-U1RESVIvdXRpbHMvdXRpbHMuc2gKPgo+IEBAIC0xMjgsMTcgKzEzMCw2NyBAQCBmdW5jdGlvbiB0
-ZXN0X3RyYWNlZmlsZV9zaXplX2xpbWl0ICgpCj4gICAgICAgICBybSAtcmYgJHRyYWNlX3BhdGgK
-PiAgfQo+Cj4gK2Z1bmN0aW9uIHRlc3RfdHJhY2VmaWxlX3NpemVfbGltaXRfcGFnZXNpemUgKCkK
-PiArewo+ICsgICAgICAgIyBTZXQgYSBzaXplIGxpbWl0IGxvd2VyIHRoYW4gdGhlIHBhZ2Vfc2l6
-ZQo+ICsgICAgICAgc2l6ZV9saW1pdD0iJCgoJFBBR0VfU0laRS0yKSkiCj4gKyAgICAgICB0cmFj
-ZV9wYXRoPSQobWt0ZW1wIC1kKQo+ICsgICAgICAgc2Vzc2lvbl9uYW1lPSQocmFuZHN0cmluZyAx
-NiAwKQo+ICsgICAgICAgY2hhbm5lbF9uYW1lPSJjaGFubmVsIgo+ICsgICAgICAgZXZlbnRfbmFt
-ZT0idHA6dHB0ZXN0Igo+ICsKPiArICAgICAgIGRpYWcgIlRlc3QgdHJhY2VmaWxlIHNpemUgbGlt
-aXQgbG93ZXIgdGhhbiBQQUdFX1NJWkUgOiAkc2l6ZV9saW1pdCBieXRlcyIKPiArCj4gKyAgICAg
-ICBjcmVhdGVfbHR0bmdfc2Vzc2lvbl9vayAkc2Vzc2lvbl9uYW1lICR0cmFjZV9wYXRoCj4gKwo+
-ICsgICAgICAgZW5hYmxlX2x0dG5nX2NoYW5uZWxfc2l6ZV9saW1pdCBcCj4gKyAgICAgICAgICAg
-JHNlc3Npb25fbmFtZSAkY2hhbm5lbF9uYW1lICRzaXplX2xpbWl0Cj4gKwo+ICsgICAgICAgZW5h
-YmxlX3VzdF9sdHRuZ19ldmVudF9wZXJfY2hhbm5lbCBcCj4gKyAgICAgICAgICAgJHNlc3Npb25f
-bmFtZSAkZXZlbnRfbmFtZSAkY2hhbm5lbF9uYW1lCj4gKwo+ICsgICAgICAgc3RhcnRfbHR0bmdf
-dHJhY2luZ19vayAkc2Vzc2lvbl9uYW1lCj4gKwo+ICsgICAgICAgJFRFU1RBUFBfQklOICROUl9J
-VEVSID4vZGV2L251bGwgMj4mMQo+ICsKPiArICAgICAgIHN0b3BfbHR0bmdfdHJhY2luZ19vayAk
-c2Vzc2lvbl9uYW1lCj4gKwo+ICsgICAgICAgZGVzdHJveV9sdHRuZ19zZXNzaW9uX29rICRzZXNz
-aW9uX25hbWUKPiArCj4gKyAgICAgICAjIFZhbGlkYXRlIGZpbGUgc2l6ZSwgZXhwZWN0IGZpbGUg
-c2l6ZSB0byBiZSBlcXVhbCB0byB0aGUgcGFnZSBzaXplCj4gKwo+ICsgICAgICAgY2hlY2tfZmls
-ZV9zaXplICR0cmFjZV9wYXRoICIke2NoYW5uZWxfbmFtZX1fKiIgJFBBR0VfU0laRQo+ICsKPiAr
-ICAgICAgICMgVmFsaWRhdGUgdHJhY2luZyBkYXRhLCB3ZSBzaG91bGQgYXQgbGVhc3QgaGF2ZSBz
-b21lIGV2ZW50cwo+ICsKPiArICAgICAgIHZhbGlkYXRlX3RyYWNlICRldmVudF9uYW1lICR0cmFj
-ZV9wYXRoCj4gKwo+ICsgICAgICAgcm0gLXJmICR0cmFjZV9wYXRoCj4gK30KPiArCj4gIHBsYW5f
-dGVzdHMgJE5VTV9URVNUUwo+Cj4gIHByaW50X3Rlc3RfYmFubmVyICIkVEVTVF9ERVNDIgo+Cj4g
-IHN0YXJ0X2x0dG5nX3Nlc3Npb25kCj4KPiAtTElNSVRTPSgiNDA5NiIgIjgxOTIiICIxNjM4NCIg
-IjMyNzY4IiAiNjU1MzYiKQo+ICsjIFRlc3Qgd2l0aCBtdWx0aXBsZXMgb2YgUEFHRV9TSVpFCj4g
-K0xJTUlUUz0oIiQoKCRQQUdFX1NJWkUpKSIKPiArICAgICAgICIkKCgkUEFHRV9TSVpFKjIpKSIK
-PiArICAgICAgICIkKCgkUEFHRV9TSVpFKjQpKSIKPiArICAgICAgICIkKCgkUEFHRV9TSVpFKjgp
-KSIKPiArICAgICAgICIkKCgkUEFHRV9TSVpFKjE2KSkiCj4gKyAgICAgICAiJCgoJFBBR0VfU0la
-RSozMikpIikKPgo+ICBmb3IgbGltaXQgaW4gJHtMSU1JVFNbQF19Owo+ICBkbwo+ICAgICAgICAg
-dGVzdF90cmFjZWZpbGVfc2l6ZV9saW1pdCAkbGltaXQKPiAgZG9uZQo+Cj4gKyMgVGVzdCB3aXRo
-IGEgdmFsdWUgdGhhdCBpcyBub3QgYSBtdWx0aXBsZSBvZiBQQUdFX1NJWkUKPiArdGVzdF90cmFj
-ZWZpbGVfc2l6ZV9saW1pdCAiJCgoJFBBR0VfU0laRSsxMDI0KSkiCj4gKwo+ICsjIFRlc3QgdGhh
-dCBhIHZhbHVlIGxvd2VyIHRoYW4gdGhlIFBBR0VfU0laRSBpcyByb3VuZGVkIHRvIGl0Cj4gK3Rl
-c3RfdHJhY2VmaWxlX3NpemVfbGltaXRfcGFnZXNpemUKPiArCj4gIHN0b3BfbHR0bmdfc2Vzc2lv
-bmQKPiAtLQo+IDEuOS4xCj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5j
-LgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
-L2x0dG5nLWRldgo=
+--===============0011826696==
+Content-Language: sv-SE
+Content-Type: multipart/alternative;
+	boundary="_000_FEF43CBBC4664F4D80C53B178C850ADE730271ESESSMB305ericsso_"
+
+--_000_FEF43CBBC4664F4D80C53B178C850ADE730271ESESSMB305ericsso_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Hello!
+
+I am trying to verify the expected behaviour in the event a machine hosting=
+ an lttng relay daemon runs out of disk space.
+
+Currently it appears from testing and inspecting the source code that whene=
+ver the lttng relay daemon hits an error caused by the lack of disk space a=
+ll failing sessions will be disconnected. It also appears that the only way=
+ to recover from this situation once disk space has been restored is to rec=
+reate all the disconnected sessions.
+
+I have also played around with different combinations of the below lttng en=
+able-channel options:
+--discard
+--overwrite
+--tracefile-count <trace file count>
+--tracefile-size <trace file size>
+
+The initial channel configuration was using the options --tracefile-count -=
+-tracefile-size but both were abandoned as Babeltrace faced constant stream=
+ing errors during heavy live tracing and now the trace files are growing co=
+ntinuously until there is no available disk space.
+
+I assume that --overwrite would not make any difference compared to --disca=
+rd with regards to a disk full scenario. Even if you specify --tracefile-co=
+unt and --tracefile-size to limit the amount of trace data from a single se=
+ssion you may still face the same issue with disconnected sessions if you f=
+or some reason run out of disk space.
+
+Testing was carried out on the latest 2.6 releases and all sessions were li=
+ve sessions.
+
+So my questions are:
+- Is there any way to keep sessions alive even if you run out of disk space=
+?
+- How can you clean up old traces once you have collected them without recr=
+eating sessions?
+
+Micke
+
+--_000_FEF43CBBC4664F4D80C53B178C850ADE730271ESESSMB305ericsso_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html dir=3D"ltr">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style id=3D"owaParaStyle" type=3D"text/css">P {margin-top:0;margin-bottom:=
+0;}</style>
+</head>
+<body ocsi=3D"0" fpstyle=3D"1">
+<div style=3D"direction: ltr;font-family: Tahoma;color: #000000;font-size: =
+10pt;">Hello!<br>
+<br>
+I am trying to verify the expected behaviour in the event a machine hosting=
+ an lttng relay daemon runs out of disk space.<br>
+<br>
+Currently it appears from testing and inspecting the source code that whene=
+ver the lttng relay daemon hits an error caused by the lack of disk space a=
+ll failing sessions will be disconnected. It also appears that the only way=
+ to recover from this situation
+ once disk space has been restored is to recreate all the disconnected sess=
+ions.<br>
+<br>
+I have also played around with different combinations of the below lttng en=
+able-channel options:<br>
+--discard<br>
+--overwrite<br>
+--tracefile-count &lt;trace file count&gt;<br>
+--tracefile-size &lt;trace file size&gt;<br>
+<br>
+The initial channel configuration was using the options --tracefile-count -=
+-tracefile-size but both were abandoned as Babeltrace faced constant stream=
+ing errors during heavy live tracing and now the trace files are growing co=
+ntinuously until there is no available
+ disk space.<br>
+<br>
+I assume that --overwrite would not make any difference compared to --disca=
+rd with regards to a disk full scenario. Even if you specify --tracefile-co=
+unt and --tracefile-size to limit the amount of trace data from a single se=
+ssion you may still face the same
+ issue with disconnected sessions if you for some reason run out of disk sp=
+ace.<br>
+<br>
+Testing was carried out on the latest 2.6 releases and all sessions were li=
+ve sessions.<br>
+<br>
+So my questions are:<br>
+- Is there any way to keep sessions alive even if you run out of disk space=
+?<br>
+- How can you clean up old traces once you have collected them without recr=
+eating sessions?<br>
+<br>
+Micke<br>
+</div>
+</body>
+</html>
+
+--_000_FEF43CBBC4664F4D80C53B178C850ADE730271ESESSMB305ericsso_--
+
+
+--===============0011826696==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0011826696==--
