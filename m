@@ -1,117 +1,176 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.7.0 (Linux kernel tracer)
-Date: Thu, 24 Sep 2015 21:13:02 +0000 (UTC)
-Message-ID: <376912304.4227.1443129182973.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng-UST 2.7.0 (Linux user-space tracer)
+Date: Thu, 24 Sep 2015 21:39:48 +0000 (UTC)
+Message-ID: <2085167955.4275.1443130788530.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 Return-path: <linux-kernel-owner@vger.kernel.org>
 Sender: linux-kernel-owner@vger.kernel.org
-To: lttng-dev <lttng-dev@lists.lttng.org>, LKML <linux-kernel@vger.kernel.org>
+To: lttng-dev@lists.lttng.org, LKML <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
 Hi,
 
-I am proud to announce the 2.7.0 release of LTTng modules! LTTng
-modules provide Linux kernel tracing capability to the LTTng 2.x
-tracer toolset. I would like to remind everyone that *no* patching
-of the Linux kernel is required whatsoever to use LTTng modules.
-It has been like this since 2010, but for some reason we still
-get this question.
+I hereby announce the release of LTTng-UST 2.7.0. LTTng-UST is a
+low-overhead application tracer for Linux. The library "liblttng-ust"
+enables tracing of applications and libraries.
 
-Here is what is new and noteworthy in LTTng modules 2.7:
+Here is what is new and noteworthy in LTTng-UST 2.7:
 
-* Supports Linux kernels up to and including 4.3-rc2,
 
-* New PID tracker: specify which process IDs you want to trace,
-  (also available with the lttng-ust user-space tracer)
+* tracelog() instrumentation facility. Excerpt from lttng-ust(3):
 
-The new "track" and "untrack" commands allows the tracking of events associated
+USAGE WITH TRACELOG
+       If you want to migrate existing logging (info, errors, ...)   to=
+  LTTng
+       UST, you can use the tracelog() interface.  To do it, in a nutsh=
+ell:
+
+       1) #include <lttng/tracelog.h>
+
+       2) /* in your code, use like a printf, with extra loglevel info.=
+ */
+          tracelog(TRACE_INFO, "Message with integer %d", 1234);
+
+       3) Link your program against liblttng-ust.so.
+
+       4)  Enable  UST events when tracing with the following sequence =
+of com=E2=80=90
+       mands
+          from lttng-tools:
+
+          lttng create
+          lttng enable-event -u "lttng_ust_tracelog:*"
+          lttng start
+          [... run your program ...]
+          lttng stop
+          lttng view
+
+       That's it!
+
+       You can replace  the  enable-event  line  above  with  a  select=
+ion  of
+       loglevels, e.g.:
+
+          lttng enable-event -u -a --loglevel TRACE_INFO
+
+       Which  will  gather  all  events  from  TRACE_INFO  and  more im=
+portant
+       loglevels.
+
+
+* File-backed user space buffers
+
+This feature allows mapping ring buffer into filesystems. Useful in com=
+bination
+with pramfs or DAX+pmem (kernels 4.0+ for DAX and 4.1+ for pmem) to kee=
+p tracer
+ring buffers around in persistent memory upon system reboot.
+
+These buffers can be salvaged and converted to regular CTF traces using=
+ the
+newly introduced lttng-crash utility to see the events that led to a cr=
+ash.
+
+How to use it:
+
+[ mount dax-enabled FS backed by pmem block device... ]
+
+$ lttng create my_session --shm-path=3D/path/to/dax/fs/
+$ lttng enable-event --userspace --all
+$ lttng start
+[ do some UST tracing ]
+
+[ run kexec to reboot, mount dax-enabled FS again... ]
+
+# View or convert trace to CTF with lttng-crash:
+
+$ lttng-crash /path/to/dax/fs/my_session*
+
+
+* Process ID (PID) tracker
+
+The new "track" and "untrack" commands allows the tracking of events as=
+sociated
 with specific PIDs, both in user space and kernel space.
 
-For example, the following commands may be used to track all kernel events
+=46or example, the following commands may be used to track all user spa=
+ce events
 of PID "1234":
-
 $ lttng create my_session
-$ lttng track --kernel --pid 1234
-$ lttng enable-event --kernel --all
+$ lttng track --userspace --pid 1234
+$ lttng enable-event --userspace --all
 $ lttng start
 
 
-* Filtering is now implemented for kernel tracing. It can be used
-  through the same UI and API as with lttng-ust.
+* Python logging support
 
-While LTTng-UST has provided support for event filtering for a long time,
-it was not possible to perform kernel-side event filtering until now. As
-of this version, kernel space filters can be used in the same way as user
-space filters.
-
-For instance, to trace only read() syscalls requesting more than 100 bytes:
-
-$ lttng create my_session
-$ lttng enable-event --kernel --syscall read --filter "count > 100"
-$ lttng start
-
-
-* Added $ctx.cpu_id context for filtering (note: also available in
-  lttng-ust now),
-
-How to use:
+=46ollowing in the footsteps of the Java Util Logging and Log4J logging=
+ backend
+support, which were introduced as part of LTTng 2.4 and LTTng 2.6 respe=
+ctively,
+this new version adds support for the Python logging backend. This mean=
+s that
+logging statements emitted by the Python logging module can now be coll=
+ected as
+part of user space traces by enabling events from the "python" domain.
 
 $ lttng create my_session
-$ lttng enable-event --kernel --all --filter '$ctx.cpu_id<2'
+$ lttng enable-event --python --all
 $ lttng start
 
+The lttngust Python module is provided as part of LTTng-UST 2.7.
+https://github.com/lttng/lttng-ust/tree/master/liblttng-ust-python-agen=
+t
 
-* New clock source plugin support. User-provide clock source
-  override can be provided as a kernel module,
+
+* getcpu and clock plugin support.
 
 In the interest of keeping LTTng as unintrusive as possible, LTTng 2.7
 introduces support for platform-specific plug-ins providing custom
-clock sources.
+implementations of getcpu() (user space) and clock sources for both ker=
+nel and
+user space tracers.
 
-Clock override plugins, which may be implemented as kernel modules may
-prove useful in cases where direct hardware access to architecture-specific
-clocks is available, and when it should be used in place of the Linux
-kernel Monotonic clock.
+getcpu override plugins can prove useful in cases where direct hardware=
+ access
+is available for architecture-specific registers storing the CPU number=
+, and
+where those should be used instead of the Linux kernel sched_getcpu()
+vDSO/syscall.
 
+Clock override plugins, which may be implemented as shared objects (use=
+r space)
+or kernel modules (kernel space) may prove useful in cases where direct
+hardware access to architecture-specific clocks is available, and when =
+it should
+be used in place of the Linux kernel Monotonic clock.
 
-* Wildcard support now available: can now specify e.g. 'sched_*'
-  to enable all scheduler events. Similar UI/API as lttng-ust.
-
-Support for wildcards in event names is another feature that has been brought
-from the user space tracer to the kernel tracer. This means that groups of
-kernel space events can be enabled at once using the wildcard notation.
-Moreover, it makes it possible to enable events belonging to loadable modules
-before said modules are loaded.
-
-The tracing of all block device or scheduling events can be enabled using a
-single command:
-
-$ lttng enable-event --kernel 'block_*'
-or
-$ lttng enable-event --kernel 'sched_*'
-
-Changelog since 2.7.0-rc2:
-
-2015-09-24 LTTng modules 2.7.0
-        * Fix: writeback instrumentation update for 4.3 Linux kernel
-        * Fix: update sched wakeup instrumentation for 4.3 kernel
-        * Fix: lttng-test build failure for kernels < 3.0
 
 Project website: http://lttng.org
 Documentation: http://lttng.org/docs
 Download link: http://lttng.org/download
 
-Enjoy this release!
+Changelog since 2.7.0-rc2:
 
-Feedback is welcome,
+2015-09-24 lttng-ust 2.7.0
+        * Fix: don't dereference NULL pointers
+        * Cleanup: Remove unused values
+        * Fix: Value stored to 'has_waited' is never read
+        * Fix: Argument with 'nonnull' attribute passed null
+        * Cleanup: Unnecessary bit shift
+        * Fix: sysconf() unchecked return value
+        * doc: add Python example
+        * Fix: Python agent: do not register twice to same port
+
+Enjoy this release!
 
 Thanks,
 
 Mathieu
 
--- 
+--=20
 Mathieu Desnoyers
 EfficiOS Inc.
 http://www.efficios.com
