@@ -1,32 +1,15 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.6.4
-Date: Thu, 24 Sep 2015 20:40:57 +0000 (UTC)
-Message-ID: <557479491.4127.1443127257765.JavaMail.zimbra__42121.337055187$1443127337$gmane$org@efficios.com>
+Subject: [EOL] LTTng stable-2.5 reaches end of life
+Date: Thu, 24 Sep 2015 20:47:18 +0000 (UTC)
+Message-ID: <947942872.4154.1443127638650.JavaMail.zimbra__18208.9626127437$1443127705$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZfDKK-000886-46
- for lttng-dev@lists.lttng.org; Thu, 24 Sep 2015 16:41:14 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 61F9234048A
- for <lttng-dev@lists.lttng.org>; Thu, 24 Sep 2015 20:41:07 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id ii5lVHqppB7G for <lttng-dev@lists.lttng.org>;
- Thu, 24 Sep 2015 20:40:58 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 20EB2340494
- for <lttng-dev@lists.lttng.org>; Thu, 24 Sep 2015 20:40:58 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id EEd41qP4ejkC for <lttng-dev@lists.lttng.org>;
- Thu, 24 Sep 2015 20:40:58 +0000 (UTC)
-Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
- by mail.efficios.com (Postfix) with ESMTP id EB7CE340490
- for <lttng-dev@lists.lttng.org>; Thu, 24 Sep 2015 20:40:57 +0000 (UTC)
+ (envelope-from <compudj@efficios.com>) id 1ZfDQQ-0008BO-E8
+ for lttng-dev@lists.lttng.org; Thu, 24 Sep 2015 16:47:31 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -35,28 +18,27 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer, is
-port of the low-overhead tracing capabilities of the LTTng kernel tracer
-to user-space. The library "liblttng-ust" enables tracing of
-applications and libraries.
+Hi,
 
-This is a small bugfix release of the lttng-ust stable-2.6 branch. It
-includes fixes for bugs identified by static analyzers.
+As of today, date of the LTTng 2.7.0 release, the 2.5 series
+of LTTng is now reaching end of life. There will be no support
+provided by the maintainers, nor further fixes for this stable
+branch.
 
-Changelog:
-2015-09-24 lttng-ust 2.6.4
-        * Fix: don't dereference NULL pointers
-        * Cleanup: Remove unused values
-        * Fix: Value stored to 'has_waited' is never read
-        * Fix: Argument with 'nonnull' attribute passed null
-        * Fix: sysconf() unchecked return value
+The last versions of the stable-2.5 are as follows:
+lttng-ust: 2.5.7
+lttng-modules: 2.5.6
+lttng-tools: 2.5.5 (to be released today)
 
-Project website: http://lttng.org
-Documentation: http://lttng.org/docs
-Download link: http://lttng.org/download
+You are encouraged to upgrade to LTTng 2.7.
+
+Thanks,
+
+Mathieu
 
 -- 
 Mathieu Desnoyers
