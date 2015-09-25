@@ -1,20 +1,36 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Sessions are disconnected when disk is full on
-	remote host
-Date: Fri, 25 Sep 2015 15:50:55 -0400
-Message-ID: <CA+jJMxsAFJ+MgYYRxhcJUuoyUT8bUWfuiH6WJXSPyVg65zLGWw__45004.1207987399$1443210713$gmane$org@mail.gmail.com>
-References: <FEF43CBBC4664F4D80C53B178C850ADE730271@ESESSMB305.ericsson.se>
+From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
+Subject: Re: Difficulty in viewing kerne traces
+Date: Fri, 25 Sep 2015 15:55:48 -0400
+Message-ID: <5605A6C4.8030505__23892.7747276195$1443211014$gmane$org@efficios.com>
+References: <CAAYE7VVeRWOe7Sn2gGBKgNpcD_3ng++Ookfn75LXGnyxJdWeEQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f182.google.com ([209.85.160.182])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZfZ1K-0006o7-1f
- for lttng-dev@lists.lttng.org; Fri, 25 Sep 2015 15:51:04 -0400
-Received: by ykdt18 with SMTP id t18so125070707ykd.3
- for <lttng-dev@lists.lttng.org>; Fri, 25 Sep 2015 12:50:56 -0700 (PDT)
-In-Reply-To: <FEF43CBBC4664F4D80C53B178C850ADE730271@ESESSMB305.ericsson.se>
+ (envelope-from <Jonathan.rajotte-julien@efficios.com>)
+ id 1ZfZ65-0006rG-6W
+ for lttng-dev@lists.lttng.org; Fri, 25 Sep 2015 15:55:58 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 17BB53404CB
+ for <lttng-dev@lists.lttng.org>; Fri, 25 Sep 2015 19:55:52 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id tPT4it-Z1CHo for <lttng-dev@lists.lttng.org>;
+ Fri, 25 Sep 2015 19:55:50 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 958763404CF
+ for <lttng-dev@lists.lttng.org>; Fri, 25 Sep 2015 19:55:50 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id CgiQhh_pj2B2 for <lttng-dev@lists.lttng.org>;
+ Fri, 25 Sep 2015 19:55:50 +0000 (UTC)
+Received: from [172.16.0.141] (cable-192.222.213.99.electronicbox.net
+ [192.222.213.99])
+ by mail.efficios.com (Postfix) with ESMTPSA id 4309D3404CB
+ for <lttng-dev@lists.lttng.org>; Fri, 25 Sep 2015 19:55:50 +0000 (UTC)
+In-Reply-To: <CAAYE7VVeRWOe7Sn2gGBKgNpcD_3ng++Ookfn75LXGnyxJdWeEQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,51 +39,49 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mikael Beckius <mikael.beckius@ericsson.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gV2VkLCBTZXAgMjMsIDIwMTUgYXQgNTo0OCBBTSwgTWlrYWVsIEJlY2tpdXMKPG1pa2FlbC5i
-ZWNraXVzQGVyaWNzc29uLmNvbT4gd3JvdGU6Cj4gSGVsbG8hCj4KPiBJIGFtIHRyeWluZyB0byB2
-ZXJpZnkgdGhlIGV4cGVjdGVkIGJlaGF2aW91ciBpbiB0aGUgZXZlbnQgYSBtYWNoaW5lIGhvc3Rp
-bmcKPiBhbiBsdHRuZyByZWxheSBkYWVtb24gcnVucyBvdXQgb2YgZGlzayBzcGFjZS4KPgo+IEN1
-cnJlbnRseSBpdCBhcHBlYXJzIGZyb20gdGVzdGluZyBhbmQgaW5zcGVjdGluZyB0aGUgc291cmNl
-IGNvZGUgdGhhdAo+IHdoZW5ldmVyIHRoZSBsdHRuZyByZWxheSBkYWVtb24gaGl0cyBhbiBlcnJv
-ciBjYXVzZWQgYnkgdGhlIGxhY2sgb2YgZGlzawo+IHNwYWNlIGFsbCBmYWlsaW5nIHNlc3Npb25z
-IHdpbGwgYmUgZGlzY29ubmVjdGVkLiBJdCBhbHNvIGFwcGVhcnMgdGhhdCB0aGUKPiBvbmx5IHdh
-eSB0byByZWNvdmVyIGZyb20gdGhpcyBzaXR1YXRpb24gb25jZSBkaXNrIHNwYWNlIGhhcyBiZWVu
-IHJlc3RvcmVkIGlzCj4gdG8gcmVjcmVhdGUgYWxsIHRoZSBkaXNjb25uZWN0ZWQgc2Vzc2lvbnMu
-Cj4KPiBJIGhhdmUgYWxzbyBwbGF5ZWQgYXJvdW5kIHdpdGggZGlmZmVyZW50IGNvbWJpbmF0aW9u
-cyBvZiB0aGUgYmVsb3cgbHR0bmcKPiBlbmFibGUtY2hhbm5lbCBvcHRpb25zOgo+IC0tZGlzY2Fy
-ZAo+IC0tb3ZlcndyaXRlCj4gLS10cmFjZWZpbGUtY291bnQgPHRyYWNlIGZpbGUgY291bnQ+Cj4g
-LS10cmFjZWZpbGUtc2l6ZSA8dHJhY2UgZmlsZSBzaXplPgo+Cj4gVGhlIGluaXRpYWwgY2hhbm5l
-bCBjb25maWd1cmF0aW9uIHdhcyB1c2luZyB0aGUgb3B0aW9ucyAtLXRyYWNlZmlsZS1jb3VudAo+
-IC0tdHJhY2VmaWxlLXNpemUgYnV0IGJvdGggd2VyZSBhYmFuZG9uZWQgYXMgQmFiZWx0cmFjZSBm
-YWNlZCBjb25zdGFudAo+IHN0cmVhbWluZyBlcnJvcnMgZHVyaW5nIGhlYXZ5IGxpdmUgdHJhY2lu
-ZyBhbmQgbm93IHRoZSB0cmFjZSBmaWxlcyBhcmUKPiBncm93aW5nIGNvbnRpbnVvdXNseSB1bnRp
-bCB0aGVyZSBpcyBubyBhdmFpbGFibGUgZGlzayBzcGFjZS4KPgo+IEkgYXNzdW1lIHRoYXQgLS1v
-dmVyd3JpdGUgd291bGQgbm90IG1ha2UgYW55IGRpZmZlcmVuY2UgY29tcGFyZWQgdG8KPiAtLWRp
-c2NhcmQgd2l0aCByZWdhcmRzIHRvIGEgZGlzayBmdWxsIHNjZW5hcmlvLiBFdmVuIGlmIHlvdSBz
-cGVjaWZ5Cj4gLS10cmFjZWZpbGUtY291bnQgYW5kIC0tdHJhY2VmaWxlLXNpemUgdG8gbGltaXQg
-dGhlIGFtb3VudCBvZiB0cmFjZSBkYXRhCj4gZnJvbSBhIHNpbmdsZSBzZXNzaW9uIHlvdSBtYXkg
-c3RpbGwgZmFjZSB0aGUgc2FtZSBpc3N1ZSB3aXRoIGRpc2Nvbm5lY3RlZAo+IHNlc3Npb25zIGlm
-IHlvdSBmb3Igc29tZSByZWFzb24gcnVuIG91dCBvZiBkaXNrIHNwYWNlLgo+Cj4gVGVzdGluZyB3
-YXMgY2FycmllZCBvdXQgb24gdGhlIGxhdGVzdCAyLjYgcmVsZWFzZXMgYW5kIGFsbCBzZXNzaW9u
-cyB3ZXJlCj4gbGl2ZSBzZXNzaW9ucy4KPgo+IFNvIG15IHF1ZXN0aW9ucyBhcmU6Cj4gLSBJcyB0
-aGVyZSBhbnkgd2F5IHRvIGtlZXAgc2Vzc2lvbnMgYWxpdmUgZXZlbiBpZiB5b3UgcnVuIG91dCBv
-ZiBkaXNrIHNwYWNlPwo+IC0gSG93IGNhbiB5b3UgY2xlYW4gdXAgb2xkIHRyYWNlcyBvbmNlIHlv
-dSBoYXZlIGNvbGxlY3RlZCB0aGVtIHdpdGhvdXQKPiByZWNyZWF0aW5nIHNlc3Npb25zPwoKSGkg
-TWlrYWVsLAoKTFRUbmcgY3VycmVudGx5IGRvZXNuJ3Qgc3VwcG9ydCB0aGVzZSByZWNvdmVyeSBt
-b2Rlcy4KCkhvd2V2ZXIsIHRoZSBmaWxlIHJvdGF0aW9uIGlzc3VlcyB5b3UgbWVudGlvbmVkIHNo
-b3VsZCBiZSByZXNvbHZlZCBpbgpsdHRuZy10b29scyAyLjYuMS4gQW55IGNoYW5jZSB5b3UgY2Fu
-IGdpdmUgaXQgYSB0cnk/ClRoZSB3ZWJzaXRlIHdpbGwgYmUgdXBkYXRlZCBsYXRlciB0b2RheS4g
-SW4gdGhlIG1lYW50aW1lLCBoZXJlJ3MgYQpkaXJlY3QgbGluayB0byB0aGUgcmVsZWFzZToKCmh0
-dHBzOi8vbHR0bmcub3JnL2ZpbGVzL2x0dG5nLXRvb2xzL2x0dG5nLXRvb2xzLTIuNi4xLnRhci5i
-ejIKClJlZ2FyZHMsCkrDqXLDqW1pZQoKPgo+IE1pY2tlCj4KPiBfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBs
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
-L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUK
-RWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
-Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
-bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi Sheetal,
+
+It looks like you are missing libuuid.
+
+ From the README:
+To compile Babeltrace, you will need:
+...
+          uuid development libraries
+              (Debian : uuid-dev)
+              (Fedora : uuid-devel)
+
+Cheers!
+
+
+On 2015-09-25 05:38 AM, Sheetal Chawla wrote:
+> SIr/Madam,
+>
+> We are working on a project that involves kernel traces. So we are 
+> using LTTng as a tool. We are not able to view the kernel traces using 
+> babeltrace as we are getting the following errors while doing 
+> ./configure for babeltrace
+>
+> *checking for uuid_generate in -luuid... no
+> checking for uuid_create in -lc... no
+> configure: error: Cannot find libuuid uuid_generate nor libc 
+> uuid_create. Use LDFLAGS=-Ldir to specify their location.*
+>
+> Kindly help us with the difficulty.
+> Your reply will be of great value to us.
+>
+> Thanking You
+> Regards,
+> Sheetal Chawla
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Jonathan R. Julien
+Efficios
