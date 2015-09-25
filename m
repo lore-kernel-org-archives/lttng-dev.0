@@ -1,16 +1,20 @@
-From: Sheetal Chawla <sheetalchawla2608@gmail.com>
-Subject: Difficulty in viewing kerne traces
-Date: Fri, 25 Sep 2015 15:08:36 +0530
-Message-ID: <CAAYE7VVeRWOe7Sn2gGBKgNpcD_3ng++Ookfn75LXGnyxJdWeEQ__4178.10648582435$1443210099$gmane$org@mail.gmail.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Sessions are disconnected when disk is full on
+	remote host
+Date: Fri, 25 Sep 2015 15:50:55 -0400
+Message-ID: <CA+jJMxsAFJ+MgYYRxhcJUuoyUT8bUWfuiH6WJXSPyVg65zLGWw__45004.1207987399$1443210713$gmane$org@mail.gmail.com>
+References: <FEF43CBBC4664F4D80C53B178C850ADE730271@ESESSMB305.ericsson.se>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0886963810=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-io0-f177.google.com ([209.85.223.177])
+Received: from mail-yk0-f182.google.com ([209.85.160.182])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <sheetalchawla2608@gmail.com>) id 1ZfPSk-0003cY-9T
- for lttng-dev@lists.lttng.org; Fri, 25 Sep 2015 05:38:45 -0400
-Received: by ioiz6 with SMTP id z6so104529620ioi.2
- for <lttng-dev@lists.lttng.org>; Fri, 25 Sep 2015 02:38:36 -0700 (PDT)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZfZ1K-0006o7-1f
+ for lttng-dev@lists.lttng.org; Fri, 25 Sep 2015 15:51:04 -0400
+Received: by ykdt18 with SMTP id t18so125070707ykd.3
+ for <lttng-dev@lists.lttng.org>; Fri, 25 Sep 2015 12:50:56 -0700 (PDT)
+In-Reply-To: <FEF43CBBC4664F4D80C53B178C850ADE730271@ESESSMB305.ericsson.se>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,62 +23,51 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Mikael Beckius <mikael.beckius@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0886963810==
-Content-Type: multipart/alternative; boundary=001a113f7fe8a7394205208f1c04
-
---001a113f7fe8a7394205208f1c04
-Content-Type: text/plain; charset=UTF-8
-
-SIr/Madam,
-
-We are working on a project that involves kernel traces. So we are using
-LTTng as a tool. We are not able to view the kernel traces using babeltrace
-as we are getting the following errors while doing ./configure for
-babeltrace
-
-
-
-*checking for uuid_generate in -luuid... nochecking for uuid_create in
--lc... noconfigure: error: Cannot find libuuid uuid_generate nor libc
-uuid_create. Use LDFLAGS=-Ldir to specify their location.*
-
-Kindly help us with the difficulty.
-Your reply will be of great value to us.
-
-Thanking You
-Regards,
-Sheetal Chawla
-
---001a113f7fe8a7394205208f1c04
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div><div><div><div><div><div>SIr/Madam,<br><br></div>We a=
-re working on a project that involves kernel traces. So we are using LTTng =
-as a tool. We are not able to view the kernel traces using babeltrace as we=
- are getting the following errors while doing ./configure for babeltrace<br=
-><br><b>checking for uuid_generate in -luuid... no<br>checking for uuid_cre=
-ate in -lc... no<br>configure: error: Cannot find libuuid uuid_generate nor=
- libc uuid_create. Use LDFLAGS=3D-Ldir to specify their location.</b><br><b=
-r></div>Kindly help us with the difficulty.<br></div>Your reply will be of =
-great value to us.<br><br></div>Thanking You<br></div>Regards,<br></div>She=
-etal Chawla<br></div>
-
---001a113f7fe8a7394205208f1c04--
-
-
---===============0886963810==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0886963810==--
+T24gV2VkLCBTZXAgMjMsIDIwMTUgYXQgNTo0OCBBTSwgTWlrYWVsIEJlY2tpdXMKPG1pa2FlbC5i
+ZWNraXVzQGVyaWNzc29uLmNvbT4gd3JvdGU6Cj4gSGVsbG8hCj4KPiBJIGFtIHRyeWluZyB0byB2
+ZXJpZnkgdGhlIGV4cGVjdGVkIGJlaGF2aW91ciBpbiB0aGUgZXZlbnQgYSBtYWNoaW5lIGhvc3Rp
+bmcKPiBhbiBsdHRuZyByZWxheSBkYWVtb24gcnVucyBvdXQgb2YgZGlzayBzcGFjZS4KPgo+IEN1
+cnJlbnRseSBpdCBhcHBlYXJzIGZyb20gdGVzdGluZyBhbmQgaW5zcGVjdGluZyB0aGUgc291cmNl
+IGNvZGUgdGhhdAo+IHdoZW5ldmVyIHRoZSBsdHRuZyByZWxheSBkYWVtb24gaGl0cyBhbiBlcnJv
+ciBjYXVzZWQgYnkgdGhlIGxhY2sgb2YgZGlzawo+IHNwYWNlIGFsbCBmYWlsaW5nIHNlc3Npb25z
+IHdpbGwgYmUgZGlzY29ubmVjdGVkLiBJdCBhbHNvIGFwcGVhcnMgdGhhdCB0aGUKPiBvbmx5IHdh
+eSB0byByZWNvdmVyIGZyb20gdGhpcyBzaXR1YXRpb24gb25jZSBkaXNrIHNwYWNlIGhhcyBiZWVu
+IHJlc3RvcmVkIGlzCj4gdG8gcmVjcmVhdGUgYWxsIHRoZSBkaXNjb25uZWN0ZWQgc2Vzc2lvbnMu
+Cj4KPiBJIGhhdmUgYWxzbyBwbGF5ZWQgYXJvdW5kIHdpdGggZGlmZmVyZW50IGNvbWJpbmF0aW9u
+cyBvZiB0aGUgYmVsb3cgbHR0bmcKPiBlbmFibGUtY2hhbm5lbCBvcHRpb25zOgo+IC0tZGlzY2Fy
+ZAo+IC0tb3ZlcndyaXRlCj4gLS10cmFjZWZpbGUtY291bnQgPHRyYWNlIGZpbGUgY291bnQ+Cj4g
+LS10cmFjZWZpbGUtc2l6ZSA8dHJhY2UgZmlsZSBzaXplPgo+Cj4gVGhlIGluaXRpYWwgY2hhbm5l
+bCBjb25maWd1cmF0aW9uIHdhcyB1c2luZyB0aGUgb3B0aW9ucyAtLXRyYWNlZmlsZS1jb3VudAo+
+IC0tdHJhY2VmaWxlLXNpemUgYnV0IGJvdGggd2VyZSBhYmFuZG9uZWQgYXMgQmFiZWx0cmFjZSBm
+YWNlZCBjb25zdGFudAo+IHN0cmVhbWluZyBlcnJvcnMgZHVyaW5nIGhlYXZ5IGxpdmUgdHJhY2lu
+ZyBhbmQgbm93IHRoZSB0cmFjZSBmaWxlcyBhcmUKPiBncm93aW5nIGNvbnRpbnVvdXNseSB1bnRp
+bCB0aGVyZSBpcyBubyBhdmFpbGFibGUgZGlzayBzcGFjZS4KPgo+IEkgYXNzdW1lIHRoYXQgLS1v
+dmVyd3JpdGUgd291bGQgbm90IG1ha2UgYW55IGRpZmZlcmVuY2UgY29tcGFyZWQgdG8KPiAtLWRp
+c2NhcmQgd2l0aCByZWdhcmRzIHRvIGEgZGlzayBmdWxsIHNjZW5hcmlvLiBFdmVuIGlmIHlvdSBz
+cGVjaWZ5Cj4gLS10cmFjZWZpbGUtY291bnQgYW5kIC0tdHJhY2VmaWxlLXNpemUgdG8gbGltaXQg
+dGhlIGFtb3VudCBvZiB0cmFjZSBkYXRhCj4gZnJvbSBhIHNpbmdsZSBzZXNzaW9uIHlvdSBtYXkg
+c3RpbGwgZmFjZSB0aGUgc2FtZSBpc3N1ZSB3aXRoIGRpc2Nvbm5lY3RlZAo+IHNlc3Npb25zIGlm
+IHlvdSBmb3Igc29tZSByZWFzb24gcnVuIG91dCBvZiBkaXNrIHNwYWNlLgo+Cj4gVGVzdGluZyB3
+YXMgY2FycmllZCBvdXQgb24gdGhlIGxhdGVzdCAyLjYgcmVsZWFzZXMgYW5kIGFsbCBzZXNzaW9u
+cyB3ZXJlCj4gbGl2ZSBzZXNzaW9ucy4KPgo+IFNvIG15IHF1ZXN0aW9ucyBhcmU6Cj4gLSBJcyB0
+aGVyZSBhbnkgd2F5IHRvIGtlZXAgc2Vzc2lvbnMgYWxpdmUgZXZlbiBpZiB5b3UgcnVuIG91dCBv
+ZiBkaXNrIHNwYWNlPwo+IC0gSG93IGNhbiB5b3UgY2xlYW4gdXAgb2xkIHRyYWNlcyBvbmNlIHlv
+dSBoYXZlIGNvbGxlY3RlZCB0aGVtIHdpdGhvdXQKPiByZWNyZWF0aW5nIHNlc3Npb25zPwoKSGkg
+TWlrYWVsLAoKTFRUbmcgY3VycmVudGx5IGRvZXNuJ3Qgc3VwcG9ydCB0aGVzZSByZWNvdmVyeSBt
+b2Rlcy4KCkhvd2V2ZXIsIHRoZSBmaWxlIHJvdGF0aW9uIGlzc3VlcyB5b3UgbWVudGlvbmVkIHNo
+b3VsZCBiZSByZXNvbHZlZCBpbgpsdHRuZy10b29scyAyLjYuMS4gQW55IGNoYW5jZSB5b3UgY2Fu
+IGdpdmUgaXQgYSB0cnk/ClRoZSB3ZWJzaXRlIHdpbGwgYmUgdXBkYXRlZCBsYXRlciB0b2RheS4g
+SW4gdGhlIG1lYW50aW1lLCBoZXJlJ3MgYQpkaXJlY3QgbGluayB0byB0aGUgcmVsZWFzZToKCmh0
+dHBzOi8vbHR0bmcub3JnL2ZpbGVzL2x0dG5nLXRvb2xzL2x0dG5nLXRvb2xzLTIuNi4xLnRhci5i
+ejIKClJlZ2FyZHMsCkrDqXLDqW1pZQoKPgo+IE1pY2tlCj4KPiBfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBs
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
+L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUK
+RWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
+bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
