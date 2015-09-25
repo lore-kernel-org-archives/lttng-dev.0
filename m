@@ -1,176 +1,72 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.7.0 (Linux user-space tracer)
-Date: Thu, 24 Sep 2015 21:39:48 +0000 (UTC)
-Message-ID: <2085167955.4275.1443130788530.JavaMail.zimbra@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: [RELEASE] LTTng-Tools 2.5.5 - Fumisterie
+Date: Fri, 25 Sep 2015 01:10:06 -0400
+Message-ID: <CA+jJMxv8sv28XHaepjYKorAqsjNLB34abSXwvxO_mL8FqkyY9Q__15987.471646122$1443157867$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Sender: linux-kernel-owner@vger.kernel.org
-To: lttng-dev@lists.lttng.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-yk0-f175.google.com ([209.85.160.175])
+ by ltt.polymtl.ca with esmtp (Exim 4.80)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZfLGt-0002Jb-Jo
+ for lttng-dev@lists.lttng.org; Fri, 25 Sep 2015 01:10:12 -0400
+Received: by ykdt18 with SMTP id t18so105525169ykd.3
+ for <lttng-dev@lists.lttng.org>; Thu, 24 Sep 2015 22:10:06 -0700 (PDT)
+List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-I hereby announce the release of LTTng-UST 2.7.0. LTTng-UST is a
-low-overhead application tracer for Linux. The library "liblttng-ust"
-enables tracing of applications and libraries.
-
-Here is what is new and noteworthy in LTTng-UST 2.7:
-
-
-* tracelog() instrumentation facility. Excerpt from lttng-ust(3):
-
-USAGE WITH TRACELOG
-       If you want to migrate existing logging (info, errors, ...)   to=
-  LTTng
-       UST, you can use the tracelog() interface.  To do it, in a nutsh=
-ell:
-
-       1) #include <lttng/tracelog.h>
-
-       2) /* in your code, use like a printf, with extra loglevel info.=
- */
-          tracelog(TRACE_INFO, "Message with integer %d", 1234);
-
-       3) Link your program against liblttng-ust.so.
-
-       4)  Enable  UST events when tracing with the following sequence =
-of com=E2=80=90
-       mands
-          from lttng-tools:
-
-          lttng create
-          lttng enable-event -u "lttng_ust_tracelog:*"
-          lttng start
-          [... run your program ...]
-          lttng stop
-          lttng view
-
-       That's it!
-
-       You can replace  the  enable-event  line  above  with  a  select=
-ion  of
-       loglevels, e.g.:
-
-          lttng enable-event -u -a --loglevel TRACE_INFO
-
-       Which  will  gather  all  events  from  TRACE_INFO  and  more im=
-portant
-       loglevels.
-
-
-* File-backed user space buffers
-
-This feature allows mapping ring buffer into filesystems. Useful in com=
-bination
-with pramfs or DAX+pmem (kernels 4.0+ for DAX and 4.1+ for pmem) to kee=
-p tracer
-ring buffers around in persistent memory upon system reboot.
-
-These buffers can be salvaged and converted to regular CTF traces using=
- the
-newly introduced lttng-crash utility to see the events that led to a cr=
-ash.
-
-How to use it:
-
-[ mount dax-enabled FS backed by pmem block device... ]
-
-$ lttng create my_session --shm-path=3D/path/to/dax/fs/
-$ lttng enable-event --userspace --all
-$ lttng start
-[ do some UST tracing ]
-
-[ run kexec to reboot, mount dax-enabled FS again... ]
-
-# View or convert trace to CTF with lttng-crash:
-
-$ lttng-crash /path/to/dax/fs/my_session*
-
-
-* Process ID (PID) tracker
-
-The new "track" and "untrack" commands allows the tracking of events as=
-sociated
-with specific PIDs, both in user space and kernel space.
-
-=46or example, the following commands may be used to track all user spa=
-ce events
-of PID "1234":
-$ lttng create my_session
-$ lttng track --userspace --pid 1234
-$ lttng enable-event --userspace --all
-$ lttng start
-
-
-* Python logging support
-
-=46ollowing in the footsteps of the Java Util Logging and Log4J logging=
- backend
-support, which were introduced as part of LTTng 2.4 and LTTng 2.6 respe=
-ctively,
-this new version adds support for the Python logging backend. This mean=
-s that
-logging statements emitted by the Python logging module can now be coll=
-ected as
-part of user space traces by enabling events from the "python" domain.
-
-$ lttng create my_session
-$ lttng enable-event --python --all
-$ lttng start
-
-The lttngust Python module is provided as part of LTTng-UST 2.7.
-https://github.com/lttng/lttng-ust/tree/master/liblttng-ust-python-agen=
-t
-
-
-* getcpu and clock plugin support.
-
-In the interest of keeping LTTng as unintrusive as possible, LTTng 2.7
-introduces support for platform-specific plug-ins providing custom
-implementations of getcpu() (user space) and clock sources for both ker=
-nel and
-user space tracers.
-
-getcpu override plugins can prove useful in cases where direct hardware=
- access
-is available for architecture-specific registers storing the CPU number=
-, and
-where those should be used instead of the Linux kernel sched_getcpu()
-vDSO/syscall.
-
-Clock override plugins, which may be implemented as shared objects (use=
-r space)
-or kernel modules (kernel space) may prove useful in cases where direct
-hardware access to architecture-specific clocks is available, and when =
-it should
-be used in place of the Linux kernel Monotonic clock.
-
-
-Project website: http://lttng.org
-Documentation: http://lttng.org/docs
-Download link: http://lttng.org/download
-
-Changelog since 2.7.0-rc2:
-
-2015-09-24 lttng-ust 2.7.0
-        * Fix: don't dereference NULL pointers
-        * Cleanup: Remove unused values
-        * Fix: Value stored to 'has_waited' is never read
-        * Fix: Argument with 'nonnull' attribute passed null
-        * Cleanup: Unnecessary bit shift
-        * Fix: sysconf() unchecked return value
-        * doc: add Python example
-        * Fix: Python agent: do not register twice to same port
-
-Enjoy this release!
-
-Thanks,
-
-Mathieu
-
---=20
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGkgYWxsLAoKQXMgcHJldmlvdXNseSBtZW50aW9uZWQgb24gdGhpcyBtYWlsaW5nIGxpc3QsIExU
+VG5nIDIuNSBpcyBlbnRlcmluZwppdHMgZW5kIG9mIGxpZmUgcGhhc2UuIExUVG5nLVRvb2xzIDIu
+NS41IGlzIGEgYnVnLWZpeCByZWxlYXNlIHdoaWNoCmFkZHJlc3NlcyBhIG51bWJlciBvZiBidWdz
+IHJlcG9ydGVkIGR1cmluZyB0aGUgTFRUbmcgMi43LjAgZGV2ZWxvcG1lbnQKY3ljbGUuCgoyMDE1
+LTA5LTI0IGx0dG5nLXRvb2xzIDIuNS41IChOYXRpb25hbCBQdW5jdHVhdGlvbiBEYXkpCiogRml4
+OiB0YWtlIFJDVSByZWFkLXNpZGUgbG9jayB3aXRoaW4gaGFzaCB0YWJsZSBmdW5jdGlvbnMKKiBG
+aXg6IFRpbWVvdXRFeHBpcmVkIGluIFB5dGhvbiB0ZXN0cyBub3QgZGVmaW5lZCBnbG9iYWxseQoq
+IEZpeDogaW50aWFsaXphdGlvbiBvZiB1c3RfbWV0YWRhdGFfcG9sbF9waXBlIHRvIGdhcmJhZ2Ug
+dmFsdWUKKiBGaXg6IFVzZSBNU0dfTk9TSUdOQUwgd2hlbiBjYWxsaW5nIHNlbmRtc2coKQoqIEZp
+eDogaW5jb3JyZWN0IHZhcmlhYmxlIGJlaW5nIGNoZWNrZWQgaW4gbGliYy13cmFwcGVyIHRlc3QK
+KiBGaXg6IENyYXNoIG9uIGx0dG5nIGxpc3QgLWovLWwvLXAgd2hlbiBubyBldmVudHMgYXJlIHBy
+ZXNlbnQKKiBGaXg6IFVuYmFsYW5jZWQgcmN1X3JlYWRfdW5sb2NrKCkgb24gc3RyZWFtIGZpbGUg
+Y3JlYXRpb24gZmFpbHVyZQoqIEZpeDogVW5iYWxhbmNlZCByY3VfcmVhZF91bmxvY2soKSBvbiBk
+aXJlY3RvcnkgY3JlYXRpb24gZmFpbHVyZQoqIEZpeDogTWVtb3J5IGxlYWsgaW4gcmVsYXlfYWRk
+X3N0cmVhbSBlcnJvciBwYXRoCiogRml4OiBzZXQgc2Vzc2lvbiBzaG91bGQgbm90IHNldCBub24t
+ZXhpc3RlbnQgc2Vzc2lvbgoqIEZpeDogRm9sbG93IHN0cnVjdCBkaXJlbnQgYWxsb2NhdGlvbiBn
+dWlkZWxpbmVzIG9mIFJFQURESVIoMykKKiBVcGRhdGUgY29tbWVudHMgcmVnYXJkaW5nIHRoZSBw
+b3dlciBvZiAyIGNvbnN0cmFpbnQgb24gc3ViLWJ1ZmZlciBzaXplcwoqIEJ1aWxkOiBhZGQgRmxl
+eCB2ZXJzaW9uIGNoZWNrCiogQnVpbGQ6IGFkZCBCaXNvbiB2ZXJzaW9uIGNoZWNrCiogRml4OiBo
+YW5kbGUgc3lzX2Z1dGV4KCkgRlVURVhfV0FJVCBpbnRlcnJ1cHRlZCBieSBzaWduYWwKKiBGaXg6
+IG1ldGFkYXRhIHB1c2ggLUVQSVBFIHNob3VsZCBiZSByZWNvdmVyYWJsZQoqIEZpeDogZGVzdHJv
+eSBzZXNzaW9uIHJlbW92ZXMgdGhlIGRlZmF1bHQgY29uZmlnIGZpbGUKKiBCdWlsZDogYnVtcCBh
+dXRvY29uZiB2ZXJzaW9uIHJlcXVpcmVtZW50IHRvIDIuNjQKKiBGaXg6IE1lbW9yeSBsZWFrIGlu
+IHNldHVwIG9mIHJlbGF5ZF9wYXRoCiogRml4OiBNZW1vcnkgYWxsb2NhdGVkIGJ5IHhtbE5vZGVH
+ZXRDb250ZW50KCkgbXVzdCBiZSBmcmVlZCBieSB4bWxGcmVlKCkKKiBGaXg6IGdldF9jbWRsaW5l
+X2J5X3BpZCBwYXRoIGxlbmd0aCBhc3N1bWVzIGEgbWF4IHBpZCBvZiA2NTUzNQoqIEZpeDogTWFy
+ayBjb25maWcgc3RyaW5nIGRlY2xhcmF0aW9ucyBhcyBleHRlcm4KKiBGaXg6IGxpdmVfdGVzdCBy
+ZWdyZXNzaW9uIG9uIGxhcmdlIG51bWJlciBvZiBjcHVzCiogRml4OiBzZXQgVVNUIHJlZ2lzdGVy
+IHRpbWVvdXQgdG8gLTEgYXMgdGVzdCBkZWZhdWx0CiogVGVzdHM6IERvbid0IHJlbHkgb24gaW1w
+bGljaXQgc2NhbGFyIGV4cHJlc3Npb24gZGVyZWZlcmVuY2UKKiBGaXggcHl0aG9uIGJpbmRpbmdz
+JyBNYWtlZmlsZSBmb3Igb3V0LW9mLXRyZWUgYnVpbGRzCiogRml4OiB6ZXJvIG1lbW9yeSBwYXNz
+ZWQgdG8gY3JlYXRlIGNoYW5uZWwga2VybmVsIGlvY3RsCiogRml4OiBQb3NzaWJsZSBjYWxsIHRv
+IGV4ZWN2cCB3aXRoIE5VTEwgYXJndW1lbnQgb24gYWxsb2NhdGlvbiBmYWlsdXJlCiogRml4OiBT
+YXZlIGp1bCBldmVudCBmaWx0ZXIgYnl0ZWNvZGUKKiBGaXg6IG91dCBvZiB0cmVlIGJ1aWxkIGJ5
+IGFkZGluZyBtaXNzaW5nIGluaS5jIGluY2x1ZGUKKiBUZXN0OiBqYXZhLWp1bDptaXNzaW5nIHN0
+YXRpYyB0ZXN0IGZpbGVzIGZvciBkaXN0IGFuZCBvdXQgb2YgdHJlZSBidWlsZAoqIFRlc3RzOiBy
+ZW1vdmUgdW5lY2Vzc2FyeSBsb2c0aiB0ZXN0CiogRml4OiBvdXQtb2YtdHJlZSBidWlsZDogbWlz
+c2luZyB4c2QgZmlsZSBmb3Igc2F2ZS1sb2FkIHRlc3QgZXhlY3V0aW9uCgpBcyBhbHdheXMsIHBs
+ZWFzZSByZXBvcnQgYW55IGlzc3VlIHlvdSBtYXkgZW5jb3VudGVyIHRvIGJ1Z3MubHR0bmcub3Jn
+Cm9yIG9uIHRoaXMgbWFpbGluZyBsaXN0LgoKUHJvamVjdCB3ZWJzaXRlOiBodHRwczovL2x0dG5n
+Lm9yZwoKRG93bmxvYWQgbGlua3M6Cmh0dHBzOi8vbHR0bmcub3JnL2ZpbGVzL2x0dG5nLXRvb2xz
+L2x0dG5nLXRvb2xzLTIuNS41LnRhci5iejIKR1BHIHNpZzogaHR0cHM6Ly9sdHRuZy5vcmcvZmls
+ZXMvbHR0bmctdG9vbHMvbHR0bmctdG9vbHMtMi41LjUudGFyLmJ6Mi5hc2MKClJlZ2FyZHMsCkrD
+qXLDqW1pZQoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3
+LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
+dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
