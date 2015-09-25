@@ -1,18 +1,34 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: =?utf-8?q?=5BRELEASE=5D_LTTng-Tools_2=2E7=2E0_-_Herbe?=
-	=?utf-8?b?IMOgIETDqXRvdXJuZQ==?=
-Date: Fri, 25 Sep 2015 01:11:14 -0400
-Message-ID: <CA+jJMxst=yfOC1PfFZqhXPWbvbG+qf09JR0FfdgbdZDPW77ATA__19658.1871402033$1443157967$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [RELEASE] LTTng modules 2.7.0 (Linux kernel tracer)
+Date: Fri, 25 Sep 2015 17:12:56 +0000 (UTC)
+Message-ID: <2042070857.4573.1443201176320.JavaMail.zimbra__43761.4610106268$1443201256$gmane$org@efficios.com>
+References: <376912304.4227.1443129182973.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f169.google.com ([209.85.160.169])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZfLI0-0002Ll-B9
- for lttng-dev@lists.lttng.org; Fri, 25 Sep 2015 01:11:22 -0400
-Received: by ykft14 with SMTP id t14so105725301ykf.0
- for <lttng-dev@lists.lttng.org>; Thu, 24 Sep 2015 22:11:15 -0700 (PDT)
+ (envelope-from <compudj@efficios.com>) id 1ZfWYZ-00063F-Lk
+ for lttng-dev@lists.lttng.org; Fri, 25 Sep 2015 13:13:13 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 167FD3403E7
+ for <lttng-dev@lists.lttng.org>; Fri, 25 Sep 2015 17:13:06 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id xZuQAwtEL41e for <lttng-dev@lists.lttng.org>;
+ Fri, 25 Sep 2015 17:12:56 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id A38C03404A3
+ for <lttng-dev@lists.lttng.org>; Fri, 25 Sep 2015 17:12:56 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id lHCKxl5XoQcJ for <lttng-dev@lists.lttng.org>;
+ Fri, 25 Sep 2015 17:12:56 +0000 (UTC)
+Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
+ by mail.efficios.com (Postfix) with ESMTP id 7F6D03403E7
+ for <lttng-dev@lists.lttng.org>; Fri, 25 Sep 2015 17:12:56 +0000 (UTC)
+In-Reply-To: <376912304.4227.1443129182973.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,110 +37,129 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgZXZlcnlvbmUhCgpJIGFtIHByb3VkIHRvIGFubm91bmNlIHRoZSBhdmFpbGFiaWxpdHkgb2Yg
-TFRUbmctVG9vbHMgMi43IC0gIkhlcmJlIMOgCkTDqXRvdXJuZSIuIEFzIGlzIHRyYWRpdGlvbiwg
-dGhpcyByZWxlYXNlIGJlYXJzIHRoZSBjb2RlbmFtZSBvZiBhClF1w6liZWMtYnJld2VkIGJlZXIu
-CgotLS0gSGVyYmUgw6AgRMOpdG91cm5lIC0tLQpCcmV3ZWQgd2l0aCB1bnJlc3RyYWluZWQgYW1v
-dW50cyBvZiBDaXRyYSBob3AsIHRoZSBIZXJiZSDDoCBEw6l0b3VybmUgaXMKYSBmYW50YXN0aWMg
-TmV3IFdvcmxkIFRyaXBlbCBicmV3ZWQgYnkgIkRpZXUgZHUgQ2llbCEiLiBBcm9tYXMgb2YKbWFu
-Z28sIGNhbnRhbG91cGUgbWVsb24gYW5kIHBhc3Npb24gZnJ1aXQsIGNvbWJpbmVkIHdpdGggYSBj
-b250cm9sbGVkCmJpdHRlciBmaW5pc2gsIHVuaXRlIHRvIG1ha2UgdGhpcyBzbW9vdGggZ29sZGVu
-LW9yYW5nZSBiZWVyIHN0YW5kCmFwYXJ0LgoKU2luY2UgdGhlIHNlY29uZCByZWxlYXNlIGNhbmRp
-ZGF0ZSB3YXMgcmVsZWFzZWQgbGFzdCB3ZWVrLCBhIGhhbmRmdWwKb2YgbWlub3IgZml4ZXMgaGF2
-ZSBtYWRlIHRoZWlyIHdheSBpbnRvIHRoZSBzdGFibGUtMi43IGJyYW5jaC4KCjIwMTUtMDktMjQg
-bHR0bmctdG9vbHMgMi43LjAgKE5hdGlvbmFsIFB1bmN0dWF0aW9uIERheSkKICAgICAgICAqIEZp
-eDogSGFuZGxlIEVJTlRSIG9mIHdhaXBpZCBpbiBydW4tYXMgd29ya2VyCiAgICAgICAgKiBGaXg6
-IEhhbmRsZSBFSU5UUiBvZiB3YWl0cGlkIHdoZW4gc3Bhd25pbmcgYSBzZXNzaW9uIGRhZW1vbgog
-ICAgICAgICogQWRkIGEgTE9HKCkgbWFjcm8gd2hpY2ggaGFuZGxlcyBkeW5hbWljIHNldmVyaXR5
-IGxldmVscwogICAgICAgICogRml4OiB0ZXN0czogc3VwcG9ydCBzeXN0ZW1zIHdoZXJlIFBBR0Vf
-U0laRSBpcyBub3QgNDA5NgogICAgICAgICogVGVzdDoganVsL2xvZzRqOiB1c2UgLWEgaW5zdGVh
-ZCBvZiAnKicgdG8gZGlzYWJsZSBhbGwgZXZlbnRzCiAgICAgICAgKiBSZXdvcmQgd2FybmluZyBv
-biBldmVudCBkaXNhYmxlCiAgICAgICAgKiBDbGVhbi11cDogUmVtb3ZlIHVudXNlZCB0ZXN0IGxh
-dW5jaGVycwogICAgICAgICogSGVscDogYWRkIC1qIC1sIC1wIG9wdGlvbiB0byBoZWxwIHN0cmlu
-ZwogICAgICAgICogbWFuOiB1cGRhdGUgZGlzYWJsZS1ldmVudCBzZWN0aW9uCiAgICAgICAgKiBV
-c2UgZW1wdHkgZXZlbnQgbmFtZSBvbiBkaXNhYmxlIC1hIGZvciB1c3QgYW5kIGFnZW50IGRvbWFp
-bgogICAgICAgICogRml4OiBkaXNhYmxlIGtlcm5lbCBldmVudCBiYXNlZCBvbiBuYW1lIGFuZCBl
-dmVudCB0eXBlCiAgICAgICAgKiBUZXN0czogQ2xlYW4tdXAgdGVzdC1jcmFzaCBvbiBTSUdURVJN
-IGFuZCBTSUdJTlQKICAgICAgICAqIEZpeDogUG9zc2libGUgZGVyZWZlcmVuY2Ugb2YgbnVsbCBw
-b2ludGVycwogICAgICAgICogRml4OiBCcmVhayBvdXQgb2YgbG9vcCB3aGVuIHNlYXJjaGluZyBm
-b3IgYSBkb21haW4ncyBhZ2VudAogICAgICAgICogRml4OiBpbnQgcHJpbnRlZCBhcyB1aW50CiAg
-ICAgICAgKiBGaXg6IGFkZCBzdWJkaXItb2JqZWN0cyB0byBNYWtlZmlsZS5hbQogICAgICAgICog
-Rml4OiB0ZXN0czogc2tpcCBVU1QgcGVyZiB0ZXN0cyBpZiBub3Qgcm9vdAoKV2Ugd2lsbCBiZSBy
-ZWxlYXNpbmcgYSBibG9nIHBvc3QgdG8gc2hvd2Nhc2UgTFRUbmcgMi43J3MgbmV3IGZlYXR1cmVz
-CmFuZCB1cGRhdGluZyB0aGUgb2ZmaWNpYWwgZG9jdW1lbnRhdGlvbiB3aXRoaW4gdGhlIG5leHQg
-ZmV3IGRheXMuIEluCnRoZSBtZWFudGltZSwgaGVyZSBpcyBhIHF1aWNrIHJ1bmRvd24gb2YgdGhl
-IG5ldyBmZWF0dXJlcyEKCi0tLSBQcm9jZXNzIChQSUQpIFRyYWNrZXIgLS0tClRoZSBuZXcgInRy
-YWNrIiBhbmQgInVudHJhY2siIGNvbW1hbmRzIGFsbG93cyB0aGUgdHJhY2tpbmcgb2YgZXZlbnRz
-CmFzc29jaWF0ZWQgd2l0aCBzcGVjaWZpYyBQSURzLCBib3RoIGluIHVzZXIgc3BhY2UgYW5kIGtl
-cm5lbCBzcGFjZS4KCkZvciBleGFtcGxlLCB0aGUgZm9sbG93aW5nIGNvbW1hbmRzIG1heSBiZSB1
-c2VkIHRvIHRyYWNrIGFsbCB1c2VyCnNwYWNlIGV2ZW50cyBvZiBQSUQgIjEyMzQiOgokIGx0dG5n
-IGNyZWF0ZSBteV9zZXNzaW9uCiQgbHR0bmcgdHJhY2sgLS11c2Vyc3BhY2UgLS1waWQgMTIzNAok
-IGx0dG5nIGVuYWJsZS1ldmVudCAtLXVzZXJzcGFjZSAtLWFsbAokIGx0dG5nIHN0YXJ0CgotLS0g
-UHl0aG9uIExvZ2dpbmcgU3VwcG9ydCAtLS0KRm9sbG93aW5nIGluIHRoZSBmb290c3RlcHMgb2Yg
-dGhlIEphdmEgVXRpbCBMb2dnaW5nIGFuZCBMb2c0SiBsb2dnaW5nCmJhY2tlbmQgc3VwcG9ydCwg
-d2hpY2ggd2VyZSBpbnRyb2R1Y2VkIGFzIHBhcnQgb2YgTFRUbmcgMi40IGFuZCBMVFRuZwoyLjYg
-cmVzcGVjdGl2ZWx5LCB0aGlzIG5ldyB2ZXJzaW9uIGFkZHMgc3VwcG9ydCBmb3IgdGhlIFB5dGhv
-biBsb2dnaW5nCmJhY2tlbmQuIFRoaXMgbWVhbnMgdGhhdCBsb2dnaW5nIHN0YXRlbWVudHMgZW1p
-dHRlZCBieSB0aGUgUHl0aG9uCmxvZ2dpbmcgbW9kdWxlIGNhbiBub3cgYmUgY29sbGVjdGVkIGFz
-IHBhcnQgb2YgdXNlciBzcGFjZSB0cmFjZXMgYnkKZW5hYmxpbmcgZXZlbnRzIGZyb20gdGhlICJw
-eXRob24iIGRvbWFpbi4KCiQgbHR0bmcgY3JlYXRlIG15X3Nlc3Npb24KJCBsdHRuZyBlbmFibGUt
-ZXZlbnQgLS1weXRob24gLS1hbGwKJCBsdHRuZyBzdGFydAoKVGhlIGx0dG5ndXN0IFB5dGhvbiBt
-b2R1bGUgaXMgcHJvdmlkZWQgYXMgcGFydCBvZiBMVFRuZy1VU1QgMi43LgpodHRwczovL2dpdGh1
-Yi5jb20vbHR0bmcvbHR0bmctdXN0L3RyZWUvbWFzdGVyL2xpYmx0dG5nLXVzdC1weXRob24tYWdl
-bnQKCi0tLSBLZXJuZWwgdHJhY2VyIGZpbHRlcmluZyBzdXBwb3J0IC0tLQpXaGlsZSBMVFRuZy1V
-U1QgaGFzIHByb3ZpZGVkIHN1cHBvcnQgZm9yIGV2ZW50IGZpbHRlcmluZyBmb3IgYSBsb25nCnRp
-bWUsIGl0IHdhcyBub3QgcG9zc2libGUgdG8gcGVyZm9ybSBrZXJuZWwtc2lkZSBldmVudCBmaWx0
-ZXJpbmcgdW50aWwKbm93LiBBcyBvZiB0aGlzIHZlcnNpb24sIGtlcm5lbCBzcGFjZSBmaWx0ZXJz
-IGNhbiBiZSB1c2VkIGluIHRoZSBzYW1lCndheSBhcyB1c2VyIHNwYWNlIGZpbHRlcnMuCgpGb3Ig
-aW5zdGFuY2UsIHRvIHRyYWNlIG9ubHkgcmVhZCgpIHN5c2NhbGxzIHJlcXVlc3RpbmcgbW9yZSB0
-aGFuIDEwMCBieXRlczoKJCBsdHRuZyBjcmVhdGUgbXlfc2Vzc2lvbgokIGx0dG5nIGVuYWJsZS1l
-dmVudCAtLWtlcm5lbCAtLXN5c2NhbGwgcmVhZCAtLWZpbHRlciAiY291bnQgPiAxMDAiCiQgbHR0
-bmcgc3RhcnQKCi0tLSBLZXJuZWwgdHJhY2VyIHdpbGRjYXJkIHN1cHBvcnQgLS0tClN1cHBvcnQg
-Zm9yIHdpbGRjYXJkcyBpbiBldmVudCBuYW1lcyBpcyBhbm90aGVyIGZlYXR1cmUgdGhhdCBoYXMg
-YmVlbgpicm91Z2h0IGZyb20gdGhlIHVzZXIgc3BhY2UgdHJhY2VyIHRvIHRoZSBrZXJuZWwgdHJh
-Y2VyLiBUaGlzIG1lYW5zCnRoYXQgZ3JvdXBzIG9mIGtlcm5lbCBzcGFjZSBldmVudHMgY2FuIGJl
-IGVuYWJsZWQgYXQgb25jZSB1c2luZyB0aGUKd2lsZGNhcmQgbm90YXRpb24uCgpUaGUgdHJhY2lu
-ZyBvZiBhbGwgYmxvY2sgZGV2aWNlIG9yIHNjaGVkdWxpbmcgZXZlbnRzIGNhbiBiZSBlbmFibGVk
-CnVzaW5nIGEgc2luZ2xlIGNvbW1hbmQ6CgokIGx0dG5nIGVuYWJsZS1ldmVudCAtLWtlcm5lbCBi
-bG9jayoKb3IKJCBsdHRuZyBlbmFibGUtZXZlbnQgLS1rZXJuZWwgc2NoZWQqCgotLS0gRmlsZS1i
-YWNrZWQgdXNlciBzcGFjZSBidWZmZXJzIC0tLQpUaGlzIG5ldyBMVFRuZy1VU1QgZmVhdHVyZSBh
-bGxvd3MgdGhlIG1hcHBpbmcgb2YgcmluZyBidWZmZXJzIG9udG8gZmlsZXN5c3RlbXMuClRoaXMg
-cHJvdmVzIHVzZWZ1bCBpbiBjb21iaW5hdGlvbiB3aXRoIHByYW1mcyBvciBEQVgrcG1lbSAoTGlu
-dXgKa2VybmVscyA0LjErIGZvciBEQVggYW5kIDQuMisgZm9yIHBtZW0pIHRvIHN0b3JlIHRyYWNl
-ciByaW5nIGJ1ZmZlcnMKaW4gcGVyc2lzdGVudCBtZW1vcnkgdXBvbiBhbiB1bmV4cGVjdGVkIHN5
-c3RlbSByZWJvb3QuCgpUaGVzZSBidWZmZXJzIGNhbiBiZSBzYWx2YWdlZCBhbmQgY29udmVydGVk
-IHRvIHJlZ3VsYXIgQ1RGIHRyYWNlcwp1c2luZyB0aGUgbmV3bHkgaW50cm9kdWNlZCBsdHRuZy1j
-cmFzaCB1dGlsaXR5IHRvIHNlZSB0aGUgZXZlbnRzIHRoYXQKbGVkIHRvIGEgY3Jhc2guCgotLS0g
-U3VwcG9ydCBmb3IgY2xvY2sgYW5kIGdldGNwdSBwbHVnaW5zIC0tLQpJbiB0aGUgaW50ZXJlc3Qg
-b2Yga2VlcGluZyBMVFRuZyBhcyB1bmludHJ1c2l2ZSBhcyBwb3NzaWJsZSwgTFRUbmcgMi43Cmlu
-dHJvZHVjZXMgc3VwcG9ydCBmb3IgcGxhdGZvcm0tc3BlY2lmaWMgcGx1Zy1pbnMgcHJvdmlkaW5n
-IGN1c3RvbQppbXBsZW1lbnRhdGlvbnMgb2YgZ2V0Y3B1KCkgKHVzZXIgc3BhY2UpIGFuZCBjbG9j
-ayBzb3VyY2VzIGZvciBib3RoCmtlcm5lbCBhbmQgdXNlciBzcGFjZSB0cmFjZXJzLgoKZ2V0Y3B1
-IG92ZXJyaWRlIHBsdWdpbnMgY2FuIHByb3ZlIHVzZWZ1bCBpbiBjYXNlcyB3aGVyZSBkaXJlY3QK
-aGFyZHdhcmUgYWNjZXNzIGlzIGF2YWlsYWJsZSBmb3IgYXJjaGl0ZWN0dXJlLXNwZWNpZmljIHJl
-Z2lzdGVycwpzdG9yaW5nIHRoZSBDUFUgbnVtYmVyLCBhbmQgd2hlcmUgdGhvc2Ugc2hvdWxkIGJl
-IHVzZWQgaW5zdGVhZCBvZiB0aGUKTGludXgga2VybmVsIHNjaGVkX2dldGNwdSgpIHZEU08vc3lz
-Y2FsbC4KCmNsb2NrIG92ZXJyaWRlIHBsdWdpbnMsIHdoaWNoIG1heSBiZSBpbXBsZW1lbnRlZCBh
-cyBzaGFyZWQgb2JqZWN0cwoodXNlciBzcGFjZSkgb3Iga2VybmVsIG1vZHVsZXMgKGtlcm5lbCBz
-cGFjZSkgbWF5IHByb3ZlIHVzZXJmdWwgaW4KY2FzZXMgd2hlcmUgZGlyZWN0IGhhcmR3YXJlIGFj
-Y2VzcyB0byBhcmNoaXRlY3R1cmUtc3BlY2lmaWMgY2xvY2tzIGlzCmF2YWlsYWJsZSwgYW5kIHdo
-ZW4gaXQgc2hvdWxkIGJlIHVzZWQgaW4gcGxhY2Ugb2YgdGhlIExpbnV4IGtlcm5lbAptb25vdG9u
-aWMgY2xvY2suCgotLS0gdHJhY2Vsb2coKSBzdXBwb3J0IC0tLQpMVFRuZy1VU1QgMi43IHByb3Zp
-ZGVzIGEgbnVtYmVyIG9mIGZhY2lsaXRpZXMgdG8gc21vb3RoZW4gdGhlCnRyYW5zaXRpb24gb2Yg
-YXBwbGljYXRpb25zIGZyb20gbG9nZ2luZyB0byB0cmFjaW5nIGluIHRoZSBmb3JtIG9mCnRyYWNl
-bG9nKCkgdHJhY2Vwb2ludHMuIExUVG5nLVVTVCAyLjcncyBhbm5vdW5jZW1lbnQgY292ZXJzIHRo
-aXMKZmVhdHVyZSBpbiBtb3JlIGRldGFpbDoKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9waXBlcm1h
-aWwvbHR0bmctZGV2LzIwMTUtSnVseS8wMjQ3NTcuaHRtbAoKQXMgYWx3YXlzLCBwbGVhc2UgcmVw
-b3J0IGFueSBpc3N1ZSB5b3UgbWF5IGVuY291bnRlciB0byBidWdzLmx0dG5nLm9yZwpvciBvbiB0
-aGlzIG1haWxpbmcgbGlzdC4KClByb2plY3Qgd2Vic2l0ZTogaHR0cHM6Ly9sdHRuZy5vcmcKCkRv
-d25sb2FkIGxpbms6IGh0dHBzOi8vbHR0bmcub3JnL2ZpbGVzL2x0dG5nLXRvb2xzL2x0dG5nLXRv
-b2xzLTIuNy4wLnRhci5iejIKR1BHIHNpZzogaHR0cHM6Ly9sdHRuZy5vcmcvZmlsZXMvbHR0bmct
-dG9vbHMvbHR0bmctdG9vbHMtMi43LjAudGFyLmJ6Mi5hc2MKCkxvb2tpbmcgZm9yd2FyZCB0byB5
-b3VyIGZlZWRiYWNrIQpKw6lyw6ltaWUKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9T
-IEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYK
+----- On Sep 24, 2015, at 5:13 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+
+> Hi,
+> 
+> I am proud to announce the 2.7.0 release of LTTng modules! LTTng
+> modules provide Linux kernel tracing capability to the LTTng 2.x
+> tracer toolset. I would like to remind everyone that *no* patching
+> of the Linux kernel is required whatsoever to use LTTng modules.
+> It has been like this since 2010, but for some reason we still
+> get this question.
+> 
+> Here is what is new and noteworthy in LTTng modules 2.7:
+> 
+> * Supports Linux kernels up to and including 4.3-rc2,
+> 
+> * New PID tracker: specify which process IDs you want to trace,
+>  (also available with the lttng-ust user-space tracer)
+> 
+> The new "track" and "untrack" commands allows the tracking of events associated
+> with specific PIDs, both in user space and kernel space.
+> 
+> For example, the following commands may be used to track all kernel events
+> of PID "1234":
+> 
+> $ lttng create my_session
+> $ lttng track --kernel --pid 1234
+> $ lttng enable-event --kernel --all
+> $ lttng start
+> 
+> 
+> * Filtering is now implemented for kernel tracing. It can be used
+>  through the same UI and API as with lttng-ust.
+> 
+> While LTTng-UST has provided support for event filtering for a long time,
+> it was not possible to perform kernel-side event filtering until now. As
+> of this version, kernel space filters can be used in the same way as user
+> space filters.
+> 
+> For instance, to trace only read() syscalls requesting more than 100 bytes:
+> 
+> $ lttng create my_session
+> $ lttng enable-event --kernel --syscall read --filter "count > 100"
+> $ lttng start
+> 
+> 
+> * Added $ctx.cpu_id context for filtering (note: also available in
+>  lttng-ust now),
+> 
+> How to use:
+> 
+> $ lttng create my_session
+> $ lttng enable-event --kernel --all --filter '$ctx.cpu_id<2'
+> $ lttng start
+> 
+> 
+> * New clock source plugin support. User-provide clock source
+>  override can be provided as a kernel module,
+> 
+> In the interest of keeping LTTng as unintrusive as possible, LTTng 2.7
+> introduces support for platform-specific plug-ins providing custom
+> clock sources.
+> 
+> Clock override plugins, which may be implemented as kernel modules may
+> prove useful in cases where direct hardware access to architecture-specific
+> clocks is available, and when it should be used in place of the Linux
+> kernel Monotonic clock.
+
+I just noticed that the lttng-modules clock plugin feature, developed in
+October 2014, was still sitting in my development branch on github, and did
+not make it into the 2.7 release. I just merged it into master for 2.8.
+
+Sorry about the confusion,
+
+Thanks,
+
+Mathieu
+
+> 
+> 
+> * Wildcard support now available: can now specify e.g. 'sched_*'
+>  to enable all scheduler events. Similar UI/API as lttng-ust.
+> 
+> Support for wildcards in event names is another feature that has been brought
+> from the user space tracer to the kernel tracer. This means that groups of
+> kernel space events can be enabled at once using the wildcard notation.
+> Moreover, it makes it possible to enable events belonging to loadable modules
+> before said modules are loaded.
+> 
+> The tracing of all block device or scheduling events can be enabled using a
+> single command:
+> 
+> $ lttng enable-event --kernel 'block_*'
+> or
+> $ lttng enable-event --kernel 'sched_*'
+> 
+> Changelog since 2.7.0-rc2:
+> 
+> 2015-09-24 LTTng modules 2.7.0
+>        * Fix: writeback instrumentation update for 4.3 Linux kernel
+>        * Fix: update sched wakeup instrumentation for 4.3 kernel
+>        * Fix: lttng-test build failure for kernels < 3.0
+> 
+> Project website: http://lttng.org
+> Documentation: http://lttng.org/docs
+> Download link: http://lttng.org/download
+> 
+> Enjoy this release!
+> 
+> Feedback is welcome,
+> 
+> Thanks,
+> 
+> Mathieu
+> 
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
