@@ -1,20 +1,16 @@
-From: Mikael Beckius <mikael.beckius@ericsson.com>
-Subject: Re: Sessions are disconnected when disk is full on
- remote host
-Date: Tue, 29 Sep 2015 08:06:19 +0000
-Message-ID: <FEF43CBBC4664F4D80C53B178C850ADE7317E3__42227.525675162$1443544003$gmane$org@ESESSMB305.ericsson.se>
-References: <FEF43CBBC4664F4D80C53B178C850ADE730271@ESESSMB305.ericsson.se>,
- <CA+jJMxsAFJ+MgYYRxhcJUuoyUT8bUWfuiH6WJXSPyVg65zLGWw@mail.gmail.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [MODULES RFC PATCH] Extract the bitmask of FDs set in
+	select syscall
+Date: Fri,  2 Oct 2015 19:01:06 -0400
+Message-ID: <1443826866-24477-1-git-send-email-jdesfossez__7961.37932125038$1443826957$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sesbmg23.ericsson.net ([193.180.251.37])
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mikael.beckius@ericsson.com>) id 1Zgpva-0008Ko-Oy
- for lttng-dev@lists.lttng.org; Tue, 29 Sep 2015 04:06:25 -0400
-In-Reply-To: <CA+jJMxsAFJ+MgYYRxhcJUuoyUT8bUWfuiH6WJXSPyVg65zLGWw@mail.gmail.com>
-Content-Language: sv-SE
+ (envelope-from <jdesfossez@efficios.com>) id 1Zi9KJ-0000IJ-Vm
+ for lttng-dev@lists.lttng.org; Fri, 02 Oct 2015 19:01:22 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,94 +19,101 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-________________________________________
-Fr=E5n: jeremie.galarneau@gmail.com [jeremie.galarneau@gmail.com] f&#246;r =
-J=E9r=E9mie Galarneau [jeremie.galarneau@efficios.com]
-Skickat: den 25 september 2015 21:50
-Till: Mikael Beckius
-Kopia: lttng-dev@lists.lttng.org
-=C4mne: Re: [lttng-dev] Sessions are disconnected when disk is full on remo=
-te host
+Instead of extracting the user-space pointers of the 3 fd_set, we now
+extract the bitmask of the FDs in the sets (in, out, ex) in the form of
+an array of unsigned long (1024 FDs is the limit in the kernel).
 
-On Wed, Sep 23, 2015 at 5:48 AM, Mikael Beckius
-<mikael.beckius@ericsson.com> wrote:
-> Hello!
->
-> I am trying to verify the expected behaviour in the event a machine hosti=
-ng
-> an lttng relay daemon runs out of disk space.
->
-> Currently it appears from testing and inspecting the source code that
-> whenever the lttng relay daemon hits an error caused by the lack of disk
-> space all failing sessions will be disconnected. It also appears that the
-> only way to recover from this situation once disk space has been restored=
- is
-> to recreate all the disconnected sessions.
->
-> I have also played around with different combinations of the below lttng
-> enable-channel options:
-> --discard
-> --overwrite
-> --tracefile-count <trace file count>
-> --tracefile-size <trace file size>
->
-> The initial channel configuration was using the options --tracefile-count
-> --tracefile-size but both were abandoned as Babeltrace faced constant
-> streaming errors during heavy live tracing and now the trace files are
-> growing continuously until there is no available disk space.
->
-> I assume that --overwrite would not make any difference compared to
-> --discard with regards to a disk full scenario. Even if you specify
-> --tracefile-count and --tracefile-size to limit the amount of trace data
-> from a single session you may still face the same issue with disconnected
-> sessions if you for some reason run out of disk space.
->
-> Testing was carried out on the latest 2.6 releases and all sessions were
-> live sessions.
->
-> So my questions are:
-> - Is there any way to keep sessions alive even if you run out of disk spa=
-ce?
-> - How can you clean up old traces once you have collected them without
-> recreating sessions?
+In this example, we select in input FDs 3, 5 and 10 (0x428), it returns
+that one FD is ready: FD 10 (0x400).
 
-Hi Mikael,
+syscall_entry_select: { n = 11,
+	_fdset_in_length = 1, fdset_in = [ [0] = 0x428 ],
+	_fdset_out_length = 1, fdset_out = [ [0] = 0x0 ],
+	_fdset_ex_length = 0, fdset_ex = [ ],
+	tvp = 0
+}
+syscall_exit_select: { ret = 1,
+	_fdset_in_length = 1, fdset_in = [ [0] = 0x400 ],
+	_fdset_out_length = 1, fdset_out = [ [0] = 0x0 ],
+	_fdset_ex_length = 0, fdset_ex = [ ],
+	tvp = 0
+}
 
-LTTng currently doesn't support these recovery modes.
+Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+---
+ .../x86-64-syscalls-3.10.0-rc7_pointers_override.h | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-However, the file rotation issues you mentioned should be resolved in
-lttng-tools 2.6.1. Any chance you can give it a try?
-The website will be updated later today. In the meantime, here's a
-direct link to the release:
-
-https://lttng.org/files/lttng-tools/lttng-tools-2.6.1.tar.bz2
-
-Regards,
-J=E9r=E9mie
-
-Hello J=E9r=E9mie!
-
-Thanks for the hint. I will give the new 2.6.1 and 2.7.0 releases of lttng-=
-tools a try and see if they work better than 2.6.0.
-
-Micke
-
->
-> Micke
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
-
-
---
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
+diff --git a/instrumentation/syscalls/headers/x86-64-syscalls-3.10.0-rc7_pointers_override.h b/instrumentation/syscalls/headers/x86-64-syscalls-3.10.0-rc7_pointers_override.h
+index 702cfb5..23ffbdd 100644
+--- a/instrumentation/syscalls/headers/x86-64-syscalls-3.10.0-rc7_pointers_override.h
++++ b/instrumentation/syscalls/headers/x86-64-syscalls-3.10.0-rc7_pointers_override.h
+@@ -115,6 +115,62 @@ SC_LTTNG_TRACEPOINT_EVENT(pipe,
+ 	)
+ )
+ 
++#define OVERRIDE_64_select
++SC_LTTNG_TRACEPOINT_EVENT_CODE(select,
++	TP_PROTO(sc_exit(long ret,) int n, fd_set __user * inp, fd_set __user * outp,
++		fd_set __user * exp, struct timeval * tvp),
++	TP_ARGS(sc_exit(ret,) n, inp, outp, exp, tvp),
++	TP_locvar(
++		unsigned long fds_in[__FD_SETSIZE / (8 * sizeof(long))],
++			fds_out[__FD_SETSIZE / (8 * sizeof(long))],
++			fds_ex[__FD_SETSIZE / (8 * sizeof(long))];
++		int nb_in, nb_out, nb_ex;
++	),
++	TP_code(
++		sc_inout(
++		{
++			unsigned long nr;
++			int ret;
++
++			nr = FDS_BYTES(n);
++			tp_locvar->nb_in = 0;
++			tp_locvar->nb_out = 0;
++			tp_locvar->nb_ex = 0;
++			if (inp) {
++				ret = copy_from_user(tp_locvar->fds_in, inp, nr);
++				if (ret < 0)
++					goto skip_code;
++				tp_locvar->nb_in = nr/sizeof(long);
++			}
++			if (outp) {
++				ret = copy_from_user(tp_locvar->fds_out, outp, nr);
++				if (ret < 0)
++				goto skip_code;
++				tp_locvar->nb_out = nr/sizeof(long);
++			}
++			if (exp) {
++				ret = copy_from_user(tp_locvar->fds_ex, exp, nr);
++				if (ret < 0)
++					goto skip_code;
++				tp_locvar->nb_ex = nr/sizeof(long);
++			}
++		}
++		skip_code:
++		)
++	),
++	TP_FIELDS(
++		sc_exit(ctf_integer(long, ret, ret))
++		sc_in(ctf_integer(int, n, n))
++		sc_inout(ctf_sequence_hex(unsigned long, fdset_in,
++				&tp_locvar->fds_in, unsigned long, tp_locvar->nb_in))
++		sc_inout(ctf_sequence_hex(unsigned long, fdset_out,
++				&tp_locvar->fds_out, unsigned long, tp_locvar->nb_out))
++		sc_inout(ctf_sequence_hex(unsigned long, fdset_ex,
++				&tp_locvar->fds_ex, unsigned long, tp_locvar->nb_ex))
++		sc_inout(ctf_integer(struct timeval *, tvp, tvp))
++	)
++)
++
+ #else	/* CREATE_SYSCALL_TABLE */
+ 
+ #define OVERRIDE_TABLE_64_clone
+-- 
+1.9.1
