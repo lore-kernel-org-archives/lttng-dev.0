@@ -1,20 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [urcu][GIT PULL] Add support for Solaris 10 and 11
-Date: Tue, 6 Oct 2015 18:48:13 +0000 (UTC)
-Message-ID: <1010471047.21545.1444157293799.JavaMail.zimbra__17012.7927129672$1444157371$gmane$org@efficios.com>
-References: <5613EB0E.1010209@efficios.com>
+Subject: [RFC PATCH 1/2] Tracepoint: fix documentation of RCU
+	lockdep checks
+Date: Tue,  6 Oct 2015 19:56:56 -0400
+Message-ID: <1444175817-12425-1-git-send-email-mathieu.desnoyers__44692.8315017887$1444176154$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZjXHm-00029w-VL
- for lttng-dev@lists.lttng.org; Tue, 06 Oct 2015 14:48:31 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 91A203403CB
- for <lttng-dev@lists.lttng.org>; Tue,  6 Oct 2015 18:48:22 +0000 (UTC)
-In-Reply-To: <5613EB0E.1010209@efficios.com>
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1ZjcAt-0003cf-RZ
+ for lttng-dev@lists.lttng.org; Tue, 06 Oct 2015 20:01:43 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,46 +19,42 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: lttng-dev@lists.lttng.org, Dave Hansen <dave@sr71.net>, linux-kernel@vger.kernel.org
 List-Id: lttng-dev@lists.lttng.org
 
-Merged with small modifications, thanks!
+The documentation on top of __DECLARE_TRACE() does not match its
+implementation since the condition check has been added to the
+RCU lockdep checks. Update the documentation to match its
+implementation.
 
-Mathieu
+Fixes: a05d59a56733 "tracing: Add condition check to RCU lockdep checks"
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+CC: Dave Hansen <dave@sr71.net>
+CC: Steven Rostedt <rostedt@goodmis.org>
+---
+ include/linux/tracepoint.h | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
------ On Oct 6, 2015, at 11:38 AM, Michael Jeanson mjeanson@efficios.com wrote:
-
-> Hi,
-> 
-> This pull request adds support for Solaris 10 and 11, on Solaris 10 it
-> requires the OpenCSW open source software distribution for build and
-> runtime dependencies.
-> 
-> https://github.com/urcu/userspace-rcu/pull/5
-> 
->	Port: make bootstrap script work on most shell 		c8d0f0f
->	Port: replace bzero() by memset()			6e8a583
->	Port: Add Solaris support to urcu/syscall-compat.h 	da639cf
->	Port: Add Solaris support to tests/common/thread-id.h 	61b8a58
->	Port: Add Solaris getcpu support 			03190dc
->	Port: Fixes to build system for portability 		114b504
->	Port: Detect nproc bin name in benchmark scripts 	fb4b0fc
->	Fix: regtest outputs valid TAP protocol 		65fcf96
-> 
-> 
-> Feedback is welcome.
-> 
-> Thanks,
-> 
-> Michael
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+index a5f7f3e..c8e3030 100644
+--- a/include/linux/tracepoint.h
++++ b/include/linux/tracepoint.h
+@@ -167,10 +167,11 @@ extern void syscall_unregfunc(void);
+  * structure. Force alignment to the same alignment as the section start.
+  *
+  * When lockdep is enabled, we make sure to always do the RCU portions of
+- * the tracepoint code, regardless of whether tracing is on or we match the
+- * condition.  This lets us find RCU issues triggered with tracepoints even
+- * when this tracepoint is off.  This code has no purpose other than poking
+- * RCU a bit.
++ * the tracepoint code, regardless of whether tracing is on. However,
++ * don't check if the condition is false, due to interaction with idle
++ * instrumentation. This lets us find RCU issues triggered with tracepoints
++ * even when this tracepoint is off. This code has no purpose other than
++ * poking RCU a bit.
+  */
+ #define __DECLARE_TRACE(name, proto, args, cond, data_proto, data_args) \
+ 	extern struct tracepoint __tracepoint_##name;			\
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.1.4
