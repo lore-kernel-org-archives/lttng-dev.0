@@ -1,21 +1,21 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH babeltrace 1/3] Configure: add missing check
-	for used funcs
-Date: Wed, 7 Oct 2015 11:42:14 -0400
-Message-ID: <CA+jJMxsKOYgyo+VBKPZ9wm3J3PfBv1p-k9haTGcJgW6uFb1XLw__32023.5511092053$1444232614$gmane$org@mail.gmail.com>
-References: <1424724638-4608-1-git-send-email-jonathan.rajotte-julien@efficios.com>
- <1424724638-4608-2-git-send-email-jonathan.rajotte-julien@efficios.com>
+From: Mikael Beckius <mikael.beckius@ericsson.com>
+Subject: Re: Sessions are disconnected when disk is full on
+ remote host
+Date: Wed, 7 Oct 2015 13:50:49 +0000
+Message-ID: <FEF43CBBC4664F4D80C53B178C850ADE743C29__22593.7416930266$1444242058$gmane$org@ESESSMB305.ericsson.se>
+References: <FEF43CBBC4664F4D80C53B178C850ADE730271@ESESSMB305.ericsson.se>,
+ <CA+jJMxsAFJ+MgYYRxhcJUuoyUT8bUWfuiH6WJXSPyVg65zLGWw@mail.gmail.com>,
+ <FEF43CBBC4664F4D80C53B178C850ADE7317E3@ESESSMB305.ericsson.se>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f175.google.com ([209.85.160.175])
+Received: from sesbmg22.ericsson.net ([193.180.251.48])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZjqrE-0000Ch-OV
- for lttng-dev@lists.lttng.org; Wed, 07 Oct 2015 11:42:27 -0400
-Received: by ykba192 with SMTP id a192so17091778ykb.3
- for <lttng-dev@lists.lttng.org>; Wed, 07 Oct 2015 08:42:15 -0700 (PDT)
-In-Reply-To: <1424724638-4608-2-git-send-email-jonathan.rajotte-julien@efficios.com>
+ (envelope-from <mikael.beckius@ericsson.com>) id 1Zjp7M-00083e-VQ
+ for lttng-dev@lists.lttng.org; Wed, 07 Oct 2015 09:50:54 -0400
+In-Reply-To: <FEF43CBBC4664F4D80C53B178C850ADE7317E3@ESESSMB305.ericsson.se>
+Content-Language: sv-SE
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,54 +24,19 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-QWxsIHRocmVlIHBhdGNoZXMgbWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIE1vbiwgRmVi
-IDIzLCAyMDE1IGF0IDM6NTAgUE0sIEpvbmF0aGFuIFJham90dGUKPGpvbmF0aGFuLnJham90dGUt
-anVsaWVuQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gQmFzZWQgb24gYXV0b3NjYW4gcmVwb3J0Ogo+
-IGNvbmZpZ3VyZS5hYzogd2FybmluZzogbWlzc2luZyBBQ19DSEVDS19GVU5DUyhbZnRydW5jYXRl
-XSkgd2FudGVkIGJ5OiBmb3JtYXRzL2N0Zi93cml0ZXIvd3JpdGVyLmM6MjM3Cj4gY29uZmlndXJl
-LmFjOiB3YXJuaW5nOiBtaXNzaW5nIEFDX0NIRUNLX0ZVTkNTKFtnZXRob3N0YnluYW1lXSkgd2Fu
-dGVkIGJ5OiBmb3JtYXRzL2x0dG5nLWxpdmUvbHR0bmctbGl2ZS1jb21tLmM6MTIyCj4gY29uZmln
-dXJlLmFjOiB3YXJuaW5nOiBtaXNzaW5nIEFDX0NIRUNLX0ZVTkNTKFtsb2NhbHRpbWVfcl0pIHdh
-bnRlZCBieTogZm9ybWF0cy9jdGYvY3RmLmM6MzQxCj4gY29uZmlndXJlLmFjOiB3YXJuaW5nOiBt
-aXNzaW5nIEFDX0NIRUNLX0ZVTkNTKFttZW1zZXRdKSB3YW50ZWQgYnk6IGNvbnZlcnRlci9iYWJl
-bHRyYWNlLWxvZy5jOjIyOAo+IGNvbmZpZ3VyZS5hYzogd2FybmluZzogbWlzc2luZyBBQ19DSEVD
-S19GVU5DUyhbbWtkaXJdKSB3YW50ZWQgYnk6IGNvbnZlcnRlci9iYWJlbHRyYWNlLWxvZy5jOjQw
-NAo+IGNvbmZpZ3VyZS5hYzogd2FybmluZzogbWlzc2luZyBBQ19DSEVDS19GVU5DUyhbcm1kaXJd
-KSB3YW50ZWQgYnk6IGNvbnZlcnRlci9iYWJlbHRyYWNlLWxvZy5jOjQ2Nwo+IGNvbmZpZ3VyZS5h
-Yzogd2FybmluZzogbWlzc2luZyBBQ19DSEVDS19GVU5DUyhbc2V0ZW52XSkgd2FudGVkIGJ5OiBp
-bmNsdWRlL2JhYmVsdHJhY2UvY29tcGF0L3V0Yy5oOjcxCj4gY29uZmlndXJlLmFjOiB3YXJuaW5n
-OiBtaXNzaW5nIEFDX0NIRUNLX0ZVTkNTKFtzb2NrZXRdKSB3YW50ZWQgYnk6IGZvcm1hdHMvbHR0
-bmctbGl2ZS9sdHRuZy1saXZlLWNvbW0uYzoxMjkKPiBjb25maWd1cmUuYWM6IHdhcm5pbmc6IG1p
-c3NpbmcgQUNfQ0hFQ0tfRlVOQ1MoW3N0cmNocl0pIHdhbnRlZCBieTogY29udmVydGVyL2JhYmVs
-dHJhY2UtbG9nLmM6MjQ0Cj4gY29uZmlndXJlLmFjOiB3YXJuaW5nOiBtaXNzaW5nIEFDX0NIRUNL
-X0ZVTkNTKFtzdHJkdXBdKSB3YW50ZWQgYnk6IGNvbnZlcnRlci9iYWJlbHRyYWNlLmM6NzAxCj4g
-Y29uZmlndXJlLmFjOiB3YXJuaW5nOiBtaXNzaW5nIEFDX0NIRUNLX0ZVTkNTKFtzdHJlcnJvcl0p
-IHdhbnRlZCBieTogZm9ybWF0cy9jdGYvY3RmLmM6NjgyCj4gY29uZmlndXJlLmFjOiB3YXJuaW5n
-OiBtaXNzaW5nIEFDX0NIRUNLX0ZVTkNTKFtzdHJuZHVwXSkgd2FudGVkIGJ5OiBmb3JtYXRzL2x0
-dG5nLWxpdmUvbHR0bmctbGl2ZS1jb21tLmM6MjgwCj4gY29uZmlndXJlLmFjOiB3YXJuaW5nOiBt
-aXNzaW5nIEFDX0NIRUNLX0ZVTkNTKFtzdHJyY2hyXSkgd2FudGVkIGJ5OiBjb252ZXJ0ZXIvYmFi
-ZWx0cmFjZS1sb2cuYzozMzQKPiBjb25maWd1cmUuYWM6IHdhcm5pbmc6IG1pc3NpbmcgQUNfQ0hF
-Q0tfRlVOQ1MoW3N0cnRvdWxsXSkgd2FudGVkIGJ5OiBjb252ZXJ0ZXIvYmFiZWx0cmFjZS5jOjM1
-NAo+IGNvbmZpZ3VyZS5hYzogd2FybmluZzogbWlzc2luZyBBQ19DSEVDS19GVU5DUyhbdHpzZXRd
-KSB3YW50ZWQgYnk6IGluY2x1ZGUvYmFiZWx0cmFjZS9jb21wYXQvdXRjLmg6NzIKPgo+IFNpZ25l
-ZC1vZmYtYnk6IEpvbmF0aGFuIFJham90dGUgPGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmlj
-aW9zLmNvbT4KPiAtLS0KPiAgY29uZmlndXJlLmFjIHwgNiArKysrKy0KPiAgMSBmaWxlIGNoYW5n
-ZWQsIDUgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+Cj4gZGlmZiAtLWdpdCBhL2NvbmZp
-Z3VyZS5hYyBiL2NvbmZpZ3VyZS5hYwo+IGluZGV4IDkzNGJmMDMuLmZmZTM1MmYgMTAwNjQ0Cj4g
-LS0tIGEvY29uZmlndXJlLmFjCj4gKysrIGIvY29uZmlndXJlLmFjCj4gQEAgLTU1LDcgKzU1LDEx
-IEBAIEFDX1RZUEVfU0laRV9UCj4gICMgQ2hlY2tzIGZvciBsaWJyYXJ5IGZ1bmN0aW9ucy4KPiAg
-QUNfRlVOQ19NQUxMT0MKPiAgQUNfRlVOQ19NTUFQCj4gLUFDX0NIRUNLX0ZVTkNTKFtiemVybyBn
-ZXR0aW1lb2ZkYXkgbXVubWFwIHN0cnRvdWxdKQo+ICtBQ19DSEVDS19GVU5DUyhbIFwKPiArICAg
-ICAgIGJ6ZXJvIGdldHRpbWVvZmRheSBtdW5tYXAgc3RydG91bCBmdHJ1bmNhdGUgZ2V0aG9zdGJ5
-bmFtZSBcCj4gKyAgICAgICBsb2NhbHRpbWVfciBtZW1zZXQgbWtkaXIgcm1kaXIgc2V0ZW52IHNv
-Y2tldCBcCj4gKyAgICAgICBzdHJjaHIgc3RyZHVwIHN0cmVycm9yIHN0cm5kdXAgc3RycmNociBz
-dHJ0b3VsbCB0enNldCBcCj4gK10pCj4KPiAgIyBDaGVjayBmb3IgTWluR1czMi4KPiAgTUlOR1cz
-Mj1ubwo+IC0tCj4gMS45LjEKPgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJ
-bmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0
-cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
-Zm8vbHR0bmctZGV2Cg==
+After trying with 2.6.1 and 2.7.0 releases of lttng-tools I cannot say that it makes much of a difference compared with the older versions previously tried. Once the file size for a CPU is reached Babeltrace will output:
+[error] get_next_index: error
+[error] get_next_index failed
+
+and Babeltrace output from that CPU will cease. Restarting Babeltrace will output some traces again before output  ceases almost immediately and the problem remains until the session has been recreated.
+
+This was with --tracefile-count set to "1" and --tracefile-size of various sizes up to a megabyte BUT if I increase the trace file count to "2" it actually appears to be working.
+
+"LTTng currently doesn't support these recovery modes."
+Are there any plans for LTTng to support these "recovery modes" or similar in a future release? Or is there perhaps a way using the LTTng API to detect that a session has lost its connection?
+
+Micke
