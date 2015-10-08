@@ -1,16 +1,16 @@
 From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [MODULES PATCH v2] Extract the bitmask of FDs set in
+Subject: [MODULES PATCH v3] Extract the bitmask of FDs set in
 	select syscall
-Date: Thu,  8 Oct 2015 09:56:02 -0400
-Message-ID: <1444312562-1110-1-git-send-email-jdesfossez__43107.2499639869$1444312629$gmane$org@efficios.com>
+Date: Thu,  8 Oct 2015 10:43:58 -0400
+Message-ID: <1444315438-7681-1-git-send-email-jdesfossez__12734.0066632771$1444315507$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1ZkBg6-0006vX-3S
- for lttng-dev@lists.lttng.org; Thu, 08 Oct 2015 09:56:15 -0400
+ (envelope-from <jdesfossez@efficios.com>) id 1ZkCQT-0007CD-Ce
+ for lttng-dev@lists.lttng.org; Thu, 08 Oct 2015 10:44:12 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -45,14 +45,14 @@ syscall_exit_select: { ret = 1,
 
 Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
 ---
- .../syscalls/headers/syscalls_pointers_override.h  | 57 ++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ .../syscalls/headers/syscalls_pointers_override.h  | 60 ++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
 diff --git a/instrumentation/syscalls/headers/syscalls_pointers_override.h b/instrumentation/syscalls/headers/syscalls_pointers_override.h
-index c9478f4..3e988e1 100644
+index c9478f4..009c16b 100644
 --- a/instrumentation/syscalls/headers/syscalls_pointers_override.h
 +++ b/instrumentation/syscalls/headers/syscalls_pointers_override.h
-@@ -52,4 +52,61 @@ SC_LTTNG_TRACEPOINT_EVENT(pipe2,
+@@ -52,4 +52,64 @@ SC_LTTNG_TRACEPOINT_EVENT(pipe2,
  	)
  )
  
@@ -78,6 +78,9 @@ index c9478f4..3e988e1 100644
 +			tp_locvar->nb_in = 0;
 +			tp_locvar->nb_out = 0;
 +			tp_locvar->nb_ex = 0;
++
++			if (nr > __FD_SETSIZE)
++				goto skip_code;
 +			if (inp) {
 +				ret = get_fd_set(nr, inp, tp_locvar->fds_in);
 +				if (ret < 0)
