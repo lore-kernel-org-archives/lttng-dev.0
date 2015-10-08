@@ -1,8 +1,8 @@
-From: Julien Desfossez <julien.desfossez@polymtl.ca>
+From: Julien Desfossez <jdesfossez@efficios.com>
 Subject: Re: [MODULES RFC PATCH] Extract the bitmask of FDs set
  in select syscall
-Date: Wed, 7 Oct 2015 14:37:23 -0400
-Message-ID: <20151007183723.GI12230__10121.7271214866$1444243105$gmane$org@sinkpad>
+Date: Thu, 8 Oct 2015 09:53:01 -0400
+Message-ID: <20151008135301.GF4504__30624.6224944063$1444312458$gmane$org@sinkpad>
 References: <1443826866-24477-1-git-send-email-jdesfossez@efficios.com>
  <1105641809.21377.1444147156884.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
@@ -11,8 +11,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <julien.desfossez@polymtl.ca>) id 1Zjtam-000170-PI
- for lttng-dev@lists.lttng.org; Wed, 07 Oct 2015 14:37:34 -0400
+ (envelope-from <jdesfossez@efficios.com>) id 1ZkBd6-0006t3-I4
+ for lttng-dev@lists.lttng.org; Thu, 08 Oct 2015 09:53:13 -0400
 Content-Disposition: inline
 In-Reply-To: <1105641809.21377.1444147156884.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -24,15 +24,20 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-> > .../x86-64-syscalls-3.10.0-rc7_pointers_override.h | 56 ++++++++++++++++++++++
-> 
-> Does it have to be a x86-64 specific override, or it could be used
-> as an override for all architectures ?
-Indeed I will move it as an override for all architectures.
-
+> > +#define OVERRIDE_64_select
+> > +SC_LTTNG_TRACEPOINT_EVENT_CODE(select,
+> > +	TP_PROTO(sc_exit(long ret,) int n, fd_set __user * inp, fd_set __user * outp,
+> > +		fd_set __user * exp, struct timeval * tvp),
+> > +	TP_ARGS(sc_exit(ret,) n, inp, outp, exp, tvp),
+> > +	TP_locvar(
+> > +		unsigned long fds_in[__FD_SETSIZE / (8 * sizeof(long))],
+> > +			fds_out[__FD_SETSIZE / (8 * sizeof(long))],
+> > +			fds_ex[__FD_SETSIZE / (8 * sizeof(long))];
+> > +		int nb_in, nb_out, nb_ex;
+> > +	),
 > > +	TP_code(
 > > +		sc_inout(
 > > +		{
@@ -45,31 +50,8 @@ Indeed I will move it as an override for all architectures.
 > > +			tp_locvar->nb_ex = 0;
 > 
 > You could initialize them to 0 in TP_locvar (definition).
-Good point.
-
-> > +			if (inp) {
-> > +				ret = copy_from_user(tp_locvar->fds_in, inp, nr);
-> 
-> Why use copy_from_user() here rather than get_fd_set() ?
-I had a problem with the memset to 0 on error, I don't remember why,
-I'll try again with that.
-
-> > +	TP_FIELDS(
-> > +		sc_exit(ctf_integer(long, ret, ret))
-> > +		sc_in(ctf_integer(int, n, n))
-> > +		sc_inout(ctf_sequence_hex(unsigned long, fdset_in,
-> > +				&tp_locvar->fds_in, unsigned long, tp_locvar->nb_in))
-> 
-> If we want to make this code portable, is it really an array of unsigned long in the
-> trace ? What is the layout on a 32-bit architecture ?
-This way of working is what is done by select() itself. On 64-bit we
-have a maximum of 16 unsigned longs (to handle up to 16*8 = 1024 FDs),
-on 32-bit it is 32 unsigned longs (32 * 4 = 1024).
-
-I would also prefer a way to extract a clean list of FDs instead of a
-bitmask and potentially waste stack space, but I don't see how without
-needing to allocate/free memory or have an arbitrary limit.
-
-Thanks
+Hum apparently I can't do anything other than just declaring variables
+in the TP_locvar section. Assigning a value to it (at declare time or
+afterward) generates a lot of errors.
 
 Julien
