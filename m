@@ -1,16 +1,17 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [MODULES PATCH v3] Extract the bitmask of FDs set in
-	select syscall
-Date: Thu,  8 Oct 2015 10:43:58 -0400
-Message-ID: <1444315438-7681-1-git-send-email-jdesfossez__12734.0066632771$1444315507$gmane$org@efficios.com>
+From: Anders Wallin <wallinux@gmail.com>
+Subject: Issue when first lttng_sessiond is started as a user
+ with GID tracing and 2nd session is started as root
+Date: Tue, 13 Oct 2015 16:29:18 +0200
+Message-ID: <CAF2baFdhhVz7FVjPge7zknEnQ+rb=J=Z-NTb9jsjeHWrvRTrXw__36657.1146333174$1444747147$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0761934596=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
+Received: from mail-wi0-f169.google.com ([209.85.212.169])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1ZkCQT-0007CD-Ce
- for lttng-dev@lists.lttng.org; Thu, 08 Oct 2015 10:44:12 -0400
+ (envelope-from <wallinux@gmail.com>) id 1Zm0iE-0005uK-Lq
+ for lttng-dev@lists.lttng.org; Tue, 13 Oct 2015 10:38:00 -0400
+Received: by wicgb1 with SMTP id gb1so91957776wic.1
+ for <lttng-dev@lists.lttng.org>; Tue, 13 Oct 2015 07:37:53 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,103 +20,144 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: mathieu.desnoyers@efficios.com
-Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Instead of extracting the user-space pointers of the 3 fd_set, we now
-extract the bitmask of the FDs in the sets (in, out, ex) in the form of
-an array of unsigned long (1024 FDs is the limit in the kernel).
+--===============0761934596==
+Content-Type: multipart/alternative; boundary=001a11c34ade64055f0521fd45b2
 
-In this example, we select in input FDs 3, 5 and 10 (0x428), it returns
-that one FD is ready: FD 10 (0x400).
+--001a11c34ade64055f0521fd45b2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-syscall_entry_select: { n = 11,
-	_fdset_in_length = 1, fdset_in = [ [0] = 0x428 ],
-	_fdset_out_length = 1, fdset_out = [ [0] = 0x0 ],
-	_fdset_ex_length = 0, fdset_ex = [ ],
-	tvp = 0
-}
-syscall_exit_select: { ret = 1,
-	_fdset_in_length = 1, fdset_in = [ [0] = 0x400 ],
-	_fdset_out_length = 1, fdset_out = [ [0] = 0x0 ],
-	_fdset_ex_length = 0, fdset_ex = [ ],
-	tvp = 0
-}
+Hi,
 
-Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
----
- .../syscalls/headers/syscalls_pointers_override.h  | 60 ++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+when I start a session as user with gid=3Dtracing it is created fine, but
+when I start a 2nd session as root the first session is gone!
 
-diff --git a/instrumentation/syscalls/headers/syscalls_pointers_override.h b/instrumentation/syscalls/headers/syscalls_pointers_override.h
-index c9478f4..009c16b 100644
---- a/instrumentation/syscalls/headers/syscalls_pointers_override.h
-+++ b/instrumentation/syscalls/headers/syscalls_pointers_override.h
-@@ -52,4 +52,64 @@ SC_LTTNG_TRACEPOINT_EVENT(pipe2,
- 	)
- )
- 
-+#define OVERRIDE_32_select
-+#define OVERRIDE_64_select
-+SC_LTTNG_TRACEPOINT_EVENT_CODE(select,
-+	TP_PROTO(sc_exit(long ret,) int n, fd_set __user * inp, fd_set __user * outp,
-+		fd_set __user * exp, struct timeval * tvp),
-+	TP_ARGS(sc_exit(ret,) n, inp, outp, exp, tvp),
-+	TP_locvar(
-+		unsigned long fds_in[__FD_SETSIZE / (8 * sizeof(long))],
-+			fds_out[__FD_SETSIZE / (8 * sizeof(long))],
-+			fds_ex[__FD_SETSIZE / (8 * sizeof(long))];
-+		int nb_in, nb_out, nb_ex;
-+	),
-+	TP_code(
-+		sc_inout(
-+		{
-+			unsigned long nr;
-+			int ret;
-+
-+			nr = FDS_BYTES(n);
-+			tp_locvar->nb_in = 0;
-+			tp_locvar->nb_out = 0;
-+			tp_locvar->nb_ex = 0;
-+
-+			if (nr > __FD_SETSIZE)
-+				goto skip_code;
-+			if (inp) {
-+				ret = get_fd_set(nr, inp, tp_locvar->fds_in);
-+				if (ret < 0)
-+					goto skip_code;
-+				tp_locvar->nb_in = nr/sizeof(long);
-+			}
-+			if (outp) {
-+				ret = get_fd_set(nr, outp, tp_locvar->fds_out);
-+				if (ret < 0)
-+					goto skip_code;
-+				tp_locvar->nb_out = nr/sizeof(long);
-+			}
-+			if (exp) {
-+				ret = get_fd_set(nr, exp, tp_locvar->fds_ex);
-+				if (ret < 0)
-+					goto skip_code;
-+				tp_locvar->nb_ex = nr/sizeof(long);
-+			}
-+		}
-+		skip_code:
-+		)
-+	),
-+	TP_FIELDS(
-+		sc_exit(ctf_integer(long, ret, ret))
-+		sc_in(ctf_integer(int, n, n))
-+		sc_inout(ctf_sequence_hex(unsigned long, fdset_in,
-+				&tp_locvar->fds_in, unsigned long, tp_locvar->nb_in))
-+		sc_inout(ctf_sequence_hex(unsigned long, fdset_out,
-+				&tp_locvar->fds_out, unsigned long, tp_locvar->nb_out))
-+		sc_inout(ctf_sequence_hex(unsigned long, fdset_ex,
-+				&tp_locvar->fds_ex, unsigned long, tp_locvar->nb_ex))
-+		sc_inout(ctf_integer(struct timeval *, tvp, tvp))
-+	)
-+)
-+
- #endif /* CREATE_SYSCALL_TABLE */
--- 
-1.9.1
+
++ ssh root@128.224.95.181 'killall -9 lttng-sessiond'
+
++ ssh root@128.224.95.181 'ps -ef | grep lttng'
+root      5119  5115  0 14:21 ?        00:00:00 sh -c ps -ef | grep lttng
+root      5121  5119  0 14:21 ?        00:00:00 /bin/busybox.nosuid
+/bin/grep lttng
+
++ ssh root@128.224.95.181 'lttng --version'
+lttng (LTTng Trace Control) 2.7.0 - Herbe =C3=A0 D=C3=A9tourne - v2.7.0
+
++ ssh trace1@128.224.95.181 'lttng create s_trace1'
+Spawning a session daemon
+Session s_trace1 created.
+
++ ssh trace1@128.224.95.181 'lttng list'
+Available tracing sessions:
+  1) s_trace1 (/home/trace1/lttng-traces/s_trace1-20151013-142106)
+[inactive]
+    Trace path: /home/trace1/lttng-traces/s_trace1-20151013-142106
+
+
+Use lttng list <session_name> for more details
+
++ ssh root@128.224.95.181 'lttng create s_root'
+Spawning a session daemon
+Session s_root created.
+Traces will be written in /root/lttng-traces/s_root-20151013-142108
+
++ ssh root@128.224.95.181 'lttng list'
+Available tracing sessions:
+  1) s_root (/root/lttng-traces/s_root-20151013-142108) [inactive]
+    Trace path: /root/lttng-traces/s_root-20151013-142108
+
+
+Use lttng list <session_name> for more details
+
+<<<<< AND HERE IS THE ISSUE WHERE THE s_trace1 SESSION IS LOST>>>>
++ ssh trace1@128.224.95.181 'lttng list'
+Currently no available tracing session
+
+
++ ssh root@128.224.95.181 'ps -ef | grep lttng'
+trace1    5134     1  0 14:21 ?        00:00:00 lttng-sessiond --daemonize
+trace1    5135  5134  0 14:21 ?        00:00:00 lttng-runas    --daemonize
+root      5157     1 14 14:21 ?        00:00:00 lttng-sessiond --daemonize
+root      5158  5157  0 14:21 ?        00:00:00 lttng-runas    --daemonize
+root      5189  5185  0 14:21 ?        00:00:00 sh -c ps -ef | grep lttng
+root      5191  5189  0 14:21 ?        00:00:00 /bin/busybox.nosuid
+/bin/grep lttng
+
+
+I've tried it on 2.5 as well with the same result.
+
+Anders Wallin
+
+--001a11c34ade64055f0521fd45b2
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div><br></div><div>when I start a session as user with=
+ gid=3Dtracing it is created fine, but when I start a 2nd session as root t=
+he first session is gone!</div><div><br></div><div><br></div><div><div>+ ss=
+h <a href=3D"mailto:root@128.224.95.181">root@128.224.95.181</a> &#39;killa=
+ll -9 lttng-sessiond&#39;</div><div><br></div><div>+ ssh <a href=3D"mailto:=
+root@128.224.95.181">root@128.224.95.181</a> &#39;ps -ef | grep lttng&#39;<=
+/div><div>root =C2=A0 =C2=A0 =C2=A05119 =C2=A05115 =C2=A00 14:21 ? =C2=A0 =
+=C2=A0 =C2=A0 =C2=A000:00:00 sh -c ps -ef | grep lttng</div><div>root =C2=
+=A0 =C2=A0 =C2=A05121 =C2=A05119 =C2=A00 14:21 ? =C2=A0 =C2=A0 =C2=A0 =C2=
+=A000:00:00 /bin/busybox.nosuid /bin/grep lttng</div><div><br></div><div>+ =
+ssh <a href=3D"mailto:root@128.224.95.181">root@128.224.95.181</a> &#39;ltt=
+ng --version&#39;</div><div>lttng (LTTng Trace Control) 2.7.0 - Herbe =C3=
+=A0 D=C3=A9tourne - v2.7.0</div><div><br></div><div>+ ssh <a href=3D"mailto=
+:trace1@128.224.95.181">trace1@128.224.95.181</a> &#39;lttng create s_trace=
+1&#39;</div><div>Spawning a session daemon</div><div>Session s_trace1 creat=
+ed.</div><div><br></div><div>+ ssh <a href=3D"mailto:trace1@128.224.95.181"=
+>trace1@128.224.95.181</a> &#39;lttng list&#39;</div><div>Available tracing=
+ sessions:</div><div>=C2=A0 1) s_trace1 (/home/trace1/lttng-traces/s_trace1=
+-20151013-142106) [inactive]</div><div>=C2=A0 =C2=A0 Trace path: /home/trac=
+e1/lttng-traces/s_trace1-20151013-142106</div><div><br></div><div><br></div=
+><div>Use lttng list &lt;session_name&gt; for more details</div><div><br></=
+div><div>+ ssh <a href=3D"mailto:root@128.224.95.181">root@128.224.95.181</=
+a> &#39;lttng create s_root&#39;</div><div>Spawning a session daemon</div><=
+div>Session s_root created.</div><div>Traces will be written in /root/lttng=
+-traces/s_root-20151013-142108</div><div><br></div><div>+ ssh <a href=3D"ma=
+ilto:root@128.224.95.181">root@128.224.95.181</a> &#39;lttng list&#39;</div=
+><div>Available tracing sessions:</div><div>=C2=A0 1) s_root (/root/lttng-t=
+races/s_root-20151013-142108) [inactive]</div><div>=C2=A0 =C2=A0 Trace path=
+: /root/lttng-traces/s_root-20151013-142108</div><div><br></div><div><br></=
+div><div>Use lttng list &lt;session_name&gt; for more details</div><div><br=
+></div><div>&lt;&lt;&lt;&lt;&lt; AND HERE IS THE ISSUE WHERE THE s_trace1 S=
+ESSION IS LOST&gt;&gt;&gt;&gt;</div><div>+ ssh <a href=3D"mailto:trace1@128=
+.224.95.181">trace1@128.224.95.181</a> &#39;lttng list&#39;</div><div>Curre=
+ntly no available tracing session</div><div><br></div><div><br></div><div>+=
+ ssh <a href=3D"mailto:root@128.224.95.181">root@128.224.95.181</a> &#39;ps=
+ -ef | grep lttng&#39;</div><div>trace1 =C2=A0 =C2=A05134 =C2=A0 =C2=A0 1 =
+=C2=A00 14:21 ? =C2=A0 =C2=A0 =C2=A0 =C2=A000:00:00 lttng-sessiond --daemon=
+ize</div><div>trace1 =C2=A0 =C2=A05135 =C2=A05134 =C2=A00 14:21 ? =C2=A0 =
+=C2=A0 =C2=A0 =C2=A000:00:00 lttng-runas =C2=A0 =C2=A0--daemonize</div><div=
+>root =C2=A0 =C2=A0 =C2=A05157 =C2=A0 =C2=A0 1 14 14:21 ? =C2=A0 =C2=A0 =C2=
+=A0 =C2=A000:00:00 lttng-sessiond --daemonize</div><div>root =C2=A0 =C2=A0 =
+=C2=A05158 =C2=A05157 =C2=A00 14:21 ? =C2=A0 =C2=A0 =C2=A0 =C2=A000:00:00 l=
+ttng-runas =C2=A0 =C2=A0--daemonize</div><div>root =C2=A0 =C2=A0 =C2=A05189=
+ =C2=A05185 =C2=A00 14:21 ? =C2=A0 =C2=A0 =C2=A0 =C2=A000:00:00 sh -c ps -e=
+f | grep lttng</div><div>root =C2=A0 =C2=A0 =C2=A05191 =C2=A05189 =C2=A00 1=
+4:21 ? =C2=A0 =C2=A0 =C2=A0 =C2=A000:00:00 /bin/busybox.nosuid /bin/grep lt=
+tng</div></div><div><br></div><div><br></div><div>I&#39;ve tried it on 2.5 =
+as well with the same result.</div><div><br clear=3D"all"><div><div class=
+=3D"gmail_signature">Anders Wallin</div></div>
+</div></div>
+
+--001a11c34ade64055f0521fd45b2--
+
+
+--===============0761934596==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0761934596==--
