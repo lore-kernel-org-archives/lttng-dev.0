@@ -1,36 +1,16 @@
-From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-Subject: Re: [PATCH] Fix: Don't (re)define STAP_PROBEV
-Date: Wed, 14 Oct 2015 13:33:49 -0400
-Message-ID: <561E91FD.1090505__44550.981760449$1444844099$gmane$org@efficios.com>
-References: <871tcx5s47.wl-sb@enotty.net> <561E9114.1040705@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH babeltrace] compat send no SIGPIPE:
+	multithread-safe
+Date: Thu, 15 Oct 2015 12:07:46 -0400
+Message-ID: <1444925266-403-1-git-send-email-mathieu.desnoyers__28284.3112982393$1444925336$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Jonathan.rajotte-julien@efficios.com>)
- id 1ZmPw6-0006KI-0y
- for lttng-dev@lists.lttng.org; Wed, 14 Oct 2015 13:34:02 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 44F0F3403AF
- for <lttng-dev@lists.lttng.org>; Wed, 14 Oct 2015 17:33:54 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id dBQPnYm6LFfC for <lttng-dev@lists.lttng.org>;
- Wed, 14 Oct 2015 17:33:52 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C5B043403C9
- for <lttng-dev@lists.lttng.org>; Wed, 14 Oct 2015 17:33:52 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id L5GR41BN4fCk for <lttng-dev@lists.lttng.org>;
- Wed, 14 Oct 2015 17:33:52 +0000 (UTC)
-Received: from [172.16.0.141] (cable-192.222.213.99.electronicbox.net
- [192.222.213.99])
- by mail.efficios.com (Postfix) with ESMTPSA id 6A1D13403AF
- for <lttng-dev@lists.lttng.org>; Wed, 14 Oct 2015 17:33:52 +0000 (UTC)
-In-Reply-To: <561E9114.1040705@efficios.com>
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1Zml4Q-0004Z2-K2
+ for lttng-dev@lists.lttng.org; Thu, 15 Oct 2015 12:07:59 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -39,105 +19,133 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: jgalar@efficios.com, mjeanson@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-*Looks more like lttng-ust ... *
+The current implementation of the no-SIGPIPE send in the compatibility
+layer has side-effects on multithreaded processes due to use of
+sigaction(). Although multithread-safety is not strictly needed since
+Babeltrace is single-threaded for now, there is no reason to keep this
+limitation deeply rooted in a compatibility layer.
 
-On 2015-10-14 01:29 PM, Jonathan Rajotte Julien wrote:
-> Hi Stelios,
->
-> Thanks for the patch!
->
-> Look's like it's for lttng-tools. Since there is multiple projects on 
-> the ML make sure to add the project
-> name to the patch email suffix next time.
->
-> It will ease the work of jgalar :P
->
-> For more info you can have a look at the contributor's guide here [1].
->
-> [1] https://lttng.org/community/
->
-> Cheers!
->
-> On 2015-10-14 12:31 PM, Stelios Bounanos wrote:
->> Define a new LTTNG_STAP_PROBEV macro to avoid clobbering STAP_PROBEV or
->> emitting unwanted sdt probes when lttng-ust has been built without sdt
->> support.
->>
->> Signed-off-by: Stelios Bounanos <sb@enotty.net>
->> ---
->>
->> Notes:
->>      Tested by building doc/examples/hello-static-lib both --with-sdt 
->> and
->>      --without-sdt.
->>           Programs that included sys/sdt.h after (for example) 
->> lttng/tracef.h
->>      would get static probes for lttng tracepoints even if lttng-ust was
->>      built without sdt support.  I'm guessing that this was unintended.
->>
->>   include/lttng/tracef.h     | 2 +-
->>   include/lttng/tracelog.h   | 2 +-
->>   include/lttng/tracepoint.h | 5 +++--
->>   3 files changed, 5 insertions(+), 4 deletions(-)
->>
->> diff --git a/include/lttng/tracef.h b/include/lttng/tracef.h
->> index 7e8b59e..0c59c9a 100644
->> --- a/include/lttng/tracef.h
->> +++ b/include/lttng/tracef.h
->> @@ -34,7 +34,7 @@ void _lttng_ust_tracef(const char *fmt, ...);
->>     #define tracef(fmt, ...)                        \
->>       do {                                \
->> -        STAP_PROBEV(tracepoint_lttng_ust_tracef, event, ## 
->> __VA_ARGS__); \
->> +        LTTNG_STAP_PROBEV(tracepoint_lttng_ust_tracef, event, ## 
->> __VA_ARGS__); \
->>           if 
->> (caa_unlikely(__tracepoint_lttng_ust_tracef___event.state)) \
->>               _lttng_ust_tracef(fmt, ## __VA_ARGS__);        \
->>       } while (0)
->> diff --git a/include/lttng/tracelog.h b/include/lttng/tracelog.h
->> index 5f14f70..4309d12 100644
->> --- a/include/lttng/tracelog.h
->> +++ b/include/lttng/tracelog.h
->> @@ -53,7 +53,7 @@ TP_TRACELOG_CB_TEMPLATE(TRACE_DEBUG);
->>     #define tracelog(level, fmt, ...)                    \
->>       do {                                \
->> -        STAP_PROBEV(tracepoint_lttng_ust_tracelog, level, ## 
->> __VA_ARGS__); \
->> +        LTTNG_STAP_PROBEV(tracepoint_lttng_ust_tracelog, level, ## 
->> __VA_ARGS__); \
->>           if 
->> (caa_unlikely(__tracepoint_lttng_ust_tracelog___##level.state)) \
->>               _lttng_ust_tracelog_##level(__FILE__, __LINE__, 
->> __func__, \
->>                   fmt, ## __VA_ARGS__); \
->> diff --git a/include/lttng/tracepoint.h b/include/lttng/tracepoint.h
->> index 4bc4fc9..e88db89 100644
->> --- a/include/lttng/tracepoint.h
->> +++ b/include/lttng/tracepoint.h
->> @@ -37,8 +37,9 @@
->>   #ifdef LTTNG_UST_HAVE_SDT_INTEGRATION
->>   #define SDT_USE_VARIADIC
->>   #include <sys/sdt.h>
->> +#define LTTNG_STAP_PROBEV STAP_PROBEV
->>   #else
->> -#define STAP_PROBEV(...)
->> +#define LTTNG_STAP_PROBEV(...)
->>   #endif
->>     #ifdef __cplusplus
->> @@ -53,7 +54,7 @@ extern "C" {
->>     #define tracepoint(provider, name, ...)                        \
->>       do {                                    \
->> -        STAP_PROBEV(provider, name, ## __VA_ARGS__); \
->> +        LTTNG_STAP_PROBEV(provider, name, ## __VA_ARGS__);        \
->>           if (tracepoint_enabled(provider, name))             \
->>               do_tracepoint(provider, name, __VA_ARGS__); \
->>       } while (0)
->
+Use the multithreaded-safe algorithm to catch SIGPIPE implemented in
+LTTng-UST for the write() system call for platforms that do not have
+MSG_NOSIGNAL. It was originally implented in LTTng-UST as part of the
+ring buffer wakeup. This is a re-implementation of this same algorithm
+under MIT license. It uses signal masks and sigtimedwait.
 
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ include/babeltrace/compat/send.h | 70 ++++++++++++++++++++++++++++++----------
+ 1 file changed, 53 insertions(+), 17 deletions(-)
+
+diff --git a/include/babeltrace/compat/send.h b/include/babeltrace/compat/send.h
+index 98e1feb..3c6d01a 100644
+--- a/include/babeltrace/compat/send.h
++++ b/include/babeltrace/compat/send.h
+@@ -5,6 +5,7 @@
+  * babeltrace/compat/send.h
+  *
+  * Copyright (C) 2015  Michael Jeanson <mjeanson@efficios.com>
++ *               2015  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+  *
+  * Permission is hereby granted, free of charge, to any person obtaining a copy
+  * of this software and associated documentation files (the "Software"), to deal
+@@ -27,9 +28,7 @@
+ 
+ /*
+  * This wrapper is used on platforms that have no way of ignoring SIGPIPE
+- * during a send(). Instead, we set the signal action to ignore. This is OK
+- * in a single-threaded app, but would be problematic in a multi-threaded app
+- * since sigaction applies to all threads.
++ * during a send().
+  */
+ 
+ #ifndef MSG_NOSIGNAL
+@@ -45,32 +44,69 @@ ssize_t bt_send_nosigpipe(int fd, const void *buffer, size_t size)
+ 	return send(fd, buffer, size, MSG_NOSIGNAL);
+ }
+ #else
++
++#include <signal.h>
++
+ static inline
+ ssize_t bt_send_nosigpipe(int fd, const void *buffer, size_t size)
+ {
+ 	ssize_t sent;
+ 	int saved_err;
+-	struct sigaction act, oldact;
++	sigset_t sigpipe_set, pending_set, old_set;
++	int sigpipe_was_pending;
+ 
+-	/* Set SIGPIPE action to ignore and save current signal action */
+-	act.sa_handler = SIG_IGN;
+-	if (sigaction(SIGPIPE, &act, &oldact)) {
+-		perror("sigaction");
+-		sent = -1;
+-		goto end;
++	/*
++	 * Discard the SIGPIPE from send(), not disturbing any SIGPIPE
++	 * that might be already pending. If a bogus SIGPIPE is sent to
++	 * the entire process concurrently by a malicious user, it may
++	 * be simply discarded.
++	 */
++	if (sigemptyset(&pending_set)) {
++		return -1;
++	}
++	/*
++	 * sigpending returns the mask of signals that are _both_
++	 * blocked for the thread _and_ pending for either the thread or
++	 * the entire process.
++	 */
++	if (sigpending(&pending_set)) {
++		return -1;
++	}
++	sigpipe_was_pending = sigismember(&pending_set, SIGPIPE);
++	/*
++	 * If sigpipe was pending, it means it was already blocked, so
++	 * no need to block it.
++	 */
++	if (!sigpipe_was_pending) {
++		if (sigemptyset(&sigpipe_set)) {
++			return -1;
++		}
++		if (sigaddset(&sigpipe_set, SIGPIPE)) {
++			return -1;
++		}
++		if (pthread_sigmask(SIG_BLOCK, &sigpipe_set, &old_set)) {
++			return -1;
++		}
+ 	}
+ 
+-	/* Send and save errno */
++	/* Send and save errno. */
+ 	sent = send(fd, buffer, size, 0);
+ 	saved_err = errno;
+ 
+-	/* Restore original signal action */
+-	if (sigaction(SIGPIPE, &oldact, NULL)) {
+-		perror("sigaction");
+-		sent = -1;
+-		goto end;
+-	}
++	if (sent == -1 && errno == EPIPE && !sigpipe_was_pending) {
++		struct timespec timeout = { 0, 0 };
++		int ret;
+ 
++		do {
++			ret = sigtimedwait(&sigpipe_set, NULL,
++				&timeout);
++		} while (ret == -1 && errno == EINTR);
++	}
++	if (!sigpipe_was_pending) {
++		if (pthread_sigmask(SIG_SETMASK, &old_set, NULL)) {
++			return -1;
++		}
++	}
+ 	/* Restore send() errno */
+ 	errno = saved_err;
+ end:
 -- 
-Jonathan R. Julien
-Efficios
+2.1.4
