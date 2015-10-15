@@ -1,17 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Fix: Don't (re)define STAP_PROBEV
-Date: Thu, 15 Oct 2015 21:16:07 +0000 (UTC)
-Message-ID: <1282784834.52742.1444943767471.JavaMail.zimbra__19881.1217480854$1444943834$gmane$org@efficios.com>
-References: <871tcx5s47.wl-sb@enotty.net>
+Subject: Re: [PATCH ust] Add missing --record in Python's
+ Makefile
+Date: Thu, 15 Oct 2015 21:24:30 +0000 (UTC)
+Message-ID: <1709596766.52753.1444944270873.JavaMail.zimbra__19019.0140427605$1444944341$gmane$org@efficios.com>
+References: <1444800876-23552-1-git-send-email-simon.marchi@polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Zmpsr-0006E5-Sm
- for lttng-dev@lists.lttng.org; Thu, 15 Oct 2015 17:16:23 -0400
-In-Reply-To: <871tcx5s47.wl-sb@enotty.net>
+ (envelope-from <compudj@efficios.com>) id 1Zmq10-0006I3-Qx
+ for lttng-dev@lists.lttng.org; Thu, 15 Oct 2015 17:24:47 -0400
+In-Reply-To: <1444800876-23552-1-git-send-email-simon.marchi@polymtl.ca>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,86 +21,65 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Stelios Bounanos <sb@enotty.net>
+To: Simon Marchi <simon.marchi@polymtl.ca>, Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>, Philippe Proulx <philippe.proulx@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Merged into lttng-ust master, stable-2.7 and stable-2.6, thanks!
+Hi,
+
+Jonathan, Philippe, can you check why this is needed, and help us
+expand the changelog a bit with the actual reason why we need this
+change ?
+
+Thanks,
 
 Mathieu
 
------ On Oct 14, 2015, at 12:31 PM, Stelios Bounanos sb@enotty.net wrote:
+----- On Oct 14, 2015, at 1:34 AM, Simon Marchi simon.marchi@polymtl.ca wrote:
 
-> Define a new LTTNG_STAP_PROBEV macro to avoid clobbering STAP_PROBEV or
-> emitting unwanted sdt probes when lttng-ust has been built without sdt
-> support.
+> I believe this is missing.  Fixes this error when doing
 > 
-> Signed-off-by: Stelios Bounanos <sb@enotty.net>
+>  $ make install DESTDIR=/tmp/lttng-ust2
+> 
+> make[1]: Entering directory
+> '/home/simark/src/lttng-ust/liblttng-ust-python-agent'
+> if [ "/tmp/lttng-ust2" = "" ]; then \
+>	/usr/bin/python setup.py install --prefix=/tmp/lttng-ust --record
+>	install_files.txt  --verbose --no-compile ;  \
+> else \
+>	/usr/bin/python setup.py install --root=/tmp/lttng-ust2 --verbose
+>	install_files.txt  --prefix=/tmp/lttng-ust --no-compile ; \
+> fi
+> invalid command name 'install_files.txt'
+> Makefile:713: recipe for target 'install-exec-local' failed
+> make[1]: *** [install-exec-local] Error 1
+> make[1]: Leaving directory
+> '/home/simark/src/lttng-ust/liblttng-ust-python-agent'
+> Makefile:594: recipe for target 'install-am' failed
+> make: *** [install-am] Error 2
+> 
+> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
 > ---
+> liblttng-ust-python-agent/Makefile.am | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Notes:
->    Tested by building doc/examples/hello-static-lib both --with-sdt and
->    --without-sdt.
->    
->    Programs that included sys/sdt.h after (for example) lttng/tracef.h
->    would get static probes for lttng tracepoints even if lttng-ust was
->    built without sdt support.  I'm guessing that this was unintended.
-> 
-> include/lttng/tracef.h     | 2 +-
-> include/lttng/tracelog.h   | 2 +-
-> include/lttng/tracepoint.h | 5 +++--
-> 3 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/lttng/tracef.h b/include/lttng/tracef.h
-> index 7e8b59e..0c59c9a 100644
-> --- a/include/lttng/tracef.h
-> +++ b/include/lttng/tracef.h
-> @@ -34,7 +34,7 @@ void _lttng_ust_tracef(const char *fmt, ...);
-> 
-> #define tracef(fmt, ...)						\
-> 	do {								\
-> -		STAP_PROBEV(tracepoint_lttng_ust_tracef, event, ## __VA_ARGS__); \
-> +		LTTNG_STAP_PROBEV(tracepoint_lttng_ust_tracef, event, ## __VA_ARGS__); \
-> 		if (caa_unlikely(__tracepoint_lttng_ust_tracef___event.state)) \
-> 			_lttng_ust_tracef(fmt, ## __VA_ARGS__);		\
-> 	} while (0)
-> diff --git a/include/lttng/tracelog.h b/include/lttng/tracelog.h
-> index 5f14f70..4309d12 100644
-> --- a/include/lttng/tracelog.h
-> +++ b/include/lttng/tracelog.h
-> @@ -53,7 +53,7 @@ TP_TRACELOG_CB_TEMPLATE(TRACE_DEBUG);
-> 
-> #define tracelog(level, fmt, ...)					\
-> 	do {								\
-> -		STAP_PROBEV(tracepoint_lttng_ust_tracelog, level, ## __VA_ARGS__); \
-> +		LTTNG_STAP_PROBEV(tracepoint_lttng_ust_tracelog, level, ## __VA_ARGS__); \
-> 		if (caa_unlikely(__tracepoint_lttng_ust_tracelog___##level.state)) \
-> 			_lttng_ust_tracelog_##level(__FILE__, __LINE__, __func__, \
-> 				fmt, ## __VA_ARGS__); \
-> diff --git a/include/lttng/tracepoint.h b/include/lttng/tracepoint.h
-> index 4bc4fc9..e88db89 100644
-> --- a/include/lttng/tracepoint.h
-> +++ b/include/lttng/tracepoint.h
-> @@ -37,8 +37,9 @@
-> #ifdef LTTNG_UST_HAVE_SDT_INTEGRATION
-> #define SDT_USE_VARIADIC
-> #include <sys/sdt.h>
-> +#define LTTNG_STAP_PROBEV STAP_PROBEV
-> #else
-> -#define STAP_PROBEV(...)
-> +#define LTTNG_STAP_PROBEV(...)
-> #endif
-> 
-> #ifdef __cplusplus
-> @@ -53,7 +54,7 @@ extern "C" {
-> 
-> #define tracepoint(provider, name, ...)					    \
-> 	do {								    \
-> -		STAP_PROBEV(provider, name, ## __VA_ARGS__);		    \
-> +		LTTNG_STAP_PROBEV(provider, name, ## __VA_ARGS__);	    \
-> 		if (tracepoint_enabled(provider, name)) 		    \
-> 			do_tracepoint(provider, name, __VA_ARGS__);	    \
-> 	} while (0)
+> diff --git a/liblttng-ust-python-agent/Makefile.am
+> b/liblttng-ust-python-agent/Makefile.am
+> index f80b8a3..8bac3fb 100644
+> --- a/liblttng-ust-python-agent/Makefile.am
+> +++ b/liblttng-ust-python-agent/Makefile.am
+> @@ -18,7 +18,7 @@ install-exec-local:
+> 	if [ "$(DESTDIR)" = "" ]; then \
+> 		$(PYTHON) setup.py install --prefix=$(prefix) --record install_files.txt
+> 		--verbose --no-compile $(DISTSETUPOPTS);  \
+> 	else \
+> -		$(PYTHON) setup.py install --root=$(DESTDIR) --verbose install_files.txt
+> --prefix=$(prefix) --no-compile $(DISTSETUPOPTS); \
+> +		$(PYTHON) setup.py install --root=$(DESTDIR) --verbose --record
+> install_files.txt  --prefix=$(prefix) --no-compile $(DISTSETUPOPTS); \
+> 	fi
+> clean-local:
+> 	rm -rf build
 > --
 > 2.6.1
 > 
