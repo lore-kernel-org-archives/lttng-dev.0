@@ -1,16 +1,20 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH babeltrace] Fix: memstream compat layer requires
-	use of babeltrace_close_memstream
-Date: Thu, 15 Oct 2015 12:08:48 -0400
-Message-ID: <1444925328-16174-1-git-send-email-mjeanson__39863.7152313769$1444925407$gmane$org@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH babeltrace] compat send no SIGPIPE:
+	multithread-safe
+Date: Thu, 15 Oct 2015 14:39:11 -0400
+Message-ID: <CA+jJMxtW0cn0seEfUyKejp2Hd3v4zHM9ZSQt=ArA8-ezmnWQVQ__21877.8344140903$1444934418$gmane$org@mail.gmail.com>
+References: <1444925266-403-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-yk0-f182.google.com ([209.85.160.182])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mjeanson@efficios.com>) id 1Zml5Z-0004bx-MS
- for lttng-dev@lists.lttng.org; Thu, 15 Oct 2015 12:09:12 -0400
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZmnQr-0005Jd-1f
+ for lttng-dev@lists.lttng.org; Thu, 15 Oct 2015 14:39:21 -0400
+Received: by ykdt21 with SMTP id t21so26150324ykd.3
+ for <lttng-dev@lists.lttng.org>; Thu, 15 Oct 2015 11:39:11 -0700 (PDT)
+In-Reply-To: <1444925266-403-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,35 +23,98 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-In compatibility mode, the babeltrace compat layer around memstream
-copies the file content into the buffer only at close.
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- formats/lttng-live/lttng-live-comm.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/formats/lttng-live/lttng-live-comm.c b/formats/lttng-live/lttng-live-comm.c
-index 91e344c..6422e65 100644
---- a/formats/lttng-live/lttng-live-comm.c
-+++ b/formats/lttng-live/lttng-live-comm.c
-@@ -932,8 +932,9 @@ int get_new_metadata(struct lttng_live_ctx *ctx,
- 		}
- 	} while (ret > 0 || !len_read);
- 
--	if (fclose(metadata_stream->metadata_fp_write))
--		perror("fclose");
-+	if (babeltrace_close_memstream(metadata_buf, &size,
-+			metadata_stream->metadata_fp_write))
-+		perror("babeltrace_close_memstream");
- 	metadata_stream->metadata_fp_write = NULL;
- 
- error:
--- 
-1.9.1
+TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIFRodSwgT2N0IDE1LCAyMDE1IGF0IDEyOjA3
+IFBNLCBNYXRoaWV1IERlc25veWVycwo8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPiB3
+cm90ZToKPiBUaGUgY3VycmVudCBpbXBsZW1lbnRhdGlvbiBvZiB0aGUgbm8tU0lHUElQRSBzZW5k
+IGluIHRoZSBjb21wYXRpYmlsaXR5Cj4gbGF5ZXIgaGFzIHNpZGUtZWZmZWN0cyBvbiBtdWx0aXRo
+cmVhZGVkIHByb2Nlc3NlcyBkdWUgdG8gdXNlIG9mCj4gc2lnYWN0aW9uKCkuIEFsdGhvdWdoIG11
+bHRpdGhyZWFkLXNhZmV0eSBpcyBub3Qgc3RyaWN0bHkgbmVlZGVkIHNpbmNlCj4gQmFiZWx0cmFj
+ZSBpcyBzaW5nbGUtdGhyZWFkZWQgZm9yIG5vdywgdGhlcmUgaXMgbm8gcmVhc29uIHRvIGtlZXAg
+dGhpcwo+IGxpbWl0YXRpb24gZGVlcGx5IHJvb3RlZCBpbiBhIGNvbXBhdGliaWxpdHkgbGF5ZXIu
+Cj4KPiBVc2UgdGhlIG11bHRpdGhyZWFkZWQtc2FmZSBhbGdvcml0aG0gdG8gY2F0Y2ggU0lHUElQ
+RSBpbXBsZW1lbnRlZCBpbgo+IExUVG5nLVVTVCBmb3IgdGhlIHdyaXRlKCkgc3lzdGVtIGNhbGwg
+Zm9yIHBsYXRmb3JtcyB0aGF0IGRvIG5vdCBoYXZlCj4gTVNHX05PU0lHTkFMLiBJdCB3YXMgb3Jp
+Z2luYWxseSBpbXBsZW50ZWQgaW4gTFRUbmctVVNUIGFzIHBhcnQgb2YgdGhlCj4gcmluZyBidWZm
+ZXIgd2FrZXVwLiBUaGlzIGlzIGEgcmUtaW1wbGVtZW50YXRpb24gb2YgdGhpcyBzYW1lIGFsZ29y
+aXRobQo+IHVuZGVyIE1JVCBsaWNlbnNlLiBJdCB1c2VzIHNpZ25hbCBtYXNrcyBhbmQgc2lndGlt
+ZWR3YWl0Lgo+Cj4gU2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVz
+bm95ZXJzQGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgaW5jbHVkZS9iYWJlbHRyYWNlL2NvbXBhdC9z
+ZW5kLmggfCA3MCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tCj4gIDEg
+ZmlsZSBjaGFuZ2VkLCA1MyBpbnNlcnRpb25zKCspLCAxNyBkZWxldGlvbnMoLSkKPgo+IGRpZmYg
+LS1naXQgYS9pbmNsdWRlL2JhYmVsdHJhY2UvY29tcGF0L3NlbmQuaCBiL2luY2x1ZGUvYmFiZWx0
+cmFjZS9jb21wYXQvc2VuZC5oCj4gaW5kZXggOThlMWZlYi4uM2M2ZDAxYSAxMDA2NDQKPiAtLS0g
+YS9pbmNsdWRlL2JhYmVsdHJhY2UvY29tcGF0L3NlbmQuaAo+ICsrKyBiL2luY2x1ZGUvYmFiZWx0
+cmFjZS9jb21wYXQvc2VuZC5oCj4gQEAgLTUsNiArNSw3IEBACj4gICAqIGJhYmVsdHJhY2UvY29t
+cGF0L3NlbmQuaAo+ICAgKgo+ICAgKiBDb3B5cmlnaHQgKEMpIDIwMTUgIE1pY2hhZWwgSmVhbnNv
+biA8bWplYW5zb25AZWZmaWNpb3MuY29tPgo+ICsgKiAgICAgICAgICAgICAgIDIwMTUgIE1hdGhp
+ZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gICAqCj4gICAq
+IFBlcm1pc3Npb24gaXMgaGVyZWJ5IGdyYW50ZWQsIGZyZWUgb2YgY2hhcmdlLCB0byBhbnkgcGVy
+c29uIG9idGFpbmluZyBhIGNvcHkKPiAgICogb2YgdGhpcyBzb2Z0d2FyZSBhbmQgYXNzb2NpYXRl
+ZCBkb2N1bWVudGF0aW9uIGZpbGVzICh0aGUgIlNvZnR3YXJlIiksIHRvIGRlYWwKPiBAQCAtMjcs
+OSArMjgsNyBAQAo+Cj4gIC8qCj4gICAqIFRoaXMgd3JhcHBlciBpcyB1c2VkIG9uIHBsYXRmb3Jt
+cyB0aGF0IGhhdmUgbm8gd2F5IG9mIGlnbm9yaW5nIFNJR1BJUEUKPiAtICogZHVyaW5nIGEgc2Vu
+ZCgpLiBJbnN0ZWFkLCB3ZSBzZXQgdGhlIHNpZ25hbCBhY3Rpb24gdG8gaWdub3JlLiBUaGlzIGlz
+IE9LCj4gLSAqIGluIGEgc2luZ2xlLXRocmVhZGVkIGFwcCwgYnV0IHdvdWxkIGJlIHByb2JsZW1h
+dGljIGluIGEgbXVsdGktdGhyZWFkZWQgYXBwCj4gLSAqIHNpbmNlIHNpZ2FjdGlvbiBhcHBsaWVz
+IHRvIGFsbCB0aHJlYWRzLgo+ICsgKiBkdXJpbmcgYSBzZW5kKCkuCj4gICAqLwo+Cj4gICNpZm5k
+ZWYgTVNHX05PU0lHTkFMCj4gQEAgLTQ1LDMyICs0NCw2OSBAQCBzc2l6ZV90IGJ0X3NlbmRfbm9z
+aWdwaXBlKGludCBmZCwgY29uc3Qgdm9pZCAqYnVmZmVyLCBzaXplX3Qgc2l6ZSkKPiAgICAgICAg
+IHJldHVybiBzZW5kKGZkLCBidWZmZXIsIHNpemUsIE1TR19OT1NJR05BTCk7Cj4gIH0KPiAgI2Vs
+c2UKPiArCj4gKyNpbmNsdWRlIDxzaWduYWwuaD4KPiArCj4gIHN0YXRpYyBpbmxpbmUKPiAgc3Np
+emVfdCBidF9zZW5kX25vc2lncGlwZShpbnQgZmQsIGNvbnN0IHZvaWQgKmJ1ZmZlciwgc2l6ZV90
+IHNpemUpCj4gIHsKPiAgICAgICAgIHNzaXplX3Qgc2VudDsKPiAgICAgICAgIGludCBzYXZlZF9l
+cnI7Cj4gLSAgICAgICBzdHJ1Y3Qgc2lnYWN0aW9uIGFjdCwgb2xkYWN0Owo+ICsgICAgICAgc2ln
+c2V0X3Qgc2lncGlwZV9zZXQsIHBlbmRpbmdfc2V0LCBvbGRfc2V0Owo+ICsgICAgICAgaW50IHNp
+Z3BpcGVfd2FzX3BlbmRpbmc7Cj4KPiAtICAgICAgIC8qIFNldCBTSUdQSVBFIGFjdGlvbiB0byBp
+Z25vcmUgYW5kIHNhdmUgY3VycmVudCBzaWduYWwgYWN0aW9uICovCj4gLSAgICAgICBhY3Quc2Ff
+aGFuZGxlciA9IFNJR19JR047Cj4gLSAgICAgICBpZiAoc2lnYWN0aW9uKFNJR1BJUEUsICZhY3Qs
+ICZvbGRhY3QpKSB7Cj4gLSAgICAgICAgICAgICAgIHBlcnJvcigic2lnYWN0aW9uIik7Cj4gLSAg
+ICAgICAgICAgICAgIHNlbnQgPSAtMTsKPiAtICAgICAgICAgICAgICAgZ290byBlbmQ7Cj4gKyAg
+ICAgICAvKgo+ICsgICAgICAgICogRGlzY2FyZCB0aGUgU0lHUElQRSBmcm9tIHNlbmQoKSwgbm90
+IGRpc3R1cmJpbmcgYW55IFNJR1BJUEUKPiArICAgICAgICAqIHRoYXQgbWlnaHQgYmUgYWxyZWFk
+eSBwZW5kaW5nLiBJZiBhIGJvZ3VzIFNJR1BJUEUgaXMgc2VudCB0bwo+ICsgICAgICAgICogdGhl
+IGVudGlyZSBwcm9jZXNzIGNvbmN1cnJlbnRseSBieSBhIG1hbGljaW91cyB1c2VyLCBpdCBtYXkK
+PiArICAgICAgICAqIGJlIHNpbXBseSBkaXNjYXJkZWQuCj4gKyAgICAgICAgKi8KPiArICAgICAg
+IGlmIChzaWdlbXB0eXNldCgmcGVuZGluZ19zZXQpKSB7Cj4gKyAgICAgICAgICAgICAgIHJldHVy
+biAtMTsKPiArICAgICAgIH0KPiArICAgICAgIC8qCj4gKyAgICAgICAgKiBzaWdwZW5kaW5nIHJl
+dHVybnMgdGhlIG1hc2sgb2Ygc2lnbmFscyB0aGF0IGFyZSBfYm90aF8KPiArICAgICAgICAqIGJs
+b2NrZWQgZm9yIHRoZSB0aHJlYWQgX2FuZF8gcGVuZGluZyBmb3IgZWl0aGVyIHRoZSB0aHJlYWQg
+b3IKPiArICAgICAgICAqIHRoZSBlbnRpcmUgcHJvY2Vzcy4KPiArICAgICAgICAqLwo+ICsgICAg
+ICAgaWYgKHNpZ3BlbmRpbmcoJnBlbmRpbmdfc2V0KSkgewo+ICsgICAgICAgICAgICAgICByZXR1
+cm4gLTE7Cj4gKyAgICAgICB9Cj4gKyAgICAgICBzaWdwaXBlX3dhc19wZW5kaW5nID0gc2lnaXNt
+ZW1iZXIoJnBlbmRpbmdfc2V0LCBTSUdQSVBFKTsKPiArICAgICAgIC8qCj4gKyAgICAgICAgKiBJ
+ZiBzaWdwaXBlIHdhcyBwZW5kaW5nLCBpdCBtZWFucyBpdCB3YXMgYWxyZWFkeSBibG9ja2VkLCBz
+bwo+ICsgICAgICAgICogbm8gbmVlZCB0byBibG9jayBpdC4KPiArICAgICAgICAqLwo+ICsgICAg
+ICAgaWYgKCFzaWdwaXBlX3dhc19wZW5kaW5nKSB7Cj4gKyAgICAgICAgICAgICAgIGlmIChzaWdl
+bXB0eXNldCgmc2lncGlwZV9zZXQpKSB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJu
+IC0xOwo+ICsgICAgICAgICAgICAgICB9Cj4gKyAgICAgICAgICAgICAgIGlmIChzaWdhZGRzZXQo
+JnNpZ3BpcGVfc2V0LCBTSUdQSVBFKSkgewo+ICsgICAgICAgICAgICAgICAgICAgICAgIHJldHVy
+biAtMTsKPiArICAgICAgICAgICAgICAgfQo+ICsgICAgICAgICAgICAgICBpZiAocHRocmVhZF9z
+aWdtYXNrKFNJR19CTE9DSywgJnNpZ3BpcGVfc2V0LCAmb2xkX3NldCkpIHsKPiArICAgICAgICAg
+ICAgICAgICAgICAgICByZXR1cm4gLTE7Cj4gKyAgICAgICAgICAgICAgIH0KPiAgICAgICAgIH0K
+Pgo+IC0gICAgICAgLyogU2VuZCBhbmQgc2F2ZSBlcnJubyAqLwo+ICsgICAgICAgLyogU2VuZCBh
+bmQgc2F2ZSBlcnJuby4gKi8KPiAgICAgICAgIHNlbnQgPSBzZW5kKGZkLCBidWZmZXIsIHNpemUs
+IDApOwo+ICAgICAgICAgc2F2ZWRfZXJyID0gZXJybm87Cj4KPiAtICAgICAgIC8qIFJlc3RvcmUg
+b3JpZ2luYWwgc2lnbmFsIGFjdGlvbiAqLwo+IC0gICAgICAgaWYgKHNpZ2FjdGlvbihTSUdQSVBF
+LCAmb2xkYWN0LCBOVUxMKSkgewo+IC0gICAgICAgICAgICAgICBwZXJyb3IoInNpZ2FjdGlvbiIp
+Owo+IC0gICAgICAgICAgICAgICBzZW50ID0gLTE7Cj4gLSAgICAgICAgICAgICAgIGdvdG8gZW5k
+Owo+IC0gICAgICAgfQo+ICsgICAgICAgaWYgKHNlbnQgPT0gLTEgJiYgZXJybm8gPT0gRVBJUEUg
+JiYgIXNpZ3BpcGVfd2FzX3BlbmRpbmcpIHsKPiArICAgICAgICAgICAgICAgc3RydWN0IHRpbWVz
+cGVjIHRpbWVvdXQgPSB7IDAsIDAgfTsKPiArICAgICAgICAgICAgICAgaW50IHJldDsKPgo+ICsg
+ICAgICAgICAgICAgICBkbyB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gc2lndGlt
+ZWR3YWl0KCZzaWdwaXBlX3NldCwgTlVMTCwKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICZ0aW1lb3V0KTsKPiArICAgICAgICAgICAgICAgfSB3aGlsZSAocmV0ID09IC0xICYmIGVy
+cm5vID09IEVJTlRSKTsKPiArICAgICAgIH0KPiArICAgICAgIGlmICghc2lncGlwZV93YXNfcGVu
+ZGluZykgewo+ICsgICAgICAgICAgICAgICBpZiAocHRocmVhZF9zaWdtYXNrKFNJR19TRVRNQVNL
+LCAmb2xkX3NldCwgTlVMTCkpIHsKPiArICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gLTE7
+Cj4gKyAgICAgICAgICAgICAgIH0KPiArICAgICAgIH0KPiAgICAgICAgIC8qIFJlc3RvcmUgc2Vu
+ZCgpIGVycm5vICovCj4gICAgICAgICBlcnJubyA9IHNhdmVkX2VycjsKPiAgZW5kOgo+IC0tCj4g
+Mi4xLjQKPgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93
+d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
+aHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
+Cg==
