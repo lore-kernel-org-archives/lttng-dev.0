@@ -1,16 +1,15 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH babeltrace] Fix: check for socket lib before
-	function checks
-Date: Thu, 15 Oct 2015 16:38:59 -0400
-Message-ID: <1444941539-15017-1-git-send-email-mjeanson__4969.98256207934$1444941624$gmane$org@efficios.com>
+Subject: [PATCH babeltrace] Cleanup: remove unused label 'end'
+Date: Thu, 15 Oct 2015 16:40:22 -0400
+Message-ID: <1444941622-16238-1-git-send-email-mjeanson__38275.0427503653$1444941688$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mjeanson@efficios.com>) id 1ZmpJ3-0005xV-Em
- for lttng-dev@lists.lttng.org; Thu, 15 Oct 2015 16:39:25 -0400
+ (envelope-from <mjeanson@efficios.com>) id 1ZmpKG-0005zm-4f
+ for lttng-dev@lists.lttng.org; Thu, 15 Oct 2015 16:40:36 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,41 +22,23 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-On platforms that require extra libraries to link socket apps,
-running this macro before the function checks will lead to
-socket functions being correctly detected.
-
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- configure.ac | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ include/babeltrace/compat/send.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configure.ac b/configure.ac
-index 31bc76a..55a357b 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -81,9 +81,11 @@ if test ! -f "$srcdir/formats/ctf/metadata/ctf-lexer.c"; then
-         ])
- fi
- 
--
- AM_PATH_GLIB_2_0(2.22.0, ,AC_MSG_ERROR([glib is required in order to compile BabelTrace - download it from ftp://ftp.gtk.org/pub/gtk]) , gmodule)
- 
-+# Check what libraries are required on this platform to link sockets programs.
-+AX_LIB_SOCKET_NSL
+diff --git a/include/babeltrace/compat/send.h b/include/babeltrace/compat/send.h
+index 3c6d01a..3998694 100644
+--- a/include/babeltrace/compat/send.h
++++ b/include/babeltrace/compat/send.h
+@@ -109,7 +109,7 @@ ssize_t bt_send_nosigpipe(int fd, const void *buffer, size_t size)
+ 	}
+ 	/* Restore send() errno */
+ 	errno = saved_err;
+-end:
 +
- # Checks for typedefs, structures, and compiler characteristics.
- AC_C_INLINE
- AC_TYPE_PID_T
-@@ -145,9 +147,6 @@ esac
- 
- AM_CONDITIONAL([BABELTRACE_BUILD_WITH_MINGW], [test "x$MINGW32" = "xyes"])
- 
--# Check what libraries are required on this platform to link sockets programs.
--AX_LIB_SOCKET_NSL
--
- # Check for libuuid
- AC_CHECK_LIB([uuid], [uuid_generate],
- [
+ 	return sent;
+ }
+ #endif
 -- 
 1.9.1
