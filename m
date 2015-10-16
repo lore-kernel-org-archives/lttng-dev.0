@@ -1,16 +1,15 @@
-From: Ted Cooper <theod@pdx.edu>
-Subject: urcu: Where does HAS_INCOHERENT_CACHES come from?
-Date: Fri, 16 Oct 2015 03:17:29 -0700
-Message-ID: <CALcGr8weFzyHE3jdieQzWtXe9-G75c-JrqtWonhr3iHWPR_mzw__17437.8245989375$1444990723$gmane$org@mail.gmail.com>
+From: Nathan Lynch <Nathan_Lynch@mentor.com>
+Subject: babeltrace foreign builds broken by 384246569494
+Date: Fri, 16 Oct 2015 10:35:42 -0500
+Message-ID: <5621194E.40804__42789.669839158$1445009809$gmane$org@mentor.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0242807086=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wi0-f172.google.com ([209.85.212.172])
+Received: from relay1.mentorg.com ([192.94.38.131])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <theod@pdx.edu>) id 1Zn24t-0001fU-8t
- for lttng-dev@lists.lttng.org; Fri, 16 Oct 2015 06:17:36 -0400
-Received: by wicgb1 with SMTP id gb1so2984526wic.1
- for <lttng-dev@lists.lttng.org>; Fri, 16 Oct 2015 03:17:29 -0700 (PDT)
+ (envelope-from <Nathan_Lynch@mentor.com>) id 1Zn72t-0003Rm-8p
+ for lttng-dev@lists.lttng.org; Fri, 16 Oct 2015 11:35:52 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,38 +18,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0242807086==
-Content-Type: multipart/alternative; boundary=047d7b86df7a5eb9360522361ad7
-
---047d7b86df7a5eb9360522361ad7
-Content-Type: text/plain; charset=UTF-8
-
-This seems like a macro that is unique to the userspace-rcu codebase, but I
-can't anything that mentions it besides some #ifndefs.
-
-Thanks,
-Ted
-
---047d7b86df7a5eb9360522361ad7
-Content-Type: text/html; charset=UTF-8
-
-<div dir="ltr">This seems like a macro that is unique to the userspace-rcu codebase, but I can&#39;t anything that mentions it besides some #ifndefs.<div><br></div><div>Thanks,</div><div>Ted</div></div>
-
---047d7b86df7a5eb9360522361ad7--
-
-
---===============0242807086==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0242807086==--
+SGksCgpCdWlsZGluZyBiYWJlbHRyYWNlJ3MgbWFzdGVyIGJyYW5jaCBpbiBhIGRpcmVjdG9yeSBz
+ZXBhcmF0ZSBmcm9tIHRoZSBzb3VyY2UKZGlyZWN0b3J5IGhhcyBiZWVuIGJyb2tlbiBieToKCmNv
+bW1pdCAzODQyNDY1Njk0OTQ1ODI5ZDc2NDUyZmY4MzkyNGFhMDEwM2M2MjkzCkF1dGhvcjogTWlj
+aGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+CkRhdGU6ICAgRnJpIE9jdCA5IDE1
+OjUwOjI1IDIwMTUgLTA0MDAKCiAgICBQb3J0OiBJbmNsdWRlIGNvbmZpZy5oIGdsb2JhbGx5IHRy
+b3VnaCBERUZBVUxUX0lOQ0xVREVTCiAgICAKICAgIFNpZ25lZC1vZmYtYnk6IE1pY2hhZWwgSmVh
+bnNvbiA8bWplYW5zb25AZWZmaWNpb3MuY29tPgogICAgU2lnbmVkLW9mZi1ieTogSsOpcsOpbWll
+IEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgoKVGhlIGVycm9yIGlz
+OgoKbWFrZVs1XTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvaG9tZS9uYXRoYW5sL3NyYy9iYWJlbHRy
+YWNlL2J1aWxkL2Zvcm1hdHMvY3RmL21ldGFkYXRhJwovYmluL3NoIC4uLy4uLy4uL2xpYnRvb2wg
+IC0tdGFnPUNDICAgLS1tb2RlPWNvbXBpbGUgZ2NjIC1ESEFWRV9DT05GSUdfSCAtSS9ob21lL25h
+dGhhbmwvc3JjL2JhYmVsdHJhY2UvYnVpbGQvLi4gLUkuLi8uLi8uLiAtSS4uLy4uLy4uL2luY2x1
+ZGUgLWluY2x1ZGUgY29uZmlnLmggICAgLXB0aHJlYWQgLUkvdXNyL2luY2x1ZGUvZ2xpYi0yLjAg
+LUkvdXNyL2xpYjY0L2dsaWItMi4wL2luY2x1ZGUgIC1XYWxsIC1XZm9ybWF0IC1JL2hvbWUvbmF0
+aGFubC9zcmMvYmFiZWx0cmFjZS9idWlsZC8uLi9pbmNsdWRlIC1pbmNsdWRlIGN0Zi1zY2FubmVy
+LXN5bWJvbHMuaCAtZyAtTzIgLXB0aHJlYWQgLU1UIGxpYmN0Zl9wYXJzZXJfbGEtY3RmLWxleGVy
+LmxvIC1NRCAtTVAgLU1GIC5kZXBzL2xpYmN0Zl9wYXJzZXJfbGEtY3RmLWxleGVyLlRwbyAtYyAt
+byBsaWJjdGZfcGFyc2VyX2xhLWN0Zi1sZXhlci5sbyBgdGVzdCAtZiAnY3RmLWxleGVyLmMnIHx8
+IGVjaG8gJy9ob21lL25hdGhhbmwvc3JjL2JhYmVsdHJhY2UvYnVpbGQvLi4vZm9ybWF0cy9jdGYv
+bWV0YWRhdGEvJ2BjdGYtbGV4ZXIuYwpsaWJ0b29sOiBjb21waWxlOiAgZ2NjIC1ESEFWRV9DT05G
+SUdfSCAtSS9ob21lL25hdGhhbmwvc3JjL2JhYmVsdHJhY2UvYnVpbGQvLi4gLUkuLi8uLi8uLiAt
+SS4uLy4uLy4uL2luY2x1ZGUgLWluY2x1ZGUgY29uZmlnLmggLXB0aHJlYWQgLUkvdXNyL2luY2x1
+ZGUvZ2xpYi0yLjAgLUkvdXNyL2xpYjY0L2dsaWItMi4wL2luY2x1ZGUgLVdhbGwgLVdmb3JtYXQg
+LUkvaG9tZS9uYXRoYW5sL3NyYy9iYWJlbHRyYWNlL2J1aWxkLy4uL2luY2x1ZGUgLWluY2x1ZGUg
+Y3RmLXNjYW5uZXItc3ltYm9scy5oIC1nIC1PMiAtcHRocmVhZCAtTVQgbGliY3RmX3BhcnNlcl9s
+YS1jdGYtbGV4ZXIubG8gLU1EIC1NUCAtTUYgLmRlcHMvbGliY3RmX3BhcnNlcl9sYS1jdGYtbGV4
+ZXIuVHBvIC1jIGN0Zi1sZXhlci5jICAtZlBJQyAtRFBJQyAtbyAubGlicy9saWJjdGZfcGFyc2Vy
+X2xhLWN0Zi1sZXhlci5vCmNjMTogZmF0YWwgZXJyb3I6IGN0Zi1zY2FubmVyLXN5bWJvbHMuaDog
+Tm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeQoKClRvIHJlY3JlYXRlLCBqdXN0IGRvIHNvbWV0aGlu
+ZyBsaWtlOgoKJCAuL2Jvb3RzdHJhcCAmJiBta2RpciBidWlsZCAmJiAoY2QgYnVpbGQgJiYgLi4v
+Y29uZmlndXJlICYmIG1ha2UpCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
+cmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
+ZGV2Cg==
