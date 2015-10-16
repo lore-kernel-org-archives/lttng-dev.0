@@ -1,16 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: urcu: Where does HAS_INCOHERENT_CACHES come from?
-Date: Fri, 16 Oct 2015 20:36:01 +0000 (UTC)
-Message-ID: <1677274442.63472.1445027761873.JavaMail.zimbra__16169.1328896724$1445027835$gmane$org@efficios.com>
-References: <CALcGr8weFzyHE3jdieQzWtXe9-G75c-JrqtWonhr3iHWPR_mzw@mail.gmail.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: [RELEASE] Babeltrace 1.3.0
+Date: Fri, 16 Oct 2015 17:45:45 -0400
+Message-ID: <CA+jJMxtE6zKdJ9rdj_3gnr_2MsECw+Evp47sO6L6PkyL9HVufg__22458.0162125223$1445032016$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0285634076=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-yk0-f179.google.com ([209.85.160.179])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZnBjd-0004zu-EG
- for lttng-dev@lists.lttng.org; Fri, 16 Oct 2015 16:36:20 -0400
-In-Reply-To: <CALcGr8weFzyHE3jdieQzWtXe9-G75c-JrqtWonhr3iHWPR_mzw@mail.gmail.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZnCow-0005NX-St
+ for lttng-dev@lists.lttng.org; Fri, 16 Oct 2015 17:45:56 -0400
+Received: by ykdz2 with SMTP id z2so12547984ykd.3
+ for <lttng-dev@lists.lttng.org>; Fri, 16 Oct 2015 14:45:45 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,83 +20,78 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Ted Cooper <theod@pdx.edu>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: "diamon-discuss@lists.linuxfoundation.org" <diamon-discuss@lists.linuxfoundation.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0285634076==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_63471_116726065.1445027761872"
-
-------=_Part_63471_116726065.1445027761872
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
------ On Oct 16, 2015, at 6:17 AM, Ted Cooper <theod@pdx.edu> wrote: 
-
-> This seems like a macro that is unique to the userspace-rcu codebase, but I
-> can't anything that mentions it besides some #ifndefs.
-
-In the early days of URCU, we planned to support architectures with incoherent caches 
-like the Blackfin. We never ended up implementing support for that kind of architecture 
-though. 
-
-Thanks, 
-
-Mathieu 
-
-> Thanks,
-> Ted
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
-------=_Part_63471_116726065.1445027761872
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
-__">----- On Oct 16, 2015, at 6:17 AM, Ted Cooper &lt;theod@pdx.edu&gt; wro=
-te:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockquote style=
-=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#0=
-00;font-weight:normal;font-style:normal;text-decoration:none;font-family:He=
-lvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr">This seems like =
-a macro that is unique to the userspace-rcu codebase, but I can't anything =
-that mentions it besides some #ifndefs.</div></blockquote><div>In the early=
- days of URCU, we planned to support architectures with incoherent caches<b=
-r></div><div>like the Blackfin. We never ended up implementing support for =
-that kind of architecture</div><div>though.<br data-mce-bogus=3D"1"></div><=
-div><br data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></d=
-iv><div><br data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"=
-></div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left=
-:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:=
-normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,s=
-ans-serif;font-size:12pt;"><div dir=3D"ltr"><br><div>Thanks,</div><div>Ted<=
-/div></div><br>_______________________________________________<br>lttng-dev=
- mailing list<br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bi=
-n/mailman/listinfo/lttng-dev<br></blockquote></div><div><br></div><div data=
--marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS In=
-c.<br>http://www.efficios.com</div></div></body></html>
-------=_Part_63471_116726065.1445027761872--
-
-
---===============0285634076==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0285634076==--
+SGkgYWxsLAoKVG9kYXkgd2UgYXJlIHJlbGVhc2luZyBCYWJlbHRyYWNlIDEuMy4wLCBiYXNlZCBv
+ZmYgdGhlIHN0YWJsZS0xLjIKYnJhbmNoLiBBcyBzb21lIG9mIHlvdSBtYXkga25vdywgd2UgYXJl
+IHN0aWxsIHdvcmtpbmcgb24KQmFiZWx0cmFjZSAyLjAsIHdoaWNoIGludHJvZHVjZXMgYSBudW1i
+ZXIgb2YgbmV3IEFQSXMuCgpUaGlzIDEuMy4wIHJlbGVhc2UgaXMgZnVuY3Rpb25hbGx5IGlkZW50
+aWNhbCB0byB0aGUgMS4yLnggc2VyaWVzLCBidXQKYWRkcyBzdXBwb3J0IGZvciBTb2xhcmlzLgoK
+VGhlIEJhYmVsdHJhY2UgcHJvamVjdCBwcm92aWRlcyB0cmFjZSByZWFkIGFuZCB3cml0ZSBsaWJy
+YXJpZXMsIGFzIHdlbGwKYXMgYSB0cmFjZSBjb252ZXJ0ZXIuIFBsdWdpbnMgY2FuIGJlIGNyZWF0
+ZWQgZm9yIGFueSB0cmFjZSBmb3JtYXQgdG8KYWxsb3cgaXRzIGNvbnZlcnNpb24gdG8vZnJvbSBh
+bm90aGVyIHRyYWNlIGZvcm1hdC4KClRoZSBtYWluIGZvcm1hdCBleHBlY3RlZCB0byBiZSBjb252
+ZXJ0ZWQgdG8vZnJvbSBpcyB0aGUgQ29tbW9uIFRyYWNlCkZvcm1hdCAoQ1RGKS4gVGhlIGRlZmF1
+bHQgaW5wdXQgZm9ybWF0IG9mIHRoZSAiYmFiZWx0cmFjZSIgY29tbWFuZCBpcwpDVEYsIGFuZCBp
+dHMgZGVmYXVsdCBvdXRwdXQgZm9ybWF0IGlzIGEgaHVtYW4tcmVhZGFibGUgdGV4dCBsb2cuIFRo
+ZQoiYmFiZWx0cmFjZS1sb2ciIGNvbW1hbmQgY29udmVydHMgZnJvbSBhIHRleHQgbG9nIHRvIGEg
+Q1RGIHRyYWNlLgoKQ2hhbmdlIGxvZzoKMjAxNS0xMC0xNiBCYWJlbHRyYWNlIDEuMy4wCiAgICAg
+ICAgKiBGaXg6IG1pc3NpbmcgaW5jbHVkZXMgYnJlYWsgdGhlIG91dC1vZi10cmVlIGJ1aWxkCiAg
+ICAgICAgKiBGaXg6IFNpbGVuY2UgbWlzc2luZyBzZW50aW5lbCB3YXJuaW5ncyBvbiBHQ0MgNAog
+ICAgICAgICogQ2xlYW51cDogcmVtb3ZlIHVudXNlZCBsYWJlbCAnZW5kJwogICAgICAgICogRml4
+OiBjaGVjayBmb3Igc29ja2V0IGxpYiBiZWZvcmUgZnVuY3Rpb24gY2hlY2tzCiAgICAgICAgKiBG
+aXg6IG1lbXN0cmVhbSBjb21wYXQgbGF5ZXIgcmVxdWlyZXMgdXNlIG9mIGJhYmVsdHJhY2VfY2xv
+c2VfbWVtc3RyZWFtCiAgICAgICAgKiBjb21wYXQgc2VuZCBubyBTSUdQSVBFOiBtdWx0aXRocmVh
+ZC1zYWZlCiAgICAgICAgKiBGaXg6IHRydW5jYXRlZCB2YWx1ZSBpbiBmZ2V0YygpIHVzYWdlCiAg
+ICAgICAgKiBGaXg6IGhhbmRsZSBFSU5UUiByZXR1cm4gdmFsdWUgZm9yIGJ0X3Bvc2l4X2ZhbGxv
+Y2F0ZQogICAgICAgICogQ29uZmlndXJlOiBBZGQgbWlzc2luZyBjaGVja3MKICAgICAgICAqIElt
+cGxlbWVudCBidF9nZXRsaW5lCiAgICAgICAgKiBGaXg6IGluaXRpYWxpemUgZ2V0bGluZSBsaW5l
+c2l6ZSBhcmd1bWVudCB0byAwCiAgICAgICAgKiBGaXg6IHdhcm5pbmcsIG1heSBiZSB1c2VkIHVu
+aW5pdGlhbGl6ZWQKICAgICAgICAqIFBvcnQ6IFJlcGxhY2UgZGlyZW50LT5kX3R5cGUgYnkgc3Rh
+dCBTX0lTUkVHCiAgICAgICAgKiBQb3J0OiBJbmNsdWRlIGNvbmZpZy5oIGdsb2JhbGx5IHRyb3Vn
+aCBERUZBVUxUX0lOQ0xVREVTCiAgICAgICAgKiBQb3J0OiBBZGQgY29tcGF0IGZvciBkaXJmZAog
+ICAgICAgICogUG9ydDogQWRkIGNvbXBhdCBmb3IgbWtkdGVtcAogICAgICAgICogUG9ydDogQWRk
+IGNvbXBhdCBmb3Igc3RybmxlbiBhbmQgc3RybmR1cAogICAgICAgICogUG9ydDogVXNlIGJhc2gg
+dG8gcnVuIHRlc3RzCiAgICAgICAgKiBQb3J0OiBJbXBsZW1lbnQgZmFjY2Vzc2F0IHdyYXBwZXIK
+ICAgICAgICAqIFBvcnQ6IGltcGxlbWVudCBwb3NpeF9mYWxsb2NhdGUgd3JhcHBlcgogICAgICAg
+ICogUG9ydDogU2V0IHJlcXVpcmVkIGNvbXBpbGVyIGZsYWdzIHRvIHVzZSBwdGhyZWFkcwogICAg
+ICAgICogUG9ydDogQWRkIGNvbmZpZ3VyZSBjaGVjayBmb3IgX19hdHRyaWJ1dGVfXyBzdXBwb3J0
+CiAgICAgICAgKiBQb3J0OiBjbGVhbnVwIGFuZCBwb3J0YWJpbGl0eSBmaXggdG8gY29uZmlndXJl
+LmFjCiAgICAgICAgKiBQb3J0OiBBZGQgc3VwcG9ydCBmb3IgbGlua2VycyB3aXRoIG5vIHN1cHBv
+cnQgZm9yICduby1hcy1uZWVkZWQnCiAgICAgICAgKiBQb3J0OiBBZGQgY29tcGF0IGZvciBwbGF0
+Zm9ybXMgd2l0aCBubyBNU0dfTk9TSUdOQUwgb3IgU09fTk9TSUdQSVBFCiAgICAgICAgKiBQb3J0
+OiBBZGQgQVhfTElCX1NPQ0tFVF9OU0wgbWFjcm8gdG8gY29uZmlndXJlLmFjCiAgICAgICAgKiBQ
+b3J0OiBSZXBsYWNlIGJ6ZXJvKCkgYnkgbWVtc2V0KCkKICAgICAgICAqIFBvcnQ6IEFkZCBkdW1t
+eS5jIHRvIGxpYmNvbXBhdAogICAgICAgICogUG9ydDogdW5hbWUgY2FuIHJldHVybiBhIHBvc2l0
+aXZlIHZhbHVlIG9uIHN1Y2Nlc3MKICAgICAgICAqIFBvcnQ6IFJlcGxhY2UgTkFNRV9NQVggYnkg
+TUFYTkFNTEVOCiAgICAgICAgKiBDaGFuZ2UgVVVJRCBBUEkgcHJlZml4IGZyb20gYmFiZWx0cmFj
+ZV8gdG8gYnRfCiAgICAgICAgKiBQb3J0OiBBZGQgU29sYXJpcyBsaWJ1dWlkIGNvbXBhdAogICAg
+ICAgICogUG9ydDogQWRkIFNvbGFyaXMgZW5kaWFuLmggY29tcGF0CiAgICAgICAgKiBQb3J0OiBt
+YWtlIGJvb3RzdHJhcCBzY3JpcHQgd29yayBvbiBtb3N0IHNoZWxsCiAgICAgICAgKiBGaXg6IHBv
+c2l4X2ZhbGxvY2F0ZSgpIHJldHVybnMgaW50ID4gMCBvbiBlcnJvcnMKICAgICAgICAqIEZpeDog
+YmFiZWx0cmFjZS1sb2cgcGFja2V0IHNlZWsKICAgICAgICAqIEZpeDogbWFrZSBjaGVjayBpbiBP
+T1QgYnVpbGQgd2l0aCBhYnNvbHV0ZSBwYXRoCiAgICAgICAgKiBGaXg6IG1ha2UgY2hlY2sgaW4g
+b3V0IG9mIHRyZWUgYnVpbGQKICAgICAgICAqIEZpeDogMzJiaXQgdmFsdWVzIGluZGV4X21ham9y
+L21pbm9yIHVzZWQgYXMgNjRiaXQKICAgICAgICAqIEhpZGUgdGhlIHBhY2tldF9zZXFfbnVtIGZp
+ZWxkCiAgICAgICAgKiBCdWlsZDogVXBkYXRlIG00IGZvciBiaXNvbiAmIGZsZXggdmVyc2lvbiBj
+aGVjayB0byBtYXRjaAphdXRvY29uZi1hcmNoaXZlIGZpbGUKICAgICAgICAqIEJ1aWxkOiBhZGQg
+dmVyc2lvbiBjaGVjayBvbiBmbGV4CiAgICAgICAgKiBCdWlsZDogYWRkIHZlcnNpb24gY2hlY2sg
+b24gYXV0b2NvbmYKICAgICAgICAqIEJ1aWxkOiBtNCBtYWNybyBmb3IgQmlzb24gdmVyc2lvbiBj
+aGVjawogICAgICAgICogRml4OiBNaXNzaW5nIHBvc3RmaXhfZXhwcmVzc2lvbiBET1Qga2V5d29y
+ZHMgaW4gQ1RGIGdyYW1tYXIKICAgICAgICAqIEZpeDogaGFuZGxlIDY0LWJpdCB0cmFjZSBJRHMg
+b24gMzItYml0IHN5c3RlbXMKICAgICAgICAqIEZpeDogcHJpbnQgZm9ybWF0IHR5cGUgbWlzbWF0
+Y2ggd2FybmluZ3Mgb24gMzItYml0CiAgICAgICAgKiBGaXg6IG1pc3NpbmcgcGFyZW50aGVzaXMg
+aW4gb2Zmc2V0X2FsaWduX2Zsb29yCiAgICAgICAgKiBGaXg6IGFsbG93IGVtcHR5IENURiBmaWxl
+cwogICAgICAgICogRml4OiBJbmNvcnJlY3QgdmFyaWFudCB0YWcgdmFsaWRhdGlvbgogICAgICAg
+ICogRml4OiBzYW5pdHkgY2hlY2sgaW4gaXRlcmF0b3IgY3JlYXRpb24KICAgICAgICAqIEZpeDog
+aXRlcmF0ZSBtYW51YWxseSBvdmVyIGVhY2ggbGl2ZSB0cmFjZSB0byBhZGQgdG8gY2F0Y2ggZXJy
+b3JzCiAgICAgICAgKiBEZXRlY3QgUHl0aG9uIHBhY2thZ2VzIGRpcmVjdG9yeSBvbiBjb25maWd1
+cmUKClByb2plY3Qgd2Vic2l0ZTogaHR0cDovL2RpYW1vbi5vcmcvYmFiZWx0cmFjZS8KRG93bmxv
+YWQgbGluazogaHR0cDovL3d3dy5lZmZpY2lvcy5jb20vZmlsZXMvYmFiZWx0cmFjZS9iYWJlbHRy
+YWNlLTEuMy4wLnRhci5iejIKQ1RGIHNwZWNpZmljYXRpb246IGh0dHA6Ly9kaWFtb24ub3JnL2N0
+Zi8KCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZp
+Y2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8v
+bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
