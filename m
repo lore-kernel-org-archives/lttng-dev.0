@@ -1,18 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH ust] Add missing --record in Python's
- Makefile
-Date: Thu, 15 Oct 2015 21:24:30 +0000 (UTC)
-Message-ID: <1709596766.52753.1444944270873.JavaMail.zimbra__19019.0140427605$1444944341$gmane$org@efficios.com>
-References: <1444800876-23552-1-git-send-email-simon.marchi@polymtl.ca>
+From: Ted Cooper <theod@pdx.edu>
+Subject: urcu: Where does HAS_INCOHERENT_CACHES come from?
+Date: Fri, 16 Oct 2015 03:17:29 -0700
+Message-ID: <CALcGr8weFzyHE3jdieQzWtXe9-G75c-JrqtWonhr3iHWPR_mzw__17437.8245989375$1444990723$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0242807086=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-wi0-f172.google.com ([209.85.212.172])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Zmq10-0006I3-Qx
- for lttng-dev@lists.lttng.org; Thu, 15 Oct 2015 17:24:47 -0400
-In-Reply-To: <1444800876-23552-1-git-send-email-simon.marchi@polymtl.ca>
+ (envelope-from <theod@pdx.edu>) id 1Zn24t-0001fU-8t
+ for lttng-dev@lists.lttng.org; Fri, 16 Oct 2015 06:17:36 -0400
+Received: by wicgb1 with SMTP id gb1so2984526wic.1
+ for <lttng-dev@lists.lttng.org>; Fri, 16 Oct 2015 03:17:29 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,75 +19,38 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>, Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>, Philippe Proulx <philippe.proulx@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+--===============0242807086==
+Content-Type: multipart/alternative; boundary=047d7b86df7a5eb9360522361ad7
 
-Jonathan, Philippe, can you check why this is needed, and help us
-expand the changelog a bit with the actual reason why we need this
-change ?
+--047d7b86df7a5eb9360522361ad7
+Content-Type: text/plain; charset=UTF-8
+
+This seems like a macro that is unique to the userspace-rcu codebase, but I
+can't anything that mentions it besides some #ifndefs.
 
 Thanks,
+Ted
 
-Mathieu
+--047d7b86df7a5eb9360522361ad7
+Content-Type: text/html; charset=UTF-8
 
------ On Oct 14, 2015, at 1:34 AM, Simon Marchi simon.marchi@polymtl.ca wrote:
+<div dir="ltr">This seems like a macro that is unique to the userspace-rcu codebase, but I can&#39;t anything that mentions it besides some #ifndefs.<div><br></div><div>Thanks,</div><div>Ted</div></div>
 
-> I believe this is missing.  Fixes this error when doing
-> 
->  $ make install DESTDIR=/tmp/lttng-ust2
-> 
-> make[1]: Entering directory
-> '/home/simark/src/lttng-ust/liblttng-ust-python-agent'
-> if [ "/tmp/lttng-ust2" = "" ]; then \
->	/usr/bin/python setup.py install --prefix=/tmp/lttng-ust --record
->	install_files.txt  --verbose --no-compile ;  \
-> else \
->	/usr/bin/python setup.py install --root=/tmp/lttng-ust2 --verbose
->	install_files.txt  --prefix=/tmp/lttng-ust --no-compile ; \
-> fi
-> invalid command name 'install_files.txt'
-> Makefile:713: recipe for target 'install-exec-local' failed
-> make[1]: *** [install-exec-local] Error 1
-> make[1]: Leaving directory
-> '/home/simark/src/lttng-ust/liblttng-ust-python-agent'
-> Makefile:594: recipe for target 'install-am' failed
-> make: *** [install-am] Error 2
-> 
-> Signed-off-by: Simon Marchi <simon.marchi@polymtl.ca>
-> ---
-> liblttng-ust-python-agent/Makefile.am | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/liblttng-ust-python-agent/Makefile.am
-> b/liblttng-ust-python-agent/Makefile.am
-> index f80b8a3..8bac3fb 100644
-> --- a/liblttng-ust-python-agent/Makefile.am
-> +++ b/liblttng-ust-python-agent/Makefile.am
-> @@ -18,7 +18,7 @@ install-exec-local:
-> 	if [ "$(DESTDIR)" = "" ]; then \
-> 		$(PYTHON) setup.py install --prefix=$(prefix) --record install_files.txt
-> 		--verbose --no-compile $(DISTSETUPOPTS);  \
-> 	else \
-> -		$(PYTHON) setup.py install --root=$(DESTDIR) --verbose install_files.txt
-> --prefix=$(prefix) --no-compile $(DISTSETUPOPTS); \
-> +		$(PYTHON) setup.py install --root=$(DESTDIR) --verbose --record
-> install_files.txt  --prefix=$(prefix) --no-compile $(DISTSETUPOPTS); \
-> 	fi
-> clean-local:
-> 	rm -rf build
-> --
-> 2.6.1
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+--047d7b86df7a5eb9360522361ad7--
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+
+--===============0242807086==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0242807086==--
