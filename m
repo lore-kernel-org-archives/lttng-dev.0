@@ -1,15 +1,19 @@
-From: Nathan Lynch <Nathan_Lynch@mentor.com>
-Subject: babeltrace foreign builds broken by 384246569494
-Date: Fri, 16 Oct 2015 10:35:42 -0500
-Message-ID: <5621194E.40804__42789.669839158$1445009809$gmane$org@mentor.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-ust] Fix python agent
+	build/install/uninstall with DESTDIR specified
+Date: Fri, 16 Oct 2015 15:07:31 -0400
+Message-ID: <1445022451-9748-1-git-send-email-jonathan.rajotte-julien__1755.60383727333$1445022536$gmane$org@efficios.com>
+References: <1709596766.52753.1444944270873.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com ([192.94.38.131])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Nathan_Lynch@mentor.com>) id 1Zn72t-0003Rm-8p
- for lttng-dev@lists.lttng.org; Fri, 16 Oct 2015 11:35:52 -0400
+ (envelope-from <jonathan.rajotte-julien@efficios.com>)
+ id 1ZnAM4-0004Ta-8l
+ for lttng-dev@lists.lttng.org; Fri, 16 Oct 2015 15:07:53 -0400
+In-Reply-To: <1709596766.52753.1444944270873.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -18,40 +22,43 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpCdWlsZGluZyBiYWJlbHRyYWNlJ3MgbWFzdGVyIGJyYW5jaCBpbiBhIGRpcmVjdG9yeSBz
-ZXBhcmF0ZSBmcm9tIHRoZSBzb3VyY2UKZGlyZWN0b3J5IGhhcyBiZWVuIGJyb2tlbiBieToKCmNv
-bW1pdCAzODQyNDY1Njk0OTQ1ODI5ZDc2NDUyZmY4MzkyNGFhMDEwM2M2MjkzCkF1dGhvcjogTWlj
-aGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+CkRhdGU6ICAgRnJpIE9jdCA5IDE1
-OjUwOjI1IDIwMTUgLTA0MDAKCiAgICBQb3J0OiBJbmNsdWRlIGNvbmZpZy5oIGdsb2JhbGx5IHRy
-b3VnaCBERUZBVUxUX0lOQ0xVREVTCiAgICAKICAgIFNpZ25lZC1vZmYtYnk6IE1pY2hhZWwgSmVh
-bnNvbiA8bWplYW5zb25AZWZmaWNpb3MuY29tPgogICAgU2lnbmVkLW9mZi1ieTogSsOpcsOpbWll
-IEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgoKVGhlIGVycm9yIGlz
-OgoKbWFrZVs1XTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvaG9tZS9uYXRoYW5sL3NyYy9iYWJlbHRy
-YWNlL2J1aWxkL2Zvcm1hdHMvY3RmL21ldGFkYXRhJwovYmluL3NoIC4uLy4uLy4uL2xpYnRvb2wg
-IC0tdGFnPUNDICAgLS1tb2RlPWNvbXBpbGUgZ2NjIC1ESEFWRV9DT05GSUdfSCAtSS9ob21lL25h
-dGhhbmwvc3JjL2JhYmVsdHJhY2UvYnVpbGQvLi4gLUkuLi8uLi8uLiAtSS4uLy4uLy4uL2luY2x1
-ZGUgLWluY2x1ZGUgY29uZmlnLmggICAgLXB0aHJlYWQgLUkvdXNyL2luY2x1ZGUvZ2xpYi0yLjAg
-LUkvdXNyL2xpYjY0L2dsaWItMi4wL2luY2x1ZGUgIC1XYWxsIC1XZm9ybWF0IC1JL2hvbWUvbmF0
-aGFubC9zcmMvYmFiZWx0cmFjZS9idWlsZC8uLi9pbmNsdWRlIC1pbmNsdWRlIGN0Zi1zY2FubmVy
-LXN5bWJvbHMuaCAtZyAtTzIgLXB0aHJlYWQgLU1UIGxpYmN0Zl9wYXJzZXJfbGEtY3RmLWxleGVy
-LmxvIC1NRCAtTVAgLU1GIC5kZXBzL2xpYmN0Zl9wYXJzZXJfbGEtY3RmLWxleGVyLlRwbyAtYyAt
-byBsaWJjdGZfcGFyc2VyX2xhLWN0Zi1sZXhlci5sbyBgdGVzdCAtZiAnY3RmLWxleGVyLmMnIHx8
-IGVjaG8gJy9ob21lL25hdGhhbmwvc3JjL2JhYmVsdHJhY2UvYnVpbGQvLi4vZm9ybWF0cy9jdGYv
-bWV0YWRhdGEvJ2BjdGYtbGV4ZXIuYwpsaWJ0b29sOiBjb21waWxlOiAgZ2NjIC1ESEFWRV9DT05G
-SUdfSCAtSS9ob21lL25hdGhhbmwvc3JjL2JhYmVsdHJhY2UvYnVpbGQvLi4gLUkuLi8uLi8uLiAt
-SS4uLy4uLy4uL2luY2x1ZGUgLWluY2x1ZGUgY29uZmlnLmggLXB0aHJlYWQgLUkvdXNyL2luY2x1
-ZGUvZ2xpYi0yLjAgLUkvdXNyL2xpYjY0L2dsaWItMi4wL2luY2x1ZGUgLVdhbGwgLVdmb3JtYXQg
-LUkvaG9tZS9uYXRoYW5sL3NyYy9iYWJlbHRyYWNlL2J1aWxkLy4uL2luY2x1ZGUgLWluY2x1ZGUg
-Y3RmLXNjYW5uZXItc3ltYm9scy5oIC1nIC1PMiAtcHRocmVhZCAtTVQgbGliY3RmX3BhcnNlcl9s
-YS1jdGYtbGV4ZXIubG8gLU1EIC1NUCAtTUYgLmRlcHMvbGliY3RmX3BhcnNlcl9sYS1jdGYtbGV4
-ZXIuVHBvIC1jIGN0Zi1sZXhlci5jICAtZlBJQyAtRFBJQyAtbyAubGlicy9saWJjdGZfcGFyc2Vy
-X2xhLWN0Zi1sZXhlci5vCmNjMTogZmF0YWwgZXJyb3I6IGN0Zi1zY2FubmVyLXN5bWJvbHMuaDog
-Tm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeQoKClRvIHJlY3JlYXRlLCBqdXN0IGRvIHNvbWV0aGlu
-ZyBsaWtlOgoKJCAuL2Jvb3RzdHJhcCAmJiBta2RpciBidWlsZCAmJiAoY2QgYnVpbGQgJiYgLi4v
-Y29uZmlndXJlICYmIG1ha2UpCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
-ZGV2Cg==
+Remove the install_files.txt record since it's simpler to delete the complete
+folder on uninstall.
+
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+ liblttng-ust-python-agent/Makefile.am | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/liblttng-ust-python-agent/Makefile.am b/liblttng-ust-python-agent/Makefile.am
+index f80b8a3..e2a15f4 100644
+--- a/liblttng-ust-python-agent/Makefile.am
++++ b/liblttng-ust-python-agent/Makefile.am
+@@ -15,16 +15,16 @@ all-local:
+ 	$(PYTHON) setup.py build --verbose
+ 
+ install-exec-local:
+-	if [ "$(DESTDIR)" = "" ]; then \
+-		$(PYTHON) setup.py install --prefix=$(prefix) --record install_files.txt  --verbose --no-compile $(DISTSETUPOPTS);  \
+-	else \
+-		$(PYTHON) setup.py install --root=$(DESTDIR) --verbose install_files.txt  --prefix=$(prefix) --no-compile $(DISTSETUPOPTS); \
+-	fi
++	@opts="--prefix=$(prefix) --verbose --no-compile $(DISTSETUPOPTS)"; \
++	if [ "$(DESTDIR)" != "" ]; then \
++		opts="$$opts --root=$(DESTDIR)"; \
++	fi; \
++	$(PYTHON) setup.py install $$opts;
++
+ clean-local:
+ 	rm -rf build
+ 
+ uninstall-local:
+-	cat install_files.txt | xargs rm -rf
+ 	rm -rf $(DESTDIR)$(pkgpythondir)
+ 
+ EXTRA_DIST=$(agent_path)
+-- 
+2.1.4
