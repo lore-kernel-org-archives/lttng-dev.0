@@ -1,74 +1,207 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: babeltrace foreign builds broken by 384246569494
-Date: Fri, 16 Oct 2015 15:53:56 -0400
-Message-ID: <CA+jJMxsUV9ZcZRwviHWEdUFVxNKvVViC+zURSsm9MGzOBUgYiA__48989.4099453979$1445025291$gmane$org@mail.gmail.com>
-References: <5621194E.40804@mentor.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] Userspace RCU 0.9.0
+Date: Fri, 16 Oct 2015 19:58:20 +0000 (UTC)
+Message-ID: <1624728994.63313.1445025500226.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f177.google.com ([209.85.160.177])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZnB4k-0004hj-DO
- for lttng-dev@lists.lttng.org; Fri, 16 Oct 2015 15:54:03 -0400
-Received: by ykdz2 with SMTP id z2so10094662ykd.3
- for <lttng-dev@lists.lttng.org>; Fri, 16 Oct 2015 12:53:56 -0700 (PDT)
-In-Reply-To: <5621194E.40804@mentor.com>
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Nathan Lynch <Nathan_Lynch@mentor.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Sender: linux-kernel-owner@vger.kernel.org
+To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
+Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <laijs@cn.fujitsu.com>, Stephen Hemminger <shemminger@vyatta.com>, Alan Stern <stern@rowland.harvard.edu>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgTmF0aGFuLAoKVGhpcyBzaG91bGQgYmUgZml4ZWQgYXMgb2Y6Cgpjb21taXQgZDYyMGMyODgw
-N2JhMmY5ZDBiOTc1ODIzODQ5MTVmNmE0NTJhMzM3NQpBdXRob3I6IErDqXLDqW1pZSBHYWxhcm5l
-YXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KRGF0ZTogICBGcmkgT2N0IDE2IDE1
-OjMxOjI4IDIwMTUgLTA0MDAKCiAgICBGaXg6IG1pc3NpbmcgaW5jbHVkZXMgYnJlYWsgdGhlIG91
-dC1vZi10cmVlIGJ1aWxkCgogICAgQWRkcmVzc2VzIG91dC1vZi10cmVlIGJ1aWxkIGJyZWFrYWdl
-IGludHJvZHVjZWQgYnkKICAgIGNvbW1pdCAzODQyNDY1Njk0OTQ1ODI5ZDc2NDUyZmY4MzkyNGFh
-MDEwM2M2MjkzCgogICAgUmVwb3J0ZWQtYnk6IE5hdGhhbiBMeW5jaCA8TmF0aGFuX0x5bmNoQG1l
-bnRvci5jb20+CiAgICBTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWll
-LmdhbGFybmVhdUBlZmZpY2lvcy5jb20+CgpUaGFua3MgZm9yIHJlcG9ydGluZyEKSsOpcsOpbWll
-CgpPbiBGcmksIE9jdCAxNiwgMjAxNSBhdCAxMTozNSBBTSwgTmF0aGFuIEx5bmNoIDxOYXRoYW5f
-THluY2hAbWVudG9yLmNvbT4gd3JvdGU6Cj4gSGksCj4KPiBCdWlsZGluZyBiYWJlbHRyYWNlJ3Mg
-bWFzdGVyIGJyYW5jaCBpbiBhIGRpcmVjdG9yeSBzZXBhcmF0ZSBmcm9tIHRoZSBzb3VyY2UKPiBk
-aXJlY3RvcnkgaGFzIGJlZW4gYnJva2VuIGJ5Ogo+Cj4gY29tbWl0IDM4NDI0NjU2OTQ5NDU4Mjlk
-NzY0NTJmZjgzOTI0YWEwMTAzYzYyOTMKPiBBdXRob3I6IE1pY2hhZWwgSmVhbnNvbiA8bWplYW5z
-b25AZWZmaWNpb3MuY29tPgo+IERhdGU6ICAgRnJpIE9jdCA5IDE1OjUwOjI1IDIwMTUgLTA0MDAK
-Pgo+ICAgICBQb3J0OiBJbmNsdWRlIGNvbmZpZy5oIGdsb2JhbGx5IHRyb3VnaCBERUZBVUxUX0lO
-Q0xVREVTCj4KPiAgICAgU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBl
-ZmZpY2lvcy5jb20+Cj4gICAgIFNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGpl
-cmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPgo+IFRoZSBlcnJvciBpczoKPgo+IG1ha2Vb
-NV06IEVudGVyaW5nIGRpcmVjdG9yeSAnL2hvbWUvbmF0aGFubC9zcmMvYmFiZWx0cmFjZS9idWls
-ZC9mb3JtYXRzL2N0Zi9tZXRhZGF0YScKPiAvYmluL3NoIC4uLy4uLy4uL2xpYnRvb2wgIC0tdGFn
-PUNDICAgLS1tb2RlPWNvbXBpbGUgZ2NjIC1ESEFWRV9DT05GSUdfSCAtSS9ob21lL25hdGhhbmwv
-c3JjL2JhYmVsdHJhY2UvYnVpbGQvLi4gLUkuLi8uLi8uLiAtSS4uLy4uLy4uL2luY2x1ZGUgLWlu
-Y2x1ZGUgY29uZmlnLmggICAgLXB0aHJlYWQgLUkvdXNyL2luY2x1ZGUvZ2xpYi0yLjAgLUkvdXNy
-L2xpYjY0L2dsaWItMi4wL2luY2x1ZGUgIC1XYWxsIC1XZm9ybWF0IC1JL2hvbWUvbmF0aGFubC9z
-cmMvYmFiZWx0cmFjZS9idWlsZC8uLi9pbmNsdWRlIC1pbmNsdWRlIGN0Zi1zY2FubmVyLXN5bWJv
-bHMuaCAtZyAtTzIgLXB0aHJlYWQgLU1UIGxpYmN0Zl9wYXJzZXJfbGEtY3RmLWxleGVyLmxvIC1N
-RCAtTVAgLU1GIC5kZXBzL2xpYmN0Zl9wYXJzZXJfbGEtY3RmLWxleGVyLlRwbyAtYyAtbyBsaWJj
-dGZfcGFyc2VyX2xhLWN0Zi1sZXhlci5sbyBgdGVzdCAtZiAnY3RmLWxleGVyLmMnIHx8IGVjaG8g
-Jy9ob21lL25hdGhhbmwvc3JjL2JhYmVsdHJhY2UvYnVpbGQvLi4vZm9ybWF0cy9jdGYvbWV0YWRh
-dGEvJ2BjdGYtbGV4ZXIuYwo+IGxpYnRvb2w6IGNvbXBpbGU6ICBnY2MgLURIQVZFX0NPTkZJR19I
-IC1JL2hvbWUvbmF0aGFubC9zcmMvYmFiZWx0cmFjZS9idWlsZC8uLiAtSS4uLy4uLy4uIC1JLi4v
-Li4vLi4vaW5jbHVkZSAtaW5jbHVkZSBjb25maWcuaCAtcHRocmVhZCAtSS91c3IvaW5jbHVkZS9n
-bGliLTIuMCAtSS91c3IvbGliNjQvZ2xpYi0yLjAvaW5jbHVkZSAtV2FsbCAtV2Zvcm1hdCAtSS9o
-b21lL25hdGhhbmwvc3JjL2JhYmVsdHJhY2UvYnVpbGQvLi4vaW5jbHVkZSAtaW5jbHVkZSBjdGYt
-c2Nhbm5lci1zeW1ib2xzLmggLWcgLU8yIC1wdGhyZWFkIC1NVCBsaWJjdGZfcGFyc2VyX2xhLWN0
-Zi1sZXhlci5sbyAtTUQgLU1QIC1NRiAuZGVwcy9saWJjdGZfcGFyc2VyX2xhLWN0Zi1sZXhlci5U
-cG8gLWMgY3RmLWxleGVyLmMgIC1mUElDIC1EUElDIC1vIC5saWJzL2xpYmN0Zl9wYXJzZXJfbGEt
-Y3RmLWxleGVyLm8KPiBjYzE6IGZhdGFsIGVycm9yOiBjdGYtc2Nhbm5lci1zeW1ib2xzLmg6IE5v
-IHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkKPgo+Cj4gVG8gcmVjcmVhdGUsIGp1c3QgZG8gc29tZXRo
-aW5nIGxpa2U6Cj4KPiAkIC4vYm9vdHN0cmFwICYmIG1rZGlyIGJ1aWxkICYmIChjZCBidWlsZCAm
-JiAuLi9jb25maWd1cmUgJiYgbWFrZSkKCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNp
-T1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
-c3RpbmZvL2x0dG5nLWRldgo=
+Hi,
+
+liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
+data synchronization library provides read-side access which scales
+linearly with the number of cores. It does so by allowing multiple
+copies of a given data structure to live at the same time, and by
+monitoring the data structure accesses to detect grace periods after
+which memory reclamation is possible.
+
+liburcu-cds provides efficient data structures based on RCU and
+lock-free algorithms. Those structures include hash tables, queues,
+stacks, and doubly-linked lists.
+
+New and Noteworthy
+
+Two years after the 0.8.0 release, it's about time we release
+Userspace RCU 0.9.0 with some interesting new features:
+
+* liburcu.so and liburcu-bp.so now use the membarrier system call
+  to speed up RCU read-side critical sections when available. It
+  is newly introduced in Linux 4.3. See kernel/membarrier.c in a
+  recent Linux kernel tree for details.
+* Port Userspace RCU to Android,
+* Port Userspace RCU to Solaris 10 and 11,
+* Refactoring of tests into the following make targets:
+  # Short sanity check
+  make check
+  # Few minutes regression testing
+  make regtest
+  # Few tens of minutes benchmarks
+  make short_bench
+  # Hours-long benchmarks
+  make long_bench
+* Tests now output in "tap", for easier integration in continuous
+  integration. See https://ci.lttng.org/job/liburcu/ for the
+  Userspace RCU CI job.
+- Port to aarch64 and powerpc64le architectures,
+- Port to hppa/PA-RISC architecture,
+
+Note: the soname major has been bumped to 4 even though it really
+only needed to be bumped to 3.
+
+Changelog:
+2015-10-16 Userspace RCU 0.9.0
+        * Bump soname major to 4
+        * Cleanup: remove trailing tab
+        * Fix: Use proper macro to detect stdbool.h
+        * Configure: Add missing checks
+        * Port: Add Solaris build instructions
+        * Fix: regtest outputs valid TAP protocol
+        * Port: Detect nproc bin name in benchmark scripts
+        * Port: Add Solaris getcpu support
+        * Port: Fixes to build system for portability
+        * Port: Add Solaris support to tests/common/thread-id.h
+        * Port: Add Solaris support to urcu/syscall-compat.h
+        * Port: replace bzero() by memset()
+        * Port: make bootstrap script work on most shell
+        * tests: rcutorture: use parameters rather than random
+        * Fix: only define membarrier system call on Linux
+        * Refactor tests
+        * Fix: cast caa_cycles_t to unsigned long long
+        * caa_get_cycles: caa_ prefix for type, use CLOCK_MONOTONIC
+        * Cleanup: remove trailing whitespaces at EOL
+        * Cleanup: move generic caa_get_cycles to arch/generic.h
+        * tile: allocate membarrier system call number
+        * ia64: allocate membarrier system call number
+        * aarch64: allocate membarrier system call number
+        * powerpc64le: use "ppc" architecture
+        * arm: allocate membarrier system call number
+        * s390: allocate membarrier system call number
+        * ppc: allocate membarrier system call number
+        * lfstack: relax constraints on node re-use
+        * Fix: format string signedness
+        * Cleanup: tests: Branch condition evaluates to a garbage value
+        * Fix: test: unchecked return value
+        * Fix: test: side-effect in assertion
+        * x86: allocate membarrier system call number
+        * urcu-bp: use sys_membarrier when available
+        * Cleanup: urcu: remove unused membarrier "group" parameter
+        * urcu/ref.h: implement urcu_ref_get_unless_zero()
+        * Fix: compat_futex: uninitialized ret variable
+        * Fix: compat_futex_noasync: don't override return value
+        * Fix: dynamic fallback to compat futex on sys_futex ENOSYS
+        * Detect RCU read-side overflows
+        * Detect RCU read-side underflows
+        * Introduce urcu_assert and registration check
+        * Fix: volatile in assert()
+        * Update following changes to sys_membarrier ABI
+        * uatomic: Specify complete types for atomic function calls
+        * Cleanup: remove unused return value warning from tests
+        * Fix: handle sys_futex() FUTEX_WAIT interrupted by signal
+        * Fix: compat_futex.c: *uaddr should be read as volatile
+        * Cleanup: cast poll delay return value to void
+        * tests: Convert unit tests to TAP
+        * Fix: make benchmark test run in oot build
+        * Fix: call_rcu_thread() affinity failure
+        * Cleanup: cast poll delay return value to void
+        * Cleanup: cast poll delay return value to void
+        * Cleanup: cast poll delay return value to void
+        * Cleanup: cast poll delay return value to void
+        * Cleanup: cast poll() return value to void for delays
+        * urcu: fix deprecation warning with new glibc
+        * urcu: add cds_list_for_each_entry_safe_from macro
+        * Fix: deadlock when thread join is issued in read-side C.S.
+        * Fix: rename RCU_DEBUG to DEBUG_RCU in urcu-qsbr.h
+        * Cleanup some c99 pedantic warnings
+        * Mark braced-groups within expressions with __extension__
+        * Fix: compat_futex_noasync race condition
+        * tests: Use stderr redirection for time output
+        * Fix: use space after rpath for OS X ld
+        * Fix: move transparent union attribute after union declaration for clang
+        * Configure: add check for used type
+        * Configure: add missing check of headers
+        * Configure: add missing check for funcs: memset, strerror
+        * Fix: documentation: urcu-pointer.h: s/rcu_dereference_pointer/rcu_dereference/
+        * urcu-bp/urcu-qsbr: remove unneeded DEBUG_YIELD code
+        * Fix: call rcu should call internal RCU API
+        * Fix: silence gcc -Wextra warning
+        * compiler: use __GNUC__ instead of the undefined __GNUC_MAJOR__
+        * Fix: lfstack reversed empty/non-empty return value
+        * lfstack: fix: add missing __cds_lfs_init
+        * wfstack: add missing union parameters
+        * Fix: preserve example files' timestamps when copying
+        * wfstack: implement mutex-free wfstack with transparent union
+        * wfcqueue: Implement mutex-free wfcqueue head with transparent union
+        * lfstack: Implement mutex-free stack head with transparent union (v2)
+        * rculfhash: remove duplicated code
+        * rculfhash: handle pthread_create failures
+        * rculfhash: fall back to single-threaded resize on calloc failure
+        * x86: drop extra semi-colon in caa_cpu_relax
+        * Cleanup: tests: cast console write return value as void
+        * Modernize doc using Markdown
+        * Fix: update automake following README to README.md change
+        * Modernize README using Markdown
+        * Fix: incorrect parenthesis in cds_hlist_for_each_entry_safe_2
+        * Fix: Use after free in rcu_barrier()
+        * Fix: rcu_barrier(): uninitialized futex field
+        * call_rcu threads should clear their PAUSED flag when they unpause
+        * test_urcu_fork: test many fork, with 3 children deep
+        * Update list of supported architectures in README
+        * Add support for hppa/PA-RISC architecture
+        * Use autoconf AM_MAINTAINER_MODE
+        * Use gcc atomics on aarch64/powerpc64le
+        * Fix: move wait loop increment before first conditional block
+        * Fix: high cpu usage in synchronize_rcu with long RCU read-side C.S.
+        * Fix: out of tree build: doc/examples
+        * Fix: out of tree build tests/common
+        * tests/unit: use lib rather than source
+        * automake: Rename INCLUDES to AM_CPPFLAGS (new name)
+        * tests regressions: use lib rather than recompile from source
+        * tests: use common lib rather than recompile compat sources
+        * urcu tests: use lib rather than compile from source
+        * urcu mb tests: use lib rather than recompile from source
+        * urcu signal tests: use library rather than recompile source
+        * tests: move yield debug to common test library
+        * tests urcu bp: use lib rather than recompile source
+        * test_urcu_defer: link on urcu lib rather than recompile source
+        * tests/benchmark: use urcu qsbr lib rather than recompile from source
+        * Pass the CC variable to the example Makefiles
+        * Fix: urcu-bp interaction with threads vs constructors/destructors
+        * x86 barrier for Xeon Phi: use rsp on x86-64
+        * Set RCU_HAVE_FENCE to false on Intel Xeon Phi
+        * Fix undefined NULL pointer arithmetic in hlist
+        * Cleanup: Check for pthread in Libc
+        * Cleanup: Android: Do not redefine gettid
+        * Fix undefined NULL pointer arithmetic
+        * Android: implement rand_r()
+        * Android: do not redefine gettid on Android
+        * Android: add a compat layer for 'syscall.h'
+        * Android: do not link pthread on Android
+        * Android: configure.ac Android check
+        * Blacklist ARM gcc 4.8.0, 4.8.1, 4.8.2
+        * rculfhash: document max_nr_buckets = 0
+        * Library major version number (soname) increment to 3
+        * Fix: tls-compat multi-lib conflict
+        * Use cross compiler for doc examples
+        * Add lttng-dev mailing list to readme
+        * wfcqueue: remove misleading comment
+        * gcc warning fixes: -Wsign-compare and -Wextra
+        * Fix: urcu-qsbr: reversed logic on RCU_DEBUG
+        * Fix: urcu-bp segfault in glibc pthread_kill()
+        * Fix urcu-bp: don't move registry
+        * Fix: compat futex duplicated lock and completion
+        * Fix: i386 compat code duplicated mutex instances
+        * Fix: urcu-bp: Bulletproof RCU arena resize bug
+        * Fix: test_mutex.c uninitialized mutex
+
+Project website: http://liburcu.org
+Git repository: git://git.liburcu.org/urcu.git
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
