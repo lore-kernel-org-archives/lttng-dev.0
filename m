@@ -1,19 +1,19 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-ust] Fix python agent
-	build/install/uninstall with DESTDIR specified
-Date: Fri, 16 Oct 2015 15:07:31 -0400
-Message-ID: <1445022451-9748-1-git-send-email-jonathan.rajotte-julien__1755.60383727333$1445022536$gmane$org@efficios.com>
-References: <1709596766.52753.1444944270873.JavaMail.zimbra@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: babeltrace foreign builds broken by 384246569494
+Date: Fri, 16 Oct 2015 15:53:56 -0400
+Message-ID: <CA+jJMxsUV9ZcZRwviHWEdUFVxNKvVViC+zURSsm9MGzOBUgYiA__48989.4099453979$1445025291$gmane$org@mail.gmail.com>
+References: <5621194E.40804@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-yk0-f177.google.com ([209.85.160.177])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1ZnAM4-0004Ta-8l
- for lttng-dev@lists.lttng.org; Fri, 16 Oct 2015 15:07:53 -0400
-In-Reply-To: <1709596766.52753.1444944270873.JavaMail.zimbra@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZnB4k-0004hj-DO
+ for lttng-dev@lists.lttng.org; Fri, 16 Oct 2015 15:54:03 -0400
+Received: by ykdz2 with SMTP id z2so10094662ykd.3
+ for <lttng-dev@lists.lttng.org>; Fri, 16 Oct 2015 12:53:56 -0700 (PDT)
+In-Reply-To: <5621194E.40804@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,43 +22,53 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Nathan Lynch <Nathan_Lynch@mentor.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Remove the install_files.txt record since it's simpler to delete the complete
-folder on uninstall.
-
-Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
----
- liblttng-ust-python-agent/Makefile.am | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/liblttng-ust-python-agent/Makefile.am b/liblttng-ust-python-agent/Makefile.am
-index f80b8a3..e2a15f4 100644
---- a/liblttng-ust-python-agent/Makefile.am
-+++ b/liblttng-ust-python-agent/Makefile.am
-@@ -15,16 +15,16 @@ all-local:
- 	$(PYTHON) setup.py build --verbose
- 
- install-exec-local:
--	if [ "$(DESTDIR)" = "" ]; then \
--		$(PYTHON) setup.py install --prefix=$(prefix) --record install_files.txt  --verbose --no-compile $(DISTSETUPOPTS);  \
--	else \
--		$(PYTHON) setup.py install --root=$(DESTDIR) --verbose install_files.txt  --prefix=$(prefix) --no-compile $(DISTSETUPOPTS); \
--	fi
-+	@opts="--prefix=$(prefix) --verbose --no-compile $(DISTSETUPOPTS)"; \
-+	if [ "$(DESTDIR)" != "" ]; then \
-+		opts="$$opts --root=$(DESTDIR)"; \
-+	fi; \
-+	$(PYTHON) setup.py install $$opts;
-+
- clean-local:
- 	rm -rf build
- 
- uninstall-local:
--	cat install_files.txt | xargs rm -rf
- 	rm -rf $(DESTDIR)$(pkgpythondir)
- 
- EXTRA_DIST=$(agent_path)
--- 
-2.1.4
+SGkgTmF0aGFuLAoKVGhpcyBzaG91bGQgYmUgZml4ZWQgYXMgb2Y6Cgpjb21taXQgZDYyMGMyODgw
+N2JhMmY5ZDBiOTc1ODIzODQ5MTVmNmE0NTJhMzM3NQpBdXRob3I6IErDqXLDqW1pZSBHYWxhcm5l
+YXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KRGF0ZTogICBGcmkgT2N0IDE2IDE1
+OjMxOjI4IDIwMTUgLTA0MDAKCiAgICBGaXg6IG1pc3NpbmcgaW5jbHVkZXMgYnJlYWsgdGhlIG91
+dC1vZi10cmVlIGJ1aWxkCgogICAgQWRkcmVzc2VzIG91dC1vZi10cmVlIGJ1aWxkIGJyZWFrYWdl
+IGludHJvZHVjZWQgYnkKICAgIGNvbW1pdCAzODQyNDY1Njk0OTQ1ODI5ZDc2NDUyZmY4MzkyNGFh
+MDEwM2M2MjkzCgogICAgUmVwb3J0ZWQtYnk6IE5hdGhhbiBMeW5jaCA8TmF0aGFuX0x5bmNoQG1l
+bnRvci5jb20+CiAgICBTaWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWll
+LmdhbGFybmVhdUBlZmZpY2lvcy5jb20+CgpUaGFua3MgZm9yIHJlcG9ydGluZyEKSsOpcsOpbWll
+CgpPbiBGcmksIE9jdCAxNiwgMjAxNSBhdCAxMTozNSBBTSwgTmF0aGFuIEx5bmNoIDxOYXRoYW5f
+THluY2hAbWVudG9yLmNvbT4gd3JvdGU6Cj4gSGksCj4KPiBCdWlsZGluZyBiYWJlbHRyYWNlJ3Mg
+bWFzdGVyIGJyYW5jaCBpbiBhIGRpcmVjdG9yeSBzZXBhcmF0ZSBmcm9tIHRoZSBzb3VyY2UKPiBk
+aXJlY3RvcnkgaGFzIGJlZW4gYnJva2VuIGJ5Ogo+Cj4gY29tbWl0IDM4NDI0NjU2OTQ5NDU4Mjlk
+NzY0NTJmZjgzOTI0YWEwMTAzYzYyOTMKPiBBdXRob3I6IE1pY2hhZWwgSmVhbnNvbiA8bWplYW5z
+b25AZWZmaWNpb3MuY29tPgo+IERhdGU6ICAgRnJpIE9jdCA5IDE1OjUwOjI1IDIwMTUgLTA0MDAK
+Pgo+ICAgICBQb3J0OiBJbmNsdWRlIGNvbmZpZy5oIGdsb2JhbGx5IHRyb3VnaCBERUZBVUxUX0lO
+Q0xVREVTCj4KPiAgICAgU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBl
+ZmZpY2lvcy5jb20+Cj4gICAgIFNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGpl
+cmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPgo+IFRoZSBlcnJvciBpczoKPgo+IG1ha2Vb
+NV06IEVudGVyaW5nIGRpcmVjdG9yeSAnL2hvbWUvbmF0aGFubC9zcmMvYmFiZWx0cmFjZS9idWls
+ZC9mb3JtYXRzL2N0Zi9tZXRhZGF0YScKPiAvYmluL3NoIC4uLy4uLy4uL2xpYnRvb2wgIC0tdGFn
+PUNDICAgLS1tb2RlPWNvbXBpbGUgZ2NjIC1ESEFWRV9DT05GSUdfSCAtSS9ob21lL25hdGhhbmwv
+c3JjL2JhYmVsdHJhY2UvYnVpbGQvLi4gLUkuLi8uLi8uLiAtSS4uLy4uLy4uL2luY2x1ZGUgLWlu
+Y2x1ZGUgY29uZmlnLmggICAgLXB0aHJlYWQgLUkvdXNyL2luY2x1ZGUvZ2xpYi0yLjAgLUkvdXNy
+L2xpYjY0L2dsaWItMi4wL2luY2x1ZGUgIC1XYWxsIC1XZm9ybWF0IC1JL2hvbWUvbmF0aGFubC9z
+cmMvYmFiZWx0cmFjZS9idWlsZC8uLi9pbmNsdWRlIC1pbmNsdWRlIGN0Zi1zY2FubmVyLXN5bWJv
+bHMuaCAtZyAtTzIgLXB0aHJlYWQgLU1UIGxpYmN0Zl9wYXJzZXJfbGEtY3RmLWxleGVyLmxvIC1N
+RCAtTVAgLU1GIC5kZXBzL2xpYmN0Zl9wYXJzZXJfbGEtY3RmLWxleGVyLlRwbyAtYyAtbyBsaWJj
+dGZfcGFyc2VyX2xhLWN0Zi1sZXhlci5sbyBgdGVzdCAtZiAnY3RmLWxleGVyLmMnIHx8IGVjaG8g
+Jy9ob21lL25hdGhhbmwvc3JjL2JhYmVsdHJhY2UvYnVpbGQvLi4vZm9ybWF0cy9jdGYvbWV0YWRh
+dGEvJ2BjdGYtbGV4ZXIuYwo+IGxpYnRvb2w6IGNvbXBpbGU6ICBnY2MgLURIQVZFX0NPTkZJR19I
+IC1JL2hvbWUvbmF0aGFubC9zcmMvYmFiZWx0cmFjZS9idWlsZC8uLiAtSS4uLy4uLy4uIC1JLi4v
+Li4vLi4vaW5jbHVkZSAtaW5jbHVkZSBjb25maWcuaCAtcHRocmVhZCAtSS91c3IvaW5jbHVkZS9n
+bGliLTIuMCAtSS91c3IvbGliNjQvZ2xpYi0yLjAvaW5jbHVkZSAtV2FsbCAtV2Zvcm1hdCAtSS9o
+b21lL25hdGhhbmwvc3JjL2JhYmVsdHJhY2UvYnVpbGQvLi4vaW5jbHVkZSAtaW5jbHVkZSBjdGYt
+c2Nhbm5lci1zeW1ib2xzLmggLWcgLU8yIC1wdGhyZWFkIC1NVCBsaWJjdGZfcGFyc2VyX2xhLWN0
+Zi1sZXhlci5sbyAtTUQgLU1QIC1NRiAuZGVwcy9saWJjdGZfcGFyc2VyX2xhLWN0Zi1sZXhlci5U
+cG8gLWMgY3RmLWxleGVyLmMgIC1mUElDIC1EUElDIC1vIC5saWJzL2xpYmN0Zl9wYXJzZXJfbGEt
+Y3RmLWxleGVyLm8KPiBjYzE6IGZhdGFsIGVycm9yOiBjdGYtc2Nhbm5lci1zeW1ib2xzLmg6IE5v
+IHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkKPgo+Cj4gVG8gcmVjcmVhdGUsIGp1c3QgZG8gc29tZXRo
+aW5nIGxpa2U6Cj4KPiAkIC4vYm9vdHN0cmFwICYmIG1rZGlyIGJ1aWxkICYmIChjZCBidWlsZCAm
+JiAuLi9jb25maWd1cmUgJiYgbWFrZSkKCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNp
+T1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZA
+bGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
+c3RpbmZvL2x0dG5nLWRldgo=
