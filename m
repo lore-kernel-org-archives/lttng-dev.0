@@ -1,18 +1,16 @@
-From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-Subject: Re: Problem LD_PRELOADing multiple UST helpers
-Date: Wed, 21 Oct 2015 11:38:11 -0400
-Message-ID: <5627B163.5060407__38769.1797259778$1445441981$gmane$org@efficios.com>
-References: <5627922E.9000808@techfak.uni-bielefeld.de>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: lttng-modules-27.0-stable and CentOS 7.0
+Date: Wed, 21 Oct 2015 19:04:46 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFD8F9B7B74__16507.2718322792$1445454373$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from fw.drenet.dnd.ca ([131.136.242.1] helo=mx.drdc-rddc.gc.ca)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Jonathan.rajotte-julien@efficios.com>)
- id 1ZovTB-0005iK-EQ
- for lttng-dev@lists.lttng.org; Wed, 21 Oct 2015 11:38:33 -0400
-In-Reply-To: <5627922E.9000808@techfak.uni-bielefeld.de>
+ (envelope-from <Daniel.Thibault@drdc-rddc.gc.ca>) id 1Zoygv-0006hy-B6
+ for lttng-dev@lists.lttng.org; Wed, 21 Oct 2015 15:04:57 -0400
+Content-Language: fr-FR
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,127 +19,36 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Christian Ascheberg <caschebe@techfak.uni-bielefeld.de>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Christian,
+----------------------------------------------------------------------
+Date: Tue, 20 Oct 2015 14:28:31 +0000
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+----------------------------------------------------------------------
+> lttng-modules-2.7.0-stable won't compile under CentOS 7.0. Details here: =
+http://bugzilla.redhat.com/show_bug.cgi?id=3D1273484
+>
+> Not sure if the problem is with gcc or LTTng
 
-The more debug output the merrier !
+   Well, that turned out to be because the virtual machine was running out =
+of memory during the compilation of the system call probes.  I increased it=
+ from 1 GiB to 2 GiB and recompiled with no problem.
 
-Could you attach the file generated (ld_debug.out.xxxx) by this command:
+   I do get the repeated 'Can't read private key' warnings when installing =
+the modules, even though lsmod says they load correctly.
 
-LD_PRELOAD="liblttng-ust-libc-wrapper.so liblttng-ust-cyg-profile.so 
-liblttng-ust-pthread-wrapper.so liblttng-ust-dl.so" LD_DEBUG=all 
-LD_DEBUG_OUTPUT=ld_debug.out ls
+Daniel U. Thibault, M.Sc.=B2
 
-Also is the output provided in your previous email all of the debug 
-output from 'ls' ?
+Informaticien scientifique, CME-PSC, Centre de recherches de Valcartier Rec=
+herche et d?veloppement pour la d?fense Canada / Gouvernement du Canada dan=
+iel.thibault@drdc-rddc.gc.ca / T?l: 418-844-4000x4245 T?l?c: 418-844-4538 d=
+aniel.thibault@forces.gc.ca / T?l: 418-844-4000x4245 T?l?c: 418-844-4538
 
-Cheers!
+Computer Scientist, MCCS-SPC, Valcartier Research Centre Defence Research a=
+nd Development Canada?/ Government of Canada daniel.thibault@drdc-rddc.gc.c=
+a / Tel: 418-844-4000x4245 Fax: 418-844-4538 daniel.thibault@forces.gc.ca /=
+ Tel: 418-844-4000x4245 Fax: 418-844-4538
 
-On 2015-10-21 09:25 AM, Christian Ascheberg wrote:
-> Hello,
->
-> I am having a strange problem with LTTng UST helpers on a Cyclone V 
-> ARM development board. If I LD_PRELOAD multiple helpers, then only 
-> data of the first loaded helper appears in the trace.
-> Below I have some debug output that looks wrong:
->
-> This is the command:
-> root@cyclone5:~# LTTNG_UST_DEBUG=1 
-> LD_PRELOAD="liblttng-ust-libc-wrapper.so liblttng-ust-cyg-profile.so 
-> liblttng-ust-pthread-wrapper.so liblttng-ust-dl.so" ls
->
-> - This is some output regarding the first registration:
-> liblttng_ust_tracepoint[XXX/XXX]: just registered a tracepoints 
-> section from 0x76e7b42c and having 2 tracepoints (in 
-> tracepoint_register_lib() at tracepoint.c:767)
-> liblttng_ust_tracepoint[XXX/XXX]: registered tracepoint: 
-> ust_baddr_statedump:soinfo (in tracepoint_register_lib() at 
-> tracepoint.c:772)
-> liblttng_ust_tracepoint[XXX/XXX]: registered tracepoint: 
-> lttng_ust_tracef:event (in tracepoint_register_lib() at tracepoint.c:772)
-> libust[XXX/XXX]: Provider "ust_baddr_statedump" accepted, version 1.0 
-> is compatible with LTTng UST provider version 1.0. (in 
-> check_provider_version() at lttng-probes.c:174)
-> libust[XXX/XXX]: adding probe ust_baddr_statedump containing 1 events 
-> to lazy registration list (in lttng_probe_register() at 
-> lttng-probes.c:216)
-> libust[XXX/XXY]: just registered probe ust_baddr_statedump containing 
-> 1 events (in lttng_lazy_probe_register() at lttng-probes.c:115)
-> libust[XXX/XXY]: Sent register event notification for name 
-> "ust_baddr_statedump:soinfo": ret_code 0, event_id 0
->  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
-> liblttng_ust_tracepoint[XXX/XXY]: Registering probe to tracepoint 
-> ust_baddr_statedump:soinfo (in __tracepoint_probe_register() at 
-> tracepoint.c:563)
-> liblttng_ust_tracepoint[XXX/XXX]: Registering probe to tracepoint 
-> lttng_ust_tracef:event (in __tracepoint_probe_register() at 
-> tracepoint.c:563)
->
-> - And here is some strange output regarding another registration:
-> liblttng_ust_tracepoint[XXX/XXX]: just registered a tracepoints 
-> section from 0x76e7b42c and having 2 tracepoints (in 
-> tracepoint_register_lib() at tracepoint.c:767)
-> liblttng_ust_tracepoint[XXX/XXX]: registered tracepoint: 
-> ust_baddr_statedump:soinfo (in tracepoint_register_lib() at 
-> tracepoint.c:772)
-> liblttng_ust_tracepoint[XXX/XXX]: registered tracepoint: 
-> lttng_ust_tracef:event (in tracepoint_register_lib() at tracepoint.c:772)
-> libust[XXX/XXX]: Provider "ust_pthread" accepted, version 1.0 is 
-> compatible with LTTng UST provider version 1.0. (in 
-> check_provider_version() at lttng-probes.c:174)
-> libust[XXX/XXX]: adding probe ust_pthread containing 4 events to lazy 
-> registration list (in lttng_probe_register() at lttng-probes.c:216)
-> libust[XXX/XXX]: just registered probe ust_pthread containing 4 events 
-> (in lttng_lazy_probe_register() at lttng-probes.c:115)
-> libust[XXX/XXX]: Sent register event notification for name 
-> "ust_pthread:pthread_mutex_lock_req": ret_code 0, event_id 4
->  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
-> libust[XXX/XXX]: Sent register event notification for name 
-> "ust_pthread:pthread_mutex_lock_acq": ret_code 0, event_id 5
->  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
-> libust[XXX/XXX]: Sent register event notification for name 
-> "ust_pthread:pthread_mutex_trylock": ret_code 0, event_id 6
->  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
-> libust[XXX/XXX]: Sent register event notification for name 
-> "ust_pthread:pthread_mutex_unlock": ret_code 0, event_id 7
->  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
-> liblttng_ust_tracepoint[XXX/XXX]: Registering probe to tracepoint 
-> ust_pthread:pthread_mutex_unlock (in __tracepoint_probe_register() at 
-> tracepoint.c:563)
-> liblttng_ust_tracepoint[XXX/XXX]: Registering probe to tracepoint 
-> ust_pthread:pthread_mutex_trylock (in __tracepoint_probe_register() at 
-> tracepoint.c:563)
-> liblttng_ust_tracepoint[XXX/XXX]: Registering probe to tracepoint 
-> ust_pthread:pthread_mutex_lock_acq (in __tracepoint_probe_register() 
-> at tracepoint.c:563)
-> liblttng_ust_tracepoint[XXX/XXX]: Registering probe to tracepoint 
-> ust_pthread:pthread_mutex_lock_req (in __tracepoint_probe_register() 
-> at tracepoint.c:563)
->
-> As with this one, the first three lines of all registrations are 
-> always the same and do not match the following (in this case) 
-> 'Provider "ust_pthread" accepted'.
-> I subsequently only get tracepoint data from ust_baddr_statedump:soinfo.
->
-> I followed these build instructions for my board using Yocto 1.7: 
-> http://rocketboards.org/foswiki/view/Documentation/GSRD150CompilingLinux
-> I also tried updating the recipes to use the latest version of LTTng. 
-> The output above is from LTTng v2.6.2.
-> I can provide more debug output if that helps. I do not see this 
-> problem on my desktop computer.
->
-> Can somebody confirm this problem?
->
-> Thanks, Christian
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Jonathan R. Julien
-Efficios
+DRDC is an agency of the Department of National Defence / RDDC est une agen=
+ce du minist?re de la D?fense nationale
