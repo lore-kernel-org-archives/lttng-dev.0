@@ -1,16 +1,17 @@
-From: Ganesh Sangle <ganesh@portworx.com>
-Subject: reading text files created by babeltrace
-Date: Thu, 22 Oct 2015 13:02:20 -0700
-Message-ID: <CAAkbhRyUOxf63_TGFtdk4P-U-ovJHbipAENJF-PXKqN4Pmg1rg__15713.223469402$1445547039$gmane$org@mail.gmail.com>
+From: Brian Robbins <brianrob@microsoft.com>
+Subject: Ubuntu Package for LTTng-UST Compiled with Debug
+ Logging On By Default
+Date: Thu, 22 Oct 2015 23:35:04 +0000
+Message-ID: <SN1PR0301MB15981E02890EE7EBB67F42A2C8270__8249.31620522893$1445556994$gmane$org@SN1PR0301MB1598.namprd03.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0319698318=="
+Content-Type: multipart/mixed; boundary="===============1011951284=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lf0-f47.google.com ([209.85.215.47])
+Received: from mail-bn1on0133.outbound.protection.outlook.com
+ ([157.56.110.133] helo=na01-bn1-obe.outbound.protection.outlook.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <ganesh@portworx.com>) id 1ZpM4A-0005iQ-RY
- for lttng-dev@lists.lttng.org; Thu, 22 Oct 2015 16:02:31 -0400
-Received: by lfaz124 with SMTP id z124so61038046lfa.1
- for <lttng-dev@lists.lttng.org>; Thu, 22 Oct 2015 13:02:20 -0700 (PDT)
+ (envelope-from <brianrob@microsoft.com>) id 1ZpPOB-0006iJ-4G
+ for lttng-dev@lists.lttng.org; Thu, 22 Oct 2015 19:35:21 -0400
+Content-Language: en-US
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,91 +20,161 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0319698318==
-Content-Type: multipart/alternative; boundary=001a11401ff6010e5f0522b6f9c0
+--===============1011951284==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_SN1PR0301MB15981E02890EE7EBB67F42A2C8270SN1PR0301MB1598_"
 
---001a11401ff6010e5f0522b6f9c0
-Content-Type: text/plain; charset=UTF-8
-
-I am trying to use the babeltrace lib to read a trace file. So here it the
-flow: 1. babeltrace /var/log/some_trace > trc.txt 2. My program does this
-in trying to add a trace after creating context:
-
-code
-int err = bt_context_add_trace(ctx, path, "text", nullptr,
-    nullptr, nullptr);
-code
-
-
-   1. Compile and Run the program gives this error: code [error] [Context]
-   Format "text" unknown. code
-
-The idea is that i have trace generated on multiple machines - and though I
-can read use my program to directly read the binary trace files on my local
-system, for other systems, i convert the trace using babeltrace and then
-process all these traces together.
-
-The package i have installed is this: babeltrace-devel-1.2.4-1.el7.x86_64
-
-
-http://stackoverflow.com/questions/33289656/babeltrace-format-text-unknown
-
--- 
--ganesh
-
---001a11401ff6010e5f0522b6f9c0
-Content-Type: text/html; charset=UTF-8
+--_000_SN1PR0301MB15981E02890EE7EBB67F42A2C8270SN1PR0301MB1598_
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><p style=3D"margin:0px 0px 1em;padding:0px;border:0px;font=
--size:15px;clear:both;font-family:&#39;Helvetica Neue&#39;,Helvetica,Arial,=
-sans-serif;line-height:19px">I am trying to use the babeltrace lib to read =
-a trace file. So here it the flow: 1. babeltrace /var/log/some_trace &gt; t=
-rc.txt 2. My program does this in trying to add a trace after creating cont=
-ext:</p><pre style=3D"margin-top:0px;padding:5px;border:0px;font-size:13px;=
-overflow:auto;width:auto;max-height:600px;background-color:rgb(238,238,238)=
-;font-family:Consolas,Menlo,Monaco,&#39;Lucida Console&#39;,&#39;Liberation=
- Mono&#39;,&#39;DejaVu Sans Mono&#39;,&#39;Bitstream Vera Sans Mono&#39;,&#=
-39;Courier New&#39;,monospace,sans-serif;word-wrap:normal"><code style=3D"m=
-argin:0px;padding:0px;border:0px;font-family:Consolas,Menlo,Monaco,&#39;Luc=
-ida Console&#39;,&#39;Liberation Mono&#39;,&#39;DejaVu Sans Mono&#39;,&#39;=
-Bitstream Vera Sans Mono&#39;,&#39;Courier New&#39;,monospace,sans-serif;wh=
-ite-space:inherit">code
-int err =3D bt_context_add_trace(ctx, path, &quot;text&quot;, nullptr,
-    nullptr, nullptr);
-code
-</code></pre><ol start=3D"3" style=3D"margin:0px 0px 1em 30px;padding:0px;b=
-order:0px;font-size:15px;list-style-position:initial;font-family:&#39;Helve=
-tica Neue&#39;,Helvetica,Arial,sans-serif;line-height:19px"><li style=3D"ma=
-rgin:0px 0px 0.5em;padding:0px;border:0px;word-wrap:break-word">Compile and=
- Run the program gives this error: code [error] [Context] Format &quot;text=
-&quot; unknown. code</li></ol><p style=3D"margin:0px 0px 1em;padding:0px;bo=
-rder:0px;font-size:15px;clear:both;font-family:&#39;Helvetica Neue&#39;,Hel=
-vetica,Arial,sans-serif;line-height:19px">The idea is that i have trace gen=
-erated on multiple machines - and though I can read use my program to direc=
-tly read the binary trace files on my local system, for other systems, i co=
-nvert the trace using babeltrace and then process all these traces together=
-.</p><p style=3D"margin:0px 0px 1em;padding:0px;border:0px;font-size:15px;c=
-lear:both;font-family:&#39;Helvetica Neue&#39;,Helvetica,Arial,sans-serif;l=
-ine-height:19px">The package i have installed is this: babeltrace-devel-1.2=
-.4-1.el7.x86_64</p><p style=3D"margin:0px 0px 1em;padding:0px;border:0px;fo=
-nt-size:15px;clear:both;font-family:&#39;Helvetica Neue&#39;,Helvetica,Aria=
-l,sans-serif;line-height:19px"><br></p><p style=3D"margin:0px 0px 1em;paddi=
-ng:0px;border:0px;font-size:15px;clear:both;font-family:&#39;Helvetica Neue=
-&#39;,Helvetica,Arial,sans-serif;line-height:19px"><a href=3D"http://stacko=
-verflow.com/questions/33289656/babeltrace-format-text-unknown">http://stack=
-overflow.com/questions/33289656/babeltrace-format-text-unknown</a>=C2=A0<br=
-></p><div><br></div>-- <br><div class=3D"gmail_signature"><div dir=3D"ltr">=
--ganesh</div></div>
+Hello,
+
+The Linux build of CoreCLR now supports tracing using LTTng-UST.  One artif=
+act that we noticed when running on Ubuntu 14.04 in our CI is that apps run=
+ning on CoreCLR all have an LTTng warning written to stderr:
+
+libust[883/883]: Warning: HOME environment variable not set. Disabling LTTn=
+g-UST per-user tracing. (in setup_local_apps() at lttng-ust-comm.c:305)
+
+I've investigated, and it is true that in the CI, there is no HOME environm=
+ent variable.  However, what I'm more interested in is why this message is =
+written in the first place.  Looking in at the latest LTTng-UST code, it ap=
+pears that this message should only be logged when debug logging is enabled=
+.  From code inspection, it appears that debug logging can be enabled at ei=
+ther compile time (#define LTTNG_UST_DEBUG) or at runtime via an environmen=
+t variable called LTTNG_UST_DEBUG.
+
+I have confirmed that the environment variable LTTNG_UST_DEBUG is not prese=
+nt.  I've also looked at the disassembly, and can confirm that the ust_logl=
+evel check is not actually performed (the if statement is optimized away). =
+ This makes me think that the Ubuntu package was compiled with LTTNG_UST_DE=
+BUG defined.
+
+The package in question is old - LTTng-UST 2.4.  I'm wondering if either de=
+bug logging was always present in 2.4, or if the package was compiled with =
+LTTNG_UST_DEBUG.  I would expect that most customers would want debug loggi=
+ng off by default, since it affects the output of the program.
+
+Your help in figuring this out is greatly appreciated.
+
+Thank you.
+-Brian
+
+--_000_SN1PR0301MB15981E02890EE7EBB67F42A2C8270SN1PR0301MB1598_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:#954F72;
+	text-decoration:underline;}
+pre
+	{mso-style-priority:99;
+	mso-style-link:"HTML Preformatted Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Courier New";}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+span.HTMLPreformattedChar
+	{mso-style-name:"HTML Preformatted Char";
+	mso-style-priority:99;
+	mso-style-link:"HTML Preformatted";
+	font-family:"Courier New";}
+.MsoChpDefault
+	{mso-style-type:export-only;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-US" link=3D"#0563C1" vlink=3D"#954F72">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal">Hello,<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">The Linux build of CoreCLR now supports tracing usin=
+g LTTng-UST. &nbsp;One artifact that we noticed when running on Ubuntu 14.0=
+4 in our CI is that apps running on CoreCLR all have an LTTng warning writt=
+en to stderr:<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Co=
+urier New&quot;;color:#333333">libust[883/883]: Warning: HOME environment v=
+ariable not set. Disabling LTTng-UST per-user tracing. (in setup_local_apps=
+() at lttng-ust-comm.c:305)<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">I&#8217;ve investigated, and it is true that in the =
+CI, there is no HOME environment variable.&nbsp; However, what I&#8217;m mo=
+re interested in is why this message is written in the first place.&nbsp; L=
+ooking in at the latest LTTng-UST code, it appears that
+ this message should only be logged when debug logging is enabled.&nbsp; Fr=
+om code inspection, it appears that debug logging can be enabled at either =
+compile time (#define LTTNG_UST_DEBUG) or at runtime via an environment var=
+iable called LTTNG_UST_DEBUG.<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">I have confirmed that the environment variable LTTNG=
+_UST_DEBUG is not present.&nbsp; I&#8217;ve also looked at the disassembly,=
+ and can confirm that the ust_loglevel check is not actually performed (the=
+ if statement is optimized away).&nbsp;
+<b>This makes me think that the Ubuntu package was compiled with LTTNG_UST_=
+DEBUG defined.</b><o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><b>The package in question is old &#8211; LTTng-UST =
+2.4.&nbsp; I&#8217;m wondering if either debug logging was always present i=
+n 2.4, or if the package was compiled with LTTNG_UST_DEBUG</b>.&nbsp; I wou=
+ld expect that most customers would want debug logging off
+ by default, since it affects the output of the program.<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Your help in figuring this out is greatly appreciate=
+d.<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Thank you.<o:p></o:p></p>
+<p class=3D"MsoNormal">-Brian<o:p></o:p></p>
 </div>
+</body>
+</html>
 
---001a11401ff6010e5f0522b6f9c0--
+--_000_SN1PR0301MB15981E02890EE7EBB67F42A2C8270SN1PR0301MB1598_--
 
 
---===============0319698318==
+--===============1011951284==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -114,4 +185,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0319698318==--
+--===============1011951284==--
