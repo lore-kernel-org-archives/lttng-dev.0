@@ -1,16 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Load x86-irq-vectors lttng-modules
+Subject: [PATCH lttng-tools] Load x86-exceptions lttng-modules
 	probe
-Date: Fri, 23 Oct 2015 18:47:11 -0400
-Message-ID: <1445640431-1197-1-git-send-email-mathieu.desnoyers__22141.9821413749$1445640494$gmane$org@efficios.com>
+Date: Fri, 23 Oct 2015 19:36:04 -0400
+Message-ID: <1445643364-12175-1-git-send-email-mathieu.desnoyers__24754.9208034345$1445643424$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1Zpl7J-0005Ro-LT
- for lttng-dev@lists.lttng.org; Fri, 23 Oct 2015 18:47:25 -0400
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1Zplsc-0005hn-7A
+ for lttng-dev@lists.lttng.org; Fri, 23 Oct 2015 19:36:15 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -29,14 +29,14 @@ Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/modprobe.c
-index 4c1ea67..8603d04 100644
+index 8603d04..2c527dc 100644
 --- a/src/bin/lttng-sessiond/modprobe.c
 +++ b/src/bin/lttng-sessiond/modprobe.c
-@@ -91,6 +91,7 @@ struct kern_modules_param kern_modules_probes_default[] = {
- 	{ "lttng-probe-v4l2" },
+@@ -92,6 +92,7 @@ struct kern_modules_param kern_modules_probes_default[] = {
  	{ "lttng-probe-workqueue" },
  	{ "lttng-probe-writeback" },
-+	{ "lttng-probe-x86-irq-vectors" },
+ 	{ "lttng-probe-x86-irq-vectors" },
++	{ "lttng-probe-x86-exceptions" },
  };
  
  /* dynamic probe modules list */
