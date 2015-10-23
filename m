@@ -1,21 +1,24 @@
-From: Brian Robbins <brianrob@microsoft.com>
-Subject: Re: Ubuntu Package for LTTng-UST Compiled with Debug
- Logging On By Default
-Date: Fri, 23 Oct 2015 15:15:23 +0000
-Message-ID: <SN1PR0301MB1598E22329CBB76D0C94748AC8260__35199.3492608473$1445613420$gmane$org@SN1PR0301MB1598.namprd03.prod.outlook.com>
-References: <SN1PR0301MB15981E02890EE7EBB67F42A2C8270@SN1PR0301MB1598.namprd03.prod.outlook.com>
- <CAFXXi0=TPu-OFYPv6f2_zXLhfChQD8ui8xQWnkEc4BVnsw0-YA@mail.gmail.com>
+From: Christian Ascheberg <caschebe@techfak.uni-bielefeld.de>
+Subject: Re: Problem LD_PRELOADing multiple UST helpers
+Date: Fri, 23 Oct 2015 19:09:34 +0200
+Message-ID: <562A69CE.8080100__2477.29601474038$1445620268$gmane$org@techfak.uni-bielefeld.de>
+References: <5627922E.9000808@techfak.uni-bielefeld.de>
+ <5627B163.5060407@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-by2on0126.outbound.protection.outlook.com
- ([207.46.100.126] helo=na01-by2-obe.outbound.protection.outlook.com)
+Received: from smarthost.techfak.uni-bielefeld.de ([129.70.137.17])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <brianrob@microsoft.com>) id 1Zpe4W-00039o-Ng
- for lttng-dev@lists.lttng.org; Fri, 23 Oct 2015 11:16:01 -0400
-In-Reply-To: <CAFXXi0=TPu-OFYPv6f2_zXLhfChQD8ui8xQWnkEc4BVnsw0-YA@mail.gmail.com>
-Content-Language: en-US
+ (envelope-from <caschebe@techfak.uni-bielefeld.de>)
+ id 1Zpfqd-0003j3-PI
+ for lttng-dev@lists.lttng.org; Fri, 23 Oct 2015 13:09:51 -0400
+Received: from [192.168.0.187] (i577AC752.versanet.de [87.122.199.82])
+ (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+ (No client certificate requested) (Authenticated sender: caschebe)
+ by smarthost.TechFak.Uni-Bielefeld.DE (Postfix) with ESMTPSA id B037680012
+ for <lttng-dev@lists.lttng.org>; Fri, 23 Oct 2015 19:09:40 +0200 (CEST)
+In-Reply-To: <5627B163.5060407@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,58 +27,432 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-QWgsIHRoYXQgY2xlYXJzIGl0IHVwLiAgVGhhbmsgeW91IFNpbW9uLg0KDQotQnJpYW4NCg0KLS0t
-LS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IHRodW5kZXJzaW1AZ21haWwuY29tIFttYWls
-dG86dGh1bmRlcnNpbUBnbWFpbC5jb21dIE9uIEJlaGFsZiBPZiBTaW1vbiBNYXJjaGkNClNlbnQ6
-IFRodXJzZGF5LCBPY3RvYmVyIDIyLCAyMDE1IDY6NTAgUE0NClRvOiBCcmlhbiBSb2JiaW5zIDxi
-cmlhbnJvYkBtaWNyb3NvZnQuY29tPg0KQ2M6IGx0dG5nLWRldiA8bHR0bmctZGV2QGxpc3RzLmx0
-dG5nLm9yZz4NClN1YmplY3Q6IFJlOiBbbHR0bmctZGV2XSBVYnVudHUgUGFja2FnZSBmb3IgTFRU
-bmctVVNUIENvbXBpbGVkIHdpdGggRGVidWcgTG9nZ2luZyBPbiBCeSBEZWZhdWx0DQoNCk9uIDIy
-IE9jdG9iZXIgMjAxNSBhdCAxOTozNSwgQnJpYW4gUm9iYmlucyA8YnJpYW5yb2JAbWljcm9zb2Z0
-LmNvbT4gd3JvdGU6DQo+IEhlbGxvLA0KPg0KPg0KPg0KPiBUaGUgTGludXggYnVpbGQgb2YgQ29y
-ZUNMUiBub3cgc3VwcG9ydHMgdHJhY2luZyB1c2luZyBMVFRuZy1VU1QuICBPbmUgDQo+IGFydGlm
-YWN0IHRoYXQgd2Ugbm90aWNlZCB3aGVuIHJ1bm5pbmcgb24gVWJ1bnR1IDE0LjA0IGluIG91ciBD
-SSBpcyANCj4gdGhhdCBhcHBzIHJ1bm5pbmcgb24gQ29yZUNMUiBhbGwgaGF2ZSBhbiBMVFRuZyB3
-YXJuaW5nIHdyaXR0ZW4gdG8gc3RkZXJyOg0KPg0KPg0KPg0KPiBsaWJ1c3RbODgzLzg4M106IFdh
-cm5pbmc6IEhPTUUgZW52aXJvbm1lbnQgdmFyaWFibGUgbm90IHNldC4gRGlzYWJsaW5nIA0KPiBM
-VFRuZy1VU1QgcGVyLXVzZXIgdHJhY2luZy4gKGluIHNldHVwX2xvY2FsX2FwcHMoKSBhdCANCj4g
-bHR0bmctdXN0LWNvbW0uYzozMDUpDQo+DQo+DQo+DQo+IEnigJl2ZSBpbnZlc3RpZ2F0ZWQsIGFu
-ZCBpdCBpcyB0cnVlIHRoYXQgaW4gdGhlIENJLCB0aGVyZSBpcyBubyBIT01FIA0KPiBlbnZpcm9u
-bWVudCB2YXJpYWJsZS4gIEhvd2V2ZXIsIHdoYXQgSeKAmW0gbW9yZSBpbnRlcmVzdGVkIGluIGlz
-IHdoeSANCj4gdGhpcyBtZXNzYWdlIGlzIHdyaXR0ZW4gaW4gdGhlIGZpcnN0IHBsYWNlLiAgTG9v
-a2luZyBpbiBhdCB0aGUgbGF0ZXN0IA0KPiBMVFRuZy1VU1QgY29kZSwgaXQgYXBwZWFycyB0aGF0
-IHRoaXMgbWVzc2FnZSBzaG91bGQgb25seSBiZSBsb2dnZWQgDQo+IHdoZW4gZGVidWcgbG9nZ2lu
-ZyBpcyBlbmFibGVkLiAgRnJvbSBjb2RlIGluc3BlY3Rpb24sIGl0IGFwcGVhcnMgdGhhdCANCj4g
-ZGVidWcgbG9nZ2luZyBjYW4gYmUgZW5hYmxlZCBhdCBlaXRoZXIgY29tcGlsZSB0aW1lICgjZGVm
-aW5lIA0KPiBMVFROR19VU1RfREVCVUcpIG9yIGF0IHJ1bnRpbWUgdmlhIGFuIGVudmlyb25tZW50
-IHZhcmlhYmxlIGNhbGxlZCBMVFROR19VU1RfREVCVUcuDQo+DQo+DQo+DQo+IEkgaGF2ZSBjb25m
-aXJtZWQgdGhhdCB0aGUgZW52aXJvbm1lbnQgdmFyaWFibGUgTFRUTkdfVVNUX0RFQlVHIGlzIG5v
-dCANCj4gcHJlc2VudC4gIEnigJl2ZSBhbHNvIGxvb2tlZCBhdCB0aGUgZGlzYXNzZW1ibHksIGFu
-ZCBjYW4gY29uZmlybSB0aGF0IA0KPiB0aGUgdXN0X2xvZ2xldmVsIGNoZWNrIGlzIG5vdCBhY3R1
-YWxseSBwZXJmb3JtZWQgKHRoZSBpZiBzdGF0ZW1lbnQgaXMgDQo+IG9wdGltaXplZCBhd2F5KS4g
-IFRoaXMgbWFrZXMgbWUgdGhpbmsgdGhhdCB0aGUgVWJ1bnR1IHBhY2thZ2Ugd2FzIA0KPiBjb21w
-aWxlZCB3aXRoIExUVE5HX1VTVF9ERUJVRyBkZWZpbmVkLg0KPg0KPg0KPg0KPiBUaGUgcGFja2Fn
-ZSBpbiBxdWVzdGlvbiBpcyBvbGQg4oCTIExUVG5nLVVTVCAyLjQuICBJ4oCZbSB3b25kZXJpbmcg
-aWYgDQo+IGVpdGhlciBkZWJ1ZyBsb2dnaW5nIHdhcyBhbHdheXMgcHJlc2VudCBpbiAyLjQsIG9y
-IGlmIHRoZSBwYWNrYWdlIHdhcyANCj4gY29tcGlsZWQgd2l0aCBMVFROR19VU1RfREVCVUcuICBJ
-IHdvdWxkIGV4cGVjdCB0aGF0IG1vc3QgY3VzdG9tZXJzIA0KPiB3b3VsZCB3YW50IGRlYnVnIGxv
-Z2dpbmcgb2ZmIGJ5IGRlZmF1bHQsIHNpbmNlIGl0IGFmZmVjdHMgdGhlIG91dHB1dCBvZiB0aGUg
-cHJvZ3JhbS4NCj4NCj4NCj4NCj4gWW91ciBoZWxwIGluIGZpZ3VyaW5nIHRoaXMgb3V0IGlzIGdy
-ZWF0bHkgYXBwcmVjaWF0ZWQuDQo+DQo+DQo+DQo+IFRoYW5rIHlvdS4NCj4NCj4gLUJyaWFuDQoN
-Cg0KSGkgQnJpYW4sDQoNClRoaXMgd2FybmluZyB1c2VkIHRvIGFwcGVhciByZWdhcmRsZXNzIG9m
-IHRoZSBkZWZpbml0aW9uIG9mIExUVE5HX1VTVF9ERUJVRy4NCg0KQmlzZWN0aW5nIHNob3dzIHRo
-YXQgaXQgaGFzIGJlZW4gZml4ZWQgaW4gY29tbWl0IDdiZGQyMWE0MTA5MmE1OTIwNzk1ODkxMTY2
-NmNiZDQ1OGY5M2EzMTksIHdoaWNoIGlzIHBhcnQgb2YgdmVyc2lvbiAyLjcuDQoNCkhlcmUgaXQg
-aXM6IGh0dHBzOi8vbmEwMS5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0
-dHAlM2ElMmYlMmZnaXQubHR0bmcub3JnJTJmJTNmcCUzZGx0dG5nLXVzdC5naXQlM2JhJTNkY29t
-bWl0JTNiaCUzZDdiZGQyMWE0MTA5MmE1OTIwNzk1ODkxMTY2NmNiZDQ1OGY5M2EzMTkmZGF0YT0w
-MSU3YzAxJTdjYnJpYW5yb2IlNDBtaWNyb3NvZnQuY29tJTdjOTliNWE4YWNhYjRhNGY1MDExZmIw
-OGQyZGI0YzQzYjMlN2M3MmY5ODhiZjg2ZjE0MWFmOTFhYjJkN2NkMDExZGI0NyU3YzEmc2RhdGE9
-elRNRSUyZiUyYlpjTGZ3QkY4JTJiU2ZTS2dDOHdvMUkxNFJFZWxNRlpsa1VZV0J5QSUzZA0KDQpT
-aW1vbg0KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
-bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0
-cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+The requested output that was generated by the stated command is in 
+http://pastebin.com/zxuFQ8yV (part 1) and http://pastebin.com/GgR8d3pV 
+(part 2).
+
+The full LTTng debug output, split by executed commands, is in 
+http://pastebin.com/NsCxaYGT
+
+As I tried to say before, note that these three lines are occuring for 
+every registration, but they should occur only once:
+liblttng_ust_tracepoint[313/313]: just registered a tracepoints section 
+from 0x76e7b42c and having 2 tracepoints (in tracepoint_register_lib() 
+at tracepoint.c:767)
+liblttng_ust_tracepoint[313/313]: registered tracepoint: 
+ust_baddr_statedump:soinfo (in tracepoint_register_lib() at 
+tracepoint.c:772)
+liblttng_ust_tracepoint[313/313]: registered tracepoint: 
+lttng_ust_tracef:event (in tracepoint_register_lib() at tracepoint.c:772)
+
+Corresponding lines for other tracepoint providers are missing instead.
+
+
+This is the full UST part of the debug output. Part of that is what I 
+had posted before.
+
+root@cyclone5:~# LD_PRELOAD="liblttng-ust-libc-wrapper.so 
+liblttng-ust-cyg-profile.so liblttng-ust-pthread-wrapper.so 
+liblttng-ust-dl.so" ls
+liblttng_ust_tracepoint[313/313]: just registered a tracepoints section 
+from 0x76e7b42c and having 2 tracepoints (in tracepoint_register_lib() 
+at tracepoint.c:767)
+liblttng_ust_tracepoint[313/313]: registered tracepoint: 
+ust_baddr_statedump:soinfo (in tracepoint_register_lib() at 
+tracepoint.c:772)
+liblttng_ust_tracepoint[313/313]: registered tracepoint: 
+lttng_ust_tracef:event (in tracepoint_register_lib() at tracepoint.c:772)
+libust[313/313]: Provider "ust_baddr_statedump" accepted, version 1.0 is 
+compatible with LTTng UST provider version 1.0. (in 
+check_provider_version() at lttng-probes.c:174)
+libust[313/313]: adding probe ust_baddr_statedump containing 1 events to 
+lazy registration list (in lttng_probe_register() at lttng-probes.c:216)
+libust[313/313]: LTT : ltt ring buffer client "relay-metadata-mmap" init
+  (in lttng_ring_buffer_metadata_client_init() at 
+lttng-ring-buffer-metadata-client.h:330)
+libust[313/313]: LTT : ltt ring buffer client "relay-overwrite-mmap" init
+  (in lttng_ring_buffer_client_overwrite_init() at 
+lttng-ring-buffer-client.h:681)
+libust[313/313]: LTT : ltt ring buffer client "relay-overwrite-rt-mmap" init
+  (in lttng_ring_buffer_client_overwrite_rt_init() at 
+lttng-ring-buffer-client.h:681)
+libust[313/313]: LTT : ltt ring buffer client "relay-discard-mmap" init
+  (in lttng_ring_buffer_client_discard_init() at 
+lttng-ring-buffer-client.h:681)
+libust[313/313]: LTT : ltt ring buffer client "relay-discard-rt-mmap" init
+  (in lttng_ring_buffer_client_discard_rt_init() at 
+lttng-ring-buffer-client.h:681)
+libust[313/315]: Info: sessiond not accepting connections to local apps 
+socket (in ust_listener_thread() at lttng-ust-comm.c:1224)
+libust[313/315]: Waiting for local apps sessiond (in wait_for_sessiond() 
+at lttng-ust-comm.c:1135)
+libust[313/314]: Message Received "Get Tracer Version" (65), Handle 
+"root" (0) (in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: Return value: 0 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/314]: Message Received "Create Session" (64), Handle "root" 
+(0) (in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: Return value: 1 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/314]: Message Received "Create Channel" (81), Handle 
+"session" (1) (in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: channel data received (in handle_message() at 
+lttng-ust-comm.c:723)
+libust[313/314]: Return value: 2 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/314]: Message Received "Create Stream" (96), Handle "channel" 
+(2) (in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: Return value: 0 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/314]: Message Received "Create Stream" (96), Handle "channel" 
+(2) (in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: Return value: 0 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/314]: Message Received "Create Context" (112), Handle 
+"channel" (2) (in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: Return value: 0 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/314]: Message Received "Create Context" (112), Handle 
+"channel" (2) (in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: Return value: 0 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/314]: Message Received "Create Context" (112), Handle 
+"channel" (2) (in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: Return value: 0 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/314]: Message Received "Create Context" (112), Handle 
+"channel" (2) (in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: Return value: 0 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/314]: Message Received "Create Event" (97), Handle "channel" 
+(2) (in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: Return value: 3 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/314]: Message Received "Enable" (128), Handle "enabler" (3) 
+(in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: Return value: 0 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/314]: Message Received "Enable" (128), Handle "session" (1) 
+(in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: Sent register channel notification: chan_id 0, 
+header_type 1
+  (in ustcomm_register_channel() at lttng-ust-comm.c:1108)
+libust[313/314]: just registered probe ust_baddr_statedump containing 1 
+events (in lttng_lazy_probe_register() at lttng-probes.c:115)
+libust[313/314]: Sent register event notification for name 
+"ust_baddr_statedump:soinfo": ret_code 0, event_id 0
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+liblttng_ust_tracepoint[313/314]: Registering probe to tracepoint 
+ust_baddr_statedump:soinfo (in __tracepoint_probe_register() at 
+tracepoint.c:563)
+libust[313/314]: Return value: 0 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/314]: Message Received "Wait for Quiescent State" (67), 
+Handle "root" (0) (in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: Return value: 0 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/314]: Message Received "Registration Done" (68), Handle 
+"root" (0) (in print_cmd() at lttng-ust-comm.c:367)
+libust[313/314]: Return value: 0 (in handle_message() at 
+lttng-ust-comm.c:827)
+libust[313/314]: message successfully sent (in send_reply() at 
+lttng-ust-comm.c:484)
+libust[313/313]: adding probe lttng_ust_tracef containing 1 events to 
+lazy registration list (in lttng_probe_register() at lttng-probes.c:216)
+libust[313/313]: just registered probe lttng_ust_tracef containing 1 
+events (in lttng_lazy_probe_register() at lttng-probes.c:115)
+libust[313/313]: Sent register event notification for name 
+"lttng_ust_tracef:event": ret_code 0, event_id 1
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+lttng_ust_tracef:event (in __tracepoint_probe_register() at 
+tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: just registered a tracepoints section 
+from 0x76e7b42c and having 2 tracepoints (in tracepoint_register_lib() 
+at tracepoint.c:767)
+liblttng_ust_tracepoint[313/313]: registered tracepoint: 
+ust_baddr_statedump:soinfo (in tracepoint_register_lib() at 
+tracepoint.c:772)
+liblttng_ust_tracepoint[313/313]: registered tracepoint: 
+lttng_ust_tracef:event (in tracepoint_register_lib() at tracepoint.c:772)
+libust[313/313]: Provider "ust_baddr" accepted, version 1.0 is 
+compatible with LTTng UST provider version 1.0. (in 
+check_provider_version() at lttng-probes.c:174)
+libust[313/313]: adding probe ust_baddr containing 2 events to lazy 
+registration list (in lttng_probe_register() at lttng-probes.c:216)
+libust[313/313]: just registered probe ust_baddr containing 2 events (in 
+lttng_lazy_probe_register() at lttng-probes.c:115)
+libust[313/313]: Sent register event notification for name 
+"ust_baddr:push": ret_code 0, event_id 2
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+libust[313/313]: Sent register event notification for name 
+"ust_baddr:pop": ret_code 0, event_id 3
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+ust_baddr:pop (in __tracepoint_probe_register() at tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+ust_baddr:push (in __tracepoint_probe_register() at tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: just registered a tracepoints section 
+from 0x76e7b42c and having 2 tracepoints (in tracepoint_register_lib() 
+at tracepoint.c:767)
+liblttng_ust_tracepoint[313/313]: registered tracepoint: 
+ust_baddr_statedump:soinfo (in tracepoint_register_lib() at 
+tracepoint.c:772)
+liblttng_ust_tracepoint[313/313]: registered tracepoint: 
+lttng_ust_tracef:event (in tracepoint_register_lib() at tracepoint.c:772)
+libust[313/313]: Provider "ust_pthread" accepted, version 1.0 is 
+compatible with LTTng UST provider version 1.0. (in 
+check_provider_version() at lttng-probes.c:174)
+libust[313/313]: adding probe ust_pthread containing 4 events to lazy 
+registration list (in lttng_probe_register() at lttng-probes.c:216)
+libust[313/313]: just registered probe ust_pthread containing 4 events 
+(in lttng_lazy_probe_register() at lttng-probes.c:115)
+libust[313/313]: Sent register event notification for name 
+"ust_pthread:pthread_mutex_lock_req": ret_code 0, event_id 4
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+libust[313/313]: Sent register event notification for name 
+"ust_pthread:pthread_mutex_lock_acq": ret_code 0, event_id 5
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+libust[313/313]: Sent register event notification for name 
+"ust_pthread:pthread_mutex_trylock": ret_code 0, event_id 6
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+libust[313/313]: Sent register event notification for name 
+"ust_pthread:pthread_mutex_unlock": ret_code 0, event_id 7
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+ust_pthread:pthread_mutex_unlock (in __tracepoint_probe_register() at 
+tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+ust_pthread:pthread_mutex_trylock (in __tracepoint_probe_register() at 
+tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+ust_pthread:pthread_mutex_lock_acq (in __tracepoint_probe_register() at 
+tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+ust_pthread:pthread_mutex_lock_req (in __tracepoint_probe_register() at 
+tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: just registered a tracepoints section 
+from 0x76e7b42c and having 2 tracepoints (in tracepoint_register_lib() 
+at tracepoint.c:767)
+liblttng_ust_tracepoint[313/313]: registered tracepoint: 
+ust_baddr_statedump:soinfo (in tracepoint_register_lib() at 
+tracepoint.c:772)
+liblttng_ust_tracepoint[313/313]: registered tracepoint: 
+lttng_ust_tracef:event (in tracepoint_register_lib() at tracepoint.c:772)
+libust[313/313]: Provider "lttng_ust_cyg_profile" accepted, version 1.0 
+is compatible with LTTng UST provider version 1.0. (in 
+check_provider_version() at lttng-probes.c:174)
+libust[313/313]: adding probe lttng_ust_cyg_profile containing 2 events 
+to lazy registration list (in lttng_probe_register() at lttng-probes.c:216)
+libust[313/313]: just registered probe lttng_ust_cyg_profile containing 
+2 events (in lttng_lazy_probe_register() at lttng-probes.c:115)
+libust[313/313]: Sent register event notification for name 
+"lttng_ust_cyg_profile:func_entry": ret_code 0, event_id 8
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+libust[313/313]: Sent register event notification for name 
+"lttng_ust_cyg_profile:func_exit": ret_code 0, event_id 9
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+lttng_ust_cyg_profile:func_exit (in __tracepoint_probe_register() at 
+tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+lttng_ust_cyg_profile:func_entry (in __tracepoint_probe_register() at 
+tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: just registered a tracepoints section 
+from 0x76e7b42c and having 2 tracepoints (in tracepoint_register_lib() 
+at tracepoint.c:767)
+liblttng_ust_tracepoint[313/313]: registered tracepoint: 
+ust_baddr_statedump:soinfo (in tracepoint_register_lib() at 
+tracepoint.c:772)
+liblttng_ust_tracepoint[313/313]: registered tracepoint: 
+lttng_ust_tracef:event (in tracepoint_register_lib() at tracepoint.c:772)
+libust[313/313]: Provider "ust_libc" accepted, version 1.0 is compatible 
+with LTTng UST provider version 1.0. (in check_provider_version() at 
+lttng-probes.c:174)
+libust[313/313]: adding probe ust_libc containing 6 events to lazy 
+registration list (in lttng_probe_register() at lttng-probes.c:216)
+libust[313/313]: just registered probe ust_libc containing 6 events (in 
+lttng_lazy_probe_register() at lttng-probes.c:115)
+libust[313/313]: Sent register event notification for name 
+"ust_libc:malloc": ret_code 0, event_id 10
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+libust[313/313]: Sent register event notification for name 
+"ust_libc:free": ret_code 0, event_id 11
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+libust[313/313]: Sent register event notification for name 
+"ust_libc:calloc": ret_code 0, event_id 12
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+libust[313/313]: Sent register event notification for name 
+"ust_libc:realloc": ret_code 0, event_id 13
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+libust[313/313]: Sent register event notification for name 
+"ust_libc:memalign": ret_code 0, event_id 14
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+libust[313/313]: Sent register event notification for name 
+"ust_libc:posix_memalign": ret_code 0, event_id 15
+  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+ust_libc:posix_memalign (in __tracepoint_probe_register() at 
+tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+ust_libc:memalign (in __tracepoint_probe_register() at tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+ust_libc:realloc (in __tracepoint_probe_register() at tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+ust_libc:calloc (in __tracepoint_probe_register() at tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+ust_libc:free (in __tracepoint_probe_register() at tracepoint.c:563)
+liblttng_ust_tracepoint[313/313]: Registering probe to tracepoint 
+ust_libc:malloc (in __tracepoint_probe_register() at tracepoint.c:563)
+
+
+
+Am 21.10.2015 um 17:38 schrieb Jonathan Rajotte Julien:
+> Hi Christian,
+>
+> The more debug output the merrier !
+>
+> Could you attach the file generated (ld_debug.out.xxxx) by this command:
+>
+> LD_PRELOAD="liblttng-ust-libc-wrapper.so liblttng-ust-cyg-profile.so 
+> liblttng-ust-pthread-wrapper.so liblttng-ust-dl.so" LD_DEBUG=all 
+> LD_DEBUG_OUTPUT=ld_debug.out ls
+>
+> Also is the output provided in your previous email all of the debug 
+> output from 'ls' ?
+>
+> Cheers!
+>
+> On 2015-10-21 09:25 AM, Christian Ascheberg wrote:
+>> Hello,
+>>
+>> I am having a strange problem with LTTng UST helpers on a Cyclone V 
+>> ARM development board. If I LD_PRELOAD multiple helpers, then only 
+>> data of the first loaded helper appears in the trace.
+>> Below I have some debug output that looks wrong:
+>>
+>> This is the command:
+>> root@cyclone5:~# LTTNG_UST_DEBUG=1 
+>> LD_PRELOAD="liblttng-ust-libc-wrapper.so liblttng-ust-cyg-profile.so 
+>> liblttng-ust-pthread-wrapper.so liblttng-ust-dl.so" ls
+>>
+>> - This is some output regarding the first registration:
+>> liblttng_ust_tracepoint[XXX/XXX]: just registered a tracepoints 
+>> section from 0x76e7b42c and having 2 tracepoints (in 
+>> tracepoint_register_lib() at tracepoint.c:767)
+>> liblttng_ust_tracepoint[XXX/XXX]: registered tracepoint: 
+>> ust_baddr_statedump:soinfo (in tracepoint_register_lib() at 
+>> tracepoint.c:772)
+>> liblttng_ust_tracepoint[XXX/XXX]: registered tracepoint: 
+>> lttng_ust_tracef:event (in tracepoint_register_lib() at 
+>> tracepoint.c:772)
+>> libust[XXX/XXX]: Provider "ust_baddr_statedump" accepted, version 1.0 
+>> is compatible with LTTng UST provider version 1.0. (in 
+>> check_provider_version() at lttng-probes.c:174)
+>> libust[XXX/XXX]: adding probe ust_baddr_statedump containing 1 events 
+>> to lazy registration list (in lttng_probe_register() at 
+>> lttng-probes.c:216)
+>> libust[XXX/XXY]: just registered probe ust_baddr_statedump containing 
+>> 1 events (in lttng_lazy_probe_register() at lttng-probes.c:115)
+>> libust[XXX/XXY]: Sent register event notification for name 
+>> "ust_baddr_statedump:soinfo": ret_code 0, event_id 0
+>>  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+>> liblttng_ust_tracepoint[XXX/XXY]: Registering probe to tracepoint 
+>> ust_baddr_statedump:soinfo (in __tracepoint_probe_register() at 
+>> tracepoint.c:563)
+>> liblttng_ust_tracepoint[XXX/XXX]: Registering probe to tracepoint 
+>> lttng_ust_tracef:event (in __tracepoint_probe_register() at 
+>> tracepoint.c:563)
+>>
+>> - And here is some strange output regarding another registration:
+>> liblttng_ust_tracepoint[XXX/XXX]: just registered a tracepoints 
+>> section from 0x76e7b42c and having 2 tracepoints (in 
+>> tracepoint_register_lib() at tracepoint.c:767)
+>> liblttng_ust_tracepoint[XXX/XXX]: registered tracepoint: 
+>> ust_baddr_statedump:soinfo (in tracepoint_register_lib() at 
+>> tracepoint.c:772)
+>> liblttng_ust_tracepoint[XXX/XXX]: registered tracepoint: 
+>> lttng_ust_tracef:event (in tracepoint_register_lib() at 
+>> tracepoint.c:772)
+>> libust[XXX/XXX]: Provider "ust_pthread" accepted, version 1.0 is 
+>> compatible with LTTng UST provider version 1.0. (in 
+>> check_provider_version() at lttng-probes.c:174)
+>> libust[XXX/XXX]: adding probe ust_pthread containing 4 events to lazy 
+>> registration list (in lttng_probe_register() at lttng-probes.c:216)
+>> libust[XXX/XXX]: just registered probe ust_pthread containing 4 
+>> events (in lttng_lazy_probe_register() at lttng-probes.c:115)
+>> libust[XXX/XXX]: Sent register event notification for name 
+>> "ust_pthread:pthread_mutex_lock_req": ret_code 0, event_id 4
+>>  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+>> libust[XXX/XXX]: Sent register event notification for name 
+>> "ust_pthread:pthread_mutex_lock_acq": ret_code 0, event_id 5
+>>  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+>> libust[XXX/XXX]: Sent register event notification for name 
+>> "ust_pthread:pthread_mutex_trylock": ret_code 0, event_id 6
+>>  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+>> libust[XXX/XXX]: Sent register event notification for name 
+>> "ust_pthread:pthread_mutex_unlock": ret_code 0, event_id 7
+>>  (in ustcomm_register_event() at lttng-ust-comm.c:1001)
+>> liblttng_ust_tracepoint[XXX/XXX]: Registering probe to tracepoint 
+>> ust_pthread:pthread_mutex_unlock (in __tracepoint_probe_register() at 
+>> tracepoint.c:563)
+>> liblttng_ust_tracepoint[XXX/XXX]: Registering probe to tracepoint 
+>> ust_pthread:pthread_mutex_trylock (in __tracepoint_probe_register() 
+>> at tracepoint.c:563)
+>> liblttng_ust_tracepoint[XXX/XXX]: Registering probe to tracepoint 
+>> ust_pthread:pthread_mutex_lock_acq (in __tracepoint_probe_register() 
+>> at tracepoint.c:563)
+>> liblttng_ust_tracepoint[XXX/XXX]: Registering probe to tracepoint 
+>> ust_pthread:pthread_mutex_lock_req (in __tracepoint_probe_register() 
+>> at tracepoint.c:563)
+>>
+>> As with this one, the first three lines of all registrations are 
+>> always the same and do not match the following (in this case) 
+>> 'Provider "ust_pthread" accepted'.
+>> I subsequently only get tracepoint data from ust_baddr_statedump:soinfo.
+>>
+>> I followed these build instructions for my board using Yocto 1.7: 
+>> http://rocketboards.org/foswiki/view/Documentation/GSRD150CompilingLinux
+>> I also tried updating the recipes to use the latest version of LTTng. 
+>> The output above is from LTTng v2.6.2.
+>> I can provide more debug output if that helps. I do not see this 
+>> problem on my desktop computer.
+>>
+>> Can somebody confirm this problem?
+>>
+>> Thanks, Christian
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
