@@ -1,17 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Python agent: Support Agent protocol v2.0
-Date: Fri, 23 Oct 2015 21:59:01 +0000 (UTC)
-Message-ID: <2071487852.111366.1445637541258.JavaMail.zimbra__29277.1739922047$1445637614$gmane$org@efficios.com>
-References: <1445634771-27070-1-git-send-email-jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-tools] Load x86-irq-vectors lttng-modules
+	probe
+Date: Fri, 23 Oct 2015 18:47:11 -0400
+Message-ID: <1445640431-1197-1-git-send-email-mathieu.desnoyers__22141.9821413749$1445640494$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZpkMm-0005AT-NY
- for lttng-dev@lists.lttng.org; Fri, 23 Oct 2015 17:59:17 -0400
-In-Reply-To: <1445634771-27070-1-git-send-email-jeremie.galarneau@efficios.com>
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1Zpl7J-0005Ro-LT
+ for lttng-dev@lists.lttng.org; Fri, 23 Oct 2015 18:47:25 -0400
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,74 +19,26 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jeremie Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGludG8gVVNUIG1hc3RlciwgdGhhbmtzIQoKTWF0aGlldQoKLS0tLS0gT24gT2N0IDIz
-LCAyMDE1LCBhdCA1OjEyIFBNLCBKZXJlbWllIEdhbGFybmVhdSBqZXJlbWllLmdhbGFybmVhdUBl
-ZmZpY2lvcy5jb20gd3JvdGU6Cgo+IFNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUg
-PGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPiAtLS0KPiBsaWJsdHRuZy11c3QtcHl0
-aG9uLWFnZW50L2x0dG5ndXN0L2FnZW50LnB5IHwgIDIgKy0KPiBsaWJsdHRuZy11c3QtcHl0aG9u
-LWFnZW50L2x0dG5ndXN0L2NtZC5weSAgIHwgMjYgKysrKysrKysrKysrKysrKysrKysrKystLS0K
-PiAyIGZpbGVzIGNoYW5nZWQsIDI0IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCj4gCj4g
-ZGlmZiAtLWdpdCBhL2xpYmx0dG5nLXVzdC1weXRob24tYWdlbnQvbHR0bmd1c3QvYWdlbnQucHkK
-PiBiL2xpYmx0dG5nLXVzdC1weXRob24tYWdlbnQvbHR0bmd1c3QvYWdlbnQucHkKPiBpbmRleCA4
-NGNmZDgzLi5lYmZhMmRlIDEwMDY0NAo+IC0tLSBhL2xpYmx0dG5nLXVzdC1weXRob24tYWdlbnQv
-bHR0bmd1c3QvYWdlbnQucHkKPiArKysgYi9saWJsdHRuZy11c3QtcHl0aG9uLWFnZW50L2x0dG5n
-dXN0L2FnZW50LnB5Cj4gQEAgLTQwLDcgKzQwLDcgQEAgZXhjZXB0IEltcG9ydEVycm9yOgo+IAo+
-IAo+IF9QUk9UT19ET01BSU4gPSA1Cj4gLV9QUk9UT19NQUpPUiA9IDEKPiArX1BST1RPX01BSk9S
-ID0gMgo+IF9QUk9UT19NSU5PUiA9IDAKPiAKPiAKPiBkaWZmIC0tZ2l0IGEvbGlibHR0bmctdXN0
-LXB5dGhvbi1hZ2VudC9sdHRuZ3VzdC9jbWQucHkKPiBiL2xpYmx0dG5nLXVzdC1weXRob24tYWdl
-bnQvbHR0bmd1c3QvY21kLnB5Cj4gaW5kZXggZmUxODBmYS4uMzgyZGU2OCAxMDA2NDQKPiAtLS0g
-YS9saWJsdHRuZy11c3QtcHl0aG9uLWFnZW50L2x0dG5ndXN0L2NtZC5weQo+ICsrKyBiL2xpYmx0
-dG5nLXVzdC1weXRob24tYWdlbnQvbHR0bmd1c3QvY21kLnB5Cj4gQEAgLTIsNiArMiw3IEBACj4g
-Iwo+ICMgQ29weXJpZ2h0IChDKSAyMDE1IC0gUGhpbGlwcGUgUHJvdWx4IDxwcHJvdWx4QGVmZmlj
-aW9zLmNvbT4KPiAjIENvcHlyaWdodCAoQykgMjAxNCAtIERhdmlkIEdvdWxldCA8ZGdvdWxldEBl
-ZmZpY2lvcy5jb20+Cj4gKyMgQ29weXJpZ2h0IChDKSAyMDE1IC0gSsOpcsOpbWllIEdhbGFybmVh
-dSA8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPgo+ICMKPiAjIFRoaXMgbGlicmFyeSBp
-cyBmcmVlIHNvZnR3YXJlOyB5b3UgY2FuIHJlZGlzdHJpYnV0ZSBpdCBhbmQvb3IgbW9kaWZ5IGl0
-IHVuZGVyCj4gIyB0aGUgdGVybXMgb2YgdGhlIEdOVSBMZXNzZXIgR2VuZXJhbCBQdWJsaWMgTGlj
-ZW5zZSBhcyBwdWJsaXNoZWQgYnkgdGhlIEZyZWUKPiBAQCAtMjksNiArMzAsMTAgQEAgX3NlcnZl
-cl9jbWRfaGVhZGVyX3N0cnVjdCA9IHN0cnVjdC5TdHJ1Y3QoJz5RSUknKQo+IF9TRVJWRVJfQ01E
-X0hFQURFUl9TSVpFID0gX3NlcnZlcl9jbWRfaGVhZGVyX3N0cnVjdC5zaXplCj4gCj4gCj4gKyMg
-YWdlbnQgcHJvdG9jb2wgc3ltYm9sIHNpemUKPiArX0xUVE5HX1NZTUJPTF9OQU1FX0xFTiA9IDI1
-Ngo+ICsKPiArCj4gY2xhc3MgX1NlcnZlckNtZEhlYWRlcihvYmplY3QpOgo+ICAgICBkZWYgX19p
-bml0X18oc2VsZiwgZGF0YV9zaXplLCBjbWRfaWQsIGNtZF92ZXJzaW9uKToKPiAgICAgICAgIHNl
-bGYuZGF0YV9zaXplID0gZGF0YV9zaXplCj4gQEAgLTY0LDIxICs2OSwzNiBAQCBjbGFzcyBfU2Vy
-dmVyQ21kTGlzdChfU2VydmVyQ21kKToKPiBjbGFzcyBfU2VydmVyQ21kRW5hYmxlKF9TZXJ2ZXJD
-bWQpOgo+ICAgICBfTkFNRV9PRkZTRVQgPSA4Cj4gICAgIF9sb2dsZXZlbF9zdHJ1Y3QgPSBzdHJ1
-Y3QuU3RydWN0KCc+SUknKQo+ICsgICAgIyBmaWx0ZXIgZXhwcmVzc2lvbiBzaXplCj4gKyAgICBf
-ZmlsdGVyX2V4cF9sZW5fc3RydWN0ID0gc3RydWN0LlN0cnVjdCgnPkknKQo+IAo+IC0gICAgZGVm
-IF9faW5pdF9fKHNlbGYsIGhlYWRlciwgbG9nbGV2ZWwsIGxvZ2xldmVsX3R5cGUsIG5hbWUpOgo+
-ICsgICAgZGVmIF9faW5pdF9fKHNlbGYsIGhlYWRlciwgbG9nbGV2ZWwsIGxvZ2xldmVsX3R5cGUs
-IG5hbWUsIGZpbHRlcl9leHApOgo+ICAgICAgICAgc3VwZXIoc2VsZi5fX2NsYXNzX18sIHNlbGYp
-Ll9faW5pdF9fKGhlYWRlcikKPiAgICAgICAgIHNlbGYubG9nbGV2ZWwgPSBsb2dsZXZlbAo+ICAg
-ICAgICAgc2VsZi5sb2dsZXZlbF90eXBlID0gbG9nbGV2ZWxfdHlwZQo+ICAgICAgICAgc2VsZi5u
-YW1lID0gbmFtZQo+ICsgICAgICAgIHNlbGYuZmlsdGVyX2V4cHJlc3Npb24gPSBmaWx0ZXJfZXhw
-Cj4gKyAgICAgICAgZGJnLl9wZGVidWcoJ3NlcnZlciBlbmFibGUgY29tbWFuZCB7fScuZm9ybWF0
-KHNlbGYuX19kaWN0X18pKQo+IAo+ICAgICBAY2xhc3NtZXRob2QKPiAgICAgZGVmIGZyb21fZGF0
-YShjbHMsIGhlYWRlciwgZGF0YSk6Cj4gICAgICAgICB0cnk6Cj4gICAgICAgICAgICAgbG9nbGV2
-ZWwsIGxvZ2xldmVsX3R5cGUgPSBjbHMuX2xvZ2xldmVsX3N0cnVjdC51bnBhY2tfZnJvbShkYXRh
-KQo+IC0gICAgICAgICAgICBkYXRhX25hbWUgPSBkYXRhW2Nscy5fbG9nbGV2ZWxfc3RydWN0LnNp
-emU6XQo+ICsgICAgICAgICAgICBuYW1lX3N0YXJ0ID0gY2xzLl9sb2dsZXZlbF9zdHJ1Y3Quc2l6
-ZQo+ICsgICAgICAgICAgICBuYW1lX2VuZCA9IG5hbWVfc3RhcnQgKyBfTFRUTkdfU1lNQk9MX05B
-TUVfTEVOCj4gKyAgICAgICAgICAgIGRhdGFfbmFtZSA9IGRhdGFbbmFtZV9zdGFydDpuYW1lX2Vu
-ZF0KPiAgICAgICAgICAgICBuYW1lID0gZGF0YV9uYW1lLnJzdHJpcChiJ1wwJykuZGVjb2RlKCkK
-PiAKPiAtICAgICAgICAgICAgcmV0dXJuIGNscyhoZWFkZXIsIGxvZ2xldmVsLCBsb2dsZXZlbF90
-eXBlLCBuYW1lKQo+ICsgICAgICAgICAgICBmaWx0ZXJfZXhwX3N0YXJ0ID0gbmFtZV9lbmQgKyBj
-bHMuX2ZpbHRlcl9leHBfbGVuX3N0cnVjdC5zaXplCj4gKyAgICAgICAgICAgIGZpbHRlcl9leHBf
-bGVuLCA9IGNscy5fZmlsdGVyX2V4cF9sZW5fc3RydWN0LnVucGFja19mcm9tKAo+ICsgICAgICAg
-ICAgICAgICAgZGF0YVtuYW1lX2VuZDpmaWx0ZXJfZXhwX3N0YXJ0XSkKPiArICAgICAgICAgICAg
-cHJpbnQoZmlsdGVyX2V4cF9sZW4pCj4gKyAgICAgICAgICAgIGZpbHRlcl9leHBfZW5kID0gZmls
-dGVyX2V4cF9zdGFydCArIGZpbHRlcl9leHBfbGVuCj4gKwo+ICsgICAgICAgICAgICBmaWx0ZXJf
-ZXhwID0gZGF0YVtmaWx0ZXJfZXhwX3N0YXJ0OmZpbHRlcl9leHBfZW5kXS5yc3RyaXAoCj4gKyAg
-ICAgICAgICAgICAgICBiJ1wwJykuZGVjb2RlKCkKPiArCj4gKyAgICAgICAgICAgIHJldHVybiBj
-bHMoaGVhZGVyLCBsb2dsZXZlbCwgbG9nbGV2ZWxfdHlwZSwgbmFtZSwgZmlsdGVyX2V4cCkKPiAg
-ICAgICAgIGV4Y2VwdCAoRXhjZXB0aW9uKSBhcyBlOgo+ICAgICAgICAgICAgIGRiZy5fcGRlYnVn
-KCdjYW5ub3QgZGVjb2RlIGVuYWJsZSBjb21tYW5kOiB7fScuZm9ybWF0KGUpKQo+ICAgICAgICAg
-ICAgIHJldHVybiBOb25lCj4gLS0KPiAyLjYuMgoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmlj
-aU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
-aXN0aW5mby9sdHRuZy1kZXYK
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ src/bin/lttng-sessiond/modprobe.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/modprobe.c
+index 4c1ea67..8603d04 100644
+--- a/src/bin/lttng-sessiond/modprobe.c
++++ b/src/bin/lttng-sessiond/modprobe.c
+@@ -91,6 +91,7 @@ struct kern_modules_param kern_modules_probes_default[] = {
+ 	{ "lttng-probe-v4l2" },
+ 	{ "lttng-probe-workqueue" },
+ 	{ "lttng-probe-writeback" },
++	{ "lttng-probe-x86-irq-vectors" },
+ };
+ 
+ /* dynamic probe modules list */
+-- 
+2.1.4
