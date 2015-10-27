@@ -1,18 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules 2.6 1/2] Fix: make
-	sched	instrumentation build for 4.3 kernel
-Date: Mon, 26 Oct 2015 18:40:09 +0000 (UTC)
-Message-ID: <827189911.130715.1445884809767.JavaMail.zimbra__9093.6089669869$1445884885$gmane$org@efficios.com>
-References: <1445859632-20147-1-git-send-email-rabinv@axis.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [BABELTRACE PATCH 1/2] Support ctf index version 1.1
+Date: Tue, 27 Oct 2015 16:20:11 -0400
+Message-ID: <CA+jJMxu_SQXC2fApNkxaDzWR9RZ6sq3UOLnMS9jsvYw3nZdnng__17017.9146495231$1445977307$gmane$org@mail.gmail.com>
+References: <1440033598-14124-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-yk0-f178.google.com ([209.85.160.178])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1Zqmgz-0001G5-L8
- for lttng-dev@lists.lttng.org; Mon, 26 Oct 2015 14:40:26 -0400
-In-Reply-To: <1445859632-20147-1-git-send-email-rabinv@axis.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZrAjB-0000O9-70
+ for lttng-dev@lists.lttng.org; Tue, 27 Oct 2015 16:20:24 -0400
+Received: by ykek133 with SMTP id k133so49293956yke.2
+ for <lttng-dev@lists.lttng.org>; Tue, 27 Oct 2015 13:20:11 -0700 (PDT)
+In-Reply-To: <1440033598-14124-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,72 +22,78 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Rabin Vincent <rabin.vincent@axis.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Rabin Vincent <rabinv@axis.com>
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Both patches merged into stable-2.6, thanks!
-
-Mathieu
-
------ On Oct 26, 2015, at 7:40 AM, Rabin Vincent rabin.vincent@axis.com wrote:
-
-> The backported patch "Fix: update sched wakeup instrumentation for 4.3
-> kernel" (c93180196ea8) used a newer definition of
-> LTTNG_TRACEPOINT_EVENT_CLASS which is not available in v2.6.
-> 
-> Signed-off-by: Rabin Vincent <rabinv@axis.com>
-> ---
-> instrumentation/events/lttng-module/sched.h |   24 +++++++++++++++++++-----
-> 1 file changed, 19 insertions(+), 5 deletions(-)
-> 
-> diff --git a/instrumentation/events/lttng-module/sched.h
-> b/instrumentation/events/lttng-module/sched.h
-> index f6b65ae..d2e03f9 100644
-> --- a/instrumentation/events/lttng-module/sched.h
-> +++ b/instrumentation/events/lttng-module/sched.h
-> @@ -142,12 +142,26 @@ LTTNG_TRACEPOINT_EVENT_CLASS(sched_wakeup_template,
-> 
-> 	TP_ARGS(p),
-> 
-> -	TP_FIELDS(
-> -		ctf_array_text(char, comm, p->comm, TASK_COMM_LEN)
-> -		ctf_integer(pid_t, tid, p->pid)
-> -		ctf_integer(int, prio, p->prio)
-> -		ctf_integer(int, target_cpu, task_cpu(p))
-> +	TP_STRUCT__entry(
-> +		__array_text(	char,	comm,	TASK_COMM_LEN	)
-> +		__field(	pid_t,	tid			)
-> +		__field(	int,	prio			)
-> +		__field(	int,	target_cpu		)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		tp_memcpy(comm, p->comm, TASK_COMM_LEN)
-> +		tp_assign(tid, p->pid)
-> +		tp_assign(prio, p->prio)
-> +		tp_assign(target_cpu, task_cpu(p))
-> 	)
-> +	TP_perf_assign(
-> +		__perf_task(p)
-> +	),
-> +
-> +	TP_printk("comm=%s tid=%d prio=%d target_cpu=%03d",
-> +		  __entry->comm, __entry->tid, __entry->prio,
-> +		  __entry->target_cpu)
-> )
-> #else /* #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,3,0)) */
-> LTTNG_TRACEPOINT_EVENT_CLASS(sched_wakeup_template,
-> --
-> 1.7.10.4
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+TWVyZ2VkIGluIG1hc3RlciwgdGhhbmtzIQoKT24gV2VkLCBBdWcgMTksIDIwMTUgYXQgOToxOSBQ
+TSwgSnVsaWVuIERlc2Zvc3Nlego8amRlc2Zvc3NlekBlZmZpY2lvcy5jb20+IHdyb3RlOgo+IFBy
+b2R1Y2VkIGJ5IExUVG5nIGFzIG9mIDIuOCAobm8gY29tcGF0aWJpbGl0eSBicmVha2FnZSB3aXRo
+IDEuMCkKPgo+IFNpZ25lZC1vZmYtYnk6IEp1bGllbiBEZXNmb3NzZXogPGpkZXNmb3NzZXpAZWZm
+aWNpb3MuY29tPgo+IC0tLQo+ICBmb3JtYXRzL2N0Zi9jdGYuYyAgICAgICAgICAgICAgICAgIHwg
+MTAgKysrKysrKysrLQo+ICBpbmNsdWRlL2JhYmVsdHJhY2UvY3RmL2N0Zi1pbmRleC5oIHwgIDUg
+KysrKy0KPiAgaW5jbHVkZS9iYWJlbHRyYWNlL2N0Zi90eXBlcy5oICAgICB8ICAzICsrKwo+ICAz
+IGZpbGVzIGNoYW5nZWQsIDE2IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4KPiBkaWZm
+IC0tZ2l0IGEvZm9ybWF0cy9jdGYvY3RmLmMgYi9mb3JtYXRzL2N0Zi9jdGYuYwo+IGluZGV4IDc0
+ZmNiNWIuLmM1YmI2ZWIgMTAwNjQ0Cj4gLS0tIGEvZm9ybWF0cy9jdGYvY3RmLmMKPiArKysgYi9m
+b3JtYXRzL2N0Zi9jdGYuYwo+IEBAIC0xNTQ3LDYgKzE1NDcsOCBAQCBiZWdpbjoKPiAgICAgICAg
+IHBhY2tldF9pbmRleC50c19jeWNsZXMudGltZXN0YW1wX2VuZCA9IDA7Cj4gICAgICAgICBwYWNr
+ZXRfaW5kZXguZXZlbnRzX2Rpc2NhcmRlZCA9IDA7Cj4gICAgICAgICBwYWNrZXRfaW5kZXguZXZl
+bnRzX2Rpc2NhcmRlZF9sZW4gPSAwOwo+ICsgICAgICAgcGFja2V0X2luZGV4LnN0cmVhbV9pbnN0
+YW5jZV9pZCA9IDA7Cj4gKyAgICAgICBwYWNrZXRfaW5kZXgucGFja2V0X3NlcV9udW0gPSAwOwo+
+Cj4gICAgICAgICAvKiByZWFkIGFuZCBjaGVjayBoZWFkZXIsIHNldCBzdHJlYW0gaWQgKGFuZCBj
+aGVjaykgKi8KPiAgICAgICAgIGlmIChmaWxlX3N0cmVhbS0+cGFyZW50LnRyYWNlX3BhY2tldF9o
+ZWFkZXIpIHsKPiBAQCAtMTgzMyw3ICsxODM1LDcgQEAgaW50IGltcG9ydF9zdHJlYW1fcGFja2V0
+X2luZGV4KHN0cnVjdCBjdGZfdHJhY2UgKnRkLAo+ICAgICAgICAgc3RydWN0IGN0Zl9wYWNrZXRf
+aW5kZXggKmN0Zl9pbmRleCA9IE5VTEw7Cj4gICAgICAgICBzdHJ1Y3QgY3RmX3BhY2tldF9pbmRl
+eF9maWxlX2hkciBpbmRleF9oZHI7Cj4gICAgICAgICBzdHJ1Y3QgcGFja2V0X2luZGV4IGluZGV4
+Owo+IC0gICAgICAgdWludDMyX3QgcGFja2V0X2luZGV4X2xlbjsKPiArICAgICAgIHVpbnQzMl90
+IHBhY2tldF9pbmRleF9sZW4sIGluZGV4X21pbm9yOwo+ICAgICAgICAgaW50IHJldCA9IDA7Cj4g
+ICAgICAgICBpbnQgZmlyc3RfcGFja2V0ID0gMTsKPiAgICAgICAgIHNpemVfdCBsZW47Cj4gQEAg
+LTE4NjEsNiArMTg2Myw4IEBAIGludCBpbXBvcnRfc3RyZWFtX3BhY2tldF9pbmRleChzdHJ1Y3Qg
+Y3RmX3RyYWNlICp0ZCwKPiAgICAgICAgICAgICAgICAgcmV0ID0gLTE7Cj4gICAgICAgICAgICAg
+ICAgIGdvdG8gZXJyb3I7Cj4gICAgICAgICB9Cj4gKyAgICAgICBpbmRleF9taW5vciA9IGJlMzJ0
+b2goaW5kZXhfaGRyLmluZGV4X21pbm9yKTsKPiArCj4gICAgICAgICBwYWNrZXRfaW5kZXhfbGVu
+ID0gYmUzMnRvaChpbmRleF9oZHIucGFja2V0X2luZGV4X2xlbik7Cj4gICAgICAgICBpZiAocGFj
+a2V0X2luZGV4X2xlbiA9PSAwKSB7Cj4gICAgICAgICAgICAgICAgIGZwcmludGYoc3RkZXJyLCAi
+W2Vycm9yXSBQYWNrZXQgaW5kZXggbGVuZ3RoIGNhbm5vdCBiZSAwLlxuIik7Cj4gQEAgLTE4ODcs
+NiArMTg5MSwxMCBAQCBpbnQgaW1wb3J0X3N0cmVhbV9wYWNrZXRfaW5kZXgoc3RydWN0IGN0Zl90
+cmFjZSAqdGQsCj4gICAgICAgICAgICAgICAgIGluZGV4LmV2ZW50c19kaXNjYXJkZWRfbGVuID0g
+NjQ7Cj4gICAgICAgICAgICAgICAgIGluZGV4LmRhdGFfb2Zmc2V0ID0gLTE7Cj4gICAgICAgICAg
+ICAgICAgIHN0cmVhbV9pZCA9IGJlNjR0b2goY3RmX2luZGV4LT5zdHJlYW1faWQpOwo+ICsgICAg
+ICAgICAgICAgICBpZiAoaW5kZXhfbWlub3IgPj0gMSkgewo+ICsgICAgICAgICAgICAgICAgICAg
+ICAgIGluZGV4LnN0cmVhbV9pbnN0YW5jZV9pZCA9IGJlNjR0b2goY3RmX2luZGV4LT5zdHJlYW1f
+aW5zdGFuY2VfaWQpOwo+ICsgICAgICAgICAgICAgICAgICAgICAgIGluZGV4LnBhY2tldF9zZXFf
+bnVtID0gYmU2NHRvaChjdGZfaW5kZXgtPnBhY2tldF9zZXFfbnVtKTsKPiArICAgICAgICAgICAg
+ICAgfQo+Cj4gICAgICAgICAgICAgICAgIGlmICghZmlyc3RfcGFja2V0KSB7Cj4gICAgICAgICAg
+ICAgICAgICAgICAgICAgLyogYWRkIGluZGV4IHRvIHBhY2tldCBhcnJheSAqLwo+IGRpZmYgLS1n
+aXQgYS9pbmNsdWRlL2JhYmVsdHJhY2UvY3RmL2N0Zi1pbmRleC5oIGIvaW5jbHVkZS9iYWJlbHRy
+YWNlL2N0Zi9jdGYtaW5kZXguaAo+IGluZGV4IGIzOWI1MjMuLjg4ODBjMmYgMTAwNjQ0Cj4gLS0t
+IGEvaW5jbHVkZS9iYWJlbHRyYWNlL2N0Zi9jdGYtaW5kZXguaAo+ICsrKyBiL2luY2x1ZGUvYmFi
+ZWx0cmFjZS9jdGYvY3RmLWluZGV4LmgKPiBAQCAtMjksNyArMjksNyBAQAo+Cj4gICNkZWZpbmUg
+Q1RGX0lOREVYX01BR0lDIDB4QzFGMURDQzEKPiAgI2RlZmluZSBDVEZfSU5ERVhfTUFKT1IgMQo+
+IC0jZGVmaW5lIENURl9JTkRFWF9NSU5PUiAwCj4gKyNkZWZpbmUgQ1RGX0lOREVYX01JTk9SIDEK
+Pgo+ICAvKgo+ICAgKiBIZWFkZXIgYXQgdGhlIGJlZ2lubmluZyBvZiBlYWNoIGluZGV4IGZpbGUu
+Cj4gQEAgLTU1LDYgKzU1LDkgQEAgc3RydWN0IGN0Zl9wYWNrZXRfaW5kZXggewo+ICAgICAgICAg
+dWludDY0X3QgdGltZXN0YW1wX2VuZDsKPiAgICAgICAgIHVpbnQ2NF90IGV2ZW50c19kaXNjYXJk
+ZWQ7Cj4gICAgICAgICB1aW50NjRfdCBzdHJlYW1faWQ7Cj4gKyAgICAgICAvKiBDVEZfSU5ERVgg
+MS4wIGxpbWl0ICovCj4gKyAgICAgICB1aW50NjRfdCBzdHJlYW1faW5zdGFuY2VfaWQ7ICAgIC8q
+IElEIG9mIHRoZSBjaGFubmVsIGluc3RhbmNlICovCj4gKyAgICAgICB1aW50NjRfdCBwYWNrZXRf
+c2VxX251bTsgICAgICAgIC8qIHBhY2tldCBzZXF1ZW5jZSBudW1iZXIgKi8KPiAgfSBfX2F0dHJp
+YnV0ZV9fKChfX3BhY2tlZF9fKSk7Cj4KPiAgI2VuZGlmIC8qIExUVE5HX0lOREVYX0ggKi8KPiBk
+aWZmIC0tZ2l0IGEvaW5jbHVkZS9iYWJlbHRyYWNlL2N0Zi90eXBlcy5oIGIvaW5jbHVkZS9iYWJl
+bHRyYWNlL2N0Zi90eXBlcy5oCj4gaW5kZXggYzMzNjYzMi4uY2M4YWNiZiAxMDA2NDQKPiAtLS0g
+YS9pbmNsdWRlL2JhYmVsdHJhY2UvY3RmL3R5cGVzLmgKPiArKysgYi9pbmNsdWRlL2JhYmVsdHJh
+Y2UvY3RmL3R5cGVzLmgKPiBAQCAtNTgsNiArNTgsOSBAQCBzdHJ1Y3QgcGFja2V0X2luZGV4IHsK
+PiAgICAgICAgIHVpbnQ2NF90IGV2ZW50c19kaXNjYXJkZWRfbGVuOyAgLyogbGVuZ3RoIG9mIHRo
+ZSBmaWVsZCwgaW4gYml0cyAqLwo+ICAgICAgICAgc3RydWN0IHBhY2tldF9pbmRleF90aW1lIHRz
+X2N5Y2xlczsgICAgIC8qIHRpbWVzdGFtcCBpbiBjeWNsZXMgKi8KPiAgICAgICAgIHN0cnVjdCBw
+YWNrZXRfaW5kZXhfdGltZSB0c19yZWFsOyAgICAgICAvKiByZWFsdGltZSB0aW1lc3RhbXAgKi8K
+PiArICAgICAgIC8qIENURl9JTkRFWCAxLjAgbGltaXQgKi8KPiArICAgICAgIHVpbnQ2NF90IHN0
+cmVhbV9pbnN0YW5jZV9pZDsgICAgLyogSUQgb2YgdGhlIGNoYW5uZWwgaW5zdGFuY2UgKi8KPiAr
+ICAgICAgIHVpbnQ2NF90IHBhY2tldF9zZXFfbnVtOyAgICAgICAgLyogcGFja2V0IHNlcXVlbmNl
+IG51bWJlciAqLwo+ICB9Owo+Cj4gIC8qCj4gLS0KPiAxLjkuMQo+CgoKCi0tIApKw6lyw6ltaWUg
+R2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2Nn
+aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
