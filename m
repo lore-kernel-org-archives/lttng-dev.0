@@ -1,21 +1,17 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [BABELTRACE PATCH 2/2] Output a warning if packets
-	are lost
-Date: Tue, 27 Oct 2015 16:20:26 -0400
-Message-ID: <CA+jJMxtiQCFK8+a1UQPghUNrFLK_hF8kPt3cSWinSig+CEP-nA__46610.9947454699$1445977329$gmane$org@mail.gmail.com>
-References: <1440033598-14124-1-git-send-email-jdesfossez@efficios.com>
- <1440033598-14124-2-git-send-email-jdesfossez@efficios.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: Improving the enable-event and disable-event commands
+Date: Tue, 27 Oct 2015 18:59:56 -0400
+Message-ID: <CAB4xu_2n8fBTZE5oZk7drxEg3-76EwPWtj4oDMpRYY2=+_1zXw__21531.3276429244$1445986884$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f179.google.com ([209.85.160.179])
+Received: from mail-lf0-f54.google.com ([209.85.215.54])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZrAjQ-0000OO-1M
- for lttng-dev@lists.lttng.org; Tue, 27 Oct 2015 16:20:38 -0400
-Received: by ykdr3 with SMTP id r3so231317739ykd.1
- for <lttng-dev@lists.lttng.org>; Tue, 27 Oct 2015 13:20:26 -0700 (PDT)
-In-Reply-To: <1440033598-14124-2-git-send-email-jdesfossez@efficios.com>
+ (envelope-from <eeppeliteloop@gmail.com>) id 1ZrDEF-0001CM-F0
+ for lttng-dev@lists.lttng.org; Tue, 27 Oct 2015 19:00:33 -0400
+Received: by lffz202 with SMTP id z202so180105617lff.3
+ for <lttng-dev@lists.lttng.org>; Tue, 27 Oct 2015 16:00:25 -0700 (PDT)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,113 +20,333 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIG1hc3RlciwgdGhhbmtzIQoKSsOpcsOpbWllCgpPbiBXZWQsIEF1ZyAxOSwgMjAx
-NSBhdCA5OjE5IFBNLCBKdWxpZW4gRGVzZm9zc2V6CjxqZGVzZm9zc2V6QGVmZmljaW9zLmNvbT4g
-d3JvdGU6Cj4gRGVwZW5kcyBvbiB0aGUgcGFja2V0X3NlcV9udW0gZmllbGRzIGF2YWlsYWJsZSBp
-biB0aGUgQ1RGIGluZGV4IHYxLjEKPiAocHJvZHVjZWQgYnkgTFRUbmcgMi44KS4KPiBTYW1lIGxp
-bWl0YXRpb24gYXMgdGhlIGV2ZW50cyBkaXNjYXJkZWQgaW5mb3JtYXRpb246IGlmIGEgc3RyZWFt
-IGlzCj4gc3BsaXQgaW4gbXVsdGlwbGUgZmlsZXMsIHRoZSBjb3VudGVycyBtaWdodCBub3QgcmVw
-b3J0IHRoZSBhcHByb3ByaWF0ZQo+IGluZm9ybWF0aW9uIGZvciBub3cuCj4KPiBTaWduZWQtb2Zm
-LWJ5OiBKdWxpZW4gRGVzZm9zc2V6IDxqZGVzZm9zc2V6QGVmZmljaW9zLmNvbT4KPiAtLS0KPiAg
-Zm9ybWF0cy9jdGYvY3RmLmMgICAgICAgICAgICAgICAgICAgIHwgNDAgKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKy0tLS0tCj4gIGluY2x1ZGUvYmFiZWx0cmFjZS9jdGYtaXIvbWV0YWRh
-dGEuaCB8ICAyICsrCj4gIDIgZmlsZXMgY2hhbmdlZCwgMzcgaW5zZXJ0aW9ucygrKSwgNSBkZWxl
-dGlvbnMoLSkKPgo+IGRpZmYgLS1naXQgYS9mb3JtYXRzL2N0Zi9jdGYuYyBiL2Zvcm1hdHMvY3Rm
-L2N0Zi5jCj4gaW5kZXggYzViYjZlYi4uZGIyMzdhZCAxMDA2NDQKPiAtLS0gYS9mb3JtYXRzL2N0
-Zi9jdGYuYwo+ICsrKyBiL2Zvcm1hdHMvY3RmL2N0Zi5jCj4gQEAgLTQyMCwxNiArNDIwLDI2IEBA
-IHZvaWQgcHJpbnRfdXVpZChGSUxFICpmcCwgdW5zaWduZWQgY2hhciAqdXVpZCkKPiAgICogR2l2
-ZW4gd2UgaGF2ZSBkaXNjYXJkZWQgY291bnRlcnMgb2YgdGhvc2UgdHdvIHR5cGVzIG1lcmdlZCBp
-bnRvIHRoZQo+ICAgKiBldmVudHNfZGlzY2FyZGVkIGNvdW50ZXIsIHdlIG5lZWQgdG8gdXNlIHRo
-ZSB1bmlvbiBvZiB0aG9zZSByYW5nZXM6Cj4gICAqICAgWyBwcmV2X3RpbWVzdGFtcF9lbmQsIHRp
-bWVzdGFtcF9lbmQgXQo+ICsgKgo+ICsgKiBMb3N0IHBhY2tldHMgb2NjdXIgaWYgdGhlIHRyYWNl
-ciBvdmVyd3JvdGUgc29tZSBzdWJidWZmZXIocykgYmVmb3JlIHRoZQo+ICsgKiBjb25zdW1lciBo
-YWQgdGltZSB0byBleHRyYWN0IHRoZW0uIFdlIGtlZXAgdHJhY2sgb2YgdGhvc2UgZ2FwcyB3aXRo
-IHRoZQo+ICsgKiBwYWNrZXQgc2VxdWVuY2UgbnVtYmVyIGluIGVhY2ggcGFja2V0Lgo+ICAgKi8K
-PiAgc3RhdGljCj4gLXZvaWQgY3RmX3ByaW50X2Rpc2NhcmRlZChGSUxFICpmcCwgc3RydWN0IGN0
-Zl9zdHJlYW1fZGVmaW5pdGlvbiAqc3RyZWFtKQo+ICt2b2lkIGN0Zl9wcmludF9kaXNjYXJkZWRf
-bG9zdChGSUxFICpmcCwgc3RydWN0IGN0Zl9zdHJlYW1fZGVmaW5pdGlvbiAqc3RyZWFtKQo+ICB7
-Cj4gLSAgICAgICBpZiAoIXN0cmVhbS0+ZXZlbnRzX2Rpc2NhcmRlZCB8fCAhYmFiZWx0cmFjZV9j
-dGZfY29uc29sZV9vdXRwdXQpIHsKPiArICAgICAgIGlmICgoIXN0cmVhbS0+ZXZlbnRzX2Rpc2Nh
-cmRlZCAmJiAhc3RyZWFtLT5wYWNrZXRzX2xvc3QpIHx8Cj4gKyAgICAgICAgICAgICAgICAgICAg
-ICAgIWJhYmVsdHJhY2VfY3RmX2NvbnNvbGVfb3V0cHV0KSB7Cj4gICAgICAgICAgICAgICAgIHJl
-dHVybjsKPiAgICAgICAgIH0KPiAgICAgICAgIGZmbHVzaChzdGRvdXQpOwo+IC0gICAgICAgZnBy
-aW50ZihmcCwgIlt3YXJuaW5nXSBUcmFjZXIgZGlzY2FyZGVkICUiIFBSSXU2NCAiIGV2ZW50cyBi
-ZXR3ZWVuIFsiLAo+IC0gICAgICAgICAgICAgICBzdHJlYW0tPmV2ZW50c19kaXNjYXJkZWQpOwo+
-ICsgICAgICAgaWYgKHN0cmVhbS0+ZXZlbnRzX2Rpc2NhcmRlZCkgewo+ICsgICAgICAgICAgICAg
-ICBmcHJpbnRmKGZwLCAiW3dhcm5pbmddIFRyYWNlciBkaXNjYXJkZWQgJSIgUFJJdTY0ICIgZXZl
-bnRzIGJldHdlZW4gWyIsCj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJlYW0t
-PmV2ZW50c19kaXNjYXJkZWQpOwo+ICsgICAgICAgfSBlbHNlIGlmIChzdHJlYW0tPnBhY2tldHNf
-bG9zdCkgewo+ICsgICAgICAgICAgICAgICBmcHJpbnRmKGZwLCAiW3dhcm5pbmddIFRyYWNlciBs
-b3N0ICUiIFBSSXU2NCAiIHRyYWNlIHBhY2tldHMgYmV0d2VlbiBbIiwKPiArICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIHN0cmVhbS0+cGFja2V0c19sb3N0KTsKPiArICAgICAgIH0KPiAg
-ICAgICAgIGlmIChvcHRfY2xvY2tfY3ljbGVzKSB7Cj4gICAgICAgICAgICAgICAgIGN0Zl9wcmlu
-dF90aW1lc3RhbXAoZnAsIHN0cmVhbSwKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IHN0cmVhbS0+cHJldi5jeWNsZXMuZW5kKTsKPiBAQCAtODAwLDYgKzgxMCw3IEBAIHZvaWQgY3Rm
-X3VwZGF0ZV9jdXJyZW50X3BhY2tldF9pbmRleChzdHJ1Y3QgY3RmX3N0cmVhbV9kZWZpbml0aW9u
-ICpzdHJlYW0sCj4gICAgICAgICAgICAgICAgIHN0cnVjdCBwYWNrZXRfaW5kZXggKmN1cl9pbmRl
-eCkKPiAgewo+ICAgICAgICAgdWludDY0X3QgZXZlbnRzX2Rpc2NhcmRlZF9kaWZmOwo+ICsgICAg
-ICAgdWludDY0X3QgcGFja2V0c19sb3N0X2RpZmYgPSAwOwo+Cj4gICAgICAgICAvKiBVcGRhdGUg
-cGFja2V0IGluZGV4IHRpbWUgaW5mb3JtYXRpb24gKi8KPgo+IEBAIC04MjcsNiArODM4LDExIEBA
-IHZvaWQgY3RmX3VwZGF0ZV9jdXJyZW50X3BhY2tldF9pbmRleChzdHJ1Y3QgY3RmX3N0cmVhbV9k
-ZWZpbml0aW9uICpzdHJlYW0sCj4gICAgICAgICAgICAgICAgICAgICAgICAgcHJldl9pbmRleC0+
-dHNfcmVhbC50aW1lc3RhbXBfZW5kOwo+Cj4gICAgICAgICAgICAgICAgIGV2ZW50c19kaXNjYXJk
-ZWRfZGlmZiAtPSBwcmV2X2luZGV4LT5ldmVudHNfZGlzY2FyZGVkOwo+ICsgICAgICAgICAgICAg
-ICAvKiBwYWNrZXRfc2VxX251bSBzdGF5cyBhdCAwIGlmIG5vdCBwcm9kdWNlZCBieSB0aGUgdHJh
-Y2VyICovCj4gKyAgICAgICAgICAgICAgIGlmIChjdXJfaW5kZXgtPnBhY2tldF9zZXFfbnVtKSB7
-Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgcGFja2V0c19sb3N0X2RpZmYgPSBjdXJfaW5kZXgt
-PnBhY2tldF9zZXFfbnVtIC0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHByZXZf
-aW5kZXgtPnBhY2tldF9zZXFfbnVtIC0gMTsKPiArICAgICAgICAgICAgICAgfQo+ICAgICAgICAg
-ICAgICAgICAvKgo+ICAgICAgICAgICAgICAgICAgKiBEZWFsIHdpdGggMzItYml0IHdyYXAtYXJv
-dW5kIGlmIHRoZSB0cmFjZXIgcHJvdmlkZWQgYQo+ICAgICAgICAgICAgICAgICAgKiAzMi1iaXQg
-ZmllbGQuCj4gQEAgLTg0Nyw2ICs4NjMsNyBAQCB2b2lkIGN0Zl91cGRhdGVfY3VycmVudF9wYWNr
-ZXRfaW5kZXgoc3RydWN0IGN0Zl9zdHJlYW1fZGVmaW5pdGlvbiAqc3RyZWFtLAo+ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgc3RyZWFtLT5jdXJyZW50LnJlYWwuYmVnaW47Cj4gICAg
-ICAgICB9Cj4gICAgICAgICBzdHJlYW0tPmV2ZW50c19kaXNjYXJkZWQgPSBldmVudHNfZGlzY2Fy
-ZGVkX2RpZmY7Cj4gKyAgICAgICBzdHJlYW0tPnBhY2tldHNfbG9zdCA9IHBhY2tldHNfbG9zdF9k
-aWZmOwo+ICB9Cj4KPiAgLyoKPiBAQCAtOTU2LDcgKzk3Myw3IEBAIHZvaWQgY3RmX3BhY2tldF9z
-ZWVrKHN0cnVjdCBidF9zdHJlYW1fcG9zICpzdHJlYW1fcG9zLCBzaXplX3QgaW5kZXgsIGludCB3
-aGVuY2UpCj4gICAgICAgICAgICAgICAgICAqIHRpbWVzdGFtcHMuCj4gICAgICAgICAgICAgICAg
-ICAqLwo+ICAgICAgICAgICAgICAgICBpZiAoKCZmaWxlX3N0cmVhbS0+cGFyZW50KS0+c3RyZWFt
-X2NsYXNzLT50cmFjZS0+cGFyZW50LmNvbGxlY3Rpb24pIHsKPiAtICAgICAgICAgICAgICAgICAg
-ICAgICBjdGZfcHJpbnRfZGlzY2FyZGVkKHN0ZGVyciwgJmZpbGVfc3RyZWFtLT5wYXJlbnQpOwo+
-ICsgICAgICAgICAgICAgICAgICAgICAgIGN0Zl9wcmludF9kaXNjYXJkZWRfbG9zdChzdGRlcnIs
-ICZmaWxlX3N0cmVhbS0+cGFyZW50KTsKPiAgICAgICAgICAgICAgICAgfQo+Cj4gICAgICAgICAg
-ICAgICAgIHBhY2tldF9pbmRleCA9ICZnX2FycmF5X2luZGV4KHBvcy0+cGFja2V0X2luZGV4LAo+
-IEBAIC0xNjk1LDYgKzE3MTIsMTkgQEAgYmVnaW46Cj4gICAgICAgICAgICAgICAgICAgICAgICAg
-cGFja2V0X2luZGV4LmV2ZW50c19kaXNjYXJkZWQgPSBidF9nZXRfdW5zaWduZWRfaW50KGZpZWxk
-KTsKPiAgICAgICAgICAgICAgICAgICAgICAgICBwYWNrZXRfaW5kZXguZXZlbnRzX2Rpc2NhcmRl
-ZF9sZW4gPSBidF9nZXRfaW50X2xlbihmaWVsZCk7Cj4gICAgICAgICAgICAgICAgIH0KPiArCj4g
-KyAgICAgICAgICAgICAgIC8qIHJlYWQgcGFja2V0X3NlcV9udW0gZnJvbSBoZWFkZXIgKi8KPiAr
-ICAgICAgICAgICAgICAgbGVuX2luZGV4ID0gYnRfc3RydWN0X2RlY2xhcmF0aW9uX2xvb2t1cF9m
-aWVsZF9pbmRleCgKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZpbGVfc3RyZWFt
-LT5wYXJlbnQuc3RyZWFtX3BhY2tldF9jb250ZXh0LT5kZWNsYXJhdGlvbiwKPiArICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIGdfcXVhcmtfZnJvbV9zdGF0aWNfc3RyaW5nKCJwYWNrZXRf
-c2VxX251bSIpKTsKPiArICAgICAgICAgICAgICAgaWYgKGxlbl9pbmRleCA+PSAwKSB7Cj4gKyAg
-ICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGJ0X2RlZmluaXRpb24gKmZpZWxkOwo+ICsKPiAr
-ICAgICAgICAgICAgICAgICAgICAgICBmaWVsZCA9IGJ0X3N0cnVjdF9kZWZpbml0aW9uX2dldF9m
-aWVsZF9mcm9tX2luZGV4KAo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBmaWxlX3N0cmVhbS0+cGFyZW50LnN0cmVhbV9wYWNrZXRfY29udGV4dCwKPiArICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbGVuX2luZGV4KTsKPiArICAgICAgICAgICAg
-ICAgICAgICAgICBwYWNrZXRfaW5kZXgucGFja2V0X3NlcV9udW0gPSBidF9nZXRfdW5zaWduZWRf
-aW50KGZpZWxkKTsKPiArICAgICAgICAgICAgICAgfQo+ICAgICAgICAgfSBlbHNlIHsKPiAgICAg
-ICAgICAgICAgICAgLyogVXNlIGZpbGUgc2l6ZSBmb3IgcGFja2V0IHNpemUgKi8KPiAgICAgICAg
-ICAgICAgICAgcGFja2V0X2luZGV4LnBhY2tldF9zaXplID0gZmlsZXNpemUgKiBDSEFSX0JJVDsK
-PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9iYWJlbHRyYWNlL2N0Zi1pci9tZXRhZGF0YS5oIGIvaW5j
-bHVkZS9iYWJlbHRyYWNlL2N0Zi1pci9tZXRhZGF0YS5oCj4gaW5kZXggNjc1MzY5NS4uYmM2ODU4
-MCAxMDA2NDQKPiAtLS0gYS9pbmNsdWRlL2JhYmVsdHJhY2UvY3RmLWlyL21ldGFkYXRhLmgKPiAr
-KysgYi9pbmNsdWRlL2JhYmVsdHJhY2UvY3RmLWlyL21ldGFkYXRhLmgKPiBAQCAtNzQsNiArNzQs
-OCBAQCBzdHJ1Y3QgY3RmX3N0cmVhbV9kZWZpbml0aW9uIHsKPgo+ICAgICAgICAgLyogRXZlbnQg
-ZGlzY2FyZGVkIGluZm9ybWF0aW9uICovCj4gICAgICAgICB1aW50NjRfdCBldmVudHNfZGlzY2Fy
-ZGVkOwo+ICsgICAgICAgLyogVHJhY2UgcGFja2V0cyBsb3N0ICovCj4gKyAgICAgICB1aW50NjRf
-dCBwYWNrZXRzX2xvc3Q7Cj4gICAgICAgICBzdHJ1Y3QgY3RmX3N0cmVhbV9wYWNrZXRfdGltZXN0
-YW1wIHByZXY7Cj4gICAgICAgICBzdHJ1Y3QgY3RmX3N0cmVhbV9wYWNrZXRfdGltZXN0YW1wIGN1
-cnJlbnQ7Cj4gICAgICAgICBjaGFyIHBhdGhbUEFUSF9NQVhdOyAgICAgICAgICAgICAgICAgICAg
-LyogUGF0aCB0byBzdHJlYW0uICdcMCcgZm9yIG1tYXAgdHJhY2VzICovCj4gLS0KPiAxLjkuMQo+
-CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZp
-Y2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8v
-bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Hello LTTngers!
+
+This is a request for comments regarding the suggested solutions to
+two fundamental problems with the `enable-event`/`disable-event` CLI
+command (and their associated API functions).
+
+Both problems and their proposed solution are independent, and it is
+recommended that problem 1 be solved before problem 2, as its proposed
+solution is easier to implement.
+
+The solutions suggested below are designed to maintain full backward
+compatibility with LTTng 2.7 while still improving the `enable-event`
+and `disable-event` commands.
+
+Feel free to contribute your own ideas!
+
+Philippe Proulx
+
+
+Context
+=======
+
+LTTng came to this world with the concept of switching the tracing
+activity of possible system events on and off from the command-line,
+hence the _enable_ and _disable_ names.
+
+Eventually, wildcards in event names and other event activation
+criteria were added (dynamic filters, log levels). All those features
+were added as new options to the `enable-event` command. In this case,
+however, we're not simply switching existing events on, but rather
+_creating_ new **tuples** of conditions to be met for an event, existing
+or not, to be emitted by the LTTng tracers. Those tuples, as of
+LTTng 2.7, have the following components:
+
+  * **Domain**: `--kernel`, `--userspace`, `--jul`, `--log4j`, and
+    `--python` options
+  * **Event name** (may contain a wildcard at the end, in which case a list
+    of specific event names to exclude (`--exclude` option) may also exist):
+    1st positional argument
+  * **Event log level(s)**: `--loglevel` and `--loglevel-only` options
+    (default: any log level)
+  * **Filter string**: `--filter` option (default: `1`, which is always true)
+
+For example, the command
+
+    lttng enable-event -u hello:world --loglevel TRACE_INFO
+
+creates and enables this tuple:
+
+  * Domain:             user space
+  * Event name:         match `hello:world`
+  * Event log level(s): <= `TRACE_INFO`
+  * Filter string:      `1`
+
+As long as this tuple is enabled, any user space event matching those
+conditions will be emitted by the tracer, even if there was no such
+matching event when the `enable-event` command was executed.
+
+
+Problem 1: `enable-event` cannot enable more than one event tuple at a time
+===========================================================================
+
+An issue is encountered when using the `--all` option of the
+`enable-event` command. The `--all` option, as it is implemented
+today, is the equivalent of providing the event name `*`.
+
+For example:
+
+    lttng enable-event -u --all
+    lttng enable-event -u something --filter 'id >= 10'
+    lttng enable-event -u 'els*' --exclude else,elsy
+
+creates and enables those tuples:
+
+  * Tuple 1:
+    * Domain:             user space
+    * Event name:         match anything
+    * Event log level(s): any
+    * Filter string:      `1`
+  * Tuple 2:
+    * Domain:             user space
+    * Event name:         match `something`
+    * Event log level(s): any
+    * Filter string:      `id >= 10`
+  * Tuple 3:
+    * Domain:             user space
+    * Event name:         match `els` followed by anything,
+                          except `else` and `elsy`
+    * Event log level(s): any
+    * Filter string:      `1`
+
+Now, let's disable all those tuples:
+
+    lttng disable-event -u -a
+
+All three tuples are disabled. What if we need to enable all three
+tuples? Using `--all` seems intuitive:
+
+    lttng enable-event -u --all
+
+But, as mentioned above, this is the equivalent of:
+
+    lttng enable-event -u '*'
+
+and so, only tuple 1 is enabled, leaving the other two
+disabled. In other words, it is not possible, today, to enable more than
+one event tuple matching specific conditions.
+
+More generally, this problem can be exhibited when event names with
+wildcards are used.
+
+
+Proposed solution
+-----------------
+
+Ideally, the `enable-event` command should be split in two individual
+commands: `create-event` for creating new tuples and `enable-event` for
+enabling existing _tuples_ matching specific conditions.
+
+Unfortunately, the `enable-event` command already fullfills both
+roles, and its current behaviour cannot be changed with a minor
+release.
+
+It was suggested that a `--match` option be added to the `enable-event`
+command. The presence of the `--match` option affects the command's
+behaviour as such:
+
+  * Absent: **legacy mode**. The `enable-event` command behaves as it
+    does today. Enabling a nonexistent tuple creates it. There is no way
+    to enable more than one tuple at a time in this mode.
+  * Present: **match mode**. Enabling a nonexistent tuple has no effect
+    (this version of the command does not create tuples). Any unspecified
+    tuple criterion is considered a _match all_ (don't care). This mode
+    can enable more than one tuple at a time.
+
+For example, it is now possible to enable all the _existing tuples_
+having a log level equal to `TRACE_WARNING`:
+
+    lttng enable-event --match -u --loglevel-only TRACE_WARNING
+
+Or all the _existing_ tuples having an event name starting with `hello`:
+
+    lttng enable-event --match -u hello'*'
+
+The same command without `--match`:
+
+    lttng enable-event -u hello'*'
+
+would create a new tuple with the event name `hello*`.
+
+When the desired action is to enable all tuples with a specific event name
+containing a wildcard, the latter must be escaped with `\`:
+
+    lttng enable-event -u test
+    lttng enable-event -u test23
+    lttng enable-event -u test'*'
+    lttng enable-event -u test'*' --loglevel TRACE_INFO
+    lttng enable-event -u test'*' --filter 'yeah != 23'
+
+Here,
+
+    lttng enable-event --match -u test'*'
+
+enables all the events above, whereas
+
+    lttng enable-event --match -u test'\*'
+
+enables the last three because their name contains the actual
+wildcard character.
+
+Even though the event type is not part of the tuple conditions,
+since two events with different types cannot share the same name,
+the `enable-event` command in match mode still offers the event
+type options to match existing events. For example,
+
+    lttng enable-event --match -k --function
+
+matches all existing kernel event tuples having the dynamic function
+probe type.
+
+The domain option is not mandatory in match mode: it's a criterion
+to match. So this:
+
+    lttng enable-event --match eye
+
+enables all the event tuples which belong to all the possible tracing
+domains and have the name `eye`.
+
+A `--match` option is also added to the `disable-event` command.
+This option behaves like its equivalent on the `enable-event` command:
+it allows to disable multiple event tuples at the same time.
+
+It has to be noted that the current behaviour of `disable-event -a`
+implies a match mode: it targets all the enabled event tuples, not
+the `*` event like `enable-event -a` does. In other words, `--match`
+has no effect on `disable-event -a`, but it does on `enable-event -a`.
+This asymmetry must remain to ensure full backward compatibility.
+
+
+Problem 2: enabling an existing event tuple requires all its conditions
+=======================================================================
+
+Let us create two event tuples:
+
+    lttng enable-event -u hello:world --loglevel TRACE_INFO
+    lttng enable-event -u hello:world
+
+which creates and enables the following tuples:
+
+  * Tuple 1:
+    * Domain:             user space
+    * Event name:         match `hello:world`
+    * Event log level(s): <= `TRACE_INFO`
+    * Filter string:      `1`
+  * Tuple 2:
+    * Domain:             user space
+    * Event name:         match `hello:world`
+    * Event log level(s): any
+    * Filter string:      `1`
+
+Now, we have two enabled tuples sharing the same event name: their
+only difference is their log level condition.
+
+The `disable-event` command matches existing event names; this command
+cannot, as for LTTng 2.7, match other conditions. In this case, our
+only way to disable the first tuple, but leave the second one enabled,
+is disabling both first:
+
+    lttng disable-event -u hello:world
+
+and then enabling the first one again:
+
+    lttng enable-event -u hello:world --loglevel TRACE_INFO
+
+A mechanism to uniquely identify both tuples would be interesting, since
+right now, all the conditions must be repeated on the command-line to
+target a specific tuple.
+
+
+Proposed solution
+-----------------
+
+The problem of uniquely identifying event tuples can be solved by
+assigning a unique _rule name_ (or _alias name_) to each tuple.
+
+When creating a tuple, a rule name is automatically assigned to it
+using the event name (which is a mandatory criterion). Since many
+event tuples may coexist with the same event names, a numeric suffix
+is appended to the rule name. For example:
+
+    lttng enable-event -u hello
+    lttng enable-event -u hello --loglevel TRACE_INFO
+    lttng enable-event -u hello --filter 'a < 23'
+    lttng enable-event -u hello'*'
+    lttng enable-event -u hello.all
+
+creates five rules named:
+
+  * `hello`
+  * `hello.2`
+  * `hello.3`
+  * `hello.all`
+  * `hello.all.2`
+
+A rule name can be assigned manually to a tuple when creating it
+using the new `--rule` option of the `enable-event` command:
+
+    lttng enable-event -u --rule hi           hello
+    lttng enable-event -u --rule meow         hello --loglevel TRACE_INFO
+    lttng enable-event -u --rule hi-with-filt hello --filter 'a < 23'
+    lttng enable-event -k --rule fn:get-opt   get_opt --function get_option
+
+Rule names are unique within the tracing session.
+
+The `list` command shows the rule names assigned to each event tuple,
+be it automatically or manually. The `disable-event` and `enable-event`
+commands can target existing rule names using the `--rule` option:
+
+    lttng disable-event --rule hi-with-filt
+    lttng disable-event --rule meow
+    lttng enable-event  --rule hi-with-filt
+
+Another example; all system calls can be grouped under the same
+rule name:
+
+    lttng enable-event -k --syscall --all --rule syscalls
+
+Wildcards can be used when enabling/disabling rules. With carefully
+crafted rule names, a hierarchy can be created and parent rules can
+be enabled/disabled at once. For example, consider the following rule
+names:
+
+    User space:
+      apache:config
+      apache:http
+      apache:https
+      apache:log
+      maria:error
+      maria:query
+      maria:server
+
+    Kernel:
+      sys:driver:input
+      sys:driver:leds
+      sys:driver:sound
+      sys:io
+      sys:net:recv
+      sys:net:send
+      sys:power
+      sys:sched
+
+All driver event tuples can be disabled at once:
+
+    lttng disable-event --rule sys:driver:'*'
+
+MariaDB tuples can be turned on and off in one command:
+
+    lttng disable-event --rule maria:'*'
+    lttng enable-event  --rule maria:'*'
+
+It is possible to use the `enable-event` command in match mode (as
+described in the previous solution). The command
+
+    lttng enable-event --match --rule apache:'*' --loglevel-only TRACE_INFO
+
+only enables the existing Apache HTTP Server event tuples having a log
+level set to `TRACE_INFO`.
