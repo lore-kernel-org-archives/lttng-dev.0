@@ -1,15 +1,20 @@
-From: Martin Andersson Z <martin.z.andersson@ericsson.com>
-Subject: lttng-relayd on Solaris Permission deniedin
-	utils_mkdir_recursive()
-Date: Thu, 29 Oct 2015 09:17:41 +0300
-Message-ID: <5631BA05.1080100__35614.9356383414$1446099572$gmane$org@ericsson.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [LTTNG-TOOLS PATCH v2 1/2] Command to detach a live
+	viewer session
+Date: Tue, 3 Nov 2015 10:51:21 -0500
+Message-ID: <CA+jJMxtqojAKSDjQh06Qjd164vmWR4ReAFvAm1BNYRFLHaptZw__3579.36256700686$1446565964$gmane$org@mail.gmail.com>
+References: <1438271554-30895-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0685364259=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sesbmg22.ericsson.net ([193.180.251.48])
+Received: from mail-yk0-f169.google.com ([209.85.160.169])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <martin.z.andersson@ericsson.com>) id 1ZrgXY-000269-Pi
- for lttng-dev@lists.lttng.org; Thu, 29 Oct 2015 02:18:29 -0400
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Ztdrr-0006ab-TA
+ for lttng-dev@lists.lttng.org; Tue, 03 Nov 2015 10:51:32 -0500
+Received: by ykba4 with SMTP id a4so22330697ykb.3
+ for <lttng-dev@lists.lttng.org>; Tue, 03 Nov 2015 07:51:22 -0800 (PST)
+In-Reply-To: <1438271554-30895-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -18,214 +23,101 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0685364259==
-Content-Type: multipart/alternative;
-	boundary="------------030407090809070706060301"
-
---------------030407090809070706060301
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: quoted-printable
-
-Hej
-
-Using the lttng-relayd on a Solaris10 (SunOS 5.10 Generic_150401-20=20
-i86pc i386 i86pc)
-
-Give the following result.
-
-=2E/lttng-relayd -C tcp://0.0.0.0:5342 -D tcp://0.0.0.0:5343 -L=20
-net://localhost:5344-o */home/XXXX/YYYY/lttng-traces* -b
-PERROR- 12:34:37.861906 [6546/6546]: mkdir recursive: Permission denied=20
-(in _utils_mkdir_recursive_unsafe() at utils.c:621)
-PERROR- 12:34:37.864154 [6546/6546]: mkdir /home/XXXX/YYYY/lttng-traces, =
-
-uid -1, gid -1: Permission denied (in utils_mkdir_recursive() at=20
-utils.c:663)
-
-If I do a truss and start the above mentioned command, the "mkdir"=20
-recursion stop because of permission (not because it exist), this will=20
-then break out of _utils_mkdir_recursive
-
-*/egrep mkdir truss.log /*
-mkdir("/home", 0770) Err#17 EEXIST
-mkdir("/home/XXXX", 0770) Err#13 *EACCES*
-
-However it shall be noted, I'm doing this as the user being the owner of =
-
-the home directory.
-
-*/ls -ld /home /home/XXXX/*
-drwxr-xr-x 409 root root       16384 Oct 20 11:47 /home
-drwxr-x--- 199 XXXX nms        49152 Oct 27 06:15 /home/XXXX
-
-If I try the following little exercise "directly" in Solaris, it works=20
-with no problem.
-/mkdir -p /home/XXXX/YYYY/
-
-Don't know if it has something to do with file-system, so I give you=20
-some info in that area.
-*/*                  (//dev/md/dsk/d70 / ):         8192 block=20
-size          1024 frag size
-41310292 total blocks   24403016 free blocks 23989914 available       =20
-2486848 total files
-  2270183 free files     22282310 filesys id
-*ufs* fstype       0x00000004 flag             255 filename length
-
-*/home * (/nas2:/vx/oss1a-home/):        8192 block size 512 frag size
-635023360 total blocks  143270864 free blocks 142440496 available        =
-
-3324224 total files
-  2238606 free files     82837519 filesys id
-*nfs* fstype         00000000 flag        4294967295 filename length
-
-For the moment I can get everything going, by changing the path to /tmp=20
-instead.
-But I report this since I'm not sure that we shall bail out on=20
-_utils_mkdir_recursive() because of permission (maybe that's the correct =
-
-choice to make, simply don't know).
-
-had=C3=A9gott
-/Martin
-
-
---------------030407090809070706060301
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-  <head>
-
-    <meta http-equiv=3D"content-type" content=3D"text/html; charset=3Dutf=
--8">
-  </head>
-  <body bgcolor=3D"#FFFFFF" text=3D"#000000">
-    Hej<br>
-    <br>
-    Using the lttng-relayd on a Solaris10 (SunOS 5.10 Generic_150401-20
-    i86pc i386 i86pc)<br>
-    <br>
-    Give the following result.<br>
-    <br>
-    <tt>./lttng-relayd -C tcp://0.0.0.0:5342 -D tcp://0.0.0.0:5343 -L </t=
-t><tt><a
-        class=3D"moz-txt-link-freetext" href=3D"net://localhost:5344"><a =
-class=3D"moz-txt-link-freetext" href=3D"net://localhost:5344">net://local=
-host:5344</a></a></tt><tt>
-      -o <b>/home/XXXX/YYYY/lttng-traces</b> -b</tt><tt><br>
-    </tt><tt> </tt><tt><span style=3D"color:red">PERROR</span></tt><tt> -=
-
-      12:34:37.861906 [6546/6546]: mkdir recursive: Permission denied
-      (in _utils_mkdir_recursive_unsafe() at utils.c:621)</tt><tt><br>
-    </tt><tt> </tt><tt><span style=3D"color:red">PERROR</span></tt><tt> -=
-
-      12:34:37.864154 [6546/6546]: mkdir /home/XXXX/YYYY/lttng-traces,
-      uid -1, gid -1: Permission denied (in utils_mkdir_recursive() at
-      utils.c:663)</tt><tt><br>
-    </tt><tt><br>
-    </tt>If I do a truss and start the above mentioned command, the
-    "mkdir" recursion stop because of permission (not because it exist),
-    this will then break out of _utils_mkdir_recursive<br>
-    <br>
-    <tt><b><i><span style=3D"font-size:10.0pt">egrep mkdir truss.log </sp=
-an></i></b></tt><br>
-    <tt><span style=3D"font-size:10.0pt">mkdir("/home", 0770) =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0=C2=A0
-        Err#17 EEXIST</span></tt><br>
-    <tt><span style=3D"font-size:10.0pt">mkdir("/home/XXXX", 0770)=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0
-        Err#13
-        <font color=3D"#ff0000"> <b>EACCES</b></font></span></tt><br>
-    <br>
-    However it shall be noted, I'm doing this as the user being the
-    owner of the home directory.<br>
-    <br>
-    <tt><b><i><span style=3D"font-size:10.0pt">ls -ld /home /home/XXXX</s=
-pan></i></b></tt><br>
-    <tt><span style=3D"font-size:10.0pt">drwxr-xr-x 409 root=C2=A0=C2=A0=C2=
-=A0=C2=A0
-        root=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 16384 Oct 20 11:47 /home=
-</span></tt><br>
-    <tt><span style=3D"font-size:10.0pt">drwxr-x--- 199 XXXX =C2=A0 =C2=A0=
-
-        nms=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 49152 Oct 27 06:15 =
-/home/XXXX</span></tt><br>
-    <br>
-    If I try the following little exercise "directly" in Solaris, it
-    works with no problem.<br>
-    <i>mkdir -p /home/XXXX/YYYY</i><br>
-    <br>
-    Don't know if it has something to do with file-system, so I give you
-    some info in that area.<br>
-    <tt><span style=3D"font-size:10.0pt"><b>/</b>=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 (<i>/dev/md/dsk/d70=C2=A0=C2=A0</i>
-        ):=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 8192 block siz=
-e=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 1024 frag size=C2=
-=A0 </span></tt><tt><br>
-    </tt><tt> </tt><tt><span style=3D"font-size:10.0pt">41310292 total
-        blocks=C2=A0=C2=A0 24403016 free blocks 23989914 available=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 2486848
-        total files</span></tt><tt><br>
-    </tt><tt> </tt><tt><span style=3D"font-size:10.0pt">=C2=A02270183 fre=
-e
-        files=C2=A0=C2=A0=C2=A0=C2=A0 22282310 filesys id=C2=A0 </span></=
-tt><tt> </tt><tt><br>
-    </tt><tt> </tt><tt><span style=3D"font-size:10.0pt">=C2=A0=C2=A0=C2=A0=
-=C2=A0 <b>ufs</b>
-        fstype=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x00000004 flag=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 255 filen=
-ame length</span></tt><tt><br>
-    </tt><tt> </tt><tt><br>
-    </tt><tt> </tt><tt><span style=3D"font-size:10.0pt"><b>/home=C2=A0</b=
->=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-
-
-        (<i>nas2:/vx/oss1a-home</i>):=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 8192 block size=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0
-        512 frag size=C2=A0 </span></tt><tt><br>
-    </tt><tt> </tt><tt><span style=3D"font-size:10.0pt">635023360 total
-        blocks=C2=A0 143270864 free blocks 142440496 available=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 3324224
-        total files</span></tt><tt><br>
-    </tt><tt> </tt><tt><span style=3D"font-size:10.0pt">=C2=A02238606 fre=
-e
-        files=C2=A0=C2=A0=C2=A0=C2=A0 82837519 filesys id=C2=A0 </span></=
-tt><tt> </tt><tt><br>
-    </tt><tt> </tt><tt><span style=3D"font-size:10.0pt">=C2=A0=C2=A0=C2=A0=
-=C2=A0 <b>nfs</b>
-        fstype=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 00000000 f=
-lag=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 4294967295 filename length<=
-/span></tt><tt><br>
-    </tt><tt> </tt><br>
-    For the moment I can get everything going, by changing the path to
-    /tmp instead.<br>
-    But I report this since I'm not sure that we shall bail out on
-    _utils_mkdir_recursive() because of permission (maybe that's the
-    correct choice to make, simply don't know). <br>
-    <br>
-    had=C3=A9gott<br>
-    /Martin<br>
-    <br>
-  </body>
-</html>
-
---------------030407090809070706060301--
-
-
---===============0685364259==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0685364259==--
+V291bGQgeW91IG1pbmQgcmViYXNpbmcgYm90aCBwYXRjaGVzIG9uIG1hc3Rlcj8gVGhlc2Ugd2ls
+bCBub3QgYXBwbHkKb24gdGhlIHJlbGF5ZCByZWZhY3RvciBpbnRyb2R1Y2VkIGluIDIuNy4KCkrD
+qXLDqW1pZQoKT24gVGh1LCBKdWwgMzAsIDIwMTUgYXQgMTE6NTIgQU0sIEp1bGllbiBEZXNmb3Nz
+ZXoKPGpkZXNmb3NzZXpAZWZmaWNpb3MuY29tPiB3cm90ZToKPiBUaGUgTFRUTkdfVklFV0VSX0RF
+VEFDSF9TRVNTSU9OIGNvbW1hbmQgYWxsb3dzIHRoZSB2aWV3ZXIgdG8gZGV0YWNoIGZyb20KPiB0
+aGUgc2Vzc2lvbiBpdCBpcyBjdXJyZW50bHkgYXR0YWNoZWQgdG8gd2l0aG91dCByZXF1aXJpbmcg
+aXQgdG8gY2xvc2UKPiB0aGUgbmV0d29yayBjb25uZWN0aW9uLiBUaGlzIGFsbG93cyB0aGUgcmVs
+YXlkIHRvIHJlbGVhc2UgaXRzIHJlZmVyZW5jZQo+IG9uIHRoZSBzZXNzaW9uIGFuZCBldmVudHVh
+bGx5IGNsZWFyIGl0IGlmIGl0IGlzIGRlc3Ryb3llZCBvbiB0aGUKPiBjb25zdW1lci4KPgo+IEZp
+eGVzOiAjODUzCj4KPiBTaWduZWQtb2ZmLWJ5OiBKdWxpZW4gRGVzZm9zc2V6IDxqZGVzZm9zc2V6
+QGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgc3JjL2Jpbi9sdHRuZy1yZWxheWQvbGl2ZS5jICAgICAg
+ICAgICAgIHwgNzMgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCj4gIHNyYy9iaW4v
+bHR0bmctcmVsYXlkL2x0dG5nLXZpZXdlci1hYmkuaCB8IDE4ICsrKysrKysrCj4gIDIgZmlsZXMg
+Y2hhbmdlZCwgOTEgaW5zZXJ0aW9ucygrKQo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmct
+cmVsYXlkL2xpdmUuYyBiL3NyYy9iaW4vbHR0bmctcmVsYXlkL2xpdmUuYwo+IGluZGV4IDU2MmE3
+ZmEuLjIyMWVjNDMgMTAwNjQ0Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1yZWxheWQvbGl2ZS5jCj4g
+KysrIGIvc3JjL2Jpbi9sdHRuZy1yZWxheWQvbGl2ZS5jCj4gQEAgLTE3MzMsNiArMTczMyw3NiBA
+QCBlbmQ6Cj4gICAgICAgICByZXR1cm4gcmV0Owo+ICB9Cj4KPiArLyoKPiArICogRGV0YWNoIGEg
+dmlld2VyIHNlc3Npb24uCj4gKyAqCj4gKyAqIFJldHVybiAwIG9uIHN1Y2Nlc3Mgb3IgZWxzZSBh
+IG5lZ2F0aXZlIHZhbHVlLgo+ICsgKi8KPiArc3RhdGljCj4gK2ludCB2aWV3ZXJfZGV0YWNoX3Nl
+c3Npb24oc3RydWN0IHJlbGF5X2Nvbm5lY3Rpb24gKmNvbm4pCj4gK3sKPiArICAgICAgIGludCBy
+ZXQsIGZvdW5kOwo+ICsgICAgICAgc3RydWN0IGx0dG5nX3ZpZXdlcl9kZXRhY2hfc2Vzc2lvbl9y
+ZXNwb25zZSByZXNwOwo+ICsgICAgICAgc3RydWN0IGx0dG5nX3ZpZXdlcl9kZXRhY2hfc2Vzc2lv
+bl9yZXF1ZXN0IHJlcXVlc3Q7Cj4gKyAgICAgICBzdHJ1Y3QgcmVsYXlfc2Vzc2lvbiAqc2Vzc2lv
+biwgKnRtcF9zZXNzaW9uOwo+ICsgICAgICAgdWludDY0X3QgdG9fY2xvc2U7Cj4gKwo+ICsgICAg
+ICAgREJHKCJWaWV3ZXIgZGV0YWNoIHNlc3Npb24gcmVjZWl2ZWQiKTsKPiArCj4gKyAgICAgICBh
+c3NlcnQoY29ubik7Cj4gKwo+ICsgICAgICAgaGVhbHRoX2NvZGVfdXBkYXRlKCk7Cj4gKwo+ICsg
+ICAgICAgLyogUmVjZWl2ZSB0aGUgcmVxdWVzdCBmcm9tIHRoZSBjb25uZWN0ZWQgY2xpZW50LiAq
+Lwo+ICsgICAgICAgcmV0ID0gcmVjdl9yZXF1ZXN0KGNvbm4tPnNvY2ssICZyZXF1ZXN0LCBzaXpl
+b2YocmVxdWVzdCkpOwo+ICsgICAgICAgaWYgKHJldCA8IDApIHsKPiArICAgICAgICAgICAgICAg
+Z290byBlbmQ7Cj4gKyAgICAgICB9Cj4gKyAgICAgICB0b19jbG9zZSA9IGJlNjR0b2gocmVxdWVz
+dC5zZXNzaW9uX2lkKTsKPiArCj4gKyAgICAgICBpZiAoIWNvbm4tPnZpZXdlcl9zZXNzaW9uKSB7
+Cj4gKyAgICAgICAgICAgICAgIHJlc3Auc3RhdHVzID0gaHRvYmUzMihMVFROR19WSUVXRVJfREVU
+QUNIX1NFU1NJT05fRVJSKTsKPiArICAgICAgICAgICAgICAgZ290byBzZW5kX3JlcGx5Owo+ICsg
+ICAgICAgfQo+ICsKPiArICAgICAgIGhlYWx0aF9jb2RlX3VwZGF0ZSgpOwo+ICsKPiArICAgICAg
+IG1lbXNldCgmcmVzcCwgMCwgc2l6ZW9mKHJlc3ApKTsKPiArICAgICAgIERCRygiQ2xlYW5pbmcg
+Y29ubmVjdGlvbiBvZiBzZXNzaW9uIElEICUiIFBSSXU2NCwgdG9fY2xvc2UpOwo+ICsKPiArICAg
+ICAgIGZvdW5kID0gMDsKPiArICAgICAgIHJjdV9yZWFkX2xvY2soKTsKPiArICAgICAgIGNkc19s
+aXN0X2Zvcl9lYWNoX2VudHJ5X3NhZmUoc2Vzc2lvbiwgdG1wX3Nlc3Npb24sCj4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgJmNvbm4tPnZpZXdlcl9zZXNzaW9uLT5zZXNzaW9uc19oZWFkLAo+ICsg
+ICAgICAgICAgICAgICAgICAgICAgIHZpZXdlcl9zZXNzaW9uX2xpc3QpIHsKPiArICAgICAgICAg
+ICAgICAgaWYgKHNlc3Npb24tPmlkID09IHRvX2Nsb3NlKSB7Cj4gKyAgICAgICAgICAgICAgICAg
+ICAgICAgREJHKCJDbGVhbmluZyBjb25uZWN0aW9uIG9mIHNlc3Npb24gSUQgJSIgUFJJdTY0LCBz
+ZXNzaW9uLT5pZCk7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgY2xlYW51cF9zZXNzaW9uKGNv
+bm4sIHNlc3Npb24pOwo+ICsgICAgICAgICAgICAgICAgICAgICAgIGZvdW5kID0gMTsKPiArICAg
+ICAgICAgICAgICAgICAgICAgICBicmVhazsKPiArICAgICAgICAgICAgICAgfQo+ICsgICAgICAg
+fQo+ICsgICAgICAgcmN1X3JlYWRfdW5sb2NrKCk7Cj4gKwo+ICsgICAgICAgaWYgKCFmb3VuZCkg
+ewo+ICsgICAgICAgICAgICAgICByZXNwLnN0YXR1cyA9IGh0b2JlMzIoTFRUTkdfVklFV0VSX0RF
+VEFDSF9TRVNTSU9OX0VSUik7Cj4gKyAgICAgICB9IGVsc2Ugewo+ICsgICAgICAgICAgICAgICBy
+ZXNwLnN0YXR1cyA9IGh0b2JlMzIoTFRUTkdfVklFV0VSX0RFVEFDSF9TRVNTSU9OX09LKTsKPiAr
+ICAgICAgIH0KPiArCj4gK3NlbmRfcmVwbHk6Cj4gKyAgICAgICBoZWFsdGhfY29kZV91cGRhdGUo
+KTsKPiArICAgICAgIHJldCA9IHNlbmRfcmVzcG9uc2UoY29ubi0+c29jaywgJnJlc3AsIHNpemVv
+ZihyZXNwKSk7Cj4gKyAgICAgICBpZiAocmV0IDwgMCkgewo+ICsgICAgICAgICAgICAgICBnb3Rv
+IGVuZDsKPiArICAgICAgIH0KPiArICAgICAgIGhlYWx0aF9jb2RlX3VwZGF0ZSgpOwo+ICsgICAg
+ICAgcmV0ID0gMDsKPiArCj4gK2VuZDoKPiArICAgICAgIHJldHVybiByZXQ7Cj4gK30KPiArCj4K
+PiAgLyoKPiAgICogbGl2ZV9yZWxheV91bmtub3duX2NvbW1hbmQ6IHNlbmQgLTEgaWYgcmVjZWl2
+ZWQgdW5rbm93biBjb21tYW5kCj4gQEAgLTE3OTcsNiArMTg2Nyw5IEBAIGludCBwcm9jZXNzX2Nv
+bnRyb2woc3RydWN0IGx0dG5nX3ZpZXdlcl9jbWQgKnJlY3ZfaGRyLAo+ICAgICAgICAgY2FzZSBM
+VFROR19WSUVXRVJfQ1JFQVRFX1NFU1NJT046Cj4gICAgICAgICAgICAgICAgIHJldCA9IHZpZXdl
+cl9jcmVhdGVfc2Vzc2lvbihjb25uKTsKPiAgICAgICAgICAgICAgICAgYnJlYWs7Cj4gKyAgICAg
+ICBjYXNlIExUVE5HX1ZJRVdFUl9ERVRBQ0hfU0VTU0lPTjoKPiArICAgICAgICAgICAgICAgcmV0
+ID0gdmlld2VyX2RldGFjaF9zZXNzaW9uKGNvbm4pOwo+ICsgICAgICAgICAgICAgICBicmVhazsK
+PiAgICAgICAgIGRlZmF1bHQ6Cj4gICAgICAgICAgICAgICAgIEVSUigiUmVjZWl2ZWQgdW5rbm93
+biB2aWV3ZXIgY29tbWFuZCAoJXUpIiwgYmUzMnRvaChyZWN2X2hkci0+Y21kKSk7Cj4gICAgICAg
+ICAgICAgICAgIGxpdmVfcmVsYXlfdW5rbm93bl9jb21tYW5kKGNvbm4pOwo+IGRpZmYgLS1naXQg
+YS9zcmMvYmluL2x0dG5nLXJlbGF5ZC9sdHRuZy12aWV3ZXItYWJpLmggYi9zcmMvYmluL2x0dG5n
+LXJlbGF5ZC9sdHRuZy12aWV3ZXItYWJpLmgKPiBpbmRleCBmOWJjZTk4Li45YjRiYzFhIDEwMDY0
+NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmctcmVsYXlkL2x0dG5nLXZpZXdlci1hYmkuaAo+ICsrKyBi
+L3NyYy9iaW4vbHR0bmctcmVsYXlkL2x0dG5nLXZpZXdlci1hYmkuaAo+IEBAIC00OCw2ICs0OCw3
+IEBAIGVudW0gbHR0bmdfdmlld2VyX2NvbW1hbmQgewo+ICAgICAgICAgTFRUTkdfVklFV0VSX0dF
+VF9NRVRBREFUQSAgICAgICA9IDYsCj4gICAgICAgICBMVFROR19WSUVXRVJfR0VUX05FV19TVFJF
+QU1TICAgID0gNywKPiAgICAgICAgIExUVE5HX1ZJRVdFUl9DUkVBVEVfU0VTU0lPTiAgICAgPSA4
+LAo+ICsgICAgICAgTFRUTkdfVklFV0VSX0RFVEFDSF9TRVNTSU9OICAgICA9IDksCj4gIH07Cj4K
+PiAgZW51bSBsdHRuZ192aWV3ZXJfYXR0YWNoX3JldHVybl9jb2RlIHsKPiBAQCAtMTA1LDYgKzEw
+NiwxMSBAQCBlbnVtIGx0dG5nX3ZpZXdlcl9jcmVhdGVfc2Vzc2lvbl9yZXR1cm5fY29kZSB7Cj4g
+ICAgICAgICBMVFROR19WSUVXRVJfQ1JFQVRFX1NFU1NJT05fRVJSICAgICAgICAgPSAyLAo+ICB9
+Owo+Cj4gK2VudW0gbHR0bmdfdmlld2VyX2RldGFjaF9zZXNzaW9uX3JldHVybl9jb2RlIHsKPiAr
+ICAgICAgIExUVE5HX1ZJRVdFUl9ERVRBQ0hfU0VTU0lPTl9PSyAgICAgICAgICA9IDEsCj4gKyAg
+ICAgICBMVFROR19WSUVXRVJfREVUQUNIX1NFU1NJT05fRVJSICAgICAgICAgPSAyLAo+ICt9Owo+
+ICsKPiAgc3RydWN0IGx0dG5nX3ZpZXdlcl9zZXNzaW9uIHsKPiAgICAgICAgIHVpbnQ2NF90IGlk
+Owo+ICAgICAgICAgdWludDMyX3QgbGl2ZV90aW1lcjsKPiBAQCAtMjMyLDQgKzIzOCwxNiBAQCBz
+dHJ1Y3QgbHR0bmdfdmlld2VyX2NyZWF0ZV9zZXNzaW9uX3Jlc3BvbnNlIHsKPiAgICAgICAgIHVp
+bnQzMl90IHN0YXR1czsKPiAgfSBfX2F0dHJpYnV0ZV9fKChfX3BhY2tlZF9fKSk7Cj4KPiArLyoK
+PiArICogTFRUTkdfVklFV0VSX0RFVEFDSF9TRVNTSU9OIHBheWxvYWQuCj4gKyAqLwo+ICtzdHJ1
+Y3QgbHR0bmdfdmlld2VyX2RldGFjaF9zZXNzaW9uX3JlcXVlc3Qgewo+ICsgICAgICAgdWludDY0
+X3Qgc2Vzc2lvbl9pZDsKPiArfSBfX2F0dHJpYnV0ZV9fKChfX3BhY2tlZF9fKSk7Cj4gKwo+ICtz
+dHJ1Y3QgbHR0bmdfdmlld2VyX2RldGFjaF9zZXNzaW9uX3Jlc3BvbnNlIHsKPiArICAgICAgIC8q
+IGVudW0gbHR0bmdfdmlld2VyX2RldGFjaF9zZXNzaW9uX3JldHVybl9jb2RlICovCj4gKyAgICAg
+ICB1aW50MzJfdCBzdGF0dXM7Cj4gK30gX19hdHRyaWJ1dGVfXygoX19wYWNrZWRfXykpOwo+ICsK
+PiAgI2VuZGlmIC8qIExUVE5HX1ZJRVdFUl9BQklfSCAqLwo+IC0tCj4gMS45LjEKPgoKCgotLSAK
+SsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29t
+CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1k
+ZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0
+dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
