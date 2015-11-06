@@ -1,16 +1,19 @@
-From: Mike R <melon.aerial@gmail.com>
-Subject: LTTng ring buffer library.
-Date: Sat, 7 Nov 2015 00:09:43 +0300
-Message-ID: <CAGJivuq1TxtJr8U0At46Zo2_T8JbURAcSykXL+rDAzq=EBTqxg__28719.2444703125$1446959092$gmane$org@mail.gmail.com>
+From: Yves Junior Bationo <yves-junior.bationo@polymtl.ca>
+Subject: Help-lttng-ust-pyhton
+Date: Fri, 06 Nov 2015 22:59:09 +0000
+Message-ID: <20151106225909.Horde.ZKUBbt2vnWaMa-0QDzy6txy__16481.187931686$1446959097$gmane$org@www.imp.polymtl.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0038844097=="
+Content-Type: text/plain; charset="utf-8"; Format="flowed"; DelSp="Yes"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f174.google.com ([209.85.217.174])
+Received: from smtp.polymtl.ca ([132.207.4.11])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <melon.aerial@gmail.com>) id 1ZuoGc-0004F9-SJ
- for lttng-dev@lists.lttng.org; Fri, 06 Nov 2015 16:09:51 -0500
-Received: by lbbwb3 with SMTP id wb3so66199297lbb.1
- for <lttng-dev@lists.lttng.org>; Fri, 06 Nov 2015 13:09:43 -0800 (PST)
+ (envelope-from <yves-junior.bationo@polymtl.ca>) id 1ZupyI-0004j2-0D
+ for lttng-dev@lists.lttng.org; Fri, 06 Nov 2015 17:59:04 -0500
+Received: from horde5.polymtl.ca (horde5.polymtl.ca [132.207.4.156])
+ by smtp.polymtl.ca (8.14.3/8.14.3) with ESMTP id tA6Mx1ja021558
+ for <lttng-dev@lists.lttng.org>; Fri, 6 Nov 2015 17:59:01 -0500
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,43 +25,52 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0038844097==
-Content-Type: multipart/alternative; boundary=089e011836b89f93540523e5a904
-
---089e011836b89f93540523e5a904
-Content-Type: text/plain; charset=UTF-8
-
-Hello.
-I'd like to use your library for ring buffers between kernel and userspace.
-I'd found that this library is in lttng-modules repo on github. But i
-haven't found any examples of codes in docs. I just want to use this
-libray. Have u got some easy example of using it or maybe u can say what
-files in repo ot watch to faster understand how it works?
-
---089e011836b89f93540523e5a904
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div style=3D"font-size:12.8000001907349px">Hello.<br></di=
-v><span style=3D"font-size:12.8000001907349px">I&#39;d like to use your lib=
-rary for ring buffers between kernel and userspace. I&#39;d found that this=
- library is in lttng-modules repo on github. But i haven&#39;t found any ex=
-amples of codes in docs. I just want to use this libray. Have u got some ea=
-sy example of using it or maybe u can say what files in repo ot watch to fa=
-ster understand how it works?</span><br></div>
-
---089e011836b89f93540523e5a904--
-
-
---===============0038844097==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0038844097==--
+CmonYWkgdW4gc291Y2kgYXZlYyBsbHRuZ3VzdCBwb3VyIGxlcyBhcHBsaWNhdGlvbiBweXRob24K
+UG91ciBsJ2V4ZW1wbGUgZGUgbGEgRG9jCglodHRwczovL2x0dG5nLm9yZy9kb2NzLyNkb2MtcHl0
+aG9uLWFwcGxpY2F0aW9uCmonYWkgbCdlcnJldXI6CglObyBoYW5kbGVycyBjb3VsZCBiZSBmb3Vu
+ZCBmb3IgbG9nZ2VyICJoZWxsby1sb2dnZXIiCgpsYSBjb21tYW5kZSAibHR0bmcgbGlzdCAtdSAt
+YSIgbWUgcmV0b3VybmUgYmllbiBsYSBsaXN0ZSBkZXMgdHJhY2UgcG9pbnQ6CgoJUElEOiA1MjI4
+IC0gTmFtZTogcHl0aG9uCiAgICAgICBsdHRuZ19weXRob246ZXZlbnQgKGxvZ2xldmVsOiBUUkFD
+RV9ERUJVR19MSU5FICgxMykpICh0eXBlOiB0cmFjZXBvaW50KQogICAgICAgbHR0bmdfdXN0X3Ry
+YWNlbG9nOlRSQUNFX0RFQlVHIChsb2dsZXZlbDogVFJBQ0VfREVCVUcgKDE0KSkgIAoodHlwZTog
+dHJhY2Vwb2ludCkKICAgICAgIGx0dG5nX3VzdF90cmFjZWxvZzpUUkFDRV9ERUJVR19MSU5FIChs
+b2dsZXZlbDogVFJBQ0VfREVCVUdfTElORSAgCigxMykpICh0eXBlOiB0cmFjZXBvaW50KQogICAg
+ICAgbHR0bmdfdXN0X3RyYWNlbG9nOlRSQUNFX0RFQlVHX0ZVTkNUSU9OIChsb2dsZXZlbDogIApU
+UkFDRV9ERUJVR19GVU5DVElPTiAoMTIpKSAodHlwZTogdHJhY2Vwb2ludCkKICAgICAgIGx0dG5n
+X3VzdF90cmFjZWxvZzpUUkFDRV9ERUJVR19VTklUIChsb2dsZXZlbDogVFJBQ0VfREVCVUdfVU5J
+VCAgCigxMSkpICh0eXBlOiB0cmFjZXBvaW50KQogICAgICAgbHR0bmdfdXN0X3RyYWNlbG9nOlRS
+QUNFX0RFQlVHX01PRFVMRSAobG9nbGV2ZWw6ICAKVFJBQ0VfREVCVUdfTU9EVUxFICgxMCkpICh0
+eXBlOiB0cmFjZXBvaW50KQogICAgICAgbHR0bmdfdXN0X3RyYWNlbG9nOlRSQUNFX0RFQlVHX1BS
+T0NFU1MgKGxvZ2xldmVsOiAgClRSQUNFX0RFQlVHX1BST0NFU1MgKDkpKSAodHlwZTogdHJhY2Vw
+b2ludCkKICAgICAgIGx0dG5nX3VzdF90cmFjZWxvZzpUUkFDRV9ERUJVR19QUk9HUkFNIChsb2ds
+ZXZlbDogIApUUkFDRV9ERUJVR19QUk9HUkFNICg4KSkgKHR5cGU6IHRyYWNlcG9pbnQpCiAgICAg
+ICBsdHRuZ191c3RfdHJhY2Vsb2c6VFJBQ0VfREVCVUdfU1lTVEVNIChsb2dsZXZlbDogIApUUkFD
+RV9ERUJVR19TWVNURU0gKDcpKSAodHlwZTogdHJhY2Vwb2ludCkKICAgICAgIGx0dG5nX3VzdF90
+cmFjZWxvZzpUUkFDRV9JTkZPIChsb2dsZXZlbDogVFJBQ0VfSU5GTyAoNikpICh0eXBlOiAgCnRy
+YWNlcG9pbnQpCiAgICAgICBsdHRuZ191c3RfdHJhY2Vsb2c6VFJBQ0VfTk9USUNFIChsb2dsZXZl
+bDogVFJBQ0VfTk9USUNFICg1KSkgIAoodHlwZTogdHJhY2Vwb2ludCkKICAgICAgIGx0dG5nX3Vz
+dF90cmFjZWxvZzpUUkFDRV9XQVJOSU5HIChsb2dsZXZlbDogVFJBQ0VfV0FSTklORyAoNCkpICAK
+KHR5cGU6IHRyYWNlcG9pbnQpCiAgICAgICBsdHRuZ191c3RfdHJhY2Vsb2c6VFJBQ0VfRVJSIChs
+b2dsZXZlbDogVFJBQ0VfRVJSICgzKSkgKHR5cGU6ICAKdHJhY2Vwb2ludCkKICAgICAgIGx0dG5n
+X3VzdF90cmFjZWxvZzpUUkFDRV9DUklUIChsb2dsZXZlbDogVFJBQ0VfQ1JJVCAoMikpICh0eXBl
+OiAgCnRyYWNlcG9pbnQpCiAgICAgICBsdHRuZ191c3RfdHJhY2Vsb2c6VFJBQ0VfQUxFUlQgKGxv
+Z2xldmVsOiBUUkFDRV9BTEVSVCAoMSkpICAKKHR5cGU6IHRyYWNlcG9pbnQpCiAgICAgICBsdHRu
+Z191c3RfdHJhY2Vsb2c6VFJBQ0VfRU1FUkcgKGxvZ2xldmVsOiBUUkFDRV9FTUVSRyAoMCkpICAK
+KHR5cGU6IHRyYWNlcG9pbnQpCiAgICAgICBsdHRuZ191c3RfdHJhY2VmOmV2ZW50IChsb2dsZXZl
+bDogVFJBQ0VfREVCVUcgKDE0KSkgKHR5cGU6IHRyYWNlcG9pbnQpCiAgICAgICBsdHRuZ191c3Rf
+c3RhdGVkdW1wOmVuZCAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHX0xJTkUgKDEzKSkgIAoodHlwZTog
+dHJhY2Vwb2ludCkKICAgICAgIGx0dG5nX3VzdF9zdGF0ZWR1bXA6ZGVidWdfbGluayAobG9nbGV2
+ZWw6IFRSQUNFX0RFQlVHX0xJTkUgIAooMTMpKSAodHlwZTogdHJhY2Vwb2ludCkKICAgICAgIGx0
+dG5nX3VzdF9zdGF0ZWR1bXA6YnVpbGRfaWQgKGxvZ2xldmVsOiBUUkFDRV9ERUJVR19MSU5FICgx
+MykpICAKKHR5cGU6IHRyYWNlcG9pbnQpCiAgICAgICBsdHRuZ191c3Rfc3RhdGVkdW1wOnNvaW5m
+byAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHX0xJTkUgKDEzKSkgIAoodHlwZTogdHJhY2Vwb2ludCkK
+ICAgICAgIGx0dG5nX3VzdF9zdGF0ZWR1bXA6c3RhcnQgKGxvZ2xldmVsOiBUUkFDRV9ERUJVR19M
+SU5FICgxMykpICAKKHR5cGU6IHRyYWNlcG9pbnQpCgpNYWlzIHBhcyBkZSByZXN1bHRhdHMgZGFu
+cyBsZSByZXBlcnRvaXJlIGRlcyBldmVuZW1lbnRzIGxvcnNxdWUgIApqJ2FjdGl2ZSBsZSB0cmFj
+YWdlIGx0dG5nLgoKUmVzdW3DqQoJUHJvYmxlbWUgMSA6Tm8gaGFuZGxlcnMgY291bGQgYmUgZm91
+bmQgZm9yIGxvZ2dlcgoJCWplIGNyb3lhaXMgcXVlICJpbXBvcnQgbHR0bmd1c3QiIGRldmFpdCBn
+ZXJlciBjZXR0ZSBzaXR1YXRpb24KCglQcm9ibGVtZSAyOiBwYXMgZGUgcmVzdWx0YXRzIGF1IHRy
+YWNhZ2UKTWVyY2kuCgoKCgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+Cmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo=
