@@ -1,16 +1,16 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH babeltrace] Fix: BABELTRACE_HAVE_LIBC_UUID
-	misspelled as BT_HAVE_LIBC_UUID
-Date: Thu,  5 Nov 2015 12:52:37 -0500
-Message-ID: <1446745957-2004-1-git-send-email-mjeanson__20226.184387184$1446746069$gmane$org@efficios.com>
+From: Mike R <melon.aerial@gmail.com>
+Subject: LTTng ring buffer library.
+Date: Sat, 7 Nov 2015 00:09:43 +0300
+Message-ID: <CAGJivuq1TxtJr8U0At46Zo2_T8JbURAcSykXL+rDAzq=EBTqxg__28719.2444703125$1446959092$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0038844097=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-lb0-f174.google.com ([209.85.217.174])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mjeanson@efficios.com>) id 1ZuOiZ-0004Wt-As
- for lttng-dev@lists.lttng.org; Thu, 05 Nov 2015 12:53:00 -0500
+ (envelope-from <melon.aerial@gmail.com>) id 1ZuoGc-0004F9-SJ
+ for lttng-dev@lists.lttng.org; Fri, 06 Nov 2015 16:09:51 -0500
+Received: by lbbwb3 with SMTP id wb3so66199297lbb.1
+ for <lttng-dev@lists.lttng.org>; Fri, 06 Nov 2015 13:09:43 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,26 +20,45 @@ List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
----
- include/babeltrace/compat/uuid.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--===============0038844097==
+Content-Type: multipart/alternative; boundary=089e011836b89f93540523e5a904
 
-diff --git a/include/babeltrace/compat/uuid.h b/include/babeltrace/compat/uuid.h
-index 369e478..4237eb5 100644
---- a/include/babeltrace/compat/uuid.h
-+++ b/include/babeltrace/compat/uuid.h
-@@ -83,7 +83,7 @@ int bt_uuid_compare(const unsigned char *uuid_a,
- }
- #endif
- 
--#elif defined(BT_HAVE_LIBC_UUID)
-+#elif defined(BABELTRACE_HAVE_LIBC_UUID)
- #include <uuid.h>
- #include <stdint.h>
- #include <string.h>
--- 
-1.9.1
+--089e011836b89f93540523e5a904
+Content-Type: text/plain; charset=UTF-8
+
+Hello.
+I'd like to use your library for ring buffers between kernel and userspace.
+I'd found that this library is in lttng-modules repo on github. But i
+haven't found any examples of codes in docs. I just want to use this
+libray. Have u got some easy example of using it or maybe u can say what
+files in repo ot watch to faster understand how it works?
+
+--089e011836b89f93540523e5a904
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div style=3D"font-size:12.8000001907349px">Hello.<br></di=
+v><span style=3D"font-size:12.8000001907349px">I&#39;d like to use your lib=
+rary for ring buffers between kernel and userspace. I&#39;d found that this=
+ library is in lttng-modules repo on github. But i haven&#39;t found any ex=
+amples of codes in docs. I just want to use this libray. Have u got some ea=
+sy example of using it or maybe u can say what files in repo ot watch to fa=
+ster understand how it works?</span><br></div>
+
+--089e011836b89f93540523e5a904--
+
+
+--===============0038844097==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0038844097==--
