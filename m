@@ -1,157 +1,92 @@
-From: Rocky Dunlap <rsdunlapiv@gmail.com>
-Subject: Python Babeltrace - Write multiple streams
-Date: Fri, 6 Nov 2015 19:40:41 -0700
-Message-ID: <CAK-w0Ddnf5TXJfmv=scZ0j6DJ0+PNbPOynKpahN8t1qVDqy=ug__39560.5608624921$1446959118$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Compat syscall instrumentation and return from execve issue
+Date: Sun, 8 Nov 2015 19:37:37 +0000 (UTC)
+Message-ID: <2095400880.57684.1447011457513.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1906651247=="
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f178.google.com ([209.85.213.178])
- by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <rsdunlapiv@gmail.com>) id 1ZutRC-0005jx-Gv
- for lttng-dev@lists.lttng.org; Fri, 06 Nov 2015 21:41:07 -0500
-Received: by igpw7 with SMTP id w7so45271670igp.1
- for <lttng-dev@lists.lttng.org>; Fri, 06 Nov 2015 18:41:01 -0800 (PST)
-List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Sender: linux-kernel-owner@vger.kernel.org
+To: rostedt <rostedt@goodmis.org>, Thomas Gleixner <tglx@linutronix.de>
+Cc: "Anvin, H. Peter" <hpa@zytor.com>, lttng-dev <lttng-dev@lists.lttng.org>, LKML <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1906651247==
-Content-Type: multipart/alternative; boundary=089e0122a3fa64efc70523ea4ac0
+Hi,
 
---089e0122a3fa64efc70523ea4ac0
-Content-Type: text/plain; charset=UTF-8
+I've hit an issue when tracing system calls on Linux. I
+know that perf and ftrace ignore compat syscalls on x86
+(see comment above kernel/trace/trace_syscalls.c:trace_get_syscall_nr()).
 
-Using the Babletrace Python binding version 1.3, I adapted a simple example
-to try to write a trace with two streams.  It appears to write okay (no
-errors), but when I attempt to read it back (again using Babeltrace) I get
-an error:
+ * Some architectures that allow for 32bit applications
+ * to run on a 64bit kernel, do not map the syscalls for
+ * the 32bit tasks the same as they do for 64bit tasks.
+ *
+ *     *cough*x86*cough*
+ *
+ * In such a case, instead of reporting the wrong syscalls,
+ * simply ignore them.
 
-[error] Stream 1 is not declared in metadata.
-[error] Stream index creation error.
-[error] Open file stream error.
-[warning] [Context] Cannot open_trace of format ctf at path ./trace.
+Even though this comment states that those compat system calls
+are ignored, there is a corner case with return from execve which
+does not seem to be correctly handled when the task TS_COMPAT
+mode is flipped by execve.
 
-Here is my code to write the streams:
+I suspect that ftrace and perf suffer from this issue when
+32-bit compat program running a 64-bit program: when returning
+from execve, is_compat_task() returns false, but the system call
+number executed is that of the 32-bit execve, which may map to
+whatever system call it is associated to on the 64-bit arch.
 
-################################
+This issue also affects LTTng.
 
-from babeltrace import *
+In LTTng, rather than ignoring compat syscalls, we take a
+different approach: we keep two syscall tables within the tracer:
+one for syscalls, one for compat_syscalls. Whenever a syscall
+tracing instrumentation is hit, we use is_compat_task() to map
+to the correct syscall table.
 
-trace_path = "./trace"
+We trace syscall entry and exit events into a different event
+for each syscall, because we fetch input/output parameters
+specific to each system call (e.g. strings) from user-space
+before/after the system call. We also filter on a per-syscall
+basis.
 
-print('trace path: {}'.format(trace_path))
+Unfortunately, there is an issue with the specific case
+of execve: whenever a 64-bit execve syscall loads a 32-bit
+compat executable, or when a 32-bit compat execve loads a
+64-bit executable, the TS_COMPAT status is changed before
+execve returns to userspace. However, the system call number
+in the pt_regs stays the same. Unfortunately, this mixes up
+the mapping between the syscall number and the syscall table
+in the tracer.
 
-writer = CTFWriter.Writer(trace_path)
+I have a few ideas on how to overcome this, and would like your
+feedback on the matter:
 
-clock = CTFWriter.Clock('my_clock')
-clock.description = 'this is my clock'
-writer.add_clock(clock)
+1) One possible approach would be to reserve an extra status flag
+   in struct thread_info to get the TS_COMPAT status at syscall
+   entry. It would _not_ be updated when the executable is loaded,
+   so the state at return from execve would match the state when
+   entering execve. This is a simple approach, but requires kernel
+   changes.
 
-stream_class = CTFWriter.StreamClass('my_stream')
-stream_class.clock = clock
+2) Keep the compat state at system call entry in a data structure
+   (e.g. hash table) indexed by thread number within each tracer.
+   This could work around this issue within each tracer.
 
-event_class = CTFWriter.EventClass('my_event')
+3) Change the syscall number in the struct pt_regs whenever we
+   change the compat mode of a process. A 64-bit execve system
+   call number would be mapped to a 32-bit compat execve number,
+   or the opposite. This requires a kernel change, and seems to be
+   rather intrusive.
 
-int32_field_decl = CTFWriter.IntegerFieldDeclaration(32)
-int32_field_decl.signed = True
+Thoughts ?
 
-event_class.add_field(int32_field_decl, 'my_field')
+Thanks,
 
-stream_class.add_event_class(event_class)
+Mathieu
 
-stream = writer.create_stream(stream_class)
-stream2 = writer.create_stream(stream_class)
-
-event = CTFWriter.Event(event_class)
-event.payload('my_field').value = -23
-stream.append_event(event)
-
-event = CTFWriter.Event(event_class)
-event.payload('my_field').value = -89
-stream.append_event(event)
-
-event = CTFWriter.Event(event_class)
-event.payload('my_field').value = -849
-stream2.append_event(event)
-
-event = CTFWriter.Event(event_class)
-event.payload('my_field').value = 42
-stream2.append_event(event)
-
-stream.flush()
-stream2.flush()
-
-######################
-
-I am sure I am just not quite using the API correctly.  If you can spot the
-error, please let me know.  Also, if anyone can point me to an example of
-using the python bindings to write out multiple streams, I would appreciate
-it.
-
-Thanks!
-Rocky
-
---089e0122a3fa64efc70523ea4ac0
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Using the Babletrace Python binding version 1.3, I adapted=
- a simple example to try to write a trace with two streams.=C2=A0 It appear=
-s to write okay (no errors), but when I attempt to read it back (again usin=
-g Babeltrace) I get an error:<div><br></div><div><div>[error] Stream 1 is n=
-ot declared in metadata.</div><div>[error] Stream index creation error.</di=
-v><div>[error] Open file stream error.</div><div>[warning] [Context] Cannot=
- open_trace of format ctf at path ./trace.</div></div><div><br></div><div>H=
-ere is my code to write the streams:</div><div><br></div><div>#############=
-###################</div><div><br></div><div>from babeltrace import *</div>=
-<div><br></div><div>trace_path =3D &quot;./trace&quot;</div><div><br></div>=
-<div>print(&#39;trace path: {}&#39;.format(trace_path))</div><div><br></div=
-><div>writer =3D CTFWriter.Writer(trace_path)</div><div><br></div><div>cloc=
-k =3D CTFWriter.Clock(&#39;my_clock&#39;)</div><div>clock.description =3D &=
-#39;this is my clock&#39;</div><div>writer.add_clock(clock)</div><div><br><=
-/div><div>stream_class =3D CTFWriter.StreamClass(&#39;my_stream&#39;)</div>=
-<div>stream_class.clock =3D clock</div><div><br></div><div>event_class =3D =
-CTFWriter.EventClass(&#39;my_event&#39;)</div><div><br></div><div>int32_fie=
-ld_decl =3D CTFWriter.IntegerFieldDeclaration(32)</div><div>int32_field_dec=
-l.signed =3D True</div><div><br></div><div>event_class.add_field(int32_fiel=
-d_decl, &#39;my_field&#39;)</div><div><br></div><div>stream_class.add_event=
-_class(event_class)</div><div><br></div><div>stream =3D writer.create_strea=
-m(stream_class)</div><div>stream2 =3D writer.create_stream(stream_class)</d=
-iv><div><br></div><div>event =3D CTFWriter.Event(event_class)</div><div>eve=
-nt.payload(&#39;my_field&#39;).value =3D -23</div><div>stream.append_event(=
-event)</div><div><br></div><div>event =3D CTFWriter.Event(event_class)</div=
-><div>event.payload(&#39;my_field&#39;).value =3D -89</div><div>stream.appe=
-nd_event(event)</div><div><br></div><div>event =3D CTFWriter.Event(event_cl=
-ass)</div><div>event.payload(&#39;my_field&#39;).value =3D -849</div><div>s=
-tream2.append_event(event)</div><div><br></div><div>event =3D CTFWriter.Eve=
-nt(event_class)</div><div>event.payload(&#39;my_field&#39;).value =3D 42</d=
-iv><div>stream2.append_event(event)</div><div><br></div><div>stream.flush()=
-</div><div>stream2.flush()=C2=A0</div><div><br></div><div>#################=
-#####</div><div><br></div><div>I am sure I am just not quite using the API =
-correctly.=C2=A0 If you can spot the error, please let me know.=C2=A0 Also,=
- if anyone can point me to an example of using the python bindings to write=
- out multiple streams, I would appreciate it.</div><div><br></div><div>Than=
-ks!</div><div>Rocky</div></div>
-
---089e0122a3fa64efc70523ea4ac0--
-
-
---===============1906651247==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1906651247==--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
