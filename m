@@ -1,19 +1,15 @@
-From: "zhenyu.ren" <zhenyu.ren@aliyun.com>
-Subject: =?utf-8?b?562U5aSN77yaIDIuNy4wIG5vdCBzdXBwb3J0IGVu?=
- =?utf-8?q?able-event_-k_-a?=
-Date: Wed, 11 Nov 2015 09:31:06 +0800
-Message-ID: <a101b1df-60ec-4303-811f-bcfcdbde0601.zhenyu.ren__32494.5118780763$1447205554$gmane$org@aliyun.com>
-References: <a66fb4c0-6937-49d3-ab21-51dbf91ec4ce.zhenyu.ren@aliyun.com>	<564206FD.3050308@efficios.com>,
- CA+jJMxuSvSc+UFE-jfooX6qqQmsHZOMCJV506XqwmNKaNuxpzg@mail.gmail.com
-Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [MODULES PATCH] irqsoff and preemptoff contexts
+Date: Tue, 10 Nov 2015 21:20:07 -0500
+Message-ID: <1447208407-24345-1-git-send-email-jdesfossez__7167.13716178692$1447208476$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1790778361=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtpcm9-320.freemail.mail.aliyun.com ([110.75.46.20])
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <zhenyu.ren@aliyun.com>) id 1ZwKG0-0000ay-0k
- for lttng-dev@lists.lttng.org; Tue, 10 Nov 2015 20:31:31 -0500
-In-Reply-To: CA+jJMxuSvSc+UFE-jfooX6qqQmsHZOMCJV506XqwmNKaNuxpzg@mail.gmail.com
+ (envelope-from <jdesfossez@efficios.com>) id 1ZwL1K-0000sX-Gi
+ for lttng-dev@lists.lttng.org; Tue, 10 Nov 2015 21:20:24 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,146 +18,294 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?B?SsOpcsOpbWllIEdhbGFybmVhdQ==?= <jeremie.galarneau@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: mathieu.desnoyers@efficios.com
+Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1790778361==
-Content-Type: multipart/alternative;
-  boundary="----=ALIBOUNDARY_24591_51073940_56429a5a_2c966"
+Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+---
+ Makefile                   |  1 +
+ lttng-abi.c                |  4 ++
+ lttng-abi.h                |  2 +
+ lttng-context-irqsoff.c    | 94 ++++++++++++++++++++++++++++++++++++++++++++++
+ lttng-context-preemptoff.c | 94 ++++++++++++++++++++++++++++++++++++++++++++++
+ lttng-context.c            |  8 ++++
+ lttng-events.h             |  2 +
+ 7 files changed, 205 insertions(+)
+ create mode 100644 lttng-context-irqsoff.c
+ create mode 100644 lttng-context-preemptoff.c
 
-------=ALIBOUNDARY_24591_51073940_56429a5a_2c966
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-wqAgSW4gZmFjdCwgSSBtYWRlIHNvbWUgY2hhbmdlcyBpbiBsdHRuZyB0b29sY2hhaW4obW9kdWxl
-L3Rvb2wvdXN0KSB0byBzdXBwb3J0IG9sZGVyIGtlcm5lbC9PUy5UaGVzZSBjaGFuZ2VzIGFyZSBP
-SyBmb3IgTHR0bmcgMi42IC5TaW5jZSB5b3UgYXJlIHN1cmUgImVuYWJsZS1ldmVudCAtayAtYSIg
-aGFzIG5vIHByb2JsZW0saXQncyBtb3JlIGNoYW5jZSB0aGF0IEkgbWFkZSBzb21lIGluYXBwcm9w
-cmlhdGUgY2hhbmdlcy4KClRoYW5rc3poZW55dS5yZW4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS3lj5Hku7bkurrvvJpKw6ly
-w6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+5Y+R6YCB5pe2
-6Ze077yaMjAxNeW5tDEx5pyIMTDml6Uo5pif5pyf5LqMKSAyMzowOeaUtuS7tuS6uu+8mnpoZW55
-dS5yZW4gPHpoZW55dS5yZW5AYWxpeXVuLmNvbT7mioTjgIDpgIHvvJpsdHRuZy1kZXYgPGx0dG5n
-LWRldkBsaXN0cy5sdHRuZy5vcmc+77yMSm9uYXRoYW4gUmFqb3R0ZSBKdWxpZW4gPEpvbmF0aGFu
-LnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT7kuLvjgIDpopjvvJpSZTogW2x0dG5nLWRldl0g
-Mi43LjAgbm90IHN1cHBvcnQgZW5hYmxlLWV2ZW50IC1rIC1hCk9uwqBUdWUswqBOb3bCoDEwLMKg
-MjAxNcKgYXTCoDEwOjAywqBBTSzCoEpvbmF0aGFuwqBSYWpvdHRlwqBKdWxpZW4KPEpvbmF0aGFu
-LnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT7CoHdyb3RlOgo+wqBIacKgWmhlbnl1LAo+Cj7C
-oEnCoGp1c3TCoHRlc3RlZMKgaXTCoG9uwqBhwqBVYnVudHXCoDE1LjEwwqB3aXRowqBrZXJuZWzC
-oDQuMi4zwqB3aXRowqBub8KgcHJvYmxlbS4KPgo+wqBEaWTCoHlvdcKgaW5zdGFsbMKgZnJvbcKg
-c291cmNlL3BwYcKgP8KgQ291bGTCoHlvdcKgZ2l2ZcKgdXPCoGFsbMKgdGhlwqBzdGVwc8KgaW52
-b2x2ZWTCoD8KPgo+wqBNYWtlwqBzdXJlwqB0b8KgZ2/CoG92ZXLCoFsxXcKgdG/CoGhlbHDCoHVz
-wqBwaW5wb2ludMKgdGhlwqBwcm9ibGVtLgo+Cj7CoFsxXcKgaHR0cHM6Ly9sdHRuZy5vcmcvY29t
-bXVuaXR5LyNidWctcmVwb3J0aW5nLWd1aWRlbGluZXMKCk1ha2XCoHN1cmXCoHlvdcKgaW5jbHVk
-ZcKgdGhlwqB2ZXJib3NlwqBsb2dzwqBvZsKgdGhlwqBzZXNzaW9uwqBkYWVtb27CoGJ5CmxhdW5j
-aGluZ8KgaXTCoHdpdGjCoHRoZcKgJy12dnYnwqBzd2l0Y2guCkFsc28swqBwbGVhc2XCoGNoZWNr
-wqB0aGF0wqB5b3VywqBsdHRuZy1tb2R1bGVzwqB2ZXJzaW9uwqBtYXRjaGVzwqB0aGXCoHJlc3TC
-oG9mCnRoZcKgdG9vbGNoYWluwqAodjIuNy54KQoKVGhhbmtzIQpKw6lyw6ltaWUKCj4KPsKgQ2hl
-ZXJzIQo+Cj4KPsKgT27CoDIwMTUtMTEtMTDCoDAzOjE3wqBBTSzCoHpoZW55dS5yZW7CoHdyb3Rl
-Ogo+Pgo+PsKgSGksZGV2LXRlYW0KPj4KPj7CoMKgwqDCoEnCoGdvdMKgdGhlwqBmb2xsb3dpbmfC
-oGVycm9zwqB3aGVuwqBJwqBydW7CoHRoZcKgY29tbWTCoDpsdHRuZ8KgZW5hYmxlLWV2ZW50wqAt
-awo+PsKgLWEKPj7CoCJFcnJvcjrCoEV2ZW50czrCoEVuYWJsZcKga2VybmVswqBldmVudMKgZmFp
-bGVkwqAoY2hhbm5lbMKgY2hhbm5lbDAswqBzZXNzaW9uCj4+wqBrZXJuZWxfdGVzdCkKPj7CoEVy
-cm9yOsKgQ29tbWFuZMKgZXJyb3IiCj4+wqDCoMKgSXTCoHNlZW1zwqB0aGF0wqBMVFRORy0yLjcu
-MMKgZG/CoE5PVMKgc3VwcG9ydMKgZW5hYmxlLWV2ZW50wqBvcHRpb27CoCItLWFsbCIuwqBJcwo+
-PsKgdGhhdMKgcmlnaHQ/SWbCoHdvwqAsd2hhdCdzwqB0aGXCoGlkZWHCoGJlaGluZMKgaXQ/Cj4+
-Cj4+wqBUaGFua3MKPj7CoHpoZW55dS5yZW4KPj4KPj4KPj4KPj7CoF9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+wqBsdHRuZy1kZXbCoG1haWxpbmfCoGxp
-c3QKPj7CoGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj7CoGh0dHA6Ly9saXN0cy5sdHRuZy5v
-cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+Cj4KPsKgLS0KPsKgSm9uYXRo
-YW7CoFIuwqBKdWxpZW4KPsKgRWZmaWNpb3MKPgo+Cj7CoF9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCj7CoGx0dG5nLWRldsKgbWFpbGluZ8KgbGlzdAo+wqBs
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj7CoGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
-bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKCgotLcKgCkrDqXLDqW1pZcKgR2FsYXJuZWF1
-CkVmZmljaU9TwqBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCg==
-------=ALIBOUNDARY_24591_51073940_56429a5a_2c966
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div class=3D"__aliyun_email_body_block"><div style=3D"clear: both;"><span sty=
-le=3D"font-family: Tahoma, Arial, STHeiti, SimSun; font-size: 14px; color: rgb=
-(0, 0, 0);">&nbsp; In fact, I made some changes in lttng toolchain(module/tool=
-/ust) to support older kernel/OS.These changes are OK for Lttng 2.6 .Since you=
- are sure "enable-event -k -a" has no problem,it's more chance that I made som=
-e inappropriate changes.</span></div><div style=3D"clear: both;"><span style=3D=
-"font-family: Tahoma, Arial, STHeiti, SimSun; font-size: 14px; color: rgb(0, 0=
-, 0);"><br></span></div><div style=3D"clear: both;"><span style=3D"font-family=
-: Tahoma, Arial, STHeiti, SimSun; font-size: 14px; color: rgb(0, 0, 0);"><br><=
-/span></div><div style=3D"clear: both;"><span style=3D"font-family: Tahoma, Ar=
-ial, STHeiti, SimSun; font-size: 14px; color: rgb(0, 0, 0);">Thanks</span></di=
-v><div style=3D"clear: both;"><span style=3D"font-family: Tahoma, Arial, STHei=
-ti, SimSun; font-size: 14px; color: rgb(0, 0, 0);">zhenyu.ren</span></div><blo=
-ckquote style=3D"margin-right: 0px; margin-top: 0px; margin-bottom: 0px;"><div=
- style=3D"clear: both;"><span style=3D"font-family: Tahoma, Arial, STHeiti, Si=
-mSun; font-size: 14px; color: rgb(0, 0, 0);">---------------------------------=
----------------------------------</span></div><div style=3D"clear: both;"><spa=
-n style=3D"font-family: Tahoma, Arial, STHeiti, SimSun; font-size: 14px; color=
-: rgb(0, 0, 0);">=E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9AJ=C3=A9r=C3=A9mie Galarne=
-au &lt;jeremie.galarneau@efficios.com&gt;</span></div><div style=3D"clear: bot=
-h;"><span style=3D"font-family: Tahoma, Arial, STHeiti, SimSun; font-size: 14p=
-x; color: rgb(0, 0, 0);">=E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4=EF=BC=9A2015=E5=B9=
-=B411=E6=9C=8810=E6=97=A5(=E6=98=9F=E6=9C=9F=E4=BA=8C) 23:09</span></div><div =
-style=3D"clear: both;"><span style=3D"font-family: Tahoma, Arial, STHeiti, Sim=
-Sun; font-size: 14px; color: rgb(0, 0, 0);">=E6=94=B6=E4=BB=B6=E4=BA=BA=EF=BC=9A=
-zhenyu.ren &lt;zhenyu.ren@aliyun.com&gt;</span></div><div style=3D"clear: both=
-;"><span style=3D"font-family: Tahoma, Arial, STHeiti, SimSun; font-size: 14px=
-; color: rgb(0, 0, 0);">=E6=8A=84=E3=80=80=E9=80=81=EF=BC=9Alttng-dev &lt;lttn=
-g-dev@lists.lttng.org&gt;=EF=BC=8CJonathan Rajotte Julien &lt;Jonathan.rajotte=
--julien@efficios.com&gt;</span></div><div style=3D"clear: both;"><span style=3D=
-"font-family: Tahoma, Arial, STHeiti, SimSun; font-size: 14px; color: rgb(0, 0=
-, 0);">=E4=B8=BB=E3=80=80=E9=A2=98=EF=BC=9ARe: [lttng-dev] 2.7.0 not support e=
-nable-event -k -a</span></div><div style=3D"clear: both;"><span style=3D"font-=
-family: Tahoma, Arial, STHeiti, SimSun; font-size: 14px; color: rgb(0, 0, 0);"=
-><br></span></div>On&nbsp;Tue,&nbsp;Nov&nbsp;10,&nbsp;2015&nbsp;at&nbsp;10:02&=
-nbsp;AM,&nbsp;Jonathan&nbsp;Rajotte&nbsp;Julien<br>&lt;Jonathan.rajotte-julien=
-@efficios.com&gt;&nbsp;wrote:<br>&gt;&nbsp;Hi&nbsp;Zhenyu,<br>&gt;<br>&gt;&nbs=
-p;I&nbsp;just&nbsp;tested&nbsp;it&nbsp;on&nbsp;a&nbsp;Ubuntu&nbsp;15.10&nbsp;w=
-ith&nbsp;kernel&nbsp;4.2.3&nbsp;with&nbsp;no&nbsp;problem.<br>&gt;<br>&gt;&nbs=
-p;Did&nbsp;you&nbsp;install&nbsp;from&nbsp;source/ppa&nbsp;?&nbsp;Could&nbsp;y=
-ou&nbsp;give&nbsp;us&nbsp;all&nbsp;the&nbsp;steps&nbsp;involved&nbsp;?<br>&gt;=
-<br>&gt;&nbsp;Make&nbsp;sure&nbsp;to&nbsp;go&nbsp;over&nbsp;[1]&nbsp;to&nbsp;h=
-elp&nbsp;us&nbsp;pinpoint&nbsp;the&nbsp;problem.<br>&gt;<br>&gt;&nbsp;[1]&nbsp=
-;https://lttng.org/community/#bug-reporting-guidelines<br><br>Make&nbsp;sure&n=
-bsp;you&nbsp;include&nbsp;the&nbsp;verbose&nbsp;logs&nbsp;of&nbsp;the&nbsp;ses=
-sion&nbsp;daemon&nbsp;by<br>launching&nbsp;it&nbsp;with&nbsp;the&nbsp;'-vvv'&n=
-bsp;switch.<br>Also,&nbsp;please&nbsp;check&nbsp;that&nbsp;your&nbsp;lttng-mod=
-ules&nbsp;version&nbsp;matches&nbsp;the&nbsp;rest&nbsp;of<br>the&nbsp;toolchai=
-n&nbsp;(v2.7.x)<br><br>Thanks!<br>J=C3=A9r=C3=A9mie<br><br>&gt;<br>&gt;&nbsp;C=
-heers!<br>&gt;<br>&gt;<br>&gt;&nbsp;On&nbsp;2015-11-10&nbsp;03:17&nbsp;AM,&nbs=
-p;zhenyu.ren&nbsp;wrote:<br>&gt;&gt;<br>&gt;&gt;&nbsp;Hi,dev-team<br>&gt;&gt;<=
-br>&gt;&gt;&nbsp;&nbsp;&nbsp;&nbsp;I&nbsp;got&nbsp;the&nbsp;following&nbsp;err=
-os&nbsp;when&nbsp;I&nbsp;run&nbsp;the&nbsp;commd&nbsp;:lttng&nbsp;enable-event=
-&nbsp;-k<br>&gt;&gt;&nbsp;-a<br>&gt;&gt;&nbsp;"Error:&nbsp;Events:&nbsp;Enable=
-&nbsp;kernel&nbsp;event&nbsp;failed&nbsp;(channel&nbsp;channel0,&nbsp;session<=
-br>&gt;&gt;&nbsp;kernel_test)<br>&gt;&gt;&nbsp;Error:&nbsp;Command&nbsp;error"=
-<br>&gt;&gt;&nbsp;&nbsp;&nbsp;It&nbsp;seems&nbsp;that&nbsp;LTTNG-2.7.0&nbsp;do=
-&nbsp;NOT&nbsp;support&nbsp;enable-event&nbsp;option&nbsp;"--all".&nbsp;Is<br>=
-&gt;&gt;&nbsp;that&nbsp;right?If&nbsp;wo&nbsp;,what's&nbsp;the&nbsp;idea&nbsp;=
-behind&nbsp;it?<br>&gt;&gt;<br>&gt;&gt;&nbsp;Thanks<br>&gt;&gt;&nbsp;zhenyu.re=
-n<br>&gt;&gt;<br>&gt;&gt;<br>&gt;&gt;<br>&gt;&gt;&nbsp;_______________________=
-________________________<br>&gt;&gt;&nbsp;lttng-dev&nbsp;mailing&nbsp;list<br>=
-&gt;&gt;&nbsp;lttng-dev@lists.lttng.org<br>&gt;&gt;&nbsp;http://lists.lttng.or=
-g/cgi-bin/mailman/listinfo/lttng-dev<br>&gt;<br>&gt;<br>&gt;&nbsp;--<br>&gt;&n=
-bsp;Jonathan&nbsp;R.&nbsp;Julien<br>&gt;&nbsp;Efficios<br>&gt;<br>&gt;<br>&gt;=
-&nbsp;_______________________________________________<br>&gt;&nbsp;lttng-dev&n=
-bsp;mailing&nbsp;list<br>&gt;&nbsp;lttng-dev@lists.lttng.org<br>&gt;&nbsp;http=
-://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br><br><br><br>--&nbsp;<=
-br>J=C3=A9r=C3=A9mie&nbsp;Galarneau<br>EfficiOS&nbsp;Inc.<br>http://www.effici=
-os.com</blockquote><div><br></div></div>
-------=ALIBOUNDARY_24591_51073940_56429a5a_2c966--
-
-
-
---===============1790778361==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1790778361==--
+diff --git a/Makefile b/Makefile
+index f7aa23f..efc534e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -41,6 +41,7 @@ lttng-tracer-objs :=  lttng-events.o lttng-abi.o \
+ 			lttng-context-vpid.o lttng-context-tid.o \
+ 			lttng-context-vtid.o lttng-context-ppid.o \
+ 			lttng-context-vppid.o lttng-context-cpu-id.o \
++			lttng-context-irqsoff.o lttng-context-preemptoff.o \
+ 			lttng-calibrate.o \
+ 			lttng-context-hostname.o wrapper/random.o \
+ 			probes/lttng.o wrapper/trace-clock.o \
+diff --git a/lttng-abi.c b/lttng-abi.c
+index f6f3043..8be9b1e 100644
+--- a/lttng-abi.c
++++ b/lttng-abi.c
+@@ -236,6 +236,10 @@ long lttng_abi_add_context(struct file *file,
+ 		return lttng_add_hostname_to_ctx(ctx);
+ 	case LTTNG_KERNEL_CONTEXT_CPU_ID:
+ 		return lttng_add_cpu_id_to_ctx(ctx);
++	case LTTNG_KERNEL_CONTEXT_IRQSOFF:
++		return lttng_add_irqsoff_to_ctx(ctx);
++	case LTTNG_KERNEL_CONTEXT_PREEMPTOFF:
++		return lttng_add_preemptoff_to_ctx(ctx);
+ 	default:
+ 		return -EINVAL;
+ 	}
+diff --git a/lttng-abi.h b/lttng-abi.h
+index a40b58f..e8b0647 100644
+--- a/lttng-abi.h
++++ b/lttng-abi.h
+@@ -142,6 +142,8 @@ enum lttng_kernel_context_type {
+ 	LTTNG_KERNEL_CONTEXT_VPPID		= 9,
+ 	LTTNG_KERNEL_CONTEXT_HOSTNAME		= 10,
+ 	LTTNG_KERNEL_CONTEXT_CPU_ID		= 11,
++	LTTNG_KERNEL_CONTEXT_IRQSOFF		= 12,
++	LTTNG_KERNEL_CONTEXT_PREEMPTOFF		= 13,
+ };
+ 
+ struct lttng_kernel_perf_counter_ctx {
+diff --git a/lttng-context-irqsoff.c b/lttng-context-irqsoff.c
+new file mode 100644
+index 0000000..2980265
+--- /dev/null
++++ b/lttng-context-irqsoff.c
+@@ -0,0 +1,94 @@
++/*
++ * lttng-context-irqsoff.c
++ *
++ * LTTng irqsoff context.
++ *
++ * Copyright (C) 2009-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++#include <linux/slab.h>
++#include <linux/sched.h>
++#include <linux/irqflags.h>
++#include "lttng-events.h"
++#include "wrapper/ringbuffer/frontend_types.h"
++#include "wrapper/vmalloc.h"
++#include "lttng-tracer.h"
++
++static
++size_t irqsoff_get_size(size_t offset)
++{
++	size_t size = 0;
++
++	size += lib_ring_buffer_align(offset, lttng_alignof(uint8_t));
++	size += sizeof(uint8_t);
++	return size;
++}
++
++static
++void irqsoff_record(struct lttng_ctx_field *field,
++		struct lib_ring_buffer_ctx *ctx,
++		struct lttng_channel *chan)
++{
++	uint8_t irqsoff = irqs_disabled();
++
++	lib_ring_buffer_align_ctx(ctx, lttng_alignof(irqsoff));
++	chan->ops->event_write(ctx, &irqsoff, sizeof(irqsoff));
++}
++
++static
++void irqsoff_get_value(struct lttng_ctx_field *field,
++		union lttng_ctx_value *value)
++{
++	value->s64 = irqs_disabled();
++}
++
++int lttng_add_irqsoff_to_ctx(struct lttng_ctx **ctx)
++{
++	struct lttng_ctx_field *field;
++
++	field = lttng_append_context(ctx);
++	if (!field)
++		return -ENOMEM;
++	if (lttng_find_context(*ctx, "irqsoff")) {
++		lttng_remove_context_field(ctx, field);
++		return -EEXIST;
++	}
++	field->event_field.name = "irqsoff";
++	field->event_field.type.atype = atype_integer;
++	field->event_field.type.u.basic.integer.size = sizeof(uint8_t) * CHAR_BIT;
++	field->event_field.type.u.basic.integer.alignment = lttng_alignof(uint8_t) * CHAR_BIT;
++	field->event_field.type.u.basic.integer.signedness = lttng_is_signed_type(uint8_t);
++	field->event_field.type.u.basic.integer.reverse_byte_order = 0;
++	field->event_field.type.u.basic.integer.base = 10;
++	field->event_field.type.u.basic.integer.encoding = lttng_encode_none;
++	field->get_size = irqsoff_get_size;
++	field->record = irqsoff_record;
++	field->get_value = irqsoff_get_value;
++	lttng_context_update(*ctx);
++	wrapper_vmalloc_sync_all();
++	return 0;
++}
++EXPORT_SYMBOL_GPL(lttng_add_irqsoff_to_ctx);
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Mathieu Desnoyers");
++MODULE_DESCRIPTION("Linux Trace Toolkit irqsoff Context");
++MODULE_VERSION(__stringify(LTTNG_MODULES_MAJOR_VERSION) "."
++	__stringify(LTTNG_MODULES_MINOR_VERSION) "."
++	__stringify(LTTNG_MODULES_PATCHLEVEL_VERSION)
++	LTTNG_MODULES_EXTRAVERSION);
+diff --git a/lttng-context-preemptoff.c b/lttng-context-preemptoff.c
+new file mode 100644
+index 0000000..72d60f8
+--- /dev/null
++++ b/lttng-context-preemptoff.c
+@@ -0,0 +1,94 @@
++/*
++ * lttng-context-preemptoff.c
++ *
++ * LTTng preemptoff context.
++ *
++ * Copyright (C) 2009-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ *
++ * This library is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU Lesser General Public
++ * License as published by the Free Software Foundation; only
++ * version 2.1 of the License.
++ *
++ * This library is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * Lesser General Public License for more details.
++ *
++ * You should have received a copy of the GNU Lesser General Public
++ * License along with this library; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
++ */
++
++#include <linux/module.h>
++#include <linux/slab.h>
++#include <linux/sched.h>
++#include <linux/irqflags.h>
++#include "lttng-events.h"
++#include "wrapper/ringbuffer/frontend_types.h"
++#include "wrapper/vmalloc.h"
++#include "lttng-tracer.h"
++
++static
++size_t preemptoff_get_size(size_t offset)
++{
++	size_t size = 0;
++
++	size += lib_ring_buffer_align(offset, lttng_alignof(uint8_t));
++	size += sizeof(uint8_t);
++	return size;
++}
++
++static
++void preemptoff_record(struct lttng_ctx_field *field,
++		struct lib_ring_buffer_ctx *ctx,
++		struct lttng_channel *chan)
++{
++	uint8_t preemptoff = !!preempt_count();
++
++	lib_ring_buffer_align_ctx(ctx, lttng_alignof(preemptoff));
++	chan->ops->event_write(ctx, &preemptoff, sizeof(preemptoff));
++}
++
++static
++void preemptoff_get_value(struct lttng_ctx_field *field,
++		union lttng_ctx_value *value)
++{
++	value->s64 = !!preempt_count();
++}
++
++int lttng_add_preemptoff_to_ctx(struct lttng_ctx **ctx)
++{
++	struct lttng_ctx_field *field;
++
++	field = lttng_append_context(ctx);
++	if (!field)
++		return -ENOMEM;
++	if (lttng_find_context(*ctx, "preemptoff")) {
++		lttng_remove_context_field(ctx, field);
++		return -EEXIST;
++	}
++	field->event_field.name = "preemptoff";
++	field->event_field.type.atype = atype_integer;
++	field->event_field.type.u.basic.integer.size = sizeof(uint8_t) * CHAR_BIT;
++	field->event_field.type.u.basic.integer.alignment = lttng_alignof(uint8_t) * CHAR_BIT;
++	field->event_field.type.u.basic.integer.signedness = lttng_is_signed_type(uint8_t);
++	field->event_field.type.u.basic.integer.reverse_byte_order = 0;
++	field->event_field.type.u.basic.integer.base = 10;
++	field->event_field.type.u.basic.integer.encoding = lttng_encode_none;
++	field->get_size = preemptoff_get_size;
++	field->record = preemptoff_record;
++	field->get_value = preemptoff_get_value;
++	lttng_context_update(*ctx);
++	wrapper_vmalloc_sync_all();
++	return 0;
++}
++EXPORT_SYMBOL_GPL(lttng_add_preemptoff_to_ctx);
++
++MODULE_LICENSE("GPL and additional rights");
++MODULE_AUTHOR("Mathieu Desnoyers");
++MODULE_DESCRIPTION("Linux Trace Toolkit preemptoff Context");
++MODULE_VERSION(__stringify(LTTNG_MODULES_MAJOR_VERSION) "."
++	__stringify(LTTNG_MODULES_MINOR_VERSION) "."
++	__stringify(LTTNG_MODULES_PATCHLEVEL_VERSION)
++	LTTNG_MODULES_EXTRAVERSION);
+diff --git a/lttng-context.c b/lttng-context.c
+index eca58ce..66e828b 100644
+--- a/lttng-context.c
++++ b/lttng-context.c
+@@ -268,6 +268,14 @@ int lttng_context_init(void)
+ 	if (ret) {
+ 		printk(KERN_WARNING "Cannot add context lttng_add_cpu_id_to_ctx");
+ 	}
++	ret = lttng_add_irqsoff_to_ctx(&lttng_static_ctx);
++	if (ret) {
++		printk(KERN_WARNING "Cannot add context lttng_add_irqsoff_to_ctx");
++	}
++	ret = lttng_add_preemptoff_to_ctx(&lttng_static_ctx);
++	if (ret) {
++		printk(KERN_WARNING "Cannot add context lttng_add_preemptoff_to_ctx");
++	}
+ 	/* TODO: perf counters for filtering */
+ 	return 0;
+ }
+diff --git a/lttng-events.h b/lttng-events.h
+index 234d4bc..dda22e7 100644
+--- a/lttng-events.h
++++ b/lttng-events.h
+@@ -630,6 +630,8 @@ int lttng_add_vtid_to_ctx(struct lttng_ctx **ctx);
+ int lttng_add_ppid_to_ctx(struct lttng_ctx **ctx);
+ int lttng_add_vppid_to_ctx(struct lttng_ctx **ctx);
+ int lttng_add_hostname_to_ctx(struct lttng_ctx **ctx);
++int lttng_add_irqsoff_to_ctx(struct lttng_ctx **ctx);
++int lttng_add_preemptoff_to_ctx(struct lttng_ctx **ctx);
+ #if defined(CONFIG_PERF_EVENTS) && (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
+ int lttng_add_perf_counter_to_ctx(uint32_t type,
+ 				  uint64_t config,
+-- 
+1.9.1
