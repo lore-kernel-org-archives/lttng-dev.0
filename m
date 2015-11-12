@@ -1,15 +1,22 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [LTTNG-TOOLS PATCH] Contexts for RT debugging
-Date: Wed, 11 Nov 2015 20:22:24 -0500
-Message-ID: <1447291344-10709-1-git-send-email-jdesfossez__46707.0471765057$1447291443$gmane$org@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: =?utf-8?b?562U5aSN77yaIOetlOWkje+8miAyLjcuMCBub3Qg?=
+	=?utf-8?q?support_enable-event_-k_-a?=
+Date: Thu, 12 Nov 2015 09:13:14 -0500
+Message-ID: <CA+jJMxtWgFowS=wpoXESLF2gNomsiBuaSK_6zTvfSaeUkuYiNA__15548.7124612138$1447337674$gmane$org@mail.gmail.com>
+References: <a66fb4c0-6937-49d3-ab21-51dbf91ec4ce.zhenyu.ren@aliyun.com>
+ <564206FD.3050308@efficios.com>
+ <38185f90-a4e3-4812-9e53-76a2c9ab6694.zhenyu.ren@aliyun.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
+Received: from mail-yk0-f171.google.com ([209.85.160.171])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1Zwgav-00083V-Ih
- for lttng-dev@lists.lttng.org; Wed, 11 Nov 2015 20:22:34 -0500
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1Zwscq-0003md-Dg
+ for lttng-dev@lists.lttng.org; Thu, 12 Nov 2015 09:13:26 -0500
+Received: by ykdr82 with SMTP id r82so95454635ykd.3
+ for <lttng-dev@lists.lttng.org>; Thu, 12 Nov 2015 06:13:15 -0800 (PST)
+In-Reply-To: <38185f90-a4e3-4812-9e53-76a2c9ab6694.zhenyu.ren@aliyun.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -18,173 +25,155 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
+To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Enables the interruptible, preemptible, need_resched and migratable
-kernel contexts.
-
-Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
----
- include/lttng/event.h                  |  4 ++++
- src/bin/lttng-sessiond/context.c       | 12 ++++++++++++
- src/bin/lttng-sessiond/save.c          | 12 ++++++++++++
- src/bin/lttng/commands/add_context.c   |  8 ++++++++
- src/common/config/config-session-abi.h |  4 ++++
- src/common/config/session-config.c     | 16 ++++++++++++++++
- src/common/lttng-kernel.h              |  4 ++++
- 7 files changed, 60 insertions(+)
-
-diff --git a/include/lttng/event.h b/include/lttng/event.h
-index 3e8fbe3..d79eb4b 100644
---- a/include/lttng/event.h
-+++ b/include/lttng/event.h
-@@ -136,6 +136,10 @@ enum lttng_event_context_type {
- 	LTTNG_EVENT_CONTEXT_IP                = 12,
- 	LTTNG_EVENT_CONTEXT_PERF_CPU_COUNTER  = 13,
- 	LTTNG_EVENT_CONTEXT_PERF_THREAD_COUNTER = 14,
-+	LTTNG_EVENT_CONTEXT_INTERRUPTIBLE     = 15,
-+	LTTNG_EVENT_CONTEXT_PREEMPTIBLE       = 16,
-+	LTTNG_EVENT_CONTEXT_NEED_RESCHED      = 17,
-+	LTTNG_EVENT_CONTEXT_MIGRATABLE        = 18,
- };
- 
- enum lttng_event_field_type {
-diff --git a/src/bin/lttng-sessiond/context.c b/src/bin/lttng-sessiond/context.c
-index 0de1d06..b01278c 100644
---- a/src/bin/lttng-sessiond/context.c
-+++ b/src/bin/lttng-sessiond/context.c
-@@ -193,6 +193,18 @@ int context_kernel_add(struct ltt_kernel_session *ksession,
- 	case LTTNG_EVENT_CONTEXT_HOSTNAME:
- 		kctx->ctx.ctx = LTTNG_KERNEL_CONTEXT_HOSTNAME;
- 		break;
-+	case LTTNG_EVENT_CONTEXT_INTERRUPTIBLE:
-+		kctx->ctx.ctx = LTTNG_KERNEL_CONTEXT_INTERRUPTIBLE;
-+		break;
-+	case LTTNG_EVENT_CONTEXT_PREEMPTIBLE:
-+		kctx->ctx.ctx = LTTNG_KERNEL_CONTEXT_PREEMPTIBLE;
-+		break;
-+	case LTTNG_EVENT_CONTEXT_NEED_RESCHED:
-+		kctx->ctx.ctx = LTTNG_KERNEL_CONTEXT_NEED_RESCHED;
-+		break;
-+	case LTTNG_EVENT_CONTEXT_MIGRATABLE:
-+		kctx->ctx.ctx = LTTNG_KERNEL_CONTEXT_MIGRATABLE;
-+		break;
- 	case LTTNG_EVENT_CONTEXT_PERF_CPU_COUNTER:
- 	case LTTNG_EVENT_CONTEXT_PERF_COUNTER:
- 		kctx->ctx.ctx = LTTNG_KERNEL_CONTEXT_PERF_CPU_COUNTER;
-diff --git a/src/bin/lttng-sessiond/save.c b/src/bin/lttng-sessiond/save.c
-index a6fea46..16b928e 100644
---- a/src/bin/lttng-sessiond/save.c
-+++ b/src/bin/lttng-sessiond/save.c
-@@ -232,6 +232,18 @@ const char *get_kernel_context_type_string(
- 	case LTTNG_KERNEL_CONTEXT_HOSTNAME:
- 		context_type_string = config_event_context_hostname;
- 		break;
-+	case LTTNG_KERNEL_CONTEXT_INTERRUPTIBLE:
-+		context_type_string = config_event_context_interruptible;
-+		break;
-+	case LTTNG_KERNEL_CONTEXT_PREEMPTIBLE:
-+		context_type_string = config_event_context_preemptible;
-+		break;
-+	case LTTNG_KERNEL_CONTEXT_NEED_RESCHED:
-+		context_type_string = config_event_context_need_resched;
-+		break;
-+	case LTTNG_KERNEL_CONTEXT_MIGRATABLE:
-+		context_type_string = config_event_context_migratable;
-+		break;
- 	default:
- 		context_type_string = NULL;
- 	}
-diff --git a/src/bin/lttng/commands/add_context.c b/src/bin/lttng/commands/add_context.c
-index fb37c0a..8cbb5a4 100644
---- a/src/bin/lttng/commands/add_context.c
-+++ b/src/bin/lttng/commands/add_context.c
-@@ -69,6 +69,10 @@ enum context_type {
- 	CONTEXT_IP           = 12,
- 	CONTEXT_PERF_CPU_COUNTER = 13,
- 	CONTEXT_PERF_THREAD_COUNTER = 14,
-+	CONTEXT_INTERRUPTIBLE = 15,
-+	CONTEXT_PREEMPTIBLE  = 16,
-+	CONTEXT_NEED_RESCHED = 17,
-+	CONTEXT_MIGRATABLE   = 18,
- };
- 
- /*
-@@ -213,6 +217,10 @@ const struct ctx_opts {
- 	{ "vppid", CONTEXT_VPPID },
- 	{ "hostname", CONTEXT_HOSTNAME },
- 	{ "ip", CONTEXT_IP },
-+	{ "interruptible", CONTEXT_INTERRUPTIBLE },
-+	{ "preemptible", CONTEXT_PREEMPTIBLE },
-+	{ "need_resched", CONTEXT_NEED_RESCHED },
-+	{ "migratable", CONTEXT_MIGRATABLE },
- 
- 	/* Perf options */
- 
-diff --git a/src/common/config/config-session-abi.h b/src/common/config/config-session-abi.h
-index 9251b22..f951e3c 100644
---- a/src/common/config/config-session-abi.h
-+++ b/src/common/config/config-session-abi.h
-@@ -116,5 +116,9 @@ extern const char * const config_event_context_pthread_id;
- extern const char * const config_event_context_hostname;
- extern const char * const config_event_context_ip;
- extern const char * const config_event_context_perf_thread_counter;
-+extern const char * const config_event_context_interruptible;
-+extern const char * const config_event_context_preemptible;
-+extern const char * const config_event_context_need_resched;
-+extern const char * const config_event_context_migratable;
- 
- #endif /* CONFIG_SESSION_INTERNAL_H */
-diff --git a/src/common/config/session-config.c b/src/common/config/session-config.c
-index 87e9c03..c87cdc2 100644
---- a/src/common/config/session-config.c
-+++ b/src/common/config/session-config.c
-@@ -165,6 +165,10 @@ const char * const config_event_context_pthread_id = "PTHREAD_ID";
- const char * const config_event_context_hostname = "HOSTNAME";
- const char * const config_event_context_ip = "IP";
- const char * const config_event_context_perf_thread_counter = "PERF_THREAD_COUNTER";
-+const char * const config_event_context_interruptible = "INTERRUPTIBLE";
-+const char * const config_event_context_preemptible = "PREEMPTIBLE";
-+const char * const config_event_context_need_resched = "NEED_RESCHED";
-+const char * const config_event_context_migratable = "MIGRATABLE";
- 
- struct consumer_output {
- 	int enabled;
-@@ -946,6 +950,18 @@ int get_context_type(xmlChar *context_type)
- 	} else if (!strcmp((char *) context_type,
- 		config_event_context_ip)) {
- 		ret = LTTNG_EVENT_CONTEXT_IP;
-+	} else if (!strcmp((char *) context_type,
-+		config_event_context_interruptible)) {
-+		ret = LTTNG_EVENT_CONTEXT_INTERRUPTIBLE;
-+	} else if (!strcmp((char *) context_type,
-+		config_event_context_preemptible)) {
-+		ret = LTTNG_EVENT_CONTEXT_PREEMPTIBLE;
-+	} else if (!strcmp((char *) context_type,
-+		config_event_context_need_resched)) {
-+		ret = LTTNG_EVENT_CONTEXT_NEED_RESCHED;
-+	} else if (!strcmp((char *) context_type,
-+		config_event_context_migratable)) {
-+		ret = LTTNG_EVENT_CONTEXT_MIGRATABLE;
- 	} else {
- 		goto error;
- 	}
-diff --git a/src/common/lttng-kernel.h b/src/common/lttng-kernel.h
-index 9dd8df7..cce094c 100644
---- a/src/common/lttng-kernel.h
-+++ b/src/common/lttng-kernel.h
-@@ -54,6 +54,10 @@ enum lttng_kernel_context_type {
- 	LTTNG_KERNEL_CONTEXT_VPPID          = 9,
- 	LTTNG_KERNEL_CONTEXT_HOSTNAME       = 10,
- 	LTTNG_KERNEL_CONTEXT_CPU_ID         = 11,
-+	LTTNG_KERNEL_CONTEXT_INTERRUPTIBLE  = 12,
-+	LTTNG_KERNEL_CONTEXT_PREEMPTIBLE    = 13,
-+	LTTNG_KERNEL_CONTEXT_NEED_RESCHED   = 14,
-+	LTTNG_KERNEL_CONTEXT_MIGRATABLE     = 15,
- };
- 
- /* Perf counter attributes */
--- 
-1.9.1
+SGkgWmhlbnl1LAoKTFRUbmcgMi43LjAgaGFzIGludHJvZHVjZWQgZXZlbnQgbmFtZSB3aWxkY2Fy
+ZCBzdXBwb3J0IHRvIGtlcm5lbApzcGFjZS4gSW4geW91ciBzcGVjaWZpYyBjYXNlLCB0aGUgcmVh
+c29uIHlvdSBzZWUgdGhlIGNhbGwgc2VxdWVuY2UKYmVpbmcgc28gZGlmZmVyZW50IGlzIGJlY2F1
+c2Ugd2UgdXNlZCB0byBsaXN0IGFsbCBldmVudHMgYW5kIGVuYWJsZQp0aGVtIG9uZSBieSBvbmUu
+CgpOb3dhZGF5cywgd2Ugc2ltcGx5IHVzZSB0aGUgImVuYWJsZXJzIiBtZWNoYW5pc20sIHdoaWNo
+IGhhcyBiZWVuCmF2YWlsYWJsZSBvbiB0aGUgbHR0bmctdXN0IHNpZGUgZm9yIGEgd2hpbGUsIHRv
+IGVuYWJsZSBhbGwgZXZlbnRzCndoaWNoIG1hdGNoIHRoZSAiKiIgbmFtZS4KCkl0IGFwcGVhcnMg
+dGhhdCB5b3VyIG1vZGlmaWVkIGx0dG5nLW1vZHVsZXMgZXhwZWN0cyB0aGUgMi42LnggYmVoYXZp
+b3VyLgoKSsOpcsOpbWllCgpPbiBUdWUsIE5vdiAxMCwgMjAxNSBhdCAxMToxOCBQTSwgemhlbnl1
+LnJlbiA8emhlbnl1LnJlbkBhbGl5dW4uY29tPiB3cm90ZToKPiBIae+8jEdhbGFybmVhdQo+Cj4g
+ICAgIEl0IHNlZW1zIHRoYXQgLGZvciAiZW5hYmxlLWV2ZW50IC1rIC1hIiwgTHR0bmctMi43LjAg
+d2lsbCBjYWxsCj4ga2VybmN0bF9jcmVhdGVfZXZlbnQoKSB0byBkbyBhIExUVE5HX0tFUk5FTF9F
+VkVOVCBpb2N0bCBvcGVyYXRpb24gZm9yIHRoZQo+IGV2ZW50KCopKGluIGNtZF9lbmFibGVfZXZl
+bnQoKSkuIEhvd2V2ZXIsSW4gTHR0bmctMi42LjAsaXQgd2lsbCBmaXJzdCBjYWxsCj4ga2VybmVs
+X2xpc3RfZXZlbnRzKCkgdG8gZ2V0IGFsbCBrZW5lbCBldmVudHMgLCB0aGVuIGl0ZXJhdG9yIHRo
+ZSBsaXN0IGFuZAo+IGNhbGwga2VybmVsX2NyZWF0ZV9ldmVudCgpIGZvciBldmVyeSBldmVudChp
+bgo+IGV2ZW50X2tlcm5lbF9lbmFibGVfYWxsX3RyYWNlcG9pbnRzKCkpLiAgSXMgdGhhdCByaWdo
+dD8KPgo+ICAgIElzIHRoaXMgIiBXYXJuaW5nOiBFdmVudCAqIG5vdCBmb3VuZCEiIGFwcGVhcmVk
+IGluIHlvdXIgY2FzZS4KPgo+IFBTOm15IGtlcm5lbDogMi42LjMyLTIyMC4yMy4yLmVsNS54ODZf
+NjQoUkhFTDYpCj4gICAgICBMdHRuZy10b29sY2hhaW46Mi43LjAKPgo+IFRoYW5rcyBpbiBhZHZh
+bmNlCj4gemhlbnl1LnJlbgo+Cj4KPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiDlj5Hku7bkurrvvJp6aGVueXUucmVu
+IDx6aGVueXUucmVuQGFsaXl1bi5jb20+Cj4g5Y+R6YCB5pe26Ze077yaMjAxNeW5tDEx5pyIMTHm
+l6Uo5pif5pyf5LiJKSAxMDozNwo+IOaUtuS7tuS6uu+8mnpoZW55dS5yZW4gPHpoZW55dS5yZW5A
+YWxpeXVuLmNvbT7vvIxKw6lyw6ltaWUgR2FsYXJuZWF1Cj4gPGplcmVtaWUuZ2FsYXJuZWF1QGVm
+ZmljaW9zLmNvbT4KPiDmioTjgIDpgIHvvJpsdHRuZy1kZXYgPGx0dG5nLWRldkBsaXN0cy5sdHRu
+Zy5vcmc+Cj4g5Li744CA6aKY77ya562U5aSN77yaW2x0dG5nLWRldl0g562U5aSN77yaIDIuNy4w
+IG5vdCBzdXBwb3J0IGVuYWJsZS1ldmVudCAtayAtYQo+Cj4gU29ycnnvvIxmb3JnZXQgdG8gcG9z
+dCB0aGUgdmVyYm9zZSBsb2dzIG9mIGx0dG5nLXNlc3Npb25kLgo+Cj4gREVCVUczIC0gMTA6MDU6
+MzQuNDc2MDg3IFsxNTI2Mi8xNTI2Ml06IExvb2tpbmcgZm9yIGEga2VybmVsIGNvbnN1bWVyIGF0
+Cj4gdGhlc2UgbG9jYXRpb25zOiAoaW4gc3Bhd25fY29uc3VtZXJkKCkgYXQgbWFpbi5jOjI1MTYp
+Cj4gREVCVUczIC0gMTA6MDU6MzQuNDc2NTk1IFsxNTI2Mi8xNTI2Ml06ICAgICAgICAgMSkKPiAv
+dXNyL2xvY2FsL2xpYi9sdHRuZy9saWJleGVjL2x0dG5nLWNvbnN1bWVyZCAoaW4gc3Bhd25fY29u
+c3VtZXJkKCkgYXQKPiBtYWluLmM6MjUxNykKPiBERUJVRzMgLSAxMDowNTozNC40NzY2ODIgWzE1
+MjYyLzE1MjYyXTogICAgICAgICAyKQo+IC91c3IvbG9jYWwvbGliL2x0dG5nL2xpYmV4ZWMvbHR0
+bmctY29uc3VtZXJkIChpbiBzcGF3bl9jb25zdW1lcmQoKSBhdAo+IG1haW4uYzoyNTE4KQo+IERF
+QlVHMSAtIDEwOjA1OjM0LjQ3NjQ2MiBbMTQ1NDAvMTUyNjNdOiBbdGhyZWFkXSBNYW5hZ2UgY29u
+c3VtZXIgc3RhcnRlZCAoaW4KPiB0aHJlYWRfbWFuYWdlX2NvbnN1bWVyKCkgYXQgbWFpbi5jOjEy
+NDkpCj4gREVCVUczIC0gMTA6MDU6MzQuNDc2NzY1IFsxNTI2Mi8xNTI2Ml06ICAgICAgICAgMykg
+IChpbiBzcGF3bl9jb25zdW1lcmQoKSBhdAo+IG1haW4uYzoyNTE5KQo+IERFQlVHMyAtIDEwOjA1
+OjM0LjQ3NzY1OCBbMTUyNjIvMTUyNjJdOiBGb3VuZCBsb2NhdGlvbiAjMSAoaW4KPiBzcGF3bl9j
+b25zdW1lcmQoKSBhdCBtYWluLmM6MjUyMSkKPiBERUJVRzEgLSAxMDowNTozNC40Nzc3NDIgWzE1
+MjYyLzE1MjYyXTogVXNpbmcga2VybmVsIGNvbnN1bWVyIGF0Ogo+IC91c3IvbG9jYWwvbGliL2x0
+dG5nL2xpYmV4ZWMvbHR0bmctY29uc3VtZXJkIChpbiBzcGF3bl9jb25zdW1lcmQoKSBhdAo+IG1h
+aW4uYzoyNTM0KQo+IERFQlVHMiAtIDEwOjA1OjM0LjI3NTgyNyBbMTQ1NDAvMTUyNjNdOiBSZWNl
+aXZpbmcgY29kZSBmcm9tIGNvbnN1bWVyCj4gZXJyX3NvY2sgKGluIHRocmVhZF9tYW5hZ2VfY29u
+c3VtZXIoKSBhdCBtYWluLmM6MTM0NykKPiBERUJVRzEgLSAxMDowNTozNC4zNzY1MjMgWzE0NTQw
+LzE1MjYzXTogQ29uc3VtZXIgY29tbWFuZCBzb2NrZXQgcmVhZHkgKGZkOgo+IDM3IChpbiB0aHJl
+YWRfbWFuYWdlX2NvbnN1bWVyKCkgYXQgbWFpbi5jOjEzODEpCj4gREVCVUcxIC0gMTA6MDU6MzQu
+Mzc2NTU0IFsxNDU0MC8xNTI2M106IENvbnN1bWVyIG1ldGFkYXRhIHNvY2tldCByZWFkeSAoZmQ6
+Cj4gMzgpIChpbiB0aHJlYWRfbWFuYWdlX2NvbnN1bWVyKCkgYXQgbWFpbi5jOjEzODMpCj4gREVC
+VUczIC0gMTA6MDU6MzQuMzc2NTQ1IFsxNDU0MC8xNDYwMV06IENvbnN1bWVyIHNvY2tldCBjcmVh
+dGVkIChmZDogMzcpIGFuZAo+IGFkZGVkIHRvIG91dHB1dCAoaW4gY29uc3VtZXJfY3JlYXRlX3Nv
+Y2tldCgpIGF0IGNvbnN1bWVyLmM6MzAyKQo+IERFQlVHMSAtIDEwOjA1OjM0LjM3NjU4NSBbMTQ1
+NDAvMTQ2MDFdOiBTZXR0aW5nIHJlbGF5ZCBmb3Igc2Vzc2lvbgo+IGtlcm5lbF90ZXN0IChpbiBj
+bWRfc2V0dXBfcmVsYXlkKCkgYXQgY21kLmM6NzYxKQo+IERFQlVHMSAtIDEwOjA1OjM0LjM3NjU5
+OSBbMTQ1NDAvMTQ2MDFdOiBFbmFibGUgZXZlbnQgY29tbWFuZCBmb3IgZXZlbnQgJyonCj4gKGlu
+IF9jbWRfZW5hYmxlX2V2ZW50KCkgYXQgY21kLmM6MTUyNCkKPiBERUJVRzEgLSAxMDowNTozNC4z
+NzY2MTkgWzE0NTQwLzE0NjAxXTogVHJ5aW5nIHRvIGZpbmQgY2hhbm5lbCBjaGFubmVsMCAoaW4K
+PiB0cmFjZV9rZXJuZWxfZ2V0X2NoYW5uZWxfYnlfbmFtZSgpIGF0IHRyYWNlLWtlcm5lbC5jOjQ5
+KQo+IERFQlVHMSAtIDEwOjA1OjM0LjM3NjY1MiBbMTQ1NDAvMTQ2MDFdOiBFbmFibGluZyBjaGFu
+bmVsICBmb3Igc2Vzc2lvbgo+IGtlcm5lbF90ZXN0IChpbiBjbWRfZW5hYmxlX2NoYW5uZWwoKSBh
+dCBjbWQuYzoxMDU0KQo+IERFQlVHMSAtIDEwOjA1OjM0LjM3NjY2MiBbMTQ1NDAvMTQ2MDFdOiBU
+cnlpbmcgdG8gZmluZCBjaGFubmVsIGNoYW5uZWwwIChpbgo+IHRyYWNlX2tlcm5lbF9nZXRfY2hh
+bm5lbF9ieV9uYW1lKCkgYXQgdHJhY2Uta2VybmVsLmM6NDkpCj4gREVCVUczIC0gMTA6MDU6MzQu
+Mzc2Njc5IFsxNDU0MC8xNDYwMV06IEtlcm5lbCBjcmVhdGUgY2hhbm5lbCAgd2l0aCBhdHRyOiAw
+LAo+IDI2MjE0NCwgNCwgMCwgMjAwMDAwLCAwLCAwIChpbiBrZXJuZWxfY3JlYXRlX2NoYW5uZWwo
+KSBhdCBrZXJuZWwuYzoxNDApCj4gREVCVUcxIC0gMTA6MDU6MzUuNzQ0MzkzIFsxNDU0MC8xNDYw
+MV06IEtlcm5lbCBjaGFubmVsIGNoYW5uZWwwIGNyZWF0ZWQgKGZkOgo+IDM5KSAoaW4ga2VybmVs
+X2NyZWF0ZV9jaGFubmVsKCkgYXQga2VybmVsLmM6MTYyKQo+IERFQlVHMSAtIDEwOjA1OjM1Ljc0
+NDk3MiBbMTQ1NDAvMTQ2MDFdOiBLZXJuZWwgcXVpZXNjZW50IHdhaXQgb24gMTMgKGluCj4ga2Vy
+bmVsX3dhaXRfcXVpZXNjZW50KCkgYXQga2VybmVsLmM6NTcwKQo+IERFQlVHMSAtIDEwOjA1OjM1
+Ljc0NTA1MyBbMTQ1NDAvMTQ2MDddOiBUaHJlYWQga2VybmVsIHJldHVybiBmcm9tIHBvbGwgb24g
+Mgo+IGZkcyAoaW4gdGhyZWFkX21hbmFnZV9rZXJuZWwoKSBhdCBtYWluLmM6MTEyNykKPiBERUJV
+RzEgLSAxMDowNTozNS43NDU3ODkgWzE0NTQwLzE0NjA3XTogVXBkYXRpbmcga2VybmVsIHBvbGwg
+c2V0IChpbgo+IHVwZGF0ZV9rZXJuZWxfcG9sbCgpIGF0IG1haW4uYzo5MTApCj4gREVCVUcxIC0g
+MTA6MDU6MzUuODUzNDU0IFsxNDU0MC8xNDYwMV06IFRyeWluZyB0byBmaW5kIGNoYW5uZWwgY2hh
+bm5lbDAgKGluCj4gdHJhY2Vfa2VybmVsX2dldF9jaGFubmVsX2J5X25hbWUoKSBhdCB0cmFjZS1r
+ZXJuZWwuYzo0OSkKPiBERUJVRzEgLSAxMDowNTozNS44NTM4MzkgWzE0NTQwLzE0NjAxXTogRm91
+bmQgY2hhbm5lbCBieSBuYW1lIGNoYW5uZWwwIChpbgo+IHRyYWNlX2tlcm5lbF9nZXRfY2hhbm5l
+bF9ieV9uYW1lKCkgYXQgdHJhY2Uta2VybmVsLmM6NTMpCj4gV2FybmluZzogRXZlbnQgKiBub3Qg
+Zm91bmQhCj4gREVCVUczIC0gMTA6MDU6MzUuODU0ODM4IFsxNDU0MC8xNDYwMV06IEtlcm5lbCBk
+ZXN0cm95IGNoYW5uZWwgY2hhbm5lbDAgKGluCj4ga2VybmVsX2Rlc3Ryb3lfY2hhbm5lbCgpIGF0
+IGtlcm5lbC5jOjk1NikKPiBERUJVRzEgLSAxMDowNTozNS44NTQ5MzcgWzE0NTQwLzE0NjAxXTog
+W3RyYWNlXSBDbG9zaW5nIGNoYW5uZWwgZmQgMzkgKGluCj4gdHJhY2Vfa2VybmVsX2Rlc3Ryb3lf
+Y2hhbm5lbCgpIGF0IHRyYWNlLWtlcm5lbC5jOjQ4MikKPiBERUJVRzEgLSAxMDowNTozNS44NTUx
+NjAgWzE0NTQwLzE0NjAxXTogU2VuZGluZyByZXNwb25zZSAoc2l6ZTogMTYsIHJldGNvZGU6Cj4g
+RW5hYmxlIGtlcm5lbCBldmVudCBmYWlsZWQpIChpbiB0aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBh
+dCBtYWluLmM6NDQ1NikKPiBERUJVRzEgLSAxMDowNTozNS44NTUyNjkgWzE0NTQwLzE0NjA3XTog
+VGhyZWFkIGtlcm5lbCBwb2xsaW5nIChpbgo+IHRocmVhZF9tYW5hZ2Vfa2VybmVsKCkgYXQgbWFp
+bi5jOjExMjApCj4gREVCVUcxIC0gMTA6MDU6MzUuODU1NDg1IFsxNDU0MC8xNDYwMV06IENsZWFu
+IGNvbW1hbmQgY29udGV4dCBzdHJ1Y3R1cmUgKGluCj4gY2xlYW5fY29tbWFuZF9jdHgoKSBhdCBt
+YWluLmM6ODI5KQo+IERFQlVHMSAtIDEwOjA1OjM1Ljg1NjAxMCBbMTQ1NDAvMTQ2MDFdOiBBY2Nl
+cHRpbmcgY2xpZW50IGNvbW1hbmQgLi4uIChpbgo+IHRocmVhZF9tYW5hZ2VfY2xpZW50cygpIGF0
+IG1haW4uYzo0MzEwKQo+IEVycm9yOiBFdmVudHM6IEVuYWJsZSBrZXJuZWwgZXZlbnQgZmFpbGVk
+IChjaGFubmVsIGNoYW5uZWwwLCBzZXNzaW9uCj4ga2VybmVsX3Rlc3QpCj4gRXJyb3I6IENvbW1h
+bmQgZXJyb3IKPgo+IElzIHRoZXJlIGFueSBhZHZpY2UgPwo+Cj4gVGhhbmtzCj4gemhlbnl1LnJl
+bgo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLQo+IOWPkeS7tuS6uu+8mnpoZW55dS5yZW4gPHpoZW55dS5yZW5AYWxpeXVu
+LmNvbT4KPiDlj5HpgIHml7bpl7TvvJoyMDE15bm0MTHmnIgxMeaXpSjmmJ/mnJ/kuIkpIDA5OjMy
+Cj4g5pS25Lu25Lq677yaSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1pZS5nYWxhcm5lYXVAZWZm
+aWNpb3MuY29tPgo+IOaKhOOAgOmAge+8mmx0dG5nLWRldiA8bHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZz4KPiDkuLvjgIDpopjvvJpbbHR0bmctZGV2XSDnrZTlpI3vvJogMi43LjAgbm90IHN1cHBv
+cnQgZW5hYmxlLWV2ZW50IC1rIC1hCj4KPiAgIEluIGZhY3QsIEkgbWFkZSBzb21lIGNoYW5nZXMg
+aW4gbHR0bmcgdG9vbGNoYWluKG1vZHVsZS90b29sL3VzdCkgdG8KPiBzdXBwb3J0IG9sZGVyIGtl
+cm5lbC9PUy5UaGVzZSBjaGFuZ2VzIGFyZSBPSyBmb3IgTHR0bmcgMi42IC5TaW5jZSB5b3UgYXJl
+Cj4gc3VyZSAiZW5hYmxlLWV2ZW50IC1rIC1hIiBoYXMgbm8gcHJvYmxlbSxpdCdzIG1vcmUgY2hh
+bmNlIHRoYXQgSSBtYWRlIHNvbWUKPiBpbmFwcHJvcHJpYXRlIGNoYW5nZXMuCj4KPgo+IFRoYW5r
+cwo+IHpoZW55dS5yZW4KPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiDlj5Hku7bkurrvvJpKw6lyw6ltaWUgR2FsYXJu
+ZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Cj4g5Y+R6YCB5pe26Ze077yaMjAx
+NeW5tDEx5pyIMTDml6Uo5pif5pyf5LqMKSAyMzowOQo+IOaUtuS7tuS6uu+8mnpoZW55dS5yZW4g
+PHpoZW55dS5yZW5AYWxpeXVuLmNvbT4KPiDmioTjgIDpgIHvvJpsdHRuZy1kZXYgPGx0dG5nLWRl
+dkBsaXN0cy5sdHRuZy5vcmc+77yMSm9uYXRoYW4gUmFqb3R0ZSBKdWxpZW4KPiA8Sm9uYXRoYW4u
+cmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPgo+IOS4u+OAgOmimO+8mlJlOiBbbHR0bmctZGV2
+XSAyLjcuMCBub3Qgc3VwcG9ydCBlbmFibGUtZXZlbnQgLWsgLWEKPgo+IE9uIFR1ZSwgTm92IDEw
+LCAyMDE1IGF0IDEwOjAyIEFNLCBKb25hdGhhbiBSYWpvdHRlIEp1bGllbgo+IDxKb25hdGhhbi5y
+YWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+IHdyb3RlOgo+PiBIaSBaaGVueXUsCj4+Cj4+IEkg
+anVzdCB0ZXN0ZWQgaXQgb24gYSBVYnVudHUgMTUuMTAgd2l0aCBrZXJuZWwgNC4yLjMgd2l0aCBu
+byBwcm9ibGVtLgo+Pgo+PiBEaWQgeW91IGluc3RhbGwgZnJvbSBzb3VyY2UvcHBhID8gQ291bGQg
+eW91IGdpdmUgdXMgYWxsIHRoZSBzdGVwcyBpbnZvbHZlZAo+PiA/Cj4+Cj4+IE1ha2Ugc3VyZSB0
+byBnbyBvdmVyIFsxXSB0byBoZWxwIHVzIHBpbnBvaW50IHRoZSBwcm9ibGVtLgo+Pgo+PiBbMV0g
+aHR0cHM6Ly9sdHRuZy5vcmcvY29tbXVuaXR5LyNidWctcmVwb3J0aW5nLWd1aWRlbGluZXMKPgo+
+IE1ha2Ugc3VyZSB5b3UgaW5jbHVkZSB0aGUgdmVyYm9zZSBsb2dzIG9mIHRoZSBzZXNzaW9uIGRh
+ZW1vbiBieQo+IGxhdW5jaGluZyBpdCB3aXRoIHRoZSAnLXZ2dicgc3dpdGNoLgo+IEFsc28sIHBs
+ZWFzZSBjaGVjayB0aGF0IHlvdXIgbHR0bmctbW9kdWxlcyB2ZXJzaW9uIG1hdGNoZXMgdGhlIHJl
+c3Qgb2YKPiB0aGUgdG9vbGNoYWluICh2Mi43LngpCj4KPiBUaGFua3MhCj4gSsOpcsOpbWllCj4K
+Pj4KPj4gQ2hlZXJzIQo+Pgo+Pgo+PiBPbiAyMDE1LTExLTEwIDAzOjE3IEFNLCB6aGVueXUucmVu
+IHdyb3RlOgo+Pj4KPj4+IEhpLGRldi10ZWFtCj4+Pgo+Pj4gICAgSSBnb3QgdGhlIGZvbGxvd2lu
+ZyBlcnJvcyB3aGVuIEkgcnVuIHRoZSBjb21tZCA6bHR0bmcgZW5hYmxlLWV2ZW50IC1rCj4+PiAt
+YQo+Pj4gIkVycm9yOiBFdmVudHM6IEVuYWJsZSBrZXJuZWwgZXZlbnQgZmFpbGVkIChjaGFubmVs
+IGNoYW5uZWwwLCBzZXNzaW9uCj4+PiBrZXJuZWxfdGVzdCkKPj4+IEVycm9yOiBDb21tYW5kIGVy
+cm9yIgo+Pj4gICBJdCBzZWVtcyB0aGF0IExUVE5HLTIuNy4wIGRvIE5PVCBzdXBwb3J0IGVuYWJs
+ZS1ldmVudCBvcHRpb24gIi0tYWxsIi4KPj4+IElzCj4+PiB0aGF0IHJpZ2h0P0lmIHdvICx3aGF0
+J3MgdGhlIGlkZWEgYmVoaW5kIGl0Pwo+Pj4KPj4+IFRoYW5rcwo+Pj4gemhlbnl1LnJlbgo+Pj4K
+Pj4+Cj4+Pgo+Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KPj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
+cmcKPj4+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
+dG5nLWRldgo+Pgo+Pgo+PiAtLQo+PiBKb25hdGhhbiBSLiBKdWxpZW4KPj4gRWZmaWNpb3MKPj4K
+Pj4KPj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4g
+bHR0bmctZGV2IG1haWxpbmcgbGlzdAo+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+IGh0
+dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+
+Cj4KPgo+IC0tCj4gSsOpcsOpbWllIEdhbGFybmVhdQo+IEVmZmljaU9TIEluYy4KPiBodHRwOi8v
+d3d3LmVmZmljaW9zLmNvbQo+Cj4KPgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lP
+UyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBs
+aXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2Cg==
