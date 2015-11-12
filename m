@@ -1,19 +1,17 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+From: Yves Junior Bationo <yves-junior.bationo@polymtl.ca>
 Subject: Re: Help-lttng-ust-pyhton
-Date: Thu, 12 Nov 2015 10:20:00 -0500
-Message-ID: <CA+jJMxvgz2D=ga+7fC4FTdnJ0obQLz1K38G7sUrnuqhCMKXg7g__3817.87103037841$1447341672$gmane$org@mail.gmail.com>
+Date: Thu, 12 Nov 2015 16:43:32 +0000
+Message-ID: <20151112164332.Horde.29NGfz3UJ4wgzaNFRJRqxf-__47793.9983750277$1447351831$gmane$org@www.imp.polymtl.ca>
 References: <20151106225909.Horde.ZKUBbt2vnWaMa-0QDzy6txy@www.imp.polymtl.ca>
+ <CA+jJMxvgz2D=ga+7fC4FTdnJ0obQLz1K38G7sUrnuqhCMKXg7g@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="=_dwB6V-bWqYsYJ17OkE7w67_"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f173.google.com ([209.85.160.173])
+Received: from smtp.polymtl.ca ([132.207.4.11])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZwtfR-00047V-W4
- for lttng-dev@lists.lttng.org; Thu, 12 Nov 2015 10:20:15 -0500
-Received: by ykdr82 with SMTP id r82so97854057ykd.3
- for <lttng-dev@lists.lttng.org>; Thu, 12 Nov 2015 07:20:00 -0800 (PST)
-In-Reply-To: <20151106225909.Horde.ZKUBbt2vnWaMa-0QDzy6txy@www.imp.polymtl.ca>
+ (envelope-from <yves-junior.bationo@polymtl.ca>) id 1Zwuy3-0004YS-CP
+ for lttng-dev@lists.lttng.org; Thu, 12 Nov 2015 11:43:27 -0500
+In-Reply-To: <CA+jJMxvgz2D=ga+7fC4FTdnJ0obQLz1K38G7sUrnuqhCMKXg7g@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,70 +20,208 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yves Junior Bationo <yves-junior.bationo@polymtl.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Philippe Proulx <philippe.proulx@efficios.com>
+To: =?utf-8?b?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org, Philippe Proulx <philippe.proulx@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-MjAxNS0xMS0wNiAxNzo1OSBHTVQtMDU6MDAgWXZlcyBKdW5pb3IgQmF0aW9ubyA8eXZlcy1qdW5p
-b3IuYmF0aW9ub0Bwb2x5bXRsLmNhPjoKPgo+IGonYWkgdW4gc291Y2kgYXZlYyBsbHRuZ3VzdCBw
-b3VyIGxlcyBhcHBsaWNhdGlvbiBweXRob24KPiBQb3VyIGwnZXhlbXBsZSBkZSBsYSBEb2MKPiAg
-ICAgICAgIGh0dHBzOi8vbHR0bmcub3JnL2RvY3MvI2RvYy1weXRob24tYXBwbGljYXRpb24KPiBq
-J2FpIGwnZXJyZXVyOgo+ICAgICAgICAgTm8gaGFuZGxlcnMgY291bGQgYmUgZm91bmQgZm9yIGxv
-Z2dlciAiaGVsbG8tbG9nZ2VyIgo+CgpIaSBZdmVzLAoKV2UgdHJ5IHRvIHN0aWNrIHRvIEVuZ2xp
-c2ggb24gdGhpcyBtYWlsaW5nIGxpc3Qgc28gdGhlIHF1ZXN0aW9ucyBhbmQKYW5zd2VycyByZW1h
-aW4gZWFzaWx5IHNlYXJjaGFibGUuCgpUaGUgZXhhbXBsZSBpbiB0aGUgZG9jcyB1c2VzICJ0aW1l
-IiB3aXRob3V0IGltcG9ydGluZyBpdCwgSSBoYXZlIHNlbnQKYSBQdWxsIFJlcXVlc3QgdG8gYWRk
-cmVzcyB0aGF0LgpIb3dldmVyLCBhZGRyZXNzaW5nIHRoZSBwcm9ibGVtIHlvdSBhcmUgZW5jb3Vu
-dGVyaW5nLCB3aGVyZSBkb2VzCiJoZWxsby1sb2dnZXIiIGNvbWUgZnJvbT8KCkNhbiB5b3UgcG9z
-dCB0aGUgY29kZSBhbmQgdmVyc2lvbnMgb2YgdGhlIGNvbXBvbmVudHMgeW91IGFyZSB1c2luZz8K
-ClRoYW5rcywKSsOpcsOpbWllCgoKPiBsYSBjb21tYW5kZSAibHR0bmcgbGlzdCAtdSAtYSIgbWUg
-cmV0b3VybmUgYmllbiBsYSBsaXN0ZSBkZXMgdHJhY2UgcG9pbnQ6Cj4KPiAgICAgICAgIFBJRDog
-NTIyOCAtIE5hbWU6IHB5dGhvbgo+ICAgICAgIGx0dG5nX3B5dGhvbjpldmVudCAobG9nbGV2ZWw6
-IFRSQUNFX0RFQlVHX0xJTkUgKDEzKSkgKHR5cGU6Cj4gdHJhY2Vwb2ludCkKPiAgICAgICBsdHRu
-Z191c3RfdHJhY2Vsb2c6VFJBQ0VfREVCVUcgKGxvZ2xldmVsOiBUUkFDRV9ERUJVRyAoMTQpKSAo
-dHlwZToKPiB0cmFjZXBvaW50KQo+ICAgICAgIGx0dG5nX3VzdF90cmFjZWxvZzpUUkFDRV9ERUJV
-R19MSU5FIChsb2dsZXZlbDogVFJBQ0VfREVCVUdfTElORSAoMTMpKQo+ICh0eXBlOiB0cmFjZXBv
-aW50KQo+ICAgICAgIGx0dG5nX3VzdF90cmFjZWxvZzpUUkFDRV9ERUJVR19GVU5DVElPTiAobG9n
-bGV2ZWw6Cj4gVFJBQ0VfREVCVUdfRlVOQ1RJT04gKDEyKSkgKHR5cGU6IHRyYWNlcG9pbnQpCj4g
-ICAgICAgbHR0bmdfdXN0X3RyYWNlbG9nOlRSQUNFX0RFQlVHX1VOSVQgKGxvZ2xldmVsOiBUUkFD
-RV9ERUJVR19VTklUICgxMSkpCj4gKHR5cGU6IHRyYWNlcG9pbnQpCj4gICAgICAgbHR0bmdfdXN0
-X3RyYWNlbG9nOlRSQUNFX0RFQlVHX01PRFVMRSAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHX01PRFVM
-RQo+ICgxMCkpICh0eXBlOiB0cmFjZXBvaW50KQo+ICAgICAgIGx0dG5nX3VzdF90cmFjZWxvZzpU
-UkFDRV9ERUJVR19QUk9DRVNTIChsb2dsZXZlbDogVFJBQ0VfREVCVUdfUFJPQ0VTUwo+ICg5KSkg
-KHR5cGU6IHRyYWNlcG9pbnQpCj4gICAgICAgbHR0bmdfdXN0X3RyYWNlbG9nOlRSQUNFX0RFQlVH
-X1BST0dSQU0gKGxvZ2xldmVsOiBUUkFDRV9ERUJVR19QUk9HUkFNCj4gKDgpKSAodHlwZTogdHJh
-Y2Vwb2ludCkKPiAgICAgICBsdHRuZ191c3RfdHJhY2Vsb2c6VFJBQ0VfREVCVUdfU1lTVEVNIChs
-b2dsZXZlbDogVFJBQ0VfREVCVUdfU1lTVEVNCj4gKDcpKSAodHlwZTogdHJhY2Vwb2ludCkKPiAg
-ICAgICBsdHRuZ191c3RfdHJhY2Vsb2c6VFJBQ0VfSU5GTyAobG9nbGV2ZWw6IFRSQUNFX0lORk8g
-KDYpKSAodHlwZToKPiB0cmFjZXBvaW50KQo+ICAgICAgIGx0dG5nX3VzdF90cmFjZWxvZzpUUkFD
-RV9OT1RJQ0UgKGxvZ2xldmVsOiBUUkFDRV9OT1RJQ0UgKDUpKSAodHlwZToKPiB0cmFjZXBvaW50
-KQo+ICAgICAgIGx0dG5nX3VzdF90cmFjZWxvZzpUUkFDRV9XQVJOSU5HIChsb2dsZXZlbDogVFJB
-Q0VfV0FSTklORyAoNCkpICh0eXBlOgo+IHRyYWNlcG9pbnQpCj4gICAgICAgbHR0bmdfdXN0X3Ry
-YWNlbG9nOlRSQUNFX0VSUiAobG9nbGV2ZWw6IFRSQUNFX0VSUiAoMykpICh0eXBlOgo+IHRyYWNl
-cG9pbnQpCj4gICAgICAgbHR0bmdfdXN0X3RyYWNlbG9nOlRSQUNFX0NSSVQgKGxvZ2xldmVsOiBU
-UkFDRV9DUklUICgyKSkgKHR5cGU6Cj4gdHJhY2Vwb2ludCkKPiAgICAgICBsdHRuZ191c3RfdHJh
-Y2Vsb2c6VFJBQ0VfQUxFUlQgKGxvZ2xldmVsOiBUUkFDRV9BTEVSVCAoMSkpICh0eXBlOgo+IHRy
-YWNlcG9pbnQpCj4gICAgICAgbHR0bmdfdXN0X3RyYWNlbG9nOlRSQUNFX0VNRVJHIChsb2dsZXZl
-bDogVFJBQ0VfRU1FUkcgKDApKSAodHlwZToKPiB0cmFjZXBvaW50KQo+ICAgICAgIGx0dG5nX3Vz
-dF90cmFjZWY6ZXZlbnQgKGxvZ2xldmVsOiBUUkFDRV9ERUJVRyAoMTQpKSAodHlwZTogdHJhY2Vw
-b2ludCkKPiAgICAgICBsdHRuZ191c3Rfc3RhdGVkdW1wOmVuZCAobG9nbGV2ZWw6IFRSQUNFX0RF
-QlVHX0xJTkUgKDEzKSkgKHR5cGU6Cj4gdHJhY2Vwb2ludCkKPiAgICAgICBsdHRuZ191c3Rfc3Rh
-dGVkdW1wOmRlYnVnX2xpbmsgKGxvZ2xldmVsOiBUUkFDRV9ERUJVR19MSU5FICgxMykpCj4gKHR5
-cGU6IHRyYWNlcG9pbnQpCj4gICAgICAgbHR0bmdfdXN0X3N0YXRlZHVtcDpidWlsZF9pZCAobG9n
-bGV2ZWw6IFRSQUNFX0RFQlVHX0xJTkUgKDEzKSkgKHR5cGU6Cj4gdHJhY2Vwb2ludCkKPiAgICAg
-ICBsdHRuZ191c3Rfc3RhdGVkdW1wOnNvaW5mbyAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHX0xJTkUg
-KDEzKSkgKHR5cGU6Cj4gdHJhY2Vwb2ludCkKPiAgICAgICBsdHRuZ191c3Rfc3RhdGVkdW1wOnN0
-YXJ0IChsb2dsZXZlbDogVFJBQ0VfREVCVUdfTElORSAoMTMpKSAodHlwZToKPiB0cmFjZXBvaW50
-KQo+Cj4gTWFpcyBwYXMgZGUgcmVzdWx0YXRzIGRhbnMgbGUgcmVwZXJ0b2lyZSBkZXMgZXZlbmVt
-ZW50cyBsb3JzcXVlIGonYWN0aXZlIGxlCj4gdHJhY2FnZSBsdHRuZy4KPgo+IFJlc3Vtw6kKPiAg
-ICAgICAgIFByb2JsZW1lIDEgOk5vIGhhbmRsZXJzIGNvdWxkIGJlIGZvdW5kIGZvciBsb2dnZXIK
-PiAgICAgICAgICAgICAgICAgamUgY3JveWFpcyBxdWUgImltcG9ydCBsdHRuZ3VzdCIgZGV2YWl0
-IGdlcmVyIGNldHRlCj4gc2l0dWF0aW9uCj4KPiAgICAgICAgIFByb2JsZW1lIDI6IHBhcyBkZSBy
-ZXN1bHRhdHMgYXUgdHJhY2FnZQo+IE1lcmNpLgo+Cj4KPgo+Cj4KPiBfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
-YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1
-CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
-bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
-bG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+This message is in MIME format.
+
+--=_dwB6V-bWqYsYJ17OkE7w67_
+Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-MIME-Autoconverted: from 8bit to quoted-printable by smtp.polymtl.ca id tACI7Tkc004566
+
+Hi, i my script i just change "my-logger" by "hello-logger" (hello.py =20
+in attachment).
+I try to figure out the probem by
+		export LTTNG_UST_PYTHON_DEBUG=3D1
+and i found this:
+#####
+[0.019155] LTTng-UST debug: <module>(): debug is enabled
+[0.024447] LTTng-UST debug: _init_threads(): entering
+[0.024710] LTTng-UST debug: _get_port_from_file(): reading port from =20
+file "/var/run/lttng/agent.port"
+[0.025745] LTTng-UST debug: _get_port_from_file(): reading port from =20
+file "/root/.lttng/agent.port"
+[0.025942] LTTng-UST debug: _init_threads(): system session daemon port: =
+5345
+[0.026117] LTTng-UST debug: _init_threads(): user session daemon port: No=
+ne
+[0.026280] LTTng-UST debug: _init_threads(): creating system client threa=
+d
+[0.026762] LTTng-UST debug: _init_threads(): created and started =20
+system client thread
+[0.026973] LTTng-UST debug: _init_threads(): waiting for registration =20
+done (expecting 1, timeout is 5.0 s)
+[0.027721] LTTng-UST debug: _client_thread_target(): creating client =20
+"system" using TCP port 5345
+[0.029745] LTTng-UST debug: _client_thread_target(): starting client "sys=
+tem"
+[0.029896] LTTng-UST debug: run(): client "system": connecting to =20
+session daemon
+[0.030117] LTTng-UST debug: run(): client "system": registering to =20
+session daemon
+[0.030370] LTTng-UST debug: _recv_server_cmd_header(): client =20
+"system": received empty server command header
+[0.030532] LTTng-UST debug: _handle_server_cmd(): client "system": bad =20
+server command
+[0.030667] LTTng-UST debug: run(): client "system": got exception: =20
+'module' object has no attribute '_ClientCmdReply'
+####
+You can see 'bad server command' and 'exception' in the last lines.
+
+J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@efficios.com> a =C3=A9crit=
+=C2=A0:
+
+> 2015-11-06 17:59 GMT-05:00 Yves Junior Bationo =20
+> <yves-junior.bationo@polymtl.ca>:
+>>
+>> j'ai un souci avec lltngust pour les application python
+>> Pour l'exemple de la Doc
+>>         https://lttng.org/docs/#doc-python-application
+>> j'ai l'erreur:
+>>         No handlers could be found for logger "hello-logger"
+>>
+>
+> Hi Yves,
+>
+> We try to stick to English on this mailing list so the questions and
+> answers remain easily searchable.
+>
+> The example in the docs uses "time" without importing it, I have sent
+> a Pull Request to address that.
+> However, addressing the problem you are encountering, where does
+> "hello-logger" come from?
+>
+> Can you post the code and versions of the components you are using?
+>
+> Thanks,
+> J=C3=A9r=C3=A9mie
+>
+>
+>> la commande "lttng list -u -a" me retourne bien la liste des trace poi=
+nt:
+>>
+>>         PID: 5228 - Name: python
+>>       lttng_python:event (loglevel: TRACE_DEBUG_LINE (13)) (type:
+>> tracepoint)
+>>       lttng_ust_tracelog:TRACE_DEBUG (loglevel: TRACE_DEBUG (14)) (typ=
+e:
+>> tracepoint)
+>>       lttng_ust_tracelog:TRACE_DEBUG_LINE (loglevel: TRACE_DEBUG_LINE =
+(13))
+>> (type: tracepoint)
+>>       lttng_ust_tracelog:TRACE_DEBUG_FUNCTION (loglevel:
+>> TRACE_DEBUG_FUNCTION (12)) (type: tracepoint)
+>>       lttng_ust_tracelog:TRACE_DEBUG_UNIT (loglevel: TRACE_DEBUG_UNIT =
+(11))
+>> (type: tracepoint)
+>>       lttng_ust_tracelog:TRACE_DEBUG_MODULE (loglevel: TRACE_DEBUG_MOD=
+ULE
+>> (10)) (type: tracepoint)
+>>       lttng_ust_tracelog:TRACE_DEBUG_PROCESS (loglevel: TRACE_DEBUG_PR=
+OCESS
+>> (9)) (type: tracepoint)
+>>       lttng_ust_tracelog:TRACE_DEBUG_PROGRAM (loglevel: TRACE_DEBUG_PR=
+OGRAM
+>> (8)) (type: tracepoint)
+>>       lttng_ust_tracelog:TRACE_DEBUG_SYSTEM (loglevel: TRACE_DEBUG_SYS=
+TEM
+>> (7)) (type: tracepoint)
+>>       lttng_ust_tracelog:TRACE_INFO (loglevel: TRACE_INFO (6)) (type:
+>> tracepoint)
+>>       lttng_ust_tracelog:TRACE_NOTICE (loglevel: TRACE_NOTICE (5)) (ty=
+pe:
+>> tracepoint)
+>>       lttng_ust_tracelog:TRACE_WARNING (loglevel: TRACE_WARNING (4)) (=
+type:
+>> tracepoint)
+>>       lttng_ust_tracelog:TRACE_ERR (loglevel: TRACE_ERR (3)) (type:
+>> tracepoint)
+>>       lttng_ust_tracelog:TRACE_CRIT (loglevel: TRACE_CRIT (2)) (type:
+>> tracepoint)
+>>       lttng_ust_tracelog:TRACE_ALERT (loglevel: TRACE_ALERT (1)) (type=
+:
+>> tracepoint)
+>>       lttng_ust_tracelog:TRACE_EMERG (loglevel: TRACE_EMERG (0)) (type=
+:
+>> tracepoint)
+>>       lttng_ust_tracef:event (loglevel: TRACE_DEBUG (14)) (type: trace=
+point)
+>>       lttng_ust_statedump:end (loglevel: TRACE_DEBUG_LINE (13)) (type:
+>> tracepoint)
+>>       lttng_ust_statedump:debug_link (loglevel: TRACE_DEBUG_LINE (13))
+>> (type: tracepoint)
+>>       lttng_ust_statedump:build_id (loglevel: TRACE_DEBUG_LINE (13)) (=
+type:
+>> tracepoint)
+>>       lttng_ust_statedump:soinfo (loglevel: TRACE_DEBUG_LINE (13)) (ty=
+pe:
+>> tracepoint)
+>>       lttng_ust_statedump:start (loglevel: TRACE_DEBUG_LINE (13)) (typ=
+e:
+>> tracepoint)
+>>
+>> Mais pas de resultats dans le repertoire des evenements lorsque j'acti=
+ve le
+>> tracage lttng.
+>>
+>> Resum=C3=A9
+>>         Probleme 1 :No handlers could be found for logger
+>>                 je croyais que "import lttngust" devait gerer cette
+>> situation
+>>
+>>         Probleme 2: pas de resultats au tracage
+>> Merci.
+>>
+>>
+>>
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
+>
+> --
+> J=C3=A9r=C3=A9mie Galarneau
+> EfficiOS Inc.
+> http://www.efficios.com
+
+
+--=_dwB6V-bWqYsYJ17OkE7w67_
+Content-Type: text/x-java; name=hello.py
+Content-Disposition: attachment; size=378; filename=hello.py
+
+import lttngust
+import logging
+import time
+
+def example():
+    logger = logging.getLogger('hello-logger')
+
+    while True:
+        logger.debug('debug message')
+        logger.info('info message')
+        logger.warn('warn message')
+        logger.error('error message')
+        logger.critical('critical message')
+        time.sleep(1)
+
+if __name__ == '__main__':
+    example()
+--=_dwB6V-bWqYsYJ17OkE7w67_
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--=_dwB6V-bWqYsYJ17OkE7w67_--
