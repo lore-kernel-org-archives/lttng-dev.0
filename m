@@ -1,23 +1,24 @@
-From: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+From: Yves Junior Bationo <yves-junior.bationo@polymtl.ca>
 Subject: Re: Help-lttng-ust-pyhton
-Date: Fri, 13 Nov 2015 11:21:28 -0500
-Message-ID: <CAF4oYfG6VaGS62MF_D83ojtZVbUo9+7KXr7Y+yUeVsY7eCb-BA__2881.33769431642$1447431758$gmane$org@mail.gmail.com>
+Date: Fri, 13 Nov 2015 18:02:59 +0000
+Message-ID: <20151113180259.Horde.tR4p6Ox7ACO6FQd18AjFiJA__12676.7038870186$1447437848$gmane$org@www.imp.polymtl.ca>
 References: <20151106225909.Horde.ZKUBbt2vnWaMa-0QDzy6txy@www.imp.polymtl.ca>
  <CA+jJMxvgz2D=ga+7fC4FTdnJ0obQLz1K38G7sUrnuqhCMKXg7g@mail.gmail.com>
  <20151112164332.Horde.29NGfz3UJ4wgzaNFRJRqxf-@www.imp.polymtl.ca>
  <20151112182108.Horde.F8RA5lZI0Cb6x7TqbxzXVzB@www.imp.polymtl.ca>
  <5645FF8C.2080401@efficios.com>
  <20151113154637.Horde.Sp6jqlYe3x3lcfEfnNAF7wW@www.imp.polymtl.ca>
+ <CAF4oYfG6VaGS62MF_D83ojtZVbUo9+7KXr7Y+yUeVsY7eCb-BA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0114029937=="
+Content-Type: text/plain; charset="utf-8"; Format="flowed"; DelSp="Yes"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-io0-f172.google.com ([209.85.223.172])
+Received: from smtp.polymtl.ca ([132.207.4.11])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jonathan.r.julien@gmail.com>) id 1ZxH6U-0003LZ-4q
- for lttng-dev@lists.lttng.org; Fri, 13 Nov 2015 11:21:36 -0500
-Received: by ioir85 with SMTP id r85so61443588ioi.1
- for <lttng-dev@lists.lttng.org>; Fri, 13 Nov 2015 08:21:28 -0800 (PST)
-In-Reply-To: <20151113154637.Horde.Sp6jqlYe3x3lcfEfnNAF7wW@www.imp.polymtl.ca>
+ (envelope-from <yves-junior.bationo@polymtl.ca>) id 1ZxIga-0003r4-E0
+ for lttng-dev@lists.lttng.org; Fri, 13 Nov 2015 13:02:58 -0500
+In-Reply-To: <CAF4oYfG6VaGS62MF_D83ojtZVbUo9+7KXr7Y+yUeVsY7eCb-BA@mail.gmail.com>
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,549 +27,154 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Yves Junior Bationo <yves-junior.bationo@polymtl.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Jonathan Rajotte <jonathan.r.julien@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0114029937==
-Content-Type: multipart/alternative; boundary=001a113eea42a2ff6c05246e7378
-
---001a113eea42a2ff6c05246e7378
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi Yves,
-
-You might want to enable all the python events via
-'lttng enable-event -p -a'.
-
-Cheers!
-
-On Fri, Nov 13, 2015 at 10:46 AM, Yves Junior Bationo <
-yves-junior.bationo@polymtl.ca> wrote:
-
-> Hi,
-> Adding "logging.basicConfig()" seems to work well. "lttng list -u -a"
-> return the list of all python log
-> BUT
-> after enabling all event trace (lttng enable-event -u -a)
-> the trace contain only  "lttng_ust_statedump" event, and not a single
-> event from the script (warning,error... )
-> THKs!
-> Yves
->
-> Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com> a =C3=A9cr=
-it :
->
->
-> Hi Yves,
->>
->> We are currently looking a little bit more into it. It might be an error
->> in the documentation.
->>
->> The example report the same error without the 'import lttngust'. If you
->> use python 3 it seems to work.
->>
->> This seems related to the logging.basicConfig() which provide as basic
->> configuration for the root handler. See [1] for more info.
->>
->> For now you can simply add the logging.basicConfig() before everything.
->> I'm not sure if this is a workaround or simply how logging in python
->> works in general.
->>
->> Cheers!
->>
->> [1] https://docs.python.org/2/library/logging.html#logging.basicConfig
->>
->> On 2015-11-12 01:21 PM, Yves Junior Bationo wrote:
->>
->>> I installed liblttng-ust-dev from ppa:lttng/ppa
->>> lttng version: (LTTng Trace Control) 2.7.0 - Herbe =C3=A0 D=C3=A9tourne
->>>
->>> Yves Junior Bationo <yves-junior.bationo@polymtl.ca> a =C3=A9crit :
->>>
->>> Hi, i my script i just change "my-logger" by "hello-logger" (hello.py i=
-n
->>>> attachment).
->>>> I try to figure out the probem by
->>>>        export LTTNG_UST_PYTHON_DEBUG=3D1
->>>> and i found this:
->>>> #####
->>>> [0.019155] LTTng-UST debug: <module>(): debug is enabled
->>>> [0.024447] LTTng-UST debug: _init_threads(): entering
->>>> [0.024710] LTTng-UST debug: _get_port_from_file(): reading port from
->>>> file "/var/run/lttng/agent.port"
->>>> [0.025745] LTTng-UST debug: _get_port_from_file(): reading port from
->>>> file "/root/.lttng/agent.port"
->>>> [0.025942] LTTng-UST debug: _init_threads(): system session daemon
->>>> port: 5345
->>>> [0.026117] LTTng-UST debug: _init_threads(): user session daemon port:
->>>> None
->>>> [0.026280] LTTng-UST debug: _init_threads(): creating system client
->>>> thread
->>>> [0.026762] LTTng-UST debug: _init_threads(): created and started syste=
-m
->>>> client thread
->>>> [0.026973] LTTng-UST debug: _init_threads(): waiting for registration
->>>> done (expecting 1, timeout is 5.0 s)
->>>> [0.027721] LTTng-UST debug: _client_thread_target(): creating client
->>>> "system" using TCP port 5345
->>>> [0.029745] LTTng-UST debug: _client_thread_target(): starting client
->>>> "system"
->>>> [0.029896] LTTng-UST debug: run(): client "system": connecting to
->>>> session daemon
->>>> [0.030117] LTTng-UST debug: run(): client "system": registering to
->>>> session daemon
->>>> [0.030370] LTTng-UST debug: _recv_server_cmd_header(): client "system"=
-:
->>>> received empty server command header
->>>> [0.030532] LTTng-UST debug: _handle_server_cmd(): client "system": bad
->>>> server command
->>>> [0.030667] LTTng-UST debug: run(): client "system": got exception:
->>>> 'module' object has no attribute '_ClientCmdReply'
->>>> ####
->>>> You can see 'bad server command' and 'exception' in the last lines.
->>>>
->>>> J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@efficios.com> a =C3=A9c=
-rit :
->>>>
->>>> 2015-11-06 17:59 GMT-05:00 Yves Junior Bationo <
->>>>> yves-junior.bationo@polymtl.ca>:
->>>>>
->>>>>>
->>>>>> j'ai un souci avec lltngust pour les application python
->>>>>> Pour l'exemple de la Doc
->>>>>>       https://lttng.org/docs/#doc-python-application
->>>>>> j'ai l'erreur:
->>>>>>       No handlers could be found for logger "hello-logger"
->>>>>>
->>>>>>
->>>>> Hi Yves,
->>>>>
->>>>> We try to stick to English on this mailing list so the questions and
->>>>> answers remain easily searchable.
->>>>>
->>>>> The example in the docs uses "time" without importing it, I have sent
->>>>> a Pull Request to address that.
->>>>> However, addressing the problem you are encountering, where does
->>>>> "hello-logger" come from?
->>>>>
->>>>> Can you post the code and versions of the components you are using?
->>>>>
->>>>> Thanks,
->>>>> J=C3=A9r=C3=A9mie
->>>>>
->>>>>
->>>>> la commande "lttng list -u -a" me retourne bien la liste des trace
->>>>>> point:
->>>>>>
->>>>>>       PID: 5228 - Name: python
->>>>>>     lttng_python:event (loglevel: TRACE_DEBUG_LINE (13)) (type:
->>>>>> tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_DEBUG (loglevel: TRACE_DEBUG (14)) (typ=
-e:
->>>>>> tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_DEBUG_LINE (loglevel: TRACE_DEBUG_LINE
->>>>>> (13))
->>>>>> (type: tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_DEBUG_FUNCTION (loglevel:
->>>>>> TRACE_DEBUG_FUNCTION (12)) (type: tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_DEBUG_UNIT (loglevel: TRACE_DEBUG_UNIT
->>>>>> (11))
->>>>>> (type: tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_DEBUG_MODULE (loglevel:
->>>>>> TRACE_DEBUG_MODULE
->>>>>> (10)) (type: tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_DEBUG_PROCESS (loglevel:
->>>>>> TRACE_DEBUG_PROCESS
->>>>>> (9)) (type: tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_DEBUG_PROGRAM (loglevel:
->>>>>> TRACE_DEBUG_PROGRAM
->>>>>> (8)) (type: tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_DEBUG_SYSTEM (loglevel:
->>>>>> TRACE_DEBUG_SYSTEM
->>>>>> (7)) (type: tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_INFO (loglevel: TRACE_INFO (6)) (type:
->>>>>> tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_NOTICE (loglevel: TRACE_NOTICE (5))
->>>>>> (type:
->>>>>> tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_WARNING (loglevel: TRACE_WARNING (4))
->>>>>> (type:
->>>>>> tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_ERR (loglevel: TRACE_ERR (3)) (type:
->>>>>> tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_CRIT (loglevel: TRACE_CRIT (2)) (type:
->>>>>> tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_ALERT (loglevel: TRACE_ALERT (1)) (type=
-:
->>>>>> tracepoint)
->>>>>>     lttng_ust_tracelog:TRACE_EMERG (loglevel: TRACE_EMERG (0)) (type=
-:
->>>>>> tracepoint)
->>>>>>     lttng_ust_tracef:event (loglevel: TRACE_DEBUG (14)) (type:
->>>>>> tracepoint)
->>>>>>     lttng_ust_statedump:end (loglevel: TRACE_DEBUG_LINE (13)) (type:
->>>>>> tracepoint)
->>>>>>     lttng_ust_statedump:debug_link (loglevel: TRACE_DEBUG_LINE (13))
->>>>>> (type: tracepoint)
->>>>>>     lttng_ust_statedump:build_id (loglevel: TRACE_DEBUG_LINE (13))
->>>>>> (type:
->>>>>> tracepoint)
->>>>>>     lttng_ust_statedump:soinfo (loglevel: TRACE_DEBUG_LINE (13))
->>>>>> (type:
->>>>>> tracepoint)
->>>>>>     lttng_ust_statedump:start (loglevel: TRACE_DEBUG_LINE (13)) (typ=
-e:
->>>>>> tracepoint)
->>>>>>
->>>>>> Mais pas de resultats dans le repertoire des evenements lorsque
->>>>>> j'active le
->>>>>> tracage lttng.
->>>>>>
->>>>>> Resum=C3=A9
->>>>>>       Probleme 1 :No handlers could be found for logger
->>>>>>               je croyais que "import lttngust" devait gerer cette
->>>>>> situation
->>>>>>
->>>>>>       Probleme 2: pas de resultats au tracage
->>>>>> Merci.
->>>>>>
->>>>>>
->>>>>>
->>>>>>
->>>>>>
->>>>>> _______________________________________________
->>>>>> lttng-dev mailing list
->>>>>> lttng-dev@lists.lttng.org
->>>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>>>>
->>>>>
->>>>>
->>>>>
->>>>> --
->>>>> J=C3=A9r=C3=A9mie Galarneau
->>>>> EfficiOS Inc.
->>>>> http://www.efficios.com
->>>>>
->>>>
->>>
->>>
->>>
->>> _______________________________________________
->>> lttng-dev mailing list
->>> lttng-dev@lists.lttng.org
->>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>
->>
->> --
->> Jonathan R. Julien
->> Efficios
->>
->
->
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
-
-
---=20
-Jonathan Rajotte Julien
-
---001a113eea42a2ff6c05246e7378
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi Yves,<div><br></div><div>You might want to enable all t=
-he python events via=C2=A0</div><div>&#39;lttng enable-event -p -a&#39;.</d=
-iv><div><br></div><div>Cheers!</div></div><div class=3D"gmail_extra"><br><d=
-iv class=3D"gmail_quote">On Fri, Nov 13, 2015 at 10:46 AM, Yves Junior Bati=
-ono <span dir=3D"ltr">&lt;<a href=3D"mailto:yves-junior.bationo@polymtl.ca"=
- target=3D"_blank">yves-junior.bationo@polymtl.ca</a>&gt;</span> wrote:<br>=
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex">Hi,<br>
-Adding &quot;logging.basicConfig()&quot; seems to work well. &quot;lttng li=
-st -u -a&quot; return the list of all python log<br>
-BUT<br>
-after enabling all event trace (lttng enable-event -u -a)<br>
-the trace contain only=C2=A0 &quot;lttng_ust_statedump&quot; event, and not=
- a single event from the script (warning,error... )<br>
-THKs!<br>
-Yves<br>
-<br>
-Jonathan Rajotte Julien &lt;<a href=3D"mailto:Jonathan.rajotte-julien@effic=
-ios.com" target=3D"_blank">Jonathan.rajotte-julien@efficios.com</a>&gt; a =
-=C3=A9crit=C2=A0:<div class=3D"HOEnZb"><div class=3D"h5"><br>
-<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex">
-Hi Yves,<br>
-<br>
-We are currently looking a little bit more into it. It might be an error in=
- the documentation.<br>
-<br>
-The example report the same error without the &#39;import lttngust&#39;. If=
- you use python 3 it seems to work.<br>
-<br>
-This seems related to the logging.basicConfig() which provide as basic conf=
-iguration for the root handler. See [1] for more info.<br>
-<br>
-For now you can simply add the logging.basicConfig() before everything.<br>
-I&#39;m not sure if this is a workaround or simply how logging in python wo=
-rks in general.<br>
-<br>
-Cheers!<br>
-<br>
-[1] <a href=3D"https://docs.python.org/2/library/logging.html#logging.basic=
-Config" rel=3D"noreferrer" target=3D"_blank">https://docs.python.org/2/libr=
-ary/logging.html#logging.basicConfig</a><br>
-<br>
-On 2015-11-12 01:21 PM, Yves Junior Bationo wrote:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex">
-I installed liblttng-ust-dev from ppa:lttng/ppa<br>
-lttng version: (LTTng Trace Control) 2.7.0 - Herbe =C3=A0 D=C3=A9tourne<br>
-<br>
-Yves Junior Bationo &lt;<a href=3D"mailto:yves-junior.bationo@polymtl.ca" t=
-arget=3D"_blank">yves-junior.bationo@polymtl.ca</a>&gt; a =C3=A9crit :<br>
-<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex">
-Hi, i my script i just change &quot;my-logger&quot; by &quot;hello-logger&q=
-uot; (hello.py in attachment).<br>
-I try to figure out the probem by<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0export LTTNG_UST_PYTHON_DEBUG=3D1<br>
-and i found this:<br>
-#####<br>
-[0.019155] LTTng-UST debug: &lt;module&gt;(): debug is enabled<br>
-[0.024447] LTTng-UST debug: _init_threads(): entering<br>
-[0.024710] LTTng-UST debug: _get_port_from_file(): reading port from file &=
-quot;/var/run/lttng/agent.port&quot;<br>
-[0.025745] LTTng-UST debug: _get_port_from_file(): reading port from file &=
-quot;/root/.lttng/agent.port&quot;<br>
-[0.025942] LTTng-UST debug: _init_threads(): system session daemon port: 53=
-45<br>
-[0.026117] LTTng-UST debug: _init_threads(): user session daemon port: None=
-<br>
-[0.026280] LTTng-UST debug: _init_threads(): creating system client thread<=
-br>
-[0.026762] LTTng-UST debug: _init_threads(): created and started system cli=
-ent thread<br>
-[0.026973] LTTng-UST debug: _init_threads(): waiting for registration done =
-(expecting 1, timeout is 5.0 s)<br>
-[0.027721] LTTng-UST debug: _client_thread_target(): creating client &quot;=
-system&quot; using TCP port 5345<br>
-[0.029745] LTTng-UST debug: _client_thread_target(): starting client &quot;=
-system&quot;<br>
-[0.029896] LTTng-UST debug: run(): client &quot;system&quot;: connecting to=
- session daemon<br>
-[0.030117] LTTng-UST debug: run(): client &quot;system&quot;: registering t=
-o session daemon<br>
-[0.030370] LTTng-UST debug: _recv_server_cmd_header(): client &quot;system&=
-quot;: received empty server command header<br>
-[0.030532] LTTng-UST debug: _handle_server_cmd(): client &quot;system&quot;=
-: bad server command<br>
-[0.030667] LTTng-UST debug: run(): client &quot;system&quot;: got exception=
-: &#39;module&#39; object has no attribute &#39;_ClientCmdReply&#39;<br>
-####<br>
-You can see &#39;bad server command&#39; and &#39;exception&#39; in the las=
-t lines.<br>
-<br>
-J=C3=A9r=C3=A9mie Galarneau &lt;<a href=3D"mailto:jeremie.galarneau@efficio=
-s.com" target=3D"_blank">jeremie.galarneau@efficios.com</a>&gt; a =C3=A9cri=
-t :<br>
-<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex">
-2015-11-06 17:59 GMT-05:00 Yves Junior Bationo &lt;<a href=3D"mailto:yves-j=
-unior.bationo@polymtl.ca" target=3D"_blank">yves-junior.bationo@polymtl.ca<=
-/a>&gt;:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex">
-<br>
-j&#39;ai un souci avec lltngust pour les application python<br>
-Pour l&#39;exemple de la Doc<br>
-=C2=A0 =C2=A0 =C2=A0 <a href=3D"https://lttng.org/docs/#doc-python-applicat=
-ion" rel=3D"noreferrer" target=3D"_blank">https://lttng.org/docs/#doc-pytho=
-n-application</a><br>
-j&#39;ai l&#39;erreur:<br>
-=C2=A0 =C2=A0 =C2=A0 No handlers could be found for logger &quot;hello-logg=
-er&quot;<br>
-<br>
-</blockquote>
-<br>
-Hi Yves,<br>
-<br>
-We try to stick to English on this mailing list so the questions and<br>
-answers remain easily searchable.<br>
-<br>
-The example in the docs uses &quot;time&quot; without importing it, I have =
-sent<br>
-a Pull Request to address that.<br>
-However, addressing the problem you are encountering, where does<br>
-&quot;hello-logger&quot; come from?<br>
-<br>
-Can you post the code and versions of the components you are using?<br>
-<br>
-Thanks,<br>
-J=C3=A9r=C3=A9mie<br>
-<br>
-<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex">
-la commande &quot;lttng list -u -a&quot; me retourne bien la liste des trac=
-e point:<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 PID: 5228 - Name: python<br>
-=C2=A0 =C2=A0 lttng_python:event (loglevel: TRACE_DEBUG_LINE (13)) (type:<b=
-r>
-tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_DEBUG (loglevel: TRACE_DEBUG (14)) (=
-type:<br>
-tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_DEBUG_LINE (loglevel: TRACE_DEBUG_LI=
-NE (13))<br>
-(type: tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_DEBUG_FUNCTION (loglevel:<br>
-TRACE_DEBUG_FUNCTION (12)) (type: tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_DEBUG_UNIT (loglevel: TRACE_DEBUG_UN=
-IT (11))<br>
-(type: tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_DEBUG_MODULE (loglevel: TRACE_DEBUG_=
-MODULE<br>
-(10)) (type: tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_DEBUG_PROCESS (loglevel: TRACE_DEBUG=
-_PROCESS<br>
-(9)) (type: tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_DEBUG_PROGRAM (loglevel: TRACE_DEBUG=
-_PROGRAM<br>
-(8)) (type: tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_DEBUG_SYSTEM (loglevel: TRACE_DEBUG_=
-SYSTEM<br>
-(7)) (type: tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_INFO (loglevel: TRACE_INFO (6)) (typ=
-e:<br>
-tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_NOTICE (loglevel: TRACE_NOTICE (5)) =
-(type:<br>
-tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_WARNING (loglevel: TRACE_WARNING (4)=
-) (type:<br>
-tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_ERR (loglevel: TRACE_ERR (3)) (type:=
-<br>
-tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_CRIT (loglevel: TRACE_CRIT (2)) (typ=
-e:<br>
-tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_ALERT (loglevel: TRACE_ALERT (1)) (t=
-ype:<br>
-tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracelog:TRACE_EMERG (loglevel: TRACE_EMERG (0)) (t=
-ype:<br>
-tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_tracef:event (loglevel: TRACE_DEBUG (14)) (type: tr=
-acepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_statedump:end (loglevel: TRACE_DEBUG_LINE (13)) (ty=
-pe:<br>
-tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_statedump:debug_link (loglevel: TRACE_DEBUG_LINE (1=
-3))<br>
-(type: tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_statedump:build_id (loglevel: TRACE_DEBUG_LINE (13)=
-) (type:<br>
-tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_statedump:soinfo (loglevel: TRACE_DEBUG_LINE (13)) =
-(type:<br>
-tracepoint)<br>
-=C2=A0 =C2=A0 lttng_ust_statedump:start (loglevel: TRACE_DEBUG_LINE (13)) (=
-type:<br>
-tracepoint)<br>
-<br>
-Mais pas de resultats dans le repertoire des evenements lorsque j&#39;activ=
-e le<br>
-tracage lttng.<br>
-<br>
-Resum=C3=A9<br>
-=C2=A0 =C2=A0 =C2=A0 Probleme 1 :No handlers could be found for logger<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 je croyais que &quot;impor=
-t lttngust&quot; devait gerer cette<br>
-situation<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 Probleme 2: pas de resultats au tracage<br>
-Merci.<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/li=
-stinfo/lttng-dev</a><br>
-</blockquote>
-<br>
-<br>
-<br>
--- <br>
-J=C3=A9r=C3=A9mie Galarneau<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">ht=
-tp://www.efficios.com</a><br>
-</blockquote></blockquote>
-<br>
-<br>
-<br>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/li=
-stinfo/lttng-dev</a><br>
-</blockquote>
-<br>
--- <br>
-Jonathan R. Julien<br>
-Efficios<br>
-</blockquote>
-<br>
-<br>
-<br>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/li=
-stinfo/lttng-dev</a><br>
-</div></div></blockquote></div><br><br clear=3D"all"><div><br></div>-- <br>=
-<div class=3D"gmail_signature"><div dir=3D"ltr"><div><div dir=3D"ltr">Jonat=
-han Rajotte Julien<div><br></div></div></div></div></div>
-</div>
-
---001a113eea42a2ff6c05246e7378--
-
-
---===============0114029937==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0114029937==--
+CkhpLAp3aXRoICdsdHRuZyBlbmFibGUtZXZlbnQgLXAgLWEnIG5vdGhpbmcgaXMgcmV0dXJuZWQg
+dG9vLgpvayBpIHdpbGwgd2FpdCBmb3IgdGhlIHByb2JsZW0gdG8gYmUgZml4ZWQKVEhLcyEKCkpv
+bmF0aGFuIFJham90dGUgPGpvbmF0aGFuLnIuanVsaWVuQGdtYWlsLmNvbT4gYSDDqWNyaXTCoDoK
+Cj4gSGkgWXZlcywKPgo+IFlvdSBtaWdodCB3YW50IHRvIGVuYWJsZSBhbGwgdGhlIHB5dGhvbiBl
+dmVudHMgdmlhCj4gJ2x0dG5nIGVuYWJsZS1ldmVudCAtcCAtYScuCj4KPiBDaGVlcnMhCj4KPiBP
+biBGcmksIE5vdiAxMywgMjAxNSBhdCAxMDo0NiBBTSwgWXZlcyBKdW5pb3IgQmF0aW9ubyA8Cj4g
+eXZlcy1qdW5pb3IuYmF0aW9ub0Bwb2x5bXRsLmNhPiB3cm90ZToKPgo+PiBIaSwKPj4gQWRkaW5n
+ICJsb2dnaW5nLmJhc2ljQ29uZmlnKCkiIHNlZW1zIHRvIHdvcmsgd2VsbC4gImx0dG5nIGxpc3Qg
+LXUgLWEiCj4+IHJldHVybiB0aGUgbGlzdCBvZiBhbGwgcHl0aG9uIGxvZwo+PiBCVVQKPj4gYWZ0
+ZXIgZW5hYmxpbmcgYWxsIGV2ZW50IHRyYWNlIChsdHRuZyBlbmFibGUtZXZlbnQgLXUgLWEpCj4+
+IHRoZSB0cmFjZSBjb250YWluIG9ubHkgICJsdHRuZ191c3Rfc3RhdGVkdW1wIiBldmVudCwgYW5k
+IG5vdCBhIHNpbmdsZQo+PiBldmVudCBmcm9tIHRoZSBzY3JpcHQgKHdhcm5pbmcsZXJyb3IuLi4g
+KQo+PiBUSEtzIQo+PiBZdmVzCj4+Cj4+IEpvbmF0aGFuIFJham90dGUgSnVsaWVuIDxKb25hdGhh
+bi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+IGEgw6ljcml0IDoKPj4KPj4KPj4gSGkgWXZl
+cywKPj4+Cj4+PiBXZSBhcmUgY3VycmVudGx5IGxvb2tpbmcgYSBsaXR0bGUgYml0IG1vcmUgaW50
+byBpdC4gSXQgbWlnaHQgYmUgYW4gZXJyb3IKPj4+IGluIHRoZSBkb2N1bWVudGF0aW9uLgo+Pj4K
+Pj4+IFRoZSBleGFtcGxlIHJlcG9ydCB0aGUgc2FtZSBlcnJvciB3aXRob3V0IHRoZSAnaW1wb3J0
+IGx0dG5ndXN0Jy4gSWYgeW91Cj4+PiB1c2UgcHl0aG9uIDMgaXQgc2VlbXMgdG8gd29yay4KPj4+
+Cj4+PiBUaGlzIHNlZW1zIHJlbGF0ZWQgdG8gdGhlIGxvZ2dpbmcuYmFzaWNDb25maWcoKSB3aGlj
+aCBwcm92aWRlIGFzIGJhc2ljCj4+PiBjb25maWd1cmF0aW9uIGZvciB0aGUgcm9vdCBoYW5kbGVy
+LiBTZWUgWzFdIGZvciBtb3JlIGluZm8uCj4+Pgo+Pj4gRm9yIG5vdyB5b3UgY2FuIHNpbXBseSBh
+ZGQgdGhlIGxvZ2dpbmcuYmFzaWNDb25maWcoKSBiZWZvcmUgZXZlcnl0aGluZy4KPj4+IEknbSBu
+b3Qgc3VyZSBpZiB0aGlzIGlzIGEgd29ya2Fyb3VuZCBvciBzaW1wbHkgaG93IGxvZ2dpbmcgaW4g
+cHl0aG9uCj4+PiB3b3JrcyBpbiBnZW5lcmFsLgo+Pj4KPj4+IENoZWVycyEKPj4+Cj4+PiBbMV0g
+aHR0cHM6Ly9kb2NzLnB5dGhvbi5vcmcvMi9saWJyYXJ5L2xvZ2dpbmcuaHRtbCNsb2dnaW5nLmJh
+c2ljQ29uZmlnCj4+Pgo+Pj4gT24gMjAxNS0xMS0xMiAwMToyMSBQTSwgWXZlcyBKdW5pb3IgQmF0
+aW9ubyB3cm90ZToKPj4+Cj4+Pj4gSSBpbnN0YWxsZWQgbGlibHR0bmctdXN0LWRldiBmcm9tIHBw
+YTpsdHRuZy9wcGEKPj4+PiBsdHRuZyB2ZXJzaW9uOiAoTFRUbmcgVHJhY2UgQ29udHJvbCkgMi43
+LjAgLSBIZXJiZSDDoCBEw6l0b3VybmUKPj4+Pgo+Pj4+IFl2ZXMgSnVuaW9yIEJhdGlvbm8gPHl2
+ZXMtanVuaW9yLmJhdGlvbm9AcG9seW10bC5jYT4gYSDDqWNyaXQgOgo+Pj4+Cj4+Pj4gSGksIGkg
+bXkgc2NyaXB0IGkganVzdCBjaGFuZ2UgIm15LWxvZ2dlciIgYnkgImhlbGxvLWxvZ2dlciIgKGhl
+bGxvLnB5IGluCj4+Pj4+IGF0dGFjaG1lbnQpLgo+Pj4+PiBJIHRyeSB0byBmaWd1cmUgb3V0IHRo
+ZSBwcm9iZW0gYnkKPj4+Pj4gICAgICAgIGV4cG9ydCBMVFROR19VU1RfUFlUSE9OX0RFQlVHPTEK
+Pj4+Pj4gYW5kIGkgZm91bmQgdGhpczoKPj4+Pj4gIyMjIyMKPj4+Pj4gWzAuMDE5MTU1XSBMVFRu
+Zy1VU1QgZGVidWc6IDxtb2R1bGU+KCk6IGRlYnVnIGlzIGVuYWJsZWQKPj4+Pj4gWzAuMDI0NDQ3
+XSBMVFRuZy1VU1QgZGVidWc6IF9pbml0X3RocmVhZHMoKTogZW50ZXJpbmcKPj4+Pj4gWzAuMDI0
+NzEwXSBMVFRuZy1VU1QgZGVidWc6IF9nZXRfcG9ydF9mcm9tX2ZpbGUoKTogcmVhZGluZyBwb3J0
+IGZyb20KPj4+Pj4gZmlsZSAiL3Zhci9ydW4vbHR0bmcvYWdlbnQucG9ydCIKPj4+Pj4gWzAuMDI1
+NzQ1XSBMVFRuZy1VU1QgZGVidWc6IF9nZXRfcG9ydF9mcm9tX2ZpbGUoKTogcmVhZGluZyBwb3J0
+IGZyb20KPj4+Pj4gZmlsZSAiL3Jvb3QvLmx0dG5nL2FnZW50LnBvcnQiCj4+Pj4+IFswLjAyNTk0
+Ml0gTFRUbmctVVNUIGRlYnVnOiBfaW5pdF90aHJlYWRzKCk6IHN5c3RlbSBzZXNzaW9uIGRhZW1v
+bgo+Pj4+PiBwb3J0OiA1MzQ1Cj4+Pj4+IFswLjAyNjExN10gTFRUbmctVVNUIGRlYnVnOiBfaW5p
+dF90aHJlYWRzKCk6IHVzZXIgc2Vzc2lvbiBkYWVtb24gcG9ydDoKPj4+Pj4gTm9uZQo+Pj4+PiBb
+MC4wMjYyODBdIExUVG5nLVVTVCBkZWJ1ZzogX2luaXRfdGhyZWFkcygpOiBjcmVhdGluZyBzeXN0
+ZW0gY2xpZW50Cj4+Pj4+IHRocmVhZAo+Pj4+PiBbMC4wMjY3NjJdIExUVG5nLVVTVCBkZWJ1Zzog
+X2luaXRfdGhyZWFkcygpOiBjcmVhdGVkIGFuZCBzdGFydGVkIHN5c3RlbQo+Pj4+PiBjbGllbnQg
+dGhyZWFkCj4+Pj4+IFswLjAyNjk3M10gTFRUbmctVVNUIGRlYnVnOiBfaW5pdF90aHJlYWRzKCk6
+IHdhaXRpbmcgZm9yIHJlZ2lzdHJhdGlvbgo+Pj4+PiBkb25lIChleHBlY3RpbmcgMSwgdGltZW91
+dCBpcyA1LjAgcykKPj4+Pj4gWzAuMDI3NzIxXSBMVFRuZy1VU1QgZGVidWc6IF9jbGllbnRfdGhy
+ZWFkX3RhcmdldCgpOiBjcmVhdGluZyBjbGllbnQKPj4+Pj4gInN5c3RlbSIgdXNpbmcgVENQIHBv
+cnQgNTM0NQo+Pj4+PiBbMC4wMjk3NDVdIExUVG5nLVVTVCBkZWJ1ZzogX2NsaWVudF90aHJlYWRf
+dGFyZ2V0KCk6IHN0YXJ0aW5nIGNsaWVudAo+Pj4+PiAic3lzdGVtIgo+Pj4+PiBbMC4wMjk4OTZd
+IExUVG5nLVVTVCBkZWJ1ZzogcnVuKCk6IGNsaWVudCAic3lzdGVtIjogY29ubmVjdGluZyB0bwo+
+Pj4+PiBzZXNzaW9uIGRhZW1vbgo+Pj4+PiBbMC4wMzAxMTddIExUVG5nLVVTVCBkZWJ1ZzogcnVu
+KCk6IGNsaWVudCAic3lzdGVtIjogcmVnaXN0ZXJpbmcgdG8KPj4+Pj4gc2Vzc2lvbiBkYWVtb24K
+Pj4+Pj4gWzAuMDMwMzcwXSBMVFRuZy1VU1QgZGVidWc6IF9yZWN2X3NlcnZlcl9jbWRfaGVhZGVy
+KCk6IGNsaWVudCAic3lzdGVtIjoKPj4+Pj4gcmVjZWl2ZWQgZW1wdHkgc2VydmVyIGNvbW1hbmQg
+aGVhZGVyCj4+Pj4+IFswLjAzMDUzMl0gTFRUbmctVVNUIGRlYnVnOiBfaGFuZGxlX3NlcnZlcl9j
+bWQoKTogY2xpZW50ICJzeXN0ZW0iOiBiYWQKPj4+Pj4gc2VydmVyIGNvbW1hbmQKPj4+Pj4gWzAu
+MDMwNjY3XSBMVFRuZy1VU1QgZGVidWc6IHJ1bigpOiBjbGllbnQgInN5c3RlbSI6IGdvdCBleGNl
+cHRpb246Cj4+Pj4+ICdtb2R1bGUnIG9iamVjdCBoYXMgbm8gYXR0cmlidXRlICdfQ2xpZW50Q21k
+UmVwbHknCj4+Pj4+ICMjIyMKPj4+Pj4gWW91IGNhbiBzZWUgJ2JhZCBzZXJ2ZXIgY29tbWFuZCcg
+YW5kICdleGNlcHRpb24nIGluIHRoZSBsYXN0IGxpbmVzLgo+Pj4+Pgo+Pj4+PiBKw6lyw6ltaWUg
+R2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+IGEgw6ljcml0IDoKPj4+
+Pj4KPj4+Pj4gMjAxNS0xMS0wNiAxNzo1OSBHTVQtMDU6MDAgWXZlcyBKdW5pb3IgQmF0aW9ubyA8
+Cj4+Pj4+PiB5dmVzLWp1bmlvci5iYXRpb25vQHBvbHltdGwuY2E+Ogo+Pj4+Pj4KPj4+Pj4+Pgo+
+Pj4+Pj4+IGonYWkgdW4gc291Y2kgYXZlYyBsbHRuZ3VzdCBwb3VyIGxlcyBhcHBsaWNhdGlvbiBw
+eXRob24KPj4+Pj4+PiBQb3VyIGwnZXhlbXBsZSBkZSBsYSBEb2MKPj4+Pj4+PiAgICAgICBodHRw
+czovL2x0dG5nLm9yZy9kb2NzLyNkb2MtcHl0aG9uLWFwcGxpY2F0aW9uCj4+Pj4+Pj4gaidhaSBs
+J2VycmV1cjoKPj4+Pj4+PiAgICAgICBObyBoYW5kbGVycyBjb3VsZCBiZSBmb3VuZCBmb3IgbG9n
+Z2VyICJoZWxsby1sb2dnZXIiCj4+Pj4+Pj4KPj4+Pj4+Pgo+Pj4+Pj4gSGkgWXZlcywKPj4+Pj4+
+Cj4+Pj4+PiBXZSB0cnkgdG8gc3RpY2sgdG8gRW5nbGlzaCBvbiB0aGlzIG1haWxpbmcgbGlzdCBz
+byB0aGUgcXVlc3Rpb25zIGFuZAo+Pj4+Pj4gYW5zd2VycyByZW1haW4gZWFzaWx5IHNlYXJjaGFi
+bGUuCj4+Pj4+Pgo+Pj4+Pj4gVGhlIGV4YW1wbGUgaW4gdGhlIGRvY3MgdXNlcyAidGltZSIgd2l0
+aG91dCBpbXBvcnRpbmcgaXQsIEkgaGF2ZSBzZW50Cj4+Pj4+PiBhIFB1bGwgUmVxdWVzdCB0byBh
+ZGRyZXNzIHRoYXQuCj4+Pj4+PiBIb3dldmVyLCBhZGRyZXNzaW5nIHRoZSBwcm9ibGVtIHlvdSBh
+cmUgZW5jb3VudGVyaW5nLCB3aGVyZSBkb2VzCj4+Pj4+PiAiaGVsbG8tbG9nZ2VyIiBjb21lIGZy
+b20/Cj4+Pj4+Pgo+Pj4+Pj4gQ2FuIHlvdSBwb3N0IHRoZSBjb2RlIGFuZCB2ZXJzaW9ucyBvZiB0
+aGUgY29tcG9uZW50cyB5b3UgYXJlIHVzaW5nPwo+Pj4+Pj4KPj4+Pj4+IFRoYW5rcywKPj4+Pj4+
+IErDqXLDqW1pZQo+Pj4+Pj4KPj4+Pj4+Cj4+Pj4+PiBsYSBjb21tYW5kZSAibHR0bmcgbGlzdCAt
+dSAtYSIgbWUgcmV0b3VybmUgYmllbiBsYSBsaXN0ZSBkZXMgdHJhY2UKPj4+Pj4+PiBwb2ludDoK
+Pj4+Pj4+Pgo+Pj4+Pj4+ICAgICAgIFBJRDogNTIyOCAtIE5hbWU6IHB5dGhvbgo+Pj4+Pj4+ICAg
+ICBsdHRuZ19weXRob246ZXZlbnQgKGxvZ2xldmVsOiBUUkFDRV9ERUJVR19MSU5FICgxMykpICh0
+eXBlOgo+Pj4+Pj4+IHRyYWNlcG9pbnQpCj4+Pj4+Pj4gICAgIGx0dG5nX3VzdF90cmFjZWxvZzpU
+UkFDRV9ERUJVRyAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHICgxNCkpICh0eXBlOgo+Pj4+Pj4+IHRy
+YWNlcG9pbnQpCj4+Pj4+Pj4gICAgIGx0dG5nX3VzdF90cmFjZWxvZzpUUkFDRV9ERUJVR19MSU5F
+IChsb2dsZXZlbDogVFJBQ0VfREVCVUdfTElORQo+Pj4+Pj4+ICgxMykpCj4+Pj4+Pj4gKHR5cGU6
+IHRyYWNlcG9pbnQpCj4+Pj4+Pj4gICAgIGx0dG5nX3VzdF90cmFjZWxvZzpUUkFDRV9ERUJVR19G
+VU5DVElPTiAobG9nbGV2ZWw6Cj4+Pj4+Pj4gVFJBQ0VfREVCVUdfRlVOQ1RJT04gKDEyKSkgKHR5
+cGU6IHRyYWNlcG9pbnQpCj4+Pj4+Pj4gICAgIGx0dG5nX3VzdF90cmFjZWxvZzpUUkFDRV9ERUJV
+R19VTklUIChsb2dsZXZlbDogVFJBQ0VfREVCVUdfVU5JVAo+Pj4+Pj4+ICgxMSkpCj4+Pj4+Pj4g
+KHR5cGU6IHRyYWNlcG9pbnQpCj4+Pj4+Pj4gICAgIGx0dG5nX3VzdF90cmFjZWxvZzpUUkFDRV9E
+RUJVR19NT0RVTEUgKGxvZ2xldmVsOgo+Pj4+Pj4+IFRSQUNFX0RFQlVHX01PRFVMRQo+Pj4+Pj4+
+ICgxMCkpICh0eXBlOiB0cmFjZXBvaW50KQo+Pj4+Pj4+ICAgICBsdHRuZ191c3RfdHJhY2Vsb2c6
+VFJBQ0VfREVCVUdfUFJPQ0VTUyAobG9nbGV2ZWw6Cj4+Pj4+Pj4gVFJBQ0VfREVCVUdfUFJPQ0VT
+Uwo+Pj4+Pj4+ICg5KSkgKHR5cGU6IHRyYWNlcG9pbnQpCj4+Pj4+Pj4gICAgIGx0dG5nX3VzdF90
+cmFjZWxvZzpUUkFDRV9ERUJVR19QUk9HUkFNIChsb2dsZXZlbDoKPj4+Pj4+PiBUUkFDRV9ERUJV
+R19QUk9HUkFNCj4+Pj4+Pj4gKDgpKSAodHlwZTogdHJhY2Vwb2ludCkKPj4+Pj4+PiAgICAgbHR0
+bmdfdXN0X3RyYWNlbG9nOlRSQUNFX0RFQlVHX1NZU1RFTSAobG9nbGV2ZWw6Cj4+Pj4+Pj4gVFJB
+Q0VfREVCVUdfU1lTVEVNCj4+Pj4+Pj4gKDcpKSAodHlwZTogdHJhY2Vwb2ludCkKPj4+Pj4+PiAg
+ICAgbHR0bmdfdXN0X3RyYWNlbG9nOlRSQUNFX0lORk8gKGxvZ2xldmVsOiBUUkFDRV9JTkZPICg2
+KSkgKHR5cGU6Cj4+Pj4+Pj4gdHJhY2Vwb2ludCkKPj4+Pj4+PiAgICAgbHR0bmdfdXN0X3RyYWNl
+bG9nOlRSQUNFX05PVElDRSAobG9nbGV2ZWw6IFRSQUNFX05PVElDRSAoNSkpCj4+Pj4+Pj4gKHR5
+cGU6Cj4+Pj4+Pj4gdHJhY2Vwb2ludCkKPj4+Pj4+PiAgICAgbHR0bmdfdXN0X3RyYWNlbG9nOlRS
+QUNFX1dBUk5JTkcgKGxvZ2xldmVsOiBUUkFDRV9XQVJOSU5HICg0KSkKPj4+Pj4+PiAodHlwZToK
+Pj4+Pj4+PiB0cmFjZXBvaW50KQo+Pj4+Pj4+ICAgICBsdHRuZ191c3RfdHJhY2Vsb2c6VFJBQ0Vf
+RVJSIChsb2dsZXZlbDogVFJBQ0VfRVJSICgzKSkgKHR5cGU6Cj4+Pj4+Pj4gdHJhY2Vwb2ludCkK
+Pj4+Pj4+PiAgICAgbHR0bmdfdXN0X3RyYWNlbG9nOlRSQUNFX0NSSVQgKGxvZ2xldmVsOiBUUkFD
+RV9DUklUICgyKSkgKHR5cGU6Cj4+Pj4+Pj4gdHJhY2Vwb2ludCkKPj4+Pj4+PiAgICAgbHR0bmdf
+dXN0X3RyYWNlbG9nOlRSQUNFX0FMRVJUIChsb2dsZXZlbDogVFJBQ0VfQUxFUlQgKDEpKSAodHlw
+ZToKPj4+Pj4+PiB0cmFjZXBvaW50KQo+Pj4+Pj4+ICAgICBsdHRuZ191c3RfdHJhY2Vsb2c6VFJB
+Q0VfRU1FUkcgKGxvZ2xldmVsOiBUUkFDRV9FTUVSRyAoMCkpICh0eXBlOgo+Pj4+Pj4+IHRyYWNl
+cG9pbnQpCj4+Pj4+Pj4gICAgIGx0dG5nX3VzdF90cmFjZWY6ZXZlbnQgKGxvZ2xldmVsOiBUUkFD
+RV9ERUJVRyAoMTQpKSAodHlwZToKPj4+Pj4+PiB0cmFjZXBvaW50KQo+Pj4+Pj4+ICAgICBsdHRu
+Z191c3Rfc3RhdGVkdW1wOmVuZCAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHX0xJTkUgKDEzKSkgKHR5
+cGU6Cj4+Pj4+Pj4gdHJhY2Vwb2ludCkKPj4+Pj4+PiAgICAgbHR0bmdfdXN0X3N0YXRlZHVtcDpk
+ZWJ1Z19saW5rIChsb2dsZXZlbDogVFJBQ0VfREVCVUdfTElORSAoMTMpKQo+Pj4+Pj4+ICh0eXBl
+OiB0cmFjZXBvaW50KQo+Pj4+Pj4+ICAgICBsdHRuZ191c3Rfc3RhdGVkdW1wOmJ1aWxkX2lkIChs
+b2dsZXZlbDogVFJBQ0VfREVCVUdfTElORSAoMTMpKQo+Pj4+Pj4+ICh0eXBlOgo+Pj4+Pj4+IHRy
+YWNlcG9pbnQpCj4+Pj4+Pj4gICAgIGx0dG5nX3VzdF9zdGF0ZWR1bXA6c29pbmZvIChsb2dsZXZl
+bDogVFJBQ0VfREVCVUdfTElORSAoMTMpKQo+Pj4+Pj4+ICh0eXBlOgo+Pj4+Pj4+IHRyYWNlcG9p
+bnQpCj4+Pj4+Pj4gICAgIGx0dG5nX3VzdF9zdGF0ZWR1bXA6c3RhcnQgKGxvZ2xldmVsOiBUUkFD
+RV9ERUJVR19MSU5FICgxMykpICh0eXBlOgo+Pj4+Pj4+IHRyYWNlcG9pbnQpCj4+Pj4+Pj4KPj4+
+Pj4+PiBNYWlzIHBhcyBkZSByZXN1bHRhdHMgZGFucyBsZSByZXBlcnRvaXJlIGRlcyBldmVuZW1l
+bnRzIGxvcnNxdWUKPj4+Pj4+PiBqJ2FjdGl2ZSBsZQo+Pj4+Pj4+IHRyYWNhZ2UgbHR0bmcuCj4+
+Pj4+Pj4KPj4+Pj4+PiBSZXN1bcOpCj4+Pj4+Pj4gICAgICAgUHJvYmxlbWUgMSA6Tm8gaGFuZGxl
+cnMgY291bGQgYmUgZm91bmQgZm9yIGxvZ2dlcgo+Pj4+Pj4+ICAgICAgICAgICAgICAgamUgY3Jv
+eWFpcyBxdWUgImltcG9ydCBsdHRuZ3VzdCIgZGV2YWl0IGdlcmVyIGNldHRlCj4+Pj4+Pj4gc2l0
+dWF0aW9uCj4+Pj4+Pj4KPj4+Pj4+PiAgICAgICBQcm9ibGVtZSAyOiBwYXMgZGUgcmVzdWx0YXRz
+IGF1IHRyYWNhZ2UKPj4+Pj4+PiBNZXJjaS4KPj4+Pj4+Pgo+Pj4+Pj4+Cj4+Pj4+Pj4KPj4+Pj4+
+Pgo+Pj4+Pj4+Cj4+Pj4+Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KPj4+Pj4+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+Pj4+Pj4gbHR0bmctZGV2
+QGxpc3RzLmx0dG5nLm9yZwo+Pj4+Pj4+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
+YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+Pj4+Pj4+Cj4+Pj4+Pgo+Pj4+Pj4KPj4+Pj4+Cj4+
+Pj4+PiAtLQo+Pj4+Pj4gSsOpcsOpbWllIEdhbGFybmVhdQo+Pj4+Pj4gRWZmaWNpT1MgSW5jLgo+
+Pj4+Pj4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KPj4+Pj4+Cj4+Pj4+Cj4+Pj4KPj4+Pgo+Pj4+
+Cj4+Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+
+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+Pj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+
+Pj4+IGh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
+LWRldgo+Pj4+Cj4+Pgo+Pj4gLS0KPj4+IEpvbmF0aGFuIFIuIEp1bGllbgo+Pj4gRWZmaWNpb3MK
+Pj4+Cj4+Cj4+Cj4+Cj4+Cj4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4gbHR0bmctZGV2QGxpc3RzLmx0
+dG5nLm9yZwo+PiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
+by9sdHRuZy1kZXYKPj4KPgo+Cj4KPiAtLQo+IEpvbmF0aGFuIFJham90dGUgSnVsaWVuCgoKCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
+YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcu
+b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
