@@ -1,23 +1,15 @@
-From: Yves Junior Bationo <yves-junior.bationo@polymtl.ca>
-Subject: Re: Help-lttng-ust-pyhton
-Date: Thu, 12 Nov 2015 18:21:08 +0000
-Message-ID: <20151112182108.Horde.F8RA5lZI0Cb6x7TqbxzXVzB__13745.8061254167$1447352513$gmane$org@www.imp.polymtl.ca>
-References: <20151106225909.Horde.ZKUBbt2vnWaMa-0QDzy6txy@www.imp.polymtl.ca>
- <CA+jJMxvgz2D=ga+7fC4FTdnJ0obQLz1K38G7sUrnuqhCMKXg7g@mail.gmail.com>
- <20151112164332.Horde.29NGfz3UJ4wgzaNFRJRqxf-@www.imp.polymtl.ca>
+From: Farhan Shariff <farhan.shariff@hotmail.com>
+Subject: C++ Dynamic library undefined reference to
+	`tracepoint_dlopen'
+Date: Fri, 13 Nov 2015 13:52:06 +0000
+Message-ID: <BAY179-W19C0B0D520AB5BFD3EBAF492110__20399.9958154329$1447422803$gmane$org@phx.gbl>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"; DelSp="Yes"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0434823047=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca ([132.207.4.11])
+Received: from bay004-omc3s19.hotmail.com ([65.54.190.157])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <yves-junior.bationo@polymtl.ca>) id 1ZwwUT-00059G-3v
- for lttng-dev@lists.lttng.org; Thu, 12 Nov 2015 13:20:58 -0500
-Received: from horde5.polymtl.ca (horde5.polymtl.ca [132.207.4.156])
- by smtp.polymtl.ca (8.14.3/8.14.3) with ESMTP id tACIKuFc010586
- for <lttng-dev@lists.lttng.org>; Thu, 12 Nov 2015 13:20:56 -0500
-In-Reply-To: <20151112164332.Horde.29NGfz3UJ4wgzaNFRJRqxf-@www.imp.polymtl.ca>
-Content-Disposition: inline
+ (envelope-from <farhan.shariff@hotmail.com>) id 1ZxElw-0002ZL-Sx
+ for lttng-dev@lists.lttng.org; Fri, 13 Nov 2015 08:52:13 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,107 +18,73 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SSBpbnN0YWxsZWQgbGlibHR0bmctdXN0LWRldiBmcm9tIHBwYTpsdHRuZy9wcGEKbHR0bmcgdmVy
-c2lvbjogKExUVG5nIFRyYWNlIENvbnRyb2wpIDIuNy4wIC0gSGVyYmUgw6AgRMOpdG91cm5lCgpZ
-dmVzIEp1bmlvciBCYXRpb25vIDx5dmVzLWp1bmlvci5iYXRpb25vQHBvbHltdGwuY2E+IGEgw6lj
-cml0wqA6Cgo+IEhpLCBpIG15IHNjcmlwdCBpIGp1c3QgY2hhbmdlICJteS1sb2dnZXIiIGJ5ICJo
-ZWxsby1sb2dnZXIiICAKPiAoaGVsbG8ucHkgaW4gYXR0YWNobWVudCkuCj4gSSB0cnkgdG8gZmln
-dXJlIG91dCB0aGUgcHJvYmVtIGJ5Cj4gCQlleHBvcnQgTFRUTkdfVVNUX1BZVEhPTl9ERUJVRz0x
-Cj4gYW5kIGkgZm91bmQgdGhpczoKPiAjIyMjIwo+IFswLjAxOTE1NV0gTFRUbmctVVNUIGRlYnVn
-OiA8bW9kdWxlPigpOiBkZWJ1ZyBpcyBlbmFibGVkCj4gWzAuMDI0NDQ3XSBMVFRuZy1VU1QgZGVi
-dWc6IF9pbml0X3RocmVhZHMoKTogZW50ZXJpbmcKPiBbMC4wMjQ3MTBdIExUVG5nLVVTVCBkZWJ1
-ZzogX2dldF9wb3J0X2Zyb21fZmlsZSgpOiByZWFkaW5nIHBvcnQgZnJvbSAgCj4gZmlsZSAiL3Zh
-ci9ydW4vbHR0bmcvYWdlbnQucG9ydCIKPiBbMC4wMjU3NDVdIExUVG5nLVVTVCBkZWJ1ZzogX2dl
-dF9wb3J0X2Zyb21fZmlsZSgpOiByZWFkaW5nIHBvcnQgZnJvbSAgCj4gZmlsZSAiL3Jvb3QvLmx0
-dG5nL2FnZW50LnBvcnQiCj4gWzAuMDI1OTQyXSBMVFRuZy1VU1QgZGVidWc6IF9pbml0X3RocmVh
-ZHMoKTogc3lzdGVtIHNlc3Npb24gZGFlbW9uIHBvcnQ6IDUzNDUKPiBbMC4wMjYxMTddIExUVG5n
-LVVTVCBkZWJ1ZzogX2luaXRfdGhyZWFkcygpOiB1c2VyIHNlc3Npb24gZGFlbW9uIHBvcnQ6IE5v
-bmUKPiBbMC4wMjYyODBdIExUVG5nLVVTVCBkZWJ1ZzogX2luaXRfdGhyZWFkcygpOiBjcmVhdGlu
-ZyBzeXN0ZW0gY2xpZW50IHRocmVhZAo+IFswLjAyNjc2Ml0gTFRUbmctVVNUIGRlYnVnOiBfaW5p
-dF90aHJlYWRzKCk6IGNyZWF0ZWQgYW5kIHN0YXJ0ZWQgIAo+IHN5c3RlbSBjbGllbnQgdGhyZWFk
-Cj4gWzAuMDI2OTczXSBMVFRuZy1VU1QgZGVidWc6IF9pbml0X3RocmVhZHMoKTogd2FpdGluZyBm
-b3IgIAo+IHJlZ2lzdHJhdGlvbiBkb25lIChleHBlY3RpbmcgMSwgdGltZW91dCBpcyA1LjAgcykK
-PiBbMC4wMjc3MjFdIExUVG5nLVVTVCBkZWJ1ZzogX2NsaWVudF90aHJlYWRfdGFyZ2V0KCk6IGNy
-ZWF0aW5nIGNsaWVudCAgCj4gInN5c3RlbSIgdXNpbmcgVENQIHBvcnQgNTM0NQo+IFswLjAyOTc0
-NV0gTFRUbmctVVNUIGRlYnVnOiBfY2xpZW50X3RocmVhZF90YXJnZXQoKTogc3RhcnRpbmcgY2xp
-ZW50ICJzeXN0ZW0iCj4gWzAuMDI5ODk2XSBMVFRuZy1VU1QgZGVidWc6IHJ1bigpOiBjbGllbnQg
-InN5c3RlbSI6IGNvbm5lY3RpbmcgdG8gIAo+IHNlc3Npb24gZGFlbW9uCj4gWzAuMDMwMTE3XSBM
-VFRuZy1VU1QgZGVidWc6IHJ1bigpOiBjbGllbnQgInN5c3RlbSI6IHJlZ2lzdGVyaW5nIHRvICAK
-PiBzZXNzaW9uIGRhZW1vbgo+IFswLjAzMDM3MF0gTFRUbmctVVNUIGRlYnVnOiBfcmVjdl9zZXJ2
-ZXJfY21kX2hlYWRlcigpOiBjbGllbnQgIAo+ICJzeXN0ZW0iOiByZWNlaXZlZCBlbXB0eSBzZXJ2
-ZXIgY29tbWFuZCBoZWFkZXIKPiBbMC4wMzA1MzJdIExUVG5nLVVTVCBkZWJ1ZzogX2hhbmRsZV9z
-ZXJ2ZXJfY21kKCk6IGNsaWVudCAic3lzdGVtIjogIAo+IGJhZCBzZXJ2ZXIgY29tbWFuZAo+IFsw
-LjAzMDY2N10gTFRUbmctVVNUIGRlYnVnOiBydW4oKTogY2xpZW50ICJzeXN0ZW0iOiBnb3QgZXhj
-ZXB0aW9uOiAgCj4gJ21vZHVsZScgb2JqZWN0IGhhcyBubyBhdHRyaWJ1dGUgJ19DbGllbnRDbWRS
-ZXBseScKPiAjIyMjCj4gWW91IGNhbiBzZWUgJ2JhZCBzZXJ2ZXIgY29tbWFuZCcgYW5kICdleGNl
-cHRpb24nIGluIHRoZSBsYXN0IGxpbmVzLgo+Cj4gSsOpcsOpbWllIEdhbGFybmVhdSA8amVyZW1p
-ZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPiBhIMOpY3JpdMKgOgo+Cj4+IDIwMTUtMTEtMDYgMTc6
-NTkgR01ULTA1OjAwIFl2ZXMgSnVuaW9yIEJhdGlvbm8gIAo+PiA8eXZlcy1qdW5pb3IuYmF0aW9u
-b0Bwb2x5bXRsLmNhPjoKPj4+Cj4+PiBqJ2FpIHVuIHNvdWNpIGF2ZWMgbGx0bmd1c3QgcG91ciBs
-ZXMgYXBwbGljYXRpb24gcHl0aG9uCj4+PiBQb3VyIGwnZXhlbXBsZSBkZSBsYSBEb2MKPj4+ICAg
-ICAgICBodHRwczovL2x0dG5nLm9yZy9kb2NzLyNkb2MtcHl0aG9uLWFwcGxpY2F0aW9uCj4+PiBq
-J2FpIGwnZXJyZXVyOgo+Pj4gICAgICAgIE5vIGhhbmRsZXJzIGNvdWxkIGJlIGZvdW5kIGZvciBs
-b2dnZXIgImhlbGxvLWxvZ2dlciIKPj4+Cj4+Cj4+IEhpIFl2ZXMsCj4+Cj4+IFdlIHRyeSB0byBz
-dGljayB0byBFbmdsaXNoIG9uIHRoaXMgbWFpbGluZyBsaXN0IHNvIHRoZSBxdWVzdGlvbnMgYW5k
-Cj4+IGFuc3dlcnMgcmVtYWluIGVhc2lseSBzZWFyY2hhYmxlLgo+Pgo+PiBUaGUgZXhhbXBsZSBp
-biB0aGUgZG9jcyB1c2VzICJ0aW1lIiB3aXRob3V0IGltcG9ydGluZyBpdCwgSSBoYXZlIHNlbnQK
-Pj4gYSBQdWxsIFJlcXVlc3QgdG8gYWRkcmVzcyB0aGF0Lgo+PiBIb3dldmVyLCBhZGRyZXNzaW5n
-IHRoZSBwcm9ibGVtIHlvdSBhcmUgZW5jb3VudGVyaW5nLCB3aGVyZSBkb2VzCj4+ICJoZWxsby1s
-b2dnZXIiIGNvbWUgZnJvbT8KPj4KPj4gQ2FuIHlvdSBwb3N0IHRoZSBjb2RlIGFuZCB2ZXJzaW9u
-cyBvZiB0aGUgY29tcG9uZW50cyB5b3UgYXJlIHVzaW5nPwo+Pgo+PiBUaGFua3MsCj4+IErDqXLD
-qW1pZQo+Pgo+Pgo+Pj4gbGEgY29tbWFuZGUgImx0dG5nIGxpc3QgLXUgLWEiIG1lIHJldG91cm5l
-IGJpZW4gbGEgbGlzdGUgZGVzIHRyYWNlIHBvaW50Ogo+Pj4KPj4+ICAgICAgICBQSUQ6IDUyMjgg
-LSBOYW1lOiBweXRob24KPj4+ICAgICAgbHR0bmdfcHl0aG9uOmV2ZW50IChsb2dsZXZlbDogVFJB
-Q0VfREVCVUdfTElORSAoMTMpKSAodHlwZToKPj4+IHRyYWNlcG9pbnQpCj4+PiAgICAgIGx0dG5n
-X3VzdF90cmFjZWxvZzpUUkFDRV9ERUJVRyAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHICgxNCkpICh0
-eXBlOgo+Pj4gdHJhY2Vwb2ludCkKPj4+ICAgICAgbHR0bmdfdXN0X3RyYWNlbG9nOlRSQUNFX0RF
-QlVHX0xJTkUgKGxvZ2xldmVsOiBUUkFDRV9ERUJVR19MSU5FICgxMykpCj4+PiAodHlwZTogdHJh
-Y2Vwb2ludCkKPj4+ICAgICAgbHR0bmdfdXN0X3RyYWNlbG9nOlRSQUNFX0RFQlVHX0ZVTkNUSU9O
-IChsb2dsZXZlbDoKPj4+IFRSQUNFX0RFQlVHX0ZVTkNUSU9OICgxMikpICh0eXBlOiB0cmFjZXBv
-aW50KQo+Pj4gICAgICBsdHRuZ191c3RfdHJhY2Vsb2c6VFJBQ0VfREVCVUdfVU5JVCAobG9nbGV2
-ZWw6IFRSQUNFX0RFQlVHX1VOSVQgKDExKSkKPj4+ICh0eXBlOiB0cmFjZXBvaW50KQo+Pj4gICAg
-ICBsdHRuZ191c3RfdHJhY2Vsb2c6VFJBQ0VfREVCVUdfTU9EVUxFIChsb2dsZXZlbDogVFJBQ0Vf
-REVCVUdfTU9EVUxFCj4+PiAoMTApKSAodHlwZTogdHJhY2Vwb2ludCkKPj4+ICAgICAgbHR0bmdf
-dXN0X3RyYWNlbG9nOlRSQUNFX0RFQlVHX1BST0NFU1MgKGxvZ2xldmVsOiBUUkFDRV9ERUJVR19Q
-Uk9DRVNTCj4+PiAoOSkpICh0eXBlOiB0cmFjZXBvaW50KQo+Pj4gICAgICBsdHRuZ191c3RfdHJh
-Y2Vsb2c6VFJBQ0VfREVCVUdfUFJPR1JBTSAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHX1BST0dSQU0K
-Pj4+ICg4KSkgKHR5cGU6IHRyYWNlcG9pbnQpCj4+PiAgICAgIGx0dG5nX3VzdF90cmFjZWxvZzpU
-UkFDRV9ERUJVR19TWVNURU0gKGxvZ2xldmVsOiBUUkFDRV9ERUJVR19TWVNURU0KPj4+ICg3KSkg
-KHR5cGU6IHRyYWNlcG9pbnQpCj4+PiAgICAgIGx0dG5nX3VzdF90cmFjZWxvZzpUUkFDRV9JTkZP
-IChsb2dsZXZlbDogVFJBQ0VfSU5GTyAoNikpICh0eXBlOgo+Pj4gdHJhY2Vwb2ludCkKPj4+ICAg
-ICAgbHR0bmdfdXN0X3RyYWNlbG9nOlRSQUNFX05PVElDRSAobG9nbGV2ZWw6IFRSQUNFX05PVElD
-RSAoNSkpICh0eXBlOgo+Pj4gdHJhY2Vwb2ludCkKPj4+ICAgICAgbHR0bmdfdXN0X3RyYWNlbG9n
-OlRSQUNFX1dBUk5JTkcgKGxvZ2xldmVsOiBUUkFDRV9XQVJOSU5HICg0KSkgKHR5cGU6Cj4+PiB0
-cmFjZXBvaW50KQo+Pj4gICAgICBsdHRuZ191c3RfdHJhY2Vsb2c6VFJBQ0VfRVJSIChsb2dsZXZl
-bDogVFJBQ0VfRVJSICgzKSkgKHR5cGU6Cj4+PiB0cmFjZXBvaW50KQo+Pj4gICAgICBsdHRuZ191
-c3RfdHJhY2Vsb2c6VFJBQ0VfQ1JJVCAobG9nbGV2ZWw6IFRSQUNFX0NSSVQgKDIpKSAodHlwZToK
-Pj4+IHRyYWNlcG9pbnQpCj4+PiAgICAgIGx0dG5nX3VzdF90cmFjZWxvZzpUUkFDRV9BTEVSVCAo
-bG9nbGV2ZWw6IFRSQUNFX0FMRVJUICgxKSkgKHR5cGU6Cj4+PiB0cmFjZXBvaW50KQo+Pj4gICAg
-ICBsdHRuZ191c3RfdHJhY2Vsb2c6VFJBQ0VfRU1FUkcgKGxvZ2xldmVsOiBUUkFDRV9FTUVSRyAo
-MCkpICh0eXBlOgo+Pj4gdHJhY2Vwb2ludCkKPj4+ICAgICAgbHR0bmdfdXN0X3RyYWNlZjpldmVu
-dCAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHICgxNCkpICh0eXBlOiB0cmFjZXBvaW50KQo+Pj4gICAg
-ICBsdHRuZ191c3Rfc3RhdGVkdW1wOmVuZCAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHX0xJTkUgKDEz
-KSkgKHR5cGU6Cj4+PiB0cmFjZXBvaW50KQo+Pj4gICAgICBsdHRuZ191c3Rfc3RhdGVkdW1wOmRl
-YnVnX2xpbmsgKGxvZ2xldmVsOiBUUkFDRV9ERUJVR19MSU5FICgxMykpCj4+PiAodHlwZTogdHJh
-Y2Vwb2ludCkKPj4+ICAgICAgbHR0bmdfdXN0X3N0YXRlZHVtcDpidWlsZF9pZCAobG9nbGV2ZWw6
-IFRSQUNFX0RFQlVHX0xJTkUgKDEzKSkgKHR5cGU6Cj4+PiB0cmFjZXBvaW50KQo+Pj4gICAgICBs
-dHRuZ191c3Rfc3RhdGVkdW1wOnNvaW5mbyAobG9nbGV2ZWw6IFRSQUNFX0RFQlVHX0xJTkUgKDEz
-KSkgKHR5cGU6Cj4+PiB0cmFjZXBvaW50KQo+Pj4gICAgICBsdHRuZ191c3Rfc3RhdGVkdW1wOnN0
-YXJ0IChsb2dsZXZlbDogVFJBQ0VfREVCVUdfTElORSAoMTMpKSAodHlwZToKPj4+IHRyYWNlcG9p
-bnQpCj4+Pgo+Pj4gTWFpcyBwYXMgZGUgcmVzdWx0YXRzIGRhbnMgbGUgcmVwZXJ0b2lyZSBkZXMg
-ZXZlbmVtZW50cyBsb3JzcXVlIGonYWN0aXZlIGxlCj4+PiB0cmFjYWdlIGx0dG5nLgo+Pj4KPj4+
-IFJlc3Vtw6kKPj4+ICAgICAgICBQcm9ibGVtZSAxIDpObyBoYW5kbGVycyBjb3VsZCBiZSBmb3Vu
-ZCBmb3IgbG9nZ2VyCj4+PiAgICAgICAgICAgICAgICBqZSBjcm95YWlzIHF1ZSAiaW1wb3J0IGx0
-dG5ndXN0IiBkZXZhaXQgZ2VyZXIgY2V0dGUKPj4+IHNpdHVhdGlvbgo+Pj4KPj4+ICAgICAgICBQ
-cm9ibGVtZSAyOiBwYXMgZGUgcmVzdWx0YXRzIGF1IHRyYWNhZ2UKPj4+IE1lcmNpLgo+Pj4KPj4+
-Cj4+Pgo+Pj4KPj4+Cj4+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwo+Pj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+Pj4gbHR0bmctZGV2QGxpc3RzLmx0
-dG5nLm9yZwo+Pj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
-Zm8vbHR0bmctZGV2Cj4+Cj4+Cj4+Cj4+IC0tCj4+IErDqXLDqW1pZSBHYWxhcm5lYXUKPj4gRWZm
-aWNpT1MgSW5jLgo+PiBodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKCgoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============0434823047==
+Content-Type: multipart/alternative;
+	boundary="_eb9251f4-693d-4b9b-9803-68a52c5eaaa4_"
+
+--_eb9251f4-693d-4b9b-9803-68a52c5eaaa4_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Dear all=2C
+When I try to link dynamic library I get tracepoint_dlopen' undefined ref :=
+what is a workaround for this
+[root@localhost TEST]# g++ -Wall -shared -fPIC -I. -o mylib.so hello-tp.cpp=
+ -L/usr/local/lib/ -llttng-ust -ldl[root@localhost TEST]# g++ -Wall -shared=
+ -fPIC -I. -L/usr/local/lib/ -o mainlib.so hello.cpp -ldl[root@localhost TE=
+ST]# g++ -o hello mainlib.so mylib.so -llttng-ust -ldlmainlib.so: undefined=
+ reference to `tracepoint_dlopen'collect2: error: ld returned 1 exit status
+
+Best Regards
+Farhan=20
+ 		 	   		  =
+
+--_eb9251f4-693d-4b9b-9803-68a52c5eaaa4_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<style><!--
+.hmmessage P
+{
+margin:0px=3B
+padding:0px
+}
+body.hmmessage
+{
+font-size: 12pt=3B
+font-family:Calibri
+}
+--></style></head>
+<body class=3D'hmmessage'><div dir=3D'ltr'><div>Dear all=2C</div><div><br><=
+/div><div>When I try to link dynamic library I get&nbsp=3B<b style=3D"font-=
+size: 12pt=3B">tracepoint_dlopen' undefined ref :</b></div><div>what is a w=
+orkaround for this</div><div><br></div><div><div>[root@localhost TEST]# g++=
+ -Wall -shared -fPIC -I. -o mylib.so hello-tp.cpp -L/usr/local/lib/ -llttng=
+-ust -ldl</div><div>[root@localhost TEST]# g++ -Wall -shared -fPIC -I. -L/u=
+sr/local/lib/ -o mainlib.so hello.cpp -ldl</div><div>[root@localhost TEST]#=
+ g++ -o hello mainlib.so mylib.so -llttng-ust -ldl</div><div><b>mainlib.so:=
+ undefined reference to `tracepoint_dlopen'</b></div><div><b>collect2: erro=
+r: ld returned 1 exit status</b></div></div><div><br></div><br>Best Regards=
+<br>Farhan&nbsp=3B<div><br></div> 		 	   		  </div></body>
+</html>=
+
+--_eb9251f4-693d-4b9b-9803-68a52c5eaaa4_--
+
+
+--===============0434823047==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0434823047==--
