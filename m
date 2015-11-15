@@ -1,16 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng ring buffer library.
-Date: Sun, 15 Nov 2015 15:57:29 +0000 (UTC)
-Message-ID: <767221134.96044.1447603049237.JavaMail.zimbra__28437.8635501072$1447603127$gmane$org@efficios.com>
-References: <CAGJivuq1TxtJr8U0At46Zo2_T8JbURAcSykXL+rDAzq=EBTqxg@mail.gmail.com>
+Subject: Re: URCU on the Xeon Phi
+Date: Sun, 15 Nov 2015 16:00:40 +0000 (UTC)
+Message-ID: <96765675.96083.1447603240932.JavaMail.zimbra__37916.5830476724$1447603322$gmane$org@efficios.com>
+References: <571881.13bb3.150ff3ebc91.Coremail.sayounara@hnu.edu.cn>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0887757907=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ZxzgW-0000RI-Rq
- for lttng-dev@lists.lttng.org; Sun, 15 Nov 2015 10:57:46 -0500
-In-Reply-To: <CAGJivuq1TxtJr8U0At46Zo2_T8JbURAcSykXL+rDAzq=EBTqxg@mail.gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1Zxzjh-0000VF-8s
+ for lttng-dev@lists.lttng.org; Sun, 15 Nov 2015 11:01:02 -0500
+In-Reply-To: <571881.13bb3.150ff3ebc91.Coremail.sayounara@hnu.edu.cn>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,233 +20,109 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mike <melon.aerial@gmail.com>
+To: =?utf-8?B?5L2V6ZGr?= <sayounara@hnu.edu.cn>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0887757907==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_96043_1230863694.1447603049236"
-
-------=_Part_96043_1230863694.1447603049236
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
------ On Nov 6, 2015, at 4:09 PM, Mike <melon.aerial@gmail.com> wrote: 
-
-> Hello.
-> I'd like to use your library for ring buffers between kernel and userspace. I'd
-> found that this library is in lttng-modules repo on github. But i haven't found
-> any examples of codes in docs. I just want to use this libray. Have u got some
-> easy example of using it or maybe u can say what files in repo ot watch to
-> faster understand how it works?
-
-Hi Mike, 
-
-I'll reply to your private email questions below the lttng-dev thread, since there 
-appears to be more questions than initially posted in the lttng-dev email. 
-
------ On Nov 13, 2015, at 10:05 AM, Mike <melon.aerial@gmail.com> wrote: 
-
-> Hello.
-> I've tried to send to mail-list. but i haven't received any answer.
-
-We've been busy with a workshop last week, hence the delayed answers. 
-
-> So you are the mainterner of github repo, that' why i'm writing you. So the
-> first question about documentation about "Generic Ring Buffer Library". I've
-> been searching internet and haven't found it.
-
-The generic ring buffer library was initially created as a library (modules) 
-for the Linux kernel. Its github repo can be found here: 
-https://github.com/compudj/linux-libringbuffer/commits/tip-current-ringbuffer-0.240 
-
-However, it's not actively maintained, and the updated libringbuffer code for 
-the Linux kernel now sits in lttng-modules under /lib/. There are a few commits 
-of lib ring buffer clients examples that were never integrated from the ringbuffer 
-github repo to lttng-modules though. 
-
-> Also i've seen code on github, understand it a little bit. But i haven't found
-> and client code there, only kernel one.
-
-The lib ring buffer "client" code is actually a in-kernel "client" of the library. 
-A ring buffer "client" selects a ring buffer configuration, and chooses the 
-data layout in the ring buffer. It also implements the userspace-visible interfaces 
-to read from the ring buffer. 
-
-> i'd like to use library for interaction from kernel-space to user-space. Is it
-> for it?
-
-No. The in-kernel library has in-kernel clients, and interfaces to read the buffer 
-content from user-space, but user-space cannot write into the kernel buffers. 
-
-I also did a port of libringbuffer from lttng-modules into lttng-ust, the lttng 
-user-space tracer. However, this is only for writing into the buffer from 
-user-space, not from the kernel. Reading the buffers is done by a user-space 
-consumer daemon. 
-
-> Or i've unserstood something wrong maybe. Also another question about LTTng.
-> I've seen that is a big framework, but i'm only need to trace system calls. Can
-> i use it with tracing only system calls?
-
-Yes, you can use it to trace only syscalls. You will need lttng-tools 
-and lttng-modules, and do 
-
-(as root) 
-lttng-sessiond -d 
-
-(as root or user part of the tracing group) 
-lttng create 
-lttng enable-event --syscall '*' 
-lttng start 
-[....] 
-lttng stop 
-lttng view 
-
-more details at http://lttng.org/docs 
-
-You can replace '*' with e.g. 'open' or 'op*'. The wildcard needs to be 
-at the end of the string. 
-
-> And if i can, where it is usually save logs? Have it got any parameters for that
-> or maybe u can say where i can find it it code, cause it will really help me.
-
-$HOME/lttng-traces/ 
-
-It can be changed by passing parameters to lttng create. See manpages or website doc. 
-Thanks, 
-
-Mathieu 
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
-------=_Part_96043_1230863694.1447603049236
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><br></div><div><span id=3D"zwchr" data-mark=
-er=3D"__DIVIDER__">----- On Nov 6, 2015, at 4:09 PM, Mike &lt;melon.aerial@=
-gmail.com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><=
-blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-l=
-eft:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:non=
-e;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr">=
-<div style=3D"font-size:12.8000001907349px">Hello.<br></div><span style=3D"=
-font-size:12.8000001907349px">I'd like to use your library for ring buffers=
- between kernel and userspace. I'd found that this library is in lttng-modu=
-les repo on github. But i haven't found any examples of codes in docs. I ju=
-st want to use this libray. Have u got some easy example of using it or may=
-be u can say what files in repo ot watch to faster understand how it works?=
-</span><br></div></blockquote><div><br></div><div><div>Hi Mike,</div><div><=
-br data-mce-bogus=3D"1"></div><div>I'll reply to your private email questio=
-ns below the lttng-dev thread, since there<br></div><div>appears to be more=
- questions than initially posted in the lttng-dev email.<br></div><div><br>=
-</div><div><span id=3D"zwchr" data-marker=3D"__DIVIDER__">----- On Nov 13, =
-2015, at 10:05 AM, Mike &lt;melon.aerial@gmail.com&gt; wrote:<br></span></d=
-iv><div data-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left: 2=
-px solid #1010FF; margin-left: 5px; padding-left: 5px; color: #000; font-we=
-ight: normal; font-style: normal; text-decoration: none; font-family: Helve=
-tica,Arial,sans-serif; font-size: 12pt;" data-mce-style=3D"border-left: 2px=
- solid #1010FF; margin-left: 5px; padding-left: 5px; color: #000; font-weig=
-ht: normal; font-style: normal; text-decoration: none; font-family: Helveti=
-ca,Arial,sans-serif; font-size: 12pt;"><div dir=3D"ltr"><div><div><div>Hell=
-o.<br></div>I've tried to send to mail-list. but i haven't received any ans=
-wer.</div></div></div></blockquote><div>We've been busy with a workshop las=
-t week, hence the delayed answers.<br></div><div><br></div><blockquote styl=
-e=3D"border-left: 2px solid #1010FF; margin-left: 5px; padding-left: 5px; c=
-olor: #000; font-weight: normal; font-style: normal; text-decoration: none;=
- font-family: Helvetica,Arial,sans-serif; font-size: 12pt;" data-mce-style=
-=3D"border-left: 2px solid #1010FF; margin-left: 5px; padding-left: 5px; co=
-lor: #000; font-weight: normal; font-style: normal; text-decoration: none; =
-font-family: Helvetica,Arial,sans-serif; font-size: 12pt;"><div dir=3D"ltr"=
-><div><div>So you are the mainterner of github repo, that' why i'm writing =
-you. So the first question about documentation about "Generic Ring Buffer L=
-ibrary". I've been searching internet and haven't found it.</div></div></di=
-v></blockquote><div>The generic ring buffer library was initially created a=
-s a library (modules)</div><div>for the Linux kernel. Its github repo can b=
-e found here:<br></div><div>https://github.com/compudj/linux-libringbuffer/=
-commits/tip-current-ringbuffer-0.240</div><div><br></div><div>However, it's=
- not actively maintained, and the updated libringbuffer code for</div><div>=
-the Linux kernel now sits in lttng-modules under /lib/. There are a few com=
-mits</div><div>of lib ring buffer clients examples that were never integrat=
-ed from the ringbuffer</div><div>github repo to lttng-modules though.</div>=
-<div><br></div><blockquote style=3D"border-left: 2px solid #1010FF; margin-=
-left: 5px; padding-left: 5px; color: #000; font-weight: normal; font-style:=
- normal; text-decoration: none; font-family: Helvetica,Arial,sans-serif; fo=
-nt-size: 12pt;" data-mce-style=3D"border-left: 2px solid #1010FF; margin-le=
-ft: 5px; padding-left: 5px; color: #000; font-weight: normal; font-style: n=
-ormal; text-decoration: none; font-family: Helvetica,Arial,sans-serif; font=
--size: 12pt;"><div dir=3D"ltr"><div><div>Also i've seen code on github, und=
-erstand it a little bit. But i haven't found and client code there, only ke=
-rnel one.</div></div></div></blockquote><div>The lib ring buffer "client" c=
-ode is actually a in-kernel "client" of the library.<br></div><div>A ring b=
-uffer "client" selects a ring buffer configuration, and chooses the<br></di=
-v><div>data layout in the ring buffer. It also implements the userspace-vis=
-ible interfaces</div><div> to read from the ring buffer.<br data-mce-bogus=
-=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"borde=
-r-left: 2px solid #1010FF; margin-left: 5px; padding-left: 5px; color: #000=
-; font-weight: normal; font-style: normal; text-decoration: none; font-fami=
-ly: Helvetica,Arial,sans-serif; font-size: 12pt;" data-mce-style=3D"border-=
-left: 2px solid #1010FF; margin-left: 5px; padding-left: 5px; color: #000; =
-font-weight: normal; font-style: normal; text-decoration: none; font-family=
-: Helvetica,Arial,sans-serif; font-size: 12pt;"><div dir=3D"ltr"><div><div>=
-i'd like to use library for interaction from kernel-space to user-space. Is=
- it for it?</div></div></div></blockquote><div>No. The in-kernel library ha=
-s in-kernel clients, and interfaces to read the buffer<br></div><div>conten=
-t from user-space, but user-space cannot write into the kernel buffers.</di=
-v><div><br></div><div>I also did a port of libringbuffer from lttng-modules=
- into lttng-ust, the lttng</div><div>user-space tracer. However, this is on=
-ly for writing into the buffer from</div><div>user-space, not from the kern=
-el. Reading the buffers is done by a user-space</div><div>consumer daemon.<=
-/div><div><br></div><blockquote style=3D"border-left: 2px solid #1010FF; ma=
-rgin-left: 5px; padding-left: 5px; color: #000; font-weight: normal; font-s=
-tyle: normal; text-decoration: none; font-family: Helvetica,Arial,sans-seri=
-f; font-size: 12pt;" data-mce-style=3D"border-left: 2px solid #1010FF; marg=
-in-left: 5px; padding-left: 5px; color: #000; font-weight: normal; font-sty=
-le: normal; text-decoration: none; font-family: Helvetica,Arial,sans-serif;=
- font-size: 12pt;"><div dir=3D"ltr"><div><div>Or i've unserstood something =
-wrong maybe. Also another question about LTTng. I've seen that is a big fra=
-mework, but i'm only need to trace system calls. Can i use it with tracing =
-only system calls?</div></div></div></blockquote><div>Yes, you can use it t=
-o trace only syscalls. You will need lttng-tools</div><div>and lttng-module=
-s, and do<br></div><div><br></div><div>(as root)</div><div>lttng-sessiond -=
-d</div><div><br></div><div>(as root or user part of the tracing group)</div=
-><div>lttng create</div><div>lttng enable-event --syscall '*'</div><div>ltt=
-ng start</div><div>[....]</div><div>lttng stop</div><div>lttng view</div><d=
-iv><br></div><div>more details at http://lttng.org/docs</div><div><br></div=
-><div>You can replace '*' with e.g. 'open' or 'op*'. The wildcard needs to =
-be</div><div>at the end of the string.</div><div><br></div><blockquote styl=
-e=3D"border-left: 2px solid #1010FF; margin-left: 5px; padding-left: 5px; c=
-olor: #000; font-weight: normal; font-style: normal; text-decoration: none;=
- font-family: Helvetica,Arial,sans-serif; font-size: 12pt;" data-mce-style=
-=3D"border-left: 2px solid #1010FF; margin-left: 5px; padding-left: 5px; co=
-lor: #000; font-weight: normal; font-style: normal; text-decoration: none; =
-font-family: Helvetica,Arial,sans-serif; font-size: 12pt;"><div dir=3D"ltr"=
-><div><div>And if i can, where it is usually save logs? Have it got any par=
-ameters for that or maybe u can say where i can find it it code, cause it w=
-ill really help me.</div></div></div></blockquote><div><br></div><div>$HOME=
-/lttng-traces/</div><div><br></div><div>It can be changed by passing parame=
-ters to lttng create. See manpages or website doc.</div></div><div data-mar=
-ker=3D"__QUOTED_TEXT__">Thanks,</div><div data-marker=3D"__QUOTED_TEXT__"><=
-br></div><div data-marker=3D"__QUOTED_TEXT__">Mathieu</div><div data-marker=
-=3D"__QUOTED_TEXT__"><br></div></div><div><br data-mce-bogus=3D"1"></div></=
-div><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<b=
-r>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></html>
-------=_Part_96043_1230863694.1447603049236--
-
-
---===============0887757907==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0887757907==--
+Q0NpbmcgbHR0bmctZGV2IG1haWxpbmcgbGlzdC4KCi0tLS0tIE9uIE5vdiAxMywgMjAxNSwgYXQg
+MTI6MDggQU0sIOS9lemRqyBzYXlvdW5hcmFAaG51LmVkdS5jbiB3cm90ZToKCj4gRGVhciBNYXRo
+aWV1Ogo+ICAgICAgICAgIEkgYW0gYSBtYXN0ZXIncyBkZWdyZWUgc3R1ZGVudCBhdCBIdW5hbiBV
+bml2ZXJzaXR5IGluIHRoZSBDb2xsZWdlIG9mIEluZm9ybWF0aW9uCj4gICAgICAgICAgU2NpZW5j
+ZSBhbmQgRW5naWVlcmluZy5JJ20gdHJ5aW5nIHRvIHBvcnQgYSBwcm9qZWN0IGFzIGEgbmF0aXZl
+IFhlb24gUGhpCj4gICAgICAgICAgYXBwbGljYXRpb24uVGhlIHByb2plY3QgZGVwZW5kcyBvbiAg
+c29tZSByY3UgZHluYW1pYyBzaGFyZWQKPiAgICAgICAgICBsaWJyYXJpZXMobGlidXJjdS5zby40
+LGxpYnVyY3UtY2RzLnNvLjQsbGlidXJjdS1jb21tb24uc28uNCxsaWJ1cmN1LXFzYnIuc28uNAo+
+ICAgICAgICAgIGV0Yy4pLmFuZCBJIHVuZGVyc3RhbmQgdGhhdCBJIGhhdmUgdG8gY3Jvc3MtY29t
+cGlsZSB0aGVzZSBsaWJyYXJ5cyBmb3IKPiAgICAgICAgICB4ODZfNjQtazFvbS1saW51eC5IZXJl
+J3MgdGhlIHByb2JsZW0gSSd2ZSBoaXQuV2hlbiBJIHRyeSB0byBjb21waWxlCj4gICAgICAgICAg
+dXNlcnNwYWNlLXJjdSB0byBnZXQgdGhlc2Ugc2hhcmVkIGxpYnMuSXQgZ2VuZXJhdGUgdGhlc2Ug
+ZXJyb3JzLgoKQUZBSUssIHRoZSBYZW9uIFBoaSBpcyBub3QgaW4gdGhlIGxpc3Qgb2YgdXJjdSBh
+cmNoaXRlY3R1cmVzIGF0IHRoZQptb21lbnQuIGxpYnVyY3Ugd291bGQgbmVlZCB0byBiZSBleHRl
+bmRlZCB0byBzdXBwb3J0IGl0LgoKSSBrbm93IGNvbnRyaWJ1dG9ycyBhdCBQb2x5dGVjaG5pcXVl
+IGhhdmUgYSBYZW9uIFBoaS4gUGVyaGFwcyB0aGV5CmNvdWxkIHRlbGwgdXMgbW9yZSBhYm91dCB3
+aGF0IGlzIG5lZWRlZCA/CgpUaGFua3MsCgpNYXRoaWV1Cgo+IAo+IFtyb290QGxvY2FsaG9zdCB3
+b3Jrc3BhY2VdIyBjZCB1c2Vyc3BhY2UtcmN1Lwo+IFtyb290QGxvY2FsaG9zdCB1c2Vyc3BhY2Ut
+cmN1XSMgbWFrZQo+IG1ha2UgIGFsbC1yZWN1cnNpdmUKPiBtYWtlWzFdOiDov5vlhaXnm67lvZXi
+gJwvcm9vdC93b3Jrc3BhY2UvdXNlcnNwYWNlLXJjdeKAnQo+IE1ha2luZyBhbGwgaW4gLgo+IG1h
+a2VbMl06IOi/m+WFpeebruW9leKAnC9yb290L3dvcmtzcGFjZS91c2Vyc3BhY2UtcmN14oCdCj4g
+IENDTEQgICBsaWJ1cmN1LWNvbW1vbi5sYQo+ICBDQyAgICAgdXJjdS5sbwo+ICBDQyAgICAgdXJj
+dS1wb2ludGVyLmxvCj4gIENDTEQgICBsaWJ1cmN1LmxhCj4gIENDICAgICB1cmN1LXFzYnIubG8K
+PiAgQ0NMRCAgIGxpYnVyY3UtcXNici5sYQo+ICBDQyAgICAgbGlidXJjdV9tYl9sYS11cmN1Lmxv
+Cj4gIENDICAgICBsaWJ1cmN1X21iX2xhLXVyY3UtcG9pbnRlci5sbwo+ICBDQyAgICAgbGlidXJj
+dV9tYl9sYS1jb21wYXRfZnV0ZXgubG8KPiAgQ0NMRCAgIGxpYnVyY3UtbWIubGEKPiAgQ0MgICAg
+IGxpYnVyY3Vfc2lnbmFsX2xhLXVyY3UubG8KPiAgQ0MgICAgIGxpYnVyY3Vfc2lnbmFsX2xhLXVy
+Y3UtcG9pbnRlci5sbwo+ICBDQyAgICAgbGlidXJjdV9zaWduYWxfbGEtY29tcGF0X2Z1dGV4Lmxv
+Cj4gIENDTEQgICBsaWJ1cmN1LXNpZ25hbC5sYQo+ICBDQyAgICAgdXJjdS1icC5sbwo+ICBDQ0xE
+ICAgbGlidXJjdS1icC5sYQo+ICBDQyAgICAgcmN1bGZxdWV1ZS5sbwo+ICBDQyAgICAgcmN1bGZz
+dGFjay5sbwo+ICBDQyAgICAgbGZzdGFjay5sbwo+ICBDQyAgICAgcmN1bGZoYXNoLmxvCj4gIEND
+ICAgICByY3VsZmhhc2gtbW0tb3JkZXIubG8KPiAgQ0MgICAgIHJjdWxmaGFzaC1tbS1jaHVuay5s
+bwo+ICBDQyAgICAgcmN1bGZoYXNoLW1tLW1tYXAubG8KPiAgQ0NMRCAgIGxpYnVyY3UtY2RzLmxh
+Cj4gbWFrZVsyXTog56a75byA55uu5b2V4oCcL3Jvb3Qvd29ya3NwYWNlL3VzZXJzcGFjZS1yY3Xi
+gJ0KPiBNYWtpbmcgYWxsIGluIGRvYwo+IG1ha2VbMl06IOi/m+WFpeebruW9leKAnC9yb290L3dv
+cmtzcGFjZS91c2Vyc3BhY2UtcmN1L2RvY+KAnQo+IE1ha2luZyBhbGwgaW4gZXhhbXBsZXMKPiBt
+YWtlWzNdOiDov5vlhaXnm67lvZXigJwvcm9vdC93b3Jrc3BhY2UvdXNlcnNwYWNlLXJjdS9kb2Mv
+ZXhhbXBsZXPigJ0KPiBFeGFtcGxlczogcmVsYXRpdmUgdG9wX3NyY2RpciBwYXRoIC4uLy4uCj4g
+RXhhbXBsZXM6IHJlbGF0aXZlIHRvcF9idWlsZGRpciBwYXRoIC4uLy4uCj4gbWFrZVs0XTog6L+b
+5YWl55uu5b2V4oCcL3Jvb3Qvd29ya3NwYWNlL3VzZXJzcGFjZS1yY3UvZG9jL2V4YW1wbGVz4oCd
+Cj4gbWFrZSAtQyBobGlzdAo+IG1ha2VbNV06IOi/m+WFpeebruW9leKAnC9yb290L3dvcmtzcGFj
+ZS91c2Vyc3BhY2UtcmN1L2RvYy9leGFtcGxlcy9obGlzdOKAnQo+IG1ha2UgLWYgTWFrZWZpbGUu
+Y2RzX2hsaXN0X2FkZF9oZWFkX3JjdQo+IG1ha2VbNl06IOi/m+WFpeebruW9leKAnC9yb290L3dv
+cmtzcGFjZS91c2Vyc3BhY2UtcmN1L2RvYy9leGFtcGxlcy9obGlzdOKAnQo+IGljYyAtc3RkPWdu
+dTk5ICAtZyAtTzIgLVdhbGwgLUkuLi8vLi4vLi4vIC1JLi4vLi4vLi4vIC1tbWljIC1wdGhyZWFk
+IFwKPgktYyAtbyBjZHNfaGxpc3RfYWRkX2hlYWRfcmN1Lm8gY2RzX2hsaXN0X2FkZF9oZWFkX3Jj
+dS5jCj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIGNkc19obGlzdF9hZGRfaGVhZF9yY3UuYygyMCk6
+Cj4gLi4vLy4uLy4uL3VyY3UvcmN1aGxpc3QuaCg1MCk6IHdhcm5pbmcgIzI2NjogZnVuY3Rpb24g
+IkNNTV9TVE9SRV9TSEFSRUQiCj4gZGVjbGFyZWQgaW1wbGljaXRseQo+ICAJQ01NX1NUT1JFX1NI
+QVJFRChlbGVtLT5wcmV2LT5uZXh0LCBlbGVtLT5uZXh0KTsKPiAgCV4KPiAKPiBpY2MgLXN0ZD1n
+bnU5OSAtZyAtTzIgLVdhbGwgIC1tbWljIC1wdGhyZWFkIC1MLi4vLi4vLi4vLmxpYnMvIC1XbCwt
+cnBhdGgKPiAiL3Jvb3Qvd29ya3NwYWNlL3VzZXJzcGFjZS1yY3UvZG9jL2V4YW1wbGVzLy4uLy4u
+Ly5saWJzLyIgXAo+CS1vIGNkc19obGlzdF9hZGRfaGVhZF9yY3UgY2RzX2hsaXN0X2FkZF9oZWFk
+X3JjdS5vIC1sdXJjdQo+IHg4Nl82NC1rMW9tLWxpbnV4LWxkOiB3YXJuaW5nOiBsaWJpbWYuc28s
+IG5lZWRlZCBieSAuLi8uLi8uLi8ubGlicy8vbGlidXJjdS5zbywKPiBub3QgZm91bmQgKHRyeSB1
+c2luZyAtcnBhdGggb3IgLXJwYXRoLWxpbmspCj4geDg2XzY0LWsxb20tbGludXgtbGQ6IHdhcm5p
+bmc6IGxpYnN2bWwuc28sIG5lZWRlZCBieSAuLi8uLi8uLi8ubGlicy8vbGlidXJjdS5zbywKPiBu
+b3QgZm91bmQgKHRyeSB1c2luZyAtcnBhdGggb3IgLXJwYXRoLWxpbmspCj4geDg2XzY0LWsxb20t
+bGludXgtbGQ6IHdhcm5pbmc6IGxpYmlybmcuc28sIG5lZWRlZCBieSAuLi8uLi8uLi8ubGlicy8v
+bGlidXJjdS5zbywKPiBub3QgZm91bmQgKHRyeSB1c2luZyAtcnBhdGggb3IgLXJwYXRoLWxpbmsp
+Cj4geDg2XzY0LWsxb20tbGludXgtbGQ6IHdhcm5pbmc6IGxpYmludGxjLnNvLjUsIG5lZWRlZCBi
+eQo+IC4uLy4uLy4uLy5saWJzLy9saWJ1cmN1LnNvLCBub3QgZm91bmQgKHRyeSB1c2luZyAtcnBh
+dGggb3IgLXJwYXRoLWxpbmspCj4gLi4vLi4vLi4vLmxpYnMvL2xpYnVyY3Uuc286IHVuZGVmaW5l
+ZCByZWZlcmVuY2UgdG8gYENNTV9TVE9SRV9TSEFSRUQnCj4gLi4vLi4vLi4vLmxpYnMvL2xpYnVy
+Y3Uuc286IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYHVhdG9taWNfYW5kJwo+IC4uLy4uLy4uLy5s
+aWJzLy9saWJ1cmN1LnNvOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvCj4gYGNtbV9zbXBfbWJfX2Fm
+dGVyX3VhdG9taWNfYW5kJwo+IC4uLy4uLy4uLy5saWJzLy9saWJ1cmN1LnNvOiB1bmRlZmluZWQg
+cmVmZXJlbmNlIHRvIGBDTU1fTE9BRF9TSEFSRUQnCj4gLi4vLi4vLi4vLmxpYnMvL2xpYnVyY3Uu
+c286IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYHVhdG9taWNfZGVjJwo+IC4uLy4uLy4uLy5saWJz
+Ly9saWJ1cmN1LnNvOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGB1YXRvbWljX2FkZCcKPiAuLi8u
+Li8uLi8ubGlicy8vbGlidXJjdS5zbzogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgY21tX3NtcF9y
+bWInCj4gLi4vLi4vLi4vLmxpYnMvL2xpYnVyY3Uuc286IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8g
+YGNtbV9zbXBfd21jJwo+IC4uLy4uLy4uLy5saWJzLy9saWJ1cmN1LnNvOiB1bmRlZmluZWQgcmVm
+ZXJlbmNlIHRvCj4gYGNtbV9zbXBfbWJfX2JlZm9yZV91YXRvbWljX29yJwo+IC4uLy4uLy4uLy5s
+aWJzLy9saWJ1cmN1LnNvOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGB1YXRvbWljX3JlYWQnCj4g
+Li4vLi4vLi4vLmxpYnMvL2xpYnVyY3Uuc286IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYHVhdG9t
+aWNfeGNoZycKPiAuLi8uLi8uLi8ubGlicy8vbGlidXJjdS5zbzogdW5kZWZpbmVkIHJlZmVyZW5j
+ZSB0byBgdWF0b21pY19zdWJfcmV0dXJuJwo+IC4uLy4uLy4uLy5saWJzLy9saWJ1cmN1LnNvOiB1
+bmRlZmluZWQgcmVmZXJlbmNlIHRvIGB1YXRvbWljX3NldCcKPiAuLi8uLi8uLi8ubGlicy8vbGli
+dXJjdS5zbzogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgY21tX3dtYicKPiAuLi8uLi8uLi8ubGli
+cy8vbGlidXJjdS5zbzogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgdWF0b21pY19vcicKPiAuLi8u
+Li8uLi8ubGlicy8vbGlidXJjdS5zbzogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgY21tX3NtcF9t
+YicKPiAuLi8uLi8uLi8ubGlicy8vbGlidXJjdS5zbzogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBg
+Y2FhX2NwdV9yZWxheCcKPiAuLi8uLi8uLi8ubGlicy8vbGlidXJjdS5zbzogdW5kZWZpbmVkIHJl
+ZmVyZW5jZSB0bwo+IGBjbW1fc21wX3JlYWRfYmFycmllcl9kZXBlbmRzJwo+IC4uLy4uLy4uLy5s
+aWJzLy9saWJ1cmN1LnNvOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvCj4gYGNtbV9zbXBfbWJfX2Fm
+dGVyX3VhdG9taWNfb3InCj4gLi4vLi4vLi4vLmxpYnMvL2xpYnVyY3Uuc286IHVuZGVmaW5lZCBy
+ZWZlcmVuY2UgdG8gYHVhdG9taWNfc3ViJwo+IC4uLy4uLy4uLy5saWJzLy9saWJ1cmN1LnNvOiB1
+bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBjbW1fc21wX3JtYycKPiAuLi8uLi8uLi8ubGlicy8vbGli
+dXJjdS5zbzogdW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgY21tX3NtcF93bWInCj4gLi4vLi4vLi4v
+LmxpYnMvL2xpYnVyY3Uuc286IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYHVhdG9taWNfaW5jJwo+
+IC4uLy4uLy4uLy5saWJzLy9saWJ1cmN1LnNvOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGB1YXRv
+bWljX2NtcHhjaGcKPiAKPiBJJ20gY29uZnVzZWQgYWJvdXQgdGhlc2UgZXJyb3JzIGFuZCBkb24n
+dCBrbm93IGhvdyB0byBzb2x2ZSB0aGVzZSBlcnJvcihsaWtlCj4gLi4vLi4vLi4vLmxpYnMvL2xp
+YnVyY3Uuc286IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYENNTV9TVE9SRV9TSEFSRUQnKS4KPiBD
+b3VsZCB5b3UgZ2l2ZSBtZSBzb21lIHRpcHMgIGFib3V0IHRoaXM/Cj4gSSBhbSBsb29raW5nIGZv
+d2FyZCB0byB5b3VyIGFwcGx5IC4KPiAKPiBUaGFuayB5b3UsCj4gCj4gW1hpbiBIZV0KPiAKPiBI
+dW5hbiBVbml2ZXJzaXR5IEluIENoaW5hCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1Mg
+SW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
+dHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
+bmZvL2x0dG5nLWRldgo=
