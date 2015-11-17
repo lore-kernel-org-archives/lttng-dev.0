@@ -1,21 +1,17 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Subject: Re: URCU on the Xeon Phi
-Date: Sun, 15 Nov 2015 22:31:47 -0500
-Message-ID: <CAFXXi0mY1dfXiV5NJ5u_oG_r_YWhM8MRRqnNmD2gvSSJfKdPRg__16861.0744215131$1447644800$gmane$org@mail.gmail.com>
-References: <571881.13bb3.150ff3ebc91.Coremail.sayounara@hnu.edu.cn>
- <96765675.96083.1447603240932.JavaMail.zimbra@efficios.com>
- <949605371.41173867.1447617490425.JavaMail.zimbra@polymtl.ca>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [LTTNG-TOOLS PATCH] Contexts for RT debugging
+Date: Tue, 17 Nov 2015 19:05:17 +0000 (UTC)
+Message-ID: <421531885.111220.1447787117631.JavaMail.zimbra__43127.2879163318$1447787209$gmane$org@efficios.com>
+References: <1447291344-10709-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-f172.google.com ([209.85.220.172])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <thundersim@gmail.com>) id 1ZyAWk-0003k7-9B
- for lttng-dev@lists.lttng.org; Sun, 15 Nov 2015 22:32:25 -0500
-Received: by qkas77 with SMTP id s77so101828881qka.0
- for <lttng-dev@lists.lttng.org>; Sun, 15 Nov 2015 19:32:16 -0800 (PST)
-In-Reply-To: <949605371.41173867.1447617490425.JavaMail.zimbra@polymtl.ca>
+ (envelope-from <compudj@efficios.com>) id 1ZylZM-000791-6F
+ for lttng-dev@lists.lttng.org; Tue, 17 Nov 2015 14:05:33 -0500
+In-Reply-To: <1447291344-10709-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,30 +20,233 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michel Dagenais <michel.dagenais@polymtl.ca>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Simon Marchi <simon.marchi@ericsson.com>, =?UTF-8?B?5L2V6ZGr?= <sayounara@hnu.edu.cn>
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On 15 November 2015 at 14:58, Michel Dagenais
-<michel.dagenais@polymtl.ca> wrote:
-> Simon Marchi worked on the Xeon Phi. He should be able to tell you more. Basically the Phi is compatible with older "pentium" presumably a design decision to put simpler cores but more of them. Thus, some of the later additions (e.g., a few specialized instructions) are missing.
 
-Indeed, it was possible at the time to build lttng-tools and lttng-ust
-fo the Phi.  Since urcu is a dependency of those, it means it was
-possible to build it as well.
 
-As Michel said, the serializing instructions used for the regular x86
-(mfence?) port are not available on the Phi, so urcu treats it like an
-old x86 processor.  See:
-https://git.lttng.org/?p=urcu.git;a=commit;h=8496c88699ea71aea6a8a244f20df4fcd558ffba
+----- On Nov 11, 2015, at 8:22 PM, Julien Desfossez jdesfossez@efficios.com wrote:
 
-However, I see that you are building with icc and not gcc.  I don't
-think I have tried that.  Would you mind trying to build with the Xeon
-Phi's gcc?  I think it's called x86_64-k1om-linux-gcc and is bundled
-with Intel's MPSS.  It's possible that using icc confuses the
-architecture auto-detection.
+> Enables the interruptible, preemptible, need_resched and migratable
+> kernel contexts.
 
-Finally, providing the config.log (you can pastebin it) would help
-identify what happens.
+need_resched -> need_reschedule
 
-Simon
+> 
+> Signed-off-by: Julien Desfossez <jdesfossez@efficios.com>
+> ---
+> include/lttng/event.h                  |  4 ++++
+> src/bin/lttng-sessiond/context.c       | 12 ++++++++++++
+> src/bin/lttng-sessiond/save.c          | 12 ++++++++++++
+> src/bin/lttng/commands/add_context.c   |  8 ++++++++
+> src/common/config/config-session-abi.h |  4 ++++
+> src/common/config/session-config.c     | 16 ++++++++++++++++
+> src/common/lttng-kernel.h              |  4 ++++
+> 7 files changed, 60 insertions(+)
+> 
+> diff --git a/include/lttng/event.h b/include/lttng/event.h
+> index 3e8fbe3..d79eb4b 100644
+> --- a/include/lttng/event.h
+> +++ b/include/lttng/event.h
+> @@ -136,6 +136,10 @@ enum lttng_event_context_type {
+> 	LTTNG_EVENT_CONTEXT_IP                = 12,
+> 	LTTNG_EVENT_CONTEXT_PERF_CPU_COUNTER  = 13,
+> 	LTTNG_EVENT_CONTEXT_PERF_THREAD_COUNTER = 14,
+> +	LTTNG_EVENT_CONTEXT_INTERRUPTIBLE     = 15,
+> +	LTTNG_EVENT_CONTEXT_PREEMPTIBLE       = 16,
+> +	LTTNG_EVENT_CONTEXT_NEED_RESCHED      = 17,
+
+Same here.
+
+many instances below....
+
+> +	LTTNG_EVENT_CONTEXT_MIGRATABLE        = 18,
+> };
+> 
+> enum lttng_event_field_type {
+> diff --git a/src/bin/lttng-sessiond/context.c b/src/bin/lttng-sessiond/context.c
+> index 0de1d06..b01278c 100644
+> --- a/src/bin/lttng-sessiond/context.c
+> +++ b/src/bin/lttng-sessiond/context.c
+> @@ -193,6 +193,18 @@ int context_kernel_add(struct ltt_kernel_session *ksession,
+> 	case LTTNG_EVENT_CONTEXT_HOSTNAME:
+> 		kctx->ctx.ctx = LTTNG_KERNEL_CONTEXT_HOSTNAME;
+> 		break;
+> +	case LTTNG_EVENT_CONTEXT_INTERRUPTIBLE:
+> +		kctx->ctx.ctx = LTTNG_KERNEL_CONTEXT_INTERRUPTIBLE;
+> +		break;
+> +	case LTTNG_EVENT_CONTEXT_PREEMPTIBLE:
+> +		kctx->ctx.ctx = LTTNG_KERNEL_CONTEXT_PREEMPTIBLE;
+> +		break;
+> +	case LTTNG_EVENT_CONTEXT_NEED_RESCHED:
+
+^
+
+> +		kctx->ctx.ctx = LTTNG_KERNEL_CONTEXT_NEED_RESCHED;
+
+^
+
+> +		break;
+> +	case LTTNG_EVENT_CONTEXT_MIGRATABLE:
+> +		kctx->ctx.ctx = LTTNG_KERNEL_CONTEXT_MIGRATABLE;
+> +		break;
+> 	case LTTNG_EVENT_CONTEXT_PERF_CPU_COUNTER:
+> 	case LTTNG_EVENT_CONTEXT_PERF_COUNTER:
+> 		kctx->ctx.ctx = LTTNG_KERNEL_CONTEXT_PERF_CPU_COUNTER;
+> diff --git a/src/bin/lttng-sessiond/save.c b/src/bin/lttng-sessiond/save.c
+> index a6fea46..16b928e 100644
+> --- a/src/bin/lttng-sessiond/save.c
+> +++ b/src/bin/lttng-sessiond/save.c
+> @@ -232,6 +232,18 @@ const char *get_kernel_context_type_string(
+> 	case LTTNG_KERNEL_CONTEXT_HOSTNAME:
+> 		context_type_string = config_event_context_hostname;
+> 		break;
+> +	case LTTNG_KERNEL_CONTEXT_INTERRUPTIBLE:
+> +		context_type_string = config_event_context_interruptible;
+> +		break;
+> +	case LTTNG_KERNEL_CONTEXT_PREEMPTIBLE:
+> +		context_type_string = config_event_context_preemptible;
+> +		break;
+> +	case LTTNG_KERNEL_CONTEXT_NEED_RESCHED:
+> +		context_type_string = config_event_context_need_resched;
+
+^
+
+> +		break;
+> +	case LTTNG_KERNEL_CONTEXT_MIGRATABLE:
+> +		context_type_string = config_event_context_migratable;
+> +		break;
+> 	default:
+> 		context_type_string = NULL;
+> 	}
+> diff --git a/src/bin/lttng/commands/add_context.c
+> b/src/bin/lttng/commands/add_context.c
+> index fb37c0a..8cbb5a4 100644
+> --- a/src/bin/lttng/commands/add_context.c
+> +++ b/src/bin/lttng/commands/add_context.c
+> @@ -69,6 +69,10 @@ enum context_type {
+> 	CONTEXT_IP           = 12,
+> 	CONTEXT_PERF_CPU_COUNTER = 13,
+> 	CONTEXT_PERF_THREAD_COUNTER = 14,
+> +	CONTEXT_INTERRUPTIBLE = 15,
+> +	CONTEXT_PREEMPTIBLE  = 16,
+> +	CONTEXT_NEED_RESCHED = 17,
+
+
+and also here
+
+> +	CONTEXT_MIGRATABLE   = 18,
+> };
+> 
+> /*
+> @@ -213,6 +217,10 @@ const struct ctx_opts {
+> 	{ "vppid", CONTEXT_VPPID },
+> 	{ "hostname", CONTEXT_HOSTNAME },
+> 	{ "ip", CONTEXT_IP },
+> +	{ "interruptible", CONTEXT_INTERRUPTIBLE },
+> +	{ "preemptible", CONTEXT_PREEMPTIBLE },
+> +	{ "need_resched", CONTEXT_NEED_RESCHED },
+
+here
+
+> +	{ "migratable", CONTEXT_MIGRATABLE },
+> 
+> 	/* Perf options */
+> 
+> diff --git a/src/common/config/config-session-abi.h
+> b/src/common/config/config-session-abi.h
+> index 9251b22..f951e3c 100644
+> --- a/src/common/config/config-session-abi.h
+> +++ b/src/common/config/config-session-abi.h
+> @@ -116,5 +116,9 @@ extern const char * const config_event_context_pthread_id;
+> extern const char * const config_event_context_hostname;
+> extern const char * const config_event_context_ip;
+> extern const char * const config_event_context_perf_thread_counter;
+> +extern const char * const config_event_context_interruptible;
+> +extern const char * const config_event_context_preemptible;
+> +extern const char * const config_event_context_need_resched;
+
+here
+
+> +extern const char * const config_event_context_migratable;
+> 
+> #endif /* CONFIG_SESSION_INTERNAL_H */
+> diff --git a/src/common/config/session-config.c
+> b/src/common/config/session-config.c
+> index 87e9c03..c87cdc2 100644
+> --- a/src/common/config/session-config.c
+> +++ b/src/common/config/session-config.c
+> @@ -165,6 +165,10 @@ const char * const config_event_context_pthread_id =
+> "PTHREAD_ID";
+> const char * const config_event_context_hostname = "HOSTNAME";
+> const char * const config_event_context_ip = "IP";
+> const char * const config_event_context_perf_thread_counter =
+> "PERF_THREAD_COUNTER";
+> +const char * const config_event_context_interruptible = "INTERRUPTIBLE";
+> +const char * const config_event_context_preemptible = "PREEMPTIBLE";
+> +const char * const config_event_context_need_resched = "NEED_RESCHED";
+
+here.
+
+> +const char * const config_event_context_migratable = "MIGRATABLE";
+> 
+> struct consumer_output {
+> 	int enabled;
+> @@ -946,6 +950,18 @@ int get_context_type(xmlChar *context_type)
+> 	} else if (!strcmp((char *) context_type,
+> 		config_event_context_ip)) {
+> 		ret = LTTNG_EVENT_CONTEXT_IP;
+> +	} else if (!strcmp((char *) context_type,
+> +		config_event_context_interruptible)) {
+> +		ret = LTTNG_EVENT_CONTEXT_INTERRUPTIBLE;
+> +	} else if (!strcmp((char *) context_type,
+> +		config_event_context_preemptible)) {
+> +		ret = LTTNG_EVENT_CONTEXT_PREEMPTIBLE;
+> +	} else if (!strcmp((char *) context_type,
+> +		config_event_context_need_resched)) {
+> +		ret = LTTNG_EVENT_CONTEXT_NEED_RESCHED;
+
+here.
+
+> +	} else if (!strcmp((char *) context_type,
+> +		config_event_context_migratable)) {
+> +		ret = LTTNG_EVENT_CONTEXT_MIGRATABLE;
+> 	} else {
+> 		goto error;
+> 	}
+> diff --git a/src/common/lttng-kernel.h b/src/common/lttng-kernel.h
+> index 9dd8df7..cce094c 100644
+> --- a/src/common/lttng-kernel.h
+> +++ b/src/common/lttng-kernel.h
+> @@ -54,6 +54,10 @@ enum lttng_kernel_context_type {
+> 	LTTNG_KERNEL_CONTEXT_VPPID          = 9,
+> 	LTTNG_KERNEL_CONTEXT_HOSTNAME       = 10,
+> 	LTTNG_KERNEL_CONTEXT_CPU_ID         = 11,
+> +	LTTNG_KERNEL_CONTEXT_INTERRUPTIBLE  = 12,
+> +	LTTNG_KERNEL_CONTEXT_PREEMPTIBLE    = 13,
+> +	LTTNG_KERNEL_CONTEXT_NEED_RESCHED   = 14,
+
+and here,
+
+Thanks,
+
+Mathieu
+
+> +	LTTNG_KERNEL_CONTEXT_MIGRATABLE     = 15,
+> };
+> 
+> /* Perf counter attributes */
+> --
+> 1.9.1
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
