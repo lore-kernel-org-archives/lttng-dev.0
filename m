@@ -1,20 +1,20 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [LTTNG-TOOLS PATCH v2] Contexts for RT debugging
-Date: Thu, 19 Nov 2015 11:12:22 -0500
-Message-ID: <CA+jJMxuC7jEsGDxgr0VbS4AwrMmDdmMs9dXW9s_DPc9rDtQAAw__15984.2280940667$1447949603$gmane$org@mail.gmail.com>
-References: <1447863421-12789-1-git-send-email-jdesfossez@efficios.com>
- <1762527520.116282.1447876892012.JavaMail.zimbra@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Lttng add-context perf commands gives me error
+Date: Thu, 19 Nov 2015 17:25:45 +0000 (UTC)
+Message-ID: <1171905821.121424.1447953945294.JavaMail.zimbra__30709.6750628718$1447954020$gmane$org@efficios.com>
+References: <328787043.5258001.1447796792694.JavaMail.yahoo.ref@mail.yahoo.com>
+ <328787043.5258001.1447796792694.JavaMail.yahoo@mail.yahoo.com>
+ <824342841.114145.1447857930891.JavaMail.zimbra@efficios.com>
+ <886413694.5732011.1447877960962.JavaMail.yahoo@mail.yahoo.com>
+ <1043364994.6119959.1447947438952.JavaMail.yahoo@mail.yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1461290372=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f181.google.com ([209.85.160.181])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1ZzRox-00040l-N4
- for lttng-dev@lists.lttng.org; Thu, 19 Nov 2015 11:12:30 -0500
-Received: by ykfs79 with SMTP id s79so114181513ykf.1
- for <lttng-dev@lists.lttng.org>; Thu, 19 Nov 2015 08:12:22 -0800 (PST)
-In-Reply-To: <1762527520.116282.1447876892012.JavaMail.zimbra@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1ZzSy6-0004O3-Vg
+ for lttng-dev@lists.lttng.org; Thu, 19 Nov 2015 12:26:01 -0500
+In-Reply-To: <1043364994.6119959.1447947438952.JavaMail.yahoo@mail.yahoo.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,170 +23,276 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>, Julien Desfossez <jdesfossez@efficios.com>
+To: Hani Nemati <hani_nemati@yahoo.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gdG9wIG9mIE1hdGhpZXUncyBjb21tZW50LCBlbmFibGluZyB0aGUgIm1pZ3JhdGFibGUiIGtl
-cm5lbCBjb250ZXh0Cm9uIGEgbm9uLVJUIGtlcm5lbCByZXN1bHRzIGluIHRoZSBmb2xsb3dpbmcg
-ZXJyb3I6CgokIGx0dG5nIGFkZC1jb250ZXh0IC1jIGNoYW5uZWwwIC1rIC10IG1pZ3JhdGFibGUK
-RXJyb3I6IG1pZ3JhdGFibGU6IEFkZCBrZXJuZWwgY29udGV4dCBmYWlsZWQKV2FybmluZzogU29t
-ZSBjb21tYW5kKHMpIHdlbnQgd3JvbmcKCldoaWxlIHRoZSBzZXNzaW9uIGRhZW1vbiBsb2dzIHRo
-ZSBmb2xsb3dpbmc6CkRFQlVHMSAtIDExOjA3OjI3LjY5MzkzNiBbMjY5MjcvMjY5NzRdOiBBZGRp
-bmcgY29udGV4dCB0byBjaGFubmVsCmNoYW5uZWwwIChpbiBrZXJuZWxfYWRkX2NoYW5uZWxfY29u
-dGV4dCgpIGF0IGtlcm5lbC5jOjQ5KQpQRVJST1IgLSAxMTowNzoyNy42OTM5NTIgWzI2OTI3LzI2
-OTc0XTogYWRkIGNvbnRleHQgaW9jdGw6IEZ1bmN0aW9uCm5vdCBpbXBsZW1lbnRlZCAoaW4ga2Vy
-bmVsX2FkZF9jaGFubmVsX2NvbnRleHQoKSBhdCBrZXJuZWwuYzo1MykKREVCVUcxIC0gMTE6MDc6
-MjcuNjkzOTYxIFsyNjkyNy8yNjk3NF06IFNlbmRpbmcgcmVzcG9uc2UgKHNpemU6IDE2LApyZXRj
-b2RlOiBBZGQga2VybmVsIGNvbnRleHQgZmFpbGVkICg0MikpIChpbiB0aHJlYWRfbWFuYWdlX2Ns
-aWVudHMoKQphdCBtYWluLmM6NDQ5MykKCkEgbmV3IGVycm9yIGNvZGUgYW5kIG1lc3NhZ2Ugc2hv
-dWxkIGJlIGludHJvZHVjZWQgdG8gcmVwb3J0IHRoYXQgYQpjb250ZXh0IGlzIHVuYXZhaWxhYmxl
-IG9uIHRoZSBzeXN0ZW0gaW5zdGVhZCBvZiBhICJnZW5lcmljIiBlcnJvcgp3aGljaCBtYWtlcyBp
-dCBzZWVtIGxpa2UgYSBidWcgd2FzIGVuY291bnRlcmVkLgoKSsOpcsOpbWllCgpPbiBXZWQsIE5v
-diAxOCwgMjAxNSBhdCAzOjAxIFBNLCBNYXRoaWV1IERlc25veWVycwo8bWF0aGlldS5kZXNub3ll
-cnNAZWZmaWNpb3MuY29tPiB3cm90ZToKPiAtLS0tLSBPbiBOb3YgMTgsIDIwMTUsIGF0IDExOjE3
-IEFNLCBKdWxpZW4gRGVzZm9zc2V6IGpkZXNmb3NzZXpAZWZmaWNpb3MuY29tIHdyb3RlOgo+Cj4+
-IEVuYWJsZXMgdGhlIGludGVycnVwdGlibGUsIHByZWVtcHRpYmxlLCBuZWVkX3Jlc2NoZWQgYW5k
-IG1pZ3JhdGFibGUKPj4ga2VybmVsIGNvbnRleHRzLgo+Cj4gbmVlZF9yZXNjaGVkIC0+IG5lZWRf
-cmVzY2hlZHVsZQo+Cj4gKGluIGNoYW5nZWxvZykKPgo+IE90aGVyIHRoYW4gdGhhdCwgbG9va3Mg
-Z29vZCwKPgo+IFRoYW5rcywKPgo+IE1hdGhpZXUKPgo+Pgo+PiBTaWduZWQtb2ZmLWJ5OiBKdWxp
-ZW4gRGVzZm9zc2V6IDxqZGVzZm9zc2V6QGVmZmljaW9zLmNvbT4KPj4gLS0tCj4+IGluY2x1ZGUv
-bHR0bmcvZXZlbnQuaCAgICAgICAgICAgICAgICAgIHwgIDQgKysrKwo+PiBzcmMvYmluL2x0dG5n
-LXNlc3Npb25kL2NvbnRleHQuYyAgICAgICB8IDEyICsrKysrKysrKysrKwo+PiBzcmMvYmluL2x0
-dG5nLXNlc3Npb25kL3NhdmUuYyAgICAgICAgICB8IDEyICsrKysrKysrKysrKwo+PiBzcmMvYmlu
-L2x0dG5nL2NvbW1hbmRzL2FkZF9jb250ZXh0LmMgICB8ICA4ICsrKysrKysrCj4+IHNyYy9jb21t
-b24vY29uZmlnL2NvbmZpZy1zZXNzaW9uLWFiaS5oIHwgIDQgKysrKwo+PiBzcmMvY29tbW9uL2Nv
-bmZpZy9zZXNzaW9uLWNvbmZpZy5jICAgICB8IDE2ICsrKysrKysrKysrKysrKysKPj4gc3JjL2Nv
-bW1vbi9sdHRuZy1rZXJuZWwuaCAgICAgICAgICAgICAgfCAgNCArKysrCj4+IDcgZmlsZXMgY2hh
-bmdlZCwgNjAgaW5zZXJ0aW9ucygrKQo+Pgo+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9sdHRuZy9l
-dmVudC5oIGIvaW5jbHVkZS9sdHRuZy9ldmVudC5oCj4+IGluZGV4IDNlOGZiZTMuLmRjN2IwYTcg
-MTAwNjQ0Cj4+IC0tLSBhL2luY2x1ZGUvbHR0bmcvZXZlbnQuaAo+PiArKysgYi9pbmNsdWRlL2x0
-dG5nL2V2ZW50LmgKPj4gQEAgLTEzNiw2ICsxMzYsMTAgQEAgZW51bSBsdHRuZ19ldmVudF9jb250
-ZXh0X3R5cGUgewo+PiAgICAgICBMVFROR19FVkVOVF9DT05URVhUX0lQICAgICAgICAgICAgICAg
-ID0gMTIsCj4+ICAgICAgIExUVE5HX0VWRU5UX0NPTlRFWFRfUEVSRl9DUFVfQ09VTlRFUiAgPSAx
-MywKPj4gICAgICAgTFRUTkdfRVZFTlRfQ09OVEVYVF9QRVJGX1RIUkVBRF9DT1VOVEVSID0gMTQs
-Cj4+ICsgICAgIExUVE5HX0VWRU5UX0NPTlRFWFRfSU5URVJSVVBUSUJMRSAgICAgPSAxNSwKPj4g
-KyAgICAgTFRUTkdfRVZFTlRfQ09OVEVYVF9QUkVFTVBUSUJMRSAgICAgICA9IDE2LAo+PiArICAg
-ICBMVFROR19FVkVOVF9DT05URVhUX05FRURfUkVTQ0hFRFVMRSAgID0gMTcsCj4+ICsgICAgIExU
-VE5HX0VWRU5UX0NPTlRFWFRfTUlHUkFUQUJMRSAgICAgICAgPSAxOCwKPj4gfTsKPj4KPj4gZW51
-bSBsdHRuZ19ldmVudF9maWVsZF90eXBlIHsKPj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmct
-c2Vzc2lvbmQvY29udGV4dC5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jb250ZXh0LmMKPj4g
-aW5kZXggMGRlMWQwNi4uMDE0OWMwMCAxMDA2NDQKPj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNz
-aW9uZC9jb250ZXh0LmMKPj4gKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jb250ZXh0LmMK
-Pj4gQEAgLTE5Myw2ICsxOTMsMTggQEAgaW50IGNvbnRleHRfa2VybmVsX2FkZChzdHJ1Y3QgbHR0
-X2tlcm5lbF9zZXNzaW9uICprc2Vzc2lvbiwKPj4gICAgICAgY2FzZSBMVFROR19FVkVOVF9DT05U
-RVhUX0hPU1ROQU1FOgo+PiAgICAgICAgICAgICAgIGtjdHgtPmN0eC5jdHggPSBMVFROR19LRVJO
-RUxfQ09OVEVYVF9IT1NUTkFNRTsKPj4gICAgICAgICAgICAgICBicmVhazsKPj4gKyAgICAgY2Fz
-ZSBMVFROR19FVkVOVF9DT05URVhUX0lOVEVSUlVQVElCTEU6Cj4+ICsgICAgICAgICAgICAga2N0
-eC0+Y3R4LmN0eCA9IExUVE5HX0tFUk5FTF9DT05URVhUX0lOVEVSUlVQVElCTEU7Cj4+ICsgICAg
-ICAgICAgICAgYnJlYWs7Cj4+ICsgICAgIGNhc2UgTFRUTkdfRVZFTlRfQ09OVEVYVF9QUkVFTVBU
-SUJMRToKPj4gKyAgICAgICAgICAgICBrY3R4LT5jdHguY3R4ID0gTFRUTkdfS0VSTkVMX0NPTlRF
-WFRfUFJFRU1QVElCTEU7Cj4+ICsgICAgICAgICAgICAgYnJlYWs7Cj4+ICsgICAgIGNhc2UgTFRU
-TkdfRVZFTlRfQ09OVEVYVF9ORUVEX1JFU0NIRURVTEU6Cj4+ICsgICAgICAgICAgICAga2N0eC0+
-Y3R4LmN0eCA9IExUVE5HX0tFUk5FTF9DT05URVhUX05FRURfUkVTQ0hFRFVMRTsKPj4gKyAgICAg
-ICAgICAgICBicmVhazsKPj4gKyAgICAgY2FzZSBMVFROR19FVkVOVF9DT05URVhUX01JR1JBVEFC
-TEU6Cj4+ICsgICAgICAgICAgICAga2N0eC0+Y3R4LmN0eCA9IExUVE5HX0tFUk5FTF9DT05URVhU
-X01JR1JBVEFCTEU7Cj4+ICsgICAgICAgICAgICAgYnJlYWs7Cj4+ICAgICAgIGNhc2UgTFRUTkdf
-RVZFTlRfQ09OVEVYVF9QRVJGX0NQVV9DT1VOVEVSOgo+PiAgICAgICBjYXNlIExUVE5HX0VWRU5U
-X0NPTlRFWFRfUEVSRl9DT1VOVEVSOgo+PiAgICAgICAgICAgICAgIGtjdHgtPmN0eC5jdHggPSBM
-VFROR19LRVJORUxfQ09OVEVYVF9QRVJGX0NQVV9DT1VOVEVSOwo+PiBkaWZmIC0tZ2l0IGEvc3Jj
-L2Jpbi9sdHRuZy1zZXNzaW9uZC9zYXZlLmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3NhdmUu
-Ywo+PiBpbmRleCBhNmZlYTQ2Li5hZWM2NTVlIDEwMDY0NAo+PiAtLS0gYS9zcmMvYmluL2x0dG5n
-LXNlc3Npb25kL3NhdmUuYwo+PiArKysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3NhdmUuYwo+
-PiBAQCAtMjMyLDYgKzIzMiwxOCBAQCBjb25zdCBjaGFyICpnZXRfa2VybmVsX2NvbnRleHRfdHlw
-ZV9zdHJpbmcoCj4+ICAgICAgIGNhc2UgTFRUTkdfS0VSTkVMX0NPTlRFWFRfSE9TVE5BTUU6Cj4+
-ICAgICAgICAgICAgICAgY29udGV4dF90eXBlX3N0cmluZyA9IGNvbmZpZ19ldmVudF9jb250ZXh0
-X2hvc3RuYW1lOwo+PiAgICAgICAgICAgICAgIGJyZWFrOwo+PiArICAgICBjYXNlIExUVE5HX0tF
-Uk5FTF9DT05URVhUX0lOVEVSUlVQVElCTEU6Cj4+ICsgICAgICAgICAgICAgY29udGV4dF90eXBl
-X3N0cmluZyA9IGNvbmZpZ19ldmVudF9jb250ZXh0X2ludGVycnVwdGlibGU7Cj4+ICsgICAgICAg
-ICAgICAgYnJlYWs7Cj4+ICsgICAgIGNhc2UgTFRUTkdfS0VSTkVMX0NPTlRFWFRfUFJFRU1QVElC
-TEU6Cj4+ICsgICAgICAgICAgICAgY29udGV4dF90eXBlX3N0cmluZyA9IGNvbmZpZ19ldmVudF9j
-b250ZXh0X3ByZWVtcHRpYmxlOwo+PiArICAgICAgICAgICAgIGJyZWFrOwo+PiArICAgICBjYXNl
-IExUVE5HX0tFUk5FTF9DT05URVhUX05FRURfUkVTQ0hFRFVMRToKPj4gKyAgICAgICAgICAgICBj
-b250ZXh0X3R5cGVfc3RyaW5nID0gY29uZmlnX2V2ZW50X2NvbnRleHRfbmVlZF9yZXNjaGVkdWxl
-Owo+PiArICAgICAgICAgICAgIGJyZWFrOwo+PiArICAgICBjYXNlIExUVE5HX0tFUk5FTF9DT05U
-RVhUX01JR1JBVEFCTEU6Cj4+ICsgICAgICAgICAgICAgY29udGV4dF90eXBlX3N0cmluZyA9IGNv
-bmZpZ19ldmVudF9jb250ZXh0X21pZ3JhdGFibGU7Cj4+ICsgICAgICAgICAgICAgYnJlYWs7Cj4+
-ICAgICAgIGRlZmF1bHQ6Cj4+ICAgICAgICAgICAgICAgY29udGV4dF90eXBlX3N0cmluZyA9IE5V
-TEw7Cj4+ICAgICAgIH0KPj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvYWRk
-X2NvbnRleHQuYwo+PiBiL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvYWRkX2NvbnRleHQuYwo+PiBp
-bmRleCBmYjM3YzBhLi4zOWE2MDliIDEwMDY0NAo+PiAtLS0gYS9zcmMvYmluL2x0dG5nL2NvbW1h
-bmRzL2FkZF9jb250ZXh0LmMKPj4gKysrIGIvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9hZGRfY29u
-dGV4dC5jCj4+IEBAIC02OSw2ICs2OSwxMCBAQCBlbnVtIGNvbnRleHRfdHlwZSB7Cj4+ICAgICAg
-IENPTlRFWFRfSVAgICAgICAgICAgID0gMTIsCj4+ICAgICAgIENPTlRFWFRfUEVSRl9DUFVfQ09V
-TlRFUiA9IDEzLAo+PiAgICAgICBDT05URVhUX1BFUkZfVEhSRUFEX0NPVU5URVIgPSAxNCwKPj4g
-KyAgICAgQ09OVEVYVF9JTlRFUlJVUFRJQkxFID0gMTUsCj4+ICsgICAgIENPTlRFWFRfUFJFRU1Q
-VElCTEUgID0gMTYsCj4+ICsgICAgIENPTlRFWFRfTkVFRF9SRVNDSEVEVUxFID0gMTcsCj4+ICsg
-ICAgIENPTlRFWFRfTUlHUkFUQUJMRSAgID0gMTgsCj4+IH07Cj4+Cj4+IC8qCj4+IEBAIC0yMTMs
-NiArMjE3LDEwIEBAIGNvbnN0IHN0cnVjdCBjdHhfb3B0cyB7Cj4+ICAgICAgIHsgInZwcGlkIiwg
-Q09OVEVYVF9WUFBJRCB9LAo+PiAgICAgICB7ICJob3N0bmFtZSIsIENPTlRFWFRfSE9TVE5BTUUg
-fSwKPj4gICAgICAgeyAiaXAiLCBDT05URVhUX0lQIH0sCj4+ICsgICAgIHsgImludGVycnVwdGli
-bGUiLCBDT05URVhUX0lOVEVSUlVQVElCTEUgfSwKPj4gKyAgICAgeyAicHJlZW1wdGlibGUiLCBD
-T05URVhUX1BSRUVNUFRJQkxFIH0sCj4+ICsgICAgIHsgIm5lZWRfcmVzY2hlZHVsZSIsIENPTlRF
-WFRfTkVFRF9SRVNDSEVEVUxFIH0sCj4+ICsgICAgIHsgIm1pZ3JhdGFibGUiLCBDT05URVhUX01J
-R1JBVEFCTEUgfSwKPj4KPj4gICAgICAgLyogUGVyZiBvcHRpb25zICovCj4+Cj4+IGRpZmYgLS1n
-aXQgYS9zcmMvY29tbW9uL2NvbmZpZy9jb25maWctc2Vzc2lvbi1hYmkuaAo+PiBiL3NyYy9jb21t
-b24vY29uZmlnL2NvbmZpZy1zZXNzaW9uLWFiaS5oCj4+IGluZGV4IDkyNTFiMjIuLjhkZTU4NWYg
-MTAwNjQ0Cj4+IC0tLSBhL3NyYy9jb21tb24vY29uZmlnL2NvbmZpZy1zZXNzaW9uLWFiaS5oCj4+
-ICsrKyBiL3NyYy9jb21tb24vY29uZmlnL2NvbmZpZy1zZXNzaW9uLWFiaS5oCj4+IEBAIC0xMTYs
-NSArMTE2LDkgQEAgZXh0ZXJuIGNvbnN0IGNoYXIgKiBjb25zdCBjb25maWdfZXZlbnRfY29udGV4
-dF9wdGhyZWFkX2lkOwo+PiBleHRlcm4gY29uc3QgY2hhciAqIGNvbnN0IGNvbmZpZ19ldmVudF9j
-b250ZXh0X2hvc3RuYW1lOwo+PiBleHRlcm4gY29uc3QgY2hhciAqIGNvbnN0IGNvbmZpZ19ldmVu
-dF9jb250ZXh0X2lwOwo+PiBleHRlcm4gY29uc3QgY2hhciAqIGNvbnN0IGNvbmZpZ19ldmVudF9j
-b250ZXh0X3BlcmZfdGhyZWFkX2NvdW50ZXI7Cj4+ICtleHRlcm4gY29uc3QgY2hhciAqIGNvbnN0
-IGNvbmZpZ19ldmVudF9jb250ZXh0X2ludGVycnVwdGlibGU7Cj4+ICtleHRlcm4gY29uc3QgY2hh
-ciAqIGNvbnN0IGNvbmZpZ19ldmVudF9jb250ZXh0X3ByZWVtcHRpYmxlOwo+PiArZXh0ZXJuIGNv
-bnN0IGNoYXIgKiBjb25zdCBjb25maWdfZXZlbnRfY29udGV4dF9uZWVkX3Jlc2NoZWR1bGU7Cj4+
-ICtleHRlcm4gY29uc3QgY2hhciAqIGNvbnN0IGNvbmZpZ19ldmVudF9jb250ZXh0X21pZ3JhdGFi
-bGU7Cj4+Cj4+ICNlbmRpZiAvKiBDT05GSUdfU0VTU0lPTl9JTlRFUk5BTF9IICovCj4+IGRpZmYg
-LS1naXQgYS9zcmMvY29tbW9uL2NvbmZpZy9zZXNzaW9uLWNvbmZpZy5jCj4+IGIvc3JjL2NvbW1v
-bi9jb25maWcvc2Vzc2lvbi1jb25maWcuYwo+PiBpbmRleCA4N2U5YzAzLi5kZTFhMzQ2IDEwMDY0
-NAo+PiAtLS0gYS9zcmMvY29tbW9uL2NvbmZpZy9zZXNzaW9uLWNvbmZpZy5jCj4+ICsrKyBiL3Ny
-Yy9jb21tb24vY29uZmlnL3Nlc3Npb24tY29uZmlnLmMKPj4gQEAgLTE2NSw2ICsxNjUsMTAgQEAg
-Y29uc3QgY2hhciAqIGNvbnN0IGNvbmZpZ19ldmVudF9jb250ZXh0X3B0aHJlYWRfaWQgPQo+PiAi
-UFRIUkVBRF9JRCI7Cj4+IGNvbnN0IGNoYXIgKiBjb25zdCBjb25maWdfZXZlbnRfY29udGV4dF9o
-b3N0bmFtZSA9ICJIT1NUTkFNRSI7Cj4+IGNvbnN0IGNoYXIgKiBjb25zdCBjb25maWdfZXZlbnRf
-Y29udGV4dF9pcCA9ICJJUCI7Cj4+IGNvbnN0IGNoYXIgKiBjb25zdCBjb25maWdfZXZlbnRfY29u
-dGV4dF9wZXJmX3RocmVhZF9jb3VudGVyID0KPj4gIlBFUkZfVEhSRUFEX0NPVU5URVIiOwo+PiAr
-Y29uc3QgY2hhciAqIGNvbnN0IGNvbmZpZ19ldmVudF9jb250ZXh0X2ludGVycnVwdGlibGUgPSAi
-SU5URVJSVVBUSUJMRSI7Cj4+ICtjb25zdCBjaGFyICogY29uc3QgY29uZmlnX2V2ZW50X2NvbnRl
-eHRfcHJlZW1wdGlibGUgPSAiUFJFRU1QVElCTEUiOwo+PiArY29uc3QgY2hhciAqIGNvbnN0IGNv
-bmZpZ19ldmVudF9jb250ZXh0X25lZWRfcmVzY2hlZHVsZSA9ICJORUVEX1JFU0NIRURVTEUiOwo+
-PiArY29uc3QgY2hhciAqIGNvbnN0IGNvbmZpZ19ldmVudF9jb250ZXh0X21pZ3JhdGFibGUgPSAi
-TUlHUkFUQUJMRSI7Cj4+Cj4+IHN0cnVjdCBjb25zdW1lcl9vdXRwdXQgewo+PiAgICAgICBpbnQg
-ZW5hYmxlZDsKPj4gQEAgLTk0Niw2ICs5NTAsMTggQEAgaW50IGdldF9jb250ZXh0X3R5cGUoeG1s
-Q2hhciAqY29udGV4dF90eXBlKQo+PiAgICAgICB9IGVsc2UgaWYgKCFzdHJjbXAoKGNoYXIgKikg
-Y29udGV4dF90eXBlLAo+PiAgICAgICAgICAgICAgIGNvbmZpZ19ldmVudF9jb250ZXh0X2lwKSkg
-ewo+PiAgICAgICAgICAgICAgIHJldCA9IExUVE5HX0VWRU5UX0NPTlRFWFRfSVA7Cj4+ICsgICAg
-IH0gZWxzZSBpZiAoIXN0cmNtcCgoY2hhciAqKSBjb250ZXh0X3R5cGUsCj4+ICsgICAgICAgICAg
-ICAgY29uZmlnX2V2ZW50X2NvbnRleHRfaW50ZXJydXB0aWJsZSkpIHsKPj4gKyAgICAgICAgICAg
-ICByZXQgPSBMVFROR19FVkVOVF9DT05URVhUX0lOVEVSUlVQVElCTEU7Cj4+ICsgICAgIH0gZWxz
-ZSBpZiAoIXN0cmNtcCgoY2hhciAqKSBjb250ZXh0X3R5cGUsCj4+ICsgICAgICAgICAgICAgY29u
-ZmlnX2V2ZW50X2NvbnRleHRfcHJlZW1wdGlibGUpKSB7Cj4+ICsgICAgICAgICAgICAgcmV0ID0g
-TFRUTkdfRVZFTlRfQ09OVEVYVF9QUkVFTVBUSUJMRTsKPj4gKyAgICAgfSBlbHNlIGlmICghc3Ry
-Y21wKChjaGFyICopIGNvbnRleHRfdHlwZSwKPj4gKyAgICAgICAgICAgICBjb25maWdfZXZlbnRf
-Y29udGV4dF9uZWVkX3Jlc2NoZWR1bGUpKSB7Cj4+ICsgICAgICAgICAgICAgcmV0ID0gTFRUTkdf
-RVZFTlRfQ09OVEVYVF9ORUVEX1JFU0NIRURVTEU7Cj4+ICsgICAgIH0gZWxzZSBpZiAoIXN0cmNt
-cCgoY2hhciAqKSBjb250ZXh0X3R5cGUsCj4+ICsgICAgICAgICAgICAgY29uZmlnX2V2ZW50X2Nv
-bnRleHRfbWlncmF0YWJsZSkpIHsKPj4gKyAgICAgICAgICAgICByZXQgPSBMVFROR19FVkVOVF9D
-T05URVhUX01JR1JBVEFCTEU7Cj4+ICAgICAgIH0gZWxzZSB7Cj4+ICAgICAgICAgICAgICAgZ290
-byBlcnJvcjsKPj4gICAgICAgfQo+PiBkaWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi9sdHRuZy1rZXJu
-ZWwuaCBiL3NyYy9jb21tb24vbHR0bmcta2VybmVsLmgKPj4gaW5kZXggOWRkOGRmNy4uNzhkNWZj
-NCAxMDA2NDQKPj4gLS0tIGEvc3JjL2NvbW1vbi9sdHRuZy1rZXJuZWwuaAo+PiArKysgYi9zcmMv
-Y29tbW9uL2x0dG5nLWtlcm5lbC5oCj4+IEBAIC01NCw2ICs1NCwxMCBAQCBlbnVtIGx0dG5nX2tl
-cm5lbF9jb250ZXh0X3R5cGUgewo+PiAgICAgICBMVFROR19LRVJORUxfQ09OVEVYVF9WUFBJRCAg
-ICAgICAgICA9IDksCj4+ICAgICAgIExUVE5HX0tFUk5FTF9DT05URVhUX0hPU1ROQU1FICAgICAg
-ID0gMTAsCj4+ICAgICAgIExUVE5HX0tFUk5FTF9DT05URVhUX0NQVV9JRCAgICAgICAgID0gMTEs
-Cj4+ICsgICAgIExUVE5HX0tFUk5FTF9DT05URVhUX0lOVEVSUlVQVElCTEUgID0gMTIsCj4+ICsg
-ICAgIExUVE5HX0tFUk5FTF9DT05URVhUX1BSRUVNUFRJQkxFICAgID0gMTMsCj4+ICsgICAgIExU
-VE5HX0tFUk5FTF9DT05URVhUX05FRURfUkVTQ0hFRFVMRSA9IDE0LAo+PiArICAgICBMVFROR19L
-RVJORUxfQ09OVEVYVF9NSUdSQVRBQkxFICAgICA9IDE1LAo+PiB9Owo+Pgo+PiAvKiBQZXJmIGNv
-dW50ZXIgYXR0cmlidXRlcyAqLwo+PiAtLQo+PiAxLjkuMQo+Pgo+Pgo+PiBfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiBsdHRuZy1kZXYgbWFpbGluZyBs
-aXN0Cj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4gaHR0cDovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KPiAtLQo+IE1hdGhpZXUgRGVz
-bm95ZXJzCj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgoKCi0tIApK
-w6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
-diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============1461290372==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_121423_1370063304.1447953945293"
+
+------=_Part_121423_1370063304.1447953945293
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+Hi, 
+
+Passing raw pmc identifiers is not supported at the moment. This is a feature we 
+would like to add to lttng next year. 
+
+Thanks, 
+
+Mathieu 
+
+----- On Nov 19, 2015, at 10:37 AM, Hani Nemati <hani_nemati@yahoo.com> wrote: 
+
+> Hi Mathieu ,
+> LCC is last level cache and it is shared between CPU cores. Also, I was running
+> several VMs in background. That's why I used sleep command.
+> Based on Intel's manual r0109 is raw identifier for LCC-load-misses,
+> The question is how can I fix the problem since Lttng is using perf symbolic
+> name.
+
+> Thanks,
+> Hani
+
+> On Wednesday, November 18, 2015 3:19 PM, Hani Nemati <hani_nemati@yahoo.com>
+> wrote:
+
+> There is no PERF symbolic name for LLC-load-misses but I can use raw identifier
+> to find out Number of code read, data read that miss the LLC. Here is the
+> command that I used.
+
+> #perf stat -e r0109 sleep 2
+> Performance counter stats for 'sleep 2':
+
+> 117 r0109
+
+> Do you have any idea why I don't have the symbolic name? Is there any way to
+> give raw identifier instead of perf:cpu:LLC-load-misses?
+
+> On Wednesday, November 18, 2015 9:45 AM, Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+
+> ----- On Nov 17, 2015, at 4:46 PM, Hani Nemati <hani_nemati@yahoo.com> wrote:
+
+>> Hi,
+>> I am trying to count last level cache misses by using lttng add-context command.
+>> I use add-context to add perf:cpu:LLC-load-misses to my channel but I see an
+>> error. There is no error for other perf events. Just two perf events including
+>> perf:cpu:LLC-load-misses and perf:cpu:LLC-store-misses give me the following
+>> error:
+>> Error: perf:cpu:LLC-load-misses: Add kernel context failed
+>> Warning: Some command(s) went wrong
+
+>> Here is result of "uname -a" on my computer:
+>> Linux nemati 3.16.0-51-generic #69~14.04.1-Ubuntu SMP Wed Oct 7 15:32:41 UTC
+>> 2015 x86_64 x86_64 x86_64 GNU/Linux
+
+>> Here is the command that I used:
+>> #lttng enable-channel -k test
+>> #Kernel channel test enabled for session hh
+>> #lttng add-context -k -t perf:cpu:LLC-load-misses -c test
+>> Error: perf:cpu:LLC-load-misses: Add kernel context failed
+>> Warning: Some command(s) went wrong
+
+>> I also tried it on other machines.
+
+> It is possible that your architecture does not expose this counter to perf.
+> Did you try using this PMC with the perf tool ?
+
+> Thanks,
+
+> Mathieu
+
+>> <<<<<<<
+>> /-/ /\ /\/ / /\/ E /\/\ /\ T
+>> / >>>>>>>>
+
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+
+-- 
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+------=_Part_121423_1370063304.1447953945293
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div>Hi,</div><div><br data-mce-bogus=3D"1"></di=
+v><div>Passing raw pmc identifiers is not supported at the moment. This is =
+a feature we<br data-mce-bogus=3D"1"></div><div>would like to add to lttng =
+next year.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></di=
+v><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1">=
+</div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br></div><div><br></=
+div><div><span id=3D"zwchr" data-marker=3D"__DIVIDER__">----- On Nov 19, 20=
+15, at 10:37 AM, Hani Nemati &lt;hani_nemati@yahoo.com&gt; wrote:<br></span=
+></div><div data-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-lef=
+t:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight=
+:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,=
+sans-serif;font-size:12pt;"><div style=3D"color:#000; background-color:#fff=
+; font-family:times new roman, new york, times, serif;font-size:16px"><div =
+id=3D"yui_3_16_0_1_1447880899551_31232"><br><span></span></div><div dir=3D"=
+ltr" id=3D"yui_3_16_0_1_1447880899551_31331"><span class=3D"" id=3D"yui_3_1=
+6_0_1_1447880899551_31564">Hi </span><span id=3D"yui_3_16_0_1_1447880899551=
+_31564"><span class=3D"" id=3D"yui_3_16_0_1_1447880899551_31748">Mathieu</s=
+pan>, <br></span></div><div id=3D"yui_3_16_0_1_1447880899551_31394"><span i=
+d=3D"yui_3_16_0_1_1447880899551_31393">LCC is last level cache and it is sh=
+ared between CPU cores. Also, I was running several VMs in background. That=
+'s why I used sleep command.&nbsp;</span></div><div id=3D"yui_3_16_0_1_1447=
+880899551_31749"><span id=3D"yui_3_16_0_1_1447880899551_31393">Based on Int=
+el's manual r0109 is raw identifier for LCC-load-misses, <br></span></div><=
+div dir=3D"ltr" id=3D"yui_3_16_0_1_1447880899551_31420"><span id=3D"yui_3_1=
+6_0_1_1447880899551_31393">The question is how can I fix the problem since =
+Lttng is using perf symbolic name. <br></span></div><div id=3D"yui_3_16_0_1=
+_1447880899551_31534" dir=3D"ltr"><br><span id=3D"yui_3_16_0_1_144788089955=
+1_31393"></span></div><div id=3D"yui_3_16_0_1_1447880899551_31535" dir=3D"l=
+tr"><span id=3D"yui_3_16_0_1_1447880899551_31393">Thanks, <br></span></div>=
+<div id=3D"yui_3_16_0_1_1447880899551_31560" dir=3D"ltr"><span id=3D"yui_3_=
+16_0_1_1447880899551_31393">Hani </span></div><div id=3D"yui_3_16_0_1_14478=
+80899551_31561" class=3D"qtdSeparateBR">&nbsp;<br><br></div>  <div style=3D=
+"display: block;" id=3D"yui_3_16_0_1_1447880899551_31652" class=3D"yahoo_qu=
+oted"> <div id=3D"yui_3_16_0_1_1447880899551_31651" style=3D"font-family: t=
+imes new roman, new york, times, serif; font-size: 16px;"> <div id=3D"yui_3=
+_16_0_1_1447880899551_31650" style=3D"font-family: HelveticaNeue, Helvetica=
+ Neue, Helvetica, Arial, Lucida Grande, sans-serif; font-size: 16px;"> <div=
+ id=3D"yui_3_16_0_1_1447880899551_31649" dir=3D"ltr"><span style=3D"font-fa=
+mily: Arial; font-size: small;" data-mce-style=3D"font-family: Arial; font-=
+size: small;" id=3D"yui_3_16_0_1_1447880899551_31648" face=3D"Arial" size=
+=3D"2"> On Wednesday, November 18, 2015 3:19 PM, Hani Nemati &lt;hani_nemat=
+i@yahoo.com&gt; wrote:<br></span></div>  <br><br> <div id=3D"yui_3_16_0_1_1=
+447880899551_31962" class=3D"y_msg_container"><div id=3D"yiv4671081710"><di=
+v id=3D"yui_3_16_0_1_1447880899551_31961"><div id=3D"yui_3_16_0_1_144788089=
+9551_31960" style=3D"color:#000;background-color:#fff;font-family:times new=
+ roman, new york, times, serif;font-size:16px;">There is no PERF symbolic n=
+ame for LLC-load-misses but I can use raw identifier to find out Number of =
+code read, data read that miss the LLC. Here is the command that I used.<br=
+ class=3D"yiv4671081710" id=3D"yiv4671081710yui_3_16_0_1_1447797278790_3561=
+3" clear=3D"none">&nbsp;<br class=3D"yiv4671081710" id=3D"yiv4671081710yui_=
+3_16_0_1_1447797278790_35615" clear=3D"none">#perf stat -e r0109 sleep 2<br=
+ class=3D"yiv4671081710" id=3D"yiv4671081710yui_3_16_0_1_1447797278790_3561=
+7" clear=3D"none">&nbsp;Performance counter stats for 'sleep 2':<br class=
+=3D"yiv4671081710" id=3D"yiv4671081710yui_3_16_0_1_1447797278790_35619" cle=
+ar=3D"none"><br class=3D"yiv4671081710" id=3D"yiv4671081710yui_3_16_0_1_144=
+7797278790_35621" clear=3D"none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 117&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+; r0109&nbsp; <br class=3D"yiv4671081710" id=3D"yiv4671081710yui_3_16_0_1_1=
+447797278790_35623" clear=3D"none"><br class=3D"yiv4671081710" id=3D"yiv467=
+1081710yui_3_16_0_1_1447797278790_35625" clear=3D"none">Do you have any ide=
+a why I don't have the symbolic name? Is there any way to give raw identifi=
+er instead of perf:cpu:LLC-load-misses? <br class=3D"yiv4671081710" id=3D"y=
+iv4671081710yui_3_16_0_1_1447797278790_35627" clear=3D"none"><br class=3D"y=
+iv4671081710" id=3D"yiv4671081710yui_3_16_0_1_1447797278790_35629" clear=3D=
+"none"><br class=3D"yiv4671081710" id=3D"yiv4671081710yui_3_16_0_1_14477972=
+78790_35631" clear=3D"none"><br class=3D"yiv4671081710" id=3D"yiv4671081710=
+yui_3_16_0_1_1447797278790_35633" clear=3D"none"><div dir=3D"ltr" id=3D"yiv=
+4671081710yui_3_16_0_1_1447797278790_35843"><br clear=3D"none"></div><br cl=
+ear=3D"none"><div class=3D"yiv4671081710qtdSeparateBR"><br clear=3D"none"><=
+br clear=3D"none"></div><div class=3D"yiv4671081710yqt9882023943" id=3D"yiv=
+4671081710yqt48910"><div class=3D"yiv4671081710yahoo_quoted" style=3D"displ=
+ay:block;"> <div style=3D"font-family:times new roman, new york, times, ser=
+if;font-size:16px;"> <div style=3D"font-family:HelveticaNeue, Helvetica Neu=
+e, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;"> <div dir=
+=3D"ltr"> <span style=3D"font-family: Arial; font-size: small;" data-mce-st=
+yle=3D"font-family: Arial; font-size: small;" face=3D"Arial" size=3D"2"> On=
+ Wednesday, November 18, 2015 9:45 AM, Mathieu Desnoyers &lt;mathieu.desnoy=
+ers@efficios.com&gt; wrote:<br clear=3D"none"> </span> </div>  <br clear=3D=
+"none"><br clear=3D"none"> <div class=3D"yiv4671081710y_msg_container"><div=
+ id=3D"yiv4671081710"><div><div style=3D"font-family:arial, helvetica, sans=
+-serif;font-size:12pt;color:#000000;"><div><br clear=3D"none"></div><div><b=
+r clear=3D"none"></div><span id=3D"yiv4671081710zwchr">----- On Nov 17, 201=
+5, at 4:46 PM, Hani Nemati &lt;hani_nemati@yahoo.com&gt; wrote:<br clear=3D=
+"none"></span><div><blockquote style=3D"border-left:2px solid #1010FF;margi=
+n-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal=
+;text-decoration:none;font-family:Helvetica, Arial, sans-serif;font-size:12=
+pt;"><div style=3D"color:#000;background-color:#fff;font-family:times new r=
+oman, new york, times, serif;font-size:16px;"><div dir=3D"ltr" id=3D"yiv467=
+1081710yui_3_16_0_1_1447772874730_12112"><span id=3D"yiv4671081710yui_3_16_=
+0_1_1447772874730_12163">Hi, <br class=3D"yiv4671081710" id=3D"yiv467108171=
+0yui_3_16_0_1_1447772874730_12165" clear=3D"none">I am trying to count last=
+ level cache misses by using lttng add-context command. I use add-context t=
+o add perf:cpu:LLC-load-misses to my channel but I see an error. There is n=
+o error for other perf events. Just two perf events including perf:cpu:LLC-=
+load-misses and&nbsp; perf:cpu:LLC-store-misses give me the following error=
+:<br class=3D"yiv4671081710" id=3D"yiv4671081710yui_3_16_0_1_1447772874730_=
+12167" clear=3D"none">Error: perf:cpu:LLC-load-misses: Add kernel context f=
+ailed<br class=3D"yiv4671081710" id=3D"yiv4671081710yui_3_16_0_1_1447772874=
+730_12169" clear=3D"none">Warning: Some command(s) went wrong<br class=3D"y=
+iv4671081710" id=3D"yiv4671081710yui_3_16_0_1_1447772874730_12171" clear=3D=
+"none"><br class=3D"yiv4671081710" id=3D"yiv4671081710yui_3_16_0_1_14477728=
+74730_12173" clear=3D"none">Here is result of "uname -a" on my computer: <b=
+r class=3D"yiv4671081710" id=3D"yiv4671081710yui_3_16_0_1_1447772874730_121=
+75" clear=3D"none">Linux nemati 3.16.0-51-generic #69~14.04.1-Ubuntu SMP We=
+d Oct 7 15:32:41 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux <br class=3D"yiv46=
+71081710" id=3D"yiv4671081710yui_3_16_0_1_1447772874730_12177" clear=3D"non=
+e"><br class=3D"yiv4671081710" id=3D"yiv4671081710yui_3_16_0_1_144777287473=
+0_12179" clear=3D"none"><br class=3D"yiv4671081710" id=3D"yiv4671081710yui_=
+3_16_0_1_1447772874730_12181" clear=3D"none">Here is the command that I use=
+d: <br class=3D"yiv4671081710" id=3D"yiv4671081710yui_3_16_0_1_144777287473=
+0_12183" clear=3D"none">#lttng enable-channel -k test<br class=3D"yiv467108=
+1710" id=3D"yiv4671081710yui_3_16_0_1_1447772874730_12185" clear=3D"none">#=
+Kernel channel test enabled for session hh<br class=3D"yiv4671081710" id=3D=
+"yiv4671081710yui_3_16_0_1_1447772874730_12187" clear=3D"none">#lttng add-c=
+ontext -k -t perf:cpu:LLC-load-misses -c test<br class=3D"yiv4671081710" id=
+=3D"yiv4671081710yui_3_16_0_1_1447772874730_12189" clear=3D"none">Error: pe=
+rf:cpu:LLC-load-misses: Add kernel context failed<br class=3D"yiv4671081710=
+" id=3D"yiv4671081710yui_3_16_0_1_1447772874730_12191" clear=3D"none">Warni=
+ng: Some command(s) went wrong<br class=3D"yiv4671081710" id=3D"yiv46710817=
+10yui_3_16_0_1_1447772874730_12193" clear=3D"none"><br class=3D"yiv46710817=
+10" id=3D"yiv4671081710yui_3_16_0_1_1447772874730_12195" clear=3D"none"><br=
+ class=3D"yiv4671081710" id=3D"yiv4671081710yui_3_16_0_1_1447772874730_1219=
+7" clear=3D"none">I also tried it on other machines. </span></div></div></b=
+lockquote><div><br clear=3D"none"></div><div>It is possible that your archi=
+tecture does not expose this counter to perf.<br clear=3D"none"></div><div>=
+Did you try using this PMC with the perf tool ?<br clear=3D"none"></div><di=
+v><br clear=3D"none"></div><div>Thanks,<br clear=3D"none"></div><div><br cl=
+ear=3D"none"></div><div>Mathieu<div class=3D"yiv4671081710yqt4842675108" id=
+=3D"yiv4671081710yqtfd64414"><br clear=3D"none"></div></div><div class=3D"y=
+iv4671081710yqt4842675108" id=3D"yiv4671081710yqtfd37008"><div><br clear=3D=
+"none"></div></div><blockquote style=3D"border-left:2px solid #1010FF;margi=
+n-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal=
+;text-decoration:none;font-family:Helvetica, Arial, sans-serif;font-size:12=
+pt;"><div style=3D"color:#000;background-color:#fff;font-family:times new r=
+oman, new york, times, serif;font-size:16px;"><div class=3D"yiv4671081710si=
+gnature" id=3D"yiv4671081710yui_3_16_0_1_1447772874730_12155"><div id=3D"yi=
+v4671081710yui_3_16_0_1_1447772874730_12154"><div class=3D"yiv4671081710yqt=
+4842675108" id=3D"yiv4671081710yqtfd96110">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&nbs=
+p;&nbsp; </div><span style=3D"color:#ff0000;"></span><div class=3D"yiv46710=
+81710yqt4842675108" id=3D"yiv4671081710yqtfd53272">&nbsp;/-/ /\ /\/ / /\/ <=
+em>E</em> /\/\ /\ <em>T</em></div> /&nbsp;&nbsp;&nbsp; &gt;&gt;&gt;&gt;&gt;=
+&gt;&gt;&gt;</div></div></div><br clear=3D"none">__________________________=
+_____________________<br clear=3D"none">lttng-dev mailing list<br clear=3D"=
+none">lttng-dev@lists.lttng.org<br clear=3D"none">http://lists.lttng.org/cg=
+i-bin/mailman/listinfo/lttng-dev<br clear=3D"none"></blockquote></div><br c=
+lear=3D"none"><div>-- <br clear=3D"none"></div><div>Mathieu Desnoyers<br cl=
+ear=3D"none">EfficiOS Inc.<br clear=3D"none">http://www.efficios.com</div><=
+/div></div></div><br clear=3D"none"><br clear=3D"none"></div>  </div> </div=
+>  </div></div></div></div></div><br><br></div>  </div> </div>  </div></div=
+><br></blockquote></div><div><br></div><div data-marker=3D"__SIG_POST__">--=
+ <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.c=
+om</div></div></body></html>
+------=_Part_121423_1370063304.1447953945293--
+
+
+--===============1461290372==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1461290372==--
