@@ -1,19 +1,20 @@
-From: Hani Nemati <hani_nemati@yahoo.com>
-Subject: Re: Lttng add-context perf commands gives me error
-Date: Wed, 18 Nov 2015 20:19:20 +0000 (UTC)
-Message-ID: <886413694.5732011.1447877960962.JavaMail.yahoo__4663.87623823739$1447878197$gmane$org@mail.yahoo.com>
-References: <328787043.5258001.1447796792694.JavaMail.yahoo.ref@mail.yahoo.com>
- <328787043.5258001.1447796792694.JavaMail.yahoo@mail.yahoo.com>
- <824342841.114145.1447857930891.JavaMail.zimbra@efficios.com>
-Reply-To: Hani Nemati <hani_nemati@yahoo.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [GIT PULL v4] Accounting packet lost and discarded
+ events at runtime
+Date: Thu, 19 Nov 2015 10:20:00 -0500
+Message-ID: <CA+jJMxvcN=DEj7rSC0a97w=RWEnzkz3Kg=i63iJZ1iLbfhcYpQ__3043.44075634635$1447946477$gmane$org@mail.gmail.com>
+References: <55C42C3C.6060803@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1793550993=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from nm42-vm6.bullet.mail.ne1.yahoo.com ([98.138.121.62])
+Received: from mail-yk0-f170.google.com ([209.85.160.170])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <hani_nemati@yahoo.com>) id 1Zz9FA-0006MM-7o
- for lttng-dev@lists.lttng.org; Wed, 18 Nov 2015 15:22:18 -0500
-In-Reply-To: <824342841.114145.1447857930891.JavaMail.zimbra@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1ZzR0H-0003gI-Te
+ for lttng-dev@lists.lttng.org; Thu, 19 Nov 2015 10:20:11 -0500
+Received: by ykdv3 with SMTP id v3so111353135ykd.0
+ for <lttng-dev@lists.lttng.org>; Thu, 19 Nov 2015 07:20:00 -0800 (PST)
+In-Reply-To: <55C42C3C.6060803@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,203 +23,74 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1793550993==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_5732010_1849134228.1447877960957"
-Content-Length: 9640
-
-------=_Part_5732010_1849134228.1447877960957
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-There is no PERF symbolic name for LLC-load-misses but I can use raw identi=
-fier to find out Number of code read, data read that miss the LLC. Here is =
-the command that I used.
-=C2=A0
-#perf stat -e r0109 sleep 2
-=C2=A0Performance counter stats for 'sleep 2':
-
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 117=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 r0109=C2=A0=20
-
-Do you have any idea why I don't have the symbolic name? Is there any way t=
-o give raw identifier instead of perf:cpu:LLC-load-misses?=20
-
-
-
-
-
-
-
-     On Wednesday, November 18, 2015 9:45 AM, Mathieu Desnoyers <mathieu.de=
-snoyers@efficios.com> wrote:
-  =20
-
-=20
-
------ On Nov 17, 2015, at 4:46 PM, Hani Nemati <hani_nemati@yahoo.com> wrot=
-e:
-
-Hi,=20
-I am trying to count last level cache misses by using lttng add-context com=
-mand. I use add-context to add perf:cpu:LLC-load-misses to my channel but I=
- see an error. There is no error for other perf events. Just two perf event=
-s including perf:cpu:LLC-load-misses and=C2=A0 perf:cpu:LLC-store-misses gi=
-ve me the following error:
-Error: perf:cpu:LLC-load-misses: Add kernel context failed
-Warning: Some command(s) went wrong
-
-Here is result of "uname -a" on my computer:=20
-Linux nemati 3.16.0-51-generic #69~14.04.1-Ubuntu SMP Wed Oct 7 15:32:41 UT=
-C 2015 x86_64 x86_64 x86_64 GNU/Linux=20
-
-
-Here is the command that I used:=20
-#lttng enable-channel -k test
-#Kernel channel test enabled for session hh
-#lttng add-context -k -t perf:cpu:LLC-load-misses -c test
-Error: perf:cpu:LLC-load-misses: Add kernel context failed
-Warning: Some command(s) went wrong
-
-
-I also tried it on other machines.=20
-
-It is possible that your architecture does not expose this counter to perf.
-Did you try using this PMC with the perf tool ?
-
-Thanks,
-
-Mathieu
-
-
-<<<<<<<=C2=A0=C2=A0 =C2=A0/-/ /\ /\/ / /\/ E /\/\ /\ T /=C2=A0=C2=A0=C2=A0 =
->>>>>>>>
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
---=20
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
-
-  
-------=_Part_5732010_1849134228.1447877960957
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><head></head><body><div style=3D"color:#000; background-color:#fff; f=
-ont-family:times new roman, new york, times, serif;font-size:16px">There is=
- no PERF symbolic name for LLC-load-misses but I can use raw identifier to =
-find out Number of code read, data read that miss the LLC. Here is the comm=
-and that I used.<br class=3D"" id=3D"yui_3_16_0_1_1447797278790_35613">&nbs=
-p;<br class=3D"" id=3D"yui_3_16_0_1_1447797278790_35615">#perf stat -e r010=
-9 sleep 2<br class=3D"" id=3D"yui_3_16_0_1_1447797278790_35617">&nbsp;Perfo=
-rmance counter stats for 'sleep 2':<br class=3D"" id=3D"yui_3_16_0_1_144779=
-7278790_35619"><br class=3D"" id=3D"yui_3_16_0_1_1447797278790_35621">&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp; 117&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; r0109&nbsp; <br class=3D"" id=3D"yui=
-_3_16_0_1_1447797278790_35623"><br class=3D"" id=3D"yui_3_16_0_1_1447797278=
-790_35625">Do you have any idea why I don't have the symbolic name? Is ther=
-e any way to give raw identifier instead of perf:cpu:LLC-load-misses? <br c=
-lass=3D"" id=3D"yui_3_16_0_1_1447797278790_35627"><br class=3D"" id=3D"yui_=
-3_16_0_1_1447797278790_35629"><br class=3D"" id=3D"yui_3_16_0_1_14477972787=
-90_35631"><br class=3D"" id=3D"yui_3_16_0_1_1447797278790_35633"><div id=3D=
-"yui_3_16_0_1_1447797278790_35843" dir=3D"ltr"><br></div><br><div class=3D"=
-qtdSeparateBR"><br><br></div><div style=3D"display: block;" class=3D"yahoo_=
-quoted"> <div style=3D"font-family: times new roman, new york, times, serif=
-; font-size: 16px;"> <div style=3D"font-family: HelveticaNeue, Helvetica Ne=
-ue, Helvetica, Arial, Lucida Grande, sans-serif; font-size: 16px;"> <div di=
-r=3D"ltr"> <font face=3D"Arial" size=3D"2"> On Wednesday, November 18, 2015=
- 9:45 AM, Mathieu Desnoyers &lt;mathieu.desnoyers@efficios.com&gt; wrote:<b=
-r> </font> </div>  <br><br> <div class=3D"y_msg_container"><div id=3D"yiv34=
-46413485"><div><div style=3D"font-family:arial, helvetica, sans-serif;font-=
-size:12pt;color:#000000;"><div><br clear=3D"none"></div><div><br clear=3D"n=
-one"></div><span id=3D"yiv3446413485zwchr">----- On Nov 17, 2015, at 4:46 P=
-M, Hani Nemati &lt;hani_nemati@yahoo.com&gt; wrote:<br clear=3D"none"></spa=
-n><div><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;p=
-adding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decora=
-tion:none;font-family:Helvetica, Arial, sans-serif;font-size:12pt;"><div st=
-yle=3D"color:#000;background-color:#fff;font-family:times new roman, new yo=
-rk, times, serif;font-size:16px;"><div dir=3D"ltr" id=3D"yiv3446413485yui_3=
-_16_0_1_1447772874730_12112"><span id=3D"yiv3446413485yui_3_16_0_1_14477728=
-74730_12163">Hi, <br class=3D"yiv3446413485" id=3D"yiv3446413485yui_3_16_0_=
-1_1447772874730_12165" clear=3D"none">I am trying to count last level cache=
- misses by using lttng add-context command. I use add-context to add perf:c=
-pu:LLC-load-misses to my channel but I see an error. There is no error for =
-other perf events. Just two perf events including perf:cpu:LLC-load-misses =
-and&nbsp; perf:cpu:LLC-store-misses give me the following error:<br class=
-=3D"yiv3446413485" id=3D"yiv3446413485yui_3_16_0_1_1447772874730_12167" cle=
-ar=3D"none">Error: perf:cpu:LLC-load-misses: Add kernel context failed<br c=
-lass=3D"yiv3446413485" id=3D"yiv3446413485yui_3_16_0_1_1447772874730_12169"=
- clear=3D"none">Warning: Some command(s) went wrong<br class=3D"yiv34464134=
-85" id=3D"yiv3446413485yui_3_16_0_1_1447772874730_12171" clear=3D"none"><br=
- class=3D"yiv3446413485" id=3D"yiv3446413485yui_3_16_0_1_1447772874730_1217=
-3" clear=3D"none">Here is result of "uname -a" on my computer: <br class=3D=
-"yiv3446413485" id=3D"yiv3446413485yui_3_16_0_1_1447772874730_12175" clear=
-=3D"none">Linux nemati 3.16.0-51-generic #69~14.04.1-Ubuntu SMP Wed Oct 7 1=
-5:32:41 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux <br class=3D"yiv3446413485"=
- id=3D"yiv3446413485yui_3_16_0_1_1447772874730_12177" clear=3D"none"><br cl=
-ass=3D"yiv3446413485" id=3D"yiv3446413485yui_3_16_0_1_1447772874730_12179" =
-clear=3D"none"><br class=3D"yiv3446413485" id=3D"yiv3446413485yui_3_16_0_1_=
-1447772874730_12181" clear=3D"none">Here is the command that I used: <br cl=
-ass=3D"yiv3446413485" id=3D"yiv3446413485yui_3_16_0_1_1447772874730_12183" =
-clear=3D"none">#lttng enable-channel -k test<br class=3D"yiv3446413485" id=
-=3D"yiv3446413485yui_3_16_0_1_1447772874730_12185" clear=3D"none">#Kernel c=
-hannel test enabled for session hh<br class=3D"yiv3446413485" id=3D"yiv3446=
-413485yui_3_16_0_1_1447772874730_12187" clear=3D"none">#lttng add-context -=
-k -t perf:cpu:LLC-load-misses -c test<br class=3D"yiv3446413485" id=3D"yiv3=
-446413485yui_3_16_0_1_1447772874730_12189" clear=3D"none">Error: perf:cpu:L=
-LC-load-misses: Add kernel context failed<br class=3D"yiv3446413485" id=3D"=
-yiv3446413485yui_3_16_0_1_1447772874730_12191" clear=3D"none">Warning: Some=
- command(s) went wrong<br class=3D"yiv3446413485" id=3D"yiv3446413485yui_3_=
-16_0_1_1447772874730_12193" clear=3D"none"><br class=3D"yiv3446413485" id=
-=3D"yiv3446413485yui_3_16_0_1_1447772874730_12195" clear=3D"none"><br class=
-=3D"yiv3446413485" id=3D"yiv3446413485yui_3_16_0_1_1447772874730_12197" cle=
-ar=3D"none">I also tried it on other machines. </span></div></div></blockqu=
-ote><div><br clear=3D"none"></div><div>It is possible that your architectur=
-e does not expose this counter to perf.<br clear=3D"none"></div><div>Did yo=
-u try using this PMC with the perf tool ?<br clear=3D"none"></div><div><br =
-clear=3D"none"></div><div>Thanks,<br clear=3D"none"></div><div><br clear=3D=
-"none"></div><div>Mathieu<div class=3D"yiv3446413485yqt4842675108" id=3D"yi=
-v3446413485yqtfd64414"><br clear=3D"none"></div></div><div class=3D"yiv3446=
-413485yqt4842675108" id=3D"yiv3446413485yqtfd37008"><div><br clear=3D"none"=
-></div></div><blockquote style=3D"border-left:2px solid #1010FF;margin-left=
-:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-=
-decoration:none;font-family:Helvetica, Arial, sans-serif;font-size:12pt;"><=
-div style=3D"color:#000;background-color:#fff;font-family:times new roman, =
-new york, times, serif;font-size:16px;"><div class=3D"yiv3446413485signatur=
-e" id=3D"yiv3446413485yui_3_16_0_1_1447772874730_12155"><div id=3D"yiv34464=
-13485yui_3_16_0_1_1447772874730_12154"><div class=3D"yiv3446413485yqt484267=
-5108" id=3D"yiv3446413485yqtfd96110">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&nbsp;&nbs=
-p; </div><span style=3D"color:#ff0000;"><div class=3D"yiv3446413485yqt48426=
-75108" id=3D"yiv3446413485yqtfd53272">&nbsp;/-/ /\ /\/ / /\/ <em>E</em> /\/=
-\ /\ <em>T</em></div> /</span>&nbsp;&nbsp;&nbsp; &gt;&gt;&gt;&gt;&gt;&gt;&g=
-t;&gt;</div></div></div><br clear=3D"none">________________________________=
-_______________<br clear=3D"none">lttng-dev mailing list<br clear=3D"none">=
-lttng-dev@lists.lttng.org<br clear=3D"none">http://lists.lttng.org/cgi-bin/=
-mailman/listinfo/lttng-dev<br clear=3D"none"></blockquote></div><br clear=
-=3D"none"><div>-- <br clear=3D"none"></div><div>Mathieu Desnoyers<br clear=
-=3D"none">EfficiOS Inc.<br clear=3D"none">http://www.efficios.com</div></di=
-v></div></div><br><br></div>  </div> </div>  </div></div></body></html>
-------=_Part_5732010_1849134228.1447877960957--
-
-
---===============1793550993==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1793550993==--
+Q29tbWVudHMgZ2l2ZW4gaGVyZToKCmh0dHBzOi8vZ2l0aHViLmNvbS9qZGVzZm9zc2V6L2x0dG5n
+LXRvb2xzLWRldi9jb21taXQvNjJiNGQ5YTBjMGRlNTk2NGJmYTRmNjFkNzNjMzc2NTgxY2RlZWVl
+NgpodHRwczovL2dpdGh1Yi5jb20vamRlc2Zvc3Nlei9sdHRuZy10b29scy1kZXYvY29tbWl0LzMx
+NzMwOWI4NzhlYTE4YjJjY2I2ZDY5ZWQ4NDhmYjdiYTE0MjgxZGEKaHR0cHM6Ly9naXRodWIuY29t
+L2pkZXNmb3NzZXovbHR0bmctdG9vbHMtZGV2L2NvbW1pdC83YjE4MGQwYTFjNzM3YTljMzIxZjYy
+YjJhYzk1N2Y3ODVjOWJjMTE3Cmh0dHBzOi8vZ2l0aHViLmNvbS9qZGVzZm9zc2V6L2x0dG5nLXRv
+b2xzLWRldi9jb21taXQvMWU5YTJjZmRjY2YxYTE4MjliZGFlY2VkNWNhNzE3MDc4M2JmMGE5OApo
+dHRwczovL2dpdGh1Yi5jb20vamRlc2Zvc3Nlei9sdHRuZy10b29scy1kZXYvY29tbWl0LzQ2MTNj
+YWM0N2Q1NTQxNjZlZWM2MzU3YjA4MmExNjNmMTU3YzIxNzYKaHR0cHM6Ly9naXRodWIuY29tL2pk
+ZXNmb3NzZXovbHR0bmctdG9vbHMtZGV2L2NvbW1pdC80MTc2ZWQzY2Q1MmFjY2EyN2NlYTRlMTU0
+YzdkM2RmZWM4MzJiMWNmCmh0dHBzOi8vZ2l0aHViLmNvbS9qZGVzZm9zc2V6L2x0dG5nLXRvb2xz
+LWRldi9jb21taXQvZWEwMzRkM2Y3ZjM3NjhkMDFmZDNjNmRkYTFiODZlOTdmMWNkYjcyYwoKVGhh
+bmtzIQpKw6lyw6ltaWUKCk9uIFRodSwgQXVnIDYsIDIwMTUgYXQgMTE6NTUgUE0sIEp1bGllbiBE
+ZXNmb3NzZXoKPGpkZXNmb3NzZXpAZWZmaWNpb3MuY29tPiB3cm90ZToKPiBUaGlzIHBhdGNoc2V0
+IGlzIGNvbXBvc2VkIG9mIGNvbW1pdHMgaW4gbHR0bmctdG9vbHMsIGFuZCBsdHRuZy11c3QsIGl0
+Cj4gYWxsb3dzIHRoZSBzZXNzaW9uZCwgdG8gcmVwb3J0IHRvIHRoZSB1c2VyIHRoZQo+IGRpc2Nh
+cmRlZCBldmVudHMgKHdoZW4gYSBjaGFubmVsIGlzIGluIGRpc2NhcmQgbW9kZSkgb3IgdGhlIGxv
+c3QgcGFja2V0cwo+ICh3aGVuIGEgY2hhbm5lbCBpcyBpbiBvdmVyd3JpdGUgbW9kZSkuCj4KPiBQ
+bGVhc2UgcHVsbCBmcm9tOgo+IGh0dHBzOi8vZ2l0aHViLmNvbS9qZGVzZm9zc2V6L2x0dG5nLXRv
+b2xzLWRldi90cmVlL3NlcW51bQo+IGE2NWE3OTEgU3RvcmUgdGhlIGluc3RhbmNlIGlkIGFuZCBw
+YWNrZXRfc2VxX251bSBpbiBpbmRleGVzCj4gODA0OTY1MCBrZXJuY3RsIGNvbW1hbmRzIHRvIGV4
+dHJhY3QgdGhlIHN0cmVhbSBpbnN0YW5jZSBpZAo+IGY5NDdkNjIgQWNjb3VudCB0aGUgbG9zdCBw
+YWNrZXRzIGluIHNuYXBzaG90IG1vZGUKPiA5NzhiZWUyIERpc3BsYXkgZGlzY2FyZGVkIGFuZCBs
+b3N0IGV2ZW50cyBhdCBkZXN0cm95IGFuZCBzdG9wCj4gNzdmNTdiMiBFeHRyYWN0IHRoZSBsb3N0
+IHBhY2tldHMgYW5kIGRpc2NhcmRlZCBldmVudHMgY291bnRlcnMKPiAxMzNlNmM0IE1ldGFkYXRh
+IGZvciBpbnN0YW5jZV9pZCBhbmQgcGFja2V0X3NlcV9udW0KPiAzMTIxMzcwIEFkZCBhIEhUIHRv
+IGxvb2t1cCBzZXNzaW9ucyBieSBpZAo+IGJkYTljZDggRXhwbGljaXRseSBzdG9wIHRoZSBzZXNz
+aW9uIG9uIGx0dG5nIGRlc3Ryb3kKPgo+IGh0dHBzOi8vZ2l0aHViLmNvbS9qZGVzZm9zc2V6L2x0
+dG5nLXVzdC1kZXYvdHJlZS9zZXFudW0KPiBlMjVmMGVmIEV4cG9ydCB0aGUgc3RyZWFtIGluc3Rh
+bmNlIElECj4gZjAxYjIxZiBHZW5lcmF0ZSBhbmQgZXhwb3J0IHRoZSBzZXF1ZW5jZSBudW1iZXIK
+PiA1OTNkZmY5IEFkZCBzdHJlYW0gaW5zdGFuY2UgaWQgdG8gdGhlIHBhY2tldCBoZWFkZXIKPgo+
+IENoYW5nZXMgZnJvbSB2MzoKPiAtIGx0dG5nLW1vZHVsZXMgcGF0Y2hlcyBBY2tlZC1ieSBhbmQg
+bWVyZ2VkIGluIG1hc3Rlcgo+IC0gbHR0bmctdXN0IHBhdGNoZXMgYWxsIEFja2VkLWJ5Cj4gLSBy
+ZW1vdmVkIHRoZSBiYWNrIHJlZmVyZW5jZSBpbnRyb2R1Y2VkIHRvIHJldHJpZXZlIHRoZQo+IGx0
+dG5nX3VzdF9zZXNzaW9uIGFuZCBjaGFubmVscyBmcm9tIHRoZSB1c3RfYXBwX2NoYW4KPiAtIGlu
+dHJvZHVjZWQgYSBuZXcgaGFzaHRhYmxlIHRvIGZpbmQgZWFzaWx5IGx0dF9zZXNzaW9uIGZyb20g
+dGhlaXIgaWQuCj4KPiBDaGFuZ2VzIGZyb20gdjI6Cj4gLSBhY3R1YWxseSBwdXNoZWQgdGhlIHVw
+ZGF0ZXMgaW50ZW5kZWQgZm9yIHYxIGluIFVTVCBhbmQgdG9vbHMuLi4KPiAtIGZpeGVkIHRoZSBj
+b21tZW50cyBmcm9tIE1hdGhpZXUgb24gdGhlIHYyCj4KPiBDaGFuZ2UgZnJvbSB2MToKPiAtIHRo
+ZSBwYWNrZXQgc2VxdWVuY2UgbnVtYmVyIGlzIG5vdCBkZXBlbmRhbnQgb24gdGhlIHN1YmJ1Zl9z
+aXplIGFuZCBub3cKPiBhbHdheXMgYSB1aW50NjRfdCwgc28gaXQgZ290IHJpZCBvZiB0aGUgbmVl
+ZCBvZiB0aGUKPiBwYWNrZXRfc2VxX251bV9wYWRkaW5nIGZpZWxkCj4KPiBPcmlnaW5hbCBjb3Zl
+ciBsZXR0ZXI6Cj4gVGhlIHJlcG9ydGluZyBpcyBkZXRhaWxsZWQgb24gYSBwZXItY2hhbm5lbCBi
+YXNpcyBpbiB0aGUgImx0dG5nIGxpc3QiCj4gY29tbWFuZCAoYW5kIGFzc29jaWF0ZWQgQVBJIGNh
+bGxzKSBhdCBydW50aW1lLiBPbiBsdHRuZyBzdG9wL2Rlc3Ryb3ksIGEKPiB3YXJuaW5nIGlzIG5v
+dyBkaXNwbGF5ZWQgdG8gdGhlIHVzZXIgaWYgZXZlbnRzL3BhY2tldHMgd2VyZQo+IGRpc2NhcmRl
+ZC9sb3N0IGR1cmluZyB0aGUgc2Vzc2lvbi4KPgo+IFRoZSBpbmZvcm1hdGlvbiBhYm91dCB0aGUg
+cGFja2V0IGxvc3QgaXMgZXh0cmFjdGVkIGZyb20gYSBwYWNrZXQKPiBzZXF1ZW5jZSBudW1iZXIg
+bm93IHdyaXR0ZW4gaW4gZWFjaCBDVEYgcGFja2V0IGFuZCBDVEYgaW5kZXgsIGFsbG93aW5nCj4g
+dGhlIHJlbGF5ZCBhbmQgdGhlIHZpZXdlcnMgdG8ga25vdyB3aGVuIHBhcnNpbmcgdGhlIHRyYWNl
+L2luZGV4IHRoYXQKPiBlbnRpcmUgcGFja2V0cyB3ZXJlIGxvc3QgYmV0d2VlbiB0d28gZGF0YSBw
+YWNrZXRzLgo+Cj4gRmluYWxseSwgYSBzdHJlYW1faW5zdGFuY2VfaWQgaXMgbm93IHdyaXR0ZW4g
+aW4gZWFjaCBwYWNrZXQsIHRoaXMKPiBmZWF0dXJlIGFsbG93cyBhIHZpZXdlciB0byBsaW5rIG11
+bHRpcGxlIHRyYWNlZmlsZXMgYmVsb25naW5nIHRvIHRoZQo+IHNhbWUgY2hhbm5lbCBhbmQgc3Ry
+ZWFtLiBUaGlzIGlzIHBhcnRpY3VsYXJseSB1c2VmdWwgd2hlbiBkZWFsaW5nIHdpdGgKPiB0cmFj
+ZWZpbGUgcm90YXRpb24gYmVjYXVzZSB0aGUgdmlld2VycyB3aWxsIG5vdyBiZSBhYmxlIHRvIGNv
+bXB1dGUgdGhlCj4gYWNjdXJhdGUgbnVtYmVyIG9mIGRpc2NhcmRlZCBldmVudHMuCj4KPiBKdWxp
+ZW4KPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4g
+bHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRw
+Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPgo+
+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmct
+ZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCgoKLS0gCkrD
+qXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRu
+Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
