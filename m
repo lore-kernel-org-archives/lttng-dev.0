@@ -1,23 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: liburcu qsbr call_rcu quiescence
-Date: Sun, 22 Nov 2015 16:47:16 +0000 (UTC)
-Message-ID: <178004323.137552.1448210836581.JavaMail.zimbra__22065.3342003518$1448210917$gmane$org@efficios.com>
-References: <328787043.5258001.1447796792694.JavaMail.yahoo.ref@mail.yahoo.com>
- <328787043.5258001.1447796792694.JavaMail.yahoo@mail.yahoo.com>
- <824342841.114145.1447857930891.JavaMail.zimbra@efficios.com>
- <886413694.5732011.1447877960962.JavaMail.yahoo@mail.yahoo.com>
- <1043364994.6119959.1447947438952.JavaMail.yahoo@mail.yahoo.com>
- <1171905821.121424.1447953945294.JavaMail.zimbra@efficios.com>
- <3e96575d71a549d4aa262a8dd31efc77@BOWEX17-D.micron.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Subject: [PATCH lttng-tools] configure.ac: use $withval with
+	AC_ARG_WITH
+Date: Sun, 22 Nov 2015 23:38:01 +0100
+Message-ID: <1448231881-7988-2-git-send-email-s.martin49__43040.5392697596$1448231945$gmane$org@gmail.com>
+References: <1448231881-7988-1-git-send-email-s.martin49@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-wm0-f47.google.com ([74.125.82.47])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1a0XnY-00007u-3l
- for lttng-dev@lists.lttng.org; Sun, 22 Nov 2015 11:47:34 -0500
-In-Reply-To: <3e96575d71a549d4aa262a8dd31efc77@BOWEX17-D.micron.com>
+ (envelope-from <s.martin49@gmail.com>) id 1a0dGw-0001rS-VP
+ for lttng-dev@lists.lttng.org; Sun, 22 Nov 2015 17:38:18 -0500
+Received: by wmec201 with SMTP id c201so83690895wme.1
+ for <lttng-dev@lists.lttng.org>; Sun, 22 Nov 2015 14:38:09 -0800 (PST)
+In-Reply-To: <1448231881-7988-1-git-send-email-s.martin49@gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -26,49 +23,26 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "David Boles (dboles)" <dboles@micron.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgRGF2aWQsCgpQbGVhc2UgY3JlYXRlIGEgbmV3IGRpc2N1c3Npb24gdGhyZWFkIHdoZW4gcG9z
-dGluZyBhIHF1ZXN0aW9uIG5leHQKdGltZS4gSXQgd2lsbCBoZWxwIG90aGVycyBmb2xsb3dpbmcg
-dGhlIGx0dG5nLWRldiBhcmNoaXZlcy4gWW91IHdpbGwKZmluZCB0aGUgYW5zd2VyIHRvIHlvdXIg
-cXVlc3Rpb24gYmVsb3csCgotLS0tLSBPbiBOb3YgMjAsIDIwMTUsIGF0IDU6MzMgUE0sIERhdmlk
-IEJvbGVzIChkYm9sZXMpIGRib2xlc0BtaWNyb24uY29tIHdyb3RlOgoKPiBJ4oCZbSB1c2luZyB0
-aGUgbGlidXJjdSBzeXN0ZW0gKHFzYnIgZmxhdm9yKSB3aXRoIGl0cyBsaXN0IHN0cnVjdHVyZXMg
-YXMgd2VsbCBhcyBhCj4gdmFyaWFudCBvZiBhIGJvbnNhaSB0cmVlLgo+IAo+IEluIG15IHVuaXQg
-dGVzdGluZyBjb2RlIEkgaGF2ZSBhIHJhY2UgYmV0d2VlbiB0aGUgcmN1IGNhbGxiYWNrIGludm9j
-YXRpb24gdGhyZWFkCj4gKGN1cnJlbnRseSBqdXN0IHRoZSBkZWZhdWx0IG9uZSkgaW52b2tpbmcg
-YSBjYWxsYmFjayBpdCB3YXMgZ2l2ZW4gYW5kIHRoZSBtYWluCj4gdGhyZWFkIHRlYXJpbmcgZG93
-biBkYXRhIHRoYXQgY2FsbGJhY2sgZGVwZW5kcyBvbi4KPiAKPiBJbiBsb29raW5nIGF0IHRoZSBj
-YWxsX3JjdV90aHJlYWQoKSBmdW5jdGlvbiwgaXQgbG9va3MgbGlrZSB0aGF0IHRocmVhZCBzbGVl
-cHMKPiBmb3Igbm8gbW9yZSB0aGFuIH4xMG1zLiBIb3dldmVyLCBldmVuIGlmIEkgZ3VhcmFudGVl
-IDIwbXMgZWxhcHNlcyBiZXR3ZWVuIHRoZQo+IGxhc3QgdGltZSBjYWxsX3JjdSgpIGlzIGNhbGxl
-ZCBhbmQgbXkgdGVhcmRvd24sIEkgYW0gc3RpbGwgc2VlaW5nIHRoZSBjYWxsYmFjawo+IHRocmVh
-ZCBwcm9jZXNzaW5nICJvbGQiIGNhbGxfcmN1KCkgcmVxdWVzdHMuIFRoaXMgYXBwZWFycyBjb3Jy
-ZWxhdGVkIHdpdGggdGhlCj4gY2FsbGJhY2sgdGhyZWFkIGhhdmluZyB0aG91c2FuZHMgb2YgZnJl
-ZSdzIHRvIHByb2Nlc3MuCj4gCj4gSW4gbXkgcmVhbCBhcHBsaWNhdGlvbiBJIGhhcHBlbmVkIHRv
-IGhhdmUgc2V0IHRoaW5ncyB1cCBzbyB0aGF0IGV2ZXJ5dGhpbmcKPiBhc3NvY2lhdGVkIHdpdGgg
-cmN1LW1hbmFnZWQgYWxsb2NhdGlvbiBpcyBmcmVlZCB3aXRoIGNhbGxfcmN1KCkgc28gSSdtIG5v
-dAo+IHNlZWluZyBhIHByb2JsZW0gdGhlcmUgKHNvIGZhcikuIEhvd2V2ZXIsIEkgc3VzcGVjdCB0
-aGUgc2FtZSBpc3N1ZSBjb3VsZCBjcm9wCj4gdXAgd2l0aCBhYm5vcm1hbCBleGl0IHBhdGhzLgo+
-IAo+IEhvdyBkbyBJIHJlbGlhYmx5IGRldGVybWluZSB0aGF0IGFsbCByY3UgY2FsbGJhY2tzIHJl
-Z2lzdGVyZWQgcHJpb3IgdG8gc29tZQo+IHBvaW50IGluIHRpbWUgaGF2ZSBiZWVuIHByb2Nlc3Nl
-ZD8KClRoZXJlJ3MgYW4gQVBJIGZvciB0aGF0ISA6LSkKClNlZSByY3VfYmFycmllcigpLiBJdCBo
-YXMgYmVlbiBpbnRyb2R1Y2VkIGluIGxpYnVyY3UgMC44LgoKUmVmOgpodHRwczovL2dpdGh1Yi5j
-b20vdXJjdS91c2Vyc3BhY2UtcmN1L2Jsb2IvbWFzdGVyL2RvYy9yY3UtYXBpLm1kCgoidm9pZCBy
-Y3VfYmFycmllcih2b2lkKTsKCldhaXQgZm9yIGFsbCBjYWxsX3JjdSgpIHdvcmsgaW5pdGlhdGVk
-IHByaW9yIHRvIHJjdV9iYXJyaWVyKCkgYnkgYW55IHRocmVhZApvbiB0aGUgc3lzdGVtIHRvIGhh
-dmUgY29tcGxldGVkIGJlZm9yZSByY3VfYmFycmllcigpIHJldHVybnMuIHJjdV9iYXJyaWVyKCkK
-c2hvdWxkIG5ldmVyIGJlIGNhbGxlZCBmcm9tIGEgY2FsbF9yY3UoKSB0aHJlYWQuIFRoaXMgZnVu
-Y3Rpb24gY2FuIGJlIHVzZWQsCmZvciBpbnN0YW5jZSwgdG8gZW5zdXJlIHRoYXQgYWxsIG1lbW9y
-eSByZWNsYWltIGludm9sdmluZyBhIHNoYXJlZCBvYmplY3QKaGFzIGNvbXBsZXRlZCBiZWZvcmUg
-YWxsb3dpbmcgZGxjbG9zZSgpIG9mIHRoaXMgc2hhcmVkIG9iamVjdCB0byBjb21wbGV0ZS4iCgpU
-aGFua3MsCgpNYXRoaWV1Cgo+IAo+IFRoYW5rcywKPiAKPiBEYXZpZCBCb2xlcwo+IAo+IF9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1h
-aWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCi0tIApNYXRoaWV1IERl
-c25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBs
-aXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
-YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index fad4de6..978e3bc 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -315,7 +315,7 @@ AC_ARG_WITH(lttng-ust-prefix,
+ # Check liblttng-ust-ctl library
+ AC_ARG_WITH(lttng-ust,
+ 	AS_HELP_STRING([--without-lttng-ust],[build without LTTng-UST (Userspace Tracing) support]),
+-	lttng_ust_support=$enableval, lttng_ust_support=yes)
++	lttng_ust_support=$withval, lttng_ust_support=yes)
+ 
+ AS_IF([test "x$lttng_ust_support" = "xyes"], [
+ 	AC_CHECK_LIB([lttng-ust-ctl], [ustctl_recv_channel_from_consumer],
+-- 
+2.6.2
