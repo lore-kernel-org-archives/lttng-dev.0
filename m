@@ -1,17 +1,16 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Subject: [PATCH lttng-tools] configure.ac: fix static build
-Date: Sun, 22 Nov 2015 23:38:00 +0100
-Message-ID: <1448231881-7988-1-git-send-email-s.martin49__38511.4712211818$1448231961$gmane$org@gmail.com>
+From: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+Subject: =?utf-8?q?Can_TP=5FARGS_contain_more_than_10_elements?=
+	=?utf-8?q?=3F?=
+Date: Tue, 24 Nov 2015 14:23:35 +0800
+Message-ID: <169a15b5-94ec-4014-b435-f6ca95532412.zhenyu.ren__33800.9606268772$1448346316$gmane$org@aliyun.com>
+Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1499498080=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm0-f43.google.com ([74.125.82.43])
+Received: from smtpcm9-308.freemail.mail.aliyun.com ([110.75.46.8])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <s.martin49@gmail.com>) id 1a0dGv-0001rR-Kq
- for lttng-dev@lists.lttng.org; Sun, 22 Nov 2015 17:38:18 -0500
-Received: by wmww144 with SMTP id w144so76167817wmw.1
- for <lttng-dev@lists.lttng.org>; Sun, 22 Nov 2015 14:38:07 -0800 (PST)
+ (envelope-from <zhenyu.ren@aliyun.com>) id 1a171E-0002un-0R
+ for lttng-dev@lists.lttng.org; Tue, 24 Nov 2015 01:24:05 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,49 +19,63 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-For static build, some extra LDFLAGS may be needed.
+--===============1499498080==
+Content-Type: multipart/alternative;
+  boundary="----=ALIBOUNDARY_5515_546bc940_56540267_bcdc"
 
-Using PKG_CHECK_MODULES instead of AC_CHECK_LIB for librairy detection
-allows to get all these flags. Then, the LIBS variable can be extended
-with everything that is needed.
+------=ALIBOUNDARY_5515_546bc940_56540267_bcdc
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-So, use PKG_CHECK_MODULES for popt and uuid detection; which both depend
-on libintl.
+SGkswqAgwqBGcm9tIG1hbiBsdHRuZy11c3QsIEkgZ2V0ICJUUF9BUkdTwqBtYWNyb8KgY29udGFp
+bnPCoHRoZcKgYXJndW1lbnRzwqBwYXNzZWTCoGZvcsKgdGhlwqB0cmFjZXBvaW50wqBpdMKgaXPC
+oGluwqB0aGXCoGZvbGxvd2luZ8KgZm9ybWF0wqBUUF9BUkdTKHR5cGUxLMKgbmFtZTEswqB0eXBl
+MizCoG5hbWUyLMKgLi4uwqB0eXBlMTAswqBuYW1lMTApwqB3aGVyZcKgdGhlcmXCoGNhbsKgYmXC
+oGZyb23CoHplcm/CoHRvwqB0ZW7CoGVsZW1lbnRzIsKgIERvZXMgYW55b25lIGtub3cgaXMgaXQg
+cG9zc2libGUgdG8gY29udGFpbiBtb3JlIHRoYW4gMTAgZWxlbWVudHMgaW4gb25lIFRQX0FSR1M/
+IElmIHNvICxob3cgdG8gZG8gdGhhdCA/VGhhbmtzIGluIGFkdmFuY2V6aGVueXUucmVu
+------=ALIBOUNDARY_5515_546bc940_56540267_bcdc
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This changes fixes build failures triggered with Buildroot, e.g.:
-  http://autobuild.buildroot.net/results/0f1/0f1e015a0c5a5ac2beeb5011d31a1e0058a32a0d/build-end.log
+<div class=3D"__aliyun_email_body_block"><div style=3D"clear: both;"><span sty=
+le=3D"font-family: Tahoma, Arial, STHeiti, SimSun; font-size: 14px; color: rgb=
+(0, 0, 0);">Hi,</span></div><div style=3D"clear: both;"><span style=3D"font-fa=
+mily: Tahoma, Arial, STHeiti, SimSun; font-size: 14px; color: rgb(0, 0, 0);"><=
+br ></span></div><div style=3D"clear: both;"><span style=3D"font-family: Tahom=
+a, Arial, STHeiti, SimSun; font-size: 14px; color: rgb(0, 0, 0);">&nbsp; &nbsp=
+;From man lttng-ust, I get "TP_ARGS&nbsp;macro&nbsp;contains&nbsp;the&nbsp;arg=
+uments&nbsp;passed&nbsp;for&nbsp;the&nbsp;tracepoint&nbsp;it&nbsp;is&nbsp;in&n=
+bsp;the&nbsp;following&nbsp;format&nbsp;TP_ARGS(type1,&nbsp;name1,&nbsp;type2,=
+&nbsp;name2,&nbsp;...&nbsp;type10,&nbsp;name10)&nbsp;where&nbsp;there&nbsp;can=
+&nbsp;be&nbsp;from&nbsp;zero&nbsp;to&nbsp;ten&nbsp;elements"</span></div><div =
+style=3D"clear: both;"><span style=3D"font-family: Tahoma, Arial, STHeiti, Sim=
+Sun; font-size: 14px; color: rgb(0, 0, 0);"><br ></span></div><div style=3D"cl=
+ear: both;"><span style=3D"font-family: Tahoma, Arial, STHeiti, SimSun; font-s=
+ize: 14px; color: rgb(0, 0, 0);">&nbsp; Does anyone know is it possible to con=
+tain more than 10 elements in one TP_ARGS? If so ,how to do that ?</span></div=
+><div style=3D"clear: both;"><span style=3D"font-family: Tahoma, Arial, STHeit=
+i, SimSun; font-size: 14px; color: rgb(0, 0, 0);"><br ></span></div><div style=
+=3D"clear: both;"><span style=3D"font-family: Tahoma, Arial, STHeiti, SimSun; =
+font-size: 14px; color: rgb(0, 0, 0);">Thanks in advance</span></div><div styl=
+e=3D"clear: both;"><span style=3D"font-family: Tahoma, Arial, STHeiti, SimSun;=
+ font-size: 14px; color: rgb(0, 0, 0);">zhenyu.ren</span></div></div>
+------=ALIBOUNDARY_5515_546bc940_56540267_bcdc--
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- configure.ac | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/configure.ac b/configure.ac
-index 9cc411e..fad4de6 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -218,15 +218,17 @@ AC_CHECK_LIB([pthread], [pthread_create], [],
- )
- 
- # Check libpopt
--AC_CHECK_LIB([popt], [poptGetContext], [],
-+PKG_CHECK_MODULES([POPT], [popt],
-+	[LIBS="$LIBS $POPT_LIBS"],
- 	[AC_MSG_ERROR([Cannot find libpopt. Use [LDFLAGS]=-Ldir to specify its location.])]
- )
- 
- AM_PATH_XML2(2.7.6, true, AC_MSG_ERROR(No supported version of libxml2 found.))
- 
- # Check for libuuid
--AC_CHECK_LIB([uuid], [uuid_generate],
-+PKG_CHECK_MODULES([UUID], [uuid],
- [
-+	LIBS="$LIBS $UUID_LIBS"
- 	AC_DEFINE_UNQUOTED([LTTNG_HAVE_LIBUUID], 1, [Has libuuid support.])
- 	have_libuuid=yes
- ],
--- 
-2.6.2
+
+--===============1499498080==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1499498080==--
