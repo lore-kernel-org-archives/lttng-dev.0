@@ -1,16 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: "Luetkebohle Ingo (CR/AEA2)" <Ingo.Luetkebohle@de.bosch.com>
 Subject: Re: faulty context for sched_stat_ tracepoints?
-Date: Thu, 26 Nov 2015 15:21:53 +0000 (UTC)
-Message-ID: <1809072616.157482.1448551313021.JavaMail.zimbra__29404.2785455988$1448551396$gmane$org@efficios.com>
-References: <73b02dedea024337886a82474372bcde@FE-MBX1025.de.bosch.com>
+Date: Thu, 26 Nov 2015 15:58:43 +0000
+Message-ID: <1448553523339.1387__12819.0093244941$1448553599$gmane$org@de.bosch.com>
+References: <73b02dedea024337886a82474372bcde@FE-MBX1025.de.bosch.com>,
+ <1809072616.157482.1448551313021.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0920090727=="
+Content-Type: multipart/mixed; boundary="===============1659422519=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from smtp6-v.fe.bosch.de ([139.15.237.11])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1a1yN5-00039b-Vq
- for lttng-dev@lists.lttng.org; Thu, 26 Nov 2015 10:22:12 -0500
-In-Reply-To: <73b02dedea024337886a82474372bcde@FE-MBX1025.de.bosch.com>
+ (envelope-from <Ingo.Luetkebohle@de.bosch.com>) id 1a1ywb-0003LK-R4
+ for lttng-dev@lists.lttng.org; Thu, 26 Nov 2015 10:58:52 -0500
+In-Reply-To: <1809072616.157482.1448551313021.JavaMail.zimbra@efficios.com>
+Content-Language: de-DE
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,266 +21,450 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Luetkebohle Ingo (CR/AEA2)" <Ingo.Luetkebohle@de.bosch.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0920090727==
+--===============1659422519==
+Content-Language: de-DE
 Content-Type: multipart/alternative;
-	boundary="----=_Part_157481_471214850.1448551313020"
+	boundary="_000_14485535233391387deboschcom_"
 
-------=_Part_157481_471214850.1448551313020
-Content-Type: text/plain; charset=utf-8
+--_000_14485535233391387deboschcom_
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
+
+Hi Mathieu,
+
+
+thank you for the explanation!
+
+
+This would suggest that the problem only occurs for scheduler events, becau=
+se only then we have this situation that the currently scheduled task is no=
+t the one that the tracepoint relates that. Am I interpreting that correctl=
+y?
+
+
+If yes, this would certainly ease my concerns, because for most tracepoints=
+, I get the expected behavior. I can also get the information that I want r=
+ight now by looking at comm instead.
+
+
+However, for future development of LTTng: Isn't the intuitive context that =
+of the *tracepoint*? In other words, isn't it wrong to always use the curre=
+ntly scheduled task?
+
+
+cheers,
+
+
+Dr. Ingo L=FCtkebohle
+Software Design and Analysis -- Robotics (CR/AEA2)
+
+Tel. +49(711)811-12248
+Fax +49(711)811-0
+Mobil +49-1525-8813417
+Ingo.Luetkebohle@de.bosch.com<mailto:Ingo.Luetkebohle@de.bosch.com>
+________________________________
+Von: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Gesendet: Donnerstag, 26. November 2015 16:21
+An: Luetkebohle Ingo (CR/AEA2)
+Cc: lttng-dev
+Betreff: Re: [lttng-dev] faulty context for sched_stat_ tracepoints?
 
 ---- On Nov 26, 2015, at 7:34 AM, Luetkebohle Ingo (CR/AEA2) <Ingo.Luetkebo=
-hle@de.bosch.com> wrote:=20
+hle@de.bosch.com> wrote:
+Hi,
 
-> Hi,
+I noticed that the "procname" and "tid" *context* variables can differ from=
+ the "comm" and "tid" variables of the sched_stat_-tracepoints (e.g., for s=
+ched_stat_runtime).
 
-> I noticed that the =E2=80=9Cprocname=E2=80=9D and =E2=80=9Ctid=E2=80=9D *=
- context * variables can differ from
-> the =E2=80=9Ccomm=E2=80=9D and =E2=80=9Ctid=E2=80=9D variables of the sch=
-ed_stat_-tracepoints (e.g., for
-> sched_stat_runtime).
+For example, see the following two outputs:
+[15:49:33.674072890] (+0.000029771) rng2070 sched_stat_sleep: { cpu_id =3D =
+4 }, { pid =3D 26974, procname =3D "amcl", tid =3D 26975 }, { comm =3D "ltt=
+ng-sessiond", tid =3D 798, delay =3D 194122524 }
+[15:49:33.722894563] (+0.000004851) rng2070 sched_stat_sleep: { cpu_id =3D =
+0 }, { pid =3D 0, procname =3D "swapper/0", tid =3D 0 }, { comm =3D "amcl",=
+ tid =3D 27078, delay =3D 10043658 }
 
-> For example, see the following two outputs:
+In both cases, procname differs from comm.  I've looked at the kernel sourc=
+e code, and the "comm" variable is taken from task_struct.filename. Barring=
+ renames, this would be the correct one, so I'm assuming that the context i=
+s sometimes incorrect.
 
-> [15:49:33.674072890] (+0.000029771) rng2070 sched_stat_sleep: { cpu_id =
-=3D 4 }, {
-> pid =3D 26974, procname =3D "amcl", tid =3D 26975 }, { comm =3D "lttng-se=
-ssiond", tid =3D
-> 798, delay =3D 194122524 }
+Now, for this particular case, I can take the correct variables from the tr=
+acepoint, but of course, this makes me worried that the context might also =
+be wrong in other cases... Do you have any idea what could be going on here=
+?
 
-> [15:49:33.722894563] (+0.000004851) rng2070 sched_stat_sleep: { cpu_id =
-=3D 0 }, {
-> pid =3D 0, procname =3D "swapper/0", tid =3D 0 }, { comm =3D "amcl", tid =
-=3D 27078, delay
-> =3D 10043658 }
-
-> In both cases, procname differs from comm. I=E2=80=99ve looked at the ker=
-nel source
-> code, and the =E2=80=9Ccomm=E2=80=9D variable is taken from task_struct.f=
-ilename. Barring
-> renames, this would be the correct one, so I=E2=80=99m assuming that the =
-context is
-> sometimes incorrect.
-
-> Now, for this particular case, I can take the correct variables from the
-> tracepoint, but of course, this makes me worried that the context might a=
-lso be
-> wrong in other cases=E2=80=A6 Do you have any idea what could be going on=
- here?
-
-> LTTng is Version 2.7.x+stable+bzr2948+pack17+201511192116~ubuntu14.04.1 a=
-nd this
-> is on a 3.19.0-33-generic kernel (btw, that=E2=80=99s not the default ker=
-nel for Ubuntu
-> 14.04, but the LTS vivid backport kernel).
-
-Hi,=20
+LTTng is Version 2.7.x+stable+bzr2948+pack17+201511192116~ubuntu14.04.1 and=
+ this is on a 3.19.0-33-generic kernel (btw, that's not the default kernel =
+for Ubuntu 14.04, but the LTS vivid backport kernel).
+Hi,
 
 Looking at lttng-modules lttng-context-tid.c tid_record(), we see that it u=
-ses task_pid_nr(current).=20
+ses task_pid_nr(current).
 It therefore gets the tid of the currently scheduled task. This is similar =
-for procname.=20
+for procname.
 
 Now looking at the Linux kernel kernel/sched/fair.c: enqueue_sleeper(), whi=
-ch calls=20
+ch calls
 trace_sched_stat_sleep(), we see that it passes "tsk" as parameter to the t=
-racepoint.=20
+racepoint.
 Already here, nothing seems to ensure that "tsk" is the currently scheduled=
- task. It's=20
+ task. It's
 rather a task that is being put to sleep. Looking at the callers of enqueue=
-_sleeper(),=20
+_sleeper(),
 we can understand that the current task is first scheduled out before being=
- enqueued=20
+ enqueued
 as a sleeper. This is why, when we hit the sched_stat_sleep tracepoint, the=
- current=20
+ current
 task is not "tsk", which explains the difference between the context inform=
-ation=20
-and the tracepoint payload information: they really target different tasks.=
-=20
+ation
+and the tracepoint payload information: they really target different tasks.
 
-Does this help solve your concerns ?=20
+Does this help solve your concerns ?
 
-Thanks,=20
+Thanks,
 
-Mathieu=20
-
-> Mit freundlichen Gr=C3=BC=C3=9Fen / Best regards
-
-> Ingo Luetkebohle
-
-> Application Software (CR/AEA2)
-> Tel. +49(711)811-12248 | Fax +49(711)811-0 | Ingo.Luetkebohle@de.bosch.co=
-m
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---=20
-Mathieu Desnoyers=20
-EfficiOS Inc.=20
-http://www.efficios.com=20
-
-------=_Part_157481_471214850.1448551313020
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
-__">---- On Nov 26, 2015, at 7:34 AM, Luetkebohle Ingo (CR/AEA2) &lt;Ingo.L=
-uetkebohle@de.bosch.com&gt; wrote:<br></span></div><div data-marker=3D"__QU=
-OTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-left=
-:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-=
-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><st=
-yle><!--
-
-@font-face
-=09{font-family:"Cambria Math";
-=09panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-=09{font-family:Calibri;
-=09panose-1:2 15 5 2 2 2 4 3 2 4;}
-
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-=09{margin:0cm;
-=09margin-bottom:.0001pt;
-=09font-size:11.0pt;
-=09font-family:"Calibri",sans-serif;
-=09mso-fareast-language:EN-US;}
-a:link, span.MsoHyperlink
-=09{mso-style-priority:99;
-=09color:#0563C1;
-=09text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-=09{mso-style-priority:99;
-=09color:#954F72;
-=09text-decoration:underline;}
-span.EmailStyle17
-=09{mso-style-type:personal-compose;
-=09font-family:"Arial",sans-serif;
-=09color:windowtext;
-=09font-weight:normal;
-=09font-style:normal;}
-.MsoChpDefault
-=09{mso-style-type:export-only;
-=09font-family:"Calibri",sans-serif;
-=09mso-fareast-language:EN-US;}
-@page WordSection1
-=09{size:612.0pt 792.0pt;
-=09margin:70.85pt 70.85pt 2.0cm 70.85pt;}
-div.WordSection1
-=09{page:WordSection1;}
---></style><div class=3D"WordSection1"><p class=3D"MsoNormal"><span style=
-=3D"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif" lang=3D"EN-U=
-S">Hi,</span></p><p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;fon=
-t-family:&quot;Arial&quot;,sans-serif" lang=3D"EN-US">&nbsp;</span></p><p c=
-lass=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Arial&=
-quot;,sans-serif" lang=3D"EN-US">I noticed that the =E2=80=9Cprocname=E2=80=
-=9D and =E2=80=9Ctid=E2=80=9D *<b>context</b>* variables can differ from th=
-e =E2=80=9Ccomm=E2=80=9D and =E2=80=9Ctid=E2=80=9D variables of the sched_s=
-tat_-tracepoints (e.g., for sched_stat_runtime).</span></p><p class=3D"MsoN=
-ormal"><span style=3D"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-s=
-erif" lang=3D"EN-US">&nbsp;</span></p><p class=3D"MsoNormal"><span style=3D=
-"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif" lang=3D"EN-US">=
-For example, see the following two outputs:</span></p><p class=3D"MsoNormal=
-"><span style=3D"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif"=
- lang=3D"EN-US">[15:49:33.674072890] (+0.000029771) rng2070 sched_stat_slee=
-p: { cpu_id =3D 4 }, { pid =3D 26974, procname =3D "amcl", tid =3D 26975 },=
- { comm =3D "lttng-sessiond", tid =3D 798,
- delay =3D 194122524 }</span></p><p class=3D"MsoNormal"><span style=3D"font=
--size:10.0pt;font-family:&quot;Arial&quot;,sans-serif" lang=3D"EN-US">[15:4=
-9:33.722894563] (+0.000004851) rng2070 sched_stat_sleep: { cpu_id =3D 0 }, =
-{ pid =3D 0, procname =3D "swapper/0", tid =3D 0 }, { comm =3D "amcl", tid =
-=3D 27078, delay =3D
- 10043658 }</span></p><p class=3D"MsoNormal"><span style=3D"font-size:10.0p=
-t;font-family:&quot;Arial&quot;,sans-serif" lang=3D"EN-US">&nbsp;</span></p=
-><p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&quot;A=
-rial&quot;,sans-serif" lang=3D"EN-US">In both cases, procname differs from =
-comm. &nbsp;I=E2=80=99ve looked at the kernel source code, and the =E2=80=
-=9Ccomm=E2=80=9D variable is taken from task_struct.filename. Barring renam=
-es, this
- would be the correct one, so I=E2=80=99m assuming that the context is some=
-times incorrect.</span></p><p class=3D"MsoNormal"><span style=3D"font-size:=
-10.0pt;font-family:&quot;Arial&quot;,sans-serif" lang=3D"EN-US">&nbsp;</spa=
-n></p><p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&q=
-uot;Arial&quot;,sans-serif" lang=3D"EN-US">Now, for this particular case, I=
- can take the correct variables from the tracepoint, but of course, this ma=
-kes me worried that the context might also be wrong in
- other cases=E2=80=A6 Do you have any idea what could be going on here?</sp=
-an></p><p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;font-family:&=
-quot;Arial&quot;,sans-serif" lang=3D"EN-US">&nbsp;</span></p><p class=3D"Ms=
-oNormal"><span style=3D"font-size:10.0pt;font-family:&quot;Arial&quot;,sans=
--serif" lang=3D"EN-US">LTTng is Version 2.7.x+stable+bzr2948+pack17+2015111=
-92116~ubuntu14.04.1 and this is on a 3.19.0-33-generic kernel (btw, that=E2=
-=80=99s not the default kernel for Ubuntu
- 14.04, but the LTS vivid backport kernel).</span></p></div></blockquote><d=
-iv>Hi,<br></div><div><br data-mce-bogus=3D"1"></div><div>Looking at lttng-m=
-odules lttng-context-tid.c tid_record(), we see that it uses task_pid_nr(cu=
-rrent).<br data-mce-bogus=3D"1"></div><div>It therefore gets the tid of the=
- currently scheduled task. This is similar for procname.<br data-mce-bogus=
-=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Now looking at the Li=
-nux kernel kernel/sched/fair.c: enqueue_sleeper(), which calls<br data-mce-=
-bogus=3D"1"></div><div>trace_sched_stat_sleep(), we see that it passes "tsk=
-" as parameter to the tracepoint.<br data-mce-bogus=3D"1"></div><div>Alread=
-y here, nothing seems to ensure that "tsk" is the currently scheduled task.=
- It's<br data-mce-bogus=3D"1"></div><div>rather a task that is being put to=
- sleep. Looking at the callers of enqueue_sleeper(),<br data-mce-bogus=3D"1=
-"></div><div>we can understand that the current task is first scheduled out=
- before being enqueued<br data-mce-bogus=3D"1"></div><div>as a sleeper. Thi=
-s is why, when we hit the sched_stat_sleep tracepoint, the current<br data-=
-mce-bogus=3D"1"></div><div>task is not "tsk", which explains the difference=
- between the context information<br data-mce-bogus=3D"1"></div><div>and the=
- tracepoint payload information: they really target different tasks.<br dat=
-a-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Does this =
-help solve your concerns ?<br data-mce-bogus=3D"1"></div><div><br data-mce-=
-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-=
-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br d=
-ata-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid #1010F=
-F;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style=
-:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-si=
-ze:12pt;"><div class=3D"WordSection1"><p class=3D"MsoNormal"><span style=3D=
-"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-serif" lang=3D"EN-US">=
-&nbsp;</span></p><p class=3D"MsoNormal"><span style=3D"font-size:10.0pt;fon=
-t-family:&quot;Arial&quot;,sans-serif;color:black;mso-fareast-language:DE" =
-lang=3D"EN-US">Mit freundlichen Gr=C3=BC=C3=9Fen / Best regards
-<br>
-<br>
-<b>Ingo Luetkebohle<br>
-</b><br>
-Application Software (CR/AEA2) <br>
-Tel. +49(711)811-12248 | Fax +49(711)811-0 | </span><span style=3D"font-siz=
-e:10.0pt;font-family:&quot;Arial&quot;,sans-serif;color:black;mso-fareast-l=
-anguage:DE"><a href=3D"mailto:Ingo.Luetkebohle@de.bosch.com" target=3D"_bla=
-nk"><span style=3D"color:blue" lang=3D"EN-US">Ingo.Luetkebohle@de.bosch.com=
-</span></a></span><span style=3D"font-size:10.0pt;font-family:&quot;Arial&q=
-uot;,sans-serif;color:black;mso-fareast-language:DE">
-</span><span style=3D"font-size:8.0pt;font-family:&quot;Arial&quot;,sans-se=
-rif;color:black;mso-fareast-language:DE" lang=3D"EN-US"><br>
-</span><span style=3D"font-size:10.0pt;font-family:&quot;Arial&quot;,sans-s=
-erif;color:black;mso-fareast-language:DE" lang=3D"EN-US"><br>
-<br>
-</span></p></div><br>_______________________________________________<br>ltt=
-ng-dev mailing list<br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/=
-cgi-bin/mailman/listinfo/lttng-dev<br></blockquote></div><div><br></div><di=
-v data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>Effic=
-iOS Inc.<br>http://www.efficios.com</div></div></body></html>
-------=_Part_157481_471214850.1448551313020--
+Mathieu
 
 
---===============0920090727==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
+Mit freundlichen Gr=FC=DFen / Best regards
+
+Ingo Luetkebohle
+
+Application Software (CR/AEA2)
+Tel. +49(711)811-12248 | Fax +49(711)811-0 | Ingo.Luetkebohle@de.bosch.com<=
+mailto:Ingo.Luetkebohle@de.bosch.com>
+
+
 
 _______________________________________________
 lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============0920090727==--
+--
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
+
+--_000_14485535233391387deboschcom_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style type=3D"text/css" style=3D"display:none"><!--P{margin-top:0;margin-b=
+ottom:0;} @font-face=0A=
+	{font-family:"Cambria Math"}=0A=
+@font-face=0A=
+	{font-family:Calibri}=0A=
+p.MsoNormal, li.MsoNormal, div.MsoNormal=0A=
+	{margin:0cm;=0A=
+	margin-bottom:.0001pt;=0A=
+	font-size:11.0pt;=0A=
+	font-family:"Calibri",sans-serif}=0A=
+a:link, span.MsoHyperlink=0A=
+	{color:#0563C1;=0A=
+	text-decoration:underline}=0A=
+a:visited, span.MsoHyperlinkFollowed=0A=
+	{color:#954F72;=0A=
+	text-decoration:underline}=0A=
+span.EmailStyle17=0A=
+	{font-family:"Arial",sans-serif;=0A=
+	color:windowtext;=0A=
+	font-weight:normal;=0A=
+	font-style:normal}=0A=
+.MsoChpDefault=0A=
+	{font-family:"Calibri",sans-serif}=0A=
+@page WordSection1=0A=
+	{margin:70.85pt 70.85pt 2.0cm 70.85pt}=0A=
+div.WordSection1=0A=
+	{}--></style>
+</head>
+<body dir=3D"ltr" style=3D"font-size:12pt;color:#000000;background-color:#F=
+FFFFF;font-family:Calibri,Arial,Helvetica,sans-serif;">
+<p>Hi Mathieu,</p>
+<p><br>
+</p>
+<p>thank you for the explanation! </p>
+<p><br>
+</p>
+<p>This would suggest that the problem only occurs for scheduler events, be=
+cause only then we have this situation that the currently scheduled task is=
+ not the one that the tracepoint relates that. Am I interpreting that corre=
+ctly?<br>
+</p>
+<p><br>
+</p>
+<p>If yes, this would certainly ease my concerns, because for most tracepoi=
+nts, I get the expected behavior. I can also get the information that I wan=
+t right now by looking at comm instead.<br>
+</p>
+<p><br>
+</p>
+<p>However, for future development of LTTng: Isn't the intuitive context th=
+at of the *tracepoint*? In other words, isn't it wrong to always use the cu=
+rrently scheduled task?<br>
+</p>
+<p><br>
+</p>
+<p>cheers,<br>
+</p>
+<p><br>
+</p>
+<div id=3D"Signature">
+<div name=3D"divtagdefaultwrapper" style=3D"font-family:Calibri,Arial,Helve=
+tica,sans-serif; font-size:; margin:0">
+<font color=3D"black" face=3D"Calibri,Arial,Helvetica,sans-serif" size=3D"3=
+"><span dir=3D"ltr" style=3D"font-size:12pt; background-color:white"><font =
+face=3D"Arial,sans-serif" size=3D"2"><span style=3D"font-size:10pt" lang=3D=
+"de"><b>Dr.
+</b></span></font><font face=3D"Arial,sans-serif" size=3D"2"><span style=3D=
+"font-size:10pt" lang=3D"en-US"><b>Ingo L=FCtkebohle</b></span></font><font=
+ face=3D"Arial,sans-serif" size=3D"2"><span style=3D"font-size:10pt" lang=
+=3D"en-US"><b><br>
+</b></span></font><font face=3D"Arial,sans-serif" size=3D"2"><span style=3D=
+"font-size:10pt" lang=3D"en-US">Software Design and Analysis -- Robotics (C=
+R/AEA2)
+</span></font><font face=3D"Arial,sans-serif" size=3D"2"><span style=3D"fon=
+t-size:10pt" lang=3D"en-US"><br>
+</span></font><font face=3D"Arial,sans-serif" size=3D"2"><span style=3D"fon=
+t-size:10pt" lang=3D"en-US"><br>
+Tel. </span></font><font face=3D"Arial,sans-serif" size=3D"2"><span style=
+=3D"font-size:10pt" lang=3D"de">&#43;49(711)811-12248
+</span></font><font face=3D"Arial,sans-serif" size=3D"2"><span style=3D"fon=
+t-size:10pt" lang=3D"de"><br>
+Fax &#43;49(711)811-0 </span></font><font face=3D"Arial,sans-serif" size=3D=
+"2"><span style=3D"font-size:10pt" lang=3D"de"><br>
+Mobil &#43;49-1525-8813417 </span></font><font face=3D"Arial,sans-serif" si=
+ze=3D"2"><span style=3D"font-size:10pt" lang=3D"de"><br>
+</span></font><a id=3D"NoLP" target=3D"_blank" href=3D"mailto:Ingo.Luetkebo=
+hle@de.bosch.com" tabindex=3D"0"><font face=3D"Calibri,sans-serif" size=3D"=
+2"><span style=3D"font-size:11pt" lang=3D"de"><font face=3D"Arial,sans-seri=
+f" size=3D"2"><span style=3D"font-size:10pt">Ingo.Luetkebohle@de.bosch.com<=
+/span></font></span></font></a></span></font></div>
+</div>
+<div style=3D"color: rgb(33, 33, 33);">
+<hr tabindex=3D"-1" style=3D"display:inline-block; width:98%">
+<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font style=3D"font-size:11pt" color=
+=3D"#000000" face=3D"Calibri, sans-serif"><b>Von:</b> Mathieu Desnoyers &lt=
+;mathieu.desnoyers@efficios.com&gt;<br>
+<b>Gesendet:</b> Donnerstag, 26. November 2015 16:21<br>
+<b>An:</b> Luetkebohle Ingo (CR/AEA2)<br>
+<b>Cc:</b> lttng-dev<br>
+<b>Betreff:</b> Re: [lttng-dev] faulty context for sched_stat_ tracepoints?=
+</font>
+<div>&nbsp;</div>
+</div>
+<div>
+<div style=3D"font-family:arial,helvetica,sans-serif; font-size:12pt; color=
+:#000000">
+<div><span id=3D"zwchr">---- On Nov 26, 2015, at 7:34 AM, Luetkebohle Ingo =
+(CR/AEA2) &lt;Ingo.Luetkebohle@de.bosch.com&gt; wrote:<br>
+</span></div>
+<div>
+<blockquote style=3D"border-left:2px solid #1010FF; margin-left:5px; paddin=
+g-left:5px; color:#000; font-weight:normal; font-style:normal; text-decorat=
+ion:none; font-family:Helvetica,Arial,sans-serif; font-size:12pt">
+<style>=0A=
+<!--=0A=
+@font-face=0A=
+	{font-family:"Cambria Math"}=0A=
+@font-face=0A=
+	{font-family:Calibri}=0A=
+p.MsoNormal, li.MsoNormal, div.MsoNormal=0A=
+	{margin:0cm;=0A=
+	margin-bottom:.0001pt;=0A=
+	font-size:11.0pt;=0A=
+	font-family:"Calibri",sans-serif}=0A=
+a:link, span.MsoHyperlink=0A=
+	{color:#0563C1;=0A=
+	text-decoration:underline}=0A=
+a:visited, span.MsoHyperlinkFollowed=0A=
+	{color:#954F72;=0A=
+	text-decoration:underline}=0A=
+span.EmailStyle17=0A=
+	{font-family:"Arial",sans-serif;=0A=
+	color:windowtext;=0A=
+	font-weight:normal;=0A=
+	font-style:normal}=0A=
+.MsoChpDefault=0A=
+	{font-family:"Calibri",sans-serif}=0A=
+@page WordSection1=0A=
+	{margin:70.85pt 70.85pt 2.0cm 70.85pt}=0A=
+div.WordSection1=0A=
+	{}=0A=
+-->=0A=
+</style>
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">Hi,</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">&nbsp;</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">I noticed that the &#8220;procname&#8=
+221; and &#8220;tid&#8221; *<b>context</b>* variables can differ from the &=
+#8220;comm&#8221; and &#8220;tid&#8221; variables of the sched_stat_-tracep=
+oints (e.g., for sched_stat_runtime).</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">&nbsp;</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">For example, see the following two ou=
+tputs:</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">[15:49:33.674072890] (&#43;0.00002977=
+1) rng2070 sched_stat_sleep: { cpu_id =3D 4 }, { pid =3D 26974, procname =
+=3D &quot;amcl&quot;, tid =3D 26975 }, { comm =3D &quot;lttng-sessiond&quot=
+;, tid =3D
+ 798, delay =3D 194122524 }</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">[15:49:33.722894563] (&#43;0.00000485=
+1) rng2070 sched_stat_sleep: { cpu_id =3D 0 }, { pid =3D 0, procname =3D &q=
+uot;swapper/0&quot;, tid =3D 0 }, { comm =3D &quot;amcl&quot;, tid =3D 2707=
+8, delay
+ =3D 10043658 }</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">&nbsp;</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">In both cases, procname differs from =
+comm. &nbsp;I&#8217;ve looked at the kernel source code, and the &#8220;com=
+m&#8221; variable is taken from task_struct.filename. Barring renames,
+ this would be the correct one, so I&#8217;m assuming that the context is s=
+ometimes incorrect.</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">&nbsp;</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">Now, for this particular case, I can =
+take the correct variables from the tracepoint, but of course, this makes m=
+e worried that the context might also be wrong in
+ other cases&#8230; Do you have any idea what could be going on here?</span=
+></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">&nbsp;</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">LTTng is Version 2.7.x&#43;stable&#43=
+;bzr2948&#43;pack17&#43;201511192116~ubuntu14.04.1 and this is on a 3.19.0-=
+33-generic kernel (btw, that&#8217;s not the default kernel for Ubuntu
+ 14.04, but the LTS vivid backport kernel).</span></p>
+</div>
+</blockquote>
+<div>Hi,<br>
+</div>
+<div><br>
+</div>
+<div>Looking at lttng-modules lttng-context-tid.c tid_record(), we see that=
+ it uses task_pid_nr(current).<br>
+</div>
+<div>It therefore gets the tid of the currently scheduled task. This is sim=
+ilar for procname.<br>
+</div>
+<div><br>
+</div>
+<div>Now looking at the Linux kernel kernel/sched/fair.c: enqueue_sleeper()=
+, which calls<br>
+</div>
+<div>trace_sched_stat_sleep(), we see that it passes &quot;tsk&quot; as par=
+ameter to the tracepoint.<br>
+</div>
+<div>Already here, nothing seems to ensure that &quot;tsk&quot; is the curr=
+ently scheduled task. It's<br>
+</div>
+<div>rather a task that is being put to sleep. Looking at the callers of en=
+queue_sleeper(),<br>
+</div>
+<div>we can understand that the current task is first scheduled out before =
+being enqueued<br>
+</div>
+<div>as a sleeper. This is why, when we hit the sched_stat_sleep tracepoint=
+, the current<br>
+</div>
+<div>task is not &quot;tsk&quot;, which explains the difference between the=
+ context information<br>
+</div>
+<div>and the tracepoint payload information: they really target different t=
+asks.<br>
+</div>
+<div><br>
+</div>
+<div>Does this help solve your concerns ?<br>
+</div>
+<div><br>
+</div>
+<div>Thanks,<br>
+</div>
+<div><br>
+</div>
+<div>Mathieu<br>
+</div>
+<div><br>
+</div>
+<blockquote style=3D"border-left:2px solid #1010FF; margin-left:5px; paddin=
+g-left:5px; color:#000; font-weight:normal; font-style:normal; text-decorat=
+ion:none; font-family:Helvetica,Arial,sans-serif; font-size:12pt">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif" lang=3D"EN-US">&nbsp;</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:10.0pt; font-family:&quot;A=
+rial&quot;,sans-serif; color:black" lang=3D"EN-US">Mit freundlichen Gr=FC=
+=DFen / Best regards
+<br>
+<br>
+<b>Ingo Luetkebohle<br>
+</b><br>
+Application Software (CR/AEA2) <br>
+Tel. &#43;49(711)811-12248 | Fax &#43;49(711)811-0 | </span><span style=3D"=
+font-size:10.0pt; font-family:&quot;Arial&quot;,sans-serif; color:black"><a=
+ href=3D"mailto:Ingo.Luetkebohle@de.bosch.com" target=3D"_blank"><span styl=
+e=3D"color:blue" lang=3D"EN-US">Ingo.Luetkebohle@de.bosch.com</span></a></s=
+pan><span style=3D"font-size:10.0pt; font-family:&quot;Arial&quot;,sans-ser=
+if; color:black">
+</span><span style=3D"font-size:8.0pt; font-family:&quot;Arial&quot;,sans-s=
+erif; color:black" lang=3D"EN-US"><br>
+</span><span style=3D"font-size:10.0pt; font-family:&quot;Arial&quot;,sans-=
+serif; color:black" lang=3D"EN-US"><br>
+<br>
+</span></p>
+</div>
+<br>
+_______________________________________________<br>
+lttng-dev mailing list<br>
+lttng-dev@lists.lttng.org<br>
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br>
+</blockquote>
+</div>
+<div><br>
+</div>
+<div>-- <br>
+</div>
+<div>Mathieu Desnoyers<br>
+EfficiOS Inc.<br>
+http://www.efficios.com</div>
+</div>
+</div>
+</div>
+</body>
+</html>
+
+--_000_14485535233391387deboschcom_--
+
+
+
+--===============1659422519==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1659422519==--
