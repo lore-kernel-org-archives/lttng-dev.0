@@ -1,17 +1,19 @@
-From: Zvi Vered <veredz72@gmail.com>
-Subject: compile error in lttng-ust-2.4.4
-Date: Fri, 27 Nov 2015 06:20:49 +0200
-Message-ID: <CABRndgwATfY9cPKb2JSzg_aO=8Q6_qZxRsf-YxnahhoMU6QH1A__29825.03162134$1448598095$gmane$org@mail.gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: Re: (no subject)
+Date: Thu, 26 Nov 2015 23:28:58 -0500
+Message-ID: <CAB4xu_3Vv=x1zkBayazqxi_dUSVVfWO5CW9-hSur3dGSoWes=Q__29917.032182175$1448598619$gmane$org@mail.gmail.com>
+References: <CABRndgzjgufnXE7_0Erp=B2P-5j3w4nZFhShn8V5oqGxd8PPaw@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-io0-f180.google.com ([209.85.223.180])
+Received: from mail-lf0-f53.google.com ([209.85.215.53])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <veredz72@gmail.com>) id 1a2AWk-0006yw-V2
- for lttng-dev@lists.lttng.org; Thu, 26 Nov 2015 23:20:55 -0500
-Received: by ioir85 with SMTP id r85so103738652ioi.1
- for <lttng-dev@lists.lttng.org>; Thu, 26 Nov 2015 20:20:49 -0800 (PST)
+ (envelope-from <eeppeliteloop@gmail.com>) id 1a2Af7-00073O-Ee
+ for lttng-dev@lists.lttng.org; Thu, 26 Nov 2015 23:29:35 -0500
+Received: by lfaz4 with SMTP id z4so116040121lfa.0
+ for <lttng-dev@lists.lttng.org>; Thu, 26 Nov 2015 20:29:27 -0800 (PST)
+In-Reply-To: <CABRndgzjgufnXE7_0Erp=B2P-5j3w4nZFhShn8V5oqGxd8PPaw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,43 +22,43 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Zvi Vered <veredz72@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello,
+Isn't there a libuuid development package for CentOS 5
+instead of building it from source?
 
-I downloaded lttng-ust-2.4.4 extracted it and ran ./configure
-Then I ran make.
+Like this: <http://pkgs.org/centos-5/epel-i386/uuid-devel-1.5.1-3.el5.i386.rpm.html>?
 
-I got the following error:
+Really not a CentOS/RPM expert here.
 
-....
-  CC       lttng-filter-specialize.lo
-  CC       lttng-filter-interpreter.lo
-  CC       lttng-ust-baddr.lo
-In file included from ../include/lttng/ust-tracepoint-event.h:724,
-                 from ../include/lttng/tracepoint-event.h:58,
-                 from ust_baddr_statedump.h:56,
-                 from lttng-ust-baddr.c:40:
-././ust_baddr_statedump.h:40: error: weak declaration of
-'__ref_loglevel___ust_baddr_statedump___soinfo' must be public
-././ust_baddr_statedump.h:40: error:
-'__ref_loglevel___ust_baddr_statedump___soinfo' defined both normally
-and as an alias
-././ust_baddr_statedump.h:40: error: weak declaration of
-'__ref_model_emf_uri___ust_baddr_statedump___soinfo' must be public
-././ust_baddr_statedump.h:40: error:
-'__ref_model_emf_uri___ust_baddr_statedump___soinfo' defined both
-normally and as an alias
-make[2]: *** [lttng-ust-baddr.lo] Error 1
-make[2]: Leaving directory
-`/home/zvivered/GNU/lttng-ust/lttng-ust-2.4.4/liblttng-ust'
-make[1]: *** [all-recursive] Error 1
-make[1]: Leaving directory `/home/zvivered/GNU/lttng-ust/lttng-ust-2.4.4'
-make: *** [all] Error 2
+Philippe Proulx
 
-I'm running under Centos 5.5 (32),
-gcc (GCC) 4.1.2 20080704 (Red Hat 4.1.2-55)
 
-Best regards,
-Z.V
+On Thu, Nov 26, 2015 at 10:20 PM, Zvi Vered <veredz72@gmail.com> wrote:
+> Hello,
+>
+> I downloaded lttng-tools-2.7.0 and tried to run ./configure.
+>
+> I got the error message:
+>
+> ....
+> checking for xml2-config... /home/zvivered/GNU/libxml2/release/bin/xml2-config
+> checking for libxml - version >= 2.7.6... yes (version 2.7.7)
+> checking for uuid_generate in -luuid... no
+> checking for uuid_create in -lc... no
+> configure: error: Cannot find libuuid uuid_generate nor libc
+> uuid_create. Use LDFLAGS=-Ldir to specify their location.
+>
+> I'm working with Centos 5.5 (32).
+> I downloaded libuuid-1.0.3.tar.gz from http://sourceforge.net/projects/libuuid/
+> It solved the .configure problem. Is this the right download place ?
+>
+> Best regards,
+> Z.V
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
