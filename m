@@ -1,16 +1,17 @@
-From: Antoine Busque <abusque@efficios.com>
-Subject: [PATCH lttng-modules] Add prio field to process
-	statedump
-Date: Sat, 28 Nov 2015 23:12:46 -0500
-Message-ID: <1448770366-2388-1-git-send-email-abusque__14641.5664152757$1448770450$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: lttng on aarch64 platform
+Date: Sun, 29 Nov 2015 14:58:43 +0000 (UTC)
+Message-ID: <1656873418.171234.1448809123603.JavaMail.zimbra__25433.1593787812$1448809185$gmane$org@efficios.com>
+References: <5658933A.4060408@parrot.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <abusque@efficios.com>) id 1a2tMY-0004XV-Od
- for lttng-dev@lists.lttng.org; Sat, 28 Nov 2015 23:13:23 -0500
+ (envelope-from <compudj@efficios.com>) id 1a33RK-0007zl-Pm
+ for lttng-dev@lists.lttng.org; Sun, 29 Nov 2015 09:59:02 -0500
+In-Reply-To: <5658933A.4060408@parrot.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,42 +20,67 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: Antoine Busque <antoine.busque@efficios.com>
+To: Ronan CHAUVIN <ronan.chauvin@parrot.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-From: Antoine Busque <antoine.busque@efficios.com>
+----- On Nov 27, 2015, at 6:30 PM, Ronan CHAUVIN ronan.chauvin@parrot.com wrote:
 
-This introduces a payload field named 'prio' for the process' priority
-value to the lttng_statedump_process_state event. The prio field's
-value corresponds to the value which would be provided by the prio
-context for a given process. It is however computed directly, rather
-than by calling the equivalent task_prio() function from the kernel.
+> Hello all,
+> 
+> I am trying to use lttng 2.7.0 on an aarch64 platform. When I create my
+> session a trap is triggered which indicated that a unknow syscall (389)
+> is called.
+> 
+> / # lttng -vvv create mysession
+> DEBUG1 - 02:36:22.271714 [850/850]: Session daemon binary path:
+> /usr/bin/lttng-sessiond (in launch_sessiond() at commands/create.c:668)
+> Spawning a session daemon
+> DEBUG1 - 02:36:24.275751 [850/850]: Session daemon terminated normally
+> (exit status: 1) (in spawn_sessiond() at commands/create.c:606)
+> Error: Session daemon terminated with an error (exit status: 1)
+> Error: Problem occurred while launching session daemon
+> (/usr/bin/lttng-sessiond)
+> Error: Command error
+> DEBUG1 - 02:36:24.275899 [850/850]: Clean exit (in clean_exit() at
+> lttng.c:193)
+> 
+> It seems that lttng-sessiond deamon is directly exited. Has anyone
+> already tried on a 3.10 kernel and aarch64 platform?
 
-Signed-off-by: Antoine Busque <abusque@efficios.com>
----
- instrumentation/events/lttng-module/lttng-statedump.h | 2 ++
- 1 file changed, 2 insertions(+)
+Hi Ronan,
 
-diff --git a/instrumentation/events/lttng-module/lttng-statedump.h b/instrumentation/events/lttng-module/lttng-statedump.h
-index 916a6c5..fa1807f 100644
---- a/instrumentation/events/lttng-module/lttng-statedump.h
-+++ b/instrumentation/events/lttng-module/lttng-statedump.h
-@@ -7,6 +7,7 @@
- #include "../../../probes/lttng-tracepoint-event.h"
- #include <linux/nsproxy.h>
- #include <linux/pid_namespace.h>
-+#include <linux/sched.h>
- #include <linux/types.h>
- #include <linux/version.h>
- 
-@@ -63,6 +64,7 @@ LTTNG_TRACEPOINT_EVENT(lttng_statedump_process_state,
- 				ret;
- 			}))
- 		ctf_array_text(char, name, p->comm, TASK_COMM_LEN)
-+		ctf_integer(int, prio, p->prio - MAX_RT_PRIO)
- 		ctf_integer(int, type, type)
- 		ctf_integer(int, mode, mode)
- 		ctf_integer(int, submode, submode)
+That's because your liburcu calls the new membarrier system call, which was
+introduced later than your kernel. The way it works is that if the membarrier
+system call returns -1, errno=ENOSYS, it falls-back to a liburcu implementation
+which does not need the membarrier system call. This question here is: why
+does your kernel trap when an unknown system call is invoked ?
+
+Thanks,
+
+Mathieu
+
+> 
+> Thanks in advance,
+> 
+> --
+> Ronan CHAUVIN
+> Embedded Software Engineer
+> ASIC & Video team
+> --------------------------------
+> Parrot SA
+> 174, quai de Jemmapes
+> 75010 Paris, France
+> --------------------------------
+> www.parrot.com
+> 
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 -- 
-2.6.2
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
