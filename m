@@ -1,17 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Zvi Vered <veredz72@gmail.com>
 Subject: Re: lttng-modules-2.7.0 : compilation error
-Date: Thu, 3 Dec 2015 07:21:14 +0000 (UTC)
-Message-ID: <1581598001.190481.1449127274969.JavaMail.zimbra__12799.2931557403$1449127339$gmane$org@efficios.com>
+Date: Thu, 3 Dec 2015 10:49:43 +0200
+Message-ID: <CABRndgzjFhLhjTfOoc47z5NAb-mrK=9jXVMJzoTA5P2UdETgPw__23433.4167595536$1449132644$gmane$org@mail.gmail.com>
 References: <CABRndgyBrVAaCP48tN_RWkqjm8z+i4H8oQKAsTHi=oY0m3LBzg@mail.gmail.com>
+ <1581598001.190481.1449127274969.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============2134670317=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-io0-f171.google.com ([209.85.223.171])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1a4OCq-0000pn-8x
- for lttng-dev@lists.lttng.org; Thu, 03 Dec 2015 02:21:33 -0500
-In-Reply-To: <CABRndgyBrVAaCP48tN_RWkqjm8z+i4H8oQKAsTHi=oY0m3LBzg@mail.gmail.com>
+ (envelope-from <veredz72@gmail.com>) id 1a4PaI-0001Gr-5K
+ for lttng-dev@lists.lttng.org; Thu, 03 Dec 2015 03:49:52 -0500
+Received: by ioir85 with SMTP id r85so74022780ioi.1
+ for <lttng-dev@lists.lttng.org>; Thu, 03 Dec 2015 00:49:44 -0800 (PST)
+In-Reply-To: <1581598001.190481.1449127274969.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,92 +22,336 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Zvi Vered <veredz72@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT24gRGVjIDMsIDIwMTUsIGF0IDQ6MjAgQU0sIFp2aSBWZXJlZCB2ZXJlZHo3MkBnbWFp
-bC5jb20gd3JvdGU6Cgo+IEhlbGxvLAo+IAo+IEknbSB0cmllZCB0byBjb21waWxlIGx0dG5nLW1v
-ZHVsZXM6Cj4gCj4gbW9yZSAvcHJvYy92ZXJzaW9uOgo+IExpbnV4IHZlcnNpb24gMi42LjMyLTI3
-OS5lbDYueDg2XzY0Cj4gKG1vY2tidWlsZEBjNmI5LmJzeXMuZGV2LmNlbnRvcy5vcmcpIChnY2Mg
-dmVyc2lvbiA0LjQuNiAyMDEyMDMwNSAoUmVkCj4gSGF0IDQuNC42LTQpIChHQ0MpICkKPiAjMSBT
-TVAgRnJpIEp1biAyMiAxMjoxOToyMSBVVEMgMjAxMgoKSGksCgpLZXJuZWwgMi42LjMyIGlzIG5v
-dCBzdXBwb3J0ZWQgYnkgbHR0bmctbW9kdWxlcy4gWW91IHdpbGwgbmVlZCB0bwp1cGdyYWRlIHlv
-dXIga2VybmVsLiBTZWUgUkVBRE1FLm1kIGluIGx0dG5nLW1vZHVsZXMuCgpUaGFua3MsCgpNYXRo
-aWV1Cgo+IAo+IHl1bSBpbnN0YWxsIGtlcm5lbC1oZWFkZXJzCj4gY2QgbHR0bmctbW9kdWxlcy0y
-LjcuMAo+IG1ha2UKPiAKPiBhbmQgZ290Ogo+IAo+IExUVE5HX0tFUk5FTERJUj0vbGliL21vZHVs
-ZXMvMi42LjMyLTI3OS5lbDYueDg2XzY0L2J1aWxkIG1ha2UgLUMKPiAvbGliL21vZHVsZXMvMi42
-LjMyLTI3OS5lbDYueDg2XzY0L2J1aWxkCj4gTT0vaG9tZS96dml2ZXJlZC9Eb3dubG9hZHMvbHR0
-bmctbW9kdWxlcy9sdHRuZy1tb2R1bGVzLTIuNy4wIG1vZHVsZXMKPiBtYWtlWzFdOiBFbnRlcmlu
-ZyBkaXJlY3RvcnkgYC91c3Ivc3JjL2tlcm5lbHMvMi42LjMyLTI3OS5lbDYueDg2XzY0Jwo+ICBD
-QyBbTV0KPiAgL2hvbWUvenZpdmVyZWQvRG93bmxvYWRzL2x0dG5nLW1vZHVsZXMvbHR0bmctbW9k
-dWxlcy0yLjcuMC9sdHRuZy1yaW5nLWJ1ZmZlci1jbGllbnQtZGlzY2FyZC5vCj4gSW4gZmlsZSBp
-bmNsdWRlZCBmcm9tCj4gL2hvbWUvenZpdmVyZWQvRG93bmxvYWRzL2x0dG5nLW1vZHVsZXMvbHR0
-bmctbW9kdWxlcy0yLjcuMC93cmFwcGVyL3JpbmdidWZmZXIvLi4vLi4vbGliL3JpbmdidWZmZXIv
-Li4vLi4vd3JhcHBlci9yaW5nYnVmZmVyL2Zyb250ZW5kX2FwaS5oOjEsCj4gICAgICAgICAgICAg
-ICAgIGZyb20KPiAvaG9tZS96dml2ZXJlZC9Eb3dubG9hZHMvbHR0bmctbW9kdWxlcy9sdHRuZy1t
-b2R1bGVzLTIuNy4wL3dyYXBwZXIvcmluZ2J1ZmZlci8uLi8uLi9saWIvcmluZ2J1ZmZlci9hcGku
-aDozNSwKPiAgICAgICAgICAgICAgICAgZnJvbQo+IC9ob21lL3p2aXZlcmVkL0Rvd25sb2Fkcy9s
-dHRuZy1tb2R1bGVzL2x0dG5nLW1vZHVsZXMtMi43LjAvd3JhcHBlci9yaW5nYnVmZmVyL2FwaS5o
-OjEsCj4gICAgICAgICAgICAgICAgIGZyb20KPiAvaG9tZS96dml2ZXJlZC9Eb3dubG9hZHMvbHR0
-bmctbW9kdWxlcy9sdHRuZy1tb2R1bGVzLTIuNy4wL2x0dG5nLXJpbmctYnVmZmVyLWNsaWVudC5o
-OjE3NywKPiAgICAgICAgICAgICAgICAgZnJvbQo+IC9ob21lL3p2aXZlcmVkL0Rvd25sb2Fkcy9s
-dHRuZy1tb2R1bGVzL2x0dG5nLW1vZHVsZXMtMi43LjAvbHR0bmctcmluZy1idWZmZXItY2xpZW50
-LWRpc2NhcmQuYzoyOToKPiAvaG9tZS96dml2ZXJlZC9Eb3dubG9hZHMvbHR0bmctbW9kdWxlcy9s
-dHRuZy1tb2R1bGVzLTIuNy4wL3dyYXBwZXIvcmluZ2J1ZmZlci8uLi8uLi9saWIvcmluZ2J1ZmZl
-ci8uLi8uLi93cmFwcGVyL3JpbmdidWZmZXIvLi4vLi4vbGliL3JpbmdidWZmZXIvZnJvbnRlbmRf
-YXBpLmg6Nzc6MToKPiBlcnJvcjogcGFzdGluZyAicGVyX2NwdV9fIiBhbmQgIioiIGRvZXMgbm90
-IGdpdmUgYSB2YWxpZCBwcmVwcm9jZXNzaW5nCj4gdG9rZW4KPiBJbiBmaWxlIGluY2x1ZGVkIGZy
-b20KPiAvaG9tZS96dml2ZXJlZC9Eb3dubG9hZHMvbHR0bmctbW9kdWxlcy9sdHRuZy1tb2R1bGVz
-LTIuNy4wL3dyYXBwZXIvcmluZ2J1ZmZlci8uLi8uLi9saWIvcmluZ2J1ZmZlci8uLi8uLi93cmFw
-cGVyL3JpbmdidWZmZXIvZnJvbnRlbmRfYXBpLmg6MSwKPiAgICAgICAgICAgICAgICAgZnJvbQo+
-IC9ob21lL3p2aXZlcmVkL0Rvd25sb2Fkcy9sdHRuZy1tb2R1bGVzL2x0dG5nLW1vZHVsZXMtMi43
-LjAvd3JhcHBlci9yaW5nYnVmZmVyLy4uLy4uL2xpYi9yaW5nYnVmZmVyL2FwaS5oOjM1LAo+ICAg
-ICAgICAgICAgICAgICBmcm9tCj4gL2hvbWUvenZpdmVyZWQvRG93bmxvYWRzL2x0dG5nLW1vZHVs
-ZXMvbHR0bmctbW9kdWxlcy0yLjcuMC93cmFwcGVyL3JpbmdidWZmZXIvYXBpLmg6MSwKPiAgICAg
-ICAgICAgICAgICAgZnJvbQo+IC9ob21lL3p2aXZlcmVkL0Rvd25sb2Fkcy9sdHRuZy1tb2R1bGVz
-L2x0dG5nLW1vZHVsZXMtMi43LjAvbHR0bmctcmluZy1idWZmZXItY2xpZW50Lmg6MTc3LAo+ICAg
-ICAgICAgICAgICAgICBmcm9tCj4gL2hvbWUvenZpdmVyZWQvRG93bmxvYWRzL2x0dG5nLW1vZHVs
-ZXMvbHR0bmctbW9kdWxlcy0yLjcuMC9sdHRuZy1yaW5nLWJ1ZmZlci1jbGllbnQtZGlzY2FyZC5j
-OjI5Ogo+IC9ob21lL3p2aXZlcmVkL0Rvd25sb2Fkcy9sdHRuZy1tb2R1bGVzL2x0dG5nLW1vZHVs
-ZXMtMi43LjAvd3JhcHBlci9yaW5nYnVmZmVyLy4uLy4uL2xpYi9yaW5nYnVmZmVyLy4uLy4uL3dy
-YXBwZXIvcmluZ2J1ZmZlci8uLi8uLi9saWIvcmluZ2J1ZmZlci9mcm9udGVuZF9hcGkuaDoKPiBJ
-biBmdW5jdGlvbiDigJhsaWJfcmluZ19idWZmZXJfcHV0X2NwdeKAmToKPiAvaG9tZS96dml2ZXJl
-ZC9Eb3dubG9hZHMvbHR0bmctbW9kdWxlcy9sdHRuZy1tb2R1bGVzLTIuNy4wL3dyYXBwZXIvcmlu
-Z2J1ZmZlci8uLi8uLi9saWIvcmluZ2J1ZmZlci8uLi8uLi93cmFwcGVyL3JpbmdidWZmZXIvLi4v
-Li4vbGliL3JpbmdidWZmZXIvZnJvbnRlbmRfYXBpLmg6Nzc6Cj4gZXJyb3I6IOKAmHBlcl9jcHVf
-X+KAmSB1bmRlY2xhcmVkIChmaXJzdCB1c2UgaW4gdGhpcyBmdW5jdGlvbikKPiAvaG9tZS96dml2
-ZXJlZC9Eb3dubG9hZHMvbHR0bmctbW9kdWxlcy9sdHRuZy1tb2R1bGVzLTIuNy4wL3dyYXBwZXIv
-cmluZ2J1ZmZlci8uLi8uLi9saWIvcmluZ2J1ZmZlci8uLi8uLi93cmFwcGVyL3JpbmdidWZmZXIv
-Li4vLi4vbGliL3JpbmdidWZmZXIvZnJvbnRlbmRfYXBpLmg6Nzc6Cj4gZXJyb3I6IChFYWNoIHVu
-ZGVjbGFyZWQgaWRlbnRpZmllciBpcyByZXBvcnRlZCBvbmx5IG9uY2UKPiAvaG9tZS96dml2ZXJl
-ZC9Eb3dubG9hZHMvbHR0bmctbW9kdWxlcy9sdHRuZy1tb2R1bGVzLTIuNy4wL3dyYXBwZXIvcmlu
-Z2J1ZmZlci8uLi8uLi9saWIvcmluZ2J1ZmZlci8uLi8uLi93cmFwcGVyL3JpbmdidWZmZXIvLi4v
-Li4vbGliL3JpbmdidWZmZXIvZnJvbnRlbmRfYXBpLmg6Nzc6Cj4gZXJyb3I6IGZvciBlYWNoIGZ1
-bmN0aW9uIGl0IGFwcGVhcnMgaW4uKQo+IC9ob21lL3p2aXZlcmVkL0Rvd25sb2Fkcy9sdHRuZy1t
-b2R1bGVzL2x0dG5nLW1vZHVsZXMtMi43LjAvd3JhcHBlci9yaW5nYnVmZmVyLy4uLy4uL2xpYi9y
-aW5nYnVmZmVyLy4uLy4uL3dyYXBwZXIvcmluZ2J1ZmZlci8uLi8uLi9saWIvcmluZ2J1ZmZlci9m
-cm9udGVuZF9hcGkuaDo3NzoKPiBlcnJvcjog4oCYbGliX3JpbmdfYnVmZmVyX25lc3RpbmfigJkg
-dW5kZWNsYXJlZCAoZmlyc3QgdXNlIGluIHRoaXMKPiBmdW5jdGlvbikKPiAvaG9tZS96dml2ZXJl
-ZC9Eb3dubG9hZHMvbHR0bmctbW9kdWxlcy9sdHRuZy1tb2R1bGVzLTIuNy4wL3dyYXBwZXIvcmlu
-Z2J1ZmZlci8uLi8uLi9saWIvcmluZ2J1ZmZlci8uLi8uLi93cmFwcGVyL3JpbmdidWZmZXIvLi4v
-Li4vbGliL3JpbmdidWZmZXIvZnJvbnRlbmRfYXBpLmg6Nzc6Cj4gd2FybmluZzogdHlwZSBkZWZh
-dWx0cyB0byDigJhpbnTigJkgaW4gZGVjbGFyYXRpb24gb2Yg4oCYdHlwZSBuYW1l4oCZCj4gL2hv
-bWUvenZpdmVyZWQvRG93bmxvYWRzL2x0dG5nLW1vZHVsZXMvbHR0bmctbW9kdWxlcy0yLjcuMC93
-cmFwcGVyL3JpbmdidWZmZXIvLi4vLi4vbGliL3JpbmdidWZmZXIvLi4vLi4vd3JhcHBlci9yaW5n
-YnVmZmVyLy4uLy4uL2xpYi9yaW5nYnVmZmVyL2Zyb250ZW5kX2FwaS5oOjc3Ogo+IGVycm9yOiBp
-bnZhbGlkIHR5cGUgYXJndW1lbnQgb2Yg4oCYdW5hcnkgKuKAmSAoaGF2ZSDigJhpbnTigJkpCj4g
-bWFrZVsyXTogKioqCj4gWy9ob21lL3p2aXZlcmVkL0Rvd25sb2Fkcy9sdHRuZy1tb2R1bGVzL2x0
-dG5nLW1vZHVsZXMtMi43LjAvbHR0bmctcmluZy1idWZmZXItY2xpZW50LWRpc2NhcmQub10KPiBF
-cnJvciAxCj4gbWFrZVsxXTogKioqCj4gW19tb2R1bGVfL2hvbWUvenZpdmVyZWQvRG93bmxvYWRz
-L2x0dG5nLW1vZHVsZXMvbHR0bmctbW9kdWxlcy0yLjcuMF0KPiBFcnJvciAyCj4gbWFrZVsxXTog
-TGVhdmluZyBkaXJlY3RvcnkgYC91c3Ivc3JjL2tlcm5lbHMvMi42LjMyLTI3OS5lbDYueDg2XzY0
-Jwo+IAo+IEkgZGlkIG5vdCBhZGQgeWV0IHRoZSByZXF1aXJlZCBjb21wb25lbnRzIHRvIHRoZSBr
-ZXJuZWwuCj4gCj4gQ2FuIHlvdSBoZWxwID8KPiAKPiBCZXN0IHJlZ2FyZHMsCj4gWi5WCj4gCj4g
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1k
-ZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9saXN0
-cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKLS0gCk1hdGhp
-ZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
-aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3Jn
-L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============2134670317==
+Content-Type: multipart/alternative; boundary=001a113ee3ecd9265d0525fa7843
+
+--001a113ee3ecd9265d0525fa7843
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Thank you.
+Z.V
+On Dec 3, 2015 9:21 AM, "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com=
+>
+wrote:
+
+> ----- On Dec 3, 2015, at 4:20 AM, Zvi Vered veredz72@gmail.com wrote:
+>
+> > Hello,
+> >
+> > I'm tried to compile lttng-modules:
+> >
+> > more /proc/version:
+> > Linux version 2.6.32-279.el6.x86_64
+> > (mockbuild@c6b9.bsys.dev.centos.org) (gcc version 4.4.6 20120305 (Red
+> > Hat 4.4.6-4) (GCC) )
+> > #1 SMP Fri Jun 22 12:19:21 UTC 2012
+>
+> Hi,
+>
+> Kernel 2.6.32 is not supported by lttng-modules. You will need to
+> upgrade your kernel. See README.md in lttng-modules.
+>
+> Thanks,
+>
+> Mathieu
+>
+> >
+> > yum install kernel-headers
+> > cd lttng-modules-2.7.0
+> > make
+> >
+> > and got:
+> >
+> > LTTNG_KERNELDIR=3D/lib/modules/2.6.32-279.el6.x86_64/build make -C
+> > /lib/modules/2.6.32-279.el6.x86_64/build
+> > M=3D/home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0 modules
+> > make[1]: Entering directory `/usr/src/kernels/2.6.32-279.el6.x86_64'
+> >  CC [M]
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/lttng-ring-buf=
+fer-client-discard.o
+> > In file included from
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/../../lib/ringbuffer/../../wrapper/ringbuffer/frontend_api.h:1,
+> >                 from
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/../../lib/ringbuffer/api.h:35,
+> >                 from
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/api.h:1,
+> >                 from
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/lttng-ring-buf=
+fer-client.h:177,
+> >                 from
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/lttng-ring-buf=
+fer-client-discard.c:29:
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/fro=
+ntend_api.h:77:1:
+> > error: pasting "per_cpu__" and "*" does not give a valid preprocessing
+> > token
+> > In file included from
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/../../lib/ringbuffer/../../wrapper/ringbuffer/frontend_api.h:1,
+> >                 from
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/../../lib/ringbuffer/api.h:35,
+> >                 from
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/api.h:1,
+> >                 from
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/lttng-ring-buf=
+fer-client.h:177,
+> >                 from
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/lttng-ring-buf=
+fer-client-discard.c:29:
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/fro=
+ntend_api.h:
+> > In function =E2=80=98lib_ring_buffer_put_cpu=E2=80=99:
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/fro=
+ntend_api.h:77:
+> > error: =E2=80=98per_cpu__=E2=80=99 undeclared (first use in this functi=
+on)
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/fro=
+ntend_api.h:77:
+> > error: (Each undeclared identifier is reported only once
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/fro=
+ntend_api.h:77:
+> > error: for each function it appears in.)
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/fro=
+ntend_api.h:77:
+> > error: =E2=80=98lib_ring_buffer_nesting=E2=80=99 undeclared (first use =
+in this
+> > function)
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/fro=
+ntend_api.h:77:
+> > warning: type defaults to =E2=80=98int=E2=80=99 in declaration of =E2=
+=80=98type name=E2=80=99
+> >
+> /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/ringbu=
+ffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/fro=
+ntend_api.h:77:
+> > error: invalid type argument of =E2=80=98unary *=E2=80=99 (have =E2=80=
+=98int=E2=80=99)
+> > make[2]: ***
+> >
+> [/home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/lttng-ring-bu=
+ffer-client-discard.o]
+> > Error 1
+> > make[1]: ***
+> > [_module_/home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0]
+> > Error 2
+> > make[1]: Leaving directory `/usr/src/kernels/2.6.32-279.el6.x86_64'
+> >
+> > I did not add yet the required components to the kernel.
+> >
+> > Can you help ?
+> >
+> > Best regards,
+> > Z.V
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+
+--001a113ee3ecd9265d0525fa7843
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<p dir=3D"ltr">Thank you.<br>
+Z.V</p>
+<div class=3D"gmail_quote">On Dec 3, 2015 9:21 AM, &quot;Mathieu Desnoyers&=
+quot; &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com">mathieu.desnoye=
+rs@efficios.com</a>&gt; wrote:<br type=3D"attribution"><blockquote class=3D=
+"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding=
+-left:1ex">----- On Dec 3, 2015, at 4:20 AM, Zvi Vered <a href=3D"mailto:ve=
+redz72@gmail.com">veredz72@gmail.com</a> wrote:<br>
+<br>
+&gt; Hello,<br>
+&gt;<br>
+&gt; I&#39;m tried to compile lttng-modules:<br>
+&gt;<br>
+&gt; more /proc/version:<br>
+&gt; Linux version 2.6.32-279.el6.x86_64<br>
+&gt; (<a href=3D"mailto:mockbuild@c6b9.bsys.dev.centos.org">mockbuild@c6b9.=
+bsys.dev.centos.org</a>) (gcc version 4.4.6 20120305 (Red<br>
+&gt; Hat 4.4.6-4) (GCC) )<br>
+&gt; #1 SMP Fri Jun 22 12:19:21 UTC 2012<br>
+<br>
+Hi,<br>
+<br>
+Kernel 2.6.32 is not supported by lttng-modules. You will need to<br>
+upgrade your kernel. See README.md in lttng-modules.<br>
+<br>
+Thanks,<br>
+<br>
+Mathieu<br>
+<br>
+&gt;<br>
+&gt; yum install kernel-headers<br>
+&gt; cd lttng-modules-2.7.0<br>
+&gt; make<br>
+&gt;<br>
+&gt; and got:<br>
+&gt;<br>
+&gt; LTTNG_KERNELDIR=3D/lib/modules/2.6.32-279.el6.x86_64/build make -C<br>
+&gt; /lib/modules/2.6.32-279.el6.x86_64/build<br>
+&gt; M=3D/home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0 modules=
+<br>
+&gt; make[1]: Entering directory `/usr/src/kernels/2.6.32-279.el6.x86_64&#3=
+9;<br>
+&gt;=C2=A0 CC [M]<br>
+&gt;=C2=A0 /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/lttng=
+-ring-buffer-client-discard.o<br>
+&gt; In file included from<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/../../lib/ringbuffer/../../wrapper/ringbuffer/frontend_api.h:1,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/../../lib/ringbuffer/api.h:35,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/api.h:1,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/lttng-ring-=
+buffer-client.h:177,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/lttng-ring-=
+buffer-client-discard.c:29:<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/=
+frontend_api.h:77:1:<br>
+&gt; error: pasting &quot;per_cpu__&quot; and &quot;*&quot; does not give a=
+ valid preprocessing<br>
+&gt; token<br>
+&gt; In file included from<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/../../lib/ringbuffer/../../wrapper/ringbuffer/frontend_api.h:1,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/../../lib/ringbuffer/api.h:35,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/api.h:1,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/lttng-ring-=
+buffer-client.h:177,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/lttng-ring-=
+buffer-client-discard.c:29:<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/=
+frontend_api.h:<br>
+&gt; In function =E2=80=98lib_ring_buffer_put_cpu=E2=80=99:<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/=
+frontend_api.h:77:<br>
+&gt; error: =E2=80=98per_cpu__=E2=80=99 undeclared (first use in this funct=
+ion)<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/=
+frontend_api.h:77:<br>
+&gt; error: (Each undeclared identifier is reported only once<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/=
+frontend_api.h:77:<br>
+&gt; error: for each function it appears in.)<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/=
+frontend_api.h:77:<br>
+&gt; error: =E2=80=98lib_ring_buffer_nesting=E2=80=99 undeclared (first use=
+ in this<br>
+&gt; function)<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/=
+frontend_api.h:77:<br>
+&gt; warning: type defaults to =E2=80=98int=E2=80=99 in declaration of =E2=
+=80=98type name=E2=80=99<br>
+&gt; /home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/wrapper/rin=
+gbuffer/../../lib/ringbuffer/../../wrapper/ringbuffer/../../lib/ringbuffer/=
+frontend_api.h:77:<br>
+&gt; error: invalid type argument of =E2=80=98unary *=E2=80=99 (have =E2=80=
+=98int=E2=80=99)<br>
+&gt; make[2]: ***<br>
+&gt; [/home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0/lttng-ring=
+-buffer-client-discard.o]<br>
+&gt; Error 1<br>
+&gt; make[1]: ***<br>
+&gt; [_module_/home/zvivered/Downloads/lttng-modules/lttng-modules-2.7.0]<b=
+r>
+&gt; Error 2<br>
+&gt; make[1]: Leaving directory `/usr/src/kernels/2.6.32-279.el6.x86_64&#39=
+;<br>
+&gt;<br>
+&gt; I did not add yet the required components to the kernel.<br>
+&gt;<br>
+&gt; Can you help ?<br>
+&gt;<br>
+&gt; Best regards,<br>
+&gt; Z.V<br>
+&gt;<br>
+&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
+</a><br>
+&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
+rel=3D"noreferrer" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman=
+/listinfo/lttng-dev</a><br>
+<br>
+--<br>
+Mathieu Desnoyers<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">ht=
+tp://www.efficios.com</a><br>
+</blockquote></div>
+
+--001a113ee3ecd9265d0525fa7843--
+
+
+--===============2134670317==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============2134670317==--
