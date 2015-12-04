@@ -1,22 +1,19 @@
-From: John Smith <whalajam@gmail.com>
-Subject: Re: lttng view => [error] at line 1269: token "(":
- syntax error, unexpected LPAREN, expecting SEMICOLON or COMMA
-Date: Wed, 2 Dec 2015 22:56:38 -0800
-Message-ID: <CANgVouVd7Uaa6ZgRq+FWeL05XiG3cdigVae8-R+-ry9Od5tBsg__3524.07220420918$1449183636$gmane$org@mail.gmail.com>
-References: <CANgVouUOGyQ5vvn9g-4fa5_ADU4yYcSiiUOezr-aJn2+yG8iDw@mail.gmail.com>
- <CAB4xu_1WusPbbz2E9zSaGOUjdPj4JA_1qBveEY34DjkNSfBg=g@mail.gmail.com>
- <CANgVouV_w1yWj-99Ey2DrrP3VjHK2AxkSvSZGkFkxz8tBUxJYg@mail.gmail.com>
- <CAB4xu_2RQRa0kbEmPX4xsZ4c=jSavqwgLmmW3n0_yp-0hcnKog@mail.gmail.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Relayd trace drops
+Date: Fri, 4 Dec 2015 07:41:18 -0500
+Message-ID: <CA+jJMxsuF+Ywvvhe3L4OqBHTsohyFffPoF4mZWFDqPvBC-P80w__392.038809559558$1449232970$gmane$org@mail.gmail.com>
+References: <CACd+_b7qEeW1XD1H_0MT4dDqwLv68rfOURfNDRh6SO=xS4k-Og@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0848935373=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f173.google.com ([209.85.213.173])
+Received: from mail-wm0-f49.google.com ([74.125.82.49])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <whalajam@gmail.com>) id 1a4Nop-0000f6-WA
- for lttng-dev@lists.lttng.org; Thu, 03 Dec 2015 01:56:46 -0500
-Received: by igvg19 with SMTP id g19so6862259igv.1
- for <lttng-dev@lists.lttng.org>; Wed, 02 Dec 2015 22:56:38 -0800 (PST)
-In-Reply-To: <CAB4xu_2RQRa0kbEmPX4xsZ4c=jSavqwgLmmW3n0_yp-0hcnKog@mail.gmail.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1a4pfv-0001Qs-Nn
+ for lttng-dev@lists.lttng.org; Fri, 04 Dec 2015 07:41:27 -0500
+Received: by wmec201 with SMTP id c201so63536843wme.1
+ for <lttng-dev@lists.lttng.org>; Fri, 04 Dec 2015 04:41:18 -0800 (PST)
+In-Reply-To: <CACd+_b7qEeW1XD1H_0MT4dDqwLv68rfOURfNDRh6SO=xS4k-Og@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,237 +22,66 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Philippe Proulx <eeppeliteloop@gmail.com>
+To: Aravind HT <aravind.ht@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0848935373==
-Content-Type: multipart/alternative; boundary=089e010d97f8738ca60525f8e4e2
-
---089e010d97f8738ca60525f8e4e2
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Philippe,
-
-On "3.19.0-30-generic #34~14.04.1-Ubuntu", apt-get won't install anything
-else, is LTTng 2.6 (or 2.7) user space backward compatible with kernel 3.19=
-?
-I remember a while back trying to build the 2.7 kernel LTTng modules and
-got build errors, required additional packages versions that were not
-available for 3.19 and upgrading to a newer kernel is problematic,
-
-thanks, John
-
-
-On Wed, Dec 2, 2015 at 6:02 PM, Philippe Proulx <eeppeliteloop@gmail.com>
-wrote:
-
-> Okay,
->
-> You should know, however, that LTTng 2.4 is not supported anymore. There
-> could be bugs in there not fixed in this version. Any chance you can
-> upgrade to at least LTTng 2.6 (2.7 is better)?
->
-> Philippe Proulx
->
-> On Wed, Dec 2, 2015 at 7:31 PM, John Smith <whalajam@gmail.com> wrote:
->
->> Philippe,
->> it doesn't work:
->>
->> babeltrace -o ctf-metadata /home/john.s/lttng-traces/auto-20151202-16210=
-0
->> [error] at line 1147: token "(": syntax error, unexpected LPAREN,
->> expecting SEMICOLON or COMMA
->> [error] Error creating AST
->> [warning] Unable to open trace metadata for path
->> "/home/john.s/lttng-traces/auto-20151202-162100/ust/uid/0/64-bit".
->> [warning] [Context] Cannot open_trace of format ctf at path
->> /home/john.s/lttng-traces/auto-20151202-162100/ust/uid/0/64-bit.
->> [warning] [Context] cannot open trace
->> "/home/john.s/lttng-traces/auto-20151202-162100/ust/uid/0/64-bit" from
->> /home/john.s/lttng-traces/auto-20151202-162100 for reading.
->> [error] Cannot open any trace for reading.
->> [error] opening trace "/home/john.s/lttng-traces/auto-20151202-162100"
->> for reading.
->>
->> The logs are populated:
->>
->> ls -l  /home/john.s/lttng-traces/auto-20151202-162100/ust/uid/0/64-bit/
->> total 884
->> -rw-rw---- 1 john.s john.s   8192 Dec  2 16:21 channel0_0
->> -rw-rw---- 1 john.s john.s   4096 Dec  2 16:21 channel0_1
->> ...
->> -rw-rw---- 1 john.s john.s   4096 Dec  2 16:21 channel0_9
->> drwxrwx--- 2 john.s john.s 4096 Dec  2 16:21 index
->> -rw-rw---- 1 john.s john.s   98304 Dec  2 16:21 metadata
->>
->> thanks, John
->>
->> On Wed, Dec 2, 2015 at 11:30 AM, Philippe Proulx <eeppeliteloop@gmail.co=
-m
->> > wrote:
->>
->>> John,
->>>
->>> Can you pastebin the trace's metadata file? Use:
->>>
->>>     babeltrace -o ctf-metadata /path/to/trace
->>>
->>> to get it.
->>>
->>> Thanks,
->>>
->>> Philippe Proulx
->>>
->>> On Tue, Dec 1, 2015 at 9:19 PM, John Smith <whalajam@gmail.com> wrote:
->>>
->>>> Hi,
->>>>
->>>> issued the regular following lttng commands:
->>>> [
->>>> lttng create
->>>> lttng enable-event -u -a
->>>> lttng start
->>>> <run-my-app>
->>>> lttng stop
->>>> lttng view
->>>> ]
->>>>
->>>> "lttng view" command fails with the following:
->>>>
->>>> [error] at line 1269: token "(": syntax error, unexpected LPAREN,
->>>> expecting SEMICOLON or COMMA
->>>> Environment info:
->>>> [
->>>> $ uname -a
->>>> Linux slab134 3.19.0-30-generic #34~14.04.1-Ubuntu SMP Fri Oct 2
->>>> 22:09:39 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
->>>> $ lttng --version
->>>> lttng (LTTng Trace Control) 2.4.0 - =C3=89poque Opaque
->>>> ]
->>>>
->>>> I used also:
->>>> lttng view -e "babeltrace -n all -v -d"
->>>>
->>>> but the output is not revealing any comprehensible details.
->>>>
->>>> What mistake could lead to such a disastrous failure?
->>>>
->>>> thanks, John
->>>>
->>>> _______________________________________________
->>>> lttng-dev mailing list
->>>> lttng-dev@lists.lttng.org
->>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>>
->>>>
->>>
->>
->
-
---089e010d97f8738ca60525f8e4e2
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Philippe,</div><div><br></div><div>On &quot;3.19.0-30=
--generic #34~14.04.1-Ubuntu&quot;, apt-get won&#39;t=C2=A0install=C2=A0anyt=
-hing else, is LTTng 2.6 (or 2.7) user space backward compatible with kernel=
- 3.19?</div><div>I remember a while back trying to build the 2.7 kernel LTT=
-ng modules and got build errors,=C2=A0required additional packages versions=
- that were not available for 3.19 and upgrading to a newer kernel is proble=
-matic,</div><div><br></div><div>thanks, John</div><div>=C2=A0=C2=A0</div></=
-div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Wed, Dec 2=
-, 2015 at 6:02 PM, Philippe Proulx <span dir=3D"ltr">&lt;<a href=3D"mailto:=
-eeppeliteloop@gmail.com" target=3D"_blank">eeppeliteloop@gmail.com</a>&gt;<=
-/span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8=
-ex;border-left:1px #ccc solid;padding-left:1ex"><div dir=3D"ltr">Okay,<div>=
-<br></div><div>You should know, however, that LTTng 2.4 is not supported an=
-ymore. There could be bugs in there not fixed in this version. Any chance y=
-ou can upgrade to at least LTTng 2.6 (2.7 is better)?</div></div><div class=
-=3D"gmail_extra"><span class=3D"HOEnZb"><font color=3D"#888888"><br clear=
-=3D"all"><div><div>Philippe Proulx</div></div></font></span><div><div class=
-=3D"h5">
-<br><div class=3D"gmail_quote">On Wed, Dec 2, 2015 at 7:31 PM, John Smith <=
-span dir=3D"ltr">&lt;<a href=3D"mailto:whalajam@gmail.com" target=3D"_blank=
-">whalajam@gmail.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_qu=
-ote" style=3D"margin:0px 0px 0px 0.8ex;padding-left:1ex;border-left-color:r=
-gb(204,204,204);border-left-width:1px;border-left-style:solid"><div dir=3D"=
-ltr"><div>Philippe,</div><div>it doesn&#39;t work:</div><div><br></div><div=
->babeltrace -o ctf-metadata /home/john.s/lttng-traces/auto-20151202-162100<=
-br>[error] at line 1147: token &quot;(&quot;: syntax error, unexpected LPAR=
-EN, expecting SEMICOLON or COMMA</div><div>[error] Error creating AST<br>[w=
-arning] Unable to open trace metadata for path &quot;/home/john.s/lttng-tra=
-ces/auto-20151202-162100/ust/uid/0/64-bit&quot;.<br>[warning] [Context] Can=
-not open_trace of format ctf at path /home/john.s/lttng-traces/auto-2015120=
-2-162100/ust/uid/0/64-bit.<br>[warning] [Context] cannot open trace &quot;/=
-home/john.s/lttng-traces/auto-20151202-162100/ust/uid/0/64-bit&quot; from /=
-home/john.s/lttng-traces/auto-20151202-162100 for reading.<br>[error] Canno=
-t open any trace for reading.</div><div>[error] opening trace &quot;/home/j=
-ohn.s/lttng-traces/auto-20151202-162100&quot; for reading.</div><div><br></=
-div><div>The logs are populated:</div><div><br></div><div>ls -l=C2=A0 /home=
-/john.s/lttng-traces/auto-20151202-162100/ust/uid/0/64-bit/<br>total 884<br=
->-rw-rw---- 1 john.s=C2=A0john.s=C2=A0=C2=A0 8192 Dec=C2=A0 2 16:21 channel=
-0_0<br>-rw-rw---- 1 john.s john.s=C2=A0=C2=A0 4096 Dec=C2=A0 2 16:21 channe=
-l0_1<br></div><div>...</div><div>-rw-rw---- 1 john.s john.s=C2=A0=C2=A0 409=
-6 Dec=C2=A0 2 16:21 channel0_9<br>drwxrwx--- 2 john.s john.s 4096 Dec=C2=A0=
- 2 16:21 index<br>-rw-rw---- 1 john.s john.s=C2=A0=C2=A0 98304 Dec=C2=A0 2 =
-16:21 metadata<br></div><div><br></div><div>thanks, John<br></div></div><di=
-v><div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Wed, De=
-c 2, 2015 at 11:30 AM, Philippe Proulx <span dir=3D"ltr">&lt;<a href=3D"mai=
-lto:eeppeliteloop@gmail.com" target=3D"_blank">eeppeliteloop@gmail.com</a>&=
-gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0px =
-0px 0px 0.8ex;padding-left:1ex;border-left-color:rgb(204,204,204);border-le=
-ft-width:1px;border-left-style:solid"><div dir=3D"ltr">John,<div><br></div>=
-<div>Can you pastebin the trace&#39;s metadata file? Use:</div><div><br></d=
-iv><div>=C2=A0 =C2=A0 babeltrace -o ctf-metadata /path/to/trace</div><div><=
-br></div><div>to get it.</div><div><br></div><div>Thanks,</div></div><div c=
-lass=3D"gmail_extra"><br clear=3D"all"><div><div>Philippe Proulx</div></div=
->
-<br><div class=3D"gmail_quote"><div><div>On Tue, Dec 1, 2015 at 9:19 PM, Jo=
-hn Smith <span dir=3D"ltr">&lt;<a href=3D"mailto:whalajam@gmail.com" target=
-=3D"_blank">whalajam@gmail.com</a>&gt;</span> wrote:<br></div></div><blockq=
-uote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;padding-left:1=
-ex;border-left-color:rgb(204,204,204);border-left-width:1px;border-left-sty=
-le:solid"><div><div><div dir=3D"ltr"><div>Hi,</div><div><br></div><div>issu=
-ed the regular following lttng commands:<br>[<br>lttng create<br>lttng enab=
-le-event -u -a<br>lttng start</div><div>&lt;run-my-app&gt;</div><div>lttng =
-stop<br>lttng view<br>]</div><p>&quot;lttng view&quot; command fails with t=
-he following:</p><p>[error] at line 1269: token &quot;(&quot;: syntax error=
-, unexpected LPAREN, expecting SEMICOLON or COMMA</p><div>Environment info:=
-</div><div>[</div><div>$ uname -a<br>Linux slab134 3.19.0-30-generic #34~14=
-.04.1-Ubuntu SMP Fri Oct 2 22:09:39 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux=
-</div><div>$ lttng --version<br>lttng (LTTng Trace Control) 2.4.0 - =C3=89p=
-oque Opaque</div><div>]</div><div><br></div><div>I used also:</div><div>ltt=
-ng view -e &quot;babeltrace -n all -v -d&quot;</div><div><br></div><div>but=
- the output is not revealing any comprehensible details.</div><div><br></di=
-v><div>What mistake could lead to such a disastrous failure?</div><div><br>=
-</div><div>thanks, John</div></div>
-<br></div></div>_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" targe=
-t=3D"_blank" rel=3D"noreferrer">http://lists.lttng.org/cgi-bin/mailman/list=
-info/lttng-dev</a><br>
-<br></blockquote></div><br></div>
-</blockquote></div><br></div>
-</div></div></blockquote></div><br></div></div></div>
-</blockquote></div><br></div>
-
---089e010d97f8738ca60525f8e4e2--
-
-
---===============0848935373==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0848935373==--
+SGkgQXJhdmluZCwKCkNhbid0IHNheSBJIGhhdmUgbG9va2VkIGF0IGV2ZXJ5dGhpbmcgeW91IHNl
+bnQgeWV0LCBidXQgYXMgYQpwcmVlbXB0aXZlIHF1ZXN0aW9uLCB3aGljaCB2ZXJzaW9uIGFyZSB3
+ZSB0YWxraW5nIGFib3V0IGhlcmU/IDIuNi4wIG9yCjIuNi4xPyAyLjYuMSBjb250YWlucyBhIGxv
+dCBvZiByZWxheSBkYWVtb24gZml4ZXMuCgpUaGFua3MsCkrDqXLDqW1pZQoKT24gVGh1LCBEZWMg
+MywgMjAxNSBhdCA3OjAxIEFNLCBBcmF2aW5kIEhUIDxhcmF2aW5kLmh0QGdtYWlsLmNvbT4gd3Jv
+dGU6Cj4gSGksCj4KPiBJIGFtIHRyeWluZyB0byBvYnRhaW4gdGhlIHBlcmZvcm1hbmNlIGNoYXJh
+Y3RlcmlzdGljcyBvZiBsdHRuZyB3aXRoIHRoZSB1c2UKPiBvZiB0ZXN0IGFwcGxpY2F0aW9ucy4g
+VHJhY2VzIGFyZSBiZWluZyBwcm9kdWNlZCBvbiBhIGxvY2FsIG5vZGUgYW5kCj4gZGVsaXZlcmVk
+IHRvIHJlbGF5ZCB0aGF0IGlzIHJ1bm5pbmcgb24gYSBzZXBhcmF0ZSBub2RlIGZvciBzdG9yYWdl
+Lgo+Cj4gQW4gbHR0bmcgc2Vzc2lvbiB3aXRoIHRoZSB0ZXN0IGFwcGxpY2F0aW9ucyBwcm9kdWNp
+bmcgYW4gaW5pdGlhbCBiaXQgcmF0ZSBvZgo+IDEwIGtiL3MgaXMgc3RhcnRlZCBhbmQgcnVuIGZv
+ciBhYm91dCAzMCBzZWNvbmRzLiBUaGUgc3RhcnRpbmcgc3ViLWJ1ZmZlcgo+IHNpemUgaXMga2Vw
+dCBhdCAxMjgga2IgYW5kIHN1Yi1idWYgY291bnQgYXQgNC4gVGhlIHNlc3Npb24gaXMgdGhlbiBz
+dG9wcGVkCj4gYW5kIGRlc3Ryb3llZCBhbmQgdHJhY2VzIGFyZSBhbmFseXplZCB0byBzZWUgaWYg
+dGhlcmUgYXJlIGFueSBkcm9wcy4gVGhpcyBpcwo+IGJlaW5nIGRvbmUgaW4gYSBsb29wIHdpdGgg
+ZXZlcnkgc3Vic2VxdWVudCBzZXNzaW9uIGhhdmluZyBhbiBpbmNyZW1lbnQgb2YgMgo+IGtiL3Mg
+YXMgbG9uZyBhcyB0aGVyZSBhcmUgbm8gZHJvcHMuIElmIHRoZXJlIGFyZSBkcm9wcywgSSBpbmNy
+ZWFzZSB0aGUKPiBidWZmZXIgc2l6ZSBieSBhIGZhY3RvciBvZiB4MiB3aXRob3V0IGluY3JlbWVu
+dGluZyB0aGUgYml0IHJhdGUuCj4KPiBJIHNlZSB0cmFjZSBkcm9wcyBoYXBwZW5pbmcgY29uc2lz
+dGVudGx5IHdpdGggdGVzdCBhcHBzIHByb2R1Y2luZyB0cmFjZXMgYXQKPiBsZXNzIHRoYW4gNDAg
+a2IvcywgaXQgZG9lc250IHNlZW0gdG8gaGVscCBldmVuIGlmIEkgc3RhcnRlZCB3aXRoIDFtYiB4
+IDQKPiBzdWItYnVmZmVycy4KPgo+IEFuYWx5c2lzIDoKPgo+IEkgaGF2ZSBhdHRhY2hlZCB0aGUg
+bHR0bmdfcmVsYXlkICwgbHR0bmdfY29uc3VtZXJkXzY0IGxvZ3MgYW5kIHRoZSBlbnRpcmUKPiB0
+cmFjZSBkaXJlY3RvcnksIGhvcGUgeW91IHdpbGwgYmUgYWJsZSB0byB2aWV3IGl0Lgo+IEkgaGF2
+ZSBtb2RpZmllZCBsdHRuZ19yZWxheWQgY29kZSB0byBkdW1wIHRoZSB0cmFjZXMgYmVpbmcgY2Fw
+dHVyZWQgaW4gdGhlCj4gbHR0bmdfcmVsYXlkIGxvZ3MgYWxvbmcgd2l0aCBkZWJ1ZyBpbmZvLgo+
+Cj4gRWFjaCB0ZXN0IGFwcCBpcyBwcm9kdWNpbmcgbG9ncyBpbiB0aGUgZm9ybSBvZiAgOgo+ICJU
+cmFjZUFwcCBQSUQgLSAzMTk0MCBUSElEIC0gMzE5NzAgQHRocmVhZFJhdGUgLSAxMDMyIGIvcyBh
+cHBSYXRlIC0gMjA3OSBiL3MKPiB0aHJlYWRUcmFjZU51bSAtIDkgYXBwVHJhY2VOdW0gLSAxOCAg
+c2xlZXBUaW1lIC0gMTkyMTIwIgo+Cj4gVGhlIHRlc3QgYXBwbGljYXRpb24gUElELCB0ZXN0IGFw
+cGxpY2F0aW9uIHRocmVhZCBpZCwgdGhyZWFkIGJpdCByYXRlLCB0ZXN0Cj4gYXBwIGJpdCByYXRl
+LCB0aHJlYWQgdHJhY2UgbnVtYmVyIGFuZCBhcHBsaWNhdGlvbiB0cmFjZSBudW1iZXIgcyBhcmUg
+cGFydCBvZgo+IHRoZSB0cmFjZS4gU28gaW4gdGhlIGFib3ZlIHRyYWNlLCB0aGUgdGhyZWFkIGlz
+IHByb2R1Y2luZyBhdCAxIGtiL3MgYW5kIHRoZQo+IHdob2xlIHRlc3QgYXBwIGlzIHByb2R1Y2lu
+ZyBhdCAyIGtiL3MuCj4KPiBJZiB3ZSBsb29rIGF0IHRoZSBiYWJlbHRyYWNlIG91dCBwdXQsIHdl
+IHNlZSB0aGF0IHRoZSBUcmFjZSB3aXRoIFRyYWNlQXBwCj4gUElEIC0gMzE5NDAgYXBwVHJhY2VO
+dW0gMiBpcyBtaXNzaW5nICwgd2l0aCAxLCAzLCA0LCA1IGFuZCBzbyBvbiBiZWluZwo+IHN1Y2Nl
+c3NmdWxseSBjYXB0dXJlZC4KPiBJIGxvb2tlZCBhdCB0aGUgbHR0bmdfcmVsYXlkIGxvZ3MgYW5k
+IGZvdW5kIHRoYXQgdHJhY2Ugb2YgImFwcFRyYWNlTnVtIDIiIGlzCj4gbm90IGRlbGl2ZXJlZC9n
+ZW5lcmF0ZWQgYnkgdGhlIGNvbnN1bWVyZCB0byB0aGUgcmVsYXlkIGluIHNlcXVlbmNlIHdpdGgK
+PiBvdGhlciB0cmFjZXMuIFRvIHJ1bGUgb3V0IHRoYXQgdGhpcyBpcyBub3QgYSB0ZXN0IGFwcGxp
+Y2F0aW9uIHByb2JsZW0sIHlvdQo+IGNhbiBsb29rIGF0IGxpbmUgbHR0dG5nX3JlbGF5ZCBsb2cg
+OiAxMjc3OCBhbmQgc2VlIHRyYWNlcyBmcm9tIGFwcFRyYWNlTnVtIC0KPiAxIHRvIGFwcFRyYWNl
+TnVtIC0gMTggaW5jbHVkaW5nIHRoZSBhcHBUcmFjZU51bSAyIGFyZSAicmUtZGVsaXZlcmVkIiBi
+eSB0aGUKPiBjb25zdW1lcmQgdG8gdGhlIHJlbGF5ZC4KPiBFc3NlbnRpYWxseSwgSSBzZWUgYXBw
+VHJhY2VOdW0gMSB0aHJvdWdoIGFwcFRyYWNlTnVtIDE4IGJlaW5nIGRlbGl2ZXJlZAo+IHR3aWNl
+LCBvbmNlIGluZGl2aWR1YWxseSB3aGVyZSBhcHBUcmFjZU51bSAyIGlzIG1pc3NpbmcgYW5kIG9u
+Y2UgYXMgYSBncm91cAo+IGF0IGxpbmUgMTI3Nzggd2hlcmUgaXRzIHByZXNlbnQuCj4KPgo+IFJl
+cXVlc3QgaGVscCB3aXRoCj4gMS4gd2h5IHRyYWNlcyBhcmUgZGVsaXZlcmVkIHR3aWNlLCBpcyBp
+dCBieSBkZXNpZ24gb3IgYSBnZW51aW5lIHByb2JsZW0gPwo+IDIuIGhvdyB0byBhdm9pZCB0cmFj
+ZXMgYmVpbmcgZHJvcHBlZCBldmVuIHRob3VnaCBidWZmZXJzIGFyZSBzdWZmaWNpZW50bHkKPiBs
+YXJnZSBlbm91Z2ggPwo+Cj4KPiBSZWdhcmRzLAo+IEFyYXZpbmQuCj4KPiBfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxp
+c3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9j
+Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxh
+cm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
+dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
