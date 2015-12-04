@@ -1,18 +1,35 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
 Subject: Re: Relayd trace drops
-Date: Fri, 4 Dec 2015 07:41:18 -0500
-Message-ID: <CA+jJMxsuF+Ywvvhe3L4OqBHTsohyFffPoF4mZWFDqPvBC-P80w__392.038809559558$1449232970$gmane$org@mail.gmail.com>
+Date: Fri, 4 Dec 2015 09:06:48 -0500
+Message-ID: <56619DF8.6060003__33723.3245526024$1449238080$gmane$org@efficios.com>
 References: <CACd+_b7qEeW1XD1H_0MT4dDqwLv68rfOURfNDRh6SO=xS4k-Og@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm0-f49.google.com ([74.125.82.49])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1a4pfv-0001Qs-Nn
- for lttng-dev@lists.lttng.org; Fri, 04 Dec 2015 07:41:27 -0500
-Received: by wmec201 with SMTP id c201so63536843wme.1
- for <lttng-dev@lists.lttng.org>; Fri, 04 Dec 2015 04:41:18 -0800 (PST)
+ (envelope-from <Jonathan.rajotte-julien@efficios.com>)
+ id 1a4r0i-0001sG-UC
+ for lttng-dev@lists.lttng.org; Fri, 04 Dec 2015 09:07:01 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id E4D683402EF
+ for <lttng-dev@lists.lttng.org>; Fri,  4 Dec 2015 14:06:52 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id 2H5HllnJsBSc for <lttng-dev@lists.lttng.org>;
+ Fri,  4 Dec 2015 14:06:52 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 367653403DC
+ for <lttng-dev@lists.lttng.org>; Fri,  4 Dec 2015 14:06:52 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id ffqENoAym5l5 for <lttng-dev@lists.lttng.org>;
+ Fri,  4 Dec 2015 14:06:52 +0000 (UTC)
+Received: from [172.16.0.141] (cable-192.222.213.99.electronicbox.net
+ [192.222.213.99])
+ by mail.efficios.com (Postfix) with ESMTPSA id CC5C23402EF
+ for <lttng-dev@lists.lttng.org>; Fri,  4 Dec 2015 14:06:51 +0000 (UTC)
 In-Reply-To: <CACd+_b7qEeW1XD1H_0MT4dDqwLv68rfOURfNDRh6SO=xS4k-Og@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -22,66 +39,84 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Aravind HT <aravind.ht@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgQXJhdmluZCwKCkNhbid0IHNheSBJIGhhdmUgbG9va2VkIGF0IGV2ZXJ5dGhpbmcgeW91IHNl
-bnQgeWV0LCBidXQgYXMgYQpwcmVlbXB0aXZlIHF1ZXN0aW9uLCB3aGljaCB2ZXJzaW9uIGFyZSB3
-ZSB0YWxraW5nIGFib3V0IGhlcmU/IDIuNi4wIG9yCjIuNi4xPyAyLjYuMSBjb250YWlucyBhIGxv
-dCBvZiByZWxheSBkYWVtb24gZml4ZXMuCgpUaGFua3MsCkrDqXLDqW1pZQoKT24gVGh1LCBEZWMg
-MywgMjAxNSBhdCA3OjAxIEFNLCBBcmF2aW5kIEhUIDxhcmF2aW5kLmh0QGdtYWlsLmNvbT4gd3Jv
-dGU6Cj4gSGksCj4KPiBJIGFtIHRyeWluZyB0byBvYnRhaW4gdGhlIHBlcmZvcm1hbmNlIGNoYXJh
-Y3RlcmlzdGljcyBvZiBsdHRuZyB3aXRoIHRoZSB1c2UKPiBvZiB0ZXN0IGFwcGxpY2F0aW9ucy4g
-VHJhY2VzIGFyZSBiZWluZyBwcm9kdWNlZCBvbiBhIGxvY2FsIG5vZGUgYW5kCj4gZGVsaXZlcmVk
-IHRvIHJlbGF5ZCB0aGF0IGlzIHJ1bm5pbmcgb24gYSBzZXBhcmF0ZSBub2RlIGZvciBzdG9yYWdl
-Lgo+Cj4gQW4gbHR0bmcgc2Vzc2lvbiB3aXRoIHRoZSB0ZXN0IGFwcGxpY2F0aW9ucyBwcm9kdWNp
-bmcgYW4gaW5pdGlhbCBiaXQgcmF0ZSBvZgo+IDEwIGtiL3MgaXMgc3RhcnRlZCBhbmQgcnVuIGZv
-ciBhYm91dCAzMCBzZWNvbmRzLiBUaGUgc3RhcnRpbmcgc3ViLWJ1ZmZlcgo+IHNpemUgaXMga2Vw
-dCBhdCAxMjgga2IgYW5kIHN1Yi1idWYgY291bnQgYXQgNC4gVGhlIHNlc3Npb24gaXMgdGhlbiBz
-dG9wcGVkCj4gYW5kIGRlc3Ryb3llZCBhbmQgdHJhY2VzIGFyZSBhbmFseXplZCB0byBzZWUgaWYg
-dGhlcmUgYXJlIGFueSBkcm9wcy4gVGhpcyBpcwo+IGJlaW5nIGRvbmUgaW4gYSBsb29wIHdpdGgg
-ZXZlcnkgc3Vic2VxdWVudCBzZXNzaW9uIGhhdmluZyBhbiBpbmNyZW1lbnQgb2YgMgo+IGtiL3Mg
-YXMgbG9uZyBhcyB0aGVyZSBhcmUgbm8gZHJvcHMuIElmIHRoZXJlIGFyZSBkcm9wcywgSSBpbmNy
-ZWFzZSB0aGUKPiBidWZmZXIgc2l6ZSBieSBhIGZhY3RvciBvZiB4MiB3aXRob3V0IGluY3JlbWVu
-dGluZyB0aGUgYml0IHJhdGUuCj4KPiBJIHNlZSB0cmFjZSBkcm9wcyBoYXBwZW5pbmcgY29uc2lz
-dGVudGx5IHdpdGggdGVzdCBhcHBzIHByb2R1Y2luZyB0cmFjZXMgYXQKPiBsZXNzIHRoYW4gNDAg
-a2IvcywgaXQgZG9lc250IHNlZW0gdG8gaGVscCBldmVuIGlmIEkgc3RhcnRlZCB3aXRoIDFtYiB4
-IDQKPiBzdWItYnVmZmVycy4KPgo+IEFuYWx5c2lzIDoKPgo+IEkgaGF2ZSBhdHRhY2hlZCB0aGUg
-bHR0bmdfcmVsYXlkICwgbHR0bmdfY29uc3VtZXJkXzY0IGxvZ3MgYW5kIHRoZSBlbnRpcmUKPiB0
-cmFjZSBkaXJlY3RvcnksIGhvcGUgeW91IHdpbGwgYmUgYWJsZSB0byB2aWV3IGl0Lgo+IEkgaGF2
-ZSBtb2RpZmllZCBsdHRuZ19yZWxheWQgY29kZSB0byBkdW1wIHRoZSB0cmFjZXMgYmVpbmcgY2Fw
-dHVyZWQgaW4gdGhlCj4gbHR0bmdfcmVsYXlkIGxvZ3MgYWxvbmcgd2l0aCBkZWJ1ZyBpbmZvLgo+
-Cj4gRWFjaCB0ZXN0IGFwcCBpcyBwcm9kdWNpbmcgbG9ncyBpbiB0aGUgZm9ybSBvZiAgOgo+ICJU
-cmFjZUFwcCBQSUQgLSAzMTk0MCBUSElEIC0gMzE5NzAgQHRocmVhZFJhdGUgLSAxMDMyIGIvcyBh
-cHBSYXRlIC0gMjA3OSBiL3MKPiB0aHJlYWRUcmFjZU51bSAtIDkgYXBwVHJhY2VOdW0gLSAxOCAg
-c2xlZXBUaW1lIC0gMTkyMTIwIgo+Cj4gVGhlIHRlc3QgYXBwbGljYXRpb24gUElELCB0ZXN0IGFw
-cGxpY2F0aW9uIHRocmVhZCBpZCwgdGhyZWFkIGJpdCByYXRlLCB0ZXN0Cj4gYXBwIGJpdCByYXRl
-LCB0aHJlYWQgdHJhY2UgbnVtYmVyIGFuZCBhcHBsaWNhdGlvbiB0cmFjZSBudW1iZXIgcyBhcmUg
-cGFydCBvZgo+IHRoZSB0cmFjZS4gU28gaW4gdGhlIGFib3ZlIHRyYWNlLCB0aGUgdGhyZWFkIGlz
-IHByb2R1Y2luZyBhdCAxIGtiL3MgYW5kIHRoZQo+IHdob2xlIHRlc3QgYXBwIGlzIHByb2R1Y2lu
-ZyBhdCAyIGtiL3MuCj4KPiBJZiB3ZSBsb29rIGF0IHRoZSBiYWJlbHRyYWNlIG91dCBwdXQsIHdl
-IHNlZSB0aGF0IHRoZSBUcmFjZSB3aXRoIFRyYWNlQXBwCj4gUElEIC0gMzE5NDAgYXBwVHJhY2VO
-dW0gMiBpcyBtaXNzaW5nICwgd2l0aCAxLCAzLCA0LCA1IGFuZCBzbyBvbiBiZWluZwo+IHN1Y2Nl
-c3NmdWxseSBjYXB0dXJlZC4KPiBJIGxvb2tlZCBhdCB0aGUgbHR0bmdfcmVsYXlkIGxvZ3MgYW5k
-IGZvdW5kIHRoYXQgdHJhY2Ugb2YgImFwcFRyYWNlTnVtIDIiIGlzCj4gbm90IGRlbGl2ZXJlZC9n
-ZW5lcmF0ZWQgYnkgdGhlIGNvbnN1bWVyZCB0byB0aGUgcmVsYXlkIGluIHNlcXVlbmNlIHdpdGgK
-PiBvdGhlciB0cmFjZXMuIFRvIHJ1bGUgb3V0IHRoYXQgdGhpcyBpcyBub3QgYSB0ZXN0IGFwcGxp
-Y2F0aW9uIHByb2JsZW0sIHlvdQo+IGNhbiBsb29rIGF0IGxpbmUgbHR0dG5nX3JlbGF5ZCBsb2cg
-OiAxMjc3OCBhbmQgc2VlIHRyYWNlcyBmcm9tIGFwcFRyYWNlTnVtIC0KPiAxIHRvIGFwcFRyYWNl
-TnVtIC0gMTggaW5jbHVkaW5nIHRoZSBhcHBUcmFjZU51bSAyIGFyZSAicmUtZGVsaXZlcmVkIiBi
-eSB0aGUKPiBjb25zdW1lcmQgdG8gdGhlIHJlbGF5ZC4KPiBFc3NlbnRpYWxseSwgSSBzZWUgYXBw
-VHJhY2VOdW0gMSB0aHJvdWdoIGFwcFRyYWNlTnVtIDE4IGJlaW5nIGRlbGl2ZXJlZAo+IHR3aWNl
-LCBvbmNlIGluZGl2aWR1YWxseSB3aGVyZSBhcHBUcmFjZU51bSAyIGlzIG1pc3NpbmcgYW5kIG9u
-Y2UgYXMgYSBncm91cAo+IGF0IGxpbmUgMTI3Nzggd2hlcmUgaXRzIHByZXNlbnQuCj4KPgo+IFJl
-cXVlc3QgaGVscCB3aXRoCj4gMS4gd2h5IHRyYWNlcyBhcmUgZGVsaXZlcmVkIHR3aWNlLCBpcyBp
-dCBieSBkZXNpZ24gb3IgYSBnZW51aW5lIHByb2JsZW0gPwo+IDIuIGhvdyB0byBhdm9pZCB0cmFj
-ZXMgYmVpbmcgZHJvcHBlZCBldmVuIHRob3VnaCBidWZmZXJzIGFyZSBzdWZmaWNpZW50bHkKPiBs
-YXJnZSBlbm91Z2ggPwo+Cj4KPiBSZWdhcmRzLAo+IEFyYXZpbmQuCj4KPiBfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxp
-c3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9j
-Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxh
-cm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
-dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
-bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi Aravind,
+
+Could you share with us the code you are using to obtain the *the 
+performance characteristics* so we can try to reproduce the problem? 
+Could you push it to some
+git repo (github/bitbucket) somewhere?
+
+Cheers!
+
+On 2015-12-03 07:01 AM, Aravind HT wrote:
+> Hi,
+>
+> I am trying to obtain the performance characteristics of lttng with 
+> the use of test applications. Traces are being produced on a local 
+> node and delivered to relayd that is running on a separate node for 
+> storage.
+>
+> An lttng session with the test applications producing an initial bit 
+> rate of 10 kb/s is started and run for about 30 seconds. The starting 
+> sub-buffer size is kept at 128 kb and sub-buf count at 4. The session 
+> is then stopped and destroyed and traces are analyzed to see if there 
+> are any drops. This is being done in a loop with every subsequent 
+> session having an increment of 2 kb/s as long as there are no drops. 
+> If there are drops, I increase the buffer size by a factor of x2 
+> without incrementing the bit rate.
+>
+> I see trace drops happening consistently with test apps producing 
+> traces at less than 40 kb/s, it doesnt seem to help even if I started 
+> with 1mb x 4 sub-buffers.
+>
+> Analysis :
+>
+> I have attached the lttng_relayd , lttng_consumerd_64 logs and the 
+> entire trace directory, hope you will be able to view it.
+> I have modified lttng_relayd code to dump the traces being captured in 
+> the lttng_relayd logs along with debug info.
+>
+> Each test app is producing logs in the form of  :
+> "TraceApp PID - 31940 THID - 31970 @threadRate - 1032 b/s appRate - 
+> 2079 b/s threadTraceNum - 9 appTraceNum - 18  sleepTime - 192120"
+>
+> The test application PID, test application thread id, thread bit rate, 
+> test app bit rate, thread trace number and application trace number s 
+> are part of the trace. So in the above trace, the thread is producing 
+> at 1 kb/s and the whole test app is producing at 2 kb/s.
+>
+> If we look at the babeltrace out put, we see that the Trace with 
+> TraceApp PID - 31940 appTraceNum 2 is missing , with 1, 3, 4, 5 and so 
+> on being successfully captured.
+> I looked at the lttng_relayd logs and found that trace of "appTraceNum 
+> 2" is not delivered/generated by the consumerd to the relayd in 
+> sequence with other traces. To rule out that this is not a test 
+> application problem, you can look at line ltttng_relayd log : 12778 
+> and see traces from appTraceNum - 1 to appTraceNum - 18 including the 
+> appTraceNum 2 are "re-delivered" by the consumerd to the relayd.
+> Essentially, I see appTraceNum 1 through appTraceNum 18 being 
+> delivered twice, once individually where appTraceNum 2 is missing and 
+> once as a group at line 12778 where its present.
+>
+>
+> Request help with
+> 1. why traces are delivered twice, is it by design or a genuine problem ?
+> 2. how to avoid traces being dropped even though buffers are 
+> sufficiently large enough ?
+>
+>
+> Regards,
+> Aravind.
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Jonathan R. Julien
+Efficios
