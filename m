@@ -1,36 +1,19 @@
-From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-Subject: Re: Relayd trace drops
-Date: Fri, 4 Dec 2015 09:06:48 -0500
-Message-ID: <56619DF8.6060003__33723.3245526024$1449238080$gmane$org@efficios.com>
-References: <CACd+_b7qEeW1XD1H_0MT4dDqwLv68rfOURfNDRh6SO=xS4k-Og@mail.gmail.com>
+From: Antoine Busque <abusque@efficios.com>
+Subject: [PATCH lttng-modules] Use MAX_RT_PRIO offset in
+	sched_wakeup_template
+Date: Fri,  4 Dec 2015 15:16:59 -0500
+Message-ID: <1449260219-1944-1-git-send-email-abusque__26279.7305048027$1449260309$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Jonathan.rajotte-julien@efficios.com>)
- id 1a4r0i-0001sG-UC
- for lttng-dev@lists.lttng.org; Fri, 04 Dec 2015 09:07:01 -0500
+ (envelope-from <abusque@efficios.com>) id 1a4wn1-0003ct-8b
+ for lttng-dev@lists.lttng.org; Fri, 04 Dec 2015 15:17:21 -0500
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id E4D683402EF
- for <lttng-dev@lists.lttng.org>; Fri,  4 Dec 2015 14:06:52 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id 2H5HllnJsBSc for <lttng-dev@lists.lttng.org>;
- Fri,  4 Dec 2015 14:06:52 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 367653403DC
- for <lttng-dev@lists.lttng.org>; Fri,  4 Dec 2015 14:06:52 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id ffqENoAym5l5 for <lttng-dev@lists.lttng.org>;
- Fri,  4 Dec 2015 14:06:52 +0000 (UTC)
-Received: from [172.16.0.141] (cable-192.222.213.99.electronicbox.net
- [192.222.213.99])
- by mail.efficios.com (Postfix) with ESMTPSA id CC5C23402EF
- for <lttng-dev@lists.lttng.org>; Fri,  4 Dec 2015 14:06:51 +0000 (UTC)
-In-Reply-To: <CACd+_b7qEeW1XD1H_0MT4dDqwLv68rfOURfNDRh6SO=xS4k-Og@mail.gmail.com>
+ by mail.efficios.com (Postfix) with ESMTP id 54FB5340443
+ for <lttng-dev@lists.lttng.org>; Fri,  4 Dec 2015 20:17:07 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -42,81 +25,42 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Aravind,
+All other sched_* events with prio fields offset the task_struct's
+prio value by subtracting MAX_RT_PRIO. This way the value corresponds
+to that given by the kernel's task_prio function, and thus with the
+prio context field.
 
-Could you share with us the code you are using to obtain the *the 
-performance characteristics* so we can try to reproduce the problem? 
-Could you push it to some
-git repo (github/bitbucket) somewhere?
+This adds the same offset to sched_wakeup, sched_wakeup_new, and
+sched_waking, via the sched_wakeup_template event class. This way
+their value is comparable to other sched_* events, and the prio
+context.
 
-Cheers!
+Signed-off-by: Antoine Busque <abusque@efficios.com>
+---
+ instrumentation/events/lttng-module/sched.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On 2015-12-03 07:01 AM, Aravind HT wrote:
-> Hi,
->
-> I am trying to obtain the performance characteristics of lttng with 
-> the use of test applications. Traces are being produced on a local 
-> node and delivered to relayd that is running on a separate node for 
-> storage.
->
-> An lttng session with the test applications producing an initial bit 
-> rate of 10 kb/s is started and run for about 30 seconds. The starting 
-> sub-buffer size is kept at 128 kb and sub-buf count at 4. The session 
-> is then stopped and destroyed and traces are analyzed to see if there 
-> are any drops. This is being done in a loop with every subsequent 
-> session having an increment of 2 kb/s as long as there are no drops. 
-> If there are drops, I increase the buffer size by a factor of x2 
-> without incrementing the bit rate.
->
-> I see trace drops happening consistently with test apps producing 
-> traces at less than 40 kb/s, it doesnt seem to help even if I started 
-> with 1mb x 4 sub-buffers.
->
-> Analysis :
->
-> I have attached the lttng_relayd , lttng_consumerd_64 logs and the 
-> entire trace directory, hope you will be able to view it.
-> I have modified lttng_relayd code to dump the traces being captured in 
-> the lttng_relayd logs along with debug info.
->
-> Each test app is producing logs in the form of  :
-> "TraceApp PID - 31940 THID - 31970 @threadRate - 1032 b/s appRate - 
-> 2079 b/s threadTraceNum - 9 appTraceNum - 18  sleepTime - 192120"
->
-> The test application PID, test application thread id, thread bit rate, 
-> test app bit rate, thread trace number and application trace number s 
-> are part of the trace. So in the above trace, the thread is producing 
-> at 1 kb/s and the whole test app is producing at 2 kb/s.
->
-> If we look at the babeltrace out put, we see that the Trace with 
-> TraceApp PID - 31940 appTraceNum 2 is missing , with 1, 3, 4, 5 and so 
-> on being successfully captured.
-> I looked at the lttng_relayd logs and found that trace of "appTraceNum 
-> 2" is not delivered/generated by the consumerd to the relayd in 
-> sequence with other traces. To rule out that this is not a test 
-> application problem, you can look at line ltttng_relayd log : 12778 
-> and see traces from appTraceNum - 1 to appTraceNum - 18 including the 
-> appTraceNum 2 are "re-delivered" by the consumerd to the relayd.
-> Essentially, I see appTraceNum 1 through appTraceNum 18 being 
-> delivered twice, once individually where appTraceNum 2 is missing and 
-> once as a group at line 12778 where its present.
->
->
-> Request help with
-> 1. why traces are delivered twice, is it by design or a genuine problem ?
-> 2. how to avoid traces being dropped even though buffers are 
-> sufficiently large enough ?
->
->
-> Regards,
-> Aravind.
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+diff --git a/instrumentation/events/lttng-module/sched.h b/instrumentation/events/lttng-module/sched.h
+index 4e829a3..4f3676b 100644
+--- a/instrumentation/events/lttng-module/sched.h
++++ b/instrumentation/events/lttng-module/sched.h
+@@ -155,7 +155,7 @@ LTTNG_TRACEPOINT_EVENT_CLASS(sched_wakeup_template,
+ 	TP_FIELDS(
+ 		ctf_array_text(char, comm, p->comm, TASK_COMM_LEN)
+ 		ctf_integer(pid_t, tid, p->pid)
+-		ctf_integer(int, prio, p->prio)
++		ctf_integer(int, prio, p->prio - MAX_RT_PRIO)
+ 		ctf_integer(int, target_cpu, task_cpu(p))
+ 	)
+ )
+@@ -175,7 +175,7 @@ LTTNG_TRACEPOINT_EVENT_CLASS(sched_wakeup_template,
+ 	TP_FIELDS(
+ 		ctf_array_text(char, comm, p->comm, TASK_COMM_LEN)
+ 		ctf_integer(pid_t, tid, p->pid)
+-		ctf_integer(int, prio, p->prio)
++		ctf_integer(int, prio, p->prio - MAX_RT_PRIO)
+ 		ctf_integer(int, success, success)
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
+ 		ctf_integer(int, target_cpu, task_cpu(p))
 -- 
-Jonathan R. Julien
-Efficios
+2.6.3
