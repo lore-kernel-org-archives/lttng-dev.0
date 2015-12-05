@@ -1,19 +1,18 @@
-From: Aravind HT <aravind.ht@gmail.com>
-Subject: Re: Relayd trace drops
-Date: Sat, 5 Dec 2015 09:36:53 +0530
-Message-ID: <CACd+_b5AGJKWH58Kq3QP8qW8R7Q9JH3fqbEwU=z8pyg5-DL=KQ__2744.72793466902$1449288478$gmane$org@mail.gmail.com>
-References: <CACd+_b7qEeW1XD1H_0MT4dDqwLv68rfOURfNDRh6SO=xS4k-Og@mail.gmail.com>
- <CA+jJMxsuF+Ywvvhe3L4OqBHTsohyFffPoF4mZWFDqPvBC-P80w@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-modules] Use MAX_RT_PRIO offset in
+ sched_wakeup_template
+Date: Sat, 5 Dec 2015 08:35:49 +0000 (UTC)
+Message-ID: <1489272652.212992.1449304549130.JavaMail.zimbra__42822.3838950091$1449304607$gmane$org@efficios.com>
+References: <1449260219-1944-1-git-send-email-abusque@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1421872092=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lf0-f43.google.com ([209.85.215.43])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <aravind.ht@gmail.com>) id 1a547f-0005p9-3O
- for lttng-dev@lists.lttng.org; Fri, 04 Dec 2015 23:07:00 -0500
-Received: by lfdl133 with SMTP id l133so123361840lfd.2
- for <lttng-dev@lists.lttng.org>; Fri, 04 Dec 2015 20:06:53 -0800 (PST)
-In-Reply-To: <CA+jJMxsuF+Ywvvhe3L4OqBHTsohyFffPoF4mZWFDqPvBC-P80w@mail.gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1a58Ju-0007ES-78
+ for lttng-dev@lists.lttng.org; Sat, 05 Dec 2015 03:35:57 -0500
+In-Reply-To: <1449260219-1944-1-git-send-email-abusque@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,269 +21,60 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Antoine Busque <abusque@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1421872092==
-Content-Type: multipart/alternative; boundary=001a113eb7340bad3e05261ec1d2
+Merged as a "fix" into master and stable-2.7.
 
---001a113eb7340bad3e05261ec1d2
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Thanks,
 
-I am using 2.6.0 .I will try to share the code that I'm using here in some
-time. If there are any specific fixes that are relevant to this issue, see
-if you can provide a link to them. I would ideally like to try them out
-before trying a full upgrade to the latest versions.
+Mathieu
 
-On Fri, Dec 4, 2015 at 6:11 PM, J=C3=A9r=C3=A9mie Galarneau <
-jeremie.galarneau@efficios.com> wrote:
+----- On Dec 4, 2015, at 9:16 PM, Antoine Busque abusque@efficios.com wrote:
 
-> Hi Aravind,
->
-> Can't say I have looked at everything you sent yet, but as a
-> preemptive question, which version are we talking about here? 2.6.0 or
-> 2.6.1? 2.6.1 contains a lot of relay daemon fixes.
->
-> Thanks,
-> J=C3=A9r=C3=A9mie
->
-> On Thu, Dec 3, 2015 at 7:01 AM, Aravind HT <aravind.ht@gmail.com> wrote:
-> > Hi,
-> >
-> > I am trying to obtain the performance characteristics of lttng with the
-> use
-> > of test applications. Traces are being produced on a local node and
-> > delivered to relayd that is running on a separate node for storage.
-> >
-> > An lttng session with the test applications producing an initial bit
-> rate of
-> > 10 kb/s is started and run for about 30 seconds. The starting sub-buffe=
-r
-> > size is kept at 128 kb and sub-buf count at 4. The session is then
-> stopped
-> > and destroyed and traces are analyzed to see if there are any drops.
-> This is
-> > being done in a loop with every subsequent session having an increment
-> of 2
-> > kb/s as long as there are no drops. If there are drops, I increase the
-> > buffer size by a factor of x2 without incrementing the bit rate.
-> >
-> > I see trace drops happening consistently with test apps producing trace=
-s
-> at
-> > less than 40 kb/s, it doesnt seem to help even if I started with 1mb x =
-4
-> > sub-buffers.
-> >
-> > Analysis :
-> >
-> > I have attached the lttng_relayd , lttng_consumerd_64 logs and the enti=
-re
-> > trace directory, hope you will be able to view it.
-> > I have modified lttng_relayd code to dump the traces being captured in
-> the
-> > lttng_relayd logs along with debug info.
-> >
-> > Each test app is producing logs in the form of  :
-> > "TraceApp PID - 31940 THID - 31970 @threadRate - 1032 b/s appRate - 207=
-9
-> b/s
-> > threadTraceNum - 9 appTraceNum - 18  sleepTime - 192120"
-> >
-> > The test application PID, test application thread id, thread bit rate,
-> test
-> > app bit rate, thread trace number and application trace number s are
-> part of
-> > the trace. So in the above trace, the thread is producing at 1 kb/s and
-> the
-> > whole test app is producing at 2 kb/s.
-> >
-> > If we look at the babeltrace out put, we see that the Trace with TraceA=
-pp
-> > PID - 31940 appTraceNum 2 is missing , with 1, 3, 4, 5 and so on being
-> > successfully captured.
-> > I looked at the lttng_relayd logs and found that trace of "appTraceNum
-> 2" is
-> > not delivered/generated by the consumerd to the relayd in sequence with
-> > other traces. To rule out that this is not a test application problem,
-> you
-> > can look at line ltttng_relayd log : 12778 and see traces from
-> appTraceNum -
-> > 1 to appTraceNum - 18 including the appTraceNum 2 are "re-delivered" by
-> the
-> > consumerd to the relayd.
-> > Essentially, I see appTraceNum 1 through appTraceNum 18 being delivered
-> > twice, once individually where appTraceNum 2 is missing and once as a
-> group
-> > at line 12778 where its present.
-> >
-> >
-> > Request help with
-> > 1. why traces are delivered twice, is it by design or a genuine problem=
- ?
-> > 2. how to avoid traces being dropped even though buffers are sufficient=
-ly
-> > large enough ?
-> >
-> >
-> > Regards,
-> > Aravind.
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >
->
->
->
+> All other sched_* events with prio fields offset the task_struct's
+> prio value by subtracting MAX_RT_PRIO. This way the value corresponds
+> to that given by the kernel's task_prio function, and thus with the
+> prio context field.
+> 
+> This adds the same offset to sched_wakeup, sched_wakeup_new, and
+> sched_waking, via the sched_wakeup_template event class. This way
+> their value is comparable to other sched_* events, and the prio
+> context.
+> 
+> Signed-off-by: Antoine Busque <abusque@efficios.com>
+> ---
+> instrumentation/events/lttng-module/sched.h | 4 ++--
+> 1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/instrumentation/events/lttng-module/sched.h
+> b/instrumentation/events/lttng-module/sched.h
+> index 4e829a3..4f3676b 100644
+> --- a/instrumentation/events/lttng-module/sched.h
+> +++ b/instrumentation/events/lttng-module/sched.h
+> @@ -155,7 +155,7 @@ LTTNG_TRACEPOINT_EVENT_CLASS(sched_wakeup_template,
+> 	TP_FIELDS(
+> 		ctf_array_text(char, comm, p->comm, TASK_COMM_LEN)
+> 		ctf_integer(pid_t, tid, p->pid)
+> -		ctf_integer(int, prio, p->prio)
+> +		ctf_integer(int, prio, p->prio - MAX_RT_PRIO)
+> 		ctf_integer(int, target_cpu, task_cpu(p))
+> 	)
+> )
+> @@ -175,7 +175,7 @@ LTTNG_TRACEPOINT_EVENT_CLASS(sched_wakeup_template,
+> 	TP_FIELDS(
+> 		ctf_array_text(char, comm, p->comm, TASK_COMM_LEN)
+> 		ctf_integer(pid_t, tid, p->pid)
+> -		ctf_integer(int, prio, p->prio)
+> +		ctf_integer(int, prio, p->prio - MAX_RT_PRIO)
+> 		ctf_integer(int, success, success)
+> #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
+> 		ctf_integer(int, target_cpu, task_cpu(p))
 > --
-> J=C3=A9r=C3=A9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
->
+> 2.6.3
 
---001a113eb7340bad3e05261ec1d2
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">I am using 2.6.0 .I will try to share the code that I&#39;=
-m using here in some time. If there are any specific fixes that are relevan=
-t to this issue, see if you can provide a link to them. I would ideally lik=
-e to try them out before trying a full upgrade to the latest versions.</div=
-><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Fri, Dec 4, 2=
-015 at 6:11 PM, J=C3=A9r=C3=A9mie Galarneau <span dir=3D"ltr">&lt;<a href=
-=3D"mailto:jeremie.galarneau@efficios.com" target=3D"_blank">jeremie.galarn=
-eau@efficios.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote"=
- style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Hi=
- Aravind,<br>
-<br>
-Can&#39;t say I have looked at everything you sent yet, but as a<br>
-preemptive question, which version are we talking about here? 2.6.0 or<br>
-2.6.1? 2.6.1 contains a lot of relay daemon fixes.<br>
-<br>
-Thanks,<br>
-J=C3=A9r=C3=A9mie<br>
-<div><div class=3D"h5"><br>
-On Thu, Dec 3, 2015 at 7:01 AM, Aravind HT &lt;<a href=3D"mailto:aravind.ht=
-@gmail.com">aravind.ht@gmail.com</a>&gt; wrote:<br>
-&gt; Hi,<br>
-&gt;<br>
-&gt; I am trying to obtain the performance characteristics of lttng with th=
-e use<br>
-&gt; of test applications. Traces are being produced on a local node and<br=
->
-&gt; delivered to relayd that is running on a separate node for storage.<br=
->
-&gt;<br>
-&gt; An lttng session with the test applications producing an initial bit r=
-ate of<br>
-&gt; 10 kb/s is started and run for about 30 seconds. The starting sub-buff=
-er<br>
-&gt; size is kept at 128 kb and sub-buf count at 4. The session is then sto=
-pped<br>
-&gt; and destroyed and traces are analyzed to see if there are any drops. T=
-his is<br>
-&gt; being done in a loop with every subsequent session having an increment=
- of 2<br>
-&gt; kb/s as long as there are no drops. If there are drops, I increase the=
-<br>
-&gt; buffer size by a factor of x2 without incrementing the bit rate.<br>
-&gt;<br>
-&gt; I see trace drops happening consistently with test apps producing trac=
-es at<br>
-&gt; less than 40 kb/s, it doesnt seem to help even if I started with 1mb x=
- 4<br>
-&gt; sub-buffers.<br>
-&gt;<br>
-&gt; Analysis :<br>
-&gt;<br>
-&gt; I have attached the lttng_relayd , lttng_consumerd_64 logs and the ent=
-ire<br>
-&gt; trace directory, hope you will be able to view it.<br>
-&gt; I have modified lttng_relayd code to dump the traces being captured in=
- the<br>
-&gt; lttng_relayd logs along with debug info.<br>
-&gt;<br>
-&gt; Each test app is producing logs in the form of=C2=A0 :<br>
-&gt; &quot;TraceApp PID - 31940 THID - 31970 @threadRate - 1032 b/s appRate=
- - 2079 b/s<br>
-&gt; threadTraceNum - 9 appTraceNum - 18=C2=A0 sleepTime - 192120&quot;<br>
-&gt;<br>
-&gt; The test application PID, test application thread id, thread bit rate,=
- test<br>
-&gt; app bit rate, thread trace number and application trace number s are p=
-art of<br>
-&gt; the trace. So in the above trace, the thread is producing at 1 kb/s an=
-d the<br>
-&gt; whole test app is producing at 2 kb/s.<br>
-&gt;<br>
-&gt; If we look at the babeltrace out put, we see that the Trace with Trace=
-App<br>
-&gt; PID - 31940 appTraceNum 2 is missing , with 1, 3, 4, 5 and so on being=
-<br>
-&gt; successfully captured.<br>
-&gt; I looked at the lttng_relayd logs and found that trace of &quot;appTra=
-ceNum 2&quot; is<br>
-&gt; not delivered/generated by the consumerd to the relayd in sequence wit=
-h<br>
-&gt; other traces. To rule out that this is not a test application problem,=
- you<br>
-&gt; can look at line ltttng_relayd log : 12778 and see traces from appTrac=
-eNum -<br>
-&gt; 1 to appTraceNum - 18 including the appTraceNum 2 are &quot;re-deliver=
-ed&quot; by the<br>
-&gt; consumerd to the relayd.<br>
-&gt; Essentially, I see appTraceNum 1 through appTraceNum 18 being delivere=
-d<br>
-&gt; twice, once individually where appTraceNum 2 is missing and once as a =
-group<br>
-&gt; at line 12778 where its present.<br>
-&gt;<br>
-&gt;<br>
-&gt; Request help with<br>
-&gt; 1. why traces are delivered twice, is it by design or a genuine proble=
-m ?<br>
-&gt; 2. how to avoid traces being dropped even though buffers are sufficien=
-tly<br>
-&gt; large enough ?<br>
-&gt;<br>
-&gt;<br>
-&gt; Regards,<br>
-&gt; Aravind.<br>
-&gt;<br>
-</div></div>&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
-</a><br>
-&gt; <a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
-rel=3D"noreferrer" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman=
-/listinfo/lttng-dev</a><br>
-&gt;<br>
-<span class=3D"HOEnZb"><font color=3D"#888888"><br>
-<br>
-<br>
---<br>
-J=C3=A9r=C3=A9mie Galarneau<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">ht=
-tp://www.efficios.com</a><br>
-</font></span></blockquote></div><br></div>
-
---001a113eb7340bad3e05261ec1d2--
-
-
---===============1421872092==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1421872092==--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
