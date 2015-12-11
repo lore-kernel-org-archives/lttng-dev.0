@@ -1,7 +1,7 @@
-From: Aravind HT <aravind.ht@gmail.com>
+From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
 Subject: Re: Relayd trace drops
-Date: Fri, 11 Dec 2015 22:46:54 +0530
-Message-ID: <CACd+_b46wkEH3jVOfz=SR2eS+ZXuWoL=f81ahNa4uwPNpWTHbw__27067.8699402653$1449854291$gmane$org@mail.gmail.com>
+Date: Fri, 11 Dec 2015 13:03:22 -0500
+Message-ID: <566B0FEA.7040307__12860.5840648108$1449857087$gmane$org@efficios.com>
 References: <CACd+_b7qEeW1XD1H_0MT4dDqwLv68rfOURfNDRh6SO=xS4k-Og@mail.gmail.com>
  <CA+jJMxsuF+Ywvvhe3L4OqBHTsohyFffPoF4mZWFDqPvBC-P80w@mail.gmail.com>
  <CACd+_b5AGJKWH58Kq3QP8qW8R7Q9JH3fqbEwU=z8pyg5-DL=KQ@mail.gmail.com>
@@ -11,16 +11,17 @@ References: <CACd+_b7qEeW1XD1H_0MT4dDqwLv68rfOURfNDRh6SO=xS4k-Og@mail.gmail.com>
  <CACd+_b6byMnZ_oWBqEk44fJOgpVX-oAGMjfh_WV8AV6cKyK9iw@mail.gmail.com>
  <56672F33.3070808@efficios.com>
  <CACd+_b6xjN8BEcfqypkhGrM2XWwxhW9RmCVgHfN5jmksGmVnPw@mail.gmail.com>
+ <CACd+_b46wkEH3jVOfz=SR2eS+ZXuWoL=f81ahNa4uwPNpWTHbw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2118855007=="
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f174.google.com ([209.85.217.174])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <aravind.ht@gmail.com>) id 1a7RJU-0002AL-FE
- for lttng-dev@lists.lttng.org; Fri, 11 Dec 2015 12:17:05 -0500
-Received: by lbbkw15 with SMTP id kw15so74100125lbb.0
- for <lttng-dev@lists.lttng.org>; Fri, 11 Dec 2015 09:16:54 -0800 (PST)
-In-Reply-To: <CACd+_b6xjN8BEcfqypkhGrM2XWwxhW9RmCVgHfN5jmksGmVnPw@mail.gmail.com>
+ (envelope-from <Jonathan.rajotte-julien@efficios.com>)
+ id 1a7S2a-0002QH-Bi
+ for lttng-dev@lists.lttng.org; Fri, 11 Dec 2015 13:03:38 -0500
+In-Reply-To: <CACd+_b46wkEH3jVOfz=SR2eS+ZXuWoL=f81ahNa4uwPNpWTHbw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -29,830 +30,310 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
+To: Aravind HT <aravind.ht@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============2118855007==
-Content-Type: multipart/alternative; boundary=089e0115fd3c6f76710526a27d2e
-
---089e0115fd3c6f76710526a27d2e
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-Did you get a chance to reproduce the problem with the scripts ? Let me
-know if you need any help running it.
-
-Regards,
-Aravind.
-
-On Wed, Dec 9, 2015 at 3:04 PM, Aravind HT <aravind.ht@gmail.com> wrote:
-
-> Sorry about that, not sure how it got missed.
-> Here it is.
->
->
-> # This needs a two node set up (1. local current node 2. remote node )
-> # relayd runs on the current node where traces are captured from the
-> remote node
-> # remote node runs test applications which generate traces.
-> # the launch_script_RN is executed on the current node and uses ssh  to
-> execute commands on the remote node. So this part may not work in every
-> case and may prompt for a password.
-> # if experiencing problems with ssh , kindly check
-> http://serverfault.com/questions/241588/how-to-automate-ssh-login-with-pa=
-ssword
->
-> # =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D       To R=
-un        =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
-> launch_script_RN.py self_profile -c /tmp/configFile.txt
->
->
->
-> # configFile.txt is the file which has configuration params that
-> launchScript
-> # needs to configure lttng sessions. Below is an explanation of the
-> different options.
-> # =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D     configFil=
-e.txt   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D
->
-> [section1]
-> # final out put file path
-> OutputFile =3D /tmp/Final_report.txt
-> # the remote node hostname on which test applications run and the test
-> sessions will be created; this should be something that could be used wit=
-h
-> ssh. Traces will be transported from this node to the lttng_relayd runnin=
-g
-> on the current node.
-> Node =3D MY_REMOTE_NODE
-> # Sub buffer size to start this with
-> SubBufSize =3D 16k
-> # Sub buffer count
-> SubBufCount =3D 4
-> # per uid buffer
-> BufferScheme =3D --buffers-uid
-> # yes
-> EnableTracing =3D yes
-> # Bit rate of the test applications. Comman seperated example "1, 3, 3,
-> 50" sayss 4 test applications producing 1, 3, 3, and 50 Kb/s traces.
-> # So with the below, we just start with 1 test application producing 10
-> kb/s
-> TestApps =3D 10
-> # session life time in seonds
-> TestTime =3D 10
-> # Max number of successive sessions to configure. if n then n-1 sessions
-> are run, ex MaxRun =3D 2 will run 1 session.
-> MaxRun =3D 100
->
->
-> # =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  Place the=
- following files under =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> # /tmp on the remote node
-> clean_RemNode_apps.sh
-> report_lttng_script.sh
->
-> # rest of the scripts under /usr/sbin on the current local node on which
-> lttng_realyd runs
-> # Define a trace point MY_TRACE to take a single string arg with
-> LOG_TEST_APP_PROFILING as the provider, compile test lttng_testApp and
-> place it under /usr/sbin of the remote host
->
-> # in launch_script_RN.py change currentNodeIP to the IP address on which
-> relayd is receiving, default ports are used.
->
-> # lttng_relayd is started as
-> /usr/bin/lttng-relayd -o /var/log/lttng-traces -d
->
-> # lttng_sessiond is started as
-> /usr/bin/lttng-sessiond --consumerd32-path
-> /usr/lib/lttng/libexec/lttng-consumerd --consumerd32-libdir /usr/lib/
-> --consumerd64-path /usr/lib64/lttng/libexec/lttng-consumerd
-> --consumerd64-libdir /usr/lib64/ -b --no-kernel
->
->
->
->
-> Regards,
-> Aravind.
->
-> On Wed, Dec 9, 2015 at 12:57 AM, Jonathan Rajotte Julien <
-> Jonathan.rajotte-julien@efficios.com> wrote:
->
->> Hi Aravind,
->>
->> There is no README in the archive you sent.
->>
->> Cheers
->>
->> On 2015-12-08 07:51 AM, Aravind HT wrote:
->>
->>> Hi,
->>>
->>> I am trying to upgrade in parallel, but this issue may still be present
->>> after I upgrade or may be temporarily masked. So I need to find the roo=
-t
->>> cause for this and then see if its available on the latest before
->>> committing to upgrade.
->>>
->>> There is another issue i'm hitting, the lttng list command hangs after
->>> lttng destroy session when running the profiling.
->>>
->>> I found that consumerd 64 goes into an infinite loop waiting to flush
->>> metadata in lttng_ustconsumer_recv_metadata() :: while
->>> (consumer_metadata_cache_flushed(channel, offset + len, timer)) .
->>> In consumer_metadata_cache, channel->metadata_stream->endpoint_status i=
-s
->>> CONSUMER_ENDPOINT_ACTIVE, metadata_stream->ust_metadata_pushed is 0 wit=
-h
->>> offset having some value. This call always returns a 1 from the last el=
-se{}
->>> block resulting in an infinite loop. Upon searching the forum, I found =
-the
->>> same issue being reported here :
->>> https://www.mail-archive.com/lttng-dev@lists.lttng.org/msg07982.html
->>>
->>> Regards,
->>> Aravind.
->>>
->>>
->>> On Tue, Dec 8, 2015 at 12:43 AM, Jonathan Rajotte <
->>> jonathan.r.julien@gmail.com> wrote:
->>>
->>>     Hi Aravind,
->>>
->>>     Did you have the chance to upgrade to 2.6.1.If so where you able
->>>     to reproduce?
->>>
->>>     Cheers
->>>
->>>     On Mon, Dec 7, 2015 at 1:07 PM, Aravind HT <aravind.ht@gmail.com>
->>>     wrote:
->>>
->>>         Hi,
->>>
->>>         I have attached the complete profiling scripts here, its a bit
->>>         shabby, im new to python.
->>>
->>>         There is a README which has the details on how to execute it.
->>>         Im using a Yocto 1.6 on x86_64 platforms on both the nodes.
->>>
->>>
->>>         Running this script when there are other sessions running
->>>         seems to reproduce this problem easily.
->>>         Please try it and let me know if you have any issues
->>>         reproducing the problem.
->>>
->>>         Regards,
->>>         Aravind.
->>>
->>>         On Sat, Dec 5, 2015 at 5:23 PM, J=C3=A9r=C3=A9mie Galarneau
->>>         <jeremie.galarneau@efficios.com
->>>         <mailto:jeremie.galarneau@efficios.com>> wrote:
->>>
->>>             On Fri, Dec 4, 2015 at 11:06 PM, Aravind HT
->>>             <aravind.ht@gmail.com <mailto:aravind.ht@gmail.com>> wrote:
->>>             > I am using 2.6.0 .I will try to share the code that I'm
->>>             using here in some
->>>             > time. If there are any specific fixes that are relevant
->>>             to this issue, see
->>>             > if you can provide a link to them. I would ideally like
->>>             to try them out
->>>             > before trying a full upgrade to the latest versions.
->>>
->>>             Hi,
->>>
->>>             Can you provide more information on the system? Which
->>>             distribution,
->>>             architecture, kernel version?
->>>
->>>             The verbose sessiond logs might help pinpoint any
->>>             unexpected behaviour
->>>             here (are all applications registering as expected?).
->>>
->>>             J=C3=A9r=C3=A9mie
->>>
->>>             >
->>>             > On Fri, Dec 4, 2015 at 6:11 PM, J=C3=A9r=C3=A9mie Galarne=
-au
->>>             > <jeremie.galarneau@efficios.com
->>>             <mailto:jeremie.galarneau@efficios.com>> wrote:
->>>             >>
->>>             >> Hi Aravind,
->>>             >>
->>>             >> Can't say I have looked at everything you sent yet, but
->>>             as a
->>>             >> preemptive question, which version are we talking about
->>>             here? 2.6.0 or
->>>             >> 2.6.1? 2.6.1 contains a lot of relay daemon fixes.
->>>             >>
->>>             >> Thanks,
->>>             >> J=C3=A9r=C3=A9mie
->>>             >>
->>>             >> On Thu, Dec 3, 2015 at 7:01 AM, Aravind HT
->>>             <aravind.ht@gmail.com> wrote:
->>>             >> > Hi,
->>>             >> >
->>>             >> > I am trying to obtain the performance characteristics
->>>             of lttng with the
->>>             >> > use
->>>             >> > of test applications. Traces are being produced on a
->>>             local node and
->>>             >> > delivered to relayd that is running on a separate
->>>             node for storage.
->>>             >> >
->>>             >> > An lttng session with the test applications producing
->>>             an initial bit
->>>             >> > rate of
->>>             >> > 10 kb/s is started and run for about 30 seconds. The
->>>             starting sub-buffer
->>>             >> > size is kept at 128 kb and sub-buf count at 4. The
->>>             session is then
->>>             >> > stopped
->>>             >> > and destroyed and traces are analyzed to see if there
->>>             are any drops.
->>>             >> > This is
->>>             >> > being done in a loop with every subsequent session
->>>             having an increment
->>>             >> > of 2
->>>             >> > kb/s as long as there are no drops. If there are
->>>             drops, I increase the
->>>             >> > buffer size by a factor of x2 without incrementing
->>>             the bit rate.
->>>             >> >
->>>             >> > I see trace drops happening consistently with test
->>>             apps producing traces
->>>             >> > at
->>>             >> > less than 40 kb/s, it doesnt seem to help even if I
->>>             started with 1mb x 4
->>>             >> > sub-buffers.
->>>             >> >
->>>             >> > Analysis :
->>>             >> >
->>>             >> > I have attached the lttng_relayd , lttng_consumerd_64
->>>             logs and the
->>>             >> > entire
->>>             >> > trace directory, hope you will be able to view it.
->>>             >> > I have modified lttng_relayd code to dump the traces
->>>             being captured in
->>>             >> > the
->>>             >> > lttng_relayd logs along with debug info.
->>>             >> >
->>>             >> > Each test app is producing logs in the form of  :
->>>             >> > "TraceApp PID - 31940 THID - 31970 @threadRate - 1032
->>>             b/s appRate - 2079
->>>             >> > b/s
->>>             >> > threadTraceNum - 9 appTraceNum - 18  sleepTime - 19212=
-0"
->>>             >> >
->>>             >> > The test application PID, test application thread id,
->>>             thread bit rate,
->>>             >> > test
->>>             >> > app bit rate, thread trace number and application
->>>             trace number s are
->>>             >> > part of
->>>             >> > the trace. So in the above trace, the thread is
->>>             producing at 1 kb/s and
->>>             >> > the
->>>             >> > whole test app is producing at 2 kb/s.
->>>             >> >
->>>             >> > If we look at the babeltrace out put, we see that the
->>>             Trace with
->>>             >> > TraceApp
->>>             >> > PID - 31940 appTraceNum 2 is missing , with 1, 3, 4,
->>>             5 and so on being
->>>             >> > successfully captured.
->>>             >> > I looked at the lttng_relayd logs and found that
->>>             trace of "appTraceNum
->>>             >> > 2" is
->>>             >> > not delivered/generated by the consumerd to the
->>>             relayd in sequence with
->>>             >> > other traces. To rule out that this is not a test
->>>             application problem,
->>>             >> > you
->>>             >> > can look at line ltttng_relayd log : 12778 and see
->>>             traces from
->>>             >> > appTraceNum -
->>>             >> > 1 to appTraceNum - 18 including the appTraceNum 2 are
->>>             "re-delivered" by
->>>             >> > the
->>>             >> > consumerd to the relayd.
->>>             >> > Essentially, I see appTraceNum 1 through appTraceNum
->>>             18 being delivered
->>>             >> > twice, once individually where appTraceNum 2 is
->>>             missing and once as a
->>>             >> > group
->>>             >> > at line 12778 where its present.
->>>             >> >
->>>             >> >
->>>             >> > Request help with
->>>             >> > 1. why traces are delivered twice, is it by design or
->>>             a genuine problem
->>>             >> > ?
->>>             >> > 2. how to avoid traces being dropped even though
->>>             buffers are
->>>             >> > sufficiently
->>>             >> > large enough ?
->>>             >> >
->>>             >> >
->>>             >> > Regards,
->>>             >> > Aravind.
->>>             >> >
->>>             >> > _______________________________________________
->>>             >> > lttng-dev mailing list
->>>             >> > lttng-dev@lists.lttng.org
->>>             >> >
->>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>             >> >
->>>             >>
->>>             >>
->>>             >>
->>>             >> --
->>>             >> J=C3=A9r=C3=A9mie Galarneau
->>>             >> EfficiOS Inc.
->>>             >> http://www.efficios.com
->>>             >
->>>             >
->>>
->>>
->>>
->>>             --
->>>             J=C3=A9r=C3=A9mie Galarneau
->>>             EfficiOS Inc.
->>>             http://www.efficios.com
->>>
->>>
->>>
->>>         _______________________________________________
->>>         lttng-dev mailing list
->>>         lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>
->>>         http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>
->>>
->>>
->>>
->>>     --     Jonathan Rajotte Julien
->>>
->>>
->>>
->>>
->>> _______________________________________________
->>> lttng-dev mailing list
->>> lttng-dev@lists.lttng.org
->>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>>
->>
->> --
->> Jonathan R. Julien
->> Efficios
->>
->>
->
-
---089e0115fd3c6f76710526a27d2e
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi,<div><br></div><div>Did you get a chance to reproduce t=
-he problem with the scripts ? Let me know if you need any help running it.<=
-/div><div><br></div><div>Regards,</div><div>Aravind.</div></div><div class=
-=3D"gmail_extra"><br><div class=3D"gmail_quote">On Wed, Dec 9, 2015 at 3:04=
- PM, Aravind HT <span dir=3D"ltr">&lt;<a href=3D"mailto:aravind.ht@gmail.co=
-m" target=3D"_blank">aravind.ht@gmail.com</a>&gt;</span> wrote:<br><blockqu=
-ote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc s=
-olid;padding-left:1ex"><div dir=3D"ltr">Sorry about that, not sure how it g=
-ot missed.<div>Here it is.</div><div><br></div><div><br></div><div><div># T=
-his needs a two node set up (1. local current node 2. remote node )</div><d=
-iv># relayd runs on the current node where traces are captured from the rem=
-ote node</div><div># remote node runs test applications which generate trac=
-es.</div><div># the launch_script_RN is executed on the current node and us=
-es ssh =C2=A0to execute commands on the remote node. So this part may not w=
-ork in every case and may prompt for a password.</div><div># if experiencin=
-g problems with ssh , kindly check <a href=3D"http://serverfault.com/questi=
-ons/241588/how-to-automate-ssh-login-with-password" target=3D"_blank">http:=
-//serverfault.com/questions/241588/how-to-automate-ssh-login-with-password<=
-/a></div><div><br></div><div># =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D =C2=A0 =C2=A0 =C2=A0 To Run =C2=A0 =C2=A0 =C2=A0 =C2=A0=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D</div><div>launch_script_RN.py self_profile -c /tmp/configFile.=
-txt</div><div><br></div><div><br></div><div><br></div><div># configFile.txt=
- is the file which has configuration params that launchScript</div><div># n=
-eeds to configure lttng sessions. Below is an explanation of the different =
-options.</div><div># =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D =C2=A0 =C2=A0 configFile.txt =C2=A0 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D</div><div><br></div>=
-<div>[section1]</div><div># final out put file path</div><div>OutputFile =
-=3D /tmp/Final_report.txt</div><div># the remote node hostname on which tes=
-t applications run and the test sessions will be created; this should be so=
-mething that could be used with ssh. Traces will be transported from this n=
-ode to the lttng_relayd running on the current node.</div><div>Node =3D MY_=
-REMOTE_NODE</div><div># Sub buffer size to start this with</div><div>SubBuf=
-Size =3D 16k</div><div># Sub buffer count</div><div>SubBufCount =3D 4</div>=
-<div># per uid buffer</div><div>BufferScheme =3D --buffers-uid</div><div># =
-yes</div><div>EnableTracing =3D yes</div><div># Bit rate of the test applic=
-ations. Comman seperated example &quot;1, 3, 3, 50&quot; sayss 4 test appli=
-cations producing 1, 3, 3, and 50 Kb/s traces.</div><div># So with the belo=
-w, we just start with 1 test application producing 10 kb/s</div><div>TestAp=
-ps =3D 10</div><div># session life time in seonds</div><div>TestTime =3D 10=
-</div><div># Max number of successive sessions to configure. if n then n-1 =
-sessions are run, ex MaxRun =3D 2 will run 1 session.</div><div>MaxRun =3D =
-100</div><div><br></div><div><br></div><div># =3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =C2=A0Place the following files under =3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D</div><div><br></div><div># /tmp =
-on the remote node</div><div>clean_RemNode_apps.sh</div><div>report_lttng_s=
-cript.sh</div><div><br></div><div># rest of the scripts under /usr/sbin on =
-the current local node on which lttng_realyd runs</div><div># Define a trac=
-e point MY_TRACE to take a single string arg with LOG_TEST_APP_PROFILING as=
- the provider, compile test lttng_testApp and place it under /usr/sbin of t=
-he remote host</div><div><br></div><div># in launch_script_RN.py change cur=
-rentNodeIP to the IP address on which relayd is receiving, default ports ar=
-e used.<br></div><div><br></div><div># lttng_relayd is started as</div><div=
->/usr/bin/lttng-relayd -o /var/log/lttng-traces -d</div><div><br></div><div=
-># lttng_sessiond is started as</div><div>/usr/bin/lttng-sessiond --consume=
-rd32-path /usr/lib/lttng/libexec/lttng-consumerd --consumerd32-libdir /usr/=
-lib/ --consumerd64-path /usr/lib64/lttng/libexec/lttng-consumerd --consumer=
-d64-libdir /usr/lib64/ -b --no-kernel</div><div><br></div><div><br></div></=
-div><div><br></div><div><br></div><div>Regards,</div><div>Aravind.</div></d=
-iv><div class=3D"HOEnZb"><div class=3D"h5"><div class=3D"gmail_extra"><br><=
-div class=3D"gmail_quote">On Wed, Dec 9, 2015 at 12:57 AM, Jonathan Rajotte=
- Julien <span dir=3D"ltr">&lt;<a href=3D"mailto:Jonathan.rajotte-julien@eff=
-icios.com" target=3D"_blank">Jonathan.rajotte-julien@efficios.com</a>&gt;</=
-span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8e=
-x;border-left:1px #ccc solid;padding-left:1ex">Hi Aravind,<br>
-<br>
-There is no README in the archive you sent.<br>
-<br>
-Cheers<span><br>
-<br>
-On 2015-12-08 07:51 AM, Aravind HT wrote:<br>
-</span><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-=
-left:1px #ccc solid;padding-left:1ex">
-Hi,<br>
-<br><div><div>
-I am trying to upgrade in parallel, but this issue may still be present aft=
-er I upgrade or may be temporarily masked. So I need to find the root cause=
- for this and then see if its available on the latest before committing to =
-upgrade.<br>
-<br>
-There is another issue i&#39;m hitting, the lttng list command hangs after =
-lttng destroy session when running the profiling.<br>
-<br>
-I found that consumerd 64 goes into an infinite loop waiting to flush metad=
-ata in lttng_ustconsumer_recv_metadata() :: while (consumer_metadata_cache_=
-flushed(channel, offset + len, timer)) .<br>
-In consumer_metadata_cache, channel-&gt;metadata_stream-&gt;endpoint_status=
- is CONSUMER_ENDPOINT_ACTIVE, metadata_stream-&gt;ust_metadata_pushed is 0 =
-with offset having some value. This call always returns a 1 from the last e=
-lse{} block resulting in an infinite loop. Upon searching the forum, I foun=
-d the same issue being reported here :<br>
-<a href=3D"https://www.mail-archive.com/lttng-dev@lists.lttng.org/msg07982.=
-html" rel=3D"noreferrer" target=3D"_blank">https://www.mail-archive.com/ltt=
-ng-dev@lists.lttng.org/msg07982.html</a><br>
-<br>
-Regards,<br>
-Aravind.<br>
-<br>
-<br>
-On Tue, Dec 8, 2015 at 12:43 AM, Jonathan Rajotte &lt;<a href=3D"mailto:jon=
-athan.r.julien@gmail.com" target=3D"_blank">jonathan.r.julien@gmail.com</a>=
-&gt; wrote:<br>
-<br>
-=C2=A0 =C2=A0 Hi Aravind,<br>
-<br>
-=C2=A0 =C2=A0 Did you have the chance to upgrade to 2.6.1.If so where you a=
-ble<br>
-=C2=A0 =C2=A0 to reproduce?<br>
-<br>
-=C2=A0 =C2=A0 Cheers<br>
-<br>
-=C2=A0 =C2=A0 On Mon, Dec 7, 2015 at 1:07 PM, Aravind HT &lt;<a href=3D"mai=
-lto:aravind.ht@gmail.com" target=3D"_blank">aravind.ht@gmail.com</a>&gt;<br=
->
-=C2=A0 =C2=A0 wrote:<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 Hi,<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 I have attached the complete profiling scripts =
-here, its a bit<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 shabby, im new to python.<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 There is a README which has the details on how =
-to execute it.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 Im using a Yocto 1.6 on x86_64 platforms on bot=
-h the nodes.<br>
-<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 Running this script when there are other sessio=
-ns running<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 seems to reproduce this problem easily.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 Please try it and let me know if you have any i=
-ssues<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 reproducing the problem.<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 Regards,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 Aravind.<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 On Sat, Dec 5, 2015 at 5:23 PM, J=C3=A9r=C3=A9m=
-ie Galarneau<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 &lt;<a href=3D"mailto:jeremie.galarneau@efficio=
-s.com" target=3D"_blank">jeremie.galarneau@efficios.com</a><br></div></div>=
-<span>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 &lt;mailto:<a href=3D"mailto:jeremie.galarneau@=
-efficios.com" target=3D"_blank">jeremie.galarneau@efficios.com</a>&gt;&gt; =
-wrote:<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 On Fri, Dec 4, 2015 at 11:06 PM, =
-Aravind HT<br></span><span>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &lt;<a href=3D"mailto:aravind.ht@=
-gmail.com" target=3D"_blank">aravind.ht@gmail.com</a> &lt;mailto:<a href=3D=
-"mailto:aravind.ht@gmail.com" target=3D"_blank">aravind.ht@gmail.com</a>&gt=
-;&gt; wrote:<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt; I am using 2.6.0 .I will try=
- to share the code that I&#39;m<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 using here in some<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt; time. If there are any speci=
-fic fixes that are relevant<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 to this issue, see<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt; if you can provide a link to=
- them. I would ideally like<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 to try them out<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt; before trying a full upgrade=
- to the latest versions.<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 Hi,<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 Can you provide more information =
-on the system? Which<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 distribution,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 architecture, kernel version?<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 The verbose sessiond logs might h=
-elp pinpoint any<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 unexpected behaviour<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 here (are all applications regist=
-ering as expected?).<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 J=C3=A9r=C3=A9mie<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt; On Fri, Dec 4, 2015 at 6:11 =
-PM, J=C3=A9r=C3=A9mie Galarneau<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt; &lt;<a href=3D"mailto:jeremi=
-e.galarneau@efficios.com" target=3D"_blank">jeremie.galarneau@efficios.com<=
-/a><br></span><div><div>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &lt;mailto:<a href=3D"mailto:jere=
-mie.galarneau@efficios.com" target=3D"_blank">jeremie.galarneau@efficios.co=
-m</a>&gt;&gt; wrote:<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; Hi Aravind,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; Can&#39;t say I have loo=
-ked at everything you sent yet, but<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 as a<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; preemptive question, whi=
-ch version are we talking about<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 here? 2.6.0 or<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; 2.6.1? 2.6.1 contains a =
-lot of relay daemon fixes.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; Thanks,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; J=C3=A9r=C3=A9mie<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; On Thu, Dec 3, 2015 at 7=
-:01 AM, Aravind HT<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &lt;<a href=3D"mailto:aravind.ht@=
-gmail.com" target=3D"_blank">aravind.ht@gmail.com</a>&gt; wrote:<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; Hi,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; I am trying to obta=
-in the performance characteristics<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 of lttng with the<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; use<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; of test application=
-s. Traces are being produced on a<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 local node and<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; delivered to relayd=
- that is running on a separate<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 node for storage.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; An lttng session wi=
-th the test applications producing<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 an initial bit<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; rate of<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; 10 kb/s is started =
-and run for about 30 seconds. The<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 starting sub-buffer<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; size is kept at 128=
- kb and sub-buf count at 4. The<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 session is then<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; stopped<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; and destroyed and t=
-races are analyzed to see if there<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 are any drops.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; This is<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; being done in a loo=
-p with every subsequent session<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 having an increment<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; of 2<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; kb/s as long as the=
-re are no drops. If there are<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 drops, I increase the<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; buffer size by a fa=
-ctor of x2 without incrementing<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 the bit rate.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; I see trace drops h=
-appening consistently with test<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 apps producing traces<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; at<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; less than 40 kb/s, =
-it doesnt seem to help even if I<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 started with 1mb x 4<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; sub-buffers.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; Analysis :<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; I have attached the=
- lttng_relayd , lttng_consumerd_64<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 logs and the<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; entire<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; trace directory, ho=
-pe you will be able to view it.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; I have modified ltt=
-ng_relayd code to dump the traces<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 being captured in<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; the<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; lttng_relayd logs a=
-long with debug info.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; Each test app is pr=
-oducing logs in the form of=C2=A0 :<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; &quot;TraceApp PID =
-- 31940 THID - 31970 @threadRate - 1032<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 b/s appRate - 2079<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; b/s<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; threadTraceNum - 9 =
-appTraceNum - 18=C2=A0 sleepTime - 192120&quot;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; The test applicatio=
-n PID, test application thread id,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 thread bit rate,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; test<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; app bit rate, threa=
-d trace number and application<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 trace number s are<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; part of<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; the trace. So in th=
-e above trace, the thread is<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 producing at 1 kb/s and<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; the<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; whole test app is p=
-roducing at 2 kb/s.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; If we look at the b=
-abeltrace out put, we see that the<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 Trace with<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; TraceApp<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; PID - 31940 appTrac=
-eNum 2 is missing , with 1, 3, 4,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 5 and so on being<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; successfully captur=
-ed.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; I looked at the ltt=
-ng_relayd logs and found that<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 trace of &quot;appTraceNum<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; 2&quot; is<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; not delivered/gener=
-ated by the consumerd to the<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 relayd in sequence with<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; other traces. To ru=
-le out that this is not a test<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 application problem,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; you<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; can look at line lt=
-ttng_relayd log : 12778 and see<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 traces from<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; appTraceNum -<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; 1 to appTraceNum - =
-18 including the appTraceNum 2 are<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &quot;re-delivered&quot; by<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; the<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; consumerd to the re=
-layd.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; Essentially, I see =
-appTraceNum 1 through appTraceNum<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 18 being delivered<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; twice, once individ=
-ually where appTraceNum 2 is<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 missing and once as a<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; group<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; at line 12778 where=
- its present.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; Request help with<b=
-r>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; 1. why traces are d=
-elivered twice, is it by design or<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 a genuine problem<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; ?<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; 2. how to avoid tra=
-ces being dropped even though<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 buffers are<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; sufficiently<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; large enough ?<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; Regards,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; Aravind.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; ___________________=
-____________________________<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; lttng-dev mailing l=
-ist<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; <a href=3D"mailto:l=
-ttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.org</a><b=
-r>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt; <a href=3D"http://l=
-ists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=3D"noreferrer" targe=
-t=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
-br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; --<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; J=C3=A9r=C3=A9mie Galarn=
-eau<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; EfficiOS Inc.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;&gt; <a href=3D"http://www.ef=
-ficios.com" rel=3D"noreferrer" target=3D"_blank">http://www.efficios.com</a=
-><br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &gt;<br>
-<br>
-<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 --<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 J=C3=A9r=C3=A9mie Galarneau<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 EfficiOS Inc.<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 <a href=3D"http://www.efficios.co=
-m" rel=3D"noreferrer" target=3D"_blank">http://www.efficios.com</a><br>
-<br>
-<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 _______________________________________________=
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 lttng-dev mailing list<br></div></div>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 <a href=3D"mailto:lttng-dev@lists.lttng.org" ta=
-rget=3D"_blank">lttng-dev@lists.lttng.org</a> &lt;mailto:<a href=3D"mailto:=
-lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.org</a>&=
-gt;<span><br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 <a href=3D"http://lists.lttng.org/cgi-bin/mailm=
-an/listinfo/lttng-dev" rel=3D"noreferrer" target=3D"_blank">http://lists.lt=
-tng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br>
-<br>
-<br>
-<br>
-<br>
-=C2=A0 =C2=A0 --=C2=A0 =C2=A0 =C2=A0Jonathan Rajotte Julien<br>
-<br>
-<br>
-<br>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
-<a href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/li=
-stinfo/lttng-dev</a><br>
-</span></blockquote><span><font color=3D"#888888">
-<br>
--- <br>
-Jonathan R. Julien<br>
-Efficios<br>
-<br>
-</font></span></blockquote></div><br></div>
-</div></div></blockquote></div><br></div>
-
---089e0115fd3c6f76710526a27d2e--
-
-
---===============2118855007==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2118855007==--
+SGkgQXJhdmluZCwKCk9uIDIwMTUtMTItMTEgMTI6MTYgUE0sIEFyYXZpbmQgSFQgd3JvdGU6Cj4g
+SGksCj4KPiBEaWQgeW91IGdldCBhIGNoYW5jZSB0byByZXByb2R1Y2UgdGhlIHByb2JsZW0gd2l0
+aCB0aGUgc2NyaXB0cyA/IExldCAKPiBtZSBrbm93IGlmIHlvdSBuZWVkIGFueSBoZWxwIHJ1bm5p
+bmcgaXQuCgpUaW1lIGlzIGEgc2NhcmNlIHJlc291cmNlIHVuZm9ydHVuYXRlbHkuIEJ1dCB1bnRp
+bCBJIGhhdmUgdGhlIHRpbWUgdG8gCmxvb2sgYXQgaXQgeW91IG1pZ2h0IHdhbnQgdG8gaW52ZXN0
+aWdhdGUgaWYgeW91IGFyZSBhYmxlIHRvIHJlcHJvZHVjZSBpdCAKb24gMi42LjEvMi43LjAvbWFz
+dGVyIG9uIDIgcmVndWxhciAoeDg2XzY0LCB1YnVudHUvZGViaWFuKSBWTSB0aGlzIHdvdWxkIApy
+ZWFsbHkgaGVscC4KCkNoZWVycyEKCj4KPiBSZWdhcmRzLAo+IEFyYXZpbmQuCj4KPiBPbiBXZWQs
+IERlYyA5LCAyMDE1IGF0IDM6MDQgUE0sIEFyYXZpbmQgSFQgPGFyYXZpbmQuaHRAZ21haWwuY29t
+IAo+IDxtYWlsdG86YXJhdmluZC5odEBnbWFpbC5jb20+PiB3cm90ZToKPgo+ICAgICBTb3JyeSBh
+Ym91dCB0aGF0LCBub3Qgc3VyZSBob3cgaXQgZ290IG1pc3NlZC4KPiAgICAgSGVyZSBpdCBpcy4K
+Pgo+Cj4gICAgICMgVGhpcyBuZWVkcyBhIHR3byBub2RlIHNldCB1cCAoMS4gbG9jYWwgY3VycmVu
+dCBub2RlIDIuIHJlbW90ZSBub2RlICkKPiAgICAgIyByZWxheWQgcnVucyBvbiB0aGUgY3VycmVu
+dCBub2RlIHdoZXJlIHRyYWNlcyBhcmUgY2FwdHVyZWQgZnJvbQo+ICAgICB0aGUgcmVtb3RlIG5v
+ZGUKPiAgICAgIyByZW1vdGUgbm9kZSBydW5zIHRlc3QgYXBwbGljYXRpb25zIHdoaWNoIGdlbmVy
+YXRlIHRyYWNlcy4KPiAgICAgIyB0aGUgbGF1bmNoX3NjcmlwdF9STiBpcyBleGVjdXRlZCBvbiB0
+aGUgY3VycmVudCBub2RlIGFuZCB1c2VzCj4gICAgIHNzaCAgdG8gZXhlY3V0ZSBjb21tYW5kcyBv
+biB0aGUgcmVtb3RlIG5vZGUuIFNvIHRoaXMgcGFydCBtYXkgbm90Cj4gICAgIHdvcmsgaW4gZXZl
+cnkgY2FzZSBhbmQgbWF5IHByb21wdCBmb3IgYSBwYXNzd29yZC4KPiAgICAgIyBpZiBleHBlcmll
+bmNpbmcgcHJvYmxlbXMgd2l0aCBzc2ggLCBraW5kbHkgY2hlY2sKPiAgICAgaHR0cDovL3NlcnZl
+cmZhdWx0LmNvbS9xdWVzdGlvbnMvMjQxNTg4L2hvdy10by1hdXRvbWF0ZS1zc2gtbG9naW4td2l0
+aC1wYXNzd29yZAo+Cj4gICAgICMgPT09PT09PT09PT09PT09PT09PT0gICAgICAgVG8gUnVuICA9
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PQo+ICAgICBsYXVuY2hfc2NyaXB0X1JOLnB5IHNl
+bGZfcHJvZmlsZSAtYyAvdG1wL2NvbmZpZ0ZpbGUudHh0Cj4KPgo+Cj4gICAgICMgY29uZmlnRmls
+ZS50eHQgaXMgdGhlIGZpbGUgd2hpY2ggaGFzIGNvbmZpZ3VyYXRpb24gcGFyYW1zIHRoYXQKPiAg
+ICAgbGF1bmNoU2NyaXB0Cj4gICAgICMgbmVlZHMgdG8gY29uZmlndXJlIGx0dG5nIHNlc3Npb25z
+LiBCZWxvdyBpcyBhbiBleHBsYW5hdGlvbiBvZgo+ICAgICB0aGUgZGlmZmVyZW50IG9wdGlvbnMu
+Cj4gICAgICMgPT09PT09PT09PT09PT09PT09PSAgICAgY29uZmlnRmlsZS50eHQgPT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT0KPgo+ICAgICBbc2VjdGlvbjFdCj4gICAgICMgZmluYWwgb3V0
+IHB1dCBmaWxlIHBhdGgKPiAgICAgT3V0cHV0RmlsZSA9IC90bXAvRmluYWxfcmVwb3J0LnR4dAo+
+ICAgICAjIHRoZSByZW1vdGUgbm9kZSBob3N0bmFtZSBvbiB3aGljaCB0ZXN0IGFwcGxpY2F0aW9u
+cyBydW4gYW5kIHRoZQo+ICAgICB0ZXN0IHNlc3Npb25zIHdpbGwgYmUgY3JlYXRlZDsgdGhpcyBz
+aG91bGQgYmUgc29tZXRoaW5nIHRoYXQgY291bGQKPiAgICAgYmUgdXNlZCB3aXRoIHNzaC4gVHJh
+Y2VzIHdpbGwgYmUgdHJhbnNwb3J0ZWQgZnJvbSB0aGlzIG5vZGUgdG8gdGhlCj4gICAgIGx0dG5n
+X3JlbGF5ZCBydW5uaW5nIG9uIHRoZSBjdXJyZW50IG5vZGUuCj4gICAgIE5vZGUgPSBNWV9SRU1P
+VEVfTk9ERQo+ICAgICAjIFN1YiBidWZmZXIgc2l6ZSB0byBzdGFydCB0aGlzIHdpdGgKPiAgICAg
+U3ViQnVmU2l6ZSA9IDE2awo+ICAgICAjIFN1YiBidWZmZXIgY291bnQKPiAgICAgU3ViQnVmQ291
+bnQgPSA0Cj4gICAgICMgcGVyIHVpZCBidWZmZXIKPiAgICAgQnVmZmVyU2NoZW1lID0gLS1idWZm
+ZXJzLXVpZAo+ICAgICAjIHllcwo+ICAgICBFbmFibGVUcmFjaW5nID0geWVzCj4gICAgICMgQml0
+IHJhdGUgb2YgdGhlIHRlc3QgYXBwbGljYXRpb25zLiBDb21tYW4gc2VwZXJhdGVkIGV4YW1wbGUg
+IjEsCj4gICAgIDMsIDMsIDUwIiBzYXlzcyA0IHRlc3QgYXBwbGljYXRpb25zIHByb2R1Y2luZyAx
+LCAzLCAzLCBhbmQgNTAgS2Ivcwo+ICAgICB0cmFjZXMuCj4gICAgICMgU28gd2l0aCB0aGUgYmVs
+b3csIHdlIGp1c3Qgc3RhcnQgd2l0aCAxIHRlc3QgYXBwbGljYXRpb24KPiAgICAgcHJvZHVjaW5n
+IDEwIGtiL3MKPiAgICAgVGVzdEFwcHMgPSAxMAo+ICAgICAjIHNlc3Npb24gbGlmZSB0aW1lIGlu
+IHNlb25kcwo+ICAgICBUZXN0VGltZSA9IDEwCj4gICAgICMgTWF4IG51bWJlciBvZiBzdWNjZXNz
+aXZlIHNlc3Npb25zIHRvIGNvbmZpZ3VyZS4gaWYgbiB0aGVuIG4tMQo+ICAgICBzZXNzaW9ucyBh
+cmUgcnVuLCBleCBNYXhSdW4gPSAyIHdpbGwgcnVuIDEgc2Vzc2lvbi4KPiAgICAgTWF4UnVuID0g
+MTAwCj4KPgo+ICAgICAjID09PT09PT09PT09PT09PT09PT09ICBQbGFjZSB0aGUgZm9sbG93aW5n
+IGZpbGVzIHVuZGVyCj4gICAgID09PT09PT09PT09PT09PQo+Cj4gICAgICMgL3RtcCBvbiB0aGUg
+cmVtb3RlIG5vZGUKPiAgICAgY2xlYW5fUmVtTm9kZV9hcHBzLnNoCj4gICAgIHJlcG9ydF9sdHRu
+Z19zY3JpcHQuc2gKPgo+ICAgICAjIHJlc3Qgb2YgdGhlIHNjcmlwdHMgdW5kZXIgL3Vzci9zYmlu
+IG9uIHRoZSBjdXJyZW50IGxvY2FsIG5vZGUgb24KPiAgICAgd2hpY2ggbHR0bmdfcmVhbHlkIHJ1
+bnMKPiAgICAgIyBEZWZpbmUgYSB0cmFjZSBwb2ludCBNWV9UUkFDRSB0byB0YWtlIGEgc2luZ2xl
+IHN0cmluZyBhcmcgd2l0aAo+ICAgICBMT0dfVEVTVF9BUFBfUFJPRklMSU5HIGFzIHRoZSBwcm92
+aWRlciwgY29tcGlsZSB0ZXN0IGx0dG5nX3Rlc3RBcHAKPiAgICAgYW5kIHBsYWNlIGl0IHVuZGVy
+IC91c3Ivc2JpbiBvZiB0aGUgcmVtb3RlIGhvc3QKPgo+ICAgICAjIGluIGxhdW5jaF9zY3JpcHRf
+Uk4ucHkgY2hhbmdlIGN1cnJlbnROb2RlSVAgdG8gdGhlIElQIGFkZHJlc3Mgb24KPiAgICAgd2hp
+Y2ggcmVsYXlkIGlzIHJlY2VpdmluZywgZGVmYXVsdCBwb3J0cyBhcmUgdXNlZC4KPgo+ICAgICAj
+IGx0dG5nX3JlbGF5ZCBpcyBzdGFydGVkIGFzCj4gICAgIC91c3IvYmluL2x0dG5nLXJlbGF5ZCAt
+byAvdmFyL2xvZy9sdHRuZy10cmFjZXMgLWQKPgo+ICAgICAjIGx0dG5nX3Nlc3Npb25kIGlzIHN0
+YXJ0ZWQgYXMKPiAgICAgL3Vzci9iaW4vbHR0bmctc2Vzc2lvbmQgLS1jb25zdW1lcmQzMi1wYXRo
+Cj4gICAgIC91c3IvbGliL2x0dG5nL2xpYmV4ZWMvbHR0bmctY29uc3VtZXJkIC0tY29uc3VtZXJk
+MzItbGliZGlyCj4gICAgIC91c3IvbGliLyAtLWNvbnN1bWVyZDY0LXBhdGgKPiAgICAgL3Vzci9s
+aWI2NC9sdHRuZy9saWJleGVjL2x0dG5nLWNvbnN1bWVyZCAtLWNvbnN1bWVyZDY0LWxpYmRpcgo+
+ICAgICAvdXNyL2xpYjY0LyAtYiAtLW5vLWtlcm5lbAo+Cj4KPgo+Cj4gICAgIFJlZ2FyZHMsCj4g
+ICAgIEFyYXZpbmQuCj4KPiAgICAgT24gV2VkLCBEZWMgOSwgMjAxNSBhdCAxMjo1NyBBTSwgSm9u
+YXRoYW4gUmFqb3R0ZSBKdWxpZW4KPiAgICAgPEpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmlj
+aW9zLmNvbQo+ICAgICA8bWFpbHRvOkpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNv
+bT4+IHdyb3RlOgo+Cj4gICAgICAgICBIaSBBcmF2aW5kLAo+Cj4gICAgICAgICBUaGVyZSBpcyBu
+byBSRUFETUUgaW4gdGhlIGFyY2hpdmUgeW91IHNlbnQuCj4KPiAgICAgICAgIENoZWVycwo+Cj4g
+ICAgICAgICBPbiAyMDE1LTEyLTA4IDA3OjUxIEFNLCBBcmF2aW5kIEhUIHdyb3RlOgo+Cj4gICAg
+ICAgICAgICAgSGksCj4KPiAgICAgICAgICAgICBJIGFtIHRyeWluZyB0byB1cGdyYWRlIGluIHBh
+cmFsbGVsLCBidXQgdGhpcyBpc3N1ZSBtYXkKPiAgICAgICAgICAgICBzdGlsbCBiZSBwcmVzZW50
+IGFmdGVyIEkgdXBncmFkZSBvciBtYXkgYmUgdGVtcG9yYXJpbHkKPiAgICAgICAgICAgICBtYXNr
+ZWQuIFNvIEkgbmVlZCB0byBmaW5kIHRoZSByb290IGNhdXNlIGZvciB0aGlzIGFuZCB0aGVuCj4g
+ICAgICAgICAgICAgc2VlIGlmIGl0cyBhdmFpbGFibGUgb24gdGhlIGxhdGVzdCBiZWZvcmUgY29t
+bWl0dGluZyB0bwo+ICAgICAgICAgICAgIHVwZ3JhZGUuCj4KPiAgICAgICAgICAgICBUaGVyZSBp
+cyBhbm90aGVyIGlzc3VlIGknbSBoaXR0aW5nLCB0aGUgbHR0bmcgbGlzdCBjb21tYW5kCj4gICAg
+ICAgICAgICAgaGFuZ3MgYWZ0ZXIgbHR0bmcgZGVzdHJveSBzZXNzaW9uIHdoZW4gcnVubmluZyB0
+aGUgcHJvZmlsaW5nLgo+Cj4gICAgICAgICAgICAgSSBmb3VuZCB0aGF0IGNvbnN1bWVyZCA2NCBn
+b2VzIGludG8gYW4gaW5maW5pdGUgbG9vcAo+ICAgICAgICAgICAgIHdhaXRpbmcgdG8gZmx1c2gg
+bWV0YWRhdGEgaW4KPiAgICAgICAgICAgICBsdHRuZ191c3Rjb25zdW1lcl9yZWN2X21ldGFkYXRh
+KCkgOjogd2hpbGUKPiAgICAgICAgICAgICAoY29uc3VtZXJfbWV0YWRhdGFfY2FjaGVfZmx1c2hl
+ZChjaGFubmVsLCBvZmZzZXQgKyBsZW4sCj4gICAgICAgICAgICAgdGltZXIpKSAuCj4gICAgICAg
+ICAgICAgSW4gY29uc3VtZXJfbWV0YWRhdGFfY2FjaGUsCj4gICAgICAgICAgICAgY2hhbm5lbC0+
+bWV0YWRhdGFfc3RyZWFtLT5lbmRwb2ludF9zdGF0dXMgaXMKPiAgICAgICAgICAgICBDT05TVU1F
+Ul9FTkRQT0lOVF9BQ1RJVkUsCj4gICAgICAgICAgICAgbWV0YWRhdGFfc3RyZWFtLT51c3RfbWV0
+YWRhdGFfcHVzaGVkIGlzIDAgd2l0aCBvZmZzZXQKPiAgICAgICAgICAgICBoYXZpbmcgc29tZSB2
+YWx1ZS4gVGhpcyBjYWxsIGFsd2F5cyByZXR1cm5zIGEgMSBmcm9tIHRoZQo+ICAgICAgICAgICAg
+IGxhc3QgZWxzZXt9IGJsb2NrIHJlc3VsdGluZyBpbiBhbiBpbmZpbml0ZSBsb29wLiBVcG9uCj4g
+ICAgICAgICAgICAgc2VhcmNoaW5nIHRoZSBmb3J1bSwgSSBmb3VuZCB0aGUgc2FtZSBpc3N1ZSBi
+ZWluZyByZXBvcnRlZAo+ICAgICAgICAgICAgIGhlcmUgOgo+ICAgICAgICAgICAgIGh0dHBzOi8v
+d3d3Lm1haWwtYXJjaGl2ZS5jb20vbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZy9tc2cwNzk4Mi5o
+dG1sCj4KPiAgICAgICAgICAgICBSZWdhcmRzLAo+ICAgICAgICAgICAgIEFyYXZpbmQuCj4KPgo+
+ICAgICAgICAgICAgIE9uIFR1ZSwgRGVjIDgsIDIwMTUgYXQgMTI6NDMgQU0sIEpvbmF0aGFuIFJh
+am90dGUKPiAgICAgICAgICAgICA8am9uYXRoYW4uci5qdWxpZW5AZ21haWwuY29tCj4gICAgICAg
+ICAgICAgPG1haWx0bzpqb25hdGhhbi5yLmp1bGllbkBnbWFpbC5jb20+PiB3cm90ZToKPgo+ICAg
+ICAgICAgICAgICAgICBIaSBBcmF2aW5kLAo+Cj4gICAgICAgICAgICAgICAgIERpZCB5b3UgaGF2
+ZSB0aGUgY2hhbmNlIHRvIHVwZ3JhZGUgdG8gMi42LjEuSWYgc28KPiAgICAgICAgICAgICB3aGVy
+ZSB5b3UgYWJsZQo+ICAgICAgICAgICAgICAgICB0byByZXByb2R1Y2U/Cj4KPiAgICAgICAgICAg
+ICAgICAgQ2hlZXJzCj4KPiAgICAgICAgICAgICAgICAgT24gTW9uLCBEZWMgNywgMjAxNSBhdCAx
+OjA3IFBNLCBBcmF2aW5kIEhUCj4gICAgICAgICAgICAgPGFyYXZpbmQuaHRAZ21haWwuY29tIDxt
+YWlsdG86YXJhdmluZC5odEBnbWFpbC5jb20+Pgo+ICAgICAgICAgICAgICAgICB3cm90ZToKPgo+
+ICAgICAgICAgICAgICAgICAgICAgSGksCj4KPiAgICAgICAgICAgICAgICAgICAgIEkgaGF2ZSBh
+dHRhY2hlZCB0aGUgY29tcGxldGUgcHJvZmlsaW5nIHNjcmlwdHMKPiAgICAgICAgICAgICBoZXJl
+LCBpdHMgYSBiaXQKPiAgICAgICAgICAgICAgICAgICAgIHNoYWJieSwgaW0gbmV3IHRvIHB5dGhv
+bi4KPgo+ICAgICAgICAgICAgICAgICAgICAgVGhlcmUgaXMgYSBSRUFETUUgd2hpY2ggaGFzIHRo
+ZSBkZXRhaWxzIG9uIGhvdyB0bwo+ICAgICAgICAgICAgIGV4ZWN1dGUgaXQuCj4gICAgICAgICAg
+ICAgICAgICAgICBJbSB1c2luZyBhIFlvY3RvIDEuNiBvbiB4ODZfNjQgcGxhdGZvcm1zIG9uIGJv
+dGgKPiAgICAgICAgICAgICB0aGUgbm9kZXMuCj4KPgo+ICAgICAgICAgICAgICAgICAgICAgUnVu
+bmluZyB0aGlzIHNjcmlwdCB3aGVuIHRoZXJlIGFyZSBvdGhlciBzZXNzaW9ucwo+ICAgICAgICAg
+ICAgIHJ1bm5pbmcKPiAgICAgICAgICAgICAgICAgICAgIHNlZW1zIHRvIHJlcHJvZHVjZSB0aGlz
+IHByb2JsZW0gZWFzaWx5Lgo+ICAgICAgICAgICAgICAgICAgICAgUGxlYXNlIHRyeSBpdCBhbmQg
+bGV0IG1lIGtub3cgaWYgeW91IGhhdmUgYW55IGlzc3Vlcwo+ICAgICAgICAgICAgICAgICAgICAg
+cmVwcm9kdWNpbmcgdGhlIHByb2JsZW0uCj4KPiAgICAgICAgICAgICAgICAgICAgIFJlZ2FyZHMs
+Cj4gICAgICAgICAgICAgICAgICAgICBBcmF2aW5kLgo+Cj4gICAgICAgICAgICAgICAgICAgICBP
+biBTYXQsIERlYyA1LCAyMDE1IGF0IDU6MjMgUE0sIErDqXLDqW1pZSBHYWxhcm5lYXUKPiAgICAg
+ICAgICAgICAgICAgICAgIDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20KPiAgICAgICAg
+ICAgICA8bWFpbHRvOmplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KPiAgICAgICAgICAg
+ICAgICAgICAgIDxtYWlsdG86amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tCj4gICAgICAg
+ICAgICAgPG1haWx0bzpqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Pj4gd3JvdGU6Cj4K
+PiAgICAgICAgICAgICAgICAgICAgICAgICBPbiBGcmksIERlYyA0LCAyMDE1IGF0IDExOjA2IFBN
+LCBBcmF2aW5kIEhUCj4gICAgICAgICAgICAgICAgICAgICAgICAgPGFyYXZpbmQuaHRAZ21haWwu
+Y29tCj4gICAgICAgICAgICAgPG1haWx0bzphcmF2aW5kLmh0QGdtYWlsLmNvbT4gPG1haWx0bzph
+cmF2aW5kLmh0QGdtYWlsLmNvbQo+ICAgICAgICAgICAgIDxtYWlsdG86YXJhdmluZC5odEBnbWFp
+bC5jb20+Pj4gd3JvdGU6Cj4gICAgICAgICAgICAgICAgICAgICAgICAgPiBJIGFtIHVzaW5nIDIu
+Ni4wIC5JIHdpbGwgdHJ5IHRvIHNoYXJlIHRoZQo+ICAgICAgICAgICAgIGNvZGUgdGhhdCBJJ20K
+PiAgICAgICAgICAgICAgICAgICAgICAgICB1c2luZyBoZXJlIGluIHNvbWUKPiAgICAgICAgICAg
+ICAgICAgICAgICAgICA+IHRpbWUuIElmIHRoZXJlIGFyZSBhbnkgc3BlY2lmaWMgZml4ZXMgdGhh
+dAo+ICAgICAgICAgICAgIGFyZSByZWxldmFudAo+ICAgICAgICAgICAgICAgICAgICAgICAgIHRv
+IHRoaXMgaXNzdWUsIHNlZQo+ICAgICAgICAgICAgICAgICAgICAgICAgID4gaWYgeW91IGNhbiBw
+cm92aWRlIGEgbGluayB0byB0aGVtLiBJIHdvdWxkCj4gICAgICAgICAgICAgaWRlYWxseSBsaWtl
+Cj4gICAgICAgICAgICAgICAgICAgICAgICAgdG8gdHJ5IHRoZW0gb3V0Cj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgPiBiZWZvcmUgdHJ5aW5nIGEgZnVsbCB1cGdyYWRlIHRvIHRoZSBsYXRlc3QK
+PiAgICAgICAgICAgICB2ZXJzaW9ucy4KPgo+ICAgICAgICAgICAgICAgICAgICAgICAgIEhpLAo+
+Cj4gICAgICAgICAgICAgICAgICAgICAgICAgQ2FuIHlvdSBwcm92aWRlIG1vcmUgaW5mb3JtYXRp
+b24gb24gdGhlCj4gICAgICAgICAgICAgc3lzdGVtPyBXaGljaAo+ICAgICAgICAgICAgICAgICAg
+ICAgICAgIGRpc3RyaWJ1dGlvbiwKPiAgICAgICAgICAgICAgICAgICAgICAgICBhcmNoaXRlY3R1
+cmUsIGtlcm5lbCB2ZXJzaW9uPwo+Cj4gICAgICAgICAgICAgICAgICAgICAgICAgVGhlIHZlcmJv
+c2Ugc2Vzc2lvbmQgbG9ncyBtaWdodCBoZWxwIHBpbnBvaW50IGFueQo+ICAgICAgICAgICAgICAg
+ICAgICAgICAgIHVuZXhwZWN0ZWQgYmVoYXZpb3VyCj4gICAgICAgICAgICAgICAgICAgICAgICAg
+aGVyZSAoYXJlIGFsbCBhcHBsaWNhdGlvbnMgcmVnaXN0ZXJpbmcgYXMKPiAgICAgICAgICAgICBl
+eHBlY3RlZD8pLgo+Cj4gICAgICAgICAgICAgICAgICAgICAgICAgSsOpcsOpbWllCj4KPiAgICAg
+ICAgICAgICAgICAgICAgICAgICA+Cj4gICAgICAgICAgICAgICAgICAgICAgICAgPiBPbiBGcmks
+IERlYyA0LCAyMDE1IGF0IDY6MTEgUE0sIErDqXLDqW1pZQo+ICAgICAgICAgICAgIEdhbGFybmVh
+dQo+ICAgICAgICAgICAgICAgICAgICAgICAgID4gPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9z
+LmNvbQo+ICAgICAgICAgICAgIDxtYWlsdG86amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29t
+Pgo+ICAgICAgICAgICAgICAgICAgICAgICAgIDxtYWlsdG86amVyZW1pZS5nYWxhcm5lYXVAZWZm
+aWNpb3MuY29tCj4gICAgICAgICAgICAgPG1haWx0bzpqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lv
+cy5jb20+Pj4gd3JvdGU6Cj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4KPiAgICAgICAgICAg
+ICAgICAgICAgICAgICA+PiBIaSBBcmF2aW5kLAo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+
+Cj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gQ2FuJ3Qgc2F5IEkgaGF2ZSBsb29rZWQgYXQg
+ZXZlcnl0aGluZyB5b3UKPiAgICAgICAgICAgICBzZW50IHlldCwgYnV0Cj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgYXMgYQo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+IHByZWVtcHRpdmUg
+cXVlc3Rpb24sIHdoaWNoIHZlcnNpb24gYXJlIHdlCj4gICAgICAgICAgICAgdGFsa2luZyBhYm91
+dAo+ICAgICAgICAgICAgICAgICAgICAgICAgIGhlcmU/IDIuNi4wIG9yCj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgPj4gMi42LjE/IDIuNi4xIGNvbnRhaW5zIGEgbG90IG9mIHJlbGF5IGRhZW1v
+bgo+ICAgICAgICAgICAgIGZpeGVzLgo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+Cj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgPj4gVGhhbmtzLAo+ICAgICAgICAgICAgICAgICAgICAgICAg
+ID4+IErDqXLDqW1pZQo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+Cj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgPj4gT24gVGh1LCBEZWMgMywgMjAxNSBhdCA3OjAxIEFNLCBBcmF2aW5kIEhU
+Cj4gICAgICAgICAgICAgICAgICAgICAgICAgPGFyYXZpbmQuaHRAZ21haWwuY29tCj4gICAgICAg
+ICAgICAgPG1haWx0bzphcmF2aW5kLmh0QGdtYWlsLmNvbT4+IHdyb3RlOgo+ICAgICAgICAgICAg
+ICAgICAgICAgICAgID4+ID4gSGksCj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gPgo+ICAg
+ICAgICAgICAgICAgICAgICAgICAgID4+ID4gSSBhbSB0cnlpbmcgdG8gb2J0YWluIHRoZSBwZXJm
+b3JtYW5jZQo+ICAgICAgICAgICAgIGNoYXJhY3RlcmlzdGljcwo+ICAgICAgICAgICAgICAgICAg
+ICAgICAgIG9mIGx0dG5nIHdpdGggdGhlCj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gPiB1
+c2UKPiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+IG9mIHRlc3QgYXBwbGljYXRpb25zLiBU
+cmFjZXMgYXJlIGJlaW5nCj4gICAgICAgICAgICAgcHJvZHVjZWQgb24gYQo+ICAgICAgICAgICAg
+ICAgICAgICAgICAgIGxvY2FsIG5vZGUgYW5kCj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4g
+PiBkZWxpdmVyZWQgdG8gcmVsYXlkIHRoYXQgaXMgcnVubmluZyBvbiBhCj4gICAgICAgICAgICAg
+c2VwYXJhdGUKPiAgICAgICAgICAgICAgICAgICAgICAgICBub2RlIGZvciBzdG9yYWdlLgo+ICAg
+ICAgICAgICAgICAgICAgICAgICAgID4+ID4KPiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+
+IEFuIGx0dG5nIHNlc3Npb24gd2l0aCB0aGUgdGVzdAo+ICAgICAgICAgICAgIGFwcGxpY2F0aW9u
+cyBwcm9kdWNpbmcKPiAgICAgICAgICAgICAgICAgICAgICAgICBhbiBpbml0aWFsIGJpdAo+ICAg
+ICAgICAgICAgICAgICAgICAgICAgID4+ID4gcmF0ZSBvZgo+ICAgICAgICAgICAgICAgICAgICAg
+ICAgID4+ID4gMTAga2IvcyBpcyBzdGFydGVkIGFuZCBydW4gZm9yIGFib3V0IDMwCj4gICAgICAg
+ICAgICAgc2Vjb25kcy4gVGhlCj4gICAgICAgICAgICAgICAgICAgICAgICAgc3RhcnRpbmcgc3Vi
+LWJ1ZmZlcgo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+ID4gc2l6ZSBpcyBrZXB0IGF0IDEy
+OCBrYiBhbmQgc3ViLWJ1ZiBjb3VudAo+ICAgICAgICAgICAgIGF0IDQuIFRoZQo+ICAgICAgICAg
+ICAgICAgICAgICAgICAgIHNlc3Npb24gaXMgdGhlbgo+ICAgICAgICAgICAgICAgICAgICAgICAg
+ID4+ID4gc3RvcHBlZAo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+ID4gYW5kIGRlc3Ryb3ll
+ZCBhbmQgdHJhY2VzIGFyZSBhbmFseXplZCB0bwo+ICAgICAgICAgICAgIHNlZSBpZiB0aGVyZQo+
+ICAgICAgICAgICAgICAgICAgICAgICAgIGFyZSBhbnkgZHJvcHMuCj4gICAgICAgICAgICAgICAg
+ICAgICAgICAgPj4gPiBUaGlzIGlzCj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gPiBiZWlu
+ZyBkb25lIGluIGEgbG9vcCB3aXRoIGV2ZXJ5Cj4gICAgICAgICAgICAgc3Vic2VxdWVudCBzZXNz
+aW9uCj4gICAgICAgICAgICAgICAgICAgICAgICAgaGF2aW5nIGFuIGluY3JlbWVudAo+ICAgICAg
+ICAgICAgICAgICAgICAgICAgID4+ID4gb2YgMgo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+
+ID4ga2IvcyBhcyBsb25nIGFzIHRoZXJlIGFyZSBubyBkcm9wcy4gSWYKPiAgICAgICAgICAgICB0
+aGVyZSBhcmUKPiAgICAgICAgICAgICAgICAgICAgICAgICBkcm9wcywgSSBpbmNyZWFzZSB0aGUK
+PiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+IGJ1ZmZlciBzaXplIGJ5IGEgZmFjdG9yIG9m
+IHgyIHdpdGhvdXQKPiAgICAgICAgICAgICBpbmNyZW1lbnRpbmcKPiAgICAgICAgICAgICAgICAg
+ICAgICAgICB0aGUgYml0IHJhdGUuCj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gPgo+ICAg
+ICAgICAgICAgICAgICAgICAgICAgID4+ID4gSSBzZWUgdHJhY2UgZHJvcHMgaGFwcGVuaW5nIGNv
+bnNpc3RlbnRseQo+ICAgICAgICAgICAgIHdpdGggdGVzdAo+ICAgICAgICAgICAgICAgICAgICAg
+ICAgIGFwcHMgcHJvZHVjaW5nIHRyYWNlcwo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+ID4g
+YXQKPiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+IGxlc3MgdGhhbiA0MCBrYi9zLCBpdCBk
+b2VzbnQgc2VlbSB0byBoZWxwCj4gICAgICAgICAgICAgZXZlbiBpZiBJCj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgc3RhcnRlZCB3aXRoIDFtYiB4IDQKPiAgICAgICAgICAgICAgICAgICAgICAg
+ICA+PiA+IHN1Yi1idWZmZXJzLgo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+ID4KPiAgICAg
+ICAgICAgICAgICAgICAgICAgICA+PiA+IEFuYWx5c2lzIDoKPiAgICAgICAgICAgICAgICAgICAg
+ICAgICA+PiA+Cj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gPiBJIGhhdmUgYXR0YWNoZWQg
+dGhlIGx0dG5nX3JlbGF5ZCAsCj4gICAgICAgICAgICAgbHR0bmdfY29uc3VtZXJkXzY0Cj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgbG9ncyBhbmQgdGhlCj4gICAgICAgICAgICAgICAgICAgICAg
+ICAgPj4gPiBlbnRpcmUKPiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+IHRyYWNlIGRpcmVj
+dG9yeSwgaG9wZSB5b3Ugd2lsbCBiZSBhYmxlIHRvCj4gICAgICAgICAgICAgdmlldyBpdC4KPiAg
+ICAgICAgICAgICAgICAgICAgICAgICA+PiA+IEkgaGF2ZSBtb2RpZmllZCBsdHRuZ19yZWxheWQg
+Y29kZSB0byBkdW1wCj4gICAgICAgICAgICAgdGhlIHRyYWNlcwo+ICAgICAgICAgICAgICAgICAg
+ICAgICAgIGJlaW5nIGNhcHR1cmVkIGluCj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gPiB0
+aGUKPiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+IGx0dG5nX3JlbGF5ZCBsb2dzIGFsb25n
+IHdpdGggZGVidWcgaW5mby4KPiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+Cj4gICAgICAg
+ICAgICAgICAgICAgICAgICAgPj4gPiBFYWNoIHRlc3QgYXBwIGlzIHByb2R1Y2luZyBsb2dzIGlu
+IHRoZQo+ICAgICAgICAgICAgIGZvcm0gb2YgIDoKPiAgICAgICAgICAgICAgICAgICAgICAgICA+
+PiA+ICJUcmFjZUFwcCBQSUQgLSAzMTk0MCBUSElEIC0gMzE5NzAKPiAgICAgICAgICAgICBAdGhy
+ZWFkUmF0ZSAtIDEwMzIKPiAgICAgICAgICAgICAgICAgICAgICAgICBiL3MgYXBwUmF0ZSAtIDIw
+NzkKPiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+IGIvcwo+ICAgICAgICAgICAgICAgICAg
+ICAgICAgID4+ID4gdGhyZWFkVHJhY2VOdW0gLSA5IGFwcFRyYWNlTnVtIC0gMTggCj4gICAgICAg
+ICAgICAgc2xlZXBUaW1lIC0gMTkyMTIwIgo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+ID4K
+PiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+IFRoZSB0ZXN0IGFwcGxpY2F0aW9uIFBJRCwg
+dGVzdAo+ICAgICAgICAgICAgIGFwcGxpY2F0aW9uIHRocmVhZCBpZCwKPiAgICAgICAgICAgICAg
+ICAgICAgICAgICB0aHJlYWQgYml0IHJhdGUsCj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4g
+PiB0ZXN0Cj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gPiBhcHAgYml0IHJhdGUsIHRocmVh
+ZCB0cmFjZSBudW1iZXIgYW5kCj4gICAgICAgICAgICAgYXBwbGljYXRpb24KPiAgICAgICAgICAg
+ICAgICAgICAgICAgICB0cmFjZSBudW1iZXIgcyBhcmUKPiAgICAgICAgICAgICAgICAgICAgICAg
+ICA+PiA+IHBhcnQgb2YKPiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+IHRoZSB0cmFjZS4g
+U28gaW4gdGhlIGFib3ZlIHRyYWNlLCB0aGUKPiAgICAgICAgICAgICB0aHJlYWQgaXMKPiAgICAg
+ICAgICAgICAgICAgICAgICAgICBwcm9kdWNpbmcgYXQgMSBrYi9zIGFuZAo+ICAgICAgICAgICAg
+ICAgICAgICAgICAgID4+ID4gdGhlCj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gPiB3aG9s
+ZSB0ZXN0IGFwcCBpcyBwcm9kdWNpbmcgYXQgMiBrYi9zLgo+ICAgICAgICAgICAgICAgICAgICAg
+ICAgID4+ID4KPiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+IElmIHdlIGxvb2sgYXQgdGhl
+IGJhYmVsdHJhY2Ugb3V0IHB1dCwgd2UKPiAgICAgICAgICAgICBzZWUgdGhhdCB0aGUKPiAgICAg
+ICAgICAgICAgICAgICAgICAgICBUcmFjZSB3aXRoCj4gICAgICAgICAgICAgICAgICAgICAgICAg
+Pj4gPiBUcmFjZUFwcAo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+ID4gUElEIC0gMzE5NDAg
+YXBwVHJhY2VOdW0gMiBpcyBtaXNzaW5nICwKPiAgICAgICAgICAgICB3aXRoIDEsIDMsIDQsCj4g
+ICAgICAgICAgICAgICAgICAgICAgICAgNSBhbmQgc28gb24gYmVpbmcKPiAgICAgICAgICAgICAg
+ICAgICAgICAgICA+PiA+IHN1Y2Nlc3NmdWxseSBjYXB0dXJlZC4KPiAgICAgICAgICAgICAgICAg
+ICAgICAgICA+PiA+IEkgbG9va2VkIGF0IHRoZSBsdHRuZ19yZWxheWQgbG9ncyBhbmQKPiAgICAg
+ICAgICAgICBmb3VuZCB0aGF0Cj4gICAgICAgICAgICAgICAgICAgICAgICAgdHJhY2Ugb2YgImFw
+cFRyYWNlTnVtCj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gPiAyIiBpcwo+ICAgICAgICAg
+ICAgICAgICAgICAgICAgID4+ID4gbm90IGRlbGl2ZXJlZC9nZW5lcmF0ZWQgYnkgdGhlIGNvbnN1
+bWVyZAo+ICAgICAgICAgICAgIHRvIHRoZQo+ICAgICAgICAgICAgICAgICAgICAgICAgIHJlbGF5
+ZCBpbiBzZXF1ZW5jZSB3aXRoCj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gPiBvdGhlciB0
+cmFjZXMuIFRvIHJ1bGUgb3V0IHRoYXQgdGhpcyBpcwo+ICAgICAgICAgICAgIG5vdCBhIHRlc3QK
+PiAgICAgICAgICAgICAgICAgICAgICAgICBhcHBsaWNhdGlvbiBwcm9ibGVtLAo+ICAgICAgICAg
+ICAgICAgICAgICAgICAgID4+ID4geW91Cj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gPiBj
+YW4gbG9vayBhdCBsaW5lIGx0dHRuZ19yZWxheWQgbG9nIDoKPiAgICAgICAgICAgICAxMjc3OCBh
+bmQgc2VlCj4gICAgICAgICAgICAgICAgICAgICAgICAgdHJhY2VzIGZyb20KPiAgICAgICAgICAg
+ICAgICAgICAgICAgICA+PiA+IGFwcFRyYWNlTnVtIC0KPiAgICAgICAgICAgICAgICAgICAgICAg
+ICA+PiA+IDEgdG8gYXBwVHJhY2VOdW0gLSAxOCBpbmNsdWRpbmcgdGhlCj4gICAgICAgICAgICAg
+YXBwVHJhY2VOdW0gMiBhcmUKPiAgICAgICAgICAgICAgICAgICAgICAgICAicmUtZGVsaXZlcmVk
+IiBieQo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+ID4gdGhlCj4gICAgICAgICAgICAgICAg
+ICAgICAgICAgPj4gPiBjb25zdW1lcmQgdG8gdGhlIHJlbGF5ZC4KPiAgICAgICAgICAgICAgICAg
+ICAgICAgICA+PiA+IEVzc2VudGlhbGx5LCBJIHNlZSBhcHBUcmFjZU51bSAxIHRocm91Z2gKPiAg
+ICAgICAgICAgICBhcHBUcmFjZU51bQo+ICAgICAgICAgICAgICAgICAgICAgICAgIDE4IGJlaW5n
+IGRlbGl2ZXJlZAo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+ID4gdHdpY2UsIG9uY2UgaW5k
+aXZpZHVhbGx5IHdoZXJlCj4gICAgICAgICAgICAgYXBwVHJhY2VOdW0gMiBpcwo+ICAgICAgICAg
+ICAgICAgICAgICAgICAgIG1pc3NpbmcgYW5kIG9uY2UgYXMgYQo+ICAgICAgICAgICAgICAgICAg
+ICAgICAgID4+ID4gZ3JvdXAKPiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+IGF0IGxpbmUg
+MTI3Nzggd2hlcmUgaXRzIHByZXNlbnQuCj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gPgo+
+ICAgICAgICAgICAgICAgICAgICAgICAgID4+ID4KPiAgICAgICAgICAgICAgICAgICAgICAgICA+
+PiA+IFJlcXVlc3QgaGVscCB3aXRoCj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gPiAxLiB3
+aHkgdHJhY2VzIGFyZSBkZWxpdmVyZWQgdHdpY2UsIGlzIGl0Cj4gICAgICAgICAgICAgYnkgZGVz
+aWduIG9yCj4gICAgICAgICAgICAgICAgICAgICAgICAgYSBnZW51aW5lIHByb2JsZW0KPiAgICAg
+ICAgICAgICAgICAgICAgICAgICA+PiA+ID8KPiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+
+IDIuIGhvdyB0byBhdm9pZCB0cmFjZXMgYmVpbmcgZHJvcHBlZCBldmVuCj4gICAgICAgICAgICAg
+dGhvdWdoCj4gICAgICAgICAgICAgICAgICAgICAgICAgYnVmZmVycyBhcmUKPiAgICAgICAgICAg
+ICAgICAgICAgICAgICA+PiA+IHN1ZmZpY2llbnRseQo+ICAgICAgICAgICAgICAgICAgICAgICAg
+ID4+ID4gbGFyZ2UgZW5vdWdoID8KPiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+Cj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgPj4gPgo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+ID4g
+UmVnYXJkcywKPiAgICAgICAgICAgICAgICAgICAgICAgICA+PiA+IEFyYXZpbmQuCj4gICAgICAg
+ICAgICAgICAgICAgICAgICAgPj4gPgo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+ID4KPiAg
+ICAgICAgICAgICBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Xwo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+ID4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+
+ICAgICAgICAgICAgICAgICAgICAgICAgID4+ID4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+
+ICAgICAgICAgICAgIDxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4KPiAgICAgICAg
+ICAgICAgICAgICAgICAgICA+PiA+Cj4gICAgICAgICAgICAgaHR0cDovL2xpc3RzLmx0dG5nLm9y
+Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gICAgICAgICAgICAgICAgICAg
+ICAgICAgPj4gPgo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+Cj4gICAgICAgICAgICAgICAg
+ICAgICAgICAgPj4KPiAgICAgICAgICAgICAgICAgICAgICAgICA+Pgo+ICAgICAgICAgICAgICAg
+ICAgICAgICAgID4+IC0tCj4gICAgICAgICAgICAgICAgICAgICAgICAgPj4gSsOpcsOpbWllIEdh
+bGFybmVhdQo+ICAgICAgICAgICAgICAgICAgICAgICAgID4+IEVmZmljaU9TIEluYy4KPiAgICAg
+ICAgICAgICAgICAgICAgICAgICA+PiBodHRwOi8vd3d3LmVmZmljaW9zLmNvbQo+ICAgICAgICAg
+ICAgICAgICAgICAgICAgID4KPiAgICAgICAgICAgICAgICAgICAgICAgICA+Cj4KPgo+Cj4gICAg
+ICAgICAgICAgICAgICAgICAgICAgLS0KPiAgICAgICAgICAgICAgICAgICAgICAgICBKw6lyw6lt
+aWUgR2FsYXJuZWF1Cj4gICAgICAgICAgICAgICAgICAgICAgICAgRWZmaWNpT1MgSW5jLgo+ICAg
+ICAgICAgICAgIGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4KPgo+Cj4gICAgICAgICAgICAgX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiAgICAgICAgICAg
+ICAgICAgICAgIGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiAgICAgICAgICAgICBsdHRuZy1kZXZA
+bGlzdHMubHR0bmcub3JnCj4gICAgICAgICAgICAgPG1haWx0bzpsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnPgo+ICAgICAgICAgICAgIDxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+
+ICAgICAgICAgICAgIDxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4+Cj4gICAgICAg
+ICAgICAgaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
+bmctZGV2Cj4KPgo+Cj4KPiAgICAgICAgICAgICAgICAgLS0gICAgIEpvbmF0aGFuIFJham90dGUg
+SnVsaWVuCj4KPgo+Cj4KPiAgICAgICAgICAgICBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwo+ICAgICAgICAgICAgIGx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+PiAgICAgICAgICAgICBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIDxtYWlsdG86bHR0bmctZGV2
+QGxpc3RzLmx0dG5nLm9yZz4KPiAgICAgICAgICAgICBodHRwOi8vbGlzdHMubHR0bmcub3JnL2Nn
+aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPgo+Cj4gICAgICAgICAtLSAKPiAgICAg
+ICAgIEpvbmF0aGFuIFIuIEp1bGllbgo+ICAgICAgICAgRWZmaWNpb3MKPgo+Cj4KCi0tIApKb25h
+dGhhbiBSLiBKdWxpZW4KRWZmaWNpb3MKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5s
+dHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
+bHR0bmctZGV2Cg==
