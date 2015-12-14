@@ -1,16 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Anders Wallin <wallinux@gmail.com>
 Subject: Re: Please remove the lttng-health-check documtation
-Date: Mon, 14 Dec 2015 12:11:02 +0000 (UTC)
-Message-ID: <518822292.241814.1450095062226.JavaMail.zimbra__22517.3137420372$1450095118$gmane$org@efficios.com>
+Date: Mon, 14 Dec 2015 13:58:37 +0100
+Message-ID: <CAF2baFfCeGmyu7gf1+TzMgMS4c3hdNK+yadTMnoh8_cjCRJVOQ__18461.8247709752$1450098012$gmane$org@mail.gmail.com>
 References: <CAF2baFdhGueE3Ykfk37g_XC6YXAxD8jSMiwant4H-B6BVopoVQ@mail.gmail.com>
+ <518822292.241814.1450095062226.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1436886679=="
+Content-Type: multipart/mixed; boundary="===============0917284455=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-lf0-f43.google.com ([209.85.215.43])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1a8Ry8-00057p-88
- for lttng-dev@lists.lttng.org; Mon, 14 Dec 2015 07:11:09 -0500
-In-Reply-To: <CAF2baFdhGueE3Ykfk37g_XC6YXAxD8jSMiwant4H-B6BVopoVQ@mail.gmail.com>
+ (envelope-from <wallinux@gmail.com>) id 1a8SiB-0005LS-8R
+ for lttng-dev@lists.lttng.org; Mon, 14 Dec 2015 07:58:44 -0500
+Received: by lfap203 with SMTP id p203so51072518lfa.0
+ for <lttng-dev@lists.lttng.org>; Mon, 14 Dec 2015 04:58:37 -0800 (PST)
+In-Reply-To: <518822292.241814.1450095062226.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,73 +22,101 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Anders Wallin <wallinux@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1436886679==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_241813_2071776670.1450095062226"
+--===============0917284455==
+Content-Type: multipart/alternative; boundary=001a11401f3c40a5120526db3b76
 
-------=_Part_241813_2071776670.1450095062226
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+--001a11401f3c40a5120526db3b76
+Content-Type: text/plain; charset=UTF-8
 
------ On Dec 14, 2015, at 3:45 AM, Anders Wallin <wallinux@gmail.com> wrote: 
+Sorry Mathieu,
 
+it was me reading the man page to fast
+
+Regards
+
+Anders
+
+Anders Wallin
+
+On Mon, Dec 14, 2015 at 1:11 PM, Mathieu Desnoyers <
+mathieu.desnoyers@efficios.com> wrote:
+
+> ----- On Dec 14, 2015, at 3:45 AM, Anders Wallin <wallinux@gmail.com>
+> wrote:
+>
 > The lttng-health-check application was deprecated a long time ago,
 > but the man pages still remains in the doc directory.
-
-This is a man(3). It's not an application, but a C interface. It is not 
-deprecated. 
-
-Thanks, 
-
-Mathieu 
-
+>
+> This is a man(3). It's not an application, but a C interface. It is not
+> deprecated.
+>
+> Thanks,
+>
+> Mathieu
+>
+>
+>
 > Anders Wallin
-
+>
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+>
 
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
-------=_Part_241813_2071776670.1450095062226
-Content-Type: text/html; charset=utf-8
+--001a11401f3c40a5120526db3b76
+Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
-__">----- On Dec 14, 2015, at 3:45 AM, Anders Wallin &lt;wallinux@gmail.com=
-&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockquot=
-e style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;c=
-olor:#000;font-weight:normal;font-style:normal;text-decoration:none;font-fa=
-mily:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr">The lttng=
--health-check application was deprecated a long time ago,&nbsp;<div>but the=
- man pages still remains in the doc directory.</div></div></blockquote><div=
->This is a man(3). It's not an application, but a C interface. It is not<br=
-></div><div>deprecated.<br data-mce-bogus=3D"1"></div><div><br data-mce-bog=
-us=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce=
--bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data=
--mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote styl=
-e=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#=
-000;font-weight:normal;font-style:normal;text-decoration:none;font-family:H=
-elvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><br><div><div><=
-div class=3D"gmail_signature">Anders Wallin</div></div></div></div><br>____=
-___________________________________________<br>lttng-dev mailing list<br>lt=
-tng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bin/mailman/listinfo/=
-lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D"__SIG_PO=
-ST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.ef=
-ficios.com</div></div></body></html>
-------=_Part_241813_2071776670.1450095062226--
+<div dir=3D"ltr">Sorry Mathieu,<div><br></div><div>it was me reading the ma=
+n page to fast</div><div><br></div><div>Regards</div><div><br></div><div>An=
+ders</div></div><div class=3D"gmail_extra"><br clear=3D"all"><div><div clas=
+s=3D"gmail_signature">Anders Wallin</div></div>
+<br><div class=3D"gmail_quote">On Mon, Dec 14, 2015 at 1:11 PM, Mathieu Des=
+noyers <span dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoyers@efficios.c=
+om" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;</span> wrote:<=
+br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left=
+:1px #ccc solid;padding-left:1ex"><div><div style=3D"font-family:arial,helv=
+etica,sans-serif;font-size:12pt;color:#000000"><span class=3D""><div><span>=
+----- On Dec 14, 2015, at 3:45 AM, Anders Wallin &lt;<a href=3D"mailto:wall=
+inux@gmail.com" target=3D"_blank">wallinux@gmail.com</a>&gt; wrote:<br></sp=
+an></div></span><div><span class=3D""><blockquote style=3D"border-left:2px =
+solid #1010ff;margin-left:5px;padding-left:5px;color:#000;font-weight:norma=
+l;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-s=
+erif;font-size:12pt"><div dir=3D"ltr">The lttng-health-check application wa=
+s deprecated a long time ago,=C2=A0<div>but the man pages still remains in =
+the doc directory.</div></div></blockquote></span><div>This is a man(3). It=
+&#39;s not an application, but a C interface. It is not<br></div><div>depre=
+cated.<br></div><div><br></div><div>Thanks,<br></div><div><br></div><div>Ma=
+thieu<br></div><div><br></div><div><br></div><blockquote style=3D"border-le=
+ft:2px solid #1010ff;margin-left:5px;padding-left:5px;color:#000;font-weigh=
+t:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial=
+,sans-serif;font-size:12pt"><div dir=3D"ltr"><br><div><div><div>Anders Wall=
+in</div></div></div></div><br>_____________________________________________=
+__<br>lttng-dev mailing list<br><a href=3D"mailto:lttng-dev@lists.lttng.org=
+" target=3D"_blank">lttng-dev@lists.lttng.org</a><br><a href=3D"http://list=
+s.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" target=3D"_blank">http://li=
+sts.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><span class=3D"HOEnZb">=
+<font color=3D"#888888"><br></font></span></blockquote></div><span class=3D=
+"HOEnZb"><font color=3D"#888888"><div><br></div><div>-- <br></div><div>Math=
+ieu Desnoyers<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com" targe=
+t=3D"_blank">http://www.efficios.com</a></div></font></span></div></div></b=
+lockquote></div><br></div>
+
+--001a11401f3c40a5120526db3b76--
 
 
---===============1436886679==
+--===============0917284455==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -96,4 +127,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1436886679==--
+--===============0917284455==--
