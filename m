@@ -1,22 +1,22 @@
-From: Eugene Ivanov <Eugene.Ivanov@orc-group.com>
-Subject: Re: Composition of objects and call_rcu() inside helper
- thread
-Date: Mon, 14 Dec 2015 14:45:37 +0000
-Message-ID: <27CD3AE4-71DB-404D-93F4-24B86067B042__44312.2580451474$1450104420$gmane$org@orc-group.com>
-References: <ADB30B76-2E72-4DBE-80BD-642912C0BEDF@orc-group.com>
- <CA+jJMxs_LzsNfaNT0WjddjKozunv7ChNRZxzczRW6RFFgebJ=Q@mail.gmail.com>
+From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
+Subject: Re: [PATCH] use AC_CHECK_TOOL for objcopy and strip
+Date: Mon, 14 Dec 2015 11:55:20 -0500
+Message-ID: <566EF478.5000403__11756.3480198898$1450112196$gmane$org@efficios.com>
+References: <1449852204-11379-1-git-send-email-nathan_lynch@mentor.com>
+ <566AFDB5.8000103@mentor.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx02.orcsoftware.com ([89.202.167.90]
- helo=ungol.ad.orcsoftware.com)
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Eugene.Ivanov@orc-group.com>) id 1a8UNg-0005uK-7z
- for lttng-dev@lists.lttng.org; Mon, 14 Dec 2015 09:45:46 -0500
-In-Reply-To: <CA+jJMxs_LzsNfaNT0WjddjKozunv7ChNRZxzczRW6RFFgebJ=Q@mail.gmail.com>
-Content-Language: en-US
-Content-ID: <CD78D2E5F299804C8C54C838E2ABC87D@orc-group.com>
+ (envelope-from <Jonathan.rajotte-julien@efficios.com>)
+ id 1a8WPJ-0006WC-TH
+ for lttng-dev@lists.lttng.org; Mon, 14 Dec 2015 11:55:33 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id C21AF340483
+ for <lttng-dev@lists.lttng.org>; Mon, 14 Dec 2015 16:55:25 +0000 (UTC)
+In-Reply-To: <566AFDB5.8000103@mentor.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,65 +25,39 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?utf-8?B?SsOpcsOpbWllIEdhbGFybmVhdQ==?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org, Michael Jeanson <mjeanson@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgSsOpcsOpbWllLA0KDQpZZXMsIGl0IHdhcyBleGFjdGx5IHRoZSBpc3N1ZSB3aXRoIGxlYWsg
-Y2hlY2tpbmcuIE5vdyBJIHVzZSBtdWx0aXBsZSBiYXJyaWVycyBhbmQgZXZlcnl0aGluZyBpcyBn
-b29kLiBUaGFua3MhDQoNCkJlc3QgcmVnYXJkcywNCkV1Z2VuZSBJdmFub3YNCg0KDQoNCj4gT24g
-MDggRGVjIDIwMTUsIGF0IDEzOjE2LCBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFy
-bmVhdUBlZmZpY2lvcy5jb20+IHdyb3RlOg0KPg0KPiBPbiBNb24sIERlYyA3LCAyMDE1IGF0IDEw
-OjA5IEFNLCBFdWdlbmUgSXZhbm92DQo+IDxFdWdlbmUuSXZhbm92QG9yYy1ncm91cC5jb20+IHdy
-b3RlOg0KPj4gSGksDQo+Pg0KPj4gSSBoYXZlIHJjdWxmaGFzaCB3aGljaCBjb250YWlucyBvYmpl
-Y3RzIHdpdGggcmN1bGZoYXNoZXMuIFdoZW4gSSBkZXN0cnVjdCDigJxiaWfigJ0gbWFwIGl0IHVz
-ZXMgY2FsbF9yY3UoKSBmb3IgZXZlcnkgaXRlbS4gV2hlbiBpbnRlcm5hbCBoYXNoZXMgYXJlIGRl
-c3RydWN0ZWQgdGhleSB1c2UgY2FsbF9jdSgpIHRvby4gSXQgc2VlbXMgdGhhdCB0byB3YWl0IHVu
-dGlsIGV2ZXJ5dGhpbmcgaXMgZGVzdHJ1Y3RlZCBJIG5lZWQgdHdvIGJhcnJpZXJzIGF0IHRoZSBl
-bmQgb2YgdGhlIGJpZyBoYXNoIGRlc3RydWN0b3IuIEJ1dCBob3cgY2FuIHNvbWVvbmUgaGFuZGxl
-IGRlZXBlciBoaWVyYXJjaHk/IElzIHRoZXJlIGFueSB3YXkgdG8gZGV0ZXJtaW5lIHRoYXQgaXQg
-aXMgaGVscGVyIHRocmVhZCB0byBub3QgdXNlIGNhbGxfcmN1KCkgYW5kIGRlc3RydWN0IGV2ZXJ5
-dGhpbmcgaW4gcGxhY2U/DQo+Pg0KPg0KPiBIaSBFdWdlbmUsDQo+DQo+IFdlIGFjdHVhbGx5IGVu
-Y291bnRlcmVkIGEgc2ltaWxhciBwcm9ibGVtIGluIGx0dG5nLXRvb2xzLiBGb2xsb3dpbmcgYQ0K
-PiBzaW1pbGFyIHBhdHRlcm4sIHNvbWUgb2JqZWN0cycgInRlYXIgZG93biIgZnVuY3Rpb25zIHdl
-cmUgcHVzaGluZyBuZXcNCj4gY2FsbGJhY2tzIHVzaW5nIGNhbGxfcmN1KCksIGxlYWRpbmcgdG8g
-dGhlICJjaGFpbmluZyIgb2YgcmN1DQo+IGNhbGxiYWNrcy4NCj4NCj4gVGhpcyBoYWQgdGhlIHVu
-Zm9ydHVuYXRlIGVmZmVjdCBvZiBwcmV2ZW50aW5nIHVzIGZyb20gdHJhY2tpbmcgbWVtb3J5DQo+
-IGxlYWtzOyB3ZSBjb3VsZCBub3QgYXNzdW1lIHRoYXQgYWxsIG1lbW9yeSB3b3VsZCBoYXZlIGJl
-ZW4gcmVjbGFpbWVkDQo+IGFmdGVyIHRoZSByY3VfYmFycmllcigpIGRvbmUgYXQgdGhlIGFwcGxp
-Y2F0aW9uJ3MgZXhpdCBzaW5jZSBuZXcNCj4gZGVhbGxvY2F0aW9uIGNhbGxiYWNrcyBjb3VsZCBo
-YXZlIGJlZW4gInB1c2hlZCIgYWZ0ZXIgdGhhdCBiYXJyaWVyLg0KPg0KPiBXZSB3b3JrZWQgYXJv
-dW5kIHRoZSBwcm9ibGVtIGJ5IGltcG9zaW5nIGEgc3RyaWN0ICJubyByY3UgY2hhaW5pbmciDQo+
-IGRlc2lnbiBydWxlLCBidXQgdGhhdCdzIGVhc2llciBzYWlkIHRoYW4gZG9uZSA6LSkuDQo+DQo+
-IEknbSBub3Qgc3VyZSB3aGF0IHlvdSBhcmUgdHJ5aW5nIHRvIGd1YXJhbnRlZSBpbiB5b3VyIHNw
-ZWNpZmljIGNhc2UsDQo+IGJ1dCBpZiB5b3UgYXJlIGluIGEgc2ltaWxhciBzaXR1YXRpb24sIHlv
-dSBjb3VsZCBpbnNlcnQgYSBudW1iZXIgb2YNCj4gYmFycmllcnMgdGhhdCBtYXRjaGVzIHRoZSBt
-YXhpbWFsIGFtb3VudCBvZiBuZXN0aW5nIHlvdSBleHBlY3QuIE9mDQo+IGNvdXJzZSwgdGhhdCdz
-IHByb25lIHRvIGJyZWFrYWdlIGFzIHRoZSBjb2RlIGNoYW5nZSBhbmQvb3IgbWF5IGJlDQo+IHVu
-Ym91bmRlZC4NCj4NCj4gTW9yZSBsaWtlbHksIHlvdSdsbCB3YW50IHRvIHVzZSBzeW5jaHJvbml6
-ZV9yY3UoKSB0byByZWFjaCBhIGdyYWNlDQo+IHBlcmlvZCwgZnJlZSB0aGUgb2JqZWN0LCBhbmQg
-Zm9yZWdvIHVzaW5nIHRoZSBjYWxsX3JjdSgpIG1lY2hhbmlzbS4NCj4NCj4gSW4gb3VyIGNhc2Us
-IGEgImZpbmFsaXppbmciIHJjdV9iYXJyaWVyKCkgdGhhdCBvbmx5IHJldHVybnMgd2hlbiB0aGUN
-Cj4gY2FsbF9yY3UgcXVldWUgaXMgZW1wdGllZCB3b3VsZCBiZSByZWFsbHkgdXNlZnVsLiBJdCdz
-IG9uIG15IHdpc2hsaXN0LA0KPiBidXQgSSBoYXZlIG5vIGlkZWEgaWYgdGhlIGN1cnJlbnQgY2Fs
-bF9yY3UoKSBkZXNpZ24gY2FuIG9mZmVyIHN1Y2ggYQ0KPiBndWFyYW50ZWUuDQo+DQo+IFRMO0RS
-OiBzeW5jaHJvbml6ZV9yY3UoKSBpcyBwcm9iYWJseSB3aGF0IHlvdSBhcmUgbG9va2luZyBmb3Iu
-DQo+DQo+IErDqXLDqW1pZQ0KPg0KPj4NCj4+IEJlc3QgcmVnYXJkcywNCj4+IEV1Z2VuZSBJdmFu
-b3YNCj4+DQo+Pg0KPj4NCj4+DQo+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0K
-Pj4NCj4+IFRoaXMgZS1tYWlsIGlzIGNvbmZpZGVudGlhbCBhbmQgbWF5IGNvbnRhaW4gbGVnYWxs
-eSBwcml2aWxlZ2VkIGluZm9ybWF0aW9uLiBJdCBpcyBpbnRlbmRlZCBvbmx5IGZvciB0aGUgYWRk
-cmVzc2Vlcy4gSWYgeW91IGhhdmUgcmVjZWl2ZWQgdGhpcyBlLW1haWwgaW4gZXJyb3IsIGtpbmRs
-eSBub3RpZnkgdXMgaW1tZWRpYXRlbHkgYnkgdGVsZXBob25lIG9yIGUtbWFpbCBhbmQgZGVsZXRl
-IHRoZSBtZXNzYWdlIGZyb20geW91ciBzeXN0ZW0uDQo+PiBfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXw0KPj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdA0KPj4g
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZw0KPj4gaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
-YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2DQo+DQo+DQo+DQo+IC0tDQo+IErDqXLDqW1p
-ZSBHYWxhcm5lYXUNCj4gRWZmaWNpT1MgSW5jLg0KPiBodHRwOi8vd3d3LmVmZmljaW9zLmNvbQ0K
-DQoNCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQoNClRoaXMgZS1tYWlsIGlzIGNv
-bmZpZGVudGlhbCBhbmQgbWF5IGNvbnRhaW4gbGVnYWxseSBwcml2aWxlZ2VkIGluZm9ybWF0aW9u
-LiBJdCBpcyBpbnRlbmRlZCBvbmx5IGZvciB0aGUgYWRkcmVzc2Vlcy4gSWYgeW91IGhhdmUgcmVj
-ZWl2ZWQgdGhpcyBlLW1haWwgaW4gZXJyb3IsIGtpbmRseSBub3RpZnkgdXMgaW1tZWRpYXRlbHkg
-YnkgdGVsZXBob25lIG9yIGUtbWFpbCBhbmQgZGVsZXRlIHRoZSBtZXNzYWdlIGZyb20geW91ciBz
-eXN0ZW0uDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
-dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xp
-c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Hi Nathan,
+
+Michael Jeanson already posted a patch [1] regarding this. His patch 
+seems more complete since it also reuse objcopy for stripping instead of 
+strip.
+
+Could you test the patch?
+
+Cheers
+
+[1] https://lists.lttng.org/pipermail/lttng-dev/2015-December/025332.html
+
+On 2015-12-11 11:45 AM, Nathan Lynch wrote:
+> On 12/11/2015 10:43 AM, Nathan Lynch wrote:
+>> The build steps for some tests refer directly to objcopy and strip,
+>> which when cross-compiling can result in:
+>>
+>>   objcopy --only-keep-debug prog prog.debug
+>>   objcopy: Unable to recognise the format of the input file `prog'
+>>
+>> Use AC_CHECK_TOOL to use appropriate programs for the target.
+> (This patch is for lttng-tools.)
+>
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Jonathan R. Julien
+Efficios
