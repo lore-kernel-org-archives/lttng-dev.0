@@ -1,20 +1,15 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Tests: fix make targets using
-	objcopy
-Date: Thu, 17 Dec 2015 14:19:26 -0500
-Message-ID: <CA+jJMxukGHGuO_fCt-=h6do7_qwfC_wCTikvq+vcOc7HPROznA__22135.0229964175$1450380046$gmane$org@mail.gmail.com>
-References: <1449080769-18845-1-git-send-email-mjeanson@efficios.com>
+From: "zhenyu.ren" <zhenyu.ren@aliyun.com>
+Subject: =?utf-8?q?if_lttng-sessiond_crashed?=
+Date: Fri, 18 Dec 2015 15:56:26 +0800
+Message-ID: <e1a18587-379c-47c4-b049-ca7125be16a3.zhenyu.ren__31997.9271655486$1450425492$gmane$org@aliyun.com>
+Reply-To: "zhenyu.ren" <zhenyu.ren@aliyun.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1756518610=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yk0-f178.google.com ([209.85.160.178])
+Received: from out12.mail.aliyun.com ([205.204.117.241])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1a9e5M-0003iy-Bg
- for lttng-dev@lists.lttng.org; Thu, 17 Dec 2015 14:19:34 -0500
-Received: by mail-yk0-f178.google.com with SMTP id p130so31137203yka.1
- for <lttng-dev@lists.lttng.org>; Thu, 17 Dec 2015 11:19:32 -0800 (PST)
-In-Reply-To: <1449080769-18845-1-git-send-email-mjeanson@efficios.com>
+ (envelope-from <zhenyu.ren@aliyun.com>) id 1a9puO-0002SC-HV
+ for lttng-dev@lists.lttng.org; Fri, 18 Dec 2015 02:57:03 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,130 +18,64 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>, Nathan Lynch <Nathan_Lynch@mentor.com>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gV2VkLCBEZWMgMiwgMjAxNSBhdCAxOjI2IFBNLCBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29u
-QGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gQWRkIGRldGVjdGlvbiBmb3Igb2JqY29weSB1c2luZyBB
-Q19DSEVDS19UT09MIGFuZCB1c2UgZGVkaWNhdGVkIG1ha2UKPiB0YXJnZXRzIGZvciBlYWNoIGZp
-bGUuCj4KPiBTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVmZmljaW9z
-LmNvbT4KPiAtLS0KPiAgLmdpdGlnbm9yZSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIHwgIDIgKysKPiAgY29uZmlndXJlLmFjICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIHwgIDYgKysrKysrCj4gIHRlc3RzL3JlZ3Jlc3Npb24vdXN0L2JhZGRy
-LXN0YXRlZHVtcC9NYWtlZmlsZS5hbSAgICB8IDIxICsrKysrKysrKysrKysrKystLS0tLQo+ICAu
-Li4vdXN0L2JhZGRyLXN0YXRlZHVtcC90ZXN0X2JhZGRyLXN0YXRlZHVtcC5weSAgICAgfCAgMiAr
-LQo+ICB0ZXN0cy9yZWdyZXNzaW9uL3VzdC91c3QtZGwvTWFrZWZpbGUuYW0gICAgICAgICAgICAg
-fCAyMSArKysrKysrKysrKysrKysrLS0tLS0KPiAgdGVzdHMvcmVncmVzc2lvbi91c3QvdXN0LWRs
-L3Rlc3RfdXN0LWRsLnB5ICAgICAgICAgIHwgIDIgKy0KPiAgNiBmaWxlcyBjaGFuZ2VkLCA0MiBp
-bnNlcnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkKPgo+IGRpZmYgLS1naXQgYS8uZ2l0aWdub3Jl
-IGIvLmdpdGlnbm9yZQo+IGluZGV4IDBlZmNjZmEuLmNhMDhkOTUgMTAwNjQ0Cj4gLS0tIGEvLmdp
-dGlnbm9yZQo+ICsrKyBiLy5naXRpZ25vcmUKPiBAQCAtOTUsNyArOTUsOSBAQCBoZWFsdGhfY2hl
-Y2sKPiAgdGVzdHMvcmVncmVzc2lvbi91c3QvcHl0aG9uLWxvZ2dpbmcvdGVzdF9weXRob25fbG9n
-Z2luZwo+ICAvdGVzdHMvcmVncmVzc2lvbi91c3QvYmFkZHItc3RhdGVkdW1wL3Byb2cKPiAgL3Rl
-c3RzL3JlZ3Jlc3Npb24vdXN0L2JhZGRyLXN0YXRlZHVtcC9wcm9nLmRlYnVnCj4gKy90ZXN0cy9y
-ZWdyZXNzaW9uL3VzdC9iYWRkci1zdGF0ZWR1bXAvcHJvZy5zdHJpcAo+ICAvdGVzdHMvcmVncmVz
-c2lvbi91c3QvdXN0LWRsL3Byb2cKPiArL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L3VzdC1kbC9saWJm
-b28uc28uZGVidWcKPiAgL3Rlc3RzL3V0aWxzL3Rlc3RhcHAvZ2VuLXVzdC1uZXZlbnRzL2dlbi11
-c3QtbmV2ZW50cwo+ICAvdGVzdHMvdXRpbHMvdGVzdGFwcC9nZW4tdXN0LXRyYWNlZi9nZW4tdXN0
-LXRyYWNlZgo+ICAvdGVzdHMvcmVncmVzc2lvbi90b29scy9saXZlL2xpdmVfdGVzdAo+IGRpZmYg
-LS1naXQgYS9jb25maWd1cmUuYWMgYi9jb25maWd1cmUuYWMKPiBpbmRleCA5NzhlM2JjLi40MTAw
-ZmUxIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3VyZS5hYwo+ICsrKyBiL2NvbmZpZ3VyZS5hYwo+IEBA
-IC0yOCw2ICsyOCwxMiBAQCBBQ19QUk9HX1NFRAo+ICBBQ19QUk9HX1lBQ0MKPiAgTFRfSU5JVAo+
-Cj4gKyMgQ2hlY2sgZm9yIG9iamNvcHksIHJlcXVpcmVkIGJ5IHRoZSBiYXNlIGFkZHJlc3Mgc3Rh
-dGVkdW1wIGFuZCBkeW5hbWljIGxpbmtlciB0ZXN0cwo+ICtBQ19DSEVDS19UT09MKFtPQkpDT1BZ
-XSwgb2JqY29weSwgbm8pCj4gK0FTX0lGKFt0ZXN0ICJ4JE9CSkNPUFkiID0geG5vXSwKPiArICAg
-ICAgIFtBQ19NU0dfRVJST1IoW0Nhbm5vbnQgZmluZCBvYmpjb3B5LiBJbnN0YWxsIHRoZSBiaW51
-dGlscyBwYWNrYWdlLl0pXQo+ICspCgpUaGUgcmVzdCBvZiB0aGUgZml4IGxvb2tzIGdvb2QsIGJ1
-dCB0aGlzIHNob3VsZCBvbmx5IGRpc2FibGUgdGhlCmFmZmVjdGVkIHRlc3RzIHNpbmNlIGJpbnV0
-aWxzIGlzIG5vdCBhIGRlcGVuZGFuY3kgb2YgbHR0bmctdG9vbHMuCgpSZWdhcmRzLApKw6lyw6lt
-aWUKCj4gKwo+ICAjIENoZWNrcyBmb3IgdHlwZWRlZnMsIHN0cnVjdHVyZXMsIGFuZCBjb21waWxl
-ciBjaGFyYWN0ZXJpc3RpY3MuCj4gIEFDX0NfSU5MSU5FCj4gIEFDX1RZUEVfSU5UMzJfVAo+IGRp
-ZmYgLS1naXQgYS90ZXN0cy9yZWdyZXNzaW9uL3VzdC9iYWRkci1zdGF0ZWR1bXAvTWFrZWZpbGUu
-YW0gYi90ZXN0cy9yZWdyZXNzaW9uL3VzdC9iYWRkci1zdGF0ZWR1bXAvTWFrZWZpbGUuYW0KPiBp
-bmRleCBmNDVjNWFlLi43Y2FmNDU3IDEwMDY0NAo+IC0tLSBhL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0
-L2JhZGRyLXN0YXRlZHVtcC9NYWtlZmlsZS5hbQo+ICsrKyBiL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0
-L2JhZGRyLXN0YXRlZHVtcC9NYWtlZmlsZS5hbQo+IEBAIC0xLDMgKzEsNyBAQAo+ICtvYmpjb3B5
-X3ZlcmJvc2UgPSAkKG9iamNvcHlfdmVyYm9zZV9AQU1fVkApCj4gK29iamNvcHlfdmVyYm9zZV8g
-PSAkKG9iamNvcHlfdmVyYm9zZV9AQU1fREVGQVVMVF9WQCkKPiArb2JqY29weV92ZXJib3NlXzAg
-PSBAZWNobyBPQkpDT1BZICRAOwo+ICsKPiAgQU1fQ1BQRkxBR1MgPSAtSSQoc3JjZGlyKSAtZwo+
-Cj4gIG5vaW5zdF9QUk9HUkFNUyA9IHByb2cKPiBAQCAtNywxNSArMTEsMjEgQEAgcHJvZ19MREFE
-RCA9IC1sbHR0bmctdXN0IC1sZGwKPiAgbm9pbnN0X1NDUklQVFMgPSB0ZXN0X2JhZGRyLXN0YXRl
-ZHVtcCB0ZXN0X2JhZGRyLXN0YXRlZHVtcC5weQo+ICBFWFRSQV9ESVNUID0gdGVzdF9iYWRkci1z
-dGF0ZWR1bXAgdGVzdF9iYWRkci1zdGF0ZWR1bXAucHkKPgo+IC1hbGwtbG9jYWw6IHByb2ckKEVY
-RUVYVCkKPiArIyBFeHRyYWN0IGRlYnVnIHN5bWJvbHMKPiArcHJvZy5kZWJ1ZzogcHJvZwo+ICsg
-ICAgICAgJChvYmpjb3B5X3ZlcmJvc2UpJChPQkpDT1BZKSAtLW9ubHkta2VlcC1kZWJ1ZyBwcm9n
-IHByb2cuZGVidWcKPiArCj4gKyMgU3RyaXAgYW5kIGFkZCBkZWJ1Z2xpbmsKPiArcHJvZy5zdHJp
-cDogcHJvZy5kZWJ1Zwo+ICsgICAgICAgQGNwIC1mIHByb2cgcHJvZy5zdHJpcAo+ICsgICAgICAg
-JChvYmpjb3B5X3ZlcmJvc2UpJChPQkpDT1BZKSAtLXN0cmlwLWRlYnVnIC0tYWRkLWdudS1kZWJ1
-Z2xpbms9cHJvZy5kZWJ1ZyBwcm9nLnN0cmlwCj4gKwo+ICthbGwtbG9jYWw6IHByb2cuc3RyaXAK
-PiAgICAgICAgIEBpZiBbIHgiJChzcmNkaXIpIiAhPSB4IiQoYnVpbGRkaXIpIiBdOyB0aGVuIFwK
-PiAgICAgICAgICAgICAgICAgZm9yIHNjcmlwdCBpbiAkKEVYVFJBX0RJU1QpOyBkbyBcCj4gICAg
-ICAgICAgICAgICAgICAgICAgICAgY3AgLWYgJChzcmNkaXIpLyQkc2NyaXB0ICQoYnVpbGRkaXIp
-OyBcCj4gICAgICAgICAgICAgICAgIGRvbmU7IFwKPiAgICAgICAgIGZpCj4gLSAgICAgICBvYmpj
-b3B5IC0tb25seS1rZWVwLWRlYnVnIHByb2cgcHJvZy5kZWJ1Zwo+IC0gICAgICAgc3RyaXAgLWcg
-cHJvZwo+IC0gICAgICAgb2JqY29weSAtLWFkZC1nbnUtZGVidWdsaW5rIHByb2cuZGVidWcgcHJv
-Zwo+Cj4gIGNsZWFuLWxvY2FsOgo+ICAgICAgICAgQGlmIFsgeCIkKHNyY2RpcikiICE9IHgiJChi
-dWlsZGRpcikiIF07IHRoZW4gXAo+IEBAIC0yMyw0ICszMyw1IEBAIGNsZWFuLWxvY2FsOgo+ICAg
-ICAgICAgICAgICAgICAgICAgICAgIHJtIC1mICQoYnVpbGRkaXIpLyQkc2NyaXB0OyBcCj4gICAg
-ICAgICAgICAgICAgIGRvbmU7IFwKPiAgICAgICAgIGZpCj4gLSAgICAgICBybSAtZiBwcm9nLmRl
-YnVnCj4gKwo+ICtDTEVBTkZJTEVTID0gcHJvZy5kZWJ1ZyBwcm9nLnN0cmlwCj4gZGlmZiAtLWdp
-dCBhL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L2JhZGRyLXN0YXRlZHVtcC90ZXN0X2JhZGRyLXN0YXRl
-ZHVtcC5weSBiL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L2JhZGRyLXN0YXRlZHVtcC90ZXN0X2JhZGRy
-LXN0YXRlZHVtcC5weQo+IGluZGV4IDMwOGVmZjQuLjQ3ZWQ5ZDYgMTAwNjQ0Cj4gLS0tIGEvdGVz
-dHMvcmVncmVzc2lvbi91c3QvYmFkZHItc3RhdGVkdW1wL3Rlc3RfYmFkZHItc3RhdGVkdW1wLnB5
-Cj4gKysrIGIvdGVzdHMvcmVncmVzc2lvbi91c3QvYmFkZHItc3RhdGVkdW1wL3Rlc3RfYmFkZHIt
-c3RhdGVkdW1wLnB5Cj4gQEAgLTQ1LDcgKzQ1LDcgQEAgc2Vzc2lvbl9pbmZvID0gY3JlYXRlX3Nl
-c3Npb24oKQo+ICBlbmFibGVfdXN0X3RyYWNlcG9pbnRfZXZlbnQoc2Vzc2lvbl9pbmZvLCAiKiIp
-Cj4gIHN0YXJ0X3Nlc3Npb24oc2Vzc2lvbl9pbmZvKQo+Cj4gLXRlc3RfcHJvY2VzcyA9IHN1YnBy
-b2Nlc3MuUG9wZW4odGVzdF9wYXRoICsgInByb2ciLCBzdGRvdXQ9c3VicHJvY2Vzcy5QSVBFLCBz
-dGRlcnI9c3VicHJvY2Vzcy5QSVBFKQo+ICt0ZXN0X3Byb2Nlc3MgPSBzdWJwcm9jZXNzLlBvcGVu
-KHRlc3RfcGF0aCArICJwcm9nLnN0cmlwIiwgc3Rkb3V0PXN1YnByb2Nlc3MuUElQRSwgc3RkZXJy
-PXN1YnByb2Nlc3MuUElQRSkKPiAgaWYgc3lzLnZlcnNpb25faW5mbyA+PSAoMywgMyk6Cj4gICAg
-ICB0cnk6Cj4gICAgICAgICAgdGVzdF9wcm9jZXNzLndhaXQoNSkKPiBkaWZmIC0tZ2l0IGEvdGVz
-dHMvcmVncmVzc2lvbi91c3QvdXN0LWRsL01ha2VmaWxlLmFtIGIvdGVzdHMvcmVncmVzc2lvbi91
-c3QvdXN0LWRsL01ha2VmaWxlLmFtCj4gaW5kZXggNDg5M2E5Ny4uYzEyZGExNiAxMDA2NDQKPiAt
-LS0gYS90ZXN0cy9yZWdyZXNzaW9uL3VzdC91c3QtZGwvTWFrZWZpbGUuYW0KPiArKysgYi90ZXN0
-cy9yZWdyZXNzaW9uL3VzdC91c3QtZGwvTWFrZWZpbGUuYW0KPiBAQCAtMSwzICsxLDcgQEAKPiAr
-b2JqY29weV92ZXJib3NlID0gJChvYmpjb3B5X3ZlcmJvc2VfQEFNX1ZAKQo+ICtvYmpjb3B5X3Zl
-cmJvc2VfID0gJChvYmpjb3B5X3ZlcmJvc2VfQEFNX0RFRkFVTFRfVkApCj4gK29iamNvcHlfdmVy
-Ym9zZV8wID0gQGVjaG8gT0JKQ09QWSAkQDsKPiArCj4gIEFNX0NQUEZMQUdTID0gLUkkKHNyY2Rp
-cikgLWcKPgo+ICBub2luc3RfUFJPR1JBTVMgPSBwcm9nCj4gQEAgLTEyLDE1ICsxNiwyMSBAQCBs
-aWJmb29fbGFfTERGTEFHUyA9IC1tb2R1bGUgLXNoYXJlZCAtYXZvaWQtdmVyc2lvbiBcCj4gIG5v
-aW5zdF9TQ1JJUFRTID0gdGVzdF91c3QtZGwgdGVzdF91c3QtZGwucHkKPiAgRVhUUkFfRElTVCA9
-IHRlc3RfdXN0LWRsIHRlc3RfdXN0LWRsLnB5Cj4KPiAtYWxsLWxvY2FsOiBsaWJmb28ubGEKPiAr
-IyBFeHRyYWN0IGRlYnVnIHN5bWJvbHMKPiArbGliZm9vLnNvLmRlYnVnOiBsaWJmb28ubGEKPiAr
-ICAgICAgICQob2JqY29weV92ZXJib3NlKSQoT0JKQ09QWSkgLS1vbmx5LWtlZXAtZGVidWcgLmxp
-YnMvbGliZm9vLnNvIGxpYmZvby5zby5kZWJ1Zwo+ICsKPiArIyBTdHJpcCBhbmQgYWRkIGRlYnVn
-bGluawo+ICtsaWJmb28uc286IGxpYmZvby5zby5kZWJ1Zwo+ICsgICAgICAgQGNwIC1mIC5saWJz
-L2xpYmZvby5zbyBsaWJmb28uc28KPiArICAgICAgICQob2JqY29weV92ZXJib3NlKSQoT0JKQ09Q
-WSkgLS1zdHJpcC1kZWJ1ZyAtLWFkZC1nbnUtZGVidWdsaW5rPWxpYmZvby5zby5kZWJ1ZyBsaWJm
-b28uc28KPiArCj4gK2FsbC1sb2NhbDogbGliZm9vLnNvCj4gICAgICAgICBAaWYgWyB4IiQoc3Jj
-ZGlyKSIgIT0geCIkKGJ1aWxkZGlyKSIgXTsgdGhlbiBcCj4gICAgICAgICAgICAgICAgIGZvciBz
-Y3JpcHQgaW4gJChFWFRSQV9ESVNUKTsgZG8gXAo+ICAgICAgICAgICAgICAgICAgICAgICAgIGNw
-IC1mICQoc3JjZGlyKS8kJHNjcmlwdCAkKGJ1aWxkZGlyKTsgXAo+ICAgICAgICAgICAgICAgICBk
-b25lOyBcCj4gICAgICAgICBmaQo+IC0gICAgICAgb2JqY29weSAtLW9ubHkta2VlcC1kZWJ1ZyAu
-bGlicy9saWJmb28uc28gLmxpYnMvbGliZm9vLnNvLmRlYnVnCj4gLSAgICAgICBzdHJpcCAtZyAu
-bGlicy9saWJmb28uc28KPiAtICAgICAgIG9iamNvcHkgLS1hZGQtZ251LWRlYnVnbGluayAubGli
-cy9saWJmb28uc28uZGVidWcgLmxpYnMvbGliZm9vLnNvCj4KPiAgY2xlYW4tbG9jYWw6Cj4gICAg
-ICAgICBAaWYgWyB4IiQoc3JjZGlyKSIgIT0geCIkKGJ1aWxkZGlyKSIgXTsgdGhlbiBcCj4gQEAg
-LTI4LDQgKzM4LDUgQEAgY2xlYW4tbG9jYWw6Cj4gICAgICAgICAgICAgICAgICAgICAgICAgcm0g
-LWYgJChidWlsZGRpcikvJCRzY3JpcHQ7IFwKPiAgICAgICAgICAgICAgICAgZG9uZTsgXAo+ICAg
-ICAgICAgZmkKPiAtICAgICAgIHJtIC1mIC5saWJzL2xpYmZvby5zby5kZWJ1Zwo+ICsKPiArQ0xF
-QU5GSUxFUyA9IGxpYmZvby5zbyBsaWJmb28uc28uZGVidWcKPiBkaWZmIC0tZ2l0IGEvdGVzdHMv
-cmVncmVzc2lvbi91c3QvdXN0LWRsL3Rlc3RfdXN0LWRsLnB5IGIvdGVzdHMvcmVncmVzc2lvbi91
-c3QvdXN0LWRsL3Rlc3RfdXN0LWRsLnB5Cj4gaW5kZXggMWU1ZTk2Yi4uZGM3MzI3MCAxMDA2NDQK
-PiAtLS0gYS90ZXN0cy9yZWdyZXNzaW9uL3VzdC91c3QtZGwvdGVzdF91c3QtZGwucHkKPiArKysg
-Yi90ZXN0cy9yZWdyZXNzaW9uL3VzdC91c3QtZGwvdGVzdF91c3QtZGwucHkKPiBAQCAtNDcsNyAr
-NDcsNyBAQCBzdGFydF9zZXNzaW9uKHNlc3Npb25faW5mbykKPgo+ICB0ZXN0X2VudiA9IG9zLmVu
-dmlyb24uY29weSgpCj4gIHRlc3RfZW52WyJMRF9QUkVMT0FEIl0gPSAibGlibHR0bmctdXN0LWRs
-LnNvIgo+IC10ZXN0X2VudlsiTERfTElCUkFSWV9QQVRIIl0gPSB0ZXN0X3BhdGggKyAiLmxpYnMv
-Igo+ICt0ZXN0X2VudlsiTERfTElCUkFSWV9QQVRIIl0gPSB0ZXN0X3BhdGgKPiAgdGVzdF9wcm9j
-ZXNzID0gc3VicHJvY2Vzcy5Qb3Blbih0ZXN0X3BhdGggKyAicHJvZyIsCj4gICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgc3Rkb3V0PXN1YnByb2Nlc3MuUElQRSwgc3RkZXJyPXN1YnBy
-b2Nlc3MuUElQRSwKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlbnY9dGVzdF9l
-bnYpCj4gLS0KPiAxLjkuMQo+CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIElu
-Yy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
-by9sdHRuZy1kZXYK
+--===============1756518610==
+Content-Type: multipart/alternative;
+  boundary="----=ALIBOUNDARY_20196_50c5a940_5673bc2a_a336"
+
+------=ALIBOUNDARY_20196_50c5a940_5673bc2a_a336
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi,=C2=A0 =C2=A0I know that when the enabled event is hitted , the=C2=A0instru=
+mented app will call=C2=A0__event_probe__##_provider##___##_template() to writ=
+e data into memory and lttng-consumerd will consume these data from buffer to =
+disk. If lttng-sessiond(include lttng-consumed) does crash (not be signal-kill=
+ed) in the middle of tracing process, what will happen in these instrumented a=
+pps? Will they crash too ? Will they continue wirting data into buffer for eve=
+r??Thankszhenyu.ren
+------=ALIBOUNDARY_20196_50c5a940_5673bc2a_a336
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div class=3D"__aliyun_email_body_block"><div style=3D"clear: both;"><span sty=
+le=3D"font-family: Tahoma, Arial, STHeiti, SimSun; font-size: 14px; color: rgb=
+(0, 0, 0);">Hi,</span></div><div style=3D"clear: both;"><span style=3D"font-fa=
+mily: Tahoma, Arial, STHeiti, SimSun; font-size: 14px; color: rgb(0, 0, 0);"><=
+br ></span></div><div style=3D"clear: both;"><span style=3D"font-family: Tahom=
+a, Arial, STHeiti, SimSun; font-size: 14px; color: rgb(0, 0, 0);">&nbsp; &nbsp=
+;I know that <span style=3D"color: rgb(0, 0, 0); font-family: Tahoma, Arial, S=
+THeiti, SimSun; font-size: 14px; font-style: normal; font-variant: normal; fon=
+t-weight: normal; line-height: 23px; text-align: start; text-indent: 0px; text=
+-transform: none; widows: auto; background-color: rgb(255, 255, 255); float: n=
+one; display: inline !important;">when the enabled event is hitted , the&nbsp;=
+</span>instrumented app will call&nbsp;__event_probe__##_provider##___##_templ=
+ate() to write data into memory and lttng-consumerd will consume these data fr=
+om buffer to disk. If lttng-sessiond(include lttng-consumed) does crash (not b=
+e signal-killed) in the middle of tracing process, what will happen in these i=
+nstrumented apps? Will they crash too ? Will they continue wirting data into b=
+uffer for ever??</span></div><div style=3D"clear: both;"><span style=3D"font-f=
+amily: Tahoma, Arial, STHeiti, SimSun; font-size: 14px; color: rgb(0, 0, 0);">=
+<br ></span></div><div style=3D"clear: both;"><span style=3D"font-family: Taho=
+ma, Arial, STHeiti, SimSun; font-size: 14px; color: rgb(0, 0, 0);">Thanks</spa=
+n></div><div style=3D"clear: both;"><span style=3D"font-family: Tahoma, Arial,=
+ STHeiti, SimSun; font-size: 14px; color: rgb(0, 0, 0);">zhenyu.ren</span></di=
+v></div>
+------=ALIBOUNDARY_20196_50c5a940_5673bc2a_a336--
+
+
+
+--===============1756518610==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1756518610==--
