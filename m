@@ -1,8 +1,8 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH babeltrace v2] Do not use g_list_free_full
-Date: Mon,  4 Jan 2016 16:47:12 -0500
-Message-ID: <1451944032-8219-1-git-send-email-jonathan.rajotte-julien__5384.7539275468$1451944104$gmane$org@efficios.com>
-References: <568AE72E.5030102@efficios.com>
+Subject: [PATCH babeltrace v3] Do not use g_list_free_full
+Date: Mon,  4 Jan 2016 17:04:23 -0500
+Message-ID: <1451945063-9730-1-git-send-email-jonathan.rajotte-julien__11674.3668717847$1451945133$gmane$org@efficios.com>
+References: <1451943430-7346-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,9 +10,9 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
  (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1aGCyQ-0008FP-8s
- for lttng-dev@lists.lttng.org; Mon, 04 Jan 2016 16:47:31 -0500
-In-Reply-To: <568AE72E.5030102@efficios.com>
+ id 1aGDEz-0008N0-Cc
+ for lttng-dev@lists.lttng.org; Mon, 04 Jan 2016 17:04:43 -0500
+In-Reply-To: <1451943430-7346-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,11 +24,10 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-v2: commit message: 2.20-> 2.28, glibc -> glib
-
+v3: we support from 2.22 not 2.28.
 --
 
-Babeltrace support glib all the way back to 2.28 and g_list_free_full
+Babeltrace support glib all the way back to 2.22 and g_list_free_full
 exists from 2.28.0 (backported to 2.27.2) only.
 
 The replacement is the current implementation found in modern glib.
