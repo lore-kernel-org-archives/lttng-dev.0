@@ -1,8 +1,7 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH babeltrace v3] Do not use g_list_free_full
-Date: Mon,  4 Jan 2016 17:04:23 -0500
-Message-ID: <1451945063-9730-1-git-send-email-jonathan.rajotte-julien__11674.3668717847$1451945133$gmane$org@efficios.com>
-References: <1451943430-7346-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-ust] Fix: missing _GNU_SOURCE define
+Date: Mon,  4 Jan 2016 17:31:57 -0500
+Message-ID: <1451946717-12219-1-git-send-email-jonathan.rajotte-julien__45728.790088515$1451946787$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -10,9 +9,11 @@ Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
  (envelope-from <jonathan.rajotte-julien@efficios.com>)
- id 1aGDEz-0008N0-Cc
- for lttng-dev@lists.lttng.org; Mon, 04 Jan 2016 17:04:43 -0500
-In-Reply-To: <1451943430-7346-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ id 1aGDfl-0008WC-Dm
+ for lttng-dev@lists.lttng.org; Mon, 04 Jan 2016 17:32:18 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 53A6734024C
+ for <lttng-dev@lists.lttng.org>; Mon,  4 Jan 2016 22:32:14 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,32 +25,24 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-v3: we support from 2.22 not 2.28.
---
-
-Babeltrace support glib all the way back to 2.22 and g_list_free_full
-exists from 2.28.0 (backported to 2.27.2) only.
-
-The replacement is the current implementation found in modern glib.
+O_CLOEXEC require _GNU_SOURCE.
 
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- formats/ctf/ir/visitor.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ liblttng-ust/lttng-ust-elf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/formats/ctf/ir/visitor.c b/formats/ctf/ir/visitor.c
-index 9b65ed5..704a804 100644
---- a/formats/ctf/ir/visitor.c
-+++ b/formats/ctf/ir/visitor.c
-@@ -724,7 +724,8 @@ end:
- 		g_free(name_copy);
- 	}
- 	if (path_tokens) {
--		g_list_free_full(path_tokens, free);
-+		g_list_foreach(path_tokens, (GFunc) free, NULL);
-+		g_list_free(path_tokens);
- 	}
- 	return ret;
- error:
+diff --git a/liblttng-ust/lttng-ust-elf.c b/liblttng-ust/lttng-ust-elf.c
+index dcae966..e906269 100644
+--- a/liblttng-ust/lttng-ust-elf.c
++++ b/liblttng-ust/lttng-ust-elf.c
+@@ -16,6 +16,7 @@
+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+  */
+ 
++#define _GNU_SOURCE
+ #include <helper.h>
+ #include <string.h>
+ #include <lttng/align.h>
 -- 
 2.5.0
