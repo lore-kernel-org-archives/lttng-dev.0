@@ -1,17 +1,16 @@
-From: John Smith <whalajam@gmail.com>
-Subject: lttng -q option doesn't work for "stop" and "destroy"
-	commands
-Date: Mon, 28 Dec 2015 16:46:13 -0800
-Message-ID: <CANgVouU3QAHUF6X1TSnAgc6ppXr3+uVntjiZNFk+PgpHBHCzMw__11987.324714619$1451927842$gmane$org@mail.gmail.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH babeltrace] Do not use g_list_free_full
+Date: Mon,  4 Jan 2016 16:37:10 -0500
+Message-ID: <1451943430-7346-1-git-send-email-jonathan.rajotte-julien__39900.8822314956$1451943511$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1869772418=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f182.google.com ([209.85.213.182])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <whalajam@gmail.com>) id 1aDiQd-0001wW-CO
- for lttng-dev@lists.lttng.org; Mon, 28 Dec 2015 19:46:20 -0500
-Received: by mail-ig0-f182.google.com with SMTP id to4so153731587igc.0
- for <lttng-dev@lists.lttng.org>; Mon, 28 Dec 2015 16:46:19 -0800 (PST)
+ (envelope-from <jonathan.rajotte-julien@efficios.com>)
+ id 1aGCop-00088Y-Lt
+ for lttng-dev@lists.lttng.org; Mon, 04 Jan 2016 16:37:37 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,48 +22,29 @@ Errors-To: lttng-dev-bounces@lists.lttng.org
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1869772418==
-Content-Type: multipart/alternative; boundary=089e0112cfb0a268ce0527febfa9
+Babeltrace support glibc all the way back to 2.20 and g_list_free_full
+exists from 2.28.0 (backported to 2.27.2) only.
 
---089e0112cfb0a268ce0527febfa9
-Content-Type: text/plain; charset=UTF-8
+The replacement is the current implementation found in modern glibc.
 
--q (quiet) option doesn't work for stop and destroy commands:
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+ formats/ctf/ir/visitor.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-$ lttng stop x
-Error: Session name not found
-$ lttng -q stop x
-Error: Session name not found
-$ lttng destroy x
-Error: Session name x not found
-$ lttng -q destroy x
-Error: Session name x not found
-
-thanks, John
-
---089e0112cfb0a268ce0527febfa9
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>-q (quiet) option doesn&#39;t work for stop and destr=
-oy commands:</div><div><br></div><div>$ lttng stop x<br>Error: Session name=
- not found<br>$ lttng -q stop x<br>Error: Session name not found<br>$ lttng=
- destroy x<br>Error: Session name x not found<br>$ lttng -q destroy x<br>Er=
-ror: Session name x not found</div><div><br></div><div>thanks, John<br></di=
-v></div>
-
---089e0112cfb0a268ce0527febfa9--
-
-
---===============1869772418==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1869772418==--
+diff --git a/formats/ctf/ir/visitor.c b/formats/ctf/ir/visitor.c
+index 9b65ed5..704a804 100644
+--- a/formats/ctf/ir/visitor.c
++++ b/formats/ctf/ir/visitor.c
+@@ -724,7 +724,8 @@ end:
+ 		g_free(name_copy);
+ 	}
+ 	if (path_tokens) {
+-		g_list_free_full(path_tokens, free);
++		g_list_foreach(path_tokens, (GFunc) free, NULL);
++		g_list_free(path_tokens);
+ 	}
+ 	return ret;
+ error:
+-- 
+2.5.0
