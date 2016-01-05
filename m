@@ -1,20 +1,32 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: lttng -q option doesn't work for "stop" and
-	"destroy" commands
-Date: Tue, 5 Jan 2016 13:14:43 -0500
-Message-ID: <CA+jJMxuHUDUT9LDhyHAahcpkX=czp9TvHQNyrGqLpMvk8-j=KQ__16272.9241689251$1452017751$gmane$org@mail.gmail.com>
-References: <CANgVouU3QAHUF6X1TSnAgc6ppXr3+uVntjiZNFk+PgpHBHCzMw@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng modules 2.7.1 (Linux kernel tracer)
+Date: Tue, 5 Jan 2016 18:37:35 +0000 (UTC)
+Message-ID: <1055877487.338270.1452019055481.JavaMail.zimbra__38748.1361548$1452019120$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f170.google.com ([209.85.213.170])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1aGW89-00060r-4N
- for lttng-dev@lists.lttng.org; Tue, 05 Jan 2016 13:14:51 -0500
-Received: by mail-ig0-f170.google.com with SMTP id ph11so20520542igc.1
- for <lttng-dev@lists.lttng.org>; Tue, 05 Jan 2016 10:14:49 -0800 (PST)
-In-Reply-To: <CANgVouU3QAHUF6X1TSnAgc6ppXr3+uVntjiZNFk+PgpHBHCzMw@mail.gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1aGWUG-00068O-Ky
+ for lttng-dev@lists.lttng.org; Tue, 05 Jan 2016 13:37:42 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 8E2D43403DE
+ for <lttng-dev@lists.lttng.org>; Tue,  5 Jan 2016 18:37:37 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id ibedG5e40fDp for <lttng-dev@lists.lttng.org>;
+ Tue,  5 Jan 2016 18:37:35 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id C23553404F7
+ for <lttng-dev@lists.lttng.org>; Tue,  5 Jan 2016 18:37:35 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id qoyVg-n2uLNP for <lttng-dev@lists.lttng.org>;
+ Tue,  5 Jan 2016 18:37:35 +0000 (UTC)
+Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
+ by mail.efficios.com (Postfix) with ESMTP id A17473403DE
+ for <lttng-dev@lists.lttng.org>; Tue,  5 Jan 2016 18:37:35 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,22 +35,32 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: John Smith <whalajam@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgSm9obiwKClBsZWFzZSBvcGVuIGEgYnVnIGFnYWluc3QgbHR0bmctdG9vbHMgb24gYnVncy5s
-dHRuZy5vcmcuCgpSZWdhcmRzLApKw6lyw6ltaWUKCk9uIE1vbiwgRGVjIDI4LCAyMDE1IGF0IDc6
-NDYgUE0sIEpvaG4gU21pdGggPHdoYWxhamFtQGdtYWlsLmNvbT4gd3JvdGU6Cj4gLXEgKHF1aWV0
-KSBvcHRpb24gZG9lc24ndCB3b3JrIGZvciBzdG9wIGFuZCBkZXN0cm95IGNvbW1hbmRzOgo+Cj4g
-JCBsdHRuZyBzdG9wIHgKPiBFcnJvcjogU2Vzc2lvbiBuYW1lIG5vdCBmb3VuZAo+ICQgbHR0bmcg
-LXEgc3RvcCB4Cj4gRXJyb3I6IFNlc3Npb24gbmFtZSBub3QgZm91bmQKPiAkIGx0dG5nIGRlc3Ry
-b3kgeAo+IEVycm9yOiBTZXNzaW9uIG5hbWUgeCBub3QgZm91bmQKPiAkIGx0dG5nIC1xIGRlc3Ry
-b3kgeAo+IEVycm9yOiBTZXNzaW9uIG5hbWUgeCBub3QgZm91bmQKPgo+IHRoYW5rcywgSm9obgo+
-Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHA6Ly9s
-aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+CgoKCi0t
-IApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5j
-b20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMu
-bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Hi,
+
+We just released lttng-modules 2.7.1, which is a bugfix release for
+the stable-2.7 branch.
+
+The LTTng modules provide Linux kernel tracing capability to the LTTng
+2.x tracer toolset.
+
+Project website: http://lttng.org
+Documentation: http://lttng.org/docs
+Download link: http://lttng.org/download
+
+Changelog:
+
+2016-01-05 LTTng modules 2.7.1
+        * Fix: Use MAX_RT_PRIO offset in sched_wakeup_template
+        * Fix: update sched instrumentation for kernel 4.4.0
+        * Fix: instrumentation: v4lv2 missing include
+        * Fix: header size larger than 256 bytes
+        * Fix: tracepoint listing misses last loaded probe
+        * Fix: lttng trace-clock needs to disable preemption
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
