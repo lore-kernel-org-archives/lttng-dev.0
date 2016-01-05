@@ -1,32 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.7.1 (Linux kernel tracer)
-Date: Tue, 5 Jan 2016 18:37:35 +0000 (UTC)
-Message-ID: <1055877487.338270.1452019055481.JavaMail.zimbra__38748.1361548$1452019120$gmane$org@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH babeltrace v3] Do not use g_list_free_full
+Date: Tue, 5 Jan 2016 16:16:32 -0500
+Message-ID: <CA+jJMxsJutE6rw1U-qwMWtVN-P=ULayk9vx9wvecPND6PZbZzA__18842.702828306$1452028644$gmane$org@mail.gmail.com>
+References: <1451943430-7346-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ <1451945063-9730-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-io0-f170.google.com ([209.85.223.170])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1aGWUG-00068O-Ky
- for lttng-dev@lists.lttng.org; Tue, 05 Jan 2016 13:37:42 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 8E2D43403DE
- for <lttng-dev@lists.lttng.org>; Tue,  5 Jan 2016 18:37:37 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id ibedG5e40fDp for <lttng-dev@lists.lttng.org>;
- Tue,  5 Jan 2016 18:37:35 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C23553404F7
- for <lttng-dev@lists.lttng.org>; Tue,  5 Jan 2016 18:37:35 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id qoyVg-n2uLNP for <lttng-dev@lists.lttng.org>;
- Tue,  5 Jan 2016 18:37:35 +0000 (UTC)
-Received: from evm-mail-1.efficios.com (evm-mail-1.efficios.com [78.47.125.74])
- by mail.efficios.com (Postfix) with ESMTP id A17473403DE
- for <lttng-dev@lists.lttng.org>; Tue,  5 Jan 2016 18:37:35 +0000 (UTC)
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1aGYy6-0006th-4A
+ for lttng-dev@lists.lttng.org; Tue, 05 Jan 2016 16:16:40 -0500
+Received: by mail-io0-f170.google.com with SMTP id q21so199551426iod.0
+ for <lttng-dev@lists.lttng.org>; Tue, 05 Jan 2016 13:16:38 -0800 (PST)
+In-Reply-To: <1451945063-9730-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -35,32 +23,30 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-We just released lttng-modules 2.7.1, which is a bugfix release for
-the stable-2.7 branch.
-
-The LTTng modules provide Linux kernel tracing capability to the LTTng
-2.x tracer toolset.
-
-Project website: http://lttng.org
-Documentation: http://lttng.org/docs
-Download link: http://lttng.org/download
-
-Changelog:
-
-2016-01-05 LTTng modules 2.7.1
-        * Fix: Use MAX_RT_PRIO offset in sched_wakeup_template
-        * Fix: update sched instrumentation for kernel 4.4.0
-        * Fix: instrumentation: v4lv2 missing include
-        * Fix: header size larger than 256 bytes
-        * Fix: tracepoint listing misses last loaded probe
-        * Fix: lttng trace-clock needs to disable preemption
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+TWVyZ2VkIGluIG1hc3RlciwgdGhhbmtzIQoKSsOpcsOpbWllCgpPbiBNb24sIEphbiA0LCAyMDE2
+IGF0IDU6MDQgUE0sIEpvbmF0aGFuIFJham90dGUKPGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVm
+ZmljaW9zLmNvbT4gd3JvdGU6Cj4gdjM6IHdlIHN1cHBvcnQgZnJvbSAyLjIyIG5vdCAyLjI4Lgo+
+IC0tCj4KPiBCYWJlbHRyYWNlIHN1cHBvcnQgZ2xpYiBhbGwgdGhlIHdheSBiYWNrIHRvIDIuMjIg
+YW5kIGdfbGlzdF9mcmVlX2Z1bGwKPiBleGlzdHMgZnJvbSAyLjI4LjAgKGJhY2twb3J0ZWQgdG8g
+Mi4yNy4yKSBvbmx5Lgo+Cj4gVGhlIHJlcGxhY2VtZW50IGlzIHRoZSBjdXJyZW50IGltcGxlbWVu
+dGF0aW9uIGZvdW5kIGluIG1vZGVybiBnbGliLgo+Cj4gU2lnbmVkLW9mZi1ieTogSm9uYXRoYW4g
+UmFqb3R0ZSA8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPgo+IC0tLQo+ICBm
+b3JtYXRzL2N0Zi9pci92aXNpdG9yLmMgfCAzICsrLQo+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNl
+cnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4KPiBkaWZmIC0tZ2l0IGEvZm9ybWF0cy9jdGYvaXIv
+dmlzaXRvci5jIGIvZm9ybWF0cy9jdGYvaXIvdmlzaXRvci5jCj4gaW5kZXggOWI2NWVkNS4uNzA0
+YTgwNCAxMDA2NDQKPiAtLS0gYS9mb3JtYXRzL2N0Zi9pci92aXNpdG9yLmMKPiArKysgYi9mb3Jt
+YXRzL2N0Zi9pci92aXNpdG9yLmMKPiBAQCAtNzI0LDcgKzcyNCw4IEBAIGVuZDoKPiAgICAgICAg
+ICAgICAgICAgZ19mcmVlKG5hbWVfY29weSk7Cj4gICAgICAgICB9Cj4gICAgICAgICBpZiAocGF0
+aF90b2tlbnMpIHsKPiAtICAgICAgICAgICAgICAgZ19saXN0X2ZyZWVfZnVsbChwYXRoX3Rva2Vu
+cywgZnJlZSk7Cj4gKyAgICAgICAgICAgICAgIGdfbGlzdF9mb3JlYWNoKHBhdGhfdG9rZW5zLCAo
+R0Z1bmMpIGZyZWUsIE5VTEwpOwo+ICsgICAgICAgICAgICAgICBnX2xpc3RfZnJlZShwYXRoX3Rv
+a2Vucyk7Cj4gICAgICAgICB9Cj4gICAgICAgICByZXR1cm4gcmV0Owo+ICBlcnJvcjoKPiAtLQo+
+IDIuNS4wCj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8v
+d3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+Cmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo=
