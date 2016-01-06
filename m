@@ -1,26 +1,33 @@
-From: "Tetreault, Francois" <ftetreau@ciena.com>
-Subject: Suggestions concerning lttng analyses
-Date: Wed, 6 Jan 2016 15:09:33 -0500
-Message-ID: <86064E213FDE854885686AF0C4584029A95728DB55__38664.369021035$1452111036$gmane$org@ONWVEXCHMB02.ciena.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: New blog post on monitoring real-time latencies
+Date: Wed, 6 Jan 2016 17:15:18 -0500
+Message-ID: <20160106221518.GB16537__20337.3769567863$1452118584$gmane$org@sinkpad.home.lan>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0b-00103a01.pphosted.com ([67.231.152.227])
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <prvs=4813206aeb=ftetreau@ciena.com>)
- id 1aGuOo-0005GT-28
- for lttng-dev@lists.lttng.org; Wed, 06 Jan 2016 15:09:38 -0500
-Received: from pps.filterd (m0002317.ppops.net [127.0.0.1])
- by mx0b-00103a01.pphosted.com (8.15.0.59/8.15.0.59) with SMTP id
- u06K6rTU010560
- for <lttng-dev@lists.lttng.org>; Wed, 6 Jan 2016 15:09:36 -0500
-Received: from vawvcgsie2k1302.ciena.com (lin1-118-36-36.ciena.com
- [63.118.36.36])
- by mx0b-00103a01.pphosted.com with ESMTP id 206bnhbh90-1
- (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
- for <lttng-dev@lists.lttng.org>; Wed, 06 Jan 2016 15:09:36 -0500
-Content-Language: en-US
+ (envelope-from <jdesfossez@efficios.com>) id 1aGwMb-0005rN-To
+ for lttng-dev@lists.lttng.org; Wed, 06 Jan 2016 17:15:32 -0500
+Received: from localhost (localhost [127.0.0.1])
+ by smtp.ini-tech.com (Postfix) with ESMTP id 4E27BAC2E0
+ for <lttng-dev@lists.lttng.org>; Wed,  6 Jan 2016 22:15:47 +0000 (UTC)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+ by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id n0BenfqcUgRT for <lttng-dev@lists.lttng.org>;
+ Wed,  6 Jan 2016 22:15:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp.ini-tech.com (Postfix) with ESMTP id BC2D4AC3C3
+ for <lttng-dev@lists.lttng.org>; Wed,  6 Jan 2016 22:15:46 +0000 (UTC)
+Received: from smtp.ini-tech.com ([127.0.0.1])
+ by localhost (smtp.ini-tech.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id RO1WPnZM_ChS for <lttng-dev@lists.lttng.org>;
+ Wed,  6 Jan 2016 22:15:46 +0000 (UTC)
+Received: from sinkpad.home.lan (localhost [127.0.0.1])
+ by smtp.ini-tech.com (Postfix) with ESMTPSA id CCEE6AC2E0
+ for <lttng-dev@lists.lttng.org>; Wed,  6 Jan 2016 22:15:45 +0000 (UTC)
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -29,38 +36,21 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Some comments concerning lttng analyses.
+Hi,
 
-1- How to figure which version of the lttng analyses package is installed?
-1.1- Version is "0-unknown" when using "pip3 show lttnganalyses".
-         Would be nice to get this fixed.
-         /usr/local/bin$ sudo pip3 show lttnganalyses
-         ---
-         Name: lttnganalyses
-         Version: 0-unknown
-         Location: /usr/local/lib/python3.4/dist-packages
-         Requires:
-1.2- Is there another way to get the version?
+Here is a new blog post about detecting and understanding high
+interrupt-processing latencies based on LTTng and the latency_tracker
+project:
+https://lttng.org/blog/2016/01/06/monitoring-realtime-latencies/
 
-2- Cannot find python3-lttnganalyses using apt on XUbuntu 14.04.03
-2.1- Followed instructions as provided in lttng analyses README file
-        apt-get install -y software-properties-common (or python-software-properties on 12.04)
-        apt-add-repository -y ppa:lttng/ppa
-        apt-get update
-        apt-get -y install lttng-tools babeltrace lttng-modules-dkms python3-babeltrace python3-progressbar python3-lttnganalyses
+I have already demonstrated this a couple of times so it is the
+text-based version of my recent demos.
 
-        But python3-lttnganalyses cannot be found.
-        /usr/local/bin$ sudo apt search python3 | grep ltt
-        brltty/trusty,now 5.0-2ubuntu2 i386 [installed]
-        python3-lttng/trusty 2.7.x+stable+bzr2953+pack19+201512081531~ubuntu14.04.1 i386
-        python3-lttngust/trusty 2.7.x+stable+bzr1923+pack63+201512012316~ubuntu14.04.1 all
+If you have any comments, please let me know.
 
-        Had to resort to pip3 method and that worked.
-        pip3 install lttnganalyses
+Thanks,
 
-
-Thank you,
-Francois
+Julien
