@@ -1,21 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules 1/2] Fix: RHEL 7.2 kvm
-	instrumentation
-Date: Thu, 14 Jan 2016 19:56:02 +0000 (UTC)
-Message-ID: <666432530.346102.1452801362823.JavaMail.zimbra__40269.9288134047$1452801432$gmane$org@efficios.com>
-References: <1452800147-4002-1-git-send-email-mjeanson@efficios.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools] Fix: test: append to LD_LIBRARY_PATH
+Date: Thu, 14 Jan 2016 15:08:22 -0500
+Message-ID: <1452802102-2706-1-git-send-email-jonathan.rajotte-julien__43087.9964762882$1452802176$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1aJo06-0001uD-Ux
- for lttng-dev@lists.lttng.org; Thu, 14 Jan 2016 14:56:09 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id F19F334031F
- for <lttng-dev@lists.lttng.org>; Thu, 14 Jan 2016 19:56:03 +0000 (UTC)
-In-Reply-To: <1452800147-4002-1-git-send-email-mjeanson@efficios.com>
+ (envelope-from <jonathan.rajotte-julien@efficios.com>)
+ id 1aJoCC-00022L-Nl
+ for lttng-dev@lists.lttng.org; Thu, 14 Jan 2016 15:08:38 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,40 +19,32 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-patch 1 and 2 merged into master and stable-2.7, thanks!
+The overwriting of LD_LIBRARY_PATH can cause failure of tests when lttng-ust is
+not installed in the default path and location is passed via LD_LIBRARY_PATH.
 
-Mathieu
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+ tests/regression/ust/ust-dl/test_ust-dl.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
------ On Jan 14, 2016, at 2:35 PM, Michael Jeanson mjeanson@efficios.com wrote:
-
-> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-> ---
-> instrumentation/events/lttng-module/kvm.h | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/instrumentation/events/lttng-module/kvm.h
-> b/instrumentation/events/lttng-module/kvm.h
-> index 87d605c..cb73011 100644
-> --- a/instrumentation/events/lttng-module/kvm.h
-> +++ b/instrumentation/events/lttng-module/kvm.h
-> @@ -111,7 +111,8 @@ LTTNG_TRACEPOINT_EVENT(kvm_fpu,
-> 	)
-> )
-> 
-> -#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0))
-> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,18,0) \
-> +	|| LTTNG_RHEL_KERNEL_RANGE(3,10,0,7,2, 3,11,0,0,0))
-> 
-> LTTNG_TRACEPOINT_EVENT(kvm_age_page,
-> 	TP_PROTO(ulong gfn, int level, struct kvm_memory_slot *slot, int ref),
-> --
-> 2.7.0.rc3
-
+diff --git a/tests/regression/ust/ust-dl/test_ust-dl.py b/tests/regression/ust/ust-dl/test_ust-dl.py
+index dc73270..7117ca1 100644
+--- a/tests/regression/ust/ust-dl/test_ust-dl.py
++++ b/tests/regression/ust/ust-dl/test_ust-dl.py
+@@ -46,8 +46,8 @@ enable_ust_tracepoint_event(session_info, "*")
+ start_session(session_info)
+ 
+ test_env = os.environ.copy()
+-test_env["LD_PRELOAD"] = "liblttng-ust-dl.so"
+-test_env["LD_LIBRARY_PATH"] = test_path
++test_env["LD_PRELOAD"] += ":liblttng-ust-dl.so"
++test_env["LD_LIBRARY_PATH"] += ":" + test_path
+ test_process = subprocess.Popen(test_path + "prog",
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                 env=test_env)
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.5.0
