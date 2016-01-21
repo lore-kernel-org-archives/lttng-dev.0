@@ -1,18 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC PATCH urcu] urcu_ref_get: API change: return
-	boolean
-Date: Thu, 21 Jan 2016 16:45:20 +0000 (UTC)
-Message-ID: <454299411.1865.1453394720076.JavaMail.zimbra__11576.5033326626$1453394792$gmane$org@efficios.com>
+From: Josh Triplett <josh@joshtriplett.org>
+Subject: Re: [rp] [RFC PATCH urcu] urcu_ref_get: API change:
+	return boolean
+Date: Thu, 21 Jan 2016 08:59:44 -0800
+Message-ID: <20160121165944.GA30140__33390.6605876566$1453395636$gmane$org@cloud>
 References: <1453237059-8879-1-git-send-email-mathieu.desnoyers@efficios.com>
+ <454299411.1865.1453394720076.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from relay3-d.mail.gandi.net ([217.70.183.195])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1aMIMV-0001cA-6g
- for lttng-dev@lists.lttng.org; Thu, 21 Jan 2016 11:45:33 -0500
-In-Reply-To: <1453237059-8879-1-git-send-email-mathieu.desnoyers@efficios.com>
+ (envelope-from <josh@joshtriplett.org>) id 1aMIaK-0001iP-Bg
+ for lttng-dev@lists.lttng.org; Thu, 21 Jan 2016 11:59:49 -0500
+Content-Disposition: inline
+In-Reply-To: <454299411.1865.1453394720076.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -21,78 +23,32 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Cc: Chris Mason <clm@fb.com>, lttng-dev <lttng-dev@lists.lttng.org>, rp@svcs.cs.pdx.edu, Lai Jiangshan <jiangshanlai@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: rp@svcs.cs.pdx.edu, Lai Jiangshan <jiangshanlai@gmail.com>, Chris Mason <clm@fb.com>, lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
------ On Jan 19, 2016, at 3:57 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+On Thu, Jan 21, 2016 at 04:45:20PM +0000, Mathieu Desnoyers wrote:
+> ----- On Jan 19, 2016, at 3:57 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+> 
+> > This is a RFC of a follow up patch based on urcu commit 7d7c5d467 "Fix:
+> > handle reference count overflow".
+> > 
+> > Change the urcu_ref_get prototype to return a boolean, which takes the
+> > value false if a LONG_MAX overflow would occur (get has not been
+> > performed), or true otherwise.
+> > 
+> > This interface change also introduces a "warn_unused_result" gcc
+> > function attribute, which will show warnings if users don't handle the
+> > return value.
+> > 
+> > I'm wondering whether this change is useful enough to justify breaking
+> > the API (need to bump the major library version), or if introducing a
+> > new "urcu_ref_get_safe()" or such would be a better option ?
+> 
+> After some thinking, I will go for adding a new urcu_ref_get_safe() API,
+> thus not requiring to bump the library major version.
 
-> This is a RFC of a follow up patch based on urcu commit 7d7c5d467 "Fix:
-> handle reference count overflow".
-> 
-> Change the urcu_ref_get prototype to return a boolean, which takes the
-> value false if a LONG_MAX overflow would occur (get has not been
-> performed), or true otherwise.
-> 
-> This interface change also introduces a "warn_unused_result" gcc
-> function attribute, which will show warnings if users don't handle the
-> return value.
-> 
-> I'm wondering whether this change is useful enough to justify breaking
-> the API (need to bump the major library version), or if introducing a
-> new "urcu_ref_get_safe()" or such would be a better option ?
+You may want to add a deprecated __attribute__ to the unsafe version in
+the header.
 
-After some thinking, I will go for adding a new urcu_ref_get_safe() API,
-thus not requiring to bump the library major version.
-
-Thanks,
-
-Mathieu
-
-> 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-> CC: Lai Jiangshan <jiangshanlai@gmail.com>
-> CC: Stephen Hemminger <stephen@networkplumber.org>
-> CC: Chris Mason <clm@fb.com>
-> CC: lttng-dev@lists.lttng.org
-> CC: rp@svcs.cs.pdx.edu
-> ---
-> urcu/ref.h | 7 ++++---
-> 1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/urcu/ref.h b/urcu/ref.h
-> index 2b803e5..42417c0 100644
-> --- a/urcu/ref.h
-> +++ b/urcu/ref.h
-> @@ -34,19 +34,20 @@ static inline void urcu_ref_init(struct urcu_ref *ref)
-> 	urcu_ref_set(ref, 1);
-> }
-> 
-> -static inline void urcu_ref_get(struct urcu_ref *ref)
-> +static inline bool  __attribute__((warn_unused_result))
-> +		urcu_ref_get(struct urcu_ref *ref)
-> {
-> 	long old, _new, res;
-> 
-> 	old = uatomic_read(&ref->refcount);
-> 	for (;;) {
-> 		if (old == LONG_MAX) {
-> -			abort();
-> +			return false;	/* Failure. */
-> 		}
-> 		_new = old + 1;
-> 		res = uatomic_cmpxchg(&ref->refcount, old, _new);
-> 		if (res == old) {
-> -			return;
-> +			return true;	/* Success. */
-> 		}
-> 		old = res;
-> 	}
-> --
-> 2.1.4
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+- Josh Triplett
