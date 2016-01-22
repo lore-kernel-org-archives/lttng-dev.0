@@ -1,22 +1,18 @@
-From: Josh Triplett <josh@joshtriplett.org>
-Subject: Re: [rp] [RFC PATCH urcu] urcu_ref_get: API change:
-	return boolean
-Date: Thu, 21 Jan 2016 13:59:35 -0800
-Message-ID: <20160121215935.GA31648__32590.5157639228$1453413634$gmane$org@cloud>
-References: <1453237059-8879-1-git-send-email-mathieu.desnoyers@efficios.com>
- <454299411.1865.1453394720076.JavaMail.zimbra@efficios.com>
- <20160121165944.GA30140@cloud>
- <1634246639.1893.1453395969036.JavaMail.zimbra@efficios.com>
+From: =?UTF-8?q?J=C3=A9r=C3=A9mie=20Galarneau?=
+ <jeremie.galarneau@efficios.com>
+Subject: [RFC PATCH urcu 00/01] Introduce-rcu_barrier_finalize()
+Date: Fri, 22 Jan 2016 12:22:02 -0500
+Message-ID: <1453483323-7596-1-git-send-email-jeremie.galarneau__2307.65021774477$1453483396$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay4-d.mail.gandi.net ([217.70.183.196])
+Received: from mail-io0-f193.google.com ([209.85.223.193])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <josh@joshtriplett.org>) id 1aMNGV-0003Rr-Qj
- for lttng-dev@lists.lttng.org; Thu, 21 Jan 2016 16:59:43 -0500
-Content-Disposition: inline
-In-Reply-To: <1634246639.1893.1453395969036.JavaMail.zimbra@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1aMfPV-0002Ba-D0
+ for lttng-dev@lists.lttng.org; Fri, 22 Jan 2016 12:22:10 -0500
+Received: by mail-io0-f193.google.com with SMTP id f81so7726626iof.0
+ for <lttng-dev@lists.lttng.org>; Fri, 22 Jan 2016 09:22:09 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,44 +21,63 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: rp@svcs.cs.pdx.edu, Lai Jiangshan <jiangshanlai@gmail.com>, Chris Mason <clm@fb.com>, lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: lttng-dev@lists.lttng.org
+Cc: paulmck@linux.vnet.ibm.com
 List-Id: lttng-dev@lists.lttng.org
 
-On Thu, Jan 21, 2016 at 05:06:09PM +0000, Mathieu Desnoyers wrote:
-> ----- On Jan 21, 2016, at 11:59 AM, Josh Triplett josh@joshtriplett.org wrote:
-> 
-> > On Thu, Jan 21, 2016 at 04:45:20PM +0000, Mathieu Desnoyers wrote:
-> >> ----- On Jan 19, 2016, at 3:57 PM, Mathieu Desnoyers
-> >> mathieu.desnoyers@efficios.com wrote:
-> >> 
-> >> > This is a RFC of a follow up patch based on urcu commit 7d7c5d467 "Fix:
-> >> > handle reference count overflow".
-> >> > 
-> >> > Change the urcu_ref_get prototype to return a boolean, which takes the
-> >> > value false if a LONG_MAX overflow would occur (get has not been
-> >> > performed), or true otherwise.
-> >> > 
-> >> > This interface change also introduces a "warn_unused_result" gcc
-> >> > function attribute, which will show warnings if users don't handle the
-> >> > return value.
-> >> > 
-> >> > I'm wondering whether this change is useful enough to justify breaking
-> >> > the API (need to bump the major library version), or if introducing a
-> >> > new "urcu_ref_get_safe()" or such would be a better option ?
-> >> 
-> >> After some thinking, I will go for adding a new urcu_ref_get_safe() API,
-> >> thus not requiring to bump the library major version.
-> > 
-> > You may want to add a deprecated __attribute__ to the unsafe version in
-> > the header.
-> 
-> The "unsafe" version now does a "abort()" in case of detected overflow,
-> so it's not a security concern per-se, but could theoretically lead to
-> an application denial of service.
-
-Ah.  In that case, nevermind.  Deprecation would make sense for a
-version that can still overflow, but if you no longer have any such
-version, great!
-
-- Josh Triplett
+Rm9sbG93aW5nIGEgcHJpb3IgZGlzY3Vzc2lvbiBvbiB0aGlzIG1haWxpbmcgbGlzdCBbMV0sIEkg
+YW0gcHJvcG9zaW5nCnRoZSBpbnRyb2R1Y3Rpb24gb2YgcmN1X2JhcnJpZXJfZmluYWxpemUoKSBp
+biBsaWJ1cmN1LgoKKioqIFVzZSBDYXNlICoqKgoKQXMgcG9pbnRlZCBvdXQgaW4gdGhlIGUtbWFp
+bCB0aHJlYWQsIHNvbWUgYXBwbGljYXRpb25zIGFyZSBuZXN0aW5nCmxpYnVyY3UgZGF0YSBzdHJ1
+Y3R1cmVzIG9yLCBhcyBwYXJ0IG9mIHRoZWlyIGRlc2lnbiwgY29tcG9zaW5nIG9iamVjdHMKd2hp
+Y2ggdXNlIGxpYnVyY3UgZGF0YSBzdHJ1Y3R1cmVzIChlLmcuIGx0dG5nLXRvb2xzIGRhZW1vbnMp
+LgoKV2hlbiBzdWNoIG9iamVjdHMgb3IgZGF0YSBzdHJ1Y3R1cmVzIGFyZSBkZXN0cm95ZWQsIGl0
+IGlzIGxpa2VseSB0aGF0CnRoZWlyICdjYWxsX3JjdScgY2FsbGJhY2tzIHdpbGwsIGluIHR1cm4s
+IGVucXVldWUgbmV3ICdjYWxsX3JjdScgd29yawppdGVtcy4KClRoaXMgbGVhZHMgdG8gYSAiY2hh
+aW5pbmciIHBoZW5vbWVub24gd2hlcmUgJ2NhbGxfcmN1JyBjYWxsYmFja3MgYXJlCmFkZGVkIHRv
+IHRoZSAnY2FsbF9yY3UnIHF1ZXVlIGJ5IGNhbGxiYWNrcyBiZWluZyBwcm9jZXNzZWQuCgpUaGUg
+aW1wbGljYXRpb24gb2YgdGhpcyBjaGFpbmluZyBpcyB0aGF0IHRoZSByY3VfYmFycmllcigpIG1l
+Y2hhbmlzbQpjYW5ub3QgYmUgcmVsaWVkIG9uIHRvIGVtcHR5IHRoZSAnY2FsbF9yY3UnIHF1ZXVl
+LiBNb3JlIHNwZWNpZmljYWxseSwKYW4gYXBwbGljYXRpb24gY2FsbGluZyByY3VfYmFycmllcigp
+IG9uIGV4aXQgbWF5IHNwdXJpb3VzbHkgbGVhawptZW1vcnkgc2luY2UgYW55IHVucHJvY2Vzc2Vk
+IHJlY2xhbWF0aW9uIGNhbGxiYWNrIGV1cXVldWVkIGFmdGVyIHRoZQpiYXJyaWVyIHdpbGwgcmVz
+dWx0IGluIGEgbGVhay4KCk9mIGNvdXJzZSwgb25lIGNvdWxkIGFyZ3VlIHRoYXQgaXQgd291bGQg
+YmUgcG9zc2libGUgdG8gcmVmYWN0b3IKYXBwbGljYXRpb25zIHRvIHNlcGFyYXRlIG9iamVjdCB0
+ZWFyIGRvd24gZnJvbSBtZW1vcnkKcmVjbGFtYXRpb24uIEhvd2V2ZXIsIHRoZSBndWFyYW50ZWUg
+dGhhdCBhbiBvYmplY3QgaXMgdW5yZWFjaGFibGUgd2hlbgppdHMgJ2NhbGxfcmN1JyBjYWxsYmFj
+ayBpcyBpbnZva2VkIChkdXJpbmcgYSBncmFjZSBwZXJpb2QpIGJlY29tZXMKdmVyeSB1c2VmdWwg
+dG8gc2FmZWx5IHRlYXIgZG93biBpdHMgaW50ZXJuYWwgc3RhdGUgKGFuZCByZWxlYXNlIG90aGVy
+CnJlc291cmNlcykgaW4gY2FzZXMgd2hlcmUgYW4gZXhwbGljaXQgcmVmZXJlbmNlIGNvdW50aW5n
+IG1lY2hhbmlzbQppc24ndCBiZWluZyB1c2VkLgoKKioqIEltcGxlbWVudGF0aW9uIGxpbWl0YXRp
+b25zICoqKgoKVGhlIHByb3Bvc2VkIGltcGxlbWVudGF0aW9uIG9mIHJjdV9iYXJyaWVyX2ZpbmFs
+aXplKCkgaXMKc3RyYWlnaHRmb3J3YXJkLCBiYXNpY2FsbHkgaW52b2tpbmcgcmN1X2JhcnJpZXIo
+KSB1bnRpbCBhbGwgcXVldWVzIGFyZQpvYnNlcnZlZCB0byBiZSBlbXB0eS4gVGhlIGNhbGxfcmN1
+X211dGV4IGlzIHJlbGVhc2VkIGJldHdlZW4gZWFjaAppdGVyYXRpb24gdG8gZW5zdXJlIHRoZSBh
+cHBsaWNhdGlvbiBjYW4gZm9yaygpIHdpdGhvdXQgZGVhZGxvY2tpbmcuClRoaXMgZW5zdXJlcyB0
+aGF0IGFsbCBxdWV1ZXMgYXJlIGVtcHR5IG9uIHJldHVybiwgd2hpY2ggaW4gbXkgdXNlCmNhc2Us
+IGlzIGEgY3J1ZGUgd2F5IG9mIGVuc3VyaW5nIGFsbCB3b3JrIGVucXVldWVkIGJ5IHRoZSB3b3Jr
+CmVucXVldWVkIHByaW9yIHRvIHRoZSByY3VfYmFycmllcigpIGhhcyBiZWVuIHByb2Nlc3NlZC4K
+ClRoaXMgZGVzaWduIG1heSBjYXVzZSByY3VfYmFycmllcl9maW5hbGl6ZSgpIHRvIG5ldmVyIHJl
+dHVybiBpZiB0aGUKYXBwbGljYXRpb24gY2FuIGNoYWluIGFuIHVuYm91bmRlZCBhbW91bnQgb2Yg
+Y2FsbGJhY2tzLgoKSXQgY291bGQgYmUgaW1wcm92ZWQgYnkgZW5zdXJpbmcgdGhhdCBhbGwgcXVl
+dWVzIGhhdmUgYmVlbiBvYnNlcnZlZCB0bwpiZSBlbXB0eSBhdCBsZWFzdCBvbmNlIChhbmQgc2tp
+cHBpbmcgdGhlbSBkdXJpbmcgdGhlIG5leHQgaXRlcmF0aW9ucyksCnRoZXJlZm9yZSBndWFyYW50
+ZWVpbmcgdGhhdCBhbGwgY2hhaW5lZCB3b3JrIGhhcyBiZWVuIGV4ZWN1dGVkLCBidXQKZm9yZWdv
+aW5nIHRoZSBndWFyYW50ZWUgdGhhdCBhbGwgcXVldWVzIGFyZSBlbXB0eSBvbiByZXR1cm4gKG1h
+a2VzIG5vCmRpZmZlcmVuY2UgaW4gbXkgdXNlIGNhc2UpLgoKQW4gYWx0ZXJuYXRpdmUgZ3VhcmFu
+dGVlIHRoYXQgY291bGQgYmUgb2ZmZXJlZCB3b3VsZCBjb25zaXN0IGluCmVuc3VyaW5nIHRoYXQg
+YWxsIGNhbGxiYWNrcyBfYW5kXyB3aGljaGV2ZXIgY2FsbGJhY2tzIHRoZXkgbWF5CmVucXVldWUs
+IGFyZSBwcm9jZXNzZWQsIGJ1dCBub3RoaW5nIG1vcmUuIEkgZG9uJ3QgaGF2ZSBhIHVzZS1jYXNl
+IGZvcgp0aGlzLCBidXQgaXQgbWF5IGNvbWUgaW4gaGFuZHkgdG8gc29tZW9uZSAocGxlYXNlIHNw
+ZWFrIHVwISkuIEhvd2V2ZXIsCnNpbmNlIHRoZSBpbXBsZW1lbnRhdGlvbiBJIGhhdmUgaW4gbWlu
+ZCBkb2VzIHNvbWV3aGF0IGluY3JlYXNlIHRoZQpvdmVyYWxsIGNvbXBsZXhpdHkgb2YgdGhlIHNv
+bHV0aW9uLCBJIGFtIG5vdCBzdXJlIGl0IGlzIHdvcnRoCml0LiAoVGhvdWdodHMgPykKClsxXSBo
+dHRwczovL2xpc3RzLmx0dG5nLm9yZy9waXBlcm1haWwvbHR0bmctZGV2LzIwMTUtRGVjZW1iZXIv
+MDI1MzU2Lmh0bWwKCkrDqXLDqW1pZSBHYWxhcm5lYXUgKDEpOgogIEludHJvZHVjZSByY3VfYmFy
+cmllcl9maW5hbGl6ZSgpCgogZG9jL3JjdS1hcGkubWQgICAgICAgfCAyMyArKysrKysrKysrKysr
+KysrKysrKy0tLQogdXJjdS1jYWxsLXJjdS1pbXBsLmggfCAzNiArKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysKIHVyY3UtY2FsbC1yY3UuaCAgICAgIHwgIDEgKwogMyBmaWxlcyBj
+aGFuZ2VkLCA1NyBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKLS0gCjIuNi40CgoKX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
+aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5v
+cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
