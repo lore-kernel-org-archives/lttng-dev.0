@@ -1,37 +1,16 @@
-From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Subject: Re: [RFC PATCH urcu 00/01]
-	Introduce-rcu_barrier_finalize()
-Date: Fri, 22 Jan 2016 09:49:30 -0800
-Message-ID: <20160122174930.GJ3818__45084.1493592181$1453485196$gmane$org@linux.vnet.ibm.com>
-References: <1453483323-7596-1-git-send-email-jeremie.galarneau@efficios.com>
-Reply-To: paulmck@linux.vnet.ibm.com
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH babeltrace] Tests: Fix test plans and do not
+	skip on fail
+Date: Mon, 25 Jan 2016 16:00:41 -0500
+Message-ID: <1453755641-25741-1-git-send-email-mjeanson__36277.0204003484$1453755727$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e36.co.us.ibm.com ([32.97.110.154])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <paulmck@linux.vnet.ibm.com>) id 1aMfq2-0002QG-Ab
- for lttng-dev@lists.lttng.org; Fri, 22 Jan 2016 12:49:37 -0500
-Received: from localhost
- by e36.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
- Violators will be prosecuted
- for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
- Fri, 22 Jan 2016 10:49:28 -0700
-Received: from b03cxnp08026.gho.boulder.ibm.com
- (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
- by d03dlp02.boulder.ibm.com (Postfix) with ESMTP id 60D4E3E4003B
- for <lttng-dev@lists.lttng.org>; Fri, 22 Jan 2016 10:49:26 -0700 (MST)
-Received: from d03av05.boulder.ibm.com (d03av05.boulder.ibm.com [9.17.195.85])
- by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with
- ESMTP id u0MHnQNX27852846
- for <lttng-dev@lists.lttng.org>; Fri, 22 Jan 2016 10:49:26 -0700
-Received: from d03av05.boulder.ibm.com (localhost [127.0.0.1])
- by d03av05.boulder.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with ESMTP id
- u0MHnOm5015157
- for <lttng-dev@lists.lttng.org>; Fri, 22 Jan 2016 10:49:25 -0700
-Content-Disposition: inline
-In-Reply-To: <1453483323-7596-1-git-send-email-jeremie.galarneau@efficios.com>
+ (envelope-from <mjeanson@efficios.com>) id 1aNoFx-00045D-NA
+ for lttng-dev@lists.lttng.org; Mon, 25 Jan 2016 16:01:03 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -40,128 +19,245 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-On Fri, Jan 22, 2016 at 12:22:02PM -0500, J=E9r=E9mie Galarneau wrote:
-> Following a prior discussion on this mailing list [1], I am proposing
-> the introduction of rcu_barrier_finalize() in liburcu.
-> =
+Use fixed count test plans in all tests and make sure we do not skip
+some tests on initialisation failures.
 
-> *** Use Case ***
-> =
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ .gitignore                  |  1 +
+ tests/lib/test_bt_values.c  |  4 +++-
+ tests/lib/test_ctf_ir_ref.c |  6 +++++-
+ tests/lib/test_ctf_writer.c |  4 +++-
+ tests/lib/test_seek.c       | 45 ++++++++++++++++-----------------------------
+ 5 files changed, 28 insertions(+), 32 deletions(-)
 
-> As pointed out in the e-mail thread, some applications are nesting
-> liburcu data structures or, as part of their design, composing objects
-> which use liburcu data structures (e.g. lttng-tools daemons).
-> =
-
-> When such objects or data structures are destroyed, it is likely that
-> their 'call_rcu' callbacks will, in turn, enqueue new 'call_rcu' work
-> items.
-> =
-
-> This leads to a "chaining" phenomenon where 'call_rcu' callbacks are
-> added to the 'call_rcu' queue by callbacks being processed.
-> =
-
-> The implication of this chaining is that the rcu_barrier() mechanism
-> cannot be relied on to empty the 'call_rcu' queue. More specifically,
-> an application calling rcu_barrier() on exit may spuriously leak
-> memory since any unprocessed reclamation callback euqueued after the
-> barrier will result in a leak.
-> =
-
-> Of course, one could argue that it would be possible to refactor
-> applications to separate object tear down from memory
-> reclamation. However, the guarantee that an object is unreachable when
-> its 'call_rcu' callback is invoked (during a grace period) becomes
-> very useful to safely tear down its internal state (and release other
-> resources) in cases where an explicit reference counting mechanism
-> isn't being used.
-
-Just a design/architecture-level observation at the moment...
-
-The point is that some callbacks register other callbacks, which
-themselves might register other callbacks.  You want to wait until
-the full chain of callbacks instigated by any previous call_rcu()
-has completed.
-
-This maps onto the RCU API.  When registering a callback that might
-itself register a callback, you need to do something sort of like
-rcu_read_lock(), but if this is down the chain, this new rcu_read_lock()
-must block anyone blocked by the rcu_read_lock() at the head of the
-chain.  When such a callback completes, you need to do something sort
-of like rcu_read_unlock().  Then you wait using something kind of like
-synchronize_rcu(), followed by rcu_barrier() to handle callbacks being
-preempted just after they do the final rcu_read_unlock().
-
-If each callback spawns at most one callback (which is the only case
-that I am aware of in real life), you just do the rcu_read_lock()-like
-thing before posting the first callback in the chain.  You wait to do
-the rcu_read_unlock()-like thing until the final callback executes.
-If callbacks can spawn multiple callbacks, then some adjustments are
-needed.  This might be a reference counter, or it might be an
-SRCU-like design where the first srcu_read_lock() returns an index
-that is passed to subsequent srcu_read_lock() and srcu_read_lock()
-calls on that chain.
-
-Why is this important?  Because it allows you to draw on design
-techniques from multiple RCU implementations to avoid your starvation
-case.  This approach can also substitute a wait-wakeup approach for
-your polling loop.
-
-Or am I missing your point?
-
-							Thanx, Paul
-
-> *** Implementation limitations ***
-> =
-
-> The proposed implementation of rcu_barrier_finalize() is
-> straightforward, basically invoking rcu_barrier() until all queues are
-> observed to be empty. The call_rcu_mutex is released between each
-> iteration to ensure the application can fork() without deadlocking.
-> This ensures that all queues are empty on return, which in my use
-> case, is a crude way of ensuring all work enqueued by the work
-> enqueued prior to the rcu_barrier() has been processed.
-> =
-
-> This design may cause rcu_barrier_finalize() to never return if the
-> application can chain an unbounded amount of callbacks.
-> =
-
-> It could be improved by ensuring that all queues have been observed to
-> be empty at least once (and skipping them during the next iterations),
-> therefore guaranteeing that all chained work has been executed, but
-> foregoing the guarantee that all queues are empty on return (makes no
-> difference in my use case).
-> =
-
-> An alternative guarantee that could be offered would consist in
-> ensuring that all callbacks _and_ whichever callbacks they may
-> enqueue, are processed, but nothing more. I don't have a use-case for
-> this, but it may come in handy to someone (please speak up!). However,
-> since the implementation I have in mind does somewhat increase the
-> overall complexity of the solution, I am not sure it is worth
-> it. (Thoughts ?)
-> =
-
-> [1] https://lists.lttng.org/pipermail/lttng-dev/2015-December/025356.html
-> =
-
-> J=E9r=E9mie Galarneau (1):
->   Introduce rcu_barrier_finalize()
-> =
-
->  doc/rcu-api.md       | 23 ++++++++++++++++++++---
->  urcu-call-rcu-impl.h | 36 ++++++++++++++++++++++++++++++++++++
->  urcu-call-rcu.h      |  1 +
->  3 files changed, 57 insertions(+), 3 deletions(-)
-> =
-
-> -- =
-
-> 2.6.4
-> =
+diff --git a/.gitignore b/.gitignore
+index bf869af..c572d18 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -5,6 +5,7 @@
+ /tests/lib/test_ctf_writer
+ /tests/lib/test_bt_objects
+ /tests/lib/test_bt_values
++/tests/lib/test_ctf_ir_ref
+ *.o
+ *.a
+ *.la
+diff --git a/tests/lib/test_bt_values.c b/tests/lib/test_bt_values.c
+index 4eb20ba..34fbc82 100644
+--- a/tests/lib/test_bt_values.c
++++ b/tests/lib/test_bt_values.c
+@@ -25,6 +25,8 @@
+ #include <string.h>
+ #include "tap/tap.h"
+ 
++#define NR_TESTS 238
++
+ static
+ void test_null(void)
+ {
+@@ -1154,7 +1156,7 @@ void test_freeze(void)
+ 
+ int main(void)
+ {
+-	plan_no_plan();
++	plan_tests(NR_TESTS);
+ 
+ 	test_macros();
+ 	test_freeze();
+diff --git a/tests/lib/test_ctf_ir_ref.c b/tests/lib/test_ctf_ir_ref.c
+index 856715c..01434d4 100644
+--- a/tests/lib/test_ctf_ir_ref.c
++++ b/tests/lib/test_ctf_ir_ref.c
+@@ -27,6 +27,8 @@
+ #include <babeltrace/object-internal.h>
+ #include <assert.h>
+ 
++#define NR_TESTS 41
++
+ struct user {
+ 	struct bt_ctf_trace *tc;
+ 	struct bt_ctf_stream_class *sc;
+@@ -358,6 +360,9 @@ int main(int argc, char **argv)
+ 			*weak_ec3 = NULL;
+ 	struct user user_a = { 0 }, user_b = { 0 }, user_c = { 0 };
+ 
++	 /* Initialize tap harness before any tests */
++	plan_tests(NR_TESTS);
++
+ 	/* The only reference which exists at this point is on TC1. */
+ 	tc1 = create_tc1();
+         ok(tc1, "Initialize trace");
+@@ -367,7 +372,6 @@ int main(int argc, char **argv)
+ 
+ 	init_weak_refs(tc1, &weak_tc1, &weak_sc1, &weak_sc2, &weak_ec1,
+ 			&weak_ec2, &weak_ec3);
+-	plan_no_plan();
+ 
+ 	ok(bt_object_get_ref_count(weak_sc1) == 0,
+ 			"Initial SC1 reference count is 0");
+diff --git a/tests/lib/test_ctf_writer.c b/tests/lib/test_ctf_writer.c
+index 596bb90..d246510 100644
+--- a/tests/lib/test_ctf_writer.c
++++ b/tests/lib/test_ctf_writer.c
+@@ -57,6 +57,8 @@
+ #define DEFAULT_CLOCK_IS_ABSOLUTE 0
+ #define DEFAULT_CLOCK_TIME 0
+ 
++#define NR_TESTS 588
++
+ static uint64_t current_time = 42;
+ 
+ /* Return 1 if uuids match, zero if different. */
+@@ -2689,7 +2691,7 @@ int main(int argc, char **argv)
+ 		return -1;
+ 	}
+ 
+-	plan_no_plan();
++	plan_tests(NR_TESTS);
+ 
+ 	if (!bt_mkdtemp(trace_path)) {
+ 		perror("# perror");
+diff --git a/tests/lib/test_seek.c b/tests/lib/test_seek.c
+index de2c934..63e5a6a 100644
+--- a/tests/lib/test_seek.c
++++ b/tests/lib/test_seek.c
+@@ -44,21 +44,18 @@ void run_seek_begin(char *path, uint64_t expected_begin)
+ 	int ret;
+ 	uint64_t timestamp_begin;
+ 	uint64_t timestamp_seek_begin;
+-	unsigned int nr_seek_begin_test;
+-
+-	nr_seek_begin_test = 5;
+ 
+ 	/* Open the trace */
+ 	ctx = create_context_with_path(path);
+ 	if (!ctx) {
+-		skip(nr_seek_begin_test, "Cannot create valid context");
++		diag("Cannot create valid context");
+ 		return;
+ 	}
+ 
+ 	/* Create iterator with null begin and end */
+ 	iter = bt_ctf_iter_create(ctx, NULL, NULL);
+ 	if (!iter) {
+-		skip(nr_seek_begin_test, "Cannot create valid iterator");
++		diag("Cannot create valid iterator");
+ 		return;
+ 	}
+ 
+@@ -97,21 +94,18 @@ void run_seek_last(char *path, uint64_t expected_last)
+ 	struct bt_iter_pos newpos;
+ 	int ret;
+ 	uint64_t timestamp_last;
+-	unsigned int nr_seek_last_tests;
+-
+-	nr_seek_last_tests = 6;
+ 
+ 	/* Open the trace */
+ 	ctx = create_context_with_path(path);
+ 	if (!ctx) {
+-		skip(nr_seek_last_tests, "Cannot create valid context");
++		diag("Cannot create valid context");
+ 		return;
+ 	}
+ 
+ 	/* Create iterator with null last and end */
+ 	iter = bt_ctf_iter_create(ctx, NULL, NULL);
+ 	if (!iter) {
+-		skip(nr_seek_last_tests, "Cannot create valid iterator");
++		diag("Cannot create valid iterator");
+ 		return;
+ 	}
+ 
+@@ -153,23 +147,18 @@ void run_seek_time_at_last(char *path, uint64_t expected_last)
+ 	struct bt_iter_pos newpos;
+ 	int ret;
+ 	uint64_t timestamp_last;
+-	unsigned int nr_seek_time_at_last_tests;
+-
+-	nr_seek_time_at_last_tests = 6;
+ 
+ 	/* Open the trace */
+ 	ctx = create_context_with_path(path);
+ 	if (!ctx) {
+-		skip(nr_seek_time_at_last_tests,
+-		     "Cannot create valid context");
++		diag("Cannot create valid context");
+ 		return;
+ 	}
+ 
+ 	/* Create iterator with null last and end */
+ 	iter = bt_ctf_iter_create(ctx, NULL, NULL);
+ 	if (!iter) {
+-		skip(nr_seek_time_at_last_tests,
+-		     "Cannot create valid iterator");
++		diag("Cannot create valid iterator");
+ 		return;
+ 	}
+ 
+@@ -215,21 +204,17 @@ void run_seek_cycles(char *path,
+ 	int ret;
+ 	uint64_t timestamp;
+ 
+-	unsigned int nr_seek_cycles_tests;
+-
+-	nr_seek_cycles_tests = 12;
+-
+ 	/* Open the trace */
+ 	ctx = create_context_with_path(path);
+ 	if (!ctx) {
+-		skip(nr_seek_cycles_tests, "Cannot create valid context");
++		diag("Cannot create valid context");
+ 		return;
+ 	}
+ 
+ 	/* Create iterator with null last and end */
+ 	iter = bt_ctf_iter_create(ctx, NULL, NULL);
+ 	if (!iter) {
+-		skip(nr_seek_cycles_tests, "Cannot create valid iterator");
++		diag("Cannot create valid iterator");
+ 		return;
+ 	}
+ 
+@@ -304,9 +289,11 @@ int main(int argc, char **argv)
+ 	babeltrace_debug = 0;	/* libbabeltrace.la */
+ 	opt_clock_offset = 0;	/* libbabeltrace-ctf.la */
+ 
+-	if (argc < 4) {
+-		plan_skip_all("Invalid arguments: need a trace path and the start and last timestamp");
++	plan_tests(NR_TESTS);
+ 
++	if (argc < 4) {
++		diag("Invalid arguments: need a trace path and the start and last timestamp");
++		exit(1);
+ 	}
+ 
+ 	/* Parse arguments (Trace, begin timestamp) */
+@@ -314,16 +301,16 @@ int main(int argc, char **argv)
+ 
+ 	expected_begin = strtoull(argv[2], NULL, 0);
+ 	if (ULLONG_MAX == expected_begin && errno == ERANGE) {
+-		plan_skip_all("Invalid value for begin timestamp");
++		diag("Invalid value for begin timestamp");
++		exit(1);
+ 	}
+ 
+ 	expected_last = strtoull(argv[3], NULL, 0);
+ 	if (ULLONG_MAX == expected_last && errno == ERANGE) {
+-		plan_skip_all("Invalid value for last timestamp");
++		diag("Invalid value for last timestamp");
++		exit(1);
+ 	}
+ 
+-	plan_tests(NR_TESTS);
+-
+ 	run_seek_begin(path, expected_begin);
+ 	run_seek_time_at_last(path, expected_last);
+ 	run_seek_last(path, expected_last);
+-- 
+2.7.0.rc3
