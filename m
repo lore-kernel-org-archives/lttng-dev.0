@@ -1,20 +1,15 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: test: use load_path
-	instead of $1
-Date: Mon, 25 Jan 2016 16:12:08 -0500
-Message-ID: <CA+jJMxs==hYefY1XwzdaOL1TVoOxULk4kezk0bUYZcSV+pRcQw__15104.8771258958$1453756396$gmane$org@mail.gmail.com>
-References: <1452796842-31174-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Bogus openembedded gcc patch
+Date: Tue, 26 Jan 2016 01:02:52 +0000 (UTC)
+Message-ID: <1037243108.4336.1453770172960.JavaMail.zimbra__34643.2465281852$1453770244$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-io0-f195.google.com ([209.85.223.195])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1aNoQo-0004BO-6f
- for lttng-dev@lists.lttng.org; Mon, 25 Jan 2016 16:12:16 -0500
-Received: by mail-io0-f195.google.com with SMTP id k127so14618440iok.1
- for <lttng-dev@lists.lttng.org>; Mon, 25 Jan 2016 13:12:14 -0800 (PST)
-In-Reply-To: <1452796842-31174-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ (envelope-from <compudj@efficios.com>) id 1aNs2D-0005Vl-1v
+ for lttng-dev@lists.lttng.org; Mon, 25 Jan 2016 20:03:07 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,37 +18,57 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>, Khem Raj <raj.khem@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, openembedded-core <openembedded-core@lists.openembedded.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIFRodSwgSmFuIDE0LCAyMDE2IGF0IDE6NDAg
-UE0sIEpvbmF0aGFuIFJham90dGUKPGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNv
-bT4gd3JvdGU6Cj4gJDEgaXMgdXNlZCBmb3IgdGFwIGNvbmRpdGlvbiBjaGVja2luZyBub3QgdGhl
-IGxvYWQgcGF0aC4KPgo+IFNpZ25lZC1vZmYtYnk6IEpvbmF0aGFuIFJham90dGUgPGpvbmF0aGFu
-LnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgdGVzdHMvdXRpbHMvdXRpbHMu
-c2ggfCAyICstCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigt
-KQo+Cj4gZGlmZiAtLWdpdCBhL3Rlc3RzL3V0aWxzL3V0aWxzLnNoIGIvdGVzdHMvdXRpbHMvdXRp
-bHMuc2gKPiBpbmRleCAzNTIwNzkyLi40MmIzNDQxIDEwMDY0NAo+IC0tLSBhL3Rlc3RzL3V0aWxz
-L3V0aWxzLnNoCj4gKysrIGIvdGVzdHMvdXRpbHMvdXRpbHMuc2gKPiBAQCAtMzYyLDcgKzM2Miw3
-IEBAIGZ1bmN0aW9uIHN0YXJ0X2x0dG5nX3Nlc3Npb25kX29wdCgpCj4gICAgICAgICBpZiBbIC16
-ICQocGdyZXAgLS1mdWxsIGx0LSRTRVNTSU9ORF9CSU4pIF07IHRoZW4KPiAgICAgICAgICAgICAg
-ICAgIyBIYXZlIGEgbG9hZCBwYXRoID8KPiAgICAgICAgICAgICAgICAgaWYgWyAtbiAiJGxvYWRf
-cGF0aCIgXTsgdGhlbgo+IC0gICAgICAgICAgICAgICAgICAgICAgICRESVIvLi4vc3JjL2Jpbi9s
-dHRuZy1zZXNzaW9uZC8kU0VTU0lPTkRfQklOIC0tbG9hZCAiJDEiIC0tYmFja2dyb3VuZCAtLWNv
-bnN1bWVyZDMyLXBhdGg9IiRESVIvLi4vc3JjL2Jpbi9sdHRuZy1jb25zdW1lcmQvbHR0bmctY29u
-c3VtZXJkIiAtLWNvbnN1bWVyZDY0LXBhdGg9IiRESVIvLi4vc3JjL2Jpbi9sdHRuZy1jb25zdW1l
-cmQvbHR0bmctY29uc3VtZXJkIgo+ICsgICAgICAgICAgICAgICAgICAgICAgICRESVIvLi4vc3Jj
-L2Jpbi9sdHRuZy1zZXNzaW9uZC8kU0VTU0lPTkRfQklOIC0tbG9hZCAiJGxvYWRfcGF0aCIgLS1i
-YWNrZ3JvdW5kIC0tY29uc3VtZXJkMzItcGF0aD0iJERJUi8uLi9zcmMvYmluL2x0dG5nLWNvbnN1
-bWVyZC9sdHRuZy1jb25zdW1lcmQiIC0tY29uc3VtZXJkNjQtcGF0aD0iJERJUi8uLi9zcmMvYmlu
-L2x0dG5nLWNvbnN1bWVyZC9sdHRuZy1jb25zdW1lcmQiCj4gICAgICAgICAgICAgICAgIGVsc2UK
-PiAgICAgICAgICAgICAgICAgICAgICAgICAkRElSLy4uL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQv
-JFNFU1NJT05EX0JJTiAtLWJhY2tncm91bmQgLS1jb25zdW1lcmQzMi1wYXRoPSIkRElSLy4uL3Ny
-Yy9iaW4vbHR0bmctY29uc3VtZXJkL2x0dG5nLWNvbnN1bWVyZCIgLS1jb25zdW1lcmQ2NC1wYXRo
-PSIkRElSLy4uL3NyYy9iaW4vbHR0bmctY29uc3VtZXJkL2x0dG5nLWNvbnN1bWVyZCIKPiAgICAg
-ICAgICAgICAgICAgZmkKPiAtLQo+IDIuNS4wCj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUK
-RWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
-Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
-bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi,
+
+We are noticing the presence of the following patch in various
+openembedded gcc versions:
+
+0024-PR-target-32219.patch
+
+"From e0d15f4f8bf28c351b9215ca37f1caa24df0e1fd Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Fri, 29 Mar 2013 09:18:54 +0400
+Subject: [PATCH 24/35] PR target/32219
+
+* varasm.c (default_binds_local_p_1): Weak data is not local.
+
+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+
+Upstream-Status: Backport"
+
+However, contrarily to its "Backport" status, that patch is
+not upstream in gcc, and we're starting to wonder if this
+would be the patch that breaks handling of start/stop automatic
+hidden symbols we use in lttng-ust.
+
+We are only experiencing problems on the various openembedded
+compilers, but on no other distro (with same compiler versions),
+which leads us to suspect a buggy distro-specific gcc patch.
+
+We've been testing with openembedded gcc-4.9.2-r0.
+
+The original gold linker issue that this patch was trying to
+address seems to have been fixed in the gold linke since
+then.
+
+Refs:
+http://lists.lttng.org/pipermail/lttng-dev/2014-May/023112.html
+https://gcc.gnu.org/ml/gcc-help/2014-05/msg00042.html
+http://cgit.openembedded.org/openembedded-core/commit/?id=3cb2b003db7371b3a47d02c08352a262e1e419b4
+https://sourceware.org/bugzilla/show_bug.cgi?id=15435
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
