@@ -1,11 +1,12 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+From: Mathieu Desnoyers <mathieu.desnoyers-vg+e7yoeK/dWk0Htik3J/w@public.gmane.org>
 Subject: Re: Bogus openembedded gcc patch
-Date: Tue, 26 Jan 2016 19:51:35 +0100
-Message-ID: <CAC1BbcRi+Vf0Y=Jxt3bZwMvs2V6fSQQkTfasrDHMWRdyjoUNzA@mail.gmail.com>
+Date: Tue, 26 Jan 2016 19:59:49 +0000 (UTC)
+Message-ID: <433937130.5072.1453838389504.JavaMail.zimbra@efficios.com>
 References: <1037243108.4336.1453770172960.JavaMail.zimbra@efficios.com>
 	<51287CFC-6F3C-43B1-9190-84F3B20C192E@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0113543954=="
+Content-Type: multipart/mixed;
+	boundary="----=_Part_5070_652604609.1453838389502"
 Return-path: <openembedded-core-bounces-ZwoEplunGu3dfDuKDZ/zN51Ccm5ICvs9@public.gmane.org>
 In-Reply-To: <51287CFC-6F3C-43B1-9190-84F3B20C192E-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
 List-Unsubscribe: <http://lists.openembedded.org/mailman/options/openembedded-core>,
@@ -18,163 +19,129 @@ List-Subscribe: <http://lists.openembedded.org/mailman/listinfo/openembedded-cor
 Sender: openembedded-core-bounces-ZwoEplunGu3dfDuKDZ/zN51Ccm5ICvs9@public.gmane.org
 Errors-To: openembedded-core-bounces-ZwoEplunGu3dfDuKDZ/zN51Ccm5ICvs9@public.gmane.org
 To: Khem Raj <raj.khem-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-Cc: lttng-dev <lttng-dev-bnB2LGs2QVJ+nrgayQ7rhA@public.gmane.org>, Mathieu Desnoyers <mathieu.desnoyers-vg+e7yoeK/dWk0Htik3J/w@public.gmane.org>, oe-core <openembedded-core-ZwoEplunGu3dfDuKDZ/zN51Ccm5ICvs9@public.gmane.org>
+Cc: lttng-dev <lttng-dev-bnB2LGs2QVJ+nrgayQ7rhA@public.gmane.org>, openembedded-core <openembedded-core-ZwoEplunGu3dfDuKDZ/zN51Ccm5ICvs9@public.gmane.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0113543954==
-Content-Type: multipart/alternative; boundary=001a113fcf0ec2714e052a412c6d
+------=_Part_5070_652604609.1453838389502
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
---001a113fcf0ec2714e052a412c6d
-Content-Type: text/plain; charset=UTF-8
+----- On Jan 26, 2016, at 11:28 AM, Khem Raj raj.khem-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org wrote:
 
-On 26 Jan 2016 17:28, "Khem Raj" <raj.khem-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org> wrote:
->
->
-> > On Jan 25, 2016, at 8:02 PM, Mathieu Desnoyers <
-mathieu.desnoyers-vg+e7yoeK/dWk0Htik3J/w@public.gmane.org> wrote:
-> >
-> > Hi,
-> >
-> > We are noticing the presence of the following patch in various
-> > openembedded gcc versions:
-> >
-> > 0024-PR-target-32219.patch
-> >
-> > "From e0d15f4f8bf28c351b9215ca37f1caa24df0e1fd Mon Sep 17 00:00:00 2001
-> > From: Khem Raj <raj.khem-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> > Date: Fri, 29 Mar 2013 09:18:54 +0400
-> > Subject: [PATCH 24/35] PR target/32219
-> >
-> > * varasm.c (default_binds_local_p_1): Weak data is not local.
-> >
-> > Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> > Signed-off-by: Khem Raj <raj.khem-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> >
-> > Upstream-Status: Backport"
-> >
-> > However, contrarily to its "Backport" status, that patch is
-> > not upstream in gcc, and we're starting to wonder if this
-> > would be the patch that breaks handling of start/stop automatic
-> > hidden symbols we use in lttng-ust.
-> >
-> > We are only experiencing problems on the various openembedded
-> > compilers, but on no other distro (with same compiler versions),
-> > which leads us to suspect a buggy distro-specific gcc patch.
-> >
-> > We've been testing with openembedded gcc-4.9.2-r0.
-> >
-> > The original gold linker issue that this patch was trying to
-> > address seems to have been fixed in the gold linke since
-> > then.
-> >
-> > Refs:
-> > http://lists.lttng.org/pipermail/lttng-dev/2014-May/023112.html
-> > https://gcc.gnu.org/ml/gcc-help/2014-05/msg00042.html
-> >
-http://cgit.openembedded.org/openembedded-core/commit/?id=3cb2b003db7371b3a47d02c08352a262e1e419b4
-> > https://sourceware.org/bugzilla/show_bug.cgi?id=15435
-> >
-> > Thoughts ?
->
-> OE has defaulted to gcc5 since last release, and gold issue is fixed in
-binutils 2.25
+>> On Jan 25, 2016, at 8:02 PM, Mathieu Desnoyers <mathieu.desnoyers-vg+e7yoeK/dWk0Htik3J/w@public.gmane.org>
+>> wrote:
+>> 
+>> Hi,
+>> 
+>> We are noticing the presence of the following patch in various
+>> openembedded gcc versions:
+>> 
+>> 0024-PR-target-32219.patch
+>> 
+>> "From e0d15f4f8bf28c351b9215ca37f1caa24df0e1fd Mon Sep 17 00:00:00 2001
+>> From: Khem Raj <raj.khem-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+>> Date: Fri, 29 Mar 2013 09:18:54 +0400
+>> Subject: [PATCH 24/35] PR target/32219
+>> 
+>> * varasm.c (default_binds_local_p_1): Weak data is not local.
+>> 
+>> Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+>> Signed-off-by: Khem Raj <raj.khem-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+>> 
+>> Upstream-Status: Backport"
+>> 
+>> However, contrarily to its "Backport" status, that patch is
+>> not upstream in gcc, and we're starting to wonder if this
+>> would be the patch that breaks handling of start/stop automatic
+>> hidden symbols we use in lttng-ust.
+>> 
+>> We are only experiencing problems on the various openembedded
+>> compilers, but on no other distro (with same compiler versions),
+>> which leads us to suspect a buggy distro-specific gcc patch.
+>> 
+>> We've been testing with openembedded gcc-4.9.2-r0.
+>> 
+>> The original gold linker issue that this patch was trying to
+>> address seems to have been fixed in the gold linke since
+>> then.
+>> 
+>> Refs:
+>> http://lists.lttng.org/pipermail/lttng-dev/2014-May/023112.html
+>> https://gcc.gnu.org/ml/gcc-help/2014-05/msg00042.html
+>> http://cgit.openembedded.org/openembedded-core/commit/?id=3cb2b003db7371b3a47d02c08352a262e1e419b4
+>> https://sourceware.org/bugzilla/show_bug.cgi?id=15435
+>> 
+>> Thoughts ?
+> 
+> OE has defaulted to gcc5 since last release, and gold issue is fixed in binutils
+> 2.25
 > which is what we use in 2.0 as well so it might be OK to unbolt this fix.
-Although I am not sure
-> about the original problem reported in PR32219 is fixed for gcc 4.9 if we
-remove this fix.
-> Have you narrowed down your issue to this patch ? if not, then it would
-be good to do so
+> Although I am not sure
+> about the original problem reported in PR32219 is fixed for gcc 4.9 if we remove
+> this fix.
+> Have you narrowed down your issue to this patch ? if not, then it would be good
+> to do so
 
-See http://gcc.gnu.org/PR32219 this is fixed for at least 6.0 so should
-certainly be dropped for any fixed GCC. Not sure if anybody is willing to
-backport this one, you might ask.
+Yes, we have narrowed down our problem to this specific patch by
+removing the patch from the OE gcc patches, rebuilding gcc, and
+then building our test program with that gcc. The problem goes
+away when we do so, which points directly to that patch as a
+culprit.
+
+Test program is attached.
+
+Faulty[gcc 4.9-r0 with patch 0024]:
+
+main: myvar addr=0x600c90 __start___test=0x600c90
+fct: myvar addr=0x7f8733d1eae8 __start___test=0x600c90
+fct2: myvar addr=0x7f8733d1eaec __start___test=0x600c90
+fct3: myvar addr=0x600c94 __start___test=0x600c90
+
+Valid[gcc 4.9-r0 without patch 0024]:
+
+main: myvar addr=0x600c60 __start___test=0x600c60
+fct: myvar addr=0x7fb62c758a90 __start___test=0x7fb62c758a90
+fct2: myvar addr=0x7fb62c758a94 __start___test=0x7fb62c758a90
+fct3: myvar addr=0x600c64 __start___test=0x600c60
 
 Thanks,
->
-> >
-> > Thanks,
-> >
-> > Mathieu
-> >
-> > --
-> > Mathieu Desnoyers
-> > EfficiOS Inc.
+
+Mathieu
+
+> 
+>> 
+>> Thanks,
+>> 
+>> Mathieu
+>> 
+>> --
+>> Mathieu Desnoyers
+>> EfficiOS Inc.
 > > http://www.efficios.com
->
 
---001a113fcf0ec2714e052a412c6d
-Content-Type: text/html; charset=UTF-8
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
 
-<p dir="ltr"><br>
-On 26 Jan 2016 17:28, &quot;Khem Raj&quot; &lt;<a href="mailto:raj.khem-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org">raj.khem-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org</a>&gt; wrote:<br>
-&gt;<br>
-&gt;<br>
-&gt; &gt; On Jan 25, 2016, at 8:02 PM, Mathieu Desnoyers &lt;<a href="mailto:mathieu.desnoyers-vg+e7yoeK/dWk0Htik3J/w@public.gmane.org">mathieu.desnoyers-vg+e7yoeK/dWk0Htik3J/w@public.gmane.org</a>&gt; wrote:<br>
-&gt; &gt;<br>
-&gt; &gt; Hi,<br>
-&gt; &gt;<br>
-&gt; &gt; We are noticing the presence of the following patch in various<br>
-&gt; &gt; openembedded gcc versions:<br>
-&gt; &gt;<br>
-&gt; &gt; 0024-PR-target-32219.patch<br>
-&gt; &gt;<br>
-&gt; &gt; &quot;From e0d15f4f8bf28c351b9215ca37f1caa24df0e1fd Mon Sep 17 00:00:00 2001<br>
-&gt; &gt; From: Khem Raj &lt;<a href="mailto:raj.khem-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org">raj.khem-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org</a>&gt;<br>
-&gt; &gt; Date: Fri, 29 Mar 2013 09:18:54 +0400<br>
-&gt; &gt; Subject: [PATCH 24/35] PR target/32219<br>
-&gt; &gt;<br>
-&gt; &gt; * varasm.c (default_binds_local_p_1): Weak data is not local.<br>
-&gt; &gt;<br>
-&gt; &gt; Signed-off-by: Bernhard Reutner-Fischer &lt;<a href="mailto:rep.dot.nop-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org">rep.dot.nop-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org</a>&gt;<br>
-&gt; &gt; Signed-off-by: Khem Raj &lt;<a href="mailto:raj.khem-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org">raj.khem-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org</a>&gt;<br>
-&gt; &gt;<br>
-&gt; &gt; Upstream-Status: Backport&quot;<br>
-&gt; &gt;<br>
-&gt; &gt; However, contrarily to its &quot;Backport&quot; status, that patch is<br>
-&gt; &gt; not upstream in gcc, and we&#39;re starting to wonder if this<br>
-&gt; &gt; would be the patch that breaks handling of start/stop automatic<br>
-&gt; &gt; hidden symbols we use in lttng-ust.<br>
-&gt; &gt;<br>
-&gt; &gt; We are only experiencing problems on the various openembedded<br>
-&gt; &gt; compilers, but on no other distro (with same compiler versions),<br>
-&gt; &gt; which leads us to suspect a buggy distro-specific gcc patch.<br>
-&gt; &gt;<br>
-&gt; &gt; We&#39;ve been testing with openembedded gcc-4.9.2-r0.<br>
-&gt; &gt;<br>
-&gt; &gt; The original gold linker issue that this patch was trying to<br>
-&gt; &gt; address seems to have been fixed in the gold linke since<br>
-&gt; &gt; then.<br>
-&gt; &gt;<br>
-&gt; &gt; Refs:<br>
-&gt; &gt; <a href="http://lists.lttng.org/pipermail/lttng-dev/2014-May/023112.html">http://lists.lttng.org/pipermail/lttng-dev/2014-May/023112.html</a><br>
-&gt; &gt; <a href="https://gcc.gnu.org/ml/gcc-help/2014-05/msg00042.html">https://gcc.gnu.org/ml/gcc-help/2014-05/msg00042.html</a><br>
-&gt; &gt; <a href="http://cgit.openembedded.org/openembedded-core/commit/?id=3cb2b003db7371b3a47d02c08352a262e1e419b4">http://cgit.openembedded.org/openembedded-core/commit/?id=3cb2b003db7371b3a47d02c08352a262e1e419b4</a><br>
-&gt; &gt; <a href="https://sourceware.org/bugzilla/show_bug.cgi?id=15435">https://sourceware.org/bugzilla/show_bug.cgi?id=15435</a><br>
-&gt; &gt;<br>
-&gt; &gt; Thoughts ?<br>
-&gt;<br>
-&gt; OE has defaulted to gcc5 since last release, and gold issue is fixed in binutils 2.25<br>
-&gt; which is what we use in 2.0 as well so it might be OK to unbolt this fix. Although I am not sure<br>
-&gt; about the original problem reported in PR32219 is fixed for gcc 4.9 if we remove this fix.<br>
-&gt; Have you narrowed down your issue to this patch ? if not, then it would be good to do so</p>
-<p dir="ltr">See <a href="http://gcc.gnu.org/PR32219">http://gcc.gnu.org/PR32219</a> this is fixed for at least 6.0 so should certainly be dropped for any fixed GCC. Not sure if anybody is willing to backport this one, you might ask.</p>
-<p dir="ltr">Thanks,<br>
-&gt;<br>
-&gt; &gt;<br>
-&gt; &gt; Thanks,<br>
-&gt; &gt;<br>
-&gt; &gt; Mathieu<br>
-&gt; &gt;<br>
-&gt; &gt; --<br>
-&gt; &gt; Mathieu Desnoyers<br>
-&gt; &gt; EfficiOS Inc.<br>
-&gt; &gt; <a href="http://www.efficios.com">http://www.efficios.com</a><br>
-&gt;<br>
-</p>
+------=_Part_5070_652604609.1453838389502
+Content-Type: application/x-compressed-tar; name=yocto-hidden-bug2.tar.gz
+Content-Disposition: attachment; filename=yocto-hidden-bug2.tar.gz
+Content-Transfer-Encoding: base64
 
---001a113fcf0ec2714e052a412c6d--
-
---===============0113543954==
+H4sIAF2np1YAA+2WXW/TMBRA+1r/CtNpKJWaNB91Im0MaYiHIQ2YJiQ0AbISx1nNUqdKnEKF9t+5
+aVfWNlQF1GYwfB4S59bXdu0cO9OMqcwcijjm0ozKa7ff2jk2EBBS3Z2A2Mv3BS3H9YkTuB7xnJbt
+DKDYwmT3Q6lTFirMMW6xbDQu488b6237/R9lWlv/vJRWMdxlH1vXnzjz9SceIbYH6088eA2wvctB
+bOI/X/+DJ/1IyH4xRGgU3nB0/pKev3pxeXp5RS9O352dWNjqK14o9NAD1eyFuv+v4TVIRMp310el
+uD8YbPTfJYP7/R/OAvDfdwPtfxOEaXqE2teMYfN92jNNmZlhYUrOYx5jMxkL+KEYhnn1lOFURKMp
+XByryLBjMexabHN2hqudA5tpnK5mhpAZQSayLs7evrk6wizloUSzK4wmH0HP89zlNL0F7YG6/7A4
+O+5jm/+B7y3O/8AeBNX3Hwn0+d8IB0KytIw5flaoWGTW8DlaDUm1GovThMlaNVC0iiGYTAVbBssk
+yAu5eDSdwPRSGiqVi6hUnFLDKDhTIpNGh9LK8k632z1GiH9VPJdLuZRWa6PovNaHT6i91s4XHt70
+8EQUIhKpUFOjM3+R5w3+tL1s/KfNAZNMxDhhyqgKEFo8u+sBbxFAszkIhTS66BtqJ+McAokBM8bz
+vIc7h8XR3RSFcZyfHI7X/jREPspOD6JJKRmlPdRuP50l9NZqQmftamh3d3dR8GaFnKsS5sI+Rrer
+22jdf7dx/4kf/PDfqeqB/46r/W+CX/T/UYu9pvH+Rb39ez5l6v5Hjfvve/69/7Y789/X538j6PP/
+t7cJ7zFtE3X/nQc4/5f89+b+20T73wT6/F//rH8cXms0Go1Go9FoNBqNRrPMd2JyaasAKAAA
+------=_Part_5070_652604609.1453838389502
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -186,4 +153,4 @@ Openembedded-core mailing list
 Openembedded-core-ZwoEplunGu3dfDuKDZ/zN51Ccm5ICvs9@public.gmane.org
 http://lists.openembedded.org/mailman/listinfo/openembedded-core
 
---===============0113543954==--
+------=_Part_5070_652604609.1453838389502--
