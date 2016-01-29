@@ -1,8 +1,8 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules 2/2] Fix: Ubuntu kernel range for
-	block_rq_complete
-Date: Fri, 29 Jan 2016 17:46:03 -0500
-Message-ID: <1454107563-22129-2-git-send-email-mjeanson__23849.2491691888$1454107665$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-modules 1/2] Fix: Ubuntu kernel range
+ for mm_page_alloc_extfrag
+Date: Fri, 29 Jan 2016 22:52:23 +0000 (UTC)
+Message-ID: <90203921.8680.1454107943296.JavaMail.zimbra__33192.70036086$1454107999$gmane$org@efficios.com>
 References: <1454107563-22129-1-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,11 +10,11 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mjeanson@efficios.com>) id 1aPHoH-0005w1-WA
- for lttng-dev@lists.lttng.org; Fri, 29 Jan 2016 17:46:34 -0500
+ (envelope-from <compudj@efficios.com>) id 1aPHu1-000612-LV
+ for lttng-dev@lists.lttng.org; Fri, 29 Jan 2016 17:52:30 -0500
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id B2835340553
- for <lttng-dev@lists.lttng.org>; Fri, 29 Jan 2016 22:46:28 +0000 (UTC)
+ by mail.efficios.com (Postfix) with ESMTP id 5E5B834055F
+ for <lttng-dev@lists.lttng.org>; Fri, 29 Jan 2016 22:52:24 +0000 (UTC)
 In-Reply-To: <1454107563-22129-1-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,26 +24,40 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
----
- instrumentation/events/lttng-module/block.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Both patches merged into master, thanks!
 
-diff --git a/instrumentation/events/lttng-module/block.h b/instrumentation/events/lttng-module/block.h
-index 1a2ba6b..6b0c788 100644
---- a/instrumentation/events/lttng-module/block.h
-+++ b/instrumentation/events/lttng-module/block.h
-@@ -202,7 +202,7 @@ LTTNG_TRACEPOINT_EVENT_INSTANCE(block_rq_with_error, block_rq_requeue,
- 	|| LTTNG_KERNEL_RANGE(3,10,41, 3,11,0)		\
- 	|| LTTNG_KERNEL_RANGE(3,4,91, 3,5,0)		\
- 	|| LTTNG_KERNEL_RANGE(3,2,58, 3,3,0)		\
--	|| LTTNG_UBUNTU_KERNEL_RANGE(3,13,11,31, 3,14,0,0)	\
-+	|| LTTNG_UBUNTU_KERNEL_RANGE(3,13,11,28, 3,14,0,0)	\
- 	|| LTTNG_RHEL_KERNEL_RANGE(3,10,0,7,1, 3,11,0,0,0))
- 
- /**
+Mathieu
+
+----- On Jan 29, 2016, at 5:46 PM, Michael Jeanson mjeanson@efficios.com wrote:
+
+> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+> ---
+> instrumentation/events/lttng-module/kmem.h | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/instrumentation/events/lttng-module/kmem.h
+> b/instrumentation/events/lttng-module/kmem.h
+> index 25e58cb..cce8da4 100644
+> --- a/instrumentation/events/lttng-module/kmem.h
+> +++ b/instrumentation/events/lttng-module/kmem.h
+> @@ -211,7 +211,7 @@ LTTNG_TRACEPOINT_EVENT_INSTANCE_MAP(kmem_mm_page,
+> mm_page_pcpu_drain,
+> 	|| LTTNG_KERNEL_RANGE(3,18,10, 3,19,0)		\
+> 	|| LTTNG_DEBIAN_KERNEL_RANGE(3,16,7,9,0,0, 3,17,0,0,0,0)	\
+> 	|| LTTNG_UBUNTU_KERNEL_RANGE(3,13,11,50, 3,14,0,0)	\
+> -	|| LTTNG_UBUNTU_KERNEL_RANGE(3,16,7,38, 3,17,0,0))
+> +	|| LTTNG_UBUNTU_KERNEL_RANGE(3,16,7,34, 3,17,0,0))
+> 
+> LTTNG_TRACEPOINT_EVENT_MAP(mm_page_alloc_extfrag,
+> 
+> --
+> 2.7.0
+
 -- 
-2.7.0
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
