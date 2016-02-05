@@ -1,21 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust stable-2.7] Fix: Ensure the Java
- JUL	messages are correctly formatted
-Date: Thu, 4 Feb 2016 20:14:57 +0000 (UTC)
-Message-ID: <1589157458.12569.1454616897535.JavaMail.zimbra__16266.6268567138$1454616961$gmane$org@efficios.com>
-References: <1454616177-8786-1-git-send-email-alexmonthy@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-modules 1/2] Add RT patch version macros
+Date: Fri,  5 Feb 2016 17:53:06 -0500
+Message-ID: <1454712787-7944-1-git-send-email-mjeanson__18931.4012918205$1454712879$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1aRQIy-0005n5-Ds
- for lttng-dev@lists.lttng.org; Thu, 04 Feb 2016 15:15:07 -0500
+ (envelope-from <mjeanson@efficios.com>) id 1aRpFt-0006h2-CH
+ for lttng-dev@lists.lttng.org; Fri, 05 Feb 2016 17:53:35 -0500
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 7C4C33404D5
- for <lttng-dev@lists.lttng.org>; Thu,  4 Feb 2016 20:14:58 +0000 (UTC)
-In-Reply-To: <1454616177-8786-1-git-send-email-alexmonthy@efficios.com>
+ by mail.efficios.com (Postfix) with ESMTP id 242D03403C9
+ for <lttng-dev@lists.lttng.org>; Fri,  5 Feb 2016 22:53:28 +0000 (UTC)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,86 +21,92 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexandre Montplaisir <alexmonthy@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Merged into lttng-ust stable-2.7 branch, thanks!
+---
+ Makefile.ABI.workarounds |  8 +++++++-
+ lttng-kernel-version.h   | 17 +++++++++++++++++
+ rt-patch-version.sh      | 25 +++++++++++++++++++++++++
+ 3 files changed, 49 insertions(+), 1 deletion(-)
+ create mode 100755 rt-patch-version.sh
 
-Mathieu
-
------ On Feb 4, 2016, at 3:02 PM, Alexandre Montplaisir alexmonthy@efficios.com wrote:
-
-> Same as 4721f9c, but for the stable-2.7 branch.
-> 
-> Signed-off-by: Alexandre Montplaisir <alexmonthy@efficios.com>
-> ---
-> .../java/org/lttng/ust/agent/jul/LTTngLogHandler.java  | 18 ++++++++++++++++--
-> 1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git
-> a/liblttng-ust-java-agent/java/org/lttng/ust/agent/jul/LTTngLogHandler.java
-> b/liblttng-ust-java-agent/java/org/lttng/ust/agent/jul/LTTngLogHandler.java
-> index b844d2f..15c7a8e 100644
-> --- a/liblttng-ust-java-agent/java/org/lttng/ust/agent/jul/LTTngLogHandler.java
-> +++ b/liblttng-ust-java-agent/java/org/lttng/ust/agent/jul/LTTngLogHandler.java
-> @@ -19,11 +19,23 @@ package org.lttng.ust.agent.jul;
-> 
-> import java.lang.String;
-> 
-> +import java.util.logging.Formatter;
-> import java.util.logging.Handler;
-> import java.util.logging.LogRecord;
-> 
-> class LTTngLogHandler extends Handler {
-> 
-> +	/**
-> +	 * Dummy Formatter object, so we can use its
-> +	 * {@link Formatter#formatMessage(LogRecord)} method.
-> +	 */
-> +	private static final Formatter FORMATTER = new Formatter() {
-> +		@Override
-> +		public String format(LogRecord record) {
-> +			throw new UnsupportedOperationException();
-> +		}
-> +	};
-> +
-> 	private final Boolean isRoot;
-> 
-> 	public LTTngLogHandler(Boolean isRoot) {
-> @@ -54,18 +66,20 @@ class LTTngLogHandler extends Handler {
-> 
-> 	@Override
-> 	public void publish(LogRecord record) {
-> +		String formattedMessage = FORMATTER.formatMessage(record);
-> +
-> 		/*
-> 		 * Specific tracepoint designed for JUL events. The source class of the
-> 		 * caller is used for the event name, the raw message is taken, the
-> 		 * loglevel of the record and the thread ID.
-> 		 */
-> 		if (this.isRoot) {
-> -			tracepointS(record.getMessage(),
-> +			tracepointS(formattedMessage,
-> 				    record.getLoggerName(), record.getSourceClassName(),
-> 				    record.getSourceMethodName(), record.getMillis(),
-> 				    record.getLevel().intValue(), record.getThreadID());
-> 		} else {
-> -			tracepointU(record.getMessage(),
-> +			tracepointU(formattedMessage,
-> 				    record.getLoggerName(), record.getSourceClassName(),
-> 				    record.getSourceMethodName(), record.getMillis(),
-> 				    record.getLevel().intValue(), record.getThreadID());
-> --
-> 2.5.0
-> 
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+diff --git a/Makefile.ABI.workarounds b/Makefile.ABI.workarounds
+index d553ee4..e8cf520 100644
+--- a/Makefile.ABI.workarounds
++++ b/Makefile.ABI.workarounds
+@@ -4,8 +4,14 @@
+ # the kernel EXTRAVERSION to figure it out. Translate this information
+ # into a define visible from the C preprocessor.
+ 
+-DEB_API_VERSION=$(shell $(MAKEFILEDIR)/abi-debian-version.sh $(KERNELDIR))
++DEB_API_VERSION:=$(shell $(MAKEFILEDIR)/abi-debian-version.sh $(KERNELDIR))
+ 
+ ifneq ($(DEB_API_VERSION), 0)
+   ccflags-y += -DDEBIAN_API_VERSION=$(DEB_API_VERSION)
+ endif
++
++RT_PATCH_VERSION:=$(shell $(MAKEFILEDIR)/rt-patch-version.sh $(KERNELDIR))
++
++ifneq ($(RT_PATCH_VERSION), 0)
++  ccflags-y += -DRT_PATCH_VERSION=$(RT_PATCH_VERSION)
++endif
+diff --git a/lttng-kernel-version.h b/lttng-kernel-version.h
+index f98a192..ac61739 100644
+--- a/lttng-kernel-version.h
++++ b/lttng-kernel-version.h
+@@ -90,4 +90,21 @@
+ 		LTTNG_RHEL_VERSION_CODE < \
+ 		LTTNG_RHEL_KERNEL_VERSION(a_high, b_high, c_high, d_high, e_high))
+ 
++#define LTTNG_RT_KERNEL_VERSION(a, b, c, d) \
++	(((a) << 24) + ((b) << 16) + ((c) << 8) + (d))
++
++#ifdef RT_PATCH_VERSION
++#define LTTNG_RT_VERSION_CODE \
++	((LINUX_VERSION_CODE << 8) + RT_PATCH_VERSION)
++#else
++#define LTTNG_RT_VERSION_CODE 	0
++#endif
++
++#define LTTNG_RT_KERNEL_RANGE(a_low, b_low, c_low, d_low, \
++		a_high, b_high, c_high, d_high) \
++	(LTTNG_RT_VERSION_CODE >= \
++		LTTNG_RT_KERNEL_VERSION(a_low, b_low, c_low, d_low) && \
++		LTTNG_RT_VERSION_CODE < \
++		LTTNG_RT_KERNEL_VERSION(a_high, b_high, c_high, d_high))
++
+ #endif /* _LTTNG_KERNEL_VERSION_H */
+diff --git a/rt-patch-version.sh b/rt-patch-version.sh
+new file mode 100755
+index 0000000..89c7755
+--- /dev/null
++++ b/rt-patch-version.sh
+@@ -0,0 +1,25 @@
++#!/bin/sh
++
++# First argument is the path to the kernel headers.
++KPATH=$1
++
++VERSIONFILE=""
++
++if [ -f "${KPATH}/localversion-rt" ]; then
++	VERSIONFILE="${KPATH}/localversion-rt"
++
++elif [ -f "${KPATH}/source/localversion-rt" ]; then
++	VERSIONFILE="${KPATH}/source/localversion-rt"
++else
++	echo 0
++	exit 0
++fi
++
++RT_PATCH_VERSION=$(sed -rn 's/^-rt([0-9]+)$/\1/p' "${VERSIONFILE}")
++
++if [ "x${RT_PATCH_VERSION}" = "x" ]; then
++	echo 0
++	exit 0
++fi
++
++echo ${RT_PATCH_VERSION}
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.7.0
