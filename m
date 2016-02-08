@@ -1,19 +1,16 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules] Fix: Use kbuild env instead of a
-	custom var KERNELDIR
-Date: Mon,  8 Feb 2016 16:33:17 -0500
-Message-ID: <1454967197-27200-1-git-send-email-mjeanson__7236.74780824712$1454967277$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools 1/2] Fix: handle negative clock
+	offset for lttng-ust metadata
+Date: Mon,  8 Feb 2016 17:13:25 -0500
+Message-ID: <1454969606-17225-1-git-send-email-mathieu.desnoyers__23778.1717013151$1454969667$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mjeanson@efficios.com>) id 1aStR6-0007hL-39
- for lttng-dev@lists.lttng.org; Mon, 08 Feb 2016 16:33:34 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C14EE340499
- for <lttng-dev@lists.lttng.org>; Mon,  8 Feb 2016 21:33:26 +0000 (UTC)
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1aSu3t-0007zb-F3
+ for lttng-dev@lists.lttng.org; Mon, 08 Feb 2016 17:13:38 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,71 +19,74 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-We currently use the custom variables KERNELDIR and LTTNG_KERNELDIR
-to pass the kernel source tree directory to helper scripts. We should
-instead use the built-in Kbuild variable CURDIR which is available in
-all sub makefiles and always points to the kernel sources.
+In the unlikely situation where a system sets its hardware clock
+(CLOCK_REALTIME) to 0 (Epoch) after boot, the difference
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+  monotonic - realtime
+
+becomes negative.
+
+Fixup this situation by returning a 0 offset in this case.
+
+This ensures that trace viewer implementations (e.g. babeltrace) which
+currently cannot handle the negative offset (known bug) still work with
+the generated traces.
+
+This patch should be applied to master and stable-2.7.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- Makefile                 | 9 ++++-----
- Makefile.ABI.workarounds | 4 ++--
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ src/bin/lttng-sessiond/ust-metadata.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 64d5885..6a8c5c7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -9,7 +9,6 @@ ifneq ($(KERNELRELEASE),)
+diff --git a/src/bin/lttng-sessiond/ust-metadata.c b/src/bin/lttng-sessiond/ust-metadata.c
+index 984d5f8..f7c8b9d 100644
+--- a/src/bin/lttng-sessiond/ust-metadata.c
++++ b/src/bin/lttng-sessiond/ust-metadata.c
+@@ -604,11 +604,17 @@ int _lttng_event_header_declare(struct ust_registry_session *session)
+ 	);
+ }
  
-   ifneq ($(CONFIG_TRACEPOINTS),)
++/*
++ * The offset between monotonic and realtime clock can be negative if
++ * the system sets the REALTIME clock to 0 after boot.
++ * Currently handle this by flooring the offset at 0.
++ */
+ static
+ int measure_single_clock_offset(struct offset_sample *sample)
+ {
+-	uint64_t offset, monotonic[2], measure_delta, realtime;
++	uint64_t monotonic_avg, monotonic[2], measure_delta, realtime;
+ 	uint64_t tcf = trace_clock_freq();
++	int64_t offset;
+ 	struct timespec rts = { 0, 0 };
+ 	int ret;
  
--    KERNELDIR = ${LTTNG_KERNELDIR}
-     MAKEFILEDIR = $(shell dirname $(lastword $(MAKEFILE_LIST)))
- 
-     lttng_check_linux_version = $(shell pwd)/include/linux/version.h
-@@ -101,15 +100,15 @@ PWD := $(shell pwd)
- CFLAGS = $(EXTCFLAGS)
- 
- default:
--	LTTNG_KERNELDIR=$(KERNELDIR) $(MAKE) -C $(KERNELDIR) M=$(PWD) CONFIG_LTTNG=m modules
-+	$(MAKE) -C $(KERNELDIR) M=$(PWD) CONFIG_LTTNG=m modules
- 
- modules_install:
--	LTTNG_KERNELDIR=$(KERNELDIR) $(MAKE) -C $(KERNELDIR) M=$(PWD) modules_install
-+	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules_install
- 
- clean:
--	LTTNG_KERNELDIR=$(KERNELDIR) $(MAKE) -C $(KERNELDIR) M=$(PWD) clean
-+	$(MAKE) -C $(KERNELDIR) M=$(PWD) clean
- 
- %.i: %.c
--	LTTNG_KERNELDIR=$(KERNELDIR) $(MAKE) -C $(KERNELDIR) M=$(PWD) $@
-+	$(MAKE) -C $(KERNELDIR) M=$(PWD) $@
- 
- endif # KERNELRELEASE
-diff --git a/Makefile.ABI.workarounds b/Makefile.ABI.workarounds
-index e8cf520..f766bc9 100644
---- a/Makefile.ABI.workarounds
-+++ b/Makefile.ABI.workarounds
-@@ -4,13 +4,13 @@
- # the kernel EXTRAVERSION to figure it out. Translate this information
- # into a define visible from the C preprocessor.
- 
--DEB_API_VERSION:=$(shell $(MAKEFILEDIR)/abi-debian-version.sh $(KERNELDIR))
-+DEB_API_VERSION:=$(shell $(MAKEFILEDIR)/abi-debian-version.sh $(CURDIR))
- 
- ifneq ($(DEB_API_VERSION), 0)
-   ccflags-y += -DDEBIAN_API_VERSION=$(DEB_API_VERSION)
- endif
- 
--RT_PATCH_VERSION:=$(shell $(MAKEFILEDIR)/rt-patch-version.sh $(KERNELDIR))
-+RT_PATCH_VERSION:=$(shell $(MAKEFILEDIR)/rt-patch-version.sh $(CURDIR))
- 
- ifneq ($(RT_PATCH_VERSION), 0)
-   ccflags-y += -DRT_PATCH_VERSION=$(RT_PATCH_VERSION)
+@@ -626,15 +632,18 @@ int measure_single_clock_offset(struct offset_sample *sample)
+ 		 */
+ 		return 0;
+ 	}
+-	offset = (monotonic[0] + monotonic[1]) >> 1;
++	monotonic_avg = (monotonic[0] + monotonic[1]) >> 1;
+ 	realtime = (uint64_t) rts.tv_sec * tcf;
+ 	if (tcf == NSEC_PER_SEC) {
+ 		realtime += rts.tv_nsec;
+ 	} else {
+ 		realtime += (uint64_t) rts.tv_nsec * tcf / NSEC_PER_SEC;
+ 	}
+-	offset = realtime - offset;
+-	sample->offset = offset;
++	offset = (int64_t) realtime - monotonic_avg;
++	if (offset < 0)
++		sample->offset = 0;
++	else
++		sample->offset = offset;
+ 	sample->measure_delta = measure_delta;
+ 	return 0;
+ }
 -- 
-2.7.0
+2.1.4
