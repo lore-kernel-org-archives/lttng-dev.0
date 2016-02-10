@@ -1,21 +1,35 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules] Fix: Add CONFIG_LTTNG to
- modules_install target
-Date: Tue, 9 Feb 2016 20:21:18 +0000 (UTC)
-Message-ID: <1664904875.15501.1455049278567.JavaMail.zimbra__11300.7033280612$1455049337$gmane$org@efficios.com>
-References: <1455049016-6087-1-git-send-email-mjeanson@efficios.com>
+From: Olof Johansson <olof.johansson@axis.com>
+Subject: [PATCH] Fix: configure.ac: check for possibly required
+	libs for clock_gettime
+Date: Wed, 10 Feb 2016 10:39:50 +0100
+Message-ID: <1455097190-11550-1-git-send-email-olofjn__39309.4460167505$1455099189$gmane$org@axis.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from bes.se.axis.com ([195.60.68.10])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1aTEmv-0000Cw-Mg
- for lttng-dev@lists.lttng.org; Tue, 09 Feb 2016 15:21:30 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 8CC11340560
- for <lttng-dev@lists.lttng.org>; Tue,  9 Feb 2016 20:21:24 +0000 (UTC)
-In-Reply-To: <1455049016-6087-1-git-send-email-mjeanson@efficios.com>
+ (envelope-from <olof.johansson@axis.com>) id 1aTRkg-0005j0-6U
+ for lttng-dev@lists.lttng.org; Wed, 10 Feb 2016 05:12:05 -0500
+Received: from localhost (localhost [127.0.0.1])
+ by bes.se.axis.com (Postfix) with ESMTP id 619F62E151
+ for <lttng-dev@lists.lttng.org>; Wed, 10 Feb 2016 11:11:56 +0100 (CET)
+Received: from bes.se.axis.com ([IPv6:::ffff:127.0.0.1])
+ by localhost (bes.se.axis.com [::ffff:127.0.0.1]) (amavisd-new, port 10024)
+ with LMTP id 3qoxNe0tzJSs for <lttng-dev@lists.lttng.org>;
+ Wed, 10 Feb 2016 11:11:55 +0100 (CET)
+Received: from boulder.se.axis.com (boulder.se.axis.com [10.0.2.104])
+ by bes.se.axis.com (Postfix) with ESMTP id A0ADB2E14D
+ for <lttng-dev@lists.lttng.org>; Wed, 10 Feb 2016 11:11:55 +0100 (CET)
+Received: from boulder.se.axis.com (localhost [127.0.0.1])
+ by postfix.imss71 (Postfix) with ESMTP id 7B40D1289
+ for <lttng-dev@lists.lttng.org>; Wed, 10 Feb 2016 11:11:55 +0100 (CET)
+Received: from thoth.se.axis.com (thoth.se.axis.com [10.0.2.173])
+ by boulder.se.axis.com (Postfix) with ESMTP id 700E4E0
+ for <lttng-dev@lists.lttng.org>; Wed, 10 Feb 2016 11:11:55 +0100 (CET)
+Received: from lnxolofjn.se.axis.com (lnxolofjn.se.axis.com [10.92.17.1])
+ by thoth.se.axis.com (Postfix) with ESMTP id 6DCB434240
+ for <lttng-dev@lists.lttng.org>; Wed, 10 Feb 2016 11:11:55 +0100 (CET)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -24,44 +38,46 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-merged, thanks!
+From: Olof Johansson <olof.johansson@axis.com>
 
-Mathieu
+On some platforms, you have to link with rt to get clock_gettime. This
+solves errors like:
 
------ On Feb 9, 2016, at 3:16 PM, Michael Jeanson mjeanson@efficios.com wrote:
+ undefined reference to `clock_gettime'
 
-> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-> ---
-> Makefile | 4 ++--
-> 1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 6a8c5c7..5d6be94 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -103,12 +103,12 @@ default:
-> 	$(MAKE) -C $(KERNELDIR) M=$(PWD) CONFIG_LTTNG=m modules
-> 
-> modules_install:
-> -	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules_install
-> +	$(MAKE) -C $(KERNELDIR) M=$(PWD) CONFIG_LTTNG=m modules_install
-> 
-> clean:
-> 	$(MAKE) -C $(KERNELDIR) M=$(PWD) clean
-> 
-> %.i: %.c
-> -	$(MAKE) -C $(KERNELDIR) M=$(PWD) $@
-> +	$(MAKE) -C $(KERNELDIR) M=$(PWD) CONFIG_LTTNG=m $@
-> 
-> endif # KERNELRELEASE
-> --
-> 2.7.0
+Fixes: #996
 
+Signed-off-by: Olof Johansson <olof.johansson@axis.com>
+---
+ configure.ac | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 39a7777..c3cf60e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -79,7 +79,6 @@ AC_FUNC_MMAP
+ AC_FUNC_FORK
+ AC_CHECK_FUNCS([ \
+ 	atexit \
+-	clock_gettime \
+ 	getcpuid \
+ 	gettid \
+ 	gettimeofday \
+@@ -215,6 +214,11 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+ 	compat_futex_test=1
+ ])
+ 
++# Search for clock_gettime
++AC_SEARCH_LIBS([clock_gettime], [rt], [],
++	[AC_MSG_ERROR([Cannot find clock_gettime function.])]
++)
++
+ # Check for pthread
+ AC_CHECK_LIB([pthread], [pthread_create],
+ 	[AM_CONDITIONAL(LIBC_INCLUDES_PTHREAD, false)],
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.1.4
