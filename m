@@ -1,20 +1,17 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH babeltrace] Tests: Fix test plans and do not
-	skip on fail
-Date: Thu, 11 Feb 2016 14:19:13 -0500
-Message-ID: <CA+jJMxs-J-c2iuZDdz6zEDhCx241hK7qLz461=7KvuCXd16UOg__3495.20421955294$1455218494$gmane$org@mail.gmail.com>
-References: <1453755641-25741-1-git-send-email-mjeanson@efficios.com>
+From: Sean Heelan <seanheelan@gmail.com>
+Subject: Crash on first run of target using
+ liblttng-ust-cyg-profile.so, but subsequent runs succeed
+Date: Thu, 11 Feb 2016 14:01:18 +0000
+Message-ID: <CAL90rL8u1_3ifDL2QzrqrQMp3+68PhOsMfgdsYhceoLX__MAJw__42171.583188656$1455229444$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0809024558=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f194.google.com ([209.85.213.194])
+Received: from mail-lb0-f172.google.com ([209.85.217.172])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1aTwlr-00028c-7p
- for lttng-dev@lists.lttng.org; Thu, 11 Feb 2016 14:19:20 -0500
-Received: by mail-ig0-f194.google.com with SMTP id ik10so5073455igb.1
- for <lttng-dev@lists.lttng.org>; Thu, 11 Feb 2016 11:19:19 -0800 (PST)
-In-Reply-To: <1453755641-25741-1-git-send-email-mjeanson@efficios.com>
+ (envelope-from <seanheelan@gmail.com>) id 1aTroC-0008Rk-AH
+ for lttng-dev@lists.lttng.org; Thu, 11 Feb 2016 09:01:30 -0500
+Received: by mail-lb0-f172.google.com with SMTP id cw1so28182276lbb.1
+ for <lttng-dev@lists.lttng.org>; Thu, 11 Feb 2016 06:01:24 -0800 (PST)
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,152 +20,94 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIE1vbiwgSmFuIDI1LCAyMDE2IGF0IDQ6MDAg
-UE0sIE1pY2hhZWwgSmVhbnNvbiA8bWplYW5zb25AZWZmaWNpb3MuY29tPiB3cm90ZToKPiBVc2Ug
-Zml4ZWQgY291bnQgdGVzdCBwbGFucyBpbiBhbGwgdGVzdHMgYW5kIG1ha2Ugc3VyZSB3ZSBkbyBu
-b3Qgc2tpcAo+IHNvbWUgdGVzdHMgb24gaW5pdGlhbGlzYXRpb24gZmFpbHVyZXMuCj4KPiBTaWdu
-ZWQtb2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVmZmljaW9zLmNvbT4KPiAtLS0K
-PiAgLmdpdGlnbm9yZSAgICAgICAgICAgICAgICAgIHwgIDEgKwo+ICB0ZXN0cy9saWIvdGVzdF9i
-dF92YWx1ZXMuYyAgfCAgNCArKystCj4gIHRlc3RzL2xpYi90ZXN0X2N0Zl9pcl9yZWYuYyB8ICA2
-ICsrKysrLQo+ICB0ZXN0cy9saWIvdGVzdF9jdGZfd3JpdGVyLmMgfCAgNCArKystCj4gIHRlc3Rz
-L2xpYi90ZXN0X3NlZWsuYyAgICAgICB8IDQ1ICsrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLQo+ICA1IGZpbGVzIGNoYW5nZWQsIDI4IGluc2VydGlvbnMoKyksIDMy
-IGRlbGV0aW9ucygtKQo+Cj4gZGlmZiAtLWdpdCBhLy5naXRpZ25vcmUgYi8uZ2l0aWdub3JlCj4g
-aW5kZXggYmY4NjlhZi4uYzU3MmQxOCAxMDA2NDQKPiAtLS0gYS8uZ2l0aWdub3JlCj4gKysrIGIv
-LmdpdGlnbm9yZQo+IEBAIC01LDYgKzUsNyBAQAo+ICAvdGVzdHMvbGliL3Rlc3RfY3RmX3dyaXRl
-cgo+ICAvdGVzdHMvbGliL3Rlc3RfYnRfb2JqZWN0cwo+ICAvdGVzdHMvbGliL3Rlc3RfYnRfdmFs
-dWVzCj4gKy90ZXN0cy9saWIvdGVzdF9jdGZfaXJfcmVmCj4gICoubwo+ICAqLmEKPiAgKi5sYQo+
-IGRpZmYgLS1naXQgYS90ZXN0cy9saWIvdGVzdF9idF92YWx1ZXMuYyBiL3Rlc3RzL2xpYi90ZXN0
-X2J0X3ZhbHVlcy5jCj4gaW5kZXggNGViMjBiYS4uMzRmYmM4MiAxMDA2NDQKPiAtLS0gYS90ZXN0
-cy9saWIvdGVzdF9idF92YWx1ZXMuYwo+ICsrKyBiL3Rlc3RzL2xpYi90ZXN0X2J0X3ZhbHVlcy5j
-Cj4gQEAgLTI1LDYgKzI1LDggQEAKPiAgI2luY2x1ZGUgPHN0cmluZy5oPgo+ICAjaW5jbHVkZSAi
-dGFwL3RhcC5oIgo+Cj4gKyNkZWZpbmUgTlJfVEVTVFMgMjM4Cj4gKwo+ICBzdGF0aWMKPiAgdm9p
-ZCB0ZXN0X251bGwodm9pZCkKPiAgewo+IEBAIC0xMTU0LDcgKzExNTYsNyBAQCB2b2lkIHRlc3Rf
-ZnJlZXplKHZvaWQpCj4KPiAgaW50IG1haW4odm9pZCkKPiAgewo+IC0gICAgICAgcGxhbl9ub19w
-bGFuKCk7Cj4gKyAgICAgICBwbGFuX3Rlc3RzKE5SX1RFU1RTKTsKPgo+ICAgICAgICAgdGVzdF9t
-YWNyb3MoKTsKPiAgICAgICAgIHRlc3RfZnJlZXplKCk7Cj4gZGlmZiAtLWdpdCBhL3Rlc3RzL2xp
-Yi90ZXN0X2N0Zl9pcl9yZWYuYyBiL3Rlc3RzL2xpYi90ZXN0X2N0Zl9pcl9yZWYuYwo+IGluZGV4
-IDg1NjcxNWMuLjAxNDM0ZDQgMTAwNjQ0Cj4gLS0tIGEvdGVzdHMvbGliL3Rlc3RfY3RmX2lyX3Jl
-Zi5jCj4gKysrIGIvdGVzdHMvbGliL3Rlc3RfY3RmX2lyX3JlZi5jCj4gQEAgLTI3LDYgKzI3LDgg
-QEAKPiAgI2luY2x1ZGUgPGJhYmVsdHJhY2Uvb2JqZWN0LWludGVybmFsLmg+Cj4gICNpbmNsdWRl
-IDxhc3NlcnQuaD4KPgo+ICsjZGVmaW5lIE5SX1RFU1RTIDQxCj4gKwo+ICBzdHJ1Y3QgdXNlciB7
-Cj4gICAgICAgICBzdHJ1Y3QgYnRfY3RmX3RyYWNlICp0YzsKPiAgICAgICAgIHN0cnVjdCBidF9j
-dGZfc3RyZWFtX2NsYXNzICpzYzsKPiBAQCAtMzU4LDYgKzM2MCw5IEBAIGludCBtYWluKGludCBh
-cmdjLCBjaGFyICoqYXJndikKPiAgICAgICAgICAgICAgICAgICAgICAgICAqd2Vha19lYzMgPSBO
-VUxMOwo+ICAgICAgICAgc3RydWN0IHVzZXIgdXNlcl9hID0geyAwIH0sIHVzZXJfYiA9IHsgMCB9
-LCB1c2VyX2MgPSB7IDAgfTsKPgo+ICsgICAgICAgIC8qIEluaXRpYWxpemUgdGFwIGhhcm5lc3Mg
-YmVmb3JlIGFueSB0ZXN0cyAqLwo+ICsgICAgICAgcGxhbl90ZXN0cyhOUl9URVNUUyk7Cj4gKwo+
-ICAgICAgICAgLyogVGhlIG9ubHkgcmVmZXJlbmNlIHdoaWNoIGV4aXN0cyBhdCB0aGlzIHBvaW50
-IGlzIG9uIFRDMS4gKi8KPiAgICAgICAgIHRjMSA9IGNyZWF0ZV90YzEoKTsKPiAgICAgICAgICBv
-ayh0YzEsICJJbml0aWFsaXplIHRyYWNlIik7Cj4gQEAgLTM2Nyw3ICszNzIsNiBAQCBpbnQgbWFp
-bihpbnQgYXJnYywgY2hhciAqKmFyZ3YpCj4KPiAgICAgICAgIGluaXRfd2Vha19yZWZzKHRjMSwg
-JndlYWtfdGMxLCAmd2Vha19zYzEsICZ3ZWFrX3NjMiwgJndlYWtfZWMxLAo+ICAgICAgICAgICAg
-ICAgICAgICAgICAgICZ3ZWFrX2VjMiwgJndlYWtfZWMzKTsKPiAtICAgICAgIHBsYW5fbm9fcGxh
-bigpOwo+Cj4gICAgICAgICBvayhidF9vYmplY3RfZ2V0X3JlZl9jb3VudCh3ZWFrX3NjMSkgPT0g
-MCwKPiAgICAgICAgICAgICAgICAgICAgICAgICAiSW5pdGlhbCBTQzEgcmVmZXJlbmNlIGNvdW50
-IGlzIDAiKTsKPiBkaWZmIC0tZ2l0IGEvdGVzdHMvbGliL3Rlc3RfY3RmX3dyaXRlci5jIGIvdGVz
-dHMvbGliL3Rlc3RfY3RmX3dyaXRlci5jCj4gaW5kZXggNTk2YmI5MC4uZDI0NjUxMCAxMDA2NDQK
-PiAtLS0gYS90ZXN0cy9saWIvdGVzdF9jdGZfd3JpdGVyLmMKPiArKysgYi90ZXN0cy9saWIvdGVz
-dF9jdGZfd3JpdGVyLmMKPiBAQCAtNTcsNiArNTcsOCBAQAo+ICAjZGVmaW5lIERFRkFVTFRfQ0xP
-Q0tfSVNfQUJTT0xVVEUgMAo+ICAjZGVmaW5lIERFRkFVTFRfQ0xPQ0tfVElNRSAwCj4KPiArI2Rl
-ZmluZSBOUl9URVNUUyA1ODgKPiArCj4gIHN0YXRpYyB1aW50NjRfdCBjdXJyZW50X3RpbWUgPSA0
-MjsKPgo+ICAvKiBSZXR1cm4gMSBpZiB1dWlkcyBtYXRjaCwgemVybyBpZiBkaWZmZXJlbnQuICov
-Cj4gQEAgLTI2ODksNyArMjY5MSw3IEBAIGludCBtYWluKGludCBhcmdjLCBjaGFyICoqYXJndikK
-PiAgICAgICAgICAgICAgICAgcmV0dXJuIC0xOwo+ICAgICAgICAgfQo+Cj4gLSAgICAgICBwbGFu
-X25vX3BsYW4oKTsKPiArICAgICAgIHBsYW5fdGVzdHMoTlJfVEVTVFMpOwo+Cj4gICAgICAgICBp
-ZiAoIWJ0X21rZHRlbXAodHJhY2VfcGF0aCkpIHsKPiAgICAgICAgICAgICAgICAgcGVycm9yKCIj
-IHBlcnJvciIpOwo+IGRpZmYgLS1naXQgYS90ZXN0cy9saWIvdGVzdF9zZWVrLmMgYi90ZXN0cy9s
-aWIvdGVzdF9zZWVrLmMKPiBpbmRleCBkZTJjOTM0Li42M2U1YTZhIDEwMDY0NAo+IC0tLSBhL3Rl
-c3RzL2xpYi90ZXN0X3NlZWsuYwo+ICsrKyBiL3Rlc3RzL2xpYi90ZXN0X3NlZWsuYwo+IEBAIC00
-NCwyMSArNDQsMTggQEAgdm9pZCBydW5fc2Vla19iZWdpbihjaGFyICpwYXRoLCB1aW50NjRfdCBl
-eHBlY3RlZF9iZWdpbikKPiAgICAgICAgIGludCByZXQ7Cj4gICAgICAgICB1aW50NjRfdCB0aW1l
-c3RhbXBfYmVnaW47Cj4gICAgICAgICB1aW50NjRfdCB0aW1lc3RhbXBfc2Vla19iZWdpbjsKPiAt
-ICAgICAgIHVuc2lnbmVkIGludCBucl9zZWVrX2JlZ2luX3Rlc3Q7Cj4gLQo+IC0gICAgICAgbnJf
-c2Vla19iZWdpbl90ZXN0ID0gNTsKPgo+ICAgICAgICAgLyogT3BlbiB0aGUgdHJhY2UgKi8KPiAg
-ICAgICAgIGN0eCA9IGNyZWF0ZV9jb250ZXh0X3dpdGhfcGF0aChwYXRoKTsKPiAgICAgICAgIGlm
-ICghY3R4KSB7Cj4gLSAgICAgICAgICAgICAgIHNraXAobnJfc2Vla19iZWdpbl90ZXN0LCAiQ2Fu
-bm90IGNyZWF0ZSB2YWxpZCBjb250ZXh0Iik7Cj4gKyAgICAgICAgICAgICAgIGRpYWcoIkNhbm5v
-dCBjcmVhdGUgdmFsaWQgY29udGV4dCIpOwo+ICAgICAgICAgICAgICAgICByZXR1cm47Cj4gICAg
-ICAgICB9Cj4KPiAgICAgICAgIC8qIENyZWF0ZSBpdGVyYXRvciB3aXRoIG51bGwgYmVnaW4gYW5k
-IGVuZCAqLwo+ICAgICAgICAgaXRlciA9IGJ0X2N0Zl9pdGVyX2NyZWF0ZShjdHgsIE5VTEwsIE5V
-TEwpOwo+ICAgICAgICAgaWYgKCFpdGVyKSB7Cj4gLSAgICAgICAgICAgICAgIHNraXAobnJfc2Vl
-a19iZWdpbl90ZXN0LCAiQ2Fubm90IGNyZWF0ZSB2YWxpZCBpdGVyYXRvciIpOwo+ICsgICAgICAg
-ICAgICAgICBkaWFnKCJDYW5ub3QgY3JlYXRlIHZhbGlkIGl0ZXJhdG9yIik7Cj4gICAgICAgICAg
-ICAgICAgIHJldHVybjsKPiAgICAgICAgIH0KPgo+IEBAIC05NywyMSArOTQsMTggQEAgdm9pZCBy
-dW5fc2Vla19sYXN0KGNoYXIgKnBhdGgsIHVpbnQ2NF90IGV4cGVjdGVkX2xhc3QpCj4gICAgICAg
-ICBzdHJ1Y3QgYnRfaXRlcl9wb3MgbmV3cG9zOwo+ICAgICAgICAgaW50IHJldDsKPiAgICAgICAg
-IHVpbnQ2NF90IHRpbWVzdGFtcF9sYXN0Owo+IC0gICAgICAgdW5zaWduZWQgaW50IG5yX3NlZWtf
-bGFzdF90ZXN0czsKPiAtCj4gLSAgICAgICBucl9zZWVrX2xhc3RfdGVzdHMgPSA2Owo+Cj4gICAg
-ICAgICAvKiBPcGVuIHRoZSB0cmFjZSAqLwo+ICAgICAgICAgY3R4ID0gY3JlYXRlX2NvbnRleHRf
-d2l0aF9wYXRoKHBhdGgpOwo+ICAgICAgICAgaWYgKCFjdHgpIHsKPiAtICAgICAgICAgICAgICAg
-c2tpcChucl9zZWVrX2xhc3RfdGVzdHMsICJDYW5ub3QgY3JlYXRlIHZhbGlkIGNvbnRleHQiKTsK
-PiArICAgICAgICAgICAgICAgZGlhZygiQ2Fubm90IGNyZWF0ZSB2YWxpZCBjb250ZXh0Iik7Cj4g
-ICAgICAgICAgICAgICAgIHJldHVybjsKPiAgICAgICAgIH0KPgo+ICAgICAgICAgLyogQ3JlYXRl
-IGl0ZXJhdG9yIHdpdGggbnVsbCBsYXN0IGFuZCBlbmQgKi8KPiAgICAgICAgIGl0ZXIgPSBidF9j
-dGZfaXRlcl9jcmVhdGUoY3R4LCBOVUxMLCBOVUxMKTsKPiAgICAgICAgIGlmICghaXRlcikgewo+
-IC0gICAgICAgICAgICAgICBza2lwKG5yX3NlZWtfbGFzdF90ZXN0cywgIkNhbm5vdCBjcmVhdGUg
-dmFsaWQgaXRlcmF0b3IiKTsKPiArICAgICAgICAgICAgICAgZGlhZygiQ2Fubm90IGNyZWF0ZSB2
-YWxpZCBpdGVyYXRvciIpOwo+ICAgICAgICAgICAgICAgICByZXR1cm47Cj4gICAgICAgICB9Cj4K
-PiBAQCAtMTUzLDIzICsxNDcsMTggQEAgdm9pZCBydW5fc2Vla190aW1lX2F0X2xhc3QoY2hhciAq
-cGF0aCwgdWludDY0X3QgZXhwZWN0ZWRfbGFzdCkKPiAgICAgICAgIHN0cnVjdCBidF9pdGVyX3Bv
-cyBuZXdwb3M7Cj4gICAgICAgICBpbnQgcmV0Owo+ICAgICAgICAgdWludDY0X3QgdGltZXN0YW1w
-X2xhc3Q7Cj4gLSAgICAgICB1bnNpZ25lZCBpbnQgbnJfc2Vla190aW1lX2F0X2xhc3RfdGVzdHM7
-Cj4gLQo+IC0gICAgICAgbnJfc2Vla190aW1lX2F0X2xhc3RfdGVzdHMgPSA2Owo+Cj4gICAgICAg
-ICAvKiBPcGVuIHRoZSB0cmFjZSAqLwo+ICAgICAgICAgY3R4ID0gY3JlYXRlX2NvbnRleHRfd2l0
-aF9wYXRoKHBhdGgpOwo+ICAgICAgICAgaWYgKCFjdHgpIHsKPiAtICAgICAgICAgICAgICAgc2tp
-cChucl9zZWVrX3RpbWVfYXRfbGFzdF90ZXN0cywKPiAtICAgICAgICAgICAgICAgICAgICAiQ2Fu
-bm90IGNyZWF0ZSB2YWxpZCBjb250ZXh0Iik7Cj4gKyAgICAgICAgICAgICAgIGRpYWcoIkNhbm5v
-dCBjcmVhdGUgdmFsaWQgY29udGV4dCIpOwo+ICAgICAgICAgICAgICAgICByZXR1cm47Cj4gICAg
-ICAgICB9Cj4KPiAgICAgICAgIC8qIENyZWF0ZSBpdGVyYXRvciB3aXRoIG51bGwgbGFzdCBhbmQg
-ZW5kICovCj4gICAgICAgICBpdGVyID0gYnRfY3RmX2l0ZXJfY3JlYXRlKGN0eCwgTlVMTCwgTlVM
-TCk7Cj4gICAgICAgICBpZiAoIWl0ZXIpIHsKPiAtICAgICAgICAgICAgICAgc2tpcChucl9zZWVr
-X3RpbWVfYXRfbGFzdF90ZXN0cywKPiAtICAgICAgICAgICAgICAgICAgICAiQ2Fubm90IGNyZWF0
-ZSB2YWxpZCBpdGVyYXRvciIpOwo+ICsgICAgICAgICAgICAgICBkaWFnKCJDYW5ub3QgY3JlYXRl
-IHZhbGlkIGl0ZXJhdG9yIik7Cj4gICAgICAgICAgICAgICAgIHJldHVybjsKPiAgICAgICAgIH0K
-Pgo+IEBAIC0yMTUsMjEgKzIwNCwxNyBAQCB2b2lkIHJ1bl9zZWVrX2N5Y2xlcyhjaGFyICpwYXRo
-LAo+ICAgICAgICAgaW50IHJldDsKPiAgICAgICAgIHVpbnQ2NF90IHRpbWVzdGFtcDsKPgo+IC0g
-ICAgICAgdW5zaWduZWQgaW50IG5yX3NlZWtfY3ljbGVzX3Rlc3RzOwo+IC0KPiAtICAgICAgIG5y
-X3NlZWtfY3ljbGVzX3Rlc3RzID0gMTI7Cj4gLQo+ICAgICAgICAgLyogT3BlbiB0aGUgdHJhY2Ug
-Ki8KPiAgICAgICAgIGN0eCA9IGNyZWF0ZV9jb250ZXh0X3dpdGhfcGF0aChwYXRoKTsKPiAgICAg
-ICAgIGlmICghY3R4KSB7Cj4gLSAgICAgICAgICAgICAgIHNraXAobnJfc2Vla19jeWNsZXNfdGVz
-dHMsICJDYW5ub3QgY3JlYXRlIHZhbGlkIGNvbnRleHQiKTsKPiArICAgICAgICAgICAgICAgZGlh
-ZygiQ2Fubm90IGNyZWF0ZSB2YWxpZCBjb250ZXh0Iik7Cj4gICAgICAgICAgICAgICAgIHJldHVy
-bjsKPiAgICAgICAgIH0KPgo+ICAgICAgICAgLyogQ3JlYXRlIGl0ZXJhdG9yIHdpdGggbnVsbCBs
-YXN0IGFuZCBlbmQgKi8KPiAgICAgICAgIGl0ZXIgPSBidF9jdGZfaXRlcl9jcmVhdGUoY3R4LCBO
-VUxMLCBOVUxMKTsKPiAgICAgICAgIGlmICghaXRlcikgewo+IC0gICAgICAgICAgICAgICBza2lw
-KG5yX3NlZWtfY3ljbGVzX3Rlc3RzLCAiQ2Fubm90IGNyZWF0ZSB2YWxpZCBpdGVyYXRvciIpOwo+
-ICsgICAgICAgICAgICAgICBkaWFnKCJDYW5ub3QgY3JlYXRlIHZhbGlkIGl0ZXJhdG9yIik7Cj4g
-ICAgICAgICAgICAgICAgIHJldHVybjsKPiAgICAgICAgIH0KPgo+IEBAIC0zMDQsOSArMjg5LDEx
-IEBAIGludCBtYWluKGludCBhcmdjLCBjaGFyICoqYXJndikKPiAgICAgICAgIGJhYmVsdHJhY2Vf
-ZGVidWcgPSAwOyAgIC8qIGxpYmJhYmVsdHJhY2UubGEgKi8KPiAgICAgICAgIG9wdF9jbG9ja19v
-ZmZzZXQgPSAwOyAgIC8qIGxpYmJhYmVsdHJhY2UtY3RmLmxhICovCj4KPiAtICAgICAgIGlmIChh
-cmdjIDwgNCkgewo+IC0gICAgICAgICAgICAgICBwbGFuX3NraXBfYWxsKCJJbnZhbGlkIGFyZ3Vt
-ZW50czogbmVlZCBhIHRyYWNlIHBhdGggYW5kIHRoZSBzdGFydCBhbmQgbGFzdCB0aW1lc3RhbXAi
-KTsKPiArICAgICAgIHBsYW5fdGVzdHMoTlJfVEVTVFMpOwo+Cj4gKyAgICAgICBpZiAoYXJnYyA8
-IDQpIHsKPiArICAgICAgICAgICAgICAgZGlhZygiSW52YWxpZCBhcmd1bWVudHM6IG5lZWQgYSB0
-cmFjZSBwYXRoIGFuZCB0aGUgc3RhcnQgYW5kIGxhc3QgdGltZXN0YW1wIik7Cj4gKyAgICAgICAg
-ICAgICAgIGV4aXQoMSk7Cj4gICAgICAgICB9Cj4KPiAgICAgICAgIC8qIFBhcnNlIGFyZ3VtZW50
-cyAoVHJhY2UsIGJlZ2luIHRpbWVzdGFtcCkgKi8KPiBAQCAtMzE0LDE2ICszMDEsMTYgQEAgaW50
-IG1haW4oaW50IGFyZ2MsIGNoYXIgKiphcmd2KQo+Cj4gICAgICAgICBleHBlY3RlZF9iZWdpbiA9
-IHN0cnRvdWxsKGFyZ3ZbMl0sIE5VTEwsIDApOwo+ICAgICAgICAgaWYgKFVMTE9OR19NQVggPT0g
-ZXhwZWN0ZWRfYmVnaW4gJiYgZXJybm8gPT0gRVJBTkdFKSB7Cj4gLSAgICAgICAgICAgICAgIHBs
-YW5fc2tpcF9hbGwoIkludmFsaWQgdmFsdWUgZm9yIGJlZ2luIHRpbWVzdGFtcCIpOwo+ICsgICAg
-ICAgICAgICAgICBkaWFnKCJJbnZhbGlkIHZhbHVlIGZvciBiZWdpbiB0aW1lc3RhbXAiKTsKPiAr
-ICAgICAgICAgICAgICAgZXhpdCgxKTsKPiAgICAgICAgIH0KPgo+ICAgICAgICAgZXhwZWN0ZWRf
-bGFzdCA9IHN0cnRvdWxsKGFyZ3ZbM10sIE5VTEwsIDApOwo+ICAgICAgICAgaWYgKFVMTE9OR19N
-QVggPT0gZXhwZWN0ZWRfbGFzdCAmJiBlcnJubyA9PSBFUkFOR0UpIHsKPiAtICAgICAgICAgICAg
-ICAgcGxhbl9za2lwX2FsbCgiSW52YWxpZCB2YWx1ZSBmb3IgbGFzdCB0aW1lc3RhbXAiKTsKPiAr
-ICAgICAgICAgICAgICAgZGlhZygiSW52YWxpZCB2YWx1ZSBmb3IgbGFzdCB0aW1lc3RhbXAiKTsK
-PiArICAgICAgICAgICAgICAgZXhpdCgxKTsKPiAgICAgICAgIH0KPgo+IC0gICAgICAgcGxhbl90
-ZXN0cyhOUl9URVNUUyk7Cj4gLQo+ICAgICAgICAgcnVuX3NlZWtfYmVnaW4ocGF0aCwgZXhwZWN0
-ZWRfYmVnaW4pOwo+ICAgICAgICAgcnVuX3NlZWtfdGltZV9hdF9sYXN0KHBhdGgsIGV4cGVjdGVk
-X2xhc3QpOwo+ICAgICAgICAgcnVuX3NlZWtfbGFzdChwYXRoLCBleHBlY3RlZF9sYXN0KTsKPiAt
-LQo+IDIuNy4wLnJjMwo+CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4K
-aHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0
-dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
-dHRuZy1kZXYK
+--===============0809024558==
+Content-Type: multipart/alternative; boundary=001a11c349ce0fec2e052b7efc84
+
+--001a11c349ce0fec2e052b7efc84
+Content-Type: text/plain; charset=UTF-8
+
+Hi all,
+
+I am running a target within a Docker instance, and tracing function
+execution using the latest LTTng release (2.7). The commands I am issuing
+look as follows:
+
+----
+lttng create cc_session -o bla
+lttng enable-event --userspace lttng_ust_cyg_profile:func_entry
+lttng start
+
+LD_PRELOAD=liblttng-ust-cyg-profile.so target
+
+lttng stop
+lttng destroy
+----
+
+When the target is executed it aborts with the following error:
+
+----
+php: lttng-ust-comm.c:1582: lttng_ust_init: Assertion `!ret' failed.
+----
+
+If I rerun the command it then works fine. In fact, simply doing the
+following within the Docker container demonstrates the issue:
+
+----
+LD_PRELOAD=liblttng-ust-cyg-profile.so ls
+LD_PRELOAD=liblttng-ust-cyg-profile.so ls
+----
+
+The first 'ls' will fail at the same point mentioned above, while the
+second will succeed. Off the top of my head I'm struggling to come up with
+an explanation as to what impact the first execution using LD_PRELOAD would
+have on the second. Does it impact a shared lib cache in some way, which
+I'm unaware of?
+
+Any assistance would be appreciated!
+
+Sean
+
+--001a11c349ce0fec2e052b7efc84
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi all,<div><br></div><div>I am running a target within a =
+Docker instance, and tracing function execution using the latest LTTng rele=
+ase (2.7). The commands I am issuing look as follows:</div><div><br></div><=
+div>----<br></div><div><div>lttng create cc_session -o bla</div><div>lttng =
+enable-event --userspace lttng_ust_cyg_profile:func_entry</div><div>lttng s=
+tart</div><div><br></div><div>LD_PRELOAD=3Dliblttng-ust-cyg-profile.so targ=
+et</div><div><br></div><div>lttng stop</div><div>lttng destroy</div><div>--=
+--</div></div><div><br></div><div>When the target is executed it aborts wit=
+h the following error:</div><div><br></div><div>----</div><div>php: lttng-u=
+st-comm.c:1582: lttng_ust_init: Assertion `!ret&#39; failed.<br></div><div>=
+----</div><div><br></div><div>If I rerun the command it then works fine. In=
+ fact, simply doing the following within the Docker container demonstrates =
+the issue:</div><div><br></div><div>----</div><div><div>LD_PRELOAD=3Dlibltt=
+ng-ust-cyg-profile.so ls</div><div>LD_PRELOAD=3Dliblttng-ust-cyg-profile.so=
+ ls</div></div><div>----</div><div><br></div><div>The first &#39;ls&#39; wi=
+ll fail at the same point mentioned above, while the second will succeed. O=
+ff the top of my head I&#39;m struggling to come up with an explanation as =
+to what impact the first execution using LD_PRELOAD would have on the secon=
+d. Does it impact a shared lib cache in some way, which I&#39;m unaware of?=
+</div><div><br></div><div>Any assistance would be appreciated!</div><div><b=
+r>Sean</div><div><br></div><div><br></div></div>
+
+--001a11c349ce0fec2e052b7efc84--
+
+
+--===============0809024558==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0809024558==--
