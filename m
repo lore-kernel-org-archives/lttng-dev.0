@@ -1,20 +1,19 @@
 From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH babeltrace] Cleanup: remove unused label
-	'end'
-Date: Thu, 11 Feb 2016 14:17:14 -0500
-Message-ID: <CA+jJMxs1-qZMn443wskquJGb4XfVjLL2NF0mYcNuyxtGvvoucA__37438.9600045562$1455218300$gmane$org@mail.gmail.com>
-References: <1444941622-16238-1-git-send-email-mjeanson@efficios.com>
+Subject: Re: [PATCH babeltrace 1/3] Port: Add OSX endian.h compat
+Date: Thu, 11 Feb 2016 14:17:26 -0500
+Message-ID: <CA+jJMxuNrE8EU++nOhEUVBS9tvPuK8E-nqpq0d09nDEkOdWnzw__7652.0973736935$1455218325$gmane$org@mail.gmail.com>
+References: <1446745915-1651-1-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-io0-f194.google.com ([209.85.223.194])
+Received: from mail-ig0-f195.google.com ([209.85.213.195])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1aTwjv-0001zZ-HB
- for lttng-dev@lists.lttng.org; Thu, 11 Feb 2016 14:17:21 -0500
-Received: by mail-io0-f194.google.com with SMTP id b188so5168636iof.3
- for <lttng-dev@lists.lttng.org>; Thu, 11 Feb 2016 11:17:19 -0800 (PST)
-In-Reply-To: <1444941622-16238-1-git-send-email-mjeanson@efficios.com>
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1aTwk7-00020Y-Nk
+ for lttng-dev@lists.lttng.org; Thu, 11 Feb 2016 14:17:32 -0500
+Received: by mail-ig0-f195.google.com with SMTP id hb3so5060748igb.0
+ for <lttng-dev@lists.lttng.org>; Thu, 11 Feb 2016 11:17:31 -0800 (PST)
+In-Reply-To: <1446745915-1651-1-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -27,20 +26,39 @@ To: Michael Jeanson <mjeanson@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIFRodSwgT2N0IDE1LCAyMDE1IGF0IDQ6NDAg
-UE0sIE1pY2hhZWwgSmVhbnNvbiA8bWplYW5zb25AZWZmaWNpb3MuY29tPiB3cm90ZToKPiBTaWdu
-ZWQtb2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVmZmljaW9zLmNvbT4KPiAtLS0K
-PiAgaW5jbHVkZS9iYWJlbHRyYWNlL2NvbXBhdC9zZW5kLmggfCAyICstCj4gIDEgZmlsZSBjaGFu
-Z2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQo+Cj4gZGlmZiAtLWdpdCBhL2luY2x1
-ZGUvYmFiZWx0cmFjZS9jb21wYXQvc2VuZC5oIGIvaW5jbHVkZS9iYWJlbHRyYWNlL2NvbXBhdC9z
-ZW5kLmgKPiBpbmRleCAzYzZkMDFhLi4zOTk4Njk0IDEwMDY0NAo+IC0tLSBhL2luY2x1ZGUvYmFi
-ZWx0cmFjZS9jb21wYXQvc2VuZC5oCj4gKysrIGIvaW5jbHVkZS9iYWJlbHRyYWNlL2NvbXBhdC9z
-ZW5kLmgKPiBAQCAtMTA5LDcgKzEwOSw3IEBAIHNzaXplX3QgYnRfc2VuZF9ub3NpZ3BpcGUoaW50
-IGZkLCBjb25zdCB2b2lkICpidWZmZXIsIHNpemVfdCBzaXplKQo+ICAgICAgICAgfQo+ICAgICAg
-ICAgLyogUmVzdG9yZSBzZW5kKCkgZXJybm8gKi8KPiAgICAgICAgIGVycm5vID0gc2F2ZWRfZXJy
-Owo+IC1lbmQ6Cj4gKwo+ICAgICAgICAgcmV0dXJuIHNlbnQ7Cj4gIH0KPiAgI2VuZGlmCj4gLS0K
-PiAxLjkuMQo+CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDov
-L3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-ZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
-ZXYK
+TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIFRodSwgTm92IDUsIDIwMTUgYXQgMTI6NTEg
+UE0sIE1pY2hhZWwgSmVhbnNvbiA8bWplYW5zb25AZWZmaWNpb3MuY29tPiB3cm90ZToKPiBGcm9t
+OiBBbGV4aXMgTWFydGluIDxhbGV4aXMubWFydGluQGlucmlhLmZyPgo+Cj4gU2lnbmVkLW9mZi1i
+eTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIGluY2x1
+ZGUvYmFiZWx0cmFjZS9lbmRpYW4uaCB8IDM4ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrCj4gIDEgZmlsZSBjaGFuZ2VkLCAzOCBpbnNlcnRpb25zKCspCj4KPiBkaWZmIC0t
+Z2l0IGEvaW5jbHVkZS9iYWJlbHRyYWNlL2VuZGlhbi5oIGIvaW5jbHVkZS9iYWJlbHRyYWNlL2Vu
+ZGlhbi5oCj4gaW5kZXggZjAyOTlhZC4uYzVlNWQ3MCAxMDA2NDQKPiAtLS0gYS9pbmNsdWRlL2Jh
+YmVsdHJhY2UvZW5kaWFuLmgKPiArKysgYi9pbmNsdWRlL2JhYmVsdHJhY2UvZW5kaWFuLmgKPiBA
+QCAtODEsNiArODEsNDQgQEAKPiAgI2RlZmluZSBCSUdfRU5ESUFOICAgICBfX0JJR19FTkRJQU4K
+PiAgI2RlZmluZSBQRFBfRU5ESUFOICAgICBfX1BEUF9FTkRJQU4KPiAgI2RlZmluZSBCWVRFX09S
+REVSICAgICBfX0JZVEVfT1JERVIKPiArCj4gKyNlbGlmIGRlZmluZWQoX19BUFBMRV9fKQo+ICsj
+IGluY2x1ZGUgPG1hY2hpbmUvZW5kaWFuLmg+Cj4gKyMgaW5jbHVkZSA8bGlia2Vybi9PU0J5dGVP
+cmRlci5oPgo+ICsKPiArIyBpZiBCWVRFX09SREVSID09IExJVFRMRV9FTkRJQU4KPiArIyAgZGVm
+aW5lIGh0b2JlMTYoeCkgT1NTd2FwQ29uc3RJbnQxNih4KQo+ICsjICBkZWZpbmUgaHRvbGUxNih4
+KSAoeCkKPiArIyAgZGVmaW5lIGJlMTZ0b2goeCkgT1NTd2FwQ29uc3RJbnQxNih4KQo+ICsjICBk
+ZWZpbmUgbGUxNnRvaCh4KSAoeCkKPiArCj4gKyMgIGRlZmluZSBodG9iZTMyKHgpIE9TU3dhcENv
+bnN0SW50MzIoeCkKPiArIyAgZGVmaW5lIGh0b2xlMzIoeCkgKHgpCj4gKyMgIGRlZmluZSBiZTMy
+dG9oKHgpIE9TU3dhcENvbnN0SW50MzIoeCkKPiArIyAgZGVmaW5lIGxlMzJ0b2goeCkgKHgpCj4g
+Kwo+ICsjICBkZWZpbmUgaHRvYmU2NCh4KSBPU1N3YXBDb25zdEludDY0KHgpCj4gKyMgIGRlZmlu
+ZSBodG9sZTY0KHgpICh4KQo+ICsjICBkZWZpbmUgYmU2NHRvaCh4KSBPU1N3YXBDb25zdEludDY0
+KHgpCj4gKyMgIGRlZmluZSBsZTY0dG9oKHgpICh4KQo+ICsKPiArIyBlbHNlIC8qIEJZVEVfT1JE
+RVIgPT0gTElUVExFX0VORElBTiAqLwo+ICsjICBkZWZpbmUgaHRvYmUxNih4KSAoeCkKPiArIyAg
+ZGVmaW5lIGh0b2xlMTYoeCkgT1NTd2FwQ29uc3RJbnQxNih4KQo+ICsjICBkZWZpbmUgYmUxNnRv
+aCh4KSAoeCkKPiArIyAgZGVmaW5lIGxlMTZ0b2goeCkgT1NTd2FwQ29uc3RJbnQxNih4KQo+ICsK
+PiArIyAgZGVmaW5lIGh0b2JlMzIoeCkgKHgpCj4gKyMgIGRlZmluZSBodG9sZTMyKHgpIE9TU3dh
+cENvbnN0SW50MzIoeCkKPiArIyAgZGVmaW5lIGJlMzJ0b2goeCkgKHgpCj4gKyMgIGRlZmluZSBs
+ZTMydG9oKHgpIE9TU3dhcENvbnN0SW50MzIoeCkKPiArCj4gKyMgIGRlZmluZSBodG9iZTY0KHgp
+ICh4KQo+ICsjICBkZWZpbmUgaHRvbGU2NCh4KSBPU1N3YXBDb25zdEludDY0KHgpCj4gKyMgIGRl
+ZmluZSBiZTY0dG9oKHgpICh4KQo+ICsjICBkZWZpbmUgbGU2NHRvaCh4KSBPU1N3YXBDb25zdElu
+dDY0KHgpCj4gKyMgIGVuZGlmCj4gKwo+ICAjZWxzZQo+ICAjaW5jbHVkZSA8ZW5kaWFuLmg+Cj4K
+PiAtLQo+IDEuOS4xCj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpo
+dHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
+dG5nLWRldgo=
