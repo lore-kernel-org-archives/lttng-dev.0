@@ -1,16 +1,18 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [RFC PATCH lttng-tools 1/5] Drop optionnal control
-	modules load and unload
-Date: Fri, 12 Feb 2016 16:31:44 -0500
-Message-ID: <1455312708-462-1-git-send-email-mjeanson__9777.45438362963$1455312780$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-tools 2/5] Move libkmod ifdef to
+	beginning of file
+Date: Fri, 12 Feb 2016 16:31:45 -0500
+Message-ID: <1455312708-462-2-git-send-email-mjeanson__4508.12313142723$1455312802$gmane$org@efficios.com>
+References: <1455312708-462-1-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mjeanson@efficios.com>) id 1aULJs-00041G-1F
- for lttng-dev@lists.lttng.org; Fri, 12 Feb 2016 16:32:04 -0500
+ (envelope-from <mjeanson@efficios.com>) id 1aULK1-00041n-Tn
+ for lttng-dev@lists.lttng.org; Fri, 12 Feb 2016 16:32:16 -0500
+In-Reply-To: <1455312708-462-1-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,64 +25,181 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-The optionnal control modules are loaded and unloaded trought modules
-dependencies by modprobe or libkmod. Trying to load them manually leads
-to spurious log messages and slows down the sessiond startup.
+This will be useful to add the libkmod implementation of the
+modprobe_remove_lttng() function in a single ifdef.
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- src/bin/lttng-sessiond/modprobe.c | 18 ------------------
- 1 file changed, 18 deletions(-)
+ src/bin/lttng-sessiond/modprobe.c | 150 +++++++++++++++++++-------------------
+ 1 file changed, 75 insertions(+), 75 deletions(-)
 
 diff --git a/src/bin/lttng-sessiond/modprobe.c b/src/bin/lttng-sessiond/modprobe.c
-index 2c527dc..81ce810 100644
+index 81ce810..6f9a997 100644
 --- a/src/bin/lttng-sessiond/modprobe.c
 +++ b/src/bin/lttng-sessiond/modprobe.c
-@@ -33,8 +33,6 @@
+@@ -90,81 +90,6 @@ static struct kern_modules_param *probes;
+ static int nr_probes;
+ static int probes_capacity;
  
- /* LTTng kernel tracer mandatory core modules list */
- struct kern_modules_param kern_modules_control_core[] = {
--	{ "lttng-tracer" },	/* MUST be loaded first so keep at top */
--	{ "lttng-lib-ring-buffer" },
- 	{ "lttng-ring-buffer-client-discard" },
- 	{ "lttng-ring-buffer-client-overwrite" },
- 	{ "lttng-ring-buffer-metadata-client" },
-@@ -43,14 +41,6 @@ struct kern_modules_param kern_modules_control_core[] = {
- 	{ "lttng-ring-buffer-metadata-mmap-client" },
- };
- 
--/* LTTng kernel tracer optional base modules list */
--struct kern_modules_param kern_modules_control_opt[] = {
--	{ "lttng-types" },
--	{ "lttng-ftrace" },
--	{ "lttng-kprobes" },
--	{ "lttng-kretprobes" },
--};
+-static void modprobe_remove_lttng(const struct kern_modules_param *modules,
+-		int entries, int required)
+-{
+-	int ret = 0, i;
+-	char modprobe[256];
 -
- /* LTTng kernel tracer probe modules list */
- struct kern_modules_param kern_modules_probes_default[] = {
- 	{ "lttng-probe-asoc" },
-@@ -134,9 +124,6 @@ static void modprobe_remove_lttng(const struct kern_modules_param *modules,
-  */
- void modprobe_remove_lttng_control(void)
- {
--	modprobe_remove_lttng(kern_modules_control_opt,
--			      ARRAY_SIZE(kern_modules_control_opt),
--			      LTTNG_MOD_OPTIONAL);
- 	modprobe_remove_lttng(kern_modules_control_core,
- 			      ARRAY_SIZE(kern_modules_control_core),
- 			      LTTNG_MOD_REQUIRED);
-@@ -303,11 +290,6 @@ int modprobe_lttng_control(void)
- 	ret = modprobe_lttng(kern_modules_control_core,
- 			     ARRAY_SIZE(kern_modules_control_core),
- 			     LTTNG_MOD_REQUIRED);
--	if (ret != 0)
--		return ret;
--	ret = modprobe_lttng(kern_modules_control_opt,
--			     ARRAY_SIZE(kern_modules_control_opt),
--			     LTTNG_MOD_OPTIONAL);
- 	return ret;
- }
+-	for (i = entries - 1; i >= 0; i--) {
+-		ret = snprintf(modprobe, sizeof(modprobe),
+-				"/sbin/modprobe -r -q %s",
+-				modules[i].name);
+-		if (ret < 0) {
+-			PERROR("snprintf modprobe -r");
+-			return;
+-		}
+-		modprobe[sizeof(modprobe) - 1] = '\0';
+-		ret = system(modprobe);
+-		if (ret == -1) {
+-			ERR("Unable to launch modprobe -r for module %s",
+-					modules[i].name);
+-		} else if (required && WEXITSTATUS(ret) != 0) {
+-			ERR("Unable to remove module %s",
+-					modules[i].name);
+-		} else {
+-			DBG("Modprobe removal successful %s",
+-					modules[i].name);
+-		}
+-	}
+-}
+-
+-/*
+- * Remove control kernel module(s) in reverse load order.
+- */
+-void modprobe_remove_lttng_control(void)
+-{
+-	modprobe_remove_lttng(kern_modules_control_core,
+-			      ARRAY_SIZE(kern_modules_control_core),
+-			      LTTNG_MOD_REQUIRED);
+-}
+-
+-static void free_probes(void)
+-{
+-	int i;
+-
+-	if (!probes) {
+-		return;
+-	}
+-	for (i = 0; i < nr_probes; ++i) {
+-		free(probes[i].name);
+-	}
+-	free(probes);
+-	probes = NULL;
+-	nr_probes = 0;
+-}
+-
+-/*
+- * Remove data kernel modules in reverse load order.
+- */
+-void modprobe_remove_lttng_data(void)
+-{
+-	if (!probes) {
+-		return;
+-	}
+-	modprobe_remove_lttng(probes, nr_probes, LTTNG_MOD_OPTIONAL);
+-	free_probes();
+-}
+-
+-/*
+- * Remove all kernel modules in reverse order.
+- */
+-void modprobe_remove_lttng_all(void)
+-{
+-	modprobe_remove_lttng_data();
+-	modprobe_remove_lttng_control();
+-}
+-
+ #if HAVE_KMOD
+ #include <libkmod.h>
+ static void log_kmod(void *data, int priority, const char *file, int line,
+@@ -280,6 +205,81 @@ error:
  
+ #endif /* HAVE_KMOD */
+ 
++static void modprobe_remove_lttng(const struct kern_modules_param *modules,
++		int entries, int required)
++{
++	int ret = 0, i;
++	char modprobe[256];
++
++	for (i = entries - 1; i >= 0; i--) {
++		ret = snprintf(modprobe, sizeof(modprobe),
++				"/sbin/modprobe -r -q %s",
++				modules[i].name);
++		if (ret < 0) {
++			PERROR("snprintf modprobe -r");
++			return;
++		}
++		modprobe[sizeof(modprobe) - 1] = '\0';
++		ret = system(modprobe);
++		if (ret == -1) {
++			ERR("Unable to launch modprobe -r for module %s",
++					modules[i].name);
++		} else if (required && WEXITSTATUS(ret) != 0) {
++			ERR("Unable to remove module %s",
++					modules[i].name);
++		} else {
++			DBG("Modprobe removal successful %s",
++					modules[i].name);
++		}
++	}
++}
++
++/*
++ * Remove control kernel module(s) in reverse load order.
++ */
++void modprobe_remove_lttng_control(void)
++{
++	modprobe_remove_lttng(kern_modules_control_core,
++			      ARRAY_SIZE(kern_modules_control_core),
++			      LTTNG_MOD_REQUIRED);
++}
++
++static void free_probes(void)
++{
++	int i;
++
++	if (!probes) {
++		return;
++	}
++	for (i = 0; i < nr_probes; ++i) {
++		free(probes[i].name);
++	}
++	free(probes);
++	probes = NULL;
++	nr_probes = 0;
++}
++
++/*
++ * Remove data kernel modules in reverse load order.
++ */
++void modprobe_remove_lttng_data(void)
++{
++	if (!probes) {
++		return;
++	}
++	modprobe_remove_lttng(probes, nr_probes, LTTNG_MOD_OPTIONAL);
++	free_probes();
++}
++
++/*
++ * Remove all kernel modules in reverse order.
++ */
++void modprobe_remove_lttng_all(void)
++{
++	modprobe_remove_lttng_data();
++	modprobe_remove_lttng_control();
++}
++
+ /*
+  * Load control kernel module(s).
+  */
 -- 
 2.7.0
