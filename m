@@ -1,20 +1,17 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: lttng-sessiond stuck at "Accepting application
-	registration"
-Date: Fri, 12 Feb 2016 11:40:22 -0500
-Message-ID: <CA+jJMxvJRQ-cE=uPtOVrOyOERAAEdvdtQR1e=+15YYp28oNiow__35932.2413140491$1455295280$gmane$org@mail.gmail.com>
-References: <CAEQ5q2Ec=Q-zcQXBx9QQ5oyDKEwxNgqVqiatdf=y79ubn6J7gg@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Crash on first run of target using
+ liblttng-ust-cyg-profile.so, but subsequent runs succeed
+Date: Fri, 12 Feb 2016 17:02:29 +0000 (UTC)
+Message-ID: <1762935886.18108.1455296549954.JavaMail.zimbra__48364.8315108896$1455296621$gmane$org@efficios.com>
+References: <CAL90rL8u1_3ifDL2QzrqrQMp3+68PhOsMfgdsYhceoLX__MAJw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1344978351=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f171.google.com ([209.85.213.171])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1aUGlf-0001z0-N3
- for lttng-dev@lists.lttng.org; Fri, 12 Feb 2016 11:40:29 -0500
-Received: by mail-ig0-f171.google.com with SMTP id ik10so13782101igb.1
- for <lttng-dev@lists.lttng.org>; Fri, 12 Feb 2016 08:40:27 -0800 (PST)
-In-Reply-To: <CAEQ5q2Ec=Q-zcQXBx9QQ5oyDKEwxNgqVqiatdf=y79ubn6J7gg@mail.gmail.com>
+ (envelope-from <compudj@efficios.com>) id 1aUH7B-0002Bh-3U
+ for lttng-dev@lists.lttng.org; Fri, 12 Feb 2016 12:02:43 -0500
+In-Reply-To: <CAL90rL8u1_3ifDL2QzrqrQMp3+68PhOsMfgdsYhceoLX__MAJw@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,95 +20,139 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Prashanth Raghavendra <prashanth.raghavendra@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, aditya dogra <dogra.aditya@gmail.com>
+To: Sean Heelan <seanheelan@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gRnJpLCBGZWIgMTIsIDIwMTYgYXQgODo1NyBBTSwgUHJhc2hhbnRoIFJhZ2hhdmVuZHJhCjxw
-cmFzaGFudGgucmFnaGF2ZW5kcmFAZ21haWwuY29tPiB3cm90ZToKPiBHcmVldGluZ3MsCj4KPiBX
-ZSBhcmUgdHJ5aW5nIHRvIHVzZSBsdHRuZyBmb3IgdHJhY2luZyBvdXIgYXBwbGljYXRpb24gY29k
-ZSAodXNlcnNwYWNlKS4KPgo+IEhvc3QgT1M6ICBXUjUuMC4xLjEzIExpbnV4Cj4gTHR0bmctdG9v
-bHMgdmVyc2lvbiAyLjEuMCwgMzItYml0ICAobHR0bmc6IEVMRiAzMi1iaXQgTFNCIGV4ZWN1dGFi
-bGUsIEludGVsCj4gODAzODYpCj4gQmFiZWx0cmFjZSB2ZXJzaW9uIDEuMC4wCj4KCkhpLAoKVW5m
-b3J0dW5hdGVseSwgYm90aCBvZiB0aGVzZSB2ZXJzaW9ucyBoYXZlIGJlZW4gdW5zdXBwb3J0ZWQg
-Zm9yIGEgbG9uZyB0aW1lLgpMZXQgdXMga25vdyBpZiB0aGUgcHJvYmxlbSBzdGlsbCBvY2N1cnMg
-d2l0aCB0aGUgbGF0ZXN0IExUVG5nIGFuZApCYWJlbHRyYWNlIHJlbGVhc2VzLgoKUmVnYXJkcywK
-SsOpcsOpbWllCgo+IExvZ2dlZCBpbiBhcyByb290Lgo+Cj4KPgo+IFdoZW4gd2Ugc3RhcnQgdGhl
-IGx0dG5nLXNlc3Npb25kLCBpdCBnZXRzIHN0dWNrIGF0ICJBY2NlcHRpbmcgYXBwbGljYXRpb24K
-PiByZWdpc3RyYXRpb27igJ0uCj4KPiBMaW51eChkZWJ1ZykjIC9pc2FuL2xpYi9sdHRuZy1zZXNz
-aW9uZCAtdnZ2IC0tbm8ta2VybmVsCj4gREVCVUczOiBDcmVhdGluZyBMVFRuZyBydW4gZGlyZWN0
-b3J5OiAvdmFyL3J1bi9sdHRuZyBbaW4KPiBjcmVhdGVfbHR0bmdfcnVuZGlyKCkgYXQgbWFpbi5j
-OjM2ODNdCj4gREVCVUcyOiBLZXJuZWwgY29uc3VtZXIgZXJyIHBhdGg6IC92YXIvcnVuL2x0dG5n
-L2tjb25zdW1lcmQvZXJyb3IgW2luIG1haW4oKQo+IGF0IG1haW4uYzozOTMxXQo+IERFQlVHMjog
-S2VybmVsIGNvbnN1bWVyIGNtZCBwYXRoOiAvdmFyL3J1bi9sdHRuZy9rY29uc3VtZXJkL2NvbW1h
-bmQgW2luCj4gbWFpbigpIGF0IG1haW4uYzozOTMzXQo+IERFQlVHMTogQ2xpZW50IHNvY2tldCBw
-YXRoIC92YXIvcnVuL2x0dG5nL2NsaWVudC1sdHRuZy1zZXNzaW9uZCBbaW4gbWFpbigpCj4gYXQg
-bWFpbi5jOjM5ODZdCj4gREVCVUcxOiBBcHBsaWNhdGlvbiBzb2NrZXQgcGF0aCAvdmFyL3J1bi9s
-dHRuZy9hcHBzLWx0dG5nLXNlc3Npb25kIFtpbgo+IG1haW4oKSBhdCBtYWluLmM6Mzk4N10KPiBE
-RUJVRzE6IExUVG5nIHJ1biBkaXJlY3RvcnkgcGF0aDogL3Zhci9ydW4vbHR0bmcgW2luIG1haW4o
-KSBhdCBtYWluLmM6Mzk4OF0KPiBERUJVRzI6IFVTVCBjb25zdW1lciAzMiBiaXRzIGVyciBwYXRo
-OiAvdmFyL3J1bi9sdHRuZy91c3Rjb25zdW1lcmQzMi9lcnJvcgo+IFtpbiBtYWluKCkgYXQgbWFp
-bi5jOjM5OTddCj4gREVCVUcyOiBVU1QgY29uc3VtZXIgMzIgYml0cyBjbWQgcGF0aDogL3Zhci9y
-dW4vbHR0bmcvdXN0Y29uc3VtZXJkMzIvY29tbWFuZAo+IFtpbiBtYWluKCkgYXQgbWFpbi5jOjM5
-OTldCj4gREVCVUcyOiBVU1QgY29uc3VtZXIgNjQgYml0cyBlcnIgcGF0aDogL3Zhci9ydW4vbHR0
-bmcvdXN0Y29uc3VtZXJkNjQvZXJyb3IKPiBbaW4gbWFpbigpIGF0IG1haW4uYzo0MDA4XQo+IERF
-QlVHMjogVVNUIGNvbnN1bWVyIDY0IGJpdHMgY21kIHBhdGg6IC92YXIvcnVuL2x0dG5nL3VzdGNv
-bnN1bWVyZDY0L2NvbW1hbmQKPiBbaW4gbWFpbigpIGF0IG1haW4uYzo0MDEwXQo+IERFQlVHMzog
-Q3JlYXRlZCBoYXNodGFibGUgc2l6ZSA0IGF0IDB4ODhkNzA4MCBvZiB0eXBlIDEgW2luIGx0dG5n
-X2h0X25ldygpCj4gYXQgaGFzaHRhYmxlLmM6OTZdCj4gREVCVUczOiBDcmVhdGVkIGhhc2h0YWJs
-ZSBzaXplIDQgYXQgMHg4OGQ3MzcwIG9mIHR5cGUgMSBbaW4gbHR0bmdfaHRfbmV3KCkKPiBhdCBo
-YXNodGFibGUuYzo5Nl0KPiBERUJVRzI6IENyZWF0aW5nIGNvbnN1bWVyIGRpcmVjdG9yeTogL3Zh
-ci9ydW4vbHR0bmcva2NvbnN1bWVyZCBbaW4KPiBzZXRfY29uc3VtZXJfc29ja2V0cygpIGF0IG1h
-aW4uYzozNzI1XQo+IERFQlVHMjogQ3JlYXRpbmcgY29uc3VtZXIgZGlyZWN0b3J5OiAvdmFyL3J1
-bi9sdHRuZy91c3Rjb25zdW1lcmQ2NCBbaW4KPiBzZXRfY29uc3VtZXJfc29ja2V0cygpIGF0IG1h
-aW4uYzozNzI1XQo+IERFQlVHMjogQ3JlYXRpbmcgY29uc3VtZXIgZGlyZWN0b3J5OiAvdmFyL3J1
-bi9sdHRuZy91c3Rjb25zdW1lcmQzMiBbaW4KPiBzZXRfY29uc3VtZXJfc29ja2V0cygpIGF0IG1h
-aW4uYzozNzI1XQo+IERFQlVHMTogU2lnbmFsIGhhbmRsZXIgc2V0IGZvciBTSUdURVJNLCBTSUdQ
-SVBFIGFuZCBTSUdJTlQgW2luCj4gc2V0X3NpZ25hbF9oYW5kbGVyKCkgYXQgbWFpbi5jOjM4MTdd
-Cj4gREVCVUczOiBTZXNzaW9uIGRhZW1vbiBjbGllbnQgc29ja2V0IDggYW5kIGFwcGxpY2F0aW9u
-IHNvY2tldCA5IGNyZWF0ZWQgW2luCj4gaW5pdF9kYWVtb25fc29ja2V0KCkgYXQgbWFpbi5jOjM1
-ODddCj4gV2FybmluZzogTm8gdHJhY2luZyBncm91cCBkZXRlY3RlZAo+IERFQlVHMTogZXBvbGwg
-c2V0IG1heCBzaXplIGlzIDMyNDM2NDIgW2luIGNvbXBhdF9lcG9sbF9zZXRfbWF4X3NpemUoKSBh
-dAo+IGNvbXBhdC1lcG9sbC5jOjIyNF0KPiBERUJVRzE6IENvbW1hbmQgc3Vic3lzdGVtIGluaXRp
-YWxpemVkIFtpbiBjbWRfaW5pdCgpIGF0IGNtZC5jOjI0MjNdCj4gREVCVUcxOiBbdGhyZWFkXSBN
-YW5hZ2UgaGVhbHRoIGNoZWNrIHN0YXJ0ZWQgW2luIHRocmVhZF9tYW5hZ2VfaGVhbHRoKCkgYXQK
-PiBtYWluLmM6Mjk0NF0KPiBERUJVRzE6IFt0aHJlYWRdIE1hbmFnZSBjbGllbnQgc3RhcnRlZCBb
-aW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQKPiBtYWluLmM6MzEzOF0KPiBERUJVRzE6IFt0
-aHJlYWRdIERpc3BhdGNoIFVTVCBjb21tYW5kIHN0YXJ0ZWQgW2luCj4gdGhyZWFkX2Rpc3BhdGNo
-X3VzdF9yZWdpc3RyYXRpb24oKSBhdCBtYWluLmM6MTI5NV0KPiBERUJVRzE6IEZ1dGV4IG4gdG8g
-MSBwcmVwYXJlIGRvbmUgW2luIGZ1dGV4X250bzFfcHJlcGFyZSgpIGF0IGZ1dGV4LmM6NzVdCj4g
-REVCVUcxOiBXb2tlbiB1cCBidXQgbm90aGluZyBpbiB0aGUgVVNUIGNvbW1hbmQgcXVldWUgW2lu
-Cj4gdGhyZWFkX2Rpc3BhdGNoX3VzdF9yZWdpc3RyYXRpb24oKSBhdCBtYWluLmM6MTMwNV0KPiBE
-RUJVRzE6IFt0aHJlYWRdIE1hbmFnZSBhcHBsaWNhdGlvbiByZWdpc3RyYXRpb24gc3RhcnRlZCBb
-aW4KPiB0aHJlYWRfcmVnaXN0cmF0aW9uX2FwcHMoKSBhdCBtYWluLmM6MTM3MV0KPiBERUJVRzE6
-IFt0aHJlYWRdIE1hbmFnZSBhcHBsaWNhdGlvbiBzdGFydGVkIFtpbiB0aHJlYWRfbWFuYWdlX2Fw
-cHMoKSBhdAo+IG1haW4uYzoxMTAxXQo+IERFQlVHMTogSGVhbHRoIGNoZWNrIHJlYWR5IFtpbiB0
-aHJlYWRfbWFuYWdlX2hlYWx0aCgpIGF0IG1haW4uYzoyOTgzXQo+IERFQlVHMTogQWNjZXB0aW5n
-IGNsaWVudCBjb21tYW5kIC4uLiBbaW4gdGhyZWFkX21hbmFnZV9jbGllbnRzKCkgYXQKPiBtYWlu
-LmM6MzE4Ml0KPiBERUJVRzE6IE5vdGlmeWluZyBhcHBsaWNhdGlvbnMgb2Ygc2Vzc2lvbiBkYWVt
-b24gc3RhdGU6IDEgW2luCj4gbm90aWZ5X3VzdF9hcHBzKCkgYXQgbWFpbi5jOjQ5Nl0KPiBERUJV
-RzE6IEFwcHMgdGhyZWFkIHBvbGxpbmcgb24gMiBmZHMgW2luIHRocmVhZF9tYW5hZ2VfYXBwcygp
-IGF0Cj4gbWFpbi5jOjExMzRdCj4gREVCVUcxOiBHb3QgdGhlIHdhaXQgc2htIGZkIDE2IFtpbiBn
-ZXRfd2FpdF9zaG0oKSBhdCBzaG0uYzoxMTddCj4gREVCVUcxOiBGdXRleCB3YWl0IHVwZGF0ZSBh
-Y3RpdmUgMSBbaW4gZnV0ZXhfd2FpdF91cGRhdGUoKSBhdCBmdXRleC5jOjYzXQo+IERFQlVHMTog
-QWNjZXB0aW5nIGFwcGxpY2F0aW9uIHJlZ2lzdHJhdGlvbiBbaW4gdGhyZWFkX3JlZ2lzdHJhdGlv
-bl9hcHBzKCkgYXQKPiBtYWluLmM6MTQwNl0gID09PcOoIFJlbWFpbiBzdHJ1Y2sgaGVyZQo+Cj4K
-Pgo+IEJlY2F1c2Ugb2YgdGhpcywgd2Ugc3VzcGVjdCB0aGF0IHRoZSB0cmFjZXMgZnJvbSBvdXIg
-YXBwbGljYXRpb24gYXJlIG5vdAo+IGdldHRpbmcgZ2VuZXJhdGVkLiBBbmQgd2UgZ2V0IGVycm9y
-IHdoZW4gd2UgcnVuIGx0dG5nIHZpZXc6Cj4gKGx0dG5nIGVuYWJsZS1ldmVudCwgc3RhcnQgZXRj
-IHdlbnQgdGhyb3VnaCBmaW5lKQo+Cj4gTGludXgoZGVidWcpIyBsdHRuZyBzdG9wCj4gV2FpdGlu
-ZyBmb3IgZGF0YSBhdmFpbGFiaWxpdHkKPiBXYXJuaW5nOiBUcmFjaW5nIGFscmVhZHkgc3RvcHBl
-ZCBmb3Igc2Vzc2lvbiBhdXRvLTIwMTYwMjExLTEzMzg1MQo+IExpbnV4KGRlYnVnKSMgbHR0bmcg
-dmlldwo+IFRyYWNlIGRpcmVjdG9yeTogL2hvbWUvCj4KPiBbZXJyb3JdIENhbm5vdCBvcGVuIGFu
-eSB0cmFjZSBmb3IgcmVhZGluZy4KPgo+IFtlcnJvcl0gb3BlbmluZyB0cmFjZSDigJwvaG9tZS8i
-IGZvciByZWFkaW5nLgo+Cj4gW2Vycm9yXSBub25lIG9mIHRoZSBzcGVjaWZpZWQgdHJhY2UgcGF0
-aHMgY291bGQgYmUgb3BlbmVkLgo+Cj4KPgo+IFBsZWFzZSBoZWxwIHVzIGluIGZpeGluZyB0aGlz
-IGlzc3VlLgo+Cj4gVGhhbmsgeW91Lgo+Cj4KPgo+Cj4gQmVzdCBSZWdhcmRzLAo+Cj4gUHJhc2hh
-bnRoIFJhZ2hhdmVuZHJhCj4gQWRpdHlhIERvZ3JhCj4KPgo+Cj4KPgo+IF9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlz
-dAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPgoKCgotLSAKSsOpcsOpbWllIEdhbGFy
-bmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0
-Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
-L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============1344978351==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_18107_1793406252.1455296549953"
+
+------=_Part_18107_1793406252.1455296549953
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+---- On Feb 11, 2016, at 9:01 AM, Sean Heelan <seanheelan@gmail.com> wrote: 
+
+> Hi all,
+> I am running a target within a Docker instance, and tracing function execution
+> using the latest LTTng release (2.7). The commands I am issuing look as
+> follows:
+
+> ----
+> lttng create cc_session -o bla
+> lttng enable-event --userspace lttng_ust_cyg_profile:func_entry
+> lttng start
+
+> LD_PRELOAD=liblttng-ust-cyg-profile.so target
+
+> lttng stop
+> lttng destroy
+> ----
+
+> When the target is executed it aborts with the following error:
+
+> ----
+> php: lttng-ust-comm.c:1582: lttng_ust_init: Assertion `!ret' failed.
+> ----
+
+> If I rerun the command it then works fine. In fact, simply doing the following
+> within the Docker container demonstrates the issue:
+
+> ----
+> LD_PRELOAD=liblttng-ust-cyg-profile.so ls
+> LD_PRELOAD=liblttng-ust-cyg-profile.so ls
+> ----
+
+> The first 'ls' will fail at the same point mentioned above, while the second
+> will succeed. Off the top of my head I'm struggling to come up with an
+> explanation as to what impact the first execution using LD_PRELOAD would have
+> on the second. Does it impact a shared lib cache in some way, which I'm unaware
+> of?
+
+> Any assistance would be appreciated!
+
+It appears that sem_timedwait() returns an unexpected error. 
+
+Can you add a ERROR("sem_timedwait"); just before the assert at line 1582 in your liblttng-ust/lttng-ust-comm.c 
+and show us the output ? 
+
+Also, what is the value of your LTTNG_UST_REGISTER_TIMEOUT env. var. ? 
+
+Thanks, 
+
+Mathieu 
+
+> Sean
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+------=_Part_18107_1793406252.1455296549953
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
+__">---- On Feb 11, 2016, at 9:01 AM, Sean Heelan &lt;seanheelan@gmail.com&=
+gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockquote=
+ style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;co=
+lor:#000;font-weight:normal;font-style:normal;text-decoration:none;font-fam=
+ily:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr">Hi all,<br=
+><div>I am running a target within a Docker instance, and tracing function =
+execution using the latest LTTng release (2.7). The commands I am issuing l=
+ook as follows:</div><br><div>----<br></div><div><div>lttng create cc_sessi=
+on -o bla</div><div>lttng enable-event --userspace lttng_ust_cyg_profile:fu=
+nc_entry</div><div>lttng start</div><br><div>LD_PRELOAD=3Dliblttng-ust-cyg-=
+profile.so target</div><br><div>lttng stop</div><div>lttng destroy</div><di=
+v>----</div></div><br><div>When the target is executed it aborts with the f=
+ollowing error:</div><br><div>----</div><div>php: lttng-ust-comm.c:1582: lt=
+tng_ust_init: Assertion `!ret' failed.<br></div><div>----</div><br><div>If =
+I rerun the command it then works fine. In fact, simply doing the following=
+ within the Docker container demonstrates the issue:</div><br><div>----</di=
+v><div><div>LD_PRELOAD=3Dliblttng-ust-cyg-profile.so ls</div><div>LD_PRELOA=
+D=3Dliblttng-ust-cyg-profile.so ls</div></div><div>----</div><br><div>The f=
+irst 'ls' will fail at the same point mentioned above, while the second wil=
+l succeed. Off the top of my head I'm struggling to come up with an explana=
+tion as to what impact the first execution using LD_PRELOAD would have on t=
+he second. Does it impact a shared lib cache in some way, which I'm unaware=
+ of?</div><br><div>Any assistance would be appreciated!</div></div></blockq=
+uote><div>It appears that sem_timedwait() returns an unexpected error.<br><=
+/div><div><br data-mce-bogus=3D"1"></div><div>Can you add a ERROR("sem_time=
+dwait"); just before the assert at line 1582 in your liblttng-ust/lttng-ust=
+-comm.c<br></div><div>and show us the output ?<br data-mce-bogus=3D"1"></di=
+v><div><br data-mce-bogus=3D"1"></div><div>Also, what is the value of your =
+LTTNG_UST_REGISTER_TIMEOUT env. var. ?<br data-mce-bogus=3D"1"></div><div><=
+br data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><d=
+iv><br data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></di=
+v><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px =
+solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:norma=
+l;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-s=
+erif;font-size:12pt;"><div dir=3D"ltr"><div><br>Sean</div><br><br></div><br=
+>_______________________________________________<br>lttng-dev mailing list<=
+br>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bin/mailman/list=
+info/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D"__S=
+IG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://w=
+ww.efficios.com</div></div></body></html>
+------=_Part_18107_1793406252.1455296549953--
+
+
+--===============1344978351==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1344978351==--
