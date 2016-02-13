@@ -1,20 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH babeltrace 1/3] Fix: out-of-bound memory
-	access
-Date: Fri, 12 Feb 2016 22:05:38 -0500
-Message-ID: <CA+jJMxtxVX3ad_PQnEr8eohoz1GWt9Bw9cSB_P8_rPWW+1=7YQ__8981.61885929785$1455332792$gmane$org@mail.gmail.com>
-References: <1455042444-23148-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools] Fix: filter tests now accept "." in
+	identifiers
+Date: Sat, 13 Feb 2016 11:18:27 -0500
+Message-ID: <1455380307-5061-1-git-send-email-mathieu.desnoyers__36151.3080228635$1455380373$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f196.google.com ([209.85.213.196])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1aUQWl-0006Lr-V6
- for lttng-dev@lists.lttng.org; Fri, 12 Feb 2016 22:05:44 -0500
-Received: by mail-ig0-f196.google.com with SMTP id ik10so2484765igb.1
- for <lttng-dev@lists.lttng.org>; Fri, 12 Feb 2016 19:05:43 -0800 (PST)
-In-Reply-To: <1455042444-23148-1-git-send-email-mathieu.desnoyers@efficios.com>
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1aUcu7-00034A-Fu
+ for lttng-dev@lists.lttng.org; Sat, 13 Feb 2016 11:18:40 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,46 +19,128 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-QWxsIHRocmVlIHBhdGNoZXMgaGF2ZSBiZWVuIG1lcmdlZCBpbiBtYXN0ZXIuIFRoZSBmaXJzdCBm
-aXggd2FzIGFsc28KaW50ZWdyYXRlZCBpbiBzdGFibGUtMS4zLgoKVGhhbmtzIQpKw6lyw6ltaWUK
-Ck9uIFR1ZSwgRmViIDksIDIwMTYgYXQgMToyNyBQTSwgTWF0aGlldSBEZXNub3llcnMKPG1hdGhp
-ZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gV2UgbmVlZCB0byBjaGVjayBmb3Ig
-ZW5kIG9mIHN0cmVhbSBiZWZvcmUgdXBkYXRpbmcgdGhlIGN1cnJlbnQgcGFja2V0Cj4gaW5kZXgs
-IGVsc2Ugd2UgYWNjZXNzIG1lbW9yeSBiZXlvbmQgdGhlIGxhc3Qgc3RyZWFtIHBhY2tldCBpbmRl
-eCBhcnJheQo+IGVsZW1lbnQuIFRoaXMgZml4ZXMgdmFsZ3JpbmQgZXJyb3JzIHdoaWNoIGFwcGVh
-ciBhdCBjb21taXQKPgo+IDQ4MGVmMDUgU3VwcG9ydCBjdGYgaW5kZXggdmVyc2lvbiAxLjEKPgo+
-IGR1ZSB0byBjaGFuZ2Ugb2YgdGhlIGVsZW1lbnQgc2l6ZSwgYnV0IGFjdHVhbGx5IGNhdXNlZCBi
-eSBjb21taXQKPgo+IDI2NTRmZTkgRml4OiBldmVudHMgZGlzY2FyZGVkIHRpbWluZyBpbmFjY3Vy
-YWN5Cj4KPiBTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3ll
-cnNAZWZmaWNpb3MuY29tPgo+IC0tLQo+ICBmb3JtYXRzL2N0Zi9jdGYuYyB8IDEwICsrKysrLS0t
-LS0KPiAgMSBmaWxlIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKPgo+
-IGRpZmYgLS1naXQgYS9mb3JtYXRzL2N0Zi9jdGYuYyBiL2Zvcm1hdHMvY3RmL2N0Zi5jCj4gaW5k
-ZXggYTYxNzQ5Ny4uMzdlYmRmYyAxMDA2NDQKPiAtLS0gYS9mb3JtYXRzL2N0Zi9jdGYuYwo+ICsr
-KyBiL2Zvcm1hdHMvY3RmL2N0Zi5jCj4gQEAgLTk1MSw2ICs5NTEsMTEgQEAgdm9pZCBjdGZfcGFj
-a2V0X3NlZWsoc3RydWN0IGJ0X3N0cmVhbV9wb3MgKnN0cmVhbV9wb3MsIHNpemVfdCBpbmRleCwg
-aW50IHdoZW5jZSkKPiAgICAgICAgICAgICAgICAgICAgICAgICBhc3NlcnQoMCk7Cj4gICAgICAg
-ICAgICAgICAgIH0KPgo+ICsgICAgICAgICAgICAgICBpZiAocG9zLT5jdXJfaW5kZXggPj0gcG9z
-LT5wYWNrZXRfaW5kZXgtPmxlbikgewo+ICsgICAgICAgICAgICAgICAgICAgICAgIHBvcy0+b2Zm
-c2V0ID0gRU9GOwo+ICsgICAgICAgICAgICAgICAgICAgICAgIHJldHVybjsKPiArICAgICAgICAg
-ICAgICAgfQo+ICsKPiAgICAgICAgICAgICAgICAgcGFja2V0X2luZGV4ID0gJmdfYXJyYXlfaW5k
-ZXgocG9zLT5wYWNrZXRfaW5kZXgsCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBz
-dHJ1Y3QgcGFja2V0X2luZGV4LCBwb3MtPmN1cl9pbmRleCk7Cj4gICAgICAgICAgICAgICAgIGlm
-IChwb3MtPmN1cl9pbmRleCA+IDApIHsKPiBAQCAtOTYzLDExICs5NjgsNiBAQCB2b2lkIGN0Zl9w
-YWNrZXRfc2VlayhzdHJ1Y3QgYnRfc3RyZWFtX3BvcyAqc3RyZWFtX3Bvcywgc2l6ZV90IGluZGV4
-LCBpbnQgd2hlbmNlKQo+ICAgICAgICAgICAgICAgICBjdGZfdXBkYXRlX2N1cnJlbnRfcGFja2V0
-X2luZGV4KCZmaWxlX3N0cmVhbS0+cGFyZW50LAo+ICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgcHJldl9pbmRleCwgcGFja2V0X2luZGV4KTsKPgo+IC0gICAgICAgICAgICAgICBpZiAo
-cG9zLT5jdXJfaW5kZXggPj0gcG9zLT5wYWNrZXRfaW5kZXgtPmxlbikgewo+IC0gICAgICAgICAg
-ICAgICAgICAgICAgIHBvcy0+b2Zmc2V0ID0gRU9GOwo+IC0gICAgICAgICAgICAgICAgICAgICAg
-IHJldHVybjsKPiAtICAgICAgICAgICAgICAgfQo+IC0KPiAgICAgICAgICAgICAgICAgLyoKPiAg
-ICAgICAgICAgICAgICAgICogV2UgbmVlZCB0byBjaGVjayBpZiB3ZSBhcmUgaW4gdHJhY2UgcmVh
-ZCBvciBjYWxsZWQKPiAgICAgICAgICAgICAgICAgICogZnJvbSBwYWNrZXQgaW5kZXhpbmcuICBJ
-biB0aGlzIGxhc3QgY2FzZSwgdGhlCj4gLS0KPiAyLjEuNAo+CgoKCi0tIApKw6lyw6ltaWUgR2Fs
-YXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxp
-c3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
-aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ .../regression/tools/filtering/test_invalid_filter | 13 ++-------
+ tests/regression/tools/filtering/test_valid_filter | 32 ++++++++++++++++++++--
+ 2 files changed, 32 insertions(+), 13 deletions(-)
+
+diff --git a/tests/regression/tools/filtering/test_invalid_filter b/tests/regression/tools/filtering/test_invalid_filter
+index bfc817d..9df5f2c 100755
+--- a/tests/regression/tools/filtering/test_invalid_filter
++++ b/tests/regression/tools/filtering/test_invalid_filter
+@@ -25,8 +25,8 @@ EVENT_NAME="bogus"
+ ENABLE_EVENT_STDERR="/tmp/invalid-filters-stderr"
+ TRACE_PATH=$(mktemp -d)
+ NUM_GLOBAL_TESTS=2
+-NUM_UST_TESTS=144
+-NUM_KERNEL_TESTS=144
++NUM_UST_TESTS=123
++NUM_KERNEL_TESTS=123
+ NUM_TESTS=$(($NUM_UST_TESTS+$NUM_KERNEL_TESTS+$NUM_GLOBAL_TESTS))
+ 
+ source $TESTDIR/utils/utils.sh
+@@ -117,14 +117,10 @@ INVALID_FILTERS=(
+ 		# Unmatched parenthesis
+ 		"((((((((((((((intfield)))))))))))))"
+ 		'0 || ("abc" != "def")) && (3 < 4)'
+-		# Field dereference
+-		"a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a"
+ 		"a->"
+ 		"a-->a"
+ 		"a->a"
+ 		"a.b.c->d.e.f+1"
+-		"!a.f.d"
+-		"asdf.asdfsd.sadf < 4"
+ 		"asdfasdf->asdfasdf < 2"
+ 		# String can\'t be root node
+ 		"\"somestring\""
+@@ -141,11 +137,6 @@ INVALID_FILTERS=(
+ 		# Nesting of binary operator not allowed
+ 		"1 | (1 | (1 | 1))"
+ 		"1 > (1 > (1 > 1))"
+-		# Exactly one chaining level under \$ctx allowed
+-		"\$ctx.vtid.blah == 0"
+-		"0 == \$ctx.vtid.blah"
+-		"\$ctx.44 == 0"
+-		"0 == \$ctx.44"
+ 		"\$ctx == 0"
+ 		"0 == \$ctx"
+ 		# Only \$ctx is supported for now
+diff --git a/tests/regression/tools/filtering/test_valid_filter b/tests/regression/tools/filtering/test_valid_filter
+index 28347a4..0a3a5a4 100755
+--- a/tests/regression/tools/filtering/test_valid_filter
++++ b/tests/regression/tools/filtering/test_valid_filter
+@@ -24,8 +24,8 @@ STATS_BIN="$TESTDIR/utils/babelstats.pl"
+ SESSION_NAME="valid_filter"
+ NR_ITER=100
+ NUM_GLOBAL_TESTS=2
+-NUM_UST_TESTS=288
+-NUM_KERNEL_TESTS=288
++NUM_UST_TESTS=330
++NUM_KERNEL_TESTS=330
+ NUM_TESTS=$(($NUM_UST_TESTS+$NUM_KERNEL_TESTS+$NUM_GLOBAL_TESTS))
+ 
+ source $TESTDIR/utils/utils.sh
+@@ -408,6 +408,13 @@ UST_FILTERS=("intfield"                                                 #1
+ 	 "\$ctx.procname == \"*\""                                      #46
+ 	 "\"*\" != \$ctx.procname"                                      #47
+ 	 "\"*\" == \$ctx.procname"                                      #48
++	 "!a.f.d"							#49
++	 "a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a"			#50
++	 "\$ctx.vtid.blah == 0"						#51
++	 "asdf.asdfsd.sadf < 4"						#52
++	 "0 == \$ctx.vtid.blah"						#53
++	 "\$ctx.44 == 0"						#54
++	 "0 == \$ctx.44"						#55
+ )
+ 
+ UST_FILTER_COUNT=${#UST_FILTERS[@]}
+@@ -464,6 +471,13 @@ UST_VALIDATOR=("validator_intfield"                 #1
+ 	   "validator_has_events"                   #46
+ 	   "validator_has_no_event"                 #47
+ 	   "validator_has_events"                   #48
++	   "validator_has_no_event"                 #49
++	   "validator_has_no_event"                 #50
++	   "validator_has_no_event"                 #51
++	   "validator_has_no_event"                 #52
++	   "validator_has_no_event"                 #53
++	   "validator_has_no_event"                 #54
++	   "validator_has_no_event"                 #55
+ )
+ 
+ diag "Test UST valid filters"
+@@ -537,6 +551,13 @@ KERNEL_FILTERS=("intfield"                                              #1
+ 	 "\$ctx.procname == \"*\""                                      #46
+ 	 "\"*\" != \$ctx.procname"                                      #47
+ 	 "\"*\" == \$ctx.procname"                                      #48
++	 "!a.f.d"							#49
++	 "a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a"			#50
++	 "\$ctx.vtid.blah == 0"						#51
++	 "asdf.asdfsd.sadf < 4"						#52
++	 "0 == \$ctx.vtid.blah"						#53
++	 "\$ctx.44 == 0"						#54
++	 "0 == \$ctx.44"						#55
+ )
+ 
+ KERNEL_FILTER_COUNT=${#KERNEL_FILTERS[@]}
+@@ -589,6 +610,13 @@ KERNEL_VALIDATOR=("validator_intfield"              #1
+ 	   "validator_has_events"                   #46
+ 	   "validator_has_no_event"                 #47
+ 	   "validator_has_events"                   #48
++	   "validator_has_no_event"                 #49
++	   "validator_has_no_event"                 #50
++	   "validator_has_no_event"                 #51
++	   "validator_has_no_event"                 #52
++	   "validator_has_no_event"                 #53
++	   "validator_has_no_event"                 #54
++	   "validator_has_no_event"                 #55
+ )
+ 
+ if [ "$(id -u)" == "0" ]; then
+-- 
+2.1.4
