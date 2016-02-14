@@ -1,16 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix: filter tests now accept "." in
-	identifiers
-Date: Sat, 13 Feb 2016 11:18:27 -0500
-Message-ID: <1455380307-5061-1-git-send-email-mathieu.desnoyers__36151.3080228635$1455380373$gmane$org@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: filter tests now accept
+	"." in identifiers
+Date: Sun, 14 Feb 2016 17:43:33 -0500
+Message-ID: <CA+jJMxvrY1FpgCPekE=vgCt77fXP7x_BhWeFnx35FRXv3FQuHg__28249.4171442979$1455489884$gmane$org@mail.gmail.com>
+References: <1455380307-5061-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from mail-ig0-f193.google.com ([209.85.213.193])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1aUcu7-00034A-Fu
- for lttng-dev@lists.lttng.org; Sat, 13 Feb 2016 11:18:40 -0500
+ (envelope-from <jeremie.galarneau@gmail.com>) id 1aV5OE-00063t-R6
+ for lttng-dev@lists.lttng.org; Sun, 14 Feb 2016 17:43:41 -0500
+Received: by mail-ig0-f193.google.com with SMTP id ok5so5225828igc.2
+ for <lttng-dev@lists.lttng.org>; Sun, 14 Feb 2016 14:43:38 -0800 (PST)
+In-Reply-To: <1455380307-5061-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -19,128 +23,116 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- .../regression/tools/filtering/test_invalid_filter | 13 ++-------
- tests/regression/tools/filtering/test_valid_filter | 32 ++++++++++++++++++++--
- 2 files changed, 32 insertions(+), 13 deletions(-)
-
-diff --git a/tests/regression/tools/filtering/test_invalid_filter b/tests/regression/tools/filtering/test_invalid_filter
-index bfc817d..9df5f2c 100755
---- a/tests/regression/tools/filtering/test_invalid_filter
-+++ b/tests/regression/tools/filtering/test_invalid_filter
-@@ -25,8 +25,8 @@ EVENT_NAME="bogus"
- ENABLE_EVENT_STDERR="/tmp/invalid-filters-stderr"
- TRACE_PATH=$(mktemp -d)
- NUM_GLOBAL_TESTS=2
--NUM_UST_TESTS=144
--NUM_KERNEL_TESTS=144
-+NUM_UST_TESTS=123
-+NUM_KERNEL_TESTS=123
- NUM_TESTS=$(($NUM_UST_TESTS+$NUM_KERNEL_TESTS+$NUM_GLOBAL_TESTS))
- 
- source $TESTDIR/utils/utils.sh
-@@ -117,14 +117,10 @@ INVALID_FILTERS=(
- 		# Unmatched parenthesis
- 		"((((((((((((((intfield)))))))))))))"
- 		'0 || ("abc" != "def")) && (3 < 4)'
--		# Field dereference
--		"a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a"
- 		"a->"
- 		"a-->a"
- 		"a->a"
- 		"a.b.c->d.e.f+1"
--		"!a.f.d"
--		"asdf.asdfsd.sadf < 4"
- 		"asdfasdf->asdfasdf < 2"
- 		# String can\'t be root node
- 		"\"somestring\""
-@@ -141,11 +137,6 @@ INVALID_FILTERS=(
- 		# Nesting of binary operator not allowed
- 		"1 | (1 | (1 | 1))"
- 		"1 > (1 > (1 > 1))"
--		# Exactly one chaining level under \$ctx allowed
--		"\$ctx.vtid.blah == 0"
--		"0 == \$ctx.vtid.blah"
--		"\$ctx.44 == 0"
--		"0 == \$ctx.44"
- 		"\$ctx == 0"
- 		"0 == \$ctx"
- 		# Only \$ctx is supported for now
-diff --git a/tests/regression/tools/filtering/test_valid_filter b/tests/regression/tools/filtering/test_valid_filter
-index 28347a4..0a3a5a4 100755
---- a/tests/regression/tools/filtering/test_valid_filter
-+++ b/tests/regression/tools/filtering/test_valid_filter
-@@ -24,8 +24,8 @@ STATS_BIN="$TESTDIR/utils/babelstats.pl"
- SESSION_NAME="valid_filter"
- NR_ITER=100
- NUM_GLOBAL_TESTS=2
--NUM_UST_TESTS=288
--NUM_KERNEL_TESTS=288
-+NUM_UST_TESTS=330
-+NUM_KERNEL_TESTS=330
- NUM_TESTS=$(($NUM_UST_TESTS+$NUM_KERNEL_TESTS+$NUM_GLOBAL_TESTS))
- 
- source $TESTDIR/utils/utils.sh
-@@ -408,6 +408,13 @@ UST_FILTERS=("intfield"                                                 #1
- 	 "\$ctx.procname == \"*\""                                      #46
- 	 "\"*\" != \$ctx.procname"                                      #47
- 	 "\"*\" == \$ctx.procname"                                      #48
-+	 "!a.f.d"							#49
-+	 "a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a"			#50
-+	 "\$ctx.vtid.blah == 0"						#51
-+	 "asdf.asdfsd.sadf < 4"						#52
-+	 "0 == \$ctx.vtid.blah"						#53
-+	 "\$ctx.44 == 0"						#54
-+	 "0 == \$ctx.44"						#55
- )
- 
- UST_FILTER_COUNT=${#UST_FILTERS[@]}
-@@ -464,6 +471,13 @@ UST_VALIDATOR=("validator_intfield"                 #1
- 	   "validator_has_events"                   #46
- 	   "validator_has_no_event"                 #47
- 	   "validator_has_events"                   #48
-+	   "validator_has_no_event"                 #49
-+	   "validator_has_no_event"                 #50
-+	   "validator_has_no_event"                 #51
-+	   "validator_has_no_event"                 #52
-+	   "validator_has_no_event"                 #53
-+	   "validator_has_no_event"                 #54
-+	   "validator_has_no_event"                 #55
- )
- 
- diag "Test UST valid filters"
-@@ -537,6 +551,13 @@ KERNEL_FILTERS=("intfield"                                              #1
- 	 "\$ctx.procname == \"*\""                                      #46
- 	 "\"*\" != \$ctx.procname"                                      #47
- 	 "\"*\" == \$ctx.procname"                                      #48
-+	 "!a.f.d"							#49
-+	 "a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a.a"			#50
-+	 "\$ctx.vtid.blah == 0"						#51
-+	 "asdf.asdfsd.sadf < 4"						#52
-+	 "0 == \$ctx.vtid.blah"						#53
-+	 "\$ctx.44 == 0"						#54
-+	 "0 == \$ctx.44"						#55
- )
- 
- KERNEL_FILTER_COUNT=${#KERNEL_FILTERS[@]}
-@@ -589,6 +610,13 @@ KERNEL_VALIDATOR=("validator_intfield"              #1
- 	   "validator_has_events"                   #46
- 	   "validator_has_no_event"                 #47
- 	   "validator_has_events"                   #48
-+	   "validator_has_no_event"                 #49
-+	   "validator_has_no_event"                 #50
-+	   "validator_has_no_event"                 #51
-+	   "validator_has_no_event"                 #52
-+	   "validator_has_no_event"                 #53
-+	   "validator_has_no_event"                 #54
-+	   "validator_has_no_event"                 #55
- )
- 
- if [ "$(id -u)" == "0" ]; then
--- 
-2.1.4
+TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIFNhdCwgRmViIDEzLCAyMDE2IGF0IDExOjE4
+IEFNLCBNYXRoaWV1IERlc25veWVycwo8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPiB3
+cm90ZToKPiBTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3ll
+cnNAZWZmaWNpb3MuY29tPgo+IC0tLQo+ICAuLi4vcmVncmVzc2lvbi90b29scy9maWx0ZXJpbmcv
+dGVzdF9pbnZhbGlkX2ZpbHRlciB8IDEzICsrLS0tLS0tLQo+ICB0ZXN0cy9yZWdyZXNzaW9uL3Rv
+b2xzL2ZpbHRlcmluZy90ZXN0X3ZhbGlkX2ZpbHRlciB8IDMyICsrKysrKysrKysrKysrKysrKysr
+LS0KPiAgMiBmaWxlcyBjaGFuZ2VkLCAzMiBpbnNlcnRpb25zKCspLCAxMyBkZWxldGlvbnMoLSkK
+Pgo+IGRpZmYgLS1naXQgYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL2ZpbHRlcmluZy90ZXN0X2lu
+dmFsaWRfZmlsdGVyIGIvdGVzdHMvcmVncmVzc2lvbi90b29scy9maWx0ZXJpbmcvdGVzdF9pbnZh
+bGlkX2ZpbHRlcgo+IGluZGV4IGJmYzgxN2QuLjlkZjVmMmMgMTAwNzU1Cj4gLS0tIGEvdGVzdHMv
+cmVncmVzc2lvbi90b29scy9maWx0ZXJpbmcvdGVzdF9pbnZhbGlkX2ZpbHRlcgo+ICsrKyBiL3Rl
+c3RzL3JlZ3Jlc3Npb24vdG9vbHMvZmlsdGVyaW5nL3Rlc3RfaW52YWxpZF9maWx0ZXIKPiBAQCAt
+MjUsOCArMjUsOCBAQCBFVkVOVF9OQU1FPSJib2d1cyIKPiAgRU5BQkxFX0VWRU5UX1NUREVSUj0i
+L3RtcC9pbnZhbGlkLWZpbHRlcnMtc3RkZXJyIgo+ICBUUkFDRV9QQVRIPSQobWt0ZW1wIC1kKQo+
+ICBOVU1fR0xPQkFMX1RFU1RTPTIKPiAtTlVNX1VTVF9URVNUUz0xNDQKPiAtTlVNX0tFUk5FTF9U
+RVNUUz0xNDQKPiArTlVNX1VTVF9URVNUUz0xMjMKPiArTlVNX0tFUk5FTF9URVNUUz0xMjMKPiAg
+TlVNX1RFU1RTPSQoKCROVU1fVVNUX1RFU1RTKyROVU1fS0VSTkVMX1RFU1RTKyROVU1fR0xPQkFM
+X1RFU1RTKSkKPgo+ICBzb3VyY2UgJFRFU1RESVIvdXRpbHMvdXRpbHMuc2gKPiBAQCAtMTE3LDE0
+ICsxMTcsMTAgQEAgSU5WQUxJRF9GSUxURVJTPSgKPiAgICAgICAgICAgICAgICAgIyBVbm1hdGNo
+ZWQgcGFyZW50aGVzaXMKPiAgICAgICAgICAgICAgICAgIigoKCgoKCgoKCgoKCgoaW50ZmllbGQp
+KSkpKSkpKSkpKSkpIgo+ICAgICAgICAgICAgICAgICAnMCB8fCAoImFiYyIgIT0gImRlZiIpKSAm
+JiAoMyA8IDQpJwo+IC0gICAgICAgICAgICAgICAjIEZpZWxkIGRlcmVmZXJlbmNlCj4gLSAgICAg
+ICAgICAgICAgICJhLmEuYS5hLmEuYS5hLmEuYS5hLmEuYS5hLmEuYS5hLmEuYS5hLmEiCj4gICAg
+ICAgICAgICAgICAgICJhLT4iCj4gICAgICAgICAgICAgICAgICJhLS0+YSIKPiAgICAgICAgICAg
+ICAgICAgImEtPmEiCj4gICAgICAgICAgICAgICAgICJhLmIuYy0+ZC5lLmYrMSIKPiAtICAgICAg
+ICAgICAgICAgIiFhLmYuZCIKPiAtICAgICAgICAgICAgICAgImFzZGYuYXNkZnNkLnNhZGYgPCA0
+Igo+ICAgICAgICAgICAgICAgICAiYXNkZmFzZGYtPmFzZGZhc2RmIDwgMiIKPiAgICAgICAgICAg
+ICAgICAgIyBTdHJpbmcgY2FuXCd0IGJlIHJvb3Qgbm9kZQo+ICAgICAgICAgICAgICAgICAiXCJz
+b21lc3RyaW5nXCIiCj4gQEAgLTE0MSwxMSArMTM3LDYgQEAgSU5WQUxJRF9GSUxURVJTPSgKPiAg
+ICAgICAgICAgICAgICAgIyBOZXN0aW5nIG9mIGJpbmFyeSBvcGVyYXRvciBub3QgYWxsb3dlZAo+
+ICAgICAgICAgICAgICAgICAiMSB8ICgxIHwgKDEgfCAxKSkiCj4gICAgICAgICAgICAgICAgICIx
+ID4gKDEgPiAoMSA+IDEpKSIKPiAtICAgICAgICAgICAgICAgIyBFeGFjdGx5IG9uZSBjaGFpbmlu
+ZyBsZXZlbCB1bmRlciBcJGN0eCBhbGxvd2VkCj4gLSAgICAgICAgICAgICAgICJcJGN0eC52dGlk
+LmJsYWggPT0gMCIKPiAtICAgICAgICAgICAgICAgIjAgPT0gXCRjdHgudnRpZC5ibGFoIgo+IC0g
+ICAgICAgICAgICAgICAiXCRjdHguNDQgPT0gMCIKPiAtICAgICAgICAgICAgICAgIjAgPT0gXCRj
+dHguNDQiCj4gICAgICAgICAgICAgICAgICJcJGN0eCA9PSAwIgo+ICAgICAgICAgICAgICAgICAi
+MCA9PSBcJGN0eCIKPiAgICAgICAgICAgICAgICAgIyBPbmx5IFwkY3R4IGlzIHN1cHBvcnRlZCBm
+b3Igbm93Cj4gZGlmZiAtLWdpdCBhL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvZmlsdGVyaW5nL3Rl
+c3RfdmFsaWRfZmlsdGVyIGIvdGVzdHMvcmVncmVzc2lvbi90b29scy9maWx0ZXJpbmcvdGVzdF92
+YWxpZF9maWx0ZXIKPiBpbmRleCAyODM0N2E0Li4wYTNhNWE0IDEwMDc1NQo+IC0tLSBhL3Rlc3Rz
+L3JlZ3Jlc3Npb24vdG9vbHMvZmlsdGVyaW5nL3Rlc3RfdmFsaWRfZmlsdGVyCj4gKysrIGIvdGVz
+dHMvcmVncmVzc2lvbi90b29scy9maWx0ZXJpbmcvdGVzdF92YWxpZF9maWx0ZXIKPiBAQCAtMjQs
+OCArMjQsOCBAQCBTVEFUU19CSU49IiRURVNURElSL3V0aWxzL2JhYmVsc3RhdHMucGwiCj4gIFNF
+U1NJT05fTkFNRT0idmFsaWRfZmlsdGVyIgo+ICBOUl9JVEVSPTEwMAo+ICBOVU1fR0xPQkFMX1RF
+U1RTPTIKPiAtTlVNX1VTVF9URVNUUz0yODgKPiAtTlVNX0tFUk5FTF9URVNUUz0yODgKPiArTlVN
+X1VTVF9URVNUUz0zMzAKPiArTlVNX0tFUk5FTF9URVNUUz0zMzAKPiAgTlVNX1RFU1RTPSQoKCRO
+VU1fVVNUX1RFU1RTKyROVU1fS0VSTkVMX1RFU1RTKyROVU1fR0xPQkFMX1RFU1RTKSkKPgo+ICBz
+b3VyY2UgJFRFU1RESVIvdXRpbHMvdXRpbHMuc2gKPiBAQCAtNDA4LDYgKzQwOCwxMyBAQCBVU1Rf
+RklMVEVSUz0oImludGZpZWxkIiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAjMQo+ICAgICAgICAgICJcJGN0eC5wcm9jbmFtZSA9PSBcIipcIiIgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICM0Ngo+ICAgICAgICAgICJcIipcIiAhPSBc
+JGN0eC5wcm9jbmFtZSIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICM0Nwo+
+ICAgICAgICAgICJcIipcIiA9PSBcJGN0eC5wcm9jbmFtZSIgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICM0OAo+ICsgICAgICAgICIhYS5mLmQiICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICM0OQo+ICsgICAgICAgICJhLmEu
+YS5hLmEuYS5hLmEuYS5hLmEuYS5hLmEuYS5hLmEuYS5hLmEiICAgICAgICAgICAgICAgICAgICAg
+ICM1MAo+ICsgICAgICAgICJcJGN0eC52dGlkLmJsYWggPT0gMCIgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICM1MQo+ICsgICAgICAgICJhc2RmLmFzZGZzZC5zYWRmIDwg
+NCIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICM1Mgo+ICsgICAgICAg
+ICIwID09IFwkY3R4LnZ0aWQuYmxhaCIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICM1Mwo+ICsgICAgICAgICJcJGN0eC40NCA9PSAwIiAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICM1NAo+ICsgICAgICAgICIwID09IFwkY3R4LjQ0
+IiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICM1NQo+ICAp
+Cj4KPiAgVVNUX0ZJTFRFUl9DT1VOVD0keyNVU1RfRklMVEVSU1tAXX0KPiBAQCAtNDY0LDYgKzQ3
+MSwxMyBAQCBVU1RfVkFMSURBVE9SPSgidmFsaWRhdG9yX2ludGZpZWxkIiAgICAgICAgICAgICAg
+ICAgIzEKPiAgICAgICAgICAgICJ2YWxpZGF0b3JfaGFzX2V2ZW50cyIgICAgICAgICAgICAgICAg
+ICAgIzQ2Cj4gICAgICAgICAgICAidmFsaWRhdG9yX2hhc19ub19ldmVudCIgICAgICAgICAgICAg
+ICAgICM0Nwo+ICAgICAgICAgICAgInZhbGlkYXRvcl9oYXNfZXZlbnRzIiAgICAgICAgICAgICAg
+ICAgICAjNDgKPiArICAgICAgICAgICJ2YWxpZGF0b3JfaGFzX25vX2V2ZW50IiAgICAgICAgICAg
+ICAgICAgIzQ5Cj4gKyAgICAgICAgICAidmFsaWRhdG9yX2hhc19ub19ldmVudCIgICAgICAgICAg
+ICAgICAgICM1MAo+ICsgICAgICAgICAgInZhbGlkYXRvcl9oYXNfbm9fZXZlbnQiICAgICAgICAg
+ICAgICAgICAjNTEKPiArICAgICAgICAgICJ2YWxpZGF0b3JfaGFzX25vX2V2ZW50IiAgICAgICAg
+ICAgICAgICAgIzUyCj4gKyAgICAgICAgICAidmFsaWRhdG9yX2hhc19ub19ldmVudCIgICAgICAg
+ICAgICAgICAgICM1Mwo+ICsgICAgICAgICAgInZhbGlkYXRvcl9oYXNfbm9fZXZlbnQiICAgICAg
+ICAgICAgICAgICAjNTQKPiArICAgICAgICAgICJ2YWxpZGF0b3JfaGFzX25vX2V2ZW50IiAgICAg
+ICAgICAgICAgICAgIzU1Cj4gICkKPgo+ICBkaWFnICJUZXN0IFVTVCB2YWxpZCBmaWx0ZXJzIgo+
+IEBAIC01MzcsNiArNTUxLDEzIEBAIEtFUk5FTF9GSUxURVJTPSgiaW50ZmllbGQiICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMxCj4gICAgICAgICAgIlwkY3R4
+LnByb2NuYW1lID09IFwiKlwiIiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IzQ2Cj4gICAgICAgICAgIlwiKlwiICE9IFwkY3R4LnByb2NuYW1lIiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIzQ3Cj4gICAgICAgICAgIlwiKlwiID09IFwkY3R4LnByb2Nu
+YW1lIiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIzQ4Cj4gKyAgICAgICAg
+IiFhLmYuZCIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIzQ5Cj4gKyAgICAgICAgImEuYS5hLmEuYS5hLmEuYS5hLmEuYS5hLmEuYS5hLmEuYS5h
+LmEuYSIgICAgICAgICAgICAgICAgICAgICAgIzUwCj4gKyAgICAgICAgIlwkY3R4LnZ0aWQuYmxh
+aCA9PSAwIiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIzUxCj4gKyAg
+ICAgICAgImFzZGYuYXNkZnNkLnNhZGYgPCA0IiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIzUyCj4gKyAgICAgICAgIjAgPT0gXCRjdHgudnRpZC5ibGFoIiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIzUzCj4gKyAgICAgICAgIlwkY3R4LjQ0
+ID09IDAiICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIzU0
+Cj4gKyAgICAgICAgIjAgPT0gXCRjdHguNDQiICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIzU1Cj4gICkKPgo+ICBLRVJORUxfRklMVEVSX0NPVU5UPSR7I0tF
+Uk5FTF9GSUxURVJTW0BdfQo+IEBAIC01ODksNiArNjEwLDEzIEBAIEtFUk5FTF9WQUxJREFUT1I9
+KCJ2YWxpZGF0b3JfaW50ZmllbGQiICAgICAgICAgICAgICAjMQo+ICAgICAgICAgICAgInZhbGlk
+YXRvcl9oYXNfZXZlbnRzIiAgICAgICAgICAgICAgICAgICAjNDYKPiAgICAgICAgICAgICJ2YWxp
+ZGF0b3JfaGFzX25vX2V2ZW50IiAgICAgICAgICAgICAgICAgIzQ3Cj4gICAgICAgICAgICAidmFs
+aWRhdG9yX2hhc19ldmVudHMiICAgICAgICAgICAgICAgICAgICM0OAo+ICsgICAgICAgICAgInZh
+bGlkYXRvcl9oYXNfbm9fZXZlbnQiICAgICAgICAgICAgICAgICAjNDkKPiArICAgICAgICAgICJ2
+YWxpZGF0b3JfaGFzX25vX2V2ZW50IiAgICAgICAgICAgICAgICAgIzUwCj4gKyAgICAgICAgICAi
+dmFsaWRhdG9yX2hhc19ub19ldmVudCIgICAgICAgICAgICAgICAgICM1MQo+ICsgICAgICAgICAg
+InZhbGlkYXRvcl9oYXNfbm9fZXZlbnQiICAgICAgICAgICAgICAgICAjNTIKPiArICAgICAgICAg
+ICJ2YWxpZGF0b3JfaGFzX25vX2V2ZW50IiAgICAgICAgICAgICAgICAgIzUzCj4gKyAgICAgICAg
+ICAidmFsaWRhdG9yX2hhc19ub19ldmVudCIgICAgICAgICAgICAgICAgICM1NAo+ICsgICAgICAg
+ICAgInZhbGlkYXRvcl9oYXNfbm9fZXZlbnQiICAgICAgICAgICAgICAgICAjNTUKPiAgKQo+Cj4g
+IGlmIFsgIiQoaWQgLXUpIiA9PSAiMCIgXTsgdGhlbgo+IC0tCj4gMi4xLjQKPgoKCgotLSAKSsOp
+csOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
+bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cDovL2xpc3RzLmx0dG5n
+Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
