@@ -1,19 +1,17 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: Re: LTTng buffer mode
-Date: Tue, 16 Feb 2016 20:02:56 -0500
-Message-ID: <CAB4xu_1qu7ezjfafSHc_CmM=YzcNhu9Oxyim=kd7N2U-OTJwZw__36231.8948763006$1455671056$gmane$org@mail.gmail.com>
-References: <BY2PR15MB0759C952513EFB6E18812650ABAE0@BY2PR15MB0759.namprd15.prod.outlook.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools] Fix: test: handle env variables
+	undefined
+Date: Wed, 17 Feb 2016 16:33:00 -0500
+Message-ID: <1455744780-2527-1-git-send-email-jonathan.rajotte-julien__21935.2879481905$1455744886$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f180.google.com ([209.85.217.180])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <eeppeliteloop@gmail.com>) id 1aVqWh-0008EM-UL
- for lttng-dev@lists.lttng.org; Tue, 16 Feb 2016 20:03:32 -0500
-Received: by mail-lb0-f180.google.com with SMTP id x1so747780lbj.3
- for <lttng-dev@lists.lttng.org>; Tue, 16 Feb 2016 17:03:31 -0800 (PST)
-In-Reply-To: <BY2PR15MB0759C952513EFB6E18812650ABAE0@BY2PR15MB0759.namprd15.prod.outlook.com>
+ (envelope-from <jonathan.rajotte-julien@efficios.com>)
+ id 1aW9ix-0007wa-PR
+ for lttng-dev@lists.lttng.org; Wed, 17 Feb 2016 16:33:33 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,45 +20,32 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jeffrey Chen <cpthk@hotmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-No you cannot.
+Prevent errors on non-existent key fetching e.g LD_PRELOAD & LD_LIBRARY_PATH.
+Uses .get() with a default empty string to prevent this case.
 
-There's no hidden global buffering scheme option for user space tracing.
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+ tests/regression/ust/ust-dl/test_ust-dl.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-From the LTTng documentation:
-
-> In the user space tracing domain, two buffering schemes are available
-> when creating a channel:
->
-> Per-PID buffering: keep one ring buffer per process.
-> Per-UID buffering: keep one ring buffer for all processes of a single user.
-
-and:
-
-> The Linux kernel tracing domain only has one available buffering scheme
-> which is to use a single ring buffer for the whole system.
-
-Phil
-
-On Tue, Feb 16, 2016 at 7:55 PM, Jeffrey Chen <cpthk@hotmail.com> wrote:
-> Hi LTTng community:
->
->
-> I have a question about LTTng buffer mode. According to documentation, LTTng
-> supports 2 buffer modes, per-pid, and per-uid. Is there any mode to have a
-> global buffer that does not have separate buffers? The reason I asked is
-> because, LTTng writes different buffer traces to different directory/file.
-> It is much more difficult for us to post-process separate directories. We
-> would like to have all traces write into one single buffer and
-> directory/file, so it is easier to do post-processing. Thanks.
->
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+diff --git a/tests/regression/ust/ust-dl/test_ust-dl.py b/tests/regression/ust/ust-dl/test_ust-dl.py
+index 7117ca1..9801012 100644
+--- a/tests/regression/ust/ust-dl/test_ust-dl.py
++++ b/tests/regression/ust/ust-dl/test_ust-dl.py
+@@ -46,8 +46,8 @@ enable_ust_tracepoint_event(session_info, "*")
+ start_session(session_info)
+ 
+ test_env = os.environ.copy()
+-test_env["LD_PRELOAD"] += ":liblttng-ust-dl.so"
+-test_env["LD_LIBRARY_PATH"] += ":" + test_path
++test_env["LD_PRELOAD"] = test_env.get("LD_PRELOAD", "") + ":liblttng-ust-dl.so"
++test_env["LD_LIBRARY_PATH"] = test_env.get("LD_LIBRARY_PATH", "") + ":" + test_path
+ test_process = subprocess.Popen(test_path + "prog",
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                 env=test_env)
+-- 
+2.5.0
