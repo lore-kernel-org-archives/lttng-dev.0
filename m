@@ -1,20 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: test: handle env variables
-	undefined
-Date: Thu, 18 Feb 2016 11:24:04 -0500
-Message-ID: <CA+jJMxuVft-4YCRCVBtUmXJY7TXoBgS0vaBL+QydtkE-SCpTSw__21416.7360835292$1455812732$gmane$org@mail.gmail.com>
-References: <1455744780-2527-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-tools] Fix: Use ipv6 loopback adress in
+	test_uri
+Date: Thu, 18 Feb 2016 12:45:13 -0500
+Message-ID: <1455817513-432-1-git-send-email-mjeanson__5114.52455907619$1455817582$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f170.google.com ([209.85.213.170])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jeremie.galarneau@gmail.com>) id 1aWRNC-0006n4-2G
- for lttng-dev@lists.lttng.org; Thu, 18 Feb 2016 11:24:11 -0500
-Received: by mail-ig0-f170.google.com with SMTP id 5so16585848igt.0
- for <lttng-dev@lists.lttng.org>; Thu, 18 Feb 2016 08:24:10 -0800 (PST)
-In-Reply-To: <1455744780-2527-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ (envelope-from <mjeanson@efficios.com>) id 1aWSdp-0007Kf-O8
+ for lttng-dev@lists.lttng.org; Thu, 18 Feb 2016 12:45:26 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -23,34 +19,43 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIFdlZCwgRmViIDE3LCAyMDE2IGF0IDQ6MzMg
-UE0sIEpvbmF0aGFuIFJham90dGUKPGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNv
-bT4gd3JvdGU6Cj4gUHJldmVudCBlcnJvcnMgb24gbm9uLWV4aXN0ZW50IGtleSBmZXRjaGluZyBl
-LmcgTERfUFJFTE9BRCAmIExEX0xJQlJBUllfUEFUSC4KPiBVc2VzIC5nZXQoKSB3aXRoIGEgZGVm
-YXVsdCBlbXB0eSBzdHJpbmcgdG8gcHJldmVudCB0aGlzIGNhc2UuCj4KPiBTaWduZWQtb2ZmLWJ5
-OiBKb25hdGhhbiBSYWpvdHRlIDxqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+
-Cj4gLS0tCj4gIHRlc3RzL3JlZ3Jlc3Npb24vdXN0L3VzdC1kbC90ZXN0X3VzdC1kbC5weSB8IDQg
-KystLQo+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQo+
-Cj4gZGlmZiAtLWdpdCBhL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L3VzdC1kbC90ZXN0X3VzdC1kbC5w
-eSBiL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L3VzdC1kbC90ZXN0X3VzdC1kbC5weQo+IGluZGV4IDcx
-MTdjYTEuLjk4MDEwMTIgMTAwNjQ0Cj4gLS0tIGEvdGVzdHMvcmVncmVzc2lvbi91c3QvdXN0LWRs
-L3Rlc3RfdXN0LWRsLnB5Cj4gKysrIGIvdGVzdHMvcmVncmVzc2lvbi91c3QvdXN0LWRsL3Rlc3Rf
-dXN0LWRsLnB5Cj4gQEAgLTQ2LDggKzQ2LDggQEAgZW5hYmxlX3VzdF90cmFjZXBvaW50X2V2ZW50
-KHNlc3Npb25faW5mbywgIioiKQo+ICBzdGFydF9zZXNzaW9uKHNlc3Npb25faW5mbykKPgo+ICB0
-ZXN0X2VudiA9IG9zLmVudmlyb24uY29weSgpCj4gLXRlc3RfZW52WyJMRF9QUkVMT0FEIl0gKz0g
-IjpsaWJsdHRuZy11c3QtZGwuc28iCj4gLXRlc3RfZW52WyJMRF9MSUJSQVJZX1BBVEgiXSArPSAi
-OiIgKyB0ZXN0X3BhdGgKPiArdGVzdF9lbnZbIkxEX1BSRUxPQUQiXSA9IHRlc3RfZW52LmdldCgi
-TERfUFJFTE9BRCIsICIiKSArICI6bGlibHR0bmctdXN0LWRsLnNvIgo+ICt0ZXN0X2VudlsiTERf
-TElCUkFSWV9QQVRIIl0gPSB0ZXN0X2Vudi5nZXQoIkxEX0xJQlJBUllfUEFUSCIsICIiKSArICI6
-IiArIHRlc3RfcGF0aAo+ICB0ZXN0X3Byb2Nlc3MgPSBzdWJwcm9jZXNzLlBvcGVuKHRlc3RfcGF0
-aCArICJwcm9nIiwKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdGRvdXQ9c3Vi
-cHJvY2Vzcy5QSVBFLCBzdGRlcnI9c3VicHJvY2Vzcy5QSVBFLAo+ICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIGVudj10ZXN0X2VudikKPiAtLQo+IDIuNS4wCj4KCgoKLS0gCkrDqXLD
-qW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
-aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHA6Ly9saXN0cy5sdHRuZy5v
-cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Some older version of Debian/Ubuntu and maybe other distros won't set
+localhost to point on ::1 in the system hosts file and use instead a
+custom name like ip6-localhost or ipv6-locahost which is not
+standardized across distros.
+
+To work around this, use the ipv6 loopback address instead of localhost.
+
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ tests/unit/test_uri.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/unit/test_uri.c b/tests/unit/test_uri.c
+index 432e2b3..cd95753 100644
+--- a/tests/unit/test_uri.c
++++ b/tests/unit/test_uri.c
+@@ -108,7 +108,7 @@ void test_uri_parsing(void)
+ 		uri = NULL;
+ 	}
+ 
+-	s_uri1 = "net6://localhost:8989";
++	s_uri1 = "net6://[::1]:8989";
+ 
+ 	size = uri_parse(s_uri1, &uri);
+ 
+@@ -125,7 +125,7 @@ void test_uri_parsing(void)
+ 	   uri[1].port == 0 &&
+ 	   strlen(uri[1].subdir) == 0 &&
+ 	   strcmp(uri[0].dst.ipv6, "::1") == 0,
+-	   "URI set to net6://localhost:8989");
++	   "URI set to net6://[::1]:8989");
+ 
+ 	if (uri) {
+ 		uri_free(uri);
+-- 
+2.7.0
