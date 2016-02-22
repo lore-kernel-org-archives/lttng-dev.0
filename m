@@ -1,19 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng buffer mode
-Date: Sat, 20 Feb 2016 18:17:03 +0000 (UTC)
-Message-ID: <829984174.3472.1455992223842.JavaMail.zimbra__26675.3577198417$1455992306$gmane$org@efficios.com>
-References: <BY2PR15MB0759C952513EFB6E18812650ABAE0@BY2PR15MB0759.namprd15.prod.outlook.com>
- <CAB4xu_1qu7ezjfafSHc_CmM=YzcNhu9Oxyim=kd7N2U-OTJwZw@mail.gmail.com>
- <BY2PR15MB07598F61A09D22D0CBF9B785ABA00@BY2PR15MB0759.namprd15.prod.outlook.com>
+Subject: Re: Deleting files from log folder
+Date: Mon, 22 Feb 2016 20:13:38 +0000 (UTC)
+Message-ID: <1073734840.4597.1456172018476.JavaMail.zimbra__6213.35481196201$1456172087$gmane$org@efficios.com>
+References: <CAD6O9ape7M-VKs+H4uhcQevGvAMRGSEa4CoXUC7A9HRdJpNesQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2093207954=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1aXC5k-0008KD-Rx
- for lttng-dev@lists.lttng.org; Sat, 20 Feb 2016 13:17:18 -0500
-In-Reply-To: <BY2PR15MB07598F61A09D22D0CBF9B785ABA00@BY2PR15MB0759.namprd15.prod.outlook.com>
+ (envelope-from <compudj@efficios.com>) id 1aXwrZ-00011f-Qw
+ for lttng-dev@lists.lttng.org; Mon, 22 Feb 2016 15:13:46 -0500
+In-Reply-To: <CAD6O9ape7M-VKs+H4uhcQevGvAMRGSEa4CoXUC7A9HRdJpNesQ@mail.gmail.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,97 +19,95 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jeffrey Chen <cpthk@hotmail.com>
+To: syed zaidi <zaidi1039@gmail.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+--===============2093207954==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_4596_1421363052.1456172018475"
 
-LTTng implements per-cpu buffers to eliminate false-sharing between
-CPUs. Babeltrace and Trace Compass implement iterators that allow
-doing the merge of those per-cpu buffers into a single stream on
-the fly. Users of Babeltrace and Trace Compass should not have to
-worry about doing this merge.
+------=_Part_4596_1421363052.1456172018475
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Since LTTng is inherently multi-buffers, we also use this buffer
-merging scheme to deal with tracefile rotation, multi-channel, and
-combining traces gathered from various processes/user IDs/kernel vs
-userspace.
+----- On Feb 18, 2016, at 7:05 PM, syed zaidi <zaidi1039@gmail.com> wrote: 
 
-So my question here is: why you say it is much more difficult for
-you to deal with those multiple buffers ? Since there are already
-libraries in Babeltrace that do that for you, I would expect this
-to be a non-issue.
+> Hey guys,
+> I am new to using LTTng.
+> My question is that, if I want to delete/move some binary log files produced by
+> LTTng, do I have to delete/move the corresponding ".idx" file from the index
+> folder too?
+> I am looking for the correct way to move log files from the folder.
+> I would really appreciate if someone could guide me on that and please let me
+> know if I am overlooking any issue in terms of moving the files.
 
-Although it would be technically possible to implement a ring
-buffer shared across CPUs, it would be inefficient, and we would
-need a good justification for adding this complexity to the
-tracers.
+Hi, 
 
-Thanks,
+Yes, deleting both stream files and associated .idx files seems like a 
+good way to proceed in your case. 
 
-Mathieu
+Thanks, 
 
+Mathieu 
 
------ On Feb 19, 2016, at 4:00 AM, Jeffrey Chen cpthk@hotmail.com wrote:
+> Thanks
+> Ammar
 
-> Thanks.
-> If we make changes to LTTng to add this feature, would it violate the LTTng
-> design principle in any way? Thanks.
-> 
-> 
-> ________________________________________
-> From: Philippe Proulx <eeppeliteloop@gmail.com>
-> Sent: Tuesday, February 16, 2016 5:02 PM
-> To: Jeffrey Chen
-> Cc: lttng-dev@lists.lttng.org
-> Subject: Re: [lttng-dev] LTTng buffer mode
-> 
-> No you cannot.
-> 
-> There's no hidden global buffering scheme option for user space tracing.
-> 
-> From the LTTng documentation:
-> 
->> In the user space tracing domain, two buffering schemes are available
->> when creating a channel:
->>
->> Per-PID buffering: keep one ring buffer per process.
->> Per-UID buffering: keep one ring buffer for all processes of a single user.
-> 
-> and:
-> 
->> The Linux kernel tracing domain only has one available buffering scheme
->> which is to use a single ring buffer for the whole system.
-> 
-> Phil
-> 
-> On Tue, Feb 16, 2016 at 7:55 PM, Jeffrey Chen <cpthk@hotmail.com> wrote:
->> Hi LTTng community:
->>
->>
->> I have a question about LTTng buffer mode. According to documentation, LTTng
->> supports 2 buffer modes, per-pid, and per-uid. Is there any mode to have a
->> global buffer that does not have separate buffers? The reason I asked is
->> because, LTTng writes different buffer traces to different directory/file.
->> It is much more difficult for us to post-process separate directories. We
->> would like to have all traces write into one single buffer and
->> directory/file, so it is easier to do post-processing. Thanks.
->>
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
-> 
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+------=_Part_4596_1421363052.1456172018475
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
+__">----- On Feb 18, 2016, at 7:05 PM, syed zaidi &lt;zaidi1039@gmail.com&g=
+t; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockquote =
+style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;col=
+or:#000;font-weight:normal;font-style:normal;text-decoration:none;font-fami=
+ly:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr">Hey guys,<d=
+iv>I am new to using LTTng.&nbsp;</div><div>My question is that, if I want =
+to delete/move some binary log files produced by LTTng, do I have to delete=
+/move the corresponding ".idx" file from the index folder too?</div><div>I =
+am looking for the correct way to move log files from the folder.</div><div=
+>I would really appreciate if someone could guide me on that and please let=
+ me know if I am overlooking any issue in terms of moving the files.</div><=
+/div></blockquote><div><br></div><div>Hi,<br data-mce-bogus=3D"1"></div><di=
+v><br data-mce-bogus=3D"1"></div><div>Yes, deleting both stream files and a=
+ssociated .idx files seems like a<br data-mce-bogus=3D"1"></div><div>good w=
+ay to proceed in your case.<br data-mce-bogus=3D"1"></div><div><br data-mce=
+-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br data=
+-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br =
+data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid #1010=
+FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-styl=
+e:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-s=
+ize:12pt;"><div dir=3D"ltr"><br><div>Thanks</div><div>Ammar</div></div><br>=
+_______________________________________________<br>lttng-dev mailing list<b=
+r>lttng-dev@lists.lttng.org<br>http://lists.lttng.org/cgi-bin/mailman/listi=
+nfo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D"__SI=
+G_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://ww=
+w.efficios.com</div></div></body></html>
+------=_Part_4596_1421363052.1456172018475--
+
+
+--===============2093207954==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============2093207954==--
