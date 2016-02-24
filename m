@@ -1,19 +1,16 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: Re: Unable to use libbabeltrace for trace reading in C
- program
-Date: Tue, 23 Feb 2016 19:13:05 -0500
-Message-ID: <20160224001305.GB14724__22804.7512741343$1456272859$gmane$org@sinkpad>
-References: <CE3666D6-C823-40D2-914A-83E17C0FDAA1@inria.fr>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH] Fix: per-pid ust buffers flush race with
+	application unregister
+Date: Tue, 23 Feb 2016 19:41:40 -0500
+Message-ID: <1456274500-9781-1-git-send-email-mathieu.desnoyers__28393.8889312141$1456274567$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <jdesfossez@efficios.com>) id 1aYN57-0001oI-W4
- for lttng-dev@lists.lttng.org; Tue, 23 Feb 2016 19:13:30 -0500
-Content-Disposition: inline
-In-Reply-To: <CE3666D6-C823-40D2-914A-83E17C0FDAA1@inria.fr>
+ (envelope-from <mathieu.desnoyers@efficios.com>) id 1aYNWZ-0001yK-La
+ for lttng-dev@lists.lttng.org; Tue, 23 Feb 2016 19:41:52 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -22,31 +19,38 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Alexis Martin <alexis.martin@inria.fr>
+To: jgalar@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgo+IEhpLAo+IAo+IEnigJltIHRyeWluZyB0byB1c2UgdGhlIGJhYmVsdHJhY2UgbGlicmFy
-eSB0byBiZSBhYmxlIHRvIGxvYWQgYW5kIHJlYWQgYSBDVEYgdHJhY2UgaW4gYSBDIHByb2dyYW0u
-Cj4gCj4gRnJvbSB0aGUgZG9jOgo+IAo+ID4gSW4gb3JkZXIgdG8gdXNlIGxpYmJhYmVsdHJhY2Ug
-dG8gcmVhZCBhIHRyYWNlLCB0aGUgZmlyc3Qgc3RlcCBpcyB0byBjcmVhdGUgYQo+ID4gY29udGV4
-dCBzdHJ1Y3R1cmUgYW5kIHRvIGFkZCBhIHRyYWNlIHRvIGl0LiBUaGlzIGlzIGRvbmUgdXNpbmcg
-dGhlCj4gPiBidF9jb250ZXh0X2NyZWF0ZSgpIGFuZCBidF9jb250ZXh0X2FkZF90cmFjZSgpIGZ1
-bmN0aW9ucy4gQXMgbG9uZyBhcyB0aGlzCj4gPiBjb250ZXh0IHN0cnVjdHVyZSBpcyBhbGxvY2F0
-ZWQgYW5kIHRoZSB0cmFjZSBpcyB2YWxpZCwgdGhlIHRyYWNlIGNhbiBiZQo+ID4gbWFuaXB1bGF0
-ZWQgYnkgdGhlIGxpYnJhcnkuCj4gCj4gCj4gQnV0IGZvciBhIHNpbXBsZSBwcm9ncmFtIGxpa2Ug
-dGhpczoKPiAKPiA+ICNpbmNsdWRlIDxzdGRpby5oPgo+ID4gI2luY2x1ZGUgPGJhYmVsdHJhY2Uv
-Y29udGV4dC5oPgo+ID4gCj4gPiBpbnQgbWFpbih2b2lkKXsKPiA+IAo+ID4gICAgIHN0cnVjdCBi
-dF9jb250ZXh0ICpjdHggPSBidF9jb250ZXh0X2NyZWF0ZSgpOwo+ID4gICAgIAo+ID4gICAgIGlu
-dCByZXQgPSBidF9jb250ZXh0X2FkZF90cmFjZShjdHgsICIvaG9tZS9hbGV4L3RyYWNlL2ZmbXBl
-Zy9rZXJuZWwvIiwgImN0ZiIsIE5VTEwsIE5VTEwsIE5VTEwpOwo+ID4gCj4gPiAgICAgcmV0dXJu
-IHJldDsKPiA+IAo+ID4gfQo+IAo+IAo+IEkgZ290IHRoZSBmb2xsb3dpbmcgZXJyb3IgbWVzc2Fn
-ZToKPiAKPiA+IFtlcnJvcl0gW0NvbnRleHRdIEZvcm1hdCAiY3RmIiB1bmtub3duLgoKSXQgc291
-bmRzIGxpa2UgYSBsaW5raW5nIHByb2JsZW0sIHRyeSB0byBjb21waWxlIHdpdGggdGhpcywgaXQg
-c2hvdWxkCndvcms6CmdjYyAtbyBhIGEuYyAtbGJhYmVsdHJhY2UgLVdsLC0tbm8tYXMtbmVlZGVk
-IC1sYmFiZWx0cmFjZS1jdGYKCkkgZG9uJ3Qga25vdyBpZiB0aGVyZSBpcyBhIGNsZWFuZXIgc29s
-dXRpb24sIG90aGVycyB3aWxsIGtub3cuCgpCYWJlbHRyYWNlIGRpc2NvdmVycyBpdHMgc3VwcG9y
-dGVkIGZvcm1hdHMgd2l0aCB0aGUgbGlicmFyaWVzIGxvYWRlZAp3aGVuIHRoZSBwcm9ncmFtIHN0
-YXJ0cy4KCkp1bGllbgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
-dHA6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+If an application exits between the moment we create the ust app session
+(shadow copy) and the moment we send channels to the application,
+sending channels may fail. If the application unregisters between the
+the end of ust app session creation and the destroy that follows (ust
+app session lock is released in between), we may see is_sent being
+false.
+
+This assert was initially there in the early days of lttng-tools when
+the application was responsible for doing the flush. Now that the flush
+has been moved to the consumer daemon, we don't need this assertion
+anymore.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ src/bin/lttng-sessiond/ust-app.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/bin/lttng-sessiond/ust-app.c b/src/bin/lttng-sessiond/ust-app.c
+index 8c45a89..160a156 100644
+--- a/src/bin/lttng-sessiond/ust-app.c
++++ b/src/bin/lttng-sessiond/ust-app.c
+@@ -4469,7 +4469,6 @@ int ust_app_flush_app_session(struct ust_app *app,
+ 		cds_lfht_for_each_entry(ua_sess->channels->ht, &iter.iter, ua_chan,
+ 				node.node) {
+ 			health_code_update();
+-			assert(ua_chan->is_sent);
+ 			ret = consumer_flush_channel(socket, ua_chan->key);
+ 			if (ret) {
+ 				ERR("Error flushing consumer channel");
+-- 
+2.1.4
