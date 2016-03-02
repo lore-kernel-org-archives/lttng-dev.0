@@ -1,8 +1,8 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Crash on first run of target
-	using	liblttng-ust-cyg-profile.so, but subsequent runs succeed
-Date: Wed, 2 Mar 2016 09:31:58 +0000 (UTC)
-Message-ID: <2125231072.14430.1456911118257.JavaMail.zimbra__14240.303313318$1456911216$gmane$org@efficios.com>
+From: Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: Crash on first run of target using
+ liblttng-ust-cyg-profile.so, but subsequent runs succeed
+Date: Wed, 2 Mar 2016 10:36:21 +0100 (CET)
+Message-ID: <alpine.DEB.2.11.1603021031190.3638__19944.4563863382$1456911516$gmane$org@nanos>
 References: <CAL90rL8u1_3ifDL2QzrqrQMp3+68PhOsMfgdsYhceoLX__MAJw@mail.gmail.com>
  <1762935886.18108.1455296549954.JavaMail.zimbra@efficios.com>
  <609823872.18327.1455308463772.JavaMail.zimbra@efficios.com>
@@ -11,15 +11,16 @@ References: <CAL90rL8u1_3ifDL2QzrqrQMp3+68PhOsMfgdsYhceoLX__MAJw@mail.gmail.com>
  <1933334349.12963.1456854319891.JavaMail.zimbra@efficios.com>
  <CY1PR0301MB07635CCFD4971647764B76F18DBB0@CY1PR0301MB0763.namprd03.prod.outlook.com>
  <735015272.14286.1456881983409.JavaMail.zimbra@efficios.com>
+ <2125231072.14430.1456911118257.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from www.linutronix.de ([62.245.132.108] helo=Galois.linutronix.de)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1ab38i-0000bn-7E
- for lttng-dev@lists.lttng.org; Wed, 02 Mar 2016 04:32:22 -0500
-In-Reply-To: <735015272.14286.1456881983409.JavaMail.zimbra@efficios.com>
+ (envelope-from <tglx@linutronix.de>) id 1ab3Dz-0000f2-2k
+ for lttng-dev@lists.lttng.org; Wed, 02 Mar 2016 04:37:44 -0500
+In-Reply-To: <2125231072.14430.1456911118257.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -28,193 +29,121 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Michael Simons <Michael.Simons@microsoft.com>, Thomas Gleixner <tglx@linutronix.de>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Michael Simons <Michael.Simons@microsoft.com>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT24gTWFyIDEsIDIwMTYsIGF0IDg6MjYgUE0sIE1hdGhpZXUgRGVzbm95ZXJzIG1hdGhp
-ZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbSB3cm90ZToKCj4gLS0tLS0gT24gTWFyIDEsIDIwMTYs
-IGF0IDE6NTAgUE0sIE1pY2hhZWwgU2ltb25zIChWSVNVQUwgU1RVRElPKQo+IE1pY2hhZWwuU2lt
-b25zQG1pY3Jvc29mdC5jb20gd3JvdGU6Cj4gCj4+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0t
-Cj4+IEZyb206IE1hdGhpZXUgRGVzbm95ZXJzIFttYWlsdG86bWF0aGlldS5kZXNub3llcnNAZWZm
-aWNpb3MuY29tXQo+PiBTZW50OiBUdWVzZGF5LCBNYXJjaCAxLCAyMDE2IDExOjQ1IEFNCj4+IFRv
-OiBNaWNoYWVsIFNpbW9ucyAoVklTVUFMIFNUVURJTykgPE1pY2hhZWwuU2ltb25zQG1pY3Jvc29m
-dC5jb20+OyBNaWNoYWVsCj4+IEplYW5zb24gPG1qZWFuc29uQGVmZmljaW9zLmNvbT4KPj4gQ2M6
-IGx0dG5nLWRldiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4KPj4gU3ViamVjdDogUmU6IFts
-dHRuZy1kZXZdIENyYXNoIG9uIGZpcnN0IHJ1biBvZiB0YXJnZXQgdXNpbmcKPj4gbGlibHR0bmct
-dXN0LWN5Zy1wcm9maWxlLnNvLCBidXQgc3Vic2VxdWVudCBydW5zIHN1Y2NlZWQKPj4gCj4+IC0t
-LS0tIE9uIE1hciAxLCAyMDE2LCBhdCAxMTozNSBBTSwgTWljaGFlbCBtc2ltb25zQG1pY3Jvc29m
-dC5jb20gd3JvdGU6Cj4+IAo+Pj4gTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJz
-IDxhdD4KPj4+IGh0dHBzOi8vbmEwMS5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/
-dXJsPWVmZmljaW9zLmNvbSZkYXRhPTAxJTdjMDElN2NNaWNoYWVsLlNpbW9ucyU0MG1pY3Jvc29m
-dC5jb20lN2NiZDFiOGUwNmRjYjA0ZWIzODc4YzA4ZDM0MWY5NGExYyU3YzcyZjk4OGJmODZmMTQx
-YWY5MWFiMmQ3Y2QwMTFkYjQ3JTdjMSZzZGF0YT04cmRQU3RSMGM3Z0phZ3RuTVNWTlZpT3RRY3Qw
-V3gzUnV4b3Z4QkxCRlY0JTNkPgo+Pj4gd3JpdGVzOgo+Pj4gCj4+Pj4gCj4+Pj4gCj4+Pj4gCj4+
-Pj4gCj4+Pj4gLS0tLS0gT24gRmViIDEyLCAyMDE2LCBhdCAzOjIxIFBNLCBNYXRoaWV1IERlc25v
-eWVycwo+Pj4gPG1hdGhpZXUuZGVzbm95ZXJzIDxhdD4KPj4+IGh0dHBzOi8vbmEwMS5zYWZlbGlu
-a3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWVmZmljaW9zLmNvbSZkYXRhPTAxJTdjMDEl
-N2NNaWNoYWVsLlNpbW9ucyU0MG1pY3Jvc29mdC5jb20lN2NiZDFiOGUwNmRjYjA0ZWIzODc4YzA4
-ZDM0MWY5NGExYyU3YzcyZjk4OGJmODZmMTQxYWY5MWFiMmQ3Y2QwMTFkYjQ3JTdjMSZzZGF0YT04
-cmRQU3RSMGM3Z0phZ3RuTVNWTlZpT3RRY3QwV3gzUnV4b3Z4QkxCRlY0JTNkPgo+Pj4gd3JvdGU6
-Cj4+Pj4gCj4+Pj4gLS0tLS0gT24gRmViIDEyLCAyMDE2LCBhdCAxMjowMiBQTSwgTWF0aGlldSBE
-ZXNub3llcnMKPj4+IDxtYXRoaWV1LmRlc25veWVycyA8YXQ+Cj4+PiBodHRwczovL25hMDEuc2Fm
-ZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1lZmZpY2lvcy5jb20mZGF0YT0wMSU3
-YzAxJTdjTWljaGFlbC5TaW1vbnMlNDBtaWNyb3NvZnQuY29tJTdjYmQxYjhlMDZkY2IwNGViMzg3
-OGMwOGQzNDFmOTRhMWMlN2M3MmY5ODhiZjg2ZjE0MWFmOTFhYjJkN2NkMDExZGI0NyU3YzEmc2Rh
-dGE9OHJkUFN0UjBjN2dKYWd0bk1TVk5WaU90UWN0MFd4M1J1eG92eEJMQkZWNCUzZD4KPj4+IHdy
-b3RlOgo+Pj4+IAo+Pj4+IAo+Pj4+IC0tLS0gT24gRmViIDExLCAyMDE2LCBhdCA5OjAxIEFNLCBT
-ZWFuIEhlZWxhbiA8c2VhbmhlZWxhbiA8YXQ+Cj4+PiBodHRwczovL25hMDEuc2FmZWxpbmtzLnBy
-b3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1nbWFpbC5jb20mZGF0YT0wMSU3YzAxJTdjTWljaGFl
-bC5TaW1vbnMlNDBtaWNyb3NvZnQuY29tJTdjYmQxYjhlMDZkY2IwNGViMzg3OGMwOGQzNDFmOTRh
-MWMlN2M3MmY5ODhiZjg2ZjE0MWFmOTFhYjJkN2NkMDExZGI0NyU3YzEmc2RhdGE9d2QlMmZ2OHJw
-VkR2TjVZM2NCbGRYbjNna1BKTk1ZSFluVDdXRTVsTEgwZnZJJTNkPgo+Pj4gd3JvdGU6Cj4+Pj4g
-Cj4+Pj4gSGkgYWxsLEkgYW0gcnVubmluZyBhIHRhcmdldCB3aXRoaW4gYSBEb2NrZXIgaW5zdGFu
-Y2UsIGFuZCB0cmFjaW5nCj4+PiBmdW5jdGlvbiBleGVjdXRpb24gdXNpbmcgdGhlIGxhdGVzdCBM
-VFRuZyByZWxlYXNlICgyLjcpLiBUaGUgY29tbWFuZHMKPj4+IEkgYW0gaXNzdWluZyBsb29rIGFz
-IGZvbGxvd3M6Cj4+Pj4gLS0tLQo+Pj4+IAo+Pj4+IAo+Pj4+IGx0dG5nIGNyZWF0ZSBjY19zZXNz
-aW9uIC1vIGJsYQo+Pj4+IGx0dG5nIGVuYWJsZS1ldmVudCAtLXVzZXJzcGFjZSBsdHRuZ191c3Rf
-Y3lnX3Byb2ZpbGU6ZnVuY19lbnRyeSBsdHRuZwo+Pj4+IHN0YXJ0IExEX1BSRUxPQUQ9bGlibHR0
-bmctdXN0LWN5Zy1wcm9maWxlLnNvIHRhcmdldCBsdHRuZyBzdG9wIGx0dG5nCj4+Pj4gZGVzdHJv
-eQo+Pj4+IC0tLS0KPj4+PiAKPj4+PiBXaGVuIHRoZSB0YXJnZXQgaXMgZXhlY3V0ZWQgaXQgYWJv
-cnRzIHdpdGggdGhlIGZvbGxvd2luZyBlcnJvcjoKPj4+PiAtLS0tCj4+Pj4gcGhwOiBsdHRuZy11
-c3QtY29tbS5jOjE1ODI6IGx0dG5nX3VzdF9pbml0OiBBc3NlcnRpb24gYCFyZXQnIGZhaWxlZC4K
-Pj4+PiAKPj4+PiAtLS0tCj4+Pj4gSWYgSSByZXJ1biB0aGUgY29tbWFuZCBpdCB0aGVuIHdvcmtz
-IGZpbmUuIEluIGZhY3QsIHNpbXBseSBkb2luZyB0aGUKPj4+IGZvbGxvd2luZyB3aXRoaW4gdGhl
-IERvY2tlciBjb250YWluZXIgZGVtb25zdHJhdGVzIHRoZSBpc3N1ZToKPj4+PiAtLS0tCj4+Pj4g
-Cj4+Pj4gTERfUFJFTE9BRD1saWJsdHRuZy11c3QtY3lnLXByb2ZpbGUuc28gbHMKPj4+PiBMRF9Q
-UkVMT0FEPWxpYmx0dG5nLXVzdC1jeWctcHJvZmlsZS5zbyBscwo+Pj4+IAo+Pj4+IC0tLS0KPj4+
-PiBUaGUgZmlyc3QgJ2xzJyB3aWxsIGZhaWwgYXQgdGhlIHNhbWUgcG9pbnQgbWVudGlvbmVkIGFi
-b3ZlLCB3aGlsZSB0aGUKPj4+IHNlY29uZCB3aWxsIHN1Y2NlZWQuIE9mZiB0aGUgdG9wIG9mIG15
-IGhlYWQgSSdtIHN0cnVnZ2xpbmcgdG8gY29tZSB1cAo+Pj4gd2l0aCBhbiBleHBsYW5hdGlvbiBh
-cyB0byB3aGF0IGltcGFjdCB0aGUgZmlyc3QgZXhlY3V0aW9uIHVzaW5nCj4+PiBMRF9QUkVMT0FE
-IHdvdWxkIGhhdmUgb24gdGhlIHNlY29uZC4gRG9lcyBpdCBpbXBhY3QgYSBzaGFyZWQgbGliIGNh
-Y2hlCj4+PiBpbiBzb21lIHdheSwgd2hpY2ggSSdtIHVuYXdhcmUgb2Y/Cj4+Pj4gQW55IGFzc2lz
-dGFuY2Ugd291bGQgYmUgYXBwcmVjaWF0ZWQhCj4+Pj4gCj4+Pj4gSXQgYXBwZWFycyB0aGF0IHNl
-bV90aW1lZHdhaXQoKSByZXR1cm5zIGFuIHVuZXhwZWN0ZWQgZXJyb3IuCj4+Pj4gCj4+Pj4gQ2Fu
-IHlvdSBhZGQgYSBFUlJPUigic2VtX3RpbWVkd2FpdCIpOyBqdXN0IGJlZm9yZSB0aGUgYXNzZXJ0
-IGF0IGxpbmUKPj4+IDE1ODIgaW4geW91ciBsaWJsdHRuZy11c3QvbHR0bmctdXN0LWNvbW0uYwo+
-Pj4+IAo+Pj4+IGFuZCBzaG93IHVzIHRoZSBvdXRwdXQgPwo+Pj4+IAo+Pj4+IEFsc28sIHdoYXQg
-aXMgdGhlIHZhbHVlIG9mIHlvdXIgTFRUTkdfVVNUX1JFR0lTVEVSX1RJTUVPVVQgZW52LiB2YXIu
-ID8KPj4+PiAKPj4+PiAKPj4+PiBBbHNvLCB3aGF0IGFyY2hpdGVjdHVyZSwgTGludXggZGlzdHJp
-YnV0aW9uLCBhbmQga2VybmVsCj4+Pj4gCj4+Pj4gdmVyc2lvbiBhcmUgeW91IHVzaW5nID8KPj4+
-PiAKPj4+PiAKPj4+PiAKPj4+PiBJIHB1c2hlZCB0aGUgZm9sbG93aW5nIGZpeCBpbiBsdHRuZy11
-c3Q6Cj4+Pj4gCj4+Pj4gCj4+Pj4gY29tbWl0IDVjZjgxZDUzZTMwNWM4MTUxN2U0OGUwZGM5MTYy
-MGE5MTZjZGMwY2NBdXRob3I6IE1hdGhpZXUKPj4+IERlc25veWVycyA8bWF0aGlldS5kZXNub3ll
-cnMgPGF0Pgo+Pj4gaHR0cHM6Ly9uYTAxLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2suY29t
-Lz91cmw9ZWZmaWNpb3MuY29tJmRhdGE9MAo+Pj4gMSU3YzAxJTdjTWljaGFlbC5TaW1vbnMlNDBt
-aWNyb3NvZnQuY29tJTdjYmQxYjhlMDZkY2IwNGViMzg3OGMwOGQzNDFmOQo+Pj4gNGExYyU3Yzcy
-Zjk4OGJmODZmMTQxYWY5MWFiMmQ3Y2QwMTFkYjQ3JTdjMSZzZGF0YT04cmRQU3RSMGM3Z0phZ3Ru
-TVNWTgo+Pj4gVmlPdFFjdDBXeDNSdXhvdnhCTEJGVjQlM2Q+RGF0ZTrCoMKgIEZyaSBGZWIgMTIK
-Pj4+IDE1OjQ0OjEwIDIwMTYgLTA1MDDCoMKgwqAgRml4OiBoYW5kbGUgbmVnYXRpdmUgcmFuZ2Ug
-Zm9yCj4+PiBMVFROR19VU1RfUkVHSVNURVJfVElNRU9VVMKgwqAgwqDCoMKgwqAgV2Ugc2hvdWxk
-IG5vdCBjb25zaWRlciB2YWx1ZXMgYmVsb3cKPj4+IC0xIGFzIHZhbGlkIHRpbWVvdXQgdmFsdWVz
-LCB0aGlzIGlzwqDCoMKgIGlzIHVuZXhwZWN0ZWQgYW5kIGNvdWxkIGxlYWQgdG8KPj4+IEVJTlZB
-TCBlcnJvcnMgcmV0dXJuZWQgYnkgc2VtX3RpbWVkd2FpdC7CoMKgIMKgwqDCoMKgIFNpZ25lZC1v
-ZmYtYnk6IE1hdGhpZXUKPj4+IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnMgPGF0Pgo+Pj4g
-aHR0cHM6Ly9uYTAxLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2suY29tLz91cmw9ZWZmaWNp
-b3MuY29tJmRhdGE9MAo+Pj4gMSU3YzAxJTdjTWljaGFlbC5TaW1vbnMlNDBtaWNyb3NvZnQuY29t
-JTdjYmQxYjhlMDZkY2IwNGViMzg3OGMwOGQzNDFmOQo+Pj4gNGExYyU3YzcyZjk4OGJmODZmMTQx
-YWY5MWFiMmQ3Y2QwMTFkYjQ3JTdjMSZzZGF0YT04cmRQU3RSMGM3Z0phZ3RuTVNWTgo+Pj4gVmlP
-dFFjdDBXeDNSdXhvdnhCTEJGVjQlM2Q+Cj4+Pj4gCj4+Pj4gCj4+Pj4gTGV0IG1lIGtub3cgaWYg
-aXQgaGVscHMsCj4+Pj4gCj4+Pj4gCj4+Pj4gVGhhbmtzLAo+Pj4+IAo+Pj4+IAo+Pj4+IE1hdGhp
-ZXUKPj4+PiAKPj4+IAo+Pj4gSSBhbSBzZWVpbmcgdGhlIHNhbWUgaXNzdWUgdGhhdCBTZWFuIG9y
-aWdpbmFsbHkgcmVwb3J0ZWQgd2l0aGluIERvY2tlcgo+Pj4gd2l0aCB0aGUgbGF0ZXN0IGZpeCBN
-YXRoaWV1IG1hZGUuICBTZXR0aW5nIExUVE5HX1VTVF9SRUdJU1RFUl9USU1FT1VUCj4+PiB0byBh
-bnkgcG9zaXRpdmUgbnVtYmVyIGNhdXNlIHRoZSBhc3NlcnQgdG8gZmFpbC4gVGhpcyBiZWhhdmlv
-ciBjaGFuZ2UKPj4+IGFwcGVhcnMgdG8gaGF2ZSBiZWVuIGludHJvZHVjZWQgd2l0aCBEb2NrZXIg
-MS4xMC4yLiAgSSBsb2dnZWQgYSBEb2NrZXIKPj4+IGlzc3VlIGZvciB0aGlzIC0gaHR0cHM6Ly9n
-aXRodWIuY29tL2RvY2tlci9kb2NrZXIvaXNzdWVzLzIwODE4Lgo+PiAKPj4gVGhpcyBpcyByZWFs
-bHkgd2VpcmQuIEl0IGxvb2tzIGxpa2UgdGhlIGZ1dGV4IHN5c3RlbSBjYWxsIHdvdWxkIGJlIGJs
-YWNrbGlzdGVkCj4+IGZvciBzb21lIHJlYXNvbiwgd2hpY2ggaXMgcmVhbGx5IHVuZXhwZWN0ZWQu
-IFRoaXMgYXNzZXJ0IHdhcyBkdWUgdG8gYW4KPj4gdW5leHBlY3RlZCByZXR1cm4gdmFsdWUgZnJv
-bSBzZW1fdGltZWR3YWl0Lgo+PiAKPj4gTWljaGFlbCBKZWFuc29uIHdpbGwgZG8gc29tZSB0ZXN0
-aW5nIHdpdGggc2VjY29tcCBhbmQgbHR0bmctdXN0Lgo+PiBXZSdsbCB0cnkgdG8gY29uZmlybSB3
-aGljaCBzeXN0ZW0gY2FsbHMgbHR0bmctdXN0IGlzIHVzaW5nIHdoZW4gdHJhY2luZyBpcwo+PiBh
-Y3RpdmUgYW5kIGluYWN0aXZlLCBzbyB3ZSBjYW4gcHJvdmlkZSBhIHN5c3RlbSBjYWxsIGRlcGVu
-ZGVuY3kgbGlzdCB0byBvdXIKPj4gdXNlcnMuCj4+IAo+PiBXZSdsbCBhbHNvIHJldmlzaXQgdGhl
-IGZhaWx1cmUgbW9kZXMgZm9yIHVuYXZhaWxhYmxlIHN5c3RlbSBjYWxsczoKPj4gd2Ugc2hvdWxk
-IG5vdCBhc3NlcnQsIGJ1dCByYXRoZXIgcHJpbnQgYW4gZXJyb3IgdG8gdGhlIHVzZXIsIGFuZCBi
-YWlsIG91dC4KPj4gCj4+IElmIHlvdSBjYW4gc2hhcmUgd2l0aCB1cyB0aGUgZ2xpYmMgdmVyc2lv
-biB5b3UgYXJlIHVzaW5nLCBhbmQgdGhlIHNlY2NvbXAKPj4gd2hpdGVsaXN0IHlvdXIgZG9ja2Vy
-IGVudmlyb25tZW50IGlzIHVzaW5nLCBpdCB3b3VsZCBiZSB2ZXJ5IGhlbHBmdWwgaW4KPj4gcmVw
-cm9kdWNpbmcgdGhlIGlzc3VlLgo+PiAKPj4gVGhhbmtzLAo+PiAKPj4gTWF0aGlldQo+PiAKPj4g
-Cj4+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+Pj4g
-bHR0bmctZGV2IG1haWxpbmcgbGlzdAo+Pj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+Pj4g
-aHR0cHM6Ly9uYTAxLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2suY29tLz91cmw9aHR0cCUz
-YSUyZiUyZmxpc3RzLgo+Pj4gbHR0bmcub3JnJTJmY2dpLWJpbiUyZm1haWxtYW4lMmZsaXN0aW5m
-byUyZmx0dG5nLWRldiZkYXRhPTAxJTdjMDElN2NNaQo+Pj4gY2hhZWwuU2ltb25zJTQwbWljcm9z
-b2Z0LmNvbSU3Y2JkMWI4ZTA2ZGNiMDRlYjM4NzhjMDhkMzQxZjk0YTFjJTdjNzJmOQo+Pj4gODhi
-Zjg2ZjE0MWFmOTFhYjJkN2NkMDExZGI0NyU3YzEmc2RhdGE9Y3BuQVRWVjB6bXdHZkZyRmI0ZXJV
-aG9OVllSNDNvYQo+Pj4gV3RUOXBRWkNUdW5VJTNkCj4+IAo+PiAtLQo+PiBNYXRoaWV1IERlc25v
-eWVycwo+PiBFZmZpY2lPUyBJbmMuCj4+IGh0dHBzOi8vbmEwMS5zYWZlbGlua3MucHJvdGVjdGlv
-bi5vdXRsb29rLmNvbS8/dXJsPWh0dHAlM2ElMmYlMmZ3d3cuZWZmaWNpb3MuY29tJmRhdGE9MDEl
-N2MwMSU3Y01pY2hhZWwuU2ltb25zJTQwbWljcm9zb2Z0LmNvbSU3Y2JkMWI4ZTA2ZGNiMDRlYjM4
-NzhjMDhkMzQxZjk0YTFjJTdjNzJmOTg4YmY4NmYxNDFhZjkxYWIyZDdjZDAxMWRiNDclN2MxJnNk
-YXRhPUdGa1lBRFB4ejNGVXRtbWRMVEI4NDVwRHd5azRRc3FrM0xnenZYeVRsVjglM2QKPj4gCj4+
-IFRoYW5rcyBmb3IgdGhlIHJlc3BvbnNlIE1hdGhpZXUuCj4+IAo+PiBUaGUgZGVwZW5kZW5jeSBs
-aXN0IHdpbGwgYmUgdmVyeSBoZWxwZnVsIGZvciBEb2NrZXIgdXNlcnMuICBBZGRpdGlvbmFsbHks
-Cj4+IGdldHRpbmcgYSBiZXR0ZXIgZGlhZ25vc3RpYyAoZXJyb3IgbWVzc2FnZSkgZXhwZXJpZW5j
-ZSBzb3VuZHMgZ3JlYXQuCj4+IAo+PiBIZXJlIGFyZSB0aGUgdHdvIHRoaW5ncyB5b3UgcmVxdWVz
-dGVkOgo+PiAKPj4gZ2xpYmMgdmVyc2lvbjoKPj4gcm9vdEBiM2YwZTZlZGY0NWI6LyMgbGRkIC0t
-dmVyc2lvbgo+PiBsZGQgKFVidW50dSBFR0xJQkMgMi4xOS0wdWJ1bnR1Ni42KSAyLjE5Cj4+IENv
-cHlyaWdodCAoQykgMjAxNCBGcmVlIFNvZnR3YXJlIEZvdW5kYXRpb24sIEluYy4KPj4gVGhpcyBp
-cyBmcmVlIHNvZnR3YXJlOyBzZWUgdGhlIHNvdXJjZSBmb3IgY29weWluZyBjb25kaXRpb25zLsKg
-IFRoZXJlIGlzIE5PCj4+IHdhcnJhbnR5OyBub3QgZXZlbiBmb3IgTUVSQ0hBTlRBQklMSVRZIG9y
-IEZJVE5FU1MgRk9SIEEgUEFSVElDVUxBUiBQVVJQT1NFLgo+PiBXcml0dGVuIGJ5IFJvbGFuZCBN
-Y0dyYXRoIGFuZCBVbHJpY2ggRHJlcHBlci4KPj4gCj4+IFNlY2NvbXAgd2hpdGVsaXN0Ogo+PiBI
-ZXJlIGlzIHRoZSBkZWZhdWx0IGRvY2tlciBzZWNjb21wIGNvbmZpZ3VyYXRpb24gLQo+PiBodHRw
-czovL2dpdGh1Yi5jb20vZG9ja2VyL2RvY2tlci9ibG9iL21hc3Rlci9wcm9maWxlcy9zZWNjb21w
-L2RlZmF1bHQuanNvbgo+PiAKPj4gVGhlIERvY2tlciBkb2N1bWVudGF0aW9uIGhlcmUgbGlzdCB3
-aGljaCBzeXNjYWxscyBhcmUgaW1wbGljaXRseSBibG9ja2VkIChieSBub3QKPj4gYmVpbmcgb24g
-dGhlIHdoaXRlbGlzdCkgYW5kIHRoZSByZWFzb24gZm9yIGl0IC0KPj4gaHR0cHM6Ly9naXRodWIu
-Y29tL2RvY2tlci9kb2NrZXIvYmxvYi9tYXN0ZXIvZG9jcy9zZWN1cml0eS9zZWNjb21wLm1kCj4+
-IAo+PiBMZXQgbWUga25vdyBpZiB5b3UgbmVlZCBhbnl0aGluZyBlbHNlLgo+IAo+IEhybSwgd2Ug
-Zm91bmQgdGhlIGN1bHByaXQsIGFuZCBpdCBzZWVtcyB0byBiZSBhbiAiaW50ZXJlc3RpbmciCj4g
-cmFiYml0IGhvbGUuCj4gCj4gQ29tcGFyaW5nIHN0cmFjZSBvZiBhIHNpbXBsZSBhcHBsaWNhdGlv
-biB3aXRoIGx0dG5nLXVzdAo+ICh0cmFjaW5nIG5vdCBlbmFibGVkKSB3aXRoIHRoZSBVU1QgcmVn
-aXN0ZXIgdGltZW91dCBhdAo+IC0xIGFuZCAzMDAwOgo+IAo+IExUVE5HX1VTVF9SRUdJU1RFUl9U
-SU1FT1VUPS0xCj4gW3BpZCAgICAyM10gc2V0X3JvYnVzdF9saXN0KDB4N2ZiMzIwNDdjOWUwLCAy
-NCkgPSAwCj4gW3BpZCAgICAyM10gdW1hc2soMDM3Nzc3Nzc3MTM3KSAgICAgICAgID0gMDIyCj4g
-W3BpZCAgICAyM10gb3BlbigweDdmYjMyMDQ3YjJkMCwgT19SRFdSfE9fQ1JFQVR8T19OT0ZPTExP
-V3xPX0NMT0VYRUMsIDA2NDApID0gMwo+IFtwaWQgICAgMjNdIGZ0cnVuY2F0ZSgzLCA0MDk2KSAg
-ICAgICAgICA9IDAKPiBbcGlkICAgIDIzXSBleGl0X2dyb3VwKDApICAgICAgICAgICAgICAgPSA/
-Cj4gW3BpZCAgICAyM10gKysrIGV4aXRlZCB3aXRoIDAgKysrCj4gW3BpZCAgICAyMF0gPC4uLiBm
-dXRleCByZXN1bWVkPiApICAgICAgID0gPyBFUkVTVEFSVFNZUyAoVG8gYmUgcmVzdGFydGVkIGlm
-Cj4gU0FfUkVTVEFSVCBpcyBzZXQpCj4gW3BpZCAgICAyMF0gLS0tIFNJR0NITEQge3NpX3NpZ25v
-PVNJR0NITEQsIHNpX2NvZGU9Q0xEX0VYSVRFRCwgc2lfcGlkPTIzLAo+IHNpX3N0YXR1cz0wLCBz
-aV91dGltZT0wLCBzaV9zdGltZT0wfSAtLS0KPiBbcGlkICAgIDIwXSBmdXRleCgweDdmYjMyMWY2
-ZTAwMCwgRlVURVhfV0FJVF9QUklWQVRFLCAwLCBOVUxMIDx1bmZpbmlzaGVkIC4uLj4KPiAKPiBk
-ZWZhdWx0ICgzMDAwKQo+IFtwaWQgICAgMjNdIHNldF9yb2J1c3RfbGlzdCgweDdmNGRkYWFkNzll
-MCwgMjQpID0gMAo+IFtwaWQgICAgMjNdIHVtYXNrKDAzNzc3Nzc3NzEzNykgICAgICAgICA9IDAy
-Mgo+IFtwaWQgICAgMjNdIG9wZW4oMHg3ZjRkZGFhZDYyZDAsIE9fUkRXUnxPX0NSRUFUfE9fTk9G
-T0xMT1d8T19DTE9FWEVDLCAwNjQwKSA9IDMKPiBbcGlkICAgIDIzXSBmdHJ1bmNhdGUoMywgNDA5
-NikgICAgICAgICAgPSAwCj4gW3BpZCAgICAyM10gZXhpdF9ncm91cCgwKSAgICAgICAgICAgICAg
-ID0gPwo+IFtwaWQgICAgMjNdICsrKyBleGl0ZWQgd2l0aCAwICsrKwo+IFtwaWQgICAgMjBdIDwu
-Li4gZnV0ZXggcmVzdW1lZD4gKSAgICAgICA9ID8gRVJFU1RBUlRfUkVTVEFSVEJMT0NLIChJbnRl
-cnJ1cHRlZAo+IGJ5IHNpZ25hbCkKPiBbcGlkICAgIDIwXSAtLS0gU0lHQ0hMRCB7c2lfc2lnbm89
-U0lHQ0hMRCwgc2lfY29kZT1DTERfRVhJVEVELCBzaV9waWQ9MjMsCj4gc2lfc3RhdHVzPTAsIHNp
-X3V0aW1lPTAsIHNpX3N0aW1lPTB9IC0tLQo+IFsgUHJvY2VzcyBQSUQ9MjAgcnVucyBpbiB4MzIg
-bW9kZS4gXQo+IFsgUHJvY2VzcyBQSUQ9MjAgcnVucyBpbiA2NCBiaXQgbW9kZS4gXQo+IFtwaWQg
-ICAgMjBdIHdyaXRlKDIsIDB4N2ZmY2QxMzRjOGUwLCA2OGxzOiBsdHRuZy11c3QtY29tbS5jOjE1
-ODU6Cj4gbHR0bmdfdXN0X2luaXQ6IEFzc2VydGlvbiBgIXJldCcgZmFpbGVkLgo+IAo+IFRoZSBk
-aWZmZXJlbmNlIGhlcmUgaXMgdGhhdCB3aXRoIGEgcG9zaXRpdmUgTFRUTkdfVVNUX1JFR0lTVEVS
-X1RJTUVPVVQKPiB2YWx1ZSwgd2UgdXNlIHNlbV90aW1lZHdhaXQoKSwgd2hpY2ggYmVoYXZlcyBk
-aWZmZXJlbnRseSB0aGFuCj4gc2VtX3dhaXQoKSB3aXRoIHJlc3BlY3QgdG8gcmVzdGFydGluZyB3
-aGVuIGhpdCBieSBhIHNpZ25hbDoKPiBpdCB1c2VzIHN5c19yZXN0YXJ0X3N5c2NhbGwoKSAod2hp
-Y2ggaXMgdXNlZCB3aGVuIEVSRVNUQVJUX1JFU1RBUlRCTE9DSwo+IGlzIHJlY2VpdmVkKS4KPiAK
-PiBVbmZvcnR1bmF0ZWx5LCBkb2NrZXIgZGVjaWRlZCB0byBibGFja2xpc3QgdGhpcyBjb3JlIHN5
-c3RlbSBjYWxsOgo+IGh0dHBzOi8vZ2l0aHViLmNvbS9kb2NrZXIvZG9ja2VyL2Jsb2IvbWFzdGVy
-L2RvY3Mvc2VjdXJpdHkvc2VjY29tcC5tZAo+IAo+IHJlc3RhcnRfc3lzY2FsbCAJRG9uJ3QgYWxs
-b3cgY29udGFpbmVycyB0byByZXN0YXJ0IGEgc3lzY2FsbC4gUG9zc2libGUgc2VjY29tcAo+IGJ5
-cGFzcyBzZWU6IGh0dHBzOi8vY29kZS5nb29nbGUuY29tL3AvY2hyb21pdW0vaXNzdWVzL2RldGFp
-bD9pZD00MDg4MjcuCj4gCj4gU29tZW9uZSBzaG91bGQgYXNrIHRoZW0gd2h5IHRoZXkgcmVhbGx5
-IGhhdmUgdG8gYmxhY2tsaXN0IHRoaXMsIHNpbmNlIGl0Cj4gd2lsbCBsZWFkIHRvIHZhcmlvdXMg
-cmFjZXMgd2l0aCByZXNwZWN0IHRvIHNpZ25hbCBoYW5kbGluZyBpbiB0b25zCj4gb2YgYXBwbGlj
-YXRpb25zLiBJdCBsb29rcyBsaWtlIHRoZSB3cm9uZyBmaXggZm9yIGEgc2VjdXJpdHkgY29uY2Vy
-bi4KCkFkZGluZyBUaG9tYXMgR2xlaXhuZXIgaW4gQ0MuCgpNYXRoaWV1Cgo+IAo+IFRoYW5rcywK
-PiAKPiBNYXRoaWV1Cj4gCj4gCj4gLS0KPiBNYXRoaWV1IERlc25veWVycwo+IEVmZmljaU9TIElu
-Yy4KPiBodHRwOi8vd3d3LmVmZmljaW9zLmNvbQoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmlj
-aU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
-aXN0aW5mby9sdHRuZy1kZXYK
+Mathieu,
+
+On Wed, 2 Mar 2016, Mathieu Desnoyers wrote:
+> > The difference here is that with a positive LTTNG_UST_REGISTER_TIMEOUT
+> > value, we use sem_timedwait(), which behaves differently than
+> > sem_wait() with respect to restarting when hit by a signal:
+> > it uses sys_restart_syscall() (which is used when ERESTART_RESTARTBLOCK
+> > is received).
+> > 
+> > Unfortunately, docker decided to blacklist this core system call:
+> > https://github.com/docker/docker/blob/master/docs/security/seccomp.md
+> > 
+> > restart_syscall 	Don't allow containers to restart a syscall. Possible seccomp
+> > bypass see: https://code.google.com/p/chromium/issues/detail?id=408827.
+> > 
+> > Someone should ask them why they really have to blacklist this, since it
+> > will lead to various races with respect to signal handling in tons
+> > of applications. It looks like the wrong fix for a security concern.
+
+Well, it's not a fix. It's just silly. The chromium bug is closed as:
+
+      Closing as WontFix -- no PoC, looks to be unreachable.
+
+Find below my analysis from back then when google reported that. This resulted
+in the commit 849151dd5481b "compat: nanosleep: Clarify error handling" in
+mainline.
+
+So nothing to see here than securuty folks being silly.
+
+Thanks,
+
+	tglx
+
+8<----------------------
+
+> > You're looking at the non-compat case.
+> > COMPAT_SYSCALL_DEFINE2(nanosleep,... in kernel/compat.c only sets up
+> > fn and .compat_rmtp.
+> 
+> Well, it actually sets all fields for the real restart case - because
+> it calls (and depends on) hrtimer_nanosleep() doing the rest.
+> 
+> The problem is that hrtimer_nanosleep() doesn't actually set any of
+> the restart block stuff for the non-restart cases.
+
+Indeed, but it's subtly correct nevertheless for the compat nanosleep
+case.
+
+COMPAT_SYSCALL_DEFINE2(nanosleep, struct compat_timespec __user *, rqtp,
+		       struct compat_timespec __user *, rmtp)
+{
+	struct timespec tu, rmt;
+	long ret;
+
+	if (compat_get_timespec(&tu, rqtp))
+		return -EFAULT;
+
+	ret = hrtimer_nanosleep(&tu,
+				rmtp ? (struct timespec __user *)&rmt : NULL,
+				HRTIMER_MODE_REL, CLOCK_MONOTONIC);
+
+Here is the important stuff:
+
+     hrtimer_nanosleep() is called with two variables on the kernel
+     stack of the calling task: tu and rmt.
+
+     And what's further important it's called with HRTIMER_MODE_REL.
+
+And hrtimer_nanosleep() does:
+
+	if (do_nanosleep())
+	   return 0;
+
+The timer expired, nothing to worry about.
+
+	if (mode == HRTIMER_MODE_ABS) 
+	   return -ERESTARTNOHAND;
+  
+Irrelevant for the compat case, due to mode = HRTIMER_MODE_REL. This
+return code CANNOT happen if called from compat_sys_nanosleep(). If it
+happens, we really don't have to worry about the rest anymore.
+ 	   
+	if (rmtp && update_rmtp())
+	   return -EFAULT;
+
+If that update fails, then we have a way bigger problem than the half
+filled in restart block because "rmtp" is on the kernel stack of the
+calling task.
+
+	fill_restart_block_completely();
+
+	return -ERESTART_RESTARTBLOCK;
+
+So we either return 0 or -ERESTART_RESTARTBLOCK with a completely
+filled in restart block. So the below is correct:
+
+	if (ret) {
+		struct restart_block *restart
+			= &current_thread_info()->restart_block;
+
+		restart->fn = compat_nanosleep_restart;
+		restart->nanosleep.compat_rmtp = rmtp;
+
+		if (rmtp && compat_put_timespec(&rmt, rmtp))
+			return -EFAULT;
+	}
+
+I admit, it's not really obvious, so a cosmetic documentary change is
+definitely due.
+
+Thanks,
+
+	Thomas
+	
