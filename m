@@ -1,15 +1,24 @@
-From: Jeffrey Chen <cpthk@live.com>
-Subject: How to use the log rotation correctly?
-Date: Tue, 1 Mar 2016 23:12:42 +0000
-Message-ID: <CY1PR13MB0778E22DB0AE961A8E37894CC7BB0__13496.5355544866$1456874038$gmane$org@CY1PR13MB0778.namprd13.prod.outlook.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Crash on first run of target
+	using	liblttng-ust-cyg-profile.so, but subsequent runs succeed
+Date: Wed, 2 Mar 2016 01:26:23 +0000 (UTC)
+Message-ID: <735015272.14286.1456881983409.JavaMail.zimbra__33965.5158496045$1456882060$gmane$org@efficios.com>
+References: <CAL90rL8u1_3ifDL2QzrqrQMp3+68PhOsMfgdsYhceoLX__MAJw@mail.gmail.com>
+ <1762935886.18108.1455296549954.JavaMail.zimbra@efficios.com>
+ <609823872.18327.1455308463772.JavaMail.zimbra@efficios.com>
+ <98246560.18416.1455310030702.JavaMail.zimbra@efficios.com>
+ <loom.20160301T172035-353@post.gmane.org>
+ <1933334349.12963.1456854319891.JavaMail.zimbra@efficios.com>
+ <CY1PR0301MB07635CCFD4971647764B76F18DBB0@CY1PR0301MB0763.namprd03.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0512633658=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from snt004-omc2s6.hotmail.com ([65.55.90.81])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <cpthk@live.com>) id 1aatTH-0005kF-2L
- for lttng-dev@lists.lttng.org; Tue, 01 Mar 2016 18:12:53 -0500
-Content-Language: en-US
+ (envelope-from <compudj@efficios.com>) id 1aavYm-0006Ri-3k
+ for lttng-dev@lists.lttng.org; Tue, 01 Mar 2016 20:26:41 -0500
+In-Reply-To: <CY1PR0301MB07635CCFD4971647764B76F18DBB0@CY1PR0301MB0763.namprd03.prod.outlook.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -18,117 +27,184 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "Michael Simons (VISUAL STUDIO)" <Michael.Simons@microsoft.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0512633658==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_CY1PR13MB0778E22DB0AE961A8E37894CC7BB0CY1PR13MB0778namp_"
-
---_000_CY1PR13MB0778E22DB0AE961A8E37894CC7BB0CY1PR13MB0778namp_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-Hi LTTng community:
-
-
-LTTng supports trace rotation by having flags "--tracefile-size", "--tracef=
-ile-count".  What is the correct use case on using the rotation files?
-
-What we want to do is, without stopping the session, and collect the comple=
-ted traces (reached file max size), and output the traces using babeltrace =
-in a loop.
-
-
-While I am trying to implement this, I have noticed that LTTng sometimes wo=
-uld not write the metadata file (file size 0), even the trace files are bei=
-ng rotated off. Without the metadata file, babeltrace would not function. I=
- am wondering whether I am using the trace rotation in the correct way. Is =
-there a way to make sure that when a trace file is being rotated off, metad=
-ata is also flush?
-
-
-I have done some studies on the metadata file. It looks like LTTng is using=
- the stream based metadata file, which would write a packet header for each=
- packet. I noticed some events definitions will be cut off in the middle, t=
-he first half at the previous packet, and second half at the next packet. D=
-o we know when LTTng writes metadata, would it always write the complete ev=
-ents definitions? (i.e. first half and second half of the event definition =
-are BOTH in the metadata file) Would it be possible that LTTng only write t=
-he first half of the definition, and second half will be written in the nex=
-t cycle of the flush. I ask this because, when we collect the traces, the s=
-ession is still running, and I need to confirm metadata file is in the read=
--able state.
-
-
-Thanks.
-
---_000_CY1PR13MB0778E22DB0AE961A8E37894CC7BB0CY1PR13MB0778namp_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style type=3D"text/css" style=3D"display:none;"><!-- P {margin-top:0;margi=
-n-bottom:0;} --></style>
-</head>
-<body dir=3D"ltr">
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;back=
-ground-color:#FFFFFF;font-family:Calibri,Arial,Helvetica,sans-serif;">
-<p>Hi LTTng community:</p>
-<p><br>
-</p>
-<p>LTTng supports trace rotation by having flags &quot;--tracefile-size&quo=
-t;, &quot;--tracefile-count&quot;.&nbsp; What is the correct use case on us=
-ing the rotation files?</p>
-<p>What we want to do is, without stopping the session, and collect the com=
-pleted traces (reached file max size), and output the traces using babeltra=
-ce in a loop.</p>
-<p><br>
-</p>
-<p>While I am trying to implement this, I have noticed that LTTng sometimes=
- would not write the metadata file (file size 0), even the trace files are =
-being rotated off. Without the metadata file, babeltrace would not function=
-. I am wondering whether I am using
- the trace rotation in the correct way. Is there a way to make sure that wh=
-en a trace file is being rotated off, metadata is also flush?</p>
-<p><br>
-</p>
-<p>I have done some studies on the metadata file. It looks like LTTng is us=
-ing the stream based metadata file, which would write a packet header for e=
-ach packet. I noticed some events definitions will be cut off in the middle=
-, the first half at the previous
- packet, and second half at the next packet. Do we know when LTTng writes m=
-etadata, would it always write the complete events definitions? (i.e. first=
- half and second half of the event definition are BOTH in the metadata file=
-) Would it be possible that LTTng
- only write the first half of the definition, and second half will be writt=
-en in the next cycle of the flush. I ask this because, when we collect the =
-traces, the session is still running, and I need to confirm metadata file i=
-s in the read-able state.</p>
-<p><br>
-</p>
-<p>Thanks.<br>
-</p>
-</div>
-</body>
-</html>
-
---_000_CY1PR13MB0778E22DB0AE961A8E37894CC7BB0CY1PR13MB0778namp_--
-
-
---===============0512633658==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============0512633658==--
+LS0tLS0gT24gTWFyIDEsIDIwMTYsIGF0IDE6NTAgUE0sIE1pY2hhZWwgU2ltb25zIChWSVNVQUwg
+U1RVRElPKSBNaWNoYWVsLlNpbW9uc0BtaWNyb3NvZnQuY29tIHdyb3RlOgoKPiAtLS0tLU9yaWdp
+bmFsIE1lc3NhZ2UtLS0tLQo+IEZyb206IE1hdGhpZXUgRGVzbm95ZXJzIFttYWlsdG86bWF0aGll
+dS5kZXNub3llcnNAZWZmaWNpb3MuY29tXQo+IFNlbnQ6IFR1ZXNkYXksIE1hcmNoIDEsIDIwMTYg
+MTE6NDUgQU0KPiBUbzogTWljaGFlbCBTaW1vbnMgKFZJU1VBTCBTVFVESU8pIDxNaWNoYWVsLlNp
+bW9uc0BtaWNyb3NvZnQuY29tPjsgTWljaGFlbAo+IEplYW5zb24gPG1qZWFuc29uQGVmZmljaW9z
+LmNvbT4KPiBDYzogbHR0bmctZGV2IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPgo+IFN1Ympl
+Y3Q6IFJlOiBbbHR0bmctZGV2XSBDcmFzaCBvbiBmaXJzdCBydW4gb2YgdGFyZ2V0IHVzaW5nCj4g
+bGlibHR0bmctdXN0LWN5Zy1wcm9maWxlLnNvLCBidXQgc3Vic2VxdWVudCBydW5zIHN1Y2NlZWQK
+PiAKPiAtLS0tLSBPbiBNYXIgMSwgMjAxNiwgYXQgMTE6MzUgQU0sIE1pY2hhZWwgbXNpbW9uc0Bt
+aWNyb3NvZnQuY29tIHdyb3RlOgo+IAo+PiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNu
+b3llcnMgPGF0Pgo+PiBodHRwczovL25hMDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5j
+b20vP3VybD1lZmZpY2lvcy5jb20mZGF0YT0wMSU3YzAxJTdjTWljaGFlbC5TaW1vbnMlNDBtaWNy
+b3NvZnQuY29tJTdjYmQxYjhlMDZkY2IwNGViMzg3OGMwOGQzNDFmOTRhMWMlN2M3MmY5ODhiZjg2
+ZjE0MWFmOTFhYjJkN2NkMDExZGI0NyU3YzEmc2RhdGE9OHJkUFN0UjBjN2dKYWd0bk1TVk5WaU90
+UWN0MFd4M1J1eG92eEJMQkZWNCUzZD4KPj4gd3JpdGVzOgo+PiAKPj4+IAo+Pj4gCj4+PiAKPj4+
+IAo+Pj4gLS0tLS0gT24gRmViIDEyLCAyMDE2LCBhdCAzOjIxIFBNLCBNYXRoaWV1IERlc25veWVy
+cwo+PiA8bWF0aGlldS5kZXNub3llcnMgPGF0Pgo+PiBodHRwczovL25hMDEuc2FmZWxpbmtzLnBy
+b3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1lZmZpY2lvcy5jb20mZGF0YT0wMSU3YzAxJTdjTWlj
+aGFlbC5TaW1vbnMlNDBtaWNyb3NvZnQuY29tJTdjYmQxYjhlMDZkY2IwNGViMzg3OGMwOGQzNDFm
+OTRhMWMlN2M3MmY5ODhiZjg2ZjE0MWFmOTFhYjJkN2NkMDExZGI0NyU3YzEmc2RhdGE9OHJkUFN0
+UjBjN2dKYWd0bk1TVk5WaU90UWN0MFd4M1J1eG92eEJMQkZWNCUzZD4KPj4gd3JvdGU6Cj4+PiAK
+Pj4+IC0tLS0tIE9uIEZlYiAxMiwgMjAxNiwgYXQgMTI6MDIgUE0sIE1hdGhpZXUgRGVzbm95ZXJz
+Cj4+IDxtYXRoaWV1LmRlc25veWVycyA8YXQ+Cj4+IGh0dHBzOi8vbmEwMS5zYWZlbGlua3MucHJv
+dGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWVmZmljaW9zLmNvbSZkYXRhPTAxJTdjMDElN2NNaWNo
+YWVsLlNpbW9ucyU0MG1pY3Jvc29mdC5jb20lN2NiZDFiOGUwNmRjYjA0ZWIzODc4YzA4ZDM0MWY5
+NGExYyU3YzcyZjk4OGJmODZmMTQxYWY5MWFiMmQ3Y2QwMTFkYjQ3JTdjMSZzZGF0YT04cmRQU3RS
+MGM3Z0phZ3RuTVNWTlZpT3RRY3QwV3gzUnV4b3Z4QkxCRlY0JTNkPgo+PiB3cm90ZToKPj4+IAo+
+Pj4gCj4+PiAtLS0tIE9uIEZlYiAxMSwgMjAxNiwgYXQgOTowMSBBTSwgU2VhbiBIZWVsYW4gPHNl
+YW5oZWVsYW4gPGF0Pgo+PiBodHRwczovL25hMDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9v
+ay5jb20vP3VybD1nbWFpbC5jb20mZGF0YT0wMSU3YzAxJTdjTWljaGFlbC5TaW1vbnMlNDBtaWNy
+b3NvZnQuY29tJTdjYmQxYjhlMDZkY2IwNGViMzg3OGMwOGQzNDFmOTRhMWMlN2M3MmY5ODhiZjg2
+ZjE0MWFmOTFhYjJkN2NkMDExZGI0NyU3YzEmc2RhdGE9d2QlMmZ2OHJwVkR2TjVZM2NCbGRYbjNn
+a1BKTk1ZSFluVDdXRTVsTEgwZnZJJTNkPgo+PiB3cm90ZToKPj4+IAo+Pj4gSGkgYWxsLEkgYW0g
+cnVubmluZyBhIHRhcmdldCB3aXRoaW4gYSBEb2NrZXIgaW5zdGFuY2UsIGFuZCB0cmFjaW5nCj4+
+IGZ1bmN0aW9uIGV4ZWN1dGlvbiB1c2luZyB0aGUgbGF0ZXN0IExUVG5nIHJlbGVhc2UgKDIuNyku
+IFRoZSBjb21tYW5kcwo+PiBJIGFtIGlzc3VpbmcgbG9vayBhcyBmb2xsb3dzOgo+Pj4gLS0tLQo+
+Pj4gCj4+PiAKPj4+IGx0dG5nIGNyZWF0ZSBjY19zZXNzaW9uIC1vIGJsYQo+Pj4gbHR0bmcgZW5h
+YmxlLWV2ZW50IC0tdXNlcnNwYWNlIGx0dG5nX3VzdF9jeWdfcHJvZmlsZTpmdW5jX2VudHJ5IGx0
+dG5nCj4+PiBzdGFydCBMRF9QUkVMT0FEPWxpYmx0dG5nLXVzdC1jeWctcHJvZmlsZS5zbyB0YXJn
+ZXQgbHR0bmcgc3RvcCBsdHRuZwo+Pj4gZGVzdHJveQo+Pj4gLS0tLQo+Pj4gCj4+PiBXaGVuIHRo
+ZSB0YXJnZXQgaXMgZXhlY3V0ZWQgaXQgYWJvcnRzIHdpdGggdGhlIGZvbGxvd2luZyBlcnJvcjoK
+Pj4+IC0tLS0KPj4+IHBocDogbHR0bmctdXN0LWNvbW0uYzoxNTgyOiBsdHRuZ191c3RfaW5pdDog
+QXNzZXJ0aW9uIGAhcmV0JyBmYWlsZWQuCj4+PiAKPj4+IC0tLS0KPj4+IElmIEkgcmVydW4gdGhl
+IGNvbW1hbmQgaXQgdGhlbiB3b3JrcyBmaW5lLiBJbiBmYWN0LCBzaW1wbHkgZG9pbmcgdGhlCj4+
+IGZvbGxvd2luZyB3aXRoaW4gdGhlIERvY2tlciBjb250YWluZXIgZGVtb25zdHJhdGVzIHRoZSBp
+c3N1ZToKPj4+IC0tLS0KPj4+IAo+Pj4gTERfUFJFTE9BRD1saWJsdHRuZy11c3QtY3lnLXByb2Zp
+bGUuc28gbHMKPj4+IExEX1BSRUxPQUQ9bGlibHR0bmctdXN0LWN5Zy1wcm9maWxlLnNvIGxzCj4+
+PiAKPj4+IC0tLS0KPj4+IFRoZSBmaXJzdCAnbHMnIHdpbGwgZmFpbCBhdCB0aGUgc2FtZSBwb2lu
+dCBtZW50aW9uZWQgYWJvdmUsIHdoaWxlIHRoZQo+PiBzZWNvbmQgd2lsbCBzdWNjZWVkLiBPZmYg
+dGhlIHRvcCBvZiBteSBoZWFkIEknbSBzdHJ1Z2dsaW5nIHRvIGNvbWUgdXAKPj4gd2l0aCBhbiBl
+eHBsYW5hdGlvbiBhcyB0byB3aGF0IGltcGFjdCB0aGUgZmlyc3QgZXhlY3V0aW9uIHVzaW5nCj4+
+IExEX1BSRUxPQUQgd291bGQgaGF2ZSBvbiB0aGUgc2Vjb25kLiBEb2VzIGl0IGltcGFjdCBhIHNo
+YXJlZCBsaWIgY2FjaGUKPj4gaW4gc29tZSB3YXksIHdoaWNoIEknbSB1bmF3YXJlIG9mPwo+Pj4g
+QW55IGFzc2lzdGFuY2Ugd291bGQgYmUgYXBwcmVjaWF0ZWQhCj4+PiAKPj4+IEl0IGFwcGVhcnMg
+dGhhdCBzZW1fdGltZWR3YWl0KCkgcmV0dXJucyBhbiB1bmV4cGVjdGVkIGVycm9yLgo+Pj4gCj4+
+PiBDYW4geW91IGFkZCBhIEVSUk9SKCJzZW1fdGltZWR3YWl0Iik7IGp1c3QgYmVmb3JlIHRoZSBh
+c3NlcnQgYXQgbGluZQo+PiAxNTgyIGluIHlvdXIgbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21t
+LmMKPj4+IAo+Pj4gYW5kIHNob3cgdXMgdGhlIG91dHB1dCA/Cj4+PiAKPj4+IEFsc28sIHdoYXQg
+aXMgdGhlIHZhbHVlIG9mIHlvdXIgTFRUTkdfVVNUX1JFR0lTVEVSX1RJTUVPVVQgZW52LiB2YXIu
+ID8KPj4+IAo+Pj4gCj4+PiBBbHNvLCB3aGF0IGFyY2hpdGVjdHVyZSwgTGludXggZGlzdHJpYnV0
+aW9uLCBhbmQga2VybmVsCj4+PiAKPj4+IHZlcnNpb24gYXJlIHlvdSB1c2luZyA/Cj4+PiAKPj4+
+IAo+Pj4gCj4+PiBJIHB1c2hlZCB0aGUgZm9sbG93aW5nIGZpeCBpbiBsdHRuZy11c3Q6Cj4+PiAK
+Pj4+IAo+Pj4gY29tbWl0IDVjZjgxZDUzZTMwNWM4MTUxN2U0OGUwZGM5MTYyMGE5MTZjZGMwY2NB
+dXRob3I6IE1hdGhpZXUKPj4gRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVycyA8YXQ+Cj4+IGh0
+dHBzOi8vbmEwMS5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWVmZmljaW9z
+LmNvbSZkYXRhPTAKPj4gMSU3YzAxJTdjTWljaGFlbC5TaW1vbnMlNDBtaWNyb3NvZnQuY29tJTdj
+YmQxYjhlMDZkY2IwNGViMzg3OGMwOGQzNDFmOQo+PiA0YTFjJTdjNzJmOTg4YmY4NmYxNDFhZjkx
+YWIyZDdjZDAxMWRiNDclN2MxJnNkYXRhPThyZFBTdFIwYzdnSmFndG5NU1ZOCj4+IFZpT3RRY3Qw
+V3gzUnV4b3Z4QkxCRlY0JTNkPkRhdGU6wqDCoCBGcmkgRmViIDEyCj4+IDE1OjQ0OjEwIDIwMTYg
+LTA1MDDCoMKgwqAgRml4OiBoYW5kbGUgbmVnYXRpdmUgcmFuZ2UgZm9yCj4+IExUVE5HX1VTVF9S
+RUdJU1RFUl9USU1FT1VUwqDCoCDCoMKgwqDCoCBXZSBzaG91bGQgbm90IGNvbnNpZGVyIHZhbHVl
+cyBiZWxvdwo+PiAtMSBhcyB2YWxpZCB0aW1lb3V0IHZhbHVlcywgdGhpcyBpc8KgwqDCoCBpcyB1
+bmV4cGVjdGVkIGFuZCBjb3VsZCBsZWFkIHRvCj4+IEVJTlZBTCBlcnJvcnMgcmV0dXJuZWQgYnkg
+c2VtX3RpbWVkd2FpdC7CoMKgIMKgwqDCoMKgIFNpZ25lZC1vZmYtYnk6IE1hdGhpZXUKPj4gRGVz
+bm95ZXJzIDxtYXRoaWV1LmRlc25veWVycyA8YXQ+Cj4+IGh0dHBzOi8vbmEwMS5zYWZlbGlua3Mu
+cHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWVmZmljaW9zLmNvbSZkYXRhPTAKPj4gMSU3YzAx
+JTdjTWljaGFlbC5TaW1vbnMlNDBtaWNyb3NvZnQuY29tJTdjYmQxYjhlMDZkY2IwNGViMzg3OGMw
+OGQzNDFmOQo+PiA0YTFjJTdjNzJmOTg4YmY4NmYxNDFhZjkxYWIyZDdjZDAxMWRiNDclN2MxJnNk
+YXRhPThyZFBTdFIwYzdnSmFndG5NU1ZOCj4+IFZpT3RRY3QwV3gzUnV4b3Z4QkxCRlY0JTNkPgo+
+Pj4gCj4+PiAKPj4+IExldCBtZSBrbm93IGlmIGl0IGhlbHBzLAo+Pj4gCj4+PiAKPj4+IFRoYW5r
+cywKPj4+IAo+Pj4gCj4+PiBNYXRoaWV1Cj4+PiAKPj4gCj4+IEkgYW0gc2VlaW5nIHRoZSBzYW1l
+IGlzc3VlIHRoYXQgU2VhbiBvcmlnaW5hbGx5IHJlcG9ydGVkIHdpdGhpbiBEb2NrZXIKPj4gd2l0
+aCB0aGUgbGF0ZXN0IGZpeCBNYXRoaWV1IG1hZGUuICBTZXR0aW5nIExUVE5HX1VTVF9SRUdJU1RF
+Ul9USU1FT1VUCj4+IHRvIGFueSBwb3NpdGl2ZSBudW1iZXIgY2F1c2UgdGhlIGFzc2VydCB0byBm
+YWlsLiBUaGlzIGJlaGF2aW9yIGNoYW5nZQo+PiBhcHBlYXJzIHRvIGhhdmUgYmVlbiBpbnRyb2R1
+Y2VkIHdpdGggRG9ja2VyIDEuMTAuMi4gIEkgbG9nZ2VkIGEgRG9ja2VyCj4+IGlzc3VlIGZvciB0
+aGlzIC0gaHR0cHM6Ly9naXRodWIuY29tL2RvY2tlci9kb2NrZXIvaXNzdWVzLzIwODE4Lgo+IAo+
+IFRoaXMgaXMgcmVhbGx5IHdlaXJkLiBJdCBsb29rcyBsaWtlIHRoZSBmdXRleCBzeXN0ZW0gY2Fs
+bCB3b3VsZCBiZSBibGFja2xpc3RlZAo+IGZvciBzb21lIHJlYXNvbiwgd2hpY2ggaXMgcmVhbGx5
+IHVuZXhwZWN0ZWQuIFRoaXMgYXNzZXJ0IHdhcyBkdWUgdG8gYW4KPiB1bmV4cGVjdGVkIHJldHVy
+biB2YWx1ZSBmcm9tIHNlbV90aW1lZHdhaXQuCj4gCj4gTWljaGFlbCBKZWFuc29uIHdpbGwgZG8g
+c29tZSB0ZXN0aW5nIHdpdGggc2VjY29tcCBhbmQgbHR0bmctdXN0Lgo+IFdlJ2xsIHRyeSB0byBj
+b25maXJtIHdoaWNoIHN5c3RlbSBjYWxscyBsdHRuZy11c3QgaXMgdXNpbmcgd2hlbiB0cmFjaW5n
+IGlzCj4gYWN0aXZlIGFuZCBpbmFjdGl2ZSwgc28gd2UgY2FuIHByb3ZpZGUgYSBzeXN0ZW0gY2Fs
+bCBkZXBlbmRlbmN5IGxpc3QgdG8gb3VyCj4gdXNlcnMuCj4gCj4gV2UnbGwgYWxzbyByZXZpc2l0
+IHRoZSBmYWlsdXJlIG1vZGVzIGZvciB1bmF2YWlsYWJsZSBzeXN0ZW0gY2FsbHM6Cj4gd2Ugc2hv
+dWxkIG5vdCBhc3NlcnQsIGJ1dCByYXRoZXIgcHJpbnQgYW4gZXJyb3IgdG8gdGhlIHVzZXIsIGFu
+ZCBiYWlsIG91dC4KPiAKPiBJZiB5b3UgY2FuIHNoYXJlIHdpdGggdXMgdGhlIGdsaWJjIHZlcnNp
+b24geW91IGFyZSB1c2luZywgYW5kIHRoZSBzZWNjb21wCj4gd2hpdGVsaXN0IHlvdXIgZG9ja2Vy
+IGVudmlyb25tZW50IGlzIHVzaW5nLCBpdCB3b3VsZCBiZSB2ZXJ5IGhlbHBmdWwgaW4KPiByZXBy
+b2R1Y2luZyB0aGUgaXNzdWUuCj4gCj4gVGhhbmtzLAo+IAo+IE1hdGhpZXUKPiAKPiAKPj4gX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gbHR0bmctZGV2
+IG1haWxpbmcgbGlzdAo+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+IGh0dHBzOi8vbmEw
+MS5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0dHAlM2ElMmYlMmZsaXN0
+cy4KPj4gbHR0bmcub3JnJTJmY2dpLWJpbiUyZm1haWxtYW4lMmZsaXN0aW5mbyUyZmx0dG5nLWRl
+diZkYXRhPTAxJTdjMDElN2NNaQo+PiBjaGFlbC5TaW1vbnMlNDBtaWNyb3NvZnQuY29tJTdjYmQx
+YjhlMDZkY2IwNGViMzg3OGMwOGQzNDFmOTRhMWMlN2M3MmY5Cj4+IDg4YmY4NmYxNDFhZjkxYWIy
+ZDdjZDAxMWRiNDclN2MxJnNkYXRhPWNwbkFUVlYwem13R2ZGckZiNGVyVWhvTlZZUjQzb2EKPj4g
+V3RUOXBRWkNUdW5VJTNkCj4gCj4gLS0KPiBNYXRoaWV1IERlc25veWVycwo+IEVmZmljaU9TIElu
+Yy4KPiBodHRwczovL25hMDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1o
+dHRwJTNhJTJmJTJmd3d3LmVmZmljaW9zLmNvbSZkYXRhPTAxJTdjMDElN2NNaWNoYWVsLlNpbW9u
+cyU0MG1pY3Jvc29mdC5jb20lN2NiZDFiOGUwNmRjYjA0ZWIzODc4YzA4ZDM0MWY5NGExYyU3Yzcy
+Zjk4OGJmODZmMTQxYWY5MWFiMmQ3Y2QwMTFkYjQ3JTdjMSZzZGF0YT1HRmtZQURQeHozRlV0bW1k
+TFRCODQ1cER3eWs0UXNxazNMZ3p2WHlUbFY4JTNkCj4gCj4gVGhhbmtzIGZvciB0aGUgcmVzcG9u
+c2UgTWF0aGlldS4KPiAKPiBUaGUgZGVwZW5kZW5jeSBsaXN0IHdpbGwgYmUgdmVyeSBoZWxwZnVs
+IGZvciBEb2NrZXIgdXNlcnMuICBBZGRpdGlvbmFsbHksCj4gZ2V0dGluZyBhIGJldHRlciBkaWFn
+bm9zdGljIChlcnJvciBtZXNzYWdlKSBleHBlcmllbmNlIHNvdW5kcyBncmVhdC4KPiAKPiBIZXJl
+IGFyZSB0aGUgdHdvIHRoaW5ncyB5b3UgcmVxdWVzdGVkOgo+IAo+IGdsaWJjIHZlcnNpb246Cj4g
+cm9vdEBiM2YwZTZlZGY0NWI6LyMgbGRkIC0tdmVyc2lvbgo+IGxkZCAoVWJ1bnR1IEVHTElCQyAy
+LjE5LTB1YnVudHU2LjYpIDIuMTkKPiBDb3B5cmlnaHQgKEMpIDIwMTQgRnJlZSBTb2Z0d2FyZSBG
+b3VuZGF0aW9uLCBJbmMuCj4gVGhpcyBpcyBmcmVlIHNvZnR3YXJlOyBzZWUgdGhlIHNvdXJjZSBm
+b3IgY29weWluZyBjb25kaXRpb25zLsKgIFRoZXJlIGlzIE5PCj4gd2FycmFudHk7IG5vdCBldmVu
+IGZvciBNRVJDSEFOVEFCSUxJVFkgb3IgRklUTkVTUyBGT1IgQSBQQVJUSUNVTEFSIFBVUlBPU0Uu
+Cj4gV3JpdHRlbiBieSBSb2xhbmQgTWNHcmF0aCBhbmQgVWxyaWNoIERyZXBwZXIuCj4gCj4gU2Vj
+Y29tcCB3aGl0ZWxpc3Q6Cj4gSGVyZSBpcyB0aGUgZGVmYXVsdCBkb2NrZXIgc2VjY29tcCBjb25m
+aWd1cmF0aW9uIC0KPiBodHRwczovL2dpdGh1Yi5jb20vZG9ja2VyL2RvY2tlci9ibG9iL21hc3Rl
+ci9wcm9maWxlcy9zZWNjb21wL2RlZmF1bHQuanNvbgo+IAo+IFRoZSBEb2NrZXIgZG9jdW1lbnRh
+dGlvbiBoZXJlIGxpc3Qgd2hpY2ggc3lzY2FsbHMgYXJlIGltcGxpY2l0bHkgYmxvY2tlZCAoYnkg
+bm90Cj4gYmVpbmcgb24gdGhlIHdoaXRlbGlzdCkgYW5kIHRoZSByZWFzb24gZm9yIGl0IC0KPiBo
+dHRwczovL2dpdGh1Yi5jb20vZG9ja2VyL2RvY2tlci9ibG9iL21hc3Rlci9kb2NzL3NlY3VyaXR5
+L3NlY2NvbXAubWQKPiAKPiBMZXQgbWUga25vdyBpZiB5b3UgbmVlZCBhbnl0aGluZyBlbHNlLgoK
+SHJtLCB3ZSBmb3VuZCB0aGUgY3VscHJpdCwgYW5kIGl0IHNlZW1zIHRvIGJlIGFuICJpbnRlcmVz
+dGluZyIKcmFiYml0IGhvbGUuCgpDb21wYXJpbmcgc3RyYWNlIG9mIGEgc2ltcGxlIGFwcGxpY2F0
+aW9uIHdpdGggbHR0bmctdXN0Cih0cmFjaW5nIG5vdCBlbmFibGVkKSB3aXRoIHRoZSBVU1QgcmVn
+aXN0ZXIgdGltZW91dCBhdAotMSBhbmQgMzAwMDoKCkxUVE5HX1VTVF9SRUdJU1RFUl9USU1FT1VU
+PS0xCltwaWQgICAgMjNdIHNldF9yb2J1c3RfbGlzdCgweDdmYjMyMDQ3YzllMCwgMjQpID0gMApb
+cGlkICAgIDIzXSB1bWFzaygwMzc3Nzc3NzcxMzcpICAgICAgICAgPSAwMjIKW3BpZCAgICAyM10g
+b3BlbigweDdmYjMyMDQ3YjJkMCwgT19SRFdSfE9fQ1JFQVR8T19OT0ZPTExPV3xPX0NMT0VYRUMs
+IDA2NDApID0gMwpbcGlkICAgIDIzXSBmdHJ1bmNhdGUoMywgNDA5NikgICAgICAgICAgPSAwCltw
+aWQgICAgMjNdIGV4aXRfZ3JvdXAoMCkgICAgICAgICAgICAgICA9ID8KW3BpZCAgICAyM10gKysr
+IGV4aXRlZCB3aXRoIDAgKysrCltwaWQgICAgMjBdIDwuLi4gZnV0ZXggcmVzdW1lZD4gKSAgICAg
+ICA9ID8gRVJFU1RBUlRTWVMgKFRvIGJlIHJlc3RhcnRlZCBpZiBTQV9SRVNUQVJUIGlzIHNldCkK
+W3BpZCAgICAyMF0gLS0tIFNJR0NITEQge3NpX3NpZ25vPVNJR0NITEQsIHNpX2NvZGU9Q0xEX0VY
+SVRFRCwgc2lfcGlkPTIzLCBzaV9zdGF0dXM9MCwgc2lfdXRpbWU9MCwgc2lfc3RpbWU9MH0gLS0t
+CltwaWQgICAgMjBdIGZ1dGV4KDB4N2ZiMzIxZjZlMDAwLCBGVVRFWF9XQUlUX1BSSVZBVEUsIDAs
+IE5VTEwgPHVuZmluaXNoZWQgLi4uPgoKZGVmYXVsdCAoMzAwMCkKW3BpZCAgICAyM10gc2V0X3Jv
+YnVzdF9saXN0KDB4N2Y0ZGRhYWQ3OWUwLCAyNCkgPSAwCltwaWQgICAgMjNdIHVtYXNrKDAzNzc3
+Nzc3NzEzNykgICAgICAgICA9IDAyMgpbcGlkICAgIDIzXSBvcGVuKDB4N2Y0ZGRhYWQ2MmQwLCBP
+X1JEV1J8T19DUkVBVHxPX05PRk9MTE9XfE9fQ0xPRVhFQywgMDY0MCkgPSAzCltwaWQgICAgMjNd
+IGZ0cnVuY2F0ZSgzLCA0MDk2KSAgICAgICAgICA9IDAKW3BpZCAgICAyM10gZXhpdF9ncm91cCgw
+KSAgICAgICAgICAgICAgID0gPwpbcGlkICAgIDIzXSArKysgZXhpdGVkIHdpdGggMCArKysKW3Bp
+ZCAgICAyMF0gPC4uLiBmdXRleCByZXN1bWVkPiApICAgICAgID0gPyBFUkVTVEFSVF9SRVNUQVJU
+QkxPQ0sgKEludGVycnVwdGVkIGJ5IHNpZ25hbCkKW3BpZCAgICAyMF0gLS0tIFNJR0NITEQge3Np
+X3NpZ25vPVNJR0NITEQsIHNpX2NvZGU9Q0xEX0VYSVRFRCwgc2lfcGlkPTIzLCBzaV9zdGF0dXM9
+MCwgc2lfdXRpbWU9MCwgc2lfc3RpbWU9MH0gLS0tClsgUHJvY2VzcyBQSUQ9MjAgcnVucyBpbiB4
+MzIgbW9kZS4gXQpbIFByb2Nlc3MgUElEPTIwIHJ1bnMgaW4gNjQgYml0IG1vZGUuIF0KW3BpZCAg
+ICAyMF0gd3JpdGUoMiwgMHg3ZmZjZDEzNGM4ZTAsIDY4bHM6IGx0dG5nLXVzdC1jb21tLmM6MTU4
+NTogbHR0bmdfdXN0X2luaXQ6IEFzc2VydGlvbiBgIXJldCcgZmFpbGVkLgoKVGhlIGRpZmZlcmVu
+Y2UgaGVyZSBpcyB0aGF0IHdpdGggYSBwb3NpdGl2ZSBMVFROR19VU1RfUkVHSVNURVJfVElNRU9V
+VAp2YWx1ZSwgd2UgdXNlIHNlbV90aW1lZHdhaXQoKSwgd2hpY2ggYmVoYXZlcyBkaWZmZXJlbnRs
+eSB0aGFuCnNlbV93YWl0KCkgd2l0aCByZXNwZWN0IHRvIHJlc3RhcnRpbmcgd2hlbiBoaXQgYnkg
+YSBzaWduYWw6Cml0IHVzZXMgc3lzX3Jlc3RhcnRfc3lzY2FsbCgpICh3aGljaCBpcyB1c2VkIHdo
+ZW4gRVJFU1RBUlRfUkVTVEFSVEJMT0NLCmlzIHJlY2VpdmVkKS4KClVuZm9ydHVuYXRlbHksIGRv
+Y2tlciBkZWNpZGVkIHRvIGJsYWNrbGlzdCB0aGlzIGNvcmUgc3lzdGVtIGNhbGw6Cmh0dHBzOi8v
+Z2l0aHViLmNvbS9kb2NrZXIvZG9ja2VyL2Jsb2IvbWFzdGVyL2RvY3Mvc2VjdXJpdHkvc2VjY29t
+cC5tZAoKcmVzdGFydF9zeXNjYWxsIAlEb24ndCBhbGxvdyBjb250YWluZXJzIHRvIHJlc3RhcnQg
+YSBzeXNjYWxsLiBQb3NzaWJsZSBzZWNjb21wIGJ5cGFzcyBzZWU6IGh0dHBzOi8vY29kZS5nb29n
+bGUuY29tL3AvY2hyb21pdW0vaXNzdWVzL2RldGFpbD9pZD00MDg4MjcuCgpTb21lb25lIHNob3Vs
+ZCBhc2sgdGhlbSB3aHkgdGhleSByZWFsbHkgaGF2ZSB0byBibGFja2xpc3QgdGhpcywgc2luY2Ug
+aXQKd2lsbCBsZWFkIHRvIHZhcmlvdXMgcmFjZXMgd2l0aCByZXNwZWN0IHRvIHNpZ25hbCBoYW5k
+bGluZyBpbiB0b25zCm9mIGFwcGxpY2F0aW9ucy4gSXQgbG9va3MgbGlrZSB0aGUgd3JvbmcgZml4
+IGZvciBhIHNlY3VyaXR5IGNvbmNlcm4uCgpUaGFua3MsCgpNYXRoaWV1CgoKLS0gCk1hdGhpZXUg
+RGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwOi8vbGlzdHMubHR0bmcub3JnL2Nn
+aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
