@@ -1,22 +1,34 @@
-From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-Subject: Re: Segfault during process exit
-Date: Wed, 2 Mar 2016 17:26:57 -0500
-Message-ID: <56D768B1.3040302__29466.5416390218$1456957678$gmane$org@efficios.com>
-References: <DM3PR13MB07829B1DB9D8EEE29BE9124BC7BC0@DM3PR13MB0782.namprd13.prod.outlook.com>
- <56D73D48.3070700@efficios.com>
- <DM3PR13MB0782CC28E9FE90AA3B35B8E9C7BC0@DM3PR13MB0782.namprd13.prod.outlook.com>
- <56D74E7B.3090901@efficios.com>
- <DM3PR13MB078236DB9E87094C58A69437C7BC0@DM3PR13MB0782.namprd13.prod.outlook.com>
+From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+Subject: Horrible hack to make C++ link to liburcu
+Date: Fri, 4 Mar 2016 12:32:54 -0800
+Message-ID: <20160304203254.GA2033__38167.4626762562$1457124801$gmane$org@linux.vnet.ibm.com>
+Reply-To: paulmck@linux.vnet.ibm.com
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from e35.co.us.ibm.com ([32.97.110.153])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <Jonathan.rajotte-julien@efficios.com>)
- id 1abFEX-00059v-OJ
- for lttng-dev@lists.lttng.org; Wed, 02 Mar 2016 17:27:07 -0500
-In-Reply-To: <DM3PR13MB078236DB9E87094C58A69437C7BC0@DM3PR13MB0782.namprd13.prod.outlook.com>
+ (envelope-from <paulmck@linux.vnet.ibm.com>) id 1abwhs-00039r-G8
+ for lttng-dev@lists.lttng.org; Fri, 04 Mar 2016 15:52:17 -0500
+Received: from localhost
+ by e35.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
+ Violators will be prosecuted
+ for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
+ Fri, 4 Mar 2016 13:52:10 -0700
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com
+ [9.57.198.24])
+ by d03dlp01.boulder.ibm.com (Postfix) with ESMTP id 6EB1E1FF0023
+ for <lttng-dev@lists.lttng.org>; Fri,  4 Mar 2016 13:40:18 -0700 (MST)
+Received: from d01av01.pok.ibm.com (d01av01.pok.ibm.com [9.56.224.215])
+ by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
+ u24Kq8nI17236040
+ for <lttng-dev@lists.lttng.org>; Fri, 4 Mar 2016 20:52:08 GMT
+Received: from d01av01.pok.ibm.com (localhost [127.0.0.1])
+ by d01av01.pok.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with ESMTP id
+ u24Kq8ja007069
+ for <lttng-dev@lists.lttng.org>; Fri, 4 Mar 2016 15:52:08 -0500
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -25,110 +37,45 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: Jeffrey Chen <cpthk@live.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: jiangshanlai@gmail.com
 List-Id: lttng-dev@lists.lttng.org
 
+Hello!
 
-On 2016-03-02 05:13 PM, Jeffrey Chen wrote:
->
-> Thanks!
->
-> I will try to get a sample executable. But, just from the theory point 
-> of view, this issue is possible, right?
->
+Still working with the C++ standards committee to add RCU to C++, and
+of course one step on that path is to make C++ programs build against
+liburcu.  The following hack-patch makes this work by disabling C++ access
+to wfcqueue and by making C++ see the rcu_head ->next field as a void *.
 
-The nice thing with bugs is that in theory there is none.
+This supports prototyping, but what would be the real fix?
 
-Make sure you have a reproducer and we will work from there.
+							Thanx, Paul
 
-Cheers!
+------------------------------------------------------------------------
 
->
->
->
-> ------------------------------------------------------------------------
-> *From:* Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-> *Sent:* Wednesday, March 2, 2016 12:35 PM
-> *To:* Jeffrey Chen
-> *Cc:* lttng-dev@lists.lttng.org
-> *Subject:* Re: [lttng-dev] Segfault during process exit
-> Hi,
->
-> Don't forget to cc the mailing list.
->
-> On 2016-03-02 02:42 PM, Jeffrey Chen wrote:
->>
->> Even I share our executable, you will not be able to run on your 
->> machine, as it depends on our environment.
->>
-> This is expected, it's also why I asked you if you could provide a 
-> reproducer, a simpler version of your problem that reproduce the 
-> behavior even sporadically.
->
->> The idea is that, if you spawn some threads, and these threads keep 
->> writing traces through LTTng. Then, exit the main thread, as in 
->> return main() function. LTTng's logic will do cleanup itself, but my 
->> other threads are still writing to LTTng. This would cause segfault. 
->> It would try to reference address 0x0.
->>
-> This could be a good start for a simple reproducer.
->
-> Cheers
->>
->>
->> #0 0x0000000000000000 in ?? ()
->> #1  0x00007f7e31fdfd78 in __tracepoint_cb_processor___tracepoint_info (
->>     taskNameArg=0x1cf3c30 "BackgroundTask", dataArg=0x1fd5200 "S")
->>
->> ...
->>
->> ------------------------------------------------------------------------
->> *From:* Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
->> *Sent:* Wednesday, March 2, 2016 11:21 AM
->> *To:* Jeffrey Chen
->> *Cc:* lttng-dev@lists.lttng.org
->> *Subject:* Re: [lttng-dev] Segfault during process exit
->> Hi,
->>
->> Could you provide a reproducer ?
->>
->> Could you give us some context ?
->>
->> Thanks
->>
->> On 2016-03-02 02:07 PM, Jeffrey Chen wrote:
->>>
->>> Hi:
->>>
->>>
->>> Our system process will spawn several background threads to do 
->>> tasks. During the process exit, there is no guarantee that these 
->>> background threads are finished. I have noticed several times that 
->>> the execution would segfault during exiting. The stacktrace is 
->>> showing that the segfault happened at the call to write trace, 
->>> tracepoint(). My guess is that LTTng cleaned up the tracing 
->>> connection, and the background thread was still running. Has anyone 
->>> noticed this issue? I thought about trying wait for all the 
->>> background threads to complete, but this is very difficult to do in 
->>> a complex system, as the background thread could spawn more threads 
->>> during the process. Is there any way to solve this? Thanks.
->>>
->>>
->>>
->>> _______________________________________________
->>> lttng-dev mailing list
->>> lttng-dev@lists.lttng.org
->>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
->> -- 
->> Jonathan R. Julien
->> Efficios
->
-> -- 
-> Jonathan R. Julien
-> Efficios
-
--- 
-Jonathan R. Julien
-Efficios
+diff --git a/urcu-call-rcu.h b/urcu-call-rcu.h
+index 339ebacc3f7c..d37c49e9d958 100644
+--- a/urcu-call-rcu.h
++++ b/urcu-call-rcu.h
+@@ -32,7 +32,9 @@
+ #include <stdlib.h>
+ #include <pthread.h>
+ 
++#ifndef __cplusplus
+ #include <urcu/wfcqueue.h>
++#endif
+ 
+ #ifdef __cplusplus
+ extern "C" {
+@@ -57,7 +59,11 @@ struct call_rcu_data;
+  */
+ 
+ struct rcu_head {
++#ifdef __cplusplus
++	void *next;
++#else
+ 	struct cds_wfcq_node next;
++#endif
+ 	void (*func)(struct rcu_head *head);
+ };
