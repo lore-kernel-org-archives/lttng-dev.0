@@ -1,34 +1,17 @@
-From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Subject: Horrible hack to make C++ link to liburcu
-Date: Fri, 4 Mar 2016 12:32:54 -0800
-Message-ID: <20160304203254.GA2033__38167.4626762562$1457124801$gmane$org@linux.vnet.ibm.com>
-Reply-To: paulmck@linux.vnet.ibm.com
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Horrible hack to make C++ link to liburcu
+Date: Sat, 5 Mar 2016 15:10:30 +0000 (UTC)
+Message-ID: <410832705.17244.1457190630579.JavaMail.zimbra__15886.8459788666$1457190698$gmane$org@efficios.com>
+References: <20160304203254.GA2033@linux.vnet.ibm.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e35.co.us.ibm.com ([32.97.110.153])
+Received: from mail.efficios.com ([78.47.125.74])
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <paulmck@linux.vnet.ibm.com>) id 1abwhs-00039r-G8
- for lttng-dev@lists.lttng.org; Fri, 04 Mar 2016 15:52:17 -0500
-Received: from localhost
- by e35.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
- Violators will be prosecuted
- for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
- Fri, 4 Mar 2016 13:52:10 -0700
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com
- [9.57.198.24])
- by d03dlp01.boulder.ibm.com (Postfix) with ESMTP id 6EB1E1FF0023
- for <lttng-dev@lists.lttng.org>; Fri,  4 Mar 2016 13:40:18 -0700 (MST)
-Received: from d01av01.pok.ibm.com (d01av01.pok.ibm.com [9.56.224.215])
- by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
- u24Kq8nI17236040
- for <lttng-dev@lists.lttng.org>; Fri, 4 Mar 2016 20:52:08 GMT
-Received: from d01av01.pok.ibm.com (localhost [127.0.0.1])
- by d01av01.pok.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with ESMTP id
- u24Kq8ja007069
- for <lttng-dev@lists.lttng.org>; Fri, 4 Mar 2016 15:52:08 -0500
-Content-Disposition: inline
+ (envelope-from <compudj@efficios.com>) id 1acDqt-0000mY-JT
+ for lttng-dev@lists.lttng.org; Sat, 05 Mar 2016 10:10:45 -0500
+In-Reply-To: <20160304203254.GA2033@linux.vnet.ibm.com>
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -37,45 +20,104 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: lttng-dev@lists.lttng.org
-Cc: jiangshanlai@gmail.com
+To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Lai Jiangshan <jiangshanlai@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Hello!
+----- On Mar 4, 2016, at 3:32 PM, Paul E. McKenney paulmck@linux.vnet.ibm.com wrote:
 
-Still working with the C++ standards committee to add RCU to C++, and
-of course one step on that path is to make C++ programs build against
-liburcu.  The following hack-patch makes this work by disabling C++ access
-to wfcqueue and by making C++ see the rcu_head ->next field as a void *.
+> Hello!
+> 
+> Still working with the C++ standards committee to add RCU to C++, and
+> of course one step on that path is to make C++ programs build against
+> liburcu.  The following hack-patch makes this work by disabling C++ access
+> to wfcqueue and by making C++ see the rcu_head ->next field as a void *.
+> 
+> This supports prototyping, but what would be the real fix?
 
-This supports prototyping, but what would be the real fix?
+One fix would be:
 
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-diff --git a/urcu-call-rcu.h b/urcu-call-rcu.h
-index 339ebacc3f7c..d37c49e9d958 100644
---- a/urcu-call-rcu.h
-+++ b/urcu-call-rcu.h
-@@ -32,7 +32,9 @@
- #include <stdlib.h>
- #include <pthread.h>
- 
-+#ifndef __cplusplus
- #include <urcu/wfcqueue.h>
-+#endif
- 
- #ifdef __cplusplus
- extern "C" {
-@@ -57,7 +59,11 @@ struct call_rcu_data;
+diff --git a/urcu/wfcqueue.h b/urcu/wfcqueue.h
+index 83ec219..c0bb289 100644
+--- a/urcu/wfcqueue.h
++++ b/urcu/wfcqueue.h
+@@ -43,7 +43,7 @@ extern "C" {
+  * McKenney.
   */
  
- struct rcu_head {
-+#ifdef __cplusplus
-+	void *next;
-+#else
- 	struct cds_wfcq_node next;
-+#endif
- 	void (*func)(struct rcu_head *head);
- };
+-#define CDS_WFCQ_WOULDBLOCK    ((void *) -1UL)
++#define CDS_WFCQ_WOULDBLOCK    ((struct cds_wfcq_node *) -1UL)
+ 
+ enum cds_wfcq_ret {
+        CDS_WFCQ_RET_WOULDBLOCK =       -1,
+
+In addition, g++ does not support the __transparent_union__ gcc attribute
+(it just ignores it). So we might want to rethink our use of this attribute
+within wfcqueue.h. We current use it for
+
+/*
+ * Do not put head and tail on the same cache-line if concurrent
+ * enqueue/dequeue are expected from many CPUs. This eliminates
+ * false-sharing between enqueue and dequeue.
+ */
+struct __cds_wfcq_head {
+        struct cds_wfcq_node node;
+};
+
+struct cds_wfcq_head {
+        struct cds_wfcq_node node;
+        pthread_mutex_t lock;
+};
+
+/*
+ * The transparent union allows calling functions that work on both
+ * struct cds_wfcq_head and struct __cds_wfcq_head on any of those two
+ * types.
+ */
+typedef union {
+        struct __cds_wfcq_head *_h;
+        struct cds_wfcq_head *h;
+} __attribute__((__transparent_union__)) cds_wfcq_head_ptr_t;
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+
+> 
+>							Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+> diff --git a/urcu-call-rcu.h b/urcu-call-rcu.h
+> index 339ebacc3f7c..d37c49e9d958 100644
+> --- a/urcu-call-rcu.h
+> +++ b/urcu-call-rcu.h
+> @@ -32,7 +32,9 @@
+> #include <stdlib.h>
+> #include <pthread.h>
+> 
+> +#ifndef __cplusplus
+> #include <urcu/wfcqueue.h>
+> +#endif
+> 
+> #ifdef __cplusplus
+> extern "C" {
+> @@ -57,7 +59,11 @@ struct call_rcu_data;
+>  */
+> 
+> struct rcu_head {
+> +#ifdef __cplusplus
+> +	void *next;
+> +#else
+> 	struct cds_wfcq_node next;
+> +#endif
+> 	void (*func)(struct rcu_head *head);
+>  };
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
