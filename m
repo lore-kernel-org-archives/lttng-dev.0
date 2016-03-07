@@ -1,17 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Horrible hack to make C++ link to liburcu
-Date: Sat, 5 Mar 2016 15:10:30 +0000 (UTC)
-Message-ID: <410832705.17244.1457190630579.JavaMail.zimbra__15886.8459788666$1457190698$gmane$org@efficios.com>
-References: <20160304203254.GA2033@linux.vnet.ibm.com>
+From: Julien Desfossez <jdesfossez@efficios.com>
+Subject: [GIT PULL] Detach a live session
+Date: Mon, 7 Mar 2016 14:17:50 -0500
+Message-ID: <20160307191750.GB9064__32928.3918989406$1457378378$gmane$org@sinkpad.internal.efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from albert.ini-tech.com ([192.99.35.19] helo=smtp.ini-tech.com)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <compudj@efficios.com>) id 1acDqt-0000mY-JT
- for lttng-dev@lists.lttng.org; Sat, 05 Mar 2016 10:10:45 -0500
-In-Reply-To: <20160304203254.GA2033@linux.vnet.ibm.com>
+ (envelope-from <jdesfossez@efficios.com>) id 1ad0fT-0000jG-U0
+ for lttng-dev@lists.lttng.org; Mon, 07 Mar 2016 14:18:18 -0500
+Content-Disposition: inline
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,104 +19,20 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Lai Jiangshan <jiangshanlai@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jeremie Galarneau <jgalar@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ On Mar 4, 2016, at 3:32 PM, Paul E. McKenney paulmck@linux.vnet.ibm.com wrote:
+Hi,
 
-> Hello!
-> 
-> Still working with the C++ standards committee to add RCU to C++, and
-> of course one step on that path is to make C++ programs build against
-> liburcu.  The following hack-patch makes this work by disabling C++ access
-> to wfcqueue and by making C++ see the rcu_head ->next field as a void *.
-> 
-> This supports prototyping, but what would be the real fix?
+The feature to detach a live session without requiring to close the
+network connection is in the "live-detach" branch from this repo:
+https://github.com/jdesfossez/lttng-tools-dev.git
 
-One fix would be:
-
-diff --git a/urcu/wfcqueue.h b/urcu/wfcqueue.h
-index 83ec219..c0bb289 100644
---- a/urcu/wfcqueue.h
-+++ b/urcu/wfcqueue.h
-@@ -43,7 +43,7 @@ extern "C" {
-  * McKenney.
-  */
- 
--#define CDS_WFCQ_WOULDBLOCK    ((void *) -1UL)
-+#define CDS_WFCQ_WOULDBLOCK    ((struct cds_wfcq_node *) -1UL)
- 
- enum cds_wfcq_ret {
-        CDS_WFCQ_RET_WOULDBLOCK =       -1,
-
-In addition, g++ does not support the __transparent_union__ gcc attribute
-(it just ignores it). So we might want to rethink our use of this attribute
-within wfcqueue.h. We current use it for
-
-/*
- * Do not put head and tail on the same cache-line if concurrent
- * enqueue/dequeue are expected from many CPUs. This eliminates
- * false-sharing between enqueue and dequeue.
- */
-struct __cds_wfcq_head {
-        struct cds_wfcq_node node;
-};
-
-struct cds_wfcq_head {
-        struct cds_wfcq_node node;
-        pthread_mutex_t lock;
-};
-
-/*
- * The transparent union allows calling functions that work on both
- * struct cds_wfcq_head and struct __cds_wfcq_head on any of those two
- * types.
- */
-typedef union {
-        struct __cds_wfcq_head *_h;
-        struct cds_wfcq_head *h;
-} __attribute__((__transparent_union__)) cds_wfcq_head_ptr_t;
-
-Thoughts ?
+Two commits:
+10f015f Test the viewer detach command
+1a49e0e Live: command to detach a viewer session
 
 Thanks,
 
-Mathieu
-
-
-> 
->							Thanx, Paul
-> 
-> ------------------------------------------------------------------------
-> 
-> diff --git a/urcu-call-rcu.h b/urcu-call-rcu.h
-> index 339ebacc3f7c..d37c49e9d958 100644
-> --- a/urcu-call-rcu.h
-> +++ b/urcu-call-rcu.h
-> @@ -32,7 +32,9 @@
-> #include <stdlib.h>
-> #include <pthread.h>
-> 
-> +#ifndef __cplusplus
-> #include <urcu/wfcqueue.h>
-> +#endif
-> 
-> #ifdef __cplusplus
-> extern "C" {
-> @@ -57,7 +59,11 @@ struct call_rcu_data;
->  */
-> 
-> struct rcu_head {
-> +#ifdef __cplusplus
-> +	void *next;
-> +#else
-> 	struct cds_wfcq_node next;
-> +#endif
-> 	void (*func)(struct rcu_head *head);
->  };
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Julien
