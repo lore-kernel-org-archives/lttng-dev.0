@@ -1,17 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RFC PATCH urcu 2/2] wfcqueue: add C++ compatibility API
-Date: Mon,  7 Mar 2016 19:33:44 -0500
-Message-ID: <1457397224-10952-2-git-send-email-mathieu.desnoyers__15093.1630553261$1457397402$gmane$org@efficios.com>
-References: <1457397224-10952-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Subject: [PATCH lttng-tools 1/2] Fix: build failure when
+	__GLIBC_PREREQ is missing
+Date: Tue,  8 Mar 2016 14:55:04 +0200
+Message-ID: <17f5fc70d86b42e09f71fc46f6dfbd85b9ee3eaf.1457441705.git.baruch__36568.1392876015$1457441843$gmane$org@tkos.co.il>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com ([78.47.125.74])
+Received: from guitar.tcltek.co.il ([192.115.133.116] helo=mx.tkos.co.il)
  by ltt.polymtl.ca with esmtp (Exim 4.80)
- (envelope-from <mathieu.desnoyers@efficios.com>) id 1ad5b7-0002tL-C0
- for lttng-dev@lists.lttng.org; Mon, 07 Mar 2016 19:34:04 -0500
-In-Reply-To: <1457397224-10952-1-git-send-email-mathieu.desnoyers@efficios.com>
+ (envelope-from <baruch@tkos.co.il>) id 1adHB0-0007xP-N4
+ for lttng-dev@lists.lttng.org; Tue, 08 Mar 2016 07:55:52 -0500
 List-Unsubscribe: <http://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <http://lists.lttng.org/pipermail/lttng-dev/>
@@ -20,141 +19,53 @@ List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
 List-Subscribe: <http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
-To: "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>, Lai Jiangshan <jiangshanlai@gmail.com>, rp@svcs.cs.pdx.edu
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Introduce __cds_wfcq_head_cast and cds_wfcq_head_cast for compability
-of wfcqueue with c++. Those are effect-less in C, where transparent
-unions are supported. However, in C++, those transform struct
-cds_wfcq_head and struct __cds_wfcq_head pointers to
-cds_wfcq_head_ptr_t.
+The musl C library does not provide the __GLIBC_PREREQ macro. Instead of
+relying on glibc version test, check directly for the availability of
+epoll_create1().
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- urcu/static/wfcqueue.h | 16 +++++++++-------
- urcu/wfcqueue.h        | 40 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 49 insertions(+), 7 deletions(-)
+ configure.ac             | 2 +-
+ src/common/compat/poll.h | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/urcu/static/wfcqueue.h b/urcu/static/wfcqueue.h
-index 7c9d548..4ababbf 100644
---- a/urcu/static/wfcqueue.h
-+++ b/urcu/static/wfcqueue.h
-@@ -257,7 +257,7 @@ ___cds_wfcq_first(cds_wfcq_head_ptr_t u_head,
- 	struct __cds_wfcq_head *head = u_head._h;
- 	struct cds_wfcq_node *node;
+diff --git a/configure.ac b/configure.ac
+index 693c456a620d..fdbce41c2428 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -120,7 +120,7 @@ AC_CHECK_FUNCS([ \
+ 	gethostbyname gethostname getpagesize localtime_r memchr memset \
+ 	mkdir munmap putenv realpath rmdir socket strchr strcspn strdup \
+ 	strncasecmp strndup strnlen strpbrk strrchr strstr strtol strtoul \
+-	strtoull dirfd gethostbyname2 getipnodebyname \
++	strtoull dirfd gethostbyname2 getipnodebyname epoll_create1 \
+ ])
  
--	if (_cds_wfcq_empty(head, tail))
-+	if (_cds_wfcq_empty(__cds_wfcq_head_cast(head), tail))
- 		return NULL;
- 	node = ___cds_wfcq_node_sync_next(&head->node, blocking);
- 	/* Load head->node.next before loading node's content */
-@@ -375,7 +375,7 @@ ___cds_wfcq_dequeue_with_state(cds_wfcq_head_ptr_t u_head,
- 	if (state)
- 		*state = 0;
+ # Babeltrace viewer check
+diff --git a/src/common/compat/poll.h b/src/common/compat/poll.h
+index 5f45da2b3b04..34d0cffda479 100644
+--- a/src/common/compat/poll.h
++++ b/src/common/compat/poll.h
+@@ -73,7 +73,7 @@ enum {
+ 	LPOLLNVAL = EPOLLHUP,
+ 	LPOLLRDHUP = EPOLLRDHUP,
+ 	/* Close on exec feature of epoll */
+-#if __GLIBC_PREREQ(2, 9)
++#if defined(HAVE_EPOLL_CREATE1) && defined(EPOLL_CLOEXEC)
+ 	LTTNG_CLOEXEC = EPOLL_CLOEXEC,
+ #else
+ 	/*
+@@ -127,7 +127,7 @@ extern int compat_epoll_create(struct lttng_poll_event *events,
+ #define lttng_poll_create(events, size, flags) \
+ 	compat_epoll_create(events, size, flags)
  
--	if (_cds_wfcq_empty(head, tail)) {
-+	if (_cds_wfcq_empty(__cds_wfcq_head_cast(head), tail)) {
- 		return NULL;
- 	}
- 
-@@ -509,7 +509,7 @@ ___cds_wfcq_splice(
- 	 * Initial emptiness check to speed up cases where queue is
- 	 * empty: only require loads to check if queue is empty.
- 	 */
--	if (_cds_wfcq_empty(src_q_head, src_q_tail))
-+	if (_cds_wfcq_empty(__cds_wfcq_head_cast(src_q_head), src_q_tail))
- 		return CDS_WFCQ_RET_SRC_EMPTY;
- 
- 	for (;;) {
-@@ -539,7 +539,8 @@ ___cds_wfcq_splice(
- 	 * Append the spliced content of src_q into dest_q. Does not
- 	 * require mutual exclusion on dest_q (wait-free).
- 	 */
--	if (___cds_wfcq_append(dest_q_head, dest_q_tail, head, tail))
-+	if (___cds_wfcq_append(__cds_wfcq_head_cast(dest_q_head), dest_q_tail,
-+			head, tail))
- 		return CDS_WFCQ_RET_DEST_NON_EMPTY;
- 	else
- 		return CDS_WFCQ_RET_DEST_EMPTY;
-@@ -599,7 +600,8 @@ _cds_wfcq_dequeue_with_state_blocking(struct cds_wfcq_head *head,
- 	struct cds_wfcq_node *retval;
- 
- 	_cds_wfcq_dequeue_lock(head, tail);
--	retval = ___cds_wfcq_dequeue_with_state_blocking(head, tail, state);
-+	retval = ___cds_wfcq_dequeue_with_state_blocking(cds_wfcq_head_cast(head),
-+			tail, state);
- 	_cds_wfcq_dequeue_unlock(head, tail);
- 	return retval;
- }
-@@ -638,8 +640,8 @@ _cds_wfcq_splice_blocking(
- 	enum cds_wfcq_ret ret;
- 
- 	_cds_wfcq_dequeue_lock(src_q_head, src_q_tail);
--	ret = ___cds_wfcq_splice_blocking(dest_q_head, dest_q_tail,
--			src_q_head, src_q_tail);
-+	ret = ___cds_wfcq_splice_blocking(cds_wfcq_head_cast(dest_q_head), dest_q_tail,
-+			cds_wfcq_head_cast(src_q_head), src_q_tail);
- 	_cds_wfcq_dequeue_unlock(src_q_head, src_q_tail);
- 	return ret;
- }
-diff --git a/urcu/wfcqueue.h b/urcu/wfcqueue.h
-index c0bb289..ec86032 100644
---- a/urcu/wfcqueue.h
-+++ b/urcu/wfcqueue.h
-@@ -74,6 +74,7 @@ struct cds_wfcq_head {
- 	pthread_mutex_t lock;
- };
- 
-+#ifndef __cplusplus
- /*
-  * The transparent union allows calling functions that work on both
-  * struct cds_wfcq_head and struct __cds_wfcq_head on any of those two
-@@ -84,6 +85,45 @@ typedef union {
- 	struct cds_wfcq_head *h;
- } __attribute__((__transparent_union__)) cds_wfcq_head_ptr_t;
- 
-+/*
-+ * This static inline is only present for compatibility with C++. It is
-+ * effect-less in C.
-+ */
-+static inline struct __cds_wfcq_head *__cds_wfcq_head_cast(struct __cds_wfcq_head *head)
-+{
-+	return head;
-+}
-+
-+/*
-+ * This static inline is only present for compatibility with C++. It is
-+ * effect-less in C.
-+ */
-+static inline struct cds_wfcq_head *cds_wfcq_head_cast(struct cds_wfcq_head *head)
-+{
-+	return head;
-+}
-+#else /* #ifndef __cplusplus */
-+
-+/* C++ ignores transparent union. */
-+typedef union {
-+	struct __cds_wfcq_head *_h;
-+	struct cds_wfcq_head *h;
-+} cds_wfcq_head_ptr_t;
-+
-+/* C++ ignores transparent union. Requires an explicit conversion. */
-+static inline cds_wfcq_head_ptr_t __cds_wfcq_head_cast(struct __cds_wfcq_head *head)
-+{
-+	cds_wfcq_head_ptr_t ret = { ._h = head };
-+	return ret;
-+}
-+/* C++ ignores transparent union. Requires an explicit conversion. */
-+static inline cds_wfcq_head_ptr_t cds_wfcq_head_cast(struct cds_wfcq_head *head)
-+{
-+	cds_wfcq_head_ptr_t ret = { .h = head };
-+	return ret;
-+}
-+#endif /* #else #ifndef __cplusplus */
-+
- struct cds_wfcq_tail {
- 	struct cds_wfcq_node *p;
- };
+-#if __GLIBC_PREREQ(2, 9)
++#if defined(HAVE_EPOLL_CREATE1) && defined(EPOLL_CLOEXEC)
+ static inline int compat_glibc_epoll_create(int size __attribute__((unused)),
+ 		int flags)
+ {
 -- 
-2.1.4
+2.7.0
