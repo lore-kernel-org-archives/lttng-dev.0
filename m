@@ -1,15 +1,20 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools] Fix: systematic overwrite of union
-	values on add context
-Date: Thu, 10 Mar 2016 15:04:35 -0500
-Message-ID: <1457640275-22156-1-git-send-email-jonathan.rajotte-julien__37864.9042257622$1457640310$gmane$org@efficios.com>
+From: Yuxin Ren <ryx@gwmail.gwu.edu>
+Subject: Re: real time Userspace RCU
+Date: Thu, 10 Mar 2016 15:33:51 -0500
+Message-ID: <CAAKbDrdac6jYEu4kjNq8kzCxQkdxJGBHN2+fFCh9wOiotoSYiw__36949.5093859316$1457642054$gmane$org@mail.gmail.com>
+References: <CAAKbDrcMU2rgStU1uFFg1Syk-B4ZOU2R7aC0On946gCXJ5DnMg@mail.gmail.com>
+ <1138868550.112232059.1457635938477.JavaMail.zimbra@polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 2756AA0A5C
- for <lttng-dev@lists.lttng.org>; Thu, 10 Mar 2016 20:04:43 +0000 (UTC)
+Received: from mail-lb0-f179.google.com (mail-lb0-f179.google.com
+ [209.85.217.179])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 8FEC8A0A8A
+ for <lttng-dev@lists.lttng.org>; Thu, 10 Mar 2016 20:33:52 +0000 (UTC)
+Received: by mail-lb0-f179.google.com with SMTP id k15so130006717lbg.0
+ for <lttng-dev@lists.lttng.org>; Thu, 10 Mar 2016 12:33:52 -0800 (PST)
+In-Reply-To: <1138868550.112232059.1457635938477.JavaMail.zimbra@polymtl.ca>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,34 +24,27 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: Michel Dagenais <michel.dagenais@polymtl.ca>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-QnVnIGludHJvZHVjZWQgaW4gY29tbWl0IDIwMDE3OTNjMTE0MWU4OWIzNGU3MGVmYjI4YjI3ZWMw
-Y2M4ZTZkNDcKClRoZSB0eXBlIGFuZCBjb25maWcgZmllbGRzIG9mIHRoZSBsdHRuZ19ldmVudF9w
-ZXJmX2NvdW50ZXJfY3R4IG1lbWJlciBvZgpsdHRuZ19ldmVudF9jb250ZXh0IHVuaW9uIHdvdWxk
-IGFsd2F5cyBiZSBzZXQgdG8gemVyby4KClNpZ25lZC1vZmYtYnk6IEpvbmF0aGFuIFJham90dGUg
-PGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT4KLS0tCiBzcmMvbGliL2x0dG5n
-LWN0bC9sdHRuZy1jdGwuYyB8IDEyICsrKysrKysrKy0tLQogMSBmaWxlIGNoYW5nZWQsIDkgaW5z
-ZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9zcmMvbGliL2x0dG5nLWN0
-bC9sdHRuZy1jdGwuYyBiL3NyYy9saWIvbHR0bmctY3RsL2x0dG5nLWN0bC5jCmluZGV4IGZlMDUy
-N2QuLjQzNmYzNTggMTAwNjQ0Ci0tLSBhL3NyYy9saWIvbHR0bmctY3RsL2x0dG5nLWN0bC5jCisr
-KyBiL3NyYy9saWIvbHR0bmctY3RsL2x0dG5nLWN0bC5jCkBAIC03MzYsOSArNzM2LDE1IEBAIGlu
-dCBsdHRuZ19hZGRfY29udGV4dChzdHJ1Y3QgbHR0bmdfaGFuZGxlICpoYW5kbGUsCiAJCW1lbWNw
-eShidWYgKyBwcm92aWRlcl9sZW4sIGN0eF9uYW1lLCBjdHhfbGVuKTsKIAl9CiAJbWVtY3B5KCZs
-c20udS5jb250ZXh0LmN0eCwgY3R4LCBzaXplb2Yoc3RydWN0IGx0dG5nX2V2ZW50X2NvbnRleHQp
-KTsKLQkvKiBEb24ndCBsZWFrIGFwcGxpY2F0aW9uIGFkZHJlc3NlcyB0byB0aGUgc2Vzc2lvbmQu
-ICovCi0JbHNtLnUuY29udGV4dC5jdHgudS5hcHBfY3R4LnByb3ZpZGVyX25hbWUgPSBOVUxMOwot
-CWxzbS51LmNvbnRleHQuY3R4LnUuYXBwX2N0eC5jdHhfbmFtZSA9IE5VTEw7CisKKwlpZiAoY3R4
-LT5jdHggPT0gTFRUTkdfRVZFTlRfQ09OVEVYVF9BUFBfQ09OVEVYVCkgeworCQkvKiBEb24ndCBs
-ZWFrIGFwcGxpY2F0aW9uIGFkZHJlc3NlcyB0byB0aGUgc2Vzc2lvbmQuCisJCSAqIFRoaXMgaXMg
-b25seSBuZWNlc3Nhcnkgd2hlbiBjdHggaXMgZm9yIGFuIGFwcCBjdHggb3RoZXJ3aXNlCisJCSAq
-IHRoZSB2YWx1ZSBpbnNpZGUgdGhlIHVuaW9uICh0eXBlICYgY29uZmlnKSBhcmUgb3ZlcndyaXR0
-ZW4uCisJCSAqLworCQlsc20udS5jb250ZXh0LmN0eC51LmFwcF9jdHgucHJvdmlkZXJfbmFtZSA9
-IE5VTEw7CisJCWxzbS51LmNvbnRleHQuY3R4LnUuYXBwX2N0eC5jdHhfbmFtZSA9IE5VTEw7CisJ
-fQogCiAJcmV0ID0gbHR0bmdfY3RsX2Fza19zZXNzaW9uZF92YXJsZW5fbm9fY21kX2hlYWRlcigm
-bHNtLCBidWYsIGxlbiwgTlVMTCk7CiBlbmQ6Ci0tIAoyLjcuMAoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRu
-Zy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
-bG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+VGhhbmsgeW91IGZvciB5b3VyIHJlcGx5LgoKSSB3YW50IHRvIGdlbmVyYWxseSB1bmRlcnN0YW5k
+IGhvdyB0byBhcHBseSB1cmN1IHRvIHJlYWwgdGltZSBzeXN0ZW1zLgpJIGtub3cgcmVhbCB0aW1l
+IHN5c3RlbSBmb2N1cyBvbiBwcmVkaWN0YWJpbGl0eSBvbiBib3RoIHRpbWluZyBhbmQKbWVtb3J5
+IGNvbnN1bXB0aW9uLgpTbyBob3cgZG9lcyByZWFsIHRpbWUgdXJjdSBzdXBwb3J0IHByZWRpY3Rh
+YmlsaXR5PwpDb3VsZCB5b3UgcHJvdmlkZSBtZSBzb21lIHBhcGVycywgZG9jdW1lbnRzIG9yIGFu
+eSBtYXRlcmlhbHMgYWJvdXQgYW55CmFzcGVjdCBvZiByZWFsIHRpbWUgdXJjdT8KClRoYW5rcyBh
+Z2FpbiEKCk9uIFRodSwgTWFyIDEwLCAyMDE2IGF0IDE6NTIgUE0sIE1pY2hlbCBEYWdlbmFpcwo8
+bWljaGVsLmRhZ2VuYWlzQHBvbHltdGwuY2E+IHdyb3RlOgo+IFJlYWwtdGltZSBhbmQgZW1iZWRk
+ZWQgc3lzdGVtcyBpcyBhbiBpbXBvcnRhbnQgY3VycmVudCBmb2N1cyBmb3IgdGhlIExUVG5nIHRv
+b2xjaGFpbiByZXNlYXJjaC4gRG8geW91IGhhdmUgc3BlY2lmaWMgbmVlZHMgZm9yIHVzZXJzcGFj
+ZSBSQ1U/Cj4KPiAtLS0tLSBNYWlsIG9yaWdpbmFsIC0tLS0tCj4+IEhpLAo+Pgo+PiAgSXMgdGhl
+cmUgYW55IHdvcmsgb3IgcmVzZWFyY2ggYWJvdXQgVXNlcnNwYWNlIFJDVSBvbiByZWFsIHRpbWUg
+b3IKPj4gZW1iZWRkZWQgc3lzdGVtcz8KPj4gQW55IGluZm9ybWF0aW9uIGlzIHdlbGNvbWUuCj4+
+Cj4+IFRoYW5rcyBhIGxvdCEKPj4gWXV4aW4KPj4gX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KPj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+PiBsdHRuZy1k
+ZXZAbGlzdHMubHR0bmcub3JnCj4+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
+bG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
+bHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
+by9sdHRuZy1kZXYK
