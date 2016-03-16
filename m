@@ -1,19 +1,17 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools v3] Contexts for RT debugging
-Date: Wed, 16 Mar 2016 14:42:14 -0400
-Message-ID: <CA+jJMxs5ZeJo0R=JDV7=_wK5WK4Cj7UxFU+D-L5HwN=+70hqHg__49517.0853021138$1458153759$gmane$org@mail.gmail.com>
-References: <1457382025-10149-1-git-send-email-jdesfossez@efficios.com>
+From: Brian Robbins <brianrob@microsoft.com>
+Subject: CTF Compact Header Timestamps
+Date: Wed, 16 Mar 2016 22:55:13 +0000
+Message-ID: <BN3PR00MB00034381CC2491E679BD1371C88A0__12801.5299830169$1458168963$gmane$org@BN3PR00MB0003.namprd00.prod.outlook.com>
+References: <BLUPR03MB1180BF1909497239E300878D38A0@BLUPR03MB118.namprd03.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============7063285061322980508=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f195.google.com (mail-ig0-f195.google.com
- [209.85.213.195])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id C325AA0A95
- for <lttng-dev@lists.lttng.org>; Wed, 16 Mar 2016 18:42:15 +0000 (UTC)
-Received: by mail-ig0-f195.google.com with SMTP id ww10so5332835igb.2
- for <lttng-dev@lists.lttng.org>; Wed, 16 Mar 2016 11:42:15 -0700 (PDT)
-In-Reply-To: <1457382025-10149-1-git-send-email-jdesfossez@efficios.com>
+Received: from na01-bn1-obe.outbound.protection.outlook.com
+ (mail-bn1on0110.outbound.protection.outlook.com [157.56.110.110])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 4EC79A0951
+ for <lttng-dev@lists.lttng.org>; Wed, 16 Mar 2016 22:55:37 +0000 (UTC)
+In-Reply-To: <BLUPR03MB1180BF1909497239E300878D38A0@BLUPR03MB118.namprd03.prod.outlook.com>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,209 +21,384 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: Lee Culver <leculver@microsoft.com>
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIE1vbiwgTWFyIDcsIDIwMTYgYXQgMzoyMCBQ
-TSwgSnVsaWVuIERlc2Zvc3Nlego8amRlc2Zvc3NlekBlZmZpY2lvcy5jb20+IHdyb3RlOgo+IEVu
-YWJsZXMgdGhlIGludGVycnVwdGlibGUsIHByZWVtcHRpYmxlLCBuZWVkX3Jlc2NoZWR1bGUgYW5k
-IG1pZ3JhdGFibGUKPiBrZXJuZWwgY29udGV4dHMuCj4KPiBTaWduZWQtb2ZmLWJ5OiBKdWxpZW4g
-RGVzZm9zc2V6IDxqZGVzZm9zc2V6QGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgaW5jbHVkZS9sdHRu
-Zy9ldmVudC5oICAgICAgICAgICAgICAgICAgfCAgNCArKysrCj4gIGluY2x1ZGUvbHR0bmcvbHR0
-bmctZXJyb3IuaCAgICAgICAgICAgIHwgIDEgKwo+ICBzcmMvYmluL2x0dG5nLXNlc3Npb25kL2Nv
-bnRleHQuYyAgICAgICB8IDE4ICsrKysrKysrKysrKysrLS0tLQo+ICBzcmMvYmluL2x0dG5nLXNl
-c3Npb25kL2tlcm5lbC5jICAgICAgICB8IDE3ICsrKysrKysrKysrKy0tLS0tCj4gIHNyYy9iaW4v
-bHR0bmctc2Vzc2lvbmQvc2F2ZS5jICAgICAgICAgIHwgMTIgKysrKysrKysrKysrCj4gIHNyYy9i
-aW4vbHR0bmcvY29tbWFuZHMvYWRkX2NvbnRleHQuYyAgIHwgIDggKysrKysrKysKPiAgc3JjL2Nv
-bW1vbi9jb25maWcvY29uZmlnLXNlc3Npb24tYWJpLmggfCAgNCArKysrCj4gIHNyYy9jb21tb24v
-Y29uZmlnL3Nlc3Npb24tY29uZmlnLmMgICAgIHwgMTcgKysrKysrKysrKysrKysrKy0KPiAgc3Jj
-L2NvbW1vbi9lcnJvci5jICAgICAgICAgICAgICAgICAgICAgfCAgMSArCj4gIHNyYy9jb21tb24v
-bHR0bmcta2VybmVsLmggICAgICAgICAgICAgIHwgIDQgKysrKwo+ICAxMCBmaWxlcyBjaGFuZ2Vk
-LCA3NiBpbnNlcnRpb25zKCspLCAxMCBkZWxldGlvbnMoLSkKPgo+IGRpZmYgLS1naXQgYS9pbmNs
-dWRlL2x0dG5nL2V2ZW50LmggYi9pbmNsdWRlL2x0dG5nL2V2ZW50LmgKPiBpbmRleCBiZjM3YTEx
-Li40OTI3ODZjIDEwMDY0NAo+IC0tLSBhL2luY2x1ZGUvbHR0bmcvZXZlbnQuaAo+ICsrKyBiL2lu
-Y2x1ZGUvbHR0bmcvZXZlbnQuaAo+IEBAIC0xMzgsNiArMTM4LDEwIEBAIGVudW0gbHR0bmdfZXZl
-bnRfY29udGV4dF90eXBlIHsKPiAgICAgICAgIExUVE5HX0VWRU5UX0NPTlRFWFRfUEVSRl9DUFVf
-Q09VTlRFUiAgICA9IDEzLAo+ICAgICAgICAgTFRUTkdfRVZFTlRfQ09OVEVYVF9QRVJGX1RIUkVB
-RF9DT1VOVEVSID0gMTQsCj4gICAgICAgICBMVFROR19FVkVOVF9DT05URVhUX0FQUF9DT05URVhU
-ICAgICAgICAgPSAxNSwKPiArICAgICAgIExUVE5HX0VWRU5UX0NPTlRFWFRfSU5URVJSVVBUSUJM
-RSAgICAgICA9IDE2LAo+ICsgICAgICAgTFRUTkdfRVZFTlRfQ09OVEVYVF9QUkVFTVBUSUJMRSAg
-ICAgICAgID0gMTcsCj4gKyAgICAgICBMVFROR19FVkVOVF9DT05URVhUX05FRURfUkVTQ0hFRFVM
-RSAgICAgPSAxOCwKPiArICAgICAgIExUVE5HX0VWRU5UX0NPTlRFWFRfTUlHUkFUQUJMRSAgICAg
-ICAgICA9IDE5LAo+ICB9Owo+Cj4gIGVudW0gbHR0bmdfZXZlbnRfZmllbGRfdHlwZSB7Cj4gZGlm
-ZiAtLWdpdCBhL2luY2x1ZGUvbHR0bmcvbHR0bmctZXJyb3IuaCBiL2luY2x1ZGUvbHR0bmcvbHR0
-bmctZXJyb3IuaAo+IGluZGV4IDEwMzBiZGYuLjM1YjVjYTIgMTAwNjQ0Cj4gLS0tIGEvaW5jbHVk
-ZS9sdHRuZy9sdHRuZy1lcnJvci5oCj4gKysrIGIvaW5jbHVkZS9sdHRuZy9sdHRuZy1lcnJvci5o
-Cj4gQEAgLTEzOCw2ICsxMzgsNyBAQCBlbnVtIGx0dG5nX2Vycm9yX2NvZGUgewo+ICAgICAgICAg
-TFRUTkdfRVJSX1BJRF9OT1RfVFJBQ0tFRCAgICAgICAgPSAxMTUsIC8qIFBJRCBub3QgdHJhY2tl
-ZCAqLwo+ICAgICAgICAgTFRUTkdfRVJSX0lOVkFMSURfQ0hBTk5FTF9ET01BSU4gPSAxMTYsIC8q
-IEludmFsaWQgY2hhbm5lbCBkb21haW4gKi8KPiAgICAgICAgIExUVE5HX0VSUl9PVkVSRkxPVyAg
-ICAgICAgICAgICAgID0gMTE3LCAvKiBPdmVyZmxvdyBvY2N1cmVkLiAqLwo+ICsgICAgICAgTFRU
-TkdfRVJSX0tFUk5fQ09OVEVYVF9VTkFWQUlMICAgPSAxMTgsICAvKiBDb250ZXh0IHVuYXZhaWxh
-YmxlIG9uIHRoaXMga2VybmVsICovCj4KPiAgICAgICAgIC8qIE1VU1QgYmUgbGFzdCBlbGVtZW50
-ICovCj4gICAgICAgICBMVFROR19FUlJfTlIsICAgICAgICAgICAgICAgICAgICAgICAgICAgLyog
-TGFzdCBlbGVtZW50ICovCj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvY29u
-dGV4dC5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jb250ZXh0LmMKPiBpbmRleCA5YTU3Mzg3
-Li45YzNhMzk0IDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvY29udGV4dC5j
-Cj4gKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jb250ZXh0LmMKPiBAQCAtNDksOCArNDks
-NyBAQCBzdGF0aWMgaW50IGFkZF9rY3R4X2FsbF9jaGFubmVscyhzdHJ1Y3QgbHR0X2tlcm5lbF9z
-ZXNzaW9uICprc2Vzc2lvbiwKPiAgICAgICAgIC8qIEdvIG92ZXIgYWxsIGNoYW5uZWxzICovCj4g
-ICAgICAgICBjZHNfbGlzdF9mb3JfZWFjaF9lbnRyeShrY2hhbiwgJmtzZXNzaW9uLT5jaGFubmVs
-X2xpc3QuaGVhZCwgbGlzdCkgewo+ICAgICAgICAgICAgICAgICByZXQgPSBrZXJuZWxfYWRkX2No
-YW5uZWxfY29udGV4dChrY2hhbiwga2N0eCk7Cj4gLSAgICAgICAgICAgICAgIGlmIChyZXQgPCAw
-KSB7Cj4gLSAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gTFRUTkdfRVJSX0tFUk5fQ09OVEVY
-VF9GQUlMOwo+ICsgICAgICAgICAgICAgICBpZiAocmV0ICE9IDApIHsKPiAgICAgICAgICAgICAg
-ICAgICAgICAgICBnb3RvIGVycm9yOwo+ICAgICAgICAgICAgICAgICB9Cj4gICAgICAgICB9Cj4g
-QEAgLTc1LDggKzc0LDcgQEAgc3RhdGljIGludCBhZGRfa2N0eF90b19jaGFubmVsKHN0cnVjdCBs
-dHRfa2VybmVsX2NvbnRleHQgKmtjdHgsCj4gICAgICAgICBEQkcoIkFkZCBrZXJuZWwgY29udGV4
-dCB0byBjaGFubmVsICclcyciLCBrY2hhbi0+Y2hhbm5lbC0+bmFtZSk7Cj4KPiAgICAgICAgIHJl
-dCA9IGtlcm5lbF9hZGRfY2hhbm5lbF9jb250ZXh0KGtjaGFuLCBrY3R4KTsKPiAtICAgICAgIGlm
-IChyZXQgPCAwKSB7Cj4gLSAgICAgICAgICAgICAgIHJldCA9IExUVE5HX0VSUl9LRVJOX0NPTlRF
-WFRfRkFJTDsKPiArICAgICAgIGlmIChyZXQgIT0gMCkgewo+ICAgICAgICAgICAgICAgICBnb3Rv
-IGVycm9yOwo+ICAgICAgICAgfQo+Cj4gQEAgLTIzMSw2ICsyMjksMTggQEAgaW50IGNvbnRleHRf
-a2VybmVsX2FkZChzdHJ1Y3QgbHR0X2tlcm5lbF9zZXNzaW9uICprc2Vzc2lvbiwKPiAgICAgICAg
-IGNhc2UgTFRUTkdfRVZFTlRfQ09OVEVYVF9QRVJGX0NPVU5URVI6Cj4gICAgICAgICAgICAgICAg
-IGtjdHgtPmN0eC5jdHggPSBMVFROR19LRVJORUxfQ09OVEVYVF9QRVJGX0NQVV9DT1VOVEVSOwo+
-ICAgICAgICAgICAgICAgICBicmVhazsKPiArICAgICAgIGNhc2UgTFRUTkdfRVZFTlRfQ09OVEVY
-VF9JTlRFUlJVUFRJQkxFOgo+ICsgICAgICAgICAgICAgICBrY3R4LT5jdHguY3R4ID0gTFRUTkdf
-S0VSTkVMX0NPTlRFWFRfSU5URVJSVVBUSUJMRTsKPiArICAgICAgICAgICAgICAgYnJlYWs7Cj4g
-KyAgICAgICBjYXNlIExUVE5HX0VWRU5UX0NPTlRFWFRfUFJFRU1QVElCTEU6Cj4gKyAgICAgICAg
-ICAgICAgIGtjdHgtPmN0eC5jdHggPSBMVFROR19LRVJORUxfQ09OVEVYVF9QUkVFTVBUSUJMRTsK
-PiArICAgICAgICAgICAgICAgYnJlYWs7Cj4gKyAgICAgICBjYXNlIExUVE5HX0VWRU5UX0NPTlRF
-WFRfTkVFRF9SRVNDSEVEVUxFOgo+ICsgICAgICAgICAgICAgICBrY3R4LT5jdHguY3R4ID0gTFRU
-TkdfS0VSTkVMX0NPTlRFWFRfTkVFRF9SRVNDSEVEVUxFOwo+ICsgICAgICAgICAgICAgICBicmVh
-azsKPiArICAgICAgIGNhc2UgTFRUTkdfRVZFTlRfQ09OVEVYVF9NSUdSQVRBQkxFOgo+ICsgICAg
-ICAgICAgICAgICBrY3R4LT5jdHguY3R4ID0gTFRUTkdfS0VSTkVMX0NPTlRFWFRfTUlHUkFUQUJM
-RTsKPiArICAgICAgICAgICAgICAgYnJlYWs7Cj4gICAgICAgICBkZWZhdWx0Ogo+ICAgICAgICAg
-ICAgICAgICByZXQgPSBMVFROR19FUlJfS0VSTl9DT05URVhUX0ZBSUw7Cj4gICAgICAgICAgICAg
-ICAgIGdvdG8gZXJyb3I7Cj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQva2Vy
-bmVsLmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2tlcm5lbC5jCj4gaW5kZXggMmNhZDBiMi4u
-NWJjZjQ4NyAxMDA2NDQKPiAtLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2tlcm5lbC5jCj4g
-KysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9rZXJuZWwuYwo+IEBAIC00OSwxNyArNDksMjQg
-QEAgaW50IGtlcm5lbF9hZGRfY2hhbm5lbF9jb250ZXh0KHN0cnVjdCBsdHRfa2VybmVsX2NoYW5u
-ZWwgKmNoYW4sCj4gICAgICAgICBEQkcoIkFkZGluZyBjb250ZXh0IHRvIGNoYW5uZWwgJXMiLCBj
-aGFuLT5jaGFubmVsLT5uYW1lKTsKPiAgICAgICAgIHJldCA9IGtlcm5jdGxfYWRkX2NvbnRleHQo
-Y2hhbi0+ZmQsICZjdHgtPmN0eCk7Cj4gICAgICAgICBpZiAocmV0IDwgMCkgewo+IC0gICAgICAg
-ICAgICAgICBpZiAoZXJybm8gIT0gRUVYSVNUKSB7Cj4gLSAgICAgICAgICAgICAgICAgICAgICAg
-UEVSUk9SKCJhZGQgY29udGV4dCBpb2N0bCIpOwo+IC0gICAgICAgICAgICAgICB9IGVsc2Ugewo+
-ICsgICAgICAgICAgICAgICBzd2l0Y2ggKGVycm5vKSB7Cj4gKyAgICAgICAgICAgICAgIGNhc2Ug
-RU5PU1lTOgo+ICsgICAgICAgICAgICAgICAgICAgICAgIC8qIEV4aXN0cyBidXQgbm90IGF2YWls
-YWJsZSBmb3IgdGhpcyBrZXJuZWwgKi8KPiArICAgICAgICAgICAgICAgICAgICAgICByZXQgPSBM
-VFROR19FUlJfS0VSTl9DT05URVhUX1VOQVZBSUw7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAg
-Z290byBlcnJvcjsKPiArICAgICAgICAgICAgICAgY2FzZSBFRVhJU1Q6Cj4gICAgICAgICAgICAg
-ICAgICAgICAgICAgLyogSWYgRUVYSVNULCB3ZSBqdXN0IGlnbm9yZSB0aGUgZXJyb3IgKi8KPiAg
-ICAgICAgICAgICAgICAgICAgICAgICByZXQgPSAwOwo+ICsgICAgICAgICAgICAgICAgICAgICAg
-IGdvdG8gZW5kOwo+ICsgICAgICAgICAgICAgICBkZWZhdWx0Ogo+ICsgICAgICAgICAgICAgICAg
-ICAgICAgIFBFUlJPUigiYWRkIGNvbnRleHQgaW9jdGwiKTsKPiArICAgICAgICAgICAgICAgICAg
-ICAgICByZXQgPSBMVFROR19FUlJfS0VSTl9DT05URVhUX0ZBSUw7Cj4gKyAgICAgICAgICAgICAg
-ICAgICAgICAgZ290byBlcnJvcjsKPiAgICAgICAgICAgICAgICAgfQo+IC0gICAgICAgICAgICAg
-ICBnb3RvIGVycm9yOwo+ICAgICAgICAgfQo+Cj4gK2VuZDoKPiAgICAgICAgIGNkc19saXN0X2Fk
-ZF90YWlsKCZjdHgtPmxpc3QsICZjaGFuLT5jdHhfbGlzdCk7Cj4gLQo+ICAgICAgICAgcmV0dXJu
-IDA7Cj4KPiAgZXJyb3I6Cj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvc2F2
-ZS5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9zYXZlLmMKPiBpbmRleCBiMzMyODc4Li40ZGIy
-Y2ZiIDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvc2F2ZS5jCj4gKysrIGIv
-c3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9zYXZlLmMKPiBAQCAtMjMyLDYgKzIzMiwxOCBAQCBjb25z
-dCBjaGFyICpnZXRfa2VybmVsX2NvbnRleHRfdHlwZV9zdHJpbmcoCj4gICAgICAgICBjYXNlIExU
-VE5HX0tFUk5FTF9DT05URVhUX0hPU1ROQU1FOgo+ICAgICAgICAgICAgICAgICBjb250ZXh0X3R5
-cGVfc3RyaW5nID0gY29uZmlnX2V2ZW50X2NvbnRleHRfaG9zdG5hbWU7Cj4gICAgICAgICAgICAg
-ICAgIGJyZWFrOwo+ICsgICAgICAgY2FzZSBMVFROR19LRVJORUxfQ09OVEVYVF9JTlRFUlJVUFRJ
-QkxFOgo+ICsgICAgICAgICAgICAgICBjb250ZXh0X3R5cGVfc3RyaW5nID0gY29uZmlnX2V2ZW50
-X2NvbnRleHRfaW50ZXJydXB0aWJsZTsKPiArICAgICAgICAgICAgICAgYnJlYWs7Cj4gKyAgICAg
-ICBjYXNlIExUVE5HX0tFUk5FTF9DT05URVhUX1BSRUVNUFRJQkxFOgo+ICsgICAgICAgICAgICAg
-ICBjb250ZXh0X3R5cGVfc3RyaW5nID0gY29uZmlnX2V2ZW50X2NvbnRleHRfcHJlZW1wdGlibGU7
-Cj4gKyAgICAgICAgICAgICAgIGJyZWFrOwo+ICsgICAgICAgY2FzZSBMVFROR19LRVJORUxfQ09O
-VEVYVF9ORUVEX1JFU0NIRURVTEU6Cj4gKyAgICAgICAgICAgICAgIGNvbnRleHRfdHlwZV9zdHJp
-bmcgPSBjb25maWdfZXZlbnRfY29udGV4dF9uZWVkX3Jlc2NoZWR1bGU7Cj4gKyAgICAgICAgICAg
-ICAgIGJyZWFrOwo+ICsgICAgICAgY2FzZSBMVFROR19LRVJORUxfQ09OVEVYVF9NSUdSQVRBQkxF
-Ogo+ICsgICAgICAgICAgICAgICBjb250ZXh0X3R5cGVfc3RyaW5nID0gY29uZmlnX2V2ZW50X2Nv
-bnRleHRfbWlncmF0YWJsZTsKPiArICAgICAgICAgICAgICAgYnJlYWs7Cj4gICAgICAgICBkZWZh
-dWx0Ogo+ICAgICAgICAgICAgICAgICBjb250ZXh0X3R5cGVfc3RyaW5nID0gTlVMTDsKPiAgICAg
-ICAgIH0KPiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9hZGRfY29udGV4dC5j
-IGIvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9hZGRfY29udGV4dC5jCj4gaW5kZXggYTgwMmRmMC4u
-YTZkNzNhMCAxMDA2NDQKPiAtLS0gYS9zcmMvYmluL2x0dG5nL2NvbW1hbmRzL2FkZF9jb250ZXh0
-LmMKPiArKysgYi9zcmMvYmluL2x0dG5nL2NvbW1hbmRzL2FkZF9jb250ZXh0LmMKPiBAQCAtNzUs
-NiArNzUsMTAgQEAgZW51bSBjb250ZXh0X3R5cGUgewo+ICAgICAgICAgQ09OVEVYVF9QRVJGX0NQ
-VV9DT1VOVEVSID0gMTMsCj4gICAgICAgICBDT05URVhUX1BFUkZfVEhSRUFEX0NPVU5URVIgPSAx
-NCwKPiAgICAgICAgIENPTlRFWFRfQVBQX0NPTlRFWFQgID0gMTUsCj4gKyAgICAgICBDT05URVhU
-X0lOVEVSUlVQVElCTEUgPSAxNiwKPiArICAgICAgIENPTlRFWFRfUFJFRU1QVElCTEUgID0gMTcs
-Cj4gKyAgICAgICBDT05URVhUX05FRURfUkVTQ0hFRFVMRSA9IDE4LAo+ICsgICAgICAgQ09OVEVY
-VF9NSUdSQVRBQkxFICAgPSAxOSwKPiAgfTsKPgo+ICAvKgo+IEBAIC0yMjUsNiArMjI5LDEwIEBA
-IGNvbnN0IHN0cnVjdCBjdHhfb3B0cyB7Cj4gICAgICAgICB7ICJ2cHBpZCIsIENPTlRFWFRfVlBQ
-SUQgfSwKPiAgICAgICAgIHsgImhvc3RuYW1lIiwgQ09OVEVYVF9IT1NUTkFNRSB9LAo+ICAgICAg
-ICAgeyAiaXAiLCBDT05URVhUX0lQIH0sCj4gKyAgICAgICB7ICJpbnRlcnJ1cHRpYmxlIiwgQ09O
-VEVYVF9JTlRFUlJVUFRJQkxFIH0sCj4gKyAgICAgICB7ICJwcmVlbXB0aWJsZSIsIENPTlRFWFRf
-UFJFRU1QVElCTEUgfSwKPiArICAgICAgIHsgIm5lZWRfcmVzY2hlZHVsZSIsIENPTlRFWFRfTkVF
-RF9SRVNDSEVEVUxFIH0sCj4gKyAgICAgICB7ICJtaWdyYXRhYmxlIiwgQ09OVEVYVF9NSUdSQVRB
-QkxFIH0sCj4KPiAgICAgICAgIC8qIFBlcmYgb3B0aW9ucyAqLwo+Cj4gZGlmZiAtLWdpdCBhL3Ny
-Yy9jb21tb24vY29uZmlnL2NvbmZpZy1zZXNzaW9uLWFiaS5oIGIvc3JjL2NvbW1vbi9jb25maWcv
-Y29uZmlnLXNlc3Npb24tYWJpLmgKPiBpbmRleCBmN2NlZTM0Li4xN2FjZWExIDEwMDY0NAo+IC0t
-LSBhL3NyYy9jb21tb24vY29uZmlnL2NvbmZpZy1zZXNzaW9uLWFiaS5oCj4gKysrIGIvc3JjL2Nv
-bW1vbi9jb25maWcvY29uZmlnLXNlc3Npb24tYWJpLmgKPiBAQCAtMTIxLDUgKzEyMSw5IEBAIGV4
-dGVybiBjb25zdCBjaGFyICogY29uc3QgY29uZmlnX2V2ZW50X2NvbnRleHRfaG9zdG5hbWU7Cj4g
-IGV4dGVybiBjb25zdCBjaGFyICogY29uc3QgY29uZmlnX2V2ZW50X2NvbnRleHRfaXA7Cj4gIGV4
-dGVybiBjb25zdCBjaGFyICogY29uc3QgY29uZmlnX2V2ZW50X2NvbnRleHRfcGVyZl90aHJlYWRf
-Y291bnRlcjsKPiAgZXh0ZXJuIGNvbnN0IGNoYXIgKiBjb25zdCBjb25maWdfZXZlbnRfY29udGV4
-dF9hcHA7Cj4gK2V4dGVybiBjb25zdCBjaGFyICogY29uc3QgY29uZmlnX2V2ZW50X2NvbnRleHRf
-aW50ZXJydXB0aWJsZTsKPiArZXh0ZXJuIGNvbnN0IGNoYXIgKiBjb25zdCBjb25maWdfZXZlbnRf
-Y29udGV4dF9wcmVlbXB0aWJsZTsKPiArZXh0ZXJuIGNvbnN0IGNoYXIgKiBjb25zdCBjb25maWdf
-ZXZlbnRfY29udGV4dF9uZWVkX3Jlc2NoZWR1bGU7Cj4gK2V4dGVybiBjb25zdCBjaGFyICogY29u
-c3QgY29uZmlnX2V2ZW50X2NvbnRleHRfbWlncmF0YWJsZTsKPgo+ICAjZW5kaWYgLyogQ09ORklH
-X1NFU1NJT05fSU5URVJOQUxfSCAqLwo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL2NvbmZpZy9z
-ZXNzaW9uLWNvbmZpZy5jIGIvc3JjL2NvbW1vbi9jb25maWcvc2Vzc2lvbi1jb25maWcuYwo+IGlu
-ZGV4IGRlYzg5MTMuLjY0N2QxNmEgMTAwNjQ0Cj4gLS0tIGEvc3JjL2NvbW1vbi9jb25maWcvc2Vz
-c2lvbi1jb25maWcuYwo+ICsrKyBiL3NyYy9jb21tb24vY29uZmlnL3Nlc3Npb24tY29uZmlnLmMK
-PiBAQCAtMTcwLDcgKzE3MCwxMCBAQCBjb25zdCBjaGFyICogY29uc3QgY29uZmlnX2V2ZW50X2Nv
-bnRleHRfaG9zdG5hbWUgPSAiSE9TVE5BTUUiOwo+ICBjb25zdCBjaGFyICogY29uc3QgY29uZmln
-X2V2ZW50X2NvbnRleHRfaXAgPSAiSVAiOwo+ICBjb25zdCBjaGFyICogY29uc3QgY29uZmlnX2V2
-ZW50X2NvbnRleHRfcGVyZl90aHJlYWRfY291bnRlciA9ICJQRVJGX1RIUkVBRF9DT1VOVEVSIjsK
-PiAgY29uc3QgY2hhciAqIGNvbnN0IGNvbmZpZ19ldmVudF9jb250ZXh0X2FwcCA9ICJBUFAiOwo+
-IC0KPiArY29uc3QgY2hhciAqIGNvbnN0IGNvbmZpZ19ldmVudF9jb250ZXh0X2ludGVycnVwdGli
-bGUgPSAiSU5URVJSVVBUSUJMRSI7Cj4gK2NvbnN0IGNoYXIgKiBjb25zdCBjb25maWdfZXZlbnRf
-Y29udGV4dF9wcmVlbXB0aWJsZSA9ICJQUkVFTVBUSUJMRSI7Cj4gK2NvbnN0IGNoYXIgKiBjb25z
-dCBjb25maWdfZXZlbnRfY29udGV4dF9uZWVkX3Jlc2NoZWR1bGUgPSAiTkVFRF9SRVNDSEVEVUxF
-IjsKPiArY29uc3QgY2hhciAqIGNvbnN0IGNvbmZpZ19ldmVudF9jb250ZXh0X21pZ3JhdGFibGUg
-PSAiTUlHUkFUQUJMRSI7Cj4KPiAgc3RydWN0IGNvbnN1bWVyX291dHB1dCB7Cj4gICAgICAgICBp
-bnQgZW5hYmxlZDsKPiBAQCAtOTg1LDYgKzk4OCwxOCBAQCBpbnQgZ2V0X2NvbnRleHRfdHlwZSh4
-bWxDaGFyICpjb250ZXh0X3R5cGUpCj4gICAgICAgICB9IGVsc2UgaWYgKCFzdHJjbXAoKGNoYXIg
-KikgY29udGV4dF90eXBlLAo+ICAgICAgICAgICAgICAgICBjb25maWdfZXZlbnRfY29udGV4dF9p
-cCkpIHsKPiAgICAgICAgICAgICAgICAgcmV0ID0gTFRUTkdfRVZFTlRfQ09OVEVYVF9JUDsKPiAr
-ICAgICAgIH0gZWxzZSBpZiAoIXN0cmNtcCgoY2hhciAqKSBjb250ZXh0X3R5cGUsCj4gKyAgICAg
-ICAgICAgICAgIGNvbmZpZ19ldmVudF9jb250ZXh0X2ludGVycnVwdGlibGUpKSB7Cj4gKyAgICAg
-ICAgICAgICAgIHJldCA9IExUVE5HX0VWRU5UX0NPTlRFWFRfSU5URVJSVVBUSUJMRTsKPiArICAg
-ICAgIH0gZWxzZSBpZiAoIXN0cmNtcCgoY2hhciAqKSBjb250ZXh0X3R5cGUsCj4gKyAgICAgICAg
-ICAgICAgIGNvbmZpZ19ldmVudF9jb250ZXh0X3ByZWVtcHRpYmxlKSkgewo+ICsgICAgICAgICAg
-ICAgICByZXQgPSBMVFROR19FVkVOVF9DT05URVhUX1BSRUVNUFRJQkxFOwo+ICsgICAgICAgfSBl
-bHNlIGlmICghc3RyY21wKChjaGFyICopIGNvbnRleHRfdHlwZSwKPiArICAgICAgICAgICAgICAg
-Y29uZmlnX2V2ZW50X2NvbnRleHRfbmVlZF9yZXNjaGVkdWxlKSkgewo+ICsgICAgICAgICAgICAg
-ICByZXQgPSBMVFROR19FVkVOVF9DT05URVhUX05FRURfUkVTQ0hFRFVMRTsKPiArICAgICAgIH0g
-ZWxzZSBpZiAoIXN0cmNtcCgoY2hhciAqKSBjb250ZXh0X3R5cGUsCj4gKyAgICAgICAgICAgICAg
-IGNvbmZpZ19ldmVudF9jb250ZXh0X21pZ3JhdGFibGUpKSB7Cj4gKyAgICAgICAgICAgICAgIHJl
-dCA9IExUVE5HX0VWRU5UX0NPTlRFWFRfTUlHUkFUQUJMRTsKPiAgICAgICAgIH0gZWxzZSB7Cj4g
-ICAgICAgICAgICAgICAgIGdvdG8gZXJyb3I7Cj4gICAgICAgICB9Cj4gZGlmZiAtLWdpdCBhL3Ny
-Yy9jb21tb24vZXJyb3IuYyBiL3NyYy9jb21tb24vZXJyb3IuYwo+IGluZGV4IGMzZmRlNTEuLmQx
-YzMyOWMgMTAwNjQ0Cj4gLS0tIGEvc3JjL2NvbW1vbi9lcnJvci5jCj4gKysrIGIvc3JjL2NvbW1v
-bi9lcnJvci5jCj4gQEAgLTE3MCw2ICsxNzAsNyBAQCBzdGF0aWMgY29uc3QgY2hhciAqZXJyb3Jf
-c3RyaW5nX2FycmF5W10gPSB7Cj4gICAgICAgICBbIEVSUk9SX0lOREVYKExUVE5HX0VSUl9QSURf
-Tk9UX1RSQUNLRUQpIF0gPSAiUElEIG5vdCB0cmFja2VkIiwKPiAgICAgICAgIFsgRVJST1JfSU5E
-RVgoTFRUTkdfRVJSX0lOVkFMSURfQ0hBTk5FTF9ET01BSU4pIF0gPSAiSW52YWxpZCBjaGFubmVs
-IGRvbWFpbiIsCj4gICAgICAgICBbIEVSUk9SX0lOREVYKExUVE5HX0VSUl9PVkVSRkxPVykgXSA9
-ICJPdmVyZmxvdyBvY2N1cmVkIiwKPiArICAgICAgIFsgRVJST1JfSU5ERVgoTFRUTkdfRVJSX0tF
-Uk5fQ09OVEVYVF9VTkFWQUlMKSBdID0gIkNvbnRleHQgdW5hdmFpbGFibGUgb24gdGhpcyBrZXJu
-ZWwiLAo+Cj4gICAgICAgICAvKiBMYXN0IGVsZW1lbnQgKi8KPiAgICAgICAgIFsgRVJST1JfSU5E
-RVgoTFRUTkdfRVJSX05SKSBdID0gIlVua25vd24gZXJyb3IgY29kZSIKPiBkaWZmIC0tZ2l0IGEv
-c3JjL2NvbW1vbi9sdHRuZy1rZXJuZWwuaCBiL3NyYy9jb21tb24vbHR0bmcta2VybmVsLmgKPiBp
-bmRleCA5ZGQ4ZGY3Li43OGQ1ZmM0IDEwMDY0NAo+IC0tLSBhL3NyYy9jb21tb24vbHR0bmcta2Vy
-bmVsLmgKPiArKysgYi9zcmMvY29tbW9uL2x0dG5nLWtlcm5lbC5oCj4gQEAgLTU0LDYgKzU0LDEw
-IEBAIGVudW0gbHR0bmdfa2VybmVsX2NvbnRleHRfdHlwZSB7Cj4gICAgICAgICBMVFROR19LRVJO
-RUxfQ09OVEVYVF9WUFBJRCAgICAgICAgICA9IDksCj4gICAgICAgICBMVFROR19LRVJORUxfQ09O
-VEVYVF9IT1NUTkFNRSAgICAgICA9IDEwLAo+ICAgICAgICAgTFRUTkdfS0VSTkVMX0NPTlRFWFRf
-Q1BVX0lEICAgICAgICAgPSAxMSwKPiArICAgICAgIExUVE5HX0tFUk5FTF9DT05URVhUX0lOVEVS
-UlVQVElCTEUgID0gMTIsCj4gKyAgICAgICBMVFROR19LRVJORUxfQ09OVEVYVF9QUkVFTVBUSUJM
-RSAgICA9IDEzLAo+ICsgICAgICAgTFRUTkdfS0VSTkVMX0NPTlRFWFRfTkVFRF9SRVNDSEVEVUxF
-ID0gMTQsCj4gKyAgICAgICBMVFROR19LRVJORUxfQ09OVEVYVF9NSUdSQVRBQkxFICAgICA9IDE1
-LAo+ICB9Owo+Cj4gIC8qIFBlcmYgY291bnRlciBhdHRyaWJ1dGVzICovCj4gLS0KPiAxLjkuMQo+
-CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZp
-Y2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8v
-bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============7063285061322980508==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_BN3PR00MB00034381CC2491E679BD1371C88A0BN3PR00MB0003namp_"
+
+--_000_BN3PR00MB00034381CC2491E679BD1371C88A0BN3PR00MB0003namp_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+I'm forwarding this on-behalf of one of my colleagues who is trying to pars=
+e CTF.  Any help you can provide is greatly appreciated.
+
+Thanks.
+-Brian
+
+From: Lee Culver
+Sent: Wednesday, March 16, 2016 11:06 AM
+To: Brian Robbins <brianrob@microsoft.com>
+Subject: CTF Compact Header Timestamps
+
+Event headers in LTTng can have a 27-bit clock or a 64-bit clock.  I have b=
+een able to properly map the 64-bit clock back to a real timestamp, but I'm=
+ not sure how to interpret the 27-bit clock value.  I've dug through the CT=
+F specification but can't find the relevant text.  I have pasted the releva=
+nt metadata at the bottom of this email.
+
+For 64-bit clocks, this calculation gets us to the proper DateTime in C#:
+
+            var clock =3D _metadata.Clocks.Single();
+            var offset =3D new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKin=
+d.Utc).AddSeconds(clock.Offset / clock.Frequency);
+
+            long ticks =3D (long)(header.Timestamp * 10000000.0 / clock.Fre=
+quency);
+            var time =3D new DateTime(offset.Ticks + ticks, DateTimeKind.Ut=
+c);
+
+However, for the 'compact' variant (see below), we end up with a timestamp =
+that's far lower than the frequency, such as '0x55363b9' and I'm simply not=
+ sure how to interpret this.  It does NOT seem to be an offset from the pre=
+vious event since if I treat it as such we get events that are out of order=
+.  One such example is the following:
+
+                Event #11 - Extended header timestamp (64-bit): 0x00098a754=
+555ea28
+Event #12 - Compact header timestamp (27-bit): 0x04ecc38c
+Event #13 - Extended header timestamp (64-bit): 0x00098a75369cc5e4
+
+As you can see, Event[11].Timestamp + Event[12].Timestamp > Event[13].Times=
+tamp.  Which means it cannot be a simple "offset from previous event", sinc=
+e we would be getting events out of order.
+
+Here is the relevant metadata:
+
+clock {
+       name =3D "monotonic";
+       uuid =3D "9fb57333-ada2-4c73-a7ce-334f46437c74";
+       description =3D "Monotonic Clock";
+       freq =3D 1000000000; /* Frequency, in Hz */
+       /* clock value offset from Epoch is: offset * (1/freq) */
+       offset =3D 1451946230228988436;
+};
+
+
+typealias integer {
+       size =3D 27; align =3D 1; signed =3D false;
+       map =3D clock.monotonic.value;
+} :=3D uint27_clock_monotonic_t;
+
+typealias integer {
+       size =3D 64; align =3D 8; signed =3D false;
+       map =3D clock.monotonic.value;
+} :=3D uint64_clock_monotonic_t;
+
+struct event_header_compact {
+       enum : uint5_t { compact =3D 0 ... 30, extended =3D 31 } id;
+       variant <id> {
+              struct {
+                     uint27_clock_monotonic_t timestamp;
+              } compact;
+              struct {
+                     uint32_t id;
+                     uint64_clock_monotonic_t timestamp;
+              } extended;
+       } v;
+} align(8);
+
+How should we be treating these uint27_clock_monotonic_t values?
+
+Thanks!
+-Lee Culver
+CLR Reliability and Performance
+
+
+--_000_BN3PR00MB00034381CC2491E679BD1371C88A0BN3PR00MB0003namp_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;
+	color:#7030A0;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:#954F72;
+	text-decoration:underline;}
+p.msonormal0, li.msonormal0, div.msonormal0
+	{mso-style-name:msonormal;
+	mso-margin-top-alt:auto;
+	margin-right:0in;
+	mso-margin-bottom-alt:auto;
+	margin-left:0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman",serif;}
+span.EmailStyle18
+	{mso-style-type:personal;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+span.EmailStyle19
+	{mso-style-type:personal-reply;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-size:10.0pt;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-US" link=3D"#0563C1" vlink=3D"#954F72">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal"><span style=3D"color:windowtext">Hello,<o:p></o:p></=
+span></p>
+<p class=3D"MsoNormal"><span style=3D"color:windowtext"><o:p>&nbsp;</o:p></=
+span></p>
+<p class=3D"MsoNormal"><span style=3D"color:windowtext">I&#8217;m forwardin=
+g this on-behalf of one of my colleagues who is trying to parse CTF.&nbsp; =
+Any help you can provide is greatly appreciated.<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"color:windowtext"><o:p>&nbsp;</o:p></=
+span></p>
+<p class=3D"MsoNormal"><span style=3D"color:windowtext">Thanks.<o:p></o:p><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"color:windowtext">-Brian<o:p></o:p></=
+span></p>
+<p class=3D"MsoNormal"><a name=3D"_MailEndCompose"><span style=3D"color:win=
+dowtext"><o:p>&nbsp;</o:p></span></a></p>
+<span style=3D"mso-bookmark:_MailEndCompose"></span>
+<div>
+<div style=3D"border:none;border-top:solid #E1E1E1 1.0pt;padding:3.0pt 0in =
+0in 0in">
+<p class=3D"MsoNormal"><b><span style=3D"color:windowtext">From:</span></b>=
+<span style=3D"color:windowtext"> Lee Culver
+<br>
+<b>Sent:</b> Wednesday, March 16, 2016 11:06 AM<br>
+<b>To:</b> Brian Robbins &lt;brianrob@microsoft.com&gt;<br>
+<b>Subject:</b> CTF Compact Header Timestamps<o:p></o:p></span></p>
+</div>
+</div>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Event headers in LTTng can have a 27-bit clock or a =
+64-bit clock.&nbsp; I have been able to properly map the 64-bit clock back =
+to a real timestamp, but I&#8217;m not sure how to interpret the 27-bit clo=
+ck value.&nbsp; I&#8217;ve dug through the CTF specification
+ but can&#8217;t find the relevant text.&nbsp; I have pasted the relevant m=
+etadata at the bottom of this email.<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">For 64-bit clocks, this calculation gets us to the p=
+roper DateTime in C#:<o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
+ze:9.5pt;font-family:Consolas;background:white;mso-highlight:white"><o:p>&n=
+bsp;</o:p></span></p>
+<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
+ze:9.5pt;font-family:Consolas;background:white;mso-highlight:white">&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var clock =3D _=
+metadata.Clocks.Single();<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
+ze:9.5pt;font-family:Consolas;background:white;mso-highlight:white">&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var offset =3D =
+new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(clock.Off=
+set / clock.Frequency);<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
+ze:9.5pt;font-family:Consolas;background:white;mso-highlight:white"><o:p>&n=
+bsp;</o:p></span></p>
+<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
+ze:9.5pt;font-family:Consolas;background:white;mso-highlight:white">&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; long ticks =3D =
+(long)(header.Timestamp * 10000000.0 / clock.Frequency);<o:p></o:p></span><=
+/p>
+<p class=3D"MsoNormal"><span style=3D"font-size:9.5pt;font-family:Consolas;=
+background:white;mso-highlight:white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var time =3D new DateTime(offset.Ticks &#43; =
+ticks, DateTimeKind.Utc);</span><o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">However, for the &#8216;compact&#8217; variant (see =
+below), we end up with a timestamp that&#8217;s far lower than the frequenc=
+y, such as &#8216;0x55363b9&#8217; and I&#8217;m simply not sure how to int=
+erpret this.&nbsp; It does NOT seem to be an offset from the previous event
+ since if I treat it as such we get events that are out of order.&nbsp; One=
+ such example is the following:<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Event #11 - Extended header timestam=
+p (64-bit): 0x00098a754555ea28<o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"text-indent:.5in">Event #12 - Compact heade=
+r timestamp (27-bit): 0x04ecc38c<o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"text-indent:.5in">Event #13 - Extended head=
+er timestamp (64-bit): 0x00098a75369cc5e4<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">As you can see, Event[11].Timestamp &#43; Event[12].=
+Timestamp &gt; Event[13].Timestamp.&nbsp; Which means it cannot be a simple=
+ &#8220;offset from previous event&#8221;, since we would be getting events=
+ out of order.<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Here is the relevant metadata:<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">clock {<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; name =3D &quot;monotonic&quot;;<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; uuid =3D &quot;9fb57333-ada2-4c73-a7ce-334f46437c74&quot;;<o:p></o:p=
+></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; description =3D &quot;Monotonic Clock&quot;;<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; freq =3D 1000000000; /* Frequency, in Hz */<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; /* clock value offset from Epoch is: offset * (1/freq) */<o:p></o:p>=
+</span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; offset =3D 1451946230228988436;<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">};<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">typealias integer {<o:p></o:p>=
+</span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; size =3D 27; align =3D 1; signed =3D false;<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; map =3D clock.monotonic.value;<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">} :=3D uint27_clock_monotonic_=
+t;<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">typealias integer {<o:p></o:p>=
+</span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; size =3D 64; align =3D 8; signed =3D false;<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; map =3D clock.monotonic.value;<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">} :=3D uint64_clock_monotonic_=
+t;<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">struct event_header_compact {<=
+o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; enum : uint5_t { compact =3D 0 ... 30, extended =3D 31 } id;<o:p></o=
+:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; variant &lt;id&gt; {<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; struct {<o:p></o:p></span>=
+</p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp; uint27_clock_monotonic_t timestamp;<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } compact;<o:p></o:p></spa=
+n></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; struct {<o:p></o:p></span>=
+</p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp; uint32_t id;<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp; uint64_clock_monotonic_t timestamp;<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } extended;<o:p></o:p></sp=
+an></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp; } v;<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
+9.5pt;font-family:Consolas;color:windowtext">} align(8);</span><span style=
+=3D"color:windowtext"><o:p></o:p></span></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">How should we be treating these <span style=3D"font-=
+size:9.5pt;font-family:Consolas">
+uint27_clock_monotonic_t</span> values?<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Thanks!<o:p></o:p></p>
+<p class=3D"MsoNormal">-Lee Culver<o:p></o:p></p>
+<p class=3D"MsoNormal">CLR Reliability and Performance<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+</div>
+</body>
+</html>
+
+--_000_BN3PR00MB00034381CC2491E679BD1371C88A0BN3PR00MB0003namp_--
+
+--===============7063285061322980508==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============7063285061322980508==--
