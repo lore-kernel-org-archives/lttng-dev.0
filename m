@@ -1,16 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Brian Robbins <brianrob@microsoft.com>
 Subject: Re: CTF Compact Header Timestamps
-Date: Thu, 17 Mar 2016 00:15:36 +0000 (UTC)
-Message-ID: <1330593963.27772.1458173736972.JavaMail.zimbra__23926.6069759198$1458173776$gmane$org@efficios.com>
+Date: Thu, 17 Mar 2016 16:32:01 +0000
+Message-ID: <BN3PR00MB0003208E1DF77CA6CBAF4736C88B0__15957.1947566748$1458232388$gmane$org@BN3PR00MB0003.namprd00.prod.outlook.com>
 References: <BLUPR03MB1180BF1909497239E300878D38A0@BLUPR03MB118.namprd03.prod.outlook.com>
  <BN3PR00MB00034381CC2491E679BD1371C88A0@BN3PR00MB0003.namprd00.prod.outlook.com>
+ <1330593963.27772.1458173736972.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8779872987636427401=="
+Content-Type: multipart/mixed; boundary="===============7017389121815864977=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 9A020A0818
- for <lttng-dev@lists.lttng.org>; Thu, 17 Mar 2016 00:15:46 +0000 (UTC)
-In-Reply-To: <BN3PR00MB00034381CC2491E679BD1371C88A0@BN3PR00MB0003.namprd00.prod.outlook.com>
+Received: from na01-bl2-obe.outbound.protection.outlook.com
+ (mail-bl2on0123.outbound.protection.outlook.com [65.55.169.123])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 7B3ECA0988
+ for <lttng-dev@lists.lttng.org>; Thu, 17 Mar 2016 16:32:43 +0000 (UTC)
+In-Reply-To: <1330593963.27772.1458173736972.JavaMail.zimbra@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,501 +23,517 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Brian Robbins <brianrob@microsoft.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>, Lee Culver <leculver@microsoft.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============8779872987636427401==
+--===============7017389121815864977==
+Content-Language: en-US
 Content-Type: multipart/alternative;
-	boundary="----=_Part_27771_2004620774.1458173736971"
-
-------=_Part_27771_2004620774.1458173736971
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi Brian,=20
-
-You should think about those 27 bits as the "new lowest significant bits"=
-=20
-of the 64-bit clock.=20
-
-Quoting the CTF spec to understand how to deal with 27-bit overflow=20
-between two consecutive time-stamps in the same stream (here N =3D 27):=20
-
-"For a N-bit integer type referring to a clock, if the integer overflows co=
-mpared to the N low order bits of the clock prior value found in the same s=
-tream, then it is assumed that one, and only one, overflow occurred. It is =
-therefore important that events encoding time on a small number of bits hap=
-pen frequently enough to detect when more than one N-bit overflow occurs."=
-=20
-
-Those 27 bits are _not_ an offset from the previous timestamp. They update =
-the=20
-current notion of time (based on all prior timestamps read for this stream)=
- by=20
-setting the low 27 bits to the new value. If that value happens to be lower=
- than the=20
-previous 27 low bits of the current time, this means we had one 27-bit over=
-flow, so=20
-we need to increment the 28th bit by one.=20
-
-In each packet header, you will find the full 64-bit timestamps, so we alwa=
-ys=20
-have a full 64-bit base from which to start.=20
-
-It is up to the tracer (lttng) to ensure that there is never more than a si=
-ngle 27-bit=20
-overflow preceding a 27-bit compact timestamp. If lttng detects that there =
-would=20
-be more than a single 27-bit overflow prior to a timestamp, it will use an =
-extended=20
-header which stores the full 64-bit of the new timestamp.=20
-
-We rely on this time-compaction scheme rather than offsetting from the prio=
-r=20
-64-bit timestamp because it allows us to weaken the sequential inter-depend=
-ency=20
-between consecutive events, which is useful for lock-free ring buffers.=20
-
-Let me know if you still have questions,=20
-
-Thanks,=20
-
-Mathieu=20
-
------ On Mar 16, 2016, at 6:55 PM, Brian Robbins <brianrob@microsoft.com> w=
-rote:=20
-
-> Hello,
-
-> I=E2=80=99m forwarding this on-behalf of one of my colleagues who is tryi=
-ng to parse
-> CTF. Any help you can provide is greatly appreciated.
-
-> Thanks.
-
-> -Brian
-
-> From: Lee Culver
-> Sent: Wednesday, March 16, 2016 11:06 AM
-> To: Brian Robbins <brianrob@microsoft.com>
-> Subject: CTF Compact Header Timestamps
-
-> Event headers in LTTng can have a 27-bit clock or a 64-bit clock. I have =
-been
-> able to properly map the 64-bit clock back to a real timestamp, but I=E2=
-=80=99m not
-> sure how to interpret the 27-bit clock value. I=E2=80=99ve dug through th=
-e CTF
-> specification but can=E2=80=99t find the relevant text. I have pasted the=
- relevant
-> metadata at the bottom of this email.
-
-> For 64-bit clocks, this calculation gets us to the proper DateTime in C#:
-
-> var clock =3D _metadata.Clocks.Single();
-
-> var offset =3D new DateTime(1970, 1, 1, 0, 0, 0, 0,
-> DateTimeKind.Utc).AddSeconds(clock.Offset / clock.Frequency);
-
-> long ticks =3D (long)(header.Timestamp * 10000000.0 / clock.Frequency);
-
-> var time =3D new DateTime(offset.Ticks + ticks, DateTimeKind.Utc);
-
-> However, for the =E2=80=98compact=E2=80=99 variant (see below), we end up=
- with a timestamp
-> that=E2=80=99s far lower than the frequency, such as =E2=80=980x55363b9=
-=E2=80=99 and I=E2=80=99m simply not
-> sure how to interpret this. It does NOT seem to be an offset from the pre=
-vious
-> event since if I treat it as such we get events that are out of order. On=
-e such
-> example is the following:
-
-> Event #11 - Extended header timestamp (64-bit): 0x00098a754555ea28
-
-> Event #12 - Compact header timestamp (27-bit): 0x04ecc38c
-
-> Event #13 - Extended header timestamp (64-bit): 0x00098a75369cc5e4
-
-> As you can see, Event[11].Timestamp + Event[12].Timestamp > Event[13].Tim=
-estamp.
-> Which means it cannot be a simple =E2=80=9Coffset from previous event=E2=
-=80=9D, since we would
-> be getting events out of order.
-
-> Here is the relevant metadata:
-
-> clock {
-
-> name =3D "monotonic";
-
-> uuid =3D "9fb57333-ada2-4c73-a7ce-334f46437c74";
-
-> description =3D "Monotonic Clock";
-
-> freq =3D 1000000000; /* Frequency, in Hz */
-
-> /* clock value offset from Epoch is: offset * (1/freq) */
-
-> offset =3D 1451946230228988436;
-
-> };
-
-> typealias integer {
-
-> size =3D 27; align =3D 1; signed =3D false;
-
-> map =3D clock.monotonic.value;
-
-> } :=3D uint27_clock_monotonic_t;
-
-> typealias integer {
-
-> size =3D 64; align =3D 8; signed =3D false;
-
-> map =3D clock.monotonic.value;
-
-> } :=3D uint64_clock_monotonic_t;
-
-> struct event_header_compact {
-
-> enum : uint5_t { compact =3D 0 ... 30, extended =3D 31 } id;
-
-> variant <id> {
-
-> struct {
-
-> uint27_clock_monotonic_t timestamp;
-
-> } compact;
-
-> struct {
-
-> uint32_t id;
-
-> uint64_clock_monotonic_t timestamp;
-
-> } extended;
-
-> } v;
-
-> } align(8);
-
-> How should we be treating these uint27_clock_monotonic_t values?
-
-> Thanks!
-
-> -Lee Culver
-
-> CLR Reliability and Performance
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---=20
-Mathieu Desnoyers=20
-EfficiOS Inc.=20
-http://www.efficios.com=20
-
-------=_Part_27771_2004620774.1458173736971
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div>Hi Brian,</div><div><br data-mce-bogus=3D"1=
-"></div><div>You should think about those 27 bits as the "new lowest signif=
-icant bits"</div><div>of the 64-bit clock.<br></div><div><br data-mce-bogus=
-=3D"1"></div><div>Quoting the CTF spec to understand how to deal with 27-bi=
-t overflow</div><div>between two consecutive time-stamps in the same stream=
- (here N =3D 27):<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"=
-1"></div><div>"For a N-bit integer type referring to a clock, if the intege=
-r overflows compared to the N low order bits of the clock prior value found=
- in the same stream, then it is assumed that one, and only one, overflow oc=
-curred. It is therefore important that events encoding time on a small numb=
-er of bits happen frequently enough to detect when more than one N-bit over=
-flow occurs."<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"><=
-/div><div>Those 27 bits are _not_ an offset from the previous timestamp. Th=
-ey update the<br data-mce-bogus=3D"1"></div><div>current notion of time (ba=
-sed on all prior timestamps read for this stream) by<br data-mce-bogus=3D"1=
-"></div><div>setting the low 27 bits to the new value. If that value happen=
-s to be lower than the<br data-mce-bogus=3D"1"></div><div>previous 27 low b=
-its of the current time, this means we had one 27-bit overflow, so<br data-=
-mce-bogus=3D"1"></div><div>we need to increment the 28th bit by one.<br dat=
-a-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>In each pa=
-cket header, you will find the full 64-bit timestamps, so we always<br data=
--mce-bogus=3D"1"></div><div>have a full 64-bit base from which to start.<br=
- data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>It is =
-up to the tracer (lttng) to ensure that there is never more than a single 2=
-7-bit<br data-mce-bogus=3D"1"></div><div>overflow preceding a 27-bit compac=
-t timestamp. If lttng detects that there would<br data-mce-bogus=3D"1"></di=
-v><div>be more than a single 27-bit overflow prior to a timestamp, it will =
-use an extended<br data-mce-bogus=3D"1"></div><div>header which stores the =
-full 64-bit of the new timestamp.<br data-mce-bogus=3D"1"></div><div><br></=
-div><div>We rely on this time-compaction scheme rather than offsetting from=
- the prior<br data-mce-bogus=3D"1"></div><div>64-bit timestamp because it a=
-llows us to weaken the sequential inter-dependency<br data-mce-bogus=3D"1">=
-</div><div>between consecutive events, which is useful for lock-free ring b=
-uffers.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><=
-div>Let me know if you still have questions,<br data-mce-bogus=3D"1"></div>=
-<div><br data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></=
-div><div><br data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1=
-"></div><div><br data-mce-bogus=3D"1"></div><div><span id=3D"zwchr" data-ma=
-rker=3D"__DIVIDER__">----- On Mar 16, 2016, at 6:55 PM, Brian Robbins &lt;b=
-rianrob@microsoft.com&gt; wrote:<br></span></div><div data-marker=3D"__QUOT=
-ED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5=
-px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-de=
-coration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;">
-
-
-
-<style><!--
-
-@font-face
-=09{font-family:"Cambria Math";
-=09panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-=09{font-family:Calibri;
-=09panose-1:2 15 5 2 2 2 4 3 2 4;}
-@font-face
-=09{font-family:Consolas;
-=09panose-1:2 11 6 9 2 2 4 3 2 4;}
-
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-=09{margin:0in;
-=09margin-bottom:.0001pt;
-=09font-size:11.0pt;
-=09font-family:"Calibri",sans-serif;
-=09color:#7030A0;}
-a:link, span.MsoHyperlink
-=09{mso-style-priority:99;
-=09color:#0563C1;
-=09text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-=09{mso-style-priority:99;
-=09color:#954F72;
-=09text-decoration:underline;}
-p.msonormal0, li.msonormal0, div.msonormal0
-=09{mso-style-name:msonormal;
-=09mso-margin-top-alt:auto;
-=09margin-right:0in;
-=09mso-margin-bottom-alt:auto;
-=09margin-left:0in;
-=09font-size:12.0pt;
-=09font-family:"Times New Roman",serif;}
-span.EmailStyle18
-=09{mso-style-type:personal;
-=09font-family:"Calibri",sans-serif;
-=09color:windowtext;}
-span.EmailStyle19
-=09{mso-style-type:personal-reply;
-=09font-family:"Calibri",sans-serif;
-=09color:windowtext;}
-.MsoChpDefault
-=09{mso-style-type:export-only;
-=09font-size:10.0pt;}
-@page WordSection1
-=09{size:8.5in 11.0in;
-=09margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-=09{page:WordSection1;}
---></style>
-
-
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal"><span style=3D"color:windowtext">Hello,</span></p>
-<p class=3D"MsoNormal"><span style=3D"color:windowtext">&nbsp;</span></p>
-<p class=3D"MsoNormal"><span style=3D"color:windowtext">I=E2=80=99m forward=
-ing this on-behalf of one of my colleagues who is trying to parse CTF.&nbsp=
-; Any help you can provide is greatly appreciated.</span></p>
-<p class=3D"MsoNormal"><span style=3D"color:windowtext">&nbsp;</span></p>
-<p class=3D"MsoNormal"><span style=3D"color:windowtext">Thanks.</span></p>
-<p class=3D"MsoNormal"><span style=3D"color:windowtext">-Brian</span></p>
-<p class=3D"MsoNormal"><a name=3D"_MailEndCompose"><span style=3D"color:win=
-dowtext">&nbsp;</span></a><br data-mce-bogus=3D"1"></p>
-<span style=3D"mso-bookmark:_MailEndCompose"></span>
-<div>
-<div style=3D"border:none;border-top:solid #E1E1E1 1.0pt;padding:3.0pt 0in =
-0in 0in">
-<p class=3D"MsoNormal"><b><span style=3D"color:windowtext">From:</span></b>=
-<span style=3D"color:windowtext"> Lee Culver
-<br>
-<b>Sent:</b> Wednesday, March 16, 2016 11:06 AM<br>
-<b>To:</b> Brian Robbins &lt;brianrob@microsoft.com&gt;<br>
-<b>Subject:</b> CTF Compact Header Timestamps</span></p>
-</div>
-</div>
-<p class=3D"MsoNormal">&nbsp;</p>
-<p class=3D"MsoNormal">Event headers in LTTng can have a 27-bit clock or a =
-64-bit clock.&nbsp; I have been able to properly map the 64-bit clock back =
-to a real timestamp, but I=E2=80=99m not sure how to interpret the 27-bit c=
-lock value.&nbsp; I=E2=80=99ve dug through the CTF specification
- but can=E2=80=99t find the relevant text.&nbsp; I have pasted the relevant=
- metadata at the bottom of this email.</p>
-<p class=3D"MsoNormal">&nbsp;</p>
-<p class=3D"MsoNormal">For 64-bit clocks, this calculation gets us to the p=
-roper DateTime in C#:</p>
-<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
-ze:9.5pt;font-family:Consolas;background:white;mso-highlight:white">&nbsp;<=
-/span></p>
-<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
-ze:9.5pt;font-family:Consolas;background:white;mso-highlight:white">&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var clock =3D _=
-metadata.Clocks.Single();</span></p>
-<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
-ze:9.5pt;font-family:Consolas;background:white;mso-highlight:white">&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var offset =3D =
-new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(clock.Off=
-set / clock.Frequency);</span></p>
-<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
-ze:9.5pt;font-family:Consolas;background:white;mso-highlight:white">&nbsp;<=
-/span></p>
-<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
-ze:9.5pt;font-family:Consolas;background:white;mso-highlight:white">&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; long ticks =3D =
-(long)(header.Timestamp * 10000000.0 / clock.Frequency);</span></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:9.5pt;font-family:Consolas;=
-background:white;mso-highlight:white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp; var time =3D new DateTime(offset.Ticks + tick=
-s, DateTimeKind.Utc);</span></p>
-<p class=3D"MsoNormal">&nbsp;</p>
-<p class=3D"MsoNormal">However, for the =E2=80=98compact=E2=80=99 variant (=
-see below), we end up with a timestamp that=E2=80=99s far lower than the fr=
-equency, such as =E2=80=980x55363b9=E2=80=99 and I=E2=80=99m simply not sur=
-e how to interpret this.&nbsp; It does NOT seem to be an offset from the pr=
-evious event
- since if I treat it as such we get events that are out of order.&nbsp; One=
- such example is the following:</p>
-<p class=3D"MsoNormal">&nbsp;</p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Event #11 - Extended header timestam=
-p (64-bit): 0x00098a754555ea28</p>
-<p class=3D"MsoNormal" style=3D"text-indent:.5in">Event #12 - Compact heade=
-r timestamp (27-bit): 0x04ecc38c</p>
-<p class=3D"MsoNormal" style=3D"text-indent:.5in">Event #13 - Extended head=
-er timestamp (64-bit): 0x00098a75369cc5e4</p>
-<p class=3D"MsoNormal">&nbsp;</p>
-<p class=3D"MsoNormal">As you can see, Event[11].Timestamp + Event[12].Time=
-stamp &gt; Event[13].Timestamp.&nbsp; Which means it cannot be a simple =E2=
-=80=9Coffset from previous event=E2=80=9D, since we would be getting events=
- out of order.</p>
-<p class=3D"MsoNormal">&nbsp;</p>
-<p class=3D"MsoNormal">Here is the relevant metadata:</p>
-<p class=3D"MsoNormal">&nbsp;</p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">clock {</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; name =3D "monotonic";</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; uuid =3D "9fb57333-ada2-4c73-a7ce-334f46437c74";</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; description =3D "Monotonic Clock";</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; freq =3D 1000000000; /* Frequency, in Hz */</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; /* clock value offset from Epoch is: offset * (1/freq) */</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; offset =3D 1451946230228988436;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">};</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">typealias integer {</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; size =3D 27; align =3D 1; signed =3D false;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; map =3D clock.monotonic.value;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">} :=3D uint27_clock_monotonic_=
-t;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">typealias integer {</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; size =3D 64; align =3D 8; signed =3D false;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; map =3D clock.monotonic.value;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">} :=3D uint64_clock_monotonic_=
-t;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">struct event_header_compact {<=
-/span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; enum : uint5_t { compact =3D 0 ... 30, extended =3D 31 } id;</span><=
-/p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; variant &lt;id&gt; {</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; struct {</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp; uint27_clock_monotonic_t timestamp;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } compact;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; struct {</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp; uint32_t id;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp; uint64_clock_monotonic_t timestamp;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } extended;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; } v;</span></p>
-<p class=3D"MsoNormal" style=3D"margin-left:.5in"><span style=3D"font-size:=
-9.5pt;font-family:Consolas;color:windowtext">} align(8);</span><span style=
-=3D"color:windowtext"></span></p>
-<p class=3D"MsoNormal">&nbsp;</p>
-<p class=3D"MsoNormal">How should we be treating these <span style=3D"font-=
-size:9.5pt;font-family:Consolas">
-uint27_clock_monotonic_t</span> values?</p>
-<p class=3D"MsoNormal">&nbsp;</p>
-<p class=3D"MsoNormal">Thanks!</p>
-<p class=3D"MsoNormal">-Lee Culver</p>
-<p class=3D"MsoNormal">CLR Reliability and Performance</p>
-<p class=3D"MsoNormal">&nbsp;</p>
-</div>
-
-
-<br>_______________________________________________<br>lttng-dev mailing li=
-st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
-listinfo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D=
-"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http=
-://www.efficios.com</div></div></body></html>
-------=_Part_27771_2004620774.1458173736971--
-
---===============8779872987636427401==
+	boundary="_000_BN3PR00MB0003208E1DF77CA6CBAF4736C88B0BN3PR00MB0003namp_"
+
+--_000_BN3PR00MB0003208E1DF77CA6CBAF4736C88B0BN3PR00MB0003namp_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+VGhhbmtzIHZlcnkgbXVjaCBNYXRoaWV1LiAgQXBwcmVjaWF0ZSB0aGUgaGVscC4NCg0KLUJyaWFu
+DQoNCkZyb206IE1hdGhpZXUgRGVzbm95ZXJzIFttYWlsdG86bWF0aGlldS5kZXNub3llcnNAZWZm
+aWNpb3MuY29tXQ0KU2VudDogV2VkbmVzZGF5LCBNYXJjaCAxNiwgMjAxNiA1OjE2IFBNDQpUbzog
+QnJpYW4gUm9iYmlucyA8YnJpYW5yb2JAbWljcm9zb2Z0LmNvbT4NCkNjOiBsdHRuZy1kZXYgPGx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+OyBMZWUgQ3VsdmVyIDxsZWN1bHZlckBtaWNyb3NvZnQu
+Y29tPg0KU3ViamVjdDogUmU6IFtsdHRuZy1kZXZdIENURiBDb21wYWN0IEhlYWRlciBUaW1lc3Rh
+bXBzDQoNCkhpIEJyaWFuLA0KDQpZb3Ugc2hvdWxkIHRoaW5rIGFib3V0IHRob3NlIDI3IGJpdHMg
+YXMgdGhlICJuZXcgbG93ZXN0IHNpZ25pZmljYW50IGJpdHMiDQpvZiB0aGUgNjQtYml0IGNsb2Nr
+Lg0KDQpRdW90aW5nIHRoZSBDVEYgc3BlYyB0byB1bmRlcnN0YW5kIGhvdyB0byBkZWFsIHdpdGgg
+MjctYml0IG92ZXJmbG93DQpiZXR3ZWVuIHR3byBjb25zZWN1dGl2ZSB0aW1lLXN0YW1wcyBpbiB0
+aGUgc2FtZSBzdHJlYW0gKGhlcmUgTiA9IDI3KToNCg0KIkZvciBhIE4tYml0IGludGVnZXIgdHlw
+ZSByZWZlcnJpbmcgdG8gYSBjbG9jaywgaWYgdGhlIGludGVnZXIgb3ZlcmZsb3dzIGNvbXBhcmVk
+IHRvIHRoZSBOIGxvdyBvcmRlciBiaXRzIG9mIHRoZSBjbG9jayBwcmlvciB2YWx1ZSBmb3VuZCBp
+biB0aGUgc2FtZSBzdHJlYW0sIHRoZW4gaXQgaXMgYXNzdW1lZCB0aGF0IG9uZSwgYW5kIG9ubHkg
+b25lLCBvdmVyZmxvdyBvY2N1cnJlZC4gSXQgaXMgdGhlcmVmb3JlIGltcG9ydGFudCB0aGF0IGV2
+ZW50cyBlbmNvZGluZyB0aW1lIG9uIGEgc21hbGwgbnVtYmVyIG9mIGJpdHMgaGFwcGVuIGZyZXF1
+ZW50bHkgZW5vdWdoIHRvIGRldGVjdCB3aGVuIG1vcmUgdGhhbiBvbmUgTi1iaXQgb3ZlcmZsb3cg
+b2NjdXJzLiINCg0KVGhvc2UgMjcgYml0cyBhcmUgX25vdF8gYW4gb2Zmc2V0IGZyb20gdGhlIHBy
+ZXZpb3VzIHRpbWVzdGFtcC4gVGhleSB1cGRhdGUgdGhlDQpjdXJyZW50IG5vdGlvbiBvZiB0aW1l
+IChiYXNlZCBvbiBhbGwgcHJpb3IgdGltZXN0YW1wcyByZWFkIGZvciB0aGlzIHN0cmVhbSkgYnkN
+CnNldHRpbmcgdGhlIGxvdyAyNyBiaXRzIHRvIHRoZSBuZXcgdmFsdWUuIElmIHRoYXQgdmFsdWUg
+aGFwcGVucyB0byBiZSBsb3dlciB0aGFuIHRoZQ0KcHJldmlvdXMgMjcgbG93IGJpdHMgb2YgdGhl
+IGN1cnJlbnQgdGltZSwgdGhpcyBtZWFucyB3ZSBoYWQgb25lIDI3LWJpdCBvdmVyZmxvdywgc28N
+CndlIG5lZWQgdG8gaW5jcmVtZW50IHRoZSAyOHRoIGJpdCBieSBvbmUuDQoNCkluIGVhY2ggcGFj
+a2V0IGhlYWRlciwgeW91IHdpbGwgZmluZCB0aGUgZnVsbCA2NC1iaXQgdGltZXN0YW1wcywgc28g
+d2UgYWx3YXlzDQpoYXZlIGEgZnVsbCA2NC1iaXQgYmFzZSBmcm9tIHdoaWNoIHRvIHN0YXJ0Lg0K
+DQpJdCBpcyB1cCB0byB0aGUgdHJhY2VyIChsdHRuZykgdG8gZW5zdXJlIHRoYXQgdGhlcmUgaXMg
+bmV2ZXIgbW9yZSB0aGFuIGEgc2luZ2xlIDI3LWJpdA0Kb3ZlcmZsb3cgcHJlY2VkaW5nIGEgMjct
+Yml0IGNvbXBhY3QgdGltZXN0YW1wLiBJZiBsdHRuZyBkZXRlY3RzIHRoYXQgdGhlcmUgd291bGQN
+CmJlIG1vcmUgdGhhbiBhIHNpbmdsZSAyNy1iaXQgb3ZlcmZsb3cgcHJpb3IgdG8gYSB0aW1lc3Rh
+bXAsIGl0IHdpbGwgdXNlIGFuIGV4dGVuZGVkDQpoZWFkZXIgd2hpY2ggc3RvcmVzIHRoZSBmdWxs
+IDY0LWJpdCBvZiB0aGUgbmV3IHRpbWVzdGFtcC4NCg0KV2UgcmVseSBvbiB0aGlzIHRpbWUtY29t
+cGFjdGlvbiBzY2hlbWUgcmF0aGVyIHRoYW4gb2Zmc2V0dGluZyBmcm9tIHRoZSBwcmlvcg0KNjQt
+Yml0IHRpbWVzdGFtcCBiZWNhdXNlIGl0IGFsbG93cyB1cyB0byB3ZWFrZW4gdGhlIHNlcXVlbnRp
+YWwgaW50ZXItZGVwZW5kZW5jeQ0KYmV0d2VlbiBjb25zZWN1dGl2ZSBldmVudHMsIHdoaWNoIGlz
+IHVzZWZ1bCBmb3IgbG9jay1mcmVlIHJpbmcgYnVmZmVycy4NCg0KTGV0IG1lIGtub3cgaWYgeW91
+IHN0aWxsIGhhdmUgcXVlc3Rpb25zLA0KDQpUaGFua3MsDQoNCk1hdGhpZXUNCg0KLS0tLS0gT24g
+TWFyIDE2LCAyMDE2LCBhdCA2OjU1IFBNLCBCcmlhbiBSb2JiaW5zIDxicmlhbnJvYkBtaWNyb3Nv
+ZnQuY29tPG1haWx0bzpicmlhbnJvYkBtaWNyb3NvZnQuY29tPj4gd3JvdGU6DQoNCkhlbGxvLA0K
+DQpJ4oCZbSBmb3J3YXJkaW5nIHRoaXMgb24tYmVoYWxmIG9mIG9uZSBvZiBteSBjb2xsZWFndWVz
+IHdobyBpcyB0cnlpbmcgdG8gcGFyc2UgQ1RGLiAgQW55IGhlbHAgeW91IGNhbiBwcm92aWRlIGlz
+IGdyZWF0bHkgYXBwcmVjaWF0ZWQuDQoNClRoYW5rcy4NCi1Ccmlhbg0KDQpGcm9tOiBMZWUgQ3Vs
+dmVyDQpTZW50OiBXZWRuZXNkYXksIE1hcmNoIDE2LCAyMDE2IDExOjA2IEFNDQpUbzogQnJpYW4g
+Um9iYmlucyA8YnJpYW5yb2JAbWljcm9zb2Z0LmNvbTxtYWlsdG86YnJpYW5yb2JAbWljcm9zb2Z0
+LmNvbT4+DQpTdWJqZWN0OiBDVEYgQ29tcGFjdCBIZWFkZXIgVGltZXN0YW1wcw0KDQpFdmVudCBo
+ZWFkZXJzIGluIExUVG5nIGNhbiBoYXZlIGEgMjctYml0IGNsb2NrIG9yIGEgNjQtYml0IGNsb2Nr
+LiAgSSBoYXZlIGJlZW4gYWJsZSB0byBwcm9wZXJseSBtYXAgdGhlIDY0LWJpdCBjbG9jayBiYWNr
+IHRvIGEgcmVhbCB0aW1lc3RhbXAsIGJ1dCBJ4oCZbSBub3Qgc3VyZSBob3cgdG8gaW50ZXJwcmV0
+IHRoZSAyNy1iaXQgY2xvY2sgdmFsdWUuICBJ4oCZdmUgZHVnIHRocm91Z2ggdGhlIENURiBzcGVj
+aWZpY2F0aW9uIGJ1dCBjYW7igJl0IGZpbmQgdGhlIHJlbGV2YW50IHRleHQuICBJIGhhdmUgcGFz
+dGVkIHRoZSByZWxldmFudCBtZXRhZGF0YSBhdCB0aGUgYm90dG9tIG9mIHRoaXMgZW1haWwuDQoN
+CkZvciA2NC1iaXQgY2xvY2tzLCB0aGlzIGNhbGN1bGF0aW9uIGdldHMgdXMgdG8gdGhlIHByb3Bl
+ciBEYXRlVGltZSBpbiBDIzoNCg0KICAgICAgICAgICAgdmFyIGNsb2NrID0gX21ldGFkYXRhLkNs
+b2Nrcy5TaW5nbGUoKTsNCiAgICAgICAgICAgIHZhciBvZmZzZXQgPSBuZXcgRGF0ZVRpbWUoMTk3
+MCwgMSwgMSwgMCwgMCwgMCwgMCwgRGF0ZVRpbWVLaW5kLlV0YykuQWRkU2Vjb25kcyhjbG9jay5P
+ZmZzZXQgLyBjbG9jay5GcmVxdWVuY3kpOw0KDQogICAgICAgICAgICBsb25nIHRpY2tzID0gKGxv
+bmcpKGhlYWRlci5UaW1lc3RhbXAgKiAxMDAwMDAwMC4wIC8gY2xvY2suRnJlcXVlbmN5KTsNCiAg
+ICAgICAgICAgIHZhciB0aW1lID0gbmV3IERhdGVUaW1lKG9mZnNldC5UaWNrcyArIHRpY2tzLCBE
+YXRlVGltZUtpbmQuVXRjKTsNCg0KSG93ZXZlciwgZm9yIHRoZSDigJhjb21wYWN04oCZIHZhcmlh
+bnQgKHNlZSBiZWxvdyksIHdlIGVuZCB1cCB3aXRoIGEgdGltZXN0YW1wIHRoYXTigJlzIGZhciBs
+b3dlciB0aGFuIHRoZSBmcmVxdWVuY3ksIHN1Y2ggYXMg4oCYMHg1NTM2M2I54oCZIGFuZCBJ4oCZ
+bSBzaW1wbHkgbm90IHN1cmUgaG93IHRvIGludGVycHJldCB0aGlzLiAgSXQgZG9lcyBOT1Qgc2Vl
+bSB0byBiZSBhbiBvZmZzZXQgZnJvbSB0aGUgcHJldmlvdXMgZXZlbnQgc2luY2UgaWYgSSB0cmVh
+dCBpdCBhcyBzdWNoIHdlIGdldCBldmVudHMgdGhhdCBhcmUgb3V0IG9mIG9yZGVyLiAgT25lIHN1
+Y2ggZXhhbXBsZSBpcyB0aGUgZm9sbG93aW5nOg0KDQogICAgICAgICAgICAgICAgRXZlbnQgIzEx
+IC0gRXh0ZW5kZWQgaGVhZGVyIHRpbWVzdGFtcCAoNjQtYml0KTogMHgwMDA5OGE3NTQ1NTVlYTI4
+DQpFdmVudCAjMTIgLSBDb21wYWN0IGhlYWRlciB0aW1lc3RhbXAgKDI3LWJpdCk6IDB4MDRlY2Mz
+OGMNCkV2ZW50ICMxMyAtIEV4dGVuZGVkIGhlYWRlciB0aW1lc3RhbXAgKDY0LWJpdCk6IDB4MDAw
+OThhNzUzNjljYzVlNA0KDQpBcyB5b3UgY2FuIHNlZSwgRXZlbnRbMTFdLlRpbWVzdGFtcCArIEV2
+ZW50WzEyXS5UaW1lc3RhbXAgPiBFdmVudFsxM10uVGltZXN0YW1wLiAgV2hpY2ggbWVhbnMgaXQg
+Y2Fubm90IGJlIGEgc2ltcGxlIOKAnG9mZnNldCBmcm9tIHByZXZpb3VzIGV2ZW504oCdLCBzaW5j
+ZSB3ZSB3b3VsZCBiZSBnZXR0aW5nIGV2ZW50cyBvdXQgb2Ygb3JkZXIuDQoNCkhlcmUgaXMgdGhl
+IHJlbGV2YW50IG1ldGFkYXRhOg0KDQpjbG9jayB7DQogICAgICAgbmFtZSA9ICJtb25vdG9uaWMi
+Ow0KICAgICAgIHV1aWQgPSAiOWZiNTczMzMtYWRhMi00YzczLWE3Y2UtMzM0ZjQ2NDM3Yzc0IjsN
+CiAgICAgICBkZXNjcmlwdGlvbiA9ICJNb25vdG9uaWMgQ2xvY2siOw0KICAgICAgIGZyZXEgPSAx
+MDAwMDAwMDAwOyAvKiBGcmVxdWVuY3ksIGluIEh6ICovDQogICAgICAgLyogY2xvY2sgdmFsdWUg
+b2Zmc2V0IGZyb20gRXBvY2ggaXM6IG9mZnNldCAqICgxL2ZyZXEpICovDQogICAgICAgb2Zmc2V0
+ID0gMTQ1MTk0NjIzMDIyODk4ODQzNjsNCn07DQoNCg0KdHlwZWFsaWFzIGludGVnZXIgew0KICAg
+ICAgIHNpemUgPSAyNzsgYWxpZ24gPSAxOyBzaWduZWQgPSBmYWxzZTsNCiAgICAgICBtYXAgPSBj
+bG9jay5tb25vdG9uaWMudmFsdWU7DQp9IDo9IHVpbnQyN19jbG9ja19tb25vdG9uaWNfdDsNCg0K
+dHlwZWFsaWFzIGludGVnZXIgew0KICAgICAgIHNpemUgPSA2NDsgYWxpZ24gPSA4OyBzaWduZWQg
+PSBmYWxzZTsNCiAgICAgICBtYXAgPSBjbG9jay5tb25vdG9uaWMudmFsdWU7DQp9IDo9IHVpbnQ2
+NF9jbG9ja19tb25vdG9uaWNfdDsNCg0Kc3RydWN0IGV2ZW50X2hlYWRlcl9jb21wYWN0IHsNCiAg
+ICAgICBlbnVtIDogdWludDVfdCB7IGNvbXBhY3QgPSAwIC4uLiAzMCwgZXh0ZW5kZWQgPSAzMSB9
+IGlkOw0KICAgICAgIHZhcmlhbnQgPGlkPiB7DQogICAgICAgICAgICAgIHN0cnVjdCB7DQogICAg
+ICAgICAgICAgICAgICAgICB1aW50MjdfY2xvY2tfbW9ub3RvbmljX3QgdGltZXN0YW1wOw0KICAg
+ICAgICAgICAgICB9IGNvbXBhY3Q7DQogICAgICAgICAgICAgIHN0cnVjdCB7DQogICAgICAgICAg
+ICAgICAgICAgICB1aW50MzJfdCBpZDsNCiAgICAgICAgICAgICAgICAgICAgIHVpbnQ2NF9jbG9j
+a19tb25vdG9uaWNfdCB0aW1lc3RhbXA7DQogICAgICAgICAgICAgIH0gZXh0ZW5kZWQ7DQogICAg
+ICAgfSB2Ow0KfSBhbGlnbig4KTsNCg0KSG93IHNob3VsZCB3ZSBiZSB0cmVhdGluZyB0aGVzZSB1
+aW50MjdfY2xvY2tfbW9ub3RvbmljX3QgdmFsdWVzPw0KDQpUaGFua3MhDQotTGVlIEN1bHZlcg0K
+Q0xSIFJlbGlhYmlsaXR5IGFuZCBQZXJmb3JtYW5jZQ0KDQoNCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fDQpsdHRuZy1kZXYgbWFpbGluZyBsaXN0DQpsdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnPG1haWx0bzpsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPg0K
+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dg0KDQotLQ0KTWF0aGlldSBEZXNub3llcnMNCkVmZmljaU9TIEluYy4NCmh0dHA6Ly93d3cuZWZm
+aWNpb3MuY29tDQo=
+
+--_000_BN3PR00MB0003208E1DF77CA6CBAF4736C88B0BN3PR00MB0003namp_
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+PGh0bWwgeG1sbnM6dj0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp2bWwiIHhtbG5zOm89InVy
+bjpzY2hlbWFzLW1pY3Jvc29mdC1jb206b2ZmaWNlOm9mZmljZSIgeG1sbnM6dz0idXJuOnNjaGVt
+YXMtbWljcm9zb2Z0LWNvbTpvZmZpY2U6d29yZCIgeG1sbnM6bT0iaHR0cDovL3NjaGVtYXMubWlj
+cm9zb2Z0LmNvbS9vZmZpY2UvMjAwNC8xMi9vbW1sIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv
+VFIvUkVDLWh0bWw0MCI+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIg
+Y29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxtZXRhIG5hbWU9IkdlbmVyYXRv
+ciIgY29udGVudD0iTWljcm9zb2Z0IFdvcmQgMTUgKGZpbHRlcmVkIG1lZGl1bSkiPg0KPHN0eWxl
+PjwhLS0NCi8qIEZvbnQgRGVmaW5pdGlvbnMgKi8NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1pbHk6
+SGVsdmV0aWNhOw0KCXBhbm9zZS0xOjIgMTEgNiA0IDIgMiAyIDIgMiA0O30NCkBmb250LWZhY2UN
+Cgl7Zm9udC1mYW1pbHk6IkNhbWJyaWEgTWF0aCI7DQoJcGFub3NlLTE6MiA0IDUgMyA1IDQgNiAz
+IDIgNDt9DQpAZm9udC1mYWNlDQoJe2ZvbnQtZmFtaWx5OkNhbGlicmk7DQoJcGFub3NlLTE6MiAx
+NSA1IDIgMiAyIDQgMyAyIDQ7fQ0KQGZvbnQtZmFjZQ0KCXtmb250LWZhbWlseTpDb25zb2xhczsN
+CglwYW5vc2UtMToyIDExIDYgOSAyIDIgNCAzIDIgNDt9DQovKiBTdHlsZSBEZWZpbml0aW9ucyAq
+Lw0KcC5Nc29Ob3JtYWwsIGxpLk1zb05vcm1hbCwgZGl2Lk1zb05vcm1hbA0KCXttYXJnaW46MGlu
+Ow0KCW1hcmdpbi1ib3R0b206LjAwMDFwdDsNCglmb250LXNpemU6MTEuMHB0Ow0KCWZvbnQtZmFt
+aWx5OiJDYWxpYnJpIixzYW5zLXNlcmlmOw0KCWNvbG9yOiM3MDMwQTA7fQ0KYTpsaW5rLCBzcGFu
+Lk1zb0h5cGVybGluaw0KCXttc28tc3R5bGUtcHJpb3JpdHk6OTk7DQoJY29sb3I6IzA1NjNDMTsN
+Cgl0ZXh0LWRlY29yYXRpb246dW5kZXJsaW5lO30NCmE6dmlzaXRlZCwgc3Bhbi5Nc29IeXBlcmxp
+bmtGb2xsb3dlZA0KCXttc28tc3R5bGUtcHJpb3JpdHk6OTk7DQoJY29sb3I6Izk1NEY3MjsNCgl0
+ZXh0LWRlY29yYXRpb246dW5kZXJsaW5lO30NCnAubXNvbm9ybWFsMCwgbGkubXNvbm9ybWFsMCwg
+ZGl2Lm1zb25vcm1hbDANCgl7bXNvLXN0eWxlLW5hbWU6bXNvbm9ybWFsOw0KCW1zby1tYXJnaW4t
+dG9wLWFsdDphdXRvOw0KCW1hcmdpbi1yaWdodDowaW47DQoJbXNvLW1hcmdpbi1ib3R0b20tYWx0
+OmF1dG87DQoJbWFyZ2luLWxlZnQ6MGluOw0KCWZvbnQtc2l6ZToxMi4wcHQ7DQoJZm9udC1mYW1p
+bHk6IlRpbWVzIE5ldyBSb21hbiIsc2VyaWY7fQ0Kc3Bhbi5FbWFpbFN0eWxlMTgNCgl7bXNvLXN0
+eWxlLXR5cGU6cGVyc29uYWw7DQoJZm9udC1mYW1pbHk6IkNhbGlicmkiLHNhbnMtc2VyaWY7DQoJ
+Y29sb3I6d2luZG93dGV4dDt9DQpzcGFuLkVtYWlsU3R5bGUxOQ0KCXttc28tc3R5bGUtdHlwZTpw
+ZXJzb25hbDsNCglmb250LWZhbWlseToiQ2FsaWJyaSIsc2Fucy1zZXJpZjsNCgljb2xvcjp3aW5k
+b3d0ZXh0O30NCnNwYW4uRW1haWxTdHlsZTIwDQoJe21zby1zdHlsZS10eXBlOnBlcnNvbmFsLXJl
+cGx5Ow0KCWZvbnQtZmFtaWx5OiJDYWxpYnJpIixzYW5zLXNlcmlmOw0KCWNvbG9yOndpbmRvd3Rl
+eHQ7fQ0KLk1zb0NocERlZmF1bHQNCgl7bXNvLXN0eWxlLXR5cGU6ZXhwb3J0LW9ubHk7DQoJZm9u
+dC1zaXplOjEwLjBwdDt9DQpAcGFnZSBXb3JkU2VjdGlvbjENCgl7c2l6ZTo4LjVpbiAxMS4waW47
+DQoJbWFyZ2luOjEuMGluIDEuMGluIDEuMGluIDEuMGluO30NCmRpdi5Xb3JkU2VjdGlvbjENCgl7
+cGFnZTpXb3JkU2VjdGlvbjE7fQ0KLS0+PC9zdHlsZT48IS0tW2lmIGd0ZSBtc28gOV0+PHhtbD4N
+CjxvOnNoYXBlZGVmYXVsdHMgdjpleHQ9ImVkaXQiIHNwaWRtYXg9IjEwMjYiIC8+DQo8L3htbD48
+IVtlbmRpZl0tLT48IS0tW2lmIGd0ZSBtc28gOV0+PHhtbD4NCjxvOnNoYXBlbGF5b3V0IHY6ZXh0
+PSJlZGl0Ij4NCjxvOmlkbWFwIHY6ZXh0PSJlZGl0IiBkYXRhPSIxIiAvPg0KPC9vOnNoYXBlbGF5
+b3V0PjwveG1sPjwhW2VuZGlmXS0tPg0KPC9oZWFkPg0KPGJvZHkgbGFuZz0iRU4tVVMiIGxpbms9
+IiMwNTYzQzEiIHZsaW5rPSIjOTU0RjcyIj4NCjxkaXYgY2xhc3M9IldvcmRTZWN0aW9uMSI+DQo8
+cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iY29sb3I6d2luZG93dGV4dCI+VGhhbmtz
+IHZlcnkgbXVjaCBNYXRoaWV1LiZuYnNwOyBBcHByZWNpYXRlIHRoZSBoZWxwLjxvOnA+PC9vOnA+
+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjp3aW5k
+b3d0ZXh0Ij48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFs
+Ij48c3BhbiBzdHlsZT0iY29sb3I6d2luZG93dGV4dCI+LUJyaWFuPG86cD48L286cD48L3NwYW4+
+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PGEgbmFtZT0iX01haWxFbmRDb21wb3NlIj48c3Bh
+biBzdHlsZT0iY29sb3I6d2luZG93dGV4dCI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9hPjwv
+cD4NCjxzcGFuIHN0eWxlPSJtc28tYm9va21hcms6X01haWxFbmRDb21wb3NlIj48L3NwYW4+DQo8
+ZGl2Pg0KPGRpdiBzdHlsZT0iYm9yZGVyOm5vbmU7Ym9yZGVyLXRvcDpzb2xpZCAjRTFFMUUxIDEu
+MHB0O3BhZGRpbmc6My4wcHQgMGluIDBpbiAwaW4iPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PGI+
+PHNwYW4gc3R5bGU9ImNvbG9yOndpbmRvd3RleHQiPkZyb206PC9zcGFuPjwvYj48c3BhbiBzdHls
+ZT0iY29sb3I6d2luZG93dGV4dCI+IE1hdGhpZXUgRGVzbm95ZXJzIFttYWlsdG86bWF0aGlldS5k
+ZXNub3llcnNAZWZmaWNpb3MuY29tXQ0KPGJyPg0KPGI+U2VudDo8L2I+IFdlZG5lc2RheSwgTWFy
+Y2ggMTYsIDIwMTYgNToxNiBQTTxicj4NCjxiPlRvOjwvYj4gQnJpYW4gUm9iYmlucyAmbHQ7YnJp
+YW5yb2JAbWljcm9zb2Z0LmNvbSZndDs8YnI+DQo8Yj5DYzo8L2I+IGx0dG5nLWRldiAmbHQ7bHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZyZndDs7IExlZSBDdWx2ZXIgJmx0O2xlY3VsdmVyQG1pY3Jv
+c29mdC5jb20mZ3Q7PGJyPg0KPGI+U3ViamVjdDo8L2I+IFJlOiBbbHR0bmctZGV2XSBDVEYgQ29t
+cGFjdCBIZWFkZXIgVGltZXN0YW1wczxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPC9k
+aXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48bzpwPiZuYnNwOzwvbzpwPjwvcD4NCjxkaXY+DQo8
+ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90
+O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2siPkhpIEJyaWFuLDwvc3Bhbj48c3Bh
+biBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90Oyxz
+YW5zLXNlcmlmO2NvbG9yOmJsYWNrIj48bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxk
+aXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7
+QXJpYWwmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjpibGFjayI+PG86cD4mbmJzcDs8L286cD48L3Nw
+YW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9
+ImZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2siPllv
+dSBzaG91bGQgdGhpbmsgYWJvdXQgdGhvc2UgMjcgYml0cyBhcyB0aGUgJnF1b3Q7bmV3IGxvd2Vz
+dCBzaWduaWZpY2FudCBiaXRzJnF1b3Q7PG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8
+ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90
+O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2siPm9mIHRoZSA2NC1iaXQgY2xvY2su
+PG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1h
+bCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7
+Y29sb3I6YmxhY2siPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4N
+CjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTomcXVvdDtBcmlh
+bCZxdW90OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrIj5RdW90aW5nIHRoZSBDVEYgc3BlYyB0byB1
+bmRlcnN0YW5kIGhvdyB0byBkZWFsIHdpdGggMjctYml0IG92ZXJmbG93PG86cD48L286cD48L3Nw
+YW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9
+ImZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2siPmJl
+dHdlZW4gdHdvIGNvbnNlY3V0aXZlIHRpbWUtc3RhbXBzIGluIHRoZSBzYW1lIHN0cmVhbSAoaGVy
+ZSBOID0gMjcpOjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNz
+PSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90Oyxz
+YW5zLXNlcmlmO2NvbG9yOmJsYWNrIj48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rp
+dj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6
+JnF1b3Q7QXJpYWwmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjpibGFjayI+JnF1b3Q7Rm9yIGEgTi1i
+aXQgaW50ZWdlciB0eXBlIHJlZmVycmluZyB0byBhIGNsb2NrLCBpZiB0aGUgaW50ZWdlciBvdmVy
+Zmxvd3MgY29tcGFyZWQgdG8gdGhlIE4gbG93IG9yZGVyIGJpdHMgb2YgdGhlIGNsb2NrIHByaW9y
+IHZhbHVlIGZvdW5kIGluIHRoZSBzYW1lIHN0cmVhbSwgdGhlbiBpdCBpcyBhc3N1bWVkIHRoYXQN
+CiBvbmUsIGFuZCBvbmx5IG9uZSwgb3ZlcmZsb3cgb2NjdXJyZWQuIEl0IGlzIHRoZXJlZm9yZSBp
+bXBvcnRhbnQgdGhhdCBldmVudHMgZW5jb2RpbmcgdGltZSBvbiBhIHNtYWxsIG51bWJlciBvZiBi
+aXRzIGhhcHBlbiBmcmVxdWVudGx5IGVub3VnaCB0byBkZXRlY3Qgd2hlbiBtb3JlIHRoYW4gb25l
+IE4tYml0IG92ZXJmbG93IG9jY3Vycy4mcXVvdDs8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rp
+dj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6
+JnF1b3Q7QXJpYWwmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjpibGFjayI+PG86cD4mbmJzcDs8L286
+cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4g
+c3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6Ymxh
+Y2siPlRob3NlIDI3IGJpdHMgYXJlIF9ub3RfIGFuIG9mZnNldCBmcm9tIHRoZSBwcmV2aW91cyB0
+aW1lc3RhbXAuIFRoZXkgdXBkYXRlIHRoZTxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0K
+PGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTomcXVv
+dDtBcmlhbCZxdW90OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrIj5jdXJyZW50IG5vdGlvbiBvZiB0
+aW1lIChiYXNlZCBvbiBhbGwgcHJpb3IgdGltZXN0YW1wcyByZWFkIGZvciB0aGlzIHN0cmVhbSkg
+Ynk8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9y
+bWFsIj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssc2Fucy1zZXJp
+Zjtjb2xvcjpibGFjayI+c2V0dGluZyB0aGUgbG93IDI3IGJpdHMgdG8gdGhlIG5ldyB2YWx1ZS4g
+SWYgdGhhdCB2YWx1ZSBoYXBwZW5zIHRvIGJlIGxvd2VyIHRoYW4gdGhlPG86cD48L286cD48L3Nw
+YW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9
+ImZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2siPnBy
+ZXZpb3VzIDI3IGxvdyBiaXRzIG9mIHRoZSBjdXJyZW50IHRpbWUsIHRoaXMgbWVhbnMgd2UgaGFk
+IG9uZSAyNy1iaXQgb3ZlcmZsb3csIHNvPG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8
+ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90
+O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2siPndlIG5lZWQgdG8gaW5jcmVtZW50
+IHRoZSAyOHRoIGJpdCBieSBvbmUuPG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2
+Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O0Fy
+aWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2siPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFu
+PjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJm
+b250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrIj5JbiBl
+YWNoIHBhY2tldCBoZWFkZXIsIHlvdSB3aWxsIGZpbmQgdGhlIGZ1bGwgNjQtYml0IHRpbWVzdGFt
+cHMsIHNvIHdlIGFsd2F5czxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxw
+IGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTomcXVvdDtBcmlhbCZx
+dW90OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrIj5oYXZlIGEgZnVsbCA2NC1iaXQgYmFzZSBmcm9t
+IHdoaWNoIHRvIHN0YXJ0LjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxw
+IGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTomcXVvdDtBcmlhbCZx
+dW90OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrIj48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+
+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1m
+YW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjpibGFjayI+SXQgaXMgdXAg
+dG8gdGhlIHRyYWNlciAobHR0bmcpIHRvIGVuc3VyZSB0aGF0IHRoZXJlIGlzIG5ldmVyIG1vcmUg
+dGhhbiBhIHNpbmdsZSAyNy1iaXQ8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+
+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7QXJp
+YWwmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjpibGFjayI+b3ZlcmZsb3cgcHJlY2VkaW5nIGEgMjct
+Yml0IGNvbXBhY3QgdGltZXN0YW1wLiBJZiBsdHRuZyBkZXRlY3RzIHRoYXQgdGhlcmUgd291bGQ8
+bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFs
+Ij48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssc2Fucy1zZXJpZjtj
+b2xvcjpibGFjayI+YmUgbW9yZSB0aGFuIGEgc2luZ2xlIDI3LWJpdCBvdmVyZmxvdyBwcmlvciB0
+byBhIHRpbWVzdGFtcCwgaXQgd2lsbCB1c2UgYW4gZXh0ZW5kZWQ8bzpwPjwvbzpwPjwvc3Bhbj48
+L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9u
+dC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjpibGFjayI+aGVhZGVy
+IHdoaWNoIHN0b3JlcyB0aGUgZnVsbCA2NC1iaXQgb2YgdGhlIG5ldyB0aW1lc3RhbXAuPG86cD48
+L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNw
+YW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6
+YmxhY2siPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNs
+YXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90
+OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrIj5XZSByZWx5IG9uIHRoaXMgdGltZS1jb21wYWN0aW9u
+IHNjaGVtZSByYXRoZXIgdGhhbiBvZmZzZXR0aW5nIGZyb20gdGhlIHByaW9yPG86cD48L286cD48
+L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5
+bGU9ImZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2si
+PjY0LWJpdCB0aW1lc3RhbXAgYmVjYXVzZSBpdCBhbGxvd3MgdXMgdG8gd2Vha2VuIHRoZSBzZXF1
+ZW50aWFsIGludGVyLWRlcGVuZGVuY3k8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxk
+aXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7
+QXJpYWwmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjpibGFjayI+YmV0d2VlbiBjb25zZWN1dGl2ZSBl
+dmVudHMsIHdoaWNoIGlzIHVzZWZ1bCBmb3IgbG9jay1mcmVlIHJpbmcgYnVmZmVycy48bzpwPjwv
+bzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3Bh
+biBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjpi
+bGFjayI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xh
+c3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7
+LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2siPkxldCBtZSBrbm93IGlmIHlvdSBzdGlsbCBoYXZlIHF1
+ZXN0aW9ucyw8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0i
+TXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssc2Fu
+cy1zZXJpZjtjb2xvcjpibGFjayI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+
+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZx
+dW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2siPlRoYW5rcyw8bzpwPjwvbzpw
+Pjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBz
+dHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjpibGFj
+ayI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9
+Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNh
+bnMtc2VyaWY7Y29sb3I6YmxhY2siPk1hdGhpZXU8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rp
+dj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6
+JnF1b3Q7QXJpYWwmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjpibGFjayI+PG86cD4mbmJzcDs8L286
+cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4g
+c3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6Ymxh
+Y2siPi0tLS0tIE9uIE1hciAxNiwgMjAxNiwgYXQgNjo1NSBQTSwgQnJpYW4gUm9iYmlucyAmbHQ7
+PGEgaHJlZj0ibWFpbHRvOmJyaWFucm9iQG1pY3Jvc29mdC5jb20iPmJyaWFucm9iQG1pY3Jvc29m
+dC5jb208L2E+Jmd0OyB3cm90ZTo8YnI+DQo8YnI+DQo8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8
+L2Rpdj4NCjxkaXY+DQo8YmxvY2txdW90ZSBzdHlsZT0iYm9yZGVyOm5vbmU7Ym9yZGVyLWxlZnQ6
+c29saWQgIzEwMTBGRiAxLjVwdDtwYWRkaW5nOjBpbiAwaW4gMGluIDQuMHB0O21hcmdpbi1sZWZ0
+OjMuNzVwdDttYXJnaW4tdG9wOjUuMHB0O21hcmdpbi1ib3R0b206NS4wcHQiPg0KPHAgY2xhc3M9
+Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImNvbG9yOndpbmRvd3RleHQiPkhlbGxvLDwvc3Bhbj48
+bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjp3
+aW5kb3d0ZXh0Ij4mbmJzcDs8L3NwYW4+PG86cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9y
+bWFsIj48c3BhbiBzdHlsZT0iY29sb3I6d2luZG93dGV4dCI+SeKAmW0gZm9yd2FyZGluZyB0aGlz
+IG9uLWJlaGFsZiBvZiBvbmUgb2YgbXkgY29sbGVhZ3VlcyB3aG8gaXMgdHJ5aW5nIHRvIHBhcnNl
+IENURi4mbmJzcDsgQW55IGhlbHAgeW91IGNhbiBwcm92aWRlIGlzIGdyZWF0bHkgYXBwcmVjaWF0
+ZWQuPC9zcGFuPjxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5
+bGU9ImNvbG9yOndpbmRvd3RleHQiPiZuYnNwOzwvc3Bhbj48bzpwPjwvbzpwPjwvcD4NCjxwIGNs
+YXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjp3aW5kb3d0ZXh0Ij5UaGFua3MuPC9z
+cGFuPjxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImNv
+bG9yOndpbmRvd3RleHQiPi1Ccmlhbjwvc3Bhbj48bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJN
+c29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJjb2xvcjp3aW5kb3d0ZXh0Ij4mbmJzcDs8L3NwYW4+PG86
+cD48L286cD48L3A+DQo8ZGl2Pg0KPGRpdiBzdHlsZT0iYm9yZGVyOm5vbmU7Ym9yZGVyLXRvcDpz
+b2xpZCAjRTFFMUUxIDEuMHB0O3BhZGRpbmc6My4wcHQgMGluIDBpbiAwaW4iPg0KPHAgY2xhc3M9
+Ik1zb05vcm1hbCI+PGI+PHNwYW4gc3R5bGU9ImNvbG9yOndpbmRvd3RleHQiPkZyb206PC9zcGFu
+PjwvYj48c3BhbiBzdHlsZT0iY29sb3I6d2luZG93dGV4dCI+IExlZSBDdWx2ZXINCjxicj4NCjxi
+PlNlbnQ6PC9iPiBXZWRuZXNkYXksIE1hcmNoIDE2LCAyMDE2IDExOjA2IEFNPGJyPg0KPGI+VG86
+PC9iPiBCcmlhbiBSb2JiaW5zICZsdDs8YSBocmVmPSJtYWlsdG86YnJpYW5yb2JAbWljcm9zb2Z0
+LmNvbSI+YnJpYW5yb2JAbWljcm9zb2Z0LmNvbTwvYT4mZ3Q7PGJyPg0KPGI+U3ViamVjdDo8L2I+
+IENURiBDb21wYWN0IEhlYWRlciBUaW1lc3RhbXBzPC9zcGFuPjxvOnA+PC9vOnA+PC9wPg0KPC9k
+aXY+DQo8L2Rpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPiZuYnNwOzxvOnA+PC9vOnA+PC9wPg0K
+PHAgY2xhc3M9Ik1zb05vcm1hbCI+RXZlbnQgaGVhZGVycyBpbiBMVFRuZyBjYW4gaGF2ZSBhIDI3
+LWJpdCBjbG9jayBvciBhIDY0LWJpdCBjbG9jay4mbmJzcDsgSSBoYXZlIGJlZW4gYWJsZSB0byBw
+cm9wZXJseSBtYXAgdGhlIDY0LWJpdCBjbG9jayBiYWNrIHRvIGEgcmVhbCB0aW1lc3RhbXAsIGJ1
+dCBJ4oCZbSBub3Qgc3VyZSBob3cgdG8gaW50ZXJwcmV0IHRoZSAyNy1iaXQgY2xvY2sgdmFsdWUu
+Jm5ic3A7IEnigJl2ZSBkdWcgdGhyb3VnaCB0aGUgQ1RGIHNwZWNpZmljYXRpb24NCiBidXQgY2Fu
+4oCZdCBmaW5kIHRoZSByZWxldmFudCB0ZXh0LiZuYnNwOyBJIGhhdmUgcGFzdGVkIHRoZSByZWxl
+dmFudCBtZXRhZGF0YSBhdCB0aGUgYm90dG9tIG9mIHRoaXMgZW1haWwuPG86cD48L286cD48L3A+
+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj4mbmJzcDs8bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJN
+c29Ob3JtYWwiPkZvciA2NC1iaXQgY2xvY2tzLCB0aGlzIGNhbGN1bGF0aW9uIGdldHMgdXMgdG8g
+dGhlIHByb3BlciBEYXRlVGltZSBpbiBDIzo8bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29O
+b3JtYWwiIHN0eWxlPSJ0ZXh0LWF1dG9zcGFjZTpub25lIj48c3BhbiBzdHlsZT0iZm9udC1zaXpl
+OjkuNXB0O2ZvbnQtZmFtaWx5OkNvbnNvbGFzO2JhY2tncm91bmQ6d2hpdGU7bXNvLWhpZ2hsaWdo
+dDp3aGl0ZSI+Jm5ic3A7PC9zcGFuPjxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1h
+bCIgc3R5bGU9InRleHQtYXV0b3NwYWNlOm5vbmUiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6OS41
+cHQ7Zm9udC1mYW1pbHk6Q29uc29sYXM7YmFja2dyb3VuZDp3aGl0ZTttc28taGlnaGxpZ2h0Ondo
+aXRlIj4mbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJz
+cDsmbmJzcDsmbmJzcDsgdmFyIGNsb2NrID0gX21ldGFkYXRhLkNsb2Nrcy5TaW5nbGUoKTs8L3Nw
+YW4+PG86cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIiBzdHlsZT0idGV4dC1hdXRv
+c3BhY2U6bm9uZSI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTo5LjVwdDtmb250LWZhbWlseTpDb25z
+b2xhcztiYWNrZ3JvdW5kOndoaXRlO21zby1oaWdobGlnaHQ6d2hpdGUiPiZuYnNwOyZuYnNwOyZu
+YnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyB2YXIg
+b2Zmc2V0ID0gbmV3IERhdGVUaW1lKDE5NzAsIDEsIDEsIDAsIDAsIDAsIDAsIERhdGVUaW1lS2lu
+ZC5VdGMpLkFkZFNlY29uZHMoY2xvY2suT2Zmc2V0IC8gY2xvY2suRnJlcXVlbmN5KTs8L3NwYW4+
+PG86cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIiBzdHlsZT0idGV4dC1hdXRvc3Bh
+Y2U6bm9uZSI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTo5LjVwdDtmb250LWZhbWlseTpDb25zb2xh
+cztiYWNrZ3JvdW5kOndoaXRlO21zby1oaWdobGlnaHQ6d2hpdGUiPiZuYnNwOzwvc3Bhbj48bzpw
+PjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiIHN0eWxlPSJ0ZXh0LWF1dG9zcGFjZTpu
+b25lIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0O2ZvbnQtZmFtaWx5OkNvbnNvbGFzO2Jh
+Y2tncm91bmQ6d2hpdGU7bXNvLWhpZ2hsaWdodDp3aGl0ZSI+Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5i
+c3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7IGxvbmcgdGlja3Mg
+PSAobG9uZykoaGVhZGVyLlRpbWVzdGFtcCAqIDEwMDAwMDAwLjAgLyBjbG9jay5GcmVxdWVuY3kp
+Ozwvc3Bhbj48bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxl
+PSJmb250LXNpemU6OS41cHQ7Zm9udC1mYW1pbHk6Q29uc29sYXM7YmFja2dyb3VuZDp3aGl0ZTtt
+c28taGlnaGxpZ2h0OndoaXRlIj4mbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsm
+bmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsgdmFyIHRpbWUgPSBuZXcgRGF0ZVRpbWUob2Zm
+c2V0LlRpY2tzICYjNDM7IHRpY2tzLCBEYXRlVGltZUtpbmQuVXRjKTs8L3NwYW4+PG86cD48L286
+cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj4mbmJzcDs8bzpwPjwvbzpwPjwvcD4NCjxwIGNs
+YXNzPSJNc29Ob3JtYWwiPkhvd2V2ZXIsIGZvciB0aGUg4oCYY29tcGFjdOKAmSB2YXJpYW50IChz
+ZWUgYmVsb3cpLCB3ZSBlbmQgdXAgd2l0aCBhIHRpbWVzdGFtcCB0aGF04oCZcyBmYXIgbG93ZXIg
+dGhhbiB0aGUgZnJlcXVlbmN5LCBzdWNoIGFzIOKAmDB4NTUzNjNiOeKAmSBhbmQgSeKAmW0gc2lt
+cGx5IG5vdCBzdXJlIGhvdyB0byBpbnRlcnByZXQgdGhpcy4mbmJzcDsgSXQgZG9lcyBOT1Qgc2Vl
+bSB0byBiZSBhbiBvZmZzZXQgZnJvbSB0aGUgcHJldmlvdXMgZXZlbnQNCiBzaW5jZSBpZiBJIHRy
+ZWF0IGl0IGFzIHN1Y2ggd2UgZ2V0IGV2ZW50cyB0aGF0IGFyZSBvdXQgb2Ygb3JkZXIuJm5ic3A7
+IE9uZSBzdWNoIGV4YW1wbGUgaXMgdGhlIGZvbGxvd2luZzo8bzpwPjwvbzpwPjwvcD4NCjxwIGNs
+YXNzPSJNc29Ob3JtYWwiPiZuYnNwOzxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1h
+bCI+Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7
+Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7IEV2ZW50ICMxMSAtIEV4dGVuZGVk
+IGhlYWRlciB0aW1lc3RhbXAgKDY0LWJpdCk6IDB4MDAwOThhNzU0NTU1ZWEyODxvOnA+PC9vOnA+
+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCIgc3R5bGU9InRleHQtaW5kZW50Oi41aW4iPkV2ZW50
+ICMxMiAtIENvbXBhY3QgaGVhZGVyIHRpbWVzdGFtcCAoMjctYml0KTogMHgwNGVjYzM4YzxvOnA+
+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCIgc3R5bGU9InRleHQtaW5kZW50Oi41aW4i
+PkV2ZW50ICMxMyAtIEV4dGVuZGVkIGhlYWRlciB0aW1lc3RhbXAgKDY0LWJpdCk6IDB4MDAwOThh
+NzUzNjljYzVlNDxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+Jm5ic3A7PG86
+cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj5BcyB5b3UgY2FuIHNlZSwgRXZlbnRb
+MTFdLlRpbWVzdGFtcCAmIzQzOyBFdmVudFsxMl0uVGltZXN0YW1wICZndDsgRXZlbnRbMTNdLlRp
+bWVzdGFtcC4mbmJzcDsgV2hpY2ggbWVhbnMgaXQgY2Fubm90IGJlIGEgc2ltcGxlIOKAnG9mZnNl
+dCBmcm9tIHByZXZpb3VzIGV2ZW504oCdLCBzaW5jZSB3ZSB3b3VsZCBiZSBnZXR0aW5nIGV2ZW50
+cyBvdXQgb2Ygb3JkZXIuPG86cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj4mbmJz
+cDs8bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPkhlcmUgaXMgdGhlIHJlbGV2
+YW50IG1ldGFkYXRhOjxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+Jm5ic3A7
+PG86cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIiBzdHlsZT0ibWFyZ2luLWxlZnQ6
+LjVpbiI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTo5LjVwdDtmb250LWZhbWlseTpDb25zb2xhcztj
+b2xvcjp3aW5kb3d0ZXh0Ij5jbG9jayB7PC9zcGFuPjxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9
+Ik1zb05vcm1hbCIgc3R5bGU9Im1hcmdpbi1sZWZ0Oi41aW4iPjxzcGFuIHN0eWxlPSJmb250LXNp
+emU6OS41cHQ7Zm9udC1mYW1pbHk6Q29uc29sYXM7Y29sb3I6d2luZG93dGV4dCI+Jm5ic3A7Jm5i
+c3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7IG5hbWUgPSAmcXVvdDttb25vdG9uaWMmcXVvdDs7
+PC9zcGFuPjxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCIgc3R5bGU9Im1hcmdp
+bi1sZWZ0Oi41aW4iPjxzcGFuIHN0eWxlPSJmb250LXNpemU6OS41cHQ7Zm9udC1mYW1pbHk6Q29u
+c29sYXM7Y29sb3I6d2luZG93dGV4dCI+Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5i
+c3A7IHV1aWQgPSAmcXVvdDs5ZmI1NzMzMy1hZGEyLTRjNzMtYTdjZS0zMzRmNDY0MzdjNzQmcXVv
+dDs7PC9zcGFuPjxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCIgc3R5bGU9Im1h
+cmdpbi1sZWZ0Oi41aW4iPjxzcGFuIHN0eWxlPSJmb250LXNpemU6OS41cHQ7Zm9udC1mYW1pbHk6
+Q29uc29sYXM7Y29sb3I6d2luZG93dGV4dCI+Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7
+Jm5ic3A7IGRlc2NyaXB0aW9uID0gJnF1b3Q7TW9ub3RvbmljIENsb2NrJnF1b3Q7Ozwvc3Bhbj48
+bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiIHN0eWxlPSJtYXJnaW4tbGVmdDou
+NWluIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0O2ZvbnQtZmFtaWx5OkNvbnNvbGFzO2Nv
+bG9yOndpbmRvd3RleHQiPiZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyBmcmVx
+ID0gMTAwMDAwMDAwMDsgLyogRnJlcXVlbmN5LCBpbiBIeiAqLzwvc3Bhbj48bzpwPjwvbzpwPjwv
+cD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiIHN0eWxlPSJtYXJnaW4tbGVmdDouNWluIj48c3BhbiBz
+dHlsZT0iZm9udC1zaXplOjkuNXB0O2ZvbnQtZmFtaWx5OkNvbnNvbGFzO2NvbG9yOndpbmRvd3Rl
+eHQiPiZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyAvKiBjbG9jayB2YWx1ZSBv
+ZmZzZXQgZnJvbSBFcG9jaCBpczogb2Zmc2V0ICogKDEvZnJlcSkgKi88L3NwYW4+PG86cD48L286
+cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIiBzdHlsZT0ibWFyZ2luLWxlZnQ6LjVpbiI+PHNw
+YW4gc3R5bGU9ImZvbnQtc2l6ZTo5LjVwdDtmb250LWZhbWlseTpDb25zb2xhcztjb2xvcjp3aW5k
+b3d0ZXh0Ij4mbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsgb2Zmc2V0ID0gMTQ1
+MTk0NjIzMDIyODk4ODQzNjs8L3NwYW4+PG86cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9y
+bWFsIiBzdHlsZT0ibWFyZ2luLWxlZnQ6LjVpbiI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTo5LjVw
+dDtmb250LWZhbWlseTpDb25zb2xhcztjb2xvcjp3aW5kb3d0ZXh0Ij59Ozwvc3Bhbj48bzpwPjwv
+bzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiIHN0eWxlPSJtYXJnaW4tbGVmdDouNWluIj48
+c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0O2ZvbnQtZmFtaWx5OkNvbnNvbGFzO2NvbG9yOndp
+bmRvd3RleHQiPiZuYnNwOzwvc3Bhbj48bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3Jt
+YWwiIHN0eWxlPSJtYXJnaW4tbGVmdDouNWluIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0
+O2ZvbnQtZmFtaWx5OkNvbnNvbGFzO2NvbG9yOndpbmRvd3RleHQiPiZuYnNwOzwvc3Bhbj48bzpw
+PjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiIHN0eWxlPSJtYXJnaW4tbGVmdDouNWlu
+Ij48c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0O2ZvbnQtZmFtaWx5OkNvbnNvbGFzO2NvbG9y
+OndpbmRvd3RleHQiPnR5cGVhbGlhcyBpbnRlZ2VyIHs8L3NwYW4+PG86cD48L286cD48L3A+DQo8
+cCBjbGFzcz0iTXNvTm9ybWFsIiBzdHlsZT0ibWFyZ2luLWxlZnQ6LjVpbiI+PHNwYW4gc3R5bGU9
+ImZvbnQtc2l6ZTo5LjVwdDtmb250LWZhbWlseTpDb25zb2xhcztjb2xvcjp3aW5kb3d0ZXh0Ij4m
+bmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsmbmJzcDsgc2l6ZSA9IDI3OyBhbGlnbiA9IDE7
+IHNpZ25lZCA9IGZhbHNlOzwvc3Bhbj48bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3Jt
+YWwiIHN0eWxlPSJtYXJnaW4tbGVmdDouNWluIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0
+O2ZvbnQtZmFtaWx5OkNvbnNvbGFzO2NvbG9yOndpbmRvd3RleHQiPiZuYnNwOyZuYnNwOyZuYnNw
+OyZuYnNwOyZuYnNwOyZuYnNwOyBtYXAgPSBjbG9jay5tb25vdG9uaWMudmFsdWU7PC9zcGFuPjxv
+OnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCIgc3R5bGU9Im1hcmdpbi1sZWZ0Oi41
+aW4iPjxzcGFuIHN0eWxlPSJmb250LXNpemU6OS41cHQ7Zm9udC1mYW1pbHk6Q29uc29sYXM7Y29s
+b3I6d2luZG93dGV4dCI+fSA6PSB1aW50MjdfY2xvY2tfbW9ub3RvbmljX3Q7PC9zcGFuPjxvOnA+
+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCIgc3R5bGU9Im1hcmdpbi1sZWZ0Oi41aW4i
+PjxzcGFuIHN0eWxlPSJmb250LXNpemU6OS41cHQ7Zm9udC1mYW1pbHk6Q29uc29sYXM7Y29sb3I6
+d2luZG93dGV4dCI+Jm5ic3A7PC9zcGFuPjxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05v
+cm1hbCIgc3R5bGU9Im1hcmdpbi1sZWZ0Oi41aW4iPjxzcGFuIHN0eWxlPSJmb250LXNpemU6OS41
+cHQ7Zm9udC1mYW1pbHk6Q29uc29sYXM7Y29sb3I6d2luZG93dGV4dCI+dHlwZWFsaWFzIGludGVn
+ZXIgezwvc3Bhbj48bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiIHN0eWxlPSJt
+YXJnaW4tbGVmdDouNWluIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0O2ZvbnQtZmFtaWx5
+OkNvbnNvbGFzO2NvbG9yOndpbmRvd3RleHQiPiZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNw
+OyZuYnNwOyBzaXplID0gNjQ7IGFsaWduID0gODsgc2lnbmVkID0gZmFsc2U7PC9zcGFuPjxvOnA+
+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCIgc3R5bGU9Im1hcmdpbi1sZWZ0Oi41aW4i
+PjxzcGFuIHN0eWxlPSJmb250LXNpemU6OS41cHQ7Zm9udC1mYW1pbHk6Q29uc29sYXM7Y29sb3I6
+d2luZG93dGV4dCI+Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7IG1hcCA9IGNs
+b2NrLm1vbm90b25pYy52YWx1ZTs8L3NwYW4+PG86cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNv
+Tm9ybWFsIiBzdHlsZT0ibWFyZ2luLWxlZnQ6LjVpbiI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTo5
+LjVwdDtmb250LWZhbWlseTpDb25zb2xhcztjb2xvcjp3aW5kb3d0ZXh0Ij59IDo9IHVpbnQ2NF9j
+bG9ja19tb25vdG9uaWNfdDs8L3NwYW4+PG86cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9y
+bWFsIiBzdHlsZT0ibWFyZ2luLWxlZnQ6LjVpbiI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTo5LjVw
+dDtmb250LWZhbWlseTpDb25zb2xhcztjb2xvcjp3aW5kb3d0ZXh0Ij4mbmJzcDs8L3NwYW4+PG86
+cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIiBzdHlsZT0ibWFyZ2luLWxlZnQ6LjVp
+biI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTo5LjVwdDtmb250LWZhbWlseTpDb25zb2xhcztjb2xv
+cjp3aW5kb3d0ZXh0Ij5zdHJ1Y3QgZXZlbnRfaGVhZGVyX2NvbXBhY3Qgezwvc3Bhbj48bzpwPjwv
+bzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiIHN0eWxlPSJtYXJnaW4tbGVmdDouNWluIj48
+c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0O2ZvbnQtZmFtaWx5OkNvbnNvbGFzO2NvbG9yOndp
+bmRvd3RleHQiPiZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyBlbnVtIDogdWlu
+dDVfdCB7IGNvbXBhY3QgPSAwIC4uLiAzMCwgZXh0ZW5kZWQgPSAzMSB9IGlkOzwvc3Bhbj48bzpw
+PjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiIHN0eWxlPSJtYXJnaW4tbGVmdDouNWlu
+Ij48c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0O2ZvbnQtZmFtaWx5OkNvbnNvbGFzO2NvbG9y
+OndpbmRvd3RleHQiPiZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyB2YXJpYW50
+ICZsdDtpZCZndDsgezwvc3Bhbj48bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwi
+IHN0eWxlPSJtYXJnaW4tbGVmdDouNWluIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0O2Zv
+bnQtZmFtaWx5OkNvbnNvbGFzO2NvbG9yOndpbmRvd3RleHQiPiZuYnNwOyZuYnNwOyZuYnNwOyZu
+YnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNw
+OyBzdHJ1Y3Qgezwvc3Bhbj48bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiIHN0
+eWxlPSJtYXJnaW4tbGVmdDouNWluIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0O2ZvbnQt
+ZmFtaWx5OkNvbnNvbGFzO2NvbG9yOndpbmRvd3RleHQiPiZuYnNwOyZuYnNwOyZuYnNwOyZuYnNw
+OyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZu
+YnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyB1aW50MjdfY2xvY2tfbW9u
+b3RvbmljX3QgdGltZXN0YW1wOzwvc3Bhbj48bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29O
+b3JtYWwiIHN0eWxlPSJtYXJnaW4tbGVmdDouNWluIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjku
+NXB0O2ZvbnQtZmFtaWx5OkNvbnNvbGFzO2NvbG9yOndpbmRvd3RleHQiPiZuYnNwOyZuYnNwOyZu
+YnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNw
+OyZuYnNwOyB9IGNvbXBhY3Q7PC9zcGFuPjxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05v
+cm1hbCIgc3R5bGU9Im1hcmdpbi1sZWZ0Oi41aW4iPjxzcGFuIHN0eWxlPSJmb250LXNpemU6OS41
+cHQ7Zm9udC1mYW1pbHk6Q29uc29sYXM7Y29sb3I6d2luZG93dGV4dCI+Jm5ic3A7Jm5ic3A7Jm5i
+c3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7
+Jm5ic3A7IHN0cnVjdCB7PC9zcGFuPjxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1h
+bCIgc3R5bGU9Im1hcmdpbi1sZWZ0Oi41aW4iPjxzcGFuIHN0eWxlPSJmb250LXNpemU6OS41cHQ7
+Zm9udC1mYW1pbHk6Q29uc29sYXM7Y29sb3I6d2luZG93dGV4dCI+Jm5ic3A7Jm5ic3A7Jm5ic3A7
+Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5i
+c3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7Jm5ic3A7IHVpbnQzMl90IGlk
+Ozwvc3Bhbj48bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiIHN0eWxlPSJtYXJn
+aW4tbGVmdDouNWluIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0O2ZvbnQtZmFtaWx5OkNv
+bnNvbGFzO2NvbG9yOndpbmRvd3RleHQiPiZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZu
+YnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNw
+OyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyB1aW50NjRfY2xvY2tfbW9ub3RvbmljX3Qg
+dGltZXN0YW1wOzwvc3Bhbj48bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiIHN0
+eWxlPSJtYXJnaW4tbGVmdDouNWluIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0O2ZvbnQt
+ZmFtaWx5OkNvbnNvbGFzO2NvbG9yOndpbmRvd3RleHQiPiZuYnNwOyZuYnNwOyZuYnNwOyZuYnNw
+OyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyZuYnNwOyB9
+IGV4dGVuZGVkOzwvc3Bhbj48bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiIHN0
+eWxlPSJtYXJnaW4tbGVmdDouNWluIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjkuNXB0O2ZvbnQt
+ZmFtaWx5OkNvbnNvbGFzO2NvbG9yOndpbmRvd3RleHQiPiZuYnNwOyZuYnNwOyZuYnNwOyZuYnNw
+OyZuYnNwOyZuYnNwOyB9IHY7PC9zcGFuPjxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05v
+cm1hbCIgc3R5bGU9Im1hcmdpbi1sZWZ0Oi41aW4iPjxzcGFuIHN0eWxlPSJmb250LXNpemU6OS41
+cHQ7Zm9udC1mYW1pbHk6Q29uc29sYXM7Y29sb3I6d2luZG93dGV4dCI+fSBhbGlnbig4KTs8L3Nw
+YW4+PG86cD48L286cD48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj4mbmJzcDs8bzpwPjwvbzpw
+PjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPkhvdyBzaG91bGQgd2UgYmUgdHJlYXRpbmcgdGhl
+c2UgPHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTo5LjVwdDtmb250LWZhbWlseTpDb25zb2xhcyI+DQp1
+aW50MjdfY2xvY2tfbW9ub3RvbmljX3Q8L3NwYW4+IHZhbHVlcz88bzpwPjwvbzpwPjwvcD4NCjxw
+IGNsYXNzPSJNc29Ob3JtYWwiPiZuYnNwOzxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05v
+cm1hbCI+VGhhbmtzITxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+LUxlZSBD
+dWx2ZXI8bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPkNMUiBSZWxpYWJpbGl0
+eSBhbmQgUGVyZm9ybWFuY2U8bzpwPjwvbzpwPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPiZu
+YnNwOzxvOnA+PC9vOnA+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZv
+bnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7SGVsdmV0aWNhJnF1b3Q7LHNhbnMtc2Vy
+aWY7Y29sb3I6YmxhY2siPjxicj4NCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fPGJyPg0KbHR0bmctZGV2IG1haWxpbmcgbGlzdDxicj4NCjxhIGhyZWY9Im1h
+aWx0bzpsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIj5sdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+PC9hPjxicj4NCjxhIGhyZWY9Imh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
+bi9saXN0aW5mby9sdHRuZy1kZXYiPmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFp
+bG1hbi9saXN0aW5mby9sdHRuZy1kZXY8L2E+PG86cD48L286cD48L3NwYW4+PC9wPg0KPC9ibG9j
+a3F1b3RlPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9
+ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssc2Fucy1zZXJp
+Zjtjb2xvcjpibGFjayI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2
+Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9u
+dC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjpibGFjayI+LS0NCjxv
+OnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwi
+PjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1
+b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2siPk1hdGhpZXUgRGVzbm95ZXJzPGJyPg0KRWZmaWNp
+T1MgSW5jLjxicj4NCjxhIGhyZWY9Imh0dHA6Ly93d3cuZWZmaWNpb3MuY29tIj5odHRwOi8vd3d3
+LmVmZmljaW9zLmNvbTwvYT48bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjwvZGl2Pg0K
+PC9kaXY+DQo8L2JvZHk+DQo8L2h0bWw+DQo=
+
+--_000_BN3PR00MB0003208E1DF77CA6CBAF4736C88B0BN3PR00MB0003namp_--
+
+--===============7017389121815864977==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -524,4 +543,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============8779872987636427401==--
+--===============7017389121815864977==--
