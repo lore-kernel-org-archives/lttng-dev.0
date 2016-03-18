@@ -1,15 +1,15 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 Subject: [PATCH lttng-tools] Fix: Use get_domain_str on add
 	context
-Date: Fri, 18 Mar 2016 18:25:23 -0400
-Message-ID: <1458339923-7955-1-git-send-email-jonathan.rajotte-julien__33451.4938215309$1458339961$gmane$org@efficios.com>
+Date: Fri, 18 Mar 2016 18:44:45 -0400
+Message-ID: <1458341085-4054-1-git-send-email-jonathan.rajotte-julien__11546.5634073646$1458341225$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 43A23A2D62
- for <lttng-dev@lists.lttng.org>; Fri, 18 Mar 2016 22:25:38 +0000 (UTC)
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id F2620A2D68
+ for <lttng-dev@lists.lttng.org>; Fri, 18 Mar 2016 22:46:41 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
