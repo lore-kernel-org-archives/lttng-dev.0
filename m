@@ -1,16 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Snapshot: fix: mi code path
-Date: Mon, 21 Mar 2016 21:49:48 +0000 (UTC)
-Message-ID: <367304197.32343.1458596988829.JavaMail.zimbra__8534.77575951747$1458597009$gmane$org@efficios.com>
-References: <1458593245-2910-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+From: Sean Heelan <seanheelan@gmail.com>
+Subject: Restriction on channel sub-buffer size?
+Date: Sun, 20 Mar 2016 19:52:36 +0000
+Message-ID: <CAL90rL99uHxGLtXJo7UVb5yAp39QFvr_qeH4uFd4p9r1e0dbRA__14208.3127903335$1458670316$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============2760195140714178411=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 2CF14A2C73
- for <lttng-dev@lists.lttng.org>; Mon, 21 Mar 2016 21:49:50 +0000 (UTC)
-In-Reply-To: <1458593245-2910-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+Received: from mail-lb0-f181.google.com (mail-lb0-f181.google.com
+ [209.85.217.181])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 0EDB3A0A2F
+ for <lttng-dev@lists.lttng.org>; Sun, 20 Mar 2016 19:52:37 +0000 (UTC)
+Received: by mail-lb0-f181.google.com with SMTP id bc4so116058868lbc.2
+ for <lttng-dev@lists.lttng.org>; Sun, 20 Mar 2016 12:52:36 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,180 +20,87 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT24gTWFyIDIxLCAyMDE2LCBhdCA0OjQ3IFBNLCBKb25hdGhhbiBSYWpvdHRlIGpvbmF0
-aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbSB3cm90ZToKCj4gUmVkdWNlIHBvc3NpYmxl
-IGNvZGUgcGF0aHMgYnkgZW1iZWRkaW5nIG1pIGludG8gZXhpc3RpbmcgY29kZSBwYXRocy4KCkkg
-ZG9uJ3QgdW5kZXJzdGFuZCB0aGUgY2hhbmdlbG9nIDotLwoKTWF0aGlldQoKPiAKPiBmaXhlcyAj
-MTAwMgo+IAo+IFNpZ25lZC1vZmYtYnk6IEpvbmF0aGFuIFJham90dGUgPGpvbmF0aGFuLnJham90
-dGUtanVsaWVuQGVmZmljaW9zLmNvbT4KPiAtLS0KPiBzcmMvYmluL2x0dG5nL2NvbW1hbmRzL3Nu
-YXBzaG90LmMgfCAyNTggKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiAx
-IGZpbGUgY2hhbmdlZCwgNjMgaW5zZXJ0aW9ucygrKSwgMTk1IGRlbGV0aW9ucygtKQo+IAo+IGRp
-ZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nL2NvbW1hbmRzL3NuYXBzaG90LmMKPiBiL3NyYy9iaW4v
-bHR0bmcvY29tbWFuZHMvc25hcHNob3QuYwo+IGluZGV4IGFiZGYxODkuLmM4YTdiYTAgMTAwNjQ0
-Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9zbmFwc2hvdC5jCj4gKysrIGIvc3JjL2Jp
-bi9sdHRuZy9jb21tYW5kcy9zbmFwc2hvdC5jCj4gQEAgLTE1MCw2NSArMTUwLDI4IEBAIGVycm9y
-X2NyZWF0ZToKPiAJcmV0dXJuIE5VTEw7Cj4gfQo+IAo+IC1zdGF0aWMgaW50IG1pX2xpc3Rfb3V0
-cHV0KHZvaWQpCj4gK3N0YXRpYyBpbnQgbGlzdF9vdXRwdXQodm9pZCkKPiB7Cj4gLQlpbnQgcmV0
-Owo+ICsJaW50IHJldCwgb3V0cHV0X3NlZW4gPSAwOwo+IAlzdHJ1Y3QgbHR0bmdfc25hcHNob3Rf
-b3V0cHV0ICpzX2l0ZXI7Cj4gCXN0cnVjdCBsdHRuZ19zbmFwc2hvdF9vdXRwdXRfbGlzdCAqbGlz
-dDsKPiAKPiAtCWFzc2VydCh3cml0ZXIpOwo+IC0KPiAJcmV0ID0gbHR0bmdfc25hcHNob3RfbGlz
-dF9vdXRwdXQoY3VycmVudF9zZXNzaW9uX25hbWUsICZsaXN0KTsKPiAJaWYgKHJldCA8IDApIHsK
-PiAJCWdvdG8gZXJyb3I7Cj4gCX0KPiAKPiAtCXJldCA9IG1pX2x0dG5nX3NuYXBzaG90X291dHB1
-dF9zZXNzaW9uX25hbWUod3JpdGVyLCBjdXJyZW50X3Nlc3Npb25fbmFtZSk7Cj4gLQlpZiAocmV0
-KSB7Cj4gLQkJcmV0ID0gQ01EX0VSUk9SOwo+IC0JCWdvdG8gZW5kOwo+IC0JfQo+ICsJTVNHKCJT
-bmFwc2hvdCBvdXRwdXQgbGlzdCBmb3Igc2Vzc2lvbiAlcyIsIGN1cnJlbnRfc2Vzc2lvbl9uYW1l
-KTsKPiAKPiAtCXdoaWxlICgoc19pdGVyID0gbHR0bmdfc25hcHNob3Rfb3V0cHV0X2xpc3RfZ2V0
-X25leHQobGlzdCkpICE9IE5VTEwpIHsKPiAtCQlyZXQgPSBtaV9sdHRuZ19zbmFwc2hvdF9saXN0
-X291dHB1dCh3cml0ZXIsIHNfaXRlcik7Cj4gKwlpZiAobHR0bmdfb3B0X21pKSB7Cj4gKwkJcmV0
-ID0gbWlfbHR0bmdfc25hcHNob3Rfb3V0cHV0X3Nlc3Npb25fbmFtZSh3cml0ZXIsCj4gKwkJCQlj
-dXJyZW50X3Nlc3Npb25fbmFtZSk7Cj4gCQlpZiAocmV0KSB7Cj4gCQkJcmV0ID0gQ01EX0VSUk9S
-Owo+IAkJCWdvdG8gZW5kOwo+IAkJfQo+IAl9Cj4gCj4gLQo+IC0JLyogQ2xvc2Ugc25hcHNob3Qg
-c25hcHNob3RzIGVsZW1lbnQgKi8KPiAtCXJldCA9IG1pX2x0dG5nX3dyaXRlcl9jbG9zZV9lbGVt
-ZW50KHdyaXRlcik7Cj4gLQlpZiAocmV0KSB7Cj4gLQkJcmV0ID0gQ01EX0VSUk9SOwo+IC0JCWdv
-dG8gZW5kOwo+IC0JfQo+IC0KPiAtCS8qIENsb3NlIHNuYXBzaG90IHNlc3Npb24gZWxlbWVudCAq
-Lwo+IC0JcmV0ID0gbWlfbHR0bmdfd3JpdGVyX2Nsb3NlX2VsZW1lbnQod3JpdGVyKTsKPiAtCWlm
-IChyZXQpIHsKPiAtCQlyZXQgPSBDTURfRVJST1I7Cj4gLQl9Cj4gLWVuZDoKPiAtCWx0dG5nX3Nu
-YXBzaG90X291dHB1dF9saXN0X2Rlc3Ryb3kobGlzdCk7Cj4gLWVycm9yOgo+IC0JcmV0dXJuIHJl
-dDsKPiAtfQo+IC0KPiAtc3RhdGljIGludCBsaXN0X291dHB1dCh2b2lkKQo+IC17Cj4gLQlpbnQg
-cmV0LCBvdXRwdXRfc2VlbiA9IDA7Cj4gLQlzdHJ1Y3QgbHR0bmdfc25hcHNob3Rfb3V0cHV0ICpz
-X2l0ZXI7Cj4gLQlzdHJ1Y3QgbHR0bmdfc25hcHNob3Rfb3V0cHV0X2xpc3QgKmxpc3Q7Cj4gLQo+
-IC0JcmV0ID0gbHR0bmdfc25hcHNob3RfbGlzdF9vdXRwdXQoY3VycmVudF9zZXNzaW9uX25hbWUs
-ICZsaXN0KTsKPiAtCWlmIChyZXQgPCAwKSB7Cj4gLQkJZ290byBlcnJvcjsKPiAtCX0KPiAtCj4g
-LQlNU0coIlNuYXBzaG90IG91dHB1dCBsaXN0IGZvciBzZXNzaW9uICVzIiwgY3VycmVudF9zZXNz
-aW9uX25hbWUpOwo+IC0KPiAJd2hpbGUgKChzX2l0ZXIgPSBsdHRuZ19zbmFwc2hvdF9vdXRwdXRf
-bGlzdF9nZXRfbmV4dChsaXN0KSkgIT0gTlVMTCkgewo+IAkJTVNHKCIlc1slIiBQUkl1MzIgIl0g
-JXM6ICVzIChtYXgtc2l6ZTogJSIgUFJJZDY0ICIpIiwgaW5kZW50NCwKPiAJCQkJbHR0bmdfc25h
-cHNob3Rfb3V0cHV0X2dldF9pZChzX2l0ZXIpLAo+IEBAIC0yMTYsOCArMTc5LDMwIEBAIHN0YXRp
-YyBpbnQgbGlzdF9vdXRwdXQodm9pZCkKPiAJCQkJbHR0bmdfc25hcHNob3Rfb3V0cHV0X2dldF9j
-dHJsX3VybChzX2l0ZXIpLAo+IAkJCQlsdHRuZ19zbmFwc2hvdF9vdXRwdXRfZ2V0X21heHNpemUo
-c19pdGVyKSk7Cj4gCQlvdXRwdXRfc2VlbiA9IDE7Cj4gKwkJaWYgKGx0dG5nX29wdF9taSkgewo+
-ICsJCQlyZXQgPSBtaV9sdHRuZ19zbmFwc2hvdF9saXN0X291dHB1dCh3cml0ZXIsIHNfaXRlcik7
-Cj4gKwkJCWlmIChyZXQpIHsKPiArCQkJCXJldCA9IENNRF9FUlJPUjsKPiArCQkJCWdvdG8gZW5k
-Owo+ICsJCQl9Cj4gKwkJfQo+IAl9Cj4gCj4gKwlpZiAobHR0bmdfb3B0X21pKSB7Cj4gKwkJLyog
-Q2xvc2Ugc25hcHNob3Qgc25hcHNob3RzIGVsZW1lbnQgKi8KPiArCQlyZXQgPSBtaV9sdHRuZ193
-cml0ZXJfY2xvc2VfZWxlbWVudCh3cml0ZXIpOwo+ICsJCWlmIChyZXQpIHsKPiArCQkJcmV0ID0g
-Q01EX0VSUk9SOwo+ICsJCQlnb3RvIGVuZDsKPiArCQl9Cj4gKwo+ICsJCS8qIENsb3NlIHNuYXBz
-aG90IHNlc3Npb24gZWxlbWVudCAqLwo+ICsJCXJldCA9IG1pX2x0dG5nX3dyaXRlcl9jbG9zZV9l
-bGVtZW50KHdyaXRlcik7Cj4gKwkJaWYgKHJldCkgewo+ICsJCQlyZXQgPSBDTURfRVJST1I7Cj4g
-KwkJfQo+ICsJfQo+ICtlbmQ6Cj4gCWx0dG5nX3NuYXBzaG90X291dHB1dF9saXN0X2Rlc3Ryb3ko
-bGlzdCk7Cj4gCj4gCWlmICghb3V0cHV0X3NlZW4pIHsKPiBAQCAtMjI5LDUwICsyMTQsNiBAQCBl
-cnJvcjoKPiB9Cj4gCj4gLyoKPiAtICogRGVsZXRlIG91dHB1dCBieSBJRCAobWFjaGluZSBpbnRl
-cmZhY2UgdmVyc2lvbikuCj4gLSAqLwo+IC1zdGF0aWMgaW50IG1pX2RlbF9vdXRwdXQodWludDMy
-X3QgaWQsIGNvbnN0IGNoYXIgKm5hbWUpCj4gLXsKPiAtCWludCByZXQ7Cj4gLQlzdHJ1Y3QgbHR0
-bmdfc25hcHNob3Rfb3V0cHV0ICpvdXRwdXQgPSBOVUxMOwo+IC0KPiAtCWFzc2VydCh3cml0ZXIp
-Owo+IC0KPiAtCW91dHB1dCA9IGx0dG5nX3NuYXBzaG90X291dHB1dF9jcmVhdGUoKTsKPiAtCWlm
-ICghb3V0cHV0KSB7Cj4gLQkJcmV0ID0gQ01EX0ZBVEFMOwo+IC0JCWdvdG8gZXJyb3I7Cj4gLQl9
-Cj4gLQo+IC0JaWYgKG5hbWUpIHsKPiAtCQlyZXQgPSBsdHRuZ19zbmFwc2hvdF9vdXRwdXRfc2V0
-X25hbWUobmFtZSwgb3V0cHV0KTsKPiAtCX0gZWxzZSBpZiAoaWQgIT0gVUlOVDMyX01BWCkgewo+
-IC0JCXJldCA9IGx0dG5nX3NuYXBzaG90X291dHB1dF9zZXRfaWQoaWQsIG91dHB1dCk7Cj4gLQl9
-IGVsc2Ugewo+IC0JCXJldCA9IENNRF9FUlJPUjsKPiAtCQlnb3RvIGVycm9yOwo+IC0JfQo+IC0J
-aWYgKHJldCA8IDApIHsKPiAtCQlyZXQgPSBDTURfRkFUQUw7Cj4gLQkJZ290byBlcnJvcjsKPiAt
-CX0KPiAtCj4gLQlyZXQgPSBsdHRuZ19zbmFwc2hvdF9kZWxfb3V0cHV0KGN1cnJlbnRfc2Vzc2lv
-bl9uYW1lLCBvdXRwdXQpOwo+IC0JaWYgKHJldCA8IDApIHsKPiAtCQlnb3RvIGVycm9yOwo+IC0J
-fQo+IC0KPiAtCXJldCA9IG1pX2x0dG5nX3NuYXBzaG90X2RlbF9vdXRwdXQod3JpdGVyLCBpZCwg
-bmFtZSwgY3VycmVudF9zZXNzaW9uX25hbWUpOwo+IC0JaWYgKHJldCkgewo+IC0JCXJldCA9IENN
-RF9FUlJPUjsKPiAtCX0KPiAtCj4gLWVycm9yOgo+IC0JbHR0bmdfc25hcHNob3Rfb3V0cHV0X2Rl
-c3Ryb3kob3V0cHV0KTsKPiAtCXJldHVybiByZXQ7Cj4gLX0KPiAtCj4gLS8qCj4gICogRGVsZXRl
-IG91dHB1dCBieSBJRC4KPiAgKi8KPiBzdGF0aWMgaW50IGRlbF9vdXRwdXQodWludDMyX3QgaWQs
-IGNvbnN0IGNoYXIgKm5hbWUpCj4gQEAgLTMxMiw1MyArMjUzLDEyIEBAIHN0YXRpYyBpbnQgZGVs
-X291dHB1dCh1aW50MzJfdCBpZCwgY29uc3QgY2hhciAqbmFtZSkKPiAJCQkJbmFtZSwgY3VycmVu
-dF9zZXNzaW9uX25hbWUpOwo+IAl9Cj4gCj4gLWVycm9yOgo+IC0JbHR0bmdfc25hcHNob3Rfb3V0
-cHV0X2Rlc3Ryb3kob3V0cHV0KTsKPiAtCXJldHVybiByZXQ7Cj4gLX0KPiAtCj4gLS8qCj4gLSAq
-IEFkZCBvdXRwdXQgZnJvbSB0aGUgdXNlciBVUkwgKG1hY2hpbmUgaW50ZXJmYWNlKS4KPiAtICov
-Cj4gLXN0YXRpYyBpbnQgbWlfYWRkX291dHB1dChjb25zdCBjaGFyICp1cmwpCj4gLXsKPiAtCWlu
-dCByZXQ7Cj4gLQlzdHJ1Y3QgbHR0bmdfc25hcHNob3Rfb3V0cHV0ICpvdXRwdXQgPSBOVUxMOwo+
-IC0JY2hhciBuYW1lW05BTUVfTUFYXTsKPiAtCWNvbnN0IGNoYXIgKm5fcHRyOwo+IC0KPiAtCWlm
-ICghdXJsICYmICghb3B0X2RhdGFfdXJsIHx8ICFvcHRfY3RybF91cmwpKSB7Cj4gLQkJcmV0ID0g
-Q01EX0VSUk9SOwo+IC0JCWdvdG8gZXJyb3I7Cj4gLQl9Cj4gLQo+IC0Jb3V0cHV0ID0gY3JlYXRl
-X291dHB1dF9mcm9tX2FyZ3ModXJsKTsKPiAtCWlmICghb3V0cHV0KSB7Cj4gLQkJcmV0ID0gQ01E
-X0ZBVEFMOwo+IC0JCWdvdG8gZXJyb3I7Cj4gLQl9Cj4gLQo+IC0JLyogVGhpcyBjYWxsLCBpZiBz
-dWNjZXNzZnVsLCBwb3B1bGF0ZXMgdGhlIGlkIG9mIHRoZSBvdXRwdXQgb2JqZWN0LiAqLwo+IC0J
-cmV0ID0gbHR0bmdfc25hcHNob3RfYWRkX291dHB1dChjdXJyZW50X3Nlc3Npb25fbmFtZSwgb3V0
-cHV0KTsKPiAtCWlmIChyZXQgPCAwKSB7Cj4gLQkJZ290byBlcnJvcjsKPiAtCX0KPiAtCj4gLQlu
-X3B0ciA9IGx0dG5nX3NuYXBzaG90X291dHB1dF9nZXRfbmFtZShvdXRwdXQpOwo+IC0JaWYgKCpu
-X3B0ciA9PSAnXDAnKSB7Cj4gLQkJaW50IHByZXQ7Cj4gLQkJcHJldCA9IHNucHJpbnRmKG5hbWUs
-IHNpemVvZihuYW1lKSwgREVGQVVMVF9TTkFQU0hPVF9OQU1FICItJSIgUFJJdTMyLAo+IC0JCQkJ
-bHR0bmdfc25hcHNob3Rfb3V0cHV0X2dldF9pZChvdXRwdXQpKTsKPiAtCQlpZiAocHJldCA8IDAp
-IHsKPiAtCQkJUEVSUk9SKCJzbnByaW50ZiBhZGQgb3V0cHV0IG5hbWUiKTsKPiArCWlmIChsdHRu
-Z19vcHRfbWkpIHsKPiArCQlyZXQgPSBtaV9sdHRuZ19zbmFwc2hvdF9kZWxfb3V0cHV0KHdyaXRl
-ciwgaWQsIG5hbWUsCj4gKwkJCQljdXJyZW50X3Nlc3Npb25fbmFtZSk7Cj4gKwkJaWYgKHJldCkg
-ewo+ICsJCQlyZXQgPSBDTURfRVJST1I7Cj4gCQl9Cj4gLQkJbl9wdHIgPSBuYW1lOwo+IC0JfQo+
-IC0KPiAtCXJldCA9IG1pX2x0dG5nX3NuYXBzaG90X2FkZF9vdXRwdXQod3JpdGVyLCBjdXJyZW50
-X3Nlc3Npb25fbmFtZSwgbl9wdHIsCj4gLQkJCW91dHB1dCk7Cj4gLQlpZiAocmV0KSB7Cj4gLQkJ
-cmV0ID0gQ01EX0VSUk9SOwo+IAl9Cj4gCj4gZXJyb3I6Cj4gQEAgLTQxMCw2ICszMTAsMTMgQEAg
-c3RhdGljIGludCBhZGRfb3V0cHV0KGNvbnN0IGNoYXIgKnVybCkKPiAJCQlsdHRuZ19zbmFwc2hv
-dF9vdXRwdXRfZ2V0X2lkKG91dHB1dCksIG5fcHRyLAo+IAkJCWx0dG5nX3NuYXBzaG90X291dHB1
-dF9nZXRfY3RybF91cmwob3V0cHV0KSwKPiAJCQlsdHRuZ19zbmFwc2hvdF9vdXRwdXRfZ2V0X21h
-eHNpemUob3V0cHV0KSk7Cj4gKwlpZiAobHR0bmdfb3B0X21pKSB7Cj4gKwkJcmV0ID0gbWlfbHR0
-bmdfc25hcHNob3RfYWRkX291dHB1dCh3cml0ZXIsIGN1cnJlbnRfc2Vzc2lvbl9uYW1lLAo+ICsJ
-CQkJbl9wdHIsIG91dHB1dCk7Cj4gKwkJaWYgKHJldCkgewo+ICsJCQlyZXQgPSBDTURfRVJST1I7
-Cj4gKwkJfQo+ICsJfQo+IGVycm9yOgo+IAlsdHRuZ19zbmFwc2hvdF9vdXRwdXRfZGVzdHJveShv
-dXRwdXQpOwo+IAlyZXR1cm4gcmV0Owo+IEBAIC00MjQsMTEgKzMzMSw3IEBAIHN0YXRpYyBpbnQg
-Y21kX2FkZF9vdXRwdXQoaW50IGFyZ2MsIGNvbnN0IGNoYXIgKiphcmd2KQo+IAkJZ290byBlbmQ7
-Cj4gCX0KPiAKPiAtCWlmIChsdHRuZ19vcHRfbWkpIHsKPiAtCQlyZXQgPSBtaV9hZGRfb3V0cHV0
-KGFyZ3ZbMV0pOwo+IC0JfSBlbHNlIHsKPiAtCQlyZXQgPSBhZGRfb3V0cHV0KGFyZ3ZbMV0pOwo+
-IC0JfQo+ICsJcmV0ID0gYWRkX291dHB1dChhcmd2WzFdKTsKPiAKPiBlbmQ6Cj4gCXJldHVybiBy
-ZXQ7Cj4gQEAgLTQ0OCwxNyArMzUxLDkgQEAgc3RhdGljIGludCBjbWRfZGVsX291dHB1dChpbnQg
-YXJnYywgY29uc3QgY2hhciAqKmFyZ3YpCj4gCWVycm5vID0gMDsKPiAJaWQgPSBzdHJ0b2woYXJn
-dlsxXSwgJm5hbWUsIDEwKTsKPiAJaWYgKGlkID09IDAgJiYgZXJybm8gPT0gMCkgewo+IC0JCWlm
-IChsdHRuZ19vcHRfbWkpIHsKPiAtCQkJcmV0ID0gbWlfZGVsX291dHB1dChVSU5UMzJfTUFYLCBu
-YW1lKTsKPiAtCQl9IGVsc2Ugewo+IC0JCQlyZXQgPSBkZWxfb3V0cHV0KFVJTlQzMl9NQVgsIG5h
-bWUpOwo+IC0JCX0KPiArCQlyZXQgPSBkZWxfb3V0cHV0KFVJTlQzMl9NQVgsIG5hbWUpOwo+IAl9
-IGVsc2UgaWYgKGVycm5vID09IDAgJiYgKm5hbWUgPT0gJ1wwJykgewo+IC0JCWlmIChsdHRuZ19v
-cHRfbWkpIHsKPiAtCQkJcmV0ID0gbWlfZGVsX291dHB1dChpZCwgTlVMTCk7Cj4gLQkJfSBlbHNl
-IHsKPiAtCQkJcmV0ID0gZGVsX291dHB1dChpZCwgTlVMTCk7Cj4gLQkJfQo+ICsJCXJldCA9IGRl
-bF9vdXRwdXQoaWQsIE5VTEwpOwo+IAl9IGVsc2Ugewo+IAkJRVJSKCJBcmd1bWVudCAlcyBub3Qg
-cmVjb2duaXplZCIsIGFyZ3ZbMV0pOwo+IAkJcmV0ID0gLTE7Cj4gQEAgLTQ3Myw0NyArMzY4LDEy
-IEBAIHN0YXRpYyBpbnQgY21kX2xpc3Rfb3V0cHV0KGludCBhcmdjLCBjb25zdCBjaGFyICoqYXJn
-dikKPiB7Cj4gCWludCByZXQ7Cj4gCj4gLQlpZiAobHR0bmdfb3B0X21pKSB7Cj4gLQkJcmV0ID0g
-bWlfbGlzdF9vdXRwdXQoKTsKPiAtCX0gZWxzZSB7Cj4gLQkJcmV0ID0gbGlzdF9vdXRwdXQoKTsK
-PiAtCX0KPiArCXJldCA9IGxpc3Rfb3V0cHV0KCk7Cj4gCj4gCXJldHVybiByZXQ7Cj4gfQo+IAo+
-IC8qCj4gLSAqIERvIGEgc25hcHNob3QgcmVjb3JkIHdpdGggdGhlIFVSTCBpZiBvbmUgaXMgZ2l2
-ZW4gKG1hY2hpbmUgaW50ZXJmYWNlKS4KPiAtICovCj4gLXN0YXRpYyBpbnQgbWlfcmVjb3JkKGNv
-bnN0IGNoYXIgKnVybCkKPiAtewo+IC0JaW50IHJldDsKPiAtCXN0cnVjdCBsdHRuZ19zbmFwc2hv
-dF9vdXRwdXQgKm91dHB1dCA9IE5VTEw7Cj4gLQo+IC0Jb3V0cHV0ID0gY3JlYXRlX291dHB1dF9m
-cm9tX2FyZ3ModXJsKTsKPiAtCWlmICghb3V0cHV0KSB7Cj4gLQkJcmV0ID0gQ01EX0ZBVEFMOwo+
-IC0JCWdvdG8gZXJyb3I7Cj4gLQl9Cj4gLQo+IC0JcmV0ID0gbHR0bmdfc25hcHNob3RfcmVjb3Jk
-KGN1cnJlbnRfc2Vzc2lvbl9uYW1lLCBvdXRwdXQsIDApOwo+IC0JaWYgKHJldCA8IDApIHsKPiAt
-CQlyZXQgPSBDTURfRVJST1I7Cj4gLQkJZ290byBlcnJvcjsKPiAtCX0KPiAtCj4gLQlyZXQgPSBt
-aV9sdHRuZ19zbmFwc2hvdF9yZWNvcmQod3JpdGVyLCBjdXJyZW50X3Nlc3Npb25fbmFtZSwgdXJs
-LAo+IC0JCQlvcHRfY3RybF91cmwsIG9wdF9kYXRhX3VybCk7Cj4gLQlpZiAocmV0KSB7Cj4gLQkJ
-cmV0ID0gQ01EX0VSUk9SOwo+IC0JfQo+IC0KPiAtZXJyb3I6Cj4gLQlsdHRuZ19zbmFwc2hvdF9v
-dXRwdXRfZGVzdHJveShvdXRwdXQpOwo+IC0JcmV0dXJuIHJldDsKPiAtfQo+IC0KPiAtLyoKPiAg
-KiBEbyBhIHNuYXBzaG90IHJlY29yZCB3aXRoIHRoZSBVUkwgaWYgb25lIGlzIGdpdmVuLgo+ICAq
-Lwo+IHN0YXRpYyBpbnQgcmVjb3JkKGNvbnN0IGNoYXIgKnVybCkKPiBAQCAtNTQ0LDYgKzQwNCwx
-NCBAQCBzdGF0aWMgaW50IHJlY29yZChjb25zdCBjaGFyICp1cmwpCj4gCQkJCW9wdF9kYXRhX3Vy
-bCk7Cj4gCX0KPiAKPiArCWlmIChsdHRuZ19vcHRfbWkpIHsKPiArCQlyZXQgPSBtaV9sdHRuZ19z
-bmFwc2hvdF9yZWNvcmQod3JpdGVyLCBjdXJyZW50X3Nlc3Npb25fbmFtZSwgdXJsLAo+ICsJCQkJ
-b3B0X2N0cmxfdXJsLCBvcHRfZGF0YV91cmwpOwo+ICsJCWlmIChyZXQpIHsKPiArCQkJcmV0ID0g
-Q01EX0VSUk9SOwo+ICsJCX0KPiArCX0KPiArCj4gZXJyb3I6Cj4gCWx0dG5nX3NuYXBzaG90X291
-dHB1dF9kZXN0cm95KG91dHB1dCk7Cj4gCXJldHVybiByZXQ7Cj4gQEAgLTU1NCwxOCArNDIyLDkg
-QEAgc3RhdGljIGludCBjbWRfcmVjb3JkKGludCBhcmdjLCBjb25zdCBjaGFyICoqYXJndikKPiAJ
-aW50IHJldDsKPiAKPiAJaWYgKGFyZ2MgPT0gMikgewo+IC0JCS8qIFdpdGggYSBnaXZlbiBVUkwg
-Ki8KPiAtCQlpZiAobHR0bmdfb3B0X21pKSB7Cj4gLQkJCXJldCA9IG1pX3JlY29yZChhcmd2WzFd
-KTsKPiAtCQl9IGVsc2Ugewo+IC0JCQlyZXQgPSByZWNvcmQoYXJndlsxXSk7Cj4gLQkJfQo+ICsJ
-CXJldCA9IHJlY29yZChhcmd2WzFdKTsKPiAJfSBlbHNlIHsKPiAtCQlpZiAobHR0bmdfb3B0X21p
-KSB7Cj4gLQkJCXJldCA9IG1pX3JlY29yZChOVUxMKTsKPiAtCQl9IGVsc2Ugewo+IC0JCQlyZXQg
-PSByZWNvcmQoTlVMTCk7Cj4gLQkJfQo+ICsJCXJldCA9IHJlY29yZChOVUxMKTsKPiAJfQo+IAo+
-IAlyZXR1cm4gcmV0Owo+IEBAIC03MjUsNiArNTg0LDE1IEBAIGludCBjbWRfc25hcHNob3QoaW50
-IGFyZ2MsIGNvbnN0IGNoYXIgKiphcmd2KQo+IAkJCWJyZWFrOwo+IAkJY2FzZSBMVFROR19FUlJf
-U05BUFNIT1RfTk9EQVRBOgo+IAkJCVdBUk4oIiVzIiwgbHR0bmdfc3RyZXJyb3IoY29tbWFuZF9y
-ZXQpKTsKPiArCj4gKwkJCS8qICBBIHdhcm5pbmcgaXMgZmluZSBzaW5jZSB0aGUgdXNlciBoYXMg
-bm8gY29udHJvbCBvbgo+ICsJCQkgKiAgd2hldGhlciBvciBub3QgYXBwbGljYXRpb25zIChvciB0
-aGUga2VybmVsKSBoYXZlCj4gKwkJCSAqICBwcm9kdWNlZCBhbnkgZXZlbnQgYmV0d2VlbiB0aGUg
-c3RhcnQgb2YgdGhlIHRyYWNpbmcKPiArCQkJICogIHNlc3Npb24gYW5kIHRoZSByZWNvcmRpbmcg
-b2YgdGhlIHNuYXBzaG90LiBNSSB3aXNlCj4gKwkJCSAqICB0aGUgY29tbWFuZCBpcyBub3QgYSBz
-dWNjZXNzIHNpbmNlIG5vdGhpbmcgd2FzCj4gKwkJCSAqICByZWNvcmRlZC4KPiArCQkJICovCj4g
-KwkJCWNvbW1hbmRfcmV0ID0gMDsKPiAJCQlicmVhazsKPiAJCWRlZmF1bHQ6Cj4gCQkJRVJSKCIl
-cyIsIGx0dG5nX3N0cmVycm9yKGNvbW1hbmRfcmV0KSk7Cj4gLS0KPiAyLjcuMAo+IAo+IF9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1h
-aWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0
-dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgotLSAKTWF0aGlldSBE
-ZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBs
-aXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
-LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============2760195140714178411==
+Content-Type: multipart/alternative; boundary=001a11c23888610a37052e8052be
+
+--001a11c23888610a37052e8052be
+Content-Type: text/plain; charset=UTF-8
+
+Hi all,
+
+I recently encountered a situation whereby tracing in a tight loop was
+generating a very large number of events, thus resulting in quite a few
+discarded events. To resolve this I attempted to create a new channel with
+a larger buffer size as follows:
+
+lttng create cc_session -o $trace_output_path
+lttng enable-channel -u custom-channel--subbuf-size 4M
+lttng enable-event -u -c custom-channel cc_provider:*
+lttng start
+
+/run/target
+
+lttng stop
+lttng destroy
+
+After running the above the trace is empty. However, if I change the size
+to 1M or 2M it works fine. Is there a restriction on the sub-buffer size? I
+also notice a similar behaviour if I increase the number of subbuffers
+above 8 while using a 1M buffer size.
+
+I'm still losing around 80k events at a sub-buffer size of 2M (down from
+1.2 million at the default buffer size buffer size of 4096) so ideally I'd
+like to use a larger buffer size (assuming it's possible).
+
+Some potentially relevant details:
+* I'm running the target inside docker, version 1.10.3
+* The container is Ubuntu 14.04
+* I'm using LTTng from git HEAD
+
+If I can provide any other useful information let me know!
+
+Thanks,
+Sean
+
+--001a11c23888610a37052e8052be
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi all,<div><br></div><div>I recently encountered a situat=
+ion whereby tracing in a tight loop was generating a very large number of e=
+vents, thus resulting in quite a few discarded events. To resolve this I at=
+tempted to create a new channel with a larger buffer size as follows:</div>=
+<div><br></div><div><div>lttng create cc_session -o $trace_output_path</div=
+><div>lttng enable-channel -u custom-channel--subbuf-size 4M</div><div>lttn=
+g enable-event -u -c custom-channel cc_provider:*</div><div>lttng start</di=
+v><div><br></div><div>/run/target</div><div><br></div><div>lttng stop</div>=
+<div>lttng destroy</div></div><div><br></div><div>After running the above t=
+he trace is empty. However, if I change the size to 1M or 2M it works fine.=
+ Is there a restriction on the sub-buffer size? I also notice a similar beh=
+aviour if I increase the number of subbuffers above 8 while using a 1M buff=
+er size.=C2=A0</div><div><br></div><div>I&#39;m still losing around 80k eve=
+nts at a sub-buffer size of 2M (down from 1.2 million at the default buffer=
+ size buffer size of 4096) so ideally I&#39;d like to use a larger buffer s=
+ize (assuming it&#39;s possible).</div><div><br></div><div>Some potentially=
+ relevant details:</div><div>* I&#39;m running the target inside docker, ve=
+rsion 1.10.3</div><div>* The container is Ubuntu 14.04</div><div>* I&#39;m =
+using LTTng from git HEAD</div><div><br></div><div>If I can provide any oth=
+er useful information let me know!</div><div><br></div><div>Thanks,</div><d=
+iv>Sean</div></div>
+
+--001a11c23888610a37052e8052be--
+
+--===============2760195140714178411==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============2760195140714178411==--
