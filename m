@@ -1,14 +1,18 @@
-From: Alexis Martin <alexis.martin@inria.fr>
-Subject: lttng-modules build fail on Jetson TK1
-Date: Tue, 22 Mar 2016 15:07:14 +0100
-Message-ID: <461CE2C8-305B-44A9-8D0D-0C89E909F8F3__23778.4839388498$1458670326$gmane$org@inria.fr>
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: multipart/mixed; boundary="===============7461550620733854526=="
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools v2 4/5] Refactor: embed mi in
+	"del_record" to remove code duplication
+Date: Tue, 22 Mar 2016 14:12:07 -0400
+Message-ID: <1458670328-17521-5-git-send-email-jonathan.rajotte-julien__30809.091931633$1458670374$gmane$org@efficios.com>
+References: <367304197.32343.1458596988829.JavaMail.zimbra@efficios.com>
+ <1458670328-17521-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail2-relais-roc.national.inria.fr
- (mail2-relais-roc.national.inria.fr [192.134.164.83])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 7133AA07A3
- for <lttng-dev@lists.lttng.org>; Tue, 22 Mar 2016 14:07:16 +0000 (UTC)
+Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 78BDDA2CD5
+ for <lttng-dev@lists.lttng.org>; Tue, 22 Mar 2016 18:12:27 +0000 (UTC)
+In-Reply-To: <1458670328-17521-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -18,538 +22,52 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-
---===============7461550620733854526==
-Content-Type: multipart/alternative; boundary="Apple-Mail=_D23F6AA7-D323-4EE9-A94E-B686ECE03EDB"
-
-
---Apple-Mail=_D23F6AA7-D323-4EE9-A94E-B686ECE03EDB
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=utf-8
-
-Hi,
-
-I=E2=80=99m trying to install lttng on my Jetson TK1, but I can=E2=80=99t =
-build the lttng kernel module.
-
-I=E2=80=99m running the last kernel available from JetPack2.1, Linux for =
-Tegra r21.4, which is a LTS ubuntu 14.04.4 LTS (GNU/Linux =
-3.10.40-gdacac96 armv7l)
-This kernel satisfies configuration required =
-(CONFIG_MODULES,CONFIG_KALLSYMS,CONFIG_HIGH_RES_TIMERS,CONFIG_TRACEPOINTS)=
-.
-
-I=E2=80=99m using the git tree on tag v2.8.0-rc1. Installation of =
-userspace-rcu, lttng-ust, and lttng-tools was fine, but when I build =
-lttng-modules I got this error related to the TP_FIELDS macro:
-
-> ubuntu@tegra-ubuntu:~/install-lttng/lttng-modules$ make=20
-> make -C /lib/modules/3.10.40-gdacac96/build =
-M=3D/home/ubuntu/install-lttng/lttng-modules CONFIG_LTTNG=3Dm modules
-> make[1]: Entering directory `/usr/src/linux-headers-3.10.40-gdacac96'
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-ring-buffer-client-discard.=
-o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-ring-buffer-client-overwrit=
-e.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-ring-buffer-metadata-client=
-.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-ring-buffer-client-mmap-dis=
-card.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-ring-buffer-client-mmap-ove=
-rwrite.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-ring-buffer-metadata-mmap-c=
-lient.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/lttng-clock.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-statedump-impl.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/wrapper/irqdesc.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/wrapper/fdtable.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/lttng-events.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/lttng-abi.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/lttng-probes.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/lttng-context.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/lttng-context-pid.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-procname.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-prio.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-nice.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-vpid.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/lttng-context-tid.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-vtid.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-ppid.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-vppid.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-cpu-id.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-interruptible.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-need-reschedule.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/lttng-calibrate.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-hostname.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/wrapper/random.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/probes/lttng.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/wrapper/trace-clock.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/wrapper/page_alloc.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/lttng-tracker-pid.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/lttng-filter.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-filter-interpreter.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-filter-specialize.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/lttng-filter-validator.o
->   CC [M]  =
-/home/ubuntu/install-lttng/lttng-modules/probes/lttng-probe-user.o
->   CC [M]  /home/ubuntu/install-lttng/lttng-modules/lttng-syscalls.o
-> =
-/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscalls/headers/=
-arm-32-syscalls-3.4.25_integers.h:14:11: error: expected =E2=80=98)=E2=80=99=
- before =E2=80=98(=E2=80=99 token
->   TP_FIELDS()
->            ^
-> /home/ubuntu/install-lttng/lttng-modules/lttng-syscalls.c:97:25: note: =
-in definition of macro =E2=80=98PARAMS=E2=80=99
->  #define PARAMS(args...) args
->                          ^
-> =
-/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscalls/headers/=
-arm-32-syscalls-3.4.25_integers.h:13:1: note: in expansion of macro =
-=E2=80=98SC_LTTNG_TRACEPOINT_EVENT_CLASS_NOARGS=E2=80=99
->  SC_LTTNG_TRACEPOINT_EVENT_CLASS_NOARGS(syscalls_noargs,
->  ^
-> /home/ubuntu/install-lttng/lttng-modules/lttng-syscalls.c:286:41: =
-error: array type has incomplete element type
->  static const struct trace_syscall_entry sc_table[] =3D {
->                                          ^
-> In file included from =
-/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscalls/headers/=
-arm-32-syscalls-3.4.25_integers.h:828:0,
->                  from =
-/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscalls/headers/=
-syscalls_integers.h:10,
->                  from =
-/home/ubuntu/install-lttng/lttng-modules/lttng-syscalls.c:287:
-> =
-/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscalls/headers/=
-arm-32-syscalls-3.4.25_integers_override.h:131:1: error: array index in =
-non-array initializer
->  TRACE_SYSCALL_TABLE(mmap, mmap, 90, 6)
->  ^
-> =
-/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscalls/headers/=
-arm-32-syscalls-3.4.25_integers_override.h:131:1: error: (near =
-initialization for =E2=80=98sc_table=E2=80=99)
-> =
-/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscalls/headers/=
-arm-32-syscalls-3.4.25_integers_override.h:131:1: error: field name not =
-in record or union initializer
-> =
-/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscalls/headers/=
-arm-32-syscalls-3.4.25_integers_override.h:131:1: error: (near =
-initialization for =E2=80=98sc_table=E2=80=99)
-> /home/ubuntu/install-lttng/lttng-modules/lttng-syscalls.c:279:11: =
-error: =E2=80=98__event_probe__syscall_entry_mmap=E2=80=99 undeclared =
-here (not in a function)
->    .func =3D __event_probe__syscall_entry_##_template, \
-> =E2=80=A6
-
-Any idea of the cause of this error ?
-I saw the file arm-32-syscalls-3.4.25_integers.h is auto-generated, =
-should the number match my kernel version ?
-
-Thanks,
-=E2=80=94
-Alexis Martin
-PhD. Student
-INRIA / LIG POLARIS-Team
-
-
---Apple-Mail=_D23F6AA7-D323-4EE9-A94E-B686ECE03EDB
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/html;
-	charset=utf-8
-
-<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html =
-charset=3Dutf-8"></head><body style=3D"word-wrap: break-word; =
--webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" =
-class=3D"">Hi,<div class=3D""><br class=3D""></div><div class=3D"">I=E2=80=
-=99m trying to install lttng on my Jetson TK1, but I can=E2=80=99t build =
-the lttng kernel module.</div><div class=3D""><br class=3D""></div><div =
-class=3D"">I=E2=80=99m running the last kernel available from =
-JetPack2.1, Linux for Tegra r21.4, which is a LTS ubuntu&nbsp;14.04.4 =
-LTS&nbsp;(GNU/Linux 3.10.40-gdacac96 armv7l)</div><div class=3D"">This =
-kernel satisfies configuration required (<span style=3D"font-family: =
-Menlo; font-size: 11px;" class=3D"">CONFIG_MODULES,</span><span =
-style=3D"font-family: Menlo; font-size: 11px;" =
-class=3D"">CONFIG_KALLSYMS,</span><span style=3D"font-family: Menlo; =
-font-size: 11px;" class=3D"">CONFIG_HIGH_RES_TIMERS,</span><span =
-style=3D"font-family: Menlo; font-size: 11px;" =
-class=3D"">CONFIG_TRACEPOINTS</span>).</div><div class=3D""><br =
-class=3D""></div><div class=3D"">I=E2=80=99m using the git tree on tag =
-v2.8.0-rc1. Installation of userspace-rcu, lttng-ust, and lttng-tools =
-was fine, but when I build lttng-modules I got this error related to the =
-TP_FIELDS macro:</div><div class=3D""><br class=3D""></div><div =
-class=3D""><div style=3D"margin: 0px; font-size: 11px; line-height: =
-normal; font-family: Menlo;" class=3D""></div><blockquote type=3D"cite" =
-class=3D""><div style=3D"margin: 0px; font-size: 11px; line-height: =
-normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" =
-class=3D"">ubuntu@tegra-ubuntu:~/install-lttng/lttng-modules$ =
-make&nbsp;</span></div><div style=3D"margin: 0px; font-size: 11px; =
-line-height: normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">make -C =
-/lib/modules/3.10.40-gdacac96/build =
-M=3D/home/ubuntu/install-lttng/lttng-modules CONFIG_LTTNG=3Dm =
-modules</span></div><div style=3D"margin: 0px; font-size: 11px; =
-line-height: normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">make[1]: =
-Entering directory =
-`/usr/src/linux-headers-3.10.40-gdacac96'</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-ring-buffer-client-discard.=
-o</span></div><div style=3D"margin: 0px; font-size: 11px; line-height: =
-normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">&nbsp; =
-CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-ring-buffer-client-overwrit=
-e.o</span></div><div style=3D"margin: 0px; font-size: 11px; line-height: =
-normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">&nbsp; =
-CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-ring-buffer-metadata-client=
-.o</span></div><div style=3D"margin: 0px; font-size: 11px; line-height: =
-normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">&nbsp; =
-CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-ring-buffer-client-mmap-dis=
-card.o</span></div><div style=3D"margin: 0px; font-size: 11px; =
-line-height: normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">&nbsp; =
-CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-ring-buffer-client-mmap-ove=
-rwrite.o</span></div><div style=3D"margin: 0px; font-size: 11px; =
-line-height: normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">&nbsp; =
-CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-ring-buffer-metadata-mmap-c=
-lient.o</span></div><div style=3D"margin: 0px; font-size: 11px; =
-line-height: normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">&nbsp; =
-CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-clock.o</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-statedump-impl.o</span></di=
-v><div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/wrapper/irqdesc.o</span></div><di=
-v style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/wrapper/fdtable.o</span></div><di=
-v style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-events.o</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-abi.o</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-probes.o</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context.o</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-pid.o</span></div><=
-div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-procname.o</span></=
-div><div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-prio.o</span></div>=
-<div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-nice.o</span></div>=
-<div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-vpid.o</span></div>=
-<div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-tid.o</span></div><=
-div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-vtid.o</span></div>=
-<div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-ppid.o</span></div>=
-<div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-vppid.o</span></div=
-><div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-cpu-id.o</span></di=
-v><div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-interruptible.o</sp=
-an></div><div style=3D"margin: 0px; font-size: 11px; line-height: =
-normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">&nbsp; =
-CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-need-reschedule.o</=
-span></div><div style=3D"margin: 0px; font-size: 11px; line-height: =
-normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">&nbsp; =
-CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-calibrate.o</span></div><di=
-v style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-context-hostname.o</span></=
-div><div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/wrapper/random.o</span></div><div=
- style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/probes/lttng.o</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/wrapper/trace-clock.o</span></div=
-><div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/wrapper/page_alloc.o</span></div>=
-<div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-tracker-pid.o</span></div><=
-div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-filter.o</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-filter-interpreter.o</span>=
-</div><div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-filter-specialize.o</span><=
-/div><div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-filter-validator.o</span></=
-div><div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/probes/lttng-probe-user.o</span><=
-/div><div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; CC [M]&nbsp; =
-/home/ubuntu/install-lttng/lttng-modules/lttng-syscalls.o</span></div><div=
- style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" =
-class=3D"">/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscal=
-ls/headers/arm-32-syscalls-3.4.25_integers.h:14:11: error: expected =
-=E2=80=98)=E2=80=99 before =E2=80=98(=E2=80=99 token</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp; TP_FIELDS()</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; =
-^</span></div><div style=3D"margin: 0px; font-size: 11px; line-height: =
-normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" =
-class=3D"">/home/ubuntu/install-lttng/lttng-modules/lttng-syscalls.c:97:25=
-: note: in definition of macro =E2=80=98PARAMS=E2=80=99</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp;#define PARAMS(args...) =
-args</span></div><div style=3D"margin: 0px; font-size: 11px; =
-line-height: normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" =
-class=3D"">&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; =
-&nbsp; &nbsp; &nbsp; &nbsp; ^</span></div><div style=3D"margin: 0px; =
-font-size: 11px; line-height: normal; font-family: Menlo;" =
-class=3D""><span style=3D"font-variant-ligatures: no-common-ligatures" =
-class=3D"">/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscal=
-ls/headers/arm-32-syscalls-3.4.25_integers.h:13:1: note: in expansion of =
-macro =E2=80=98SC_LTTNG_TRACEPOINT_EVENT_CLASS_NOARGS=E2=80=99</span></div=
-><div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" =
-class=3D"">&nbsp;SC_LTTNG_TRACEPOINT_EVENT_CLASS_NOARGS(syscalls_noargs,</=
-span></div><div style=3D"margin: 0px; font-size: 11px; line-height: =
-normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" =
-class=3D"">&nbsp;^</span></div><div style=3D"margin: 0px; font-size: =
-11px; line-height: normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" =
-class=3D"">/home/ubuntu/install-lttng/lttng-modules/lttng-syscalls.c:286:4=
-1: error: array type has incomplete element type</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp;static const struct =
-trace_syscall_entry sc_table[] =3D {</span></div><div style=3D"margin: =
-0px; font-size: 11px; line-height: normal; font-family: Menlo;" =
-class=3D""><span style=3D"font-variant-ligatures: no-common-ligatures" =
-class=3D"">&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; =
-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; =
-&nbsp; &nbsp; ^</span></div><div style=3D"margin: 0px; font-size: 11px; =
-line-height: normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" class=3D"">In file =
-included from =
-/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscalls/headers/=
-arm-32-syscalls-3.4.25_integers.h:828:0,</span></div><div style=3D"margin:=
- 0px; font-size: 11px; line-height: normal; font-family: Menlo;" =
-class=3D""><span style=3D"font-variant-ligatures: no-common-ligatures" =
-class=3D"">&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; =
-from =
-/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscalls/headers/=
-syscalls_integers.h:10,</span></div><div style=3D"margin: 0px; =
-font-size: 11px; line-height: normal; font-family: Menlo;" =
-class=3D""><span style=3D"font-variant-ligatures: no-common-ligatures" =
-class=3D"">&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; =
-from =
-/home/ubuntu/install-lttng/lttng-modules/lttng-syscalls.c:287:</span></div=
-><div style=3D"margin: 0px; font-size: 11px; line-height: normal; =
-font-family: Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" =
-class=3D"">/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscal=
-ls/headers/arm-32-syscalls-3.4.25_integers_override.h:131:1: error: =
-array index in non-array initializer</span></div><div style=3D"margin: =
-0px; font-size: 11px; line-height: normal; font-family: Menlo;" =
-class=3D""><span style=3D"font-variant-ligatures: no-common-ligatures" =
-class=3D"">&nbsp;TRACE_SYSCALL_TABLE(mmap, mmap, 90, 6)</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" class=3D"">&nbsp;^</span></div><div style=3D"margin: =
-0px; font-size: 11px; line-height: normal; font-family: Menlo;" =
-class=3D""><span style=3D"font-variant-ligatures: no-common-ligatures" =
-class=3D"">/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscal=
-ls/headers/arm-32-syscalls-3.4.25_integers_override.h:131:1: error: =
-(near initialization for =E2=80=98sc_table=E2=80=99)</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" =
-class=3D"">/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscal=
-ls/headers/arm-32-syscalls-3.4.25_integers_override.h:131:1: error: =
-field name not in record or union initializer</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" =
-class=3D"">/home/ubuntu/install-lttng/lttng-modules/instrumentation/syscal=
-ls/headers/arm-32-syscalls-3.4.25_integers_override.h:131:1: error: =
-(near initialization for =E2=80=98sc_table=E2=80=99)</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D""><span style=3D"font-variant-ligatures: =
-no-common-ligatures" =
-class=3D"">/home/ubuntu/install-lttng/lttng-modules/lttng-syscalls.c:279:1=
-1: error: =E2=80=98__event_probe__syscall_entry_mmap=E2=80=99 undeclared =
-here (not in a function)</span></div><div style=3D"margin: 0px; =
-font-size: 11px; line-height: normal; font-family: Menlo;" =
-class=3D""><span style=3D"font-variant-ligatures: no-common-ligatures" =
-class=3D"">&nbsp;&nbsp; .func =3D =
-__event_probe__syscall_entry_##_template, \</span></div><div =
-style=3D"margin: 0px; font-size: 11px; line-height: normal; font-family: =
-Menlo;" class=3D"">=E2=80=A6</div></blockquote><p style=3D"margin: 0px; =
-font-size: 11px; line-height: normal; font-family: Menlo; min-height: =
-13px;" class=3D""><br class=3D""></p><p style=3D"margin: 0px; =
-line-height: normal; min-height: 13px;" class=3D"">Any idea of the cause =
-of this error ?</p><div class=3D"">I saw the file&nbsp;<span =
-style=3D"font-family: Menlo; font-size: 11px;" =
-class=3D"">arm-32-syscalls-3.4.25_integers.h </span>is auto-generated, =
-should the number match my kernel version ?</div><div class=3D""><br =
-class=3D""></div><div class=3D"">Thanks,</div></div><div class=3D""><div =
-class=3D"">
-<div style=3D"color: rgb(0, 0, 0); letter-spacing: normal; orphans: =
-auto; text-align: start; text-indent: 0px; text-transform: none; =
-white-space: normal; widows: auto; word-spacing: 0px; =
--webkit-text-stroke-width: 0px; word-wrap: break-word; =
--webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" =
-class=3D""><div style=3D"color: rgb(0, 0, 0); letter-spacing: normal; =
-orphans: auto; text-align: start; text-indent: 0px; text-transform: =
-none; white-space: normal; widows: auto; word-spacing: 0px; =
--webkit-text-stroke-width: 0px; word-wrap: break-word; =
--webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" =
-class=3D""><div style=3D"color: rgb(0, 0, 0); letter-spacing: normal; =
-orphans: auto; text-align: start; text-indent: 0px; text-transform: =
-none; white-space: normal; widows: auto; word-spacing: 0px; =
--webkit-text-stroke-width: 0px; word-wrap: break-word; =
--webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" =
-class=3D""><div style=3D"color: rgb(0, 0, 0); letter-spacing: normal; =
-orphans: auto; text-align: start; text-indent: 0px; text-transform: =
-none; white-space: normal; widows: auto; word-spacing: 0px; =
--webkit-text-stroke-width: 0px; word-wrap: break-word; =
--webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" =
-class=3D""><div style=3D"color: rgb(0, 0, 0); letter-spacing: normal; =
-orphans: auto; text-align: start; text-indent: 0px; text-transform: =
-none; white-space: normal; widows: auto; word-spacing: 0px; =
--webkit-text-stroke-width: 0px; word-wrap: break-word; =
--webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" =
-class=3D"">=E2=80=94<br class=3D"">Alexis Martin<br class=3D"">PhD. =
-Student</div><div style=3D"color: rgb(0, 0, 0); letter-spacing: normal; =
-orphans: auto; text-align: start; text-indent: 0px; text-transform: =
-none; white-space: normal; widows: auto; word-spacing: 0px; =
--webkit-text-stroke-width: 0px; word-wrap: break-word; =
--webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" =
-class=3D"">INRIA / LIG POLARIS-Team</div></div></div></div></div>
-</div>
-<br class=3D""></div></body></html>=
-
---Apple-Mail=_D23F6AA7-D323-4EE9-A94E-B686ECE03EDB--
-
---===============7461550620733854526==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============7461550620733854526==--
+UmVkdWNlcyB0aGUgbnVtYmVyIG9mIHBvc3NpYmxlIGNvZGUgcGF0aHMgYW5kIGVuc3VyZSBhIGNv
+aGVyZW50IHJldHVybgpwYXRoLgoKU2lnbmVkLW9mZi1ieTogSm9uYXRoYW4gUmFqb3R0ZSA8am9u
+YXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPgotLS0KIHNyYy9iaW4vbHR0bmcvY29t
+bWFuZHMvc25hcHNob3QuYyB8IDY0ICsrKysrKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLQogMSBmaWxlIGNoYW5nZWQsIDEwIGluc2VydGlvbnMoKyksIDU0IGRlbGV0aW9ucygtKQoK
+ZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvc25hcHNob3QuYyBiL3NyYy9iaW4v
+bHR0bmcvY29tbWFuZHMvc25hcHNob3QuYwppbmRleCBjZTYzZTVlLi5iMmUzNzY3IDEwMDY0NAot
+LS0gYS9zcmMvYmluL2x0dG5nL2NvbW1hbmRzL3NuYXBzaG90LmMKKysrIGIvc3JjL2Jpbi9sdHRu
+Zy9jb21tYW5kcy9zbmFwc2hvdC5jCkBAIC0yMTQsNTAgKzIxNCw2IEBAIGVycm9yOgogfQogCiAv
+KgotICogRGVsZXRlIG91dHB1dCBieSBJRCAobWFjaGluZSBpbnRlcmZhY2UgdmVyc2lvbikuCi0g
+Ki8KLXN0YXRpYyBpbnQgbWlfZGVsX291dHB1dCh1aW50MzJfdCBpZCwgY29uc3QgY2hhciAqbmFt
+ZSkKLXsKLQlpbnQgcmV0OwotCXN0cnVjdCBsdHRuZ19zbmFwc2hvdF9vdXRwdXQgKm91dHB1dCA9
+IE5VTEw7Ci0KLQlhc3NlcnQod3JpdGVyKTsKLQotCW91dHB1dCA9IGx0dG5nX3NuYXBzaG90X291
+dHB1dF9jcmVhdGUoKTsKLQlpZiAoIW91dHB1dCkgewotCQlyZXQgPSBDTURfRkFUQUw7Ci0JCWdv
+dG8gZXJyb3I7Ci0JfQotCi0JaWYgKG5hbWUpIHsKLQkJcmV0ID0gbHR0bmdfc25hcHNob3Rfb3V0
+cHV0X3NldF9uYW1lKG5hbWUsIG91dHB1dCk7Ci0JfSBlbHNlIGlmIChpZCAhPSBVSU5UMzJfTUFY
+KSB7Ci0JCXJldCA9IGx0dG5nX3NuYXBzaG90X291dHB1dF9zZXRfaWQoaWQsIG91dHB1dCk7Ci0J
+fSBlbHNlIHsKLQkJcmV0ID0gQ01EX0VSUk9SOwotCQlnb3RvIGVycm9yOwotCX0KLQlpZiAocmV0
+IDwgMCkgewotCQlyZXQgPSBDTURfRkFUQUw7Ci0JCWdvdG8gZXJyb3I7Ci0JfQotCi0JcmV0ID0g
+bHR0bmdfc25hcHNob3RfZGVsX291dHB1dChjdXJyZW50X3Nlc3Npb25fbmFtZSwgb3V0cHV0KTsK
+LQlpZiAocmV0IDwgMCkgewotCQlnb3RvIGVycm9yOwotCX0KLQotCXJldCA9IG1pX2x0dG5nX3Nu
+YXBzaG90X2RlbF9vdXRwdXQod3JpdGVyLCBpZCwgbmFtZSwgY3VycmVudF9zZXNzaW9uX25hbWUp
+OwotCWlmIChyZXQpIHsKLQkJcmV0ID0gQ01EX0VSUk9SOwotCX0KLQotZXJyb3I6Ci0JbHR0bmdf
+c25hcHNob3Rfb3V0cHV0X2Rlc3Ryb3kob3V0cHV0KTsKLQlyZXR1cm4gcmV0OwotfQotCi0vKgog
+ICogRGVsZXRlIG91dHB1dCBieSBJRC4KICAqLwogc3RhdGljIGludCBkZWxfb3V0cHV0KHVpbnQz
+Ml90IGlkLCBjb25zdCBjaGFyICpuYW1lKQpAQCAtMjk3LDYgKzI1MywxNCBAQCBzdGF0aWMgaW50
+IGRlbF9vdXRwdXQodWludDMyX3QgaWQsIGNvbnN0IGNoYXIgKm5hbWUpCiAJCQkJbmFtZSwgY3Vy
+cmVudF9zZXNzaW9uX25hbWUpOwogCX0KIAorCWlmIChsdHRuZ19vcHRfbWkpIHsKKwkJcmV0ID0g
+bWlfbHR0bmdfc25hcHNob3RfZGVsX291dHB1dCh3cml0ZXIsIGlkLCBuYW1lLAorCQkJCWN1cnJl
+bnRfc2Vzc2lvbl9uYW1lKTsKKwkJaWYgKHJldCkgeworCQkJcmV0ID0gQ01EX0VSUk9SOworCQl9
+CisJfQorCiBlcnJvcjoKIAlsdHRuZ19zbmFwc2hvdF9vdXRwdXRfZGVzdHJveShvdXRwdXQpOwog
+CXJldHVybiByZXQ7CkBAIC00MzMsMTcgKzM5Nyw5IEBAIHN0YXRpYyBpbnQgY21kX2RlbF9vdXRw
+dXQoaW50IGFyZ2MsIGNvbnN0IGNoYXIgKiphcmd2KQogCWVycm5vID0gMDsKIAlpZCA9IHN0cnRv
+bChhcmd2WzFdLCAmbmFtZSwgMTApOwogCWlmIChpZCA9PSAwICYmIGVycm5vID09IDApIHsKLQkJ
+aWYgKGx0dG5nX29wdF9taSkgewotCQkJcmV0ID0gbWlfZGVsX291dHB1dChVSU5UMzJfTUFYLCBu
+YW1lKTsKLQkJfSBlbHNlIHsKLQkJCXJldCA9IGRlbF9vdXRwdXQoVUlOVDMyX01BWCwgbmFtZSk7
+Ci0JCX0KKwkJcmV0ID0gZGVsX291dHB1dChVSU5UMzJfTUFYLCBuYW1lKTsKIAl9IGVsc2UgaWYg
+KGVycm5vID09IDAgJiYgKm5hbWUgPT0gJ1wwJykgewotCQlpZiAobHR0bmdfb3B0X21pKSB7Ci0J
+CQlyZXQgPSBtaV9kZWxfb3V0cHV0KGlkLCBOVUxMKTsKLQkJfSBlbHNlIHsKLQkJCXJldCA9IGRl
+bF9vdXRwdXQoaWQsIE5VTEwpOwotCQl9CisJCXJldCA9IGRlbF9vdXRwdXQoaWQsIE5VTEwpOwog
+CX0gZWxzZSB7CiAJCUVSUigiQXJndW1lbnQgJXMgbm90IHJlY29nbml6ZWQiLCBhcmd2WzFdKTsK
+IAkJcmV0ID0gLTE7Ci0tIAoyLjcuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
+dHRuZy1kZXYK
