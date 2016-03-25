@@ -1,29 +1,16 @@
-From: =?UTF-8?B?SmVhbi1GcmFuw6dvaXMgTW9uZXN0aWVy?=
- <jean-francois.monestier@st.com>
-Subject: [barectf] Support for empty payload ?
-Date: Fri, 25 Mar 2016 15:14:55 +0100
-Message-ID: <56F547DF.4070704__37709.6566990533$1458916308$gmane$org@st.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: Re: [barectf] Support for empty payload ?
+Date: Fri, 25 Mar 2016 10:34:02 -0400
+Message-ID: <f54de9c7a2733c354a9d480f78400d1f__785.392724401568$1458916464$gmane$org@simark.ca>
+References: <56F547DF.4070704@st.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com
- [62.209.51.94])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 9FF78A2CC4
- for <lttng-dev@lists.lttng.org>; Fri, 25 Mar 2016 14:14:57 +0000 (UTC)
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
- by m0046037.ppops.net (8.15.0.59/8.15.0.59) with SMTP id u2PEC2sQ026434
- for <lttng-dev@lists.lttng.org>; Fri, 25 Mar 2016 15:14:57 +0100
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
- by m0046037.ppops.net with ESMTP id 21rwdwhx03-1
- (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT)
- for <lttng-dev@lists.lttng.org>; Fri, 25 Mar 2016 15:14:57 +0100
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
- by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 66EB642
- for <lttng-dev@lists.lttng.org>; Fri, 25 Mar 2016 14:14:56 +0000 (GMT)
-Received: from Webmail-eu.st.com (safex1hubcas2.st.com [10.75.90.16])
- by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3D6011425
- for <lttng-dev@lists.lttng.org>; Fri, 25 Mar 2016 14:14:56 +0000 (GMT)
+Received: from simark.ca (simark.ca [158.69.221.121])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id E0E55A2EC9
+ for <lttng-dev@lists.lttng.org>; Fri, 25 Mar 2016 14:34:04 +0000 (UTC)
+In-Reply-To: <56F547DF.4070704@st.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -33,19 +20,32 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: =?UTF-8?Q?Jean-Fran=C3=A7ois_Monestier?= <jean-francois.monestier@st.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGVsbG8gVHJhY2VycywKCkRvZXMgYW55b25lIGtub3cgd2hldGhlciBiYXJlY3RmIHN1cHBvcnRz
-IHNvbWUgc29ydCBvZiBlbXB0eSBwYXlsb2FkcyAKZm9yIGV2ZW50cyBzcGVjaWZpZWQgaW4gdGhl
-IC55YW1sIGNvbmZpZ3VyYXRpb24gZmlsZSA/CgpTb21ldGhpbmcgc3VjaCBhcyB0aGUgd2VsbC1r
-bm93biBsdHRuZ191c3Rfc3RhdGVkdW1wOnN0YXJ0IGV2ZW50IDoKCmV2ZW50IHsKICAgICAgICAg
-bmFtZSA9ICJsdHRuZ191c3Rfc3RhdGVkdW1wOnN0YXJ0IjsKICAgICAgICAgaWQgPSAwOwogICAg
-ICAgICBzdHJlYW1faWQgPSAwOwogICAgICAgICBsb2dsZXZlbCA9IDEzOwogICAgICAgICBmaWVs
-ZHMgOj0gc3RydWN0IHsKICAgICAgICAgfTsKfTsKCkkgY2FuJ3QgZmlndXJlIG91dCB0aGUgeWFt
-bCBzeW50YXggZm9yIHN1Y2ggYW4gZXZlbnQsIHlvdXIgaGVscCB3b3VsZCBiZSAKd2VsY29tZS4K
-CkkgbXVzdCBjb25mZXNzIEknbSBzdGlsbCBzdHVjayB0byBiYXJlY3RmIHYyLjAuMgoKClRoYW5r
-cyBpbiBhZHZhbmNlLAotLSAKSmVhbi1GcmFuY29pcyBNb25lc3RpZXIKCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
-L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+T24gMjAxNi0wMy0yNSAxMDoxNCwgSmVhbi1GcmFuw6dvaXMgTW9uZXN0aWVyIHdyb3RlOgo+IEhl
+bGxvIFRyYWNlcnMsCj4gCj4gRG9lcyBhbnlvbmUga25vdyB3aGV0aGVyIGJhcmVjdGYgc3VwcG9y
+dHMgc29tZSBzb3J0IG9mIGVtcHR5IHBheWxvYWRzCj4gZm9yIGV2ZW50cyBzcGVjaWZpZWQgaW4g
+dGhlIC55YW1sIGNvbmZpZ3VyYXRpb24gZmlsZSA/Cj4gCj4gU29tZXRoaW5nIHN1Y2ggYXMgdGhl
+IHdlbGwta25vd24gbHR0bmdfdXN0X3N0YXRlZHVtcDpzdGFydCBldmVudCA6Cj4gCj4gZXZlbnQg
+ewo+ICAgICAgICAgbmFtZSA9ICJsdHRuZ191c3Rfc3RhdGVkdW1wOnN0YXJ0IjsKPiAgICAgICAg
+IGlkID0gMDsKPiAgICAgICAgIHN0cmVhbV9pZCA9IDA7Cj4gICAgICAgICBsb2dsZXZlbCA9IDEz
+Owo+ICAgICAgICAgZmllbGRzIDo9IHN0cnVjdCB7Cj4gICAgICAgICB9Owo+IH07Cj4gCj4gSSBj
+YW4ndCBmaWd1cmUgb3V0IHRoZSB5YW1sIHN5bnRheCBmb3Igc3VjaCBhbiBldmVudCwgeW91ciBo
+ZWxwIHdvdWxkCj4gYmUgd2VsY29tZS4KPiAKPiBJIG11c3QgY29uZmVzcyBJJ20gc3RpbGwgc3R1
+Y2sgdG8gYmFyZWN0ZiB2Mi4wLjIKPiAKPiAKPiBUaGFua3MgaW4gYWR2YW5jZSwKCkhpIEplYW4t
+RnJhbsOnb2lzLAoKSSBkb24ndCBiZWxpZXZlIGJhcmVjdGYgYWxsb3dzIHNwZWNpZnlpbmcgZW1w
+dHkgcGF5bG9hZHMgYXMgb2Ygbm93LiAgClRyeWluZyB0byBzcGVjaWZ5IGFuIGVtcHR5IGZpZWxk
+cyBkaWN0LCBzdWNoIGFzOgoKc2ltcGxlX3VpbnQzMjoKICAgbG9nLWxldmVsOiBDUklUCiAgIHBh
+eWxvYWQtdHlwZToKICAgICBjbGFzczogc3RydWN0CiAgICAgZmllbGRzOiB7fQoKeWllbGRzOgoK
+RXJyb3I6CiAgIGNhbm5vdCBjcmVhdGUgY29uZmlndXJhdGlvbiBmcm9tIFlBTUwgZmlsZSAiY29u
+ZmlnLnlhbWwiOgogICBtZXRhZGF0YSBlcnJvcjoKICAgaW52YWxpZCBldmVudCBpbiBzdHJlYW0g
+ImRlZmF1bHQiOgogICBldmVudCBwYXlsb2FkIHR5cGUgbXVzdCBoYXZlIGF0IGxlYXN0IG9uZSBm
+aWVsZCBmb3IgZXZlbnQgCiJzaW1wbGVfdWludDMyIgoKU2VlOiAKaHR0cHM6Ly9naXRodWIuY29t
+L2VmZmljaW9zL2JhcmVjdGYvYmxvYi9tYXN0ZXIvYmFyZWN0Zi9jb25maWcucHkjTDExMTkKClRo
+ZSBtYWludGFpbmVycyB3aWxsIGJlIGFibGUgdG8gY29uZmlybS9pbmZpcm0sIGFuZCBzYXkgd2hl
+dGhlciBpdCdzIGluIAp0aGUgcGxhbnMgdG8gYWRkIHN1cHBvcnQgZm9yIHRoYXQuCgpTaW1vbgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
+bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRu
+Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
