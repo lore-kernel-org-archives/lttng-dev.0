@@ -1,17 +1,20 @@
-From: syed zaidi <zaidi1039@gmail.com>
-Subject: issues converting large amount of traces using
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: Re: issues converting large amount of traces using
 	babeltrace
-Date: Fri, 25 Mar 2016 19:08:35 -0700
-Message-ID: <CAD6O9aopPSyHA4fNp2ewGZUHiuG7WZ07-ntR6Hj2gzx5Suok-Q__28140.5050344349$1458958136$gmane$org@mail.gmail.com>
+Date: Fri, 25 Mar 2016 22:49:24 -0400
+Message-ID: <CAB4xu_2PK6PQOhEq5K+xZUPNbjrBBN4KmCWhCgZmOB-aTo_f7Q__45207.0595034913$1458960604$gmane$org@mail.gmail.com>
+References: <CAD6O9aopPSyHA4fNp2ewGZUHiuG7WZ07-ntR6Hj2gzx5Suok-Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1636746658838473656=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ig0-f173.google.com (mail-ig0-f173.google.com
- [209.85.213.173])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 2D225A2D4C
- for <lttng-dev@lists.lttng.org>; Sat, 26 Mar 2016 02:08:37 +0000 (UTC)
-Received: by mail-ig0-f173.google.com with SMTP id cl4so21726094igb.0
- for <lttng-dev@lists.lttng.org>; Fri, 25 Mar 2016 19:08:36 -0700 (PDT)
+Received: from mail-lb0-f180.google.com (mail-lb0-f180.google.com
+ [209.85.217.180])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 3ADEAA0156
+ for <lttng-dev@lists.lttng.org>; Sat, 26 Mar 2016 02:49:54 +0000 (UTC)
+Received: by mail-lb0-f180.google.com with SMTP id y6so1699348lbj.0
+ for <lttng-dev@lists.lttng.org>; Fri, 25 Mar 2016 19:49:54 -0700 (PDT)
+In-Reply-To: <CAD6O9aopPSyHA4fNp2ewGZUHiuG7WZ07-ntR6Hj2gzx5Suok-Q@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,56 +24,42 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: syed zaidi <zaidi1039@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1636746658838473656==
-Content-Type: multipart/alternative; boundary=089e011769a13dd2cd052eea2892
-
---089e011769a13dd2cd052eea2892
-Content-Type: text/plain; charset=UTF-8
-
-Hey guys,
-I am using babeltrace to convert the traces produced by Lttng. It works
-perfectly if I have small amount of data. That is if I run the session for
-small amount of time.
-But if the the session is ran for a long time, while converting the traces,
-the babel trace process gets killed and it does not complete the conversion.
-I just wanted to ask if this is a known issue. I guess the babeltrace
-process getting killed depends on the memory available on the machine and
-that should also define the limit for traces to be converted succesfully.
-I was wondering if my assumption, that the issue is the memory available,
-is true and if other people have seen this or not.
-
-Thanks
-Ammar
-
---089e011769a13dd2cd052eea2892
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hey guys,<div>I am using babeltrace to convert the traces =
-produced by Lttng. It works perfectly if I have small amount of data. That =
-is if I run the session for small amount of time.</div><div>But if the the =
-session is ran for a long time, while converting the traces, the babel trac=
-e process gets killed and it does not complete the conversion.</div><div>I =
-just wanted to ask if this is a known issue. I guess the babeltrace process=
- getting killed depends on the memory available on the machine and that sho=
-uld also define the limit for traces to be converted succesfully.</div><div=
->I was wondering if my assumption, that the issue is the memory available, =
-is true and if other people have seen this or not.</div><div><br></div><div=
->Thanks</div><div>Ammar</div></div>
-
---089e011769a13dd2cd052eea2892--
-
---===============1636746658838473656==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============1636746658838473656==--
+T24gRnJpLCBNYXIgMjUsIDIwMTYgYXQgMTA6MDggUE0sIHN5ZWQgemFpZGkgPHphaWRpMTAzOUBn
+bWFpbC5jb20+IHdyb3RlOgo+IEhleSBndXlzLAo+IEkgYW0gdXNpbmcgYmFiZWx0cmFjZSB0byBj
+b252ZXJ0IHRoZSB0cmFjZXMgcHJvZHVjZWQgYnkgTHR0bmcuIEl0IHdvcmtzCj4gcGVyZmVjdGx5
+IGlmIEkgaGF2ZSBzbWFsbCBhbW91bnQgb2YgZGF0YS4gVGhhdCBpcyBpZiBJIHJ1biB0aGUgc2Vz
+c2lvbiBmb3IKPiBzbWFsbCBhbW91bnQgb2YgdGltZS4KPiBCdXQgaWYgdGhlIHRoZSBzZXNzaW9u
+IGlzIHJhbiBmb3IgYSBsb25nIHRpbWUsIHdoaWxlIGNvbnZlcnRpbmcgdGhlIHRyYWNlcywKPiB0
+aGUgYmFiZWwgdHJhY2UgcHJvY2VzcyBnZXRzIGtpbGxlZCBhbmQgaXQgZG9lcyBub3QgY29tcGxl
+dGUgdGhlIGNvbnZlcnNpb24uCgpIb3cgbGFyZ2Ugb2YgYSB0cmFjZSBhcmUgd2UgdGFsa2luZyBh
+Ym91dD8gV2hhdCBpcyB0aGUgc2l6ZSBvZiB0aGUgdHJhY2U/CgpDb3VsZCB5b3UgcGxlYXNlIHBy
+b3ZpZGUgdGhlIG91dHB1dCBvZjoKCiAgICB0cmVlIC1oIDx5b3VyIENURiB0cmFjZSBkaXJlY3Rv
+cnk+CgpDb3VsZCB5b3UgYWxzbyBwcm92aWRlICh1c2luZyBhIHBhc3RlYmluIGlkZWFsbHk7IHRo
+aXMgY291bGQgYmUgaHVnZSkgdGhlCnRleHR1YWwgbWV0YWRhdGEgY29udGVudCwgaWYgdGhhdCdz
+IG5vdCBjb25maWRlbnRpYWw6CgogICAgYmFiZWx0cmFjZSAtbyBjdGYtbWV0YWRhdGEgPHlvdXIg
+Q1RGIHRyYWNlIGRpcmVjdG9yeT4KCkFyZSB5b3UgdXNpbmcgYSBjdXN0b20gc3ViYnVmZmVyIHNp
+emUgd2hlbiB0cmFjaW5nIHdpdGggTFRUbmc/Cgo+IEkganVzdCB3YW50ZWQgdG8gYXNrIGlmIHRo
+aXMgaXMgYSBrbm93biBpc3N1ZS4gSSBndWVzcyB0aGUgYmFiZWx0cmFjZQo+IHByb2Nlc3MgZ2V0
+dGluZyBraWxsZWQgZGVwZW5kcyBvbiB0aGUgbWVtb3J5IGF2YWlsYWJsZSBvbiB0aGUgbWFjaGlu
+ZSBhbmQKPiB0aGF0IHNob3VsZCBhbHNvIGRlZmluZSB0aGUgbGltaXQgZm9yIHRyYWNlcyB0byBi
+ZSBjb252ZXJ0ZWQgc3VjY2VzZnVsbHkuCj4gSSB3YXMgd29uZGVyaW5nIGlmIG15IGFzc3VtcHRp
+b24sIHRoYXQgdGhlIGlzc3VlIGlzIHRoZSBtZW1vcnkgYXZhaWxhYmxlLCBpcwo+IHRydWUgYW5k
+IGlmIG90aGVyIHBlb3BsZSBoYXZlIHNlZW4gdGhpcyBvciBub3QuCgpJIHdvdWxkIGJlIHN1cnBy
+aXNlZCB0aGF0IHRoZSBtZW1vcnkgdXNhZ2UgaW5jcmVhc2VkIHNvIG11Y2ggd2l0aCB0aGUKcXVh
+bnRpdHkgb2YgdHJhY2UgZGF0YS4gVGhlIHN0cmVhbSBwYWNrZXRzIGFyZSBtbWFwKCllZC4gTWVt
+b3J5IHVzYWdlCmluIEJhYmVsdHJhY2Ugc2hvdWxkIGJlIHNvbWV3aGF0IHByb3BvcnRpb25hbCB0
+byB0aGUgbnVtYmVyIG9mIHBvc3NpYmxlCmV2ZW50cyAodGhlIG51bWJlciBvZiBldmVudCBibG9j
+a3MgaW4gdGhlIG1ldGFkYXRhKSwgbm90IHRvIHRoZSBzaXplIG9mCnRoZSB0cmFjZS4KCkFub3Ro
+ZXIgcG9zc2liaWxpdHkgd291bGQgYmUgdGhhdCBhbGwgdGhlIHBhY2tldCBpbmRleGVzIGFyZSBr
+ZXB0IGluCm1lbW9yeSwgYW5kIHRoYXQgdGhleSBhcmUgaHVnZSwgYnV0IEkgZG91YnQgdGhhdC4K
+Ck9yIGl0IGNvdWxkIGJlIGEgc2ltcGxlIG1lbW9yeSBsZWFrLgoKQlIsClBoaWwKCj4KPiBUaGFu
+a3MKPiBBbW1hcgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+Zwo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
+Zy1kZXYKPgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9s
+aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
