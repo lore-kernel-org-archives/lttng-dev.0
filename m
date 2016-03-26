@@ -1,21 +1,17 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: Re: [barectf] Support for empty payload ?
-Date: Fri, 25 Mar 2016 14:33:07 -0400
-Message-ID: <CAB4xu_3BBH5WzX3NHcF+H97VmAaRXKr-T2bK+HEVkuzcK39zbw__2311.94666489518$1458930835$gmane$org@mail.gmail.com>
-References: <56F547DF.4070704@st.com>
- <f54de9c7a2733c354a9d480f78400d1f@simark.ca>
- <56F551F2.1020603@st.com>
+From: syed zaidi <zaidi1039@gmail.com>
+Subject: issues converting large amount of traces using
+	babeltrace
+Date: Fri, 25 Mar 2016 19:08:35 -0700
+Message-ID: <CAD6O9aopPSyHA4fNp2ewGZUHiuG7WZ07-ntR6Hj2gzx5Suok-Q__28140.5050344349$1458958136$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1636746658838473656=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lf0-f41.google.com (mail-lf0-f41.google.com
- [209.85.215.41])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id DFA4BA06DB
- for <lttng-dev@lists.lttng.org>; Fri, 25 Mar 2016 18:33:37 +0000 (UTC)
-Received: by mail-lf0-f41.google.com with SMTP id c62so56320617lfc.1
- for <lttng-dev@lists.lttng.org>; Fri, 25 Mar 2016 11:33:37 -0700 (PDT)
-In-Reply-To: <56F551F2.1020603@st.com>
+Received: from mail-ig0-f173.google.com (mail-ig0-f173.google.com
+ [209.85.213.173])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 2D225A2D4C
+ for <lttng-dev@lists.lttng.org>; Sat, 26 Mar 2016 02:08:37 +0000 (UTC)
+Received: by mail-ig0-f173.google.com with SMTP id cl4so21726094igb.0
+ for <lttng-dev@lists.lttng.org>; Fri, 25 Mar 2016 19:08:36 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,91 +21,56 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?UTF-8?Q?Jean=2DFran=C3=A7ois_Monestier?= <jean-francois.monestier@st.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gRnJpLCBNYXIgMjUsIDIwMTYgYXQgMTA6NTcgQU0sIEplYW4tRnJhbsOnb2lzIE1vbmVzdGll
-cgo8amVhbi1mcmFuY29pcy5tb25lc3RpZXJAc3QuY29tPiB3cm90ZToKPgo+IExlIDMvMjUvMjAx
-NiAzOjM0IFBNLCBTaW1vbiBNYXJjaGkgYSDDqWNyaXQgOgo+Pgo+PiBPbiAyMDE2LTAzLTI1IDEw
-OjE0LCBKZWFuLUZyYW7Dp29pcyBNb25lc3RpZXIgd3JvdGU6Cj4+Pgo+Pj4gSGVsbG8gVHJhY2Vy
-cywKPj4+Cj4+PiBEb2VzIGFueW9uZSBrbm93IHdoZXRoZXIgYmFyZWN0ZiBzdXBwb3J0cyBzb21l
-IHNvcnQgb2YgZW1wdHkgcGF5bG9hZHMKPj4+IGZvciBldmVudHMgc3BlY2lmaWVkIGluIHRoZSAu
-eWFtbCBjb25maWd1cmF0aW9uIGZpbGUgPwo+Pj4KPj4+IFNvbWV0aGluZyBzdWNoIGFzIHRoZSB3
-ZWxsLWtub3duIGx0dG5nX3VzdF9zdGF0ZWR1bXA6c3RhcnQgZXZlbnQgOgo+Pj4KPj4+IGV2ZW50
-IHsKPj4+ICAgICAgICAgIG5hbWUgPSAibHR0bmdfdXN0X3N0YXRlZHVtcDpzdGFydCI7Cj4+PiAg
-ICAgICAgICBpZCA9IDA7Cj4+PiAgICAgICAgICBzdHJlYW1faWQgPSAwOwo+Pj4gICAgICAgICAg
-bG9nbGV2ZWwgPSAxMzsKPj4+ICAgICAgICAgIGZpZWxkcyA6PSBzdHJ1Y3Qgewo+Pj4gICAgICAg
-ICAgfTsKPj4+IH07Cj4+Pgo+Pj4gSSBjYW4ndCBmaWd1cmUgb3V0IHRoZSB5YW1sIHN5bnRheCBm
-b3Igc3VjaCBhbiBldmVudCwgeW91ciBoZWxwIHdvdWxkCj4+PiBiZSB3ZWxjb21lLgoKSGkgSmVh
-bi1GcmFuw6dvaXMsCgpUaGFua3MgZm9yIHdyaXRpbmcuCgpUaGlzIHdhcyBhbiBhcmJpdHJhcnkg
-bGltaXRhdGlvbiwgYW5kIEkgY2FuJ3QgcmVtZW1iZXIgd2h5IGl0IHdhcyBsaWtlCnRoYXQuCgpJ
-IHdyaXRlICJ3YXMiIGJlY2F1c2UgSSBqdXN0ICJmaXhlZCIgaXQgaW4gdjIuMS4zLiBUaGUgb25s
-eSByZXF1aXJlbWVudApub3cgaXMgdGhhdCB0aGUgZXZlbnQgbXVzdCBjb250YWluIGF0IGxlYXN0
-IG9uZSBmaWVsZCBpbiBvbmUgb2YgdGhlCmZvbGxvd2luZyB0eXBlczoKCiAgKiBUaGUgZXZlbnQg
-aGVhZGVyIHR5cGUgb2YgaXRzIHBhcmVudCBzdHJlYW0KICAqIFRoZSBldmVudCBjb250ZXh0IHR5
-cGUgb2YgaXRzIHBhcmVudCBzdHJlYW0KICAqIEl0cyBjb250ZXh0IHR5cGUKICAqIEl0cyBwYXls
-b2FkIHR5cGUKCkluIG90aGVyIHdvcmRzLCB0aGUgZXZlbnQgY2Fubm90IGJlIGNvbXBsZXRlbHkg
-ZW1wdHkuIFRoaXMgd291bGQgbWFrZSBpdAppbXBvc3NpYmxlIGZvciB0aGUgcmVhZGVyIHRvIGZp
-bmlzaCwgc2luY2UgaXQgd291bGQgbWVhbiBhIHN0cmVhbSBvZgptYW55IDAtc2l6ZWQgZXZlbnRz
-IChzaW5jZSB0aGVyZSdzIG5vIGV2ZW50IElELCB0aGVyZSdzIG9ubHkgb25lIGV2ZW50IGluCnRo
-aXMgc3RyZWFtKS4gQmFiZWx0cmFjZSBkb2VzIG5vdCBsaWtlIHRoaXM6CgogICAgW2Vycm9yXSBJ
-bnZhbGlkIDAgYnl0ZSBldmVudCBlbmNvdW50ZXJlZC4KICAgIFtlcnJvcl0gUmVhZGluZyBldmVu
-dCBmYWlsZWQuCgpBbGwgdGhlIGZvbGxvd2luZyBldmVudCBvYmplY3RzIHNob3VsZCB3b3JrIGFz
-IGV4cGVjdGVkIGluIHYyLjEuMzoKCiAgMS4gRW1wdHkgZXZlbnQgb2JqZWN0OgoKICAgICAgICAg
-e30KCiAgMi4gTnVsbCBwYXlsb2FkIHR5cGUgKHNldHMgdGhlIHBheWxvYWQgdHlwZSB0byBpdHMg
-ZGVmYXVsdCB2YWx1ZSwKICAgICB3aGljaCBpcyBubyBwYXlsb2FkIHR5cGUpOgoKICAgICAgICAg
-cGF5bG9hZC10eXBlOiBudWxsCgogIDMuIFN0cnVjdHVyZSB3aXRoIG5vIGZpZWxkcyAoeW91IG11
-c3Qgc3RpbGwgZXhwbGljaXRseSBhbGlnbiB0aGUgdHlwZQogICAgIHRvIGF0IGxlYXN0IDgtYml0
-OyB0aGlzIGlzIGEgcmVxdWlyZW1lbnQgZm9yIG9iamVjdCB0eXBlcyB3aGljaCBpcwogICAgIHVz
-dWFsbHkgc2F0aXNmaWVkIGJ5IHRoZSBmYWN0IHRoYXQgb25lIG9mIHRoZSBmaWVsZHMgaXMKICAg
-ICBieXRlLWFsaWduZWQpOgoKICAgICAgICAgcGF5bG9hZC10eXBlOgogICAgICAgICAgIGNsYXNz
-OiBzdHJ1Y3QKICAgICAgICAgICBtaW4tYWxpZ246IDgKCkkgYWRkZWQgc3VjaCBhbiBldmVudCBp
-biB0aGUgbGludXgtZnMtc2ltcGxlIGV4YW1wbGUsIGFuZCBpdCBzZWVtcyBsaWtlCmV2ZXJ5dGhp
-bmcgaXMgb2theSBvbiB0aGUgQmFiZWx0cmFjZSBzaWRlIGFmdGVyd2FyZHM6CgogICAgLi4uCiAg
-ICBjb250ZXh0X25vX3BheWxvYWQ6IHsgfSwgeyBhID0gMjIzLCBiID0gImN0eCIgfSwgeyB9CiAg
-ICAuLi4KICAgIG5vX2NvbnRleHRfbm9fcGF5bG9hZDogeyB9LCB7IH0KICAgIC4uLgoKPj4+Cj4+
-PiBJIG11c3QgY29uZmVzcyBJJ20gc3RpbGwgc3R1Y2sgdG8gYmFyZWN0ZiB2Mi4wLjIKCk1heSBJ
-IGFzayB5b3Ugd2h5IHlvdSdyZSAic3R1Y2siIGF0IHYyLjAuMj8gSG93IGFyZSB5b3UgaW5zdGFs
-bGluZwpiYXJlY3RmPwoKYmFyZWN0ZiB2Mi4xIGlzIGZ1bGx5IGJhY2t3YXJkLWNvbXBhdGlibGUg
-d2l0aCB2Mi4wIChzdXBwb3J0cyBjb25maWcKZmlsZXMgd2l0aCB2ZXJzaW9uIDIuMCksIHNvIHVw
-Z3JhZGluZyBpdCBpcyBqdXN0IGEgbWF0dGVyIG9mIHJ1bm5pbmc6CgogICAgcGlwMyBpbnN0YWxs
-IC0tdXBncmFkZSBiYXJlY3RmCgo+Pj4KPj4+Cj4+PiBUaGFua3MgaW4gYWR2YW5jZSwKPj4KPj4K
-Pj4gSGkgSmVhbi1GcmFuw6dvaXMsCj4+Cj4+IEkgZG9uJ3QgYmVsaWV2ZSBiYXJlY3RmIGFsbG93
-cyBzcGVjaWZ5aW5nIGVtcHR5IHBheWxvYWRzIGFzIG9mIG5vdy4KPj4gVHJ5aW5nIHRvIHNwZWNp
-ZnkgYW4gZW1wdHkgZmllbGRzIGRpY3QsIHN1Y2ggYXM6Cj4+Cj4+IHNpbXBsZV91aW50MzI6Cj4+
-ICAgICBsb2ctbGV2ZWw6IENSSVQKPj4gICAgIHBheWxvYWQtdHlwZToKPj4gICAgICAgY2xhc3M6
-IHN0cnVjdAo+PiAgICAgICBmaWVsZHM6IHt9Cj4+Cj4+IHlpZWxkczoKPj4KPj4gRXJyb3I6Cj4+
-ICAgICBjYW5ub3QgY3JlYXRlIGNvbmZpZ3VyYXRpb24gZnJvbSBZQU1MIGZpbGUgImNvbmZpZy55
-YW1sIjoKPj4gICAgIG1ldGFkYXRhIGVycm9yOgo+PiAgICAgaW52YWxpZCBldmVudCBpbiBzdHJl
-YW0gImRlZmF1bHQiOgo+PiAgICAgZXZlbnQgcGF5bG9hZCB0eXBlIG11c3QgaGF2ZSBhdCBsZWFz
-dCBvbmUgZmllbGQgZm9yIGV2ZW50Cj4+ICJzaW1wbGVfdWludDMyIgo+Pgo+PiBTZWU6Cj4+IGh0
-dHBzOi8vZ2l0aHViLmNvbS9lZmZpY2lvcy9iYXJlY3RmL2Jsb2IvbWFzdGVyL2JhcmVjdGYvY29u
-ZmlnLnB5I0wxMTE5Cj4+Cj4+IFRoZSBtYWludGFpbmVycyB3aWxsIGJlIGFibGUgdG8gY29uZmly
-bS9pbmZpcm0sIGFuZCBzYXkgd2hldGhlciBpdCdzIGluCj4+IHRoZSBwbGFucyB0byBhZGQgc3Vw
-cG9ydCBmb3IgdGhhdC4KClRoYW5rcyBmb3IgdGhlIGZhc3Qgc3VwcG9ydCA7LSkuCgo+Pgo+PiBT
-aW1vbgo+Pgo+Cj4gVGhhbmsgeW91LCBTaW1vbiwgZm9yIHlvdXIgcHJvbXB0IHJlc3BvbnNlLgo+
-Cj4gSSBzaG91bGQgaGF2ZSBtZW50aW9ubmVkIGl0LCBidXQgbXkgbnVtZXJvdXMsICdjcmVhdGl2
-ZScgYXR0ZW1wdHMgcG9wcGVkIHVwIGEgZmV3IGVycm9yIG1lc3NhZ2VzLCBzdWNoIGFzCj4KPiBF
-cnJvcjoKPiAgIGNhbm5vdCBjcmVhdGUgY29uZmlndXJhdGlvbiBmcm9tIFlBTUwgZmlsZToKPiAg
-IGNhbm5vdCBjcmVhdGUgc3RyZWFtICJkZWZhdWx0IjoKPiAgIGNhbm5vdCBjcmVhdGUgZXZlbnQg
-InN0YXJ0IjoKPiAgIG1pc3NpbmcgInBheWxvYWQtdHlwZSIgcHJvcGVydHkgaW4gZXZlbnQgb2Jq
-ZWN0Cj4KPiBFcnJvcjoKPiAgIGNhbm5vdCBjcmVhdGUgY29uZmlndXJhdGlvbiBmcm9tIFlBTUwg
-ZmlsZToKPiAgIGNhbm5vdCBjcmVhdGUgc3RyZWFtICJkZWZhdWx0IjoKPiAgIGNhbm5vdCBjcmVh
-dGUgZXZlbnQgInN0YXJ0IjoKPiAgIGNhbm5vdCBjcmVhdGUgZXZlbnQncyBwYXlsb2FkIHR5cGUg
-b2JqZWN0Ogo+ICAgdHlwZSBvYmplY3RzIG11c3QgYmUgYXNzb2NpYXRpdmUgYXJyYXlzCj4KPiBF
-cnJvcjoKPiAgIGNhbm5vdCBjcmVhdGUgY29uZmlndXJhdGlvbiBmcm9tIFlBTUwgZmlsZToKPiAg
-IG1ldGFkYXRhIGVycm9yOgo+ICAgaW52YWxpZCBldmVudCBpbiBzdHJlYW0gImRlZmF1bHQiOgo+
-ICAgZXZlbnQgcGF5bG9hZCB0eXBlIG11c3QgaGF2ZSBhdCBsZWFzdCBvbmUgZmllbGQgZm9yIGV2
-ZW50ICJzdGFydCIKPgo+IEVycm9yOgo+ICAgY2Fubm90IGNyZWF0ZSBjb25maWd1cmF0aW9uIGZy
-b20gWUFNTCBmaWxlOgo+ICAgY2Fubm90IGNyZWF0ZSBzdHJlYW0gImRlZmF1bHQiOgo+ICAgY2Fu
-bm90IGNyZWF0ZSBldmVudCAic3RhcnQiOgo+ICAgY2Fubm90IGNyZWF0ZSBldmVudCdzIHBheWxv
-YWQgdHlwZSBvYmplY3Q6Cj4gICAiZmllbGRzIiBwcm9wZXJ0eSBvZiBzdHJ1Y3R1cmUgdHlwZSBv
-YmplY3QgbXVzdCBiZSBhbiBhc3NvY2lhdGl2ZSBhcnJheQo+Cj4KPiBCeWUgZm9yIG5vdywKPiAt
-LQo+IEplYW4tRnJhbmNvaXMgTW9uZXN0aWVyCj4gMDQxLTY3NjYKPgo+IF9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlz
-dAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9j
-Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============1636746658838473656==
+Content-Type: multipart/alternative; boundary=089e011769a13dd2cd052eea2892
+
+--089e011769a13dd2cd052eea2892
+Content-Type: text/plain; charset=UTF-8
+
+Hey guys,
+I am using babeltrace to convert the traces produced by Lttng. It works
+perfectly if I have small amount of data. That is if I run the session for
+small amount of time.
+But if the the session is ran for a long time, while converting the traces,
+the babel trace process gets killed and it does not complete the conversion.
+I just wanted to ask if this is a known issue. I guess the babeltrace
+process getting killed depends on the memory available on the machine and
+that should also define the limit for traces to be converted succesfully.
+I was wondering if my assumption, that the issue is the memory available,
+is true and if other people have seen this or not.
+
+Thanks
+Ammar
+
+--089e011769a13dd2cd052eea2892
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hey guys,<div>I am using babeltrace to convert the traces =
+produced by Lttng. It works perfectly if I have small amount of data. That =
+is if I run the session for small amount of time.</div><div>But if the the =
+session is ran for a long time, while converting the traces, the babel trac=
+e process gets killed and it does not complete the conversion.</div><div>I =
+just wanted to ask if this is a known issue. I guess the babeltrace process=
+ getting killed depends on the memory available on the machine and that sho=
+uld also define the limit for traces to be converted succesfully.</div><div=
+>I was wondering if my assumption, that the issue is the memory available, =
+is true and if other people have seen this or not.</div><div><br></div><div=
+>Thanks</div><div>Ammar</div></div>
+
+--089e011769a13dd2cd052eea2892--
+
+--===============1636746658838473656==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============1636746658838473656==--
