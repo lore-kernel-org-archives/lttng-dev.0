@@ -1,20 +1,16 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: Re: issues converting large amount of traces using
-	babeltrace
-Date: Fri, 25 Mar 2016 22:49:24 -0400
-Message-ID: <CAB4xu_2PK6PQOhEq5K+xZUPNbjrBBN4KmCWhCgZmOB-aTo_f7Q__45207.0595034913$1458960604$gmane$org@mail.gmail.com>
-References: <CAD6O9aopPSyHA4fNp2ewGZUHiuG7WZ07-ntR6Hj2gzx5Suok-Q@mail.gmail.com>
+From: Aravind HT <aravind.ht@gmail.com>
+Subject: Mem leak in lttng_ust lttng_probes_get_event_list()
+Date: Mon, 28 Mar 2016 11:39:51 +0530
+Message-ID: <CACd+_b7QyU_npdoa-NzffgA2cJpLGu0c0Yajk+bQ+hhOP=6dkQ__38082.8852569268$1459145416$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============8496276003336521329=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lb0-f180.google.com (mail-lb0-f180.google.com
- [209.85.217.180])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 3ADEAA0156
- for <lttng-dev@lists.lttng.org>; Sat, 26 Mar 2016 02:49:54 +0000 (UTC)
-Received: by mail-lb0-f180.google.com with SMTP id y6so1699348lbj.0
- for <lttng-dev@lists.lttng.org>; Fri, 25 Mar 2016 19:49:54 -0700 (PDT)
-In-Reply-To: <CAD6O9aopPSyHA4fNp2ewGZUHiuG7WZ07-ntR6Hj2gzx5Suok-Q@mail.gmail.com>
+Received: from mail-ig0-f176.google.com (mail-ig0-f176.google.com
+ [209.85.213.176])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id C5807A2EDD
+ for <lttng-dev@lists.lttng.org>; Mon, 28 Mar 2016 06:09:52 +0000 (UTC)
+Received: by mail-ig0-f176.google.com with SMTP id cl4so46318880igb.0
+ for <lttng-dev@lists.lttng.org>; Sun, 27 Mar 2016 23:09:52 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,42 +20,99 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: syed zaidi <zaidi1039@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gRnJpLCBNYXIgMjUsIDIwMTYgYXQgMTA6MDggUE0sIHN5ZWQgemFpZGkgPHphaWRpMTAzOUBn
-bWFpbC5jb20+IHdyb3RlOgo+IEhleSBndXlzLAo+IEkgYW0gdXNpbmcgYmFiZWx0cmFjZSB0byBj
-b252ZXJ0IHRoZSB0cmFjZXMgcHJvZHVjZWQgYnkgTHR0bmcuIEl0IHdvcmtzCj4gcGVyZmVjdGx5
-IGlmIEkgaGF2ZSBzbWFsbCBhbW91bnQgb2YgZGF0YS4gVGhhdCBpcyBpZiBJIHJ1biB0aGUgc2Vz
-c2lvbiBmb3IKPiBzbWFsbCBhbW91bnQgb2YgdGltZS4KPiBCdXQgaWYgdGhlIHRoZSBzZXNzaW9u
-IGlzIHJhbiBmb3IgYSBsb25nIHRpbWUsIHdoaWxlIGNvbnZlcnRpbmcgdGhlIHRyYWNlcywKPiB0
-aGUgYmFiZWwgdHJhY2UgcHJvY2VzcyBnZXRzIGtpbGxlZCBhbmQgaXQgZG9lcyBub3QgY29tcGxl
-dGUgdGhlIGNvbnZlcnNpb24uCgpIb3cgbGFyZ2Ugb2YgYSB0cmFjZSBhcmUgd2UgdGFsa2luZyBh
-Ym91dD8gV2hhdCBpcyB0aGUgc2l6ZSBvZiB0aGUgdHJhY2U/CgpDb3VsZCB5b3UgcGxlYXNlIHBy
-b3ZpZGUgdGhlIG91dHB1dCBvZjoKCiAgICB0cmVlIC1oIDx5b3VyIENURiB0cmFjZSBkaXJlY3Rv
-cnk+CgpDb3VsZCB5b3UgYWxzbyBwcm92aWRlICh1c2luZyBhIHBhc3RlYmluIGlkZWFsbHk7IHRo
-aXMgY291bGQgYmUgaHVnZSkgdGhlCnRleHR1YWwgbWV0YWRhdGEgY29udGVudCwgaWYgdGhhdCdz
-IG5vdCBjb25maWRlbnRpYWw6CgogICAgYmFiZWx0cmFjZSAtbyBjdGYtbWV0YWRhdGEgPHlvdXIg
-Q1RGIHRyYWNlIGRpcmVjdG9yeT4KCkFyZSB5b3UgdXNpbmcgYSBjdXN0b20gc3ViYnVmZmVyIHNp
-emUgd2hlbiB0cmFjaW5nIHdpdGggTFRUbmc/Cgo+IEkganVzdCB3YW50ZWQgdG8gYXNrIGlmIHRo
-aXMgaXMgYSBrbm93biBpc3N1ZS4gSSBndWVzcyB0aGUgYmFiZWx0cmFjZQo+IHByb2Nlc3MgZ2V0
-dGluZyBraWxsZWQgZGVwZW5kcyBvbiB0aGUgbWVtb3J5IGF2YWlsYWJsZSBvbiB0aGUgbWFjaGlu
-ZSBhbmQKPiB0aGF0IHNob3VsZCBhbHNvIGRlZmluZSB0aGUgbGltaXQgZm9yIHRyYWNlcyB0byBi
-ZSBjb252ZXJ0ZWQgc3VjY2VzZnVsbHkuCj4gSSB3YXMgd29uZGVyaW5nIGlmIG15IGFzc3VtcHRp
-b24sIHRoYXQgdGhlIGlzc3VlIGlzIHRoZSBtZW1vcnkgYXZhaWxhYmxlLCBpcwo+IHRydWUgYW5k
-IGlmIG90aGVyIHBlb3BsZSBoYXZlIHNlZW4gdGhpcyBvciBub3QuCgpJIHdvdWxkIGJlIHN1cnBy
-aXNlZCB0aGF0IHRoZSBtZW1vcnkgdXNhZ2UgaW5jcmVhc2VkIHNvIG11Y2ggd2l0aCB0aGUKcXVh
-bnRpdHkgb2YgdHJhY2UgZGF0YS4gVGhlIHN0cmVhbSBwYWNrZXRzIGFyZSBtbWFwKCllZC4gTWVt
-b3J5IHVzYWdlCmluIEJhYmVsdHJhY2Ugc2hvdWxkIGJlIHNvbWV3aGF0IHByb3BvcnRpb25hbCB0
-byB0aGUgbnVtYmVyIG9mIHBvc3NpYmxlCmV2ZW50cyAodGhlIG51bWJlciBvZiBldmVudCBibG9j
-a3MgaW4gdGhlIG1ldGFkYXRhKSwgbm90IHRvIHRoZSBzaXplIG9mCnRoZSB0cmFjZS4KCkFub3Ro
-ZXIgcG9zc2liaWxpdHkgd291bGQgYmUgdGhhdCBhbGwgdGhlIHBhY2tldCBpbmRleGVzIGFyZSBr
-ZXB0IGluCm1lbW9yeSwgYW5kIHRoYXQgdGhleSBhcmUgaHVnZSwgYnV0IEkgZG91YnQgdGhhdC4K
-Ck9yIGl0IGNvdWxkIGJlIGEgc2ltcGxlIG1lbW9yeSBsZWFrLgoKQlIsClBoaWwKCj4KPiBUaGFu
-a3MKPiBBbW1hcgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-Zwo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
-Zy1kZXYKPgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
-dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9s
-aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============8496276003336521329==
+Content-Type: multipart/alternative; boundary=089e0122e720bc0613052f15c201
+
+--089e0122e720bc0613052f15c201
+Content-Type: text/plain; charset=UTF-8
+
+Hi,
+
+I have seen that the RES mem from TOP increases over time for an
+application that
+is being traced. When analyzed with valgrind, I see the following
+
+==12429== 175,824 bytes in 594 blocks are possibly lost in loss record 30
+of 30
+==12429==    at 0x4C29810: calloc (in
+/usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so)
+==12429==    by 0x54AF21E: calloc (in
+/usr/lib64/liblttng-ust-libc-wrapper.so.0.0.0)
+==12429==    by 0x526C27B: lttng_probes_get_event_list (in
+/usr/lib64/liblttng-ust.so.0.0.0)
+==12429==    by 0x526AD9E: ??? (in /usr/lib64/liblttng-ust.so.0.0.0)
+==12429==    by 0x5267FAF: ??? (in /usr/lib64/liblttng-ust.so.0.0.0)
+==12429==    by 0x503CFE2: start_thread (pthread_create.c:312)
+==12429==    by 0x579BAFC: clone (clone.S:111)
+
+
+There is a memleak seen when lttng_probes_get_event_list() gets called
+during listing of
+trace points, example "lttng list -u". Each time
+lttng_probes_get_event_list() gets called,
+objd_alloc() is called and a new list of trace points generated in
+lttng_probes_get_event_list()
+and stored.
+This entry in the objd_table is not reused when "lttng list -u" gets called
+again in the future
+and is also not removed until the application exits resulting in memory
+consumption.
+
+I can see that the objd_table is meant to be used as a cache but somehow
+the full implementation is not present..is this a work still in progress ?
+If not, to solve this, whenever lttng_probes_get_event_list() is called, we
+could check if we have results available in the objd_table from an earlier
+call for a particular owner and name and re-use it.
+
+Regards,
+Aravind.
+
+--089e0122e720bc0613052f15c201
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div><br></div><div><div>I have seen that the RES mem f=
+rom TOP increases over time for an application that</div><div>is being trac=
+ed. When analyzed with valgrind, I see the following</div><div><br></div><d=
+iv>=3D=3D12429=3D=3D 175,824 bytes in 594 blocks are possibly lost in loss =
+record 30 of 30</div><div>=3D=3D12429=3D=3D =C2=A0 =C2=A0at 0x4C29810: call=
+oc (in /usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so)</div><div>=3D=
+=3D12429=3D=3D =C2=A0 =C2=A0by 0x54AF21E: calloc (in /usr/lib64/liblttng-us=
+t-libc-wrapper.so.0.0.0)</div><div>=3D=3D12429=3D=3D =C2=A0 =C2=A0by 0x526C=
+27B: lttng_probes_get_event_list (in /usr/lib64/liblttng-ust.so.0.0.0)</div=
+><div>=3D=3D12429=3D=3D =C2=A0 =C2=A0by 0x526AD9E: ??? (in /usr/lib64/liblt=
+tng-ust.so.0.0.0)</div><div>=3D=3D12429=3D=3D =C2=A0 =C2=A0by 0x5267FAF: ??=
+? (in /usr/lib64/liblttng-ust.so.0.0.0)</div><div>=3D=3D12429=3D=3D =C2=A0 =
+=C2=A0by 0x503CFE2: start_thread (pthread_create.c:312)</div><div>=3D=3D124=
+29=3D=3D =C2=A0 =C2=A0by 0x579BAFC: clone (clone.S:111)</div><div><br></div=
+><div><br></div><div>There is a memleak seen when lttng_probes_get_event_li=
+st() gets called during listing of =C2=A0</div><div>trace points, example &=
+quot;lttng list -u&quot;. Each time lttng_probes_get_event_list() gets call=
+ed,</div><div>objd_alloc() is called and a new list of trace points generat=
+ed in lttng_probes_get_event_list()</div><div>and stored.</div><div>This en=
+try in the objd_table is not reused when &quot;lttng list -u&quot; gets cal=
+led again in the future=C2=A0</div><div>and is also not removed until the a=
+pplication exits resulting in memory consumption.=C2=A0</div><div><br></div=
+><div>I can see that the objd_table is meant to be used as a cache but some=
+how the full implementation is not present..is this a work still in progres=
+s ? If not, to solve this, whenever lttng_probes_get_event_list() is called=
+, we could check if we have results available in the objd_table from an ear=
+lier call for a particular owner and name and re-use it.=C2=A0</div></div><=
+div><br></div><div>Regards,</div><div>Aravind.</div></div>
+
+--089e0122e720bc0613052f15c201--
+
+--===============8496276003336521329==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============8496276003336521329==--
