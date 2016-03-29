@@ -1,20 +1,15 @@
-From: =?UTF-8?B?SmVhbi1GcmFuw6dvaXMgTW9uZXN0aWVy?=
- <jean-francois.monestier@st.com>
-Subject: Re: [barectf] Support for empty payload ?
-Date: Tue, 29 Mar 2016 11:31:14 +0200
-Message-ID: <56FA4B62.3020301__18821.1797889837$1459244813$gmane$org@st.com>
-References: <56F547DF.4070704@st.com>
- <f54de9c7a2733c354a9d480f78400d1f@simark.ca> <56F551F2.1020603@st.com>
- <CAB4xu_3BBH5WzX3NHcF+H97VmAaRXKr-T2bK+HEVkuzcK39zbw@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Mem leak in lttng_ust lttng_probes_get_event_list()
+Date: Tue, 29 Mar 2016 14:35:05 +0000 (UTC)
+Message-ID: <1591088638.38466.1459262105320.JavaMail.zimbra__26344.5892408074$1459262130$gmane$org@efficios.com>
+References: <CACd+_b7QyU_npdoa-NzffgA2cJpLGu0c0Yajk+bQ+hhOP=6dkQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1856248639302996460=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com
- [91.207.212.93])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id BDFD1A064E
- for <lttng-dev@lists.lttng.org>; Tue, 29 Mar 2016 09:31:18 +0000 (UTC)
-In-Reply-To: <CAB4xu_3BBH5WzX3NHcF+H97VmAaRXKr-T2bK+HEVkuzcK39zbw@mail.gmail.com>
+Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id B1828A2C2E
+ for <lttng-dev@lists.lttng.org>; Tue, 29 Mar 2016 14:35:06 +0000 (UTC)
+In-Reply-To: <CACd+_b7QyU_npdoa-NzffgA2cJpLGu0c0Yajk+bQ+hhOP=6dkQ@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,99 +19,135 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Aravind HT <aravind.ht@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGVsbG8KCkluZGVlZCwgdXBncmFkaW5nIGJhcmVjdGYgdG8gdjIuMS4zIHdvcmtzIGxpa2UgYSBj
-aGFybSAhCgpUaGFuayB5b3UgdmVyeSBtdWNoCgpMZSAzLzI1LzIwMTYgNzozMyBQTSwgUGhpbGlw
-cGUgUHJvdWx4IGEgw6ljcml0IDoKPiBPbiBGcmksIE1hciAyNSwgMjAxNiBhdCAxMDo1NyBBTSwg
-SmVhbi1GcmFuw6dvaXMgTW9uZXN0aWVyCj4gPGplYW4tZnJhbmNvaXMubW9uZXN0aWVyQHN0LmNv
-bT4gd3JvdGU6Cj4+Cj4+IExlIDMvMjUvMjAxNiAzOjM0IFBNLCBTaW1vbiBNYXJjaGkgYSDDqWNy
-aXQgOgo+Pj4KPj4+IE9uIDIwMTYtMDMtMjUgMTA6MTQsIEplYW4tRnJhbsOnb2lzIE1vbmVzdGll
-ciB3cm90ZToKPj4+Pgo+Pj4+IEhlbGxvIFRyYWNlcnMsCj4+Pj4KPj4+PiBEb2VzIGFueW9uZSBr
-bm93IHdoZXRoZXIgYmFyZWN0ZiBzdXBwb3J0cyBzb21lIHNvcnQgb2YgZW1wdHkgcGF5bG9hZHMK
-Pj4+PiBmb3IgZXZlbnRzIHNwZWNpZmllZCBpbiB0aGUgLnlhbWwgY29uZmlndXJhdGlvbiBmaWxl
-ID8KPj4+Pgo+Pj4+IFNvbWV0aGluZyBzdWNoIGFzIHRoZSB3ZWxsLWtub3duIGx0dG5nX3VzdF9z
-dGF0ZWR1bXA6c3RhcnQgZXZlbnQgOgo+Pj4+Cj4+Pj4gZXZlbnQgewo+Pj4+ICAgICAgICAgICBu
-YW1lID0gImx0dG5nX3VzdF9zdGF0ZWR1bXA6c3RhcnQiOwo+Pj4+ICAgICAgICAgICBpZCA9IDA7
-Cj4+Pj4gICAgICAgICAgIHN0cmVhbV9pZCA9IDA7Cj4+Pj4gICAgICAgICAgIGxvZ2xldmVsID0g
-MTM7Cj4+Pj4gICAgICAgICAgIGZpZWxkcyA6PSBzdHJ1Y3Qgewo+Pj4+ICAgICAgICAgICB9Owo+
-Pj4+IH07Cj4+Pj4KPj4+PiBJIGNhbid0IGZpZ3VyZSBvdXQgdGhlIHlhbWwgc3ludGF4IGZvciBz
-dWNoIGFuIGV2ZW50LCB5b3VyIGhlbHAgd291bGQKPj4+PiBiZSB3ZWxjb21lLgo+Cj4gSGkgSmVh
-bi1GcmFuw6dvaXMsCj4KPiBUaGFua3MgZm9yIHdyaXRpbmcuCj4KPiBUaGlzIHdhcyBhbiBhcmJp
-dHJhcnkgbGltaXRhdGlvbiwgYW5kIEkgY2FuJ3QgcmVtZW1iZXIgd2h5IGl0IHdhcyBsaWtlCj4g
-dGhhdC4KPgo+IEkgd3JpdGUgIndhcyIgYmVjYXVzZSBJIGp1c3QgImZpeGVkIiBpdCBpbiB2Mi4x
-LjMuIFRoZSBvbmx5IHJlcXVpcmVtZW50Cj4gbm93IGlzIHRoYXQgdGhlIGV2ZW50IG11c3QgY29u
-dGFpbiBhdCBsZWFzdCBvbmUgZmllbGQgaW4gb25lIG9mIHRoZQo+IGZvbGxvd2luZyB0eXBlczoK
-Pgo+ICAgICogVGhlIGV2ZW50IGhlYWRlciB0eXBlIG9mIGl0cyBwYXJlbnQgc3RyZWFtCj4gICAg
-KiBUaGUgZXZlbnQgY29udGV4dCB0eXBlIG9mIGl0cyBwYXJlbnQgc3RyZWFtCj4gICAgKiBJdHMg
-Y29udGV4dCB0eXBlCj4gICAgKiBJdHMgcGF5bG9hZCB0eXBlCj4KPiBJbiBvdGhlciB3b3Jkcywg
-dGhlIGV2ZW50IGNhbm5vdCBiZSBjb21wbGV0ZWx5IGVtcHR5LiBUaGlzIHdvdWxkIG1ha2UgaXQK
-PiBpbXBvc3NpYmxlIGZvciB0aGUgcmVhZGVyIHRvIGZpbmlzaCwgc2luY2UgaXQgd291bGQgbWVh
-biBhIHN0cmVhbSBvZgo+IG1hbnkgMC1zaXplZCBldmVudHMgKHNpbmNlIHRoZXJlJ3Mgbm8gZXZl
-bnQgSUQsIHRoZXJlJ3Mgb25seSBvbmUgZXZlbnQgaW4KPiB0aGlzIHN0cmVhbSkuIEJhYmVsdHJh
-Y2UgZG9lcyBub3QgbGlrZSB0aGlzOgo+Cj4gICAgICBbZXJyb3JdIEludmFsaWQgMCBieXRlIGV2
-ZW50IGVuY291bnRlcmVkLgo+ICAgICAgW2Vycm9yXSBSZWFkaW5nIGV2ZW50IGZhaWxlZC4KPgo+
-IEFsbCB0aGUgZm9sbG93aW5nIGV2ZW50IG9iamVjdHMgc2hvdWxkIHdvcmsgYXMgZXhwZWN0ZWQg
-aW4gdjIuMS4zOgo+Cj4gICAgMS4gRW1wdHkgZXZlbnQgb2JqZWN0Ogo+Cj4gICAgICAgICAgIHt9
-Cj4KPiAgICAyLiBOdWxsIHBheWxvYWQgdHlwZSAoc2V0cyB0aGUgcGF5bG9hZCB0eXBlIHRvIGl0
-cyBkZWZhdWx0IHZhbHVlLAo+ICAgICAgIHdoaWNoIGlzIG5vIHBheWxvYWQgdHlwZSk6Cj4KPiAg
-ICAgICAgICAgcGF5bG9hZC10eXBlOiBudWxsCj4KPiAgICAzLiBTdHJ1Y3R1cmUgd2l0aCBubyBm
-aWVsZHMgKHlvdSBtdXN0IHN0aWxsIGV4cGxpY2l0bHkgYWxpZ24gdGhlIHR5cGUKPiAgICAgICB0
-byBhdCBsZWFzdCA4LWJpdDsgdGhpcyBpcyBhIHJlcXVpcmVtZW50IGZvciBvYmplY3QgdHlwZXMg
-d2hpY2ggaXMKPiAgICAgICB1c3VhbGx5IHNhdGlzZmllZCBieSB0aGUgZmFjdCB0aGF0IG9uZSBv
-ZiB0aGUgZmllbGRzIGlzCj4gICAgICAgYnl0ZS1hbGlnbmVkKToKPgo+ICAgICAgICAgICBwYXls
-b2FkLXR5cGU6Cj4gICAgICAgICAgICAgY2xhc3M6IHN0cnVjdAo+ICAgICAgICAgICAgIG1pbi1h
-bGlnbjogOAo+Cj4gSSBhZGRlZCBzdWNoIGFuIGV2ZW50IGluIHRoZSBsaW51eC1mcy1zaW1wbGUg
-ZXhhbXBsZSwgYW5kIGl0IHNlZW1zIGxpa2UKPiBldmVyeXRoaW5nIGlzIG9rYXkgb24gdGhlIEJh
-YmVsdHJhY2Ugc2lkZSBhZnRlcndhcmRzOgo+Cj4gICAgICAuLi4KPiAgICAgIGNvbnRleHRfbm9f
-cGF5bG9hZDogeyB9LCB7IGEgPSAyMjMsIGIgPSAiY3R4IiB9LCB7IH0KPiAgICAgIC4uLgo+ICAg
-ICAgbm9fY29udGV4dF9ub19wYXlsb2FkOiB7IH0sIHsgfQo+ICAgICAgLi4uCj4KPj4+Pgo+Pj4+
-IEkgbXVzdCBjb25mZXNzIEknbSBzdGlsbCBzdHVjayB0byBiYXJlY3RmIHYyLjAuMgo+Cj4gTWF5
-IEkgYXNrIHlvdSB3aHkgeW91J3JlICJzdHVjayIgYXQgdjIuMC4yPyBIb3cgYXJlIHlvdSBpbnN0
-YWxsaW5nCj4gYmFyZWN0Zj8KPgo+IGJhcmVjdGYgdjIuMSBpcyBmdWxseSBiYWNrd2FyZC1jb21w
-YXRpYmxlIHdpdGggdjIuMCAoc3VwcG9ydHMgY29uZmlnCj4gZmlsZXMgd2l0aCB2ZXJzaW9uIDIu
-MCksIHNvIHVwZ3JhZGluZyBpdCBpcyBqdXN0IGEgbWF0dGVyIG9mIHJ1bm5pbmc6Cj4KPiAgICAg
-IHBpcDMgaW5zdGFsbCAtLXVwZ3JhZGUgYmFyZWN0Zgo+Cj4+Pj4KPj4+Pgo+Pj4+IFRoYW5rcyBp
-biBhZHZhbmNlLAo+Pj4KPj4+Cj4+PiBIaSBKZWFuLUZyYW7Dp29pcywKPj4+Cj4+PiBJIGRvbid0
-IGJlbGlldmUgYmFyZWN0ZiBhbGxvd3Mgc3BlY2lmeWluZyBlbXB0eSBwYXlsb2FkcyBhcyBvZiBu
-b3cuCj4+PiBUcnlpbmcgdG8gc3BlY2lmeSBhbiBlbXB0eSBmaWVsZHMgZGljdCwgc3VjaCBhczoK
-Pj4+Cj4+PiBzaW1wbGVfdWludDMyOgo+Pj4gICAgICBsb2ctbGV2ZWw6IENSSVQKPj4+ICAgICAg
-cGF5bG9hZC10eXBlOgo+Pj4gICAgICAgIGNsYXNzOiBzdHJ1Y3QKPj4+ICAgICAgICBmaWVsZHM6
-IHt9Cj4+Pgo+Pj4geWllbGRzOgo+Pj4KPj4+IEVycm9yOgo+Pj4gICAgICBjYW5ub3QgY3JlYXRl
-IGNvbmZpZ3VyYXRpb24gZnJvbSBZQU1MIGZpbGUgImNvbmZpZy55YW1sIjoKPj4+ICAgICAgbWV0
-YWRhdGEgZXJyb3I6Cj4+PiAgICAgIGludmFsaWQgZXZlbnQgaW4gc3RyZWFtICJkZWZhdWx0IjoK
-Pj4+ICAgICAgZXZlbnQgcGF5bG9hZCB0eXBlIG11c3QgaGF2ZSBhdCBsZWFzdCBvbmUgZmllbGQg
-Zm9yIGV2ZW50Cj4+PiAic2ltcGxlX3VpbnQzMiIKPj4+Cj4+PiBTZWU6Cj4+PiBodHRwczovL2dp
-dGh1Yi5jb20vZWZmaWNpb3MvYmFyZWN0Zi9ibG9iL21hc3Rlci9iYXJlY3RmL2NvbmZpZy5weSNM
-MTExOQo+Pj4KPj4+IFRoZSBtYWludGFpbmVycyB3aWxsIGJlIGFibGUgdG8gY29uZmlybS9pbmZp
-cm0sIGFuZCBzYXkgd2hldGhlciBpdCdzIGluCj4+PiB0aGUgcGxhbnMgdG8gYWRkIHN1cHBvcnQg
-Zm9yIHRoYXQuCj4KPiBUaGFua3MgZm9yIHRoZSBmYXN0IHN1cHBvcnQgOy0pLgo+Cj4+Pgo+Pj4g
-U2ltb24KPj4+Cj4+Cj4+IFRoYW5rIHlvdSwgU2ltb24sIGZvciB5b3VyIHByb21wdCByZXNwb25z
-ZS4KPj4KPj4gSSBzaG91bGQgaGF2ZSBtZW50aW9ubmVkIGl0LCBidXQgbXkgbnVtZXJvdXMsICdj
-cmVhdGl2ZScgYXR0ZW1wdHMgcG9wcGVkIHVwIGEgZmV3IGVycm9yIG1lc3NhZ2VzLCBzdWNoIGFz
-Cj4+Cj4+IEVycm9yOgo+PiAgICBjYW5ub3QgY3JlYXRlIGNvbmZpZ3VyYXRpb24gZnJvbSBZQU1M
-IGZpbGU6Cj4+ICAgIGNhbm5vdCBjcmVhdGUgc3RyZWFtICJkZWZhdWx0IjoKPj4gICAgY2Fubm90
-IGNyZWF0ZSBldmVudCAic3RhcnQiOgo+PiAgICBtaXNzaW5nICJwYXlsb2FkLXR5cGUiIHByb3Bl
-cnR5IGluIGV2ZW50IG9iamVjdAo+Pgo+PiBFcnJvcjoKPj4gICAgY2Fubm90IGNyZWF0ZSBjb25m
-aWd1cmF0aW9uIGZyb20gWUFNTCBmaWxlOgo+PiAgICBjYW5ub3QgY3JlYXRlIHN0cmVhbSAiZGVm
-YXVsdCI6Cj4+ICAgIGNhbm5vdCBjcmVhdGUgZXZlbnQgInN0YXJ0IjoKPj4gICAgY2Fubm90IGNy
-ZWF0ZSBldmVudCdzIHBheWxvYWQgdHlwZSBvYmplY3Q6Cj4+ICAgIHR5cGUgb2JqZWN0cyBtdXN0
-IGJlIGFzc29jaWF0aXZlIGFycmF5cwo+Pgo+PiBFcnJvcjoKPj4gICAgY2Fubm90IGNyZWF0ZSBj
-b25maWd1cmF0aW9uIGZyb20gWUFNTCBmaWxlOgo+PiAgICBtZXRhZGF0YSBlcnJvcjoKPj4gICAg
-aW52YWxpZCBldmVudCBpbiBzdHJlYW0gImRlZmF1bHQiOgo+PiAgICBldmVudCBwYXlsb2FkIHR5
-cGUgbXVzdCBoYXZlIGF0IGxlYXN0IG9uZSBmaWVsZCBmb3IgZXZlbnQgInN0YXJ0Igo+Pgo+PiBF
-cnJvcjoKPj4gICAgY2Fubm90IGNyZWF0ZSBjb25maWd1cmF0aW9uIGZyb20gWUFNTCBmaWxlOgo+
-PiAgICBjYW5ub3QgY3JlYXRlIHN0cmVhbSAiZGVmYXVsdCI6Cj4+ICAgIGNhbm5vdCBjcmVhdGUg
-ZXZlbnQgInN0YXJ0IjoKPj4gICAgY2Fubm90IGNyZWF0ZSBldmVudCdzIHBheWxvYWQgdHlwZSBv
-YmplY3Q6Cj4+ICAgICJmaWVsZHMiIHByb3BlcnR5IG9mIHN0cnVjdHVyZSB0eXBlIG9iamVjdCBt
-dXN0IGJlIGFuIGFzc29jaWF0aXZlIGFycmF5Cj4+Cj4+Cj4+IEJ5ZSBmb3Igbm93LAo+PiAtLQo+
-PiBKZWFuLUZyYW5jb2lzIE1vbmVzdGllcgo+PiAwNDEtNjc2Ngo+Pgo+PiBfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiBsdHRuZy1kZXYgbWFpbGluZyBs
-aXN0Cj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5v
-cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKCi0tIApKZWFuLUZyYW5jb2lz
-IE1vbmVzdGllcgowNDEtNjc2NgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
-LWRldgo=
+--===============1856248639302996460==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_38465_797695708.1459262105319"
+
+------=_Part_38465_797695708.1459262105319
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+Hi, 
+
+Please open an issue on the bug tracker with all the information requested 
+in the bug reporting guidelines. See https://bugs.lttng.org/ 
+
+Thanks, 
+
+Mathieu 
+
+----- On Mar 28, 2016, at 2:09 AM, Aravind HT <aravind.ht@gmail.com> wrote: 
+
+> Hi,
+> I have seen that the RES mem from TOP increases over time for an application
+> that
+> is being traced. When analyzed with valgrind, I see the following
+
+> ==12429== 175,824 bytes in 594 blocks are possibly lost in loss record 30 of 30
+> ==12429== at 0x4C29810: calloc (in
+> /usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so)
+> ==12429== by 0x54AF21E: calloc (in
+> /usr/lib64/liblttng-ust-libc-wrapper.so.0.0.0)
+> ==12429== by 0x526C27B: lttng_probes_get_event_list (in
+> /usr/lib64/liblttng-ust.so.0.0.0)
+> ==12429== by 0x526AD9E: ??? (in /usr/lib64/liblttng-ust.so.0.0.0)
+> ==12429== by 0x5267FAF: ??? (in /usr/lib64/liblttng-ust.so.0.0.0)
+> ==12429== by 0x503CFE2: start_thread (pthread_create.c:312)
+> ==12429== by 0x579BAFC: clone (clone.S:111)
+
+> There is a memleak seen when lttng_probes_get_event_list() gets called during
+> listing of
+> trace points, example "lttng list -u". Each time lttng_probes_get_event_list()
+> gets called,
+> objd_alloc() is called and a new list of trace points generated in
+> lttng_probes_get_event_list()
+> and stored.
+> This entry in the objd_table is not reused when "lttng list -u" gets called
+> again in the future
+> and is also not removed until the application exits resulting in memory
+> consumption.
+
+> I can see that the objd_table is meant to be used as a cache but somehow the
+> full implementation is not present..is this a work still in progress ? If not,
+> to solve this, whenever lttng_probes_get_event_list() is called, we could check
+> if we have results available in the objd_table from an earlier call for a
+> particular owner and name and re-use it.
+
+> Regards,
+> Aravind.
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+------=_Part_38465_797695708.1459262105319
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div>Hi,<br></div><div><br data-mce-bogus=3D"1">=
+</div><div>Please open an issue on the bug tracker with all the information=
+ requested</div><div>in the bug reporting guidelines. See https://bugs.lttn=
+g.org/<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><d=
+iv>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></di=
+v><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br></div><span id=3D"zwc=
+hr" data-marker=3D"__DIVIDER__">----- On Mar 28, 2016, at 2:09 AM, Aravind =
+HT &lt;aravind.ht@gmail.com&gt; wrote:<br></span><div data-marker=3D"__QUOT=
+ED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5=
+px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-de=
+coration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div =
+dir=3D"ltr">Hi,<br><div><div>I have seen that the RES mem from TOP increase=
+s over time for an application that</div><div>is being traced. When analyze=
+d with valgrind, I see the following</div><br><div>=3D=3D12429=3D=3D 175,82=
+4 bytes in 594 blocks are possibly lost in loss record 30 of 30</div><div>=
+=3D=3D12429=3D=3D &nbsp; &nbsp;at 0x4C29810: calloc (in /usr/lib64/valgrind=
+/vgpreload_memcheck-amd64-linux.so)</div><div>=3D=3D12429=3D=3D &nbsp; &nbs=
+p;by 0x54AF21E: calloc (in /usr/lib64/liblttng-ust-libc-wrapper.so.0.0.0)</=
+div><div>=3D=3D12429=3D=3D &nbsp; &nbsp;by 0x526C27B: lttng_probes_get_even=
+t_list (in /usr/lib64/liblttng-ust.so.0.0.0)</div><div>=3D=3D12429=3D=3D &n=
+bsp; &nbsp;by 0x526AD9E: ??? (in /usr/lib64/liblttng-ust.so.0.0.0)</div><di=
+v>=3D=3D12429=3D=3D &nbsp; &nbsp;by 0x5267FAF: ??? (in /usr/lib64/liblttng-=
+ust.so.0.0.0)</div><div>=3D=3D12429=3D=3D &nbsp; &nbsp;by 0x503CFE2: start_=
+thread (pthread_create.c:312)</div><div>=3D=3D12429=3D=3D &nbsp; &nbsp;by 0=
+x579BAFC: clone (clone.S:111)</div><br><br><div>There is a memleak seen whe=
+n lttng_probes_get_event_list() gets called during listing of &nbsp;</div><=
+div>trace points, example "lttng list -u". Each time lttng_probes_get_event=
+_list() gets called,</div><div>objd_alloc() is called and a new list of tra=
+ce points generated in lttng_probes_get_event_list()</div><div>and stored.<=
+/div><div>This entry in the objd_table is not reused when "lttng list -u" g=
+ets called again in the future&nbsp;</div><div>and is also not removed unti=
+l the application exits resulting in memory consumption.&nbsp;</div><br><di=
+v>I can see that the objd_table is meant to be used as a cache but somehow =
+the full implementation is not present..is this a work still in progress ? =
+If not, to solve this, whenever lttng_probes_get_event_list() is called, we=
+ could check if we have results available in the objd_table from an earlier=
+ call for a particular owner and name and re-use it.&nbsp;</div></div><br><=
+div>Regards,</div><div>Aravind.</div></div>
+<br>_______________________________________________<br>lttng-dev mailing li=
+st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
+listinfo/lttng-dev<br></blockquote></div><br><div data-marker=3D"__SIG_POST=
+__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.effi=
+cios.com</div></div></body></html>
+------=_Part_38465_797695708.1459262105319--
+
+--===============1856248639302996460==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============1856248639302996460==--
