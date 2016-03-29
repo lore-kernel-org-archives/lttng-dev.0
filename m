@@ -1,15 +1,14 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Mem leak in lttng_ust lttng_probes_get_event_list()
-Date: Tue, 29 Mar 2016 14:35:05 +0000 (UTC)
-Message-ID: <1591088638.38466.1459262105320.JavaMail.zimbra__26344.5892408074$1459262130$gmane$org@efficios.com>
-References: <CACd+_b7QyU_npdoa-NzffgA2cJpLGu0c0Yajk+bQ+hhOP=6dkQ@mail.gmail.com>
+From: =?iso-8859-1?Q?Marc-Andr=E9_Laperle?= <marc-andre.laperle@ericsson.com>
+Subject: Max length for trace path in LTTng MI
+Date: Tue, 29 Mar 2016 17:44:28 +0000
+Message-ID: <D381217948BF4C45AF756AFC995BEB9F225D5E8E__34914.8821588189$1459273512$gmane$org@eusaamb103.ericsson.se>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1856248639302996460=="
+Content-Type: multipart/mixed; boundary="===============2489243218818484424=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id B1828A2C2E
- for <lttng-dev@lists.lttng.org>; Tue, 29 Mar 2016 14:35:06 +0000 (UTC)
-In-Reply-To: <CACd+_b7QyU_npdoa-NzffgA2cJpLGu0c0Yajk+bQ+hhOP=6dkQ@mail.gmail.com>
+Received: from usplmg20.ericsson.net (usplmg20.ericsson.net [198.24.6.45])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id ACBCDA2EE6
+ for <lttng-dev@lists.lttng.org>; Tue, 29 Mar 2016 17:44:35 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,128 +18,107 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Aravind HT <aravind.ht@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1856248639302996460==
+--===============2489243218818484424==
+Content-Language: en-US
 Content-Type: multipart/alternative;
-	boundary="----=_Part_38465_797695708.1459262105319"
+	boundary="_000_D381217948BF4C45AF756AFC995BEB9F225D5E8Eeusaamb103erics_"
 
-------=_Part_38465_797695708.1459262105319
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
-Hi, 
-
-Please open an issue on the bug tracker with all the information requested 
-in the bug reporting guidelines. See https://bugs.lttng.org/ 
-
-Thanks, 
-
-Mathieu 
-
------ On Mar 28, 2016, at 2:09 AM, Aravind HT <aravind.ht@gmail.com> wrote: 
-
-> Hi,
-> I have seen that the RES mem from TOP increases over time for an application
-> that
-> is being traced. When analyzed with valgrind, I see the following
-
-> ==12429== 175,824 bytes in 594 blocks are possibly lost in loss record 30 of 30
-> ==12429== at 0x4C29810: calloc (in
-> /usr/lib64/valgrind/vgpreload_memcheck-amd64-linux.so)
-> ==12429== by 0x54AF21E: calloc (in
-> /usr/lib64/liblttng-ust-libc-wrapper.so.0.0.0)
-> ==12429== by 0x526C27B: lttng_probes_get_event_list (in
-> /usr/lib64/liblttng-ust.so.0.0.0)
-> ==12429== by 0x526AD9E: ??? (in /usr/lib64/liblttng-ust.so.0.0.0)
-> ==12429== by 0x5267FAF: ??? (in /usr/lib64/liblttng-ust.so.0.0.0)
-> ==12429== by 0x503CFE2: start_thread (pthread_create.c:312)
-> ==12429== by 0x579BAFC: clone (clone.S:111)
-
-> There is a memleak seen when lttng_probes_get_event_list() gets called during
-> listing of
-> trace points, example "lttng list -u". Each time lttng_probes_get_event_list()
-> gets called,
-> objd_alloc() is called and a new list of trace points generated in
-> lttng_probes_get_event_list()
-> and stored.
-> This entry in the objd_table is not reused when "lttng list -u" gets called
-> again in the future
-> and is also not removed until the application exits resulting in memory
-> consumption.
-
-> I can see that the objd_table is meant to be used as a cache but somehow the
-> full implementation is not present..is this a work still in progress ? If not,
-> to solve this, whenever lttng_probes_get_event_list() is called, we could check
-> if we have results available in the objd_table from an earlier call for a
-> particular owner and name and re-use it.
-
-> Regards,
-> Aravind.
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
-------=_Part_38465_797695708.1459262105319
-Content-Type: text/html; charset=utf-8
+--_000_D381217948BF4C45AF756AFC995BEB9F225D5E8Eeusaamb103erics_
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div>Hi,<br></div><div><br data-mce-bogus=3D"1">=
-</div><div>Please open an issue on the bug tracker with all the information=
- requested</div><div>in the bug reporting guidelines. See https://bugs.lttn=
-g.org/<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><d=
-iv>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></di=
-v><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br></div><span id=3D"zwc=
-hr" data-marker=3D"__DIVIDER__">----- On Mar 28, 2016, at 2:09 AM, Aravind =
-HT &lt;aravind.ht@gmail.com&gt; wrote:<br></span><div data-marker=3D"__QUOT=
-ED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5=
-px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-de=
-coration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div =
-dir=3D"ltr">Hi,<br><div><div>I have seen that the RES mem from TOP increase=
-s over time for an application that</div><div>is being traced. When analyze=
-d with valgrind, I see the following</div><br><div>=3D=3D12429=3D=3D 175,82=
-4 bytes in 594 blocks are possibly lost in loss record 30 of 30</div><div>=
-=3D=3D12429=3D=3D &nbsp; &nbsp;at 0x4C29810: calloc (in /usr/lib64/valgrind=
-/vgpreload_memcheck-amd64-linux.so)</div><div>=3D=3D12429=3D=3D &nbsp; &nbs=
-p;by 0x54AF21E: calloc (in /usr/lib64/liblttng-ust-libc-wrapper.so.0.0.0)</=
-div><div>=3D=3D12429=3D=3D &nbsp; &nbsp;by 0x526C27B: lttng_probes_get_even=
-t_list (in /usr/lib64/liblttng-ust.so.0.0.0)</div><div>=3D=3D12429=3D=3D &n=
-bsp; &nbsp;by 0x526AD9E: ??? (in /usr/lib64/liblttng-ust.so.0.0.0)</div><di=
-v>=3D=3D12429=3D=3D &nbsp; &nbsp;by 0x5267FAF: ??? (in /usr/lib64/liblttng-=
-ust.so.0.0.0)</div><div>=3D=3D12429=3D=3D &nbsp; &nbsp;by 0x503CFE2: start_=
-thread (pthread_create.c:312)</div><div>=3D=3D12429=3D=3D &nbsp; &nbsp;by 0=
-x579BAFC: clone (clone.S:111)</div><br><br><div>There is a memleak seen whe=
-n lttng_probes_get_event_list() gets called during listing of &nbsp;</div><=
-div>trace points, example "lttng list -u". Each time lttng_probes_get_event=
-_list() gets called,</div><div>objd_alloc() is called and a new list of tra=
-ce points generated in lttng_probes_get_event_list()</div><div>and stored.<=
-/div><div>This entry in the objd_table is not reused when "lttng list -u" g=
-ets called again in the future&nbsp;</div><div>and is also not removed unti=
-l the application exits resulting in memory consumption.&nbsp;</div><br><di=
-v>I can see that the objd_table is meant to be used as a cache but somehow =
-the full implementation is not present..is this a work still in progress ? =
-If not, to solve this, whenever lttng_probes_get_event_list() is called, we=
- could check if we have results available in the objd_table from an earlier=
- call for a particular owner and name and re-use it.&nbsp;</div></div><br><=
-div>Regards,</div><div>Aravind.</div></div>
-<br>_______________________________________________<br>lttng-dev mailing li=
-st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
-listinfo/lttng-dev<br></blockquote></div><br><div data-marker=3D"__SIG_POST=
-__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.effi=
-cios.com</div></div></body></html>
-------=_Part_38465_797695708.1459262105319--
+Hi,
 
---===============1856248639302996460==
+We have noticed a problem when a trace session uses a long output path (ove=
+r 255 in length) and the session is listed with MI. The MI output format is=
+ specified in a schema, here is the relevant part:
+
+<!-- Maps to the char name[LTTNG_SYMBOL_NAME_LEN] -->
+<xs:simpleType name=3D"name_type">
+<xs:restriction base=3D"xs:string">
+<xs:maxLength value=3D"255"/>
+</xs:restriction>
+</xs:simpleType>
+
+Because of the maxLength of 255, the MI output received by the viewer (Trac=
+e Compass) is deemed invalid and the session cannot be listed.
+
+The issue was first noticed here, in a test:
+https://ci.lttng.org/view/Trace%20Compass/job/tracecompass-master-linux/197=
+/JAVA_TO_USE=3DOpenJDK-8,SWT_GTK3=3D0,WM=3Dmetacity,label=3Dx86-32,target-p=
+latform=3Dtracecompass-e4.5/artifact/lttng/org.eclipse.tracecompass.lttng2.=
+control.ui.swtbot.tests/target/work/data/.metadata/.log/*view*/
+
+Then I described steps to reproduce this in normal usage:
+https://bugs.eclipse.org/bugs/show_bug.cgi?id=3D490557
+
+What would be the best way forward here? Would it be a solution to increase=
+ this limit or would it be better perhaps to have a different element for t=
+he trace output path that has either a bigger limit or no limit at all?
+
+Thank you,
+Marc-Andr=E9
+
+--_000_D381217948BF4C45AF756AFC995BEB9F225D5E8Eeusaamb103erics_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html dir=3D"ltr">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style id=3D"owaParaStyle" type=3D"text/css">P {margin-top:0;margin-bottom:=
+0;}</style>
+</head>
+<body ocsi=3D"0" fpstyle=3D"1">
+<div style=3D"direction: ltr;font-family: Tahoma;color: #000000;font-size: =
+10pt;">Hi,<br>
+<br>
+We have noticed a problem when a trace session uses a long output path (ove=
+r 255 in length) and the session is listed with MI. The MI output format is=
+ specified in a schema, here is the relevant part:<br>
+<br>
+&lt;!-- Maps to the char name[LTTNG_SYMBOL_NAME_LEN] --&gt;<br>
+&lt;xs:simpleType name=3D&quot;name_type&quot;&gt;<br>
+&lt;xs:restriction base=3D&quot;xs:string&quot;&gt;<br>
+&lt;xs:maxLength value=3D&quot;255&quot;/&gt;<br>
+&lt;/xs:restriction&gt;<br>
+&lt;/xs:simpleType&gt;<br>
+<br>
+Because of the maxLength of 255, the MI output received by the viewer (Trac=
+e Compass) is deemed invalid and the session cannot be listed.<br>
+<br>
+The issue was first noticed here, in a test:<br>
+<a href=3D"https://ci.lttng.org/view/Trace%20Compass/job/tracecompass-maste=
+r-linux/197/JAVA_TO_USE=3DOpenJDK-8,SWT_GTK3=3D0,WM=3Dmetacity,label=3Dx86-=
+32,target-platform=3Dtracecompass-e4.5/artifact/lttng/org.eclipse.tracecomp=
+ass.lttng2.control.ui.swtbot.tests/target/work/data/.metadata/.log/*view*/"=
+ target=3D"_blank">https://ci.lttng.org/view/Trace%20Compass/job/tracecompa=
+ss-master-linux/197/JAVA_TO_USE=3DOpenJDK-8,SWT_GTK3=3D0,WM=3Dmetacity,labe=
+l=3Dx86-32,target-platform=3Dtracecompass-e4.5/artifact/lttng/org.eclipse.t=
+racecompass.lttng2.control.ui.swtbot.tests/target/work/data/.metadata/.log/=
+*view*/</a><br>
+<br>
+Then I described steps to reproduce this in normal usage:<br>
+<a href=3D"https://bugs.eclipse.org/bugs/show_bug.cgi?id=3D490557" target=
+=3D"_blank">https://bugs.eclipse.org/bugs/show_bug.cgi?id=3D490557</a><br>
+<br>
+What would be the best way forward here? Would it be a solution to increase=
+ this limit or would it be better perhaps to have a different element for t=
+he trace output path that has either a bigger limit or no limit at all?<br>
+<br>
+Thank you,<br>
+Marc-Andr=E9<br>
+</div>
+</body>
+</html>
+
+--_000_D381217948BF4C45AF756AFC995BEB9F225D5E8Eeusaamb103erics_--
+
+--===============2489243218818484424==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -150,4 +128,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============1856248639302996460==--
+--===============2489243218818484424==--
