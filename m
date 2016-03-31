@@ -1,20 +1,19 @@
 From: Junho Suh <redrattus@gmail.com>
 Subject: Re: Building lttng-modules against linux 3.2.65
-Date: Thu, 31 Mar 2016 12:35:24 +0900
-Message-ID: <5F4A5551-0889-478F-8F0C-BD5C1296AF89__45803.9786237807$1459395353$gmane$org@gmail.com>
+Date: Thu, 31 Mar 2016 13:44:53 +0900
+Message-ID: <4B8B1283-FE08-4DB6-AF55-1E285882B059__6429.1181545288$1459399521$gmane$org@gmail.com>
 References: <FB820BF5-3F00-4E08-870A-906953D29BBC@gmail.com>
  <CAF4oYfGJYtX30BhiR98eT-7dUinYX1Fsd5+fUjrHJhR8CkT17w@mail.gmail.com>
- <CAF4oYfGH0cc2nJJrCxvDA4EPY2tJ5wnGjbhw-6UCd6WpS9L13A@mail.gmail.com>
 Mime-Version: 1.0 (Mac OS X Mail 9.2 \(3112\))
-Content-Type: multipart/mixed; boundary="===============4690128004415256290=="
+Content-Type: multipart/mixed; boundary="===============2806272189378189107=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pf0-f175.google.com (mail-pf0-f175.google.com
- [209.85.192.175])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 97441A0644
- for <lttng-dev@lists.lttng.org>; Thu, 31 Mar 2016 03:35:30 +0000 (UTC)
-Received: by mail-pf0-f175.google.com with SMTP id n5so58716197pfn.2
- for <lttng-dev@lists.lttng.org>; Wed, 30 Mar 2016 20:35:30 -0700 (PDT)
-In-Reply-To: <CAF4oYfGH0cc2nJJrCxvDA4EPY2tJ5wnGjbhw-6UCd6WpS9L13A@mail.gmail.com>
+Received: from mail-pf0-f181.google.com (mail-pf0-f181.google.com
+ [209.85.192.181])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 33E3BA0644
+ for <lttng-dev@lists.lttng.org>; Thu, 31 Mar 2016 04:45:00 +0000 (UTC)
+Received: by mail-pf0-f181.google.com with SMTP id e128so38740005pfe.3
+ for <lttng-dev@lists.lttng.org>; Wed, 30 Mar 2016 21:44:59 -0700 (PDT)
+In-Reply-To: <CAF4oYfGJYtX30BhiR98eT-7dUinYX1Fsd5+fUjrHJhR8CkT17w@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -29,37 +28,29 @@ Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
 
---===============4690128004415256290==
-Content-Type: multipart/alternative; boundary="Apple-Mail=_9F606E02-2130-4F80-B879-7E275E8E5A70"
+--===============2806272189378189107==
+Content-Type: multipart/alternative; boundary="Apple-Mail=_C069000D-478A-4C20-9937-3482CD942D74"
 
 
---Apple-Mail=_9F606E02-2130-4F80-B879-7E275E8E5A70
+--Apple-Mail=_C069000D-478A-4C20-9937-3482CD942D74
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain;
 	charset=utf-8
 
-Hi Jonathan
+Hi Jonathan,
 
-Thanks for helping me. I attach the recipe files that related to the =
-lttng-modules building.
-Also, I use Poky 1.8 distro version.
+I am still encountering the similar problem, but log detail is some =
+different.
+Would you try the build with this linux version and lttng-modules 2.7.x? =
+Here is a repo that I use
 
-Junho Suh
+git@github.com:JunhoSuh/linux-3.2.65-1-deb7u2.git=20
 
-> On Mar 31, 2016, at 10:50 AM, Jonathan Rajotte =
+Thanks~
+
+> On Mar 31, 2016, at 10:46 AM, Jonathan Rajotte =
 <jonathan.r.julien@gmail.com> wrote:
 >=20
-> Hi Junho,
->=20
-> Also, it looks like you are building via OpenEmbedded/yocto. Could you =
-provide us with more information on your environnement (oe/yocto =
-version,recipe etc.).
->=20
-> Thanks
->=20
-> On Wed, Mar 30, 2016 at 9:46 PM, Jonathan Rajotte =
-<jonathan.r.julien@gmail.com <mailto:jonathan.r.julien@gmail.com>> =
-wrote:
 > Hi Junho,
 >=20
 > Can you reproduce this with the latest 2.7 stable branch of =
@@ -494,186 +485,9 @@ g-modules/2.6.1-r0/temp/log.do_compile.22702)
 > --=20
 > Jonathan Rajotte Julien
 >=20
->=20
->=20
->=20
-> --=20
-> Jonathan Rajotte Julien
->=20
 
 
---Apple-Mail=_9F606E02-2130-4F80-B879-7E275E8E5A70
-Content-Type: multipart/mixed;
-	boundary="Apple-Mail=_1900F289-9BB9-4810-B1C9-A151AE3B7F2E"
-
-
---Apple-Mail=_1900F289-9BB9-4810-B1C9-A151AE3B7F2E
-Content-Transfer-Encoding: 7bit
-Content-Type: text/html;
-	charset=us-ascii
-
-<html><head><meta http-equiv="Content-Type" content="text/html charset=us-ascii"></head><body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" class="">Hi Jonathan<div class=""><br class=""></div><div class="">Thanks for helping me. I attach the recipe files that related to the lttng-modules building.<div class="">Also, I use Poky 1.8 distro version.</div><div class=""><br class=""></div><div class="">Junho Suh</div><div class=""></div></div></body></html>
---Apple-Mail=_1900F289-9BB9-4810-B1C9-A151AE3B7F2E
-Content-Disposition: attachment;
-	filename=lttng-modules_2.6.1.bb.rtf
-Content-Type: text/rtf;
-	name="lttng-modules_2.6.1.bb.rtf"
-Content-Transfer-Encoding: 7bit
-
-{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf340
-{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-
-\f0\fs24 \cf0 SECTION = "devel"\
-SUMMARY = "Linux Trace Toolkit KERNEL MODULE"\
-DESCRIPTION = "The lttng-modules 2.0 package contains the kernel tracer modules"\
-LICENSE = "LGPLv2.1 & GPLv2 & MIT"\
-LIC_FILES_CHKSUM = "file://LICENSE;md5=1412caf5a1aa90d6a48588a4794c0eac \\\
-                    file://gpl-2.0.txt;md5=751419260aa954499f7abaabaa882bbe \\\
-                    file://lgpl-2.1.txt;md5=243b725d71bb5df4a1e5920b344b86ad"\
-\
-inherit module\
-\
-SRCREV = "62080b2248fd8ec4111ffc379d0bc5eaf0a5c16d"\
-\
-COMPATIBLE_HOST = '(x86_64|i.86|powerpc|aarch64|mips|arm).*-linux'\
-\
-SRC_URI = "git://git.lttng.org/lttng-modules.git;branch=stable-2.6 \\\
-           file://lttng-modules-replace-KERNELDIR-with-KERNEL_SRC.patch \\\
-           "\
-\
-export INSTALL_MOD_DIR="kernel/lttng-modules"\
-export KERNEL_SRC="$\{STAGING_KERNEL_DIR\}"\
-\
-\
-S = "$\{WORKDIR\}/git"\
-\
-do_install_append() \{\
-    # Delete empty directories to avoid QA failures if no modules were built\
-    find $\{D\}/lib -depth -type d -empty -exec rmdir \{\} \\;\
-\}\
-\
-python do_package_prepend() \{\
-    if not os.path.exists(os.path.join(d.getVar('D', True), 'lib/modules')):\
-        bb.warn("%s: no modules were created; this may be due to CONFIG_TRACEPOINTS not being enabled in your kernel." % d.getVar('PN', True))\
-\}}
---Apple-Mail=_1900F289-9BB9-4810-B1C9-A151AE3B7F2E
-Content-Transfer-Encoding: 7bit
-Content-Type: text/html;
-	charset=us-ascii
-
-<html><body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;"><head><meta http-equiv="Content-Type" content="text/html charset=us-ascii"></head><div><div></div></div></body></html>
---Apple-Mail=_1900F289-9BB9-4810-B1C9-A151AE3B7F2E
-Content-Disposition: attachment;
-	filename=lttng-ust_%.bbappend.rtf
-Content-Type: text/rtf;
-	name="lttng-ust_%.bbappend.rtf"
-Content-Transfer-Encoding: 7bit
-
-{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf340
-{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-
-\f0\fs24 \cf0 # Copyright (C) 2015 Hewlett Packard Enterprise Development LP\
-PR_append = "_openswitch"\
-\
-FILES_$\{PN\} = "/usr/lib"\
-FILES_$\{PN\}-dev += "/usr/bin/lttng-gen-tp"}
---Apple-Mail=_1900F289-9BB9-4810-B1C9-A151AE3B7F2E
-Content-Transfer-Encoding: 7bit
-Content-Type: text/html;
-	charset=us-ascii
-
-<html><body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;"><head><meta http-equiv="Content-Type" content="text/html charset=us-ascii"></head><div><div></div></div></body></html>
---Apple-Mail=_1900F289-9BB9-4810-B1C9-A151AE3B7F2E
-Content-Disposition: attachment;
-	filename=lttng-modules-replace-KERNELDIR-with-KERNEL_SRC.patch
-Content-Type: application/octet-stream;
-	name="lttng-modules-replace-KERNELDIR-with-KERNEL_SRC.patch"
-Content-Transfer-Encoding: 7bit
-
-{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf340
-{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-
-\f0\fs24 \cf0 Upstream-Status: Inappropriate [embedded specific]\
-\
-lttng-modules: replace KERNELDIR with KERNEL_SRC\
-\
-Since lttng-modules uses the default way of module.bbclass to\
-build and install lttng-modules, we do this replacement for\
-it as-is.\
-\
-Signed-off-by: Zumeng Chen <zumeng.chen@windriver.com>\
-[sgw - rebased for 2.6.1]\
-Signed-off-by: Saul wold <sgw@linux.intel.com>\
-\
-Index: git/Makefile\
-===================================================================\
---- git.orig/Makefile\
-+++ git/Makefile\
-@@ -68,19 +68,19 @@ obj-m += lib/\
- endif # CONFIG_TRACEPOINTS\
-\
- else # KERNELRELEASE\
--   KERNELDIR ?= /lib/modules/$(shell uname -r)/build\
--   PWD := $(shell pwd)\
--   CFLAGS = $(EXTCFLAGS)\
--\
-+   KERNEL_SRC ?= /lib/modules/$(shell uname -r)/build\
-+   PWD := $(shell pwd)\
-+   CFLAGS = $(EXTCFLAGS)\
-+\
- default:\
--   LTTNG_KERNELDIR=$(KERNELDIR) $(MAKE) -C $(KERNELDIR) M=$(PWD) modules\
-+   LTTNG_KERNELDIR=$(KERNEL_SRC) $(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules\
-\
- modules_install:\
--   LTTNG_KERNELDIR=$(KERNELDIR) $(MAKE) -C $(KERNELDIR) M=$(PWD) modules_install\
-+   LTTNG_KERNELDIR=$(KERNEL_SRC) $(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules_install\
-\
- clean:\
--   LTTNG_KERNELDIR=$(KERNELDIR) $(MAKE) -C $(KERNELDIR) M=$(PWD) clean\
-+   LTTNG_KERNELDIR=$(KERNEL_SRC) $(MAKE) -C $(KERNEL_SRC) M=$(PWD) clean\
-\
- %.i: %.c\
--   LTTNG_KERNELDIR=$(KERNELDIR) $(MAKE) -C $(KERNELDIR) M=$(PWD) $@\
-+   LTTNG_KERNELDIR=$(KERNEL_SRC) $(MAKE) -C $(KERNEL_SRC) M=$(PWD) $@\
- endif # KERNELRELEASE\
-Index: git/probes/Makefile\
-===================================================================\
---- git.orig/probes/Makefile\
-+++ git/probes/Makefile\
-@@ -267,18 +267,18 @@ endif\
- endif\
-\
- else\
--   KERNELDIR ?= /lib/modules/$(shell uname -r)/build\
-+   KERNEL_SRC ?= /lib/modules/$(shell uname -r)/build\
-    PWD := $(shell pwd)\
-    CFLAGS = $(EXTCFLAGS)\
-\
- default:\
--   $(MAKE) -C $(KERNELDIR) M=$(PWD) modules\
-+   $(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules\
-\
- modules_install:\
--   $(MAKE) -C $(KERNELDIR) M=$(PWD) modules_install\
-+   $(MAKE) -C $(KERNEL_SRC) M=$(PWD) modules_install\
-    /sbin/depmod -a\
-\
- clean:\
--   $(MAKE) -C $(KERNELDIR) M=$(PWD) clean\
-+   $(MAKE) -C $(KERNEL_SRC) M=$(PWD) clean\
-\
- endif}
---Apple-Mail=_1900F289-9BB9-4810-B1C9-A151AE3B7F2E
+--Apple-Mail=_C069000D-478A-4C20-9937-3482CD942D74
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/html;
 	charset=utf-8
@@ -681,35 +495,30 @@ Content-Type: text/html;
 <html><head><meta http-equiv=3D"Content-Type" content=3D"text/html =
 charset=3Dutf-8"></head><body style=3D"word-wrap: break-word; =
 -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" =
-class=3D""><div class=3D""><div class=3D""><br class=3D""><div><blockquote=
- type=3D"cite" class=3D""><div class=3D"">On Mar 31, 2016, at 10:50 AM, =
-Jonathan Rajotte &lt;<a href=3D"mailto:jonathan.r.julien@gmail.com" =
+class=3D"">Hi Jonathan,<div class=3D""><br class=3D""></div><div =
+class=3D"">I am still encountering the similar problem, but log detail =
+is some different.</div><div class=3D"">Would you try the build with =
+this linux version and lttng-modules 2.7.x? Here is a repo that I =
+use</div><div class=3D""><br class=3D""></div><div =
+class=3D"">git@github.com:JunhoSuh/linux-3.2.65-1-deb7u2.git&nbsp;</div><d=
+iv class=3D""><br class=3D""></div><div class=3D"">Thanks~</div><div =
+class=3D""><br class=3D""><div><blockquote type=3D"cite" class=3D""><div =
+class=3D"">On Mar 31, 2016, at 10:46 AM, Jonathan Rajotte &lt;<a =
+href=3D"mailto:jonathan.r.julien@gmail.com" =
 class=3D"">jonathan.r.julien@gmail.com</a>&gt; wrote:</div><br =
 class=3D"Apple-interchange-newline"><div class=3D""><div dir=3D"ltr" =
-class=3D"">Hi Junho,<div class=3D""><br class=3D""></div><div =
-class=3D"">Also, it looks like you are building via OpenEmbedded/yocto. =
-Could you provide us with more information on your environnement =
-(oe/yocto version,recipe etc.).</div><div class=3D""><br =
-class=3D""></div><div class=3D"">Thanks</div></div><div =
-class=3D"gmail_extra"><br class=3D""><div class=3D"gmail_quote">On Wed, =
-Mar 30, 2016 at 9:46 PM, Jonathan Rajotte <span dir=3D"ltr" =
-class=3D"">&lt;<a href=3D"mailto:jonathan.r.julien@gmail.com" =
-target=3D"_blank" class=3D"">jonathan.r.julien@gmail.com</a>&gt;</span> =
-wrote:<br class=3D""><blockquote class=3D"gmail_quote" style=3D"margin:0 =
-0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div dir=3D"ltr" =
 class=3D"">Hi Junho,<div class=3D""><br class=3D""></div><div =
 class=3D"">Can you reproduce this with the latest 2.7 stable branch of =
 lttng-modules or master ?</div><div class=3D""><br class=3D""></div><div =
 class=3D"">Also there is a newer release for 2.6 which is v2.6.4 so you =
 might want to try this also.</div><div class=3D""><br =
 class=3D""></div><div class=3D"">Cheers</div></div><div =
-class=3D"gmail_extra"><br class=3D""><div class=3D"gmail_quote"><div =
-class=3D""><div class=3D"h5">On Wed, Mar 30, 2016 at 9:38 PM, Junho Suh =
-<span dir=3D"ltr" class=3D"">&lt;<a href=3D"mailto:redrattus@gmail.com" =
-target=3D"_blank" class=3D"">redrattus@gmail.com</a>&gt;</span> =
-wrote:<br class=3D""></div></div><blockquote class=3D"gmail_quote" =
-style=3D"margin:0 0 0 .8ex;border-left:1px #ccc =
-solid;padding-left:1ex"><div class=3D""><div class=3D"h5"><div =
+class=3D"gmail_extra"><br class=3D""><div class=3D"gmail_quote">On Wed, =
+Mar 30, 2016 at 9:38 PM, Junho Suh <span dir=3D"ltr" class=3D"">&lt;<a =
+href=3D"mailto:redrattus@gmail.com" target=3D"_blank" =
+class=3D"">redrattus@gmail.com</a>&gt;</span> wrote:<br =
+class=3D""><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 =
+.8ex;border-left:1px #ccc solid;padding-left:1ex"><div =
 style=3D"word-wrap:break-word" class=3D"">Hi,<br class=3D""><br =
 class=3D"">I am currently building the LTTng 2.6.1 against the linux =
 kernel 3.2.65.<br class=3D"">When building lttng-modules, I get the =
@@ -1095,35 +904,25 @@ command.<br class=3D"">| ERROR: Function failed: do_compile (log file is =
 located at =
 /home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
 g-modules/2.6.1-r0/temp/log.do_compile.22702)</div></div><br =
-class=3D""></div></div>_______________________________________________<br =
-class=3D"">
+class=3D"">_______________________________________________<br class=3D"">
 lttng-dev mailing list<br class=3D"">
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank" =
+<a href=3D"mailto:lttng-dev@lists.lttng.org" =
 class=3D"">lttng-dev@lists.lttng.org</a><br class=3D"">
 <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
 rel=3D"noreferrer" target=3D"_blank" =
 class=3D"">https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><=
 br class=3D"">
-<br class=3D""></blockquote></div><span class=3D"HOEnZb"><font =
-color=3D"#888888" class=3D""><br class=3D""><br clear=3D"all" =
+<br class=3D""></blockquote></div><br class=3D""><br clear=3D"all" =
 class=3D""><div class=3D""><br class=3D""></div>-- <br class=3D""><div =
-class=3D""><div dir=3D"ltr" class=3D""><div class=3D""><div dir=3D"ltr" =
-class=3D"">Jonathan Rajotte Julien<div class=3D""><br =
-class=3D""></div></div></div></div></div>
-</font></span></div>
-</blockquote></div><br class=3D""><br clear=3D"all" class=3D""><div =
-class=3D""><br class=3D""></div>-- <br class=3D""><div =
 class=3D"gmail_signature"><div dir=3D"ltr" class=3D""><div class=3D""><div=
  dir=3D"ltr" class=3D"">Jonathan Rajotte Julien<div class=3D""><br =
 class=3D""></div></div></div></div></div>
 </div>
-</div></blockquote></div><br class=3D""></div></div></body></html>=
+</div></blockquote></div><br class=3D""></div></body></html>=
 
---Apple-Mail=_1900F289-9BB9-4810-B1C9-A151AE3B7F2E--
+--Apple-Mail=_C069000D-478A-4C20-9937-3482CD942D74--
 
---Apple-Mail=_9F606E02-2130-4F80-B879-7E275E8E5A70--
-
---===============4690128004415256290==
+--===============2806272189378189107==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -1133,4 +932,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============4690128004415256290==--
+--===============2806272189378189107==--
