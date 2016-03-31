@@ -1,24 +1,21 @@
-From: Yuxin Ren <ryx@gwmail.gwu.edu>
-Subject: Re: real time Userspace RCU
-Date: Thu, 31 Mar 2016 09:20:07 +0800
-Message-ID: <CAAKbDregDg9y4UfKMESBekYW3Vrt=DFrbVvS_ut80QXCpwMELw__4480.39564439586$1459387228$gmane$org@mail.gmail.com>
-References: <CAAKbDrcMU2rgStU1uFFg1Syk-B4ZOU2R7aC0On946gCXJ5DnMg@mail.gmail.com>
- <1138868550.112232059.1457635938477.JavaMail.zimbra@polymtl.ca>
- <CAAKbDrdac6jYEu4kjNq8kzCxQkdxJGBHN2+fFCh9wOiotoSYiw@mail.gmail.com>
- <1899542687.22326.1457643185957.JavaMail.zimbra@efficios.com>
- <20160311114507.GQ3452@linux.vnet.ibm.com>
- <1882016137.22940.1457704838823.JavaMail.zimbra@efficios.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Junho Suh <redrattus@gmail.com>
+Subject: Building lttng-modules against linux 3.2.65
+Date: Thu, 31 Mar 2016 10:38:55 +0900
+Message-ID: <FB820BF5-3F00-4E08-870A-906953D29BBC__32307.5658795007$1459388364$gmane$org@gmail.com>
+Mime-Version: 1.0 (Mac OS X Mail 9.2 \(3112\))
+Content-Type: multipart/mixed; boundary="===============3368737389623989137=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lf0-f67.google.com (mail-lf0-f67.google.com
- [209.85.215.67])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 5535FA2EC8
- for <lttng-dev@lists.lttng.org>; Thu, 31 Mar 2016 01:20:08 +0000 (UTC)
-Received: by mail-lf0-f67.google.com with SMTP id c62so6652813lfc.2
- for <lttng-dev@lists.lttng.org>; Wed, 30 Mar 2016 18:20:08 -0700 (PDT)
-In-Reply-To: <1882016137.22940.1457704838823.JavaMail.zimbra@efficios.com>
+Received: from mail-io0-f174.google.com (mail-io0-f174.google.com
+ [209.85.223.174])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id CB0A6A2EC8
+ for <lttng-dev@lists.lttng.org>; Thu, 31 Mar 2016 01:39:01 +0000 (UTC)
+Received: by mail-io0-f174.google.com with SMTP id a129so89565259ioe.0
+ for <lttng-dev@lists.lttng.org>; Wed, 30 Mar 2016 18:39:01 -0700 (PDT)
+Received: from [172.23.146.137] ([203.236.3.225])
+ by smtp.gmail.com with ESMTPSA id b9sm9420986igx.22.2016.03.30.18.38.58
+ for <lttng-dev@lists.lttng.org>
+ (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+ Wed, 30 Mar 2016 18:38:59 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -28,81 +25,832 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-VGhhbmsgeW91IGFsbCEhCgpJIGFncmVlIFVSQ1UgZG9lcyB0aW1pbmcgcXVpdGUgd2VsbC4KQnV0
-IGFyZSB0aGVyZSBhbnkgZm9ybWFsIHJlc3BvbnNlIHRpbWUgYW5hbHlzaXMgZm9yIFVSQ1UvUkNV
-IChib3RoCnJlYWQgIGFuZCB1cGRhdGUgcGF0aCk/Ck9yIGNvdWxkIGFueW9uZSBndWlkZSBtZSBo
-b3cgdG8gZG8gUlRBIGZvciBVUkNVL1JDVT8KClRoYW5rcyBhZ2Fpbi4KCk9uIEZyaSwgTWFyIDEx
-LCAyMDE2IGF0IDEwOjAwIFBNLCBNYXRoaWV1IERlc25veWVycwo8bWF0aGlldS5kZXNub3llcnNA
-ZWZmaWNpb3MuY29tPiB3cm90ZToKPiAtLS0tLSBPbiBNYXIgMTEsIDIwMTYsIGF0IDY6NDUgQU0s
-IFBhdWwgRS4gTWNLZW5uZXkgcGF1bG1ja0BsaW51eC52bmV0LmlibS5jb20gd3JvdGU6Cj4KPj4g
-T24gVGh1LCBNYXIgMTAsIDIwMTYgYXQgMDg6NTM6MDVQTSArMDAwMCwgTWF0aGlldSBEZXNub3ll
-cnMgd3JvdGU6Cj4+PiAtLS0tLSBPbiBNYXIgMTAsIDIwMTYsIGF0IDM6MzMgUE0sIFl1eGluIFJl
-biByeXhAZ3dtYWlsLmd3dS5lZHUgd3JvdGU6Cj4+Pgo+Pj4gPiBUaGFuayB5b3UgZm9yIHlvdXIg
-cmVwbHkuCj4+PiA+Cj4+PiA+IEkgd2FudCB0byBnZW5lcmFsbHkgdW5kZXJzdGFuZCBob3cgdG8g
-YXBwbHkgdXJjdSB0byByZWFsIHRpbWUgc3lzdGVtcy4KPj4+ID4gSSBrbm93IHJlYWwgdGltZSBz
-eXN0ZW0gZm9jdXMgb24gcHJlZGljdGFiaWxpdHkgb24gYm90aCB0aW1pbmcgYW5kCj4+PiA+IG1l
-bW9yeSBjb25zdW1wdGlvbi4KPj4+ID4gU28gaG93IGRvZXMgcmVhbCB0aW1lIHVyY3Ugc3VwcG9y
-dCBwcmVkaWN0YWJpbGl0eT8KPj4+ID4gQ291bGQgeW91IHByb3ZpZGUgbWUgc29tZSBwYXBlcnMs
-IGRvY3VtZW50cyBvciBhbnkgbWF0ZXJpYWxzIGFib3V0IGFueQo+Pj4gPiBhc3BlY3Qgb2YgcmVh
-bCB0aW1lIHVyY3U/Cj4+Pgo+Pj4gQWRkaW5nIFBhdWwgRS4gTWNLZW5uZXkgaW4gQ0MsIHdobyBt
-YXkgaGF2ZSBzb21lIHRob3VnaHRzIG9uIHRoaXMKPj4+IHRvcGljLgo+Pgo+PiBVUkNVIGRvZXMg
-dGltaW5nIHF1aXRlIHdlbGwsIGdpdmVuIHRoYXQgdGhlIHJlYWQtc2lkZSBwcmltaXRpdmVzIGVh
-Y2gKPj4gZXhlY3V0ZSBhIGZpeGVkIHNlcXVlbmNlIG9mIGluc3RydWN0aW9ucy4gIFVwZGF0ZXMg
-dXNpbmcgY2FsbF9yY3UoKQo+PiBjYW4gYmUgdXNlZCB0byBtaW5pbWl6ZSB1cGRhdGUtc2lkZSBs
-YXRlbmN5LCBidXQgaWYgeW91IG5lZWQgdG8gYm91bmQKPj4gbWVtb3J5IG92ZXJoZWFkLCB0aGUg
-YmVzdCB3YXkgdG8gZG8gdGhhdCBpcyB0byBtYWtlIHN1cmUgdGhhdCB1cGRhdGVzCj4+IGFyZSBu
-b3Qgb24gdGhlIGNyaXRpY2FsIHBhdGgsIGFuZCB0aGVuIHVzZSBzeW5jaHJvbml6ZV9yY3UoKSBp
-bnN0ZWFkCj4+IG9mIGNhbGxfcmN1KCkuICBJbiB0aGF0IGNhc2UsIHRoZSB0b3RhbCBhbW91bnQg
-b2YgbWVtb3J5IHdhaXRpbmcgZm9yCj4+IHJlY2xhbWF0aW9uIGlzIGJvdW5kZWQgYnkgdGhlIG1h
-eGltdW0gc2l6ZSBvZiBhbiBSQ1UtcHJvdGVjdGVkIG1lbW9yeQo+PiBibG9jayB0aW1lcyB0aGUg
-bnVtYmVyIG9mIHRocmVhZHMuCj4KPiBBbiBpbnRlcm1lZGlhdGUgc29sdXRpb24gaWYgYm90aCB1
-cGRhdGUgdGhyb3VnaHB1dCBhbmQgYm91bmRlZC1tZW1vcnkKPiBhcmUgcmVxdWlyZWQgKGJ1dCB0
-aGUgYXBwbGljYXRpb24gd291bGQgbm90IGhhdmUgcmVhbC10aW1lIGNvbnN0cmFpbnRzCj4gb24g
-dXBkYXRlcykgd291bGQgYmUgdG8gdXNlIHRoZSBkZWZlcl9yY3UoKSBBUEkgaW4gbGlidXJjdS4g
-SXQgYW1vcnRpemVzCj4gdGhlIGNvc3Qgb2Ygc3luY2hyb25pemVfcmN1KCkgb3ZlciBtYW55IGRl
-ZmVyX3JjdSgpIGNhbGxzIHdpdGggYSB3b3JrZXIKPiB0aHJlYWQsIGJ1dCBvbmx5IHVwIHRvIGFu
-IHVwcGVyIGJvdW5kLiBXaGVuIHRoZSB1cHBlciBib3VuZCBpcyByZWFjaGVkLAo+IHRoZSBkZWZl
-ciBxdWV1ZSBjYWxsIGVtcHRpZXMgdGhlIGRlZmVyIHF1ZXVlIGl0c2VsZi4KPgo+IFRoYW5rcywK
-Pgo+IE1hdGhpZXUKPgo+Pgo+PiBTbyBjYW4geW91IGRlc2lnbiB5b3VyIGFwcGxpY2F0aW9uIHNv
-IHRoYXQgdXBkYXRlcyBhcmUgb2ZmIHRoZSBjcml0aWNhbAo+PiBwYXRoPyAgSWYgc28sIHlvdSBj
-YW4gZ2V0IGJvdGggYm91bmRlZCByZWFkLXNpZGUgYWNjZXNzZXMgYW5kIGJvdW5kZWQKPj4gbWVt
-b3J5IGZvb3RwcmludC4KPj4KPj4gVGhpcyBvZiBjb3Vyc2UgYXNzdW1lcyB0aGF0IHlvdXIgZGF0
-YSBzdHJ1Y3R1cmVzIGFyZSBzaW1wbGUgZW5vdWdoCj4+IHRoYXQgcmVhZGVycyBkb24ndCBuZWVk
-IHRvIHVzZSByZXRyeSB0ZWNobmlxdWVzLgo+Pgo+PiBUaGUgZm9sbG93aW5nIGluZm8gbWlnaHQg
-YmUgaGVscGZ1bDoKPj4KPj4gaHR0cDovL3d3dzIucmRyb3AuY29tL3VzZXJzL3BhdWxtY2svcmVh
-bHRpbWUvcGFwZXIvRGV0U3luY1JDVS4yMDA5LjA4LjE4YS5wZGYKPj4gaHR0cDovL3d3dzIucmRy
-b3AuY29tL3VzZXJzL3BhdWxtY2svcmVhbHRpbWUvcGFwZXIvRGV0U3luY1JDVS4yMDA5LjA5LjI5
-YS5wZGYKPj4KPj4gaHR0cDovL3d3dzIucmRyb3AuY29tL3VzZXJzL3BhdWxtY2svcmVhbHRpbWUv
-cGFwZXIvUlRMV1MyMDEyb2NjY1JULjIwMTIuMTAuMTllLnBkZgo+Pgo+PiBJdCBhbHNvIGRlcGVu
-ZHMgb24geW91ciB0aW1lZnJhbWUuICBNaWNyb3NlY29uZHM/ICBMaWZlIGlzIGhhcmQuCj4+IE1p
-bGxpc2Vjb25kcz8gIENhcmUgaXMgcmVxdWlyZWQsIGJ1dCB5b3UgaGF2ZSBhIGZhaXIgYW1vdW50
-IG9mIGZyZWVkb20uCj4+IFNlY29uZHM/ICBMaWZlIGlzIG5vdCBzbyBoYXJkLiAgVW5sZXNzIHlv
-dSBuZWVkIHRvIGRvIHR3byBzZWNvbmRzIG9mCj4+IGNvbXB1dGF0aW9uIGluIG9uZSBzZWNvbmQg
-b3Igc29tZSBzdWNoLiAgOy0pCj4+Cj4+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIFRoYW54LCBQYXVsCj4+Cj4+PiBUaGFua3MsCj4+Pgo+Pj4g
-TWF0aGlldQo+Pj4KPj4+ID4KPj4+ID4gVGhhbmtzIGFnYWluIQo+Pj4gPgo+Pj4gPiBPbiBUaHUs
-IE1hciAxMCwgMjAxNiBhdCAxOjUyIFBNLCBNaWNoZWwgRGFnZW5haXMKPj4+ID4gPG1pY2hlbC5k
-YWdlbmFpc0Bwb2x5bXRsLmNhPiB3cm90ZToKPj4+ID4+IFJlYWwtdGltZSBhbmQgZW1iZWRkZWQg
-c3lzdGVtcyBpcyBhbiBpbXBvcnRhbnQgY3VycmVudCBmb2N1cyBmb3IgdGhlIExUVG5nCj4+PiA+
-PiB0b29sY2hhaW4gcmVzZWFyY2guIERvIHlvdSBoYXZlIHNwZWNpZmljIG5lZWRzIGZvciB1c2Vy
-c3BhY2UgUkNVPwo+Pj4gPj4KPj4+ID4+IC0tLS0tIE1haWwgb3JpZ2luYWwgLS0tLS0KPj4+ID4+
-PiBIaSwKPj4+ID4+Pgo+Pj4gPj4+ICBJcyB0aGVyZSBhbnkgd29yayBvciByZXNlYXJjaCBhYm91
-dCBVc2Vyc3BhY2UgUkNVIG9uIHJlYWwgdGltZSBvcgo+Pj4gPj4+IGVtYmVkZGVkIHN5c3RlbXM/
-Cj4+PiA+Pj4gQW55IGluZm9ybWF0aW9uIGlzIHdlbGNvbWUuCj4+PiA+Pj4KPj4+ID4+PiBUaGFu
-a3MgYSBsb3QhCj4+PiA+Pj4gWXV4aW4KPj4+ID4+PiBfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwo+Pj4gPj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4+
-ID4+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+PiA+Pj4gaHR0cHM6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+Pj4gPj4+Cj4+PiA+IF9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+PiA+IGx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKPj4+ID4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+Pj4gPiBo
-dHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
-Cj4+Pgo+Pj4gLS0KPj4+IE1hdGhpZXUgRGVzbm95ZXJzCj4+PiBFZmZpY2lPUyBJbmMuCj4+PiBo
-dHRwOi8vd3d3LmVmZmljaW9zLmNvbQo+Cj4gLS0KPiBNYXRoaWV1IERlc25veWVycwo+IEVmZmlj
-aU9TIEluYy4KPiBodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
-L2xpc3RpbmZvL2x0dG5nLWRldgo=
+
+--===============3368737389623989137==
+Content-Type: multipart/alternative; boundary="Apple-Mail=_0AB674FB-093B-4B39-9242-1925FB466E02"
+
+
+--Apple-Mail=_0AB674FB-093B-4B39-9242-1925FB466E02
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=utf-8
+
+Hi,
+
+I am currently building the LTTng 2.6.1 against the linux kernel 3.2.65.
+When building lttng-modules, I get the below error:
+
+It seems the proper definition of "page->index" can not be found in the =
+right header file.
+I also patch the Makefile by following the link =
+(https://lists.lttng.org/pipermail/lttng-dev/2013-September/021322.html =
+<https://lists.lttng.org/pipermail/lttng-dev/2013-September/021322.html>) =
+which has similar problem, but it doesn=E2=80=99t work.
+
+Anybody can help me?
+
+Thanks~
+
+=3D=3D=3D
+Log data follows:
+| DEBUG: Executing shell function do_compile
+| NOTE: make -j 2 -e MAKEFLAGS=3D =
+KERNEL_SRC=3D/home/wedge/workspace/ops-build/build/tmp/work-shared/wedge/k=
+ernel-source =
+KERNEL_PATH=3D/home/wedge/workspace/ops-build/build/tmp/work-shared/wedge/=
+kernel-source KERNEL_VERSION=3D3.2.65 CC=3Dx86_64-openswitch-linux-gcc  =
+LD=3Dx86_64-openswitch-linux-ld.bfd  AR=3Dx86_64-openswitch-linux-ar  =
+O=3D/home/wedge/workspace/ops-build/build/tmp/work-shared/wedge/kernel-bui=
+ld-artifacts
+| =
+LTTNG_KERNELDIR=3D/home/wedge/workspace/ops-build/build/tmp/work-shared/we=
+dge/kernel-source make -C =
+/home/wedge/workspace/ops-build/build/tmp/work-shared/wedge/kernel-source =
+M=3D/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/=
+lttng-modules/2.6.1-r0/git modules
+| make[1]: Entering directory =
+`/home/wedge/workspace/ops-build/build/tmp/work-shared/wedge/kernel-source=
+'
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/Makefile:250: CONFIG_KALLSYMS_ALL is =
+disabled, therefore probe "writeback" is disabled. Rebuild your kernel =
+with this configuration option enabled in order to trace this subsystem.
+|   CC [M]  =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/lttng-probe-ext3.o
+| In file included from =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/define_trace.h:136:0,
+|                  from =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/ext3.=
+h:902,
+|                  from =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/lttng-probe-ext3.c:49:
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h: In function =
+'__event_probe__ext3__page_op':
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:253:24: error: =
+dereferencing pointer to incomplete type
+|    tp_assign(index, page->index)
+|                         ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:904:2: note: in definition of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS_CODE'
+|   _assign              \
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:154:21: note: in expansion of macro 'PARAMS'
+|    PARAMS(_tstruct), PARAMS(_assign), PARAMS(_print))
+|                      ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:240:1: note: in =
+expansion of macro 'LTTNG_TRACEPOINT_EVENT_CLASS'
+|  LTTNG_TRACEPOINT_EVENT_CLASS(ext3__page_op,
+|  ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:252:2: note: in =
+expansion of macro 'TP_fast_assign'
+|   TP_fast_assign(
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:253:3: note: in =
+expansion of macro 'tp_assign'
+|    tp_assign(index, page->index)
+|    ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:254:22: error: =
+dereferencing pointer to incomplete type
+|    tp_assign(ino, page->mapping->host->i_ino)
+|                       ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:904:2: note: in definition of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS_CODE'
+|   _assign              \
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:154:21: note: in expansion of macro 'PARAMS'
+|    PARAMS(_tstruct), PARAMS(_assign), PARAMS(_print))
+|                      ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:240:1: note: in =
+expansion of macro 'LTTNG_TRACEPOINT_EVENT_CLASS'
+|  LTTNG_TRACEPOINT_EVENT_CLASS(ext3__page_op,
+|  ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:252:2: note: in =
+expansion of macro 'TP_fast_assign'
+|   TP_fast_assign(
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:254:3: note: in =
+expansion of macro 'tp_assign'
+|    tp_assign(ino, page->mapping->host->i_ino)
+|    ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:255:22: error: =
+dereferencing pointer to incomplete type
+|    tp_assign(dev, page->mapping->host->i_sb->s_dev)
+|                       ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:904:2: note: in definition of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS_CODE'
+|   _assign              \
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:154:21: note: in expansion of macro 'PARAMS'
+|    PARAMS(_tstruct), PARAMS(_assign), PARAMS(_print))
+|                      ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:240:1: note: in =
+expansion of macro 'LTTNG_TRACEPOINT_EVENT_CLASS'
+|  LTTNG_TRACEPOINT_EVENT_CLASS(ext3__page_op,
+|  ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:252:2: note: in =
+expansion of macro 'TP_fast_assign'
+|   TP_fast_assign(
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:255:3: note: in =
+expansion of macro 'tp_assign'
+|    tp_assign(dev, page->mapping->host->i_sb->s_dev)
+|    ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h: In function =
+'__event_probe__ext3_invalidatepage':
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:344:24: error: =
+dereferencing pointer to incomplete type
+|    tp_assign(index, page->index)
+|                         ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:904:2: note: in definition of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS_CODE'
+|   _assign              \
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:154:21: note: in expansion of macro 'PARAMS'
+|    PARAMS(_tstruct), PARAMS(_assign), PARAMS(_print))
+|                      ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:41:2: note: in expansion of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS'
+|   LTTNG_TRACEPOINT_EVENT_CLASS(map,    \
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:45:9: note: in expansion of macro 'PARAMS'
+|          PARAMS(assign),    \
+|          ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:107:2: note: in expansion of macro =
+'LTTNG_TRACEPOINT_EVENT_MAP'
+|   LTTNG_TRACEPOINT_EVENT_MAP(name, name,    \
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:111:4: note: in expansion of macro 'PARAMS'
+|     PARAMS(assign),     \
+|     ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:330:1: note: in =
+expansion of macro 'LTTNG_TRACEPOINT_EVENT'
+|  LTTNG_TRACEPOINT_EVENT(ext3_invalidatepage,
+|  ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:343:2: note: in =
+expansion of macro 'TP_fast_assign'
+|   TP_fast_assign(
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:344:3: note: in =
+expansion of macro 'tp_assign'
+|    tp_assign(index, page->index)
+|    ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:346:37: error: =
+dereferencing pointer to incomplete type
+|    tp_assign(ino, (unsigned long)page->mapping->host->i_ino)
+|                                      ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:904:2: note: in definition of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS_CODE'
+|   _assign              \
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:154:21: note: in expansion of macro 'PARAMS'
+|    PARAMS(_tstruct), PARAMS(_assign), PARAMS(_print))
+|                      ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:41:2: note: in expansion of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS'
+|   LTTNG_TRACEPOINT_EVENT_CLASS(map,    \
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:45:9: note: in expansion of macro 'PARAMS'
+|          PARAMS(assign),    \
+|          ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:107:2: note: in expansion of macro =
+'LTTNG_TRACEPOINT_EVENT_MAP'
+|   LTTNG_TRACEPOINT_EVENT_MAP(name, name,    \
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:111:4: note: in expansion of macro 'PARAMS'
+|     PARAMS(assign),     \
+|     ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:330:1: note: in =
+expansion of macro 'LTTNG_TRACEPOINT_EVENT'
+|  LTTNG_TRACEPOINT_EVENT(ext3_invalidatepage,
+|  ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:343:2: note: in =
+expansion of macro 'TP_fast_assign'
+|   TP_fast_assign(
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:346:3: note: in =
+expansion of macro 'tp_assign'
+|    tp_assign(ino, (unsigned long)page->mapping->host->i_ino)
+|    ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:347:37: error: =
+dereferencing pointer to incomplete type
+|    tp_assign(dev, (unsigned long)page->mapping->host->i_sb->s_dev)
+|                                      ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:904:2: note: in definition of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS_CODE'
+|   _assign              \
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:154:21: note: in expansion of macro 'PARAMS'
+|    PARAMS(_tstruct), PARAMS(_assign), PARAMS(_print))
+|                      ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:41:2: note: in expansion of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS'
+|   LTTNG_TRACEPOINT_EVENT_CLASS(map,    \
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:45:9: note: in expansion of macro 'PARAMS'
+|          PARAMS(assign),    \
+|          ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:107:2: note: in expansion of macro =
+'LTTNG_TRACEPOINT_EVENT_MAP'
+|   LTTNG_TRACEPOINT_EVENT_MAP(name, name,    \
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:111:4: note: in expansion of macro 'PARAMS'
+|     PARAMS(assign),     \
+|     ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:330:1: note: in =
+expansion of macro 'LTTNG_TRACEPOINT_EVENT'
+|  LTTNG_TRACEPOINT_EVENT(ext3_invalidatepage,
+|  ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:343:2: note: in =
+expansion of macro 'TP_fast_assign'
+|   TP_fast_assign(
+|   ^
+| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:347:3: note: in =
+expansion of macro 'tp_assign'
+|    tp_assign(dev, (unsigned long)page->mapping->host->i_sb->s_dev)
+|    ^
+| make[4]: *** =
+[/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/ltt=
+ng-modules/2.6.1-r0/git/probes/lttng-probe-ext3.o] Error 1
+| make[3]: *** =
+[/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/ltt=
+ng-modules/2.6.1-r0/git/probes] Error 2
+| make[2]: *** =
+[_module_/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-l=
+inux/lttng-modules/2.6.1-r0/git] Error 2
+| make[1]: *** [sub-make] Error 2
+| make[1]: Leaving directory =
+`/home/wedge/workspace/ops-build/build/tmp/work-shared/wedge/kernel-source=
+'
+| make: *** [default] Error 2
+| ERROR: oe_runmake failed
+| WARNING: exit code 1 from a shell command.
+| ERROR: Function failed: do_compile (log file is located at =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/temp/log.do_compile.22702)=
+
+--Apple-Mail=_0AB674FB-093B-4B39-9242-1925FB466E02
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html;
+	charset=utf-8
+
+<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html =
+charset=3Dutf-8"></head><body style=3D"word-wrap: break-word; =
+-webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" =
+class=3D"">Hi,<br class=3D""><br class=3D"">I am currently building the =
+LTTng 2.6.1 against the linux kernel 3.2.65.<br class=3D"">When building =
+lttng-modules, I get the below error:<br class=3D""><br class=3D"">It =
+seems the proper definition of "page-&gt;index" can not be found in the =
+right header file.<br class=3D"">I also patch the Makefile by following =
+the link (<a =
+href=3D"https://lists.lttng.org/pipermail/lttng-dev/2013-September/021322.=
+html" =
+class=3D"">https://lists.lttng.org/pipermail/lttng-dev/2013-September/0213=
+22.html</a>) which has similar problem, but it doesn=E2=80=99t work.<br =
+class=3D""><br class=3D"">Anybody can help me?<br class=3D""><br =
+class=3D"">Thanks~<div class=3D""><br class=3D"">=3D=3D=3D<br =
+class=3D"">Log data follows:<br class=3D"">| DEBUG: Executing shell =
+function do_compile<br class=3D"">| NOTE: make -j 2 -e MAKEFLAGS=3D =
+KERNEL_SRC=3D/home/wedge/workspace/ops-build/build/tmp/work-shared/wedge/k=
+ernel-source =
+KERNEL_PATH=3D/home/wedge/workspace/ops-build/build/tmp/work-shared/wedge/=
+kernel-source KERNEL_VERSION=3D3.2.65 CC=3Dx86_64-openswitch-linux-gcc =
+&nbsp;LD=3Dx86_64-openswitch-linux-ld.bfd =
+&nbsp;AR=3Dx86_64-openswitch-linux-ar =
+&nbsp;O=3D/home/wedge/workspace/ops-build/build/tmp/work-shared/wedge/kern=
+el-build-artifacts<br class=3D"">| =
+LTTNG_KERNELDIR=3D/home/wedge/workspace/ops-build/build/tmp/work-shared/we=
+dge/kernel-source make -C =
+/home/wedge/workspace/ops-build/build/tmp/work-shared/wedge/kernel-source =
+M=3D/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/=
+lttng-modules/2.6.1-r0/git modules<br class=3D"">| make[1]: Entering =
+directory =
+`/home/wedge/workspace/ops-build/build/tmp/work-shared/wedge/kernel-source=
+'<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/Makefile:250: CONFIG_KALLSYMS_ALL is =
+disabled, therefore probe "writeback" is disabled. Rebuild your kernel =
+with this configuration option enabled in order to trace this =
+subsystem.<br class=3D"">| &nbsp;&nbsp;CC [M] =
+&nbsp;/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linu=
+x/lttng-modules/2.6.1-r0/git/probes/lttng-probe-ext3.o<br class=3D"">| =
+In file included from =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/define_trace.h:136:0,<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;from =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/ext3.=
+h:902,<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;from =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/lttng-probe-ext3.c:49:<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h: In function =
+'__event_probe__ext3__page_op':<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:253:24: error: =
+dereferencing pointer to incomplete type<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;tp_assign(index, page-&gt;index)<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br=
+ class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:904:2: note: in definition of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS_CODE'<br class=3D"">| &nbsp;&nbsp;_assign =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;\<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:154:21: note: in expansion of macro =
+'PARAMS'<br class=3D"">| &nbsp;&nbsp;&nbsp;PARAMS(_tstruct), =
+PARAMS(_assign), PARAMS(_print))<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:240:1: note: in =
+expansion of macro 'LTTNG_TRACEPOINT_EVENT_CLASS'<br class=3D"">| =
+&nbsp;LTTNG_TRACEPOINT_EVENT_CLASS(ext3__page_op,<br class=3D"">| =
+&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:252:2: note: in =
+expansion of macro 'TP_fast_assign'<br class=3D"">| =
+&nbsp;&nbsp;TP_fast_assign(<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:253:3: note: in =
+expansion of macro 'tp_assign'<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;tp_assign(index, page-&gt;index)<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:254:22: error: =
+dereferencing pointer to incomplete type<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;tp_assign(ino, page-&gt;mapping-&gt;host-&gt;i_ino)<br =
+class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br =
+class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:904:2: note: in definition of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS_CODE'<br class=3D"">| &nbsp;&nbsp;_assign =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;\<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:154:21: note: in expansion of macro =
+'PARAMS'<br class=3D"">| &nbsp;&nbsp;&nbsp;PARAMS(_tstruct), =
+PARAMS(_assign), PARAMS(_print))<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:240:1: note: in =
+expansion of macro 'LTTNG_TRACEPOINT_EVENT_CLASS'<br class=3D"">| =
+&nbsp;LTTNG_TRACEPOINT_EVENT_CLASS(ext3__page_op,<br class=3D"">| =
+&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:252:2: note: in =
+expansion of macro 'TP_fast_assign'<br class=3D"">| =
+&nbsp;&nbsp;TP_fast_assign(<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:254:3: note: in =
+expansion of macro 'tp_assign'<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;tp_assign(ino, page-&gt;mapping-&gt;host-&gt;i_ino)<br =
+class=3D"">| &nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:255:22: error: =
+dereferencing pointer to incomplete type<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;tp_assign(dev, =
+page-&gt;mapping-&gt;host-&gt;i_sb-&gt;s_dev)<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br =
+class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:904:2: note: in definition of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS_CODE'<br class=3D"">| &nbsp;&nbsp;_assign =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;\<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:154:21: note: in expansion of macro =
+'PARAMS'<br class=3D"">| &nbsp;&nbsp;&nbsp;PARAMS(_tstruct), =
+PARAMS(_assign), PARAMS(_print))<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:240:1: note: in =
+expansion of macro 'LTTNG_TRACEPOINT_EVENT_CLASS'<br class=3D"">| =
+&nbsp;LTTNG_TRACEPOINT_EVENT_CLASS(ext3__page_op,<br class=3D"">| =
+&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:252:2: note: in =
+expansion of macro 'TP_fast_assign'<br class=3D"">| =
+&nbsp;&nbsp;TP_fast_assign(<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:255:3: note: in =
+expansion of macro 'tp_assign'<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;tp_assign(dev, =
+page-&gt;mapping-&gt;host-&gt;i_sb-&gt;s_dev)<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h: In function =
+'__event_probe__ext3_invalidatepage':<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:344:24: error: =
+dereferencing pointer to incomplete type<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;tp_assign(index, page-&gt;index)<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br=
+ class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:904:2: note: in definition of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS_CODE'<br class=3D"">| &nbsp;&nbsp;_assign =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;\<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:154:21: note: in expansion of macro =
+'PARAMS'<br class=3D"">| &nbsp;&nbsp;&nbsp;PARAMS(_tstruct), =
+PARAMS(_assign), PARAMS(_print))<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:41:2: note: in expansion of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS'<br class=3D"">| =
+&nbsp;&nbsp;LTTNG_TRACEPOINT_EVENT_CLASS(map, &nbsp;&nbsp;&nbsp;\<br =
+class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:45:9: note: in expansion of macro 'PARAMS'<br =
+class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PARAMS(assign), =
+&nbsp;&nbsp;&nbsp;\<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:107:2: note: in expansion of macro =
+'LTTNG_TRACEPOINT_EVENT_MAP'<br class=3D"">| =
+&nbsp;&nbsp;LTTNG_TRACEPOINT_EVENT_MAP(name, name, =
+&nbsp;&nbsp;&nbsp;\<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:111:4: note: in expansion of macro 'PARAMS'<br =
+class=3D"">| &nbsp;&nbsp;&nbsp;&nbsp;PARAMS(assign), =
+&nbsp;&nbsp;&nbsp;&nbsp;\<br class=3D"">| &nbsp;&nbsp;&nbsp;&nbsp;^<br =
+class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:330:1: note: in =
+expansion of macro 'LTTNG_TRACEPOINT_EVENT'<br class=3D"">| =
+&nbsp;LTTNG_TRACEPOINT_EVENT(ext3_invalidatepage,<br class=3D"">| =
+&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:343:2: note: in =
+expansion of macro 'TP_fast_assign'<br class=3D"">| =
+&nbsp;&nbsp;TP_fast_assign(<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:344:3: note: in =
+expansion of macro 'tp_assign'<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;tp_assign(index, page-&gt;index)<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:346:37: error: =
+dereferencing pointer to incomplete type<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;tp_assign(ino, (unsigned =
+long)page-&gt;mapping-&gt;host-&gt;i_ino)<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:904:2: note: in definition of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS_CODE'<br class=3D"">| &nbsp;&nbsp;_assign =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;\<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:154:21: note: in expansion of macro =
+'PARAMS'<br class=3D"">| &nbsp;&nbsp;&nbsp;PARAMS(_tstruct), =
+PARAMS(_assign), PARAMS(_print))<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:41:2: note: in expansion of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS'<br class=3D"">| =
+&nbsp;&nbsp;LTTNG_TRACEPOINT_EVENT_CLASS(map, &nbsp;&nbsp;&nbsp;\<br =
+class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:45:9: note: in expansion of macro 'PARAMS'<br =
+class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PARAMS(assign), =
+&nbsp;&nbsp;&nbsp;\<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:107:2: note: in expansion of macro =
+'LTTNG_TRACEPOINT_EVENT_MAP'<br class=3D"">| =
+&nbsp;&nbsp;LTTNG_TRACEPOINT_EVENT_MAP(name, name, =
+&nbsp;&nbsp;&nbsp;\<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:111:4: note: in expansion of macro 'PARAMS'<br =
+class=3D"">| &nbsp;&nbsp;&nbsp;&nbsp;PARAMS(assign), =
+&nbsp;&nbsp;&nbsp;&nbsp;\<br class=3D"">| &nbsp;&nbsp;&nbsp;&nbsp;^<br =
+class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:330:1: note: in =
+expansion of macro 'LTTNG_TRACEPOINT_EVENT'<br class=3D"">| =
+&nbsp;LTTNG_TRACEPOINT_EVENT(ext3_invalidatepage,<br class=3D"">| =
+&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:343:2: note: in =
+expansion of macro 'TP_fast_assign'<br class=3D"">| =
+&nbsp;&nbsp;TP_fast_assign(<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:346:3: note: in =
+expansion of macro 'tp_assign'<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;tp_assign(ino, (unsigned =
+long)page-&gt;mapping-&gt;host-&gt;i_ino)<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:347:37: error: =
+dereferencing pointer to incomplete type<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;tp_assign(dev, (unsigned =
+long)page-&gt;mapping-&gt;host-&gt;i_sb-&gt;s_dev)<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:904:2: note: in definition of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS_CODE'<br class=3D"">| &nbsp;&nbsp;_assign =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;\<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:154:21: note: in expansion of macro =
+'PARAMS'<br class=3D"">| &nbsp;&nbsp;&nbsp;PARAMS(_tstruct), =
+PARAMS(_assign), PARAMS(_print))<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:41:2: note: in expansion of macro =
+'LTTNG_TRACEPOINT_EVENT_CLASS'<br class=3D"">| =
+&nbsp;&nbsp;LTTNG_TRACEPOINT_EVENT_CLASS(map, &nbsp;&nbsp;&nbsp;\<br =
+class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:45:9: note: in expansion of macro 'PARAMS'<br =
+class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PARAMS(assign), =
+&nbsp;&nbsp;&nbsp;\<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:107:2: note: in expansion of macro =
+'LTTNG_TRACEPOINT_EVENT_MAP'<br class=3D"">| =
+&nbsp;&nbsp;LTTNG_TRACEPOINT_EVENT_MAP(name, name, =
+&nbsp;&nbsp;&nbsp;\<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/lttng-events.h:111:4: note: in expansion of macro 'PARAMS'<br =
+class=3D"">| &nbsp;&nbsp;&nbsp;&nbsp;PARAMS(assign), =
+&nbsp;&nbsp;&nbsp;&nbsp;\<br class=3D"">| &nbsp;&nbsp;&nbsp;&nbsp;^<br =
+class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:330:1: note: in =
+expansion of macro 'LTTNG_TRACEPOINT_EVENT'<br class=3D"">| =
+&nbsp;LTTNG_TRACEPOINT_EVENT(ext3_invalidatepage,<br class=3D"">| =
+&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:343:2: note: in =
+expansion of macro 'TP_fast_assign'<br class=3D"">| =
+&nbsp;&nbsp;TP_fast_assign(<br class=3D"">| &nbsp;&nbsp;^<br class=3D"">| =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/git/probes/../instrumentation/events/lttng-module/../..=
+/../probes/../instrumentation/events/lttng-module/ext3.h:347:3: note: in =
+expansion of macro 'tp_assign'<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;tp_assign(dev, (unsigned =
+long)page-&gt;mapping-&gt;host-&gt;i_sb-&gt;s_dev)<br class=3D"">| =
+&nbsp;&nbsp;&nbsp;^<br class=3D"">| make[4]: *** =
+[/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/ltt=
+ng-modules/2.6.1-r0/git/probes/lttng-probe-ext3.o] Error 1<br class=3D"">|=
+ make[3]: *** =
+[/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/ltt=
+ng-modules/2.6.1-r0/git/probes] Error 2<br class=3D"">| make[2]: *** =
+[_module_/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-l=
+inux/lttng-modules/2.6.1-r0/git] Error 2<br class=3D"">| make[1]: *** =
+[sub-make] Error 2<br class=3D"">| make[1]: Leaving directory =
+`/home/wedge/workspace/ops-build/build/tmp/work-shared/wedge/kernel-source=
+'<br class=3D"">| make: *** [default] Error 2<br class=3D"">| ERROR: =
+oe_runmake failed<br class=3D"">| WARNING: exit code 1 from a shell =
+command.<br class=3D"">| ERROR: Function failed: do_compile (log file is =
+located at =
+/home/wedge/workspace/ops-build/build/tmp/work/wedge-openswitch-linux/lttn=
+g-modules/2.6.1-r0/temp/log.do_compile.22702)</div></body></html>=
+
+--Apple-Mail=_0AB674FB-093B-4B39-9242-1925FB466E02--
+
+--===============3368737389623989137==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============3368737389623989137==--
