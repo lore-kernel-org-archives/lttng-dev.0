@@ -1,14 +1,34 @@
-From: Lichuanbao <lichuanbao@hisilicon.com>
-Subject: lttng trace kernel on arm64
-Date: Fri, 8 Apr 2016 06:28:08 +0000
-Message-ID: <BECE94944F67D640AA66E9BA499F7CE853A12931__37697.6099833429$1460247547$gmane$org@SZXEMA509-MBX.china.huawei.com>
+From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
+Subject: Re: lttng trace kernel on arm64
+Date: Mon, 11 Apr 2016 10:14:16 -0400
+Message-ID: <570BB138.6030705__46685.6926134371$1460384063$gmane$org@efficios.com>
+References: <BECE94944F67D640AA66E9BA499F7CE853A12931@SZXEMA509-MBX.china.huawei.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1167125715659360222=="
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from szxga03-in.huawei.com (unknown [119.145.14.66])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 3FF2CA2E10
- for <lttng-dev@lists.lttng.org>; Fri,  8 Apr 2016 06:28:18 +0000 (UTC)
-Content-Language: zh-CN
+Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id CC561A21B3
+ for <lttng-dev@lists.lttng.org>; Mon, 11 Apr 2016 14:14:19 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id DC194340359
+ for <lttng-dev@lists.lttng.org>; Mon, 11 Apr 2016 14:14:19 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id cBKCSyi0eSKg for <lttng-dev@lists.lttng.org>;
+ Mon, 11 Apr 2016 14:14:19 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 1AA1534041B
+ for <lttng-dev@lists.lttng.org>; Mon, 11 Apr 2016 14:14:19 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id h8Jj2U_pO20J for <lttng-dev@lists.lttng.org>;
+ Mon, 11 Apr 2016 14:14:19 +0000 (UTC)
+Received: from [172.16.0.165] (cable-192.222.213.99.electronicbox.net
+ [192.222.213.99])
+ by mail.efficios.com (Postfix) with ESMTPSA id 9F1C8340359
+ for <lttng-dev@lists.lttng.org>; Mon, 11 Apr 2016 14:14:18 +0000 (UTC)
+In-Reply-To: <BECE94944F67D640AA66E9BA499F7CE853A12931@SZXEMA509-MBX.china.huawei.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -18,419 +38,129 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1167125715659360222==
-Content-Language: zh-CN
-Content-Type: multipart/alternative;
-	boundary="_000_BECE94944F67D640AA66E9BA499F7CE853A12931SZXEMA509MBXchi_"
-
---_000_BECE94944F67D640AA66E9BA499F7CE853A12931SZXEMA509MBXchi_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-   I want to use lttng trace kernel event,I installed lttng-tools 2.7.1 ltt=
-ng-ust 2.7.2 lttng-modules 2.7.2 on my arm64 board,
-And then I create my session like sub command as root,but there is nothing =
-result to view.
-
-    # lttng create
-    # lttng enable-event --kernel --all
-    # lttng start
-    # sleep 10               # let the system generate some activity
-    # lttng stop
-    # lttng view
-# lttng destroy
-
--bash-4.3# lttng view
-Trace directory: /root/lttng-traces/auto-20160407-211248
-
-[error] Cannot open any trace for reading.
-
-[error] opening trace "/root/lttng-traces/auto-20160407-211248" for reading=
-.
-
-[error] none of the specified trace paths could be opened.
-
-Get thes session daemon log as follow:
-
-bash-4.3# lttng-sessiond -vvv
-DEBUG1 - 21:52:15.396991 [5621/5621]: run_as signal handler set for SIGTERM=
- and SIGINT (in set_worker_sighandlers() at runas.c:600)
-DEBUG1 - 21:52:15.397410 [5620/5620]: Health check time delta in seconds se=
-t to 20 (in health_init() at health.c:74)
-DEBUG1 - 21:52:15.397661 [5620/5620]: epoll set max size is 27037798 (in co=
-mpat_epoll_set_max_size() at compat-epoll.c:290)
-DEBUG3 - 21:52:15.397838 [5620/5620]: Creating LTTng run directory: /var/ru=
-n/lttng (in create_lttng_rundir() at main.c:5156)
-DEBUG1 - 21:52:15.397852 [5620/5622]: [ht-thread] startup. (in thread_ht_cl=
-eanup() at ht-cleanup.c:37)
-DEBUG2 - 21:52:15.397986 [5620/5620]: Kernel consumer err path: /var/run/lt=
-tng/kconsumerd/error (in main() at main.c:5601)
-DEBUG2 - 21:52:15.398070 [5620/5620]: Kernel consumer cmd path: /var/run/lt=
-tng/kconsumerd/command (in main() at main.c:5603)
-DEBUG3 - 21:52:15.398034 [5620/5622]: [ht-thread] Polling. (in thread_ht_cl=
-eanup() at ht-cleanup.c:67)
-Error: Could not get lock file /var/run/lttng/lttng-sessiond.lck, another i=
-nstance is running.
-DEBUG1 - 21:52:15.398240 [5620/5620]: Cleanup sessiond (in sessiond_cleanup=
-() at main.c:622)
-DEBUG1 - 21:52:15.398294 [5620/5620]: Removing sessiond and consumerd conte=
-nt of directory /var/run/lttng (in sessiond_cleanup() at main.c:641)
-DEBUG1 - 21:52:15.398321 [5620/5620]: Removing /var/run/lttng/lttng-session=
-d.pid (in sessiond_cleanup() at main.c:647)
-DEBUG1 - 21:52:15.398372 [5620/5620]: Removing /var/run/lttng/agent.port (i=
-n sessiond_cleanup() at main.c:652)
-DEBUG1 - 21:52:15.398420 [5620/5620]: Removing /var/run/lttng/kconsumerd/er=
-ror (in sessiond_cleanup() at main.c:659)
-DEBUG1 - 21:52:15.398472 [5620/5620]: Removing directory /var/run/lttng/kco=
-nsumerd (in sessiond_cleanup() at main.c:665)
-DEBUG1 - 21:52:15.398526 [5620/5620]: Removing /var/run/lttng/ustconsumerd3=
-2/error (in sessiond_cleanup() at main.c:672)
-DEBUG1 - 21:52:15.398579 [5620/5620]: Removing directory /var/run/lttng/ust=
-consumerd32 (in sessiond_cleanup() at main.c:678)
-DEBUG1 - 21:52:15.398620 [5620/5620]: Removing /var/run/lttng/ustconsumerd6=
-4/error (in sessiond_cleanup() at main.c:685)
-DEBUG1 - 21:52:15.398673 [5620/5620]: Removing directory /var/run/lttng/ust=
-consumerd64 (in sessiond_cleanup() at main.c:691)
-DEBUG1 - 21:52:15.398734 [5620/5620]: Cleaning up all sessions (in sessiond=
-_cleanup() at main.c:694)
-DEBUG1 - 21:52:15.398765 [5620/5620]: Cleaning up all agent apps (in sessio=
-nd_cleanup() at main.c:711)
-DEBUG1 - 21:52:15.398789 [5620/5620]: Closing all UST sockets (in sessiond_=
-cleanup() at main.c:714)
-DEBUG2 - 21:52:15.398813 [5620/5620]: UST app cleaning registered apps hash=
- table (in ust_app_clean_list() at ust-app.c:3702)
-DEBUG3 - 21:52:15.398837 [5620/5620]: Buffer registry destroy all registry =
-(in buffer_reg_destroy_registries() at buffer-registry.c:716)
-DEBUG2 - 21:52:15.398861 [5620/5620]: Closing kernel fd (in sessiond_cleanu=
-p() at main.c:719)
-DEBUG1 - 21:52:15.398884 [5620/5620]: Unloading kernel modules (in sessiond=
-_cleanup() at main.c:726)
-DEBUG1 - 21:52:15.403580 [5620/5620]: Modprobe removal successful lttng-kre=
-tprobes (in modprobe_remove_lttng() at modprobe.c:126)
-DEBUG1 - 21:52:15.407855 [5620/5620]: Modprobe removal successful lttng-kpr=
-obes (in modprobe_remove_lttng() at modprobe.c:126)
-DEBUG1 - 21:52:15.412073 [5620/5620]: Modprobe removal successful lttng-ftr=
-ace (in modprobe_remove_lttng() at modprobe.c:126)
-DEBUG1 - 21:52:15.416256 [5620/5620]: Modprobe removal successful lttng-typ=
-es (in modprobe_remove_lttng() at modprobe.c:126)
-DEBUG1 - 21:52:15.420593 [5620/5620]: Modprobe removal successful lttng-rin=
-g-buffer-metadata-mmap-client (in modprobe_remove_lttng() at modprobe.c:126=
-)
-DEBUG1 - 21:52:15.425108 [5620/5620]: Modprobe removal successful lttng-rin=
-g-buffer-client-mmap-overwrite (in modprobe_remove_lttng() at modprobe.c:12=
-6)
-DEBUG1 - 21:52:15.429745 [5620/5620]: Modprobe removal successful lttng-rin=
-g-buffer-client-mmap-discard (in modprobe_remove_lttng() at modprobe.c:126)
-Error: Unable to remove module lttng-ring-buffer-metadata-client
-DEBUG1 - 21:52:15.438779 [5620/5620]: Modprobe removal successful lttng-rin=
-g-buffer-client-overwrite (in modprobe_remove_lttng() at modprobe.c:126)
-Error: Unable to remove module lttng-ring-buffer-client-discard
-Error: Unable to remove module lttng-lib-ring-buffer
-Error: Unable to remove module lttng-tracer
-DEBUG3 - 21:52:15.452135 [5620/5622]: [ht-thread] Returning from poll on 2 =
-fds. (in thread_ht_cleanup() at ht-cleanup.c:74)
-DEBUG1 - 21:52:15.452186 [5620/5622]: [ht-cleanup] quit. (in thread_ht_clea=
-nup() at ht-cleanup.c:153)
-DEBUG1 - 21:52:15.452225 [5620/5622]: [ht-cleanup] Thread terminates. (in t=
-hread_ht_cleanup() at ht-cleanup.c:164)
-DEBUG1 - 21:52:15.452333 [5620/5620]: Cleaning up options (in sessiond_clea=
-nup_options() at main.c:773)
-DEBUG1 - 21:52:15.453308 [5620/5620]: lttng-runas terminated with status co=
-de 0 (in run_as_destroy_worker() at runas.c:737)
-DEBUG1 - 21:52:15.453349 [5620/5620]: *** assert failed :-) *** =3D=3D> Mat=
-thew, BEET driven development works! (in sessiond_cleanup_options() at main=
-.c:805)
-
-
-can anybody help me ?
-
-thanks very much.
-
-lichuanbao
-
-ShenZhen in China
-
-
-
---_000_BECE94944F67D640AA66E9BA499F7CE853A12931SZXEMA509MBXchi_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 12 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:SimSun;
-	panose-1:2 1 6 0 3 1 1 1 1 1;}
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-@font-face
-	{font-family:SimSun;
-	panose-1:2 1 6 0 3 1 1 1 1 1;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0cm;
-	margin-bottom:.0001pt;
-	text-align:justify;
-	text-justify:inter-ideograph;
-	font-size:10.5pt;
-	font-family:"Calibri","sans-serif";}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:blue;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:purple;
-	text-decoration:underline;}
-p.MsoPlainText, li.MsoPlainText, div.MsoPlainText
-	{mso-style-priority:99;
-	mso-style-link:"\7EAF\6587\672C Char";
-	margin:0cm;
-	margin-bottom:.0001pt;
-	font-size:10.5pt;
-	font-family:"Calibri","sans-serif";}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri","sans-serif";
-	color:windowtext;}
-span.Char
-	{mso-style-name:"\7EAF\6587\672C Char";
-	mso-style-priority:99;
-	mso-style-link:\7EAF\6587\672C;
-	font-family:"Calibri","sans-serif";}
-.MsoChpDefault
-	{mso-style-type:export-only;}
-/* Page Definitions */
-@page WordSection1
-	{size:612.0pt 792.0pt;
-	margin:72.0pt 90.0pt 72.0pt 90.0pt;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"ZH-CN" link=3D"blue" vlink=3D"purple" style=3D"text-justify-t=
-rim:punctuation">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Hi,<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">&nbsp;&nbsp; I want to use lttn=
-g trace kernel event,I installed lttng-tools 2.7.1 lttng-ust 2.7.2 lttng-mo=
-dules 2.7.2 on my arm64 board,<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">And then I create my session li=
-ke sub command as root,but there is nothing result to view.<o:p></o:p></spa=
-n></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">&nbsp;&nbsp;&nbsp; # lttng crea=
-te<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">&nbsp;&nbsp;&nbsp; # lttng enab=
-le-event --kernel --all<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">&nbsp;&nbsp;&nbsp; # lttng star=
-t<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">&nbsp;&nbsp;&nbsp; # sleep 10&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p; # let the system generate some activity<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">&nbsp;&nbsp;&nbsp; # lttng stop=
-<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">&nbsp;&nbsp;&nbsp; # lttng view=
-<o:p></o:p></span></p>
-<p class=3D"MsoNormal" style=3D"text-indent:21.0pt"><span lang=3D"EN-US"># =
-lttng destroy<o:p></o:p></span></p>
-<p class=3D"MsoNormal" style=3D"text-indent:21.0pt"><span lang=3D"EN-US"><o=
-:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">-bash-4.3# lttng view<o:p></o:p=
-></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Trace directory: /root/lttng-tr=
-aces/auto-20160407-211248<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">[error] Cannot open any trace f=
-or reading.<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">[error] opening trace &quot;/ro=
-ot/lttng-traces/auto-20160407-211248&quot; for reading.<o:p></o:p></span></=
-p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">[error] none of the specified t=
-race paths could be opened.<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Get thes session daemon log as =
-follow:<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">bash-4.3# lttng-sessiond -vvv&n=
-bsp; <o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.396991 [5621/=
-5621]: run_as signal handler set for SIGTERM and SIGINT (in set_worker_sigh=
-andlers() at runas.c:600)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.397410 [5620/=
-5620]: Health check time delta in seconds set to 20 (in health_init() at he=
-alth.c:74)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.397661 [5620/=
-5620]: epoll set max size is 27037798 (in compat_epoll_set_max_size() at co=
-mpat-epoll.c:290)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG3 - 21:52:15.397838 [5620/=
-5620]: Creating LTTng run directory: /var/run/lttng (in create_lttng_rundir=
-() at main.c:5156)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.397852 [5620/=
-5622]: [ht-thread] startup. (in thread_ht_cleanup() at ht-cleanup.c:37)<o:p=
-></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG2 - 21:52:15.397986 [5620/=
-5620]: Kernel consumer err path: /var/run/lttng/kconsumerd/error (in main()=
- at main.c:5601)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG2 - 21:52:15.398070 [5620/=
-5620]: Kernel consumer cmd path: /var/run/lttng/kconsumerd/command (in main=
-() at main.c:5603)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG3 - 21:52:15.398034 [5620/=
-5622]: [ht-thread] Polling. (in thread_ht_cleanup() at ht-cleanup.c:67)<o:p=
-></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Error: Could not get lock file =
-/var/run/lttng/lttng-sessiond.lck, another instance is running.<o:p></o:p><=
-/span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398240 [5620/=
-5620]: Cleanup sessiond (in sessiond_cleanup() at main.c:622)<o:p></o:p></s=
-pan></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398294 [5620/=
-5620]: Removing sessiond and consumerd content of directory /var/run/lttng =
-(in sessiond_cleanup() at main.c:641)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398321 [5620/=
-5620]: Removing /var/run/lttng/lttng-sessiond.pid (in sessiond_cleanup() at=
- main.c:647)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398372 [5620/=
-5620]: Removing /var/run/lttng/agent.port (in sessiond_cleanup() at main.c:=
-652)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398420 [5620/=
-5620]: Removing /var/run/lttng/kconsumerd/error (in sessiond_cleanup() at m=
-ain.c:659)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398472 [5620/=
-5620]: Removing directory /var/run/lttng/kconsumerd (in sessiond_cleanup() =
-at main.c:665)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398526 [5620/=
-5620]: Removing /var/run/lttng/ustconsumerd32/error (in sessiond_cleanup() =
-at main.c:672)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398579 [5620/=
-5620]: Removing directory /var/run/lttng/ustconsumerd32 (in sessiond_cleanu=
-p() at main.c:678)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398620 [5620/=
-5620]: Removing /var/run/lttng/ustconsumerd64/error (in sessiond_cleanup() =
-at main.c:685)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398673 [5620/=
-5620]: Removing directory /var/run/lttng/ustconsumerd64 (in sessiond_cleanu=
-p() at main.c:691)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398734 [5620/=
-5620]: Cleaning up all sessions (in sessiond_cleanup() at main.c:694)<o:p><=
-/o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398765 [5620/=
-5620]: Cleaning up all agent apps (in sessiond_cleanup() at main.c:711)<o:p=
-></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398789 [5620/=
-5620]: Closing all UST sockets (in sessiond_cleanup() at main.c:714)<o:p></=
-o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG2 - 21:52:15.398813 [5620/=
-5620]: UST app cleaning registered apps hash table (in ust_app_clean_list()=
- at ust-app.c:3702)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG3 - 21:52:15.398837 [5620/=
-5620]: Buffer registry destroy all registry (in buffer_reg_destroy_registri=
-es() at buffer-registry.c:716)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG2 - 21:52:15.398861 [5620/=
-5620]: Closing kernel fd (in sessiond_cleanup() at main.c:719)<o:p></o:p></=
-span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.398884 [5620/=
-5620]: Unloading kernel modules (in sessiond_cleanup() at main.c:726)<o:p><=
-/o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.403580 [5620/=
-5620]: Modprobe removal successful lttng-kretprobes (in modprobe_remove_ltt=
-ng() at modprobe.c:126)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.407855 [5620/=
-5620]: Modprobe removal successful lttng-kprobes (in modprobe_remove_lttng(=
-) at modprobe.c:126)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.412073 [5620/=
-5620]: Modprobe removal successful lttng-ftrace (in modprobe_remove_lttng()=
- at modprobe.c:126)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.416256 [5620/=
-5620]: Modprobe removal successful lttng-types (in modprobe_remove_lttng() =
-at modprobe.c:126)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.420593 [5620/=
-5620]: Modprobe removal successful lttng-ring-buffer-metadata-mmap-client (=
-in modprobe_remove_lttng() at modprobe.c:126)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.425108 [5620/=
-5620]: Modprobe removal successful lttng-ring-buffer-client-mmap-overwrite =
-(in modprobe_remove_lttng() at modprobe.c:126)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.429745 [5620/=
-5620]: Modprobe removal successful lttng-ring-buffer-client-mmap-discard (i=
-n modprobe_remove_lttng() at modprobe.c:126)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Error: Unable to remove module =
-lttng-ring-buffer-metadata-client<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.438779 [5620/=
-5620]: Modprobe removal successful lttng-ring-buffer-client-overwrite (in m=
-odprobe_remove_lttng() at modprobe.c:126)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Error: Unable to remove module =
-lttng-ring-buffer-client-discard<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Error: Unable to remove module =
-lttng-lib-ring-buffer<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">Error: Unable to remove module =
-lttng-tracer<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG3 - 21:52:15.452135 [5620/=
-5622]: [ht-thread] Returning from poll on 2 fds. (in thread_ht_cleanup() at=
- ht-cleanup.c:74)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.452186 [5620/=
-5622]: [ht-cleanup] quit. (in thread_ht_cleanup() at ht-cleanup.c:153)<o:p>=
-</o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.452225 [5620/=
-5622]: [ht-cleanup] Thread terminates. (in thread_ht_cleanup() at ht-cleanu=
-p.c:164)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.452333 [5620/=
-5620]: Cleaning up options (in sessiond_cleanup_options() at main.c:773)<o:=
-p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.453308 [5620/=
-5620]: lttng-runas terminated with status code 0 (in run_as_destroy_worker(=
-) at runas.c:737)<o:p></o:p></span></p>
-<p class=3D"MsoNormal"><span lang=3D"EN-US">DEBUG1 - 21:52:15.453349 [5620/=
-5620]: *** assert failed :-) *** =3D=3D&gt; Matthew, BEET driven developmen=
-t works! (in sessiond_cleanup_options() at main.c:805)<o:p></o:p></span></p=
->
-<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-<p class=3D"MsoPlainText"><span lang=3D"EN-US">can anybody help me ?<o:p></=
-o:p></span></p>
-<p class=3D"MsoPlainText"><span lang=3D"EN-US">thanks very much.<o:p></o:p>=
-</span></p>
-<p class=3D"MsoPlainText"><span lang=3D"EN-US">lichuanbao<o:p></o:p></span>=
-</p>
-<p class=3D"MsoPlainText"><span lang=3D"EN-US">ShenZhen in China<o:p></o:p>=
-</span></p>
-<p class=3D"MsoPlainText"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
-</div>
-</body>
-</html>
-
---_000_BECE94944F67D640AA66E9BA499F7CE853A12931SZXEMA509MBXchi_--
-
-
---===============1167125715659360222==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============1167125715659360222==--
+SGksCgpPbiAyMDE2LTA0LTA4IDAyOjI4IEFNLCBMaWNodWFuYmFvIHdyb3RlOgo+Cj4gSGksCj4K
+PiAgICBJIHdhbnQgdG8gdXNlIGx0dG5nIHRyYWNlIGtlcm5lbCBldmVudCxJIGluc3RhbGxlZCBs
+dHRuZy10b29scyAKPiAyLjcuMSBsdHRuZy11c3QgMi43LjIgbHR0bmctbW9kdWxlcyAyLjcuMiBv
+biBteSBhcm02NCBib2FyZCwKPgoKWW91IGdvdCBtZSBjdXJpb3VzOiBEMDIgPyBEMDMgaGlzaWxp
+Y29uIGJvYXJkID8gOikKCj4gQW5kIHRoZW4gSSBjcmVhdGUgbXkgc2Vzc2lvbiBsaWtlIHN1YiBj
+b21tYW5kIGFzIHJvb3QsYnV0IHRoZXJlIGlzIAo+IG5vdGhpbmcgcmVzdWx0IHRvIHZpZXcuCj4K
+PiAgICAgIyBsdHRuZyBjcmVhdGUKPgo+ICAgICAjIGx0dG5nIGVuYWJsZS1ldmVudCAtLWtlcm5l
+bCAtLWFsbAo+Cj4gICAgICMgbHR0bmcgc3RhcnQKPgo+ICAgICAjIHNsZWVwIDEwICAgICAgICMg
+bGV0IHRoZSBzeXN0ZW0gZ2VuZXJhdGUgc29tZSBhY3Rpdml0eQo+Cj4gICAgICMgbHR0bmcgc3Rv
+cAo+Cj4gICAgICMgbHR0bmcgdmlldwo+Cj4gIyBsdHRuZyBkZXN0cm95Cj4KCkRvZXMgImx0dG5n
+IGxpc3QgLWsiIHJldHVybiBhIGxpc3Qgb2YgZXZlbnRzID8KCj4gLWJhc2gtNC4zIyBsdHRuZyB2
+aWV3Cj4KPiBUcmFjZSBkaXJlY3Rvcnk6IC9yb290L2x0dG5nLXRyYWNlcy9hdXRvLTIwMTYwNDA3
+LTIxMTI0OAo+Cj4gW2Vycm9yXSBDYW5ub3Qgb3BlbiBhbnkgdHJhY2UgZm9yIHJlYWRpbmcuCj4K
+PiBbZXJyb3JdIG9wZW5pbmcgdHJhY2UgIi9yb290L2x0dG5nLXRyYWNlcy9hdXRvLTIwMTYwNDA3
+LTIxMTI0OCIgZm9yIAo+IHJlYWRpbmcuCj4KPiBbZXJyb3JdIG5vbmUgb2YgdGhlIHNwZWNpZmll
+ZCB0cmFjZSBwYXRocyBjb3VsZCBiZSBvcGVuZWQuCj4KPiBHZXQgdGhlcyBzZXNzaW9uIGRhZW1v
+biBsb2cgYXMgZm9sbG93Ogo+Cj4gYmFzaC00LjMjIGx0dG5nLXNlc3Npb25kIC12dnYKPgo+IERF
+QlVHMSAtIDIxOjUyOjE1LjM5Njk5MSBbNTYyMS81NjIxXTogcnVuX2FzIHNpZ25hbCBoYW5kbGVy
+IHNldCBmb3IgCj4gU0lHVEVSTSBhbmQgU0lHSU5UIChpbiBzZXRfd29ya2VyX3NpZ2hhbmRsZXJz
+KCkgYXQgcnVuYXMuYzo2MDApCj4KPiBERUJVRzEgLSAyMTo1MjoxNS4zOTc0MTAgWzU2MjAvNTYy
+MF06IEhlYWx0aCBjaGVjayB0aW1lIGRlbHRhIGluIAo+IHNlY29uZHMgc2V0IHRvIDIwIChpbiBo
+ZWFsdGhfaW5pdCgpIGF0IGhlYWx0aC5jOjc0KQo+Cj4gREVCVUcxIC0gMjE6NTI6MTUuMzk3NjYx
+IFs1NjIwLzU2MjBdOiBlcG9sbCBzZXQgbWF4IHNpemUgaXMgMjcwMzc3OTggCj4gKGluIGNvbXBh
+dF9lcG9sbF9zZXRfbWF4X3NpemUoKSBhdCBjb21wYXQtZXBvbGwuYzoyOTApCj4KPiBERUJVRzMg
+LSAyMTo1MjoxNS4zOTc4MzggWzU2MjAvNTYyMF06IENyZWF0aW5nIExUVG5nIHJ1biBkaXJlY3Rv
+cnk6IAo+IC92YXIvcnVuL2x0dG5nIChpbiBjcmVhdGVfbHR0bmdfcnVuZGlyKCkgYXQgbWFpbi5j
+OjUxNTYpCj4KPiBERUJVRzEgLSAyMTo1MjoxNS4zOTc4NTIgWzU2MjAvNTYyMl06IFtodC10aHJl
+YWRdIHN0YXJ0dXAuIChpbiAKPiB0aHJlYWRfaHRfY2xlYW51cCgpIGF0IGh0LWNsZWFudXAuYzoz
+NykKPgo+IERFQlVHMiAtIDIxOjUyOjE1LjM5Nzk4NiBbNTYyMC81NjIwXTogS2VybmVsIGNvbnN1
+bWVyIGVyciBwYXRoOiAKPiAvdmFyL3J1bi9sdHRuZy9rY29uc3VtZXJkL2Vycm9yIChpbiBtYWlu
+KCkgYXQgbWFpbi5jOjU2MDEpCj4KPiBERUJVRzIgLSAyMTo1MjoxNS4zOTgwNzAgWzU2MjAvNTYy
+MF06IEtlcm5lbCBjb25zdW1lciBjbWQgcGF0aDogCj4gL3Zhci9ydW4vbHR0bmcva2NvbnN1bWVy
+ZC9jb21tYW5kIChpbiBtYWluKCkgYXQgbWFpbi5jOjU2MDMpCj4KPiBERUJVRzMgLSAyMTo1Mjox
+NS4zOTgwMzQgWzU2MjAvNTYyMl06IFtodC10aHJlYWRdIFBvbGxpbmcuIChpbiAKPiB0aHJlYWRf
+aHRfY2xlYW51cCgpIGF0IGh0LWNsZWFudXAuYzo2NykKPgo+IEVycm9yOiBDb3VsZCBub3QgZ2V0
+IGxvY2sgZmlsZSAvdmFyL3J1bi9sdHRuZy9sdHRuZy1zZXNzaW9uZC5sY2ssIAo+IGFub3RoZXIg
+aW5zdGFuY2UgaXMgcnVubmluZy4KPgoKVGhpcyBsaW5lIHN1Z2dlc3QgdGhhdCBhbm90aGVyIGlu
+c3RhbmNlIHdhcyBydW5uaW5nLgoKTWFrZSBzdXJlIHRvIGtpbGwgYWxsIGx0dG5nLXNlc3Npb25k
+IGluc3RhbmNlIGJlZm9yZSBzdGFydGluZyBvbmUgdG8gCm1ha2Ugc3VyZSB5b3UgaGF2ZSB0aGUg
+YWN0dWFsIGxvZyBvZiB0aGUgdXNlZCBzZXNzaW9uZC4KCkNoZWVycwoKCj4gREVCVUcxIC0gMjE6
+NTI6MTUuMzk4MjQwIFs1NjIwLzU2MjBdOiBDbGVhbnVwIHNlc3Npb25kIChpbiAKPiBzZXNzaW9u
+ZF9jbGVhbnVwKCkgYXQgbWFpbi5jOjYyMikKPgo+IERFQlVHMSAtIDIxOjUyOjE1LjM5ODI5NCBb
+NTYyMC81NjIwXTogUmVtb3Zpbmcgc2Vzc2lvbmQgYW5kIGNvbnN1bWVyZCAKPiBjb250ZW50IG9m
+IGRpcmVjdG9yeSAvdmFyL3J1bi9sdHRuZyAoaW4gc2Vzc2lvbmRfY2xlYW51cCgpIGF0IG1haW4u
+Yzo2NDEpCj4KPiBERUJVRzEgLSAyMTo1MjoxNS4zOTgzMjEgWzU2MjAvNTYyMF06IFJlbW92aW5n
+IAo+IC92YXIvcnVuL2x0dG5nL2x0dG5nLXNlc3Npb25kLnBpZCAoaW4gc2Vzc2lvbmRfY2xlYW51
+cCgpIGF0IG1haW4uYzo2NDcpCj4KPiBERUJVRzEgLSAyMTo1MjoxNS4zOTgzNzIgWzU2MjAvNTYy
+MF06IFJlbW92aW5nIAo+IC92YXIvcnVuL2x0dG5nL2FnZW50LnBvcnQgKGluIHNlc3Npb25kX2Ns
+ZWFudXAoKSBhdCBtYWluLmM6NjUyKQo+Cj4gREVCVUcxIC0gMjE6NTI6MTUuMzk4NDIwIFs1NjIw
+LzU2MjBdOiBSZW1vdmluZyAKPiAvdmFyL3J1bi9sdHRuZy9rY29uc3VtZXJkL2Vycm9yIChpbiBz
+ZXNzaW9uZF9jbGVhbnVwKCkgYXQgbWFpbi5jOjY1OSkKPgo+IERFQlVHMSAtIDIxOjUyOjE1LjM5
+ODQ3MiBbNTYyMC81NjIwXTogUmVtb3ZpbmcgZGlyZWN0b3J5IAo+IC92YXIvcnVuL2x0dG5nL2tj
+b25zdW1lcmQgKGluIHNlc3Npb25kX2NsZWFudXAoKSBhdCBtYWluLmM6NjY1KQo+Cj4gREVCVUcx
+IC0gMjE6NTI6MTUuMzk4NTI2IFs1NjIwLzU2MjBdOiBSZW1vdmluZyAKPiAvdmFyL3J1bi9sdHRu
+Zy91c3Rjb25zdW1lcmQzMi9lcnJvciAoaW4gc2Vzc2lvbmRfY2xlYW51cCgpIGF0IG1haW4uYzo2
+NzIpCj4KPiBERUJVRzEgLSAyMTo1MjoxNS4zOTg1NzkgWzU2MjAvNTYyMF06IFJlbW92aW5nIGRp
+cmVjdG9yeSAKPiAvdmFyL3J1bi9sdHRuZy91c3Rjb25zdW1lcmQzMiAoaW4gc2Vzc2lvbmRfY2xl
+YW51cCgpIGF0IG1haW4uYzo2NzgpCj4KPiBERUJVRzEgLSAyMTo1MjoxNS4zOTg2MjAgWzU2MjAv
+NTYyMF06IFJlbW92aW5nIAo+IC92YXIvcnVuL2x0dG5nL3VzdGNvbnN1bWVyZDY0L2Vycm9yIChp
+biBzZXNzaW9uZF9jbGVhbnVwKCkgYXQgbWFpbi5jOjY4NSkKPgo+IERFQlVHMSAtIDIxOjUyOjE1
+LjM5ODY3MyBbNTYyMC81NjIwXTogUmVtb3ZpbmcgZGlyZWN0b3J5IAo+IC92YXIvcnVuL2x0dG5n
+L3VzdGNvbnN1bWVyZDY0IChpbiBzZXNzaW9uZF9jbGVhbnVwKCkgYXQgbWFpbi5jOjY5MSkKPgo+
+IERFQlVHMSAtIDIxOjUyOjE1LjM5ODczNCBbNTYyMC81NjIwXTogQ2xlYW5pbmcgdXAgYWxsIHNl
+c3Npb25zIChpbiAKPiBzZXNzaW9uZF9jbGVhbnVwKCkgYXQgbWFpbi5jOjY5NCkKPgo+IERFQlVH
+MSAtIDIxOjUyOjE1LjM5ODc2NSBbNTYyMC81NjIwXTogQ2xlYW5pbmcgdXAgYWxsIGFnZW50IGFw
+cHMgKGluIAo+IHNlc3Npb25kX2NsZWFudXAoKSBhdCBtYWluLmM6NzExKQo+Cj4gREVCVUcxIC0g
+MjE6NTI6MTUuMzk4Nzg5IFs1NjIwLzU2MjBdOiBDbG9zaW5nIGFsbCBVU1Qgc29ja2V0cyAoaW4g
+Cj4gc2Vzc2lvbmRfY2xlYW51cCgpIGF0IG1haW4uYzo3MTQpCj4KPiBERUJVRzIgLSAyMTo1Mjox
+NS4zOTg4MTMgWzU2MjAvNTYyMF06IFVTVCBhcHAgY2xlYW5pbmcgcmVnaXN0ZXJlZCBhcHBzIAo+
+IGhhc2ggdGFibGUgKGluIHVzdF9hcHBfY2xlYW5fbGlzdCgpIGF0IHVzdC1hcHAuYzozNzAyKQo+
+Cj4gREVCVUczIC0gMjE6NTI6MTUuMzk4ODM3IFs1NjIwLzU2MjBdOiBCdWZmZXIgcmVnaXN0cnkg
+ZGVzdHJveSBhbGwgCj4gcmVnaXN0cnkgKGluIGJ1ZmZlcl9yZWdfZGVzdHJveV9yZWdpc3RyaWVz
+KCkgYXQgYnVmZmVyLXJlZ2lzdHJ5LmM6NzE2KQo+Cj4gREVCVUcyIC0gMjE6NTI6MTUuMzk4ODYx
+IFs1NjIwLzU2MjBdOiBDbG9zaW5nIGtlcm5lbCBmZCAoaW4gCj4gc2Vzc2lvbmRfY2xlYW51cCgp
+IGF0IG1haW4uYzo3MTkpCj4KPiBERUJVRzEgLSAyMTo1MjoxNS4zOTg4ODQgWzU2MjAvNTYyMF06
+IFVubG9hZGluZyBrZXJuZWwgbW9kdWxlcyAoaW4gCj4gc2Vzc2lvbmRfY2xlYW51cCgpIGF0IG1h
+aW4uYzo3MjYpCj4KPiBERUJVRzEgLSAyMTo1MjoxNS40MDM1ODAgWzU2MjAvNTYyMF06IE1vZHBy
+b2JlIHJlbW92YWwgc3VjY2Vzc2Z1bCAKPiBsdHRuZy1rcmV0cHJvYmVzIChpbiBtb2Rwcm9iZV9y
+ZW1vdmVfbHR0bmcoKSBhdCBtb2Rwcm9iZS5jOjEyNikKPgo+IERFQlVHMSAtIDIxOjUyOjE1LjQw
+Nzg1NSBbNTYyMC81NjIwXTogTW9kcHJvYmUgcmVtb3ZhbCBzdWNjZXNzZnVsIAo+IGx0dG5nLWtw
+cm9iZXMgKGluIG1vZHByb2JlX3JlbW92ZV9sdHRuZygpIGF0IG1vZHByb2JlLmM6MTI2KQo+Cj4g
+REVCVUcxIC0gMjE6NTI6MTUuNDEyMDczIFs1NjIwLzU2MjBdOiBNb2Rwcm9iZSByZW1vdmFsIHN1
+Y2Nlc3NmdWwgCj4gbHR0bmctZnRyYWNlIChpbiBtb2Rwcm9iZV9yZW1vdmVfbHR0bmcoKSBhdCBt
+b2Rwcm9iZS5jOjEyNikKPgo+IERFQlVHMSAtIDIxOjUyOjE1LjQxNjI1NiBbNTYyMC81NjIwXTog
+TW9kcHJvYmUgcmVtb3ZhbCBzdWNjZXNzZnVsIAo+IGx0dG5nLXR5cGVzIChpbiBtb2Rwcm9iZV9y
+ZW1vdmVfbHR0bmcoKSBhdCBtb2Rwcm9iZS5jOjEyNikKPgo+IERFQlVHMSAtIDIxOjUyOjE1LjQy
+MDU5MyBbNTYyMC81NjIwXTogTW9kcHJvYmUgcmVtb3ZhbCBzdWNjZXNzZnVsIAo+IGx0dG5nLXJp
+bmctYnVmZmVyLW1ldGFkYXRhLW1tYXAtY2xpZW50IChpbiBtb2Rwcm9iZV9yZW1vdmVfbHR0bmco
+KSBhdCAKPiBtb2Rwcm9iZS5jOjEyNikKPgo+IERFQlVHMSAtIDIxOjUyOjE1LjQyNTEwOCBbNTYy
+MC81NjIwXTogTW9kcHJvYmUgcmVtb3ZhbCBzdWNjZXNzZnVsIAo+IGx0dG5nLXJpbmctYnVmZmVy
+LWNsaWVudC1tbWFwLW92ZXJ3cml0ZSAoaW4gbW9kcHJvYmVfcmVtb3ZlX2x0dG5nKCkgYXQgCj4g
+bW9kcHJvYmUuYzoxMjYpCj4KPiBERUJVRzEgLSAyMTo1MjoxNS40Mjk3NDUgWzU2MjAvNTYyMF06
+IE1vZHByb2JlIHJlbW92YWwgc3VjY2Vzc2Z1bCAKPiBsdHRuZy1yaW5nLWJ1ZmZlci1jbGllbnQt
+bW1hcC1kaXNjYXJkIChpbiBtb2Rwcm9iZV9yZW1vdmVfbHR0bmcoKSBhdCAKPiBtb2Rwcm9iZS5j
+OjEyNikKPgo+IEVycm9yOiBVbmFibGUgdG8gcmVtb3ZlIG1vZHVsZSBsdHRuZy1yaW5nLWJ1ZmZl
+ci1tZXRhZGF0YS1jbGllbnQKPgo+IERFQlVHMSAtIDIxOjUyOjE1LjQzODc3OSBbNTYyMC81NjIw
+XTogTW9kcHJvYmUgcmVtb3ZhbCBzdWNjZXNzZnVsIAo+IGx0dG5nLXJpbmctYnVmZmVyLWNsaWVu
+dC1vdmVyd3JpdGUgKGluIG1vZHByb2JlX3JlbW92ZV9sdHRuZygpIGF0IAo+IG1vZHByb2JlLmM6
+MTI2KQo+Cj4gRXJyb3I6IFVuYWJsZSB0byByZW1vdmUgbW9kdWxlIGx0dG5nLXJpbmctYnVmZmVy
+LWNsaWVudC1kaXNjYXJkCj4KPiBFcnJvcjogVW5hYmxlIHRvIHJlbW92ZSBtb2R1bGUgbHR0bmct
+bGliLXJpbmctYnVmZmVyCj4KPiBFcnJvcjogVW5hYmxlIHRvIHJlbW92ZSBtb2R1bGUgbHR0bmct
+dHJhY2VyCj4KPiBERUJVRzMgLSAyMTo1MjoxNS40NTIxMzUgWzU2MjAvNTYyMl06IFtodC10aHJl
+YWRdIFJldHVybmluZyBmcm9tIHBvbGwgCj4gb24gMiBmZHMuIChpbiB0aHJlYWRfaHRfY2xlYW51
+cCgpIGF0IGh0LWNsZWFudXAuYzo3NCkKPgo+IERFQlVHMSAtIDIxOjUyOjE1LjQ1MjE4NiBbNTYy
+MC81NjIyXTogW2h0LWNsZWFudXBdIHF1aXQuIChpbiAKPiB0aHJlYWRfaHRfY2xlYW51cCgpIGF0
+IGh0LWNsZWFudXAuYzoxNTMpCj4KPiBERUJVRzEgLSAyMTo1MjoxNS40NTIyMjUgWzU2MjAvNTYy
+Ml06IFtodC1jbGVhbnVwXSBUaHJlYWQgdGVybWluYXRlcy4gCj4gKGluIHRocmVhZF9odF9jbGVh
+bnVwKCkgYXQgaHQtY2xlYW51cC5jOjE2NCkKPgo+IERFQlVHMSAtIDIxOjUyOjE1LjQ1MjMzMyBb
+NTYyMC81NjIwXTogQ2xlYW5pbmcgdXAgb3B0aW9ucyAoaW4gCj4gc2Vzc2lvbmRfY2xlYW51cF9v
+cHRpb25zKCkgYXQgbWFpbi5jOjc3MykKPgo+IERFQlVHMSAtIDIxOjUyOjE1LjQ1MzMwOCBbNTYy
+MC81NjIwXTogbHR0bmctcnVuYXMgdGVybWluYXRlZCB3aXRoIAo+IHN0YXR1cyBjb2RlIDAgKGlu
+IHJ1bl9hc19kZXN0cm95X3dvcmtlcigpIGF0IHJ1bmFzLmM6NzM3KQo+Cj4gREVCVUcxIC0gMjE6
+NTI6MTUuNDUzMzQ5IFs1NjIwLzU2MjBdOiAqKiogYXNzZXJ0IGZhaWxlZCA6LSkgKioqID09PiAK
+PiBNYXR0aGV3LCBCRUVUIGRyaXZlbiBkZXZlbG9wbWVudCB3b3JrcyEgKGluIHNlc3Npb25kX2Ns
+ZWFudXBfb3B0aW9ucygpIAo+IGF0IG1haW4uYzo4MDUpCj4KPiBjYW4gYW55Ym9keSBoZWxwIG1l
+ID8KPgo+IHRoYW5rcyB2ZXJ5IG11Y2guCj4KPiBsaWNodWFuYmFvCj4KPiBTaGVuWmhlbiBpbiBD
+aGluYQo+Cj4KPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
+PiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
+ZGV2CgotLSAKSm9uYXRoYW4gUi4gSnVsaWVuCkVmZmljaW9zCgpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
+bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
