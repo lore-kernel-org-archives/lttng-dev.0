@@ -1,20 +1,15 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules] Fix: RHEL kernel
-	3.10.0-327.13.1 compat
-Date: Wed, 20 Apr 2016 22:24:56 +0000 (UTC)
-Message-ID: <1374501110.65365.1461191096781.JavaMail.zimbra__46925.8080157035$1461191127$gmane$org@efficios.com>
-References: <1461189005-15862-1-git-send-email-mjeanson@efficios.com>
+Subject: lttng-tools package version out of sync in debian
+	testing/sid
+Date: Thu, 21 Apr 2016 14:01:20 +0000 (UTC)
+Message-ID: <575554471.65774.1461247280368.JavaMail.zimbra__32261.4258192063$1461247305$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 987ACA31EE
- for <lttng-dev@lists.lttng.org>; Wed, 20 Apr 2016 22:25:01 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id A61DE34034F
- for <lttng-dev@lists.lttng.org>; Wed, 20 Apr 2016 22:25:01 +0000 (UTC)
-In-Reply-To: <1461189005-15862-1-git-send-email-mjeanson@efficios.com>
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id CC2BFA322F
+ for <lttng-dev@lists.lttng.org>; Thu, 21 Apr 2016 14:01:24 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,34 +19,30 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Jon Bernard <jbernard@debian.org>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, ftpmaster@debian.org, =?utf-8?Q?St=C3=A9phane?= Graber <stgraber@ubuntu.com>
 List-Id: lttng-dev@lists.lttng.org
 
-bWVyZ2VkIGludG8gbWFzdGVyLCAyLjggYW5kIDIuNywgdGhhbmtzIQoKTWF0aGlldQoKLS0tLS0g
-T24gQXByIDIwLCAyMDE2LCBhdCA1OjUwIFBNLCBNaWNoYWVsIEplYW5zb24gbWplYW5zb25AZWZm
-aWNpb3MuY29tIHdyb3RlOgoKPiBTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFu
-c29uQGVmZmljaW9zLmNvbT4KPiAtLS0KPiBsdHRuZy1zdGF0ZWR1bXAtaW1wbC5jIHwgNiArKysr
-LS0KPiAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQo+IAo+
-IGRpZmYgLS1naXQgYS9sdHRuZy1zdGF0ZWR1bXAtaW1wbC5jIGIvbHR0bmctc3RhdGVkdW1wLWlt
-cGwuYwo+IGluZGV4IDRjMWE5OWQuLmEyNTIwNDMgMTAwNjQ0Cj4gLS0tIGEvbHR0bmctc3RhdGVk
-dW1wLWltcGwuYwo+ICsrKyBiL2x0dG5nLXN0YXRlZHVtcC1pbXBsLmMKPiBAQCAtNDAzLDcgKzQw
-Myw4IEBAIHZvaWQgbHR0bmdfc3RhdGVkdW1wX3Byb2Nlc3NfbnMoc3RydWN0IGx0dG5nX3Nlc3Np
-b24KPiAqc2Vzc2lvbiwKPiAJICovCj4gI2lmIChMSU5VWF9WRVJTSU9OX0NPREUgPj0gS0VSTkVM
-X1ZFUlNJT04oMywxNywwKSB8fCBcCj4gCQlMVFROR19VQlVOVFVfS0VSTkVMX1JBTkdFKDMsMTMs
-MTEsMzYsIDMsMTQsMCwwKSB8fCBcCj4gLQkJTFRUTkdfVUJVTlRVX0tFUk5FTF9SQU5HRSgzLDE2
-LDEsMTEsIDMsMTcsMCwwKSkKPiArCQlMVFROR19VQlVOVFVfS0VSTkVMX1JBTkdFKDMsMTYsMSwx
-MSwgMywxNywwLDApIHx8IFwKPiArCQlMVFROR19SSEVMX0tFUk5FTF9SQU5HRSgzLDEwLDAsMjI5
-LDEzLDAsIDMsMTEsMCwwLDAsMCkpCj4gCXByb3h5ID0gcC0+bnNwcm94eTsKPiAjZWxzZQo+IAly
-Y3VfcmVhZF9sb2NrKCk7Cj4gQEAgLTQyMiw3ICs0MjMsOCBAQCB2b2lkIGx0dG5nX3N0YXRlZHVt
-cF9wcm9jZXNzX25zKHN0cnVjdCBsdHRuZ19zZXNzaW9uCj4gKnNlc3Npb24sCj4gCX0KPiAjaWYg
-KExJTlVYX1ZFUlNJT05fQ09ERSA+PSBLRVJORUxfVkVSU0lPTigzLDE3LDApIHx8IFwKPiAJCUxU
-VE5HX1VCVU5UVV9LRVJORUxfUkFOR0UoMywxMywxMSwzNiwgMywxNCwwLDApIHx8IFwKPiAtCQlM
-VFROR19VQlVOVFVfS0VSTkVMX1JBTkdFKDMsMTYsMSwxMSwgMywxNywwLDApKQo+ICsJCUxUVE5H
-X1VCVU5UVV9LRVJORUxfUkFOR0UoMywxNiwxLDExLCAzLDE3LDAsMCkgfHwgXAo+ICsJCUxUVE5H
-X1JIRUxfS0VSTkVMX1JBTkdFKDMsMTAsMCwyMjksMTMsMCwgMywxMSwwLDAsMCwwKSkKPiAJLyog
-KG5vdGhpbmcpICovCj4gI2Vsc2UKPiAJcmN1X3JlYWRfdW5sb2NrKCk7Cj4gLS0KPiAyLjcuNAoK
-LS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5j
-b20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmct
-ZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMu
-bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+SGkgSm9uLAoKKENDaW5nIHRoZSBmdHBtYXN0ZXIgdGVhbSBpbiBjYXNlIHRoZXkgY2FuIGhlbHAg
+dXMgc29sdmUgdGhlIHNpdHVhdGlvbikKCkkgYW0gYW4gdXBzdHJlYW0gbWFpbnRhaW5lciBvZiB0
+aGUgTFRUbmcgcHJvamVjdCAoaHR0cDovL2x0dG5nLm9yZykuCgpJdCBhcHBlYXJzIHRoYXQgbHR0
+bmctdG9vbHMgaXMgY3VycmVudGx5IG91dCBvZiBzeW5jIHdpdGggbHR0bmctdXN0IGFuZApsdHRu
+Zy1tb2R1bGVzIGluIERlYmlhbiBhbmQgc2lkICh1bnN0YWJsZSksIGFuZCBtaXNzaW5nIGluIERl
+YmlhbiBzdHJldGNoCih0ZXN0aW5nKS4gSXQgYXBwZWFycyB0aGF0IHRoaXMgc2l0dWF0aW9uIGhh
+cyBiZWVuIG9uZ29pbmcgZm9yIGEgd2hpbGUuCgpUaGUgZm9sbG93aW5nIHNlYXJjaDogaHR0cHM6
+Ly9wYWNrYWdlcy5kZWJpYW4ub3JnL3NlYXJjaD9zZWFyY2hvbj1uYW1lcyZrZXl3b3Jkcz1sdHRu
+ZwpzaG93cyB0aGUgc2l0dWF0aW9uOgoKLSBzaWQgKHVuc3RhYmxlKToKCmx0dG5nLXVzdCogOiAy
+LjcuMi0xCmx0dG5nLW1vZHVsZXMqIDogMi43LjItMQpsdHRuZy10b29sczogMi42LjAtMXBwYzY0
+ZWwxCmxpYmx0dG5nLWN0bDA6IDIuNi4wLTFwcGM2NGVsMQpsaWJsdHRuZy1jdGwtZGV2OiAyLjYu
+MC0xcHBjNjRlbDEKCi0gc3RyZXRjaCAodGVzdGluZyk6CgpsdHRuZy11c3QqIDogMi43LjItMQps
+dHRuZy1tb2R1bGVzKiA6IDIuNy4yLTEKbHR0bmctdG9vbHM6IDxub25lPgpsaWJsdHRuZy1jdGww
+OiA8bm9uZT4KbGlibHR0bmctY3RsLWRldjogPG5vbmU+CgpJbiB0aGUgY3VycmVudGx5IHNpdHVh
+dGlvbiwgdXNlcnMgbmVlZCB0byBidWlsZCBsdHRuZy10b29scyBmcm9tIHNvdXJjZQp0byB1c2Ug
+bHR0bmctdXN0IGFuZCBsdHRuZy1tb2R1bGVzIG9uIERlYmlhbiB0ZXN0aW5nL3NpZCwgd2hpY2gg
+ZGVmZWF0cwp0aGUgcHVycG9zZSBvZiBkaXN0cmlidXRpb24gcGFja2FnZXMuCgpXaGF0IGNhbiB3
+ZSBkbywgYXMgdXBzdHJlYW0sIHRvIGhlbHAgc29sdmUgdGhpcyBwYWNrYWdpbmcgaXNzdWUgPwoK
+VGhhbmtzLAoKTWF0aGlldQoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0
+cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcu
+b3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
+Zy1kZXYK
