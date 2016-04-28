@@ -1,20 +1,21 @@
-From: Michael Jeanson <mjeanson@efficios.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
 Subject: Re: [PATCH 1/3] tests/lib/Makefile.am: Remove
  test_seek_empty_packet and test_seek_big_trace from SCRIPT_LIST
-Date: Thu, 28 Apr 2016 18:28:49 +0000 (UTC)
-Message-ID: <808373029.72582.1461868129007.JavaMail.zimbra__25675.5649847493$1461868160$gmane$org@efficios.com>
+Date: Thu, 28 Apr 2016 14:36:17 -0400
+Message-ID: <aa6a47a32d5c10e16676a8b9b332d09e__47429.4635271237$1461868610$gmane$org@simark.ca>
 References: <1461811940-8336-1-git-send-email-simon.marchi@polymtl.ca>
  <e2a89f7d42d3628541f53cae8ca478ac@simark.ca>
  <1804225761.72412.1461860179512.JavaMail.zimbra@efficios.com>
  <1d03bf34bd523c31ab8d32e7abda56ec@simark.ca>
+ <808373029.72582.1461868129007.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 645E3A3315
- for <lttng-dev@lists.lttng.org>; Thu, 28 Apr 2016 18:28:53 +0000 (UTC)
-In-Reply-To: <1d03bf34bd523c31ab8d32e7abda56ec@simark.ca>
+Received: from simark.ca (simark.ca [158.69.221.121])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 57C5AA3315
+ for <lttng-dev@lists.lttng.org>; Thu, 28 Apr 2016 18:36:21 +0000 (UTC)
+In-Reply-To: <808373029.72582.1461868129007.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,26 +25,32 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT24gQXByIDI4LCAyMDE2LCBhdCAxMjo0NCBQTSwgU2ltb24gTWFyY2hpIHNpbW9uLm1h
-cmNoaUBwb2x5bXRsLmNhIHdyb3RlOgo+IAo+IE9rIHRoYW5rcy4KPiAKPiBKdXN0IGFuIGlkZWE6
-IEkgZmluZCBpdCBxdWl0ZSBjdW1iZXJzb21lIHRvIGFkZCBhIG5ldyBlbnRyeSBpbgo+IGNvbmZp
-Z3VyZS5hYyBmb3IgZWFjaCB0ZXN0IHNjcmlwdCB0aGF0IHdlIHdhbnQgYXV0b2NvbmYgdG8gcHJv
-Y2VzcyAoc3VjaAo+IGFzIGluIHBhdGNoIDMvMykuICBJIHRoaW5rIGl0IGNvdWxkIGJlIGVhc2ll
-ciB0byBoYXZlIGEgc2luZ2xlIGZpbGUKPiAoZS5nLiB2YXJzLnNoKSBhbmQgaGF2ZSBpdCBjb250
-YWluIGRlZmluaXRpb25zIG9mIHZhcmlvdXMgZGlyZWN0b3JpZXM6Cj4gCj4gICBzcmNkaXI9QHNy
-Y2RpckAKPiAgIHRvcF9zcmNkaXI9QHRvcF9zcmNkaXJACj4gICBhYnNfdG9wX3NyY2Rpcj1AYWJz
-X3RvcF9zcmNkaXJACj4gICBidWlsZGRpcj1AYnVpbGRkaXJACj4gICAuLi4KPiAKPiBUaGlzIHdh
-eSwgeW91IGNvdWxkIGhhdmUgb25seSBhIHNpbmdsZSBnZW5lcmF0ZWQgZmlsZSAodmFycy5zaC5p
-biAtPgo+IHZhcnMuc2gpLCBhbmQgZWFjaCB0ZXN0IHNjcmlwdCB3b3VsZCBqdXN0IGhhdmUgdG8g
-c291cmNlIHRoYXQgZmlsZSB0bwo+IHVzZSB0aGUgdmFsdWVzLgoKQXMgZGlzY3Vzc2VkIG9uICNs
-dHRuZywgaGVyZSBpcyB0aGUgUFIgcmVzdWx0aW5nIGZyb20gbXkgdXBkYXRlcyB0byB5b3VyCnBh
-dGNoZXMgOgoKICBodHRwczovL2dpdGh1Yi5jb20vZWZmaWNpb3MvYmFiZWx0cmFjZS9wdWxsLzQz
-CgoKQ29uY2VybmluZyB0aGUgaW5jbHVkZSBmaWxlLCBJJ20gbm90IGNvbnZpbmNlZCBpdCB3b3Vs
-ZCBiZSBzaW1wbGVyLCB3ZSB3b3VsZAplbmQgdXAgd2l0aCBzdGF0aWMgc2NyaXB0cyBpbiB0aGUg
-c291cmNlIGRpciBpbmNsdWRpbmcgYSBnZW5lcmF0ZWQgZmlsZSBpbgp0aGUgYnVpbGRkaXIuCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
-YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5n
-Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+T24gMjAxNi0wNC0yOCAxNDoyOCwgTWljaGFlbCBKZWFuc29uIHdyb3RlOgo+IC0tLS0tIE9uIEFw
+ciAyOCwgMjAxNiwgYXQgMTI6NDQgUE0sIFNpbW9uIE1hcmNoaSAKPiBzaW1vbi5tYXJjaGlAcG9s
+eW10bC5jYSB3cm90ZToKPj4gCj4+IE9rIHRoYW5rcy4KPj4gCj4+IEp1c3QgYW4gaWRlYTogSSBm
+aW5kIGl0IHF1aXRlIGN1bWJlcnNvbWUgdG8gYWRkIGEgbmV3IGVudHJ5IGluCj4+IGNvbmZpZ3Vy
+ZS5hYyBmb3IgZWFjaCB0ZXN0IHNjcmlwdCB0aGF0IHdlIHdhbnQgYXV0b2NvbmYgdG8gcHJvY2Vz
+cyAKPj4gKHN1Y2gKPj4gYXMgaW4gcGF0Y2ggMy8zKS4gIEkgdGhpbmsgaXQgY291bGQgYmUgZWFz
+aWVyIHRvIGhhdmUgYSBzaW5nbGUgZmlsZQo+PiAoZS5nLiB2YXJzLnNoKSBhbmQgaGF2ZSBpdCBj
+b250YWluIGRlZmluaXRpb25zIG9mIHZhcmlvdXMgZGlyZWN0b3JpZXM6Cj4+IAo+PiAgIHNyY2Rp
+cj1Ac3JjZGlyQAo+PiAgIHRvcF9zcmNkaXI9QHRvcF9zcmNkaXJACj4+ICAgYWJzX3RvcF9zcmNk
+aXI9QGFic190b3Bfc3JjZGlyQAo+PiAgIGJ1aWxkZGlyPUBidWlsZGRpckAKPj4gICAuLi4KPj4g
+Cj4+IFRoaXMgd2F5LCB5b3UgY291bGQgaGF2ZSBvbmx5IGEgc2luZ2xlIGdlbmVyYXRlZCBmaWxl
+ICh2YXJzLnNoLmluIC0+Cj4+IHZhcnMuc2gpLCBhbmQgZWFjaCB0ZXN0IHNjcmlwdCB3b3VsZCBq
+dXN0IGhhdmUgdG8gc291cmNlIHRoYXQgZmlsZSB0bwo+PiB1c2UgdGhlIHZhbHVlcy4KPiAKPiBB
+cyBkaXNjdXNzZWQgb24gI2x0dG5nLCBoZXJlIGlzIHRoZSBQUiByZXN1bHRpbmcgZnJvbSBteSB1
+cGRhdGVzIHRvIAo+IHlvdXIKPiBwYXRjaGVzIDoKPiAKPiAgIGh0dHBzOi8vZ2l0aHViLmNvbS9l
+ZmZpY2lvcy9iYWJlbHRyYWNlL3B1bGwvNDMKClRoYW5rcyBmb3IgZm9sbG93aW5nIHVwLgoKPiBD
+b25jZXJuaW5nIHRoZSBpbmNsdWRlIGZpbGUsIEknbSBub3QgY29udmluY2VkIGl0IHdvdWxkIGJl
+IHNpbXBsZXIsIHdlIAo+IHdvdWxkCj4gZW5kIHVwIHdpdGggc3RhdGljIHNjcmlwdHMgaW4gdGhl
+IHNvdXJjZSBkaXIgaW5jbHVkaW5nIGEgZ2VuZXJhdGVkIGZpbGUgCj4gaW4KPiB0aGUgYnVpbGRk
+aXIuCgpJbiB0aGUgY3VycmVudCBzdGF0ZSwgZXZlbiB0aGUgc3RhdGljIHNjcmlwdHMgYXJlIGNv
+cGllZCB0byB0aGUgYnVpbGQgCmRpciwgc28gaXQKd291bGRuJ3QgYmUgYSBwcm9ibGVtLiAgQW55
+d2F5LCBpZiBpdCdzIG5vdCBhIHByb2JsZW0sIEkgdGhpbmsgaXQgbG9va3MgCmdvb2QgaW4geW91
+cgpQUi4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
+bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
