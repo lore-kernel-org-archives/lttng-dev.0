@@ -1,36 +1,21 @@
-From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+From: Yuxin Ren <ryx@gwmail.gwu.edu>
 Subject: Re: Question about lock in synchronize_rcu
 	implementation of URCU
-Date: Wed, 27 Apr 2016 19:08:03 -0700
-Message-ID: <20160428020803.GN4967__40115.0918486111$1461809286$gmane$org@linux.vnet.ibm.com>
+Date: Wed, 27 Apr 2016 22:18:04 -0400
+Message-ID: <CAAKbDrfRMKzu6brHG=pfm0mu_Oy1afVZ94zDCiN7Y0w5o+SMZQ__1853.91183845258$1461809905$gmane$org@mail.gmail.com>
 References: <CAAKbDrfmcqEE7_6p_J0DPVO85yDGJ0GCbi5k9Lm19g4VaLgOWw@mail.gmail.com>
-Reply-To: paulmck@linux.vnet.ibm.com
+ <20160428020803.GN4967@linux.vnet.ibm.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from e18.ny.us.ibm.com (e18.ny.us.ibm.com [129.33.205.208])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id AB9DEA32A1
- for <lttng-dev@lists.lttng.org>; Thu, 28 Apr 2016 02:07:40 +0000 (UTC)
-Received: from localhost
- by e18.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
- Violators will be prosecuted
- for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
- Wed, 27 Apr 2016 22:07:39 -0400
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com
- [9.57.198.28])
- by d01dlp01.pok.ibm.com (Postfix) with ESMTP id D154538C803B
- for <lttng-dev@lists.lttng.org>; Wed, 27 Apr 2016 22:07:26 -0400 (EDT)
-Received: from d01av01.pok.ibm.com (d01av01.pok.ibm.com [9.56.224.215])
- by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
- u3S27Qpt41615456
- for <lttng-dev@lists.lttng.org>; Thu, 28 Apr 2016 02:07:26 GMT
-Received: from d01av01.pok.ibm.com (localhost [127.0.0.1])
- by d01av01.pok.ibm.com (8.14.4/8.14.4/NCO v10.0 AVout) with ESMTP id
- u3S27QPR027068
- for <lttng-dev@lists.lttng.org>; Wed, 27 Apr 2016 22:07:26 -0400
-Content-Disposition: inline
-In-Reply-To: <CAAKbDrfmcqEE7_6p_J0DPVO85yDGJ0GCbi5k9Lm19g4VaLgOWw@mail.gmail.com>
+Received: from mail-lf0-f52.google.com (mail-lf0-f52.google.com
+ [209.85.215.52])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id AC624A32BC
+ for <lttng-dev@lists.lttng.org>; Thu, 28 Apr 2016 02:18:05 +0000 (UTC)
+Received: by mail-lf0-f52.google.com with SMTP id j11so78374647lfb.1
+ for <lttng-dev@lists.lttng.org>; Wed, 27 Apr 2016 19:18:05 -0700 (PDT)
+In-Reply-To: <20160428020803.GN4967@linux.vnet.ibm.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -40,26 +25,30 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Yuxin Ren <ryx@gwmail.gwu.edu>
+To: Paul McKenney <paulmck@linux.vnet.ibm.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gV2VkLCBBcHIgMjcsIDIwMTYgYXQgMDk6MzQ6MTZQTSAtMDQwMCwgWXV4aW4gUmVuIHdyb3Rl
-Ogo+IEhpLAo+IAo+IEkgYW0gbGVhcm5pbmcgdGhlIFVSQ1UgY29kZS4KPiAKPiBXaHkgZG8gd2Ug
-bmVlZCByY3VfZ3BfbG9jayBpbiBzeW5jaHJvbml6ZV9yY3U/Cj4gaHR0cHM6Ly9naXRodWIuY29t
-L3VyY3UvdXNlcnNwYWNlLXJjdS9ibG9iL21hc3Rlci91cmN1LmMjTDQwMQo+IAo+IEluIHRoZSBj
-b21tZW50LCBpdCBzYXlzIHRoaXMgbG9jayBlbnN1cmVzIG11dHVhbCBleGNsdXNpb24gYmV0d2Vl
-bgo+IHRocmVhZHMgY2FsbGluZyBzeW5jaHJvbml6ZV9yY3UoKS4KPiBCdXQgb25seSB0aGUgZmly
-c3QgdGhyZWFkIGFkZGVkIHRvIHdhaXRlciBxdWV1ZSBjYW4gcHJvY2VlZCB0byBkZXRlY3QKPiBn
-cmFjZSBwZXJpb2QuCj4gSG93IGNhbiBtdWx0aXBsZSB0aHJlYWRzIGN1cnJlbnRseSBwZXJmb3Jt
-IHRoZSBncmFjZSB0aHJlYWQ/CgpUaGV5IGRvbid0IGNvbmN1cnJlbnRseSBwZXJmb3JtIGdyYWNl
-IHBlcmlvZHMsIGFuZCBpdCB3b3VsZCBiZSB3YXN0ZWZ1bApmb3IgdGhlbSB0byBkbyBzby4gIElu
-c3RlYWQsIHRoZSBmaXJzdCBvbmUgcGVyZm9ybXMgdGhlIGdyYWNlIHBlcmlvZCwKYW5kIGFsbCB0
-aGF0IHdlcmUgd2FpdGluZyBhdCB0aGUgdGltZSBpdCBzdGFydGVkIGdldCB0aGUgYmVuZWZpdCBv
-ZiB0aGF0CnNhbWUgZ3JhY2UgcGVyaW9kLgoKQW55IHRoYXQgYXJyaXZlZCBhZnRlciB0aGUgZmly
-c3QgZ3JhY2UgcGVyaW9kIHBlcmZvcm1zIHRoZSBmaXJzdApncmFjZSBwZXJpb2QgYXJlIHNlcnZl
-ZCBieSB3aGljaGV2ZXIgb2YgdGhlbSBwZXJmb3JtcyB0aGUgc2Vjb25kCmdyYWNlIHBlcmlvZC4K
-CgkJCQkJCQlUaGFueCwgUGF1bAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcu
-b3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
-Zy1kZXYK
+QXMgdGhleSBkb24ndCBjdXJyZW50bHkgcGVyZm9ybSBncmFjZSBwZXJpb2QsIHdoeSBkbyB3ZSB1
+c2UgdGhlIHJjdV9ncF9sb2NrPwoKVGhhbmsgeW91LgpZdXhpbgoKT24gV2VkLCBBcHIgMjcsIDIw
+MTYgYXQgMTA6MDggUE0sIFBhdWwgRS4gTWNLZW5uZXkKPHBhdWxtY2tAbGludXgudm5ldC5pYm0u
+Y29tPiB3cm90ZToKPiBPbiBXZWQsIEFwciAyNywgMjAxNiBhdCAwOTozNDoxNlBNIC0wNDAwLCBZ
+dXhpbiBSZW4gd3JvdGU6Cj4+IEhpLAo+Pgo+PiBJIGFtIGxlYXJuaW5nIHRoZSBVUkNVIGNvZGUu
+Cj4+Cj4+IFdoeSBkbyB3ZSBuZWVkIHJjdV9ncF9sb2NrIGluIHN5bmNocm9uaXplX3JjdT8KPj4g
+aHR0cHM6Ly9naXRodWIuY29tL3VyY3UvdXNlcnNwYWNlLXJjdS9ibG9iL21hc3Rlci91cmN1LmMj
+TDQwMQo+Pgo+PiBJbiB0aGUgY29tbWVudCwgaXQgc2F5cyB0aGlzIGxvY2sgZW5zdXJlcyBtdXR1
+YWwgZXhjbHVzaW9uIGJldHdlZW4KPj4gdGhyZWFkcyBjYWxsaW5nIHN5bmNocm9uaXplX3JjdSgp
+Lgo+PiBCdXQgb25seSB0aGUgZmlyc3QgdGhyZWFkIGFkZGVkIHRvIHdhaXRlciBxdWV1ZSBjYW4g
+cHJvY2VlZCB0byBkZXRlY3QKPj4gZ3JhY2UgcGVyaW9kLgo+PiBIb3cgY2FuIG11bHRpcGxlIHRo
+cmVhZHMgY3VycmVudGx5IHBlcmZvcm0gdGhlIGdyYWNlIHRocmVhZD8KPgo+IFRoZXkgZG9uJ3Qg
+Y29uY3VycmVudGx5IHBlcmZvcm0gZ3JhY2UgcGVyaW9kcywgYW5kIGl0IHdvdWxkIGJlIHdhc3Rl
+ZnVsCj4gZm9yIHRoZW0gdG8gZG8gc28uICBJbnN0ZWFkLCB0aGUgZmlyc3Qgb25lIHBlcmZvcm1z
+IHRoZSBncmFjZSBwZXJpb2QsCj4gYW5kIGFsbCB0aGF0IHdlcmUgd2FpdGluZyBhdCB0aGUgdGlt
+ZSBpdCBzdGFydGVkIGdldCB0aGUgYmVuZWZpdCBvZiB0aGF0Cj4gc2FtZSBncmFjZSBwZXJpb2Qu
+Cj4KPiBBbnkgdGhhdCBhcnJpdmVkIGFmdGVyIHRoZSBmaXJzdCBncmFjZSBwZXJpb2QgcGVyZm9y
+bXMgdGhlIGZpcnN0Cj4gZ3JhY2UgcGVyaW9kIGFyZSBzZXJ2ZWQgYnkgd2hpY2hldmVyIG9mIHRo
+ZW0gcGVyZm9ybXMgdGhlIHNlY29uZAo+IGdyYWNlIHBlcmlvZC4KPgo+ICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgVGhhbngsIFBhdWwKPgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
+bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRu
+Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
