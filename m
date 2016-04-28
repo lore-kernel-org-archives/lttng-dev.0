@@ -1,21 +1,15 @@
-From: Yuxin Ren <ryx@gwmail.gwu.edu>
-Subject: Re: Question about lock in synchronize_rcu
-	implementation of URCU
-Date: Wed, 27 Apr 2016 22:18:04 -0400
-Message-ID: <CAAKbDrfRMKzu6brHG=pfm0mu_Oy1afVZ94zDCiN7Y0w5o+SMZQ__1853.91183845258$1461809905$gmane$org@mail.gmail.com>
-References: <CAAKbDrfmcqEE7_6p_J0DPVO85yDGJ0GCbi5k9Lm19g4VaLgOWw@mail.gmail.com>
- <20160428020803.GN4967@linux.vnet.ibm.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: [PATCH 1/3] tests/lib/Makefile.am: Remove
+	test_seek_empty_packet and test_seek_big_trace from SCRIPT_LIST
+Date: Wed, 27 Apr 2016 22:52:18 -0400
+Message-ID: <1461811940-8336-1-git-send-email-simon.marchi__33517.075298778$1461811974$gmane$org@polymtl.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lf0-f52.google.com (mail-lf0-f52.google.com
- [209.85.215.52])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id AC624A32BC
- for <lttng-dev@lists.lttng.org>; Thu, 28 Apr 2016 02:18:05 +0000 (UTC)
-Received: by mail-lf0-f52.google.com with SMTP id j11so78374647lfb.1
- for <lttng-dev@lists.lttng.org>; Wed, 27 Apr 2016 19:18:05 -0700 (PDT)
-In-Reply-To: <20160428020803.GN4967@linux.vnet.ibm.com>
+Received: from smtp.electronicbox.net (smtp.electronicbox.net [96.127.255.82])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 1F204A32BC
+ for <lttng-dev@lists.lttng.org>; Thu, 28 Apr 2016 02:52:29 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,30 +19,30 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Paul McKenney <paulmck@linux.vnet.ibm.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-QXMgdGhleSBkb24ndCBjdXJyZW50bHkgcGVyZm9ybSBncmFjZSBwZXJpb2QsIHdoeSBkbyB3ZSB1
-c2UgdGhlIHJjdV9ncF9sb2NrPwoKVGhhbmsgeW91LgpZdXhpbgoKT24gV2VkLCBBcHIgMjcsIDIw
-MTYgYXQgMTA6MDggUE0sIFBhdWwgRS4gTWNLZW5uZXkKPHBhdWxtY2tAbGludXgudm5ldC5pYm0u
-Y29tPiB3cm90ZToKPiBPbiBXZWQsIEFwciAyNywgMjAxNiBhdCAwOTozNDoxNlBNIC0wNDAwLCBZ
-dXhpbiBSZW4gd3JvdGU6Cj4+IEhpLAo+Pgo+PiBJIGFtIGxlYXJuaW5nIHRoZSBVUkNVIGNvZGUu
-Cj4+Cj4+IFdoeSBkbyB3ZSBuZWVkIHJjdV9ncF9sb2NrIGluIHN5bmNocm9uaXplX3JjdT8KPj4g
-aHR0cHM6Ly9naXRodWIuY29tL3VyY3UvdXNlcnNwYWNlLXJjdS9ibG9iL21hc3Rlci91cmN1LmMj
-TDQwMQo+Pgo+PiBJbiB0aGUgY29tbWVudCwgaXQgc2F5cyB0aGlzIGxvY2sgZW5zdXJlcyBtdXR1
-YWwgZXhjbHVzaW9uIGJldHdlZW4KPj4gdGhyZWFkcyBjYWxsaW5nIHN5bmNocm9uaXplX3JjdSgp
-Lgo+PiBCdXQgb25seSB0aGUgZmlyc3QgdGhyZWFkIGFkZGVkIHRvIHdhaXRlciBxdWV1ZSBjYW4g
-cHJvY2VlZCB0byBkZXRlY3QKPj4gZ3JhY2UgcGVyaW9kLgo+PiBIb3cgY2FuIG11bHRpcGxlIHRo
-cmVhZHMgY3VycmVudGx5IHBlcmZvcm0gdGhlIGdyYWNlIHRocmVhZD8KPgo+IFRoZXkgZG9uJ3Qg
-Y29uY3VycmVudGx5IHBlcmZvcm0gZ3JhY2UgcGVyaW9kcywgYW5kIGl0IHdvdWxkIGJlIHdhc3Rl
-ZnVsCj4gZm9yIHRoZW0gdG8gZG8gc28uICBJbnN0ZWFkLCB0aGUgZmlyc3Qgb25lIHBlcmZvcm1z
-IHRoZSBncmFjZSBwZXJpb2QsCj4gYW5kIGFsbCB0aGF0IHdlcmUgd2FpdGluZyBhdCB0aGUgdGlt
-ZSBpdCBzdGFydGVkIGdldCB0aGUgYmVuZWZpdCBvZiB0aGF0Cj4gc2FtZSBncmFjZSBwZXJpb2Qu
-Cj4KPiBBbnkgdGhhdCBhcnJpdmVkIGFmdGVyIHRoZSBmaXJzdCBncmFjZSBwZXJpb2QgcGVyZm9y
-bXMgdGhlIGZpcnN0Cj4gZ3JhY2UgcGVyaW9kIGFyZSBzZXJ2ZWQgYnkgd2hpY2hldmVyIG9mIHRo
-ZW0gcGVyZm9ybXMgdGhlIHNlY29uZAo+IGdyYWNlIHBlcmlvZC4KPgo+ICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgVGhhbngsIFBhdWwKPgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
-bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+U2luY2UgdGhlc2UgZmlsZXMgYXJlIGdlbmVyYXRlZCBieSBhdXRvY29uZiwgdGhleSBzaG91bGRu
+J3QgYmUgaW5jbHVkZWQKaW4gU0NSSVBUX0xJU1QsIHdoaWNoIGlzIHRoZSBsaXN0IG9mIHNjcmlw
+dHMgdG8gY29weSBmcm9tIHRoZSBzb3VyY2UKZGlyZWN0b3J5IHRvIHRoZSBidWlsZCBkaXJlY3Rv
+cnkuICBUaGlzIGdldHMgcmlkIG9mIHRoZXNlIHdhcm5pbmdzIHdoZW4KYnVpbGRpbmc6CgogIGNw
+OiBjYW5ub3Qgc3RhdCAnL2hvbWUvc2ltYXJrL3NyYy9iYWJlbHRyYWNlL3Rlc3RzL2xpYi90ZXN0
+X3NlZWtfYmlnX3RyYWNlJzogTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeQogIGNwOiBjYW5ub3Qg
+c3RhdCAnL2hvbWUvc2ltYXJrL3NyYy9iYWJlbHRyYWNlL3Rlc3RzL2xpYi90ZXN0X3NlZWtfZW1w
+dHlfcGFja2V0JzogTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeQoKU2lnbmVkLW9mZi1ieTogU2lt
+b24gTWFyY2hpIDxzaW1vbi5tYXJjaGlAcG9seW10bC5jYT4KLS0tCiB0ZXN0cy9saWIvTWFrZWZp
+bGUuYW0gfCA0ICstLS0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMyBkZWxldGlv
+bnMoLSkKCmRpZmYgLS1naXQgYS90ZXN0cy9saWIvTWFrZWZpbGUuYW0gYi90ZXN0cy9saWIvTWFr
+ZWZpbGUuYW0KaW5kZXggZTIzYmNjMS4uYTA4Y2JmNiAxMDA2NDQKLS0tIGEvdGVzdHMvbGliL01h
+a2VmaWxlLmFtCisrKyBiL3Rlc3RzL2xpYi9NYWtlZmlsZS5hbQpAQCAtNDEsOSArNDEsNyBAQCB0
+ZXN0X2J0X3ZhbHVlc19TT1VSQ0VTID0gdGVzdF9idF92YWx1ZXMuYwogdGVzdF9jdGZfaXJfcmVm
+X1NPVVJDRVMgPSB0ZXN0X2N0Zl9pcl9yZWYuYwogdGVzdF9idF9jdGZfZmllbGRfdHlwZV92YWxp
+ZGF0aW9uX1NPVVJDRVMgPSB0ZXN0X2J0X2N0Zl9maWVsZF90eXBlX3ZhbGlkYXRpb24uYwogCi1T
+Q1JJUFRfTElTVCA9IHRlc3Rfc2Vla19iaWdfdHJhY2UgXAotCXRlc3Rfc2Vla19lbXB0eV9wYWNr
+ZXQgXAotCXRlc3RfY3RmX3dyaXRlcl9jb21wbGV0ZQorU0NSSVBUX0xJU1QgPSB0ZXN0X2N0Zl93
+cml0ZXJfY29tcGxldGUKIEVYVFJBX0RJU1QgPSB0ZXN0X3NlZWtfYmlnX3RyYWNlLmluIHRlc3Rf
+c2Vla19lbXB0eV9wYWNrZXQuaW4KIENMRUFORklMRVM9IHRlc3Rfc2Vla19iaWdfdHJhY2UgdGVz
+dF9zZWVrX2VtcHR5X3BhY2tldAogCi0tIAoyLjguMAoKX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZA
+bGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
+aXN0aW5mby9sdHRuZy1kZXYK
