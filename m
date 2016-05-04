@@ -1,14 +1,15 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH babeltrace] Fix: Static build on OS X
-Date: Wed,  4 May 2016 10:54:55 -0400
-Message-ID: <1462373695-15432-1-git-send-email-mjeanson__7311.21803769401$1462373727$gmane$org@efficios.com>
+Subject: [PATCH babeltrace] Add missing generated tests to
+	gitignore
+Date: Wed,  4 May 2016 10:56:27 -0400
+Message-ID: <1462373787-16175-1-git-send-email-mjeanson__37210.2575995543$1462373813$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id D9187A0CBA
- for <lttng-dev@lists.lttng.org>; Wed,  4 May 2016 14:55:03 +0000 (UTC)
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id C4134A0A23
+ for <lttng-dev@lists.lttng.org>; Wed,  4 May 2016 14:56:33 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,19 +23,14 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-VGhlIE9TIFggbGlua2VyIGZhaWxzIHRvIHJlc29sdmUgY29tbW9uIHN5bWJvbHMgaW4gYSBzdGF0
-aWMKbGlicmFyeSBmb3Igc29tZSB1bmV4cGxhaW5lZCByZWFzb24uIEluaXRpYWxpemluZyB0aGUg
-dmFyaWFibGVzCnRvIHplcm8gbWFrZXMgdGhlIHN5bWJvbCBiZWNvbWUgdW5pbml0aWFsaXplZCBk
-YXRhIGFuZCBmaXhlcwp0aGUgbGlua2luZy4KClNpZ25lZC1vZmYtYnk6IE1pY2hhZWwgSmVhbnNv
-biA8bWplYW5zb25AZWZmaWNpb3MuY29tPgotLS0KIGxpYi9iYWJlbHRyYWNlLmMgfCAyICstCiAx
-IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQg
-YS9saWIvYmFiZWx0cmFjZS5jIGIvbGliL2JhYmVsdHJhY2UuYwppbmRleCAwYmNmZDFkLi5mMDU4
-MDhkIDEwMDY0NAotLS0gYS9saWIvYmFiZWx0cmFjZS5jCisrKyBiL2xpYi9iYWJlbHRyYWNlLmMK
-QEAgLTMxLDcgKzMxLDcgQEAKICNpbmNsdWRlIDxiYWJlbHRyYWNlL2N0Zi10ZXh0L3R5cGVzLmg+
-CiAjaW5jbHVkZSA8c3RkbGliLmg+CiAKLWludCBiYWJlbHRyYWNlX3ZlcmJvc2UsIGJhYmVsdHJh
-Y2VfZGVidWc7CitpbnQgYmFiZWx0cmFjZV92ZXJib3NlID0gMCwgYmFiZWx0cmFjZV9kZWJ1ZyA9
-IDA7CiAKIHN0YXRpYwogdm9pZCBfX2F0dHJpYnV0ZV9fKChjb25zdHJ1Y3RvcikpIGluaXRfYmFi
-ZWx0cmFjZV9saWIodm9pZCkKLS0gCjIuNy40CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0
-cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
-bmZvL2x0dG5nLWRldgo=
+U2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Ci0t
+LQogLmdpdGlnbm9yZSB8IDMgKysrCiAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspCgpk
+aWZmIC0tZ2l0IGEvLmdpdGlnbm9yZSBiLy5naXRpZ25vcmUKaW5kZXggN2FhMTg5Ni4uNTI3ZDE5
+NSAxMDA2NDQKLS0tIGEvLmdpdGlnbm9yZQorKysgYi8uZ2l0aWdub3JlCkBAIC0xMyw2ICsxMyw5
+IEBACiAvdGVzdHMvbGliL3Rlc3Rfc2Vla19lbXB0eV9wYWNrZXQKIC90ZXN0cy9saWIvdGVzdF9k
+d2FyZgogL3Rlc3RzL2xpYi90ZXN0X2Jpbl9pbmZvCisvdGVzdHMvbGliL3Rlc3RfYmluX2luZm9f
+Y29tcGxldGUKKy90ZXN0cy9saWIvdGVzdF9jdGZfd3JpdGVyX2NvbXBsZXRlCisvdGVzdHMvbGli
+L3Rlc3RfZHdhcmZfY29tcGxldGUKICoubwogKi5hCiAqLmxhCi0tIAoyLjcuNAoKX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
+bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2Nn
+aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
