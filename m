@@ -1,37 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [CFP] Tracing Summit 2016 Call for Presentations,
-	October 12th, 2016, Berlin, Germany
-Date: Wed, 04 May 2016 15:23:44 -0400
-Message-ID: <E1ay2Oe-00012b-Q8__48789.0606550083$1462389857$gmane$org@thinkos>
-Reply-To: submission@tracingsummit.org
+From: Marko Vucak <vucakmarko@gmail.com>
+Subject: Arch arm cross-complie lttng-modules
+Date: Thu, 5 May 2016 15:15:50 +0200
+Message-ID: <CAEmDgcqm=0ovvUZds48cCihNh7oCGfr5x_erkm9Z73Zu_CC7cg__11966.4036356427$1462454174$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1470068413064262413=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id B2098A00AA
- for <lttng-dev@lists.lttng.org>; Wed,  4 May 2016 19:23:50 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 5F1113401F1
- for <lttng-dev@lists.lttng.org>; Wed,  4 May 2016 19:23:50 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id 9Cg_u1RCkRlz for <lttng-dev@lists.lttng.org>;
- Wed,  4 May 2016 19:23:46 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 3F83A34022A
- for <lttng-dev@lists.lttng.org>; Wed,  4 May 2016 19:23:46 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id Iftc8VTDZEJD for <lttng-dev@lists.lttng.org>;
- Wed,  4 May 2016 19:23:46 +0000 (UTC)
-Received: from thinkos (cable-192.222.213.99.electronicbox.net
- [192.222.213.99])
- by mail.efficios.com (Postfix) with ESMTPSA id 09BA63401F1
- for <lttng-dev@lists.lttng.org>; Wed,  4 May 2016 19:23:46 +0000 (UTC)
-Received: from compudj by thinkos with local (Exim 4.84_2)
- (envelope-from <compudj@efficios.com>) id 1ay2Oe-00012b-Q8
- for lttng-dev@lists.lttng.org; Wed, 04 May 2016 15:23:44 -0400
+Received: from mail-vk0-f52.google.com (mail-vk0-f52.google.com
+ [209.85.213.52])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id F02D8A09C9
+ for <lttng-dev@lists.lttng.org>; Thu,  5 May 2016 13:15:51 +0000 (UTC)
+Received: by mail-vk0-f52.google.com with SMTP id r16so24708631vkf.3
+ for <lttng-dev@lists.lttng.org>; Thu, 05 May 2016 06:15:51 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -44,56 +23,118 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpUaGlzIGlzIGEgY2FsbCBmb3IgcHJlc2VudGF0aW9ucyBmb3IgdGhlIFRyYWNpbmcgU3Vt
-bWl0IHdoaWNoIHdpbGwgYmUKaGVsZCBpbiBCZXJsaW4sIEdlcm1hbnksIG9uIE9jdG9iZXIgMTJ0
-aCwgMjAxNiwgYXQgdGhlIE1hcml0aW0gSG90ZWwKQmVybGluLiBUaGlzIGV2ZW50IGlzIGNvLWxv
-Y2F0ZWQgd2l0aCBFbWJlZGRlZCBMaW51eCBDb25mZXJlbmNlIDIwMTYuCgpUaGUgVHJhY2luZyBT
-dW1taXQgaXMgb3JnYW5pemVkIGJ5IHRoZSBMaW51eCBGb3VuZGF0aW9uIERpYWdub3N0aWMgYW5k
-Ck1vbml0b3JpbmcgV29ya2dyb3VwIChodHRwOi8vZGlhbW9uLm9yZykuIFRoaXMgZXZlbnQgZm9j
-dXNlcyBvbiB0aGUKdHJhY2luZyBhcmVhLCBnYXRoZXJpbmcgcGVvcGxlIGludm9sdmVkIGluIGRl
-dmVsb3BtZW50IGFuZCBlbmQtdXNlcnMgb2YKdHJhY2luZyB0b29scyBhcyB3ZWxsIGFzIHRyYWNl
-IGFuYWx5c2lzIHRvb2xzLiBUaGUgbWFpbiB0YXJnZXQgb2YgdGhpcwpUcmFjaW5nIFN1bW1pdCBp
-cyB0byBwcm92aWRlIHJvb20gZm9yIGRpc2N1c3Npb24gYmV0d2VlbiBwZW9wbGUgaW4gdGhlCnZh
-cmlvdXMgYXJlYXMgdGhhdCBiZW5lZml0IGZyb20gdHJhY2luZywgbmFtZWx5IHBhcmFsbGVsLCBk
-aXN0cmlidXRlZAphbmQvb3IgcmVhbC10aW1lIHN5c3RlbXMsIGFzIHdlbGwgYXMga2VybmVsIGRl
-dmVsb3BtZW50LiAKCklmIHlvdSBhcmUgaW50ZXJlc3RlZCB0byBwcmVzZW50LCBwbGVhc2Ugc3Vi
-bWl0IGEgcHJvcG9zYWwgdG8Kc3VibWlzc2lvbkB0cmFjaW5nc3VtbWl0Lm9yZyBiZWZvcmUgSnVs
-eSAxNXRoLCAyMDE2LCBhdCAyMzo1OSBFU1QuIApQbGVhc2UgcHJvdmlkZSBhIHRpdGxlLCBhYnN0
-cmFjdCBkZXNjcmliaW5nIHRoZSBwcm9wb3NlZCB0YWxrCig5MDAgY2hhcmFjdGVycyBtYXhpbXVt
-KSwgc2hvcnQgYmlvZ3JhcGh5ICg5MDAgY2hhcmFjdGVycyBtYXhpbXVtKSwKYW5kIGRlc2NyaWJl
-IHRoZSB0YXJnZXRlZCBhdWRpZW5jZSAoOTAwIGNoYXJhY3RlcnMgbWF4aW11bSkuCgpXZSBhcmUg
-d2VsY29taW5nIHByZXNlbnRhdGlvbnMgZnJvbSBib3RoIGVuZCB1c2VycyBhbmQgZGV2ZWxvcGVy
-cywgb24KdG9waWNzIGNvdmVyaW5nLCBidXQgbm90IGxpbWl0ZWQgdG86CgogKiBJbnZlc3RpZ2F0
-aW9uIHdvcmtmbG93IG9mIFJlYWwtVGltZSwgbGF0ZW5jeSwgYW5kIHRocm91Z2hwdXQgaXNzdWVz
-LAogKiBUcmFjZSBjb2xsZWN0aW9uIGFuZCBleHRyYWN0aW9uLAogKiBUcmFjZSBmaWx0ZXJpbmcs
-CiAqIFRyYWNlIGFnZ3JlZ2F0aW9uLAogKiBUcmFjZSBmb3JtYXRzLAogKiBUcmFjaW5nIG11bHRp
-LWNvcmUgc3lzdGVtcywKICogVHJhY2UgYWJzdHJhY3Rpb24sCiAqIFRyYWNlIG1vZGVsaW5nLAog
-KiBBdXRvbWF0ZWQgdHJhY2UgYW5hbHlzaXMgKGUuZy4gZGVwZW5kZW5jeSBhbmFseXNpcyksCiAq
-IFRyYWNpbmcgbGFyZ2UgY2x1c3RlcnMgYW5kIGRpc3RyaWJ1dGVkIHN5c3RlbXMsCiAqIEhhcmR3
-YXJlLWxldmVsIHRyYWNpbmcgKGUuZy4gRFNQLCBHUFUsIGJhcmUtbWV0YWwpLAogKiBUcmFjZSB2
-aXN1YWxpc2F0aW9uLAogKiBJbnRlcmFjdGlvbiBiZXR3ZWVuIGRlYnVnZ2luZyBhbmQgdHJhY2lu
-ZywKICogVHJhY2luZyByZW1vdGUgY29udHJvbCwKICogQW5hbHlzaXMgb2YgbGFyZ2UgdHJhY2Ug
-ZGF0YXNldHMsCiAqIENsb3VkIHRyYWNlIGNvbGxlY3Rpb24gYW5kIGFuYWx5c2lzLAogKiBJbnRl
-Z3JhdGlvbiBiZXR3ZWVuIHRyYWNlIHRvb2xzLAogKiBMaXZlIHRyYWNpbmcgJiBtb25pdG9yaW5n
-LgoKVGhvc2UgY2FuIGNvdmVyIHJlY2VudGx5IGF2YWlsYWJsZSB0ZWNobm9sb2dpZXMsIG9uZ29p
-bmcgd29yaywgYW5kIHlldApub24tZXhpc3RpbmcgdGVjaG5vbG9naWVzICh3aGljaCBhcmUgY29t
-cGVsbGluZ2x5IGludGVyZXN0aW5nIHRvCmVuZC11c2VycykuIFBsZWFzZSB1bmRlcnN0YW5kIHRo
-YXQgdGhpcyBvcGVuIGZvcnVtIGlzIG5vdCB0aGUgcHJvcGVyCnBsYWNlIHRvIHByZXNlbnQgc2Fs
-ZXMgb3IgbWFya2V0aW5nIHBpdGNoZXMsIG5vciB0ZWNobm9sb2dpZXMgd2hpY2ggYXJlCnByZXZl
-bnRlZCBmcm9tIGJlaW5nIGZyZWVseSB1c2VkIGluIG9wZW4gc291cmNlLgoKVGhlcmUgaXMgYSBz
-aW5nbGUgdHJhY2ssIGNvbnRhaW5pbmcgcHJlc2VudGF0aW9ucyBiZXR3ZWVuIDMwIGFuZCA0NQpt
-aW51dGVzIHBlciBzdWJqZWN0IHdpdGggZGlzY3Vzc2lvbi4KClRoaXMgeWVhciwgYXR0ZW5kaW5n
-IHRoZSBUcmFjaW5nIFN1bW1pdCBpcyBmcmVlIG9mIGNoYXJnZSwgYW5kIGF0dGVuZGVlcwphcmUg
-bm90IHJlcXVpcmVkIHRvIHJlZ2lzdGVyIHRvIG90aGVyIGV2ZW50cy4gSWYgeW91IGluZGVuZCB0
-byBhdHRlbmQsCndlIHJlY29tbWVuZCB5b3UgZG9uJ3Qgd2FpdCB0b28gbXVjaCBiZWZvcmUgcmVn
-aXN0ZXJpbmcKW2h0dHBzOi8vd3d3LnJlZ29ubGluZS5jb20vdHJhY2luZ3N1bW1pdDE2XSwgYXMg
-d2UgbmVlZCB0byBjb25zaWRlciByb29tCnNpemUgbGltaXRzLgoKVGhlIFRyYWNpbmcgU3VtbWl0
-IGlzIGN1cnJlbnRseSBzcG9uc29yZWQgYnkgRWZmaWNpT1MuIFBsZWFzZSBsZXQgdXMKa25vdyBp
-ZiB5b3VyIGNvbXBhbnkgaXMgaW50ZXJlc3RlZCBpbiBzcG9uc29yaW5nIHRoaXMgZXZlbnQuCgpT
-ZWUgdGhlIFRyYWNpbmcgU3VtbWl0IDIwMTYgd2lraSBhdApodHRwOi8vd3d3LnRyYWNpbmdzdW1t
-aXQub3JnL3dpa2kvVHJhY2luZ1N1bW1pdDIwMTYgZm9yIGRldGFpbHMuCgpUaGFuayB5b3UsCgpP
-biBiZWhhbGYgb2YgdGhlIERpYWdub3N0aWMgYW5kIE1vbml0b3JpbmcgV29ya2dyb3VwLApEb21p
-bmlxdWUgVG91cGluICYgTWF0aGlldSBEZXNub3llcnMKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
-aXN0aW5mby9sdHRuZy1kZXYK
+--===============1470068413064262413==
+Content-Type: multipart/alternative; boundary=94eb2c0b726a2876b70532182434
+
+--94eb2c0b726a2876b70532182434
+Content-Type: text/plain; charset=UTF-8
+
+Hi
+
+When trying to cross-complie lttng-modules with Linux 3.14 ARCH ARM build
+using this command:
+make KERNELDIR=/home/muser/Projects/st-linux-mainline/
+
+I get this errors:
+
+
+In file included from include/linux/fs.h:8:0,
+                 from include/linux/ftrace.h:18,
+                 from include/linux/kprobes.h:42,
+                 from
+/home/muser/LTTngArch/lttng-modules-2.7.1/lttng-events.h:28,
+                 from
+/home/muser/LTTngArch/lttng-modules-2.7.1/lttng-tracer.h:40,
+                 from
+/home/muser/LTTngArch/lttng-modules-2.7.1/lttng-ring-buffer-client-discard.c:24:
+include/linux/dcache.h:163:1: error: requested alignment is not an integer
+constant
+ } ____cacheline_aligned;
+ ^
+In file included from include/linux/ftrace.h:18:0,
+                 from include/linux/kprobes.h:42,
+                 from
+/home/muser/LTTngArch/lttng-modules-2.7.1/lttng-events.h:28,
+                 from
+/home/muser/LTTngArch/lttng-modules-2.7.1/lttng-tracer.h:40,
+                 from
+/home/muser/LTTngArch/lttng-modules-2.7.1/lttng-ring-buffer-client-discard.c:24:
+include/linux/fs.h:1588:1: error: requested alignment is not an integer
+constant
+ } ____cacheline_aligned;
+ ^
+make[2]: ***
+[/home/muser/LTTngArch/lttng-modules-2.7.1/lttng-ring-buffer-client-discard.o]
+Error 1
+make[1]: *** [_module_/home/muser/LTTngArch/lttng-modules-2.7.1] Error 2
+make[1]: Leaving directory `/home/muser/Projects/st-linux-mainline'
+make: *** [default] Error 2
+
+Additional info:
+
+Linux is 3.14 build with:
+make ARCH=arm CROSS_COMPILE=arm-v5te-linux-gnueabi-
+
+LTTng modules used are downloaded from here:
+http://lttng.org/files/lttng-modules/lttng-modules-2.7.1.tar.bz2
+I tried clone it from https://aur.archlinux.org/lttng-modules.git but
+doesn't exists anymore.
+
+--94eb2c0b726a2876b70532182434
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi</div><div><br></div><div>When trying to cross-comp=
+lie lttng-modules with Linux 3.14 ARCH ARM build using this command:</div><=
+div>make KERNELDIR=3D/home/muser/Projects/st-linux-mainline/</div><div><br>=
+</div><div>I get this errors:</div><div><br></div><div><br></div><div>In fi=
+le included from include/linux/fs.h:8:0,</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from include/linux/ftrace.h:18,</div>=
+<div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from inc=
+lude/linux/kprobes.h:42,</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0from /home/muser/LTTngArch/lttng-modules-2.7.1/lttn=
+g-events.h:28,</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0from /home/muser/LTTngArch/lttng-modules-2.7.1/lttng-tracer.h:=
+40,</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0from /home/muser/LTTngArch/lttng-modules-2.7.1/lttng-ring-buffer-client-=
+discard.c:24:</div><div>include/linux/dcache.h:163:1: error: requested alig=
+nment is not an integer constant</div><div>=C2=A0} ____cacheline_aligned;</=
+div><div>=C2=A0^</div><div>In file included from include/linux/ftrace.h:18:=
+0,</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+from include/linux/kprobes.h:42,</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from /home/muser/LTTngArch/lttng-modules-2.7=
+.1/lttng-events.h:28,</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0from /home/muser/LTTngArch/lttng-modules-2.7.1/lttng-tr=
+acer.h:40,</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0from /home/muser/LTTngArch/lttng-modules-2.7.1/lttng-ring-buffer-=
+client-discard.c:24:</div><div>include/linux/fs.h:1588:1: error: requested =
+alignment is not an integer constant</div><div>=C2=A0} ____cacheline_aligne=
+d;</div><div>=C2=A0^</div><div>make[2]: *** [/home/muser/LTTngArch/lttng-mo=
+dules-2.7.1/lttng-ring-buffer-client-discard.o] Error 1</div><div>make[1]: =
+*** [_module_/home/muser/LTTngArch/lttng-modules-2.7.1] Error 2</div><div>m=
+ake[1]: Leaving directory `/home/muser/Projects/st-linux-mainline&#39;</div=
+><div>make: *** [default] Error 2</div><div><br></div><div>Additional info:=
+</div><div><br></div><div>Linux is 3.14 build with:</div><div>make ARCH=3Da=
+rm CROSS_COMPILE=3Darm-v5te-linux-gnueabi-</div><div><br></div><div>LTTng m=
+odules used are downloaded from here:</div><div><a href=3D"http://lttng.org=
+/files/lttng-modules/lttng-modules-2.7.1.tar.bz2">http://lttng.org/files/lt=
+tng-modules/lttng-modules-2.7.1.tar.bz2</a></div><div>I tried clone it from=
+ <a href=3D"https://aur.archlinux.org/lttng-modules.git">https://aur.archli=
+nux.org/lttng-modules.git</a> but doesn&#39;t exists anymore.</div><div><di=
+v class=3D"gmail_signature"><div dir=3D"ltr"><div style=3D"font-size:12.8px=
+"><br></div></div></div></div>
+</div>
+
+--94eb2c0b726a2876b70532182434--
+
+--===============1470068413064262413==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============1470068413064262413==--
