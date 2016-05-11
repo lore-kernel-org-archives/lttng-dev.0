@@ -1,21 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules] Fix: x86 kvm mmutrace
- instrumentation for kernel < 3.6
-Date: Tue, 10 May 2016 16:02:22 +0000 (UTC)
-Message-ID: <1412854239.5807.1462896142600.JavaMail.zimbra__40133.6656221703$1462896170$gmane$org@efficios.com>
-References: <1462887420-30065-1-git-send-email-mjeanson@efficios.com>
- <1462887420-30065-2-git-send-email-mjeanson@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-modules] Add modules target to base
+	Makefile
+Date: Wed, 11 May 2016 10:38:06 -0400
+Message-ID: <1462977486-18690-1-git-send-email-mjeanson__48024.293073877$1462977517$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 26F6AA33D0
- for <lttng-dev@lists.lttng.org>; Tue, 10 May 2016 16:02:24 +0000 (UTC)
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 7D5C1A3443
+ for <lttng-dev@lists.lttng.org>; Wed, 11 May 2016 14:38:17 +0000 (UTC)
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id D4B313403DE
- for <lttng-dev@lists.lttng.org>; Tue, 10 May 2016 16:02:23 +0000 (UTC)
-In-Reply-To: <1462887420-30065-2-git-send-email-mjeanson@efficios.com>
+ by mail.efficios.com (Postfix) with ESMTP id 363D5340349
+ for <lttng-dev@lists.lttng.org>; Wed, 11 May 2016 14:38:17 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,45 +22,19 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-bWVyZ2VkLCB0aGFua3MsCgpNYXRoaWV1CgotLS0tLSBPbiBNYXkgMTAsIDIwMTYsIGF0IDk6Mzcg
-QU0sIE1pY2hhZWwgSmVhbnNvbiBtamVhbnNvbkBlZmZpY2lvcy5jb20gd3JvdGU6Cgo+IEZyb206
-IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gCj4g
-U2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmlj
-aW9zLmNvbT4KPiBTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVmZmlj
-aW9zLmNvbT4KPiAtLS0KPiAuLi4vZXZlbnRzL2x0dG5nLW1vZHVsZS9hcmNoL3g4Ni9rdm0vbW11
-dHJhY2UuaCAgICB8IDI2ICsrKysrKysrKysrKysrKysrKysrKysKPiAxIGZpbGUgY2hhbmdlZCwg
-MjYgaW5zZXJ0aW9ucygrKQo+IAo+IGRpZmYgLS1naXQgYS9pbnN0cnVtZW50YXRpb24vZXZlbnRz
-L2x0dG5nLW1vZHVsZS9hcmNoL3g4Ni9rdm0vbW11dHJhY2UuaAo+IGIvaW5zdHJ1bWVudGF0aW9u
-L2V2ZW50cy9sdHRuZy1tb2R1bGUvYXJjaC94ODYva3ZtL21tdXRyYWNlLmgKPiBpbmRleCAxNjVk
-N2Q2Li4yYTRmODg3IDEwMDY0NAo+IC0tLSBhL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmct
-bW9kdWxlL2FyY2gveDg2L2t2bS9tbXV0cmFjZS5oCj4gKysrIGIvaW5zdHJ1bWVudGF0aW9uL2V2
-ZW50cy9sdHRuZy1tb2R1bGUvYXJjaC94ODYva3ZtL21tdXRyYWNlLmgKPiBAQCAtNTUsNiArNTUs
-NyBAQAo+IAl7IFBGRVJSX1JTVkRfTUFTSywgIlJTVkQiIH0sCVwKPiAJeyBQRkVSUl9GRVRDSF9N
-QVNLLCAiRiIgfQo+IAo+ICsjaWYgKExJTlVYX1ZFUlNJT05fQ09ERSA+PSBLRVJORUxfVkVSU0lP
-TigzLDYsMCkpCj4gLyoKPiAgKiBBIHBhZ2V0YWJsZSB3YWxrIGhhcyBzdGFydGVkCj4gICovCj4g
-QEAgLTc2LDYgKzc3LDMxIEBAIExUVE5HX1RSQUNFUE9JTlRfRVZFTlQoCj4gCVRQX3ByaW50aygi
-YWRkciAlbGx4IHBmZXJyICV4ICVzIiwgX19lbnRyeS0+YWRkciwgX19lbnRyeS0+cGZlcnIsCj4g
-CQkgIF9fcHJpbnRfZmxhZ3MoX19lbnRyeS0+cGZlcnIsICJ8Iiwga3ZtX21tdV90cmFjZV9wZmVy
-cl9mbGFncykpCj4gKQo+ICsjZWxzZSAvKiAjaWYgKExJTlVYX1ZFUlNJT05fQ09ERSA+PSBLRVJO
-RUxfVkVSU0lPTigzLDYsMCkpICovCj4gKy8qCj4gKyAqIEEgcGFnZXRhYmxlIHdhbGsgaGFzIHN0
-YXJ0ZWQKPiArICovCj4gK0xUVE5HX1RSQUNFUE9JTlRfRVZFTlQoCj4gKwlrdm1fbW11X3BhZ2V0
-YWJsZV93YWxrLAo+ICsJVFBfUFJPVE8odTY0IGFkZHIsIGludCB3cml0ZV9mYXVsdCwgaW50IHVz
-ZXJfZmF1bHQsIGludCBmZXRjaF9mYXVsdCksCj4gKwlUUF9BUkdTKGFkZHIsIHdyaXRlX2ZhdWx0
-LCB1c2VyX2ZhdWx0LCBmZXRjaF9mYXVsdCksCj4gKwo+ICsJVFBfU1RSVUNUX19lbnRyeSgKPiAr
-CQlfX2ZpZWxkKF9fdTY0LCBhZGRyKQo+ICsJCV9fZmllbGQoX191MzIsIHBmZXJyKQo+ICsJKSwK
-PiArCj4gKwlUUF9mYXN0X2Fzc2lnbigKPiArCQl0cF9hc3NpZ24oYWRkciwgYWRkcikKPiArCQl0
-cF9hc3NpZ24ocGZlcnIsCj4gKwkJCSghIXdyaXRlX2ZhdWx0IDw8IDEpIHwgKCEhdXNlcl9mYXVs
-dCA8PCAyKQo+ICsJCQl8ICghIWZldGNoX2ZhdWx0IDw8IDQpKQo+ICsJKSwKPiArCj4gKwlUUF9w
-cmludGsoImFkZHIgJWxseCBwZmVyciAleCAlcyIsIF9fZW50cnktPmFkZHIsIF9fZW50cnktPnBm
-ZXJyLAo+ICsJCSAgX19wcmludF9mbGFncyhfX2VudHJ5LT5wZmVyciwgInwiLCBrdm1fbW11X3Ry
-YWNlX3BmZXJyX2ZsYWdzKSkKPiArKQo+ICsjZW5kaWYgLyogI2Vsc2UgI2lmIChMSU5VWF9WRVJT
-SU9OX0NPREUgPj0gS0VSTkVMX1ZFUlNJT04oMyw2LDApKSAqLwo+IAo+IAo+IC8qIFdlIGp1c3Qg
-d2Fsa2VkIGEgcGFnaW5nIGVsZW1lbnQgKi8KPiAtLQo+IDEuOS4xCgotLSAKTWF0aGlldSBEZXNu
-b3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0
-Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
-bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+VGhpcyB3YXkgcnVubmluZyAnbWFrZSBtb2R1bGVzJyB3aWxsIGluZGVlZCBidWlsZCB0aGUgbW9k
+dWxlcwpsaWtlIGluIHRoZSB1cHN0cmVhbSBidWlsZCBzeXN0ZW0uCgpTaWduZWQtb2ZmLWJ5OiBN
+aWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVmZmljaW9zLmNvbT4KLS0tCiBNYWtlZmlsZSB8IDQg
+KysrLQogMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlm
+ZiAtLWdpdCBhL01ha2VmaWxlIGIvTWFrZWZpbGUKaW5kZXggNTg4Y2E5Ni4uNzM4YTM1YyAxMDA2
+NDQKLS0tIGEvTWFrZWZpbGUKKysrIGIvTWFrZWZpbGUKQEAgLTEwMSw3ICsxMDEsOSBAQCBLRVJO
+RUxESVIgPz0gL2xpYi9tb2R1bGVzLyQoc2hlbGwgdW5hbWUgLXIpL2J1aWxkCiBQV0QgOj0gJChz
+aGVsbCBwd2QpCiBDRkxBR1MgPSAkKEVYVENGTEFHUykKIAotZGVmYXVsdDoKK2RlZmF1bHQ6IG1v
+ZHVsZXMKKworbW9kdWxlczoKIAkkKE1BS0UpIC1DICQoS0VSTkVMRElSKSBNPSQoUFdEKSBDT05G
+SUdfTFRUTkc9bSBtb2R1bGVzCiAKIG1vZHVsZXNfaW5zdGFsbDoKLS0gCjEuOS4xCgpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGlu
+ZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
