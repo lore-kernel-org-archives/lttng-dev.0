@@ -1,20 +1,15 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools 0/5] Fix: static build make
-	check/long reg/distcheck
-Date: Sat, 14 May 2016 16:57:09 -0400
-Message-ID: <CA+jJMxvbe9MhhZYFZfJ6D0zPvL4sr4C3ANYSRUbiMKGLU+nRGA__18567.4096960158$1463259464$gmane$org@mail.gmail.com>
-References: <1463083727-15190-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: lttng view without stopping the session
+Date: Mon, 16 May 2016 15:10:59 +0000 (UTC)
+Message-ID: <2100466655.10374.1463411459616.JavaMail.zimbra__1579.39902642301$1463411494$gmane$org@efficios.com>
+References: <CAC8EaD_AMGRQRL5rAw3gaFohSoBY4-4OErHHxDTdCD9a9ip4QQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0112365651797995973=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-f194.google.com (mail-qk0-f194.google.com
- [209.85.220.194])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id BABDFA34C5
- for <lttng-dev@lists.lttng.org>; Sat, 14 May 2016 20:57:10 +0000 (UTC)
-Received: by mail-qk0-f194.google.com with SMTP id n62so4817807qkc.2
- for <lttng-dev@lists.lttng.org>; Sat, 14 May 2016 13:57:10 -0700 (PDT)
-In-Reply-To: <1463083727-15190-1-git-send-email-mathieu.desnoyers@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 4B763A34C7
+ for <lttng-dev@lists.lttng.org>; Mon, 16 May 2016 15:11:05 +0000 (UTC)
+In-Reply-To: <CAC8EaD_AMGRQRL5rAw3gaFohSoBY4-4OErHHxDTdCD9a9ip4QQ@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,39 +19,77 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: vijay anand <vijnitt@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-QWxsIGZpdmUgcGF0Y2hlcyBtZXJnZWQgaW4gbWFzdGVyIGFuZCBzdGFibGUtMi44LCB0aGFua3Mh
-CgpKw6lyw6ltaWUKCk9uIFRodSwgTWF5IDEyLCAyMDE2IGF0IDQ6MDggUE0sIE1hdGhpZXUgRGVz
-bm95ZXJzCjxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+IE1hdGhpZXUg
-RGVzbm95ZXJzICg1KToKPiAgIEZpeDogdGVzdHM6IGRvbid0IGJ1aWxkIGR5bmFtaWMgbGliIHRl
-c3RzIGlmIHN1cHBvcnQgZGlzYWJsZWQKPiAgIEZpeDogdGVzdHM6IHNraXAgdGVzdHMgb24gc3Rh
-dGljIGJ1aWxkCj4gICBGaXg6IHRlc3RzOiBkb24ndCBtYXRjaCBjb21tYW5kIGxpbmUgYXJndW1l
-bnRzLCBtYXRjaCBzdGF0aWMgYnVpbGQKPiAgICAgYmluYXJ5IG5hbWVzCj4gICBGaXg6IGNvbmZp
-Z3VyZTogZm9yYmlkIFB5dGhvbiBiaW5kaW5ncyBpZiBzaGFyZWQgbGlicmFyaWVzIGFyZQo+ICAg
-ICBkaXNhYmxlZAo+ICAgRml4OiBkaXN0Y2hlY2sgcmVxdWlyZXMgdGhhdCB3ZSBjbGVhbiB2ZXJz
-aW9uLmgKPgo+ICBjb25maWd1cmUuYWMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICB8ICAxICsKPiAgaW5jbHVkZS9NYWtlZmlsZS5hbSAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgfCAgMiArKwo+ICB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL2hlYWx0aC9NYWtlZmls
-ZS5hbSAgICAgICAgICB8IDIwICsrKysrKystLS0tLQo+ICB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xz
-L2hlYWx0aC90ZXN0X2hlYWx0aC5zaCAgICAgICB8IDEyICsrKysrLS0tCj4gIHRlc3RzL3JlZ3Jl
-c3Npb24vdXN0L2Nsb2NrLW92ZXJyaWRlL01ha2VmaWxlLmFtICAgIHwgMTMgKysrKysrKysKPiAg
-Li4uL3VzdC9jbG9jay1vdmVycmlkZS90ZXN0X2Nsb2NrX292ZXJyaWRlICAgICAgICAgfCAxMiAr
-KysrKy0tLQo+ICB0ZXN0cy9yZWdyZXNzaW9uL3VzdC9nZXRjcHUtb3ZlcnJpZGUvTWFrZWZpbGUu
-YW0gICB8IDE0ICsrKysrKysrKwo+ICAuLi4vdXN0L2dldGNwdS1vdmVycmlkZS90ZXN0X2dldGNw
-dV9vdmVycmlkZSAgICAgICB8IDEyICsrKysrLS0tCj4gIHRlc3RzL3JlZ3Jlc3Npb24vdXN0L2xp
-bmtpbmcvTWFrZWZpbGUuYW0gICAgICAgICAgIHwgMjAgKysrKysrKystLS0tCj4gIHRlc3RzL3Jl
-Z3Jlc3Npb24vdXN0L292ZXJsYXAvZGVtby9NYWtlZmlsZS5hbSAgICAgIHwgMTIgKysrKysrKy0K
-PiAgdGVzdHMvcmVncmVzc2lvbi91c3Qvb3ZlcmxhcC90ZXN0X292ZXJsYXAgICAgICAgICAgfCAx
-MiArKysrKy0tLQo+ICB0ZXN0cy9yZWdyZXNzaW9uL3VzdC91c3QtZGwvTWFrZWZpbGUuYW0gICAg
-ICAgICAgICB8IDE5ICsrKysrKysrKystLQo+ICB0ZXN0cy9yZWdyZXNzaW9uL3VzdC91c3QtZGwv
-dGVzdF91c3QtZGwgICAgICAgICAgICB8ICA1ICsrKwo+ICB0ZXN0cy91dGlscy91dGlscy5zaCAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IDM2ICsrKysrKysrKysrKy0tLS0tLS0tLS0K
-PiAgMTQgZmlsZXMgY2hhbmdlZCwgMTQxIGluc2VydGlvbnMoKyksIDQ5IGRlbGV0aW9ucygtKQo+
-Cj4gLS0KPiAyLjEuNAo+CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4K
-aHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
-dHRuZy1kZXYK
+--===============0112365651797995973==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_10373_665315923.1463411459615"
+
+------=_Part_10373_665315923.1463411459615
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+----- On May 11, 2016, at 2:28 AM, vijay anand <vijnitt@gmail.com> wrote: 
+
+> Hi,
+> Is there any way I can view traces generated by a user-space application without
+> stopping the trace session. Stopping the trace session leads to loss of few
+> trace events and is there any way we can circumvent this ?
+
+Yes, see http://lttng.org/docs/#doc-lttng-live 
+
+Thanks, 
+
+Mathieu 
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+------=_Part_10373_665315923.1463411459615
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
+__">----- On May 11, 2016, at 2:28 AM, vijay anand &lt;vijnitt@gmail.com&gt=
+; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockquote s=
+tyle=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;colo=
+r:#000;font-weight:normal;font-style:normal;text-decoration:none;font-famil=
+y:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr">Hi,<br><div>=
+Is there any way I can view traces generated by a user-space application wi=
+thout stopping the trace session. Stopping the trace session leads to loss =
+of few trace events and is there any way we can circumvent this ?</div></di=
+v></blockquote><div><br></div><div>Yes, see http://lttng.org/docs/#doc-lttn=
+g-live<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><d=
+iv>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></di=
+v><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1">=
+</div><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;pa=
+dding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decorat=
+ion:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=
+=3D"ltr"><br><br></div><br>_______________________________________________<=
+br>lttng-dev mailing list<br>lttng-dev@lists.lttng.org<br>https://lists.ltt=
+ng.org/cgi-bin/mailman/listinfo/lttng-dev<br></blockquote></div><div><br></=
+div><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<b=
+r>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></html>
+------=_Part_10373_665315923.1463411459615--
+
+--===============0112365651797995973==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============0112365651797995973==--
