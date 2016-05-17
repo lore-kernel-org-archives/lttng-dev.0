@@ -1,14 +1,15 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix: insecure data handling
-Date: Mon, 16 May 2016 23:36:09 -0400
-Message-ID: <1463456169-12405-1-git-send-email-mathieu.desnoyers__6451.29245608604$1463456199$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools] Fix: macro compares unsigned to 0
+	(no effect)
+Date: Tue, 17 May 2016 09:01:51 -0400
+Message-ID: <1463490111-13604-1-git-send-email-mathieu.desnoyers__13909.050616394$1463490148$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id EE4D5A350E
- for <lttng-dev@lists.lttng.org>; Tue, 17 May 2016 03:36:15 +0000 (UTC)
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 87725A34DA
+ for <lttng-dev@lists.lttng.org>; Tue, 17 May 2016 13:02:03 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -18,23 +19,24 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: jgalar@efficios.com, mjeanson@efficios.com
+To: jgalar@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Rm91bmQgYnkgQ292ZXJpdHk6CgpDSUQgMTM1MzQ2MiAoIzEgb2YgMSk6IFVzZSBvZiB1bnRydXN0
-ZWQgc3RyaW5nIHZhbHVlIChUQUlOVEVEX1NUUklORyk1Lgp0YWludGVkX3N0cmluZzogUGFzc2lu
-ZyB0YWludGVkIHN0cmluZyBtYW5fYmluX3BhdGggdG8gZXhlY2xwLCB3aGljaApjYW5ub3QgYWNj
-ZXB0IHRhaW50ZWQgZGF0YS4KClNpZ25lZC1vZmYtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRo
-aWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Ci0tLQogc3JjL2NvbW1vbi91dGlscy5jIHwgMyAr
-Ky0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYg
-LS1naXQgYS9zcmMvY29tbW9uL3V0aWxzLmMgYi9zcmMvY29tbW9uL3V0aWxzLmMKaW5kZXggZGY1
-NWRjOS4uYjZiNDVlMyAxMDA2NDQKLS0tIGEvc3JjL2NvbW1vbi91dGlscy5jCisrKyBiL3NyYy9j
-b21tb24vdXRpbHMuYwpAQCAtMTM0Nyw3ICsxMzQ3LDggQEAgZW5kOgogCiBzdGF0aWMgY29uc3Qg
-Y2hhciAqZ2V0X21hbl9iaW5fcGF0aCh2b2lkKQogewotCWNoYXIgKmVudl9tYW5fcGF0aCA9IGdl
-dGVudihERUZBVUxUX01BTl9CSU5fUEFUSF9FTlYpOworCWNoYXIgKmVudl9tYW5fcGF0aCA9CisJ
-CWx0dG5nX3NlY3VyZV9nZXRlbnYoREVGQVVMVF9NQU5fQklOX1BBVEhfRU5WKTsKIAogCWlmIChl
-bnZfbWFuX3BhdGgpIHsKIAkJcmV0dXJuIGVudl9tYW5fcGF0aDsKLS0gCjIuMS40CgpfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGlu
-ZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
-Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Rm91bmQgYnkgQ292ZXJpdHk6CgpDSUQgMTI2MjExNyAoIzEgb2YgMSk6IE1hY3JvIGNvbXBhcmVz
+IHVuc2lnbmVkIHRvIDAKKE5PX0VGRkVDVCl1bnNpZ25lZF9jb21wYXJlOiBUaGlzIGdyZWF0ZXIt
+dGhhbi1vci1lcXVhbC10by16ZXJvCmNvbXBhcmlzb24gb2YgYW4gdW5zaWduZWQgdmFsdWUgaXMg
+YWx3YXlzIHRydWUuIGV2ZW50cy0+bmJfZmQgPj0gMFUuCgpTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1
+IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgotLS0KIHNyYy9jb21t
+b24vY29tcGF0L2NvbXBhdC1lcG9sbC5jIHwgMSAtCiAxIGZpbGUgY2hhbmdlZCwgMSBkZWxldGlv
+bigtKQoKZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vY29tcGF0L2NvbXBhdC1lcG9sbC5jIGIvc3Jj
+L2NvbW1vbi9jb21wYXQvY29tcGF0LWVwb2xsLmMKaW5kZXggNThmNTBjYy4uNjI1OWZkMyAxMDA2
+NDQKLS0tIGEvc3JjL2NvbW1vbi9jb21wYXQvY29tcGF0LWVwb2xsLmMKKysrIGIvc3JjL2NvbW1v
+bi9jb21wYXQvY29tcGF0LWVwb2xsLmMKQEAgLTIwOCw3ICsyMDgsNiBAQCBpbnQgY29tcGF0X2Vw
+b2xsX3dhaXQoc3RydWN0IGx0dG5nX3BvbGxfZXZlbnQgKmV2ZW50cywgaW50IHRpbWVvdXQpCiAJ
+CUVSUigiV3JvbmcgYXJndW1lbnRzIGluIGNvbXBhdF9lcG9sbF93YWl0Iik7CiAJCWdvdG8gZXJy
+b3I7CiAJfQotCWFzc2VydChldmVudHMtPm5iX2ZkID49IDApOwogCiAJaWYgKGV2ZW50cy0+bmJf
+ZmQgPT0gMCkgewogCQllcnJubyA9IEVJTlZBTDsKLS0gCjIuMS40CgpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
+YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
