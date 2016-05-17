@@ -1,19 +1,20 @@
 From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: insecure data handling
-Date: Tue, 17 May 2016 15:34:07 -0400
-Message-ID: <CA+jJMxuDLSgp0UK5zfqtgft5mopDMB=56r2W=TBux6u6O5eNbA__48173.9556453705$1463513662$gmane$org@mail.gmail.com>
-References: <1463456169-12405-1-git-send-email-mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: macro compares unsigned to
+	0 (no effect)
+Date: Tue, 17 May 2016 16:42:22 -0400
+Message-ID: <CA+jJMxt=-kCwd=bwvkXd6e5haYGi79Br+=Wqcqziw0vcRe+Htg__27496.7528101572$1463517767$gmane$org@mail.gmail.com>
+References: <1463490111-13604-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qg0-f67.google.com (mail-qg0-f67.google.com
- [209.85.192.67])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 58424A02DB
- for <lttng-dev@lists.lttng.org>; Tue, 17 May 2016 19:34:09 +0000 (UTC)
-Received: by mail-qg0-f67.google.com with SMTP id e35so2290137qge.1
- for <lttng-dev@lists.lttng.org>; Tue, 17 May 2016 12:34:09 -0700 (PDT)
-In-Reply-To: <1463456169-12405-1-git-send-email-mathieu.desnoyers@efficios.com>
+Received: from mail-qk0-f195.google.com (mail-qk0-f195.google.com
+ [209.85.220.195])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id E658DA3443
+ for <lttng-dev@lists.lttng.org>; Tue, 17 May 2016 20:42:23 +0000 (UTC)
+Received: by mail-qk0-f195.google.com with SMTP id q184so2588110qkf.0
+ for <lttng-dev@lists.lttng.org>; Tue, 17 May 2016 13:42:23 -0700 (PDT)
+In-Reply-To: <1463490111-13604-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,30 +28,25 @@ To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Rml4ZWQgYnk6Cgpjb21taXQgMDJkOGFjM2RhZjE4MWRjOGIwN2JmMjA2ZThjZDg1NWU3NGUzZmNk
-OApBdXRob3I6IE1pY2hhZWwgSmVhbnNvbiA8bWplYW5zb25AZWZmaWNpb3MuY29tPgpEYXRlOiAg
-IFR1ZSBNYXkgMTcgMTQ6MTI6MDkgMjAxNiAtMDQwMAoKICAgIEZpeDogRnJlZSB2YXJpYWJsZSBi
-ZWZvcmUgc3RyZHVwKCkgaW4gcHJvY2Vzc19ldmVudF9ub2RlCgogICAgRml4ZXMgY292ZXJpdHkg
-IzEyNDMwNDAKCiAgICBTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVm
-ZmljaW9zLmNvbT4KICAgIFNpZ25lZC1vZmYtYnk6IErDqXLDqW1pZSBHYWxhcm5lYXUgPGplcmVt
-aWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4KCgpUaGFua3MsCkrDqXLDqW1pZQoKT24gTW9uLCBN
-YXkgMTYsIDIwMTYgYXQgMTE6MzYgUE0sIE1hdGhpZXUgRGVzbm95ZXJzCjxtYXRoaWV1LmRlc25v
-eWVyc0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+IEZvdW5kIGJ5IENvdmVyaXR5Ogo+Cj4gQ0lEIDEz
-NTM0NjIgKCMxIG9mIDEpOiBVc2Ugb2YgdW50cnVzdGVkIHN0cmluZyB2YWx1ZSAoVEFJTlRFRF9T
-VFJJTkcpNS4KPiB0YWludGVkX3N0cmluZzogUGFzc2luZyB0YWludGVkIHN0cmluZyBtYW5fYmlu
-X3BhdGggdG8gZXhlY2xwLCB3aGljaAo+IGNhbm5vdCBhY2NlcHQgdGFpbnRlZCBkYXRhLgo+Cj4g
-U2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmlj
-aW9zLmNvbT4KPiAtLS0KPiAgc3JjL2NvbW1vbi91dGlscy5jIHwgMyArKy0KPiAgMSBmaWxlIGNo
-YW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+Cj4gZGlmZiAtLWdpdCBhL3Ny
-Yy9jb21tb24vdXRpbHMuYyBiL3NyYy9jb21tb24vdXRpbHMuYwo+IGluZGV4IGRmNTVkYzkuLmI2
-YjQ1ZTMgMTAwNjQ0Cj4gLS0tIGEvc3JjL2NvbW1vbi91dGlscy5jCj4gKysrIGIvc3JjL2NvbW1v
-bi91dGlscy5jCj4gQEAgLTEzNDcsNyArMTM0Nyw4IEBAIGVuZDoKPgo+ICBzdGF0aWMgY29uc3Qg
-Y2hhciAqZ2V0X21hbl9iaW5fcGF0aCh2b2lkKQo+ICB7Cj4gLSAgICAgICBjaGFyICplbnZfbWFu
-X3BhdGggPSBnZXRlbnYoREVGQVVMVF9NQU5fQklOX1BBVEhfRU5WKTsKPiArICAgICAgIGNoYXIg
-KmVudl9tYW5fcGF0aCA9Cj4gKyAgICAgICAgICAgICAgIGx0dG5nX3NlY3VyZV9nZXRlbnYoREVG
-QVVMVF9NQU5fQklOX1BBVEhfRU5WKTsKPgo+ICAgICAgICAgaWYgKGVudl9tYW5fcGF0aCkgewo+
-ICAgICAgICAgICAgICAgICByZXR1cm4gZW52X21hbl9wYXRoOwo+IC0tCj4gMi4xLjQKPgoKCgot
-LSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3Mu
-Y29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIFR1ZSwgTWF5IDE3LCAyMDE2IGF0IDk6MDEg
+QU0sIE1hdGhpZXUgRGVzbm95ZXJzCjxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+IHdy
+b3RlOgo+IEZvdW5kIGJ5IENvdmVyaXR5Ogo+Cj4gQ0lEIDEyNjIxMTcgKCMxIG9mIDEpOiBNYWNy
+byBjb21wYXJlcyB1bnNpZ25lZCB0byAwCj4gKE5PX0VGRkVDVCl1bnNpZ25lZF9jb21wYXJlOiBU
+aGlzIGdyZWF0ZXItdGhhbi1vci1lcXVhbC10by16ZXJvCj4gY29tcGFyaXNvbiBvZiBhbiB1bnNp
+Z25lZCB2YWx1ZSBpcyBhbHdheXMgdHJ1ZS4gZXZlbnRzLT5uYl9mZCA+PSAwVS4KPgo+IFNpZ25l
+ZC1vZmYtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5j
+b20+Cj4gLS0tCj4gIHNyYy9jb21tb24vY29tcGF0L2NvbXBhdC1lcG9sbC5jIHwgMSAtCj4gIDEg
+ZmlsZSBjaGFuZ2VkLCAxIGRlbGV0aW9uKC0pCj4KPiBkaWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi9j
+b21wYXQvY29tcGF0LWVwb2xsLmMgYi9zcmMvY29tbW9uL2NvbXBhdC9jb21wYXQtZXBvbGwuYwo+
+IGluZGV4IDU4ZjUwY2MuLjYyNTlmZDMgMTAwNjQ0Cj4gLS0tIGEvc3JjL2NvbW1vbi9jb21wYXQv
+Y29tcGF0LWVwb2xsLmMKPiArKysgYi9zcmMvY29tbW9uL2NvbXBhdC9jb21wYXQtZXBvbGwuYwo+
+IEBAIC0yMDgsNyArMjA4LDYgQEAgaW50IGNvbXBhdF9lcG9sbF93YWl0KHN0cnVjdCBsdHRuZ19w
+b2xsX2V2ZW50ICpldmVudHMsIGludCB0aW1lb3V0KQo+ICAgICAgICAgICAgICAgICBFUlIoIldy
+b25nIGFyZ3VtZW50cyBpbiBjb21wYXRfZXBvbGxfd2FpdCIpOwo+ICAgICAgICAgICAgICAgICBn
+b3RvIGVycm9yOwo+ICAgICAgICAgfQo+IC0gICAgICAgYXNzZXJ0KGV2ZW50cy0+bmJfZmQgPj0g
+MCk7Cj4KPiAgICAgICAgIGlmIChldmVudHMtPm5iX2ZkID09IDApIHsKPiAgICAgICAgICAgICAg
+ICAgZXJybm8gPSBFSU5WQUw7Cj4gLS0KPiAyLjEuNAo+CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJu
+ZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
+bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
