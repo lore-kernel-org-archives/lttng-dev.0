@@ -1,15 +1,17 @@
-From: Vijay Anand <vjanandr85@gmail.com>
-Subject: scale numbers for LTTNG
-Date: Tue, 24 May 2016 11:31:02 +0530
-Message-ID: <CAHxF_R8QdRQjbgfE1d+Zgi=CmDiB6SEgL2Up1G-p21YdQz9pYA__13812.5978796326$1464190036$gmane$org@mail.gmail.com>
+From: Ashish Sangwan <ashishsangwan2@gmail.com>
+Subject: example/demo not working
+Date: Tue, 24 May 2016 18:59:46 +0530
+Message-ID: <CAOiN93m=9KtFwDQoLTmtkP7=8aE4T0jLXfiu6KckATsC8kLbtQ__45186.0855486759$1464190042$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0944993174946287188=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm0-f68.google.com (mail-wm0-f68.google.com [74.125.82.68])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 836A6A2E26
- for <lttng-dev@lists.lttng.org>; Tue, 24 May 2016 06:01:02 +0000 (UTC)
-Received: by mail-wm0-f68.google.com with SMTP id 67so2765872wmg.0
- for <lttng-dev@lists.lttng.org>; Mon, 23 May 2016 23:01:02 -0700 (PDT)
+Received: from mail-lf0-f45.google.com (mail-lf0-f45.google.com
+ [209.85.215.45])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id BDBF3A3440
+ for <lttng-dev@lists.lttng.org>; Tue, 24 May 2016 13:29:47 +0000 (UTC)
+Received: by mail-lf0-f45.google.com with SMTP id k98so6252229lfi.1
+ for <lttng-dev@lists.lttng.org>; Tue, 24 May 2016 06:29:47 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,108 +24,64 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============0944993174946287188==
-Content-Type: multipart/alternative; boundary=089e0112bee222c7270533904823
-
---089e0112bee222c7270533904823
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hello Folks,
-
-We have been evaluating LTTNG for use in our production systems for user
-space tracing. We have evaluated most of the features supported by LTTNG
-and very much see a value add LTTNG brings into our debugging
-infrastructure.
-
-   - Our current requirement is to trace Userspace programs running on
-   linux.
-   - Each of the linux processes define their own tracepoint providers.
-   - We would like to trace event histories of each process independently.
-   - We could potentially have 1000s of such processes running
-   simultaneously.
-   - We concluded on using a session/channel to trace one tracepoint
-   provider corresponding to a unique process.
-      - But I understand we could also create one system wide session and
-      use channels to trace each of the providers. Either of the
-approaches seems
-      to work for us.
-   - But upon evaluating I see that we could create only 25 active
-   process-sessions and not traces from all the processes are logged.
-      - Please note I have tried increasing the buffer size and the number
-      of buffers. This doesn't help.
-      - Each of the process trace 52 events at and interval of 1 second
-      each.
-   - I have evaluated this with lttng in session,live and snapshot modes
-   and I have not been getting favourable.
-
-Could you folks share the scale numbers that LTTNG supports, especially
-when it comes to tracing user space programs ?
-
-Regards,
-Vijay
-=E2=80=8B=E2=80=8B
-
---089e0112bee222c7270533904823
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-family:verdana,=
-sans-serif;font-size:small"><font color=3D"#000000">Hello Folks,</font></di=
-v><div class=3D"gmail_default" style=3D"font-family:verdana,sans-serif;font=
--size:small"><font color=3D"#000000"><br></font></div><div class=3D"gmail_d=
-efault" style=3D"font-family:verdana,sans-serif;font-size:small"><font colo=
-r=3D"#000000">We have been evaluating LTTNG for use in our production syste=
-ms for user space tracing. We have evaluated most of the features supported=
- by LTTNG and very much see a value add LTTNG brings into our debugging inf=
-rastructure.</font></div><div class=3D"gmail_default" style=3D""><ul style=
-=3D""><li><font color=3D"#000000"><span style=3D"font-family:verdana,sans-s=
-erif">Our current requirement is to trace Userspace programs running on lin=
-ux.=C2=A0</span><br></font></li><li><font color=3D"#000000"><span style=3D"=
-font-family:verdana,sans-serif">Each of the linux processes define their ow=
-n tracepoint providers.</span><br></font></li><li><font color=3D"#000000"><=
-span style=3D"font-family:verdana,sans-serif">We would like to trace event =
-histories of each process independently.</span><br></font></li><li><font co=
-lor=3D"#000000"><span style=3D"font-family:verdana,sans-serif">We could pot=
-entially have 1000s of such processes running simultaneously.</span><br></f=
-ont></li><li><span style=3D"font-family:verdana,sans-serif"><font color=3D"=
-#000000">We concluded on using a session/channel to trace one tracepoint pr=
-ovider corresponding to a unique process.=C2=A0</font></span></li><ul><li><=
-span style=3D"font-family:verdana,sans-serif"><font color=3D"#000000">But I=
- understand we could also create one system wide session and use channels t=
-o trace each of the providers. Either of the approaches seems to work for u=
-s.</font></span></li></ul><li><span style=3D"font-family:verdana,sans-serif=
-"><font color=3D"#000000">But upon evaluating I see that we could create on=
-ly 25 active process-sessions and not traces from all the processes are log=
-ged.</font></span></li><ul><li><span style=3D"font-family:verdana,sans-seri=
-f"><font color=3D"#000000">Please note I have tried increasing the buffer s=
-ize and the number of buffers. This doesn&#39;t help.</font></span></li><li=
-><span style=3D"font-family:verdana,sans-serif"><font color=3D"#000000">Eac=
-h of the process trace 52 events at and interval of 1 second each.</font></=
-span></li></ul><li><font face=3D"verdana, sans-serif" color=3D"#000000">I h=
-ave evaluated this with lttng in session,live and snapshot modes and I have=
- not been getting=C2=A0favourable.</font></li></ul><font color=3D"#000000">=
-<span style=3D"font-family:verdana,sans-serif">Could you folks share the sc=
-ale numbers that LTTNG supports, especially when it comes to tracing user s=
-pace programs ?</span><br></font></div><div class=3D"gmail_default" style=
-=3D"font-family:verdana,sans-serif;font-size:small"><font color=3D"#000000"=
-><br></font></div><div><div class=3D"gmail_signature"><div dir=3D"ltr"><fon=
-t face=3D"verdana, sans-serif" color=3D"#000000">Regards,</font><div><font =
-face=3D"verdana, sans-serif" color=3D"#000000">Vijay<div class=3D"gmail_def=
-ault" style=3D"font-family:verdana,sans-serif;font-size:small;display:inlin=
-e">=E2=80=8B=E2=80=8B</div></font></div></div></div></div>
-</div>
-
---089e0112bee222c7270533904823--
-
---===============0944993174946287188==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============0944993174946287188==--
+SGksCgpJIGFtIHRyeWluZyB0byB1c2UgbHR0bmcgbGlicmFyeSB0byB0cmFjZSB1c2VyIHNwYWNl
+LgpJIGhhdmUgaW5zdGFsbGVkIHRoZSBwYWNrYWdlcyBvbiBVYnVudHUgYXMgbWVudGlvbmVkIGhl
+cmUgOgpodHRwOi8vbHR0bmcub3JnL2Rvd25sb2FkLyN1YnVudHUKQWxzbywgSSBoYXZlIGRvd25s
+b2FkIHRoZSBnaXQgc25hcHNob3QgZnJvbQpodHRwOi8vZ2l0Lmx0dG5nLm9yZy8/cD1sdHRuZy11
+c3QuZ2l0O2E9c25hcHNob3Q7aD1IRUFEO3NmPXRneiBhbmQKYnVpbHQgdGhlIHNvdXJjZXMuCgpX
+aGVuIEkgYW0gdHJ5aW5nIHRvIGV4ZWN1dGUgYW55IG9mIHRoZSBhcHBsaWNhdGlvbiBpbiBleGFt
+cGxlCmRpcmVjdG9yeSBJIGFtIG5vdCBhYmxlIHRvIGdldCB0aGUgdHJhY2UuCkkgaGF2ZSBhZGRl
+ZCBteXNlbGYgdG8gdGhlIHRyYWNpbmcgZ3JvdXAgdXNpbmcgdXNlcm1vZCBhbmQgdGhhbiBkaWQK
+dGhlIGZvbGxvd2luZzoKYXNoaXNoQGFzaGlzaC1wYzp+L2x0dG5nL2x0dG5nLXVzdC1IRUFELWY0
+NjI0ZGUvZG9jL2V4YW1wbGVzL2RlbW8tdHJhY2Vsb2ckIHB3ZAovaG9tZS9hc2hpc2gvbHR0bmcv
+bHR0bmctdXN0LUhFQUQtZjQ2MjRkZS9kb2MvZXhhbXBsZXMvZGVtby10cmFjZWxvZwpsdHRuZyBj
+cmVhdGUKbHR0bmcgZW5hYmxlLWV2ZW50IC11ICJsdHRuZ191c3RfdHJhY2Vsb2c6KiIKbHR0bmcg
+c3RhcnQKLi9kZW1vLXRyYWNlbG9nCmx0dG5nIHN0b3AKCkFsbCB0aGUgYWJvdmUgY29tbWFuZHMg
+d2VyZSBzdWNjZXNzZnVsbHkgY29tcGxldGVkLiBCdXQgd2hlbiBJIGFtCnRyeWluZyB0byB2aWV3
+IHRoZSB0cmFjZSBJIGFtIGdldHRpbmcgZXJyb3IuCgphc2hpc2hAYXNoaXNoLXBjOn4vbHR0bmcv
+bHR0bmctdXN0LUhFQUQtZjQ2MjRkZS9kb2MvZXhhbXBsZXMvZGVtby10cmFjZWxvZyQKbHR0bmcg
+dmlldwpUcmFjZSBkaXJlY3Rvcnk6IC9ob21lL2FzaGlzaC9sdHRuZy10cmFjZXMvYXV0by0yMDE2
+MDUyNC0xODUxMjMKCltlcnJvcl0gQ2Fubm90IG9wZW4gYW55IHRyYWNlIGZvciByZWFkaW5nLgoK
+W2Vycm9yXSBvcGVuaW5nIHRyYWNlICIvaG9tZS9hc2hpc2gvbHR0bmctdHJhY2VzL2F1dG8tMjAx
+NjA1MjQtMTg1MTIzIgpmb3IgcmVhZGluZy4KCltlcnJvcl0gbm9uZSBvZiB0aGUgc3BlY2lmaWVk
+IHRyYWNlIHBhdGhzIGNvdWxkIGJlIG9wZW5lZC4KCmFzaGlzaEBhc2hpc2gtcGM6fi9sdHRuZy9s
+dHRuZy11c3QtSEVBRC1mNDYyNGRlL2RvYy9leGFtcGxlcy9kZW1vLXRyYWNlbG9nJApsdHRuZyBk
+ZXN0cm95ClNlc3Npb24gYXV0by0yMDE2MDUyNC0xODUxMjMgZGVzdHJveWVkCgpJIHdpbGwgYXBw
+cmVjaWF0ZSBhbnkgaGVscC4KClJlZ2FyZHMsCkFzaGlzaAoKUFM6IEJUVywgaW5zdGFsbGluZyBs
+dHRuZy1tb2R1bGVzLWRrbXMgZmFpbGVkIGZvciBtZSAoa2VybmVsIHZlcnNpb24KMy4xOSkgd2l0
+aCBiZWxvdyBlcnJvcjoKIERLTVMgbWFrZS5sb2cgZm9yIGx0dG5nLW1vZHVsZXMtMi40LjAgZm9y
+IGtlcm5lbCAzLjE5LjAtMzEtZ2VuZXJpYyAoeDg2XzY0KQogVHVlIE1heSAyNCAxODo1NToyMSBJ
+U1QgMjAxNgogbWFrZTogRW50ZXJpbmcgZGlyZWN0b3J5IGAvdXNyL3NyYy9saW51eC1oZWFkZXJz
+LTMuMTkuMC0zMS1nZW5lcmljJwogICBDQyBbTV0gIC92YXIvbGliL2RrbXMvbHR0bmctbW9kdWxl
+cy8yLjQuMC9idWlsZC9sdHRuZy1yaW5nLWJ1ZmZlci1jbGllbnQtZGlzY2FyZC5vCiBJbiBmaWxl
+IGluY2x1ZGVkIGZyb20KL3Zhci9saWIvZGttcy9sdHRuZy1tb2R1bGVzLzIuNC4wL2J1aWxkL3dy
+YXBwZXIvcmluZ2J1ZmZlci8uLi8uLi9saWIvcmluZ2J1ZmZlci8uLi8uLi93cmFwcGVyL3Jpbmdi
+dWZmZXIvZnJvbnRlbmRfYXBpLmg6MTowLAogICAgICAgICAgICAgICAgICBmcm9tCi92YXIvbGli
+L2RrbXMvbHR0bmctbW9kdWxlcy8yLjQuMC9idWlsZC93cmFwcGVyL3JpbmdidWZmZXIvLi4vLi4v
+bGliL3JpbmdidWZmZXIvYXBpLmg6MzUsCiAgICAgICAgICAgICAgICAgIGZyb20KL3Zhci9saWIv
+ZGttcy9sdHRuZy1tb2R1bGVzLzIuNC4wL2J1aWxkL3dyYXBwZXIvcmluZ2J1ZmZlci9hcGkuaDox
+LAogICAgICAgICAgICAgICAgICBmcm9tCi92YXIvbGliL2RrbXMvbHR0bmctbW9kdWxlcy8yLjQu
+MC9idWlsZC9sdHRuZy1yaW5nLWJ1ZmZlci1jbGllbnQuaDoxNzUsCiAgICAgICAgICAgICAgICAg
+IGZyb20KL3Zhci9saWIvZGttcy9sdHRuZy1tb2R1bGVzLzIuNC4wL2J1aWxkL2x0dG5nLXJpbmct
+YnVmZmVyLWNsaWVudC1kaXNjYXJkLmM6Mjk6CiAvdmFyL2xpYi9ka21zL2x0dG5nLW1vZHVsZXMv
+Mi40LjAvYnVpbGQvd3JhcHBlci9yaW5nYnVmZmVyLy4uLy4uL2xpYi9yaW5nYnVmZmVyLy4uLy4u
+L3dyYXBwZXIvcmluZ2J1ZmZlci8uLi8uLi9saWIvcmluZ2J1ZmZlci9mcm9udGVuZF9hcGkuaDoK
+SW4gZnVuY3Rpb24g4oCYbGliX3JpbmdfYnVmZmVyX3B1dF9jcHXigJk6CiAvdmFyL2xpYi9ka21z
+L2x0dG5nLW1vZHVsZXMvMi40LjAvYnVpbGQvd3JhcHBlci9yaW5nYnVmZmVyLy4uLy4uL2xpYi9y
+aW5nYnVmZmVyLy4uLy4uL3dyYXBwZXIvcmluZ2J1ZmZlci8uLi8uLi9saWIvcmluZ2J1ZmZlci9m
+cm9udGVuZF9hcGkuaDo3NjoyOgplcnJvcjogaW1wbGljaXQgZGVjbGFyYXRpb24gb2YgZnVuY3Rp
+b24g4oCYX19nZXRfY3B1X3Zhcgog4oCZIFstV2Vycm9yPWltcGxpY2l0LWZ1bmN0aW9uLWRlY2xh
+cmF0aW9uXQogICBfX2dldF9jcHVfdmFyKGxpYl9yaW5nX2J1ZmZlcl9uZXN0aW5nKS0tOwogICBe
+CiAvdmFyL2xpYi9ka21zL2x0dG5nLW1vZHVsZXMvMi40LjAvYnVpbGQvd3JhcHBlci9yaW5nYnVm
+ZmVyLy4uLy4uL2xpYi9yaW5nYnVmZmVyLy4uLy4uL3dyYXBwZXIvcmluZ2J1ZmZlci8uLi8uLi9s
+aWIvcmluZ2J1ZmZlci9mcm9udGVuZF9hcGkuaDo3Njo0MDoKZXJyb3I6IGx2YWx1ZSByZXF1aXJl
+ZCBhcyBkZWNyZW1lbnQgb3BlcmFuZAogICBfX2dldF9jcHVfdmFyKGxpYl9yaW5nX2J1ZmZlcl9u
+ZXN0aW5nKS0tOwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF4KIGNj
+MTogc29tZSB3YXJuaW5ncyBiZWluZyB0cmVhdGVkIGFzIGVycm9ycwogbWFrZVsxXTogKioqIFsv
+dmFyL2xpYi9ka21zL2x0dG5nLW1vZHVsZXMvMi40LjAvYnVpbGQvbHR0bmctcmluZy1idWZmZXIt
+Y2xpZW50LWRpc2NhcmQub10KRXJyb3IgMQogbWFrZTogKioqIFtfbW9kdWxlXy92YXIvbGliL2Rr
+bXMvbHR0bmctbW9kdWxlcy8yLjQuMC9idWlsZF0gRXJyb3IgMgogbWFrZTogTGVhdmluZyBkaXJl
+Y3RvcnkgYC91c3Ivc3JjL2xpbnV4LWhlYWRlcnMtMy4xOS4wLTMxLWdlbmVyaWMnCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9j
+Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
