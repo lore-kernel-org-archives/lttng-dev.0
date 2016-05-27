@@ -1,17 +1,16 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools v2] fix: systematically set the
-	logger level to prevent unexpected level inheritance
-Date: Fri, 27 May 2016 14:14:15 -0400
-Message-ID: <1464372855-29729-1-git-send-email-jonathan.rajotte-julien__31635.157732717$1464372886$gmane$org@efficios.com>
-References: <967635494.21414.1464372150275.JavaMail.zimbra@efficios.com>
+From: John Smith <whalajam@gmail.com>
+Subject: "lttng enable-channel --tracefile-size" bug
+Date: Fri, 27 May 2016 15:11:11 -0700
+Message-ID: <CANgVouVswhgXmy=Dge5h2FA-7xsaJfDqOZ3=seG5dHjP=_4gmA__5525.05359887636$1464387861$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============4499940287267387263=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 7C316A0785
- for <lttng-dev@lists.lttng.org>; Fri, 27 May 2016 18:14:24 +0000 (UTC)
-In-Reply-To: <967635494.21414.1464372150275.JavaMail.zimbra@efficios.com>
+Received: from mail-oi0-f68.google.com (mail-oi0-f68.google.com
+ [209.85.218.68])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 5B604A36D8
+ for <lttng-dev@lists.lttng.org>; Fri, 27 May 2016 22:11:12 +0000 (UTC)
+Received: by mail-oi0-f68.google.com with SMTP id r64so14165192oie.1
+ for <lttng-dev@lists.lttng.org>; Fri, 27 May 2016 15:11:12 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,42 +21,54 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-QlNGIG9yIG90aGVyIGphcnMgY2FuIHNoaXAgd2l0aCBsb2c0ai5wcm9wZXJ0aWVzIGZpbGUgZW1i
-ZWRkZWQuIFRoaXMgY2F1c2VzCnByb2JsZW0gd2hlbiBsYXVuY2hpbmcgYW4gYXBwbGljYXRpb24g
-d2l0aCBhIGdlbmVyYWwgY2xhc3MgcGF0aCAoZS5nCi91c3Ivc2hhcmUvamF2YS8qKSBzaW5jZSBs
-b2c0aiB3aWxsIGxvb2sgZm9yIGEgY29uZmlndXJhdGlvbiBmaWxlIGluIGFsbCBsb2FkZWQKamFy
-cy4gSWYgYW55IGNvbnRhaW5zIGRpcmVjdGl2ZSBmb3IgdGhlIHJvb3QgbG9nZ2VyIGl0IHdpbGwg
-YWZmZWN0IGFueSBsb2dnZXIKd2l0aCBubyBsZXZlbCB3aG8gYXJlIGRpcmVjdGx5IHVuZGVyIHRo
-ZSByb290IGxvZ2dlci4gVGhpcyBjb3VsZCByZXN1bHQgaW4gYW4KdW5leHBlY3RlZCBiZWhhdmlv
-dXIgKGUuZyBubyBldmVudHMgdHJpZ2dlcmVkIGV0LikuCgpMaW5rOiBodHRwczovL2lzc3Vlcy5h
-cGFjaGUub3JnL2ppcmEvYnJvd3NlL0JTRi0yNAoKU2lnbmVkLW9mZi1ieTogSm9uYXRoYW4gUmFq
-b3R0ZSA8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPgotLS0KIHRlc3RzL3Jl
-Z3Jlc3Npb24vdXN0L2phdmEtbG9nNGovSlRlc3RMVFRuZy5qYXZhIHwgMTMgKysrKysrKysrKysr
-KwogMSBmaWxlIGNoYW5nZWQsIDEzIGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS90ZXN0cy9y
-ZWdyZXNzaW9uL3VzdC9qYXZhLWxvZzRqL0pUZXN0TFRUbmcuamF2YSBiL3Rlc3RzL3JlZ3Jlc3Np
-b24vdXN0L2phdmEtbG9nNGovSlRlc3RMVFRuZy5qYXZhCmluZGV4IDY0YTQ3MWIuLjgwMTAzZGYg
-MTAwNjQ0Ci0tLSBhL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L2phdmEtbG9nNGovSlRlc3RMVFRuZy5q
-YXZhCisrKyBiL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L2phdmEtbG9nNGovSlRlc3RMVFRuZy5qYXZh
-CkBAIC0yMyw2ICsyMyw3IEBAIGltcG9ydCBqYXZhLmxhbmcuSW50ZWdlcjsKIGltcG9ydCBvcmcu
-YXBhY2hlLmxvZzRqLkFwcGVuZGVyOwogaW1wb3J0IG9yZy5hcGFjaGUubG9nNGouQmFzaWNDb25m
-aWd1cmF0b3I7CiBpbXBvcnQgb3JnLmFwYWNoZS5sb2c0ai5Mb2dnZXI7CitpbXBvcnQgb3JnLmFw
-YWNoZS5sb2c0ai5MZXZlbDsKIGltcG9ydCBvcmcubHR0bmcudXN0LmFnZW50LmxvZzRqLkx0dG5n
-TG9nQXBwZW5kZXI7CiAKIHB1YmxpYyBjbGFzcyBKVGVzdExUVG5nIHsKQEAgLTQwLDYgKzQxLDE4
-IEBAIHB1YmxpYyBjbGFzcyBKVGVzdExUVG5nIHsKIAkJTG9nZ2VyIGx0dG5nID0gTG9nZ2VyLmdl
-dExvZ2dlcigibG9nNGotZXZlbnQiKTsKIAkJTG9nZ2VyIGx0dG5nMiA9IExvZ2dlci5nZXRMb2dn
-ZXIoImxvZzRqLWV2ZW50LTIiKTsKIAorCQkvKgorCQkgKiBTZXQgbG93ZXN0IGxldmVsIHRvIG1h
-a2Ugc3VyZSBhbGwgZXZlbnQgbGV2ZWxzIGFyZSBsb2dnZWQuCisJCSAqIEFueSBqYXIgY2FuIG92
-ZXJyaWRlIHRoZSBkZWZhdWx0IGxvZzRqIHJvb3RMb2dnZXIgbGV2ZWwKKwkJICogYW5kIGEgbG9n
-Z2VyIHdpdGggbm8gZXhwbGljaXQgbGV2ZWwgZGVmYXVsdHMgdG8gdGhlIG5vbi1udWxsCisJCSAq
-IHBhcmVudCBsZXZlbC4gRXZlbnRzIGNvdWxkIGJlIGlnbm9yZWQgaWYgdGhlIGluaGVyaXRlZCB2
-YWx1ZQorCQkgKiBpcyB0byBsb3cuCisJCSAqIGUuZyBCU0YgIC0+IGh0dHBzOi8vaXNzdWVzLmFw
-YWNoZS5vcmcvamlyYS9icm93c2UvQlNGLTI0CisJCSAqLworCisJCWx0dG5nLnNldExldmVsKExl
-dmVsLkFMTCk7CisJCWx0dG5nMi5zZXRMZXZlbChMZXZlbC5BTEwpOworCiAJCWludCBuckl0ZXIg
-PSBJbnRlZ2VyLnBhcnNlSW50KGFyZ3NbMF0pOwogCQlpbnQgd2FpdFRpbWUgPSBJbnRlZ2VyLnBh
-cnNlSW50KGFyZ3NbMV0pOwogCQlpbnQgZmlyZV9kZWJ1Z190cCA9IDA7Ci0tIAoyLjcuNAoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
-aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcu
-b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============4499940287267387263==
+Content-Type: multipart/alternative; boundary=001a11358a362fe70f0533da2f19
+
+--001a11358a362fe70f0533da2f19
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+it looks like for the "enable-channel" command, "tracefile-size" option
+doesn't take effect, bellow are all the options, the resulted files have
+the actual size the same as the size specified by subbuf-size option:
+
+# lttng -V
+lttng (LTTng Trace Control) 2.7.1 - Herbe =C3=A0 D=C3=A9tourne
+
+$ lttng enable-channel chan_name -u -s session_name --discard --num-subbuf
+8
+            --subbuf-size 32M --tracefile-size 8K --tracefile-count 8
+--buffers-pid
+
+thanks, John
+
+--001a11358a362fe70f0533da2f19
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div>Hi,</div><div>it looks like for the &quot;enable=
+-channel&quot; command, &quot;tracefile-size&quot; option doesn&#39;t take =
+effect, bellow are all the options, the resulted files have the actual size=
+ the same as the size specified by subbuf-size option:</div><div>=C2=A0</di=
+v><div># lttng -V</div><div>lttng (LTTng Trace Control) 2.7.1 - Herbe =C3=
+=A0 D=C3=A9tourne</div></div><div><br></div>$ lttng enable-channel chan_nam=
+e -u -s session_name --discard --num-subbuf 8=C2=A0<div>=C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 --subbuf-size 32M --tracefile-size 8K --tracefile-=
+count 8 --buffers-pid</div><div><br></div><div>thanks, John</div></div>
+
+--001a11358a362fe70f0533da2f19--
+
+--===============4499940287267387263==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============4499940287267387263==--
