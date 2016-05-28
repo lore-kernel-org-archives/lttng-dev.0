@@ -1,18 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RFC PATCH lttng-ust] Fix: don't generate 0-len array
-	in tracepoint probes
-Date: Mon, 30 May 2016 18:56:49 +0200
-Message-ID: <1464627409-28142-1-git-send-email-mathieu.desnoyers__5182.32493564046$1464627436$gmane$org@efficios.com>
+From: John Smith <whalajam@gmail.com>
+Subject: Re: "lttng enable-channel --tracefile-size" bug
+Date: Sat, 28 May 2016 14:59:13 -0700
+Message-ID: <CANgVouUbJtNjBDajia1E3+CCEg95-=tnqfzBW7ukQxQbn9N_6Q__12466.4285257042$1464631045$gmane$org@mail.gmail.com>
+References: <CANgVouVswhgXmy=Dge5h2FA-7xsaJfDqOZ3=seG5dHjP=_4gmA@mail.gmail.com>
+ <57499B75.80203@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============6650290145456519963=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 0BDC5A3684
- for <lttng-dev@lists.lttng.org>; Mon, 30 May 2016 16:56:54 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id C3E0C3402FA
- for <lttng-dev@lists.lttng.org>; Mon, 30 May 2016 16:56:53 +0000 (UTC)
+Received: from mail-oi0-f67.google.com (mail-oi0-f67.google.com
+ [209.85.218.67])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 610D5A36D9
+ for <lttng-dev@lists.lttng.org>; Sat, 28 May 2016 21:59:14 +0000 (UTC)
+Received: by mail-oi0-f67.google.com with SMTP id x130so19048572oia.3
+ for <lttng-dev@lists.lttng.org>; Sat, 28 May 2016 14:59:14 -0700 (PDT)
+In-Reply-To: <57499B75.80203@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,75 +23,156 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: mathieu.desnoyers@efficios.com
+To: Julien Desfossez <jdesfossez@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SXQgaXMgZm9yYmlkZGVuIGJ5IEM5OSwgYW5kIGdjYy9nKysgaW4gcGVkYW50aWMgbW9kZSBnZW5l
-cmF0ZXMgZXJyb3JzCmZvciBlLmcuIGZpZWxkLWxlc3MgZXZlbnRzLgoKU2lnbmVkLW9mZi1ieTog
-TWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KLS0tCiBp
-bmNsdWRlL2x0dG5nL3VzdC10cmFjZXBvaW50LWV2ZW50LmggfCAxMyArKysrKysrKy0tLS0tCiAx
-IGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdp
-dCBhL2luY2x1ZGUvbHR0bmcvdXN0LXRyYWNlcG9pbnQtZXZlbnQuaCBiL2luY2x1ZGUvbHR0bmcv
-dXN0LXRyYWNlcG9pbnQtZXZlbnQuaAppbmRleCA2NDVjNTY2Li5kOTgwMWE4IDEwMDY0NAotLS0g
-YS9pbmNsdWRlL2x0dG5nL3VzdC10cmFjZXBvaW50LWV2ZW50LmgKKysrIGIvaW5jbHVkZS9sdHRu
-Zy91c3QtdHJhY2Vwb2ludC1ldmVudC5oCkBAIC0xNjksNiArMTY5LDcgQEAgc3RhdGljIGNvbnN0
-IGNoYXIJCQkJCQkJXAogI2RlZmluZSBUUkFDRVBPSU5UX0VOVU0oX3Byb3ZpZGVyLCBfbmFtZSwg
-X3ZhbHVlcykJCQlcCiAJY29uc3Qgc3RydWN0IGx0dG5nX2VudW1fZW50cnkgX19lbnVtX3ZhbHVl
-c19fIyNfcHJvdmlkZXIjI18jI19uYW1lW10gPSB7IFwKIAkJX3ZhbHVlcwkJCQkJCQlcCisJCWN0
-Zl9lbnVtX3ZhbHVlKCIiLCAwKQkvKiBEdW1teSwgMC1sZW4gYXJyYXkgZm9yYmlkZGVuIGJ5IEM5
-OS4gKi8gXAogCX07CiAKICNpbmNsdWRlIFRSQUNFUE9JTlRfSU5DTFVERQpAQCAtMjkwLDYgKzI5
-MSw3IEBAIHN0YXRpYyBjb25zdCBjaGFyCQkJCQkJCVwKICNkZWZpbmUgVFJBQ0VQT0lOVF9FVkVO
-VF9DTEFTUyhfcHJvdmlkZXIsIF9uYW1lLCBfYXJncywgX2ZpZWxkcykJCSAgIAkgICAgIFwKIAlz
-dGF0aWMgY29uc3Qgc3RydWN0IGx0dG5nX2V2ZW50X2ZpZWxkIF9fZXZlbnRfZmllbGRzX19fIyNf
-cHJvdmlkZXIjI19fXyMjX25hbWVbXSA9IHsgXAogCQlfZmllbGRzCQkJCQkJCQkJICAgICBcCisJ
-CWN0Zl9pbnRlZ2VyKGludCwgZHVtbXksIDApCS8qIER1bW15LCBDOTkgZm9yYmlkcyAwLWxlbiBh
-cnJheS4gKi8JICAgICBcCiAJfTsKIAogI3VuZGVmIFRSQUNFUE9JTlRfRU5VTQpAQCAtMjk3LDcg
-KzI5OSw3IEBAIHN0YXRpYyBjb25zdCBjaGFyCQkJCQkJCVwKIAlzdGF0aWMgY29uc3Qgc3RydWN0
-IGx0dG5nX2VudW1fZGVzYyBfX2VudW1fIyNfcHJvdmlkZXIjI18jI19uYW1lID0gewkJXAogCQku
-bmFtZSA9ICNfcHJvdmlkZXIgIl8iICNfbmFtZSwJCQkJCQlcCiAJCS5lbnRyaWVzID0gX19lbnVt
-X3ZhbHVlc19fIyNfcHJvdmlkZXIjI18jI19uYW1lLAkJCVwKLQkJLm5yX2VudHJpZXMgPSBfVFBf
-QVJSQVlfU0laRShfX2VudW1fdmFsdWVzX18jI19wcm92aWRlciMjXyMjX25hbWUpLAlcCisJCS5u
-cl9lbnRyaWVzID0gX1RQX0FSUkFZX1NJWkUoX19lbnVtX3ZhbHVlc19fIyNfcHJvdmlkZXIjI18j
-I19uYW1lKSAtIDEsCVwKIAl9OwogCiAjaW5jbHVkZSBUUkFDRVBPSU5UX0lOQ0xVREUKQEAgLTcz
-NSw4ICs3MzcsOCBAQCB2b2lkIF9fZXZlbnRfcHJvYmVfXyMjX3Byb3ZpZGVyIyNfX18jI19uYW1l
-KF9UUF9BUkdTX0RBVEFfUFJPVE8oX2FyZ3MpKQkgICAgICBcCiAJc2l6ZV90IF9fZXZlbnRfbGVu
-LCBfX2V2ZW50X2FsaWduOwkJCQkgICAgICBcCiAJc2l6ZV90IF9fZHluYW1pY19sZW5faWR4ID0g
-MDsJCQkJCSAgICAgIFwKIAl1bmlvbiB7CQkJCQkJCQkgICAgICBcCi0JCXNpemVfdCBfX2R5bmFt
-aWNfbGVuW19UUF9BUlJBWV9TSVpFKF9fZXZlbnRfZmllbGRzX19fIyNfcHJvdmlkZXIjI19fXyMj
-X25hbWUpXTsgXAotCQljaGFyIF9fZmlsdGVyX3N0YWNrX2RhdGFbMiAqIHNpemVvZih1bnNpZ25l
-ZCBsb25nKSAqIF9UUF9BUlJBWV9TSVpFKF9fZXZlbnRfZmllbGRzX19fIyNfcHJvdmlkZXIjI19f
-XyMjX25hbWUpXTsgXAorCQlzaXplX3QgX19keW5hbWljX2xlbltfVFBfQVJSQVlfU0laRShfX2V2
-ZW50X2ZpZWxkc19fXyMjX3Byb3ZpZGVyIyNfX18jI19uYW1lKSAtIDFdOyBcCisJCWNoYXIgX19m
-aWx0ZXJfc3RhY2tfZGF0YVsyICogc2l6ZW9mKHVuc2lnbmVkIGxvbmcpICogKF9UUF9BUlJBWV9T
-SVpFKF9fZXZlbnRfZmllbGRzX19fIyNfcHJvdmlkZXIjI19fXyMjX25hbWUpIC0gMSldOyBcCiAJ
-fSBfX3N0YWNrdmFyOwkJCQkJCQkgICAgICBcCiAJaW50IF9fcmV0OwkJCQkJCQkgICAgICBcCiAJ
-CQkJCQkJCQkgICAgICBcCkBAIC04NjksNyArODcxLDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBs
-dHRuZ19ldmVudF9kZXNjIF9fZXZlbnRfZGVzY19fXyMjX3Byb3ZpZGVyIyNfIyNfbmFtZSA9IHsK
-IAkucHJvYmVfY2FsbGJhY2sgPSAodm9pZCAoKikodm9pZCkpICZfX2V2ZW50X3Byb2JlX18jI19w
-cm92aWRlciMjX19fIyNfdGVtcGxhdGUsXAogCS5jdHggPSBOVUxMLAkJCQkJCQkgICAgICAgXAog
-CS5maWVsZHMgPSBfX2V2ZW50X2ZpZWxkc19fXyMjX3Byb3ZpZGVyIyNfX18jI190ZW1wbGF0ZSwJ
-CSAgICAgICBcCi0JLm5yX2ZpZWxkcyA9IF9UUF9BUlJBWV9TSVpFKF9fZXZlbnRfZmllbGRzX19f
-IyNfcHJvdmlkZXIjI19fXyMjX3RlbXBsYXRlKSwgXAorCS5ucl9maWVsZHMgPSBfVFBfQVJSQVlf
-U0laRShfX2V2ZW50X2ZpZWxkc19fXyMjX3Byb3ZpZGVyIyNfX18jI190ZW1wbGF0ZSkgLSAxLCBc
-CiAJLmxvZ2xldmVsID0gJl9fcmVmX2xvZ2xldmVsX19fIyNfcHJvdmlkZXIjI19fXyMjX25hbWUs
-CQkgICAgICAgXAogCS5zaWduYXR1cmUgPSBfX3RwX2V2ZW50X3NpZ25hdHVyZV9fXyMjX3Byb3Zp
-ZGVyIyNfX18jI190ZW1wbGF0ZSwgICAgICAgXAogCS51ID0gewkJCQkJCQkJICAgICAgIFwKQEAg
-LTg5Niw2ICs4OTgsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGx0dG5nX2V2ZW50X2Rlc2MgX19l
-dmVudF9kZXNjX19fIyNfcHJvdmlkZXIjI18jI19uYW1lID0gewogCiBzdGF0aWMgY29uc3Qgc3Ry
-dWN0IGx0dG5nX2V2ZW50X2Rlc2MgKl9UUF9DT01CSU5FX1RPS0VOUyhfX2V2ZW50X2Rlc2NfX18s
-IFRSQUNFUE9JTlRfUFJPVklERVIpW10gPSB7CiAjaW5jbHVkZSBUUkFDRVBPSU5UX0lOQ0xVREUK
-KwlOVUxMLAkvKiBEdW1teSwgQzk5IGZvcmJpZHMgMC1sZW4gYXJyYXkuICovCiB9OwogCiAKQEAg
-LTkwOSw3ICs5MTIsNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGx0dG5nX2V2ZW50X2Rlc2MgKl9U
-UF9DT01CSU5FX1RPS0VOUyhfX2V2ZW50X2Rlc2NfX18sIFRSQUNFUAogc3RhdGljIHN0cnVjdCBs
-dHRuZ19wcm9iZV9kZXNjIF9UUF9DT01CSU5FX1RPS0VOUyhfX3Byb2JlX2Rlc2NfX18sIFRSQUNF
-UE9JTlRfUFJPVklERVIpID0gewogCS5wcm92aWRlciA9IF9fdHBfc3RyaW5naWZ5KFRSQUNFUE9J
-TlRfUFJPVklERVIpLAogCS5ldmVudF9kZXNjID0gX1RQX0NPTUJJTkVfVE9LRU5TKF9fZXZlbnRf
-ZGVzY19fXywgVFJBQ0VQT0lOVF9QUk9WSURFUiksCi0JLm5yX2V2ZW50cyA9IF9UUF9BUlJBWV9T
-SVpFKF9UUF9DT01CSU5FX1RPS0VOUyhfX2V2ZW50X2Rlc2NfX18sIFRSQUNFUE9JTlRfUFJPVklE
-RVIpKSwKKwkubnJfZXZlbnRzID0gX1RQX0FSUkFZX1NJWkUoX1RQX0NPTUJJTkVfVE9LRU5TKF9f
-ZXZlbnRfZGVzY19fXywgVFJBQ0VQT0lOVF9QUk9WSURFUikpIC0gMSwKIAkuaGVhZCA9IHsgTlVM
-TCwgTlVMTCB9LAogCS5sYXp5X2luaXRfaGVhZCA9IHsgTlVMTCwgTlVMTCB9LAogCS5sYXp5ID0g
-MCwKLS0gCjIuMS40CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
-cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============6650290145456519963==
+Content-Type: multipart/alternative; boundary=001a1141c7803bb23c0533ee22c0
+
+--001a1141c7803bb23c0533ee22c0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Julien,
+thanks, I was mislead by the 2.7 documentation saying:
+"...parameters of enable-channel are --tracefile-sizeand --tracefile-count,
+which respectively limit the size of each trace file and the their count
+for a given channel. "
+In this case the tracefile-size option should be removed, will it become
+useful in the future releases or has a more subtle use?
+
+thanks, John
+
+On Sat, May 28, 2016 at 6:21 AM, Julien Desfossez <jdesfossez@efficios.com>
+wrote:
+
+> > Hi,
+> > it looks like for the "enable-channel" command, "tracefile-size" option
+> > doesn't take effect, bellow are all the options, the resulted files hav=
+e
+> > the actual size the same as the size specified by subbuf-size option:
+> >
+> > # lttng -V
+> > lttng (LTTng Trace Control) 2.7.1 - Herbe =C3=A0 D=C3=A9tourne
+> >
+> > $ lttng enable-channel chan_name -u -s session_name --discard
+> > --num-subbuf 8
+> >             --subbuf-size 32M --tracefile-size 8K --tracefile-count 8
+> > --buffers-pid
+>
+> Yes, that is the expected behaviour, we work with packets (sub-buffers),
+> so the smallest unit we can store is the subbuf-size.
+>
+> With 2.7.3 I get this warning when I try your command:
+> Warning: Tracefile size rounded up from (8192) to subbuffer size (3355443=
+2)
+>
+> Julien
+>
+
+--001a1141c7803bb23c0533ee22c0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Julien,</div>thanks, I was mislead by the 2.7 documen=
+tation saying:<div>&quot;...<span style=3D"color:rgb(26,26,26);font-family:=
+&#39;Open Sans&#39;,Frutiger,&#39;Frutiger Linotype&#39;,Univers,Calibri,&#=
+39;Gill Sans&#39;,&#39;Gill Sans MT&#39;,&#39;Myriad Pro&#39;,Myriad,&#39;D=
+ejaVu Sans Condensed&#39;,&#39;Liberation Sans&#39;,&#39;Nimbus Sans L&#39;=
+,Tahoma,Geneva,&#39;Helvetica Neue&#39;,Helvetica,Arial,sans-serif;font-siz=
+e:16px;line-height:27.2px;background-color:rgb(253,253,253)">parameters of=
+=C2=A0</span><code class=3D"" style=3D"margin:0px 1px;padding:2px 5px;borde=
+r:0px;font-stretch:inherit;font-size:14.4px;line-height:27.2px;font-family:=
+&#39;Andale Mono WT&#39;,&#39;Andale Mono&#39;,&#39;Bitstream Vera Sans Mon=
+o&#39;,&#39;Liberation Mono&#39;,&#39;Nimbus Mono L&#39;,&#39;Ubuntu Mono&#=
+39;,Monaco,Consolas,&#39;Lucida Console&#39;,&#39;Lucida Sans Typewriter&#3=
+9;,&#39;Courier New&#39;,Courier,monospace;vertical-align:baseline;white-sp=
+ace:nowrap;color:rgb(26,26,26);background-color:rgba(0,0,0,0.0470588)">enab=
+le-channel</code><span style=3D"color:rgb(26,26,26);font-family:&#39;Open S=
+ans&#39;,Frutiger,&#39;Frutiger Linotype&#39;,Univers,Calibri,&#39;Gill San=
+s&#39;,&#39;Gill Sans MT&#39;,&#39;Myriad Pro&#39;,Myriad,&#39;DejaVu Sans =
+Condensed&#39;,&#39;Liberation Sans&#39;,&#39;Nimbus Sans L&#39;,Tahoma,Gen=
+eva,&#39;Helvetica Neue&#39;,Helvetica,Arial,sans-serif;font-size:16px;line=
+-height:27.2px;background-color:rgb(253,253,253)">=C2=A0are=C2=A0</span><co=
+de class=3D"" style=3D"margin:12px 1px 0px;padding:2px 5px;border:0px;font-=
+stretch:inherit;font-size:14.4px;line-height:27.2px;font-family:&#39;Andale=
+ Mono WT&#39;,&#39;Andale Mono&#39;,&#39;Bitstream Vera Sans Mono&#39;,&#39=
+;Liberation Mono&#39;,&#39;Nimbus Mono L&#39;,&#39;Ubuntu Mono&#39;,Monaco,=
+Consolas,&#39;Lucida Console&#39;,&#39;Lucida Sans Typewriter&#39;,&#39;Cou=
+rier New&#39;,Courier,monospace;vertical-align:baseline;white-space:nowrap;=
+color:rgb(26,26,26);background-color:rgba(0,0,0,0.0470588)">--tracefile-siz=
+e</code><span style=3D"color:rgb(26,26,26);font-family:&#39;Open Sans&#39;,=
+Frutiger,&#39;Frutiger Linotype&#39;,Univers,Calibri,&#39;Gill Sans&#39;,&#=
+39;Gill Sans MT&#39;,&#39;Myriad Pro&#39;,Myriad,&#39;DejaVu Sans Condensed=
+&#39;,&#39;Liberation Sans&#39;,&#39;Nimbus Sans L&#39;,Tahoma,Geneva,&#39;=
+Helvetica Neue&#39;,Helvetica,Arial,sans-serif;font-size:16px;line-height:2=
+7.2px;background-color:rgb(253,253,253)">and=C2=A0</span><code class=3D"" s=
+tyle=3D"margin:12px 1px 0px;padding:2px 5px;border:0px;font-stretch:inherit=
+;font-size:14.4px;line-height:27.2px;font-family:&#39;Andale Mono WT&#39;,&=
+#39;Andale Mono&#39;,&#39;Bitstream Vera Sans Mono&#39;,&#39;Liberation Mon=
+o&#39;,&#39;Nimbus Mono L&#39;,&#39;Ubuntu Mono&#39;,Monaco,Consolas,&#39;L=
+ucida Console&#39;,&#39;Lucida Sans Typewriter&#39;,&#39;Courier New&#39;,C=
+ourier,monospace;vertical-align:baseline;white-space:nowrap;color:rgb(26,26=
+,26);background-color:rgba(0,0,0,0.0470588)">--tracefile-count</code><span =
+style=3D"color:rgb(26,26,26);font-family:&#39;Open Sans&#39;,Frutiger,&#39;=
+Frutiger Linotype&#39;,Univers,Calibri,&#39;Gill Sans&#39;,&#39;Gill Sans M=
+T&#39;,&#39;Myriad Pro&#39;,Myriad,&#39;DejaVu Sans Condensed&#39;,&#39;Lib=
+eration Sans&#39;,&#39;Nimbus Sans L&#39;,Tahoma,Geneva,&#39;Helvetica Neue=
+&#39;,Helvetica,Arial,sans-serif;font-size:16px;line-height:27.2px;backgrou=
+nd-color:rgb(253,253,253)">, which respectively limit the size of each trac=
+e file and the their count for a given channel. &quot;</span></div><div><sp=
+an style=3D"color:rgb(26,26,26);font-family:&#39;Open Sans&#39;,Frutiger,&#=
+39;Frutiger Linotype&#39;,Univers,Calibri,&#39;Gill Sans&#39;,&#39;Gill San=
+s MT&#39;,&#39;Myriad Pro&#39;,Myriad,&#39;DejaVu Sans Condensed&#39;,&#39;=
+Liberation Sans&#39;,&#39;Nimbus Sans L&#39;,Tahoma,Geneva,&#39;Helvetica N=
+eue&#39;,Helvetica,Arial,sans-serif;font-size:16px;line-height:27.2px;backg=
+round-color:rgb(253,253,253)">In this case the tracefile-size option should=
+ be removed, will it become useful in the future releases or has a more sub=
+tle use?=C2=A0</span></div><div class=3D"gmail_extra"><br></div><div class=
+=3D"gmail_extra">thanks, John</div><div class=3D"gmail_extra"><br><div clas=
+s=3D"gmail_quote">On Sat, May 28, 2016 at 6:21 AM, Julien Desfossez <span d=
+ir=3D"ltr">&lt;<a href=3D"mailto:jdesfossez@efficios.com" target=3D"_blank"=
+>jdesfossez@efficios.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmai=
+l_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left=
+:1ex"><span class=3D"">&gt; Hi,<br>
+&gt; it looks like for the &quot;enable-channel&quot; command, &quot;tracef=
+ile-size&quot; option<br>
+&gt; doesn&#39;t take effect, bellow are all the options, the resulted file=
+s have<br>
+&gt; the actual size the same as the size specified by subbuf-size option:<=
+br>
+&gt;<br>
+&gt; # lttng -V<br>
+&gt; lttng (LTTng Trace Control) 2.7.1 - Herbe =C3=A0 D=C3=A9tourne<br>
+&gt;<br>
+&gt; $ lttng enable-channel chan_name -u -s session_name --discard<br>
+&gt; --num-subbuf 8<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0--subbuf-size 32M --tra=
+cefile-size 8K --tracefile-count 8<br>
+&gt; --buffers-pid<br>
+<br>
+</span>Yes, that is the expected behaviour, we work with packets (sub-buffe=
+rs),<br>
+so the smallest unit we can store is the subbuf-size.<br>
+<br>
+With 2.7.3 I get this warning when I try your command:<br>
+Warning: Tracefile size rounded up from (8192) to subbuffer size (33554432)=
+<br>
+<span class=3D"HOEnZb"><font color=3D"#888888"><br>
+Julien<br>
+</font></span></blockquote></div><br></div></div>
+
+--001a1141c7803bb23c0533ee22c0--
+
+--===============6650290145456519963==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============6650290145456519963==--
