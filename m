@@ -1,15 +1,17 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH babeltrace 1/2] sys/param.h is required for
-	MAXNAMLEN on musl libc
-Date: Mon, 30 May 2016 16:39:01 -0400
-Message-ID: <1464640742-24658-1-git-send-email-mjeanson__16217.3636294485$1464640771$gmane$org@efficios.com>
+Subject: [PATCH babeltrace 2/2] Fix: strerror_r behavior is
+	glibc specific
+Date: Mon, 30 May 2016 16:39:02 -0400
+Message-ID: <1464640742-24658-2-git-send-email-mjeanson__32795.5505498268$1464640782$gmane$org@efficios.com>
+References: <1464640742-24658-1-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 9D638A3724
- for <lttng-dev@lists.lttng.org>; Mon, 30 May 2016 20:39:11 +0000 (UTC)
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id CE770A372B
+ for <lttng-dev@lists.lttng.org>; Mon, 30 May 2016 20:39:13 +0000 (UTC)
+In-Reply-To: <1464640742-24658-1-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,14 +26,17 @@ Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
 U2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Ci0t
-LQogZm9ybWF0cy9sdHRuZy1saXZlL2x0dG5nLWxpdmUuaCB8IDEgKwogMSBmaWxlIGNoYW5nZWQs
-IDEgaW5zZXJ0aW9uKCspCgpkaWZmIC0tZ2l0IGEvZm9ybWF0cy9sdHRuZy1saXZlL2x0dG5nLWxp
-dmUuaCBiL2Zvcm1hdHMvbHR0bmctbGl2ZS9sdHRuZy1saXZlLmgKaW5kZXggZTAwYTUxZS4uYjMx
-NTQ1OCAxMDA2NDQKLS0tIGEvZm9ybWF0cy9sdHRuZy1saXZlL2x0dG5nLWxpdmUuaAorKysgYi9m
-b3JtYXRzL2x0dG5nLWxpdmUvbHR0bmctbGl2ZS5oCkBAIC0yNSw2ICsyNSw3IEBACiAgKi8KIAog
-I2luY2x1ZGUgPHN0ZGludC5oPgorI2luY2x1ZGUgPHN5cy9wYXJhbS5oPgogI2luY2x1ZGUgImx0
-dG5nLXZpZXdlci1hYmkuaCIKIAogI2RlZmluZSBMVFROR19ERUZBVUxUX05FVFdPUktfVklFV0VS
-X1BPUlQJNTM0NAotLSAKMi43LjQKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5n
-Lm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
-bmctZGV2Cg==
+LQogaW5jbHVkZS9iYWJlbHRyYWNlL2NvbXBhdC9zdHJpbmcuaCB8IDIgKy0KIDEgZmlsZSBjaGFu
+Z2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUv
+YmFiZWx0cmFjZS9jb21wYXQvc3RyaW5nLmggYi9pbmNsdWRlL2JhYmVsdHJhY2UvY29tcGF0L3N0
+cmluZy5oCmluZGV4IDdhNTc0ZTYuLjYwOTI2MTYgMTAwNjQ0Ci0tLSBhL2luY2x1ZGUvYmFiZWx0
+cmFjZS9jb21wYXQvc3RyaW5nLmgKKysrIGIvaW5jbHVkZS9iYWJlbHRyYWNlL2NvbXBhdC9zdHJp
+bmcuaApAQCAtMjYsNyArMjYsNyBAQAogI2luY2x1ZGUgPHN0cmluZy5oPgogI2luY2x1ZGUgPHN0
+ZGxpYi5oPgogCi0jaWYgIWRlZmluZWQoX19saW51eF9fKSB8fCAoKF9QT1NJWF9DX1NPVVJDRSA+
+PSAyMDAxMTJMIHx8IF9YT1BFTl9TT1VSQ0UgPj0gNjAwKSAmJiAhZGVmaW5lZChfR05VX1NPVVJD
+RSkpCisjaWYgIWRlZmluZWQoX19HTElCQ19fKSB8fCAoKF9QT1NJWF9DX1NPVVJDRSA+PSAyMDAx
+MTJMIHx8IF9YT1BFTl9TT1VSQ0UgPj0gNjAwKSAmJiAhZGVmaW5lZChfR05VX1NPVVJDRSkpCiAK
+IC8qIFhTSS1jb21wbGlhbnQgc3RyZXJyb3JfciAqLwogc3RhdGljIGlubGluZQotLSAKMi43LjQK
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
+diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0
+dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
