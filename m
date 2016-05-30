@@ -1,19 +1,15 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-ust 3/4] Fix: use limits.h in ust-elf test
-Date: Mon, 30 May 2016 16:31:32 -0400
-Message-ID: <1464640293-10157-3-git-send-email-mjeanson__36729.577164124$1464640344$gmane$org@efficios.com>
-References: <1464640293-10157-1-git-send-email-mjeanson@efficios.com>
+Subject: [PATCH babeltrace 1/2] sys/param.h is required for
+	MAXNAMLEN on musl libc
+Date: Mon, 30 May 2016 16:39:01 -0400
+Message-ID: <1464640742-24658-1-git-send-email-mjeanson__16217.3636294485$1464640771$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 9EDB2A3713
- for <lttng-dev@lists.lttng.org>; Mon, 30 May 2016 20:31:55 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 5A31A34020D
- for <lttng-dev@lists.lttng.org>; Mon, 30 May 2016 20:31:55 +0000 (UTC)
-In-Reply-To: <1464640293-10157-1-git-send-email-mjeanson@efficios.com>
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 9D638A3724
+ for <lttng-dev@lists.lttng.org>; Mon, 30 May 2016 20:39:11 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,17 +20,18 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
 U2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Ci0t
-LQogdGVzdHMvdXN0LWVsZi9wcm9nLmMgfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRp
-b24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS90ZXN0cy91c3QtZWxmL3Byb2cuYyBi
-L3Rlc3RzL3VzdC1lbGYvcHJvZy5jCmluZGV4IGRhNGYzOTYuLjQwMzY1NjMgMTAwNjQ0Ci0tLSBh
-L3Rlc3RzL3VzdC1lbGYvcHJvZy5jCisrKyBiL3Rlc3RzL3VzdC1lbGYvcHJvZy5jCkBAIC0xNiw3
-ICsxNiw3IEBACiAgKiBGb3VuZGF0aW9uLCBJbmMuLCA1MSBGcmFua2xpbiBTdHJlZXQsIEZpZnRo
-IEZsb29yLCBCb3N0b24sIE1BICAwMjExMC0xMzAxIFVTQQogICovCiAKLSNpbmNsdWRlIDxsaW51
-eC9saW1pdHMuaD4KKyNpbmNsdWRlIDxsaW1pdHMuaD4KICNpbmNsdWRlIDxzdGRpby5oPgogI2lu
-Y2x1ZGUgPHN0ZGxpYi5oPgogI2luY2x1ZGUgPHN0cmluZy5oPgotLSAKMi43LjQKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
-IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9j
-Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+LQogZm9ybWF0cy9sdHRuZy1saXZlL2x0dG5nLWxpdmUuaCB8IDEgKwogMSBmaWxlIGNoYW5nZWQs
+IDEgaW5zZXJ0aW9uKCspCgpkaWZmIC0tZ2l0IGEvZm9ybWF0cy9sdHRuZy1saXZlL2x0dG5nLWxp
+dmUuaCBiL2Zvcm1hdHMvbHR0bmctbGl2ZS9sdHRuZy1saXZlLmgKaW5kZXggZTAwYTUxZS4uYjMx
+NTQ1OCAxMDA2NDQKLS0tIGEvZm9ybWF0cy9sdHRuZy1saXZlL2x0dG5nLWxpdmUuaAorKysgYi9m
+b3JtYXRzL2x0dG5nLWxpdmUvbHR0bmctbGl2ZS5oCkBAIC0yNSw2ICsyNSw3IEBACiAgKi8KIAog
+I2luY2x1ZGUgPHN0ZGludC5oPgorI2luY2x1ZGUgPHN5cy9wYXJhbS5oPgogI2luY2x1ZGUgImx0
+dG5nLXZpZXdlci1hYmkuaCIKIAogI2RlZmluZSBMVFROR19ERUZBVUxUX05FVFdPUktfVklFV0VS
+X1BPUlQJNTM0NAotLSAKMi43LjQKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
+bmctZGV2Cg==
