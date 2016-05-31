@@ -1,20 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust 1/4] Add support for musl libc to
-	ust-dlfcn.h
-Date: Tue, 31 May 2016 04:38:20 +0000 (UTC)
-Message-ID: <1078683747.23560.1464669500716.JavaMail.zimbra__458.889877381985$1464669532$gmane$org@efficios.com>
-References: <1464640293-10157-1-git-send-email-mjeanson@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH babeltrace 2/2] Fix: strerror_r behavior is
+	glibc specific
+Date: Tue, 31 May 2016 01:53:09 -0400
+Message-ID: <CA+jJMxuFS=K5COp8zPKgnoV=jusja8ifekPWkTXy74yO7u9cdg__929.936607326631$1464674010$gmane$org@mail.gmail.com>
+References: <1464640742-24658-1-git-send-email-mjeanson@efficios.com>
+ <1464640742-24658-2-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id E393CA36D8
- for <lttng-dev@lists.lttng.org>; Tue, 31 May 2016 04:38:21 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id B65C43402CC
- for <lttng-dev@lists.lttng.org>; Tue, 31 May 2016 04:38:21 +0000 (UTC)
-In-Reply-To: <1464640293-10157-1-git-send-email-mjeanson@efficios.com>
+Received: from mail-qg0-f66.google.com (mail-qg0-f66.google.com
+ [209.85.192.66])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 6C807A3728
+ for <lttng-dev@lists.lttng.org>; Tue, 31 May 2016 05:53:10 +0000 (UTC)
+Received: by mail-qg0-f66.google.com with SMTP id p34so3036720qgp.0
+ for <lttng-dev@lists.lttng.org>; Mon, 30 May 2016 22:53:10 -0700 (PDT)
+In-Reply-To: <1464640742-24658-2-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,29 +26,25 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-QWxsIG1lcmdlZCBpbnRvIG1hc3Rlciwgc3RhYmxlLTIuOC4gVGhlIGNvbW1pdCBtYXJrZWQKImZp
-eCIgdGhhdCBhcHBseSB0byAyLjcgaGFzIGJlZW4gYmFja3BvcnRlZC4KCi0tLS0tIE9uIE1heSAz
-MCwgMjAxNiwgYXQgMTA6MzEgUE0sIE1pY2hhZWwgSmVhbnNvbiBtamVhbnNvbkBlZmZpY2lvcy5j
-b20gd3JvdGU6Cgo+IFNpZ25lZC1vZmYtYnk6IE1pY2hhZWwgSmVhbnNvbiA8bWplYW5zb25AZWZm
-aWNpb3MuY29tPgo+IC0tLQo+IGluY2x1ZGUvbHR0bmcvdXN0LWRsZmNuLmggfCA0ICsrKysKPiAx
-IGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUv
-bHR0bmcvdXN0LWRsZmNuLmggYi9pbmNsdWRlL2x0dG5nL3VzdC1kbGZjbi5oCj4gaW5kZXggYzky
-ZjFiYi4uNzQ3MWQ5NCAxMDA2NDQKPiAtLS0gYS9pbmNsdWRlL2x0dG5nL3VzdC1kbGZjbi5oCj4g
-KysrIGIvaW5jbHVkZS9sdHRuZy91c3QtZGxmY24uaAo+IEBAIC0zMSw2ICszMSw3IEBACj4gI2Vy
-cm9yICJQbGVhc2UgaW5jbHVkZSBsdHRuZy91c3QtZGxmY24uaCBiZWZvcmUgZGxmY24uaC4iCj4g
-I2VuZGlmIC8qIF9ETEZDTl9IICovCj4gCj4gKyNpZmRlZiBfX0dMSUJDX18KPiAvKgo+ICAqIGds
-aWJjIGRlY2xhcmVzIGRsc3ltKCkgYW5kIGRsZXJyb3IoKSB3aXRoIF9fYXR0cmlidXRlX18oKGxl
-YWYpKSAoc2VlCj4gICogVEhST1cgYW5ub3RhdGlvbikuIFVuZm9ydHVuYXRlbHksIHRoaXMgaXMg
-bm90IGluIHN5bmMgd2l0aCByZWFsaXR5LAo+IEBAIC01Nyw1ICs1OCw4IEBAIGV4dGVybiBpbnQg
-ZGxjbG9zZSh2b2lkICpfX2hhbmRsZSkgX19ub25udWxsICgoMSkpOwo+IGV4dGVybiB2b2lkICpk
-bHN5bSh2b2lkICpfX3Jlc3RyaWN0IF9faGFuZGxlLAo+IAkJX19jb25zdCBjaGFyICpfX3Jlc3Ry
-aWN0IF9fbmFtZSkgX19ub25udWxsICgoMikpOwo+IGV4dGVybiBjaGFyICpkbGVycm9yKHZvaWQp
-Owo+ICsjZWxzZQo+ICsjaW5jbHVkZSA8ZGxmY24uaD4KPiArI2VuZGlmIC8qIF9fR0xJQkNfXyAq
-Lwo+IAo+ICNlbmRpZiAvKiBfTFRUTkdfVVNUX0RMRkNOX0ggKi8KPiAtLQo+IDIuNy40CgotLSAK
-TWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
-bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+TWVyZ2VkIGluIG1hc3RlciBhbmQgc3RhYmxlLTEuNC4gVGhhbmtzIQoKSsOpcsOpbWllCgpPbiBN
+b24sIE1heSAzMCwgMjAxNiBhdCA0OjM5IFBNLCBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVm
+ZmljaW9zLmNvbT4gd3JvdGU6Cj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVh
+bnNvbkBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIGluY2x1ZGUvYmFiZWx0cmFjZS9jb21wYXQvc3Ry
+aW5nLmggfCAyICstCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlv
+bigtKQo+Cj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvYmFiZWx0cmFjZS9jb21wYXQvc3RyaW5nLmgg
+Yi9pbmNsdWRlL2JhYmVsdHJhY2UvY29tcGF0L3N0cmluZy5oCj4gaW5kZXggN2E1NzRlNi4uNjA5
+MjYxNiAxMDA2NDQKPiAtLS0gYS9pbmNsdWRlL2JhYmVsdHJhY2UvY29tcGF0L3N0cmluZy5oCj4g
+KysrIGIvaW5jbHVkZS9iYWJlbHRyYWNlL2NvbXBhdC9zdHJpbmcuaAo+IEBAIC0yNiw3ICsyNiw3
+IEBACj4gICNpbmNsdWRlIDxzdHJpbmcuaD4KPiAgI2luY2x1ZGUgPHN0ZGxpYi5oPgo+Cj4gLSNp
+ZiAhZGVmaW5lZChfX2xpbnV4X18pIHx8ICgoX1BPU0lYX0NfU09VUkNFID49IDIwMDExMkwgfHwg
+X1hPUEVOX1NPVVJDRSA+PSA2MDApICYmICFkZWZpbmVkKF9HTlVfU09VUkNFKSkKPiArI2lmICFk
+ZWZpbmVkKF9fR0xJQkNfXykgfHwgKChfUE9TSVhfQ19TT1VSQ0UgPj0gMjAwMTEyTCB8fCBfWE9Q
+RU5fU09VUkNFID49IDYwMCkgJiYgIWRlZmluZWQoX0dOVV9TT1VSQ0UpKQo+Cj4gIC8qIFhTSS1j
+b21wbGlhbnQgc3RyZXJyb3JfciAqLwo+ICBzdGF0aWMgaW5saW5lCj4gLS0KPiAyLjcuNAo+CgoK
+Ci0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lv
+cy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
+bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
