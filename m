@@ -1,16 +1,20 @@
-From: Sebastien Boisvert <sboisvert@gydle.com>
-Subject: Re: Building URCU in a Cygwin 64 environment
-Date: Wed, 1 Jun 2016 10:01:50 -0400
-Message-ID: <574EEACE.2060207__25368.2479648434$1464789712$gmane$org@gydle.com>
-References: <574D93FE.7000703@gydle.com> <574DA411.3000603@efficios.com>
- <1907475198.24545.1464731555921.JavaMail.zimbra@efficios.com>
+From: =?UTF-8?Q?Rapha=C3=ABl_Beamonte?= <raphael.beamonte@gmail.com>
+Subject: Re: [RFC PATCH 0/2] Identify UST threads by changing
+	thread names
+Date: Wed, 1 Jun 2016 11:04:42 -0400
+Message-ID: <CAE_Gge2jacOMKQaPdp_dXf3NP+yJTS+jWgJQ-SUnv1-B6WgcGw__45944.1472347409$1464793524$gmane$org@mail.gmail.com>
+References: <cover.1461269886.git.raphael.beamonte@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------050802070701060706070807"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 59E38A366F
- for <lttng-dev@lists.lttng.org>; Wed,  1 Jun 2016 14:01:21 +0000 (UTC)
-In-Reply-To: <1907475198.24545.1464731555921.JavaMail.zimbra@efficios.com>
+Received: from mail-qg0-f67.google.com (mail-qg0-f67.google.com
+ [209.85.192.67])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 55C89A348A
+ for <lttng-dev@lists.lttng.org>; Wed,  1 Jun 2016 15:05:03 +0000 (UTC)
+Received: by mail-qg0-f67.google.com with SMTP id t106so13739431qgt.2
+ for <lttng-dev@lists.lttng.org>; Wed, 01 Jun 2016 08:05:03 -0700 (PDT)
+In-Reply-To: <cover.1461269886.git.raphael.beamonte@gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,267 +24,45 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
---------------050802070701060706070807
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Hey Mathieu,
-
-At home (in Cygwin 64), I have a patch for urcu 0.9.2 to fix compilation =
-issues.
-This patch is however unrelated to building shared libraries (.dll files)=
- in Cygwin.
-
-Here is a patch (inline and attached) to build shared libraries on Cygwin=
- (the one that you
-requested). This patch is based on userspace-rcu 613086f69b4c8e6cc1b73b4e=
-93d6d0497825d1ee.
-
-I tested it on Ubuntu 14.04 ("behavior on non-cygwin builds"), but not on=
- Cygwin as I don't have a Cygwin system at work.
-
-Commands used to test the patch:
-
-git clone https://github.com/urcu/userspace-rcu.git
-cd userspace-rcu/
-patch -p1 < ~/patches/0001-Port-build-shared-libraries-in-Cygwin.patch=20
-./bootstrap=20
-./configure --prefix=3D$HOME/builds/userspace-rcu/613086f69b4c8e6cc1b73b4=
-e93d6d0497825d1ee/`date -Iseconds`
-make -j 4
-cd tests/
-make check
-cd ..
-make install
-
-Output of the test:
-
-./run.sh unit_tests
-./test_uatomic ................... ok    =20
-./test_urcu_multiflavor .......... ok  =20
-./test_urcu_multiflavor_dynlink .. ok  =20
-All tests successful.
-Files=3D3, Tests=3D78,  0 wallclock secs ( 0.03 usr  0.00 sys +  0.03 cus=
-r  0.01 csys =3D  0.07 CPU)
-Result: PASS
-
-
-So, the Result is PASS, which is good.
-
-Tonight, I will combine my 2 patches (the one that enables shared librari=
-es in Cygwin, and the one that fixes various compilation issues in Cygwin=
-)
-and send it to the mailing list for review (along with the output of unit=
- tests in Cygwin).
-
-Z1$ cat ~/patches/0001-Port-build-shared-libraries-in-Cygwin.patch=20
-From 1b4f39afc781c1a431b9f52adf25aa0856c86142 Mon Sep 17 00:00:00 2001
-From: Sebastien Boisvert <sboisvert@gydle.com>
-Date: Wed, 1 Jun 2016 09:53:36 -0400
-Subject: [PATCH] Port: build shared libraries in Cygwin
-
-Link: https://lists.lttng.org/pipermail/lttng-dev/2016-May/026081.html
-Signed-off-by: Sebastien Boisvert <sboisvert@gydle.com>
----
- Makefile.am  | 3 +++
- configure.ac | 5 +++++
- 2 files changed, 8 insertions(+)
-
-diff --git a/Makefile.am b/Makefile.am
-index 672beec..8e25fd9 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -8,6 +8,9 @@ AM_LDFLAGS=3D-version-info $(URCU_LIBRARY_VERSION)
- if !LIBC_INCLUDES_PTHREAD
- AM_LDFLAGS+=3D-lpthread
- endif
-+if USE_CYGWIN
-+AM_LDFLAGS+=3D-no-undefined
-+endif
- AM_CFLAGS=3D-Wall
-=20
- SUBDIRS =3D . doc tests
-diff --git a/configure.ac b/configure.ac
-index fe1c55d..b3096c6 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -134,6 +134,11 @@ AS_CASE([$host],[*-*-linux-androideabi],
- 	[AM_CONDITIONAL(TARGET_IS_ANDROID, false)]
- )
-=20
-+AS_CASE([$host],[*-cygwin*],
-+	[AM_CONDITIONAL(USE_CYGWIN, true)],
-+	[AM_CONDITIONAL(USE_CYGWIN, false)]
-+)
-+
- AC_SUBST(ARCHTYPE)
- AC_SUBST(SUBARCHTYPE)
-=20
---=20
-1.9.1
-
-
-
-On 05/31/2016 05:52 PM, Mathieu Desnoyers wrote:
-> ----- On May 31, 2016, at 4:47 PM, Jonathan Rajotte Julien Jonathan.raj=
-otte-julien@efficios.com wrote:
->=20
->> Hi Sebastien,
->>
->> I'll simply move the conversation here (from IRC) to have an archive o=
-f it.
->>
->> On 2016-05-31 09:39 AM, Sebastien Boisvert wrote:
->>> Hi,
->>>
->>> I am in the process of writing a blog article on the use of the LTTng=
--UST
->>> userspace event tracer on Windows.
->>>
->>> I am building urcu and LTTng-UST in a Cygwin 64 environment. Then, I =
-plan to use
->>> LTTng in Visual Studio Community, so I mostly need headers (.h) and s=
-hared
->>> libraries (.dll).
->>
->> Nice!
->>
->>>
->>> When I am building urcu (0.9.2), I get this message:
->>>
->>> libtool: link: warning: undefined symbols not allowed in x86_64-unkno=
-wn-cygwin
->>> shared libraries
->>
->> This seems related to a Windows restriction regarding inter-library
->> dependencies [1], the relevant part:
->>
->> "Some platforms, such as Windows, do not even allow you this
->> flexibility. In order to build a shared library, it must be entirely
->> self-contained or it must have dependencies known at link time (that i=
-s,
->> have references only to symbols that are found in the .lo files or the
->> specified =E2=80=98-l=E2=80=99 libraries), and you need to specify the=
- -no-undefined
->> flag. By default, libtool builds only static libraries on these kinds =
-of
->> platforms."
->>
->> Looks like the -no-undefined might be a good start judging from this
->> patch I found for the urcu cygwin port in yacp [2].
->>
->> Cheers!
->>
->> [1]
->> https://www.gnu.org/software/libtool/manual/libtool.html#Inter_002dlib=
-rary-dependencies
->> [2]
->> https://github.com/fd00/yacp/blob/master/userspace-rcu/userspace-rcu-0=
-.8.7-1bl1.src.patch
->=20
-> Is there a way we could adapt this patch to urcu upstream without chang=
-ing
-> the behavior on non-cygwin builds ?
->=20
-> Thanks,
->=20
-> Mathieu
->=20
->>>
->>> The immediate consequence seems to be the absence of .dll files in th=
-e urcu
->>> build that I am generating. Otherwise, the build contains static libr=
-ary files
->>> and headers.
->>>
->>> However, I suppose that the .a static library files also have undefin=
-ed symbols
->>> as I am getting linking issues when building LTTng-UST.
->>>
->>> Do you have a clue of what may be the issue here ? Otherwise, I will =
-continue my
->>> investigation and get around the issue eventually.
->>> _______________________________________________
->>> lttng-dev mailing list
->>> lttng-dev@lists.lttng.org
->>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
->> --
->> Jonathan R. Julien
->> Efficios
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->=20
-
---------------050802070701060706070807
-Content-Type: text/x-patch;
- name="0001-Port-build-shared-libraries-in-Cygwin.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
- filename="0001-Port-build-shared-libraries-in-Cygwin.patch"
-
-=46rom 1b4f39afc781c1a431b9f52adf25aa0856c86142 Mon Sep 17 00:00:00 2001
-From: Sebastien Boisvert <sboisvert@gydle.com>
-Date: Wed, 1 Jun 2016 09:53:36 -0400
-Subject: [PATCH] Port: build shared libraries in Cygwin
-
-Link: https://lists.lttng.org/pipermail/lttng-dev/2016-May/026081.html
-Signed-off-by: Sebastien Boisvert <sboisvert@gydle.com>
----
- Makefile.am  | 3 +++
- configure.ac | 5 +++++
- 2 files changed, 8 insertions(+)
-
-diff --git a/Makefile.am b/Makefile.am
-index 672beec..8e25fd9 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -8,6 +8,9 @@ AM_LDFLAGS=3D-version-info $(URCU_LIBRARY_VERSION)
- if !LIBC_INCLUDES_PTHREAD
- AM_LDFLAGS+=3D-lpthread
- endif
-+if USE_CYGWIN
-+AM_LDFLAGS+=3D-no-undefined
-+endif
- AM_CFLAGS=3D-Wall
-=20
- SUBDIRS =3D . doc tests
-diff --git a/configure.ac b/configure.ac
-index fe1c55d..b3096c6 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -134,6 +134,11 @@ AS_CASE([$host],[*-*-linux-androideabi],
- 	[AM_CONDITIONAL(TARGET_IS_ANDROID, false)]
- )
-=20
-+AS_CASE([$host],[*-cygwin*],
-+	[AM_CONDITIONAL(USE_CYGWIN, true)],
-+	[AM_CONDITIONAL(USE_CYGWIN, false)]
-+)
-+
- AC_SUBST(ARCHTYPE)
- AC_SUBST(SUBARCHTYPE)
-=20
---=20
-1.9.1
-
-
---------------050802070701060706070807
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---------------050802070701060706070807--
+SGksCgpJIGRpZCBub3QgZ2V0IGFueSBmZWVkYmFjayBhYm91dCB0aGlzLCBhbnkgdGhvdWdodHMg
+PwoKVGhhbmtzLApSYXBoYcOrbAoKMjAxNi0wNC0yMSAxNjo1MCBHTVQtMDQ6MDAgUmFwaGHDq2wg
+QmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwuY29tPjoKPiBIaSwKPgo+IFRoaXMgaXMg
+YW4gUkZDIHBhdGNoIGZvciBjb21tZW50cyBhbmQgaWRlYXMgYWJvdXQgaG93IHRoaXMgc2hvdWxk
+IGJlCj4gZG9uZS4gSW4gcmVjZW50IHdvcmsgSSd2ZSBiZWVuIGRvaW5nLCBJIGZvdW5kIG91dCB0
+aGF0IHNvbWUgVVNULQo+IGluc3RydW1lbnRlZCB1c2Vyc3BhY2UgcHJvY2VzcyB3YXMgcHJlZW1w
+dGluZyBpdHNlbGYuIExvb2tpbmcgZnVydGhlciwKPiBpdCB3YXMgbm90IHRoZSBzYW1lIFRJRCwg
+YnV0IHRoZSBzYW1lIHByb2Nlc3MgbmFtZS4gVGhlc2UgcHJvY2Vzc2VzCj4gd2VyZSBMVFRuZy1V
+U1QgbGlzdGVuZXIgdGhyZWFkcywgYnV0IHdlcmUgbm90IGlkZW50aWZpZWQgYXMgc28uCj4gQWRk
+aW5nIGEgc2ltcGxlIHN5bWJvbCwgc3VjaCBhcyAiLXVzdCIgb3IgIi1sdHRuZyIgYXQgdGhlIGVu
+ZCBvZiB0aGUKPiBwcm9jZXNzIG5hbWUgd291bGQgaGVscCB0byBpZGVudGlmeSBzdWNoIHByb2Nl
+c3MgZGlyZWN0bHkgaW4gdGhlCj4gZ2VuZXJhdGVkIHRyYWNlLgo+Cj4gWW91J2xsIGZpbmQgYmVs
+b3cgdHdvIGRpZmZlcmVudCBpbXBsZW1lbnRhdGlvbnMgd2l0aCB0aGVpciBwcm9zCj4gYW5kIGNv
+bnMsIGZvciB3aGljaCB0aGUgIi11c3QiIHN5bWJvbCB3YXMgY2hvb3NlbjoKPgo+Cj4gMS8gQW4g
+aW1wbGVtZW50YXRpb24gdXNpbmcgcHJjdGwKPiAgICAgICAgIEl0IHdvcmtzIHByb3Blcmx5IG9u
+IExpbnV4LCBidXQgSSBkaWRuJ3QgZmluZCBhIHdheSB0byBtYWtlCj4gICAgICAgICBpdCB3b3Jr
+IHVuZGVyIEZyZWVCU0QsIGhlbmNlIHRoZSBlbXB0eSBmdW5jdGlvbiBpbiBGcmVlQlNECj4gICAg
+ICAgICBjYXNlIChrZWVwaW5nIHRoZSBzaXR1YXRpb24gYXMgaXQgaXMgbm93KS4KPgo+IFJhcGhh
+w6tsIEJlYW1vbnRlICgxKToKPiAgIEFkZCAtdXN0IHRvIHRoZSBuYW1lIG9mIFVTVCB0aHJlYWRz
+IG9mIHRoZSBhcHBsaWNhdGlvbgo+Cj4gIGxpYmx0dG5nLXVzdC9jb21wYXQuaCAgICAgICAgIHwg
+MjIgKysrKysrKysrKysrKysrKysrKysrKwo+ICBsaWJsdHRuZy11c3QvbHR0bmctdXN0LWNvbW0u
+YyB8ICAyICsrCj4gIDIgZmlsZXMgY2hhbmdlZCwgMjQgaW5zZXJ0aW9ucygrKQo+Cj4KPgo+IDIv
+IEFuIGltcGxlbWVudGF0aW9uIHVzaW5nIHB0aHJlYWQKPiAgICAgICAgIEl0IHdvcmtzIG9uIGJv
+dGggTGludXggYW5kIEZyZWVCU0QsIGJ1dCByZXF1aXJlcyB0byBhZGQgYQo+ICAgICAgICAgbGlu
+ayB0byB0aGUgcHRocmVhZCBsaWJyYXJ5IGluIGxpYmx0dG5nLXVzdCBNYWtlZmlsZS5hbS4KPiAg
+ICAgICAgIEFsc28sIHRoaXMgYXBwcm9hY2ggcmVsaWVzIG9uIHRoZSBwcmVzZW5jZSBvZiB0aGUK
+PiAgICAgICAgIHB0aHJlYWRfc2V0bmFtZV9ucCBmdW5jdGlvbiwgd2hpY2ggd2FzIGluY2x1ZGVk
+IGluIGdsaWJjCj4gICAgICAgICAyLjEyLCBtZWFuaW5nIGl0IHdpbGwgbm90IHdvcmsgd2l0aCBv
+bGRlciB2ZXJzaW9ucyAoYnV0Cj4gICAgICAgICB0aGlzIHNob3VsZCBub3QgYmUgYSBwcm9ibGVt
+PykKPgo+IFJhcGhhw6tsIEJlYW1vbnRlICgxKToKPiAgIEFkZCAtdXN0IHRvIHRoZSBuYW1lIG9m
+IFVTVCB0aHJlYWRzIG9mIHRoZSBhcHBsaWNhdGlvbgo+Cj4gIGxpYmx0dG5nLXVzdC9NYWtlZmls
+ZS5hbSAgICAgIHwgIDEgKwo+ICBsaWJsdHRuZy11c3QvY29tcGF0LmggICAgICAgICB8IDM1ICsr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCj4gIGxpYmx0dG5nLXVzdC9sdHRuZy11
+c3QtY29tbS5jIHwgIDIgKysKPiAgMyBmaWxlcyBjaGFuZ2VkLCAzOCBpbnNlcnRpb25zKCspCj4K
+Pgo+Cj4gSSdsbCB3YWl0IGZvciB5b3VyIGNvbW1lbnRzIGFuZCBpZGVhcyBvbiB0aGF0IHN1Ympl
+Y3QuCj4KPiBUaGFua3MsCj4gUmFwaGHDq2wKPgo+Cj4gLS0KPiAyLjEuNAo+Cl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxp
+c3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
+YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
