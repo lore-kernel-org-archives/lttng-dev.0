@@ -1,15 +1,17 @@
-From: Michel Dagenais <michel.dagenais@polymtl.ca>
-Subject: Re: LTTng user mode performance observation
-Date: Thu, 2 Jun 2016 09:10:33 -0400 (EDT)
-Message-ID: <52005383.41674507.1464873033520.JavaMail.zimbra__24415.3436426588$1464873071$gmane$org@polymtl.ca>
-References: <D6EA0E80-F341-43D1-9C4B-780366947A19@nxp.com>
+From: Sebastien Boisvert <sboisvert@gydle.com>
+Subject: Re: [RFC PATCH 1/2] Add -ust to the name of UST threads
+ of the application
+Date: Thu, 2 Jun 2016 09:14:17 -0400
+Message-ID: <57503129.7070503__9554.64450312338$1464873235$gmane$org@gydle.com>
+References: <57503021.5000507@gydle.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7093984971634275841=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca (smtp.polymtl.ca [132.207.4.11])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 6310FA3786
- for <lttng-dev@lists.lttng.org>; Thu,  2 Jun 2016 13:10:36 +0000 (UTC)
-In-Reply-To: <D6EA0E80-F341-43D1-9C4B-780366947A19@nxp.com>
+Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 66AE6A3779
+ for <lttng-dev@lists.lttng.org>; Thu,  2 Jun 2016 13:13:33 +0000 (UTC)
+In-Reply-To: <57503021.5000507@gydle.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,157 +21,48 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Richard Schmitt <richard.schmitt@nxp.com>
-Cc: lttng-dev@lists.lttng.org, "Nghia (Tommy) Huynh" <nghia.huynh@utexas.edu>
+To: =?UTF-8?Q?Rapha=c3=abl_Beamonte?= <raphael.beamonte@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============7093984971634275841==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_41674506_301931092.1464873033519"
-
-------=_Part_41674506_301931092.1464873033519
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-Here is a short answer to start. Others will have more precise suggestions.=
-=20
-
-Something that can seriously affect the performance is what is used to obta=
-in information such as the timestamp and possibly the CPU id. More details =
-on your platform would help in that respect. The second thing is that UST i=
-s flexible (many parameters can be changed / activated at run time) and rob=
-ust (reentrant, can be used from within signals) which adds a cost in terms=
- of structure and memory barriers. A high performance mode with restriction=
-s on its use has been discussed in the past but the speed difference is not=
- necessarily that great, typically much lower than the impact of selecting =
-an efficient source for timestamps.=20
-
------ Mail original -----
-
-> We are trying to use user space LTTng to perform some performance analysi=
-s of
-> fast-path layer 3 forwarding. We have seen that with the tracepoints
-> enabled, we experience about a 30% increase in service time. This is spre=
-ad
-> out over two tracepoints so each one is still contributing a good amount.
-
-> This fast path is fast, about 300 cycles so we are asking a lot of effici=
-ency
-> of the tracepoint but for comparison, we implemented a simple ring buffer=
-.
-> When we run with this type of capture, we only experience a 5% increase i=
-n
-> service time.
-
-> I=E2=80=99m looking for pointers. We=E2=80=99d rather use LTTng. Are ther=
-e ways to tune LTTng
-> ust for ultra high performance requirements. Perhaps there is a way we co=
-uld
-> write directly to ust=E2=80=99s ring buffers, or perhaps preallocate the =
-buffers?
-
-> Rich
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-------=_Part_41674506_301931092.1464873033519
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: times new roman, new york, times, se=
-rif; font-size: 12pt; color: #000000"><div>Here is a short answer to start.=
- Others will have more precise suggestions. </div><div><br></div><div>Somet=
-hing that can seriously affect the performance is what is used to obtain in=
-formation such as the timestamp and possibly the CPU id. More details on yo=
-ur platform would help in that respect. The second thing is that UST is fle=
-xible (many parameters can be changed / activated at run time) and robust (=
-reentrant, can be used from within signals) which adds a cost in terms of s=
-tructure and memory barriers. A high performance mode with restrictions on =
-its use has been discussed in the past but the speed difference is not nece=
-ssarily that great, typically much lower than the impact of selecting an ef=
-ficient source for timestamps.</div><div><br></div><hr id=3D"zwchr"><blockq=
-uote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5p=
-x;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font=
--family:Helvetica,Arial,sans-serif;font-size:12pt;" data-mce-style=3D"borde=
-r-left: 2px solid #1010FF; margin-left: 5px; padding-left: 5px; color: #000=
-; font-weight: normal; font-style: normal; text-decoration: none; font-fami=
-ly: Helvetica,Arial,sans-serif; font-size: 12pt;"><style><!--
-
-@font-face
-=09{font-family:"Cambria Math";
-=09panose-1:0 0 0 0 0 0 0 0 0 0;}
-@font-face
-=09{font-family:Calibri;
-=09panose-1:2 15 5 2 2 2 4 3 2 4;}
-
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-=09{margin:0in;
-=09margin-bottom:.0001pt;
-=09font-size:12.0pt;
-=09font-family:Calibri;}
-a:link, span.MsoHyperlink
-=09{mso-style-priority:99;
-=09color:#0563C1;
-=09text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-=09{mso-style-priority:99;
-=09color:#954F72;
-=09text-decoration:underline;}
-span.EmailStyle17
-=09{mso-style-type:personal-compose;
-=09font-family:Calibri;
-=09color:windowtext;}
-span.msoIns
-=09{mso-style-type:export-only;
-=09mso-style-name:"";
-=09text-decoration:underline;
-=09color:teal;}
-.MsoChpDefault
-=09{mso-style-type:export-only;
-=09font-family:Calibri;}
-@page WordSection1
-=09{size:8.5in 11.0in;
-=09margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-=09{page:WordSection1;}
---></style><div class=3D"WordSection1"><p class=3D"MsoNormal"><span style=
-=3D"font-size:11.0pt" data-mce-style=3D"font-size: 11.0pt;">We are trying t=
-o use user space LTTng to perform some performance analysis of fast-path la=
-yer 3 forwarding.&nbsp; We have seen that with the tracepoints enabled, we =
-experience about a 30% increase in service time.&nbsp; This is spread out o=
-ver two tracepoints so each one is still contributing a good amount.</span>=
-</p><p class=3D"MsoNormal"><span style=3D"font-size:11.0pt" data-mce-style=
-=3D"font-size: 11.0pt;">&nbsp;</span></p><p class=3D"MsoNormal"><span style=
-=3D"font-size:11.0pt" data-mce-style=3D"font-size: 11.0pt;">This fast path =
-is fast, about 300 cycles so we are asking a lot of efficiency of the trace=
-point but for comparison, we implemented a simple ring buffer.&nbsp; When w=
-e run with this type of capture, we only experience a 5% increase in servic=
-e time.</span></p><p class=3D"MsoNormal"><span style=3D"font-size:11.0pt" d=
-ata-mce-style=3D"font-size: 11.0pt;">&nbsp;</span></p><p class=3D"MsoNormal=
-"><span style=3D"font-size:11.0pt" data-mce-style=3D"font-size: 11.0pt;">I=
-=E2=80=99m looking for pointers.&nbsp; We=E2=80=99d rather use LTTng.&nbsp;=
- Are there ways to tune LTTng ust for ultra high performance requirements.&=
-nbsp; Perhaps there is &nbsp;a way we could write directly to ust=E2=80=99s=
- ring buffers, or perhaps preallocate the buffers?</span></p><p class=3D"Ms=
-oNormal"><span style=3D"font-size:11.0pt" data-mce-style=3D"font-size: 11.0=
-pt;">&nbsp;</span></p><p class=3D"MsoNormal"><span style=3D"font-size:11.0p=
-t" data-mce-style=3D"font-size: 11.0pt;">Rich</span></p></div><br>_________=
-______________________________________<br>lttng-dev mailing list<br>lttng-d=
-ev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/listinfo/lttn=
-g-dev<br></blockquote><div><br></div></div></body></html>
-------=_Part_41674506_301931092.1464873033519--
-
---===============7093984971634275841==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============7093984971634275841==--
+SGkgUmFwaGHDq2wsCgpPbiAwNi8wMi8yMDE2IDA5OjA5IEFNLCBTZWJhc3RpZW4gQm9pc3ZlcnQg
+d3JvdGU6Cj4gQWRkIHRoZSByZXF1aXJlZCBmdW5jdGlvbnMgdG8gY2hhbmdlIHRoZSB0aHJlYWQg
+bmFtZSBvZiB0aGUgVVNUCj4gdGhyZWFkcyBhbmQgYWRkIHRoZSAtdXN0IHN0cmluZyBhdCBpdHMg
+ZW5kLiBUaGlzIHdpbGwgaGVscCB0bwo+IGlkZW50aWZ5IExUVG5nLVVTVCBwcm9jZXNzZXMgd2hl
+biBhbmFseXppbmcgdGhlIHRyYWNlIG9mIGEgcHJvY2Vzcy4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBS
+YXBoYcOrbCBCZWFtb250ZSA8cmFwaGFlbC5iZWFtb250ZSBhdCBnbWFpbC5jb20+Cj4gLS0tCj4g
+IGxpYmx0dG5nLXVzdC9jb21wYXQuaCAgICAgICAgIHwgMjIgKysrKysrKysrKysrKysrKysrKysr
+Kwo+ICBsaWJsdHRuZy11c3QvbHR0bmctdXN0LWNvbW0uYyB8ICAyICsrCj4gIDIgZmlsZXMgY2hh
+bmdlZCwgMjQgaW5zZXJ0aW9ucygrKQo+IAo+IGRpZmYgLS1naXQgYS9saWJsdHRuZy11c3QvY29t
+cGF0LmggYi9saWJsdHRuZy11c3QvY29tcGF0LmgKPiBpbmRleCA0M2IyMjIzLi44ZDVmYzc3IDEw
+MDY0NAo+IC0tLSBhL2xpYmx0dG5nLXVzdC9jb21wYXQuaAo+ICsrKyBiL2xpYmx0dG5nLXVzdC9j
+b21wYXQuaAo+IEBAIC0zNCw2ICszNCwyMyBAQCB2b2lkIGx0dG5nX3VzdF9nZXRwcm9jbmFtZShj
+aGFyICpuYW1lKQo+ICAJKHZvaWQpIHByY3RsKFBSX0dFVF9OQU1FLCAodW5zaWduZWQgbG9uZykg
+bmFtZSwgMCwgMCwgMCk7Cj4gIH0KPiAgCj4gK3N0YXRpYyBpbmxpbmUKPiArdm9pZCBsdHRuZ191
+c3Rfc2V0dXN0cHJvY25hbWUoKQo+ICt7Cj4gKwljaGFyIG5hbWVbTFRUTkdfVVNUX1BST0NOQU1F
+X0xFTl07Cj4gKwlpbnQgbGltaXQgPSBMVFROR19VU1RfUFJPQ05BTUVfTEVOIC0gNDsKPiArCj4g
+KwlsdHRuZ191c3RfZ2V0cHJvY25hbWUobmFtZSk7Cj4gKwo+ICsJaWYgKHN0cmxlbihuYW1lKSA+
+PSBsaW1pdCkgewo+ICsJCW5hbWVbbGltaXRdID0gMDsKPiArCX0KPiArCj4gKwlzcHJpbnRmKG5h
+bWUsICIlcyVzIiwgbmFtZSwgIi11c3QiKTsKClRoZSBvYmplY3RzIGNhbiBub3Qgb3ZlcmxhcCwg
+b3RoZXJ3aXNlLCB0aGUgYmVoYXZpb3IgaXMgdW5kZWZpbmVkOgoKIklmIGNvcHlpbmcgdGFrZXMg
+cGxhY2UgYmV0d2VlbiBvYmplY3RzIHRoYXQgb3ZlcmxhcCBhcyBhIHJlc3VsdCBvZiBhIGNhbGwg
+dG8gc3ByaW50ZigpIG9yIHNucHJpbnRmKCksIHRoZSByZXN1bHRzIGFyZSB1bmRlZmluZWQuIiBb
+MV0KCgpbMV0gaHR0cDovL3B1YnMub3Blbmdyb3VwLm9yZy9vbmxpbmVwdWJzLzk2OTk5MTk3OTkv
+ZnVuY3Rpb25zL3NwcmludGYuaHRtbAoKCgoKPiArCj4gKwkodm9pZCkgcHJjdGwoUFJfU0VUX05B
+TUUsIG5hbWUsIDAsIDAsIDApOwo+ICt9Cj4gKwo+ICAjZWxpZiBkZWZpbmVkKF9fRnJlZUJTRF9f
+KQo+ICAjaW5jbHVkZSA8c3RkbGliLmg+Cj4gICNpbmNsdWRlIDxzdHJpbmcuaD4KPiBAQCAtNTks
+NiArNzYsMTEgQEAgdm9pZCBsdHRuZ191c3RfZ2V0cHJvY25hbWUoY2hhciAqbmFtZSkKPiAgCQlz
+dHJuY3B5KG5hbWUsIGJzZF9uYW1lLCBMVFROR19VU1RfUFJPQ05BTUVfTEVOIC0gMSk7Cj4gIH0K
+PiAgCj4gK3N0YXRpYyBpbmxpbmUKPiArdm9pZCBsdHRuZ191c3Rfc2V0dXN0cHJvY25hbWUoKQo+
+ICt7Cj4gK30KPiArCj4gICNlbmRpZgo+ICAKPiAgI2luY2x1ZGUgPGVycm5vLmg+Cj4gZGlmZiAt
+LWdpdCBhL2xpYmx0dG5nLXVzdC9sdHRuZy11c3QtY29tbS5jIGIvbGlibHR0bmctdXN0L2x0dG5n
+LXVzdC1jb21tLmMKPiBpbmRleCBlMDBhMjJjLi5hODVjYjIxIDEwMDY0NAo+IC0tLSBhL2xpYmx0
+dG5nLXVzdC9sdHRuZy11c3QtY29tbS5jCj4gKysrIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1j
+b21tLmMKPiBAQCAtMTI5NSw2ICsxMjk1LDggQEAgdm9pZCAqdXN0X2xpc3RlbmVyX3RocmVhZCh2
+b2lkICphcmcpCj4gIAlpbnQgc29jaywgcmV0LCBwcmV2X2Nvbm5lY3RfZmFpbGVkID0gMCwgaGFz
+X3dhaXRlZCA9IDA7Cj4gIAlsb25nIHRpbWVvdXQ7Cj4gIAo+ICsJbHR0bmdfdXN0X3NldHVzdHBy
+b2NuYW1lKCk7Cj4gKwo+ICAJLyogUmVzdGFydCB0cnlpbmcgdG8gY29ubmVjdCB0byB0aGUgc2Vz
+c2lvbiBkYWVtb24gKi8KPiAgcmVzdGFydDoKPiAgCWlmIChwcmV2X2Nvbm5lY3RfZmFpbGVkKSB7
+Cj4gCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
+Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
