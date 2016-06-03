@@ -1,15 +1,21 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng user mode performance observation
-Date: Fri, 3 Jun 2016 06:23:34 +0000 (UTC)
-Message-ID: <576554794.26523.1464935014956.JavaMail.zimbra__20772.2466010184$1464935042$gmane$org@efficios.com>
-References: <D6EA0E80-F341-43D1-9C4B-780366947A19@nxp.com>
+Subject: Re: [RFC PATCH 0/2] Identify UST threads by changing
+ thread names
+Date: Fri, 3 Jun 2016 06:24:25 +0000 (UTC)
+Message-ID: <293416701.26545.1464935065348.JavaMail.zimbra__29101.7613061287$1464935098$gmane$org@efficios.com>
+References: <cover.1461269886.git.raphael.beamonte@gmail.com>
+ <CAE_Gge2jacOMKQaPdp_dXf3NP+yJTS+jWgJQ-SUnv1-B6WgcGw@mail.gmail.com>
+ <CA+jJMxvmHRYYtHWYjumXrS1BrBCih3WJnRA5yGFBXTw7jL3HiA@mail.gmail.com>
+ <CA+jJMxs9yNOeeqtYBfGTz1ADOqqiVO=XZd-7qm48BS8dzVo-iw@mail.gmail.com>
+ <1192105907.26502.1464934699922.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3792535596690791251=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 8D439A3799
- for <lttng-dev@lists.lttng.org>; Fri,  3 Jun 2016 06:23:39 +0000 (UTC)
-In-Reply-To: <D6EA0E80-F341-43D1-9C4B-780366947A19@nxp.com>
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 62081A3799
+ for <lttng-dev@lists.lttng.org>; Fri,  3 Jun 2016 06:24:30 +0000 (UTC)
+In-Reply-To: <1192105907.26502.1464934699922.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,174 +25,81 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Richard Schmitt <richard.schmitt@nxp.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Nghia (Tommy) Huynh" <nghia.huynh@utexas.edu>
+To: Jeremie Galarneau <jeremie.galarneau@efficios.com>
+Cc: =?utf-8?Q?Rapha=C3=ABl?= Beamonte <raphael.beamonte@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============3792535596690791251==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_26522_1933404280.1464935014955"
-
-------=_Part_26522_1933404280.1464935014955
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
----- On Jun 2, 2016, at 1:29 AM, Richard Schmitt <richard.schmitt@nxp.com> =
-wrote:=20
-
-> We are trying to use user space LTTng to perform some performance analysi=
-s of
-> fast-path layer 3 forwarding. We have seen that with the tracepoints enab=
-led,
-> we experience about a 30% increase in service time. This is spread out ov=
-er two
-> tracepoints so each one is still contributing a good amount.
-
-> This fast path is fast, about 300 cycles so we are asking a lot of effici=
-ency of
-> the tracepoint but for comparison, we implemented a simple ring buffer. W=
-hen we
-> run with this type of capture, we only experience a 5% increase in servic=
-e
-> time.
-
-> I=E2=80=99m looking for pointers. We=E2=80=99d rather use LTTng. Are ther=
-e ways to tune LTTng
-> ust for ultra high performance requirements. Perhaps there is a way we co=
-uld
-> write directly to ust=E2=80=99s ring buffers, or perhaps preallocate the =
-buffers?
-
-What is the target architecture ?=20
-
-I'm currently working on proposing restartable sequence system call to the =
-kernel to=20
-improve the speed of getcpu and remove atomic operations from the fast path=
-=20
-on arm32, intel 32/64. This will be portable to other architectures too.=20
-
-Make sure you run a kernel with sys_membarrier available, and that you have=
-=20
-a recent liburcu 0.9.x. This should take care of removing memory barriers f=
-rom=20
-the tracing fast path.=20
-
-Thanks,=20
-
-Mathieu=20
-
-> Rich
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---=20
-Mathieu Desnoyers=20
-EfficiOS Inc.=20
-http://www.efficios.com=20
-
-------=_Part_26522_1933404280.1464935014955
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
-__">---- On Jun 2, 2016, at 1:29 AM, Richard Schmitt &lt;richard.schmitt@nx=
-p.com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><bloc=
-kquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:=
-5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;fo=
-nt-family:Helvetica,Arial,sans-serif;font-size:12pt;"><style><!--
-
-@font-face
-=09{font-family:"Cambria Math";
-=09panose-1:0 0 0 0 0 0 0 0 0 0;}
-@font-face
-=09{font-family:Calibri;
-=09panose-1:2 15 5 2 2 2 4 3 2 4;}
-
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-=09{margin:0in;
-=09margin-bottom:.0001pt;
-=09font-size:12.0pt;
-=09font-family:Calibri;}
-a:link, span.MsoHyperlink
-=09{mso-style-priority:99;
-=09color:#0563C1;
-=09text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-=09{mso-style-priority:99;
-=09color:#954F72;
-=09text-decoration:underline;}
-span.EmailStyle17
-=09{mso-style-type:personal-compose;
-=09font-family:Calibri;
-=09color:windowtext;}
-span.msoIns
-=09{mso-style-type:export-only;
-=09mso-style-name:"";
-=09text-decoration:underline;
-=09color:teal;}
-.MsoChpDefault
-=09{mso-style-type:export-only;
-=09font-family:Calibri;}
-@page WordSection1
-=09{size:8.5in 11.0in;
-=09margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-=09{page:WordSection1;}
---></style><div class=3D"WordSection1"><p class=3D"MsoNormal"><span style=
-=3D"font-size:11.0pt">We are trying to use user space LTTng to perform some=
- performance analysis of fast-path layer 3 forwarding.&nbsp; We have seen t=
-hat with the tracepoints enabled, we experience about a 30% increase in ser=
-vice time.&nbsp;
- This is spread out over two tracepoints so each one is still contributing =
-a good amount.</span></p><p class=3D"MsoNormal"><span style=3D"font-size:11=
-.0pt">&nbsp;</span></p><p class=3D"MsoNormal"><span style=3D"font-size:11.0=
-pt">This fast path is fast, about 300 cycles so we are asking a lot of effi=
-ciency of the tracepoint but for comparison, we implemented a simple ring b=
-uffer.&nbsp; When we run with this type of capture, we only experience
- a 5% increase in service time.</span></p><p class=3D"MsoNormal"><span styl=
-e=3D"font-size:11.0pt">&nbsp;</span></p><p class=3D"MsoNormal"><span style=
-=3D"font-size:11.0pt">I=E2=80=99m looking for pointers.&nbsp; We=E2=80=99d =
-rather use LTTng.&nbsp; Are there ways to tune LTTng ust for ultra high per=
-formance requirements.&nbsp; Perhaps there is &nbsp;a way we could write di=
-rectly to ust=E2=80=99s ring buffers, or perhaps
- preallocate the buffers?</span></p></div></blockquote><div>What is the tar=
-get architecture ?<br></div><div><br data-mce-bogus=3D"1"></div><div>I'm cu=
-rrently working on proposing restartable sequence system call to the kernel=
- to<br data-mce-bogus=3D"1"></div><div>improve the speed of getcpu and remo=
-ve atomic operations from the fast path<br data-mce-bogus=3D"1"></div><div>=
-on arm32, intel 32/64. This will be portable to other architectures too.<br=
- data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Make s=
-ure you run a kernel with sys_membarrier available, and that you have<br da=
-ta-mce-bogus=3D"1"></div><div>a recent liburcu 0.9.x. This should take care=
- of removing memory barriers from<br data-mce-bogus=3D"1"></div><div>the tr=
-acing fast path.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1=
-"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=
-=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-b=
-ogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"b=
-order-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;fo=
-nt-weight:normal;font-style:normal;text-decoration:none;font-family:Helveti=
-ca,Arial,sans-serif;font-size:12pt;"><div class=3D"WordSection1"><p class=
-=3D"MsoNormal"><span style=3D"font-size:11.0pt">&nbsp;</span></p><p class=
-=3D"MsoNormal"><span style=3D"font-size:11.0pt">Rich</span></p></div><br>__=
-_____________________________________________<br>lttng-dev mailing list<br>=
-lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/listin=
-fo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D"__SIG=
-_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www=
-.efficios.com</div></div></body></html>
-------=_Part_26522_1933404280.1464935014955--
-
---===============3792535596690791251==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============3792535596690791251==--
+LS0tLS0gT24gSnVuIDMsIDIwMTYsIGF0IDg6MTggQU0sIE1hdGhpZXUgRGVzbm95ZXJzIG1hdGhp
+ZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbSB3cm90ZToKCj4gLS0tLS0gT24gSnVuIDMsIDIwMTYs
+IGF0IDg6MTEgQU0sIEplcmVtaWUgR2FsYXJuZWF1Cj4gamVyZW1pZS5nYWxhcm5lYXVAZWZmaWNp
+b3MuY29tIHdyb3RlOgo+IAo+PiBBbmQsIG9mIGNvdXJzZSwgSSBmb3JnZXQgdG8gYWRkIE1hdGhp
+ZXUgaW4gQ0MuLi4gQ29mZmVlIHRpbWUhCj4+IAo+PiBKw6lyw6ltaWUKPj4gCj4+IE9uIEZyaSwg
+SnVuIDMsIDIwMTYgYXQgMjoxMCBBTSwgSsOpcsOpbWllIEdhbGFybmVhdQo+PiA8amVyZW1pZS5n
+YWxhcm5lYXVAZWZmaWNpb3MuY29tPiB3cm90ZToKPj4+IEhpIFJhcGhhw6tsLAo+Pj4KPj4+IEFk
+ZGluZyBNYXRoaWV1IGluIENDLiBQbGVhc2UgbWFrZSBzdXJlIHlvdSBDQyB0aGUgbWFpbnRhaW5l
+cnMgd2hlbgo+Pj4gc3VibWl0dGluZyBhIHBhdGNoLgo+Pj4KPj4+IFJlZ2FyZHMsCj4+PiBKw6ly
+w6ltaWUKPj4+Cj4+PiBPbiBXZWQsIEp1biAxLCAyMDE2IGF0IDExOjA0IEFNLCBSYXBoYcOrbCBC
+ZWFtb250ZQo+Pj4gPHJhcGhhZWwuYmVhbW9udGVAZ21haWwuY29tPiB3cm90ZToKPj4+PiBIaSwK
+Pj4+Pgo+Pj4+IEkgZGlkIG5vdCBnZXQgYW55IGZlZWRiYWNrIGFib3V0IHRoaXMsIGFueSB0aG91
+Z2h0cyA/Cj4+Pj4KPj4+PiBUaGFua3MsCj4+Pj4gUmFwaGHDq2wKPj4+Pgo+Pj4+IDIwMTYtMDQt
+MjEgMTY6NTAgR01ULTA0OjAwIFJhcGhhw6tsIEJlYW1vbnRlIDxyYXBoYWVsLmJlYW1vbnRlQGdt
+YWlsLmNvbT46Cj4+Pj4+IEhpLAo+Pj4+Pgo+Pj4+PiBUaGlzIGlzIGFuIFJGQyBwYXRjaCBmb3Ig
+Y29tbWVudHMgYW5kIGlkZWFzIGFib3V0IGhvdyB0aGlzIHNob3VsZCBiZQo+Pj4+PiBkb25lLiBJ
+biByZWNlbnQgd29yayBJJ3ZlIGJlZW4gZG9pbmcsIEkgZm91bmQgb3V0IHRoYXQgc29tZSBVU1Qt
+Cj4+Pj4+IGluc3RydW1lbnRlZCB1c2Vyc3BhY2UgcHJvY2VzcyB3YXMgcHJlZW1wdGluZyBpdHNl
+bGYuIExvb2tpbmcgZnVydGhlciwKPj4+Pj4gaXQgd2FzIG5vdCB0aGUgc2FtZSBUSUQsIGJ1dCB0
+aGUgc2FtZSBwcm9jZXNzIG5hbWUuIFRoZXNlIHByb2Nlc3Nlcwo+Pj4+PiB3ZXJlIExUVG5nLVVT
+VCBsaXN0ZW5lciB0aHJlYWRzLCBidXQgd2VyZSBub3QgaWRlbnRpZmllZCBhcyBzby4KPj4+Pj4g
+QWRkaW5nIGEgc2ltcGxlIHN5bWJvbCwgc3VjaCBhcyAiLXVzdCIgb3IgIi1sdHRuZyIgYXQgdGhl
+IGVuZCBvZiB0aGUKPj4+Pj4gcHJvY2VzcyBuYW1lIHdvdWxkIGhlbHAgdG8gaWRlbnRpZnkgc3Vj
+aCBwcm9jZXNzIGRpcmVjdGx5IGluIHRoZQo+Pj4+PiBnZW5lcmF0ZWQgdHJhY2UuCj4+Pj4+Cj4+
+Pj4+IFlvdSdsbCBmaW5kIGJlbG93IHR3byBkaWZmZXJlbnQgaW1wbGVtZW50YXRpb25zIHdpdGgg
+dGhlaXIgcHJvcwo+Pj4+PiBhbmQgY29ucywgZm9yIHdoaWNoIHRoZSAiLXVzdCIgc3ltYm9sIHdh
+cyBjaG9vc2VuOgo+Pj4+Pgo+Pj4+Pgo+Pj4+PiAxLyBBbiBpbXBsZW1lbnRhdGlvbiB1c2luZyBw
+cmN0bAo+Pj4+PiAgICAgICAgIEl0IHdvcmtzIHByb3Blcmx5IG9uIExpbnV4LCBidXQgSSBkaWRu
+J3QgZmluZCBhIHdheSB0byBtYWtlCj4+Pj4+ICAgICAgICAgaXQgd29yayB1bmRlciBGcmVlQlNE
+LCBoZW5jZSB0aGUgZW1wdHkgZnVuY3Rpb24gaW4gRnJlZUJTRAo+Pj4+PiAgICAgICAgIGNhc2Ug
+KGtlZXBpbmcgdGhlIHNpdHVhdGlvbiBhcyBpdCBpcyBub3cpLgo+Pj4+Pgo+Pj4+PiBSYXBoYcOr
+bCBCZWFtb250ZSAoMSk6Cj4+Pj4+ICAgQWRkIC11c3QgdG8gdGhlIG5hbWUgb2YgVVNUIHRocmVh
+ZHMgb2YgdGhlIGFwcGxpY2F0aW9uCj4+Pj4+Cj4+Pj4+ICBsaWJsdHRuZy11c3QvY29tcGF0Lmgg
+ICAgICAgICB8IDIyICsrKysrKysrKysrKysrKysrKysrKysKPj4+Pj4gIGxpYmx0dG5nLXVzdC9s
+dHRuZy11c3QtY29tbS5jIHwgIDIgKysKPj4+Pj4gIDIgZmlsZXMgY2hhbmdlZCwgMjQgaW5zZXJ0
+aW9ucygrKQo+Pj4+Pgo+Pj4+Pgo+Pj4+Pgo+Pj4+PiAyLyBBbiBpbXBsZW1lbnRhdGlvbiB1c2lu
+ZyBwdGhyZWFkCj4+Pj4+ICAgICAgICAgSXQgd29ya3Mgb24gYm90aCBMaW51eCBhbmQgRnJlZUJT
+RCwgYnV0IHJlcXVpcmVzIHRvIGFkZCBhCj4+Pj4+ICAgICAgICAgbGluayB0byB0aGUgcHRocmVh
+ZCBsaWJyYXJ5IGluIGxpYmx0dG5nLXVzdCBNYWtlZmlsZS5hbS4KPj4+Pj4gICAgICAgICBBbHNv
+LCB0aGlzIGFwcHJvYWNoIHJlbGllcyBvbiB0aGUgcHJlc2VuY2Ugb2YgdGhlCj4+Pj4+ICAgICAg
+ICAgcHRocmVhZF9zZXRuYW1lX25wIGZ1bmN0aW9uLCB3aGljaCB3YXMgaW5jbHVkZWQgaW4gZ2xp
+YmMKPj4+Pj4gICAgICAgICAyLjEyLCBtZWFuaW5nIGl0IHdpbGwgbm90IHdvcmsgd2l0aCBvbGRl
+ciB2ZXJzaW9ucyAoYnV0Cj4+Pj4+ICAgICAgICAgdGhpcyBzaG91bGQgbm90IGJlIGEgcHJvYmxl
+bT8pCj4gCj4gbHR0bmctdXN0IGFscmVhZHkgdXNlcyBsaWJjIGZvciBtdXRleGVzIGFuZCBvdGhl
+ci4gU28gSSBkb24ndCBzZWUgd2h5Cj4geW91IGhhdmUgdG8gX2FkZF8gYW55IGV4cGxpY2l0IGRl
+cGVuZGVuY3kgdGhlcmUuCgphbmQgd2UgYWxyZWFkeSBleHBsaWNpdGx5IHVzZSBwdGhyZWFkIChw
+dGhyZWFkX2NyZWF0ZSkuCgpUaGFua3MsCgpNYXRoaWV1Cgo+IAo+IEFib3V0IHRoZSBnbGliYyB2
+ZXJzaW9uLCB3ZSBzaG91bGQgdXNlIGF1dG90b29scyB0byBkZXRlY3QgdGhlCj4gZmVhdHVyZXMg
+c3VwcG9ydGVkIGJ5IHRoZSBzeXN0ZW0gbGliYywgYW5kIHBhc3MgYSBjb25maWcgZGVmaW5lCj4g
+dG8gdGhlIHNvdXJjZSBjb2RlLCBzbyB3ZSBjYW4gdXNlIHRoZSBnbGliYyBwdGhyZWFkX3NldG5h
+bWVfbnAKPiBpZiBhdmFpbGFibGUsIGVsc2Ugd2Uga2VlcCB0aGUgY3VycmVudCBiZWhhdmlvci4K
+PiAKPiBUaG91Z2h0cyA/Cj4gCj4gVGhhbmtzLAo+IAo+IE1hdGhpZXUKPiAKPj4+Pj4KPj4+Pj4g
+UmFwaGHDq2wgQmVhbW9udGUgKDEpOgo+Pj4+PiAgIEFkZCAtdXN0IHRvIHRoZSBuYW1lIG9mIFVT
+VCB0aHJlYWRzIG9mIHRoZSBhcHBsaWNhdGlvbgo+Pj4+Pgo+Pj4+PiAgbGlibHR0bmctdXN0L01h
+a2VmaWxlLmFtICAgICAgfCAgMSArCj4+Pj4+ICBsaWJsdHRuZy11c3QvY29tcGF0LmggICAgICAg
+ICB8IDM1ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCj4+Pj4+ICBsaWJsdHRu
+Zy11c3QvbHR0bmctdXN0LWNvbW0uYyB8ICAyICsrCj4+Pj4+ICAzIGZpbGVzIGNoYW5nZWQsIDM4
+IGluc2VydGlvbnMoKykKPj4+Pj4KPj4+Pj4KPj4+Pj4KPj4+Pj4gSSdsbCB3YWl0IGZvciB5b3Vy
+IGNvbW1lbnRzIGFuZCBpZGVhcyBvbiB0aGF0IHN1YmplY3QuCj4+Pj4+Cj4+Pj4+IFRoYW5rcywK
+Pj4+Pj4gUmFwaGHDq2wKPj4+Pj4KPj4+Pj4KPj4+Pj4gLS0KPj4+Pj4gMi4xLjQKPj4+Pj4KPj4+
+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+Pj4+IGx0
+dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+Pj4g
+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo+Pj4KPj4+Cj4+Pgo+Pj4gLS0KPj4+IErDqXLDqW1pZSBHYWxhcm5lYXUKPj4+IEVmZmljaU9T
+IEluYy4KPj4+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4+IAo+PiAKPj4gCj4+IC0tCj4+IErD
+qXLDqW1pZSBHYWxhcm5lYXUKPj4gRWZmaWNpT1MgSW5jLgo+PiBodHRwOi8vd3d3LmVmZmljaW9z
+LmNvbQo+IAo+IC0tCj4gTWF0aGlldSBEZXNub3llcnMKPiBFZmZpY2lPUyBJbmMuCj4gaHR0cDov
+L3d3dy5lZmZpY2lvcy5jb20KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
+L2x0dG5nLWRldgoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3
+dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
+dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
