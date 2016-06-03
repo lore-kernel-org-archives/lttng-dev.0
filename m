@@ -1,20 +1,15 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC PATCH 0/2] Identify UST threads by changing
- thread names
-Date: Fri, 3 Jun 2016 06:18:19 +0000 (UTC)
-Message-ID: <1192105907.26502.1464934699922.JavaMail.zimbra__12405.1818311729$1464934734$gmane$org@efficios.com>
-References: <cover.1461269886.git.raphael.beamonte@gmail.com>
- <CAE_Gge2jacOMKQaPdp_dXf3NP+yJTS+jWgJQ-SUnv1-B6WgcGw@mail.gmail.com>
- <CA+jJMxvmHRYYtHWYjumXrS1BrBCih3WJnRA5yGFBXTw7jL3HiA@mail.gmail.com>
- <CA+jJMxs9yNOeeqtYBfGTz1ADOqqiVO=XZd-7qm48BS8dzVo-iw@mail.gmail.com>
+Subject: Re: LTTng user mode performance observation
+Date: Fri, 3 Jun 2016 06:23:34 +0000 (UTC)
+Message-ID: <576554794.26523.1464935014956.JavaMail.zimbra__20772.2466010184$1464935042$gmane$org@efficios.com>
+References: <D6EA0E80-F341-43D1-9C4B-780366947A19@nxp.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============3792535596690791251=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 90D91A3799
- for <lttng-dev@lists.lttng.org>; Fri,  3 Jun 2016 06:18:24 +0000 (UTC)
-In-Reply-To: <CA+jJMxs9yNOeeqtYBfGTz1ADOqqiVO=XZd-7qm48BS8dzVo-iw@mail.gmail.com>
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 8D439A3799
+ for <lttng-dev@lists.lttng.org>; Fri,  3 Jun 2016 06:23:39 +0000 (UTC)
+In-Reply-To: <D6EA0E80-F341-43D1-9C4B-780366947A19@nxp.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,72 +19,174 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jeremie Galarneau <jeremie.galarneau@efficios.com>
-Cc: =?utf-8?Q?Rapha=C3=ABl?= Beamonte <raphael.beamonte@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>
+To: Richard Schmitt <richard.schmitt@nxp.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Nghia (Tommy) Huynh" <nghia.huynh@utexas.edu>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT24gSnVuIDMsIDIwMTYsIGF0IDg6MTEgQU0sIEplcmVtaWUgR2FsYXJuZWF1IGplcmVt
-aWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbSB3cm90ZToKCj4gQW5kLCBvZiBjb3Vyc2UsIEkgZm9y
-Z2V0IHRvIGFkZCBNYXRoaWV1IGluIENDLi4uIENvZmZlZSB0aW1lIQo+IAo+IErDqXLDqW1pZQo+
-IAo+IE9uIEZyaSwgSnVuIDMsIDIwMTYgYXQgMjoxMCBBTSwgSsOpcsOpbWllIEdhbGFybmVhdQo+
-IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+IHdyb3RlOgo+PiBIaSBSYXBoYcOrbCwK
-Pj4KPj4gQWRkaW5nIE1hdGhpZXUgaW4gQ0MuIFBsZWFzZSBtYWtlIHN1cmUgeW91IENDIHRoZSBt
-YWludGFpbmVycyB3aGVuCj4+IHN1Ym1pdHRpbmcgYSBwYXRjaC4KPj4KPj4gUmVnYXJkcywKPj4g
-SsOpcsOpbWllCj4+Cj4+IE9uIFdlZCwgSnVuIDEsIDIwMTYgYXQgMTE6MDQgQU0sIFJhcGhhw6ts
-IEJlYW1vbnRlCj4+IDxyYXBoYWVsLmJlYW1vbnRlQGdtYWlsLmNvbT4gd3JvdGU6Cj4+PiBIaSwK
-Pj4+Cj4+PiBJIGRpZCBub3QgZ2V0IGFueSBmZWVkYmFjayBhYm91dCB0aGlzLCBhbnkgdGhvdWdo
-dHMgPwo+Pj4KPj4+IFRoYW5rcywKPj4+IFJhcGhhw6tsCj4+Pgo+Pj4gMjAxNi0wNC0yMSAxNjo1
-MCBHTVQtMDQ6MDAgUmFwaGHDq2wgQmVhbW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwuY29t
-PjoKPj4+PiBIaSwKPj4+Pgo+Pj4+IFRoaXMgaXMgYW4gUkZDIHBhdGNoIGZvciBjb21tZW50cyBh
-bmQgaWRlYXMgYWJvdXQgaG93IHRoaXMgc2hvdWxkIGJlCj4+Pj4gZG9uZS4gSW4gcmVjZW50IHdv
-cmsgSSd2ZSBiZWVuIGRvaW5nLCBJIGZvdW5kIG91dCB0aGF0IHNvbWUgVVNULQo+Pj4+IGluc3Ry
-dW1lbnRlZCB1c2Vyc3BhY2UgcHJvY2VzcyB3YXMgcHJlZW1wdGluZyBpdHNlbGYuIExvb2tpbmcg
-ZnVydGhlciwKPj4+PiBpdCB3YXMgbm90IHRoZSBzYW1lIFRJRCwgYnV0IHRoZSBzYW1lIHByb2Nl
-c3MgbmFtZS4gVGhlc2UgcHJvY2Vzc2VzCj4+Pj4gd2VyZSBMVFRuZy1VU1QgbGlzdGVuZXIgdGhy
-ZWFkcywgYnV0IHdlcmUgbm90IGlkZW50aWZpZWQgYXMgc28uCj4+Pj4gQWRkaW5nIGEgc2ltcGxl
-IHN5bWJvbCwgc3VjaCBhcyAiLXVzdCIgb3IgIi1sdHRuZyIgYXQgdGhlIGVuZCBvZiB0aGUKPj4+
-PiBwcm9jZXNzIG5hbWUgd291bGQgaGVscCB0byBpZGVudGlmeSBzdWNoIHByb2Nlc3MgZGlyZWN0
-bHkgaW4gdGhlCj4+Pj4gZ2VuZXJhdGVkIHRyYWNlLgo+Pj4+Cj4+Pj4gWW91J2xsIGZpbmQgYmVs
-b3cgdHdvIGRpZmZlcmVudCBpbXBsZW1lbnRhdGlvbnMgd2l0aCB0aGVpciBwcm9zCj4+Pj4gYW5k
-IGNvbnMsIGZvciB3aGljaCB0aGUgIi11c3QiIHN5bWJvbCB3YXMgY2hvb3NlbjoKPj4+Pgo+Pj4+
-Cj4+Pj4gMS8gQW4gaW1wbGVtZW50YXRpb24gdXNpbmcgcHJjdGwKPj4+PiAgICAgICAgIEl0IHdv
-cmtzIHByb3Blcmx5IG9uIExpbnV4LCBidXQgSSBkaWRuJ3QgZmluZCBhIHdheSB0byBtYWtlCj4+
-Pj4gICAgICAgICBpdCB3b3JrIHVuZGVyIEZyZWVCU0QsIGhlbmNlIHRoZSBlbXB0eSBmdW5jdGlv
-biBpbiBGcmVlQlNECj4+Pj4gICAgICAgICBjYXNlIChrZWVwaW5nIHRoZSBzaXR1YXRpb24gYXMg
-aXQgaXMgbm93KS4KPj4+Pgo+Pj4+IFJhcGhhw6tsIEJlYW1vbnRlICgxKToKPj4+PiAgIEFkZCAt
-dXN0IHRvIHRoZSBuYW1lIG9mIFVTVCB0aHJlYWRzIG9mIHRoZSBhcHBsaWNhdGlvbgo+Pj4+Cj4+
-Pj4gIGxpYmx0dG5nLXVzdC9jb21wYXQuaCAgICAgICAgIHwgMjIgKysrKysrKysrKysrKysrKysr
-KysrKwo+Pj4+ICBsaWJsdHRuZy11c3QvbHR0bmctdXN0LWNvbW0uYyB8ICAyICsrCj4+Pj4gIDIg
-ZmlsZXMgY2hhbmdlZCwgMjQgaW5zZXJ0aW9ucygrKQo+Pj4+Cj4+Pj4KPj4+Pgo+Pj4+IDIvIEFu
-IGltcGxlbWVudGF0aW9uIHVzaW5nIHB0aHJlYWQKPj4+PiAgICAgICAgIEl0IHdvcmtzIG9uIGJv
-dGggTGludXggYW5kIEZyZWVCU0QsIGJ1dCByZXF1aXJlcyB0byBhZGQgYQo+Pj4+ICAgICAgICAg
-bGluayB0byB0aGUgcHRocmVhZCBsaWJyYXJ5IGluIGxpYmx0dG5nLXVzdCBNYWtlZmlsZS5hbS4K
-Pj4+PiAgICAgICAgIEFsc28sIHRoaXMgYXBwcm9hY2ggcmVsaWVzIG9uIHRoZSBwcmVzZW5jZSBv
-ZiB0aGUKPj4+PiAgICAgICAgIHB0aHJlYWRfc2V0bmFtZV9ucCBmdW5jdGlvbiwgd2hpY2ggd2Fz
-IGluY2x1ZGVkIGluIGdsaWJjCj4+Pj4gICAgICAgICAyLjEyLCBtZWFuaW5nIGl0IHdpbGwgbm90
-IHdvcmsgd2l0aCBvbGRlciB2ZXJzaW9ucyAoYnV0Cj4+Pj4gICAgICAgICB0aGlzIHNob3VsZCBu
-b3QgYmUgYSBwcm9ibGVtPykKCmx0dG5nLXVzdCBhbHJlYWR5IHVzZXMgbGliYyBmb3IgbXV0ZXhl
-cyBhbmQgb3RoZXIuIFNvIEkgZG9uJ3Qgc2VlIHdoeQp5b3UgaGF2ZSB0byBfYWRkXyBhbnkgZXhw
-bGljaXQgZGVwZW5kZW5jeSB0aGVyZS4KCkFib3V0IHRoZSBnbGliYyB2ZXJzaW9uLCB3ZSBzaG91
-bGQgdXNlIGF1dG90b29scyB0byBkZXRlY3QgdGhlCmZlYXR1cmVzIHN1cHBvcnRlZCBieSB0aGUg
-c3lzdGVtIGxpYmMsIGFuZCBwYXNzIGEgY29uZmlnIGRlZmluZQp0byB0aGUgc291cmNlIGNvZGUs
-IHNvIHdlIGNhbiB1c2UgdGhlIGdsaWJjIHB0aHJlYWRfc2V0bmFtZV9ucAppZiBhdmFpbGFibGUs
-IGVsc2Ugd2Uga2VlcCB0aGUgY3VycmVudCBiZWhhdmlvci4KClRob3VnaHRzID8KClRoYW5rcywK
-Ck1hdGhpZXUKCj4+Pj4KPj4+PiBSYXBoYcOrbCBCZWFtb250ZSAoMSk6Cj4+Pj4gICBBZGQgLXVz
-dCB0byB0aGUgbmFtZSBvZiBVU1QgdGhyZWFkcyBvZiB0aGUgYXBwbGljYXRpb24KPj4+Pgo+Pj4+
-ICBsaWJsdHRuZy11c3QvTWFrZWZpbGUuYW0gICAgICB8ICAxICsKPj4+PiAgbGlibHR0bmctdXN0
-L2NvbXBhdC5oICAgICAgICAgfCAzNSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-Kwo+Pj4+ICBsaWJsdHRuZy11c3QvbHR0bmctdXN0LWNvbW0uYyB8ICAyICsrCj4+Pj4gIDMgZmls
-ZXMgY2hhbmdlZCwgMzggaW5zZXJ0aW9ucygrKQo+Pj4+Cj4+Pj4KPj4+Pgo+Pj4+IEknbGwgd2Fp
-dCBmb3IgeW91ciBjb21tZW50cyBhbmQgaWRlYXMgb24gdGhhdCBzdWJqZWN0Lgo+Pj4+Cj4+Pj4g
-VGhhbmtzLAo+Pj4+IFJhcGhhw6tsCj4+Pj4KPj4+Pgo+Pj4+IC0tCj4+Pj4gMi4xLjQKPj4+Pgo+
-Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+IGx0
-dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4+IGh0
-dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-Pj4KPj4KPj4KPj4gLS0KPj4gSsOpcsOpbWllIEdhbGFybmVhdQo+PiBFZmZpY2lPUyBJbmMuCj4+
-IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4gCj4gCj4gCj4gLS0KPiBKw6lyw6ltaWUgR2FsYXJu
-ZWF1Cj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgotLSAKTWF0aGll
-dSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGlu
-ZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
-Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============3792535596690791251==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_26522_1933404280.1464935014955"
+
+------=_Part_26522_1933404280.1464935014955
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+---- On Jun 2, 2016, at 1:29 AM, Richard Schmitt <richard.schmitt@nxp.com> =
+wrote:=20
+
+> We are trying to use user space LTTng to perform some performance analysi=
+s of
+> fast-path layer 3 forwarding. We have seen that with the tracepoints enab=
+led,
+> we experience about a 30% increase in service time. This is spread out ov=
+er two
+> tracepoints so each one is still contributing a good amount.
+
+> This fast path is fast, about 300 cycles so we are asking a lot of effici=
+ency of
+> the tracepoint but for comparison, we implemented a simple ring buffer. W=
+hen we
+> run with this type of capture, we only experience a 5% increase in servic=
+e
+> time.
+
+> I=E2=80=99m looking for pointers. We=E2=80=99d rather use LTTng. Are ther=
+e ways to tune LTTng
+> ust for ultra high performance requirements. Perhaps there is a way we co=
+uld
+> write directly to ust=E2=80=99s ring buffers, or perhaps preallocate the =
+buffers?
+
+What is the target architecture ?=20
+
+I'm currently working on proposing restartable sequence system call to the =
+kernel to=20
+improve the speed of getcpu and remove atomic operations from the fast path=
+=20
+on arm32, intel 32/64. This will be portable to other architectures too.=20
+
+Make sure you run a kernel with sys_membarrier available, and that you have=
+=20
+a recent liburcu 0.9.x. This should take care of removing memory barriers f=
+rom=20
+the tracing fast path.=20
+
+Thanks,=20
+
+Mathieu=20
+
+> Rich
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
+
+------=_Part_26522_1933404280.1464935014955
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
+__">---- On Jun 2, 2016, at 1:29 AM, Richard Schmitt &lt;richard.schmitt@nx=
+p.com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><bloc=
+kquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:=
+5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;fo=
+nt-family:Helvetica,Arial,sans-serif;font-size:12pt;"><style><!--
+
+@font-face
+=09{font-family:"Cambria Math";
+=09panose-1:0 0 0 0 0 0 0 0 0 0;}
+@font-face
+=09{font-family:Calibri;
+=09panose-1:2 15 5 2 2 2 4 3 2 4;}
+
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+=09{margin:0in;
+=09margin-bottom:.0001pt;
+=09font-size:12.0pt;
+=09font-family:Calibri;}
+a:link, span.MsoHyperlink
+=09{mso-style-priority:99;
+=09color:#0563C1;
+=09text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+=09{mso-style-priority:99;
+=09color:#954F72;
+=09text-decoration:underline;}
+span.EmailStyle17
+=09{mso-style-type:personal-compose;
+=09font-family:Calibri;
+=09color:windowtext;}
+span.msoIns
+=09{mso-style-type:export-only;
+=09mso-style-name:"";
+=09text-decoration:underline;
+=09color:teal;}
+.MsoChpDefault
+=09{mso-style-type:export-only;
+=09font-family:Calibri;}
+@page WordSection1
+=09{size:8.5in 11.0in;
+=09margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+=09{page:WordSection1;}
+--></style><div class=3D"WordSection1"><p class=3D"MsoNormal"><span style=
+=3D"font-size:11.0pt">We are trying to use user space LTTng to perform some=
+ performance analysis of fast-path layer 3 forwarding.&nbsp; We have seen t=
+hat with the tracepoints enabled, we experience about a 30% increase in ser=
+vice time.&nbsp;
+ This is spread out over two tracepoints so each one is still contributing =
+a good amount.</span></p><p class=3D"MsoNormal"><span style=3D"font-size:11=
+.0pt">&nbsp;</span></p><p class=3D"MsoNormal"><span style=3D"font-size:11.0=
+pt">This fast path is fast, about 300 cycles so we are asking a lot of effi=
+ciency of the tracepoint but for comparison, we implemented a simple ring b=
+uffer.&nbsp; When we run with this type of capture, we only experience
+ a 5% increase in service time.</span></p><p class=3D"MsoNormal"><span styl=
+e=3D"font-size:11.0pt">&nbsp;</span></p><p class=3D"MsoNormal"><span style=
+=3D"font-size:11.0pt">I=E2=80=99m looking for pointers.&nbsp; We=E2=80=99d =
+rather use LTTng.&nbsp; Are there ways to tune LTTng ust for ultra high per=
+formance requirements.&nbsp; Perhaps there is &nbsp;a way we could write di=
+rectly to ust=E2=80=99s ring buffers, or perhaps
+ preallocate the buffers?</span></p></div></blockquote><div>What is the tar=
+get architecture ?<br></div><div><br data-mce-bogus=3D"1"></div><div>I'm cu=
+rrently working on proposing restartable sequence system call to the kernel=
+ to<br data-mce-bogus=3D"1"></div><div>improve the speed of getcpu and remo=
+ve atomic operations from the fast path<br data-mce-bogus=3D"1"></div><div>=
+on arm32, intel 32/64. This will be portable to other architectures too.<br=
+ data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Make s=
+ure you run a kernel with sys_membarrier available, and that you have<br da=
+ta-mce-bogus=3D"1"></div><div>a recent liburcu 0.9.x. This should take care=
+ of removing memory barriers from<br data-mce-bogus=3D"1"></div><div>the tr=
+acing fast path.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1=
+"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=
+=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-b=
+ogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"b=
+order-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;fo=
+nt-weight:normal;font-style:normal;text-decoration:none;font-family:Helveti=
+ca,Arial,sans-serif;font-size:12pt;"><div class=3D"WordSection1"><p class=
+=3D"MsoNormal"><span style=3D"font-size:11.0pt">&nbsp;</span></p><p class=
+=3D"MsoNormal"><span style=3D"font-size:11.0pt">Rich</span></p></div><br>__=
+_____________________________________________<br>lttng-dev mailing list<br>=
+lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/listin=
+fo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D"__SIG=
+_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www=
+.efficios.com</div></div></body></html>
+------=_Part_26522_1933404280.1464935014955--
+
+--===============3792535596690791251==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============3792535596690791251==--
