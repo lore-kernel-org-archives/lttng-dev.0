@@ -1,18 +1,21 @@
-From: Sebastien Boisvert <sboisvert@gydle.com>
-Subject: Re: [lttng-ust PATCH v3 1/1] Add -ust to the name of
- UST threads of the application
-Date: Fri, 3 Jun 2016 12:51:55 -0400
-Message-ID: <5751B5AB.1060108__32751.1812247851$1464973152$gmane$org@gydle.com>
-References: <cover.1464971957.git.raphael.beamonte@gmail.com>
- <1d3230f091658e56c8ccf12279c3afd89b4062c7.1464971957.git.raphael.beamonte@gmail.com>
+From: John Smith <whalajam@gmail.com>
+Subject: Re: "lttng enable-channel --tracefile-size" bug
+Date: Thu, 2 Jun 2016 17:15:06 -0700
+Message-ID: <CANgVouUiQTn-TWVAwasG5VaO6jJbTvw+d9AqZbqjgfY4Y8iiig__31824.3503723808$1464979670$gmane$org@mail.gmail.com>
+References: <CANgVouVswhgXmy=Dge5h2FA-7xsaJfDqOZ3=seG5dHjP=_4gmA@mail.gmail.com>
+ <57499B75.80203@efficios.com>
+ <CANgVouUbJtNjBDajia1E3+CCEg95-=tnqfzBW7ukQxQbn9N_6Q@mail.gmail.com>
+ <574B4791.905@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============8455377354401643476=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 7FE8AA3784
- for <lttng-dev@lists.lttng.org>; Fri,  3 Jun 2016 16:50:54 +0000 (UTC)
-In-Reply-To: <1d3230f091658e56c8ccf12279c3afd89b4062c7.1464971957.git.raphael.beamonte@gmail.com>
+Received: from mail-oi0-f51.google.com (mail-oi0-f51.google.com
+ [209.85.218.51])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id D6DE3A0242
+ for <lttng-dev@lists.lttng.org>; Fri,  3 Jun 2016 00:15:07 +0000 (UTC)
+Received: by mail-oi0-f51.google.com with SMTP id e72so103481295oib.1
+ for <lttng-dev@lists.lttng.org>; Thu, 02 Jun 2016 17:15:07 -0700 (PDT)
+In-Reply-To: <574B4791.905@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,90 +25,96 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?UTF-8?Q?Rapha=c3=abl_Beamonte?= <raphael.beamonte@gmail.com>, lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-KzEKCk9uIDA2LzAzLzIwMTYgMTI6NDUgUE0sIFJhcGhhw6tsIEJlYW1vbnRlIHdyb3RlOgo+IEFk
-ZCB0aGUgcmVxdWlyZWQgZnVuY3Rpb25zIHRvIGNoYW5nZSB0aGUgdGhyZWFkIG5hbWUgb2YgdGhl
-IFVTVAo+IHRocmVhZHMgYW5kIGFkZCB0aGUgLXVzdCBzdHJpbmcgYXQgaXRzIGVuZC4gVGhpcyB3
-aWxsIGhlbHAgdG8KPiBpZGVudGlmeSBMVFRuZy1VU1QgcHJvY2Vzc2VzIHdoZW4gYW5hbHl6aW5n
-IHRoZSB0cmFjZSBvZiBhIHByb2Nlc3MuCj4gCj4gU2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgQmVh
-bW9udGUgPHJhcGhhZWwuYmVhbW9udGVAZ21haWwuY29tPgo+IC0tLQo+ICBjb25maWd1cmUuYWMg
-ICAgICAgICAgICAgICAgICB8ICA1ICsrKysrCj4gIGxpYmx0dG5nLXVzdC9NYWtlZmlsZS5hbSAg
-ICAgIHwgIDEgKwo+ICBsaWJsdHRuZy11c3QvY29tcGF0LmggICAgICAgICB8IDUxICsrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0KPiAgbGlibHR0bmctdXN0L2x0dG5n
-LXVzdC1jb21tLmMgfCAgNiArKysrKwo+ICA0IGZpbGVzIGNoYW5nZWQsIDYyIGluc2VydGlvbnMo
-KyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvY29uZmlndXJlLmFjIGIvY29uZmln
-dXJlLmFjCj4gaW5kZXggNTY5MjU1My4uZGU0NjJmZiAxMDA2NDQKPiAtLS0gYS9jb25maWd1cmUu
-YWMKPiArKysgYi9jb25maWd1cmUuYWMKPiBAQCAtMTM1LDYgKzEzNSwxMSBAQCBBTV9DT05ESVRJ
-T05BTChbTFRUTkdfVVNUX0JVSUxEX1dJVEhfTElCRExdLCBbdGVzdCAieCRoYXZlX2xpYmRsIiA9
-ICJ4eWVzIl0pCj4gIEFNX0NPTkRJVElPTkFMKFtMVFROR19VU1RfQlVJTERfV0lUSF9MSUJDX0RM
-XSwgW3Rlc3QgIngkaGF2ZV9saWJjX2RsIiA9ICJ4eWVzIl0pCj4gIAo+ICBBQ19DSEVDS19MSUIo
-W3B0aHJlYWRdLCBbcHRocmVhZF9jcmVhdGVdKQo+ICtBQ19DSEVDS19MSUIoW3B0aHJlYWRdLCBb
-cHRocmVhZF9zZXRuYW1lX25wXSwKPiArCUFDX0RFRklORShbSEFWRV9QVEhSRUFEX1NFVE5BTUVf
-TlBdLCBbMV0sIFtEZWZpbmUgdG8gMSBpZiBwdGhyZWFkX3NldG5hbWVfbnAgaXMgYXZhaWxhYmxl
-Ll0pLAo+ICsJQUNfQ0hFQ0tfTElCKFtwdGhyZWFkXSwgW3B0aHJlYWRfc2V0X25hbWVfbnBdLAo+
-ICsJCUFDX0RFRklORShbSEFWRV9QVEhSRUFEX1NFVF9OQU1FX05QXSwgWzFdLCBbRGVmaW5lIHRv
-IDEgaWYgcHRocmVhZF9zZXRfbmFtZV9ucCBpcyBhdmFpbGFibGUuXSksCj4gKwkJQUNfTVNHX1JF
-U1VMVChbcHRocmVhZCBzZXRuYW1lL3NldF9uYW1lIG5vdCBmb3VuZC5dKSkpCj4gIAo+ICAjIENo
-ZWNrIGZvciBkbGZjbi5oCj4gIEFDX0NIRUNLX0hFQURFUihbZGxmY24uaF0pCj4gZGlmZiAtLWdp
-dCBhL2xpYmx0dG5nLXVzdC9NYWtlZmlsZS5hbSBiL2xpYmx0dG5nLXVzdC9NYWtlZmlsZS5hbQo+
-IGluZGV4IGYxODAxY2YuLjA1OTI5YmUgMTAwNjQ0Cj4gLS0tIGEvbGlibHR0bmctdXN0L01ha2Vm
-aWxlLmFtCj4gKysrIGIvbGlibHR0bmctdXN0L01ha2VmaWxlLmFtCj4gQEAgLTE0LDYgKzE0LDcg
-QEAgbGlibHR0bmdfdXN0X3RyYWNlcG9pbnRfbGFfU09VUkNFUyA9IFwKPiAgCWVycm9yLmgKPiAg
-bGlibHR0bmdfdXN0X3RyYWNlcG9pbnRfbGFfTElCQUREID0gXAo+ICAJLWx1cmN1LWJwIFwKPiAr
-CS1scHRocmVhZCBcCj4gIAkkKHRvcF9idWlsZGRpcikvc25wcmludGYvbGlidXN0c25wcmludGYu
-bGEKPiAgbGlibHR0bmdfdXN0X3RyYWNlcG9pbnRfbGFfTERGTEFHUyA9IC1uby11bmRlZmluZWQg
-LXZlcnNpb24taW5mbyAkKExUVE5HX1VTVF9MSUJSQVJZX1ZFUlNJT04pCj4gIGxpYmx0dG5nX3Vz
-dF90cmFjZXBvaW50X2xhX0NGTEFHUyA9IC1EVVNUX0NPTVBPTkVOVD0ibGlibHR0bmdfdXN0X3Ry
-YWNlcG9pbnQiIC1mbm8tc3RyaWN0LWFsaWFzaW5nCj4gZGlmZiAtLWdpdCBhL2xpYmx0dG5nLXVz
-dC9jb21wYXQuaCBiL2xpYmx0dG5nLXVzdC9jb21wYXQuaAo+IGluZGV4IDQzYjIyMjMuLjY4ZDRk
-NTAgMTAwNjQ0Cj4gLS0tIGEvbGlibHR0bmctdXN0L2NvbXBhdC5oCj4gKysrIGIvbGlibHR0bmct
-dXN0L2NvbXBhdC5oCj4gQEAgLTMsNiArMyw3IEBACj4gIAo+ICAvKgo+ICAgKiBDb3B5cmlnaHQg
-KEMpIDIwMTEgTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNv
-bT4KPiArICogQ29weXJpZ2h0IChDKSAyMDE2IFJhcGhhw6tsIEJlYW1vbnRlIDxyYXBoYWVsLmJl
-YW1vbnRlQGdtYWlsLmNvbT4KPiAgICoKPiAgICogVGhpcyBsaWJyYXJ5IGlzIGZyZWUgc29mdHdh
-cmU7IHlvdSBjYW4gcmVkaXN0cmlidXRlIGl0IGFuZC9vcgo+ICAgKiBtb2RpZnkgaXQgdW5kZXIg
-dGhlIHRlcm1zIG9mIHRoZSBHTlUgTGVzc2VyIEdlbmVyYWwgUHVibGljCj4gQEAgLTIzLDcgKzI0
-LDYgQEAKPiAgICogbHR0bmdfdXN0X2dldHByb2NuYW1lLgo+ICAgKi8KPiAgI2lmZGVmIF9fbGlu
-dXhfXwo+IC0KPiAgI2luY2x1ZGUgPHN5cy9wcmN0bC5oPgo+ICAKPiAgI2RlZmluZSBMVFROR19V
-U1RfUFJPQ05BTUVfTEVOIDE3Cj4gQEAgLTM0LDYgKzM0LDEzIEBAIHZvaWQgbHR0bmdfdXN0X2dl
-dHByb2NuYW1lKGNoYXIgKm5hbWUpCj4gIAkodm9pZCkgcHJjdGwoUFJfR0VUX05BTUUsICh1bnNp
-Z25lZCBsb25nKSBuYW1lLCAwLCAwLCAwKTsKPiAgfQo+ICAKPiArLyoKPiArICogaWYgcHRocmVh
-ZF9zZXRuYW1lX25wIGlzIGF2YWlsYWJsZS4KPiArICovCj4gKyNpZmRlZiBIQVZFX1BUSFJFQURf
-U0VUTkFNRV9OUAo+ICsjZGVmaW5lIFBUSFJFQURfU0VUTkFNRV9OUCBwdGhyZWFkX3NldG5hbWVf
-bnAKPiArI2VuZGlmCj4gKwo+ICAjZWxpZiBkZWZpbmVkKF9fRnJlZUJTRF9fKQo+ICAjaW5jbHVk
-ZSA8c3RkbGliLmg+Cj4gICNpbmNsdWRlIDxzdHJpbmcuaD4KPiBAQCAtNTksNiArNjYsNDggQEAg
-dm9pZCBsdHRuZ191c3RfZ2V0cHJvY25hbWUoY2hhciAqbmFtZSkKPiAgCQlzdHJuY3B5KG5hbWUs
-IGJzZF9uYW1lLCBMVFROR19VU1RfUFJPQ05BTUVfTEVOIC0gMSk7Cj4gIH0KPiAgCj4gKy8qCj4g
-KyAqIGlmIHB0aHJlYWRfc2V0X25hbWVfbnAgaXMgYXZhaWxhYmxlLgo+ICsgKi8KPiArI2lmZGVm
-IEhBVkVfUFRIUkVBRF9TRVRfTkFNRV9OUAo+ICsjZGVmaW5lIFBUSFJFQURfU0VUTkFNRV9OUCBw
-dGhyZWFkX3NldF9uYW1lX25wCj4gKyNlbmRpZgo+ICsKPiArI2VuZGlmCj4gKwo+ICsvKgo+ICsg
-KiBpZiBhIHB0aHJlYWQgc2V0bmFtZS9zZXRfbmFtZSBmdW5jdGlvbiBpcyBhdmFpbGFibGUsIGRl
-Y2xhcmUKPiArICogdGhlIHNldHVzdHByb2NuYW1lKCkgZnVuY3Rpb24gdGhhdCB3aWxsIGFkZCAn
-LXVzdCcgdG8gdGhlIGVuZAo+ICsgKiBvZiB0aGUgY3VycmVudCBwcm9jZXNzIG5hbWUsIHdoaWxl
-IHRydW5jYXRpbmcgaXQgaWYgbmVlZGVkLgo+ICsgKi8KPiArI2lmZGVmIFBUSFJFQURfU0VUTkFN
-RV9OUAo+ICsjZGVmaW5lIExUVE5HX1VTVF9QUk9DTkFNRV9TVUZGSVggIi11c3QiCj4gKwo+ICsj
-aW5jbHVkZSA8cHRocmVhZC5oPgo+ICsKPiArc3RhdGljIGlubGluZQo+ICt2b2lkIGx0dG5nX3Vz
-dF9zZXR1c3Rwcm9jbmFtZSh2b2lkKQo+ICt7Cj4gKwljaGFyIG5hbWVbTFRUTkdfVVNUX1BST0NO
-QU1FX0xFTl07Cj4gKwlpbnQgbGltaXQgPSBMVFROR19VU1RfUFJPQ05BTUVfTEVOIC0gc3RybGVu
-KExUVE5HX1VTVF9QUk9DTkFNRV9TVUZGSVgpOwo+ICsJaW50IGxlbjsKPiArCj4gKwlsdHRuZ191
-c3RfZ2V0cHJvY25hbWUobmFtZSk7Cj4gKwo+ICsJbGVuID0gc3RybGVuKG5hbWUpOwo+ICsJaWYg
-KGxlbiA+IGxpbWl0KSB7Cj4gKwkJbGVuID0gbGltaXQ7Cj4gKwl9Cj4gKwo+ICsJc3ByaW50Zihu
-YW1lICsgbGVuLCBMVFROR19VU1RfUFJPQ05BTUVfU1VGRklYKTsKPiArCj4gKwlQVEhSRUFEX1NF
-VE5BTUVfTlAocHRocmVhZF9zZWxmKCksIG5hbWUpOwo+ICt9Cj4gKyNlbHNlCj4gK3N0YXRpYyBp
-bmxpbmUKPiArdm9pZCBsdHRuZ191c3Rfc2V0dXN0cHJvY25hbWUodm9pZCkKPiArewo+ICt9Cj4g
-ICNlbmRpZgo+ICAKPiAgI2luY2x1ZGUgPGVycm5vLmg+Cj4gZGlmZiAtLWdpdCBhL2xpYmx0dG5n
-LXVzdC9sdHRuZy11c3QtY29tbS5jIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMKPiBp
-bmRleCBlMDBhMjJjLi5jMzJlOGFlIDEwMDY0NAo+IC0tLSBhL2xpYmx0dG5nLXVzdC9sdHRuZy11
-c3QtY29tbS5jCj4gKysrIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMKPiBAQCAtMTI5
-NSw2ICsxMjk1LDEyIEBAIHZvaWQgKnVzdF9saXN0ZW5lcl90aHJlYWQodm9pZCAqYXJnKQo+ICAJ
-aW50IHNvY2ssIHJldCwgcHJldl9jb25uZWN0X2ZhaWxlZCA9IDAsIGhhc193YWl0ZWQgPSAwOwo+
-ICAJbG9uZyB0aW1lb3V0Owo+ICAKPiArCS8qCj4gKwkgKiBJZiBhdmFpbGFibGUsIGFkZCAnLXVz
-dCcgdG8gdGhlIGVuZCBvZiB0aGlzIHRocmVhZCdzCj4gKwkgKiBwcm9jZXNzIG5hbWUKPiArCSAq
-Lwo+ICsJbHR0bmdfdXN0X3NldHVzdHByb2NuYW1lKCk7Cj4gKwo+ICAJLyogUmVzdGFydCB0cnlp
-bmcgdG8gY29ubmVjdCB0byB0aGUgc2Vzc2lvbiBkYWVtb24gKi8KPiAgcmVzdGFydDoKPiAgCWlm
-IChwcmV2X2Nvbm5lY3RfZmFpbGVkKSB7Cj4gCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
-Zm8vbHR0bmctZGV2Cg==
+--===============8455377354401643476==
+Content-Type: multipart/alternative; boundary=001a113729826d2d5a0534549d04
+
+--001a113729826d2d5a0534549d04
+Content-Type: text/plain; charset=UTF-8
+
+thanks, just one more question, I would think that it would be more
+efficient to have multiple sub-buffers writing to a file versus one
+sub-buffer to one file,. Of course, when the file gets overwritten
+(rolled-over by the tracefile-count option)  multiple sub-buffers are lost.
+Do you have any use case recommendation?
+John
+
+On Sun, May 29, 2016 at 12:48 PM, Julien Desfossez <jdesfossez@efficios.com>
+wrote:
+
+> > Julien,
+> > thanks, I was mislead by the 2.7 documentation saying:
+> > "...parameters
+> > of |enable-channel| are |--tracefile-size|and |--tracefile-count|, which
+> > respectively limit the size of each trace file and the their count for a
+> > given channel. "
+> > In this case the tracefile-size option should be removed, will it become
+> > useful in the future releases or has a more subtle use?
+>
+> No, the tracefile-size options does what it says, the limitation is that
+> the smallest unit it can work with is the subbuf-size. So the smallest
+> tracefile size you can have is the subbuf-size.
+>
+> If you are using 4k subbuffers and you limit the size of the tracefiles
+> to 4M, then you will have at most 1000 full packets in each tracefile.
+> But if you have subbuffers of 8M, the smallest tracefile size you can
+> have is 8M.
+>
+> Julien
+>
+
+--001a113729826d2d5a0534549d04
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">thanks, just one more question, I would think that it woul=
+d be more efficient to have multiple sub-buffers writing to a file versus o=
+ne sub-buffer to one file,. Of course, when the file gets overwritten (roll=
+ed-over by the=C2=A0<span style=3D"font-size:12.8px">tracefile-count option=
+</span>) =C2=A0multiple sub-buffers are lost.<div>Do you have any use case =
+recommendation?<div>John</div></div></div><div class=3D"gmail_extra"><br><d=
+iv class=3D"gmail_quote">On Sun, May 29, 2016 at 12:48 PM, Julien Desfossez=
+ <span dir=3D"ltr">&lt;<a href=3D"mailto:jdesfossez@efficios.com" target=3D=
+"_blank">jdesfossez@efficios.com</a>&gt;</span> wrote:<br><blockquote class=
+=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
+ing-left:1ex"><span class=3D"">&gt; Julien,<br>
+&gt; thanks, I was mislead by the 2.7 documentation saying:<br>
+&gt; &quot;...parameters<br>
+</span>&gt; of |enable-channel| are |--tracefile-size|and |--tracefile-coun=
+t|, which<br>
+<span class=3D"">&gt; respectively limit the size of each trace file and th=
+e their count for a<br>
+&gt; given channel. &quot;<br>
+&gt; In this case the tracefile-size option should be removed, will it beco=
+me<br>
+&gt; useful in the future releases or has a more subtle use?<br>
+<br>
+</span>No, the tracefile-size options does what it says, the limitation is =
+that<br>
+the smallest unit it can work with is the subbuf-size. So the smallest<br>
+tracefile size you can have is the subbuf-size.<br>
+<br>
+If you are using 4k subbuffers and you limit the size of the tracefiles<br>
+to 4M, then you will have at most 1000 full packets in each tracefile.<br>
+But if you have subbuffers of 8M, the smallest tracefile size you can<br>
+have is 8M.<br>
+<span class=3D"HOEnZb"><font color=3D"#888888"><br>
+Julien<br>
+</font></span></blockquote></div><br></div>
+
+--001a113729826d2d5a0534549d04--
+
+--===============8455377354401643476==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============8455377354401643476==--
