@@ -1,20 +1,20 @@
-From: siddharth teotia <siddharthteotia@gmail.com>
-Subject: Re: RCU Question
-Date: Fri, 3 Jun 2016 17:21:59 -0700
-Message-ID: <CAJw6sH35nkcrOonTQVNM+La3H2_vHVDcgxKRmv1EE20_+69WOw__14620.0886033059$1465233220$gmane$org@mail.gmail.com>
-References: <CAJw6sH0=pZX__YaeMwozF673u3Dyn7Jzp3g9q2FuYurThO6paw@mail.gmail.com>
- <CAJw6sH0kFFVvmWm2vRQ+KNTgJaKVXS47OCATY2zHTA0AiSipiQ@mail.gmail.com>
- <1208862117.75733.1462222380579.JavaMail.zimbra@efficios.com>
+From: Ojas Shirekar <ojas.shirekar@gmail.com>
+Subject: Re: Which function/file allows babeltrace to print the
+	logs?
+Date: Mon, 6 Jun 2016 11:30:01 +0530
+Message-ID: <CAPtQ1vfqc5QGs1x1Z60kSE8DwowGspPWKNPuqHzV93zbzRO4eQ__9138.51494337923$1465233226$gmane$org@mail.gmail.com>
+References: <CAPtQ1vePkKYx8bkgtDxNaYpMNVyw+UBxnA=0qrznsNo7Wg3M5Q@mail.gmail.com>
+ <CAB4xu_2zho1eETUEuNVDGmUn9fCdoFyhTae2xcuoE3089efA5Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7121267850229785995=="
+Content-Type: multipart/mixed; boundary="===============6956551343903807427=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-io0-f196.google.com (mail-io0-f196.google.com
- [209.85.223.196])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id ACADEA3735
- for <lttng-dev@lists.lttng.org>; Sat,  4 Jun 2016 00:22:00 +0000 (UTC)
-Received: by mail-io0-f196.google.com with SMTP id p194so12932313iod.0
- for <lttng-dev@lists.lttng.org>; Fri, 03 Jun 2016 17:22:00 -0700 (PDT)
-In-Reply-To: <1208862117.75733.1462222380579.JavaMail.zimbra@efficios.com>
+Received: from mail-io0-f182.google.com (mail-io0-f182.google.com
+ [209.85.223.182])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id A4638A37C7
+ for <lttng-dev@lists.lttng.org>; Mon,  6 Jun 2016 06:00:22 +0000 (UTC)
+Received: by mail-io0-f182.google.com with SMTP id n127so7968984iof.3
+ for <lttng-dev@lists.lttng.org>; Sun, 05 Jun 2016 23:00:22 -0700 (PDT)
+In-Reply-To: <CAB4xu_2zho1eETUEuNVDGmUn9fCdoFyhTae2xcuoE3089efA5Q@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,241 +24,117 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: Philippe Proulx <eeppeliteloop@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============7121267850229785995==
-Content-Type: multipart/alternative; boundary=94eb2c05be56dfa39a053468d39e
+--===============6956551343903807427==
+Content-Type: multipart/alternative; boundary=001a1140b8eca7b92d053495c93e
 
---94eb2c05be56dfa39a053468d39e
+--001a1140b8eca7b92d053495c93e
 Content-Type: text/plain; charset=UTF-8
 
-Hi Mathieu,
+Another query that I had was regarding the buffer in babeltrace. Where can
+I find the trace buffer implementation, I just want to print out the size
+of the buffer every few seconds.
+The thing is that we are using lttng on a set top box, and the traces that
+are sent during the boot process number at around 100000 per 5 secs or so,
+the whole bootup lasts for about a minute and half, so I just want to the
+buffer size every few seconds, is that possible? If yes, then where/how?
 
-Thanks for your reply. I somehow missed this email of yours, and saw it
-today while I was clearing my inbox.
+So I was wondering if I can have babeltrace write to a shared memory
+location to make it faster, hence my first question, it would be great if
+you could point me in the right direction for this.
 
-I appreciate your prompt response.
+Thank you
 
-Thanks,
-Siddharth
+- Ojas
 
-On Mon, May 2, 2016 at 1:53 PM, Mathieu Desnoyers <
-mathieu.desnoyers@efficios.com> wrote:
+On Sun, Jun 5, 2016 at 9:18 PM, Philippe Proulx <eeppeliteloop@gmail.com>
+wrote:
 
+> On Fri, Jun 3, 2016 at 12:29 AM, Ojas Shirekar <ojas.shirekar@gmail.com>
+> wrote:
+> >
+> > In which file is the function that allows babeltrace to print the CTF
+> logs to STDOUT?
+> > I am asking this because I need to modify it so that I can get JSON
+> output, and also because I am new to babeltrace.
 >
-> ----- On Apr 29, 2016, at 3:10 PM, siddharth teotia <
-> siddharthteotia@gmail.com> wrote:
+> This will certainly be a trivial feature to implement once the
+> plugin-based Babeltrace 2 is released!
 >
-> The mail was accidentally sent. Here is more info:
+> In the meantime: the printing happens here:
+> https://github.com/efficios/babeltrace/tree/master/formats/ctf-text.
 >
-> My question really is that when writing a user space application that
-> leverages RCU, how do I ensure that I am using the proper
-> flavor/implementation of RCU ? I don't think so I can go ahead with
-> non-preemptive RCU. And the user space paper does not really tell or
-> distinguish clearly as to which of the following -- QSBR, MB, BP, signal
-> can be used for preemptive environments and do not restrict the reader to
-> not block or not sleep ?
+> Phil
 >
-> Hi,
->
-> You appear to be confused between concepts that apply to the Linux kernel
-> RCU implementation (preemptible vs non-preemptive RCU read-side critical
-> sections) and those that apply to the Userspace RCU library (flavors: mb,
-> signal,
-> qsbr, bp).
->
-> All Userspace RCU flavors read-side critical sections are preemptible,
-> because we cannot disable preemption when running in user-space.
-> Therefore, you may block or sleep within liburcu read-side critical
-> sections. However, if you do so, you need to be careful not to place
-> calls to synchronize_rcu() within code that have a transitive blocking
-> dependency on a RCU read-side, which would cause a deadlock.
->
-> For instance, using the same mutex within a read-side critical section,
-> _and_ holding this mutex while calling synchronize_rcu() in another thread,
-> can trigger a deadlock.
->
-> The main differences between liburcu flavors is detailed here:
-> https://lwn.net/Articles/573424/#URCU%20Flavors
->
-> Thanks,
->
-> Mathieu
->
->
-> Thanks,
-> Siddharth
->
-> On Fri, Apr 29, 2016 at 12:07 PM, siddharth teotia <
-> siddharthteotia@gmail.com> wrote:
->
->> Hi Guys,
->>
->> I recently started exploring RCU to build a lock free hash table. I have
->> read quite a bit of literature from LWN on RCU, its usage, API etc. I have
->> the following question for which I have had mixed answers online:
->>
->> Does the user space implementation of RCU liburcu take care of preemptive
->> v/s non-preemptive flavors of RCU. From what I understand RCU can be
->> broadly divided into:
->>
->> 1. Classic RCU - High Performance but suitable for non-preemptive
->> environments.
->> 2. Preemptible RCU - Permits the reader to block on a resource or the
->> read side critical sections to be preempted. But still does not allow any
->> kind of sleep(). Moreover there seems to be some sort of limitation on the
->> nature of blocking that can happen within RCU read side critical section.
->> 3. Sleepable RCU - Seems to me an augmentation of preemptible RCU.
->>
->> The paper that describes the user space implementation of RCU suggests 4
->> different flavors -- QSBR, Memory Barrier based, Bullet Proof, and Signal
->> based.
->>
->> I don't think so in my application I can afford to not have the readers
->> block or even sleep. If the reader wants to take some orthogonal lock/latch
->> on an entirely different resource, it might end waiting for it.
->>
->> And because
->>
->>
->>
->
->
-> --
-> *Best Regards,*
-> *SIDDHARTH TEOTIA*
-> *2008C6PS540G*
-> *BITS PILANI- GOA CAMPUS*
-> *+91 87911 75932 <%2B91%2087911%2075932>*
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+> >
+> > Thank you for the help.
+> > -Ojas Shirekar
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> >
 >
 
-
-
--- 
-*Best Regards,*
-*SIDDHARTH TEOTIA*
-*2008C6PS540G*
-*BITS PILANI- GOA CAMPUS*
-
-*+91 87911 75932*
-
---94eb2c05be56dfa39a053468d39e
+--001a1140b8eca7b92d053495c93e
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div><div><div><div>Hi Mathieu,<br><br></div>Thanks for yo=
-ur reply. I somehow missed this email of yours, and saw it today while I wa=
-s clearing my inbox.<br><br></div>I appreciate your prompt response.<br><br=
-></div>Thanks,<br></div>Siddharth<br><div><div><div><div><div><div class=3D=
-"gmail_extra"><br><div class=3D"gmail_quote">On Mon, May 2, 2016 at 1:53 PM=
-, Mathieu Desnoyers <span dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoye=
-rs@efficios.com" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;</=
-span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8e=
-x;border-left:1px #ccc solid;padding-left:1ex"><div><div style=3D"font-fami=
-ly:arial,helvetica,sans-serif;font-size:12pt;color:#000000"><span class=3D"=
-"><div><br></div><div><span>----- On Apr 29, 2016, at 3:10 PM, siddharth te=
-otia &lt;<a href=3D"mailto:siddharthteotia@gmail.com" target=3D"_blank">sid=
-dharthteotia@gmail.com</a>&gt; wrote:<br></span></div></span><div><span cla=
-ss=3D""><blockquote style=3D"border-left:2px solid #1010ff;margin-left:5px;=
-padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decor=
-ation:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=
-=3D"ltr"><div><div><div>The mail was accidentally sent. Here is more info:<=
-br><br></div>My question really is that when writing a user space applicati=
-on that leverages RCU, how do I ensure that I am using the proper flavor/im=
-plementation of RCU ? I don&#39;t think so I can go ahead with non-preempti=
-ve RCU. And the user space paper does not really tell or distinguish clearl=
-y as to which of the following -- QSBR, MB, BP, signal can be used for pree=
-mptive environments and do not restrict the reader to not block or not slee=
-p ?<br></div></div></div></blockquote></span><div><div>Hi,</div><div><br></=
-div><div>You appear to be confused between concepts that apply to the Linux=
- kernel</div><div>RCU implementation (preemptible vs non-preemptive RCU rea=
-d-side critical</div><div>sections) and those that apply to the Userspace R=
-CU library (flavors: mb, signal,</div><div>qsbr, bp).<br></div><div><br></d=
-iv><div>All Userspace RCU flavors read-side critical sections are preemptib=
-le,<br></div><div>because we cannot disable preemption when running in user=
--space.<br></div><div>Therefore, you may block or sleep within liburcu read=
--side critical<br></div><div>sections. However, if you do so, you need to b=
-e careful not to place<br></div><div>calls to synchronize_rcu() within code=
- that have a transitive blocking</div><div>dependency on a RCU read-side, w=
-hich would cause a deadlock.<br></div><div><br></div><div>For instance, usi=
-ng the same mutex within a read-side critical section,<br></div><div>_and_ =
-holding this mutex while calling synchronize_rcu() in another thread,<br></=
-div><div>can trigger a deadlock.<br></div><div><br></div><div>The main diff=
-erences between liburcu flavors is detailed here:<br></div><div><a href=3D"=
-https://lwn.net/Articles/573424/#URCU%20Flavors" target=3D"_blank">https://=
-lwn.net/Articles/573424/#URCU%20Flavors</a></div><div><br></div><div>Thanks=
-,<br></div><div><br></div><div>Mathieu</div></div><div><br></div><div><br><=
-/div><blockquote style=3D"border-left:2px solid #1010ff;margin-left:5px;pad=
-ding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decorati=
-on:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt"><span class=
-=3D""><div dir=3D"ltr"><div>Thanks,<br></div>Siddharth <br></div><div class=
-=3D"gmail_extra"><br><div class=3D"gmail_quote">On Fri, Apr 29, 2016 at 12:=
-07 PM, siddharth teotia <span dir=3D"ltr">&lt;<a href=3D"mailto:siddharthte=
-otia@gmail.com" target=3D"_blank">siddharthteotia@gmail.com</a>&gt;</span> =
-wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;bord=
-er-left:1px #ccc solid;padding-left:1ex"><div dir=3D"ltr"><div><div><div><d=
-iv><div><div><div><div>Hi Guys,<br><br></div>I recently started exploring R=
-CU to build a lock free hash table. I have read quite a bit of literature f=
-rom LWN on RCU, its usage, API etc. I have the following question for which=
- I have had mixed answers online:<br><br></div>Does the user space implemen=
-tation of RCU liburcu take care of preemptive v/s non-preemptive flavors of=
- RCU. From what I understand RCU can be broadly divided into:<br><br></div>=
-1. Classic RCU - High Performance but suitable for non-preemptive environme=
-nts.<br></div>2. Preemptible RCU - Permits the reader to block on a resourc=
-e or the read side critical sections to be preempted. But still does not al=
-low any kind of sleep(). Moreover there seems to be some sort of limitation=
- on the nature of blocking that can happen within RCU read side critical se=
-ction.<br></div>3. Sleepable RCU - Seems to me an augmentation of preemptib=
-le RCU.<br><br></div>The paper that describes the user space implementation=
- of RCU suggests 4 different flavors -- QSBR, Memory Barrier based, Bullet =
-Proof, and Signal based. <br><br></div>I don&#39;t think so in my applicati=
-on I can afford to not have the readers block or even sleep. If the reader =
-wants to take some orthogonal lock/latch on an entirely different resource,=
- it might end waiting for it.<br><br></div>And because <br><div><div><div><=
-div><div><div><div><div><div><br><br clear=3D"all"></div></div></div></div>=
-</div></div></div></div></div></div></blockquote></div><br><br clear=3D"all=
-"><br>-- <br><div><div><b><span style=3D"color:#000066" color=3D"#000066">B=
-est Regards,</span></b></div><div><b><span style=3D"color:#000066" color=3D=
-"#000066">SIDDHARTH TEOTIA</span></b></div><div><b><span style=3D"color:#00=
-0066" color=3D"#000066">2008C6PS540G</span></b></div><div><b><span style=3D=
-"color:#000066" color=3D"#000066">BITS PILANI- GOA CAMPUS</span></b></div><=
-div><b><span style=3D"color:#000066" color=3D"#000066"><a href=3D"tel:%2B91=
-%2087911%2075932" value=3D"+918791175932" target=3D"_blank">+91 87911 75932=
-</a></span></b></div></div></div><br></span>_______________________________=
-________________<br>lttng-dev mailing list<br><a href=3D"mailto:lttng-dev@l=
-ists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.org</a><br><a href=
-=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" target=3D"_=
-blank">https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><span =
-class=3D"HOEnZb"><font color=3D"#888888"><br></font></span></blockquote></d=
-iv><span class=3D"HOEnZb"><font color=3D"#888888"><div><br></div><div>-- <b=
-r></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br><a href=3D"http://www.ef=
-ficios.com" target=3D"_blank">http://www.efficios.com</a></div></font></spa=
-n></div></div></blockquote></div><br><br clear=3D"all"><br>-- <br><div clas=
-s=3D"gmail_signature" data-smartmail=3D"gmail_signature"><div><b><font colo=
-r=3D"#000066">Best Regards,</font></b></div>
-<div><b><font color=3D"#000066">SIDDHARTH TEOTIA</font></b></div>
-<div><b><font color=3D"#000066">2008C6PS540G</font></b></div>
-<div><b><font color=3D"#000066">BITS PILANI- GOA CAMPUS</font></b></div>
-<div><b><font color=3D"#000066"></font></b>=C2=A0</div>
-<div><b><font color=3D"#000066">+91 87911 75932</font></b></div></div>
-</div></div></div></div></div></div></div>
+<div dir=3D"ltr"><div><div><div><div>Another query that I had was regarding=
+ the buffer in babeltrace. Where can I find the trace buffer implementation=
+, I just want to print out the size of the buffer every few seconds.<br></d=
+iv>The thing is that we are using lttng on a set top box, and the traces th=
+at are sent during the boot process number at around 100000 per 5 secs or s=
+o, the whole bootup lasts for about a minute and half, so I just want to th=
+e buffer size every few seconds, is that possible? If yes, then where/how?<=
+br><br></div>So I was wondering if I can have babeltrace write to a shared =
+memory location to make it faster, hence my first question, it would be gre=
+at if you could point me in the right direction for this.<br><br></div>Than=
+k you<br><br></div>- Ojas<br></div><div class=3D"gmail_extra"><br><div clas=
+s=3D"gmail_quote">On Sun, Jun 5, 2016 at 9:18 PM, Philippe Proulx <span dir=
+=3D"ltr">&lt;<a href=3D"mailto:eeppeliteloop@gmail.com" target=3D"_blank">e=
+eppeliteloop@gmail.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_=
+quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1=
+ex"><span class=3D"">On Fri, Jun 3, 2016 at 12:29 AM, Ojas Shirekar &lt;<a =
+href=3D"mailto:ojas.shirekar@gmail.com">ojas.shirekar@gmail.com</a>&gt; wro=
+te:<br>
+&gt;<br>
+&gt; In which file is the function that allows babeltrace to print the CTF =
+logs to STDOUT?<br>
+&gt; I am asking this because I need to modify it so that I can get JSON ou=
+tput, and also because I am new to babeltrace.<br>
+<br>
+</span>This will certainly be a trivial feature to implement once the<br>
+plugin-based Babeltrace 2 is released!<br>
+<br>
+In the meantime: the printing happens here:<br>
+<a href=3D"https://github.com/efficios/babeltrace/tree/master/formats/ctf-t=
+ext" rel=3D"noreferrer" target=3D"_blank">https://github.com/efficios/babel=
+trace/tree/master/formats/ctf-text</a>.<br>
+<br>
+Phil<br>
+<span class=3D""><br>
+&gt;<br>
+&gt; Thank you for the help.<br>
+&gt; -Ojas Shirekar<br>
+&gt;<br>
+</span>&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
+</a><br>
+&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
+ rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailm=
+an/listinfo/lttng-dev</a><br>
+&gt;<br>
+</blockquote></div><br></div>
 
---94eb2c05be56dfa39a053468d39e--
+--001a1140b8eca7b92d053495c93e--
 
---===============7121267850229785995==
+--===============6956551343903807427==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -268,4 +144,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============7121267850229785995==--
+--===============6956551343903807427==--
