@@ -1,16 +1,14 @@
-From: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
-Subject: SPMC Queue in URCU
-Date: Mon, 6 Jun 2016 18:48:04 +0000 (UTC)
-Message-ID: <1733955808.5920250.1465238884157.JavaMail.yahoo__23520.4952689402$1465238913$gmane$org@mail.yahoo.com>
-References: <1733955808.5920250.1465238884157.JavaMail.yahoo.ref@mail.yahoo.com>
-Reply-To: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
+From: Sebastien Boisvert <sboisvert@gydle.com>
+Subject: [LTTng] Domains
+Date: Mon, 6 Jun 2016 15:28:05 -0400
+Message-ID: <5755CEC5.80104__8321.43146913058$1465241192$gmane$org@gydle.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1351713567363934858=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from nm50.bullet.mail.bf1.yahoo.com (nm50.bullet.mail.bf1.yahoo.com
- [216.109.114.67])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 35FA1A36D0
- for <lttng-dev@lists.lttng.org>; Mon,  6 Jun 2016 18:48:06 +0000 (UTC)
+Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 16CD1A3706
+ for <lttng-dev@lists.lttng.org>; Mon,  6 Jun 2016 19:26:18 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,34 +18,35 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1351713567363934858==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_5920249_30267351.1465238884154"
-
-------=_Part_5920249_30267351.1465238884154
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-All,
-Is there a data structure offered by Userspace RCU that provides a bounded single producer multiple consumer queue? Or are we better off just using the linked list URCU data structure despite the cpu cache implications?
-------=_Part_5920249_30267351.1465238884154
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-<html><head></head><body><div style="color:#000; background-color:#fff; font-family:HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px"><div id="yui_3_16_0_ym19_1_1465238402299_6084">All,</div><div id="yui_3_16_0_ym19_1_1465238402299_6084"><br></div><div id="yui_3_16_0_ym19_1_1465238402299_6084">Is there a data structure offered by Userspace RCU that provides a bounded single producer multiple consumer queue? Or are we better off just using the linked list URCU data structure despite the cpu cache implications?</div></div></body></html>
-------=_Part_5920249_30267351.1465238884154--
-
---===============1351713567363934858==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============1351713567363934858==--
+SSBoYXZlIGEgcXVlc3Rpb24gcGVydGFpbmluZyB0byB0aGUgdXNlciBleHBlcmllbmNlLgoKSSBk
+b24ndCBrbm93IHRob3VnaCBpZiBpdCBtYWtlcyBzZW5zZSB0aG91Z2ggZnJvbSBhIGltcGxlbWVu
+dGF0aW9uIHBvaW50LW9mLXZpZXcuIAoKQnV0IEkgdGhpbmsgaXQgbWFrZXMgc2Vuc2UgZm9yIHRo
+ZSB1c2VyIGV4cGVyaWVuY2UuCgoKV291bGQgaXQgbWFrZSBzZW5zZSB0byBhdXRvLWRldGVjdCB0
+aGUgZG9tYWluIHdoZW4gdGhlIHVzZXIgZG9lcyBub3QgcHJvdmlkZSBpdCAoLXUgb3IgLWsgb3Ig
+LWogb3IgLXAgb3IgLWwpID8KCk15IHVuZGVyc3RhbmRpbmcgaXMgdGhhdCB0aGVyZSBhcmUgMiBk
+b21haW5zOiBrZXJuZWwgYW5kIHVzZXJzcGFjZS4KClNpbmNlIEphdmEvUHl0aG9uL0xvZzRqIGFy
+ZSBiaXRzIGluIHVzZXJzcGFjZSwgSSB3b3VsZCBleHBlY3QgdGhlbSB0byBiZSBpbiB0aGUgdXNl
+cnNwYWNlIGNhdGVnb3J5LgoKCklmIEkgZW5hYmxlIGFuIGV2ZW50IHdpdGhvdXQgcHJvdmlkaW5n
+IGEgZG9tYWluLCBJIGFtIHRvbGQgdGhhdCB0aGVyZSBpcyBhbiBlcnJvci4KCgpzYm9pc3ZlcnRA
+WjE6fi9neWRsZS1vcHRpY2FsLWFsaWduZXIuYnVpbGQkIGx0dG5nIGVuYWJsZS1ldmVudCAnZ3lk
+bGVfb206KicKRXJyb3I6IFBsZWFzZSBzcGVjaWZ5IGEgZG9tYWluICgtay8tdS8taikuCkVycm9y
+OiBDb21tYW5kIGVycm9yCgpTbywgaWYgSSBkb24ndCBzcGVjaWZ5IGl0LCBsdHRuZyB0ZWxscyBt
+ZSB0byBwcm92aWRlIHRoZSBkb21haW4gKC1rLCAtaSwgb3IgLXUpLgoKSW4gdGhlIGhlbHAsIHRo
+ZXJlIGFyZSBtb3JlIGRvbWFpbnMgdGhvdWdoLiBUaGVyZSBhcmUgNSB0byBiZSBleGFjdC4KCgpz
+Ym9pc3ZlcnRAWjE6fi9neWRsZS1vcHRpY2FsLWFsaWduZXIuYnVpbGQkIGx0dG5nIGVuYWJsZS1l
+dmVudCAtLWhlbHB8aGVhZCAtbiAxM3x0YWlsIC1uIDUKICAtaywgLS1rZXJuZWwgICAgICAgICAg
+ICAgQXBwbHkgdG8gdGhlIGtlcm5lbCB0cmFjZXIKICAtdSwgLS11c2Vyc3BhY2UgICAgICAgICAg
+QXBwbHkgdG8gdGhlIHVzZXItc3BhY2UgdHJhY2VyCiAgLWosIC0tanVsICAgICAgICAgICAgICAg
+IEFwcGx5IHRvIEphdmEgYXBwbGljYXRpb24gdXNpbmcgSlVMCiAgLWwsIC0tbG9nNGogICAgICAg
+ICAgICAgIEFwcGx5IGZvciBKYXZhIGFwcGxpY2F0aW9uIHVzaW5nIExPRzRqCiAgLXAsIC0tcHl0
+aG9uICAgICAgICAgICAgIEFwcGx5IGZvciBQeXRob24gYXBwbGljYXRpb24KCgoKVGhlIHN0dWZm
+IHByb3ZpZGVkIHRvICJsdHRuZyBlbmFibGUtZXZlbnQiIGlzIGEgc3RyaW5nLCBzbyB0aGUgZmFj
+dCB0aGF0IExUVG5nIGtlcm5lbCB0cmFjZXBvaW50cyBoYXZlIG5vIG5hbWVzcGFjZXMKaXMgbm90
+IGEgcHJvYmxlbSBJIHRoaW5rLgoKU28gaWYgdGhlIGV2ZW50IG5hbWUgaXMgaW4gdGhlIGxpc3Qg
+b2Yga2VybmVsIHRyYWNlcG9pbnRzLCB0aGVuIHVzZSAiLWsiLCBvdGhlcndpc2UsIHVzZSAiLXUi
+LgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1k
+ZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5s
+dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
