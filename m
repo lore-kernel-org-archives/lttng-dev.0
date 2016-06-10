@@ -1,18 +1,18 @@
-From: "D'Alessandro, Luke K" <ldalessa@indiana.edu>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: urcu lfht and free listing
-Date: Fri, 10 Jun 2016 18:36:31 +0000
-Message-ID: <36F8A95C-47D1-4D7C-AA2F-AA9B9A8B53BE__41881.6521800638$1465583821$gmane$org@indiana.edu>
+Date: Fri, 10 Jun 2016 18:46:21 +0000 (UTC)
+Message-ID: <524415477.33188.1465584381940.JavaMail.zimbra__32533.3140594468$1465584408$gmane$org@efficios.com>
 References: <BF41A9C3-FD22-4AF7-80DC-C172C252B92C@indiana.edu>
  <149868690.33139.1465582936951.JavaMail.zimbra@efficios.com>
+ <36F8A95C-47D1-4D7C-AA2F-AA9B9A8B53BE@indiana.edu>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2223558428970134011=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from hartman.uits.indiana.edu (belushi.uits.indiana.edu
- [129.79.1.188])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 79B98A381D
- for <lttng-dev@lists.lttng.org>; Fri, 10 Jun 2016 18:36:33 +0000 (UTC)
-In-Reply-To: <149868690.33139.1465582936951.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id EDFDDA37FB
+ for <lttng-dev@lists.lttng.org>; Fri, 10 Jun 2016 18:46:27 +0000 (UTC)
+In-Reply-To: <36F8A95C-47D1-4D7C-AA2F-AA9B9A8B53BE@indiana.edu>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,134 +22,58 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: "D'Alessandro, Luke K" <ldalessa@indiana.edu>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============2223558428970134011==
-Content-Language: en-US
-Content-Type: multipart/signed;
-	boundary="Apple-Mail=_6E660831-1909-4752-B5D5-671C96130104";
-	protocol="application/pgp-signature"; micalg=pgp-sha512
-
---Apple-Mail=_6E660831-1909-4752-B5D5-671C96130104
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=utf-8
-
-
-> On Jun 10, 2016, at 2:22 PM, Mathieu Desnoyers =
-<mathieu.desnoyers@efficios.com> wrote:
->=20
-> ----- On Jun 10, 2016, at 6:58 AM, D'Alessandro, Luke K =
-ldalessa@indiana.edu wrote:
->=20
->> Hi List,
->>=20
->> Is it safe to free list and reuse hash table nodes (cds_lfht_node =
-structures
->> used in cds_lfht_add_replace, cds_lfht_iter_get_node/cds_lfht_del) =
-without
->> going through a synchronize_rcu() barrier?
->=20
-> Hi,
->=20
-> No, it is not safe.
->=20
-> =46rom rculfhash.h:
->=20
-> cds_lfht_del:
->=20
-> * After successful removal, a grace period must be waited for before
-> * freeing the memory reserved for old node (which can be accessed with
-> * cds_lfht_iter_get_node).
->=20
-> cds_lfht_add_replace:
->=20
-> * After successful replacement, a grace period must be waited for =
-before
-> * freeing the memory reserved for the returned node.
->=20
-> cds_lfht_replace:
->=20
-> * After successful replacement, a grace period must be waited for =
-before
-> * freeing the memory reserved for the old node (which can be accessed
-> * with cds_lfht_iter_get_node).
-
-Hi Mathieu,
-
-Thanks for the response.
-
-I did read that documentation but it only references =E2=80=9Cfreeing=E2=80=
-=9D the memory which I read as =E2=80=9Creturning the memory to the =
-allocator via free()=E2=80=9D which can sometimes be an issue as it can =
-cascade into an munmap that is concurrent with some reader. I wasn=E2=80=99=
-t sure if simply reusing the memory was a problem.
-
-> You can either invoke synchronize_rcu() before re-using or freeing
-> the removed node, or use the call_rcu() or defer_rcu() mechanisms to
-> defer reclaim after a grace period (handled by worker threads).
-
-Great, thank you.
-
-Thanks,
-
-Luke
-
->=20
-> Thanks,
->=20
-> Mathieu
->=20
->>=20
->> Thanks,
->> Luke
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->=20
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-
-
---Apple-Mail=_6E660831-1909-4752-B5D5-671C96130104
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Message signed with OpenPGP using GPGMail
-
------BEGIN PGP SIGNATURE-----
-Comment: GPGTools - https://gpgtools.org
-
-iQIcBAEBCgAGBQJXWwivAAoJEJ9t5ApCTtG0jqkQAKzQ6lduzKTk2oU1rYQGm57m
-CQunn5E28m0CwL+kmqurflZaCxcSaqXljhVsr9vGeAfsJCHChRZaNQasfMvynPm2
-Vlym5uAen3zQ1ZZ7+RJ/ajkBMeaqeicpc3hvsO1r2U/61hgmLzD8ayrhycRudKPH
-lxOTVxxqRbxBZSWBl1HYj0YDrr2Z4E15v3eHfRgGtbWpiB/kC88l/LZYxOcp5XN2
-nYiD+t9pY1HhI316U5ShPwr6qpk9E4oywZcdJHHCTMurrA3XopiBkrEmGzc5ukky
-Cqy2gC+ZhX0G8ZTUkf71fwJPqZufjh3p1GkTxDtrr/BXsHhYj68lzjdi57aVnf5m
-Y7JoScgmXvuDCiKberGHcqIHBgmC7DVeKjVl69T0F2AV7eUhnJ93DCwRt80+mr8u
-NeGz/B5PRHqAVvTMrKN1IE//gtODoe/opNuFwMQSJQ9JAxvcE/QMYVBc1Z5ZQjOR
-h8XqlfK45Ho7/KnQwUMaiPVuqZOM90O6WXSu16Md9PpAfL9kfUYo48PB8Tf4kLgB
-rjOerLnXuAD+1rpVEQqFevI8gSCTcnsphojB/5PQ/skPFakryyyOmr3cGnsFF5F/
-0U6q8wgxQuuEBh8BHmtLUtqPFtAqjLpVp+4fNCCoRp25HMjBiZkghZXRXQBaHrq6
-V8Y4QXyODrd01VZbu8+z
-=mOdM
------END PGP SIGNATURE-----
-
---Apple-Mail=_6E660831-1909-4752-B5D5-671C96130104--
-
---===============2223558428970134011==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============2223558428970134011==--
+LS0tLS0gT24gSnVuIDEwLCAyMDE2LCBhdCAyOjM2IFBNLCBEJ0FsZXNzYW5kcm8sIEx1a2UgSyBs
+ZGFsZXNzYUBpbmRpYW5hLmVkdSB3cm90ZToKCj4+IE9uIEp1biAxMCwgMjAxNiwgYXQgMjoyMiBQ
+TSwgTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPj4g
+d3JvdGU6Cj4+IAo+PiAtLS0tLSBPbiBKdW4gMTAsIDIwMTYsIGF0IDY6NTggQU0sIEQnQWxlc3Nh
+bmRybywgTHVrZSBLIGxkYWxlc3NhQGluZGlhbmEuZWR1Cj4+IHdyb3RlOgo+PiAKPj4+IEhpIExp
+c3QsCj4+PiAKPj4+IElzIGl0IHNhZmUgdG8gZnJlZSBsaXN0IGFuZCByZXVzZSBoYXNoIHRhYmxl
+IG5vZGVzIChjZHNfbGZodF9ub2RlIHN0cnVjdHVyZXMKPj4+IHVzZWQgaW4gY2RzX2xmaHRfYWRk
+X3JlcGxhY2UsIGNkc19sZmh0X2l0ZXJfZ2V0X25vZGUvY2RzX2xmaHRfZGVsKSB3aXRob3V0Cj4+
+PiBnb2luZyB0aHJvdWdoIGEgc3luY2hyb25pemVfcmN1KCkgYmFycmllcj8KPj4gCj4+IEhpLAo+
+PiAKPj4gTm8sIGl0IGlzIG5vdCBzYWZlLgo+PiAKPj4gRnJvbSByY3VsZmhhc2guaDoKPj4gCj4+
+IGNkc19sZmh0X2RlbDoKPj4gCj4+ICogQWZ0ZXIgc3VjY2Vzc2Z1bCByZW1vdmFsLCBhIGdyYWNl
+IHBlcmlvZCBtdXN0IGJlIHdhaXRlZCBmb3IgYmVmb3JlCj4+ICogZnJlZWluZyB0aGUgbWVtb3J5
+IHJlc2VydmVkIGZvciBvbGQgbm9kZSAod2hpY2ggY2FuIGJlIGFjY2Vzc2VkIHdpdGgKPj4gKiBj
+ZHNfbGZodF9pdGVyX2dldF9ub2RlKS4KPj4gCj4+IGNkc19sZmh0X2FkZF9yZXBsYWNlOgo+PiAK
+Pj4gKiBBZnRlciBzdWNjZXNzZnVsIHJlcGxhY2VtZW50LCBhIGdyYWNlIHBlcmlvZCBtdXN0IGJl
+IHdhaXRlZCBmb3IgYmVmb3JlCj4+ICogZnJlZWluZyB0aGUgbWVtb3J5IHJlc2VydmVkIGZvciB0
+aGUgcmV0dXJuZWQgbm9kZS4KPj4gCj4+IGNkc19sZmh0X3JlcGxhY2U6Cj4+IAo+PiAqIEFmdGVy
+IHN1Y2Nlc3NmdWwgcmVwbGFjZW1lbnQsIGEgZ3JhY2UgcGVyaW9kIG11c3QgYmUgd2FpdGVkIGZv
+ciBiZWZvcmUKPj4gKiBmcmVlaW5nIHRoZSBtZW1vcnkgcmVzZXJ2ZWQgZm9yIHRoZSBvbGQgbm9k
+ZSAod2hpY2ggY2FuIGJlIGFjY2Vzc2VkCj4+ICogd2l0aCBjZHNfbGZodF9pdGVyX2dldF9ub2Rl
+KS4KPiAKPiBIaSBNYXRoaWV1LAo+IAo+IFRoYW5rcyBmb3IgdGhlIHJlc3BvbnNlLgo+IAo+IEkg
+ZGlkIHJlYWQgdGhhdCBkb2N1bWVudGF0aW9uIGJ1dCBpdCBvbmx5IHJlZmVyZW5jZXMg4oCcZnJl
+ZWluZ+KAnSB0aGUgbWVtb3J5IHdoaWNoCj4gSSByZWFkIGFzIOKAnHJldHVybmluZyB0aGUgbWVt
+b3J5IHRvIHRoZSBhbGxvY2F0b3IgdmlhIGZyZWUoKeKAnSB3aGljaCBjYW4KPiBzb21ldGltZXMg
+YmUgYW4gaXNzdWUgYXMgaXQgY2FuIGNhc2NhZGUgaW50byBhbiBtdW5tYXAgdGhhdCBpcyBjb25j
+dXJyZW50IHdpdGgKPiBzb21lIHJlYWRlci4gSSB3YXNu4oCZdCBzdXJlIGlmIHNpbXBseSByZXVz
+aW5nIHRoZSBtZW1vcnkgd2FzIGEgcHJvYmxlbS4KCkluZGVlZCwgaXQgY291bGQgYmUgY2xlYXJl
+ci4gSSBqdXN0IHVwZGF0ZWQgdGhlIGNvbW1lbnRzIGluIHRoZSBtYXN0ZXIgYnJhbmNoLgoKY29t
+bWl0IDUwMDI0MzQ0MTliNDU4ZjFkZTg4OWIzZWQxMTEwYjQ0MGQzYmY1YjAKQXV0aG9yOiBNYXRo
+aWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgpEYXRlOiAgIEZy
+aSBKdW4gMTAgMTQ6NDM6NDAgMjAxNiAtMDQwMAoKICAgIHJjdWxmaGFzaDogRG9jdW1lbnRhdGlv
+bjogY2xhcmlmeSBuZWVkIGZvciBncmFjZSBwZXJpb2QgYmVmb3JlICJyZS11c2luZyIKICAgIAog
+ICAgR3JhY2UgcGVyaW9kIG11c3QgYmUgd2FpdGVkIGZvciBpbiBjYXNlIGEgbm9kZSByZW1vdmVk
+IGZyb20gdGhlIGhhc2gKICAgIHRhYmxlIGlzIHJlLXVzZWQsIHNpbWlsYXJseSB0byB0aGUgcmVj
+bGFpbSB1c2UtY2FzZS4KICAgIAogICAgUmVwb3J0ZWQtYnk6IEx1a2UgSyBEJ0FsZXNzYW5kcm8g
+PGxkYWxlc3NhQGluZGlhbmEuZWR1PgogICAgU2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3ll
+cnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KClRoYW5rcyEKCk1hdGhpZXUKCj4g
+Cj4+IFlvdSBjYW4gZWl0aGVyIGludm9rZSBzeW5jaHJvbml6ZV9yY3UoKSBiZWZvcmUgcmUtdXNp
+bmcgb3IgZnJlZWluZwo+PiB0aGUgcmVtb3ZlZCBub2RlLCBvciB1c2UgdGhlIGNhbGxfcmN1KCkg
+b3IgZGVmZXJfcmN1KCkgbWVjaGFuaXNtcyB0bwo+PiBkZWZlciByZWNsYWltIGFmdGVyIGEgZ3Jh
+Y2UgcGVyaW9kIChoYW5kbGVkIGJ5IHdvcmtlciB0aHJlYWRzKS4KPiAKPiBHcmVhdCwgdGhhbmsg
+eW91Lgo+IAo+IFRoYW5rcywKPiAKPiBMdWtlCj4gCj4+IAo+PiBUaGFua3MsCj4+IAo+PiBNYXRo
+aWV1Cj4+IAo+Pj4gCj4+PiBUaGFua3MsCj4+PiBMdWtlCj4+PiBfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+Pj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+
+Pj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+Pj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+PiAKPj4gLS0KPj4gTWF0aGlldSBE
+ZXNub3llcnMKPj4gRWZmaWNpT1MgSW5jLgo+ID4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCi0t
+IApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29t
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
+diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0
+dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
