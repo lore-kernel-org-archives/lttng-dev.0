@@ -1,13 +1,13 @@
 From: Milian Wolff <milian.wolff@kdab.com>
-Subject: performance of lttng-analyses scripts
-Date: Tue, 14 Jun 2016 12:06:08 +0200
-Message-ID: <3394658.gRztduONkv__41504.9593234018$1465898796$gmane$org@milian-kdab2>
+Subject: CTF semantics
+Date: Tue, 14 Jun 2016 13:09:40 +0200
+Message-ID: <4611130.hYL7BGjQNU__22549.3753947832$1465902599$gmane$org@milian-kdab2>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3107659472057659352=="
+Content-Type: multipart/mixed; boundary="===============2105408828375175507=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 0FBC9A36C8
- for <lttng-dev@lists.lttng.org>; Tue, 14 Jun 2016 10:06:11 +0000 (UTC)
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 6A2E3A36FB
+ for <lttng-dev@lists.lttng.org>; Tue, 14 Jun 2016 11:09:42 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,76 +20,28 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============3107659472057659352==
-Content-Type: multipart/signed; boundary="nextPart2150785.NEFRYJFDs6"; micalg="sha1"; protocol="application/pkcs7-signature"
+--===============2105408828375175507==
+Content-Type: multipart/signed; boundary="nextPart6851386.pM04nPmUTE"; micalg="sha1"; protocol="application/pkcs7-signature"
 
---nextPart2150785.NEFRYJFDs6
+--nextPart6851386.pM04nPmUTE
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
 
 Hey all,
 
-I wanted to try out the lttng-analyses scripts today, following the 
-documentation available from https://github.com/lttng/lttng-analyses.
+I have looked through the CTF specification and ponder using it to replace my 
+custom text-based output format of heaptrack.
 
-Even for a minimal trace of just a couple of seconds (the lttng trace folder 
-is ~56MB large), it takes a really long time to analyze the data using the 
-python scripts. I wonder whether I'm doing something wrong, as this is 
-completely unusable for larger data files that we generate to investigate 
-startup-performance on an embedded device...
+At this stage, I have a fundamental question: How do the existing viewers like 
+Trace Compass understand the semantics of the data? Or are the viewers not 
+generic but instead rely on the existing generators like lttng? How does one 
+know e.g. what the backtrace of a given event is?
 
-Profiling with perf shows this:
-
-~~~~~~~~~ time to check for lost events:
-Checking the trace for lost events...
-Warning: progressbar module not available, using --no-progress.
-^CCancelled by user
-
- Performance counter stats for '/home/milian/projects/src/lttng/lttng-
-analyses/lttng-cputop kernel/':
-
-       4871.395990      task-clock:u (msec)       #    1.019 CPUs utilized          
-                 0      context-switches:u        #    0.000 K/sec                  
-                 0      cpu-migrations:u          #    0.000 K/sec                  
-            23,927      page-faults:u             #    0.005 M/sec                  
-    17,324,601,224      cycles:u                  #    3.556 GHz                    
-    35,474,572,407      instructions:u            #    2.05  insn per cycle         
-     7,496,776,724      branches:u                # 1538.938 M/sec                  
-        31,698,918      branch-misses:u           #    0.42% of all branches        
-
-       4.780154529 seconds time elapsed
-~~~~~~~~~
-
-~~~~~~~~~ time to do full analysis:
- Performance counter stats for '/home/milian/projects/src/lttng/lttng-
-analyses/lttng-cputop kernel/':
-
-      76048.928635      task-clock:u (msec)       #    1.000 CPUs utilized          
-                 0      context-switches:u        #    0.000 K/sec                  
-                 0      cpu-migrations:u          #    0.000 K/sec                  
-            25,766      page-faults:u             #    0.339 K/sec                  
-   291,464,040,754      cycles:u                  #    3.833 GHz                    
-   516,839,520,205      instructions:u            #    1.77  insn per cycle         
-   105,416,447,495      branches:u                # 1386.166 M/sec                  
-     1,178,825,581      branch-misses:u           #    1.12% of all branches        
-
-      76.019929857 seconds time elapsed
-~~~~~~~~~
-
-perf record/report shows these hotspots:
-
-+   18.92%  python3        libpython3.5m.so.1.0 [.] PyEval_EvalFrameEx
-+    4.63%  python3        libpython3.5m.so.1.0 [.] 
-_PyObject_GenericGetAttrWithDict
-+    4.20%  lt-babeltrace  libc-2.23.so [.] vfprintf
-+    4.10%  python3        libpython3.5m.so.1.0 [.] _PyType_Lookup
-+    2.15%  python3        libpython3.5m.so.1.0 [.] PyObject_GetAttr
-+    1.88%  python3        libpython3.5m.so.1.0 [.] PyDict_GetItem
-+    1.78%  python3        libglib-2.0.so.0.4800.1 [.] g_hash_table_lookup
-+    1.59%  python3        libpython3.5m.so.1.0 [.] PyFrame_New
-
-Is there any way to speed this process up? I don't want to wait for hours to 
-do the analyses on my real data sets.
+In heaptrack's current format heavily interns data to greatly reduce the file 
+size of the output data. This is crucial, and can be done with minimal 
+overhead. So I'd like to do the same if and when I convert to using CTF. But 
+how would e.g. know how to interpret that an integer member of a struct 
+actually is an index into a list of backtraces?
 
 Thanks
 -- 
@@ -97,7 +49,7 @@ Milian Wolff | milian.wolff@kdab.com | Software Engineer
 KDAB (Deutschland) GmbH&Co KG, a KDAB Group company
 Tel: +49-30-521325470
 KDAB - The Qt Experts
---nextPart2150785.NEFRYJFDs6
+--nextPart6851386.pM04nPmUTE
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -199,19 +151,19 @@ ATCBqDCBkzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UE
 BxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxOTA3BgNVBAMTMENPTU9ETyBD
 bGllbnQgQXV0aGVudGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIQcgjoW5E8F4ibWmtHeSub
 tDAJBgUrDgMCGgUAoIGHMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8X
-DTE2MDYxNDEwMDYwOFowIwYJKoZIhvcNAQkEMRYEFAqc9ZBkVY87kU8oeNOsICxrIHiMMCgGCSqG
-SIb3DQEJDzEbMBkwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA0GCSqGSIb3DQEBAQUABIIBAJem
-E8LQK5W3XjlIO7gc2ihaTS4oiYmlxUGEAV9G8lYK4PRJlY7CqfexdZrqzO18We0UwwbzuXYP2emR
-6aFU1xoC6XK9BwfvSz7kIiXuxky2V9SK7b9deTvAuBX0KSQLlL17TdX1PyIMi39dLRhjLGL/wyjH
-RqGrxUsIh0AP1a14sZBHkdYiGT+J9LvxlBBNxKOoySEMUhLm5L6RJrbkgrDR1ST+YgehGUrUlZUT
-BDHc/G7WNnT/QWDgoelSrmUajhQNRu6ml3v31l6O4TUW3Y/b4tg4nimoLsD3B53lOb8eQRkFMYBu
-frMw+Nkw3a0YPk3YIE7r3/7dMmxryGOhEt0AAAAAAAA=
+DTE2MDYxNDExMDk0MFowIwYJKoZIhvcNAQkEMRYEFHt2c4jDsMRG7Gmjkks02uVggfjbMCgGCSqG
+SIb3DQEJDzEbMBkwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA0GCSqGSIb3DQEBAQUABIIBACeI
+pC+qCX6u6A2NqLG4P9wxeOabKPe0ygm9VUa2Oc2nLx46BYY1TkpWQr/O8+NRPCMYK3BXpw6viaIu
+ZEPp6BCPmfIVZ3TVPhxs294WIXitRkQB9DiuKVOSf+Rh4xuQvvWiX8LTbYT8j1LY2yx2WH/p7S5f
+c/h/n5qrY/AmKyRrhTKbagA0UFtJ8YzQ5rpdr08kowt4L6rZhtUaMu+R4vIj5XozqRcVD9sQ1rxq
+JM1YBp5ZO4mUoxGqKCSnZ5HCD9jDuOe5O7B86GE75nV1cqNHR9CMPYKv3K8EBMfBGYxirMLc1Lep
+E6+ZXrlzdpVq6JBnU047kjgkuCwUTeYkPBMAAAAAAAA=
 
 
---nextPart2150785.NEFRYJFDs6--
+--nextPart6851386.pM04nPmUTE--
 
 
---===============3107659472057659352==
+--===============2105408828375175507==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -221,4 +173,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============3107659472057659352==--
+--===============2105408828375175507==--
