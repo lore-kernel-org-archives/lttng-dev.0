@@ -1,21 +1,13 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Subject: Re: [PATCH babeltrace] configure: fix uuid support
- detection on static build
-Date: Tue, 14 Jun 2016 08:21:52 +0200
-Message-ID: <CAHXCMMLfmjew0zJPzvdfW5nT2GWrJ=WpZkbo8oAB4660EqPgAQ__16140.2612844997$1465885374$gmane$org@mail.gmail.com>
-References: <20160601195632.23585-1-s.martin49@gmail.com>
- <CA+jJMxuRg7U-TuA5sWgW+e8mRf3ebO1BjcQ+1caqHT6ecUOTNw@mail.gmail.com>
+From: Milian Wolff <milian.wolff@kdab.com>
+Subject: performance of lttng-analyses scripts
+Date: Tue, 14 Jun 2016 12:06:08 +0200
+Message-ID: <3394658.gRztduONkv__41504.9593234018$1465898796$gmane$org@milian-kdab2>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============3107659472057659352=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pa0-f45.google.com (mail-pa0-f45.google.com
- [209.85.220.45])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 15EA8A385C
- for <lttng-dev@lists.lttng.org>; Tue, 14 Jun 2016 06:22:33 +0000 (UTC)
-Received: by mail-pa0-f45.google.com with SMTP id b13so30927544pat.0
- for <lttng-dev@lists.lttng.org>; Mon, 13 Jun 2016 23:22:33 -0700 (PDT)
-In-Reply-To: <CA+jJMxuRg7U-TuA5sWgW+e8mRf3ebO1BjcQ+1caqHT6ecUOTNw@mail.gmail.com>
+Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 0FBC9A36C8
+ for <lttng-dev@lists.lttng.org>; Tue, 14 Jun 2016 10:06:11 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,28 +17,208 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgSsOpcsOpbWllLAoKT24gVHVlLCBKdW4gMTQsIDIwMTYgYXQgMToyMSBBTSwgSsOpcsOpbWll
-IEdhbGFybmVhdQo8amVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tPiB3cm90ZToKPiBPbiBX
-ZWQsIEp1biAxLCAyMDE2IGF0IDM6NTYgUE0sIFNhbXVlbCBNYXJ0aW4gPHMubWFydGluNDlAZ21h
-aWwuY29tPiB3cm90ZToKPj4gVGhpcyBjaGFuZ2UgYWRkcyB1dWlkIGRldGVjdGlvbiB1c2luZyBw
-a2ctY29uZmlnIGhlbHBlciBiZWZvcmUgZmFsbGluZwo+PiBiYWNrIG9uIHRoZSBzdGFuZGFyZCBB
-Q19DSEVDS19MSUIgZGV0ZWN0aW9uIGZvciBwbGF0Zm9ybXMgbWlzc2luZwo+PiBwa2ctY29uZmln
-Lgo+Pgo+PiBBQ19DSEVDS19MSUIgZnVuY3Rpb24gYWNoaWV2ZXMgaXRzIHRlc3QgYnkgdHJ5aW5n
-IHRvIGxpbmsgYWdhaW5zdCB0aGUKPj4gcmVxdWVzdGVkIGxpYnJhcnksIHdpdGhvdXQgdGFraW5n
-IGNhcmUgb2YgaXRzIGRlcGVuZGVuY3kKPj4gcmVxdWlyZW1lbnRzL2ZsYWdzIHRoYXQgbWF5IGRp
-ZmZlciBiZXR3ZWVuIGRpZmZlcmVudCB0YXJnZXRzLgo+PiBUaGVyZWZvcmUsIGluIGNhc2Ugb2Yg
-c3RhdGljIGJ1aWxkLCBpdCBjYW4gZmFpbCBvbiB0aGUgdXVpZCBkZXRlY3Rpb24KPj4gbGlrZSBb
-MV0sIGJlY2F1c2UgdGhlIHV1aWQncyBkZXBlbmRlbmN5IGZsYWdzIChyZWdhcmRpbmcgZ2V0dGV4
-dCkgYXJlCj4+IG1pc3NpbmcuCj4KPiBIaSBTYW11ZWwsCj4KPiBUaGUgc2FtZSByZXF1aXJlbWVu
-dHMgc2VlbSB0byBleGlzdCBmb3IgZ2xpYiAoZ2V0dGV4dCksIGRvZXMgdGhlCj4gY2hhbmdlIG5l
-ZWQgdG8gYmUgbWFkZSBmb3IgaXQgYWxzbz8KTWF5YmUsIEkgZGlkIG5vdCB0cmlnZ2VyIHRoaXMg
-aW4gbXkgdGVzdCAoY2VydGFpbmx5IGJlY2F1c2UgZml4IHRoZQpmaXJzdCBlcnJvciB3YXMgZW5v
-dWdoIHRvIHByb3ZpZGUgYWxsIGRlcHMgdGhlIG90aGVycyBuZWVkLi4uKQpJJ2xsIGNoZWNrIGl0
-IGFuZCByZXBvcnQgYmFjayBoZXJlLgoKUmVnYXJkcywKCi0tIApTYW11ZWwKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
-dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
-aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============3107659472057659352==
+Content-Type: multipart/signed; boundary="nextPart2150785.NEFRYJFDs6"; micalg="sha1"; protocol="application/pkcs7-signature"
+
+--nextPart2150785.NEFRYJFDs6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+
+Hey all,
+
+I wanted to try out the lttng-analyses scripts today, following the 
+documentation available from https://github.com/lttng/lttng-analyses.
+
+Even for a minimal trace of just a couple of seconds (the lttng trace folder 
+is ~56MB large), it takes a really long time to analyze the data using the 
+python scripts. I wonder whether I'm doing something wrong, as this is 
+completely unusable for larger data files that we generate to investigate 
+startup-performance on an embedded device...
+
+Profiling with perf shows this:
+
+~~~~~~~~~ time to check for lost events:
+Checking the trace for lost events...
+Warning: progressbar module not available, using --no-progress.
+^CCancelled by user
+
+ Performance counter stats for '/home/milian/projects/src/lttng/lttng-
+analyses/lttng-cputop kernel/':
+
+       4871.395990      task-clock:u (msec)       #    1.019 CPUs utilized          
+                 0      context-switches:u        #    0.000 K/sec                  
+                 0      cpu-migrations:u          #    0.000 K/sec                  
+            23,927      page-faults:u             #    0.005 M/sec                  
+    17,324,601,224      cycles:u                  #    3.556 GHz                    
+    35,474,572,407      instructions:u            #    2.05  insn per cycle         
+     7,496,776,724      branches:u                # 1538.938 M/sec                  
+        31,698,918      branch-misses:u           #    0.42% of all branches        
+
+       4.780154529 seconds time elapsed
+~~~~~~~~~
+
+~~~~~~~~~ time to do full analysis:
+ Performance counter stats for '/home/milian/projects/src/lttng/lttng-
+analyses/lttng-cputop kernel/':
+
+      76048.928635      task-clock:u (msec)       #    1.000 CPUs utilized          
+                 0      context-switches:u        #    0.000 K/sec                  
+                 0      cpu-migrations:u          #    0.000 K/sec                  
+            25,766      page-faults:u             #    0.339 K/sec                  
+   291,464,040,754      cycles:u                  #    3.833 GHz                    
+   516,839,520,205      instructions:u            #    1.77  insn per cycle         
+   105,416,447,495      branches:u                # 1386.166 M/sec                  
+     1,178,825,581      branch-misses:u           #    1.12% of all branches        
+
+      76.019929857 seconds time elapsed
+~~~~~~~~~
+
+perf record/report shows these hotspots:
+
++   18.92%  python3        libpython3.5m.so.1.0 [.] PyEval_EvalFrameEx
++    4.63%  python3        libpython3.5m.so.1.0 [.] 
+_PyObject_GenericGetAttrWithDict
++    4.20%  lt-babeltrace  libc-2.23.so [.] vfprintf
++    4.10%  python3        libpython3.5m.so.1.0 [.] _PyType_Lookup
++    2.15%  python3        libpython3.5m.so.1.0 [.] PyObject_GetAttr
++    1.88%  python3        libpython3.5m.so.1.0 [.] PyDict_GetItem
++    1.78%  python3        libglib-2.0.so.0.4800.1 [.] g_hash_table_lookup
++    1.59%  python3        libpython3.5m.so.1.0 [.] PyFrame_New
+
+Is there any way to speed this process up? I don't want to wait for hours to 
+do the analyses on my real data sets.
+
+Thanks
+-- 
+Milian Wolff | milian.wolff@kdab.com | Software Engineer
+KDAB (Deutschland) GmbH&Co KG, a KDAB Group company
+Tel: +49-30-521325470
+KDAB - The Qt Experts
+--nextPart2150785.NEFRYJFDs6
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIUdzCCBGYw
+ggNOoAMCAQICEFEmCpMc4n+cw6VfeeByroIwDQYJKoZIhvcNAQEFBQAwgZMxCzAJBgNVBAYTAlVT
+MQswCQYDVQQIEwJVVDEXMBUGA1UEBxMOU2FsdCBMYWtlIENpdHkxHjAcBgNVBAoTFVRoZSBVU0VS
+VFJVU1QgTmV0d29yazEhMB8GA1UECxMYaHR0cDovL3d3dy51c2VydHJ1c3QuY29tMRswGQYDVQQD
+ExJVVE4gLSBEQVRBQ29ycCBTR0MwHhcNMDUwNjA3MDgwOTEwWhcNMTkwNjI0MTkwNjMwWjBvMQsw
+CQYDVQQGEwJTRTEUMBIGA1UEChMLQWRkVHJ1c3QgQUIxJjAkBgNVBAsTHUFkZFRydXN0IEV4dGVy
+bmFsIFRUUCBOZXR3b3JrMSIwIAYDVQQDExlBZGRUcnVzdCBFeHRlcm5hbCBDQSBSb290MIIBIjAN
+BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt/caM+byAAQtOeBOW+0fvGwPzbX6I7bO3psRM5ek
+KUx9k5+9SryT7QMa44/P5W1QWtaXKZRagLBJetsulf24yr83OC0ePpFBrXBWx/BPP+gynnTKyJBU
+6cZfD3idmkA8Dqxhql4Uj56HoWpQ3NeaTq8Fs6ZxlJxxs1BgCscTnTgHhgKo6ahpJhiQq0ywTyOr
+Ok+E2N/On+Fpb7vXQtdrROTHre5tQV9yWnEIN7N5ZaRZoJQ39wAvDcKSctrQOHLbFKhFxF0qfbe0
+1sTurM0TRLfJK91DACX6YblpalgjEbenM49WdVn1zSnXRrcKK2W200JvFbK4e/vv6V1T1TRaJwID
+AQABo4HYMIHVMB8GA1UdIwQYMBaAFFMy0bPPf/rg8aBdhU6S0p5FHbRPMB0GA1UdDgQWBBStvZh6
+NLQm9/rEJlTvA73gJMtUGjAOBgNVHQ8BAf8EBAMCAQYwDwYDVR0TAQH/BAUwAwEB/zARBglghkgB
+hvhCAQEEBAMCAQIwIAYDVR0lBBkwFwYKKwYBBAGCNwoDAwYJYIZIAYb4QgQBMD0GA1UdHwQ2MDQw
+MqAwoC6GLGh0dHA6Ly9jcmwudXNlcnRydXN0LmNvbS9VVE4tREFUQUNvcnBTR0MuY3JsMA0GCSqG
+SIb3DQEBBQUAA4IBAQDG7lMXaBSyUSIekFgNlP298XDlhi3DNjGPVEhG5y0IN7xsCmDhDq1RNOAS
+k+m+uKu4JrTplj0oj65kB/7gAezF45HrGKDxdX7bCuafkduvrnXfI5Fo3RcAWkv/ZGxw6wEa0JDZ
+x6bWbfYT5P+1ydIeKsuxJUMmeNkwm04NHr5p79/q/i2zzPmw3bUUypHUsrWl+wEZo0d5n52MlYc0
++B84kto2phH6a+tr6dxFeBU5BtdNQeQhyNwvh9G3v0hgdaViyyTeO2GgKSCmvsVsnMTpCmki75E6
++iav0VtBpzri+DgHQqvBW/jObboPBD8yNKzcBCjXcDAUJgbE5JuY1c94MIIEnTCCA4WgAwIBAgIQ
+ND3pK6wnNP+PyzSU+8xwVDANBgkqhkiG9w0BAQUFADBvMQswCQYDVQQGEwJTRTEUMBIGA1UEChML
+QWRkVHJ1c3QgQUIxJjAkBgNVBAsTHUFkZFRydXN0IEV4dGVybmFsIFRUUCBOZXR3b3JrMSIwIAYD
+VQQDExlBZGRUcnVzdCBFeHRlcm5hbCBDQSBSb290MB4XDTA1MDYwNzA4MDkxMFoXDTIwMDUzMDEw
+NDgzOFowga4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJVVDEXMBUGA1UEBxMOU2FsdCBMYWtlIENp
+dHkxHjAcBgNVBAoTFVRoZSBVU0VSVFJVU1QgTmV0d29yazEhMB8GA1UECxMYaHR0cDovL3d3dy51
+c2VydHJ1c3QuY29tMTYwNAYDVQQDEy1VVE4tVVNFUkZpcnN0LUNsaWVudCBBdXRoZW50aWNhdGlv
+biBhbmQgRW1haWwwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCyOYWk8n2rQTtiRjeu
+zcFgdbw5ZflKGkeiucxIzGqY1U01GbmkQuXOSeKKLx580jEHx060g2SdLinVomTEhb2FUTV5pE5o
+kHsceqSSqBfymBXyk8zJpDKVuwxPML2YoAuL5W4bokb6eLyib6tZXqUvz8rabaov66yhs2qqty5n
+NYt54R5piOLmRs2gpeq+C852OnoOm+r82idbPXMfIuZIYcZM82mxqC4bttQxICy8goqOpA6l14lD
+/BZarx1x1xFZ2rqHDa/68+HC8KTFZ4zW1lQ63gqkugN3s2XI/R7TdGKqGMpokx6hhX71R2XL+E1X
+KHTSNP8wtu72YjAUjCzrAgMBAAGjgfQwgfEwHwYDVR0jBBgwFoAUrb2YejS0Jvf6xCZU7wO94CTL
+VBowHQYDVR0OBBYEFImCZ33EnSZwAEu0UEh83j2uBG59MA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMB
+Af8EBTADAQH/MBEGA1UdIAQKMAgwBgYEVR0gADBEBgNVHR8EPTA7MDmgN6A1hjNodHRwOi8vY3Js
+LnVzZXJ0cnVzdC5jb20vQWRkVHJ1c3RFeHRlcm5hbENBUm9vdC5jcmwwNQYIKwYBBQUHAQEEKTAn
+MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0GCSqGSIb3DQEBBQUAA4IB
+AQABvJzjYyiw8zEBwt973WKgAZ0jMQ+cknNTUeofTPrWn8TKL2d+eDMPdBa5kYeR9Yom+mRwANge
++QsEYlCHk4HU2vUj2zS7hVa0cDRueIM3HoUcxREVkl+HF72sav3xwtHMiV+xfPA+UfI183zsYJhr
+Oivg79+zfYbrtRv1W+yifJgT1wBQudEtc94DeHThBYUxXsuauZ2UxrmUN3Vy3ET7Z+jw+iUeUqfa
+JelH4KDHPKBOsQo2+3dIn++Xivu0/uOUFKiDvFwtP9JgcWDuwnGCDOmINuPaILSjoGyqlku4gI51
+ykkH9jsUut/cBdmf2+Cy5k2geCbn5y1uf1/GHogVMIIFGjCCBAKgAwIBAgIQbRnqpxlPajMi5iIy
+eqpx3jANBgkqhkiG9w0BAQUFADCBrjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAlVUMRcwFQYDVQQH
+Ew5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMVVGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQL
+ExhodHRwOi8vd3d3LnVzZXJ0cnVzdC5jb20xNjA0BgNVBAMTLVVUTi1VU0VSRmlyc3QtQ2xpZW50
+IEF1dGhlbnRpY2F0aW9uIGFuZCBFbWFpbDAeFw0xMTA0MjgwMDAwMDBaFw0yMDA1MzAxMDQ4Mzha
+MIGTMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdT
+YWxmb3JkMRowGAYDVQQKExFDT01PRE8gQ0EgTGltaXRlZDE5MDcGA1UEAxMwQ09NT0RPIENsaWVu
+dCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEAkoSEW0tXmNReL4uk4UDIo1NYX2Zl8TJO958yfVXQeExVt0KU4PkncQfFxmmk
+uTLE8UAakMwnVmJ/F7Vxaa7lIBvky2NeYMqiQfZq4aP/uN8fSG1lQ4wqLitjOHffsReswtqCAtbU
+MmrUZ28gE49cNfrlVICv2HEKHTcKAlBTbJUdqRAUtJmVWRIx/wmi0kzcUtve4kABW0ho3cVKtODt
+JB86r3FfB+OsvxQ7sCVxaD30D9YXWEYVgTxoi4uDD216IVfmNLDbMn7jSuGlUnJkJpFOpZIP/+Cx
+YP0ab2hRmWONGoulzEKbm30iY9OpoPzOnpDfRBn0XFs1uhbzp5v/wQIDAQABo4IBSzCCAUcwHwYD
+VR0jBBgwFoAUiYJnfcSdJnAAS7RQSHzePa4Ebn0wHQYDVR0OBBYEFHoTTgB0W8Z4Y2QnwS/ioFu8
+ecV7MA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0g
+ADBYBgNVHR8EUTBPME2gS6BJhkdodHRwOi8vY3JsLnVzZXJ0cnVzdC5jb20vVVROLVVTRVJGaXJz
+dC1DbGllbnRBdXRoZW50aWNhdGlvbmFuZEVtYWlsLmNybDB0BggrBgEFBQcBAQRoMGYwPQYIKwYB
+BQUHMAKGMWh0dHA6Ly9jcnQudXNlcnRydXN0LmNvbS9VVE5BZGRUcnVzdENsaWVudF9DQS5jcnQw
+JQYIKwYBBQUHMAGGGWh0dHA6Ly9vY3NwLnVzZXJ0cnVzdC5jb20wDQYJKoZIhvcNAQEFBQADggEB
+AIXWvnhXVW0zf0RS/kLVBqgBA4CK+w2y/Uq/9q9BSfUbWsXSrRtzbj7pJnzmTJjBMCjfy/tCPKEl
+Pgp11tA9OYZm0aGbtU2bb68obB2v5ep0WqjascDxdXovnrqTecr+4pEeVnSy+I3T4ENyG+2P/WA5
+IEf7i686ZUg8mD2lJb+972DgSeUWyOs/Q4Pw4O4NwdPNM1+b0L1garM7/vrUyTo8H+2b/5tJM75C
+KTmD7jNpLoKdRU2oadqAGx490hpdfEeZpZsIbRKZhtZdVwcbpzC+S0lEuJB+ytF5OOu0M/qgOl0m
+WJ5hVRi0IdWZ1eBDQEIwvuql55TSsP7zdfl/bucwggZKMIIFMqADAgECAhByCOhbkTwXiJtaa0d5
+K5u0MA0GCSqGSIb3DQEBBQUAMIGTMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5j
+aGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYDVQQKExFDT01PRE8gQ0EgTGltaXRlZDE5MDcG
+A1UEAxMwQ09NT0RPIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4X
+DTE0MDYwMjAwMDAwMFoXDTE3MDYwMTIzNTk1OVowggFZMQswCQYDVQQGEwJTRTEPMA0GA1UEERMG
+NjgzIDMxMRIwEAYDVQQIEwlWYWVybWxhbmQxEDAOBgNVBAcTB0hhZ2ZvcnMxGDAWBgNVBAkTD05v
+cnJpbmdzIHZhZWcgMjEPMA0GA1UEEhMGQm94IDMwMSYwJAYDVQQKDB1LbGFyw6RsdmRhbGVucyBE
+YXRha29uc3VsdCBBQjEdMBsGA1UECxMUQSBLREFCIEdyb3VwIENvbXBhbnkxQzBBBgNVBAsMOklz
+c3VlZCB0aHJvdWdoIEtsYXLDpGx2ZGFsZW5zIERhdGFrb25zdWx0IEFCIEUtUEtJIE1hbmFnZXIx
+HzAdBgNVBAsTFkNvcnBvcmF0ZSBTZWN1cmUgRW1haWwxFTATBgNVBAMTDE1pbGlhbiBXb2xmZjEk
+MCIGCSqGSIb3DQEJARYVbWlsaWFuLndvbGZmQGtkYWIuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEAwirYPAOcWQk9jaCoEAn84PwINg/NDs3PxsEd34f27AfCqJepwIF+ikMuBBxt
+mm1pieQwU9fcFrE4CXPCdYxfFOdcbJJ58Xzog5aFrJHnYGEFIL8KVvdBvAFeP/AJPaY2lg1JWnVI
+1jwO74VmUGMyvMG286wpwW3hWO3sepZZQN3tvXyd9EgD72AiImkvw43+BW4xy8ptOd3TvEwCJ+uN
+x8v+uILsRLvKcmSrUsLpo7No2HoifWX1doKHKSwYVVqmOT/rjJWxF98j4w2kTKRsWdQ4ENlqNpjW
+zlbtB6TM2mrnInefzALbIoLLQ2E2NFCaMVsczf7RFsMxUepM9KQQ5QIDAQABo4IBzzCCAcswHwYD
+VR0jBBgwFoAUehNOAHRbxnhjZCfBL+KgW7x5xXswHQYDVR0OBBYEFGSjHixs9BD9OyGskYjMX7mi
+P+fiMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUFBwMEBggr
+BgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1odHRwczov
+L3NlY3VyZS5jb21vZG8ubmV0L0NQUzBXBgNVHR8EUDBOMEygSqBIhkZodHRwOi8vY3JsLmNvbW9k
+b2NhLmNvbS9DT01PRE9DbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3JsMIGI
+BggrBgEFBQcBAQR8MHowUgYIKwYBBQUHMAKGRmh0dHA6Ly9jcnQuY29tb2RvY2EuY29tL0NPTU9E
+T0NsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYIKwYBBQUHMAGGGGh0
+dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAgBgNVHREEGTAXgRVtaWxpYW4ud29sZmZAa2RhYi5jb20w
+DQYJKoZIhvcNAQEFBQADggEBAFvi067uXCOkiUH/D6rv4gV0/e+e8DzcvbbsUxAC5nwDXBv+47ds
+l7j8NrZstZraVz35WEWgksNmnyghcuBKzKcN3kY1KNn/ERc9wvns/0dI+yj39L0eSMzchUZoV6GY
+MtPfmLofPvUBbDesl97JQXF9vpk8FIVsI1UKKrLzfoKhue5abQHXurSFa0ts1UPmSh2Y8/QCQlFN
+lCv8ISyEwVCAkhdIqxRc3hslooBhcRVUrYhRdCLlNN6Od8yuLE9sKWH/K4wg/BpnjCJmGp4GQhU8
+DUG2r0CbOa+iZQKTWUgwdGU3Jr+WcOan/JaNzBuKk1GM3D+WcljoU7ZWtoqXPzgxggJaMIICVgIB
+ATCBqDCBkzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UE
+BxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxOTA3BgNVBAMTMENPTU9ETyBD
+bGllbnQgQXV0aGVudGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIQcgjoW5E8F4ibWmtHeSub
+tDAJBgUrDgMCGgUAoIGHMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8X
+DTE2MDYxNDEwMDYwOFowIwYJKoZIhvcNAQkEMRYEFAqc9ZBkVY87kU8oeNOsICxrIHiMMCgGCSqG
+SIb3DQEJDzEbMBkwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA0GCSqGSIb3DQEBAQUABIIBAJem
+E8LQK5W3XjlIO7gc2ihaTS4oiYmlxUGEAV9G8lYK4PRJlY7CqfexdZrqzO18We0UwwbzuXYP2emR
+6aFU1xoC6XK9BwfvSz7kIiXuxky2V9SK7b9deTvAuBX0KSQLlL17TdX1PyIMi39dLRhjLGL/wyjH
+RqGrxUsIh0AP1a14sZBHkdYiGT+J9LvxlBBNxKOoySEMUhLm5L6RJrbkgrDR1ST+YgehGUrUlZUT
+BDHc/G7WNnT/QWDgoelSrmUajhQNRu6ml3v31l6O4TUW3Y/b4tg4nimoLsD3B53lOb8eQRkFMYBu
+frMw+Nkw3a0YPk3YIE7r3/7dMmxryGOhEt0AAAAAAAA=
+
+
+--nextPart2150785.NEFRYJFDs6--
+
+
+--===============3107659472057659352==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============3107659472057659352==--
