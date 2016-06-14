@@ -1,16 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: CTF semantics
-Date: Tue, 14 Jun 2016 16:10:46 +0000 (UTC)
-Message-ID: <1427184362.35706.1465920646079.JavaMail.zimbra__4451.56901046193$1465921296$gmane$org@efficios.com>
-References: <4611130.hYL7BGjQNU@milian-kdab2>
+From: "D'Alessandro, Luke K" <ldalessa@indiana.edu>
+Subject: urcu AC_FUNC_MALLOC fails for cross-compile
+Date: Tue, 14 Jun 2016 16:12:51 +0000
+Message-ID: <A96D5DC1-9242-4C88-ADE1-150DCAE62C54__16978.9491490976$1465921344$gmane$org@indiana.edu>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============2768095091290249804=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id A7C95A384F
- for <lttng-dev@lists.lttng.org>; Tue, 14 Jun 2016 16:10:50 +0000 (UTC)
-In-Reply-To: <4611130.hYL7BGjQNU@milian-kdab2>
+Received: from hartman.uits.indiana.edu (belushi.uits.indiana.edu
+ [129.79.1.188])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 3A775A386B
+ for <lttng-dev@lists.lttng.org>; Tue, 14 Jun 2016 16:12:53 +0000 (UTC)
+Received: from in-cci-exch0a.ads.iu.edu (in-cci-exch0a.ads.iu.edu
+ [10.234.33.137])
+ by mssg-relay.indiana.edu (8.14.7/8.14.4/IU Campus Communications Team) with
+ ESMTP id u5EGCqGQ024318
+ (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=NOT)
+ for <lttng-dev@lists.lttng.org>; Tue, 14 Jun 2016 12:12:52 -0400
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,59 +25,62 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Milian Wolff <milian.wolff@kdab.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT24gSnVuIDE0LCAyMDE2LCBhdCA3OjA5IEFNLCBNaWxpYW4gV29sZmYgbWlsaWFuLndv
-bGZmQGtkYWIuY29tIHdyb3RlOgoKPiBIZXkgYWxsLAo+IAo+IEkgaGF2ZSBsb29rZWQgdGhyb3Vn
-aCB0aGUgQ1RGIHNwZWNpZmljYXRpb24gYW5kIHBvbmRlciB1c2luZyBpdCB0byByZXBsYWNlIG15
-Cj4gY3VzdG9tIHRleHQtYmFzZWQgb3V0cHV0IGZvcm1hdCBvZiBoZWFwdHJhY2suCgpWZXJ5IGNv
-b2whCgo+IAo+IEF0IHRoaXMgc3RhZ2UsIEkgaGF2ZSBhIGZ1bmRhbWVudGFsIHF1ZXN0aW9uOiBI
-b3cgZG8gdGhlIGV4aXN0aW5nIHZpZXdlcnMgbGlrZQo+IFRyYWNlIENvbXBhc3MgdW5kZXJzdGFu
-ZCB0aGUgc2VtYW50aWNzIG9mIHRoZSBkYXRhPyBPciBhcmUgdGhlIHZpZXdlcnMgbm90Cj4gZ2Vu
-ZXJpYyBidXQgaW5zdGVhZCByZWx5IG9uIHRoZSBleGlzdGluZyBnZW5lcmF0b3JzIGxpa2UgbHR0
-bmc/IEhvdyBkb2VzIG9uZQo+IGtub3cgZS5nLiB3aGF0IHRoZSBiYWNrdHJhY2Ugb2YgYSBnaXZl
-biBldmVudCBpcz8KCkNURiBvbmx5IHNwZWNpZmllcyB0aGUgZGF0YSBsYXlvdXQgYW5kIGFzc29j
-aWF0ZXMgZXZlbnRzL2ZpZWxkcyB0byBuYW1lcwoobmFtZXNwYWNpbmcpLiBUaGUgYW5hbHlzZXMg
-YXNzb2NpYXRlIG1lYW5pbmcgdG8gdGhlIGluZm9ybWF0aW9uIGdhdGhlcmVkCmJ5IHVzaW5nIHRo
-ZSBuYW1lc3BhY2UgYXNzb2NpYXRlZCB0byB0aGUgdHJhY2VyIHRoYXQgY29sbGVjdGVkIHRoZSB0
-cmFjZSwKZXZlbnQgYW5kIGZpZWxkIG5hbWVzLgoKRm9yIGEgbHR0bmcgYmFja3RyYWNlICh3ZSBo
-YXZlIGEgb25nb2luZyB3b3JrIHByb3RvdHlwZSBicmFuY2ggaGVyZSB3aGljaApyZXF1aXJlcyBm
-cmFtZSBwb2ludGVycyBmb3IgdXNlci1zcGFjZSBhcHBsaWNhdGlvbnM6Cmh0dHBzOi8vZ2l0aHVi
-LmNvbS9jb21wdWRqL2x0dG5nLW1vZHVsZXMtZGV2L2NvbW1pdHMvY2FsbHN0YWNrKSwgd2UgY2Fu
-CmFzc29jaWF0ZSB0aGUgY2FsbHN0YWNrX3VzZXIgY29udGV4dCBuYW1lIHRvIHRoaXMgY2FsbHN0
-YWNrIGNvbmNlcHQsIGFuZAppZiB0aGUgdHJhY2Ugdmlld2VyIHdhbnRzIHRvIHJlYWxseSBzaG93
-IHRoaXMgYXMgYSBjYWxsc3RhY2sgKGxpbmtlZCB3aXRoCmRlYnVnIGluZm9ybWF0aW9uIHRvIGZp
-bmQgdGhlIGZ1bmN0aW9uIG5hbWVzIGZvciBpbnN0YW5jZSksIGl0IG5lZWRzIHRvCmtub3cgdGhl
-IHNlbWFudGljIG9mIHRoaXMgbmV3IGNvbnRleHQgZmllbGQgZm9yIExUVG5nLgoKV2l0aCB0aGUg
-dXBjb21pbmcgQ1RGIDIuMCwgd2UgcGxhbiBvbiBhZGRpbmcgbXVjaCBtb3JlIGZsZXhpYmlsaXR5
-IHRvIHRoZQpzcGVjLCBzbyB3ZSBjb3VsZCBkZWNsYXJlIHVzZXIgYXR0cmlidXRlcyB0aGF0IHdv
-dWxkICJmbGFnIiBhIHNwZWNpZmljIGFzcGVjdApvZiB0aGUgc2VtYW50aWMsIGFjcm9zcyB2YXJp
-b3VzIHRyYWNlcnMuIEJ1dCB3ZSBpbnRlbmQgdG8gbGVhdmUgdGhlIHRyYWNlcnMKZXhwcmVzcyB0
-aGVpciBvd24gc2VtYW50aWMgYXMgbXVjaCBhcyBwb3NzaWJsZSwgYW5kIHRoZW4gZXZlbnR1YWxs
-eSBhZ3JlZQpvbiBjb21tb24gc2V0cyBvZiBjb25zdHJ1Y3RzIHRoYXQgYXJlIGZvdW5kIGluIG1h
-bnkgaW1wbGVtZW50YXRpb25zLCBwZXJoYXBzCnRvIGNyZWF0ZSBhIHNpZGUtc3BlYyBvZiAic3Rh
-bmRhcmQgdXNlciBhdHRyaWJ1dGVzIiBpbiB0aGUgZnV0dXJlLgoKQ1RGIDIuMCB3aWxsIGtlZXAg
-dGhlIGRhdGEgc3RyZWFtcyBhcy1pcywgYW5kIGNoYW5nZSB0aGUgbWV0YWRhdGEgZm9ybWF0IGZy
-b20KVFNETCAoY3VzdG9tIGdyYW1tYXIpIHRvIEpTT04uCgo+IAo+IEluIGhlYXB0cmFjaydzIGN1
-cnJlbnQgZm9ybWF0IGhlYXZpbHkgaW50ZXJucyBkYXRhIHRvIGdyZWF0bHkgcmVkdWNlIHRoZSBm
-aWxlCj4gc2l6ZSBvZiB0aGUgb3V0cHV0IGRhdGEuIFRoaXMgaXMgY3J1Y2lhbCwgYW5kIGNhbiBi
-ZSBkb25lIHdpdGggbWluaW1hbAo+IG92ZXJoZWFkLiBTbyBJJ2QgbGlrZSB0byBkbyB0aGUgc2Ft
-ZSBpZiBhbmQgd2hlbiBJIGNvbnZlcnQgdG8gdXNpbmcgQ1RGLiBCdXQKPiBob3cgd291bGQgZS5n
-LiBrbm93IGhvdyB0byBpbnRlcnByZXQgdGhhdCBhbiBpbnRlZ2VyIG1lbWJlciBvZiBhIHN0cnVj
-dAo+IGFjdHVhbGx5IGlzIGFuIGluZGV4IGludG8gYSBsaXN0IG9mIGJhY2t0cmFjZXM/CgpKdXN0
-IHRyeWluZyB0byB1bmRlcnN0YW5kIGhlcmUuIFNvIHlvdSBzdG9yZSBhIGJhY2t0cmFjZSBvbmNl
-IGluIHRoZSB0cmFjZSwKYXNzb2NpYXRlIGl0IHdpdGggYSB1bmlxdWUgbnVtYmVyLCBhbmQgbGF0
-ZXIgb24sIGlmIHlvdSBuZWVkIHRvIHNhdmUgdGhlIHNhbWUKYmFja3RyYWNlLCB5b3UganVzdCB1
-c2UgdGhpcyBudW1iZXIgaW5zdGVhZCA/CgpUaGFua3MsCgpNYXRoaWV1Cgo+IAo+IFRoYW5rcwo+
-IC0tCj4gTWlsaWFuIFdvbGZmIHwgbWlsaWFuLndvbGZmQGtkYWIuY29tIHwgU29mdHdhcmUgRW5n
-aW5lZXIKPiBLREFCIChEZXV0c2NobGFuZCkgR21iSCZDbyBLRywgYSBLREFCIEdyb3VwIGNvbXBh
-bnkKPiBUZWw6ICs0OS0zMC01MjEzMjU0NzAKPiBLREFCIC0gVGhlIFF0IEV4cGVydHMKPiBfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBt
-YWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5s
-dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKLS0gCk1hdGhpZXUg
-RGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
-bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============2768095091290249804==
+Content-Language: en-US
+Content-Type: multipart/signed;
+	boundary="Apple-Mail=_BA9E0754-4577-4089-B751-741AD36CF1DA";
+	protocol="application/pgp-signature"; micalg=pgp-sha512
+
+--Apple-Mail=_BA9E0754-4577-4089-B751-741AD36CF1DA
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=us-ascii
+
+The AC_FUNC_MALLOC depends on some runtime results which doesn't work =
+when cross compiling. Google has a bit to say about this and basically =
+the fix is to stop using the macro. Is there a specific purpose for this =
+check, or could it just be eliminated from configure.ac?
+
+Thanks,
+Luke
+
+--Apple-Mail=_BA9E0754-4577-4089-B751-741AD36CF1DA
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="signature.asc"
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Message signed with OpenPGP using GPGMail
+
+-----BEGIN PGP SIGNATURE-----
+Comment: GPGTools - https://gpgtools.org
+
+iQIcBAEBCgAGBQJXYC0DAAoJEJ9t5ApCTtG0n3gP/1W8esspu/Q2SGY7V8gVDs2h
+4+xrGHN9BUddknxxQolNs+n/U4F+KWhaxexHLq+xFlJRPb0GHs7IoMJHL5UkSsNO
+iylQ9wWgXrWQj/lyvuba445MPKgKURmNX6aD3vvdFkjZB3Pdol+4liuprVJyc6Ff
++XbreTnH8hvueSh4YGhSLuf0CgVPNq8mTHwrzPpDLd91IscE5kSmvQCC/FivGTo2
+IB/YTVWt8HlPgZxBVTS5kl05Prv5UVuFNNIzqxCIYWmVPYuXBdEBBHO0Ek8vUPnS
+E2nzI4LeUSsSQgVPG+AeUCZJigvKSbHUWlpg368N9cijR/uhAPjARXWCGfgSpUwk
+rYsBTFSaUALg8Dw7m09BPk9j5zjYnbkhLSoDyup9xR21xdv8morFQX+JWEQdhjGX
+YsN1eLQZBxfvkRbOORKIjwWqGS5VqSV1gc7Yfu/YuqQ5DzM56RQBBcswOSKGlIBC
+i8U4Z/w54W0DWhp0VSsFI3BM1NRI2GFmBqODznojiIKv4wBmcn781yiEu7KoQnHO
+sbUWXuE35Rf1nkb0NCOR0dGMvVeOc1iBGopFZbboT2Y4OpxS2DS3I11f0I2AZWAN
+UVfZ4Saycw6QGm1LiKEZcnO2Sxm/IzkKn+rweE9n9JNWim9oryWWDlBMY6YnlnhZ
+DMboSfG5ZvLYlgTuuyS0
+=SXSh
+-----END PGP SIGNATURE-----
+
+--Apple-Mail=_BA9E0754-4577-4089-B751-741AD36CF1DA--
+
+--===============2768095091290249804==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============2768095091290249804==--
