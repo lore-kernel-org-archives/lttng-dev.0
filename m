@@ -1,15 +1,16 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-tools 2/6] Fix: error.h -> common/error.h
-Date: Wed, 15 Jun 2016 17:18:03 -0400
-Message-ID: <1466025487-26743-2-git-send-email-mjeanson__13381.9003160626$1466025544$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 4/6] Fix: missing include ctype.h
+	for isdigit()
+Date: Wed, 15 Jun 2016 17:18:05 -0400
+Message-ID: <1466025487-26743-4-git-send-email-mjeanson__38244.1587433734$1466025549$gmane$org@efficios.com>
 References: <1466025487-26743-1-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 05F7CA380E
- for <lttng-dev@lists.lttng.org>; Wed, 15 Jun 2016 21:18:40 +0000 (UTC)
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 77A19A3897
+ for <lttng-dev@lists.lttng.org>; Wed, 15 Jun 2016 21:18:48 +0000 (UTC)
 In-Reply-To: <1466025487-26743-1-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,15 +26,14 @@ Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
 U2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Ci0t
-LQogc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9hZ2VudC5jIHwgMiArLQogMSBmaWxlIGNoYW5nZWQs
-IDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRu
-Zy1zZXNzaW9uZC9hZ2VudC5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9hZ2VudC5jCmluZGV4
-IDhlMWVmMDguLjViMGI2ZjUgMTAwNjQ0Ci0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvYWdl
-bnQuYworKysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2FnZW50LmMKQEAgLTI5LDcgKzI5LDcg
-QEAKICNpbmNsdWRlICJhZ2VudC5oIgogI2luY2x1ZGUgInVzdC1hcHAuaCIKICNpbmNsdWRlICJ1
-dGlscy5oIgotI2luY2x1ZGUgImVycm9yLmgiCisjaW5jbHVkZSAiY29tbW9uL2Vycm9yLmgiCiAK
-ICNkZWZpbmUgQUdFTlRfUkVUX0NPREVfSU5ERVgoY29kZSkgKGNvZGUgLSBBR0VOVF9SRVRfQ09E
-RV9TVUNDRVNTKQogCi0tIAoyLjcuNAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
-dHRuZy1kZXYK
+LQogc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMgfCAxICsKIDEgZmlsZSBjaGFuZ2VkLCAx
+IGluc2VydGlvbigrKQoKZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5j
+IGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKaW5kZXggZWUxOWVmOC4uYmFiOTJhNCAx
+MDA2NDQKLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKKysrIGIvc3JjL2Jpbi9s
+dHRuZy1zZXNzaW9uZC9tYWluLmMKQEAgLTM3LDYgKzM3LDcgQEAKICNpbmNsdWRlIDxzeXMvd2Fp
+dC5oPgogI2luY2x1ZGUgPHVyY3UvdWF0b21pYy5oPgogI2luY2x1ZGUgPHVuaXN0ZC5oPgorI2lu
+Y2x1ZGUgPGN0eXBlLmg+CiAKICNpbmNsdWRlIDxjb21tb24vY29tbW9uLmg+CiAjaW5jbHVkZSA8
+Y29tbW9uL2NvbXBhdC9zb2NrZXQuaD4KLS0gCjIuNy40CgpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
+dkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
+L2xpc3RpbmZvL2x0dG5nLWRldgo=
