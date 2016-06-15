@@ -1,118 +1,95 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: stack validation warning on lttng-modules bytecode interpreter
-Date: Wed, 15 Jun 2016 19:13:39 +0000 (UTC)
-Message-ID: <734452688.38065.1466018019445.JavaMail.zimbra@efficios.com>
-References: <1074038231.37468.1466009716273.JavaMail.zimbra@efficios.com> <20160615181817.vvnf66z6cpwcraq7@treble>
+From: Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: stack validation warning on lttng-modules bytecode
+	interpreter
+Date: Wed, 15 Jun 2016 14:38:46 -0500
+Message-ID: <20160615193846.qsa7vffhi7rn6x2s__19972.5490798757$1466019558$gmane$org@treble>
+References: <1074038231.37468.1466009716273.JavaMail.zimbra@efficios.com>
+ <20160615181817.vvnf66z6cpwcraq7@treble>
+ <734452688.38065.1466018019445.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <20160615181817.vvnf66z6cpwcraq7@treble>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Josh Poimboeuf <jpoimboe@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mx1.redhat.com (mx1.redhat.com [209.132.183.28])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 0DCC3A38AB
+ for <lttng-dev@lists.lttng.org>; Wed, 15 Jun 2016 19:38:50 +0000 (UTC)
+Content-Disposition: inline
+In-Reply-To: <734452688.38065.1466018019445.JavaMail.zimbra@efficios.com>
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On Jun 15, 2016, at 2:18 PM, Josh Poimboeuf jpoimboe@redhat.com wrote:
-
-> On Wed, Jun 15, 2016 at 04:55:16PM +0000, Mathieu Desnoyers wrote:
->> Hi Josh,
->> 
->> I notice that with gcc 6.1.1, kernel 4.6, with
->> CONFIG_STACK_VALIDATION=y, building lttng-modules master
->> at commit 6c09dd94 gives this warning:
->> 
->> lttng-modules/lttng-filter-interpreter.o: warning: objtool:
->> lttng_filter_interpret_bytecode()+0x58: sibling call from callable instruction
->> with changed frame pointer
->> 
->> this object implements a bytecode interpreter using an explicit
->> jump table (see
->> https://github.com/lttng/lttng-modules/blob/master/lttng-filter-interpreter.c)
->> 
->> If I define "INTERPRETER_USE_SWITCH" at the top of the file,
->> thus using the switch-case fallback implementation, the
->> warning vanishes.
->> 
->> We use an explicit jump table rather than a switch case whenever
->> possible for performance reasons.
->> 
->> I notice that tools/objtool/builtin-check.c needs to be aware of
->> switch-cases transformed into jump tables by the compiler. Are
->> explicit jump tables supported by the stack validator ? Do we
->> need to add annotation to our code ?
-> 
-> Hi Mathieu,
-> 
-> Unfortunately objtool doesn't know how to validate this type of jump
-> table.  So to avoid the warning you'll need to add an annotation to tell
-> objtool to ignore it:
-> 
->  STACK_FRAME_NON_STANDARD(lttng_filter_interpret_bytecode);
-> 
-> We had to annotate __bpf_prog_run() in the kernel for the same reason.
-
-Thanks for the tip! Unfortunately it does not seem to work.
-
-objdump -t lttng/lttng-filter-interpreter.o output gives:
-
-0000000000000000 l    d  __func_stack_frame_non_standard        0000000000000000 __func_stack_frame_non_standard
-0000000000000000 l     O __func_stack_frame_non_standard        0000000000000008 __func_stack_frame_non_standard_lttng_filter_interpret_bytecode
-
-Running objtool check (built in O0) in gdb on lttng-filter-interpreter.o
-built with the STACK_FRAME_NON_STANDARD define, it appears that the
-following function:
-
-static bool ignore_func(struct objtool_file *file, struct symbol *func)
-{
-        struct rela *rela;
-        struct instruction *insn;
-
-        /* check for STACK_FRAME_NON_STANDARD */
-        if (file->whitelist && file->whitelist->rela)
-                list_for_each_entry(rela, &file->whitelist->rela->rela_list, list)
-                        if (rela->sym->sec == func->sec &&
-                            rela->addend == func->offset)
-                                return true;
-
-        /* check if it has a context switching instruction */
-        func_for_each_insn(file, func, insn)
-                if (insn->type == INSN_CONTEXT_SWITCH)
-                        return true;
-
-        return false;
-}
-
-For lttng_filter_interpret_bytecode, while in the first list
-iteration:
-
-(gdb) print rela->sym->sec
-$18 = (struct section *) 0x7ffff7e20010
-(gdb) print func->sec
-$19 = (struct section *) 0x7ffff7e20010
-
-But
-
-(gdb) print rela->addend
-$20 = 0
-(gdb) print func->offset
-$21 = 928
-
-So for some reason it never match the ignore_func.
-This happens both when I build lttng-modules as a kernel module,
-and when I build it into the kernel image.
-
-Any idea why ?
-
-Thanks,
-
-Mathieu
-
-> 
-> --
-> Josh
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+T24gV2VkLCBKdW4gMTUsIDIwMTYgYXQgMDc6MTM6MzlQTSArMDAwMCwgTWF0aGlldSBEZXNub3ll
+cnMgd3JvdGU6Cj4gLS0tLS0gT24gSnVuIDE1LCAyMDE2LCBhdCAyOjE4IFBNLCBKb3NoIFBvaW1i
+b2V1ZiBqcG9pbWJvZUByZWRoYXQuY29tIHdyb3RlOgo+IAo+ID4gT24gV2VkLCBKdW4gMTUsIDIw
+MTYgYXQgMDQ6NTU6MTZQTSArMDAwMCwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4gPj4gSGkg
+Sm9zaCwKPiA+PiAKPiA+PiBJIG5vdGljZSB0aGF0IHdpdGggZ2NjIDYuMS4xLCBrZXJuZWwgNC42
+LCB3aXRoCj4gPj4gQ09ORklHX1NUQUNLX1ZBTElEQVRJT049eSwgYnVpbGRpbmcgbHR0bmctbW9k
+dWxlcyBtYXN0ZXIKPiA+PiBhdCBjb21taXQgNmMwOWRkOTQgZ2l2ZXMgdGhpcyB3YXJuaW5nOgo+
+ID4+IAo+ID4+IGx0dG5nLW1vZHVsZXMvbHR0bmctZmlsdGVyLWludGVycHJldGVyLm86IHdhcm5p
+bmc6IG9ianRvb2w6Cj4gPj4gbHR0bmdfZmlsdGVyX2ludGVycHJldF9ieXRlY29kZSgpKzB4NTg6
+IHNpYmxpbmcgY2FsbCBmcm9tIGNhbGxhYmxlIGluc3RydWN0aW9uCj4gPj4gd2l0aCBjaGFuZ2Vk
+IGZyYW1lIHBvaW50ZXIKPiA+PiAKPiA+PiB0aGlzIG9iamVjdCBpbXBsZW1lbnRzIGEgYnl0ZWNv
+ZGUgaW50ZXJwcmV0ZXIgdXNpbmcgYW4gZXhwbGljaXQKPiA+PiBqdW1wIHRhYmxlIChzZWUKPiA+
+PiBodHRwczovL2dpdGh1Yi5jb20vbHR0bmcvbHR0bmctbW9kdWxlcy9ibG9iL21hc3Rlci9sdHRu
+Zy1maWx0ZXItaW50ZXJwcmV0ZXIuYykKPiA+PiAKPiA+PiBJZiBJIGRlZmluZSAiSU5URVJQUkVU
+RVJfVVNFX1NXSVRDSCIgYXQgdGhlIHRvcCBvZiB0aGUgZmlsZSwKPiA+PiB0aHVzIHVzaW5nIHRo
+ZSBzd2l0Y2gtY2FzZSBmYWxsYmFjayBpbXBsZW1lbnRhdGlvbiwgdGhlCj4gPj4gd2FybmluZyB2
+YW5pc2hlcy4KPiA+PiAKPiA+PiBXZSB1c2UgYW4gZXhwbGljaXQganVtcCB0YWJsZSByYXRoZXIg
+dGhhbiBhIHN3aXRjaCBjYXNlIHdoZW5ldmVyCj4gPj4gcG9zc2libGUgZm9yIHBlcmZvcm1hbmNl
+IHJlYXNvbnMuCj4gPj4gCj4gPj4gSSBub3RpY2UgdGhhdCB0b29scy9vYmp0b29sL2J1aWx0aW4t
+Y2hlY2suYyBuZWVkcyB0byBiZSBhd2FyZSBvZgo+ID4+IHN3aXRjaC1jYXNlcyB0cmFuc2Zvcm1l
+ZCBpbnRvIGp1bXAgdGFibGVzIGJ5IHRoZSBjb21waWxlci4gQXJlCj4gPj4gZXhwbGljaXQganVt
+cCB0YWJsZXMgc3VwcG9ydGVkIGJ5IHRoZSBzdGFjayB2YWxpZGF0b3IgPyBEbyB3ZQo+ID4+IG5l
+ZWQgdG8gYWRkIGFubm90YXRpb24gdG8gb3VyIGNvZGUgPwo+ID4gCj4gPiBIaSBNYXRoaWV1LAo+
+ID4gCj4gPiBVbmZvcnR1bmF0ZWx5IG9ianRvb2wgZG9lc24ndCBrbm93IGhvdyB0byB2YWxpZGF0
+ZSB0aGlzIHR5cGUgb2YganVtcAo+ID4gdGFibGUuICBTbyB0byBhdm9pZCB0aGUgd2FybmluZyB5
+b3UnbGwgbmVlZCB0byBhZGQgYW4gYW5ub3RhdGlvbiB0byB0ZWxsCj4gPiBvYmp0b29sIHRvIGln
+bm9yZSBpdDoKPiA+IAo+ID4gIFNUQUNLX0ZSQU1FX05PTl9TVEFOREFSRChsdHRuZ19maWx0ZXJf
+aW50ZXJwcmV0X2J5dGVjb2RlKTsKPiA+IAo+ID4gV2UgaGFkIHRvIGFubm90YXRlIF9fYnBmX3By
+b2dfcnVuKCkgaW4gdGhlIGtlcm5lbCBmb3IgdGhlIHNhbWUgcmVhc29uLgo+IAo+IFRoYW5rcyBm
+b3IgdGhlIHRpcCEgVW5mb3J0dW5hdGVseSBpdCBkb2VzIG5vdCBzZWVtIHRvIHdvcmsuCj4gCj4g
+b2JqZHVtcCAtdCBsdHRuZy9sdHRuZy1maWx0ZXItaW50ZXJwcmV0ZXIubyBvdXRwdXQgZ2l2ZXM6
+Cj4gCj4gMDAwMDAwMDAwMDAwMDAwMCBsICAgIGQgIF9fZnVuY19zdGFja19mcmFtZV9ub25fc3Rh
+bmRhcmQgICAgICAgIDAwMDAwMDAwMDAwMDAwMDAgX19mdW5jX3N0YWNrX2ZyYW1lX25vbl9zdGFu
+ZGFyZAo+IDAwMDAwMDAwMDAwMDAwMDAgbCAgICAgTyBfX2Z1bmNfc3RhY2tfZnJhbWVfbm9uX3N0
+YW5kYXJkICAgICAgICAwMDAwMDAwMDAwMDAwMDA4IF9fZnVuY19zdGFja19mcmFtZV9ub25fc3Rh
+bmRhcmRfbHR0bmdfZmlsdGVyX2ludGVycHJldF9ieXRlY29kZQo+IAo+IFJ1bm5pbmcgb2JqdG9v
+bCBjaGVjayAoYnVpbHQgaW4gTzApIGluIGdkYiBvbiBsdHRuZy1maWx0ZXItaW50ZXJwcmV0ZXIu
+bwo+IGJ1aWx0IHdpdGggdGhlIFNUQUNLX0ZSQU1FX05PTl9TVEFOREFSRCBkZWZpbmUsIGl0IGFw
+cGVhcnMgdGhhdCB0aGUKPiBmb2xsb3dpbmcgZnVuY3Rpb246Cj4gCj4gc3RhdGljIGJvb2wgaWdu
+b3JlX2Z1bmMoc3RydWN0IG9ianRvb2xfZmlsZSAqZmlsZSwgc3RydWN0IHN5bWJvbCAqZnVuYykK
+PiB7Cj4gICAgICAgICBzdHJ1Y3QgcmVsYSAqcmVsYTsKPiAgICAgICAgIHN0cnVjdCBpbnN0cnVj
+dGlvbiAqaW5zbjsKPiAKPiAgICAgICAgIC8qIGNoZWNrIGZvciBTVEFDS19GUkFNRV9OT05fU1RB
+TkRBUkQgKi8KPiAgICAgICAgIGlmIChmaWxlLT53aGl0ZWxpc3QgJiYgZmlsZS0+d2hpdGVsaXN0
+LT5yZWxhKQo+ICAgICAgICAgICAgICAgICBsaXN0X2Zvcl9lYWNoX2VudHJ5KHJlbGEsICZmaWxl
+LT53aGl0ZWxpc3QtPnJlbGEtPnJlbGFfbGlzdCwgbGlzdCkKPiAgICAgICAgICAgICAgICAgICAg
+ICAgICBpZiAocmVsYS0+c3ltLT5zZWMgPT0gZnVuYy0+c2VjICYmCj4gICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHJlbGEtPmFkZGVuZCA9PSBmdW5jLT5vZmZzZXQpCj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICByZXR1cm4gdHJ1ZTsKPiAKPiAgICAgICAgIC8qIGNoZWNrIGlm
+IGl0IGhhcyBhIGNvbnRleHQgc3dpdGNoaW5nIGluc3RydWN0aW9uICovCj4gICAgICAgICBmdW5j
+X2Zvcl9lYWNoX2luc24oZmlsZSwgZnVuYywgaW5zbikKPiAgICAgICAgICAgICAgICAgaWYgKGlu
+c24tPnR5cGUgPT0gSU5TTl9DT05URVhUX1NXSVRDSCkKPiAgICAgICAgICAgICAgICAgICAgICAg
+ICByZXR1cm4gdHJ1ZTsKPiAKPiAgICAgICAgIHJldHVybiBmYWxzZTsKPiB9Cj4gCj4gRm9yIGx0
+dG5nX2ZpbHRlcl9pbnRlcnByZXRfYnl0ZWNvZGUsIHdoaWxlIGluIHRoZSBmaXJzdCBsaXN0Cj4g
+aXRlcmF0aW9uOgo+IAo+IChnZGIpIHByaW50IHJlbGEtPnN5bS0+c2VjCj4gJDE4ID0gKHN0cnVj
+dCBzZWN0aW9uICopIDB4N2ZmZmY3ZTIwMDEwCj4gKGdkYikgcHJpbnQgZnVuYy0+c2VjCj4gJDE5
+ID0gKHN0cnVjdCBzZWN0aW9uICopIDB4N2ZmZmY3ZTIwMDEwCj4gCj4gQnV0Cj4gCj4gKGdkYikg
+cHJpbnQgcmVsYS0+YWRkZW5kCj4gJDIwID0gMAo+IChnZGIpIHByaW50IGZ1bmMtPm9mZnNldAo+
+ICQyMSA9IDkyOAo+IAo+IFNvIGZvciBzb21lIHJlYXNvbiBpdCBuZXZlciBtYXRjaCB0aGUgaWdu
+b3JlX2Z1bmMuCj4gVGhpcyBoYXBwZW5zIGJvdGggd2hlbiBJIGJ1aWxkIGx0dG5nLW1vZHVsZXMg
+YXMgYSBrZXJuZWwgbW9kdWxlLAo+IGFuZCB3aGVuIEkgYnVpbGQgaXQgaW50byB0aGUga2VybmVs
+IGltYWdlLgo+IAo+IEFueSBpZGVhIHdoeSA/CgpIbSwgbm8gaWRlYS4gIENhbiB5b3Ugc2VuZCBt
+ZSB0aGUgb2JqZWN0IGZpbGU/CgotLSAKSm9zaApfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
+bmZvL2x0dG5nLWRldgo=
