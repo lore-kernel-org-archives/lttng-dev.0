@@ -1,32 +1,60 @@
-From: Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: stack validation warning on lttng-modules bytecode interpreter
-Date: Wed, 15 Jun 2016 15:28:06 -0500
-Message-ID: <20160615202806.srownowdzh5mexsh@treble>
-References: <1074038231.37468.1466009716273.JavaMail.zimbra@efficios.com>
- <20160615181817.vvnf66z6cpwcraq7@treble>
- <734452688.38065.1466018019445.JavaMail.zimbra@efficios.com>
- <20160615193846.qsa7vffhi7rn6x2s@treble>
- <596775805.38201.1466020869401.JavaMail.zimbra@efficios.com>
- <20160615202452.3u4trysvatx4xtgc@treble>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RFC PATCH lttng-ust] Fix: allow non-LGPL applications
+	to use tracepoints
+Date: Wed, 15 Jun 2016 16:39:03 -0400
+Message-ID: <1466023143-15846-1-git-send-email-mathieu.desnoyers__49852.3218128414$1466023173$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Content-Disposition: inline
-In-Reply-To: <20160615202452.3u4trysvatx4xtgc@treble>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id F3F56A3754
+ for <lttng-dev@lists.lttng.org>; Wed, 15 Jun 2016 20:39:11 +0000 (UTC)
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: sboisvert@gydle.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, Jun 15, 2016 at 03:24:52PM -0500, Josh Poimboeuf wrote:
-> Thanks, figured it out.  It was an objtool bug.  It was expecting the
-> macro to create a section symbol (STT_SECTION), but for some reason this
-> file's use of the macro creates a function symbol (STT_FUNC).
-
-Actually, to be precise: this file's use of the macro creates a
-relocation which references the function symbol rather than the section
-symbol.
-
-
--- 
-Josh
+Tm9uLUxHUEwgYXBwbGljYXRpb25zIHRoYXQgZG8gbm90IGRlZmluZSBlaXRoZXIgVFJBQ0VQT0lO
+VF9ERUZJTkUgb3IKVFJBQ0VQT0lOVF9DUkVBVEVfUFJPQkVTIHdpdGhpbiBlYWNoIGNvbXBpbGUg
+dW5pdCB0aGF0IHVzZXMgdHJhY2Vwb2ludHMKZmFpbCB0byBidWlsZCBkdWUgdG8gdW5kZWZpbmVk
+IHJlZmVyZW5jZSB0byBgdHJhY2Vwb2ludF9kbG9wZW5fcHRyJy4KClNpZ25lZC1vZmYtYnk6IE1h
+dGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Ci0tLQogaW5j
+bHVkZS9sdHRuZy90cmFjZXBvaW50LmggfCAyMyArKysrKysrKysrKystLS0tLS0tLS0tLQogMSBm
+aWxlIGNoYW5nZWQsIDEyIGluc2VydGlvbnMoKyksIDExIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdp
+dCBhL2luY2x1ZGUvbHR0bmcvdHJhY2Vwb2ludC5oIGIvaW5jbHVkZS9sdHRuZy90cmFjZXBvaW50
+LmgKaW5kZXggMDNiYzkxMy4uZDQ2OTc2NSAxMDA2NDQKLS0tIGEvaW5jbHVkZS9sdHRuZy90cmFj
+ZXBvaW50LmgKKysrIGIvaW5jbHVkZS9sdHRuZy90cmFjZXBvaW50LmgKQEAgLTI0MSwxNyArMjQx
+LDYgQEAgc3RhdGljIGlubGluZSB2b2lkIHRyYWNlcG9pbnRfZGlzYWJsZV9kZXN0cnVjdG9ycyh2
+b2lkKQogCV9fdHJhY2Vwb2ludHNfX2Rpc2FibGVfZGVzdHJ1Y3RvcnMgPSAxOwogfQogCi0jaWYg
+ZGVmaW5lZChUUkFDRVBPSU5UX0RFRklORSkgfHwgZGVmaW5lZChUUkFDRVBPSU5UX0NSRUFURV9Q
+Uk9CRVMpCi0KLS8qCi0gKiBUaGVzZSB3ZWFrIHN5bWJvbHMsIHRoZSBjb25zdHJ1Y3RvciwgYW5k
+IGRlc3RydWN0b3IgdGFrZSBjYXJlIG9mCi0gKiByZWdpc3RlcmluZyBvbmx5IF9vbmVfIGluc3Rh
+bmNlIG9mIHRoZSB0cmFjZXBvaW50cyBwZXIgc2hhcmVkLW9qYmVjdAotICogKG9yIGZvciB0aGUg
+d2hvbGUgbWFpbiBwcm9ncmFtKS4KLSAqLwotaW50IF9fdHJhY2Vwb2ludF9yZWdpc3RlcmVkCi0J
+X19hdHRyaWJ1dGVfXygod2VhaywgdmlzaWJpbGl0eSgiaGlkZGVuIikpKTsKLWludCBfX3RyYWNl
+cG9pbnRfcHRyc19yZWdpc3RlcmVkCi0JX19hdHRyaWJ1dGVfXygod2VhaywgdmlzaWJpbGl0eSgi
+aGlkZGVuIikpKTsKIHN0cnVjdCBsdHRuZ191c3RfdHJhY2Vwb2ludF9kbG9wZW4gdHJhY2Vwb2lu
+dF9kbG9wZW4KIAlfX2F0dHJpYnV0ZV9fKCh3ZWFrLCB2aXNpYmlsaXR5KCJoaWRkZW4iKSkpOwog
+LyoKQEAgLTMwNCw2ICsyOTMsMTggQEAgX190cmFjZXBvaW50X19pbml0X3VyY3Vfc3ltKHZvaWQp
+CiB9CiAjZW5kaWYKIAorI2lmIGRlZmluZWQoVFJBQ0VQT0lOVF9ERUZJTkUpIHx8IGRlZmluZWQo
+VFJBQ0VQT0lOVF9DUkVBVEVfUFJPQkVTKQorCisvKgorICogVGhlc2Ugd2VhayBzeW1ib2xzLCB0
+aGUgY29uc3RydWN0b3IsIGFuZCBkZXN0cnVjdG9yIHRha2UgY2FyZSBvZgorICogcmVnaXN0ZXJp
+bmcgb25seSBfb25lXyBpbnN0YW5jZSBvZiB0aGUgdHJhY2Vwb2ludHMgcGVyIHNoYXJlZC1vamJl
+Y3QKKyAqIChvciBmb3IgdGhlIHdob2xlIG1haW4gcHJvZ3JhbSkuCisgKi8KK2ludCBfX3RyYWNl
+cG9pbnRfcmVnaXN0ZXJlZAorCV9fYXR0cmlidXRlX18oKHdlYWssIHZpc2liaWxpdHkoImhpZGRl
+biIpKSk7CitpbnQgX190cmFjZXBvaW50X3B0cnNfcmVnaXN0ZXJlZAorCV9fYXR0cmlidXRlX18o
+KHdlYWssIHZpc2liaWxpdHkoImhpZGRlbiIpKSk7CisKIHN0YXRpYyB2b2lkIGx0dG5nX3VzdF9u
+b3RyYWNlIF9fYXR0cmlidXRlX18oKGNvbnN0cnVjdG9yKSkKIF9fdHJhY2Vwb2ludHNfX2luaXQo
+dm9pZCk7CiBzdGF0aWMgdm9pZAotLSAKMi4xLjQKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2Cg==
