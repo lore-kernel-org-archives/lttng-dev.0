@@ -1,16 +1,19 @@
-From: Ravi Inder Singh <raviinder@gmail.com>
-Subject: In Redhat 7.1 kmod-lttng-modules is not installed
-Date: Fri, 17 Jun 2016 08:53:25 -0400
-Message-ID: <CA+=s6Bag3Pz6FkbLAmu2BEC_wbpC1ON=qrjvF=G6iVdd1N8NyQ__5350.98954937911$1466168051$gmane$org@mail.gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: Re: [lttng-ust GIT PULL] Doc: add a CMake example
+Date: Fri, 17 Jun 2016 10:25:39 -0400
+Message-ID: <CAB4xu_0rqy-OKa5ctWr6+pjWB-n_UZWH7-RHn9HGsWy-8QxW5A__43963.4171002128$1466173602$gmane$org@mail.gmail.com>
+References: <576377E3.8040401@gydle.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7592484539028982212=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yw0-f181.google.com (mail-yw0-f181.google.com
- [209.85.161.181])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 1380EA33F5
- for <lttng-dev@lists.lttng.org>; Fri, 17 Jun 2016 12:53:46 +0000 (UTC)
-Received: by mail-yw0-f181.google.com with SMTP id z186so70516805ywd.2
- for <lttng-dev@lists.lttng.org>; Fri, 17 Jun 2016 05:53:46 -0700 (PDT)
+Received: from mail-qk0-f194.google.com (mail-qk0-f194.google.com
+ [209.85.220.194])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 2728AA03CE
+ for <lttng-dev@lists.lttng.org>; Fri, 17 Jun 2016 14:26:10 +0000 (UTC)
+Received: by mail-qk0-f194.google.com with SMTP id a186so12070459qkf.0
+ for <lttng-dev@lists.lttng.org>; Fri, 17 Jun 2016 07:26:10 -0700 (PDT)
+In-Reply-To: <576377E3.8040401@gydle.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,486 +23,53 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Sebastien Boisvert <sboisvert@gydle.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============7592484539028982212==
-Content-Type: multipart/alternative; boundary=94eb2c0649b249cce3053578d8d2
-
---94eb2c0649b249cce3053578d8d2
-Content-Type: text/plain; charset=UTF-8
-
-Hi all,
-1)
-RHEL 7.1 OS version is :-
-
-*****************************************************************8
-cat /etc/*release
-NAME="Red Hat Enterprise Linux Workstation"
-VERSION="7.1 (Maipo)"
-ID="rhel"
-ID_LIKE="fedora"
-VERSION_ID="7.1"
-PRETTY_NAME="Red Hat Enterprise Linux Workstation 7.1 (Maipo)"
-ANSI_COLOR="0;31"
-CPE_NAME="cpe:/o:redhat:enterprise_linux:7.1:GA:workstation"
-HOME_URL="https://www.redhat.com/"
-BUG_REPORT_URL="https://bugzilla.redhat.com/"
-*********************************************************************
-2)  I installed everything but when i start kernel tracer it throws me
-error "Kernel Tracer not available"
-
-
- lttng enable-event --kernel allError: Event all: Kernel tracer not
-available (channel channel0, session auto-20160616-165319)
-
-
-Issue i beleive is while installing kernel modules it give me following
-warnings.
-Here is output.
-
-
-root # yum install  kmod-lttng-modules
-Loaded plugins: langpacks, product-id, subscription-manager
-This system is not registered to Red Hat Subscription Management. You can
-use subscription-manager to register.
-Resolving Dependencies
---> Running transaction check
----> Package kmod-lttng-modules.x86_64 0:2.8.0-1.el7 will be installed
---> Finished Dependency Resolution
-
-Dependencies Resolved
-
-================================================================================================================================================================================
- Package                                       Arch
-     Version                                 Repository
-                   Size
-================================================================================================================================================================================
-Installing:
- kmod-lttng-modules                            x86_64
-     2.8.0-1.el7                             EfficiOS-RHEL7-x86-64
-                   281 k
-
-Transaction Summary
-================================================================================================================================================================================
-Install  1 Package
-
-Total download size: 281 k
-Installed size: 2.5 M
-Is this ok [y/d/N]: y
-Downloading packages:
-kmod-lttng-modules-2.8.0-1.el7.x86_64.rpm
-
- | 281 kB  00:00:00
-Running transaction check
-Running transaction test
-Transaction test succeeded
-Running transaction
-  Installing : kmod-lttng-modules-2.8.0-1.el7.x86_64
-
-                     1/1
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-kvm.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-kvm.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-kvm.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sock.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sock.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sock.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-metadata-client.ko
-needs unknown symbol lttng_transport_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-metadata-client.ko
-needs unknown symbol lttng_transport_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-printk.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-printk.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-printk.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-napi.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-napi.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-napi.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-mmap-discard.ko
-needs unknown symbol lttng_transport_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-mmap-discard.ko
-needs unknown symbol lttng_transport_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-kmem.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-kmem.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-kmem.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-compaction.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-compaction.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-compaction.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-overwrite.ko
-needs unknown symbol lttng_transport_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-overwrite.ko
-needs unknown symbol lttng_transport_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-mmap-overwrite.ko
-needs unknown symbol lttng_transport_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-mmap-overwrite.ko
-needs unknown symbol lttng_transport_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-x86-exceptions.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-x86-exceptions.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-x86-exceptions.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sunrpc.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sunrpc.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sunrpc.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-signal.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-signal.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-signal.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-module.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-module.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-module.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-discard.ko
-needs unknown symbol lttng_transport_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-discard.ko
-needs unknown symbol lttng_transport_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-timer.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-timer.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-timer.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-net.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-net.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-net.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/tests/probes/lttng-test.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/tests/probes/lttng-test.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/tests/probes/lttng-test.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-writeback.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-workqueue.ko
-needs unknown symbol lttng_pid_tracker_lookup
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-irq.ko
-needs unknown symbol lttng_probe_unregister
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-irq.ko
-needs unknown symbol lttng_probe_register
-depmod: WARNING:
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-irq.ko
-needs unknown symbol lttng_pid_tracker_lookup
-  Verifying  : kmod-lttng-modules-2.8.0-1.el7.x86_64
-
-                     1/1
-
-Installed:
-  kmod-lttng-modules.x86_64 0:2.8.0-1.el7
-
-
-
-Complete!
-
---94eb2c0649b249cce3053578d8d2
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi all,=C2=A0</div><div>1)=C2=A0</div>RHEL 7.1 OS ver=
-sion is :-=C2=A0<div><div><br></div><div>**********************************=
-*******************************8</div><div>cat /etc/*release=C2=A0</div><di=
-v>NAME=3D&quot;Red Hat Enterprise Linux Workstation&quot;</div><div>VERSION=
-=3D&quot;7.1 (Maipo)&quot;</div><div>ID=3D&quot;rhel&quot;</div><div>ID_LIK=
-E=3D&quot;fedora&quot;</div><div>VERSION_ID=3D&quot;7.1&quot;</div><div>PRE=
-TTY_NAME=3D&quot;Red Hat Enterprise Linux Workstation 7.1 (Maipo)&quot;</di=
-v><div>ANSI_COLOR=3D&quot;0;31&quot;</div><div>CPE_NAME=3D&quot;cpe:/o:redh=
-at:enterprise_linux:7.1:GA:workstation&quot;</div><div>HOME_URL=3D&quot;<a =
-href=3D"https://www.redhat.com/">https://www.redhat.com/</a>&quot;</div><di=
-v>BUG_REPORT_URL=3D&quot;<a href=3D"https://bugzilla.redhat.com/">https://b=
-ugzilla.redhat.com/</a>&quot;</div><div>***********************************=
-**********************************</div><div>2) =C2=A0I installed everythin=
-g but when i start kernel tracer it throws me error &quot;Kernel Tracer not=
- available&quot;</div><div><br></div><div><br></div><div>=C2=A0lttng enable=
--event --kernel allError: Event all: Kernel tracer not available (channel c=
-hannel0, session auto-20160616-165319)<br></div><div><br></div><div><br></d=
-iv><div>Issue i beleive is while installing kernel modules it give me follo=
-wing warnings.=C2=A0</div><div>Here is output.=C2=A0</div></div><div><br></=
-div><div><br></div><div><div>root # yum install =C2=A0kmod-lttng-modules</d=
-iv><div>Loaded plugins: langpacks, product-id, subscription-manager</div><d=
-iv>This system is not registered to Red Hat Subscription Management. You ca=
-n use subscription-manager to register.</div><div>Resolving Dependencies</d=
-iv><div>--&gt; Running transaction check</div><div>---&gt; Package kmod-ltt=
-ng-modules.x86_64 0:2.8.0-1.el7 will be installed</div><div>--&gt; Finished=
- Dependency Resolution</div><div><br></div><div>Dependencies Resolved</div>=
-<div><br></div><div>=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D</div><div>=C2=A0Package =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 Arch =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Versio=
-n =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 Repository =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Size</div><div>=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D</div><div>Inst=
-alling:</div><div>=C2=A0kmod-lttng-modules =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0x86_64 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A02.8.0-1.el7 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 EfficiOS-RHEL7-=
-x86-64 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0281 k</div><div><br></div><div>Transaction S=
-ummary</div><div>=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D</div><div>Install =C2=A01 Package</div><div><br></div=
-><div>Total download size: 281 k</div><div>Installed size: 2.5 M</div><div>=
-Is this ok [y/d/N]: y</div><div>Downloading packages:</div><div>kmod-lttng-=
-modules-2.8.0-1.el7.x86_64.rpm =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| 281 kB =C2=A000:00=
-:00 =C2=A0 =C2=A0=C2=A0</div><div>Running transaction check</div><div>Runni=
-ng transaction test</div><div>Transaction test succeeded</div><div>Running =
-transaction</div><div>=C2=A0 Installing : kmod-lttng-modules-2.8.0-1.el7.x8=
-6_64 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A01/1=C2=A0</div><div>=
-depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modu=
-les/probes/lttng-probe-kvm.ko needs unknown symbol lttng_probe_unregister</=
-div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/l=
-ttng-modules/probes/lttng-probe-kvm.ko needs unknown symbol lttng_probe_reg=
-ister</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-up=
-dates/lttng-modules/probes/lttng-probe-kvm.ko needs unknown symbol lttng_pi=
-d_tracker_lookup</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86=
-_64/weak-updates/lttng-modules/probes/lttng-probe-sock.ko needs unknown sym=
-bol lttng_probe_unregister</div><div>depmod: WARNING: /lib/modules/3.10.0-2=
-29.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sock.ko needs u=
-nknown symbol lttng_probe_register</div><div>depmod: WARNING: /lib/modules/=
-3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sock.ko=
- needs unknown symbol lttng_pid_tracker_lookup</div><div>depmod: WARNING: /=
-lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buf=
-fer-metadata-client.ko needs unknown symbol lttng_transport_unregister</div=
-><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttn=
-g-modules/lttng-ring-buffer-metadata-client.ko needs unknown symbol lttng_t=
-ransport_register</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x8=
-6_64/weak-updates/lttng-modules/probes/lttng-probe-printk.ko needs unknown =
-symbol lttng_probe_unregister</div><div>depmod: WARNING: /lib/modules/3.10.=
-0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-printk.ko ne=
-eds unknown symbol lttng_probe_register</div><div>depmod: WARNING: /lib/mod=
-ules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-pr=
-intk.ko needs unknown symbol lttng_pid_tracker_lookup</div><div>depmod: WAR=
-NING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/=
-lttng-probe-napi.ko needs unknown symbol lttng_probe_unregister</div><div>d=
-epmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modul=
-es/probes/lttng-probe-napi.ko needs unknown symbol lttng_probe_register</di=
-v><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/ltt=
-ng-modules/probes/lttng-probe-napi.ko needs unknown symbol lttng_pid_tracke=
-r_lookup</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak=
--updates/lttng-modules/lttng-ring-buffer-client-mmap-discard.ko needs unkno=
-wn symbol lttng_transport_unregister</div><div>depmod: WARNING: /lib/module=
-s/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client=
--mmap-discard.ko needs unknown symbol lttng_transport_register</div><div>de=
-pmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-module=
-s/probes/lttng-probe-kmem.ko needs unknown symbol lttng_probe_unregister</d=
-iv><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lt=
-tng-modules/probes/lttng-probe-kmem.ko needs unknown symbol lttng_probe_reg=
-ister</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-up=
-dates/lttng-modules/probes/lttng-probe-kmem.ko needs unknown symbol lttng_p=
-id_tracker_lookup</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x8=
-6_64/weak-updates/lttng-modules/probes/lttng-probe-compaction.ko needs unkn=
-own symbol lttng_probe_unregister</div><div>depmod: WARNING: /lib/modules/3=
-.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-compacti=
-on.ko needs unknown symbol lttng_probe_register</div><div>depmod: WARNING: =
-/lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-=
-probe-compaction.ko needs unknown symbol lttng_pid_tracker_lookup</div><div=
->depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-mod=
-ules/lttng-ring-buffer-client-overwrite.ko needs unknown symbol lttng_trans=
-port_unregister</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_=
-64/weak-updates/lttng-modules/lttng-ring-buffer-client-overwrite.ko needs u=
-nknown symbol lttng_transport_register</div><div>depmod: WARNING: /lib/modu=
-les/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-clie=
-nt-mmap-overwrite.ko needs unknown symbol lttng_transport_unregister</div><=
-div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-=
-modules/lttng-ring-buffer-client-mmap-overwrite.ko needs unknown symbol ltt=
-ng_transport_register</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el=
-7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-x86-exceptions.ko ne=
-eds unknown symbol lttng_probe_unregister</div><div>depmod: WARNING: /lib/m=
-odules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-=
-x86-exceptions.ko needs unknown symbol lttng_probe_register</div><div>depmo=
-d: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/p=
-robes/lttng-probe-x86-exceptions.ko needs unknown symbol lttng_pid_tracker_=
-lookup</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-u=
-pdates/lttng-modules/probes/lttng-probe-sunrpc.ko needs unknown symbol lttn=
-g_probe_unregister</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x=
-86_64/weak-updates/lttng-modules/probes/lttng-probe-sunrpc.ko needs unknown=
- symbol lttng_probe_register</div><div>depmod: WARNING: /lib/modules/3.10.0=
--229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sunrpc.ko nee=
-ds unknown symbol lttng_pid_tracker_lookup</div><div>depmod: WARNING: /lib/=
-modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe=
--signal.ko needs unknown symbol lttng_probe_unregister</div><div>depmod: WA=
-RNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes=
-/lttng-probe-signal.ko needs unknown symbol lttng_probe_register</div><div>=
-depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modu=
-les/probes/lttng-probe-signal.ko needs unknown symbol lttng_pid_tracker_loo=
-kup</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-upda=
-tes/lttng-modules/probes/lttng-probe-module.ko needs unknown symbol lttng_p=
-robe_unregister</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_=
-64/weak-updates/lttng-modules/probes/lttng-probe-module.ko needs unknown sy=
-mbol lttng_probe_register</div><div>depmod: WARNING: /lib/modules/3.10.0-22=
-9.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-module.ko needs =
-unknown symbol lttng_pid_tracker_lookup</div><div>depmod: WARNING: /lib/mod=
-ules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-cli=
-ent-discard.ko needs unknown symbol lttng_transport_unregister</div><div>de=
-pmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-module=
-s/lttng-ring-buffer-client-discard.ko needs unknown symbol lttng_transport_=
-register</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak=
--updates/lttng-modules/probes/lttng-probe-timer.ko needs unknown symbol ltt=
-ng_probe_unregister</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.=
-x86_64/weak-updates/lttng-modules/probes/lttng-probe-timer.ko needs unknown=
- symbol lttng_probe_register</div><div>depmod: WARNING: /lib/modules/3.10.0=
--229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-timer.ko need=
-s unknown symbol lttng_pid_tracker_lookup</div><div>depmod: WARNING: /lib/m=
-odules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-=
-net.ko needs unknown symbol lttng_probe_unregister</div><div>depmod: WARNIN=
-G: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/ltt=
-ng-probe-net.ko needs unknown symbol lttng_probe_register</div><div>depmod:=
- WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/pro=
-bes/lttng-probe-net.ko needs unknown symbol lttng_pid_tracker_lookup</div><=
-div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-=
-modules/tests/probes/lttng-test.ko needs unknown symbol lttng_probe_unregis=
-ter</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-upda=
-tes/lttng-modules/tests/probes/lttng-test.ko needs unknown symbol lttng_pro=
-be_register</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/w=
-eak-updates/lttng-modules/tests/probes/lttng-test.ko needs unknown symbol l=
-ttng_pid_tracker_lookup</div><div>depmod: WARNING: /lib/modules/3.10.0-229.=
-el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-writeback.ko needs=
- unknown symbol lttng_probe_unregister</div><div>depmod: WARNING: /lib/modu=
-les/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-wor=
-kqueue.ko needs unknown symbol lttng_pid_tracker_lookup<br></div><div>depmo=
-d: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/p=
-robes/lttng-probe-irq.ko needs unknown symbol lttng_probe_unregister</div><=
-div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-=
-modules/probes/lttng-probe-irq.ko needs unknown symbol lttng_probe_register=
-</div><div>depmod: WARNING: /lib/modules/3.10.0-229.el7.x86_64/weak-updates=
-/lttng-modules/probes/lttng-probe-irq.ko needs unknown symbol lttng_pid_tra=
-cker_lookup</div><div>=C2=A0 Verifying =C2=A0: kmod-lttng-modules-2.8.0-1.e=
-l7.x86_64 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A01/1=C2=A0</di=
-v><div><br></div><div>Installed:</div><div>=C2=A0 kmod-lttng-modules.x86_64=
- 0:2.8.0-1.el7 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=C2=A0</div><div><br></div><div>Co=
-mplete!</div></div><div><br></div><div><br></div></div>
-
---94eb2c0649b249cce3053578d8d2--
-
---===============7592484539028982212==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============7592484539028982212==--
+T24gRnJpLCBKdW4gMTcsIDIwMTYgYXQgMTI6MDkgQU0sIFNlYmFzdGllbiBCb2lzdmVydAo8c2Jv
+aXN2ZXJ0QGd5ZGxlLmNvbT4gd3JvdGU6Cj4gSGkgTWF0aGlldSwKPgo+IFBsZWFzZSBwdWxsIDcg
+Y29tbWl0cyBmb3IgYSBuZXcgZXhhbXBsZSBpbiB0aGUgZG9jdW1lbnRhdGlvbjoKCklzbid0IHRo
+ZSAic3RhbmRhcmQiIHdheSB0byB1c2UgQ01ha2UgdGhpcywgaW4gdGVybXMgb2YgZGlyZWN0b3Jp
+ZXM6CgogICAgbWtkaXIgYnVpbGQKICAgIGNkIGJ1aWxkCiAgICBjbWFrZSAuLgogICAgbWFrZQoK
+PwoKQWxzbywganVzdCBhIG5vdGU6IENNYWtlIDMuNiB3aWxsIGhhdmUgYSBGaW5kTFRUbmdVU1Qg
+WzFdIG1vZHVsZSB3aGljaCBkZWZpbmVzCmFuIGBMVFRuZzo6VVNUYCBpbXBvcnRlZCB0YXJnZXQu
+IFRoaXMgc2hvdWxkIGJlIG1vcmUgcm9idXN0IHRoYW4ganVzdDoKCiAgICB0YXJnZXRfbGlua19s
+aWJyYXJpZXModHJhY2Vwb2ludC1wcm92aWRlciBkbCBsdHRuZy11c3QpCgpBYm91dCB0aGlzIGxp
+bmUsIGJ5IHRoZSB3YXksIHlvdSBzaG91bGQgYXQgbGVhc3QgdXNlIGAke0NNQUtFX0RMX0xJQlN9
+YCBpbnN0ZWFkCm9mIGBkbGAuCgpQaGlsCgo+Cj4KPiBUaGUgZm9sbG93aW5nIGNoYW5nZXMgc2lu
+Y2UgY29tbWl0IDAxZjBlNDBjZTViMGMzMGM3YzA3MDZiNjM1MzIwNDliMzExYzgzY2YKPiBhcmUg
+YXZhaWxhYmxlIGluIHRoZSBnaXQgcmVwb3NpdG9yeSBhdAo+Cj4gaHR0cHM6Ly9naXRodWIuY29t
+L3NlYmh0bWwvbHR0bmctdXN0LmdpdAo+IHRhZ3MvY21ha2UtbXVsdGlwbGUtc2hhcmVkLWxpYnJh
+cmllcy4yMDE2LTA2LTE3Cj4KPgo+IFNlYmFzdGllbiBCb2lzdmVydCAoNyk6Cj4gICAgICAgRG9j
+OiBhZGQgQ01ha2UgZXhhbXBsZQo+ICAgICAgIERvYzogY2xlYW4gdXAgY21ha2UgZXhhbXBsZQo+
+ICAgICAgIERvYzogYWRkIGEgdHJhY2Uuc2ggc2NyaXB0IGluIHRoZSBjbWFrZSBleGFtcGxlCj4g
+ICAgICAgRG9jOiBjbGVhbiB1cCBjbWFrZSBmaWxlCj4gICAgICAgRG9jOiBmaXggRW5nbGlzaCBp
+c3N1ZQo+ICAgICAgIERvYzogcmVuYW1lIGNtYWtlIGV4YW1wbGUKPiAgICAgICBEb2M6IHNoaXAg
+Y21ha2UgZXhhbXBsZSB3aXRoICdtYWtlIGRpc3RjaGVjaycKPgo+Cj4KPiAgZG9jL2V4YW1wbGVz
+L01ha2VmaWxlLmFtICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+fCAxNQo+ICsrKysrKysrKysrKysKPiAgZG9jL2V4YW1wbGVzL2NtYWtlLW11bHRpcGxlLXNoYXJl
+ZC1saWJyYXJpZXMvQ01ha2VMaXN0cy50eHQgICAgICAgICAgfCAyMAo+ICsrKysrKysrKysrKysr
+KysrCj4gIGRvYy9leGFtcGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFyaWVzL1JFQURN
+RS5tZCAgICAgICAgICAgICAgIHwgNTIKPiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysKPiAgZG9jL2V4YW1wbGVzL2NtYWtlLW11bHRpcGxlLXNoYXJlZC1saWJy
+YXJpZXMvYWxpZ25lci1saWIuY3BwICAgICAgICAgfCAxNgo+ICsrKysrKysrKysrKysrCj4gIGRv
+Yy9leGFtcGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFyaWVzL2FsaWduZXItbGliLmgg
+ICAgICAgICAgIHwgIDcKPiArKysrKysKPiAgZG9jL2V4YW1wbGVzL2NtYWtlLW11bHRpcGxlLXNo
+YXJlZC1saWJyYXJpZXMvYWxpZ25lci5jcHAgICAgICAgICAgICAgfCAxMAo+ICsrKysrKysrKwo+
+ICBkb2MvZXhhbXBsZXMvY21ha2UtbXVsdGlwbGUtc2hhcmVkLWxpYnJhcmllcy90ZXN0ZXItbGli
+LmNwcCAgICAgICAgICB8IDE2Cj4gKysrKysrKysrKysrKysKPiAgZG9jL2V4YW1wbGVzL2NtYWtl
+LW11bHRpcGxlLXNoYXJlZC1saWJyYXJpZXMvdGVzdGVyLWxpYi5oICAgICAgICAgICAgfCAgNwo+
+ICsrKysrKwo+ICBkb2MvZXhhbXBsZXMvY21ha2UtbXVsdGlwbGUtc2hhcmVkLWxpYnJhcmllcy90
+ZXN0ZXIuY3BwICAgICAgICAgICAgICB8IDE1Cj4gKysrKysrKysrKysrKwo+ICBkb2MvZXhhbXBs
+ZXMvY21ha2UtbXVsdGlwbGUtc2hhcmVkLWxpYnJhcmllcy90cmFjZS5zaCAgICAgICAgICAgICAg
+ICB8ICA5Cj4gKysrKysrKysKPiAgZG9jL2V4YW1wbGVzL2NtYWtlLW11bHRpcGxlLXNoYXJlZC1s
+aWJyYXJpZXMvdHJhY2Vwb2ludC1wcm92aWRlci5jcHAgfCAgNgo+ICsrKysrKwo+ICBkb2MvZXhh
+bXBsZXMvY21ha2UtbXVsdGlwbGUtc2hhcmVkLWxpYnJhcmllcy90cmFjZXBvaW50LXByb3ZpZGVy
+LmggICB8IDI3Cj4gKysrKysrKysrKysrKysrKysrKysrKysKPiAgMTIgZmlsZXMgY2hhbmdlZCwg
+MjAwIGluc2VydGlvbnMoKykKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
+L2x0dG5nLWRldgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6
+Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
