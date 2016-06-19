@@ -1,20 +1,15 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: Re: [PATCH lttng-tools] Fix: sessiond:
- ht_match_event(): check if filter is NULL
-Date: Sat, 18 Jun 2016 11:00:18 -0400
-Message-ID: <CAB4xu_09NkzJcQj2R6O+fCsgpkyiKsHEYkyvBckNhb9CBTGvEg__8902.45039850033$1466262072$gmane$org@mail.gmail.com>
-References: <20160615213417.2946-1-janinesutto@gmail.com>
- <918783794.40478.1466217405502.JavaMail.zimbra@efficios.com>
+From: Simon Marchi <simon.marchi@polymtl.ca>
+Subject: [PATCH babeltrace 1/2] python: Add stream event context
+	support
+Date: Sat, 18 Jun 2016 22:54:51 -0400
+Message-ID: <20160619025452.22156-1-simon.marchi__30153.2922465869$1466304920$gmane$org@polymtl.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2320985558412892776=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-f194.google.com (mail-qk0-f194.google.com
- [209.85.220.194])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 6180EA09FA
- for <lttng-dev@lists.lttng.org>; Sat, 18 Jun 2016 15:00:48 +0000 (UTC)
-Received: by mail-qk0-f194.google.com with SMTP id j2so16334865qkf.1
- for <lttng-dev@lists.lttng.org>; Sat, 18 Jun 2016 08:00:48 -0700 (PDT)
-In-Reply-To: <918783794.40478.1466217405502.JavaMail.zimbra@efficios.com>
+Received: from smtp.electronicbox.net (smtp.electronicbox.net [96.127.255.82])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 5114DA33F5
+ for <lttng-dev@lists.lttng.org>; Sun, 19 Jun 2016 02:54:55 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,225 +19,151 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Philippe Proulx <philippe.proulx@efficios.com>, lttng-dev <lttng-dev@lists.lttng.org>, Janine Sutto <janinesutto@gmail.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============2320985558412892776==
-Content-Type: multipart/alternative; boundary=001a1147f4b27c90eb05358ebc13
-
---001a1147f4b27c90eb05358ebc13
-Content-Type: text/plain; charset=UTF-8
-
-Oh, Janine hijacked my workstation again!
-
-Philippe Proulx
-
-On Fri, Jun 17, 2016 at 10:36 PM, Mathieu Desnoyers <
-mathieu.desnoyers@efficios.com> wrote:
-
-> Received: from jsutto (cable-192.222.213.99.electronicbox.net.
->
-> host mtl.efficios.com
-> mtl.efficios.com has address 192.222.213.99
->
-> Nice try Phil. ;-)
->
-> We'll need the actual contributor name to merge this contribution
-> however. I'm pretty sure there is no Mrs. Sutto at EfficiOS.
->
-> Thanks,
->
-> Mathieu
->
-> ----- On Jun 15, 2016, at 5:34 PM, Janine Sutto janinesutto@gmail.com
-> wrote:
->
-> > It looks like an agent event's filter expression is NULL when
-> > it's created with -a, for example:
-> >
-> >    lttng enable-event -j -a
-> >
-> > Since there's no check for this in ht_match_event(), strlen()
-> > makes the session daemon segfault with this scenario:
-> >
-> >    lttng create
-> >    lttng enable-event -j -a
-> >    lttng disable-event -j -a
-> >
-> > Signed-off-by: Janine Sutto <janinesutto@gmail.com>
-> > ---
-> > src/bin/lttng-sessiond/agent.c | 11 +++++++++--
-> > 1 file changed, 9 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/src/bin/lttng-sessiond/agent.c
-> b/src/bin/lttng-sessiond/agent.c
-> > index 8e1ef08..7cbbbde 100644
-> > --- a/src/bin/lttng-sessiond/agent.c
-> > +++ b/src/bin/lttng-sessiond/agent.c
-> > @@ -143,11 +143,18 @@ static int ht_match_event(struct cds_lfht_node
-> *node,
-> >       }
-> >
-> >       /* Filter expression */
-> > -     if (strncmp(event->filter_expression, key->filter_expression,
-> > -                     strlen(event->filter_expression)) != 0) {
-> > +     if (!!event->filter_expression ^ !!key->filter_expression) {
-> > +             /* One has a filter expression, the other does not */
-> >               goto no_match;
-> >       }
-> >
-> > +     if (event->filter_expression) {
-> > +             if (strncmp(event->filter_expression,
-> key->filter_expression,
-> > +                             strlen(event->filter_expression)) != 0) {
-> > +                     goto no_match;
-> > +             }
-> > +     }
-> > +
-> >       return 1;
-> >
-> > no_match:
-> > --
-> > 2.8.3
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
---001a1147f4b27c90eb05358ebc13
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Oh, Janine hijacked my workstation again!</div><div class=
-=3D"gmail_extra"><br clear=3D"all"><div><div class=3D"gmail_signature" data=
--smartmail=3D"gmail_signature">Philippe Proulx</div></div>
-<br><div class=3D"gmail_quote">On Fri, Jun 17, 2016 at 10:36 PM, Mathieu De=
-snoyers <span dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoyers@efficios.=
-com" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;</span> wrote:=
-<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-lef=
-t:1px #ccc solid;padding-left:1ex">Received: from jsutto (<a href=3D"http:/=
-/cable-192.222.213.99.electronicbox.net" rel=3D"noreferrer" target=3D"_blan=
-k">cable-192.222.213.99.electronicbox.net</a>.<br>
-<br>
-host <a href=3D"http://mtl.efficios.com" rel=3D"noreferrer" target=3D"_blan=
-k">mtl.efficios.com</a><br>
-<a href=3D"http://mtl.efficios.com" rel=3D"noreferrer" target=3D"_blank">mt=
-l.efficios.com</a> has address 192.222.213.99<br>
-<br>
-Nice try Phil. ;-)<br>
-<br>
-We&#39;ll need the actual contributor name to merge this contribution<br>
-however. I&#39;m pretty sure there is no Mrs. Sutto at EfficiOS.<br>
-<br>
-Thanks,<br>
-<br>
-Mathieu<br>
-<div class=3D"HOEnZb"><div class=3D"h5"><br>
------ On Jun 15, 2016, at 5:34 PM, Janine Sutto <a href=3D"mailto:janinesut=
-to@gmail.com">janinesutto@gmail.com</a> wrote:<br>
-<br>
-&gt; It looks like an agent event&#39;s filter expression is NULL when<br>
-&gt; it&#39;s created with -a, for example:<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 lttng enable-event -j -a<br>
-&gt;<br>
-&gt; Since there&#39;s no check for this in ht_match_event(), strlen()<br>
-&gt; makes the session daemon segfault with this scenario:<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 lttng create<br>
-&gt;=C2=A0 =C2=A0 lttng enable-event -j -a<br>
-&gt;=C2=A0 =C2=A0 lttng disable-event -j -a<br>
-&gt;<br>
-&gt; Signed-off-by: Janine Sutto &lt;<a href=3D"mailto:janinesutto@gmail.co=
-m">janinesutto@gmail.com</a>&gt;<br>
-&gt; ---<br>
-&gt; src/bin/lttng-sessiond/agent.c | 11 +++++++++--<br>
-&gt; 1 file changed, 9 insertions(+), 2 deletions(-)<br>
-&gt;<br>
-&gt; diff --git a/src/bin/lttng-sessiond/agent.c b/src/bin/lttng-sessiond/a=
-gent.c<br>
-&gt; index 8e1ef08..7cbbbde 100644<br>
-&gt; --- a/src/bin/lttng-sessiond/agent.c<br>
-&gt; +++ b/src/bin/lttng-sessiond/agent.c<br>
-&gt; @@ -143,11 +143,18 @@ static int ht_match_event(struct cds_lfht_node *=
-node,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0/* Filter expression */<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0if (strncmp(event-&gt;filter_expression, key-&gt;=
-filter_expression,<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0strlen(event-&gt;filter_expression)) !=3D 0) {<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0if (!!event-&gt;filter_expression ^ !!key-&gt;fil=
-ter_expression) {<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0/* One has a filter e=
-xpression, the other does not */<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0goto no_match;<b=
-r>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
-&gt;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0if (event-&gt;filter_expression) {<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if (strncmp(event-&gt=
-;filter_expression, key-&gt;filter_expression,<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0strlen(event-&gt;filter_expression)) !=
-=3D 0) {<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- =C2=A0goto no_match;<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0}<br>
-&gt; +=C2=A0 =C2=A0 =C2=A0}<br>
-&gt; +<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0return 1;<br>
-&gt;<br>
-&gt; no_match:<br>
-&gt; --<br>
-&gt; 2.8.3<br>
-&gt;<br>
-&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
-</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailm=
-an/listinfo/lttng-dev</a><br>
-<br>
-</div></div><span class=3D"HOEnZb"><font color=3D"#888888">--<br>
-Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">ht=
-tp://www.efficios.com</a><br>
-</font></span><div class=3D"HOEnZb"><div class=3D"h5">_____________________=
-__________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailman/l=
-istinfo/lttng-dev</a><br>
-</div></div></blockquote></div><br></div>
-
---001a1147f4b27c90eb05358ebc13--
-
---===============2320985558412892776==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============2320985558412892776==--
+VGhpcyBwYXRjaCBhZGRzIHRoZSBwb3NzaWJpbGl0eSB0byBnZXQvc2V0IHRoZSBldmVudCBjb250
+ZXh0IHR5cGUgb2YgYQpzdHJlYW0gY2xhc3MgYW5kIHNldCB0aGUgc3RyZWFtIGNvbnRleHQgdmFs
+dWUgb2YgYW4gZXZlbnQgZnJvbSBQeXRob24uCgpGcm9tIG15IGV4cGVyaWVuY2UsIHRoZSB2YWx1
+ZSBzZXR0ZXIgKEV2ZW50LnN0cmVhbV9jb250ZXh0LnNldHRlcikgaXMKbm90IHNvIHVzZWZ1bCwg
+c2luY2UgaXQgbG9va3MgbGlrZSB0aGUgY29udGV4dCBpcyBhbHJlYWR5IGluc3RhbmNpYXRlZAp3
+aGVuIHlvdSBjcmVhdGUgdGhlIGV2ZW50LiAgU28gaW4gb3JkZXIgdG8gc2V0IHRoZSB2YWx1ZXMg
+aW4gaXQsIHlvdQpvbmx5IG5lZWQgdG8gZ2V0IHRoZSBleGlzdGluZyBpbnN0YW5jZSBhbmQgc2V0
+IGl0cyBmaWVsZHMuICBUaGVyZSBpcyBubwpuZWVkIHRvIHRvIHJlLWFzc2lnbiB0aGUgc3RyZWFt
+IGNvbnRleHQgaW5zdGFuY2UgdG8gdGhlIGV2ZW50LiAgSSBzdGlsbApwdXQgaXQgdGhlcmUgZm9y
+IGNvbXBsZXRlbmVzcy4KCkkgYWRkZWQgYW4gZXhhbXBsZSBvZiB0aGUgdXNhZ2UgdG8gdGhlIGV4
+aXN0aW5nIENURiB3cml0ZXIgUHl0aG9uCmV4YW1wbGUuCgpTaWduZWQtb2ZmLWJ5OiBTaW1vbiBN
+YXJjaGkgPHNpbW9uLm1hcmNoaUBwb2x5bXRsLmNhPgotLS0KIGJpbmRpbmdzL3B5dGhvbi9iYWJl
+bHRyYWNlL2V4YW1wbGVzL2N0Zl93cml0ZXIucHkgfCAgNyArKysKIGJpbmRpbmdzL3B5dGhvbi9i
+YWJlbHRyYWNlL25hdGl2ZWJ0LmkgICAgICAgICAgICAgfCAgOCArKysKIGJpbmRpbmdzL3B5dGhv
+bi9iYWJlbHRyYWNlL3dyaXRlci5weSAgICAgICAgICAgICAgfCA2MSArKysrKysrKysrKysrKysr
+KysrKysrKwogMyBmaWxlcyBjaGFuZ2VkLCA3NiBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEv
+YmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2UvZXhhbXBsZXMvY3RmX3dyaXRlci5weSBiL2JpbmRp
+bmdzL3B5dGhvbi9iYWJlbHRyYWNlL2V4YW1wbGVzL2N0Zl93cml0ZXIucHkKaW5kZXggZDYwZWIz
+ZC4uMDNlMDFlYSAxMDA2NDQKLS0tIGEvYmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2UvZXhhbXBs
+ZXMvY3RmX3dyaXRlci5weQorKysgYi9iaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZS9leGFtcGxl
+cy9jdGZfd3JpdGVyLnB5CkBAIC03MSw2ICs3MSwxMSBAQCBmb3IgZmllbGQgaW4gcGFja2V0X2Nv
+bnRleHRfdHlwZS5maWVsZHM6CiBwYWNrZXRfY29udGV4dF90eXBlLmFkZF9maWVsZCh1aW50MTZf
+dHlwZSwgImFfY3VzdG9tX3BhY2tldF9jb250ZXh0X2ZpZWxkIikKIHN0cmVhbV9jbGFzcy5wYWNr
+ZXRfY29udGV4dF90eXBlID0gcGFja2V0X2NvbnRleHRfdHlwZQogCisjIFNldCBhIHN0cmVhbSBl
+dmVudCBjb250ZXh0CitzdHJlYW1fZXZlbnRfY29udGV4dF90eXBlID0gYnR3LlN0cnVjdHVyZUZp
+ZWxkRGVjbGFyYXRpb24oKQorc3RyZWFtX2V2ZW50X2NvbnRleHRfdHlwZS5hZGRfZmllbGQoaW50
+MzJfdHlwZSwgImZpZWxkX2luX3N0cmVhbV9ldmVudF9jb250ZXh0IikKK3N0cmVhbV9jbGFzcy5l
+dmVudF9jb250ZXh0X3R5cGUgPSBzdHJlYW1fZXZlbnRfY29udGV4dF90eXBlCisKICMgQ3JlYXRl
+IGEgc3RyaW5nIHR5cGUKIHN0cmluZ190eXBlID0gYnR3LlN0cmluZ0ZpZWxkRGVjbGFyYXRpb24o
+KQogCkBAIC0xMzUsNiArMTQwLDggQEAgZm9yIGkgaW4gcmFuZ2UoMTAwKToKICAgICBpbnRlZ2Vy
+X2ZpZWxkID0gZW51bWVyYXRpb25fZmllbGQuY29udGFpbmVyCiAgICAgZW51bWVyYXRpb25fZmll
+bGQudmFsdWUgPSBpICUgMTAKIAorICAgIGV2ZW50LnN0cmVhbV9jb250ZXh0LmZpZWxkKCJmaWVs
+ZF9pbl9zdHJlYW1fZXZlbnRfY29udGV4dCIpLnZhbHVlID0gaSAqIDEwCisKICAgICBzdHJlYW0u
+YXBwZW5kX2V2ZW50KGV2ZW50KQogCiAjIFBvcHVsYXRlIGN1c3RvbSBwYWNrZXQgY29udGV4dCBm
+aWVsZCBiZWZvcmUgZmx1c2hpbmcKZGlmZiAtLWdpdCBhL2JpbmRpbmdzL3B5dGhvbi9iYWJlbHRy
+YWNlL25hdGl2ZWJ0LmkgYi9iaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZS9uYXRpdmVidC5pCmlu
+ZGV4IDE1NzI2YmEuLmFkMjBjMTMgMTAwNjQ0Ci0tLSBhL2JpbmRpbmdzL3B5dGhvbi9iYWJlbHRy
+YWNlL25hdGl2ZWJ0LmkKKysrIGIvYmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2UvbmF0aXZlYnQu
+aQpAQCAtNTYwLDYgKzU2MCw4IEBAIHZvaWQgYnRfY3RmX2V2ZW50X2NsYXNzX3B1dChzdHJ1Y3Qg
+YnRfY3RmX2V2ZW50X2NsYXNzICpldmVudF9jbGFzcyk7CiAlcmVuYW1lKCJfYnRfY3RmX2V2ZW50
+X2dldF9wYXlsb2FkX2J5X2luZGV4IikgYnRfY3RmX2V2ZW50X2dldF9wYXlsb2FkX2J5X2luZGV4
+KHN0cnVjdCBidF9jdGZfZXZlbnQgKmV2ZW50LCBpbnQgaW5kZXgpOwogJXJlbmFtZSgiX2J0X2N0
+Zl9ldmVudF9nZXQiKSBidF9jdGZfZXZlbnRfZ2V0KHN0cnVjdCBidF9jdGZfZXZlbnQgKmV2ZW50
+KTsKICVyZW5hbWUoIl9idF9jdGZfZXZlbnRfcHV0IikgYnRfY3RmX2V2ZW50X3B1dChzdHJ1Y3Qg
+YnRfY3RmX2V2ZW50ICpldmVudCk7CislcmVuYW1lKCJfYnRfY3RmX2V2ZW50X2dldF9zdHJlYW1f
+ZXZlbnRfY29udGV4dCIpIGJ0X2N0Zl9ldmVudF9nZXRfc3RyZWFtX2V2ZW50X2NvbnRleHQoc3Ry
+dWN0IGJ0X2N0Zl9ldmVudCAqZXZlbnQpOworJXJlbmFtZSgiX2J0X2N0Zl9ldmVudF9zZXRfc3Ry
+ZWFtX2V2ZW50X2NvbnRleHQiKSBidF9jdGZfZXZlbnRfc2V0X3N0cmVhbV9ldmVudF9jb250ZXh0
+KHN0cnVjdCBidF9jdGZfZXZlbnQgKmV2ZW50LCBzdHJ1Y3QgYnRfY3RmX2ZpZWxkICpzdHJlYW1f
+ZXZlbnRfY29udGV4dCk7CiAKIHN0cnVjdCBidF9jdGZfZXZlbnQgKmJ0X2N0Zl9ldmVudF9jcmVh
+dGUoc3RydWN0IGJ0X2N0Zl9ldmVudF9jbGFzcyAqZXZlbnRfY2xhc3MpOwogc3RydWN0IGJ0X2N0
+Zl9ldmVudF9jbGFzcyAqYnRfY3RmX2V2ZW50X2dldF9jbGFzcyhzdHJ1Y3QgYnRfY3RmX2V2ZW50
+ICpldmVudCk7CkBAIC01NjksNiArNTcxLDggQEAgaW50IGJ0X2N0Zl9ldmVudF9zZXRfcGF5bG9h
+ZChzdHJ1Y3QgYnRfY3RmX2V2ZW50ICpldmVudCwgY29uc3QgY2hhciAqbmFtZSwgc3RydWMKIHN0
+cnVjdCBidF9jdGZfZmllbGQgKmJ0X2N0Zl9ldmVudF9nZXRfcGF5bG9hZF9ieV9pbmRleChzdHJ1
+Y3QgYnRfY3RmX2V2ZW50ICpldmVudCwgaW50IGluZGV4KTsKIHZvaWQgYnRfY3RmX2V2ZW50X2dl
+dChzdHJ1Y3QgYnRfY3RmX2V2ZW50ICpldmVudCk7CiB2b2lkIGJ0X2N0Zl9ldmVudF9wdXQoc3Ry
+dWN0IGJ0X2N0Zl9ldmVudCAqZXZlbnQpOworc3RydWN0IGJ0X2N0Zl9maWVsZCAqYnRfY3RmX2V2
+ZW50X2dldF9zdHJlYW1fZXZlbnRfY29udGV4dChzdHJ1Y3QgYnRfY3RmX2V2ZW50ICpldmVudCk7
+CitpbnQgYnRfY3RmX2V2ZW50X3NldF9zdHJlYW1fZXZlbnRfY29udGV4dChzdHJ1Y3QgYnRfY3Rm
+X2V2ZW50ICpldmVudCwgc3RydWN0IGJ0X2N0Zl9maWVsZCAqc3RyZWFtX2V2ZW50X2NvbnRleHQp
+OwogCiAKIC8qIHN0cmVhbS1jbGFzcy5oICovCkBAIC01ODQsNiArNTg4LDggQEAgdm9pZCBidF9j
+dGZfZXZlbnRfcHV0KHN0cnVjdCBidF9jdGZfZXZlbnQgKmV2ZW50KTsKICVyZW5hbWUoIl9idF9j
+dGZfc3RyZWFtX2NsYXNzX2dldF9ldmVudF9jbGFzc19ieV9uYW1lIikgYnRfY3RmX3N0cmVhbV9j
+bGFzc19nZXRfZXZlbnRfY2xhc3NfYnlfbmFtZShzdHJ1Y3QgYnRfY3RmX3N0cmVhbV9jbGFzcyAq
+c3RyZWFtX2NsYXNzLCBjb25zdCBjaGFyICpuYW1lKTsKICVyZW5hbWUoIl9idF9jdGZfc3RyZWFt
+X2NsYXNzX2dldF9wYWNrZXRfY29udGV4dF90eXBlIikgYnRfY3RmX3N0cmVhbV9jbGFzc19nZXRf
+cGFja2V0X2NvbnRleHRfdHlwZShzdHJ1Y3QgYnRfY3RmX3N0cmVhbV9jbGFzcyAqc3RyZWFtX2Ns
+YXNzKTsKICVyZW5hbWUoIl9idF9jdGZfc3RyZWFtX2NsYXNzX3NldF9wYWNrZXRfY29udGV4dF90
+eXBlIikgYnRfY3RmX3N0cmVhbV9jbGFzc19zZXRfcGFja2V0X2NvbnRleHRfdHlwZShzdHJ1Y3Qg
+YnRfY3RmX3N0cmVhbV9jbGFzcyAqc3RyZWFtX2NsYXNzLCBzdHJ1Y3QgYnRfY3RmX2ZpZWxkX3R5
+cGUgKnBhY2tldF9jb250ZXh0X3R5cGUpOworJXJlbmFtZSgiX2J0X2N0Zl9zdHJlYW1fY2xhc3Nf
+Z2V0X2V2ZW50X2NvbnRleHRfdHlwZSIpIGJ0X2N0Zl9zdHJlYW1fY2xhc3NfZ2V0X2V2ZW50X2Nv
+bnRleHRfdHlwZShzdHJ1Y3QgYnRfY3RmX3N0cmVhbV9jbGFzcyAqc3RyZWFtX2NsYXNzKTsKKyVy
+ZW5hbWUoIl9idF9jdGZfc3RyZWFtX2NsYXNzX3NldF9ldmVudF9jb250ZXh0X3R5cGUiKSBidF9j
+dGZfc3RyZWFtX2NsYXNzX3NldF9ldmVudF9jb250ZXh0X3R5cGUoc3RydWN0IGJ0X2N0Zl9zdHJl
+YW1fY2xhc3MgKnN0cmVhbV9jbGFzcywgc3RydWN0IGJ0X2N0Zl9maWVsZF90eXBlICpldmVudF9j
+b250ZXh0X3R5cGUpOwogJXJlbmFtZSgiX2J0X2N0Zl9zdHJlYW1fY2xhc3NfZ2V0IikgYnRfY3Rm
+X3N0cmVhbV9jbGFzc19nZXQoc3RydWN0IGJ0X2N0Zl9zdHJlYW1fY2xhc3MgKnN0cmVhbV9jbGFz
+cyk7CiAlcmVuYW1lKCJfYnRfY3RmX3N0cmVhbV9jbGFzc19wdXQiKSBidF9jdGZfc3RyZWFtX2Ns
+YXNzX3B1dChzdHJ1Y3QgYnRfY3RmX3N0cmVhbV9jbGFzcyAqc3RyZWFtX2NsYXNzKTsKIApAQCAt
+NTk5LDYgKzYwNSw4IEBAIHN0cnVjdCBidF9jdGZfZXZlbnRfY2xhc3MgKmJ0X2N0Zl9zdHJlYW1f
+Y2xhc3NfZ2V0X2V2ZW50X2NsYXNzKHN0cnVjdCBidF9jdGZfc3RyCiBzdHJ1Y3QgYnRfY3RmX2V2
+ZW50X2NsYXNzICpidF9jdGZfc3RyZWFtX2NsYXNzX2dldF9ldmVudF9jbGFzc19ieV9uYW1lKHN0
+cnVjdCBidF9jdGZfc3RyZWFtX2NsYXNzICpzdHJlYW1fY2xhc3MsIGNvbnN0IGNoYXIgKm5hbWUp
+Owogc3RydWN0IGJ0X2N0Zl9maWVsZF90eXBlICpidF9jdGZfc3RyZWFtX2NsYXNzX2dldF9wYWNr
+ZXRfY29udGV4dF90eXBlKHN0cnVjdCBidF9jdGZfc3RyZWFtX2NsYXNzICpzdHJlYW1fY2xhc3Mp
+OwogaW50IGJ0X2N0Zl9zdHJlYW1fY2xhc3Nfc2V0X3BhY2tldF9jb250ZXh0X3R5cGUoc3RydWN0
+IGJ0X2N0Zl9zdHJlYW1fY2xhc3MgKnN0cmVhbV9jbGFzcywgc3RydWN0IGJ0X2N0Zl9maWVsZF90
+eXBlICpwYWNrZXRfY29udGV4dF90eXBlKTsKK3N0cnVjdCBidF9jdGZfZmllbGRfdHlwZSAqYnRf
+Y3RmX3N0cmVhbV9jbGFzc19nZXRfZXZlbnRfY29udGV4dF90eXBlKHN0cnVjdCBidF9jdGZfc3Ry
+ZWFtX2NsYXNzICpzdHJlYW1fY2xhc3MpOworaW50IGJ0X2N0Zl9zdHJlYW1fY2xhc3Nfc2V0X2V2
+ZW50X2NvbnRleHRfdHlwZShzdHJ1Y3QgYnRfY3RmX3N0cmVhbV9jbGFzcyAqc3RyZWFtX2NsYXNz
+LCBzdHJ1Y3QgYnRfY3RmX2ZpZWxkX3R5cGUgKmV2ZW50X2NvbnRleHRfdHlwZSk7CiB2b2lkIGJ0
+X2N0Zl9zdHJlYW1fY2xhc3NfZ2V0KHN0cnVjdCBidF9jdGZfc3RyZWFtX2NsYXNzICpzdHJlYW1f
+Y2xhc3MpOwogdm9pZCBidF9jdGZfc3RyZWFtX2NsYXNzX3B1dChzdHJ1Y3QgYnRfY3RmX3N0cmVh
+bV9jbGFzcyAqc3RyZWFtX2NsYXNzKTsKIApkaWZmIC0tZ2l0IGEvYmluZGluZ3MvcHl0aG9uL2Jh
+YmVsdHJhY2Uvd3JpdGVyLnB5IGIvYmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2Uvd3JpdGVyLnB5
+CmluZGV4IGRjNjViMjQuLmNkNjA5YWYgMTAwNjQ0Ci0tLSBhL2JpbmRpbmdzL3B5dGhvbi9iYWJl
+bHRyYWNlL3dyaXRlci5weQorKysgYi9iaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZS93cml0ZXIu
+cHkKQEAgLTE3NDcsNiArMTc0NywzNCBAQCBjbGFzcyBFdmVudDoKICAgICAgICAgaWYgcmV0IDwg
+MDoKICAgICAgICAgICAgIHJhaXNlIFZhbHVlRXJyb3IoIkNvdWxkIG5vdCBzZXQgZXZlbnQgZmll
+bGQgcGF5bG9hZC4iKQogCisgICAgQHByb3BlcnR5CisgICAgZGVmIHN0cmVhbV9jb250ZXh0KHNl
+bGYpOgorICAgICAgICAiIiIKKyAgICAgICAgU3RyZWFtIGV2ZW50IGNvbnRleHQgZmllbGQgKGlu
+c3RhbmNlIG9mCisgICAgICAgIDpjbGFzczpgU3RydWN0dXJlRmllbGRgKS4KKworICAgICAgICBT
+ZXQgdGhpcyBhdHRyaWJ1dGUgdG8gYXNzaWduIGEgc3RyZWFtIGV2ZW50IGNvbnRleHQgZmllbGQK
+KyAgICAgICAgdG8gdGhpcyBzdHJlYW0uCisKKyAgICAgICAgOmV4YzpgVmFsdWVFcnJvcmAgaXMg
+cmFpc2VkIG9uIGVycm9yLgorICAgICAgICAiIiIKKworICAgICAgICBuYXRpdmVfZmllbGQgPSBu
+YnQuX2J0X2N0Zl9ldmVudF9nZXRfc3RyZWFtX2V2ZW50X2NvbnRleHQoc2VsZi5fZSkKKworICAg
+ICAgICBpZiBuYXRpdmVfZmllbGQgaXMgTm9uZToKKyAgICAgICAgICAgIHJhaXNlIFZhbHVlRXJy
+b3IoIkludmFsaWQgU3RyZWFtLiIpCisKKyAgICAgICAgcmV0dXJuIEZpZWxkLl9jcmVhdGVfZmll
+bGRfZnJvbV9uYXRpdmVfaW5zdGFuY2UobmF0aXZlX2ZpZWxkKQorCisgICAgQHN0cmVhbV9jb250
+ZXh0LnNldHRlcgorICAgIGRlZiBzdHJlYW1fY29udGV4dChzZWxmLCBmaWVsZCk6CisgICAgICAg
+IGlmIG5vdCBpc2luc3RhbmNlKGZpZWxkLCBTdHJ1Y3R1cmVGaWVsZCk6CisgICAgICAgICAgICBy
+YWlzZSBUeXBlRXJyb3IoIkFyZ3VtZW50IGZpZWxkIG11c3QgYmUgb2YgdHlwZSBTdHJ1Y3R1cmVG
+aWVsZCIpCisKKyAgICAgICAgcmV0ID0gbmJ0Ll9idF9jdGZfZXZlbnRfc2V0X3N0cmVhbV9ldmVu
+dF9jb250ZXh0KHNlbGYuX2UsIGZpZWxkLl9mKQorCisgICAgICAgIGlmIHJldCA8IDA6CisgICAg
+ICAgICAgICByYWlzZSBWYWx1ZUVycm9yKCJJbnZhbGlkIHN0cmVhbSBjb250ZXh0IGZpZWxkLiIp
+CiAKIGNsYXNzIFN0cmVhbUNsYXNzOgogICAgICIiIgpAQCAtMTkyMyw2ICsxOTUxLDM5IEBAIGNs
+YXNzIFN0cmVhbUNsYXNzOgogICAgICAgICBpZiByZXQgPCAwOgogICAgICAgICAgICAgcmFpc2Ug
+VmFsdWVFcnJvcigiRmFpbGVkIHRvIHNldCBwYWNrZXQgY29udGV4dCB0eXBlLiIpCiAKKyAgICBA
+cHJvcGVydHkKKyAgICBkZWYgZXZlbnRfY29udGV4dF90eXBlKHNlbGYpOgorICAgICAgICAiIiIK
+KyAgICAgICAgU3RyZWFtIGV2ZW50IGNvbnRleHQgZGVjbGFyYXRpb24uCisKKyAgICAgICAgU2V0
+IHRoaXMgYXR0cmlidXRlIHRvIGNoYW5nZSB0aGUgc3RyZWFtIGV2ZW50IGNvbnRleHQKKyAgICAg
+ICAgZGVjbGFyYXRpb24gKG11c3QgYmUgYW4gaW5zdGFuY2Ugb2YKKyAgICAgICAgOmNsYXNzOmBT
+dHJ1Y3R1cmVGaWVsZERlY2xhcmF0aW9uYCkuCisKKyAgICAgICAgOmV4YzpgVmFsdWVFcnJvcmAg
+aXMgcmFpc2VkIG9uIGVycm9yLgorCisgICAgICAgICIiIgorCisgICAgICAgIGZpZWxkX3R5cGVf
+bmF0aXZlID0gbmJ0Ll9idF9jdGZfc3RyZWFtX2NsYXNzX2dldF9ldmVudF9jb250ZXh0X3R5cGUo
+c2VsZi5fc2MpCisKKyAgICAgICAgaWYgZmllbGRfdHlwZV9uYXRpdmUgaXMgTm9uZToKKyAgICAg
+ICAgICAgIHJhaXNlIFZhbHVlRXJyb3IoIkludmFsaWQgU3RyZWFtQ2xhc3MiKQorCisgICAgICAg
+IGZpZWxkX3R5cGUgPSBGaWVsZERlY2xhcmF0aW9uLl9jcmVhdGVfZmllbGRfZGVjbGFyYXRpb25f
+ZnJvbV9uYXRpdmVfaW5zdGFuY2UoZmllbGRfdHlwZV9uYXRpdmUpCisKKyAgICAgICAgcmV0dXJu
+IGZpZWxkX3R5cGUKKworICAgIEBldmVudF9jb250ZXh0X3R5cGUuc2V0dGVyCisgICAgZGVmIGV2
+ZW50X2NvbnRleHRfdHlwZShzZWxmLCBmaWVsZF90eXBlKToKKyAgICAgICAgaWYgbm90IGlzaW5z
+dGFuY2UoZmllbGRfdHlwZSwgU3RydWN0dXJlRmllbGREZWNsYXJhdGlvbik6CisgICAgICAgICAg
+ICByYWlzZSBUeXBlRXJyb3IoImZpZWxkX3R5cGUgYXJndW1lbnQgbXVzdCBiZSBvZiB0eXBlIFN0
+cnVjdHVyZUZpZWxkRGVjbGFyYXRpb24uIikKKworICAgICAgICByZXQgPSBuYnQuX2J0X2N0Zl9z
+dHJlYW1fY2xhc3Nfc2V0X2V2ZW50X2NvbnRleHRfdHlwZShzZWxmLl9zYywKKyAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmllbGRf
+dHlwZS5fZnQpCisKKyAgICAgICAgaWYgcmV0IDwgMDoKKyAgICAgICAgICAgIHJhaXNlIFZhbHVl
+RXJyb3IoIkZhaWxlZCB0byBzZXQgZXZlbnQgY29udGV4dCB0eXBlLiIpCisKIAogY2xhc3MgU3Ry
+ZWFtOgogICAgICIiIgotLSAKMi44LjMKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0
+dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
+bHR0bmctZGV2Cg==
