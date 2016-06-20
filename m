@@ -1,15 +1,15 @@
-From: Simon Marchi <simon.marchi@polymtl.ca>
-Subject: [PATCH babeltrace] debug info: Call
-	register_event_debug_infos for all events
-Date: Sun, 19 Jun 2016 11:14:29 -0400
-Message-ID: <20160619151429.19053-1-simon.marchi__49939.2001577236$1466349293$gmane$org@polymtl.ca>
+From: Jeffrey Chen <cpthk@hotmail.com>
+Subject: Duplicate traces in multiple sessions
+Date: Mon, 20 Jun 2016 20:35:41 +0000
+Message-ID: <BY2PR15MB075908518B3A94F8995A7387AB2A0__19746.7452068397$1466454974$gmane$org@BY2PR15MB0759.namprd15.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============5285197601153699731=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.electronicbox.net (smtp.electronicbox.net [96.127.255.82])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 6114BA36A9
- for <lttng-dev@lists.lttng.org>; Sun, 19 Jun 2016 15:14:31 +0000 (UTC)
+Received: from BLU004-OMC4S34.hotmail.com (blu004-omc4s34.hotmail.com
+ [65.55.111.173])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id A6C07A36B7
+ for <lttng-dev@lists.lttng.org>; Mon, 20 Jun 2016 20:35:44 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,57 +19,90 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-VGhlIHJlZ2lzdGVyX2V2ZW50X2RlYnVnX2luZm9zIGZ1bmN0aW9uIGlzIHJlc3BvbnNpYmxlIGZv
-ciBzZXR0aW5nIHRoZQpkZWJ1Z19pbmZvX3NyYyBmaWVsZCBvZiB0aGUgc3RydWN0IGRlZmluaXRp
-b25faW50ZWdlciByZXByZXNlbnRpbmcgdGhlCiJpcCIgY29udGV4dCBmaWVsZC4gIFRoaXMgcG9p
-bnRlciBpcyB1c2VkIGxhdGVyIHRvIHByaW50IHRoZQpzb3VyY2UgYW5kIGJpbmFyeSBsb2NhdGlv
-biBvZiB0aGUgdHJhY2Vwb2ludC4KCkN1cnJlbnRseSwgaXQncyBub3QgY2FsbGVkIGZvciB0aGUg
-ZXZlbnRzIHRoYXQgaGF2ZSBhIHNwZWNpYWwgbWVhbmluZwpmb3IgdGhlIGRlYnVnIGluZm8gYW5h
-bHlzaXMgKHN0YXRlZHVtcCBzdGFydCwgZGxvcGVuLCBiaW5faW5mbywgZXRjKS4KVGhpcyBtZWFu
-cyB0aGF0IGZvciB0aGVzZSBldmVudHMsIHRoZSBkZWJ1Z19pbmZvX3NyYyBwb2ludGVyIGtlZXBz
-IHRoZQp2YWx1ZSBvZiB0aGUgcHJldmlvdXMgZXZlbnQgZnJvbSB0aGF0IHN0cmVhbSAoc2luY2Ug
-dGhlIGlwIGZpZWxkIGlzIGluCnN0cmVhbSBldmVudCBjb250ZXh0LCB0aGVyZSBpcyBvbmUgaW5z
-dGFuY2UgcGVyIHN0cmVhbSksIHdoaWNoIGxlYWRzIHRvCndyb25nIGluZm9ybWF0aW9uIGFuZC9v
-ciBjcmFzaC4gIEEgY3Jhc2ggY2FuIGhhcHBlbiB3aGVuIHRoZSBkZWJ1ZyBpbmZvCnN0cnVjdHVy
-ZXMgYXJlIGNsZWFyZWQgYmVjYXVzZSBhIHN0YXRlZHVtcCBzdGFydCBpcyBlbmNvdW50ZXJlZC4K
-ZGVidWdfaW5mb19zcmMgYmVjb21lcyBhIHN0YWxlIHBvaW50ZXIgYW5kIGJhYmVsdHJhY2UgdHJp
-ZXMgdG8gcHJpbnQgYQpzdHJpbmcgaW4gZnJlZSBtZW1vcnkuCgpUaGUgZml4IGlzIHRvIGNhbGwg
-cmVnaXN0ZXJfZXZlbnRfZGVidWdfaW5mb3MgZm9yIGFsbCBldmVudHMsIHdoaWNoIHdpbGwKYWx3
-YXlzIHNldCBkZWJ1Z19pbmZvX3NyYyBwcm9wZXJseS4gIFRoZSBldmVudHMgdXNlZCB0byBkbyB0
-aGUgZGVidWcKaW5mbyBhbmFseXNpcyBhcmUgc3RpbGwgcmVndWxhciBldmVudHMgYW5kIGhhdmUg
-dGhlaXIgb3duIGxvY2F0aW9uCmluZm9ybWF0aW9uLgoKVGhlIHRyYWNlIGluIGJ1ZyAjMTAxOCBz
-aG93cyBhIGNyYXNoIGNhdXNlZCBieSB0aGlzIGlzc3VlLgoKSGVyZSdzIGFuIGV4YW1wbGUgb2Yg
-d3JvbmcgaW5mbyBmcm9tIHRoZSBzYW1lIHRyYWNlOgoKLi4uIGx0dG5nX3VzdF9zdGF0ZWR1bXA6
-YmluX2luZm86IHsgY3B1X2lkID0gMSB9LCB7IHZwaWQgPSAyODk5MSwgaXAgPSAweDdGRDI2NjY1
-NjU3RCwgZGVidWdfaW5mbyA9IHsgYmluID0gImxpYlgxMS5zby42LjMuMCsweDIxM2ZhIiB9IH0s
-IC4uLgouLi4gbHR0bmdfdXN0X3N0YXRlZHVtcDpidWlsZF9pZDogeyBjcHVfaWQgPSAxIH0sIHsg
-dnBpZCA9IDI4OTkxLCBpcCA9IDB4N0ZEMjY2NjU2NjU2LCBkZWJ1Z19pbmZvID0geyBiaW4gPSAi
-bGliWDExLnNvLjYuMy4wKzB4MjEzZmEiIH0gfSwgLi4uCgpXZSBjYW4gc2VlIHRoYXQgdGhlIGlw
-IHZhbHVlcyBhcmUgZGlmZmVyZW50LCBidXQgdGhlIGRlYnVnIGluZm8gcmVmZXJzCnRvIHRoZSBz
-YW1lIGxvY2F0aW9uLCB3aGljaCBpcyBpbXBvc3NpYmxlLiAgSGVyZSdzIHRoZSByZXN1bHQgd2l0
-aCB0aGlzCnBhdGNoIGFwcGxpZWQuCgouLi4gbHR0bmdfdXN0X3N0YXRlZHVtcDpiaW5faW5mbzog
-eyBjcHVfaWQgPSAxIH0sIHsgdnBpZCA9IDI4OTkxLCBpcCA9IDB4N0ZEMjY2NjU2NTdELCBkZWJ1
-Z19pbmZvID0geyBiaW4gPSAibGlibHR0bmctdXN0LnNvLjAuMC4wKzB4MzU1N2QiLCBmdW5jID0g
-InRyYWNlX2Jpbl9pbmZvX2NiKzB4ZmEiIH0gfSwgLi4uCi4uLiBsdHRuZ191c3Rfc3RhdGVkdW1w
-OmJ1aWxkX2lkOiB7IGNwdV9pZCA9IDEgfSwgeyB2cGlkID0gMjg5OTEsIGlwID0gMHg3RkQyNjY2
-NTY2NTYsIGRlYnVnX2luZm8gPSB7IGJpbiA9ICJsaWJsdHRuZy11c3Quc28uMC4wLjArMHgzNTY1
-NiIsIGZ1bmMgPSAidHJhY2VfYnVpbGRfaWRfY2IrMHhiYyIgfSB9LCAuLi4KCndoaWNoIHNlZW1z
-IG1vcmUgcmVhc29ubmFibGUuCgpTaWduZWQtb2ZmLWJ5OiBTaW1vbiBNYXJjaGkgPHNpbW9uLm1h
-cmNoaUBwb2x5bXRsLmNhPgotLS0KIGxpYi9kZWJ1Zy1pbmZvLmMgfCA2ICsrKy0tLQogMSBmaWxl
-IGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9s
-aWIvZGVidWctaW5mby5jIGIvbGliL2RlYnVnLWluZm8uYwppbmRleCBhYTE5Y2U0Li4wMmFlNTgy
-IDEwMDY0NAotLS0gYS9saWIvZGVidWctaW5mby5jCisrKyBiL2xpYi9kZWJ1Zy1pbmZvLmMKQEAg
-LTc5NSwxMSArNzk1LDExIEBAIHZvaWQgZGVidWdfaW5mb19oYW5kbGVfZXZlbnQoc3RydWN0IGRl
-YnVnX2luZm8gKmRlYnVnX2luZm8sCiAJfSBlbHNlIGlmIChldmVudF9jbGFzcy0+bmFtZSA9PSBk
-ZWJ1Z19pbmZvLT5xX3N0YXRlZHVtcF9idWlsZF9pZCkgewogCQkvKiBCdWlsZCBJRCBpbmZvICov
-CiAJCWhhbmRsZV9zdGF0ZWR1bXBfYnVpbGRfaWRfZXZlbnQoZGVidWdfaW5mbywgZXZlbnQpOwot
-CX0gZWxzZSB7Ci0JCS8qIE90aGVyIGV2ZW50czogcmVnaXN0ZXIgZGVidWcgaW5mb3MgKi8KLQkJ
-cmVnaXN0ZXJfZXZlbnRfZGVidWdfaW5mb3MoZGVidWdfaW5mbywgZXZlbnQpOwogCX0KIAorCS8q
-IEFsbCBldmVudHM6IHJlZ2lzdGVyIGRlYnVnIGluZm9zICovCisJcmVnaXN0ZXJfZXZlbnRfZGVi
-dWdfaW5mb3MoZGVidWdfaW5mbywgZXZlbnQpOworCiBlbmQ6CiAJcmV0dXJuOwogfQotLSAKMi44
-LjMKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============5285197601153699731==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_BY2PR15MB075908518B3A94F8995A7387AB2A0BY2PR15MB0759namp_"
+
+--_000_BY2PR15MB075908518B3A94F8995A7387AB2A0BY2PR15MB0759namp_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Hi LTTng community:
+
+
+We are using LTTng to collect traces from our non-stopping service (our ser=
+vice is running 24/7, highly available). We collect traces by rotate the tr=
+ace in an interval. We do this by creating new session, stop the old sessio=
+n, and process the old traces, every 10 minutes.
+There are overlaps on the session since we create new session before stoppi=
+ng the old session. We are seeing some traces exist in both the old session=
+, and new session. This is expected. We also noticed that these duplicated =
+traces could have slightly different timestamp in the two sessions, so it i=
+s very difficult to do post-processing to remove the duplicates.
+Assuming we could read the raw binary trace files, we would like to know wh=
+ether this is any way to identify the duplicating traces. Is there any kind=
+ of unique id or hash that could be used to identity the duplicate traces i=
+n two sessions?
+
+
+Thanks.
+
+--_000_BY2PR15MB075908518B3A94F8995A7387AB2A0BY2PR15MB0759namp_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style type=3D"text/css" style=3D"display:none;"><!-- P {margin-top:0;margi=
+n-bottom:0;} --></style>
+</head>
+<body dir=3D"ltr">
+<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;back=
+ground-color:#FFFFFF;font-family:Calibri,Arial,Helvetica,sans-serif;">
+<p>Hi LTTng community:</p>
+<p><br>
+</p>
+<p></p>
+<div>We are using LTTng to collect traces from our non-stopping service (ou=
+r service is running 24/7, highly available). We collect traces by rotate t=
+he trace in an interval. We do this by creating new session, stop the old s=
+ession, and process the old traces,
+ every 10 minutes.<br>
+There are overlaps on the session since we create new session before stoppi=
+ng the old session. We are seeing some traces exist in both the old session=
+, and new session. This is expected. We also noticed that these duplicated =
+traces could have slightly different
+ timestamp in the two sessions, so it is very difficult to do post-processi=
+ng to remove the duplicates.<br>
+Assuming we could read the raw binary trace files, we would like to know wh=
+ether this is any way to identify the duplicating traces. Is there any kind=
+ of unique id or hash that could be used to identity the duplicate traces i=
+n two sessions?<br>
+<br>
+</div>
+<p></p>
+<p>Thanks.<br>
+</p>
+</div>
+</body>
+</html>
+
+--_000_BY2PR15MB075908518B3A94F8995A7387AB2A0BY2PR15MB0759namp_--
+
+--===============5285197601153699731==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============5285197601153699731==--
