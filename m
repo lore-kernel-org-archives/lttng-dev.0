@@ -1,19 +1,16 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: Re: [lttng-ust GIT PULL v4] Doc: add a CMake example
-Date: Tue, 21 Jun 2016 00:02:51 -0400
-Message-ID: <CAB4xu_2ja=f9FeS2unm7+UD0=5yX9QAg-SZzQSEAT=tseq4oZQ__5683.35156790472$1466481840$gmane$org@mail.gmail.com>
-References: <576896D3.7000803@gydle.com>
+From: Charles Lesire-Cabaniols <charles.lesire@gmail.com>
+Subject: Tracing in python application with custom tracepoints
+Date: Tue, 21 Jun 2016 10:25:19 +0200
+Message-ID: <CAEc6OSxXETtoNK+3LDXhUMN3mrxDS-wBa20jsSZVDyfgJAJ0ew__39658.1954708838$1466497538$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============7705350115575357299=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-f178.google.com (mail-qk0-f178.google.com
- [209.85.220.178])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 072FFA380E
- for <lttng-dev@lists.lttng.org>; Tue, 21 Jun 2016 04:03:22 +0000 (UTC)
-Received: by mail-qk0-f178.google.com with SMTP id p10so5396201qke.3
- for <lttng-dev@lists.lttng.org>; Mon, 20 Jun 2016 21:03:22 -0700 (PDT)
-In-Reply-To: <576896D3.7000803@gydle.com>
+Received: from mail-lf0-f49.google.com (mail-lf0-f49.google.com
+ [209.85.215.49])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 25EEFA36C5
+ for <lttng-dev@lists.lttng.org>; Tue, 21 Jun 2016 08:25:21 +0000 (UTC)
+Received: by mail-lf0-f49.google.com with SMTP id h129so11929533lfh.1
+ for <lttng-dev@lists.lttng.org>; Tue, 21 Jun 2016 01:25:21 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,53 +20,57 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Sebastien Boisvert <sboisvert@gydle.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gTW9uLCBKdW4gMjAsIDIwMTYgYXQgOToyMiBQTSwgU2ViYXN0aWVuIEJvaXN2ZXJ0IDxzYm9p
-c3ZlcnRAZ3lkbGUuY29tPiB3cm90ZToKPiBIaSBQaGlsLAo+Cj4gc2hvcnRsb2c6Cj4KPiBTZWJh
-c3RpZW4gQm9pc3ZlcnQgKDE2KToKPiAgICAgICBEb2M6IGFkZCBDTWFrZSBleGFtcGxlCj4gICAg
-ICAgRG9jOiBjbGVhbiB1cCBjbWFrZSBleGFtcGxlCj4gICAgICAgRG9jOiBhZGQgYSB0cmFjZS5z
-aCBzY3JpcHQgaW4gdGhlIGNtYWtlIGV4YW1wbGUKPiAgICAgICBEb2M6IGNsZWFuIHVwIGNtYWtl
-IGZpbGUKPiAgICAgICBEb2M6IGZpeCBFbmdsaXNoIGlzc3VlCj4gICAgICAgRG9jOiByZW5hbWUg
-Y21ha2UgZXhhbXBsZQo+ICAgICAgIERvYzogc2hpcCBjbWFrZSBleGFtcGxlIHdpdGggJ21ha2Ug
-ZGlzdGNoZWNrJwo+ICAgICAgIERvYzogYWRkIEZpbmRMVFRuZ1VTVCBDTWFrZSBtb2R1bGUKPiAg
-ICAgICBEb2M6IHVzZSBzdGFuZGFyZCB3YXkgZm9yIGJ1aWxkaW5nIHdpdGggQ01ha2UKPiAgICAg
-ICBEb2M6IHVzZSB0aGUgRmluZExUVG5nVVNUIENNYWtlIG1vZHVsZQo+ICAgICAgIGNvbmZpZ3Vy
-ZS5hYzogY2hlY2sgY21ha2UgYXZhaWxhYmlsaXR5Cj4gICAgICAgY29uZmlndXJlLmFjOiBjaGVj
-ayBDKysgY29tcGlsZXIgYXZhaWxhYmlsaXR5Cj4gICAgICAgRG9jOiByZW1vdmUgYSBkdXBsaWNh
-dGUgbGluZQo+ICAgICAgIERvYzogYWRkIG1pc3NpbmcgY21ha2UgZmlsZSBpbiBjbWFrZSBleGFt
-cGxlCj4gICAgICAgRG9jOiBjcmVhdGUgYSB2YXJpYWJsZSBmb3IgY21ha2UgZGlyZWN0b3JpZXMK
-PiAgICAgICBEb2M6IGFkZCB0aGUgY21ha2UgZXhhbXBsZSB0byB0aGUgZGlzdGNoZWNrIG91dHB1
-dAoKSSBndWVzcyB5b3UgY291bGQgc3F1YXNoIGFsbCB0aGUgIkRvYyIgdG9nZXRoZXIsIG9yIGFs
-bW9zdCwgd2l0aCB0aXRsZQoiRG9jOiBhZGQgQ01ha2UgZXhhbXBsZSIsIGFuZCBwZXJoYXBzIHRo
-ZSBjb25maWd1cmUuYWMgb25lcyB0b28uCgpQaGlsCgo+Cj4KPiBkaWZmc3RhdDoKPgo+ICBjb25m
-aWd1cmUuYWMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgfCAgIDMKPiArKwo+ICBkb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0gICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMzgKPiArKysrKysrKysrKysr
-KysrKysrKy0tCj4gIGRvYy9leGFtcGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFyaWVz
-L0NNYWtlTGlzdHMudHh0ICAgICAgICAgICB8ICAyMwo+ICsrKysrKysrKysrKysrCj4gIGRvYy9l
-eGFtcGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFyaWVzL1JFQURNRS5tZCAgICAgICAg
-ICAgICAgICB8ICA1Mgo+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+ICBkb2MvZXhh
-bXBsZXMvY21ha2UtbXVsdGlwbGUtc2hhcmVkLWxpYnJhcmllcy9hbGlnbmVyLWxpYi5jcHAgICAg
-ICAgICAgfCAgMTYKPiArKysrKysrKysrCj4gIGRvYy9leGFtcGxlcy9jbWFrZS1tdWx0aXBsZS1z
-aGFyZWQtbGlicmFyaWVzL2FsaWduZXItbGliLmggICAgICAgICAgICB8ICAgNwo+ICsrKysrCj4g
-IGRvYy9leGFtcGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFyaWVzL2FsaWduZXIuY3Bw
-ICAgICAgICAgICAgICB8ICAxMAo+ICsrKysrKwo+ICBkb2MvZXhhbXBsZXMvY21ha2UtbXVsdGlw
-bGUtc2hhcmVkLWxpYnJhcmllcy9jbWFrZS9GaW5kTFRUbmdVU1QuY21ha2UgfCAxMTEKPiArKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKwo+ICBkb2MvZXhhbXBsZXMvY21ha2UtbXVsdGlwbGUtc2hhcmVkLWxpYnJhcmllcy90ZXN0
-ZXItbGliLmNwcCAgICAgICAgICAgfCAgMTYKPiArKysrKysrKysrCj4gIGRvYy9leGFtcGxlcy9j
-bWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFyaWVzL3Rlc3Rlci1saWIuaCAgICAgICAgICAgICB8
-ICAgNwo+ICsrKysrCj4gIGRvYy9leGFtcGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFy
-aWVzL3Rlc3Rlci5jcHAgICAgICAgICAgICAgICB8ICAxNQo+ICsrKysrKysrKwo+ICBkb2MvZXhh
-bXBsZXMvY21ha2UtbXVsdGlwbGUtc2hhcmVkLWxpYnJhcmllcy90cmFjZS5zaCAgICAgICAgICAg
-ICAgICAgfCAgIDkKPiArKysrKysKPiAgZG9jL2V4YW1wbGVzL2NtYWtlLW11bHRpcGxlLXNoYXJl
-ZC1saWJyYXJpZXMvdHJhY2Vwb2ludC1wcm92aWRlci5jcHAgIHwgICA2Cj4gKysrKwo+ICBkb2Mv
-ZXhhbXBsZXMvY21ha2UtbXVsdGlwbGUtc2hhcmVkLWxpYnJhcmllcy90cmFjZXBvaW50LXByb3Zp
-ZGVyLmggICAgfCAgMjcKPiArKysrKysrKysrKysrKysrCj4gIDE0IGZpbGVzIGNoYW5nZWQsIDMz
-OCBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQo+Cj4KPgo+IEhhdmUgYSBnb29kIG9uZS4K
+--===============7705350115575357299==
+Content-Type: multipart/alternative; boundary=001a113ebb88c43cc20535c58f93
+
+--001a113ebb88c43cc20535c58f93
+Content-Type: text/plain; charset=UTF-8
+
+Hi,
+
+I have written a C++ code in which I use custom tracepoints (generated from
+a .tp file).
+
+My system now deploys a mix of my C++ app and a python script.
+Is there a way to write traces in my python script using the same
+tracepoints definition (from the .tp file), and then being recorded within
+the same lttng session?
+
+I found this link about using lttng traces within python apps but it is
+very concise:
+https://lttng.org/docs/#doc-python-application
+
+Thanks in advance,
+
+Charles
+
+--001a113ebb88c43cc20535c58f93
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div><div><div><div>Hi,<br><br></div>I have written a=
+ C++ code in which I use custom tracepoints (generated from a .tp file).<br=
+><br></div>My system now deploys a mix of my C++ app and a python script.<b=
+r></div>Is there a way to write traces in my python script using the same t=
+racepoints definition (from the .tp file), and then being recorded within t=
+he same lttng session?<br><br>I found this link about using lttng traces wi=
+thin python apps but it is very concise:<br><a href=3D"https://lttng.org/do=
+cs/#doc-python-application">https://lttng.org/docs/#doc-python-application<=
+/a><br><br></div>Thanks in advance,<br><br></div>Charles<br></div>
+
+--001a113ebb88c43cc20535c58f93--
+
+--===============7705350115575357299==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
 X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============7705350115575357299==--
