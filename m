@@ -1,16 +1,17 @@
-From: Charles Lesire-Cabaniols <charles.lesire@gmail.com>
-Subject: Tracing in python application with custom tracepoints
-Date: Tue, 21 Jun 2016 10:25:19 +0200
-Message-ID: <CAEc6OSxXETtoNK+3LDXhUMN3mrxDS-wBa20jsSZVDyfgJAJ0ew__39658.1954708838$1466497538$gmane$org@mail.gmail.com>
+From: Sebastien Boisvert <sboisvert@gydle.com>
+Subject: Re: [lttng-ust GIT PULL v4] Doc: add a CMake example
+Date: Tue, 21 Jun 2016 08:00:23 -0400
+Message-ID: <57692C57.9040405__17973.0211537846$1466510482$gmane$org@gydle.com>
+References: <576896D3.7000803@gydle.com>
+ <CAB4xu_2ja=f9FeS2unm7+UD0=5yX9QAg-SZzQSEAT=tseq4oZQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7705350115575357299=="
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lf0-f49.google.com (mail-lf0-f49.google.com
- [209.85.215.49])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 25EEFA36C5
- for <lttng-dev@lists.lttng.org>; Tue, 21 Jun 2016 08:25:21 +0000 (UTC)
-Received: by mail-lf0-f49.google.com with SMTP id h129so11929533lfh.1
- for <lttng-dev@lists.lttng.org>; Tue, 21 Jun 2016 01:25:21 -0700 (PDT)
+Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 6E4D9A0397
+ for <lttng-dev@lists.lttng.org>; Tue, 21 Jun 2016 12:00:30 +0000 (UTC)
+In-Reply-To: <CAB4xu_2ja=f9FeS2unm7+UD0=5yX9QAg-SZzQSEAT=tseq4oZQ@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,57 +21,64 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Philippe Proulx <eeppeliteloop@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============7705350115575357299==
-Content-Type: multipart/alternative; boundary=001a113ebb88c43cc20535c58f93
-
---001a113ebb88c43cc20535c58f93
-Content-Type: text/plain; charset=UTF-8
-
-Hi,
-
-I have written a C++ code in which I use custom tracepoints (generated from
-a .tp file).
-
-My system now deploys a mix of my C++ app and a python script.
-Is there a way to write traces in my python script using the same
-tracepoints definition (from the .tp file), and then being recorded within
-the same lttng session?
-
-I found this link about using lttng traces within python apps but it is
-very concise:
-https://lttng.org/docs/#doc-python-application
-
-Thanks in advance,
-
-Charles
-
---001a113ebb88c43cc20535c58f93
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div><div><div><div><div>Hi,<br><br></div>I have written a=
- C++ code in which I use custom tracepoints (generated from a .tp file).<br=
-><br></div>My system now deploys a mix of my C++ app and a python script.<b=
-r></div>Is there a way to write traces in my python script using the same t=
-racepoints definition (from the .tp file), and then being recorded within t=
-he same lttng session?<br><br>I found this link about using lttng traces wi=
-thin python apps but it is very concise:<br><a href=3D"https://lttng.org/do=
-cs/#doc-python-application">https://lttng.org/docs/#doc-python-application<=
-/a><br><br></div>Thanks in advance,<br><br></div>Charles<br></div>
-
---001a113ebb88c43cc20535c58f93--
-
---===============7705350115575357299==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============7705350115575357299==--
+SGkgUGhpbCwKCkFmdGVyIHRoZSByZW9yZGVyaW5nIGFuZCBzcXVhc2hpbmcsIEkgaGF2ZSAzIGNv
+bW1pdHMgc2luY2UgY29tbWl0IDIxZGRiOGVjOTY4OWUwMjk0NGRhZTljZDRlNWFiYTFjYTJhYjBk
+NWIuCgoKWW91IGNhbiBwdWxsIGZyb20KCiAgICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9zZWJodG1s
+L2x0dG5nLXVzdC5naXQgIHRhZ3MvZm9yLXBoaWwtY21ha2UtZXhhbXBsZS52NQoKClRvIHNlZSB0
+aGUgY2hhbmdlcyBpbiBhIHdlYiBicm93c2VyOiBodHRwczovL2dpdGh1Yi5jb20vc2ViaHRtbC9s
+dHRuZy11c3QvY29tbWl0cy9mb3ItcGhpbC1jbWFrZS1leGFtcGxlLnY1CgoKClNlYmFzdGllbiBC
+b2lzdmVydCAoMyk6CiAgICAgICBjb25maWd1cmUuYWM6IGNoZWNrIGNtYWtlIGF2YWlsYWJpbGl0
+eQogICAgICAgRG9jOiBhZGQgQ01ha2UgZXhhbXBsZQogICAgICAgRG9jOiBzaGlwIGNtYWtlIGV4
+YW1wbGUgd2l0aCAnbWFrZSBkaXN0Y2hlY2snCgoKT24gMjAxNi0wNi0yMSAxMjowMiBBTSwgUGhp
+bGlwcGUgUHJvdWx4IHdyb3RlOgo+IE9uIE1vbiwgSnVuIDIwLCAyMDE2IGF0IDk6MjIgUE0sIFNl
+YmFzdGllbiBCb2lzdmVydCA8c2JvaXN2ZXJ0QGd5ZGxlLmNvbT4gd3JvdGU6Cj4+IEhpIFBoaWws
+Cj4+Cj4+IHNob3J0bG9nOgo+Pgo+PiBTZWJhc3RpZW4gQm9pc3ZlcnQgKDE2KToKPj4gICAgICAg
+IERvYzogYWRkIENNYWtlIGV4YW1wbGUKPj4gICAgICAgIERvYzogY2xlYW4gdXAgY21ha2UgZXhh
+bXBsZQo+PiAgICAgICAgRG9jOiBhZGQgYSB0cmFjZS5zaCBzY3JpcHQgaW4gdGhlIGNtYWtlIGV4
+YW1wbGUKPj4gICAgICAgIERvYzogY2xlYW4gdXAgY21ha2UgZmlsZQo+PiAgICAgICAgRG9jOiBm
+aXggRW5nbGlzaCBpc3N1ZQo+PiAgICAgICAgRG9jOiByZW5hbWUgY21ha2UgZXhhbXBsZQo+PiAg
+ICAgICAgRG9jOiBzaGlwIGNtYWtlIGV4YW1wbGUgd2l0aCAnbWFrZSBkaXN0Y2hlY2snCj4+ICAg
+ICAgICBEb2M6IGFkZCBGaW5kTFRUbmdVU1QgQ01ha2UgbW9kdWxlCj4+ICAgICAgICBEb2M6IHVz
+ZSBzdGFuZGFyZCB3YXkgZm9yIGJ1aWxkaW5nIHdpdGggQ01ha2UKPj4gICAgICAgIERvYzogdXNl
+IHRoZSBGaW5kTFRUbmdVU1QgQ01ha2UgbW9kdWxlCj4+ICAgICAgICBjb25maWd1cmUuYWM6IGNo
+ZWNrIGNtYWtlIGF2YWlsYWJpbGl0eQo+PiAgICAgICAgY29uZmlndXJlLmFjOiBjaGVjayBDKysg
+Y29tcGlsZXIgYXZhaWxhYmlsaXR5Cj4+ICAgICAgICBEb2M6IHJlbW92ZSBhIGR1cGxpY2F0ZSBs
+aW5lCj4+ICAgICAgICBEb2M6IGFkZCBtaXNzaW5nIGNtYWtlIGZpbGUgaW4gY21ha2UgZXhhbXBs
+ZQo+PiAgICAgICAgRG9jOiBjcmVhdGUgYSB2YXJpYWJsZSBmb3IgY21ha2UgZGlyZWN0b3JpZXMK
+Pj4gICAgICAgIERvYzogYWRkIHRoZSBjbWFrZSBleGFtcGxlIHRvIHRoZSBkaXN0Y2hlY2sgb3V0
+cHV0Cj4KPiBJIGd1ZXNzIHlvdSBjb3VsZCBzcXVhc2ggYWxsIHRoZSAiRG9jIiB0b2dldGhlciwg
+b3IgYWxtb3N0LCB3aXRoIHRpdGxlCj4gIkRvYzogYWRkIENNYWtlIGV4YW1wbGUiLCBhbmQgcGVy
+aGFwcyB0aGUgY29uZmlndXJlLmFjIG9uZXMgdG9vLgo+Cj4gUGhpbAo+Cj4+Cj4+Cj4+IGRpZmZz
+dGF0Ogo+Pgo+PiAgIGNvbmZpZ3VyZS5hYyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMwo+PiArKwo+PiAgIGRvYy9leGFtcGxlcy9N
+YWtlZmlsZS5hbSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8
+ICAzOAo+PiArKysrKysrKysrKysrKysrKysrKy0tCj4+ICAgZG9jL2V4YW1wbGVzL2NtYWtlLW11
+bHRpcGxlLXNoYXJlZC1saWJyYXJpZXMvQ01ha2VMaXN0cy50eHQgICAgICAgICAgIHwgIDIzCj4+
+ICsrKysrKysrKysrKysrCj4+ICAgZG9jL2V4YW1wbGVzL2NtYWtlLW11bHRpcGxlLXNoYXJlZC1s
+aWJyYXJpZXMvUkVBRE1FLm1kICAgICAgICAgICAgICAgIHwgIDUyCj4+ICsrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKwo+PiAgIGRvYy9leGFtcGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQt
+bGlicmFyaWVzL2FsaWduZXItbGliLmNwcCAgICAgICAgICB8ICAxNgo+PiArKysrKysrKysrCj4+
+ICAgZG9jL2V4YW1wbGVzL2NtYWtlLW11bHRpcGxlLXNoYXJlZC1saWJyYXJpZXMvYWxpZ25lci1s
+aWIuaCAgICAgICAgICAgIHwgICA3Cj4+ICsrKysrCj4+ICAgZG9jL2V4YW1wbGVzL2NtYWtlLW11
+bHRpcGxlLXNoYXJlZC1saWJyYXJpZXMvYWxpZ25lci5jcHAgICAgICAgICAgICAgIHwgIDEwCj4+
+ICsrKysrKwo+PiAgIGRvYy9leGFtcGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFyaWVz
+L2NtYWtlL0ZpbmRMVFRuZ1VTVC5jbWFrZSB8IDExMQo+PiArKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+PiAgIGRvYy9leGFt
+cGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFyaWVzL3Rlc3Rlci1saWIuY3BwICAgICAg
+ICAgICB8ICAxNgo+PiArKysrKysrKysrCj4+ICAgZG9jL2V4YW1wbGVzL2NtYWtlLW11bHRpcGxl
+LXNoYXJlZC1saWJyYXJpZXMvdGVzdGVyLWxpYi5oICAgICAgICAgICAgIHwgICA3Cj4+ICsrKysr
+Cj4+ICAgZG9jL2V4YW1wbGVzL2NtYWtlLW11bHRpcGxlLXNoYXJlZC1saWJyYXJpZXMvdGVzdGVy
+LmNwcCAgICAgICAgICAgICAgIHwgIDE1Cj4+ICsrKysrKysrKwo+PiAgIGRvYy9leGFtcGxlcy9j
+bWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFyaWVzL3RyYWNlLnNoICAgICAgICAgICAgICAgICB8
+ICAgOQo+PiArKysrKysKPj4gICBkb2MvZXhhbXBsZXMvY21ha2UtbXVsdGlwbGUtc2hhcmVkLWxp
+YnJhcmllcy90cmFjZXBvaW50LXByb3ZpZGVyLmNwcCAgfCAgIDYKPj4gKysrKwo+PiAgIGRvYy9l
+eGFtcGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFyaWVzL3RyYWNlcG9pbnQtcHJvdmlk
+ZXIuaCAgICB8ICAyNwo+PiArKysrKysrKysrKysrKysrCj4+ICAgMTQgZmlsZXMgY2hhbmdlZCwg
+MzM4IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4+Cj4+Cj4+Cj4+IEhhdmUgYSBnb29k
+IG9uZS4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
+bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
