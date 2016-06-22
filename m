@@ -1,17 +1,20 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [PATCH lttng-tools v2 3/3] Create a dedicated test
-	suite for Perf
-Date: Wed, 22 Jun 2016 15:27:16 -0400
-Message-ID: <1466623636-24179-3-git-send-email-jdesfossez__35891.4900025868$1466623688$gmane$org@efficios.com>
-References: <1466623636-24179-1-git-send-email-jdesfossez@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: urcu configure/build failures on Darwin
+Date: Wed, 22 Jun 2016 19:29:58 +0000 (UTC)
+Message-ID: <1341714632.45564.1466623798434.JavaMail.zimbra__18899.6007702828$1466623827$gmane$org@efficios.com>
+References: <BBA3E68F-E5CB-4031-903F-2838E0274D41@indiana.edu>
+ <969693309.44561.1466609828052.JavaMail.zimbra@efficios.com>
+ <4DDF550A-41B1-4917-8A17-15CE9F4B03D8@indiana.edu>
+ <432896973.45030.1466613549689.JavaMail.zimbra@efficios.com>
+ <8B0C0676-0FBD-4108-92DB-6CA0BCBD102C@indiana.edu>
+ <1218231396.45288.1466622972254.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============4417579074072187726=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com (albert.ini-tech.com [192.99.35.19])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 429ADA36B6
- for <lttng-dev@lists.lttng.org>; Wed, 22 Jun 2016 19:27:25 +0000 (UTC)
-In-Reply-To: <1466623636-24179-1-git-send-email-jdesfossez@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 13634A36AB
+ for <lttng-dev@lists.lttng.org>; Wed, 22 Jun 2016 19:30:03 +0000 (UTC)
+In-Reply-To: <1218231396.45288.1466622972254.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,187 +24,401 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: jgalar@efficios.com, mathieu.desnoyers@efficios.com
-Cc: lttng-dev@lists.lttng.org, Julien Desfossez <jdesfossez@efficios.com>
+To: Luke K D'Alessandro <ldalessa@indiana.edu>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SW50cm9kdWNlIHRoZSBwZXJmX3JlZ3Jlc3Npb24gdGVzdCBzdWl0ZSB0aGF0IG11c3QgYmUgcnVu
-IG1hbnVhbGx5IHRvCmNoZWNrIGlmIHRoZSBzdXBwb3J0IGZvciB0aGUgUGVyZi1yZWxhdGVkIGZl
-YXR1cmVzIGFyZSBhdmFpbGFibGUgb24gdGhlCmN1cnJlbnQgbWFjaGluZS4gVGhpcyB0ZXN0IGNh
-bm5vdCBiZSBydW4gYXV0b21hdGljYWxseSBzaW5jZSB0aGVyZSBhcmUKc29tZSBwbGF0Zm9ybXMg
-d2hlcmUgaXQgY2FuIGZhaWwuCgpGb3Igbm93LCB0aGUgdGVzdCBvbmx5IG1ha2VzIHN1cmUgdGhh
-dCB3ZSBjYW4gdHJhY2UgZXZlbnRzIHdpdGggcGVyZgpjb250ZXh0cyBlbmFibGVkIGJ5IHJhdyBJ
-RCBpbiBrZXJuZWwgYW5kIHVzZXItc3BhY2UuIFRoZSB0ZXN0IG9ubHkgd29ya3MKaWYgbGlicGZt
-IGlzIGluc3RhbGxlZCBvbiB0aGUgc3lzdGVtIGFuZCBmYWlscyBpZiBpdCBpcyBub3QgaW5zdGFs
-bGVkLgoKU2lnbmVkLW9mZi1ieTogSnVsaWVuIERlc2Zvc3NleiA8amRlc2Zvc3NlekBlZmZpY2lv
-cy5jb20+Ci0tLQogLmdpdGlnbm9yZSAgICAgICAgICAgICAgIHwgICAxICsKIFJFQURNRS5tZCAg
-ICAgICAgICAgICAgICB8ICAgMiArCiBjb25maWd1cmUuYWMgICAgICAgICAgICAgfCAgIDggKysr
-CiB0ZXN0cy9NYWtlZmlsZS5hbSAgICAgICAgfCAgIDggKy0tCiB0ZXN0cy9wZXJmL01ha2VmaWxl
-LmFtICAgfCAgIDYgKysrCiB0ZXN0cy9wZXJmL2ZpbmRfZXZlbnQuYyAgfCAgODMgKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrCiB0ZXN0cy9wZXJmL3Rlc3RfcGVyZl9yYXcgfCAxMjkgKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysKIHRlc3RzL3BlcmZf
-cmVncmVzc2lvbiAgICB8ICAgMSArCiA4IGZpbGVzIGNoYW5nZWQsIDIzNCBpbnNlcnRpb25zKCsp
-LCA0IGRlbGV0aW9ucygtKQogY3JlYXRlIG1vZGUgMTAwNjQ0IHRlc3RzL3BlcmYvTWFrZWZpbGUu
-YW0KIGNyZWF0ZSBtb2RlIDEwMDY0NCB0ZXN0cy9wZXJmL2ZpbmRfZXZlbnQuYwogY3JlYXRlIG1v
-ZGUgMTAwNzU1IHRlc3RzL3BlcmYvdGVzdF9wZXJmX3JhdwogY3JlYXRlIG1vZGUgMTAwNjQ0IHRl
-c3RzL3BlcmZfcmVncmVzc2lvbgoKZGlmZiAtLWdpdCBhLy5naXRpZ25vcmUgYi8uZ2l0aWdub3Jl
-CmluZGV4IGFjNzgyOTIuLmMzMWRiYzUgMTAwNjQ0Ci0tLSBhLy5naXRpZ25vcmUKKysrIGIvLmdp
-dGlnbm9yZQpAQCAtMTA2LDYgKzEwNiw3IEBAIHRlc3RzL3JlZ3Jlc3Npb24vdXN0L3B5dGhvbi1s
-b2dnaW5nL3Rlc3RfcHl0aG9uX2xvZ2dpbmcKIC90ZXN0cy91dGlscy90ZXN0YXBwL2dlbi11c3Qt
-dHJhY2VmL2dlbi11c3QtdHJhY2VmCiAvdGVzdHMvcmVncmVzc2lvbi90b29scy9saXZlL2xpdmVf
-dGVzdAogL3Rlc3RzL3VuaXQvaW5pX2NvbmZpZy9pbmlfY29uZmlnCisvdGVzdHMvcGVyZi9maW5k
-X2V2ZW50CiAKICMgbWFuIHBhZ2VzCiAvZG9jL21hbi8qLjEKZGlmZiAtLWdpdCBhL1JFQURNRS5t
-ZCBiL1JFQURNRS5tZAppbmRleCAyMmRlMjUyLi4zMTU2YTE1IDEwMDY0NAotLS0gYS9SRUFETUUu
-bWQKKysrIGIvUkVBRE1FLm1kCkBAIC01Nyw2ICs1Nyw4IEBAIFRoZSBmb2xsb3dpbmcgaXRlbXMg
-YXJlIF9vcHRpb25hbF8gZGVwZW5kZW5jaWVzOgogICAgIHBhZ2VzIHdpdGggdGhlIGAtLWhlbHBg
-IG9wdGlvbiBvciB3aXRoIHRoZSBgbHR0bmcgaGVscGAgY29tbWFuZC4KICAgICBOb3RlIHRoYXQg
-d2l0aG91dCBgbWFuYCwgeW91IGNhbm5vdCBnZXQgb2ZmbGluZSBoZWxwIHdpdGgKICAgICBMVFRu
-Zy10b29scyBjb21tYW5kcywgbm90IGV2ZW4gdGhlaXIgdXNhZ2UuCisgIC0gKipgbGlicGZtYCoq
-OiBuZWVkZWQgdG8gcnVuIHRoZSBwZXJmIHJlZ3Jlc3Npb24gdGVzdCBzdWl0ZS4KKyAgICAtIERl
-Ymlhbi9VYnVudHUgcGFja2FnZTogYGxpYnBmbTQtZGV2YAogCiBMVFRuZy10b29scyBzdXBwb3J0
-cyBib3RoIHRoZSBbTFRUbmcgTGludXggS2VybmVsIHRyYWNlcl0oaHR0cHM6Ly9sdHRuZy5vcmcp
-CiBhbmQgW0xUVG5nIHVzZXIgc3BhY2UgdHJhY2VyXShodHRwczovL2x0dG5nLm9yZykgcmVsZWFz
-ZWQgYXMgcGFydCBvZiB0aGUgc2FtZQpkaWZmIC0tZ2l0IGEvY29uZmlndXJlLmFjIGIvY29uZmln
-dXJlLmFjCmluZGV4IGQ2MTQ5ZmUuLjVkNWYwMDEgMTAwNjQ0Ci0tLSBhL2NvbmZpZ3VyZS5hYwor
-KysgYi9jb25maWd1cmUuYWMKQEAgLTQ2Nyw2ICs0NjcsMTMgQEAgQUNfQ0hFQ0tfTElCKFtjXSwg
-W29wZW5fbWVtc3RyZWFtXSwKIF0KICkKIAorIyBjaGVjayBmb3IgbGlicGZtCitBQ19DSEVDS19M
-SUIoW3BmbV0sIFtwZm1faW5pdGlhbGl6ZV0sCisJICAgICBbCisJICAgICAgaGF2ZV9saWJwZm09
-eWVzCisJICAgICAgXSkKK0FNX0NPTkRJVElPTkFMKFtMVFROR19UT09MU19CVUlMRF9XSVRIX0xJ
-QlBGTV0sIFt0ZXN0ICJ4JGhhdmVfbGlicGZtIiA9ICJ4eWVzIl0pCisKIEFDX0FSR19FTkFCTEUo
-W2dpdC12ZXJzaW9uXSwKICAgICAgICAgICAgICAgW0FDX0hFTFBfU1RSSU5HKFstLWRpc2FibGUt
-Z2l0LXZlcnNpb25dLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgW0RvIG5vdCB1c2Ug
-dGhlIGdpdCB2ZXJzaW9uIGZvciB0aGUgYnVpbGRdKV0sCkBAIC0xMDA1LDYgKzEwMTIsNyBAQCBB
-Q19DT05GSUdfRklMRVMoWwogCXRlc3RzL3JlZ3Jlc3Npb24vdXN0L2Nsb2NrLW92ZXJyaWRlL01h
-a2VmaWxlCiAJdGVzdHMvcmVncmVzc2lvbi91c3QvdHlwZS1kZWNsYXJhdGlvbnMvTWFrZWZpbGUK
-IAl0ZXN0cy9yZWdyZXNzaW9uL3VzdC9yb3RhdGlvbi1kZXN0cm95LWZsdXNoL01ha2VmaWxlCisJ
-dGVzdHMvcmVncmVzc2lvbi91c3QvcGVyZi9NYWtlZmlsZQogCXRlc3RzL3N0cmVzcy9NYWtlZmls
-ZQogCXRlc3RzL3VuaXQvTWFrZWZpbGUKIAl0ZXN0cy91bml0L2luaV9jb25maWcvTWFrZWZpbGUK
-ZGlmZiAtLWdpdCBhL3Rlc3RzL01ha2VmaWxlLmFtIGIvdGVzdHMvTWFrZWZpbGUuYW0KaW5kZXgg
-MzYwMGU5OS4uZDQ2MGZiNiAxMDA2NDQKLS0tIGEvdGVzdHMvTWFrZWZpbGUuYW0KKysrIGIvdGVz
-dHMvTWFrZWZpbGUuYW0KQEAgLTEsOCArMSw4IEBACiBTVUJESVJTID0KLURJU1RfU1VCRElSUyA9
-IHV0aWxzIHJlZ3Jlc3Npb24gdW5pdCBzdHJlc3MgZGVzdHJ1Y3RpdmUKK0RJU1RfU1VCRElSUyA9
-IHV0aWxzIHJlZ3Jlc3Npb24gdW5pdCBzdHJlc3MgZGVzdHJ1Y3RpdmUgcGVyZgogCiBpZiBCVUlM
-RF9URVNUUwotU1VCRElSUyArPSAuIHV0aWxzIHJlZ3Jlc3Npb24gdW5pdCBzdHJlc3MgZGVzdHJ1
-Y3RpdmUKK1NVQkRJUlMgKz0gLiB1dGlscyByZWdyZXNzaW9uIHVuaXQgc3RyZXNzIGRlc3RydWN0
-aXZlIHBlcmYKIGlmIEhBU19QR1JFUAogY2hlY2stYW06CiAJJCh0b3Bfc3JjZGlyKS90ZXN0cy91
-dGlscy93YXJuX3Byb2Nlc3Nlcy5zaCAkKFBHUkVQKQpAQCAtMTQsOCArMTQsOCBAQCBlbHNlCiBl
-bmRpZgogCiAKLWRpc3Rfbm9pbnN0X1NDUklQVFMgPSBydW4uc2ggZmFzdF9yZWdyZXNzaW9uIGxv
-bmdfcmVncmVzc2lvbiByb290X3JlZ3Jlc3Npb24gcm9vdF9kZXN0cnVjdGl2ZV90ZXN0cwotRVhU
-UkFfRElTVCA9IHJ1bi5zaCBmYXN0X3JlZ3Jlc3Npb24gbG9uZ19yZWdyZXNzaW9uIHJvb3RfcmVn
-cmVzc2lvbiBSRUFETUUgcm9vdF9kZXN0cnVjdGl2ZV90ZXN0cworZGlzdF9ub2luc3RfU0NSSVBU
-UyA9IHJ1bi5zaCBmYXN0X3JlZ3Jlc3Npb24gbG9uZ19yZWdyZXNzaW9uIHJvb3RfcmVncmVzc2lv
-biByb290X2Rlc3RydWN0aXZlX3Rlc3RzIHBlcmZfcmVncmVzc2lvbgorRVhUUkFfRElTVCA9IHJ1
-bi5zaCBmYXN0X3JlZ3Jlc3Npb24gbG9uZ19yZWdyZXNzaW9uIHJvb3RfcmVncmVzc2lvbiBSRUFE
-TUUgcm9vdF9kZXN0cnVjdGl2ZV90ZXN0cyBwZXJmX3JlZ3Jlc3Npb24KIAogYWxsLWxvY2FsOgog
-CUBpZiBbIHgiJChzcmNkaXIpIiAhPSB4IiQoYnVpbGRkaXIpIiBdOyB0aGVuIFwKZGlmZiAtLWdp
-dCBhL3Rlc3RzL3BlcmYvTWFrZWZpbGUuYW0gYi90ZXN0cy9wZXJmL01ha2VmaWxlLmFtCm5ldyBm
-aWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAuLjQwYmI3NTQKLS0tIC9kZXYvbnVsbAorKysg
-Yi90ZXN0cy9wZXJmL01ha2VmaWxlLmFtCkBAIC0wLDAgKzEsNiBAQAoraWYgTFRUTkdfVE9PTFNf
-QlVJTERfV0lUSF9MSUJQRk0KK0xJQlMgKz0gLWxwZm0KKworbm9pbnN0X1BST0dSQU1TID0gZmlu
-ZF9ldmVudAorZmluZF9ldmVudF9TT1VSQ0VTID0gZmluZF9ldmVudC5jCitlbmRpZgpkaWZmIC0t
-Z2l0IGEvdGVzdHMvcGVyZi9maW5kX2V2ZW50LmMgYi90ZXN0cy9wZXJmL2ZpbmRfZXZlbnQuYwpu
-ZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwLi5hZTYzODAwCi0tLSAvZGV2L251bGwK
-KysrIGIvdGVzdHMvcGVyZi9maW5kX2V2ZW50LmMKQEAgLTAsMCArMSw4MyBAQAorLyoKKyAqIENv
-cHlyaWdodCAoYykgIDIwMTYgSnVsaWVuIERlc2Zvc3NleiA8amRlc2Zvc3NlekBlZmZpY2lvcy5j
-b20+CisgKgorICogVGhpcyBwcm9ncmFtIGlzIGZyZWUgc29mdHdhcmU7IHlvdSBjYW4gcmVkaXN0
-cmlidXRlIGl0IGFuZC9vciBtb2RpZnkKKyAqIGl0IHVuZGVyIHRoZSB0ZXJtcyBvZiB0aGUgR05V
-IEdlbmVyYWwgUHVibGljIExpY2Vuc2UgYXMgcHVibGlzaGVkIGJ5CisgKiBhcyBwdWJsaXNoZWQg
-YnkgdGhlIEZyZWUgU29mdHdhcmUgRm91bmRhdGlvbjsgb25seSB2ZXJzaW9uIDIKKyAqIG9mIHRo
-ZSBMaWNlbnNlLgorICoKKyAqIFRoaXMgcHJvZ3JhbSBpcyBkaXN0cmlidXRlZCBpbiB0aGUgaG9w
-ZSB0aGF0IGl0IHdpbGwgYmUgdXNlZnVsLAorICogYnV0IFdJVEhPVVQgQU5ZIFdBUlJBTlRZOyB3
-aXRob3V0IGV2ZW4gdGhlIGltcGxpZWQgd2FycmFudHkgb2YKKyAqIE1FUkNIQU5UQUJJTElUWSBv
-ciBGSVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIgUFVSUE9TRS4gIFNlZSB0aGUKKyAqIEdOVSBHZW5l
-cmFsIFB1YmxpYyBMaWNlbnNlIGZvciBtb3JlIGRldGFpbHMuCisgKgorICogWW91IHNob3VsZCBo
-YXZlIHJlY2VpdmVkIGEgY29weSBvZiB0aGUgR05VIEdlbmVyYWwgUHVibGljIExpY2Vuc2UgYWxv
-bmcKKyAqIHdpdGggdGhpcyBwcm9ncmFtOyBpZiBub3QsIHdyaXRlIHRvIHRoZSBGcmVlIFNvZnR3
-YXJlIEZvdW5kYXRpb24sIEluYy4sCisgKiA1MSBGcmFua2xpbiBTdHJlZXQsIEZpZnRoIEZsb29y
-LCBCb3N0b24sIE1BIDAyMTEwLTEzMDEgVVNBLgorICovCisKKyNpbmNsdWRlIDxzdGRpby5oPgor
-I2luY2x1ZGUgPHBlcmZtb24vcGZtbGliLmg+CisjaW5jbHVkZSA8c3RyaW5nLmg+CisKK2ludCBt
-YWluKGludCBhcmdjLCBjaGFyICoqYXJndikKK3sKKwlpbnQgcmV0LCBpOworCXVuc2lnbmVkIGlu
-dCBqOworCXBmbV9wbXVfaW5mb190IHBpbmZvOworCisJaWYgKGFyZ2MgIT0gMikgeworCQlmcHJp
-bnRmKHN0ZGVyciwgIlVzYWdlOiAlcyA8cG11IGNvdW50ZXIgdG8gZmluZD5cbiIKKwkJCQkiZXg6
-ICVzIFVOSEFMVEVEX1JFRkVSRU5DRV9DWUNMRVNcbiIKKwkJCQkiUmV0dXJucyB0aGUgZmlyc3Qg
-b2NjdXJlbmNlIGl0IGZpbmRzIHdpdGggIgorCQkJCSJyZXR1cm4gY29kZSAwLlxuIgorCQkJCSJJ
-ZiBub3QgZm91bmQgcmV0dXJucyAxLCBvbiBlcnJvciByZXR1cm5zIC0xXG4iLAorCQkJCWFyZ3Zb
-MF0sIGFyZ3ZbMF0pOworCQlyZXQgPSAtMTsKKwkJZ290byBlbmQ7CisJfQorCisJbWVtc2V0KCZw
-aW5mbywgMCwgc2l6ZW9mKHBpbmZvKSk7CisJcGluZm8uc2l6ZSA9IHNpemVvZihwaW5mbyk7CisK
-KwlyZXQgPSBwZm1faW5pdGlhbGl6ZSgpOworCWlmIChyZXQgIT0gUEZNX1NVQ0NFU1MpIHsKKwkJ
-ZnByaW50ZihzdGRlcnIsICJGYWlsZWQgdG8gaW5pdGlhbGlzZSBsaWJwZm06ICVzIiwKKwkJCQlw
-Zm1fc3RyZXJyb3IocmV0KSk7CisJCXJldCA9IC0xOworCQlnb3RvIGVuZDsKKwl9CisKKwlwZm1f
-Zm9yX2FsbF9wbXVzKGopIHsKKwkJcmV0ID0gcGZtX2dldF9wbXVfaW5mbyhqLCAmcGluZm8pOwor
-CQlpZiAocmV0ICE9IFBGTV9TVUNDRVNTKSB7CisJCQljb250aW51ZTsKKwkJfQorCisJCWZvciAo
-aSA9IHBpbmZvLmZpcnN0X2V2ZW50OyBpICE9IC0xOyBpID0gcGZtX2dldF9ldmVudF9uZXh0KGkp
-KSB7CisJCQlwZm1fZXZlbnRfaW5mb190IGluZm87CisKKwkJCXJldCA9IHBmbV9nZXRfZXZlbnRf
-aW5mbyhpLCBQRk1fT1NfTk9ORSwgJmluZm8pOworCQkJaWYgKHJldCAhPSBQRk1fU1VDQ0VTUykg
-eworCQkJCWZwcmludGYoc3RkZXJyLCAiQ2Fubm90IGdldCBldmVudCBpbmZvOiAlc1xuIiwKKwkJ
-CQkJCXBmbV9zdHJlcnJvcihyZXQpKTsKKwkJCQlyZXQgPSAtMTsKKwkJCQlnb3RvIGVuZDsKKwkJ
-CX0KKworCQkJaWYgKGluZm8ucG11ICE9IGopCisJCQkJY29udGludWU7CisKKwkJCWlmIChzdHJj
-bXAoaW5mby5uYW1lLCBhcmd2WzFdKSA9PSAwKSB7CisJCQkJZnByaW50ZihzdGRvdXQsICJyJWx4
-XG4iLCBpbmZvLmNvZGUpOworCQkJCXJldCA9IDA7CisJCQkJZ290byBlbmQ7CisJCQl9CisJCX0K
-Kwl9CisKKwlyZXQgPSAxOworCitlbmQ6CisJcmV0dXJuIHJldDsKK30KZGlmZiAtLWdpdCBhL3Rl
-c3RzL3BlcmYvdGVzdF9wZXJmX3JhdyBiL3Rlc3RzL3BlcmYvdGVzdF9wZXJmX3JhdwpuZXcgZmls
-ZSBtb2RlIDEwMDc1NQppbmRleCAwMDAwMDAwLi42OGIxMmQ3Ci0tLSAvZGV2L251bGwKKysrIGIv
-dGVzdHMvcGVyZi90ZXN0X3BlcmZfcmF3CkBAIC0wLDAgKzEsMTI5IEBACisjIS9iaW4vYmFzaAor
-IworIyBDb3B5cmlnaHQgKEMpIC0gMjAxNiBKdWxpZW4gRGVzZm9zc2V6IDxqZGVzZm9zc2V6QGVm
-ZmljaW9zLmNvbT4KKyMKKyMgVGhpcyBwcm9ncmFtIGlzIGZyZWUgc29mdHdhcmU7IHlvdSBjYW4g
-cmVkaXN0cmlidXRlIGl0IGFuZC9vciBtb2RpZnkgaXQKKyMgdW5kZXIgdGhlIHRlcm1zIG9mIHRo
-ZSBHTlUgR2VuZXJhbCBQdWJsaWMgTGljZW5zZSwgdmVyc2lvbiAyIG9ubHksIGFzCisjIHB1Ymxp
-c2hlZCBieSB0aGUgRnJlZSBTb2Z0d2FyZSBGb3VuZGF0aW9uLgorIworIyBUaGlzIHByb2dyYW0g
-aXMgZGlzdHJpYnV0ZWQgaW4gdGhlIGhvcGUgdGhhdCBpdCB3aWxsIGJlIHVzZWZ1bCwgYnV0IFdJ
-VEhPVVQKKyMgQU5ZIFdBUlJBTlRZOyB3aXRob3V0IGV2ZW4gdGhlIGltcGxpZWQgd2FycmFudHkg
-b2YgTUVSQ0hBTlRBQklMSVRZIG9yCisjIEZJVE5FU1MgRk9SIEEgUEFSVElDVUxBUiBQVVJQT1NF
-LiAgU2VlIHRoZSBHTlUgR2VuZXJhbCBQdWJsaWMgTGljZW5zZSBmb3IKKyMgbW9yZSBkZXRhaWxz
-LgorIworIyBZb3Ugc2hvdWxkIGhhdmUgcmVjZWl2ZWQgYSBjb3B5IG9mIHRoZSBHTlUgR2VuZXJh
-bCBQdWJsaWMgTGljZW5zZSBhbG9uZyB3aXRoCisjIHRoaXMgcHJvZ3JhbTsgaWYgbm90LCB3cml0
-ZSB0byB0aGUgRnJlZSBTb2Z0d2FyZSBGb3VuZGF0aW9uLCBJbmMuLCA1MQorIyBGcmFua2xpbiBT
-dHJlZXQsIEZpZnRoIEZsb29yLCBCb3N0b24sIE1BIDAyMTEwLTEzMDEgVVNBLgorCitURVNUX0RF
-U0M9IlBlcmYgY291bnRlcnMiCisKK0NVUkRJUj0kKGRpcm5hbWUgJDApLworVEVTVERJUj0kQ1VS
-RElSLy4uCitMVFROR19CSU49Imx0dG5nIgorU0VTU0lPTl9OQU1FPSJwZXJmX2NvdW50ZXJzIgor
-TlVNX1RFU1RTPTIwCitOUl9JVEVSPTEKK05SX1VTRUNfV0FJVD0xCitURVNUQVBQX1BBVEg9IiRU
-RVNURElSL3V0aWxzL3Rlc3RhcHAiCitURVNUQVBQX05BTUU9Imdlbi11c3QtZXZlbnRzIgorVEVT
-VEFQUF9CSU49IiRURVNUQVBQX1BBVEgvJFRFU1RBUFBfTkFNRS8kVEVTVEFQUF9OQU1FIgorCitz
-b3VyY2UgJFRFU1RESVIvdXRpbHMvdXRpbHMuc2gKKworZnVuY3Rpb24gZW5hYmxlX3VzdF9sdHRu
-Z19ldmVudF9wZXJfY2hhbigpCit7CisJc2Vzc19uYW1lPSIkMSIKKwlldmVudF9uYW1lPSIkMiIK
-KwljaGFuX25hbWU9IiQzIgorCisJJFRFU1RESVIvLi4vc3JjL2Jpbi9sdHRuZy8kTFRUTkdfQklO
-IGVuYWJsZS1ldmVudCAiJGV2ZW50X25hbWUiIC1zICRzZXNzX25hbWUgLWMgJGNoYW5fbmFtZSAt
-dSA+L2Rldi9udWxsIDI+JjEKKwlvayAkPyAiRW5hYmxlIGV2ZW50ICRldmVudF9uYW1lIGZvciBz
-ZXNzaW9uICRzZXNzX25hbWUgaW4gY2hhbm5lbCAkY2hhbl9uYW1lIgorfQorCitmdW5jdGlvbiB0
-ZXN0X3VzdF9yYXcoKQoreworCVRSQUNFX1BBVEg9JChta3RlbXAgLWQpCisJU0VTU0lPTl9OQU1F
-PSJ1c3RfcGVyZiIKKwlDSEFOX05BTUU9Im15Y2hhbiIKKwlFVkVOVF9OQU1FPSJ0cDp0cHRlc3Qi
-CisJUE1VPSJVTkhBTFRFRF9SRUZFUkVOQ0VfQ1lDTEVTIgorCVBFUkZJRD0kKCRDVVJESVIvZmlu
-ZF9ldmVudCAkUE1VKQorCXRlc3QgJD8gLWVxICIwIgorCW9rICQ/ICJGaW5kIFBNVSAkUE1VIgor
-CisJY3JlYXRlX2x0dG5nX3Nlc3Npb25fb2sgJFNFU1NJT05fTkFNRSAkVFJBQ0VfUEFUSAorCisJ
-ZW5hYmxlX3VzdF9sdHRuZ19jaGFubmVsX29rICRTRVNTSU9OX05BTUUgJENIQU5fTkFNRQorCisJ
-ZW5hYmxlX3VzdF9sdHRuZ19ldmVudF9wZXJfY2hhbiAkU0VTU0lPTl9OQU1FICRFVkVOVF9OQU1F
-ICRDSEFOX05BTUUKKworCWFkZF9jb250ZXh0X3VzdF9vayAkU0VTU0lPTl9OQU1FICRDSEFOX05B
-TUUgInBlcmY6dGhyZWFkOnJhdzoke1BFUkZJRH06dGVzdCIKKworCXN0YXJ0X2x0dG5nX3RyYWNp
-bmdfb2sKKworCSRURVNUQVBQX0JJTiAkTlJfSVRFUiAkTlJfVVNFQ19XQUlUID4vZGV2L251bGwg
-Mj4mMQorCisJc3RvcF9sdHRuZ190cmFjaW5nX29rCisKKwlkZXN0cm95X2x0dG5nX3Nlc3Npb25f
-b2sgJFNFU1NJT05fTkFNRQorCisJdmFsaWRhdGVfdHJhY2UgInBlcmZfdGhyZWFkX3Jhd18ke1BF
-UkZJRH1fdGVzdCIgJFRSQUNFX1BBVEgKKworCXJtIC1yZiAkVFJBQ0VfUEFUSAorfQorCitmdW5j
-dGlvbiB0ZXN0X2tlcm5lbF9yYXcoKQoreworCVRSQUNFX1BBVEg9JChta3RlbXAgLWQpCisJU0VT
-U0lPTl9OQU1FPSJrZXJuZWxfcGVyZiIKKwlDSEFOX05BTUU9Im15Y2hhbiIKKwlFVkVOVF9OQU1F
-PSJsdHRuZ190ZXN0X2ZpbHRlcl9ldmVudCIKKwlQTVU9IlVOSEFMVEVEX1JFRkVSRU5DRV9DWUNM
-RVMiCisJUEVSRklEPSQoJENVUkRJUi9maW5kX2V2ZW50ICRQTVUpCisJdGVzdCAkPyAtZXEgIjAi
-CisJb2sgJD8gIkZpbmQgUE1VICRQTVUiCisKKwljcmVhdGVfbHR0bmdfc2Vzc2lvbl9vayAkU0VT
-U0lPTl9OQU1FICRUUkFDRV9QQVRICisKKwlsdHRuZ19lbmFibGVfa2VybmVsX2NoYW5uZWxfb2sg
-JFNFU1NJT05fTkFNRSAkQ0hBTl9OQU1FCisKKwllbmFibGVfa2VybmVsX2x0dG5nX2V2ZW50X29r
-ICRTRVNTSU9OX05BTUUgJEVWRU5UX05BTUUgJENIQU5fTkFNRQorCisJYWRkX2NvbnRleHRfa2Vy
-bmVsX29rICRTRVNTSU9OX05BTUUgJENIQU5fTkFNRSAicGVyZjpjcHU6cmF3OiR7UEVSRklEfTp0
-ZXN0IgorCisJc3RhcnRfbHR0bmdfdHJhY2luZ19vaworCisJZWNobyAtbiAxMCA+IC9wcm9jL2x0
-dG5nLXRlc3QtZmlsdGVyLWV2ZW50CisKKwlzdG9wX2x0dG5nX3RyYWNpbmdfb2sKKworCWRlc3Ry
-b3lfbHR0bmdfc2Vzc2lvbl9vayAkU0VTU0lPTl9OQU1FCisKKwl2YWxpZGF0ZV90cmFjZSAicGVy
-Zl9jcHVfcmF3XyR7UEVSRklEfV90ZXN0IiAkVFJBQ0VfUEFUSAorCisJcm0gLXJmICRUUkFDRV9Q
-QVRICit9CisKK2lmIFsgIiQoaWQgLXUpIiA9PSAiMCIgXTsgdGhlbgorCWlzcm9vdD0xCitlbHNl
-CisJaXNyb290PTAKK2ZpCisKKyMgTVVTVCBzZXQgVEVTVERJUiBiZWZvcmUgY2FsbGluZyB0aG9z
-ZSBmdW5jdGlvbnMKK3BsYW5fdGVzdHMgJE5VTV9URVNUUworCitwcmludF90ZXN0X2Jhbm5lciAi
-JFRFU1RfREVTQyIKKworc3RhcnRfbHR0bmdfc2Vzc2lvbmQKKwordGVzdF91c3RfcmF3CisKK3Nr
-aXAgJGlzcm9vdCAiUm9vdCBhY2Nlc3MgaXMgbmVlZGVkIGZvciBrZXJuZWwgdGVzdGluZywgc2tp
-cHBpbmcuIiA5IHx8Cit7CisJbW9kcHJvYmUgbHR0bmctdGVzdAorCXRlc3Rfa2VybmVsX3Jhdwor
-CXJtbW9kIGx0dG5nLXRlc3QKK30KKworc3RvcF9sdHRuZ19zZXNzaW9uZApkaWZmIC0tZ2l0IGEv
-dGVzdHMvcGVyZl9yZWdyZXNzaW9uIGIvdGVzdHMvcGVyZl9yZWdyZXNzaW9uCm5ldyBmaWxlIG1v
-ZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAuLmM0YjliODYKLS0tIC9kZXYvbnVsbAorKysgYi90ZXN0
-cy9wZXJmX3JlZ3Jlc3Npb24KQEAgLTAsMCArMSBAQAorcGVyZi90ZXN0X3BlcmZfcmF3Ci0tIAox
-LjkuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
-bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlz
-dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============4417579074072187726==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_45563_592045499.1466623798434"
+
+------=_Part_45563_592045499.1466623798434
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+----- On Jun 22, 2016, at 3:16 PM, Mathieu Desnoyers <mathieu.desnoyers@eff=
+icios.com> wrote:=20
+
+> ----- On Jun 22, 2016, at 2:17 PM, Luke K D'Alessandro <ldalessa@indiana.=
+edu>
+> wrote:
+
+>>> On Jun 22, 2016, at 12:39 PM, Mathieu Desnoyers < mathieu.desnoyers@eff=
+icios.com
+>>> > wrote:
+
+>>> ----- On Jun 22, 2016, at 11:56 AM, Luke K D'Alessandro < ldalessa@indi=
+ana.edu >
+>>> wrote:
+
+>>>>> On Jun 22, 2016, at 11:37 AM, Mathieu Desnoyers < mathieu.desnoyers@e=
+fficios.com
+>>>>> > wrote:
+
+>>>>> ----- On Jun 14, 2016, at 12:31 PM, Luke K D'Alessandro < ldalessa@in=
+diana.edu >
+>>>>> wrote:
+
+>>>>>> I tried following the Darwin instructions on the website (basically =
+`
+>>>>>> ./configure --build=3Dx86_64-apple-darwin11` but the `clock_gettime`=
+ and `-lrt`
+>>>>>> dependencies don=E2=80=99t exist on Darwin).
+
+>>>>>> Just for fun I removed this dependency and added a custom version of
+>>>>>> `clock_gettime` (
+>>>>>> https://github.com/lorrden/darwin-posix-rt/blob/master/clock_gettime=
+.c ) but
+>>>>>> the build still fails in `systcall-compat.h`.
+
+>>>>>> ```
+>>>>>> $ make V=3D1
+>>>>>> /Applications/Xcode.app/Contents/Developer/usr/bin/make all-recursiv=
+e
+>>>>>> Making all in .
+>>>>>> /bin/sh ./libtool --tag=3DCC --mode=3Dcompile gcc -DHAVE_CONFIG_H -I=
+. -I./urcu
+>>>>>> -I./urcu -Wall -g -O2 -D_THREAD_SAFE -pthread -MT wfqueue.lo -MD -MP=
+ -MF
+>>>>>> .deps/wfqueue.Tpo -c -o wfqueue.lo wfqueue.c
+>>>>>> libtool: compile: gcc -DHAVE_CONFIG_H -I. -I./urcu -I./urcu -Wall -g=
+ -O2
+>>>>>> -D_THREAD_SAFE -pthread -MT wfqueue.lo -MD -MP -MF .deps/wfqueue.Tpo=
+ -c
+>>>>>> wfqueue.c -fno-common -DPIC -o .libs/wfqueue.o
+>>>>>> In file included from wfqueue.c:28:
+>>>>>> In file included from ./urcu/static/wfqueue.h:33:
+>>>>>> In file included from ./urcu/uatomic.h:24:
+>>>>>> In file included from ./urcu/system.h:23:
+>>>>>> In file included from ./urcu/arch.h:27:
+>>>>>> ./urcu/syscall-compat.h:39:2: error: "Add platform support to
+>>>>>> urcu/syscall-compat.h"
+>>>>>> #error "Add platform support to urcu/syscall-compat.h"
+>>>>>> ^
+>>>>>> 1 error generated.
+>>>>>> make[2]: *** [wfqueue.lo] Error 1
+>>>>>> make[1]: *** [all-recursive] Error 1
+>>>>>> make: *** [all] Error 2
+>>>>>> ```
+
+>>>>>> Is Darwin still a supported platform for the library?
+
+>>>>> It should, yes, but we don't test it in our CI yet.
+
+>>>>> I just took care of the syscall-compat.h error (pushed into master
+>>>>> and stable-0.9). For clock_gettime, we would need to implement
+>>>>> a LGPLv2.1 wrapper within liburcu for MacOSX.
+
+>>>>> Is this something you could look into ?
+
+>>>> Hmm. This isn=E2=80=99t really something I know much about.
+
+>>>> The github link I sent seems to be either GPLv2 or LGPLv3=E2=80=A6 don=
+=E2=80=99t really know
+>>>> what LGPLv2.1 means. Based on the actually code that I=E2=80=99m seein=
+g, there is
+>>>> really not much going on here and thus it might be difficult to do any=
+thing
+>>>> differently. It might be easier to have urcu use some configuration ti=
+me
+>>>> behavior to have its own arch-specific timing functionality if necessa=
+ry.
+
+>>> The only place where we need clock_gettime is urcu/arch/generic.h
+>>> caa_get_cycles.
+
+>>> I just pushed the implementation of the fix in master and stable-0.9.
+>>> Tested on my own macos mini machine. Can you try them out ?
+
+>> Looks good on my system as well (bootstrapping with current autotools fr=
+om
+>> brew).
+
+>> I do get a warning at
+
+>> ```
+>> ../../tests/common/thread-id.h:62:3: warning: "use pid as thread ID"
+>> [-W#warnings]
+>> ```
+
+> This is just because we don't have a gettid() system call available. This=
+ just
+> leads
+> to less precise debug printout in the test programs, nothing to worry abo=
+ut.
+
+>> however `make check` passes. Should Darwin have its own preprocessor bra=
+nch in
+>> this file?
+
+> how about make regtest ?
+
+> It appears we don't have the "nproc" program available. Is there a brew p=
+ackage
+> for it,
+> or something similar ?
+
+This commit now in master and 0.9 should fix it:=20
+
+commit 2350bf7b3f3c4581493b187988a92b8d871471ba=20
+Author: Michael Jeanson <mjeanson@efficios.com>=20
+Date: Wed Jun 22 15:16:18 2016 -0400=20
+
+Fix: Add failover for platforms without nproc=20
+
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>=20
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>=20
+
+> Thanks,
+
+> Mathieu
+
+>> Thanks for doing this,
+>> Luke
+
+>>> Thanks,
+
+>>> Mathieu
+
+>>>> Luke
+
+>>>>> Thanks,
+
+>>>>> Mathieu
+
+>>>>>> Thanks,
+>>>>>> Luke
+
+>>>>>> _______________________________________________
+>>>>>> lttng-dev mailing list
+>>>>>> lttng-dev@lists.lttng.org
+>>>>>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+>>>>> --
+>>>>> Mathieu Desnoyers
+>>>>> EfficiOS Inc.
+>>>>> http://www.efficios.com
+
+>>> --
+>>> Mathieu Desnoyers
+>>> EfficiOS Inc.
+>>> http://www.efficios.com
+
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
+
+------=_Part_45563_592045499.1466623798434
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><br></div><div><br></div><span id=3D"zwchr"=
+ data-marker=3D"__DIVIDER__">----- On Jun 22, 2016, at 3:16 PM, Mathieu Des=
+noyers &lt;mathieu.desnoyers@efficios.com&gt; wrote:<br></span><div data-ma=
+rker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF=
+;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:=
+normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-siz=
+e:12pt;"><div style=3D"font-family: arial, helvetica, sans-serif; font-size=
+: 12pt; color: #000000"><br><br><span id=3D"zwchr">----- On Jun 22, 2016, a=
+t 2:17 PM, Luke K D'Alessandro &lt;ldalessa@indiana.edu&gt; wrote:<br></spa=
+n><div><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;p=
+adding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decora=
+tion:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><br class=
+=3D""><div><blockquote class=3D""><div class=3D"">On Jun 22, 2016, at 12:39=
+ PM, Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com=
+" class=3D"" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt; wrote=
+:</div><br class=3D"Apple-interchange-newline"><div class=3D""><div style=
+=3D"font-family: arial, helvetica, sans-serif; font-size: 16px; font-style:=
+ normal; font-variant-caps: normal; font-weight: normal; letter-spacing: no=
+rmal; orphans: auto; text-align: start; text-indent: 0px; text-transform: n=
+one; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-str=
+oke-width: 0px;" class=3D""><br class=3D"Apple-interchange-newline"><br cla=
+ss=3D""></div><span id=3D"zwchr" style=3D"font-family: arial, helvetica, sa=
+ns-serif; font-size: 16px; font-style: normal; font-variant-caps: normal; f=
+ont-weight: normal; letter-spacing: normal; orphans: auto; text-align: star=
+t; text-indent: 0px; text-transform: none; white-space: normal; widows: aut=
+o; word-spacing: 0px; -webkit-text-stroke-width: 0px;" class=3D"">----- On =
+Jun 22, 2016, at 11:56 AM, Luke K D'Alessandro &lt;<a href=3D"mailto:ldales=
+sa@indiana.edu" class=3D"" target=3D"_blank">ldalessa@indiana.edu</a>&gt; w=
+rote:<br class=3D""></span><div style=3D"font-family: arial, helvetica, san=
+s-serif; font-size: 16px; font-style: normal; font-variant-caps: normal; fo=
+nt-weight: normal; letter-spacing: normal; orphans: auto; text-align: start=
+; text-indent: 0px; text-transform: none; white-space: normal; widows: auto=
+; word-spacing: 0px; -webkit-text-stroke-width: 0px;" class=3D""><blockquot=
+e style=3D"border-left-width: 2px; border-left-style: solid; border-left-co=
+lor: rgb(16, 16, 255); margin-left: 5px; padding-left: 5px; font-weight: no=
+rmal; font-style: normal; text-decoration: none; font-family: Helvetica, Ar=
+ial, sans-serif; font-size: 12pt;" class=3D""><br class=3D""><div class=3D"=
+"><blockquote class=3D""><div class=3D"">On Jun 22, 2016, at 11:37 AM, Math=
+ieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com" class=
+=3D"" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt; wrote:</div>=
+<br class=3D"Apple-interchange-newline"><div class=3D""><div class=3D""><di=
+v class=3D"" style=3D"font-family: arial, helvetica, sans-serif; font-size:=
+ 12pt;"><div class=3D""><span id=3D"zwchr" class=3D"">----- On Jun 14, 2016=
+, at 12:31 PM, Luke K D'Alessandro &lt;<a href=3D"mailto:ldalessa@indiana.e=
+du" class=3D"" target=3D"_blank">ldalessa@indiana.edu</a>&gt; wrote:<br cla=
+ss=3D""></span></div><div class=3D""><blockquote class=3D"" style=3D"border=
+-left-width: 2px; border-left-style: solid; border-left-color: rgb(16, 16, =
+255); margin-left: 5px; padding-left: 5px; font-weight: normal; font-style:=
+ normal; text-decoration: none; font-family: Helvetica, Arial, sans-serif; =
+font-size: 12pt;"><span class=3D"">I tried following the Darwin instruction=
+s on the website (basically `</span><span class=3D"">./configure --build=3D=
+x86_64-apple-darwin11` but the `clock_gettime` and `-lrt` dependencies don=
+=E2=80=99t&nbsp;exist on Darwin).</span><div class=3D""><span class=3D""><b=
+r class=3D""></span></div><div class=3D""><span class=3D"">Just for fun I r=
+emoved this dependency and added a custom version of `clock_gettime` (</spa=
+n><a href=3D"https://github.com/lorrden/darwin-posix-rt/blob/master/clock_g=
+ettime.c" class=3D"" target=3D"_blank">https://github.com/lorrden/darwin-po=
+six-rt/blob/master/clock_gettime.c</a>) but the build still fails in `systc=
+all-compat.h`.</div><span class=3D""><div class=3D""><span class=3D""><br c=
+lass=3D""></span></div>```<br class=3D""></span><span class=3D"">$ make V=
+=3D1<br class=3D"">/Applications/Xcode.app/Contents/Developer/usr/bin/make&=
+nbsp;&nbsp;all-recursive<br class=3D"">Making all in .<br class=3D"">/bin/s=
+h ./libtool&nbsp;&nbsp;--tag=3DCC&nbsp;&nbsp;&nbsp;--mode=3Dcompile gcc -DH=
+AVE_CONFIG_H -I. -I./urcu&nbsp;&nbsp;-I./urcu&nbsp;&nbsp;-Wall -g -O2 -D_TH=
+READ_SAFE -pthread -MT wfqueue.lo -MD -MP -MF&nbsp;.deps/wfqueue.Tpo -c -o =
+wfqueue.lo wfqueue.c<br class=3D"">libtool: compile:&nbsp;&nbsp;gcc -DHAVE_=
+CONFIG_H -I. -I./urcu -I./urcu -Wall -g -O2 -D_THREAD_SAFE -pthread -MT wfq=
+ueue.lo -MD -MP -MF .deps/wfqueue.Tpo -c wfqueue.c&nbsp;&nbsp;-fno-common -=
+DPIC -o .libs/wfqueue.o<br class=3D"">In file included from wfqueue.c:28:<b=
+r class=3D"">In file included from ./urcu/static/wfqueue.h:33:<br class=3D"=
+">In file included from ./urcu/uatomic.h:24:<br class=3D"">In file included=
+ from ./urcu/system.h:23:<br class=3D"">In file included from ./urcu/arch.h=
+:27:<br class=3D"">./urcu/syscall-compat.h:39:2:&nbsp;error:&nbsp;"Add plat=
+form support to urcu/syscall-compat.h"<br class=3D"">#error "Add platform s=
+upport to urcu/syscall-compat.h"<br class=3D"">&nbsp;^<br class=3D"">1 erro=
+r generated.<br class=3D"">make[2]: *** [wfqueue.lo] Error 1<br class=3D"">=
+make[1]: *** [all-recursive] Error 1<br class=3D"">make: *** [all] Error 2<=
+br class=3D""></span><span class=3D"">```</span><div class=3D""><span class=
+=3D""><br class=3D""></span></div><div class=3D""><span class=3D"">Is&nbsp;=
+Darwin still a supported platform for the library?</span></div></blockquote=
+><div class=3D""><br class=3D""></div><div class=3D"">It should, yes, but w=
+e don't test it in our CI yet.<br class=3D""></div><div class=3D""><br clas=
+s=3D""></div><div class=3D"">I just took care of the syscall-compat.h error=
+ (pushed into master</div><div class=3D"">and stable-0.9). For clock_gettim=
+e, we would need to implement</div><div class=3D"">a LGPLv2.1 wrapper withi=
+n liburcu for MacOSX.<br class=3D""></div><div class=3D""><br class=3D""></=
+div><div class=3D"">Is this something you could look into ?<br class=3D""><=
+/div></div></div></div></div></blockquote><div class=3D""><br class=3D""></=
+div><div class=3D"">Hmm. This isn=E2=80=99t really something I know much ab=
+out.&nbsp;</div><div class=3D""><br class=3D""></div><div class=3D"">The gi=
+thub link I sent seems to be either GPLv2 or LGPLv3=E2=80=A6 don=E2=80=99t =
+really know what LGPLv2.1 means. Based on the actually code that I=E2=80=99=
+m seeing, there is really not much going on here and thus it might be diffi=
+cult to do anything differently. It might be easier to have urcu use some c=
+onfiguration time behavior to have its own arch-specific timing functionali=
+ty if necessary.</div></div></blockquote><div class=3D""><br class=3D""></d=
+iv><div class=3D"">The only place where we need clock_gettime is urcu/arch/=
+generic.h<br class=3D""></div><div class=3D"">caa_get_cycles.<br class=3D""=
+></div><div class=3D""><br class=3D""></div><div class=3D"">I just pushed t=
+he implementation of the fix in master and stable-0.9.<br class=3D""></div>=
+<div class=3D"">Tested on my own macos mini machine. Can you try them out ?=
+<br class=3D""></div></div></div></blockquote><div><br class=3D""></div><di=
+v>Looks good on my system as well (bootstrapping with current autotools fro=
+m brew).</div><div><br class=3D""></div><div>I do get a warning at&nbsp;</d=
+iv><div><br class=3D""></div><div>```</div><span class=3D"">&nbsp; ../../te=
+sts/common/thread-id.h:62:3:&nbsp;warning:&nbsp;"use pid as thread ID" [-W#=
+warnings]</span></div><div><span class=3D"">```</span></div></blockquote><b=
+r><div>This is just because we don't have a gettid() system call available.=
+ This just leads<br></div><div>to less precise debug printout in the test p=
+rograms, nothing to worry about.<br></div><br><blockquote style=3D"border-l=
+eft:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weig=
+ht:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Aria=
+l,sans-serif;font-size:12pt;"><div><span class=3D""><br class=3D""></span><=
+/div><div><span class=3D"">however `make check` passes. Should Darwin have =
+its own preprocessor branch in this file?</span></div></blockquote><br><div=
+>how about make regtest ?<br></div><br><div>It appears we don't have the "n=
+proc" program available. Is there a brew package for it,<br></div><div>or s=
+omething similar ?</div></div></div></blockquote><div><br></div><div>This c=
+ommit now in master and 0.9 should fix it:<br data-mce-bogus=3D"1"></div><d=
+iv><br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>=
+commit 2350bf7b3f3c4581493b187988a92b8d871471ba<br>Author: Michael Jeanson =
+&lt;mjeanson@efficios.com&gt;<br>Date: Wed Jun 22 15:16:18 2016 -0400<br><b=
+r> Fix: Add failover for platforms without nproc<br> <br> Signed-off-by: Mi=
+chael Jeanson &lt;mjeanson@efficios.com&gt;<br> Signed-off-by: Mathieu Desn=
+oyers &lt;mathieu.desnoyers@efficios.com&gt;<br></div><blockquote style=3D"=
+border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;f=
+ont-weight:normal;font-style:normal;text-decoration:none;font-family:Helvet=
+ica,Arial,sans-serif;font-size:12pt;"><div style=3D"font-family: arial, hel=
+vetica, sans-serif; font-size: 12pt; color: #000000"><div><div><br></div><b=
+r><div>Thanks,<br></div><br><div>Mathieu<br></div><br><blockquote style=3D"=
+border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;f=
+ont-weight:normal;font-style:normal;text-decoration:none;font-family:Helvet=
+ica,Arial,sans-serif;font-size:12pt;"><div><span class=3D""><br class=3D"">=
+</span><div>Thanks for doing this,</div><div>Luke</div><br class=3D""><bloc=
+kquote class=3D""><div class=3D""><div style=3D"font-family: arial, helveti=
+ca, sans-serif; font-size: 16px; font-style: normal; font-variant-caps: nor=
+mal; font-weight: normal; letter-spacing: normal; orphans: auto; text-align=
+: start; text-indent: 0px; text-transform: none; white-space: normal; widow=
+s: auto; word-spacing: 0px; -webkit-text-stroke-width: 0px;" class=3D""><di=
+v class=3D""><br class=3D""></div><div class=3D"">Thanks,<br class=3D""></d=
+iv><div class=3D""><br class=3D""></div><div class=3D"">Mathieu<br class=3D=
+""></div><div class=3D""><br class=3D""></div><blockquote style=3D"border-l=
+eft-width: 2px; border-left-style: solid; border-left-color: rgb(16, 16, 25=
+5); margin-left: 5px; padding-left: 5px; font-weight: normal; font-style: n=
+ormal; text-decoration: none; font-family: Helvetica, Arial, sans-serif; fo=
+nt-size: 12pt;" class=3D""><div class=3D""><div class=3D""><br class=3D""><=
+/div><div class=3D"">Luke</div><br class=3D""><blockquote class=3D""><div c=
+lass=3D""><div class=3D""><div class=3D"" style=3D"font-family: arial, helv=
+etica, sans-serif; font-size: 12pt;"><div class=3D""><div class=3D""><br cl=
+ass=3D""></div><div class=3D"">Thanks,<br class=3D""></div><div class=3D"">=
+<br class=3D""></div><div class=3D"">Mathieu<br class=3D""></div><div class=
+=3D""><br class=3D""></div><div class=3D""><br class=3D""></div><blockquote=
+ class=3D"" style=3D"border-left-width: 2px; border-left-style: solid; bord=
+er-left-color: rgb(16, 16, 255); margin-left: 5px; padding-left: 5px; font-=
+weight: normal; font-style: normal; text-decoration: none; font-family: Hel=
+vetica, Arial, sans-serif; font-size: 12pt;"><div class=3D""><span class=3D=
+""><br class=3D""></span></div><div class=3D""><span class=3D"">Thanks,</sp=
+an></div><div class=3D""><span class=3D"">Luke</span></div><br class=3D"">_=
+______________________________________________<br class=3D"">lttng-dev mail=
+ing list<br class=3D""><a href=3D"mailto:lttng-dev@lists.lttng.org" class=
+=3D"" target=3D"_blank">lttng-dev@lists.lttng.org</a><br class=3D""><a href=
+=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" class=3D"" =
+target=3D"_blank">https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-de=
+v</a><br class=3D""></blockquote></div><div class=3D""><br class=3D""></div=
+><div class=3D"">--<span class=3D"Apple-converted-space">&nbsp;</span><br c=
+lass=3D""></div><div class=3D"">Mathieu Desnoyers<br class=3D"">EfficiOS In=
+c.<br class=3D""><a href=3D"http://www.efficios.com/" class=3D"" target=3D"=
+_blank">http://www.efficios.com</a><br class=3D""></div></div></div></div><=
+/blockquote></div><br class=3D""><br class=3D""></blockquote></div><br styl=
+e=3D"font-family: arial, helvetica, sans-serif; font-size: 16px; font-style=
+: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: n=
+ormal; orphans: auto; text-align: start; text-indent: 0px; text-transform: =
+none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-st=
+roke-width: 0px;" class=3D""><div style=3D"font-family: arial, helvetica, s=
+ans-serif; font-size: 16px; font-style: normal; font-variant-caps: normal; =
+font-weight: normal; letter-spacing: normal; orphans: auto; text-align: sta=
+rt; text-indent: 0px; text-transform: none; white-space: normal; widows: au=
+to; word-spacing: 0px; -webkit-text-stroke-width: 0px;" class=3D"">--<span =
+class=3D"Apple-converted-space">&nbsp;</span><br class=3D""></div><div styl=
+e=3D"font-family: arial, helvetica, sans-serif; font-size: 16px; font-style=
+: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: n=
+ormal; orphans: auto; text-align: start; text-indent: 0px; text-transform: =
+none; white-space: normal; widows: auto; word-spacing: 0px; -webkit-text-st=
+roke-width: 0px;" class=3D"">Mathieu Desnoyers<br class=3D"">EfficiOS Inc.<=
+br class=3D""><a href=3D"http://www.efficios.com/" class=3D"" target=3D"_bl=
+ank">http://www.efficios.com</a><br></div></div></blockquote></div><br clas=
+s=3D""><br></blockquote></div><br><div>-- <br></div><div>Mathieu Desnoyers<=
+br>EfficiOS Inc.<br>http://www.efficios.com</div></div><br></blockquote></d=
+iv><br><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyer=
+s<br>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></html>
+------=_Part_45563_592045499.1466623798434--
+
+--===============4417579074072187726==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============4417579074072187726==--
