@@ -1,17 +1,15 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools] Test add-context perf raw
- command
-Date: Tue, 21 Jun 2016 20:22:37 +0000 (UTC)
-Message-ID: <819107733.43608.1466540557349.JavaMail.zimbra__1134.57224001667$1466540592$gmane$org@efficios.com>
-References: <1466536863-9729-1-git-send-email-jdesfossez@efficios.com>
+Subject: Re: urcu configure/build failures on Darwin
+Date: Wed, 22 Jun 2016 15:37:08 +0000 (UTC)
+Message-ID: <969693309.44561.1466609828052.JavaMail.zimbra__30350.7676734172$1466609858$gmane$org@efficios.com>
+References: <BBA3E68F-E5CB-4031-903F-2838E0274D41@indiana.edu>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============8108086580191341661=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id CC3EAA3852
- for <lttng-dev@lists.lttng.org>; Tue, 21 Jun 2016 20:22:41 +0000 (UTC)
-In-Reply-To: <1466536863-9729-1-git-send-email-jdesfossez@efficios.com>
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id A814DA36C6
+ for <lttng-dev@lists.lttng.org>; Wed, 22 Jun 2016 15:37:12 +0000 (UTC)
+In-Reply-To: <BBA3E68F-E5CB-4031-903F-2838E0274D41@indiana.edu>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,99 +19,156 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: Luke K D'Alessandro <ldalessa@indiana.edu>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-V2hhdCBoYXBwZW5zIGlmIHdlIHJ1biB0aGlzIHRlc3Qgb24gb3RoZXIgYXJjaGl0ZWN0dXJlCnRo
-YW4geDg2ID8KCldlIHNob3VsZCB0cnkgdG8gdGVzdCB0aGlzIGZlYXR1cmUgdGhyb3VnaG91dCB0
-aGUgc3RhY2ssCmluY2x1ZGluZyB0cmFjaW5nIGFuZCBsb29raW5nIGF0IHRoZSByZXN1bHQsIGJ1
-dCBzb21laG93CmNoZWNrIHRoYXQgd2UgYXJlIG9uIHRoZSByaWdodCBhcmNoaXRlY3R1cmUgdG8g
-ZG8gc28uCgpUaGFua3MsCgpNYXRoaWV1CgotLS0tLSBPbiBKdW4gMjEsIDIwMTYsIGF0IDM6MjEg
-UE0sIEp1bGllbiBEZXNmb3NzZXogamRlc2Zvc3NlekBlZmZpY2lvcy5jb20gd3JvdGU6Cgo+IFNp
-Z25lZC1vZmYtYnk6IEp1bGllbiBEZXNmb3NzZXogPGpkZXNmb3NzZXpAZWZmaWNpb3MuY29tPgo+
-IC0tLQo+IHRlc3RzL2Zhc3RfcmVncmVzc2lvbiAgICAgICAgICAgICAgfCAgIDEgKwo+IHRlc3Rz
-L3JlZ3Jlc3Npb24vdXN0L3Rlc3RfcGVyZl9yYXcgfCAxMDMgKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKwo+IDIgZmlsZXMgY2hhbmdlZCwgMTA0IGluc2VydGlvbnMoKykKPiBj
-cmVhdGUgbW9kZSAxMDA3NTUgdGVzdHMvcmVncmVzc2lvbi91c3QvdGVzdF9wZXJmX3Jhdwo+IAo+
-IGRpZmYgLS1naXQgYS90ZXN0cy9mYXN0X3JlZ3Jlc3Npb24gYi90ZXN0cy9mYXN0X3JlZ3Jlc3Np
-b24KPiBpbmRleCAwYzRmMDc5Li5hMzA4NGQ1IDEwMDY0NAo+IC0tLSBhL3Rlc3RzL2Zhc3RfcmVn
-cmVzc2lvbgo+ICsrKyBiL3Rlc3RzL2Zhc3RfcmVncmVzc2lvbgo+IEBAIC0zMCwzICszMCw0IEBA
-IHJlZ3Jlc3Npb24vdXN0L2Nsb2NrLW92ZXJyaWRlL3Rlc3RfY2xvY2tfb3ZlcnJpZGUKPiByZWdy
-ZXNzaW9uL3VzdC9yb3RhdGlvbi1kZXN0cm95LWZsdXNoL3Rlc3Rfcm90YXRpb25fZGVzdHJveV9m
-bHVzaAo+IHJlZ3Jlc3Npb24vdXN0L3Rlc3RfZXZlbnRfYmFzaWMKPiByZWdyZXNzaW9uL3VzdC90
-ZXN0X2V2ZW50X3RyYWNlZgo+ICtyZWdyZXNzaW9uL3VzdC90ZXN0X3BlcmZfcmF3Cj4gZGlmZiAt
-LWdpdCBhL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L3Rlc3RfcGVyZl9yYXcKPiBiL3Rlc3RzL3JlZ3Jl
-c3Npb24vdXN0L3Rlc3RfcGVyZl9yYXcKPiBuZXcgZmlsZSBtb2RlIDEwMDc1NQo+IGluZGV4IDAw
-MDAwMDAuLjAwZDdjNTIKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvdGVzdHMvcmVncmVzc2lvbi91
-c3QvdGVzdF9wZXJmX3Jhdwo+IEBAIC0wLDAgKzEsMTAzIEBACj4gKyMhL2Jpbi9iYXNoCj4gKyMK
-PiArIyBDb3B5cmlnaHQgKEMpIC0gMjAxNiBKdWxpZW4gRGVzZm9zc2V6IDxqZGVzZm9zc2V6QGVm
-ZmljaW9zLmNvbT4KPiArIwo+ICsjIFRoaXMgcHJvZ3JhbSBpcyBmcmVlIHNvZnR3YXJlOyB5b3Ug
-Y2FuIHJlZGlzdHJpYnV0ZSBpdCBhbmQvb3IgbW9kaWZ5IGl0Cj4gKyMgdW5kZXIgdGhlIHRlcm1z
-IG9mIHRoZSBHTlUgR2VuZXJhbCBQdWJsaWMgTGljZW5zZSwgdmVyc2lvbiAyIG9ubHksIGFzCj4g
-KyMgcHVibGlzaGVkIGJ5IHRoZSBGcmVlIFNvZnR3YXJlIEZvdW5kYXRpb24uCj4gKyMKPiArIyBU
-aGlzIHByb2dyYW0gaXMgZGlzdHJpYnV0ZWQgaW4gdGhlIGhvcGUgdGhhdCBpdCB3aWxsIGJlIHVz
-ZWZ1bCwgYnV0IFdJVEhPVVQKPiArIyBBTlkgV0FSUkFOVFk7IHdpdGhvdXQgZXZlbiB0aGUgaW1w
-bGllZCB3YXJyYW50eSBvZiBNRVJDSEFOVEFCSUxJVFkgb3IKPiArIyBGSVRORVNTIEZPUiBBIFBB
-UlRJQ1VMQVIgUFVSUE9TRS4gIFNlZSB0aGUgR05VIEdlbmVyYWwgUHVibGljIExpY2Vuc2UgZm9y
-Cj4gKyMgbW9yZSBkZXRhaWxzLgo+ICsjCj4gKyMgWW91IHNob3VsZCBoYXZlIHJlY2VpdmVkIGEg
-Y29weSBvZiB0aGUgR05VIEdlbmVyYWwgUHVibGljIExpY2Vuc2UgYWxvbmcgd2l0aAo+ICsjIHRo
-aXMgcHJvZ3JhbTsgaWYgbm90LCB3cml0ZSB0byB0aGUgRnJlZSBTb2Z0d2FyZSBGb3VuZGF0aW9u
-LCBJbmMuLCA1MQo+ICsjIEZyYW5rbGluIFN0cmVldCwgRmlmdGggRmxvb3IsIEJvc3RvbiwgTUEg
-MDIxMTAtMTMwMSBVU0EuCj4gKwo+ICtURVNUX0RFU0M9IlVTVCB0cmFjZXIgLSBQZXJmIGNvdW50
-ZXJzIgo+ICsKPiArQ1VSRElSPSQoZGlybmFtZSAkMCkvCj4gK1RFU1RESVI9JENVUkRJUi8uLi8u
-Lgo+ICtMVFROR19CSU49Imx0dG5nIgo+ICtTRVNTSU9OX05BTUU9InBlcmZfY291bnRlcnMiCj4g
-K0VWRU5UX05BTUU9InRwOnRwdGVzdCIKPiArTlVNX1RFU1RTPTE1Cj4gK05SX0lURVI9MQo+ICtO
-Ul9VU0VDX1dBSVQ9MQo+ICtURVNUQVBQX1BBVEg9IiRURVNURElSL3V0aWxzL3Rlc3RhcHAiCj4g
-K1RFU1RBUFBfTkFNRT0iZ2VuLXVzdC1ldmVudHMiCj4gK1RFU1RBUFBfQklOPSIkVEVTVEFQUF9Q
-QVRILyRURVNUQVBQX05BTUUvJFRFU1RBUFBfTkFNRSIKPiArCj4gK3NvdXJjZSAkVEVTVERJUi91
-dGlscy91dGlscy5zaAo+ICsKPiArZnVuY3Rpb24gZW5hYmxlX3VzdF9sdHRuZ19ldmVudF9wZXJf
-Y2hhbigpCj4gK3sKPiArCXNlc3NfbmFtZT0iJDEiCj4gKwlldmVudF9uYW1lPSIkMiIKPiArCWNo
-YW5fbmFtZT0iJDMiCj4gKwo+ICsJJFRFU1RESVIvLi4vc3JjL2Jpbi9sdHRuZy8kTFRUTkdfQklO
-IGVuYWJsZS1ldmVudCAiJGV2ZW50X25hbWUiIC1zICRzZXNzX25hbWUKPiAtYyAkY2hhbl9uYW1l
-IC11ID4vZGV2L251bGwgMj4mMQo+ICsJb2sgJD8gIkVuYWJsZSBldmVudCAkZXZlbnRfbmFtZSBm
-b3Igc2Vzc2lvbiAkc2Vzc19uYW1lIGluIGNoYW5uZWwgJGNoYW5fbmFtZSIKPiArfQo+ICsKPiAr
-ZnVuY3Rpb24gYWRkX3VzdF9sdHRuZ19jb250ZXh0X29rKCkKPiArewo+ICsJc2Vzc19uYW1lPSIk
-MSIKPiArCWNoYW5fbmFtZT0iJDIiCj4gKwl0eXBlPSIkMyIKPiArCj4gKwkkVEVTVERJUi8uLi9z
-cmMvYmluL2x0dG5nLyRMVFROR19CSU4gYWRkLWNvbnRleHQgLXMgJHNlc3NfbmFtZSAtYyAkY2hh
-bl9uYW1lCj4gLXQgJHR5cGUgLXUgPi9kZXYvbnVsbCAyPiYxCj4gKwlvayAkPyAiQWRkIGNvbnRl
-eHQgJHR5cGUgZm9yIHNlc3Npb24gJHNlc3NfbmFtZSBpbiBjaGFubmVsICRjaGFuX25hbWUiCj4g
-K30KPiArCj4gK2Z1bmN0aW9uIGFkZF91c3RfbHR0bmdfY29udGV4dF9mYWlsKCkKPiArewo+ICsJ
-c2Vzc19uYW1lPSIkMSIKPiArCWNoYW5fbmFtZT0iJDIiCj4gKwl0eXBlPSIkMyIKPiArCj4gKwkk
-VEVTVERJUi8uLi9zcmMvYmluL2x0dG5nLyRMVFROR19CSU4gYWRkLWNvbnRleHQgLXMgJHNlc3Nf
-bmFtZSAtYyAkY2hhbl9uYW1lCj4gLXQgJHR5cGUgLXUgPi9kZXYvbnVsbCAyPiYxCj4gKwl0ZXN0
-ICQ/IC1uZSAiNCIKPiArCW9rICQ/ICJBZGQgY29udGV4dCAkdHlwZSBmb3Igc2Vzc2lvbiAkc2Vz
-c19uYW1lIGluIGNoYW5uZWwgJGNoYW5fbmFtZSBmYWlsZWQKPiBhcyBleHBlY3RlZCIKPiArfQo+
-ICsKPiArIyBPbmx5IHRlc3QgcGFyc2luZyBzaW5jZSB0aGlzIGZlYXR1cmUgZGVwZW5kcyBvbiB0
-aGUgY291bnRlcnMgYXZhaWxhYmxlIG9uCj4gKyMgc3BlY2lmaWNzIHByb2Nlc3NvcnMgYW5kIGRv
-ZXMgbm90IHdvcmsgaW4gVk0uCj4gK2Z1bmN0aW9uIHRlc3RfcGFyc2luZ19yYXcoKQo+ICt7Cj4g
-KwlUUkFDRV9QQVRIPSQobWt0ZW1wIC1kKQo+ICsJU0VTU0lPTl9OQU1FPSJ1c3RfZXZlbnRfYmFz
-aWMiCj4gKwlDSEFOX05BTUU9Im15Y2hhbiIKPiArCj4gKwljcmVhdGVfbHR0bmdfc2Vzc2lvbl9v
-ayAkU0VTU0lPTl9OQU1FICRUUkFDRV9QQVRICj4gKwo+ICsJZW5hYmxlX3VzdF9sdHRuZ19jaGFu
-bmVsX29rICRTRVNTSU9OX05BTUUgJENIQU5fTkFNRQo+ICsKPiArCWVuYWJsZV91c3RfbHR0bmdf
-ZXZlbnRfcGVyX2NoYW4gJFNFU1NJT05fTkFNRSAkRVZFTlRfTkFNRSAkQ0hBTl9OQU1FCj4gKwo+
-ICsJYWRkX3VzdF9sdHRuZ19jb250ZXh0X29rICRTRVNTSU9OX05BTUUgJENIQU5fTkFNRSAicGVy
-Zjp0aHJlYWQ6cmF3OnIwMTEwOnRlc3QiCj4gKwlhZGRfdXN0X2x0dG5nX2NvbnRleHRfZmFpbCAk
-U0VTU0lPTl9OQU1FICRDSEFOX05BTUUKPiAicGVyZjp0aHJlYWQ6cmF3OmIwMTEwOnRlc3QiCj4g
-KwlhZGRfdXN0X2x0dG5nX2NvbnRleHRfZmFpbCAkU0VTU0lPTl9OQU1FICRDSEFOX05BTUUgInBl
-cmY6dGhyZWFkOnJhdzpyMDExMDoiCj4gKwlhZGRfdXN0X2x0dG5nX2NvbnRleHRfZmFpbCAkU0VT
-U0lPTl9OQU1FICRDSEFOX05BTUUgInBlcmY6dGhyZWFkOnJhdzpyMDExMDo6Igo+ICsJYWRkX3Vz
-dF9sdHRuZ19jb250ZXh0X2ZhaWwgJFNFU1NJT05fTkFNRSAkQ0hBTl9OQU1FICJwZXJmOnRocmVh
-ZDpyYXc6cjp0ZXN0Igo+ICsJYWRkX3VzdF9sdHRuZ19jb250ZXh0X2ZhaWwgJFNFU1NJT05fTkFN
-RSAkQ0hBTl9OQU1FICJwZXJmOnRocmVhZDpyYXc6cjo6Igo+ICsJYWRkX3VzdF9sdHRuZ19jb250
-ZXh0X2ZhaWwgJFNFU1NJT05fTkFNRSAkQ0hBTl9OQU1FICJwZXJmOnRocmVhZDpyYXc6OiIKPiAr
-CWFkZF91c3RfbHR0bmdfY29udGV4dF9mYWlsICRTRVNTSU9OX05BTUUgJENIQU5fTkFNRSAicGVy
-Zjp0aHJlYWQ6cmF3Igo+ICsJYWRkX3VzdF9sdHRuZ19jb250ZXh0X2ZhaWwgJFNFU1NJT05fTkFN
-RSAkQ0hBTl9OQU1FCj4gInBlcmY6dGhyZWFkOnJhdzpyMDExMDp0ZXN0Ondyb25nIgo+ICsKPiAr
-CWRlc3Ryb3lfbHR0bmdfc2Vzc2lvbl9vayAkU0VTU0lPTl9OQU1FCj4gKwo+ICsJcm0gLXJmICRU
-UkFDRV9QQVRICj4gK30KPiArCj4gKyMgTVVTVCBzZXQgVEVTVERJUiBiZWZvcmUgY2FsbGluZyB0
-aG9zZSBmdW5jdGlvbnMKPiArcGxhbl90ZXN0cyAkTlVNX1RFU1RTCj4gKwo+ICtwcmludF90ZXN0
-X2Jhbm5lciAiJFRFU1RfREVTQyIKPiArCj4gK3N0YXJ0X2x0dG5nX3Nlc3Npb25kCj4gKwo+ICt0
-ZXN0X3BhcnNpbmdfcmF3Cj4gKwo+ICtzdG9wX2x0dG5nX3Nlc3Npb25kCj4gLS0KPiAxLjkuMQo+
-IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0
-bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczov
-L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgotLSAK
-TWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
-bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============8108086580191341661==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_44560_2110958274.1466609828051"
+
+------=_Part_44560_2110958274.1466609828051
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+----- On Jun 14, 2016, at 12:31 PM, Luke K D'Alessandro <ldalessa@indiana.e=
+du> wrote:=20
+
+> I tried following the Darwin instructions on the website (basically `
+> ./configure --build=3Dx86_64-apple-darwin11` but the `clock_gettime` and =
+`-lrt`
+> dependencies don=E2=80=99t exist on Darwin).
+
+> Just for fun I removed this dependency and added a custom version of
+> `clock_gettime` (
+> https://github.com/lorrden/darwin-posix-rt/blob/master/clock_gettime.c ) =
+but
+> the build still fails in `systcall-compat.h`.
+
+> ```
+> $ make V=3D1
+> /Applications/Xcode.app/Contents/Developer/usr/bin/make all-recursive
+> Making all in .
+> /bin/sh ./libtool --tag=3DCC --mode=3Dcompile gcc -DHAVE_CONFIG_H -I. -I.=
+/urcu
+> -I./urcu -Wall -g -O2 -D_THREAD_SAFE -pthread -MT wfqueue.lo -MD -MP -MF
+> .deps/wfqueue.Tpo -c -o wfqueue.lo wfqueue.c
+> libtool: compile: gcc -DHAVE_CONFIG_H -I. -I./urcu -I./urcu -Wall -g -O2
+> -D_THREAD_SAFE -pthread -MT wfqueue.lo -MD -MP -MF .deps/wfqueue.Tpo -c
+> wfqueue.c -fno-common -DPIC -o .libs/wfqueue.o
+> In file included from wfqueue.c:28:
+> In file included from ./urcu/static/wfqueue.h:33:
+> In file included from ./urcu/uatomic.h:24:
+> In file included from ./urcu/system.h:23:
+> In file included from ./urcu/arch.h:27:
+> ./urcu/syscall-compat.h:39:2: error: "Add platform support to
+> urcu/syscall-compat.h"
+> #error "Add platform support to urcu/syscall-compat.h"
+> ^
+> 1 error generated.
+> make[2]: *** [wfqueue.lo] Error 1
+> make[1]: *** [all-recursive] Error 1
+> make: *** [all] Error 2
+> ```
+
+> Is Darwin still a supported platform for the library?
+
+It should, yes, but we don't test it in our CI yet.=20
+
+I just took care of the syscall-compat.h error (pushed into master=20
+and stable-0.9). For clock_gettime, we would need to implement=20
+a LGPLv2.1 wrapper within liburcu for MacOSX.=20
+
+Is this something you could look into ?=20
+
+Thanks,=20
+
+Mathieu=20
+
+> Thanks,
+> Luke
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
+
+------=_Part_44560_2110958274.1466609828051
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
+__">----- On Jun 14, 2016, at 12:31 PM, Luke K D'Alessandro &lt;ldalessa@in=
+diana.edu&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><=
+blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-l=
+eft:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:non=
+e;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><span class=3D"">=
+I tried following the Darwin instructions on the website (basically `</span=
+><span class=3D"">./configure --build=3Dx86_64-apple-darwin11` but the `clo=
+ck_gettime` and `-lrt` dependencies don=E2=80=99t&nbsp;exist on Darwin).</s=
+pan><div class=3D""><span class=3D""><br class=3D""></span></div><div class=
+=3D""><span class=3D"">Just for fun I removed this dependency and added a c=
+ustom version of `clock_gettime` (</span><a href=3D"https://github.com/lorr=
+den/darwin-posix-rt/blob/master/clock_gettime.c" class=3D"" target=3D"_blan=
+k">https://github.com/lorrden/darwin-posix-rt/blob/master/clock_gettime.c</=
+a>) but the build still fails in `systcall-compat.h`.</div><span class=3D""=
+><div class=3D""><span class=3D""><br class=3D""></span></div>```<br class=
+=3D""></span><span class=3D"">$ make V=3D1<br class=3D"">/Applications/Xcod=
+e.app/Contents/Developer/usr/bin/make&nbsp;&nbsp;all-recursive<br class=3D"=
+">Making all in .<br class=3D"">/bin/sh ./libtool&nbsp;&nbsp;--tag=3DCC&nbs=
+p;&nbsp;&nbsp;--mode=3Dcompile gcc -DHAVE_CONFIG_H -I. -I./urcu&nbsp;&nbsp;=
+-I./urcu&nbsp;&nbsp;-Wall -g -O2 -D_THREAD_SAFE -pthread -MT wfqueue.lo -MD=
+ -MP -MF&nbsp;.deps/wfqueue.Tpo -c -o wfqueue.lo wfqueue.c<br class=3D"">li=
+btool: compile:&nbsp;&nbsp;gcc -DHAVE_CONFIG_H -I. -I./urcu -I./urcu -Wall =
+-g -O2 -D_THREAD_SAFE -pthread -MT wfqueue.lo -MD -MP -MF .deps/wfqueue.Tpo=
+ -c wfqueue.c&nbsp;&nbsp;-fno-common -DPIC -o .libs/wfqueue.o<br class=3D""=
+>In file included from wfqueue.c:28:<br class=3D"">In file included from ./=
+urcu/static/wfqueue.h:33:<br class=3D"">In file included from ./urcu/uatomi=
+c.h:24:<br class=3D"">In file included from ./urcu/system.h:23:<br class=3D=
+"">In file included from ./urcu/arch.h:27:<br class=3D"">./urcu/syscall-com=
+pat.h:39:2:&nbsp;error:&nbsp;"Add platform support to urcu/syscall-compat.h=
+"<br class=3D"">#error "Add platform support to urcu/syscall-compat.h"<br c=
+lass=3D"">&nbsp;^<br class=3D"">1 error generated.<br class=3D"">make[2]: *=
+** [wfqueue.lo] Error 1<br class=3D"">make[1]: *** [all-recursive] Error 1<=
+br class=3D"">make: *** [all] Error 2<br class=3D""></span><span class=3D""=
+>```</span><div class=3D""><span class=3D""><br class=3D""></span></div><di=
+v class=3D""><span class=3D"">Is&nbsp;Darwin still a supported platform for=
+ the library?</span></div></blockquote><div><br></div><div>It should, yes, =
+but we don't test it in our CI yet.<br data-mce-bogus=3D"1"></div><div><br =
+data-mce-bogus=3D"1"></div><div>I just took care of the syscall-compat.h er=
+ror (pushed into master</div><div>and stable-0.9). For clock_gettime, we wo=
+uld need to implement</div><div>a LGPLv2.1 wrapper within liburcu for MacOS=
+X.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>I=
+s this something you could look into ?<br data-mce-bogus=3D"1"></div><div><=
+br data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><d=
+iv><br data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></di=
+v><div><br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><=
+blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-l=
+eft:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:non=
+e;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div class=3D""><=
+span class=3D""><br class=3D""></span></div><div class=3D""><span class=3D"=
+">Thanks,</span></div><div class=3D""><span class=3D"">Luke</span></div><br=
+>_______________________________________________<br>lttng-dev mailing list<=
+br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/lis=
+tinfo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D"__=
+SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://=
+www.efficios.com</div></div></body></html>
+------=_Part_44560_2110958274.1466609828051--
+
+--===============8108086580191341661==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============8108086580191341661==--
