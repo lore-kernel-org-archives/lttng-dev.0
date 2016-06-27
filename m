@@ -1,15 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Fix: RHEL 7.2 kvm instrumentation
-Date: Mon, 27 Jun 2016 16:13:57 +0000 (UTC)
-Message-ID: <1451271429.49557.1467044037388.JavaMail.zimbra__46511.5060368136$1467044076$gmane$org@efficios.com>
-References: <CABp_NWB7SQ9zz8F9UhKJjD_a274OBDjOvQ78Yvm-Hs1N_7zxLw@mail.gmail.com>
+Subject: Re: [lttng-ust GIT PULL v7] Doc: add a CMake example
+Date: Mon, 27 Jun 2016 16:46:04 +0000 (UTC)
+Message-ID: <1123894513.49655.1467045964310.JavaMail.zimbra__16802.8165157468$1467046005$gmane$org@efficios.com>
+References: <577088E3.7080201@gydle.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3580821862211115694=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 778CCA385D
- for <lttng-dev@lists.lttng.org>; Mon, 27 Jun 2016 16:14:11 +0000 (UTC)
-In-Reply-To: <CABp_NWB7SQ9zz8F9UhKJjD_a274OBDjOvQ78Yvm-Hs1N_7zxLw@mail.gmail.com>
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 6057EA36B6
+ for <lttng-dev@lists.lttng.org>; Mon, 27 Jun 2016 16:46:11 +0000 (UTC)
+In-Reply-To: <577088E3.7080201@gydle.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,147 +20,65 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: mo geb <mohamad.gebai@gmail.com>
+To: Sebastien Boisvert <sboisvert@gydle.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============3580821862211115694==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_49556_1343261220.1467044037387"
-
-------=_Part_49556_1343261220.1467044037387
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
------ On Jun 27, 2016, at 11:26 AM, mo geb <mohamad.gebai@gmail.com> wrote: 
-
-Please use [PATCH lttng-modules] in the subject. 
-
-> Signed-off-by: Mohamad Gebai < mohamad.gebai@gmail.com >
-> ---
-> instrumentation/events/lttng-module/arch/x86/kvm/trace.h | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
-
-> diff --git a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> index 1282bea..ef3d8aa 100644
-> --- a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> +++ b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
-> @@ -429,7 +429,8 @@ LTTNG_TRACEPOINT_EVENT(kvm_emulate_insn,
-> ctf_integer(__u8, len, vcpu->arch.emulate_ctxt.decode.eip
-> - vcpu->arch.emulate_ctxt.decode.fetch.start)
-> ctf_array(__u8, insn, vcpu->arch.emulate_ctxt.decode.fetch.data, 15)
-> -#elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,17,0))
-> +#elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,17,0) \
-> + && !LTTNG_RHEL_KERNEL_RANGE(3,10,0,7,2, 3,11,0,0,0))
-
-We don't use negation "!" in kernel version range tests. We also don't use 
-"&&" typically, to make the code easier to maintain. 
-
-Instead, we might want to swap the order in which ifdefs are done, and put 
-newer versions at the top, e.g.: 
-
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,17,0)) \ 
-|| LTTNG_RHEL_KERNEL_RANGE(3,10,0,7,2, 3,11,0,0,0)) 
-... 
-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0)) 
-... 
-#else 
-... 
-#endif 
-
-Thanks, 
-
-Mathieu 
-
-> ctf_integer(__u64, rip, vcpu->arch.emulate_ctxt.fetch.start)
-> ctf_integer(__u32, csbase, kvm_x86_ops->get_segment_base(vcpu, VCPU_SREG_CS))
-> ctf_integer(__u8, len, vcpu->arch.emulate_ctxt._eip
-> --
-> 2.1.1
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
-------=_Part_49556_1343261220.1467044037387
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><br></div><div><span id=3D"zwchr" data-mark=
-er=3D"__DIVIDER__">----- On Jun 27, 2016, at 11:26 AM, mo geb &lt;mohamad.g=
-ebai@gmail.com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT=
-__"><div><br></div><div>Please use [PATCH lttng-modules] in the subject.<br=
- data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote=
- style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;co=
-lor:#000;font-weight:normal;font-style:normal;text-decoration:none;font-fam=
-ily:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div>Signe=
-d-off-by: Mohamad Gebai &lt;<a href=3D"mailto:mohamad.gebai@gmail.com" targ=
-et=3D"_blank">mohamad.gebai@gmail.com</a>&gt;<br>---<br>&nbsp;instrumentati=
-on/events/lttng-module/arch/x86/kvm/trace.h | 3 ++-<br>&nbsp;1 file changed=
-, 2 insertions(+), 1 deletion(-)</div><p>diff --git a/instrumentation/event=
-s/lttng-module/arch/x86/kvm/trace.h b/instrumentation/events/lttng-module/a=
-rch/x86/kvm/trace.h<br>index 1282bea..ef3d8aa 100644<br>--- a/instrumentati=
-on/events/lttng-module/arch/x86/kvm/trace.h<br>+++ b/instrumentation/events=
-/lttng-module/arch/x86/kvm/trace.h<br>@@ -429,7 +429,8 @@ LTTNG_TRACEPOINT_=
-EVENT(kvm_emulate_insn,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ctf_integer(__u8, len, vcpu-&gt;=
-arch.emulate_ctxt.decode.eip<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - vcpu=
--&gt;arch.emulate_ctxt.decode.fetch.start)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ctf_array(__u=
-8, insn, vcpu-&gt;arch.emulate_ctxt.decode.fetch.data, 15)<br>-#elif (LINUX=
-_VERSION_CODE &lt; KERNEL_VERSION(3,17,0))<br>+#elif (LINUX_VERSION_CODE &l=
-t; KERNEL_VERSION(3,17,0) \<br>+&nbsp;&nbsp;&nbsp; &amp;&amp; !LTTNG_RHEL_K=
-ERNEL_RANGE(3,10,0,7,2, 3,11,0,0,0))</p></div></blockquote><div><br></div><=
-div>We don't use negation "!" in kernel version range tests. We also don't =
-use<br data-mce-bogus=3D"1"></div><div>"&amp;&amp;" typically, to make the =
-code easier to maintain.<br data-mce-bogus=3D"1"></div><div><br data-mce-bo=
-gus=3D"1"></div><div>Instead, we might want to swap the order in which ifde=
-fs are done, and put<br data-mce-bogus=3D"1"></div><div>newer versions at t=
-he top, e.g.:<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"><=
-/div><div>#if (LINUX_VERSION_CODE &gt;=3D KERNEL_VERSION(3,17,0)) \<br data=
--mce-bogus=3D"1"></div><div>&nbsp; || LTTNG_RHEL_KERNEL_RANGE(3,10,0,7,2, 3=
-,11,0,0,0))<br data-mce-bogus=3D"1"></div><div>...<br data-mce-bogus=3D"1">=
-</div><div>#elif (LINUX_VERSION_CODE &gt;=3D KERNEL_VERSION(3,1,0))<br data=
--mce-bogus=3D"1"></div><div>...<br data-mce-bogus=3D"1"></div><div>#else<br=
- data-mce-bogus=3D"1"></div><div>...<br data-mce-bogus=3D"1"></div><div>#en=
-dif<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>=
-Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><=
-div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></d=
-iv><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px=
- solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:norm=
-al;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-=
-serif;font-size:12pt;"><div dir=3D"ltr"><p><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ctf_integer(=
-__u64, rip, vcpu-&gt;arch.emulate_ctxt.fetch.start)<br>&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ctf_=
-integer(__u32, csbase, kvm_x86_ops-&gt;get_segment_base(vcpu, VCPU_SREG_CS)=
-)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp; ctf_integer(__u8, len, vcpu-&gt;arch.emulate_ctxt._eip=
-<br>-- <br>2.1.1<br></p></div><br>_________________________________________=
-______<br>lttng-dev mailing list<br>lttng-dev@lists.lttng.org<br>https://li=
-sts.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br></blockquote></div><div=
-><br></div><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desn=
-oyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></html>
-------=_Part_49556_1343261220.1467044037387--
-
---===============3580821862211115694==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============3580821862211115694==--
+Ci0tLS0tIE9uIEp1biAyNiwgMjAxNiwgYXQgMTA6MDEgUE0sIFNlYmFzdGllbiBCb2lzdmVydCBz
+Ym9pc3ZlcnRAZ3lkbGUuY29tIHdyb3RlOgoKPiBIaSBNYXRoaWV1LAo+IAo+IFRoaXMgaXMgdGhl
+IHZlcnNpb24gNyBvZiBteSBwdWxsIHJlcXVlc3Q7IGl0IGNvbnRhaW5zIGEgQ01ha2UgZXhhbXBs
+ZSBpbiBDKysKPiB3aGljaCB1c2VzIExUVG5nLVVTVAo+IGluc3RydW1lbnRhdGlvbiBpbiAyIHNo
+YXJlZCBsaWJyYXJpZXMuIFllcywgdGhpcyBpcyB2Ny4gSSBzdGFydGVkIHRvIGNvdW50IGZyb20K
+PiB2MSwgYnV0IHRoZSBmaXJzdCB0aGF0IHlvdQo+IHJldmlld2VkIHdhcyB2NSBJIHRoaW5rLiBQ
+aGlsaXBwZSBoZWxwZWQgbWUgd2l0aCB2MSB0aHJvdWdoIHY0L3Y1Lgo+IAo+IEkgbG9va2VkIGF0
+IHRoZSBjb21tZW50cyBmcm9tIHlvdXIgY29kZSByZXZpZXdzIChvbiBib3RoIHY1IGFuZCB2NiBb
+MV0pLgo+IAo+IEkgaW1wbGVtZW50ZWQgYWxsIHRoZSByZXF1aXJlZCBjaGFuZ2VzIChhY2tlZC1i
+eSwgc3R5bGUsIHdoaXRlc3BhY2UgbGluZXMsIGFuZAo+IHNvIG9uKS4KPiAKPiBJIHdlbnQgdGhl
+IGV4dHJhIG1pbGUgdG9vLiBJIGFsc28gY29udmVydGVkIHRoZSA0LXNwYWNlIGluZGVudGF0aW9u
+cyB0bwo+IHRhYiBpbmRlbnRhdGlvbnMuIEZpbmFsbHksIEkgaW1wcm92ZWQgdGhlIHRyYWNlcG9p
+bnRzIGluIHRoZSBleGFtcGxlIHN1Y2ggdGhhdAo+IGl0IG1ha2VzCj4gbW9yZSBzZW5zZS4KPiAK
+PiBQaGlsaXBwZTogSSB1c2VkIHRoZSAnZml4dXAnIHRoaW5nIGFuZCBJIGxvdmUgaXQuCj4gCj4g
+Cj4gCj4gTWF0aGlldSwgeW91IGNhbiBwdWxsIGZyb20KPiAKPiAgICAgICBodHRwczovL2dpdGh1
+Yi5jb20vc2ViaHRtbC9sdHRuZy11c3QuZ2l0ICB0YWdzL2Zvci1jb21wdWRqLWNtYWtlLWV4YW1w
+bGUudjcKPiAKCkp1c3QgbWVyZ2VkIGl0LiBJIGFkZGVkIGEgY29kaW5nIHN0eWxlIGZpeCBjb21t
+aXQgb24gdG9wLgoKVGhhbmtzIQoKTWF0aGlldQoKPiAKPiAKPiBUaGUgY2hhbmdlcyBjYW4gYmUg
+dmlld2VkIG9uIGdpdGh1YjoKPiAKPiAgICAgICBodHRwczovL2dpdGh1Yi5jb20vc2ViaHRtbC9s
+dHRuZy11c3QvY29tbWl0cy9mb3ItY29tcHVkai1jbWFrZS1leGFtcGxlLnY3Cj4gCj4gCj4gCj4g
+TGV0IG1lIGtub3cgaWYgdGhlcmUgc2hvdWxkIGJlIGEgdjgsIGdpdmVuIG15IHByZXZpb3VzIG1p
+c3VzZSBvZiBnaXQgYWNrZWQtYnkKPiBhbmQgc2lnbmVkLW9mZiB0YWdzLgo+IAo+IAo+IAo+IAo+
+IHNob3J0bG9nCj4gCj4gU2ViYXN0aWVuIEJvaXN2ZXJ0ICgzKToKPiAgICAgICBjb25maWd1cmUu
+YWM6IGNoZWNrIGNtYWtlIGF2YWlsYWJpbGl0eQo+ICAgICAgIERvYzogYWRkIENNYWtlIGV4YW1w
+bGUKPiAgICAgICBEb2M6IHNoaXAgY21ha2UgZXhhbXBsZSB3aXRoICdtYWtlIGRpc3RjaGVjaycK
+PiAKPiAKPiBkaWZmc3RhdAo+IAo+ICBjb25maWd1cmUuYWMgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDMgKysKPiAgZG9jL2V4YW1w
+bGVzL01ha2VmaWxlLmFtICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDM4Cj4gICsrKysrKysrKysrKysrKysrKysrLS0KPiAgZG9jL2V4YW1wbGVzL2NtYWtl
+LW11bHRpcGxlLXNoYXJlZC1saWJyYXJpZXMvQ01ha2VMaXN0cy50eHQgICAgICAgICAgIHwgIDIz
+Cj4gICsrKysrKysrKysrKysrCj4gIGRvYy9leGFtcGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQt
+bGlicmFyaWVzL1JFQURNRS5tZCAgICAgICAgICAgICAgICB8ICA1Mgo+ICArKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysKPiAgZG9jL2V4YW1wbGVzL2NtYWtlLW11bHRpcGxlLXNoYXJlZC1s
+aWJyYXJpZXMvYWxpZ25lci1saWIuY3BwICAgICAgICAgIHwgIDM0Cj4gICsrKysrKysrKysrKysr
+KysrKysrCj4gIGRvYy9leGFtcGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFyaWVzL2Fs
+aWduZXItbGliLmggICAgICAgICAgICB8ICAzMAo+ICArKysrKysrKysrKysrKysrKysKPiAgZG9j
+L2V4YW1wbGVzL2NtYWtlLW11bHRpcGxlLXNoYXJlZC1saWJyYXJpZXMvYWxpZ25lci5jcHAgICAg
+ICAgICAgICAgIHwgIDMwCj4gICsrKysrKysrKysrKysrKysrKwo+ICBkb2MvZXhhbXBsZXMvY21h
+a2UtbXVsdGlwbGUtc2hhcmVkLWxpYnJhcmllcy9jbWFrZS9GaW5kTFRUbmdVU1QuY21ha2UgfCAx
+MTEKPiAgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysKPiAgZG9jL2V4YW1wbGVzL2NtYWtlLW11bHRpcGxlLXNoYXJlZC1saWJy
+YXJpZXMvdGVzdGVyLWxpYi5jcHAgICAgICAgICAgIHwgIDMxCj4gICsrKysrKysrKysrKysrKysr
+Kwo+ICBkb2MvZXhhbXBsZXMvY21ha2UtbXVsdGlwbGUtc2hhcmVkLWxpYnJhcmllcy90ZXN0ZXIt
+bGliLmggICAgICAgICAgICAgfCAgMzAKPiAgKysrKysrKysrKysrKysrKysrCj4gIGRvYy9leGFt
+cGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFyaWVzL3Rlc3Rlci5jcHAgICAgICAgICAg
+ICAgICB8ICAzNQo+ICArKysrKysrKysrKysrKysrKysrKysKPiAgZG9jL2V4YW1wbGVzL2NtYWtl
+LW11bHRpcGxlLXNoYXJlZC1saWJyYXJpZXMvdHJhY2Uuc2ggICAgICAgICAgICAgICAgIHwgICA5
+Cj4gICsrKysrKwo+ICBkb2MvZXhhbXBsZXMvY21ha2UtbXVsdGlwbGUtc2hhcmVkLWxpYnJhcmll
+cy90cmFjZXBvaW50LXByb3ZpZGVyLmNwcCAgfCAgMjYKPiAgKysrKysrKysrKysrKysrCj4gIGRv
+Yy9leGFtcGxlcy9jbWFrZS1tdWx0aXBsZS1zaGFyZWQtbGlicmFyaWVzL3RyYWNlcG9pbnQtcHJv
+dmlkZXIuaCAgICB8ICA2MAo+ICArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+
+ICAxNCBmaWxlcyBjaGFuZ2VkLCA1MTAgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPiAK
+PiAKPiAKPiBSZWZlcmVuY2VzCj4gCj4gWzFdIGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL3BpcGVy
+bWFpbC9sdHRuZy1kZXYvMjAxNi1KdW5lLzAyNjI1NS5odG1sCgotLSAKTWF0aGlldSBEZXNub3ll
+cnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
+YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
