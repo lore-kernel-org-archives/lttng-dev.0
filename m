@@ -1,16 +1,16 @@
-From: Sebastien Boisvert <sboisvert@gydle.com>
-Subject: Re: subbuffers count and size
-Date: Mon, 27 Jun 2016 11:24:30 -0400
-Message-ID: <5771452E.6070509__36455.1061335534$1467041030$gmane$org@gydle.com>
-References: <CAHxF_R85MSZ5LqvH1JGUXyj2HaMNfyO7pT7ypQ=o=zoE1F4ybw@mail.gmail.com>
+From: mo geb <mohamad.gebai@gmail.com>
+Subject: [PATCH] Fix: RHEL 7.2 kvm instrumentation
+Date: Mon, 27 Jun 2016 11:26:18 -0400
+Message-ID: <CABp_NWB7SQ9zz8F9UhKJjD_a274OBDjOvQ78Yvm-Hs1N_7zxLw__43522.0375228257$1467041196$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0225622204806904425=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id C0E4CA3678
- for <lttng-dev@lists.lttng.org>; Mon, 27 Jun 2016 15:23:31 +0000 (UTC)
-In-Reply-To: <CAHxF_R85MSZ5LqvH1JGUXyj2HaMNfyO7pT7ypQ=o=zoE1F4ybw@mail.gmail.com>
+Received: from mail-qk0-f194.google.com (mail-qk0-f194.google.com
+ [209.85.220.194])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 9F426A385D
+ for <lttng-dev@lists.lttng.org>; Mon, 27 Jun 2016 15:26:19 +0000 (UTC)
+Received: by mail-qk0-f194.google.com with SMTP id r136so11683733qke.3
+ for <lttng-dev@lists.lttng.org>; Mon, 27 Jun 2016 08:26:19 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,50 +20,82 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Vijay Anand <vjanandr85@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgVmlqYXksCgoKT24gMDYvMjcvMjAxNiAwNjoxMiBBTSwgVmlqYXkgQW5hbmQgd3JvdGU6Cj4g
-SGksCj4gCj4gSSBoYXZlIGJlZW4gdHJ5aW5nIHRvIHVuZGVyc3RhbmQgdGhlIGltcGFjdCBvZiBw
-ZXJmb3JtYW5jZSB3aGlsZSBsb2dnaW5nIHVzZXIgc3BhY2UgcHJvZ3JhbSBiYXNlZCBvbiB0aGUg
-c3ViYnVmZmVyIGNvdW50IGFuZCBzaXplLgo+IAoKVGhlIHN1Yi1idWZmZXJzIGNvdW50IGFuZCBz
-aXplIGlzIHdlbGwtZG9jdW1lbnRlZCBoZXJlOgoKICAgIGh0dHA6Ly9sdHRuZy5vcmcvZG9jcy8j
-ZG9jLWNoYW5uZWwtc3ViYnVmLXNpemUtdnMtc3ViYnVmLWNvdW50CgoKCj4gSSBoYXZlIGEgc2lt
-cGxlIHByb2dyYW0gbG9nZ2luZyAxIG1pbGxpb24gdHJhY2VzIAoKRG8geW91IG1lYW4gdGhhdCB5
-b3UgcmVjb3JkZWQgMSBtaWxsaW9uIFVTVCBldmVudHMgPwoKT3IgZG8geW91IG1lYW4gdGhhdCB5
-b3UgdHJhY2VkIHlvdXIgYXBwIDEgbWlsbGlvbiB0aW1lcyBhbmQgeW91IGdlbmVyYXRlZCAxIG1p
-bGxpb24gdHJhY2VzID8KCgo+IGFuZCBJIGRvbnQgc2VlbSB0byBzZWUgYW55IGFwcHJlY2lhYmxl
-IHBlcmZvcm1hbmNlIGJldHdlZW4gdGhlIGJlbG93IHR3byBjb25maWd1cmF0aW9ucy4KPiAKPiBh
-LiBkZWZhdWx0IDQgc3ViYnVmZXJzIDEyOEtCIGVhY2gKPiBiLiAxNiBzdWJidWZlcnMgd2l0aCAx
-MDI0a0IgZWFjaC4KCldoZW4geW91IGFyZSBlbmFibGluZyB5b3VyIFVTVCBldmVudHMgKGJlZm9y
-ZSBzdGFydGluZyB0aGUgTFRUbmcgc2Vzc2lvbiksIAphcmUgeW91IGVuYWJsaW5nIHlvdXIgVVNU
-IGV2ZW50cyBpbiB5b3VyIGN1c3RvbSBjaGFubmVsICh0aGUgb25lIHdpdGggY29uZmlndXJhdGlv
-biBhLiBvciBjb25maWd1cmF0aW9uIGIuKSA/CgoKSWYgbm90LCBpdCBjb3VsZCBleHBsYWluIHRo
-ZSBsYWNrIG9mIGRpZmZlcmVuY2UgaW4gcGVyZm9ybWFuY2UgYmV0d2VlbiB5b3VyIDIgY29uZmln
-dXJhdGlvbnMuCgoKRXhhbXBsZToKCiAgICBsdHRuZyBjcmVhdGUKCiAgICBsdHRuZyBlbmFibGUt
-Y2hhbm5lbCAtdSAtLXN1YmJ1Zi1zaXplIDRNIGNoYW5uZWw3CiAgICBsdHRuZyBlbmFibGUtZXZl
-bnQgLXUgLWMgY2hhbm5lbDcgZ3lkbGVfb206QWxsb2NhdG9yX2NvbnN0cnVjdG9yX2RlZmF1bHQK
-CiAgICBsdHRuZyBzdGFydAoKICAgIHJ1bi15b3VyLWFwcAoKICAgIGx0dG5nIHN0b3AKICAgIGx0
-dG5nIHZpZXcgPiB0cmFjZS50eHQKCgoKPiAKPiBNb3Jlb3ZlciBJIGhhdmUgYmVlbiBsb29raW5n
-IGF0IHRoZSBsdHRuZy11c3QgY29kZSB0byB1bmRlcnN0YW5kIHRoZSBwZXJmb3JtYW5jZSBpbXBh
-Y3RzIGZyb20gdGhlIGltcGxlbWVudGF0aW9uIGFuZCB1bmFibGUgdG8gY29tcHJlaGVuZCB3aGF0
-IGlzIGRvY3VtZW50ZWQgYXQgCj4gCj4gaHR0cDovL2x0dG5nLm9yZy9kb2NzLyNkb2MtY2hhbm5l
-bC1zdWJidWYtc2l6ZS12cy1zdWJidWYtY291bnQKPiAKPiBJIHNlZSB0aGF0IGNoYW5uZWxfYmFj
-a2VuZF9pbml0LCBfc2htX29iamVjdF90YWJsZV9hbGxvY19zaG0gc2VlbXMgdG8gYWxsb2NhdGUg
-b25lIGJpZyBzaGFyZWQgbWVtb3J5IGNodW5rIHdoaWNoIGFnYWluIGlzIHN1YmRpdmlkZWQgaW50
-byBzdWJidWZmZXJzIHdpdGggZWFjaCBzdWJidWZmZXIgcmVmZXJlbmNlZCB1c2luZyB0aGUgc3Vi
-YnVmZXIgaW5kZXguCj4gCj4gRnVydGhlciBtb3JlIGxpYl9yaW5nX2J1ZmZlcl93cml0ZSBzZWVt
-cyB0byBmaW5kIHRoZSBzdWJidWZmZXIgaW5kZXggYW5kIHdyaXRlICJsZW4iIG51bWJlciBvZiBi
-eXRlcyBpbnRvIHRoZSBzdWJidWZmZXIgaW5kZXguCj4gCj4gQ291bGQgYW55b25lIHBsZWFzZSBl
-bmxpZ2h0ZW4gbWUgd2hhdCBpcyB0aGUgb3ZlcmhlYWQgaW52b2x2ZWQgd2hpbGUgc3dpdGNoaW5n
-IGZyb20gb25lIHN1YmJ1ZmVyIHRvIGFub3RoZXIgYXMgZG9jdW1lbnRlZC4KPiAKClRoZSBkb2N1
-bWVudGF0aW9uIGluZGljYXRlcyB0aGF0IHRoZSB0cmFjZXIncyBDUFUgb3ZlcmhlYWQgaXMgY2F1
-c2VkIGJ5IDIgdGhpbmdzOgoKMSkgbWFya2luZyB0aGUgY3VycmVudCBzdWItYnVmZmVyIGFzIGNv
-bnN1bWFibGUsIGFuZAoyKSBzd2l0Y2hpbmcgdG8gYW4gZW1wdHkgc3ViLWJ1ZmZlci4KCgoKCj4g
-UmVnYXJkcywKPiBWaWpheQo+IAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0
-cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
-dGluZm8vbHR0bmctZGV2Cj4gCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-ZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
-ZGV2Cg==
+--===============0225622204806904425==
+Content-Type: multipart/alternative; boundary=001a114388d8533d040536442458
+
+--001a114388d8533d040536442458
+Content-Type: text/plain; charset=UTF-8
+
+Signed-off-by: Mohamad Gebai <mohamad.gebai@gmail.com>
+---
+ instrumentation/events/lttng-module/arch/x86/kvm/trace.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
+b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
+index 1282bea..ef3d8aa 100644
+--- a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
++++ b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h
+@@ -429,7 +429,8 @@ LTTNG_TRACEPOINT_EVENT(kvm_emulate_insn,
+                ctf_integer(__u8, len, vcpu->arch.emulate_ctxt.decode.eip
+                                -
+vcpu->arch.emulate_ctxt.decode.fetch.start)
+                ctf_array(__u8, insn,
+vcpu->arch.emulate_ctxt.decode.fetch.data, 15)
+-#elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,17,0))
++#elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,17,0) \
++    && !LTTNG_RHEL_KERNEL_RANGE(3,10,0,7,2, 3,11,0,0,0))
+                ctf_integer(__u64, rip, vcpu->arch.emulate_ctxt.fetch.start)
+                ctf_integer(__u32, csbase,
+kvm_x86_ops->get_segment_base(vcpu, VCPU_SREG_CS))
+                ctf_integer(__u8, len, vcpu->arch.emulate_ctxt._eip
+-- 
+2.1.1
+
+--001a114388d8533d040536442458
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>=C2=A0</div><div>Signed-off-by: Mohamad Gebai &lt;<a =
+href=3D"mailto:mohamad.gebai@gmail.com">mohamad.gebai@gmail.com</a>&gt;<br>=
+---<br>=C2=A0instrumentation/events/lttng-module/arch/x86/kvm/trace.h | 3 +=
++-<br>=C2=A01 file changed, 2 insertions(+), 1 deletion(-)</div><p>diff --g=
+it a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h b/instrumenta=
+tion/events/lttng-module/arch/x86/kvm/trace.h<br>index 1282bea..ef3d8aa 100=
+644<br>--- a/instrumentation/events/lttng-module/arch/x86/kvm/trace.h<br>++=
++ b/instrumentation/events/lttng-module/arch/x86/kvm/trace.h<br>@@ -429,7 +=
+429,8 @@ LTTNG_TRACEPOINT_EVENT(kvm_emulate_insn,<br>=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ctf_i=
+nteger(__u8, len, vcpu-&gt;arch.emulate_ctxt.decode.eip<br>=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 - vcpu-&gt;arch.emulate_ctxt.decode.fetch.start)<br>=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 ctf_array(__u8, insn, vcpu-&gt;arch.emulate_ctxt.decode.fet=
+ch.data, 15)<br>-#elif (LINUX_VERSION_CODE &lt; KERNEL_VERSION(3,17,0))<br>=
++#elif (LINUX_VERSION_CODE &lt; KERNEL_VERSION(3,17,0) \<br>+=C2=A0=C2=A0=
+=C2=A0 &amp;&amp; !LTTNG_RHEL_KERNEL_RANGE(3,10,0,7,2, 3,11,0,0,0))<br>=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 ctf_integer(__u64, rip, vcpu-&gt;arch.emulate_ctxt.fetch.start=
+)<br>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 ctf_integer(__u32, csbase, kvm_x86_ops-&gt;get_segmen=
+t_base(vcpu, VCPU_SREG_CS))<br>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ctf_integer(__u8, len, vcp=
+u-&gt;arch.emulate_ctxt._eip<br>-- <br>2.1.1<br></p></div>
+
+--001a114388d8533d040536442458--
+
+--===============0225622204806904425==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============0225622204806904425==--
