@@ -1,15 +1,16 @@
-From: Vijay Anand <vjanandr85@gmail.com>
-Subject: subbuffers count and size
-Date: Mon, 27 Jun 2016 15:42:54 +0530
-Message-ID: <CAHxF_R85MSZ5LqvH1JGUXyj2HaMNfyO7pT7ypQ=o=zoE1F4ybw__31300.4236239523$1467022393$gmane$org@mail.gmail.com>
+From: Sebastien Boisvert <sboisvert@gydle.com>
+Subject: Re: subbuffers count and size
+Date: Mon, 27 Jun 2016 11:24:30 -0400
+Message-ID: <5771452E.6070509__36455.1061335534$1467041030$gmane$org@gydle.com>
+References: <CAHxF_R85MSZ5LqvH1JGUXyj2HaMNfyO7pT7ypQ=o=zoE1F4ybw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0793273201295204799=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm0-f50.google.com (mail-wm0-f50.google.com [74.125.82.50])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id D04ADA0287
- for <lttng-dev@lists.lttng.org>; Mon, 27 Jun 2016 10:12:54 +0000 (UTC)
-Received: by mail-wm0-f50.google.com with SMTP id v199so93533628wmv.0
- for <lttng-dev@lists.lttng.org>; Mon, 27 Jun 2016 03:12:54 -0700 (PDT)
+Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id C0E4CA3678
+ for <lttng-dev@lists.lttng.org>; Mon, 27 Jun 2016 15:23:31 +0000 (UTC)
+In-Reply-To: <CAHxF_R85MSZ5LqvH1JGUXyj2HaMNfyO7pT7ypQ=o=zoE1F4ybw@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,110 +20,50 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: Vijay Anand <vjanandr85@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0793273201295204799==
-Content-Type: multipart/alternative; boundary=089e0102d80082714705363fc344
-
---089e0102d80082714705363fc344
-Content-Type: text/plain; charset=UTF-8
-
-Hi,
-
-I have been trying to understand the impact of performance while logging
-user space program based on the subbuffer count and size.
-
-I have a simple program logging 1 million traces and I dont seem to see any
-appreciable performance between the below two configurations.
-
-a. default 4 subbufers 128KB each
-b. 16 subbufers with 1024kB each.
-
-Moreover I have been looking at the lttng-ust code to understand the
-performance impacts from the implementation and unable to comprehend what
-is documented at
-
-http://lttng.org/docs/#doc-channel-subbuf-size-vs-subbuf-count
-
-I see that channel_backend_init, _shm_object_table_alloc_shm seems to
-allocate one big shared memory chunk which again is subdivided into
-subbuffers with each subbuffer referenced using the subbufer index.
-
-Further more lib_ring_buffer_write seems to find the subbuffer index and
-write "len" number of bytes into the subbuffer index.
-
-Could anyone please enlighten me what is the overhead involved while
-switching from one subbufer to another as documented.
-
-Regards,
-Vijay
-
---089e0102d80082714705363fc344
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-family:verdana,=
-sans-serif;font-size:small"><font color=3D"#000000">Hi,</font></div><div cl=
-ass=3D"gmail_default" style=3D"font-family:verdana,sans-serif;font-size:sma=
-ll"><font color=3D"#000000"><br></font></div><div class=3D"gmail_default" s=
-tyle=3D"font-family:verdana,sans-serif;font-size:small"><font color=3D"#000=
-000">I have been trying to understand the impact of performance while loggi=
-ng user space program based on the subbuffer count and size.</font></div><d=
-iv class=3D"gmail_default" style=3D"font-family:verdana,sans-serif;font-siz=
-e:small"><font color=3D"#000000"><br></font></div><div class=3D"gmail_defau=
-lt" style=3D"font-family:verdana,sans-serif;font-size:small"><font color=3D=
-"#000000">I have a simple program logging 1 million traces and I dont seem =
-to see any appreciable performance between the below two configurations.</f=
-ont></div><div class=3D"gmail_default" style=3D"font-family:verdana,sans-se=
-rif;font-size:small"><font color=3D"#000000"><br></font></div><div class=3D=
-"gmail_default" style=3D"font-family:verdana,sans-serif;font-size:small"><f=
-ont color=3D"#000000">a. default 4 subbufers 128KB each</font></div><div cl=
-ass=3D"gmail_default" style=3D"font-family:verdana,sans-serif;font-size:sma=
-ll"><font color=3D"#000000">b. 16 subbufers with 1024kB each.</font></div><=
-div class=3D"gmail_default" style=3D"font-family:verdana,sans-serif;font-si=
-ze:small"><font color=3D"#000000"><br></font></div><div class=3D"gmail_defa=
-ult" style=3D"font-family:verdana,sans-serif;font-size:small"><font color=
-=3D"#000000">Moreover I have been looking at the lttng-ust code to understa=
-nd the performance impacts from the implementation and unable to comprehend=
- what is documented at=C2=A0</font></div><div class=3D"gmail_default" style=
-=3D"font-family:verdana,sans-serif;font-size:small"><font color=3D"#000000"=
-><br></font></div><div class=3D"gmail_default" style=3D""><font color=3D"#0=
-00000"><font face=3D"verdana, sans-serif"><a href=3D"http://lttng.org/docs/=
-#doc-channel-subbuf-size-vs-subbuf-count">http://lttng.org/docs/#doc-channe=
-l-subbuf-size-vs-subbuf-count</a></font><br></font></div><div class=3D"gmai=
-l_default" style=3D""><font face=3D"verdana, sans-serif" color=3D"#000000">=
-<br></font></div><div class=3D"gmail_default" style=3D""><font face=3D"verd=
-ana, sans-serif" color=3D"#000000">I see that=C2=A0channel_backend_init,=C2=
-=A0_shm_object_table_alloc_shm seems to allocate one big shared memory chun=
-k which again is subdivided into subbuffers with each subbuffer referenced =
-using the subbufer index.</font></div><div class=3D"gmail_default" style=3D=
-""><font face=3D"verdana, sans-serif" color=3D"#000000"><br></font></div><d=
-iv class=3D"gmail_default" style=3D""><font face=3D"verdana, sans-serif" co=
-lor=3D"#000000">Further more=C2=A0lib_ring_buffer_write seems to find the s=
-ubbuffer index and write &quot;len&quot; number of bytes into the subbuffer=
- index.</font></div><div class=3D"gmail_default" style=3D""><font face=3D"v=
-erdana, sans-serif" color=3D"#000000"><br></font></div><div class=3D"gmail_=
-default" style=3D""><font face=3D"verdana, sans-serif" color=3D"#000000">Co=
-uld anyone please enlighten me what is the overhead involved while switchin=
-g from one subbufer to another as documented.</font></div><div class=3D"gma=
-il_default" style=3D"font-family:verdana,sans-serif;font-size:small"><font =
-color=3D"#000000"><br></font></div><div><div class=3D"gmail_signature" data=
--smartmail=3D"gmail_signature"><div dir=3D"ltr"><font face=3D"verdana, sans=
--serif" color=3D"#000000">Regards,</font><div><font face=3D"verdana, sans-s=
-erif" color=3D"#000000">Vijay</font></div></div></div></div>
-</div>
-
---089e0102d80082714705363fc344--
-
---===============0793273201295204799==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============0793273201295204799==--
+SGkgVmlqYXksCgoKT24gMDYvMjcvMjAxNiAwNjoxMiBBTSwgVmlqYXkgQW5hbmQgd3JvdGU6Cj4g
+SGksCj4gCj4gSSBoYXZlIGJlZW4gdHJ5aW5nIHRvIHVuZGVyc3RhbmQgdGhlIGltcGFjdCBvZiBw
+ZXJmb3JtYW5jZSB3aGlsZSBsb2dnaW5nIHVzZXIgc3BhY2UgcHJvZ3JhbSBiYXNlZCBvbiB0aGUg
+c3ViYnVmZmVyIGNvdW50IGFuZCBzaXplLgo+IAoKVGhlIHN1Yi1idWZmZXJzIGNvdW50IGFuZCBz
+aXplIGlzIHdlbGwtZG9jdW1lbnRlZCBoZXJlOgoKICAgIGh0dHA6Ly9sdHRuZy5vcmcvZG9jcy8j
+ZG9jLWNoYW5uZWwtc3ViYnVmLXNpemUtdnMtc3ViYnVmLWNvdW50CgoKCj4gSSBoYXZlIGEgc2lt
+cGxlIHByb2dyYW0gbG9nZ2luZyAxIG1pbGxpb24gdHJhY2VzIAoKRG8geW91IG1lYW4gdGhhdCB5
+b3UgcmVjb3JkZWQgMSBtaWxsaW9uIFVTVCBldmVudHMgPwoKT3IgZG8geW91IG1lYW4gdGhhdCB5
+b3UgdHJhY2VkIHlvdXIgYXBwIDEgbWlsbGlvbiB0aW1lcyBhbmQgeW91IGdlbmVyYXRlZCAxIG1p
+bGxpb24gdHJhY2VzID8KCgo+IGFuZCBJIGRvbnQgc2VlbSB0byBzZWUgYW55IGFwcHJlY2lhYmxl
+IHBlcmZvcm1hbmNlIGJldHdlZW4gdGhlIGJlbG93IHR3byBjb25maWd1cmF0aW9ucy4KPiAKPiBh
+LiBkZWZhdWx0IDQgc3ViYnVmZXJzIDEyOEtCIGVhY2gKPiBiLiAxNiBzdWJidWZlcnMgd2l0aCAx
+MDI0a0IgZWFjaC4KCldoZW4geW91IGFyZSBlbmFibGluZyB5b3VyIFVTVCBldmVudHMgKGJlZm9y
+ZSBzdGFydGluZyB0aGUgTFRUbmcgc2Vzc2lvbiksIAphcmUgeW91IGVuYWJsaW5nIHlvdXIgVVNU
+IGV2ZW50cyBpbiB5b3VyIGN1c3RvbSBjaGFubmVsICh0aGUgb25lIHdpdGggY29uZmlndXJhdGlv
+biBhLiBvciBjb25maWd1cmF0aW9uIGIuKSA/CgoKSWYgbm90LCBpdCBjb3VsZCBleHBsYWluIHRo
+ZSBsYWNrIG9mIGRpZmZlcmVuY2UgaW4gcGVyZm9ybWFuY2UgYmV0d2VlbiB5b3VyIDIgY29uZmln
+dXJhdGlvbnMuCgoKRXhhbXBsZToKCiAgICBsdHRuZyBjcmVhdGUKCiAgICBsdHRuZyBlbmFibGUt
+Y2hhbm5lbCAtdSAtLXN1YmJ1Zi1zaXplIDRNIGNoYW5uZWw3CiAgICBsdHRuZyBlbmFibGUtZXZl
+bnQgLXUgLWMgY2hhbm5lbDcgZ3lkbGVfb206QWxsb2NhdG9yX2NvbnN0cnVjdG9yX2RlZmF1bHQK
+CiAgICBsdHRuZyBzdGFydAoKICAgIHJ1bi15b3VyLWFwcAoKICAgIGx0dG5nIHN0b3AKICAgIGx0
+dG5nIHZpZXcgPiB0cmFjZS50eHQKCgoKPiAKPiBNb3Jlb3ZlciBJIGhhdmUgYmVlbiBsb29raW5n
+IGF0IHRoZSBsdHRuZy11c3QgY29kZSB0byB1bmRlcnN0YW5kIHRoZSBwZXJmb3JtYW5jZSBpbXBh
+Y3RzIGZyb20gdGhlIGltcGxlbWVudGF0aW9uIGFuZCB1bmFibGUgdG8gY29tcHJlaGVuZCB3aGF0
+IGlzIGRvY3VtZW50ZWQgYXQgCj4gCj4gaHR0cDovL2x0dG5nLm9yZy9kb2NzLyNkb2MtY2hhbm5l
+bC1zdWJidWYtc2l6ZS12cy1zdWJidWYtY291bnQKPiAKPiBJIHNlZSB0aGF0IGNoYW5uZWxfYmFj
+a2VuZF9pbml0LCBfc2htX29iamVjdF90YWJsZV9hbGxvY19zaG0gc2VlbXMgdG8gYWxsb2NhdGUg
+b25lIGJpZyBzaGFyZWQgbWVtb3J5IGNodW5rIHdoaWNoIGFnYWluIGlzIHN1YmRpdmlkZWQgaW50
+byBzdWJidWZmZXJzIHdpdGggZWFjaCBzdWJidWZmZXIgcmVmZXJlbmNlZCB1c2luZyB0aGUgc3Vi
+YnVmZXIgaW5kZXguCj4gCj4gRnVydGhlciBtb3JlIGxpYl9yaW5nX2J1ZmZlcl93cml0ZSBzZWVt
+cyB0byBmaW5kIHRoZSBzdWJidWZmZXIgaW5kZXggYW5kIHdyaXRlICJsZW4iIG51bWJlciBvZiBi
+eXRlcyBpbnRvIHRoZSBzdWJidWZmZXIgaW5kZXguCj4gCj4gQ291bGQgYW55b25lIHBsZWFzZSBl
+bmxpZ2h0ZW4gbWUgd2hhdCBpcyB0aGUgb3ZlcmhlYWQgaW52b2x2ZWQgd2hpbGUgc3dpdGNoaW5n
+IGZyb20gb25lIHN1YmJ1ZmVyIHRvIGFub3RoZXIgYXMgZG9jdW1lbnRlZC4KPiAKClRoZSBkb2N1
+bWVudGF0aW9uIGluZGljYXRlcyB0aGF0IHRoZSB0cmFjZXIncyBDUFUgb3ZlcmhlYWQgaXMgY2F1
+c2VkIGJ5IDIgdGhpbmdzOgoKMSkgbWFya2luZyB0aGUgY3VycmVudCBzdWItYnVmZmVyIGFzIGNv
+bnN1bWFibGUsIGFuZAoyKSBzd2l0Y2hpbmcgdG8gYW4gZW1wdHkgc3ViLWJ1ZmZlci4KCgoKCj4g
+UmVnYXJkcywKPiBWaWpheQo+IAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2Cj4gCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+ZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
+ZGV2Cg==
