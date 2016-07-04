@@ -1,15 +1,15 @@
 From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [PATCH lttng-tools v2 2/6] UST command to regenerate
+Subject: [PATCH lttng-tools v2 3/6] Kernel ioctl to regenerate
 	the statedump
-Date: Mon,  4 Jul 2016 11:13:04 -0400
-Message-ID: <1467645188-16060-2-git-send-email-jdesfossez__38315.8548539088$1467645217$gmane$org@efficios.com>
+Date: Mon,  4 Jul 2016 11:13:05 -0400
+Message-ID: <1467645188-16060-3-git-send-email-jdesfossez__38127.9213972904$1467645218$gmane$org@efficios.com>
 References: <1467645188-16060-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from smtp.ini-tech.com (unknown [192.99.35.19])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id DEE6AA2BAE
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id DE1A9A0A26
  for <lttng-dev@lists.lttng.org>; Mon,  4 Jul 2016 15:13:15 +0000 (UTC)
 In-Reply-To: <1467645188-16060-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -27,17 +27,18 @@ List-Id: lttng-dev@lists.lttng.org
 
 RnJvbTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4K
 ClNpZ25lZC1vZmYtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZp
-Y2lvcy5jb20+Ci0tLQogc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9sdHRuZy11c3QtYWJpLmggfCAx
-ICsKIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQoKZGlmZiAtLWdpdCBhL3NyYy9iaW4v
-bHR0bmctc2Vzc2lvbmQvbHR0bmctdXN0LWFiaS5oIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9s
-dHRuZy11c3QtYWJpLmgKaW5kZXggN2JlYzBjOS4uOWVmN2I5YSAxMDA2NDQKLS0tIGEvc3JjL2Jp
-bi9sdHRuZy1zZXNzaW9uZC9sdHRuZy11c3QtYWJpLmgKKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNz
-aW9uZC9sdHRuZy11c3QtYWJpLmgKQEAgLTI3NSw2ICsyNzUsNyBAQCBzdHJ1Y3QgbHR0bmdfdXN0
-X2V2ZW50X2V4Y2x1c2lvbiB7CiAJX1VTVF9DTURXKDB4NTEsIHN0cnVjdCBsdHRuZ191c3RfY2hh
-bm5lbCkKICNkZWZpbmUgTFRUTkdfVVNUX1NFU1NJT05fU1RBUlQJCQlfVVNUX0NNRCgweDUyKQog
-I2RlZmluZSBMVFROR19VU1RfU0VTU0lPTl9TVE9QCQkJX1VTVF9DTUQoMHg1MykKKyNkZWZpbmUg
-TFRUTkdfVVNUX1NFU1NJT05fU1RBVEVEVU1QCQlfVVNUX0NNRCgweDU0KQogCiAvKiBDaGFubmVs
-IEZEIGNvbW1hbmRzICovCiAjZGVmaW5lIExUVE5HX1VTVF9TVFJFQU0JCQlfVVNUX0NNRCgweDYw
-KQotLSAKMS45LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
-czovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Y2lvcy5jb20+Ci0tLQogc3JjL2NvbW1vbi9rZXJuZWwtY3RsL2tlcm5lbC1pb2N0bC5oIHwgMiAr
+KwogMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL3NyYy9jb21t
+b24va2VybmVsLWN0bC9rZXJuZWwtaW9jdGwuaCBiL3NyYy9jb21tb24va2VybmVsLWN0bC9rZXJu
+ZWwtaW9jdGwuaAppbmRleCA2ODA1NmRjLi44MDVkZTAyIDEwMDY0NAotLS0gYS9zcmMvY29tbW9u
+L2tlcm5lbC1jdGwva2VybmVsLWlvY3RsLmgKKysrIGIvc3JjL2NvbW1vbi9rZXJuZWwtY3RsL2tl
+cm5lbC1pb2N0bC5oCkBAIC0xMzQsNiArMTM0LDggQEAKICAqLwogI2RlZmluZSBMVFROR19LRVJO
+RUxfU0VTU0lPTl9MSVNUX1RSQUNLRVJfUElEUwlfSU8oMHhGNiwgMHg1OCkKICNkZWZpbmUgTFRU
+TkdfS0VSTkVMX1NFU1NJT05fTUVUQURBVEFfUkVHRU4JX0lPKDB4RjYsIDB4NTkpCisvKiAweDVB
+IGFuZCAweDVCIGFyZSByZXNlcnZlZCBmb3IgYSBmdXR1cmUgQUJJLWJyZWFraW5nIGNsZWFudXAu
+ICovCisjZGVmaW5lIExUVE5HX0tFUk5FTF9TRVNTSU9OX1NUQVRFRFVNUAkJX0lPKDB4RjYsIDB4
+NUMpCiAKIC8qIENoYW5uZWwgRkQgaW9jdGwgKi8KICNkZWZpbmUgTFRUTkdfS0VSTkVMX1NUUkVB
+TQkJCV9JTygweEY2LCAweDYyKQotLSAKMS45LjEKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2Cg==
