@@ -1,19 +1,20 @@
-From: Ravi Inder Singh <raviinder@gmail.com>
-Subject: Re: In Redhat 7.1 kmod-lttng-modules is not installed
-Date: Wed, 6 Jul 2016 12:22:41 -0400
-Message-ID: <CA+=s6BbTSLRR1E9ab+wwtN9jBDiZG5ybhoU4_HgEF+uUkeWu3A__42624.5594201193$1467822204$gmane$org@mail.gmail.com>
-References: <CA+=s6Bag3Pz6FkbLAmu2BEC_wbpC1ON=qrjvF=G6iVdd1N8NyQ@mail.gmail.com>
- <858964754.39767.1466176115372.JavaMail.zimbra@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools v3 1/6] Rename the "metadata
+ regenerate" command to "regenerate metadata"
+Date: Wed, 6 Jul 2016 16:30:42 -0400
+Message-ID: <CA+jJMxvbQaOmW3frjK+uUF6xGxCA4iUrUuMzBNcx_YRFW8P6xA__47790.5735759579$1467837084$gmane$org@mail.gmail.com>
+References: <1467730478-9524-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0461152961411716189=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yw0-f193.google.com (mail-yw0-f193.google.com
- [209.85.161.193])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id E9F97A3265
- for <lttng-dev@lists.lttng.org>; Wed,  6 Jul 2016 16:23:01 +0000 (UTC)
-Received: by mail-yw0-f193.google.com with SMTP id f75so11799267ywb.3
- for <lttng-dev@lists.lttng.org>; Wed, 06 Jul 2016 09:23:02 -0700 (PDT)
-In-Reply-To: <858964754.39767.1466176115372.JavaMail.zimbra@efficios.com>
+Received: from mail-qk0-f196.google.com (mail-qk0-f196.google.com
+ [209.85.220.196])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id C5899A396B
+ for <lttng-dev@lists.lttng.org>; Wed,  6 Jul 2016 20:30:44 +0000 (UTC)
+Received: by mail-qk0-f196.google.com with SMTP id s7so1162715qkf.2
+ for <lttng-dev@lists.lttng.org>; Wed, 06 Jul 2016 13:30:44 -0700 (PDT)
+In-Reply-To: <1467730478-9524-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,1244 +24,1018 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: Philippe Proulx <philippe.proulx@efficios.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0461152961411716189==
-Content-Type: multipart/alternative; boundary=94eb2c0649b2ac25280536f9fbdc
-
---94eb2c0649b2ac25280536f9fbdc
-Content-Type: text/plain; charset=UTF-8
-
-Hi Michael,
-     Kernel version used is :- Linux 3.10.0-229.el7.x86_64 x86_64
-      Redahat version 7.1
-
-
-      I compiled source package against my kernel it gives me following
-Warning "Kernel ABI". Doees this effect my lttng-modules for getting
-intsalld??
-
-
-nm:
-/root/rpmbuild/BUILDROOT/lttng-modules-2.8.0-1.el7.x86_64/lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/tests/clock-plugin/lttng-clock-plugin-test.ko:
-No symbols
-extracting debug info from
-/root/rpmbuild/BUILDROOT/lttng-modules-2.8.0-1.el7.x86_64/lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/tests/probes/lttng-test.ko
-nm:
-/root/rpmbuild/BUILDROOT/lttng-modules-2.8.0-1.el7.x86_64/lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/tests/probes/lttng-test.ko:
-No symbols
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/lib/lttng-lib-ring-buffer.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/lttng-clock.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/lttng-ring-buffer-client-discard.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/lttng-ring-buffer-client-mmap-discard.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/lttng-ring-buffer-client-mmap-overwrite.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/lttng-ring-buffer-client-overwrite.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/lttng-ring-buffer-metadata-client.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/lttng-ring-buffer-metadata-mmap-client.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/lttng-statedump.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/lttng-tracer.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-ftrace.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-kprobes.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-kretprobes.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-block.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-compaction.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-irq.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-jbd2.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-kmem.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-kvm.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-module.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-napi.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-net.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-power.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-printk.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-random.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-rcu.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-rpm.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-sched.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-scsi.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-signal.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-skb.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-sock.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-statedump.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-sunrpc.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-timer.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-udp.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-vmscan.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-workqueue.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-writeback.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-x86-exceptions.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-x86-irq-vectors.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/tests/clock-plugin/lttng-clock-plugin-test.ko.debug"
-is not a shared library
-dwz:
-"./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/tests/probes/lttng-test.ko.debug"
-is not a shared library
-dwz: Too few files for multifile optimization
-/usr/lib/rpm/sepdebugcrcfix: Updated 0 CRC32s, 43 CRC32s did match.
-2620 blocks
-+ /usr/lib/rpm/check-buildroot
-+ /usr/lib/rpm/redhat/brp-compress
-+ /usr/lib/rpm/redhat/brp-strip-static-archive /usr/bin/strip
-+ /usr/lib/rpm/brp-python-bytecompile /usr/bin/python 1
-+ /usr/lib/rpm/redhat/brp-python-hardlink
-+ /usr/lib/rpm/redhat/brp-java-repack-jars
-Processing files: kmod-lttng-modules-2.8.0-1.el7.x86_64
-Finding  Provides: /usr/lib/rpm/redhat/find-provides
-Finding  Requires(interp):
-Finding  Requires(rpmlib):
-Finding  Requires(verify):
-Finding  Requires(pre):
-Finding  Requires(post):
-Finding  Requires(preun):
-Finding  Requires(postun):
-Finding  Requires(pretrans):
-Finding  Requires(posttrans):
-Finding  Requires: /usr/lib/rpm/redhat/find-requires
-
-********************************************************************************
-*********************** KERNEL ABI COMPATIBILITY WARNING
-***********************
-********************************************************************************
-The kernel ABI reference files (provided by kabi-whitelists) were not found.
-No compatibility check was performed. Please install the kABI reference
-files
-and rebuild if you would like to verify compatibility with kernel ABI.
-
-Provides: kernel-modules >= 3.10.0-229.el7.x86_64 lttng-modules-kmod =
-2.8.0-1.el7 kmod-lttng-modules = 2.8.0-1.el7 kmod-lttng-modules(x86-64) =
-2.8.0-1.el7 ksym(channel_create) = 0xa7997152 ksym(channel_destroy) =
-0x4cb4c7f1 ksym(channel_get_next_record) = 0xf604aa9c
-ksym(channel_get_ring_buffer) = 0xff8d9824 ksym(channel_iterator_open) =
-0x045cc6f5 ksym(channel_iterator_release) = 0x42c43c29
-ksym(channel_payload_file_operations) = 0x0adb1633 ksym(channel_reset) =
-0x51094d69 ksym(lib_ring_buffer_clear_quiescent_channel) = 0x77c58966
-ksym(lib_ring_buffer_compat_ioctl) = 0x808f7bc3
-ksym(_lib_ring_buffer_copy_from_user_inatomic) = 0x0e15057d
-ksym(__lib_ring_buffer_copy_to_user) = 0xbe7c2c7e
-ksym(lib_ring_buffer_file_operations) = 0x7fd7bb44
-ksym(lib_ring_buffer_get_next_record) = 0x988ea562
-ksym(lib_ring_buffer_get_subbuf) = 0x9b0a88c1 ksym(lib_ring_buffer_ioctl) =
-0x8e28d608 ksym(lib_ring_buffer_iterator_open) = 0x4ca1462a
-ksym(lib_ring_buffer_iterator_release) = 0xce8713f1
-ksym(_lib_ring_buffer_memset) = 0x587f6477 ksym(lib_ring_buffer_mmap) =
-0xd50b19d8 ksym(lib_ring_buffer_move_consumer) = 0xbad2c526
-ksym(lib_ring_buffer_nesting) = 0x2776a3e5
-ksym(lib_ring_buffer_offset_address) = 0xd42e81f1
-ksym(lib_ring_buffer_open) = 0x6440a359 ksym(lib_ring_buffer_open_read) =
-0x84e26fbb ksym(lib_ring_buffer_payload_file_operations) = 0x3fd0207d
-ksym(lib_ring_buffer_poll) = 0xd5ffe503 ksym(lib_ring_buffer_put_subbuf) =
-0x27f7c765 ksym(lib_ring_buffer_read) = 0x20e07ac8
-ksym(lib_ring_buffer_read_cstr) = 0x98e54af8
-ksym(lib_ring_buffer_read_get_pfn) = 0x6df83d91
-ksym(lib_ring_buffer_read_offset_address) = 0xdfb7ac9e
-ksym(lib_ring_buffer_release) = 0xe361ceca
-ksym(lib_ring_buffer_release_read) = 0x849cd194
-ksym(lib_ring_buffer_reserve_slow) = 0x10ccb673 ksym(lib_ring_buffer_reset)
-= 0x07e6658d ksym(lib_ring_buffer_set_quiescent_channel) = 0x5bda1b1e
-ksym(lib_ring_buffer_snapshot) = 0x4336af02
-ksym(lib_ring_buffer_splice_read) = 0x6522d6ed
-ksym(_lib_ring_buffer_strcpy) = 0x9c6da1d0
-ksym(_lib_ring_buffer_strcpy_from_user_inatomic) = 0xc1562a34
-ksym(lib_ring_buffer_switch_remote) = 0xefff2b40
-ksym(lib_ring_buffer_switch_remote_empty) = 0x5cfe97b3
-ksym(lib_ring_buffer_switch_slow) = 0x5200ba7e ksym(_lib_ring_buffer_write)
-= 0xb63bbe79 ksym(lttng_add_cpu_id_to_ctx) = 0xba7ce894
-ksym(lttng_add_hostname_to_ctx) = 0x6394574a
-ksym(lttng_add_interruptible_to_ctx) = 0xd7771943
-ksym(lttng_add_need_reschedule_to_ctx) = 0x08b3302f
-ksym(lttng_add_nice_to_ctx) = 0xbaa33870 ksym(lttng_add_pid_to_ctx) =
-0xb1cb4a79 ksym(lttng_add_ppid_to_ctx) = 0x5e54eb95
-ksym(lttng_add_prio_to_ctx) = 0xc3886bbd ksym(lttng_add_procname_to_ctx) =
-0x85946da6 ksym(lttng_add_tid_to_ctx) = 0x061c7c5e
-ksym(lttng_add_vpid_to_ctx) = 0xc0fd9a02 ksym(lttng_add_vppid_to_ctx) =
-0x1c9043d0 ksym(lttng_add_vtid_to_ctx) = 0x772aac25
-ksym(lttng_append_context) = 0x360043ff ksym(lttng_clock_ref) = 0x52f30bf0
-ksym(lttng_clock_register_plugin) = 0x75d0077f ksym(lttng_clock_unref) =
-0xbc072131 ksym(lttng_clock_unregister_plugin) = 0x33543f11
-ksym(lttng_event_get) = 0x6c9752a3 ksym(lttng_event_put) = 0x5a1d3572
-ksym(lttng_find_context) = 0xeb0fed18 ksym(lttng_ftrace_destroy_private) =
-0xa79975a6 ksym(lttng_ftrace_register) = 0x785a786f
-ksym(lttng_ftrace_unregister) = 0x4def02b9 ksym(lttng_get_context_index) =
-0xaf595534 ksym(lttng_kprobes_destroy_private) = 0x049ed49c
-ksym(lttng_kprobes_register) = 0x3c7531ec ksym(lttng_kprobes_unregister) =
-0x214f3079 ksym(lttng_kretprobes_destroy_private) = 0x840a437c
-ksym(lttng_kretprobes_event_enable_state) = 0x4a5ba2b7
-ksym(lttng_kretprobes_register) = 0x415ff55c
-ksym(lttng_kretprobes_unregister) = 0x141b3cfe
-ksym(lttng_metadata_channel_destroy) = 0x72a21830
-ksym(lttng_pid_tracker_lookup) = 0xd2c8889e ksym(lttng_probe_register) =
-0x59ef07be ksym(lttng_probe_unregister) = 0xf0bd62a5
-ksym(lttng_remove_context_field) = 0xd6954ba4 ksym(lttng_statedump_start) =
-0x092d4b2e ksym(lttng_strlen_user_inatomic) = 0xce58fba5
-ksym(lttng_trace_clock) = 0xf038f471 ksym(lttng_transport_register) =
-0x2174c352 ksym(lttng_transport_unregister) = 0xd6df49d0
-ksym(vfs_lib_ring_buffer_mmap) = 0xb6d3823f
-ksym(vfs_lib_ring_buffer_no_llseek) = 0xb51dcda9
-ksym(vfs_lib_ring_buffer_splice_read) = 0x64aad26a
-Requires(interp): /bin/sh /bin/sh /bin/sh
-Requires(rpmlib): rpmlib(FileDigests) <= 4.6.0-1
-rpmlib(PayloadFilesHavePrefix) <= 4.0-1 rpmlib(CompressedFileNames) <=
-3.0.4-1
-Requires(post): /usr/sbin/depmod /bin/sh
-Requires(preun): /bin/sh
-Requires(postun): /usr/sbin/depmod /bin/sh
-Requires: kernel(__alloc_pages_nodemask) = 0x8616cca3
-kernel(__alloc_percpu) = 0x949f7342 kernel(__bitmap_weight) = 0x4cbbd171
-kernel(__fentry__) = 0xbdfb6dbb kernel(__free_pages) = 0xa281370e
-kernel(__get_page_tail) = 0xadd2aceb kernel(__get_user_4) = 0x6729d3df
-kernel(__get_user_8) = 0x6d334118 kernel(__init_waitqueue_head) =
-0xf432dd3d kernel(__kmalloc) = 0xd2b09ce5 kernel(__kmalloc_node) =
-0x55f5019b kernel(__list_add) = 0x0343a1a8 kernel(__per_cpu_offset) =
-0x0d94cc09 kernel(__put_user_4) = 0xb2fd5ceb kernel(__put_user_8) =
-0xb8e7ce2c kernel(__smp_mb__after_atomic) = 0x52b645e5
-kernel(__smp_mb__before_atomic) = 0x384e70ae kernel(__stack_chk_fail) =
-0xf0fdf6cb kernel(__wake_up) = 0xcf21d241 kernel(_cond_resched) =
-0xa1c76e0a kernel(_raw_spin_lock) = 0xd52bf1ce kernel(_raw_spin_unlock) =
-0xda3e43d1 kernel(add_timer) = 0xbe2c0274 kernel(add_timer_on) = 0x121ed3f3
-kernel(atomic_notifier_chain_unregister) = 0x758a3812
-kernel(autoremove_wake_function) = 0xc8b57c27
-kernel(copy_user_enhanced_fast_string) = 0x60b40fd8
-kernel(copy_user_generic_string) = 0xe5772d4a
-kernel(copy_user_generic_unrolled) = 0xdcc3a419 kernel(cpu_number) =
-0x54efb5d6 kernel(cpu_online_mask) = 0x930484aa kernel(cpu_possible_mask) =
-0xc311ec22 kernel(current_task) = 0xb8c7ff88 kernel(del_timer_sync) =
-0xd5f2172f kernel(find_next_bit) = 0xc0a3d105 kernel(finish_wait) =
-0xfa66f77c kernel(free_cpumask_var) = 0xdbc34085 kernel(free_percpu) =
-0xc9ec4e21 kernel(generic_pipe_buf_confirm) = 0xb369ab86
-kernel(generic_pipe_buf_get) = 0x168f15f6 kernel(generic_pipe_buf_map) =
-0x020ec224 kernel(generic_pipe_buf_steal) = 0x0d7ce4f3
-kernel(generic_pipe_buf_unmap) = 0x60625ff8 kernel(get_online_cpus) =
-0x3efb35c9 kernel(init_timer_key) = 0x0593a99b kernel(jiffies) = 0x7d11c268
-kernel(jiffies_to_msecs) = 0x37befc70 kernel(jiffies_to_usecs) = 0x7f24de73
-kernel(kallsyms_lookup_name) = 0xe007de41 kernel(kernel_stack) = 0x4c4fef19
-kernel(kfree) = 0x037a0cba kernel(kmalloc_caches) = 0x98ab5c8d
-kernel(kmem_cache_alloc_trace) = 0x41ec4c1a kernel(list_del) = 0x0521445b
-kernel(memcpy) = 0x69acdf38 kernel(mod_timer) = 0x8834396c
-kernel(mod_timer_pinned) = 0x98fa21b0 kernel(module_layout) = 0x28950ef1
-kernel(msleep) = 0xf9a482f9 kernel(node_data) = 0x3142b10b
-kernel(nonseekable_open) = 0xd288ca07 kernel(nr_cpu_ids) = 0xfe7c4287
-kernel(numa_node) = 0x618911fc kernel(prepare_to_wait) = 0x5c8b5ce8
-kernel(printk) = 0x27e1a049 kernel(put_online_cpus) = 0xd7d79132
-kernel(register_cpu_notifier) = 0x8b43159b kernel(schedule) = 0x01000e51
-kernel(smp_call_function) = 0xd75c79df kernel(smp_call_function_single) =
-0x6228c21f kernel(strlcpy) = 0x5792f848 kernel(strnlen) = 0xa916b694
-kernel(unregister_cpu_notifier) = 0x1fe9f800 kernel(usecs_to_jiffies) =
-0xb54533f7 kernel(warn_slowpath_null) = 0x16305289
-kernel(zalloc_cpumask_var) = 0x3e092b88
-Processing files: lttng-modules-debuginfo-2.8.0-1.el7.x86_64
-Provides: lttng-modules-debuginfo = 2.8.0-1.el7
-lttng-modules-debuginfo(x86-64) = 2.8.0-1.el7
-Requires(rpmlib): rpmlib(FileDigests) <= 4.6.0-1
-rpmlib(PayloadFilesHavePrefix) <= 4.0-1 rpmlib(CompressedFileNames) <=
-3.0.4-1
-Checking for unpackaged file(s): /usr/lib/rpm/check-files
-/root/rpmbuild/BUILDROOT/lttng-modules-2.8.0-1.el7.x86_64
-Wrote: /root/rpmbuild/RPMS/x86_64/kmod-lttng-modules-2.8.0-1.el7.x86_64.rpm
-Wrote:
-/root/rpmbuild/RPMS/x86_64/lttng-modules-debuginfo-2.8.0-1.el7.x86_64.rpm
-Executing(%clean): /bin/sh -e /var/tmp/rpm-tmp.i0XGqF
-+ umask 022
-+ cd /root/rpmbuild/BUILD
-+ cd lttng-modules-2.8.0
-+ /usr/bin/rm -rf /root/rpmbuild/BUILDROOT/lttng-modules-2.8.0-1.el7.x86_64
-+ exit 0
-
-
-
-
-On Fri, Jun 17, 2016 at 11:08 AM, Michael Jeanson <mjeanson@efficios.com>
-wrote:
-
-> Hi,
->
-> The 'kmod-lttng-modules' binary package we provide only supports the latest
-> RHEL 7.x kernel, you can either upgrade your system to the latest kernel or
-> get the source package [1] and build it against your current kernel.
->
-> Regards,
->
-> Michael
->
-> [1]
-> http://packages.efficios.com/rhel/7/SRPMS/latest/lttng-modules/lttng-modules-2.8.0-1.el7.src.rpm
->
->
-> ----- On Jun 17, 2016, at 8:53 AM, Ravi Inder Singh raviinder@gmail.com
-> wrote:
->
-> > Hi all,
-> > 1)
-> > RHEL 7.1 OS version is :-
-> >
-> > *****************************************************************8
-> > cat /etc/*release
-> > NAME="Red Hat Enterprise Linux Workstation"
-> > VERSION="7.1 (Maipo)"
-> > ID="rhel"
-> > ID_LIKE="fedora"
-> > VERSION_ID="7.1"
-> > PRETTY_NAME="Red Hat Enterprise Linux Workstation 7.1 (Maipo)"
-> > ANSI_COLOR="0;31"
-> > CPE_NAME="cpe:/o:redhat:enterprise_linux:7.1:GA:workstation"
-> > HOME_URL=" https://www.redhat.com/ "
-> > BUG_REPORT_URL=" https://bugzilla.redhat.com/ "
-> > *********************************************************************
-> > 2) I installed everything but when i start kernel tracer it throws me
-> error
-> > "Kernel Tracer not available"
-> >
-> >
-> > lttng enable-event --kernel allError: Event all: Kernel tracer not
-> available
-> > (channel channel0, session auto-20160616-165319)
-> >
-> >
-> > Issue i beleive is while installing kernel modules it give me following
-> > warnings.
-> > Here is output.
-> >
-> >
-> > root # yum install kmod-lttng-modules
-> > Loaded plugins: langpacks, product-id, subscription-manager
-> > This system is not registered to Red Hat Subscription Management. You
-> can use
-> > subscription-manager to register.
-> > Resolving Dependencies
-> > --> Running transaction check
-> > ---> Package kmod-lttng-modules.x86_64 0:2.8.0-1.el7 will be installed
-> > --> Finished Dependency Resolution
-> >
-> > Dependencies Resolved
-> >
-> >
-> ================================================================================================================================================================================
-> > Package Arch Version Repository Size
-> >
-> ================================================================================================================================================================================
-> > Installing:
-> > kmod-lttng-modules x86_64 2.8.0-1.el7 EfficiOS-RHEL7-x86-64 281 k
-> >
-> > Transaction Summary
-> >
-> ================================================================================================================================================================================
-> > Install 1 Package
-> >
-> > Total download size: 281 k
-> > Installed size: 2.5 M
-> > Is this ok [y/d/N]: y
-> > Downloading packages:
-> > kmod-lttng-modules-2.8.0-1.el7.x86_64.rpm | 281 kB 00:00:00
-> > Running transaction check
-> > Running transaction test
-> > Transaction test succeeded
-> > Running transaction
-> > Installing : kmod-lttng-modules-2.8.0-1.el7.x86_64 1/1
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-kvm.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-kvm.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-kvm.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sock.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sock.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sock.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-metadata-client.ko
-> > needs unknown symbol lttng_transport_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-metadata-client.ko
-> > needs unknown symbol lttng_transport_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-printk.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-printk.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-printk.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-napi.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-napi.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-napi.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-mmap-discard.ko
-> > needs unknown symbol lttng_transport_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-mmap-discard.ko
-> > needs unknown symbol lttng_transport_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-kmem.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-kmem.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-kmem.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-compaction.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-compaction.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-compaction.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-overwrite.ko
-> > needs unknown symbol lttng_transport_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-overwrite.ko
-> > needs unknown symbol lttng_transport_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-mmap-overwrite.ko
-> > needs unknown symbol lttng_transport_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-mmap-overwrite.ko
-> > needs unknown symbol lttng_transport_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-x86-exceptions.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-x86-exceptions.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-x86-exceptions.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sunrpc.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sunrpc.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-sunrpc.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-signal.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-signal.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-signal.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-module.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-module.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-module.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-discard.ko
-> > needs unknown symbol lttng_transport_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ring-buffer-client-discard.ko
-> > needs unknown symbol lttng_transport_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-timer.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-timer.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-timer.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-net.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-net.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-net.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/tests/probes/lttng-test.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/tests/probes/lttng-test.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/tests/probes/lttng-test.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-writeback.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-workqueue.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-irq.ko
-> > needs unknown symbol lttng_probe_unregister
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-irq.ko
-> > needs unknown symbol lttng_probe_register
-> > depmod: WARNING:
-> >
-> /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/lttng-probe-irq.ko
-> > needs unknown symbol lttng_pid_tracker_lookup
-> > Verifying : kmod-lttng-modules-2.8.0-1.el7.x86_64 1/1
-> >
-> > Installed:
-> > kmod-lttng-modules.x86_64 0:2.8.0-1.el7
-> >
-> > Complete!
-> >
-> >
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
---94eb2c0649b2ac25280536f9fbdc
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi Michael, <br></div><div>=C2=A0=C2=A0=C2=A0=C2=A0 K=
-ernel version used is :- Linux 3.10.0-229.el7.x86_64 x86_64<br></div><div>=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Redahat version 7.1 <br></div><div><br></div=
-><div></div><div>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 <br></div>=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 I compiled source package against my kernel it gives me fol=
-lowing Warning &quot;Kernel ABI&quot;. Doees this effect my lttng-modules f=
-or getting intsalld??<br><br><br>nm: /root/rpmbuild/BUILDROOT/lttng-modules=
--2.8.0-1.el7.x86_64/lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/t=
-ests/clock-plugin/lttng-clock-plugin-test.ko: No symbols<br>extracting debu=
-g info from /root/rpmbuild/BUILDROOT/lttng-modules-2.8.0-1.el7.x86_64/lib/m=
-odules/3.10.0-229.el7.x86_64/extra/lttng-modules/tests/probes/lttng-test.ko=
-<br>nm: /root/rpmbuild/BUILDROOT/lttng-modules-2.8.0-1.el7.x86_64/lib/modul=
-es/3.10.0-229.el7.x86_64/extra/lttng-modules/tests/probes/lttng-test.ko: No=
- symbols<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modu=
-les/lib/lttng-lib-ring-buffer.ko.debug&quot; is not a shared library<br>dwz=
-: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/lttng-clock=
-.ko.debug&quot; is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-=
-229.el7.x86_64/extra/lttng-modules/lttng-ring-buffer-client-discard.ko.debu=
-g&quot; is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.=
-x86_64/extra/lttng-modules/lttng-ring-buffer-client-mmap-discard.ko.debug&q=
-uot; is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86=
-_64/extra/lttng-modules/lttng-ring-buffer-client-mmap-overwrite.ko.debug&qu=
-ot; is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_=
-64/extra/lttng-modules/lttng-ring-buffer-client-overwrite.ko.debug&quot; is=
- not a shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/ext=
-ra/lttng-modules/lttng-ring-buffer-metadata-client.ko.debug&quot; is not a =
-shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttn=
-g-modules/lttng-ring-buffer-metadata-mmap-client.ko.debug&quot; is not a sh=
-ared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-=
-modules/lttng-statedump.ko.debug&quot; is not a shared library<br>dwz: &quo=
-t;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/lttng-tracer.ko.d=
-ebug&quot; is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-229.e=
-l7.x86_64/extra/lttng-modules/probes/lttng-ftrace.ko.debug&quot; is not a s=
-hared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng=
--modules/probes/lttng-kprobes.ko.debug&quot; is not a shared library<br>dwz=
-: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttn=
-g-kretprobes.ko.debug&quot; is not a shared library<br>dwz: &quot;./lib/mod=
-ules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-block.ko.=
-debug&quot; is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-229.=
-el7.x86_64/extra/lttng-modules/probes/lttng-probe-compaction.ko.debug&quot;=
- is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/=
-extra/lttng-modules/probes/lttng-probe-irq.ko.debug&quot; is not a shared l=
-ibrary<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-module=
-s/probes/lttng-probe-jbd2.ko.debug&quot; is not a shared library<br>dwz: &q=
-uot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-pr=
-obe-kmem.ko.debug&quot; is not a shared library<br>dwz: &quot;./lib/modules=
-/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-kvm.ko.debug&=
-quot; is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x8=
-6_64/extra/lttng-modules/probes/lttng-probe-module.ko.debug&quot; is not a =
-shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttn=
-g-modules/probes/lttng-probe-napi.ko.debug&quot; is not a shared library<br=
->dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/=
-lttng-probe-net.ko.debug&quot; is not a shared library<br>dwz: &quot;./lib/=
-modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-power.=
-ko.debug&quot; is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-2=
-29.el7.x86_64/extra/lttng-modules/probes/lttng-probe-printk.ko.debug&quot; =
-is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/e=
-xtra/lttng-modules/probes/lttng-probe-random.ko.debug&quot; is not a shared=
- library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modu=
-les/probes/lttng-probe-rcu.ko.debug&quot; is not a shared library<br>dwz: &=
-quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-p=
-robe-rpm.ko.debug&quot; is not a shared library<br>dwz: &quot;./lib/modules=
-/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-sched.ko.debu=
-g&quot; is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.=
-x86_64/extra/lttng-modules/probes/lttng-probe-scsi.ko.debug&quot; is not a =
-shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttn=
-g-modules/probes/lttng-probe-signal.ko.debug&quot; is not a shared library<=
-br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probe=
-s/lttng-probe-skb.ko.debug&quot; is not a shared library<br>dwz: &quot;./li=
-b/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-sock=
-.ko.debug&quot; is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-=
-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-statedump.ko.debug&qu=
-ot; is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_=
-64/extra/lttng-modules/probes/lttng-probe-sunrpc.ko.debug&quot; is not a sh=
-ared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-=
-modules/probes/lttng-probe-timer.ko.debug&quot; is not a shared library<br>=
-dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/l=
-ttng-probe-udp.ko.debug&quot; is not a shared library<br>dwz: &quot;./lib/m=
-odules/3.10.0-229.el7.x86_64/extra/lttng-modules/probes/lttng-probe-vmscan.=
-ko.debug&quot; is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-2=
-29.el7.x86_64/extra/lttng-modules/probes/lttng-probe-workqueue.ko.debug&quo=
-t; is not a shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_6=
-4/extra/lttng-modules/probes/lttng-probe-writeback.ko.debug&quot; is not a =
-shared library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttn=
-g-modules/probes/lttng-probe-x86-exceptions.ko.debug&quot; is not a shared =
-library<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modul=
-es/probes/lttng-probe-x86-irq-vectors.ko.debug&quot; is not a shared librar=
-y<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/tes=
-ts/clock-plugin/lttng-clock-plugin-test.ko.debug&quot; is not a shared libr=
-ary<br>dwz: &quot;./lib/modules/3.10.0-229.el7.x86_64/extra/lttng-modules/t=
-ests/probes/lttng-test.ko.debug&quot; is not a shared library<br>dwz: Too f=
-ew files for multifile optimization<br>/usr/lib/rpm/sepdebugcrcfix: Updated=
- 0 CRC32s, 43 CRC32s did match.<br>2620 blocks<br>+ /usr/lib/rpm/check-buil=
-droot<br>+ /usr/lib/rpm/redhat/brp-compress<br>+ /usr/lib/rpm/redhat/brp-st=
-rip-static-archive /usr/bin/strip<br>+ /usr/lib/rpm/brp-python-bytecompile =
-/usr/bin/python 1<br>+ /usr/lib/rpm/redhat/brp-python-hardlink<br>+ /usr/li=
-b/rpm/redhat/brp-java-repack-jars<br>Processing files: kmod-lttng-modules-2=
-.8.0-1.el7.x86_64<br>Finding=C2=A0 Provides: /usr/lib/rpm/redhat/find-provi=
-des<br>Finding=C2=A0 Requires(interp): <br>Finding=C2=A0 Requires(rpmlib): =
-<br>Finding=C2=A0 Requires(verify): <br>Finding=C2=A0 Requires(pre): <br>Fi=
-nding=C2=A0 Requires(post): <br>Finding=C2=A0 Requires(preun): <br>Finding=
-=C2=A0 Requires(postun): <br>Finding=C2=A0 Requires(pretrans): <br>Finding=
-=C2=A0 Requires(posttrans): <br>Finding=C2=A0 Requires: /usr/lib/rpm/redhat=
-/find-requires<br><br>*****************************************************=
-***************************<br>*********************** KERNEL ABI COMPATIBI=
-LITY WARNING ***********************<br>***********************************=
-*********************************************<br>The kernel ABI reference f=
-iles (provided by kabi-whitelists) were not found.<br>No compatibility chec=
-k was performed. Please install the kABI reference files<br>and rebuild if =
-you would like to verify compatibility with kernel ABI.<br><br>Provides: ke=
-rnel-modules &gt;=3D 3.10.0-229.el7.x86_64 lttng-modules-kmod =3D 2.8.0-1.e=
-l7 kmod-lttng-modules =3D 2.8.0-1.el7 kmod-lttng-modules(x86-64) =3D 2.8.0-=
-1.el7 ksym(channel_create) =3D 0xa7997152 ksym(channel_destroy) =3D 0x4cb4c=
-7f1 ksym(channel_get_next_record) =3D 0xf604aa9c ksym(channel_get_ring_buff=
-er) =3D 0xff8d9824 ksym(channel_iterator_open) =3D 0x045cc6f5 ksym(channel_=
-iterator_release) =3D 0x42c43c29 ksym(channel_payload_file_operations) =3D =
-0x0adb1633 ksym(channel_reset) =3D 0x51094d69 ksym(lib_ring_buffer_clear_qu=
-iescent_channel) =3D 0x77c58966 ksym(lib_ring_buffer_compat_ioctl) =3D 0x80=
-8f7bc3 ksym(_lib_ring_buffer_copy_from_user_inatomic) =3D 0x0e15057d ksym(_=
-_lib_ring_buffer_copy_to_user) =3D 0xbe7c2c7e ksym(lib_ring_buffer_file_ope=
-rations) =3D 0x7fd7bb44 ksym(lib_ring_buffer_get_next_record) =3D 0x988ea56=
-2 ksym(lib_ring_buffer_get_subbuf) =3D 0x9b0a88c1 ksym(lib_ring_buffer_ioct=
-l) =3D 0x8e28d608 ksym(lib_ring_buffer_iterator_open) =3D 0x4ca1462a ksym(l=
-ib_ring_buffer_iterator_release) =3D 0xce8713f1 ksym(_lib_ring_buffer_memse=
-t) =3D 0x587f6477 ksym(lib_ring_buffer_mmap) =3D 0xd50b19d8 ksym(lib_ring_b=
-uffer_move_consumer) =3D 0xbad2c526 ksym(lib_ring_buffer_nesting) =3D 0x277=
-6a3e5 ksym(lib_ring_buffer_offset_address) =3D 0xd42e81f1 ksym(lib_ring_buf=
-fer_open) =3D 0x6440a359 ksym(lib_ring_buffer_open_read) =3D 0x84e26fbb ksy=
-m(lib_ring_buffer_payload_file_operations) =3D 0x3fd0207d ksym(lib_ring_buf=
-fer_poll) =3D 0xd5ffe503 ksym(lib_ring_buffer_put_subbuf) =3D 0x27f7c765 ks=
-ym(lib_ring_buffer_read) =3D 0x20e07ac8 ksym(lib_ring_buffer_read_cstr) =3D=
- 0x98e54af8 ksym(lib_ring_buffer_read_get_pfn) =3D 0x6df83d91 ksym(lib_ring=
-_buffer_read_offset_address) =3D 0xdfb7ac9e ksym(lib_ring_buffer_release) =
-=3D 0xe361ceca ksym(lib_ring_buffer_release_read) =3D 0x849cd194 ksym(lib_r=
-ing_buffer_reserve_slow) =3D 0x10ccb673 ksym(lib_ring_buffer_reset) =3D 0x0=
-7e6658d ksym(lib_ring_buffer_set_quiescent_channel) =3D 0x5bda1b1e ksym(lib=
-_ring_buffer_snapshot) =3D 0x4336af02 ksym(lib_ring_buffer_splice_read) =3D=
- 0x6522d6ed ksym(_lib_ring_buffer_strcpy) =3D 0x9c6da1d0 ksym(_lib_ring_buf=
-fer_strcpy_from_user_inatomic) =3D 0xc1562a34 ksym(lib_ring_buffer_switch_r=
-emote) =3D 0xefff2b40 ksym(lib_ring_buffer_switch_remote_empty) =3D 0x5cfe9=
-7b3 ksym(lib_ring_buffer_switch_slow) =3D 0x5200ba7e ksym(_lib_ring_buffer_=
-write) =3D 0xb63bbe79 ksym(lttng_add_cpu_id_to_ctx) =3D 0xba7ce894 ksym(ltt=
-ng_add_hostname_to_ctx) =3D 0x6394574a ksym(lttng_add_interruptible_to_ctx)=
- =3D 0xd7771943 ksym(lttng_add_need_reschedule_to_ctx) =3D 0x08b3302f ksym(=
-lttng_add_nice_to_ctx) =3D 0xbaa33870 ksym(lttng_add_pid_to_ctx) =3D 0xb1cb=
-4a79 ksym(lttng_add_ppid_to_ctx) =3D 0x5e54eb95 ksym(lttng_add_prio_to_ctx)=
- =3D 0xc3886bbd ksym(lttng_add_procname_to_ctx) =3D 0x85946da6 ksym(lttng_a=
-dd_tid_to_ctx) =3D 0x061c7c5e ksym(lttng_add_vpid_to_ctx) =3D 0xc0fd9a02 ks=
-ym(lttng_add_vppid_to_ctx) =3D 0x1c9043d0 ksym(lttng_add_vtid_to_ctx) =3D 0=
-x772aac25 ksym(lttng_append_context) =3D 0x360043ff ksym(lttng_clock_ref) =
-=3D 0x52f30bf0 ksym(lttng_clock_register_plugin) =3D 0x75d0077f ksym(lttng_=
-clock_unref) =3D 0xbc072131 ksym(lttng_clock_unregister_plugin) =3D 0x33543=
-f11 ksym(lttng_event_get) =3D 0x6c9752a3 ksym(lttng_event_put) =3D 0x5a1d35=
-72 ksym(lttng_find_context) =3D 0xeb0fed18 ksym(lttng_ftrace_destroy_privat=
-e) =3D 0xa79975a6 ksym(lttng_ftrace_register) =3D 0x785a786f ksym(lttng_ftr=
-ace_unregister) =3D 0x4def02b9 ksym(lttng_get_context_index) =3D 0xaf595534=
- ksym(lttng_kprobes_destroy_private) =3D 0x049ed49c ksym(lttng_kprobes_regi=
-ster) =3D 0x3c7531ec ksym(lttng_kprobes_unregister) =3D 0x214f3079 ksym(ltt=
-ng_kretprobes_destroy_private) =3D 0x840a437c ksym(lttng_kretprobes_event_e=
-nable_state) =3D 0x4a5ba2b7 ksym(lttng_kretprobes_register) =3D 0x415ff55c =
-ksym(lttng_kretprobes_unregister) =3D 0x141b3cfe ksym(lttng_metadata_channe=
-l_destroy) =3D 0x72a21830 ksym(lttng_pid_tracker_lookup) =3D 0xd2c8889e ksy=
-m(lttng_probe_register) =3D 0x59ef07be ksym(lttng_probe_unregister) =3D 0xf=
-0bd62a5 ksym(lttng_remove_context_field) =3D 0xd6954ba4 ksym(lttng_statedum=
-p_start) =3D 0x092d4b2e ksym(lttng_strlen_user_inatomic) =3D 0xce58fba5 ksy=
-m(lttng_trace_clock) =3D 0xf038f471 ksym(lttng_transport_register) =3D 0x21=
-74c352 ksym(lttng_transport_unregister) =3D 0xd6df49d0 ksym(vfs_lib_ring_bu=
-ffer_mmap) =3D 0xb6d3823f ksym(vfs_lib_ring_buffer_no_llseek) =3D 0xb51dcda=
-9 ksym(vfs_lib_ring_buffer_splice_read) =3D 0x64aad26a<br>Requires(interp):=
- /bin/sh /bin/sh /bin/sh<br>Requires(rpmlib): rpmlib(FileDigests) &lt;=3D 4=
-.6.0-1 rpmlib(PayloadFilesHavePrefix) &lt;=3D 4.0-1 rpmlib(CompressedFileNa=
-mes) &lt;=3D 3.0.4-1<br>Requires(post): /usr/sbin/depmod /bin/sh<br>Require=
-s(preun): /bin/sh<br>Requires(postun): /usr/sbin/depmod /bin/sh<br>Requires=
-: kernel(__alloc_pages_nodemask) =3D 0x8616cca3 kernel(__alloc_percpu) =3D =
-0x949f7342 kernel(__bitmap_weight) =3D 0x4cbbd171 kernel(__fentry__) =3D 0x=
-bdfb6dbb kernel(__free_pages) =3D 0xa281370e kernel(__get_page_tail) =3D 0x=
-add2aceb kernel(__get_user_4) =3D 0x6729d3df kernel(__get_user_8) =3D 0x6d3=
-34118 kernel(__init_waitqueue_head) =3D 0xf432dd3d kernel(__kmalloc) =3D 0x=
-d2b09ce5 kernel(__kmalloc_node) =3D 0x55f5019b kernel(__list_add) =3D 0x034=
-3a1a8 kernel(__per_cpu_offset) =3D 0x0d94cc09 kernel(__put_user_4) =3D 0xb2=
-fd5ceb kernel(__put_user_8) =3D 0xb8e7ce2c kernel(__smp_mb__after_atomic) =
-=3D 0x52b645e5 kernel(__smp_mb__before_atomic) =3D 0x384e70ae kernel(__stac=
-k_chk_fail) =3D 0xf0fdf6cb kernel(__wake_up) =3D 0xcf21d241 kernel(_cond_re=
-sched) =3D 0xa1c76e0a kernel(_raw_spin_lock) =3D 0xd52bf1ce kernel(_raw_spi=
-n_unlock) =3D 0xda3e43d1 kernel(add_timer) =3D 0xbe2c0274 kernel(add_timer_=
-on) =3D 0x121ed3f3 kernel(atomic_notifier_chain_unregister) =3D 0x758a3812 =
-kernel(autoremove_wake_function) =3D 0xc8b57c27 kernel(copy_user_enhanced_f=
-ast_string) =3D 0x60b40fd8 kernel(copy_user_generic_string) =3D 0xe5772d4a =
-kernel(copy_user_generic_unrolled) =3D 0xdcc3a419 kernel(cpu_number) =3D 0x=
-54efb5d6 kernel(cpu_online_mask) =3D 0x930484aa kernel(cpu_possible_mask) =
-=3D 0xc311ec22 kernel(current_task) =3D 0xb8c7ff88 kernel(del_timer_sync) =
-=3D 0xd5f2172f kernel(find_next_bit) =3D 0xc0a3d105 kernel(finish_wait) =3D=
- 0xfa66f77c kernel(free_cpumask_var) =3D 0xdbc34085 kernel(free_percpu) =3D=
- 0xc9ec4e21 kernel(generic_pipe_buf_confirm) =3D 0xb369ab86 kernel(generic_=
-pipe_buf_get) =3D 0x168f15f6 kernel(generic_pipe_buf_map) =3D 0x020ec224 ke=
-rnel(generic_pipe_buf_steal) =3D 0x0d7ce4f3 kernel(generic_pipe_buf_unmap) =
-=3D 0x60625ff8 kernel(get_online_cpus) =3D 0x3efb35c9 kernel(init_timer_key=
-) =3D 0x0593a99b kernel(jiffies) =3D 0x7d11c268 kernel(jiffies_to_msecs) =
-=3D 0x37befc70 kernel(jiffies_to_usecs) =3D 0x7f24de73 kernel(kallsyms_look=
-up_name) =3D 0xe007de41 kernel(kernel_stack) =3D 0x4c4fef19 kernel(kfree) =
-=3D 0x037a0cba kernel(kmalloc_caches) =3D 0x98ab5c8d kernel(kmem_cache_allo=
-c_trace) =3D 0x41ec4c1a kernel(list_del) =3D 0x0521445b kernel(memcpy) =3D =
-0x69acdf38 kernel(mod_timer) =3D 0x8834396c kernel(mod_timer_pinned) =3D 0x=
-98fa21b0 kernel(module_layout) =3D 0x28950ef1 kernel(msleep) =3D 0xf9a482f9=
- kernel(node_data) =3D 0x3142b10b kernel(nonseekable_open) =3D 0xd288ca07 k=
-ernel(nr_cpu_ids) =3D 0xfe7c4287 kernel(numa_node) =3D 0x618911fc kernel(pr=
-epare_to_wait) =3D 0x5c8b5ce8 kernel(printk) =3D 0x27e1a049 kernel(put_onli=
-ne_cpus) =3D 0xd7d79132 kernel(register_cpu_notifier) =3D 0x8b43159b kernel=
-(schedule) =3D 0x01000e51 kernel(smp_call_function) =3D 0xd75c79df kernel(s=
-mp_call_function_single) =3D 0x6228c21f kernel(strlcpy) =3D 0x5792f848 kern=
-el(strnlen) =3D 0xa916b694 kernel(unregister_cpu_notifier) =3D 0x1fe9f800 k=
-ernel(usecs_to_jiffies) =3D 0xb54533f7 kernel(warn_slowpath_null) =3D 0x163=
-05289 kernel(zalloc_cpumask_var) =3D 0x3e092b88<br>Processing files: lttng-=
-modules-debuginfo-2.8.0-1.el7.x86_64<br>Provides: lttng-modules-debuginfo =
-=3D 2.8.0-1.el7 lttng-modules-debuginfo(x86-64) =3D 2.8.0-1.el7<br>Requires=
-(rpmlib): rpmlib(FileDigests) &lt;=3D 4.6.0-1 rpmlib(PayloadFilesHavePrefix=
-) &lt;=3D 4.0-1 rpmlib(CompressedFileNames) &lt;=3D 3.0.4-1<br>Checking for=
- unpackaged file(s): /usr/lib/rpm/check-files /root/rpmbuild/BUILDROOT/lttn=
-g-modules-2.8.0-1.el7.x86_64<br>Wrote: /root/rpmbuild/RPMS/x86_64/kmod-lttn=
-g-modules-2.8.0-1.el7.x86_64.rpm<br>Wrote: /root/rpmbuild/RPMS/x86_64/lttng=
--modules-debuginfo-2.8.0-1.el7.x86_64.rpm<br>Executing(%clean): /bin/sh -e =
-/var/tmp/rpm-tmp.i0XGqF<br>+ umask 022<br>+ cd /root/rpmbuild/BUILD<br>+ cd=
- lttng-modules-2.8.0<br>+ /usr/bin/rm -rf /root/rpmbuild/BUILDROOT/lttng-mo=
-dules-2.8.0-1.el7.x86_64<br>+ exit 0<br><br><br><br><div><div><div class=3D=
-"gmail_extra"><br><div class=3D"gmail_quote">On Fri, Jun 17, 2016 at 11:08 =
-AM, Michael Jeanson <span dir=3D"ltr">&lt;<a href=3D"mailto:mjeanson@effici=
-os.com" target=3D"_blank">mjeanson@efficios.com</a>&gt;</span> wrote:<br><b=
-lockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-le=
-ft:1px solid rgb(204,204,204);padding-left:1ex">Hi,<br>
-<br>
-The &#39;kmod-lttng-modules&#39; binary package we provide only supports th=
-e latest<br>
-RHEL 7.x kernel, you can either upgrade your system to the latest kernel or=
-<br>
-get the source package [1] and build it against your current kernel.<br>
-<br>
-Regards,<br>
-<br>
-Michael<br>
-<br>
-[1] <a href=3D"http://packages.efficios.com/rhel/7/SRPMS/latest/lttng-modul=
-es/lttng-modules-2.8.0-1.el7.src.rpm" rel=3D"noreferrer" target=3D"_blank">=
-http://packages.efficios.com/rhel/7/SRPMS/latest/lttng-modules/lttng-module=
-s-2.8.0-1.el7.src.rpm</a><br>
-<div><div><br>
-<br>
------ On Jun 17, 2016, at 8:53 AM, Ravi Inder Singh <a href=3D"mailto:ravii=
-nder@gmail.com" target=3D"_blank">raviinder@gmail.com</a> wrote:<br>
-<br>
-&gt; Hi all,<br>
-&gt; 1)<br>
-&gt; RHEL 7.1 OS version is :-<br>
-&gt;<br>
-&gt; *****************************************************************8<br>
-&gt; cat /etc/*release<br>
-&gt; NAME=3D&quot;Red Hat Enterprise Linux Workstation&quot;<br>
-&gt; VERSION=3D&quot;7.1 (Maipo)&quot;<br>
-&gt; ID=3D&quot;rhel&quot;<br>
-&gt; ID_LIKE=3D&quot;fedora&quot;<br>
-&gt; VERSION_ID=3D&quot;7.1&quot;<br>
-&gt; PRETTY_NAME=3D&quot;Red Hat Enterprise Linux Workstation 7.1 (Maipo)&q=
-uot;<br>
-&gt; ANSI_COLOR=3D&quot;0;31&quot;<br>
-&gt; CPE_NAME=3D&quot;cpe:/o:redhat:enterprise_linux:7.1:GA:workstation&quo=
-t;<br>
-&gt; HOME_URL=3D&quot; <a href=3D"https://www.redhat.com/" rel=3D"noreferre=
-r" target=3D"_blank">https://www.redhat.com/</a> &quot;<br>
-&gt; BUG_REPORT_URL=3D&quot; <a href=3D"https://bugzilla.redhat.com/" rel=
-=3D"noreferrer" target=3D"_blank">https://bugzilla.redhat.com/</a> &quot;<b=
-r>
-&gt; *********************************************************************<=
-br>
-&gt; 2) I installed everything but when i start kernel tracer it throws me =
-error<br>
-&gt; &quot;Kernel Tracer not available&quot;<br>
-&gt;<br>
-&gt;<br>
-&gt; lttng enable-event --kernel allError: Event all: Kernel tracer not ava=
-ilable<br>
-&gt; (channel channel0, session auto-20160616-165319)<br>
-&gt;<br>
-&gt;<br>
-&gt; Issue i beleive is while installing kernel modules it give me followin=
-g<br>
-&gt; warnings.<br>
-&gt; Here is output.<br>
-&gt;<br>
-&gt;<br>
-&gt; root # yum install kmod-lttng-modules<br>
-&gt; Loaded plugins: langpacks, product-id, subscription-manager<br>
-&gt; This system is not registered to Red Hat Subscription Management. You =
-can use<br>
-&gt; subscription-manager to register.<br>
-&gt; Resolving Dependencies<br>
-&gt; --&gt; Running transaction check<br>
-&gt; ---&gt; Package kmod-lttng-modules.x86_64 0:2.8.0-1.el7 will be instal=
-led<br>
-&gt; --&gt; Finished Dependency Resolution<br>
-&gt;<br>
-&gt; Dependencies Resolved<br>
-&gt;<br>
-&gt; =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D<br>
-&gt; Package Arch Version Repository Size<br>
-&gt; =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D<br>
-&gt; Installing:<br>
-&gt; kmod-lttng-modules x86_64 2.8.0-1.el7 EfficiOS-RHEL7-x86-64 281 k<br>
-&gt;<br>
-&gt; Transaction Summary<br>
-&gt; =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D<br>
-&gt; Install 1 Package<br>
-&gt;<br>
-&gt; Total download size: 281 k<br>
-&gt; Installed size: 2.5 M<br>
-&gt; Is this ok [y/d/N]: y<br>
-&gt; Downloading packages:<br>
-&gt; kmod-lttng-modules-2.8.0-1.el7.x86_64.rpm | 281 kB 00:00:00<br>
-&gt; Running transaction check<br>
-&gt; Running transaction test<br>
-&gt; Transaction test succeeded<br>
-&gt; Running transaction<br>
-&gt; Installing : kmod-lttng-modules-2.8.0-1.el7.x86_64 1/1<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-kvm.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-kvm.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-kvm.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-sock.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-sock.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-sock.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ri=
-ng-buffer-metadata-client.ko<br>
-&gt; needs unknown symbol lttng_transport_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ri=
-ng-buffer-metadata-client.ko<br>
-&gt; needs unknown symbol lttng_transport_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-printk.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-printk.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-printk.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-napi.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-napi.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-napi.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ri=
-ng-buffer-client-mmap-discard.ko<br>
-&gt; needs unknown symbol lttng_transport_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ri=
-ng-buffer-client-mmap-discard.ko<br>
-&gt; needs unknown symbol lttng_transport_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-kmem.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-kmem.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-kmem.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-compaction.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-compaction.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-compaction.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ri=
-ng-buffer-client-overwrite.ko<br>
-&gt; needs unknown symbol lttng_transport_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ri=
-ng-buffer-client-overwrite.ko<br>
-&gt; needs unknown symbol lttng_transport_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ri=
-ng-buffer-client-mmap-overwrite.ko<br>
-&gt; needs unknown symbol lttng_transport_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ri=
-ng-buffer-client-mmap-overwrite.ko<br>
-&gt; needs unknown symbol lttng_transport_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-x86-exceptions.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-x86-exceptions.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-x86-exceptions.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-sunrpc.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-sunrpc.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-sunrpc.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-signal.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-signal.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-signal.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-module.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-module.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-module.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ri=
-ng-buffer-client-discard.ko<br>
-&gt; needs unknown symbol lttng_transport_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/lttng-ri=
-ng-buffer-client-discard.ko<br>
-&gt; needs unknown symbol lttng_transport_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-timer.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-timer.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-timer.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-net.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-net.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-net.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/tests/pr=
-obes/lttng-test.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/tests/pr=
-obes/lttng-test.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/tests/pr=
-obes/lttng-test.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-writeback.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-workqueue.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-irq.ko<br>
-&gt; needs unknown symbol lttng_probe_unregister<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-irq.ko<br>
-&gt; needs unknown symbol lttng_probe_register<br>
-&gt; depmod: WARNING:<br>
-&gt; /lib/modules/3.10.0-229.el7.x86_64/weak-updates/lttng-modules/probes/l=
-ttng-probe-irq.ko<br>
-&gt; needs unknown symbol lttng_pid_tracker_lookup<br>
-&gt; Verifying : kmod-lttng-modules-2.8.0-1.el7.x86_64 1/1<br>
-&gt;<br>
-&gt; Installed:<br>
-&gt; kmod-lttng-modules.x86_64 0:2.8.0-1.el7<br>
-&gt;<br>
-&gt; Complete!<br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-</div></div>&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
-ev@lists.lttng.org</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailm=
-an/listinfo/lttng-dev</a><br>
-</blockquote></div><br></div></div></div></div>
-
---94eb2c0649b2ac25280536f9fbdc--
-
---===============0461152961411716189==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============0461152961411716189==--
+QWxsIHNpeCBwYXRjaGVzIGFyZSBtZXJnZWQsIHRoYW5rcyEKCkrDqXLDqW1pZQoKT24gVHVlLCBK
+dWwgNSwgMjAxNiBhdCAxMDo1NCBBTSwgSnVsaWVuIERlc2Zvc3Nlego8amRlc2Zvc3NlekBlZmZp
+Y2lvcy5jb20+IHdyb3RlOgo+IFByZXBhcmUgdGhlIGRlcHJlY2F0aW9uIG9mIHRoZSAibWV0YWRh
+dGEgcmVnZW5lcmF0ZSIgY29tbWFuZCBzaW5jZSB3ZQo+IG5lZWQgdG8gcmVnZW5lcmF0ZSB0aGUg
+c3RhdGVkdW1wIGFzIHdlbGwsIHNvIGl0IGlzIG1vcmUgY29udmVuaWVudCB0bwo+IGhhdmUgb25l
+IGNvbW1hbmQgdG8gcmVnZW5lcmF0ZSB2YXJpb3VzIHNlc3Npb24ncyBhdHRyaWJ1dGVzLgo+Cj4g
+U2lnbmVkLW9mZi1ieTogSnVsaWVuIERlc2Zvc3NleiA8amRlc2Zvc3NlekBlZmZpY2lvcy5jb20+
+Cj4gLS0tCj4gIGNvbmZpZ3VyZS5hYyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgfCAgIDIgKy0KPiAgZG9jL21hbi9NYWtlZmlsZS5hbSAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICB8ICAgMyArLQo+ICBkb2MvbWFuL2x0dG5nLW1ldGFkYXRhLjEudHh0ICAgICAgICAg
+ICAgICAgICAgICAgIHwgIDE3ICstCj4gIGRvYy9tYW4vbHR0bmctcmVnZW5lcmF0ZS4xLnR4dCAg
+ICAgICAgICAgICAgICAgICAgfCAgNjMgKysrKysKPiAgaW5jbHVkZS9sdHRuZy9sdHRuZy5oICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgOCArLQo+ICBzcmMvYmluL2x0dG5nLXNlc3Np
+b25kL2NtZC5jICAgICAgICAgICAgICAgICAgICAgIHwgIDE1ICstCj4gIHNyYy9iaW4vbHR0bmct
+c2Vzc2lvbmQvY21kLmggICAgICAgICAgICAgICAgICAgICAgfCAgIDIgKy0KPiAgc3JjL2Jpbi9s
+dHRuZy1zZXNzaW9uZC9tYWluLmMgICAgICAgICAgICAgICAgICAgICB8ICAgNiArLQo+ICBzcmMv
+YmluL2x0dG5nL01ha2VmaWxlLmFtICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAxICsKPiAg
+c3JjL2Jpbi9sdHRuZy9jb21tYW5kLmggICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMSAr
+Cj4gIHNyYy9iaW4vbHR0bmcvY29tbWFuZHMvbWV0YWRhdGEuYyAgICAgICAgICAgICAgICAgfCAg
+IDIgKy0KPiAgc3JjL2Jpbi9sdHRuZy9jb21tYW5kcy9yZWdlbmVyYXRlLmMgICAgICAgICAgICAg
+ICB8IDI2NiArKysrKysrKysrKysrKysrKysrKysrCj4gIHNyYy9iaW4vbHR0bmcvbHR0bmcuYyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDEgKwo+ICBzcmMvY29tbW9uL2tlcm5lbC1j
+dGwva2VybmVsLWN0bC5jICAgICAgICAgICAgICAgIHwgICAyICstCj4gIHNyYy9jb21tb24va2Vy
+bmVsLWN0bC9rZXJuZWwtY3RsLmggICAgICAgICAgICAgICAgfCAgIDIgKy0KPiAgc3JjL2NvbW1v
+bi9taS1sdHRuZy5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMiArCj4gIHNyYy9j
+b21tb24vbWktbHR0bmcuaCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDIgKwo+ICBz
+cmMvY29tbW9uL3Nlc3Npb25kLWNvbW0vc2Vzc2lvbmQtY29tbS5oICAgICAgICAgIHwgICA0ICst
+Cj4gIHNyYy9saWIvbHR0bmctY3RsL2x0dG5nLWN0bC5jICAgICAgICAgICAgICAgICAgICAgfCAg
+MTIgKy0KPiAgdGVzdHMvZGVzdHJ1Y3RpdmUvbWV0YWRhdGEtcmVnZW5lcmF0aW9uICAgICAgICAg
+ICB8ICAgOCArLQo+ICB0ZXN0cy9mYXN0X3JlZ3Jlc3Npb24gICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHwgICAyICstCj4gIHRlc3RzL3JlZ3Jlc3Npb24vTWFrZWZpbGUuYW0gICAgICAgICAg
+ICAgICAgICAgICAgfCAgIDIgKy0KPiAgdGVzdHMvcmVncmVzc2lvbi90b29scy9NYWtlZmlsZS5h
+bSAgICAgICAgICAgICAgICB8ICAgMiArLQo+ICB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL21ldGFk
+YXRhLXJlZ2VuL01ha2VmaWxlLmFtIHwgIDE2IC0tCj4gIHRlc3RzL3JlZ3Jlc3Npb24vdG9vbHMv
+bWV0YWRhdGEtcmVnZW4vdGVzdF9rZXJuZWwgfCAxMDkgLS0tLS0tLS0tCj4gIHRlc3RzL3JlZ3Jl
+c3Npb24vdG9vbHMvbWV0YWRhdGEtcmVnZW4vdGVzdF91c3QgICAgfCAyMDggLS0tLS0tLS0tLS0t
+LS0tLS0KPiAgdGVzdHMvcmVncmVzc2lvbi90b29scy9taS90ZXN0X21pICAgICAgICAgICAgICAg
+ICB8ICAgNCArLQo+ICB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3JlZ2VuLW1ldGFkYXRhL01ha2Vm
+aWxlLmFtIHwgIDE2ICsrCj4gIHRlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvcmVnZW4tbWV0YWRhdGEv
+dGVzdF9rZXJuZWwgfCAxMDkgKysrKysrKysrCj4gIHRlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvcmVn
+ZW4tbWV0YWRhdGEvdGVzdF91c3QgICAgfCAyMDggKysrKysrKysrKysrKysrKysKPiAgdGVzdHMv
+cm9vdF9yZWdyZXNzaW9uICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMiArLQo+ICB0
+ZXN0cy91dGlscy91dGlscy5zaCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDE0ICst
+Cj4gIDMyIGZpbGVzIGNoYW5nZWQsIDcyNCBpbnNlcnRpb25zKCspLCAzODcgZGVsZXRpb25zKC0p
+Cj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBkb2MvbWFuL2x0dG5nLXJlZ2VuZXJhdGUuMS50eHQKPiAg
+Y3JlYXRlIG1vZGUgMTAwNjQ0IHNyYy9iaW4vbHR0bmcvY29tbWFuZHMvcmVnZW5lcmF0ZS5jCj4g
+IGRlbGV0ZSBtb2RlIDEwMDY0NCB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL21ldGFkYXRhLXJlZ2Vu
+L01ha2VmaWxlLmFtCj4gIGRlbGV0ZSBtb2RlIDEwMDc1NSB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xz
+L21ldGFkYXRhLXJlZ2VuL3Rlc3Rfa2VybmVsCj4gIGRlbGV0ZSBtb2RlIDEwMDc1NSB0ZXN0cy9y
+ZWdyZXNzaW9uL3Rvb2xzL21ldGFkYXRhLXJlZ2VuL3Rlc3RfdXN0Cj4gIGNyZWF0ZSBtb2RlIDEw
+MDY0NCB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3JlZ2VuLW1ldGFkYXRhL01ha2VmaWxlLmFtCj4g
+IGNyZWF0ZSBtb2RlIDEwMDc1NSB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3JlZ2VuLW1ldGFkYXRh
+L3Rlc3Rfa2VybmVsCj4gIGNyZWF0ZSBtb2RlIDEwMDc1NSB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xz
+L3JlZ2VuLW1ldGFkYXRhL3Rlc3RfdXN0Cj4KPiBkaWZmIC0tZ2l0IGEvY29uZmlndXJlLmFjIGIv
+Y29uZmlndXJlLmFjCj4gaW5kZXggZmIyYjAxMy4uODlhNzg1OCAxMDA2NDQKPiAtLS0gYS9jb25m
+aWd1cmUuYWMKPiArKysgYi9jb25maWd1cmUuYWMKPiBAQCAtOTgwLDcgKzk4MCw3IEBAIEFDX0NP
+TkZJR19GSUxFUyhbCj4gICAgICAgICB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL21pL01ha2VmaWxl
+Cj4gICAgICAgICB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3dpbGRjYXJkL01ha2VmaWxlCj4gICAg
+ICAgICB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL2NyYXNoL01ha2VmaWxlCj4gLSAgICAgICB0ZXN0
+cy9yZWdyZXNzaW9uL3Rvb2xzL21ldGFkYXRhLXJlZ2VuL01ha2VmaWxlCj4gKyAgICAgICB0ZXN0
+cy9yZWdyZXNzaW9uL3Rvb2xzL3JlZ2VuLW1ldGFkYXRhL01ha2VmaWxlCj4gICAgICAgICB0ZXN0
+cy9yZWdyZXNzaW9uL3VzdC9NYWtlZmlsZQo+ICAgICAgICAgdGVzdHMvcmVncmVzc2lvbi91c3Qv
+bnByb2Nlc3Nlcy9NYWtlZmlsZQo+ICAgICAgICAgdGVzdHMvcmVncmVzc2lvbi91c3QvaGlnaC10
+aHJvdWdocHV0L01ha2VmaWxlCj4gZGlmZiAtLWdpdCBhL2RvYy9tYW4vTWFrZWZpbGUuYW0gYi9k
+b2MvbWFuL01ha2VmaWxlLmFtCj4gaW5kZXggMTA5MGYxYS4uZjc1ZGI2ZSAxMDA2NDQKPiAtLS0g
+YS9kb2MvbWFuL01ha2VmaWxlLmFtCj4gKysrIGIvZG9jL21hbi9NYWtlZmlsZS5hbQo+IEBAIC0z
+MCw3ICszMCw4IEBAIE1BTjFfTkFNRVMgPSBcCj4gICAgICAgICBsdHRuZy1lbmFibGUtZXZlbnQg
+XAo+ICAgICAgICAgbHR0bmctZGlzYWJsZS1ldmVudCBcCj4gICAgICAgICBsdHRuZy1jcmFzaCBc
+Cj4gLSAgICAgICBsdHRuZy1tZXRhZGF0YQo+ICsgICAgICAgbHR0bmctbWV0YWRhdGEgXAo+ICsg
+ICAgICAgbHR0bmctcmVnZW5lcmF0ZQo+ICBNQU4zX05BTUVTID0KPiAgTUFOOF9OQU1FUyA9IGx0
+dG5nLXNlc3Npb25kIGx0dG5nLXJlbGF5ZAo+ICBNQU4xX05PX0FTQ0lJRE9DX05BTUVTID0KPiBk
+aWZmIC0tZ2l0IGEvZG9jL21hbi9sdHRuZy1tZXRhZGF0YS4xLnR4dCBiL2RvYy9tYW4vbHR0bmct
+bWV0YWRhdGEuMS50eHQKPiBpbmRleCAwZmEyNDBlLi41MzQ4OTE2IDEwMDY0NAo+IC0tLSBhL2Rv
+Yy9tYW4vbHR0bmctbWV0YWRhdGEuMS50eHQKPiArKysgYi9kb2MvbWFuL2x0dG5nLW1ldGFkYXRh
+LjEudHh0Cj4gQEAgLTE1LDIxICsxNSw4IEBAIFNZTk9QU0lTCj4KPiAgREVTQ1JJUFRJT04KPiAg
+LS0tLS0tLS0tLS0KPiAtVGhlIGBsdHRuZyBtZXRhZGF0YWAgY29tbWFuZCBtYW5hZ2VzIGEgdHJh
+Y2luZyBzZXNzaW9uJ3MgbWV0YWRhdGEKPiAtZ2VuZXJhdGlvbiBvcHRpb25zLgo+IC0KPiAtQXMg
+b2YgdGhpcyB2ZXJzaW9uLCBvbmx5IHRoZSBgcmVnZW5lcmF0ZWAgY29tbWFuZCdzIGFjdGlvbiBp
+cyBhdmFpbGFibGUuCj4gLVJlZ2VuZXJhdGluZyBhIHRyYWNpbmcgc2Vzc2lvbidzIG1ldGFkYXRh
+IGNhbiBiZSB1c2VkIHRvCj4gLXJlc2FtcGxlIHRoZSBvZmZzZXQgYmV0d2VlbiB0aGUgc3lzdGVt
+J3MgbW9ub3RvbmljIGNsb2NrIGFuZAo+IC10aGUgd2FsbC1jbG9jayB0aW1lLgo+IC0KPiAtVGhp
+cyBjb21tYW5kIGlzIG1lYW50IHRvIGJlIHVzZWQgdG8gcmVzYW1wbGUgdGhlIHdhbGwtY2xvY2sg
+dGltZQo+IC1mb2xsb3dpbmcgYSBtYWpvcgo+IC1saW5rOmh0dHBzOi8vZW4ud2lraXBlZGlhLm9y
+Zy93aWtpL05ldHdvcmtfVGltZV9Qcm90b2NvbFtOVFBdCj4gLWNvcnJlY3Rpb24uIEFzIHN1Y2gs
+IGEgc3lzdGVtIGJvb3Rpbmcgd2l0aCBhbiBpbmNvcnJlY3Qgd2FsbCB0aW1lIGNhbiBiZQo+IC10
+cmFjZWQgYmVmb3JlIGl0cyB3YWxsIHRpbWUgaXMgTlRQLWNvcnJlY3RlZC4gUmVnZW5lcmF0aW5n
+IHRoZSB0cmFjaW5nCj4gLXNlc3Npb24ncyBtZXRhZGF0YSBlbnN1cmVzIHRoYXQgdHJhY2Ugdmll
+d2VycyBjYW4gYWNjdXJhdGVseSBkZXRlcm1pbmUKPiAtdGhlIGV2ZW50cyB0aW1lIHJlbGF0aXZl
+IHRvIFVuaXggRXBvY2guCj4gK1dBUk5JTkc6IFRoaXMgY29tbWFuZCBpcyAqKmRlcHJlY2F0ZWQq
+KjsgaXQgaGFzIGJlZW4gcmVwbGFjZWQgYnkgdGhlICpsdHRuZwo+ICtyZWdlbmVyYXRlIG1ldGFk
+YXRhKiBjb21tYW5kIChzZWUgbWFuOmx0dG5nLXJlZ2VuZXJhdGUoMSkpLgo+Cj4KPiAgaW5jbHVk
+ZTo6Y29tbW9uLWNtZC1vcHRpb25zLWhlYWQudHh0W10KPiBkaWZmIC0tZ2l0IGEvZG9jL21hbi9s
+dHRuZy1yZWdlbmVyYXRlLjEudHh0IGIvZG9jL21hbi9sdHRuZy1yZWdlbmVyYXRlLjEudHh0Cj4g
+bmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwLi5kYmJmYTRkCj4gLS0tIC9kZXYv
+bnVsbAo+ICsrKyBiL2RvYy9tYW4vbHR0bmctcmVnZW5lcmF0ZS4xLnR4dAo+IEBAIC0wLDAgKzEs
+NjMgQEAKPiArbHR0bmctcmVnZW5lcmF0ZSgxKQo+ICs9PT09PT09PT09PT09PT09PQo+ICsKPiAr
+Cj4gK05BTUUKPiArLS0tLQo+ICtsdHRuZy1yZWdlbmVyYXRlIC0gTWFuYWdlIGFuIExUVG5nIHRy
+YWNpbmcgc2Vzc2lvbidzIGRhdGEgcmVnZW5lcmF0aW9uCj4gKwo+ICsKPiArU1lOT1BTSVMKPiAr
+LS0tLS0tLS0KPiArUmVnZW5lcmF0ZSB0aGUgbWV0YWRhdGEgb2YgYSBzZXNzaW9uCj4gKwo+ICtb
+dmVyc2VdCj4gKypsdHRuZyogWydsaW5rZ2Vub3B0aW9uczooR0VORVJBTCBPUFRJT05TKSddICpy
+ZWdlbmVyYXRlIG1ldGFkYXRhKiBbb3B0aW9uOi0tc2Vzc2lvbj0nU0VTU0lPTiddCj4gKwo+ICtE
+RVNDUklQVElPTgo+ICstLS0tLS0tLS0tLQo+ICtUaGUgYGx0dG5nIHJlZ2VuZXJhdGVgIGNvbW1h
+bmQgbWFuYWdlcyBhIHRyYWNpbmcgc2Vzc2lvbidzIGRhdGEgcmVnZW5lcmF0aW9uCj4gK29wdGlv
+bnMuCj4gKwo+ICtBcyBvZiB0aGlzIHZlcnNpb24sIG9ubHkgdGhlIGBtZXRhZGF0YWAgY29tbWFu
+ZCdzIGFjdGlvbiBpcyBhdmFpbGFibGUuCj4gK1JlZ2VuZXJhdGluZyBhIHRyYWNpbmcgc2Vzc2lv
+bidzIG1ldGFkYXRhIGNhbiBiZSB1c2VkIHRvCj4gK3Jlc2FtcGxlIHRoZSBvZmZzZXQgYmV0d2Vl
+biB0aGUgc3lzdGVtJ3MgbW9ub3RvbmljIGNsb2NrIGFuZAo+ICt0aGUgd2FsbC1jbG9jayB0aW1l
+Lgo+ICsKPiArVGhpcyBjb21tYW5kIGlzIG1lYW50IHRvIGJlIHVzZWQgdG8gcmVzYW1wbGUgdGhl
+IHdhbGwtY2xvY2sgdGltZQo+ICtmb2xsb3dpbmcgYSBtYWpvcgo+ICtsaW5rOmh0dHBzOi8vZW4u
+d2lraXBlZGlhLm9yZy93aWtpL05ldHdvcmtfVGltZV9Qcm90b2NvbFtOVFBdCj4gK2NvcnJlY3Rp
+b24uIEFzIHN1Y2gsIGEgc3lzdGVtIGJvb3Rpbmcgd2l0aCBhbiBpbmNvcnJlY3Qgd2FsbCB0aW1l
+IGNhbiBiZQo+ICt0cmFjZWQgYmVmb3JlIGl0cyB3YWxsIHRpbWUgaXMgTlRQLWNvcnJlY3RlZC4g
+UmVnZW5lcmF0aW5nIHRoZSB0cmFjaW5nCj4gK3Nlc3Npb24ncyBtZXRhZGF0YSBlbnN1cmVzIHRo
+YXQgdHJhY2Ugdmlld2VycyBjYW4gYWNjdXJhdGVseSBkZXRlcm1pbmUKPiArdGhlIGV2ZW50cyB0
+aW1lIHJlbGF0aXZlIHRvIFVuaXggRXBvY2guCj4gKwo+ICsKPiAraW5jbHVkZTo6Y29tbW9uLWNt
+ZC1vcHRpb25zLWhlYWQudHh0W10KPiArCj4gKwo+ICtvcHRpb246LXMsIG9wdGlvbjotLXNlc3Np
+b249J1NFU1NJT04nOjoKPiArICAgIE1hbmFnZSB0aGUgbWV0YWRhdGEgZ2VuZXJhdGlvbiBvZiB0
+aGUgdHJhY2luZyBzZXNzaW9uIG5hbWVkICdTRVNTSU9OJwo+ICsgICAgaW5zdGVhZCBvZiB0aGUg
+Y3VycmVudCB0cmFjaW5nIHNlc3Npb24uCj4gKwo+ICsKPiAraW5jbHVkZTo6Y29tbW9uLWNtZC1o
+ZWxwLW9wdGlvbnMudHh0W10KPiArCj4gKwo+ICtMSU1JVEFUSU9OUwo+ICstLS0tLS0tLS0tLQo+
+ICtUaGUgYGx0dG5nIHJlZ2VuZXJhdGUgbWV0YWRhdGFgIGNvbW1hbmQgY2FuIG9ubHkgYmUgdXNl
+ZCBvbiBrZXJuZWwgYW5kCj4gK3VzZXIgc3BhY2UgdHJhY2luZyBzZXNzaW9ucyAodXNpbmcgcGVy
+LXVzZXIgYnVmZmVyaW5nKSwgaW4gbm9uLWxpdmUKPiArbW9kZS4KPiArCj4gK1NlZSBtYW46bHR0
+bmctZW5hYmxlLWNoYW5uZWwoMSkgZm9yIG1vcmUgaW5mb3JtYXRpb24gYWJvdXQKPiArYnVmZmVy
+aW5nIHNjaGVtZXMgYW5kIG1hbjpsdHRuZy1jcmVhdGUoMSkgZm9yIG1vcmUgaW5mb3JtYXRpb24K
+PiArYWJvdXQgdGhlIGRpZmZlcmVudCB0cmFjaW5nIHNlc3Npb24gbW9kZXMuCj4gKwo+ICsKPiAr
+aW5jbHVkZTo6Y29tbW9uLWNtZC1mb290ZXIudHh0W10KPiArCj4gKwo+ICtTRUUgQUxTTwo+ICst
+LS0tLS0tLQo+ICttYW46bHR0bmcoMSkKPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9sdHRuZy9sdHRu
+Zy5oIGIvaW5jbHVkZS9sdHRuZy9sdHRuZy5oCj4gaW5kZXggMjA4ODg2NC4uMDlhYTk2OSAxMDA2
+NDQKPiAtLS0gYS9pbmNsdWRlL2x0dG5nL2x0dG5nLmgKPiArKysgYi9pbmNsdWRlL2x0dG5nL2x0
+dG5nLmgKPiBAQCAtMTYwLDEyICsxNjAsMTggQEAgZXh0ZXJuIGludCBsdHRuZ19zZXRfY29uc3Vt
+ZXJfdXJsKHN0cnVjdCBsdHRuZ19oYW5kbGUgKmhhbmRsZSwKPiAgZXh0ZXJuIGludCBsdHRuZ19k
+YXRhX3BlbmRpbmcoY29uc3QgY2hhciAqc2Vzc2lvbl9uYW1lKTsKPgo+ICAvKgo+ICsgKiBEZXBy
+ZWNhdGVkLCByZXBsYWNlZCBieSBsdHRuZ19yZWdlbmVyYXRlX21ldGFkYXRhLgo+ICsgKi8KPiAr
+TFRUTkdfREVQUkVDQVRFRCgpCj4gK2V4dGVybiBpbnQgbHR0bmdfbWV0YWRhdGFfcmVnZW5lcmF0
+ZShjb25zdCBjaGFyICpzZXNzaW9uX25hbWUpOwo+ICsKPiArLyoKPiAgICogVHJpZ2dlciB0aGUg
+cmVnZW5lcmF0aW9uIG9mIHRoZSBtZXRhZGF0YSBmb3IgYSBzZXNzaW9uLgo+ICAgKiBUaGUgbmV3
+IG1ldGFkYXRhIG92ZXJ3cml0ZSB0aGUgcHJldmlvdXMgb25lIGxvY2FsbHkgb3IgcmVtb3RlbHkg
+KHRocm91Z2gKPiAgICogdGhlIGx0dG5nLXJlbGF5ZCkuIE9ubHkga2VybmVsLCBwZXItdWlkIGFu
+ZCBub24tbGl2ZSBzZXNzaW9ucyBhcmUgc3VwcG9ydGVkLgo+ICAgKiBSZXR1cm4gMCBvbiBzdWNj
+ZXNzLCBhIG5lZ2F0aXZlIExUVG5nIGVycm9yIGNvZGUgb24gZXJyb3IuCj4gICAqLwo+IC1leHRl
+cm4gaW50IGx0dG5nX21ldGFkYXRhX3JlZ2VuZXJhdGUoY29uc3QgY2hhciAqc2Vzc2lvbl9uYW1l
+KTsKPiArZXh0ZXJuIGludCBsdHRuZ19yZWdlbmVyYXRlX21ldGFkYXRhKGNvbnN0IGNoYXIgKnNl
+c3Npb25fbmFtZSk7Cj4KPiAgI2lmZGVmIF9fY3BsdXNwbHVzCj4gIH0KPiBkaWZmIC0tZ2l0IGEv
+c3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jbWQuYyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvY21k
+LmMKPiBpbmRleCBjNzRkYTk0Li5iZDYzMzg5IDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmct
+c2Vzc2lvbmQvY21kLmMKPiArKysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2NtZC5jCj4gQEAg
+LTMzOTcsNyArMzM5Nyw3IEBAIGVycm9yOgo+ICAgKiBSZXR1cm4gMCBpZiB0aGUgbWV0YWRhdGEg
+Y2FuIGJlIGdlbmVyYXRlZCwgYSBMVFROR19FUlIgY29kZSBvdGhlcndpc2UuCj4gICAqLwo+ICBz
+dGF0aWMKPiAtaW50IGNoZWNrX21ldGFkYXRhX3JlZ2VuZXJhdGVfc3VwcG9ydChzdHJ1Y3QgbHR0
+X3Nlc3Npb24gKnNlc3Npb24pCj4gK2ludCBjaGVja19yZWdlbmVyYXRlX21ldGFkYXRhX3N1cHBv
+cnQoc3RydWN0IGx0dF9zZXNzaW9uICpzZXNzaW9uKQo+ICB7Cj4gICAgICAgICBpbnQgcmV0Owo+
+Cj4gQEAgLTM0MzYsNyArMzQzNiw3IEBAIGVuZDoKPiAgfQo+Cj4gIHN0YXRpYwo+IC1pbnQgdXN0
+X21ldGFkYXRhX3JlZ2VuZXJhdGUoc3RydWN0IGx0dF91c3Rfc2Vzc2lvbiAqdXNlc3MpCj4gK2lu
+dCB1c3RfcmVnZW5lcmF0ZV9tZXRhZGF0YShzdHJ1Y3QgbHR0X3VzdF9zZXNzaW9uICp1c2VzcykK
+PiAgewo+ICAgICAgICAgaW50IHJldCA9IDA7Cj4gICAgICAgICBzdHJ1Y3QgYnVmZmVyX3JlZ191
+aWQgKnVpZF9yZWcgPSBOVUxMOwo+IEBAIC0zNDk3LDcgKzM0OTcsNyBAQCBlbmQ6Cj4gIH0KPgo+
+ICAvKgo+IC0gKiBDb21tYW5kIExUVE5HX01FVEFEQVRBX1JFR0VORVJBVEUgZnJvbSB0aGUgbHR0
+bmctY3RsIGxpYnJhcnkuCj4gKyAqIENvbW1hbmQgTFRUTkdfUkVHRU5FUkFURV9NRVRBREFUQSBm
+cm9tIHRoZSBsdHRuZy1jdGwgbGlicmFyeS4KPiAgICoKPiAgICogQXNrIHRoZSBjb25zdW1lciB0
+byB0cnVuY2F0ZSB0aGUgZXhpc3RpbmcgbWV0YWRhdGEgZmlsZShzKSBhbmQKPiAgICogdGhlbiBy
+ZWdlbmVyYXRlIHRoZSBtZXRhZGF0YS4gTGl2ZSBhbmQgcGVyLXBpZCBzZXNzaW9ucyBhcmUgbm90
+Cj4gQEAgLTM1MDUsMTkgKzM1MDUsMTkgQEAgZW5kOgo+ICAgKgo+ICAgKiBSZXR1cm4gMCBvbiBz
+dWNjZXNzIG9yIGVsc2UgYSBMVFROR19FUlIgY29kZS4KPiAgICovCj4gLWludCBjbWRfbWV0YWRh
+dGFfcmVnZW5lcmF0ZShzdHJ1Y3QgbHR0X3Nlc3Npb24gKnNlc3Npb24pCj4gK2ludCBjbWRfcmVn
+ZW5lcmF0ZV9tZXRhZGF0YShzdHJ1Y3QgbHR0X3Nlc3Npb24gKnNlc3Npb24pCj4gIHsKPiAgICAg
+ICAgIGludCByZXQ7Cj4KPiAgICAgICAgIGFzc2VydChzZXNzaW9uKTsKPgo+IC0gICAgICAgcmV0
+ID0gY2hlY2tfbWV0YWRhdGFfcmVnZW5lcmF0ZV9zdXBwb3J0KHNlc3Npb24pOwo+ICsgICAgICAg
+cmV0ID0gY2hlY2tfcmVnZW5lcmF0ZV9tZXRhZGF0YV9zdXBwb3J0KHNlc3Npb24pOwo+ICAgICAg
+ICAgaWYgKHJldCkgewo+ICAgICAgICAgICAgICAgICBnb3RvIGVuZDsKPiAgICAgICAgIH0KPgo+
+ICAgICAgICAgaWYgKHNlc3Npb24tPmtlcm5lbF9zZXNzaW9uKSB7Cj4gLSAgICAgICAgICAgICAg
+IHJldCA9IGtlcm5jdGxfc2Vzc2lvbl9tZXRhZGF0YV9yZWdlbmVyYXRlKAo+ICsgICAgICAgICAg
+ICAgICByZXQgPSBrZXJuY3RsX3Nlc3Npb25fcmVnZW5lcmF0ZV9tZXRhZGF0YSgKPiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHNlc3Npb24tPmtlcm5lbF9zZXNzaW9uLT5mZCk7Cj4g
+ICAgICAgICAgICAgICAgIGlmIChyZXQgPCAwKSB7Cj4gICAgICAgICAgICAgICAgICAgICAgICAg
+RVJSKCJGYWlsZWQgdG8gcmVnZW5lcmF0ZSB0aGUga2VybmVsIG1ldGFkYXRhIik7Cj4gQEAgLTM1
+MjYsNyArMzUyNiw3IEBAIGludCBjbWRfbWV0YWRhdGFfcmVnZW5lcmF0ZShzdHJ1Y3QgbHR0X3Nl
+c3Npb24gKnNlc3Npb24pCj4gICAgICAgICB9Cj4KPiAgICAgICAgIGlmIChzZXNzaW9uLT51c3Rf
+c2Vzc2lvbikgewo+IC0gICAgICAgICAgICAgICByZXQgPSB1c3RfbWV0YWRhdGFfcmVnZW5lcmF0
+ZShzZXNzaW9uLT51c3Rfc2Vzc2lvbik7Cj4gKyAgICAgICAgICAgICAgIHJldCA9IHVzdF9yZWdl
+bmVyYXRlX21ldGFkYXRhKHNlc3Npb24tPnVzdF9zZXNzaW9uKTsKPiAgICAgICAgICAgICAgICAg
+aWYgKHJldCA8IDApIHsKPiAgICAgICAgICAgICAgICAgICAgICAgICBFUlIoIkZhaWxlZCB0byBy
+ZWdlbmVyYXRlIHRoZSBVU1QgbWV0YWRhdGEiKTsKPiAgICAgICAgICAgICAgICAgICAgICAgICBn
+b3RvIGVuZDsKPiBAQCAtMzUzOSw3ICszNTM5LDYgQEAgZW5kOgo+ICAgICAgICAgcmV0dXJuIHJl
+dDsKPiAgfQo+Cj4gLQo+ICAvKgo+ICAgKiBTZW5kIHJlbGF5ZCBzb2NrZXRzIGZyb20gc25hcHNo
+b3Qgb3V0cHV0IHRvIGNvbnN1bWVyLiBJZ25vcmUgcmVxdWVzdCBpZiB0aGUKPiAgICogc25hcHNo
+b3Qgb3V0cHV0IGlzICpub3QqIHNldCB3aXRoIGEgcmVtb3RlIGRlc3RpbmF0aW9uLgo+IGRpZmYg
+LS1naXQgYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2NtZC5oIGIvc3JjL2Jpbi9sdHRuZy1zZXNz
+aW9uZC9jbWQuaAo+IGluZGV4IGEyMjBlM2EuLjMyMGQ3MTcgMTAwNjQ0Cj4gLS0tIGEvc3JjL2Jp
+bi9sdHRuZy1zZXNzaW9uZC9jbWQuaAo+ICsrKyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvY21k
+LmgKPiBAQCAtMTEwLDYgKzExMCw2IEBAIGludCBjbWRfc25hcHNob3RfcmVjb3JkKHN0cnVjdCBs
+dHRfc2Vzc2lvbiAqc2Vzc2lvbiwKPgo+ICBpbnQgY21kX3NldF9zZXNzaW9uX3NobV9wYXRoKHN0
+cnVjdCBsdHRfc2Vzc2lvbiAqc2Vzc2lvbiwKPiAgICAgICAgICAgICAgICAgY29uc3QgY2hhciAq
+c2htX3BhdGgpOwo+IC1pbnQgY21kX21ldGFkYXRhX3JlZ2VuZXJhdGUoc3RydWN0IGx0dF9zZXNz
+aW9uICpzZXNzaW9uKTsKPiAraW50IGNtZF9yZWdlbmVyYXRlX21ldGFkYXRhKHN0cnVjdCBsdHRf
+c2Vzc2lvbiAqc2Vzc2lvbik7Cj4KPiAgI2VuZGlmIC8qIENNRF9IICovCj4gZGlmZiAtLWdpdCBh
+L3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9t
+YWluLmMKPiBpbmRleCA0OTdmNGVlLi4zNjIzZTVkIDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0
+bmctc2Vzc2lvbmQvbWFpbi5jCj4gKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMK
+PiBAQCAtMzAwMyw3ICszMDAzLDcgQEAgc3RhdGljIGludCBwcm9jZXNzX2NsaWVudF9tc2coc3Ry
+dWN0IGNvbW1hbmRfY3R4ICpjbWRfY3R4LCBpbnQgc29jaywKPiAgICAgICAgIGNhc2UgTFRUTkdf
+U05BUFNIT1RfUkVDT1JEOgo+ICAgICAgICAgY2FzZSBMVFROR19TQVZFX1NFU1NJT046Cj4gICAg
+ICAgICBjYXNlIExUVE5HX1NFVF9TRVNTSU9OX1NITV9QQVRIOgo+IC0gICAgICAgY2FzZSBMVFRO
+R19NRVRBREFUQV9SRUdFTkVSQVRFOgo+ICsgICAgICAgY2FzZSBMVFROR19SRUdFTkVSQVRFX01F
+VEFEQVRBOgo+ICAgICAgICAgICAgICAgICBuZWVkX2RvbWFpbiA9IDA7Cj4gICAgICAgICAgICAg
+ICAgIGJyZWFrOwo+ICAgICAgICAgZGVmYXVsdDoKPiBAQCAtNDExNCw5ICs0MTE0LDkgQEAgZXJy
+b3JfYWRkX2NvbnRleHQ6Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjbWRfY3R4
+LT5sc20tPnUuc2V0X3NobV9wYXRoLnNobV9wYXRoKTsKPiAgICAgICAgICAgICAgICAgYnJlYWs7
+Cj4gICAgICAgICB9Cj4gLSAgICAgICBjYXNlIExUVE5HX01FVEFEQVRBX1JFR0VORVJBVEU6Cj4g
+KyAgICAgICBjYXNlIExUVE5HX1JFR0VORVJBVEVfTUVUQURBVEE6Cj4gICAgICAgICB7Cj4gLSAg
+ICAgICAgICAgICAgIHJldCA9IGNtZF9tZXRhZGF0YV9yZWdlbmVyYXRlKGNtZF9jdHgtPnNlc3Np
+b24pOwo+ICsgICAgICAgICAgICAgICByZXQgPSBjbWRfcmVnZW5lcmF0ZV9tZXRhZGF0YShjbWRf
+Y3R4LT5zZXNzaW9uKTsKPiAgICAgICAgICAgICAgICAgYnJlYWs7Cj4gICAgICAgICB9Cj4gICAg
+ICAgICBkZWZhdWx0Ogo+IGRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nL01ha2VmaWxlLmFtIGIv
+c3JjL2Jpbi9sdHRuZy9NYWtlZmlsZS5hbQo+IGluZGV4IGI5MTFmMzMuLmFjZDk3M2IgMTAwNjQ0
+Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy9NYWtlZmlsZS5hbQo+ICsrKyBiL3NyYy9iaW4vbHR0bmcv
+TWFrZWZpbGUuYW0KPiBAQCAtMTgsNiArMTgsNyBAQCBsdHRuZ19TT1VSQ0VTID0gY29tbWFuZC5o
+IGNvbmYuYyBjb25mLmggY29tbWFuZHMvc3RhcnQuYyBcCj4gICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBjb21tYW5kcy90cmFjay11bnRyYWNrLmMgXAo+ICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgY29tbWFuZHMvc3RhdHVzLmMgXAo+ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgY29tbWFuZHMvbWV0YWRhdGEuYyBcCj4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBjb21tYW5kcy9yZWdlbmVyYXRlLmMgXAo+ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgY29tbWFuZHMvaGVscC5jIFwKPiAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHV0aWxzLmMgdXRpbHMuaCBsdHRuZy5jCj4KPiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9s
+dHRuZy9jb21tYW5kLmggYi9zcmMvYmluL2x0dG5nL2NvbW1hbmQuaAo+IGluZGV4IDcyY2Y0ZTAu
+LjNhYzYxZTEgMTAwNjQ0Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy9jb21tYW5kLmgKPiArKysgYi9z
+cmMvYmluL2x0dG5nL2NvbW1hbmQuaAo+IEBAIC03Niw2ICs3Niw3IEBAIERFQ0xfQ09NTUFORChs
+b2FkKTsKPiAgREVDTF9DT01NQU5EKHRyYWNrKTsKPiAgREVDTF9DT01NQU5EKHVudHJhY2spOwo+
+ICBERUNMX0NPTU1BTkQobWV0YWRhdGEpOwo+ICtERUNMX0NPTU1BTkQocmVnZW5lcmF0ZSk7Cj4K
+PiAgZXh0ZXJuIGludCBjbWRfaGVscChpbnQgYXJnYywgY29uc3QgY2hhciAqKmFyZ3YsCj4gICAg
+ICAgICAgICAgICAgIGNvbnN0IHN0cnVjdCBjbWRfc3RydWN0IGNvbW1hbmRzW10pOwo+IGRpZmYg
+LS1naXQgYS9zcmMvYmluL2x0dG5nL2NvbW1hbmRzL21ldGFkYXRhLmMgYi9zcmMvYmluL2x0dG5n
+L2NvbW1hbmRzL21ldGFkYXRhLmMKPiBpbmRleCBmNmE4MjFhLi4wOGQ2ZTU4IDEwMDY0NAo+IC0t
+LSBhL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvbWV0YWRhdGEuYwo+ICsrKyBiL3NyYy9iaW4vbHR0
+bmcvY29tbWFuZHMvbWV0YWRhdGEuYwo+IEBAIC03OSw3ICs3OSw3IEBAIHN0YXRpYyBpbnQgbWV0
+YWRhdGFfcmVnZW5lcmF0ZShpbnQgYXJnYywgY29uc3QgY2hhciAqKmFyZ3YpCj4gICAgICAgICAg
+ICAgICAgIHJldCA9IC1MVFROR19FUlJfSU5WQUxJRDsKPiAgICAgICAgICAgICAgICAgZ290byBl
+bmQ7Cj4gICAgICAgICB9Cj4gLSAgICAgICByZXQgPSBsdHRuZ19tZXRhZGF0YV9yZWdlbmVyYXRl
+KHNlc3Npb25fbmFtZSk7Cj4gKyAgICAgICByZXQgPSBsdHRuZ19yZWdlbmVyYXRlX21ldGFkYXRh
+KHNlc3Npb25fbmFtZSk7Cj4gICAgICAgICBpZiAocmV0ID09IDApIHsKPiAgICAgICAgICAgICAg
+ICAgTVNHKCJNZXRhZGF0YSBzdWNjZXNzZnVsbHkgcmVnZW5lcmF0ZWQgZm9yIHNlc3Npb24gJXMi
+LCBzZXNzaW9uX25hbWUpOwo+ICAgICAgICAgfQo+IGRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5n
+L2NvbW1hbmRzL3JlZ2VuZXJhdGUuYyBiL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvcmVnZW5lcmF0
+ZS5jCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwLi5jNjRkOGZlCj4gLS0t
+IC9kZXYvbnVsbAo+ICsrKyBiL3NyYy9iaW4vbHR0bmcvY29tbWFuZHMvcmVnZW5lcmF0ZS5jCj4g
+QEAgLTAsMCArMSwyNjYgQEAKPiArLyoKPiArICogQ29weXJpZ2h0IChDKSAyMDE1IC0gSnVsaWVu
+IERlc2Zvc3NleiA8amRlc2Zvc3NlekBlZmZpY2lvcy5jb20+Cj4gKyAqCj4gKyAqIFRoaXMgcHJv
+Z3JhbSBpcyBmcmVlIHNvZnR3YXJlOyB5b3UgY2FuIHJlZGlzdHJpYnV0ZSBpdCBhbmQvb3IgbW9k
+aWZ5Cj4gKyAqIGl0IHVuZGVyIHRoZSB0ZXJtcyBvZiB0aGUgR05VIEdlbmVyYWwgUHVibGljIExp
+Y2Vuc2UsIHZlcnNpb24gMiBvbmx5LAo+ICsgKiBhcyBwdWJsaXNoZWQgYnkgdGhlIEZyZWUgU29m
+dHdhcmUgRm91bmRhdGlvbi4KPiArICoKPiArICogVGhpcyBwcm9ncmFtIGlzIGRpc3RyaWJ1dGVk
+IGluIHRoZSBob3BlIHRoYXQgaXQgd2lsbCBiZSB1c2VmdWwsCj4gKyAqIGJ1dCBXSVRIT1VUIEFO
+WSBXQVJSQU5UWTsgd2l0aG91dCBldmVuIHRoZSBpbXBsaWVkIHdhcnJhbnR5IG9mCj4gKyAqIE1F
+UkNIQU5UQUJJTElUWSBvciBGSVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIgUFVSUE9TRS4gIFNlZSB0
+aGUKPiArICogR05VIEdlbmVyYWwgUHVibGljIExpY2Vuc2UgZm9yIG1vcmUgZGV0YWlscy4KPiAr
+ICoKPiArICogWW91IHNob3VsZCBoYXZlIHJlY2VpdmVkIGEgY29weSBvZiB0aGUgR05VIEdlbmVy
+YWwgUHVibGljIExpY2Vuc2UgYWxvbmcKPiArICogd2l0aCB0aGlzIHByb2dyYW07IGlmIG5vdCwg
+d3JpdGUgdG8gdGhlIEZyZWUgU29mdHdhcmUgRm91bmRhdGlvbiwgSW5jLiwKPiArICogNTEgRnJh
+bmtsaW4gU3RyZWV0LCBGaWZ0aCBGbG9vciwgQm9zdG9uLCBNQSAwMjExMC0xMzAxIFVTQS4KPiAr
+ICovCj4gKwo+ICsjZGVmaW5lIF9MR1BMX1NPVVJDRQo+ICsjaW5jbHVkZSA8YXNzZXJ0Lmg+Cj4g
+KyNpbmNsdWRlIDxjdHlwZS5oPgo+ICsjaW5jbHVkZSA8cG9wdC5oPgo+ICsjaW5jbHVkZSA8c3Rk
+aW8uaD4KPiArI2luY2x1ZGUgPHN0ZGxpYi5oPgo+ICsjaW5jbHVkZSA8c3RyaW5nLmg+Cj4gKyNp
+bmNsdWRlIDx1bmlzdGQuaD4KPiArCj4gKyNpbmNsdWRlIDxjb21tb24vbWktbHR0bmcuaD4KPiAr
+Cj4gKyNpbmNsdWRlICIuLi9jb21tYW5kLmgiCj4gKwo+ICtzdGF0aWMgY2hhciAqb3B0X3Nlc3Np
+b25fbmFtZTsKPiArc3RhdGljIGNoYXIgKnNlc3Npb25fbmFtZSA9IE5VTEw7Cj4gKwo+ICtzdGF0
+aWMgaW50IHJlZ2VuZXJhdGVfbWV0YWRhdGEoaW50IGFyZ2MsIGNvbnN0IGNoYXIgKiphcmd2KTsK
+PiArCj4gK2VudW0gewo+ICsgICAgICAgT1BUX0hFTFAgPSAxLAo+ICsgICAgICAgT1BUX0xJU1Rf
+T1BUSU9OUywKPiArICAgICAgIE9QVF9MSVNUX0NPTU1BTkRTLAo+ICt9Owo+ICsKPiArc3RhdGlj
+IHN0cnVjdCBtaV93cml0ZXIgKndyaXRlcjsKPiArCj4gK3N0YXRpYyBzdHJ1Y3QgcG9wdE9wdGlv
+biBsb25nX29wdGlvbnNbXSA9IHsKPiArICAgICAgIC8qIHsgbG9uZ05hbWUsIHNob3J0TmFtZSwg
+YXJnSW5mbywgYXJnUHRyLCB2YWx1ZSwgZGVzY3JpcCwgYXJnRGVzYywgfSAqLwo+ICsgICAgICAg
+eyAiaGVscCIsICAgICAgICAgICAgICAgJ2gnLCBQT1BUX0FSR19OT05FLCAwLCBPUFRfSEVMUCwg
+MCwgMCwgfSwKPiArICAgICAgIHsgInNlc3Npb24iLCAgICAgICAgICAgICdzJywgUE9QVF9BUkdf
+U1RSSU5HLCAmb3B0X3Nlc3Npb25fbmFtZSwgMCwgMCwgMH0sCj4gKyAgICAgICB7ICJsaXN0LW9w
+dGlvbnMiLCAgICAgICAwLCBQT1BUX0FSR19OT05FLCBOVUxMLCBPUFRfTElTVF9PUFRJT05TLCAw
+LCAwLCB9LAo+ICsgICAgICAgeyAibGlzdC1jb21tYW5kcyIsICAgICAgMCwgUE9QVF9BUkdfTk9O
+RSwgTlVMTCwgT1BUX0xJU1RfQ09NTUFORFN9LAo+ICsgICAgICAgeyAwLCAwLCAwLCAwLCAwLCAw
+LCAwLCB9LAo+ICt9Owo+ICsKPiArc3RhdGljIHN0cnVjdCBjbWRfc3RydWN0IGFjdGlvbnNbXSA9
+IHsKPiArICAgICAgIHsgIm1ldGFkYXRhIiwgcmVnZW5lcmF0ZV9tZXRhZGF0YSB9LAo+ICsgICAg
+ICAgeyBOVUxMLCBOVUxMIH0gIC8qIEFycmF5IGNsb3N1cmUgKi8KPiArfTsKPiArCj4gKy8qCj4g
+KyAqIENvdW50IGFuZCByZXR1cm4gdGhlIG51bWJlciBvZiBhcmd1bWVudHMgaW4gYXJndi4KPiAr
+ICovCj4gK3N0YXRpYyBpbnQgY291bnRfYXJndW1lbnRzKGNvbnN0IGNoYXIgKiphcmd2KQo+ICt7
+Cj4gKyAgICAgICBpbnQgaSA9IDA7Cj4gKwo+ICsgICAgICAgYXNzZXJ0KGFyZ3YpOwo+ICsKPiAr
+ICAgICAgIHdoaWxlIChhcmd2W2ldICE9IE5VTEwpIHsKPiArICAgICAgICAgICAgICAgaSsrOwo+
+ICsgICAgICAgfQo+ICsKPiArICAgICAgIHJldHVybiBpOwo+ICt9Cj4gKwo+ICtzdGF0aWMgaW50
+IHJlZ2VuZXJhdGVfbWV0YWRhdGEoaW50IGFyZ2MsIGNvbnN0IGNoYXIgKiphcmd2KQo+ICt7Cj4g
+KyAgICAgICBpbnQgcmV0Owo+ICsKPiArICAgICAgIGlmIChhcmdjID4gMSkgewo+ICsgICAgICAg
+ICAgICAgICByZXQgPSAtTFRUTkdfRVJSX0lOVkFMSUQ7Cj4gKyAgICAgICAgICAgICAgIGdvdG8g
+ZW5kOwo+ICsgICAgICAgfQo+ICsgICAgICAgcmV0ID0gbHR0bmdfcmVnZW5lcmF0ZV9tZXRhZGF0
+YShzZXNzaW9uX25hbWUpOwo+ICsgICAgICAgaWYgKHJldCA9PSAwKSB7Cj4gKyAgICAgICAgICAg
+ICAgIE1TRygiTWV0YWRhdGEgc3VjY2Vzc2Z1bGx5IHJlZ2VuZXJhdGVkIGZvciBzZXNzaW9uICVz
+Iiwgc2Vzc2lvbl9uYW1lKTsKPiArICAgICAgIH0KPiArCj4gK2VuZDoKPiArICAgICAgIHJldHVy
+biByZXQ7Cj4gK30KPiArCj4gK3N0YXRpYyBpbnQgaGFuZGxlX2NvbW1hbmQoY29uc3QgY2hhciAq
+KmFyZ3YpCj4gK3sKPiArICAgICAgIHN0cnVjdCBjbWRfc3RydWN0ICpjbWQ7Cj4gKyAgICAgICBp
+bnQgcmV0ID0gQ01EX1NVQ0NFU1MsIGkgPSAwLCBhcmdjLCBjb21tYW5kX3JldCA9IENNRF9TVUND
+RVNTOwo+ICsKPiArICAgICAgIGlmIChhcmd2ID09IE5VTEwpIHsKPiArICAgICAgICAgICAgICAg
+RVJSKCJhcmd2IGlzIG51bGwiKTsKPiArICAgICAgICAgICAgICAgY29tbWFuZF9yZXQgPSBDTURf
+RVJST1I7Cj4gKyAgICAgICAgICAgICAgIGdvdG8gZW5kOwo+ICsgICAgICAgfQo+ICsKPiArICAg
+ICAgIGFyZ2MgPSBjb3VudF9hcmd1bWVudHMoYXJndik7Cj4gKwo+ICsgICAgICAgY21kID0gJmFj
+dGlvbnNbaV07Cj4gKyAgICAgICB3aGlsZSAoY21kLT5mdW5jICE9IE5VTEwpIHsKPiArICAgICAg
+ICAgICAgICAgLyogRmluZCBjb21tYW5kICovCj4gKyAgICAgICAgICAgICAgIGlmIChzdHJjbXAo
+YXJndlswXSwgY21kLT5uYW1lKSA9PSAwKSB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgaWYg
+KGx0dG5nX29wdF9taSkgewo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLyogQWN0
+aW9uIGVsZW1lbnQgKi8KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJldCA9IG1p
+X2x0dG5nX3dyaXRlcl9vcGVuX2VsZW1lbnQod3JpdGVyLAo+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIG1pX2x0dG5nX2VsZW1lbnRfY29tbWFuZF9yZWdl
+bmVyYXRlX2FjdGlvbik7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpZiAocmV0
+KSB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJldCA9IENNRF9F
+UlJPUjsKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZ290byBlbmQ7
+Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB9Cj4gKwo+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgLyogTmFtZSBvZiB0aGUgYWN0aW9uICovCj4gKyAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICByZXQgPSBtaV9sdHRuZ193cml0ZXJfd3JpdGVfZWxlbWVudF9z
+dHJpbmcod3JpdGVyLAo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIGNvbmZpZ19lbGVtZW50X25hbWUsIGFyZ3ZbMF0pOwo+ICsgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgaWYgKHJldCkgewo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICByZXQgPSBDTURfRVJST1I7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIGdvdG8gZW5kOwo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+fQo+ICsgICAgICAgICAgICAgICAgICAgICAgIH0KPiArICAgICAgICAgICAgICAgICAgICAgICBj
+b21tYW5kX3JldCA9IGNtZC0+ZnVuYyhhcmdjLCBhcmd2KTsKPiArICAgICAgICAgICAgICAgICAg
+ICAgICBpZiAobHR0bmdfb3B0X21pKSB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAvKiBDbG9zZSBvdXRwdXQgYW5kIGFjdGlvbiBlbGVtZW50ICovCj4gKyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICByZXQgPSBtaV9sdHRuZ193cml0ZXJfY2xvc2VfZWxlbWVudCh3cml0
+ZXIpOwo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaWYgKHJldCkgewo+ICsgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICByZXQgPSBDTURfRVJST1I7Cj4gKyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGdvdG8gZW5kOwo+ICsgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgfQo+ICsgICAgICAgICAgICAgICAgICAgICAgIH0KPiAr
+ICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVuZDsKPiArICAgICAgICAgICAgICAgfQo+ICsK
+PiArICAgICAgICAgICAgICAgY21kID0gJmFjdGlvbnNbaSsrXTsKPiArICAgICAgIH0KPiArCj4g
+KyAgICAgICByZXQgPSBDTURfVU5ERUZJTkVEOwo+ICsKPiArZW5kOgo+ICsgICAgICAgLyogT3Zl
+cndyaXRlIHJldCBpZiBhbiBlcnJvciBvY2N1cnJlZCBpbiBjbWQtPmZ1bmMoKSAqLwo+ICsgICAg
+ICAgcmV0ID0gY29tbWFuZF9yZXQgPyBjb21tYW5kX3JldCA6IHJldDsKPiArICAgICAgIHJldHVy
+biByZXQ7Cj4gK30KPiArCj4gKy8qCj4gKyAqIHJlZ2VuZXJhdGUgY29tbWFuZCBoYW5kbGluZy4K
+PiArICovCj4gK2ludCBjbWRfcmVnZW5lcmF0ZShpbnQgYXJnYywgY29uc3QgY2hhciAqKmFyZ3Yp
+Cj4gK3sKPiArICAgICAgIGludCBvcHQsIHJldCA9IENNRF9TVUNDRVNTLCBjb21tYW5kX3JldCA9
+IENNRF9TVUNDRVNTLCBzdWNjZXNzID0gMTsKPiArICAgICAgIHN0YXRpYyBwb3B0Q29udGV4dCBw
+YzsKPiArCj4gKyAgICAgICBpZiAoYXJnYyA8IDEpIHsKPiArICAgICAgICAgICAgICAgU0hPV19I
+RUxQKCk7Cj4gKyAgICAgICAgICAgICAgIHJldCA9IENNRF9FUlJPUjsKPiArICAgICAgICAgICAg
+ICAgZ290byBlbmQ7Cj4gKyAgICAgICB9Cj4gKwo+ICsgICAgICAgcGMgPSBwb3B0R2V0Q29udGV4
+dChOVUxMLCBhcmdjLCBhcmd2LCBsb25nX29wdGlvbnMsIDApOwo+ICsgICAgICAgcG9wdFJlYWRE
+ZWZhdWx0Q29uZmlnKHBjLCAwKTsKPiArCj4gKyAgICAgICBpZiAobHR0bmdfb3B0X21pKSB7Cj4g
+KyAgICAgICAgICAgICAgIHdyaXRlciA9IG1pX2x0dG5nX3dyaXRlcl9jcmVhdGUoZmlsZW5vKHN0
+ZG91dCksIGx0dG5nX29wdF9taSk7Cj4gKyAgICAgICAgICAgICAgIGlmICghd3JpdGVyKSB7Cj4g
+KyAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gLUxUVE5HX0VSUl9OT01FTTsKPiArICAgICAg
+ICAgICAgICAgICAgICAgICBnb3RvIGVuZDsKPiArICAgICAgICAgICAgICAgfQo+ICsgICAgICAg
+ICAgICAgICAvKiBPcGVuIGNvbW1hbmQgZWxlbWVudCAqLwo+ICsgICAgICAgICAgICAgICByZXQg
+PSBtaV9sdHRuZ193cml0ZXJfY29tbWFuZF9vcGVuKHdyaXRlciwKPiArICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIG1pX2x0dG5nX2VsZW1lbnRfY29tbWFuZF9yZWdlbmVyYXRlKTsKPiAr
+ICAgICAgICAgICAgICAgaWYgKHJldCkgewo+ICsgICAgICAgICAgICAgICAgICAgICAgIHJldCA9
+IENNRF9FUlJPUjsKPiArICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVuZDsKPiArICAgICAg
+ICAgICAgICAgfQo+ICsKPiArICAgICAgICAgICAgICAgLyogT3BlbiBvdXRwdXQgZWxlbWVudCAq
+Lwo+ICsgICAgICAgICAgICAgICByZXQgPSBtaV9sdHRuZ193cml0ZXJfb3Blbl9lbGVtZW50KHdy
+aXRlciwKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG1pX2x0dG5nX2VsZW1lbnRf
+Y29tbWFuZF9vdXRwdXQpOwo+ICsgICAgICAgICAgICAgICBpZiAocmV0KSB7Cj4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgcmV0ID0gQ01EX0VSUk9SOwo+ICsgICAgICAgICAgICAgICAgICAgICAg
+IGdvdG8gZW5kOwo+ICsgICAgICAgICAgICAgICB9Cj4gKyAgICAgICB9Cj4gKwo+ICsgICAgICAg
+d2hpbGUgKChvcHQgPSBwb3B0R2V0TmV4dE9wdChwYykpICE9IC0xKSB7Cj4gKyAgICAgICAgICAg
+ICAgIHN3aXRjaCAob3B0KSB7Cj4gKyAgICAgICAgICAgICAgIGNhc2UgT1BUX0hFTFA6Cj4gKyAg
+ICAgICAgICAgICAgICAgICAgICAgU0hPV19IRUxQKCk7Cj4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgZ290byBlbmQ7Cj4gKyAgICAgICAgICAgICAgIGNhc2UgT1BUX0xJU1RfT1BUSU9OUzoKPiAr
+ICAgICAgICAgICAgICAgICAgICAgICBsaXN0X2NtZF9vcHRpb25zKHN0ZG91dCwgbG9uZ19vcHRp
+b25zKTsKPiArICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVuZDsKPiArICAgICAgICAgICAg
+ICAgY2FzZSBPUFRfTElTVF9DT01NQU5EUzoKPiArICAgICAgICAgICAgICAgICAgICAgICBsaXN0
+X2NvbW1hbmRzKGFjdGlvbnMsIHN0ZG91dCk7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgZ290
+byBlbmQ7Cj4gKyAgICAgICAgICAgICAgIGRlZmF1bHQ6Cj4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgU0hPV19IRUxQKCk7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gQ01EX1VOREVG
+SU5FRDsKPiArICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVuZDsKPiArICAgICAgICAgICAg
+ICAgfQo+ICsgICAgICAgfQo+ICsKPiArICAgICAgIGlmICghb3B0X3Nlc3Npb25fbmFtZSkgewo+
+ICsgICAgICAgICAgICAgICBzZXNzaW9uX25hbWUgPSBnZXRfc2Vzc2lvbl9uYW1lKCk7Cj4gKyAg
+ICAgICAgICAgICAgIGlmIChzZXNzaW9uX25hbWUgPT0gTlVMTCkgewo+ICsgICAgICAgICAgICAg
+ICAgICAgICAgIHJldCA9IENNRF9FUlJPUjsKPiArICAgICAgICAgICAgICAgICAgICAgICBnb3Rv
+IGVuZDsKPiArICAgICAgICAgICAgICAgfQo+ICsgICAgICAgfSBlbHNlIHsKPiArICAgICAgICAg
+ICAgICAgc2Vzc2lvbl9uYW1lID0gb3B0X3Nlc3Npb25fbmFtZTsKPiArICAgICAgIH0KPiArCj4g
+KyAgICAgICBjb21tYW5kX3JldCA9IGhhbmRsZV9jb21tYW5kKHBvcHRHZXRBcmdzKHBjKSk7Cj4g
+KyAgICAgICBpZiAoY29tbWFuZF9yZXQpIHsKPiArICAgICAgICAgICAgICAgc3dpdGNoICgtY29t
+bWFuZF9yZXQpIHsKPiArICAgICAgICAgICAgICAgZGVmYXVsdDoKPiArICAgICAgICAgICAgICAg
+ICAgICAgICBFUlIoIiVzIiwgbHR0bmdfc3RyZXJyb3IoY29tbWFuZF9yZXQpKTsKPiArICAgICAg
+ICAgICAgICAgICAgICAgICBzdWNjZXNzID0gMDsKPiArICAgICAgICAgICAgICAgICAgICAgICBi
+cmVhazsKPiArICAgICAgICAgICAgICAgfQo+ICsgICAgICAgfQo+ICsKPiArICAgICAgIGlmIChs
+dHRuZ19vcHRfbWkpIHsKPiArICAgICAgICAgICAgICAgLyogQ2xvc2Ugb3V0cHV0IGVsZW1lbnQg
+Ki8KPiArICAgICAgICAgICAgICAgcmV0ID0gbWlfbHR0bmdfd3JpdGVyX2Nsb3NlX2VsZW1lbnQo
+d3JpdGVyKTsKPiArICAgICAgICAgICAgICAgaWYgKHJldCkgewo+ICsgICAgICAgICAgICAgICAg
+ICAgICAgIHJldCA9IENNRF9FUlJPUjsKPiArICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVu
+ZDsKPiArICAgICAgICAgICAgICAgfQo+ICsKPiArICAgICAgICAgICAgICAgLyogU3VjY2VzcyA/
+ICovCj4gKyAgICAgICAgICAgICAgIHJldCA9IG1pX2x0dG5nX3dyaXRlcl93cml0ZV9lbGVtZW50
+X2Jvb2wod3JpdGVyLAo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbWlfbHR0bmdf
+ZWxlbWVudF9jb21tYW5kX3N1Y2Nlc3MsIHN1Y2Nlc3MpOwo+ICsgICAgICAgICAgICAgICBpZiAo
+cmV0KSB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gQ01EX0VSUk9SOwo+ICsgICAg
+ICAgICAgICAgICAgICAgICAgIGdvdG8gZW5kOwo+ICsgICAgICAgICAgICAgICB9Cj4gKwo+ICsg
+ICAgICAgICAgICAgICAvKiBDb21tYW5kIGVsZW1lbnQgY2xvc2UgKi8KPiArICAgICAgICAgICAg
+ICAgcmV0ID0gbWlfbHR0bmdfd3JpdGVyX2NvbW1hbmRfY2xvc2Uod3JpdGVyKTsKPiArICAgICAg
+ICAgICAgICAgaWYgKHJldCkgewo+ICsgICAgICAgICAgICAgICAgICAgICAgIHJldCA9IENNRF9F
+UlJPUjsKPiArICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVuZDsKPiArICAgICAgICAgICAg
+ICAgfQo+ICsgICAgICAgfQo+ICsKPiArZW5kOgo+ICsgICAgICAgLyogTWkgY2xlYW4tdXAgKi8K
+PiArICAgICAgIGlmICh3cml0ZXIgJiYgbWlfbHR0bmdfd3JpdGVyX2Rlc3Ryb3kod3JpdGVyKSkg
+ewo+ICsgICAgICAgICAgICAgICAvKiBQcmVzZXJ2ZSBvcmlnaW5hbCBlcnJvciBjb2RlICovCj4g
+KyAgICAgICAgICAgICAgIHJldCA9IHJldCA/IHJldCA6IC1MVFROR19FUlJfTUlfSU9fRkFJTDsK
+PiArICAgICAgIH0KPiArCj4gKyAgICAgICBpZiAoIW9wdF9zZXNzaW9uX25hbWUpIHsKPiArICAg
+ICAgICAgICAgICAgZnJlZShzZXNzaW9uX25hbWUpOwo+ICsgICAgICAgfQo+ICsKPiArICAgICAg
+IC8qIE92ZXJ3cml0ZSByZXQgaWYgYW4gZXJyb3Igb2NjdXJyZWQgZHVyaW5nIGhhbmRsZV9jb21t
+YW5kKCkgKi8KPiArICAgICAgIHJldCA9IGNvbW1hbmRfcmV0ID8gY29tbWFuZF9yZXQgOiByZXQ7
+Cj4gKwo+ICsgICAgICAgcG9wdEZyZWVDb250ZXh0KHBjKTsKPiArICAgICAgIHJldHVybiByZXQ7
+Cj4gK30KPiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy9sdHRuZy5jIGIvc3JjL2Jpbi9sdHRu
+Zy9sdHRuZy5jCj4gaW5kZXggOTg3YTlkZC4uMzQ4MTZiZSAxMDA2NDQKPiAtLS0gYS9zcmMvYmlu
+L2x0dG5nL2x0dG5nLmMKPiArKysgYi9zcmMvYmluL2x0dG5nL2x0dG5nLmMKPiBAQCAtODgsNiAr
+ODgsNyBAQCBzdGF0aWMgc3RydWN0IGNtZF9zdHJ1Y3QgY29tbWFuZHNbXSA9ICB7Cj4gICAgICAg
+ICB7ICJoZWxwIiwgTlVMTH0sCj4gICAgICAgICB7ICJ2ZXJzaW9uIiwgY21kX3ZlcnNpb259LAo+
+ICAgICAgICAgeyAidmlldyIsIGNtZF92aWV3fSwKPiArICAgICAgIHsgInJlZ2VuZXJhdGUiLCBj
+bWRfcmVnZW5lcmF0ZX0sCj4gICAgICAgICB7IE5VTEwsIE5VTEx9ICAgLyogQXJyYXkgY2xvc3Vy
+ZSAqLwo+ICB9Owo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9jb21tb24va2VybmVsLWN0bC9rZXJuZWwt
+Y3RsLmMgYi9zcmMvY29tbW9uL2tlcm5lbC1jdGwva2VybmVsLWN0bC5jCj4gaW5kZXggM2QxMmRm
+NC4uZTFkZTBlNyAxMDA2NDQKPiAtLS0gYS9zcmMvY29tbW9uL2tlcm5lbC1jdGwva2VybmVsLWN0
+bC5jCj4gKysrIGIvc3JjL2NvbW1vbi9rZXJuZWwtY3RsL2tlcm5lbC1jdGwuYwo+IEBAIC0yMjUs
+NyArMjI1LDcgQEAgaW50IGtlcm5jdGxfbGlzdF90cmFja2VyX3BpZHMoaW50IGZkKQo+ICAgICAg
+ICAgcmV0dXJuIExUVE5HX0lPQ1RMX05PX0NIRUNLKGZkLCBMVFROR19LRVJORUxfU0VTU0lPTl9M
+SVNUX1RSQUNLRVJfUElEUyk7Cj4gIH0KPgo+IC1pbnQga2VybmN0bF9zZXNzaW9uX21ldGFkYXRh
+X3JlZ2VuZXJhdGUoaW50IGZkKQo+ICtpbnQga2VybmN0bF9zZXNzaW9uX3JlZ2VuZXJhdGVfbWV0
+YWRhdGEoaW50IGZkKQo+ICB7Cj4gICAgICAgICByZXR1cm4gTFRUTkdfSU9DVExfQ0hFQ0soZmQs
+IExUVE5HX0tFUk5FTF9TRVNTSU9OX01FVEFEQVRBX1JFR0VOKTsKPiAgfQo+IGRpZmYgLS1naXQg
+YS9zcmMvY29tbW9uL2tlcm5lbC1jdGwva2VybmVsLWN0bC5oIGIvc3JjL2NvbW1vbi9rZXJuZWwt
+Y3RsL2tlcm5lbC1jdGwuaAo+IGluZGV4IDY3MzY5MzcuLmYzMGU2ZjMgMTAwNjQ0Cj4gLS0tIGEv
+c3JjL2NvbW1vbi9rZXJuZWwtY3RsL2tlcm5lbC1jdGwuaAo+ICsrKyBiL3NyYy9jb21tb24va2Vy
+bmVsLWN0bC9rZXJuZWwtY3RsLmgKPiBAQCAtNjUsNyArNjUsNyBAQCBpbnQga2VybmN0bF90cmFj
+a19waWQoaW50IGZkLCBpbnQgcGlkKTsKPiAgaW50IGtlcm5jdGxfdW50cmFja19waWQoaW50IGZk
+LCBpbnQgcGlkKTsKPiAgaW50IGtlcm5jdGxfbGlzdF90cmFja2VyX3BpZHMoaW50IGZkKTsKPgo+
+IC1pbnQga2VybmN0bF9zZXNzaW9uX21ldGFkYXRhX3JlZ2VuZXJhdGUoaW50IGZkKTsKPiAraW50
+IGtlcm5jdGxfc2Vzc2lvbl9yZWdlbmVyYXRlX21ldGFkYXRhKGludCBmZCk7Cj4KPiAgLyogQnVm
+ZmVyIG9wZXJhdGlvbnMgKi8KPgo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL21pLWx0dG5nLmMg
+Yi9zcmMvY29tbW9uL21pLWx0dG5nLmMKPiBpbmRleCAxMDlmYjQxLi41NzY3OGMxIDEwMDY0NAo+
+IC0tLSBhL3NyYy9jb21tb24vbWktbHR0bmcuYwo+ICsrKyBiL3NyYy9jb21tb24vbWktbHR0bmcu
+Ywo+IEBAIC01OCw2ICs1OCw4IEBAIGNvbnN0IGNoYXIgKiBjb25zdCBtaV9sdHRuZ19lbGVtZW50
+X2NvbW1hbmRfbGlzdCA9ICJsaXN0IjsKPiAgY29uc3QgY2hhciAqIGNvbnN0IG1pX2x0dG5nX2Vs
+ZW1lbnRfY29tbWFuZF9sb2FkID0gImxvYWQiOwo+ICBMVFROR19ISURERU4gY29uc3QgY2hhciAq
+IGNvbnN0IG1pX2x0dG5nX2VsZW1lbnRfY29tbWFuZF9tZXRhZGF0YSA9ICJtZXRhZGF0YSI7Cj4g
+IExUVE5HX0hJRERFTiBjb25zdCBjaGFyICogY29uc3QgbWlfbHR0bmdfZWxlbWVudF9jb21tYW5k
+X21ldGFkYXRhX2FjdGlvbiA9ICJtZXRhZGF0YV9hY3Rpb24iOwo+ICtMVFROR19ISURERU4gY29u
+c3QgY2hhciAqIGNvbnN0IG1pX2x0dG5nX2VsZW1lbnRfY29tbWFuZF9yZWdlbmVyYXRlID0gInJl
+Z2VuZXJhdGUiOwo+ICtMVFROR19ISURERU4gY29uc3QgY2hhciAqIGNvbnN0IG1pX2x0dG5nX2Vs
+ZW1lbnRfY29tbWFuZF9yZWdlbmVyYXRlX2FjdGlvbiA9ICJyZWdlbmVyYXRlX2FjdGlvbiI7Cj4g
+IGNvbnN0IGNoYXIgKiBjb25zdCBtaV9sdHRuZ19lbGVtZW50X2NvbW1hbmRfbmFtZSA9ICJuYW1l
+IjsKPiAgY29uc3QgY2hhciAqIGNvbnN0IG1pX2x0dG5nX2VsZW1lbnRfY29tbWFuZF9vdXRwdXQg
+PSAib3V0cHV0IjsKPiAgY29uc3QgY2hhciAqIGNvbnN0IG1pX2x0dG5nX2VsZW1lbnRfY29tbWFu
+ZF9zYXZlID0gInNhdmUiOwo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL21pLWx0dG5nLmggYi9z
+cmMvY29tbW9uL21pLWx0dG5nLmgKPiBpbmRleCA1ODU4MThkLi5jZjVmNDY4IDEwMDY0NAo+IC0t
+LSBhL3NyYy9jb21tb24vbWktbHR0bmcuaAo+ICsrKyBiL3NyYy9jb21tb24vbWktbHR0bmcuaAo+
+IEBAIC02NCw2ICs2NCw4IEBAIGV4dGVybiBjb25zdCBjaGFyICogY29uc3QgbWlfbHR0bmdfZWxl
+bWVudF9jb21tYW5kX2xpc3Q7Cj4gIGV4dGVybiBjb25zdCBjaGFyICogY29uc3QgbWlfbHR0bmdf
+ZWxlbWVudF9jb21tYW5kX2xvYWQ7Cj4gIGV4dGVybiBjb25zdCBjaGFyICogY29uc3QgbWlfbHR0
+bmdfZWxlbWVudF9jb21tYW5kX21ldGFkYXRhOwo+ICBleHRlcm4gY29uc3QgY2hhciAqIGNvbnN0
+IG1pX2x0dG5nX2VsZW1lbnRfY29tbWFuZF9tZXRhZGF0YV9hY3Rpb247Cj4gK2V4dGVybiBjb25z
+dCBjaGFyICogY29uc3QgbWlfbHR0bmdfZWxlbWVudF9jb21tYW5kX3JlZ2VuZXJhdGU7Cj4gK2V4
+dGVybiBjb25zdCBjaGFyICogY29uc3QgbWlfbHR0bmdfZWxlbWVudF9jb21tYW5kX3JlZ2VuZXJh
+dGVfYWN0aW9uOwo+ICBleHRlcm4gY29uc3QgY2hhciAqIGNvbnN0IG1pX2x0dG5nX2VsZW1lbnRf
+Y29tbWFuZF9uYW1lOwo+ICBleHRlcm4gY29uc3QgY2hhciAqIGNvbnN0IG1pX2x0dG5nX2VsZW1l
+bnRfY29tbWFuZF9vdXRwdXQ7Cj4gIGV4dGVybiBjb25zdCBjaGFyICogY29uc3QgbWlfbHR0bmdf
+ZWxlbWVudF9jb21tYW5kX3NhdmU7Cj4gZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vc2Vzc2lvbmQt
+Y29tbS9zZXNzaW9uZC1jb21tLmggYi9zcmMvY29tbW9uL3Nlc3Npb25kLWNvbW0vc2Vzc2lvbmQt
+Y29tbS5oCj4gaW5kZXggMDk4Mzg2NS4uMjk3NDBjMSAxMDA2NDQKPiAtLS0gYS9zcmMvY29tbW9u
+L3Nlc3Npb25kLWNvbW0vc2Vzc2lvbmQtY29tbS5oCj4gKysrIGIvc3JjL2NvbW1vbi9zZXNzaW9u
+ZC1jb21tL3Nlc3Npb25kLWNvbW0uaAo+IEBAIC05NCw3ICs5NCw3IEBAIGVudW0gbHR0Y29tbV9z
+ZXNzaW9uZF9jb21tYW5kIHsKPiAgICAgICAgIExUVE5HX1VOVFJBQ0tfUElEICAgICAgICAgICAg
+ICAgICAgID0gMzMsCj4gICAgICAgICBMVFROR19MSVNUX1RSQUNLRVJfUElEUyAgICAgICAgICAg
+ICA9IDM0LAo+ICAgICAgICAgTFRUTkdfU0VUX1NFU1NJT05fU0hNX1BBVEggICAgICAgICAgPSA0
+MCwKPiAtICAgICAgIExUVE5HX01FVEFEQVRBX1JFR0VORVJBVEUgICAgICAgICAgID0gNDEsCj4g
+KyAgICAgICBMVFROR19SRUdFTkVSQVRFX01FVEFEQVRBICAgICAgICAgICA9IDQxLAo+ICB9Owo+
+Cj4gIGVudW0gbHR0Y29tbV9yZWxheWRfY29tbWFuZCB7Cj4gQEAgLTUyNiw3ICs1MjYsNyBAQCBz
+dHJ1Y3QgbHR0Y29tbV9jb25zdW1lcl9tc2cgewo+ICAgICAgICAgICAgICAgICB9IExUVE5HX1BB
+Q0tFRCBsb3N0X3BhY2tldHM7Cj4gICAgICAgICAgICAgICAgIHN0cnVjdCB7Cj4gICAgICAgICAg
+ICAgICAgICAgICAgICAgdWludDY0X3Qgc2Vzc2lvbl9pZDsKPiAtICAgICAgICAgICAgICAgfSBM
+VFROR19QQUNLRUQgbWV0YWRhdGFfcmVnZW5lcmF0ZTsKPiArICAgICAgICAgICAgICAgfSBMVFRO
+R19QQUNLRUQgcmVnZW5lcmF0ZV9tZXRhZGF0YTsKPiAgICAgICAgIH0gdTsKPiAgfSBMVFROR19Q
+QUNLRUQ7Cj4KPiBkaWZmIC0tZ2l0IGEvc3JjL2xpYi9sdHRuZy1jdGwvbHR0bmctY3RsLmMgYi9z
+cmMvbGliL2x0dG5nLWN0bC9sdHRuZy1jdGwuYwo+IGluZGV4IDBhZTZiMGIuLjhjNzhlMWMgMTAw
+NjQ0Cj4gLS0tIGEvc3JjL2xpYi9sdHRuZy1jdGwvbHR0bmctY3RsLmMKPiArKysgYi9zcmMvbGli
+L2x0dG5nLWN0bC9sdHRuZy1jdGwuYwo+IEBAIC0yMzg0LDcgKzIzODQsNyBAQCBpbnQgbHR0bmdf
+bGlzdF90cmFja2VyX3BpZHMoc3RydWN0IGx0dG5nX2hhbmRsZSAqaGFuZGxlLAo+ICAgKiBSZWdl
+bmVyYXRlIHRoZSBtZXRhZGF0YSBmb3IgYSBzZXNzaW9uLgo+ICAgKiBSZXR1cm4gMCBvbiBzdWNj
+ZXNzLCBhIG5lZ2F0aXZlIGVycm9yIGNvZGUgb24gZXJyb3IuCj4gICAqLwo+IC1pbnQgbHR0bmdf
+bWV0YWRhdGFfcmVnZW5lcmF0ZShjb25zdCBjaGFyICpzZXNzaW9uX25hbWUpCj4gK2ludCBsdHRu
+Z19yZWdlbmVyYXRlX21ldGFkYXRhKGNvbnN0IGNoYXIgKnNlc3Npb25fbmFtZSkKPiAgewo+ICAg
+ICAgICAgaW50IHJldDsKPiAgICAgICAgIHN0cnVjdCBsdHRjb21tX3Nlc3Npb25fbXNnIGxzbTsK
+PiBAQCAtMjM5NSw3ICsyMzk1LDcgQEAgaW50IGx0dG5nX21ldGFkYXRhX3JlZ2VuZXJhdGUoY29u
+c3QgY2hhciAqc2Vzc2lvbl9uYW1lKQo+ICAgICAgICAgfQo+Cj4gICAgICAgICBtZW1zZXQoJmxz
+bSwgMCwgc2l6ZW9mKGxzbSkpOwo+IC0gICAgICAgbHNtLmNtZF90eXBlID0gTFRUTkdfTUVUQURB
+VEFfUkVHRU5FUkFURTsKPiArICAgICAgIGxzbS5jbWRfdHlwZSA9IExUVE5HX1JFR0VORVJBVEVf
+TUVUQURBVEE7Cj4KPiAgICAgICAgIGx0dG5nX2N0bF9jb3B5X3N0cmluZyhsc20uc2Vzc2lvbi5u
+YW1lLCBzZXNzaW9uX25hbWUsCj4gICAgICAgICAgICAgICAgICAgICAgICAgc2l6ZW9mKGxzbS5z
+ZXNzaW9uLm5hbWUpKTsKPiBAQCAtMjQxMSw2ICsyNDExLDE0IEBAIGVuZDoKPiAgfQo+Cj4gIC8q
+Cj4gKyAqIERlcHJlY2F0ZWQsIHJlcGxhY2VkIGJ5IGx0dG5nX3JlZ2VuZXJhdGVfbWV0YWRhdGEu
+Cj4gKyAqLwo+ICtpbnQgbHR0bmdfbWV0YWRhdGFfcmVnZW5lcmF0ZShjb25zdCBjaGFyICpzZXNz
+aW9uX25hbWUpCj4gK3sKPiArICAgICAgIHJldHVybiBsdHRuZ19yZWdlbmVyYXRlX21ldGFkYXRh
+KHNlc3Npb25fbmFtZSk7Cj4gK30KPiArCj4gKy8qCj4gICAqIGxpYiBjb25zdHJ1Y3Rvci4KPiAg
+ICovCj4gIHN0YXRpYyB2b2lkIF9fYXR0cmlidXRlX18oKGNvbnN0cnVjdG9yKSkgaW5pdCh2b2lk
+KQo+IGRpZmYgLS1naXQgYS90ZXN0cy9kZXN0cnVjdGl2ZS9tZXRhZGF0YS1yZWdlbmVyYXRpb24g
+Yi90ZXN0cy9kZXN0cnVjdGl2ZS9tZXRhZGF0YS1yZWdlbmVyYXRpb24KPiBpbmRleCAzMjQ2OWI1
+Li5kNGU2MzJhIDEwMDc1NQo+IC0tLSBhL3Rlc3RzL2Rlc3RydWN0aXZlL21ldGFkYXRhLXJlZ2Vu
+ZXJhdGlvbgo+ICsrKyBiL3Rlc3RzL2Rlc3RydWN0aXZlL21ldGFkYXRhLXJlZ2VuZXJhdGlvbgo+
+IEBAIC04OSw3ICs4OSw3IEBAIGZ1bmN0aW9uIHRlc3Rfa2VybmVsX2xvY2FsICgpCj4gICAgICAg
+ICB2YWxpZGF0ZV90cmFjZV9kYXRlICREQVRFMSAkVFJBQ0VfUEFUSAo+ICAgICAgICAgc3RhcnRf
+bHR0bmdfdHJhY2luZ19vayAkU0VTU0lPTl9OQU1FCj4gICAgICAgICBkYXRlICIrJVktJW0tJWQg
+JUg6JU0iIC1zICIkREFURTIgJEhPVVIiID4vZGV2L251bGwKPiAtICAgICAgIG1ldGFkYXRhX3Jl
+Z2VuZXJhdGVfb2sgJFNFU1NJT05fTkFNRQo+ICsgICAgICAgcmVnZW5lcmF0ZV9tZXRhZGF0YV9v
+ayAkU0VTU0lPTl9OQU1FCj4gICAgICAgICBzdG9wX2x0dG5nX3RyYWNpbmdfb2sgJFNFU1NJT05f
+TkFNRQo+ICAgICAgICAgdmFsaWRhdGVfdHJhY2VfZGF0ZSAkREFURTIgJFRSQUNFX1BBVEgKPiAg
+ICAgICAgIGlmIFsgJD8gLWVxIDAgXTsgdGhlbgo+IEBAIC0xMTEsNyArMTExLDcgQEAgZnVuY3Rp
+b24gdGVzdF9rZXJuZWxfc3RyZWFtaW5nICgpCj4gICAgICAgICB2YWxpZGF0ZV90cmFjZV9kYXRl
+ICREQVRFMSAkVFJBQ0VfUEFUSC8kSE9TVE5BTUUvJFNFU1NJT05fTkFNRSoKPiAgICAgICAgIHN0
+YXJ0X2x0dG5nX3RyYWNpbmdfb2sgJFNFU1NJT05fTkFNRQo+ICAgICAgICAgZGF0ZSAiKyVZLSVt
+LSVkICVIOiVNIiAtcyAiJERBVEUyICRIT1VSIiA+L2Rldi9udWxsCj4gLSAgICAgICBtZXRhZGF0
+YV9yZWdlbmVyYXRlX29rICRTRVNTSU9OX05BTUUKPiArICAgICAgIHJlZ2VuZXJhdGVfbWV0YWRh
+dGFfb2sgJFNFU1NJT05fTkFNRQo+ICAgICAgICAgc3RvcF9sdHRuZ190cmFjaW5nX29rICRTRVNT
+SU9OX05BTUUKPiAgICAgICAgICMgVmFsaWRhdGUgdGVzdAo+ICAgICAgICAgdmFsaWRhdGVfdHJh
+Y2VfZGF0ZSAkREFURTIgJFRSQUNFX1BBVEgvJEhPU1ROQU1FLyRTRVNTSU9OX05BTUUqCj4gQEAg
+LTE0Nyw3ICsxNDcsNyBAQCBmdW5jdGlvbiB0ZXN0X3VzdF9sb2NhbCAoKQo+Cj4gICAgICAgICBz
+dGFydF9sdHRuZ190cmFjaW5nX29rICRTRVNTSU9OX05BTUUKPiAgICAgICAgIGRhdGUgIislWS0l
+bS0lZCAlSDolTSIgLXMgIiREQVRFMiAkSE9VUiIgPi9kZXYvbnVsbAo+IC0gICAgICAgbWV0YWRh
+dGFfcmVnZW5lcmF0ZV9vayAkU0VTU0lPTl9OQU1FCj4gKyAgICAgICByZWdlbmVyYXRlX21ldGFk
+YXRhX29rICRTRVNTSU9OX05BTUUKPgo+ICAgICAgICAgc3RvcF9sdHRuZ190cmFjaW5nX29rICRT
+RVNTSU9OX05BTUUKPiAgICAgICAgIGRlc3Ryb3lfbHR0bmdfc2Vzc2lvbl9vayAkU0VTU0lPTl9O
+QU1FCj4gQEAgLTE4NCw3ICsxODQsNyBAQCBmdW5jdGlvbiB0ZXN0X3VzdF9zdHJlYW1pbmcgKCkK
+PiAgICAgICAgIHN0YXJ0X2x0dG5nX3RyYWNpbmdfb2sgJFNFU1NJT05fTkFNRQo+ICAgICAgICAg
+ZGF0ZSAiKyVZLSVtLSVkICVIOiVNIiAtcyAiJERBVEUyICRIT1VSIiA+L2Rldi9udWxsCj4KPiAt
+ICAgICAgIG1ldGFkYXRhX3JlZ2VuZXJhdGVfb2sgJFNFU1NJT05fTkFNRQo+ICsgICAgICAgcmVn
+ZW5lcmF0ZV9tZXRhZGF0YV9vayAkU0VTU0lPTl9OQU1FCj4KPiAgICAgICAgIHN0b3BfbHR0bmdf
+dHJhY2luZ19vayAkU0VTU0lPTl9OQU1FCj4gICAgICAgICBkZXN0cm95X2x0dG5nX3Nlc3Npb25f
+b2sgJFNFU1NJT05fTkFNRQo+IGRpZmYgLS1naXQgYS90ZXN0cy9mYXN0X3JlZ3Jlc3Npb24gYi90
+ZXN0cy9mYXN0X3JlZ3Jlc3Npb24KPiBpbmRleCAwYzRmMDc5Li4yNjJjODQ2IDEwMDY0NAo+IC0t
+LSBhL3Rlc3RzL2Zhc3RfcmVncmVzc2lvbgo+ICsrKyBiL3Rlc3RzL2Zhc3RfcmVncmVzc2lvbgo+
+IEBAIC0xNiw3ICsxNiw3IEBAIHJlZ3Jlc3Npb24vdG9vbHMvc2F2ZS1sb2FkL3Rlc3RfbG9hZAo+
+ICByZWdyZXNzaW9uL3Rvb2xzL21pL3Rlc3RfbWkKPiAgcmVncmVzc2lvbi90b29scy93aWxkY2Fy
+ZC90ZXN0X2V2ZW50X3dpbGRjYXJkCj4gIHJlZ3Jlc3Npb24vdG9vbHMvY3Jhc2gvdGVzdF9jcmFz
+aAo+IC1yZWdyZXNzaW9uL3Rvb2xzL21ldGFkYXRhLXJlZ2VuL3Rlc3RfdXN0Cj4gK3JlZ3Jlc3Np
+b24vdG9vbHMvcmVnZW4tbWV0YWRhdGEvdGVzdF91c3QKPiAgcmVncmVzc2lvbi91c3QvYmVmb3Jl
+LWFmdGVyL3Rlc3RfYmVmb3JlX2FmdGVyCj4gIHJlZ3Jlc3Npb24vdXN0L2J1ZmZlcnMtcGlkL3Rl
+c3RfYnVmZmVyc19waWQKPiAgcmVncmVzc2lvbi91c3QvbXVsdGktc2Vzc2lvbi90ZXN0X211bHRp
+X3Nlc3Npb24KPiBkaWZmIC0tZ2l0IGEvdGVzdHMvcmVncmVzc2lvbi9NYWtlZmlsZS5hbSBiL3Rl
+c3RzL3JlZ3Jlc3Npb24vTWFrZWZpbGUuYW0KPiBpbmRleCA2YTJkMjRjLi4yMjk3ZWExIDEwMDY0
+NAo+IC0tLSBhL3Rlc3RzL3JlZ3Jlc3Npb24vTWFrZWZpbGUuYW0KPiArKysgYi90ZXN0cy9yZWdy
+ZXNzaW9uL01ha2VmaWxlLmFtCj4gQEAgLTIyLDcgKzIyLDcgQEAgVEVTVFMgPSB0b29scy9maWx0
+ZXJpbmcvdGVzdF9pbnZhbGlkX2ZpbHRlciBcCj4gICAgICAgICB0b29scy9taS90ZXN0X21pIFwK
+PiAgICAgICAgIHRvb2xzL3dpbGRjYXJkL3Rlc3RfZXZlbnRfd2lsZGNhcmQgXAo+ICAgICAgICAg
+dG9vbHMvY3Jhc2gvdGVzdF9jcmFzaCBcCj4gLSAgICAgICB0b29scy9tZXRhZGF0YS1yZWdlbi90
+ZXN0X3VzdAo+ICsgICAgICAgdG9vbHMvcmVnZW4tbWV0YWRhdGEvdGVzdF91c3QKPgo+ICBpZiBI
+QVZFX0xJQkxUVE5HX1VTVF9DVEwKPiAgU1VCRElSUyArPSB1c3QKPiBkaWZmIC0tZ2l0IGEvdGVz
+dHMvcmVncmVzc2lvbi90b29scy9NYWtlZmlsZS5hbSBiL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMv
+TWFrZWZpbGUuYW0KPiBpbmRleCA2YzM5YzlmLi45MTgyMGFkIDEwMDY0NAo+IC0tLSBhL3Rlc3Rz
+L3JlZ3Jlc3Npb24vdG9vbHMvTWFrZWZpbGUuYW0KPiArKysgYi90ZXN0cy9yZWdyZXNzaW9uL3Rv
+b2xzL01ha2VmaWxlLmFtCj4gQEAgLTEsMiArMSwyIEBACj4gIFNVQkRJUlMgPSBzdHJlYW1pbmcg
+ZmlsdGVyaW5nIGhlYWx0aCB0cmFjZWZpbGUtbGltaXRzIHNuYXBzaG90cyBsaXZlIGV4Y2x1c2lv
+biBzYXZlLWxvYWQgbWkgXAo+IC0gICAgICAgICAgICAgICB3aWxkY2FyZCBjcmFzaCBtZXRhZGF0
+YS1yZWdlbgo+ICsgICAgICAgICAgICAgICB3aWxkY2FyZCBjcmFzaCByZWdlbi1tZXRhZGF0YQo+
+IGRpZmYgLS1naXQgYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL21ldGFkYXRhLXJlZ2VuL01ha2Vm
+aWxlLmFtIGIvdGVzdHMvcmVncmVzc2lvbi90b29scy9tZXRhZGF0YS1yZWdlbi9NYWtlZmlsZS5h
+bQo+IGRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IGQ0YTkyZWIuLjAwMDAwMDAKPiAt
+LS0gYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL21ldGFkYXRhLXJlZ2VuL01ha2VmaWxlLmFtCj4g
+KysrIC9kZXYvbnVsbAo+IEBAIC0xLDE2ICswLDAgQEAKPiAtbm9pbnN0X1NDUklQVFMgPSB0ZXN0
+X3VzdCB0ZXN0X2tlcm5lbAo+IC1FWFRSQV9ESVNUID0gdGVzdF91c3QgdGVzdF9rZXJuZWwKPiAt
+Cj4gLWFsbC1sb2NhbDoKPiAtICAgICAgIEBpZiBbIHgiJChzcmNkaXIpIiAhPSB4IiQoYnVpbGRk
+aXIpIiBdOyB0aGVuIFwKPiAtICAgICAgICAgICAgICAgZm9yIHNjcmlwdCBpbiAkKEVYVFJBX0RJ
+U1QpOyBkbyBcCj4gLSAgICAgICAgICAgICAgICAgICAgICAgY3AgLWYgJChzcmNkaXIpLyQkc2Ny
+aXB0ICQoYnVpbGRkaXIpOyBcCj4gLSAgICAgICAgICAgICAgIGRvbmU7IFwKPiAtICAgICAgIGZp
+Cj4gLQo+IC1jbGVhbi1sb2NhbDoKPiAtICAgICAgIEBpZiBbIHgiJChzcmNkaXIpIiAhPSB4IiQo
+YnVpbGRkaXIpIiBdOyB0aGVuIFwKPiAtICAgICAgICAgICAgICAgZm9yIHNjcmlwdCBpbiAkKEVY
+VFJBX0RJU1QpOyBkbyBcCj4gLSAgICAgICAgICAgICAgICAgICAgICAgcm0gLWYgJChidWlsZGRp
+cikvJCRzY3JpcHQ7IFwKPiAtICAgICAgICAgICAgICAgZG9uZTsgXAo+IC0gICAgICAgZmkKPiBk
+aWZmIC0tZ2l0IGEvdGVzdHMvcmVncmVzc2lvbi90b29scy9tZXRhZGF0YS1yZWdlbi90ZXN0X2tl
+cm5lbCBiL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvbWV0YWRhdGEtcmVnZW4vdGVzdF9rZXJuZWwK
+PiBkZWxldGVkIGZpbGUgbW9kZSAxMDA3NTUKPiBpbmRleCBmYjk5NDBhLi4wMDAwMDAwCj4gLS0t
+IGEvdGVzdHMvcmVncmVzc2lvbi90b29scy9tZXRhZGF0YS1yZWdlbi90ZXN0X2tlcm5lbAo+ICsr
+KyAvZGV2L251bGwKPiBAQCAtMSwxMDkgKzAsMCBAQAo+IC0jIS9iaW4vYmFzaAo+IC0jCj4gLSMg
+Q29weXJpZ2h0IChDKSAtIDIwMTUgSnVsaWVuIERlc2Zvc3NleiA8amRlc2Zvc3NlekBlZmZpY2lv
+cy5jb20+Cj4gLSMKPiAtIyBUaGlzIGxpYnJhcnkgaXMgZnJlZSBzb2Z0d2FyZTsgeW91IGNhbiBy
+ZWRpc3RyaWJ1dGUgaXQgYW5kL29yIG1vZGlmeSBpdCB1bmRlcgo+IC0jIHRoZSB0ZXJtcyBvZiB0
+aGUgR05VIExlc3NlciBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlIGFzIHB1Ymxpc2hlZCBieSB0aGUg
+RnJlZQo+IC0jIFNvZnR3YXJlIEZvdW5kYXRpb247IHZlcnNpb24gMi4xIG9mIHRoZSBMaWNlbnNl
+Lgo+IC0jCj4gLSMgVGhpcyBsaWJyYXJ5IGlzIGRpc3RyaWJ1dGVkIGluIHRoZSBob3BlIHRoYXQg
+aXQgd2lsbCBiZSB1c2VmdWwsIGJ1dCBXSVRIT1VUCj4gLSMgQU5ZIFdBUlJBTlRZOyB3aXRob3V0
+IGV2ZW4gdGhlIGltcGxpZWQgd2FycmFudHkgb2YgTUVSQ0hBTlRBQklMSVRZIG9yIEZJVE5FU1MK
+PiAtIyBGT1IgQSBQQVJUSUNVTEFSIFBVUlBPU0UuICBTZWUgdGhlIEdOVSBMZXNzZXIgR2VuZXJh
+bCBQdWJsaWMgTGljZW5zZSBmb3IgbW9yZQo+IC0jIGRldGFpbHMuCj4gLSMKPiAtIyBZb3Ugc2hv
+dWxkIGhhdmUgcmVjZWl2ZWQgYSBjb3B5IG9mIHRoZSBHTlUgTGVzc2VyIEdlbmVyYWwgUHVibGlj
+IExpY2Vuc2UKPiAtIyBhbG9uZyB3aXRoIHRoaXMgbGlicmFyeTsgaWYgbm90LCB3cml0ZSB0byB0
+aGUgRnJlZSBTb2Z0d2FyZSBGb3VuZGF0aW9uLCBJbmMuLAo+IC0jIDUxIEZyYW5rbGluIFN0cmVl
+dCwgRmlmdGggRmxvb3IsIEJvc3RvbiwgTUEgIDAyMTEwLTEzMDEgVVNBCj4gLVRFU1RfREVTQz0i
+U3RyZWFtaW5nIC0gS2VybmVsIHRyYWNpbmciCj4gLQo+IC1DVVJESVI9JChkaXJuYW1lICQwKS8K
+PiAtVEVTVERJUj0kQ1VSRElSLy4uLy4uLy4uCj4gLUVWRU5UX05BTUU9Imx0dG5nX3Rlc3RfZmls
+dGVyX2V2ZW50Igo+IC1QSURfUkVMQVlEPTAKPiAtU0VTU0lPTl9OQU1FPSIiCj4gLQo+IC1UUkFD
+RV9QQVRIPSQobWt0ZW1wIC1kKQo+IC0KPiAtTlVNX1RFU1RTPTE4Cj4gLQo+IC1zb3VyY2UgJFRF
+U1RESVIvdXRpbHMvdXRpbHMuc2gKPiAtCj4gLSMgTFRUbmcga2VybmVsIG1vZHVsZXMgY2hlY2sK
+PiAtb3V0PWBscyAvbGliL21vZHVsZXMvJCh1bmFtZSAtcikvZXh0cmEgfCBncmVwIGx0dG5nYAo+
+IC1pZiBbIC16ICIkb3V0IiBdOyB0aGVuCj4gLSAgICAgICBCQUlMX09VVCAiTFRUbmcgbW9kdWxl
+cyBub3QgZGV0ZWN0ZWQuIgo+IC1maQo+IC0KPiAtZnVuY3Rpb24gbHR0bmdfY3JlYXRlX3Nlc3Np
+b25fdXJpCj4gLXsKPiAtICAgICAgICMgQ3JlYXRlIHNlc3Npb24gd2l0aCBkZWZhdWx0IHBhdGgK
+PiAtICAgICAgICRURVNURElSLy4uL3NyYy9iaW4vbHR0bmcvJExUVE5HX0JJTiBjcmVhdGUgJFNF
+U1NJT05fTkFNRSAtVSBuZXQ6Ly9sb2NhbGhvc3QgPi9kZXYvbnVsbCAyPiYxCj4gLQo+IC0gICAg
+ICAgb2sgJD8gIkNyZWF0ZSBzZXNzaW9uICRTRVNTSU9OX05BTUUiCj4gLX0KPiAtCj4gLWZ1bmN0
+aW9uIHRlc3Rfa2VybmVsX3N0cmVhbWluZyAoKQo+IC17Cj4gLSAgICAgICBkaWFnICJUZXN0IGtl
+cm5lbCBzdHJlYW1pbmcgd2l0aCBtZXRhZGF0YSByZWdlbmVyYXRpb24iCj4gLSAgICAgICBsdHRu
+Z19jcmVhdGVfc2Vzc2lvbl91cmkKPiAtICAgICAgIGx0dG5nX2VuYWJsZV9rZXJuZWxfZXZlbnQg
+JFNFU1NJT05fTkFNRSAkRVZFTlRfTkFNRQo+IC0gICAgICAgc3RhcnRfbHR0bmdfdHJhY2luZ19v
+ayAkU0VTU0lPTl9OQU1FCj4gLSAgICAgICBlY2hvIC1uICIxMDAiID4gL3Byb2MvbHR0bmctdGVz
+dC1maWx0ZXItZXZlbnQKPiAtICAgICAgIG1ldGFkYXRhX3JlZ2VuZXJhdGVfb2sgJFNFU1NJT05f
+TkFNRQo+IC0gICAgICAgc3RvcF9sdHRuZ190cmFjaW5nX29rICRTRVNTSU9OX05BTUUKPiAtICAg
+ICAgICMgVmFsaWRhdGUgdGVzdAo+IC0gICAgICAgdmFsaWRhdGVfdHJhY2UgJEVWRU5UX05BTUUg
+JFRSQUNFX1BBVEgvJEhPU1ROQU1FLyRTRVNTSU9OX05BTUUqCj4gLSAgICAgICBpZiBbICQ/IC1l
+cSAwIF07IHRoZW4KPiAtICAgICAgICAgICAgICAgIyBPbmx5IGRlbGV0ZSBpZiBzdWNjZXNzZnVs
+Cj4gLSAgICAgICAgICAgICAgIHJtIC1yZiAkVFJBQ0VfUEFUSAo+IC0gICAgICAgZWxzZQo+IC0g
+ICAgICAgICAgICAgICBicmVhawo+IC0gICAgICAgZmkKPiAtICAgICAgIGRlc3Ryb3lfbHR0bmdf
+c2Vzc2lvbl9vayAkU0VTU0lPTl9OQU1FCj4gLX0KPiAtCj4gLWZ1bmN0aW9uIHRlc3Rfa2VybmVs
+X2xvY2FsICgpCj4gLXsKPiAtICAgICAgIGRpYWcgIlRlc3Qga2VybmVsIGxvY2FsIHdpdGggbWV0
+YWRhdGEgcmVnZW5lcmF0aW9uIgo+IC0gICAgICAgY3JlYXRlX2x0dG5nX3Nlc3Npb25fb2sgJFNF
+U1NJT05fTkFNRSAkVFJBQ0VfUEFUSAo+IC0gICAgICAgbHR0bmdfZW5hYmxlX2tlcm5lbF9ldmVu
+dCAkU0VTU0lPTl9OQU1FICRFVkVOVF9OQU1FCj4gLSAgICAgICBzdGFydF9sdHRuZ190cmFjaW5n
+X29rICRTRVNTSU9OX05BTUUKPiAtICAgICAgIGVjaG8gLW4gIjEwMCIgPiAvcHJvYy9sdHRuZy10
+ZXN0LWZpbHRlci1ldmVudAo+IC0gICAgICAgbWV0YWRhdGFfcmVnZW5lcmF0ZV9vayAkU0VTU0lP
+Tl9OQU1FCj4gLSAgICAgICBzdG9wX2x0dG5nX3RyYWNpbmdfb2sgJFNFU1NJT05fTkFNRQo+IC0g
+ICAgICAgdmFsaWRhdGVfdHJhY2UgJEVWRU5UX05BTUUgJFRSQUNFX1BBVEgKPiAtICAgICAgIGlm
+IFsgJD8gLWVxIDAgXTsgdGhlbgo+IC0gICAgICAgICAgICAgICAjIE9ubHkgZGVsZXRlIGlmIHN1
+Y2Nlc3NmdWwKPiAtICAgICAgICAgICAgICAgcm0gLXJmICRUUkFDRV9QQVRICj4gLSAgICAgICBm
+aQo+IC0gICAgICAgZGVzdHJveV9sdHRuZ19zZXNzaW9uX29rICRTRVNTSU9OX05BTUUKPiAtfQo+
+IC0KPiAtcGxhbl90ZXN0cyAkTlVNX1RFU1RTCj4gLQo+IC1wcmludF90ZXN0X2Jhbm5lciAiJFRF
+U1RfREVTQyIKPiAtCj4gLWlmIFsgIiQoaWQgLXUpIiA9PSAiMCIgXTsgdGhlbgo+IC0gICAgICAg
+aXNyb290PTEKPiAtZWxzZQo+IC0gICAgICAgaXNyb290PTAKPiAtZmkKPiAtCj4gLXNraXAgJGlz
+cm9vdCAiUm9vdCBhY2Nlc3MgaXMgbmVlZGVkLiBTa2lwcGluZyBhbGwga2VybmVsIHN0cmVhbWlu
+ZyB0ZXN0cy4iICROVU1fVEVTVFMgfHwKPiAtewo+IC0gICAgICAgc3RhcnRfbHR0bmdfcmVsYXlk
+ICItbyAkVFJBQ0VfUEFUSCIKPiAtICAgICAgIHN0YXJ0X2x0dG5nX3Nlc3Npb25kCj4gLSAgICAg
+ICBtb2Rwcm9iZSBsdHRuZy10ZXN0Cj4gLQo+IC0gICAgICAgdGVzdHM9KCB0ZXN0X2tlcm5lbF9z
+dHJlYW1pbmcgdGVzdF9rZXJuZWxfbG9jYWwgKQo+IC0KPiAtICAgICAgIGZvciBmY3RfdGVzdCBp
+biAke3Rlc3RzW0BdfTsKPiAtICAgICAgIGRvCj4gLSAgICAgICAgICAgICAgIFNFU1NJT05fTkFN
+RT0kKHJhbmRzdHJpbmcgMTYgMCkKPiAtICAgICAgICAgICAgICAgJHtmY3RfdGVzdH0KPiAtICAg
+ICAgIGRvbmUKPiAtCj4gLSAgICAgICBybW1vZCBsdHRuZy10ZXN0Cj4gLSAgICAgICBzdG9wX2x0
+dG5nX3Nlc3Npb25kCj4gLSAgICAgICBzdG9wX2x0dG5nX3JlbGF5ZAo+IC19Cj4gZGlmZiAtLWdp
+dCBhL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvbWV0YWRhdGEtcmVnZW4vdGVzdF91c3QgYi90ZXN0
+cy9yZWdyZXNzaW9uL3Rvb2xzL21ldGFkYXRhLXJlZ2VuL3Rlc3RfdXN0Cj4gZGVsZXRlZCBmaWxl
+IG1vZGUgMTAwNzU1Cj4gaW5kZXggZmU2ZmZkOC4uMDAwMDAwMAo+IC0tLSBhL3Rlc3RzL3JlZ3Jl
+c3Npb24vdG9vbHMvbWV0YWRhdGEtcmVnZW4vdGVzdF91c3QKPiArKysgL2Rldi9udWxsCj4gQEAg
+LTEsMjA4ICswLDAgQEAKPiAtIyEvYmluL2Jhc2gKPiAtIwo+IC0jIENvcHlyaWdodCAoQykgLSAy
+MDE1IEp1bGllbiBEZXNmb3NzZXogPGpkZXNmb3NzZXpAZWZmaWNpb3MuY29tPgo+IC0jCj4gLSMg
+VGhpcyBsaWJyYXJ5IGlzIGZyZWUgc29mdHdhcmU7IHlvdSBjYW4gcmVkaXN0cmlidXRlIGl0IGFu
+ZC9vciBtb2RpZnkgaXQgdW5kZXIKPiAtIyB0aGUgdGVybXMgb2YgdGhlIEdOVSBMZXNzZXIgR2Vu
+ZXJhbCBQdWJsaWMgTGljZW5zZSBhcyBwdWJsaXNoZWQgYnkgdGhlIEZyZWUKPiAtIyBTb2Z0d2Fy
+ZSBGb3VuZGF0aW9uOyB2ZXJzaW9uIDIuMSBvZiB0aGUgTGljZW5zZS4KPiAtIwo+IC0jIFRoaXMg
+bGlicmFyeSBpcyBkaXN0cmlidXRlZCBpbiB0aGUgaG9wZSB0aGF0IGl0IHdpbGwgYmUgdXNlZnVs
+LCBidXQgV0lUSE9VVAo+IC0jIEFOWSBXQVJSQU5UWTsgd2l0aG91dCBldmVuIHRoZSBpbXBsaWVk
+IHdhcnJhbnR5IG9mIE1FUkNIQU5UQUJJTElUWSBvciBGSVRORVNTCj4gLSMgRk9SIEEgUEFSVElD
+VUxBUiBQVVJQT1NFLiAgU2VlIHRoZSBHTlUgTGVzc2VyIEdlbmVyYWwgUHVibGljIExpY2Vuc2Ug
+Zm9yIG1vcmUKPiAtIyBkZXRhaWxzLgo+IC0jCj4gLSMgWW91IHNob3VsZCBoYXZlIHJlY2VpdmVk
+IGEgY29weSBvZiB0aGUgR05VIExlc3NlciBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlCj4gLSMgYWxv
+bmcgd2l0aCB0aGlzIGxpYnJhcnk7IGlmIG5vdCwgd3JpdGUgdG8gdGhlIEZyZWUgU29mdHdhcmUg
+Rm91bmRhdGlvbiwgSW5jLiwKPiAtIyA1MSBGcmFua2xpbiBTdHJlZXQsIEZpZnRoIEZsb29yLCBC
+b3N0b24sIE1BICAwMjExMC0xMzAxIFVTQQo+IC1URVNUX0RFU0M9IlN0cmVhbWluZyAtIFVzZXIg
+c3BhY2UgdHJhY2luZyIKPiAtCj4gLUNVUkRJUj0kKGRpcm5hbWUgJDApLwo+IC1URVNURElSPSRD
+VVJESVIvLi4vLi4vLi4KPiAtTlJfSVRFUj0xCj4gLU5SX1VTRUNfV0FJVD0wCj4gLVRFU1RBUFBf
+UEFUSD0iJFRFU1RESVIvdXRpbHMvdGVzdGFwcCIKPiAtVEVTVEFQUF9OQU1FPSJnZW4tdXN0LWV2
+ZW50cyIKPiAtVEVTVEFQUF9CSU49IiRURVNUQVBQX1BBVEgvJFRFU1RBUFBfTkFNRS8kVEVTVEFQ
+UF9OQU1FIgo+IC1TRVNTSU9OX05BTUU9InN0cmVhbSIKPiAtRVZFTlRfTkFNRT0idHA6dHB0ZXN0
+Igo+IC1QSURfUkVMQVlEPTAKPiAtCj4gLVRSQUNFX1BBVEg9JChta3RlbXAgLWQpCj4gLQo+IC1O
+VU1fVEVTVFM9MzMKPiAtCj4gLXNvdXJjZSAkVEVTVERJUi91dGlscy91dGlscy5zaAo+IC0KPiAt
+aWYgWyAhIC14ICIkVEVTVEFQUF9CSU4iIF07IHRoZW4KPiAtICAgICAgIEJBSUxfT1VUICJObyBV
+U1QgZXZlbnRzIGJpbmFyeSBkZXRlY3RlZC4iCj4gLWZpCj4gLQo+IC1mdW5jdGlvbiBsdHRuZ19j
+cmVhdGVfc2Vzc2lvbl91cmkKPiAtewo+IC0gICAgICAgIyBDcmVhdGUgc2Vzc2lvbiB3aXRoIGRl
+ZmF1bHQgcGF0aAo+IC0gICAgICAgJFRFU1RESVIvLi4vc3JjL2Jpbi9sdHRuZy8kTFRUTkdfQklO
+IGNyZWF0ZSAkU0VTU0lPTl9OQU1FIC1VIG5ldDovL2xvY2FsaG9zdCA+L2Rldi9udWxsIDI+JjEK
+PiAtICAgICAgIG9rICQ/ICJDcmVhdGUgc2Vzc2lvbiB3aXRoIGRlZmF1bHQgcGF0aCIKPiAtfQo+
+IC0KPiAtZnVuY3Rpb24gbHR0bmdfY3JlYXRlX3Nlc3Npb25fdXJpX2xpdmUKPiAtewo+IC0gICAg
+ICAgIyBDcmVhdGUgc2Vzc2lvbiB3aXRoIGRlZmF1bHQgcGF0aAo+IC0gICAgICAgJFRFU1RESVIv
+Li4vc3JjL2Jpbi9sdHRuZy8kTFRUTkdfQklOIGNyZWF0ZSAkU0VTU0lPTl9OQU1FIC0tbGl2ZSAt
+VSBuZXQ6Ly9sb2NhbGhvc3QgPi9kZXYvbnVsbCAyPiYxCj4gLSAgICAgICBvayAkPyAiQ3JlYXRl
+IGxpdmUgc2Vzc2lvbiIKPiAtfQo+IC0KPiAtZnVuY3Rpb24gZW5hYmxlX2NoYW5uZWxfcGVyX3Bp
+ZCgpCj4gLXsKPiAtICAgICAgIHNlc3NfbmFtZT0kMQo+IC0gICAgICAgY2hhbm5lbF9uYW1lPSQy
+Cj4gLQo+IC0gICAgICAgJFRFU1RESVIvLi4vc3JjL2Jpbi9sdHRuZy8kTFRUTkdfQklOIGVuYWJs
+ZS1jaGFubmVsIC0tYnVmZmVycy1waWQgLXUgJGNoYW5uZWxfbmFtZSAtcyAkc2Vzc19uYW1lID4v
+ZGV2L251bGwgMj4mMQo+IC0gICAgICAgb2sgJD8gIkVuYWJsZSBjaGFubmVsICRjaGFubmVsX25h
+bWUgcGVyIFBJRCBmb3Igc2Vzc2lvbiAkc2Vzc19uYW1lIgo+IC19Cj4gLQo+IC0jIE1VU1Qgc2V0
+IFRFU1RESVIgYmVmb3JlIGNhbGxpbmcgdGhvc2UgZnVuY3Rpb25zCj4gLQo+IC1mdW5jdGlvbiB0
+ZXN0X3VzdF9zdHJlYW1pbmcgKCkKPiAtewo+IC0gICAgICAgbG9jYWwgZmlsZV9zeW5jX2FmdGVy
+X2ZpcnN0PSQobWt0ZW1wIC11KQo+IC0gICAgICAgbG9jYWwgZmlsZV9zeW5jX2JlZm9yZV9sYXN0
+PSQobWt0ZW1wIC11KQo+IC0KPiAtICAgICAgIGRpYWcgIlRlc3QgVVNUIHN0cmVhbWluZyB3aXRo
+IG1ldGFkYXRhIHJlZ2VuZXJhdGlvbiIKPiAtICAgICAgIGx0dG5nX2NyZWF0ZV9zZXNzaW9uX3Vy
+aQo+IC0gICAgICAgZW5hYmxlX3VzdF9sdHRuZ19ldmVudF9vayAkU0VTU0lPTl9OQU1FICRFVkVO
+VF9OQU1FCj4gLQo+IC0gICAgICAgJFRFU1RBUFBfQklOICROUl9JVEVSICROUl9VU0VDX1dBSVQg
+JHtmaWxlX3N5bmNfYWZ0ZXJfZmlyc3R9ICR7ZmlsZV9zeW5jX2JlZm9yZV9sYXN0fSAvZGV2L251
+bGwgMj4mMSAmCj4gLQo+IC0gICAgICAgc3RhcnRfbHR0bmdfdHJhY2luZ19vayAkU0VTU0lPTl9O
+QU1FCj4gLQo+IC0gICAgICAgdG91Y2ggJHtmaWxlX3N5bmNfYmVmb3JlX2xhc3R9Cj4gLQo+IC0g
+ICAgICAgIyBXYWl0IGZvciB0aGUgYXBwbGljYXRpb25zIHN0YXJ0ZWQgaW4gYmFja2dyb3VuZAo+
+IC0gICAgICAgd2FpdAo+IC0gICAgICAgbWV0YWRhdGFfcmVnZW5lcmF0ZV9vayAkU0VTU0lPTl9O
+QU1FCj4gLQo+IC0gICAgICAgc3RvcF9sdHRuZ190cmFjaW5nX29rICRTRVNTSU9OX05BTUUKPiAt
+ICAgICAgIGRlc3Ryb3lfbHR0bmdfc2Vzc2lvbl9vayAkU0VTU0lPTl9OQU1FCj4gLSAgICAgICAj
+IFZhbGlkYXRlIHRlc3QKPiAtICAgICAgIHZhbGlkYXRlX3RyYWNlICRFVkVOVF9OQU1FICRUUkFD
+RV9QQVRILyRIT1NUTkFNRS8kU0VTU0lPTl9OQU1FKgo+IC0gICAgICAgaWYgWyAkPyAtZXEgMCBd
+OyB0aGVuCj4gLSAgICAgICAgICAgICAgICMgT25seSBkZWxldGUgaWYgc3VjY2Vzc2Z1bAo+IC0g
+ICAgICAgICAgICAgICBybSAtcmYgJFRSQUNFX1BBVEgKPiAtICAgICAgIGZpCj4gLSAgICAgICBy
+bSAtZiAke2ZpbGVfc3luY19hZnRlcl9maXJzdH0KPiAtICAgICAgIHJtIC1mICR7ZmlsZV9zeW5j
+X2JlZm9yZV9sYXN0fQo+IC19Cj4gLQo+IC1mdW5jdGlvbiB0ZXN0X3VzdF9sb2NhbCAoKQo+IC17
+Cj4gLSAgICAgICBsb2NhbCBmaWxlX3N5bmNfYWZ0ZXJfZmlyc3Q9JChta3RlbXAgLXUpCj4gLSAg
+ICAgICBsb2NhbCBmaWxlX3N5bmNfYmVmb3JlX2xhc3Q9JChta3RlbXAgLXUpCj4gLQo+IC0gICAg
+ICAgZGlhZyAiVGVzdCBVU1QgbG9jYWwgd2l0aCBtZXRhZGF0YSByZWdlbmVyYXRpb24iCj4gLSAg
+ICAgICBjcmVhdGVfbHR0bmdfc2Vzc2lvbl9vayAkU0VTU0lPTl9OQU1FICRUUkFDRV9QQVRICj4g
+LSAgICAgICBlbmFibGVfdXN0X2x0dG5nX2V2ZW50X29rICRTRVNTSU9OX05BTUUgJEVWRU5UX05B
+TUUKPiAtCj4gLSAgICAgICAkVEVTVEFQUF9CSU4gJE5SX0lURVIgJE5SX1VTRUNfV0FJVCAke2Zp
+bGVfc3luY19hZnRlcl9maXJzdH0gJHtmaWxlX3N5bmNfYmVmb3JlX2xhc3R9IC9kZXYvbnVsbCAy
+PiYxICYKPiAtCj4gLSAgICAgICBzdGFydF9sdHRuZ190cmFjaW5nX29rICRTRVNTSU9OX05BTUUK
+PiAtCj4gLSAgICAgICB0b3VjaCAke2ZpbGVfc3luY19iZWZvcmVfbGFzdH0KPiAtCj4gLSAgICAg
+ICAjIFdhaXQgZm9yIHRoZSBhcHBsaWNhdGlvbnMgc3RhcnRlZCBpbiBiYWNrZ3JvdW5kCj4gLSAg
+ICAgICB3YWl0Cj4gLSAgICAgICBtZXRhZGF0YV9yZWdlbmVyYXRlX29rICRTRVNTSU9OX05BTUUK
+PiAtCj4gLSAgICAgICBzdG9wX2x0dG5nX3RyYWNpbmdfb2sgJFNFU1NJT05fTkFNRQo+IC0gICAg
+ICAgZGVzdHJveV9sdHRuZ19zZXNzaW9uX29rICRTRVNTSU9OX05BTUUKPiAtICAgICAgICMgVmFs
+aWRhdGUgdGVzdAo+IC0gICAgICAgdmFsaWRhdGVfdHJhY2UgJEVWRU5UX05BTUUgJFRSQUNFX1BB
+VEgKPiAtICAgICAgIGlmIFsgJD8gLWVxIDAgXTsgdGhlbgo+IC0gICAgICAgICAgICAgICAjIE9u
+bHkgZGVsZXRlIGlmIHN1Y2Nlc3NmdWwKPiAtICAgICAgICAgICAgICAgcm0gLXJmICRUUkFDRV9Q
+QVRICj4gLSAgICAgICBmaQo+IC0gICAgICAgcm0gLWYgJHtmaWxlX3N5bmNfYWZ0ZXJfZmlyc3R9
+Cj4gLSAgICAgICBybSAtZiAke2ZpbGVfc3luY19iZWZvcmVfbGFzdH0KPiAtfQo+IC0KPiAtZnVu
+Y3Rpb24gdGVzdF91c3RfcGlkICgpCj4gLXsKPiAtICAgICAgIGxvY2FsIGZpbGVfc3luY19hZnRl
+cl9maXJzdD0kKG1rdGVtcCAtdSkKPiAtICAgICAgIGxvY2FsIGZpbGVfc3luY19iZWZvcmVfbGFz
+dD0kKG1rdGVtcCAtdSkKPiAtCj4gLSAgICAgICBkaWFnICJUZXN0IFVTVCBwZXItcGlkIHdpdGgg
+bWV0YWRhdGEgcmVnZW5lcmF0aW9uIChleHBlY3QgZmFpbHVyZSkiCj4gLSAgICAgICBjcmVhdGVf
+bHR0bmdfc2Vzc2lvbl9vayAkU0VTU0lPTl9OQU1FICRUUkFDRV9QQVRICj4gLSAgICAgICBlbmFi
+bGVfY2hhbm5lbF9wZXJfcGlkICRTRVNTSU9OX05BTUUgImNoYW5uZWwwIgo+IC0gICAgICAgZW5h
+YmxlX3VzdF9sdHRuZ19ldmVudF9vayAkU0VTU0lPTl9OQU1FICRFVkVOVF9OQU1FICJjaGFubmVs
+MCIKPiAtCj4gLSAgICAgICAkVEVTVEFQUF9CSU4gJE5SX0lURVIgJE5SX1VTRUNfV0FJVCAke2Zp
+bGVfc3luY19hZnRlcl9maXJzdH0gJHtmaWxlX3N5bmNfYmVmb3JlX2xhc3R9IC9kZXYvbnVsbCAy
+PiYxICYKPiAtCj4gLSAgICAgICBzdGFydF9sdHRuZ190cmFjaW5nX29rICRTRVNTSU9OX05BTUUK
+PiAtCj4gLSAgICAgICB0b3VjaCAke2ZpbGVfc3luY19iZWZvcmVfbGFzdH0KPiAtCj4gLSAgICAg
+ICAjIFdhaXQgZm9yIHRoZSBhcHBsaWNhdGlvbnMgc3RhcnRlZCBpbiBiYWNrZ3JvdW5kCj4gLSAg
+ICAgICB3YWl0Cj4gLSAgICAgICBtZXRhZGF0YV9yZWdlbmVyYXRlX2ZhaWwgJFNFU1NJT05fTkFN
+RQo+IC0KPiAtICAgICAgIHN0b3BfbHR0bmdfdHJhY2luZ19vayAkU0VTU0lPTl9OQU1FCj4gLSAg
+ICAgICBkZXN0cm95X2x0dG5nX3Nlc3Npb25fb2sgJFNFU1NJT05fTkFNRQo+IC0gICAgICAgIyBW
+YWxpZGF0ZSB0ZXN0Cj4gLSAgICAgICB2YWxpZGF0ZV90cmFjZSAkRVZFTlRfTkFNRSAkVFJBQ0Vf
+UEFUSAo+IC0gICAgICAgaWYgWyAkPyAtZXEgMCBdOyB0aGVuCj4gLSAgICAgICAgICAgICAgICMg
+T25seSBkZWxldGUgaWYgc3VjY2Vzc2Z1bAo+IC0gICAgICAgICAgICAgICBybSAtcmYgJFRSQUNF
+X1BBVEgKPiAtICAgICAgIGZpCj4gLSAgICAgICBybSAtZiAke2ZpbGVfc3luY19hZnRlcl9maXJz
+dH0KPiAtICAgICAgIHJtIC1mICR7ZmlsZV9zeW5jX2JlZm9yZV9sYXN0fQo+IC19Cj4gLQo+IC1m
+dW5jdGlvbiB0ZXN0X3VzdF9saXZlICgpCj4gLXsKPiAtICAgICAgIGxvY2FsIGZpbGVfc3luY19h
+ZnRlcl9maXJzdD0kKG1rdGVtcCAtdSkKPiAtICAgICAgIGxvY2FsIGZpbGVfc3luY19iZWZvcmVf
+bGFzdD0kKG1rdGVtcCAtdSkKPiAtCj4gLSAgICAgICBkaWFnICJUZXN0IFVTVCBsaXZlIHdpdGgg
+bWV0YWRhdGEgcmVnZW5lcmF0aW9uIChleHBlY3QgZmFpbHVyZSkiCj4gLSAgICAgICBsdHRuZ19j
+cmVhdGVfc2Vzc2lvbl91cmlfbGl2ZSAkU0VTU0lPTl9OQU1FICRUUkFDRV9QQVRICj4gLSAgICAg
+ICBlbmFibGVfdXN0X2x0dG5nX2V2ZW50X29rICRTRVNTSU9OX05BTUUgJEVWRU5UX05BTUUKPiAt
+Cj4gLSAgICAgICAkVEVTVEFQUF9CSU4gJE5SX0lURVIgJE5SX1VTRUNfV0FJVCAke2ZpbGVfc3lu
+Y19hZnRlcl9maXJzdH0gJHtmaWxlX3N5bmNfYmVmb3JlX2xhc3R9IC9kZXYvbnVsbCAyPiYxICYK
+PiAtCj4gLSAgICAgICBzdGFydF9sdHRuZ190cmFjaW5nX29rICRTRVNTSU9OX05BTUUKPiAtCj4g
+LSAgICAgICB0b3VjaCAke2ZpbGVfc3luY19iZWZvcmVfbGFzdH0KPiAtCj4gLSAgICAgICAjIFdh
+aXQgZm9yIHRoZSBhcHBsaWNhdGlvbnMgc3RhcnRlZCBpbiBiYWNrZ3JvdW5kCj4gLSAgICAgICB3
+YWl0Cj4gLSAgICAgICBtZXRhZGF0YV9yZWdlbmVyYXRlX2ZhaWwgJFNFU1NJT05fTkFNRQo+IC0K
+PiAtICAgICAgIHN0b3BfbHR0bmdfdHJhY2luZ19vayAkU0VTU0lPTl9OQU1FCj4gLSAgICAgICBk
+ZXN0cm95X2x0dG5nX3Nlc3Npb25fb2sgJFNFU1NJT05fTkFNRQo+IC0gICAgICAgIyBWYWxpZGF0
+ZSB0ZXN0Cj4gLSAgICAgICB2YWxpZGF0ZV90cmFjZSAkRVZFTlRfTkFNRSAkVFJBQ0VfUEFUSAo+
+IC0gICAgICAgaWYgWyAkPyAtZXEgMCBdOyB0aGVuCj4gLSAgICAgICAgICAgICAgICMgT25seSBk
+ZWxldGUgaWYgc3VjY2Vzc2Z1bAo+IC0gICAgICAgICAgICAgICBybSAtcmYgJFRSQUNFX1BBVEgK
+PiAtICAgICAgIGZpCj4gLSAgICAgICBybSAtZiAke2ZpbGVfc3luY19hZnRlcl9maXJzdH0KPiAt
+ICAgICAgIHJtIC1mICR7ZmlsZV9zeW5jX2JlZm9yZV9sYXN0fQo+IC19Cj4gLQo+IC1wbGFuX3Rl
+c3RzICROVU1fVEVTVFMKPiAtCj4gLXByaW50X3Rlc3RfYmFubmVyICIkVEVTVF9ERVNDIgo+IC0K
+PiAtc3RhcnRfbHR0bmdfcmVsYXlkICItbyAkVFJBQ0VfUEFUSCIKPiAtc3RhcnRfbHR0bmdfc2Vz
+c2lvbmQKPiAtCj4gLXRlc3RzPSggdGVzdF91c3Rfc3RyZWFtaW5nIHRlc3RfdXN0X2xvY2FsIHRl
+c3RfdXN0X3BpZCB0ZXN0X3VzdF9saXZlICkKPiAtCj4gLWZvciBmY3RfdGVzdCBpbiAke3Rlc3Rz
+W0BdfTsKPiAtZG8KPiAtICAgICAgIFNFU1NJT05fTkFNRT0kKHJhbmRzdHJpbmcgMTYgMCkKPiAt
+ICAgICAgICR7ZmN0X3Rlc3R9Cj4gLWRvbmUKPiAtCj4gLXN0b3BfbHR0bmdfc2Vzc2lvbmQKPiAt
+c3RvcF9sdHRuZ19yZWxheWQKPiAtCj4gLWV4aXQgJG91dAo+IGRpZmYgLS1naXQgYS90ZXN0cy9y
+ZWdyZXNzaW9uL3Rvb2xzL21pL3Rlc3RfbWkgYi90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL21pL3Rl
+c3RfbWkKPiBpbmRleCAwZThmYTY3Li4zODAzODVmIDEwMDc1NQo+IC0tLSBhL3Rlc3RzL3JlZ3Jl
+c3Npb24vdG9vbHMvbWkvdGVzdF9taQo+ICsrKyBiL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvbWkv
+dGVzdF9taQo+IEBAIC02MzEsOSArNjMxLDkgQEAgZnVuY3Rpb24gdGVzdF9zdGFydF9zdG9wICgp
+IHsKPiAgICAgICAgIG9rICQ/ICJNaSB0ZXN0OiBlbmFibGVkIGVsZW1lbnQgOiAkcmVzdWx0IGV4
+cGVjdGVkOiB0cnVlIgo+Cj4gICAgICAgICAjVGVzdCBtZXRhZGF0YSByZWdlbmVyYXRlIGNvbW1h
+bmQKPiAtICAgICAgIG1ldGFkYXRhX3JlZ2VuZXJhdGVfb2sgJHNlc3Npb25fbmFtZQo+ICsgICAg
+ICAgcmVnZW5lcmF0ZV9tZXRhZGF0YV9vayAkc2Vzc2lvbl9uYW1lCj4gICAgICAgICAkWE1MX1ZB
+TElEQVRFICRPVVRQVVRfREVTVAo+IC0gICAgICAgb2sgJD8gIk1pIHRlc3Q6IG1ldGFkYXRhIHJl
+Z2VuZXJhdGUiCj4gKyAgICAgICBvayAkPyAiTWkgdGVzdDogcmVnZW5lcmF0ZSBtZXRhZGF0YSIK
+Pgo+ICAgICAgICAgI1Rlc3Qgc3RvcCBjb21tYW5kCj4gICAgICAgICBzdG9wX2x0dG5nX3RyYWNp
+bmdfb2sgJHNlc3Npb25fbmFtZQo+IGRpZmYgLS1naXQgYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xz
+L3JlZ2VuLW1ldGFkYXRhL01ha2VmaWxlLmFtIGIvdGVzdHMvcmVncmVzc2lvbi90b29scy9yZWdl
+bi1tZXRhZGF0YS9NYWtlZmlsZS5hbQo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAw
+MDAwMC4uZDRhOTJlYgo+IC0tLSAvZGV2L251bGwKPiArKysgYi90ZXN0cy9yZWdyZXNzaW9uL3Rv
+b2xzL3JlZ2VuLW1ldGFkYXRhL01ha2VmaWxlLmFtCj4gQEAgLTAsMCArMSwxNiBAQAo+ICtub2lu
+c3RfU0NSSVBUUyA9IHRlc3RfdXN0IHRlc3Rfa2VybmVsCj4gK0VYVFJBX0RJU1QgPSB0ZXN0X3Vz
+dCB0ZXN0X2tlcm5lbAo+ICsKPiArYWxsLWxvY2FsOgo+ICsgICAgICAgQGlmIFsgeCIkKHNyY2Rp
+cikiICE9IHgiJChidWlsZGRpcikiIF07IHRoZW4gXAo+ICsgICAgICAgICAgICAgICBmb3Igc2Ny
+aXB0IGluICQoRVhUUkFfRElTVCk7IGRvIFwKPiArICAgICAgICAgICAgICAgICAgICAgICBjcCAt
+ZiAkKHNyY2RpcikvJCRzY3JpcHQgJChidWlsZGRpcik7IFwKPiArICAgICAgICAgICAgICAgZG9u
+ZTsgXAo+ICsgICAgICAgZmkKPiArCj4gK2NsZWFuLWxvY2FsOgo+ICsgICAgICAgQGlmIFsgeCIk
+KHNyY2RpcikiICE9IHgiJChidWlsZGRpcikiIF07IHRoZW4gXAo+ICsgICAgICAgICAgICAgICBm
+b3Igc2NyaXB0IGluICQoRVhUUkFfRElTVCk7IGRvIFwKPiArICAgICAgICAgICAgICAgICAgICAg
+ICBybSAtZiAkKGJ1aWxkZGlyKS8kJHNjcmlwdDsgXAo+ICsgICAgICAgICAgICAgICBkb25lOyBc
+Cj4gKyAgICAgICBmaQo+IGRpZmYgLS1naXQgYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3JlZ2Vu
+LW1ldGFkYXRhL3Rlc3Rfa2VybmVsIGIvdGVzdHMvcmVncmVzc2lvbi90b29scy9yZWdlbi1tZXRh
+ZGF0YS90ZXN0X2tlcm5lbAo+IG5ldyBmaWxlIG1vZGUgMTAwNzU1Cj4gaW5kZXggMDAwMDAwMC4u
+ZmQxMzlhZQo+IC0tLSAvZGV2L251bGwKPiArKysgYi90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3Jl
+Z2VuLW1ldGFkYXRhL3Rlc3Rfa2VybmVsCj4gQEAgLTAsMCArMSwxMDkgQEAKPiArIyEvYmluL2Jh
+c2gKPiArIwo+ICsjIENvcHlyaWdodCAoQykgLSAyMDE1IEp1bGllbiBEZXNmb3NzZXogPGpkZXNm
+b3NzZXpAZWZmaWNpb3MuY29tPgo+ICsjCj4gKyMgVGhpcyBsaWJyYXJ5IGlzIGZyZWUgc29mdHdh
+cmU7IHlvdSBjYW4gcmVkaXN0cmlidXRlIGl0IGFuZC9vciBtb2RpZnkgaXQgdW5kZXIKPiArIyB0
+aGUgdGVybXMgb2YgdGhlIEdOVSBMZXNzZXIgR2VuZXJhbCBQdWJsaWMgTGljZW5zZSBhcyBwdWJs
+aXNoZWQgYnkgdGhlIEZyZWUKPiArIyBTb2Z0d2FyZSBGb3VuZGF0aW9uOyB2ZXJzaW9uIDIuMSBv
+ZiB0aGUgTGljZW5zZS4KPiArIwo+ICsjIFRoaXMgbGlicmFyeSBpcyBkaXN0cmlidXRlZCBpbiB0
+aGUgaG9wZSB0aGF0IGl0IHdpbGwgYmUgdXNlZnVsLCBidXQgV0lUSE9VVAo+ICsjIEFOWSBXQVJS
+QU5UWTsgd2l0aG91dCBldmVuIHRoZSBpbXBsaWVkIHdhcnJhbnR5IG9mIE1FUkNIQU5UQUJJTElU
+WSBvciBGSVRORVNTCj4gKyMgRk9SIEEgUEFSVElDVUxBUiBQVVJQT1NFLiAgU2VlIHRoZSBHTlUg
+TGVzc2VyIEdlbmVyYWwgUHVibGljIExpY2Vuc2UgZm9yIG1vcmUKPiArIyBkZXRhaWxzLgo+ICsj
+Cj4gKyMgWW91IHNob3VsZCBoYXZlIHJlY2VpdmVkIGEgY29weSBvZiB0aGUgR05VIExlc3NlciBH
+ZW5lcmFsIFB1YmxpYyBMaWNlbnNlCj4gKyMgYWxvbmcgd2l0aCB0aGlzIGxpYnJhcnk7IGlmIG5v
+dCwgd3JpdGUgdG8gdGhlIEZyZWUgU29mdHdhcmUgRm91bmRhdGlvbiwgSW5jLiwKPiArIyA1MSBG
+cmFua2xpbiBTdHJlZXQsIEZpZnRoIEZsb29yLCBCb3N0b24sIE1BICAwMjExMC0xMzAxIFVTQQo+
+ICtURVNUX0RFU0M9IlN0cmVhbWluZyAtIEtlcm5lbCB0cmFjaW5nIgo+ICsKPiArQ1VSRElSPSQo
+ZGlybmFtZSAkMCkvCj4gK1RFU1RESVI9JENVUkRJUi8uLi8uLi8uLgo+ICtFVkVOVF9OQU1FPSJs
+dHRuZ190ZXN0X2ZpbHRlcl9ldmVudCIKPiArUElEX1JFTEFZRD0wCj4gK1NFU1NJT05fTkFNRT0i
+Igo+ICsKPiArVFJBQ0VfUEFUSD0kKG1rdGVtcCAtZCkKPiArCj4gK05VTV9URVNUUz0xOAo+ICsK
+PiArc291cmNlICRURVNURElSL3V0aWxzL3V0aWxzLnNoCj4gKwo+ICsjIExUVG5nIGtlcm5lbCBt
+b2R1bGVzIGNoZWNrCj4gK291dD1gbHMgL2xpYi9tb2R1bGVzLyQodW5hbWUgLXIpL2V4dHJhIHwg
+Z3JlcCBsdHRuZ2AKPiAraWYgWyAteiAiJG91dCIgXTsgdGhlbgo+ICsgICAgICAgQkFJTF9PVVQg
+IkxUVG5nIG1vZHVsZXMgbm90IGRldGVjdGVkLiIKPiArZmkKPiArCj4gK2Z1bmN0aW9uIGx0dG5n
+X2NyZWF0ZV9zZXNzaW9uX3VyaQo+ICt7Cj4gKyAgICAgICAjIENyZWF0ZSBzZXNzaW9uIHdpdGgg
+ZGVmYXVsdCBwYXRoCj4gKyAgICAgICAkVEVTVERJUi8uLi9zcmMvYmluL2x0dG5nLyRMVFROR19C
+SU4gY3JlYXRlICRTRVNTSU9OX05BTUUgLVUgbmV0Oi8vbG9jYWxob3N0ID4vZGV2L251bGwgMj4m
+MQo+ICsKPiArICAgICAgIG9rICQ/ICJDcmVhdGUgc2Vzc2lvbiAkU0VTU0lPTl9OQU1FIgo+ICt9
+Cj4gKwo+ICtmdW5jdGlvbiB0ZXN0X2tlcm5lbF9zdHJlYW1pbmcgKCkKPiArewo+ICsgICAgICAg
+ZGlhZyAiVGVzdCBrZXJuZWwgc3RyZWFtaW5nIHdpdGggbWV0YWRhdGEgcmVnZW5lcmF0aW9uIgo+
+ICsgICAgICAgbHR0bmdfY3JlYXRlX3Nlc3Npb25fdXJpCj4gKyAgICAgICBsdHRuZ19lbmFibGVf
+a2VybmVsX2V2ZW50ICRTRVNTSU9OX05BTUUgJEVWRU5UX05BTUUKPiArICAgICAgIHN0YXJ0X2x0
+dG5nX3RyYWNpbmdfb2sgJFNFU1NJT05fTkFNRQo+ICsgICAgICAgZWNobyAtbiAiMTAwIiA+IC9w
+cm9jL2x0dG5nLXRlc3QtZmlsdGVyLWV2ZW50Cj4gKyAgICAgICByZWdlbmVyYXRlX21ldGFkYXRh
+X29rICRTRVNTSU9OX05BTUUKPiArICAgICAgIHN0b3BfbHR0bmdfdHJhY2luZ19vayAkU0VTU0lP
+Tl9OQU1FCj4gKyAgICAgICAjIFZhbGlkYXRlIHRlc3QKPiArICAgICAgIHZhbGlkYXRlX3RyYWNl
+ICRFVkVOVF9OQU1FICRUUkFDRV9QQVRILyRIT1NUTkFNRS8kU0VTU0lPTl9OQU1FKgo+ICsgICAg
+ICAgaWYgWyAkPyAtZXEgMCBdOyB0aGVuCj4gKyAgICAgICAgICAgICAgICMgT25seSBkZWxldGUg
+aWYgc3VjY2Vzc2Z1bAo+ICsgICAgICAgICAgICAgICBybSAtcmYgJFRSQUNFX1BBVEgKPiArICAg
+ICAgIGVsc2UKPiArICAgICAgICAgICAgICAgYnJlYWsKPiArICAgICAgIGZpCj4gKyAgICAgICBk
+ZXN0cm95X2x0dG5nX3Nlc3Npb25fb2sgJFNFU1NJT05fTkFNRQo+ICt9Cj4gKwo+ICtmdW5jdGlv
+biB0ZXN0X2tlcm5lbF9sb2NhbCAoKQo+ICt7Cj4gKyAgICAgICBkaWFnICJUZXN0IGtlcm5lbCBs
+b2NhbCB3aXRoIG1ldGFkYXRhIHJlZ2VuZXJhdGlvbiIKPiArICAgICAgIGNyZWF0ZV9sdHRuZ19z
+ZXNzaW9uX29rICRTRVNTSU9OX05BTUUgJFRSQUNFX1BBVEgKPiArICAgICAgIGx0dG5nX2VuYWJs
+ZV9rZXJuZWxfZXZlbnQgJFNFU1NJT05fTkFNRSAkRVZFTlRfTkFNRQo+ICsgICAgICAgc3RhcnRf
+bHR0bmdfdHJhY2luZ19vayAkU0VTU0lPTl9OQU1FCj4gKyAgICAgICBlY2hvIC1uICIxMDAiID4g
+L3Byb2MvbHR0bmctdGVzdC1maWx0ZXItZXZlbnQKPiArICAgICAgIHJlZ2VuZXJhdGVfbWV0YWRh
+dGFfb2sgJFNFU1NJT05fTkFNRQo+ICsgICAgICAgc3RvcF9sdHRuZ190cmFjaW5nX29rICRTRVNT
+SU9OX05BTUUKPiArICAgICAgIHZhbGlkYXRlX3RyYWNlICRFVkVOVF9OQU1FICRUUkFDRV9QQVRI
+Cj4gKyAgICAgICBpZiBbICQ/IC1lcSAwIF07IHRoZW4KPiArICAgICAgICAgICAgICAgIyBPbmx5
+IGRlbGV0ZSBpZiBzdWNjZXNzZnVsCj4gKyAgICAgICAgICAgICAgIHJtIC1yZiAkVFJBQ0VfUEFU
+SAo+ICsgICAgICAgZmkKPiArICAgICAgIGRlc3Ryb3lfbHR0bmdfc2Vzc2lvbl9vayAkU0VTU0lP
+Tl9OQU1FCj4gK30KPiArCj4gK3BsYW5fdGVzdHMgJE5VTV9URVNUUwo+ICsKPiArcHJpbnRfdGVz
+dF9iYW5uZXIgIiRURVNUX0RFU0MiCj4gKwo+ICtpZiBbICIkKGlkIC11KSIgPT0gIjAiIF07IHRo
+ZW4KPiArICAgICAgIGlzcm9vdD0xCj4gK2Vsc2UKPiArICAgICAgIGlzcm9vdD0wCj4gK2ZpCj4g
+Kwo+ICtza2lwICRpc3Jvb3QgIlJvb3QgYWNjZXNzIGlzIG5lZWRlZC4gU2tpcHBpbmcgYWxsIGtl
+cm5lbCBzdHJlYW1pbmcgdGVzdHMuIiAkTlVNX1RFU1RTIHx8Cj4gK3sKPiArICAgICAgIHN0YXJ0
+X2x0dG5nX3JlbGF5ZCAiLW8gJFRSQUNFX1BBVEgiCj4gKyAgICAgICBzdGFydF9sdHRuZ19zZXNz
+aW9uZAo+ICsgICAgICAgbW9kcHJvYmUgbHR0bmctdGVzdAo+ICsKPiArICAgICAgIHRlc3RzPSgg
+dGVzdF9rZXJuZWxfc3RyZWFtaW5nIHRlc3Rfa2VybmVsX2xvY2FsICkKPiArCj4gKyAgICAgICBm
+b3IgZmN0X3Rlc3QgaW4gJHt0ZXN0c1tAXX07Cj4gKyAgICAgICBkbwo+ICsgICAgICAgICAgICAg
+ICBTRVNTSU9OX05BTUU9JChyYW5kc3RyaW5nIDE2IDApCj4gKyAgICAgICAgICAgICAgICR7ZmN0
+X3Rlc3R9Cj4gKyAgICAgICBkb25lCj4gKwo+ICsgICAgICAgcm1tb2QgbHR0bmctdGVzdAo+ICsg
+ICAgICAgc3RvcF9sdHRuZ19zZXNzaW9uZAo+ICsgICAgICAgc3RvcF9sdHRuZ19yZWxheWQKPiAr
+fQo+IGRpZmYgLS1naXQgYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3JlZ2VuLW1ldGFkYXRhL3Rl
+c3RfdXN0IGIvdGVzdHMvcmVncmVzc2lvbi90b29scy9yZWdlbi1tZXRhZGF0YS90ZXN0X3VzdAo+
+IG5ldyBmaWxlIG1vZGUgMTAwNzU1Cj4gaW5kZXggMDAwMDAwMC4uYjdmMWFmMQo+IC0tLSAvZGV2
+L251bGwKPiArKysgYi90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3JlZ2VuLW1ldGFkYXRhL3Rlc3Rf
+dXN0Cj4gQEAgLTAsMCArMSwyMDggQEAKPiArIyEvYmluL2Jhc2gKPiArIwo+ICsjIENvcHlyaWdo
+dCAoQykgLSAyMDE1IEp1bGllbiBEZXNmb3NzZXogPGpkZXNmb3NzZXpAZWZmaWNpb3MuY29tPgo+
+ICsjCj4gKyMgVGhpcyBsaWJyYXJ5IGlzIGZyZWUgc29mdHdhcmU7IHlvdSBjYW4gcmVkaXN0cmli
+dXRlIGl0IGFuZC9vciBtb2RpZnkgaXQgdW5kZXIKPiArIyB0aGUgdGVybXMgb2YgdGhlIEdOVSBM
+ZXNzZXIgR2VuZXJhbCBQdWJsaWMgTGljZW5zZSBhcyBwdWJsaXNoZWQgYnkgdGhlIEZyZWUKPiAr
+IyBTb2Z0d2FyZSBGb3VuZGF0aW9uOyB2ZXJzaW9uIDIuMSBvZiB0aGUgTGljZW5zZS4KPiArIwo+
+ICsjIFRoaXMgbGlicmFyeSBpcyBkaXN0cmlidXRlZCBpbiB0aGUgaG9wZSB0aGF0IGl0IHdpbGwg
+YmUgdXNlZnVsLCBidXQgV0lUSE9VVAo+ICsjIEFOWSBXQVJSQU5UWTsgd2l0aG91dCBldmVuIHRo
+ZSBpbXBsaWVkIHdhcnJhbnR5IG9mIE1FUkNIQU5UQUJJTElUWSBvciBGSVRORVNTCj4gKyMgRk9S
+IEEgUEFSVElDVUxBUiBQVVJQT1NFLiAgU2VlIHRoZSBHTlUgTGVzc2VyIEdlbmVyYWwgUHVibGlj
+IExpY2Vuc2UgZm9yIG1vcmUKPiArIyBkZXRhaWxzLgo+ICsjCj4gKyMgWW91IHNob3VsZCBoYXZl
+IHJlY2VpdmVkIGEgY29weSBvZiB0aGUgR05VIExlc3NlciBHZW5lcmFsIFB1YmxpYyBMaWNlbnNl
+Cj4gKyMgYWxvbmcgd2l0aCB0aGlzIGxpYnJhcnk7IGlmIG5vdCwgd3JpdGUgdG8gdGhlIEZyZWUg
+U29mdHdhcmUgRm91bmRhdGlvbiwgSW5jLiwKPiArIyA1MSBGcmFua2xpbiBTdHJlZXQsIEZpZnRo
+IEZsb29yLCBCb3N0b24sIE1BICAwMjExMC0xMzAxIFVTQQo+ICtURVNUX0RFU0M9IlN0cmVhbWlu
+ZyAtIFVzZXIgc3BhY2UgdHJhY2luZyIKPiArCj4gK0NVUkRJUj0kKGRpcm5hbWUgJDApLwo+ICtU
+RVNURElSPSRDVVJESVIvLi4vLi4vLi4KPiArTlJfSVRFUj0xCj4gK05SX1VTRUNfV0FJVD0wCj4g
+K1RFU1RBUFBfUEFUSD0iJFRFU1RESVIvdXRpbHMvdGVzdGFwcCIKPiArVEVTVEFQUF9OQU1FPSJn
+ZW4tdXN0LWV2ZW50cyIKPiArVEVTVEFQUF9CSU49IiRURVNUQVBQX1BBVEgvJFRFU1RBUFBfTkFN
+RS8kVEVTVEFQUF9OQU1FIgo+ICtTRVNTSU9OX05BTUU9InN0cmVhbSIKPiArRVZFTlRfTkFNRT0i
+dHA6dHB0ZXN0Igo+ICtQSURfUkVMQVlEPTAKPiArCj4gK1RSQUNFX1BBVEg9JChta3RlbXAgLWQp
+Cj4gKwo+ICtOVU1fVEVTVFM9MzMKPiArCj4gK3NvdXJjZSAkVEVTVERJUi91dGlscy91dGlscy5z
+aAo+ICsKPiAraWYgWyAhIC14ICIkVEVTVEFQUF9CSU4iIF07IHRoZW4KPiArICAgICAgIEJBSUxf
+T1VUICJObyBVU1QgZXZlbnRzIGJpbmFyeSBkZXRlY3RlZC4iCj4gK2ZpCj4gKwo+ICtmdW5jdGlv
+biBsdHRuZ19jcmVhdGVfc2Vzc2lvbl91cmkKPiArewo+ICsgICAgICAgIyBDcmVhdGUgc2Vzc2lv
+biB3aXRoIGRlZmF1bHQgcGF0aAo+ICsgICAgICAgJFRFU1RESVIvLi4vc3JjL2Jpbi9sdHRuZy8k
+TFRUTkdfQklOIGNyZWF0ZSAkU0VTU0lPTl9OQU1FIC1VIG5ldDovL2xvY2FsaG9zdCA+L2Rldi9u
+dWxsIDI+JjEKPiArICAgICAgIG9rICQ/ICJDcmVhdGUgc2Vzc2lvbiB3aXRoIGRlZmF1bHQgcGF0
+aCIKPiArfQo+ICsKPiArZnVuY3Rpb24gbHR0bmdfY3JlYXRlX3Nlc3Npb25fdXJpX2xpdmUKPiAr
+ewo+ICsgICAgICAgIyBDcmVhdGUgc2Vzc2lvbiB3aXRoIGRlZmF1bHQgcGF0aAo+ICsgICAgICAg
+JFRFU1RESVIvLi4vc3JjL2Jpbi9sdHRuZy8kTFRUTkdfQklOIGNyZWF0ZSAkU0VTU0lPTl9OQU1F
+IC0tbGl2ZSAtVSBuZXQ6Ly9sb2NhbGhvc3QgPi9kZXYvbnVsbCAyPiYxCj4gKyAgICAgICBvayAk
+PyAiQ3JlYXRlIGxpdmUgc2Vzc2lvbiIKPiArfQo+ICsKPiArZnVuY3Rpb24gZW5hYmxlX2NoYW5u
+ZWxfcGVyX3BpZCgpCj4gK3sKPiArICAgICAgIHNlc3NfbmFtZT0kMQo+ICsgICAgICAgY2hhbm5l
+bF9uYW1lPSQyCj4gKwo+ICsgICAgICAgJFRFU1RESVIvLi4vc3JjL2Jpbi9sdHRuZy8kTFRUTkdf
+QklOIGVuYWJsZS1jaGFubmVsIC0tYnVmZmVycy1waWQgLXUgJGNoYW5uZWxfbmFtZSAtcyAkc2Vz
+c19uYW1lID4vZGV2L251bGwgMj4mMQo+ICsgICAgICAgb2sgJD8gIkVuYWJsZSBjaGFubmVsICRj
+aGFubmVsX25hbWUgcGVyIFBJRCBmb3Igc2Vzc2lvbiAkc2Vzc19uYW1lIgo+ICt9Cj4gKwo+ICsj
+IE1VU1Qgc2V0IFRFU1RESVIgYmVmb3JlIGNhbGxpbmcgdGhvc2UgZnVuY3Rpb25zCj4gKwo+ICtm
+dW5jdGlvbiB0ZXN0X3VzdF9zdHJlYW1pbmcgKCkKPiArewo+ICsgICAgICAgbG9jYWwgZmlsZV9z
+eW5jX2FmdGVyX2ZpcnN0PSQobWt0ZW1wIC11KQo+ICsgICAgICAgbG9jYWwgZmlsZV9zeW5jX2Jl
+Zm9yZV9sYXN0PSQobWt0ZW1wIC11KQo+ICsKPiArICAgICAgIGRpYWcgIlRlc3QgVVNUIHN0cmVh
+bWluZyB3aXRoIG1ldGFkYXRhIHJlZ2VuZXJhdGlvbiIKPiArICAgICAgIGx0dG5nX2NyZWF0ZV9z
+ZXNzaW9uX3VyaQo+ICsgICAgICAgZW5hYmxlX3VzdF9sdHRuZ19ldmVudF9vayAkU0VTU0lPTl9O
+QU1FICRFVkVOVF9OQU1FCj4gKwo+ICsgICAgICAgJFRFU1RBUFBfQklOICROUl9JVEVSICROUl9V
+U0VDX1dBSVQgJHtmaWxlX3N5bmNfYWZ0ZXJfZmlyc3R9ICR7ZmlsZV9zeW5jX2JlZm9yZV9sYXN0
+fSAvZGV2L251bGwgMj4mMSAmCj4gKwo+ICsgICAgICAgc3RhcnRfbHR0bmdfdHJhY2luZ19vayAk
+U0VTU0lPTl9OQU1FCj4gKwo+ICsgICAgICAgdG91Y2ggJHtmaWxlX3N5bmNfYmVmb3JlX2xhc3R9
+Cj4gKwo+ICsgICAgICAgIyBXYWl0IGZvciB0aGUgYXBwbGljYXRpb25zIHN0YXJ0ZWQgaW4gYmFj
+a2dyb3VuZAo+ICsgICAgICAgd2FpdAo+ICsgICAgICAgcmVnZW5lcmF0ZV9tZXRhZGF0YV9vayAk
+U0VTU0lPTl9OQU1FCj4gKwo+ICsgICAgICAgc3RvcF9sdHRuZ190cmFjaW5nX29rICRTRVNTSU9O
+X05BTUUKPiArICAgICAgIGRlc3Ryb3lfbHR0bmdfc2Vzc2lvbl9vayAkU0VTU0lPTl9OQU1FCj4g
+KyAgICAgICAjIFZhbGlkYXRlIHRlc3QKPiArICAgICAgIHZhbGlkYXRlX3RyYWNlICRFVkVOVF9O
+QU1FICRUUkFDRV9QQVRILyRIT1NUTkFNRS8kU0VTU0lPTl9OQU1FKgo+ICsgICAgICAgaWYgWyAk
+PyAtZXEgMCBdOyB0aGVuCj4gKyAgICAgICAgICAgICAgICMgT25seSBkZWxldGUgaWYgc3VjY2Vz
+c2Z1bAo+ICsgICAgICAgICAgICAgICBybSAtcmYgJFRSQUNFX1BBVEgKPiArICAgICAgIGZpCj4g
+KyAgICAgICBybSAtZiAke2ZpbGVfc3luY19hZnRlcl9maXJzdH0KPiArICAgICAgIHJtIC1mICR7
+ZmlsZV9zeW5jX2JlZm9yZV9sYXN0fQo+ICt9Cj4gKwo+ICtmdW5jdGlvbiB0ZXN0X3VzdF9sb2Nh
+bCAoKQo+ICt7Cj4gKyAgICAgICBsb2NhbCBmaWxlX3N5bmNfYWZ0ZXJfZmlyc3Q9JChta3RlbXAg
+LXUpCj4gKyAgICAgICBsb2NhbCBmaWxlX3N5bmNfYmVmb3JlX2xhc3Q9JChta3RlbXAgLXUpCj4g
+Kwo+ICsgICAgICAgZGlhZyAiVGVzdCBVU1QgbG9jYWwgd2l0aCBtZXRhZGF0YSByZWdlbmVyYXRp
+b24iCj4gKyAgICAgICBjcmVhdGVfbHR0bmdfc2Vzc2lvbl9vayAkU0VTU0lPTl9OQU1FICRUUkFD
+RV9QQVRICj4gKyAgICAgICBlbmFibGVfdXN0X2x0dG5nX2V2ZW50X29rICRTRVNTSU9OX05BTUUg
+JEVWRU5UX05BTUUKPiArCj4gKyAgICAgICAkVEVTVEFQUF9CSU4gJE5SX0lURVIgJE5SX1VTRUNf
+V0FJVCAke2ZpbGVfc3luY19hZnRlcl9maXJzdH0gJHtmaWxlX3N5bmNfYmVmb3JlX2xhc3R9IC9k
+ZXYvbnVsbCAyPiYxICYKPiArCj4gKyAgICAgICBzdGFydF9sdHRuZ190cmFjaW5nX29rICRTRVNT
+SU9OX05BTUUKPiArCj4gKyAgICAgICB0b3VjaCAke2ZpbGVfc3luY19iZWZvcmVfbGFzdH0KPiAr
+Cj4gKyAgICAgICAjIFdhaXQgZm9yIHRoZSBhcHBsaWNhdGlvbnMgc3RhcnRlZCBpbiBiYWNrZ3Jv
+dW5kCj4gKyAgICAgICB3YWl0Cj4gKyAgICAgICByZWdlbmVyYXRlX21ldGFkYXRhX29rICRTRVNT
+SU9OX05BTUUKPiArCj4gKyAgICAgICBzdG9wX2x0dG5nX3RyYWNpbmdfb2sgJFNFU1NJT05fTkFN
+RQo+ICsgICAgICAgZGVzdHJveV9sdHRuZ19zZXNzaW9uX29rICRTRVNTSU9OX05BTUUKPiArICAg
+ICAgICMgVmFsaWRhdGUgdGVzdAo+ICsgICAgICAgdmFsaWRhdGVfdHJhY2UgJEVWRU5UX05BTUUg
+JFRSQUNFX1BBVEgKPiArICAgICAgIGlmIFsgJD8gLWVxIDAgXTsgdGhlbgo+ICsgICAgICAgICAg
+ICAgICAjIE9ubHkgZGVsZXRlIGlmIHN1Y2Nlc3NmdWwKPiArICAgICAgICAgICAgICAgcm0gLXJm
+ICRUUkFDRV9QQVRICj4gKyAgICAgICBmaQo+ICsgICAgICAgcm0gLWYgJHtmaWxlX3N5bmNfYWZ0
+ZXJfZmlyc3R9Cj4gKyAgICAgICBybSAtZiAke2ZpbGVfc3luY19iZWZvcmVfbGFzdH0KPiArfQo+
+ICsKPiArZnVuY3Rpb24gdGVzdF91c3RfcGlkICgpCj4gK3sKPiArICAgICAgIGxvY2FsIGZpbGVf
+c3luY19hZnRlcl9maXJzdD0kKG1rdGVtcCAtdSkKPiArICAgICAgIGxvY2FsIGZpbGVfc3luY19i
+ZWZvcmVfbGFzdD0kKG1rdGVtcCAtdSkKPiArCj4gKyAgICAgICBkaWFnICJUZXN0IFVTVCBwZXIt
+cGlkIHdpdGggbWV0YWRhdGEgcmVnZW5lcmF0aW9uIChleHBlY3QgZmFpbHVyZSkiCj4gKyAgICAg
+ICBjcmVhdGVfbHR0bmdfc2Vzc2lvbl9vayAkU0VTU0lPTl9OQU1FICRUUkFDRV9QQVRICj4gKyAg
+ICAgICBlbmFibGVfY2hhbm5lbF9wZXJfcGlkICRTRVNTSU9OX05BTUUgImNoYW5uZWwwIgo+ICsg
+ICAgICAgZW5hYmxlX3VzdF9sdHRuZ19ldmVudF9vayAkU0VTU0lPTl9OQU1FICRFVkVOVF9OQU1F
+ICJjaGFubmVsMCIKPiArCj4gKyAgICAgICAkVEVTVEFQUF9CSU4gJE5SX0lURVIgJE5SX1VTRUNf
+V0FJVCAke2ZpbGVfc3luY19hZnRlcl9maXJzdH0gJHtmaWxlX3N5bmNfYmVmb3JlX2xhc3R9IC9k
+ZXYvbnVsbCAyPiYxICYKPiArCj4gKyAgICAgICBzdGFydF9sdHRuZ190cmFjaW5nX29rICRTRVNT
+SU9OX05BTUUKPiArCj4gKyAgICAgICB0b3VjaCAke2ZpbGVfc3luY19iZWZvcmVfbGFzdH0KPiAr
+Cj4gKyAgICAgICAjIFdhaXQgZm9yIHRoZSBhcHBsaWNhdGlvbnMgc3RhcnRlZCBpbiBiYWNrZ3Jv
+dW5kCj4gKyAgICAgICB3YWl0Cj4gKyAgICAgICByZWdlbmVyYXRlX21ldGFkYXRhX2ZhaWwgJFNF
+U1NJT05fTkFNRQo+ICsKPiArICAgICAgIHN0b3BfbHR0bmdfdHJhY2luZ19vayAkU0VTU0lPTl9O
+QU1FCj4gKyAgICAgICBkZXN0cm95X2x0dG5nX3Nlc3Npb25fb2sgJFNFU1NJT05fTkFNRQo+ICsg
+ICAgICAgIyBWYWxpZGF0ZSB0ZXN0Cj4gKyAgICAgICB2YWxpZGF0ZV90cmFjZSAkRVZFTlRfTkFN
+RSAkVFJBQ0VfUEFUSAo+ICsgICAgICAgaWYgWyAkPyAtZXEgMCBdOyB0aGVuCj4gKyAgICAgICAg
+ICAgICAgICMgT25seSBkZWxldGUgaWYgc3VjY2Vzc2Z1bAo+ICsgICAgICAgICAgICAgICBybSAt
+cmYgJFRSQUNFX1BBVEgKPiArICAgICAgIGZpCj4gKyAgICAgICBybSAtZiAke2ZpbGVfc3luY19h
+ZnRlcl9maXJzdH0KPiArICAgICAgIHJtIC1mICR7ZmlsZV9zeW5jX2JlZm9yZV9sYXN0fQo+ICt9
+Cj4gKwo+ICtmdW5jdGlvbiB0ZXN0X3VzdF9saXZlICgpCj4gK3sKPiArICAgICAgIGxvY2FsIGZp
+bGVfc3luY19hZnRlcl9maXJzdD0kKG1rdGVtcCAtdSkKPiArICAgICAgIGxvY2FsIGZpbGVfc3lu
+Y19iZWZvcmVfbGFzdD0kKG1rdGVtcCAtdSkKPiArCj4gKyAgICAgICBkaWFnICJUZXN0IFVTVCBs
+aXZlIHdpdGggbWV0YWRhdGEgcmVnZW5lcmF0aW9uIChleHBlY3QgZmFpbHVyZSkiCj4gKyAgICAg
+ICBsdHRuZ19jcmVhdGVfc2Vzc2lvbl91cmlfbGl2ZSAkU0VTU0lPTl9OQU1FICRUUkFDRV9QQVRI
+Cj4gKyAgICAgICBlbmFibGVfdXN0X2x0dG5nX2V2ZW50X29rICRTRVNTSU9OX05BTUUgJEVWRU5U
+X05BTUUKPiArCj4gKyAgICAgICAkVEVTVEFQUF9CSU4gJE5SX0lURVIgJE5SX1VTRUNfV0FJVCAk
+e2ZpbGVfc3luY19hZnRlcl9maXJzdH0gJHtmaWxlX3N5bmNfYmVmb3JlX2xhc3R9IC9kZXYvbnVs
+bCAyPiYxICYKPiArCj4gKyAgICAgICBzdGFydF9sdHRuZ190cmFjaW5nX29rICRTRVNTSU9OX05B
+TUUKPiArCj4gKyAgICAgICB0b3VjaCAke2ZpbGVfc3luY19iZWZvcmVfbGFzdH0KPiArCj4gKyAg
+ICAgICAjIFdhaXQgZm9yIHRoZSBhcHBsaWNhdGlvbnMgc3RhcnRlZCBpbiBiYWNrZ3JvdW5kCj4g
+KyAgICAgICB3YWl0Cj4gKyAgICAgICByZWdlbmVyYXRlX21ldGFkYXRhX2ZhaWwgJFNFU1NJT05f
+TkFNRQo+ICsKPiArICAgICAgIHN0b3BfbHR0bmdfdHJhY2luZ19vayAkU0VTU0lPTl9OQU1FCj4g
+KyAgICAgICBkZXN0cm95X2x0dG5nX3Nlc3Npb25fb2sgJFNFU1NJT05fTkFNRQo+ICsgICAgICAg
+IyBWYWxpZGF0ZSB0ZXN0Cj4gKyAgICAgICB2YWxpZGF0ZV90cmFjZSAkRVZFTlRfTkFNRSAkVFJB
+Q0VfUEFUSAo+ICsgICAgICAgaWYgWyAkPyAtZXEgMCBdOyB0aGVuCj4gKyAgICAgICAgICAgICAg
+ICMgT25seSBkZWxldGUgaWYgc3VjY2Vzc2Z1bAo+ICsgICAgICAgICAgICAgICBybSAtcmYgJFRS
+QUNFX1BBVEgKPiArICAgICAgIGZpCj4gKyAgICAgICBybSAtZiAke2ZpbGVfc3luY19hZnRlcl9m
+aXJzdH0KPiArICAgICAgIHJtIC1mICR7ZmlsZV9zeW5jX2JlZm9yZV9sYXN0fQo+ICt9Cj4gKwo+
+ICtwbGFuX3Rlc3RzICROVU1fVEVTVFMKPiArCj4gK3ByaW50X3Rlc3RfYmFubmVyICIkVEVTVF9E
+RVNDIgo+ICsKPiArc3RhcnRfbHR0bmdfcmVsYXlkICItbyAkVFJBQ0VfUEFUSCIKPiArc3RhcnRf
+bHR0bmdfc2Vzc2lvbmQKPiArCj4gK3Rlc3RzPSggdGVzdF91c3Rfc3RyZWFtaW5nIHRlc3RfdXN0
+X2xvY2FsIHRlc3RfdXN0X3BpZCB0ZXN0X3VzdF9saXZlICkKPiArCj4gK2ZvciBmY3RfdGVzdCBp
+biAke3Rlc3RzW0BdfTsKPiArZG8KPiArICAgICAgIFNFU1NJT05fTkFNRT0kKHJhbmRzdHJpbmcg
+MTYgMCkKPiArICAgICAgICR7ZmN0X3Rlc3R9Cj4gK2RvbmUKPiArCj4gK3N0b3BfbHR0bmdfc2Vz
+c2lvbmQKPiArc3RvcF9sdHRuZ19yZWxheWQKPiArCj4gK2V4aXQgJG91dAo+IGRpZmYgLS1naXQg
+YS90ZXN0cy9yb290X3JlZ3Jlc3Npb24gYi90ZXN0cy9yb290X3JlZ3Jlc3Npb24KPiBpbmRleCAy
+OTgxZGM2Li5kMGZhZDA0IDEwMDY0NAo+IC0tLSBhL3Rlc3RzL3Jvb3RfcmVncmVzc2lvbgo+ICsr
+KyBiL3Rlc3RzL3Jvb3RfcmVncmVzc2lvbgo+IEBAIC0xNCw1ICsxNCw1IEBAIHJlZ3Jlc3Npb24v
+dG9vbHMvZmlsdGVyaW5nL3Rlc3RfaW52YWxpZF9maWx0ZXIKPiAgcmVncmVzc2lvbi90b29scy9m
+aWx0ZXJpbmcvdGVzdF91bnN1cHBvcnRlZF9vcAo+ICByZWdyZXNzaW9uL3Rvb2xzL2ZpbHRlcmlu
+Zy90ZXN0X3ZhbGlkX2ZpbHRlcgo+ICByZWdyZXNzaW9uL3Rvb2xzL3dpbGRjYXJkL3Rlc3RfZXZl
+bnRfd2lsZGNhcmQKPiAtcmVncmVzc2lvbi90b29scy9tZXRhZGF0YS1yZWdlbi90ZXN0X2tlcm5l
+bAo+ICtyZWdyZXNzaW9uL3Rvb2xzL3JlZ2VuLW1ldGFkYXRhL3Rlc3Rfa2VybmVsCj4gIHJlZ3Jl
+c3Npb24vdXN0L3Rlc3RfZXZlbnRfcGVyZgo+IGRpZmYgLS1naXQgYS90ZXN0cy91dGlscy91dGls
+cy5zaCBiL3Rlc3RzL3V0aWxzL3V0aWxzLnNoCj4gaW5kZXggZGEyZWZlOS4uM2Q3NDRlMiAxMDA2
+NDQKPiAtLS0gYS90ZXN0cy91dGlscy91dGlscy5zaAo+ICsrKyBiL3Rlc3RzL3V0aWxzL3V0aWxz
+LnNoCj4gQEAgLTEzNjYsMjkgKzEzNjYsMjkgQEAgZnVuY3Rpb24gdmFsaWRhdGVfdHJhY2VfZW1w
+dHkoKQo+ICAgICAgICAgcmV0dXJuICRyZXQKPiAgfQo+Cj4gLWZ1bmN0aW9uIG1ldGFkYXRhX3Jl
+Z2VuZXJhdGUgKCkKPiArZnVuY3Rpb24gcmVnZW5lcmF0ZV9tZXRhZGF0YSAoKQo+ICB7Cj4gICAg
+ICAgICBsb2NhbCBleHBlY3RlZF90b19mYWlsPSQxCj4gICAgICAgICBsb2NhbCBzZXNzX25hbWU9
+JDIKPgo+IC0gICAgICAgJFRFU1RESVIvLi4vc3JjL2Jpbi9sdHRuZy8kTFRUTkdfQklOIG1ldGFk
+YXRhIHJlZ2VuZXJhdGUgLXMgJHNlc3NfbmFtZSAxPiAkT1VUUFVUX0RFU1QgMj4gJEVSUk9SX09V
+VFBVVF9ERVNUCj4gKyAgICAgICAkVEVTVERJUi8uLi9zcmMvYmluL2x0dG5nLyRMVFROR19CSU4g
+cmVnZW5lcmF0ZSBtZXRhZGF0YSAtcyAkc2Vzc19uYW1lIDE+ICRPVVRQVVRfREVTVCAyPiAkRVJS
+T1JfT1VUUFVUX0RFU1QKPiAgICAgICAgIHJldD0kPwo+ICAgICAgICAgaWYgW1sgJGV4cGVjdGVk
+X3RvX2ZhaWwgLWVxICIxIiBdXTsgdGhlbgo+ICAgICAgICAgICAgICAgICB0ZXN0ICIkcmV0IiAt
+bmUgIjAiCj4gLSAgICAgICAgICAgICAgIG9rICQ/ICJFeHBlY3RlZCBmYWlsIG9uIHJlZ2VuZXJh
+dGUgJHNlc3NfbmFtZSIKPiArICAgICAgICAgICAgICAgb2sgJD8gIkV4cGVjdGVkIGZhaWwgb24g
+cmVnZW5lcmF0ZSBtZXRhZGF0YSAkc2Vzc19uYW1lIgo+ICAgICAgICAgZWxzZQo+ICAgICAgICAg
+ICAgICAgICBvayAkcmV0ICJNZXRhZGF0YSByZWdlbmVyYXRlICRzZXNzX25hbWUiCj4gICAgICAg
+ICBmaQo+ICB9Cj4KPiAtZnVuY3Rpb24gbWV0YWRhdGFfcmVnZW5lcmF0ZV9vayAoKQo+ICtmdW5j
+dGlvbiByZWdlbmVyYXRlX21ldGFkYXRhX29rICgpCj4gIHsKPiAtICAgICAgIG1ldGFkYXRhX3Jl
+Z2VuZXJhdGUgMCAiJEAiCj4gKyAgICAgICByZWdlbmVyYXRlX21ldGFkYXRhIDAgIiRAIgo+ICB9
+Cj4KPiAtZnVuY3Rpb24gbWV0YWRhdGFfcmVnZW5lcmF0ZV9mYWlsICgpCj4gK2Z1bmN0aW9uIHJl
+Z2VuZXJhdGVfbWV0YWRhdGFfZmFpbCAoKQo+ICB7Cj4gLSAgICAgICBtZXRhZGF0YV9yZWdlbmVy
+YXRlIDEgIiRAIgo+ICsgICAgICAgcmVnZW5lcmF0ZV9tZXRhZGF0YSAxICIkQCIKPiAgfQo+Cj4g
+IGZ1bmN0aW9uIGRlc3RydWN0aXZlX3Rlc3RzX2VuYWJsZWQgKCkKPiAtLQo+IDEuOS4xCj4KPgo+
+Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVm
+ZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6
+Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
