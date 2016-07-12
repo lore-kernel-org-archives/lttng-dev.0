@@ -1,25 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools v3 3/3] Create a dedicated test
- suite for Perf
-Date: Fri, 8 Jul 2016 16:57:47 -0400
-Message-ID: <CA+jJMxtSQ_SU4tR8-WoZjcZsSv_-TiTWk-+0pfMmKkXbrNy=gQ__30705.4813289598$1468011491$gmane$org@mail.gmail.com>
-References: <1467733848-18128-1-git-send-email-jdesfossez@efficios.com>
- <1467733848-18128-3-git-send-email-jdesfossez@efficios.com>
- <CA+jJMxv06zCw2wRaG+d5prs9BRJ6TG65k-9g4e6zKZQP+SLihQ@mail.gmail.com>
- <5780080D.4090902@efficios.com>
- <CA+jJMxsyOzNFPyST3i17BbWuAuBhd_ao-DYY2qLeRaiBaScEHw@mail.gmail.com>
- <20160708204158.GA3372@sinkpad.home.lan>
+From: Aravind HT <aravind.ht@gmail.com>
+Subject: Core seen with lttng_abi_map_channel()
+Date: Tue, 12 Jul 2016 16:35:59 +0530
+Message-ID: <CACd+_b7jEvRC6hAJh2yCeuPo5aEXuKsn5AWcEodUmdCeoy08vw__19226.7228536823$1468321579$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============6226046772473849898=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-f169.google.com (mail-qk0-f169.google.com
- [209.85.220.169])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id D7040A3B7E
- for <lttng-dev@lists.lttng.org>; Fri,  8 Jul 2016 20:57:51 +0000 (UTC)
-Received: by mail-qk0-f169.google.com with SMTP id t127so46839504qkf.1
- for <lttng-dev@lists.lttng.org>; Fri, 08 Jul 2016 13:57:51 -0700 (PDT)
-In-Reply-To: <20160708204158.GA3372@sinkpad.home.lan>
+Received: from mail-it0-f65.google.com (mail-it0-f65.google.com
+ [209.85.214.65])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 0825FA2B7B
+ for <lttng-dev@lists.lttng.org>; Tue, 12 Jul 2016 11:06:01 +0000 (UTC)
+Received: by mail-it0-f65.google.com with SMTP id h190so778005ith.3
+ for <lttng-dev@lists.lttng.org>; Tue, 12 Jul 2016 04:06:01 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -29,64 +20,114 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gRnJpLCBKdWwgOCwgMjAxNiBhdCA0OjQxIFBNLCBKdWxpZW4gRGVzZm9zc2V6CjxqZGVzZm9z
-c2V6QGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4+ID4+IGhhdmVfbGlicGZtIHNob3VsZCBiZSB1c2Vk
-IHRvIHNldCBhbiBhdXRvbWFrZSB2YXJpYWJsZSBhbmQgZW5hYmxlIHRoZSB0ZXN0Cj4+ID4+IGNv
-bmRpdGlvbmFsbHkuIFNpbWlsYXIgdG8gd2hhdCBpcyBkb25lIGhlcmU6Cj4+ID4+Cj4+ID4+IGh0
-dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRuZy10b29scy9ibG9iL21hc3Rlci90ZXN0cy9yZWdy
-ZXNzaW9uL01ha2VmaWxlLmFtI0w0NAo+PiA+Cj4+ID4gSHVtLCB0aGUgaW50ZW50IGhlcmUgaXMg
-dG8gbWFrZSB0aGUgdGVzdHMgZmFpbCBpZiB0aGUgZGVwZW5kZW5jeSBpcyBub3QKPj4gPiBhdmFp
-bGFibGUsIGJ1dCB3ZSBkbyBub3Qgd2FudCB0byBlbmZvcmNlIGl0IGFzIGEgZGVwZW5kZW5jeSBz
-aW5jZSBtb3N0Cj4+ID4gZGVwbG95bWVudHMgY2Fubm90IHJ1biB0aGVzZSB0ZXN0cy4gV2hhdCB3
-ZSB3YW50IGhlcmUgaWYgZm9yIHRoZSB0ZXN0IHRvCj4+ID4gZmFpbCBpZiBhIHVzZXIgdHJpZXMg
-dG8gcnVuIGl0IHdpdGhvdXQgdGhlIGRlcGVuZGVuY3kgaW5zdGFsbGVkLCB0aGVuCj4+ID4gdGhl
-eSB3aWxsIGluc3RhbGwgdGhlIGRlcGVuZGVuY3kgYW5kIHJ1biBpdCBhZ2Fpbi4gSGF2aW5nIGEg
-dHJhbnNwYXJlbnQKPj4gPiB3YXkgdG8gZGlzYWJsZSB0aGVzZSB0ZXN0cyB3b3VsZCByZW5kZXIg
-dGhlbSB1c2VsZXNzIGJlY2F1c2Ugd2Ugd2lsbAo+PiA+IHRoaW5rIHRoZXkgcGFzc2VkLgo+Pgo+
-PiBBZ3JlZWQgdG8gbm90IGluY2x1ZGUgdGhlbSBpbiB0aGUgc3RhbmRhcmQgdGVzdCBzdWl0ZS4g
-SG93ZXZlciwgdGhlCj4+IHRlc3Qgc2hvdWxkIGJlIHNraXBwZWQgaWYgdGhlIGRlcGVuZGVuY3kg
-aXMgbm90IGZvdW5kIG9uIHRoZSBzeXN0ZW0sCj4+IGFsb25nIHdpdGggYSBtZXNzYWdlIGV4cGxh
-aW5pbmcgd2h5Lgo+Pgo+PiBDdXJyZW50bHkgdGhlIHRlc3Qgd2lsbCBmYWlsIHdpdGggdGhlIGZv
-bGxvd2luZyBvdXRwdXQgaWYgcnVuIHdpdGhvdXQKPj4gbGlicGZtNCBpbnN0YWxsZWQgb24gdGhl
-IHN5c3RlbS4KPj4KPj4gJCAuL3Rlc3RzL3BlcmYvdGVzdF9wZXJmX3Jhdwo+PiAxLi4yMAo+PiAj
-IFBlcmYgY291bnRlcnMKPj4gb2sgMSAtIFN0YXJ0IHNlc3Npb24gZGFlbW9uCj4+IC4vdGVzdHMv
-cGVyZi90ZXN0X3BlcmZfcmF3OiBsaW5lIDUwOiAuL3Rlc3RzL3BlcmYvL2ZpbmRfZXZlbnQ6IE5v
-IHN1Y2gKPj4gZmlsZSBvciBkaXJlY3RvcnkKPj4gbm90IG9rIDIgLSBGaW5kIFBNVSBVTkhBTFRF
-RF9SRUZFUkVOQ0VfQ1lDTEVTCj4gWy4uLl0KPj4KPj4gVGhpcyBkb2VzJ3QgbWFrZSBpdCBvYnZp
-b3VzIHdoeSB0aGUgdGVzdCBpcyBmYWlsaW5nLgo+Pgo+PiA+Cj4+ID4gVGhlcmUgbWF5IGJlIGEg
-YmV0dGVyIHdheSBvZiBkb2luZyBpdCwgYnV0IHdlIHNob3VsZCBhdm9pZCB1c2luZyBtYWdpY2Fs
-Cj4+ID4gInNraXAiIGluIHRoaXMgY2FzZSwgdGhlc2UgdGVzdHMgc2hvdWxkIGZhaWwgaWYgdGhl
-IHRhcmdldCBhcmNoaXRlY3R1cmUKPj4gPiBkb2VzIG5vdCBzdXBwb3J0IGFsbCB0aGUgUGVyZi1y
-ZWxhdGVkIGZlYXR1cmVzIHdlIHN1cHBvcnQuCj4+Cj4+IEkgd2FudCB0byBtYWtlIGl0IGNsZWFy
-IHRvIHRoZSB1c2VyIHRoYXQgdGhlIHRlc3QgaXMgZmFpbGluZyBiZWNhdXNlCj4+IG9mIGEgbWlz
-c2luZyBkZXBlbmRlbmN5LCBhbmQgbm90IGJlY2F1c2UgaGlzIEhXIGRvZXNuJ3QgaGF2ZSB0aGUK
-Pj4gY2FwYWJpbGl0aWVzIG5lZWRlZC4KPj4KPj4gU2tpcCB3aXRoIGEgY2xlYXIgZXJyb3IgbWVz
-c2FnZSBzZWVtcyBhcHByb3ByaWF0ZSBoZXJlLCBlc3BlY2lhbGx5Cj4+IHNpbmNlIHRoZSB0ZXN0
-IHdpbGwgbm90IGJlIHJ1biBhdXRvbWF0aWNhbGx5Lgo+Cj4gSG93IGFib3V0IGhhdmluZyBhIGZp
-cnN0IHN0ZXAgaW4gdGhlIHRlc3QgdGhhdCBjaGVja3MgaWYgdGhlIGRlcGVuZGVuY3kKPiBpcyBw
-cmVzZW50IGFuZCBmYWlscyBpZiBub3QgPyBUaGlzIHdvdWxkIG1ha2UgaXQgY2xlYXIgdGhhdCB0
-aGUKPiBkZXBlbmRlbmN5IGlzIG5lZWRlZCB0byBydW4gdGhlIHRlc3QsIGFuZCBpdCB3b3VsZCBu
-b3QgbWFnaWNhbGx5IHBhc3MgaWYKPiBydW4gaW4gdGhlIGJhY2tncm91bmQgb3IgaW4gYmF0Y2gu
-Cj4KPiBJIGFtIHJlYWxseSB3b3JyaWVkIHRoYXQgc2tpcHBpbmcgaGVyZSB3aWxsIGNvbmZ1c2Ug
-dXNlcnMsIEkgc2VlIHRoaXMKPiB0ZXN0IHN1aXRlIGFzIGEgd2F5IHRvIGd1YXJhbnRlZSB0aGF0
-IHBlcmYtcmVsYXRlZCBmZWF0dXJlcyBhbGwgd29yayBvbgo+IHRoZWlyIHN5c3RlbSBpZiB0aGUg
-dGVzdCByZXR1cm5zIDAgYXQgdGhlIGVuZC4KClRoYXQncyBmYWlyLiBGZWVsIGZyZWUgdG8gaGF2
-ZSBhIGxvb2sgYXQgaG93IHdlIHVzZSBhdXRvY29uZiB0byBnZW5lcmF0ZQp0aGUgdGVzdCBzY3Jp
-cHRzIGJhc2VkIG9uIGNvbmZpZ3VyZS10aW1lIHJlc3VsdHMgaW4gQmFiZWx0cmFjZSBbMV1bMl0u
-CgpZb3Ugc2hvdWxkIGJlIGFibGUgdG8gZXhwb3J0ICJMVFROR19UT09MU19CVUlMRF9XSVRIX0xJ
-QlBGTSIsCmNoZWNrIGl0cyB2YWx1ZSBpbiB0aGUgc2NyaXB0IGFuZCBiYWlsIG91dCB3aXRoIGFu
-IGV4cGxhbmF0aW9uLgoKWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9lZmZpY2lvcy9iYWJlbHRyYWNl
-L2Jsb2IvbWFzdGVyL3Rlc3RzL2xpYi90ZXN0X2N0Zl93cml0ZXJfY29tcGxldGUuaW4KWzJdIGh0
-dHBzOi8vZ2l0aHViLmNvbS9lZmZpY2lvcy9iYWJlbHRyYWNlL2Jsb2IvbWFzdGVyL2NvbmZpZ3Vy
-ZS5hYyNMMzYzCgpKZXJlbWllCj4KPiBUaGFua3MsCj4KPiBKdWxpZW4KPiBfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxp
-c3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
-Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKCgotLSAKSsOpcsOpbWllIEdhbGFy
-bmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
-L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============6226046772473849898==
+Content-Type: multipart/alternative; boundary=001a1143de96fb9a1205376e4021
+
+--001a1143de96fb9a1205376e4021
+Content-Type: text/plain; charset=UTF-8
+
+Hi,
+
+Below is a recent core that I saw. Unfortunately the code is optimized, but
+still it points to a call to free(lttng_chan);
+
+(gdb) bt
+#0  0x00007f3cbb0df367 in __GI_raise (sig=sig@entry=6) at
+../sysdeps/unix/sysv/linux/raise.c:55
+#1  0x00007f3cbb0e233a in __GI_abort () at abort.c:89
+#2  0x00007f3cbb11928c in __libc_message (do_abort=do_abort@entry=2,
+fmt=fmt@entry=0x7f3cbb2158c8 "*** Error in `%s': %s: 0x%s ***\n") at
+../sysdeps/posix/libc_fatal.c:175
+#3  0x00007f3cbb122cbe in malloc_printerr (action=3,
+str=0x7f3cbb211a87 "free(): invalid pointer", ptr=<optimized out>) at
+malloc.c:4960
+#4  0x00007f3cbb12349b in _int_free (av=<optimized out>, p=<optimized
+out>, have_lock=0) at malloc.c:3831
+#5  0x00007f3cb79551c5 in lttng_abi_map_channel () from
+/var/tmp/iso-path.24284/altroot/usr/lib64/liblttng-ust.so.0
+#6  0x00007f3cb79554c8 in ?? () from
+/var/tmp/iso-path.24284/altroot/usr/lib64/liblttng-ust.so.0
+#7  0x00007f3cb7952846 in ?? () from
+/var/tmp/iso-path.24284/altroot/usr/lib64/liblttng-ust.so.0
+#8  0x00007f3cb8974294 in start_thread (arg=0x7f3cb1ad7700) at
+pthread_create.c:336
+#9  0x00007f3cbb19413d in clone () at
+../sysdeps/unix/sysv/linux/x86_64/clone.S:109
+
+
+Think we should not be freeing lttng_chan here.
+
+
+https://github.com/dgoulet/lttng-ust-dev/blob/master/liblttng-ust/lttng-ust-abi.c#L516
+
+
+
+Regards,
+Aravind.
+
+--001a1143de96fb9a1205376e4021
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div><br></div><div>Below is a recent core that I saw. =
+Unfortunately the code is optimized, but still it points to a call to free(=
+lttng_chan);</div><div><br></div><div><pre style=3D"margin-top:0px;margin-b=
+ottom:0px;padding:0px;white-space:pre-wrap;word-wrap:break-word;font-size:1=
+3px;color:black">(gdb) bt
+#0  0x00007f3cbb0df367 in __GI_raise (sig=3Dsig@entry=3D6) at ../sysdeps/un=
+ix/sysv/linux/raise.c:55
+#1  0x00007f3cbb0e233a in __GI_abort () at abort.c:89
+#2  0x00007f3cbb11928c in __libc_message (do_abort=3Ddo_abort@entry=3D2, fm=
+t=3Dfmt@entry=3D0x7f3cbb2158c8 &quot;*** Error in `%s&#39;: %s: 0x%s ***\n&=
+quot;) at ../sysdeps/posix/libc_fatal.c:175
+#3  0x00007f3cbb122cbe in malloc_printerr (action=3D3, str=3D0x7f3cbb211a87=
+ &quot;free(): invalid pointer&quot;, ptr=3D&lt;optimized out&gt;) at mallo=
+c.c:4960
+#4  0x00007f3cbb12349b in _int_free (av=3D&lt;optimized out&gt;, p=3D&lt;op=
+timized out&gt;, have_lock=3D0) at malloc.c:3831
+#5  0x00007f3cb79551c5 in lttng_abi_map_channel () from /var/tmp/iso-path.2=
+4284/altroot/usr/lib64/liblttng-ust.so.0
+#6  0x00007f3cb79554c8 in ?? () from /var/tmp/iso-path.24284/altroot/usr/li=
+b64/liblttng-ust.so.0
+#7  0x00007f3cb7952846 in ?? () from /var/tmp/iso-path.24284/altroot/usr/li=
+b64/liblttng-ust.so.0
+#8  0x00007f3cb8974294 in start_thread (arg=3D0x7f3cb1ad7700) at pthread_cr=
+eate.c:336
+#9  0x00007f3cbb19413d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clo=
+ne.S:109</pre><pre style=3D"margin-top:0px;margin-bottom:0px;padding:0px;wh=
+ite-space:pre-wrap;word-wrap:break-word;font-size:13px;color:black"><br></p=
+re><pre style=3D"margin-top:0px;margin-bottom:0px;padding:0px;white-space:p=
+re-wrap;word-wrap:break-word;font-size:13px;color:black">Think we should no=
+t be freeing lttng_chan here.</pre><pre style=3D"margin-top:0px;margin-bott=
+om:0px;padding:0px;white-space:pre-wrap;word-wrap:break-word;font-size:13px=
+;color:black"><span style=3D"font-family:arial,sans-serif"><br></span></pre=
+><pre style=3D"margin-top:0px;margin-bottom:0px;padding:0px;white-space:pre=
+-wrap;word-wrap:break-word;font-size:13px;color:black"><span style=3D"font-=
+family:arial,sans-serif"><a href=3D"https://github.com/dgoulet/lttng-ust-de=
+v/blob/master/liblttng-ust/lttng-ust-abi.c#L516">https://github.com/dgoulet=
+/lttng-ust-dev/blob/master/liblttng-ust/lttng-ust-abi.c#L516</a></span></pr=
+e><pre style=3D"margin-top:0px;margin-bottom:0px;padding:0px;word-wrap:brea=
+k-word"><font color=3D"#000000"><span style=3D"font-size:13px;white-space:p=
+re-wrap"><br></span></font></pre><pre style=3D"margin-top:0px;margin-bottom=
+:0px;padding:0px;white-space:pre-wrap;word-wrap:break-word;font-size:13px;c=
+olor:black"><br></pre><pre style=3D"margin-top:0px;margin-bottom:0px;paddin=
+g:0px;white-space:pre-wrap;word-wrap:break-word;font-size:13px;color:black"=
+>Regards,
+Aravind.</pre></div></div>
+
+--001a1143de96fb9a1205376e4021--
+
+--===============6226046772473849898==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============6226046772473849898==--
