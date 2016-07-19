@@ -1,17 +1,17 @@
 From: Anders Wallin <wallinux@gmail.com>
-Subject: It should be possible to build lttng w/o the test clock
-	plugin.
-Date: Tue, 19 Jul 2016 21:18:17 +0200
-Message-ID: <CAF2baFdXVFeg4yYHPUhi2Tmh3ghS1H0jSLMdUJF=NNjj_+72+A__16476.1658445515$1468955922$gmane$org@mail.gmail.com>
+Subject: The test clock plugin should be initiated earlier when
+ built inside the kernel
+Date: Tue, 19 Jul 2016 21:20:52 +0200
+Message-ID: <CAF2baFeKw0M1qYpBbEqQLpHLsa5M_nPbW0Em=wgukq_LAzOqdw__19499.5366888636$1468956080$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary=001a11402298824fa6053801f29a
+Content-Type: multipart/mixed; boundary=001a114b0c56c89d3b053801fbd2
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lf0-f42.google.com (mail-lf0-f42.google.com
- [209.85.215.42])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 23478A3BE7
- for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2016 19:18:19 +0000 (UTC)
-Received: by mail-lf0-f42.google.com with SMTP id g62so22149825lfe.3
- for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2016 12:18:19 -0700 (PDT)
+Received: from mail-lf0-f51.google.com (mail-lf0-f51.google.com
+ [209.85.215.51])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 8F771A3801
+ for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2016 19:20:54 +0000 (UTC)
+Received: by mail-lf0-f51.google.com with SMTP id g62so22194269lfe.3
+ for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2016 12:20:54 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,73 +24,47 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---001a11402298824fa6053801f29a
+--001a114b0c56c89d3b053801fbd2
 Content-Type: text/plain; charset=UTF-8
 
 Hi,
 
-only one clock plugin can be used when building lttng inside the kernel.
-To be able to write a custom clock plugin it should be possible to not
-build the test clock plugin.
+the test clock plugin should be initiated before all the other lttng
+modules when build inside the kernel
+. Move the module_init to e.g rootfs_initcall.
 
-This appended patch is one way to make this possible.
-
-Regards
 Anders Wallin
 
---001a11402298824fa6053801f29a
+--001a114b0c56c89d3b053801fbd2
 Content-Type: text/x-patch; charset=US-ASCII;
-	name="0001-Added-kernel-configuration-for-lttng-clock-plugin.patch"
+	name="0001-The-clock-plugin-must-be-initiated-before-first-use-.patch"
 Content-Disposition: attachment;
-	filename="0001-Added-kernel-configuration-for-lttng-clock-plugin.patch"
+	filename="0001-The-clock-plugin-must-be-initiated-before-first-use-.patch"
 Content-Transfer-Encoding: base64
-X-Attachment-Id: f_iqtuecnf0
+X-Attachment-Id: f_iqtui4c50
 
-RnJvbSBkNmIyY2Q2ZGNjZjlmM2ZkOGI0YWVhMzRkYTVmY2EwZmYzNTJkZTUxIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpNZXNzYWdlLUlkOiA8ZDZiMmNkNmRjY2Y5ZjNmZDhiNGFlYTM0ZGE1ZmNh
-MGZmMzUyZGU1MS4xNDY4OTU1Nzg1LmdpdC5hbmRlcnMud2FsbGluQHdpbmRyaXZlci5jb20+CkZy
+RnJvbSA4YTE1NWM2Mjc3MDExMTgyNDc1MDBlYjgwNDAzZjA5YjE5NTA0ZGYwIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpNZXNzYWdlLUlkOiA8OGExNTVjNjI3NzAxMTE4MjQ3NTAwZWI4MDQwM2Yw
+OWIxOTUwNGRmMC4xNDY4OTU1NzkxLmdpdC5hbmRlcnMud2FsbGluQHdpbmRyaXZlci5jb20+CkZy
 b206IEFuZGVycyBXYWxsaW4gPGFuZGVycy53YWxsaW5Ad2luZHJpdmVyLmNvbT4KRGF0ZTogVHVl
-LCAxOSBKdWwgMjAxNiAyMTowNjowOSArMDIwMApTdWJqZWN0OiBbUEFUQ0ggMS8xXSBBZGRlZCBr
-ZXJuZWwgY29uZmlndXJhdGlvbiBmb3IgbHR0bmcgY2xvY2sgcGx1Z2luCgpPbmx5IG9uZSBsdHRu
-ZyBjbG9jayBwbHVnaW4gY2FuIGJlIHVzZWQgYW5kIHRvIG1ha2UgaXQgcG9zc2libGUgdG8gdXNl
-IGEKY3VzdG9tIGNsb2NrIHRoZSB0ZXN0IHBsdWdpbiBtdXN0IGJlIHVuY29uZmlndXJlZAoKU2ln
-bmVkLW9mZi1ieTogQW5kZXJzIFdhbGxpbiA8YW5kZXJzLndhbGxpbkB3aW5kcml2ZXIuY29tPgot
-LS0KIEtjb25maWcgICAgICAgfCAyICsrCiBNYWtlZmlsZSAgICAgIHwgNiArKystLS0KIHRlc3Rz
-L0tidWlsZCAgfCAyICstCiB0ZXN0cy9LY29uZmlnIHwgNyArKysrKysrCiA0IGZpbGVzIGNoYW5n
-ZWQsIDEzIGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9kZSAxMDA2NDQg
-dGVzdHMvS2NvbmZpZwoKZGlmZiAtLWdpdCBhL0tjb25maWcgYi9LY29uZmlnCmluZGV4IDZiNGFk
-NjguLmMzNTBiOWIgMTAwNjQ0Ci0tLSBhL0tjb25maWcKKysrIGIvS2NvbmZpZwpAQCAtMTAsMyAr
-MTAsNSBAQCBjb25maWcgTFRUTkcKIAkgIHRoZSBMaW51eCBrZXJuZWwgaW1hZ2UsIGNob29zZSBZ
-LgogCiAJICBJZiB1bnN1cmUsIHNheSBOLgorCitzb3VyY2UgImx0dG5nL3Rlc3RzL0tjb25maWci
-CmRpZmYgLS1naXQgYS9NYWtlZmlsZSBiL01ha2VmaWxlCmluZGV4IGMyYjEyMTMuLjg2MDI2NDkg
-MTAwNjQ0Ci0tLSBhL01ha2VmaWxlCisrKyBiL01ha2VmaWxlCkBAIC0xMDcsMTUgKzEwNywxNSBA
-QCBDRkxBR1MgPSAkKEVYVENGTEFHUykKIGRlZmF1bHQ6IG1vZHVsZXMKIAogbW9kdWxlczoKLQkk
-KE1BS0UpIC1DICQoS0VSTkVMRElSKSBNPSQoUFdEKSBDT05GSUdfTFRUTkc9bSBtb2R1bGVzCisJ
-JChNQUtFKSAtQyAkKEtFUk5FTERJUikgTT0kKFBXRCkgQ09ORklHX0xUVE5HPW0gQ09ORklHX0xU
-VE5HX0NMT0NLX1BMVUdJTl9URVNUPW0gbW9kdWxlcwogCiBtb2R1bGVzX2luc3RhbGw6Ci0JJChN
-QUtFKSAtQyAkKEtFUk5FTERJUikgTT0kKFBXRCkgQ09ORklHX0xUVE5HPW0gbW9kdWxlc19pbnN0
-YWxsCisJJChNQUtFKSAtQyAkKEtFUk5FTERJUikgTT0kKFBXRCkgQ09ORklHX0xUVE5HPW0gQ09O
-RklHX0xUVE5HX0NMT0NLX1BMVUdJTl9URVNUPW0gbW9kdWxlc19pbnN0YWxsCiAKIGNsZWFuOgog
-CSQoTUFLRSkgLUMgJChLRVJORUxESVIpIE09JChQV0QpIGNsZWFuCiAKICUuaTogJS5jCi0JJChN
-QUtFKSAtQyAkKEtFUk5FTERJUikgTT0kKFBXRCkgQ09ORklHX0xUVE5HPW0gJEAKKwkkKE1BS0Up
-IC1DICQoS0VSTkVMRElSKSBNPSQoUFdEKSBDT05GSUdfTFRUTkc9bSBDT05GSUdfTFRUTkdfQ0xP
-Q0tfUExVR0lOX1RFU1Q9bSAkQAogCiBlbmRpZiAjIEtFUk5FTFJFTEVBU0UKZGlmZiAtLWdpdCBh
-L3Rlc3RzL0tidWlsZCBiL3Rlc3RzL0tidWlsZAppbmRleCA1ZTQ5MDA3Li5hYWJiOGUyIDEwMDY0
-NAotLS0gYS90ZXN0cy9LYnVpbGQKKysrIGIvdGVzdHMvS2J1aWxkCkBAIC03LDcgKzcsNyBAQCBj
-Y2ZsYWdzLXkgKz0gLUkkKFRPUF9MVFROR19NT0RVTEVTX0RJUikKIG9iai0kKENPTkZJR19MVFRO
-RykgKz0gbHR0bmctdGVzdC5vCiBsdHRuZy10ZXN0LW9ianMgOj0gcHJvYmVzL2x0dG5nLXRlc3Qu
-bwogCi1vYmotJChDT05GSUdfTFRUTkcpICs9IGx0dG5nLWNsb2NrLXBsdWdpbi10ZXN0Lm8KK29i
-ai0kKENPTkZJR19MVFROR19DTE9DS19QTFVHSU5fVEVTVCkgKz0gbHR0bmctY2xvY2stcGx1Z2lu
-LXRlc3QubwogbHR0bmctY2xvY2stcGx1Z2luLXRlc3Qtb2JqcyA6PSBjbG9jay1wbHVnaW4vbHR0
-bmctY2xvY2stcGx1Z2luLXRlc3QubwogCiAjIHZpbTpzeW50YXg9bWFrZQpkaWZmIC0tZ2l0IGEv
-dGVzdHMvS2NvbmZpZyBiL3Rlc3RzL0tjb25maWcKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXgg
-MDAwMDAwMC4uOWE3NDg2NwotLS0gL2Rldi9udWxsCisrKyBiL3Rlc3RzL0tjb25maWcKQEAgLTAs
-MCArMSw3IEBACitjb25maWcgTFRUTkdfQ0xPQ0tfUExVR0lOX1RFU1QKKyAgICAgICB0cmlzdGF0
-ZSAiVXNlIFRlc3QgcGx1Z2luIGFzIHRyYWNlIGNsb2NrIgorICAgICAgIGRlcGVuZHMgb24gTFRU
-TkcKKyAgICAgICBoZWxwCisJIFVzZSB0aGUgVGVzdCBjbG9jayBhcyB0cmFjZSBjbG9jay4gVGhp
-cyBwbHVnaW4gZnJlZXplcyB0aGUKKwkgdGltZSB3aXRoIDEgS0h6IGZvciByZWdyZXNzaW9uIHRl
-c3QKKwotLSAKMi45LjEKCg==
---001a11402298824fa6053801f29a
+LCAxOSBKdWwgMjAxNiAyMTowODoyMCArMDIwMApTdWJqZWN0OiBbUEFUQ0ggMS8xXSBUaGUgY2xv
+Y2sgcGx1Z2luIG11c3QgYmUgaW5pdGlhdGVkIGJlZm9yZSBmaXJzdCB1c2Ugb2YKIHRoZSBjbG9j
+awoKV2hlbiBidWlsZGluZyBsdHRuZyBpbnNpZGUgdGhlIGtlcm5lbCB0aGUgY2xvY2sgcGx1Z2lu
+IG11c3QgYmUgaW5pdGF0ZWQKYmVmb3JlIHRoZSByZXN0IG9mIHRoZSBsdHRuZyBjb2RlIGlzIGlu
+aXRpYXRlZC4gTW92ZWQgdGhlIGluaXQgdG8Kcm9vdGZzX2luaXRjYWxsLgoKU2lnbmVkLW9mZi1i
+eTogQW5kZXJzIFdhbGxpbiA8YW5kZXJzLndhbGxpbkB3aW5kcml2ZXIuY29tPgotLS0KIHRlc3Rz
+L2Nsb2NrLXBsdWdpbi9sdHRuZy1jbG9jay1wbHVnaW4tdGVzdC5jIHwgMiArLQogMSBmaWxlIGNo
+YW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvdGVzdHMv
+Y2xvY2stcGx1Z2luL2x0dG5nLWNsb2NrLXBsdWdpbi10ZXN0LmMgYi90ZXN0cy9jbG9jay1wbHVn
+aW4vbHR0bmctY2xvY2stcGx1Z2luLXRlc3QuYwppbmRleCBmMTZlYTY0Li5iZjgxOTMyIDEwMDY0
+NAotLS0gYS90ZXN0cy9jbG9jay1wbHVnaW4vbHR0bmctY2xvY2stcGx1Z2luLXRlc3QuYworKysg
+Yi90ZXN0cy9jbG9jay1wbHVnaW4vbHR0bmctY2xvY2stcGx1Z2luLXRlc3QuYwpAQCAtNjcsNyAr
+NjcsNyBAQCBpbnQgbHR0bmdfY2xvY2tfcGx1Z2luX2luaXQodm9pZCkKIHsKIAlyZXR1cm4gbHR0
+bmdfY2xvY2tfcmVnaXN0ZXJfcGx1Z2luKCZsdGMsIFRISVNfTU9EVUxFKTsKIH0KLW1vZHVsZV9p
+bml0KGx0dG5nX2Nsb2NrX3BsdWdpbl9pbml0KTsKK3Jvb3Rmc19pbml0Y2FsbChsdHRuZ19jbG9j
+a19wbHVnaW5faW5pdCk7CiAKIHN0YXRpYyBfX2V4aXQKIHZvaWQgbHR0bmdfY2xvY2tfcGx1Z2lu
+X2V4aXQodm9pZCkKLS0gCjIuOS4xCgo=
+--001a114b0c56c89d3b053801fbd2
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -100,4 +74,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---001a11402298824fa6053801f29a--
+--001a114b0c56c89d3b053801fbd2--
