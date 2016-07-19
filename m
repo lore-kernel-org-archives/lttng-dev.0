@@ -1,17 +1,35 @@
-From: Anders Wallin <wallinux@gmail.com>
-Subject: The test clock plugin should be initiated earlier when
- built inside the kernel
-Date: Tue, 19 Jul 2016 21:20:52 +0200
-Message-ID: <CAF2baFeKw0M1qYpBbEqQLpHLsa5M_nPbW0Em=wgukq_LAzOqdw__19499.5366888636$1468956080$gmane$org@mail.gmail.com>
+From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
+Subject: Re: It should be possible to build lttng w/o the test
+ clock plugin.
+Date: Tue, 19 Jul 2016 15:31:00 -0400
+Message-ID: <553967e1-855a-954b-5a06-5fd7e2ab309e__9581.89331363446$1468956690$gmane$org@efficios.com>
+References: <CAF2baFdXVFeg4yYHPUhi2Tmh3ghS1H0jSLMdUJF=NNjj_+72+A@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary=001a114b0c56c89d3b053801fbd2
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lf0-f51.google.com (mail-lf0-f51.google.com
- [209.85.215.51])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 8F771A3801
- for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2016 19:20:54 +0000 (UTC)
-Received: by mail-lf0-f51.google.com with SMTP id g62so22194269lfe.3
- for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2016 12:20:54 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id F0BBCA3801
+ for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2016 19:31:02 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 7BA8E3400E2
+ for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2016 19:31:02 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id S1phjWnt0Mfj for <lttng-dev@lists.lttng.org>;
+ Tue, 19 Jul 2016 19:31:01 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id C9A54340298
+ for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2016 19:31:01 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id pL5moBLMuZxP for <lttng-dev@lists.lttng.org>;
+ Tue, 19 Jul 2016 19:31:01 +0000 (UTC)
+Received: from [172.16.0.165] (cable-192.222.213.99.electronicbox.net
+ [192.222.213.99])
+ by mail.efficios.com (Postfix) with ESMTPSA id 508093400E2
+ for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2016 19:31:01 +0000 (UTC)
+In-Reply-To: <CAF2baFdXVFeg4yYHPUhi2Tmh3ghS1H0jSLMdUJF=NNjj_+72+A@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,57 +39,22 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---001a114b0c56c89d3b053801fbd2
-Content-Type: text/plain; charset=UTF-8
-
-Hi,
-
-the test clock plugin should be initiated before all the other lttng
-modules when build inside the kernel
-. Move the module_init to e.g rootfs_initcall.
-
-Anders Wallin
-
---001a114b0c56c89d3b053801fbd2
-Content-Type: text/x-patch; charset=US-ASCII;
-	name="0001-The-clock-plugin-must-be-initiated-before-first-use-.patch"
-Content-Disposition: attachment;
-	filename="0001-The-clock-plugin-must-be-initiated-before-first-use-.patch"
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_iqtui4c50
-
-RnJvbSA4YTE1NWM2Mjc3MDExMTgyNDc1MDBlYjgwNDAzZjA5YjE5NTA0ZGYwIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpNZXNzYWdlLUlkOiA8OGExNTVjNjI3NzAxMTE4MjQ3NTAwZWI4MDQwM2Yw
-OWIxOTUwNGRmMC4xNDY4OTU1NzkxLmdpdC5hbmRlcnMud2FsbGluQHdpbmRyaXZlci5jb20+CkZy
-b206IEFuZGVycyBXYWxsaW4gPGFuZGVycy53YWxsaW5Ad2luZHJpdmVyLmNvbT4KRGF0ZTogVHVl
-LCAxOSBKdWwgMjAxNiAyMTowODoyMCArMDIwMApTdWJqZWN0OiBbUEFUQ0ggMS8xXSBUaGUgY2xv
-Y2sgcGx1Z2luIG11c3QgYmUgaW5pdGlhdGVkIGJlZm9yZSBmaXJzdCB1c2Ugb2YKIHRoZSBjbG9j
-awoKV2hlbiBidWlsZGluZyBsdHRuZyBpbnNpZGUgdGhlIGtlcm5lbCB0aGUgY2xvY2sgcGx1Z2lu
-IG11c3QgYmUgaW5pdGF0ZWQKYmVmb3JlIHRoZSByZXN0IG9mIHRoZSBsdHRuZyBjb2RlIGlzIGlu
-aXRpYXRlZC4gTW92ZWQgdGhlIGluaXQgdG8Kcm9vdGZzX2luaXRjYWxsLgoKU2lnbmVkLW9mZi1i
-eTogQW5kZXJzIFdhbGxpbiA8YW5kZXJzLndhbGxpbkB3aW5kcml2ZXIuY29tPgotLS0KIHRlc3Rz
-L2Nsb2NrLXBsdWdpbi9sdHRuZy1jbG9jay1wbHVnaW4tdGVzdC5jIHwgMiArLQogMSBmaWxlIGNo
-YW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvdGVzdHMv
-Y2xvY2stcGx1Z2luL2x0dG5nLWNsb2NrLXBsdWdpbi10ZXN0LmMgYi90ZXN0cy9jbG9jay1wbHVn
-aW4vbHR0bmctY2xvY2stcGx1Z2luLXRlc3QuYwppbmRleCBmMTZlYTY0Li5iZjgxOTMyIDEwMDY0
-NAotLS0gYS90ZXN0cy9jbG9jay1wbHVnaW4vbHR0bmctY2xvY2stcGx1Z2luLXRlc3QuYworKysg
-Yi90ZXN0cy9jbG9jay1wbHVnaW4vbHR0bmctY2xvY2stcGx1Z2luLXRlc3QuYwpAQCAtNjcsNyAr
-NjcsNyBAQCBpbnQgbHR0bmdfY2xvY2tfcGx1Z2luX2luaXQodm9pZCkKIHsKIAlyZXR1cm4gbHR0
-bmdfY2xvY2tfcmVnaXN0ZXJfcGx1Z2luKCZsdGMsIFRISVNfTU9EVUxFKTsKIH0KLW1vZHVsZV9p
-bml0KGx0dG5nX2Nsb2NrX3BsdWdpbl9pbml0KTsKK3Jvb3Rmc19pbml0Y2FsbChsdHRuZ19jbG9j
-a19wbHVnaW5faW5pdCk7CiAKIHN0YXRpYyBfX2V4aXQKIHZvaWQgbHR0bmdfY2xvY2tfcGx1Z2lu
-X2V4aXQodm9pZCkKLS0gCjIuOS4xCgo=
---001a114b0c56c89d3b053801fbd2
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---001a114b0c56c89d3b053801fbd2--
+SGkgQW5kZXJzLAoKVGhhbmtzIGZvciB5b3VyIGNvbnRyaWJ1dGlvbi4gTWFrZSBzdXJlIHRvIGxv
+b2sgYXQgdGhlIGNvbnRyaWJ1dG9yJ3MgCmd1aWRlIFsxXS4KClsxXSBodHRwOi8vbHR0bmcub3Jn
+L2NvbW11bml0eS8jY29udHJpYnV0b3JzLWd1aWRlCgoKT24gMjAxNi0wNy0xOSAwMzoxOCBQTSwg
+QW5kZXJzIFdhbGxpbiB3cm90ZToKPiBIaSwKPgo+IG9ubHkgb25lIGNsb2NrIHBsdWdpbiBjYW4g
+YmUgdXNlZCB3aGVuIGJ1aWxkaW5nIGx0dG5nIGluc2lkZSB0aGUga2VybmVsLgo+IFRvIGJlIGFi
+bGUgdG8gd3JpdGUgYSBjdXN0b20gY2xvY2sgcGx1Z2luIGl0IHNob3VsZCBiZSBwb3NzaWJsZSB0
+byBub3QKPiBidWlsZCB0aGUgdGVzdCBjbG9jayBwbHVnaW4uCj4KPiBUaGlzIGFwcGVuZGVkIHBh
+dGNoIGlzIG9uZSB3YXkgdG8gbWFrZSB0aGlzIHBvc3NpYmxlLgoKV2hhdCB3b3VsZCBiZSB0aGUg
+YWx0ZXJuYXRpdmUgPwoKQ2hlZXJzCgo+Cj4gUmVnYXJkcwo+IEFuZGVycyBXYWxsaW4KPgo+Cj4g
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1k
+ZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBzOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCi0tIApKb25h
+dGhhbiBSLiBKdWxpZW4KRWZmaWNpb3MKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0
+dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
+bHR0bmctZGV2Cg==
