@@ -1,16 +1,17 @@
-From: Sebastien Boisvert <sboisvert@gydle.com>
-Subject: Re: URCU C++ wrapper?
-Date: Mon, 18 Jul 2016 11:22:52 -0400
-Message-ID: <578CF44C.2040907__19352.8429409072$1468855291$gmane$org@gydle.com>
-References: <CACNseid7w-nSAOJvGph1P6_nGroMPHqUT_oJAp+x_Y5_MCmmgA@mail.gmail.com>
- <1617651200.73768.1468855029639.JavaMail.zimbra@efficios.com>
+From: Anders Wallin <wallinux@gmail.com>
+Subject: It should be possible to build lttng w/o the test clock
+	plugin.
+Date: Tue, 19 Jul 2016 21:18:17 +0200
+Message-ID: <CAF2baFdXVFeg4yYHPUhi2Tmh3ghS1H0jSLMdUJF=NNjj_+72+A__16476.1658445515$1468955922$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3895218078847132616=="
+Content-Type: multipart/mixed; boundary=001a11402298824fa6053801f29a
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 1F228A3BEF
- for <lttng-dev@lists.lttng.org>; Mon, 18 Jul 2016 15:21:10 +0000 (UTC)
-In-Reply-To: <1617651200.73768.1468855029639.JavaMail.zimbra@efficios.com>
+Received: from mail-lf0-f42.google.com (mail-lf0-f42.google.com
+ [209.85.215.42])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 23478A3BE7
+ for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2016 19:18:19 +0000 (UTC)
+Received: by mail-lf0-f42.google.com with SMTP id g62so22149825lfe.3
+ for <lttng-dev@lists.lttng.org>; Tue, 19 Jul 2016 12:18:19 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,152 +21,76 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, noam cohen <noam1023@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
---===============3895218078847132616==
-Content-Type: multipart/alternative;
- boundary="------------020409030200070603040902"
+--001a11402298824fa6053801f29a
+Content-Type: text/plain; charset=UTF-8
 
-This is a multi-part message in MIME format.
---------------020409030200070603040902
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Hi,
 
-Perhaps he wants a drop-in replacement of std::unordered_map.
+only one clock plugin can be used when building lttng inside the kernel.
+To be able to write a custom clock plugin it should be possible to not
+build the test clock plugin.
 
-On 07/18/2016 11:17 AM, Mathieu Desnoyers wrote:
->
-> ----- On Jul 17, 2016, at 2:25 AM, noam cohen <noam1023@gmail.com> wrote:
->
->     Hi
->     Has anyone created a c++ wrapper to the hashtable?
->     If not, I will try to roll my own and give back as a pull request.
->
->
-> There are extern "C" guards around the rculfhash.h header. This should
-> allow you to use rculfhash from C++ code. Do you have something else
-> in mind ?
->
-> Thanks,
->
-> Mathieu
->
->
->     Thanks
->     Noam C
->
->     _______________________________________________
->     lttng-dev mailing list
->     lttng-dev@lists.lttng.org
->     https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+This appended patch is one way to make this possible.
 
+Regards
+Anders Wallin
 
---------------020409030200070603040902
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: 7bit
+--001a11402298824fa6053801f29a
+Content-Type: text/x-patch; charset=US-ASCII;
+	name="0001-Added-kernel-configuration-for-lttng-clock-plugin.patch"
+Content-Disposition: attachment;
+	filename="0001-Added-kernel-configuration-for-lttng-clock-plugin.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_iqtuecnf0
 
-<html>
-  <head>
-    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-  </head>
-  <body text="#000000" bgcolor="#FFFFFF">
-    Perhaps he wants a drop-in replacement of std::unordered_map.<br>
-    <br>
-    <div class="moz-cite-prefix">On 07/18/2016 11:17 AM, Mathieu
-      Desnoyers wrote:<br>
-    </div>
-    <blockquote
-      cite="mid:1617651200.73768.1468855029639.JavaMail.zimbra@efficios.com"
-      type="cite">
-      <div style="font-family: arial, helvetica, sans-serif; font-size:
-        12pt; color: #000000">
-        <div><br>
-        </div>
-        <div><span id="zwchr" data-marker="__DIVIDER__">----- On Jul 17,
-            2016, at 2:25 AM, noam cohen <a class="moz-txt-link-rfc2396E" href="mailto:noam1023@gmail.com">&lt;noam1023@gmail.com&gt;</a>
-            wrote:<br>
-          </span></div>
-        <div data-marker="__QUOTED_TEXT__">
-          <blockquote style="border-left:2px solid
-#1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;">
-            <div dir="ltr">Hi
-              <div>Has anyone created a c++ wrapper to the hashtable?</div>
-              <div>If not, I will try to roll my own and give back as a
-                pull request.</div>
-            </div>
-          </blockquote>
-          <div><br>
-          </div>
-          <div>There are extern "C" guards around the rculfhash.h
-            header. This should<br data-mce-bogus="1">
-          </div>
-          <div>allow you to use rculfhash from C++ code. Do you have
-            something else<br data-mce-bogus="1">
-          </div>
-          <div>in mind ?<br data-mce-bogus="1">
-          </div>
-          <div><br data-mce-bogus="1">
-          </div>
-          <div>Thanks,<br data-mce-bogus="1">
-          </div>
-          <div><br data-mce-bogus="1">
-          </div>
-          <div>Mathieu<br data-mce-bogus="1">
-          </div>
-          <div><br data-mce-bogus="1">
-          </div>
-          <blockquote style="border-left:2px solid
-#1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;">
-            <div dir="ltr"><br>
-              <div>Thanks</div>
-              <div>Noam C</div>
-            </div>
-            <br>
-            _______________________________________________<br>
-            lttng-dev mailing list<br>
-            <a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><br>
-            <a class="moz-txt-link-freetext" href="https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br>
-          </blockquote>
-        </div>
-        <div><br>
-        </div>
-        <div data-marker="__SIG_POST__">-- <br>
-        </div>
-        <div>Mathieu Desnoyers<br>
-          EfficiOS Inc.<br>
-          <a class="moz-txt-link-freetext" href="http://www.efficios.com">http://www.efficios.com</a></div>
-      </div>
-      <br>
-      <fieldset class="mimeAttachmentHeader"></fieldset>
-      <br>
-      <pre wrap="">_______________________________________________
-lttng-dev mailing list
-<a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>
-<a class="moz-txt-link-freetext" href="https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
-</pre>
-    </blockquote>
-    <br>
-  </body>
-</html>
-
---------------020409030200070603040902--
-
---===============3895218078847132616==
+RnJvbSBkNmIyY2Q2ZGNjZjlmM2ZkOGI0YWVhMzRkYTVmY2EwZmYzNTJkZTUxIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpNZXNzYWdlLUlkOiA8ZDZiMmNkNmRjY2Y5ZjNmZDhiNGFlYTM0ZGE1ZmNh
+MGZmMzUyZGU1MS4xNDY4OTU1Nzg1LmdpdC5hbmRlcnMud2FsbGluQHdpbmRyaXZlci5jb20+CkZy
+b206IEFuZGVycyBXYWxsaW4gPGFuZGVycy53YWxsaW5Ad2luZHJpdmVyLmNvbT4KRGF0ZTogVHVl
+LCAxOSBKdWwgMjAxNiAyMTowNjowOSArMDIwMApTdWJqZWN0OiBbUEFUQ0ggMS8xXSBBZGRlZCBr
+ZXJuZWwgY29uZmlndXJhdGlvbiBmb3IgbHR0bmcgY2xvY2sgcGx1Z2luCgpPbmx5IG9uZSBsdHRu
+ZyBjbG9jayBwbHVnaW4gY2FuIGJlIHVzZWQgYW5kIHRvIG1ha2UgaXQgcG9zc2libGUgdG8gdXNl
+IGEKY3VzdG9tIGNsb2NrIHRoZSB0ZXN0IHBsdWdpbiBtdXN0IGJlIHVuY29uZmlndXJlZAoKU2ln
+bmVkLW9mZi1ieTogQW5kZXJzIFdhbGxpbiA8YW5kZXJzLndhbGxpbkB3aW5kcml2ZXIuY29tPgot
+LS0KIEtjb25maWcgICAgICAgfCAyICsrCiBNYWtlZmlsZSAgICAgIHwgNiArKystLS0KIHRlc3Rz
+L0tidWlsZCAgfCAyICstCiB0ZXN0cy9LY29uZmlnIHwgNyArKysrKysrCiA0IGZpbGVzIGNoYW5n
+ZWQsIDEzIGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9kZSAxMDA2NDQg
+dGVzdHMvS2NvbmZpZwoKZGlmZiAtLWdpdCBhL0tjb25maWcgYi9LY29uZmlnCmluZGV4IDZiNGFk
+NjguLmMzNTBiOWIgMTAwNjQ0Ci0tLSBhL0tjb25maWcKKysrIGIvS2NvbmZpZwpAQCAtMTAsMyAr
+MTAsNSBAQCBjb25maWcgTFRUTkcKIAkgIHRoZSBMaW51eCBrZXJuZWwgaW1hZ2UsIGNob29zZSBZ
+LgogCiAJICBJZiB1bnN1cmUsIHNheSBOLgorCitzb3VyY2UgImx0dG5nL3Rlc3RzL0tjb25maWci
+CmRpZmYgLS1naXQgYS9NYWtlZmlsZSBiL01ha2VmaWxlCmluZGV4IGMyYjEyMTMuLjg2MDI2NDkg
+MTAwNjQ0Ci0tLSBhL01ha2VmaWxlCisrKyBiL01ha2VmaWxlCkBAIC0xMDcsMTUgKzEwNywxNSBA
+QCBDRkxBR1MgPSAkKEVYVENGTEFHUykKIGRlZmF1bHQ6IG1vZHVsZXMKIAogbW9kdWxlczoKLQkk
+KE1BS0UpIC1DICQoS0VSTkVMRElSKSBNPSQoUFdEKSBDT05GSUdfTFRUTkc9bSBtb2R1bGVzCisJ
+JChNQUtFKSAtQyAkKEtFUk5FTERJUikgTT0kKFBXRCkgQ09ORklHX0xUVE5HPW0gQ09ORklHX0xU
+VE5HX0NMT0NLX1BMVUdJTl9URVNUPW0gbW9kdWxlcwogCiBtb2R1bGVzX2luc3RhbGw6Ci0JJChN
+QUtFKSAtQyAkKEtFUk5FTERJUikgTT0kKFBXRCkgQ09ORklHX0xUVE5HPW0gbW9kdWxlc19pbnN0
+YWxsCisJJChNQUtFKSAtQyAkKEtFUk5FTERJUikgTT0kKFBXRCkgQ09ORklHX0xUVE5HPW0gQ09O
+RklHX0xUVE5HX0NMT0NLX1BMVUdJTl9URVNUPW0gbW9kdWxlc19pbnN0YWxsCiAKIGNsZWFuOgog
+CSQoTUFLRSkgLUMgJChLRVJORUxESVIpIE09JChQV0QpIGNsZWFuCiAKICUuaTogJS5jCi0JJChN
+QUtFKSAtQyAkKEtFUk5FTERJUikgTT0kKFBXRCkgQ09ORklHX0xUVE5HPW0gJEAKKwkkKE1BS0Up
+IC1DICQoS0VSTkVMRElSKSBNPSQoUFdEKSBDT05GSUdfTFRUTkc9bSBDT05GSUdfTFRUTkdfQ0xP
+Q0tfUExVR0lOX1RFU1Q9bSAkQAogCiBlbmRpZiAjIEtFUk5FTFJFTEVBU0UKZGlmZiAtLWdpdCBh
+L3Rlc3RzL0tidWlsZCBiL3Rlc3RzL0tidWlsZAppbmRleCA1ZTQ5MDA3Li5hYWJiOGUyIDEwMDY0
+NAotLS0gYS90ZXN0cy9LYnVpbGQKKysrIGIvdGVzdHMvS2J1aWxkCkBAIC03LDcgKzcsNyBAQCBj
+Y2ZsYWdzLXkgKz0gLUkkKFRPUF9MVFROR19NT0RVTEVTX0RJUikKIG9iai0kKENPTkZJR19MVFRO
+RykgKz0gbHR0bmctdGVzdC5vCiBsdHRuZy10ZXN0LW9ianMgOj0gcHJvYmVzL2x0dG5nLXRlc3Qu
+bwogCi1vYmotJChDT05GSUdfTFRUTkcpICs9IGx0dG5nLWNsb2NrLXBsdWdpbi10ZXN0Lm8KK29i
+ai0kKENPTkZJR19MVFROR19DTE9DS19QTFVHSU5fVEVTVCkgKz0gbHR0bmctY2xvY2stcGx1Z2lu
+LXRlc3QubwogbHR0bmctY2xvY2stcGx1Z2luLXRlc3Qtb2JqcyA6PSBjbG9jay1wbHVnaW4vbHR0
+bmctY2xvY2stcGx1Z2luLXRlc3QubwogCiAjIHZpbTpzeW50YXg9bWFrZQpkaWZmIC0tZ2l0IGEv
+dGVzdHMvS2NvbmZpZyBiL3Rlc3RzL0tjb25maWcKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXgg
+MDAwMDAwMC4uOWE3NDg2NwotLS0gL2Rldi9udWxsCisrKyBiL3Rlc3RzL0tjb25maWcKQEAgLTAs
+MCArMSw3IEBACitjb25maWcgTFRUTkdfQ0xPQ0tfUExVR0lOX1RFU1QKKyAgICAgICB0cmlzdGF0
+ZSAiVXNlIFRlc3QgcGx1Z2luIGFzIHRyYWNlIGNsb2NrIgorICAgICAgIGRlcGVuZHMgb24gTFRU
+TkcKKyAgICAgICBoZWxwCisJIFVzZSB0aGUgVGVzdCBjbG9jayBhcyB0cmFjZSBjbG9jay4gVGhp
+cyBwbHVnaW4gZnJlZXplcyB0aGUKKwkgdGltZSB3aXRoIDEgS0h6IGZvciByZWdyZXNzaW9uIHRl
+c3QKKwotLSAKMi45LjEKCg==
+--001a11402298824fa6053801f29a
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -175,4 +100,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============3895218078847132616==--
+--001a11402298824fa6053801f29a--
