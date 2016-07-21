@@ -1,19 +1,20 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: Re: Babeltrace, Python3, and the Event Declarations
-Date: Wed, 20 Jul 2016 13:19:55 -0400
-Message-ID: <CAB4xu_3y_XbVGxxKjFyPO=S_YJf=Uz2xD1GckBKZaQD39rRa-Q__45431.5412826419$1469035251$gmane$org@mail.gmail.com>
-References: <48CF5AC71E61DB46B70D0F388054EFFDB7D9ECC8@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+From: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
+Subject: Practical recommendation for max update rate with QSBR
+Date: Thu, 21 Jul 2016 20:47:41 +0000 (UTC)
+Message-ID: <208245300.3358603.1469134061370.JavaMail.yahoo__24491.2670380019$1469134106$gmane$org@mail.yahoo.com>
+References: <1733955808.5920250.1465238884157.JavaMail.yahoo.ref@mail.yahoo.com>
+ <1733955808.5920250.1465238884157.JavaMail.yahoo@mail.yahoo.com>
+ <188943617.29620.1465243726034.JavaMail.zimbra@efficios.com>
+ <897997834.5701164.1465244342476.JavaMail.yahoo@mail.yahoo.com>
+Reply-To: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============3642239947226065849=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-f174.google.com (mail-qk0-f174.google.com
- [209.85.220.174])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id B7968A3C03
- for <lttng-dev@lists.lttng.org>; Wed, 20 Jul 2016 17:20:25 +0000 (UTC)
-Received: by mail-qk0-f174.google.com with SMTP id p74so51438592qka.0
- for <lttng-dev@lists.lttng.org>; Wed, 20 Jul 2016 10:20:25 -0700 (PDT)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFDB7D9ECC8@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Received: from nm9-vm0.bullet.mail.bf1.yahoo.com
+ (nm9-vm0.bullet.mail.bf1.yahoo.com [98.139.213.154])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 223B2A2B5B
+ for <lttng-dev@lists.lttng.org>; Thu, 21 Jul 2016 20:47:57 +0000 (UTC)
+In-Reply-To: <897997834.5701164.1465244342476.JavaMail.yahoo@mail.yahoo.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,40 +24,49 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gV2VkLCBKdWwgMjAsIDIwMTYgYXQgMTI6NDUgUE0sIFRoaWJhdWx0LCBEYW5pZWwKPERhbmll
-bC5UaGliYXVsdEBkcmRjLXJkZGMuZ2MuY2E+IHdyb3RlOgo+ICAgIEknbSB0aW5rZXJpbmcgd2l0
-aCB0aGUgUHl0aG9uIDMgYmluZGluZ3MgZm9yIGJhYmVsdHJhY2UsIGFuZCBJJ3ZlIGNvbWUgdXBv
-biBhbiBvZGQgZmVhdHVyZTogZm9yIGEgZ2l2ZW4gdHJhY2UsIGlmIEkgYXNrIGZvciB0aGUgRXZl
-bnREZWNsYXJhdGlvbnMgKHVzaW5nIHRoZSBUcmFjZUhhbmRsZSksIEkgZW5kIHVwIGdldHRpbmcg
-dGhlIHNldCBvZiBldmVudCBkZWNsYXJhdGlvbnMgZHVwbGljYXRlZCBhcyBtYW55IHRpbWVzIGFz
-IHRoZXJlIGFyZSBjaGFubmVscy4gQW5kIEkgbWVhbiBleGFjdCBkdXBsaWNhdGVzLgo+Cj4gICAg
-SXQncyB1bmRlcnN0YW5kYWJsZSB0aGF0IGV2ZW50IGRlY2xhcmF0aW9ucyBtYXkgcmVjdXIgYmV0
-d2VlbiB0cmFjZXMgcGFydCBvZiBhIHNpbmdsZSBjb2xsZWN0aW9uLCBidXQgd2l0aGluIGEgc2lu
-Z2xlIHRyYWNlPyAgQW5kIGJldHdlZW4gY2hhbm5lbHM/Cj4KPiAgICBJIGxvb2tlZCBhdCB0aGUg
-cmF3IG1ldGFkYXRhIGZpbGUgb2YgdGhlIHRyYWNlLCBhbmQgdGhhdCBkdXBsaWNhdGlvbiBpcyBh
-bHNvIHByZXNlbnQKClRoZW4gQmFiZWx0cmFjZSBkb2VzIGl0cyBqb2IgcmlnaHQuCgo+ICwgc28g
-SSBzdXBwb3NlIG90aGVyIGJhYmVsdHJhY2UgYmluZGluZ3MgdGhhbiBQeXRob24gd2lsbCBydW4g
-aW50byB0aGlzLgoKVGhleSBkbyBub3QgZXhpc3QuIEJ1dCB5ZXMsIHRoZXkgd291bGQuCgpQaGls
-Cgo+Cj4gRGFuaWVsIFUuIFRoaWJhdWx0LCBNLlNjLsKyCj4KPiBJbmZvcm1hdGljaWVuIHNjaWVu
-dGlmaXF1ZSwgQ01FLVBTQywgQ2VudHJlIGRlIHJlY2hlcmNoZXMgZGUgVmFsY2FydGllcgo+IFJl
-Y2hlcmNoZSBldCBkw6l2ZWxvcHBlbWVudCBwb3VyIGxhIGTDqWZlbnNlIENhbmFkYSAvIEdvdXZl
-cm5lbWVudCBkdSBDYW5hZGEKPiBkYW5pZWwudGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhIC8gVMOp
-bDogNDE4LTg0NC00MDAweDQyNDUgVMOpbMOpYzogNDE4LTg0NC00NTM4Cj4gZGFuaWVsLnRoaWJh
-dWx0QGZvcmNlcy5nYy5jYSAvIFTDqWw6IDQxOC04NDQtNDAwMHg0MjQ1IFTDqWzDqWM6IDQxOC04
-NDQtNDUzOAo+Cj4gQ29tcHV0ZXIgU2NpZW50aXN0LCBNQ0NTLVNQQywgVmFsY2FydGllciBSZXNl
-YXJjaCBDZW50cmUKPiBEZWZlbmNlIFJlc2VhcmNoIGFuZCBEZXZlbG9wbWVudCBDYW5hZGEgLyBH
-b3Zlcm5tZW50IG9mIENhbmFkYQo+IGRhbmllbC50aGliYXVsdEBkcmRjLXJkZGMuZ2MuY2EgLyBU
-ZWw6IDQxOC04NDQtNDAwMHg0MjQ1IEZheDogNDE4LTg0NC00NTM4Cj4gZGFuaWVsLnRoaWJhdWx0
-QGZvcmNlcy5nYy5jYSAvIFRlbDogNDE4LTg0NC00MDAweDQyNDUgRmF4OiA0MTgtODQ0LTQ1MzgK
-Pgo+IERSREMgaXMgYW4gYWdlbmN5IG9mIHRoZSBEZXBhcnRtZW50IG9mIE5hdGlvbmFsIERlZmVu
-Y2UgLyBSRERDIGVzdCB1bmUgYWdlbmNlIGR1IG1pbmlzdMOocmUgZGUgbGEgRMOpZmVuc2UgbmF0
-aW9uYWxlCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0
-dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============3642239947226065849==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_3358602_1614967075.1469134061368"
+
+------=_Part_3358602_1614967075.1469134061368
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+All,
+I've read the documentation regarding reader throughput drop-offs with high update rates due to the pointer exchanging between readers-writers, and the general admonition of using URCU only for mostly-read workloads with relatively infrequent updates.
+However, is there a general rule-of-thumb suggestion for highest recommended update rate sustainable for optimal performance with URCU (in particular, the QSBR flavor) for highly threaded applications deployed on high core count machines (Intel)? The example case would be a single updater and 20 - 30 reader threads.
+------=_Part_3358602_1614967075.1469134061368
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head></head><body><div style=3D"color:#000; background-color:#fff; f=
+ont-family:HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, =
+sans-serif;font-size:16px"><div id=3D"yui_3_16_0_ym19_1_1469131414329_10925=
+">All,</div><div id=3D"yui_3_16_0_ym19_1_1469131414329_10925"><br></div><di=
+v id=3D"yui_3_16_0_ym19_1_1469131414329_10925">I've read the documentation =
+regarding reader throughput drop-offs with high update rates due to the poi=
+nter exchanging between readers-writers, and the general admonition of usin=
+g URCU only for mostly-read workloads with relatively infrequent updates.</=
+div><div id=3D"yui_3_16_0_ym19_1_1469131414329_10925"><br></div><div id=3D"=
+yui_3_16_0_ym19_1_1469131414329_10925">However, is there a general rule-of-=
+thumb suggestion for highest recommended update rate sustainable for optima=
+l performance with URCU (in particular, the QSBR flavor) for highly threade=
+d applications deployed on high core count machines (Intel)? The example ca=
+se would be a single updater and 20 - 30 reader threads.</div></div></body>=
+</html>
+------=_Part_3358602_1614967075.1469134061368--
+
+--===============3642239947226065849==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
 X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============3642239947226065849==--
