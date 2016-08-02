@@ -1,15 +1,20 @@
-From: Jenny Gu <jenny.gu@ericsson.com>
-Subject: about how to trouble-shooting when lttng-sessiond crash
-	happens.
-Date: Tue, 26 Jul 2016 09:03:21 +0000
-Message-ID: <BA3C5551E429FF4696E330920448E90B1A2D72D0__10347.7406235927$1470160198$gmane$org@ESGSCMB101.ericsson.se>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: about how to trouble-shooting when lttng-sessiond
+ crash happens.
+Date: Tue, 2 Aug 2016 15:09:48 -0400
+Message-ID: <CA+jJMxv8+_t5GXtD5iPG5fa9fc=2DCcUDqmftRS-uNuwmO=7dQ__31765.7230109491$1470165010$gmane$org@mail.gmail.com>
+References: <BA3C5551E429FF4696E330920448E90B1A2D72D0@ESGSCMB101.ericsson.se>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3232565378845106793=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sessmg23.ericsson.net (sessmg23.ericsson.net [193.180.251.45])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id DDAF3A3C1B
- for <lttng-dev@lists.lttng.org>; Tue, 26 Jul 2016 09:03:25 +0000 (UTC)
-Content-Language: en-US
+Received: from mail-vk0-f47.google.com (mail-vk0-f47.google.com
+ [209.85.213.47])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 75C4DA2ABE
+ for <lttng-dev@lists.lttng.org>; Tue,  2 Aug 2016 19:09:50 +0000 (UTC)
+Received: by mail-vk0-f47.google.com with SMTP id w127so129925736vkh.2
+ for <lttng-dev@lists.lttng.org>; Tue, 02 Aug 2016 12:09:50 -0700 (PDT)
+In-Reply-To: <BA3C5551E429FF4696E330920448E90B1A2D72D0@ESGSCMB101.ericsson.se>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,110 +24,27 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Jenny Gu <jenny.gu@ericsson.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============3232565378845106793==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_BA3C5551E429FF4696E330920448E90B1A2D72D0ESGSCMB101erics_"
-
---_000_BA3C5551E429FF4696E330920448E90B1A2D72D0ESGSCMB101erics_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-We're now applying lttng 2.5 in our system but we experienced lttng-session=
-d crash. Could you show how to dump the back trace of the core? Thanks very=
- much.
-
-BRs,
-Jenny.
-
---_000_BA3C5551E429FF4696E330920448E90B1A2D72D0ESGSCMB101erics_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:\5B8B\4F53;
-	panose-1:2 1 6 0 3 1 1 1 1 1;}
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-@font-face
-	{font-family:"\@\5B8B\4F53";
-	panose-1:2 1 6 0 3 1 1 1 1 1;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri",sans-serif;}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:blue;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:purple;
-	text-decoration:underline;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri",sans-serif;
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-family:"Calibri",sans-serif;}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.25in 1.0in 1.25in;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-US" link=3D"blue" vlink=3D"purple">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal">Hi all, <o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">We&#8217;re now applying lttng 2.5 in our system but=
- we experienced lttng-sessiond crash. Could you show how to dump the back t=
-race of the core? Thanks very much.<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">BRs,<o:p></o:p></p>
-<p class=3D"MsoNormal">Jenny.<o:p></o:p></p>
-</div>
-</body>
-</html>
-
---_000_BA3C5551E429FF4696E330920448E90B1A2D72D0ESGSCMB101erics_--
-
---===============3232565378845106793==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============3232565378845106793==--
+SGkgSmVubnksCgpMVFRuZyAyLjUgaGFzIGJlZW4gdW5zdXBwb3J0ZWQgZm9yIGEgd2hpbGUgbm93
+LiBUaGUgb2xkZXN0IHN1cHBvcnRlZAp2ZXJzaW9uIGlzIExUVG5nIDIuNy4gWW91IG1heSB3YW50
+IHRvIHVwZGF0ZSB0byB0aGUgbGF0ZXN0IExUVG5nIDIuOC54CnJlbGVhc2UgYW5kIHNlZSBpZiB0
+aGUgcHJvYmxlbSBwZXJzaXN0cy4KCkFzIGZvciBob3cgdG8gY29sbGVjdCBhIGJhY2sgdHJhY2Us
+IGlmIHlvdSBoYXZlIGNvbGxlY3RlZCBhIGNvcmUgZmlsZSwKb3BlbiBpdCBpbiBHREIgYW5kIHVz
+ZToKCihnZGIpIHRocmVhZCBhcHBseSBhbGwgYnQgZnVsbAoKVGhpcyBzaG91bGQgcHJvdmlkZSB5
+b3Ugd2l0aCBhIGNvbXBsZXRlIGJhY2sgdHJhY2Ugb2YgYWxsIHRocmVhZHMgYXQKdGhlIHRpbWUg
+b2YgdGhlIGNyYXNoLgoKUmVnYXJkcywKSsOpcsOpbWllCgpPbiBUdWUsIEp1bCAyNiwgMjAxNiBh
+dCA1OjAzIEFNLCBKZW5ueSBHdSA8amVubnkuZ3VAZXJpY3Nzb24uY29tPiB3cm90ZToKPiBIaSBh
+bGwsCj4KPgo+Cj4gV2XigJlyZSBub3cgYXBwbHlpbmcgbHR0bmcgMi41IGluIG91ciBzeXN0ZW0g
+YnV0IHdlIGV4cGVyaWVuY2VkIGx0dG5nLXNlc3Npb25kCj4gY3Jhc2guIENvdWxkIHlvdSBzaG93
+IGhvdyB0byBkdW1wIHRoZSBiYWNrIHRyYWNlIG9mIHRoZSBjb3JlPyBUaGFua3MgdmVyeQo+IG11
+Y2guCj4KPgo+Cj4gQlJzLAo+Cj4gSmVubnkuCj4KPgo+IF9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZm
+aWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
+dkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
+L2xpc3RpbmZvL2x0dG5nLWRldgo=
