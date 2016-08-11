@@ -1,15 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Tracing network events in the kernel using lttng
-Date: Fri, 12 Aug 2016 20:41:45 +0000 (UTC)
-Message-ID: <1729632151.9416.1471034505021.JavaMail.zimbra__47470.7374735319$1471034517$gmane$org@efficios.com>
-References: <CAFMzwX6csrXt6aQwy0b7oW7CzfEKRr28uXYZcE4NhPrOWyCr4g@mail.gmail.com>
+From: Muni Sekhar <munisekharrms@gmail.com>
+Subject: Re: lttng view - doubt
+Date: Thu, 11 Aug 2016 14:47:36 +0530
+Message-ID: <CAHhAz+gmqMC4ULLHgBwspYjdPJv_X8QGTMLLcifzgJvQvKAthg__37768.2060622194$1471213067$gmane$org@mail.gmail.com>
+References: <CAHhAz+inXQ-fqkL61Gfo2wp3owiAN_SxCwyjtp8hZvVnHq9GwQ@mail.gmail.com>
+ <CA+jJMxsujC2iPpmjp6CcWYMVrD7owLG-zNBCfiRxpJVX+P7b+Q@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4491335953373007523=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 4C435A2B0E
- for <lttng-dev@lists.lttng.org>; Fri, 12 Aug 2016 20:41:46 +0000 (UTC)
-In-Reply-To: <CAFMzwX6csrXt6aQwy0b7oW7CzfEKRr28uXYZcE4NhPrOWyCr4g@mail.gmail.com>
+Received: from mail-it0-f54.google.com (mail-it0-f54.google.com
+ [209.85.214.54])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id BC705A037D
+ for <lttng-dev@lists.lttng.org>; Thu, 11 Aug 2016 09:17:42 +0000 (UTC)
+Received: by mail-it0-f54.google.com with SMTP id x130so709890ite.1
+ for <lttng-dev@lists.lttng.org>; Thu, 11 Aug 2016 02:17:42 -0700 (PDT)
+In-Reply-To: <CA+jJMxsujC2iPpmjp6CcWYMVrD7owLG-zNBCfiRxpJVX+P7b+Q@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,173 +24,46 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Adel Belkhiri <adel.belkhiri@ensi-uma.tn>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Trace Compass Developer Discussions <tracecompass-dev@eclipse.org>, Alexandre Montplaisir <alexmonthy@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============4491335953373007523==
-Content-Type: multipart/alternative;
-	boundary="=_9e7480f2-b7e8-46e3-82d5-795d7363884b"
-
---=_9e7480f2-b7e8-46e3-82d5-795d7363884b
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
------ On Aug 12, 2016, at 12:50 AM, Adel Belkhiri <adel.belkhiri@ensi-uma.t=
-n> wrote:=20
-
-> Hello,
-
-> I'm, from some time, working on tracing linux kernel using lttng to get s=
-ome
-> information about the system' network activities. Tracing bare system cal=
-ls
-> (--syscall) didn't give me much information so I realized that i should f=
-irst
-> place some static probes in the kernel source files to be able to trace
-> (mainly) TCP socket operations (bind, accept, create, ...). Running out o=
-f time
-> in my project, I wonder if there are any patch for the kernel that place =
-those
-> probes in the right source files.
-
-> My linux Kernel version is 3.2.0-4-486 and I'm using Lttng 2.7.
-
-You'll be interested in recent commits that made their way into lttng=20
-master branch:=20
-
-At the networking level:=20
-
-commit e5990fd415d46da69523dfe7943bc3168664fde8=20
-Author: Genevi=C3=A8ve Bastien <gbastien+lttng@versatic.net>=20
-Date: Mon Jul 11 09:34:02 2016 -0400=20
-
-net: Add IPv4/IPv6 header data to net_* tracepoints=20
-
-commit 9cf9736a1715a1fec4857fac2784a12596675ce2=20
-Author: Genevi=C3=A8ve Bastien <gbastien+lttng@versatic.net>=20
-Date: Tue Jul 12 13:26:14 2016 -0400=20
-
-net: Add TCP header data to net_* tracepoints=20
-
-and for the accept and connect syscalls (in stable-2.8 and=20
-master):=20
-
-commit 7ca580f8aca4f8c2b9e0066ad52ebfc226b3d645=20
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>=20
-Date: Thu Jul 24 12:47:46 2014 -0400=20
-
-Extract input/output arguments from accept and connect syscalls=20
-
-This is all you should need to extract the kind of information you=20
-want. Perhaps we should add other specialized system call=20
-tracepoint probe functions to get more information about the=20
-arguments, but it should not require any kernel modification nor=20
-dynamic probing.=20
-
-Hoping this helps!=20
-
-Mathieu=20
-
-> Thank very much you for your help.
-
-> Adel Belkhiri
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---=20
-Mathieu Desnoyers=20
-EfficiOS Inc.=20
-http://www.efficios.com=20
-
---=_9e7480f2-b7e8-46e3-82d5-795d7363884b
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
-__">----- On Aug 12, 2016, at 12:50 AM, Adel Belkhiri &lt;adel.belkhiri@ens=
-i-uma.tn&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><b=
-lockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-le=
-ft:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none=
-;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><=
-span style=3D"font-family: arial,helvetica,sans-serif;" data-mce-style=3D"f=
-ont-family: arial,helvetica,sans-serif;" face=3D"arial, helvetica, sans-ser=
-if">Hello,</span><div><span style=3D"font-family: arial,helvetica,sans-seri=
-f;" data-mce-style=3D"font-family: arial,helvetica,sans-serif;" face=3D"ari=
-al, helvetica, sans-serif"><br></span></div><div><span style=3D"font-family=
-: arial,helvetica,sans-serif;" data-mce-style=3D"font-family: arial,helveti=
-ca,sans-serif;" face=3D"arial, helvetica, sans-serif"><br></span></div><div=
-><span style=3D"font-family: arial,helvetica,sans-serif;" data-mce-style=3D=
-"font-family: arial,helvetica,sans-serif;" face=3D"arial, helvetica, sans-s=
-erif">I'm, from some time, working on tracing linux kernel using lttng to g=
-et some information about the system' network activities.&nbsp;Tracing bare=
- system calls (--syscall) didn't give me much information so I realized tha=
-t i should first place some static probes in the kernel source files to be =
-able to trace (mainly) <b>TCP socket operations</b> (bind, accept, create, =
-...). Running out of time in my project, I wonder if there are <b>any patch=
- for the kernel</b> that place those probes in the right source files.&nbsp=
-;</span></div><div><span style=3D"font-family: arial,helvetica,sans-serif;"=
- data-mce-style=3D"font-family: arial,helvetica,sans-serif;" face=3D"arial,=
- helvetica, sans-serif"><br></span></div><div><span style=3D"font-family: a=
-rial,helvetica,sans-serif;" data-mce-style=3D"font-family: arial,helvetica,=
-sans-serif;" face=3D"arial, helvetica, sans-serif">My linux Kernel version =
-is&nbsp;3.2.0-4-486 and I'm using Lttng 2.7.</span></div></div></blockquote=
-><div><br></div><div>You'll be interested in recent commits that made their=
- way into lttng</div><div>master branch:<br data-mce-bogus=3D"1"></div><div=
-><br data-mce-bogus=3D"1"></div><div>At the networking level:<br data-mce-b=
-ogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>commit e5990fd415=
-d46da69523dfe7943bc3168664fde8<br>Author: Genevi=C3=A8ve Bastien &lt;gbasti=
-en+lttng@versatic.net&gt;<br>Date:&nbsp;&nbsp; Mon Jul 11 09:34:02 2016 -04=
-00<br><br>&nbsp;&nbsp;&nbsp; net: Add IPv4/IPv6 header data to net_* tracep=
-oints<br><br data-mce-bogus=3D"1"></div><div>commit 9cf9736a1715a1fec4857fa=
-c2784a12596675ce2<br>Author: Genevi=C3=A8ve Bastien &lt;gbastien+lttng@vers=
-atic.net&gt;<br>Date:&nbsp;&nbsp; Tue Jul 12 13:26:14 2016 -0400<br><br>&nb=
-sp;&nbsp;&nbsp; net: Add TCP header data to net_* tracepoints<br><br data-m=
-ce-bogus=3D"1"></div><div>and for the accept and connect syscalls (in stabl=
-e-2.8 and<br data-mce-bogus=3D"1"></div><div>master):<br data-mce-bogus=3D"=
-1"></div><div><br data-mce-bogus=3D"1"></div><div>commit 7ca580f8aca4f8c2b9=
-e0066ad52ebfc226b3d645<br>Author: Mathieu Desnoyers &lt;mathieu.desnoyers@e=
-fficios.com&gt;<br>Date:&nbsp;&nbsp; Thu Jul 24 12:47:46 2014 -0400<br><br>=
-&nbsp;&nbsp;&nbsp; Extract input/output arguments from accept and connect s=
-yscalls<br><br data-mce-bogus=3D"1"></div><div>This is all you should need =
-to extract the kind of information you<br data-mce-bogus=3D"1"></div><div>w=
-ant. Perhaps we should add other specialized system call<br data-mce-bogus=
-=3D"1"></div><div>tracepoint probe functions to get more information about =
-the<br data-mce-bogus=3D"1"></div><div>arguments, but it should not require=
- any kernel modification nor<br data-mce-bogus=3D"1"></div><div>dynamic pro=
-bing.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><di=
-v>Hoping this helps!<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=
-=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-b=
-ogus=3D"1"></div><blockquote style=3D"border-left:2px solid #1010FF;margin-=
-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;t=
-ext-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"=
-><div dir=3D"ltr"><div><span style=3D"font-family: arial,helvetica,sans-ser=
-if;" data-mce-style=3D"font-family: arial,helvetica,sans-serif;" face=3D"ar=
-ial, helvetica, sans-serif"><br></span></div><div><span style=3D"font-famil=
-y: arial,helvetica,sans-serif;" data-mce-style=3D"font-family: arial,helvet=
-ica,sans-serif;" face=3D"arial, helvetica, sans-serif"><br></span></div><di=
-v><span style=3D"font-family: arial,helvetica,sans-serif;" data-mce-style=
-=3D"font-family: arial,helvetica,sans-serif;" face=3D"arial, helvetica, san=
-s-serif">Thank very much you for your help.</span></div><br><br><br><div>Ad=
-el Belkhiri</div></div><br>_______________________________________________<=
-br>lttng-dev mailing list<br>lttng-dev@lists.lttng.org<br>https://lists.ltt=
-ng.org/cgi-bin/mailman/listinfo/lttng-dev<br></blockquote></div><div><br></=
-div><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<b=
-r>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></html>
---=_9e7480f2-b7e8-46e3-82d5-795d7363884b--
-
---===============4491335953373007523==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============4491335953373007523==--
+T24gV2VkLCBBdWcgMTAsIDIwMTYgYXQgMTI6NDEgQU0sIErDqXLDqW1pZSBHYWxhcm5lYXUKPGpl
+cmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gT24gTW9uLCBBdWcgOCwgMjAx
+NiBhdCAyOjM3IEFNLCBNdW5pIFNla2hhciA8bXVuaXNla2hhcnJtc0BnbWFpbC5jb20+IHdyb3Rl
+Ogo+PiAgWyBQbGVhc2Uga2VlcCBtZSBpbiBDQyBhcyBJJ20gbm90IHN1YnNjcmliZWQgdG8gdGhl
+IGxpc3RdCj4+Cj4+Cj4+IEhlbGxvLAo+Pgo+Pgo+PiBGZXcgbGluZXMgb2YgbHR0bmcgdmlldyB0
+cmFjZSBhYm91dCB3b3JrcXVldWUgZXZlbnRzOgo+Pgo+PiBbMTE6MDc6MDguMjA4Nzk1MzI1XSAo
+KzAuMDAwMDAxNjc3KSB0ZXN0Ym94IGlycV9oYW5kbGVyX2VudHJ5OiB7Cj4+IGNwdV9pZCA9IDEg
+fSwgeyBpcnEgPSAxNiwgbmFtZSA9ICJkZWJ1Z19pcnEiIH0KPj4KPj4gWzExOjA3OjA4LjIwODgy
+MjcwM10gKCswLjAwMDAyNzM3OCkgdGVzdGJveCB3b3JrcXVldWVfcXVldWVfd29yazogewo+PiBj
+cHVfaWQgPSAxIH0sIHsgd29yayA9IDB4RkZGRjg4MDEzOTZENEYxOCwgZnVuY3Rpb24gPQo+PiAw
+eEZGRkZGRkZGQzA3MjczQjAsIHJlcV9jcHUgPSAyNTYgfQo+Pgo+PiBbMTE6MDc6MDguMjA4ODI0
+MzgwXSAoKzAuMDAwMDAxNjc3KSB0ZXN0Ym94IHdvcmtxdWV1ZV9hY3RpdmF0ZV93b3JrOiB7Cj4+
+IGNwdV9pZCA9IDEgfSwgeyB3b3JrID0gMHhGRkZGODgwMTM5NkQ0RjE4IH0KPj4KPj4gWzExOjA3
+OjA4LjIwODgyNjYxNV0gKCswLjAwMDAwMjIzNSkgdGVzdGJveCBpcnFfaGFuZGxlcl9leGl0OiB7
+IGNwdV9pZAo+PiA9IDEgfSwgeyBpcnEgPSAxNiwgcmV0ID0gMSB9Cj4+Cj4+IFsxMTowNzowOC4y
+MDg4MzEzNjRdICgrMC4wMDAwMDQ3NDkpIHRlc3Rib3ggd29ya3F1ZXVlX2V4ZWN1dGVfc3RhcnQ6
+IHsKPj4gY3B1X2lkID0gMSB9LCB7IHdvcmsgPSAweEZGRkY4ODAxMzk2RDRGMTgsIGZ1bmN0aW9u
+ID0KPj4gMHhGRkZGRkZGRkMwNzI3M0IwIH0KPj4KPj4gWzExOjA3OjA4LjIwODg0MTQyMl0gKCsw
+LjAwMDAxMDA1OCkgdGVzdGJveCB3b3JrcXVldWVfZXhlY3V0ZV9lbmQ6IHsKPj4gY3B1X2lkID0g
+MSB9LCB7IHdvcmsgPSAweEZGRkY4ODAxMzk2RDRGMTggfQo+Pgo+Pgo+Pgo+Pgo+Pgo+PiBDYW4g
+aXQgYmUgcG9zc2libGUgdG8gcHJpbnQgZnVuY3Rpb24gbmFtZSBpbnN0ZWFkIG9mIOKAmGZ1bmN0
+aW9uID0KPj4gMHhGRkZGRkZGRkMwNzI3M0Iw4oCZPwo+Cj4gSGkgTXVuaSwKPgo+IFVuZm9ydHVu
+YXRlbHksIHlvdSBuZWVkIHRvIHBlcmZvcm0gdGhhdCBsb29rLXVwIG1hbnVhbGx5IHVzaW5nCj4g
+YWRkcjJsaW5lIG9yIG90aGVyIHN1Y2ggdG9vbHMgc2luY2UgQmFiZWx0cmFjZSAodGhlIHZpZXdl
+ciBpbnZva2VkIGJ5Cj4gbHR0bmcgdmlldykgb25seSBwZXJmb3JtcyB0aGUgYWRkcmVzcy9zeW1i
+b2wgYXNzb2NpYXRpb24gZm9yIHVzZXIKPiBzcGFjZSBjb2RlLiBFeHRlbmRpbmcgdGhhdCBmZWF0
+dXJlIHdvdWxkIGJlIGEgZ3JlYXQgaWRlYSB0aG91Z2ghClRoYW5rcyBmb3IgdGhlIHJlcGx5LiBJ
+IHVzZWQgdGhlIC9wcm9jL2thbGxzeW1zIHRvIGZldGNoIHRoZSBzeW1ib2wgbmFtZS4KCj4KPiBJ
+J20gQ0MtaW5nIHRoZSBUcmFjZSBDb21wYXNzIG1haWxpbmcgbGlzdDsgcGVyaGFwcyB0aGlzIGlz
+IHN1cHBvcnRlZAo+IG9yIGFscmVhZHkgaW4gdGhlIHdvcmtzLgo+Cj4gVGhhbmtzIQo+IErDqXLD
+qW1pZQo+Cj4+Cj4+IC0tCj4+IFRoYW5rcywKPj4gU2VraGFyCj4+IF9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+Pj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9j
+Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KPgo+Cj4gLS0KPiBKw6lyw6ltaWUg
+R2FsYXJuZWF1Cj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgoKCi0t
+IApUaGFua3MsClNla2hhcgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo=
