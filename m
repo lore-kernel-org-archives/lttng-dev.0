@@ -1,18 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re:
- =?utf-8?q?timestamp_inconsistence_between_=E2=80=98lt?=
- =?utf-8?q?tng_view=E2=80=99_and_=27kernel_log=27?=
-Date: Wed, 10 Aug 2016 21:32:32 +0000 (UTC)
-Message-ID: <681153539.7831.1470864752258.JavaMail.zimbra__3471.99502070925$1470864771$gmane$org@efficios.com>
-References: <CAHhAz+htGUBOG8evME3K6uNfjqSA4atDHrfKXeJXBUYkKdJ1uQ@mail.gmail.com>
+From: Adel Belkhiri <adel.belkhiri@ensi-uma.tn>
+Subject: Tracing network events in the kernel using lttng
+Date: Thu, 11 Aug 2016 23:50:10 -0500
+Message-ID: <CAFMzwX6csrXt6aQwy0b7oW7CzfEKRr28uXYZcE4NhPrOWyCr4g__37424.9981985942$1470977424$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============3857394231990764507=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id EA226A2A8D
- for <lttng-dev@lists.lttng.org>; Wed, 10 Aug 2016 21:32:39 +0000 (UTC)
-In-Reply-To: <CAHhAz+htGUBOG8evME3K6uNfjqSA4atDHrfKXeJXBUYkKdJ1uQ@mail.gmail.com>
+Received: from mail-ua0-f194.google.com (mail-ua0-f194.google.com
+ [209.85.217.194])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 42D1BA3A05
+ for <lttng-dev@lists.lttng.org>; Fri, 12 Aug 2016 04:50:12 +0000 (UTC)
+Received: by mail-ua0-f194.google.com with SMTP id 74so1240098uau.3
+ for <lttng-dev@lists.lttng.org>; Thu, 11 Aug 2016 21:50:12 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,43 +20,68 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Muni Sekhar <munisekharrms@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT24gQXVnIDMsIDIwMTYsIGF0IDY6NTYgQU0sIE11bmkgU2VraGFyIG11bmlzZWtoYXJy
-bXNAZ21haWwuY29tIHdyb3RlOgoKPiBbIFBsZWFzZSBrZWVwIG1lIGluIENDIGFzIEknbSBub3Qg
-c3Vic2NyaWJlZCB0byB0aGUgbGlzdF0KPiAKPiAKPiBIZWxsbywKPiAKPiBGaXJzdCB0aW1lIEkg
-YW0gdXNpbmcgbHR0bmcgdG8gdHJhY2UgdGhlIGtlcm5lbCBldmVudHMuCj4gCj4gSSBub3RpY2Vk
-IHRoZSB0aW1lc3RhbXAgaW5jb25zaXN0ZW5jZSBiZXR3ZWVuIOKAmGx0dG5nIHZpZXfigJkgIGFu
-ZCAna2VybmVsIGxvZycuCj4gCj4gQ2FuIGl0IGJlIHBvc3NpYmxlIHRvIGhhdmUgdGhlIGtlcm5l
-bCBsb2cgdGltZXN0YW1wIGluIGx0dG5nIGxvZz8KPiAKPiAKPiAKPiBGZXcgbGluZXMgb2Yg4oCc
-bHR0bmcgdmlld+KAnSBsb2cgaXMgbWVudGlvbmVkIGJlbG93Ogo+IAo+IFsxNToyNzozMC42MzI4
-MzcwNzVdICgrMC4wMDAwMDI1MTQpIHRlc3Rib3ggIHN5c2NhbGxfZW50cnlfb3Blbjogewo+IGNw
-dV9pZCA9IDEgfSwgeyBmaWxlbmFtZSA9ICIvaG9tZS9tdW5pL3YyLjQvdGVzdHMvZGVidWd0cmFu
-cy5zbyIsCj4gZmxhZ3MgPSAwLCBtb2RlID0gNDM4IH0KPiAKPiBbMTU6Mjc6MzAuNjMyODQyMzgz
-XSAoKzAuMDAwMDAyMjM1KSB0ZXN0Ym94ICBzeXNjYWxsX2VudHJ5X29wZW46IHsKPiBjcHVfaWQg
-PSAxIH0sIHsgZmlsZW5hbWUgPQo+ICIvaG9tZS9tdW5pL3YyLjQvdGVzdHMvZGVidWd0cmFuc21v
-ZHVsZS5zbyIsIGZsYWdzID0gMCwgbW9kZSA9IDQzOCB9Cj4gCj4gCj4gCj4gCj4gQ29ycmVzcG9u
-ZGluZyBLZXJuZWwgbG9nIGlzIG1lbnRpb25lZCBiZWxvdzoKPiAKPiBBdWcgIDMgMTU6Mjc6MzAg
-dGVzdGJveCAga2VybmVsOiBbMTUxMTcuMDUwMzI2XSBFbnRyeSBkZWJ1Z19vcGVuCj4gCj4gQXVn
-ICAzIDE1OjI3OjMwIHRlc3Rib3ggIGtlcm5lbDogWzE1MTE3LjA1MDMyNl0KPiAKPiBBdWcgIDMg
-MTU6Mjc6MzAgdGVzdGJveCAga2VybmVsOiBbMTUxMTcuMDUwMzMzXSBFeGl0IGRlYnVnX29wZW4K
-PiAKClRoZXJlIGlzIGEgd2F5LCBidXQgaXQncyBub3Qgc3RyYWlnaHRmb3J3YXJkLiBCYXNpY2Fs
-bHksIHRoZSBrZXJuZWwKdXNlcyB0aGUgc2NoZWR1bGVyIGNsb2NrIChsb2NhbF9jbG9jaykgaW4g
-ZG1lc2cuIExUVG5nIHVzZXMgdGhlCm1vbm90b25pYyBjbG9jayAoY29ycmVjdGVkIGZvciBzbWFs
-bCByYXRlIHZhcmlhdGlvbnMpLCBhbmQgb2Zmc2V0cwppdCBieSB0aGUgZGVsdGEgYmV0d2VlbiBy
-ZWFsdGltZSBhbmQgbW9ub3RvbmljIGNsb2NrIGF0IHRyYWNlIHN0YXJ0LgoKVGhlIGRpZmZlcmVu
-Y2UgYmV0d2VlbiB0aGUgc2NoZWQgY2xvY2sgYW5kIHRoZSBtb25vdG9uaWMgY2xvY2sgbWFrZXMg
-aXQKbm9uLXRyaXZpYWwgdG8gY29ycmVsYXRlIHRoZSB0d28uCgpPbmUgdHJpY2sgeW91IGNhbiB1
-c2UgaXMgdG8gZW5hYmxlIHRoZSBwcmludGtfY29uc29sZSBMVFRuZyBrZXJuZWwgZXZlbnQuClRo
-aXMgd2F5LCB5b3Ugd2lsbCBzZWUgdGhlIGRtZXNnIGNvbnNvbGUgbWVzc2FnZXMgd2l0aCB0aGVp
-ciB0aW1lc3RhbXBzIGluCnRoZSBsdHRuZyB0cmFjZSwgYWxsb3dpbmcgeW91IHRvIGNvcnJlbGF0
-ZSB0aGUgdHdvLgoKQmVzdCByZWdhcmRzLAoKTWF0aGlldQoKCj4gCj4gLS0KPiBUaGFua3MsCj4g
-U2VraGFyCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0
-dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-Ci0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3Mu
-Y29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============3857394231990764507==
+Content-Type: multipart/alternative; boundary=001a113bd2041351ff0539d89eec
+
+--001a113bd2041351ff0539d89eec
+Content-Type: text/plain; charset=UTF-8
+
+Hello,
+
+
+I'm, from some time, working on tracing linux kernel using lttng to get
+some information about the system' network activities. Tracing bare system
+calls (--syscall) didn't give me much information so I realized that i
+should first place some static probes in the kernel source files to be able
+to trace (mainly) *TCP socket operations* (bind, accept, create, ...).
+Running out of time in my project, I wonder if there are *any patch for the
+kernel* that place those probes in the right source files.
+
+My linux Kernel version is 3.2.0-4-486 and I'm using Lttng 2.7.
+
+
+Thank very much you for your help.
+
+
+
+Adel Belkhiri
+
+--001a113bd2041351ff0539d89eec
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><font face=3D"arial, helvetica, sans-serif">Hello,</font><=
+div><font face=3D"arial, helvetica, sans-serif"><br></font></div><div><font=
+ face=3D"arial, helvetica, sans-serif"><br></font></div><div><font face=3D"=
+arial, helvetica, sans-serif">I&#39;m, from some time, working on tracing l=
+inux kernel using lttng to get some information about the system&#39; netwo=
+rk activities.=C2=A0Tracing bare system calls (--syscall) didn&#39;t give m=
+e much information so I realized that i should first place some static prob=
+es in the kernel source files to be able to trace (mainly) <b>TCP socket op=
+erations</b> (bind, accept, create, ...). Running out of time in my project=
+, I wonder if there are <b>any patch for the kernel</b> that place those pr=
+obes in the right source files.=C2=A0</font></div><div><font face=3D"arial,=
+ helvetica, sans-serif"><br></font></div><div><font face=3D"arial, helvetic=
+a, sans-serif">My linux Kernel version is=C2=A03.2.0-4-486 and I&#39;m usin=
+g Lttng 2.7.</font></div><div><font face=3D"arial, helvetica, sans-serif"><=
+br></font></div><div><font face=3D"arial, helvetica, sans-serif"><br></font=
+></div><div><font face=3D"arial, helvetica, sans-serif">Thank very much you=
+ for your help.</font></div><div><br></div><div><br></div><div><br></div><d=
+iv>Adel Belkhiri</div></div>
+
+--001a113bd2041351ff0539d89eec--
+
+--===============3857394231990764507==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============3857394231990764507==--
