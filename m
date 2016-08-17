@@ -1,104 +1,153 @@
-From: Stefan Hajnoczi <stefanha@gmail.com>
-Subject: Re: [PATCH 0/6] hypertrace: Lightweight guest-to-QEMU
- trace channel
-Date: Thu, 18 Aug 2016 11:54:24 +0100
-Message-ID: <20160818105424.GD4850@stefanha-x1.localdomain>
-References: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
+From: Noam Cohen <noam@lifeonair.com>
+Subject: problem running/installing lttng on ubuntu 16.04
+Date: Wed, 17 Aug 2016 13:25:48 +0300
+Message-ID: <CAKH_oXJ+20uS1d1S71JLbYkPO9+Cx=3v4-+Ss_jbj7rnUzp8_w__40598.8588849597$1471522005$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="sXc4Kmr5FA7axrvy"
-Return-path: <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
-Content-Disposition: inline
-In-Reply-To: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
-List-Unsubscribe: <https://lists.nongnu.org/mailman/options/qemu-devel>,
-	<mailto:qemu-devel-request@nongnu.org?subject=unsubscribe>
-List-Archive: <http://lists.nongnu.org/archive/html/qemu-devel/>
-List-Post: <mailto:qemu-devel@nongnu.org>
-List-Help: <mailto:qemu-devel-request@nongnu.org?subject=help>
-List-Subscribe: <https://lists.nongnu.org/mailman/listinfo/qemu-devel>,
-	<mailto:qemu-devel-request@nongnu.org?subject=subscribe>
-Errors-To: qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org
-Sender: "Qemu-devel" <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
-To: =?iso-8859-1?Q?Llu=EDs?= Vilanova <vilanova@ac.upc.edu>
-Cc: qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, Luiz Capitulino <lcapitulino@redhat.com>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>
+Content-Type: multipart/mixed; boundary="===============0166367220696041326=="
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-wm0-f43.google.com (mail-wm0-f43.google.com [74.125.82.43])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 1574AA02B1
+ for <lttng-dev@lists.lttng.org>; Wed, 17 Aug 2016 10:26:14 +0000 (UTC)
+Received: by mail-wm0-f43.google.com with SMTP id o80so223061202wme.1
+ for <lttng-dev@lists.lttng.org>; Wed, 17 Aug 2016 03:26:10 -0700 (PDT)
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+--===============0166367220696041326==
+Content-Type: multipart/alternative; boundary=001a11412394c94f63053a41e4fa
 
---sXc4Kmr5FA7axrvy
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+--001a11412394c94f63053a41e4fa
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 05, 2016 at 06:59:23PM +0200, Llu=EDs Vilanova wrote:
-> The hypertrace channel allows guest code to emit events in QEMU (the host=
-) using
-> its tracing infrastructure (see "docs/trace.txt"). This works in both 'sy=
-stem'
-> and 'user' modes. That is, hypertrace is to tracing, what hypercalls are =
-to
-> system calls.
->=20
-> You can use this to emit an event on both guest and QEMU (host) traces to=
- easily
-> synchronize or correlate them. You could also modify you guest's tracing =
-system
-> to emit all events through the hypertrace channel, providing a unified an=
-d fully
-> synchronized trace log. Another use case is timing the performance of gue=
-st code
-> when optimizing TCG (QEMU traces have a timestamp).
->=20
-> See first commit for a full description.
+Hello
+I installed lttng on my ubuntu, and tried the "getting Started".
 
-This tracing approach has a high performance overhead, particularly for
-SMP guests where each trace event requires writing to the global control
-register.  All CPUs will be hammering this register (heavyweight vmexit)
-for each trace event.
 
-I think the folks CCed on this email all take an asynchronous approach
-to avoid this performance overhead.  Synchronous means taking a VM exit
-for every event.  Asynchronous means writing trace data to a buffer and
-later interleaving guest data with host trace data.
+I ran the helloWorld, and then
+$ lttng list --userspace
+Error: Unable to list UST events: No session daemon is available
+Error: Command error
 
-LTTng Userspace Tracer is an example of the asynchronous approach.  The
-trace data buffers are in shared memory.  The LTTng process can grab
-buffers at appropriate times.
+Waited a minute and retried, and now the output was as expected.
+$ lttng list --userspace
+UST events:
+-------------
 
-The ftrace virtio-serial approach has been to splice() the ftrace
-buffers, resulting in efficient I/O.
+PID: 17386 - Name: ./hello
+      lttng_ust_tracelog:TRACE_DEBUG (loglevel: TRACE_DEBUG (14)) (type:
+tracepoint)
+      < SNIP >
+      hello_world:my_first_tracepoint (loglevel: TRACE_DEBUG_LINE (13))
+(type: tracepoint)
 
-Steven is working on a host/guest solution for trace-cmd.  It is also
-asynchronous.  No new paravirt hardware is needed and it makes me wonder
-whether the hypertrace PCI device is trying to solve the problem at the
-wrong layer.
+**Is it normal behavior?*
 
-If you want to play around with asynchronous tracing, you could start
-with trace/simple.c.  It has a trace buffer that is asynchronously
-written out to file by a dedicated "writer" thread.
 
-The one case where hypertrace makes sense to me is for -user tracing.
-There QEMU can efficiently interleave guest and QEMU traces, although as
-mentioned in the patch, I don't think the SIGSEGV approach should be
-used.
+Then,
+$ lttng create
+Session auto-20160817-132123 created.
+Traces will be written in /home/noam/lttng-traces/auto-20160817-132123
+noam@noam-nuc:~/tmp/lttng$ lttng enable-event --userspace
+hello_world:my_first_tracepoint
+Error: Event hello_world:my_first_tracepoint: UST create channel failed
+(channel channel0, session auto-20160817-132123)
 
-I suggest stripping this series down to focus on -user.  Synchronous
-tracing is not a good approach for -system emulation.
+How do I solve it?
+---------------------
+system properties:
 
-Stefan
+noam@noam-nuc:~$ ps -ef | grep lttng
+noam     17410 17398  0 13:18 pts/3    00:00:00 lttng-sessiond -vvv
+noam     17411 17410  0 13:18 pts/3    00:00:00 lttng-runas    -vvv
+noam     17442 17410  0 13:21 pts/3    00:00:00 lttng-consumerd  -u
+--consumerd-cmd-sock /home/noam/.lttng/ustconsumerd64/command
+--consumerd-err-sock /home/noam/.lttng/ustconsumerd64/error --group tracing
+noam     17444 17442  0 13:21 pts/3    00:00:00 lttng-runas      -u
+--consumerd-cmd-sock /home/noam/.lttng/ustconsumerd64/command
+--consumerd-err-sock /home/noam/.lttng/ustconsumerd64/error --group tracing
+noam     17480 17467  0 13:22 pts/7    00:00:00 grep --color=3Dauto lttng
+noam@noam-nuc:~$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description: Ubuntu 16.04.1 LTS
+Release: 16.04
+Codename: xenial
 
---sXc4Kmr5FA7axrvy
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+Installed lttng using:
+sudo apt-get install lttng-tools lttng-modules-dkms liblttng-ust-dev
 
-iQEcBAEBAgAGBQJXtZPgAAoJEJykq7OBq3PInLoH/j0Y0mw1eSOhhfRXiqu/Zp5C
-URbDbBZ5Z2vYytLZIiRcm/69GKr9QJSSLj0ZoV54Er/60pFs2kxgZnsVd94oybGI
-P7PqRTAiVnxI3fJJnjxfA35ox8Pl9rpK2Qila44bGypl7JK9vGZ9hrfPYDIlDseY
-jO4v+1C1Z7F4nR9q5/apKtzl1JGdejUU2xmf1NlXhQ5KGOVisp0cfG2OV0sS8Sdu
-hZuXJNSpVfAgPqgKpHPCzUEHZ0Zqw+G1gg2QjlDg+ladi+fv3eSZyt/opZTKky3+
-hqGP47Z6CTY7cPwkhyECvoed/8McxgqbZaumqB7Yhy2sV/4BRrjyaiIqcnyBCR0=
-=sD3+
------END PGP SIGNATURE-----
 
---sXc4Kmr5FA7axrvy--
+$ lttng --version
+lttng (LTTng Trace Control) 2.7.1 - Herbe =C3=A0 D=C3=A9tourne
+
+--001a11412394c94f63053a41e4fa
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello<div>I installed lttng on my ubuntu, and tried the &q=
+uot;getting Started&quot;.</div><div><br></div><div><br></div><div>I ran th=
+e helloWorld, and then=C2=A0</div><div><div>$ lttng list --userspace</div><=
+div>Error: Unable to list UST events: No session daemon is available</div><=
+div>Error: Command error</div></div><div><br></div><div>Waited a minute and=
+ retried, and now the output was as expected.</div><div><div>$ lttng list -=
+-userspace</div><div>UST events:</div><div>-------------</div><div><br></di=
+v><div>PID: 17386 - Name: ./hello</div><div>=C2=A0 =C2=A0 =C2=A0 lttng_ust_=
+tracelog:TRACE_DEBUG (loglevel: TRACE_DEBUG (14)) (type: tracepoint)</div><=
+div>=C2=A0 =C2=A0 =C2=A0 &lt; SNIP &gt;</div><div>=C2=A0 =C2=A0 =C2=A0 hell=
+o_world:my_first_tracepoint (loglevel: TRACE_DEBUG_LINE (13)) (type: tracep=
+oint)</div></div><div><br></div><div><b>*Is it normal behavior?</b></div><d=
+iv><br></div><div><br></div><div>Then,</div><div><div>$ lttng create</div><=
+div>Session auto-20160817-132123 created.</div><div>Traces will be written =
+in /home/noam/lttng-traces/auto-20160817-132123</div><div>noam@noam-nuc:~/t=
+mp/lttng$ lttng enable-event --userspace hello_world:my_first_tracepoint</d=
+iv><div>Error: Event hello_world:my_first_tracepoint: UST create channel fa=
+iled (channel channel0, session auto-20160817-132123)</div></div><div><br><=
+/div><div>How do I solve it?</div><div>---------------------</div><div>syst=
+em properties:</div><div><br></div><div><div>noam@noam-nuc:~$ ps -ef | grep=
+ lttng</div><div>noam =C2=A0 =C2=A0 17410 17398 =C2=A00 13:18 pts/3 =C2=A0 =
+=C2=A000:00:00 lttng-sessiond -vvv</div><div>noam =C2=A0 =C2=A0 17411 17410=
+ =C2=A00 13:18 pts/3 =C2=A0 =C2=A000:00:00 lttng-runas =C2=A0 =C2=A0-vvv</d=
+iv><div>noam =C2=A0 =C2=A0 17442 17410 =C2=A00 13:21 pts/3 =C2=A0 =C2=A000:=
+00:00 lttng-consumerd =C2=A0-u --consumerd-cmd-sock /home/noam/.lttng/ustco=
+nsumerd64/command --consumerd-err-sock /home/noam/.lttng/ustconsumerd64/err=
+or --group tracing</div><div>noam =C2=A0 =C2=A0 17444 17442 =C2=A00 13:21 p=
+ts/3 =C2=A0 =C2=A000:00:00 lttng-runas =C2=A0 =C2=A0 =C2=A0-u --consumerd-c=
+md-sock /home/noam/.lttng/ustconsumerd64/command --consumerd-err-sock /home=
+/noam/.lttng/ustconsumerd64/error --group tracing</div><div>noam =C2=A0 =C2=
+=A0 17480 17467 =C2=A00 13:22 pts/7 =C2=A0 =C2=A000:00:00 grep --color=3Dau=
+to lttng</div><div>noam@noam-nuc:~$ lsb_release -a</div><div>No LSB modules=
+ are available.</div><div>Distributor ID:<span class=3D"" style=3D"white-sp=
+ace:pre">	</span>Ubuntu</div><div>Description:<span class=3D"" style=3D"whi=
+te-space:pre">	</span>Ubuntu 16.04.1 LTS</div><div>Release:<span class=3D""=
+ style=3D"white-space:pre">	</span>16.04</div><div>Codename:<span class=3D"=
+" style=3D"white-space:pre">	</span>xenial</div></div><div><br></div><div><=
+br></div><div>Installed lttng using:</div><div>sudo apt-get install lttng-t=
+ools lttng-modules-dkms liblttng-ust-dev<br></div><div><br></div><div><br><=
+/div><div><div>$ lttng --version</div><div>lttng (LTTng Trace Control) 2.7.=
+1 - Herbe =C3=A0 D=C3=A9tourne</div></div><div><br></div><div><br></div></d=
+iv>
+
+--001a11412394c94f63053a41e4fa--
+
+--===============0166367220696041326==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============0166367220696041326==--
