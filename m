@@ -1,69 +1,137 @@
-From: Muni Sekhar <munisekharrms@gmail.com>
-Subject: Re: lttng view - doubt
-Date: Thu, 11 Aug 2016 14:47:36 +0530
-Message-ID: <CAHhAz+gmqMC4ULLHgBwspYjdPJv_X8QGTMLLcifzgJvQvKAthg__37768.2060622194$1471213067$gmane$org@mail.gmail.com>
-References: <CAHhAz+inXQ-fqkL61Gfo2wp3owiAN_SxCwyjtp8hZvVnHq9GwQ@mail.gmail.com>
- <CA+jJMxsujC2iPpmjp6CcWYMVrD7owLG-zNBCfiRxpJVX+P7b+Q@mail.gmail.com>
+From: Stefan Hajnoczi <stefanha@gmail.com>
+Subject: Re: [PATCH 0/6] hypertrace: Lightweight guest-to-QEMU
+ trace channel
+Date: Thu, 18 Aug 2016 10:47:20 +0100
+Message-ID: <20160818094720.GA4850@stefanha-x1.localdomain>
+References: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-it0-f54.google.com (mail-it0-f54.google.com
- [209.85.214.54])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id BC705A037D
- for <lttng-dev@lists.lttng.org>; Thu, 11 Aug 2016 09:17:42 +0000 (UTC)
-Received: by mail-it0-f54.google.com with SMTP id x130so709890ite.1
- for <lttng-dev@lists.lttng.org>; Thu, 11 Aug 2016 02:17:42 -0700 (PDT)
-In-Reply-To: <CA+jJMxsujC2iPpmjp6CcWYMVrD7owLG-zNBCfiRxpJVX+P7b+Q@mail.gmail.com>
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Trace Compass Developer Discussions <tracecompass-dev@eclipse.org>, Alexandre Montplaisir <alexmonthy@efficios.com>
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="fUYQa+Pmc3FrFX/N"
+Return-path: <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
+Content-Disposition: inline
+In-Reply-To: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
+List-Unsubscribe: <https://lists.nongnu.org/mailman/options/qemu-devel>,
+	<mailto:qemu-devel-request@nongnu.org?subject=unsubscribe>
+List-Archive: <http://lists.nongnu.org/archive/html/qemu-devel/>
+List-Post: <mailto:qemu-devel@nongnu.org>
+List-Help: <mailto:qemu-devel-request@nongnu.org?subject=help>
+List-Subscribe: <https://lists.nongnu.org/mailman/listinfo/qemu-devel>,
+	<mailto:qemu-devel-request@nongnu.org?subject=subscribe>
+Errors-To: qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org
+Sender: "Qemu-devel" <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
+To: =?iso-8859-1?Q?Llu=EDs?= Vilanova <vilanova@ac.upc.edu>
+Cc: qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, Luiz Capitulino <lcapitulino@redhat.com>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gV2VkLCBBdWcgMTAsIDIwMTYgYXQgMTI6NDEgQU0sIErDqXLDqW1pZSBHYWxhcm5lYXUKPGpl
-cmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gT24gTW9uLCBBdWcgOCwgMjAx
-NiBhdCAyOjM3IEFNLCBNdW5pIFNla2hhciA8bXVuaXNla2hhcnJtc0BnbWFpbC5jb20+IHdyb3Rl
-Ogo+PiAgWyBQbGVhc2Uga2VlcCBtZSBpbiBDQyBhcyBJJ20gbm90IHN1YnNjcmliZWQgdG8gdGhl
-IGxpc3RdCj4+Cj4+Cj4+IEhlbGxvLAo+Pgo+Pgo+PiBGZXcgbGluZXMgb2YgbHR0bmcgdmlldyB0
-cmFjZSBhYm91dCB3b3JrcXVldWUgZXZlbnRzOgo+Pgo+PiBbMTE6MDc6MDguMjA4Nzk1MzI1XSAo
-KzAuMDAwMDAxNjc3KSB0ZXN0Ym94IGlycV9oYW5kbGVyX2VudHJ5OiB7Cj4+IGNwdV9pZCA9IDEg
-fSwgeyBpcnEgPSAxNiwgbmFtZSA9ICJkZWJ1Z19pcnEiIH0KPj4KPj4gWzExOjA3OjA4LjIwODgy
-MjcwM10gKCswLjAwMDAyNzM3OCkgdGVzdGJveCB3b3JrcXVldWVfcXVldWVfd29yazogewo+PiBj
-cHVfaWQgPSAxIH0sIHsgd29yayA9IDB4RkZGRjg4MDEzOTZENEYxOCwgZnVuY3Rpb24gPQo+PiAw
-eEZGRkZGRkZGQzA3MjczQjAsIHJlcV9jcHUgPSAyNTYgfQo+Pgo+PiBbMTE6MDc6MDguMjA4ODI0
-MzgwXSAoKzAuMDAwMDAxNjc3KSB0ZXN0Ym94IHdvcmtxdWV1ZV9hY3RpdmF0ZV93b3JrOiB7Cj4+
-IGNwdV9pZCA9IDEgfSwgeyB3b3JrID0gMHhGRkZGODgwMTM5NkQ0RjE4IH0KPj4KPj4gWzExOjA3
-OjA4LjIwODgyNjYxNV0gKCswLjAwMDAwMjIzNSkgdGVzdGJveCBpcnFfaGFuZGxlcl9leGl0OiB7
-IGNwdV9pZAo+PiA9IDEgfSwgeyBpcnEgPSAxNiwgcmV0ID0gMSB9Cj4+Cj4+IFsxMTowNzowOC4y
-MDg4MzEzNjRdICgrMC4wMDAwMDQ3NDkpIHRlc3Rib3ggd29ya3F1ZXVlX2V4ZWN1dGVfc3RhcnQ6
-IHsKPj4gY3B1X2lkID0gMSB9LCB7IHdvcmsgPSAweEZGRkY4ODAxMzk2RDRGMTgsIGZ1bmN0aW9u
-ID0KPj4gMHhGRkZGRkZGRkMwNzI3M0IwIH0KPj4KPj4gWzExOjA3OjA4LjIwODg0MTQyMl0gKCsw
-LjAwMDAxMDA1OCkgdGVzdGJveCB3b3JrcXVldWVfZXhlY3V0ZV9lbmQ6IHsKPj4gY3B1X2lkID0g
-MSB9LCB7IHdvcmsgPSAweEZGRkY4ODAxMzk2RDRGMTggfQo+Pgo+Pgo+Pgo+Pgo+Pgo+PiBDYW4g
-aXQgYmUgcG9zc2libGUgdG8gcHJpbnQgZnVuY3Rpb24gbmFtZSBpbnN0ZWFkIG9mIOKAmGZ1bmN0
-aW9uID0KPj4gMHhGRkZGRkZGRkMwNzI3M0Iw4oCZPwo+Cj4gSGkgTXVuaSwKPgo+IFVuZm9ydHVu
-YXRlbHksIHlvdSBuZWVkIHRvIHBlcmZvcm0gdGhhdCBsb29rLXVwIG1hbnVhbGx5IHVzaW5nCj4g
-YWRkcjJsaW5lIG9yIG90aGVyIHN1Y2ggdG9vbHMgc2luY2UgQmFiZWx0cmFjZSAodGhlIHZpZXdl
-ciBpbnZva2VkIGJ5Cj4gbHR0bmcgdmlldykgb25seSBwZXJmb3JtcyB0aGUgYWRkcmVzcy9zeW1i
-b2wgYXNzb2NpYXRpb24gZm9yIHVzZXIKPiBzcGFjZSBjb2RlLiBFeHRlbmRpbmcgdGhhdCBmZWF0
-dXJlIHdvdWxkIGJlIGEgZ3JlYXQgaWRlYSB0aG91Z2ghClRoYW5rcyBmb3IgdGhlIHJlcGx5LiBJ
-IHVzZWQgdGhlIC9wcm9jL2thbGxzeW1zIHRvIGZldGNoIHRoZSBzeW1ib2wgbmFtZS4KCj4KPiBJ
-J20gQ0MtaW5nIHRoZSBUcmFjZSBDb21wYXNzIG1haWxpbmcgbGlzdDsgcGVyaGFwcyB0aGlzIGlz
-IHN1cHBvcnRlZAo+IG9yIGFscmVhZHkgaW4gdGhlIHdvcmtzLgo+Cj4gVGhhbmtzIQo+IErDqXLD
-qW1pZQo+Cj4+Cj4+IC0tCj4+IFRoYW5rcywKPj4gU2VraGFyCj4+IF9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-Pj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+PiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9j
-Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KPgo+Cj4gLS0KPiBKw6lyw6ltaWUg
-R2FsYXJuZWF1Cj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgoKCi0t
-IApUaGFua3MsClNla2hhcgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
-aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
-dgo=
+
+--fUYQa+Pmc3FrFX/N
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Aug 05, 2016 at 06:59:23PM +0200, Llu=EDs Vilanova wrote:
+> The hypertrace channel allows guest code to emit events in QEMU (the host=
+) using
+> its tracing infrastructure (see "docs/trace.txt"). This works in both 'sy=
+stem'
+> and 'user' modes. That is, hypertrace is to tracing, what hypercalls are =
+to
+> system calls.
+>=20
+> You can use this to emit an event on both guest and QEMU (host) traces to=
+ easily
+> synchronize or correlate them. You could also modify you guest's tracing =
+system
+> to emit all events through the hypertrace channel, providing a unified an=
+d fully
+> synchronized trace log. Another use case is timing the performance of gue=
+st code
+> when optimizing TCG (QEMU traces have a timestamp).
+>=20
+> See first commit for a full description.
+>=20
+> Signed-off-by: Llu=EDs Vilanova <vilanova@ac.upc.edu>
+> ---
+
+CCing Steven Rostedt, Masami Hiramatsu, Luiz Capitulino, and LTTng folks
+who have all looked into host/guest tracing solutions.
+
+Here is a mailing list archive link to this email thread:
+https://lists.gnu.org/archive/html/qemu-devel/2016-08/msg01081.html
+
+>=20
+> Llu=EDs Vilanova (6):
+>       hypertrace: Add documentation
+>       hypertrace: Add tracing event "guest_hypertrace"
+>       hypertrace: [*-user] Add QEMU-side proxy to "guest_hypertrace" event
+>       hypertrace: [softmmu] Add QEMU-side proxy to "guest_hypertrace" eve=
+nt
+>       hypertrace: Add guest-side user-level library
+>       hypertrace: Add guest-side Linux module
+>=20
+>=20
+>  Makefile                                           |    8 -
+>  Makefile.objs                                      |    6=20
+>  bsd-user/main.c                                    |   16 +
+>  bsd-user/mmap.c                                    |    2=20
+>  bsd-user/syscall.c                                 |    4=20
+>  configure                                          |   42 +++
+>  docs/hypertrace.txt                                |  141 ++++++++++
+>  docs/tracing.txt                                   |    3=20
+>  hypertrace/Makefile.objs                           |   20 +
+>  hypertrace/guest/linux-module/Kbuild.in            |    5=20
+>  hypertrace/guest/linux-module/Makefile             |   24 ++
+>  .../include/linux/qemu-hypertrace-internal.h       |   46 +++
+>  .../linux-module/include/linux/qemu-hypertrace.h   |   71 +++++
+>  hypertrace/guest/linux-module/qemu-hypertrace.c    |  133 +++++++++
+>  hypertrace/guest/user/Makefile                     |   28 ++
+>  hypertrace/guest/user/common.c                     |  221 +++++++++++++++
+>  hypertrace/guest/user/qemu-hypertrace.h            |   77 +++++
+>  hypertrace/softmmu.c                               |  243 ++++++++++++++=
++++
+>  hypertrace/user.c                                  |  292 ++++++++++++++=
+++++++
+>  hypertrace/user.h                                  |   52 ++++
+>  include/hw/pci/pci.h                               |    2=20
+>  linux-user/main.c                                  |   19 +
+>  linux-user/mmap.c                                  |    2=20
+>  linux-user/syscall.c                               |    3=20
+>  trace/Makefile.objs                                |    2=20
+>  25 files changed, 1460 insertions(+), 2 deletions(-)
+>  create mode 100644 docs/hypertrace.txt
+>  create mode 100644 hypertrace/Makefile.objs
+>  create mode 100644 hypertrace/guest/linux-module/Kbuild.in
+>  create mode 100644 hypertrace/guest/linux-module/Makefile
+>  create mode 100644 hypertrace/guest/linux-module/include/linux/qemu-hype=
+rtrace-internal.h
+>  create mode 100644 hypertrace/guest/linux-module/include/linux/qemu-hype=
+rtrace.h
+>  create mode 100644 hypertrace/guest/linux-module/qemu-hypertrace.c
+>  create mode 100644 hypertrace/guest/user/Makefile
+>  create mode 100644 hypertrace/guest/user/common.c
+>  create mode 100644 hypertrace/guest/user/qemu-hypertrace.h
+>  create mode 100644 hypertrace/softmmu.c
+>  create mode 100644 hypertrace/user.c
+>  create mode 100644 hypertrace/user.h
+>=20
+>=20
+> To: qemu-devel@nongnu.org
+> Cc: Stefan Hajnoczi <stefanha@redhat.com>
+>=20
+
+--fUYQa+Pmc3FrFX/N
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJXtYQoAAoJEJykq7OBq3PIemYH/j8uwZcQRkcsSt8WA+w+DKQa
+0n6YCaoIPOl2sha8WTnV6v1NCcAtf+zmQJ+lVXaSUhqOdJGvoIIVKICUPRlsEn4B
+xp6XGNM2l9BfaEtVOmUnuA4NiKZI2LWEf+3eeztu3FbWxuY2S4PF9xgyE5RDiMma
+PF9HqpX9ody7jjFXLP3om+CDBorWpNmhUtDnXitA+22Ap4K1Fmyq15p99JJcRGxg
+cvUyhfhkhU0UaJ1r/AF30vy9YZtcHZOX4syhyGtHch2WUHsY1QLft9WSrrRPMA6Y
+2dVRNk8qgDetXkKM9SJmTvHhDa4OC50iouuvv9UZGcZtL+7N0wq6/9+mB2pyU2g=
+=u9S6
+-----END PGP SIGNATURE-----
+
+--fUYQa+Pmc3FrFX/N--
