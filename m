@@ -1,18 +1,18 @@
-From: Luiz Capitulino <lcapitulino@redhat.com>
+From: Stefan Hajnoczi <stefanha@redhat.com>
 Subject: Re: [Qemu-devel] [PATCH 0/6] hypertrace: Lightweight
  guest-to-QEMU trace channel
-Date: Thu, 18 Aug 2016 09:37:11 -0400
-Message-ID: <20160818093711.6f77c30b__37839.230328291$1471527461$gmane$org@redhat.com>
+Date: Thu, 18 Aug 2016 14:53:27 +0100
+Message-ID: <20160818135327.GJ4850__23321.8245128684$1471528423$gmane$org@stefanha-x1.localdomain>
 References: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
- <20160818105424.GD4850@stefanha-x1.localdomain>
+ <20160818094720.GA4850@stefanha-x1.localdomain>
+ <87wpjeqsv9.fsf@fimbulvetr.bsc.es>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0355525449713057246=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mx1.redhat.com (mx1.redhat.com [209.132.183.28])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id E3993A2A23
- for <lttng-dev@lists.lttng.org>; Thu, 18 Aug 2016 13:37:33 +0000 (UTC)
-In-Reply-To: <20160818105424.GD4850@stefanha-x1.localdomain>
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 3F207A2A23
+ for <lttng-dev@lists.lttng.org>; Thu, 18 Aug 2016 13:53:36 +0000 (UTC)
+In-Reply-To: <87wpjeqsv9.fsf@fimbulvetr.bsc.es>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,62 +22,88 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Stefan Hajnoczi <stefanha@gmail.com>
-Cc: qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>, =?UTF-8?B?TGx1w61z?= Vilanova <vilanova@ac.upc.edu>
+To: Stefan Hajnoczi <stefanha@gmail.com>, qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, Luiz Capitulino <lcapitulino@redhat.com>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gVGh1LCAxOCBBdWcgMjAxNiAxMTo1NDoyNCArMDEwMApTdGVmYW4gSGFqbm9jemkgPHN0ZWZh
-bmhhQGdtYWlsLmNvbT4gd3JvdGU6Cgo+IE9uIEZyaSwgQXVnIDA1LCAyMDE2IGF0IDA2OjU5OjIz
-UE0gKzAyMDAsIExsdcOtcyBWaWxhbm92YSB3cm90ZToKPiA+IFRoZSBoeXBlcnRyYWNlIGNoYW5u
-ZWwgYWxsb3dzIGd1ZXN0IGNvZGUgdG8gZW1pdCBldmVudHMgaW4gUUVNVSAodGhlIGhvc3QpIHVz
-aW5nCj4gPiBpdHMgdHJhY2luZyBpbmZyYXN0cnVjdHVyZSAoc2VlICJkb2NzL3RyYWNlLnR4dCIp
-LiBUaGlzIHdvcmtzIGluIGJvdGggJ3N5c3RlbScKPiA+IGFuZCAndXNlcicgbW9kZXMuIFRoYXQg
-aXMsIGh5cGVydHJhY2UgaXMgdG8gdHJhY2luZywgd2hhdCBoeXBlcmNhbGxzIGFyZSB0bwo+ID4g
-c3lzdGVtIGNhbGxzLgo+ID4gCj4gPiBZb3UgY2FuIHVzZSB0aGlzIHRvIGVtaXQgYW4gZXZlbnQg
-b24gYm90aCBndWVzdCBhbmQgUUVNVSAoaG9zdCkgdHJhY2VzIHRvIGVhc2lseQo+ID4gc3luY2hy
-b25pemUgb3IgY29ycmVsYXRlIHRoZW0uIFlvdSBjb3VsZCBhbHNvIG1vZGlmeSB5b3UgZ3Vlc3Qn
-cyB0cmFjaW5nIHN5c3RlbQo+ID4gdG8gZW1pdCBhbGwgZXZlbnRzIHRocm91Z2ggdGhlIGh5cGVy
-dHJhY2UgY2hhbm5lbCwgcHJvdmlkaW5nIGEgdW5pZmllZCBhbmQgZnVsbHkKPiA+IHN5bmNocm9u
-aXplZCB0cmFjZSBsb2cuIEFub3RoZXIgdXNlIGNhc2UgaXMgdGltaW5nIHRoZSBwZXJmb3JtYW5j
-ZSBvZiBndWVzdCBjb2RlCj4gPiB3aGVuIG9wdGltaXppbmcgVENHIChRRU1VIHRyYWNlcyBoYXZl
-IGEgdGltZXN0YW1wKS4KPiA+IAo+ID4gU2VlIGZpcnN0IGNvbW1pdCBmb3IgYSBmdWxsIGRlc2Ny
-aXB0aW9uLiAgCgpJIGhhdGUgdGhlIGJlIHRoZSBvbmUgYXNraW5nIHRoZSBzdHVwaWQgcXVlc3Rp
-b25zLCBidXQgd2hhdCdzCnRoZSBwcm9ibGVtIHRoaXMgc2VyaWVzIHNvbHZlcz8gV2hhdCBhcmUg
-dGhlIHVzZS1jYXNlcz8gV2h5CmV4aXN0aW5nIHNvbHV0aW9ucyBkb24ndCBzb2x2ZSB0aGlzIHBy
-b2JsZW0/IEhvdyBkb2VzIHRoaXMKY29tcGFyZXMgdG8gZXhpc3Rpbmcgc29sdXRpb25zPwoKPiBU
-aGlzIHRyYWNpbmcgYXBwcm9hY2ggaGFzIGEgaGlnaCBwZXJmb3JtYW5jZSBvdmVyaGVhZCwgcGFy
-dGljdWxhcmx5IGZvcgo+IFNNUCBndWVzdHMgd2hlcmUgZWFjaCB0cmFjZSBldmVudCByZXF1aXJl
-cyB3cml0aW5nIHRvIHRoZSBnbG9iYWwgY29udHJvbAo+IHJlZ2lzdGVyLiAgQWxsIENQVXMgd2ls
-bCBiZSBoYW1tZXJpbmcgdGhpcyByZWdpc3RlciAoaGVhdnl3ZWlnaHQgdm1leGl0KQo+IGZvciBl
-YWNoIHRyYWNlIGV2ZW50Lgo+IAo+IEkgdGhpbmsgdGhlIGZvbGtzIENDZWQgb24gdGhpcyBlbWFp
-bCBhbGwgdGFrZSBhbiBhc3luY2hyb25vdXMgYXBwcm9hY2gKPiB0byBhdm9pZCB0aGlzIHBlcmZv
-cm1hbmNlIG92ZXJoZWFkLiAgU3luY2hyb25vdXMgbWVhbnMgdGFraW5nIGEgVk0gZXhpdAo+IGZv
-ciBldmVyeSBldmVudC4gIEFzeW5jaHJvbm91cyBtZWFucyB3cml0aW5nIHRyYWNlIGRhdGEgdG8g
-YSBidWZmZXIgYW5kCj4gbGF0ZXIgaW50ZXJsZWF2aW5nIGd1ZXN0IGRhdGEgd2l0aCBob3N0IHRy
-YWNlIGRhdGEuCj4gCj4gTFRUbmcgVXNlcnNwYWNlIFRyYWNlciBpcyBhbiBleGFtcGxlIG9mIHRo
-ZSBhc3luY2hyb25vdXMgYXBwcm9hY2guICBUaGUKPiB0cmFjZSBkYXRhIGJ1ZmZlcnMgYXJlIGlu
-IHNoYXJlZCBtZW1vcnkuICBUaGUgTFRUbmcgcHJvY2VzcyBjYW4gZ3JhYgo+IGJ1ZmZlcnMgYXQg
-YXBwcm9wcmlhdGUgdGltZXMuCj4gCj4gVGhlIGZ0cmFjZSB2aXJ0aW8tc2VyaWFsIGFwcHJvYWNo
-IGhhcyBiZWVuIHRvIHNwbGljZSgpIHRoZSBmdHJhY2UKPiBidWZmZXJzLCByZXN1bHRpbmcgaW4g
-ZWZmaWNpZW50IEkvTy4KClllcy4gSG93ZXZlciwgbm90ZSB0aGF0IHRoZSB2aXJ0aW8tc2VyaWFs
-IGRldmljZSBpcyBvbmx5IHVzZWQgdG8KdHJhbnNmZXIgdGhlIHRyYWNpbmcgZGF0YSB0byB0aGUg
-aG9zdC4gSXQgaGFzIG5vIHJvbGUgaW4gdGhlCnRyYWNpbmcgcHJvY2Vzcy4gQWxzbywgaXQncyBu
-b3QgcmVxdWlyZWQuIEkndmUgYmVlbiB1c2luZyB0aGUKbmV0d29ya2luZyBhbmQgaXQgd29ya3Mg
-T0sgYXMgbG9uZyBhcyB5b3VyIHRyYWNpbmcgZGF0YSBpcyBub3QgYmlnLgoKPiAKPiBTdGV2ZW4g
-aXMgd29ya2luZyBvbiBhIGhvc3QvZ3Vlc3Qgc29sdXRpb24gZm9yIHRyYWNlLWNtZC4gIEl0IGlz
-IGFsc28KPiBhc3luY2hyb25vdXMuICBObyBuZXcgcGFyYXZpcnQgaGFyZHdhcmUgaXMgbmVlZGVk
-IGFuZCBpdCBtYWtlcyBtZSB3b25kZXIKPiB3aGV0aGVyIHRoZSBoeXBlcnRyYWNlIFBDSSBkZXZp
-Y2UgaXMgdHJ5aW5nIHRvIHNvbHZlIHRoZSBwcm9ibGVtIGF0IHRoZQo+IHdyb25nIGxheWVyLgo+
-IAo+IElmIHlvdSB3YW50IHRvIHBsYXkgYXJvdW5kIHdpdGggYXN5bmNocm9ub3VzIHRyYWNpbmcs
-IHlvdSBjb3VsZCBzdGFydAo+IHdpdGggdHJhY2Uvc2ltcGxlLmMuICBJdCBoYXMgYSB0cmFjZSBi
-dWZmZXIgdGhhdCBpcyBhc3luY2hyb25vdXNseQo+IHdyaXR0ZW4gb3V0IHRvIGZpbGUgYnkgYSBk
-ZWRpY2F0ZWQgIndyaXRlciIgdGhyZWFkLgo+IAo+IFRoZSBvbmUgY2FzZSB3aGVyZSBoeXBlcnRy
-YWNlIG1ha2VzIHNlbnNlIHRvIG1lIGlzIGZvciAtdXNlciB0cmFjaW5nLgo+IFRoZXJlIFFFTVUg
-Y2FuIGVmZmljaWVudGx5IGludGVybGVhdmUgZ3Vlc3QgYW5kIFFFTVUgdHJhY2VzLCBhbHRob3Vn
-aCBhcwo+IG1lbnRpb25lZCBpbiB0aGUgcGF0Y2gsIEkgZG9uJ3QgdGhpbmsgdGhlIFNJR1NFR1Yg
-YXBwcm9hY2ggc2hvdWxkIGJlCj4gdXNlZC4KPiAKPiBJIHN1Z2dlc3Qgc3RyaXBwaW5nIHRoaXMg
-c2VyaWVzIGRvd24gdG8gZm9jdXMgb24gLXVzZXIuICBTeW5jaHJvbm91cwo+IHRyYWNpbmcgaXMg
-bm90IGEgZ29vZCBhcHByb2FjaCBmb3IgLXN5c3RlbSBlbXVsYXRpb24uCj4gCj4gU3RlZmFuCgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
-bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+
+--===============0355525449713057246==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="mPTHnM80CEnHQ2WJ"
+Content-Disposition: inline
+
+
+--mPTHnM80CEnHQ2WJ
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Aug 18, 2016 at 12:22:18PM +0200, Llu=EDs Vilanova wrote:
+> Stefan Hajnoczi writes:
+>=20
+> > On Fri, Aug 05, 2016 at 06:59:23PM +0200, Llu=EDs Vilanova wrote:
+> >> The hypertrace channel allows guest code to emit events in QEMU (the h=
+ost) using
+> >> its tracing infrastructure (see "docs/trace.txt"). This works in both =
+'system'
+> >> and 'user' modes. That is, hypertrace is to tracing, what hypercalls a=
+re to
+> >> system calls.
+> >>=20
+> >> You can use this to emit an event on both guest and QEMU (host) traces=
+ to easily
+> >> synchronize or correlate them. You could also modify you guest's traci=
+ng system
+> >> to emit all events through the hypertrace channel, providing a unified=
+ and fully
+> >> synchronized trace log. Another use case is timing the performance of =
+guest code
+> >> when optimizing TCG (QEMU traces have a timestamp).
+> >>=20
+> >> See first commit for a full description.
+> >>=20
+> >> Signed-off-by: Llu=EDs Vilanova <vilanova@ac.upc.edu>
+> >> ---
+>=20
+> > CCing Steven Rostedt, Masami Hiramatsu, Luiz Capitulino, and LTTng folks
+> > who have all looked into host/guest tracing solutions.
+> [...]
+>=20
+> Oh, I wasn't aware of that. I'm certainly interested in collaborating.
+
+They are working on or have worked on different approaches to host/guest
+tracing.  Unfortunately there isn't an out-of-the-box solution as far as
+I know.
+
+It would be nice if there was a documented host/guest tracing approach
+that didn't involve much manual setup and handled most use cases.
+
+Stefan
+
+--mPTHnM80CEnHQ2WJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJXtb3XAAoJEJykq7OBq3PIwsoH/2UNq012uaauQNC4XY1dskPf
+6+9xwwq3xhmb3UzXtVX4Fe1ZM7YXpa5OoqEZJeNdShJHc957F3s77AbpU9cJUG6D
+Oh37a2TwOSRj/uRetid0Y51gGeSyc5/wFdIkhDaIAVKk2UgGN50i0NUMbIa1Ggaj
+Kuo99BGB4L08XWgnz9YSKM3O3FeGlP/PIphi9OcTLocPE7d6Gw3Ox0FAkTQT+q/Y
+qqxRE60U6XLeDVCkrbDkRPpRAwsGzP8vhep7OflBQzHcRPBje1RYnFmuDi/5KpC4
+LBacb8/wM9N8rOb597f9D/SCvua6uqG0Lqrpnb864Lz3zXuhnSuLo0xovPUYPso=
+=VVba
+-----END PGP SIGNATURE-----
+
+--mPTHnM80CEnHQ2WJ--
+
+--===============0355525449713057246==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============0355525449713057246==--
