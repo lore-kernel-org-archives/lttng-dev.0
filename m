@@ -1,15 +1,18 @@
-From: Noam Cohen <noam@lifeonair.com>
-Subject: problem running/installing lttng on ubuntu 16.04
-Date: Wed, 17 Aug 2016 13:25:48 +0300
-Message-ID: <CAKH_oXJ+20uS1d1S71JLbYkPO9+Cx=3v4-+Ss_jbj7rnUzp8_w__40598.8588849597$1471522005$gmane$org@mail.gmail.com>
+From: Luiz Capitulino <lcapitulino@redhat.com>
+Subject: Re: [Qemu-devel] [PATCH 0/6] hypertrace: Lightweight
+ guest-to-QEMU trace channel
+Date: Thu, 18 Aug 2016 09:37:11 -0400
+Message-ID: <20160818093711.6f77c30b__37839.230328291$1471527461$gmane$org@redhat.com>
+References: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
+ <20160818105424.GD4850@stefanha-x1.localdomain>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0166367220696041326=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm0-f43.google.com (mail-wm0-f43.google.com [74.125.82.43])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 1574AA02B1
- for <lttng-dev@lists.lttng.org>; Wed, 17 Aug 2016 10:26:14 +0000 (UTC)
-Received: by mail-wm0-f43.google.com with SMTP id o80so223061202wme.1
- for <lttng-dev@lists.lttng.org>; Wed, 17 Aug 2016 03:26:10 -0700 (PDT)
+Received: from mx1.redhat.com (mx1.redhat.com [209.132.183.28])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id E3993A2A23
+ for <lttng-dev@lists.lttng.org>; Thu, 18 Aug 2016 13:37:33 +0000 (UTC)
+In-Reply-To: <20160818105424.GD4850@stefanha-x1.localdomain>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,135 +22,62 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Stefan Hajnoczi <stefanha@gmail.com>
+Cc: qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>, =?UTF-8?B?TGx1w61z?= Vilanova <vilanova@ac.upc.edu>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0166367220696041326==
-Content-Type: multipart/alternative; boundary=001a11412394c94f63053a41e4fa
-
---001a11412394c94f63053a41e4fa
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hello
-I installed lttng on my ubuntu, and tried the "getting Started".
-
-
-I ran the helloWorld, and then
-$ lttng list --userspace
-Error: Unable to list UST events: No session daemon is available
-Error: Command error
-
-Waited a minute and retried, and now the output was as expected.
-$ lttng list --userspace
-UST events:
--------------
-
-PID: 17386 - Name: ./hello
-      lttng_ust_tracelog:TRACE_DEBUG (loglevel: TRACE_DEBUG (14)) (type:
-tracepoint)
-      < SNIP >
-      hello_world:my_first_tracepoint (loglevel: TRACE_DEBUG_LINE (13))
-(type: tracepoint)
-
-**Is it normal behavior?*
-
-
-Then,
-$ lttng create
-Session auto-20160817-132123 created.
-Traces will be written in /home/noam/lttng-traces/auto-20160817-132123
-noam@noam-nuc:~/tmp/lttng$ lttng enable-event --userspace
-hello_world:my_first_tracepoint
-Error: Event hello_world:my_first_tracepoint: UST create channel failed
-(channel channel0, session auto-20160817-132123)
-
-How do I solve it?
----------------------
-system properties:
-
-noam@noam-nuc:~$ ps -ef | grep lttng
-noam     17410 17398  0 13:18 pts/3    00:00:00 lttng-sessiond -vvv
-noam     17411 17410  0 13:18 pts/3    00:00:00 lttng-runas    -vvv
-noam     17442 17410  0 13:21 pts/3    00:00:00 lttng-consumerd  -u
---consumerd-cmd-sock /home/noam/.lttng/ustconsumerd64/command
---consumerd-err-sock /home/noam/.lttng/ustconsumerd64/error --group tracing
-noam     17444 17442  0 13:21 pts/3    00:00:00 lttng-runas      -u
---consumerd-cmd-sock /home/noam/.lttng/ustconsumerd64/command
---consumerd-err-sock /home/noam/.lttng/ustconsumerd64/error --group tracing
-noam     17480 17467  0 13:22 pts/7    00:00:00 grep --color=3Dauto lttng
-noam@noam-nuc:~$ lsb_release -a
-No LSB modules are available.
-Distributor ID: Ubuntu
-Description: Ubuntu 16.04.1 LTS
-Release: 16.04
-Codename: xenial
-
-
-Installed lttng using:
-sudo apt-get install lttng-tools lttng-modules-dkms liblttng-ust-dev
-
-
-$ lttng --version
-lttng (LTTng Trace Control) 2.7.1 - Herbe =C3=A0 D=C3=A9tourne
-
---001a11412394c94f63053a41e4fa
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello<div>I installed lttng on my ubuntu, and tried the &q=
-uot;getting Started&quot;.</div><div><br></div><div><br></div><div>I ran th=
-e helloWorld, and then=C2=A0</div><div><div>$ lttng list --userspace</div><=
-div>Error: Unable to list UST events: No session daemon is available</div><=
-div>Error: Command error</div></div><div><br></div><div>Waited a minute and=
- retried, and now the output was as expected.</div><div><div>$ lttng list -=
--userspace</div><div>UST events:</div><div>-------------</div><div><br></di=
-v><div>PID: 17386 - Name: ./hello</div><div>=C2=A0 =C2=A0 =C2=A0 lttng_ust_=
-tracelog:TRACE_DEBUG (loglevel: TRACE_DEBUG (14)) (type: tracepoint)</div><=
-div>=C2=A0 =C2=A0 =C2=A0 &lt; SNIP &gt;</div><div>=C2=A0 =C2=A0 =C2=A0 hell=
-o_world:my_first_tracepoint (loglevel: TRACE_DEBUG_LINE (13)) (type: tracep=
-oint)</div></div><div><br></div><div><b>*Is it normal behavior?</b></div><d=
-iv><br></div><div><br></div><div>Then,</div><div><div>$ lttng create</div><=
-div>Session auto-20160817-132123 created.</div><div>Traces will be written =
-in /home/noam/lttng-traces/auto-20160817-132123</div><div>noam@noam-nuc:~/t=
-mp/lttng$ lttng enable-event --userspace hello_world:my_first_tracepoint</d=
-iv><div>Error: Event hello_world:my_first_tracepoint: UST create channel fa=
-iled (channel channel0, session auto-20160817-132123)</div></div><div><br><=
-/div><div>How do I solve it?</div><div>---------------------</div><div>syst=
-em properties:</div><div><br></div><div><div>noam@noam-nuc:~$ ps -ef | grep=
- lttng</div><div>noam =C2=A0 =C2=A0 17410 17398 =C2=A00 13:18 pts/3 =C2=A0 =
-=C2=A000:00:00 lttng-sessiond -vvv</div><div>noam =C2=A0 =C2=A0 17411 17410=
- =C2=A00 13:18 pts/3 =C2=A0 =C2=A000:00:00 lttng-runas =C2=A0 =C2=A0-vvv</d=
-iv><div>noam =C2=A0 =C2=A0 17442 17410 =C2=A00 13:21 pts/3 =C2=A0 =C2=A000:=
-00:00 lttng-consumerd =C2=A0-u --consumerd-cmd-sock /home/noam/.lttng/ustco=
-nsumerd64/command --consumerd-err-sock /home/noam/.lttng/ustconsumerd64/err=
-or --group tracing</div><div>noam =C2=A0 =C2=A0 17444 17442 =C2=A00 13:21 p=
-ts/3 =C2=A0 =C2=A000:00:00 lttng-runas =C2=A0 =C2=A0 =C2=A0-u --consumerd-c=
-md-sock /home/noam/.lttng/ustconsumerd64/command --consumerd-err-sock /home=
-/noam/.lttng/ustconsumerd64/error --group tracing</div><div>noam =C2=A0 =C2=
-=A0 17480 17467 =C2=A00 13:22 pts/7 =C2=A0 =C2=A000:00:00 grep --color=3Dau=
-to lttng</div><div>noam@noam-nuc:~$ lsb_release -a</div><div>No LSB modules=
- are available.</div><div>Distributor ID:<span class=3D"" style=3D"white-sp=
-ace:pre">	</span>Ubuntu</div><div>Description:<span class=3D"" style=3D"whi=
-te-space:pre">	</span>Ubuntu 16.04.1 LTS</div><div>Release:<span class=3D""=
- style=3D"white-space:pre">	</span>16.04</div><div>Codename:<span class=3D"=
-" style=3D"white-space:pre">	</span>xenial</div></div><div><br></div><div><=
-br></div><div>Installed lttng using:</div><div>sudo apt-get install lttng-t=
-ools lttng-modules-dkms liblttng-ust-dev<br></div><div><br></div><div><br><=
-/div><div><div>$ lttng --version</div><div>lttng (LTTng Trace Control) 2.7.=
-1 - Herbe =C3=A0 D=C3=A9tourne</div></div><div><br></div><div><br></div></d=
-iv>
-
---001a11412394c94f63053a41e4fa--
-
---===============0166367220696041326==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============0166367220696041326==--
+T24gVGh1LCAxOCBBdWcgMjAxNiAxMTo1NDoyNCArMDEwMApTdGVmYW4gSGFqbm9jemkgPHN0ZWZh
+bmhhQGdtYWlsLmNvbT4gd3JvdGU6Cgo+IE9uIEZyaSwgQXVnIDA1LCAyMDE2IGF0IDA2OjU5OjIz
+UE0gKzAyMDAsIExsdcOtcyBWaWxhbm92YSB3cm90ZToKPiA+IFRoZSBoeXBlcnRyYWNlIGNoYW5u
+ZWwgYWxsb3dzIGd1ZXN0IGNvZGUgdG8gZW1pdCBldmVudHMgaW4gUUVNVSAodGhlIGhvc3QpIHVz
+aW5nCj4gPiBpdHMgdHJhY2luZyBpbmZyYXN0cnVjdHVyZSAoc2VlICJkb2NzL3RyYWNlLnR4dCIp
+LiBUaGlzIHdvcmtzIGluIGJvdGggJ3N5c3RlbScKPiA+IGFuZCAndXNlcicgbW9kZXMuIFRoYXQg
+aXMsIGh5cGVydHJhY2UgaXMgdG8gdHJhY2luZywgd2hhdCBoeXBlcmNhbGxzIGFyZSB0bwo+ID4g
+c3lzdGVtIGNhbGxzLgo+ID4gCj4gPiBZb3UgY2FuIHVzZSB0aGlzIHRvIGVtaXQgYW4gZXZlbnQg
+b24gYm90aCBndWVzdCBhbmQgUUVNVSAoaG9zdCkgdHJhY2VzIHRvIGVhc2lseQo+ID4gc3luY2hy
+b25pemUgb3IgY29ycmVsYXRlIHRoZW0uIFlvdSBjb3VsZCBhbHNvIG1vZGlmeSB5b3UgZ3Vlc3Qn
+cyB0cmFjaW5nIHN5c3RlbQo+ID4gdG8gZW1pdCBhbGwgZXZlbnRzIHRocm91Z2ggdGhlIGh5cGVy
+dHJhY2UgY2hhbm5lbCwgcHJvdmlkaW5nIGEgdW5pZmllZCBhbmQgZnVsbHkKPiA+IHN5bmNocm9u
+aXplZCB0cmFjZSBsb2cuIEFub3RoZXIgdXNlIGNhc2UgaXMgdGltaW5nIHRoZSBwZXJmb3JtYW5j
+ZSBvZiBndWVzdCBjb2RlCj4gPiB3aGVuIG9wdGltaXppbmcgVENHIChRRU1VIHRyYWNlcyBoYXZl
+IGEgdGltZXN0YW1wKS4KPiA+IAo+ID4gU2VlIGZpcnN0IGNvbW1pdCBmb3IgYSBmdWxsIGRlc2Ny
+aXB0aW9uLiAgCgpJIGhhdGUgdGhlIGJlIHRoZSBvbmUgYXNraW5nIHRoZSBzdHVwaWQgcXVlc3Rp
+b25zLCBidXQgd2hhdCdzCnRoZSBwcm9ibGVtIHRoaXMgc2VyaWVzIHNvbHZlcz8gV2hhdCBhcmUg
+dGhlIHVzZS1jYXNlcz8gV2h5CmV4aXN0aW5nIHNvbHV0aW9ucyBkb24ndCBzb2x2ZSB0aGlzIHBy
+b2JsZW0/IEhvdyBkb2VzIHRoaXMKY29tcGFyZXMgdG8gZXhpc3Rpbmcgc29sdXRpb25zPwoKPiBU
+aGlzIHRyYWNpbmcgYXBwcm9hY2ggaGFzIGEgaGlnaCBwZXJmb3JtYW5jZSBvdmVyaGVhZCwgcGFy
+dGljdWxhcmx5IGZvcgo+IFNNUCBndWVzdHMgd2hlcmUgZWFjaCB0cmFjZSBldmVudCByZXF1aXJl
+cyB3cml0aW5nIHRvIHRoZSBnbG9iYWwgY29udHJvbAo+IHJlZ2lzdGVyLiAgQWxsIENQVXMgd2ls
+bCBiZSBoYW1tZXJpbmcgdGhpcyByZWdpc3RlciAoaGVhdnl3ZWlnaHQgdm1leGl0KQo+IGZvciBl
+YWNoIHRyYWNlIGV2ZW50Lgo+IAo+IEkgdGhpbmsgdGhlIGZvbGtzIENDZWQgb24gdGhpcyBlbWFp
+bCBhbGwgdGFrZSBhbiBhc3luY2hyb25vdXMgYXBwcm9hY2gKPiB0byBhdm9pZCB0aGlzIHBlcmZv
+cm1hbmNlIG92ZXJoZWFkLiAgU3luY2hyb25vdXMgbWVhbnMgdGFraW5nIGEgVk0gZXhpdAo+IGZv
+ciBldmVyeSBldmVudC4gIEFzeW5jaHJvbm91cyBtZWFucyB3cml0aW5nIHRyYWNlIGRhdGEgdG8g
+YSBidWZmZXIgYW5kCj4gbGF0ZXIgaW50ZXJsZWF2aW5nIGd1ZXN0IGRhdGEgd2l0aCBob3N0IHRy
+YWNlIGRhdGEuCj4gCj4gTFRUbmcgVXNlcnNwYWNlIFRyYWNlciBpcyBhbiBleGFtcGxlIG9mIHRo
+ZSBhc3luY2hyb25vdXMgYXBwcm9hY2guICBUaGUKPiB0cmFjZSBkYXRhIGJ1ZmZlcnMgYXJlIGlu
+IHNoYXJlZCBtZW1vcnkuICBUaGUgTFRUbmcgcHJvY2VzcyBjYW4gZ3JhYgo+IGJ1ZmZlcnMgYXQg
+YXBwcm9wcmlhdGUgdGltZXMuCj4gCj4gVGhlIGZ0cmFjZSB2aXJ0aW8tc2VyaWFsIGFwcHJvYWNo
+IGhhcyBiZWVuIHRvIHNwbGljZSgpIHRoZSBmdHJhY2UKPiBidWZmZXJzLCByZXN1bHRpbmcgaW4g
+ZWZmaWNpZW50IEkvTy4KClllcy4gSG93ZXZlciwgbm90ZSB0aGF0IHRoZSB2aXJ0aW8tc2VyaWFs
+IGRldmljZSBpcyBvbmx5IHVzZWQgdG8KdHJhbnNmZXIgdGhlIHRyYWNpbmcgZGF0YSB0byB0aGUg
+aG9zdC4gSXQgaGFzIG5vIHJvbGUgaW4gdGhlCnRyYWNpbmcgcHJvY2Vzcy4gQWxzbywgaXQncyBu
+b3QgcmVxdWlyZWQuIEkndmUgYmVlbiB1c2luZyB0aGUKbmV0d29ya2luZyBhbmQgaXQgd29ya3Mg
+T0sgYXMgbG9uZyBhcyB5b3VyIHRyYWNpbmcgZGF0YSBpcyBub3QgYmlnLgoKPiAKPiBTdGV2ZW4g
+aXMgd29ya2luZyBvbiBhIGhvc3QvZ3Vlc3Qgc29sdXRpb24gZm9yIHRyYWNlLWNtZC4gIEl0IGlz
+IGFsc28KPiBhc3luY2hyb25vdXMuICBObyBuZXcgcGFyYXZpcnQgaGFyZHdhcmUgaXMgbmVlZGVk
+IGFuZCBpdCBtYWtlcyBtZSB3b25kZXIKPiB3aGV0aGVyIHRoZSBoeXBlcnRyYWNlIFBDSSBkZXZp
+Y2UgaXMgdHJ5aW5nIHRvIHNvbHZlIHRoZSBwcm9ibGVtIGF0IHRoZQo+IHdyb25nIGxheWVyLgo+
+IAo+IElmIHlvdSB3YW50IHRvIHBsYXkgYXJvdW5kIHdpdGggYXN5bmNocm9ub3VzIHRyYWNpbmcs
+IHlvdSBjb3VsZCBzdGFydAo+IHdpdGggdHJhY2Uvc2ltcGxlLmMuICBJdCBoYXMgYSB0cmFjZSBi
+dWZmZXIgdGhhdCBpcyBhc3luY2hyb25vdXNseQo+IHdyaXR0ZW4gb3V0IHRvIGZpbGUgYnkgYSBk
+ZWRpY2F0ZWQgIndyaXRlciIgdGhyZWFkLgo+IAo+IFRoZSBvbmUgY2FzZSB3aGVyZSBoeXBlcnRy
+YWNlIG1ha2VzIHNlbnNlIHRvIG1lIGlzIGZvciAtdXNlciB0cmFjaW5nLgo+IFRoZXJlIFFFTVUg
+Y2FuIGVmZmljaWVudGx5IGludGVybGVhdmUgZ3Vlc3QgYW5kIFFFTVUgdHJhY2VzLCBhbHRob3Vn
+aCBhcwo+IG1lbnRpb25lZCBpbiB0aGUgcGF0Y2gsIEkgZG9uJ3QgdGhpbmsgdGhlIFNJR1NFR1Yg
+YXBwcm9hY2ggc2hvdWxkIGJlCj4gdXNlZC4KPiAKPiBJIHN1Z2dlc3Qgc3RyaXBwaW5nIHRoaXMg
+c2VyaWVzIGRvd24gdG8gZm9jdXMgb24gLXVzZXIuICBTeW5jaHJvbm91cwo+IHRyYWNpbmcgaXMg
+bm90IGEgZ29vZCBhcHByb2FjaCBmb3IgLXN5c3RlbSBlbXVsYXRpb24uCj4gCj4gU3RlZmFuCgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
+bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRu
+Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
