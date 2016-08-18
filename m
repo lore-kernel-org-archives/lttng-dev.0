@@ -1,51 +1,104 @@
-From: =?utf-8?Q?Llu=C3=ADs_Vilanova?= <vilanova@ac.upc.edu>
-Subject: Re: [Qemu-devel] [PATCH 0/6] hypertrace: Lightweight
-	guest-to-QEMU trace channel
-Date: Thu, 18 Aug 2016 12:22:18 +0200
-Message-ID: <87wpjeqsv9.fsf__43330.134850885$1471515764$gmane$org@fimbulvetr.bsc.es>
+From: Stefan Hajnoczi <stefanha@gmail.com>
+Subject: Re: [PATCH 0/6] hypertrace: Lightweight guest-to-QEMU
+ trace channel
+Date: Thu, 18 Aug 2016 11:54:24 +0100
+Message-ID: <20160818105424.GD4850@stefanha-x1.localdomain>
 References: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
- <20160818094720.GA4850@stefanha-x1.localdomain>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from roura.ac.upc.es (roura.ac.upc.edu [147.83.33.10])
- by evm-lttng-1.efficios.com (Postfix) with ESMTP id 7EB9DA03A3
- for <lttng-dev@lists.lttng.org>; Thu, 18 Aug 2016 10:22:37 +0000 (UTC)
-In-Reply-To: <20160818094720.GA4850@stefanha-x1.localdomain> (Stefan
- Hajnoczi's message of "Thu, 18 Aug 2016 10:47:20 +0100")
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Stefan Hajnoczi <stefanha@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="sXc4Kmr5FA7axrvy"
+Return-path: <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
+Content-Disposition: inline
+In-Reply-To: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
+List-Unsubscribe: <https://lists.nongnu.org/mailman/options/qemu-devel>,
+	<mailto:qemu-devel-request@nongnu.org?subject=unsubscribe>
+List-Archive: <http://lists.nongnu.org/archive/html/qemu-devel/>
+List-Post: <mailto:qemu-devel@nongnu.org>
+List-Help: <mailto:qemu-devel-request@nongnu.org?subject=help>
+List-Subscribe: <https://lists.nongnu.org/mailman/listinfo/qemu-devel>,
+	<mailto:qemu-devel-request@nongnu.org?subject=subscribe>
+Errors-To: qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org
+Sender: "Qemu-devel" <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
+To: =?iso-8859-1?Q?Llu=EDs?= Vilanova <vilanova@ac.upc.edu>
 Cc: qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, Luiz Capitulino <lcapitulino@redhat.com>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>
 List-Id: lttng-dev@lists.lttng.org
 
-U3RlZmFuIEhham5vY3ppIHdyaXRlczoKCj4gT24gRnJpLCBBdWcgMDUsIDIwMTYgYXQgMDY6NTk6
-MjNQTSArMDIwMCwgTGx1w61zIFZpbGFub3ZhIHdyb3RlOgo+PiBUaGUgaHlwZXJ0cmFjZSBjaGFu
-bmVsIGFsbG93cyBndWVzdCBjb2RlIHRvIGVtaXQgZXZlbnRzIGluIFFFTVUgKHRoZSBob3N0KSB1
-c2luZwo+PiBpdHMgdHJhY2luZyBpbmZyYXN0cnVjdHVyZSAoc2VlICJkb2NzL3RyYWNlLnR4dCIp
-LiBUaGlzIHdvcmtzIGluIGJvdGggJ3N5c3RlbScKPj4gYW5kICd1c2VyJyBtb2Rlcy4gVGhhdCBp
-cywgaHlwZXJ0cmFjZSBpcyB0byB0cmFjaW5nLCB3aGF0IGh5cGVyY2FsbHMgYXJlIHRvCj4+IHN5
-c3RlbSBjYWxscy4KPj4gCj4+IFlvdSBjYW4gdXNlIHRoaXMgdG8gZW1pdCBhbiBldmVudCBvbiBi
-b3RoIGd1ZXN0IGFuZCBRRU1VIChob3N0KSB0cmFjZXMgdG8gZWFzaWx5Cj4+IHN5bmNocm9uaXpl
-IG9yIGNvcnJlbGF0ZSB0aGVtLiBZb3UgY291bGQgYWxzbyBtb2RpZnkgeW91IGd1ZXN0J3MgdHJh
-Y2luZyBzeXN0ZW0KPj4gdG8gZW1pdCBhbGwgZXZlbnRzIHRocm91Z2ggdGhlIGh5cGVydHJhY2Ug
-Y2hhbm5lbCwgcHJvdmlkaW5nIGEgdW5pZmllZCBhbmQgZnVsbHkKPj4gc3luY2hyb25pemVkIHRy
-YWNlIGxvZy4gQW5vdGhlciB1c2UgY2FzZSBpcyB0aW1pbmcgdGhlIHBlcmZvcm1hbmNlIG9mIGd1
-ZXN0IGNvZGUKPj4gd2hlbiBvcHRpbWl6aW5nIFRDRyAoUUVNVSB0cmFjZXMgaGF2ZSBhIHRpbWVz
-dGFtcCkuCj4+IAo+PiBTZWUgZmlyc3QgY29tbWl0IGZvciBhIGZ1bGwgZGVzY3JpcHRpb24uCj4+
-IAo+PiBTaWduZWQtb2ZmLWJ5OiBMbHXDrXMgVmlsYW5vdmEgPHZpbGFub3ZhQGFjLnVwYy5lZHU+
-Cj4+IC0tLQoKPiBDQ2luZyBTdGV2ZW4gUm9zdGVkdCwgTWFzYW1pIEhpcmFtYXRzdSwgTHVpeiBD
-YXBpdHVsaW5vLCBhbmQgTFRUbmcgZm9sa3MKPiB3aG8gaGF2ZSBhbGwgbG9va2VkIGludG8gaG9z
-dC9ndWVzdCB0cmFjaW5nIHNvbHV0aW9ucy4KWy4uLl0KCk9oLCBJIHdhc24ndCBhd2FyZSBvZiB0
-aGF0LiBJJ20gY2VydGFpbmx5IGludGVyZXN0ZWQgaW4gY29sbGFib3JhdGluZy4KCgpDaGVlcnMs
-CiAgTGx1aXMKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8v
-bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--sXc4Kmr5FA7axrvy
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Aug 05, 2016 at 06:59:23PM +0200, Llu=EDs Vilanova wrote:
+> The hypertrace channel allows guest code to emit events in QEMU (the host=
+) using
+> its tracing infrastructure (see "docs/trace.txt"). This works in both 'sy=
+stem'
+> and 'user' modes. That is, hypertrace is to tracing, what hypercalls are =
+to
+> system calls.
+>=20
+> You can use this to emit an event on both guest and QEMU (host) traces to=
+ easily
+> synchronize or correlate them. You could also modify you guest's tracing =
+system
+> to emit all events through the hypertrace channel, providing a unified an=
+d fully
+> synchronized trace log. Another use case is timing the performance of gue=
+st code
+> when optimizing TCG (QEMU traces have a timestamp).
+>=20
+> See first commit for a full description.
+
+This tracing approach has a high performance overhead, particularly for
+SMP guests where each trace event requires writing to the global control
+register.  All CPUs will be hammering this register (heavyweight vmexit)
+for each trace event.
+
+I think the folks CCed on this email all take an asynchronous approach
+to avoid this performance overhead.  Synchronous means taking a VM exit
+for every event.  Asynchronous means writing trace data to a buffer and
+later interleaving guest data with host trace data.
+
+LTTng Userspace Tracer is an example of the asynchronous approach.  The
+trace data buffers are in shared memory.  The LTTng process can grab
+buffers at appropriate times.
+
+The ftrace virtio-serial approach has been to splice() the ftrace
+buffers, resulting in efficient I/O.
+
+Steven is working on a host/guest solution for trace-cmd.  It is also
+asynchronous.  No new paravirt hardware is needed and it makes me wonder
+whether the hypertrace PCI device is trying to solve the problem at the
+wrong layer.
+
+If you want to play around with asynchronous tracing, you could start
+with trace/simple.c.  It has a trace buffer that is asynchronously
+written out to file by a dedicated "writer" thread.
+
+The one case where hypertrace makes sense to me is for -user tracing.
+There QEMU can efficiently interleave guest and QEMU traces, although as
+mentioned in the patch, I don't think the SIGSEGV approach should be
+used.
+
+I suggest stripping this series down to focus on -user.  Synchronous
+tracing is not a good approach for -system emulation.
+
+Stefan
+
+--sXc4Kmr5FA7axrvy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJXtZPgAAoJEJykq7OBq3PInLoH/j0Y0mw1eSOhhfRXiqu/Zp5C
+URbDbBZ5Z2vYytLZIiRcm/69GKr9QJSSLj0ZoV54Er/60pFs2kxgZnsVd94oybGI
+P7PqRTAiVnxI3fJJnjxfA35ox8Pl9rpK2Qila44bGypl7JK9vGZ9hrfPYDIlDseY
+jO4v+1C1Z7F4nR9q5/apKtzl1JGdejUU2xmf1NlXhQ5KGOVisp0cfG2OV0sS8Sdu
+hZuXJNSpVfAgPqgKpHPCzUEHZ0Zqw+G1gg2QjlDg+ladi+fv3eSZyt/opZTKky3+
+hqGP47Z6CTY7cPwkhyECvoed/8McxgqbZaumqB7Yhy2sV/4BRrjyaiIqcnyBCR0=
+=sD3+
+-----END PGP SIGNATURE-----
+
+--sXc4Kmr5FA7axrvy--
