@@ -1,18 +1,20 @@
-From: Stefan Hajnoczi <stefanha@redhat.com>
+From: Luiz Capitulino <lcapitulino@redhat.com>
 Subject: Re: [Qemu-devel] [PATCH 0/6] hypertrace: Lightweight
  guest-to-QEMU trace channel
-Date: Thu, 18 Aug 2016 14:53:27 +0100
-Message-ID: <20160818135327.GJ4850__23321.8245128684$1471528423$gmane$org@stefanha-x1.localdomain>
+Date: Thu, 18 Aug 2016 10:21:56 -0400
+Message-ID: <20160818102156.2c43bc6c__7646.1638360799$1471530133$gmane$org@redhat.com>
 References: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
  <20160818094720.GA4850@stefanha-x1.localdomain>
  <87wpjeqsv9.fsf@fimbulvetr.bsc.es>
+ <20160818135327.GJ4850@stefanha-x1.localdomain>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0355525449713057246=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mx1.redhat.com (mx1.redhat.com [209.132.183.28])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 3F207A2A23
- for <lttng-dev@lists.lttng.org>; Thu, 18 Aug 2016 13:53:36 +0000 (UTC)
-In-Reply-To: <87wpjeqsv9.fsf@fimbulvetr.bsc.es>
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id A6150A2E74
+ for <lttng-dev@lists.lttng.org>; Thu, 18 Aug 2016 14:22:04 +0000 (UTC)
+In-Reply-To: <20160818135327.GJ4850@stefanha-x1.localdomain>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,88 +24,52 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Stefan Hajnoczi <stefanha@gmail.com>, qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, Luiz Capitulino <lcapitulino@redhat.com>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>
+To: Stefan Hajnoczi <stefanha@redhat.com>
+Cc: Stefan Hajnoczi <stefanha@gmail.com>, lttng-dev@lists.lttng.org, qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-
---===============0355525449713057246==
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="mPTHnM80CEnHQ2WJ"
-Content-Disposition: inline
-
-
---mPTHnM80CEnHQ2WJ
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Aug 18, 2016 at 12:22:18PM +0200, Llu=EDs Vilanova wrote:
-> Stefan Hajnoczi writes:
->=20
-> > On Fri, Aug 05, 2016 at 06:59:23PM +0200, Llu=EDs Vilanova wrote:
-> >> The hypertrace channel allows guest code to emit events in QEMU (the h=
-ost) using
-> >> its tracing infrastructure (see "docs/trace.txt"). This works in both =
-'system'
-> >> and 'user' modes. That is, hypertrace is to tracing, what hypercalls a=
-re to
-> >> system calls.
-> >>=20
-> >> You can use this to emit an event on both guest and QEMU (host) traces=
- to easily
-> >> synchronize or correlate them. You could also modify you guest's traci=
-ng system
-> >> to emit all events through the hypertrace channel, providing a unified=
- and fully
-> >> synchronized trace log. Another use case is timing the performance of =
-guest code
-> >> when optimizing TCG (QEMU traces have a timestamp).
-> >>=20
-> >> See first commit for a full description.
-> >>=20
-> >> Signed-off-by: Llu=EDs Vilanova <vilanova@ac.upc.edu>
-> >> ---
->=20
-> > CCing Steven Rostedt, Masami Hiramatsu, Luiz Capitulino, and LTTng folks
-> > who have all looked into host/guest tracing solutions.
-> [...]
->=20
-> Oh, I wasn't aware of that. I'm certainly interested in collaborating.
-
-They are working on or have worked on different approaches to host/guest
-tracing.  Unfortunately there isn't an out-of-the-box solution as far as
-I know.
-
-It would be nice if there was a documented host/guest tracing approach
-that didn't involve much manual setup and handled most use cases.
-
-Stefan
-
---mPTHnM80CEnHQ2WJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQEcBAEBAgAGBQJXtb3XAAoJEJykq7OBq3PIwsoH/2UNq012uaauQNC4XY1dskPf
-6+9xwwq3xhmb3UzXtVX4Fe1ZM7YXpa5OoqEZJeNdShJHc957F3s77AbpU9cJUG6D
-Oh37a2TwOSRj/uRetid0Y51gGeSyc5/wFdIkhDaIAVKk2UgGN50i0NUMbIa1Ggaj
-Kuo99BGB4L08XWgnz9YSKM3O3FeGlP/PIphi9OcTLocPE7d6Gw3Ox0FAkTQT+q/Y
-qqxRE60U6XLeDVCkrbDkRPpRAwsGzP8vhep7OflBQzHcRPBje1RYnFmuDi/5KpC4
-LBacb8/wM9N8rOb597f9D/SCvua6uqG0Lqrpnb864Lz3zXuhnSuLo0xovPUYPso=
-=VVba
------END PGP SIGNATURE-----
-
---mPTHnM80CEnHQ2WJ--
-
---===============0355525449713057246==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============0355525449713057246==--
+T24gVGh1LCAxOCBBdWcgMjAxNiAxNDo1MzoyNyArMDEwMApTdGVmYW4gSGFqbm9jemkgPHN0ZWZh
+bmhhQHJlZGhhdC5jb20+IHdyb3RlOgoKPiBPbiBUaHUsIEF1ZyAxOCwgMjAxNiBhdCAxMjoyMjox
+OFBNICswMjAwLCBMbHXDrXMgVmlsYW5vdmEgd3JvdGU6Cj4gPiBTdGVmYW4gSGFqbm9jemkgd3Jp
+dGVzOgo+ID4gICAKPiA+ID4gT24gRnJpLCBBdWcgMDUsIDIwMTYgYXQgMDY6NTk6MjNQTSArMDIw
+MCwgTGx1w61zIFZpbGFub3ZhIHdyb3RlOiAgCj4gPiA+PiBUaGUgaHlwZXJ0cmFjZSBjaGFubmVs
+IGFsbG93cyBndWVzdCBjb2RlIHRvIGVtaXQgZXZlbnRzIGluIFFFTVUgKHRoZSBob3N0KSB1c2lu
+Zwo+ID4gPj4gaXRzIHRyYWNpbmcgaW5mcmFzdHJ1Y3R1cmUgKHNlZSAiZG9jcy90cmFjZS50eHQi
+KS4gVGhpcyB3b3JrcyBpbiBib3RoICdzeXN0ZW0nCj4gPiA+PiBhbmQgJ3VzZXInIG1vZGVzLiBU
+aGF0IGlzLCBoeXBlcnRyYWNlIGlzIHRvIHRyYWNpbmcsIHdoYXQgaHlwZXJjYWxscyBhcmUgdG8K
+PiA+ID4+IHN5c3RlbSBjYWxscy4KPiA+ID4+IAo+ID4gPj4gWW91IGNhbiB1c2UgdGhpcyB0byBl
+bWl0IGFuIGV2ZW50IG9uIGJvdGggZ3Vlc3QgYW5kIFFFTVUgKGhvc3QpIHRyYWNlcyB0byBlYXNp
+bHkKPiA+ID4+IHN5bmNocm9uaXplIG9yIGNvcnJlbGF0ZSB0aGVtLiBZb3UgY291bGQgYWxzbyBt
+b2RpZnkgeW91IGd1ZXN0J3MgdHJhY2luZyBzeXN0ZW0KPiA+ID4+IHRvIGVtaXQgYWxsIGV2ZW50
+cyB0aHJvdWdoIHRoZSBoeXBlcnRyYWNlIGNoYW5uZWwsIHByb3ZpZGluZyBhIHVuaWZpZWQgYW5k
+IGZ1bGx5Cj4gPiA+PiBzeW5jaHJvbml6ZWQgdHJhY2UgbG9nLiBBbm90aGVyIHVzZSBjYXNlIGlz
+IHRpbWluZyB0aGUgcGVyZm9ybWFuY2Ugb2YgZ3Vlc3QgY29kZQo+ID4gPj4gd2hlbiBvcHRpbWl6
+aW5nIFRDRyAoUUVNVSB0cmFjZXMgaGF2ZSBhIHRpbWVzdGFtcCkuCj4gPiA+PiAKPiA+ID4+IFNl
+ZSBmaXJzdCBjb21taXQgZm9yIGEgZnVsbCBkZXNjcmlwdGlvbi4KPiA+ID4+IAo+ID4gPj4gU2ln
+bmVkLW9mZi1ieTogTGx1w61zIFZpbGFub3ZhIDx2aWxhbm92YUBhYy51cGMuZWR1Pgo+ID4gPj4g
+LS0tICAKPiA+ICAgCj4gPiA+IENDaW5nIFN0ZXZlbiBSb3N0ZWR0LCBNYXNhbWkgSGlyYW1hdHN1
+LCBMdWl6IENhcGl0dWxpbm8sIGFuZCBMVFRuZyBmb2xrcwo+ID4gPiB3aG8gaGF2ZSBhbGwgbG9v
+a2VkIGludG8gaG9zdC9ndWVzdCB0cmFjaW5nIHNvbHV0aW9ucy4gIAo+ID4gWy4uLl0KPiA+IAo+
+ID4gT2gsIEkgd2Fzbid0IGF3YXJlIG9mIHRoYXQuIEknbSBjZXJ0YWlubHkgaW50ZXJlc3RlZCBp
+biBjb2xsYWJvcmF0aW5nLiAgCj4gCj4gVGhleSBhcmUgd29ya2luZyBvbiBvciBoYXZlIHdvcmtl
+ZCBvbiBkaWZmZXJlbnQgYXBwcm9hY2hlcyB0byBob3N0L2d1ZXN0Cj4gdHJhY2luZy4gIFVuZm9y
+dHVuYXRlbHkgdGhlcmUgaXNuJ3QgYW4gb3V0LW9mLXRoZS1ib3ggc29sdXRpb24gYXMgZmFyIGFz
+Cj4gSSBrbm93LgoKVGhlIGZ0cmFjZSBzb2x1dGlvbiBpcyBkb2N1bWVudGVkIGhlcmU6CgogaHR0
+cHM6Ly9saXN0cy5ub25nbnUub3JnL2FyY2hpdmUvaHRtbC9xZW11LWRldmVsLzIwMTYtMDMvbXNn
+MDA4ODcuaHRtbAoKVGhpcyB0cmFjZXMgdGhlIGd1ZXN0IGFuZCBob3N0IGtlcm5lbHMuIEl0IHN1
+cHBvcnRzIG1lcmdpbmcgdGhlIGd1ZXN0CmFuZCBob3N0IHRyYWNlcy4gSXQncyBleHRyZW1lbHkg
+bG93IGxhdGVuY3kgYW5kIGhhcyBoZWxwZWQgdXMgdG8KZmluZCBzZXZlcmFsIHNwaWtlcyBmb3Ig
+cmVhbC10aW1lIEtWTSAod2UncmUgdGFsa2luZyBhIGZldyB0bwphIGRvemVuIG1pY3Jvc2Vjb25k
+cyBhdCBtb3N0KS4KCk5vdywgb3VyIHN0YWNrIGFjdHVhbGx5IGlzOgoKIC0gR3Vlc3QgYXBwCiAt
+IEd1ZXN0IGtlcm5lbAogLSBIb3N0IGtlcm5lbAogLSBRRU1VCgpRRU1VIGFscmVhZHkgaGFzIGl0
+cyBvd24gdHJhY2luZyAod2hpY2ggSSBkb24ndCBrbm93IGhvdyBpdCB3b3JrcykuCklmIEkgaGFk
+IHRvIHRyYWNlIHRoZSBndWVzdCBhcHAsIEknZCBjZXJ0YWlubHkgc3RhcnQgb2ZmIGJ5IHVzaW5n
+CkxUVG5nLiBBbHRob3VnaCwgd2UnZCBoYXZlIHRvIHdyaXRlIGEgdG9vbCB0byBtZXJnZSBhbmQg
+b3JjaGVzdHJhdGUKKHdvb28sIGNsb3VkIGJ1enp3b3JkISkgYWxsIHRob3NlIHRyYWNlcyAoaWYg
+dGhhdCdzIHdoYXQgb25lIHdhbnRzKS4KCj4gSXQgd291bGQgYmUgbmljZSBpZiB0aGVyZSB3YXMg
+YSBkb2N1bWVudGVkIGhvc3QvZ3Vlc3QgdHJhY2luZyBhcHByb2FjaAo+IHRoYXQgZGlkbid0IGlu
+dm9sdmUgbXVjaCBtYW51YWwgc2V0dXAgYW5kIGhhbmRsZWQgbW9zdCB1c2UgY2FzZXMuCgpJJ2Qg
+dm9sdW50ZWVyIHRvIGRvIGl0LCBhbHRob3VnaCBpdCB3aWxsIHRha2UgbWUgd2Vla3MgdG8gZG8g
+aXQuCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
+Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
