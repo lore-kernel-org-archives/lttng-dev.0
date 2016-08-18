@@ -1,20 +1,19 @@
-From: Luiz Capitulino <lcapitulino@redhat.com>
+From: Steven Rostedt <rostedt@goodmis.org>
 Subject: Re: [Qemu-devel] [PATCH 0/6] hypertrace: Lightweight
  guest-to-QEMU trace channel
-Date: Thu, 18 Aug 2016 10:21:56 -0400
-Message-ID: <20160818102156.2c43bc6c__7646.1638360799$1471530133$gmane$org@redhat.com>
+Date: Thu, 18 Aug 2016 12:19:50 -0400
+Message-ID: <20160818121950.6a8d3c2d__3099.64182456515$1471537208$gmane$org@gandalf.local.home>
 References: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
- <20160818094720.GA4850@stefanha-x1.localdomain>
- <87wpjeqsv9.fsf@fimbulvetr.bsc.es>
- <20160818135327.GJ4850@stefanha-x1.localdomain>
+ <20160818105424.GD4850@stefanha-x1.localdomain>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx1.redhat.com (mx1.redhat.com [209.132.183.28])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id A6150A2E74
- for <lttng-dev@lists.lttng.org>; Thu, 18 Aug 2016 14:22:04 +0000 (UTC)
-In-Reply-To: <20160818135327.GJ4850@stefanha-x1.localdomain>
+Received: from smtprelay.hostedemail.com (smtprelay0125.hostedemail.com
+ [216.40.44.125])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 2C58EA3118
+ for <lttng-dev@lists.lttng.org>; Thu, 18 Aug 2016 16:20:00 +0000 (UTC)
+In-Reply-To: <20160818105424.GD4850@stefanha-x1.localdomain>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,52 +23,22 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Stefan Hajnoczi <stefanha@redhat.com>
-Cc: Stefan Hajnoczi <stefanha@gmail.com>, lttng-dev@lists.lttng.org, qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>
+To: Stefan Hajnoczi <stefanha@gmail.com>
+Cc: qemu-devel@nongnu.org, Luiz Capitulino <lcapitulino@redhat.com>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>, =?UTF-8?B?TGx1w61z?= Vilanova <vilanova@ac.upc.edu>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gVGh1LCAxOCBBdWcgMjAxNiAxNDo1MzoyNyArMDEwMApTdGVmYW4gSGFqbm9jemkgPHN0ZWZh
-bmhhQHJlZGhhdC5jb20+IHdyb3RlOgoKPiBPbiBUaHUsIEF1ZyAxOCwgMjAxNiBhdCAxMjoyMjox
-OFBNICswMjAwLCBMbHXDrXMgVmlsYW5vdmEgd3JvdGU6Cj4gPiBTdGVmYW4gSGFqbm9jemkgd3Jp
-dGVzOgo+ID4gICAKPiA+ID4gT24gRnJpLCBBdWcgMDUsIDIwMTYgYXQgMDY6NTk6MjNQTSArMDIw
-MCwgTGx1w61zIFZpbGFub3ZhIHdyb3RlOiAgCj4gPiA+PiBUaGUgaHlwZXJ0cmFjZSBjaGFubmVs
-IGFsbG93cyBndWVzdCBjb2RlIHRvIGVtaXQgZXZlbnRzIGluIFFFTVUgKHRoZSBob3N0KSB1c2lu
-Zwo+ID4gPj4gaXRzIHRyYWNpbmcgaW5mcmFzdHJ1Y3R1cmUgKHNlZSAiZG9jcy90cmFjZS50eHQi
-KS4gVGhpcyB3b3JrcyBpbiBib3RoICdzeXN0ZW0nCj4gPiA+PiBhbmQgJ3VzZXInIG1vZGVzLiBU
-aGF0IGlzLCBoeXBlcnRyYWNlIGlzIHRvIHRyYWNpbmcsIHdoYXQgaHlwZXJjYWxscyBhcmUgdG8K
-PiA+ID4+IHN5c3RlbSBjYWxscy4KPiA+ID4+IAo+ID4gPj4gWW91IGNhbiB1c2UgdGhpcyB0byBl
-bWl0IGFuIGV2ZW50IG9uIGJvdGggZ3Vlc3QgYW5kIFFFTVUgKGhvc3QpIHRyYWNlcyB0byBlYXNp
-bHkKPiA+ID4+IHN5bmNocm9uaXplIG9yIGNvcnJlbGF0ZSB0aGVtLiBZb3UgY291bGQgYWxzbyBt
-b2RpZnkgeW91IGd1ZXN0J3MgdHJhY2luZyBzeXN0ZW0KPiA+ID4+IHRvIGVtaXQgYWxsIGV2ZW50
-cyB0aHJvdWdoIHRoZSBoeXBlcnRyYWNlIGNoYW5uZWwsIHByb3ZpZGluZyBhIHVuaWZpZWQgYW5k
-IGZ1bGx5Cj4gPiA+PiBzeW5jaHJvbml6ZWQgdHJhY2UgbG9nLiBBbm90aGVyIHVzZSBjYXNlIGlz
-IHRpbWluZyB0aGUgcGVyZm9ybWFuY2Ugb2YgZ3Vlc3QgY29kZQo+ID4gPj4gd2hlbiBvcHRpbWl6
-aW5nIFRDRyAoUUVNVSB0cmFjZXMgaGF2ZSBhIHRpbWVzdGFtcCkuCj4gPiA+PiAKPiA+ID4+IFNl
-ZSBmaXJzdCBjb21taXQgZm9yIGEgZnVsbCBkZXNjcmlwdGlvbi4KPiA+ID4+IAo+ID4gPj4gU2ln
-bmVkLW9mZi1ieTogTGx1w61zIFZpbGFub3ZhIDx2aWxhbm92YUBhYy51cGMuZWR1Pgo+ID4gPj4g
-LS0tICAKPiA+ICAgCj4gPiA+IENDaW5nIFN0ZXZlbiBSb3N0ZWR0LCBNYXNhbWkgSGlyYW1hdHN1
-LCBMdWl6IENhcGl0dWxpbm8sIGFuZCBMVFRuZyBmb2xrcwo+ID4gPiB3aG8gaGF2ZSBhbGwgbG9v
-a2VkIGludG8gaG9zdC9ndWVzdCB0cmFjaW5nIHNvbHV0aW9ucy4gIAo+ID4gWy4uLl0KPiA+IAo+
-ID4gT2gsIEkgd2Fzbid0IGF3YXJlIG9mIHRoYXQuIEknbSBjZXJ0YWlubHkgaW50ZXJlc3RlZCBp
-biBjb2xsYWJvcmF0aW5nLiAgCj4gCj4gVGhleSBhcmUgd29ya2luZyBvbiBvciBoYXZlIHdvcmtl
-ZCBvbiBkaWZmZXJlbnQgYXBwcm9hY2hlcyB0byBob3N0L2d1ZXN0Cj4gdHJhY2luZy4gIFVuZm9y
-dHVuYXRlbHkgdGhlcmUgaXNuJ3QgYW4gb3V0LW9mLXRoZS1ib3ggc29sdXRpb24gYXMgZmFyIGFz
-Cj4gSSBrbm93LgoKVGhlIGZ0cmFjZSBzb2x1dGlvbiBpcyBkb2N1bWVudGVkIGhlcmU6CgogaHR0
-cHM6Ly9saXN0cy5ub25nbnUub3JnL2FyY2hpdmUvaHRtbC9xZW11LWRldmVsLzIwMTYtMDMvbXNn
-MDA4ODcuaHRtbAoKVGhpcyB0cmFjZXMgdGhlIGd1ZXN0IGFuZCBob3N0IGtlcm5lbHMuIEl0IHN1
-cHBvcnRzIG1lcmdpbmcgdGhlIGd1ZXN0CmFuZCBob3N0IHRyYWNlcy4gSXQncyBleHRyZW1lbHkg
-bG93IGxhdGVuY3kgYW5kIGhhcyBoZWxwZWQgdXMgdG8KZmluZCBzZXZlcmFsIHNwaWtlcyBmb3Ig
-cmVhbC10aW1lIEtWTSAod2UncmUgdGFsa2luZyBhIGZldyB0bwphIGRvemVuIG1pY3Jvc2Vjb25k
-cyBhdCBtb3N0KS4KCk5vdywgb3VyIHN0YWNrIGFjdHVhbGx5IGlzOgoKIC0gR3Vlc3QgYXBwCiAt
-IEd1ZXN0IGtlcm5lbAogLSBIb3N0IGtlcm5lbAogLSBRRU1VCgpRRU1VIGFscmVhZHkgaGFzIGl0
-cyBvd24gdHJhY2luZyAod2hpY2ggSSBkb24ndCBrbm93IGhvdyBpdCB3b3JrcykuCklmIEkgaGFk
-IHRvIHRyYWNlIHRoZSBndWVzdCBhcHAsIEknZCBjZXJ0YWlubHkgc3RhcnQgb2ZmIGJ5IHVzaW5n
-CkxUVG5nLiBBbHRob3VnaCwgd2UnZCBoYXZlIHRvIHdyaXRlIGEgdG9vbCB0byBtZXJnZSBhbmQg
-b3JjaGVzdHJhdGUKKHdvb28sIGNsb3VkIGJ1enp3b3JkISkgYWxsIHRob3NlIHRyYWNlcyAoaWYg
-dGhhdCdzIHdoYXQgb25lIHdhbnRzKS4KCj4gSXQgd291bGQgYmUgbmljZSBpZiB0aGVyZSB3YXMg
-YSBkb2N1bWVudGVkIGhvc3QvZ3Vlc3QgdHJhY2luZyBhcHByb2FjaAo+IHRoYXQgZGlkbid0IGlu
-dm9sdmUgbXVjaCBtYW51YWwgc2V0dXAgYW5kIGhhbmRsZWQgbW9zdCB1c2UgY2FzZXMuCgpJJ2Qg
-dm9sdW50ZWVyIHRvIGRvIGl0LCBhbHRob3VnaCBpdCB3aWxsIHRha2UgbWUgd2Vla3MgdG8gZG8g
-aXQuCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+T24gVGh1LCAxOCBBdWcgMjAxNiAxMTo1NDoyNCArMDEwMApTdGVmYW4gSGFqbm9jemkgPHN0ZWZh
+bmhhQGdtYWlsLmNvbT4gd3JvdGU6Cgo+IFN0ZXZlbiBpcyB3b3JraW5nIG9uIGEgaG9zdC9ndWVz
+dCBzb2x1dGlvbiBmb3IgdHJhY2UtY21kLiAgSXQgaXMgYWxzbwo+IGFzeW5jaHJvbm91cy4gIE5v
+IG5ldyBwYXJhdmlydCBoYXJkd2FyZSBpcyBuZWVkZWQgYW5kIGl0IG1ha2VzIG1lIHdvbmRlcgo+
+IHdoZXRoZXIgdGhlIGh5cGVydHJhY2UgUENJIGRldmljZSBpcyB0cnlpbmcgdG8gc29sdmUgdGhl
+IHByb2JsZW0gYXQgdGhlCj4gd3JvbmcgbGF5ZXIuCgpZZXMsIGFuZCBJJ20gY3VycmVudGx5IHdv
+cmtpbmcgb24gaXQgYWdhaW4uIEluIGZhY3QsIGlmIGFueSBvZiB5b3Ugd2lsbApiZSBhdCBMaW51
+eENvbiBpbiBUb3JvbnRvIG5leHQgd2VlaywgSSdsbCBiZSBwcmVzZW50aW5nWzFdIHdoYXQgSSBo
+YXZlCmFuZCB3aGF0IEkgcGxhbiB0byBjb21wbGV0ZSBpbiB0aGUgbmVhciBmdXR1cmUuCgotLSBT
+dGV2ZQoKWzFdIGh0dHBzOi8vbGNjY25hMjAxNi5zY2hlZC5vcmcvZXZlbnQvN0pXTC90cmFjZS1j
+bWQtdmlydC1zZXJ2ZXItYS1zdGF0dXMtdXBkYXRlLXN0ZXZlbi1yb3N0ZWR0LXJlZC1oYXQ/aWZy
+YW1lPW5vJnc9aToxMDA7JnNpZGViYXI9eWVzJmJnPW5vCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2
+QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
+bGlzdGluZm8vbHR0bmctZGV2Cg==
