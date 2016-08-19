@@ -1,140 +1,94 @@
-From: Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH 0/6] hypertrace: Lightweight guest-to-QEMU
- trace channel
-Date: Fri, 19 Aug 2016 13:45:31 +0900
-Message-ID: <20160819134531.6e7c4099e52ba115413ee540@kernel.org>
+From: Stefan Hajnoczi <stefanha@redhat.com>
+Subject: Re: [Qemu-devel] [PATCH 0/6] hypertrace: Lightweight
+ guest-to-QEMU trace channel
+Date: Fri, 19 Aug 2016 11:02:07 +0100
+Message-ID: <20160819100207.GA17385__3034.18558692119$1471600943$gmane$org@stefanha-x1.localdomain>
 References: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
-	<20160818105424.GD4850@stefanha-x1.localdomain>
-	<20160818093711.6f77c30b@redhat.com>
+ <20160818105424.GD4850@stefanha-x1.localdomain>
+ <20160818121950.6a8d3c2d@gandalf.local.home>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-Return-path: <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
-In-Reply-To: <20160818093711.6f77c30b@redhat.com>
-List-Unsubscribe: <https://lists.nongnu.org/mailman/options/qemu-devel>,
-	<mailto:qemu-devel-request@nongnu.org?subject=unsubscribe>
-List-Archive: <http://lists.nongnu.org/archive/html/qemu-devel/>
-List-Post: <mailto:qemu-devel@nongnu.org>
-List-Help: <mailto:qemu-devel-request@nongnu.org?subject=help>
-List-Subscribe: <https://lists.nongnu.org/mailman/listinfo/qemu-devel>,
-	<mailto:qemu-devel-request@nongnu.org?subject=subscribe>
-Errors-To: qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org
-Sender: "Qemu-devel" <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
-To: Luiz Capitulino <lcapitulino@redhat.com>
-Cc: Stefan Hajnoczi <stefanha@gmail.com>, qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>, =?UTF-8?B?TGx1w61z?= Vilanova <vilanova@ac.upc.edu>
+Content-Type: multipart/mixed; boundary="===============2154802322420152304=="
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mx1.redhat.com (mx1.redhat.com [209.132.183.28])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 1A815A2BCD
+ for <lttng-dev@lists.lttng.org>; Fri, 19 Aug 2016 10:02:19 +0000 (UTC)
+In-Reply-To: <20160818121950.6a8d3c2d@gandalf.local.home>
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Stefan Hajnoczi <stefanha@gmail.com>, qemu-devel@nongnu.org, Luiz Capitulino <lcapitulino@redhat.com>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>, =?iso-8859-1?Q?Llu=EDs?= Vilanova <vilanova@ac.upc.edu>
 List-Id: lttng-dev@lists.lttng.org
 
-On Thu, 18 Aug 2016 09:37:11 -0400
-Luiz Capitulino <lcapitulino@redhat.com> wrote:
 
+--===============2154802322420152304==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="xHFwDpU9dbj6ez1V"
+Content-Disposition: inline
+
+
+--xHFwDpU9dbj6ez1V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Aug 18, 2016 at 12:19:50PM -0400, Steven Rostedt wrote:
 > On Thu, 18 Aug 2016 11:54:24 +0100
 > Stefan Hajnoczi <stefanha@gmail.com> wrote:
 >=20
-> > On Fri, Aug 05, 2016 at 06:59:23PM +0200, Llu=C3=ADs Vilanova wrote:
-> > > The hypertrace channel allows guest code to emit events in QEMU (th=
-e host) using
-> > > its tracing infrastructure (see "docs/trace.txt"). This works in bo=
-th 'system'
-> > > and 'user' modes. That is, hypertrace is to tracing, what hypercall=
-s are to
-> > > system calls.
-> > >=20
-> > > You can use this to emit an event on both guest and QEMU (host) tra=
-ces to easily
-> > > synchronize or correlate them. You could also modify you guest's tr=
-acing system
-> > > to emit all events through the hypertrace channel, providing a unif=
-ied and fully
-> > > synchronized trace log. Another use case is timing the performance =
-of guest code
-> > > when optimizing TCG (QEMU traces have a timestamp).
-> > >=20
-> > > See first commit for a full description. =20
->=20
-> I hate the be the one asking the stupid questions, but what's
-> the problem this series solves? What are the use-cases? Why
-> existing solutions don't solve this problem? How does this
-> compares to existing solutions?
->=20
-> > This tracing approach has a high performance overhead, particularly f=
-or
-> > SMP guests where each trace event requires writing to the global cont=
-rol
-> > register.  All CPUs will be hammering this register (heavyweight vmex=
-it)
-> > for each trace event.
-
-That reminds me xenprobes.
-https://www.usenix.org/legacy/event/usenix07/tech/full_papers/quynh/quynh=
-.pdf
-
-The paper also tried to implement kprobe-like feature for tracing events =
-in
-guest. Synchronous tracing maybe easy to read the raw trace data, but cau=
-se
-big slowdown. Moreover, we can merge and synchronize the data easily afte=
-r
-traced.
-
-> >=20
-> > I think the folks CCed on this email all take an asynchronous approac=
-h
-> > to avoid this performance overhead.  Synchronous means taking a VM ex=
-it
-> > for every event.  Asynchronous means writing trace data to a buffer a=
-nd
-> > later interleaving guest data with host trace data.
-> >=20
-> > LTTng Userspace Tracer is an example of the asynchronous approach.  T=
-he
-> > trace data buffers are in shared memory.  The LTTng process can grab
-> > buffers at appropriate times.
-> >=20
-> > The ftrace virtio-serial approach has been to splice() the ftrace
-> > buffers, resulting in efficient I/O.
->=20
-> Yes. However, note that the virtio-serial device is only used to
-> transfer the tracing data to the host. It has no role in the
-> tracing process. Also, it's not required. I've been using the
-> networking and it works OK as long as your tracing data is not big.
-
-Right, the no-copy virtio-serial is for reducing the overhead as small as
-possible but it also requires a special programs in both of guest and hos=
-t.
-(since it uses unix domain socket to transfer data without copy)
-In normal case, you can just trace it as like as tracing on a remote mach=
-ine
-via network. That's more scalable and flexible.=20
-
-
 > > Steven is working on a host/guest solution for trace-cmd.  It is also
-> > asynchronous.  No new paravirt hardware is needed and it makes me won=
-der
-> > whether the hypertrace PCI device is trying to solve the problem at t=
-he
+> > asynchronous.  No new paravirt hardware is needed and it makes me wonder
+> > whether the hypertrace PCI device is trying to solve the problem at the
 > > wrong layer.
-
-Thanks Steven to continue that!
-
-Regards,
-
-> >=20
-> > If you want to play around with asynchronous tracing, you could start
-> > with trace/simple.c.  It has a trace buffer that is asynchronously
-> > written out to file by a dedicated "writer" thread.
-> >=20
-> > The one case where hypertrace makes sense to me is for -user tracing.
-> > There QEMU can efficiently interleave guest and QEMU traces, although=
- as
-> > mentioned in the patch, I don't think the SIGSEGV approach should be
-> > used.
-> >=20
-> > I suggest stripping this series down to focus on -user.  Synchronous
-> > tracing is not a good approach for -system emulation.
-> >=20
-> > Stefan
 >=20
+> Yes, and I'm currently working on it again. In fact, if any of you will
+> be at LinuxCon in Toronto next week, I'll be presenting[1] what I have
+> and what I plan to complete in the near future.
+>=20
+> -- Steve
+>=20
+> [1] https://lcccna2016.sched.org/event/7JWL/trace-cmd-virt-server-a-statu=
+s-update-steven-rostedt-red-hat?iframe=3Dno&w=3Di:100;&sidebar=3Dyes&bg=3Dno
 
+Cool, that's very interesting!  I'll try to attend.
 
---=20
-Masami Hiramatsu <mhiramat@kernel.org>
+I guess LinuxCon will post a video of your talk and the slides will be
+available after the talk so people not at LinuxCon will be able to check
+it out too.
+
+Stefan
+
+--xHFwDpU9dbj6ez1V
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJXttkfAAoJEJykq7OBq3PI9SIH/1Jtr5PsU9WmfqB2EWyLNmH3
+hLMiWPj6RT5qe0LKGeJucEZ2kM3aFvWz9bsOIcPAzVbGFki/O9SHq+x+Gq4PKgui
+oHGDqLok9FuJ32FvbT5D5iuGelIdAe6nxyjzWvzDFPFU9Vze1U8wDRoasVyAtvIy
+ha3bJxVLxX2lpOMlcb7Q3zH0o6qA6IzTCZIo6m5uUo2DXfPIHlNcDPxq1w6w3IeW
+qEwOEydCXS0q4q1UKXMgyP0JdIjeGQCkMJHI6DZKHET9BW111GSu9IhoLwUBP933
+JrCYYtIwy4Jn0lecyPj3OKaNOAPAGZSYAyY8hN9uQilV0ha0SEBKv3euXaBvOzk=
+=4wcB
+-----END PGP SIGNATURE-----
+
+--xHFwDpU9dbj6ez1V--
+
+--===============2154802322420152304==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============2154802322420152304==--
