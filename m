@@ -1,146 +1,105 @@
-From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-Subject: Re: Beginner question: how to inspect scheduling of
- multi-threaded user application?
-Date: Fri, 26 Aug 2016 10:53:04 -0400
-Message-ID: <02c06e3a-06ad-0c77-c3b2-bb9ab1dc3995__15799.376826226$1472223805$gmane$org@efficios.com>
-References: <35de22c3d2034f3abb75596477b23e3a@EUX13SRV1.EU.NEC.COM>
- <CADcCL0hqkvEPZEu85GzJnJKi9nOi0wntpOYoVz37QhcRVpb+=g@mail.gmail.com>
- <CAF4oYfHJCGnmmDfNokV2029Kp_8k7n1rCt4CX=OaLrLKEc_5wg@mail.gmail.com>
- <CAF4oYfHyRe1KmbAgy4eKk6oDVWvZp+TP3SRXZ+BuJf5iWwEQwQ@mail.gmail.com>
- <022bc22a602e4631903ee12b6dd1be6c@EUX13SRV1.EU.NEC.COM>
+From: Stefan Hajnoczi <stefanha@gmail.com>
+Subject: Re: [PATCH 0/6] hypertrace: Lightweight guest-to-QEMU
+ trace channel
+Date: Mon, 29 Aug 2016 09:45:02 -0400
+Message-ID: <20160829134502.GA26282@stefanha-x1.localdomain>
+References: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
+	<20160818105424.GD4850@stefanha-x1.localdomain>
+	<8737lypajh.fsf@fimbulvetr.bsc.es>
+	<20160823155430.GB3948@stefanha-x1.localdomain>
+	<87lgzm4g5p.fsf@fimbulvetr.bsc.es>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [78.47.125.74])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 47914A4064
- for <lttng-dev@lists.lttng.org>; Fri, 26 Aug 2016 15:03:35 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 4552E3401B0
- for <lttng-dev@lists.lttng.org>; Fri, 26 Aug 2016 14:53:07 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id fGjcJaIdf_VO for <lttng-dev@lists.lttng.org>;
- Fri, 26 Aug 2016 14:53:05 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 8348A340239
- for <lttng-dev@lists.lttng.org>; Fri, 26 Aug 2016 14:53:05 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id yqbeaMCdqfjf for <lttng-dev@lists.lttng.org>;
- Fri, 26 Aug 2016 14:53:05 +0000 (UTC)
-Received: from [172.24.0.18] (cable-192.222.213.99.electronicbox.net
- [192.222.213.99])
- by mail.efficios.com (Postfix) with ESMTPSA id 06F4F3401B0
- for <lttng-dev@lists.lttng.org>; Fri, 26 Aug 2016 14:53:04 +0000 (UTC)
-In-Reply-To: <022bc22a602e4631903ee12b6dd1be6c@EUX13SRV1.EU.NEC.COM>
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature"; boundary="EVF5PPMfhYS0aIcm"
+Return-path: <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
+Content-Disposition: inline
+In-Reply-To: <87lgzm4g5p.fsf@fimbulvetr.bsc.es>
+List-Unsubscribe: <https://lists.nongnu.org/mailman/options/qemu-devel>,
+	<mailto:qemu-devel-request@nongnu.org?subject=unsubscribe>
+List-Archive: <http://lists.nongnu.org/archive/html/qemu-devel/>
+List-Post: <mailto:qemu-devel@nongnu.org>
+List-Help: <mailto:qemu-devel-request@nongnu.org?subject=help>
+List-Subscribe: <https://lists.nongnu.org/mailman/listinfo/qemu-devel>,
+	<mailto:qemu-devel-request@nongnu.org?subject=subscribe>
+Errors-To: qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org
+Sender: "Qemu-devel" <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
+To: Stefan Hajnoczi <stefanha@redhat.com>, qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, Luiz Capitulino <lcapitulino@redhat.com>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgRGF2aWQsCgo+IEhpIEpvbmF0aGFuIGFuZCBGcmFuY2lzCj4KPiBUaGFua3MgZm9yIHlvdXIg
-aGVscGZ1bCByZXBsaWVzLiAgSSBhbSBoYXZpbmcgYSBiaXQgb2YgdHJvdWJsZSBpbXBsZW1lbnRp
-bmcgeW91ciBzdWdnZXN0aW9ucy4gSGVyZSBpcyBteSBzZXNzaW9uOgo+Cj4KPiAkIGx0dG5nIGNy
-ZWF0ZQo+Cj4gU3Bhd25pbmcgYSBzZXNzaW9uIGRhZW1vbgo+Cj4gUEVSUk9SIFsyODg1LzI4OTNd
-OiBiaW5kIGluZXQ6IEFkZHJlc3MgYWxyZWFkeSBpbiB1c2UgKGluIGx0dGNvbW1fYmluZF9pbmV0
-X3NvY2soKSBhdCBpbmV0LmM6MTA5KQo+Cj4gV2FybmluZzogQW4gb3RoZXIgc2Vzc2lvbiBkYWVt
-b24gaXMgdXNpbmcgdGhpcyBKVUwgcG9ydC4gSlVMIHN1cHBvcnQgd2lsbCBiZSBkZWFjdGl2YXRl
-ZCBub3QgaW50ZXJmZXJpbmcgd2l0aCB0aGUgdHJhY2luZy4KPgo+IFNlc3Npb24gYXV0by0yMDE2
-MDgyNi0wODM4MjMgY3JlYXRlZC4KPgo+IFRyYWNlcyB3aWxsIGJlIHdyaXR0ZW4gaW4gPHNuaXA+
-L2x0dG5nLXRyYWNlcy9hdXRvLTIwMTYwODI2LTA4MzgyMwoKRmlyc3QgbGV0J3MgZ2V0IGEgY2xl
-YW4gc3RhdGUuCk1ha2Ugc3VyZSB0aGUgdXNlciBpcyBpbiB0aGUgInRyYWNpbmciIGdyb3VwIGlm
-IHlvdSBwbGFuIHRvIGRvIGtlcm5lbCAKdHJhY2luZyBmcm9tIHRoZSB1c2VyLgoKZ3JvdXBzIFVz
-ZXJuYW1lSGVyZQoKSWYgbm90IG1ha2Ugc3VyZSB0byBhZGQgdGhlIHVzZXIgdG8gdGhlICd0cmFj
-aW5nJyBncm91cC4KCgpLaWxsIGFsbCBsdHRuZyByZWxhdGVkIGRhZW1vbi4KCnN1ZG8gcGtpbGwg
-bHR0bmctc2Vzc2lvbmQKc3VkbyBwa2lsbCBsdHRuZy1yZWxheWQKCklmIHlvdSBpbnN0YWxsZWQg
-aXQgdmlhIGFwdC1nZXQvcHBhIGEgbHR0bmctc2Vzc2lvbmQgc2hvdWxkIHNwYXduIApvdGhlcndp
-c2Ugc3RhcnQgb25lIHdpdGggc3VkbzoKCnN1ZG8gbHR0bmctc2Vzc2lvbmQKb3IKc3VkbyBsdHRu
-Zy1zZXNzaW9uZCAtYgpvcgpzdWRvIGx0dG5nLXNlc3Npb25kIC1kCgpTZWUgbHR0bmctc2Vzc2lv
-bmQgbWFuIHBhZ2UgZm9yIGluZm9ybWF0aW9uIHJlZ2FyZGluZyB0aGVzZSBvcHRpb25zLgoKPgo+
-Cj4KPiAkIHN1ZG8gbHR0bmcgZW5hYmxlLWV2ZW50IC1rIHNjaGVkX3N3aXRjaAo+Cj4gRXJyb3I6
-IEV2ZW50IHNjaGVkX3N3aXRjaDogU2Vzc2lvbiBuYW1lIG5vdCBmb3VuZCAoY2hhbm5lbCBjaGFu
-bmVsMCwgc2Vzc2lvbiBhdXRvLTIwMTYwODI2LTA4MzgyMykKPgo+IFdhcm5pbmc6IFNvbWUgY29t
-bWFuZChzKSB3ZW50IHdyb25nCgpUaGlzIGlzIGR1ZSB0byB0aGUgZmFjdCB0aGF0IHRoZSBzdGF0
-ZSAoY3VycmVudCBzZXNzaW9uKSBpcyBrZXB0IG9uIGEgCnBlci11c2VyIGJhc2lzIHVuZGVyIH4v
-Lmx0dG5nLiBZb3Ugc3RhcnRlZCB0aGUgc2Vzc2lvbiB3aXRoIGFub3RoZXIgdXNlciAKYW5kIHRo
-ZW4gdXNlZCBzdWRvIGZvciAibHR0bmcgZW5hYmxlLWV2ZW50Ii4KCklmIHlvdSB3YW50IHRvIHBh
-c3MgdGhlIHNlc3Npb24gbmFtZSBtb3N0IG9mIHRoZSBjb21tYW5kcyBzdXBwb3J0IHRoZSAKJy1z
-IFNlc3Npb25OYW1lSGVyZScgb3B0aW9uLgoKPgo+IFRoZXJlIHNlZW0gdG8gYmUgdHdvIHByb2Js
-ZW1zIGhlcmU6Cj4KPgo+IDEpICAgICAgSG93IHRvIGtpbGwgYSBsdHRuZyBkYWVtb24gdGhhdCBp
-cyBhbHJlYWR5IHJ1bm5pbmc/Cj4KPgo+IDIpICAgICAgSG93IHRvIHNwZWNpZnkgYSBzZXNzaW9u
-Pwo+Cj4KPiBTb3JyeSB0aGF0IHRoZXNlIGFyZSBiYXNpYyBxdWVzdGlvbnMuIEkgd291bGQgYmUg
-Z3JhdGVmdWwgaWYgeW91IGNhbiBoZWxwIHBsZWFzZS4KCk5wLgoKTWFrZSBzdXJlIHRvIGNoZWNr
-IGh0dHA6Ly9sdHRuZy5vcmcvZG9jcy8gaWYgeW91IGRpZCBub3QgYWxyZWFkeS4KCkNoZWVycwoK
-Pgo+IEJlc3QgcmVnYXJkcwo+Cj4gRGF2aWQKPgo+IEZyb206IEpvbmF0aGFuIFJham90dGUgW21h
-aWx0bzpqb25hdGhhbi5yLmp1bGllbkBnbWFpbC5jb21dCj4gU2VudDogMjQgQXVndXN0IDIwMTYg
-MTc6MzkKPiBUbzogRnJhbmNpcyBEZXNsYXVyaWVycyA8ZnJhbmNpcy5kZXNsYXVyaWVyc0BtYWls
-LnV0b3JvbnRvLmNhPgo+IENjOiBEYXZpZCBBbGRyaWNoIDxEYXZpZC5BbGRyaWNoQEVNRUEuTkVD
-LkNPTT47IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBTdWJqZWN0OiBSZTogW2x0dG5nLWRl
-dl0gQmVnaW5uZXIgcXVlc3Rpb246IGhvdyB0byBpbnNwZWN0IHNjaGVkdWxpbmcgb2YgbXVsdGkt
-dGhyZWFkZWQgdXNlciBhcHBsaWNhdGlvbj8KPgo+IFNvcnJ5IGhhZCBhIHNlbmRpbmcgcHJvYmxl
-bS4KPgo+IEhlcmUgaXMgdGhlIHJlc3QuCj4KPiBPbiBXZWQsIEF1ZyAyNCwgMjAxNiBhdCAxMjoz
-NSBQTSwgSm9uYXRoYW4gUmFqb3R0ZSA8am9uYXRoYW4uci5qdWxpZW5AZ21haWwuY29tPG1haWx0
-bzpqb25hdGhhbi5yLmp1bGllbkBnbWFpbC5jb20+PiB3cm90ZToKPgo+IEhpLAo+Cj4gT24gQXVn
-IDI0LCAyMDE2IDEyOjE4IFBNLCAiRnJhbmNpcyBEZXNsYXVyaWVycyIgPGZyYW5jaXMuZGVzbGF1
-cmllcnNAbWFpbC51dG9yb250by5jYTxtYWlsdG86ZnJhbmNpcy5kZXNsYXVyaWVyc0BtYWlsLnV0
-b3JvbnRvLmNhPj4gd3JvdGU6Cj4+IEhpIERhdmlkLAo+PiBJZiB5b3Ugc3BlY2lmaWNhbGx5IHdh
-bnQgdG8gdHJhY2UgdGhlIHNjaGVkdWxpbmcgb2YgdGhlIHRocmVhZHMgb2YgeW91ciBhcHAsIHlv
-dSBkb24ndCBuZWVkIGN1c3RvbSB0cmFjZXBvaW50cy4KPj4gRW5hYmxpbmcgdGhlIHNjaGVkX3N3
-aXRjaCBrZXJuZWwgZXZlbnQgd2lsbCBnaXZlIHlvdSBib3RoIG9mIGNwdSBpZCBhbmQgdGhyZWFk
-IGlkLiBMb29rIGF0IHRoZSBjcHVfaWQgYW5kIG5leHRfdGlkIGZpZWxkcy4KPj4KPj4gWW91IGNh
-biBlbmFibGUgdGhlIHNjaGVkX3N3aXRjaCBldmVudCB1c2luZyA6IGx0dG5nIGVuYWJsZS1ldmVu
-dCAtayBzY2hlZF9zd2l0Y2gKPiBJbiBUcmFjZUNvbXBhc3MgeW91IGNhbiBpbnNwZWN0IHRoaXMg
-ZGF0YSB3aXRoIHRoZSBjb250cm9sIGZsb3cgdmlldyBhbmQgdGhlIFJlc3NvdXJjZSB2aWV3IHVu
-ZGVyIHRoZSBLZXJuZWwgYW5hbHlzaXMgbm9kZSB1bmRlciB0aGUgdHJhY2Ugbm9kZSBpbiB0aGUg
-cHJvamVjdCBleHBsb3Jlci4KPgo+IEknbSBub3Qgc3VyZSBvZiB0aGUgYmFzZSByZXF1aXJlbWVu
-dCBmb3IgdGhvc2Ugdmlld3MgeW91IGNhbiB1c2UgdGhlIHNhZmUgZW5hYmxlLWV2ZW50Ogo+Cj4g
-cmVwbGFjZSAic2FmZSIgYnkgImVhc2llc3QiLgo+Cj4KPiBsdHRuZyBlbmFibGUtZXZlbnQgLWsg
-J3NjaGVkKicKPgo+Cj4KPiBZb3UgY2FuIGFsc28gdXNlICJsdHRuZyB0cmFjayIgdG8gbGltaSB0
-aGUgZ2F0aGVyaW5nIG9mIGV2ZW50IHRvIGEgY2VydGFpbiBwaWQuCj4KPgo+Cj4gQW5vdGhlciB3
-YXkgdG8gcmVkdWNlIHRoZSBzY29wZSB3b3VsZCBiZSB0byBmaWx0ZXIgcGVyIHByb2NuYW1lOgo+
-Cj4KPgo+IGx0dG5nIGNyZWF0ZQo+IGx0dG5nIGFkZC1jb250ZXh0IC1rIC10IHByb2NuYW1lCj4g
-bHR0bmcgZW5hYmxlLWV2ZW50ICdzY2hlZConIC0tZmlsdGVyICckY3R4LnByb2NuYW1lID09ICJQ
-Uk9DTkFNRUhFUkUiJwo+IGx0dG5nIHN0YXJ0Cj4KPgo+IFBST0NOQU1FSEVSRSBjYW4gY29udGFp
-biAnKicgd2lsZGNhcmQuIFNlZSB0aGUgbWFuIHBhZ2UgZm9yIG1vcmUgaW5mb3JtYXRpb24uCj4K
-PiBDaGVlcnMKPgo+Cj4KPj4gQ2hlZXJzLAo+PiBGcmFuY2lzCj4+Cj4+Cj4+IDIwMTYtMDgtMjQg
-MzoxNyBHTVQtMDQ6MDAgRGF2aWQgQWxkcmljaCA8RGF2aWQuQWxkcmljaEBlbWVhLm5lYy5jb208
-bWFpbHRvOkRhdmlkLkFsZHJpY2hAZW1lYS5uZWMuY29tPj46Cj4+PiBIaQo+Pj4KPj4+Cj4+Pgo+
-Pj4gSSBhbSBuZXcgdG8gdHJhY2luZyBpbiBMaW51eCBhbmQgdG8gbHR0bmcuIEkgaGF2ZSBhIG11
-bHRpLXRocmVhZGVkIHVzZXIgYXBwbGljYXRpb24gYW5kIEkgd2FudCB0byBzZWU6Cj4+Pgo+Pj4K
-Pj4+Cj4+PiAxKSAgICAgIFdoZW4gdGhlIHRocmVhZHMgYXJlIHNjaGVkdWxlZCB0byBydW4KPj4+
-Cj4+PiAyKSAgICAgIFdoaWNoIGNvcmVzIHRoZSB0aHJlYWRzIGFyZSBydW5uaW5nIG9uLgo+Pj4K
-Pj4+Cj4+Pgo+Pj4gSSBoYXZlIGluc3RhbGxlZCBsdHRuZyBvbiBVYnVudHUgMTQuMDQgTFRTLiAg
-SSBhbSBleHBlY3RpbmcgdG8gdmlzdWFsaXNlIHRoZSB0cmFjZSB1c2luZyBUcmFjZUNvbXBhc3Mu
-Cj4+Pgo+Pj4KPj4+Cj4+PiBJIGhhdmUgcmVhZCB0aGUgZm9sbG93aW5nIGRvYyBzZWN0aW9uOgo+
-Pj4KPj4+Cj4+Pgo+Pj4gaHR0cDovL2x0dG5nLm9yZy9kb2NzLyNkb2MtdHJhY2luZy15b3VyLW93
-bi11c2VyLWFwcGxpY2F0aW9uCj4+Pgo+Pj4KPj4+Cj4+PiBJbiBvcmRlciB0byBjb2xsZWN0IG15
-IHRyYWNlLCBtdXN0IEkgZGVmaW5lIGN1c3RvbSB0cmFjZXBvaW50IGRlZmluaXRpb25zICggaW4g
-YSB0cmFjZXBvaW50IHByb3ZpZGVyIGhlYWRlciBmaWxlICksIGFuZCBpbnNlcnQgdHJhY2Vwb2lu
-dHMgaW50byBteSB1c2VyIGFwcGxpY2F0aW9uLCBvciBpcyB0aGVyZSBhIHNpbXBsZXIgd2F5IG9m
-IGFjaGlldmluZyBteSBnb2FsPwo+Pj4KPj4+Cj4+Pgo+Pj4gQmVzdCByZWdhcmRzCj4+Pgo+Pj4K
-Pj4+Cj4+PiBEYXZpZAo+Pj4KPj4+Cj4+Pgo+Pj4KPj4+IF9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCj4+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+PiBs
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPG1haWx0bzpsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-Pgo+Pj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo+Pj4KPj4KPj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KPj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+PiBsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnPG1haWx0bzpsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPgo+PiBodHRwczovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4+Cj4KPgo+IC0t
-Cj4gSm9uYXRoYW4gUmFqb3R0ZSBKdWxpZW4KPgo+Cj4KPiBDbGljayBoZXJlPGh0dHBzOi8vd3d3
-Lm1haWxjb250cm9sLmNvbS9zci91bkV3ZHNTWkdsSEdYMlBRUE9tdlVtUWJabEpVQTZNWWFIc2pw
-bUV3R3JCZm9iaXBBTVcxWkNQTXBzTEkxOEZTM3RkVHVBSnl4cW1peWxhITFyVDV4UT09PiB0byBy
-ZXBvcnQgdGhpcyBlbWFpbCBhcyBzcGFtLgo+Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1k
-ZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
-bWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKLS0gCkpvbmF0aGFuIFIuIEp1bGllbgpFZmZpY2lvcwoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--EVF5PPMfhYS0aIcm
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Aug 24, 2016 at 12:25:54PM +0200, Llu=EDs Vilanova wrote:
+> Stefan Hajnoczi writes:
+>=20
+> > On Sun, Aug 21, 2016 at 02:32:34PM +0200, Llu=EDs Vilanova wrote:
+> >> Unfortuntely, I've been unable to to make dtrace recognise QEMU's even=
+ts (I'm
+> >> only able to see the host kernel events). If someone with more experie=
+nce on it
+> >> can help me use dtrace with QEMU's events, I'll also add the supportin=
+g library
+> >> to let dtrace do the callout to QEMU's moitor interface and control th=
+e events,
+> >> and add a prperly useful example of that on the hypertrace docs (which=
+ was my
+> >> original intention).
+>=20
+> > Which "dtrace" and host OS are you using?
+>=20
+> > QEMU builds with static user-space probes.  You need to tell DTrace or
+> > SystemTap to enable those probes in order to record trace data.
+>=20
+> I'm using debian on a 4.6.0-1-amd64 kernel with systemtap 3.0.6.
+>=20
+> I just gave it another try, and works if I use probes like:
+>=20
+>   process("<binary-path>").mark("<event-name>")
+>=20
+> although they don't seem to appear on "stap -l" or anything like that (I =
+cannot
+> find a "qemu" provider). But I'm still unable to print the event values. =
+This:
+
+The following enumerates events for me:
+
+$ sudo stap -L 'process("/usr/bin/qemu-system-x86_64").mark("*")'
+process("/usr/bin/qemu-system-x86_64").mark("alsa_no_frames") $arg1:long
+process("/usr/bin/qemu-system-x86_64").mark("alsa_pollout") $arg1:long $arg=
+2:long
+process("/usr/bin/qemu-system-x86_64").mark("alsa_read_zero") $arg1:long
+=2E..
+
+You can also use /usr/share/systemtap/tapset/qemu-system-x86_64.stp.
+I'm running Fedora 24 with qemu-system-x86 2.6.0-5.fc24 and SystemTap
+3.0-3.fc24.
+
+> Also, I'm still not sure how to interact with QEMU's monitor interface fr=
+om
+> within the probe code (probes execute in kernel mode, including "guru mod=
+e"
+> code).
+
+When SystemTap is used the QEMU monitor interface does nothing.
+
+Stefan
+
+--EVF5PPMfhYS0aIcm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJXxDxeAAoJEJykq7OBq3PIOgEH+wRgmT8atWscf8iNHqK++G1l
+3g0e2ar42zxQq3fhtG7wW0/m24pFeyQs6MkPFEZuQ/kPDdnfo02lSk64IkMQ31gS
+YOdFS0M0zE6e/4lrBI+4T2thvvj2RxpgbefrrBIbyElAUi9NuMCSQxh8/kuW9Q/A
+58VUsLVCs7Hu2/bRjCN2qsjG6u+df7NL2dszhUGxkLC7XfFLzOkv6zPB3zFQaJYS
+ip+8n0L+krysAM+e8ZVvq4fJDLkgVWT/iRHatUs2GYqjYrpwobXo4sfdNoDryAz8
+ZzOR0x0jnWsd40kcypP+IWj1+XLg9SrVuvmPinCui7qp1jAovg0du2Q0VC5X0LA=
+=NwMs
+-----END PGP SIGNATURE-----
+
+--EVF5PPMfhYS0aIcm--
