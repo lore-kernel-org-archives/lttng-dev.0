@@ -1,105 +1,90 @@
-From: Stefan Hajnoczi <stefanha@gmail.com>
-Subject: Re: [PATCH 0/6] hypertrace: Lightweight guest-to-QEMU
- trace channel
-Date: Mon, 29 Aug 2016 09:45:02 -0400
-Message-ID: <20160829134502.GA26282@stefanha-x1.localdomain>
+From: =?utf-8?Q?Llu=C3=ADs_Vilanova?= <vilanova@ac.upc.edu>
+Subject: Re: [Qemu-devel] [PATCH 0/6] hypertrace: Lightweight
+	guest-to-QEMU trace channel
+Date: Mon, 29 Aug 2016 20:46:02 +0200
+Message-ID: <87a8fvjtw5.fsf__37760.773584205$1472496389$gmane$org@fimbulvetr.bsc.es>
 References: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
-	<20160818105424.GD4850@stefanha-x1.localdomain>
-	<8737lypajh.fsf@fimbulvetr.bsc.es>
-	<20160823155430.GB3948@stefanha-x1.localdomain>
-	<87lgzm4g5p.fsf@fimbulvetr.bsc.es>
+ <20160818105424.GD4850@stefanha-x1.localdomain>
+ <8737lypajh.fsf@fimbulvetr.bsc.es>
+ <20160823155430.GB3948@stefanha-x1.localdomain>
+ <87lgzm4g5p.fsf@fimbulvetr.bsc.es>
+ <20160829134502.GA26282@stefanha-x1.localdomain>
 Mime-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="EVF5PPMfhYS0aIcm"
-Return-path: <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
-Content-Disposition: inline
-In-Reply-To: <87lgzm4g5p.fsf@fimbulvetr.bsc.es>
-List-Unsubscribe: <https://lists.nongnu.org/mailman/options/qemu-devel>,
-	<mailto:qemu-devel-request@nongnu.org?subject=unsubscribe>
-List-Archive: <http://lists.nongnu.org/archive/html/qemu-devel/>
-List-Post: <mailto:qemu-devel@nongnu.org>
-List-Help: <mailto:qemu-devel-request@nongnu.org?subject=help>
-List-Subscribe: <https://lists.nongnu.org/mailman/listinfo/qemu-devel>,
-	<mailto:qemu-devel-request@nongnu.org?subject=subscribe>
-Errors-To: qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org
-Sender: "Qemu-devel" <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
-To: Stefan Hajnoczi <stefanha@redhat.com>, qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, Luiz Capitulino <lcapitulino@redhat.com>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from roura.ac.upc.es (roura.ac.upc.es [147.83.33.10])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTP id 9DBA0A3C64
+ for <lttng-dev@lists.lttng.org>; Mon, 29 Aug 2016 18:46:39 +0000 (UTC)
+In-Reply-To: <20160829134502.GA26282@stefanha-x1.localdomain> (Stefan
+ Hajnoczi's message of "Mon, 29 Aug 2016 09:45:02 -0400")
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: Stefan Hajnoczi <stefanha@gmail.com>
+Cc: qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, Luiz Capitulino <lcapitulino@redhat.com>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>
 List-Id: lttng-dev@lists.lttng.org
 
-
---EVF5PPMfhYS0aIcm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Aug 24, 2016 at 12:25:54PM +0200, Llu=EDs Vilanova wrote:
-> Stefan Hajnoczi writes:
->=20
-> > On Sun, Aug 21, 2016 at 02:32:34PM +0200, Llu=EDs Vilanova wrote:
-> >> Unfortuntely, I've been unable to to make dtrace recognise QEMU's even=
-ts (I'm
-> >> only able to see the host kernel events). If someone with more experie=
-nce on it
-> >> can help me use dtrace with QEMU's events, I'll also add the supportin=
-g library
-> >> to let dtrace do the callout to QEMU's moitor interface and control th=
-e events,
-> >> and add a prperly useful example of that on the hypertrace docs (which=
- was my
-> >> original intention).
->=20
-> > Which "dtrace" and host OS are you using?
->=20
-> > QEMU builds with static user-space probes.  You need to tell DTrace or
-> > SystemTap to enable those probes in order to record trace data.
->=20
-> I'm using debian on a 4.6.0-1-amd64 kernel with systemtap 3.0.6.
->=20
-> I just gave it another try, and works if I use probes like:
->=20
->   process("<binary-path>").mark("<event-name>")
->=20
-> although they don't seem to appear on "stap -l" or anything like that (I =
-cannot
-> find a "qemu" provider). But I'm still unable to print the event values. =
-This:
-
-The following enumerates events for me:
-
-$ sudo stap -L 'process("/usr/bin/qemu-system-x86_64").mark("*")'
-process("/usr/bin/qemu-system-x86_64").mark("alsa_no_frames") $arg1:long
-process("/usr/bin/qemu-system-x86_64").mark("alsa_pollout") $arg1:long $arg=
-2:long
-process("/usr/bin/qemu-system-x86_64").mark("alsa_read_zero") $arg1:long
-=2E..
-
-You can also use /usr/share/systemtap/tapset/qemu-system-x86_64.stp.
-I'm running Fedora 24 with qemu-system-x86 2.6.0-5.fc24 and SystemTap
-3.0-3.fc24.
-
-> Also, I'm still not sure how to interact with QEMU's monitor interface fr=
-om
-> within the probe code (probes execute in kernel mode, including "guru mod=
-e"
-> code).
-
-When SystemTap is used the QEMU monitor interface does nothing.
-
-Stefan
-
---EVF5PPMfhYS0aIcm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQEcBAEBAgAGBQJXxDxeAAoJEJykq7OBq3PIOgEH+wRgmT8atWscf8iNHqK++G1l
-3g0e2ar42zxQq3fhtG7wW0/m24pFeyQs6MkPFEZuQ/kPDdnfo02lSk64IkMQ31gS
-YOdFS0M0zE6e/4lrBI+4T2thvvj2RxpgbefrrBIbyElAUi9NuMCSQxh8/kuW9Q/A
-58VUsLVCs7Hu2/bRjCN2qsjG6u+df7NL2dszhUGxkLC7XfFLzOkv6zPB3zFQaJYS
-ip+8n0L+krysAM+e8ZVvq4fJDLkgVWT/iRHatUs2GYqjYrpwobXo4sfdNoDryAz8
-ZzOR0x0jnWsd40kcypP+IWj1+XLg9SrVuvmPinCui7qp1jAovg0du2Q0VC5X0LA=
-=NwMs
------END PGP SIGNATURE-----
-
---EVF5PPMfhYS0aIcm--
+U3RlZmFuIEhham5vY3ppIHdyaXRlczoKCj4gT24gV2VkLCBBdWcgMjQsIDIwMTYgYXQgMTI6MjU6
+NTRQTSArMDIwMCwgTGx1w61zIFZpbGFub3ZhIHdyb3RlOgo+PiBTdGVmYW4gSGFqbm9jemkgd3Jp
+dGVzOgo+PiAKPj4gPiBPbiBTdW4sIEF1ZyAyMSwgMjAxNiBhdCAwMjozMjozNFBNICswMjAwLCBM
+bHXDrXMgVmlsYW5vdmEgd3JvdGU6Cj4+ID4+IFVuZm9ydHVudGVseSwgSSd2ZSBiZWVuIHVuYWJs
+ZSB0byB0byBtYWtlIGR0cmFjZSByZWNvZ25pc2UgUUVNVSdzIGV2ZW50cyAoSSdtCj4+ID4+IG9u
+bHkgYWJsZSB0byBzZWUgdGhlIGhvc3Qga2VybmVsIGV2ZW50cykuIElmIHNvbWVvbmUgd2l0aCBt
+b3JlIGV4cGVyaWVuY2Ugb24gaXQKPj4gPj4gY2FuIGhlbHAgbWUgdXNlIGR0cmFjZSB3aXRoIFFF
+TVUncyBldmVudHMsIEknbGwgYWxzbyBhZGQgdGhlIHN1cHBvcnRpbmcgbGlicmFyeQo+PiA+PiB0
+byBsZXQgZHRyYWNlIGRvIHRoZSBjYWxsb3V0IHRvIFFFTVUncyBtb2l0b3IgaW50ZXJmYWNlIGFu
+ZCBjb250cm9sIHRoZSBldmVudHMsCj4+ID4+IGFuZCBhZGQgYSBwcnBlcmx5IHVzZWZ1bCBleGFt
+cGxlIG9mIHRoYXQgb24gdGhlIGh5cGVydHJhY2UgZG9jcyAod2hpY2ggd2FzIG15Cj4+ID4+IG9y
+aWdpbmFsIGludGVudGlvbikuCj4+IAo+PiA+IFdoaWNoICJkdHJhY2UiIGFuZCBob3N0IE9TIGFy
+ZSB5b3UgdXNpbmc/Cj4+IAo+PiA+IFFFTVUgYnVpbGRzIHdpdGggc3RhdGljIHVzZXItc3BhY2Ug
+cHJvYmVzLiAgWW91IG5lZWQgdG8gdGVsbCBEVHJhY2Ugb3IKPj4gPiBTeXN0ZW1UYXAgdG8gZW5h
+YmxlIHRob3NlIHByb2JlcyBpbiBvcmRlciB0byByZWNvcmQgdHJhY2UgZGF0YS4KPj4gCj4+IEkn
+bSB1c2luZyBkZWJpYW4gb24gYSA0LjYuMC0xLWFtZDY0IGtlcm5lbCB3aXRoIHN5c3RlbXRhcCAz
+LjAuNi4KPj4gCj4+IEkganVzdCBnYXZlIGl0IGFub3RoZXIgdHJ5LCBhbmQgd29ya3MgaWYgSSB1
+c2UgcHJvYmVzIGxpa2U6Cj4+IAo+PiBwcm9jZXNzKCI8YmluYXJ5LXBhdGg+IikubWFyaygiPGV2
+ZW50LW5hbWU+IikKPj4gCj4+IGFsdGhvdWdoIHRoZXkgZG9uJ3Qgc2VlbSB0byBhcHBlYXIgb24g
+InN0YXAgLWwiIG9yIGFueXRoaW5nIGxpa2UgdGhhdCAoSSBjYW5ub3QKPj4gZmluZCBhICJxZW11
+IiBwcm92aWRlcikuIEJ1dCBJJ20gc3RpbGwgdW5hYmxlIHRvIHByaW50IHRoZSBldmVudCB2YWx1
+ZXMuIFRoaXM6Cgo+IFRoZSBmb2xsb3dpbmcgZW51bWVyYXRlcyBldmVudHMgZm9yIG1lOgoKPiAk
+IHN1ZG8gc3RhcCAtTCAncHJvY2VzcygiL3Vzci9iaW4vcWVtdS1zeXN0ZW0teDg2XzY0IikubWFy
+aygiKiIpJwo+IHByb2Nlc3MoIi91c3IvYmluL3FlbXUtc3lzdGVtLXg4Nl82NCIpLm1hcmsoImFs
+c2Ffbm9fZnJhbWVzIikgJGFyZzE6bG9uZwo+IHByb2Nlc3MoIi91c3IvYmluL3FlbXUtc3lzdGVt
+LXg4Nl82NCIpLm1hcmsoImFsc2FfcG9sbG91dCIpICRhcmcxOmxvbmcgJGFyZzI6bG9uZwo+IHBy
+b2Nlc3MoIi91c3IvYmluL3FlbXUtc3lzdGVtLXg4Nl82NCIpLm1hcmsoImFsc2FfcmVhZF96ZXJv
+IikgJGFyZzE6bG9uZwo+IC4uLgoKPiBZb3UgY2FuIGFsc28gdXNlIC91c3Ivc2hhcmUvc3lzdGVt
+dGFwL3RhcHNldC9xZW11LXN5c3RlbS14ODZfNjQuc3RwLgo+IEknbSBydW5uaW5nIEZlZG9yYSAy
+NCB3aXRoIHFlbXUtc3lzdGVtLXg4NiAyLjYuMC01LmZjMjQgYW5kIFN5c3RlbVRhcAo+IDMuMC0z
+LmZjMjQuCgpJIG1lYW50IEkgY2Fubm90IGp1c3QgdXNlICJxZW11IiBhcyBhIHByb3ZpZGVyIG5h
+bWUuIExhdGVyIEkgZGlzY292ZXJlZCB0aGF0CiJwcm9jZXNzKCkiIGRvZXMgd29yay4KCgo+PiBB
+bHNvLCBJJ20gc3RpbGwgbm90IHN1cmUgaG93IHRvIGludGVyYWN0IHdpdGggUUVNVSdzIG1vbml0
+b3IgaW50ZXJmYWNlIGZyb20KPj4gd2l0aGluIHRoZSBwcm9iZSBjb2RlIChwcm9iZXMgZXhlY3V0
+ZSBpbiBrZXJuZWwgbW9kZSwgaW5jbHVkaW5nICJndXJ1IG1vZGUiCj4+IGNvZGUpLgoKPiBXaGVu
+IFN5c3RlbVRhcCBpcyB1c2VkIHRoZSBRRU1VIG1vbml0b3IgaW50ZXJmYWNlIGRvZXMgbm90aGlu
+Zy4KClRoYXQncyBub3Qgd2hhdCBJJ3ZlIGV4cGVyaWVuY2VkLiBJIHdhcyBhYmxlIHRvIHVzZSBh
+IHN0YXAgc2NyaXB0IHRvIGNoYW5nZSB0aGUKdHJhY2luZyBzdGF0ZSBvZiBldmVudHM6CgogICAj
+IS91c3IvYmluL2VudiBzdGFwCgogICAlewogICAjaW5jbHVkZSA8L2hvbWUvbGx1aXMvUHJvamVj
+dHMvcWVtdS1kYmktdGVzdC90ZXN0Lmg+CiAgICV9CgogICBmdW5jdGlvbiBldmVudDpsb25nKGNw
+dTpsb25nLCBhZGRyOmxvbmcsIGluZm86bG9uZykKICAgJXsKICAgICAgIGNoYXIgKmFyZ3ZbNF0g
+PSB7Ii9iaW4vc2giLCAiLWMiLCAiZWNobyAndHJhY2UtZXZlbnQgKiBvZmYnIHwgdGVsbmV0IGxv
+Y2FsaG9zdCAxMjM0IiwgTlVMTH07CiAgICAgICBjYWxsX3VzZXJtb2RlaGVscGVyKGFyZ3ZbMF0s
+IGFyZ3YsIE5VTEwsIFVNSF9XQUlUX0VYRUMpOwogICAgICAgU1RBUF9SRVRVUk4oMCk7CiAgICV9
+CgogICBwcm9iZSBiZWdpbiB7CiAgICAgICBwcmludGYoImhlbGxvXG4iKQogICB9CiAgIHByb2Jl
+IHByb2Nlc3MoIi4vaW5zdGFsbC92YW5pbGxhL2Jpbi9xZW11LXN5c3RlbS1pMzg2IikubWFyaygi
+Z3Vlc3RfbWVtX2JlZm9yZV9leGVjIikKICAgewogICAgICAgcHJpbnRmKCIleCAlZCAlZFxuIiwg
+JGFyZzEsICRhcmcyLCAkYXJnMykKICAgICAgIGV2ZW50KCRhcmcxLCAkYXJnMiwgJGFyZzMpCiAg
+ICAgICBleGl0KCkKICAgfQoKVGhlIG9ubHkgY2F2ZWF0IGlzIHRoYXQgeW91IG11c3QgcGFzcyB0
+aGUgIi1nIiBhcmd1bWVudCB0byBzdGFwLgoKQWxzbywgZm9yIHNvbWUgcmVhc29uIHRoZSBwcmlu
+dGYgaW4gdGhlIHByb2JlIGFsd2F5cyBwcmludHMgemVyb3MsIG5vIG1hdHRlcgp3aGF0IHRoZSBh
+Y3R1YWwgZXZlbnQgcmVjZWl2ZXMgKEkndmUgZGVidWdnZWQgUUVNVSBkb3duIHRvIHRoZSBjYWxs
+IHRvIHRoZQphdXRvLWdlbmVyYXRlZCBzdGFwIGZ1bmN0aW9ucykuIENvdWxkIHRoaXMgYmUgYW4g
+ZXJyb3IgaW4gc3lzdGVtdGFwPwoKClRoYW5rcywKICBMbHVpcwpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
+bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
