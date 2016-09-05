@@ -1,76 +1,69 @@
-From: "Daniel P. Berrange" <berrange@redhat.com>
-Subject: Re: [PATCH 0/6] hypertrace: Lightweight guest-to-QEMU
- trace channel
-Date: Mon, 5 Sep 2016 15:59:16 +0100
-Message-ID: <20160905145916.GI24656@redhat.com>
+From: =?utf-8?Q?Llu=C3=ADs_Vilanova?= <vilanova@ac.upc.edu>
+Subject: Re: [Qemu-devel] [PATCH 0/6] hypertrace: Lightweight
+	guest-to-QEMU trace channel
+Date: Mon, 05 Sep 2016 20:29:54 +0200
+Message-ID: <8760qaryhp.fsf__30419.5337616422$1473100215$gmane$org@fimbulvetr.bsc.es>
 References: <147041636348.2523.2954972609232949598.stgit@fimbulvetr.bsc.es>
-	<20160818105424.GD4850@stefanha-x1.localdomain>
-	<8737lypajh.fsf@fimbulvetr.bsc.es>
-	<20160823155430.GB3948@stefanha-x1.localdomain>
-	<87lgzm4g5p.fsf@fimbulvetr.bsc.es>
-	<20160829134502.GA26282@stefanha-x1.localdomain>
-	<87a8fvjtw5.fsf@fimbulvetr.bsc.es>
-Reply-To: "Daniel P. Berrange" <berrange@redhat.com>
+ <20160818105424.GD4850@stefanha-x1.localdomain>
+ <8737lypajh.fsf@fimbulvetr.bsc.es>
+ <20160823155430.GB3948@stefanha-x1.localdomain>
+ <87lgzm4g5p.fsf@fimbulvetr.bsc.es>
+ <20160829134502.GA26282@stefanha-x1.localdomain>
+ <87a8fvjtw5.fsf@fimbulvetr.bsc.es> <20160905145916.GI24656@redhat.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Return-path: <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
-Content-Disposition: inline
-In-Reply-To: <87a8fvjtw5.fsf@fimbulvetr.bsc.es>
-List-Unsubscribe: <https://lists.nongnu.org/mailman/options/qemu-devel>,
-	<mailto:qemu-devel-request@nongnu.org?subject=unsubscribe>
-List-Archive: <http://lists.nongnu.org/archive/html/qemu-devel/>
-List-Post: <mailto:qemu-devel@nongnu.org>
-List-Help: <mailto:qemu-devel-request@nongnu.org?subject=help>
-List-Subscribe: <https://lists.nongnu.org/mailman/listinfo/qemu-devel>,
-	<mailto:qemu-devel-request@nongnu.org?subject=subscribe>
-Errors-To: qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org
-Sender: "Qemu-devel" <qemu-devel-bounces+gceq-qemu-devel=gmane.org@nongnu.org>
-To: Stefan Hajnoczi <stefanha@gmail.com>, Stefan Hajnoczi <stefanha@redhat.com>, qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, Luiz Capitulino <lcapitulino@redhat.com>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from roura.ac.upc.es (roura.ac.upc.edu [147.83.33.10])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTP id 2A9BAA3AD8
+ for <lttng-dev@lists.lttng.org>; Mon,  5 Sep 2016 18:30:41 +0000 (UTC)
+In-Reply-To: <20160905145916.GI24656@redhat.com> (Daniel P. Berrange's message
+ of "Mon, 5 Sep 2016 15:59:16 +0100")
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: "Daniel P. Berrange" <berrange@redhat.com>
+Cc: Stefan Hajnoczi <stefanha@gmail.com>, qemu-devel@nongnu.org, Steven Rostedt <rostedt@goodmis.org>, Luiz Capitulino <lcapitulino@redhat.com>, lttng-dev@lists.lttng.org, Masami Hiramatsu <mhiramat@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>
 List-Id: lttng-dev@lists.lttng.org
 
-On Mon, Aug 29, 2016 at 08:46:02PM +0200, Llu=C3=ADs Vilanova wrote:
-> Stefan Hajnoczi writes:
->=20
-> > When SystemTap is used the QEMU monitor interface does nothing.
->=20
-> That's not what I've experienced. I was able to use a stap script to ch=
-ange the
-> tracing state of events:
->=20
->    #!/usr/bin/env stap
->=20
->    %{
->    #include </home/lluis/Projects/qemu-dbi-test/test.h>
->    %}
->=20
->    function event:long(cpu:long, addr:long, info:long)
->    %{
->        char *argv[4] =3D {"/bin/sh", "-c", "echo 'trace-event * off' | =
-telnet localhost 1234", NULL};
->        call_usermodehelper(argv[0], argv, NULL, UMH_WAIT_EXEC);
->        STAP_RETURN(0);
->    %}
-
-I don't know what you're trying to achieve here.  The trace-event state,
-as changed/viewed via QEMU monitor, is irrelevant to the dtrace (systemta=
-p)
-backend. dtrace and ltt-ust are both fully dynamic trace event backends,
-so the QEMU event state has no effect on them. The probe points in the
-binary are dynamically enabled / disabled by the dtrace runtime. ie dtrac=
-e
-will automatically enable an event if you write a dtrace script that uses
-the event.
-
-
-Regards,
-Daniel
---=20
-|: http://berrange.com      -o-    http://www.flickr.com/photos/dberrange=
-/ :|
-|: http://libvirt.org              -o-             http://virt-manager.or=
-g :|
-|: http://autobuild.org       -o-         http://search.cpan.org/~danberr=
-/ :|
-|: http://entangle-photo.org       -o-       http://live.gnome.org/gtk-vn=
-c :|
+RGFuaWVsIFAgQmVycmFuZ2Ugd3JpdGVzOgoKPiBPbiBNb24sIEF1ZyAyOSwgMjAxNiBhdCAwODo0
+NjowMlBNICswMjAwLCBMbHXDrXMgVmlsYW5vdmEgd3JvdGU6Cj4+IFN0ZWZhbiBIYWpub2N6aSB3
+cml0ZXM6Cj4+IAo+PiA+IFdoZW4gU3lzdGVtVGFwIGlzIHVzZWQgdGhlIFFFTVUgbW9uaXRvciBp
+bnRlcmZhY2UgZG9lcyBub3RoaW5nLgo+PiAKPj4gVGhhdCdzIG5vdCB3aGF0IEkndmUgZXhwZXJp
+ZW5jZWQuIEkgd2FzIGFibGUgdG8gdXNlIGEgc3RhcCBzY3JpcHQgdG8gY2hhbmdlIHRoZQo+PiB0
+cmFjaW5nIHN0YXRlIG9mIGV2ZW50czoKPj4gCj4+ICMhL3Vzci9iaW4vZW52IHN0YXAKPj4gCj4+
+ICV7Cj4+ICNpbmNsdWRlIDwvaG9tZS9sbHVpcy9Qcm9qZWN0cy9xZW11LWRiaS10ZXN0L3Rlc3Qu
+aD4KPj4gJX0KPj4gCj4+IGZ1bmN0aW9uIGV2ZW50OmxvbmcoY3B1OmxvbmcsIGFkZHI6bG9uZywg
+aW5mbzpsb25nKQo+PiAlewo+PiBjaGFyICphcmd2WzRdID0geyIvYmluL3NoIiwgIi1jIiwgImVj
+aG8gJ3RyYWNlLWV2ZW50ICogb2ZmJyB8IHRlbG5ldCBsb2NhbGhvc3QgMTIzNCIsIE5VTEx9Owo+
+PiBjYWxsX3VzZXJtb2RlaGVscGVyKGFyZ3ZbMF0sIGFyZ3YsIE5VTEwsIFVNSF9XQUlUX0VYRUMp
+Owo+PiBTVEFQX1JFVFVSTigwKTsKPj4gJX0KCj4gSSBkb24ndCBrbm93IHdoYXQgeW91J3JlIHRy
+eWluZyB0byBhY2hpZXZlIGhlcmUuICBUaGUgdHJhY2UtZXZlbnQgc3RhdGUsCj4gYXMgY2hhbmdl
+ZC92aWV3ZWQgdmlhIFFFTVUgbW9uaXRvciwgaXMgaXJyZWxldmFudCB0byB0aGUgZHRyYWNlIChz
+eXN0ZW10YXApCj4gYmFja2VuZC4gZHRyYWNlIGFuZCBsdHQtdXN0IGFyZSBib3RoIGZ1bGx5IGR5
+bmFtaWMgdHJhY2UgZXZlbnQgYmFja2VuZHMsCj4gc28gdGhlIFFFTVUgZXZlbnQgc3RhdGUgaGFz
+IG5vIGVmZmVjdCBvbiB0aGVtLiBUaGUgcHJvYmUgcG9pbnRzIGluIHRoZQo+IGJpbmFyeSBhcmUg
+ZHluYW1pY2FsbHkgZW5hYmxlZCAvIGRpc2FibGVkIGJ5IHRoZSBkdHJhY2UgcnVudGltZS4gaWUg
+ZHRyYWNlCj4gd2lsbCBhdXRvbWF0aWNhbGx5IGVuYWJsZSBhbiBldmVudCBpZiB5b3Ugd3JpdGUg
+YSBkdHJhY2Ugc2NyaXB0IHRoYXQgdXNlcwo+IHRoZSBldmVudC4KClNvcnJ5LCBJIGRpZCBub3Qg
+cHJvcGVybHkgZXhwbGFpbiB0aGUgdXNlIGNhc2UuIFRoaXMgaXMgYW4gZXhhbXBsZSBvZiB1c2lu
+ZwpRRU1VJ3MgdHJhY2luZyBpbmZyYXN0cnVjdHVyZSB0byBjb250cm9sIGl0c2VsZi4gSGVyZSBJ
+J20gdXNpbmcgdGhlICJsb2ciCmJhY2tlbmQgdG8gdHJhY2UgZXZlbnRzIHRvIGRpc2ssIGFuZCB0
+aGUgImR0cmFjZSIgYmFja2VuZCAoc3lzdGVtdGFwKSB0byBjb250cm9sCnRoZSB0cmFjaW5nIHN0
+YXRlIG9mIHN1Y2ggZXZlbnRzLgoKVGhlIGd1ZXN0IGNvZGUgaXMgc29tZXRoaW5nIGxpa2U6Cgog
+IC8vIHNvbWUgZ3Vlc3QgY29kZSBleGVjdXRlZCAqd2l0aG91dCogdHJhY2luZyBlbmFibGVkCgog
+IGludm9rZV9oeXBlcnRyYWNlX2V2ZW50KCk7IC8vIHN0YXAgd2lsbCBlbmFibGUgc29tZSBldmVu
+dHMgaGVyZQoKICAvLyBzb21lIGd1ZXN0IGNvZGUgZXhlY3V0ZWQgKndpdGgqIHRyYWNpbmcgZW5h
+YmxlZAoKICBpbnZva2VfaHlwZXJ0cmFjZV9ldmVudCgpOyAvLyBzdGFwIHdpbGwgZGlzYWJsZSBz
+b21lIGV2ZW50cyBoZXJlCgogIC8vIHNvbWUgZ3Vlc3QgY29kZSBleGVjdXRlZCAqd2l0aG91dCog
+dHJhY2luZyBlbmFibGVkCgpTbyB3ZSBjYW4gdXNlIGl0IHRvIG1hcmsgcmVnaW9ucyBvZiBpbnRl
+cmVzdCBmb3IgdHJhY2luZy4KCgpDaGVlcnMsCiAgTGx1aXMKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1k
+ZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
+bi9saXN0aW5mby9sdHRuZy1kZXYK
