@@ -1,16 +1,17 @@
-From: Sandeep Nandal <sandeep.nandal@nectechnologies.in>
-Subject: How to generate Sequence Diagram for Kernel Traces
-	using lttng
-Date: Wed, 7 Sep 2016 14:15:36 +0000
-Message-ID: <24051E950A3B60439629CEF60C215AD24C05E0F4__1487.43284303254$1473258169$gmane$org@EXCH-MB02-U1.nectechnologies.in>
+From: Mohamad Gebai <mohamad.gebai@gmail.com>
+Subject: [PATCH lttng-modules] Add throughput test to LTTng
+Date: Thu,  8 Sep 2016 13:27:42 -0400
+Message-ID: <1473355662-29891-1-git-send-email-mohamad.gebai__44640.6037117869$1473355703$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0669478405952028772=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from scanner.cloudmailstore.com (mx3.cloudmailstore.com
- [103.11.84.128])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 56770A3AF7
- for <lttng-dev@lists.lttng.org>; Wed,  7 Sep 2016 14:23:14 +0000 (UTC)
-Content-Language: en-US
+Received: from mail-qk0-f194.google.com (mail-qk0-f194.google.com
+ [209.85.220.194])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id DD1E8A3AC0
+ for <lttng-dev@lists.lttng.org>; Thu,  8 Sep 2016 17:28:32 +0000 (UTC)
+Received: by mail-qk0-f194.google.com with SMTP id w204so3898512qka.2
+ for <lttng-dev@lists.lttng.org>; Thu, 08 Sep 2016 10:27:48 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,294 +21,120 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: Mohamad Gebai <mohamad.gebai@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0669478405952028772==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_24051E950A3B60439629CEF60C215AD24C05E0F4EXCHMB02U1necte_"
-
---_000_24051E950A3B60439629CEF60C215AD24C05E0F4EXCHMB02U1necte_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-Dear lttng-dev Team,
-
-I have collected traces using lttng on my Linux Machine RHEL7.2
-Now I need to generate a Sequence Diagram showing the IPC between different=
- processes.
-Is there an in-built feature or already developed tool, by which I can gene=
-rate the IPC between the processes using the kernel traces.
-For example :-
-
-1.       X forks Y
-
-2.       X sends data through socket to Y
-
-3.       X sends communicate with Y using PIPE
-
-4.       And etc.
-
->----------------Time ----------->
-Process X : ---------------------------------------------------------------=
------------------------------------------------------
-                                *|                                         =
-                                  *|                                       =
-    *|
-Process Y : ---------------------------------------------------------------=
-------------------------------------------------------
-                                                                           =
-     *|
-Process Z : ---------------------------------------------------------------=
------------------------------------------------------
-                                                *|                         =
-                                                                           =
-                                       *|
-Process ## : --------------------------------------------------------------=
-------------------------------------------------------
-
-
-Consider   *|  as the kind of IPC between different process at given time. =
-Eg. PIPE, SOCKET, FORK etc.
-
-Kindly guide me.
-
-Thank you
-
-
-
-
---_000_24051E950A3B60439629CEF60C215AD24C05E0F4EXCHMB02U1necte_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0in;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:#0563C1;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:#954F72;
-	text-decoration:underline;}
-p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
-	{mso-style-priority:34;
-	margin-top:0in;
-	margin-right:0in;
-	margin-bottom:0in;
-	margin-left:.5in;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri","sans-serif";}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri","sans-serif";
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-family:"Calibri","sans-serif";}
-@page WordSection1
-	{size:8.5in 11.0in;
-	margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-	{page:WordSection1;}
-/* List Definitions */
-@list l0
-	{mso-list-id:1132986607;
-	mso-list-type:hybrid;
-	mso-list-template-ids:-1028857708 67698703 67698713 67698715 67698703 6769=
-8713 67698715 67698703 67698713 67698715;}
-@list l0:level1
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level2
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level3
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
-@list l0:level4
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level5
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level6
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
-@list l0:level7
-	{mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level8
-	{mso-level-number-format:alpha-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:left;
-	text-indent:-.25in;}
-@list l0:level9
-	{mso-level-number-format:roman-lower;
-	mso-level-tab-stop:none;
-	mso-level-number-position:right;
-	text-indent:-9.0pt;}
-ol
-	{margin-bottom:0in;}
-ul
-	{margin-bottom:0in;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-US" link=3D"#0563C1" vlink=3D"#954F72">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal">Dear lttng-dev Team,<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">I have collected traces using lttng on my Linux Mach=
-ine RHEL7.2<o:p></o:p></p>
-<p class=3D"MsoNormal">Now I need to generate a Sequence Diagram showing th=
-e IPC between different processes.<o:p></o:p></p>
-<p class=3D"MsoNormal">Is there an in-built feature or already developed to=
-ol, by which I can generate the IPC between the processes using the kernel =
-traces.<o:p></o:p></p>
-<p class=3D"MsoNormal">For example :-<o:p></o:p></p>
-<p class=3D"MsoListParagraph" style=3D"text-indent:-.25in;mso-list:l0 level=
-1 lfo1"><![if !supportLists]><span style=3D"mso-list:Ignore">1.<span style=
-=3D"font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;
-</span></span><![endif]>X forks Y <o:p></o:p></p>
-<p class=3D"MsoListParagraph" style=3D"text-indent:-.25in;mso-list:l0 level=
-1 lfo1"><![if !supportLists]><span style=3D"mso-list:Ignore">2.<span style=
-=3D"font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;
-</span></span><![endif]>X sends data through socket to Y <o:p></o:p></p>
-<p class=3D"MsoListParagraph" style=3D"text-indent:-.25in;mso-list:l0 level=
-1 lfo1"><![if !supportLists]><span style=3D"mso-list:Ignore">3.<span style=
-=3D"font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;
-</span></span><![endif]>X sends communicate with Y using PIPE<o:p></o:p></p=
->
-<p class=3D"MsoListParagraph" style=3D"text-indent:-.25in;mso-list:l0 level=
-1 lfo1"><![if !supportLists]><span style=3D"mso-list:Ignore">4.<span style=
-=3D"font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;
-</span></span><![endif]>And etc.<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal" style=3D"margin-left:1.0in;text-indent:.5in">&gt;---=
--------------Time -----------&gt;<o:p></o:p></p>
-<p class=3D"MsoNormal">Process X : ----------------------------------------=
----------------------------------------------------------------------------=
--<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *|&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *|&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp; *|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<o:p></o:p></p>
-<p class=3D"MsoNormal">Process Y : ----------------------------------------=
----------------------------------------------------------------------------=
---<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;
-<o:p></o:p></p>
-<p class=3D"MsoNormal">Process Z : ----------------------------------------=
----------------------------------------------------------------------------=
--
-<o:p></o:p></p>
-<p class=3D"MsoNormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp; *|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp; *|<o:p></o:p></p>
-<p class=3D"MsoNormal">Process ## : ---------------------------------------=
----------------------------------------------------------------------------=
---<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Consider &nbsp;&nbsp;*|&nbsp; as the kind of IPC bet=
-ween different process at given time. Eg. PIPE, SOCKET, FORK etc.<o:p></o:p=
-></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Kindly guide me.<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Thank you<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-</div>
-</body>
-</html>
-
---_000_24051E950A3B60439629CEF60C215AD24C05E0F4EXCHMB02U1necte_--
-
---===============0669478405952028772==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============0669478405952028772==--
+LSBDcmVhdGUgdGhlIGx0dG5nLXRlc3Qgc3ViZGlyZWN0b3J5IHVuZGVyIC9wcm9jIGZvciB0ZXN0
+aW5nIHB1cnBvc2VzLgoKLSBDcmVhdGUgdGhlIHByb2NmcyB0aHJvdWdocHV0IGZpbGUuIFN0YXJ0
+IGEgdGhyb3VnaHB1dCB0ZXN0IGJ5IHdyaXRpbmcKICB0aGUgbnVtYmVyIG9mIGl0ZXJhdGlvbnMg
+Zm9yIHRoZSB0ZXN0LiBSZWFkIGZyb20gdGhpcyBmaWxlIHRvIGdldCB0aGUKICByZXN1bHQgaW4g
+bmFub3NlY29uZHMuIE5vdGUgdGhhdCB0aGUgdGVzdCBhdXRvbWF0aWNhbGx5IHRyaWVzIHRvIHJl
+YWNoCiAgYSBzdGVhZHkgc3RhdGUgYmVmb3JlIGJlbmNobWFya2luZy4KClNpZ25lZC1vZmYtYnk6
+IE1vaGFtYWQgR2ViYWkgPG1vaGFtYWQuZ2ViYWlAZ21haWwuY29tPgotLS0KIGluc3RydW1lbnRh
+dGlvbi9ldmVudHMvbHR0bmctbW9kdWxlL2x0dG5nLXRlc3QuaCB8ICAgOCArKwogdGVzdHMvcHJv
+YmVzL2x0dG5nLXRlc3QuYyAgICAgICAgICAgICAgICAgICAgICAgIHwgMTE4ICsrKysrKysrKysr
+KysrKysrKysrKy0tCiAyIGZpbGVzIGNoYW5nZWQsIDExNiBpbnNlcnRpb25zKCspLCAxMCBkZWxl
+dGlvbnMoLSkKCmRpZmYgLS1naXQgYS9pbnN0cnVtZW50YXRpb24vZXZlbnRzL2x0dG5nLW1vZHVs
+ZS9sdHRuZy10ZXN0LmggYi9pbnN0cnVtZW50YXRpb24vZXZlbnRzL2x0dG5nLW1vZHVsZS9sdHRu
+Zy10ZXN0LmgKaW5kZXggMDVkMDI4Yy4uNTRiNDQwNCAxMDA2NDQKLS0tIGEvaW5zdHJ1bWVudGF0
+aW9uL2V2ZW50cy9sdHRuZy1tb2R1bGUvbHR0bmctdGVzdC5oCisrKyBiL2luc3RydW1lbnRhdGlv
+bi9ldmVudHMvbHR0bmctbW9kdWxlL2x0dG5nLXRlc3QuaApAQCAtNDgsNiArNDgsMTQgQEAgTFRU
+TkdfVFJBQ0VQT0lOVF9FVkVOVChsdHRuZ190ZXN0X2ZpbHRlcl9ldmVudCwKIAkpCiApCiAKK0xU
+VE5HX1RSQUNFUE9JTlRfRVZFTlQobHR0bmdfdGVzdF90aHJvdWdocHV0LAorICAgIFRQX1BST1RP
+KGludCBhbmludCksCisgICAgVFBfQVJHUyhhbmludCksCisgICAgVFBfRklFTERTKAorICAgICAg
+ICBjdGZfaW50ZWdlcihpbnQsIGludGZpZWxkLCBhbmludCkKKyAgICApCispCisKICNlbmRpZiAv
+KiAgTFRUTkdfVFJBQ0VfTFRUTkdfVEVTVF9IICovCiAKIC8qIFRoaXMgcGFydCBtdXN0IGJlIG91
+dHNpZGUgcHJvdGVjdGlvbiAqLwpkaWZmIC0tZ2l0IGEvdGVzdHMvcHJvYmVzL2x0dG5nLXRlc3Qu
+YyBiL3Rlc3RzL3Byb2Jlcy9sdHRuZy10ZXN0LmMKaW5kZXggNTRiZTRjNy4uZGM1OTY4MCAxMDA2
+NDQKLS0tIGEvdGVzdHMvcHJvYmVzL2x0dG5nLXRlc3QuYworKysgYi90ZXN0cy9wcm9iZXMvbHR0
+bmctdGVzdC5jCkBAIC0yMyw2ICsyMyw3IEBACiAjaW5jbHVkZSA8bGludXgvaW5pdC5oPgogI2lu
+Y2x1ZGUgPGxpbnV4L21vZHVsZS5oPgogI2luY2x1ZGUgPGxpbnV4L3Byb2NfZnMuaD4KKyNpbmNs
+dWRlIDxsaW51eC90aW1la2VlcGluZy5oPgogI2luY2x1ZGUgPGxpbnV4L2J5dGVvcmRlci9nZW5l
+cmljLmg+CiAKICNpbmNsdWRlIDxsdHRuZy1ldmVudHMuaD4KQEAgLTM5LDEyICs0MCwxOCBAQAog
+I2luY2x1ZGUgPGluc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxlL2x0dG5nLXRlc3Qu
+aD4KIAogREVGSU5FX1RSQUNFKGx0dG5nX3Rlc3RfZmlsdGVyX2V2ZW50KTsKK0RFRklORV9UUkFD
+RShsdHRuZ190ZXN0X3Rocm91Z2hwdXQpOwogCi0jZGVmaW5lIExUVE5HX1RFU1RfRklMVEVSX0VW
+RU5UX0ZJTEUJImx0dG5nLXRlc3QtZmlsdGVyLWV2ZW50IgorI2RlZmluZSBMVFROR19URVNUX1BS
+T0NGU19ESVIgICAgICAgICAgICJsdHRuZy10ZXN0IgorI2RlZmluZSBMVFROR19URVNUX0ZJTFRF
+Ul9FVkVOVF9GSUxFICAgICJmaWx0ZXItZXZlbnQiCisvKiBEbyBhIHRocm91Z2hwdXQgYmVuY2ht
+YXJrIGJ5IHdyaXRpbmcgdG8gdGhpcyBmaWxlIHRoZSBudW1iZXIgb2YgZXZlbnRzLgorICogUmVh
+ZCB0aGUgcmVzdWx0cyBpbiBuYW5vc2Vjb25kcy4gKi8KKyNkZWZpbmUgTFRUTkdfVEVTVF9USFJP
+VUdIUFVUX0ZJTEUgICAgICAidGhyb3VnaHB1dCIKIAogI2RlZmluZSBMVFROR19XUklURV9DT1VO
+VF9NQVgJNjQKIAotc3RhdGljIHN0cnVjdCBwcm9jX2Rpcl9lbnRyeSAqbHR0bmdfdGVzdF9maWx0
+ZXJfZXZlbnRfZGVudHJ5Oworc3RhdGljIHN0cnVjdCBwcm9jX2Rpcl9lbnRyeSAqbHR0bmdfdGVz
+dF9kZW50cnk7CitzdGF0aWMgdTY0IGxhdGVzdF90aHJvdWdocHV0X3Jlc3VsdHMgPSAwOwogCiBz
+dGF0aWMKIHZvaWQgdHJhY2VfdGVzdF9ldmVudCh1bnNpZ25lZCBpbnQgbnJfaXRlcikKQEAgLTYw
+LDYgKzY3LDI0IEBAIHZvaWQgdHJhY2VfdGVzdF9ldmVudCh1bnNpZ25lZCBpbnQgbnJfaXRlcikK
+IAl9CiB9CiAKK3N0YXRpYwordm9pZCBsdHRuZ190aHJvdWdocHV0X3Rlc3QodW5zaWduZWQgaW50
+IG5yX2l0ZXIpCit7CisJaW50IGk7CisJa3RpbWVfdCBzdGFydF90aW1lLCBlbmRfdGltZTsKKwor
+CS8qIFdhcm0gdXAgYW5kIGdldCB0byBhIHN0ZWFkeSBzdGF0ZSAqLworCWZvcihpID0gMDsgaSA8
+IG5yX2l0ZXIgLyAyOyBpKyspCisJCXRyYWNlX2x0dG5nX3Rlc3RfdGhyb3VnaHB1dChpKTsKKwor
+CXN0YXJ0X3RpbWUgPSBrdGltZV9nZXQoKTsKKwlmb3IoaSA9IDA7IGkgPCBucl9pdGVyOyBpKysp
+CisJCXRyYWNlX2x0dG5nX3Rlc3RfdGhyb3VnaHB1dChpKTsKKwllbmRfdGltZSA9IGt0aW1lX2dl
+dCgpOworCisJbGF0ZXN0X3Rocm91Z2hwdXRfcmVzdWx0cyA9IGt0aW1lX3RvX25zKGVuZF90aW1l
+KSAtIGt0aW1lX3RvX25zKHN0YXJ0X3RpbWUpOworfQorCiAvKioKICAqIGx0dG5nX2ZpbHRlcl9l
+dmVudF93cml0ZSAtIHRyaWdnZXIgYSBsdHRuZ190ZXN0X2ZpbHRlcl9ldmVudAogICogQGZpbGU6
+IGZpbGUgcG9pbnRlcgpAQCAtOTAsMTAgKzExNSw3MiBAQCBlbmQ6CiAJcmV0dXJuIHdyaXR0ZW47
+CiB9CiAKKy8qKgorICogbHR0bmdfdGhyb3VnaHB1dF90ZXN0X3dyaXRlIC0gdHJpZ2dlciBhIGx0
+dG5nX3Rocm91Z2hwdXRfdGVzdAorICogQGZpbGU6IGZpbGUgcG9pbnRlcgorICogQHVzZXJfYnVm
+OiB1c2VyIHN0cmluZworICogQGNvdW50OiBsZW5ndGggdG8gY29weQorICoKKyAqIFJldHVybiAt
+MSBvbiBlcnJvciwgd2l0aCBFRkFVTFQgZXJybm8uIFJldHVybnMgY291bnQgb24gc3VjY2Vzcy4K
+KyAqLworc3RhdGljCitzc2l6ZV90IGx0dG5nX3Rocm91Z2hwdXRfdGVzdF93cml0ZShzdHJ1Y3Qg
+ZmlsZSAqZmlsZSwKKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnN0IGNo
+YXIgX191c2VyICp1c2VyX2J1ZiwKKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHNpemVfdCBjb3VudCwgbG9mZl90ICpwcG9zKQoreworCXVuc2lnbmVkIGludCBucl9pdGVyOwor
+CXNzaXplX3Qgd3JpdHRlbjsKKwlpbnQgcmV0OworCisJLyogR2V0IHRoZSBudW1iZXIgb2YgaXRl
+cmF0aW9ucyAqLworCXJldCA9IGx0dG5nX2tzdHJ0b3VpbnRfZnJvbV91c2VyKHVzZXJfYnVmLCBj
+b3VudCwgMTAsICZucl9pdGVyKTsKKwlpZiAocmV0KSB7CisJCXdyaXR0ZW4gPSByZXQ7CisJCWdv
+dG8gZW5kOworCX0KKwkvKiBEbyB0aHJvdWdocHV0IHRlc3QgKi8KKwlsdHRuZ190aHJvdWdocHV0
+X3Rlc3QobnJfaXRlcik7CisJd3JpdHRlbiA9IGNvdW50OworCSpwcG9zICs9IHdyaXR0ZW47Citl
+bmQ6CisgICAgcmV0dXJuIHdyaXR0ZW47Cit9CisKKy8qKgorICogbHR0bmdfdGhyb3VnaHB1dF90
+ZXN0X3JlYWQgLSByZWFkIGxhdGVzdCByZXN1bHRzIG9mIHRocm91Z2hwdXQgdGVzdAorICogQGZp
+bGU6IGZpbGUgcG9pbnRlcgorICogQHVzZXJfYnVmOiB1c2VyIHN0cmluZworICogQGNvdW50OiBs
+ZW5ndGggdG8gY29weQorICoKKyAqIFJldHVybiAtMSBvbiBlcnJvciwgd2l0aCBFRkFVTFQgZXJy
+bm8uIFJldHVybnMgY291bnQgb24gc3VjY2Vzcy4KKyAqLworc3RhdGljCitzc2l6ZV90IGx0dG5n
+X3Rocm91Z2hwdXRfdGVzdF9yZWFkKHN0cnVjdCBmaWxlICpmaWxlLCBjaGFyIF9fdXNlciAqdXNl
+cl9idWYsCisgICAgICAgICAgICAgICAgICAgICAgICAgICBzaXplX3QgY291bnQsIGxvZmZfdCAq
+cHBvcykKK3sKKwljaGFyIGJ1Zltjb3VudF07CisJc3NpemVfdCByZWFkX2NvdW50ID0gMDsKKwor
+CWlmKGxhdGVzdF90aHJvdWdocHV0X3Jlc3VsdHMgPT0gMCkKKwkJZ290byBlbmQ7CisKKwlyZWFk
+X2NvdW50ICs9IHNucHJpbnRmKGJ1ZiwgY291bnQsICIlbGx1XG4iLCBsYXRlc3RfdGhyb3VnaHB1
+dF9yZXN1bHRzKTsKKwljb3B5X3RvX3VzZXIodXNlcl9idWYsIGJ1ZiwgY291bnQpOworCWxhdGVz
+dF90aHJvdWdocHV0X3Jlc3VsdHMgPSAwOworCitlbmQ6CisgICAgcmV0dXJuIHJlYWRfY291bnQ7
+Cit9CisKIHN0YXRpYyBjb25zdCBzdHJ1Y3QgZmlsZV9vcGVyYXRpb25zIGx0dG5nX3Rlc3RfZmls
+dGVyX2V2ZW50X29wZXJhdGlvbnMgPSB7CiAJLndyaXRlID0gbHR0bmdfdGVzdF9maWx0ZXJfZXZl
+bnRfd3JpdGUsCiB9OwogCitzdGF0aWMgY29uc3Qgc3RydWN0IGZpbGVfb3BlcmF0aW9ucyBsdHRu
+Z190aHJvdWdocHV0X3Rlc3Rfb3BlcmF0aW9ucyA9IHsKKwkud3JpdGUgPSBsdHRuZ190aHJvdWdo
+cHV0X3Rlc3Rfd3JpdGUsCisJLnJlYWQgPSBsdHRuZ190aHJvdWdocHV0X3Rlc3RfcmVhZCwKK307
+CisKIHN0YXRpYwogaW50IF9faW5pdCBsdHRuZ190ZXN0X2luaXQodm9pZCkKIHsKQEAgLTEwMSwy
+MiArMTg4LDMzIEBAIGludCBfX2luaXQgbHR0bmdfdGVzdF9pbml0KHZvaWQpCiAKIAkodm9pZCkg
+d3JhcHBlcl9sdHRuZ19maXh1cF9zaWcoVEhJU19NT0RVTEUpOwogCXdyYXBwZXJfdm1hbGxvY19z
+eW5jX2FsbCgpOwotCWx0dG5nX3Rlc3RfZmlsdGVyX2V2ZW50X2RlbnRyeSA9Ci0JCQlwcm9jX2Ny
+ZWF0ZV9kYXRhKExUVE5HX1RFU1RfRklMVEVSX0VWRU5UX0ZJTEUsCi0JCQkJU19JUlVHTyB8IFNf
+SVdVR08sIE5VTEwsCi0JCQkJJmx0dG5nX3Rlc3RfZmlsdGVyX2V2ZW50X29wZXJhdGlvbnMsIE5V
+TEwpOwotCWlmICghbHR0bmdfdGVzdF9maWx0ZXJfZXZlbnRfZGVudHJ5KSB7CisJbHR0bmdfdGVz
+dF9kZW50cnkgPSBwcm9jX21rZGlyKExUVE5HX1RFU1RfUFJPQ0ZTX0RJUiwgTlVMTCk7CisJaWYg
+KCFsdHRuZ190ZXN0X2RlbnRyeSkgeworCQlwcmludGsoS0VSTl9FUlIgIkVycm9yIGNyZWF0aW5n
+IExUVG5nIHRlc3QgZGlyZWN0b3J5XG4iKTsKKwkJcmV0ID0gLUVOT01FTTsKKwkJZ290byBlcnJv
+cjsKKwl9CisJaWYgKCFwcm9jX2NyZWF0ZV9kYXRhKExUVE5HX1RFU1RfRklMVEVSX0VWRU5UX0ZJ
+TEUsCisJCQkJU19JUlVHTyB8IFNfSVdVR08sIGx0dG5nX3Rlc3RfZGVudHJ5LAorCQkJCSZsdHRu
+Z190ZXN0X2ZpbHRlcl9ldmVudF9vcGVyYXRpb25zLCBOVUxMKSkgewogCQlwcmludGsoS0VSTl9F
+UlIgIkVycm9yIGNyZWF0aW5nIExUVG5nIHRlc3QgZmlsdGVyIGZpbGVcbiIpOwogCQlyZXQgPSAt
+RU5PTUVNOwogCQlnb3RvIGVycm9yOwogCX0KKwlpZighcHJvY19jcmVhdGVfZGF0YShMVFROR19U
+RVNUX1RIUk9VR0hQVVRfRklMRSwKKwkJCQlTX0lSVUdPIHwgU19JV1VHTywgbHR0bmdfdGVzdF9k
+ZW50cnksCisJCQkJJmx0dG5nX3Rocm91Z2hwdXRfdGVzdF9vcGVyYXRpb25zLCBOVUxMKSkgewor
+CQlwcmludGsoS0VSTl9FUlIgIkVycm9yIGNyZWF0aW5nIExUVG5nIHRlc3QgdGhyb3VnaHB1dCBm
+aWxlXG4iKTsKKwkJcmV0ID0gLUVOT01FTTsKKwkJZ290byBlcnJvcjsKKwl9CiAJcmV0ID0gX19s
+dHRuZ19ldmVudHNfaW5pdF9fbHR0bmdfdGVzdCgpOwogCWlmIChyZXQpCiAJCWdvdG8gZXJyb3Jf
+ZXZlbnRzOwogCXJldHVybiByZXQ7CiAKIGVycm9yX2V2ZW50czoKLQlyZW1vdmVfcHJvY19lbnRy
+eShMVFROR19URVNUX0ZJTFRFUl9FVkVOVF9GSUxFLCBOVUxMKTsKKwlyZW1vdmVfcHJvY19zdWJ0
+cmVlKExUVE5HX1RFU1RfUFJPQ0ZTX0RJUiwgTlVMTCk7CiBlcnJvcjoKIAlyZXR1cm4gcmV0Owog
+fQpAQCAtMTI3LDggKzIyNSw4IEBAIHN0YXRpYwogdm9pZCBfX2V4aXQgbHR0bmdfdGVzdF9leGl0
+KHZvaWQpCiB7CiAJX19sdHRuZ19ldmVudHNfZXhpdF9fbHR0bmdfdGVzdCgpOwotCWlmIChsdHRu
+Z190ZXN0X2ZpbHRlcl9ldmVudF9kZW50cnkpCi0JCXJlbW92ZV9wcm9jX2VudHJ5KExUVE5HX1RF
+U1RfRklMVEVSX0VWRU5UX0ZJTEUsIE5VTEwpOworCWlmIChsdHRuZ190ZXN0X2RlbnRyeSkKKwkJ
+cmVtb3ZlX3Byb2Nfc3VidHJlZShMVFROR19URVNUX1BST0NGU19ESVIsIE5VTEwpOwogfQogCiBt
+b2R1bGVfZXhpdChsdHRuZ190ZXN0X2V4aXQpOwotLSAKMi41LjAKCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
