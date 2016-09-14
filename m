@@ -1,22 +1,30 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH] babeltrace: add test for babeltrace --list
-Date: Wed, 14 Sep 2016 14:04:51 -0400
-Message-ID: <CA+jJMxutf9aBni73W=JHn95tXXTqTrs3XXo=yvQcCtGHAPepAg__6571.57338359884$1473876304$gmane$org@mail.gmail.com>
-References: <1471540228-24555-1-git-send-email-nathan_lynch@mentor.com>
- <c58c6445-dfe0-0835-4bea-d4b944509200@mentor.com>
- <CA+jJMxuGjA9MBm_gh_zLmPGiCQEv7S9OAS-ODhwOW-4dVwDT3A@mail.gmail.com>
- <0500974e-6635-3b63-f29f-2687b82407a1@mentor.com>
+From: "Staffan Tjernstrom" <staffan@eternaltraveller.com>
+Subject: lttng view on --live session vs direct babeltrace use
+	on UST
+Date: Wed, 14 Sep 2016 15:49:21 -0500
+Message-ID: <fb211c1a543766e28b2eb036aa20f0a2.squirrel__8387.01367979429$1473888032$gmane$org@email.powweb.com>
+Reply-To: stjernstrom@acm.org
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yb0-f181.google.com (mail-yb0-f181.google.com
- [209.85.213.181])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id C1913A3D4F
- for <lttng-dev@lists.lttng.org>; Wed, 14 Sep 2016 18:05:47 +0000 (UTC)
-Received: by mail-yb0-f181.google.com with SMTP id u125so18604399ybg.3
- for <lttng-dev@lists.lttng.org>; Wed, 14 Sep 2016 11:04:52 -0700 (PDT)
-In-Reply-To: <0500974e-6635-3b63-f29f-2687b82407a1@mentor.com>
+Received: from walmailout05.yourhostingaccount.com
+ (walmailout05.yourhostingaccount.com [65.254.253.40])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 3D453A3ED7
+ for <lttng-dev@lists.lttng.org>; Wed, 14 Sep 2016 21:20:51 +0000 (UTC)
+Received: from mailscan04.yourhostingaccount.com ([10.1.15.4]
+ helo=walmailscan04.yourhostingaccount.com)
+ by walmailout05.yourhostingaccount.com with esmtp (Exim)
+ id 1bkH7t-0000gw-KN
+ for lttng-dev@lists.lttng.org; Wed, 14 Sep 2016 16:49:49 -0400
+Received: from [10.114.3.32] (helo=walimpout12)
+ by walmailscan04.yourhostingaccount.com with esmtp (Exim)
+ id 1bkH7t-0002T9-B5
+ for lttng-dev@lists.lttng.org; Wed, 14 Sep 2016 16:49:49 -0400
+Received: from [127.0.0.1] (helo=email.powweb.com)
+ by walwebmail19.yourhostingaccount.com with esmtp (Exim)
+ id 1bkH7R-0000OE-Eu
+ for lttng-dev@lists.lttng.org; Wed, 14 Sep 2016 16:49:21 -0400
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,24 +34,30 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Nathan Lynch <Nathan_Lynch@mentor.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIFR1ZSwgU2VwIDEzLCAyMDE2IGF0IDE6NTUg
-UE0sIE5hdGhhbiBMeW5jaCA8TmF0aGFuX0x5bmNoQG1lbnRvci5jb20+IHdyb3RlOgo+IE9uIDA5
-LzEzLzIwMTYgMTI6NDcgUE0sIErDqXLDqW1pZSBHYWxhcm5lYXUgd3JvdGU6Cj4+IFRoZSBwYXRj
-aCBsb29rcyBnb29kIHRvIG1lLCBidXQgd291bGQgeW91IG1pbmQgY2hhbmdpbmcgdGhlIGhlYWRl
-ciBvZgo+PiB0ZXN0X2Zvcm1hdHMgdG8gdGhlIGZ1bGwgR1BMIGhlYWRlciArIGNvcHlyaWdodCBt
-ZW50aW9uLCBhcyBpcyBkb25lCj4+IGhlcmU6Cj4+Cj4+IGh0dHBzOi8vcmF3LmdpdGh1YnVzZXJj
-b250ZW50LmNvbS9lZmZpY2lvcy9iYWJlbHRyYWNlL21hc3Rlci90ZXN0cy9iaW4vaW50ZXJzZWN0
-aW9uL3Rlc3RfaW50ZXJzZWN0aW9uLmluCj4+Cj4+IEkgY2FuIHBlcmZvcm0gdGhlIGNoYW5nZSBt
-eXNlbGYsIGJ1dCBJIHdhbnQgdG8gbWFrZSBzdXJlIGl0J3Mgb2theS4KPgo+IEl0J3MgZmluZSB3
-aXRoIG1lLCB0aGFua3MuCj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
-L2x0dG5nLWRldgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6
-Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-ZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
-ZGV2Cg==
+SSBjcmVhdGUgYSBzZXNzaW9uIHdpdGgKCmx0dG5nIGNyZWF0ZSAtLWxpdmUgMTAwMDAwCgphZGQg
+bXkgZXZlbnRzCgpsdHRuZyBlbmFibGUtZXZlbnQgLXUgIm15X3Byb3ZpZGVyOioiCgpzdGFydCBp
+dAoKbHR0bmcgc3RhcnQKCnRoZW4gdmlldyB0aGUgcmVzdWx0cy4KCmx0dG5nIHZpZXcKCndvcmtz
+IGZpbmUsIGJ1dCBJIG5lZWQgdG8gZmluZS10dW5lIHRoZSBvdXRwdXQgZmllbGRzIChJIG5lZWQg
+dGhlCmRhdGUsIGFuZCB1dGMgdGltZSwgaW4gcGFydGljdWxhcikuCgpsdHRuZyB2aWV3IC1lICIv
+dXNyL2Jpbi9iYWJlbHRyYWNlIC0tY2xvY2stZGF0ZSAtLWNsb2NrLWdtdCIKCnByb2R1Y2VzIHRo
+ZSBmb2xsb3dpbmcgZXJyb3I6CgpUcmFjZSBkaXJlY3Rvcnk6Cm5ldDovL2xvY2FsaG9zdC9ob3N0
+L2U3Y2gxc2FwcGhpcmUwMS5mYWN0aW9uLmxvY2FsL2F1dG8tMjAxNjA5MTQtMTUwMDQwCgpbZXJy
+b3JdIFVuYWJsZSB0byBvcGVuIHRyYWNlIGRpcmVjdG9yeQoibmV0Oi8vbG9jYWxob3N0L2hvc3Qv
+ZTdjaDFzYXBwaGlyZTAxLmZhY3Rpb24ubG9jYWwvYXV0by0yMDE2MDkxNC0xNTAwNDAiLgpbd2Fy
+bmluZ10gW0NvbnRleHRdIENhbm5vdCBvcGVuX3RyYWNlIG9mIGZvcm1hdCBjdGYgYXQgcGF0aApu
+ZXQ6Ly9sb2NhbGhvc3QvaG9zdC9lN2NoMXNhcHBoaXJlMDEuZmFjdGlvbi5sb2NhbC9hdXRvLTIw
+MTYwOTE0LTE1MDA0MC4KW3dhcm5pbmddIFtDb250ZXh0XSBjYW5ub3Qgb3BlbiB0cmFjZQoibmV0
+Oi8vbG9jYWxob3N0L2hvc3QvZTdjaDFzYXBwaGlyZTAxLmZhY3Rpb24ubG9jYWwvYXV0by0yMDE2
+MDkxNC0xNTAwNDAiCmZvciByZWFkaW5nLgpbd2FybmluZ10gZXJyb3JzIG9jY3VycmVkIHdoZW4g
+b3BlbmluZyB0cmFjZQoibmV0Oi8vbG9jYWxob3N0L2hvc3QvZTdjaDFzYXBwaGlyZTAxLmZhY3Rp
+b24ubG9jYWwvYXV0by0yMDE2MDkxNC0xNTAwNDAiCmZvciByZWFkaW5nLCBjb250aW51aW5nIGFu
+eXdheS4KCldoZW4gSSBkb24ndCB1c2UgYSBsaXZlIHNlc3Npb24sIHRoZSBleHBsaWNpdCB2ZXJz
+aW9uIG9mIGx0dG5nIHZpZXcKd29ya3MgYXMgb25lIHdvdWxkIGV4cGVjdC4KCkRvZXMgYW55b25l
+IGhhdmUgYW55IGdvb2QgaWRlYXMgd2hlcmUgSSdtIGdvaW5nIHdyb25nPzoKCktpbmQgUmVnYXJk
+cywKU3RhZmZhbiBUai4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
+dHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
+Cg==
