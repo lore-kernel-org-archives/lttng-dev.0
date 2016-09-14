@@ -1,20 +1,22 @@
-From: Francis Giraldeau <francis.giraldeau@gmail.com>
-Subject: Re: How to generate Sequence Diagram for Kernel Traces
- using lttng
-Date: Tue, 13 Sep 2016 17:20:10 -0400
-Message-ID: <8b383a30-57bc-0f22-deff-20fe2034612e__28371.6679238298$1473801628$gmane$org@gmail.com>
-References: <24051E950A3B60439629CEF60C215AD24C05E0F4@EXCH-MB02-U1.nectechnologies.in>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH] babeltrace: add test for babeltrace --list
+Date: Wed, 14 Sep 2016 14:04:51 -0400
+Message-ID: <CA+jJMxutf9aBni73W=JHn95tXXTqTrs3XXo=yvQcCtGHAPepAg__6571.57338359884$1473876304$gmane$org@mail.gmail.com>
+References: <1471540228-24555-1-git-send-email-nathan_lynch@mentor.com>
+ <c58c6445-dfe0-0835-4bea-d4b944509200@mentor.com>
+ <CA+jJMxuGjA9MBm_gh_zLmPGiCQEv7S9OAS-ODhwOW-4dVwDT3A@mail.gmail.com>
+ <0500974e-6635-3b63-f29f-2687b82407a1@mentor.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-f194.google.com (mail-qk0-f194.google.com
- [209.85.220.194])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 3BA42A3EEC
- for <lttng-dev@lists.lttng.org>; Tue, 13 Sep 2016 21:21:06 +0000 (UTC)
-Received: by mail-qk0-f194.google.com with SMTP id b204so182584qkc.1
- for <lttng-dev@lists.lttng.org>; Tue, 13 Sep 2016 14:20:13 -0700 (PDT)
-In-Reply-To: <24051E950A3B60439629CEF60C215AD24C05E0F4@EXCH-MB02-U1.nectechnologies.in>
+Received: from mail-yb0-f181.google.com (mail-yb0-f181.google.com
+ [209.85.213.181])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id C1913A3D4F
+ for <lttng-dev@lists.lttng.org>; Wed, 14 Sep 2016 18:05:47 +0000 (UTC)
+Received: by mail-yb0-f181.google.com with SMTP id u125so18604399ybg.3
+ for <lttng-dev@lists.lttng.org>; Wed, 14 Sep 2016 11:04:52 -0700 (PDT)
+In-Reply-To: <0500974e-6635-3b63-f29f-2687b82407a1@mentor.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,27 +26,24 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Sandeep Nandal <sandeep.nandal@nectechnologies.in>, lttng-dev@lists.lttng.org
+To: Nathan Lynch <Nathan_Lynch@mentor.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-CgpPbiAyMDE2LTA5LTA3IDEwOjE1IEFNLCBTYW5kZWVwIE5hbmRhbCB3cm90ZToKPiBEZWFyIGx0
-dG5nLWRldiBUZWFtLAo+IAo+IEkgaGF2ZSBjb2xsZWN0ZWQgdHJhY2VzIHVzaW5nIGx0dG5nIG9u
-IG15IExpbnV4IE1hY2hpbmUgUkhFTDcuMgo+IAo+IE5vdyBJIG5lZWQgdG8gZ2VuZXJhdGUgYSBT
-ZXF1ZW5jZSBEaWFncmFtIHNob3dpbmcgdGhlIElQQyBiZXR3ZWVuIGRpZmZlcmVudCBwcm9jZXNz
-ZXMuCj4gCj4gSXMgdGhlcmUgYW4gaW4tYnVpbHQgZmVhdHVyZSBvciBhbHJlYWR5IGRldmVsb3Bl
-ZCB0b29sLCBieSB3aGljaCBJIGNhbiBnZW5lcmF0ZSB0aGUgSVBDIGJldHdlZW4gdGhlIHByb2Nl
-c3NlcyB1c2luZyB0aGUga2VybmVsIHRyYWNlcy4KPiAKPiBGb3IgZXhhbXBsZSA6LQo+IAo+IDEu
-ICAgICAgIFggZm9ya3MgWQo+IDIuICAgICAgIFggc2VuZHMgZGF0YSB0aHJvdWdoIHNvY2tldCB0
-byBZCj4gMy4gICAgICAgWCBzZW5kcyBjb21tdW5pY2F0ZSB3aXRoIFkgdXNpbmcgUElQRQo+IDQu
-ICAgICAgIEFuZCBldGMuCgoKWW91IG1heSBiZSBpbnRlcmVzdGVkIGludG8gdGhlIENyaXRpY2Fs
-IEZsb3cgVmlldyBpbiBUcmFjZUNvbXBhc3MsCnRoYXQgdXNlcyBMVFRuZyBrZXJuZWwgZXZlbnRz
-IHRvIHNob3cgdGhlIHdhaXRpbmcgZGVwZW5kZW5jaWVzCmJldHdlZW4gcHJvY2Vzc2VzIGFuZCB3
-b3JrcyB3aXRoIGFsbCBJUENzLCBmdXRleCwgYW5kIFRDUCBzb2NrZXRzLgpJdCBkb2VzIG5vdCBz
-aG93IHNwZWNpZmljIElQQ3MgaG93ZXZlciwgYnV0IHlvdSBjYW4gZGVkdWNlIGl0IGZyb20KdGhl
-IHN5c3RlbSBjYWxscyBpbnZvbHZlZC4gWW91IHdpbGwgZmluZCB0aGUgZG9jdW1lbnRhdGlvbiBo
-ZXJlOiAKCiAgaHR0cDovL2hlbHAuZWNsaXBzZS5vcmcvbmVvbi90b3BpYy9vcmcuZWNsaXBzZS50
-cmFjZWNvbXBhc3MuZG9jLnVzZXIvZG9jL0xUVG5nLUtlcm5lbC1BbmFseXNpcy5odG1sP2NwPTc3
-XzVfNSNQcm9jZXNzX1dhaXRfQW5hbHlzaXMKCkNoZWVycywKCkZyYW5jaXMKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
-dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
-aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIFR1ZSwgU2VwIDEzLCAyMDE2IGF0IDE6NTUg
+UE0sIE5hdGhhbiBMeW5jaCA8TmF0aGFuX0x5bmNoQG1lbnRvci5jb20+IHdyb3RlOgo+IE9uIDA5
+LzEzLzIwMTYgMTI6NDcgUE0sIErDqXLDqW1pZSBHYWxhcm5lYXUgd3JvdGU6Cj4+IFRoZSBwYXRj
+aCBsb29rcyBnb29kIHRvIG1lLCBidXQgd291bGQgeW91IG1pbmQgY2hhbmdpbmcgdGhlIGhlYWRl
+ciBvZgo+PiB0ZXN0X2Zvcm1hdHMgdG8gdGhlIGZ1bGwgR1BMIGhlYWRlciArIGNvcHlyaWdodCBt
+ZW50aW9uLCBhcyBpcyBkb25lCj4+IGhlcmU6Cj4+Cj4+IGh0dHBzOi8vcmF3LmdpdGh1YnVzZXJj
+b250ZW50LmNvbS9lZmZpY2lvcy9iYWJlbHRyYWNlL21hc3Rlci90ZXN0cy9iaW4vaW50ZXJzZWN0
+aW9uL3Rlc3RfaW50ZXJzZWN0aW9uLmluCj4+Cj4+IEkgY2FuIHBlcmZvcm0gdGhlIGNoYW5nZSBt
+eXNlbGYsIGJ1dCBJIHdhbnQgdG8gbWFrZSBzdXJlIGl0J3Mgb2theS4KPgo+IEl0J3MgZmluZSB3
+aXRoIG1lLCB0aGFua3MuCj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0
+bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
+L2x0dG5nLWRldgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6
+Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+ZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
+ZGV2Cg==
