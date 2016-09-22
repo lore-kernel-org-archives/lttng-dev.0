@@ -1,16 +1,17 @@
 From: Milian Wolff <milian.wolff@kdab.com>
 Subject: Re: sdt.h tracepoints with unicode data and/or structs
-Date: Thu, 22 Sep 2016 14:47:08 +0200
-Message-ID: <4486738.j9zaXj12nX__27063.3404645652$1474548457$gmane$org@milian-kdab2>
-References: <133954640.uMaX5Hy6f7@agathebauer> <1806825.5qdYm7EQhg@agathebauer>
- <669131537.28153.1474481355551.JavaMail.zimbra@efficios.com>
+Date: Thu, 22 Sep 2016 14:56:25 +0200
+Message-ID: <12621392.supdKG9qFk__20232.3091602468$1474549005$gmane$org@milian-kdab2>
+References: <133954640.uMaX5Hy6f7@agathebauer>
+ <CAB4xu_2r+eNS6s5CWTGoNGPRJwp8H_gr6TDTG+6LJCgvDtO5gg@mail.gmail.com>
+ <1494937800.28038.1474478555753.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1445977665186999635=="
+Content-Type: multipart/mixed; boundary="===============6356021466947504178=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 2A691A2BCD
- for <lttng-dev@lists.lttng.org>; Thu, 22 Sep 2016 12:48:20 +0000 (UTC)
-In-Reply-To: <669131537.28153.1474481355551.JavaMail.zimbra@efficios.com>
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id DF34CA3113
+ for <lttng-dev@lists.lttng.org>; Thu, 22 Sep 2016 12:57:37 +0000 (UTC)
+In-Reply-To: <1494937800.28038.1474478555753.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,144 +25,108 @@ To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>, Philippe Proulx <philippe.proulx@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1445977665186999635==
-Content-Type: multipart/signed; boundary="nextPart8492826.qJfhbi0Yj8"; micalg="sha1"; protocol="application/pkcs7-signature"
+--===============6356021466947504178==
+Content-Type: multipart/signed; boundary="nextPart3686442.QQmZFuMv9d"; micalg="sha1"; protocol="application/pkcs7-signature"
 
---nextPart8492826.qJfhbi0Yj8
+--nextPart3686442.QQmZFuMv9d
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
 
-On Wednesday, September 21, 2016 6:09:15 PM CEST Mathieu Desnoyers wrote:
-> ----- On Sep 20, 2016, at 4:34 PM, Milian Wolff milian.wolff@kdab.com wrote:
-> > On Montag, 12. September 2016 16:24:04 CEST Mathieu Desnoyers wrote:
-> >> ----- On Sep 12, 2016, at 11:40 AM, Milian Wolff milian.wolff@kdab.com
+On Wednesday, September 21, 2016 5:22:35 PM CEST Mathieu Desnoyers wrote:
+> ----- On Sep 20, 2016, at 7:22 PM, Philippe Proulx eeppeliteloop@gmail.com 
+wrote:
+> >>> >> > Can I pass UTF16 strings? Do they need to be null-terminated?
+> >>> >> 
+> >>> >> You should convert them to UTF8.
+> >>> >> 
+> >>> >> A ctf_string() needs to be null-terminated. A ctf_sequence_text() is
+> >>> >> not required to be null-terminated. See
+> >>> >> http://lttng.org/docs/#doc-liblttng-ust-tp-fields
+> >>> > 
+> >>> > This sounds like tracing would then incur a huge runtime overhead,
+> >>> > when I
+> >>> > need to convert all my UTF-16 strings to UTF-8. How does one deal with
+> >>> > that?
+> >>> 
+> >>> Are you concerned about the runtime overhead when tracing is disabled,
+> >>> or
+> >>> enabled ? It would be good to gather some metrics on the overhead of
+> >>> this
+> >>> conversion.
+> >> 
+> >> I'm mostly concerned about the overhead when tracing is disabled.
+> >> Ideally, I would like to see these tracepoints unconditionally compiled
+> >> into Qt. But if the overhead is noticeable when they are not in use, I
+> >> may have a hard time achieving this goal. Instead, one will then
+> >> probably need to recompile Qt with the tracepoints enabled.
 > > 
-> > wrote:
-> >> > On Monday, September 12, 2016 3:03:04 PM CEST Mathieu Desnoyers wrote:
-> >> >> ----- On Sep 6, 2016, at 3:00 PM, Milian Wolff milian.wolff@kdab.com
+> > As Mathieu wrote, the overhead of disabled LTTng-UST tracepoints is pretty
+> > much unnoticeable. You can use the tracepoint_enabled() and
+> > do_tracepoint()
+> > macros to perform some computation, conversions, and prepare stuff
+> > specifically for the payload of the event.
 > > 
-> > wrote:
-> >> >> > Hey all,
-> >> >> > 
-> >> >> > where can I find more documentation on how to use sdt.h to add
-> >> >> > static
-> >> >> > tracepoints to user-land applications? If this is not the right
-> >> >> > place
-> >> >> > to
-> >> >> > ask, please refer to to elsewhere.
-> >> >> 
-> >> >> Hi Milian,
-> >> > 
-> >> > Hey Mathieu,
-> >> > 
-> >> >> LTTng-UST offers a "tracepoint" instrumentation facility, which can
-> >> >> optionally emit "sdt.h" probe points too for compatibility with
-> >> >> SystemTAP.
-> >> >> 
-> >> >> > I plan to upstream a collection of tracepoints to Qt, and possibly
-> >> >> > elsewhere. One problem I'm having right now is figuring out how to
-> >> >> > "design" the tracepoints such that they have minimal overhead.
-> >> >> 
-> >> >> The main question here would be: do you want your instrumentation to
-> >> >> be
-> >> >> usable with LTTng-UST ? If yes, then you want the tracepoint
-> >> >> instrumentation facility. Else, if you only plan on using SystemTAP,
-> >> >> you
-> >> >> can use sdt.h instrumentation.
-> >> >> 
-> >> >> > So my questions:
-> >> >> My answers will be about lttng-ust tracepoints.
-> >> > 
-> >> > Thanks for the clarifications! Are the LTTNG-UST tracepoints also
-> >> > "zero-
-> >> > overhead" like the SystemTap once, i.e. put into a separate section and
-> >> > "only" one nop is added when tracing is disabled? I could not find such
-> >> > an information anywhere yet.
-> >> 
-> >> The lttng-ust tracepoint mechanism comes from the design of the
-> >> Linux kernel tracepoints, which have proven to be unnoticeable
-> >> when disabled. There is one slight technicality though:
-> >> 
-> >> The linux kernel tracepoints use the asm goto mechanism and code patching
-> >> to flip between a no-op and a jump to dynamically enable each tracepoint.
-> >> This is all very fine for the kernel.
-> >> 
-> >> Now for user-space, the lttng-ust tracepoints rather use a conditional
-> >> branch to skip over the entire stack setup and the function call. There
-> >> are a few reasons for using a old-fashioned conditional branch: first,
-> >> there are no widely adopted multi-core, live code patching library
-> >> available in user-space that am I aware of. Second, even if we would
-> >> have one, we may not want to send SIGSTOP/SIGCONT to the traced process,
-> >> due to debugger interactions. Thirdly, doing code patching may not
-> >> interact will security features such as read-only code sections and
-> >> code checksumming. Finally, doing code patching of library and
-> >> executable code will trigger copy-on-write of the touched pages, which
-> >> will prevent sharing those pages between processes running the same
-> >> apps/libraries. All in all, the conditional branch does not seem like
-> >> a too bad alternative after all.
-> >> 
-> >> If we look at the code generated by SystemTAP sdt.h probes (as well
-> >> as DTrace), they are actually more heavyweight than what has been
-> >> claimed by Sun's marketing department back in the days: it does
-> >> cost a stack setup of all the variables passed to the the probe,
-> >> and indeed the function call is no-op'd.
-> >> 
-> >> The downside here is that all side-effects, and layout of the arguments
-> >> for the no-op'd call, are taken by the instrumented application, even
-> >> though tracing is not dynamically enabled.
-> >> 
-> >> Therefore, the SDT mechanism is not a lightweight as is generally
-> >> claimed. It is not "just a single no-op per site", but rather a
-> >> function call stack setup and a no-op.
+> >> When in use, the overhead of the tracepoints should also be minimal.
+> >> Allocating memory for a temporary UTF-16 to UTF-8 conversion alone has a
+> >> large overhead, and then converting the data to UTF-8 also adds on top
+> >> of that. Thus, if at all possible, I would like to prevent that.
 > > 
-> > Thanks a lot for the in-depth explanation Mathieu, much appreciated! From
-> > what I gather, sdt.h does allow to check whether a given trace point is
-> > enabled or not, no? I.e. via the semaphores. Is there any performance
-> > difference between checking the semaphore of a sdt.h tracepoint vs. doing
-> > the analogous check for lttng-ust tracepoints?
+> > There's no way to support UTF-16 as of the current versions of LTTng and
+> > CTF. Even if you find a way to store the string as is, for example using a
+> > sequence of bytes, the existing CTF viewers and analyzers won't recognize
+> > the field as a string.
+> > 
+> > However we could think about a way to support UTF-16 in the future, and
+> > possibly other Unicode encodings too.
+> > 
+> >> Similarly, I am looking for a way to put URLs into tracepoints, and
+> >> converting a QUrl to string data is far from cheap.
+> > 
+> > Yes, I see that this code is executed:
+> > <https://github.com/qt/qtbase/blob/dev/src/corelib/io/qurl.cpp#L3279>.
+> > 
+> > You could allocate one tracepoint field for each individual attribute of
+> > the QUrl object, for example the scheme, the path, the query string, the
+> > fragment, etc. But I guess you'd still have the UTF-16 issue.
+> > 
+> >> At this point, I don't see a way around only enabling tracepoints
+> >> optionally. Independent of the mechanism in use for the actual
+> >> tracepoints (i.e. lttng-ust or sdt). The conditional to check whether
+> >> tracing is enabled may not be too bad. But then in the conditional it
+> >> looks like $some code will be required to massage the data into a form
+> >> that the tracepoints accept them. This increase in code size negatively
+> >> influences code caches and I don't see any way around that.
+> > 
+> > I leave this part for Mathieu ;-).
 > 
-> Not sure what you refer to about "semaphores". And it's unclear how you
-> define "checking if active": is it to decide in the fast path whether to
-> trace or not, or in a slow path to query what is currently active ?
+> This "extra code" can be implemented within the tracepoint provider,
+> which is a cache cold function, not used at all when tracing is disabled.
 
-The fast path to check whether to trace or not:
+This sounds excellent. Can you tell me how? Could you maybe add an example to 
+lttng-ust. Also note how http://lttng.org/man/3/lttng-ust/v2.7 says:
 
-$ cat probes.d
-provider milian {
-    probe test();                                                                                                                                                                                                 
-};                                                                                                                                                                                                                
-$ dtrace -C -h -s probes.d -o probes.h                                                                                                                                                    
-$ cat probes.h                                                                                                                                                  
-/* Generated by the Systemtap dtrace wrapper */                                                                                                                                                                   
-                                                                                                                                                                                                                  
-                                                                                                                                                                                                                  
-#define _SDT_HAS_SEMAPHORES 1                                                                                                                                                                                     
-                                                                                                                                                                                                                  
-                                                                                                                                                                                                                  
-#define STAP_HAS_SEMAPHORES 1 /* deprecated */                                                                                                                                                                    
-                                                                                                                                                                                                                  
-                                                                                                                                                                                                                  
-#include <sys/sdt.h>                                                                                                                                                                                              
-                                                                                                                                                                                                                  
-/* MILIAN_TEST ( ) */
-#if defined STAP_SDT_V1
-#define MILIAN_TEST_ENABLED() __builtin_expect (test_semaphore, 0)
-#define milian_test_semaphore test_semaphore
-#else
-#define MILIAN_TEST_ENABLED() __builtin_expect (milian_test_semaphore, 0)
-#endif
-__extension__ extern unsigned short milian_test_semaphore __attribute__ 
-((unused)) __attribute__ ((section (".probes")));
-#define MILIAN_TEST() \
-DTRACE_PROBE (milian, test)
+	if (tracepoint_enabled(ust_tests_hello, tptest)) {
+		/* prepare arguments */
+		do_tracepoint(ust_tests_hello, tptest, i, netint, values,
+			text, strlen(text), dbl, flt);
+	}
 
+If I understood you correctly, then I could do something like
 
+	if (tracepoint_enabled(ust_tests_hello, tptest)) {
+		/* don't prepare arguments */
+		do_tracepoint(ust_tests_hello, my_complex_data);
+	}
+
+And then have the "prepare" code somewhere in my TRACEPOINT_EVENT?
+
+Thanks
 -- 
 Milian Wolff | milian.wolff@kdab.com | Software Engineer
 KDAB (Deutschland) GmbH&Co KG, a KDAB Group company
 Tel: +49-30-521325470
 KDAB - The Qt Experts
---nextPart8492826.qJfhbi0Yj8
+--nextPart3686442.QQmZFuMv9d
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -263,19 +228,19 @@ ATCBqDCBkzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UE
 BxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxOTA3BgNVBAMTMENPTU9ETyBD
 bGllbnQgQXV0aGVudGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIQcgjoW5E8F4ibWmtHeSub
 tDAJBgUrDgMCGgUAoIGHMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8X
-DTE2MDkyMjEyNDcwOFowIwYJKoZIhvcNAQkEMRYEFAK0Me1h+uxNVJziYaSMUN+1/eAlMCgGCSqG
-SIb3DQEJDzEbMBkwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA0GCSqGSIb3DQEBAQUABIIBAI9v
-0R7ZlxpPu0k0ZZrKWrg1781Na4vp5FKDHqCH3dsCOF5wpK6cxJNL08vUGco3bDRTJJuhf1IcckGn
-YtwEFs67mxSJKV8XlYWTSf/FH/eqlzq7VGGQAAzTCg2o+5RwYtKOtjB6gV3rcoZg68KoOuco4gOr
-bW4nlYKd80wgPRt17jwBj7GM7QvdzeMOJJ1F2YzDqSgy6U7Ull03YaQ/64ArX1apc5WNzXME4Hwj
-xS6FHL5gYwE7ne9WxRsj6Af9Bua3x+uHMLVG4HQRSqSXn3IsZtvPJYaF/lJ2S9EKQS1qWvHw8/We
-yqmasRIIHV6fDux4KwM9kQfUUQG+k2fqstcAAAAAAAA=
+DTE2MDkyMjEyNTYyNVowIwYJKoZIhvcNAQkEMRYEFGVBtuqnvWRxH6w23IaJlvDe3MbPMCgGCSqG
+SIb3DQEJDzEbMBkwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA0GCSqGSIb3DQEBAQUABIIBALeH
+LDENw1HXp1CWqLI1c/25ABEfRNoS7M+3DyE/J6gRPCKeCr07j6cUWGMZtqsNiDumYZRGa8kxqqpB
+jVkkGWwO2RQhfM1D9mcG6KyZR6JofWgu0RE/L+H2k+wTC3dSjX35T3G+XZq6CsPijxLLArr4NCtm
+IqXBsFYhuTZ9/8xYohQleVe6PRnPFI1rdR9nhPOjeuFY9PNuJaYjMyJ7KYzSrnPnImoipnabKkWS
+VHqSdgnvNz5jqAW0XIpYSoyrOi0yEfRlC+7zAXIqrctlj1GupMlUiXV3yBy5PkqITTg0DPjmSEol
+my3DoprIR6GI3vAEJfGzxkc9jwiVG/eb7AUAAAAAAAA=
 
 
---nextPart8492826.qJfhbi0Yj8--
+--nextPart3686442.QQmZFuMv9d--
 
 
---===============1445977665186999635==
+--===============6356021466947504178==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -285,4 +250,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============1445977665186999635==--
+--===============6356021466947504178==--
