@@ -1,22 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: segfault when exiting process with background thread
-Date: Wed, 21 Sep 2016 21:05:19 +0000 (UTC)
-Message-ID: <674148302.28389.1474491919075.JavaMail.zimbra__26587.1381656781$1474491900$gmane$org@efficios.com>
-References: <DM3PR13MB0782B678A6ECD858863C1A8CC7B20@DM3PR13MB0782.namprd13.prod.outlook.com>
- <DM3PR15MB0768E77237D422EFE34C0014ABB40@DM3PR15MB0768.namprd15.prod.outlook.com>
- <1717932664.22109.1457635977007.JavaMail.zimbra@efficios.com>
- <BY2PR15MB0759383FF520BBE4DB105F22ABB40@BY2PR15MB0759.namprd15.prod.outlook.com>
- <75563213.22564.1457652451557.JavaMail.zimbra@efficios.com>
- <BY2PR15MB07598BAFC59EAAA6D7812019AB890@BY2PR15MB0759.namprd15.prod.outlook.com>
- <967044216.25799.1458068418180.JavaMail.zimbra@efficios.com>
- <CY4PR13MB1414010B72D6389030477BECC7F60@CY4PR13MB1414.namprd13.prod.outlook.com>
+From: Milian Wolff <milian.wolff@kdab.com>
+Subject: Re: sdt.h tracepoints with unicode data and/or structs
+Date: Thu, 22 Sep 2016 14:47:08 +0200
+Message-ID: <4486738.j9zaXj12nX__27063.3404645652$1474548457$gmane$org@milian-kdab2>
+References: <133954640.uMaX5Hy6f7@agathebauer> <1806825.5qdYm7EQhg@agathebauer>
+ <669131537.28153.1474481355551.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8415551152677491088=="
+Content-Type: multipart/mixed; boundary="===============1445977665186999635=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 40A5FA3113
- for <lttng-dev@lists.lttng.org>; Wed, 21 Sep 2016 21:05:48 +0000 (UTC)
-In-Reply-To: <CY4PR13MB1414010B72D6389030477BECC7F60@CY4PR13MB1414.namprd13.prod.outlook.com>
+Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 2A691A2BCD
+ for <lttng-dev@lists.lttng.org>; Thu, 22 Sep 2016 12:48:20 +0000 (UTC)
+In-Reply-To: <669131537.28153.1474481355551.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,847 +20,262 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jeffrey Chen <cpthk@live.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Philippe Proulx <philippe.proulx@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============8415551152677491088==
-Content-Type: multipart/alternative;
-	boundary="=_2d454863-b5ab-4f66-905b-95e9b262c79a"
+--===============1445977665186999635==
+Content-Type: multipart/signed; boundary="nextPart8492826.qJfhbi0Yj8"; micalg="sha1"; protocol="application/pkcs7-signature"
+
+--nextPart8492826.qJfhbi0Yj8
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+
+On Wednesday, September 21, 2016 6:09:15 PM CEST Mathieu Desnoyers wrote:
+> ----- On Sep 20, 2016, at 4:34 PM, Milian Wolff milian.wolff@kdab.com wrote:
+> > On Montag, 12. September 2016 16:24:04 CEST Mathieu Desnoyers wrote:
+> >> ----- On Sep 12, 2016, at 11:40 AM, Milian Wolff milian.wolff@kdab.com
+> > 
+> > wrote:
+> >> > On Monday, September 12, 2016 3:03:04 PM CEST Mathieu Desnoyers wrote:
+> >> >> ----- On Sep 6, 2016, at 3:00 PM, Milian Wolff milian.wolff@kdab.com
+> > 
+> > wrote:
+> >> >> > Hey all,
+> >> >> > 
+> >> >> > where can I find more documentation on how to use sdt.h to add
+> >> >> > static
+> >> >> > tracepoints to user-land applications? If this is not the right
+> >> >> > place
+> >> >> > to
+> >> >> > ask, please refer to to elsewhere.
+> >> >> 
+> >> >> Hi Milian,
+> >> > 
+> >> > Hey Mathieu,
+> >> > 
+> >> >> LTTng-UST offers a "tracepoint" instrumentation facility, which can
+> >> >> optionally emit "sdt.h" probe points too for compatibility with
+> >> >> SystemTAP.
+> >> >> 
+> >> >> > I plan to upstream a collection of tracepoints to Qt, and possibly
+> >> >> > elsewhere. One problem I'm having right now is figuring out how to
+> >> >> > "design" the tracepoints such that they have minimal overhead.
+> >> >> 
+> >> >> The main question here would be: do you want your instrumentation to
+> >> >> be
+> >> >> usable with LTTng-UST ? If yes, then you want the tracepoint
+> >> >> instrumentation facility. Else, if you only plan on using SystemTAP,
+> >> >> you
+> >> >> can use sdt.h instrumentation.
+> >> >> 
+> >> >> > So my questions:
+> >> >> My answers will be about lttng-ust tracepoints.
+> >> > 
+> >> > Thanks for the clarifications! Are the LTTNG-UST tracepoints also
+> >> > "zero-
+> >> > overhead" like the SystemTap once, i.e. put into a separate section and
+> >> > "only" one nop is added when tracing is disabled? I could not find such
+> >> > an information anywhere yet.
+> >> 
+> >> The lttng-ust tracepoint mechanism comes from the design of the
+> >> Linux kernel tracepoints, which have proven to be unnoticeable
+> >> when disabled. There is one slight technicality though:
+> >> 
+> >> The linux kernel tracepoints use the asm goto mechanism and code patching
+> >> to flip between a no-op and a jump to dynamically enable each tracepoint.
+> >> This is all very fine for the kernel.
+> >> 
+> >> Now for user-space, the lttng-ust tracepoints rather use a conditional
+> >> branch to skip over the entire stack setup and the function call. There
+> >> are a few reasons for using a old-fashioned conditional branch: first,
+> >> there are no widely adopted multi-core, live code patching library
+> >> available in user-space that am I aware of. Second, even if we would
+> >> have one, we may not want to send SIGSTOP/SIGCONT to the traced process,
+> >> due to debugger interactions. Thirdly, doing code patching may not
+> >> interact will security features such as read-only code sections and
+> >> code checksumming. Finally, doing code patching of library and
+> >> executable code will trigger copy-on-write of the touched pages, which
+> >> will prevent sharing those pages between processes running the same
+> >> apps/libraries. All in all, the conditional branch does not seem like
+> >> a too bad alternative after all.
+> >> 
+> >> If we look at the code generated by SystemTAP sdt.h probes (as well
+> >> as DTrace), they are actually more heavyweight than what has been
+> >> claimed by Sun's marketing department back in the days: it does
+> >> cost a stack setup of all the variables passed to the the probe,
+> >> and indeed the function call is no-op'd.
+> >> 
+> >> The downside here is that all side-effects, and layout of the arguments
+> >> for the no-op'd call, are taken by the instrumented application, even
+> >> though tracing is not dynamically enabled.
+> >> 
+> >> Therefore, the SDT mechanism is not a lightweight as is generally
+> >> claimed. It is not "just a single no-op per site", but rather a
+> >> function call stack setup and a no-op.
+> > 
+> > Thanks a lot for the in-depth explanation Mathieu, much appreciated! From
+> > what I gather, sdt.h does allow to check whether a given trace point is
+> > enabled or not, no? I.e. via the semaphores. Is there any performance
+> > difference between checking the semaphore of a sdt.h tracepoint vs. doing
+> > the analogous check for lttng-ust tracepoints?
+> 
+> Not sure what you refer to about "semaphores". And it's unclear how you
+> define "checking if active": is it to decide in the fast path whether to
+> trace or not, or in a slow path to query what is currently active ?
+
+The fast path to check whether to trace or not:
+
+$ cat probes.d
+provider milian {
+    probe test();                                                                                                                                                                                                 
+};                                                                                                                                                                                                                
+$ dtrace -C -h -s probes.d -o probes.h                                                                                                                                                    
+$ cat probes.h                                                                                                                                                  
+/* Generated by the Systemtap dtrace wrapper */                                                                                                                                                                   
+                                                                                                                                                                                                                  
+                                                                                                                                                                                                                  
+#define _SDT_HAS_SEMAPHORES 1                                                                                                                                                                                     
+                                                                                                                                                                                                                  
+                                                                                                                                                                                                                  
+#define STAP_HAS_SEMAPHORES 1 /* deprecated */                                                                                                                                                                    
+                                                                                                                                                                                                                  
+                                                                                                                                                                                                                  
+#include <sys/sdt.h>                                                                                                                                                                                              
+                                                                                                                                                                                                                  
+/* MILIAN_TEST ( ) */
+#if defined STAP_SDT_V1
+#define MILIAN_TEST_ENABLED() __builtin_expect (test_semaphore, 0)
+#define milian_test_semaphore test_semaphore
+#else
+#define MILIAN_TEST_ENABLED() __builtin_expect (milian_test_semaphore, 0)
+#endif
+__extension__ extern unsigned short milian_test_semaphore __attribute__ 
+((unused)) __attribute__ ((section (".probes")));
+#define MILIAN_TEST() \
+DTRACE_PROBE (milian, test)
 
---=_2d454863-b5ab-4f66-905b-95e9b262c79a
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
-I don't see anything relevant that changed since commit: 
-
-commit 664ccf245fcb343e1ea10e145bab3749423e9d0f 
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com> 
-Date: Thu Mar 10 09:32:59 2016 -0500 
-
-Add tracepoint_disable_destructors() 
-
-Calling this function from an instrumented program allows disabling 
-tracepoint destructors. This allows threads to continue calling 
-tracepoint code even after the tracepoint destructors have run. This is 
-needed for applications that exit without joining all their threads. 
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com> 
-CC: Jeffrey Chen <cpthk@live.com> 
-
-Can you point it out ? And let me know what is segfaulting, with a backtrace. 
-
-I see that tracepoint_dlopen_ptr->tracepoint_unregister_lib(__start___tracepoints_ptrs) 
-is still invoked from __tracepoints__ptrs_destroy() even if the disable destructors is set, 
-but this only unregisters the library from the list of available events. I don't see how it would 
-trigger a crash of threads still actively performing tracing. 
-
-Thanks, 
-
-Mathieu 
-
------ On Sep 21, 2016, at 4:00 PM, Jeffrey Chen <cpthk@live.com> wrote: 
-
-> It seems that some changes went in recently that caused this workaround to not
-> work again. Originally, the __tracepoints__disable_destructors variable should
-> be checked around the beginning of the destructor functions (
-> __tracepoints__destroy and __tracepoints__ptrs_destroy ), and return the
-> function when the variable is true. It is not in the beginning any more. So,
-> the segfault problem could happen. Is it possible to fix it again at your
-> convenience? Thanks a lot.
-
-> From: lttng-dev <lttng-dev-bounces@lists.lttng.org> on behalf of Mathieu
-> Desnoyers <mathieu.desnoyers@efficios.com>
-> Sent: Tuesday, March 15, 2016 12:00 PM
-> To: Jeffrey Chen
-> Cc: lttng-dev
-> Subject: Re: [lttng-dev] segfault when exiting process with background thread
-> Commit merged into master, thanks for your feedback!
-
-> Mathieu
-
-> ----- On Mar 15, 2016, at 2:48 PM, Jeffrey Chen <cpthk@hotmail.com> wrote:
-
->> Hi Mathieu:
-
->> Will this fix be checked-in? Thanks.
-
->> From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->> Sent: Thursday, March 10, 2016 3:27 PM
->> To: Jeffrey Chen
->> Cc: Jonathan Rajotte Julien; lttng-dev
->> Subject: Re: segfault when exiting process with background thread
-
->> ----- On Mar 10, 2016, at 5:59 PM, Jeffrey Chen <cpthk@hotmail.com> wrote:
-
->>> Thanks, Mathieu.
-
->>> Yes, the fix works as a workaround. This is also the same workaround we have
->>> now.
-
->>> It seems the problem is due to a race condition, that it checked whether "
->>> tracepoint_dlopen.rcu_read_lock_sym_bp " is not NULL. If not NULL, it calls to
->>> that. But, at this moment, memset cleared the memory.
-
->>> This fix is okay with us, but I am not certain if it would break other
->>> component, since I do not understand LTTng enough to tell. Thanks.
-
->> In addition to memset clearing that memory, dlclose() of the
->> lttng-ust-tracepoint
->> shared object will clear the memory containing the called functions. Therefore,
->> we need to skip both steps of the destructor if we want threads to survive after
->> this destructor execution.
-
->> Thanks,
-
->> Mathieu
-
->>> From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->>> Sent: Thursday, March 10, 2016 10:52 AM
->>> To: Jeffrey Chen
->>> Cc: Jonathan Rajotte Julien; lttng-dev
->>> Subject: Re: segfault when exiting process with background thread
->>> Hi Jeffrey,
-
->>> I CC'd your @live.com address on the RFC patch. Please let me know if the
->>> approach
->>> is OK with you (and try it out).
-
->>> See:
->>> https://lists.lttng.org/pipermail/lttng-dev/2016-March/025608.html
-
->>> Thanks,
-
->>> Mathieu
-
->>> ----- On Mar 10, 2016, at 1:35 PM, Jeffrey Chen <cpthk@hotmail.com> wrote:
-
->>>> Thanks Mathieu.
-
->>>> Is there a plan at LTTng side to fix this issue? If so, we could wait for the
->>>> fix. If not, we will have to workaround the problem for now (probably by
->>>> applying your fix ourselves). Thanks.
-
->>>> From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->>>> Sent: Tuesday, March 8, 2016 6:09 PM
->>>> To: Jonathan Rajotte Julien
->>>> Cc: lttng-dev
->>>> Subject: Re: [lttng-dev] segfault when exiting process with background thread
->>>> The attached patch works around the issue. The problem is
->>>> the tracepoint destructors that run in parallel with the thread
->>>> that still exists.
-
->>>> If we remove this, we leak the liblttng-ust-tracepoint.so.0 shared
->>>> object on dlclose of the instrumented code. Not sure if we should
->>>> care though...
-
->>>> Thoughts ?
-
->>>> Thanks,
-
->>>> Mathieu
-
->>>> ----- On Mar 8, 2016, at 7:35 PM, Mathieu Desnoyers
->>>> <mathieu.desnoyers@efficios.com> wrote:
-
->>>>> Reproduced it on master (ust and tools).
-
->>>>> Repro with:
-
->>>>> lttng create
->>>>> lttng enable-event -u -a
->>>>> lttng start
-
->>>>> then run hello a few times, it eventually segfaults in the spawned thread.
-
->>>>> Looking into it.
-
->>>>> Thanks,
-
->>>>> Mathieu
-
->>>>> ----- On Mar 8, 2016, at 7:12 PM, Jonathan Rajotte Julien
->>>>> <Jonathan.rajotte-julien@efficios.com> wrote:
-
->>>>>> Hi Jeffrey,
-
->>>>>> Could you provide the version for lttng-ust, lttng-tools, lttng-modules (if
->>>>>> installed)?
-
->>>>>> Were you able to reproduce the issue on master (git) ?
-
->>>>>> What are the exact order of command to reproduce the problem ?
-
->>>>>> Thanks
-
->>>>>> On 2016-03-08 06:43 PM, Jeffrey Chen wrote:
-
->>>>>>> Hi LTTng community:
-
->>>>>>> We are using LTTng for our production environment. We have been noticing
->>>>>>> segfault problem when our process exit. We think the problem is due to the
->>>>>>> background thread continue to write traces, while LTTng cleanup its memory. We
->>>>>>> do not know how to fix this issue without changing LTTng code base. I have
->>>>>>> written a very simple app that could repro the problem. Most of my codes are
->>>>>>> copy pasted from the LTTng doc sample. Is there any fix that the LTTng side
->>>>>>> could do?
-
->>>>>>> hello.c
-
->>>>>>> #include <stdio.h>
->>>>>>> #include "hello-tp.h"
->>>>>>> #include <pthread.h>
-
->>>>>>> void* doSomeThing(void *arg)
->>>>>>> {
->>>>>>> int x;
->>>>>>> for (x = 0; x < 100000; ++x) {
->>>>>>> tracepoint(hello_world, my_first_tracepoint, x, "test");
->>>>>>> }
->>>>>>> }
-
->>>>>>> int main(int argc, char *argv[])
->>>>>>> {
->>>>>>> int x;
-
->>>>>>> getchar();
-
->>>>>>> pthread_t inc_x_thread;
-
->>>>>>> if(pthread_create(&inc_x_thread, NULL, doSomeThing, NULL)) {
-
->>>>>>> fprintf(stderr, "Error creating thread\n");
->>>>>>> return 1;
->>>>>>> }
-
->>>>>>> tracepoint(hello_world, my_first_tracepoint, 23, "hi there!");
-
->>>>>>> return 0;
->>>>>>> }
-
->>>>>>> hello-tp.c
-
->>>>>>> #define TRACEPOINT_CREATE_PROBES
->>>>>>> #define TRACEPOINT_DEFINE
-
->>>>>>> #include "hello-tp.h"
-
->>>>>>> hello-tp.h
-
->>>>>>> #undef TRACEPOINT_PROVIDER
->>>>>>> #define TRACEPOINT_PROVIDER hello_world
-
->>>>>>> #undef TRACEPOINT_INCLUDE
->>>>>>> #define TRACEPOINT_INCLUDE "./hello-tp.h"
-
->>>>>>> #if !defined(_HELLO_TP_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
->>>>>>> #define _HELLO_TP_H
-
->>>>>>> #include <lttng/tracepoint.h>
-
->>>>>>> TRACEPOINT_EVENT(
->>>>>>> hello_world,
->>>>>>> my_first_tracepoint,
->>>>>>> TP_ARGS(
->>>>>>> int, my_integer_arg,
->>>>>>> char*, my_string_arg
->>>>>>> ),
->>>>>>> TP_FIELDS(
->>>>>>> ctf_string(my_string_field, my_string_arg)
->>>>>>> ctf_integer(int, my_integer_field, my_integer_arg)
->>>>>>> )
->>>>>>> )
-
->>>>>>> #endif /* _HELLO_TP_H */
-
->>>>>>> #include <lttng/tracepoint-event.h>
-
->>>>>>> Compile
-
->>>>>>> gcc -c -I. hello-tp.c
->>>>>>> gcc -c hello.c
->>>>>>> gcc -o hello hello.o hello-tp.o -llttng-ust -ldl -lpthread
-
->>>>>>> _______________________________________________
->>>>>>> lttng-dev mailing list [ mailto:lttng-dev@lists.lttng.org |
->>>>>>> lttng-dev@lists.lttng.org ] [
->>>>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
->>>>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
-
->>>>>> --
->>>>>> Jonathan R. Julien
->>>>>> Efficios
-
->>>>>> _______________________________________________
->>>>>> lttng-dev mailing list
->>>>>> lttng-dev@lists.lttng.org
->>>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
->>>>> --
->>>>> Mathieu Desnoyers
->>>>> EfficiOS Inc.
->>>>> http://www.efficios.com
-
->>>>> _______________________________________________
->>>>> lttng-dev mailing list
->>>>> lttng-dev@lists.lttng.org
->>>>> http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
->>>> --
->>>> Mathieu Desnoyers
->>>> EfficiOS Inc.
->>>> http://www.efficios.com
-
->>> --
->>> Mathieu Desnoyers
->>> EfficiOS Inc.
->>> http://www.efficios.com
-
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> http://www.efficios.com
-
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
 
 -- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
+Milian Wolff | milian.wolff@kdab.com | Software Engineer
+KDAB (Deutschland) GmbH&Co KG, a KDAB Group company
+Tel: +49-30-521325470
+KDAB - The Qt Experts
+--nextPart8492826.qJfhbi0Yj8
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
---=_2d454863-b5ab-4f66-905b-95e9b262c79a
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIUdzCCBGYw
+ggNOoAMCAQICEFEmCpMc4n+cw6VfeeByroIwDQYJKoZIhvcNAQEFBQAwgZMxCzAJBgNVBAYTAlVT
+MQswCQYDVQQIEwJVVDEXMBUGA1UEBxMOU2FsdCBMYWtlIENpdHkxHjAcBgNVBAoTFVRoZSBVU0VS
+VFJVU1QgTmV0d29yazEhMB8GA1UECxMYaHR0cDovL3d3dy51c2VydHJ1c3QuY29tMRswGQYDVQQD
+ExJVVE4gLSBEQVRBQ29ycCBTR0MwHhcNMDUwNjA3MDgwOTEwWhcNMTkwNjI0MTkwNjMwWjBvMQsw
+CQYDVQQGEwJTRTEUMBIGA1UEChMLQWRkVHJ1c3QgQUIxJjAkBgNVBAsTHUFkZFRydXN0IEV4dGVy
+bmFsIFRUUCBOZXR3b3JrMSIwIAYDVQQDExlBZGRUcnVzdCBFeHRlcm5hbCBDQSBSb290MIIBIjAN
+BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAt/caM+byAAQtOeBOW+0fvGwPzbX6I7bO3psRM5ek
+KUx9k5+9SryT7QMa44/P5W1QWtaXKZRagLBJetsulf24yr83OC0ePpFBrXBWx/BPP+gynnTKyJBU
+6cZfD3idmkA8Dqxhql4Uj56HoWpQ3NeaTq8Fs6ZxlJxxs1BgCscTnTgHhgKo6ahpJhiQq0ywTyOr
+Ok+E2N/On+Fpb7vXQtdrROTHre5tQV9yWnEIN7N5ZaRZoJQ39wAvDcKSctrQOHLbFKhFxF0qfbe0
+1sTurM0TRLfJK91DACX6YblpalgjEbenM49WdVn1zSnXRrcKK2W200JvFbK4e/vv6V1T1TRaJwID
+AQABo4HYMIHVMB8GA1UdIwQYMBaAFFMy0bPPf/rg8aBdhU6S0p5FHbRPMB0GA1UdDgQWBBStvZh6
+NLQm9/rEJlTvA73gJMtUGjAOBgNVHQ8BAf8EBAMCAQYwDwYDVR0TAQH/BAUwAwEB/zARBglghkgB
+hvhCAQEEBAMCAQIwIAYDVR0lBBkwFwYKKwYBBAGCNwoDAwYJYIZIAYb4QgQBMD0GA1UdHwQ2MDQw
+MqAwoC6GLGh0dHA6Ly9jcmwudXNlcnRydXN0LmNvbS9VVE4tREFUQUNvcnBTR0MuY3JsMA0GCSqG
+SIb3DQEBBQUAA4IBAQDG7lMXaBSyUSIekFgNlP298XDlhi3DNjGPVEhG5y0IN7xsCmDhDq1RNOAS
+k+m+uKu4JrTplj0oj65kB/7gAezF45HrGKDxdX7bCuafkduvrnXfI5Fo3RcAWkv/ZGxw6wEa0JDZ
+x6bWbfYT5P+1ydIeKsuxJUMmeNkwm04NHr5p79/q/i2zzPmw3bUUypHUsrWl+wEZo0d5n52MlYc0
++B84kto2phH6a+tr6dxFeBU5BtdNQeQhyNwvh9G3v0hgdaViyyTeO2GgKSCmvsVsnMTpCmki75E6
++iav0VtBpzri+DgHQqvBW/jObboPBD8yNKzcBCjXcDAUJgbE5JuY1c94MIIEnTCCA4WgAwIBAgIQ
+ND3pK6wnNP+PyzSU+8xwVDANBgkqhkiG9w0BAQUFADBvMQswCQYDVQQGEwJTRTEUMBIGA1UEChML
+QWRkVHJ1c3QgQUIxJjAkBgNVBAsTHUFkZFRydXN0IEV4dGVybmFsIFRUUCBOZXR3b3JrMSIwIAYD
+VQQDExlBZGRUcnVzdCBFeHRlcm5hbCBDQSBSb290MB4XDTA1MDYwNzA4MDkxMFoXDTIwMDUzMDEw
+NDgzOFowga4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJVVDEXMBUGA1UEBxMOU2FsdCBMYWtlIENp
+dHkxHjAcBgNVBAoTFVRoZSBVU0VSVFJVU1QgTmV0d29yazEhMB8GA1UECxMYaHR0cDovL3d3dy51
+c2VydHJ1c3QuY29tMTYwNAYDVQQDEy1VVE4tVVNFUkZpcnN0LUNsaWVudCBBdXRoZW50aWNhdGlv
+biBhbmQgRW1haWwwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCyOYWk8n2rQTtiRjeu
+zcFgdbw5ZflKGkeiucxIzGqY1U01GbmkQuXOSeKKLx580jEHx060g2SdLinVomTEhb2FUTV5pE5o
+kHsceqSSqBfymBXyk8zJpDKVuwxPML2YoAuL5W4bokb6eLyib6tZXqUvz8rabaov66yhs2qqty5n
+NYt54R5piOLmRs2gpeq+C852OnoOm+r82idbPXMfIuZIYcZM82mxqC4bttQxICy8goqOpA6l14lD
+/BZarx1x1xFZ2rqHDa/68+HC8KTFZ4zW1lQ63gqkugN3s2XI/R7TdGKqGMpokx6hhX71R2XL+E1X
+KHTSNP8wtu72YjAUjCzrAgMBAAGjgfQwgfEwHwYDVR0jBBgwFoAUrb2YejS0Jvf6xCZU7wO94CTL
+VBowHQYDVR0OBBYEFImCZ33EnSZwAEu0UEh83j2uBG59MA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMB
+Af8EBTADAQH/MBEGA1UdIAQKMAgwBgYEVR0gADBEBgNVHR8EPTA7MDmgN6A1hjNodHRwOi8vY3Js
+LnVzZXJ0cnVzdC5jb20vQWRkVHJ1c3RFeHRlcm5hbENBUm9vdC5jcmwwNQYIKwYBBQUHAQEEKTAn
+MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0GCSqGSIb3DQEBBQUAA4IB
+AQABvJzjYyiw8zEBwt973WKgAZ0jMQ+cknNTUeofTPrWn8TKL2d+eDMPdBa5kYeR9Yom+mRwANge
++QsEYlCHk4HU2vUj2zS7hVa0cDRueIM3HoUcxREVkl+HF72sav3xwtHMiV+xfPA+UfI183zsYJhr
+Oivg79+zfYbrtRv1W+yifJgT1wBQudEtc94DeHThBYUxXsuauZ2UxrmUN3Vy3ET7Z+jw+iUeUqfa
+JelH4KDHPKBOsQo2+3dIn++Xivu0/uOUFKiDvFwtP9JgcWDuwnGCDOmINuPaILSjoGyqlku4gI51
+ykkH9jsUut/cBdmf2+Cy5k2geCbn5y1uf1/GHogVMIIFGjCCBAKgAwIBAgIQbRnqpxlPajMi5iIy
+eqpx3jANBgkqhkiG9w0BAQUFADCBrjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAlVUMRcwFQYDVQQH
+Ew5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMVVGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQL
+ExhodHRwOi8vd3d3LnVzZXJ0cnVzdC5jb20xNjA0BgNVBAMTLVVUTi1VU0VSRmlyc3QtQ2xpZW50
+IEF1dGhlbnRpY2F0aW9uIGFuZCBFbWFpbDAeFw0xMTA0MjgwMDAwMDBaFw0yMDA1MzAxMDQ4Mzha
+MIGTMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdT
+YWxmb3JkMRowGAYDVQQKExFDT01PRE8gQ0EgTGltaXRlZDE5MDcGA1UEAxMwQ09NT0RPIENsaWVu
+dCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEAkoSEW0tXmNReL4uk4UDIo1NYX2Zl8TJO958yfVXQeExVt0KU4PkncQfFxmmk
+uTLE8UAakMwnVmJ/F7Vxaa7lIBvky2NeYMqiQfZq4aP/uN8fSG1lQ4wqLitjOHffsReswtqCAtbU
+MmrUZ28gE49cNfrlVICv2HEKHTcKAlBTbJUdqRAUtJmVWRIx/wmi0kzcUtve4kABW0ho3cVKtODt
+JB86r3FfB+OsvxQ7sCVxaD30D9YXWEYVgTxoi4uDD216IVfmNLDbMn7jSuGlUnJkJpFOpZIP/+Cx
+YP0ab2hRmWONGoulzEKbm30iY9OpoPzOnpDfRBn0XFs1uhbzp5v/wQIDAQABo4IBSzCCAUcwHwYD
+VR0jBBgwFoAUiYJnfcSdJnAAS7RQSHzePa4Ebn0wHQYDVR0OBBYEFHoTTgB0W8Z4Y2QnwS/ioFu8
+ecV7MA4GA1UdDwEB/wQEAwIBBjASBgNVHRMBAf8ECDAGAQH/AgEAMBEGA1UdIAQKMAgwBgYEVR0g
+ADBYBgNVHR8EUTBPME2gS6BJhkdodHRwOi8vY3JsLnVzZXJ0cnVzdC5jb20vVVROLVVTRVJGaXJz
+dC1DbGllbnRBdXRoZW50aWNhdGlvbmFuZEVtYWlsLmNybDB0BggrBgEFBQcBAQRoMGYwPQYIKwYB
+BQUHMAKGMWh0dHA6Ly9jcnQudXNlcnRydXN0LmNvbS9VVE5BZGRUcnVzdENsaWVudF9DQS5jcnQw
+JQYIKwYBBQUHMAGGGWh0dHA6Ly9vY3NwLnVzZXJ0cnVzdC5jb20wDQYJKoZIhvcNAQEFBQADggEB
+AIXWvnhXVW0zf0RS/kLVBqgBA4CK+w2y/Uq/9q9BSfUbWsXSrRtzbj7pJnzmTJjBMCjfy/tCPKEl
+Pgp11tA9OYZm0aGbtU2bb68obB2v5ep0WqjascDxdXovnrqTecr+4pEeVnSy+I3T4ENyG+2P/WA5
+IEf7i686ZUg8mD2lJb+972DgSeUWyOs/Q4Pw4O4NwdPNM1+b0L1garM7/vrUyTo8H+2b/5tJM75C
+KTmD7jNpLoKdRU2oadqAGx490hpdfEeZpZsIbRKZhtZdVwcbpzC+S0lEuJB+ytF5OOu0M/qgOl0m
+WJ5hVRi0IdWZ1eBDQEIwvuql55TSsP7zdfl/bucwggZKMIIFMqADAgECAhByCOhbkTwXiJtaa0d5
+K5u0MA0GCSqGSIb3DQEBBQUAMIGTMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5j
+aGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYDVQQKExFDT01PRE8gQ0EgTGltaXRlZDE5MDcG
+A1UEAxMwQ09NT0RPIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4X
+DTE0MDYwMjAwMDAwMFoXDTE3MDYwMTIzNTk1OVowggFZMQswCQYDVQQGEwJTRTEPMA0GA1UEERMG
+NjgzIDMxMRIwEAYDVQQIEwlWYWVybWxhbmQxEDAOBgNVBAcTB0hhZ2ZvcnMxGDAWBgNVBAkTD05v
+cnJpbmdzIHZhZWcgMjEPMA0GA1UEEhMGQm94IDMwMSYwJAYDVQQKDB1LbGFyw6RsdmRhbGVucyBE
+YXRha29uc3VsdCBBQjEdMBsGA1UECxMUQSBLREFCIEdyb3VwIENvbXBhbnkxQzBBBgNVBAsMOklz
+c3VlZCB0aHJvdWdoIEtsYXLDpGx2ZGFsZW5zIERhdGFrb25zdWx0IEFCIEUtUEtJIE1hbmFnZXIx
+HzAdBgNVBAsTFkNvcnBvcmF0ZSBTZWN1cmUgRW1haWwxFTATBgNVBAMTDE1pbGlhbiBXb2xmZjEk
+MCIGCSqGSIb3DQEJARYVbWlsaWFuLndvbGZmQGtkYWIuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEAwirYPAOcWQk9jaCoEAn84PwINg/NDs3PxsEd34f27AfCqJepwIF+ikMuBBxt
+mm1pieQwU9fcFrE4CXPCdYxfFOdcbJJ58Xzog5aFrJHnYGEFIL8KVvdBvAFeP/AJPaY2lg1JWnVI
+1jwO74VmUGMyvMG286wpwW3hWO3sepZZQN3tvXyd9EgD72AiImkvw43+BW4xy8ptOd3TvEwCJ+uN
+x8v+uILsRLvKcmSrUsLpo7No2HoifWX1doKHKSwYVVqmOT/rjJWxF98j4w2kTKRsWdQ4ENlqNpjW
+zlbtB6TM2mrnInefzALbIoLLQ2E2NFCaMVsczf7RFsMxUepM9KQQ5QIDAQABo4IBzzCCAcswHwYD
+VR0jBBgwFoAUehNOAHRbxnhjZCfBL+KgW7x5xXswHQYDVR0OBBYEFGSjHixs9BD9OyGskYjMX7mi
+P+fiMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUFBwMEBggr
+BgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1odHRwczov
+L3NlY3VyZS5jb21vZG8ubmV0L0NQUzBXBgNVHR8EUDBOMEygSqBIhkZodHRwOi8vY3JsLmNvbW9k
+b2NhLmNvbS9DT01PRE9DbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWlsQ0EuY3JsMIGI
+BggrBgEFBQcBAQR8MHowUgYIKwYBBQUHMAKGRmh0dHA6Ly9jcnQuY29tb2RvY2EuY29tL0NPTU9E
+T0NsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYIKwYBBQUHMAGGGGh0
+dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAgBgNVHREEGTAXgRVtaWxpYW4ud29sZmZAa2RhYi5jb20w
+DQYJKoZIhvcNAQEFBQADggEBAFvi067uXCOkiUH/D6rv4gV0/e+e8DzcvbbsUxAC5nwDXBv+47ds
+l7j8NrZstZraVz35WEWgksNmnyghcuBKzKcN3kY1KNn/ERc9wvns/0dI+yj39L0eSMzchUZoV6GY
+MtPfmLofPvUBbDesl97JQXF9vpk8FIVsI1UKKrLzfoKhue5abQHXurSFa0ts1UPmSh2Y8/QCQlFN
+lCv8ISyEwVCAkhdIqxRc3hslooBhcRVUrYhRdCLlNN6Od8yuLE9sKWH/K4wg/BpnjCJmGp4GQhU8
+DUG2r0CbOa+iZQKTWUgwdGU3Jr+WcOan/JaNzBuKk1GM3D+WcljoU7ZWtoqXPzgxggJaMIICVgIB
+ATCBqDCBkzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UE
+BxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxOTA3BgNVBAMTMENPTU9ETyBD
+bGllbnQgQXV0aGVudGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIQcgjoW5E8F4ibWmtHeSub
+tDAJBgUrDgMCGgUAoIGHMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8X
+DTE2MDkyMjEyNDcwOFowIwYJKoZIhvcNAQkEMRYEFAK0Me1h+uxNVJziYaSMUN+1/eAlMCgGCSqG
+SIb3DQEJDzEbMBkwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA0GCSqGSIb3DQEBAQUABIIBAI9v
+0R7ZlxpPu0k0ZZrKWrg1781Na4vp5FKDHqCH3dsCOF5wpK6cxJNL08vUGco3bDRTJJuhf1IcckGn
+YtwEFs67mxSJKV8XlYWTSf/FH/eqlzq7VGGQAAzTCg2o+5RwYtKOtjB6gV3rcoZg68KoOuco4gOr
+bW4nlYKd80wgPRt17jwBj7GM7QvdzeMOJJ1F2YzDqSgy6U7Ull03YaQ/64ArX1apc5WNzXME4Hwj
+xS6FHL5gYwE7ne9WxRsj6Af9Bua3x+uHMLVG4HQRSqSXn3IsZtvPJYaF/lJ2S9EKQS1qWvHw8/We
+yqmasRIIHV6fDux4KwM9kQfUUQG+k2fqstcAAAAAAAA=
 
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><style style=3D"display:none;"><!-- P {marg=
-in-top:0;margin-bottom:0;} --></style></div><div>I don't see anything relev=
-ant that changed since commit:<br></div><div><br data-mce-bogus=3D"1"></div=
-><div>commit 664ccf245fcb343e1ea10e145bab3749423e9d0f<br>Author: Mathieu De=
-snoyers &lt;mathieu.desnoyers@efficios.com&gt;<br>Date:&nbsp;&nbsp; Thu Mar=
- 10 09:32:59 2016 -0500<br><br>&nbsp;&nbsp;&nbsp; Add tracepoint_disable_de=
-structors()<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; Calling this funct=
-ion from an instrumented program allows disabling<br>&nbsp;&nbsp;&nbsp; tra=
-cepoint destructors. This allows threads to continue calling<br>&nbsp;&nbsp=
-;&nbsp; tracepoint code even after the tracepoint destructors have run. Thi=
-s is<br>&nbsp;&nbsp;&nbsp; needed for applications that exit without joinin=
-g all their threads.<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; Signed-of=
-f-by: Mathieu Desnoyers &lt;mathieu.desnoyers@efficios.com&gt;<br>&nbsp;&nb=
-sp;&nbsp; CC: Jeffrey Chen &lt;cpthk@live.com&gt;<br><br data-mce-bogus=3D"=
-1"></div><div>Can you point it out ? And let me know what is segfaulting, w=
-ith a backtrace.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1=
-"></div><div>I see that tracepoint_dlopen_ptr-&gt;tracepoint_unregister_lib=
-(__start___tracepoints_ptrs)<br data-mce-bogus=3D"1"></div><div>is still in=
-voked from __tracepoints__ptrs_destroy() even if the disable destructors is=
- set,<br data-mce-bogus=3D"1"></div><div>but this only unregisters the libr=
-ary from the list of available events. I don't see how it would<br data-mce=
--bogus=3D"1"></div><div>trigger a crash of threads still actively performin=
-g tracing.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></di=
-v><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1">=
-</div><div>Mathieu</div><div><br></div><div><span id=3D"zwchr" data-marker=
-=3D"__DIVIDER__">----- On Sep 21, 2016, at 4:00 PM, Jeffrey Chen &lt;cpthk@=
-live.com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><b=
-lockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-le=
-ft:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none=
-;font-family:Helvetica,Arial,sans-serif;font-size:12pt;">
+
+--nextPart8492826.qJfhbi0Yj8--
 
 
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;font=
--family:Calibri,Arial,Helvetica,sans-serif;">
-<p><span>It seems that some changes went in recently that caused this worka=
-round to not work again. Originally, the __tracepoints__disable_destructors=
- variable should be checked around the beginning of the destructor function=
-s (<span class=3D"pl-c1">__tracepoints__destroy</span>
- and <span class=3D"pl-c1">__tracepoints__ptrs_destroy</span>), and return =
-the function when the variable is true. It is not in the beginning any more=
-. So, the segfault problem could happen. Is it possible to fix it again at =
-your convenience? Thanks a lot.</span><br>
-</p>
-<br>
-<br>
-<div style=3D"color: rgb(0, 0, 0);">
-<hr style=3D"display:inline-block; width:98%">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><span style=3D"font-size: 11pt; color=
-: #000000; font-family: Calibri,sans-serif;" data-mce-style=3D"font-size: 1=
-1pt; color: #000000; font-family: Calibri,sans-serif;" color=3D"#000000" fa=
-ce=3D"Calibri, sans-serif"><b>From:</b> lttng-dev &lt;lttng-dev-bounces@lis=
-ts.lttng.org&gt; on behalf of Mathieu Desnoyers &lt;mathieu.desnoyers@effic=
-ios.com&gt;<br>
-<b>Sent:</b> Tuesday, March 15, 2016 12:00 PM<br>
-<b>To:</b> Jeffrey Chen<br>
-<b>Cc:</b> lttng-dev<br>
-<b>Subject:</b> Re: [lttng-dev] segfault when exiting process with backgrou=
-nd thread</span>
-<div>&nbsp;</div>
-</div>
-<div>
-<div style=3D"font-family:arial,helvetica,sans-serif; font-size:12pt; color=
-:#000000">
-<div>Commit merged into master, thanks for your feedback!<br>
-</div>
-<div><br>
-</div>
-<div>Mathieu<br>
-</div>
-<div><br>
-</div>
-<span id=3D"zwchr">----- On Mar 15, 2016, at 2:48 PM, Jeffrey Chen &lt;cpth=
-k@hotmail.com&gt; wrote:<br>
-</span>
-<div>
-<blockquote style=3D"border-left:2px solid #1010FF; margin-left:5px; paddin=
-g-left:5px; color:#000; font-weight:normal; font-style:normal; text-decorat=
-ion:none; font-family:Helvetica,Arial,sans-serif; font-size:12pt">
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt; color:#000000; ba=
-ckground-color:#FFFFFF; font-family:Calibri,Arial,Helvetica,sans-serif">
-<p>Hi Mathieu:</p>
-<p><br>
-</p>
-<p>Will this fix be checked-in? Thanks.<br>
-</p>
-<p><br>
-</p>
-<br>
-<br>
-<div style=3D"color:rgb(0,0,0)">
-<hr style=3D"display:inline-block; width:98%">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><span style=3D"font-size:11pt; color:=
-#000000; font-family:Calibri,sans-serif"><b>From:</b> Mathieu Desnoyers &lt=
-;mathieu.desnoyers@efficios.com&gt;<br>
-<b>Sent:</b> Thursday, March 10, 2016 3:27 PM<br>
-<b>To:</b> Jeffrey Chen<br>
-<b>Cc:</b> Jonathan Rajotte Julien; lttng-dev<br>
-<b>Subject:</b> Re: segfault when exiting process with background thread</s=
-pan>
-<div>&nbsp;</div>
-</div>
-<div>
-<div style=3D"font-family:arial,helvetica,sans-serif; font-size:12pt; color=
-:#000000">
-<div><br>
-</div>
-<div><br>
-</div>
-<span id=3D"zwchr">----- On Mar 10, 2016, at 5:59 PM, Jeffrey Chen &lt;cpth=
-k@hotmail.com&gt; wrote:<br>
-</span>
-<div>
-<blockquote style=3D"border-left:2px solid #1010FF; margin-left:5px; paddin=
-g-left:5px; color:#000; font-weight:normal; font-style:normal; text-decorat=
-ion:none; font-family:Helvetica,Arial,sans-serif; font-size:12pt">
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt; color:#000000; ba=
-ckground-color:#FFFFFF; font-family:Calibri,Arial,Helvetica,sans-serif">
-<p>Thanks, Mathieu.</p>
-<p><br>
-</p>
-<p>Yes, the fix works as a workaround. This is also the same workaround we =
-have now.</p>
-<p>It seems the problem is due to a race condition, that it checked whether=
- "<span style=3D"font-size:12pt; font-family:&quot;Calibri&quot;,sans-serif=
-; color:black; background:rgb(255,255,255) none repeat scroll 0% 0%">tracep=
-oint_dlopen.rcu_read_lock_sym_bp</span>" is
- not NULL. If not NULL, it calls to that. But, at this moment, memset clear=
-ed the memory.</p>
-<p>This fix is okay with us, but I am not certain if it would break other c=
-omponent, since I do not understand LTTng enough to tell. Thanks.</p>
-</div>
-</blockquote>
-<div><br>
-</div>
-<div>In addition to memset clearing that memory, dlclose() of the lttng-ust=
--tracepoint<br>
-</div>
-<div>shared object will clear the memory containing the called functions. T=
-herefore,<br>
-</div>
-<div>we need to skip both steps of the destructor if we want threads to sur=
-vive after<br>
-</div>
-<div>this destructor execution.<br>
-</div>
-<div><br>
-</div>
-<div>Thanks,<br>
-</div>
-<div><br>
-</div>
-<div>Mathieu<br>
-</div>
-<div><br>
-</div>
-<blockquote style=3D"border-left:2px solid #1010FF; margin-left:5px; paddin=
-g-left:5px; color:#000; font-weight:normal; font-style:normal; text-decorat=
-ion:none; font-family:Helvetica,Arial,sans-serif; font-size:12pt">
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt; color:#000000; ba=
-ckground-color:#FFFFFF; font-family:Calibri,Arial,Helvetica,sans-serif">
-<p><br>
-</p>
-<p><br>
-</p>
-<br>
-<br>
-<div style=3D"color:rgb(0,0,0)">
-<hr style=3D"display:inline-block; width:98%">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><span style=3D"font-size:11pt; color:=
-#000000; font-family:Calibri,sans-serif"><b>From:</b> Mathieu Desnoyers &lt=
-;mathieu.desnoyers@efficios.com&gt;<br>
-<b>Sent:</b> Thursday, March 10, 2016 10:52 AM<br>
-<b>To:</b> Jeffrey Chen<br>
-<b>Cc:</b> Jonathan Rajotte Julien; lttng-dev<br>
-<b>Subject:</b> Re: segfault when exiting process with background thread</s=
-pan></div>
-<div>
-<div style=3D"font-family:arial,helvetica,sans-serif; font-size:12pt; color=
-:#000000">
-<div>Hi Jeffrey,<br>
-</div>
-<div><br>
-</div>
-<div>I CC'd your @live.com address on the RFC patch. Please let me know if =
-the approach<br>
-</div>
-<div>is OK with you (and try it out).<br>
-</div>
-<div><br>
-</div>
-<div>See:<br>
-</div>
-<div>https://lists.lttng.org/pipermail/lttng-dev/2016-March/025608.html</di=
-v>
-<div><br>
-</div>
-<div>Thanks,<br>
-</div>
-<div><br>
-</div>
-<div>Mathieu<br>
-</div>
-<div><br>
-</div>
-<div><br>
-</div>
-<div><span id=3D"zwchr">----- On Mar 10, 2016, at 1:35 PM, Jeffrey Chen &lt=
-;cpthk@hotmail.com&gt; wrote:<br>
-</span></div>
-<div>
-<blockquote style=3D"border-left:2px solid #1010FF; margin-left:5px; paddin=
-g-left:5px; color:#000; font-weight:normal; font-style:normal; text-decorat=
-ion:none; font-family:Helvetica,Arial,sans-serif; font-size:12pt">
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt; color:#000000; ba=
-ckground-color:#FFFFFF; font-family:Calibri,Arial,Helvetica,sans-serif">
-<p>Thanks Mathieu.</p>
-<p>Is there a plan at LTTng side to fix this issue? If so, we could wait fo=
-r the fix. If not, we will have to workaround the problem for now (probably=
- by applying your fix ourselves). Thanks.<br>
-</p>
-<p><br>
-</p>
-<br>
-<br>
-<div style=3D"color:rgb(0,0,0)">
-<hr style=3D"display:inline-block; width:98%">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><span style=3D"font-size:11pt; color:=
-#000000; font-family:Calibri,sans-serif"><b>From:</b> Mathieu Desnoyers &lt=
-;mathieu.desnoyers@efficios.com&gt;<br>
-<b>Sent:</b> Tuesday, March 8, 2016 6:09 PM<br>
-<b>To:</b> Jonathan Rajotte Julien<br>
-<b>Cc:</b> lttng-dev<br>
-<b>Subject:</b> Re: [lttng-dev] segfault when exiting process with backgrou=
-nd thread</span></div>
-<div>
-<div style=3D"font-family:arial,helvetica,sans-serif; font-size:12pt; color=
-:#000000">
-<div>The attached patch works around the issue. The problem is<br>
-</div>
-<div>the tracepoint destructors that run in parallel with the thread<br>
-</div>
-<div>that still exists.<br>
-</div>
-<div><br>
-</div>
-<div>If we remove this, we leak the liblttng-ust-tracepoint.so.0 shared<br>
-</div>
-<div>object on dlclose of the instrumented code. Not sure if we should<br>
-</div>
-<div>care though...<br>
-</div>
-<div><br>
-</div>
-<div>Thoughts ?<br>
-</div>
-<div><br>
-</div>
-<div>Thanks,<br>
-</div>
-<div><br>
-</div>
-<div>Mathieu<br>
-</div>
-<div><br>
-</div>
-<div><br>
-</div>
-<div><span id=3D"zwchr">----- On Mar 8, 2016, at 7:35 PM, Mathieu Desnoyers=
- &lt;mathieu.desnoyers@efficios.com&gt; wrote:<br>
-</span></div>
-<div>
-<blockquote style=3D"border-left:2px solid #1010FF; margin-left:5px; paddin=
-g-left:5px; color:#000; font-weight:normal; font-style:normal; text-decorat=
-ion:none; font-family:Helvetica,Arial,sans-serif; font-size:12pt">
-<div style=3D"font-family:arial,helvetica,sans-serif; font-size:12pt; color=
-:#000000">
-<div>Reproduced it on master (ust and tools).<br>
-</div>
-<br>
-<div>Repro with:<br>
-</div>
-<br>
-<div>lttng create<br>
-</div>
-<div>lttng enable-event -u -a<br>
-</div>
-<div>lttng start<br>
-</div>
-<br>
-<div>then run hello a few times, it eventually segfaults in the spawned thr=
-ead.<br>
-</div>
-<br>
-<div>Looking into it.<br>
-</div>
-<br>
-<div>Thanks,<br>
-</div>
-<br>
-<div>Mathieu<br>
-</div>
-<br>
-<span id=3D"zwchr">----- On Mar 8, 2016, at 7:12 PM, Jonathan Rajotte Julie=
-n &lt;Jonathan.rajotte-julien@efficios.com&gt; wrote:<br>
-</span>
-<div>
-<blockquote style=3D"border-left:2px solid #1010FF; margin-left:5px; paddin=
-g-left:5px; color:#000; font-weight:normal; font-style:normal; text-decorat=
-ion:none; font-family:Helvetica,Arial,sans-serif; font-size:12pt">
-Hi Jeffrey,<br>
-<br>
-Could you provide the version for lttng-ust, lttng-tools, lttng-modules (if=
- installed)?<br>
-<br>
-Were you able to reproduce the issue on master (git) ?<br>
-<br>
-What are the exact order of command to reproduce the problem ?<br>
-<br>
-Thanks<br>
-<br>
-<div class=3D"moz-cite-prefix">On 2016-03-08 06:43 PM, Jeffrey Chen wrote:<=
-br>
-</div>
-<blockquote>
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt; color:#000000; ba=
-ckground-color:#FFFFFF; font-family:Calibri,Arial,Helvetica,sans-serif">
-<p>Hi LTTng community:</p>
-<p><br>
-</p>
-<p>We are using LTTng for our production environment. We have been noticing=
- segfault problem when our process exit. We think the problem is due to the=
- background thread continue to write traces, while LTTng cleanup its memory=
-. We do not know how to fix this
- issue without changing LTTng code base. I have written a very simple app t=
-hat could repro the problem. Most of my codes are copy pasted from the LTTn=
-g doc sample. Is there any fix that the LTTng side could do?</p>
-<p><br>
-</p>
-<p><br>
-</p>
-<p><b><span style=3D"text-decoration:underline">hello.c</span></b><br>
-</p>
-<p>#include &lt;stdio.h&gt;<br>
-#include "hello-tp.h"<br>
-#include &lt;pthread.h&gt;<br>
-<br>
-<br>
-void* doSomeThing(void *arg)<br>
-{<br>
-&nbsp;&nbsp;&nbsp; int x;<br>
-&nbsp;&nbsp;&nbsp; for (x =3D 0; x &lt; 100000; ++x) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; tracepoint(hello_world, my_first=
-_tracepoint, x, "test");<br>
-&nbsp;&nbsp;&nbsp; }<br>
-}<br>
-<br>
-int main(int argc, char *argv[])<br>
-{<br>
-&nbsp;&nbsp;&nbsp; int x;<br>
-<br>
-&nbsp;&nbsp;&nbsp; getchar();<br>
-<br>
-&nbsp;&nbsp;&nbsp; pthread_t inc_x_thread;<br>
-<br>
-&nbsp;&nbsp;&nbsp; if(pthread_create(&amp;inc_x_thread, NULL, doSomeThing, =
-NULL)) {<br>
-<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; fprintf(stderr, "Error creating =
-thread\n");<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return 1;<br>
-&nbsp;&nbsp;&nbsp; }<br>
-<br>
-&nbsp;&nbsp;&nbsp; tracepoint(hello_world, my_first_tracepoint, 23, "hi the=
-re!");<br>
-<br>
-&nbsp;&nbsp;&nbsp; return 0;<br>
-}</p>
-<p><br>
-</p>
-<p><b><span style=3D"text-decoration:underline">hello-tp.c</span></b><br>
-</p>
-<p>#define TRACEPOINT_CREATE_PROBES<br>
-#define TRACEPOINT_DEFINE<br>
-<br>
-#include "hello-tp.h"<br>
-</p>
-<p><br>
-</p>
-<p><b><span style=3D"text-decoration:underline">hello-tp.h</span></b></p>
-<p>#undef TRACEPOINT_PROVIDER<br>
-#define TRACEPOINT_PROVIDER hello_world<br>
-<br>
-#undef TRACEPOINT_INCLUDE<br>
-#define TRACEPOINT_INCLUDE "./hello-tp.h"<br>
-<br>
-#if !defined(_HELLO_TP_H) || defined(TRACEPOINT_HEADER_MULTI_READ)<br>
-#define _HELLO_TP_H<br>
-<br>
-#include &lt;lttng/tracepoint.h&gt;<br>
-<br>
-TRACEPOINT_EVENT(<br>
-&nbsp;&nbsp;&nbsp; hello_world,<br>
-&nbsp;&nbsp;&nbsp; my_first_tracepoint,<br>
-&nbsp;&nbsp;&nbsp; TP_ARGS(<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int, my_integer_arg,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; char*, my_string_arg<br>
-&nbsp;&nbsp;&nbsp; ),<br>
-&nbsp;&nbsp;&nbsp; TP_FIELDS(<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ctf_string(my_string_field, my_s=
-tring_arg)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ctf_integer(int, my_integer_fiel=
-d, my_integer_arg)<br>
-&nbsp;&nbsp;&nbsp; )<br>
-)<br>
-<br>
-#endif /* _HELLO_TP_H */<br>
-<br>
-#include &lt;lttng/tracepoint-event.h&gt;<br>
-</p>
-<p><br>
-</p>
-<p><b><span style=3D"text-decoration:underline">Compile</span></b></p>
-<p>gcc -c -I. hello-tp.c<br>
-gcc -c hello.c<br>
-gcc -o hello hello.o hello-tp.o -llttng-ust -ldl -lpthread<br>
-<br>
-</p>
-<p><br>
-</p>
-<p><br>
-</p>
-<p><br>
-</p>
-</div>
-<br>
-<br>
-<pre>_______________________________________________
-lttng-dev mailing list
-<a class=3D"moz-txt-link-abbreviated" href=3D"mailto:lttng-dev@lists.lttng.=
-org" target=3D"_blank">lttng-dev@lists.lttng.org</a><a class=3D"moz-txt-lin=
-k-freetext" href=3D"http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-d=
-ev" target=3D"_blank">http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng=
--dev</a><br></pre>
-</blockquote>
-<br>
-<pre class=3D"moz-signature">--=20
-Jonathan R. Julien
-Efficios</pre>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-lttng-dev@lists.lttng.org<br>
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br>
-</blockquote>
-</div>
-<br>
-<div>-- <br>
-</div>
-<div>Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-http://www.efficios.com</div>
-</div>
-<br>
-_______________________________________________<br>
-lttng-dev mailing list<br>
-lttng-dev@lists.lttng.org<br>
-http://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br>
-</blockquote>
-</div>
-<div><br>
-</div>
-<div>-- <br>
-</div>
-<div>Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-http://www.efficios.com</div>
-</div>
-</div>
-</div>
-</div>
-<br>
-</blockquote>
-</div>
-<div><br>
-</div>
-<div>-- <br>
-</div>
-<div>Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-http://www.efficios.com</div>
-</div>
-</div>
-</div>
-</div>
-<br>
-</blockquote>
-</div>
-<br>
-<div>-- <br>
-</div>
-<div>Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-http://www.efficios.com</div>
-</div>
-</div>
-</div>
-</div>
-<br>
-</blockquote>
-</div>
-<br>
-<div>-- <br>
-</div>
-<div>Mathieu Desnoyers<br>
-EfficiOS Inc.<br>
-http://www.efficios.com</div>
-</div>
-</div>
-</div>
-</div><br></blockquote></div><div><br></div><div data-marker=3D"__SIG_POST_=
-_">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.effic=
-ios.com</div></div></body></html>
---=_2d454863-b5ab-4f66-905b-95e9b262c79a--
-
---===============8415551152677491088==
+--===============1445977665186999635==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -876,4 +285,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============8415551152677491088==--
+--===============1445977665186999635==--
