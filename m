@@ -1,22 +1,16 @@
-From: Francis Giraldeau <francis.giraldeau@gmail.com>
-Subject: [RFC] perf sampling library for LTTng-UST
-Date: Fri, 23 Sep 2016 14:43:32 -0400
-Message-ID: <1483f0d3-da42-8269-a25b-a45d7db5e1ea__12839.0535981909$1474656231$gmane$org@gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: High memory consumption issue on RCU side
+Date: Fri, 23 Sep 2016 21:59:00 +0000 (UTC)
+Message-ID: <1073011756.31148.1474667940258.JavaMail.zimbra__19561.0082279474$1474667911$gmane$org@efficios.com>
+References: <CAO6Ho0cLZc0x3RBfHd=qh_XZ+PPPMkaG_GaGGiT5=6MhsreR+Q@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-f180.google.com (mail-qk0-f180.google.com
- [209.85.220.180])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 7EDF1A3A2E
- for <lttng-dev@lists.lttng.org>; Fri, 23 Sep 2016 18:44:47 +0000 (UTC)
-Received: by mail-qk0-f180.google.com with SMTP id t7so114186345qkh.2
- for <lttng-dev@lists.lttng.org>; Fri, 23 Sep 2016 11:43:35 -0700 (PDT)
-Received: from [132.207.72.22] ([132.207.72.22])
- by smtp.gmail.com with ESMTPSA id b1sm4533003qkg.9.2016.09.23.11.43.33
- for <lttng-dev@lists.lttng.org>
- (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
- Fri, 23 Sep 2016 11:43:33 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 3C9B4A3EF0
+ for <lttng-dev@lists.lttng.org>; Fri, 23 Sep 2016 21:59:29 +0000 (UTC)
+In-Reply-To: <CAO6Ho0cLZc0x3RBfHd=qh_XZ+PPPMkaG_GaGGiT5=6MhsreR+Q@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,29 +20,41 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Evgeniy Ivanov <lolkaantimat@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
-SGVsbG8hIAoKSSBkaWQgYSBzbWFsbCBzaGFyZWQgbGlicmFyeSBmb3IgcHJvZmlsaW5nIGNvZGUg
-dXNpbmcgcGVyZiBzYW1wbGluZyBhbmQgTFRUbmctVVNUOgoKICBodHRwczovL2dpdGh1Yi5jb20v
-Z2lyYWxkZWF1L2x0dG5nLXVzdC90cmVlL3NhbXBsaW5nL2xpYmx0dG5nLXVzdC1zYW1wbGluZwoK
-SXQgd29ya3MgYnkgcHJlbG9hZGluZyB0aGUgbGlicmFyeSB3aGVuIGV4ZWN1dGluZyBhIHByb2dy
-YW0uIEluc2lkZSB0aGUgbGlicmFyeSBjb25zdHJ1Y3RvciwgYSBwZXJmIGNvdW50ZXIgaXMgY3Jl
-YXRlZCBhbmQgc2FtcGxlcyBhcmUgc2F2ZWQgaW5zaWRlIHRoZSBTSUdJTyBoYW5kbGVyIHVzaW5n
-IGFuIExUVG5nLVVTVCB0cmFjZXBvaW50LiBUaGUgY2FsbCBzdGFjayBpcyBvYnRhaW5lZCB1c2lu
-ZyBsaWJ1bndpbmQsIGFuZCB0aHVzIGl0IHdvcmtzIGV2ZW4gd2l0aG91dCBmcmFtZSBwb2ludGVy
-cyBhbmQgd2l0aCB1bm1vZGlmaWVkIGV4ZWN1dGFibGVzLiAKClByZWxpbWluYXJ5IG92ZXJoZWFk
-IG1lYXN1cmUgd2l0aCB0aGUgZGVmYXVsdCBzYW1wbGluZyBwZXJpb2Qgb2YgMUU0IGZvciBjcHUg
-Y3ljbGVzIGlzIGFib3V0IDguNSUsIG9yIDIuMnVzIHBlciBldmVudC4gT24gbXkgbWFjaGluZSwg
-YWJvdXQgMzhrIHNhbXBsZXMgcGVyIHNlY29uZCBhcmUgZ2VuZXJhdGVkLiBUaGlzIGZpZ3VyZSBp
-cyBvYnRhaW5lZCB3aGVuIGNvbXBpbGluZyBsaWJ1bndpbmQgd2l0aG91dCBzaWduYWwgcmUtZW50
-cmFuY2Ugc3VwcG9ydC4KCkdlbmV2aWV2ZSBCYXN0aWVuIGRpZCBhIG5pY2UgdmlldyBpbiBUcmFj
-ZUNvbXBhc3MgdG8gbG9hZCB0aGlzIHRyYWNlIGFuZCBkaXNwbGF5IHRoZSBjb3JyZXNwb25kaW5n
-IGNhbGwgZ3JhcGggdmlldy4gCgogIGh0dHA6Ly9zZWNyZXRhaXJlLmRvcnNhbC5wb2x5bXRsLmNh
-L35nYmFzdGllbi9zY3JlZW5zaG90cy9sdHRuZ19zYW1wbGluZ19jYWxsc3RhY2sucG5nCgpUaGUg
-Y291bnRlciBpcyBoYXJkIGNvZGVkIG5vdywgYnV0IGl0J3MganVzdCBhIHByb3RvdHlwZSB0byBk
-ZW1vbnN0cmF0ZSB0aGUgY29uY2VwdC4gSSB3b3VsZCBmaW5kIGl0IHZlcnkgY29vbCB0byBzZWUg
-c3VjaCBmZWF0dXJlIGluIExUVG5nLiBXaGF0IGRvIHlvdSB0aGluaz8KCkNoZWVycywgCgpGcmFu
-Y2lzCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+LS0tLS0gT24gU2VwIDIyLCAyMDE2LCBhdCAzOjE0IFBNLCBFdmdlbml5IEl2YW5vdiBsb2xrYWFu
+dGltYXRAZ21haWwuY29tIHdyb3RlOgoKPiBIaSBhbGwsCj4gCj4gSSdtIGludmVzdGlnYXRpbmcg
+aGlnaCBtZW1vcnkgdXNhZ2Ugb2YgbXkgcHJvZ3JhbTogUlNTIHZhcmllcyBiZXR3ZWVuCj4gZXhl
+Y3V0aW9ucyBpbiByYW5nZSAyMC01MCBHQiwgdGhvdWdoIGl0IHNob3VsZCBiZSBkZXRlcm1lbmlz
+dGljLiBJJ3ZlCj4gZm91bmQgdGhhdCBhbGwgdGhlIG1lbW9yeSBpcyBhbGxvY2F0ZWQgaW4gdGhp
+cyBzdGFjazoKPiAKPiBBbGxvY2F0ZWQgMTc2NzM3ODEyNDggYnl0ZXMgaW4gNTU2IGFsbG9jYXRp
+b25zCj4gICAgICAgIGNkc19sZmh0X2FsbG9jX2J1Y2tldF90YWJsZTMgICAgIGZyb20gbGlidXJj
+dS1jZHMuc28uMi4wLjAKPiAgICAgICAgX2RvX2Nkc19sZmh0X3Jlc2l6ZSAgICAgIGZyb20gbGli
+dXJjdS1jZHMuc28uMi4wLjAKPiAgICAgICAgZG9fcmVzaXplX2NiICAgICAgICAgICAgIGZyb20g
+bGlidXJjdS1jZHMuc28uMi4wLjAKPiAgICAgICAgY2FsbF9yY3VfdGhyZWFkICAgICAgICAgIGZy
+b20gbGlidXJjdS1xc2JyLnNvLjIuMC4wCj4gICAgICAgIHN0YXJ0X3RocmVhZCAgICAgICAgICAg
+ICBmcm9tIGxpYnB0aHJlYWQtMi4xMi5zbwo+ICAgICAgICBjbG9uZSAgICAgICAgICAgICAgICAg
+ICAgZnJvbSBsaWJjLTIuMTIuc28KPiAKPiBBY2NvcmRpbmcgcHN0YWNrIGl0IHNob3VsZCBiZSBx
+dWllc2NlbnQgc3RhdGUuICBDYWxsIHRocmVhZCB3YWl0cyBvbiBzeXNjYWxsOgo+IHN5c2NhbGwK
+PiBjYWxsX3JjdV90aHJlYWQKPiBzdGFydF90aHJlYWQKPiBjbG9uZQo+IAo+IFdlIHVzZSB1cmN1
+LTAuOC43LCBvbmx5IHJjdWxmaGFzaCAoUVNCUikuIElzIGl0IHNvbWUga2luZCBvZiBsZWFrIGlu
+Cj4gUkNVIG9yIGFueSBjaGFuY2UgSSBtaXN1c2UgaXQ/IFdoYXQgd291bGQgeW91IHJlY29tbWVu
+ZCB0bwo+IHRyb3VibGVzaG9vdCB0aGUgc2l0dWF0aW9uPwoKdXJjdS1xc2JyIGlzIHRoZSBmYXN0
+ZXN0IGZsYXZvciBvZiB1cmN1LCBidXQgaXQgaXMgcmF0aGVyIHRyaWNreSB0byB1c2Ugd2VsbC4K
+TWFrZSBzdXJlIHRoYXQ6CgotIEVhY2ggcmVnaXN0ZXJlZCB0aHJlYWQgcGVyaW9kaWNhbGx5IHJl
+YWNoIGEgcXVpZXNjZW50IHN0YXRlLCBieToKICAtIEludm9raW5nIHJjdV9xdWllc2NlbnRfc3Rh
+dGUgcGVyaW9kaWNhbGx5LCBhbmQKICAtIE1ha2luZyBzdXJlIHRvIHN1cnJvdW5kIGFueSBibG9j
+a2luZyBmb3IgcmVsYXRpdmVseSBsYXJnZSBhbW91bnQgb2YKICAgIHRpbWUgYnkgcmN1X3RocmVh
+ZF9vZmZsaW5lKCkvcmN1X3RocmVhZF9vbmxpbmUoKS4KCkluIHVyY3UtcXNiciwgdGhlICJkZWZh
+dWx0IiBzdGF0ZSBvZiB0aHJlYWRzIGlzIHRvIGJlIHdpdGhpbiBhIFJDVSByZWFkLXNpZGUuClRo
+ZXJlZm9yZSwgaWYgeW91IG9taXQgYW55IG9mIHRoZSB0d28gYWR2aWNlIGFib3ZlLCB5b3UgZW5k
+IHVwIGluIGEgc2l0dWF0aW9uCndoZXJlIGdyYWNlIHBlcmlvZHMgbmV2ZXIgY29tcGxldGUsIGFu
+ZCB0aGVyZWZvcmUgbm8gY2FsbF9yY3UoKSBjYWxsYmFja3MgY2FuCmJlIHByb2Nlc3NlZC4gVGhp
+cyBlZmZlY3RpdmVseSBhY3RzIGxpa2UgYSBiaWcgbWVtb3J5IGxlYWsuCgpIb3BpbmcgdGhpcyBo
+ZWxwcywKClRoYW5rcywKCk1hdGhpZXUKCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1Mg
+SW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
+bmZvL2x0dG5nLWRldgo=
