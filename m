@@ -1,29 +1,16 @@
-From: "Staffan Tjernstrom" <staffan@eternaltraveller.com>
-Subject: Keeping traces separate query
-Date: Mon, 26 Sep 2016 09:14:01 -0500
-Message-ID: <13210846eae7d21c01b45f120c5644ee.squirrel__33925.6290732466$1474901074$gmane$org@email.powweb.com>
-Reply-To: stjernstrom@acm.org
+From: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
+Subject: Removing timing overhead via tracepoint()
+Date: Mon, 26 Sep 2016 18:32:50 +0000 (UTC)
+Message-ID: <44700566.4933962.1474914770059__27253.3365911388$1474914786$gmane$org@mail.yahoo.com>
+References: <44700566.4933962.1474914770059.ref@mail.yahoo.com>
+Reply-To: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============7778857950874802476=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from walmailout08.yourhostingaccount.com
- (walmailout08.yourhostingaccount.com [65.254.253.232])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 5CD95A2053
- for <lttng-dev@lists.lttng.org>; Mon, 26 Sep 2016 14:45:30 +0000 (UTC)
-Received: from mailscan14.yourhostingaccount.com ([10.1.15.14]
- helo=walmailscan14.yourhostingaccount.com)
- by walmailout08.yourhostingaccount.com with esmtp (Exim)
- id 1boWfV-0002Wd-Jl
- for lttng-dev@lists.lttng.org; Mon, 26 Sep 2016 10:14:05 -0400
-Received: from [10.114.3.31] (helo=walimpout11)
- by walmailscan14.yourhostingaccount.com with esmtp (Exim)
- id 1boWfV-0007Vh-FQ
- for lttng-dev@lists.lttng.org; Mon, 26 Sep 2016 10:14:05 -0400
-Received: from [127.0.0.1] (helo=email.powweb.com)
- by walwebmail07.yourhostingaccount.com with esmtp (Exim)
- id 1boWfR-0001N2-Nn
- for lttng-dev@lists.lttng.org; Mon, 26 Sep 2016 10:14:01 -0400
+Received: from nm34-vm8.bullet.mail.bf1.yahoo.com
+ (nm34-vm8.bullet.mail.bf1.yahoo.com [72.30.239.6])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id ADE73A2B81
+ for <lttng-dev@lists.lttng.org>; Mon, 26 Sep 2016 18:34:11 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -33,19 +20,36 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SSBoYXZlIGEgc2NlbmFyaW8gd2hlcmUgSSBoYXZlIHR3byBjb3BpZXMgb2YgdGhlIHNhbWUgZXhl
-Y3V0YWJsZQpydW5uaW5nIG9uIG9uZSBzeXN0ZW0gKGJ1dCBmcm9tIGRpZmZlcmVudCBkaXJlY3Rv
-cmllcykuCgpXaGF0IEkgd291bGQgbGlrZSB0byBoYXZlIGhhcHBlbiBpcyB0byBiZSBhYmxlIHRv
-IHJ1biB0d28gc2VwYXJhdGUKYmFiZWx0cmFjZSBpbnN0YW5jZXMsIGVhY2ggZmVlZGluZyBmcm9t
-IGl0cyBvd24gZXhlY3V0YWJsZSBpbnN0YW5jZS4KClRoZSBjb21wbGljYXRpbmcgZmFjdG9yIGlz
-IHRoYXQgSSBuZWVkIHRvIHJ1biBpbiAtLWxpdmUgbW9kZSwgYW5kIEkKbmVlZCB0byBjYXB0dXJl
-IHRoZSBmaXJzdCB0cmFjZXBvaW50cyB0aGF0IGVhY2ggZXhlY3V0YWJsZSBzcGl0cyBvdXQsCnNv
-IEkgZG9uJ3QgdGhpbmsgdGhhdCBmaWx0ZXJpbmcgYnkgcGlkIHdpbGwgd29yayAoSSdkIGhhdmUg
-dG8ga25vdyB0aGUKcGlkIGJlZm9yZSB0aGUgZXhlY3V0YWJsZSBzdGFydHMgLi4uKQoKSWYgYW55
-Ym9keSBoYXMgYW55IGdvb2QgaWRlYXMsIEknZCBiZSBncmF0ZWZ1bC4KCktpbmQgUmVnYXJkcwpT
-dGFmZmFuIFRqLgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBz
-Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============7778857950874802476==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_4933961_1319111101.1474914770057"
+
+------=_Part_4933961_1319111101.1474914770057
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+All,
+Simple question alert!
+If I want to remove a ton of compiled-in calls to an "rdtscp-based" C timing function and replace them with conditionally-enabled timing based on whether or not I enable a tracing session, I can do so by adding the aforementioned call as one of the arguments to tracepoint() with our defined provider and event name, correct?
+------=_Part_4933961_1319111101.1474914770057
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<html><head></head><body><div style="color:#000; background-color:#fff; font-family:HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px"><div id="yui_3_16_0_ym19_1_1474914422310_4680">All,</div><div id="yui_3_16_0_ym19_1_1474914422310_4680"><br></div><div id="yui_3_16_0_ym19_1_1474914422310_4680" dir="ltr">Simple question alert!</div><div id="yui_3_16_0_ym19_1_1474914422310_4680" dir="ltr"><br></div><div id="yui_3_16_0_ym19_1_1474914422310_4680" dir="ltr">If I want to remove a ton of compiled-in calls to an "rdtscp-based" C timing function and replace them with conditionally-enabled timing based on whether or not I enable a tracing session, I can do so by adding the aforementioned call as one of the arguments to tracepoint() with our defined provider a
+ nd event name, correct?</div></div></body></html>
+------=_Part_4933961_1319111101.1474914770057--
+
+--===============7778857950874802476==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============7778857950874802476==--
