@@ -1,16 +1,18 @@
-From: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
-Subject: Removing timing overhead via tracepoint()
-Date: Mon, 26 Sep 2016 18:32:50 +0000 (UTC)
-Message-ID: <44700566.4933962.1474914770059__27253.3365911388$1474914786$gmane$org@mail.yahoo.com>
-References: <44700566.4933962.1474914770059.ref@mail.yahoo.com>
-Reply-To: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
+From: Jesper Derehag <jderehag@hotmail.com>
+Subject: Re: [PATCH lttng-tools] Cleanup: Remove fun from code
+ base
+Date: Tue, 27 Sep 2016 12:57:50 +0000
+Message-ID: <DUB123-W386578693B60BBEEAAD04ADDCC0__24435.6724586853$1474981405$gmane$org@phx.gbl>
+References: <1474828347-21108-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7778857950874802476=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from nm34-vm8.bullet.mail.bf1.yahoo.com
- (nm34-vm8.bullet.mail.bf1.yahoo.com [72.30.239.6])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id ADE73A2B81
- for <lttng-dev@lists.lttng.org>; Mon, 26 Sep 2016 18:34:11 +0000 (UTC)
+Received: from DUB004-OMC2S8.hotmail.com (dub004-omc2s8.hotmail.com
+ [157.55.1.147])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 10597A1E33
+ for <lttng-dev@lists.lttng.org>; Tue, 27 Sep 2016 13:04:13 +0000 (UTC)
+In-Reply-To: <1474828347-21108-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,36 +22,48 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "jgalar@efficios.com" <jgalar@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============7778857950874802476==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_4933961_1319111101.1474914770057"
-
-------=_Part_4933961_1319111101.1474914770057
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-All,
-Simple question alert!
-If I want to remove a ton of compiled-in calls to an "rdtscp-based" C timing function and replace them with conditionally-enabled timing based on whether or not I enable a tracing session, I can do so by adding the aforementioned call as one of the arguments to tracepoint() with our defined provider and event name, correct?
-------=_Part_4933961_1319111101.1474914770057
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-<html><head></head><body><div style="color:#000; background-color:#fff; font-family:HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px"><div id="yui_3_16_0_ym19_1_1474914422310_4680">All,</div><div id="yui_3_16_0_ym19_1_1474914422310_4680"><br></div><div id="yui_3_16_0_ym19_1_1474914422310_4680" dir="ltr">Simple question alert!</div><div id="yui_3_16_0_ym19_1_1474914422310_4680" dir="ltr"><br></div><div id="yui_3_16_0_ym19_1_1474914422310_4680" dir="ltr">If I want to remove a ton of compiled-in calls to an "rdtscp-based" C timing function and replace them with conditionally-enabled timing based on whether or not I enable a tracing session, I can do so by adding the aforementioned call as one of the arguments to tracepoint() with our defined provider a
- nd event name, correct?</div></div></body></html>
-------=_Part_4933961_1319111101.1474914770057--
-
---===============7778857950874802476==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============7778857950874802476==--
+ZWhoaC4uLiB0YWtpbmcgYWxsIHRoZSBmdW4gb3V0IG9mIHRoZSBqb2I/ID0pCgotLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gRnJvbTogbWF0aGlldS5kZXNub3llcnNA
+ZWZmaWNpb3MuY29tCj4gVG86IGpnYWxhckBlZmZpY2lvcy5jb20KPiBEYXRlOiBTdW4sIDI1IFNl
+cCAyMDE2IDE0OjMyOjI3IC0wNDAwCj4gQ0M6IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBT
+dWJqZWN0OiBbbHR0bmctZGV2XSBbUEFUQ0ggbHR0bmctdG9vbHNdIENsZWFudXA6IFJlbW92ZSBm
+dW4gZnJvbSBjb2RlIGJhc2UKPgo+IEl0IGFwcGVhcnMgY2hvb3NpbmcgdGhlIHJlbGVhc2UgbmFt
+ZXMgcHJvdmlkZXMgcGxlbnR5IG9mIGVuam95bWVudCB0bwo+IExUVG5nIGRldmVsb3BlcnMsIHRo
+dXMgYWxsb3dpbmcgdXMgdG8gcmVtb3ZlIHRob3NlIGVhc3RlciBlZ2dzLgo+Cj4gSW5jaWRlbnRh
+bGx5LCBpdCB3aWxsIGFsbG93IG1lIHRvIGRlbW8gdGhlIExUVG5nIHByb2plY3Qgd2l0aG91dAo+
+IGNhcnJ5aW5nIHRoaXMgPHllbGxvdz5XZWxjb21lIGJhY2sgRHIgVHJhY2luZyE8L3llbGxvdz4g
+bWVzc2FnZSBlYWNoCj4gdGltZSBJIGlzc3VlIGEgImx0dG5nIiBjb21tYW5kLgo+Cj4gU2lnbmVk
+LW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNv
+bT4KPiAtLS0KPiBzcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYyB8IDYgLS0tLS0tCj4gc3Jj
+L2Jpbi9sdHRuZy9sdHRuZy5jIHwgOCAtLS0tLS0tLQo+IDIgZmlsZXMgY2hhbmdlZCwgMTQgZGVs
+ZXRpb25zKC0pCj4KPiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMg
+Yi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYwo+IGluZGV4IGIwNjc0NjEuLjVlMTlmMzcg
+MTAwNjQ0Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKPiArKysgYi9zcmMv
+YmluL2x0dG5nLXNlc3Npb25kL21haW4uYwo+IEBAIC03NjAsMTIgKzc2MCw2IEBAIHN0YXRpYyB2
+b2lkIHNlc3Npb25kX2NsZWFudXBfb3B0aW9ucyh2b2lkKQo+IGZyZWUoa21vZF9leHRyYV9wcm9i
+ZXNfbGlzdCk7Cj4KPiBydW5fYXNfZGVzdHJveV93b3JrZXIoKTsKPiAtCj4gLSAvKiA8ZnVuPiAq
+Lwo+IC0gREJHKCIlY1slZDslZG0qKiogYXNzZXJ0IGZhaWxlZCA6LSkgKioqID09PiAlY1slZG0l
+Y1slZDslZG0iCj4gLSAiTWF0dGhldywgQkVFVCBkcml2ZW4gZGV2ZWxvcG1lbnQgd29ya3MhJWNb
+JWRtIiwKPiAtIDI3LCAxLCAzMSwgMjcsIDAsIDI3LCAxLCAzMywgMjcsIDApOwo+IC0gLyogPC9m
+dW4+ICovCj4gfQo+Cj4gLyoKPiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy9sdHRuZy5jIGIv
+c3JjL2Jpbi9sdHRuZy9sdHRuZy5jCj4gaW5kZXggMzQ4MTZiZS4uOTMxN2U4MyAxMDA2NDQKPiAt
+LS0gYS9zcmMvYmluL2x0dG5nL2x0dG5nLmMKPiArKysgYi9zcmMvYmluL2x0dG5nL2x0dG5nLmMK
+PiBAQCAtMzg5LDE0ICszODksNiBAQCBzdGF0aWMgaW50IHBhcnNlX2FyZ3MoaW50IGFyZ2MsIGNo
+YXIgKiphcmd2KQo+IGdvdG8gZXJyb3I7Cj4gfQo+Cj4gLSAvKiBGb3IgTWF0aGlldSBEZXNub3ll
+cnMgYS5rLmEuIERyLiBUcmFjaW5nICovCj4gLSB1c2VyID0gZ2V0ZW52KCJVU0VSIik7Cj4gLSBp
+ZiAodXNlciAhPSBOVUxMICYmICgoc3RybmNtcChwcm9nbmFtZSwgImRydHJhY2UiLCA3KSA9PSAw
+IHx8Cj4gLSBzdHJuY21wKCJjb21wdWRqIiwgdXNlciwgNykgPT0gMCkpKSB7Cj4gLSBNU0coIiVj
+WyVkOyVkbVdlbGNvbWUgYmFjayBEciBUcmFjaW5nISVjWyVkbVxuIiwgMjcsMSwzMywyNywwKTsK
+PiAtIH0KPiAtIC8qIFRoYW5rcyBNYXRoaWV1ICovCj4gLQo+IC8qCj4gKiBIYW5kbGUgbGVmdG92
+ZXJzIHdoaWNoIGlzIGEgZmlyc3QgbGV2ZWwgY29tbWFuZCB3aXRoIHRoZSB0cmFpbGluZwo+ICog
+b3B0aW9ucy4KPiAtLQo+IDIuMS40Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlz
+dHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
+c3RpbmZvL2x0dG5nLWRldgogCQkgCSAgIAkJICAKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
+dHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
+aW5mby9sdHRuZy1kZXYK
