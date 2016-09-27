@@ -1,18 +1,15 @@
-From: Jesper Derehag <jderehag@hotmail.com>
-Subject: Re: [PATCH lttng-tools] Cleanup: Remove fun from code
- base
-Date: Tue, 27 Sep 2016 12:57:50 +0000
-Message-ID: <DUB123-W386578693B60BBEEAAD04ADDCC0__24435.6724586853$1474981405$gmane$org@phx.gbl>
-References: <1474828347-21108-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Jeffrey Chen <cpthk@live.com>
+Subject: LTTng memory map
+Date: Tue, 27 Sep 2016 18:20:03 +0000
+Message-ID: <CY4PR13MB14149C4EF327ABE7F53ED61AC7CC0__37435.9029032805$1475000739$gmane$org@CY4PR13MB1414.namprd13.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============4754804397136467548=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from DUB004-OMC2S8.hotmail.com (dub004-omc2s8.hotmail.com
- [157.55.1.147])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 10597A1E33
- for <lttng-dev@lists.lttng.org>; Tue, 27 Sep 2016 13:04:13 +0000 (UTC)
-In-Reply-To: <1474828347-21108-1-git-send-email-mathieu.desnoyers@efficios.com>
+Received: from COL004-OMC4S4.hotmail.com (col004-omc4s4.hotmail.com
+ [65.55.34.206])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 068C9A3C51
+ for <lttng-dev@lists.lttng.org>; Tue, 27 Sep 2016 18:26:28 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,48 +19,165 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "jgalar@efficios.com" <jgalar@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-ZWhoaC4uLiB0YWtpbmcgYWxsIHRoZSBmdW4gb3V0IG9mIHRoZSBqb2I/ID0pCgotLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gRnJvbTogbWF0aGlldS5kZXNub3llcnNA
-ZWZmaWNpb3MuY29tCj4gVG86IGpnYWxhckBlZmZpY2lvcy5jb20KPiBEYXRlOiBTdW4sIDI1IFNl
-cCAyMDE2IDE0OjMyOjI3IC0wNDAwCj4gQ0M6IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBT
-dWJqZWN0OiBbbHR0bmctZGV2XSBbUEFUQ0ggbHR0bmctdG9vbHNdIENsZWFudXA6IFJlbW92ZSBm
-dW4gZnJvbSBjb2RlIGJhc2UKPgo+IEl0IGFwcGVhcnMgY2hvb3NpbmcgdGhlIHJlbGVhc2UgbmFt
-ZXMgcHJvdmlkZXMgcGxlbnR5IG9mIGVuam95bWVudCB0bwo+IExUVG5nIGRldmVsb3BlcnMsIHRo
-dXMgYWxsb3dpbmcgdXMgdG8gcmVtb3ZlIHRob3NlIGVhc3RlciBlZ2dzLgo+Cj4gSW5jaWRlbnRh
-bGx5LCBpdCB3aWxsIGFsbG93IG1lIHRvIGRlbW8gdGhlIExUVG5nIHByb2plY3Qgd2l0aG91dAo+
-IGNhcnJ5aW5nIHRoaXMgPHllbGxvdz5XZWxjb21lIGJhY2sgRHIgVHJhY2luZyE8L3llbGxvdz4g
-bWVzc2FnZSBlYWNoCj4gdGltZSBJIGlzc3VlIGEgImx0dG5nIiBjb21tYW5kLgo+Cj4gU2lnbmVk
-LW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNv
-bT4KPiAtLS0KPiBzcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYyB8IDYgLS0tLS0tCj4gc3Jj
-L2Jpbi9sdHRuZy9sdHRuZy5jIHwgOCAtLS0tLS0tLQo+IDIgZmlsZXMgY2hhbmdlZCwgMTQgZGVs
-ZXRpb25zKC0pCj4KPiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMg
-Yi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYwo+IGluZGV4IGIwNjc0NjEuLjVlMTlmMzcg
-MTAwNjQ0Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKPiArKysgYi9zcmMv
-YmluL2x0dG5nLXNlc3Npb25kL21haW4uYwo+IEBAIC03NjAsMTIgKzc2MCw2IEBAIHN0YXRpYyB2
-b2lkIHNlc3Npb25kX2NsZWFudXBfb3B0aW9ucyh2b2lkKQo+IGZyZWUoa21vZF9leHRyYV9wcm9i
-ZXNfbGlzdCk7Cj4KPiBydW5fYXNfZGVzdHJveV93b3JrZXIoKTsKPiAtCj4gLSAvKiA8ZnVuPiAq
-Lwo+IC0gREJHKCIlY1slZDslZG0qKiogYXNzZXJ0IGZhaWxlZCA6LSkgKioqID09PiAlY1slZG0l
-Y1slZDslZG0iCj4gLSAiTWF0dGhldywgQkVFVCBkcml2ZW4gZGV2ZWxvcG1lbnQgd29ya3MhJWNb
-JWRtIiwKPiAtIDI3LCAxLCAzMSwgMjcsIDAsIDI3LCAxLCAzMywgMjcsIDApOwo+IC0gLyogPC9m
-dW4+ICovCj4gfQo+Cj4gLyoKPiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy9sdHRuZy5jIGIv
-c3JjL2Jpbi9sdHRuZy9sdHRuZy5jCj4gaW5kZXggMzQ4MTZiZS4uOTMxN2U4MyAxMDA2NDQKPiAt
-LS0gYS9zcmMvYmluL2x0dG5nL2x0dG5nLmMKPiArKysgYi9zcmMvYmluL2x0dG5nL2x0dG5nLmMK
-PiBAQCAtMzg5LDE0ICszODksNiBAQCBzdGF0aWMgaW50IHBhcnNlX2FyZ3MoaW50IGFyZ2MsIGNo
-YXIgKiphcmd2KQo+IGdvdG8gZXJyb3I7Cj4gfQo+Cj4gLSAvKiBGb3IgTWF0aGlldSBEZXNub3ll
-cnMgYS5rLmEuIERyLiBUcmFjaW5nICovCj4gLSB1c2VyID0gZ2V0ZW52KCJVU0VSIik7Cj4gLSBp
-ZiAodXNlciAhPSBOVUxMICYmICgoc3RybmNtcChwcm9nbmFtZSwgImRydHJhY2UiLCA3KSA9PSAw
-IHx8Cj4gLSBzdHJuY21wKCJjb21wdWRqIiwgdXNlciwgNykgPT0gMCkpKSB7Cj4gLSBNU0coIiVj
-WyVkOyVkbVdlbGNvbWUgYmFjayBEciBUcmFjaW5nISVjWyVkbVxuIiwgMjcsMSwzMywyNywwKTsK
-PiAtIH0KPiAtIC8qIFRoYW5rcyBNYXRoaWV1ICovCj4gLQo+IC8qCj4gKiBIYW5kbGUgbGVmdG92
-ZXJzIHdoaWNoIGlzIGEgZmlyc3QgbGV2ZWwgY29tbWFuZCB3aXRoIHRoZSB0cmFpbGluZwo+ICog
-b3B0aW9ucy4KPiAtLQo+IDIuMS40Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
-c3RpbmZvL2x0dG5nLWRldgogCQkgCSAgIAkJICAKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYK
+--===============4754804397136467548==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_CY4PR13MB14149C4EF327ABE7F53ED61AC7CC0CY4PR13MB1414namp_"
+
+--_000_CY4PR13MB14149C4EF327ABE7F53ED61AC7CC0CY4PR13MB1414namp_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Hi LTTng:
+
+
+Our service has been running overnight with LTTng enabled to do some memory=
+ consumption testing. We noticed the linux pmap output would have several m=
+emory map used by LTTng, and are marked as deleted. Do you know what are th=
+em? Why are they left in the system and marked as deleted? Thanks.
+
+
+00007fc3017ee000   40968     592     592 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc3017ee000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc303ff0000   40968       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc303ff0000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc3067f2000   40968       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc3067f2000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc308ff4000   40968       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc308ff4000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc30b7f6000   40968       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc30b7f6000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc30dff8000   40968     524     524 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc30dff8000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc3107fa000   40968       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc3107fa000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc312ffc000   40968     244     244 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc312ffc000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc3157fe000   40968     396     396 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+00007fc3157fe000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
+ted)
+
+
+--_000_CY4PR13MB14149C4EF327ABE7F53ED61AC7CC0CY4PR13MB1414namp_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style type=3D"text/css" style=3D"display:none;"><!-- P {margin-top:0;margi=
+n-bottom:0;} --></style>
+</head>
+<body dir=3D"ltr">
+<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;font=
+-family:Calibri,Arial,Helvetica,sans-serif;">
+<p>Hi LTTng:</p>
+<p><br>
+</p>
+<p>Our service has been running overnight with LTTng enabled to do some mem=
+ory consumption testing. We noticed the linux pmap output would have severa=
+l memory map used by LTTng, and are marked as deleted. Do you know what are=
+ them? Why are they left in the
+ system and marked as deleted? Thanks.<br>
+</p>
+<p><br>
+</p>
+<p><br>
+</p>
+<p></p>
+<div>
+<p class=3D"MsoNormal">00007fc3017ee000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
+&nbsp; 592&nbsp;&nbsp;&nbsp;&nbsp; 592 rw-s- ust-shm-consumer-58905 (delete=
+d)</p>
+<p class=3D"MsoNormal">00007fc3017ee000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+ 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
+<p class=3D"MsoNormal">00007fc303ff0000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
+nsumer-58905 (deleted)</p>
+<p class=3D"MsoNormal">00007fc303ff0000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+ 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
+<p class=3D"MsoNormal">00007fc3067f2000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
+nsumer-58905 (deleted)</p>
+<p class=3D"MsoNormal">00007fc3067f2000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+ 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
+<p class=3D"MsoNormal">00007fc308ff4000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
+nsumer-58905 (deleted)</p>
+<p class=3D"MsoNormal">00007fc308ff4000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+ 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
+<p class=3D"MsoNormal">00007fc30b7f6000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
+nsumer-58905 (deleted)</p>
+<p class=3D"MsoNormal">00007fc30b7f6000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+ 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
+<p class=3D"MsoNormal">00007fc30dff8000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
+&nbsp; 524&nbsp;&nbsp;&nbsp;&nbsp; 524 rw-s- ust-shm-consumer-58905 (delete=
+d)</p>
+<p class=3D"MsoNormal">00007fc30dff8000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+ 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
+<p class=3D"MsoNormal">00007fc3107fa000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
+nsumer-58905 (deleted)</p>
+<p class=3D"MsoNormal">00007fc3107fa000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+ 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
+<p class=3D"MsoNormal">00007fc312ffc000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
+&nbsp; 244&nbsp;&nbsp;&nbsp;&nbsp; 244 rw-s- ust-shm-consumer-58905 (delete=
+d)</p>
+<p class=3D"MsoNormal">00007fc312ffc000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+ 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
+<p class=3D"MsoNormal">00007fc3157fe000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
+&nbsp; 396&nbsp;&nbsp;&nbsp;&nbsp; 396 rw-s- ust-shm-consumer-58905 (delete=
+d)</p>
+<p class=3D"MsoNormal">00007fc3157fe000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+ 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
+</div>
+<br>
+<p></p>
+</div>
+</body>
+</html>
+
+--_000_CY4PR13MB14149C4EF327ABE7F53ED61AC7CC0CY4PR13MB1414namp_--
+
+--===============4754804397136467548==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============4754804397136467548==--
