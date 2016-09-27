@@ -1,15 +1,20 @@
-From: Jeffrey Chen <cpthk@live.com>
-Subject: LTTng memory map
-Date: Tue, 27 Sep 2016 18:20:03 +0000
-Message-ID: <CY4PR13MB14149C4EF327ABE7F53ED61AC7CC0__37435.9029032805$1475000739$gmane$org@CY4PR13MB1414.namprd13.prod.outlook.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools] Cleanup: Remove fun from code
+	base
+Date: Tue, 27 Sep 2016 15:13:21 -0400
+Message-ID: <CA+jJMxup+Xu1BsQ0ZKcEqmoC0+9spSe0O14WTM5VxOPz7_FUNw__40916.1244905137$1475003649$gmane$org@mail.gmail.com>
+References: <1474828347-21108-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4754804397136467548=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from COL004-OMC4S4.hotmail.com (col004-omc4s4.hotmail.com
- [65.55.34.206])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 068C9A3C51
- for <lttng-dev@lists.lttng.org>; Tue, 27 Sep 2016 18:26:28 +0000 (UTC)
-Content-Language: en-US
+Received: from mail-ua0-f194.google.com (mail-ua0-f194.google.com
+ [209.85.217.194])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id ADE96A3C51
+ for <lttng-dev@lists.lttng.org>; Tue, 27 Sep 2016 19:14:42 +0000 (UTC)
+Received: by mail-ua0-f194.google.com with SMTP id 51so752514uac.3
+ for <lttng-dev@lists.lttng.org>; Tue, 27 Sep 2016 12:13:22 -0700 (PDT)
+In-Reply-To: <1474828347-21108-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,165 +24,47 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============4754804397136467548==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_CY4PR13MB14149C4EF327ABE7F53ED61AC7CC0CY4PR13MB1414namp_"
-
---_000_CY4PR13MB14149C4EF327ABE7F53ED61AC7CC0CY4PR13MB1414namp_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-Hi LTTng:
-
-
-Our service has been running overnight with LTTng enabled to do some memory=
- consumption testing. We noticed the linux pmap output would have several m=
-emory map used by LTTng, and are marked as deleted. Do you know what are th=
-em? Why are they left in the system and marked as deleted? Thanks.
-
-
-00007fc3017ee000   40968     592     592 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc3017ee000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc303ff0000   40968       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc303ff0000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc3067f2000   40968       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc3067f2000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc308ff4000   40968       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc308ff4000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc30b7f6000   40968       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc30b7f6000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc30dff8000   40968     524     524 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc30dff8000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc3107fa000   40968       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc3107fa000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc312ffc000   40968     244     244 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc312ffc000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc3157fe000   40968     396     396 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-00007fc3157fe000       0       0       0 rw-s- ust-shm-consumer-58905 (dele=
-ted)
-
-
---_000_CY4PR13MB14149C4EF327ABE7F53ED61AC7CC0CY4PR13MB1414namp_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style type=3D"text/css" style=3D"display:none;"><!-- P {margin-top:0;margi=
-n-bottom:0;} --></style>
-</head>
-<body dir=3D"ltr">
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;font=
--family:Calibri,Arial,Helvetica,sans-serif;">
-<p>Hi LTTng:</p>
-<p><br>
-</p>
-<p>Our service has been running overnight with LTTng enabled to do some mem=
-ory consumption testing. We noticed the linux pmap output would have severa=
-l memory map used by LTTng, and are marked as deleted. Do you know what are=
- them? Why are they left in the
- system and marked as deleted? Thanks.<br>
-</p>
-<p><br>
-</p>
-<p><br>
-</p>
-<p></p>
-<div>
-<p class=3D"MsoNormal">00007fc3017ee000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp; 592&nbsp;&nbsp;&nbsp;&nbsp; 592 rw-s- ust-shm-consumer-58905 (delete=
-d)</p>
-<p class=3D"MsoNormal">00007fc3017ee000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc303ff0000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
-nsumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc303ff0000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc3067f2000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
-nsumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc3067f2000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc308ff4000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
-nsumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc308ff4000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc30b7f6000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
-nsumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc30b7f6000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc30dff8000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp; 524&nbsp;&nbsp;&nbsp;&nbsp; 524 rw-s- ust-shm-consumer-58905 (delete=
-d)</p>
-<p class=3D"MsoNormal">00007fc30dff8000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc3107fa000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
-nsumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc3107fa000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc312ffc000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp; 244&nbsp;&nbsp;&nbsp;&nbsp; 244 rw-s- ust-shm-consumer-58905 (delete=
-d)</p>
-<p class=3D"MsoNormal">00007fc312ffc000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc3157fe000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp; 396&nbsp;&nbsp;&nbsp;&nbsp; 396 rw-s- ust-shm-consumer-58905 (delete=
-d)</p>
-<p class=3D"MsoNormal">00007fc3157fe000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-</div>
-<br>
-<p></p>
-</div>
-</body>
-</html>
-
---_000_CY4PR13MB14149C4EF327ABE7F53ED61AC7CC0CY4PR13MB1414namp_--
-
---===============4754804397136467548==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============4754804397136467548==--
+RnVuIHJlbW92ZWQgZnJvbSBtYXN0ZXIsIHRoYW5rcy4uLiA7KQoKSsOpcsOpbWllCgpPbiAyNSBT
+ZXB0ZW1iZXIgMjAxNiBhdCAxNDozMiwgTWF0aGlldSBEZXNub3llcnMKPG1hdGhpZXUuZGVzbm95
+ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gSXQgYXBwZWFycyBjaG9vc2luZyB0aGUgcmVsZWFz
+ZSBuYW1lcyBwcm92aWRlcyBwbGVudHkgb2YgZW5qb3ltZW50IHRvCj4gTFRUbmcgZGV2ZWxvcGVy
+cywgdGh1cyBhbGxvd2luZyB1cyB0byByZW1vdmUgdGhvc2UgZWFzdGVyIGVnZ3MuCj4KPiBJbmNp
+ZGVudGFsbHksIGl0IHdpbGwgYWxsb3cgbWUgdG8gZGVtbyB0aGUgTFRUbmcgcHJvamVjdCB3aXRo
+b3V0Cj4gY2FycnlpbmcgdGhpcyA8eWVsbG93PldlbGNvbWUgYmFjayBEciBUcmFjaW5nITwveWVs
+bG93PiBtZXNzYWdlIGVhY2gKPiB0aW1lIEkgaXNzdWUgYSAibHR0bmciIGNvbW1hbmQuCj4KPiBT
+aWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNp
+b3MuY29tPgo+IC0tLQo+ICBzcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYyB8IDYgLS0tLS0t
+Cj4gIHNyYy9iaW4vbHR0bmcvbHR0bmcuYyAgICAgICAgIHwgOCAtLS0tLS0tLQo+ICAyIGZpbGVz
+IGNoYW5nZWQsIDE0IGRlbGV0aW9ucygtKQo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmct
+c2Vzc2lvbmQvbWFpbi5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKPiBpbmRleCBi
+MDY3NDYxLi41ZTE5ZjM3IDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFp
+bi5jCj4gKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKPiBAQCAtNzYwLDEyICs3
+NjAsNiBAQCBzdGF0aWMgdm9pZCBzZXNzaW9uZF9jbGVhbnVwX29wdGlvbnModm9pZCkKPiAgICAg
+ICAgIGZyZWUoa21vZF9leHRyYV9wcm9iZXNfbGlzdCk7Cj4KPiAgICAgICAgIHJ1bl9hc19kZXN0
+cm95X3dvcmtlcigpOwo+IC0KPiAtICAgICAgIC8qIDxmdW4+ICovCj4gLSAgICAgICBEQkcoIiVj
+WyVkOyVkbSoqKiBhc3NlcnQgZmFpbGVkIDotKSAqKiogPT0+ICVjWyVkbSVjWyVkOyVkbSIKPiAt
+ICAgICAgICAgICAgICAgICAgICAgICAiTWF0dGhldywgQkVFVCBkcml2ZW4gZGV2ZWxvcG1lbnQg
+d29ya3MhJWNbJWRtIiwKPiAtICAgICAgICAgICAgICAgICAgICAgICAyNywgMSwgMzEsIDI3LCAw
+LCAyNywgMSwgMzMsIDI3LCAwKTsKPiAtICAgICAgIC8qIDwvZnVuPiAqLwo+ICB9Cj4KPiAgLyoK
+PiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy9sdHRuZy5jIGIvc3JjL2Jpbi9sdHRuZy9sdHRu
+Zy5jCj4gaW5kZXggMzQ4MTZiZS4uOTMxN2U4MyAxMDA2NDQKPiAtLS0gYS9zcmMvYmluL2x0dG5n
+L2x0dG5nLmMKPiArKysgYi9zcmMvYmluL2x0dG5nL2x0dG5nLmMKPiBAQCAtMzg5LDE0ICszODks
+NiBAQCBzdGF0aWMgaW50IHBhcnNlX2FyZ3MoaW50IGFyZ2MsIGNoYXIgKiphcmd2KQo+ICAgICAg
+ICAgICAgICAgICBnb3RvIGVycm9yOwo+ICAgICAgICAgfQo+Cj4gLSAgICAgICAvKiBGb3IgTWF0
+aGlldSBEZXNub3llcnMgYS5rLmEuIERyLiBUcmFjaW5nICovCj4gLSAgICAgICB1c2VyID0gZ2V0
+ZW52KCJVU0VSIik7Cj4gLSAgICAgICBpZiAodXNlciAhPSBOVUxMICYmICgoc3RybmNtcChwcm9n
+bmFtZSwgImRydHJhY2UiLCA3KSA9PSAwIHx8Cj4gLSAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIHN0cm5jbXAoImNvbXB1ZGoiLCB1c2VyLCA3KSA9PSAwKSkpIHsKPiAtICAg
+ICAgICAgICAgICAgTVNHKCIlY1slZDslZG1XZWxjb21lIGJhY2sgRHIgVHJhY2luZyElY1slZG1c
+biIsIDI3LDEsMzMsMjcsMCk7Cj4gLSAgICAgICB9Cj4gLSAgICAgICAvKiBUaGFua3MgTWF0aGll
+dSAqLwo+IC0KPiAgICAgICAgIC8qCj4gICAgICAgICAgKiBIYW5kbGUgbGVmdG92ZXJzIHdoaWNo
+IGlzIGEgZmlyc3QgbGV2ZWwgY29tbWFuZCB3aXRoIHRoZSB0cmFpbGluZwo+ICAgICAgICAgICog
+b3B0aW9ucy4KPiAtLQo+IDIuMS40Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNp
+T1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBs
+aXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
+c3RpbmZvL2x0dG5nLWRldgo=
