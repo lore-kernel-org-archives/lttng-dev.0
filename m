@@ -1,21 +1,18 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: Re: [PATCH lttng-tools] Cleanup: Remove fun from code
-	base
-Date: Tue, 27 Sep 2016 15:24:24 -0400
-Message-ID: <CAB4xu_0z3c+yzpGVosuR5ifbFGUsbmWsBPA3z7=9xp8GGSW+vg__14198.3575922952$1475004320$gmane$org@mail.gmail.com>
-References: <1474828347-21108-1-git-send-email-mathieu.desnoyers@efficios.com>
- <CA+jJMxup+Xu1BsQ0ZKcEqmoC0+9spSe0O14WTM5VxOPz7_FUNw@mail.gmail.com>
+From: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
+Subject: Re: Removing timing overhead via tracepoint()
+Date: Wed, 28 Sep 2016 20:12:59 +0000 (UTC)
+Message-ID: <266465597.1115207.1475093579363__24001.6180011027$1475093603$gmane$org@mail.yahoo.com>
+References: <44700566.4933962.1474914770059.ref@mail.yahoo.com>
+ <44700566.4933962.1474914770059@mail.yahoo.com>
+Reply-To: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============5640518778402020995=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-f193.google.com (mail-qk0-f193.google.com
- [209.85.220.193])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 7D9BBA3C51
- for <lttng-dev@lists.lttng.org>; Tue, 27 Sep 2016 19:26:15 +0000 (UTC)
-Received: by mail-qk0-f193.google.com with SMTP id m184so1399229qkb.3
- for <lttng-dev@lists.lttng.org>; Tue, 27 Sep 2016 12:24:55 -0700 (PDT)
-In-Reply-To: <CA+jJMxup+Xu1BsQ0ZKcEqmoC0+9spSe0O14WTM5VxOPz7_FUNw@mail.gmail.com>
+Received: from nm15.bullet.mail.bf1.yahoo.com (nm15.bullet.mail.bf1.yahoo.com
+ [98.139.212.174])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 4155FA2E87
+ for <lttng-dev@lists.lttng.org>; Wed, 28 Sep 2016 20:14:22 +0000 (UTC)
+In-Reply-To: <44700566.4933962.1474914770059@mail.yahoo.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,54 +22,77 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-RmluYWxseSB0aGlzIHByb2plY3QgaXMgZ2V0dGluZyBzZXJpb3VzIQpQaGlsaXBwZSBQcm91bHgK
-CgpPbiBUdWUsIFNlcCAyNywgMjAxNiBhdCAzOjEzIFBNLCBKw6lyw6ltaWUgR2FsYXJuZWF1Cjxq
-ZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+IHdyb3RlOgo+IEZ1biByZW1vdmVkIGZyb20g
-bWFzdGVyLCB0aGFua3MuLi4gOykKPgo+IErDqXLDqW1pZQo+Cj4gT24gMjUgU2VwdGVtYmVyIDIw
-MTYgYXQgMTQ6MzIsIE1hdGhpZXUgRGVzbm95ZXJzCj4gPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmlj
-aW9zLmNvbT4gd3JvdGU6Cj4+IEl0IGFwcGVhcnMgY2hvb3NpbmcgdGhlIHJlbGVhc2UgbmFtZXMg
-cHJvdmlkZXMgcGxlbnR5IG9mIGVuam95bWVudCB0bwo+PiBMVFRuZyBkZXZlbG9wZXJzLCB0aHVz
-IGFsbG93aW5nIHVzIHRvIHJlbW92ZSB0aG9zZSBlYXN0ZXIgZWdncy4KPj4KPj4gSW5jaWRlbnRh
-bGx5LCBpdCB3aWxsIGFsbG93IG1lIHRvIGRlbW8gdGhlIExUVG5nIHByb2plY3Qgd2l0aG91dAo+
-PiBjYXJyeWluZyB0aGlzIDx5ZWxsb3c+V2VsY29tZSBiYWNrIERyIFRyYWNpbmchPC95ZWxsb3c+
-IG1lc3NhZ2UgZWFjaAo+PiB0aW1lIEkgaXNzdWUgYSAibHR0bmciIGNvbW1hbmQuCj4+Cj4+IFNp
-Z25lZC1vZmYtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lv
-cy5jb20+Cj4+IC0tLQo+PiAgc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMgfCA2IC0tLS0t
-LQo+PiAgc3JjL2Jpbi9sdHRuZy9sdHRuZy5jICAgICAgICAgfCA4IC0tLS0tLS0tCj4+ICAyIGZp
-bGVzIGNoYW5nZWQsIDE0IGRlbGV0aW9ucygtKQo+Pgo+PiBkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9s
-dHRuZy1zZXNzaW9uZC9tYWluLmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYwo+PiBp
-bmRleCBiMDY3NDYxLi41ZTE5ZjM3IDEwMDY0NAo+PiAtLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Np
-b25kL21haW4uYwo+PiArKysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYwo+PiBAQCAt
-NzYwLDEyICs3NjAsNiBAQCBzdGF0aWMgdm9pZCBzZXNzaW9uZF9jbGVhbnVwX29wdGlvbnModm9p
-ZCkKPj4gICAgICAgICBmcmVlKGttb2RfZXh0cmFfcHJvYmVzX2xpc3QpOwo+Pgo+PiAgICAgICAg
-IHJ1bl9hc19kZXN0cm95X3dvcmtlcigpOwo+PiAtCj4+IC0gICAgICAgLyogPGZ1bj4gKi8KPj4g
-LSAgICAgICBEQkcoIiVjWyVkOyVkbSoqKiBhc3NlcnQgZmFpbGVkIDotKSAqKiogPT0+ICVjWyVk
-bSVjWyVkOyVkbSIKPj4gLSAgICAgICAgICAgICAgICAgICAgICAgIk1hdHRoZXcsIEJFRVQgZHJp
-dmVuIGRldmVsb3BtZW50IHdvcmtzISVjWyVkbSIsCj4+IC0gICAgICAgICAgICAgICAgICAgICAg
-IDI3LCAxLCAzMSwgMjcsIDAsIDI3LCAxLCAzMywgMjcsIDApOwo+PiAtICAgICAgIC8qIDwvZnVu
-PiAqLwo+PiAgfQo+Pgo+PiAgLyoKPj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmcvbHR0bmcu
-YyBiL3NyYy9iaW4vbHR0bmcvbHR0bmcuYwo+PiBpbmRleCAzNDgxNmJlLi45MzE3ZTgzIDEwMDY0
-NAo+PiAtLS0gYS9zcmMvYmluL2x0dG5nL2x0dG5nLmMKPj4gKysrIGIvc3JjL2Jpbi9sdHRuZy9s
-dHRuZy5jCj4+IEBAIC0zODksMTQgKzM4OSw2IEBAIHN0YXRpYyBpbnQgcGFyc2VfYXJncyhpbnQg
-YXJnYywgY2hhciAqKmFyZ3YpCj4+ICAgICAgICAgICAgICAgICBnb3RvIGVycm9yOwo+PiAgICAg
-ICAgIH0KPj4KPj4gLSAgICAgICAvKiBGb3IgTWF0aGlldSBEZXNub3llcnMgYS5rLmEuIERyLiBU
-cmFjaW5nICovCj4+IC0gICAgICAgdXNlciA9IGdldGVudigiVVNFUiIpOwo+PiAtICAgICAgIGlm
-ICh1c2VyICE9IE5VTEwgJiYgKChzdHJuY21wKHByb2duYW1lLCAiZHJ0cmFjZSIsIDcpID09IDAg
-fHwKPj4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cm5jbXAoImNv
-bXB1ZGoiLCB1c2VyLCA3KSA9PSAwKSkpIHsKPj4gLSAgICAgICAgICAgICAgIE1TRygiJWNbJWQ7
-JWRtV2VsY29tZSBiYWNrIERyIFRyYWNpbmchJWNbJWRtXG4iLCAyNywxLDMzLDI3LDApOwo+PiAt
-ICAgICAgIH0KPj4gLSAgICAgICAvKiBUaGFua3MgTWF0aGlldSAqLwo+PiAtCj4+ICAgICAgICAg
-LyoKPj4gICAgICAgICAgKiBIYW5kbGUgbGVmdG92ZXJzIHdoaWNoIGlzIGEgZmlyc3QgbGV2ZWwg
-Y29tbWFuZCB3aXRoIHRoZSB0cmFpbGluZwo+PiAgICAgICAgICAqIG9wdGlvbnMuCj4+IC0tCj4+
-IDIuMS40Cj4+Cj4KPgo+Cj4gLS0KPiBKw6lyw6ltaWUgR2FsYXJuZWF1Cj4gRWZmaWNpT1MgSW5j
-Lgo+IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
-bi9saXN0aW5mby9sdHRuZy1kZXYKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcu
-b3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
-Zy1kZXYK
+--===============5640518778402020995==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_1115206_369954236.1475093579359"
+
+------=_Part_1115206_369954236.1475093579359
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+ping
+
+      From: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
+ To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org> 
+ Sent: Monday, September 26, 2016 1:32 PM
+ Subject: Removing timing overhead via tracepoint()
+   
+All,
+Simple question alert!
+If I want to remove a ton of compiled-in calls to an "rdtscp-based" C timing function and replace them with conditionally-enabled timing based on whether or not I enable a tracing session, I can do so by adding the aforementioned call as one of the arguments to tracepoint() with our defined provider and event name, correct?
+
+   
+------=_Part_1115206_369954236.1475093579359
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head></head><body><div style=3D"color:#000; background-color:#fff; f=
+ont-family:HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, =
+sans-serif;font-size:16px"><div><span>ping</span></div><div class=3D"qtdSep=
+arateBR" id=3D"yui_3_16_0_ym19_1_1475093483021_6918"><br><br></div><div cla=
+ss=3D"yahoo_quoted" id=3D"yui_3_16_0_ym19_1_1475093483021_6940" style=3D"di=
+splay: block;">  <div style=3D"font-family: HelveticaNeue, Helvetica Neue, =
+Helvetica, Arial, Lucida Grande, sans-serif; font-size: 16px;" id=3D"yui_3_=
+16_0_ym19_1_1475093483021_6939"> <div style=3D"font-family: HelveticaNeue, =
+Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif; font-size: 16p=
+x;" id=3D"yui_3_16_0_ym19_1_1475093483021_6938"> <div dir=3D"ltr" id=3D"yui=
+_3_16_0_ym19_1_1475093483021_6937"> <font size=3D"2" face=3D"Arial" id=3D"y=
+ui_3_16_0_ym19_1_1475093483021_6942"> <hr size=3D"1"> <b><span style=3D"fon=
+t-weight:bold;">From:</span></b> "Mark E. Dawson, Jr." &lt;medawsonjr@yahoo=
+.com&gt;<br> <b><span style=3D"font-weight: bold;">To:</span></b> "lttng-de=
+v@lists.lttng.org" &lt;lttng-dev@lists.lttng.org&gt; <br> <b><span style=3D=
+"font-weight: bold;">Sent:</span></b> Monday, September 26, 2016 1:32 PM<br=
+> <b><span style=3D"font-weight: bold;">Subject:</span></b> Removing timing=
+ overhead via tracepoint()<br> </font> </div> <div class=3D"y_msg_container=
+" id=3D"yui_3_16_0_ym19_1_1475093483021_6944"><br><div id=3D"yiv6857502660"=
+><div id=3D"yui_3_16_0_ym19_1_1475093483021_6947"><div style=3D"color:#000;=
+background-color:#fff;font-family:HelveticaNeue, Helvetica Neue, Helvetica,=
+ Arial, Lucida Grande, sans-serif;font-size:16px;" id=3D"yui_3_16_0_ym19_1_=
+1475093483021_6946"><div id=3D"yiv6857502660yui_3_16_0_ym19_1_1474914422310=
+_4680">All,</div><div id=3D"yiv6857502660yui_3_16_0_ym19_1_1474914422310_46=
+80"><br></div><div id=3D"yiv6857502660yui_3_16_0_ym19_1_1474914422310_4680"=
+ dir=3D"ltr">Simple question alert!</div><div id=3D"yiv6857502660yui_3_16_0=
+_ym19_1_1474914422310_4680" dir=3D"ltr"><br></div><div id=3D"yiv6857502660y=
+ui_3_16_0_ym19_1_1474914422310_4680" dir=3D"ltr">If I want to remove a ton =
+of compiled-in calls to an "rdtscp-based" C timing function and replace the=
+m with conditionally-enabled timing based on whether or not I enable a trac=
+ing session, I can do so by adding the aforementioned call as one of the ar=
+guments to tracepoint() with our defined provider and event name, correct?<=
+/div></div></div></div><br><br></div> </div> </div>  </div></div></body></h=
+tml>
+------=_Part_1115206_369954236.1475093579359--
+
+--===============5640518778402020995==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============5640518778402020995==--
