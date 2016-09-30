@@ -1,16 +1,15 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng memory map
-Date: Fri, 30 Sep 2016 01:24:41 +0000 (UTC)
-Message-ID: <183868643.41213.1475198681743.JavaMail.zimbra__27581.4080880538$1475198656$gmane$org@efficios.com>
-References: <CY4PR13MB14149C4EF327ABE7F53ED61AC7CC0@CY4PR13MB1414.namprd13.prod.outlook.com>
- <DM5PR13MB14195604280F866E14687DFCC7CF0@DM5PR13MB1419.namprd13.prod.outlook.com>
+From: Evgeniy Osipov <Evgeniy.Osipov@itiviti.com>
+Subject: LTTng live viewer development
+Date: Fri, 30 Sep 2016 14:26:44 +0000
+Message-ID: <1168BEA1-300E-4ED0-96AF-ECFC65EA2DD9__48937.127486761$1475305435$gmane$org@itiviti.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3959218081127091956=="
+Content-Type: multipart/mixed; boundary="===============3969311156576626314=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 9B926A2053
- for <lttng-dev@lists.lttng.org>; Fri, 30 Sep 2016 01:25:11 +0000 (UTC)
-In-Reply-To: <DM5PR13MB14195604280F866E14687DFCC7CF0@DM5PR13MB1419.namprd13.prod.outlook.com>
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com
+ (mail-db5eur01on0116.outbound.protection.outlook.com [104.47.2.116])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 64B45A3AC9
+ for <lttng-dev@lists.lttng.org>; Sat,  1 Oct 2016 07:05:09 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,236 +19,245 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jeffrey Chen <cpthk@live.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============3959218081127091956==
+--===============3969311156576626314==
+Content-Language: en-US
 Content-Type: multipart/alternative;
-	boundary="=_62bb428b-fd82-4d43-8e53-11109b07ddc9"
+	boundary="_000_1168BEA1300E4ED096AFECFC65EA2DD9itiviticom_"
 
---=_62bb428b-fd82-4d43-8e53-11109b07ddc9
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+--_000_1168BEA1300E4ED096AFECFC65EA2DD9itiviticom_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-Yes, we open and then unlink the file in the shm within consumerd. 
-Its inode stays reserved on the disk as long as we have at least 
-one handle on it. 
+SGkgdGhlcmUhDQoNCknigJltIHF1aXRlIG5ldyB0byBMVFRuZyBsaXZlIHRlY2hub2xvZ3kgYW5k
+IEkgbmVlZCB0byBjcmVhdGUgc29tZSBraW5kIG9mIGxpdmUgTFRUbmcgZXZlbnRzIGhhbmRsaW5n
+IHV0aWxpdHkuIExvb2tpbmcgYXQgYmFiZWx0cmFjZSBnaXQgcmVwb3NpdG9yeSBJ4oCZdmUgZm91
+bmQgdGhhdCB0aGVyZSBpcyBhIHNwZWNpYWwgZm9ybWF0IOKAnGx0dG5nLWxpdmXigJ0gYW5kIHNv
+bWUgbHR0bmctbGl2ZS1wbHVnaW4gdGhhdCBjb3VsZCBiZSBlYXNpbHkgdXNlZCBpbiBteSBvd24g
+dmlld2VyLCBmb3IgZXhhbXBsZToNCg0Kc3RydWN0IGJ0X2NvbnRleHQgKiBjdHggPSBidF9jb250
+ZXh0X2NyZWF0ZSgpOw0KaW50IGhhbmRsZV9pZCA9IGJ0X2NvbnRleHRfYWRkX3RyYWNlKGN0eCwg
+Im5ldDovLzEyNy4wLjAuMTo1MzQ0L2hvc3QvYmxhaC1ibGFoLWJsYWgiLCAibHR0bmctbGl2ZSIs
+IE5VTEwsIE5VTEwsIE5VTEwpOw0KDQpUaGVzZSBsaW5lcyBlbnRlcnMgaW5maW5pdGUgbG9vcCBy
+ZWFkaW5nIGxpdmUgTFRUbmcgZGF0YSBhbmQgcHJpbnRzIG91dCBldmVyeSBzaW5nbGUgTFRUbmcg
+dHJhY2luZyBldmVudCBvbiBhIHNjcmVlbiB3aXRoIHVzZSBvZiDigJxjdGYtdGV4dOKAnSBmb3Jt
+YXQgbW9kdWxlLg0KDQpDb3VsZCB5b3UgcGxlYXNlIHJlY29tbWVuZCBtZSB0aGUgYmVzdCB3YXkg
+aG93IHRvIGltcGxlbWVudCBMVFRuZyBsaXZlIGV2ZW50cyBoYW5kbGluZyB1dGlsaXR5Pw0KSXMg
+aXQgcG9zc2libGUgdG8gbWFrZSB1c2Ugb2Yg4oCcbHR0bmctbGl2ZeKAnSBtb2R1bGUgdG8gY2Fs
+bCBteSBvd24g4oCcc3RydWN0IGJ0X2N0Zl9ldmVudOKAnSBldmVudCBoYW5kbGVyIHNvbWVob3c/
+DQoNCg0KQWxzbywgb25lIHRoaW5nIHRoYXQgSeKAmXZlIGZvdW5kIHdoaWxlIHVzaW5nIOKAmGpl
+bWFsbG9jJyBhbGxvY2F0b3IgaXMgdGhhdCBjb2RlIGluIGZpbGUgYmFiZWx0cmFjZS9mb3JtYXRz
+L2x0dG5nLWxpdmUvbHR0bmctbGl2ZS1wbHVnaW4uYyBsZWFkcyB0byBtZW1vcnkgZG91YmxlIGZy
+ZWU6DQoNCnN0YXRpYyBpbnQgbHR0bmdfbGl2ZV9vcGVuX3RyYWNlX3JlYWQoY29uc3QgY2hhciAq
+cGF0aCkNCnsNCuKApg0KZW5kX2ZyZWU6DQogICAgZ19oYXNoX3RhYmxlX2Rlc3Ryb3koY3R4LT5z
+ZXNzaW9uLT5jdGZfdHJhY2VzKTsNCiAgICBnX2ZyZWUoY3R4LT5zZXNzaW9uKTsNCiAgICBnX2Zy
+ZWUoY3R4LT5zZXNzaW9uLT5zdHJlYW1zKTsNCiAgICBnX2ZyZWUoY3R4KTsNCg0KICAgIGlmIChs
+dHRuZ19saXZlX3Nob3VsZF9xdWl0KCkpIHsNCiAgICAgICAgcmV0ID0gMDsNCiAgICB9DQogICAg
+cmV0dXJuIHJldDsNCn0NCg0KQ2hhbmdpbmcgb3JkZXIgb2YgbGluZXMgImdfZnJlZShjdHgtPnNl
+c3Npb24pO+KAnSBhbmQg4oCcZ19mcmVlKGN0eC0+c2Vzc2lvbi0+c3RyZWFtcyk74oCdIGZpeGVz
+IGl0Og0KDQpzdGF0aWMgaW50IGx0dG5nX2xpdmVfb3Blbl90cmFjZV9yZWFkKGNvbnN0IGNoYXIg
+KnBhdGgpDQp7DQrigKYNCmVuZF9mcmVlOg0KICAgIGdfaGFzaF90YWJsZV9kZXN0cm95KGN0eC0+
+c2Vzc2lvbi0+Y3RmX3RyYWNlcyk7DQogICAgZ19mcmVlKGN0eC0+c2Vzc2lvbi0+c3RyZWFtcyk7
+DQogICAgZ19mcmVlKGN0eC0+c2Vzc2lvbik7DQogICAgZ19mcmVlKGN0eCk7DQoNCiAgICBpZiAo
+bHR0bmdfbGl2ZV9zaG91bGRfcXVpdCgpKSB7DQogICAgICAgIHJldCA9IDA7DQogICAgfQ0KICAg
+IHJldHVybiByZXQ7DQp9DQoNCg0KDQpUaGFua3MgaW4gYWR2YW5jZSENCg0KRXZnZW5peSBPc2lw
+b3YNCg0KDQo=
 
-We do file descriptor passing from consumerd to sessiond to 
-the application over unix sockets. 
+--_000_1168BEA1300E4ED096AFECFC65EA2DD9itiviticom_
+Content-Type: text/html; charset="utf-8"
+Content-ID: <C3715397BF7DAF478853456DAED2FA5A@eurprd07.prod.outlook.com>
+Content-Transfer-Encoding: base64
 
-The reason why we unlink the file shortly after creation by consumerd 
-is to make sure we teardown all resources cleanly even in case the 
-consumerd would be killed by a SIGKILL. 
+PGh0bWw+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIgY29udGVudD0i
+dGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjwvaGVhZD4NCjxib2R5IHN0eWxlPSJ3b3JkLXdy
+YXA6IGJyZWFrLXdvcmQ7IC13ZWJraXQtbmJzcC1tb2RlOiBzcGFjZTsgLXdlYmtpdC1saW5lLWJy
+ZWFrOiBhZnRlci13aGl0ZS1zcGFjZTsiIGNsYXNzPSIiPg0KPHNwYW4gc3R5bGU9ImZvbnQtc2l6
+ZTogMTRweDsiIGNsYXNzPSIiPkhpIHRoZXJlITwvc3Bhbj4NCjxkaXYgY2xhc3M9IiI+PHNwYW4g
+c3R5bGU9ImZvbnQtc2l6ZTogMTRweDsiIGNsYXNzPSIiPjxiciBjbGFzcz0iIj4NCjwvc3Bhbj48
+L2Rpdj4NCjxkaXYgY2xhc3M9IiI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTogMTRweDsiIGNsYXNz
+PSIiPknigJltIHF1aXRlIG5ldyB0byBMVFRuZyBsaXZlIHRlY2hub2xvZ3kgYW5kIEkgbmVlZCB0
+byBjcmVhdGUgc29tZSBraW5kIG9mIGxpdmUgTFRUbmcgZXZlbnRzIGhhbmRsaW5nIHV0aWxpdHku
+IExvb2tpbmcgYXQgYmFiZWx0cmFjZSBnaXQgcmVwb3NpdG9yeSBJ4oCZdmUgZm91bmQgdGhhdCB0
+aGVyZSBpcyBhIHNwZWNpYWwgZm9ybWF0IOKAnGx0dG5nLWxpdmXigJ0gYW5kDQogc29tZSBsdHRu
+Zy1saXZlLXBsdWdpbiB0aGF0IGNvdWxkIGJlIGVhc2lseSB1c2VkIGluIG15IG93biB2aWV3ZXIs
+IGZvciBleGFtcGxlOjwvc3Bhbj48L2Rpdj4NCjxkaXYgY2xhc3M9IiI+PHNwYW4gc3R5bGU9ImZv
+bnQtc2l6ZTogMTRweDsiIGNsYXNzPSIiPjxiciBjbGFzcz0iIj4NCjwvc3Bhbj48L2Rpdj4NCjxk
+aXYgY2xhc3M9IiI+DQo8ZGl2IHN0eWxlPSJtYXJnaW46IDBweDsgbGluZS1oZWlnaHQ6IG5vcm1h
+bDsiIGNsYXNzPSIiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6IDE0cHg7IiBjbGFzcz0iIj48c3Bh
+biBzdHlsZT0iZm9udC12YXJpYW50LWxpZ2F0dXJlczogbm8tY29tbW9uLWxpZ2F0dXJlczsiIGNs
+YXNzPSIiPnN0cnVjdCBidF9jb250ZXh0ICogY3R4ID0mbmJzcDs8L3NwYW4+YnRfY29udGV4dF9j
+cmVhdGUoKTs8L3NwYW4+PC9kaXY+DQo8L2Rpdj4NCjxkaXYgY2xhc3M9IiI+DQo8ZGl2IHN0eWxl
+PSJtYXJnaW46IDBweDsgbGluZS1oZWlnaHQ6IG5vcm1hbDsiIGNsYXNzPSIiPjxzcGFuIHN0eWxl
+PSJmb250LXNpemU6IDE0cHg7IiBjbGFzcz0iIj48c3BhbiBzdHlsZT0iZm9udC12YXJpYW50LWxp
+Z2F0dXJlczogbm8tY29tbW9uLWxpZ2F0dXJlczsiIGNsYXNzPSIiPmludCBoYW5kbGVfaWQgPSBi
+dF9jb250ZXh0Xzwvc3Bhbj48c3BhbiBzdHlsZT0iZm9udC12YXJpYW50LWxpZ2F0dXJlczogbm8t
+Y29tbW9uLWxpZ2F0dXJlczsgY29sb3I6IHJnYigxOTEsIDE5MSwgMTkxKTsgYmFja2dyb3VuZC1j
+b2xvcjogcmdiKDEwMiwgMTAyLCAxMDIpOyIgY2xhc3M9IiI+YWRkX3RyPC9zcGFuPjxzcGFuIHN0
+eWxlPSJmb250LXZhcmlhbnQtbGlnYXR1cmVzOiBuby1jb21tb24tbGlnYXR1cmVzOyIgY2xhc3M9
+IiI+YWNlKGN0eCwNCiAmcXVvdDs8YSBocmVmPSJuZXQ6Ly8xMjcuMC4wLjE6NTM0NC9ob3N0L2Js
+YWgtYmxhaC1ibGFoIiBjbGFzcz0iIj5uZXQ6Ly8xMjcuMC4wLjE6NTM0NC9ob3N0L2JsYWgtYmxh
+aC1ibGFoPC9hPiZxdW90OywgJnF1b3Q7bHR0bmctbGl2ZSZxdW90OywgTlVMTCwgTlVMTCwgTlVM
+TCk7PC9zcGFuPjwvc3Bhbj48L2Rpdj4NCjwvZGl2Pg0KPGRpdiBjbGFzcz0iIj48c3BhbiBzdHls
+ZT0iZm9udC1zaXplOiAxNHB4OyIgY2xhc3M9IiI+PGJyIGNsYXNzPSIiPg0KPC9zcGFuPjwvZGl2
+Pg0KPGRpdiBjbGFzcz0iIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOiAxNHB4OyIgY2xhc3M9IiI+
+VGhlc2UgbGluZXMgZW50ZXJzIGluZmluaXRlIGxvb3AgcmVhZGluZyBsaXZlIExUVG5nIGRhdGEg
+YW5kIHByaW50cyBvdXQgZXZlcnkgc2luZ2xlIExUVG5nIHRyYWNpbmcgZXZlbnQgb24gYSBzY3Jl
+ZW4gd2l0aCB1c2Ugb2YmbmJzcDvigJxjdGYtdGV4dOKAnSBmb3JtYXQgbW9kdWxlLjwvc3Bhbj48
+L2Rpdj4NCjxkaXYgY2xhc3M9IiI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTogMTRweDsiIGNsYXNz
+PSIiPjxiciBjbGFzcz0iIj4NCjwvc3Bhbj48L2Rpdj4NCjxkaXYgY2xhc3M9IiI+PHNwYW4gc3R5
+bGU9ImZvbnQtc2l6ZTogMTRweDsiIGNsYXNzPSIiPkNvdWxkIHlvdSBwbGVhc2UgcmVjb21tZW5k
+IG1lIHRoZSBiZXN0IHdheSBob3cgdG8gaW1wbGVtZW50IExUVG5nIGxpdmUgZXZlbnRzIGhhbmRs
+aW5nIHV0aWxpdHk/Jm5ic3A7PC9zcGFuPjwvZGl2Pg0KPGRpdiBjbGFzcz0iIj48c3BhbiBzdHls
+ZT0iZm9udC1zaXplOiAxNHB4OyIgY2xhc3M9IiI+SXMgaXQgcG9zc2libGUgdG8gbWFrZSB1c2Ug
+b2YmbmJzcDvigJxsdHRuZy1saXZl4oCdIG1vZHVsZSB0byBjYWxsIG15IG93biZuYnNwO+KAnDxz
+cGFuIHN0eWxlPSJmb250LXZhcmlhbnQtbGlnYXR1cmVzOiBuby1jb21tb24tbGlnYXR1cmVzOyIg
+Y2xhc3M9IiI+c3RydWN0IGJ0X2N0Zl88L3NwYW4+PHNwYW4gc3R5bGU9ImZvbnQtdmFyaWFudC1s
+aWdhdHVyZXM6IG5vLWNvbW1vbi1saWdhdHVyZXM7IGNvbG9yOiByZ2IoMTkxLCAxOTEsIDE5MSk7
+IGJhY2tncm91bmQtY29sb3I6IHJnYigxMDIsIDEwMiwgMTAyKTsiIGNsYXNzPSIiPmV2ZW50PC9z
+cGFuPuKAnQ0KIGV2ZW50IGhhbmRsZXIgc29tZWhvdz88L3NwYW4+PC9kaXY+DQo8ZGl2IGNsYXNz
+PSIiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6IDE0cHg7IiBjbGFzcz0iIj48YnIgY2xhc3M9IiI+
+DQo8L3NwYW4+PC9kaXY+DQo8ZGl2IGNsYXNzPSIiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6IDE0
+cHg7IiBjbGFzcz0iIj48YnIgY2xhc3M9IiI+DQo8L3NwYW4+PC9kaXY+DQo8ZGl2IGNsYXNzPSIi
+PjxzcGFuIHN0eWxlPSJmb250LXNpemU6IDE0cHg7IiBjbGFzcz0iIj5BbHNvLCBvbmUgdGhpbmcg
+dGhhdCBJ4oCZdmUgZm91bmQgd2hpbGUgdXNpbmcmbmJzcDvigJhqZW1hbGxvYycgYWxsb2NhdG9y
+IGlzIHRoYXQgY29kZSBpbiBmaWxlIGJhYmVsdHJhY2UvZm9ybWF0cy9sdHRuZy1saXZlL2x0dG5n
+LWxpdmUtcGx1Z2luLmMgbGVhZHMgdG8mbmJzcDttZW1vcnkmbmJzcDtkb3VibGUgZnJlZTo8L3Nw
+YW4+PC9kaXY+DQo8ZGl2IGNsYXNzPSIiPg0KPGRpdiBzdHlsZT0ibWFyZ2luOiAwcHg7IGxpbmUt
+aGVpZ2h0OiBub3JtYWw7IiBjbGFzcz0iIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOiAxNHB4OyIg
+Y2xhc3M9IiI+PGJyIGNsYXNzPSIiPg0KPC9zcGFuPjwvZGl2Pg0KPC9kaXY+DQo8ZGl2IHN0eWxl
+PSJtYXJnaW46IDBweDsgbGluZS1oZWlnaHQ6IG5vcm1hbDsiIGNsYXNzPSIiPjxzcGFuIHN0eWxl
+PSJmb250LXZhcmlhbnQtbGlnYXR1cmVzOiBuby1jb21tb24tbGlnYXR1cmVzOyBmb250LXNpemU6
+IDE0cHg7IiBjbGFzcz0iIj4NCjxkaXYgc3R5bGU9Im1hcmdpbjogMHB4OyBsaW5lLWhlaWdodDog
+bm9ybWFsOyIgY2xhc3M9IiI+PHNwYW4gc3R5bGU9ImZvbnQtdmFyaWFudC1saWdhdHVyZXM6IG5v
+LWNvbW1vbi1saWdhdHVyZXM7IiBjbGFzcz0iIj5zdGF0aWMgaW50IGx0dG5nX2xpdmVfb3Blbl90
+cmFjZV9yZWFkKGNvbnN0IGNoYXIgKnBhdGgpPC9zcGFuPjwvZGl2Pg0KPGRpdiBzdHlsZT0ibWFy
+Z2luOiAwcHg7IGxpbmUtaGVpZ2h0OiBub3JtYWw7IiBjbGFzcz0iIj48c3BhbiBzdHlsZT0iZm9u
+dC12YXJpYW50LWxpZ2F0dXJlczogbm8tY29tbW9uLWxpZ2F0dXJlczsiIGNsYXNzPSIiPns8L3Nw
+YW4+PC9kaXY+DQo8ZGl2IHN0eWxlPSJtYXJnaW46IDBweDsgbGluZS1oZWlnaHQ6IG5vcm1hbDsi
+IGNsYXNzPSIiPjxzcGFuIHN0eWxlPSJmb250LXZhcmlhbnQtbGlnYXR1cmVzOiBuby1jb21tb24t
+bGlnYXR1cmVzOyIgY2xhc3M9IiI+4oCmPC9zcGFuPjwvZGl2Pg0KPGRpdiBzdHlsZT0ibWFyZ2lu
+OiAwcHg7IGxpbmUtaGVpZ2h0OiBub3JtYWw7IiBjbGFzcz0iIj48c3BhbiBzdHlsZT0iZm9udC12
+YXJpYW50LWxpZ2F0dXJlczogbm8tY29tbW9uLWxpZ2F0dXJlczsiIGNsYXNzPSIiPg0KPGRpdiBz
+dHlsZT0ibWFyZ2luOiAwcHg7IGxpbmUtaGVpZ2h0OiBub3JtYWw7IiBjbGFzcz0iIj48c3BhbiBz
+dHlsZT0iZm9udC12YXJpYW50LWxpZ2F0dXJlczogbm8tY29tbW9uLWxpZ2F0dXJlczsiIGNsYXNz
+PSIiPmVuZF9mcmVlOjwvc3Bhbj48L2Rpdj4NCjxkaXYgc3R5bGU9Im1hcmdpbjogMHB4OyBsaW5l
+LWhlaWdodDogbm9ybWFsOyIgY2xhc3M9IiI+PHNwYW4gc3R5bGU9ImZvbnQtdmFyaWFudC1saWdh
+dHVyZXM6IG5vLWNvbW1vbi1saWdhdHVyZXM7IiBjbGFzcz0iIj4mbmJzcDsgJm5ic3A7IGdfaGFz
+aF90YWJsZV9kZXN0cm95KGN0eC0mZ3Q7c2Vzc2lvbi0mZ3Q7Y3RmX3RyYWNlcyk7PC9zcGFuPjwv
+ZGl2Pg0KPGRpdiBzdHlsZT0ibWFyZ2luOiAwcHg7IGxpbmUtaGVpZ2h0OiBub3JtYWw7IiBjbGFz
+cz0iIj48c3BhbiBzdHlsZT0iZm9udC12YXJpYW50LWxpZ2F0dXJlczogbm8tY29tbW9uLWxpZ2F0
+dXJlczsiIGNsYXNzPSIiPiZuYnNwOyAmbmJzcDsgZ19mcmVlKGN0eC0mZ3Q7c2Vzc2lvbik7PC9z
+cGFuPjwvZGl2Pg0KPGRpdiBzdHlsZT0ibWFyZ2luOiAwcHg7IGxpbmUtaGVpZ2h0OiBub3JtYWw7
+IiBjbGFzcz0iIj48c3BhbiBzdHlsZT0iZm9udC12YXJpYW50LWxpZ2F0dXJlczogbm8tY29tbW9u
+LWxpZ2F0dXJlczsiIGNsYXNzPSIiPiZuYnNwOyAmbmJzcDsgZ19mcmVlKGN0eC0mZ3Q7c2Vzc2lv
+bi0mZ3Q7c3RyZWFtcyk7PC9zcGFuPjwvZGl2Pg0KPGRpdiBzdHlsZT0ibWFyZ2luOiAwcHg7IGxp
+bmUtaGVpZ2h0OiBub3JtYWw7IiBjbGFzcz0iIj48c3BhbiBzdHlsZT0iZm9udC12YXJpYW50LWxp
+Z2F0dXJlczogbm8tY29tbW9uLWxpZ2F0dXJlczsiIGNsYXNzPSIiPiZuYnNwOyAmbmJzcDsgZ19m
+cmVlKGN0eCk7PC9zcGFuPjwvZGl2Pg0KPGRpdiBzdHlsZT0ibWFyZ2luOiAwcHg7IGxpbmUtaGVp
+Z2h0OiBub3JtYWw7IG1pbi1oZWlnaHQ6IDE3cHg7IiBjbGFzcz0iIj48c3BhbiBzdHlsZT0iZm9u
+dC12YXJpYW50LWxpZ2F0dXJlczogbm8tY29tbW9uLWxpZ2F0dXJlcyIgY2xhc3M9IiI+PC9zcGFu
+PjxiciBjbGFzcz0iIj4NCjwvZGl2Pg0KPGRpdiBzdHlsZT0ibWFyZ2luOiAwcHg7IGxpbmUtaGVp
+Z2h0OiBub3JtYWw7IiBjbGFzcz0iIj48c3BhbiBzdHlsZT0iZm9udC12YXJpYW50LWxpZ2F0dXJl
+czogbm8tY29tbW9uLWxpZ2F0dXJlczsiIGNsYXNzPSIiPiZuYnNwOyAmbmJzcDsgaWYgKGx0dG5n
+X2xpdmVfc2hvdWxkX3F1aXQoKSkgezwvc3Bhbj48L2Rpdj4NCjxkaXYgc3R5bGU9Im1hcmdpbjog
+MHB4OyBsaW5lLWhlaWdodDogbm9ybWFsOyIgY2xhc3M9IiI+PHNwYW4gc3R5bGU9ImZvbnQtdmFy
+aWFudC1saWdhdHVyZXM6IG5vLWNvbW1vbi1saWdhdHVyZXM7IiBjbGFzcz0iIj4mbmJzcDsgJm5i
+c3A7ICZuYnNwOyAmbmJzcDsgcmV0ID0gMDs8L3NwYW4+PC9kaXY+DQo8ZGl2IHN0eWxlPSJtYXJn
+aW46IDBweDsgbGluZS1oZWlnaHQ6IG5vcm1hbDsiIGNsYXNzPSIiPjxzcGFuIHN0eWxlPSJmb250
+LXZhcmlhbnQtbGlnYXR1cmVzOiBuby1jb21tb24tbGlnYXR1cmVzOyIgY2xhc3M9IiI+Jm5ic3A7
+ICZuYnNwOyB9PC9zcGFuPjwvZGl2Pg0KPGRpdiBzdHlsZT0ibWFyZ2luOiAwcHg7IGxpbmUtaGVp
+Z2h0OiBub3JtYWw7IiBjbGFzcz0iIj48c3BhbiBzdHlsZT0iZm9udC12YXJpYW50LWxpZ2F0dXJl
+czogbm8tY29tbW9uLWxpZ2F0dXJlczsiIGNsYXNzPSIiPiZuYnNwOyAmbmJzcDsgcmV0dXJuIHJl
+dDs8L3NwYW4+PC9kaXY+DQo8ZGl2IHN0eWxlPSJtYXJnaW46IDBweDsgbGluZS1oZWlnaHQ6IG5v
+cm1hbDsiIGNsYXNzPSIiPjxzcGFuIHN0eWxlPSJmb250LXZhcmlhbnQtbGlnYXR1cmVzOiBuby1j
+b21tb24tbGlnYXR1cmVzOyIgY2xhc3M9IiI+fTwvc3Bhbj48L2Rpdj4NCjxkaXYgc3R5bGU9Im1h
+cmdpbjogMHB4OyBsaW5lLWhlaWdodDogbm9ybWFsOyIgY2xhc3M9IiI+PHNwYW4gc3R5bGU9ImZv
+bnQtdmFyaWFudC1saWdhdHVyZXM6IG5vLWNvbW1vbi1saWdhdHVyZXM7IiBjbGFzcz0iIj48YnIg
+Y2xhc3M9IiI+DQo8L3NwYW4+PC9kaXY+DQo8ZGl2IHN0eWxlPSJtYXJnaW46IDBweDsgbGluZS1o
+ZWlnaHQ6IG5vcm1hbDsiIGNsYXNzPSIiPkNoYW5naW5nIG9yZGVyIG9mIGxpbmVzICZxdW90O2df
+ZnJlZShjdHgtJmd0O3Nlc3Npb24pO+KAnSBhbmQg4oCcZ19mcmVlKGN0eC0mZ3Q7c2Vzc2lvbi0m
+Z3Q7c3RyZWFtcyk74oCdIGZpeGVzIGl0OjwvZGl2Pg0KPGRpdiBzdHlsZT0ibWFyZ2luOiAwcHg7
+IGxpbmUtaGVpZ2h0OiBub3JtYWw7IiBjbGFzcz0iIj48YnIgY2xhc3M9IiI+DQo8L2Rpdj4NCjxk
+aXYgc3R5bGU9Im1hcmdpbjogMHB4OyBsaW5lLWhlaWdodDogbm9ybWFsOyIgY2xhc3M9IiI+DQo8
+ZGl2IHN0eWxlPSJtYXJnaW46IDBweDsgbGluZS1oZWlnaHQ6IG5vcm1hbDsiIGNsYXNzPSIiPjxz
+cGFuIHN0eWxlPSJmb250LXZhcmlhbnQtbGlnYXR1cmVzOiBuby1jb21tb24tbGlnYXR1cmVzOyIg
+Y2xhc3M9IiI+c3RhdGljIGludCBsdHRuZ19saXZlX29wZW5fdHJhY2VfcmVhZChjb25zdCBjaGFy
+ICpwYXRoKTwvc3Bhbj48L2Rpdj4NCjxkaXYgc3R5bGU9Im1hcmdpbjogMHB4OyBsaW5lLWhlaWdo
+dDogbm9ybWFsOyIgY2xhc3M9IiI+PHNwYW4gc3R5bGU9ImZvbnQtdmFyaWFudC1saWdhdHVyZXM6
+IG5vLWNvbW1vbi1saWdhdHVyZXM7IiBjbGFzcz0iIj57PC9zcGFuPjwvZGl2Pg0KPGRpdiBzdHls
+ZT0ibWFyZ2luOiAwcHg7IGxpbmUtaGVpZ2h0OiBub3JtYWw7IiBjbGFzcz0iIj48c3BhbiBzdHls
+ZT0iZm9udC12YXJpYW50LWxpZ2F0dXJlczogbm8tY29tbW9uLWxpZ2F0dXJlczsiIGNsYXNzPSIi
+PuKApjwvc3Bhbj48L2Rpdj4NCjxkaXYgc3R5bGU9Im1hcmdpbjogMHB4OyBsaW5lLWhlaWdodDog
+bm9ybWFsOyIgY2xhc3M9IiI+PHNwYW4gc3R5bGU9ImZvbnQtdmFyaWFudC1saWdhdHVyZXM6IG5v
+LWNvbW1vbi1saWdhdHVyZXM7IiBjbGFzcz0iIj4NCjxkaXYgc3R5bGU9Im1hcmdpbjogMHB4OyBs
+aW5lLWhlaWdodDogbm9ybWFsOyIgY2xhc3M9IiI+PHNwYW4gc3R5bGU9ImZvbnQtdmFyaWFudC1s
+aWdhdHVyZXM6IG5vLWNvbW1vbi1saWdhdHVyZXM7IiBjbGFzcz0iIj5lbmRfZnJlZTo8L3NwYW4+
+PC9kaXY+DQo8ZGl2IHN0eWxlPSJtYXJnaW46IDBweDsgbGluZS1oZWlnaHQ6IG5vcm1hbDsiIGNs
+YXNzPSIiPjxzcGFuIHN0eWxlPSJmb250LXZhcmlhbnQtbGlnYXR1cmVzOiBuby1jb21tb24tbGln
+YXR1cmVzOyIgY2xhc3M9IiI+Jm5ic3A7ICZuYnNwOyZuYnNwO2dfaGFzaF90YWJsZV9kZXN0cm95
+KGN0eC0mZ3Q7c2Vzc2lvbi0mZ3Q7Y3RmX3RyYWNlcyk7PC9zcGFuPjwvZGl2Pg0KPGRpdiBzdHls
+ZT0ibWFyZ2luOiAwcHg7IGxpbmUtaGVpZ2h0OiBub3JtYWw7IiBjbGFzcz0iIj48c3BhbiBzdHls
+ZT0iZm9udC12YXJpYW50LWxpZ2F0dXJlczogbm8tY29tbW9uLWxpZ2F0dXJlczsiIGNsYXNzPSIi
+PiZuYnNwOyAmbmJzcDsgZ19mcmVlKGN0eC0mZ3Q7c2Vzc2lvbi0mZ3Q7c3RyZWFtcyk7PC9zcGFu
+PjwvZGl2Pg0KPGRpdiBzdHlsZT0ibWFyZ2luOiAwcHg7IGxpbmUtaGVpZ2h0OiBub3JtYWw7IiBj
+bGFzcz0iIj48c3BhbiBzdHlsZT0iZm9udC12YXJpYW50LWxpZ2F0dXJlczogbm8tY29tbW9uLWxp
+Z2F0dXJlczsiIGNsYXNzPSIiPiZuYnNwOyAmbmJzcDsmbmJzcDtnX2ZyZWUoY3R4LSZndDtzZXNz
+aW9uKTs8L3NwYW4+PC9kaXY+DQo8ZGl2IHN0eWxlPSJtYXJnaW46IDBweDsgbGluZS1oZWlnaHQ6
+IG5vcm1hbDsiIGNsYXNzPSIiPjxzcGFuIHN0eWxlPSJmb250LXZhcmlhbnQtbGlnYXR1cmVzOiBu
+by1jb21tb24tbGlnYXR1cmVzOyIgY2xhc3M9IiI+Jm5ic3A7ICZuYnNwOyZuYnNwO2dfZnJlZShj
+dHgpOzwvc3Bhbj48L2Rpdj4NCjxkaXYgc3R5bGU9Im1hcmdpbjogMHB4OyBsaW5lLWhlaWdodDog
+bm9ybWFsOyBtaW4taGVpZ2h0OiAxN3B4OyIgY2xhc3M9IiI+PHNwYW4gc3R5bGU9ImZvbnQtdmFy
+aWFudC1saWdhdHVyZXM6IG5vLWNvbW1vbi1saWdhdHVyZXM7IiBjbGFzcz0iIj48L3NwYW4+PGJy
+IGNsYXNzPSIiPg0KPC9kaXY+DQo8ZGl2IHN0eWxlPSJtYXJnaW46IDBweDsgbGluZS1oZWlnaHQ6
+IG5vcm1hbDsiIGNsYXNzPSIiPjxzcGFuIHN0eWxlPSJmb250LXZhcmlhbnQtbGlnYXR1cmVzOiBu
+by1jb21tb24tbGlnYXR1cmVzOyIgY2xhc3M9IiI+Jm5ic3A7ICZuYnNwOyZuYnNwO2lmIChsdHRu
+Z19saXZlX3Nob3VsZF9xdWl0KCkpIHs8L3NwYW4+PC9kaXY+DQo8ZGl2IHN0eWxlPSJtYXJnaW46
+IDBweDsgbGluZS1oZWlnaHQ6IG5vcm1hbDsiIGNsYXNzPSIiPjxzcGFuIHN0eWxlPSJmb250LXZh
+cmlhbnQtbGlnYXR1cmVzOiBuby1jb21tb24tbGlnYXR1cmVzOyIgY2xhc3M9IiI+Jm5ic3A7ICZu
+YnNwOyAmbmJzcDsgJm5ic3A7Jm5ic3A7cmV0ID0gMDs8L3NwYW4+PC9kaXY+DQo8ZGl2IHN0eWxl
+PSJtYXJnaW46IDBweDsgbGluZS1oZWlnaHQ6IG5vcm1hbDsiIGNsYXNzPSIiPjxzcGFuIHN0eWxl
+PSJmb250LXZhcmlhbnQtbGlnYXR1cmVzOiBuby1jb21tb24tbGlnYXR1cmVzOyIgY2xhc3M9IiI+
+Jm5ic3A7ICZuYnNwOyZuYnNwO308L3NwYW4+PC9kaXY+DQo8ZGl2IHN0eWxlPSJtYXJnaW46IDBw
+eDsgbGluZS1oZWlnaHQ6IG5vcm1hbDsiIGNsYXNzPSIiPjxzcGFuIHN0eWxlPSJmb250LXZhcmlh
+bnQtbGlnYXR1cmVzOiBuby1jb21tb24tbGlnYXR1cmVzOyIgY2xhc3M9IiI+Jm5ic3A7ICZuYnNw
+OyZuYnNwO3JldHVybiByZXQ7PC9zcGFuPjwvZGl2Pg0KPGRpdiBzdHlsZT0ibWFyZ2luOiAwcHg7
+IGxpbmUtaGVpZ2h0OiBub3JtYWw7IiBjbGFzcz0iIj48c3BhbiBzdHlsZT0iZm9udC12YXJpYW50
+LWxpZ2F0dXJlczogbm8tY29tbW9uLWxpZ2F0dXJlczsiIGNsYXNzPSIiPn08L3NwYW4+PC9kaXY+
+DQo8ZGl2IGNsYXNzPSIiPjxzcGFuIHN0eWxlPSJmb250LXZhcmlhbnQtbGlnYXR1cmVzOiBuby1j
+b21tb24tbGlnYXR1cmVzOyIgY2xhc3M9IiI+PGJyIGNsYXNzPSIiPg0KPC9zcGFuPjwvZGl2Pg0K
+PGRpdiBjbGFzcz0iIj48c3BhbiBzdHlsZT0iZm9udC12YXJpYW50LWxpZ2F0dXJlczogbm8tY29t
+bW9uLWxpZ2F0dXJlczsiIGNsYXNzPSIiPjxiciBjbGFzcz0iIj4NCjwvc3Bhbj48L2Rpdj4NCjxk
+aXYgY2xhc3M9IiI+PHNwYW4gc3R5bGU9ImZvbnQtdmFyaWFudC1saWdhdHVyZXM6IG5vLWNvbW1v
+bi1saWdhdHVyZXM7IiBjbGFzcz0iIj48YnIgY2xhc3M9IiI+DQo8L3NwYW4+PC9kaXY+DQo8L3Nw
+YW4+PC9kaXY+DQo8L2Rpdj4NCjwvc3Bhbj48L2Rpdj4NCjwvc3Bhbj48L2Rpdj4NCjxkaXYgY2xh
+c3M9IiI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTogMTRweDsiIGNsYXNzPSIiPlRoYW5rcyBpbiBh
+ZHZhbmNlITwvc3Bhbj48L2Rpdj4NCjxkaXYgY2xhc3M9IiI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6
+ZTogMTRweDsiIGNsYXNzPSIiPjxiciBjbGFzcz0iIj4NCjwvc3Bhbj48L2Rpdj4NCjxkaXYgY2xh
+c3M9IiI+DQo8ZGl2IGNsYXNzPSIiPg0KPGRpdiBzdHlsZT0iY29sb3I6IHJnYigwLCAwLCAwKTsg
+bGV0dGVyLXNwYWNpbmc6IG5vcm1hbDsgb3JwaGFuczogYXV0bzsgdGV4dC1hbGlnbjogc3RhcnQ7
+IHRleHQtaW5kZW50OiAwcHg7IHRleHQtdHJhbnNmb3JtOiBub25lOyB3aGl0ZS1zcGFjZTogbm9y
+bWFsOyB3aWRvd3M6IGF1dG87IHdvcmQtc3BhY2luZzogMHB4OyAtd2Via2l0LXRleHQtc3Ryb2tl
+LXdpZHRoOiAwcHg7IHdvcmQtd3JhcDogYnJlYWstd29yZDsgLXdlYmtpdC1uYnNwLW1vZGU6IHNw
+YWNlOyAtd2Via2l0LWxpbmUtYnJlYWs6IGFmdGVyLXdoaXRlLXNwYWNlOyIgY2xhc3M9IiI+DQo8
+ZGl2IHN0eWxlPSJjb2xvcjogcmdiKDAsIDAsIDApOyBsZXR0ZXItc3BhY2luZzogbm9ybWFsOyBv
+cnBoYW5zOiBhdXRvOyB0ZXh0LWFsaWduOiBzdGFydDsgdGV4dC1pbmRlbnQ6IDBweDsgdGV4dC10
+cmFuc2Zvcm06IG5vbmU7IHdoaXRlLXNwYWNlOiBub3JtYWw7IHdpZG93czogYXV0bzsgd29yZC1z
+cGFjaW5nOiAwcHg7IC13ZWJraXQtdGV4dC1zdHJva2Utd2lkdGg6IDBweDsgd29yZC13cmFwOiBi
+cmVhay13b3JkOyAtd2Via2l0LW5ic3AtbW9kZTogc3BhY2U7IC13ZWJraXQtbGluZS1icmVhazog
+YWZ0ZXItd2hpdGUtc3BhY2U7IiBjbGFzcz0iIj4NCjxkaXYgc3R5bGU9ImNvbG9yOiByZ2IoMCwg
+MCwgMCk7IGxldHRlci1zcGFjaW5nOiBub3JtYWw7IG9ycGhhbnM6IGF1dG87IHRleHQtYWxpZ246
+IHN0YXJ0OyB0ZXh0LWluZGVudDogMHB4OyB0ZXh0LXRyYW5zZm9ybTogbm9uZTsgd2hpdGUtc3Bh
+Y2U6IG5vcm1hbDsgd2lkb3dzOiBhdXRvOyB3b3JkLXNwYWNpbmc6IDBweDsgLXdlYmtpdC10ZXh0
+LXN0cm9rZS13aWR0aDogMHB4OyB3b3JkLXdyYXA6IGJyZWFrLXdvcmQ7IC13ZWJraXQtbmJzcC1t
+b2RlOiBzcGFjZTsgLXdlYmtpdC1saW5lLWJyZWFrOiBhZnRlci13aGl0ZS1zcGFjZTsiIGNsYXNz
+PSIiPg0KPHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTogMTRweDsiIGNsYXNzPSIiPkV2Z2VuaXkgT3Np
+cG92PC9zcGFuPjxiciBjbGFzcz0iIj4NCjxiciBjbGFzcz0iIj4NCjwvZGl2Pg0KPC9kaXY+DQo8
+L2Rpdj4NCjwvZGl2Pg0KPGJyIGNsYXNzPSIiPg0KPC9kaXY+DQo8L2JvZHk+DQo8L2h0bWw+DQo=
 
-Thanks, 
+--_000_1168BEA1300E4ED096AFECFC65EA2DD9itiviticom_--
 
-Mathieu 
-
------ On Sep 28, 2016, at 7:38 PM, Jeffrey Chen <cpthk@live.com> wrote: 
-
-> It looks like the code that called shm_open() is called at the lttng-consumerd
-> daemon. But, somehow it show up in the pmap at my service process. I noticed
-> all my processes that loads liblttng-ust would have this entry. Do you know
-> what's the reason?
-
-> From: lttng-dev <lttng-dev-bounces@lists.lttng.org> on behalf of Jeffrey Chen
-> <cpthk@live.com>
-> Sent: Tuesday, September 27, 2016 11:20 AM
-> To: lttng-dev
-> Subject: [lttng-dev] LTTng memory map
-
-> Hi LTTng:
-
-> Our service has been running overnight with LTTng enabled to do some memory
-> consumption testing. We noticed the linux pmap output would have several memory
-> map used by LTTng, and are marked as deleted. Do you know what are them? Why
-> are they left in the system and marked as deleted? Thanks.
-
-> 00007fc3017ee000 40968 592 592 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc3017ee000 0 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc303ff0000 40968 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc303ff0000 0 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc3067f2000 40968 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc3067f2000 0 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc308ff4000 40968 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc308ff4000 0 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc30b7f6000 40968 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc30b7f6000 0 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc30dff8000 40968 524 524 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc30dff8000 0 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc3107fa000 40968 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc3107fa000 0 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc312ffc000 40968 244 244 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc312ffc000 0 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc3157fe000 40968 396 396 rw-s- ust-shm-consumer-58905 (deleted)
-
-> 00007fc3157fe000 0 0 0 rw-s- ust-shm-consumer-58905 (deleted)
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_62bb428b-fd82-4d43-8e53-11109b07ddc9
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><style style=3D"display:none;"><!-- P {marg=
-in-top:0;margin-bottom:0;} --></style></div><div>Yes, we open and then unli=
-nk the file in the shm within consumerd.<br></div><div>Its inode stays rese=
-rved on the disk as long as we have at least<br data-mce-bogus=3D"1"></div>=
-<div>one handle on it.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogu=
-s=3D"1"></div><div>We do file descriptor passing from consumerd to sessiond=
- to<br data-mce-bogus=3D"1"></div><div>the application over unix sockets.<b=
-r data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>The r=
-eason why we unlink the file shortly after creation by consumerd<br data-mc=
-e-bogus=3D"1"></div><div>is to make sure we teardown all resources cleanly =
-even in case the<br data-mce-bogus=3D"1"></div><div>consumerd would be kill=
-ed by a SIGKILL.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1=
-"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=
-=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br></div><div=
-><span id=3D"zwchr" data-marker=3D"__DIVIDER__">----- On Sep 28, 2016, at 7=
-:38 PM, Jeffrey Chen &lt;cpthk@live.com&gt; wrote:<br></span></div><div dat=
-a-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #10=
-10FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-st=
-yle:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font=
--size:12pt;">
-
-
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;font=
--family:Calibri,Arial,Helvetica,sans-serif;">
-<p>It looks like the code that called shm_open() is called at the lttng-con=
-sumerd daemon. But, somehow it show up in the pmap at my service process. I=
- noticed all my processes that loads liblttng-ust would have this entry. Do=
- you know what's the reason?<br>
-</p>
-<br>
-<br>
-<div style=3D"color: rgb(0, 0, 0);">
-<hr style=3D"display:inline-block; width:98%">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><span style=3D"font-size: 11pt; color=
-: #000000; font-family: Calibri,sans-serif;" data-mce-style=3D"font-size: 1=
-1pt; color: #000000; font-family: Calibri,sans-serif;" color=3D"#000000" fa=
-ce=3D"Calibri, sans-serif"><b>From:</b> lttng-dev &lt;lttng-dev-bounces@lis=
-ts.lttng.org&gt; on behalf of Jeffrey Chen &lt;cpthk@live.com&gt;<br>
-<b>Sent:</b> Tuesday, September 27, 2016 11:20 AM<br>
-<b>To:</b> lttng-dev<br>
-<b>Subject:</b> [lttng-dev] LTTng memory map</span>
-<div>&nbsp;</div>
-</div>
-<div>
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt; color:#000000; fo=
-nt-family:Calibri,Arial,Helvetica,sans-serif">
-<p>Hi LTTng:</p>
-<p><br>
-</p>
-<p>Our service has been running overnight with LTTng enabled to do some mem=
-ory consumption testing. We noticed the linux pmap output would have severa=
-l memory map used by LTTng, and are marked as deleted. Do you know what are=
- them? Why are they left in the
- system and marked as deleted? Thanks.<br>
-</p>
-<p><br>
-</p>
-<p><br>
-</p>
-<p></p>
-<div>
-<p class=3D"MsoNormal">00007fc3017ee000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp; 592&nbsp;&nbsp;&nbsp;&nbsp; 592 rw-s- ust-shm-consumer-58905 (delete=
-d)</p>
-<p class=3D"MsoNormal">00007fc3017ee000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc303ff0000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
-nsumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc303ff0000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc3067f2000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
-nsumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc3067f2000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc308ff4000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
-nsumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc308ff4000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc30b7f6000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
-nsumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc30b7f6000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc30dff8000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp; 524&nbsp;&nbsp;&nbsp;&nbsp; 524 rw-s- ust-shm-consumer-58905 (delete=
-d)</p>
-<p class=3D"MsoNormal">00007fc30dff8000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc3107fa000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 rw-s- ust-shm-co=
-nsumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc3107fa000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc312ffc000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp; 244&nbsp;&nbsp;&nbsp;&nbsp; 244 rw-s- ust-shm-consumer-58905 (delete=
-d)</p>
-<p class=3D"MsoNormal">00007fc312ffc000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-<p class=3D"MsoNormal">00007fc3157fe000&nbsp;&nbsp; 40968&nbsp;&nbsp;&nbsp;=
-&nbsp; 396&nbsp;&nbsp;&nbsp;&nbsp; 396 rw-s- ust-shm-consumer-58905 (delete=
-d)</p>
-<p class=3D"MsoNormal">00007fc3157fe000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
- 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-; 0 rw-s- ust-shm-consumer-58905 (deleted)</p>
-</div>
-<br>
-<p></p>
-</div>
-</div>
-</div>
-</div>
-
-
-<br>_______________________________________________<br>lttng-dev mailing li=
-st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
-listinfo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D=
-"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http=
-://www.efficios.com</div></div></body></html>
---=_62bb428b-fd82-4d43-8e53-11109b07ddc9--
-
---===============3959218081127091956==
+--===============3969311156576626314==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -259,4 +267,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============3959218081127091956==--
+--===============3969311156576626314==--
