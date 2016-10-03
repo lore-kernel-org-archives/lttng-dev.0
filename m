@@ -1,20 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] build: pass configure flags to
-	cmake example
-Date: Mon, 3 Oct 2016 15:11:02 +0000 (UTC)
-Message-ID: <60134637.43630.1475507462650.JavaMail.zimbra__34046.8129179955$1475507432$gmane$org@efficios.com>
-References: <1475505765-22557-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-ust] build: check for CXX_WORKS for cmake
+	example
+Date: Mon,  3 Oct 2016 11:15:21 -0400
+Message-ID: <1475507721-6550-1-git-send-email-jonathan.rajotte-julien__32903.547542128$1475507752$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 20C07A4389
- for <lttng-dev@lists.lttng.org>; Mon,  3 Oct 2016 15:11:34 +0000 (UTC)
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 3D344A1DC1
+ for <lttng-dev@lists.lttng.org>; Mon,  3 Oct 2016 15:17:00 +0000 (UTC)
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 39173340237
- for <lttng-dev@lists.lttng.org>; Mon,  3 Oct 2016 15:11:06 +0000 (UTC)
-In-Reply-To: <1475505765-22557-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ by mail.efficios.com (Postfix) with ESMTP id 600C0340237
+ for <lttng-dev@lists.lttng.org>; Mon,  3 Oct 2016 15:16:32 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,32 +22,28 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGludG8gbWFzdGVyLCB0aGFua3MhCgpNYXRoaWV1CgotLS0tLSBPbiBPY3QgMywgMjAx
-NiwgYXQgMTA6NDIgQU0sIEpvbmF0aGFuIFJham90dGUgam9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5A
-ZWZmaWNpb3MuY29tIHdyb3RlOgoKPiBTaWduZWQtb2ZmLWJ5OiBKb25hdGhhbiBSYWpvdHRlIDxq
-b25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gZG9jL2V4YW1wbGVz
-L01ha2VmaWxlLmFtIHwgOCArKysrKysrLQo+IDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMo
-KyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0tZ2l0IGEvZG9jL2V4YW1wbGVzL01ha2VmaWxl
-LmFtIGIvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtCj4gaW5kZXggYzdlNWI2OC4uNWQ2N2U3OSAx
-MDA2NDQKPiAtLS0gYS9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KPiArKysgYi9kb2MvZXhhbXBs
-ZXMvTWFrZWZpbGUuYW0KPiBAQCAtMTQ5LDcgKzE0OSwxMyBAQCBhbGwtbG9jYWw6Cj4gCQkJCWNk
-ICQoU1VCRElSU19DTUFLRSkgJiYgXAo+IAkJCQkkKE1LRElSX1ApIGJ1aWxkICYmIFwKPiAJCQkJ
-Y2QgYnVpbGQgJiYgXAo+IC0JCQkJY21ha2UKPiAtRENNQUtFX0lOQ0xVREVfUEFUSD0iJChhYnNf
-dG9wX3NyY2RpcikvaW5jbHVkZTskKGFic190b3BfYnVpbGRkaXIpL2luY2x1ZGUiCj4gLURDTUFL
-RV9MSUJSQVJZX1BBVEg9IiQoYWJzX3RvcF9idWlsZGRpcikvbGlibHR0bmctdXN0Ly5saWJzIiAu
-LiAmJiBcCj4gKwkJCQljbWFrZSBcCj4gKwo+IAkJCQktRENNQUtFX0lOQ0xVREVfUEFUSD0iJChh
-YnNfdG9wX3NyY2RpcikvaW5jbHVkZTskKGFic190b3BfYnVpbGRkaXIpL2luY2x1ZGUiCj4gXAo+
-ICsJCQkJLURDTUFLRV9MSUJSQVJZX1BBVEg9IiQoYWJzX3RvcF9idWlsZGRpcikvbGlibHR0bmct
-dXN0Ly5saWJzIiBcCj4gKwkJCQktRENNQUtFX0NfRkxBR1M9IiQoQ0ZMQUdTKSAkKENQUEZMQUdT
-KSIgXAo+ICsJCQkJLURDTUFLRV9DWFhfRkxBR1M9IiQoQ1hYRkxBR1MpICQoQ1BQRkxBR1MpIiBc
-Cj4gKwkJCQktRENNQUtFX0VYRV9MSU5LRVJfRkxBR1M9IiQoTERGTEFHUykiIFwKPiArCQkJCS4u
-ICYmIFwKPiAJCQkJJChNQUtFKSAmJiBcCj4gCQkJCWNkIC4uIFwKPiAJCQkpIHx8IGV4aXQgMTsg
-XAo+IC0tCj4gMi43LjQKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6
-Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-ZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
-ZGV2Cg==
+VHJhY2Vwb2ludHMgYW5kIHRyYWNlcG9pbnQgcHJvdmlkZXIgY29tcGlsYXRpb24gbmVlZCBhIGZ1
+bmN0aW9uYWwKYysrIGNvbXBpbGVyIChnKysgPiA0LjcpLgoKU2lnbmVkLW9mZi1ieTogSm9uYXRo
+YW4gUmFqb3R0ZSA8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPgotLS0KIGNv
+bmZpZ3VyZS5hYyAgICAgICAgICAgICB8IDEgLQogZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFtIHwg
+MiArLQogMiBmaWxlcyBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMiBkZWxldGlvbnMoLSkKCmRp
+ZmYgLS1naXQgYS9jb25maWd1cmUuYWMgYi9jb25maWd1cmUuYWMKaW5kZXggNDI1NmY2Ni4uNDE1
+Mzg4ZiAxMDA2NDQKLS0tIGEvY29uZmlndXJlLmFjCisrKyBiL2NvbmZpZ3VyZS5hYwpAQCAtODAs
+NyArODAsNiBAQCBBTV9DT05ESVRJT05BTChbTk9fU0hBUkVEXSwgW3Rlc3QgIngkZW5hYmxlX3No
+YXJlZCIgPSAieG5vIl0pCiAjIENoZWNrcyBmb3IgcHJvZ3JhbXMuCiBBQ19QUk9HX0NDCiBBQ19Q
+Uk9HX0NYWAotQU1fQ09ORElUSU9OQUwoW0hBVkVfQ1hYXSwgW3Rlc3QgIngkQ1hYIiAhPSAieCJd
+KQogQUNfQ0hFQ0tfUFJPRyhbSEFWRV9DTUFLRV0sIFtjbWFrZV0sIFsieWVzIl0pCiBBTV9DT05E
+SVRJT05BTChbSEFWRV9DTUFLRV0sIFt0ZXN0ICJ4JEhBVkVfQ01BS0UiID0gInh5ZXMiXSkKIEFD
+X1BST0dfTUFLRV9TRVQKZGlmZiAtLWdpdCBhL2RvYy9leGFtcGxlcy9NYWtlZmlsZS5hbSBiL2Rv
+Yy9leGFtcGxlcy9NYWtlZmlsZS5hbQppbmRleCBjN2U1YjY4Li4wODkwYzUyIDEwMDY0NAotLS0g
+YS9kb2MvZXhhbXBsZXMvTWFrZWZpbGUuYW0KKysrIGIvZG9jL2V4YW1wbGVzL01ha2VmaWxlLmFt
+CkBAIC0zNCw3ICszNCw3IEBAIGRpc3RfZG9jX2V4YW1wbGVzX3B5dGhvbl9EQVRBID0gcHl0aG9u
+L2hlbGxvLnB5CiBlbmRpZgogCiBpZiBIQVZFX0NNQUtFCi1pZiBIQVZFX0NYWAoraWYgQ1hYX1dP
+UktTCiBTVUJESVJTX0NNQUtFID0gY21ha2UtbXVsdGlwbGUtc2hhcmVkLWxpYnJhcmllcwogZW5k
+aWYKIGVuZGlmCi0tIAoyLjcuNAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcu
+b3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
+Zy1kZXYK
