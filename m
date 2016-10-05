@@ -1,17 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 2/2] Bump lttng-modules ABI minor
-	version
-Date: Wed,  5 Oct 2016 12:54:20 -0400
-Message-ID: <1475686460-7561-2-git-send-email-mathieu.desnoyers__2390.12359311364$1475686496$gmane$org@efficios.com>
-References: <1475686460-7561-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+Subject: Re: LTTng 2.9 sessiond misbehaving
+Date: Wed, 5 Oct 2016 19:51:09 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFDB7DF1580__26261.8644316264$1475697198$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+References: <48CF5AC71E61DB46B70D0F388054EFFDB7DF14FE@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id BE2D8A4444
- for <lttng-dev@lists.lttng.org>; Wed,  5 Oct 2016 16:55:58 +0000 (UTC)
-In-Reply-To: <1475686460-7561-1-git-send-email-mathieu.desnoyers@efficios.com>
+Received: from mx.drdc-rddc.gc.ca (fw.drenet.dnd.ca [131.136.242.1])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTP id 67F92A4444
+ for <lttng-dev@lists.lttng.org>; Wed,  5 Oct 2016 19:54:29 +0000 (UTC)
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFDB7DF14FE@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+Content-Language: fr-FR
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,23 +21,34 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: "'lttng-dev@lists.lttng.org'" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Rm9sbG93IGx0dG5nLW1vZHVsZXMgdXBzdHJlYW0uCgpTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERl
-c25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgotLS0KIHNyYy9jb21tb24v
-a2VybmVsLWN0bC9rZXJuZWwtaW9jdGwuaCB8IDIgKy0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2Vy
-dGlvbigrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL3NyYy9jb21tb24va2VybmVsLWN0
-bC9rZXJuZWwtaW9jdGwuaCBiL3NyYy9jb21tb24va2VybmVsLWN0bC9rZXJuZWwtaW9jdGwuaApp
-bmRleCA4MDVkZTAyLi5lMjM1ZDEwIDEwMDY0NAotLS0gYS9zcmMvY29tbW9uL2tlcm5lbC1jdGwv
-a2VybmVsLWlvY3RsLmgKKysrIGIvc3JjL2NvbW1vbi9rZXJuZWwtY3RsL2tlcm5lbC1pb2N0bC5o
-CkBAIC0yMCw3ICsyMCw3IEBACiAjZGVmaW5lIF9MVFRfS0VSTkVMX0lPQ1RMX0gKIAogI2RlZmlu
-ZSBMVFROR19NT0RVTEVTX0FCSV9NQUpPUl9WRVJTSU9OCQkyCi0jZGVmaW5lIExUVE5HX01PRFVM
-RVNfQUJJX01JTk9SX1ZFUlNJT04JCTEKKyNkZWZpbmUgTFRUTkdfTU9EVUxFU19BQklfTUlOT1Jf
-VkVSU0lPTgkJMgogCiAvKiBHZXQgYSBzbmFwc2hvdCBvZiB0aGUgY3VycmVudCByaW5nIGJ1ZmZl
-ciBwcm9kdWNlciBhbmQgY29uc3VtZXIgcG9zaXRpb25zICovCiAjZGVmaW5lIFJJTkdfQlVGRkVS
-X1NOQVBTSE9UICAgICAgICAgICAgICAgIF9JTygweEY2LCAweDAwKQotLSAKMi4xLjQKCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
-aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+SW50ZXJlc3RpbmcuICBSZWJ1aWx0IHRoZSBlbnRpcmUgTFRUbmcgc2V0IHdpdGggdGhlIHN0YWJs
+ZS0xLjggcmVsZWFzZXMgKHN0YWJsZS0wLjkgZm9yIHVzZXJzcGFjZS1yY3UpIGFuZCBJIHNlZSB0
+aGUgc2FtZSBiZWhhdmlvdXI6DQpXaGVuIEkgaGl0IGN0cmwtYyBpbiB0aGUgZGFlbW9uJ3Mgc2hl
+bGwsIGl0IGRvZXNuJ3QgcmVzcG9uZCBhbmQgdGhlIENQVSB1c2FnZSBnb2VzIGNyYXp5ICh+OTAl
+KS4gIENhbid0IHN1ZG8ga2lsbCBpdCAob3IgbHR0bmctcnVuYXMpIGVpdGhlci4NCg0KV2hhdCdz
+IHN0cmFuZ2UgaXMgdGhhdCBpZiBpbnN0ZWFkIG9mOg0KDQokIGx0dG5nLXNlc3Npb25kIC12dnYg
+Mj4mMSB8IHRlZSBsdHRuZy1zZXNzaW9uZC4yLmxvZw0KDQpJIGRvOg0KDQokIGx0dG5nLXNlc3Np
+b25kIDI+JjEgfCB0ZWUgbHR0bmctc2Vzc2lvbmQuMy5sb2cNCg0KVGhlbiBjdHJsLWMgdGVybWlu
+YXRlcyBsdHRuZy1zZXNzaW9uZCBub3JtYWxseS4NCg0KVXNpbmcganVzdCB0aGUgZmlyc3QgbGV2
+ZWwgb2YgdmVyYm9zaXR5Og0KDQokIGx0dG5nLXNlc3Npb25kIC12IDI+JjEgfCB0ZWUgbHR0bmct
+c2Vzc2lvbmQuNC5sb2cNCg0KYWxzbyBtaXNiZWhhdmVzLiAgU29tZWhvdyAtdiBpcyByZXNwb25z
+aWJsZT8NCg0KQXQgdGhpcyBwb2ludCwgc2hvdWxkIEkgb3BlbiBhIGJ1Zz8NCg0KRGFuaWVsIFUu
+IFRoaWJhdWx0LCBNLlNjLsKyDQoNCkluZm9ybWF0aWNpZW4gc2NpZW50aWZpcXVlLCBDTUUtUFND
+LCBDZW50cmUgZGUgcmVjaGVyY2hlcyBkZSBWYWxjYXJ0aWVyDQpSZWNoZXJjaGUgZXQgZMOpdmVs
+b3BwZW1lbnQgcG91ciBsYSBkw6lmZW5zZSBDYW5hZGEgLyBHb3V2ZXJuZW1lbnQgZHUgQ2FuYWRh
+DQpkYW5pZWwudGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhIC8gVMOpbDogNDE4LTg0NC00MDAweDQy
+NDUgVMOpbMOpYzogNDE4LTg0NC00NTM4DQpkYW5pZWwudGhpYmF1bHRAZm9yY2VzLmdjLmNhIC8g
+VMOpbDogNDE4LTg0NC00MDAweDQyNDUgVMOpbMOpYzogNDE4LTg0NC00NTM4DQoNCkNvbXB1dGVy
+IFNjaWVudGlzdCwgTUNDUy1TUEMsIFZhbGNhcnRpZXIgUmVzZWFyY2ggQ2VudHJlIA0KRGVmZW5j
+ZSBSZXNlYXJjaCBhbmQgRGV2ZWxvcG1lbnQgQ2FuYWRhwqAvIEdvdmVybm1lbnQgb2YgQ2FuYWRh
+DQpkYW5pZWwudGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhIC8gVGVsOiA0MTgtODQ0LTQwMDB4NDI0
+NSBGYXg6IDQxOC04NDQtNDUzOA0KZGFuaWVsLnRoaWJhdWx0QGZvcmNlcy5nYy5jYSAvIFRlbDog
+NDE4LTg0NC00MDAweDQyNDUgRmF4OiA0MTgtODQ0LTQ1MzgNCg0KRFJEQyBpcyBhbiBhZ2VuY3kg
+b2YgdGhlIERlcGFydG1lbnQgb2YgTmF0aW9uYWwgRGVmZW5jZSAvIFJEREMgZXN0IHVuZSBhZ2Vu
+Y2UgZHUgbWluaXN0w6hyZSBkZSBsYSBEw6lmZW5zZSBuYXRpb25hbGUNCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
+L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
