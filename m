@@ -1,20 +1,20 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@gmail.com>
-Subject: Re: lttng-tools backport request: Fix: error.h ->
-	common/error.h
-Date: Thu, 6 Oct 2016 08:34:58 -0400
-Message-ID: <CA+jJMxtxjCwmjHHnFxWnoJawG8t+cmQtm+HVQvfWt9sG=hsWQw__43471.7908771292$1475759142$gmane$org@mail.gmail.com>
-References: <4f48032d-049c-5e3a-f635-f7978a5ad783@mentor.com>
- <90905ba7-d102-c9f3-6fb3-67eb630b6558@mentor.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools 1/2] Fix: handle backward
+ compatibility with lttng-modules 2.7
+Date: Thu, 6 Oct 2016 10:46:58 -0400
+Message-ID: <CA+jJMxsrezaivJ2DatqZp1y0miLJEWJYZMUMOW0BEBccG-x0Tg__10456.8256684162$1475765263$gmane$org@mail.gmail.com>
+References: <1475686460-7561-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4222605320281407822=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ua0-f194.google.com (mail-ua0-f194.google.com
- [209.85.217.194])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id D385AA3B0D
- for <lttng-dev@lists.lttng.org>; Thu,  6 Oct 2016 12:36:36 +0000 (UTC)
-Received: by mail-ua0-f194.google.com with SMTP id 49so680626uac.0
- for <lttng-dev@lists.lttng.org>; Thu, 06 Oct 2016 05:34:59 -0700 (PDT)
-In-Reply-To: <90905ba7-d102-c9f3-6fb3-67eb630b6558@mentor.com>
+Received: from mail-vk0-f65.google.com (mail-vk0-f65.google.com
+ [209.85.213.65])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 1BAAAA44A4
+ for <lttng-dev@lists.lttng.org>; Thu,  6 Oct 2016 14:48:36 +0000 (UTC)
+Received: by mail-vk0-f65.google.com with SMTP id b186so823195vkb.3
+ for <lttng-dev@lists.lttng.org>; Thu, 06 Oct 2016 07:46:59 -0700 (PDT)
+In-Reply-To: <1475686460-7561-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,108 +24,70 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Nathan Lynch <Nathan_Lynch@mentor.com>
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============4222605320281407822==
-Content-Type: multipart/alternative; boundary=001a113cf758990931053e3185b8
-
---001a113cf758990931053e3185b8
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-I have merged the patch in 2.8.
-
-Thanks for reporting!
-J=C3=A9r=C3=A9mie
-
-On Oct 3, 2016 4:43 PM, "Nathan Lynch" <Nathan_Lynch@mentor.com> wrote:
-
-> On 10/03/2016 10:36 AM, Nathan Lynch wrote:
-> > Can this be backported to the stable-2.8 branch?
-> >
-> > commit 6712db617fe9
-> > Author: Michael Jeanson <mjeanson@efficios.com>
-> > Date:   Wed Jun 15 17:18:03 2016 -0400
-> >
-> >     Fix: error.h -> common/error.h
-> >
-> > OE is carrying this patch for its lttng-tools 2.8 package in order to
-> > build against musl libc:
-> >
-> > http://lists.openembedded.org/pipermail/openembedded-core/
-> 2016-September/126851.html
-> >
-> > I haven't personally verified the problem or the patch, but it seems
-> > like an obvious, low-risk fix?
->
-> I've now verified that the patch is necessary for cross-compiling with a
-> musl toolchain.
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
---001a113cf758990931053e3185b8
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<p dir=3D"ltr">I have merged the patch in 2.8.</p>
-<p dir=3D"ltr">Thanks for reporting!<br>
-J=C3=A9r=C3=A9mie</p>
-<div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Oct 3, 2016 4:=
-43 PM, &quot;Nathan Lynch&quot; &lt;<a href=3D"mailto:Nathan_Lynch@mentor.c=
-om">Nathan_Lynch@mentor.com</a>&gt; wrote:<br type=3D"attribution"><blockqu=
-ote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc s=
-olid;padding-left:1ex">On 10/03/2016 10:36 AM, Nathan Lynch wrote:<br>
-&gt; Can this be backported to the stable-2.8 branch?<br>
-&gt;<br>
-&gt; commit 6712db617fe9<br>
-&gt; Author: Michael Jeanson &lt;<a href=3D"mailto:mjeanson@efficios.com">m=
-jeanson@efficios.com</a>&gt;<br>
-&gt; Date:=C2=A0 =C2=A0Wed Jun 15 17:18:03 2016 -0400<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Fix: error.h -&gt; common/error.h<br>
-&gt;<br>
-&gt; OE is carrying this patch for its lttng-tools 2.8 package in order to<=
-br>
-&gt; build against musl libc:<br>
-&gt;<br>
-&gt; <a href=3D"http://lists.openembedded.org/pipermail/openembedded-core/2=
-016-September/126851.html" rel=3D"noreferrer" target=3D"_blank">http://list=
-s.openembedded.org/<wbr>pipermail/openembedded-core/<wbr>2016-September/126=
-851.html</a><br>
-&gt;<br>
-&gt; I haven&#39;t personally verified the problem or the patch, but it see=
-ms<br>
-&gt; like an obvious, low-risk fix?<br>
-<br>
-I&#39;ve now verified that the patch is necessary for cross-compiling with =
-a<br>
-musl toolchain.<br>
-<br>
-______________________________<wbr>_________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-<wbr>bin/mail=
-man/listinfo/lttng-dev</a><br>
-</blockquote></div></div>
-
---001a113cf758990931053e3185b8--
-
---===============4222605320281407822==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============4222605320281407822==--
+TWVyZ2VkIGluIG1hc3RlciBhbmQgc3RhYmxlLTIuOC4gVGhhbmtzIQoKSsOpcsOpbWllCgpPbiA1
+IE9jdG9iZXIgMjAxNiBhdCAxMjo1NCwgTWF0aGlldSBEZXNub3llcnMKPG1hdGhpZXUuZGVzbm95
+ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gVGhlcmUgaXMgbm8gbWFqb3IgdmVyc2lvbiBidW1w
+IGJldHdlZW4gbHR0bmctbW9kdWxlIDIuNyBhbmQgMi44IEFCSS4KPiBFdmVuIHRob3VnaCB3ZSBk
+byBub3QgZ3VhcmFudGVlIGNvbXBhdGliaWxpdHksIGRvIGEgYmVzdCBlZmZvcnQgdG8KPiBtYWlu
+dGFpbiBpdCB3aGVuIHBvc3NpYmxlLgo+Cj4gU2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3ll
+cnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgc3JjL2NvbW1vbi9r
+ZXJuZWwtY29uc3VtZXIva2VybmVsLWNvbnN1bWVyLmMgfCAzOCArKysrKysrKysrKysrKysrKysr
+KysrKy0tLS0tCj4gIDEgZmlsZSBjaGFuZ2VkLCAzMiBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9u
+cygtKQo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9jb21tb24va2VybmVsLWNvbnN1bWVyL2tlcm5lbC1j
+b25zdW1lci5jIGIvc3JjL2NvbW1vbi9rZXJuZWwtY29uc3VtZXIva2VybmVsLWNvbnN1bWVyLmMK
+PiBpbmRleCA2NWRjY2U0Li5hOGFiY2Q3IDEwMDY0NAo+IC0tLSBhL3NyYy9jb21tb24va2VybmVs
+LWNvbnN1bWVyL2tlcm5lbC1jb25zdW1lci5jCj4gKysrIGIvc3JjL2NvbW1vbi9rZXJuZWwtY29u
+c3VtZXIva2VybmVsLWNvbnN1bWVyLmMKPiBAQCAtMTA4NSwxNSArMTA4NSwyNyBAQCBzdGF0aWMg
+aW50IGdldF9pbmRleF92YWx1ZXMoc3RydWN0IGN0Zl9wYWNrZXRfaW5kZXggKmluZGV4LCBpbnQg
+aW5mZCkKPgo+ICAgICAgICAgcmV0ID0ga2VybmN0bF9nZXRfaW5zdGFuY2VfaWQoaW5mZCwgJmlu
+ZGV4LT5zdHJlYW1faW5zdGFuY2VfaWQpOwo+ICAgICAgICAgaWYgKHJldCA8IDApIHsKPiAtICAg
+ICAgICAgICAgICAgUEVSUk9SKCJrZXJuY3RsX2dldF9pbnN0YW5jZV9pZCIpOwo+IC0gICAgICAg
+ICAgICAgICBnb3RvIGVycm9yOwo+ICsgICAgICAgICAgICAgICBpZiAocmV0ID09IC1FTk9UVFkp
+IHsKPiArICAgICAgICAgICAgICAgICAgICAgICAvKiBDb21tYW5kIG5vdCBpbXBsZW1lbnRlZCBi
+eSBsdHRuZy1tb2R1bGVzLiAqLwo+ICsgICAgICAgICAgICAgICAgICAgICAgIGluZGV4LT5zdHJl
+YW1faW5zdGFuY2VfaWQgPSAtMVVMTDsKPiArICAgICAgICAgICAgICAgICAgICAgICByZXQgPSAw
+Owo+ICsgICAgICAgICAgICAgICB9IGVsc2Ugewo+ICsgICAgICAgICAgICAgICAgICAgICAgIFBF
+UlJPUigia2VybmN0bF9nZXRfaW5zdGFuY2VfaWQiKTsKPiArICAgICAgICAgICAgICAgICAgICAg
+ICBnb3RvIGVycm9yOwo+ICsgICAgICAgICAgICAgICB9Cj4gICAgICAgICB9Cj4gICAgICAgICBp
+bmRleC0+c3RyZWFtX2luc3RhbmNlX2lkID0gaHRvYmU2NChpbmRleC0+c3RyZWFtX2luc3RhbmNl
+X2lkKTsKPgo+ICAgICAgICAgcmV0ID0ga2VybmN0bF9nZXRfc2VxdWVuY2VfbnVtYmVyKGluZmQs
+ICZpbmRleC0+cGFja2V0X3NlcV9udW0pOwo+ICAgICAgICAgaWYgKHJldCA8IDApIHsKPiAtICAg
+ICAgICAgICAgICAgUEVSUk9SKCJrZXJuY3RsX2dldF9zZXF1ZW5jZV9udW1iZXIiKTsKPiAtICAg
+ICAgICAgICAgICAgZ290byBlcnJvcjsKPiArICAgICAgICAgICAgICAgaWYgKHJldCA9PSAtRU5P
+VFRZKSB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgLyogQ29tbWFuZCBub3QgaW1wbGVtZW50
+ZWQgYnkgbHR0bmctbW9kdWxlcy4gKi8KPiArICAgICAgICAgICAgICAgICAgICAgICBpbmRleC0+
+cGFja2V0X3NlcV9udW0gPSAtMVVMTDsKPiArICAgICAgICAgICAgICAgICAgICAgICByZXQgPSAw
+Owo+ICsgICAgICAgICAgICAgICB9IGVsc2Ugewo+ICsgICAgICAgICAgICAgICAgICAgICAgIFBF
+UlJPUigia2VybmN0bF9nZXRfc2VxdWVuY2VfbnVtYmVyIik7Cj4gKyAgICAgICAgICAgICAgICAg
+ICAgICAgZ290byBlcnJvcjsKPiArICAgICAgICAgICAgICAgfQo+ICAgICAgICAgfQo+ICAgICAg
+ICAgaW5kZXgtPnBhY2tldF9zZXFfbnVtID0gaHRvYmU2NChpbmRleC0+cGFja2V0X3NlcV9udW0p
+Owo+Cj4gQEAgLTExNDUsOCArMTE1NywxNCBAQCBpbnQgdXBkYXRlX3N0cmVhbV9zdGF0cyhzdHJ1
+Y3QgbHR0bmdfY29uc3VtZXJfc3RyZWFtICpzdHJlYW0pCj4KPiAgICAgICAgIHJldCA9IGtlcm5j
+dGxfZ2V0X3NlcXVlbmNlX251bWJlcihzdHJlYW0tPndhaXRfZmQsICZzZXEpOwo+ICAgICAgICAg
+aWYgKHJldCA8IDApIHsKPiAtICAgICAgICAgICAgICAgUEVSUk9SKCJrZXJuY3RsX2dldF9zZXF1
+ZW5jZV9udW1iZXIiKTsKPiAtICAgICAgICAgICAgICAgZ290byBlbmQ7Cj4gKyAgICAgICAgICAg
+ICAgIGlmIChyZXQgPT0gLUVOT1RUWSkgewo+ICsgICAgICAgICAgICAgICAgICAgICAgIC8qIENv
+bW1hbmQgbm90IGltcGxlbWVudGVkIGJ5IGx0dG5nLW1vZHVsZXMuICovCj4gKyAgICAgICAgICAg
+ICAgICAgICAgICAgc2VxID0gLTFVTEw7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0g
+MDsKPiArICAgICAgICAgICAgICAgfSBlbHNlIHsKPiArICAgICAgICAgICAgICAgICAgICAgICBQ
+RVJST1IoImtlcm5jdGxfZ2V0X3NlcXVlbmNlX251bWJlciIpOwo+ICsgICAgICAgICAgICAgICAg
+ICAgICAgIGdvdG8gZW5kOwo+ICsgICAgICAgICAgICAgICB9Cj4gICAgICAgICB9Cj4KPiAgICAg
+ICAgIC8qCj4gQEAgLTEyMDUsNiArMTIyMywxNCBAQCBpbnQgbWV0YWRhdGFfc3RyZWFtX2NoZWNr
+X3ZlcnNpb24oaW50IGluZmQsIHN0cnVjdCBsdHRuZ19jb25zdW1lcl9zdHJlYW0gKnN0cmVhbQo+
+Cj4gICAgICAgICByZXQgPSBrZXJuY3RsX2dldF9tZXRhZGF0YV92ZXJzaW9uKGluZmQsICZjdXJf
+dmVyc2lvbik7Cj4gICAgICAgICBpZiAocmV0IDwgMCkgewo+ICsgICAgICAgICAgICAgICBpZiAo
+cmV0ID09IC1FTk9UVFkpIHsKPiArICAgICAgICAgICAgICAgICAgICAgICAvKgo+ICsgICAgICAg
+ICAgICAgICAgICAgICAgICAqIExUVG5nLW1vZHVsZXMgZG9lcyBub3QgaW1wbGVtZW50IHRoaXMK
+PiArICAgICAgICAgICAgICAgICAgICAgICAgKiBjb21tYW5kLgo+ICsgICAgICAgICAgICAgICAg
+ICAgICAgICAqLwo+ICsgICAgICAgICAgICAgICAgICAgICAgIHJldCA9IDA7Cj4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgZ290byBlbmQ7Cj4gKyAgICAgICAgICAgICAgIH0KPiAgICAgICAgICAg
+ICAgICAgRVJSKCJGYWlsZWQgdG8gZ2V0IHRoZSBtZXRhZGF0YSB2ZXJzaW9uIik7Cj4gICAgICAg
+ICAgICAgICAgIGdvdG8gZW5kOwo+ICAgICAgICAgfQo+IC0tCj4gMi4xLjQKPgoKCgotLSAKSsOp
+csOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
+YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5n
+Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
