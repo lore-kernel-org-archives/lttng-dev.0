@@ -1,17 +1,19 @@
-From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@gmail.com>
 Subject: Re: LTTng 2.9 sessiond misbehaving
-Date: Wed, 5 Oct 2016 19:51:09 +0000
-Message-ID: <48CF5AC71E61DB46B70D0F388054EFFDB7DF1580__26261.8644316264$1475697198$gmane$org@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+Date: Thu, 6 Oct 2016 08:29:39 -0400
+Message-ID: <CA+jJMxt20vc_rVqr2MwpB1RtueJD9-B01CuhWMG-ThY6Upj0Rw__40153.8062877536$1475759140$gmane$org@mail.gmail.com>
 References: <48CF5AC71E61DB46B70D0F388054EFFDB7DF14FE@VAL-E-01.valcartier.drdc-rddc.gc.ca>
+ <48CF5AC71E61DB46B70D0F388054EFFDB7DF1580@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============8000971581896215479=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx.drdc-rddc.gc.ca (fw.drenet.dnd.ca [131.136.242.1])
- by evm-lttng-1.efficios.com (Postfix) with ESMTP id 67F92A4444
- for <lttng-dev@lists.lttng.org>; Wed,  5 Oct 2016 19:54:29 +0000 (UTC)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFDB7DF14FE@VAL-E-01.valcartier.drdc-rddc.gc.ca>
-Content-Language: fr-FR
+Received: from mail-vk0-f44.google.com (mail-vk0-f44.google.com
+ [209.85.213.44])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 5F231A2E87
+ for <lttng-dev@lists.lttng.org>; Thu,  6 Oct 2016 12:31:17 +0000 (UTC)
+Received: by mail-vk0-f44.google.com with SMTP id b186so16039033vkb.1
+ for <lttng-dev@lists.lttng.org>; Thu, 06 Oct 2016 05:29:41 -0700 (PDT)
+In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFDB7DF1580@VAL-E-01.valcartier.drdc-rddc.gc.ca>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,34 +23,155 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "'lttng-dev@lists.lttng.org'" <lttng-dev@lists.lttng.org>
+To: Daniel Thibault <Daniel.Thibault@drdc-rddc.gc.ca>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SW50ZXJlc3RpbmcuICBSZWJ1aWx0IHRoZSBlbnRpcmUgTFRUbmcgc2V0IHdpdGggdGhlIHN0YWJs
-ZS0xLjggcmVsZWFzZXMgKHN0YWJsZS0wLjkgZm9yIHVzZXJzcGFjZS1yY3UpIGFuZCBJIHNlZSB0
-aGUgc2FtZSBiZWhhdmlvdXI6DQpXaGVuIEkgaGl0IGN0cmwtYyBpbiB0aGUgZGFlbW9uJ3Mgc2hl
-bGwsIGl0IGRvZXNuJ3QgcmVzcG9uZCBhbmQgdGhlIENQVSB1c2FnZSBnb2VzIGNyYXp5ICh+OTAl
-KS4gIENhbid0IHN1ZG8ga2lsbCBpdCAob3IgbHR0bmctcnVuYXMpIGVpdGhlci4NCg0KV2hhdCdz
-IHN0cmFuZ2UgaXMgdGhhdCBpZiBpbnN0ZWFkIG9mOg0KDQokIGx0dG5nLXNlc3Npb25kIC12dnYg
-Mj4mMSB8IHRlZSBsdHRuZy1zZXNzaW9uZC4yLmxvZw0KDQpJIGRvOg0KDQokIGx0dG5nLXNlc3Np
-b25kIDI+JjEgfCB0ZWUgbHR0bmctc2Vzc2lvbmQuMy5sb2cNCg0KVGhlbiBjdHJsLWMgdGVybWlu
-YXRlcyBsdHRuZy1zZXNzaW9uZCBub3JtYWxseS4NCg0KVXNpbmcganVzdCB0aGUgZmlyc3QgbGV2
-ZWwgb2YgdmVyYm9zaXR5Og0KDQokIGx0dG5nLXNlc3Npb25kIC12IDI+JjEgfCB0ZWUgbHR0bmct
-c2Vzc2lvbmQuNC5sb2cNCg0KYWxzbyBtaXNiZWhhdmVzLiAgU29tZWhvdyAtdiBpcyByZXNwb25z
-aWJsZT8NCg0KQXQgdGhpcyBwb2ludCwgc2hvdWxkIEkgb3BlbiBhIGJ1Zz8NCg0KRGFuaWVsIFUu
-IFRoaWJhdWx0LCBNLlNjLsKyDQoNCkluZm9ybWF0aWNpZW4gc2NpZW50aWZpcXVlLCBDTUUtUFND
-LCBDZW50cmUgZGUgcmVjaGVyY2hlcyBkZSBWYWxjYXJ0aWVyDQpSZWNoZXJjaGUgZXQgZMOpdmVs
-b3BwZW1lbnQgcG91ciBsYSBkw6lmZW5zZSBDYW5hZGEgLyBHb3V2ZXJuZW1lbnQgZHUgQ2FuYWRh
-DQpkYW5pZWwudGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhIC8gVMOpbDogNDE4LTg0NC00MDAweDQy
-NDUgVMOpbMOpYzogNDE4LTg0NC00NTM4DQpkYW5pZWwudGhpYmF1bHRAZm9yY2VzLmdjLmNhIC8g
-VMOpbDogNDE4LTg0NC00MDAweDQyNDUgVMOpbMOpYzogNDE4LTg0NC00NTM4DQoNCkNvbXB1dGVy
-IFNjaWVudGlzdCwgTUNDUy1TUEMsIFZhbGNhcnRpZXIgUmVzZWFyY2ggQ2VudHJlIA0KRGVmZW5j
-ZSBSZXNlYXJjaCBhbmQgRGV2ZWxvcG1lbnQgQ2FuYWRhwqAvIEdvdmVybm1lbnQgb2YgQ2FuYWRh
-DQpkYW5pZWwudGhpYmF1bHRAZHJkYy1yZGRjLmdjLmNhIC8gVGVsOiA0MTgtODQ0LTQwMDB4NDI0
-NSBGYXg6IDQxOC04NDQtNDUzOA0KZGFuaWVsLnRoaWJhdWx0QGZvcmNlcy5nYy5jYSAvIFRlbDog
-NDE4LTg0NC00MDAweDQyNDUgRmF4OiA0MTgtODQ0LTQ1MzgNCg0KRFJEQyBpcyBhbiBhZ2VuY3kg
-b2YgdGhlIERlcGFydG1lbnQgb2YgTmF0aW9uYWwgRGVmZW5jZSAvIFJEREMgZXN0IHVuZSBhZ2Vu
-Y2UgZHUgbWluaXN0w6hyZSBkZSBsYSBEw6lmZW5zZSBuYXRpb25hbGUNCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
-L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============8000971581896215479==
+Content-Type: multipart/alternative; boundary=001a1141d9d2975cfb053e317274
+
+--001a1141d9d2975cfb053e317274
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+On Oct 5, 2016 3:52 PM, "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca=
+>
+wrote:
+>
+> Interesting.  Rebuilt the entire LTTng set with the stable-1.8 releases
+(stable-0.9 for userspace-rcu) and I see the same behaviour:
+> When I hit ctrl-c in the daemon's shell, it doesn't respond and the CPU
+usage goes crazy (~90%).  Can't sudo kill it (or lttng-runas) either.
+>
+> What's strange is that if instead of:
+>
+> $ lttng-sessiond -vvv 2>&1 | tee lttng-sessiond.2.log
+>
+> I do:
+>
+> $ lttng-sessiond 2>&1 | tee lttng-sessiond.3.log
+>
+> Then ctrl-c terminates lttng-sessiond normally.
+>
+> Using just the first level of verbosity:
+>
+> $ lttng-sessiond -v 2>&1 | tee lttng-sessiond.4.log
+>
+> also misbehaves.  Somehow -v is responsible?
+>
+> At this point, should I open a bug?
+
+I'm assuming you meant 2.8.
+Open a bug and we'll try to reproduce it.
+
+Does the problem occur with the other verbosity levels? (-vv, -vvv)
+
+Thanks,
+J=C3=A9r=C3=A9mie
+
+>
+> Daniel U. Thibault, M.Sc.=C2=B2
+>
+> Informaticien scientifique, CME-PSC, Centre de recherches de Valcartier
+> Recherche et d=C3=A9veloppement pour la d=C3=A9fense Canada / Gouvernemen=
+t du Canada
+> daniel.thibault@drdc-rddc.gc.ca / T=C3=A9l: 418-844-4000x4245 T=C3=A9l=C3=
+=A9c:
+418-844-4538
+> daniel.thibault@forces.gc.ca / T=C3=A9l: 418-844-4000x4245 T=C3=A9l=C3=A9=
+c: 418-844-4538
+>
+> Computer Scientist, MCCS-SPC, Valcartier Research Centre
+> Defence Research and Development Canada / Government of Canada
+> daniel.thibault@drdc-rddc.gc.ca / Tel: 418-844-4000x4245 Fax: 418-844-453=
+8
+> daniel.thibault@forces.gc.ca / Tel: 418-844-4000x4245 Fax: 418-844-4538
+>
+> DRDC is an agency of the Department of National Defence / RDDC est une
+agence du minist=C3=A8re de la D=C3=A9fense nationale
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--001a1141d9d2975cfb053e317274
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<p dir=3D"ltr"></p>
+<p dir=3D"ltr">On Oct 5, 2016 3:52 PM, &quot;Thibault, Daniel&quot; &lt;<a =
+href=3D"mailto:Daniel.Thibault@drdc-rddc.gc.ca">Daniel.Thibault@drdc-rddc.g=
+c.ca</a>&gt; wrote:<br>
+&gt;<br>
+&gt; Interesting.=C2=A0 Rebuilt the entire LTTng set with the stable-1.8 re=
+leases (stable-0.9 for userspace-rcu) and I see the same behaviour:<br>
+&gt; When I hit ctrl-c in the daemon&#39;s shell, it doesn&#39;t respond an=
+d the CPU usage goes crazy (~90%).=C2=A0 Can&#39;t sudo kill it (or lttng-r=
+unas) either.<br>
+&gt;<br>
+&gt; What&#39;s strange is that if instead of:<br>
+&gt;<br>
+&gt; $ lttng-sessiond -vvv 2&gt;&amp;1 | tee lttng-sessiond.2.log<br>
+&gt;<br>
+&gt; I do:<br>
+&gt;<br>
+&gt; $ lttng-sessiond 2&gt;&amp;1 | tee lttng-sessiond.3.log<br>
+&gt;<br>
+&gt; Then ctrl-c terminates lttng-sessiond normally.<br>
+&gt;<br>
+&gt; Using just the first level of verbosity:<br>
+&gt;<br>
+&gt; $ lttng-sessiond -v 2&gt;&amp;1 | tee lttng-sessiond.4.log<br>
+&gt;<br>
+&gt; also misbehaves.=C2=A0 Somehow -v is responsible?<br>
+&gt;<br>
+&gt; At this point, should I open a bug?</p>
+<p dir=3D"ltr">I&#39;m assuming you meant 2.8.<br>
+Open a bug and we&#39;ll try to reproduce it.</p>
+<p dir=3D"ltr">Does the problem occur with the other verbosity levels? (-vv=
+, -vvv)</p>
+<p dir=3D"ltr">Thanks,<br>
+J=C3=A9r=C3=A9mie</p>
+<p dir=3D"ltr">&gt;<br>
+&gt; Daniel U. Thibault, M.Sc.=C2=B2<br>
+&gt;<br>
+&gt; Informaticien scientifique, CME-PSC, Centre de recherches de Valcartie=
+r<br>
+&gt; Recherche et d=C3=A9veloppement pour la d=C3=A9fense Canada / Gouverne=
+ment du Canada<br>
+&gt; <a href=3D"mailto:daniel.thibault@drdc-rddc.gc.ca">daniel.thibault@drd=
+c-rddc.gc.ca</a> / T=C3=A9l: 418-844-4000x4245 T=C3=A9l=C3=A9c: 418-844-453=
+8<br>
+&gt; <a href=3D"mailto:daniel.thibault@forces.gc.ca">daniel.thibault@forces=
+.gc.ca</a> / T=C3=A9l: 418-844-4000x4245 T=C3=A9l=C3=A9c: 418-844-4538<br>
+&gt;<br>
+&gt; Computer Scientist, MCCS-SPC, Valcartier Research Centre<br>
+&gt; Defence Research and Development Canada=C2=A0/ Government of Canada<br=
+>
+&gt; <a href=3D"mailto:daniel.thibault@drdc-rddc.gc.ca">daniel.thibault@drd=
+c-rddc.gc.ca</a> / Tel: 418-844-4000x4245 Fax: 418-844-4538<br>
+&gt; <a href=3D"mailto:daniel.thibault@forces.gc.ca">daniel.thibault@forces=
+.gc.ca</a> / Tel: 418-844-4000x4245 Fax: 418-844-4538<br>
+&gt;<br>
+&gt; DRDC is an agency of the Department of National Defence / RDDC est une=
+ agence du minist=C3=A8re de la D=C3=A9fense nationale<br>
+&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
+</a><br>
+&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
+>https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br></p>
+
+--001a1141d9d2975cfb053e317274--
+
+--===============8000971581896215479==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============8000971581896215479==--
