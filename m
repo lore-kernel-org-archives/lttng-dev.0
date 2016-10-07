@@ -1,16 +1,15 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: lttng sessiond hash table crashes.
-Date: Fri, 7 Oct 2016 14:35:15 +0000 (UTC)
-Message-ID: <1733583412.50054.1475850915243.JavaMail.zimbra__40937.1330090382$1475850862$gmane$org@efficios.com>
-References: <CACd+_b6tfbyesNVT-xHjb=cjjSD=6wThFRVKazs4MV11=xCo9A@mail.gmail.com>
- <23555011.49962.1475845152312.JavaMail.zimbra@efficios.com>
+Subject: =?utf-8?q?=5BRELEASE=5D_LTTng_modules_2=2E9=2E0-rc1_?=
+ =?utf-8?q?=22Joann=C3=A8s=22_=28Linux_kernel_tracer=29?=
+Date: Fri, 7 Oct 2016 20:04:45 +0000 (UTC)
+Message-ID: <899554043.50497.1475870685546.JavaMail.zimbra__6613.2981134162$1475870631$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0258220242313430145=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 91D9DA44D8
- for <lttng-dev@lists.lttng.org>; Fri,  7 Oct 2016 14:35:45 +0000 (UTC)
-In-Reply-To: <23555011.49962.1475845152312.JavaMail.zimbra@efficios.com>
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 59ED0A4551
+ for <lttng-dev@lists.lttng.org>; Fri,  7 Oct 2016 20:05:14 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,816 +19,132 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Aravind HT <aravind.ht@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org, linux-kernel <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0258220242313430145==
-Content-Type: multipart/alternative;
-	boundary="=_e581e14f-4895-406b-b70b-f44487b460b8"
-
---=_e581e14f-4895-406b-b70b-f44487b460b8
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
------ On Oct 7, 2016, at 8:59 AM, Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote: 
-
-> ----- On Oct 7, 2016, at 6:46 AM, Aravind HT <aravind.ht@gmail.com> wrote:
-
->> Hi,
-
->> I am encountering a few crashes which are all happening around the hash table
->> functions, the below are from my 2.6 version for which I have reproduced them
->> with debug symbols enabled.
-
-> Hi Aravind,
-
-> We do not support LTTng 2.6 anymore. Let us know if you can reproduce with
-> LTTng 2.8 or master.
-
-Hi, 
-
-I noticed that further down below, you reproduced with 2.8. Please 
-provide backtrace with debug information, of a build without optimisation. 
-If you can provide a reproducer it would also help. 
-
-Ref. https://lttng.org/community/#bug-reporting-guidelines 
-
-Thanks, 
-
-Mathieu 
-
-> Thanks,
-
-> Mathieu
-
->> 2.6 SCENARIO 1
-
->> (gdb) bt
-
->> Python Exception <type 'exceptions.ImportError'> No module named gdb.frames:
-
->> #0 lttng_ht_lookup (ht=0x6888f0, key=key@entry=0x4b,
->> iter=iter@entry=0x7f318fffeae0) at hashtable.c:236
-
->> #1 0x0000000000429900 in ust_app_unregister (sock=sock@entry=75) at
->> ust-app.c:3105
-
->> #2 0x000000000043918a in thread_manage_apps (data=<optimized out>) at
->> main.c:1558
-
->> #3 0x00007f3197c74294 in start_thread (arg=0x7f318ffff700) at
->> pthread_create.c:336
-
->> #4 0x00007f31979b213d in clone () at
->> ../sysdeps/unix/sysv/linux/x86_64/clone.S:109
-
->> 2.6 SCENARIO 2 : Not sure why cmd_init() gets called here
-
->> #0 0x00007f024d68fd2c in lttng_cds_lfht_lookup (ht=0x68ac90,
->> hash=8123239074643410387, match=0x418be2 <ht_match_reg_uid>,
->> key=0x7f023affb8a0, iter=0x7f023affb900) at rculfhash.c:1535
-
->> #1 0x0000000000418be2 in cmd_init () at cmd.c:3332
-
->> #2 0x00000000004191e3 in buffer_reg_uid_find (session_id=<optimized out>,
->> bits_per_long=64, uid=0) at buffer-registry.c:198
-
->> #3 0x000000000042df89 in ust_consumer_metadata_request
->> (socket=socket@entry=0x67f1f0 <ustconsumer64_data+176>) at ust-consumer.c:464
-
->> #4 0x000000000043b0e6 in thread_manage_consumer (data=0x67f140
->> <ustconsumer64_data>) at main.c:1353
-
->> #5 0x00007f024c4ae294 in start_thread (arg=0x7f023affd700) at
->> pthread_create.c:336
-
->> #6 0x00007f024c1ec13d in clone () at
->> ../sysdeps/unix/sysv/linux/x86_64/clone.S:109
-
->> (gdb)
-
->> 2.6 SCENARIO 3
-
->> (gdb) bt
-
->> #0 0x00007f444c017740 in ?? ()
-
->> #1 0x00007f44676a9b6b in bucket_at (index=<optimized out>, ht=0x7f444c00d4e0) at
->> rculfhash.c:853
-
->> #2 lookup_bucket (hash=4405530133935945645, size=<optimized out>,
->> ht=0x7f444c00d4e0) at rculfhash.c:861
-
->> #3 lttng_cds_lfht_lookup (ht=0x7f444c00d4e0, hash=4405530133935945645,
->> match=0x7f44676a7980 <match_ulong>, key=0x29, iter=iter@entry=0x7f44613d59d0)
->> at rculfhash.c:1542
-
->> #4 0x00007f44676a7e20 in lttng_ht_lookup (ht=<optimized out>, key=<optimized
->> out>, iter=iter@entry=0x7f44613d59d0) at hashtable.c:240
-
->> #5 0x0000000000412217 in consumer_find_socket (key=<optimized out>,
->> consumer=<optimized out>) at consumer.c:359
-
->> #6 0x0000000000000000 in ?? ()
-
->> I am also trying to upgrade to 2.8.1 and see similar crashes there,
->> unfortunately do not have debug symbols enabled, but crashes always in one of
->> the hash table related functions.
->> I'm in the process of enabling debug symbols on 2.8.1 so that the info that i
->> provide applies to the current version, also trying out Valgrind.
-
->> Let me know if you can figure something out with this.
-
->> 2.8.1 SCENARIO 1
-
->> GNU gdb (GDB) 7.8.1
-
->> Copyright (C) 2014 Free Software Foundation, Inc.
-
->> License GPLv3+: GNU GPL version 3 or later < [ http://gnu.org/licenses/gpl.html
->> | http://gnu.org/licenses/gpl.html ] >
-
->> This is free software: you are free to change and redistribute it.
-
->> There is NO WARRANTY, to the extent permitted by law. Type "show copying"
-
->> and "show warranty" for details.
-
->> This GDB was configured as "x86_64-poky-linux".
-
->> Type "show configuration" for configuration details.
-
->> For bug reporting instructions, please see:
-
->> < [ http://www.gnu.org/software/gdb/bugs/ |
->> http://www.gnu.org/software/gdb/bugs/ ] >.
-
->> Find the GDB manual and other documentation resources online at:
-
->> < [ http://www.gnu.org/software/gdb/documentation/ |
->> http://www.gnu.org/software/gdb/documentation/ ] >.
-
->> For help, type "help".
-
->> Type "apropos word" to search for commands related to "word"...
-
->> Reading symbols from /usr/bin/lttng-sessiond...(no debugging symbols
->> found)...done.
-
->> [New LWP 1134]
-
->> [New LWP 1090]
-
->> [New LWP 1091]
-
->> [New LWP 1092]
-
->> [New LWP 1093]
-
->> [New LWP 1095]
-
->> [New LWP 1098]
-
->> [New LWP 1102]
-
->> [New LWP 1110]
-
->> [New LWP 1096]
-
->> [New LWP 1094]
-
->> [New LWP 1097]
-
->> warning: Could not load shared library symbols for linux-vdso.so.1.
-
->> Do you need "set solib-search-path" or "set sysroot"?
-
->> [Thread debugging using libthread_db enabled]
-
->> Using host libthread_db library "/lib64/libthread_db.so.1".
-
->> Core was generated by `/usr/bin/lttng-sessiond --consumerd32-path
->> /usr/lib/lttng/libexec/lttng-consume'.
-
->> Program terminated with signal SIGSEGV, Segmentation fault.
-
->> #0 0x0000000000000000 in ?? ()
-
->> (gdb) bt
-
->> Python Exception <type 'exceptions.ImportError'> No module named gdb.frames:
-
->> #0 0x0000000000000000 in ?? ()
-
->> #1 0x00007f1b39b1db6b in lttng_cds_lfht_lookup () from
->> /usr/lib64/liblttng-ctl.so.0
-
->> #2 0x0000000000412217 in ?? ()
-
->> #3 0x0000000000412263 in ?? ()
-
->> #4 0x0000000000427de8 in ?? ()
-
->> #5 0x0000000000427ed1 in ?? ()
-
->> #6 0x00000000004280d3 in ?? ()
-
->> #7 0x00007f1b398facad in ?? () from /usr/lib64/liburcu.so.2
-
->> #8 0x00007f1b3893d294 in start_thread (arg=0x7f1b1e7fc700) at
->> pthread_create.c:336
-
->> #9 0x00007f1b3867b13d in clone () at
->> ../sysdeps/unix/sysv/linux/x86_64/clone.S:109
-
->> (gdb) q
-
->> 2.8.1 SCENARIO 2
-
->> GNU gdb (GDB) 7.8.1
-
->> Copyright (C) 2014 Free Software Foundation, Inc.
-
->> License GPLv3+: GNU GPL version 3 or later < [ http://gnu.org/licenses/gpl.html
->> | http://gnu.org/licenses/gpl.html ] >
-
->> This is free software: you are free to change and redistribute it.
-
->> There is NO WARRANTY, to the extent permitted by law. Type "show copying"
-
->> and "show warranty" for details.
-
->> This GDB was configured as "x86_64-poky-linux".
-
->> Type "show configuration" for configuration details.
-
->> For bug reporting instructions, please see:
-
->> < [ http://www.gnu.org/software/gdb/bugs/ |
->> http://www.gnu.org/software/gdb/bugs/ ] >.
-
->> Find the GDB manual and other documentation resources online at:
-
->> < [ http://www.gnu.org/software/gdb/documentation/ |
->> http://www.gnu.org/software/gdb/documentation/ ] >.
-
->> For help, type "help".
-
->> Type "apropos word" to search for commands related to "word"...
-
->> Reading symbols from /usr/bin/lttng-sessiond...(no debugging symbols
->> found)...done.
-
->> [New LWP 637]
-
->> [New LWP 610]
-
->> [New LWP 613]
-
->> [New LWP 624]
-
->> [New LWP 605]
-
->> [New LWP 608]
-
->> [New LWP 607]
-
->> [New LWP 609]
-
->> [New LWP 612]
-
->> [New LWP 606]
-
->> [New LWP 611]
-
->> [New LWP 616]
-
->> warning: Could not load shared library symbols for linux-vdso.so.1.
-
->> Do you need "set solib-search-path" or "set sysroot"?
-
->> [Thread debugging using libthread_db enabled]
-
->> Using host libthread_db library "/lib64/libthread_db.so.1".
-
->> Core was generated by `/usr/bin/lttng-sessiond --consumerd32-path
->> /usr/lib/lttng/libexec/lttng-consume'.
-
->> Program terminated with signal SIGSEGV, Segmentation fault.
-
->> #0 0x0000000000000020 in ?? ()
-
->> (gdb) bt
-
->> Python Exception <type 'exceptions.ImportError'> No module named gdb.frames:
-
->> #0 0x0000000000000020 in ?? ()
-
->> #1 0x00007ff010197e02 in lttng_ht_lookup () from /usr/lib64/liblttng-ctl.so.0
-
->> #2 0x0000000000412217 in ?? ()
-
->> #3 0x0000000000412263 in ?? ()
-
->> #4 0x0000000000427de8 in ?? ()
-
->> #5 0x0000000000427ed1 in ?? ()
-
->> #6 0x00000000004280d3 in ?? ()
-
->> #7 0x00007ff00ff76cad in ?? () from /usr/lib64/liburcu.so.2
-
->> #8 0x00007ff00efb9294 in start_thread (arg=0x7ff0096c5700) at
->> pthread_create.c:336
-
->> #9 0x00007ff00ecf713d in clone () at
->> ../sysdeps/unix/sysv/linux/x86_64/clone.S:109
-
->> (gdb) q
-
->> Regards,
->> Aravind.
-
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_e581e14f-4895-406b-b70b-f44487b460b8
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><br></div><div><br></div><span id=3D"zwchr"=
- data-marker=3D"__DIVIDER__">----- On Oct 7, 2016, at 8:59 AM, Mathieu Desn=
-oyers &lt;mathieu.desnoyers@efficios.com&gt; wrote:<br></span><div data-mar=
-ker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;=
-margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:n=
-ormal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size=
-:12pt;"><div style=3D"font-family: arial, helvetica, sans-serif; font-size:=
- 12pt; color: #000000"><br><span id=3D"zwchr">----- On Oct 7, 2016, at 6:46=
- AM, Aravind HT &lt;aravind.ht@gmail.com&gt; wrote:<br></span><div><blockqu=
-ote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px=
-;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-=
-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><span s=
-tyle=3D"background-color: #ffffff; color: #000000; font-family: times new r=
-oman,serif;">Hi,</span><div><span style=3D"background-color: #ffffff; color=
-: #000000; font-family: times new roman,serif;"><br></span></div><div><span=
- style=3D"background-color: #ffffff; color: #000000; font-family: times new=
- roman,serif;">I am encountering a few crashes which are all happening arou=
-nd the hash table functions, the below are from my 2.6 version for which I =
-have reproduced them with debug symbols enabled.</span></div></div></blockq=
-uote><br><div>Hi Aravind,<br></div><br><div>We do not support LTTng 2.6 any=
-more. Let us know if you can reproduce with<br></div><div>LTTng 2.8 or mast=
-er.</div></div></div></blockquote><div><br></div><div>Hi,<br data-mce-bogus=
-=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>I noticed that furthe=
-r down below, you reproduced with 2.8. Please<br data-mce-bogus=3D"1"></div=
-><div>provide backtrace with debug information, of a build without optimisa=
-tion.<br data-mce-bogus=3D"1"></div><div>If you can provide a reproducer it=
- would also help.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"=
-1"></div><div>Ref. https://lttng.org/community/#bug-reporting-guidelines<br=
- data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks=
-,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Ma=
-thieu<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><di=
-v><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid=
- #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;fon=
-t-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;=
-font-size:12pt;"><div style=3D"font-family: arial, helvetica, sans-serif; f=
-ont-size: 12pt; color: #000000"><div><div><br></div><br><div>Thanks,<br></d=
-iv><br><div>Mathieu<br></div><br><br><blockquote style=3D"border-left:2px s=
-olid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal=
-;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-se=
-rif;font-size:12pt;"><div dir=3D"ltr"><div><p class=3D"MsoNormal"><b><span =
-style=3D"background-color: #ffffff; color: #000000; font-family: times new =
-roman,serif;">2.6 SCENARIO
-1</span></b></p><p class=3D"MsoNormal"><span style=3D"background-color: #ff=
-ffff; color: #000000; font-family: times new roman,serif;">(gdb)
-bt</span></p><p class=3D"MsoNormal"><span style=3D"background-color: #fffff=
-f; color: #000000; font-family: times new roman,serif;">Python
-Exception &lt;type 'exceptions.ImportError'&gt; No module named gdb.frames:=
-</span></p><p class=3D"MsoNormal"><span style=3D"background-color: #ffffff;=
- color: #000000; font-family: times new roman,serif;">#0&nbsp;
-lttng_ht_lookup (ht=3D0x6888f0, key=3Dkey@entry=3D0x4b,
-iter=3Diter@entry=3D0x7f318fffeae0) at hashtable.c:236</span></p><p class=
-=3D"MsoNormal"><span style=3D"background-color: #ffffff; color: #000000; fo=
-nt-family: times new roman,serif;">#1&nbsp;
-0x0000000000429900 in ust_app_unregister (sock=3Dsock@entry=3D75) at ust-ap=
-p.c:3105</span></p><p class=3D"MsoNormal"><span style=3D"background-color: =
-#ffffff; color: #000000; font-family: times new roman,serif;">#2&nbsp;
-0x000000000043918a in thread_manage_apps (data=3D&lt;optimized out&gt;) at
-main.c:1558</span></p><p class=3D"MsoNormal"><span style=3D"background-colo=
-r: #ffffff; color: #000000; font-family: times new roman,serif;">#3&nbsp;
-0x00007f3197c74294 in start_thread (arg=3D0x7f318ffff700) at pthread_create=
-.c:336</span></p><p class=3D"MsoNormal"><span style=3D"background-color: #f=
-fffff; color: #000000; font-family: times new roman,serif;">#4&nbsp;
-0x00007f31979b213d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S=
-:109</span></p><p class=3D"MsoNormal"><span style=3D"background-color: #fff=
-fff; color: #000000; font-family: times new roman,serif;">&nbsp;</span></p>=
-<p class=3D"MsoNormal"><span style=3D"background-color: #ffffff; color: #00=
-0000; font-family: times new roman,serif;"><b>2.6&nbsp;</b><b>SCENARIO
-2 : Not sure why cmd_init() gets called here&nbsp;</b></span></p><p class=
-=3D"MsoNormal"><span style=3D"background-color: #ffffff; color: #000000; fo=
-nt-family: times new roman,serif;">#0&nbsp;
-0x00007f024d68fd2c in lttng_cds_lfht_lookup (ht=3D0x68ac90,
-hash=3D8123239074643410387, match=3D0x418be2 &lt;ht_match_reg_uid&gt;,
-key=3D0x7f023affb8a0, iter=3D0x7f023affb900) at rculfhash.c:1535</span></p>=
-<p class=3D"MsoNormal"><span style=3D"background-color: #ffffff; color: #00=
-0000; font-family: times new roman,serif;">#1&nbsp;
-0x0000000000418be2 in cmd_init () at cmd.c:3332</span></p><p class=3D"MsoNo=
-rmal"><span style=3D"background-color: #ffffff; color: #000000; font-family=
-: times new roman,serif;">#2&nbsp;
-0x00000000004191e3 in buffer_reg_uid_find (session_id=3D&lt;optimized out&g=
-t;,
-bits_per_long=3D64, uid=3D0) at buffer-registry.c:198</span></p><p class=3D=
-"MsoNormal"><span style=3D"background-color: #ffffff; color: #000000; font-=
-family: times new roman,serif;">#3&nbsp;
-0x000000000042df89 in ust_consumer_metadata_request (socket=3Dsocket@entry=
-=3D0x67f1f0
-&lt;ustconsumer64_data+176&gt;) at ust-consumer.c:464</span></p><p class=3D=
-"MsoNormal"><span style=3D"background-color: #ffffff; color: #000000; font-=
-family: times new roman,serif;">#4&nbsp;
-0x000000000043b0e6 in thread_manage_consumer (data=3D0x67f140
-&lt;ustconsumer64_data&gt;) at main.c:1353</span></p><p class=3D"MsoNormal"=
-><span style=3D"background-color: #ffffff; color: #000000; font-family: tim=
-es new roman,serif;">#5&nbsp;
-0x00007f024c4ae294 in start_thread (arg=3D0x7f023affd700) at pthread_create=
-.c:336</span></p><p class=3D"MsoNormal"><span style=3D"background-color: #f=
-fffff; color: #000000; font-family: times new roman,serif;">#6&nbsp;
-0x00007f024c1ec13d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S=
-:109</span></p><p class=3D"MsoNormal"><span style=3D"background-color: #fff=
-fff; color: #000000; font-family: times new roman,serif;">(gdb)</span></p><=
-p class=3D"MsoNormal"><span style=3D"background-color: #ffffff; color: #000=
-000; font-family: times new roman,serif;">&nbsp;</span></p><p class=3D"MsoN=
-ormal"><span style=3D"background-color: #ffffff; color: #000000; font-famil=
-y: times new roman,serif;"><b>2.6&nbsp;</b><b>SCENARIO
-3</b></span></p><p class=3D"MsoNormal"><span style=3D"background-color: #ff=
-ffff; color: #000000; font-family: times new roman,serif;">(gdb)
-bt</span></p><p class=3D"MsoNormal"><span style=3D"background-color: #fffff=
-f; color: #000000; font-family: times new roman,serif;">#0&nbsp;
-0x00007f444c017740 in ?? ()</span></p><p class=3D"MsoNormal"><span style=3D=
-"background-color: #ffffff; color: #000000; font-family: times new roman,se=
-rif;">#1&nbsp;
-0x00007f44676a9b6b in bucket_at (index=3D&lt;optimized out&gt;,
-ht=3D0x7f444c00d4e0) at rculfhash.c:853</span></p><p class=3D"MsoNormal"><s=
-pan style=3D"background-color: #ffffff; color: #000000; font-family: times =
-new roman,serif;">#2&nbsp;
-lookup_bucket (hash=3D4405530133935945645, size=3D&lt;optimized out&gt;,
-ht=3D0x7f444c00d4e0) at rculfhash.c:861</span></p><p class=3D"MsoNormal"><s=
-pan style=3D"background-color: #ffffff; color: #000000; font-family: times =
-new roman,serif;">#3&nbsp;
-lttng_cds_lfht_lookup (ht=3D0x7f444c00d4e0, hash=3D4405530133935945645,
-match=3D0x7f44676a7980 &lt;match_ulong&gt;, key=3D0x29,
-iter=3Diter@entry=3D0x7f44613d59d0) at rculfhash.c:1542</span></p><p class=
-=3D"MsoNormal"><span style=3D"background-color: #ffffff; color: #000000; fo=
-nt-family: times new roman,serif;">#4&nbsp;
-0x00007f44676a7e20 in lttng_ht_lookup (ht=3D&lt;optimized out&gt;,
-key=3D&lt;optimized out&gt;, iter=3Diter@entry=3D0x7f44613d59d0) at hashtab=
-le.c:240</span></p><p class=3D"MsoNormal"><span style=3D"background-color: =
-#ffffff; color: #000000; font-family: times new roman,serif;">#5&nbsp;
-0x0000000000412217 in consumer_find_socket (key=3D&lt;optimized out&gt;,
-consumer=3D&lt;optimized out&gt;) at consumer.c:359</span></p><p class=3D"M=
-soNormal"><span style=3D"background-color: #ffffff; color: #000000; font-fa=
-mily: times new roman,serif;">#6&nbsp;
-0x0000000000000000 in ?? ()</span></p><p class=3D"MsoNormal"><span style=3D=
-"background-color: #ffffff; color: #000000; font-family: times new roman,se=
-rif;"><br></span></p><p class=3D"MsoNormal"><span style=3D"background-color=
-: #ffffff; color: #000000; font-family: times new roman,serif;">I am also t=
-rying to upgrade to 2.8.1 and see similar crashes there, unfortunately do n=
-ot have debug symbols enabled, but crashes always in one of the hash table =
-related functions.</span></p><div><span style=3D"background-color: #ffffff;=
- color: #000000; font-family: times new roman,serif;">I'm in the process of=
- enabling debug symbols on 2.8.1 so that the info that i provide applies to=
- the current version, also trying out Valgrind.</span></div><div><span styl=
-e=3D"background-color: #ffffff; color: #000000; font-family: times new roma=
-n,serif;"><br></span></div><div><span style=3D"background-color: #ffffff; c=
-olor: #000000; font-family: times new roman,serif;">Let me know if you can =
-figure something out with this.</span></div><div><span style=3D"background-=
-color: #ffffff; color: #000000; font-family: times new roman,serif;"><br></=
-span></div><p class=3D"MsoNormal"><span style=3D"background-color: #ffffff;=
- color: #000000; font-family: times new roman,serif;"><b>2.8.1 SCENARIO 1</=
-b>&nbsp;</span></p><p class=3D"MsoNormal"><span style=3D"background-color:r=
-gb(255,255,255)"><span style=3D"color: #000000; font-family: times new roma=
-n,serif;">GNU gdb (GDB) 7.8.1</span></span></p><p class=3D"MsoNormal"><span=
- style=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000;=
- font-family: times new roman,serif;">Copyright (C) 2014 Free Software Foun=
-dation, Inc.</span></span></p><p class=3D"MsoNormal"><span style=3D"backgro=
-und-color:rgb(255,255,255)"><span style=3D"color: #000000; font-family: tim=
-es new roman,serif;">License GPLv3+: GNU GPL version 3 or later &lt;<a href=
-=3D"http://gnu.org/licenses/gpl.html" target=3D"_blank">http://gnu.org/lice=
-nses/gpl.html</a>&gt;</span></span></p><p class=3D"MsoNormal"><span style=
-=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; font-=
-family: times new roman,serif;">This is free software: you are free to chan=
-ge and redistribute
-it.</span></span></p><p class=3D"MsoNormal"><span style=3D"background-color=
-:rgb(255,255,255)"><span style=3D"color: #000000; font-family: times new ro=
-man,serif;">There is NO WARRANTY, to the extent permitted by law.&nbsp; Typ=
-e
-"show copying"</span></span></p><p class=3D"MsoNormal"><span style=3D"backg=
-round-color:rgb(255,255,255)"><span style=3D"color: #000000; font-family: t=
-imes new roman,serif;">and "show warranty" for details.</span></span></p><p=
- class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><spa=
-n style=3D"color: #000000; font-family: times new roman,serif;">This GDB wa=
-s configured as "x86_64-poky-linux".</span></span></p><p class=3D"MsoNormal=
-"><span style=3D"background-color:rgb(255,255,255)"><span style=3D"color: #=
-000000; font-family: times new roman,serif;">Type "show configuration" for =
-configuration details.</span></span></p><p class=3D"MsoNormal"><span style=
-=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; font-=
-family: times new roman,serif;">For bug reporting instructions, please see:=
-</span></span></p><p class=3D"MsoNormal"><span style=3D"background-color:rg=
-b(255,255,255)"><span style=3D"color: #000000; font-family: times new roman=
-,serif;">&lt;<a href=3D"http://www.gnu.org/software/gdb/bugs/" target=3D"_b=
-lank">http://www.gnu.org/software/gdb/bugs/</a>&gt;.</span></span></p><p cl=
-ass=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span s=
-tyle=3D"color: #000000; font-family: times new roman,serif;">Find the GDB m=
-anual and other documentation resources online at:</span></span></p><p clas=
-s=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span sty=
-le=3D"color: #000000; font-family: times new roman,serif;">&lt;<a href=3D"h=
-ttp://www.gnu.org/software/gdb/documentation/" target=3D"_blank">http://www=
-.gnu.org/software/gdb/documentation/</a>&gt;.</span></span></p><p class=3D"=
-MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span style=3D=
-"color: #000000; font-family: times new roman,serif;">For help, type "help"=
-.</span></span></p><p class=3D"MsoNormal"><span style=3D"background-color:r=
-gb(255,255,255)"><span style=3D"color: #000000; font-family: times new roma=
-n,serif;">Type "apropos word" to search for commands related to
-"word"...</span></span></p><p class=3D"MsoNormal"><span style=3D"background=
--color:rgb(255,255,255)"><span style=3D"color: #000000; font-family: times =
-new roman,serif;">Reading symbols from /usr/bin/lttng-sessiond...(no debugg=
-ing
-symbols found)...done.</span></span></p><p class=3D"MsoNormal"><span style=
-=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; font-=
-family: times new roman,serif;">[New LWP 1134]</span></span></p><p class=3D=
-"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span style=
-=3D"color: #000000; font-family: times new roman,serif;">[New LWP 1090]</sp=
-an></span></p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(25=
-5,255,255)"><span style=3D"color: #000000; font-family: times new roman,ser=
-if;">[New LWP 1091]</span></span></p><p class=3D"MsoNormal"><span style=3D"=
-background-color:rgb(255,255,255)"><span style=3D"color: #000000; font-fami=
-ly: times new roman,serif;">[New LWP 1092]</span></span></p><p class=3D"Mso=
-Normal"><span style=3D"background-color:rgb(255,255,255)"><span style=3D"co=
-lor: #000000; font-family: times new roman,serif;">[New LWP 1093]</span></s=
-pan></p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,=
-255)"><span style=3D"color: #000000; font-family: times new roman,serif;">[=
-New LWP 1095]</span></span></p><p class=3D"MsoNormal"><span style=3D"backgr=
-ound-color:rgb(255,255,255)"><span style=3D"color: #000000; font-family: ti=
-mes new roman,serif;">[New LWP 1098]</span></span></p><p class=3D"MsoNormal=
-"><span style=3D"background-color:rgb(255,255,255)"><span style=3D"color: #=
-000000; font-family: times new roman,serif;">[New LWP 1102]</span></span></=
-p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)">=
-<span style=3D"color: #000000; font-family: times new roman,serif;">[New LW=
-P 1110]</span></span></p><p class=3D"MsoNormal"><span style=3D"background-c=
-olor:rgb(255,255,255)"><span style=3D"color: #000000; font-family: times ne=
-w roman,serif;">[New LWP 1096]</span></span></p><p class=3D"MsoNormal"><spa=
-n style=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000=
-; font-family: times new roman,serif;">[New LWP 1094]</span></span></p><p c=
-lass=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span =
-style=3D"color: #000000; font-family: times new roman,serif;">[New LWP 1097=
-]</span></span></p><p class=3D"MsoNormal"><span style=3D"background-color:r=
-gb(255,255,255)"><span style=3D"color: #000000; font-family: times new roma=
-n,serif;">&nbsp;</span></span></p><p class=3D"MsoNormal"><span style=3D"bac=
-kground-color:rgb(255,255,255)"><span style=3D"color: #000000; font-family:=
- times new roman,serif;">warning: Could not load shared library symbols for
-linux-vdso.so.1.</span></span></p><p class=3D"MsoNormal"><span style=3D"bac=
-kground-color:rgb(255,255,255)"><span style=3D"color: #000000; font-family:=
- times new roman,serif;">Do you need "set solib-search-path" or "set
-sysroot"?</span></span></p><p class=3D"MsoNormal"><span style=3D"background=
--color:rgb(255,255,255)"><span style=3D"color: #000000; font-family: times =
-new roman,serif;">[Thread debugging using libthread_db enabled]</span></spa=
-n></p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,25=
-5)"><span style=3D"color: #000000; font-family: times new roman,serif;">Usi=
-ng host libthread_db library
-"/lib64/libthread_db.so.1".</span></span></p><p class=3D"MsoNormal"><span s=
-tyle=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; f=
-ont-family: times new roman,serif;">Core was generated by `/usr/bin/lttng-s=
-essiond
---consumerd32-path /usr/lib/lttng/libexec/lttng-consume'.</span></span></p>=
-<p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><s=
-pan style=3D"color: #000000; font-family: times new roman,serif;">Program t=
-erminated with signal SIGSEGV, Segmentation fault.</span></span></p><p clas=
-s=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span sty=
-le=3D"color: #000000; font-family: times new roman,serif;">#0&nbsp; 0x00000=
-00000000000 in ?? ()</span></span></p><p class=3D"MsoNormal"><span style=3D=
-"background-color:rgb(255,255,255)"><span style=3D"color: #000000; font-fam=
-ily: times new roman,serif;">(gdb) bt</span></span></p><p class=3D"MsoNorma=
-l"><span style=3D"background-color:rgb(255,255,255)"><span style=3D"color: =
-#000000; font-family: times new roman,serif;">Python Exception &lt;type 'ex=
-ceptions.ImportError'&gt; No module
-named gdb.frames: </span></span></p><p class=3D"MsoNormal"><span style=3D"b=
-ackground-color:rgb(255,255,255)"><span style=3D"color: #000000; font-famil=
-y: times new roman,serif;">#0&nbsp; 0x0000000000000000 in ?? ()</span></spa=
-n></p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,25=
-5)"><span style=3D"color: #000000; font-family: times new roman,serif;">#1&=
-nbsp; 0x00007f1b39b1db6b in lttng_cds_lfht_lookup () from
-/usr/lib64/liblttng-ctl.so.0</span></span></p><p class=3D"MsoNormal"><span =
-style=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; =
-font-family: times new roman,serif;">#2&nbsp; 0x0000000000412217 in ?? ()</=
-span></span></p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(=
-255,255,255)"><span style=3D"color: #000000; font-family: times new roman,s=
-erif;">#3&nbsp; 0x0000000000412263 in ?? ()</span></span></p><p class=3D"Ms=
-oNormal"><span style=3D"background-color:rgb(255,255,255)"><span style=3D"c=
-olor: #000000; font-family: times new roman,serif;">#4&nbsp; 0x000000000042=
-7de8 in ?? ()</span></span></p><p class=3D"MsoNormal"><span style=3D"backgr=
-ound-color:rgb(255,255,255)"><span style=3D"color: #000000; font-family: ti=
-mes new roman,serif;">#5&nbsp; 0x0000000000427ed1 in ?? ()</span></span></p=
-><p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><=
-span style=3D"color: #000000; font-family: times new roman,serif;">#6&nbsp;=
- 0x00000000004280d3 in ?? ()</span></span></p><p class=3D"MsoNormal"><span =
-style=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; =
-font-family: times new roman,serif;">#7&nbsp; 0x00007f1b398facad in ?? () f=
-rom
-/usr/lib64/liburcu.so.2</span></span></p><p class=3D"MsoNormal"><span style=
-=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; font-=
-family: times new roman,serif;">#8&nbsp; 0x00007f1b3893d294 in start_thread=
- (arg=3D0x7f1b1e7fc700)
-at pthread_create.c:336</span></span></p><p class=3D"MsoNormal"><span style=
-=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; font-=
-family: times new roman,serif;">#9&nbsp; 0x00007f1b3867b13d in clone () at
-../sysdeps/unix/sysv/linux/x86_64/clone.S:109</span></span></p><p class=3D"=
-MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span style=3D=
-"color: #000000; font-family: times new roman,serif;">(gdb) q</span></span>=
-</p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)=
-"><span style=3D"color: #000000; font-family: times new roman,serif;"><br><=
-/span></span></p><p class=3D"MsoNormal"><span style=3D"background-color:rgb=
-(255,255,255)"><span style=3D"color: #000000; font-family: times new roman,=
-serif;"><br></span></span></p><p class=3D"MsoNormal"><span style=3D"backgro=
-und-color:rgb(255,255,255)"><span style=3D"color: #000000; font-family: tim=
-es new roman,serif;"><br></span></span></p><p class=3D"MsoNormal"><span sty=
-le=3D"color: #000000; font-family: times new roman,serif;"><b style=3D"back=
-ground-color:rgb(255,255,255)">2.8.1 SCENARIO 2</b></span></p><div><span st=
-yle=3D"background-color: #ffffff; color: #000000; font-family: times new ro=
-man,serif;"><br></span></div><p class=3D"MsoNormal"><span style=3D"backgrou=
-nd-color: #ffffff; color: #000000; font-family: times new roman,serif;">GNU=
- gdb (GDB) 7.8.1<br></span></p><p class=3D"MsoNormal"><span style=3D"backgr=
-ound-color:rgb(255,255,255)"><span style=3D"color: #000000; font-family: ti=
-mes new roman,serif;">Copyright (C) 2014 Free Software Foundation, Inc.</sp=
-an></span></p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(25=
-5,255,255)"><span style=3D"color: #000000; font-family: times new roman,ser=
-if;">License GPLv3+: GNU GPL version 3 or later &lt;<a href=3D"http://gnu.o=
-rg/licenses/gpl.html" target=3D"_blank">http://gnu.org/licenses/gpl.html</a=
->&gt;</span></span></p><p class=3D"MsoNormal"><span style=3D"background-col=
-or:rgb(255,255,255)"><span style=3D"color: #000000; font-family: times new =
-roman,serif;">This is free software: you are free to change and redistribut=
-e
-it.</span></span></p><p class=3D"MsoNormal"><span style=3D"background-color=
-:rgb(255,255,255)"><span style=3D"color: #000000; font-family: times new ro=
-man,serif;">There is NO WARRANTY, to the extent permitted by law.&nbsp; Typ=
-e
-"show copying"</span></span></p><p class=3D"MsoNormal"><span style=3D"backg=
-round-color:rgb(255,255,255)"><span style=3D"color: #000000; font-family: t=
-imes new roman,serif;">and "show warranty" for details.</span></span></p><p=
- class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><spa=
-n style=3D"color: #000000; font-family: times new roman,serif;">This GDB wa=
-s configured as "x86_64-poky-linux".</span></span></p><p class=3D"MsoNormal=
-"><span style=3D"background-color:rgb(255,255,255)"><span style=3D"color: #=
-000000; font-family: times new roman,serif;">Type "show configuration" for =
-configuration details.</span></span></p><p class=3D"MsoNormal"><span style=
-=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; font-=
-family: times new roman,serif;">For bug reporting instructions, please see:=
-</span></span></p><p class=3D"MsoNormal"><span style=3D"background-color:rg=
-b(255,255,255)"><span style=3D"color: #000000; font-family: times new roman=
-,serif;">&lt;<a href=3D"http://www.gnu.org/software/gdb/bugs/" target=3D"_b=
-lank">http://www.gnu.org/software/gdb/bugs/</a>&gt;.</span></span></p><p cl=
-ass=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span s=
-tyle=3D"color: #000000; font-family: times new roman,serif;">Find the GDB m=
-anual and other documentation resources online at:</span></span></p><p clas=
-s=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span sty=
-le=3D"color: #000000; font-family: times new roman,serif;">&lt;<a href=3D"h=
-ttp://www.gnu.org/software/gdb/documentation/" target=3D"_blank">http://www=
-.gnu.org/software/gdb/documentation/</a>&gt;.</span></span></p><p class=3D"=
-MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span style=3D=
-"color: #000000; font-family: times new roman,serif;">For help, type "help"=
-.</span></span></p><p class=3D"MsoNormal"><span style=3D"background-color:r=
-gb(255,255,255)"><span style=3D"color: #000000; font-family: times new roma=
-n,serif;">Type "apropos word" to search for commands related to
-"word"...</span></span></p><p class=3D"MsoNormal"><span style=3D"background=
--color:rgb(255,255,255)"><span style=3D"color: #000000; font-family: times =
-new roman,serif;">Reading symbols from /usr/bin/lttng-sessiond...(no debugg=
-ing
-symbols found)...done.</span></span></p><p class=3D"MsoNormal"><span style=
-=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; font-=
-family: times new roman,serif;">[New LWP 637]</span></span></p><p class=3D"=
-MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span style=3D=
-"color: #000000; font-family: times new roman,serif;">[New LWP 610]</span><=
-/span></p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,25=
-5,255)"><span style=3D"color: #000000; font-family: times new roman,serif;"=
->[New LWP 613]</span></span></p><p class=3D"MsoNormal"><span style=3D"backg=
-round-color:rgb(255,255,255)"><span style=3D"color: #000000; font-family: t=
-imes new roman,serif;">[New LWP 624]</span></span></p><p class=3D"MsoNormal=
-"><span style=3D"background-color:rgb(255,255,255)"><span style=3D"color: #=
-000000; font-family: times new roman,serif;">[New LWP 605]</span></span></p=
-><p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><=
-span style=3D"color: #000000; font-family: times new roman,serif;">[New LWP=
- 608]</span></span></p><p class=3D"MsoNormal"><span style=3D"background-col=
-or:rgb(255,255,255)"><span style=3D"color: #000000; font-family: times new =
-roman,serif;">[New LWP 607]</span></span></p><p class=3D"MsoNormal"><span s=
-tyle=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; f=
-ont-family: times new roman,serif;">[New LWP 609]</span></span></p><p class=
-=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span styl=
-e=3D"color: #000000; font-family: times new roman,serif;">[New LWP 612]</sp=
-an></span></p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(25=
-5,255,255)"><span style=3D"color: #000000; font-family: times new roman,ser=
-if;">[New LWP 606]</span></span></p><p class=3D"MsoNormal"><span style=3D"b=
-ackground-color:rgb(255,255,255)"><span style=3D"color: #000000; font-famil=
-y: times new roman,serif;">[New LWP 611]</span></span></p><p class=3D"MsoNo=
-rmal"><span style=3D"background-color:rgb(255,255,255)"><span style=3D"colo=
-r: #000000; font-family: times new roman,serif;">[New LWP 616]</span></span=
-></p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255=
-)"><span style=3D"color: #000000; font-family: times new roman,serif;">&nbs=
-p;</span></span></p><p class=3D"MsoNormal"><span style=3D"background-color:=
-rgb(255,255,255)"><span style=3D"color: #000000; font-family: times new rom=
-an,serif;">warning: Could not load shared library symbols for
-linux-vdso.so.1.</span></span></p><p class=3D"MsoNormal"><span style=3D"bac=
-kground-color:rgb(255,255,255)"><span style=3D"color: #000000; font-family:=
- times new roman,serif;">Do you need "set solib-search-path" or "set
-sysroot"?</span></span></p><p class=3D"MsoNormal"><span style=3D"background=
--color:rgb(255,255,255)"><span style=3D"color: #000000; font-family: times =
-new roman,serif;">[Thread debugging using libthread_db enabled]</span></spa=
-n></p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,25=
-5)"><span style=3D"color: #000000; font-family: times new roman,serif;">Usi=
-ng host libthread_db library
-"/lib64/libthread_db.so.1".</span></span></p><p class=3D"MsoNormal"><span s=
-tyle=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; f=
-ont-family: times new roman,serif;">Core was generated by `/usr/bin/lttng-s=
-essiond
---consumerd32-path /usr/lib/lttng/libexec/lttng-consume'.</span></span></p>=
-<p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><s=
-pan style=3D"color: #000000; font-family: times new roman,serif;">Program t=
-erminated with signal SIGSEGV, Segmentation fault.</span></span></p><p clas=
-s=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span sty=
-le=3D"color: #000000; font-family: times new roman,serif;">#0&nbsp; 0x00000=
-00000000020 in ?? ()</span></span></p><p class=3D"MsoNormal"><span style=3D=
-"background-color:rgb(255,255,255)"><span style=3D"color: #000000; font-fam=
-ily: times new roman,serif;">(gdb) bt</span></span></p><p class=3D"MsoNorma=
-l"><span style=3D"background-color:rgb(255,255,255)"><span style=3D"color: =
-#000000; font-family: times new roman,serif;">Python Exception &lt;type 'ex=
-ceptions.ImportError'&gt; No module
-named gdb.frames: </span></span></p><p class=3D"MsoNormal"><span style=3D"b=
-ackground-color:rgb(255,255,255)"><span style=3D"color: #000000; font-famil=
-y: times new roman,serif;">#0&nbsp; 0x0000000000000020 in ?? ()</span></spa=
-n></p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,25=
-5)"><span style=3D"color: #000000; font-family: times new roman,serif;">#1&=
-nbsp; 0x00007ff010197e02 in lttng_ht_lookup () from
-/usr/lib64/liblttng-ctl.so.0</span></span></p><p class=3D"MsoNormal"><span =
-style=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; =
-font-family: times new roman,serif;">#2&nbsp; 0x0000000000412217 in ?? ()</=
-span></span></p><p class=3D"MsoNormal"><span style=3D"background-color:rgb(=
-255,255,255)"><span style=3D"color: #000000; font-family: times new roman,s=
-erif;">#3&nbsp; 0x0000000000412263 in ?? ()</span></span></p><p class=3D"Ms=
-oNormal"><span style=3D"background-color:rgb(255,255,255)"><span style=3D"c=
-olor: #000000; font-family: times new roman,serif;">#4&nbsp; 0x000000000042=
-7de8 in ?? ()</span></span></p><p class=3D"MsoNormal"><span style=3D"backgr=
-ound-color:rgb(255,255,255)"><span style=3D"color: #000000; font-family: ti=
-mes new roman,serif;">#5&nbsp; 0x0000000000427ed1 in ?? ()</span></span></p=
-><p class=3D"MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><=
-span style=3D"color: #000000; font-family: times new roman,serif;">#6&nbsp;=
- 0x00000000004280d3 in ?? ()</span></span></p><p class=3D"MsoNormal"><span =
-style=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; =
-font-family: times new roman,serif;">#7&nbsp; 0x00007ff00ff76cad in ?? () f=
-rom
-/usr/lib64/liburcu.so.2</span></span></p><p class=3D"MsoNormal"><span style=
-=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; font-=
-family: times new roman,serif;">#8&nbsp; 0x00007ff00efb9294 in start_thread=
- (arg=3D0x7ff0096c5700)
-at pthread_create.c:336</span></span></p><p class=3D"MsoNormal"><span style=
-=3D"background-color:rgb(255,255,255)"><span style=3D"color: #000000; font-=
-family: times new roman,serif;">#9&nbsp; 0x00007ff00ecf713d in clone () at
-../sysdeps/unix/sysv/linux/x86_64/clone.S:109</span></span></p><p class=3D"=
-MsoNormal"><span style=3D"background-color:rgb(255,255,255)"><span style=3D=
-"color: #000000; font-family: times new roman,serif;">(gdb) q</span></span>=
-</p><p class=3D"MsoNormal"><span style=3D"background-color: #ffffff; color:=
- #000000; font-family: times new roman,serif;"><br></span></p><p class=3D"M=
-soNormal"><span style=3D"background-color: #ffffff; color: #000000; font-fa=
-mily: times new roman,serif;"><br></span></p><p class=3D"MsoNormal"><span s=
-tyle=3D"background-color: #ffffff; color: #000000; font-family: times new r=
-oman,serif;">Regards,<br>Aravind.</span></p></div></div><br>_______________=
-________________________________<br>lttng-dev mailing list<br>lttng-dev@lis=
-ts.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<=
-br></blockquote></div><br><div>-- <br></div><div>Mathieu Desnoyers<br>Effic=
-iOS Inc.<br>http://www.efficios.com</div></div><br></blockquote></div><br><=
-div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>Eff=
-iciOS Inc.<br>http://www.efficios.com</div></div></body></html>
---=_e581e14f-4895-406b-b70b-f44487b460b8--
-
-
-
---===============0258220242313430145==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
+V2UgYXJlIHByb3VkIHRvIGFubm91bmNlIHJlbGVhc2UgY2FuZGlkYXRlIDEgb2YgTFRUbmctbW9k
+dWxlcyAyLjkuMC4KUGxlYXNlIHRlc3QgaXQgd2l0aGluIHRoZSBjb21pbmcgbW9udGgsIGFuZCBs
+ZXQgdXMga25vdyBpZiBhbnl0aGluZwpnb2VzIHVuZXhwZWN0ZWRseSBiZWZvcmUgd2UgcHJvY2Vl
+ZCB0byB0aGUgZmluYWwgcmVsZWFzZS4KClRoZSBMVFRuZyBtb2R1bGVzIHByb3ZpZGUgTGludXgg
+a2VybmVsIHRyYWNpbmcgY2FwYWJpbGl0eSB0byB0aGUgTFRUbmcKMi45IHRyYWNlciB0b29sc2V0
+LgoKTmV3IGFuZCBOb3Rld29ydGh5IGZvciAyLjkuMC1yYzE6CgoqIFZhcmlvdXMgcGVyZm9ybWFu
+Y2UgaW1wcm92ZW1lbnRzLiBUZXN0ZWQgb24geDg2LTY0IGFuZCBBUk0zMi4KKiBBZGQgYml0Zmll
+bGQsIGVudW1lcmF0aW9uLCB2YXJpYW50LCBzdHJ1Y3R1cmUsIGNvbXBvdW5kCiAgYXJyYXkvc2Vx
+dWVuY2UgdHlwZXMuCiogQWRkIGN1c3RvbSBmaWVsZCBzdXBwb3J0LgoqIElQdjQsIElQdjYsIGFu
+ZCBUQ1AgaGVhZGVyIGRhdGEgaXMgbm93IHRyYWNlZCB3aXRoIHRoZSBuZXRfLgogIHRyYWNlcG9p
+bnRzLgoqIEltcGxlbWVudCBzZWxlY3QsIHBzZWxlY3Q2LCBwb2xsLCBwcG9sbCwgZXBvbGxfd2Fp
+dCwgZXBvbGxfcHdhaXQsCiAgZXBvbGxfY3RsLCBkZXRhaWxlZCBzeXN0ZW0gY2FsbCB0cmFjaW5n
+LgoqIFRoZSBhY2NlcHQ0KCkgc3lzdGVtIGNhbGwgcGF5bG9hZCBkZXRhaWwgaXMgbm93IHRyYWNl
+ZCBvbiB4ODYtNjQuCiogTmV3ICJpMmMiIGluc3RydW1lbnRhdGlvbi4gV2UgaW50cm9kdWNlIHRo
+ZSBtb2R1bGUgcGFyYW1ldGVyCiAgImV4dHJhY3Rfc2Vuc2l0aXZlX3BheWxvYWQiIGZvciB0aGlz
+IHByb2JlLiBJdCBpcyBkaXNhYmxlZCBieQogIGRlZmF1bHQuIFdoZW4gZW5hYmxlZCwgaXQgYWxs
+b3dzIHRyYWNpbmcgaTJjIHBheWxvYWQgaW5mb3JtYXRpb24KICB3aGljaCBtYXkgY29udGFpbiBz
+ZW5zaXRpdmUgZGF0YSAoZS5nLiBrZXlzdHJva2VzKS4KKiBXaGVuIGx0dG5nLW1vZHVsZXMgZ2V0
+cyBidWlsdCBpbnRvIHRoZSBrZXJuZWwgaW1hZ2UsIHNlbGVjdAogIFRSQUNFUE9JTlRTIHJhdGhl
+ciB0aGFuIGRlcGVuZGluZyBvbiBpdC4KClByb2plY3Qgd2Vic2l0ZTogaHR0cDovL2x0dG5nLm9y
+ZwpEb2N1bWVudGF0aW9uOiBodHRwOi8vbHR0bmcub3JnL2RvY3MKRG93bmxvYWQgbGluazogaHR0
+cDovL2x0dG5nLm9yZy9kb3dubG9hZAoKVGhlIDIuOSByZWxlYXNlICJKb2FubsOocyIgaXMgbmFt
+ZWQgYWZ0ZXIgYSBCZXJsaW5lciBXZWlzc2Ugc3R5bGUKYmVlciBmcm9tIHRoZSBUcsOoZmxlIE5v
+aXIgbWljcm9icmV3ZXJ5IGluIFJvdXluLU5vcmFuZGEuCgpDaGFuZ2Vsb2c6CgoyMDE2LTEwLTA3
+IChOYXRpb25hbCBGcmFwcMOpIERheSkgTFRUbmcgbW9kdWxlcyAyLjkuMC1yYzEKICAgICAgICAq
+IEZpeDogaTJjOiBzdXBwb3J0IGtlcm5lbHMgPCAzLjE1CiAgICAgICAgKiBGaXg6IHNob3cgd2Fy
+bmluZyBmb3IgYnJva2VuIGNsb2NrIHdvcmstYXJvdW5kCiAgICAgICAgKiBCdW1wIG1pbm9yIEFC
+SSB2ZXJzaW9uCiAgICAgICAgKiBGaXg6IHdvcmstYXJvdW5kIHVwc3RyZWFtIExpbnV4IHRpbWVr
+ZWVwaW5nIGJ1ZwogICAgICAgICogQWRkIHN1cHBvcnQgZm9yIGkyYyB0cmFjZXBvaW50cwogICAg
+ICAgICogQ2xlYW51cDogbWFrZWZpbGUgdmVyc2lvbiBjaGVja3Mgd2l0aCBzaW5nbGUgImdlIgog
+ICAgICAgICogUGVyZm9ybWFuY2U6IHNwZWNpYWwtY2FzZSBOVUxMIGluIGx0dG5nX3N0cmxlbl91
+c2VyX2luYXRvbWljCiAgICAgICAgKiBGaXg6IGx0dG5nX2lubGluZV9tZW1jcHkgZG9lcyBub3Qg
+dGFrZSBhIF9fdXNlciBhcmd1bWVudAogICAgICAgICogUGVyZm9ybWFuY2U6IGltcGxlbWVudCBs
+dHRuZ19pbmxpbmVfbWVtY3B5CiAgICAgICAgKiBQZXJmb3JtYW5jZTogY2FjaGUgdGhlIGJhY2tl
+bmQgcGFnZXMgcG9pbnRlciBpbiBjb250ZXh0CiAgICAgICAgKiBDbGVhbnVwOiBsaWJyaW5nYnVm
+ZmVyOiByZW1vdmUgZHVwbGljYXRlIHBvaW50ZXIgY2hhc2luZyBpbiBzbG93IHBhdGhzCiAgICAg
+ICAgKiBQZXJmb3JtYW5jZTogT25seSBkZXJlZmVyZW5jZSBjb21taXQgaW5kZXggb25jZQogICAg
+ICAgICogUGVyZm9ybWFuY2U6IE1hcmsgY2hhbm5lbCBhbmQgYnVmZmVyIGV2ZW50IGRpc2FibGVk
+IGNoZWNrIHVubGlrZWx5CiAgICAgICAgKiBQZXJmb3JtYW5jZTogUmVsYXggYXRvbWljaXR5IGNv
+bnN0cmFpbnRzIGZvciBjcmFzaCBoYW5kbGluZwogICAgICAgICogUGVyZm9ybWFuY2U6IG1hcmsg
+cmluZyBidWZmZXIgZG9fY29weSBjYWxsZXJzIGFsd2F5cyBpbmxpbmUKICAgICAgICAqIFBlcmZv
+cm1hbmNlOiBtYXJrIGxpYl9yaW5nX2J1ZmZlcl93cml0ZSBhbHdheXMgaW5saW5lCiAgICAgICAg
+KiBLY29uZmlnOiBzZWxlY3QgVFJBQ0VQT0lOVFMgd2hlbiBidWlsdC1pbgogICAgICAgICogUGVy
+Zm9ybWFuY2U6IGRpc2FibGUgZXZlbnQgY291bnRpbmcgYnkgZGVmYXVsdAogICAgICAgICogRml4
+OiBoYW5kbGUgbGFyZ2UgbnVtYmVyIG9mIHBhZ2VzIG9yIHN1YmJ1ZmZlcnMgcGVyIGJ1ZmZlcgog
+ICAgICAgICogRml4OiB1bnJlZ2lzdGVyIGNwdSBob3RwbHVnIG5vdGlmaWVyIG9uIGJ1ZmZlciBh
+bGxvYyBlcnJvcgogICAgICAgICogRml4OiBzYV9mYW1pbHkgaXMgb2YgdHlwZSB1bnNpZ25lZCBz
+aG9ydAogICAgICAgICogRml4OiBjaGVjayBmb3Igc2l6ZW9mIHNhX2ZhbWlseSB0byBzYXZlIHNh
+X2ZhbWlseSBpbiBhY2NlcHQgYW5kIGNvbm5lY3QKICAgICAgICAqIEZpeDogdXNlIHByaW50a19v
+bmNlKCkgZm9yIHdyYXBwZXIgd2FybmluZyBtZXNzYWdlcwogICAgICAgICogRml4OiBidHJmcyBp
+bnN0cnVtZW50YXRpb24gZm9yIDQuOCBrZXJuZWwKICAgICAgICAqIEZpeDogdXBkYXRlIG1tX3Zt
+c2NhbiBpbnN0cnVtZW50YXRpb24gZm9yIGtlcm5lbCA0LjgKICAgICAgICAqIEZpeDogbmFwaSBp
+bnN0cnVtZW50YXRpb24gZm9yIDQuOCBrZXJuZWxzCiAgICAgICAgKiBGaXg6IHVwZGF0ZSBibG9j
+ayBpbnN0cnVtZW50YXRpb24gdG8gY29tcGlsZSBvbiA0Ljgga2VybmVscwogICAgICAgICogQ2xl
+YW51cDogcmV1c2UgY29kZSBpbiBhY2NlcHQoKSBhbmQgYWNjZXB0NCgpIGluc3RydW1lbnRhdGlv
+bgogICAgICAgICogQWRkIHg4Ni02NCBvdmVycmlkZSBmb3IgYWNjZXB0NCBzeXNjYWxsCiAgICAg
+ICAgKiBGaXg6IHRpbWVyIHdyYXBwZXI6IHN1cHBvcnQga2VybmVscyA+PSA0LjgKICAgICAgICAq
+IFBlcmZvcm1hbmNlOiBzcGxpdCBjaGVjayBkZWxpdmVyIGZhc3Qvc2xvdyBwYXRocwogICAgICAg
+ICogRml4OiB4ODYtNjQgYWNjZXB0IGluc3RydW1lbnRhdGlvbgogICAgICAgICogRml4OiBBZGQg
+c3VwcG9ydCBmb3IgNC42LjQtcnQ4IGtlcm5lbAogICAgICAgICogRml4OiB1cGRhdGUgc2NzaSBp
+bnN0cnVtZW50YXRpb24gZm9yIDQuNysga2VybmVscwogICAgICAgICogRml4OiBVc2UgZnNfaW5p
+dGNhbGwgaW5zdGVhZCBvZiByb290ZnNfaW5pdGNhbGwKICAgICAgICAqIEZpeDogQWRkIGtlcm5l
+bCBjb25maWd1cmF0aW9uIGZvciBsdHRuZyBjbG9jayBwbHVnaW4KICAgICAgICAqIEZpeDogdGhl
+IGNsb2NrIHBsdWdpbiBtdXN0IGJlIGluaXRpYXRlZCBiZWZvcmUgZmlyc3QgdXNlIG9mIHRoZSBj
+bG9jawogICAgICAgICogRml4OiB0ZXN0cy9LYnVpbGQgZm9yIG9sZGVyIGtlcm5lbHMKICAgICAg
+ICAqIENsZWFudXA6IF9fZHluYW1pY19sZW5faWR4IHNldCBidXQgbm90IHVzZWQgd2FybmluZwog
+ICAgICAgICogQ2xlYW51cDogY29kaW5nIHN0eWxlIGFuZCBjb21tZW50cyBvZiBuZXQuaAogICAg
+ICAgICogbmV0OiBBZGQgVENQIGhlYWRlciBkYXRhIHRvIG5ldF8qIHRyYWNlcG9pbnRzCiAgICAg
+ICAgKiBuZXQ6IEFkZCBJUHY0L0lQdjYgaGVhZGVyIGRhdGEgdG8gbmV0XyogdHJhY2Vwb2ludHMK
+ICAgICAgICAqIEZpeDogZW5kaWFubmVzcyBmb3IgdGhlIGNvbnRhaW5lciB0eXBlIG9mIGVudW0K
+ICAgICAgICAqIGVudW1lcmF0aW9uIGF1dG9pbmNyZW1lbnQ6IHVzZSBpZi9lbHNlIGxvZ2ljCiAg
+ICAgICAgKiBDbGVhbnVwIHRyYWlsaW5nIHdoaXRlc3BhY2VzCiAgICAgICAgKiBsdHRuZy10ZXN0
+IHByb2JlOiB0ZXN0IGN0Zl9lbnVtX2F1dG8oKQogICAgICAgICogQWRkIGN0Zl9lbnVtX2F1dG8o
+KSBmb3IgYXV0b2luY3JlbWVudGluZyBlbnVtZXJhdGlvbiB2YWx1ZXMKICAgICAgICAqIEltcGxl
+bWVudCBzZXNzaW9uIHN0YXRlZHVtcCBjb21tYW5kCiAgICAgICAgKiBGaXg6IGFubm90YXRlIGJ5
+dGVjb2RlIGludGVycHJldGVyIGZvciBrZXJuZWwgc3RhY2sgdmFsaWRhdG9yCiAgICAgICAgKiBV
+cGRhdGUgdmVyc2lvbiB0byAyLjkuMC1wcmUKICAgICAgICAqIEZpeDogcmluZyBidWZmZXI6IGhv
+bm9yIHN3aXRjaCBwYXJhbWV0ZXIgdHlwZSBpbiByZW1vdGUgc3dpdGNoCiAgICAgICAgKiBGaXg6
+IG9ubHkgZmx1c2ggbm9uLW1ldGFkYXRhIGNoYW5uZWxzCiAgICAgICAgKiBGaXg6IGRvbid0IHBl
+cmZvcm0gZXh0cmEgZmx1c2ggb24gbWV0YWRhdGEgY2hhbm5lbAogICAgICAgICogc2VsZWN0LCBw
+b2xsIGFuZCBlcG9sbF93YWl0IG92ZXJyaWRlcyBvbiBBUk0gMzItYml0CiAgICAgICAgKiBGaXg6
+IGZsdXNoIGVtcHR5IHBhY2tldHMgb24gc25hcHNob3QgY2hhbm5lbAogICAgICAgICogRml4OiBk
+byBub3QgZ2VuZXJhdGUgcGFja2V0IGF0IGRlc3Ryb3kgYWZ0ZXIgc3RvcAogICAgICAgICogRml4
+OiBjb21wYXQgaW9jdGwgZm9yIGZsdXNoL2dldCBtZXRhZGF0YSB2ZXJzaW9uCiAgICAgICAgKiBG
+aXg6IGN0Zl9zdHJpbmcoKSBzaG91bGQgaGFuZGxlIE5VTEwgcG9pbnRlcnMKICAgICAgICAqIEZp
+eDogcG9ydGFiaWxpdHk6IG5vIGFyaXRoIG9uIHZvaWQgcG9pbnRlcgogICAgICAgICogRml4OiBh
+ZGQgbWlzc2luZyB0ZXN0cy9LYnVpbGQKICAgICAgICAqIFRlc3QgY2xvY2sgb3ZlcnJpZGUgcGx1
+Z2luCiAgICAgICAgKiBGaXg6IGFkZCBtb2R1bGVzIHRhcmdldCB0byBiYXNlIE1ha2VmaWxlCiAg
+ICAgICAgKiBGaXg6IG1ha2UgY2xlYW4gZG9lcyBub3QgaW5jbHVkZSBkb3QtY29uZmlnCiAgICAg
+ICAgKiBGaXg6IHRyaWdnZXIgYnVpbGQgZXJyb3IgaWYgQ09ORklHX1RSQUNFUE9JTlRTIGlzIG5v
+dCBzZXQKICAgICAgICAqIERvY3VtZW50YXRpb246IGRvY3VtZW50IHRoYXQgQ09ORklHX01PRFVM
+RVMgbm90IHJlcXVpcmVkIHdoZW4gYnVpbHRpbgogICAgICAgICogRml4OiBhZGQgbWlzc2luZyBl
+cnJubyBpbmNsdWRlIGluIHJhbmRvbSB3cmFwcGVyCiAgICAgICAgKiBGaXg6IG1tX3BhZ2VfYWxs
+b2NfZXh0ZnJhZyBpbnN0cnVtZW50YXRpb24gZm9yIGtlcm5lbCAzLjE2LjM1CiAgICAgICAgKiBG
+aXg6IGNvcHlfZnJvbV91c2VyIHNpemUgd2hlbiBsaW1pdGVkIGFsbG9jYXRpb24KICAgICAgICAq
+IEV4dHJhY3QgdGhlIHBheWxvYWQgb2YgZXBvbGxfd2FpdC9lcG9sbF9wd2FpdAogICAgICAgICog
+RXh0cmFjdCB0aGUgcGF5bG9hZCBmb3IgZXBvbGxfY3RsCiAgICAgICAgKiBFeHRyYWN0IHRoZSBG
+RHMgYW5kIGZsYWdzIGZyb20gcG9sbCBhbmQgcHBvbGwKICAgICAgICAqIEV4dHJhY3QgdGhlIEZE
+IHNldHMgaW4gc2VsZWN0IGFuZCBwc2VsZWN0NgogICAgICAgICogQWRkIGN0Zl9pbnRlZ2VyX2Jp
+dGZpZWxkX3R5cGUKICAgICAgICAqIEltcGxlbWVudCBlbnVtZXJhdGlvbiB0eXBlCiAgICAgICAg
+KiBJbXBsZW1lbnQgY3VzdG9tIGZpZWxkIHN1cHBvcnQKICAgICAgICAqIEltcGxlbWVudCB2YXJp
+YW50IHR5cGUKICAgICAgICAqIEltcGxlbWVudCBzaGFkb3cgc3RhY2sgZm9yIGR5bmFtaWMgbGVu
+CiAgICAgICAgKiBsaWJyaW5nYnVmZmVyOiBpbXBsZW1lbnQgZXZlbnQgdG9vIGJpZyBBUEkKICAg
+ICAgICAqIEltcGxlbWVudCBzdHJ1Y3R1cmUsIGNvbXBvdW5kIGFycmF5L3NlcXVlbmNlIHR5cGVz
+CiAgICAgICAgKiBGaXg6IGludGVnZXIgZW5kaWFubmVzcyBtZXRhZGF0YSBnZW5lcmF0aW9uCiAg
+ICAgICAgKiBGaXg6IGVuZGlhbm5lc3Mgb2YgaW50ZWdlcnMgcmVjZWl2ZWQgYnkgZmlsdGVyCiAg
+ICAgICAgKiBGaXg6IHdyaXRlYmFjayBwcm9iZSBvbiBSSEVMID49IDMuMTAuMC0zMjcuMTAuMQog
+ICAgICAgICogRml4OiBSSEVMIGtlcm5lbCAzLjEwLjAtMzI3LjEzLjEgY29tcGF0CiAgICAgICAg
+KiBGaXg6IGN0Zl91c2VyX2ludGVnZXIgc2hvdWxkIG5vdCB0cmlnZ2VyIHBhZ2UgZmF1bHQKICAg
+ICAgICAqIEZpeDogbGliX3JpbmdfYnVmZmVyX2NvcHlfZnJvbV91c2VyX2luYXRvbWljIGVycm9y
+IGhhbmRsaW5nCiAgICAgICAgKiBBZGQgY29tbWVudCBkZXNjcmliaW5nIGlvY3RsIG51bWJlciBk
+dXBsaWNhdGlvbgogICAgICAgICogRml4OiByZW1vdmUgdW51c2VkIGdmcGZsYWdzLmggZnJvbSBi
+dHJmcyBhbmQgY29tcGFjdGlvbiBpbnN0cnVtZW50YXRpb24KICAgICAgICAqIEZpeDogUmVtb3Zl
+IGRlYWQgY29kZSBmcm9tIGZpbHRlciBpbnRlcnByZXRlcgogICAgICAgICogRml4OiB4ODYga3Zt
+IG1tdXRyYWNlIGluc3RydW1lbnRhdGlvbiBmb3Iga2VybmVsIDwgMy42CiAgICAgICAgKiBGaXg6
+IG1tX3Ztc2NhbiBpbnN0cnVtZW50YXRpb246IHJlbW92ZSB1bnVzZWQgZ2ZwZmxhZ3MuaCBpbmNs
+dWRlCiAgICAgICAgKiBGaXg6IHVzZSBvZiB1bmluaXRpYWxpemVkIHJldCB2YWx1ZSBpbiBsdHRu
+Z19hYmlfY3JlYXRlX2V2ZW50CiAgICAgICAgKiBGaXg6IGttZW0gaW5zdHJ1bWVudGF0aW9uOiBy
+ZW1vdmUgdW51c2VkIGdmcGZsYWdzLmggaW5jbHVkZQogICAgICAgICogRml4OiA0LjYga2VybmVs
+OiB1c2UgaW5fY29tcGF0X3N5c2NhbGwKICAgICAgICAqIEZpeDogdXNlIEJVR19PTiBpbnN0ZWFk
+IG9mIGFjY2Vzc2luZyBhcnJheSBzdWJzY3JpcHQgYWJvdmUgYXJyYXkgYm91bmRzCiAgICAgICAg
+KiBGaXg6IEFkZCBncmFudWxhcml0eSB0byBSSEVMIGtlcm5lbCB2ZXJzaW9uIGNoZWNrcwoKLS0g
+Ck1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
 X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============0258220242313430145==--
