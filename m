@@ -1,72 +1,119 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng modules 2.7.6 and 2.8.2 (Linux tracer timekeeping
- work-around)
-Date: Fri, 7 Oct 2016 20:35:16 +0000 (UTC)
-Message-ID: <1718003007.50531.1475872516861.JavaMail.zimbra@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: ignore SIGPIPE
+Date: Fri, 7 Oct 2016 17:19:29 -0400
+Message-ID: <CA+jJMxv3NpgrLPorGe0xaAv9TBpAJwpQd9T63idEric4X=ZVqg__35596.0613502704$1475875195$gmane$org@mail.gmail.com>
+References: <1475773065-2323-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Return-path: <stable-owner@vger.kernel.org>
-Sender: stable-owner@vger.kernel.org
-To: lttng-dev@lists.lttng.org
-Cc: linux-kernel <linux-kernel@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, stable <stable@vger.kernel.org>, Brendan Gregg <bgregg@netflix.com>, Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-ua0-f195.google.com (mail-ua0-f195.google.com
+ [209.85.217.195])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id CD4D8A4501
+ for <lttng-dev@lists.lttng.org>; Fri,  7 Oct 2016 21:21:10 +0000 (UTC)
+Received: by mail-ua0-f195.google.com with SMTP id 49so2285712uac.0
+ for <lttng-dev@lists.lttng.org>; Fri, 07 Oct 2016 14:19:31 -0700 (PDT)
+In-Reply-To: <1475773065-2323-1-git-send-email-mathieu.desnoyers@efficios.com>
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-LTTng modules 2.7.6 and 2.8.2 are bugfix releases which
-work around an upstream Linux kernel timekeeping bug. This
-bug has been introduced in the 4.8 kernel, and backported
-into Linux stable branches. It affects LTTng, perf,
-ftrace with "mono" clock source, and eBPF.
-
-All LTTng-modules 2.7.x and 2.8.x users with Linux kernels
-4.8, 4.7.4+, 4.4.20+, and 4.1.32+ should upgrade.
-
-The effect of this issue is that timestamps sampled in the
-trace are not reliable, and may be off by up to nearly a
-second, which makes correlation between cores, and between
-kernel and user-space tracing impossible.
-
-The upstream kernel fix is being discussed [1], but it has
-not been merged yet.
-
-Linux commit 27727df240c7 ("Avoid taking lock in NMI path with
-CONFIG_DEBUG_TIMEKEEPING"), changed the logic to open-code
-the timekeeping_get_ns() function, but forgot to include
-the unit conversion from cycles to nanoseconds, breaking the
-function's output, which impacts LTTng.
-    
-We expect that the upstream fix will reach the master and stable
-branches timely before the next releases, so we use 4.8.1, 4.7.7,
-4.4.24, and 4.1.34 as upper bounds (exclusive).
-    
-Fall-back to the non-NMI-safe trace clock for those kernel versions.
-We simply discard events from NMI context with a in_nmi() check,
-as we did before Linux 3.17.
-
-Project website: http://lttng.org
-Documentation: http://lttng.org/docs
-Download link: http://lttng.org/download
-
-Changelog:
-
-2016-10-07 (National Frappé Day) LTTng modules 2.8.2
-        * Fix: show warning for broken clock work-around
-        * Fix: work-around upstream Linux timekeeping bug
-
-2016-10-07 (National Frappé Day) LTTng modules 2.7.6
-        * Fix: show warning for broken clock work-around
-        * Fix: work-around upstream Linux timekeeping bug
-        * Documentation: lttng-modules 2.7 supports Linux < 4.8
-
-[1] http://lkml.kernel.org/r/1475636148-26539-1-git-send-email-john.stultz@linaro.org
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIDYgT2N0b2JlciAyMDE2IGF0IDEyOjU3LCBN
+YXRoaWV1IERlc25veWVycwo8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPiB3cm90ZToK
+PiBJc3N1aW5nIGZwcmludGYoKSB0byBzdGRlcnIgKHRodXMgd3JpdGUoKSB0byB0aGUgc3RhbmRh
+cmQgZXJyb3IgZmlsZQo+IGRlc2NyaXB0b3IpIHdpdGhpbiB0aGUgU0lHUElQRSBzaWduYWwgaGFu
+ZGxlciBpcyBiYWQ6IGl0IGNhbiB0cmlnZ2VyCj4gU0lHUElQRSByZXBlYXRlZGx5IGlmIHRoZSBs
+aXN0ZW5pbmcgZW5kIGhhcyBjbG9zZWQgaXRzIGVuZCBvZiB0aGUgcGlwZS4KPgo+IFNldCB0aGUg
+U0lHUElQRSBhY3Rpb24gdG8gU0lHX0lHTiBpbiByZWxheWQsIHNlc3Npb25kLCBhbmQgY29uc3Vt
+ZXJkLgo+Cj4gVGhpcyB3YXMgYWZmZWN0aW5nIHNlc3Npb25kIGFuZCByZWxheWQuIFRoZSBjb25z
+dW1lcmQgZGlkIG5vdCBwcmludAo+IGFueXRoaW5nIHRvIHN0ZGVyci4KPgo+IFNpZ25lZC1vZmYt
+Ynk6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4g
+LS0tCj4gIHNyYy9iaW4vbHR0bmctY29uc3VtZXJkL2x0dG5nLWNvbnN1bWVyZC5jIHwgMTIgKysr
+LS0tLS0tLS0tCj4gIHNyYy9iaW4vbHR0bmctcmVsYXlkL21haW4uYyAgICAgICAgICAgICAgIHwg
+MTEgKysrKystLS0tLS0KPiAgc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMgICAgICAgICAg
+ICAgfCAxMSArKysrKy0tLS0tLQo+ICAzIGZpbGVzIGNoYW5nZWQsIDEzIGluc2VydGlvbnMoKyks
+IDIxIGRlbGV0aW9ucygtKQo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctY29uc3VtZXJk
+L2x0dG5nLWNvbnN1bWVyZC5jIGIvc3JjL2Jpbi9sdHRuZy1jb25zdW1lcmQvbHR0bmctY29uc3Vt
+ZXJkLmMKPiBpbmRleCAxNjM2YjljLi4xMzczYTc0IDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0
+bmctY29uc3VtZXJkL2x0dG5nLWNvbnN1bWVyZC5jCj4gKysrIGIvc3JjL2Jpbi9sdHRuZy1jb25z
+dW1lcmQvbHR0bmctY29uc3VtZXJkLmMKPiBAQCAtOTksMTQgKzk5LDYgQEAgc3RhdGljIHZvaWQg
+c2lnaGFuZGxlcihpbnQgc2lnKQo+ICAgICAgICAgICAgICAgICByZXR1cm47Cj4gICAgICAgICB9
+Cj4KPiAtICAgICAgIC8qCj4gLSAgICAgICAgKiBJZ25vcmUgU0lHUElQRSBiZWNhdXNlIGl0IHNo
+b3VsZCBub3Qgc3RvcCB0aGUgY29uc3VtZXIgd2hlbmV2ZXIgYQo+IC0gICAgICAgICogU0lHUElQ
+RSBpcyBjYXVnaHQgdGhyb3VnaCBhIEZEIG9wZXJhdGlvbi4KPiAtICAgICAgICAqLwo+IC0gICAg
+ICAgaWYgKHNpZyA9PSBTSUdQSVBFKSB7Cj4gLSAgICAgICAgICAgICAgIHJldHVybjsKPiAtICAg
+ICAgIH0KPiAtCj4gICAgICAgICBpZiAoY3R4KSB7Cj4gICAgICAgICAgICAgICAgIGx0dG5nX2Nv
+bnN1bWVyX3Nob3VsZF9leGl0KGN0eCk7Cj4gICAgICAgICB9Cj4gQEAgLTEyNyw5ICsxMTksMTAg
+QEAgc3RhdGljIGludCBzZXRfc2lnbmFsX2hhbmRsZXIodm9pZCkKPiAgICAgICAgICAgICAgICAg
+cmV0dXJuIHJldDsKPiAgICAgICAgIH0KPgo+IC0gICAgICAgc2Euc2FfaGFuZGxlciA9IHNpZ2hh
+bmRsZXI7Cj4gICAgICAgICBzYS5zYV9tYXNrID0gc2lnc2V0Owo+ICAgICAgICAgc2Euc2FfZmxh
+Z3MgPSAwOwo+ICsKPiArICAgICAgIHNhLnNhX2hhbmRsZXIgPSBzaWdoYW5kbGVyOwo+ICAgICAg
+ICAgaWYgKChyZXQgPSBzaWdhY3Rpb24oU0lHVEVSTSwgJnNhLCBOVUxMKSkgPCAwKSB7Cj4gICAg
+ICAgICAgICAgICAgIFBFUlJPUigic2lnYWN0aW9uIik7Cj4gICAgICAgICAgICAgICAgIHJldHVy
+biByZXQ7Cj4gQEAgLTE0MCw2ICsxMzMsNyBAQCBzdGF0aWMgaW50IHNldF9zaWduYWxfaGFuZGxl
+cih2b2lkKQo+ICAgICAgICAgICAgICAgICByZXR1cm4gcmV0Owo+ICAgICAgICAgfQo+Cj4gKyAg
+ICAgICBzYS5zYV9oYW5kbGVyID0gU0lHX0lHTjsKPiAgICAgICAgIGlmICgocmV0ID0gc2lnYWN0
+aW9uKFNJR1BJUEUsICZzYSwgTlVMTCkpIDwgMCkgewo+ICAgICAgICAgICAgICAgICBQRVJST1Io
+InNpZ2FjdGlvbiIpOwo+ICAgICAgICAgICAgICAgICByZXR1cm4gcmV0Owo+IGRpZmYgLS1naXQg
+YS9zcmMvYmluL2x0dG5nLXJlbGF5ZC9tYWluLmMgYi9zcmMvYmluL2x0dG5nLXJlbGF5ZC9tYWlu
+LmMKPiBpbmRleCBlOGYzMDg3Li5lYTQ2ZWM3IDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmct
+cmVsYXlkL21haW4uYwo+ICsrKyBiL3NyYy9iaW4vbHR0bmctcmVsYXlkL21haW4uYwo+IEBAIC01
+ODIsOSArNTgyLDYgQEAgaW50IGx0dG5nX3JlbGF5X3N0b3BfdGhyZWFkcyh2b2lkKQo+ICBzdGF0
+aWMgdm9pZCBzaWdoYW5kbGVyKGludCBzaWcpCj4gIHsKPiAgICAgICAgIHN3aXRjaCAoc2lnKSB7
+Cj4gLSAgICAgICBjYXNlIFNJR1BJUEU6Cj4gLSAgICAgICAgICAgICAgIERCRygiU0lHUElQRSBj
+YXVnaHQiKTsKPiAtICAgICAgICAgICAgICAgcmV0dXJuOwo+ICAgICAgICAgY2FzZSBTSUdJTlQ6
+Cj4gICAgICAgICAgICAgICAgIERCRygiU0lHSU5UIGNhdWdodCIpOwo+ICAgICAgICAgICAgICAg
+ICBpZiAobHR0bmdfcmVsYXlfc3RvcF90aHJlYWRzKCkpIHsKPiBAQCAtNjIwLDkgKzYxNywxMCBA
+QCBzdGF0aWMgaW50IHNldF9zaWduYWxfaGFuZGxlcih2b2lkKQo+ICAgICAgICAgICAgICAgICBy
+ZXR1cm4gcmV0Owo+ICAgICAgICAgfQo+Cj4gLSAgICAgICBzYS5zYV9oYW5kbGVyID0gc2lnaGFu
+ZGxlcjsKPiAgICAgICAgIHNhLnNhX21hc2sgPSBzaWdzZXQ7Cj4gICAgICAgICBzYS5zYV9mbGFn
+cyA9IDA7Cj4gKwo+ICsgICAgICAgc2Euc2FfaGFuZGxlciA9IHNpZ2hhbmRsZXI7Cj4gICAgICAg
+ICBpZiAoKHJldCA9IHNpZ2FjdGlvbihTSUdURVJNLCAmc2EsIE5VTEwpKSA8IDApIHsKPiAgICAg
+ICAgICAgICAgICAgUEVSUk9SKCJzaWdhY3Rpb24iKTsKPiAgICAgICAgICAgICAgICAgcmV0dXJu
+IHJldDsKPiBAQCAtNjMzLDEyICs2MzEsMTMgQEAgc3RhdGljIGludCBzZXRfc2lnbmFsX2hhbmRs
+ZXIodm9pZCkKPiAgICAgICAgICAgICAgICAgcmV0dXJuIHJldDsKPiAgICAgICAgIH0KPgo+IC0g
+ICAgICAgaWYgKChyZXQgPSBzaWdhY3Rpb24oU0lHUElQRSwgJnNhLCBOVUxMKSkgPCAwKSB7Cj4g
+KyAgICAgICBpZiAoKHJldCA9IHNpZ2FjdGlvbihTSUdVU1IxLCAmc2EsIE5VTEwpKSA8IDApIHsK
+PiAgICAgICAgICAgICAgICAgUEVSUk9SKCJzaWdhY3Rpb24iKTsKPiAgICAgICAgICAgICAgICAg
+cmV0dXJuIHJldDsKPiAgICAgICAgIH0KPgo+IC0gICAgICAgaWYgKChyZXQgPSBzaWdhY3Rpb24o
+U0lHVVNSMSwgJnNhLCBOVUxMKSkgPCAwKSB7Cj4gKyAgICAgICBzYS5zYV9oYW5kbGVyID0gU0lH
+X0lHTjsKPiArICAgICAgIGlmICgocmV0ID0gc2lnYWN0aW9uKFNJR1BJUEUsICZzYSwgTlVMTCkp
+IDwgMCkgewo+ICAgICAgICAgICAgICAgICBQRVJST1IoInNpZ2FjdGlvbiIpOwo+ICAgICAgICAg
+ICAgICAgICByZXR1cm4gcmV0Owo+ICAgICAgICAgfQo+IGRpZmYgLS1naXQgYS9zcmMvYmluL2x0
+dG5nLXNlc3Npb25kL21haW4uYyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5jCj4gaW5k
+ZXggMTk2NGZlMC4uYTJhZmI4ZiAxMDA2NDQKPiAtLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25k
+L21haW4uYwo+ICsrKyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5jCj4gQEAgLTUzNzAs
+OSArNTM3MCw2IEBAIGVycm9yOgo+ICBzdGF0aWMgdm9pZCBzaWdoYW5kbGVyKGludCBzaWcpCj4g
+IHsKPiAgICAgICAgIHN3aXRjaCAoc2lnKSB7Cj4gLSAgICAgICBjYXNlIFNJR1BJUEU6Cj4gLSAg
+ICAgICAgICAgICAgIERCRygiU0lHUElQRSBjYXVnaHQiKTsKPiAtICAgICAgICAgICAgICAgcmV0
+dXJuOwo+ICAgICAgICAgY2FzZSBTSUdJTlQ6Cj4gICAgICAgICAgICAgICAgIERCRygiU0lHSU5U
+IGNhdWdodCIpOwo+ICAgICAgICAgICAgICAgICBzdG9wX3RocmVhZHMoKTsKPiBAQCAtNTQwNCw5
+ICs1NDAxLDEwIEBAIHN0YXRpYyBpbnQgc2V0X3NpZ25hbF9oYW5kbGVyKHZvaWQpCj4gICAgICAg
+ICAgICAgICAgIHJldHVybiByZXQ7Cj4gICAgICAgICB9Cj4KPiAtICAgICAgIHNhLnNhX2hhbmRs
+ZXIgPSBzaWdoYW5kbGVyOwo+ICAgICAgICAgc2Euc2FfbWFzayA9IHNpZ3NldDsKPiAgICAgICAg
+IHNhLnNhX2ZsYWdzID0gMDsKPiArCj4gKyAgICAgICBzYS5zYV9oYW5kbGVyID0gc2lnaGFuZGxl
+cjsKPiAgICAgICAgIGlmICgocmV0ID0gc2lnYWN0aW9uKFNJR1RFUk0sICZzYSwgTlVMTCkpIDwg
+MCkgewo+ICAgICAgICAgICAgICAgICBQRVJST1IoInNpZ2FjdGlvbiIpOwo+ICAgICAgICAgICAg
+ICAgICByZXR1cm4gcmV0Owo+IEBAIC01NDE3LDEyICs1NDE1LDEzIEBAIHN0YXRpYyBpbnQgc2V0
+X3NpZ25hbF9oYW5kbGVyKHZvaWQpCj4gICAgICAgICAgICAgICAgIHJldHVybiByZXQ7Cj4gICAg
+ICAgICB9Cj4KPiAtICAgICAgIGlmICgocmV0ID0gc2lnYWN0aW9uKFNJR1BJUEUsICZzYSwgTlVM
+TCkpIDwgMCkgewo+ICsgICAgICAgaWYgKChyZXQgPSBzaWdhY3Rpb24oU0lHVVNSMSwgJnNhLCBO
+VUxMKSkgPCAwKSB7Cj4gICAgICAgICAgICAgICAgIFBFUlJPUigic2lnYWN0aW9uIik7Cj4gICAg
+ICAgICAgICAgICAgIHJldHVybiByZXQ7Cj4gICAgICAgICB9Cj4KPiAtICAgICAgIGlmICgocmV0
+ID0gc2lnYWN0aW9uKFNJR1VTUjEsICZzYSwgTlVMTCkpIDwgMCkgewo+ICsgICAgICAgc2Euc2Ff
+aGFuZGxlciA9IFNJR19JR047Cj4gKyAgICAgICBpZiAoKHJldCA9IHNpZ2FjdGlvbihTSUdQSVBF
+LCAmc2EsIE5VTEwpKSA8IDApIHsKPiAgICAgICAgICAgICAgICAgUEVSUk9SKCJzaWdhY3Rpb24i
+KTsKPiAgICAgICAgICAgICAgICAgcmV0dXJuIHJldDsKPiAgICAgICAgIH0KPiAtLQo+IDIuMS40
+Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVm
+ZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6
+Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
