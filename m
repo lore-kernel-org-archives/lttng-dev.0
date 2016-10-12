@@ -1,20 +1,31 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
+From: "Staffan Tjernstrom" <staffan@eternaltraveller.com>
 Subject: Re: [lttng-ust] [babeltrace] use case question - field
  names in event classes
-Date: Wed, 12 Oct 2016 11:23:51 -0400
-Message-ID: <20161012152351.GA26170__35036.0419172377$1476285871$gmane$org@sinkpad.internal.efficios.com>
+Date: Wed, 12 Oct 2016 10:36:56 -0500
+Message-ID: <c3f20d6e60ab9fcb77650bfa13bfddaa.squirrel__43715.7301967547$1476286658$gmane$org@email.powweb.com>
 References: <8867c80160a75f382ac5dd3f50d2014b.squirrel@email.powweb.com>
  <CAB4xu_0ohmGica3QkEMR2sXNdhmqQvnfethmjHQig3EFaULrhQ@mail.gmail.com>
  <7110ec441dc2f14caee4a447826c31f7.squirrel@email.powweb.com>
+ <20161012152351.GA26170@sinkpad.internal.efficios.com>
+Reply-To: stjernstrom@acm.org
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com (albert.ini-tech.com [192.99.4.57])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 5428FA4060
- for <lttng-dev@lists.lttng.org>; Wed, 12 Oct 2016 15:25:51 +0000 (UTC)
-Content-Disposition: inline
-In-Reply-To: <7110ec441dc2f14caee4a447826c31f7.squirrel@email.powweb.com>
+Received: from walmailout09.yourhostingaccount.com
+ (walmailout09.yourhostingaccount.com [65.254.253.77])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id E2A68A3D31
+ for <lttng-dev@lists.lttng.org>; Wed, 12 Oct 2016 15:38:55 +0000 (UTC)
+Received: from mailscan10.yourhostingaccount.com ([10.1.15.10]
+ helo=walmailscan10.yourhostingaccount.com)
+ by walmailout09.yourhostingaccount.com with esmtp (Exim)
+ id 1buLac-0004QG-3Z
+ for lttng-dev@lists.lttng.org; Wed, 12 Oct 2016 11:37:06 -0400
+Received: from [10.114.3.33] (helo=walimpout13)
+ by walmailscan10.yourhostingaccount.com with esmtp (Exim)
+ id 1buLab-0006yx-Va
+ for lttng-dev@lists.lttng.org; Wed, 12 Oct 2016 11:37:05 -0400
+In-Reply-To: <20161012152351.GA26170@sinkpad.internal.efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,41 +35,16 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: stjernstrom@acm.org
+To: Julien Desfossez <jdesfossez@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMTItT2N0LTIwMTYgMDg6NTE6NDYgQU0sIFN0YWZmYW4gVGplcm5zdHJvbSB3cm90ZToKPiA+
-Cj4gPiBJbiB0aGUgY29kZSwgYmVmb3JlIGNhbGxpbmcgdGhlIGFzc29jaWF0ZWQgYHR3b19pbnRz
-X2FuZF9zdHJpbmdgCj4gPiB0cmFjZXBvaW50LCBhbmQgb25seSBvbmNlOgo+ID4KPiA+ICAgICB0
-cmFjZXBvaW50KG15X2FwcCwgbG9nX3N0YXRlbWVudF9maWVsZF9uYW1lcywgMSwKPiA+ICAgICAg
-ICAgICAgICAgICJ3aWRnZXRfaGVpZ2h0IiwgIndpZGdldF93aWR0aCIsICJ3aWRnZXRfbmFtZSIs
-ICIiKTsKPiA+Cj4gPiBUaGVuOgo+ID4KPiA+ICAgICB0cmFjZXBvaW50KG15X2FwcCwgdHdvX2lu
-dHNfYW5kX3N0cmluZywgMSwgaGVpZ2h0LCB3aWR0aCwgbmFtZSk7Cj4gPgo+ID4gVGhlbiBpbiB5
-b3VyIFB5dGhvbiBzY3JpcHQgeW91IGNhbiByZWdpc3RlciB0aGUgZHluYW1pYyBmaWVsZCBuYW1l
-cwo+ID4gd2hlbgo+ID4geW91IGdldCBhIGBsb2dfc3RhdGVtZW50X2ZpZWxkX25hbWVzYCBldmVu
-dCBhbmQgdXNlIHRoZW0gd2hlbiB5b3UgZ2V0Cj4gPiBhCj4gPiAicmVhbCIgZXZlbnQgKG5vdCB0
-ZXN0ZWQpOgo+ID4KPiA+ICAgICBpZF90b19maWVsZF9uYW1lcyA9IHt9Cj4gPgo+ID4gICAgICMg
-b3BlbiB0cmFjZSwgZXRjLgo+ID4KPiA+ICAgICAjIHNvbWUgbG9vcCBvdmVyIHRoZSB0cmFjZSdz
-IGV2ZW50czoKPiA+ICAgICAgICAgaWYgZXZ0Lm5hbWUgPT0gJ2xvZ19zdGF0ZW1lbnRfZmllbGRf
-bmFtZXMnOgo+ID4gICAgICAgICAgICAgZmllbGRfbmFtZXMgPSAoZXZ0WydhcmcxJ10sIGV2dFsn
-YXJnMiddLCBldnRbJ2FyZzMnXSwKPiA+IGV2dFsnYXJnNCddKQo+ID4gICAgICAgICAgICAgaWRf
-dG9fZmllbGRfbmFtZXNbZXZ0WydpZCddXSA9IGZpZWxkX25hbWVzCj4gPiAgICAgICAgIGVsaWYg
-ZXZ0Lm5hbWUgPT0gJ3R3b19pbnRzX2FuZF9zdHJpbmcnOgo+ID4gICAgICAgICAgICAgZmllbGRf
-bmFtZXMgPSBpZF90b19maWVsZF9uYW1lc1tldnRbJ2lkJ11dCj4gPiAgICAgICAgICAgICBwcmlu
-dCgne306IHt9Jy5mb3JtYXQoZmllbGRfbmFtZXNbMF0sIGV2dFsndmFsdWUxJ10pKQo+ID4gICAg
-ICAgICAgICAgcHJpbnQoJ3t9OiB7fScuZm9ybWF0KGZpZWxkX25hbWVzWzFdLCBldnRbJ3ZhbHVl
-MiddKSkKPiA+ICAgICAgICAgICAgIHByaW50KCd7fToge30nLmZvcm1hdChmaWVsZF9uYW1lc1sy
-XSwgZXZ0Wyd2YWx1ZTMnXSkpCj4gPiAgICAgICAgICAgICBwcmludCgpCj4gPgo+ID4gTm93IHRo
-aXMgaXMgYSBncmVhdCB1c2UgY2FzZSBmb3IgZnV0dXJlIGV4dGVuc2lvbnMgb2YgTFRUbmctVVNU
-IGFuZC9vcgo+ID4gdGhlIHVwY29taW5nIENURiAyLgo+ID4KPiA+IFBoaWwKPiA+Cj4gVGhhbmtz
-IC0gSSBoYWRuJ3QgdGhvdWdodCBvZiB0aGUgUHl0aG9uIGJpbmRpbmdzIC0gSSB0aGluayB3ZSBj
-b3VsZAo+IG1ha2UgdGhhdCB3b3JrIChtYXliZSB3cmFwcGluZyB0aGUgdHdvIHRyYWNlcG9pbnQg
-aW5jYW50YXRpb25zIGludG8gYQo+IHNpbmdsZSBtYWNybyBkZWZpbml0aW9uKS4KCklmIHlvdSB3
-YW50IHNvbWUgaGVscCBnZW5lcmF0aW5nIHRoZSBib2lsZXIgcGxhdGUgUHl0aG9uIGNvZGUgZm9y
-CnBhcnNpbmcgeW91ciB0cmFjZSwgSSByZWNvbW1lbmQgdGhlIHBhcnNlcl9nZW5lcmF0b3IucHkg
-c2NyaXB0IGZyb20KbHR0bmctYW5hbHlzZXM6Cmh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRu
-Zy1hbmFseXNlcy9ibG9iL21hc3Rlci9wYXJzZXJfZ2VuZXJhdG9yLnB5CgpKdWxpZW4KX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
-bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3Jn
-L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Pgo+IElmIHlvdSB3YW50IHNvbWUgaGVscCBnZW5lcmF0aW5nIHRoZSBib2lsZXIgcGxhdGUgUHl0
+aG9uIGNvZGUgZm9yCj4gcGFyc2luZyB5b3VyIHRyYWNlLCBJIHJlY29tbWVuZCB0aGUgcGFyc2Vy
+X2dlbmVyYXRvci5weSBzY3JpcHQgZnJvbQo+IGx0dG5nLWFuYWx5c2VzOgo+IGh0dHBzOi8vZ2l0
+aHViLmNvbS9sdHRuZy9sdHRuZy1hbmFseXNlcy9ibG9iL21hc3Rlci9wYXJzZXJfZ2VuZXJhdG9y
+LnB5Cj4KPiBKdWxpZW4KPgpHb29kIHBvaW50ZXIgLSBJJ2xsIHRha2UgYSBsb29rLgoKVGhhbmtz
+IQoKU3RhZmZhbiBUai4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
+dHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
+Cg==
