@@ -1,17 +1,17 @@
-From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: save: close fd of
-	configuration file
-Date: Tue, 18 Oct 2016 18:13:22 -0400
-Message-ID: <44dcc94a-bee7-cfd0-1c79-4b2dd3998035__32871.8243785717$1476828828$gmane$org@efficios.com>
-References: <1476828593-8761-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+From: Evgeniy Ivanov <i@eivanov.com>
+Subject: Deadlock in call_rcu_thread when destroy rculfhash node
+	with nested rculfhash
+Date: Wed, 19 Oct 2016 12:56:04 +0300
+Message-ID: <CAO6Ho0ea+Mhdoea4b3EL-J4z2wifHPWohq1ps74LQBU+b0-OOQ__10995.0091959492$1476870997$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============3398330330845768843=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id C1816A43AC
- for <lttng-dev@lists.lttng.org>; Tue, 18 Oct 2016 22:15:25 +0000 (UTC)
-In-Reply-To: <1476828593-8761-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+Received: from mail-it0-f47.google.com (mail-it0-f47.google.com
+ [209.85.214.47])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 9B9FCA0E89
+ for <lttng-dev@lists.lttng.org>; Wed, 19 Oct 2016 09:58:08 +0000 (UTC)
+Received: by mail-it0-f47.google.com with SMTP id 139so99458009itm.1
+ for <lttng-dev@lists.lttng.org>; Wed, 19 Oct 2016 02:56:06 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,36 +21,73 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpUaGlzIHNob3VsZCBiZSBiYWNrcG9ydGVkIHRvIDIuOSwyLjgsMi43LgoKVGhhbmtzCgpP
-biAyMDE2LTEwLTE4IDA2OjA5IFBNLCBKb25hdGhhbiBSYWpvdHRlIHdyb3RlOgo+IFNpZ25lZC1v
-ZmYtYnk6IEpvbmF0aGFuIFJham90dGUgPGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9z
-LmNvbT4KPiAtLS0KPiAgIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvc2F2ZS5jICAgICAgfCA3ICsr
-KysrKysKPiAgIHNyYy9jb21tb24vY29uZmlnL3Nlc3Npb24tY29uZmlnLmggfCA0ICsrLS0KPiAg
-IDIgZmlsZXMgY2hhbmdlZCwgOSBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQo+Cj4gZGlm
-ZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvc2F2ZS5jIGIvc3JjL2Jpbi9sdHRuZy1z
-ZXNzaW9uZC9zYXZlLmMKPiBpbmRleCA5YWM3NzEyLi4xYTg3OWIyIDEwMDY0NAo+IC0tLSBhL3Ny
-Yy9iaW4vbHR0bmctc2Vzc2lvbmQvc2F2ZS5jCj4gKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9u
-ZC9zYXZlLmMKPiBAQCAtMjA1Myw2ICsyMDUzLDEzIEBAIGVuZDoKPiAgIAkJfQo+ICAgCX0KPiAg
-IAo+ICsJaWYgKGZpbGVfb3BlbmVkKSB7Cj4gKwkJcmV0ID0gY2xvc2UoZmQpOwo+ICsJCWlmIChy
-ZXQpIHsKPiArCQkJUEVSUk9SKCJDbG9zaW5nIFhNTCBzZXNzaW9uIGNvbmZpZ3VyYXRpb24iKTsK
-PiArCQl9Cj4gKwl9Cj4gKwo+ICAgCXJldHVybiByZXQ7Cj4gICB9Cj4gICAKPiBkaWZmIC0tZ2l0
-IGEvc3JjL2NvbW1vbi9jb25maWcvc2Vzc2lvbi1jb25maWcuaCBiL3NyYy9jb21tb24vY29uZmln
-L3Nlc3Npb24tY29uZmlnLmgKPiBpbmRleCBjNjQzOWY3Li5mNDhmZjc0IDEwMDY0NAo+IC0tLSBh
-L3NyYy9jb21tb24vY29uZmlnL3Nlc3Npb24tY29uZmlnLmgKPiArKysgYi9zcmMvY29tbW9uL2Nv
-bmZpZy9zZXNzaW9uLWNvbmZpZy5oCj4gQEAgLTg1LDggKzg1LDggQEAgaW50IGNvbmZpZ19wYXJz
-ZV92YWx1ZShjb25zdCBjaGFyICp2YWx1ZSk7Cj4gICAvKgo+ICAgICogQ3JlYXRlIGFuIGluc3Rh
-bmNlIG9mIGEgY29uZmlndXJhdGlvbiB3cml0ZXIuCj4gICAgKgo+IC0gKiBmZF9vdXRwdXQgRmls
-ZSB0byB3aGljaCB0aGUgWE1MIGNvbnRlbnQgbXVzdCBiZSB3cml0dGVuLiBUaGUgZmlsZSB3aWxs
-IGJlCj4gLSAqIGNsb3NlZCBvbmNlIHRoZSBjb25maWdfd3JpdGVyIGhhcyBiZWVuIGRlc3Ryb3ll
-ZC4KPiArICogZmRfb3V0cHV0IEZpbGUgdG8gd2hpY2ggdGhlIFhNTCBjb250ZW50IG11c3QgYmUg
-d3JpdHRlbi4gZmRfb3V0cHV0IGlzCj4gKyAqIG93bmVkIGJ5IHRoZSBjYWxsZXIuCj4gICAgKgo+
-ICAgICogaW5kZW50IElmIG90aGVyIHRoYW4gMCB0aGUgWE1MIHdpbGwgYmUgcHJldHR5IHByaW50
-ZWQKPiAgICAqIHdpdGggaW5kZW50YXRpb24gYW5kIG5ld2xpbmUuCgotLSAKSm9uYXRoYW4gUi4g
-SnVsaWVuCkVmZmljaW9zCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
-aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
-dgo=
+--===============3398330330845768843==
+Content-Type: multipart/alternative; boundary=94eb2c03473e40a259053f34d1e9
+
+--94eb2c03473e40a259053f34d1e9
+Content-Type: text/plain; charset=UTF-8
+
+Hi,
+
+Each node of top level rculfhash has nested rculfhash. Some thread clears
+the top level map and then uses rcu_barrier() to wait until everything is
+destroyed (it is done to check leaks). Recently it started to dead lock
+sometimes with following stacks:
+
+Thread1:
+
+__poll
+cds_lfht_destroy    <---- nested map
+...
+free_Node(rcu_head*)  <----- node of top level map
+call_rcu_thread
+
+Thread2:
+
+syscall
+rcu_barrier_qsbr
+destroy_all
+main
+
+
+Did call_rcu_thread dead lock with barrier thread? Or is it some kind of
+internal deadlock because of nested maps?
+
+
+-- 
+Cheers,
+Evgeniy
+
+--94eb2c03473e40a259053f34d1e9
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<br><br>Each node of top level rculfhash has nested rcu=
+lfhash. Some thread clears the top level map and then uses rcu_barrier() to=
+ wait until everything is destroyed (it is done to check leaks). Recently i=
+t started to dead lock sometimes with following stacks:<br><br>Thread1:<br>=
+<font face=3D"monospace, monospace"><br></font><div><font face=3D"monospace=
+, monospace">__poll<br>cds_lfht_destroy =C2=A0 =C2=A0&lt;---- nested map<br=
+>...<br>free_Node(rcu_head*) =C2=A0&lt;----- node of top level map<br>call_=
+rcu_thread<br></font><br>Thread2:<div><br><font face=3D"monospace, monospac=
+e">syscall <br>rcu_barrier_qsbr <br>destroy_all<br>main<br></font><br><br>D=
+id=C2=A0call_rcu_thread dead lock with barrier thread? Or is it some kind o=
+f internal deadlock because of nested maps?<br><br><br>-- <br>Cheers,<br>Ev=
+geniy</div></div></div>
+
+--94eb2c03473e40a259053f34d1e9--
+
+--===============3398330330845768843==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============3398330330845768843==--
