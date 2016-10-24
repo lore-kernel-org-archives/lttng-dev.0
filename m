@@ -1,15 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng-modules with RT kernel
-Date: Mon, 24 Oct 2016 17:30:54 +0000 (UTC)
-Message-ID: <235909180.1299.1477330254016.JavaMail.zimbra__35028.0790044509$1477330268$gmane$org@efficios.com>
-References: <CAAqXYd31SHfHyrW2SWrBe8EmbQnAc1dwNXy0xo+EXXLXYaEung@mail.gmail.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: [RELEASE] Babeltrace 1.5.0-rc1
+Date: Mon, 24 Oct 2016 14:56:11 -0400
+Message-ID: <CA+jJMxsDzCxCm5otykD6MRezCC-skNondt=XUb0_=0wyZDJzJg__37234.2071998448$1477335402$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3657978641746315571=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 7A309A0E51
- for <lttng-dev@lists.lttng.org>; Mon, 24 Oct 2016 17:30:59 +0000 (UTC)
-In-Reply-To: <CAAqXYd31SHfHyrW2SWrBe8EmbQnAc1dwNXy0xo+EXXLXYaEung@mail.gmail.com>
+Received: from mail-ua0-f169.google.com (mail-ua0-f169.google.com
+ [209.85.217.169])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id D791FA2B9C
+ for <lttng-dev@lists.lttng.org>; Mon, 24 Oct 2016 18:56:19 +0000 (UTC)
+Received: by mail-ua0-f169.google.com with SMTP id 20so2630719uak.6
+ for <lttng-dev@lists.lttng.org>; Mon, 24 Oct 2016 11:56:12 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,128 +21,45 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Gaylord Charles <gaylord.charles@veo-labs.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============3657978641746315571==
-Content-Type: multipart/alternative;
-	boundary="=_8e7912c2-12a6-4c85-9b15-2ad56e7df00f"
-
---=_8e7912c2-12a6-4c85-9b15-2ad56e7df00f
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
------ On Oct 24, 2016, at 11:23 AM, Gaylord Charles <gaylord.charles@veo-labs.com> wrote: 
-
-> Hello,
-
-> I am currently testing LTTng latest versions with a PREEMPT_RT kernel
-> (4.6.7-rt12). I've got:
-> - LTTng-modules 2.8.3
-> - LTTng-tools 2.8.2
-> - LTTng-UST 2.8.1
-
-> When calling "lttng create", the following message appears:
-> Cannot add context lttng_add_preemptible_to_ctx
-> Cannot add context lttng_add_migratable_to_ctx
-
-> A quick look at the source code (lttng-context.c) makes me wonder if there could
-> be a bug. The "lttng_add_preemptible_to_ctx" function returns 0, so if my
-> understanding is correct, there is no problem.
-> Do I miss something ?
-
-Fix pushed into master, stable-2.9, and stable-2.8 of lttng-modules: 
-
-commit d0e59d6f099f4663cc62bffb59d960cd4235064f 
-Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com> 
-Date: Mon Oct 24 13:27:01 2016 -0400 
-
-Fix: preemptible and migratable context error handling 
-
-When built against preempt-rt and preempt kernels, the "return 0" case 
-means success, but lttng-modules incorrectly prints an error in the 
-kernel log. 
-
-Given that we handle the -ENOSYS error in lttng_context_init, there is 
-no need to keep the ifdefs in that function. 
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com> 
-
-Thanks for reporting! 
-
-Mathieu 
-
-> Regards.
-> Gaylord
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_8e7912c2-12a6-4c85-9b15-2ad56e7df00f
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><br></div><div><br></div><span id=3D"zwchr"=
- data-marker=3D"__DIVIDER__">----- On Oct 24, 2016, at 11:23 AM, Gaylord Ch=
-arles &lt;gaylord.charles@veo-labs.com&gt; wrote:<br></span><div data-marke=
-r=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;ma=
-rgin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:nor=
-mal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:1=
-2pt;"><div dir=3D"ltr"><div><div><div><div><div><div><div><div>Hello,<br><b=
-r></div>I am currently testing LTTng latest versions with a PREEMPT_RT kern=
-el (4.6.7-rt12). I've got:<br></div>&nbsp;- LTTng-modules 2.8.3<br></div>&n=
-bsp;- LTTng-tools 2.8.2<br></div>&nbsp;- LTTng-UST 2.8.1<br><br></div>When =
-calling "lttng create", the following message appears: <br>&nbsp;&nbsp;&nbs=
-p;&nbsp; Cannot add context lttng_add_preemptible_to_ctx<br>&nbsp;&nbsp;&nb=
-sp;&nbsp; Cannot add context lttng_add_migratable_to_ctx<br><br></div>A qui=
-ck look at the source code (lttng-context.c) makes me wonder if there could=
- be a bug. The "lttng_add_preemptible_to_ctx" function returns 0, so if my =
-understanding is correct, there is no problem.<br></div>Do I miss something=
- ?</div></div></blockquote><div><br></div><div>Fix pushed into master, stab=
-le-2.9, and stable-2.8 of lttng-modules:<br data-mce-bogus=3D"1"></div><div=
-><br data-mce-bogus=3D"1"></div><div>commit d0e59d6f099f4663cc62bffb59d960c=
-d4235064f<br>Author: Mathieu Desnoyers &lt;mathieu.desnoyers@efficios.com&g=
-t;<br>Date:&nbsp;&nbsp; Mon Oct 24 13:27:01 2016 -0400<br><br>&nbsp;&nbsp;&=
-nbsp; Fix: preemptible and migratable context error handling<br>&nbsp;&nbsp=
-;&nbsp; <br>&nbsp;&nbsp;&nbsp; When built against preempt-rt and preempt ke=
-rnels, the "return 0" case<br>&nbsp;&nbsp;&nbsp; means success, but lttng-m=
-odules incorrectly prints an error in the<br>&nbsp;&nbsp;&nbsp; kernel log.=
-<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; Given that we handle the -ENO=
-SYS error in lttng_context_init, there is<br>&nbsp;&nbsp;&nbsp; no need to =
-keep the ifdefs in that function.<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nb=
-sp; Signed-off-by: Mathieu Desnoyers &lt;mathieu.desnoyers@efficios.com&gt;=
-<br><br data-mce-bogus=3D"1"></div><div>Thanks for reporting!<br data-mce-b=
-ogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathieu<br data-m=
-ce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div><br data-mce-=
-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid #1010FF;margin=
--left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;=
-text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;=
-"><div dir=3D"ltr"><div><br><br></div>Regards.<br><div><div><div><div><div>=
-<div><div><div><div>Gaylord<br></div></div></div></div></div></div></div></=
-div></div></div><br>_______________________________________________<br>lttn=
-g-dev mailing list<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/=
-cgi-bin/mailman/listinfo/lttng-dev<br></blockquote></div><br><div data-mark=
-er=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br=
->http://www.efficios.com</div></div></body></html>
---=_8e7912c2-12a6-4c85-9b15-2ad56e7df00f--
-
---===============3657978641746315571==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============3657978641746315571==--
+SGkgYWxsLAoKVG9kYXkgd2UgYXJlIHJlbGVhc2luZyB0aGUgZmlyc3QgcmVsZWFzZSBjYW5kaWRh
+dGUgb2YgQmFiZWx0cmFjZSAxLjUuCgpUaGUgQmFiZWx0cmFjZSBwcm9qZWN0IHByb3ZpZGVzIHRy
+YWNlIHJlYWQgYW5kIHdyaXRlIGxpYnJhcmllcywgYXMgd2VsbAphcyBhIHRyYWNlIGNvbnZlcnRl
+ci4gUGx1Z2lucyBjYW4gYmUgY3JlYXRlZCBmb3IgYW55IHRyYWNlIGZvcm1hdCB0bwphbGxvdyBp
+dHMgY29udmVyc2lvbiB0by9mcm9tIGFub3RoZXIgdHJhY2UgZm9ybWF0LgoKVGhlIG1haW4gZm9y
+bWF0IGV4cGVjdGVkIHRvIGJlIGNvbnZlcnRlZCB0by9mcm9tIGlzIHRoZSBDb21tb24gVHJhY2UK
+Rm9ybWF0IChDVEYpLiBUaGUgZGVmYXVsdCBpbnB1dCBmb3JtYXQgb2YgdGhlICJiYWJlbHRyYWNl
+IiBjb21tYW5kIGlzCkNURiwgYW5kIGl0cyBkZWZhdWx0IG91dHB1dCBmb3JtYXQgaXMgYSBodW1h
+bi1yZWFkYWJsZSB0ZXh0IGxvZy4gVGhlCiJiYWJlbHRyYWNlLWxvZyIgY29tbWFuZCBjb252ZXJ0
+cyBmcm9tIGEgdGV4dCBsb2cgdG8gYSBDVEYgdHJhY2UuCgpUaGlzIHJlbGVhc2UgYWRkcyB0d28g
+ZmVhdHVyZXMgdG8gdGhlIENURiBXcml0ZXIgbGlicmFyeToKICAgICogQWxsb3cgdGhlIGRlZmlu
+aXRpb24gb2YgY3VzdG9tIHN0cmVhbSBwYWNrZXQgaGVhZGVycwogICAgKiBWYWxpZGF0aW9uIHV0
+aWxpdHkgdG8gY2hlY2sgZm9yIHJlc2VydmVkIENURiBpZGVudGlmaWVycwoKQ2hhbmdlIGxvZzoK
+MjAxNi0xMC0yNCBiYWJlbHRyYWNlIDEuNS4wLXJjMSAoRmlyc3QgYmFycmVsIHJpZGUgZG93biBO
+aWFnYXJhIEZhbGxzKQogICAgKiBVcGRhdGUgdmVyc2lvbiB0byAxLjUuMAogICAgKiBQeXRob24g
+YnVpbGQgZml4CiAgICAqIEZpeCBlbnVtIHJlbmFtZSB3YXJuaW5ncwogICAgKiBIaWRlIGJ0X2N0
+Zl93cml0ZXJfZ2V0X3RyYWNlKCkKICAgICogSGlkZSBidF9jdGZfdHJhY2VfKiBzeW1ib2xzCiAg
+ICAqIEhpZGUgZ2V0X2ZpZWxkX3BhdGhzX2xjYV9pbmRleCgpCiAgICAqIFJlbW92ZSBidF9jdGZf
+d3JpdGVyX2FkZF9lbnZpcm9ubWVudF9maWVsZF9pbnQ2NAogICAgKiBIaWRlIG5ldyBidF9jdGZf
+c3RyZWFtXyogc3ltYm9scwogICAgKiBIaWRlIG5ldyBidF9jdGZfc3RyZWFtX2NsYXNzXyogc3lt
+Ym9scwogICAgKiBIaWRlIG5ldyBidF9jdGZfZmllbGRfdHlwZV8qIHN5bWJvbHMKICAgICogSGlk
+ZSBuZXcgYnRfY3RmX3BhY2tldF8qIHN5bWJvbHMKICAgICogSGlkZSBuZXcgYnRfY3RmX2ZpZWxk
+Xyogc3ltYm9scwogICAgKiBIaWRlIG5ldyBidF9jdGZfZmllbGRfcGF0aF8qIHN5bWJvbHMKICAg
+ICogSGlkZSBuZXcgYnRfY3RmX2V2ZW50Xyogc3ltYm9scwogICAgKiBIaWRlIGJ0X2N0Zl9ldmVu
+dF9jbGFzc18qIHN5bWJvbHMKICAgICogSGlkZSBuZXcgYnRfY3RmX2Nsb2NrXyogc3ltYm9scwog
+ICAgKiBIaWRlIGJ0X2dldCBhbmQgYnRfcHV0CiAgICAqIEhpZGUgYnRfdmFsdWVzIGFuZCBidF9h
+dHRyaWJ1dGVzIGluIGxpYmJhYmVsdHJhY2UtY3RmCiAgICAqIEJhY2twb3J0IHRoZSBDVEYtSVIg
+aW50ZXJmYWNlCiAgICAqIGRlYnVnIGluZm86IENhbGwgcmVnaXN0ZXJfZXZlbnRfZGVidWdfaW5m
+b3MgZm9yIGFsbCBldmVudHMKICAgICogVHlwbzogY29uZmlndXJlLmFjIGltcGxlbWVuYXRpb24g
+LT4gaW1wbGVtZW50YXRpb24KICAgICogY29uZmlndXJlOiBmaXggdXVpZCBzdXBwb3J0IGRldGVj
+dGlvbiBvbiBzdGF0aWMgYnVpbGQKICAgICogVGVzdHM6IG5vIHN1YnN0aXR1dGlvbiBuZWVkZWQg
+Zm9yIG11bHRpLXRyYWNlIGludGVyc2VjdGlvbiB0ZXN0CgpQcm9qZWN0IHdlYnNpdGU6IGh0dHA6
+Ly9kaWFtb24ub3JnL2JhYmVsdHJhY2UvCkRvd25sb2FkIGxpbms6IGh0dHA6Ly93d3cuZWZmaWNp
+b3MuY29tL2ZpbGVzL2JhYmVsdHJhY2UvYmFiZWx0cmFjZS0xLjUuMC1yYzEudGFyLmJ6MgpDVEYg
+c3BlY2lmaWNhdGlvbjogaHR0cDovL2RpYW1vbi5vcmcvY3RmLwoKSsOpcsOpbWllCgotLSAKSsOp
+csOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
+YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5n
+Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
