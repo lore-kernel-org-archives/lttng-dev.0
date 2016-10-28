@@ -1,17 +1,15 @@
-From: Sebastien Boisvert <sboisvert@gydle.com>
-Subject: Re: babeltrace API question
-Date: Sun, 30 Oct 2016 09:51:47 +0100
-Message-ID: <e1ce48da-158b-f96a-0eed-9d571b45900e__23089.1009596691$1477817539$gmane$org@gydle.com>
-References: <f62194ef-0591-d1a4-d1cb-925d2697b9bf@gydle.com>
- <CAB4xu_2w8mCJZUX4kc1K7H9qNwEZSQQFHDgY8Duftr=KLbOK3A@mail.gmail.com>
+From: Charles Jacobsen <charles.jacobsen@primarydata.com>
+Subject: Do updaters of a cds_lfht need to be synchronized?
+Date: Fri, 28 Oct 2016 15:40:28 +0000
+Message-ID: <MWHPR11MB17756EC0046E84C041DF022398AD0__38103.2303128906$1477926674$gmane$org@MWHPR11MB1775.namprd11.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============3133972688505254687=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id E7E49A3AEE
- for <lttng-dev@lists.lttng.org>; Sun, 30 Oct 2016 08:52:13 +0000 (UTC)
-In-Reply-To: <CAB4xu_2w8mCJZUX4kc1K7H9qNwEZSQQFHDgY8Duftr=KLbOK3A@mail.gmail.com>
+Received: from us-smtp-delivery-194.mimecast.com
+ (us-smtp-delivery-194.mimecast.com [63.128.21.194])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTP id C63E1A0DFF
+ for <lttng-dev@lists.lttng.org>; Fri, 28 Oct 2016 15:47:22 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,37 +19,122 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-CkkgbG9vayBmb3J3YXJkIGZvciB0aGlzIG5ldyBBUEkuCgpJdCBzb3VuZHMgcmVhbGx5IGNvb2wu
-CgoKVGhhbmtzCgoKT24gMjAxNi0xMC0yOSAxMTo0OSBQTSwgUGhpbGlwcGUgUHJvdWx4IHdyb3Rl
-Ogo+IE9uIFNhdCwgT2N0IDI5LCAyMDE2IGF0IDU6MzUgUE0sIFNlYmFzdGllbiBCb2lzdmVydCA8
-c2JvaXN2ZXJ0QGd5ZGxlLmNvbT4gd3JvdGU6Cj4+IEhpLAo+Pgo+Pgo+PiBJIHdvdWxkIGxpa2Ug
-dG8gYWRkIGZpbHRlciBvcHRpb25zIHRvIGJhYmVsdHJhY2UuCj4+Cj4+IEkgYW0gZXhwbG9yaW5n
-IHRoZSBiYWJlbHRyYWNlIEFQSS4KPiBJIHdvdWxkIHN0cm9uZ2x5IGFkdmlzZSB5b3UgTk9UIHRv
-IHVzZSB0aGlzIEFQSSBhcyB3ZSdyZSBhYm91dCB0bwo+IGRlcHJlY2F0ZSBpdCBpbiBhIGZldyB3
-ZWVrcyB3aGVuIEJhYmVsdHJhY2UgMi4wIGlzIHJlbGVhc2VkLiBBIHdob2xlIG5ldwo+IEFQSSBi
-YXNlZCBvbiByZWZlcmVuY2UgY291bnRzIHdpbGwgYmUgYXZhaWxhYmxlIHdoZW4gaXQncyByZWxl
-YXNlZCBhbmQKPiB5b3Ugd2lsbCBiZSBhYmxlIHRvIGRldmVsb3AgYSBmaWx0ZXIgcGx1Z2luIHdo
-aWNoIGNhbiBiZSBpbnNlcnRlZCBpbiBhCj4gZ3JhcGggb2YgY29ubmVjdGVkIGNvbXBvbmVudHMg
-d2hlcmUgYSBzdHJlYW0gb2YgZXZlbnRzIGFuZCBvdGhlcgo+IG5vdGlmaWNhdGlvbnMgZmxvdy4K
-Pgo+IEluIHRoZSBtZWFudGltZSB5b3UgY2FuIHVzZSB0aGUgUHl0aG9uIGJpbmRpbmdzICh0aGlz
-IEFQSSB3aWxsIHJlbWFpbgo+IG1haW50YWluZWQpIHRvIGFjaGlldmUgd2hhdCB5b3Ugd2FudC4K
-Pgo+IFBoaWwKPgo+Pgo+PiBXaGVuIHRoZSB0eXBlX2lkIG9mIGEgZmllbGQgKGJ0X2RlY2xhcmF0
-aW9uKSBpcyBDVEZfVFlQRV9JTlRFR0VSLCBob3cgY2FuIG9uZSBkZXRlcm1pbmUgd2hldGhlciB0
-byB1c2UgYnRfY3RmX2dldF91aW50NjQgb3IgYnRfY3RmX2dldF9pbnQ2NCB0byByZXRyaWV2ZSB0
-aGUgdmFsdWUgPwo+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwo+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKPj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgoKLS0gCkRyLiBTw6liYXN0aWVuIEJPSVNWRVJULCBQaC5ELgpCaW9pbmZvcm1hdGlj
-cyBTb2Z0d2FyZSBTcGVjaWFsaXN0CkdZRExFIGluYy4Kc2JvaXN2ZXJ0QGd5ZGxlLmNvbQorMzMg
-NiA2NyA5OSA3MSA1MCAoTW9iaWxlLCBGcmFuY2UpCiszMyA0IDkyIDI4IDAyIDUwIChGaXhlLCBG
-cmFuY2UpCiszMyA5IDcwIDQ0IDQ0IDA3IChTa3lwZSwgRnJhbmNlKQorMSA0MTggOTA3IDkzNzcg
-IyAzODAgKEd5ZGxlIFF1w6liZWMgT2ZmaWNlKQorMSA1ODEgMzA4IDk5OTkgKE1vYmlsZSwgQ2Fu
-YWRhKQoxMDEtMTMzMiBBdi4gQ2hhbm9pbmUgTW9yZWwKUXXDqWJlYywgUUMgRzFTIDRCNCwgQ2Fu
-YWRhCmh0dHA6Ly93d3cuZ3lkbGUuY29tCgpzaWduYXR1cmUgdi4yMDE2LTEwLTEwLjEKCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
-aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============3133972688505254687==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_MWHPR11MB17756EC0046E84C041DF022398AD0MWHPR11MB1775namp_"
+
+--_000_MWHPR11MB17756EC0046E84C041DF022398AD0MWHPR11MB1775namp_
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+The documentation for the lock-free hash table does not mention anything ab=
+out synchronizing updaters (e.g., with a lock):
+
+
+https://lwn.net/Articles/573431/
+
+<https://lwn.net/Articles/573431/>https://lwn.net/Articles/573432/
+
+
+The source for rculfhash (=3D=3D cds_lfht?) also mentions in the comments t=
+hat add and remove are lock free:
+
+
+https://github.com/urcu/userspace-rcu/blob/master/src/rculfhash.c
+
+
+Is it safe to assume that cds_lfht_add, cds_lfht_add_unique, and so on, *on=
+ly* require a surrounding rcu read lock/unlock?
+
+
+"lock free" is part of the name, so I would assume the answer is "yes".
+
+
+Thank you.
+
+Disclaimer
+
+The information contained in this communication from the sender is confiden=
+tial. It is intended solely for use by the recipient and others authorized =
+to receive it. If you are not the recipient, you are hereby notified that a=
+ny disclosure, copying, distribution or taking action in relation of the co=
+ntents of this information is strictly prohibited and may be unlawful.
+
+--_000_MWHPR11MB17756EC0046E84C041DF022398AD0MWHPR11MB1775namp_
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style type=3D"text/css" style=3D"display:none;"><!-- P {margin-top:0;margi=
+n-bottom:0;} --></style>
+<style type=3D"text/css">.style1 {font-family: "Times New Roman";}</style><=
+/head><body dir=3D"ltr">
+<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;font=
+-family:Calibri,Arial,Helvetica,sans-serif;">
+<p>The documentation for the lock-free hash table does not mention anything=
+ about synchronizing updaters (e.g., with a lock):</p>
+<p><br>
+</p>
+<p><a href=3D"https://lwn.net/Articles/573431/" class=3D"OWAAutoLink" id=3D=
+"LPlnk860374" previewremoved=3D"true">https://lwn.net/Articles/573431/</a><=
+/p>
+<p><a href=3D"https://lwn.net/Articles/573431/" class=3D"OWAAutoLink" id=3D=
+"LPlnk860374" previewremoved=3D"true"></a><a href=3D"https://lwn.net/Articl=
+es/573432/" class=3D"OWAAutoLink" id=3D"LPlnk417850" previewremoved=3D"true=
+">https://lwn.net/Articles/573432/</a><br>
+</p>
+<p><br>
+</p>
+<p>The source for rculfhash (=3D=3D cds_lfht?) also mentions in the comment=
+s that add and remove are lock free:<br>
+</p>
+<p><br>
+</p>
+<p><a href=3D"https://github.com/urcu/userspace-rcu/blob/master/src/rculfha=
+sh.c" class=3D"OWAAutoLink" id=3D"LPlnk562362" previewremoved=3D"true">http=
+s://github.com/urcu/userspace-rcu/blob/master/src/rculfhash.c</a><br>
+</p>
+<p><br>
+</p>
+<p>Is it safe to assume that cds_lfht_add, cds_lfht_add_unique, and so on, =
+*only* require a surrounding rcu read lock/unlock?</p>
+<p><br>
+</p>
+<p>&quot;lock free&quot; is part of the name, so I would assume the answer =
+is &quot;yes&quot;.<br>
+</p>
+<p><br>
+</p>
+<p>Thank you.<br>
+</p>
+</div>
+
+<br /><br /><p style=3D"font-family: Verdana; font-size:10pt; color:#666666=
+;"><b>Disclaimer</b></p><p style=3D"font-family: Verdana; font-size:8pt; co=
+lor:#666666;">The information contained in this communication from the send=
+er is confidential. It is intended solely for use by the recipient and othe=
+rs authorized to receive it. If you are not the recipient, you are hereby n=
+otified that any disclosure, copying, distribution or taking action in rela=
+tion of the contents of this information is strictly prohibited and may be =
+unlawful.<br /></p></body></html>
+
+--_000_MWHPR11MB17756EC0046E84C041DF022398AD0MWHPR11MB1775namp_--
+
+
+--===============3133972688505254687==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============3133972688505254687==--
