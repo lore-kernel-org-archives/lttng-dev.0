@@ -1,15 +1,16 @@
-From: Charles Jacobsen <charles.jacobsen@primarydata.com>
-Subject: Do updaters of a cds_lfht need to be synchronized?
-Date: Fri, 28 Oct 2016 15:40:28 +0000
-Message-ID: <MWHPR11MB17756EC0046E84C041DF022398AD0__38103.2303128906$1477926674$gmane$org@MWHPR11MB1775.namprd11.prod.outlook.com>
+From: Jean Spector <jean.spector@gmail.com>
+Subject: Babeltrace python bindings documentation is no
+	up-to-date
+Date: Sat, 29 Oct 2016 16:55:15 +0300
+Message-ID: <CABVQWN0JnR+K9BN11vYX051Q_ZspWHbVnUdUbREb+LgB1pMR8A__19872.8972035044$1477926677$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3133972688505254687=="
+Content-Type: multipart/mixed; boundary="===============2537973453712201997=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from us-smtp-delivery-194.mimecast.com
- (us-smtp-delivery-194.mimecast.com [63.128.21.194])
- by evm-lttng-1.efficios.com (Postfix) with ESMTP id C63E1A0DFF
- for <lttng-dev@lists.lttng.org>; Fri, 28 Oct 2016 15:47:22 +0000 (UTC)
-Content-Language: en-US
+Received: from mail-wm0-f51.google.com (mail-wm0-f51.google.com [74.125.82.51])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 51D64A0C8E
+ for <lttng-dev@lists.lttng.org>; Sat, 29 Oct 2016 13:55:54 +0000 (UTC)
+Received: by mail-wm0-f51.google.com with SMTP id p190so65844548wmp.1
+ for <lttng-dev@lists.lttng.org>; Sat, 29 Oct 2016 06:55:37 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,115 +20,48 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============3133972688505254687==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_MWHPR11MB17756EC0046E84C041DF022398AD0MWHPR11MB1775namp_"
+--===============2537973453712201997==
+Content-Type: multipart/alternative; boundary=047d7bf10a6041f13805400154c7
 
---_000_MWHPR11MB17756EC0046E84C041DF022398AD0MWHPR11MB1775namp_
+--047d7bf10a6041f13805400154c7
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
 
-The documentation for the lock-free hash table does not mention anything ab=
-out synchronizing updaters (e.g., with a lock):
+When trying to use the example from
+http://diamon.org/babeltrace/docs/python/examples/ (pointed to via
+http://lttng.org/viewers/), the code is not up-to-date.
 
+For instance, the first line in the example (import babeltrace.reader)
+fails as there's no 'reader' to import.
 
-https://lwn.net/Articles/573431/
+I've managed to get over it, but thought it would be better to have a
+working example code.
 
-<https://lwn.net/Articles/573431/>https://lwn.net/Articles/573432/
+P.S. I'm running RHEL 7.2 with babeltrace-python-1.2.4-1.el7.x86_64
 
+Best Regards,
+Jean
 
-The source for rculfhash (=3D=3D cds_lfht?) also mentions in the comments t=
-hat add and remove are lock free:
-
-
-https://github.com/urcu/userspace-rcu/blob/master/src/rculfhash.c
-
-
-Is it safe to assume that cds_lfht_add, cds_lfht_add_unique, and so on, *on=
-ly* require a surrounding rcu read lock/unlock?
-
-
-"lock free" is part of the name, so I would assume the answer is "yes".
-
-
-Thank you.
-
-Disclaimer
-
-The information contained in this communication from the sender is confiden=
-tial. It is intended solely for use by the recipient and others authorized =
-to receive it. If you are not the recipient, you are hereby notified that a=
-ny disclosure, copying, distribution or taking action in relation of the co=
-ntents of this information is strictly prohibited and may be unlawful.
-
---_000_MWHPR11MB17756EC0046E84C041DF022398AD0MWHPR11MB1775namp_
+--047d7bf10a6041f13805400154c7
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<html><head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style type=3D"text/css" style=3D"display:none;"><!-- P {margin-top:0;margi=
-n-bottom:0;} --></style>
-<style type=3D"text/css">.style1 {font-family: "Times New Roman";}</style><=
-/head><body dir=3D"ltr">
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;font=
--family:Calibri,Arial,Helvetica,sans-serif;">
-<p>The documentation for the lock-free hash table does not mention anything=
- about synchronizing updaters (e.g., with a lock):</p>
-<p><br>
-</p>
-<p><a href=3D"https://lwn.net/Articles/573431/" class=3D"OWAAutoLink" id=3D=
-"LPlnk860374" previewremoved=3D"true">https://lwn.net/Articles/573431/</a><=
-/p>
-<p><a href=3D"https://lwn.net/Articles/573431/" class=3D"OWAAutoLink" id=3D=
-"LPlnk860374" previewremoved=3D"true"></a><a href=3D"https://lwn.net/Articl=
-es/573432/" class=3D"OWAAutoLink" id=3D"LPlnk417850" previewremoved=3D"true=
-">https://lwn.net/Articles/573432/</a><br>
-</p>
-<p><br>
-</p>
-<p>The source for rculfhash (=3D=3D cds_lfht?) also mentions in the comment=
-s that add and remove are lock free:<br>
-</p>
-<p><br>
-</p>
-<p><a href=3D"https://github.com/urcu/userspace-rcu/blob/master/src/rculfha=
-sh.c" class=3D"OWAAutoLink" id=3D"LPlnk562362" previewremoved=3D"true">http=
-s://github.com/urcu/userspace-rcu/blob/master/src/rculfhash.c</a><br>
-</p>
-<p><br>
-</p>
-<p>Is it safe to assume that cds_lfht_add, cds_lfht_add_unique, and so on, =
-*only* require a surrounding rcu read lock/unlock?</p>
-<p><br>
-</p>
-<p>&quot;lock free&quot; is part of the name, so I would assume the answer =
-is &quot;yes&quot;.<br>
-</p>
-<p><br>
-</p>
-<p>Thank you.<br>
-</p>
-</div>
+<div dir=3D"ltr"><div>When trying to use the example from=C2=A0<a href=3D"h=
+ttp://diamon.org/babeltrace/docs/python/examples/">http://diamon.org/babelt=
+race/docs/python/examples/</a> (pointed to via <a href=3D"http://lttng.org/=
+viewers/">http://lttng.org/viewers/</a>), the code is not up-to-date.</div>=
+<div><br></div><div>For instance, the first line in the example (import bab=
+eltrace.reader) fails as there&#39;s no &#39;reader&#39; to import.<br></di=
+v><div><br></div><div>I&#39;ve managed to get over it, but thought it would=
+ be better to have a working example code.</div><div><br></div><div>P.S. I&=
+#39;m running RHEL 7.2 with babeltrace-python-1.2.4-1.el7.x86_64</div><div>=
+<br></div><div>Best Regards,</div><div>Jean</div><div><br></div></div>
 
-<br /><br /><p style=3D"font-family: Verdana; font-size:10pt; color:#666666=
-;"><b>Disclaimer</b></p><p style=3D"font-family: Verdana; font-size:8pt; co=
-lor:#666666;">The information contained in this communication from the send=
-er is confidential. It is intended solely for use by the recipient and othe=
-rs authorized to receive it. If you are not the recipient, you are hereby n=
-otified that any disclosure, copying, distribution or taking action in rela=
-tion of the contents of this information is strictly prohibited and may be =
-unlawful.<br /></p></body></html>
+--047d7bf10a6041f13805400154c7--
 
---_000_MWHPR11MB17756EC0046E84C041DF022398AD0MWHPR11MB1775namp_--
-
-
---===============3133972688505254687==
+--===============2537973453712201997==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -137,4 +71,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============3133972688505254687==--
+--===============2537973453712201997==--
