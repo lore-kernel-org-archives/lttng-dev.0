@@ -1,19 +1,17 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
+From: Sebastien Boisvert <sboisvert@gydle.com>
 Subject: Re: babeltrace API question
-Date: Sat, 29 Oct 2016 17:49:26 -0400
-Message-ID: <CAB4xu_2w8mCJZUX4kc1K7H9qNwEZSQQFHDgY8Duftr=KLbOK3A__27022.2515835941$1477777814$gmane$org@mail.gmail.com>
+Date: Sun, 30 Oct 2016 09:51:47 +0100
+Message-ID: <e1ce48da-158b-f96a-0eed-9d571b45900e__23089.1009596691$1477817539$gmane$org@gydle.com>
 References: <f62194ef-0591-d1a4-d1cb-925d2697b9bf@gydle.com>
+ <CAB4xu_2w8mCJZUX4kc1K7H9qNwEZSQQFHDgY8Duftr=KLbOK3A@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt0-f181.google.com (mail-qt0-f181.google.com
- [209.85.216.181])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id D7E78A0C83
- for <lttng-dev@lists.lttng.org>; Sat, 29 Oct 2016 21:50:15 +0000 (UTC)
-Received: by mail-qt0-f181.google.com with SMTP id p16so55330332qta.0
- for <lttng-dev@lists.lttng.org>; Sat, 29 Oct 2016 14:49:57 -0700 (PDT)
-In-Reply-To: <f62194ef-0591-d1a4-d1cb-925d2697b9bf@gydle.com>
+Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
+ by evm-lttng-1.efficios.com (Postfix) with ESMTPS id E7E49A3AEE
+ for <lttng-dev@lists.lttng.org>; Sun, 30 Oct 2016 08:52:13 +0000 (UTC)
+In-Reply-To: <CAB4xu_2w8mCJZUX4kc1K7H9qNwEZSQQFHDgY8Duftr=KLbOK3A@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,28 +21,37 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Sebastien Boisvert <sboisvert@gydle.com>
+To: Philippe Proulx <eeppeliteloop@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gU2F0LCBPY3QgMjksIDIwMTYgYXQgNTozNSBQTSwgU2ViYXN0aWVuIEJvaXN2ZXJ0IDxzYm9p
-c3ZlcnRAZ3lkbGUuY29tPiB3cm90ZToKPiBIaSwKPgo+Cj4gSSB3b3VsZCBsaWtlIHRvIGFkZCBm
-aWx0ZXIgb3B0aW9ucyB0byBiYWJlbHRyYWNlLgo+Cj4gSSBhbSBleHBsb3JpbmcgdGhlIGJhYmVs
-dHJhY2UgQVBJLgoKSSB3b3VsZCBzdHJvbmdseSBhZHZpc2UgeW91IE5PVCB0byB1c2UgdGhpcyBB
-UEkgYXMgd2UncmUgYWJvdXQgdG8KZGVwcmVjYXRlIGl0IGluIGEgZmV3IHdlZWtzIHdoZW4gQmFi
-ZWx0cmFjZSAyLjAgaXMgcmVsZWFzZWQuIEEgd2hvbGUgbmV3CkFQSSBiYXNlZCBvbiByZWZlcmVu
-Y2UgY291bnRzIHdpbGwgYmUgYXZhaWxhYmxlIHdoZW4gaXQncyByZWxlYXNlZCBhbmQKeW91IHdp
-bGwgYmUgYWJsZSB0byBkZXZlbG9wIGEgZmlsdGVyIHBsdWdpbiB3aGljaCBjYW4gYmUgaW5zZXJ0
-ZWQgaW4gYQpncmFwaCBvZiBjb25uZWN0ZWQgY29tcG9uZW50cyB3aGVyZSBhIHN0cmVhbSBvZiBl
-dmVudHMgYW5kIG90aGVyCm5vdGlmaWNhdGlvbnMgZmxvdy4KCkluIHRoZSBtZWFudGltZSB5b3Ug
-Y2FuIHVzZSB0aGUgUHl0aG9uIGJpbmRpbmdzICh0aGlzIEFQSSB3aWxsIHJlbWFpbgptYWludGFp
-bmVkKSB0byBhY2hpZXZlIHdoYXQgeW91IHdhbnQuCgpQaGlsCgo+Cj4KPiBXaGVuIHRoZSB0eXBl
-X2lkIG9mIGEgZmllbGQgKGJ0X2RlY2xhcmF0aW9uKSBpcyBDVEZfVFlQRV9JTlRFR0VSLCBob3cg
-Y2FuIG9uZSBkZXRlcm1pbmUgd2hldGhlciB0byB1c2UgYnRfY3RmX2dldF91aW50NjQgb3IgYnRf
-Y3RmX2dldF9pbnQ2NCB0byByZXRyaWV2ZSB0aGUgdmFsdWUgPwo+IF9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+
-IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
-YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
-dGluZm8vbHR0bmctZGV2Cg==
+CkkgbG9vayBmb3J3YXJkIGZvciB0aGlzIG5ldyBBUEkuCgpJdCBzb3VuZHMgcmVhbGx5IGNvb2wu
+CgoKVGhhbmtzCgoKT24gMjAxNi0xMC0yOSAxMTo0OSBQTSwgUGhpbGlwcGUgUHJvdWx4IHdyb3Rl
+Ogo+IE9uIFNhdCwgT2N0IDI5LCAyMDE2IGF0IDU6MzUgUE0sIFNlYmFzdGllbiBCb2lzdmVydCA8
+c2JvaXN2ZXJ0QGd5ZGxlLmNvbT4gd3JvdGU6Cj4+IEhpLAo+Pgo+Pgo+PiBJIHdvdWxkIGxpa2Ug
+dG8gYWRkIGZpbHRlciBvcHRpb25zIHRvIGJhYmVsdHJhY2UuCj4+Cj4+IEkgYW0gZXhwbG9yaW5n
+IHRoZSBiYWJlbHRyYWNlIEFQSS4KPiBJIHdvdWxkIHN0cm9uZ2x5IGFkdmlzZSB5b3UgTk9UIHRv
+IHVzZSB0aGlzIEFQSSBhcyB3ZSdyZSBhYm91dCB0bwo+IGRlcHJlY2F0ZSBpdCBpbiBhIGZldyB3
+ZWVrcyB3aGVuIEJhYmVsdHJhY2UgMi4wIGlzIHJlbGVhc2VkLiBBIHdob2xlIG5ldwo+IEFQSSBi
+YXNlZCBvbiByZWZlcmVuY2UgY291bnRzIHdpbGwgYmUgYXZhaWxhYmxlIHdoZW4gaXQncyByZWxl
+YXNlZCBhbmQKPiB5b3Ugd2lsbCBiZSBhYmxlIHRvIGRldmVsb3AgYSBmaWx0ZXIgcGx1Z2luIHdo
+aWNoIGNhbiBiZSBpbnNlcnRlZCBpbiBhCj4gZ3JhcGggb2YgY29ubmVjdGVkIGNvbXBvbmVudHMg
+d2hlcmUgYSBzdHJlYW0gb2YgZXZlbnRzIGFuZCBvdGhlcgo+IG5vdGlmaWNhdGlvbnMgZmxvdy4K
+Pgo+IEluIHRoZSBtZWFudGltZSB5b3UgY2FuIHVzZSB0aGUgUHl0aG9uIGJpbmRpbmdzICh0aGlz
+IEFQSSB3aWxsIHJlbWFpbgo+IG1haW50YWluZWQpIHRvIGFjaGlldmUgd2hhdCB5b3Ugd2FudC4K
+Pgo+IFBoaWwKPgo+Pgo+PiBXaGVuIHRoZSB0eXBlX2lkIG9mIGEgZmllbGQgKGJ0X2RlY2xhcmF0
+aW9uKSBpcyBDVEZfVFlQRV9JTlRFR0VSLCBob3cgY2FuIG9uZSBkZXRlcm1pbmUgd2hldGhlciB0
+byB1c2UgYnRfY3RmX2dldF91aW50NjQgb3IgYnRfY3RmX2dldF9pbnQ2NCB0byByZXRyaWV2ZSB0
+aGUgdmFsdWUgPwo+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwo+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
+cmcKPj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
+dG5nLWRldgoKLS0gCkRyLiBTw6liYXN0aWVuIEJPSVNWRVJULCBQaC5ELgpCaW9pbmZvcm1hdGlj
+cyBTb2Z0d2FyZSBTcGVjaWFsaXN0CkdZRExFIGluYy4Kc2JvaXN2ZXJ0QGd5ZGxlLmNvbQorMzMg
+NiA2NyA5OSA3MSA1MCAoTW9iaWxlLCBGcmFuY2UpCiszMyA0IDkyIDI4IDAyIDUwIChGaXhlLCBG
+cmFuY2UpCiszMyA5IDcwIDQ0IDQ0IDA3IChTa3lwZSwgRnJhbmNlKQorMSA0MTggOTA3IDkzNzcg
+IyAzODAgKEd5ZGxlIFF1w6liZWMgT2ZmaWNlKQorMSA1ODEgMzA4IDk5OTkgKE1vYmlsZSwgQ2Fu
+YWRhKQoxMDEtMTMzMiBBdi4gQ2hhbm9pbmUgTW9yZWwKUXXDqWJlYywgUUMgRzFTIDRCNCwgQ2Fu
+YWRhCmh0dHA6Ly93d3cuZ3lkbGUuY29tCgpzaWduYXR1cmUgdi4yMDE2LTEwLTEwLjEKCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
+aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9y
+Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
