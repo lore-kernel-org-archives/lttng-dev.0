@@ -1,19 +1,22 @@
-From: Jean Spector <jean.spector@gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
 Subject: Re: Babeltrace python bindings documentation is no
 	up-to-date
-Date: Mon, 31 Oct 2016 22:02:55 +0200
-Message-ID: <CABVQWN1USj+gH_horiYtB3V0q0nCOQ+NWdknA2AdVwdyMoGtHg__35458.0861320303$1477944387$gmane$org@mail.gmail.com>
+Date: Mon, 31 Oct 2016 16:38:03 -0400
+Message-ID: <CAB4xu_1Q8QekRhmAEUNf7ML+9zRXOEj5Afiw-3EeuB_pmHC4kA__3491.69025798819$1477946344$gmane$org@mail.gmail.com>
 References: <CABVQWN0JnR+K9BN11vYX051Q_ZspWHbVnUdUbREb+LgB1pMR8A@mail.gmail.com>
  <CAB4xu_0FBn00woj==OqKyiQ67cNNsKBNcKHKoevP8ki=oOFHTg@mail.gmail.com>
+ <CABVQWN1USj+gH_horiYtB3V0q0nCOQ+NWdknA2AdVwdyMoGtHg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4508390611288509750=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm0-f42.google.com (mail-wm0-f42.google.com [74.125.82.42])
- by evm-lttng-1.efficios.com (Postfix) with ESMTPS id 2DD9CA545E
- for <lttng-dev@lists.lttng.org>; Mon, 31 Oct 2016 20:03:39 +0000 (UTC)
-Received: by mail-wm0-f42.google.com with SMTP id n67so249879996wme.1
- for <lttng-dev@lists.lttng.org>; Mon, 31 Oct 2016 13:03:17 -0700 (PDT)
-In-Reply-To: <CAB4xu_0FBn00woj==OqKyiQ67cNNsKBNcKHKoevP8ki=oOFHTg@mail.gmail.com>
+Received: from mail-qt0-x236.google.com (mail-qt0-x236.google.com
+ [IPv6:2607:f8b0:400d:c0d::236])
+ by lists.lttng.org (Postfix) with ESMTPS id 32B4615684
+ for <lttng-dev@lists.lttng.org>; Mon, 31 Oct 2016 20:39:06 +0000 (UTC)
+Received: by mail-qt0-x236.google.com with SMTP id c47so34181449qtc.2
+ for <lttng-dev@lists.lttng.org>; Mon, 31 Oct 2016 13:38:34 -0700 (PDT)
+In-Reply-To: <CABVQWN1USj+gH_horiYtB3V0q0nCOQ+NWdknA2AdVwdyMoGtHg@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,276 +26,101 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Philippe Proulx <eeppeliteloop@gmail.com>
+To: Jean Spector <jean.spector@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============4508390611288509750==
-Content-Type: multipart/alternative; boundary=047d7bfcfdced3c20105402eb212
-
---047d7bfcfdced3c20105402eb212
-Content-Type: text/plain; charset=UTF-8
-
-Thank you Philippe.
-
-Adding a different documentation page for older versions (it's the latest
-package on RHEL 7.2 - so I'd expect more newbies to encounter this issue)
-could help anyone trying the Python bindings for the first time.
-I'm sure you realize that trying the official example and failing can be
-quite frustrating and could turn off potential users. This is especially
-true if it comes after other issues(let me know if you'd prefer these to be
-sent in separate emails):
-
-RHEL 7.2 uses python 3.4, but babeltrace-python-1.2.4 requires python 3.3,
-which is not available anymore - at least not out of the box.
-Again, I've solved the issue for myself, so it's not a support call. The
-idea is that it would be great if the initial install+run stage was made
-less painful.
-I believe it would increase the user base as, for instance, I was on the
-verge of giving up after building from source has also failed for me.
-
-When trying to build from latest stable source (1.4.0) on RHEL 7.2, I've
-encountered a couple of issues:
-
-   1. configure would fail on popt. "ln -s /usr/lib64/libpopt.so.0
-   /usr/lib64/libpopt.so" worked around the issue, but there must be a better
-   way (or a line in the README).
-   2. "python3 -c 'import babeltrace'" would fail with "ImportError:
-   /usr/local/lib64/python3.4/site-packages/babeltrace/_nativebt.so: undefined
-   symbol: PyInstance_Type"
-
-That's where I gave up trying to build from source. It could be due to the
-same python 3.4 - but it's just a guess.
-
-==========
-
-To recap, I see 3 issues here:
-
-   1. Documentation - any platform
-   2. Install of the latest  babeltrace-python (1.2.4) - RHEL 7.2
-   3. Building from the latest stable source (1.4.0) - RHEL 7.2
-
-
-In any case, thanks for the great tool. I hope to put it to good use.
-Jean
-
-
-On Mon, Oct 31, 2016 at 7:07 PM, Philippe Proulx <eeppeliteloop@gmail.com>
-wrote:
-
-> On Sat, Oct 29, 2016 at 9:55 AM, Jean Spector <jean.spector@gmail.com>
-> wrote:
-> > When trying to use the example from
-> > http://diamon.org/babeltrace/docs/python/examples/ (pointed to via
-> > http://lttng.org/viewers/), the code is not up-to-date.
-> >
-> > For instance, the first line in the example (import babeltrace.reader)
-> fails
-> > as there's no 'reader' to import.
-> >
-> > I've managed to get over it, but thought it would be better to have a
-> > working example code.
->
-> I wrote this doc and it was merged into master more than a year ago.
-> When writing this doc, I split the `babeltrace` package into the
-> `reader` and `writer` subpackages to make the autodocumentation with
-> Sphinx easier. Now it looks like this split was never backported to
-> v1.2, v1.3, v1.4, and soon v1.5.
->
-> The `Babeltrace 1.2.0` version you see on the front page is just the
-> current version found when I generated the online version. Really, the
-> title should say `Babeltrace (master branch)`. The master branch will
-> become Babeltrace 2.0 soon. In the meantime, simply drop the `reader`
-> subpackage when you read the doc and try examples. So
->
->     import babeltrace.reader as btreader
->
->     trace_collection = btreader.TraceCollection()
->
-> becomes
->
->     import babeltrace as btreader
->
->     trace_collection = btreader.TraceCollection()
->
-> For the CTF writer part, drop the `writer` subpackage, and import the
-> `CTFWriter` class: you'll find all the documented classes within this
-> class (kind of weird, and one of the reasons I created a subpackage
-> instead):
->
->     import babeltrace.writer as btwriter
->
->     writer = btwriter.Writer(trace_path)
->
-> becomes
->
->     from babeltrace import CTFWriter as btwriter
->
->     writer = btwriter.Writer(trace_path)
->
-> Note that the new subpackage split is backward compatible with the
-> bindings of v1.x, so the code you write now will continue to work...
-> forever.
->
-> I might add an equivalent of this response as a note in the generated
-> documentation.
->
-> BR,
-> Phil
->
-> >
-> > P.S. I'm running RHEL 7.2 with babeltrace-python-1.2.4-1.el7.x86_64
-> >
-> > Best Regards,
-> > Jean
-> >
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >
->
-
---047d7bfcfdced3c20105402eb212
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Thank you=C2=A0<span style=3D"font-size:12.8px;white-space=
-:nowrap">Philippe.</span><div><span style=3D"font-size:12.8px;white-space:n=
-owrap"><br></span><div><span style=3D"font-size:12.8px;white-space:nowrap">=
-Adding a different documentation page for older versions (it&#39;s the late=
-st package on RHEL 7.2 - so I&#39;d expect more newbies to encounter this i=
-ssue) could help anyone trying the Python bindings for the first time.</spa=
-n></div><div><span style=3D"font-size:12.8px;white-space:nowrap">I&#39;m su=
-re you realize that trying the official example and failing can be quite fr=
-ustrating and could turn off potential users. This is especially true if it=
- comes after other issues(let me know if you&#39;d prefer these to be sent =
-in separate emails):</span></div><div><span style=3D"font-size:12.8px;white=
--space:nowrap"><br></span></div><div><span style=3D"font-size:12.8px;white-=
-space:nowrap">RHEL 7.2 uses python 3.4, but=C2=A0</span><span style=3D"colo=
-r:rgb(80,0,80);font-size:12.8px">babeltrace-python-1.2.4 requires python 3.=
-3, which is not available anymore - at least not out of the box.</span><br>=
-</div><div>Again, I&#39;ve solved the issue for myself, so it&#39;s not a s=
-upport call. The idea is that it would be great if the initial install+run =
-stage was made less painful.</div><div>I believe it would increase the user=
- base as, for instance, I was on the verge of giving up after building from=
- source has also failed for me.</div><div><br></div><div>When trying to bui=
-ld from latest stable source (1.4.0) on RHEL 7.2, I&#39;ve encountered a co=
-uple of issues:</div><div><ol><li>configure would fail on popt. &quot;ln -s=
- /usr/lib64/libpopt.so.0 /usr/lib64/libpopt.so&quot; worked around the issu=
-e, but there must be a better way (or a line in the README).</li><li>&quot;=
-python3 -c &#39;import babeltrace&#39;&quot; would fail with &quot;ImportEr=
-ror: /usr/local/lib64/python3.4/site-packages/babeltrace/_nativebt.so: unde=
-fined symbol: PyInstance_Type&quot;</li></ol><div>That&#39;s where I gave u=
-p trying to build from source. It could be due to the same python 3.4 - but=
- it&#39;s just a guess.</div></div><div><br></div><div>=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D</div><div><br></div><div>To recap, I see 3 issues here:</div><=
-div><ol><li>Documentation - any platform</li><li>Install of the latest=C2=
-=A0
-babeltrace-python (1.2.4) - RHEL 7.2</li><li>Building from the latest stabl=
-e source (1.4.0) - RHEL 7.2</li></ol><div><br></div></div><div>In any case,=
- thanks for the great tool. I hope to put it to good use.</div><div>Jean</d=
-iv><div><br></div></div><div class=3D"gmail_extra"><br><div class=3D"gmail_=
-quote">On Mon, Oct 31, 2016 at 7:07 PM, Philippe Proulx <span dir=3D"ltr">&=
-lt;<a href=3D"mailto:eeppeliteloop@gmail.com" target=3D"_blank">eeppelitelo=
-op@gmail.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" sty=
-le=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddi=
-ng-left:1ex"><span>On Sat, Oct 29, 2016 at 9:55 AM, Jean Spector &lt;<a hre=
-f=3D"mailto:jean.spector@gmail.com" target=3D"_blank">jean.spector@gmail.co=
-m</a>&gt; wrote:<br>
-&gt; When trying to use the example from<br>
-&gt; <a href=3D"http://diamon.org/babeltrace/docs/python/examples/" rel=3D"=
-noreferrer" target=3D"_blank">http://diamon.org/babeltrace/d<wbr>ocs/python=
-/examples/</a> (pointed to via<br>
-&gt; <a href=3D"http://lttng.org/viewers/" rel=3D"noreferrer" target=3D"_bl=
-ank">http://lttng.org/viewers/</a>), the code is not up-to-date.<br>
-&gt;<br>
-&gt; For instance, the first line in the example (import babeltrace.reader)=
- fails<br>
-&gt; as there&#39;s no &#39;reader&#39; to import.<br>
-&gt;<br>
-&gt; I&#39;ve managed to get over it, but thought it would be better to hav=
-e a<br>
-&gt; working example code.<br>
-<br>
-</span>I wrote this doc and it was merged into master more than a year ago.=
-<br>
-When writing this doc, I split the `babeltrace` package into the<br>
-`reader` and `writer` subpackages to make the autodocumentation with<br>
-Sphinx easier. Now it looks like this split was never backported to<br>
-v1.2, v1.3, v1.4, and soon v1.5.<br>
-<br>
-The `Babeltrace 1.2.0` version you see on the front page is just the<br>
-current version found when I generated the online version. Really, the<br>
-title should say `Babeltrace (master branch)`. The master branch will<br>
-become Babeltrace 2.0 soon. In the meantime, simply drop the `reader`<br>
-subpackage when you read the doc and try examples. So<br>
-<br>
-=C2=A0 =C2=A0 import babeltrace.reader as btreader<br>
-<br>
-=C2=A0 =C2=A0 trace_collection =3D btreader.TraceCollection()<br>
-<br>
-becomes<br>
-<br>
-=C2=A0 =C2=A0 import babeltrace as btreader<br>
-<br>
-=C2=A0 =C2=A0 trace_collection =3D btreader.TraceCollection()<br>
-<br>
-For the CTF writer part, drop the `writer` subpackage, and import the<br>
-`CTFWriter` class: you&#39;ll find all the documented classes within this<b=
-r>
-class (kind of weird, and one of the reasons I created a subpackage<br>
-instead):<br>
-<br>
-=C2=A0 =C2=A0 import babeltrace.writer as btwriter<br>
-<br>
-=C2=A0 =C2=A0 writer =3D btwriter.Writer(trace_path)<br>
-<br>
-becomes<br>
-<br>
-=C2=A0 =C2=A0 from babeltrace import CTFWriter as btwriter<br>
-<br>
-=C2=A0 =C2=A0 writer =3D btwriter.Writer(trace_path)<br>
-<br>
-Note that the new subpackage split is backward compatible with the<br>
-bindings of v1.x, so the code you write now will continue to work...<br>
-forever.<br>
-<br>
-I might add an equivalent of this response as a note in the generated<br>
-documentation.<br>
-<br>
-BR,<br>
-Phil<br>
-<span><br>
-&gt;<br>
-&gt; P.S. I&#39;m running RHEL 7.2 with babeltrace-python-1.2.4-1.el7.<wbr>=
-x86_64<br>
-&gt;<br>
-&gt; Best Regards,<br>
-&gt; Jean<br>
-&gt;<br>
-&gt;<br>
-</span>&gt; ______________________________<wbr>_________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
-ev@lists.lttng.org</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bi<wbr>n/=
-mailman/listinfo/lttng-dev</a><br>
-&gt;<br>
-</blockquote></div><br></div></div>
-
---047d7bfcfdced3c20105402eb212--
-
---===============4508390611288509750==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============4508390611288509750==--
+T24gTW9uLCBPY3QgMzEsIDIwMTYgYXQgNDowMiBQTSwgSmVhbiBTcGVjdG9yIDxqZWFuLnNwZWN0
+b3JAZ21haWwuY29tPiB3cm90ZToKPiBUaGFuayB5b3UgUGhpbGlwcGUuCj4KPiBBZGRpbmcgYSBk
+aWZmZXJlbnQgZG9jdW1lbnRhdGlvbiBwYWdlIGZvciBvbGRlciB2ZXJzaW9ucyAoaXQncyB0aGUg
+bGF0ZXN0Cj4gcGFja2FnZSBvbiBSSEVMIDcuMiAtIHNvIEknZCBleHBlY3QgbW9yZSBuZXdiaWVz
+IHRvIGVuY291bnRlciB0aGlzIGlzc3VlKQo+IGNvdWxkIGhlbHAgYW55b25lIHRyeWluZyB0aGUg
+UHl0aG9uIGJpbmRpbmdzIGZvciB0aGUgZmlyc3QgdGltZS4KPiBJJ20gc3VyZSB5b3UgcmVhbGl6
+ZSB0aGF0IHRyeWluZyB0aGUgb2ZmaWNpYWwgZXhhbXBsZSBhbmQgZmFpbGluZyBjYW4gYmUKPiBx
+dWl0ZSBmcnVzdHJhdGluZyBhbmQgY291bGQgdHVybiBvZmYgcG90ZW50aWFsIHVzZXJzLgoKSSds
+bCBtYWtlIHN1cmUgdG8gbWFrZSB0aGUgZG9jIGFzIGNsZWFyIGFzIHBvc3NpYmxlLiBUaGUgbWFp
+biBwcm9ibGVtIGhlcmUgaXMKdGhhdCB0aGUgbW9kdWxlIGlzIHNpbXBseSBub3QgU3BoaW54LWRv
+Y3VtZW50ZWQgaW4gQmFiZWx0cmFjZSAxLnguIEkgZ3Vlc3MKSSBjb3VsZCBzZWFyY2ggYW5kIHJl
+cGxhY2UgdGhlIHBhY2thZ2UgbmFtZXMgaW4gdGhlIGRvYyBiZWZvcmUgcHVibGlzaGluZyBpdC4K
+SSdsbCBmaW5kIGEgd2F5IHRvIG1ha2UgaXQgY2xlYXIgYW55d2F5LgoKPiBUaGlzIGlzIGVzcGVj
+aWFsbHkKPiB0cnVlIGlmIGl0IGNvbWVzIGFmdGVyIG90aGVyIGlzc3VlcyhsZXQgbWUga25vdyBp
+ZiB5b3UnZCBwcmVmZXIgdGhlc2UgdG8gYmUKPiBzZW50IGluIHNlcGFyYXRlIGVtYWlscyk6Cj4K
+PiBSSEVMIDcuMiB1c2VzIHB5dGhvbiAzLjQsIGJ1dCBiYWJlbHRyYWNlLXB5dGhvbi0xLjIuNCBy
+ZXF1aXJlcyBweXRob24gMy4zLAo+IHdoaWNoIGlzIG5vdCBhdmFpbGFibGUgYW55bW9yZSAtIGF0
+IGxlYXN0IG5vdCBvdXQgb2YgdGhlIGJveC4KCldoYXQgZG8geW91IG1lYW4/IFRoZSBiaW5kaW5n
+cyB3b3JrIGp1c3QgZmluZSB3aXRoIFB5dGhvbiAzLjQgYW5kIFB5dGhvbiAzLjUuCgo+IEFnYWlu
+LCBJJ3ZlIHNvbHZlZCB0aGUgaXNzdWUgZm9yIG15c2VsZiwgc28gaXQncyBub3QgYSBzdXBwb3J0
+IGNhbGwuIFRoZQo+IGlkZWEgaXMgdGhhdCBpdCB3b3VsZCBiZSBncmVhdCBpZiB0aGUgaW5pdGlh
+bCBpbnN0YWxsK3J1biBzdGFnZSB3YXMgbWFkZQo+IGxlc3MgcGFpbmZ1bC4KPiBJIGJlbGlldmUg
+aXQgd291bGQgaW5jcmVhc2UgdGhlIHVzZXIgYmFzZSBhcywgZm9yIGluc3RhbmNlLCBJIHdhcyBv
+biB0aGUKPiB2ZXJnZSBvZiBnaXZpbmcgdXAgYWZ0ZXIgYnVpbGRpbmcgZnJvbSBzb3VyY2UgaGFz
+IGFsc28gZmFpbGVkIGZvciBtZS4KPgo+IFdoZW4gdHJ5aW5nIHRvIGJ1aWxkIGZyb20gbGF0ZXN0
+IHN0YWJsZSBzb3VyY2UgKDEuNC4wKSBvbiBSSEVMIDcuMiwgSSd2ZQo+IGVuY291bnRlcmVkIGEg
+Y291cGxlIG9mIGlzc3VlczoKPgo+IGNvbmZpZ3VyZSB3b3VsZCBmYWlsIG9uIHBvcHQuICJsbiAt
+cyAvdXNyL2xpYjY0L2xpYnBvcHQuc28uMAo+IC91c3IvbGliNjQvbGlicG9wdC5zbyIgd29ya2Vk
+IGFyb3VuZCB0aGUgaXNzdWUsIGJ1dCB0aGVyZSBtdXN0IGJlIGEgYmV0dGVyCj4gd2F5IChvciBh
+IGxpbmUgaW4gdGhlIFJFQURNRSkuCj4gInB5dGhvbjMgLWMgJ2ltcG9ydCBiYWJlbHRyYWNlJyIg
+d291bGQgZmFpbCB3aXRoICJJbXBvcnRFcnJvcjoKPiAvdXNyL2xvY2FsL2xpYjY0L3B5dGhvbjMu
+NC9zaXRlLXBhY2thZ2VzL2JhYmVsdHJhY2UvX25hdGl2ZWJ0LnNvOiB1bmRlZmluZWQKPiBzeW1i
+b2w6IFB5SW5zdGFuY2VfVHlwZSIKPgo+IFRoYXQncyB3aGVyZSBJIGdhdmUgdXAgdHJ5aW5nIHRv
+IGJ1aWxkIGZyb20gc291cmNlLiBJdCBjb3VsZCBiZSBkdWUgdG8gdGhlCj4gc2FtZSBweXRob24g
+My40IC0gYnV0IGl0J3MganVzdCBhIGd1ZXNzLgoKVGhlIG9mZmljaWFsIGNoYW5uZWwgZm9yIHJl
+cG9ydGluZyBidWdzIGlzIHRoZSBidWcgdHJhY2tlcgo8aHR0cHM6Ly9idWdzLmx0dG5nLm9yZy9w
+cm9qZWN0cy9iYWJlbHRyYWNlLz4uIElmIHlvdSBjcmVhdGUgYW4gaXNzdWUgdGhlcmUsIHdlCmNh
+biBhc2sgZm9yIGRldGFpbHMgYWJvdXQgdGhlIGVudmlyb25tZW50IGFuZCBjb250ZXh0IGFuZCB0
+cmFjayB0aGUgYnVnIHRvCnJlbWVtYmVyIGl0LgoKSSBoYXZlIG5vIGlkZWEgd2hhdCdzIGdvaW5n
+IHdyb25nIGhlcmUsIGJ1dCBpZiB5b3UgY3JlYXRlIGFuIGlzc3VlIHdlCmNhbiB0ZXN0IHRoZQpz
+YW1lIGVudmlyb25tZW50IChSSEVMIDcuMikgYW5kIHNlZSBpZiB3ZSBjYW4gcmVwcm9kdWNlIHRo
+ZSBidWcuCgo+Cj4gPT09PT09PT09PQo+Cj4gVG8gcmVjYXAsIEkgc2VlIDMgaXNzdWVzIGhlcmU6
+Cj4KPiBEb2N1bWVudGF0aW9uIC0gYW55IHBsYXRmb3JtCj4gSW5zdGFsbCBvZiB0aGUgbGF0ZXN0
+ICBiYWJlbHRyYWNlLXB5dGhvbiAoMS4yLjQpIC0gUkhFTCA3LjIKPiBCdWlsZGluZyBmcm9tIHRo
+ZSBsYXRlc3Qgc3RhYmxlIHNvdXJjZSAoMS40LjApIC0gUkhFTCA3LjIKPgo+Cj4gSW4gYW55IGNh
+c2UsIHRoYW5rcyBmb3IgdGhlIGdyZWF0IHRvb2wuIEkgaG9wZSB0byBwdXQgaXQgdG8gZ29vZCB1
+c2UuCj4gSmVhbgoKVGhhbmtzIGZvciB0aGUgZmVlZGJhY2shIFdlIGFwcHJlY2lhdGUuCgpQaGls
+Cgo+Cj4KPiBPbiBNb24sIE9jdCAzMSwgMjAxNiBhdCA3OjA3IFBNLCBQaGlsaXBwZSBQcm91bHgg
+PGVlcHBlbGl0ZWxvb3BAZ21haWwuY29tPgo+IHdyb3RlOgo+Pgo+PiBPbiBTYXQsIE9jdCAyOSwg
+MjAxNiBhdCA5OjU1IEFNLCBKZWFuIFNwZWN0b3IgPGplYW4uc3BlY3RvckBnbWFpbC5jb20+Cj4+
+IHdyb3RlOgo+PiA+IFdoZW4gdHJ5aW5nIHRvIHVzZSB0aGUgZXhhbXBsZSBmcm9tCj4+ID4gaHR0
+cDovL2RpYW1vbi5vcmcvYmFiZWx0cmFjZS9kb2NzL3B5dGhvbi9leGFtcGxlcy8gKHBvaW50ZWQg
+dG8gdmlhCj4+ID4gaHR0cDovL2x0dG5nLm9yZy92aWV3ZXJzLyksIHRoZSBjb2RlIGlzIG5vdCB1
+cC10by1kYXRlLgo+PiA+Cj4+ID4gRm9yIGluc3RhbmNlLCB0aGUgZmlyc3QgbGluZSBpbiB0aGUg
+ZXhhbXBsZSAoaW1wb3J0IGJhYmVsdHJhY2UucmVhZGVyKQo+PiA+IGZhaWxzCj4+ID4gYXMgdGhl
+cmUncyBubyAncmVhZGVyJyB0byBpbXBvcnQuCj4+ID4KPj4gPiBJJ3ZlIG1hbmFnZWQgdG8gZ2V0
+IG92ZXIgaXQsIGJ1dCB0aG91Z2h0IGl0IHdvdWxkIGJlIGJldHRlciB0byBoYXZlIGEKPj4gPiB3
+b3JraW5nIGV4YW1wbGUgY29kZS4KPj4KPj4gSSB3cm90ZSB0aGlzIGRvYyBhbmQgaXQgd2FzIG1l
+cmdlZCBpbnRvIG1hc3RlciBtb3JlIHRoYW4gYSB5ZWFyIGFnby4KPj4gV2hlbiB3cml0aW5nIHRo
+aXMgZG9jLCBJIHNwbGl0IHRoZSBgYmFiZWx0cmFjZWAgcGFja2FnZSBpbnRvIHRoZQo+PiBgcmVh
+ZGVyYCBhbmQgYHdyaXRlcmAgc3VicGFja2FnZXMgdG8gbWFrZSB0aGUgYXV0b2RvY3VtZW50YXRp
+b24gd2l0aAo+PiBTcGhpbnggZWFzaWVyLiBOb3cgaXQgbG9va3MgbGlrZSB0aGlzIHNwbGl0IHdh
+cyBuZXZlciBiYWNrcG9ydGVkIHRvCj4+IHYxLjIsIHYxLjMsIHYxLjQsIGFuZCBzb29uIHYxLjUu
+Cj4+Cj4+IFRoZSBgQmFiZWx0cmFjZSAxLjIuMGAgdmVyc2lvbiB5b3Ugc2VlIG9uIHRoZSBmcm9u
+dCBwYWdlIGlzIGp1c3QgdGhlCj4+IGN1cnJlbnQgdmVyc2lvbiBmb3VuZCB3aGVuIEkgZ2VuZXJh
+dGVkIHRoZSBvbmxpbmUgdmVyc2lvbi4gUmVhbGx5LCB0aGUKPj4gdGl0bGUgc2hvdWxkIHNheSBg
+QmFiZWx0cmFjZSAobWFzdGVyIGJyYW5jaClgLiBUaGUgbWFzdGVyIGJyYW5jaCB3aWxsCj4+IGJl
+Y29tZSBCYWJlbHRyYWNlIDIuMCBzb29uLiBJbiB0aGUgbWVhbnRpbWUsIHNpbXBseSBkcm9wIHRo
+ZSBgcmVhZGVyYAo+PiBzdWJwYWNrYWdlIHdoZW4geW91IHJlYWQgdGhlIGRvYyBhbmQgdHJ5IGV4
+YW1wbGVzLiBTbwo+Pgo+PiAgICAgaW1wb3J0IGJhYmVsdHJhY2UucmVhZGVyIGFzIGJ0cmVhZGVy
+Cj4+Cj4+ICAgICB0cmFjZV9jb2xsZWN0aW9uID0gYnRyZWFkZXIuVHJhY2VDb2xsZWN0aW9uKCkK
+Pj4KPj4gYmVjb21lcwo+Pgo+PiAgICAgaW1wb3J0IGJhYmVsdHJhY2UgYXMgYnRyZWFkZXIKPj4K
+Pj4gICAgIHRyYWNlX2NvbGxlY3Rpb24gPSBidHJlYWRlci5UcmFjZUNvbGxlY3Rpb24oKQo+Pgo+
+PiBGb3IgdGhlIENURiB3cml0ZXIgcGFydCwgZHJvcCB0aGUgYHdyaXRlcmAgc3VicGFja2FnZSwg
+YW5kIGltcG9ydCB0aGUKPj4gYENURldyaXRlcmAgY2xhc3M6IHlvdSdsbCBmaW5kIGFsbCB0aGUg
+ZG9jdW1lbnRlZCBjbGFzc2VzIHdpdGhpbiB0aGlzCj4+IGNsYXNzIChraW5kIG9mIHdlaXJkLCBh
+bmQgb25lIG9mIHRoZSByZWFzb25zIEkgY3JlYXRlZCBhIHN1YnBhY2thZ2UKPj4gaW5zdGVhZCk6
+Cj4+Cj4+ICAgICBpbXBvcnQgYmFiZWx0cmFjZS53cml0ZXIgYXMgYnR3cml0ZXIKPj4KPj4gICAg
+IHdyaXRlciA9IGJ0d3JpdGVyLldyaXRlcih0cmFjZV9wYXRoKQo+Pgo+PiBiZWNvbWVzCj4+Cj4+
+ICAgICBmcm9tIGJhYmVsdHJhY2UgaW1wb3J0IENURldyaXRlciBhcyBidHdyaXRlcgo+Pgo+PiAg
+ICAgd3JpdGVyID0gYnR3cml0ZXIuV3JpdGVyKHRyYWNlX3BhdGgpCj4+Cj4+IE5vdGUgdGhhdCB0
+aGUgbmV3IHN1YnBhY2thZ2Ugc3BsaXQgaXMgYmFja3dhcmQgY29tcGF0aWJsZSB3aXRoIHRoZQo+
+PiBiaW5kaW5ncyBvZiB2MS54LCBzbyB0aGUgY29kZSB5b3Ugd3JpdGUgbm93IHdpbGwgY29udGlu
+dWUgdG8gd29yay4uLgo+PiBmb3JldmVyLgo+Pgo+PiBJIG1pZ2h0IGFkZCBhbiBlcXVpdmFsZW50
+IG9mIHRoaXMgcmVzcG9uc2UgYXMgYSBub3RlIGluIHRoZSBnZW5lcmF0ZWQKPj4gZG9jdW1lbnRh
+dGlvbi4KPj4KPj4gQlIsCj4+IFBoaWwKPj4KPj4gPgo+PiA+IFAuUy4gSSdtIHJ1bm5pbmcgUkhF
+TCA3LjIgd2l0aCBiYWJlbHRyYWNlLXB5dGhvbi0xLjIuNC0xLmVsNy54ODZfNjQKPj4gPgo+PiA+
+IEJlc3QgUmVnYXJkcywKPj4gPiBKZWFuCj4+ID4KPj4gPgo+PiA+IF9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+ID4gbHR0bmctZGV2IG1haWxpbmcgbGlz
+dAo+PiA+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4gPiBodHRwczovL2xpc3RzLmx0dG5n
+Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4+ID4KPgo+Cl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9j
+Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
