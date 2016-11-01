@@ -1,24 +1,23 @@
-From: Jean Spector <jean.spector@gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
 Subject: Re: Babeltrace python bindings documentation is no
 	up-to-date
-Date: Mon, 31 Oct 2016 23:20:42 +0200
-Message-ID: <CABVQWN1LwXepZrbnCTzbRbtUN+Z+fYw=eGvueq-W4rcGu9K7AA__44000.2913623632$1477949815$gmane$org@mail.gmail.com>
+Date: Mon, 31 Oct 2016 20:51:30 -0400
+Message-ID: <CAB4xu_3zS6OHGrZbEYWEB6T-gQf=yhetiTR=aKm5BpwNpNYV0A__46369.0397832126$1477961560$gmane$org@mail.gmail.com>
 References: <CABVQWN0JnR+K9BN11vYX051Q_ZspWHbVnUdUbREb+LgB1pMR8A@mail.gmail.com>
  <CAB4xu_0FBn00woj==OqKyiQ67cNNsKBNcKHKoevP8ki=oOFHTg@mail.gmail.com>
  <CABVQWN1USj+gH_horiYtB3V0q0nCOQ+NWdknA2AdVwdyMoGtHg@mail.gmail.com>
  <CAB4xu_1Q8QekRhmAEUNf7ML+9zRXOEj5Afiw-3EeuB_pmHC4kA@mail.gmail.com>
- <CABVQWN2z5v77Y=EDvW5MFWVhB46Wn7+QyfxH8mwUSSip7UwyqA@mail.gmail.com>
- <a9955420-8b89-fa48-7ee1-4d271af3bb41@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5756493199771229154=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm0-x22a.google.com (mail-wm0-x22a.google.com
- [IPv6:2a00:1450:400c:c09::22a])
- by lists.lttng.org (Postfix) with ESMTPS id CDBC61570A
- for <lttng-dev@lists.lttng.org>; Mon, 31 Oct 2016 21:21:36 +0000 (UTC)
-Received: by mail-wm0-x22a.google.com with SMTP id n67so253187405wme.1
- for <lttng-dev@lists.lttng.org>; Mon, 31 Oct 2016 14:21:04 -0700 (PDT)
-In-Reply-To: <a9955420-8b89-fa48-7ee1-4d271af3bb41@efficios.com>
+Received: from mail-qt0-x231.google.com (mail-qt0-x231.google.com
+ [IPv6:2607:f8b0:400d:c0d::231])
+ by lists.lttng.org (Postfix) with ESMTPS id 79DD415803
+ for <lttng-dev@lists.lttng.org>; Tue,  1 Nov 2016 00:52:34 +0000 (UTC)
+Received: by mail-qt0-x231.google.com with SMTP id n6so48880802qtd.1
+ for <lttng-dev@lists.lttng.org>; Mon, 31 Oct 2016 17:52:01 -0700 (PDT)
+In-Reply-To: <CAB4xu_1Q8QekRhmAEUNf7ML+9zRXOEj5Afiw-3EeuB_pmHC4kA@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -28,94 +27,112 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Jean Spector <jean.spector@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============5756493199771229154==
-Content-Type: multipart/alternative; boundary=001a114b4378fed29e05402fc859
-
---001a114b4378fed29e05402fc859
-Content-Type: text/plain; charset=UTF-8
-
-Hi Michael,
-
-That's where I got python33 from eventually :-)
-What I called out-of-the-box is actually EPEL.
-I could just run "yum install python34" on my RHEL 7.2 (while the same
-wouldn't work for python33), so for me it was the natural version to use.
-Software Collections, though, required additional googling. Also, they
-don't work out-of-the-box afterwards either, as you have to enable the scl
-every time before using python33.
-
-
-
-
-On Mon, Oct 31, 2016 at 10:54 PM, Michael Jeanson <mjeanson@efficios.com>
-wrote:
-
-> On 2016-10-31 16:44, Jean Spector wrote:
-> > It's a matter of rpm dependencies.
-> > Once installed, it might work fine with python 3.4 - but yum just
-> > refuses to install it on RHEL 7.2
->
-> RHEL 7 doesn't ship with python 3 out of the box, you'll need to get it
-> from a software collection, have a look at :
->
->   https://www.softwarecollections.org/en/scls/rhscl/python33/
->
-> Cheers,
->
-> Michael
->
->
-
---001a114b4378fed29e05402fc859
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi Michael,</div><div><br></div>That&#39;s where I go=
-t python33 from eventually :-)<div>What I called out-of-the-box is actually=
- EPEL.</div><div>I could just run &quot;yum install python34&quot; on my RH=
-EL 7.2 (while the same wouldn&#39;t work for python33), so for me it was th=
-e natural version to use.</div><div>Software Collections, though, required =
-additional googling. Also, they don&#39;t work out-of-the-box afterwards ei=
-ther, as you have to enable the scl every time before using python33.</div>=
-<div><br></div><div><br></div><div><br></div></div><div class=3D"gmail_extr=
-a"><br><div class=3D"gmail_quote">On Mon, Oct 31, 2016 at 10:54 PM, Michael=
- Jeanson <span dir=3D"ltr">&lt;<a href=3D"mailto:mjeanson@efficios.com" tar=
-get=3D"_blank">mjeanson@efficios.com</a>&gt;</span> wrote:<br><blockquote c=
-lass=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;=
-padding-left:1ex"><span class=3D"">On 2016-10-31 16:44, Jean Spector wrote:=
-<br>
-&gt; It&#39;s a matter of rpm dependencies.<br>
-&gt; Once installed, it might work fine with python 3.4 - but yum just<br>
-&gt; refuses to install it on RHEL 7.2<br>
-<br>
-</span>RHEL 7 doesn&#39;t ship with python 3 out of the box, you&#39;ll nee=
-d to get it<br>
-from a software collection, have a look at :<br>
-<br>
-=C2=A0 <a href=3D"https://www.softwarecollections.org/en/scls/rhscl/python3=
-3/" rel=3D"noreferrer" target=3D"_blank">https://www.<wbr>softwarecollectio=
-ns.org/en/<wbr>scls/rhscl/python33/</a><br>
-<br>
-Cheers,<br>
-<br>
-Michael<br>
-<br>
-</blockquote></div><br></div>
-
---001a114b4378fed29e05402fc859--
-
---===============5756493199771229154==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============5756493199771229154==--
+T24gTW9uLCBPY3QgMzEsIDIwMTYgYXQgNDozOCBQTSwgUGhpbGlwcGUgUHJvdWx4CjxlZXBwZWxp
+dGVsb29wQGdtYWlsLmNvbT4gd3JvdGU6Cj4gT24gTW9uLCBPY3QgMzEsIDIwMTYgYXQgNDowMiBQ
+TSwgSmVhbiBTcGVjdG9yIDxqZWFuLnNwZWN0b3JAZ21haWwuY29tPiB3cm90ZToKPj4gVGhhbmsg
+eW91IFBoaWxpcHBlLgo+Pgo+PiBBZGRpbmcgYSBkaWZmZXJlbnQgZG9jdW1lbnRhdGlvbiBwYWdl
+IGZvciBvbGRlciB2ZXJzaW9ucyAoaXQncyB0aGUgbGF0ZXN0Cj4+IHBhY2thZ2Ugb24gUkhFTCA3
+LjIgLSBzbyBJJ2QgZXhwZWN0IG1vcmUgbmV3YmllcyB0byBlbmNvdW50ZXIgdGhpcyBpc3N1ZSkK
+Pj4gY291bGQgaGVscCBhbnlvbmUgdHJ5aW5nIHRoZSBQeXRob24gYmluZGluZ3MgZm9yIHRoZSBm
+aXJzdCB0aW1lLgo+PiBJJ20gc3VyZSB5b3UgcmVhbGl6ZSB0aGF0IHRyeWluZyB0aGUgb2ZmaWNp
+YWwgZXhhbXBsZSBhbmQgZmFpbGluZyBjYW4gYmUKPj4gcXVpdGUgZnJ1c3RyYXRpbmcgYW5kIGNv
+dWxkIHR1cm4gb2ZmIHBvdGVudGlhbCB1c2Vycy4KPgo+IEknbGwgbWFrZSBzdXJlIHRvIG1ha2Ug
+dGhlIGRvYyBhcyBjbGVhciBhcyBwb3NzaWJsZS4gVGhlIG1haW4gcHJvYmxlbSBoZXJlIGlzCj4g
+dGhhdCB0aGUgbW9kdWxlIGlzIHNpbXBseSBub3QgU3BoaW54LWRvY3VtZW50ZWQgaW4gQmFiZWx0
+cmFjZSAxLnguIEkgZ3Vlc3MKPiBJIGNvdWxkIHNlYXJjaCBhbmQgcmVwbGFjZSB0aGUgcGFja2Fn
+ZSBuYW1lcyBpbiB0aGUgZG9jIGJlZm9yZSBwdWJsaXNoaW5nIGl0Lgo+IEknbGwgZmluZCBhIHdh
+eSB0byBtYWtlIGl0IGNsZWFyIGFueXdheS4KCkplYW4sCgpTZWUgPGh0dHA6Ly9kaWFtb24ub3Jn
+L2JhYmVsdHJhY2UvZG9jcy9weXRob24vPiBhZ2Fpbi4KCkkgYWRkZWQgYW4gaW1wb3J0YW50IGFk
+bW9uaXRpb24gdG8gZWFjaCBwYWdlIHdoaWNoIGF0IGxlYXN0IGV4cGxhaW5zIHdoYXQKdG8gZG8g
+aWYgeW91J3JlIHVzaW5nIEJhYmVsdHJhY2UgMS54LiBQbHVzIHRoZSBpbmRpY2F0ZWQgdmVyc2lv
+biBpcwpub3cgYDIuMC4wLXByZWAuCgpJdCBzaG91bGQgbm90IGJlIHNvIGNvbXBsaWNhdGVkIHRv
+IHVuZGVyc3RhbmQgZm9yIG5ld2NvbWVycy4gVGhhdCdzIHRoZSBiZXN0CkkgY2FuIGRvIGZvciB0
+aGUgbW9tZW50OyB3cml0aW5nIGEgZGlmZmVyZW50IHZlcnNpb24gZm9yIEJhYmVsdHJhY2UKMS54
+IGlzIG91dCBvZgp0aGUgcXVlc3Rpb24uCgpQaGlsCgo+Cj4+IFRoaXMgaXMgZXNwZWNpYWxseQo+
+PiB0cnVlIGlmIGl0IGNvbWVzIGFmdGVyIG90aGVyIGlzc3VlcyhsZXQgbWUga25vdyBpZiB5b3Un
+ZCBwcmVmZXIgdGhlc2UgdG8gYmUKPj4gc2VudCBpbiBzZXBhcmF0ZSBlbWFpbHMpOgo+Pgo+PiBS
+SEVMIDcuMiB1c2VzIHB5dGhvbiAzLjQsIGJ1dCBiYWJlbHRyYWNlLXB5dGhvbi0xLjIuNCByZXF1
+aXJlcyBweXRob24gMy4zLAo+PiB3aGljaCBpcyBub3QgYXZhaWxhYmxlIGFueW1vcmUgLSBhdCBs
+ZWFzdCBub3Qgb3V0IG9mIHRoZSBib3guCj4KPiBXaGF0IGRvIHlvdSBtZWFuPyBUaGUgYmluZGlu
+Z3Mgd29yayBqdXN0IGZpbmUgd2l0aCBQeXRob24gMy40IGFuZCBQeXRob24gMy41Lgo+Cj4+IEFn
+YWluLCBJJ3ZlIHNvbHZlZCB0aGUgaXNzdWUgZm9yIG15c2VsZiwgc28gaXQncyBub3QgYSBzdXBw
+b3J0IGNhbGwuIFRoZQo+PiBpZGVhIGlzIHRoYXQgaXQgd291bGQgYmUgZ3JlYXQgaWYgdGhlIGlu
+aXRpYWwgaW5zdGFsbCtydW4gc3RhZ2Ugd2FzIG1hZGUKPj4gbGVzcyBwYWluZnVsLgo+PiBJIGJl
+bGlldmUgaXQgd291bGQgaW5jcmVhc2UgdGhlIHVzZXIgYmFzZSBhcywgZm9yIGluc3RhbmNlLCBJ
+IHdhcyBvbiB0aGUKPj4gdmVyZ2Ugb2YgZ2l2aW5nIHVwIGFmdGVyIGJ1aWxkaW5nIGZyb20gc291
+cmNlIGhhcyBhbHNvIGZhaWxlZCBmb3IgbWUuCj4+Cj4+IFdoZW4gdHJ5aW5nIHRvIGJ1aWxkIGZy
+b20gbGF0ZXN0IHN0YWJsZSBzb3VyY2UgKDEuNC4wKSBvbiBSSEVMIDcuMiwgSSd2ZQo+PiBlbmNv
+dW50ZXJlZCBhIGNvdXBsZSBvZiBpc3N1ZXM6Cj4+Cj4+IGNvbmZpZ3VyZSB3b3VsZCBmYWlsIG9u
+IHBvcHQuICJsbiAtcyAvdXNyL2xpYjY0L2xpYnBvcHQuc28uMAo+PiAvdXNyL2xpYjY0L2xpYnBv
+cHQuc28iIHdvcmtlZCBhcm91bmQgdGhlIGlzc3VlLCBidXQgdGhlcmUgbXVzdCBiZSBhIGJldHRl
+cgo+PiB3YXkgKG9yIGEgbGluZSBpbiB0aGUgUkVBRE1FKS4KPj4gInB5dGhvbjMgLWMgJ2ltcG9y
+dCBiYWJlbHRyYWNlJyIgd291bGQgZmFpbCB3aXRoICJJbXBvcnRFcnJvcjoKPj4gL3Vzci9sb2Nh
+bC9saWI2NC9weXRob24zLjQvc2l0ZS1wYWNrYWdlcy9iYWJlbHRyYWNlL19uYXRpdmVidC5zbzog
+dW5kZWZpbmVkCj4+IHN5bWJvbDogUHlJbnN0YW5jZV9UeXBlIgo+Pgo+PiBUaGF0J3Mgd2hlcmUg
+SSBnYXZlIHVwIHRyeWluZyB0byBidWlsZCBmcm9tIHNvdXJjZS4gSXQgY291bGQgYmUgZHVlIHRv
+IHRoZQo+PiBzYW1lIHB5dGhvbiAzLjQgLSBidXQgaXQncyBqdXN0IGEgZ3Vlc3MuCj4KPiBUaGUg
+b2ZmaWNpYWwgY2hhbm5lbCBmb3IgcmVwb3J0aW5nIGJ1Z3MgaXMgdGhlIGJ1ZyB0cmFja2VyCj4g
+PGh0dHBzOi8vYnVncy5sdHRuZy5vcmcvcHJvamVjdHMvYmFiZWx0cmFjZS8+LiBJZiB5b3UgY3Jl
+YXRlIGFuIGlzc3VlIHRoZXJlLCB3ZQo+IGNhbiBhc2sgZm9yIGRldGFpbHMgYWJvdXQgdGhlIGVu
+dmlyb25tZW50IGFuZCBjb250ZXh0IGFuZCB0cmFjayB0aGUgYnVnIHRvCj4gcmVtZW1iZXIgaXQu
+Cj4KPiBJIGhhdmUgbm8gaWRlYSB3aGF0J3MgZ29pbmcgd3JvbmcgaGVyZSwgYnV0IGlmIHlvdSBj
+cmVhdGUgYW4gaXNzdWUgd2UKPiBjYW4gdGVzdCB0aGUKPiBzYW1lIGVudmlyb25tZW50IChSSEVM
+IDcuMikgYW5kIHNlZSBpZiB3ZSBjYW4gcmVwcm9kdWNlIHRoZSBidWcuCj4KPj4KPj4gPT09PT09
+PT09PQo+Pgo+PiBUbyByZWNhcCwgSSBzZWUgMyBpc3N1ZXMgaGVyZToKPj4KPj4gRG9jdW1lbnRh
+dGlvbiAtIGFueSBwbGF0Zm9ybQo+PiBJbnN0YWxsIG9mIHRoZSBsYXRlc3QgIGJhYmVsdHJhY2Ut
+cHl0aG9uICgxLjIuNCkgLSBSSEVMIDcuMgo+PiBCdWlsZGluZyBmcm9tIHRoZSBsYXRlc3Qgc3Rh
+YmxlIHNvdXJjZSAoMS40LjApIC0gUkhFTCA3LjIKPj4KPj4KPj4gSW4gYW55IGNhc2UsIHRoYW5r
+cyBmb3IgdGhlIGdyZWF0IHRvb2wuIEkgaG9wZSB0byBwdXQgaXQgdG8gZ29vZCB1c2UuCj4+IEpl
+YW4KPgo+IFRoYW5rcyBmb3IgdGhlIGZlZWRiYWNrISBXZSBhcHByZWNpYXRlLgo+Cj4gUGhpbAo+
+Cj4+Cj4+Cj4+IE9uIE1vbiwgT2N0IDMxLCAyMDE2IGF0IDc6MDcgUE0sIFBoaWxpcHBlIFByb3Vs
+eCA8ZWVwcGVsaXRlbG9vcEBnbWFpbC5jb20+Cj4+IHdyb3RlOgo+Pj4KPj4+IE9uIFNhdCwgT2N0
+IDI5LCAyMDE2IGF0IDk6NTUgQU0sIEplYW4gU3BlY3RvciA8amVhbi5zcGVjdG9yQGdtYWlsLmNv
+bT4KPj4+IHdyb3RlOgo+Pj4gPiBXaGVuIHRyeWluZyB0byB1c2UgdGhlIGV4YW1wbGUgZnJvbQo+
+Pj4gPiBodHRwOi8vZGlhbW9uLm9yZy9iYWJlbHRyYWNlL2RvY3MvcHl0aG9uL2V4YW1wbGVzLyAo
+cG9pbnRlZCB0byB2aWEKPj4+ID4gaHR0cDovL2x0dG5nLm9yZy92aWV3ZXJzLyksIHRoZSBjb2Rl
+IGlzIG5vdCB1cC10by1kYXRlLgo+Pj4gPgo+Pj4gPiBGb3IgaW5zdGFuY2UsIHRoZSBmaXJzdCBs
+aW5lIGluIHRoZSBleGFtcGxlIChpbXBvcnQgYmFiZWx0cmFjZS5yZWFkZXIpCj4+PiA+IGZhaWxz
+Cj4+PiA+IGFzIHRoZXJlJ3Mgbm8gJ3JlYWRlcicgdG8gaW1wb3J0Lgo+Pj4gPgo+Pj4gPiBJJ3Zl
+IG1hbmFnZWQgdG8gZ2V0IG92ZXIgaXQsIGJ1dCB0aG91Z2h0IGl0IHdvdWxkIGJlIGJldHRlciB0
+byBoYXZlIGEKPj4+ID4gd29ya2luZyBleGFtcGxlIGNvZGUuCj4+Pgo+Pj4gSSB3cm90ZSB0aGlz
+IGRvYyBhbmQgaXQgd2FzIG1lcmdlZCBpbnRvIG1hc3RlciBtb3JlIHRoYW4gYSB5ZWFyIGFnby4K
+Pj4+IFdoZW4gd3JpdGluZyB0aGlzIGRvYywgSSBzcGxpdCB0aGUgYGJhYmVsdHJhY2VgIHBhY2th
+Z2UgaW50byB0aGUKPj4+IGByZWFkZXJgIGFuZCBgd3JpdGVyYCBzdWJwYWNrYWdlcyB0byBtYWtl
+IHRoZSBhdXRvZG9jdW1lbnRhdGlvbiB3aXRoCj4+PiBTcGhpbnggZWFzaWVyLiBOb3cgaXQgbG9v
+a3MgbGlrZSB0aGlzIHNwbGl0IHdhcyBuZXZlciBiYWNrcG9ydGVkIHRvCj4+PiB2MS4yLCB2MS4z
+LCB2MS40LCBhbmQgc29vbiB2MS41Lgo+Pj4KPj4+IFRoZSBgQmFiZWx0cmFjZSAxLjIuMGAgdmVy
+c2lvbiB5b3Ugc2VlIG9uIHRoZSBmcm9udCBwYWdlIGlzIGp1c3QgdGhlCj4+PiBjdXJyZW50IHZl
+cnNpb24gZm91bmQgd2hlbiBJIGdlbmVyYXRlZCB0aGUgb25saW5lIHZlcnNpb24uIFJlYWxseSwg
+dGhlCj4+PiB0aXRsZSBzaG91bGQgc2F5IGBCYWJlbHRyYWNlIChtYXN0ZXIgYnJhbmNoKWAuIFRo
+ZSBtYXN0ZXIgYnJhbmNoIHdpbGwKPj4+IGJlY29tZSBCYWJlbHRyYWNlIDIuMCBzb29uLiBJbiB0
+aGUgbWVhbnRpbWUsIHNpbXBseSBkcm9wIHRoZSBgcmVhZGVyYAo+Pj4gc3VicGFja2FnZSB3aGVu
+IHlvdSByZWFkIHRoZSBkb2MgYW5kIHRyeSBleGFtcGxlcy4gU28KPj4+Cj4+PiAgICAgaW1wb3J0
+IGJhYmVsdHJhY2UucmVhZGVyIGFzIGJ0cmVhZGVyCj4+Pgo+Pj4gICAgIHRyYWNlX2NvbGxlY3Rp
+b24gPSBidHJlYWRlci5UcmFjZUNvbGxlY3Rpb24oKQo+Pj4KPj4+IGJlY29tZXMKPj4+Cj4+PiAg
+ICAgaW1wb3J0IGJhYmVsdHJhY2UgYXMgYnRyZWFkZXIKPj4+Cj4+PiAgICAgdHJhY2VfY29sbGVj
+dGlvbiA9IGJ0cmVhZGVyLlRyYWNlQ29sbGVjdGlvbigpCj4+Pgo+Pj4gRm9yIHRoZSBDVEYgd3Jp
+dGVyIHBhcnQsIGRyb3AgdGhlIGB3cml0ZXJgIHN1YnBhY2thZ2UsIGFuZCBpbXBvcnQgdGhlCj4+
+PiBgQ1RGV3JpdGVyYCBjbGFzczogeW91J2xsIGZpbmQgYWxsIHRoZSBkb2N1bWVudGVkIGNsYXNz
+ZXMgd2l0aGluIHRoaXMKPj4+IGNsYXNzIChraW5kIG9mIHdlaXJkLCBhbmQgb25lIG9mIHRoZSBy
+ZWFzb25zIEkgY3JlYXRlZCBhIHN1YnBhY2thZ2UKPj4+IGluc3RlYWQpOgo+Pj4KPj4+ICAgICBp
+bXBvcnQgYmFiZWx0cmFjZS53cml0ZXIgYXMgYnR3cml0ZXIKPj4+Cj4+PiAgICAgd3JpdGVyID0g
+YnR3cml0ZXIuV3JpdGVyKHRyYWNlX3BhdGgpCj4+Pgo+Pj4gYmVjb21lcwo+Pj4KPj4+ICAgICBm
+cm9tIGJhYmVsdHJhY2UgaW1wb3J0IENURldyaXRlciBhcyBidHdyaXRlcgo+Pj4KPj4+ICAgICB3
+cml0ZXIgPSBidHdyaXRlci5Xcml0ZXIodHJhY2VfcGF0aCkKPj4+Cj4+PiBOb3RlIHRoYXQgdGhl
+IG5ldyBzdWJwYWNrYWdlIHNwbGl0IGlzIGJhY2t3YXJkIGNvbXBhdGlibGUgd2l0aCB0aGUKPj4+
+IGJpbmRpbmdzIG9mIHYxLngsIHNvIHRoZSBjb2RlIHlvdSB3cml0ZSBub3cgd2lsbCBjb250aW51
+ZSB0byB3b3JrLi4uCj4+PiBmb3JldmVyLgo+Pj4KPj4+IEkgbWlnaHQgYWRkIGFuIGVxdWl2YWxl
+bnQgb2YgdGhpcyByZXNwb25zZSBhcyBhIG5vdGUgaW4gdGhlIGdlbmVyYXRlZAo+Pj4gZG9jdW1l
+bnRhdGlvbi4KPj4+Cj4+PiBCUiwKPj4+IFBoaWwKPj4+Cj4+PiA+Cj4+PiA+IFAuUy4gSSdtIHJ1
+bm5pbmcgUkhFTCA3LjIgd2l0aCBiYWJlbHRyYWNlLXB5dGhvbi0xLjIuNC0xLmVsNy54ODZfNjQK
+Pj4+ID4KPj4+ID4gQmVzdCBSZWdhcmRzLAo+Pj4gPiBKZWFuCj4+PiA+Cj4+PiA+Cj4+PiA+IF9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+PiA+IGx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKPj4+ID4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+Pj4gPiBo
+dHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
+Cj4+PiA+Cj4+Cj4+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
+czovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
