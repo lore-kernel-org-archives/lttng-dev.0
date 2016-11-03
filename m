@@ -1,19 +1,16 @@
-From: Nathan Lynch <nathan_lynch@mentor.com>
-Subject: [PATCH] lttng-tools: accommodate stricter mktemp
-	implementations in tests
-Date: Tue, 1 Nov 2016 11:25:47 -0600
-Message-ID: <1478021147-6767-1-git-send-email-nathan_lynch__5566.37329650602$1478022466$gmane$org@mentor.com>
+From: Francis Deslauriers <francis.deslauriers@efficios.com>
+Subject: LTTng User Survey 2016
+Date: Thu, 3 Nov 2016 09:06:42 -0400
+Message-ID: <CADcCL0gXaiOpTrfq7HoGuTeTjj5HSHN1=GbZFsxRy4AuJBqa=g__33418.6529311866$1478178469$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============4508617454982808780=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com (relay1.mentorg.com [192.94.38.131])
- by lists.lttng.org (Postfix) with ESMTPS id 9F04815CAC
- for <lttng-dev@lists.lttng.org>; Tue,  1 Nov 2016 17:48:09 +0000 (UTC)
-Received: from svr-orw-mbx-02.mgc.mentorg.com ([147.34.90.202])
- by relay1.mentorg.com with esmtp
- id 1c1cop-0006mU-RQ from Nathan_Lynch@mentor.com
- for lttng-dev@lists.lttng.org; Tue, 01 Nov 2016 10:25:51 -0700
+Received: from mail-vk0-x22d.google.com (mail-vk0-x22d.google.com
+ [IPv6:2607:f8b0:400c:c05::22d])
+ by lists.lttng.org (Postfix) with ESMTPS id EBA6A1B531
+ for <lttng-dev@lists.lttng.org>; Thu,  3 Nov 2016 13:07:41 +0000 (UTC)
+Received: by mail-vk0-x22d.google.com with SMTP id p9so38851085vkd.3
+ for <lttng-dev@lists.lttng.org>; Thu, 03 Nov 2016 06:07:03 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,42 +20,65 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-QnVzeWJveCdzIG1rdGVtcCBjb21tYW5kIHVzZXMgbWtzdGVtcCgzKSB3aGljaCByZXF1aXJlcyB0
-aGUgbGFzdCBzaXgKY2hhcmFjdGVycyBvZiB0aGUgdGVtcGxhdGUgdG8gYmUgWCdzLiAgRXh0ZW5k
-IHRoZSBta3RlbXAgdGVtcGxhdGVzCnVzZWQgaW4gdGhlIHRlc3Qgc2NyaXB0cy4KClNpZ25lZC1v
-ZmYtYnk6IE5hdGhhbiBMeW5jaCA8bmF0aGFuX2x5bmNoQG1lbnRvci5jb20+Ci0tLQogdGVzdHMv
-cmVncmVzc2lvbi9rZXJuZWwvdGVzdF9jbG9ja19vdmVycmlkZSAgICAgICAgICAgICB8IDQgKyst
-LQogdGVzdHMvcmVncmVzc2lvbi91c3QvY2xvY2stb3ZlcnJpZGUvdGVzdF9jbG9ja19vdmVycmlk
-ZSB8IDQgKystLQogMiBmaWxlcyBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25z
-KC0pCgpkaWZmIC0tZ2l0IGEvdGVzdHMvcmVncmVzc2lvbi9rZXJuZWwvdGVzdF9jbG9ja19vdmVy
-cmlkZSBiL3Rlc3RzL3JlZ3Jlc3Npb24va2VybmVsL3Rlc3RfY2xvY2tfb3ZlcnJpZGUKaW5kZXgg
-YzUyZGRmMTAwYjI1Li4yZjY0YmQ5Mjk0M2IgMTAwNzU1Ci0tLSBhL3Rlc3RzL3JlZ3Jlc3Npb24v
-a2VybmVsL3Rlc3RfY2xvY2tfb3ZlcnJpZGUKKysrIGIvdGVzdHMvcmVncmVzc2lvbi9rZXJuZWwv
-dGVzdF9jbG9ja19vdmVycmlkZQpAQCAtNzYsOCArNzYsOCBAQCBmdW5jdGlvbiBleHRyYWN0X2Ns
-b2NrX21ldGFkYXRhX3Rva2VuKCkKIAogZnVuY3Rpb24gdGVzdF9jbG9ja19vdmVycmlkZV9tZXRh
-ZGF0YSgpCiB7Ci0JbG9jYWwgY3RmX21ldGFkYXRhX2ZpbGU9JChta3RlbXAgLXAgJFRSQUNFX1BB
-VEggY3RmLW1ldGFkYXRhLlhYWFhYKQotCWxvY2FsIGNsb2NrX21ldGFkYXRhX2ZpbGU9JChta3Rl
-bXAgLXAgJFRSQUNFX1BBVEggY2xvY2stbWV0YWRhdGEuWFhYWFgpCisJbG9jYWwgY3RmX21ldGFk
-YXRhX2ZpbGU9JChta3RlbXAgLXAgJFRSQUNFX1BBVEggY3RmLW1ldGFkYXRhLlhYWFhYWCkKKwls
-b2NhbCBjbG9ja19tZXRhZGF0YV9maWxlPSQobWt0ZW1wIC1wICRUUkFDRV9QQVRIIGNsb2NrLW1l
-dGFkYXRhLlhYWFhYWCkKIAlsb2NhbCByZXN1bHQ9IiIKIAogCWRpYWcgIkNsb2NrIG92ZXJyaWRl
-IHBsdWdpbiBtZXRhZGF0YSB0ZXN0IgpkaWZmIC0tZ2l0IGEvdGVzdHMvcmVncmVzc2lvbi91c3Qv
-Y2xvY2stb3ZlcnJpZGUvdGVzdF9jbG9ja19vdmVycmlkZSBiL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0
-L2Nsb2NrLW92ZXJyaWRlL3Rlc3RfY2xvY2tfb3ZlcnJpZGUKaW5kZXggNzIyZTczMTU4NDlmLi43
-N2ZhOTEyMTZmYTMgMTAwNzU1Ci0tLSBhL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L2Nsb2NrLW92ZXJy
-aWRlL3Rlc3RfY2xvY2tfb3ZlcnJpZGUKKysrIGIvdGVzdHMvcmVncmVzc2lvbi91c3QvY2xvY2st
-b3ZlcnJpZGUvdGVzdF9jbG9ja19vdmVycmlkZQpAQCAtNzYsOCArNzYsOCBAQCBmdW5jdGlvbiBl
-eHRyYWN0X2Nsb2NrX21ldGFkYXRhX3Rva2VuKCkKIAogZnVuY3Rpb24gdGVzdF9nZXRjcHVfb3Zl
-cnJpZGVfbWV0YWRhdGEoKQogewotCWxvY2FsIGN0Zl9tZXRhZGF0YV9maWxlPSQobWt0ZW1wIC1w
-ICRUUkFDRV9QQVRIIGN0Zi1tZXRhZGF0YS5YWFhYWCkKLQlsb2NhbCBjbG9ja19tZXRhZGF0YV9m
-aWxlPSQobWt0ZW1wIC1wICRUUkFDRV9QQVRIIGNsb2NrLW1ldGFkYXRhLlhYWFhYKQorCWxvY2Fs
-IGN0Zl9tZXRhZGF0YV9maWxlPSQobWt0ZW1wIC1wICRUUkFDRV9QQVRIIGN0Zi1tZXRhZGF0YS5Y
-WFhYWFgpCisJbG9jYWwgY2xvY2tfbWV0YWRhdGFfZmlsZT0kKG1rdGVtcCAtcCAkVFJBQ0VfUEFU
-SCBjbG9jay1tZXRhZGF0YS5YWFhYWFgpCiAJbG9jYWwgcmVzdWx0PSIiCiAKIAlkaWFnICJDbG9j
-ayBvdmVycmlkZSBwbHVnaW4gbWV0YWRhdGEgdGVzdCIKLS0gCjIuNy40CgpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0
-Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
-bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============4508617454982808780==
+Content-Type: multipart/alternative; boundary=001a11427400cfdab10540653b04
+
+--001a11427400cfdab10540653b04
+Content-Type: text/plain; charset=UTF-8
+
+Hi all,
+
+I recently joined the LTTng community and I am curious to better understand
+what crowd is forming this community. So I had the idea of putting together
+a small survey. This information is also useful for maintainers when
+deciding what trade offs users are willing to take.
+
+This is a really short survey of 7 multiple choices questions. I would
+really appreciate it if you took a little bit of your time to fill it up.
+
+https://goo.gl/forms/mqbAGSU2TIVZEySk1
+
+I will keep it opened for two weeks and then reply to this message with a
+summary of the results.
+
+Thank you,
+-- 
+Francis Deslauriers
+Software developer
+EfficiOS inc.
+
+--001a11427400cfdab10540653b04
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div>Hi all,</div><div><br></div><div>I recently join=
+ed the LTTng community and I am curious to better understand what crowd is =
+forming this community. So I had the idea of putting together a small surve=
+y. This information is also useful for maintainers when deciding what trade=
+ offs users are willing to take.</div><div><br></div><div>This is a really =
+short survey of 7 multiple choices questions. I would really appreciate it =
+if you took a little bit of your time to fill it up.=C2=A0</div></div><div>=
+<br></div><div><div class=3D"gmail-m_-7610130938150201415m_9087309877663411=
+646gmail_signature"><div dir=3D"ltr"><div><a href=3D"https://goo.gl/forms/m=
+qbAGSU2TIVZEySk1">https://goo.gl/forms/mqbAGSU2TIVZEySk1</a><br></div><div>=
+<br></div><div><div>I will keep it opened for two weeks and then reply to t=
+his message with a summary of the results.</div><div><br></div><div>Thank y=
+ou,</div><div>--=C2=A0</div><div>Francis Deslauriers</div><div>Software dev=
+eloper</div><div>EfficiOS inc.</div></div></div></div></div></div>
+
+--001a11427400cfdab10540653b04--
+
+--===============4508617454982808780==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============4508617454982808780==--
