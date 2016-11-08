@@ -1,20 +1,19 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH] lttng-tools: accommodate stricter mktemp
- implementations in tests
-Date: Tue, 8 Nov 2016 12:03:41 -0500
-Message-ID: <CA+jJMxtYssVrz9c4cQSoormkmB_9RczJKYGpe8fWAzV3QvU6pw__30875.058056745$1478624654$gmane$org@mail.gmail.com>
-References: <1478021147-6767-1-git-send-email-nathan_lynch@mentor.com>
+From: Francis Deslauriers <francis.deslauriers@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: test case can not rely on
+ sched_process_free, use _fork instead
+Date: Tue, 8 Nov 2016 13:47:57 -0500
+Message-ID: <CADcCL0jUKVo446e_hb9K53dNLZAmcew0_h=qB9BBSBM1uSodDw__41992.5724193037$1478630933$gmane$org@mail.gmail.com>
+References: <1478621125-16836-1-git-send-email-francis.deslauriers@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============9210269436706038698=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vk0-x241.google.com (mail-vk0-x241.google.com
- [IPv6:2607:f8b0:400c:c05::241])
- by lists.lttng.org (Postfix) with ESMTPS id 89CD21B45E
- for <lttng-dev@lists.lttng.org>; Tue,  8 Nov 2016 17:04:32 +0000 (UTC)
-Received: by mail-vk0-x241.google.com with SMTP id p9so8010389vkd.1
- for <lttng-dev@lists.lttng.org>; Tue, 08 Nov 2016 09:03:43 -0800 (PST)
-In-Reply-To: <1478021147-6767-1-git-send-email-nathan_lynch@mentor.com>
+Received: from mail-ua0-x244.google.com (mail-ua0-x244.google.com
+ [IPv6:2607:f8b0:400c:c08::244])
+ by lists.lttng.org (Postfix) with ESMTPS id 6956F1B67B
+ for <lttng-dev@lists.lttng.org>; Tue,  8 Nov 2016 18:49:08 +0000 (UTC)
+Received: by mail-ua0-x244.google.com with SMTP id 12so8062748uas.3
+ for <lttng-dev@lists.lttng.org>; Tue, 08 Nov 2016 10:48:19 -0800 (PST)
+In-Reply-To: <1478621125-16836-1-git-send-email-francis.deslauriers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,52 +23,137 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Nathan Lynch <nathan_lynch@mentor.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIG1hc3RlciBhbmQgc3RhYmxlLTIuOS4KClRoYW5rcyEKSsOpcsOpbWllCgpPbiAx
-IE5vdmVtYmVyIDIwMTYgYXQgMTM6MjUsIE5hdGhhbiBMeW5jaCA8bmF0aGFuX2x5bmNoQG1lbnRv
-ci5jb20+IHdyb3RlOgo+IEJ1c3lib3gncyBta3RlbXAgY29tbWFuZCB1c2VzIG1rc3RlbXAoMykg
-d2hpY2ggcmVxdWlyZXMgdGhlIGxhc3Qgc2l4Cj4gY2hhcmFjdGVycyBvZiB0aGUgdGVtcGxhdGUg
-dG8gYmUgWCdzLiAgRXh0ZW5kIHRoZSBta3RlbXAgdGVtcGxhdGVzCj4gdXNlZCBpbiB0aGUgdGVz
-dCBzY3JpcHRzLgo+Cj4gU2lnbmVkLW9mZi1ieTogTmF0aGFuIEx5bmNoIDxuYXRoYW5fbHluY2hA
-bWVudG9yLmNvbT4KPiAtLS0KPiAgdGVzdHMvcmVncmVzc2lvbi9rZXJuZWwvdGVzdF9jbG9ja19v
-dmVycmlkZSAgICAgICAgICAgICB8IDQgKystLQo+ICB0ZXN0cy9yZWdyZXNzaW9uL3VzdC9jbG9j
-ay1vdmVycmlkZS90ZXN0X2Nsb2NrX292ZXJyaWRlIHwgNCArKy0tCj4gIDIgZmlsZXMgY2hhbmdl
-ZCwgNCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQo+Cj4gZGlmZiAtLWdpdCBhL3Rlc3Rz
-L3JlZ3Jlc3Npb24va2VybmVsL3Rlc3RfY2xvY2tfb3ZlcnJpZGUgYi90ZXN0cy9yZWdyZXNzaW9u
-L2tlcm5lbC90ZXN0X2Nsb2NrX292ZXJyaWRlCj4gaW5kZXggYzUyZGRmMTAwYjI1Li4yZjY0YmQ5
-Mjk0M2IgMTAwNzU1Cj4gLS0tIGEvdGVzdHMvcmVncmVzc2lvbi9rZXJuZWwvdGVzdF9jbG9ja19v
-dmVycmlkZQo+ICsrKyBiL3Rlc3RzL3JlZ3Jlc3Npb24va2VybmVsL3Rlc3RfY2xvY2tfb3ZlcnJp
-ZGUKPiBAQCAtNzYsOCArNzYsOCBAQCBmdW5jdGlvbiBleHRyYWN0X2Nsb2NrX21ldGFkYXRhX3Rv
-a2VuKCkKPgo+ICBmdW5jdGlvbiB0ZXN0X2Nsb2NrX292ZXJyaWRlX21ldGFkYXRhKCkKPiAgewo+
-IC0gICAgICAgbG9jYWwgY3RmX21ldGFkYXRhX2ZpbGU9JChta3RlbXAgLXAgJFRSQUNFX1BBVEgg
-Y3RmLW1ldGFkYXRhLlhYWFhYKQo+IC0gICAgICAgbG9jYWwgY2xvY2tfbWV0YWRhdGFfZmlsZT0k
-KG1rdGVtcCAtcCAkVFJBQ0VfUEFUSCBjbG9jay1tZXRhZGF0YS5YWFhYWCkKPiArICAgICAgIGxv
-Y2FsIGN0Zl9tZXRhZGF0YV9maWxlPSQobWt0ZW1wIC1wICRUUkFDRV9QQVRIIGN0Zi1tZXRhZGF0
-YS5YWFhYWFgpCj4gKyAgICAgICBsb2NhbCBjbG9ja19tZXRhZGF0YV9maWxlPSQobWt0ZW1wIC1w
-ICRUUkFDRV9QQVRIIGNsb2NrLW1ldGFkYXRhLlhYWFhYWCkKPiAgICAgICAgIGxvY2FsIHJlc3Vs
-dD0iIgo+Cj4gICAgICAgICBkaWFnICJDbG9jayBvdmVycmlkZSBwbHVnaW4gbWV0YWRhdGEgdGVz
-dCIKPiBkaWZmIC0tZ2l0IGEvdGVzdHMvcmVncmVzc2lvbi91c3QvY2xvY2stb3ZlcnJpZGUvdGVz
-dF9jbG9ja19vdmVycmlkZSBiL3Rlc3RzL3JlZ3Jlc3Npb24vdXN0L2Nsb2NrLW92ZXJyaWRlL3Rl
-c3RfY2xvY2tfb3ZlcnJpZGUKPiBpbmRleCA3MjJlNzMxNTg0OWYuLjc3ZmE5MTIxNmZhMyAxMDA3
-NTUKPiAtLS0gYS90ZXN0cy9yZWdyZXNzaW9uL3VzdC9jbG9jay1vdmVycmlkZS90ZXN0X2Nsb2Nr
-X292ZXJyaWRlCj4gKysrIGIvdGVzdHMvcmVncmVzc2lvbi91c3QvY2xvY2stb3ZlcnJpZGUvdGVz
-dF9jbG9ja19vdmVycmlkZQo+IEBAIC03Niw4ICs3Niw4IEBAIGZ1bmN0aW9uIGV4dHJhY3RfY2xv
-Y2tfbWV0YWRhdGFfdG9rZW4oKQo+Cj4gIGZ1bmN0aW9uIHRlc3RfZ2V0Y3B1X292ZXJyaWRlX21l
-dGFkYXRhKCkKPiAgewo+IC0gICAgICAgbG9jYWwgY3RmX21ldGFkYXRhX2ZpbGU9JChta3RlbXAg
-LXAgJFRSQUNFX1BBVEggY3RmLW1ldGFkYXRhLlhYWFhYKQo+IC0gICAgICAgbG9jYWwgY2xvY2tf
-bWV0YWRhdGFfZmlsZT0kKG1rdGVtcCAtcCAkVFJBQ0VfUEFUSCBjbG9jay1tZXRhZGF0YS5YWFhY
-WCkKPiArICAgICAgIGxvY2FsIGN0Zl9tZXRhZGF0YV9maWxlPSQobWt0ZW1wIC1wICRUUkFDRV9Q
-QVRIIGN0Zi1tZXRhZGF0YS5YWFhYWFgpCj4gKyAgICAgICBsb2NhbCBjbG9ja19tZXRhZGF0YV9m
-aWxlPSQobWt0ZW1wIC1wICRUUkFDRV9QQVRIIGNsb2NrLW1ldGFkYXRhLlhYWFhYWCkKPiAgICAg
-ICAgIGxvY2FsIHJlc3VsdD0iIgo+Cj4gICAgICAgICBkaWFnICJDbG9jayBvdmVycmlkZSBwbHVn
-aW4gbWV0YWRhdGEgdGVzdCIKPiAtLQo+IDIuNy40Cj4KPiBfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRu
-Zy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZp
-Y2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============9210269436706038698==
+Content-Type: multipart/alternative; boundary=f403045defd2731fc00540ce951f
+
+--f403045defd2731fc00540ce951f
+Content-Type: text/plain; charset=UTF-8
+
+Please omit this patch. I am preparing a more generic one.
+
+Thank you,
+-- 
+Francis Deslauriers
+Software developer
+EfficiOS inc.
+
+2016-11-08 11:05 GMT-05:00 Francis Deslauriers <
+francis.deslauriers@efficios.com>:
+
+> sched_process_free may not be called during the tracing session if there
+> is very little activity on the machine the test is run on. We change
+> this validate to sched_process_fork since we are sure there will be
+> atleast one generated by the final lttng stop.
+>
+> Signed-off-by: Francis Deslauriers <francis.deslauriers@efficios.com>
+> ---
+>  tests/regression/kernel/test_event_basic | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tests/regression/kernel/test_event_basic
+> b/tests/regression/kernel/test_event_basic
+> index aeca02b..584bfc8 100755
+> --- a/tests/regression/kernel/test_event_basic
+> +++ b/tests/regression/kernel/test_event_basic
+> @@ -32,14 +32,14 @@ function test_event_basic()
+>
+>         lttng_enable_kernel_event $SESSION_NAME "sched_switch"
+>         lttng_enable_kernel_event $SESSION_NAME "sched_process_exit"
+> -       lttng_enable_kernel_event $SESSION_NAME "sched_process_free"
+> +       lttng_enable_kernel_event $SESSION_NAME "sched_process_fork"
+>
+>         start_lttng_tracing_ok
+>         stop_lttng_tracing_ok
+>
+>         validate_trace "sched_switch" $TRACE_PATH
+>         validate_trace "sched_process_exit" $TRACE_PATH
+> -       validate_trace "sched_process_free" $TRACE_PATH
+> +       validate_trace "sched_process_fork" $TRACE_PATH
+>
+>         destroy_lttng_session_ok $SESSION_NAME
+>
+> --
+> 2.7.4
+>
+>
+
+--f403045defd2731fc00540ce951f
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Please omit this patch. I am preparing a more generic one.=
+<div><br></div><div>Thank you,</div><div>--=C2=A0<br><div class=3D"gmail_si=
+gnature"><div dir=3D"ltr"><div class=3D"gmail_signature"><div>Francis Desla=
+uriers</div><div dir=3D"ltr">Software developer<div>EfficiOS inc.</div></di=
+v></div></div></div><div class=3D"gmail_extra"><br><div class=3D"gmail_quot=
+e">2016-11-08 11:05 GMT-05:00 Francis Deslauriers <span dir=3D"ltr">&lt;<a =
+href=3D"mailto:francis.deslauriers@efficios.com" target=3D"_blank">francis.=
+deslauriers@efficios.<wbr>com</a>&gt;</span>:<br><blockquote class=3D"gmail=
+_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204=
+,204);padding-left:1ex">sched_process_free may not be called during the tra=
+cing session if there<br>
+is very little activity on the machine the test is run on. We change<br>
+this validate to sched_process_fork since we are sure there will be<br>
+atleast one generated by the final lttng stop.<br>
+<br>
+Signed-off-by: Francis Deslauriers &lt;<a href=3D"mailto:francis.deslaurier=
+s@efficios.com" target=3D"_blank">francis.deslauriers@efficios.<wbr>com</a>=
+&gt;<br>
+---<br>
+=C2=A0tests/regression/kernel/test_<wbr>event_basic | 4 ++--<br>
+=C2=A01 file changed, 2 insertions(+), 2 deletions(-)<br>
+<br>
+diff --git a/tests/regression/kernel/test<wbr>_event_basic b/tests/regressi=
+on/kernel/test<wbr>_event_basic<br>
+index aeca02b..584bfc8 100755<br>
+--- a/tests/regression/kernel/test<wbr>_event_basic<br>
++++ b/tests/regression/kernel/test<wbr>_event_basic<br>
+@@ -32,14 +32,14 @@ function test_event_basic()<br>
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 lttng_enable_kernel_event $SESSION_NAME &quot;s=
+ched_switch&quot;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 lttng_enable_kernel_event $SESSION_NAME &quot;s=
+ched_process_exit&quot;<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0lttng_enable_kernel_event $SESSION_NAME &quot;s=
+ched_process_free&quot;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0lttng_enable_kernel_event $SESSION_NAME &quot;s=
+ched_process_fork&quot;<br>
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 start_lttng_tracing_ok<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 stop_lttng_tracing_ok<br>
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 validate_trace &quot;sched_switch&quot; $TRACE_=
+PATH<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 validate_trace &quot;sched_process_exit&quot; $=
+TRACE_PATH<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0validate_trace &quot;sched_process_free&quot; $=
+TRACE_PATH<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0validate_trace &quot;sched_process_fork&quot; $=
+TRACE_PATH<br>
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 destroy_lttng_session_ok $SESSION_NAME<br>
+<span class=3D"gmail-m_-8370492692563735646m_5754271386190881712HOEnZb"><fo=
+nt color=3D"#888888"><br>
+--<br>
+2.7.4<br>
+<br>
+</font></span></blockquote></div><br></div></div><br clear=3D"all"><div><br=
+></div><br></div>
+
+--f403045defd2731fc00540ce951f--
+
+--===============9210269436706038698==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============9210269436706038698==--
