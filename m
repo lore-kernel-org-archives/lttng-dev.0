@@ -1,16 +1,19 @@
-From: Rocky Dunlap <rsdunlapiv@gmail.com>
-Subject: [barectf] Request for C++ compatible source
-Date: Wed, 9 Nov 2016 09:18:42 -0700
-Message-ID: <CAK-w0DctLJpzfFpVBSPMN3MjGjeDB1sc1ZEnV_BsW3GbTHwqrw__38109.7313751981$1478708857$gmane$org@mail.gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: Re: [barectf] Request for C++ compatible source
+Date: Wed, 9 Nov 2016 11:57:42 -0500
+Message-ID: <CAB4xu_0vubunFvOGwTOJdaEdyRnEUO9=7spDPsrkJYSXGhpJdg__26008.8917254054$1478710710$gmane$org@mail.gmail.com>
+References: <CAK-w0DctLJpzfFpVBSPMN3MjGjeDB1sc1ZEnV_BsW3GbTHwqrw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0461841698194784498=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vk0-x22a.google.com (mail-vk0-x22a.google.com
- [IPv6:2607:f8b0:400c:c05::22a])
- by lists.lttng.org (Postfix) with ESMTPS id 4A0A21B436
- for <lttng-dev@lists.lttng.org>; Wed,  9 Nov 2016 16:19:54 +0000 (UTC)
-Received: by mail-vk0-x22a.google.com with SMTP id 137so132324533vkl.0
- for <lttng-dev@lists.lttng.org>; Wed, 09 Nov 2016 08:19:03 -0800 (PST)
+Received: from mail-qk0-x241.google.com (mail-qk0-x241.google.com
+ [IPv6:2607:f8b0:400d:c09::241])
+ by lists.lttng.org (Postfix) with ESMTPS id EA0DD1B4E7
+ for <lttng-dev@lists.lttng.org>; Wed,  9 Nov 2016 16:59:05 +0000 (UTC)
+Received: by mail-qk0-x241.google.com with SMTP id h201so17567254qke.3
+ for <lttng-dev@lists.lttng.org>; Wed, 09 Nov 2016 08:58:13 -0800 (PST)
+In-Reply-To: <CAK-w0DctLJpzfFpVBSPMN3MjGjeDB1sc1ZEnV_BsW3GbTHwqrw@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,50 +23,24 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Rocky Dunlap <rsdunlapiv@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0461841698194784498==
-Content-Type: multipart/alternative; boundary=001a1142e1b67ada180540e09d9a
-
---001a1142e1b67ada180540e09d9a
-Content-Type: text/plain; charset=UTF-8
-
-Great work on the barectf tool!  This really makes it easy to write out
-CTF.
-
-I would like to integrate the generated code into a larger project that,
-for historical reasons, uses the C++ compiler.  Would it be possible to add
-an option to the barectf generator so that the code can be compiled by a
-C++ compiler?  It does not seem too bad--it's mainly pointer casting issues
-that the compiler is complaining about.
-
-Thanks,
-Rocky
-
---001a1142e1b67ada180540e09d9a
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Great work on the barectf tool!=C2=A0 This really makes it=
- easy to write out CTF. =C2=A0<div><br></div><div>I would like to integrate=
- the generated code into a larger project that, for historical reasons, use=
-s the C++ compiler.=C2=A0 Would it be possible to add an option to the bare=
-ctf generator so that the code can be compiled by a C++ compiler?=C2=A0 It =
-does not seem too bad--it&#39;s mainly pointer casting issues that the comp=
-iler is complaining about.<div><br></div><div>Thanks,</div><div>Rocky</div>=
-</div></div>
-
---001a1142e1b67ada180540e09d9a--
-
---===============0461841698194784498==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============0461841698194784498==--
+T24gV2VkLCBOb3YgOSwgMjAxNiBhdCAxMToxOCBBTSwgUm9ja3kgRHVubGFwIDxyc2R1bmxhcGl2
+QGdtYWlsLmNvbT4gd3JvdGU6Cj4gR3JlYXQgd29yayBvbiB0aGUgYmFyZWN0ZiB0b29sISAgVGhp
+cyByZWFsbHkgbWFrZXMgaXQgZWFzeSB0byB3cml0ZSBvdXQgQ1RGLgo+Cj4gSSB3b3VsZCBsaWtl
+IHRvIGludGVncmF0ZSB0aGUgZ2VuZXJhdGVkIGNvZGUgaW50byBhIGxhcmdlciBwcm9qZWN0IHRo
+YXQsIGZvcgo+IGhpc3RvcmljYWwgcmVhc29ucywgdXNlcyB0aGUgQysrIGNvbXBpbGVyLiAgV291
+bGQgaXQgYmUgcG9zc2libGUgdG8gYWRkIGFuCj4gb3B0aW9uIHRvIHRoZSBiYXJlY3RmIGdlbmVy
+YXRvciBzbyB0aGF0IHRoZSBjb2RlIGNhbiBiZSBjb21waWxlZCBieSBhIEMrKwo+IGNvbXBpbGVy
+PyAgSXQgZG9lcyBub3Qgc2VlbSB0b28gYmFkLS1pdCdzIG1haW5seSBwb2ludGVyIGNhc3Rpbmcg
+aXNzdWVzIHRoYXQKPiB0aGUgY29tcGlsZXIgaXMgY29tcGxhaW5pbmcgYWJvdXQuCgpIZWxsbyBS
+b2NreSwKCkknbGwgbG9vayBpbnRvIHRoaXMgdG9kYXkuCgpUaGFuayB5b3UgZm9yIHlvdXIgY29t
+bWVudHMhCgpQaGlsCgo+Cj4gVGhhbmtzLAo+IFJvY2t5Cj4KPiBfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBs
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+Cl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2Cg==
