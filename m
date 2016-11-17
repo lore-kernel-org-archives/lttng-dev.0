@@ -1,18 +1,17 @@
-From: "Swartz, Shane" <sswartz@ball.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: LTTng and Red Hat / CentOS RealTime Kernels
-Date: Thu, 17 Nov 2016 16:09:33 +0000
-Message-ID: <9EF0E366B97A2444B715BD7861705886E2942E56__26427.8053459295$1479399006$gmane$org@EX2010-CO-06.AERO.BALL.com>
+Date: Thu, 17 Nov 2016 16:11:59 +0000 (UTC)
+Message-ID: <1321420326.5617.1479399119390.JavaMail.zimbra__13963.3782826879$1479399078$gmane$org@efficios.com>
 References: <9EF0E366B97A2444B715BD7861705886E293EE69@EX2010-CO-06.AERO.BALL.com>
  <162450272.4446.1479335231606.JavaMail.zimbra@efficios.com>
+ <9EF0E366B97A2444B715BD7861705886E2942E56@EX2010-CO-06.AERO.BALL.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3510831412182549903=="
+Content-Type: multipart/mixed; boundary="===============2050233026691783411=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0a-0014fe01.pphosted.com (mx0b-0014fe01.pphosted.com
- [208.86.201.212])
- by lists.lttng.org (Postfix) with ESMTPS id 3tKR1s0t11zmZs
- for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 16:10:56 +0000 (UTC)
-In-Reply-To: <162450272.4446.1479335231606.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3tKR3M6BnmzmbP
+ for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 16:12:15 +0000 (UTC)
+In-Reply-To: <9EF0E366B97A2444B715BD7861705886E2942E56@EX2010-CO-06.AERO.BALL.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,214 +21,272 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Smith, Daniel W" <dwsmith@ball.com>
+To: Shane Swartz <sswartz@ball.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Daniel W Smith <dwsmith@ball.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============3510831412182549903==
-Content-Language: en-US
+--===============2050233026691783411==
 Content-Type: multipart/alternative;
-	boundary="_000_9EF0E366B97A2444B715BD7861705886E2942E56EX2010CO06AEROB_"
+	boundary="=_8a7507ad-4483-4a2d-842a-edb3ab07d0b4"
 
---_000_9EF0E366B97A2444B715BD7861705886E2942E56EX2010CO06AEROB_
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"
+--=_8a7507ad-4483-4a2d-842a-edb3ab07d0b4
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-TWF0aGlldSwNCg0KVGhhbmtzIGZvciB0aGUgcXVpY2sgcmVzcG9uc2UgdG8gdGhpcyBxdWVzdGlv
-bi4NCg0KQ2FuIHlvdSBwbGVhc2UgbGV0IG1lIGtub3cgd2hhdCDigJxDbOKAnSBpcy4NCg0KVGhh
-bmtzLg0KDQotU2hhbmUgU3dhcnR6DQoNCkZyb206IE1hdGhpZXUgRGVzbm95ZXJzIFttYWlsdG86
-bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tXQ0KU2VudDogV2VkbmVzZGF5LCBOb3ZlbWJl
-ciAxNiwgMjAxNiAzOjI3IFBNDQpUbzogU3dhcnR6LCBTaGFuZQ0KQ2M6IGx0dG5nLWRldjsgU21p
-dGgsIERhbmllbCBXDQpTdWJqZWN0OiBSZTogW2x0dG5nLWRldl0gTFRUbmcgYW5kIFJlZCBIYXQg
-LyBDZW50T1MgUmVhbFRpbWUgS2VybmVscw0KDQoNCi0tLS0tIE9uIE5vdiAxNSwgMjAxNiwgYXQg
-MTE6NTIgUE0sIFN3YXJ0eiwgU2hhbmUgPHNzd2FydHpAYmFsbC5jb208bWFpbHRvOnNzd2FydHpA
-YmFsbC5jb20+PiB3cm90ZToNCg0KSXMgaXQgcG9zc2libGUgdG8gbG9hZCB0aGUgTFRUbmcgdG9v
-bHMgd2l0aCBhIFJlZCBIYXQgb3IgQ2VudE9TIHZlcnNpb24gNyBSZWFsIFRpbWUga2VybmVsPyAg
-SWYgeWVzLCBjYW4gaXQgYmUgZG9uZSB1c2luZyB0aGUgRWZmaWNpT1MgTFRUbmcgcGFja2FnZXMg
-b3Igb25seSBieSBidWlsZGluZyB0aGUgcGFja2FnZXMgZnJvbSBzb3VyY2UgY29kZT8NCg0KVGhh
-bmtzLg0KSGkgU2hhbmUsDQoNClRoZSBMVFRuZyBrZXJuZWwgdHJhY2VyIHdvcmtzIHdpdGggYSBy
-YW5nZSBvZiBQcmVlbXB0LVJUIGtlcm5lbCB2ZXJzaW9ucy4NCkl0IGlzIHRlc3RlZCBpbiBDSSBv
-biB0aGUgUHJlZW1wdC1SVCBrZXJuZWwgYnJhbmNoZXMgY3VycmVudGx5IG1haW50YWluZWQNCmJ5
-IHByZWVtcHQtcnQgZGV2ZWxvcGVycy4gSG93ZXZlciwgaXQgZG9lcyBub3QgY3VycmVudGx5IGNv
-dmVyIHRoZQ0KMy44LjEzLXJ0MjcuMzQga2VybmVsIGxpc3RlZCBvbiB0aGUgUkhFTCBwYWdlLCBh
-bmQgdGhlIEVmZmljaU9TDQpwYWNrYWdlcyBmb3IgUkhFTCBkbyBub3QgY3VycmVudGx5IHRhcmdl
-dCB0aGVpciBQcmVlbXB0LVJUIGtlcm5lbC4NCg0KVGhhbmtzLA0KDQpNYXRoaWV1DQoNCg0KLS0N
-Ck1hdGhpZXUgRGVzbm95ZXJzDQpFZmZpY2lPUyBJbmMuDQpodHRwOi8vd3d3LmVmZmljaW9zLmNv
-bQ0KCgoKVGhpcyBtZXNzYWdlIGFuZCBhbnkgZW5jbG9zdXJlcyBhcmUgaW50ZW5kZWQgb25seSBm
-b3IgdGhlIGFkZHJlc3NlZS4gIFBsZWFzZSAKbm90aWZ5IHRoZSBzZW5kZXIgYnkgZW1haWwgaWYg
-eW91IGFyZSBub3QgdGhlIGludGVuZGVkIHJlY2lwaWVudC4gIElmIHlvdSBhcmUgCm5vdCB0aGUg
-aW50ZW5kZWQgcmVjaXBpZW50LCB5b3UgbWF5IG5vdCB1c2UsIGNvcHksIGRpc2Nsb3NlLCBvciBk
-aXN0cmlidXRlIHRoaXMgCm1lc3NhZ2Ugb3IgaXRzIGNvbnRlbnRzIG9yIGVuY2xvc3VyZXMgdG8g
-YW55IG90aGVyIHBlcnNvbiBhbmQgYW55IHN1Y2ggYWN0aW9ucyAKbWF5IGJlIHVubGF3ZnVsLiAg
-QmFsbCByZXNlcnZlcyB0aGUgcmlnaHQgdG8gbW9uaXRvciBhbmQgcmV2aWV3IGFsbCBtZXNzYWdl
-cyAKYW5kIGVuY2xvc3VyZXMgc2VudCB0byBvciBmcm9tIHRoaXMgZW1haWwgYWRkcmVzcy4K
+----- On Nov 17, 2016, at 11:09 AM, Shane Swartz <sswartz@ball.com> wrote:=
+=20
 
---_000_9EF0E366B97A2444B715BD7861705886E2942E56EX2010CO06AEROB_
-Content-Transfer-Encoding: base64
-Content-Type: text/html; charset="utf-8"
+> Mathieu,
 
-PGh0bWwgeG1sbnM6dj0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp2bWwiIHhtbG5zOm89InVy
-bjpzY2hlbWFzLW1pY3Jvc29mdC1jb206b2ZmaWNlOm9mZmljZSIgeG1sbnM6dz0idXJuOnNjaGVt
-YXMtbWljcm9zb2Z0LWNvbTpvZmZpY2U6d29yZCIgeG1sbnM6bT0iaHR0cDovL3NjaGVtYXMubWlj
-cm9zb2Z0LmNvbS9vZmZpY2UvMjAwNC8xMi9vbW1sIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv
-VFIvUkVDLWh0bWw0MCI+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIg
-Y29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxtZXRhIG5hbWU9IkdlbmVyYXRv
-ciIgY29udGVudD0iTWljcm9zb2Z0IFdvcmQgMTQgKGZpbHRlcmVkIG1lZGl1bSkiPg0KPHN0eWxl
-PjwhLS0NCi8qIEZvbnQgRGVmaW5pdGlvbnMgKi8NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1pbHk6
-Q2FsaWJyaTsNCglwYW5vc2UtMToyIDE1IDUgMiAyIDIgNCAzIDIgNDt9DQpAZm9udC1mYWNlDQoJ
-e2ZvbnQtZmFtaWx5OlRhaG9tYTsNCglwYW5vc2UtMToyIDExIDYgNCAzIDUgNCA0IDIgNDt9DQpA
-Zm9udC1mYWNlDQoJe2ZvbnQtZmFtaWx5OlZlcmRhbmE7DQoJcGFub3NlLTE6MiAxMSA2IDQgMyA1
-IDQgNCAyIDQ7fQ0KLyogU3R5bGUgRGVmaW5pdGlvbnMgKi8NCnAuTXNvTm9ybWFsLCBsaS5Nc29O
-b3JtYWwsIGRpdi5Nc29Ob3JtYWwNCgl7bWFyZ2luOjBpbjsNCgltYXJnaW4tYm90dG9tOi4wMDAx
-cHQ7DQoJZm9udC1zaXplOjExLjBwdDsNCglmb250LWZhbWlseToiQ2FsaWJyaSIsInNhbnMtc2Vy
-aWYiO30NCmE6bGluaywgc3Bhbi5Nc29IeXBlcmxpbmsNCgl7bXNvLXN0eWxlLXByaW9yaXR5Ojk5
-Ow0KCWNvbG9yOmJsdWU7DQoJdGV4dC1kZWNvcmF0aW9uOnVuZGVybGluZTt9DQphOnZpc2l0ZWQs
-IHNwYW4uTXNvSHlwZXJsaW5rRm9sbG93ZWQNCgl7bXNvLXN0eWxlLXByaW9yaXR5Ojk5Ow0KCWNv
-bG9yOnB1cnBsZTsNCgl0ZXh0LWRlY29yYXRpb246dW5kZXJsaW5lO30NCnAuTXNvQWNldGF0ZSwg
-bGkuTXNvQWNldGF0ZSwgZGl2Lk1zb0FjZXRhdGUNCgl7bXNvLXN0eWxlLXByaW9yaXR5Ojk5Ow0K
-CW1zby1zdHlsZS1saW5rOiJCYWxsb29uIFRleHQgQ2hhciI7DQoJbWFyZ2luOjBpbjsNCgltYXJn
-aW4tYm90dG9tOi4wMDAxcHQ7DQoJZm9udC1zaXplOjguMHB0Ow0KCWZvbnQtZmFtaWx5OiJUYWhv
-bWEiLCJzYW5zLXNlcmlmIjt9DQpzcGFuLkJhbGxvb25UZXh0Q2hhcg0KCXttc28tc3R5bGUtbmFt
-ZToiQmFsbG9vbiBUZXh0IENoYXIiOw0KCW1zby1zdHlsZS1wcmlvcml0eTo5OTsNCgltc28tc3R5
-bGUtbGluazoiQmFsbG9vbiBUZXh0IjsNCglmb250LWZhbWlseToiVGFob21hIiwic2Fucy1zZXJp
-ZiI7fQ0Kc3Bhbi5FbWFpbFN0eWxlMTkNCgl7bXNvLXN0eWxlLXR5cGU6cGVyc29uYWw7DQoJZm9u
-dC1mYW1pbHk6IlZlcmRhbmEiLCJzYW5zLXNlcmlmIjsNCgljb2xvcjp3aW5kb3d0ZXh0Ow0KCWZv
-bnQtd2VpZ2h0Om5vcm1hbDsNCglmb250LXN0eWxlOm5vcm1hbDsNCgl0ZXh0LWRlY29yYXRpb246
-bm9uZSBub25lO30NCnNwYW4uRW1haWxTdHlsZTIwDQoJe21zby1zdHlsZS10eXBlOnBlcnNvbmFs
-LXJlcGx5Ow0KCWZvbnQtZmFtaWx5OiJWZXJkYW5hIiwic2Fucy1zZXJpZiI7DQoJY29sb3I6IzFG
-NDk3RDsNCglmb250LXdlaWdodDpub3JtYWw7DQoJZm9udC1zdHlsZTpub3JtYWw7DQoJdGV4dC1k
-ZWNvcmF0aW9uOm5vbmUgbm9uZTt9DQouTXNvQ2hwRGVmYXVsdA0KCXttc28tc3R5bGUtdHlwZTpl
-eHBvcnQtb25seTsNCglmb250LXNpemU6MTAuMHB0O30NCkBwYWdlIFdvcmRTZWN0aW9uMQ0KCXtz
-aXplOjguNWluIDExLjBpbjsNCgltYXJnaW46MS4waW4gMS4waW4gMS4waW4gMS4waW47fQ0KZGl2
-LldvcmRTZWN0aW9uMQ0KCXtwYWdlOldvcmRTZWN0aW9uMTt9DQotLT48L3N0eWxlPjwhLS1baWYg
-Z3RlIG1zbyA5XT48eG1sPg0KPG86c2hhcGVkZWZhdWx0cyB2OmV4dD0iZWRpdCIgc3BpZG1heD0i
-MTAyNiIgLz4NCjwveG1sPjwhW2VuZGlmXS0tPjwhLS1baWYgZ3RlIG1zbyA5XT48eG1sPg0KPG86
-c2hhcGVsYXlvdXQgdjpleHQ9ImVkaXQiPg0KPG86aWRtYXAgdjpleHQ9ImVkaXQiIGRhdGE9IjEi
-IC8+DQo8L286c2hhcGVsYXlvdXQ+PC94bWw+PCFbZW5kaWZdLS0+DQo8L2hlYWQ+DQo8Ym9keSBs
-YW5nPSJFTi1VUyIgbGluaz0iYmx1ZSIgdmxpbms9InB1cnBsZSI+DQo8ZGl2IGNsYXNzPSJXb3Jk
-U2VjdGlvbjEiPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5
-OiZxdW90O1ZlcmRhbmEmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjojMUY0OTdE
-Ij5NYXRoaWV1LDxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxz
-cGFuIHN0eWxlPSJmb250LWZhbWlseTomcXVvdDtWZXJkYW5hJnF1b3Q7LCZxdW90O3NhbnMtc2Vy
-aWYmcXVvdDs7Y29sb3I6IzFGNDk3RCI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPHAg
-Y2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O1ZlcmRhbmEm
-cXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjojMUY0OTdEIj5UaGFua3MgZm9yIHRo
-ZSBxdWljayByZXNwb25zZSB0byB0aGlzIHF1ZXN0aW9uLjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4N
-CjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTomcXVvdDtWZXJk
-YW5hJnF1b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29sb3I6IzFGNDk3RCI+PG86cD4mbmJz
-cDs8L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZv
-bnQtZmFtaWx5OiZxdW90O1ZlcmRhbmEmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xv
-cjojMUY0OTdEIj5DYW4geW91IHBsZWFzZSBsZXQgbWUga25vdyB3aGF0IOKAnENs4oCdIGlzLjxv
-OnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJm
-b250LWZhbWlseTomcXVvdDtWZXJkYW5hJnF1b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29s
-b3I6IzFGNDk3RCI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05v
-cm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O1ZlcmRhbmEmcXVvdDssJnF1b3Q7
-c2Fucy1zZXJpZiZxdW90Oztjb2xvcjojMUY0OTdEIj5UaGFua3MuPG86cD48L286cD48L3NwYW4+
-PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90
-O1ZlcmRhbmEmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjojMUY0OTdEIj48bzpw
-PiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHls
-ZT0iZm9udC1mYW1pbHk6JnF1b3Q7VmVyZGFuYSZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7
-O2NvbG9yOiMxRjQ5N0QiPi1TaGFuZSBTd2FydHo8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBj
-bGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7VmVyZGFuYSZx
-dW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOiMxRjQ5N0QiPjxvOnA+Jm5ic3A7PC9v
-OnA+PC9zcGFuPjwvcD4NCjxkaXY+DQo8ZGl2IHN0eWxlPSJib3JkZXI6bm9uZTtib3JkZXItdG9w
-OnNvbGlkICNCNUM0REYgMS4wcHQ7cGFkZGluZzozLjBwdCAwaW4gMGluIDBpbiI+DQo8cCBjbGFz
-cz0iTXNvTm9ybWFsIj48Yj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEwLjBwdDtmb250LWZhbWls
-eTomcXVvdDtUYWhvbWEmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90OyI+RnJvbTo8L3NwYW4+
-PC9iPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTAuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O1RhaG9t
-YSZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7Ij4gTWF0aGlldSBEZXNub3llcnMgW21haWx0
-bzptYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb21dDQo8YnI+DQo8Yj5TZW50OjwvYj4gV2Vk
-bmVzZGF5LCBOb3ZlbWJlciAxNiwgMjAxNiAzOjI3IFBNPGJyPg0KPGI+VG86PC9iPiBTd2FydHos
-IFNoYW5lPGJyPg0KPGI+Q2M6PC9iPiBsdHRuZy1kZXY7IFNtaXRoLCBEYW5pZWwgVzxicj4NCjxi
-PlN1YmplY3Q6PC9iPiBSZTogW2x0dG5nLWRldl0gTFRUbmcgYW5kIFJlZCBIYXQgLyBDZW50T1Mg
-UmVhbFRpbWUgS2VybmVsczxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPC9kaXY+DQo8
-cCBjbGFzcz0iTXNvTm9ybWFsIj48bzpwPiZuYnNwOzwvbzpwPjwvcD4NCjxkaXY+DQo8ZGl2Pg0K
-PHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1m
-YW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFj
-ayI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9
-Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1
-b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFjayI+LS0tLS0g
-T24gTm92IDE1LCAyMDE2LCBhdCAxMTo1MiBQTSwgU3dhcnR6LCBTaGFuZSAmbHQ7PGEgaHJlZj0i
-bWFpbHRvOnNzd2FydHpAYmFsbC5jb20iPnNzd2FydHpAYmFsbC5jb208L2E+Jmd0OyB3cm90ZTo8
-YnI+DQo8YnI+DQo8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8YmxvY2tx
-dW90ZSBzdHlsZT0iYm9yZGVyOm5vbmU7Ym9yZGVyLWxlZnQ6c29saWQgIzEwMTBGRiAxLjVwdDtw
-YWRkaW5nOjBpbiAwaW4gMGluIDQuMHB0O21hcmdpbi1sZWZ0OjMuNzVwdDttYXJnaW4tdG9wOjUu
-MHB0O21hcmdpbi1ib3R0b206NS4wcHQiPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5
-bGU9ImZvbnQtZmFtaWx5OiZxdW90O1ZlcmRhbmEmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90
-Oztjb2xvcjpibGFjayI+SXMgaXQgcG9zc2libGUgdG8gbG9hZCB0aGUgTFRUbmcgdG9vbHMgd2l0
-aCBhIFJlZCBIYXQgb3IgQ2VudE9TIHZlcnNpb24gNyBSZWFsIFRpbWUga2VybmVsPyZuYnNwOyBJ
-ZiB5ZXMsIGNhbiBpdCBiZSBkb25lIHVzaW5nIHRoZSBFZmZpY2lPUyBMVFRuZyBwYWNrYWdlcyBv
-ciBvbmx5IGJ5IGJ1aWxkaW5nIHRoZSBwYWNrYWdlcw0KIGZyb20gc291cmNlIGNvZGU/PC9zcGFu
-PjxzcGFuIHN0eWxlPSJjb2xvcjpibGFjayI+PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xh
-c3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O1ZlcmRhbmEmcXVv
-dDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFjayI+Jm5ic3A7PC9zcGFuPjxzcGFu
-IHN0eWxlPSJjb2xvcjpibGFjayI+PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1z
-b05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O1ZlcmRhbmEmcXVvdDssJnF1
-b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFjayI+VGhhbmtzLjwvc3Bhbj48c3BhbiBzdHls
-ZT0iY29sb3I6YmxhY2siPjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvYmxvY2txdW90ZT4NCjxk
-aXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTox
-Mi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90
-Oztjb2xvcjpibGFjayI+SGkgU2hhbmUsPG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8
-ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7
-Zm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xv
-cjpibGFjayI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAg
-Y2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1p
-bHk6JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFjayI+
-VGhlIExUVG5nIGtlcm5lbCB0cmFjZXIgd29ya3Mgd2l0aCBhIHJhbmdlIG9mIFByZWVtcHQtUlQg
-a2VybmVsIHZlcnNpb25zLjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxw
-IGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFt
-aWx5OiZxdW90O0FyaWFsJnF1b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29sb3I6YmxhY2si
-Pkl0IGlzIHRlc3RlZCBpbiBDSSBvbiB0aGUgUHJlZW1wdC1SVCBrZXJuZWwgYnJhbmNoZXMgY3Vy
-cmVudGx5IG1haW50YWluZWQ8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8
-cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZh
-bWlseTomcXVvdDtBcmlhbCZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNr
-Ij5ieSBwcmVlbXB0LXJ0IGRldmVsb3BlcnMuIEhvd2V2ZXIsIGl0IGRvZXMgbm90IGN1cnJlbnRs
-eSBjb3ZlciB0aGU8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFz
-cz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTom
-cXVvdDtBcmlhbCZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj4zLjgu
-MTMtcnQyNy4zNCBrZXJuZWwgbGlzdGVkIG9uIHRoZSBSSEVMIHBhZ2UsIGFuZCB0aGUgRWZmaWNp
-T1M8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9y
-bWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlh
-bCZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj5wYWNrYWdlcyBmb3Ig
-UkhFTCBkbyBub3QgY3VycmVudGx5IHRhcmdldCB0aGVpciBQcmVlbXB0LVJUIGtlcm5lbC48bzpw
-PjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48
-c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90
-OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj48bzpwPiZuYnNwOzwvbzpwPjwv
-c3Bhbj48L3A+DQo8L2Rpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250
-LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LCZxdW90O3NhbnMtc2Vy
-aWYmcXVvdDs7Y29sb3I6YmxhY2siPlRoYW5rcyw8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8ZGl2
-Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9u
-dC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpi
-bGFjayI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xh
-c3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6
-JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFjayI+TWF0
-aGlldTxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xh
-c3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6
-JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFjayI+PG86
-cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48
-c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90
-OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj48bzpwPiZuYnNwOzwvbzpwPjwv
-c3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHls
-ZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90OywmcXVvdDtz
-YW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj4tLQ0KPG86cD48L286cD48L3NwYW4+PC9wPg0K
-PC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6
-ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZx
-dW90Oztjb2xvcjpibGFjayI+TWF0aGlldSBEZXNub3llcnM8YnI+DQpFZmZpY2lPUyBJbmMuPGJy
-Pg0KPGEgaHJlZj0iaHR0cDovL3d3dy5lZmZpY2lvcy5jb20iPmh0dHA6Ly93d3cuZWZmaWNpb3Mu
-Y29tPC9hPjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPC9kaXY+DQo8L2Rpdj4NCgo8
-RElWPgo8QlI+CjxCUj4KVGhpcyBtZXNzYWdlIGFuZCBhbnkgZW5jbG9zdXJlcyBhcmUgaW50ZW5k
-ZWQgb25seSBmb3IgdGhlIGFkZHJlc3NlZS4gIFBsZWFzZSA8QlI+Cm5vdGlmeSB0aGUgc2VuZGVy
-IGJ5IGVtYWlsIGlmIHlvdSBhcmUgbm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQuICBJZiB5b3Ug
-YXJlIDxCUj4Kbm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQsIHlvdSBtYXkgbm90IHVzZSwgY29w
-eSwgZGlzY2xvc2UsIG9yIGRpc3RyaWJ1dGUgdGhpcyA8QlI+Cm1lc3NhZ2Ugb3IgaXRzIGNvbnRl
-bnRzIG9yIGVuY2xvc3VyZXMgdG8gYW55IG90aGVyIHBlcnNvbiBhbmQgYW55IHN1Y2ggYWN0aW9u
-cyA8QlI+Cm1heSBiZSB1bmxhd2Z1bC4gIEJhbGwgcmVzZXJ2ZXMgdGhlIHJpZ2h0IHRvIG1vbml0
-b3IgYW5kIHJldmlldyBhbGwgbWVzc2FnZXMgPEJSPgphbmQgZW5jbG9zdXJlcyBzZW50IHRvIG9y
-IGZyb20gdGhpcyBlbWFpbCBhZGRyZXNzLjxCUj4KPC9ESVY+PC9ib2R5Pg0KPC9odG1sPg0K
+> Thanks for the quick response to this question.
 
---_000_9EF0E366B97A2444B715BD7861705886E2942E56EX2010CO06AEROB_--
+> Can you please let me know what =E2=80=9CCl=E2=80=9D is.
 
---===============3510831412182549903==
+CI stands for "Continuous Integration", see https://ci.lttng.org=20
+
+Thanks,=20
+
+Mathieu=20
+
+> Thanks.
+
+> -Shane Swartz
+
+> From: Mathieu Desnoyers [mailto:mathieu.desnoyers@efficios.com]
+> Sent: Wednesday, November 16, 2016 3:27 PM
+> To: Swartz, Shane
+> Cc: lttng-dev; Smith, Daniel W
+> Subject: Re: [lttng-dev] LTTng and Red Hat / CentOS RealTime Kernels
+
+> ----- On Nov 15, 2016, at 11:52 PM, Swartz, Shane < [ mailto:sswartz@ball=
+.com |
+> sswartz@ball.com ] > wrote:
+
+>> Is it possible to load the LTTng tools with a Red Hat or CentOS version =
+7 Real
+>> Time kernel? If yes, can it be done using the EfficiOS LTTng packages or=
+ only
+>> by building the packages from source code?
+
+>> Thanks.
+> Hi Shane,
+
+> The LTTng kernel tracer works with a range of Preempt-RT kernel versions.
+
+> It is tested in CI on the Preempt-RT kernel branches currently maintained
+
+> by preempt-rt developers. However, it does not currently cover the
+
+> 3.8.13-rt27.34 kernel listed on the RHEL page, and the EfficiOS
+
+> packages for RHEL do not currently target their Preempt-RT kernel.
+
+> Thanks,
+
+> Mathieu
+
+> --
+
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> [ http://www.efficios.com/ | http://www.efficios.com ]
+
+> This message and any enclosures are intended only for the addressee. Plea=
+se
+> notify the sender by email if you are not the intended recipient. If you =
+are
+> not the intended recipient, you may not use, copy, disclose, or distribut=
+e this
+> message or its contents or enclosures to any other person and any such ac=
+tions
+> may be unlawful. Ball reserves the right to monitor and review all messag=
+es
+> and enclosures sent to or from this email address.
+
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
+
+--=_8a7507ad-4483-4a2d-842a-edb3ab07d0b4
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><style><!--
+
+@font-face
+=09{font-family:Calibri;
+=09panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+=09{font-family:Tahoma;
+=09panose-1:2 11 6 4 3 5 4 4 2 4;}
+@font-face
+=09{font-family:Verdana;
+=09panose-1:2 11 6 4 3 5 4 4 2 4;}
+
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+=09{margin:0in;
+=09margin-bottom:.0001pt;
+=09font-size:11.0pt;
+=09font-family:"Calibri","sans-serif";}
+a:link, span.MsoHyperlink
+=09{mso-style-priority:99;
+=09color:blue;
+=09text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+=09{mso-style-priority:99;
+=09color:purple;
+=09text-decoration:underline;}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+=09{mso-style-priority:99;
+=09mso-style-link:"Balloon Text Char";
+=09margin:0in;
+=09margin-bottom:.0001pt;
+=09font-size:8.0pt;
+=09font-family:"Tahoma","sans-serif";}
+span.BalloonTextChar
+=09{mso-style-name:"Balloon Text Char";
+=09mso-style-priority:99;
+=09mso-style-link:"Balloon Text";
+=09font-family:"Tahoma","sans-serif";}
+span.EmailStyle19
+=09{mso-style-type:personal;
+=09font-family:"Verdana","sans-serif";
+=09color:windowtext;
+=09font-weight:normal;
+=09font-style:normal;
+=09text-decoration:none none;}
+span.EmailStyle20
+=09{mso-style-type:personal-reply;
+=09font-family:"Verdana","sans-serif";
+=09color:#1F497D;
+=09font-weight:normal;
+=09font-style:normal;
+=09text-decoration:none none;}
+.MsoChpDefault
+=09{mso-style-type:export-only;
+=09font-size:10.0pt;}
+@page WordSection1
+=09{size:8.5in 11.0in;
+=09margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+=09{page:WordSection1;}
+--></style></div><div><br></div><div><span id=3D"zwchr" data-marker=3D"__DI=
+VIDER__">----- On Nov 17, 2016, at 11:09 AM, Shane Swartz &lt;sswartz@ball.=
+com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockq=
+uote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5p=
+x;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font=
+-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div class=3D"WordSecti=
+on1"><p class=3D"MsoNormal"><span style=3D"font-family:&quot;Verdana&quot;,=
+&quot;sans-serif&quot;;color:#1F497D">Mathieu,</span></p><p class=3D"MsoNor=
+mal"><span style=3D"font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;;=
+color:#1F497D">&nbsp;</span></p><p class=3D"MsoNormal"><span style=3D"font-=
+family:&quot;Verdana&quot;,&quot;sans-serif&quot;;color:#1F497D">Thanks for=
+ the quick response to this question.</span></p><p class=3D"MsoNormal"><spa=
+n style=3D"font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;;color:#1F=
+497D">&nbsp;</span></p><p class=3D"MsoNormal"><span style=3D"font-family:&q=
+uot;Verdana&quot;,&quot;sans-serif&quot;;color:#1F497D">Can you please let =
+me know what =E2=80=9CCl=E2=80=9D is.</span></p></div></blockquote><div><br=
+></div><div>CI stands for "Continuous Integration", see https://ci.lttng.or=
+g<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Th=
+anks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><di=
+v>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div=
+><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding=
+-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:n=
+one;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div class=3D"W=
+ordSection1"><p class=3D"MsoNormal"><span style=3D"font-family:&quot;Verdan=
+a&quot;,&quot;sans-serif&quot;;color:#1F497D">&nbsp;</span></p><p class=3D"=
+MsoNormal"><span style=3D"font-family:&quot;Verdana&quot;,&quot;sans-serif&=
+quot;;color:#1F497D">Thanks.</span></p><p class=3D"MsoNormal"><span style=
+=3D"font-family:&quot;Verdana&quot;,&quot;sans-serif&quot;;color:#1F497D">&=
+nbsp;</span></p><p class=3D"MsoNormal"><span style=3D"font-family:&quot;Ver=
+dana&quot;,&quot;sans-serif&quot;;color:#1F497D">-Shane Swartz</span></p><p=
+ class=3D"MsoNormal"><span style=3D"font-family:&quot;Verdana&quot;,&quot;s=
+ans-serif&quot;;color:#1F497D">&nbsp;</span></p><div><div style=3D"border:n=
+one;border-top:solid #B5C4DF 1.0pt;padding:3.0pt 0in 0in 0in"><p class=3D"M=
+soNormal"><b><span style=3D"font-size:10.0pt;font-family:&quot;Tahoma&quot;=
+,&quot;sans-serif&quot;">From:</span></b><span style=3D"font-size:10.0pt;fo=
+nt-family:&quot;Tahoma&quot;,&quot;sans-serif&quot;"> Mathieu Desnoyers [ma=
+ilto:mathieu.desnoyers@efficios.com]
+<br>
+<b>Sent:</b> Wednesday, November 16, 2016 3:27 PM<br>
+<b>To:</b> Swartz, Shane<br>
+<b>Cc:</b> lttng-dev; Smith, Daniel W<br>
+<b>Subject:</b> Re: [lttng-dev] LTTng and Red Hat / CentOS RealTime Kernels=
+</span></p></div></div><div><div><p class=3D"MsoNormal"><span style=3D"font=
+-size:12.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:bla=
+ck">&nbsp;</span></p></div><div><p class=3D"MsoNormal"><span style=3D"font-=
+size:12.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:blac=
+k">----- On Nov 15, 2016, at 11:52 PM, Swartz, Shane &lt;<a href=3D"mailto:=
+sswartz@ball.com" target=3D"_blank">sswartz@ball.com</a>&gt; wrote:<br>
+<br>
+</span></p></div><div><blockquote style=3D"border:none;border-left:solid #1=
+010FF 1.5pt;padding:0in 0in 0in 4.0pt;margin-left:3.75pt;margin-top:5.0pt;m=
+argin-bottom:5.0pt"><p class=3D"MsoNormal"><span style=3D"font-family:&quot=
+;Verdana&quot;,&quot;sans-serif&quot;;color:black">Is it possible to load t=
+he LTTng tools with a Red Hat or CentOS version 7 Real Time kernel?&nbsp; I=
+f yes, can it be done using the EfficiOS LTTng packages or only by building=
+ the packages
+ from source code?</span></p><p class=3D"MsoNormal"><span style=3D"font-fam=
+ily:&quot;Verdana&quot;,&quot;sans-serif&quot;;color:black">&nbsp;</span></=
+p><p class=3D"MsoNormal"><span style=3D"font-family:&quot;Verdana&quot;,&qu=
+ot;sans-serif&quot;;color:black">Thanks.</span></p></blockquote><div><div><=
+p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Ari=
+al&quot;,&quot;sans-serif&quot;;color:black">Hi Shane,</span></p></div><div=
+><p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;A=
+rial&quot;,&quot;sans-serif&quot;;color:black">&nbsp;</span></p></div><div>=
+<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;;color:black">The LTTng kernel tracer works=
+ with a range of Preempt-RT kernel versions.</span></p></div><div><p class=
+=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Arial&quot=
+;,&quot;sans-serif&quot;;color:black">It is tested in CI on the Preempt-RT =
+kernel branches currently maintained</span></p></div><div><p class=3D"MsoNo=
+rmal"><span style=3D"font-size:12.0pt;font-family:&quot;Arial&quot;,&quot;s=
+ans-serif&quot;;color:black">by preempt-rt developers. However, it does not=
+ currently cover the</span></p></div><div><p class=3D"MsoNormal"><span styl=
+e=3D"font-size:12.0pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;=
+color:black">3.8.13-rt27.34 kernel listed on the RHEL page, and the EfficiO=
+S</span></p></div><div><p class=3D"MsoNormal"><span style=3D"font-size:12.0=
+pt;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:black">packag=
+es for RHEL do not currently target their Preempt-RT kernel.</span></p></di=
+v><div><p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&=
+quot;Arial&quot;,&quot;sans-serif&quot;;color:black">&nbsp;</span></p></div=
+><p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;A=
+rial&quot;,&quot;sans-serif&quot;;color:black">Thanks,</span></p><div><p cl=
+ass=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Arial&q=
+uot;,&quot;sans-serif&quot;;color:black">&nbsp;</span></p></div><div><p cla=
+ss=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Arial&qu=
+ot;,&quot;sans-serif&quot;;color:black">Mathieu</span></p></div></div><div>=
+<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Ar=
+ial&quot;,&quot;sans-serif&quot;;color:black">&nbsp;</span></p></div><p cla=
+ss=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Arial&qu=
+ot;,&quot;sans-serif&quot;;color:black">&nbsp;</span></p></div><div><p clas=
+s=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Arial&quo=
+t;,&quot;sans-serif&quot;;color:black">--
+</span></p></div><div><p class=3D"MsoNormal"><span style=3D"font-size:12.0p=
+t;font-family:&quot;Arial&quot;,&quot;sans-serif&quot;;color:black">Mathieu=
+ Desnoyers<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
+om</a></span><br data-mce-bogus=3D"1"></p></div></div></div><div><br><br>
+This message and any enclosures are intended only for the addressee.  Pleas=
+e <br>
+notify the sender by email if you are not the intended recipient.  If you a=
+re <br>
+not the intended recipient, you may not use, copy, disclose, or distribute =
+this <br>
+message or its contents or enclosures to any other person and any such acti=
+ons <br>
+may be unlawful.  Ball reserves the right to monitor and review all message=
+s <br>
+and enclosures sent to or from this email address.<br></div><br></blockquot=
+e></div><div><br></div><div data-marker=3D"__SIG_POST__">-- <br></div><div>=
+Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></div></=
+body></html>
+--=_8a7507ad-4483-4a2d-842a-edb3ab07d0b4--
+
+--===============2050233026691783411==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -239,4 +296,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============3510831412182549903==--
+--===============2050233026691783411==--
