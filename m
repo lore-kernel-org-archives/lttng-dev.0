@@ -1,36 +1,23 @@
-From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-Subject: Re: Installing LTTNG on beaglebone black or rasberry pi
-Date: Thu, 17 Nov 2016 16:45:46 -0500
-Message-ID: <d0ef0af1-4c57-34bc-7764-fcf86764773f__2649.57542899555$1479419158$gmane$org@efficios.com>
-References: <CAAuy2ATLED2dopcqdjF4+Xpy7wA+OLeTwOvYma+BRkWR9xPKRg@mail.gmail.com>
- <CAF4oYfGS5Vf5CrS3XVFxDQkdrs=wtoNCNw5qOpf_G6_TDBLBsg@mail.gmail.com>
- <CAAuy2AQmRSC4Zg59gALTstfL+gBRTLynfAv0u6vhmgu-TumNpw@mail.gmail.com>
+From: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
+Subject: Re: Removing timing overhead with tracepoint() <--
+ query dropped by mailing list
+Date: Thu, 17 Nov 2016 21:47:14 +0000 (UTC)
+Message-ID: <1022607049.2377857.1479419234491__30652.9919886545$1479419442$gmane$org@mail.yahoo.com>
+References: <9EF0E366B97A2444B715BD7861705886E293EE69@EX2010-CO-06.AERO.BALL.com>
+ <162450272.4446.1479335231606.JavaMail.zimbra@efficios.com>
+ <9EF0E366B97A2444B715BD7861705886E2942E56@EX2010-CO-06.AERO.BALL.com>
+ <1321420326.5617.1479399119390.JavaMail.zimbra@efficios.com>
+ <1484074426.2165170.1479403261514@mail.yahoo.com>
+ <1384678026.6657.1479415650848.JavaMail.zimbra@efficios.com>
+Reply-To: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============7466939609844669696=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3tKZTZ3MTYzd60
- for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 21:46:58 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id EBCC43402B8
- for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 21:46:47 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id 84R6td7K3PBp for <lttng-dev@lists.lttng.org>;
- Thu, 17 Nov 2016 21:46:47 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 3C0953402D6
- for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 21:46:47 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id eReVXv_zriOg for <lttng-dev@lists.lttng.org>;
- Thu, 17 Nov 2016 21:46:47 +0000 (UTC)
-Received: from [172.16.0.165] (cable-192.222.218.157.electronicbox.net
- [192.222.218.157])
- by mail.efficios.com (Postfix) with ESMTPSA id 1F2583402B8
- for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 21:46:47 +0000 (UTC)
-In-Reply-To: <CAAuy2AQmRSC4Zg59gALTstfL+gBRTLynfAv0u6vhmgu-TumNpw@mail.gmail.com>
+Received: from nm12-vm0.bullet.mail.bf1.yahoo.com
+ (nm12-vm0.bullet.mail.bf1.yahoo.com [98.139.213.140])
+ by lists.lttng.org (Postfix) with ESMTPS id 3tKZZy6d02zd7D
+ for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 21:51:38 +0000 (UTC)
+In-Reply-To: <1384678026.6657.1479415650848.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -40,85 +27,218 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgoKT24gMjAxNi0xMS0xNyAwNDoyNCBQTSwgTndhZm9yLCBFYmVsZWNodWt3dSB3cm90ZToK
-PiBIaSBKb25hdGhhbi4gVGhhbmsgeW91IGZvciB5b3VyIHJlc3BvbnNlLgo+Cj4gT24gdGhlIGJl
-YWdsZWJvbmUgYmxhY2ssIGkgdHJpZWQgYnVpbGRpbmcgbHR0bmctdG9vbHMsIAo+IGx0dG5nLW1v
-ZHVsZXMtZGttcyBhbmQgbHR0bmctdXN0LWRldiBmcm9tIHNvdXJjZSB2Mi44LjEgYnkgZm9sbG93
-aW5nIAo+IHRoZSBkb2N1bWVudGF0aW9uLiBsdHRuZy1tb2R1bGVzLWRrbXMgcnVucyBmaW5lIGJ1
-dCB0aGUgbW9kdWxlIGRvZXMgCj4gbm90IHNob3cgdXAgb24gdGhlIGxpc3Qgb2YgcnVubmluZyBt
-b2R1bGVzIHdoZW4gaSBpc3N1ZSBhbiBsc21vZCAKPiBjb21tYW5kLiBBbHNvLCBpIHJ1biBpbnRv
-IGVycm9ycyB3aGlsZSB0cnlpbmcgdG8gYnVpbGQgYW5kIGNvbXBpbGUgCj4gbHR0bmctdG9vbHMu
-IEJlYWdsZWJvbmUgYmxhY2sgcnVucyBvbiBkZWJpYW4uIExpbnV4IGJlYWdsZWJvbmUgCj4gMy44
-LjEzLWJvbmU3MCAjMSBTTVAgRnJpIEphbiAyMyAwMjoxNTo0MiBVVEMgMjAxNSBhcm12N2wgR05V
-L0xpbnV4CgpXaGF0IGVycm9ycyBkbyB5b3Ugc2VlIHdoZW4gYnVpbGRpbmcgbHR0bmctdG9vbHM/
-Cgo+Cj4KPiBPbiB0aGUgcmFzcGJlcnJ5IHBpLCBJIHVzZSB0aGUgY29tbWFuZHMsIGFwdC1nZXQg
-aW5zdGFsbCAKPiBsdHRuZy1tb2R1bGVzLWRrbXMgbHR0bmctdG9vbHMgbHR0bmctdXN0LWRldi4g
-RXZlcnl0aGluZyBzZWVtcyB0byB3b3JrIAo+IGZpbmUgd2l0aCB0aGUgZXhjZXB0aW9uIG9mIGx0
-dG5nLW1vZHVsZXMtZGttcyB3aGljaCBkb2VzIG5vdCBzaG93IHVwIAo+IG9uIHRoZSBsaXN0IG9u
-IHJ1bm5pbmcgbW9kdWxlcy4gQWxzbywgZXZlcnkgdGltZSBpIHRyeSB0byB2aWV3IAo+IGF2YWls
-YWJsZSBrZXJuZWwgZXZlbnRzLCBpdCBjb21lcyB1cCB3aXRoIGFuIGVycm9yIHNheWluZyB1bmFi
-bGUgdG8gCj4gbGlzdCBrZXJuZWwgZXZlbnRzOiBrZXJuZWwgdHJhY2VyIG5vdCBhdmFpbGFibGUu
-IFRoZSBMVFRORyB2ZXJzaW9uIAo+IGluc3RhbGxlZCB1c2luZyBhcHQtZ2V0IGlzIDIuNy4xLiBJ
-IGFtIHJ1bm5pbmcgdWJ1bnR1IG1hdGUgT1MuIEJlbG93IAo+IGFyZSB0aGUgb3V0cHV0IHdoaWxl
-IGluc3RhbGxpbmcgbHR0bmctbW9kdWxlcy1ka21zCgpXZWxsIGFzIHRoZSBlcnJvciBwb2ludHMg
-b3V0IGRvIHlvdSBoYXZlIHRoZSBrZXJuZWwgdHJhY2VyIHN0YXJ0ZWQ/CgpwcyAtYXV4IHwgZ3Jl
-cCBsdHRuZy1zZXNzaW9uZAoKRG9lcyB0aGUgdXNlciB0cnlpbmcgdG8gdXNlIGx0dG5nIGlzIHBh
-cnQgb2YgdGhlIHRyYWNpbmcgZ3JvdXAgb3IgaXMgcm9vdCA/CgpZb3UgY2FuIHN0YXJ0IGx0dG5n
-LXNlc3Npb25kIHdpdGggdGhlIC12dnYgb3B0aW9ucyBtYWtlIHN1cmUgdG8gYmUgcm9vdCAKd2hl
-biBkb2luZyBzbyBsdHRuZy1zZXNzaW9uZCBsb2FkIHRoZSB0cmFjaW5nIG1vZHVsZXMuCgpTaW5j
-ZSB5b3UgaW5zdGFsbGVkIGl0IGZyb20gYXB0LWdldCB0aGUgbHR0bmctdG9vbHMgcGFja2FnZSBw
-cm92aWRlIGEgCmRhZW1vbiBmb3IgbHR0bmctc2Vzc2lvbmQgc28gYmVmb3JlIHRlc3RpbmcgbWFu
-dWFsbHk6CgpzZXJ2aWNlIGx0dG5nLXNlc3Npb25kIHN0b3AKCj4KPgo+IHJvb3RAZWJlbGUtZGVz
-a3RvcDp+IyBhcHQtZ2V0IGluc3RhbGwgbHR0bmctbW9kdWxlcy1ka21zCj4gUmVhZGluZyBwYWNr
-YWdlIGxpc3RzLi4uIERvbmUKPiBCdWlsZGluZyBkZXBlbmRlbmN5IHRyZWUKPiBSZWFkaW5nIHN0
-YXRlIGluZm9ybWF0aW9uLi4uIERvbmUKPiBsdHRuZy1tb2R1bGVzLWRrbXMgaXMgYWxyZWFkeSB0
-aGUgbmV3ZXN0IHZlcnNpb24gKDIuNy4xLTEpLgo+IDAgdXBncmFkZWQsIDAgbmV3bHkgaW5zdGFs
-bGVkLCAwIHRvIHJlbW92ZSBhbmQgMTQgbm90IHVwZ3JhZGVkLgo+IDIgbm90IGZ1bGx5IGluc3Rh
-bGxlZCBvciByZW1vdmVkLgo+IEFmdGVyIHRoaXMgb3BlcmF0aW9uLCAwIEIgb2YgYWRkaXRpb25h
-bCBkaXNrIHNwYWNlIHdpbGwgYmUgdXNlZC4KPiBEbyB5b3Ugd2FudCB0byBjb250aW51ZT8gW1kv
-bl0gWQo+IFNldHRpbmcgdXAgbGludXgtaGVhZGVycy00LjQuMC0yMiAoNC40LjAtMjIuNDApIC4u
-Lgo+IFNldHRpbmcgdXAgbHR0bmctbW9kdWxlcy1ka21zICgyLjcuMS0xKSAuLi4KPiBMb2FkaW5n
-IG5ldyBsdHRuZy1tb2R1bGVzLTIuNy4xIERLTVMgZmlsZXMuLi4KPiBGaXJzdCBJbnN0YWxsYXRp
-b246IGNoZWNraW5nIGFsbCBrZXJuZWxzLi4uCj4gZHBrZzogd2FybmluZzogdmVyc2lvbiAnKi0q
-JyBoYXMgYmFkIHN5bnRheDogdmVyc2lvbiBudW1iZXIgZG9lcyBub3QgCj4gc3RhcnQgd2l0aCBk
-aWdpdAo+IEl0IGlzIGxpa2VseSB0aGF0IDQuNC4zMC12NysgYmVsb25ncyB0byBhIGNocm9vdCdz
-IGhvc3QKPiBNb2R1bGUgYnVpbGQgZm9yIHRoZSBjdXJyZW50bHkgcnVubmluZyBrZXJuZWwgd2Fz
-IHNraXBwZWQgc2luY2UgdGhlCj4ga2VybmVsIHNvdXJjZSBmb3IgdGhpcyBrZXJuZWwgZG9lcyBu
-b3Qgc2VlbSB0byBiZSBpbnN0YWxsZWQuCgoKQ291bGQgeW91IG1ha2Ugc3VyZSB0aGF0IHlvdXIg
-bGludXggaGVhZGVyIGZvciB0aGUgcnVubmluZyBrZXJuZWwgYXJlIAppbnN0YWxsZWQuCgo0LjQu
-MzAtdjcrIHNlZW1zIGxpa2UgYSBjdXN0b20ga2VybmVsIGluc3RhbGwuCgo+IHJvb3RAZWJlbGUt
-ZGVza3RvcDp+Iwo+Cj4KPgo+IE9uIFRodSwgTm92IDE3LCAyMDE2IGF0IDM6MDAgUE0sIEpvbmF0
-aGFuIFJham90dGUgCj4gPGpvbmF0aGFuLnIuanVsaWVuQGdtYWlsLmNvbSA8bWFpbHRvOmpvbmF0
-aGFuLnIuanVsaWVuQGdtYWlsLmNvbT4+IHdyb3RlOgo+Cj4gICAgIEhpLAo+Cj4gICAgIENvdWxk
-IHlvdSBiZSBhIGJpdCBtb3JlIHByZWNpc2UgcmVnYXJkaW5nIHdoaWNoIHBhcnQgb2YgdGhlCj4g
-ICAgIGRvY3VtZW50YXRpb24gZG9lcyBub3Qgd29yayA/Cj4KPiAgICAgSG93IGRpZCB5b3UgaW5z
-dGFsbCBpdCA/IERpc3RyaWJ1dGlvbiBwYWNrYWdlcyA/IEZyb20gc291cmNlcyA/Cj4gICAgIENy
-b3NzIGNvbXBpbGVkID8KPgo+ICAgICBXaGF0IGlzIHlvdXIgc2V0dXAgPyBSYXNwaWFuIGZvciB0
-aGUgUGkgPyBDdXN0b20ga2VybmVsIGltYWdlID8KPgo+ICAgICBDaGVlcnMKPgo+ICAgICBPbiBU
-aHUsIE5vdiAxNywgMjAxNiBhdCAyOjU0IFBNLCBOd2Fmb3IsIEViZWxlY2h1a3d1Cj4gICAgIDxl
-YmVsZWNodWt3dS5ud2Fmb3JAYmlzb24uaG93YXJkLmVkdQo+ICAgICA8bWFpbHRvOmViZWxlY2h1
-a3d1Lm53YWZvckBiaXNvbi5ob3dhcmQuZWR1Pj4gd3JvdGU6Cj4KPiAgICAgICAgIEhlbGxvLgo+
-Cj4gICAgICAgICBJIGFtIHRyeWluZyB0byBpbnN0YWxsIExUVE5HIHRyYWNpbmcgdG9vbCBvbiBy
-YXNwYmVycnkgcGkgYW5kCj4gICAgICAgICBiZWFnbGVib25lIGJsYWNrIGJvYXJkLlRoZSBvZmZp
-Y2lhbCBMVFRORyBkb2N1bWVudGF0aW9uIGRvZXMKPiAgICAgICAgIG5vdCB3b3JrIG9uIHRoZXNl
-IGRldmljZXMuIERvZXMgYW55b25lIGtub3cgb2YgYW55IHR1dG9yaWFsCj4gICAgICAgICB0aGF0
-IGNhbiBoZWxwIG1lIGFjY29tcGxpc2ggdGhpcz8gVGhhbmtzLgo+Cj4gICAgICAgICAtLSAKPiAg
-ICAgICAgIEViZWxlY2h1a3d1IE53YWZvciwKPiAgICAgICAgIEdyYWR1YXRlIFN0dWRlbnQsCj4g
-ICAgICAgICBIb3dhcmQgVW5pdmVyc2l0eS4KPgo+ICAgICAgICAgX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiAgICAgICAgIGx0dG5nLWRldiBtYWlsaW5n
-IGxpc3QKPiAgICAgICAgIGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcgPG1haWx0bzpsdHRuZy1k
-ZXZAbGlzdHMubHR0bmcub3JnPgo+ICAgICAgICAgaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
-LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+ICAgICAgICAgPGh0dHBzOi8vbGlzdHMu
-bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXY+Cj4KPgo+Cj4KPiAg
-ICAgLS0gCj4gICAgIEpvbmF0aGFuIFJham90dGUgSnVsaWVuCj4KPgo+Cj4KPiAtLSAKPiBFYmVs
-ZWNodWt3dSBOd2Fmb3IsCj4gR3JhZHVhdGUgU3R1ZGVudCwKPiBIb3dhcmQgVW5pdmVyc2l0eS4K
-Pgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBs
-dHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBz
-Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCi0t
-IApKb25hdGhhbiBSLiBKdWxpZW4KRWZmaWNpb3MKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
-dGluZm8vbHR0bmctZGV2Cg==
+--===============7466939609844669696==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_2377856_717577019.1479419234488"
+
+------=_Part_2377856_717577019.1479419234488
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Ah, so there's more than just the one way I suggested in my original query.=
+ Perfect! Thanks, Mathieu!
+
+      From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+ To: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>=20
+Cc: lttng-dev <lttng-dev@lists.lttng.org>; Michael Jeanson <mjeanson@effici=
+os.com>
+ Sent: Thursday, November 17, 2016 2:47 PM
+ Subject: Re: Removing timing overhead with tracepoint() <-- query dropped =
+by mailing list
+  =20
+#yiv8877469080 filtered {font-family:Calibri;panose-1:2 15 5 2 2 2 4 3 2 4;=
+}#yiv8877469080 filtered {font-family:Tahoma;panose-1:2 11 6 4 3 5 4 4 2 4;=
+}#yiv8877469080 filtered {font-family:Verdana;panose-1:2 11 6 4 3 5 4 4 2 4=
+;}#yiv8877469080 p.yiv8877469080MsoNormal, #yiv8877469080 li.yiv8877469080M=
+soNormal, #yiv8877469080 div.yiv8877469080MsoNormal {margin:0in;margin-bott=
+om:.0001pt;font-size:11.0pt;}#yiv8877469080 a:link, #yiv8877469080 span.yiv=
+8877469080MsoHyperlink {color:blue;text-decoration:underline;}#yiv887746908=
+0 a:visited, #yiv8877469080 span.yiv8877469080MsoHyperlinkFollowed {color:p=
+urple;text-decoration:underline;}#yiv8877469080 p.yiv8877469080MsoAcetate, =
+#yiv8877469080 li.yiv8877469080MsoAcetate, #yiv8877469080 div.yiv8877469080=
+MsoAcetate {margin:0in;margin-bottom:.0001pt;font-size:8.0pt;}#yiv887746908=
+0 span.yiv8877469080BalloonTextChar {}#yiv8877469080 span.yiv8877469080Emai=
+lStyle19 {color:windowtext;font-weight:normal;font-style:normal;text-decora=
+tion:none none;}#yiv8877469080 span.yiv8877469080EmailStyle20 {color:#1F497=
+D;font-weight:normal;font-style:normal;text-decoration:none none;}#yiv88774=
+69080 .yiv8877469080MsoChpDefault {font-size:10.0pt;}#yiv8877469080 filtere=
+d {margin:1.0in 1.0in 1.0in 1.0in;}#yiv8877469080 div.yiv8877469080WordSect=
+ion1 {}#yiv8877469080=20
+
+----- On Nov 17, 2016, at 12:21 PM, Mark E. Dawson, Jr. <medawsonjr@yahoo.c=
+om> wrote:
+
+Mathieu,
+My query appears to be getting dropped by the mailing list, forcing me to a=
+sk you directly which I understand is both inefficient and a nuisance. We m=
+et when I spoke (along with Christoph Lameter) at the Tracing Summit a coup=
+le years back.
+
+Hi Mark,
+
+Not sure why the mailing list would have dropped your email. Everything loo=
+ks fine in theadmin interface. Adding it in CC. (Michael, can you check if =
+lttng-dev has issues with emailsfrom yahoo domains ?)
+Anyway, my question is as follows:
+If I want to remove a ton of compiled-in calls to an "rdtsc-based" C timing=
+ function and make them all conditionally-enabled based on whether or not I=
+ enable a tracing session, I can do so by adding the aforementioned "rdtsc"=
+ call as one of the arguments to tracepoint() along with our defined provid=
+er and event name, correct?
+
+You can take a few approaches there:
+
+1) Use if (tracepoint_enabled()) { ..read tsc... do_tracepoint(...); }
+
+2) do this function call or static inline invocation as an argument of trac=
+epoint().
+
+3) do the function call/static inline invocation within the tracepoint prob=
+e provider
+=C2=A0=C2=A0=C2=A0=C2=A0 (TRACEPOINT_EVENT() code).
+
+Let me know if I somehow misunderstood the intent of your question.
+
+Thanks,
+
+Mathieu
+--=20
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
+
+  =20
+------=_Part_2377856_717577019.1479419234488
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head></head><body><div style=3D"color:#000; background-color:#fff; f=
+ont-family:HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, =
+sans-serif;font-size:16px"><div id=3D"yui_3_16_0_ym19_1_1479419026922_32398=
+"><span>Ah, so there's more than just the one way I suggested in my origina=
+l query. Perfect! Thanks, Mathieu!</span></div><div class=3D"qtdSeparateBR"=
+ id=3D"yui_3_16_0_ym19_1_1479419026922_32399"><br><br></div><div class=3D"y=
+ahoo_quoted" id=3D"yui_3_16_0_ym19_1_1479419026922_32438" style=3D"display:=
+ block;">  <div style=3D"font-family: HelveticaNeue, Helvetica Neue, Helvet=
+ica, Arial, Lucida Grande, sans-serif; font-size: 16px;" id=3D"yui_3_16_0_y=
+m19_1_1479419026922_32437"> <div style=3D"font-family: HelveticaNeue, Helve=
+tica Neue, Helvetica, Arial, Lucida Grande, sans-serif; font-size: 16px;" i=
+d=3D"yui_3_16_0_ym19_1_1479419026922_32436"> <div dir=3D"ltr" id=3D"yui_3_1=
+6_0_ym19_1_1479419026922_32435"> <font size=3D"2" face=3D"Arial" id=3D"yui_=
+3_16_0_ym19_1_1479419026922_32434"> <hr size=3D"1" id=3D"yui_3_16_0_ym19_1_=
+1479419026922_32433"> <b><span style=3D"font-weight:bold;">From:</span></b>=
+ Mathieu Desnoyers &lt;mathieu.desnoyers@efficios.com&gt;<br> <b><span styl=
+e=3D"font-weight: bold;">To:</span></b> "Mark E. Dawson, Jr." &lt;medawsonj=
+r@yahoo.com&gt; <br><b><span style=3D"font-weight: bold;">Cc:</span></b> lt=
+tng-dev &lt;lttng-dev@lists.lttng.org&gt;; Michael Jeanson &lt;mjeanson@eff=
+icios.com&gt;<br> <b><span style=3D"font-weight: bold;">Sent:</span></b> Th=
+ursday, November 17, 2016 2:47 PM<br> <b><span style=3D"font-weight: bold;"=
+>Subject:</span></b> Re: Removing timing overhead with tracepoint() &lt;-- =
+query dropped by mailing list<br> </font> </div> <div class=3D"y_msg_contai=
+ner" id=3D"yui_3_16_0_ym19_1_1479419026922_32439"><br><div id=3D"yiv8877469=
+080"><div id=3D"yui_3_16_0_ym19_1_1479419026922_32442"><div style=3D"font-f=
+amily:arial, helvetica, sans-serif;font-size:12pt;color:#000000;" id=3D"yui=
+_3_16_0_ym19_1_1479419026922_32441"><div><style>#yiv8877469080    filtered =
+ {font-family:Calibri;panose-1:2 15 5 2 2 2 4 3 2 4;}
+#yiv8877469080 filtered  {font-family:Tahoma;panose-1:2 11 6 4 3 5 4 4 2 4;=
+}
+#yiv8877469080 filtered  {font-family:Verdana;panose-1:2 11 6 4 3 5 4 4 2 4=
+;}
+
+#yiv8877469080  p.yiv8877469080MsoNormal, #yiv8877469080  li.yiv8877469080M=
+soNormal, #yiv8877469080  div.yiv8877469080MsoNormal
+=09{margin:0in;margin-bottom:.0001pt;font-size:11.0pt;}
+#yiv8877469080  a:link, #yiv8877469080  span.yiv8877469080MsoHyperlink
+=09{color:blue;text-decoration:underline;}
+#yiv8877469080  a:visited, #yiv8877469080  span.yiv8877469080MsoHyperlinkFo=
+llowed
+=09{color:purple;text-decoration:underline;}
+#yiv8877469080  p.yiv8877469080MsoAcetate, #yiv8877469080  li.yiv8877469080=
+MsoAcetate, #yiv8877469080  div.yiv8877469080MsoAcetate
+=09{margin:0in;margin-bottom:.0001pt;font-size:8.0pt;}
+#yiv8877469080  span.yiv8877469080BalloonTextChar
+=09{}
+#yiv8877469080  span.yiv8877469080EmailStyle19
+=09{color:windowtext;font-weight:normal;font-style:normal;text-decoration:n=
+one none;}
+#yiv8877469080  span.yiv8877469080EmailStyle20
+=09{color:#1F497D;font-weight:normal;font-style:normal;text-decoration:none=
+ none;}
+#yiv8877469080  .yiv8877469080MsoChpDefault
+=09{font-size:10.0pt;}
+#yiv8877469080 filtered  {margin:1.0in 1.0in 1.0in 1.0in;}
+#yiv8877469080  div.yiv8877469080WordSection1
+=09{}
+#yiv8877469080 </style></div><div id=3D"yui_3_16_0_ym19_1_1479419026922_324=
+40"><br clear=3D"none"></div><div id=3D"yui_3_16_0_ym19_1_1479419026922_324=
+43"><br clear=3D"none"></div><div id=3D"yui_3_16_0_ym19_1_1479419026922_324=
+44"><span id=3D"yiv8877469080zwchr">----- On Nov 17, 2016, at 12:21 PM, Mar=
+k E. Dawson, Jr. &lt;medawsonjr@yahoo.com&gt; wrote:<br clear=3D"none"></sp=
+an></div><div id=3D"yui_3_16_0_ym19_1_1479419026922_32447"><blockquote styl=
+e=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#=
+000;font-weight:normal;font-style:normal;text-decoration:none;font-family:H=
+elvetica, Arial, sans-serif;font-size:12pt;" id=3D"yui_3_16_0_ym19_1_147941=
+9026922_32446"><div style=3D"color:#000;background-color:#fff;font-family:H=
+elveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;f=
+ont-size:16px;" id=3D"yui_3_16_0_ym19_1_1479419026922_32445"><div id=3D"yiv=
+8877469080yui_3_16_0_ym19_1_1479402851121_60364"><span>Mathieu,</span></div=
+><div id=3D"yiv8877469080yui_3_16_0_ym19_1_1479402851121_60364"><span><br c=
+lear=3D"none"></span></div><div id=3D"yiv8877469080yui_3_16_0_ym19_1_147940=
+2851121_60364"><span id=3D"yiv8877469080yui_3_16_0_ym19_1_1479402851121_604=
+85">My query appears to be getting dropped by the mailing list, forcing me =
+to ask you directly which I understand is both inefficient and a nuisance. =
+We met when I spoke (along with Christoph Lameter) at the Tracing Summit a =
+couple years back.</span></div></div></blockquote><div id=3D"yui_3_16_0_ym1=
+9_1_1479419026922_32448"><br clear=3D"none"></div><div id=3D"yui_3_16_0_ym1=
+9_1_1479419026922_32450"><div id=3D"yui_3_16_0_ym19_1_1479419026922_32449">=
+Hi Mark,<br clear=3D"none"></div><div><br clear=3D"none"></div><div>Not sur=
+e why the mailing list would have dropped your email. Everything looks fine=
+ in the</div><div>admin interface. Adding it in CC. (Michael, can you check=
+ if lttng-dev has issues with emails</div><div>from yahoo domains ?)</div><=
+/div><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;pad=
+ding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decorati=
+on:none;font-family:Helvetica, Arial, sans-serif;font-size:12pt;"><div styl=
+e=3D"color:#000;background-color:#fff;font-family:HelveticaNeue, Helvetica =
+Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;"><div id=
+=3D"yiv8877469080yui_3_16_0_ym19_1_1479402851121_60364"><span>Anyway, my qu=
+estion is as follows:</span></div><div id=3D"yiv8877469080yui_3_16_0_ym19_1=
+_1479402851121_60364"><span><br clear=3D"none"></span></div><div dir=3D"ltr=
+" id=3D"yiv8877469080yui_3_16_0_ym19_1_1479402851121_60364">If I want to re=
+move a ton of compiled-in calls to an "rdtsc-based" C timing function and m=
+ake them all conditionally-enabled based on whether or not I enable a traci=
+ng session, I can do so by adding the aforementioned "rdtsc" call as one of=
+ the arguments to tracepoint() along with our defined provider and event na=
+me, correct?</div></div></blockquote><br clear=3D"none">You can take a few =
+approaches there:<br clear=3D"none"><div><br clear=3D"none"></div><div>1) U=
+se if (tracepoint_enabled()) { ..read tsc... do_tracepoint(...); }<br clear=
+=3D"none"></div><div><br clear=3D"none"></div><div>2) do this function call=
+ or static inline invocation as an argument of tracepoint().<br clear=3D"no=
+ne"></div><div><br clear=3D"none"></div><div>3) do the function call/static=
+ inline invocation within the tracepoint probe provider<br clear=3D"none"><=
+/div><div>&nbsp;&nbsp;&nbsp;&nbsp; (TRACEPOINT_EVENT() code).<br clear=3D"n=
+one"></div><div><br clear=3D"none"></div><div>Let me know if I somehow misu=
+nderstood the intent of your question.<br clear=3D"none"></div><div><br cle=
+ar=3D"none"></div><div>Thanks,<div class=3D"yiv8877469080yqt5390401818" id=
+=3D"yiv8877469080yqtfd52333"><br clear=3D"none"></div></div><div class=3D"y=
+iv8877469080yqt5390401818" id=3D"yiv8877469080yqtfd60045"><div><br clear=3D=
+"none"></div><div>Mathieu</div></div></div><div><br clear=3D"none"></div><d=
+iv>-- <br clear=3D"none"></div><div>Mathieu Desnoyers<br clear=3D"none">Eff=
+iciOS Inc.<br clear=3D"none">http://www.efficios.com</div></div></div></div=
+><br><br></div> </div> </div>  </div></div></body></html>
+------=_Part_2377856_717577019.1479419234488--
+
+--===============7466939609844669696==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============7466939609844669696==--
