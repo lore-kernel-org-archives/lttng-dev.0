@@ -1,16 +1,18 @@
-From: Evgeny Roubinchtein <zhenya1007@gmail.com>
-Subject: How do tracepoint macros interact with the optimizer?
-Date: Thu, 17 Nov 2016 10:34:59 -0500
-Message-ID: <CAGYXaSbnjG1Sh8bx5B2vcsAsfaOKo66yr6-Lt+saZPuuyAJDpg__4788.2690596909$1479397235$gmane$org@mail.gmail.com>
+From: "Swartz, Shane" <sswartz@ball.com>
+Subject: Re: LTTng and Red Hat / CentOS RealTime Kernels
+Date: Thu, 17 Nov 2016 16:09:33 +0000
+Message-ID: <9EF0E366B97A2444B715BD7861705886E2942E56__26427.8053459295$1479399006$gmane$org@EX2010-CO-06.AERO.BALL.com>
+References: <9EF0E366B97A2444B715BD7861705886E293EE69@EX2010-CO-06.AERO.BALL.com>
+ <162450272.4446.1479335231606.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0341290155373640308=="
+Content-Type: multipart/mixed; boundary="===============3510831412182549903=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yb0-x231.google.com (mail-yb0-x231.google.com
- [IPv6:2607:f8b0:4002:c09::231])
- by lists.lttng.org (Postfix) with ESMTPS id 3tKQFj5lS7zmWp
- for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 15:36:09 +0000 (UTC)
-Received: by mail-yb0-x231.google.com with SMTP id a184so60103663ybb.0
- for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 07:35:00 -0800 (PST)
+Received: from mx0a-0014fe01.pphosted.com (mx0b-0014fe01.pphosted.com
+ [208.86.201.212])
+ by lists.lttng.org (Postfix) with ESMTPS id 3tKR1s0t11zmZs
+ for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 16:10:56 +0000 (UTC)
+In-Reply-To: <162450272.4446.1479335231606.JavaMail.zimbra@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,85 +22,214 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Smith, Daniel W" <dwsmith@ball.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0341290155373640308==
-Content-Type: multipart/alternative; boundary=001a114d8accae2359054180ee6b
+--===============3510831412182549903==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_9EF0E366B97A2444B715BD7861705886E2942E56EX2010CO06AEROB_"
 
---001a114d8accae2359054180ee6b
-Content-Type: text/plain; charset=UTF-8
+--_000_9EF0E366B97A2444B715BD7861705886E2942E56EX2010CO06AEROB_
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"
 
-Dear LTTNG users and developers,
+TWF0aGlldSwNCg0KVGhhbmtzIGZvciB0aGUgcXVpY2sgcmVzcG9uc2UgdG8gdGhpcyBxdWVzdGlv
+bi4NCg0KQ2FuIHlvdSBwbGVhc2UgbGV0IG1lIGtub3cgd2hhdCDigJxDbOKAnSBpcy4NCg0KVGhh
+bmtzLg0KDQotU2hhbmUgU3dhcnR6DQoNCkZyb206IE1hdGhpZXUgRGVzbm95ZXJzIFttYWlsdG86
+bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tXQ0KU2VudDogV2VkbmVzZGF5LCBOb3ZlbWJl
+ciAxNiwgMjAxNiAzOjI3IFBNDQpUbzogU3dhcnR6LCBTaGFuZQ0KQ2M6IGx0dG5nLWRldjsgU21p
+dGgsIERhbmllbCBXDQpTdWJqZWN0OiBSZTogW2x0dG5nLWRldl0gTFRUbmcgYW5kIFJlZCBIYXQg
+LyBDZW50T1MgUmVhbFRpbWUgS2VybmVscw0KDQoNCi0tLS0tIE9uIE5vdiAxNSwgMjAxNiwgYXQg
+MTE6NTIgUE0sIFN3YXJ0eiwgU2hhbmUgPHNzd2FydHpAYmFsbC5jb208bWFpbHRvOnNzd2FydHpA
+YmFsbC5jb20+PiB3cm90ZToNCg0KSXMgaXQgcG9zc2libGUgdG8gbG9hZCB0aGUgTFRUbmcgdG9v
+bHMgd2l0aCBhIFJlZCBIYXQgb3IgQ2VudE9TIHZlcnNpb24gNyBSZWFsIFRpbWUga2VybmVsPyAg
+SWYgeWVzLCBjYW4gaXQgYmUgZG9uZSB1c2luZyB0aGUgRWZmaWNpT1MgTFRUbmcgcGFja2FnZXMg
+b3Igb25seSBieSBidWlsZGluZyB0aGUgcGFja2FnZXMgZnJvbSBzb3VyY2UgY29kZT8NCg0KVGhh
+bmtzLg0KSGkgU2hhbmUsDQoNClRoZSBMVFRuZyBrZXJuZWwgdHJhY2VyIHdvcmtzIHdpdGggYSBy
+YW5nZSBvZiBQcmVlbXB0LVJUIGtlcm5lbCB2ZXJzaW9ucy4NCkl0IGlzIHRlc3RlZCBpbiBDSSBv
+biB0aGUgUHJlZW1wdC1SVCBrZXJuZWwgYnJhbmNoZXMgY3VycmVudGx5IG1haW50YWluZWQNCmJ5
+IHByZWVtcHQtcnQgZGV2ZWxvcGVycy4gSG93ZXZlciwgaXQgZG9lcyBub3QgY3VycmVudGx5IGNv
+dmVyIHRoZQ0KMy44LjEzLXJ0MjcuMzQga2VybmVsIGxpc3RlZCBvbiB0aGUgUkhFTCBwYWdlLCBh
+bmQgdGhlIEVmZmljaU9TDQpwYWNrYWdlcyBmb3IgUkhFTCBkbyBub3QgY3VycmVudGx5IHRhcmdl
+dCB0aGVpciBQcmVlbXB0LVJUIGtlcm5lbC4NCg0KVGhhbmtzLA0KDQpNYXRoaWV1DQoNCg0KLS0N
+Ck1hdGhpZXUgRGVzbm95ZXJzDQpFZmZpY2lPUyBJbmMuDQpodHRwOi8vd3d3LmVmZmljaW9zLmNv
+bQ0KCgoKVGhpcyBtZXNzYWdlIGFuZCBhbnkgZW5jbG9zdXJlcyBhcmUgaW50ZW5kZWQgb25seSBm
+b3IgdGhlIGFkZHJlc3NlZS4gIFBsZWFzZSAKbm90aWZ5IHRoZSBzZW5kZXIgYnkgZW1haWwgaWYg
+eW91IGFyZSBub3QgdGhlIGludGVuZGVkIHJlY2lwaWVudC4gIElmIHlvdSBhcmUgCm5vdCB0aGUg
+aW50ZW5kZWQgcmVjaXBpZW50LCB5b3UgbWF5IG5vdCB1c2UsIGNvcHksIGRpc2Nsb3NlLCBvciBk
+aXN0cmlidXRlIHRoaXMgCm1lc3NhZ2Ugb3IgaXRzIGNvbnRlbnRzIG9yIGVuY2xvc3VyZXMgdG8g
+YW55IG90aGVyIHBlcnNvbiBhbmQgYW55IHN1Y2ggYWN0aW9ucyAKbWF5IGJlIHVubGF3ZnVsLiAg
+QmFsbCByZXNlcnZlcyB0aGUgcmlnaHQgdG8gbW9uaXRvciBhbmQgcmV2aWV3IGFsbCBtZXNzYWdl
+cyAKYW5kIGVuY2xvc3VyZXMgc2VudCB0byBvciBmcm9tIHRoaXMgZW1haWwgYWRkcmVzcy4K
 
-I would like to know how the tracepoint macro interacts with the compiler's
-code optimizer (I am specifically interested in GCC 4.9 if that makes a
-difference).
+--_000_9EF0E366B97A2444B715BD7861705886E2942E56EX2010CO06AEROB_
+Content-Transfer-Encoding: base64
+Content-Type: text/html; charset="utf-8"
 
-Suppose I add a tracepoint to the section of code that the optimizer would
-have eliminated, and then compile with optimization.  What happens?  Does
-the optimizer eliminate the statement(s) that the tracepoint macro expands
-to?  Or does the tracepoint macro do something to force the optimizer to
-keep the statement(s) in? (e.g., declare some variable volatile, or some
-moral equivalent).
+PGh0bWwgeG1sbnM6dj0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp2bWwiIHhtbG5zOm89InVy
+bjpzY2hlbWFzLW1pY3Jvc29mdC1jb206b2ZmaWNlOm9mZmljZSIgeG1sbnM6dz0idXJuOnNjaGVt
+YXMtbWljcm9zb2Z0LWNvbTpvZmZpY2U6d29yZCIgeG1sbnM6bT0iaHR0cDovL3NjaGVtYXMubWlj
+cm9zb2Z0LmNvbS9vZmZpY2UvMjAwNC8xMi9vbW1sIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv
+VFIvUkVDLWh0bWw0MCI+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIg
+Y29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxtZXRhIG5hbWU9IkdlbmVyYXRv
+ciIgY29udGVudD0iTWljcm9zb2Z0IFdvcmQgMTQgKGZpbHRlcmVkIG1lZGl1bSkiPg0KPHN0eWxl
+PjwhLS0NCi8qIEZvbnQgRGVmaW5pdGlvbnMgKi8NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1pbHk6
+Q2FsaWJyaTsNCglwYW5vc2UtMToyIDE1IDUgMiAyIDIgNCAzIDIgNDt9DQpAZm9udC1mYWNlDQoJ
+e2ZvbnQtZmFtaWx5OlRhaG9tYTsNCglwYW5vc2UtMToyIDExIDYgNCAzIDUgNCA0IDIgNDt9DQpA
+Zm9udC1mYWNlDQoJe2ZvbnQtZmFtaWx5OlZlcmRhbmE7DQoJcGFub3NlLTE6MiAxMSA2IDQgMyA1
+IDQgNCAyIDQ7fQ0KLyogU3R5bGUgRGVmaW5pdGlvbnMgKi8NCnAuTXNvTm9ybWFsLCBsaS5Nc29O
+b3JtYWwsIGRpdi5Nc29Ob3JtYWwNCgl7bWFyZ2luOjBpbjsNCgltYXJnaW4tYm90dG9tOi4wMDAx
+cHQ7DQoJZm9udC1zaXplOjExLjBwdDsNCglmb250LWZhbWlseToiQ2FsaWJyaSIsInNhbnMtc2Vy
+aWYiO30NCmE6bGluaywgc3Bhbi5Nc29IeXBlcmxpbmsNCgl7bXNvLXN0eWxlLXByaW9yaXR5Ojk5
+Ow0KCWNvbG9yOmJsdWU7DQoJdGV4dC1kZWNvcmF0aW9uOnVuZGVybGluZTt9DQphOnZpc2l0ZWQs
+IHNwYW4uTXNvSHlwZXJsaW5rRm9sbG93ZWQNCgl7bXNvLXN0eWxlLXByaW9yaXR5Ojk5Ow0KCWNv
+bG9yOnB1cnBsZTsNCgl0ZXh0LWRlY29yYXRpb246dW5kZXJsaW5lO30NCnAuTXNvQWNldGF0ZSwg
+bGkuTXNvQWNldGF0ZSwgZGl2Lk1zb0FjZXRhdGUNCgl7bXNvLXN0eWxlLXByaW9yaXR5Ojk5Ow0K
+CW1zby1zdHlsZS1saW5rOiJCYWxsb29uIFRleHQgQ2hhciI7DQoJbWFyZ2luOjBpbjsNCgltYXJn
+aW4tYm90dG9tOi4wMDAxcHQ7DQoJZm9udC1zaXplOjguMHB0Ow0KCWZvbnQtZmFtaWx5OiJUYWhv
+bWEiLCJzYW5zLXNlcmlmIjt9DQpzcGFuLkJhbGxvb25UZXh0Q2hhcg0KCXttc28tc3R5bGUtbmFt
+ZToiQmFsbG9vbiBUZXh0IENoYXIiOw0KCW1zby1zdHlsZS1wcmlvcml0eTo5OTsNCgltc28tc3R5
+bGUtbGluazoiQmFsbG9vbiBUZXh0IjsNCglmb250LWZhbWlseToiVGFob21hIiwic2Fucy1zZXJp
+ZiI7fQ0Kc3Bhbi5FbWFpbFN0eWxlMTkNCgl7bXNvLXN0eWxlLXR5cGU6cGVyc29uYWw7DQoJZm9u
+dC1mYW1pbHk6IlZlcmRhbmEiLCJzYW5zLXNlcmlmIjsNCgljb2xvcjp3aW5kb3d0ZXh0Ow0KCWZv
+bnQtd2VpZ2h0Om5vcm1hbDsNCglmb250LXN0eWxlOm5vcm1hbDsNCgl0ZXh0LWRlY29yYXRpb246
+bm9uZSBub25lO30NCnNwYW4uRW1haWxTdHlsZTIwDQoJe21zby1zdHlsZS10eXBlOnBlcnNvbmFs
+LXJlcGx5Ow0KCWZvbnQtZmFtaWx5OiJWZXJkYW5hIiwic2Fucy1zZXJpZiI7DQoJY29sb3I6IzFG
+NDk3RDsNCglmb250LXdlaWdodDpub3JtYWw7DQoJZm9udC1zdHlsZTpub3JtYWw7DQoJdGV4dC1k
+ZWNvcmF0aW9uOm5vbmUgbm9uZTt9DQouTXNvQ2hwRGVmYXVsdA0KCXttc28tc3R5bGUtdHlwZTpl
+eHBvcnQtb25seTsNCglmb250LXNpemU6MTAuMHB0O30NCkBwYWdlIFdvcmRTZWN0aW9uMQ0KCXtz
+aXplOjguNWluIDExLjBpbjsNCgltYXJnaW46MS4waW4gMS4waW4gMS4waW4gMS4waW47fQ0KZGl2
+LldvcmRTZWN0aW9uMQ0KCXtwYWdlOldvcmRTZWN0aW9uMTt9DQotLT48L3N0eWxlPjwhLS1baWYg
+Z3RlIG1zbyA5XT48eG1sPg0KPG86c2hhcGVkZWZhdWx0cyB2OmV4dD0iZWRpdCIgc3BpZG1heD0i
+MTAyNiIgLz4NCjwveG1sPjwhW2VuZGlmXS0tPjwhLS1baWYgZ3RlIG1zbyA5XT48eG1sPg0KPG86
+c2hhcGVsYXlvdXQgdjpleHQ9ImVkaXQiPg0KPG86aWRtYXAgdjpleHQ9ImVkaXQiIGRhdGE9IjEi
+IC8+DQo8L286c2hhcGVsYXlvdXQ+PC94bWw+PCFbZW5kaWZdLS0+DQo8L2hlYWQ+DQo8Ym9keSBs
+YW5nPSJFTi1VUyIgbGluaz0iYmx1ZSIgdmxpbms9InB1cnBsZSI+DQo8ZGl2IGNsYXNzPSJXb3Jk
+U2VjdGlvbjEiPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5
+OiZxdW90O1ZlcmRhbmEmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjojMUY0OTdE
+Ij5NYXRoaWV1LDxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxz
+cGFuIHN0eWxlPSJmb250LWZhbWlseTomcXVvdDtWZXJkYW5hJnF1b3Q7LCZxdW90O3NhbnMtc2Vy
+aWYmcXVvdDs7Y29sb3I6IzFGNDk3RCI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPHAg
+Y2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O1ZlcmRhbmEm
+cXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjojMUY0OTdEIj5UaGFua3MgZm9yIHRo
+ZSBxdWljayByZXNwb25zZSB0byB0aGlzIHF1ZXN0aW9uLjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4N
+CjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LWZhbWlseTomcXVvdDtWZXJk
+YW5hJnF1b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29sb3I6IzFGNDk3RCI+PG86cD4mbmJz
+cDs8L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZv
+bnQtZmFtaWx5OiZxdW90O1ZlcmRhbmEmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xv
+cjojMUY0OTdEIj5DYW4geW91IHBsZWFzZSBsZXQgbWUga25vdyB3aGF0IOKAnENs4oCdIGlzLjxv
+OnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJm
+b250LWZhbWlseTomcXVvdDtWZXJkYW5hJnF1b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29s
+b3I6IzFGNDk3RCI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05v
+cm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O1ZlcmRhbmEmcXVvdDssJnF1b3Q7
+c2Fucy1zZXJpZiZxdW90Oztjb2xvcjojMUY0OTdEIj5UaGFua3MuPG86cD48L286cD48L3NwYW4+
+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90
+O1ZlcmRhbmEmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjojMUY0OTdEIj48bzpw
+PiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHls
+ZT0iZm9udC1mYW1pbHk6JnF1b3Q7VmVyZGFuYSZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7
+O2NvbG9yOiMxRjQ5N0QiPi1TaGFuZSBTd2FydHo8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBj
+bGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1mYW1pbHk6JnF1b3Q7VmVyZGFuYSZx
+dW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOiMxRjQ5N0QiPjxvOnA+Jm5ic3A7PC9v
+OnA+PC9zcGFuPjwvcD4NCjxkaXY+DQo8ZGl2IHN0eWxlPSJib3JkZXI6bm9uZTtib3JkZXItdG9w
+OnNvbGlkICNCNUM0REYgMS4wcHQ7cGFkZGluZzozLjBwdCAwaW4gMGluIDBpbiI+DQo8cCBjbGFz
+cz0iTXNvTm9ybWFsIj48Yj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEwLjBwdDtmb250LWZhbWls
+eTomcXVvdDtUYWhvbWEmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90OyI+RnJvbTo8L3NwYW4+
+PC9iPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTAuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O1RhaG9t
+YSZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7Ij4gTWF0aGlldSBEZXNub3llcnMgW21haWx0
+bzptYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb21dDQo8YnI+DQo8Yj5TZW50OjwvYj4gV2Vk
+bmVzZGF5LCBOb3ZlbWJlciAxNiwgMjAxNiAzOjI3IFBNPGJyPg0KPGI+VG86PC9iPiBTd2FydHos
+IFNoYW5lPGJyPg0KPGI+Q2M6PC9iPiBsdHRuZy1kZXY7IFNtaXRoLCBEYW5pZWwgVzxicj4NCjxi
+PlN1YmplY3Q6PC9iPiBSZTogW2x0dG5nLWRldl0gTFRUbmcgYW5kIFJlZCBIYXQgLyBDZW50T1Mg
+UmVhbFRpbWUgS2VybmVsczxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPC9kaXY+DQo8
+cCBjbGFzcz0iTXNvTm9ybWFsIj48bzpwPiZuYnNwOzwvbzpwPjwvcD4NCjxkaXY+DQo8ZGl2Pg0K
+PHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1m
+YW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFj
+ayI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9
+Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1
+b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFjayI+LS0tLS0g
+T24gTm92IDE1LCAyMDE2LCBhdCAxMTo1MiBQTSwgU3dhcnR6LCBTaGFuZSAmbHQ7PGEgaHJlZj0i
+bWFpbHRvOnNzd2FydHpAYmFsbC5jb20iPnNzd2FydHpAYmFsbC5jb208L2E+Jmd0OyB3cm90ZTo8
+YnI+DQo8YnI+DQo8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8YmxvY2tx
+dW90ZSBzdHlsZT0iYm9yZGVyOm5vbmU7Ym9yZGVyLWxlZnQ6c29saWQgIzEwMTBGRiAxLjVwdDtw
+YWRkaW5nOjBpbiAwaW4gMGluIDQuMHB0O21hcmdpbi1sZWZ0OjMuNzVwdDttYXJnaW4tdG9wOjUu
+MHB0O21hcmdpbi1ib3R0b206NS4wcHQiPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5
+bGU9ImZvbnQtZmFtaWx5OiZxdW90O1ZlcmRhbmEmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90
+Oztjb2xvcjpibGFjayI+SXMgaXQgcG9zc2libGUgdG8gbG9hZCB0aGUgTFRUbmcgdG9vbHMgd2l0
+aCBhIFJlZCBIYXQgb3IgQ2VudE9TIHZlcnNpb24gNyBSZWFsIFRpbWUga2VybmVsPyZuYnNwOyBJ
+ZiB5ZXMsIGNhbiBpdCBiZSBkb25lIHVzaW5nIHRoZSBFZmZpY2lPUyBMVFRuZyBwYWNrYWdlcyBv
+ciBvbmx5IGJ5IGJ1aWxkaW5nIHRoZSBwYWNrYWdlcw0KIGZyb20gc291cmNlIGNvZGU/PC9zcGFu
+PjxzcGFuIHN0eWxlPSJjb2xvcjpibGFjayI+PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xh
+c3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O1ZlcmRhbmEmcXVv
+dDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFjayI+Jm5ic3A7PC9zcGFuPjxzcGFu
+IHN0eWxlPSJjb2xvcjpibGFjayI+PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1z
+b05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtZmFtaWx5OiZxdW90O1ZlcmRhbmEmcXVvdDssJnF1
+b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFjayI+VGhhbmtzLjwvc3Bhbj48c3BhbiBzdHls
+ZT0iY29sb3I6YmxhY2siPjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvYmxvY2txdW90ZT4NCjxk
+aXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZTox
+Mi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90
+Oztjb2xvcjpibGFjayI+SGkgU2hhbmUsPG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8
+ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7
+Zm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xv
+cjpibGFjayI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAg
+Y2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1p
+bHk6JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFjayI+
+VGhlIExUVG5nIGtlcm5lbCB0cmFjZXIgd29ya3Mgd2l0aCBhIHJhbmdlIG9mIFByZWVtcHQtUlQg
+a2VybmVsIHZlcnNpb25zLjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxw
+IGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFt
+aWx5OiZxdW90O0FyaWFsJnF1b3Q7LCZxdW90O3NhbnMtc2VyaWYmcXVvdDs7Y29sb3I6YmxhY2si
+Pkl0IGlzIHRlc3RlZCBpbiBDSSBvbiB0aGUgUHJlZW1wdC1SVCBrZXJuZWwgYnJhbmNoZXMgY3Vy
+cmVudGx5IG1haW50YWluZWQ8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8
+cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZh
+bWlseTomcXVvdDtBcmlhbCZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNr
+Ij5ieSBwcmVlbXB0LXJ0IGRldmVsb3BlcnMuIEhvd2V2ZXIsIGl0IGRvZXMgbm90IGN1cnJlbnRs
+eSBjb3ZlciB0aGU8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFz
+cz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTom
+cXVvdDtBcmlhbCZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj4zLjgu
+MTMtcnQyNy4zNCBrZXJuZWwgbGlzdGVkIG9uIHRoZSBSSEVMIHBhZ2UsIGFuZCB0aGUgRWZmaWNp
+T1M8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9y
+bWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlh
+bCZxdW90OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj5wYWNrYWdlcyBmb3Ig
+UkhFTCBkbyBub3QgY3VycmVudGx5IHRhcmdldCB0aGVpciBQcmVlbXB0LVJUIGtlcm5lbC48bzpw
+PjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48
+c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90
+OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj48bzpwPiZuYnNwOzwvbzpwPjwv
+c3Bhbj48L3A+DQo8L2Rpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250
+LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LCZxdW90O3NhbnMtc2Vy
+aWYmcXVvdDs7Y29sb3I6YmxhY2siPlRoYW5rcyw8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8ZGl2
+Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9u
+dC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpi
+bGFjayI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xh
+c3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6
+JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFjayI+TWF0
+aGlldTxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xh
+c3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6
+JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZxdW90Oztjb2xvcjpibGFjayI+PG86
+cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48
+c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90
+OywmcXVvdDtzYW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj48bzpwPiZuYnNwOzwvbzpwPjwv
+c3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHls
+ZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90OywmcXVvdDtz
+YW5zLXNlcmlmJnF1b3Q7O2NvbG9yOmJsYWNrIj4tLQ0KPG86cD48L286cD48L3NwYW4+PC9wPg0K
+PC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6
+ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssJnF1b3Q7c2Fucy1zZXJpZiZx
+dW90Oztjb2xvcjpibGFjayI+TWF0aGlldSBEZXNub3llcnM8YnI+DQpFZmZpY2lPUyBJbmMuPGJy
+Pg0KPGEgaHJlZj0iaHR0cDovL3d3dy5lZmZpY2lvcy5jb20iPmh0dHA6Ly93d3cuZWZmaWNpb3Mu
+Y29tPC9hPjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPC9kaXY+DQo8L2Rpdj4NCgo8
+RElWPgo8QlI+CjxCUj4KVGhpcyBtZXNzYWdlIGFuZCBhbnkgZW5jbG9zdXJlcyBhcmUgaW50ZW5k
+ZWQgb25seSBmb3IgdGhlIGFkZHJlc3NlZS4gIFBsZWFzZSA8QlI+Cm5vdGlmeSB0aGUgc2VuZGVy
+IGJ5IGVtYWlsIGlmIHlvdSBhcmUgbm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQuICBJZiB5b3Ug
+YXJlIDxCUj4Kbm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQsIHlvdSBtYXkgbm90IHVzZSwgY29w
+eSwgZGlzY2xvc2UsIG9yIGRpc3RyaWJ1dGUgdGhpcyA8QlI+Cm1lc3NhZ2Ugb3IgaXRzIGNvbnRl
+bnRzIG9yIGVuY2xvc3VyZXMgdG8gYW55IG90aGVyIHBlcnNvbiBhbmQgYW55IHN1Y2ggYWN0aW9u
+cyA8QlI+Cm1heSBiZSB1bmxhd2Z1bC4gIEJhbGwgcmVzZXJ2ZXMgdGhlIHJpZ2h0IHRvIG1vbml0
+b3IgYW5kIHJldmlldyBhbGwgbWVzc2FnZXMgPEJSPgphbmQgZW5jbG9zdXJlcyBzZW50IHRvIG9y
+IGZyb20gdGhpcyBlbWFpbCBhZGRyZXNzLjxCUj4KPC9ESVY+PC9ib2R5Pg0KPC9odG1sPg0K
 
-Now essentially the same question about local variables.  To make things
-simple, let's imagine that my tracepoint definition has a single variable
-declared inside TP_ARGS, i.e., something like:
-TRACEPOINT_EVENT (
-      my_provider,  my_trace_point
-      TP_ARGS (int, foo_arg),
-       TP_FIELDS( ctf_integer(int, foo, foo_arg)))
-Let's also imagine that, in my code, I have an automatic local variable,
-(let's call it `bar`) that would normally be "optimized out", and I add a
-tracepoint statement that references "bar", and compile with optimization.
-What happens?  Specifically, can it happen that the optimizer is now
-prevented from "optimizing out" `bar`, and is, e.g., forced to
-stack-allocated it (rather than keeping it in a register, or whatever other
-techniques it employs to "optimize it out").
+--_000_9EF0E366B97A2444B715BD7861705886E2942E56EX2010CO06AEROB_--
 
-Please Cc me on replies as I am not subscribed to the list.
-
-Thank you in advance!
-
--- 
-Best,
-Zhenya
-
---001a114d8accae2359054180ee6b
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Dear LTTNG users and developers,<div><br></div><div>I woul=
-d like to know how the tracepoint macro interacts with the compiler&#39;s c=
-ode optimizer (I am specifically interested in GCC 4.9 if that makes a diff=
-erence). =C2=A0</div><div><br></div><div>Suppose I add a tracepoint to the =
-section of code that the optimizer would have eliminated, and then compile =
-with optimization.=C2=A0 What happens?=C2=A0 Does the optimizer eliminate t=
-he statement(s) that the tracepoint macro expands to?=C2=A0 Or does the tra=
-cepoint macro do something to force the optimizer to keep the statement(s) =
-in? (e.g., declare some variable volatile, or some moral equivalent).</div>=
-<div><br></div><div>Now essentially the same question about local variables=
-.=C2=A0 To make things simple, let&#39;s imagine that my tracepoint definit=
-ion has a single variable declared inside TP_ARGS, i.e., something like:</d=
-iv><div>TRACEPOINT_EVENT (<br></div><div>=C2=A0 =C2=A0 =C2=A0 my_provider, =
-=C2=A0my_trace_point</div><div>=C2=A0 =C2=A0 =C2=A0 TP_ARGS (int, foo_arg),=
-</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0TP_FIELDS( ctf_integer(int, foo, foo_=
-arg)))</div><div>Let&#39;s also imagine that, in my code, I have an automat=
-ic local variable, (let&#39;s call it `bar`) that would normally be &quot;o=
-ptimized out&quot;, and I add a tracepoint statement that references &quot;=
-bar&quot;, and compile with optimization.=C2=A0 What happens?=C2=A0 Specifi=
-cally, can it happen that the optimizer is now prevented from &quot;optimiz=
-ing out&quot; `bar`, and is, e.g., forced to stack-allocated it (rather tha=
-n keeping it in a register, or whatever other techniques it employs to &quo=
-t;optimize it out&quot;).</div><div><br></div><div>Please Cc me on replies =
-as I am not subscribed to the list.</div><div><br></div><div>Thank you in a=
-dvance!</div><div><br></div><div>--=C2=A0</div><div>Best,</div><div>Zhenya<=
-/div></div>
-
---001a114d8accae2359054180ee6b--
-
---===============0341290155373640308==
+--===============3510831412182549903==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -108,4 +239,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============0341290155373640308==--
+--===============3510831412182549903==--
