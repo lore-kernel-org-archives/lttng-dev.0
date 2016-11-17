@@ -1,19 +1,36 @@
-From: "Nwafor, Ebelechukwu" <ebelechukwu.nwafor@bison.howard.edu>
+From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
 Subject: Re: Installing LTTNG on beaglebone black or rasberry pi
-Date: Thu, 17 Nov 2016 16:24:29 -0500
-Message-ID: <CAAuy2AQmRSC4Zg59gALTstfL+gBRTLynfAv0u6vhmgu-TumNpw__48754.7112898484$1479417883$gmane$org@mail.gmail.com>
+Date: Thu, 17 Nov 2016 16:45:46 -0500
+Message-ID: <d0ef0af1-4c57-34bc-7764-fcf86764773f__2649.57542899555$1479419158$gmane$org@efficios.com>
 References: <CAAuy2ATLED2dopcqdjF4+Xpy7wA+OLeTwOvYma+BRkWR9xPKRg@mail.gmail.com>
  <CAF4oYfGS5Vf5CrS3XVFxDQkdrs=wtoNCNw5qOpf_G6_TDBLBsg@mail.gmail.com>
+ <CAAuy2AQmRSC4Zg59gALTstfL+gBRTLynfAv0u6vhmgu-TumNpw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8008758487675099225=="
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yb0-x235.google.com (mail-yb0-x235.google.com
- [IPv6:2607:f8b0:4002:c09::235])
- by lists.lttng.org (Postfix) with ESMTPS id 3tKZ105qkRzmvJ
- for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 21:25:40 +0000 (UTC)
-Received: by mail-yb0-x235.google.com with SMTP id d128so74813207ybh.2
- for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 13:24:30 -0800 (PST)
-In-Reply-To: <CAF4oYfGS5Vf5CrS3XVFxDQkdrs=wtoNCNw5qOpf_G6_TDBLBsg@mail.gmail.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3tKZTZ3MTYzd60
+ for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 21:46:58 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id EBCC43402B8
+ for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 21:46:47 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+ with ESMTP id 84R6td7K3PBp for <lttng-dev@lists.lttng.org>;
+ Thu, 17 Nov 2016 21:46:47 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 3C0953402D6
+ for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 21:46:47 +0000 (UTC)
+Received: from mail.efficios.com ([127.0.0.1])
+ by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+ with ESMTP id eReVXv_zriOg for <lttng-dev@lists.lttng.org>;
+ Thu, 17 Nov 2016 21:46:47 +0000 (UTC)
+Received: from [172.16.0.165] (cable-192.222.218.157.electronicbox.net
+ [192.222.218.157])
+ by mail.efficios.com (Postfix) with ESMTPSA id 1F2583402B8
+ for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 21:46:47 +0000 (UTC)
+In-Reply-To: <CAAuy2AQmRSC4Zg59gALTstfL+gBRTLynfAv0u6vhmgu-TumNpw@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,193 +40,85 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte <jonathan.r.julien@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============8008758487675099225==
-Content-Type: multipart/alternative; boundary=94eb2c035c50a02226054185d00d
-
---94eb2c035c50a02226054185d00d
-Content-Type: text/plain; charset=UTF-8
-
-Hi Jonathan. Thank you for your response.
-
-On the beaglebone black, i tried building lttng-tools, lttng-modules-dkms
-and lttng-ust-dev from source v2.8.1 by following the documentation.
-lttng-modules-dkms runs fine but the module does not show up on the list of
-running modules when i issue an lsmod command. Also, i run into errors
-while trying to build and compile lttng-tools. Beaglebone black runs on
-debian. Linux beaglebone 3.8.13-bone70 #1 SMP Fri Jan 23 02:15:42 UTC 2015
-armv7l GNU/Linux
-
-
-On the raspberry pi, I use the commands, apt-get install lttng-modules-dkms
-lttng-tools lttng-ust-dev. Everything seems to work fine with the exception
-of lttng-modules-dkms which does not show up on the list on running
-modules. Also, every time i try to view available kernel events, it comes
-up with an error saying unable to list kernel events: kernel tracer not
-available. The LTTNG version installed using apt-get is 2.7.1. I am running
-ubuntu mate OS. Below are the output while installing lttng-modules-dkms
-
-
-root@ebele-desktop:~# apt-get install lttng-modules-dkms
-Reading package lists... Done
-Building dependency tree
-Reading state information... Done
-lttng-modules-dkms is already the newest version (2.7.1-1).
-0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.
-2 not fully installed or removed.
-After this operation, 0 B of additional disk space will be used.
-Do you want to continue? [Y/n] Y
-Setting up linux-headers-4.4.0-22 (4.4.0-22.40) ...
-Setting up lttng-modules-dkms (2.7.1-1) ...
-Loading new lttng-modules-2.7.1 DKMS files...
-First Installation: checking all kernels...
-dpkg: warning: version '*-*' has bad syntax: version number does not start
-with digit
-It is likely that 4.4.30-v7+ belongs to a chroot's host
-Module build for the currently running kernel was skipped since the
-kernel source for this kernel does not seem to be installed.
-root@ebele-desktop:~#
-
-
-
-On Thu, Nov 17, 2016 at 3:00 PM, Jonathan Rajotte <
-jonathan.r.julien@gmail.com> wrote:
-
-> Hi,
->
-> Could you be a bit more precise regarding which part of the documentation
-> does not work ?
->
-> How did you install it ? Distribution packages ? From sources ? Cross
-> compiled ?
->
-> What is your setup ? Raspian for the Pi ? Custom kernel image ?
->
-> Cheers
->
-> On Thu, Nov 17, 2016 at 2:54 PM, Nwafor, Ebelechukwu <
-> ebelechukwu.nwafor@bison.howard.edu> wrote:
->
->> Hello.
->>
->> I am trying to install LTTNG tracing tool on raspberry pi and beaglebone
->> black board.The official LTTNG documentation does not work on these
->> devices. Does anyone know of any tutorial that can help me accomplish this?
->> Thanks.
->>
->> --
->> Ebelechukwu Nwafor,
->> Graduate Student,
->> Howard University.
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
->>
->
->
-> --
-> Jonathan Rajotte Julien
->
->
-
-
--- 
-Ebelechukwu Nwafor,
-Graduate Student,
-Howard University.
-
---94eb2c035c50a02226054185d00d
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi Jonathan. Thank you for your response.</div><div><=
-br></div>On the beaglebone black, i tried building lttng-tools, lttng-modul=
-es-dkms and lttng-ust-dev from source v2.8.1 by following the documentation=
-. lttng-modules-dkms runs fine but the module does not show up on the list =
-of running modules when i issue an lsmod command. Also, i run into errors w=
-hile trying to build and compile lttng-tools. Beaglebone black runs on debi=
-an. Linux beaglebone 3.8.13-bone70 #1 SMP Fri Jan 23 02:15:42 UTC 2015 armv=
-7l GNU/Linux<br><br><br><div>On the raspberry pi, I use the commands, apt-g=
-et install lttng-modules-dkms lttng-tools lttng-ust-dev. Everything seems t=
-o work fine with the exception of lttng-modules-dkms which does not show up=
- on the list on running modules. Also, every time i try to view available k=
-ernel events, it comes up with an error saying unable to list kernel events=
-: kernel tracer not available. The LTTNG version installed using apt-get is=
- 2.7.1. I am running ubuntu mate OS. Below are the output while installing =
-lttng-modules-dkms</div><div><br></div><div><br></div><div>root@ebele-deskt=
-op:~# apt-get install lttng-modules-dkms=C2=A0<br>Reading package lists... =
-Done<br>Building dependency tree=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0<=
-br>Reading state information... Done<br>lttng-modules-dkms is already the n=
-ewest version (2.7.1-1).<br>0 upgraded, 0 newly installed, 0 to remove and =
-14 not upgraded.<br>2 not fully installed or removed.<br>After this operati=
-on, 0 B of additional disk space will be used.<br>Do you want to continue? =
-[Y/n] Y<br>Setting up linux-headers-4.4.0-22 (4.4.0-22.40) ...<br>Setting u=
-p lttng-modules-dkms (2.7.1-1) ...<br>Loading new lttng-modules-2.7.1 DKMS =
-files...<br>First Installation: checking all kernels...<br>dpkg: warning: v=
-ersion &#39;*-*&#39; has bad syntax: version number does not start with dig=
-it<br>It is likely that 4.4.30-v7+ belongs to a chroot&#39;s host<br>Module=
- build for the currently running kernel was skipped since the<br>kernel sou=
-rce for this kernel does not seem to be installed.<br>root@ebele-desktop:~#=
-=C2=A0<br></div><div><br></div><div><br></div></div><div class=3D"gmail_ext=
-ra"><br><div class=3D"gmail_quote">On Thu, Nov 17, 2016 at 3:00 PM, Jonatha=
-n Rajotte <span dir=3D"ltr">&lt;<a href=3D"mailto:jonathan.r.julien@gmail.c=
-om" target=3D"_blank">jonathan.r.julien@gmail.com</a>&gt;</span> wrote:<br>=
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
-x #ccc solid;padding-left:1ex"><div dir=3D"ltr">Hi,<div><br></div><div>Coul=
-d you be a bit more precise regarding which part of the documentation does =
-not work ?</div><div><br></div><div>How did you install it ? Distribution p=
-ackages ? From sources ? Cross compiled ?</div><div><br></div><div>What is =
-your setup ? Raspian for the Pi ? Custom kernel image ?=C2=A0</div><div><br=
-></div><div>Cheers</div></div><div class=3D"gmail_extra"><br><div class=3D"=
-gmail_quote"><div><div class=3D"h5">On Thu, Nov 17, 2016 at 2:54 PM, Nwafor=
-, Ebelechukwu <span dir=3D"ltr">&lt;<a href=3D"mailto:ebelechukwu.nwafor@bi=
-son.howard.edu" target=3D"_blank">ebelechukwu.nwafor@bison.<wbr>howard.edu<=
-/a>&gt;</span> wrote:<br></div></div><blockquote class=3D"gmail_quote" styl=
-e=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div><d=
-iv class=3D"h5"><div dir=3D"ltr"><div>Hello.</div><div><br></div>I am tryin=
-g to install LTTNG tracing tool on raspberry pi and beaglebone black board.=
-The official LTTNG documentation does not work on these devices. Does anyon=
-e know of any tutorial that can help me accomplish this? Thanks.<span class=
-=3D"m_-3084267195904687416HOEnZb"><font color=3D"#888888"><br clear=3D"all"=
-><div><br></div>-- <br><div class=3D"m_-3084267195904687416m_-7757085018109=
-737659gmail_signature"><div dir=3D"ltr">Ebelechukwu Nwafor,<div>Graduate St=
-udent,</div><div>Howard University.</div></div></div>
-</font></span></div>
-<br></div></div>______________________________<wbr>_________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
-<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bi<wbr>n/mail=
-man/listinfo/lttng-dev</a><br>
-<br></blockquote></div><span class=3D"HOEnZb"><font color=3D"#888888"><br><=
-br clear=3D"all"><div><br></div>-- <br><div class=3D"m_-3084267195904687416=
-gmail_signature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div><=
-div dir=3D"ltr">Jonathan Rajotte Julien<div><br></div></div></div></div></d=
-iv>
-</font></span></div>
-</blockquote></div><br><br clear=3D"all"><div><br></div>-- <br><div class=
-=3D"gmail_signature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr">Eb=
-elechukwu Nwafor,<div>Graduate Student,</div><div>Howard University.</div><=
-/div></div>
-</div>
-
---94eb2c035c50a02226054185d00d--
-
---===============8008758487675099225==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============8008758487675099225==--
+SGksCgoKT24gMjAxNi0xMS0xNyAwNDoyNCBQTSwgTndhZm9yLCBFYmVsZWNodWt3dSB3cm90ZToK
+PiBIaSBKb25hdGhhbi4gVGhhbmsgeW91IGZvciB5b3VyIHJlc3BvbnNlLgo+Cj4gT24gdGhlIGJl
+YWdsZWJvbmUgYmxhY2ssIGkgdHJpZWQgYnVpbGRpbmcgbHR0bmctdG9vbHMsIAo+IGx0dG5nLW1v
+ZHVsZXMtZGttcyBhbmQgbHR0bmctdXN0LWRldiBmcm9tIHNvdXJjZSB2Mi44LjEgYnkgZm9sbG93
+aW5nIAo+IHRoZSBkb2N1bWVudGF0aW9uLiBsdHRuZy1tb2R1bGVzLWRrbXMgcnVucyBmaW5lIGJ1
+dCB0aGUgbW9kdWxlIGRvZXMgCj4gbm90IHNob3cgdXAgb24gdGhlIGxpc3Qgb2YgcnVubmluZyBt
+b2R1bGVzIHdoZW4gaSBpc3N1ZSBhbiBsc21vZCAKPiBjb21tYW5kLiBBbHNvLCBpIHJ1biBpbnRv
+IGVycm9ycyB3aGlsZSB0cnlpbmcgdG8gYnVpbGQgYW5kIGNvbXBpbGUgCj4gbHR0bmctdG9vbHMu
+IEJlYWdsZWJvbmUgYmxhY2sgcnVucyBvbiBkZWJpYW4uIExpbnV4IGJlYWdsZWJvbmUgCj4gMy44
+LjEzLWJvbmU3MCAjMSBTTVAgRnJpIEphbiAyMyAwMjoxNTo0MiBVVEMgMjAxNSBhcm12N2wgR05V
+L0xpbnV4CgpXaGF0IGVycm9ycyBkbyB5b3Ugc2VlIHdoZW4gYnVpbGRpbmcgbHR0bmctdG9vbHM/
+Cgo+Cj4KPiBPbiB0aGUgcmFzcGJlcnJ5IHBpLCBJIHVzZSB0aGUgY29tbWFuZHMsIGFwdC1nZXQg
+aW5zdGFsbCAKPiBsdHRuZy1tb2R1bGVzLWRrbXMgbHR0bmctdG9vbHMgbHR0bmctdXN0LWRldi4g
+RXZlcnl0aGluZyBzZWVtcyB0byB3b3JrIAo+IGZpbmUgd2l0aCB0aGUgZXhjZXB0aW9uIG9mIGx0
+dG5nLW1vZHVsZXMtZGttcyB3aGljaCBkb2VzIG5vdCBzaG93IHVwIAo+IG9uIHRoZSBsaXN0IG9u
+IHJ1bm5pbmcgbW9kdWxlcy4gQWxzbywgZXZlcnkgdGltZSBpIHRyeSB0byB2aWV3IAo+IGF2YWls
+YWJsZSBrZXJuZWwgZXZlbnRzLCBpdCBjb21lcyB1cCB3aXRoIGFuIGVycm9yIHNheWluZyB1bmFi
+bGUgdG8gCj4gbGlzdCBrZXJuZWwgZXZlbnRzOiBrZXJuZWwgdHJhY2VyIG5vdCBhdmFpbGFibGUu
+IFRoZSBMVFRORyB2ZXJzaW9uIAo+IGluc3RhbGxlZCB1c2luZyBhcHQtZ2V0IGlzIDIuNy4xLiBJ
+IGFtIHJ1bm5pbmcgdWJ1bnR1IG1hdGUgT1MuIEJlbG93IAo+IGFyZSB0aGUgb3V0cHV0IHdoaWxl
+IGluc3RhbGxpbmcgbHR0bmctbW9kdWxlcy1ka21zCgpXZWxsIGFzIHRoZSBlcnJvciBwb2ludHMg
+b3V0IGRvIHlvdSBoYXZlIHRoZSBrZXJuZWwgdHJhY2VyIHN0YXJ0ZWQ/CgpwcyAtYXV4IHwgZ3Jl
+cCBsdHRuZy1zZXNzaW9uZAoKRG9lcyB0aGUgdXNlciB0cnlpbmcgdG8gdXNlIGx0dG5nIGlzIHBh
+cnQgb2YgdGhlIHRyYWNpbmcgZ3JvdXAgb3IgaXMgcm9vdCA/CgpZb3UgY2FuIHN0YXJ0IGx0dG5n
+LXNlc3Npb25kIHdpdGggdGhlIC12dnYgb3B0aW9ucyBtYWtlIHN1cmUgdG8gYmUgcm9vdCAKd2hl
+biBkb2luZyBzbyBsdHRuZy1zZXNzaW9uZCBsb2FkIHRoZSB0cmFjaW5nIG1vZHVsZXMuCgpTaW5j
+ZSB5b3UgaW5zdGFsbGVkIGl0IGZyb20gYXB0LWdldCB0aGUgbHR0bmctdG9vbHMgcGFja2FnZSBw
+cm92aWRlIGEgCmRhZW1vbiBmb3IgbHR0bmctc2Vzc2lvbmQgc28gYmVmb3JlIHRlc3RpbmcgbWFu
+dWFsbHk6CgpzZXJ2aWNlIGx0dG5nLXNlc3Npb25kIHN0b3AKCj4KPgo+IHJvb3RAZWJlbGUtZGVz
+a3RvcDp+IyBhcHQtZ2V0IGluc3RhbGwgbHR0bmctbW9kdWxlcy1ka21zCj4gUmVhZGluZyBwYWNr
+YWdlIGxpc3RzLi4uIERvbmUKPiBCdWlsZGluZyBkZXBlbmRlbmN5IHRyZWUKPiBSZWFkaW5nIHN0
+YXRlIGluZm9ybWF0aW9uLi4uIERvbmUKPiBsdHRuZy1tb2R1bGVzLWRrbXMgaXMgYWxyZWFkeSB0
+aGUgbmV3ZXN0IHZlcnNpb24gKDIuNy4xLTEpLgo+IDAgdXBncmFkZWQsIDAgbmV3bHkgaW5zdGFs
+bGVkLCAwIHRvIHJlbW92ZSBhbmQgMTQgbm90IHVwZ3JhZGVkLgo+IDIgbm90IGZ1bGx5IGluc3Rh
+bGxlZCBvciByZW1vdmVkLgo+IEFmdGVyIHRoaXMgb3BlcmF0aW9uLCAwIEIgb2YgYWRkaXRpb25h
+bCBkaXNrIHNwYWNlIHdpbGwgYmUgdXNlZC4KPiBEbyB5b3Ugd2FudCB0byBjb250aW51ZT8gW1kv
+bl0gWQo+IFNldHRpbmcgdXAgbGludXgtaGVhZGVycy00LjQuMC0yMiAoNC40LjAtMjIuNDApIC4u
+Lgo+IFNldHRpbmcgdXAgbHR0bmctbW9kdWxlcy1ka21zICgyLjcuMS0xKSAuLi4KPiBMb2FkaW5n
+IG5ldyBsdHRuZy1tb2R1bGVzLTIuNy4xIERLTVMgZmlsZXMuLi4KPiBGaXJzdCBJbnN0YWxsYXRp
+b246IGNoZWNraW5nIGFsbCBrZXJuZWxzLi4uCj4gZHBrZzogd2FybmluZzogdmVyc2lvbiAnKi0q
+JyBoYXMgYmFkIHN5bnRheDogdmVyc2lvbiBudW1iZXIgZG9lcyBub3QgCj4gc3RhcnQgd2l0aCBk
+aWdpdAo+IEl0IGlzIGxpa2VseSB0aGF0IDQuNC4zMC12NysgYmVsb25ncyB0byBhIGNocm9vdCdz
+IGhvc3QKPiBNb2R1bGUgYnVpbGQgZm9yIHRoZSBjdXJyZW50bHkgcnVubmluZyBrZXJuZWwgd2Fz
+IHNraXBwZWQgc2luY2UgdGhlCj4ga2VybmVsIHNvdXJjZSBmb3IgdGhpcyBrZXJuZWwgZG9lcyBu
+b3Qgc2VlbSB0byBiZSBpbnN0YWxsZWQuCgoKQ291bGQgeW91IG1ha2Ugc3VyZSB0aGF0IHlvdXIg
+bGludXggaGVhZGVyIGZvciB0aGUgcnVubmluZyBrZXJuZWwgYXJlIAppbnN0YWxsZWQuCgo0LjQu
+MzAtdjcrIHNlZW1zIGxpa2UgYSBjdXN0b20ga2VybmVsIGluc3RhbGwuCgo+IHJvb3RAZWJlbGUt
+ZGVza3RvcDp+Iwo+Cj4KPgo+IE9uIFRodSwgTm92IDE3LCAyMDE2IGF0IDM6MDAgUE0sIEpvbmF0
+aGFuIFJham90dGUgCj4gPGpvbmF0aGFuLnIuanVsaWVuQGdtYWlsLmNvbSA8bWFpbHRvOmpvbmF0
+aGFuLnIuanVsaWVuQGdtYWlsLmNvbT4+IHdyb3RlOgo+Cj4gICAgIEhpLAo+Cj4gICAgIENvdWxk
+IHlvdSBiZSBhIGJpdCBtb3JlIHByZWNpc2UgcmVnYXJkaW5nIHdoaWNoIHBhcnQgb2YgdGhlCj4g
+ICAgIGRvY3VtZW50YXRpb24gZG9lcyBub3Qgd29yayA/Cj4KPiAgICAgSG93IGRpZCB5b3UgaW5z
+dGFsbCBpdCA/IERpc3RyaWJ1dGlvbiBwYWNrYWdlcyA/IEZyb20gc291cmNlcyA/Cj4gICAgIENy
+b3NzIGNvbXBpbGVkID8KPgo+ICAgICBXaGF0IGlzIHlvdXIgc2V0dXAgPyBSYXNwaWFuIGZvciB0
+aGUgUGkgPyBDdXN0b20ga2VybmVsIGltYWdlID8KPgo+ICAgICBDaGVlcnMKPgo+ICAgICBPbiBU
+aHUsIE5vdiAxNywgMjAxNiBhdCAyOjU0IFBNLCBOd2Fmb3IsIEViZWxlY2h1a3d1Cj4gICAgIDxl
+YmVsZWNodWt3dS5ud2Fmb3JAYmlzb24uaG93YXJkLmVkdQo+ICAgICA8bWFpbHRvOmViZWxlY2h1
+a3d1Lm53YWZvckBiaXNvbi5ob3dhcmQuZWR1Pj4gd3JvdGU6Cj4KPiAgICAgICAgIEhlbGxvLgo+
+Cj4gICAgICAgICBJIGFtIHRyeWluZyB0byBpbnN0YWxsIExUVE5HIHRyYWNpbmcgdG9vbCBvbiBy
+YXNwYmVycnkgcGkgYW5kCj4gICAgICAgICBiZWFnbGVib25lIGJsYWNrIGJvYXJkLlRoZSBvZmZp
+Y2lhbCBMVFRORyBkb2N1bWVudGF0aW9uIGRvZXMKPiAgICAgICAgIG5vdCB3b3JrIG9uIHRoZXNl
+IGRldmljZXMuIERvZXMgYW55b25lIGtub3cgb2YgYW55IHR1dG9yaWFsCj4gICAgICAgICB0aGF0
+IGNhbiBoZWxwIG1lIGFjY29tcGxpc2ggdGhpcz8gVGhhbmtzLgo+Cj4gICAgICAgICAtLSAKPiAg
+ICAgICAgIEViZWxlY2h1a3d1IE53YWZvciwKPiAgICAgICAgIEdyYWR1YXRlIFN0dWRlbnQsCj4g
+ICAgICAgICBIb3dhcmQgVW5pdmVyc2l0eS4KPgo+ICAgICAgICAgX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiAgICAgICAgIGx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKPiAgICAgICAgIGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcgPG1haWx0bzpsdHRuZy1k
+ZXZAbGlzdHMubHR0bmcub3JnPgo+ICAgICAgICAgaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
+LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+ICAgICAgICAgPGh0dHBzOi8vbGlzdHMu
+bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXY+Cj4KPgo+Cj4KPiAg
+ICAgLS0gCj4gICAgIEpvbmF0aGFuIFJham90dGUgSnVsaWVuCj4KPgo+Cj4KPiAtLSAKPiBFYmVs
+ZWNodWt3dSBOd2Fmb3IsCj4gR3JhZHVhdGUgU3R1ZGVudCwKPiBIb3dhcmQgVW5pdmVyc2l0eS4K
+Pgo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBs
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBz
+Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCi0t
+IApKb25hdGhhbiBSLiBKdWxpZW4KRWZmaWNpb3MKCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2Cg==
