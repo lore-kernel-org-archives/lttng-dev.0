@@ -1,15 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: LTTng and Red Hat / CentOS RealTime Kernels
-Date: Wed, 16 Nov 2016 22:27:11 +0000 (UTC)
-Message-ID: <162450272.4446.1479335231606.JavaMail.zimbra__40997.6602918052$1479335193$gmane$org@efficios.com>
-References: <9EF0E366B97A2444B715BD7861705886E293EE69@EX2010-CO-06.AERO.BALL.com>
+From: Evgeny Roubinchtein <zhenya1007@gmail.com>
+Subject: How do tracepoint macros interact with the optimizer?
+Date: Thu, 17 Nov 2016 10:34:59 -0500
+Message-ID: <CAGYXaSbnjG1Sh8bx5B2vcsAsfaOKo66yr6-Lt+saZPuuyAJDpg__4788.2690596909$1479397235$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6042767758709637107=="
+Content-Type: multipart/mixed; boundary="===============0341290155373640308=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3tJzQm6VtlzlwY
- for <lttng-dev@lists.lttng.org>; Wed, 16 Nov 2016 22:27:28 +0000 (UTC)
-In-Reply-To: <9EF0E366B97A2444B715BD7861705886E293EE69@EX2010-CO-06.AERO.BALL.com>
+Received: from mail-yb0-x231.google.com (mail-yb0-x231.google.com
+ [IPv6:2607:f8b0:4002:c09::231])
+ by lists.lttng.org (Postfix) with ESMTPS id 3tKQFj5lS7zmWp
+ for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 15:36:09 +0000 (UTC)
+Received: by mail-yb0-x231.google.com with SMTP id a184so60103663ybb.0
+ for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 07:35:00 -0800 (PST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,127 +20,85 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "Swartz, Shane" <sswartz@ball.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Daniel W Smith <dwsmith@ball.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============6042767758709637107==
-Content-Type: multipart/alternative;
-	boundary="=_79dcaf89-ac58-4813-be5a-ad4d2af63fc2"
+--===============0341290155373640308==
+Content-Type: multipart/alternative; boundary=001a114d8accae2359054180ee6b
 
---=_79dcaf89-ac58-4813-be5a-ad4d2af63fc2
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+--001a114d8accae2359054180ee6b
+Content-Type: text/plain; charset=UTF-8
 
------ On Nov 15, 2016, at 11:52 PM, Swartz, Shane <sswartz@ball.com> wrote: 
+Dear LTTNG users and developers,
 
-> Is it possible to load the LTTng tools with a Red Hat or CentOS version 7 Real
-> Time kernel? If yes, can it be done using the EfficiOS LTTng packages or only
-> by building the packages from source code?
+I would like to know how the tracepoint macro interacts with the compiler's
+code optimizer (I am specifically interested in GCC 4.9 if that makes a
+difference).
 
-> Thanks.
+Suppose I add a tracepoint to the section of code that the optimizer would
+have eliminated, and then compile with optimization.  What happens?  Does
+the optimizer eliminate the statement(s) that the tracepoint macro expands
+to?  Or does the tracepoint macro do something to force the optimizer to
+keep the statement(s) in? (e.g., declare some variable volatile, or some
+moral equivalent).
 
-Hi Shane, 
+Now essentially the same question about local variables.  To make things
+simple, let's imagine that my tracepoint definition has a single variable
+declared inside TP_ARGS, i.e., something like:
+TRACEPOINT_EVENT (
+      my_provider,  my_trace_point
+      TP_ARGS (int, foo_arg),
+       TP_FIELDS( ctf_integer(int, foo, foo_arg)))
+Let's also imagine that, in my code, I have an automatic local variable,
+(let's call it `bar`) that would normally be "optimized out", and I add a
+tracepoint statement that references "bar", and compile with optimization.
+What happens?  Specifically, can it happen that the optimizer is now
+prevented from "optimizing out" `bar`, and is, e.g., forced to
+stack-allocated it (rather than keeping it in a register, or whatever other
+techniques it employs to "optimize it out").
 
-The LTTng kernel tracer works with a range of Preempt-RT kernel versions. 
-It is tested in CI on the Preempt-RT kernel branches currently maintained 
-by preempt-rt developers. However, it does not currently cover the 
-3.8.13-rt27.34 kernel listed on the RHEL page, and the EfficiOS 
-packages for RHEL do not currently target their Preempt-RT kernel. 
+Please Cc me on replies as I am not subscribed to the list.
 
-Thanks, 
-
-Mathieu 
+Thank you in advance!
 
 -- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
+Best,
+Zhenya
 
---=_79dcaf89-ac58-4813-be5a-ad4d2af63fc2
-Content-Type: text/html; charset=utf-8
+--001a114d8accae2359054180ee6b
+Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><style><!--
+<div dir=3D"ltr">Dear LTTNG users and developers,<div><br></div><div>I woul=
+d like to know how the tracepoint macro interacts with the compiler&#39;s c=
+ode optimizer (I am specifically interested in GCC 4.9 if that makes a diff=
+erence). =C2=A0</div><div><br></div><div>Suppose I add a tracepoint to the =
+section of code that the optimizer would have eliminated, and then compile =
+with optimization.=C2=A0 What happens?=C2=A0 Does the optimizer eliminate t=
+he statement(s) that the tracepoint macro expands to?=C2=A0 Or does the tra=
+cepoint macro do something to force the optimizer to keep the statement(s) =
+in? (e.g., declare some variable volatile, or some moral equivalent).</div>=
+<div><br></div><div>Now essentially the same question about local variables=
+.=C2=A0 To make things simple, let&#39;s imagine that my tracepoint definit=
+ion has a single variable declared inside TP_ARGS, i.e., something like:</d=
+iv><div>TRACEPOINT_EVENT (<br></div><div>=C2=A0 =C2=A0 =C2=A0 my_provider, =
+=C2=A0my_trace_point</div><div>=C2=A0 =C2=A0 =C2=A0 TP_ARGS (int, foo_arg),=
+</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0TP_FIELDS( ctf_integer(int, foo, foo_=
+arg)))</div><div>Let&#39;s also imagine that, in my code, I have an automat=
+ic local variable, (let&#39;s call it `bar`) that would normally be &quot;o=
+ptimized out&quot;, and I add a tracepoint statement that references &quot;=
+bar&quot;, and compile with optimization.=C2=A0 What happens?=C2=A0 Specifi=
+cally, can it happen that the optimizer is now prevented from &quot;optimiz=
+ing out&quot; `bar`, and is, e.g., forced to stack-allocated it (rather tha=
+n keeping it in a register, or whatever other techniques it employs to &quo=
+t;optimize it out&quot;).</div><div><br></div><div>Please Cc me on replies =
+as I am not subscribed to the list.</div><div><br></div><div>Thank you in a=
+dvance!</div><div><br></div><div>--=C2=A0</div><div>Best,</div><div>Zhenya<=
+/div></div>
 
-@font-face
-=09{font-family:Calibri;
-=09panose-1:2 15 5 2 2 2 4 3 2 4;}
-@font-face
-=09{font-family:Tahoma;
-=09panose-1:2 11 6 4 3 5 4 4 2 4;}
-@font-face
-=09{font-family:Verdana;
-=09panose-1:2 11 6 4 3 5 4 4 2 4;}
+--001a114d8accae2359054180ee6b--
 
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-=09{margin:0in;
-=09margin-bottom:.0001pt;
-=09font-size:11.0pt;
-=09font-family:"Calibri","sans-serif";}
-a:link, span.MsoHyperlink
-=09{mso-style-priority:99;
-=09color:blue;
-=09text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-=09{mso-style-priority:99;
-=09color:purple;
-=09text-decoration:underline;}
-p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
-=09{mso-style-priority:99;
-=09mso-style-link:"Balloon Text Char";
-=09margin:0in;
-=09margin-bottom:.0001pt;
-=09font-size:8.0pt;
-=09font-family:"Tahoma","sans-serif";}
-span.EmailStyle17
-=09{mso-style-type:personal-compose;
-=09font-family:"Verdana","sans-serif";
-=09color:windowtext;
-=09font-weight:normal;
-=09font-style:normal;
-=09text-decoration:none none;}
-span.BalloonTextChar
-=09{mso-style-name:"Balloon Text Char";
-=09mso-style-priority:99;
-=09mso-style-link:"Balloon Text";
-=09font-family:"Tahoma","sans-serif";}
-.MsoChpDefault
-=09{mso-style-type:export-only;
-=09font-family:"Calibri","sans-serif";}
-@page WordSection1
-=09{size:8.5in 11.0in;
-=09margin:1.0in 1.0in 1.0in 1.0in;}
-div.WordSection1
-=09{page:WordSection1;}
---></style></div><div><br></div><div><span id=3D"zwchr" data-marker=3D"__DI=
-VIDER__">----- On Nov 15, 2016, at 11:52 PM, Swartz, Shane &lt;sswartz@ball=
-.com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><block=
-quote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5=
-px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;fon=
-t-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div class=3D"WordSect=
-ion1"><p class=3D"MsoNormal"><span style=3D"font-family:&quot;Verdana&quot;=
-,&quot;sans-serif&quot;">Is it possible to load the LTTng tools with a Red =
-Hat or CentOS version 7 Real Time kernel?&nbsp; If yes, can it be done usin=
-g the EfficiOS LTTng packages or only by building the packages from
- source code?</span></p><p class=3D"MsoNormal"><span style=3D"font-family:&=
-quot;Verdana&quot;,&quot;sans-serif&quot;">&nbsp;</span></p><p class=3D"Mso=
-Normal"><span style=3D"font-family:&quot;Verdana&quot;,&quot;sans-serif&quo=
-t;">Thanks.</span></p></div></blockquote><div><div>Hi Shane,<br></div><div>=
-<br></div><div>The LTTng kernel tracer works with a range of Preempt-RT ker=
-nel versions.</div><div>It is tested in CI on the Preempt-RT kernel branche=
-s currently maintained</div><div>by preempt-rt developers. However, it does=
- not currently cover the</div><div>3.8.13-rt27.34 kernel listed on the RHEL=
- page, and the EfficiOS<br></div><div>packages for RHEL do not currently ta=
-rget their Preempt-RT kernel.<br data-mce-bogus=3D"1"></div><div><br data-m=
-ce-bogus=3D"1"></div>Thanks,<div><br></div><div>Mathieu</div></div><div><br=
- data-mce-bogus=3D"1"></div><br data-mce-bogus=3D"1"></div><div data-marker=
-=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>h=
-ttp://www.efficios.com</div></div></body></html>
---=_79dcaf89-ac58-4813-be5a-ad4d2af63fc2--
-
---===============6042767758709637107==
+--===============0341290155373640308==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -149,4 +108,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============6042767758709637107==--
+--===============0341290155373640308==--
