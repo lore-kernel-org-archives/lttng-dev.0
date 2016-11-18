@@ -1,23 +1,21 @@
-From: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
-Subject: Re: Removing timing overhead with tracepoint() <--
- query dropped by mailing list
-Date: Thu, 17 Nov 2016 21:47:14 +0000 (UTC)
-Message-ID: <1022607049.2377857.1479419234491__30652.9919886545$1479419442$gmane$org@mail.yahoo.com>
-References: <9EF0E366B97A2444B715BD7861705886E293EE69@EX2010-CO-06.AERO.BALL.com>
- <162450272.4446.1479335231606.JavaMail.zimbra@efficios.com>
- <9EF0E366B97A2444B715BD7861705886E2942E56@EX2010-CO-06.AERO.BALL.com>
- <1321420326.5617.1479399119390.JavaMail.zimbra@efficios.com>
- <1484074426.2165170.1479403261514@mail.yahoo.com>
- <1384678026.6657.1479415650848.JavaMail.zimbra@efficios.com>
-Reply-To: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
+From: "Nwafor, Ebelechukwu" <ebelechukwu.nwafor@bison.howard.edu>
+Subject: Re: Installing LTTNG on beaglebone black or rasberry pi
+Date: Thu, 17 Nov 2016 19:24:45 -0500
+Message-ID: <CAAuy2AR_efNuciOO46HPiN+dvSOg6RWvpghptgp_QdBwYow80Q__10767.9476532669$1479428701$gmane$org@mail.gmail.com>
+References: <CAAuy2ATLED2dopcqdjF4+Xpy7wA+OLeTwOvYma+BRkWR9xPKRg@mail.gmail.com>
+ <CAF4oYfGS5Vf5CrS3XVFxDQkdrs=wtoNCNw5qOpf_G6_TDBLBsg@mail.gmail.com>
+ <CAAuy2AQmRSC4Zg59gALTstfL+gBRTLynfAv0u6vhmgu-TumNpw@mail.gmail.com>
+ <d0ef0af1-4c57-34bc-7764-fcf86764773f@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7466939609844669696=="
+Content-Type: multipart/mixed; boundary="===============9060113560005173341=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from nm12-vm0.bullet.mail.bf1.yahoo.com
- (nm12-vm0.bullet.mail.bf1.yahoo.com [98.139.213.140])
- by lists.lttng.org (Postfix) with ESMTPS id 3tKZZy6d02zd7D
- for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 21:51:38 +0000 (UTC)
-In-Reply-To: <1384678026.6657.1479415650848.JavaMail.zimbra@efficios.com>
+Received: from mail-yw0-x242.google.com (mail-yw0-x242.google.com
+ [IPv6:2607:f8b0:4002:c05::242])
+ by lists.lttng.org (Postfix) with ESMTPS id 3tKf111fmBzdMc
+ for <lttng-dev@lists.lttng.org>; Fri, 18 Nov 2016 00:25:56 +0000 (UTC)
+Received: by mail-yw0-x242.google.com with SMTP id r204so18572970ywb.3
+ for <lttng-dev@lists.lttng.org>; Thu, 17 Nov 2016 16:24:47 -0800 (PST)
+In-Reply-To: <d0ef0af1-4c57-34bc-7764-fcf86764773f@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,211 +25,372 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============7466939609844669696==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_2377856_717577019.1479419234488"
+--===============9060113560005173341==
+Content-Type: multipart/alternative; boundary=001a1142605c5185320541885552
 
-------=_Part_2377856_717577019.1479419234488
+--001a1142605c5185320541885552
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
 
-Ah, so there's more than just the one way I suggested in my original query.=
- Perfect! Thanks, Mathieu!
+Thanks Jonathan for you helpful response. I was able to install the
+specific linux-headers and it seems to install all of the modules. Now i've
+hit another roadblock. whenever i try to list all of the kernel events
+using lttng list -k, it throws an error: unable to list kernel events:
+Kernel tracer is not available. I have two lttng-sessiond running.
 
-      From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
- To: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>=20
-Cc: lttng-dev <lttng-dev@lists.lttng.org>; Michael Jeanson <mjeanson@effici=
-os.com>
- Sent: Thursday, November 17, 2016 2:47 PM
- Subject: Re: Removing timing overhead with tracepoint() <-- query dropped =
-by mailing list
-  =20
-#yiv8877469080 filtered {font-family:Calibri;panose-1:2 15 5 2 2 2 4 3 2 4;=
-}#yiv8877469080 filtered {font-family:Tahoma;panose-1:2 11 6 4 3 5 4 4 2 4;=
-}#yiv8877469080 filtered {font-family:Verdana;panose-1:2 11 6 4 3 5 4 4 2 4=
-;}#yiv8877469080 p.yiv8877469080MsoNormal, #yiv8877469080 li.yiv8877469080M=
-soNormal, #yiv8877469080 div.yiv8877469080MsoNormal {margin:0in;margin-bott=
-om:.0001pt;font-size:11.0pt;}#yiv8877469080 a:link, #yiv8877469080 span.yiv=
-8877469080MsoHyperlink {color:blue;text-decoration:underline;}#yiv887746908=
-0 a:visited, #yiv8877469080 span.yiv8877469080MsoHyperlinkFollowed {color:p=
-urple;text-decoration:underline;}#yiv8877469080 p.yiv8877469080MsoAcetate, =
-#yiv8877469080 li.yiv8877469080MsoAcetate, #yiv8877469080 div.yiv8877469080=
-MsoAcetate {margin:0in;margin-bottom:.0001pt;font-size:8.0pt;}#yiv887746908=
-0 span.yiv8877469080BalloonTextChar {}#yiv8877469080 span.yiv8877469080Emai=
-lStyle19 {color:windowtext;font-weight:normal;font-style:normal;text-decora=
-tion:none none;}#yiv8877469080 span.yiv8877469080EmailStyle20 {color:#1F497=
-D;font-weight:normal;font-style:normal;text-decoration:none none;}#yiv88774=
-69080 .yiv8877469080MsoChpDefault {font-size:10.0pt;}#yiv8877469080 filtere=
-d {margin:1.0in 1.0in 1.0in 1.0in;}#yiv8877469080 div.yiv8877469080WordSect=
-ion1 {}#yiv8877469080=20
+On Thu, Nov 17, 2016 at 4:45 PM, Jonathan Rajotte Julien <
+Jonathan.rajotte-julien@efficios.com> wrote:
 
------ On Nov 17, 2016, at 12:21 PM, Mark E. Dawson, Jr. <medawsonjr@yahoo.c=
-om> wrote:
+> Hi,
+>
+>
+> On 2016-11-17 04:24 PM, Nwafor, Ebelechukwu wrote:
+>
+>> Hi Jonathan. Thank you for your response.
+>>
+>> On the beaglebone black, i tried building lttng-tools, lttng-modules-dkms
+>> and lttng-ust-dev from source v2.8.1 by following the documentation.
+>> lttng-modules-dkms runs fine but the module does not show up on the list of
+>> running modules when i issue an lsmod command. Also, i run into errors
+>> while trying to build and compile lttng-tools. Beaglebone black runs on
+>> debian. Linux beaglebone 3.8.13-bone70 #1 SMP Fri Jan 23 02:15:42 UTC 2015
+>> armv7l GNU/Linux
+>>
+>
+> What errors do you see when building lttng-tools?
+>
+>
+>>
+>> On the raspberry pi, I use the commands, apt-get install
+>> lttng-modules-dkms lttng-tools lttng-ust-dev. Everything seems to work fine
+>> with the exception of lttng-modules-dkms which does not show up on the list
+>> on running modules. Also, every time i try to view available kernel events,
+>> it comes up with an error saying unable to list kernel events: kernel
+>> tracer not available. The LTTNG version installed using apt-get is 2.7.1. I
+>> am running ubuntu mate OS. Below are the output while installing
+>> lttng-modules-dkms
+>>
+>
+> Well as the error points out do you have the kernel tracer started?
+>
+> ps -aux | grep lttng-sessiond
+>
+> Does the user trying to use lttng is part of the tracing group or is root ?
+>
+> You can start lttng-sessiond with the -vvv options make sure to be root
+> when doing so lttng-sessiond load the tracing modules.
+>
+> Since you installed it from apt-get the lttng-tools package provide a
+> daemon for lttng-sessiond so before testing manually:
+>
+> service lttng-sessiond stop
+>
+>
+>>
+>> root@ebele-desktop:~# apt-get install lttng-modules-dkms
+>> Reading package lists... Done
+>> Building dependency tree
+>> Reading state information... Done
+>> lttng-modules-dkms is already the newest version (2.7.1-1).
+>> 0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.
+>> 2 not fully installed or removed.
+>> After this operation, 0 B of additional disk space will be used.
+>> Do you want to continue? [Y/n] Y
+>> Setting up linux-headers-4.4.0-22 (4.4.0-22.40) ...
+>> Setting up lttng-modules-dkms (2.7.1-1) ...
+>> Loading new lttng-modules-2.7.1 DKMS files...
+>> First Installation: checking all kernels...
+>> dpkg: warning: version '*-*' has bad syntax: version number does not
+>> start with digit
+>> It is likely that 4.4.30-v7+ belongs to a chroot's host
+>> Module build for the currently running kernel was skipped since the
+>> kernel source for this kernel does not seem to be installed.
+>>
+>
+>
+> Could you make sure that your linux header for the running kernel are
+> installed.
+>
+> 4.4.30-v7+ seems like a custom kernel install.
+>
+> root@ebele-desktop:~#
+>>
+>>
+>>
+>> On Thu, Nov 17, 2016 at 3:00 PM, Jonathan Rajotte <
+>> jonathan.r.julien@gmail.com <mailto:jonathan.r.julien@gmail.com>> wrote:
+>>
+>>     Hi,
+>>
+>>     Could you be a bit more precise regarding which part of the
+>>     documentation does not work ?
+>>
+>>     How did you install it ? Distribution packages ? From sources ?
+>>     Cross compiled ?
+>>
+>>     What is your setup ? Raspian for the Pi ? Custom kernel image ?
+>>
+>>     Cheers
+>>
+>>     On Thu, Nov 17, 2016 at 2:54 PM, Nwafor, Ebelechukwu
+>>     <ebelechukwu.nwafor@bison.howard.edu
+>>     <mailto:ebelechukwu.nwafor@bison.howard.edu>> wrote:
+>>
+>>         Hello.
+>>
+>>         I am trying to install LTTNG tracing tool on raspberry pi and
+>>         beaglebone black board.The official LTTNG documentation does
+>>         not work on these devices. Does anyone know of any tutorial
+>>         that can help me accomplish this? Thanks.
+>>
+>>         --         Ebelechukwu Nwafor,
+>>         Graduate Student,
+>>         Howard University.
+>>
+>>         _______________________________________________
+>>         lttng-dev mailing list
+>>         lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>
+>>         https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>         <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>
+>>
+>>
+>>
+>>
+>>     --     Jonathan Rajotte Julien
+>>
+>>
+>>
+>>
+>> --
+>> Ebelechukwu Nwafor,
+>> Graduate Student,
+>> Howard University.
+>>
+>>
+>> _______________________________________________
+>> lttng-dev mailing list
+>> lttng-dev@lists.lttng.org
+>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>
+>
+> --
+> Jonathan R. Julien
+> Efficios
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
 
-Mathieu,
-My query appears to be getting dropped by the mailing list, forcing me to a=
-sk you directly which I understand is both inefficient and a nuisance. We m=
-et when I spoke (along with Christoph Lameter) at the Tracing Summit a coup=
-le years back.
 
-Hi Mark,
 
-Not sure why the mailing list would have dropped your email. Everything loo=
-ks fine in theadmin interface. Adding it in CC. (Michael, can you check if =
-lttng-dev has issues with emailsfrom yahoo domains ?)
-Anyway, my question is as follows:
-If I want to remove a ton of compiled-in calls to an "rdtsc-based" C timing=
- function and make them all conditionally-enabled based on whether or not I=
- enable a tracing session, I can do so by adding the aforementioned "rdtsc"=
- call as one of the arguments to tracepoint() along with our defined provid=
-er and event name, correct?
+-- 
+Ebelechukwu Nwafor,
+Graduate Student,
+Howard University.
 
-You can take a few approaches there:
-
-1) Use if (tracepoint_enabled()) { ..read tsc... do_tracepoint(...); }
-
-2) do this function call or static inline invocation as an argument of trac=
-epoint().
-
-3) do the function call/static inline invocation within the tracepoint prob=
-e provider
-=C2=A0=C2=A0=C2=A0=C2=A0 (TRACEPOINT_EVENT() code).
-
-Let me know if I somehow misunderstood the intent of your question.
-
-Thanks,
-
-Mathieu
---=20
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
-
-  =20
-------=_Part_2377856_717577019.1479419234488
+--001a1142605c5185320541885552
 Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-<html><head></head><body><div style=3D"color:#000; background-color:#fff; f=
-ont-family:HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, =
-sans-serif;font-size:16px"><div id=3D"yui_3_16_0_ym19_1_1479419026922_32398=
-"><span>Ah, so there's more than just the one way I suggested in my origina=
-l query. Perfect! Thanks, Mathieu!</span></div><div class=3D"qtdSeparateBR"=
- id=3D"yui_3_16_0_ym19_1_1479419026922_32399"><br><br></div><div class=3D"y=
-ahoo_quoted" id=3D"yui_3_16_0_ym19_1_1479419026922_32438" style=3D"display:=
- block;">  <div style=3D"font-family: HelveticaNeue, Helvetica Neue, Helvet=
-ica, Arial, Lucida Grande, sans-serif; font-size: 16px;" id=3D"yui_3_16_0_y=
-m19_1_1479419026922_32437"> <div style=3D"font-family: HelveticaNeue, Helve=
-tica Neue, Helvetica, Arial, Lucida Grande, sans-serif; font-size: 16px;" i=
-d=3D"yui_3_16_0_ym19_1_1479419026922_32436"> <div dir=3D"ltr" id=3D"yui_3_1=
-6_0_ym19_1_1479419026922_32435"> <font size=3D"2" face=3D"Arial" id=3D"yui_=
-3_16_0_ym19_1_1479419026922_32434"> <hr size=3D"1" id=3D"yui_3_16_0_ym19_1_=
-1479419026922_32433"> <b><span style=3D"font-weight:bold;">From:</span></b>=
- Mathieu Desnoyers &lt;mathieu.desnoyers@efficios.com&gt;<br> <b><span styl=
-e=3D"font-weight: bold;">To:</span></b> "Mark E. Dawson, Jr." &lt;medawsonj=
-r@yahoo.com&gt; <br><b><span style=3D"font-weight: bold;">Cc:</span></b> lt=
-tng-dev &lt;lttng-dev@lists.lttng.org&gt;; Michael Jeanson &lt;mjeanson@eff=
-icios.com&gt;<br> <b><span style=3D"font-weight: bold;">Sent:</span></b> Th=
-ursday, November 17, 2016 2:47 PM<br> <b><span style=3D"font-weight: bold;"=
->Subject:</span></b> Re: Removing timing overhead with tracepoint() &lt;-- =
-query dropped by mailing list<br> </font> </div> <div class=3D"y_msg_contai=
-ner" id=3D"yui_3_16_0_ym19_1_1479419026922_32439"><br><div id=3D"yiv8877469=
-080"><div id=3D"yui_3_16_0_ym19_1_1479419026922_32442"><div style=3D"font-f=
-amily:arial, helvetica, sans-serif;font-size:12pt;color:#000000;" id=3D"yui=
-_3_16_0_ym19_1_1479419026922_32441"><div><style>#yiv8877469080    filtered =
- {font-family:Calibri;panose-1:2 15 5 2 2 2 4 3 2 4;}
-#yiv8877469080 filtered  {font-family:Tahoma;panose-1:2 11 6 4 3 5 4 4 2 4;=
-}
-#yiv8877469080 filtered  {font-family:Verdana;panose-1:2 11 6 4 3 5 4 4 2 4=
-;}
+<div dir=3D"ltr">Thanks Jonathan for you helpful response. I was able to in=
+stall the specific linux-headers and it seems to install all of the modules=
+. Now i&#39;ve hit another roadblock. whenever i try to list all of the ker=
+nel events using lttng list -k, it throws an error: unable to list kernel e=
+vents: Kernel tracer is not available. I have two lttng-sessiond running.=
+=C2=A0</div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Th=
+u, Nov 17, 2016 at 4:45 PM, Jonathan Rajotte Julien <span dir=3D"ltr">&lt;<=
+a href=3D"mailto:Jonathan.rajotte-julien@efficios.com" target=3D"_blank">Jo=
+nathan.rajotte-julien@efficios.com</a>&gt;</span> wrote:<br><blockquote cla=
+ss=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;pa=
+dding-left:1ex">Hi,<span class=3D""><br>
+<br>
+<br>
+On 2016-11-17 04:24 PM, Nwafor, Ebelechukwu wrote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+Hi Jonathan. Thank you for your response.<br>
+<br>
+On the beaglebone black, i tried building lttng-tools, lttng-modules-dkms a=
+nd lttng-ust-dev from source v2.8.1 by following the documentation. lttng-m=
+odules-dkms runs fine but the module does not show up on the list of runnin=
+g modules when i issue an lsmod command. Also, i run into errors while tryi=
+ng to build and compile lttng-tools. Beaglebone black runs on debian. Linux=
+ beaglebone 3.8.13-bone70 #1 SMP Fri Jan 23 02:15:42 UTC 2015 armv7l GNU/Li=
+nux<br>
+</blockquote>
+<br></span>
+What errors do you see when building lttng-tools?<span class=3D""><br>
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+<br>
+<br>
+On the raspberry pi, I use the commands, apt-get install lttng-modules-dkms=
+ lttng-tools lttng-ust-dev. Everything seems to work fine with the exceptio=
+n of lttng-modules-dkms which does not show up on the list on running modul=
+es. Also, every time i try to view available kernel events, it comes up wit=
+h an error saying unable to list kernel events: kernel tracer not available=
+. The LTTNG version installed using apt-get is 2.7.1. I am running ubuntu m=
+ate OS. Below are the output while installing lttng-modules-dkms<br>
+</blockquote>
+<br></span>
+Well as the error points out do you have the kernel tracer started?<br>
+<br>
+ps -aux | grep lttng-sessiond<br>
+<br>
+Does the user trying to use lttng is part of the tracing group or is root ?=
+<br>
+<br>
+You can start lttng-sessiond with the -vvv options make sure to be root whe=
+n doing so lttng-sessiond load the tracing modules.<br>
+<br>
+Since you installed it from apt-get the lttng-tools package provide a daemo=
+n for lttng-sessiond so before testing manually:<br>
+<br>
+service lttng-sessiond stop<span class=3D""><br>
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+<br>
+<br>
+root@ebele-desktop:~# apt-get install lttng-modules-dkms<br>
+Reading package lists... Done<br>
+Building dependency tree<br>
+Reading state information... Done<br>
+lttng-modules-dkms is already the newest version (2.7.1-1).<br>
+0 upgraded, 0 newly installed, 0 to remove and 14 not upgraded.<br>
+2 not fully installed or removed.<br>
+After this operation, 0 B of additional disk space will be used.<br>
+Do you want to continue? [Y/n] Y<br>
+Setting up linux-headers-4.4.0-22 (4.4.0-22.40) ...<br>
+Setting up lttng-modules-dkms (2.7.1-1) ...<br>
+Loading new lttng-modules-2.7.1 DKMS files...<br>
+First Installation: checking all kernels...<br>
+dpkg: warning: version &#39;*-*&#39; has bad syntax: version number does no=
+t start with digit<br>
+It is likely that 4.4.30-v7+ belongs to a chroot&#39;s host<br>
+Module build for the currently running kernel was skipped since the<br>
+kernel source for this kernel does not seem to be installed.<br>
+</blockquote>
+<br>
+<br></span>
+Could you make sure that your linux header for the running kernel are insta=
+lled.<br>
+<br>
+4.4.30-v7+ seems like a custom kernel install.<br>
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+root@ebele-desktop:~#<span class=3D""><br>
+<br>
+<br>
+<br>
+On Thu, Nov 17, 2016 at 3:00 PM, Jonathan Rajotte &lt;<a href=3D"mailto:jon=
+athan.r.julien@gmail.com" target=3D"_blank">jonathan.r.julien@gmail.com</a>=
+ &lt;mailto:<a href=3D"mailto:jonathan.r.julien@gmail.com" target=3D"_blank=
+">jonathan.r.julien@gmai<wbr>l.com</a>&gt;&gt; wrote:<br>
+<br>
+=C2=A0 =C2=A0 Hi,<br>
+<br>
+=C2=A0 =C2=A0 Could you be a bit more precise regarding which part of the<b=
+r>
+=C2=A0 =C2=A0 documentation does not work ?<br>
+<br>
+=C2=A0 =C2=A0 How did you install it ? Distribution packages ? From sources=
+ ?<br>
+=C2=A0 =C2=A0 Cross compiled ?<br>
+<br>
+=C2=A0 =C2=A0 What is your setup ? Raspian for the Pi ? Custom kernel image=
+ ?<br>
+<br>
+=C2=A0 =C2=A0 Cheers<br>
+<br>
+=C2=A0 =C2=A0 On Thu, Nov 17, 2016 at 2:54 PM, Nwafor, Ebelechukwu<br>
+=C2=A0 =C2=A0 &lt;<a href=3D"mailto:ebelechukwu.nwafor@bison.howard.edu" ta=
+rget=3D"_blank">ebelechukwu.nwafor@bison.howa<wbr>rd.edu</a><br></span><spa=
+n class=3D"">
+=C2=A0 =C2=A0 &lt;mailto:<a href=3D"mailto:ebelechukwu.nwafor@bison.howard.=
+edu" target=3D"_blank">ebelechukwu.nwafor@bis<wbr>on.howard.edu</a>&gt;&gt;=
+ wrote:<br>
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 Hello.<br>
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 I am trying to install LTTNG tracing tool on ra=
+spberry pi and<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 beaglebone black board.The official LTTNG docum=
+entation does<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 not work on these devices. Does anyone know of =
+any tutorial<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 that can help me accomplish this? Thanks.<br>
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 --=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Ebelechukwu=
+ Nwafor,<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 Graduate Student,<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 Howard University.<br>
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 ______________________________<wbr>____________=
+_____<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 lttng-dev mailing list<br></span>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 <a href=3D"mailto:lttng-dev@lists.lttng.org" ta=
+rget=3D"_blank">lttng-dev@lists.lttng.org</a> &lt;mailto:<a href=3D"mailto:=
+lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.<wbr>org=
+</a>&gt;<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 <a href=3D"https://lists.lttng.org/cgi-bin/mail=
+man/listinfo/lttng-dev" rel=3D"noreferrer" target=3D"_blank">https://lists.=
+lttng.org/cgi-bi<wbr>n/mailman/listinfo/lttng-dev</a><span class=3D""><br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 &lt;<a href=3D"https://lists.lttng.org/cgi-bin/=
+mailman/listinfo/lttng-dev" rel=3D"noreferrer" target=3D"_blank">https://li=
+sts.lttng.org/cgi-b<wbr>in/mailman/listinfo/lttng-dev</a>&gt;<br>
+<br>
+<br>
+<br>
+<br>
+=C2=A0 =C2=A0 --=C2=A0 =C2=A0 =C2=A0Jonathan Rajotte Julien<br>
+<br>
+<br>
+<br>
+<br>
+-- <br>
+Ebelechukwu Nwafor,<br>
+Graduate Student,<br>
+Howard University.<br>
+<br>
+<br>
+______________________________<wbr>_________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
+sts.lttng.org</a><br>
+<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
+=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bi<wbr>n/mail=
+man/listinfo/lttng-dev</a><br>
+</span></blockquote><span class=3D"HOEnZb"><font color=3D"#888888">
+<br>
+-- <br>
+Jonathan R. Julien<br>
+Efficios</font></span><div class=3D"HOEnZb"><div class=3D"h5"><br>
+<br>
+______________________________<wbr>_________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
+sts.lttng.org</a><br>
+<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
+=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bi<wbr>n/mail=
+man/listinfo/lttng-dev</a><br>
+</div></div></blockquote></div><br><br clear=3D"all"><div><br></div>-- <br>=
+<div class=3D"gmail_signature" data-smartmail=3D"gmail_signature"><div dir=
+=3D"ltr">Ebelechukwu Nwafor,<div>Graduate Student,</div><div>Howard Univers=
+ity.</div></div></div>
+</div>
 
-#yiv8877469080  p.yiv8877469080MsoNormal, #yiv8877469080  li.yiv8877469080M=
-soNormal, #yiv8877469080  div.yiv8877469080MsoNormal
-=09{margin:0in;margin-bottom:.0001pt;font-size:11.0pt;}
-#yiv8877469080  a:link, #yiv8877469080  span.yiv8877469080MsoHyperlink
-=09{color:blue;text-decoration:underline;}
-#yiv8877469080  a:visited, #yiv8877469080  span.yiv8877469080MsoHyperlinkFo=
-llowed
-=09{color:purple;text-decoration:underline;}
-#yiv8877469080  p.yiv8877469080MsoAcetate, #yiv8877469080  li.yiv8877469080=
-MsoAcetate, #yiv8877469080  div.yiv8877469080MsoAcetate
-=09{margin:0in;margin-bottom:.0001pt;font-size:8.0pt;}
-#yiv8877469080  span.yiv8877469080BalloonTextChar
-=09{}
-#yiv8877469080  span.yiv8877469080EmailStyle19
-=09{color:windowtext;font-weight:normal;font-style:normal;text-decoration:n=
-one none;}
-#yiv8877469080  span.yiv8877469080EmailStyle20
-=09{color:#1F497D;font-weight:normal;font-style:normal;text-decoration:none=
- none;}
-#yiv8877469080  .yiv8877469080MsoChpDefault
-=09{font-size:10.0pt;}
-#yiv8877469080 filtered  {margin:1.0in 1.0in 1.0in 1.0in;}
-#yiv8877469080  div.yiv8877469080WordSection1
-=09{}
-#yiv8877469080 </style></div><div id=3D"yui_3_16_0_ym19_1_1479419026922_324=
-40"><br clear=3D"none"></div><div id=3D"yui_3_16_0_ym19_1_1479419026922_324=
-43"><br clear=3D"none"></div><div id=3D"yui_3_16_0_ym19_1_1479419026922_324=
-44"><span id=3D"yiv8877469080zwchr">----- On Nov 17, 2016, at 12:21 PM, Mar=
-k E. Dawson, Jr. &lt;medawsonjr@yahoo.com&gt; wrote:<br clear=3D"none"></sp=
-an></div><div id=3D"yui_3_16_0_ym19_1_1479419026922_32447"><blockquote styl=
-e=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#=
-000;font-weight:normal;font-style:normal;text-decoration:none;font-family:H=
-elvetica, Arial, sans-serif;font-size:12pt;" id=3D"yui_3_16_0_ym19_1_147941=
-9026922_32446"><div style=3D"color:#000;background-color:#fff;font-family:H=
-elveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;f=
-ont-size:16px;" id=3D"yui_3_16_0_ym19_1_1479419026922_32445"><div id=3D"yiv=
-8877469080yui_3_16_0_ym19_1_1479402851121_60364"><span>Mathieu,</span></div=
-><div id=3D"yiv8877469080yui_3_16_0_ym19_1_1479402851121_60364"><span><br c=
-lear=3D"none"></span></div><div id=3D"yiv8877469080yui_3_16_0_ym19_1_147940=
-2851121_60364"><span id=3D"yiv8877469080yui_3_16_0_ym19_1_1479402851121_604=
-85">My query appears to be getting dropped by the mailing list, forcing me =
-to ask you directly which I understand is both inefficient and a nuisance. =
-We met when I spoke (along with Christoph Lameter) at the Tracing Summit a =
-couple years back.</span></div></div></blockquote><div id=3D"yui_3_16_0_ym1=
-9_1_1479419026922_32448"><br clear=3D"none"></div><div id=3D"yui_3_16_0_ym1=
-9_1_1479419026922_32450"><div id=3D"yui_3_16_0_ym19_1_1479419026922_32449">=
-Hi Mark,<br clear=3D"none"></div><div><br clear=3D"none"></div><div>Not sur=
-e why the mailing list would have dropped your email. Everything looks fine=
- in the</div><div>admin interface. Adding it in CC. (Michael, can you check=
- if lttng-dev has issues with emails</div><div>from yahoo domains ?)</div><=
-/div><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;pad=
-ding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decorati=
-on:none;font-family:Helvetica, Arial, sans-serif;font-size:12pt;"><div styl=
-e=3D"color:#000;background-color:#fff;font-family:HelveticaNeue, Helvetica =
-Neue, Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;"><div id=
-=3D"yiv8877469080yui_3_16_0_ym19_1_1479402851121_60364"><span>Anyway, my qu=
-estion is as follows:</span></div><div id=3D"yiv8877469080yui_3_16_0_ym19_1=
-_1479402851121_60364"><span><br clear=3D"none"></span></div><div dir=3D"ltr=
-" id=3D"yiv8877469080yui_3_16_0_ym19_1_1479402851121_60364">If I want to re=
-move a ton of compiled-in calls to an "rdtsc-based" C timing function and m=
-ake them all conditionally-enabled based on whether or not I enable a traci=
-ng session, I can do so by adding the aforementioned "rdtsc" call as one of=
- the arguments to tracepoint() along with our defined provider and event na=
-me, correct?</div></div></blockquote><br clear=3D"none">You can take a few =
-approaches there:<br clear=3D"none"><div><br clear=3D"none"></div><div>1) U=
-se if (tracepoint_enabled()) { ..read tsc... do_tracepoint(...); }<br clear=
-=3D"none"></div><div><br clear=3D"none"></div><div>2) do this function call=
- or static inline invocation as an argument of tracepoint().<br clear=3D"no=
-ne"></div><div><br clear=3D"none"></div><div>3) do the function call/static=
- inline invocation within the tracepoint probe provider<br clear=3D"none"><=
-/div><div>&nbsp;&nbsp;&nbsp;&nbsp; (TRACEPOINT_EVENT() code).<br clear=3D"n=
-one"></div><div><br clear=3D"none"></div><div>Let me know if I somehow misu=
-nderstood the intent of your question.<br clear=3D"none"></div><div><br cle=
-ar=3D"none"></div><div>Thanks,<div class=3D"yiv8877469080yqt5390401818" id=
-=3D"yiv8877469080yqtfd52333"><br clear=3D"none"></div></div><div class=3D"y=
-iv8877469080yqt5390401818" id=3D"yiv8877469080yqtfd60045"><div><br clear=3D=
-"none"></div><div>Mathieu</div></div></div><div><br clear=3D"none"></div><d=
-iv>-- <br clear=3D"none"></div><div>Mathieu Desnoyers<br clear=3D"none">Eff=
-iciOS Inc.<br clear=3D"none">http://www.efficios.com</div></div></div></div=
-><br><br></div> </div> </div>  </div></div></body></html>
-------=_Part_2377856_717577019.1479419234488--
+--001a1142605c5185320541885552--
 
---===============7466939609844669696==
+--===============9060113560005173341==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -241,4 +400,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============7466939609844669696==--
+--===============9060113560005173341==--
