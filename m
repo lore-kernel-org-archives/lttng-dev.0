@@ -1,20 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: add missing refcount of
-	loaded modules
-Date: Mon, 21 Nov 2016 12:56:51 -0500
-Message-ID: <CA+jJMxuyrD+xrdpN1W6n8dk1NM4zHCRrYjw++AZG4m36Q4Gfhw__11651.3166962706$1479751023$gmane$org@mail.gmail.com>
-References: <1479749760-20017-1-git-send-email-francis.deslauriers@efficios.com>
+From: Evgeniy Ivanov <i@eivanov.com>
+Subject: Both liburcu-bp.so and liburcu-qsbr linked to binary
+Date: Wed, 23 Nov 2016 12:13:32 +0300
+Message-ID: <CAO6Ho0c7RikfKbafPLEMPpEksEr6m=rx-4ipqAn8651MjkodTw__6676.62594137273$1479892433$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============3988014804783228043=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vk0-x244.google.com (mail-vk0-x244.google.com
- [IPv6:2607:f8b0:400c:c05::244])
- by lists.lttng.org (Postfix) with ESMTPS id 3tMxCl3S70zlyc
- for <lttng-dev@lists.lttng.org>; Mon, 21 Nov 2016 17:58:11 +0000 (UTC)
-Received: by mail-vk0-x244.google.com with SMTP id p9so25233744vkd.1
- for <lttng-dev@lists.lttng.org>; Mon, 21 Nov 2016 09:56:52 -0800 (PST)
-In-Reply-To: <1479749760-20017-1-git-send-email-francis.deslauriers@efficios.com>
+Received: from mail-io0-x236.google.com (mail-io0-x236.google.com
+ [IPv6:2607:f8b0:4001:c06::236])
+ by lists.lttng.org (Postfix) with ESMTPS id 3tNxW45Pc5zlVs
+ for <lttng-dev@lists.lttng.org>; Wed, 23 Nov 2016 09:14:56 +0000 (UTC)
+Received: by mail-io0-x236.google.com with SMTP id c21so13333391ioj.1
+ for <lttng-dev@lists.lttng.org>; Wed, 23 Nov 2016 01:13:34 -0800 (PST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,27 +20,48 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Francis Deslauriers <francis.deslauriers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-R29vZCBjYXRjaCEgTWVyZ2VkIGluIG1hc3Rlciwgc3RhYmxlLTIuOSBhbmQgc3RhYmxlLTIuOC4K
-ClRoYW5rcyEKSsOpcsOpbWllCgoKCk9uIDIxIE5vdmVtYmVyIDIwMTYgYXQgMTI6MzYsIEZyYW5j
-aXMgRGVzbGF1cmllcnMKPGZyYW5jaXMuZGVzbGF1cmllcnNAZWZmaWNpb3MuY29tPiB3cm90ZToK
-PiBTaWduZWQtb2ZmLWJ5OiBGcmFuY2lzIERlc2xhdXJpZXJzIDxmcmFuY2lzLmRlc2xhdXJpZXJz
-QGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tb2Rwcm9iZS5j
-IHwgMiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkK
-Pgo+IGRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21vZHByb2JlLmMgYi9zcmMv
-YmluL2x0dG5nLXNlc3Npb25kL21vZHByb2JlLmMKPiBpbmRleCAwNTAyNzQwLi4wMzU0NWVmIDEw
-MDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbW9kcHJvYmUuYwo+ICsrKyBiL3Ny
-Yy9iaW4vbHR0bmctc2Vzc2lvbmQvbW9kcHJvYmUuYwo+IEBAIC0zNDMsNyArMzQzLDcgQEAgc3Rh
-dGljIGludCBtb2Rwcm9iZV9sdHRuZyhzdHJ1Y3Qga2Vybl9tb2R1bGVzX3BhcmFtICptb2R1bGVz
-LAo+ICAgICAgICAgICAgICAgICAgICAgICAgIH0KPiAgICAgICAgICAgICAgICAgfSBlbHNlIHsK
-PiAgICAgICAgICAgICAgICAgICAgICAgICBEQkcoIk1vZHByb2JlIHN1Y2Nlc3NmdWxseSAlcyIs
-IG1vZHVsZXNbaV0ubmFtZSk7Cj4gLSAgICAgICAgICAgICAgICAgICAgICAgbW9kdWxlc1tpXS5s
-b2FkZWQ7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgbW9kdWxlc1tpXS5sb2FkZWQgPSB0cnVl
-Owo+ICAgICAgICAgICAgICAgICB9Cj4gICAgICAgICB9Cj4KPiAtLQo+IDIuNy40Cj4KCgoKLS0g
-CkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNv
-bQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1k
-ZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5s
-dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============3988014804783228043==
+Content-Type: multipart/alternative; boundary=94eb2c11c1a490be9b0541f44dfd
+
+--94eb2c11c1a490be9b0541f44dfd
+Content-Type: text/plain; charset=UTF-8
+
+Hi,
+
+My program uses QSBR (together with CDS). Also we use lttng-ust for
+performance analyses. In maps I see that both liburcu-bp.so (dependency
+from liblttng-ust-tracepoint.so) and liburcu-qsbr.so are linked. Can it
+potentially break anything? Is it possible to rebuild lttng-ust with QSBR?
+
+-- 
+Cheers,
+Evgeniy
+
+--94eb2c11c1a490be9b0541f44dfd
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div><br></div><div>My program uses QSBR (together with=
+ CDS). Also we use lttng-ust for performance analyses. In maps I see that b=
+oth liburcu-bp.so (dependency from liblttng-ust-tracepoint.so)=C2=A0and=C2=
+=A0liburcu-qsbr.so are linked. Can it potentially break anything? Is it pos=
+sible to rebuild lttng-ust with QSBR?<br clear=3D"all"><div><br></div>-- <b=
+r><div class=3D"gmail_signature">Cheers,<br>Evgeniy</div>
+</div></div>
+
+--94eb2c11c1a490be9b0541f44dfd--
+
+--===============3988014804783228043==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============3988014804783228043==--
