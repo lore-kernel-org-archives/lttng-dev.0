@@ -1,19 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH] Fix: truncate the metadata file in shm-path
-Date: Mon, 28 Nov 2016 17:00:07 -0500
-Message-ID: <CA+jJMxv_JgJou-Ppn_1+_HOi3SK1fQMJ0Q_cwO9YDJH2Er=58Q__14001.6692960218$1480370427$gmane$org@mail.gmail.com>
-References: <1480322267-12997-1-git-send-email-liguang.li@windriver.com>
+From: "Nwafor, Ebelechukwu" <ebelechukwu.nwafor@bison.howard.edu>
+Subject: CTF parser library or plugin location?
+Date: Mon, 28 Nov 2016 19:59:03 -0500
+Message-ID: <CAAuy2ASOUuJn2tAiV1vWNU2E9vZAFJcPiSsdNjsJ97F8uJYaSA__25994.7260412902$1480381156$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============4150692544642924100=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ua0-x242.google.com (mail-ua0-x242.google.com
- [IPv6:2607:f8b0:400c:c08::242])
- by lists.lttng.org (Postfix) with ESMTPS id 3tSLHW72mdzmTX
- for <lttng-dev@lists.lttng.org>; Mon, 28 Nov 2016 22:01:43 +0000 (UTC)
-Received: by mail-ua0-x242.google.com with SMTP id 20so11873262uak.0
- for <lttng-dev@lists.lttng.org>; Mon, 28 Nov 2016 14:00:08 -0800 (PST)
-In-Reply-To: <1480322267-12997-1-git-send-email-liguang.li@windriver.com>
+Received: from mail-yw0-x235.google.com (mail-yw0-x235.google.com
+ [IPv6:2607:f8b0:4002:c05::235])
+ by lists.lttng.org (Postfix) with ESMTPS id 3tSQG02gHfzmXG
+ for <lttng-dev@lists.lttng.org>; Tue, 29 Nov 2016 01:00:39 +0000 (UTC)
+Received: by mail-yw0-x235.google.com with SMTP id i145so128665340ywg.2
+ for <lttng-dev@lists.lttng.org>; Mon, 28 Nov 2016 16:59:05 -0800 (PST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,60 +20,65 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Liguang Li <liguang.li@windriver.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgTGlndWFuZywKCkdvb2QgY2F0Y2gsIHRoYW5rcyBmb3IgdGhlIGZpeCEKSSBoYXZlIHNsaWdo
-dGx5IG1vZGlmaWVkIHRoZSBwYXRjaCBwcmlvciB0byBtZXJnaW5nIGl0LCByZWFkIG9uLgoKSsOp
-csOpbWllCgpPbiAyOCBOb3ZlbWJlciAyMDE2IGF0IDAzOjM3LCBMaWd1YW5nIExpIDxsaWd1YW5n
-LmxpQHdpbmRyaXZlci5jb20+IHdyb3RlOgo+IEluIHRoZSBzaG0tcGF0aCBtb2RlLCB0aGUgbWV0
-YWRhdGEgd2lsbCBiZSBiYWNrdXBlZCB0byBhIG1ldGFkYXRhIGZpbGUsCj4gd2hlbiBydW4gdGhl
-IGx0dG5nIGNvbW1hbmQgImx0dG5nIG1ldGFkYXRhIHJlZ2VuZXJhdGUiIHRvIHJlc2FtcGxlIHRo
-ZQo+IHdhbGwgdGltZSBmb2xsb3dpbmcgYSBtYWpvciBOVFAgY29ycmVjdGlvbiwgdGhlIG1ldGFk
-YXRhIGZpbGUgd2lsbCBub3QKPiBiZSB0cnVuY2F0ZWQgYW5kIHJlZ2VuZXJhdGVkLgo+Cj4gQWRk
-IHRoZSBmdW5jdGlvbiB1c3RfbWV0YWRhdGFfdHJ1bmNhdGUoKSB0byB0cnVuY2F0ZSBhbmQgcmVn
-ZW5lcmF0ZSB0aGUKPiBtZXRhZGF0YSBmaWxlLgo+Cj4gU2lnbmVkLW9mZi1ieTogTGlndWFuZyBM
-aSA8bGlndWFuZy5saUB3aW5kcml2ZXIuY29tPgo+IC0tLQo+ICBzcmMvYmluL2x0dG5nLXNlc3Np
-b25kL2NtZC5jIHwgMjggKysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+ICAxIGZpbGUgY2hh
-bmdlZCwgMjggaW5zZXJ0aW9ucygrKQo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vz
-c2lvbmQvY21kLmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2NtZC5jCj4gaW5kZXggMzI1ZmZk
-Mi4uYmE4MzIyNiAxMDA2NDQKPiAtLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2NtZC5jCj4g
-KysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jbWQuYwo+IEBAIC0zMzc4LDYgKzMzNzgsMjUg
-QEAgZW5kOgo+ICB9Cj4KPiAgc3RhdGljCj4gK2ludCB1c3RfbWV0YWRhdGFfdHJ1bmNhdGUoaW50
-IGZkLCBzaXplX3QgbGVuZ3RoKQoKQ2hhbmdlZCB0aGUgbmFtZSBvZiB0aGlzIGZ1bmN0aW9uIHRv
-IGNsZWFyX21ldGFkYXRhX2ZpbGUoLi4uKSB3aGljaApvbmx5IHRha2VzIGFuICJmZCIgYXMgcGFy
-YW1ldGVyLiBUaGVyZSBhcmUgbm8gb3RoZXIgdXNlcnMgb2YgdGhpcwp1dGlsaXR5IHlldCwgc28g
-SSdtIGtlZXBpbmcgaXQgc3BlY2lmaWMgdG8gaXRzIGN1cnJlbnQgdXNlLgoKPiArewo+ICsgICAg
-ICAgaW50IHJldDsKPiArCj4gKyAgICAgICByZXQgPSBsc2VlayhmZCwgbGVuZ3RoLCBTRUVLX1NF
-VCk7CgpsZW5ndGggcmVwbGFjZWQgYnkgMAoKPiArICAgICAgIGlmIChyZXQgPCAwKSB7Cj4gKyAg
-ICAgICAgICAgICAgIFBFUlJPUigibHNlZWsiKTsKPiArICAgICAgICAgICAgICAgZ290byBvdXQ7
-Cj4gKyAgICAgICB9Cj4gKwo+ICsgICAgICAgcmV0ID0gZnRydW5jYXRlKGZkLCBsZW5ndGgpOwoK
-bGVuZ3RoIHJlcGxhY2VkIGJ5IDAKCj4gKyAgICAgICBpZiAocmV0IDwgMCkKPiArICAgICAgICAg
-ICAgICAgUEVSUk9SKCJmdHJ1bmNhdGUiKTsKCldlIHVzZSBjdXJseS1icmFjZXMgZXZlbiBvbiBz
-aW5nbGUtbGluZSBjb25kaXRpb25hbHMgaW4gdGhpcyBjb2RlYmFzZS4KCj4gKwo+ICtvdXQ6CgpD
-aGFuZ2VkIHRoZSAib3V0IiBsYWJlbCB0byAiZW5kIiB0byByZW1haW4gY29uc2lzdGVudCB3aXRo
-IHRoZSByZXN0IG9mIHRoZSBjb2RlLgoKPiArICAgICAgIHJldHVybiByZXQ7Cj4gK30KPiArCj4g
-K3N0YXRpYwo+ICBpbnQgdXN0X3JlZ2VuZXJhdGVfbWV0YWRhdGEoc3RydWN0IGx0dF91c3Rfc2Vz
-c2lvbiAqdXNlc3MpCj4gIHsKPiAgICAgICAgIGludCByZXQgPSAwOwo+IEBAIC0zMzk4LDYgKzM0
-MTcsMTUgQEAgaW50IHVzdF9yZWdlbmVyYXRlX21ldGFkYXRhKHN0cnVjdCBsdHRfdXN0X3Nlc3Np
-b24gKnVzZXNzKQo+ICAgICAgICAgICAgICAgICBtZW1zZXQocmVnaXN0cnktPm1ldGFkYXRhLCAw
-LCByZWdpc3RyeS0+bWV0YWRhdGFfYWxsb2NfbGVuKTsKPiAgICAgICAgICAgICAgICAgcmVnaXN0
-cnktPm1ldGFkYXRhX2xlbiA9IDA7Cj4gICAgICAgICAgICAgICAgIHJlZ2lzdHJ5LT5tZXRhZGF0
-YV92ZXJzaW9uKys7Cj4gKyAgICAgICAgICAgICAgIC8qdHJ1bmNhdGUgdGhlIG1ldGFkYXRhIGZp
-bGUqLwo+ICsgICAgICAgICAgICAgICBpZiAocmVnaXN0cnktPm1ldGFkYXRhX2ZkID4gMCkgewo+
-ICsgICAgICAgICAgICAgICAgICAgICAgIHJldCA9IHVzdF9tZXRhZGF0YV90cnVuY2F0ZShyZWdp
-c3RyeS0+bWV0YWRhdGFfZmQsIDApOwo+ICsgICAgICAgICAgICAgICAgICAgICAgIGlmIChyZXQp
-IHsKPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHB0aHJlYWRfbXV0ZXhfdW5sb2Nr
-KCZyZWdpc3RyeS0+bG9jayk7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBnb3Rv
-IGVuZDsKPiArICAgICAgICAgICAgICAgICAgICAgICB9Cj4gKyAgICAgICAgICAgICAgIH0KPiAr
-Cj4gICAgICAgICAgICAgICAgIHJldCA9IHVzdF9tZXRhZGF0YV9zZXNzaW9uX3N0YXRlZHVtcChy
-ZWdpc3RyeSwgTlVMTCwKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJlZ2lzdHJ5
-LT5tYWpvciwgcmVnaXN0cnktPm1pbm9yKTsKPiAgICAgICAgICAgICAgICAgaWYgKHJldCkgewo+
-IC0tCj4gMi43LjQKPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
-bmctZGV2CgoKCi0tIApKw6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3
-dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
-dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============4150692544642924100==
+Content-Type: multipart/alternative; boundary=001a114e5b423da4fc0542661870
+
+--001a114e5b423da4fc0542661870
+Content-Type: text/plain; charset=UTF-8
+
+Hello All.
+
+I am new to lttng and linux tracing. I was trying to download the linux
+update plugin so i can use the CTF parser to read events. I followed
+instructions on the eclipse documentation located at:
+
+http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.linuxtools.lttng.help%2Fdoc%2FInstallation.html
+
+The CTF parser and LTTNG tracing toolkit does not seem to be included in
+the Linux tools plugin anymore. Does anyone know how i could get the
+library for CTF parsing or possibly plugin location?
+
+
+
+Best Regards.
+
+-- 
+Ebelechukwu Nwafor,
+Graduate Student,
+Howard University.
+
+--001a114e5b423da4fc0542661870
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello All.<div><br></div><div>I am new to lttng and linux =
+tracing. I was trying to download the linux update plugin so i can use the =
+CTF parser to read events. I followed instructions on the eclipse documenta=
+tion located at:=C2=A0</div><div><br></div><div><a href=3D"http://help.ecli=
+pse.org/luna/index.jsp?topic=3D%2Forg.eclipse.linuxtools.lttng.help%2Fdoc%2=
+FInstallation.html">http://help.eclipse.org/luna/index.jsp?topic=3D%2Forg.e=
+clipse.linuxtools.lttng.help%2Fdoc%2FInstallation.html</a></div><div><br></=
+div><div> The CTF parser and LTTNG tracing toolkit does not seem to be incl=
+uded in the Linux tools plugin anymore. Does anyone know how i could get th=
+e library for CTF parsing or possibly plugin location?</div><div><br></div>=
+<div><br></div><div><br></div><div>Best Regards.<br clear=3D"all"><div><br>=
+</div>-- <br><div class=3D"gmail_signature"><div dir=3D"ltr">Ebelechukwu Nw=
+afor,<div>Graduate Student,</div><div>Howard University.</div></div></div>
+</div></div>
+
+--001a114e5b423da4fc0542661870--
+
+--===============4150692544642924100==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============4150692544642924100==--
