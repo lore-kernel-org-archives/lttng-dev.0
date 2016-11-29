@@ -1,72 +1,53 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.9.0 (Linux user-space tracer)
-Date: Tue, 29 Nov 2016 22:42:43 +0000 (UTC)
-Message-ID: <828273171.20873.1480459363170.JavaMail.zimbra@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: [RELEASE] Babeltrace 1.5.0
+Date: Tue, 29 Nov 2016 18:11:37 -0500
+Message-ID: <CA+jJMxsqQoEKuBczimpDkXWnvMKcfq9-QcRMS4zU5YKtM4jW5Q__25086.525156121$1480461109$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Sender: linux-kernel-owner@vger.kernel.org
-To: lttng-dev@lists.lttng.org
-Cc: linux-kernel <linux-kernel@vger.kernel.org>, diamon-discuss@lists.linuxfoundation.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-ua0-x243.google.com (mail-ua0-x243.google.com
+ [IPv6:2607:f8b0:400c:c08::243])
+ by lists.lttng.org (Postfix) with ESMTPS id 3tSzqd1Qmjzp0d
+ for <lttng-dev@lists.lttng.org>; Tue, 29 Nov 2016 23:13:15 +0000 (UTC)
+Received: by mail-ua0-x243.google.com with SMTP id 20so15665634uak.0
+ for <lttng-dev@lists.lttng.org>; Tue, 29 Nov 2016 15:11:39 -0800 (PST)
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Cc: "diamon-discuss@lists.linuxfoundation.org" <diamon-discuss@lists.linuxfoundation.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This is the official announcement of the release of LTTng-UST 2.9.0.
-Release name: Joannès.
-
-LTTng-UST, the Linux Trace Toolkit Next Generation Userspace Tracer,
-is a low-overhead application tracer. The library "liblttng-ust" enables
-tracing of applications and libraries.
-
-New and Noteworthy for LTTng-UST 2.9:
-
-* Various performance improvements. Tested on x86-64 and ARM32.
-* New liblttng-ust-fd helper library to deal with daemon applications
-  closing file descriptors that don't belong to them, e.g. loop
-  closing file descriptors after fork, or BSD closeall().
-* Introduce library load/unlock tracking events, which is more
-  precise than the dlopen/dlmopen/dlclose instrumentation we had
-  in lttng-ust 2.8 in cases where a dlopen'd library loads its
-  own dependencies.
-* Tracepoints: new payload types supported: array and sequences of
-  integers in network byte order,
-* Documentation (man pages) overhaul,
-* Added support for ARM64 "aarch64_be" for some toolchains,
-* Added "-ust" suffix to lttng-ust thread names,
-* Introduce lttng_ust_loaded weak symbol, meant to allow applications
-  to detect whether lttng-ust is dynamically loaded,
-* perf counters contexts can now be used across all architectures
-  supported by Perf. We use a read() system call on a perf file
-  descriptor as fallback. It is slower, but works everywhere.
-
-The release name "Joannès" is named after a Berliner Weisse style
-beer from the Trèfle Noir microbrewery in Rouyn-Noranda. It is a
-tangy beer with a distinct pink dress and intense fruit flavor,
-thanks to the presence of fresh blackcurrant grown in Témiscamingue.
-
-Project website: http://lttng.org
-Documentation: http://lttng.org/docs
-Download link: http://lttng.org/download
-
-Changelog:
-
-2016-11-29 (National Square Dance Day) lttng-ust 2.9.0
-        * lttng-ust(3): document `lttng_ust_loaded` symbol
-        * lttng-ust(3): document `perf:thread:raw:rN:NAME` context
-        * lttng-ust-dl(3): update documentation
-        * lttng-ust(3): document liblttng-ust-fd
-        * doc/man: document the lttng_ust_lib events
-        * doc/man: add full stop to descriptive table cells
-        * doc/man: reorganize source for tables
-        * lttng-ust(3): sort ctf_*() macro parameter definitions
-        * lttng-ust(3): fix alignment and indentation
-        * lttng-ust(3): document new ctf_*() array/sequence network/hex macros
-        * Performance: add missing "caa_unlikely" on fast-path
-        * Fix: loglevel and model_emf_uri build fix
-        * Fix: loglevel and model_emf_uri with g++ compiled probes
-        * Fix: Out of tree build of liblttng-ust-java
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGkgYWxsLAoKVG9kYXkgd2UgYXJlIHJlbGVhc2luZyB0aGUgZmluYWwgcmVsZWFzZSBvZiBCYWJl
+bHRyYWNlIDEuNS4KClRoZSBCYWJlbHRyYWNlIHByb2plY3QgcHJvdmlkZXMgdHJhY2UgcmVhZCBh
+bmQgd3JpdGUgbGlicmFyaWVzLCBhcyB3ZWxsCmFzIGEgdHJhY2UgY29udmVydGVyLiBQbHVnaW5z
+IGNhbiBiZSBjcmVhdGVkIGZvciBhbnkgdHJhY2UgZm9ybWF0IHRvCmFsbG93IGl0cyBjb252ZXJz
+aW9uIHRvL2Zyb20gYW5vdGhlciB0cmFjZSBmb3JtYXQuCgpUaGUgbWFpbiBmb3JtYXQgZXhwZWN0
+ZWQgdG8gYmUgY29udmVydGVkIHRvL2Zyb20gaXMgdGhlIENvbW1vbiBUcmFjZQpGb3JtYXQgKENU
+RikuIFRoZSBkZWZhdWx0IGlucHV0IGZvcm1hdCBvZiB0aGUgImJhYmVsdHJhY2UiIGNvbW1hbmQg
+aXMKQ1RGLCBhbmQgaXRzIGRlZmF1bHQgb3V0cHV0IGZvcm1hdCBpcyBhIGh1bWFuLXJlYWRhYmxl
+IHRleHQgbG9nLiBUaGUKImJhYmVsdHJhY2UtbG9nIiBjb21tYW5kIGNvbnZlcnRzIGZyb20gYSB0
+ZXh0IGxvZyB0byBhIENURiB0cmFjZS4KClRoaXMgcmVsZWFzZSBhZGRzIHR3byBmZWF0dXJlcyB0
+byB0aGUgQ1RGIFdyaXRlciBsaWJyYXJ5OgogICAgKiBBbGxvdyB0aGUgZGVmaW5pdGlvbiBvZiBj
+dXN0b20gc3RyZWFtIHBhY2tldCBoZWFkZXJzCiAgICAqIFZhbGlkYXRpb24gdXRpbGl0eSB0byBj
+aGVjayBmb3IgcmVzZXJ2ZWQgQ1RGIGlkZW50aWZpZXJzCgpDaGFuZ2UgbG9nOgoyMDE2LTExLTI5
+IGJhYmVsdHJhY2UgMS41LjAgKE5hdGlvbmFsIFNxdWFyZSBEYW5jZSBEYXkpCiAgICAgICAgKiBG
+aXg6IHJlbW92ZSBCVF9ISURERU4gZnJvbSBidF92YWx1ZV9udWxsIHNpbmdsZXRvbiBkZWNsYXJh
+dGlvbgogICAgICAgICogRml4IG1peGluZyBvZiBidF9jdGZfc2NvcGUgYW5kIGJ0X2N0Zl9pcl9z
+Y29wZSBlbnVtcwogICAgICAgICogUmV2ZXJ0IEFCSS1icmVha2luZyBlbnVtIGJ0X2N0Zl9zdHJp
+bmdfZW5jb2RpbmcgY2hhbmdlCiAgICAgICAgKiBGaXg6IHdhcm5pbmdzIGVtaXR0ZWQgYmVjYXVz
+ZSBvZiBlbnVtIGN0Zl9zdHJpbmdfZW5jb2RpbmcgbWl4aW5nCgpQcm9qZWN0IHdlYnNpdGU6IGh0
+dHA6Ly9kaWFtb24ub3JnL2JhYmVsdHJhY2UvCkRvd25sb2FkIGxpbms6IGh0dHA6Ly93d3cuZWZm
+aWNpb3MuY29tL2ZpbGVzL2JhYmVsdHJhY2UvYmFiZWx0cmFjZS0xLjUuMC50YXIuYnoyCkNURiBz
+cGVjaWZpY2F0aW9uOiBodHRwOi8vZGlhbW9uLm9yZy9jdGYvCgpKw6lyw6ltaWUKCi0tIApKw6ly
+w6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
+aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcu
+b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
