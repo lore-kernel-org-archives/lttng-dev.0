@@ -1,17 +1,14 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RFC PATCH urcu 2/3] Cleanup: remove cmm_wmb() from
-	rcu_xchg_pointer and rcu_cmpxchg_pointer
-Date: Mon,  5 Dec 2016 12:31:12 -0500
-Message-ID: <1480959073-11973-2-git-send-email-mathieu.desnoyers__47211.7624631666$1480959472$gmane$org@efficios.com>
-References: <1480959073-11973-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-tools] Fix: Add missing pthread.h include
+Date: Mon,  5 Dec 2016 15:39:26 -0500
+Message-ID: <1480970366-14140-1-git-send-email-mjeanson__41131.8103936084$1480970384$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3tXX6y0XcHztkP
- for <lttng-dev@lists.lttng.org>; Mon,  5 Dec 2016 17:38:50 +0000 (UTC)
-In-Reply-To: <1480959073-11973-1-git-send-email-mathieu.desnoyers@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 3tXc9b1HJVztr7
+ for <lttng-dev@lists.lttng.org>; Mon,  5 Dec 2016 20:41:22 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,43 +18,19 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: rp@svcs.cs.pdx.edu, paulmck@linux.vnet.ibm.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Qm90aCByY3VfeGNoZ19wb2ludGVyKCkgYW5kIHJjdV9jbXB4Y2hnX3BvaW50ZXIoKSBpbXBseSBi
-b3RoIHJlbGVhc2UgYW5kCmFjcXVpcmUgYmFycmllcnMuIFRoZXJlZm9yZSwgdGhlIGV4dHJhIGNt
-bV93bWIoKSBpcyByZWR1bmRhbnQgYW5kIGNhbiBiZQpyZW1vdmVkLgoKU2lnbmVkLW9mZi1ieTog
-TWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KLS0tCiBp
-bmNsdWRlL3VyY3Uvc3RhdGljL3VyY3UtcG9pbnRlci5oIHwgMTAgKysrKy0tLS0tLQogMSBmaWxl
-IGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9p
-bmNsdWRlL3VyY3Uvc3RhdGljL3VyY3UtcG9pbnRlci5oIGIvaW5jbHVkZS91cmN1L3N0YXRpYy91
-cmN1LXBvaW50ZXIuaAppbmRleCAyODMzM2M1Li42ZTEyMGZjIDEwMDY0NAotLS0gYS9pbmNsdWRl
-L3VyY3Uvc3RhdGljL3VyY3UtcG9pbnRlci5oCisrKyBiL2luY2x1ZGUvdXJjdS9zdGF0aWMvdXJj
-dS1wb2ludGVyLmgKQEAgLTc5LDYgKzc5LDggQEAgZXh0ZXJuICJDIiB7CiAgKiB1c2luZyBzeW5j
-aHJvbml6ZV9yY3UoKS4gSWYgZmFpbHMgKHVuZXhwZWN0ZWQgdmFsdWUpLCByZXR1cm5zIG9sZCAo
-d2hpY2gKICAqIHNob3VsZCBub3QgYmUgZnJlZWQgISkuCiAgKgorICogdWF0b21pY19jbXB4Y2hn
-KCkgYWN0cyBhcyBib3RoIHJlbGVhc2UgYW5kIGFjcXVpcmUgYmFycmllcnMuCisgKgogICogVGhp
-cyBtYWNybyBpcyBsZXNzIHRoYW4gMTAgbGluZXMgbG9uZy4gIFRoZSBpbnRlbnQgaXMgdGhhdCB0
-aGlzIG1hY3JvCiAgKiBtZWV0cyB0aGUgMTAtbGluZSBjcml0ZXJpb24gaW4gTEdQTCwgYWxsb3dp
-bmcgdGhpcyBmdW5jdGlvbiB0byBiZQogICogZXhwYW5kZWQgZGlyZWN0bHkgaW4gbm9uLUxHUEwg
-Y29kZS4KQEAgLTg4LDkgKzkwLDYgQEAgZXh0ZXJuICJDIiB7CiAJKHsJCQkJCQkJCVwKIAkJX190
-eXBlb2ZfXygqcCkgX19fX19fX19fcG9sZCA9IChvbGQpOwkJCVwKIAkJX190eXBlb2ZfXygqcCkg
-X19fX19fX19fcG5ldyA9IChfbmV3KTsJCQlcCi0JCWlmICghX19idWlsdGluX2NvbnN0YW50X3Ao
-X25ldykgfHwJCQlcCi0JCSAgICAoKF9uZXcpICE9IE5VTEwpKQkJCQkJXAotCQkJY21tX3dtYigp
-OwkJCQkJCVwKIAkJdWF0b21pY19jbXB4Y2hnKHAsIF9fX19fX19fX3BvbGQsIF9fX19fX19fX3Bu
-ZXcpOwlcCiAJfSkKIApAQCAtOTksNiArOTgsOCBAQCBleHRlcm4gIkMiIHsKICAqIHBvaW50ZXIg
-dG8gdGhlIGRhdGEgc3RydWN0dXJlLCB3aGljaCBjYW4gYmUgc2FmZWx5IGZyZWVkIGFmdGVyIHdh
-aXRpbmcgZm9yIGEKICAqIHF1aWVzY2VudCBzdGF0ZSB1c2luZyBzeW5jaHJvbml6ZV9yY3UoKS4K
-ICAqCisgKiB1YXRvbWljX3hjaGcoKSBhY3RzIGFzIGJvdGggcmVsZWFzZSBhbmQgYWNxdWlyZSBi
-YXJyaWVycy4KKyAqCiAgKiBUaGlzIG1hY3JvIGlzIGxlc3MgdGhhbiAxMCBsaW5lcyBsb25nLiAg
-VGhlIGludGVudCBpcyB0aGF0IHRoaXMgbWFjcm8KICAqIG1lZXRzIHRoZSAxMC1saW5lIGNyaXRl
-cmlvbiBpbiBMR1BMLCBhbGxvd2luZyB0aGlzIGZ1bmN0aW9uIHRvIGJlCiAgKiBleHBhbmRlZCBk
-aXJlY3RseSBpbiBub24tTEdQTCBjb2RlLgpAQCAtMTA3LDkgKzEwOCw2IEBAIGV4dGVybiAiQyIg
-ewogCV9fZXh0ZW5zaW9uX18JCQkJCVwKIAkoewkJCQkJCVwKIAkJX190eXBlb2ZfXygqcCkgX19f
-X19fX19fcHYgPSAodik7CVwKLQkJaWYgKCFfX2J1aWx0aW5fY29uc3RhbnRfcCh2KSB8fAkJXAot
-CQkgICAgKCh2KSAhPSBOVUxMKSkJCQlcCi0JCQljbW1fd21iKCk7CQkJCVwKIAkJdWF0b21pY194
-Y2hnKHAsIF9fX19fX19fX3B2KTsJCVwKIAl9KQogCi0tIAoyLjEuNAoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdAps
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
-bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+U29tZSBsaWJjIGxpa2UgbXVzbCBhbmQgdUNsaWJjIHJlcXVpcmVzIGV4cGxpY2l0IGluY2x1ZGVz
+IG9mIHB0aHJlYWQuaAoKU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBl
+ZmZpY2lvcy5jb20+Ci0tLQogc3JjL2NvbW1vbi9kZWZhdWx0cy5oIHwgMSArCiAxIGZpbGUgY2hh
+bmdlZCwgMSBpbnNlcnRpb24oKykKCmRpZmYgLS1naXQgYS9zcmMvY29tbW9uL2RlZmF1bHRzLmgg
+Yi9zcmMvY29tbW9uL2RlZmF1bHRzLmgKaW5kZXggMjdmMWRkYy4uMzdkMjIyYSAxMDA2NDQKLS0t
+IGEvc3JjL2NvbW1vbi9kZWZhdWx0cy5oCisrKyBiL3NyYy9jb21tb24vZGVmYXVsdHMuaApAQCAt
+MjAsNiArMjAsNyBAQAogI2lmbmRlZiBfREVGQVVMVFNfSAogI2RlZmluZSBfREVGQVVMVFNfSAog
+CisjaW5jbHVkZSA8cHRocmVhZC5oPgogI2luY2x1ZGUgPHNyYy9jb21tb24vbWFjcm9zLmg+CiAK
+IC8qIERlZmF1bHQgdW5peCBncm91cCBuYW1lIGZvciB0cmFjaW5nLiAqLwotLSAKMi43LjQKCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
+YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5n
+Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
