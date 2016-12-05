@@ -1,14 +1,17 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Add missing pthread.h include
-Date: Mon,  5 Dec 2016 15:39:26 -0500
-Message-ID: <1480970366-14140-1-git-send-email-mjeanson__41131.8103936084$1480970384$gmane$org@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: Add missing pthread.h
+	include
+Date: Mon, 5 Dec 2016 15:40:37 -0500
+Message-ID: <46f050c2-1571-2cb8-f105-ec0c26234d75__26961.6241836504$1480970454$gmane$org@efficios.com>
+References: <1480970366-14140-1-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3tXc9b1HJVztr7
- for <lttng-dev@lists.lttng.org>; Mon,  5 Dec 2016 20:41:22 +0000 (UTC)
+ by lists.lttng.org (Postfix) with ESMTPS id 3tXcBs2JgGztrd
+ for <lttng-dev@lists.lttng.org>; Mon,  5 Dec 2016 20:42:29 +0000 (UTC)
+In-Reply-To: <1480970366-14140-1-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,15 +25,17 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-U29tZSBsaWJjIGxpa2UgbXVzbCBhbmQgdUNsaWJjIHJlcXVpcmVzIGV4cGxpY2l0IGluY2x1ZGVz
-IG9mIHB0aHJlYWQuaAoKU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBl
-ZmZpY2lvcy5jb20+Ci0tLQogc3JjL2NvbW1vbi9kZWZhdWx0cy5oIHwgMSArCiAxIGZpbGUgY2hh
-bmdlZCwgMSBpbnNlcnRpb24oKykKCmRpZmYgLS1naXQgYS9zcmMvY29tbW9uL2RlZmF1bHRzLmgg
-Yi9zcmMvY29tbW9uL2RlZmF1bHRzLmgKaW5kZXggMjdmMWRkYy4uMzdkMjIyYSAxMDA2NDQKLS0t
-IGEvc3JjL2NvbW1vbi9kZWZhdWx0cy5oCisrKyBiL3NyYy9jb21tb24vZGVmYXVsdHMuaApAQCAt
-MjAsNiArMjAsNyBAQAogI2lmbmRlZiBfREVGQVVMVFNfSAogI2RlZmluZSBfREVGQVVMVFNfSAog
-CisjaW5jbHVkZSA8cHRocmVhZC5oPgogI2luY2x1ZGUgPHNyYy9jb21tb24vbWFjcm9zLmg+CiAK
-IC8qIERlZmF1bHQgdW5peCBncm91cCBuYW1lIGZvciB0cmFjaW5nLiAqLwotLSAKMi43LjQKCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
-YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5n
-Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+VGhpcyBzaG91bGQgYmUgYmFja3BvcnRlZCB0byBzdGFibGUtMi45LgoKT24gMjAxNi0xMi0wNSAx
+NTozOSwgTWljaGFlbCBKZWFuc29uIHdyb3RlOgo+IFNvbWUgbGliYyBsaWtlIG11c2wgYW5kIHVD
+bGliYyByZXF1aXJlcyBleHBsaWNpdCBpbmNsdWRlcyBvZiBwdGhyZWFkLmgKPiAKPiBTaWduZWQt
+b2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVmZmljaW9zLmNvbT4KPiAtLS0KPiAg
+c3JjL2NvbW1vbi9kZWZhdWx0cy5oIHwgMSArCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlv
+bigrKQo+IAo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL2RlZmF1bHRzLmggYi9zcmMvY29tbW9u
+L2RlZmF1bHRzLmgKPiBpbmRleCAyN2YxZGRjLi4zN2QyMjJhIDEwMDY0NAo+IC0tLSBhL3NyYy9j
+b21tb24vZGVmYXVsdHMuaAo+ICsrKyBiL3NyYy9jb21tb24vZGVmYXVsdHMuaAo+IEBAIC0yMCw2
+ICsyMCw3IEBACj4gICNpZm5kZWYgX0RFRkFVTFRTX0gKPiAgI2RlZmluZSBfREVGQVVMVFNfSAo+
+ICAKPiArI2luY2x1ZGUgPHB0aHJlYWQuaD4KPiAgI2luY2x1ZGUgPHNyYy9jb21tb24vbWFjcm9z
+Lmg+Cj4gIAo+ICAvKiBEZWZhdWx0IHVuaXggZ3JvdXAgbmFtZSBmb3IgdHJhY2luZy4gKi8KPiAK
+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRl
+diBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0
+dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
