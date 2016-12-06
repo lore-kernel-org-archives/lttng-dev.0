@@ -1,39 +1,16 @@
-From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Subject: Re: liburcu rcu_xchg_pointer and rcu_cmpxchg_pointer
-	ARM32 barriers
-Date: Mon, 5 Dec 2016 15:06:41 -0800
-Message-ID: <20161205230641.GA3924__25810.6594709263$1480979221$gmane$org@linux.vnet.ibm.com>
-References: <338378551.25158.1480804181477.JavaMail.zimbra@efficios.com>
- <20161204021318.GI3924@linux.vnet.ibm.com>
- <2019577573.25202.1480822772280.JavaMail.zimbra@efficios.com>
- <20161204035125.GL3924@linux.vnet.ibm.com>
- <283567045.26709.1480947287824.JavaMail.zimbra@efficios.com>
- <20161205223503.GY3924@linux.vnet.ibm.com>
- <1880899400.27500.1480978870945.JavaMail.zimbra@efficios.com>
-Reply-To: paulmck@linux.vnet.ibm.com
+From: "Mark E. Dawson, Jr. via lttng-dev" <lttng-dev@lists.lttng.org>
+Subject: Tracing a sequence of events through an application
+Date: Tue, 6 Dec 2016 20:12:01 +0000 (UTC)
+Message-ID: <817756865.877118.1481055121329__2250.9916023866$1481055261$gmane$org@mail.yahoo.com>
+References: <817756865.877118.1481055121329.ref@mail.yahoo.com>
+Reply-To: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============2354963344458042033=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com
- [148.163.158.5])
- by lists.lttng.org (Postfix) with ESMTPS id 3tXgRQ6Xh4ztxN
- for <lttng-dev@lists.lttng.org>; Mon,  5 Dec 2016 23:08:34 +0000 (UTC)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
- by mx0b-001b2d01.pphosted.com (8.16.0.17/8.16.0.17) with SMTP id
- uB5MwWN7052877
- for <lttng-dev@lists.lttng.org>; Mon, 5 Dec 2016 18:06:38 -0500
-Received: from e33.co.us.ibm.com (e33.co.us.ibm.com [32.97.110.151])
- by mx0b-001b2d01.pphosted.com with ESMTP id 2756tep4q8-1
- (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
- for <lttng-dev@lists.lttng.org>; Mon, 05 Dec 2016 18:06:38 -0500
-Received: from localhost
- by e33.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
- Violators will be prosecuted
- for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
- Mon, 5 Dec 2016 16:06:37 -0700
-Content-Disposition: inline
-In-Reply-To: <1880899400.27500.1480978870945.JavaMail.zimbra@efficios.com>
+Received: from nm34-vm8.bullet.mail.bf1.yahoo.com
+ (nm34-vm8.bullet.mail.bf1.yahoo.com [72.30.239.6])
+ by lists.lttng.org (Postfix) with ESMTPS id 3tYCYq6RKLzdSR
+ for <lttng-dev@lists.lttng.org>; Tue,  6 Dec 2016 20:15:59 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -43,85 +20,64 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, rp <rp@svcs.cs.pdx.edu>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gTW9uLCBEZWMgMDUsIDIwMTYgYXQgMTE6MDE6MTBQTSArMDAwMCwgTWF0aGlldSBEZXNub3ll
-cnMgd3JvdGU6Cj4gLS0tLS0gT24gRGVjIDUsIDIwMTYsIGF0IDU6MzUgUE0sIFBhdWwgRS4gTWNL
-ZW5uZXkgcGF1bG1ja0BsaW51eC52bmV0LmlibS5jb20gd3JvdGU6Cj4gCj4gPiBPbiBNb24sIERl
-YyAwNSwgMjAxNiBhdCAwMjoxNDo0N1BNICswMDAwLCBNYXRoaWV1IERlc25veWVycyB3cm90ZToK
-PiA+PiBIaSBQYXVsLAo+ID4+IAo+ID4+IFNvIGFib3V0IHRoZSBsaWJ1cmN1IHJjdV94Y2hnX3Bv
-aW50ZXIoKSBiYXJyaWVycywgaGVyZSBpcyB0aGUgY3VycmVudAo+ID4+IHNpdHVhdGlvbjoKPiA+
-PiAKPiA+PiByY3VfeGNoZ19wb2ludGVyIGlzIGltcGxlbWVudGVkIGFzOgo+ID4+IAo+ID4+ICNk
-ZWZpbmUgX3JjdV94Y2hnX3BvaW50ZXIocCwgdikgICAgICAgICAgICAgICAgICAgICAgICAgXAo+
-ID4+ICAgICAgICAgX19leHRlbnNpb25fXyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgXAo+ID4+ICAgICAgICAgKHsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgXAo+ID4+ICAgICAgICAgICAgICAgICBfX3R5cGVvZl9fKCpwKSBfX19fX19fX19w
-diA9ICh2KTsgICAgICAgXAo+ID4+ICAgICAgICAgICAgICAgICBpZiAoIV9fYnVpbHRpbl9jb25z
-dGFudF9wKHYpIHx8ICAgICAgICAgXAo+ID4+ICAgICAgICAgICAgICAgICAgICAgKCh2KSAhPSBO
-VUxMKSkgICAgICAgICAgICAgICAgICAgICAgXAo+ID4+ICAgICAgICAgICAgICAgICAgICAgICAg
-IGNtbV93bWIoKTsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCj4gPj4gICAgICAgICAg
-ICAgICAgIHVhdG9taWNfeGNoZyhwLCBfX19fX19fX19wdik7ICAgICAgICAgICBcCj4gPj4gICAg
-ICAgICB9KQo+ID4+IAo+ID4+IFNvIHdlIGFjdHVhbGx5IGFkZCBhIHdyaXRlIGJhcnJpZXIgYmVm
-b3JlIHRoZSB1YXRvbWljX3hjaGcoKSwKPiA+PiB3aGljaCBzaG91bGQgbm90IGJlIHJlcXVpcmVk
-IGlmIHdlIGNvbnNpZGVyIHRoYXQgdWF0b21pY194Y2hnKCkKPiA+PiAqc2hvdWxkKiBpbXBseSBh
-IGZ1bGwgYmFycmllciBiZWZvcmUvYWZ0ZXIuCj4gPj4gCj4gPj4gQnV0IGluIHJlYWxpdHksIGl0
-J3MgQVJNMzIgdWF0b21pY194Y2hnKCkgd2hpY2ggZG9lcyBub3QgZnVsZmlsbAo+ID4+IGl0cyBj
-b250cmFjdCwgZHVlIHRvIF9fc3luY19sb2NrX3Rlc3RfYW5kX3NldCBiZWluZyBvbmx5Cj4gPj4g
-YW4gYWNxdWlyZSBiYXJyaWVyIFsxXS4gU28gdGhlIGV4dHJhIGNtbV93bWIoKSBpcyB3aGF0IHNh
-dmVkCj4gPj4gdXMgaGVyZSBmb3IgcmN1X3hjaGdfcG9pbnRlcigpLgo+ID4+IAo+ID4+IFRoZSBj
-b2RlIGN1cnJlbnRseSBnZW5lcmF0ZWQgYnkgcmN1X3hjaGdfcG9pbnRlcigpIGxvb2tzIGxpa2U6
-Cj4gPj4gCj4gPj4gICAgMTEwMDA6ICAgICAgIGYzYmYgOGY1ZiAgICAgICBkbWIgICAgIHN5Cj4g
-Pj4gICAgMTEwMDQ6ICAgICAgIGU4NTcgZWYwMCAgICAgICBsZHJleCAgIGxyLCBbcjddCj4gPj4g
-ICAgMTEwMDg6ICAgICAgIGU4NDcgMDMwMCAgICAgICBzdHJleCAgIHIzLCByMCwgW3I3XQo+ID4+
-ICAgIDExMDBjOiAgICAgICAyYjAwICAgICAgICAgICAgY21wICAgICByMywgIzAKPiA+PiAgICAx
-MTAwZTogICAgICAgZDFmOSAgICAgICAgICAgIGJuZS5uICAgMTEwMDQgPHRocl93cml0ZXIrMHg3
-MD4KPiA+PiAgICAxMTAxMDogICAgICAgZjNiZiA4ZjViICAgICAgIGRtYiAgICAgaXNoCj4gPj4g
-Cj4gPj4gCj4gPj4gTG9va2luZyBhdCB0aGUgY21weGNoZyB2YXJpYW50Ogo+ID4+IAo+ID4+ICNk
-ZWZpbmUgX3JjdV9jbXB4Y2hnX3BvaW50ZXIocCwgb2xkLCBfbmV3KSAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIFwKPiA+PiAgICAgICAgIF9fZXh0ZW5zaW9uX18gICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCj4gPj4gICAgICAgICAoeyAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-XAo+ID4+ICAgICAgICAgICAgICAgICBfX3R5cGVvZl9fKCpwKSBfX19fX19fX19wb2xkID0gKG9s
-ZCk7ICAgICAgICAgICAgICAgICAgIFwKPiA+PiAgICAgICAgICAgICAgICAgX190eXBlb2ZfXygq
-cCkgX19fX19fX19fcG5ldyA9IChfbmV3KTsgICAgICAgICAgICAgICAgICBcCj4gPj4gICAgICAg
-ICAgICAgICAgIGlmICghX19idWlsdGluX2NvbnN0YW50X3AoX25ldykgfHwgICAgICAgICAgICAg
-ICAgICAgICAgXAo+ID4+ICAgICAgICAgICAgICAgICAgICAgKChfbmV3KSAhPSBOVUxMKSkgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwKPiA+PiAgICAgICAgICAgICAgICAgICAg
-ICAgICBjbW1fd21iKCk7ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgIFwKPiA+PiAgICAgICAgICAgICAgICAgdWF0b21pY19jbXB4Y2hnKHAsIF9fX19fX19fX3Bv
-bGQsIF9fX19fX19fX3BuZXcpOyAgICAgICBcCj4gPj4gICAgICAgICB9KQo+ID4+IAo+ID4+IFdl
-IGFsc28gbm90aWNlIGEgY21tX3dtYigpIGJlZm9yZSB3aGF0IHNob3VsZCBpbXBseSBhIGZ1bGwg
-YmFycmllcgo+ID4+ICh1YXRvbWljX2NteGNoZykuIFRoZSBsYXR0ZXIgaXMgaW1wbGVtZW50ZWQg
-d2l0aCBfX3N5bmNfdmFsX2NvbXBhcmVfYW5kX3N3YXBfTiwKPiA+PiB3aGljaCBzaG91bGQgaW1w
-bHkgYSBmdWxsIGJhcnJpZXIgYmFzZWQgb24gWzFdICh3aGljaCBpcyBhcyB2YWd1ZSBhcyBpdAo+
-ID4+IGdldHMpLiBMb29raW5nIGF0IHRoZSBnZW5lcmF0ZWQgY29kZSwgd2UgaW5kZWVkIGhhdmUg
-dHdvIGJhcnJpZXJzIGJlZm9yZToKPiA+PiAKPiA+PiAgICAxMTAwMDogICAgICAgZjNiZiA4ZjVm
-ICAgICAgIGRtYiAgICAgc3kKPiA+PiAgICAxMTAwNDogICAgICAgZjNiZiA4ZjViICAgICAgIGRt
-YiAgICAgaXNoCj4gPj4gICAgMTEwMDg6ICAgICAgIGU4NTcgZWYwMCAgICAgICBsZHJleCAgIGxy
-LCBbcjddCj4gPj4gICAgMTEwMGM6ICAgICAgIDQ1YzYgICAgICAgICAgICBjbXAgICAgIGxyLCBy
-OAo+ID4+ICAgIDExMDBlOiAgICAgICBkMTAzICAgICAgICAgICAgYm5lLm4gICAxMTAxOCA8dGhy
-X3dyaXRlcisweDg0Pgo+ID4+ICAgIDExMDEwOiAgICAgICBlODQ3IDAzMDAgICAgICAgc3RyZXgg
-ICByMywgcjAsIFtyN10KPiA+PiAgICAxMTAxNDogICAgICAgMmIwMCAgICAgICAgICAgIGNtcCAg
-ICAgcjMsICMwCj4gPj4gICAgMTEwMTY6ICAgICAgIGQxZjcgICAgICAgICAgICBibmUubiAgIDEx
-MDA4IDx0aHJfd3JpdGVyKzB4NzQ+Cj4gPj4gICAgMTEwMTg6ICAgICAgIGYzYmYgOGY1YiAgICAg
-ICBkbWIgICAgIGlzaAo+ID4+IAo+ID4+IFNvIGZvciBzdGFibGUtMC44IGFuZCBzdGFibGUtMC45
-LCBJIHdvdWxkIGJlIHRlbXB0ZWQgdG8gZXJyIG9uCj4gPj4gdGhlIHNhZmUgc2lkZSBhbmQgc2lt
-cGx5IGFkZCB0aGUgbWlzc2luZyBjbW1fc21wX21iKCkgd2l0aGluCj4gPj4gdWF0b21pY194Y2hn
-KCkgYmVmb3JlIHRoZSBfX3N5bmNfbG9ja190ZXN0X2FuZF9zZXQoKS4KPiA+PiAKPiA+PiBGb3Ig
-dGhlIG1hc3RlciBicmFuY2gsIGluIGFkZGl0aW9uIHRvIGFkZGluZyB0aGUgbWlzc2luZyBjbW1f
-c21wX21iKCkKPiA+PiB0byB1YXRvbWljX3hjaGcoKSwgd2UgY291bGQgcmVtb3ZlIHRoZSByZWR1
-bmRhbnQgY21tX3dtYigpIGluCj4gPj4gcmN1X2NtcHhjaGdfcG9pbnRlciBhbmQgcmN1X3hjaGdf
-cG9pbnRlci4KPiA+PiAKPiA+PiBUaG91Z2h0cyA/Cj4gPiAKPiA+IFNlZW1zIHJlYXNvbmFibGUg
-dG8gbWUuICBJdCBpcyB0aGUgeDg2IGd1eXMgd2hvIG1pZ2h0IGhhdmUgb2JqZWN0aW9ucywKPiA+
-IGdpdmVuIHRoYXQgdGhlIGV4dHJhIGJhcnJpZXIgY29zdHMgdGhlbSBidXQgaGFzIG5vIGVmZmVj
-dC4gIDstKQo+IAo+IFRoaXMgYmFycmllciBpcyBvbmx5IGFkZGVkIHRvIHRoZSBhc20tc3BlY2lm
-aWMgY29kZSBvZiB1YXRvbWljX3hjaGcgYW5kIHVhdG9taWNfY21weGNoZygpLAo+IGFuZCBoYXMg
-bm8gaW1wYWN0IG9uIHg4Niwgc28gd2Ugc2hvdWxkIGJlIGdvb2QuCj4gCj4gQWN0dWFsbHksIHJl
-bW92aW5nIHRoZSBleHBsaWNpdCB3bWIoKSBmcm9tIHJjdV9jbXB4Y2hnX3BvaW50ZXIoKSBhbmQg
-cmN1X3hjaGdfcG9pbnRlcigpCj4gd2lsbCBldmVuIHNwZWVkIHVwIHRob3NlIG9wZXJhdGlvbnMg
-b24geDg2LgoKRXZlbiBiZXR0ZXIhCgoJCQkJCQkJVGhhbngsIFBhdWwKCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
-L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============2354963344458042033==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_877117_417079126.1481055121328"
+
+------=_Part_877117_417079126.1481055121328
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+All,
+I'm wondering if this is something anyone has ever done before:
+We have a financial trading application for which we'd like to trace the ti=
+ming of a sequence of related events with low impact. =C2=A0For example, tr=
+acing a market data feed packet from its reception on the NIC, to its proce=
+ssing in the Market Data portion of the code, and on & on via other layers =
+of the application until it finally reaches the Order Execution portion of =
+the code where it sends out an Order on the stock exchange. =C2=A0We're won=
+dering if there's a proven reference for using LTTng-UST to enable session =
+tracing which would link related activities in this way, as opposed to just=
+ providing aggregate timestamps at various tracepoints within our code.
+Has something like this ever been done before using LTTng-UST? If so, is th=
+ere a reference available?
+------=_Part_877117_417079126.1481055121328
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head></head><body><div style=3D"color:#000; background-color:#fff; f=
+ont-family:HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, =
+sans-serif;font-size:16px"><div id=3D"yui_3_16_0_ym19_1_1481054609869_29034=
+">All,</div><div id=3D"yui_3_16_0_ym19_1_1481054609869_29034"><br></div><di=
+v id=3D"yui_3_16_0_ym19_1_1481054609869_29034">I'm wondering if this is som=
+ething anyone has ever done before:</div><div id=3D"yui_3_16_0_ym19_1_14810=
+54609869_29034"><br></div><div id=3D"yui_3_16_0_ym19_1_1481054609869_29034"=
+ dir=3D"ltr">We have a financial trading application for which we'd like to=
+ trace the timing of a sequence of related events with low impact. &nbsp;Fo=
+r example, tracing a market data feed packet from its reception on the NIC,=
+ to its processing in the Market Data portion of the code, and on &amp; on =
+via other layers of the application until it finally reaches the Order Exec=
+ution portion of the code where it sends out an Order on the stock exchange=
+. &nbsp;We're wondering if there's a proven reference for using LTTng-UST t=
+o enable session tracing which would link related activities in this way, a=
+s opposed to just providing aggregate timestamps at various tracepoints wit=
+hin our code.</div><div id=3D"yui_3_16_0_ym19_1_1481054609869_29034" dir=3D=
+"ltr"><br></div><div id=3D"yui_3_16_0_ym19_1_1481054609869_29034" dir=3D"lt=
+r">Has something like this ever been done before using LTTng-UST? If so, is=
+ there a reference available?</div></div></body></html>
+------=_Part_877117_417079126.1481055121328--
+
+--===============2354963344458042033==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============2354963344458042033==--
