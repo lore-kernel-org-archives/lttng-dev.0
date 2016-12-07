@@ -1,18 +1,17 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules] Fix: asoc instrumentation for
-	RHEL 7.3
-Date: Wed,  7 Dec 2016 14:17:33 -0500
-Message-ID: <1481138253-2365-1-git-send-email-mjeanson__15024.4159195156$1481138282$gmane$org@efficios.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Subject: Re: [PATCH lttng-tools] Fix: Add missing pthread.h
+ include
+Date: Wed, 7 Dec 2016 22:38:48 +0100
+Message-ID: <20161207223848.1d8584a5__39058.8744696744$1481146746$gmane$org@free-electrons.com>
+References: <1480970366-14140-1-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3tYpGL0ZtLzdyP
- for <lttng-dev@lists.lttng.org>; Wed,  7 Dec 2016 19:19:37 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 3877B3402EC
- for <lttng-dev@lists.lttng.org>; Wed,  7 Dec 2016 19:19:27 +0000 (UTC)
+Received: from mail.free-electrons.com (mail.free-electrons.com [62.4.15.54])
+ by lists.lttng.org (Postfix) with ESMTP id 3tYsPG6tG0zf2t
+ for <lttng-dev@lists.lttng.org>; Wed,  7 Dec 2016 21:40:50 +0000 (UTC)
+In-Reply-To: <1480970366-14140-1-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,22 +21,19 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Ci0t
-LQogaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9sdHRuZy1tb2R1bGUvYXNvYy5oIHwgMyArKy0KIDEg
-ZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQg
-YS9pbnN0cnVtZW50YXRpb24vZXZlbnRzL2x0dG5nLW1vZHVsZS9hc29jLmggYi9pbnN0cnVtZW50
-YXRpb24vZXZlbnRzL2x0dG5nLW1vZHVsZS9hc29jLmgKaW5kZXggMDllMWZlMi4uMjUxMzZlYyAx
-MDA2NDQKLS0tIGEvaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9sdHRuZy1tb2R1bGUvYXNvYy5oCisr
-KyBiL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxlL2Fzb2MuaApAQCAtMjEsNyAr
-MjEsOCBAQCBzdHJ1Y3Qgc25kX3NvY19jYXJkOwogc3RydWN0IHNuZF9zb2NfZGFwbV93aWRnZXQ7
-CiAjZW5kaWYKIAotI2lmIChMSU5VWF9WRVJTSU9OX0NPREUgPj0gS0VSTkVMX1ZFUlNJT04oMywx
-NiwwKSkKKyNpZiAoTElOVVhfVkVSU0lPTl9DT0RFID49IEtFUk5FTF9WRVJTSU9OKDMsMTYsMCkg
-XAorCXx8IExUVE5HX1JIRUxfS0VSTkVMX1JBTkdFKDMsMTAsMCw1MTQsMCwwLCAzLDExLDAsMCww
-LDApKQogI2RlZmluZSBDT0RFQ19OQU1FX0ZJRUxEIGNvbXBvbmVudC5uYW1lCiAjZGVmaW5lIENP
-REVDX0lEX0ZJRUxEIGNvbXBvbmVudC5pZAogI2Vsc2UKLS0gCjIuNy40CgpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0
-Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
-bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+SGVsbG8sCgpPbiBNb24sICA1IERlYyAyMDE2IDE1OjM5OjI2IC0wNTAwLCBNaWNoYWVsIEplYW5z
+b24gd3JvdGU6Cj4gU29tZSBsaWJjIGxpa2UgbXVzbCBhbmQgdUNsaWJjIHJlcXVpcmVzIGV4cGxp
+Y2l0IGluY2x1ZGVzIG9mIHB0aHJlYWQuaAo+IAo+IFNpZ25lZC1vZmYtYnk6IE1pY2hhZWwgSmVh
+bnNvbiA8bWplYW5zb25AZWZmaWNpb3MuY29tPgoKVGVzdGVkLWJ5OiBUaG9tYXMgUGV0YXp6b25p
+IDx0aG9tYXMucGV0YXp6b25pQGZyZWUtZWxlY3Ryb25zLmNvbT4KClRoaXMgaXMgaW5kZWVkIG5l
+ZWRlZCB0byBmaXggdGhlIGJ1aWxkIG9uIG11c2wsIEkndmUgaW50ZWdyYXRlZCB5b3VyCnBhdGNo
+IGluIEJ1aWxkcm9vdCBmb3IgdGhlIHRpbWUgYmVpbmcuCgpUaGFua3MhCgpUaG9tYXMKLS0gClRo
+b21hcyBQZXRhenpvbmksIENUTywgRnJlZSBFbGVjdHJvbnMKRW1iZWRkZWQgTGludXggYW5kIEtl
+cm5lbCBlbmdpbmVlcmluZwpodHRwOi8vZnJlZS1lbGVjdHJvbnMuY29tCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
+L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
