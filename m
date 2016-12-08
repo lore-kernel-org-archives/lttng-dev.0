@@ -1,17 +1,15 @@
-From: "Mark E. Dawson, Jr. via lttng-dev" <lttng-dev@lists.lttng.org>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: URCU_CALL_RCU_RT and its implications
-Date: Thu, 8 Dec 2016 19:59:48 +0000 (UTC)
-Message-ID: <1252570317.649997.1481227188949__34010.3760514923$1481227338$gmane$org@mail.yahoo.com>
+Date: Thu, 8 Dec 2016 21:46:30 +0000 (UTC)
+Message-ID: <2072321356.31974.1481233590402.JavaMail.zimbra__7722.75256827033$1481233499$gmane$org@efficios.com>
 References: <1238891560.614917.1481226788805.ref@mail.yahoo.com>
  <1238891560.614917.1481226788805@mail.yahoo.com>
-Reply-To: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2495604107336642446=="
+Content-Type: multipart/mixed; boundary="===============8660503077552706487=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from nm42-vm8.bullet.mail.bf1.yahoo.com
- (nm42-vm8.bullet.mail.bf1.yahoo.com [216.109.114.207])
- by lists.lttng.org (Postfix) with ESMTPS id 3tZRC5596Kzg6k
- for <lttng-dev@lists.lttng.org>; Thu,  8 Dec 2016 20:04:01 +0000 (UTC)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3tZTTf3V2hzgbY
+ for <lttng-dev@lists.lttng.org>; Thu,  8 Dec 2016 21:46:46 +0000 (UTC)
 In-Reply-To: <1238891560.614917.1481226788805@mail.yahoo.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -22,134 +20,169 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>, Lttng-dev <lttng-dev@lists.lttng.org>
+To: "Mark E. Dawson, Jr." <medawsonjr@yahoo.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============2495604107336642446==
+--===============8660503077552706487==
 Content-Type: multipart/alternative;
-	boundary="----=_Part_649996_382730768.1481227188946"
+	boundary="=_1e4de41f-f182-4046-b86c-da4e5408e598"
 
-------=_Part_649996_382730768.1481227188946
-Content-Type: text/plain; charset=UTF-8
+--=_1e4de41f-f182-4046-b86c-da4e5408e598
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+----- On Dec 8, 2016, at 2:53 PM, lttng-dev <lttng-dev@lists.lttng.org> wrote: 
+
+> All,
+
+> In the documentation for the create_call_rcu_data() call, we have the following
+> description of the URCU_CALL_RCU_RT flag:
+
+>> struct call_rcu_data *create_call_rcu_data(unsigned long flags, int
+>> cpu_affinity) : Returns a handle that can be passed to the other functions in
+>> this list. The flags argument can be zero, or can be URCU_CALL_RCU_RT if the
+>> application threads associated with the new callback-invocation thread are to
+>> get real-time response from call_rcu() by avoiding the need to call into the
+>> kernel to wake up the callback-invocation thread.
+
+> So setting "flags" to 0 will simply use the futex mechanism for wakeups. What
+> exactly happens when set to the RT option? Is there something else that needs
+> to be configured from the OS side to make the aforementioned option work
+> correctly?
+
+No, it's just that the call rcu worker thread will rely on periodic polling 
+of the call rcu work queue. 
+
+> I'm asking because we're seeing intermittent issues whereby on application
+> startup, the reclamation thread (call_rcu) does exactly one cleanup, but then
+> never does it again. We have the URCU_CALL_RCU_RT flag set. Originally, we
+> thought it was because the updater was not appropriately registered as a
+> reader. But after ensuring that is the case, it still happens in 10% of
+> startups.
+
+Which URCU flavor are you using ? You may have a thread stuck as 
+being a RCU reader forever, which would cause this kind of issue. 
+
+For instance, unbalanced rcu read-side lock/unlock, or blocking on 
+poll() or other while holding a rcu read-side lock, or blocking on 
+pthread_join() while holding rcu read-side lock... 
+
+And if you use the QSBR flavor, remember that registered threads 
+are by default in read-side. So you need to mark them as explicitly 
+"offline" whenever you do any blocking op (e.g. poll(), blocking read(), 
+pthread_join....). 
+
+> Lastly, we wonder why it would even work correctly *at all* when we failed to
+> register the updater as a reader thread.
+
+I don't understand the context of this question. Can you provide more info ? 
+
+Thanks, 
+
+Mathieu 
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+--=_1e4de41f-f182-4046-b86c-da4e5408e598
+Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-And yes, the rcu_quiescent_state() is being regularly called in the updater=
- thread, just as an fyi.
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
+__">----- On Dec 8, 2016, at 2:53 PM, lttng-dev &lt;lttng-dev@lists.lttng.o=
+rg&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockqu=
+ote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px=
+;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-=
+family:Helvetica,Arial,sans-serif;font-size:12pt;"><div style=3D"color:#000=
+; background-color:#fff; font-family:HelveticaNeue, Helvetica Neue, Helveti=
+ca, Arial, Lucida Grande, sans-serif;font-size:16px"><div id=3D"yui_3_16_0_=
+ym19_1_1481226442633_2947">All,</div><div id=3D"yui_3_16_0_ym19_1_148122644=
+2633_2947"><br></div><div id=3D"yui_3_16_0_ym19_1_1481226442633_2947">In th=
+e documentation for the create_call_rcu_data() call, we have the following =
+description of the URCU_CALL_RCU_RT flag:</div><div id=3D"yui_3_16_0_ym19_1=
+_1481226442633_2947"><br></div><blockquote style=3D"margin: 0 0 0 40px; bor=
+der: none; padding: 0px;" id=3D"yui_3_16_0_ym19_1_1481226442633_3052"><div =
+id=3D"yui_3_16_0_ym19_1_1481226442633_2947" dir=3D"ltr"><code id=3D"yui_3_1=
+6_0_ym19_1_1481226442633_2989">struct call_rcu_data *create_call_rcu_data(u=
+nsigned long flags, int cpu_affinity)</code><span style=3D"font-family: Tim=
+es; font-size: medium;" id=3D"yui_3_16_0_ym19_1_1481226442633_2990">: Retur=
+ns a handle that can be passed to the other functions in this list. The&nbs=
+p;</span><code id=3D"yui_3_16_0_ym19_1_1481226442633_2991">flags</code><spa=
+n style=3D"font-family: Times; font-size: medium;" id=3D"yui_3_16_0_ym19_1_=
+1481226442633_2992">&nbsp;argument can be zero, or can be&nbsp;</span><code=
+ id=3D"yui_3_16_0_ym19_1_1481226442633_2993">URCU_CALL_RCU_RT</code><span s=
+tyle=3D"font-family: Times; font-size: medium;" id=3D"yui_3_16_0_ym19_1_148=
+1226442633_2994">&nbsp;if the application threads associated with the new c=
+allback-invocation thread are to get real-time response from&nbsp;</span><c=
+ode id=3D"yui_3_16_0_ym19_1_1481226442633_2995">call_rcu()</code><span styl=
+e=3D"font-family: Times; font-size: medium;" id=3D"yui_3_16_0_ym19_1_148122=
+6442633_2996">&nbsp;by avoiding the need to call into the kernel to wake up=
+ the callback-invocation thread.</span></div><div id=3D"yui_3_16_0_ym19_1_1=
+481226442633_2947" dir=3D"ltr"><span style=3D"font-family: Times; font-size=
+: medium;"><br></span></div></blockquote><div id=3D"yui_3_16_0_ym19_1_14812=
+26442633_3169">So setting "flags" to 0 will simply use the futex mechanism =
+for wakeups. What exactly happens when set to the RT option? Is there somet=
+hing else that needs to be configured from the OS side to make the aforemen=
+tioned option work correctly?</div></div></blockquote><div><br></div><div>N=
+o, it's just that the call rcu worker thread will rely on periodic polling<=
+br data-mce-bogus=3D"1"></div><div>of the call rcu work queue.<br data-mce-=
+bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"=
+border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;f=
+ont-weight:normal;font-style:normal;text-decoration:none;font-family:Helvet=
+ica,Arial,sans-serif;font-size:12pt;"><div style=3D"color:#000; background-=
+color:#fff; font-family:HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lu=
+cida Grande, sans-serif;font-size:16px"><br><div id=3D"yui_3_16_0_ym19_1_14=
+81226442633_3170">I'm asking because we're seeing intermittent issues where=
+by on application startup, the reclamation thread (call_rcu) does exactly o=
+ne cleanup, but then never does it again. &nbsp;We have the URCU_CALL_RCU_R=
+T flag set. &nbsp;Originally, we thought it was because the updater was not=
+ appropriately registered as a reader. But after ensuring that is the case,=
+ it still happens in 10% of startups.&nbsp;</div></div></blockquote><div>Wh=
+ich URCU flavor are you using ? You may have a thread stuck as<br></div><di=
+v>being a RCU reader forever, which would cause this kind of issue.<br data=
+-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>For instanc=
+e, unbalanced rcu read-side lock/unlock, or blocking on<br></div><div>poll(=
+) or other while holding a rcu read-side lock, or blocking on<br data-mce-b=
+ogus=3D"1"></div><div>pthread_join() while holding rcu read-side lock...<br=
+ data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>And if=
+ you use the QSBR flavor, remember that registered threads<br data-mce-bogu=
+s=3D"1"></div><div>are by default in read-side. So you need to mark them as=
+ explicitly<br data-mce-bogus=3D"1"></div><div>"offline" whenever you do an=
+y blocking op (e.g. poll(), blocking read(),<br data-mce-bogus=3D"1"></div>=
+<div>pthread_join....).<br data-mce-bogus=3D"1"></div><div><br data-mce-bog=
+us=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"bor=
+der-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font=
+-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica=
+,Arial,sans-serif;font-size:12pt;"><div style=3D"color:#000; background-col=
+or:#fff; font-family:HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucid=
+a Grande, sans-serif;font-size:16px"><br><div id=3D"yui_3_16_0_ym19_1_14812=
+26442633_3171">Lastly, we wonder why it would even work correctly *at all* =
+when we failed to register the updater as a reader thread.</div></div></blo=
+ckquote><div>I don't understand the context of this question. Can you provi=
+de more info ?<br></div><div><br data-mce-bogus=3D"1"></div><div>Thanks,<br=
+ data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathie=
+u<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div><b=
+r data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquot=
+e style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;c=
+olor:#000;font-weight:normal;font-style:normal;text-decoration:none;font-fa=
+mily:Helvetica,Arial,sans-serif;font-size:12pt;"><br>______________________=
+_________________________<br>lttng-dev mailing list<br>lttng-dev@lists.lttn=
+g.org<br>https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br></bl=
+ockquote></div><div><br></div><div data-marker=3D"__SIG_POST__">-- <br></di=
+v><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div><=
+/div></body></html>
+--=_1e4de41f-f182-4046-b86c-da4e5408e598--
 
-      From: "Mark E. Dawson, Jr. via lttng-dev" <lttng-dev@lists.lttng.org>
- To: Lttng-dev <lttng-dev@lists.lttng.org>=20
- Sent: Thursday, December 8, 2016 1:53 PM
- Subject: [lttng-dev] URCU_CALL_RCU_RT and its implications
-  =20
-All,
-In the documentation for the create_call_rcu_data() call, we have the follo=
-wing description of the URCU_CALL_RCU_RT flag:
-
-struct call_rcu_data *create_call_rcu_data(unsigned long flags, int cpu_aff=
-inity): Returns a handle that can be passed to the other functions in this =
-list. The=C2=A0flags=C2=A0argument can be zero, or can be=C2=A0URCU_CALL_RC=
-U_RT=C2=A0if the application threads associated with the new callback-invoc=
-ation thread are to get real-time response from=C2=A0call_rcu()=C2=A0by avo=
-iding the need to call into the kernel to wake up the callback-invocation t=
-hread.
-
-So setting "flags" to 0 will simply use the futex mechanism for wakeups. Wh=
-at exactly happens when set to the RT option? Is there something else that =
-needs to be configured from the OS side to make the aforementioned option w=
-ork correctly?
-I'm asking because we're seeing intermittent issues whereby on application =
-startup, the reclamation thread (call_rcu) does exactly one cleanup, but th=
-en never does it again. =C2=A0We have the URCU_CALL_RCU_RT flag set. =C2=A0=
-Originally, we thought it was because the updater was not appropriately reg=
-istered as a reader. But after ensuring that is the case, it still happens =
-in 10% of startups.=C2=A0
-Lastly, we wonder why it would even work correctly *at all* when we failed =
-to register the updater as a reader thread.
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
-  =20
-------=_Part_649996_382730768.1481227188946
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><head></head><body><div style=3D"color:#000; background-color:#fff; f=
-ont-family:HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, =
-sans-serif;font-size:16px"><div id=3D"yui_3_16_0_ym19_1_1481226938043_9555"=
-><span id=3D"yui_3_16_0_ym19_1_1481226938043_9580">And yes, the rcu_quiesce=
-nt_state() is being regularly called in the updater thread, just as an fyi.=
-</span></div><div class=3D"qtdSeparateBR" id=3D"yui_3_16_0_ym19_1_148122693=
-8043_9554"><br><br></div><div class=3D"yahoo_quoted" id=3D"yui_3_16_0_ym19_=
-1_1481226938043_9544" style=3D"display: block;">  <div style=3D"font-family=
-: HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-seri=
-f; font-size: 16px;" id=3D"yui_3_16_0_ym19_1_1481226938043_9543"> <div styl=
-e=3D"font-family: HelveticaNeue, Helvetica Neue, Helvetica, Arial, Lucida G=
-rande, sans-serif; font-size: 16px;" id=3D"yui_3_16_0_ym19_1_1481226938043_=
-9542"> <div dir=3D"ltr" id=3D"yui_3_16_0_ym19_1_1481226938043_9551"> <font =
-size=3D"2" face=3D"Arial" id=3D"yui_3_16_0_ym19_1_1481226938043_9553"> <hr =
-size=3D"1" id=3D"yui_3_16_0_ym19_1_1481226938043_9552"> <b><span style=3D"f=
-ont-weight:bold;">From:</span></b> "Mark E. Dawson, Jr. via lttng-dev" &lt;=
-lttng-dev@lists.lttng.org&gt;<br> <b><span style=3D"font-weight: bold;">To:=
-</span></b> Lttng-dev &lt;lttng-dev@lists.lttng.org&gt; <br> <b><span style=
-=3D"font-weight: bold;">Sent:</span></b> Thursday, December 8, 2016 1:53 PM=
-<br> <b><span style=3D"font-weight: bold;">Subject:</span></b> [lttng-dev] =
-URCU_CALL_RCU_RT and its implications<br> </font> </div> <div class=3D"y_ms=
-g_container" id=3D"yui_3_16_0_ym19_1_1481226938043_9541"><br><div id=3D"yiv=
-2166555474"><div id=3D"yui_3_16_0_ym19_1_1481226938043_9540"><div style=3D"=
-color:#000;background-color:#fff;font-family:HelveticaNeue, Helvetica Neue,=
- Helvetica, Arial, Lucida Grande, sans-serif;font-size:16px;" id=3D"yui_3_1=
-6_0_ym19_1_1481226938043_9539"><div id=3D"yiv2166555474yui_3_16_0_ym19_1_14=
-81226442633_2947">All,</div><div id=3D"yiv2166555474yui_3_16_0_ym19_1_14812=
-26442633_2947"><br></div><div id=3D"yiv2166555474yui_3_16_0_ym19_1_14812264=
-42633_2947">In the documentation for the create_call_rcu_data() call, we ha=
-ve the following description of the URCU_CALL_RCU_RT flag:</div><div id=3D"=
-yiv2166555474yui_3_16_0_ym19_1_1481226442633_2947"><br></div><blockquote st=
-yle=3D"margin:0 0 0 40px;border:none;padding:0px;" id=3D"yiv2166555474yui_3=
-_16_0_ym19_1_1481226442633_3052"><div id=3D"yiv2166555474yui_3_16_0_ym19_1_=
-1481226442633_2947" dir=3D"ltr"><code id=3D"yiv2166555474yui_3_16_0_ym19_1_=
-1481226442633_2989">struct call_rcu_data *create_call_rcu_data(unsigned lon=
-g flags, int cpu_affinity)</code><span style=3D"font-family:Times;font-size=
-:medium;" id=3D"yiv2166555474yui_3_16_0_ym19_1_1481226442633_2990">: Return=
-s a handle that can be passed to the other functions in this list. The&nbsp=
-;</span><code id=3D"yiv2166555474yui_3_16_0_ym19_1_1481226442633_2991">flag=
-s</code><span style=3D"font-family:Times;font-size:medium;" id=3D"yiv216655=
-5474yui_3_16_0_ym19_1_1481226442633_2992">&nbsp;argument can be zero, or ca=
-n be&nbsp;</span><code id=3D"yiv2166555474yui_3_16_0_ym19_1_1481226442633_2=
-993">URCU_CALL_RCU_RT</code><span style=3D"font-family:Times;font-size:medi=
-um;" id=3D"yiv2166555474yui_3_16_0_ym19_1_1481226442633_2994">&nbsp;if the =
-application threads associated with the new callback-invocation thread are =
-to get real-time response from&nbsp;</span><code id=3D"yiv2166555474yui_3_1=
-6_0_ym19_1_1481226442633_2995">call_rcu()</code><span style=3D"font-family:=
-Times;font-size:medium;" id=3D"yiv2166555474yui_3_16_0_ym19_1_1481226442633=
-_2996">&nbsp;by avoiding the need to call into the kernel to wake up the ca=
-llback-invocation thread.</span></div><div id=3D"yiv2166555474yui_3_16_0_ym=
-19_1_1481226442633_2947" dir=3D"ltr"><span style=3D"font-family:Times;font-=
-size:medium;"><br></span></div></blockquote><div id=3D"yiv2166555474yui_3_1=
-6_0_ym19_1_1481226442633_3169">So setting "flags" to 0 will simply use the =
-futex mechanism for wakeups. What exactly happens when set to the RT option=
-? Is there something else that needs to be configured from the OS side to m=
-ake the aforementioned option work correctly?</div><div><br></div><div id=
-=3D"yiv2166555474yui_3_16_0_ym19_1_1481226442633_3170">I'm asking because w=
-e're seeing intermittent issues whereby on application startup, the reclama=
-tion thread (call_rcu) does exactly one cleanup, but then never does it aga=
-in. &nbsp;We have the URCU_CALL_RCU_RT flag set. &nbsp;Originally, we thoug=
-ht it was because the updater was not appropriately registered as a reader.=
- But after ensuring that is the case, it still happens in 10% of startups.&=
-nbsp;</div><div><br></div><div id=3D"yiv2166555474yui_3_16_0_ym19_1_1481226=
-442633_3171">Lastly, we wonder why it would even work correctly *at all* wh=
-en we failed to register the updater as a reader thread.</div></div></div><=
-/div><br>_______________________________________________<br>lttng-dev maili=
-ng list<br><a ymailto=3D"mailto:lttng-dev@lists.lttng.org" href=3D"mailto:l=
-ttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><br><a href=3D"https=
-://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" target=3D"_blank">ht=
-tps://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br><br><br></d=
-iv> </div> </div>  </div></div></body></html>
-------=_Part_649996_382730768.1481227188946--
-
---===============2495604107336642446==
+--===============8660503077552706487==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -159,4 +192,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============2495604107336642446==--
+--===============8660503077552706487==--
