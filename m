@@ -1,34 +1,16 @@
-From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-Subject: Re: Fast way to clear trace logs and continue tracing?
-Date: Wed, 14 Dec 2016 11:59:18 -0500
-Message-ID: <84b44894-8344-f416-2763-b97c1d2621fa__34571.2825110697$1481734774$gmane$org@efficios.com>
-References: <DB5PR07MB0949E65A3F1EEFBEDD89CD79F09A0@DB5PR07MB0949.eurprd07.prod.outlook.com>
+From: Peter Morreale <pwmorreale@gmail.com>
+Subject: thread context for call_rcu?
+Date: Wed, 14 Dec 2016 11:47:54 -0700
+Message-ID: <CACMVCQ17W5fitJdChAO3vTdRBNvTW1tfhEL4Pha62UAXSn-0MA__34483.6953365759$1481741288$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============3989497609199476291=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3tf2sq6n75ztSs
- for <lttng-dev@lists.lttng.org>; Wed, 14 Dec 2016 17:01:35 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id AB4823401B7
- for <lttng-dev@lists.lttng.org>; Wed, 14 Dec 2016 17:01:19 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
- with ESMTP id 41m9CKkDg4hi for <lttng-dev@lists.lttng.org>;
- Wed, 14 Dec 2016 17:01:19 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 185403401E8
- for <lttng-dev@lists.lttng.org>; Wed, 14 Dec 2016 17:01:19 +0000 (UTC)
-Received: from mail.efficios.com ([127.0.0.1])
- by localhost (evm-mail-1.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
- with ESMTP id Xl6Bq-d0wWXB for <lttng-dev@lists.lttng.org>;
- Wed, 14 Dec 2016 17:01:19 +0000 (UTC)
-Received: from [172.16.0.165] (cable-192.222.218.157.electronicbox.net
- [192.222.218.157])
- by mail.efficios.com (Postfix) with ESMTPSA id 006E83401B7
- for <lttng-dev@lists.lttng.org>; Wed, 14 Dec 2016 17:01:18 +0000 (UTC)
-In-Reply-To: <DB5PR07MB0949E65A3F1EEFBEDD89CD79F09A0@DB5PR07MB0949.eurprd07.prod.outlook.com>
+Received: from mail-oi0-x22b.google.com (mail-oi0-x22b.google.com
+ [IPv6:2607:f8b0:4003:c06::22b])
+ by lists.lttng.org (Postfix) with ESMTPS id 3tf5H24FLDztWF
+ for <lttng-dev@lists.lttng.org>; Wed, 14 Dec 2016 18:50:06 +0000 (UTC)
+Received: by mail-oi0-x22b.google.com with SMTP id y198so29650465oia.1
+ for <lttng-dev@lists.lttng.org>; Wed, 14 Dec 2016 10:47:56 -0800 (PST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -41,59 +23,34 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgRG91Z2xhcywKCgpPbiAyMDE2LTEyLTEzIDA5OjQxIFBNLCBEb3VnbGFzIEdyYWhhbSB3cm90
-ZToKPiBIaSwKPgo+IEkganVzdCBzdGFydGVkIHdvcmtpbmcgd2l0aCBsdHRuZyByZWNlbnRseSwg
-c28gYXBvbG9naWVzIGlmIHRoaXMgaXMgYSBkdW1iIHF1ZXN0aW9uLgoKV2VsY29tZSEKCj4KPiBT
-dXBwb3NlIEkgaGF2ZSBjb25maWd1cmVkIGFuZCBzdGFydGVkIGEgc2Vzc2lvbiBhbmQgaGF2ZSBj
-b2xsZWN0ZWQgYSBidW5jaCBvZiB0cmFjZXMgaW4gYSB0cmFjZSBmaWxlLiAgTm93IEkgd2FudCB0
-byBjbGVhciB0aG9zZSB0cmFjZXMgYnV0IHRoZW4gY29udGludWUgc2F2aW5nIG5ldyB0cmFjZXMg
-dXNpbmcgdGhlIHNhbWUgc2Vzc2lvbi4gIElzIHRoZXJlIGEgcmVhc29uYWJseSBmYXN0IHdheSB0
-byBkbyB0aGF0PwoKTm9ybWFsbHkgdGhlIHR5cGljYWwgdXNlIGNhc2UgaXMgdGhlIG90aGVyIHdh
-eSBhcm91bmQsIHlvdSB3b3JrIGluIApmbGlnaHQtcmVjb3JkZXIgbW9kZSAobm90IHRvdWNoaW5n
-IGRpc2sgb3IgbmV0d29yaykgYW5kIHRha2UgInNuYXBzaG90IiAKd2hlbiBuZWVkZWQuCgpDb3Vs
-ZCB5b3UgZXhwbGFpbiB3aGF0IHlvdSB3YW50IHRvIGFjaGlldmU/IFdoYXQgaXMgdGhlIGJpZ2dl
-ciBwaWN0dXJlPwoKPgo+IFdoYXQgd2UgY3VycmVudGx5IGRvIGlzICJsdHRuZyBzYXZlIC0tb3V0
-cHV0LXBhdGg9eC5jZmc7IGx0dG5nIHN0b3A7IGx0dG5nIGRlc3Ryb3k7IHJtIC1yZiA8dHJhY2Vk
-aXI+OyBsdHRuZyBsb2FkIC0taW5wdXQtcGF0aD14LmNmZwoKQXJlIHlvdSBzYXZpbmcvbG9hZGlu
-ZyBtdWx0aXBsZSBzZXNzaW9ucyA/IFByb2JhYmx5IG5vdCBzaW5jZSB5b3UgdXNlIAoibHR0bmcg
-c3RvcCIgYW5kICJsdHRuZyBkZXN0cm95IGRpcmVjdGx5Ii4KClN0aWxsLCB1c2luZyAibHR0bmcg
-c2F2ZSAtLW91dHB1dC1wYXRoPXguY2ZnIiB3aWxsIGNyZWF0ZSBhIGRpcmVjdG9yeSAKInguY2Zn
-IiBjb250YWluaW5nIG9uZSB0byBtdWx0aXBsZSBzZXNzaW9ucyBjb25maWd1cmF0aW9ucy4KCiJs
-dHRuZyBsb2FkIC0taW5wdXQtcGF0aD14LmNmZyIgIHdpbGwgbG9vayBpbnRvIHRoZSAieC5jZmci
-IGZvbGRlciBhbmQgCmxvYWQgYWxsIHNlc3Npb25zIGNvbmZpZ3VyYXRpb24gcHJlc2VudC4KCklm
-IHRoaXMgaXMgbm90IHRoZSBiZWhhdmlvciB5b3Ugd2FudCBtYWtlIHN1cmUgdG8gZ2l2ZSB0aGUg
-bmFtZSBvZiB0aGUgCnNlc3Npb24gdG8gYm90aCBjb21tYW5kcy4KCllvdSBzeXN0ZW1hdGljYWxs
-eSByZW1vdmUgdGhlIHRyYWNlcyA/IFdoZW4gZG9lcyB0aGlzIGdldCBleGVjdXRlZCAKKGNyb24s
-IHVzZXIgYWN0aW9uLCB0cmFjZSBzaXplKT8KV2hlbiBkb2VzIHRoZSB0cmFjZSBkYXRhIGJlY29t
-ZSBpbXBvcnRhbnQ/IFdoZW4gZG8geW91IHdhbnQgdG8ga2VlcCB0aGUgCnRyYWNlIGRhdGE/CgpJ
-cyBpdCBhIHJlcXVpcmVtZW50IHRoYXQgdGhlIG5ldyBzZXNzaW9uIGhhdmUgdGhlIHNhbWUgbmFt
-ZSBhbmQvb3IgdGhlIApzYW1lIG91dHB1dCBwYXRoPwoKPgo+IEJ1dCB0aGlzIGlzIHZlcnkgc2xv
-dyBpbiBzb21lIGNhc2VzLiAgVGhlIGx0dG5nIGxvYWQgaW4gcGFydGljdWxhciBpcyBleHRyZW1l
-bHkgc2xvdyB3aGVuIExpbnV4IGlzIHJ1bm5pbmcgaW5zaWRlIGEgdmlydHVhbCBtYWNoaW5lLgoK
-SSB3aWxsIHRlc3QgdGhhdC4gTm90IHN1cmUgd2hhdCB3b3VsZCBjYXVzZSB0aGUgbG9hZCBjb21t
-YW5kIHRvIGJlIHNsb3cgCmluc2lkZSBhIHZtIHBhcnRpY3VsYXJseS4KVGhlICIgbHR0bmcgc3Rv
-cCIgYW5kICJybSAtcmYiIGFyZSBtb3N0IHByb2JhYmx5IHRha2luZyBtb3JlIHRpbWUgdGhhbiAK
-dGhlIGxvYWQgY29tbWFuZC4KCkNvdWxkIHlvdSBnaXZlIHVzIG1vcmUgaW5mb3JtYXRpb24gcmVn
-YXJkaW5nIHRoZSBjb25maWd1cmF0aW9uIHlvdSBhcmUgCmxvYWRpbmc/IE51bWJlciBvZiBjaGFu
-bmVscywgZW5hYmxlZCBldmVudHMsIHR5cGUgb2Ygc2Vzc2lvbiAobGl2ZSwgdG8gCmRpc2ssIHN0
-cmVhbWluZykuCgo+ICAgIEkgd2FzIGhvcGluZyB0aGF0IGx0dG5nIG1pZ2h0IHN1cHBvcnQgYSAi
-bHR0bmcgY2xlYXIiIHRoYXQgY291bGQgYmUgdXNlZCB0byByZW1vdmUgYWxsIHRyYWNlcyBmcm9t
-IHRoZSB0cmFjZSBmaWxlLCBidXQgSSBjYW4ndCBmaW5kIGFueSBzdWNoIGNvbW1hbmQuCgpUaGF0
-IGlzIGFuIGludGVyZXN0aW5nIGlkZWEuCgo+Cj4gSSBub3RlIHRoYXQgbHR0bmcgZG9lcyBzdXBw
-b3J0IHRoZSByb3RhdGluZyBvZiB0cmFjZSBmaWxlcyB3aGVuIHRoZXkgcmVhY2ggYSBzaXplIGxp
-bWl0LiAgSSB0aGluayB0aGF0J3MgZmFpcmx5IGNsb3NlIHRvIHdoYXQgSSB3YW50LiAgSWYgSSBj
-b3VsZCBmb3JjZSBhIHRyYWNlIGZpbGUgcm90YXRpb24gYXQgYW4gYXJiaXRyYXJ5IHRpbWUgYW5k
-IHRoZW4gc2ltcGxlIHJlbW92ZSB0aGUgb2xkIHJvdGF0ZWQgbG9nLCBsZWF2aW5nIHRoZSBuZXcg
-b25lLCB0aGF0IHNlZW1zIGxpa2UgaXQgc2hvdWxkIGRvIHRoZSBqb2IuICBFeGNlcHQgSSBkb24n
-dCBzZWUgYW55IHdheSB0byBmb3JjZSBhIHJvdGF0aW9uLgoKSGF2aW5nIGEgd2F5IHRvIGZvcmNl
-IGEgcm90YXRpb24gd291bGQgYmUgc29tZXRoaW5nIHRoYXQgd291bGQgbWFrZSAKc2Vuc2UuIE1h
-dGhpZXUgRGVzbm95ZXJzL0plcmVtaWUgR2FsYXJuZWF1IG1pZ2h0IGJlIGFibGUgdG8gZ2l2ZSBt
-b3JlIAppbmZvcm1hdGlvbiBvbiB0aGUgZmVhc2liaWxpdHkgb2Ygc3VjaCBhIGZlYXR1cmUuCgo+
-Cj4gQW55IGlkZWFzPwo+Cj4gVGhhbmtzLAo+IERvdWcKClNvIGZhciBJIGRvIG5vdCBzZWUgYW55
-IGR1bWIgcXVlc3Rpb25zLiA6UAoKQ2hlZXJzCgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
-YW4vbGlzdGluZm8vbHR0bmctZGV2CgotLSAKSm9uYXRoYW4gUi4gSnVsaWVuCkVmZmljaW9zCgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
-bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============3989497609199476291==
+Content-Type: multipart/alternative; boundary=94eb2c1920a658654a0543a2c6a9
+
+--94eb2c1920a658654a0543a2c6a9
+Content-Type: text/plain; charset=UTF-8
+
+Is there anyway for a routine to determine whether it is executing in a
+call_rcu thread context?
+(ao as to avoid nested call_rcu() calls?)
+
+Thx
+-PWM
+
+--94eb2c1920a658654a0543a2c6a9
+Content-Type: text/html; charset=UTF-8
+
+<div dir="ltr"><div><div><div><div><br></div>Is there anyway for a routine to determine whether it is executing in a call_rcu thread context?<br></div>(ao as to avoid nested call_rcu() calls?)<br><br></div>Thx<br></div>-PWM<br></div>
+
+--94eb2c1920a658654a0543a2c6a9--
+
+--===============3989497609199476291==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============3989497609199476291==--
