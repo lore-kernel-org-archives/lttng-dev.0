@@ -1,16 +1,18 @@
-From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
+From: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>
 Subject: Re: lttng load misbehaving
-Date: Thu, 15 Dec 2016 11:56:09 -0500
-Message-ID: <729200db-acca-0e8b-7d0b-abb08e2d3076__10082.8998293311$1481820982$gmane$org@efficios.com>
+Date: Thu, 15 Dec 2016 19:27:52 +0000
+Message-ID: <48CF5AC71E61DB46B70D0F388054EFFDD2497C60__5178.83387296951$1481830161$gmane$org@VAL-E-02.valcartier.drdc-rddc.gc.ca>
 References: <48CF5AC71E61DB46B70D0F388054EFFDD2493BBD@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+ <729200db-acca-0e8b-7d0b-abb08e2d3076@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3tfflh2rtTzskW
- for <lttng-dev@lists.lttng.org>; Thu, 15 Dec 2016 16:58:24 +0000 (UTC)
-In-Reply-To: <48CF5AC71E61DB46B70D0F388054EFFDD2493BBD@VAL-E-02.valcartier.drdc-rddc.gc.ca>
+Received: from mx.drdc-rddc.gc.ca (fw.drenet.dnd.ca [131.136.242.1])
+ by lists.lttng.org (Postfix) with ESMTP id 3tfk8C732vzsqd
+ for <lttng-dev@lists.lttng.org>; Thu, 15 Dec 2016 19:31:23 +0000 (UTC)
+In-Reply-To: <729200db-acca-0e8b-7d0b-abb08e2d3076@efficios.com>
+Content-Language: fr-FR
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,44 +22,17 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "Thibault, Daniel" <Daniel.Thibault@drdc-rddc.gc.ca>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: 'Jonathan Rajotte Julien' <Jonathan.rajotte-julien@efficios.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgoKT24gMjAxNi0xMi0xNSAxMTozNiBBTSwgVGhpYmF1bHQsIERhbmllbCB3cm90ZToKPiAg
-ICAgSSd2ZSBqdXN0IGhhZCB0aGUgd2VpcmRlc3QgdGhpbmcgaGFwcGVuLiAgSSdtIHJ1bm5pbmcg
-dGhyZWUgY29waWVzIG9mIHRoZSBzYW1lIFZNIChVYnVudHUgMTQuMDQuNCB3aXRoIExUVG5nIDIu
-OC4wKSBhbmQgdGhlIHNhbWUgTFRUbmcgdHJhY2UgY2FwdHVyZSBzY3JpcHQsIHRoZSBvbmx5IHZh
-cmlhdGlvbiBiZWluZyBhZGp1c3RtZW50cyB0byB0aGUgdHJhY2Ugc3RvcmFnZSBwYXRoIHRvIGFj
-Y29tbW9kYXRlIHNsaWdodGx5IGRpZmZlcmVudCBzaGFyZWQgZm9sZGVyIGFycmFuZ2VtZW50cyBi
-ZXR3ZWVuIHRoZSBWTSBhbmQgaXRzIGhvc3QuCj4KPiAgICAgT24gb25lIG1hY2hpbmUsIGFmdGVy
-IEkgZWRpdGVkIH4vLmx0dG5nLzxzZXNzaW9uLW5hbWU+Lmx0dG5nIHRvIGNoYW5nZSBpdHMgc2Vz
-c2lvbnM6IHNlc3Npb246IG91dHB1dDogY29uc3VtZXJfb3V0cHV0OiBkZXN0aW5hdGlvbjogcGF0
-aCBtZW1iZXIsIGhhdmluZyBsdHRuZyBsb2FkIHRoZSBzZXNzaW9uIHJlc3VsdGVkIGluIHRoZSBw
-cmV2aW91cyBwYXRoIGJlaW5nIHVzZWQgKEkgY2FuIHNlZSB0aGlzIGJ5IGRvaW5nICdsdHRuZyBs
-b2FkIDxzZXNzaW9uLW5hbWU+JyBhbmQgdGhlbiAnbHR0bmcgbGlzdCA8c2Vzc2lvbi1uYW1lPicp
-LgoKWW91IG1pZ2h0IG5vdCBoYXZlIHNhdmVkIHRoZSBlZGl0ZWQgZmlsZS4KCj4gICAgQml6YXJy
-ZSEgIFRoaXMgZGlkIG5vdCBoYXBwZW4gb24gdGhlIG90aGVyIG1hY2hpbmVzLCBzbyBJJ20gcmVh
-bGx5IHVuc3VyZSBpZiBpdHMgcmVwcm9kdWNpYmxlLiAgSXMgdGhlcmUgc29tZSBraW5kIG9mIGNh
-Y2hpbmcgcG9zc2libHkgZ29pbmcgb24/CgpOb3QgdGhhdCBJIGtub3cgb2YuCgo+ICAgIEhvdyB3
-b3VsZCBJIGdvIGFib3V0IGludmVzdGlnYXRpbmcgdGhpcz8gIChJJ3ZlIHRha2VuIGEgc25hcHNo
-b3Qgb2YgdGhlIFZNIGp1c3QgaW4gY2FzZSkKCldlbGwgYSBnb29kIHN0YXJ0IHdvdWxkIGJlIHRv
-IHJlcHJvZHVjZS4KCkNoZWVycy4KCj4KPiBEYW5pZWwgVS4gVGhpYmF1bHQsIE0uU2MuwrIKPgo+
-IEluZm9ybWF0aWNpZW4gc2NpZW50aWZpcXVlLCBDTUUtUFNDLCBDZW50cmUgZGUgcmVjaGVyY2hl
-cyBkZSBWYWxjYXJ0aWVyCj4gUmVjaGVyY2hlIGV0IGTDqXZlbG9wcGVtZW50IHBvdXIgbGEgZMOp
-ZmVuc2UgQ2FuYWRhIC8gR291dmVybmVtZW50IGR1IENhbmFkYQo+IGRhbmllbC50aGliYXVsdEBk
-cmRjLXJkZGMuZ2MuY2EgLyBUw6lsOiA0MTgtODQ0LTQwMDB4NDI0NSBUw6lsw6ljOiA0MTgtODQ0
-LTQ1MzgKPiBkYW5pZWwudGhpYmF1bHRAZm9yY2VzLmdjLmNhIC8gVMOpbDogNDE4LTg0NC00MDAw
-eDQyNDUgVMOpbMOpYzogNDE4LTg0NC00NTM4Cj4KPiBDb21wdXRlciBTY2llbnRpc3QsIE1DQ1Mt
-U1BDLCBWYWxjYXJ0aWVyIFJlc2VhcmNoIENlbnRyZQo+IERlZmVuY2UgUmVzZWFyY2ggYW5kIERl
-dmVsb3BtZW50IENhbmFkYSAvIEdvdmVybm1lbnQgb2YgQ2FuYWRhCj4gZGFuaWVsLnRoaWJhdWx0
-QGRyZGMtcmRkYy5nYy5jYSAvIFRlbDogNDE4LTg0NC00MDAweDQyNDUgRmF4OiA0MTgtODQ0LTQ1
-MzgKPiBkYW5pZWwudGhpYmF1bHRAZm9yY2VzLmdjLmNhIC8gVGVsOiA0MTgtODQ0LTQwMDB4NDI0
-NSBGYXg6IDQxOC04NDQtNDUzOAo+Cj4gRFJEQyBpcyBhbiBhZ2VuY3kgb2YgdGhlIERlcGFydG1l
-bnQgb2YgTmF0aW9uYWwgRGVmZW5jZSAvIFJEREMgZXN0IHVuZSBhZ2VuY2UgZHUgbWluaXN0w6hy
-ZSBkZSBsYSBEw6lmZW5zZSBuYXRpb25hbGUKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
-L2xpc3RpbmZvL2x0dG5nLWRldgoKLS0gCkpvbmF0aGFuIFIuIEp1bGllbgpFZmZpY2lvcwoKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
-aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcu
-b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+LS0tLS1NZXNzYWdlIGQnb3JpZ2luZS0tLS0tDQpFbnZvecOpIDogMTUgZMOpY2VtYnJlIDIwMTYg
+MTE6NTYNCg0KPiBZb3UgbWlnaHQgbm90IGhhdmUgc2F2ZWQgdGhlIGVkaXRlZCBmaWxlLg0KDQog
+ICBJIHRyaXBsZS1jaGVja2VkIHRoYXQuICBJdCBpcyBub3QgdGhlIGNhc2UuDQoNCiAgIEkgaGFk
+IGFuIGluc3BpcmF0aW9uIGFuZCB3YXMgYWJsZSB0byBjb25maXJtIGl0OiBodHRwczovL2J1Z3Mu
+bHR0bmcub3JnL2lzc3Vlcy8xMDgzDQoNCkRhbmllbCBVLiBUaGliYXVsdCwgTS5TYy7Csg0KSW5m
+b3JtYXRpY2llbiBzY2llbnRpZmlxdWUsIENNRS1QU0MsIENlbnRyZSBkZSByZWNoZXJjaGVzIGRl
+IFZhbGNhcnRpZXINClJlY2hlcmNoZSBldCBkw6l2ZWxvcHBlbWVudCBwb3VyIGxhIGTDqWZlbnNl
+IENhbmFkYQ0KR291dmVybmVtZW50IGR1IENhbmFkYQ0KX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZA
+bGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
+aXN0aW5mby9sdHRuZy1kZXYK
