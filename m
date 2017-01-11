@@ -1,20 +1,15 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH] lttng-tools: remove bogus interpreter line
- from utils shell library
-Date: Mon, 9 Jan 2017 19:52:27 -0500
-Message-ID: <CA+jJMxsmDdNNckOWuLQQdSNGV4jz7dy+yqkVAaPk0kv0QB=yXw__20669.6498128169$1484009565$gmane$org@mail.gmail.com>
-References: <1484000068-27224-1-git-send-email-nathan_lynch@mentor.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools 1/2] Fix: sessiond: only send
+	streams to consumer once
+Date: Wed, 11 Jan 2017 15:49:48 -0500
+Message-ID: <1484167789-26831-1-git-send-email-mathieu.desnoyers__10335.8014523566$1484167824$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vk0-x244.google.com (mail-vk0-x244.google.com
- [IPv6:2607:f8b0:400c:c05::244])
- by lists.lttng.org (Postfix) with ESMTPS id 3tyD6Y6yQlzkRY
- for <lttng-dev@lists.lttng.org>; Tue, 10 Jan 2017 00:53:41 +0000 (UTC)
-Received: by mail-vk0-x244.google.com with SMTP id 23so1609984vkc.2
- for <lttng-dev@lists.lttng.org>; Mon, 09 Jan 2017 16:52:28 -0800 (PST)
-In-Reply-To: <1484000068-27224-1-git-send-email-nathan_lynch@mentor.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3tzLf250Ljzl0r
+ for <lttng-dev@lists.lttng.org>; Wed, 11 Jan 2017 20:51:22 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,28 +19,40 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Nathan Lynch <nathan_lynch@mentor.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: jgalar@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIG1hc3Rlciwgc3RhYmxlLTIuOSBhbmQgc3RhYmxlLTIuOC4KClRoYW5rcyEKSsOp
-csOpbWllCgpPbiA5IEphbnVhcnkgMjAxNyBhdCAxNzoxNCwgTmF0aGFuIEx5bmNoIDxuYXRoYW5f
-bHluY2hAbWVudG9yLmNvbT4gd3JvdGU6Cj4gdGVzdHMvdXRpbHMvdXRpbHMuc2ggaXMgYWx3YXlz
-IHNvdXJjZWQsIG5ldmVyIGV4ZWN1dGVkLCBhbmQKPiAvc3JjL2Jpbi9iYXNoIGlzIG5vdCBhIHR5
-cGljYWwgcGF0aCBmb3IgYSBzaGVsbCBpbnRlcnByZXRlci4gIEp1c3QKPiBkZWxldGUgaXQuCj4K
-PiBTaWduZWQtb2ZmLWJ5OiBOYXRoYW4gTHluY2ggPG5hdGhhbl9seW5jaEBtZW50b3IuY29tPgo+
-IC0tLQo+ICB0ZXN0cy91dGlscy91dGlscy5zaCB8IDIgLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDIg
-ZGVsZXRpb25zKC0pCj4KPiBkaWZmIC0tZ2l0IGEvdGVzdHMvdXRpbHMvdXRpbHMuc2ggYi90ZXN0
-cy91dGlscy91dGlscy5zaAo+IGluZGV4IDA1ZDg4NjUwZTlmMy4uOWRiMDY0MGI3MGYzIDEwMDY0
-NAo+IC0tLSBhL3Rlc3RzL3V0aWxzL3V0aWxzLnNoCj4gKysrIGIvdGVzdHMvdXRpbHMvdXRpbHMu
-c2gKPiBAQCAtMSw1ICsxLDMgQEAKPiAtIyEvc3JjL2Jpbi9iYXNoCj4gLSMKPiAgIyBDb3B5cmln
-aHQgKEMpIC0gMjAxMiBEYXZpZCBHb3VsZXQgPGRnb3VsZXRAZWZmaWNpb3MuY29tPgo+ICAjCj4g
-ICMgVGhpcyBsaWJyYXJ5IGlzIGZyZWUgc29mdHdhcmU7IHlvdSBjYW4gcmVkaXN0cmlidXRlIGl0
-IGFuZC9vciBtb2RpZnkgaXQgdW5kZXIKPiAtLQo+IDIuNy40Cj4KPiBfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
-LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVh
-dQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
-bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
-aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+U2Vzc2lvbiBkYWVtb24gc2hvdWxkIG5vdCBzZW5kIHN0cmVhbXMgdG8gY29uc3VtZXIgZGFlbW9u
+CnJlcGVhdGVkbHkgd2hlbiBDUFUgaG90cGx1ZyBpcyBwZXJmb3JtZWQgd2hpbGUgZG9pbmcga2Vy
+bmVsCnRyYWNpbmcuCgpUaGlzIGNhdXNlcyB0aGUgY29uc3VtZXIgZGFlbW9uIHRvIGhhdmUgbXVs
+dGlwbGUgZmlsZSBkZXNjcmlwdG9ycwpvbiB0aGUgc2FtZSBzdHJlYW0sIGFuZCB0aHVzIHRyeSB0
+byBwZXJmb3JtIG9wZXJhdGlvbnMgbGlrZSByZWFkaW5nCmEgc3ViLWJ1ZmZlciBhbmQgY2hlY2tp
+bmcgZm9yIGRhdGEgcGVuZGluZyBjb25jdXJyZW50bHkuIFRoaXMgdHJpZ2dlcnMKc2FmZXR5LW5l
+dCB3YXJuaW5ncyBpbiB0aGUga2VybmVsIHRyYWNlci4KClNpZ25lZC1vZmYtYnk6IE1hdGhpZXUg
+RGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Ci0tLQogc3JjL2Jpbi9s
+dHRuZy1zZXNzaW9uZC9rZXJuZWwtY29uc3VtZXIuYyB8IDMgKystCiBzcmMvYmluL2x0dG5nLXNl
+c3Npb25kL3RyYWNlLWtlcm5lbC5oICAgIHwgMSArCiAyIGZpbGVzIGNoYW5nZWQsIDMgaW5zZXJ0
+aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lv
+bmQva2VybmVsLWNvbnN1bWVyLmMgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2tlcm5lbC1jb25z
+dW1lci5jCmluZGV4IDc1ODJkODAuLmI5ZDY4OWYgMTAwNjQ0Ci0tLSBhL3NyYy9iaW4vbHR0bmct
+c2Vzc2lvbmQva2VybmVsLWNvbnN1bWVyLmMKKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9r
+ZXJuZWwtY29uc3VtZXIuYwpAQCAtMzM4LDcgKzMzOCw3IEBAIGludCBrZXJuZWxfY29uc3VtZXJf
+c2VuZF9jaGFubmVsX3N0cmVhbShzdHJ1Y3QgY29uc3VtZXJfc29ja2V0ICpzb2NrLAogCiAJLyog
+U2VuZCBzdHJlYW1zICovCiAJY2RzX2xpc3RfZm9yX2VhY2hfZW50cnkoc3RyZWFtLCAmY2hhbm5l
+bC0+c3RyZWFtX2xpc3QuaGVhZCwgbGlzdCkgewotCQlpZiAoIXN0cmVhbS0+ZmQpIHsKKwkJaWYg
+KCFzdHJlYW0tPmZkIHx8IHN0cmVhbS0+c2VudF90b19jb25zdW1lcikgewogCQkJY29udGludWU7
+CiAJCX0KIApAQCAtMzQ4LDYgKzM0OCw3IEBAIGludCBrZXJuZWxfY29uc3VtZXJfc2VuZF9jaGFu
+bmVsX3N0cmVhbShzdHJ1Y3QgY29uc3VtZXJfc29ja2V0ICpzb2NrLAogCQlpZiAocmV0IDwgMCkg
+ewogCQkJZ290byBlcnJvcjsKIAkJfQorCQlzdHJlYW0tPnNlbnRfdG9fY29uc3VtZXIgPSAxOwog
+CX0KIAogZXJyb3I6CmRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3RyYWNlLWtl
+cm5lbC5oIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC90cmFjZS1rZXJuZWwuaAppbmRleCBiOWJj
+YmZhLi45MTY3MmJjIDEwMDY0NAotLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL3RyYWNlLWtl
+cm5lbC5oCisrKyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdHJhY2Uta2VybmVsLmgKQEAgLTg0
+LDYgKzg0LDcgQEAgc3RydWN0IGx0dF9rZXJuZWxfc3RyZWFtIHsKIAlpbnQgZmQ7CiAJaW50IHN0
+YXRlOwogCWludCBjcHU7CisJaW50IHNlbnRfdG9fY29uc3VtZXI7CiAJLyogRm9ybWF0IGlzICVz
+XyVkIHJlc3BlY3RpdmVseSBjaGFubmVsIG5hbWUgYW5kIENQVSBudW1iZXIuICovCiAJY2hhciBu
+YW1lW0RFRkFVTFRfU1RSRUFNX05BTUVfTEVOXTsKIAl1aW50NjRfdCB0cmFjZWZpbGVfc2l6ZTsK
+LS0gCjIuMS40CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6
+Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
