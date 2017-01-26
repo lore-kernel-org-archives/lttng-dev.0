@@ -1,14 +1,15 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-tools] Fix: Remove unused headers
-Date: Thu, 26 Jan 2017 14:55:46 -0500
-Message-ID: <1485460546-22938-1-git-send-email-mjeanson__2780.23189534924$1485460585$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 1/2] Port: add cygwin support to
+	endian compat
+Date: Thu, 26 Jan 2017 15:09:21 -0500
+Message-ID: <1485461362-31301-1-git-send-email-mjeanson__31993.9709654593$1485461408$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3v8Xm71KHdzjt8
- for <lttng-dev@lists.lttng.org>; Thu, 26 Jan 2017 19:58:30 +0000 (UTC)
+ by lists.lttng.org (Postfix) with ESMTPS id 3v8Y3w5QG1zjvl
+ for <lttng-dev@lists.lttng.org>; Thu, 26 Jan 2017 20:12:12 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,23 +23,15 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-VGhpcyBpcyBhIHBvcnRhYmlsaXR5IGZpeCwgdGhlc2UgaGVhZGVycyBhcmUgdW51c2VkIGFuZCBu
-b3QgYXZhaWxhYmxlIG9uCnNvbWUgcGxhdGZvcm1zLgoKU2lnbmVkLW9mZi1ieTogTWljaGFlbCBK
-ZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Ci0tLQogc3JjL2Jpbi9sdHRuZy1yZWxheWQv
-aGVhbHRoLXJlbGF5ZC5jIHwgMSAtCiBzcmMvY29tbW9uL2Z1dGV4LmMgICAgICAgICAgICAgICAg
-ICAgfCAxIC0KIDIgZmlsZXMgY2hhbmdlZCwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9z
-cmMvYmluL2x0dG5nLXJlbGF5ZC9oZWFsdGgtcmVsYXlkLmMgYi9zcmMvYmluL2x0dG5nLXJlbGF5
-ZC9oZWFsdGgtcmVsYXlkLmMKaW5kZXggY2ZmNmM2ZS4uYjE0YjgyNyAxMDA2NDQKLS0tIGEvc3Jj
-L2Jpbi9sdHRuZy1yZWxheWQvaGVhbHRoLXJlbGF5ZC5jCisrKyBiL3NyYy9iaW4vbHR0bmctcmVs
-YXlkL2hlYWx0aC1yZWxheWQuYwpAQCAtMzcsNyArMzcsNiBAQAogI2luY2x1ZGUgPHN5cy9tbWFu
-Lmg+CiAjaW5jbHVkZSA8YXNzZXJ0Lmg+CiAjaW5jbHVkZSA8dXJjdS9jb21waWxlci5oPgotI2lu
-Y2x1ZGUgPHVsaW1pdC5oPgogI2luY2x1ZGUgPGludHR5cGVzLmg+CiAKICNpbmNsdWRlIDxjb21t
-b24vZGVmYXVsdHMuaD4KZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vZnV0ZXguYyBiL3NyYy9jb21t
-b24vZnV0ZXguYwppbmRleCAyYWUwM2IyLi4zODRlOTU3IDEwMDY0NAotLS0gYS9zcmMvY29tbW9u
-L2Z1dGV4LmMKKysrIGIvc3JjL2NvbW1vbi9mdXRleC5jCkBAIC0xOCw3ICsxOCw2IEBACiAKICNk
-ZWZpbmUgX0xHUExfU09VUkNFCiAjaW5jbHVkZSA8bGltaXRzLmg+Ci0jaW5jbHVkZSA8c3lzL3N5
-c2NhbGwuaD4KICNpbmNsdWRlIDx1bmlzdGQuaD4KICNpbmNsdWRlIDx1cmN1Lmg+CiAjaW5jbHVk
-ZSA8dXJjdS9mdXRleC5oPgotLSAKMi43LjQKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
-Zm8vbHR0bmctZGV2Cg==
+U2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Ci0t
+LQogc3JjL2NvbW1vbi9jb21wYXQvZW5kaWFuLmggfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBp
+bnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9zcmMvY29tbW9uL2NvbXBh
+dC9lbmRpYW4uaCBiL3NyYy9jb21tb24vY29tcGF0L2VuZGlhbi5oCmluZGV4IDRlZGMxMjQuLjY0
+MjdmZWIgMTAwNjQ0Ci0tLSBhL3NyYy9jb21tb24vY29tcGF0L2VuZGlhbi5oCisrKyBiL3NyYy9j
+b21tb24vY29tcGF0L2VuZGlhbi5oCkBAIC0xOCw3ICsxOCw3IEBACiAjaWZuZGVmIF9DT01QQVRf
+RU5ESUFOX0gKICNkZWZpbmUgX0NPTVBBVF9FTkRJQU5fSAogCi0jaWZkZWYgX19saW51eF9fCisj
+aWYgZGVmaW5lZChfX2xpbnV4X18pIHx8IGRlZmluZWQoX19DWUdXSU5fXykKICNpbmNsdWRlIDxl
+bmRpYW4uaD4KIAogLyoKLS0gCjIuNy40CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5s
+dHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
+L2x0dG5nLWRldgo=
