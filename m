@@ -1,83 +1,49 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Port: Link with no-undefined on
-	Windows
-Date: Tue, 14 Feb 2017 15:56:49 -0500
-Message-ID: <CA+jJMxti9fcEQAWoZNq9ocCHgvz2bDTpTGQn3GnrJ=vEtHWobA__20422.7638234899$1487105891$gmane$org@mail.gmail.com>
-References: <1486073383-22514-1-git-send-email-mjeanson@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.8.4 and 2.9.1 (Linux kernel tracer)
+Date: Fri, 17 Feb 2017 17:23:54 +0000 (UTC)
+Message-ID: <2014569414.67331.1487352234782.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vk0-x242.google.com (mail-vk0-x242.google.com
- [IPv6:2607:f8b0:400c:c05::242])
- by lists.lttng.org (Postfix) with ESMTPS id 3vNFFY6QLvzl5S
- for <lttng-dev@lists.lttng.org>; Tue, 14 Feb 2017 21:01:05 +0000 (UTC)
-Received: by mail-vk0-x242.google.com with SMTP id r136so11311699vke.1
- for <lttng-dev@lists.lttng.org>; Tue, 14 Feb 2017 12:56:50 -0800 (PST)
-In-Reply-To: <1486073383-22514-1-git-send-email-mjeanson@efficios.com>
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Sender: linux-kernel-owner@vger.kernel.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: linux-kernel <linux-kernel@vger.kernel.org>, diamon-discuss@lists.linuxfoundation.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIG1hc3RlciBhbmQgc3RhYmxlLTIuOS4KClRoYW5rcyEKSsOpcsOpbWllCgpPbiAy
-IEZlYnJ1YXJ5IDIwMTcgYXQgMTc6MDksIE1pY2hhZWwgSmVhbnNvbiA8bWplYW5zb25AZWZmaWNp
-b3MuY29tPiB3cm90ZToKPiBTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29u
-QGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgY29uZmlndXJlLmFjICAgICAgICAgICAgICAgICAgICAg
-fCAxMCArKysrKysrKysrCj4gIHNyYy9iaW4vbHR0bmctcmVsYXlkL01ha2VmaWxlLmFtIHwgIDQg
-KystLQo+ICBzcmMvbGliL2x0dG5nLWN0bC9NYWtlZmlsZS5hbSAgICB8ICAzICsrKwo+ICAzIGZp
-bGVzIGNoYW5nZWQsIDE1IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4KPiBkaWZmIC0t
-Z2l0IGEvY29uZmlndXJlLmFjIGIvY29uZmlndXJlLmFjCj4gaW5kZXggNGM3YTgyNi4uOTU0ZmZi
-NCAxMDA2NDQKPiAtLS0gYS9jb25maWd1cmUuYWMKPiArKysgYi9jb25maWd1cmUuYWMKPiBAQCAt
-NjUsNiArNjUsMTYgQEAgQ0M9IiRQVEhSRUFEX0NDIgo+Cj4gIEFYX0xJQl9TT0NLRVRfTlNMCj4K
-PiArTFRfTk9fVU5ERUZJTkVEPSIiCj4gK0FTX0NBU0UoWyRob3N0X29zXSwKPiArICBbY3lnd2lu
-Kl0sCj4gKyAgICBbCj4gKyAgICAgIExUX05PX1VOREVGSU5FRD0iLW5vLXVuZGVmaW5lZCIKPiAr
-ICAgIF0KPiArKQo+ICsKPiArQUNfU1VCU1QoTFRfTk9fVU5ERUZJTkVEKQo+ICsKPiAgIyBDb21w
-dXRlIG1pbm9yL21ham9yL3BhdGNobGV2ZWwgdmVyc2lvbiBudW1iZXJzCj4gIG1ham9yX3ZlcnNp
-b249JChlY2hvIEFDX1BBQ0tBR0VfVkVSU0lPTiB8ICRTRUQgJ3MvXlwoW1swLTldXVwpKlwuW1sw
-LTldXSpcLltbMC05XV0qLiokL1wxLycpCj4gIG1pbm9yX3ZlcnNpb249JChlY2hvIEFDX1BBQ0tB
-R0VfVkVSU0lPTiB8ICRTRUQgJ3MvXltbMC05XV0qXC5cKFtbMC05XV0qXClcLltbMC05XV0qLiok
-L1wxLycpCj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctcmVsYXlkL01ha2VmaWxlLmFtIGIv
-c3JjL2Jpbi9sdHRuZy1yZWxheWQvTWFrZWZpbGUuYW0KPiBpbmRleCA0ODU3MDc0Li5kZjg3YmMz
-IDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmctcmVsYXlkL01ha2VmaWxlLmFtCj4gKysrIGIv
-c3JjL2Jpbi9sdHRuZy1yZWxheWQvTWFrZWZpbGUuYW0KPiBAQCAtMjQsNyArMjQsNiBAQCBsdHRu
-Z19yZWxheWRfU09VUkNFUyA9IG1haW4uYyBsdHRuZy1yZWxheWQuaCB1dGlscy5oIHV0aWxzLmMg
-Y21kLmggXAo+Cj4gICMgbGluayBvbiBsaWJsdHRuZ2N0bCBmb3IgY2hlY2sgaWYgcmVsYXlkIGlz
-IGFscmVhZHkgYWxpdmUuCj4gIGx0dG5nX3JlbGF5ZF9MREFERCA9IC1sdXJjdS1jb21tb24gLWx1
-cmN1IFwKPiAtICAgICAgICAgICAgICAgJCh0b3BfYnVpbGRkaXIpL3NyYy9saWIvbHR0bmctY3Rs
-L2xpYmx0dG5nLWN0bC5sYSBcCj4gICAgICAgICAgICAgICAgICQodG9wX2J1aWxkZGlyKS9zcmMv
-Y29tbW9uL3Nlc3Npb25kLWNvbW0vbGlic2Vzc2lvbmQtY29tbS5sYSBcCj4gICAgICAgICAgICAg
-ICAgICQodG9wX2J1aWxkZGlyKS9zcmMvY29tbW9uL2hhc2h0YWJsZS9saWJoYXNodGFibGUubGEg
-XAo+ICAgICAgICAgICAgICAgICAkKHRvcF9idWlsZGRpcikvc3JjL2NvbW1vbi9saWJjb21tb24u
-bGEgXAo+IEBAIC0zMiw0ICszMSw1IEBAIGx0dG5nX3JlbGF5ZF9MREFERCA9IC1sdXJjdS1jb21t
-b24gLWx1cmN1IFwKPiAgICAgICAgICAgICAgICAgJCh0b3BfYnVpbGRkaXIpL3NyYy9jb21tb24v
-aW5kZXgvbGliaW5kZXgubGEgXAo+ICAgICAgICAgICAgICAgICAkKHRvcF9idWlsZGRpcikvc3Jj
-L2NvbW1vbi9oZWFsdGgvbGliaGVhbHRoLmxhIFwKPiAgICAgICAgICAgICAgICAgJCh0b3BfYnVp
-bGRkaXIpL3NyYy9jb21tb24vY29uZmlnL2xpYmNvbmZpZy5sYSBcCj4gLSAgICAgICAgICAgICAg
-ICQodG9wX2J1aWxkZGlyKS9zcmMvY29tbW9uL3Rlc3Rwb2ludC9saWJ0ZXN0cG9pbnQubGEKPiAr
-ICAgICAgICAgICAgICAgJCh0b3BfYnVpbGRkaXIpL3NyYy9jb21tb24vdGVzdHBvaW50L2xpYnRl
-c3Rwb2ludC5sYSBcCj4gKyAgICAgICAgICAgICAgICQodG9wX2J1aWxkZGlyKS9zcmMvbGliL2x0
-dG5nLWN0bC9saWJsdHRuZy1jdGwubGEKPiBkaWZmIC0tZ2l0IGEvc3JjL2xpYi9sdHRuZy1jdGwv
-TWFrZWZpbGUuYW0gYi9zcmMvbGliL2x0dG5nLWN0bC9NYWtlZmlsZS5hbQo+IGluZGV4IDViODdl
-MzguLjZiNmE2ZWUgMTAwNjQ0Cj4gLS0tIGEvc3JjL2xpYi9sdHRuZy1jdGwvTWFrZWZpbGUuYW0K
-PiArKysgYi9zcmMvbGliL2x0dG5nLWN0bC9NYWtlZmlsZS5hbQo+IEBAIC03LDYgKzcsOSBAQCBs
-aWJfTFRMSUJSQVJJRVMgPSBsaWJsdHRuZy1jdGwubGEKPiAgbGlibHR0bmdfY3RsX2xhX1NPVVJD
-RVMgPSBsdHRuZy1jdGwuYyBzbmFwc2hvdC5jIGx0dG5nLWN0bC1oZWxwZXIuaCBcCj4gICAgICAg
-ICAgICAgICAgIGx0dG5nLWN0bC1oZWFsdGguYyBzYXZlLmMgbG9hZC5jIGRlcHJlY2F0ZWQtc3lt
-Ym9scy5jCj4KPiArbGlibHR0bmdfY3RsX2xhX0xERkxBR1MgPSBcCj4gKyAgICAgICAgICAgICAg
-ICQoTFRfTk9fVU5ERUZJTkVEKQo+ICsKPiAgbGlibHR0bmdfY3RsX2xhX0xJQkFERCA9IFwKPiAg
-ICAgICAgICAgICAgICAgJCh0b3BfYnVpbGRkaXIpL3NyYy9jb21tb24vc2Vzc2lvbmQtY29tbS9s
-aWJzZXNzaW9uZC1jb21tLmxhIFwKPiAgICAgICAgICAgICAgICAgJCh0b3BfYnVpbGRkaXIpL3Ny
-Yy9jb21tb24vbGliY29tbW9uLmxhIFwKPiAtLQo+IDIuNy40Cj4KCgoKLS0gCkrDqXLDqW1pZSBH
-YWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBs
-aXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
-LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+The LTTng modules provide Linux kernel tracing capability to the LTTng
+tracer toolset.
+
+Those are stable branch releases for stable-2.8 and stable-2.9 lttng-modules
+branches. Version 2.9.1 adds support for the 4.10 version of the linux kernel
+release candidates. The rest are various bugfixes.
+
+Project website: http://lttng.org
+Documentation: http://lttng.org/docs
+Download link: http://lttng.org/download
+
+Changelog:
+2017-02-17 (National Cabbage Day) LTTng modules 2.9.1
+        * Fix: nmi-safe clock on 32-bit systems
+        * Fix: only include linux/cpuhotplug.h for kernels >= 4.10
+        * Fix: 4.10 hotplug adaptation backward compat
+        * Adapt lttng-modules to Linux 4.10 cpu hotplug state machine
+        * Fix: 4.10 btrfs instrumentation update backward compat
+        * Update btrfs instrumentation for 4.10 kernel
+        * btrfs instrumentation: update to 4.10 kernel
+        * timer instrumentation: adapt to ktime_t without union
+        * Fix: asoc instrumentation for RHEL 7.3
+        * Fix: SCSI instrumentation for SLES12 SP2
+        * Add SUSE Linux Enterprise kernel version tests
+
+2017-02-17 (National Cabbage Day) LTTng modules 2.8.4
+        * Fix: nmi-safe clock on 32-bit systems
+        * Fix: asoc instrumentation for RHEL 7.3
+        * Fix: SCSI instrumentation for SLES12 SP2
+        * Add SUSE Linux Enterprise kernel version tests
+        * Fix: preemptible and migratable context error handling
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
