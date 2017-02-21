@@ -1,18 +1,19 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: [RFC PATCH lttng-ust 2/2] dl instrumentation: add
  dlmopen event, trace dlopen flags
-Date: Tue, 21 Feb 2017 10:03:01 +0100
-Message-ID: <20170221100301.6e409dc3__71.2355286397681$1487668399$gmane$org@free-electrons.com>
+Date: Tue, 21 Feb 2017 14:08:08 +0000 (UTC)
+Message-ID: <188106062.195366.1487686088345.JavaMail.zimbra__21089.4890166403$1487685888$gmane$org@efficios.com>
 References: <1467672828-19184-1-git-send-email-mathieu.desnoyers@efficios.com>
  <1467672828-19184-2-git-send-email-mathieu.desnoyers@efficios.com>
+ <20170221100301.6e409dc3@free-electrons.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.free-electrons.com (mail.free-electrons.com [62.4.15.54])
- by lists.lttng.org (Postfix) with ESMTP id 3vSFCt1xrdzk5R
- for <lttng-dev@lists.lttng.org>; Tue, 21 Feb 2017 09:13:29 +0000 (UTC)
-In-Reply-To: <1467672828-19184-2-git-send-email-mathieu.desnoyers@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3vSMhG13TBzkWT
+ for <lttng-dev@lists.lttng.org>; Tue, 21 Feb 2017 14:05:01 +0000 (UTC)
+In-Reply-To: <20170221100301.6e409dc3@free-electrons.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,23 +23,31 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com, alexmonthy@efficios.com
+To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>, Alexandre Montplaisir <alexmonthy@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-SGVsbG8sCgpPbiBNb24sICA0IEp1bCAyMDE2IDE4OjUzOjQ4IC0wNDAwLCBNYXRoaWV1IERlc25v
-eWVycyB3cm90ZToKPiBBZGQgbWlzc2luZyBkbG1vcGVuKDMpIGluc3RydW1lbnRhdGlvbiwgYW5k
-IGFkZCB0aGUgImZsYWdzIiBmaWVsZCB0bwo+IGRsb3BlbiBpbnN0cnVtZW50YXRpb24uCj4gCj4g
-TGluazogaHR0cDovL21hbjcub3JnL2xpbnV4L21hbi1wYWdlcy9tYW4zL2Rsb3Blbi4zLmh0bWwK
-PiBTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZm
-aWNpb3MuY29tPgoKRllJLCB0aGlzIGNvbW1pdCAoN2IwZmRkODNjMTM3YmVhMWQ3MzAyZGYxYTQ1
-MjUyZGZkY2NkODE3MikgYnJlYWtzIHRoZQpidWlsZCB3aXRoIHRoZSBtdXNsIEMgbGlicmFyeSwg
-YmVjYXVzZSBpdCBkb2Vzbid0IGltcGxlbWVudCB0aGUKZGxtb3BlbigpIGV4dGVuc2lvbi4KClBl
-cmhhcHMgdGhlcmUgc2hvdWxkIGJlIGFuIGF1dG9jb25mIHRlc3QgdG8gY2hlY2sgaWYgdGhlIEMg
-bGlicmFyeQpwcm92aWRlcyBkbG1vcGVuKCkgZnVuY3Rpb25hbGl0eSBvciBub3Q/CgpCZXN0IHJl
-Z2FyZHMsCgpUaG9tYXMgUGV0YXp6b25pCi0tIApUaG9tYXMgUGV0YXp6b25pLCBDVE8sIEZyZWUg
-RWxlY3Ryb25zCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cDovL2Zy
-ZWUtZWxlY3Ryb25zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
-aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
-dgo=
+LS0tLS0gT24gRmViIDIxLCAyMDE3LCBhdCA0OjAzIEFNLCBUaG9tYXMgUGV0YXp6b25pIHRob21h
+cy5wZXRhenpvbmlAZnJlZS1lbGVjdHJvbnMuY29tIHdyb3RlOgoKPiBIZWxsbywKPiAKPiBPbiBN
+b24sICA0IEp1bCAyMDE2IDE4OjUzOjQ4IC0wNDAwLCBNYXRoaWV1IERlc25veWVycyB3cm90ZToK
+Pj4gQWRkIG1pc3NpbmcgZGxtb3BlbigzKSBpbnN0cnVtZW50YXRpb24sIGFuZCBhZGQgdGhlICJm
+bGFncyIgZmllbGQgdG8KPj4gZGxvcGVuIGluc3RydW1lbnRhdGlvbi4KPj4gCj4+IExpbms6IGh0
+dHA6Ly9tYW43Lm9yZy9saW51eC9tYW4tcGFnZXMvbWFuMy9kbG9wZW4uMy5odG1sCj4+IFNpZ25l
+ZC1vZmYtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5j
+b20+Cj4gCj4gRllJLCB0aGlzIGNvbW1pdCAoN2IwZmRkODNjMTM3YmVhMWQ3MzAyZGYxYTQ1MjUy
+ZGZkY2NkODE3MikgYnJlYWtzIHRoZQo+IGJ1aWxkIHdpdGggdGhlIG11c2wgQyBsaWJyYXJ5LCBi
+ZWNhdXNlIGl0IGRvZXNuJ3QgaW1wbGVtZW50IHRoZQo+IGRsbW9wZW4oKSBleHRlbnNpb24uCj4g
+Cj4gUGVyaGFwcyB0aGVyZSBzaG91bGQgYmUgYW4gYXV0b2NvbmYgdGVzdCB0byBjaGVjayBpZiB0
+aGUgQyBsaWJyYXJ5Cj4gcHJvdmlkZXMgZGxtb3BlbigpIGZ1bmN0aW9uYWxpdHkgb3Igbm90PwoK
+TXkgZXhwZWN0YXRpb24gaXMgdGhhdCB0aGUgZGxtb3BlbiBvdmVycmlkZSBzeW1ib2wgZ2V0cyBn
+ZW5lcmF0ZWQsCmJ1dCBpdCBpcyBuZXZlciBpbnZva2VkIGluIGJ1aWxkcyB3aGVyZSB0aGUgbGli
+YyBkb2VzIG5vdCBpbXBsZW1lbnQKaXQsIHNvIHdlIG5ldmVyIGhhdmUgdG8gbG9vayBpdCB1cCBk
+eW5hbWljYWxseSB0aHJvdWdoIGRsc3ltKCkuCgpIb3cgZG9lcyB0aGUgYnVpbGQgZmFpbCB3aXRo
+IG11c2wgPyBDYW4geW91IHByb3ZpZGUgdGhlIGJ1aWxkCm91dHB1dCA/CgpUaGFua3MsCgpNYXRo
+aWV1Cgo+IAo+IEJlc3QgcmVnYXJkcywKPiAKPiBUaG9tYXMgUGV0YXp6b25pCj4gLS0KPiBUaG9t
+YXMgUGV0YXp6b25pLCBDVE8sIEZyZWUgRWxlY3Ryb25zCj4gRW1iZWRkZWQgTGludXggYW5kIEtl
+cm5lbCBlbmdpbmVlcmluZwo+IGh0dHA6Ly9mcmVlLWVsZWN0cm9ucy5jb20KCi0tIApNYXRoaWV1
+IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9j
+Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
