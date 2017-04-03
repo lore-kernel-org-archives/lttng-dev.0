@@ -1,16 +1,18 @@
-From: Mario Demontis <mario.demontis@gmail.com>
-Subject: Splitting timestamps
-Date: Sun, 2 Apr 2017 13:04:26 +0200
-Message-ID: <CAD=N7Ku1Ac3yJKdDuO-cvYAg4aY6n39PUZZN1AASpUno8xykow__16947.9811135263$1491230844$gmane$org@mail.gmail.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: Lttng trace showing empty result while doing lttng
+ view
+Date: Mon, 3 Apr 2017 11:20:24 -0400
+Message-ID: <20170403152024.GA9081__37018.7869797975$1491232859$gmane$org@psrcode-TP-X230>
+References: <7422d8db81750ce11ed6fe0e87bba3d9de20cfa9@mail.uurmi.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3682820931711779146=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-io0-x231.google.com (mail-io0-x231.google.com
- [IPv6:2607:f8b0:4001:c06::231])
- by lists.lttng.org (Postfix) with ESMTPS id 3vwsns3VWHzwcZ
- for <lttng-dev@lists.lttng.org>; Sun,  2 Apr 2017 11:04:48 +0000 (UTC)
-Received: by mail-io0-x231.google.com with SMTP id l7so60946109ioe.3
- for <lttng-dev@lists.lttng.org>; Sun, 02 Apr 2017 04:04:28 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3vxbR22VQBzwMs
+ for <lttng-dev@lists.lttng.org>; Mon,  3 Apr 2017 15:21:01 +0000 (UTC)
+Content-Disposition: inline
+In-Reply-To: <7422d8db81750ce11ed6fe0e87bba3d9de20cfa9@mail.uurmi.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,51 +22,36 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: abhishekk@uurmi.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============3682820931711779146==
-Content-Type: multipart/alternative; boundary=94eb2c07701e920200054c2d01e4
-
---94eb2c07701e920200054c2d01e4
-Content-Type: text/plain; charset=UTF-8
-
-Hi All,
-I'm setting up a tracing engine for a MCU with low RAM.
-I'm currently stuck trying to specify the timestamps organization in
-metadata.
-
-I have 56 bits timestamps split up into:
-- a 32 bits (high order) part sent only in the packet header
-- a 24 bits (low order) part sent in the event header
-
-Is there a way to do that in CTF 1.8?
-
-Thanks
-Mario
-
---94eb2c07701e920200054c2d01e4
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi All,<div>I&#39;m setting up a tracing engine for a MCU =
-with low RAM.</div><div>I&#39;m currently stuck trying to specify the times=
-tamps organization in metadata.</div><div><br></div><div>I have 56 bits tim=
-estamps split up into:</div><div>- a 32 bits (high order) part sent only in=
- the packet header</div><div>- a 24 bits (low order) part sent in the event=
- header</div><div><br></div><div>Is there a way to do that in CTF 1.8?</div=
-><div><br></div><div>Thanks</div><div>Mario</div></div>
-
---94eb2c07701e920200054c2d01e4--
-
---===============3682820931711779146==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============3682820931711779146==--
+T24gTW9uLCBBcHIgMDMsIDIwMTcgYXQgMTE6NTY6NTdBTSArMDUzMCwgYWJoaXNoZWtrQHV1cm1p
+LmNvbSB3cm90ZToKPiAgCj4gCj4gCUkgYW0gdHJ5aW5nIHRvIHRyYWNlIHJhc3BiZXJyeSAoSSBh
+bSB1c2luZyByYXNwYmVycnkgMyBCICkgTGludXgKPiBrZXJuZWwgYnkgdXNpbmcgbHR0bmcuIFRo
+ZSBwcm9ibGVtIGkgYW0gZmFjaW5nIGlzIGFmdGVyIHRoZSBzdWNjZXNzZnVsCj4gY29tcGxldGlv
+biBvZiBydW5uaW5nIGZvbGxvd2luZyBjb21tYW5kcyBpIGFtIG5vdCBhYmxlIHRvIHNlZSB0cmFj
+aW5nCj4gcmVzdWx0LiBJdCBzZWVtcyB0cmFjaW5nIGZpbGUgaXMgZW1wdHkuIDEuIGxsdG5nIGNy
+ZWF0ZSBteXNlc3Npb24KPiAKPiAJIDIuIGx0dG5nIGVuYWJsZS1ldmVudCAtYSAtayAKPiAKPiAJ
+My4gbHR0bmcgc3RhcnQgCj4gCj4gCTQgbHR0bmcgc3RvcCA1Cj4gCj4gCS4gbHR0bmcgdmlldwo+
+IAo+IAkgTm90ZTotIEkgYW0gbm90IGZhY2luZyBhbnkgZXJyb3Igd2hpbGUgcnVubmluZyBhYm92
+ZSBjb21tYW5kIGFuZAo+IGtlcm5lbCB0cmFjaW5nIGZpbGUgaXMgZ2VuZXJhdGVkIGF0IHByb3Bl
+ciBwYXRoLiBBbmQgSSBhbSBub3QgZmFjaW5nCj4gdGhpcyBwcm9ibGVtIHdoZW4gaSBhbSB0cmFj
+aW5nIGZvciB1c2VyIHNwYWNlIGFwcGxpY2F0aW9uLiAgCj4gCj4gCUkgYW0gdXNpbmcgdmVyc2lv
+biAyLjkgb2Yga2VybmVsIG1vZHVsZXMgYW5kIHZlcnNpb24gMi41IG9mIGx0dG5nCj4gbW9kdWxl
+cy5LZXJuZWwgbW9kdWxlcyBhcmUgbG9hZGVkIGkgY2FuIHNlZSB1c2luZyBsc21vZC4gIAoKTm90
+IHN1cmUgSSB1bmRlcnN0YW5kIHdoaWNoIHZlcnNpb24gb2YgbHR0bmctbW9kdWxlcyB5b3UgYXJl
+IGN1cnJlbnRseSB1c2luZy4KCkNhbiB5b3Ugc2hhcmUgd2l0aCB1cyB0aGUgcmVzdWx0IG9mICdt
+b2RpbmZvIGx0dG5nLXRyYWNlcic/CkNvdWxkIHlvdSBwYXN0ZWJpbml0IChvciBlcXVpdmFsZW50
+KSB0aGUgbG9nIHByb2R1Y2VkIGJ5IHRoZSBsdHRuZy1zZXNzaW9uZCBpbgp2ZXJib3NlIG1vZGUg
+KGx0dG5nLXNlc3Npb25kIC12dnYpLgoKUGxlYXNlIHRha2UgYSBsb29rIGF0IHRoZSBidWcgcmVw
+b3J0aW5nIGd1aWRlbGluZXMgWzFdLgoKQ2hlZXJzCgpbMV0gaHR0cDovL2x0dG5nLm9yZy9jb21t
+dW5pdHkvI2J1Zy1yZXBvcnRpbmctZ3VpZGVsaW5lcwoKPiBUaGFua3MgJiBSZWdhcmRzCj4gQWJo
+aXNoZWsgS3VtYXIKPiA3ODAxMDc4NTEzIAo+IAo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0K
+PiBFbWFpbCBzZW50IHVzaW5nIEUtaW50ZXJhY3QgV2VibWFpbAoKPiBfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
+LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKCi0tIApKb25hdGhhbiBSYWpvdHRlLUp1
+bGllbgpFZmZpY2lPUwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
+cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
