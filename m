@@ -1,26 +1,17 @@
-From: Genevieve Bastien <gbastien+lttng@versatic.net>
-Subject: Re: [RFC PATCH lttng-modules 00/10] Callstack context
- for kernel tracer
-Date: Fri, 31 Mar 2017 10:50:58 -0400
-Message-ID: <02ec6862-6b08-aa06-0ec9-ab6ef5319486__10899.2007830695$1490974378$gmane$org@versatic.net>
-References: <1490966239-21284-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: abhishekk@uurmi.com
+Subject: Error while building lttng-tools-2.9 from source for
+	raspberry pi platform.
+Date: Mon, 03 Apr 2017 11:58:51 +0530
+Message-ID: <ebb9ca90e9e5a099e960dea7ff399119103d4c8e__7223.53087408027$1491200946$gmane$org@mail.uurmi.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============5735775452373485116=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from s056.panelboxmanager.com (s056.panelboxmanager.com
- [174.142.230.146])
- by lists.lttng.org (Postfix) with ESMTPS id 3vvlrF5GyVzwMS
- for <lttng-dev@lists.lttng.org>; Fri, 31 Mar 2017 15:32:56 +0000 (UTC)
-Received: from mailnull by s056.panelboxmanager.com with sa-checked (Exim 4.87)
- (envelope-from <gbastien+lttng@versatic.net>) id 1ctxtD-001sSc-5j
- for lttng-dev@lists.lttng.org; Fri, 31 Mar 2017 10:50:59 -0400
-Received: from [132.207.72.9] (port=44396)
- by s056.panelboxmanager.com with esmtpsa
- (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128) (Exim 4.87)
- (envelope-from <gbastien+lttng@versatic.net>) id 1ctxtD-001sSU-2P
- for lttng-dev@lists.lttng.org; Fri, 31 Mar 2017 10:50:59 -0400
-In-Reply-To: <1490966239-21284-1-git-send-email-mathieu.desnoyers@efficios.com>
+Received: from smtpout.netcore.co.in (sm23714.nsmailserv.com [202.162.237.14])
+ by lists.lttng.org (Postfix) with ESMTPS id 3vxMdW5j1JzvHg
+ for <lttng-dev@lists.lttng.org>; Mon,  3 Apr 2017 06:29:18 +0000 (UTC)
+Received: from localhost (localdomain [127.0.0.1])
+ by pop6.netcore.co.in (Postfix) with ESMTP id F2B686367823F
+ for <lttng-dev@lists.lttng.org>; Mon,  3 Apr 2017 11:58:51 +0530 (IST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -33,43 +24,89 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-VGhhbmtzIGZvciBwb3N0aW5nIHRoaXMuIEknbGwgZGVmaW5pdGVseSB0cnkgaXQgb3V0IChhbHJl
-YWR5IGRpZCBhY3R1YWxseSkuCgoKVGhlICdjYWxsc3RhY2snIGJyYW5jaGVzIGFyZSBhdmFpbGFi
-bGUgb24gTWF0aGlldSdzIGdpdGh1YjogCmh0dHBzOi8vZ2l0aHViLmNvbS9jb21wdWRqL2x0dG5n
-LW1vZHVsZXMtZGV2IGFuZCAKaHR0cHM6Ly9naXRodWIuY29tL2NvbXB1ZGovbHR0bmctdG9vbHMt
-ZGV2CgpUaGUgY29udGV4dHMgdG8gYWRkIGFyZToKCiogY2FsbHN0YWNrLWtlcm5lbAoKKiBjYWxs
-c3RhY2stdXNlcgoKbHR0bmcgYWRkLWNvbnRleHQgLWsgLXQgY2FsbHN0YWNrLWtlcm5lbCAtdCBj
-YWxsc3RhY2stdXNlcgoKCkdlbmV2acOodmUKCgoKCk9uIDIwMTctMDMtMzEgMDk6MTcgQU0sIE1h
-dGhpZXUgRGVzbm95ZXJzIHdyb3RlOgo+IFRoaXMgcGF0Y2hzZXQgaGFzIGJlZW4gc2l0dGluZyBp
-biBteSBkZXYgYnJhbmNoZXMgZm9yIGEgd2hpbGUuIEkgdGhpbmsKPiBpdCdzIHRpbWUgSSBwb3N0
-IGl0IGZvciBSRkMuCj4KPiBBZGQgY2FsbHN0YWNrIGNvbnRleHRzIGZvciBsdHRuZy1tb2R1bGVz
-IGtlcm5lbCB0cmFjZXIgKGNhbGxzdGFjay11c2VyCj4gZm9yIHVzZXItc3BhY2UgY2FsbHN0YWNr
-LCBhbmQgY2FsbHN0YWNrLWtlcm5lbCBmb3Iga2VybmVsIGNhbGxzdGFjaykuIEl0Cj4gY3VycmVu
-dGx5IHJlbHkgb24gZnJhbWUgcG9pbnRlcnMgZm9yIHVzZXItc3BhY2UgY2FsbHN0YWNrcywgc28g
-aXQncwo+IG5vcm1hbCB0aGF0IHdlIGNhbm5vdCBnZXQgc3RhY2sgdHJhY2UgZm9yIGFsbCBhcHBs
-aWNhdGlvbnMgZm9yIG5vdy4gV2UKPiBtYXkgd2FudCB0byBpbnZlc3RpZ2F0ZSB1c2luZyB1bndp
-bmQgaW5mb3JtYXRpb24gaW4gdGhvc2Ugc2l0dWF0aW9ucy4KPgo+IFRoaXMgaXMgYSBSRkMgcGF0
-Y2hzZXQuIFRoZXJlIGFyZSBjdXJyZW50bHkgbm8gdGVzdHMgZm9yIHRoaXMgZmVhdHVyZSBpbgo+
-IGx0dG5nLXRvb2xzLgo+Cj4gRmVlZGJhY2sgaXMgd2VsY29tZSEKPgo+IFRoYW5rcywKPgo+IE1h
-dGhpZXUKPgo+Cj4gRnJhbmNpcyBHaXJhbGRlYXUgKDMpOgo+ICAgIFBhc3MgYXJndW1lbnRzIGZv
-ciBjb250ZXh0IHNpemUgY29tcHV0YXRpb24KPiAgICBEZWZpbmUgbWF4IG5lc3RpbmcgY291bnQg
-Y29uc3RhbnQKPiAgICBBZGQga2VybmVsIGFuZCB1c2VyIGNhbGxzdGFjayBjb250ZXh0cwo+Cj4g
-TWF0aGlldSBEZXNub3llcnMgKDcpOgo+ICAgIENsZWFudXAgY2FsbHN0YWNrIGNvbnRleHQKPiAg
-ICBjYWxsc3RhY2sgY29udGV4dDogdXNlIGRlbGltaXRlciB3aGVuIHN0YWNrIGlzIGluY29tcGxl
-dGUKPiAgICBGaXg6IGNhbGxzdGFjayBjb250ZXh0OiBmYWxzZS1zaGFyaW5nLCBiYWQgbWVtb3J5
-IHNpemUgYWxsb2NhdGlvbgo+ICAgIEZpeCBjYWxsc3RhY2sgY29udGV4dDogd3JpdGUgZW1wdHkg
-c2VxdWVuY2UgaWYgbm8gc3RhY2sgdHJhY2UKPiAgICBDbGVhbnVwIGNhbGxzdGFjayBjb250ZXh0
-Cj4gICAgRml4OiBjYWxsc3RhY2sgY29udGV4dCBhbGlnbm1lbnQgY2FsY3VsYXRpb24KPiAgICBj
-YWxsc3RhY2sgY29udGV4dDogYnVtcCBudW1iZXIgb2YgZW50cmllcyB0byAxMjgKPgo+ICAgTWFr
-ZWZpbGUgICAgICAgICAgICAgICAgICAgICAgfCAgIDMgKy0KPiAgIGxpYi9yaW5nYnVmZmVyL2Zy
-b250ZW5kLmggICAgIHwgICAzICsKPiAgIGxpYi9yaW5nYnVmZmVyL2Zyb250ZW5kX2FwaS5oIHwg
-ICAyICstCj4gICBsdHRuZy1hYmkuYyAgICAgICAgICAgICAgICAgICB8ICAgMyArCj4gICBsdHRu
-Zy1hYmkuaCAgICAgICAgICAgICAgICAgICB8ICAgMiArCj4gICBsdHRuZy1jb250ZXh0LWNhbGxz
-dGFjay5jICAgICB8IDM2MSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysKPiAgIGx0dG5nLWV2ZW50cy5oICAgICAgICAgICAgICAgIHwgIDEyICsrCj4gICBsdHRuZy1y
-aW5nLWJ1ZmZlci1jbGllbnQuaCAgICB8ICAxNyArLQo+ICAgOCBmaWxlcyBjaGFuZ2VkLCAzOTYg
-aW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkKPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBsdHRu
-Zy1jb250ZXh0LWNhbGxzdGFjay5jCj4KCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0
-dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
-bHR0bmctZGV2Cg==
+--===============5735775452373485116==
+Content-Type: multipart/alternative;
+ boundary="=_4e170bafd29c03d799f86f07b4d152c7"
+
+--=_4e170bafd29c03d799f86f07b4d152c7
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Hi, =0A=C2=A0=C2=A0=C2=A0 I am trying to build lttng tools version 2.9=
+=C2=A0 form source for=0Amy raspberry pi 3 B board, But i am ended up wi=
+th some following=0Aassembler error message while doing make.=0A=0A/tmp/=
+ccegcSiA.s: Assembler messages:=0A/tmp/ccegcSiA.s:1314: Error: selected=
+ processor does not support ARM=0Amode `dmb ish'=0A/tmp/ccegcSiA.s:1333:=
+ Error: selected processor does not support ARM=0Amode `dmb ish'=0A/tmp/=
+ccegcSiA.s:1344: Error: selected processor does not support ARM=0Amode `=
+dmb ish'=0A/tmp/ccegcSiA.s:1721: Error: selected processor does not supp=
+ort ARM=0Amode `dmb ish'=0A/tmp/ccegcSiA.s:1740: Error: selected process=
+or does not support ARM=0Amode `dmb ish'=0A/tmp/ccegcSiA.s:1751: Error:=
+ selected processor does not support ARM=0Amode `dmb ish'=0A/tmp/ccegcSi=
+A.s:2108: Error: selected processor does not support ARM=0Amode `dmb ish=
+'=0A/tmp/ccegcSiA.s:2127: Error: selected processor does not support ARM=
+=0Amode `dmb ish'=0A/tmp/ccegcSiA.s:2138: Error: selected processor does=
+ not support ARM=0Amode `dmb ish'=0A/tmp/ccegcSiA.s:2494: Error: selecte=
+d processor does not support ARM=0Amode `dmb ish'=0A/tmp/ccegcSiA.s:2513=
+: Error: selected processor does not support ARM=0Amode `dmb ish'=0A/tmp=
+/ccegcSiA.s:2524: Error: selected processor does not support ARM=0Amode=
+ `dmb ish'=0AI there any way to solve this issue, =0Acat /proc/cpuinfo s=
+hows following result.=0A=0Aprocessor=C2=A0=C2=A0=C2=A0 : 1=0Amodel name=
+=C2=A0=C2=A0=C2=A0 : ARMv7 Processor rev 4 (v7l)=0ABogoMIPS=C2=A0=C2=A0=
+=C2=A0 : 38.40=0AFeatures=C2=A0=C2=A0=C2=A0 : half thumb fastmult vfp ed=
+sp neon vfpv3 tls vfpv4=0Aidiva idivt vfpd32 lpae evtstrm crc32 =0ACPU i=
+mplementer=C2=A0=C2=A0=C2=A0 : 0x41=0ACPU architecture: 7=0ACPU variant=
+=C2=A0=C2=A0=C2=A0 : 0x0=0ACPU part=C2=A0=C2=A0=C2=A0 : 0xd03=0ACPU revi=
+sion=C2=A0=C2=A0=C2=A0 : 4=0A=0AThanks & Regards=0AAbhishek Kumar=0A7801=
+078513 =0A=0A-------------------------=0AEmail sent using E-interact Web=
+mail
+
+--=_4e170bafd29c03d799f86f07b4d152c7
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body style=3D"font-family: 'Helvetica Neue',Helvetica,Arial,sans-=
+serif; font-size: 12px;">Hi, <br />=C2=A0=C2=A0=C2=A0 I am trying to bui=
+ld lttng tools version 2.9=C2=A0 form source for my raspberry pi 3 B boa=
+rd, But i am ended up with some following assembler error message while=
+ doing make.<br /><br />/tmp/ccegcSiA.s: Assembler messages:<br />/tmp/c=
+cegcSiA.s:1314: Error: selected processor does not support ARM mode `dmb=
+ ish'<br />/tmp/ccegcSiA.s:1333: Error: selected processor does not supp=
+ort ARM mode `dmb ish'<br />/tmp/ccegcSiA.s:1344: Error: selected proces=
+sor does not support ARM mode `dmb ish'<br />/tmp/ccegcSiA.s:1721: Error=
+: selected processor does not support ARM mode `dmb ish'<br />/tmp/ccegc=
+SiA.s:1740: Error: selected processor does not support ARM mode `dmb ish=
+'<br />/tmp/ccegcSiA.s:1751: Error: selected processor does not support=
+ ARM mode `dmb ish'<br />/tmp/ccegcSiA.s:2108: Error: selected processor=
+ does not support ARM mode `dmb ish'<br />/tmp/ccegcSiA.s:2127: Error: s=
+elected processor does not support ARM mode `dmb ish'<br />/tmp/ccegcSiA=
+s:2138: Error: selected processor does not support ARM mode `dmb ish'<b=
+r />/tmp/ccegcSiA.s:2494: Error: selected processor does not support ARM=
+ mode `dmb ish'<br />/tmp/ccegcSiA.s:2513: Error: selected processor doe=
+s not support ARM mode `dmb ish'<br />/tmp/ccegcSiA.s:2524: Error: selec=
+ted processor does not support ARM mode `dmb ish'<br />I there any way t=
+o solve this issue, <br />cat /proc/cpuinfo shows following result.<br /=
+><br />processor=C2=A0=C2=A0=C2=A0 : 1<br />model name=C2=A0=C2=A0=C2=A0=
+ : ARMv7 Processor rev 4 (v7l)<br />BogoMIPS=C2=A0=C2=A0=C2=A0 : 38.40<b=
+r />Features=C2=A0=C2=A0=C2=A0 : half thumb fastmult vfp edsp neon vfpv3=
+ tls vfpv4 idiva idivt vfpd32 lpae evtstrm crc32 <br />CPU implementer=
+=C2=A0=C2=A0=C2=A0 : 0x41<br />CPU architecture: 7<br />CPU variant=C2=
+=A0=C2=A0=C2=A0 : 0x0<br />CPU part=C2=A0=C2=A0=C2=A0 : 0xd03<br />CPU r=
+evision=C2=A0=C2=A0=C2=A0 : 4<br /><br /><br /><br />Thanks &amp; Regard=
+s<br />Abhishek Kumar<br />7801078513 <br /><br /><hr>Email sent using E=
+-interact Webmail</body></html>
+
+--=_4e170bafd29c03d799f86f07b4d152c7--
+
+
+--===============5735775452373485116==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============5735775452373485116==--
