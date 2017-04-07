@@ -1,21 +1,22 @@
-From: Rocky Dunlap <rsdunlapiv@gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
 Subject: Re: Explicit setting of UUID with ctf writer
-Date: Fri, 7 Apr 2017 16:07:57 -0600
-Message-ID: <CAK-w0DfPVQ01cbp-r9a2Z=6Fx_S_hjuXYQdqOj3zK0hr-Sy9uQ__9523.213413968$1491602913$gmane$org@mail.gmail.com>
+Date: Fri, 7 Apr 2017 18:55:46 -0400
+Message-ID: <CAB4xu_3B_K1NWktW4W4uw4NsutuE52m-rr5_grrcFzVh7ZHiVQ__21046.8977144503$1491605795$gmane$org@mail.gmail.com>
 References: <CAK-w0DdKCrHuGakFkWM1z4sXW10oyxmxdGXezyXb+DutEieeMA@mail.gmail.com>
  <CAB4xu_2fHsZa-LqHA-VVdDN1X8ej2_W6-JvjHk2E0C83ftKLYQ@mail.gmail.com>
  <CAK-w0DfawxkijMiUCZzLSApkTHCLH06N6QayjaSh_OSJQwEQjQ@mail.gmail.com>
  <CAB4xu_3_OfLz_CNiPMU7E8iZtS_R1M9HfDb-2nxe0jrb1QU9Zw@mail.gmail.com>
  <CAK-w0Ddo6hJsPoZLh8VdgqOcBb6sUsj6FkHrtv9UBkrf5gKDEg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8452337346129309235=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ua0-x235.google.com (mail-ua0-x235.google.com
- [IPv6:2607:f8b0:400c:c08::235])
- by lists.lttng.org (Postfix) with ESMTPS id 3w0DHc1dgbzkyd
- for <lttng-dev@lists.lttng.org>; Fri,  7 Apr 2017 22:08:43 +0000 (UTC)
-Received: by mail-ua0-x235.google.com with SMTP id 49so2603497uau.2
- for <lttng-dev@lists.lttng.org>; Fri, 07 Apr 2017 15:08:18 -0700 (PDT)
+Received: from mail-qt0-x236.google.com (mail-qt0-x236.google.com
+ [IPv6:2607:f8b0:400d:c0d::236])
+ by lists.lttng.org (Postfix) with ESMTPS id 3w0FLz1wPGzl4k
+ for <lttng-dev@lists.lttng.org>; Fri,  7 Apr 2017 22:56:42 +0000 (UTC)
+Received: by mail-qt0-x236.google.com with SMTP id c45so30450989qtb.1
+ for <lttng-dev@lists.lttng.org>; Fri, 07 Apr 2017 15:56:17 -0700 (PDT)
 In-Reply-To: <CAK-w0Ddo6hJsPoZLh8VdgqOcBb6sUsj6FkHrtv9UBkrf5gKDEg@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -26,337 +27,89 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Philippe Proulx <eeppeliteloop@gmail.com>
+To: Rocky Dunlap <rsdunlapiv@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============8452337346129309235==
-Content-Type: multipart/alternative; boundary=f40304362126dfc3d5054c9adc99
-
---f40304362126dfc3d5054c9adc99
-Content-Type: text/plain; charset=UTF-8
-
-Phil,
-
-Not sure about your release policy, but would it be possible to have a
-1.5.3 release with a new API to set the trace uuid?
-
-Rocky
-
-On Fri, Apr 7, 2017 at 4:02 PM, Rocky Dunlap <rsdunlapiv@gmail.com> wrote:
-
-> Phil,
->
-> Thanks very much for your suggestion.  I tried it and it does work exactly
-> as you say, but I agree it is a bit ugly and non-portable. It is nice to
-> have a temporary option while awaiting babeltrace 2.0.
->
-> Using the command line to combine traces is perhaps the cleaner option.
-> However, it does not appear that I can output in CTF format with this
-> version:
->
-> $ babeltrace -w combined -o ctf PET1 PET2
-> [error] Only CTF traces with a single clock description are supported by
-> this babeltrace version.
-> [error] Opening CTF traces for output is not supported yet.
-> Error opening trace "combined" for writing.
->
-> Thanks,
-> Rocky
->
-> On Fri, Apr 7, 2017 at 3:03 PM, Philippe Proulx <eeppeliteloop@gmail.com>
-> wrote:
->
->> On Fri, Apr 7, 2017 at 4:15 PM, Rocky Dunlap <rsdunlapiv@gmail.com>
->> wrote:
->> > Phil,
->> >
->> > This relates to my previous question about multi-process tracing. The
->> > workaround I am attempting is to have each process write its own trace
->> with
->> > a single stream, but then to pull all the stream files together into a
->> > single trace with one metadata file. For this reason the uuids would
->> need to
->> > match.
->> >
->> > Do you think this will work?
->>
->> First question: why not having multiple traces (multiple directories
->> with multiple `metadata` files)? babeltrace(1) and Trace Compass can
->> merge them easily.
->>
->> In the meantime, if you really want a single trace, here's a hack.
->> Please don't tell anyone that I suggested this. Choose any generated
->> `metadata` file which contains all the `event` blocks that you need.
->> Note that, across all your traces, the order in which you add the event
->> class objects to your single stream class object needs to remain the
->> same so that they have the same IDs whatever the trace. Then, this
->> works, as long as you use the Babeltrace 1.5.2 release:
->>
->>     #include <babeltrace/ctf-writer/writer.h>
->>     #include <string.h>
->>     #include <assert.h>
->>
->>     typedef unsigned char uuid_t[16];
->>
->>     struct bt_ref {
->>         long count;
->>         void *release;
->>     };
->>
->>     struct bt_object {
->>         struct bt_ref ref_count;
->>         void *release;
->>         void *parent;
->>     };
->>
->>     struct bt_ctf_trace {
->>         struct bt_object base;
->>         int frozen;
->>         unsigned char uuid[16];
->>     };
->>
->>     struct bt_ctf_writer {
->>         struct bt_object base;
->>         int frozen;
->>         struct bt_ctf_trace *trace;
->>     };
->>
->>     int main(void)
->>     {
->>         struct bt_ctf_writer *writer;
->>         const unsigned char my_custom_uuid[16] = {
->>             0xb3, 0x38, 0x4d, 0x7b, 0x77, 0x8a, 0x4f, 0xf0,
->>             0x99, 0xbd, 0x43, 0x54, 0x9e, 0xc0, 0x54, 0x1b,
->>         };
->>
->>         writer = bt_ctf_writer_create("/tmp/my-trace");
->>         assert(writer);
->>         memcpy(writer->trace->uuid, my_custom_uuid, 16);
->>
->>         /* do stuff with writer here */
->>
->>         bt_ctf_writer_put(writer);
->>         return 0;
->>     }
->>
->> Again, I don't condone this: it's not portable, it's ugly, but it does
->> what you ask.
->>
->> Another hack: search the byte sequences c1 fc 1f c1 (big endian) or
->> c1 1f fc c1 (little endian) in all your stream files and replace the
->> _next_ 16 bytes with your favorite UUID. Also replace the `uuid`
->> attribute in the chosen `metadata` file with the canonical
->> representation of your favorite UUID.
->>
->> Phil
->>
->> >
->> > Rocky
->> >
->> > On Apr 7, 2017 1:57 PM, "Philippe Proulx" <eeppeliteloop@gmail.com>
->> wrote:
->> >>
->> >> On Fri, Apr 7, 2017 at 3:18 PM, Rocky Dunlap <rsdunlapiv@gmail.com>
->> wrote:
->> >> > Is it possible to explicitly set a uuid for a trace using the
->> Babeltrace
->> >> > CTF
->> >> > writer?  I did not see a straightforward way to do it with the API.
->> >>
->> >> It's not possible as of Babeltrace 1. We'll add trace UUID accessors to
->> >> the upcoming Babeltrace 2 API.
->> >>
->> >> That said, may I ask you why you need this? Two different CTF traces
->> >> should not share the same UUID.
->> >>
->> >> Phil
->> >>
->> >> >
->> >> > Rocky
->> >> >
->> >> > _______________________________________________
->> >> > lttng-dev mailing list
->> >> > lttng-dev@lists.lttng.org
->> >> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->> >> >
->>
->
->
-
---f40304362126dfc3d5054c9adc99
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Phil,<div><br></div><div>Not sure about your release polic=
-y, but would it be possible to have a 1.5.3 release with a new API to set t=
-he trace uuid?</div><div><br></div><div>Rocky</div></div><div class=3D"gmai=
-l_extra"><br><div class=3D"gmail_quote">On Fri, Apr 7, 2017 at 4:02 PM, Roc=
-ky Dunlap <span dir=3D"ltr">&lt;<a href=3D"mailto:rsdunlapiv@gmail.com" tar=
-get=3D"_blank">rsdunlapiv@gmail.com</a>&gt;</span> wrote:<br><blockquote cl=
-ass=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;p=
-adding-left:1ex"><div dir=3D"ltr"><div>Phil,</div><div><br></div><div>Thank=
-s very much for your suggestion.=C2=A0 I tried it and it does work exactly =
-as you say, but I agree it is a bit ugly and non-portable. It is nice to ha=
-ve a temporary option while awaiting babeltrace 2.0.</div><div><br></div><d=
-iv>Using the command line to combine traces is perhaps the cleaner option.=
-=C2=A0 However, it does not appear that I can output in CTF format with thi=
-s version:</div><div><br></div><div>$ babeltrace -w combined -o ctf PET1 PE=
-T2</div><div>[error] Only CTF traces with a single clock description are su=
-pported by this babeltrace version.</div><div>[error] Opening CTF traces fo=
-r output is not supported yet.</div><div>Error opening trace &quot;combined=
-&quot; for writing.</div><div><br></div><div>Thanks,</div><div>Rocky</div><=
-/div><div class=3D"HOEnZb"><div class=3D"h5"><div class=3D"gmail_extra"><br=
-><div class=3D"gmail_quote">On Fri, Apr 7, 2017 at 3:03 PM, Philippe Proulx=
- <span dir=3D"ltr">&lt;<a href=3D"mailto:eeppeliteloop@gmail.com" target=3D=
-"_blank">eeppeliteloop@gmail.com</a>&gt;</span> wrote:<br><blockquote class=
-=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
-ing-left:1ex"><span>On Fri, Apr 7, 2017 at 4:15 PM, Rocky Dunlap &lt;<a hre=
-f=3D"mailto:rsdunlapiv@gmail.com" target=3D"_blank">rsdunlapiv@gmail.com</a=
->&gt; wrote:<br>
-&gt; Phil,<br>
-&gt;<br>
-&gt; This relates to my previous question about multi-process tracing. The<=
-br>
-&gt; workaround I am attempting is to have each process write its own trace=
- with<br>
-&gt; a single stream, but then to pull all the stream files together into a=
-<br>
-&gt; single trace with one metadata file. For this reason the uuids would n=
-eed to<br>
-&gt; match.<br>
-&gt;<br>
-&gt; Do you think this will work?<br>
-<br>
-</span>First question: why not having multiple traces (multiple directories=
-<br>
-with multiple `metadata` files)? babeltrace(1) and Trace Compass can<br>
-merge them easily.<br>
-<br>
-In the meantime, if you really want a single trace, here&#39;s a hack.<br>
-Please don&#39;t tell anyone that I suggested this. Choose any generated<br=
->
-`metadata` file which contains all the `event` blocks that you need.<br>
-Note that, across all your traces, the order in which you add the event<br>
-class objects to your single stream class object needs to remain the<br>
-same so that they have the same IDs whatever the trace. Then, this<br>
-works, as long as you use the Babeltrace 1.5.2 release:<br>
-<br>
-=C2=A0 =C2=A0 #include &lt;babeltrace/ctf-writer/writer.<wbr>h&gt;<br>
-=C2=A0 =C2=A0 #include &lt;string.h&gt;<br>
-=C2=A0 =C2=A0 #include &lt;assert.h&gt;<br>
-<br>
-=C2=A0 =C2=A0 typedef unsigned char uuid_t[16];<br>
-<br>
-=C2=A0 =C2=A0 struct bt_ref {<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 long count;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 void *release;<br>
-=C2=A0 =C2=A0 };<br>
-<br>
-=C2=A0 =C2=A0 struct bt_object {<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 struct bt_ref ref_count;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 void *release;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 void *parent;<br>
-=C2=A0 =C2=A0 };<br>
-<br>
-=C2=A0 =C2=A0 struct bt_ctf_trace {<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 struct bt_object base;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 int frozen;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 unsigned char uuid[16];<br>
-=C2=A0 =C2=A0 };<br>
-<br>
-=C2=A0 =C2=A0 struct bt_ctf_writer {<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 struct bt_object base;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 int frozen;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 struct bt_ctf_trace *trace;<br>
-=C2=A0 =C2=A0 };<br>
-<br>
-=C2=A0 =C2=A0 int main(void)<br>
-=C2=A0 =C2=A0 {<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 struct bt_ctf_writer *writer;<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 const unsigned char my_custom_uuid[16] =3D {<br=
->
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 0xb3, 0x38, 0x4d, 0x7b, 0x77, 0x8=
-a, 0x4f, 0xf0,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 0x99, 0xbd, 0x43, 0x54, 0x9e, 0xc=
-0, 0x54, 0x1b,<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 };<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 writer =3D bt_ctf_writer_create(&quot;/tmp/my-<=
-wbr>trace&quot;);<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 assert(writer);<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 memcpy(writer-&gt;trace-&gt;uuid, my_custom_uui=
-d, 16);<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 /* do stuff with writer here */<br>
-<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 bt_ctf_writer_put(writer);<br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 return 0;<br>
-=C2=A0 =C2=A0 }<br>
-<br>
-Again, I don&#39;t condone this: it&#39;s not portable, it&#39;s ugly, but =
-it does<br>
-what you ask.<br>
-<br>
-Another hack: search the byte sequences c1 fc 1f c1 (big endian) or<br>
-c1 1f fc c1 (little endian) in all your stream files and replace the<br>
-_next_ 16 bytes with your favorite UUID. Also replace the `uuid`<br>
-attribute in the chosen `metadata` file with the canonical<br>
-representation of your favorite UUID.<br>
-<br>
-Phil<br>
-<div class=3D"m_-3665664898659589100HOEnZb"><div class=3D"m_-36656648986595=
-89100h5"><br>
-&gt;<br>
-&gt; Rocky<br>
-&gt;<br>
-&gt; On Apr 7, 2017 1:57 PM, &quot;Philippe Proulx&quot; &lt;<a href=3D"mai=
-lto:eeppeliteloop@gmail.com" target=3D"_blank">eeppeliteloop@gmail.com</a>&=
-gt; wrote:<br>
-&gt;&gt;<br>
-&gt;&gt; On Fri, Apr 7, 2017 at 3:18 PM, Rocky Dunlap &lt;<a href=3D"mailto=
-:rsdunlapiv@gmail.com" target=3D"_blank">rsdunlapiv@gmail.com</a>&gt; wrote=
-:<br>
-&gt;&gt; &gt; Is it possible to explicitly set a uuid for a trace using the=
- Babeltrace<br>
-&gt;&gt; &gt; CTF<br>
-&gt;&gt; &gt; writer?=C2=A0 I did not see a straightforward way to do it wi=
-th the API.<br>
-&gt;&gt;<br>
-&gt;&gt; It&#39;s not possible as of Babeltrace 1. We&#39;ll add trace UUID=
- accessors to<br>
-&gt;&gt; the upcoming Babeltrace 2 API.<br>
-&gt;&gt;<br>
-&gt;&gt; That said, may I ask you why you need this? Two different CTF trac=
-es<br>
-&gt;&gt; should not share the same UUID.<br>
-&gt;&gt;<br>
-&gt;&gt; Phil<br>
-&gt;&gt;<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; Rocky<br>
-&gt;&gt; &gt;<br>
-&gt;&gt; &gt; ______________________________<wbr>_________________<br>
-&gt;&gt; &gt; lttng-dev mailing list<br>
-&gt;&gt; &gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank=
-">lttng-dev@lists.lttng.org</a><br>
-&gt;&gt; &gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/l=
-ttng-dev" rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-=
-bi<wbr>n/mailman/listinfo/lttng-dev</a><br>
-&gt;&gt; &gt;<br>
-</div></div></blockquote></div><br></div>
-</div></div></blockquote></div><br></div>
-
---f40304362126dfc3d5054c9adc99--
-
---===============8452337346129309235==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============8452337346129309235==--
+T24gRnJpLCBBcHIgNywgMjAxNyBhdCA2OjAyIFBNLCBSb2NreSBEdW5sYXAgPHJzZHVubGFwaXZA
+Z21haWwuY29tPiB3cm90ZToKPiBQaGlsLAo+Cj4gVGhhbmtzIHZlcnkgbXVjaCBmb3IgeW91ciBz
+dWdnZXN0aW9uLiAgSSB0cmllZCBpdCBhbmQgaXQgZG9lcyB3b3JrIGV4YWN0bHkKPiBhcyB5b3Ug
+c2F5LCBidXQgSSBhZ3JlZSBpdCBpcyBhIGJpdCB1Z2x5IGFuZCBub24tcG9ydGFibGUuIEl0IGlz
+IG5pY2UgdG8KPiBoYXZlIGEgdGVtcG9yYXJ5IG9wdGlvbiB3aGlsZSBhd2FpdGluZyBiYWJlbHRy
+YWNlIDIuMC4KPgo+IFVzaW5nIHRoZSBjb21tYW5kIGxpbmUgdG8gY29tYmluZSB0cmFjZXMgaXMg
+cGVyaGFwcyB0aGUgY2xlYW5lciBvcHRpb24uCj4gSG93ZXZlciwgaXQgZG9lcyBub3QgYXBwZWFy
+IHRoYXQgSSBjYW4gb3V0cHV0IGluIENURiBmb3JtYXQgd2l0aCB0aGlzCj4gdmVyc2lvbjoKPgo+
+ICQgYmFiZWx0cmFjZSAtdyBjb21iaW5lZCAtbyBjdGYgUEVUMSBQRVQyCj4gW2Vycm9yXSBPbmx5
+IENURiB0cmFjZXMgd2l0aCBhIHNpbmdsZSBjbG9jayBkZXNjcmlwdGlvbiBhcmUgc3VwcG9ydGVk
+IGJ5Cj4gdGhpcyBiYWJlbHRyYWNlIHZlcnNpb24uCj4gW2Vycm9yXSBPcGVuaW5nIENURiB0cmFj
+ZXMgZm9yIG91dHB1dCBpcyBub3Qgc3VwcG9ydGVkIHlldC4KPiBFcnJvciBvcGVuaW5nIHRyYWNl
+ICJjb21iaW5lZCIgZm9yIHdyaXRpbmcuCgpEaWQgeW91IHRyeSB3aXRoIC0tY2xvY2stZm9yY2Ut
+Y29ycmVsYXRlPwoKUGhpbAoKPgo+IFRoYW5rcywKPiBSb2NreQo+Cj4gT24gRnJpLCBBcHIgNywg
+MjAxNyBhdCAzOjAzIFBNLCBQaGlsaXBwZSBQcm91bHggPGVlcHBlbGl0ZWxvb3BAZ21haWwuY29t
+Pgo+IHdyb3RlOgo+Pgo+PiBPbiBGcmksIEFwciA3LCAyMDE3IGF0IDQ6MTUgUE0sIFJvY2t5IER1
+bmxhcCA8cnNkdW5sYXBpdkBnbWFpbC5jb20+IHdyb3RlOgo+PiA+IFBoaWwsCj4+ID4KPj4gPiBU
+aGlzIHJlbGF0ZXMgdG8gbXkgcHJldmlvdXMgcXVlc3Rpb24gYWJvdXQgbXVsdGktcHJvY2VzcyB0
+cmFjaW5nLiBUaGUKPj4gPiB3b3JrYXJvdW5kIEkgYW0gYXR0ZW1wdGluZyBpcyB0byBoYXZlIGVh
+Y2ggcHJvY2VzcyB3cml0ZSBpdHMgb3duIHRyYWNlCj4+ID4gd2l0aAo+PiA+IGEgc2luZ2xlIHN0
+cmVhbSwgYnV0IHRoZW4gdG8gcHVsbCBhbGwgdGhlIHN0cmVhbSBmaWxlcyB0b2dldGhlciBpbnRv
+IGEKPj4gPiBzaW5nbGUgdHJhY2Ugd2l0aCBvbmUgbWV0YWRhdGEgZmlsZS4gRm9yIHRoaXMgcmVh
+c29uIHRoZSB1dWlkcyB3b3VsZAo+PiA+IG5lZWQgdG8KPj4gPiBtYXRjaC4KPj4gPgo+PiA+IERv
+IHlvdSB0aGluayB0aGlzIHdpbGwgd29yaz8KPj4KPj4gRmlyc3QgcXVlc3Rpb246IHdoeSBub3Qg
+aGF2aW5nIG11bHRpcGxlIHRyYWNlcyAobXVsdGlwbGUgZGlyZWN0b3JpZXMKPj4gd2l0aCBtdWx0
+aXBsZSBgbWV0YWRhdGFgIGZpbGVzKT8gYmFiZWx0cmFjZSgxKSBhbmQgVHJhY2UgQ29tcGFzcyBj
+YW4KPj4gbWVyZ2UgdGhlbSBlYXNpbHkuCj4+Cj4+IEluIHRoZSBtZWFudGltZSwgaWYgeW91IHJl
+YWxseSB3YW50IGEgc2luZ2xlIHRyYWNlLCBoZXJlJ3MgYSBoYWNrLgo+PiBQbGVhc2UgZG9uJ3Qg
+dGVsbCBhbnlvbmUgdGhhdCBJIHN1Z2dlc3RlZCB0aGlzLiBDaG9vc2UgYW55IGdlbmVyYXRlZAo+
+PiBgbWV0YWRhdGFgIGZpbGUgd2hpY2ggY29udGFpbnMgYWxsIHRoZSBgZXZlbnRgIGJsb2NrcyB0
+aGF0IHlvdSBuZWVkLgo+PiBOb3RlIHRoYXQsIGFjcm9zcyBhbGwgeW91ciB0cmFjZXMsIHRoZSBv
+cmRlciBpbiB3aGljaCB5b3UgYWRkIHRoZSBldmVudAo+PiBjbGFzcyBvYmplY3RzIHRvIHlvdXIg
+c2luZ2xlIHN0cmVhbSBjbGFzcyBvYmplY3QgbmVlZHMgdG8gcmVtYWluIHRoZQo+PiBzYW1lIHNv
+IHRoYXQgdGhleSBoYXZlIHRoZSBzYW1lIElEcyB3aGF0ZXZlciB0aGUgdHJhY2UuIFRoZW4sIHRo
+aXMKPj4gd29ya3MsIGFzIGxvbmcgYXMgeW91IHVzZSB0aGUgQmFiZWx0cmFjZSAxLjUuMiByZWxl
+YXNlOgo+Pgo+PiAgICAgI2luY2x1ZGUgPGJhYmVsdHJhY2UvY3RmLXdyaXRlci93cml0ZXIuaD4K
+Pj4gICAgICNpbmNsdWRlIDxzdHJpbmcuaD4KPj4gICAgICNpbmNsdWRlIDxhc3NlcnQuaD4KPj4K
+Pj4gICAgIHR5cGVkZWYgdW5zaWduZWQgY2hhciB1dWlkX3RbMTZdOwo+Pgo+PiAgICAgc3RydWN0
+IGJ0X3JlZiB7Cj4+ICAgICAgICAgbG9uZyBjb3VudDsKPj4gICAgICAgICB2b2lkICpyZWxlYXNl
+Owo+PiAgICAgfTsKPj4KPj4gICAgIHN0cnVjdCBidF9vYmplY3Qgewo+PiAgICAgICAgIHN0cnVj
+dCBidF9yZWYgcmVmX2NvdW50Owo+PiAgICAgICAgIHZvaWQgKnJlbGVhc2U7Cj4+ICAgICAgICAg
+dm9pZCAqcGFyZW50Owo+PiAgICAgfTsKPj4KPj4gICAgIHN0cnVjdCBidF9jdGZfdHJhY2Ugewo+
+PiAgICAgICAgIHN0cnVjdCBidF9vYmplY3QgYmFzZTsKPj4gICAgICAgICBpbnQgZnJvemVuOwo+
+PiAgICAgICAgIHVuc2lnbmVkIGNoYXIgdXVpZFsxNl07Cj4+ICAgICB9Owo+Pgo+PiAgICAgc3Ry
+dWN0IGJ0X2N0Zl93cml0ZXIgewo+PiAgICAgICAgIHN0cnVjdCBidF9vYmplY3QgYmFzZTsKPj4g
+ICAgICAgICBpbnQgZnJvemVuOwo+PiAgICAgICAgIHN0cnVjdCBidF9jdGZfdHJhY2UgKnRyYWNl
+Owo+PiAgICAgfTsKPj4KPj4gICAgIGludCBtYWluKHZvaWQpCj4+ICAgICB7Cj4+ICAgICAgICAg
+c3RydWN0IGJ0X2N0Zl93cml0ZXIgKndyaXRlcjsKPj4gICAgICAgICBjb25zdCB1bnNpZ25lZCBj
+aGFyIG15X2N1c3RvbV91dWlkWzE2XSA9IHsKPj4gICAgICAgICAgICAgMHhiMywgMHgzOCwgMHg0
+ZCwgMHg3YiwgMHg3NywgMHg4YSwgMHg0ZiwgMHhmMCwKPj4gICAgICAgICAgICAgMHg5OSwgMHhi
+ZCwgMHg0MywgMHg1NCwgMHg5ZSwgMHhjMCwgMHg1NCwgMHgxYiwKPj4gICAgICAgICB9Owo+Pgo+
+PiAgICAgICAgIHdyaXRlciA9IGJ0X2N0Zl93cml0ZXJfY3JlYXRlKCIvdG1wL215LXRyYWNlIik7
+Cj4+ICAgICAgICAgYXNzZXJ0KHdyaXRlcik7Cj4+ICAgICAgICAgbWVtY3B5KHdyaXRlci0+dHJh
+Y2UtPnV1aWQsIG15X2N1c3RvbV91dWlkLCAxNik7Cj4+Cj4+ICAgICAgICAgLyogZG8gc3R1ZmYg
+d2l0aCB3cml0ZXIgaGVyZSAqLwo+Pgo+PiAgICAgICAgIGJ0X2N0Zl93cml0ZXJfcHV0KHdyaXRl
+cik7Cj4+ICAgICAgICAgcmV0dXJuIDA7Cj4+ICAgICB9Cj4+Cj4+IEFnYWluLCBJIGRvbid0IGNv
+bmRvbmUgdGhpczogaXQncyBub3QgcG9ydGFibGUsIGl0J3MgdWdseSwgYnV0IGl0IGRvZXMKPj4g
+d2hhdCB5b3UgYXNrLgo+Pgo+PiBBbm90aGVyIGhhY2s6IHNlYXJjaCB0aGUgYnl0ZSBzZXF1ZW5j
+ZXMgYzEgZmMgMWYgYzEgKGJpZyBlbmRpYW4pIG9yCj4+IGMxIDFmIGZjIGMxIChsaXR0bGUgZW5k
+aWFuKSBpbiBhbGwgeW91ciBzdHJlYW0gZmlsZXMgYW5kIHJlcGxhY2UgdGhlCj4+IF9uZXh0XyAx
+NiBieXRlcyB3aXRoIHlvdXIgZmF2b3JpdGUgVVVJRC4gQWxzbyByZXBsYWNlIHRoZSBgdXVpZGAK
+Pj4gYXR0cmlidXRlIGluIHRoZSBjaG9zZW4gYG1ldGFkYXRhYCBmaWxlIHdpdGggdGhlIGNhbm9u
+aWNhbAo+PiByZXByZXNlbnRhdGlvbiBvZiB5b3VyIGZhdm9yaXRlIFVVSUQuCj4+Cj4+IFBoaWwK
+Pj4KPj4gPgo+PiA+IFJvY2t5Cj4+ID4KPj4gPiBPbiBBcHIgNywgMjAxNyAxOjU3IFBNLCAiUGhp
+bGlwcGUgUHJvdWx4IiA8ZWVwcGVsaXRlbG9vcEBnbWFpbC5jb20+Cj4+ID4gd3JvdGU6Cj4+ID4+
+Cj4+ID4+IE9uIEZyaSwgQXByIDcsIDIwMTcgYXQgMzoxOCBQTSwgUm9ja3kgRHVubGFwIDxyc2R1
+bmxhcGl2QGdtYWlsLmNvbT4KPj4gPj4gd3JvdGU6Cj4+ID4+ID4gSXMgaXQgcG9zc2libGUgdG8g
+ZXhwbGljaXRseSBzZXQgYSB1dWlkIGZvciBhIHRyYWNlIHVzaW5nIHRoZQo+PiA+PiA+IEJhYmVs
+dHJhY2UKPj4gPj4gPiBDVEYKPj4gPj4gPiB3cml0ZXI/ICBJIGRpZCBub3Qgc2VlIGEgc3RyYWln
+aHRmb3J3YXJkIHdheSB0byBkbyBpdCB3aXRoIHRoZSBBUEkuCj4+ID4+Cj4+ID4+IEl0J3Mgbm90
+IHBvc3NpYmxlIGFzIG9mIEJhYmVsdHJhY2UgMS4gV2UnbGwgYWRkIHRyYWNlIFVVSUQgYWNjZXNz
+b3JzIHRvCj4+ID4+IHRoZSB1cGNvbWluZyBCYWJlbHRyYWNlIDIgQVBJLgo+PiA+Pgo+PiA+PiBU
+aGF0IHNhaWQsIG1heSBJIGFzayB5b3Ugd2h5IHlvdSBuZWVkIHRoaXM/IFR3byBkaWZmZXJlbnQg
+Q1RGIHRyYWNlcwo+PiA+PiBzaG91bGQgbm90IHNoYXJlIHRoZSBzYW1lIFVVSUQuCj4+ID4+Cj4+
+ID4+IFBoaWwKPj4gPj4KPj4gPj4gPgo+PiA+PiA+IFJvY2t5Cj4+ID4+ID4KPj4gPj4gPiBfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiA+PiA+IGx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKPj4gPj4gPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+ID4+
+ID4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
+LWRldgo+PiA+PiA+Cj4KPgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo=
