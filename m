@@ -1,23 +1,15 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Subject: Re: Explicit setting of UUID with ctf writer
-Date: Fri, 7 Apr 2017 19:14:22 -0400
-Message-ID: <CAB4xu_2i7bhO8LOt1cr5gEY0d2LirEj1GvY1LiORYJW5jgnDdA__3063.39628664336$1491606909$gmane$org@mail.gmail.com>
-References: <CAK-w0DdKCrHuGakFkWM1z4sXW10oyxmxdGXezyXb+DutEieeMA@mail.gmail.com>
- <CAB4xu_2fHsZa-LqHA-VVdDN1X8ej2_W6-JvjHk2E0C83ftKLYQ@mail.gmail.com>
- <CAK-w0DfawxkijMiUCZzLSApkTHCLH06N6QayjaSh_OSJQwEQjQ@mail.gmail.com>
- <CAB4xu_3_OfLz_CNiPMU7E8iZtS_R1M9HfDb-2nxe0jrb1QU9Zw@mail.gmail.com>
- <CAK-w0Ddo6hJsPoZLh8VdgqOcBb6sUsj6FkHrtv9UBkrf5gKDEg@mail.gmail.com>
+From: Jeffrey Chen <cpthk@live.com>
+Subject: LTTng on Docker
+Date: Fri, 7 Apr 2017 22:35:33 +0000
+Message-ID: <CY4PR13MB152689FB577CFBEF185495EAC70C0__26387.9687911414$1491660587$gmane$org@CY4PR13MB1526.namprd13.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============8642086493103705805=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-x235.google.com (mail-qk0-x235.google.com
- [IPv6:2607:f8b0:400d:c09::235])
- by lists.lttng.org (Postfix) with ESMTPS id 3w0FmQ5fLlzl6X
- for <lttng-dev@lists.lttng.org>; Fri,  7 Apr 2017 23:15:18 +0000 (UTC)
-Received: by mail-qk0-x235.google.com with SMTP id p68so49543579qke.1
- for <lttng-dev@lists.lttng.org>; Fri, 07 Apr 2017 16:14:53 -0700 (PDT)
-In-Reply-To: <CAK-w0Ddo6hJsPoZLh8VdgqOcBb6sUsj6FkHrtv9UBkrf5gKDEg@mail.gmail.com>
+Received: from NAM02-CY1-obe.outbound.protection.outlook.com
+ (mail-oln040092004090.outbound.protection.outlook.com [40.92.4.90])
+ by lists.lttng.org (Postfix) with ESMTPS id 3w0dcd6XjVzk2l
+ for <lttng-dev@lists.lttng.org>; Sat,  8 Apr 2017 14:09:53 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,93 +19,91 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Rocky Dunlap <rsdunlapiv@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gRnJpLCBBcHIgNywgMjAxNyBhdCA2OjAyIFBNLCBSb2NreSBEdW5sYXAgPHJzZHVubGFwaXZA
-Z21haWwuY29tPiB3cm90ZToKPiBQaGlsLAo+Cj4gVGhhbmtzIHZlcnkgbXVjaCBmb3IgeW91ciBz
-dWdnZXN0aW9uLiAgSSB0cmllZCBpdCBhbmQgaXQgZG9lcyB3b3JrIGV4YWN0bHkKPiBhcyB5b3Ug
-c2F5LCBidXQgSSBhZ3JlZSBpdCBpcyBhIGJpdCB1Z2x5IGFuZCBub24tcG9ydGFibGUuIEl0IGlz
-IG5pY2UgdG8KPiBoYXZlIGEgdGVtcG9yYXJ5IG9wdGlvbiB3aGlsZSBhd2FpdGluZyBiYWJlbHRy
-YWNlIDIuMC4KPgo+IFVzaW5nIHRoZSBjb21tYW5kIGxpbmUgdG8gY29tYmluZSB0cmFjZXMgaXMg
-cGVyaGFwcyB0aGUgY2xlYW5lciBvcHRpb24uCj4gSG93ZXZlciwgaXQgZG9lcyBub3QgYXBwZWFy
-IHRoYXQgSSBjYW4gb3V0cHV0IGluIENURiBmb3JtYXQgd2l0aCB0aGlzCj4gdmVyc2lvbjoKPgo+
-ICQgYmFiZWx0cmFjZSAtdyBjb21iaW5lZCAtbyBjdGYgUEVUMSBQRVQyCj4gW2Vycm9yXSBPbmx5
-IENURiB0cmFjZXMgd2l0aCBhIHNpbmdsZSBjbG9jayBkZXNjcmlwdGlvbiBhcmUgc3VwcG9ydGVk
-IGJ5Cj4gdGhpcyBiYWJlbHRyYWNlIHZlcnNpb24uCj4gW2Vycm9yXSBPcGVuaW5nIENURiB0cmFj
-ZXMgZm9yIG91dHB1dCBpcyBub3Qgc3VwcG9ydGVkIHlldC4KPiBFcnJvciBvcGVuaW5nIHRyYWNl
-ICJjb21iaW5lZCIgZm9yIHdyaXRpbmcuCgpBbmQgbm8sIGJhYmVsdHJhY2UoMSkgMS41LjIgY2Fu
-bm90IHByb2R1Y2UgQ1RGIHRyYWNlcy4gV2h5IGRvIHlvdSB3YW50CnRvIGNvbWJpbmUgZGlmZmVy
-ZW50IHRyYWNlcyBhcyBhIHNpbmdsZSB0cmFjZT8gSG93IGRvIHlvdSB3YW50IHRvCmFuYWx5emUg
-dGhpcyBjb21iaW5hdGlvbiB1bHRpbWF0ZWx5PwoKQnkgdGhlIHdheSwgYmFiZWx0cmFjZSgxKSAy
-LjAuMCB3aWxsIGJlIGFibGUgdG8gY29tYmluZSBkaWZmZXJlbnQgZm9ybWF0Cm9mIHRyYWNlcyBm
-cm9tIGRpZmZlcmVudCBzb3VyY2VzIGFzIGEgc2luZ2xlIENURiB0cmFjZSBsaWtlIHlvdSB3YW50
-IHRvCmRvLgoKUGhpbAoKPgo+IFRoYW5rcywKPiBSb2NreQo+Cj4gT24gRnJpLCBBcHIgNywgMjAx
-NyBhdCAzOjAzIFBNLCBQaGlsaXBwZSBQcm91bHggPGVlcHBlbGl0ZWxvb3BAZ21haWwuY29tPgo+
-IHdyb3RlOgo+Pgo+PiBPbiBGcmksIEFwciA3LCAyMDE3IGF0IDQ6MTUgUE0sIFJvY2t5IER1bmxh
-cCA8cnNkdW5sYXBpdkBnbWFpbC5jb20+IHdyb3RlOgo+PiA+IFBoaWwsCj4+ID4KPj4gPiBUaGlz
-IHJlbGF0ZXMgdG8gbXkgcHJldmlvdXMgcXVlc3Rpb24gYWJvdXQgbXVsdGktcHJvY2VzcyB0cmFj
-aW5nLiBUaGUKPj4gPiB3b3JrYXJvdW5kIEkgYW0gYXR0ZW1wdGluZyBpcyB0byBoYXZlIGVhY2gg
-cHJvY2VzcyB3cml0ZSBpdHMgb3duIHRyYWNlCj4+ID4gd2l0aAo+PiA+IGEgc2luZ2xlIHN0cmVh
-bSwgYnV0IHRoZW4gdG8gcHVsbCBhbGwgdGhlIHN0cmVhbSBmaWxlcyB0b2dldGhlciBpbnRvIGEK
-Pj4gPiBzaW5nbGUgdHJhY2Ugd2l0aCBvbmUgbWV0YWRhdGEgZmlsZS4gRm9yIHRoaXMgcmVhc29u
-IHRoZSB1dWlkcyB3b3VsZAo+PiA+IG5lZWQgdG8KPj4gPiBtYXRjaC4KPj4gPgo+PiA+IERvIHlv
-dSB0aGluayB0aGlzIHdpbGwgd29yaz8KPj4KPj4gRmlyc3QgcXVlc3Rpb246IHdoeSBub3QgaGF2
-aW5nIG11bHRpcGxlIHRyYWNlcyAobXVsdGlwbGUgZGlyZWN0b3JpZXMKPj4gd2l0aCBtdWx0aXBs
-ZSBgbWV0YWRhdGFgIGZpbGVzKT8gYmFiZWx0cmFjZSgxKSBhbmQgVHJhY2UgQ29tcGFzcyBjYW4K
-Pj4gbWVyZ2UgdGhlbSBlYXNpbHkuCj4+Cj4+IEluIHRoZSBtZWFudGltZSwgaWYgeW91IHJlYWxs
-eSB3YW50IGEgc2luZ2xlIHRyYWNlLCBoZXJlJ3MgYSBoYWNrLgo+PiBQbGVhc2UgZG9uJ3QgdGVs
-bCBhbnlvbmUgdGhhdCBJIHN1Z2dlc3RlZCB0aGlzLiBDaG9vc2UgYW55IGdlbmVyYXRlZAo+PiBg
-bWV0YWRhdGFgIGZpbGUgd2hpY2ggY29udGFpbnMgYWxsIHRoZSBgZXZlbnRgIGJsb2NrcyB0aGF0
-IHlvdSBuZWVkLgo+PiBOb3RlIHRoYXQsIGFjcm9zcyBhbGwgeW91ciB0cmFjZXMsIHRoZSBvcmRl
-ciBpbiB3aGljaCB5b3UgYWRkIHRoZSBldmVudAo+PiBjbGFzcyBvYmplY3RzIHRvIHlvdXIgc2lu
-Z2xlIHN0cmVhbSBjbGFzcyBvYmplY3QgbmVlZHMgdG8gcmVtYWluIHRoZQo+PiBzYW1lIHNvIHRo
-YXQgdGhleSBoYXZlIHRoZSBzYW1lIElEcyB3aGF0ZXZlciB0aGUgdHJhY2UuIFRoZW4sIHRoaXMK
-Pj4gd29ya3MsIGFzIGxvbmcgYXMgeW91IHVzZSB0aGUgQmFiZWx0cmFjZSAxLjUuMiByZWxlYXNl
-Ogo+Pgo+PiAgICAgI2luY2x1ZGUgPGJhYmVsdHJhY2UvY3RmLXdyaXRlci93cml0ZXIuaD4KPj4g
-ICAgICNpbmNsdWRlIDxzdHJpbmcuaD4KPj4gICAgICNpbmNsdWRlIDxhc3NlcnQuaD4KPj4KPj4g
-ICAgIHR5cGVkZWYgdW5zaWduZWQgY2hhciB1dWlkX3RbMTZdOwo+Pgo+PiAgICAgc3RydWN0IGJ0
-X3JlZiB7Cj4+ICAgICAgICAgbG9uZyBjb3VudDsKPj4gICAgICAgICB2b2lkICpyZWxlYXNlOwo+
-PiAgICAgfTsKPj4KPj4gICAgIHN0cnVjdCBidF9vYmplY3Qgewo+PiAgICAgICAgIHN0cnVjdCBi
-dF9yZWYgcmVmX2NvdW50Owo+PiAgICAgICAgIHZvaWQgKnJlbGVhc2U7Cj4+ICAgICAgICAgdm9p
-ZCAqcGFyZW50Owo+PiAgICAgfTsKPj4KPj4gICAgIHN0cnVjdCBidF9jdGZfdHJhY2Ugewo+PiAg
-ICAgICAgIHN0cnVjdCBidF9vYmplY3QgYmFzZTsKPj4gICAgICAgICBpbnQgZnJvemVuOwo+PiAg
-ICAgICAgIHVuc2lnbmVkIGNoYXIgdXVpZFsxNl07Cj4+ICAgICB9Owo+Pgo+PiAgICAgc3RydWN0
-IGJ0X2N0Zl93cml0ZXIgewo+PiAgICAgICAgIHN0cnVjdCBidF9vYmplY3QgYmFzZTsKPj4gICAg
-ICAgICBpbnQgZnJvemVuOwo+PiAgICAgICAgIHN0cnVjdCBidF9jdGZfdHJhY2UgKnRyYWNlOwo+
-PiAgICAgfTsKPj4KPj4gICAgIGludCBtYWluKHZvaWQpCj4+ICAgICB7Cj4+ICAgICAgICAgc3Ry
-dWN0IGJ0X2N0Zl93cml0ZXIgKndyaXRlcjsKPj4gICAgICAgICBjb25zdCB1bnNpZ25lZCBjaGFy
-IG15X2N1c3RvbV91dWlkWzE2XSA9IHsKPj4gICAgICAgICAgICAgMHhiMywgMHgzOCwgMHg0ZCwg
-MHg3YiwgMHg3NywgMHg4YSwgMHg0ZiwgMHhmMCwKPj4gICAgICAgICAgICAgMHg5OSwgMHhiZCwg
-MHg0MywgMHg1NCwgMHg5ZSwgMHhjMCwgMHg1NCwgMHgxYiwKPj4gICAgICAgICB9Owo+Pgo+PiAg
-ICAgICAgIHdyaXRlciA9IGJ0X2N0Zl93cml0ZXJfY3JlYXRlKCIvdG1wL215LXRyYWNlIik7Cj4+
-ICAgICAgICAgYXNzZXJ0KHdyaXRlcik7Cj4+ICAgICAgICAgbWVtY3B5KHdyaXRlci0+dHJhY2Ut
-PnV1aWQsIG15X2N1c3RvbV91dWlkLCAxNik7Cj4+Cj4+ICAgICAgICAgLyogZG8gc3R1ZmYgd2l0
-aCB3cml0ZXIgaGVyZSAqLwo+Pgo+PiAgICAgICAgIGJ0X2N0Zl93cml0ZXJfcHV0KHdyaXRlcik7
-Cj4+ICAgICAgICAgcmV0dXJuIDA7Cj4+ICAgICB9Cj4+Cj4+IEFnYWluLCBJIGRvbid0IGNvbmRv
-bmUgdGhpczogaXQncyBub3QgcG9ydGFibGUsIGl0J3MgdWdseSwgYnV0IGl0IGRvZXMKPj4gd2hh
-dCB5b3UgYXNrLgo+Pgo+PiBBbm90aGVyIGhhY2s6IHNlYXJjaCB0aGUgYnl0ZSBzZXF1ZW5jZXMg
-YzEgZmMgMWYgYzEgKGJpZyBlbmRpYW4pIG9yCj4+IGMxIDFmIGZjIGMxIChsaXR0bGUgZW5kaWFu
-KSBpbiBhbGwgeW91ciBzdHJlYW0gZmlsZXMgYW5kIHJlcGxhY2UgdGhlCj4+IF9uZXh0XyAxNiBi
-eXRlcyB3aXRoIHlvdXIgZmF2b3JpdGUgVVVJRC4gQWxzbyByZXBsYWNlIHRoZSBgdXVpZGAKPj4g
-YXR0cmlidXRlIGluIHRoZSBjaG9zZW4gYG1ldGFkYXRhYCBmaWxlIHdpdGggdGhlIGNhbm9uaWNh
-bAo+PiByZXByZXNlbnRhdGlvbiBvZiB5b3VyIGZhdm9yaXRlIFVVSUQuCj4+Cj4+IFBoaWwKPj4K
-Pj4gPgo+PiA+IFJvY2t5Cj4+ID4KPj4gPiBPbiBBcHIgNywgMjAxNyAxOjU3IFBNLCAiUGhpbGlw
-cGUgUHJvdWx4IiA8ZWVwcGVsaXRlbG9vcEBnbWFpbC5jb20+Cj4+ID4gd3JvdGU6Cj4+ID4+Cj4+
-ID4+IE9uIEZyaSwgQXByIDcsIDIwMTcgYXQgMzoxOCBQTSwgUm9ja3kgRHVubGFwIDxyc2R1bmxh
-cGl2QGdtYWlsLmNvbT4KPj4gPj4gd3JvdGU6Cj4+ID4+ID4gSXMgaXQgcG9zc2libGUgdG8gZXhw
-bGljaXRseSBzZXQgYSB1dWlkIGZvciBhIHRyYWNlIHVzaW5nIHRoZQo+PiA+PiA+IEJhYmVsdHJh
-Y2UKPj4gPj4gPiBDVEYKPj4gPj4gPiB3cml0ZXI/ICBJIGRpZCBub3Qgc2VlIGEgc3RyYWlnaHRm
-b3J3YXJkIHdheSB0byBkbyBpdCB3aXRoIHRoZSBBUEkuCj4+ID4+Cj4+ID4+IEl0J3Mgbm90IHBv
-c3NpYmxlIGFzIG9mIEJhYmVsdHJhY2UgMS4gV2UnbGwgYWRkIHRyYWNlIFVVSUQgYWNjZXNzb3Jz
-IHRvCj4+ID4+IHRoZSB1cGNvbWluZyBCYWJlbHRyYWNlIDIgQVBJLgo+PiA+Pgo+PiA+PiBUaGF0
-IHNhaWQsIG1heSBJIGFzayB5b3Ugd2h5IHlvdSBuZWVkIHRoaXM/IFR3byBkaWZmZXJlbnQgQ1RG
-IHRyYWNlcwo+PiA+PiBzaG91bGQgbm90IHNoYXJlIHRoZSBzYW1lIFVVSUQuCj4+ID4+Cj4+ID4+
-IFBoaWwKPj4gPj4KPj4gPj4gPgo+PiA+PiA+IFJvY2t5Cj4+ID4+ID4KPj4gPj4gPiBfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiA+PiA+IGx0dG5nLWRl
-diBtYWlsaW5nIGxpc3QKPj4gPj4gPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+ID4+ID4g
-aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
-dgo+PiA+PiA+Cj4KPgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
-cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============8642086493103705805==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_CY4PR13MB152689FB577CFBEF185495EAC70C0CY4PR13MB1526namp_"
+
+--_000_CY4PR13MB152689FB577CFBEF185495EAC70C0CY4PR13MB1526namp_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Hi:
+
+
+I am trying to have LTTng UST tracing inside a docker container. I wasn't a=
+ble to get the UST tracing working. LTTng would not write any UST trace fil=
+es in the directory, even though it printed it would. Has it been tested be=
+fore? Is there any known problem?
+
+
+$ lttng enable-channel --session test --userspace channel0
+
+Error: Channel channel0: UST create channel failed (session ServiceFabric_0=
+)
+Error: Command error
+
+
+
+Thanks.
+
+
+--_000_CY4PR13MB152689FB577CFBEF185495EAC70C0CY4PR13MB1526namp_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style type=3D"text/css" style=3D"display:none;"><!-- P {margin-top:0;margi=
+n-bottom:0;} --></style>
+</head>
+<body dir=3D"ltr">
+<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;font=
+-family:Calibri,Arial,Helvetica,sans-serif;" dir=3D"ltr">
+<p>Hi:</p>
+<p><br>
+</p>
+<p>I am trying to have LTTng UST tracing inside a docker container. I wasn'=
+t able to get the UST tracing working. LTTng would not write any UST trace =
+files in the directory, even though it printed it would. Has it been tested=
+ before? Is there any known problem?</p>
+<p><br>
+</p>
+<p>$ lttng enable-channel <span>--session test --userspace channel0</span><=
+br>
+</p>
+<p></p>
+<div>Error: Channel channel0: UST create channel failed (session ServiceFab=
+ric_0)<br>
+Error: Command error<br>
+</div>
+<br>
+<p></p>
+<p><br>
+</p>
+<p>Thanks.<br>
+</p>
+<p><br>
+</p>
+</div>
+</body>
+</html>
+
+--_000_CY4PR13MB152689FB577CFBEF185495EAC70C0CY4PR13MB1526namp_--
+
+--===============8642086493103705805==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============8642086493103705805==--
