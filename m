@@ -1,19 +1,21 @@
-From: Rocky Dunlap <rsdunlapiv@gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
 Subject: Re: Explicit setting of UUID with ctf writer
-Date: Fri, 7 Apr 2017 14:15:50 -0600
-Message-ID: <CAK-w0DfawxkijMiUCZzLSApkTHCLH06N6QayjaSh_OSJQwEQjQ__43080.5516698912$1491596165$gmane$org@mail.gmail.com>
+Date: Fri, 7 Apr 2017 17:03:04 -0400
+Message-ID: <CAB4xu_3_OfLz_CNiPMU7E8iZtS_R1M9HfDb-2nxe0jrb1QU9Zw__33589.4180149355$1491599045$gmane$org@mail.gmail.com>
 References: <CAK-w0DdKCrHuGakFkWM1z4sXW10oyxmxdGXezyXb+DutEieeMA@mail.gmail.com>
  <CAB4xu_2fHsZa-LqHA-VVdDN1X8ej2_W6-JvjHk2E0C83ftKLYQ@mail.gmail.com>
+ <CAK-w0DfawxkijMiUCZzLSApkTHCLH06N6QayjaSh_OSJQwEQjQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3700002634517437230=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ua0-x22f.google.com (mail-ua0-x22f.google.com
- [IPv6:2607:f8b0:400c:c08::22f])
- by lists.lttng.org (Postfix) with ESMTPS id 3w09ns22VjzkTk
- for <lttng-dev@lists.lttng.org>; Fri,  7 Apr 2017 20:16:17 +0000 (UTC)
-Received: by mail-ua0-x22f.google.com with SMTP id c28so1182546uaf.3
- for <lttng-dev@lists.lttng.org>; Fri, 07 Apr 2017 13:15:52 -0700 (PDT)
-In-Reply-To: <CAB4xu_2fHsZa-LqHA-VVdDN1X8ej2_W6-JvjHk2E0C83ftKLYQ@mail.gmail.com>
+Received: from mail-qk0-x22a.google.com (mail-qk0-x22a.google.com
+ [IPv6:2607:f8b0:400d:c09::22a])
+ by lists.lttng.org (Postfix) with ESMTPS id 3w0Brw4D1Gzkmq
+ for <lttng-dev@lists.lttng.org>; Fri,  7 Apr 2017 21:04:00 +0000 (UTC)
+Received: by mail-qk0-x22a.google.com with SMTP id p68so47758912qke.1
+ for <lttng-dev@lists.lttng.org>; Fri, 07 Apr 2017 14:03:35 -0700 (PDT)
+In-Reply-To: <CAK-w0DfawxkijMiUCZzLSApkTHCLH06N6QayjaSh_OSJQwEQjQ@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,107 +25,67 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: Rocky Dunlap <rsdunlapiv@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============3700002634517437230==
-Content-Type: multipart/alternative; boundary=f403045df056bf970e054c994abf
-
---f403045df056bf970e054c994abf
-Content-Type: text/plain; charset=UTF-8
-
-Phil,
-
-This relates to my previous question about multi-process tracing. The
-workaround I am attempting is to have each process write its own trace with
-a single stream, but then to pull all the stream files together into a
-single trace with one metadata file. For this reason the uuids would need
-to match.
-
-Do you think this will work?
-
-Rocky
-
-On Apr 7, 2017 1:57 PM, "Philippe Proulx" <eeppeliteloop@gmail.com> wrote:
-
-> On Fri, Apr 7, 2017 at 3:18 PM, Rocky Dunlap <rsdunlapiv@gmail.com> wrote:
-> > Is it possible to explicitly set a uuid for a trace using the Babeltrace
-> CTF
-> > writer?  I did not see a straightforward way to do it with the API.
->
-> It's not possible as of Babeltrace 1. We'll add trace UUID accessors to
-> the upcoming Babeltrace 2 API.
->
-> That said, may I ask you why you need this? Two different CTF traces
-> should not share the same UUID.
->
-> Phil
->
-> >
-> > Rocky
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >
->
-
---f403045df056bf970e054c994abf
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto">Phil,<div dir=3D"auto"><br></div><div dir=3D"auto">This r=
-elates to my previous question about multi-process tracing. The workaround =
-I am attempting is to have each process write its own trace with a single s=
-tream, but then to pull all the stream files together into a single trace w=
-ith one metadata file. For this reason the uuids would need to match.</div>=
-<div dir=3D"auto"><br></div><div dir=3D"auto">Do you think this will work?<=
-/div><div dir=3D"auto"><br></div><div dir=3D"auto">Rocky</div></div><div cl=
-ass=3D"gmail_extra"><br><div class=3D"gmail_quote">On Apr 7, 2017 1:57 PM, =
-&quot;Philippe Proulx&quot; &lt;<a href=3D"mailto:eeppeliteloop@gmail.com">=
-eeppeliteloop@gmail.com</a>&gt; wrote:<br type=3D"attribution"><blockquote =
-class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid=
-;padding-left:1ex">On Fri, Apr 7, 2017 at 3:18 PM, Rocky Dunlap &lt;<a href=
-=3D"mailto:rsdunlapiv@gmail.com">rsdunlapiv@gmail.com</a>&gt; wrote:<br>
-&gt; Is it possible to explicitly set a uuid for a trace using the Babeltra=
-ce CTF<br>
-&gt; writer?=C2=A0 I did not see a straightforward way to do it with the AP=
-I.<br>
-<br>
-It&#39;s not possible as of Babeltrace 1. We&#39;ll add trace UUID accessor=
-s to<br>
-the upcoming Babeltrace 2 API.<br>
-<br>
-That said, may I ask you why you need this? Two different CTF traces<br>
-should not share the same UUID.<br>
-<br>
-Phil<br>
-<br>
-&gt;<br>
-&gt; Rocky<br>
-&gt;<br>
-&gt; ______________________________<wbr>_________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
-</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-<wbr>bin/=
-mailman/listinfo/lttng-dev</a><br>
-&gt;<br>
-</blockquote></div></div>
-
---f403045df056bf970e054c994abf--
-
---===============3700002634517437230==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============3700002634517437230==--
+T24gRnJpLCBBcHIgNywgMjAxNyBhdCA0OjE1IFBNLCBSb2NreSBEdW5sYXAgPHJzZHVubGFwaXZA
+Z21haWwuY29tPiB3cm90ZToKPiBQaGlsLAo+Cj4gVGhpcyByZWxhdGVzIHRvIG15IHByZXZpb3Vz
+IHF1ZXN0aW9uIGFib3V0IG11bHRpLXByb2Nlc3MgdHJhY2luZy4gVGhlCj4gd29ya2Fyb3VuZCBJ
+IGFtIGF0dGVtcHRpbmcgaXMgdG8gaGF2ZSBlYWNoIHByb2Nlc3Mgd3JpdGUgaXRzIG93biB0cmFj
+ZSB3aXRoCj4gYSBzaW5nbGUgc3RyZWFtLCBidXQgdGhlbiB0byBwdWxsIGFsbCB0aGUgc3RyZWFt
+IGZpbGVzIHRvZ2V0aGVyIGludG8gYQo+IHNpbmdsZSB0cmFjZSB3aXRoIG9uZSBtZXRhZGF0YSBm
+aWxlLiBGb3IgdGhpcyByZWFzb24gdGhlIHV1aWRzIHdvdWxkIG5lZWQgdG8KPiBtYXRjaC4KPgo+
+IERvIHlvdSB0aGluayB0aGlzIHdpbGwgd29yaz8KCkZpcnN0IHF1ZXN0aW9uOiB3aHkgbm90IGhh
+dmluZyBtdWx0aXBsZSB0cmFjZXMgKG11bHRpcGxlIGRpcmVjdG9yaWVzCndpdGggbXVsdGlwbGUg
+YG1ldGFkYXRhYCBmaWxlcyk/IGJhYmVsdHJhY2UoMSkgYW5kIFRyYWNlIENvbXBhc3MgY2FuCm1l
+cmdlIHRoZW0gZWFzaWx5LgoKSW4gdGhlIG1lYW50aW1lLCBpZiB5b3UgcmVhbGx5IHdhbnQgYSBz
+aW5nbGUgdHJhY2UsIGhlcmUncyBhIGhhY2suClBsZWFzZSBkb24ndCB0ZWxsIGFueW9uZSB0aGF0
+IEkgc3VnZ2VzdGVkIHRoaXMuIENob29zZSBhbnkgZ2VuZXJhdGVkCmBtZXRhZGF0YWAgZmlsZSB3
+aGljaCBjb250YWlucyBhbGwgdGhlIGBldmVudGAgYmxvY2tzIHRoYXQgeW91IG5lZWQuCk5vdGUg
+dGhhdCwgYWNyb3NzIGFsbCB5b3VyIHRyYWNlcywgdGhlIG9yZGVyIGluIHdoaWNoIHlvdSBhZGQg
+dGhlIGV2ZW50CmNsYXNzIG9iamVjdHMgdG8geW91ciBzaW5nbGUgc3RyZWFtIGNsYXNzIG9iamVj
+dCBuZWVkcyB0byByZW1haW4gdGhlCnNhbWUgc28gdGhhdCB0aGV5IGhhdmUgdGhlIHNhbWUgSURz
+IHdoYXRldmVyIHRoZSB0cmFjZS4gVGhlbiwgdGhpcwp3b3JrcywgYXMgbG9uZyBhcyB5b3UgdXNl
+IHRoZSBCYWJlbHRyYWNlIDEuNS4yIHJlbGVhc2U6CgogICAgI2luY2x1ZGUgPGJhYmVsdHJhY2Uv
+Y3RmLXdyaXRlci93cml0ZXIuaD4KICAgICNpbmNsdWRlIDxzdHJpbmcuaD4KICAgICNpbmNsdWRl
+IDxhc3NlcnQuaD4KCiAgICB0eXBlZGVmIHVuc2lnbmVkIGNoYXIgdXVpZF90WzE2XTsKCiAgICBz
+dHJ1Y3QgYnRfcmVmIHsKICAgICAgICBsb25nIGNvdW50OwogICAgICAgIHZvaWQgKnJlbGVhc2U7
+CiAgICB9OwoKICAgIHN0cnVjdCBidF9vYmplY3QgewogICAgICAgIHN0cnVjdCBidF9yZWYgcmVm
+X2NvdW50OwogICAgICAgIHZvaWQgKnJlbGVhc2U7CiAgICAgICAgdm9pZCAqcGFyZW50OwogICAg
+fTsKCiAgICBzdHJ1Y3QgYnRfY3RmX3RyYWNlIHsKICAgICAgICBzdHJ1Y3QgYnRfb2JqZWN0IGJh
+c2U7CiAgICAgICAgaW50IGZyb3plbjsKICAgICAgICB1bnNpZ25lZCBjaGFyIHV1aWRbMTZdOwog
+ICAgfTsKCiAgICBzdHJ1Y3QgYnRfY3RmX3dyaXRlciB7CiAgICAgICAgc3RydWN0IGJ0X29iamVj
+dCBiYXNlOwogICAgICAgIGludCBmcm96ZW47CiAgICAgICAgc3RydWN0IGJ0X2N0Zl90cmFjZSAq
+dHJhY2U7CiAgICB9OwoKICAgIGludCBtYWluKHZvaWQpCiAgICB7CiAgICAgICAgc3RydWN0IGJ0
+X2N0Zl93cml0ZXIgKndyaXRlcjsKICAgICAgICBjb25zdCB1bnNpZ25lZCBjaGFyIG15X2N1c3Rv
+bV91dWlkWzE2XSA9IHsKICAgICAgICAgICAgMHhiMywgMHgzOCwgMHg0ZCwgMHg3YiwgMHg3Nywg
+MHg4YSwgMHg0ZiwgMHhmMCwKICAgICAgICAgICAgMHg5OSwgMHhiZCwgMHg0MywgMHg1NCwgMHg5
+ZSwgMHhjMCwgMHg1NCwgMHgxYiwKICAgICAgICB9OwoKICAgICAgICB3cml0ZXIgPSBidF9jdGZf
+d3JpdGVyX2NyZWF0ZSgiL3RtcC9teS10cmFjZSIpOwogICAgICAgIGFzc2VydCh3cml0ZXIpOwog
+ICAgICAgIG1lbWNweSh3cml0ZXItPnRyYWNlLT51dWlkLCBteV9jdXN0b21fdXVpZCwgMTYpOwoK
+ICAgICAgICAvKiBkbyBzdHVmZiB3aXRoIHdyaXRlciBoZXJlICovCgogICAgICAgIGJ0X2N0Zl93
+cml0ZXJfcHV0KHdyaXRlcik7CiAgICAgICAgcmV0dXJuIDA7CiAgICB9CgpBZ2FpbiwgSSBkb24n
+dCBjb25kb25lIHRoaXM6IGl0J3Mgbm90IHBvcnRhYmxlLCBpdCdzIHVnbHksIGJ1dCBpdCBkb2Vz
+CndoYXQgeW91IGFzay4KCkFub3RoZXIgaGFjazogc2VhcmNoIHRoZSBieXRlIHNlcXVlbmNlcyBj
+MSBmYyAxZiBjMSAoYmlnIGVuZGlhbikgb3IKYzEgMWYgZmMgYzEgKGxpdHRsZSBlbmRpYW4pIGlu
+IGFsbCB5b3VyIHN0cmVhbSBmaWxlcyBhbmQgcmVwbGFjZSB0aGUKX25leHRfIDE2IGJ5dGVzIHdp
+dGggeW91ciBmYXZvcml0ZSBVVUlELiBBbHNvIHJlcGxhY2UgdGhlIGB1dWlkYAphdHRyaWJ1dGUg
+aW4gdGhlIGNob3NlbiBgbWV0YWRhdGFgIGZpbGUgd2l0aCB0aGUgY2Fub25pY2FsCnJlcHJlc2Vu
+dGF0aW9uIG9mIHlvdXIgZmF2b3JpdGUgVVVJRC4KClBoaWwKCj4KPiBSb2NreQo+Cj4gT24gQXBy
+IDcsIDIwMTcgMTo1NyBQTSwgIlBoaWxpcHBlIFByb3VseCIgPGVlcHBlbGl0ZWxvb3BAZ21haWwu
+Y29tPiB3cm90ZToKPj4KPj4gT24gRnJpLCBBcHIgNywgMjAxNyBhdCAzOjE4IFBNLCBSb2NreSBE
+dW5sYXAgPHJzZHVubGFwaXZAZ21haWwuY29tPiB3cm90ZToKPj4gPiBJcyBpdCBwb3NzaWJsZSB0
+byBleHBsaWNpdGx5IHNldCBhIHV1aWQgZm9yIGEgdHJhY2UgdXNpbmcgdGhlIEJhYmVsdHJhY2UK
+Pj4gPiBDVEYKPj4gPiB3cml0ZXI/ICBJIGRpZCBub3Qgc2VlIGEgc3RyYWlnaHRmb3J3YXJkIHdh
+eSB0byBkbyBpdCB3aXRoIHRoZSBBUEkuCj4+Cj4+IEl0J3Mgbm90IHBvc3NpYmxlIGFzIG9mIEJh
+YmVsdHJhY2UgMS4gV2UnbGwgYWRkIHRyYWNlIFVVSUQgYWNjZXNzb3JzIHRvCj4+IHRoZSB1cGNv
+bWluZyBCYWJlbHRyYWNlIDIgQVBJLgo+Pgo+PiBUaGF0IHNhaWQsIG1heSBJIGFzayB5b3Ugd2h5
+IHlvdSBuZWVkIHRoaXM/IFR3byBkaWZmZXJlbnQgQ1RGIHRyYWNlcwo+PiBzaG91bGQgbm90IHNo
+YXJlIHRoZSBzYW1lIFVVSUQuCj4+Cj4+IFBoaWwKPj4KPj4gPgo+PiA+IFJvY2t5Cj4+ID4KPj4g
+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiA+IGx0
+dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4gPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+ID4g
+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo+PiA+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0
+dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xp
+c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
