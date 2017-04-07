@@ -1,15 +1,16 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH babeltrace stable-1.5] Fix: ctf writer test on
-	Cygwin
-Date: Thu,  6 Apr 2017 15:00:44 -0400
-Message-ID: <1491505244-340-1-git-send-email-mjeanson__18126.5592728325$1491505268$gmane$org@efficios.com>
+From: Rocky Dunlap <rsdunlapiv@gmail.com>
+Subject: Explicit setting of UUID with ctf writer
+Date: Fri, 7 Apr 2017 13:18:27 -0600
+Message-ID: <CAK-w0DdKCrHuGakFkWM1z4sXW10oyxmxdGXezyXb+DutEieeMA__20379.9676070505$1491592744$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============2119685734557322543=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3vzX9s3Y4mzlGy
- for <lttng-dev@lists.lttng.org>; Thu,  6 Apr 2017 19:01:21 +0000 (UTC)
+Received: from mail-vk0-x230.google.com (mail-vk0-x230.google.com
+ [IPv6:2607:f8b0:400c:c05::230])
+ by lists.lttng.org (Postfix) with ESMTPS id 3w08X20XMFzkLy
+ for <lttng-dev@lists.lttng.org>; Fri,  7 Apr 2017 19:19:13 +0000 (UTC)
+Received: by mail-vk0-x230.google.com with SMTP id d188so84576489vka.0
+ for <lttng-dev@lists.lttng.org>; Fri, 07 Apr 2017 12:18:48 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,28 +21,37 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-SW4gdGhlIGN0ZiB3cml0ZXIgdGVzdCB3ZSBleGVjbCgpIHNvbWUgbGlidG9vbCB3cmFwcGVycyB0
-aGF0IGdldCBjb25mdXNlZAp3aGVuIGFyZ1swXSBpcyBub3QgdGhlIGZ1bGwgcGF0aCB0byB0aGUg
-YmluYXJ5LgoKU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lv
-cy5jb20+Ci0tLQogdGVzdHMvbGliL3Rlc3RfY3RmX3dyaXRlci5jIHwgNCArKy0tCiAxIGZpbGUg
-Y2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3Rl
-c3RzL2xpYi90ZXN0X2N0Zl93cml0ZXIuYyBiL3Rlc3RzL2xpYi90ZXN0X2N0Zl93cml0ZXIuYwpp
-bmRleCA5NjFkZjc5Li41MzYxM2M5IDEwMDY0NAotLS0gYS90ZXN0cy9saWIvdGVzdF9jdGZfd3Jp
-dGVyLmMKKysrIGIvdGVzdHMvbGliL3Rlc3RfY3RmX3dyaXRlci5jCkBAIC05NCw3ICs5NCw3IEBA
-IHZvaWQgdmFsaWRhdGVfbWV0YWRhdGEoY2hhciAqcGFyc2VyX3BhdGgsIGNoYXIgKm1ldGFkYXRh
-X3BhdGgpCiAJCQlnb3RvIHJlc3VsdDsKIAkJfQogCi0JCWV4ZWNsKHBhcnNlcl9wYXRoLCAiY3Rm
-LXBhcnNlci10ZXN0IiwgKGNoYXIgKikgTlVMTCk7CisJCWV4ZWNsKHBhcnNlcl9wYXRoLCBwYXJz
-ZXJfcGF0aCwgKGNoYXIgKikgTlVMTCk7CiAJCXBlcnJvcigiIyBDb3VsZCBub3QgbGF1bmNoIHRo
-ZSBjdGYgbWV0YWRhdGEgcGFyc2VyIHByb2Nlc3MiKTsKIAkJZXhpdCgtMSk7CiAJfQpAQCAtMjAx
-LDcgKzIwMSw3IEBAIHZvaWQgdmFsaWRhdGVfdHJhY2UoY2hhciAqcGFyc2VyX3BhdGgsIGNoYXIg
-KnRyYWNlX3BhdGgpCiAJCQlnb3RvIHJlc3VsdDsKIAkJfQogCi0JCWV4ZWNsKHBhcnNlcl9wYXRo
-LCAiYmFiZWx0cmFjZSIsIHRyYWNlX3BhdGgsIChjaGFyICopIE5VTEwpOworCQlleGVjbChwYXJz
-ZXJfcGF0aCwgcGFyc2VyX3BhdGgsIHRyYWNlX3BhdGgsIChjaGFyICopIE5VTEwpOwogCQlwZXJy
-b3IoIiMgQ291bGQgbm90IGxhdW5jaCB0aGUgYmFiZWx0cmFjZSBwcm9jZXNzIik7CiAJCWV4aXQo
-LTEpOwogCX0KLS0gCjIuNy40CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
-LWRldgo=
+--===============2119685734557322543==
+Content-Type: multipart/alternative; boundary=94eb2c07be06b01ae8054c987e73
+
+--94eb2c07be06b01ae8054c987e73
+Content-Type: text/plain; charset=UTF-8
+
+Is it possible to explicitly set a uuid for a trace using the Babeltrace
+CTF writer?  I did not see a straightforward way to do it with the API.
+
+Rocky
+
+--94eb2c07be06b01ae8054c987e73
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Is it possible to explicitly set a uuid for a trace using =
+the Babeltrace CTF writer?=C2=A0 I did not see a straightforward way to do =
+it with the API. =C2=A0<div><br></div><div>Rocky</div></div>
+
+--94eb2c07be06b01ae8054c987e73--
+
+--===============2119685734557322543==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============2119685734557322543==--
