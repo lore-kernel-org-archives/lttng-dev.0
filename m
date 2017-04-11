@@ -1,20 +1,17 @@
-From: Jeffrey Chen <cpthk@live.com>
-Subject: Re: LTTng on Docker
-Date: Tue, 11 Apr 2017 01:57:20 +0000
-Message-ID: <CY4PR13MB1526F207E3CA286D383E35E0C7000__19564.0313825153$1491917629$gmane$org@CY4PR13MB1526.namprd13.prod.outlook.com>
-References: <CY4PR13MB152689FB577CFBEF185495EAC70C0@CY4PR13MB1526.namprd13.prod.outlook.com>
- <CA+jJMxvVeQFci4Yx5a=AJ-9NnSpxfbE00Jk8e2wnPZY67Hkk5g@mail.gmail.com>
- <CY4PR13MB1526BBB771C31BF53C41C6C4C7010@CY4PR13MB1526.namprd13.prod.outlook.com>,
- <CA+jJMxs1Qn=WOQ087VYb3sKHxvd8NL-=o6FzCt44pRufNVvq7w@mail.gmail.com>
+From: Francis Deslauriers <francis.deslauriers@efficios.com>
+Subject: [PATCH babeltrace v5] Build Python bindings with
+	distutils for consistent installs
+Date: Tue, 11 Apr 2017 15:27:37 -0400
+Message-ID: <1491938857-3525-1-git-send-email-francis.deslauriers__18022.1395603896$1491938887$gmane$org@efficios.com>
+References: <1488820749-16114-1-git-send-email-francis.deslauriers@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3480263269142404988=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from NAM04-BN3-obe.outbound.protection.outlook.com
- (mail-oln040092009075.outbound.protection.outlook.com [40.92.9.75])
- by lists.lttng.org (Postfix) with ESMTPS id 3w2Sgz5vd1zCR7
- for <lttng-dev@lists.lttng.org>; Tue, 11 Apr 2017 13:34:07 +0000 (UTC)
-In-Reply-To: <CA+jJMxs1Qn=WOQ087VYb3sKHxvd8NL-=o6FzCt44pRufNVvq7w@mail.gmail.com>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3w2cXk58frzD41
+ for <lttng-dev@lists.lttng.org>; Tue, 11 Apr 2017 19:28:22 +0000 (UTC)
+In-Reply-To: <1488820749-16114-1-git-send-email-francis.deslauriers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,463 +21,276 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
---===============3480263269142404988==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_CY4PR13MB1526F207E3CA286D383E35E0C7000CY4PR13MB1526namp_"
-
---_000_CY4PR13MB1526F207E3CA286D383E35E0C7000CY4PR13MB1526namp_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-I just tried it a few more times. It is the --subbuf-size that's causing th=
-e issue. The --tracefile-sze is fine. Thanks.
-
-
-________________________________
-From: jeremie.galarneau@gmail.com <jeremie.galarneau@gmail.com> on behalf o=
-f J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-Sent: Monday, April 10, 2017 12:26 PM
-To: Jeffrey Chen
-Cc: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] LTTng on Docker
-
-
-
-On 10 April 2017 at 14:06, Jeffrey Chen <cpthk@live.com<mailto:cpthk@live.c=
-om>> wrote:
-
-I have attached the logs from the lttng daemon. I could see errors like bel=
-ow.
-
-
-Error: Error creating UST channel "channel0" on the consumer daemon
-
-
-My commands to create a session are:
-
-lttng create test
-lttng enable-channel --session test --userspace --tracefile-size 8388608 --=
-subbuf-size 8388608 channel0
-lttng enable-event --channel channel0 --userspace "service:*"
-lttng add-context -u -t vtid
-lttng add-context -u -t vpid
-lttng start
-
-Thanks for the info. Can you try to create the channel with the default val=
-ues and see if it works?
-
-$ lttng enable-channel --session test --userspace channel0
-
-Also, can you re-capture the session daemon logs launching it with the "-vv=
-v --verbose-consumer" option since the problem appears to occur on the cons=
-umer's end.
-
-Thanks,
-J=E9r=E9mie
-
-
-Installed:
-apt-get -y install lttng-tools lttng-modules-dkms liblttng-ust0 liblttng-us=
-t-dev
-
-
-Thanks.
-
-________________________________
-From: jeremie.galarneau@gmail.com<mailto:jeremie.galarneau@gmail.com> <jere=
-mie.galarneau@gmail.com<mailto:jeremie.galarneau@gmail.com>> on behalf of J=
-=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com<mailto:jeremie.galarne=
-au@efficios.com>>
-Sent: Sunday, April 9, 2017 2:06 PM
-To: Jeffrey Chen
-Cc: lttng-dev@lists.lttng.org<mailto:lttng-dev@lists.lttng.org>
-Subject: Re: [lttng-dev] LTTng on Docker
-
-On 7 April 2017 at 18:35, Jeffrey Chen <cpthk@live.com<mailto:cpthk@live.co=
-m>> wrote:
-> Hi:
->
->
-> I am trying to have LTTng UST tracing inside a docker container. I wasn't
-> able to get the UST tracing working. LTTng would not write any UST trace
-> files in the directory, even though it printed it would. Has it been test=
-ed
-> before? Is there any known problem?
-
-Tracing inside a container (not Docker), where the LTTng daemons and
-the applications are running in the same container, is known to work
-as this is how most of the LTTng CI works.
-
-As far as Docker is concerned, I tested it a number of times and it
-worked. Can you provide the versions of LTTng and Docker you're using
-and the session daemon's logs (launching it with the -vvv option)?
-
-Thanks,
-J=E9r=E9mie
-
->
->
-> $ lttng enable-channel --session test --userspace channel0
->
-> Error: Channel channel0: UST create channel failed (session ServiceFabric=
-_0)
-> Error: Command error
->
->
-> Thanks.
->
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org<mailto:lttng-dev@lists.lttng.org>
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-lttng-dev Info Page<https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-=
-dev>
-lists.lttng.org<http://lists.lttng.org>
-To see the collection of prior postings to the list, visit the lttng-dev Ar=
-chives. Using lttng-dev: To post a message to all the list members, send ..=
-.
-
-
->
-
-
-
---
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-EfficiOS<http://www.efficios.com/>
-www.efficios.com<http://www.efficios.com>
-At EfficiOS, our main goal is diminishing the amount of time our clients sp=
-end identifying faults. We also enable our clients' applications to scale o=
-n massive multi ...
-
-
-
-
-
---
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-
---_000_CY4PR13MB1526F207E3CA286D383E35E0C7000CY4PR13MB1526namp_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style type=3D"text/css" style=3D"display:none;"><!-- P {margin-top:0;margi=
-n-bottom:0;} --></style>
-</head>
-<body dir=3D"ltr">
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;font=
--family:Calibri,Arial,Helvetica,sans-serif;" dir=3D"ltr">
-<p>I just tried it a few more times. It is the <span>--subbuf-size</span> t=
-hat's causing the issue. The --tracefile-sze is fine. Thanks.<br>
-</p>
-<br>
-<br>
-<div style=3D"color: rgb(0, 0, 0);">
-<hr tabindex=3D"-1" style=3D"display:inline-block; width:98%">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font style=3D"font-size:11pt" face=
-=3D"Calibri, sans-serif" color=3D"#000000"><b>From:</b> jeremie.galarneau@g=
-mail.com &lt;jeremie.galarneau@gmail.com&gt; on behalf of J=E9r=E9mie Galar=
-neau &lt;jeremie.galarneau@efficios.com&gt;<br>
-<b>Sent:</b> Monday, April 10, 2017 12:26 PM<br>
-<b>To:</b> Jeffrey Chen<br>
-<b>Cc:</b> lttng-dev@lists.lttng.org<br>
-<b>Subject:</b> Re: [lttng-dev] LTTng on Docker</font>
-<div>&nbsp;</div>
-</div>
-<div>
-<div dir=3D"ltr"><br>
-<div class=3D"gmail_extra"><br>
-<div class=3D"gmail_quote">On 10 April 2017 at 14:06, Jeffrey Chen <span di=
-r=3D"ltr">
-&lt;<a href=3D"mailto:cpthk@live.com" target=3D"_blank">cpthk@live.com</a>&=
-gt;</span> wrote:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex; border=
--left:1px solid rgb(204,204,204); padding-left:1ex">
-<div dir=3D"ltr">
-<div id=3D"gmail-m_-3517871239381958006divtagdefaultwrapper" dir=3D"ltr" st=
-yle=3D"font-size:12pt; color:rgb(0,0,0); font-family:calibri,arial,helvetic=
-a,sans-serif">
-<p>I have attached the logs from the lttng daemon. I could see errors like =
-below.</p>
-<p><br>
-</p>
-<p></p>
-<div><span style=3D"background-color:rgb(255,255,0)">Error: Error creating =
-UST channel &quot;channel0&quot; on the consumer daemon</span><br>
-</div>
-<p></p>
-<p><br>
-</p>
-<p>My commands to create a session are:</p>
-<p></p>
-<div>lttng create test<br>
-lttng enable-channel --session test --userspace --tracefile-size 8388608 --=
-subbuf-size 8388608 channel0<br>
-lttng enable-event --channel channel0 --userspace &quot;service:*&quot;<br>
-lttng add-context -u -t vtid<br>
-lttng add-context -u -t vpid<br>
-lttng start<br>
-</div>
-</div>
-</div>
-</blockquote>
-<div><br>
-</div>
-<div>Thanks for the info. Can you try to create the channel with the defaul=
-t values and see if it works?</div>
-<div><br>
-</div>
-<div>$&nbsp;lttng enable-channel --session test --userspace channel0</div>
-<div>&nbsp;</div>
-<div>Also, can you re-capture the session daemon logs launching it with the=
- &quot;-vvv --verbose-consumer&quot; option since the problem appears to oc=
-cur on the consumer's end.</div>
-<div><br>
-</div>
-<div>Thanks,</div>
-<div>J=E9r=E9mie</div>
-<div><br>
-</div>
-<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex; border=
--left:1px solid rgb(204,204,204); padding-left:1ex">
-<div dir=3D"ltr">
-<div id=3D"gmail-m_-3517871239381958006divtagdefaultwrapper" dir=3D"ltr" st=
-yle=3D"font-size:12pt; color:rgb(0,0,0); font-family:calibri,arial,helvetic=
-a,sans-serif">
-<div><br>
-Installed:<br>
-<span>apt-get -y install lttng-tools lttng-modules-dkms liblttng-ust0 <span=
->liblttng-ust-dev</span></span>
-<br>
-</div>
-<br>
-<p></p>
-Thanks.<br>
-<br>
-<div style=3D"color:rgb(0,0,0)">
-<div>
-<hr style=3D"display:inline-block; width:98%">
-<div id=3D"gmail-m_-3517871239381958006x_divRplyFwdMsg" dir=3D"ltr"><font s=
-tyle=3D"font-size:11pt" face=3D"Calibri, sans-serif" color=3D"#000000"><b>F=
-rom:</b>
-<a href=3D"mailto:jeremie.galarneau@gmail.com" target=3D"_blank">jeremie.ga=
-larneau@gmail.com</a> &lt;<a href=3D"mailto:jeremie.galarneau@gmail.com" ta=
-rget=3D"_blank">jeremie.galarneau@gmail.com</a>&gt; on behalf of J=E9r=E9mi=
-e Galarneau &lt;<a href=3D"mailto:jeremie.galarneau@efficios.com" target=3D=
-"_blank">jeremie.galarneau@efficios.<wbr>com</a>&gt;<br>
-<b>Sent:</b> Sunday, April 9, 2017 2:06 PM<br>
-<b>To:</b> Jeffrey Chen<br>
-<b>Cc:</b> <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">l=
-ttng-dev@lists.lttng.org</a><br>
-<b>Subject:</b> Re: [lttng-dev] LTTng on Docker</font>
-<div>&nbsp;</div>
-</div>
-</div>
-<font size=3D"2"><span style=3D"font-size:10pt">
-<div class=3D"gmail-m_-3517871239381958006PlainText"><span class=3D"gmail-"=
->On 7 April 2017 at 18:35, Jeffrey Chen &lt;<a href=3D"mailto:cpthk@live.co=
-m" target=3D"_blank">cpthk@live.com</a>&gt; wrote:<br>
-&gt; Hi:<br>
-&gt;<br>
-&gt;<br>
-&gt; I am trying to have LTTng UST tracing inside a docker container. I was=
-n't<br>
-&gt; able to get the UST tracing working. LTTng would not write any UST tra=
-ce<br>
-&gt; files in the directory, even though it printed it would. Has it been t=
-ested<br>
-&gt; before? Is there any known problem?<br>
-<br>
-Tracing inside a container (not Docker), where the LTTng daemons and<br>
-the applications are running in the same container, is known to work<br>
-as this is how most of the LTTng CI works.<br>
-<br>
-As far as Docker is concerned, I tested it a number of times and it<br>
-worked. Can you provide the versions of LTTng and Docker you're using<br>
-and the session daemon's logs (launching it with the -vvv option)?<br>
-<br>
-Thanks,<br>
-J=E9r=E9mie<br>
-<br>
-&gt;<br>
-&gt;<br>
-&gt; $ lttng enable-channel --session test --userspace channel0<br>
-&gt;<br>
-&gt; Error: Channel channel0: UST create channel failed (session ServiceFab=
-ric_0)<br>
-&gt; Error: Command error<br>
-&gt;<br>
-&gt;<br>
-&gt; Thanks.<br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-&gt; ______________________________<wbr>_________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
-ev@lists.lttng.org</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- id=3D"gmail-m_-3517871239381958006LPlnk632716" target=3D"_blank">
-https://lists.lttng.org/cgi-<wbr>bin/mailman/listinfo/lttng-dev</a> </span>
-<div id=3D"gmail-m_-3517871239381958006LPBorder_GT_14918472778530.774934833=
-6754354" style=3D"margin-bottom:20px; overflow:auto; width:100%; text-inden=
-t:0px">
-<table id=3D"gmail-m_-3517871239381958006LPContainer_14918472778450.5226343=
-4094437" style=3D"width:90%; background-color:rgb(255,255,255); overflow:au=
-to; padding-top:20px; padding-bottom:20px; margin-top:20px; border-top:1px =
-dotted rgb(200,200,200); border-bottom:1px dotted rgb(200,200,200)" cellspa=
-cing=3D"0">
-<tbody>
-<tr valign=3D"top">
-<td id=3D"gmail-m_-3517871239381958006TextCell_14918472778480.4117515003584=
-903" colspan=3D"2" style=3D"vertical-align:top; padding:0px; display:table-=
-cell">
-<div id=3D"gmail-m_-3517871239381958006LPRemovePreviewContainer_14918472778=
-480.343333967527086">
-</div>
-<div id=3D"gmail-m_-3517871239381958006LPTitle_14918472778480.8766887868350=
-135" style=3D"color:rgb(0,120,215); font-weight:400; font-size:21px; font-f=
-amily:wf_segoe-ui_light,&quot;segoe ui light&quot;,&quot;segoe wp light&quo=
-t;,&quot;segoe ui&quot;,&quot;segoe wp&quot;,tahoma,arial,&quot;apple color=
- emoji&quot;,&quot;segoe ui emoji&quot;,notocoloremoji,&quot;segoe ui symbo=
-l&quot;,&quot;android emoji&quot;,emojisymbols,sans-serif; line-height:21px=
-">
-<a id=3D"gmail-m_-3517871239381958006LPUrlAnchor_14918472778490.70798860273=
-54777" href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" =
-target=3D"_blank" style=3D"text-decoration:none">lttng-dev Info Page</a></d=
-iv>
-<div id=3D"gmail-m_-3517871239381958006LPMetadata_14918472778500.4711223158=
-9813147" style=3D"margin:10px 0px 16px; color:rgb(102,102,102); font-weight=
-:400; font-family:wf_segoe-ui_normal,&quot;segoe ui&quot;,&quot;segoe wp&qu=
-ot;,tahoma,arial,&quot;apple color emoji&quot;,&quot;segoe ui emoji&quot;,n=
-otocoloremoji,&quot;segoe ui symbol&quot;,&quot;android emoji&quot;,emojisy=
-mbols,sans-serif; font-size:14px; line-height:14px">
-<a href=3D"http://lists.lttng.org" target=3D"_blank">lists.lttng.org</a></d=
-iv>
-<div id=3D"gmail-m_-3517871239381958006LPDescription_14918472778520.6602582=
-148353134" style=3D"display:block; color:rgb(102,102,102); font-weight:400;=
- font-family:wf_segoe-ui_normal,&quot;segoe ui&quot;,&quot;segoe wp&quot;,t=
-ahoma,arial,&quot;apple color emoji&quot;,&quot;segoe ui emoji&quot;,notoco=
-loremoji,&quot;segoe ui symbol&quot;,&quot;android emoji&quot;,emojisymbols=
-,sans-serif; font-size:14px; line-height:20px; max-height:100px; overflow:h=
-idden">
-To see the collection of prior postings to the list, visit the lttng-dev Ar=
-chives. Using lttng-dev: To post a message to all the list members, send ..=
-.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<span class=3D"gmail-"><br>
-&gt;<br>
-<br>
-<br>
-<br>
--- <br>
-J=E9r=E9mie Galarneau<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" id=3D"gmail-m_-3517871239381958006LPlnk=
-440294" target=3D"_blank">http://www.efficios.com</a>
-</span>
-<div id=3D"gmail-m_-3517871239381958006LPBorder_GT_14918473357550.248963055=
-382728" style=3D"margin-bottom:20px; overflow:auto; width:100%; text-indent=
-:0px">
-<table id=3D"gmail-m_-3517871239381958006LPContainer_14918473357460.4144245=
-49224911" style=3D"width:90%; background-color:rgb(255,255,255); overflow:a=
-uto; padding-top:20px; padding-bottom:20px; margin-top:20px; border-top:1px=
- dotted rgb(200,200,200); border-bottom:1px dotted rgb(200,200,200)" cellsp=
-acing=3D"0">
-<tbody>
-<tr valign=3D"top">
-<td id=3D"gmail-m_-3517871239381958006TextCell_14918473357480.9923752452490=
-312" colspan=3D"2" style=3D"vertical-align:top; padding:0px; display:table-=
-cell">
-<div id=3D"gmail-m_-3517871239381958006LPRemovePreviewContainer_14918473357=
-480.48768909434730534">
-</div>
-<div id=3D"gmail-m_-3517871239381958006LPTitle_14918473357490.5288885228874=
-352" style=3D"color:rgb(0,120,215); font-weight:400; font-size:21px; font-f=
-amily:wf_segoe-ui_light,&quot;segoe ui light&quot;,&quot;segoe wp light&quo=
-t;,&quot;segoe ui&quot;,&quot;segoe wp&quot;,tahoma,arial,&quot;apple color=
- emoji&quot;,&quot;segoe ui emoji&quot;,notocoloremoji,&quot;segoe ui symbo=
-l&quot;,&quot;android emoji&quot;,emojisymbols,sans-serif; line-height:21px=
-">
-<a id=3D"gmail-m_-3517871239381958006LPUrlAnchor_14918473357500.70673789786=
-25205" href=3D"http://www.efficios.com/" target=3D"_blank" style=3D"text-de=
-coration:none">EfficiOS</a></div>
-<div id=3D"gmail-m_-3517871239381958006LPMetadata_14918473357520.6810205760=
-820718" style=3D"margin:10px 0px 16px; color:rgb(102,102,102); font-weight:=
-400; font-family:wf_segoe-ui_normal,&quot;segoe ui&quot;,&quot;segoe wp&quo=
-t;,tahoma,arial,&quot;apple color emoji&quot;,&quot;segoe ui emoji&quot;,no=
-tocoloremoji,&quot;segoe ui symbol&quot;,&quot;android emoji&quot;,emojisym=
-bols,sans-serif; font-size:14px; line-height:14px">
-<a href=3D"http://www.efficios.com" target=3D"_blank">www.efficios.com</a><=
-/div>
-<div id=3D"gmail-m_-3517871239381958006LPDescription_14918473357530.6577156=
-845495322" style=3D"display:block; color:rgb(102,102,102); font-weight:400;=
- font-family:wf_segoe-ui_normal,&quot;segoe ui&quot;,&quot;segoe wp&quot;,t=
-ahoma,arial,&quot;apple color emoji&quot;,&quot;segoe ui emoji&quot;,notoco=
-loremoji,&quot;segoe ui symbol&quot;,&quot;android emoji&quot;,emojisymbols=
-,sans-serif; font-size:14px; line-height:20px; max-height:100px; overflow:h=
-idden">
-At EfficiOS, our main goal is diminishing the amount of time our clients sp=
-end identifying faults. We also enable our clients' applications to scale o=
-n massive multi ...</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<br>
-</div>
-</span></font></div>
-</div>
-</div>
-</blockquote>
-</div>
-<br>
-<br clear=3D"all">
-<div><br>
-</div>
--- <br>
-<div class=3D"gmail_signature">J=E9r=E9mie Galarneau<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
-om</a></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</body>
-</html>
-
---_000_CY4PR13MB1526F207E3CA286D383E35E0C7000CY4PR13MB1526namp_--
-
---===============3480263269142404988==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============3480263269142404988==--
+djU6IE1hbnVhbGx5IGxvYWQgc2hhcmVkIG9iamVjdHMgdXNlZCBieSB0aGUgQmFiZWx0cmFjZSBQ
+eXRob24gbW9kdWxlCgpUaGlzIHBhdGNoIGNoYW5nZXMgdGhlIGJ1aWxkIHN5c3RlbSB1c2VkIHRv
+IGNvbXBpbGUgYW5kIGluc3RhbGwgdGhlClB5dGhvbiBCaW5kaW5ncy4gRGlzdHV0aWxzIGlzIHVz
+ZWQgdG8gZmluZCB0aGUgcmlnaHQgaW5zdGFsbCBkaXJlY3RvcnkuCldoZW4gdGhlIGluc3RhbGwg
+ZGlyZWN0b3J5IGdlbmVyYXRlZCBmcm9tIHRoZSBpbnN0YWxsIHByZWZpeCBpcyBub3QgaW4KdGhl
+IFB5dGhvbiBzZWFyY2ggcGF0aCAoUFlUSE9OUEFUSCksIHdlIHByaW50IGEgd2FybmluZyBleHBs
+YWluaW5nIHdoYXQKY2FuIGJlIGRvbmUgdG8gaW5jbHVkZSBpdC4KSXQgdXNlcyBEaXN0dXRpbHMg
+d2hpY2ggaXMgcGFydCBvZiB0aGUgUHl0aG9uIHN0YW5kYXJkIGxpYnJhcnkuCgpTaWduZWQtb2Zm
+LWJ5OiBGcmFuY2lzIERlc2xhdXJpZXJzIDxmcmFuY2lzLmRlc2xhdXJpZXJzQGVmZmljaW9zLmNv
+bT4KLS0tCiAuZ2l0aWdub3JlICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAx
+MCArKystCiBiaW5kaW5ncy9weXRob24vTWFrZWZpbGUuYW0gICAgICAgICAgICAgICAgICAgfCA1
+NyArKysrKysrKysrKysrKysrKy0KIGJpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlL01ha2VmaWxl
+LmFtICAgICAgICB8IDMwICsrLS0tLS0tLS0KIGJpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlL19f
+aW5pdF9fLnB5LmluICAgICB8IDI1ICsrKysrKysrCiBiaW5kaW5ncy9weXRob24vc2V0dXAucHku
+aW4gICAgICAgICAgICAgICAgICAgfCA4NCArKysrKysrKysrKysrKysrKysrKysrKysrKysKIGNv
+bmZpZ3VyZS5hYyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8IDE0ICsrKy0tCiBt
+NC9weXRob25fbW9kdWxlcy5tNCAgICAgICAgICAgICAgICAgICAgICAgICAgfCAyMyAtLS0tLS0t
+LQogdGVzdHMvYmluL2ludGVyc2VjdGlvbi9idF9weXRob25faGVscGVyLnB5LmluIHwgMTcgKysr
+LS0tCiA4IGZpbGVzIGNoYW5nZWQsIDE5NSBpbnNlcnRpb25zKCspLCA2NSBkZWxldGlvbnMoLSkK
+IGNyZWF0ZSBtb2RlIDEwMDY0NCBiaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZS9fX2luaXRfXy5w
+eS5pbgogY3JlYXRlIG1vZGUgMTAwNjQ0IGJpbmRpbmdzL3B5dGhvbi9zZXR1cC5weS5pbgogZGVs
+ZXRlIG1vZGUgMTAwNjQ0IG00L3B5dGhvbl9tb2R1bGVzLm00CgpkaWZmIC0tZ2l0IGEvLmdpdGln
+bm9yZSBiLy5naXRpZ25vcmUKaW5kZXggYTdjOWUzYy4uOTI1OWI2ZiAxMDA2NDQKLS0tIGEvLmdp
+dGlnbm9yZQorKysgYi8uZ2l0aWdub3JlCkBAIC00Nyw4ICs0NywxMiBAQCBjb252ZXJ0ZXIvYmFi
+ZWx0cmFjZS1sb2cKIGNvcmUKIGZvcm1hdHMvY3RmL21ldGFkYXRhL2N0Zi1wYXJzZXIub3V0cHV0
+CiBzdGFtcC1oMQotYmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2UuaQotYmluZGluZ3MvcHl0aG9u
+L2JhYmVsdHJhY2UucHkKLWJpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlX3dyYXAuYworYmluZGlu
+Z3MvcHl0aG9uL3NldHVwLnB5CitiaW5kaW5ncy9weXRob24vaW5zdGFsbGVkX2ZpbGVzLnR4dAor
+YmluZGluZ3MvcHl0aG9uL2J1aWxkCitiaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZS9fX2luaXRf
+Xy5weQorYmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2UvYmFiZWx0cmFjZS5pCitiaW5kaW5ncy9w
+eXRob24vYmFiZWx0cmFjZS9iYWJlbHRyYWNlLnB5CitiaW5kaW5ncy9weXRob24vYmFiZWx0cmFj
+ZS9iYWJlbHRyYWNlX3dyYXAuYwogYmFiZWx0cmFjZS5wYwogYmFiZWx0cmFjZS1jdGYucGMKZGlm
+ZiAtLWdpdCBhL2JpbmRpbmdzL3B5dGhvbi9NYWtlZmlsZS5hbSBiL2JpbmRpbmdzL3B5dGhvbi9N
+YWtlZmlsZS5hbQppbmRleCBkNmIzNjQ4Li45ZTQ0MTI3IDEwMDY0NAotLS0gYS9iaW5kaW5ncy9w
+eXRob24vTWFrZWZpbGUuYW0KKysrIGIvYmluZGluZ3MvcHl0aG9uL01ha2VmaWxlLmFtCkBAIC0x
+LDMgKzEsNTggQEAKIGlmIFVTRV9QWVRIT04KLVNVQkRJUlMgPSBiYWJlbHRyYWNlCitTVUJESVJT
+ID0gYmFiZWx0cmFjZSAuCisKK0lOU1RBTExFRF9GSUxFUz0kKGJ1aWxkZGlyKS9pbnN0YWxsZWRf
+ZmlsZXMudHh0CisKK0FNX0NGTEFHUyA9ICQoUEFDS0FHRV9DRkxBR1MpIC1JJCh0b3Bfc3JjZGly
+KS9pbmNsdWRlIC1JJChzcmNkaXIpL2JhYmVsdHJhY2UvCisKKyMgU2luY2UgdGhlIHNoYXJlZCBv
+YmplY3QgdXNlZCBieSB0aGUgcHl0aG9uIGJpbmRpbmdzIGlzIG5vdCBidWlsdCB3aXRoIGxpYnRv
+b2wKKyMgd2UgbmVlZCB0byBtYW51YWxseSBzZXQgdGhlIGBycGF0aGAgZHVyaW5nIGxpbmthZ2UK
+K0FNX0xERkxBR1M9LUwkKHRvcF9idWlsZGRpcikvZm9ybWF0cy9jdGYvLmxpYnMgLUwkKHRvcF9i
+dWlsZGRpcikvbGliLy5saWJzCithbGwtbG9jYWw6IGJ1aWxkLXB5dGhvbi1iaW5kaW5ncy5zdGFt
+cAorCiskKGJ1aWxkZGlyKS9iYWJlbHRyYWNlL19faW5pdF9fLnB5OiAkKHNyY2RpcikvYmFiZWx0
+cmFjZS9fX2luaXRfXy5weS5pbgorCWNkIGJhYmVsdHJhY2UgJiYgJChNQUtFKSBfX2luaXRfXy5w
+eQorCiskKGJ1aWxkZGlyKS9iYWJlbHRyYWNlL2JhYmVsdHJhY2UuaTogJChzcmNkaXIpL2JhYmVs
+dHJhY2UvYmFiZWx0cmFjZS5pLmluCisJY2QgYmFiZWx0cmFjZSAmJiAkKE1BS0UpIGJhYmVsdHJh
+Y2UuaQorCitCSU5ESU5HU19ERVBTPXNldHVwLnB5IFwKKwkJYmFiZWx0cmFjZS9fX2luaXRfXy5w
+eSBcCisJCWJhYmVsdHJhY2UvYmFiZWx0cmFjZS5pIFwKKwkJYmFiZWx0cmFjZS9weXRob24tY29t
+cGxlbWVudHMuYyBcCisJCWJhYmVsdHJhY2UvcHl0aG9uLWNvbXBsZW1lbnRzLmgKKworQlVJTERf
+RkxBR1M9Q0M9IiQoQ0MpIiBcCisJCUNGTEFHUz0iJChERUZTKSAkKERFRkFVTFRfSU5DTFVERVMp
+ICQoSU5DTFVERVMpICQoR0xJQl9DRkxBR1MpICQoQU1fQ0ZMQUdTKSIgXAorCQlDUFBGTEFHUz0i
+JChBTV9DUFBGTEFHUykgJChDUFBGTEFHUykiIFwKKwkJTERGTEFHUz0iJChBTV9MREZMQUdTKSAk
+KExERkxBR1MpIgorCitidWlsZC1weXRob24tYmluZGluZ3Muc3RhbXA6ICQoQklORElOR1NfREVQ
+UykKKwkkKEJVSUxEX0ZMQUdTKSAkKFBZVEhPTikgJChidWlsZGRpcikvc2V0dXAucHkgYnVpbGRf
+ZXh0CisJJChCVUlMRF9GTEFHUykgJChQWVRIT04pICQoYnVpbGRkaXIpL3NldHVwLnB5IGJ1aWxk
+CisJdG91Y2ggJEAKKworaW5zdGFsbC1leGVjLWxvY2FsOiBidWlsZC1weXRob24tYmluZGluZ3Mu
+c3RhbXAKKwlAb3B0cz0iLS1wcmVmaXg9JChwcmVmaXgpIC0tcmVjb3JkICQoSU5TVEFMTEVEX0ZJ
+TEVTKSAtLXZlcmJvc2UgLS1uby1jb21waWxlICQoRElTVFNFVFVQT1BUUykiOyBcCisJaWYgWyAi
+JChERVNURElSKSIgIT0gIiIgXTsgdGhlbiBcCisJCW9wdHM9IiQkb3B0cyAtLXJvb3Q9JChERVNU
+RElSKSI7IFwKKwlmaTsgXAorCSQoUFlUSE9OKSAkKGJ1aWxkZGlyKS9zZXR1cC5weSBpbnN0YWxs
+ICQkb3B0czsKKworY2xlYW4tbG9jYWw6CisJcm0gLXJmICQoYnVpbGRkaXIpL2J1aWxkCisKKyMg
+RGlzdHV0aWxzJyBzZXR1cC5weSBkb2VzIG5vdCBpbmNsdWRlIGFuIHVuaW5zdGFsbCB0YXJnZXQs
+IHdlIHRodXMgbmVlZCB0byBkbworIyBpdCBtYW51YWxseS4gV2Ugc2F2ZSB0aGUgcGF0aCBvZiB0
+aGUgZmlsZXMgdGhhdCB3ZXJlIGluc3RhbGxlZCBkdXJpbmcgdGhlIGluc3RhbGwgdGFyZ2V0Cisj
+IGFuZCBkZWxldGUgdGhlbSBkdXJpbmcgdGhlIHVuaW5zdGFsbGF0aW9uLgordW5pbnN0YWxsLWxv
+Y2FsOgorCWlmIFsgIiQoREVTVERJUikiICE9ICIiIF07IHRoZW4gXAorCQkkKFNFRCkgLWkgInN8
+XnwkKERFU1RESVIpL3xnIiAkKElOU1RBTExFRF9GSUxFUyk7IFwKKwlmaQorCWNhdCAkKElOU1RB
+TExFRF9GSUxFUykgfCB4YXJncyBybSAtcmYgfHwgdHJ1ZQorCSQoR1JFUCkgIl9faW5pdF9fLnB5
+IiAkKElOU1RBTExFRF9GSUxFUykgfCB4YXJncyBkaXJuYW1lIHwgeGFyZ3Mgcm0gLXJmIHx8IHRy
+dWUKKwlybSAtZiAkKElOU1RBTExFRF9GSUxFUykKKworQ0xFQU5GSUxFUyA9IGJhYmVsdHJhY2Uv
+YmFiZWx0cmFjZV93cmFwLmMgYmFiZWx0cmFjZS9iYWJlbHRyYWNlLnB5IGJ1aWxkLXB5dGhvbi1i
+aW5kaW5ncy5zdGFtcAorRElTVENMRUFORklMRVMgPSBzZXR1cC5weQogZW5kaWYKZGlmZiAtLWdp
+dCBhL2JpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlL01ha2VmaWxlLmFtIGIvYmluZGluZ3MvcHl0
+aG9uL2JhYmVsdHJhY2UvTWFrZWZpbGUuYW0KaW5kZXggMTFkY2RmMC4uZjYxMmFhNiAxMDA2NDQK
+LS0tIGEvYmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2UvTWFrZWZpbGUuYW0KKysrIGIvYmluZGlu
+Z3MvcHl0aG9uL2JhYmVsdHJhY2UvTWFrZWZpbGUuYW0KQEAgLTEsMzEgKzEsOSBAQAoraWYgVVNF
+X1BZVEhPTgogYmFiZWx0cmFjZS5pOiBiYWJlbHRyYWNlLmkuaW4KIAlzZWQgInMvQkFCRUxUUkFD
+RV9WRVJTSU9OX1NUUi9CYWJlbHRyYWNlICQoUEFDS0FHRV9WRVJTSU9OKS9nIiA8IFwKIAkJJCh0
+b3Bfc3JjZGlyKS9iaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZS9iYWJlbHRyYWNlLmkuaW4gPiBc
+CiAJCSQodG9wX2J1aWxkZGlyKS9iaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZS9iYWJlbHRyYWNl
+LmkKIAotQU1fQ0ZMQUdTID0gJChQWVRIT05fSU5DTFVERSkgLUkkKHRvcF9zcmNkaXIpL2luY2x1
+ZGUvIFwKLQkJLUkkKHRvcF9zcmNkaXIpL2JpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlCi0KLUVY
+VFJBX0RJU1QgPSBiYWJlbHRyYWNlLmkuaW4KLW5vZGlzdF9weXRob25fUFlUSE9OID0gYmFiZWx0
+cmFjZS5weQotcHlleGVjX0xUTElCUkFSSUVTID0gX2JhYmVsdHJhY2UubGEKLQotTUFJTlRBSU5F
+UkNMRUFORklMRVMgPSBiYWJlbHRyYWNlX3dyYXAuYyBiYWJlbHRyYWNlLnB5Ci0KLW5vZGlzdF9f
+YmFiZWx0cmFjZV9sYV9TT1VSQ0VTID0gYmFiZWx0cmFjZV93cmFwLmMKLV9iYWJlbHRyYWNlX2xh
+X1NPVVJDRVMgPSBweXRob24tY29tcGxlbWVudHMuaCBweXRob24tY29tcGxlbWVudHMuYwotX2Jh
+YmVsdHJhY2VfbGFfTERGTEFHUyA9IC1tb2R1bGUKLQotX2JhYmVsdHJhY2VfbGFfQ0ZMQUdTID0g
+JChHTElCX0NGTEFHUykgJChBTV9DRkxBR1MpCi0KLV9iYWJlbHRyYWNlX2xhX0xJQlMgPSAkKEdM
+SUJfTElCUykKLQotX2JhYmVsdHJhY2VfbGFfTElCQUREID0gJCh0b3BfYnVpbGRkaXIpL2Zvcm1h
+dHMvY3RmL2xpYmJhYmVsdHJhY2UtY3RmLmxhIFwKLQkkKHRvcF9idWlsZGRpcikvZm9ybWF0cy9j
+dGYtdGV4dC9saWJiYWJlbHRyYWNlLWN0Zi10ZXh0LmxhCi0KLSMgU1dJRyAnd2FybmluZyBtZCB2
+YXJpYWJsZSB1bnVzZWQnIGZpeGVkIGFmdGVyIFNXSUcgYnVpbGQ6Ci1iYWJlbHRyYWNlX3dyYXAu
+YzogYmFiZWx0cmFjZS5pCi0JJChTV0lHKSAtcHl0aG9uIC1XYWxsIC1JLiAtSSQodG9wX3NyY2Rp
+cikvaW5jbHVkZSBcCi0JCSQodG9wX2J1aWxkZGlyKS9iaW5kaW5ncy9weXRob24vYmFiZWx0cmFj
+ZS9iYWJlbHRyYWNlLmkKLQotQ0xFQU5GSUxFUyA9IGJhYmVsdHJhY2UuaSBiYWJlbHRyYWNlLnB5
+IGJhYmVsdHJhY2Vfd3JhcC5jCisjdGhlIF9faW5pdF9fLnB5IHRhcmdldCBpcyBnZW5lcmF0ZWQg
+YnkgdGhlIGF1dG9tYWtlCitESVNUQ0xFQU5GSUxFUyA9IF9faW5pdF9fLnB5IGJhYmVsdHJhY2Uu
+aQorZW5kaWYKZGlmZiAtLWdpdCBhL2JpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlL19faW5pdF9f
+LnB5LmluIGIvYmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2UvX19pbml0X18ucHkuaW4KbmV3IGZp
+bGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMC4uZWIxZTc2YQotLS0gL2Rldi9udWxsCisrKyBi
+L2JpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlL19faW5pdF9fLnB5LmluCkBAIC0wLDAgKzEsMjUg
+QEAKKyMgVGhlIE1JVCBMaWNlbnNlIChNSVQpCisjCisjIENvcHlyaWdodCAoQykgMjAxNyAtIEZy
+YW5jaXMgRGVzbGF1cmllcnMgPGZyYW5jaXMuZGVzbGF1cmllcnNAZWZmaWNpb3MuY29tPgorIwor
+IyBQZXJtaXNzaW9uIGlzIGhlcmVieSBncmFudGVkLCBmcmVlIG9mIGNoYXJnZSwgdG8gYW55IHBl
+cnNvbiBvYnRhaW5pbmcgYSBjb3B5CisjIG9mIHRoaXMgc29mdHdhcmUgYW5kIGFzc29jaWF0ZWQg
+ZG9jdW1lbnRhdGlvbiBmaWxlcyAodGhlICJTb2Z0d2FyZSIpLCB0byBkZWFsCisjIGluIHRoZSBT
+b2Z0d2FyZSB3aXRob3V0IHJlc3RyaWN0aW9uLCBpbmNsdWRpbmcgd2l0aG91dCBsaW1pdGF0aW9u
+IHRoZSByaWdodHMKKyMgdG8gdXNlLCBjb3B5LCBtb2RpZnksIG1lcmdlLCBwdWJsaXNoLCBkaXN0
+cmlidXRlLCBzdWJsaWNlbnNlLCBhbmQvb3Igc2VsbAorIyBjb3BpZXMgb2YgdGhlIFNvZnR3YXJl
+LCBhbmQgdG8gcGVybWl0IHBlcnNvbnMgdG8gd2hvbSB0aGUgU29mdHdhcmUgaXMKKyMgZnVybmlz
+aGVkIHRvIGRvIHNvLCBzdWJqZWN0IHRvIHRoZSBmb2xsb3dpbmcgY29uZGl0aW9uczoKKyMKKyMg
+VGhlIGFib3ZlIGNvcHlyaWdodCBub3RpY2UgYW5kIHRoaXMgcGVybWlzc2lvbiBub3RpY2Ugc2hh
+bGwgYmUgaW5jbHVkZWQgaW4KKyMgYWxsIGNvcGllcyBvciBzdWJzdGFudGlhbCBwb3J0aW9ucyBv
+ZiB0aGUgU29mdHdhcmUuCisjCisjIFRIRSBTT0ZUV0FSRSBJUyBQUk9WSURFRCAiQVMgSVMiLCBX
+SVRIT1VUIFdBUlJBTlRZIE9GIEFOWSBLSU5ELCBFWFBSRVNTIE9SCisjIElNUExJRUQsIElOQ0xV
+RElORyBCVVQgTk9UIExJTUlURUQgVE8gVEhFIFdBUlJBTlRJRVMgT0YgTUVSQ0hBTlRBQklMSVRZ
+LAorIyBGSVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIgUFVSUE9TRSBBTkQgTk9OSU5GUklOR0VNRU5U
+LiBJTiBOTyBFVkVOVCBTSEFMTCBUSEUKKyMgQVVUSE9SUyBPUiBDT1BZUklHSFQgSE9MREVSUyBC
+RSBMSUFCTEUgRk9SIEFOWSBDTEFJTSwgREFNQUdFUyBPUiBPVEhFUgorIyBMSUFCSUxJVFksIFdI
+RVRIRVIgSU4gQU4gQUNUSU9OIE9GIENPTlRSQUNULCBUT1JUIE9SIE9USEVSV0lTRSwgQVJJU0lO
+RyBGUk9NLAorIyBPVVQgT0YgT1IgSU4gQ09OTkVDVElPTiBXSVRIIFRIRSBTT0ZUV0FSRSBPUiBU
+SEUgVVNFIE9SIE9USEVSIERFQUxJTkdTIElOCisjIFRIRSBTT0ZUV0FSRS4KKworZnJvbSAuYmFi
+ZWx0cmFjZSBpbXBvcnQgKgorCitfX3ZlcnNpb25fXyA9ICdAUEFDS0FHRV9WRVJTSU9OQCcKZGlm
+ZiAtLWdpdCBhL2JpbmRpbmdzL3B5dGhvbi9zZXR1cC5weS5pbiBiL2JpbmRpbmdzL3B5dGhvbi9z
+ZXR1cC5weS5pbgpuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwLi45YmFhMDYyCi0t
+LSAvZGV2L251bGwKKysrIGIvYmluZGluZ3MvcHl0aG9uL3NldHVwLnB5LmluCkBAIC0wLDAgKzEs
+ODQgQEAKKyMgVGhlIE1JVCBMaWNlbnNlIChNSVQpCisjCisjIENvcHlyaWdodCAoQykgMjAxNyAt
+IEZyYW5jaXMgRGVzbGF1cmllcnMgPGZyYW5jaXMuZGVzbGF1cmllcnNAZWZmaWNpb3MuY29tPgor
+IworIyBQZXJtaXNzaW9uIGlzIGhlcmVieSBncmFudGVkLCBmcmVlIG9mIGNoYXJnZSwgdG8gYW55
+IHBlcnNvbiBvYnRhaW5pbmcgYSBjb3B5CisjIG9mIHRoaXMgc29mdHdhcmUgYW5kIGFzc29jaWF0
+ZWQgZG9jdW1lbnRhdGlvbiBmaWxlcyAodGhlICJTb2Z0d2FyZSIpLCB0byBkZWFsCisjIGluIHRo
+ZSBTb2Z0d2FyZSB3aXRob3V0IHJlc3RyaWN0aW9uLCBpbmNsdWRpbmcgd2l0aG91dCBsaW1pdGF0
+aW9uIHRoZSByaWdodHMKKyMgdG8gdXNlLCBjb3B5LCBtb2RpZnksIG1lcmdlLCBwdWJsaXNoLCBk
+aXN0cmlidXRlLCBzdWJsaWNlbnNlLCBhbmQvb3Igc2VsbAorIyBjb3BpZXMgb2YgdGhlIFNvZnR3
+YXJlLCBhbmQgdG8gcGVybWl0IHBlcnNvbnMgdG8gd2hvbSB0aGUgU29mdHdhcmUgaXMKKyMgZnVy
+bmlzaGVkIHRvIGRvIHNvLCBzdWJqZWN0IHRvIHRoZSBmb2xsb3dpbmcgY29uZGl0aW9uczoKKyMK
+KyMgVGhlIGFib3ZlIGNvcHlyaWdodCBub3RpY2UgYW5kIHRoaXMgcGVybWlzc2lvbiBub3RpY2Ug
+c2hhbGwgYmUgaW5jbHVkZWQgaW4KKyMgYWxsIGNvcGllcyBvciBzdWJzdGFudGlhbCBwb3J0aW9u
+cyBvZiB0aGUgU29mdHdhcmUuCisjCisjIFRIRSBTT0ZUV0FSRSBJUyBQUk9WSURFRCAiQVMgSVMi
+LCBXSVRIT1VUIFdBUlJBTlRZIE9GIEFOWSBLSU5ELCBFWFBSRVNTIE9SCisjIElNUExJRUQsIElO
+Q0xVRElORyBCVVQgTk9UIExJTUlURUQgVE8gVEhFIFdBUlJBTlRJRVMgT0YgTUVSQ0hBTlRBQklM
+SVRZLAorIyBGSVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIgUFVSUE9TRSBBTkQgTk9OSU5GUklOR0VN
+RU5ULiBJTiBOTyBFVkVOVCBTSEFMTCBUSEUKKyMgQVVUSE9SUyBPUiBDT1BZUklHSFQgSE9MREVS
+UyBCRSBMSUFCTEUgRk9SIEFOWSBDTEFJTSwgREFNQUdFUyBPUiBPVEhFUgorIyBMSUFCSUxJVFks
+IFdIRVRIRVIgSU4gQU4gQUNUSU9OIE9GIENPTlRSQUNULCBUT1JUIE9SIE9USEVSV0lTRSwgQVJJ
+U0lORyBGUk9NLAorIyBPVVQgT0YgT1IgSU4gQ09OTkVDVElPTiBXSVRIIFRIRSBTT0ZUV0FSRSBP
+UiBUSEUgVVNFIE9SIE9USEVSIERFQUxJTkdTIElOCisjIFRIRSBTT0ZUV0FSRS4KKworaW1wb3J0
+IHN5cworCitmcm9tIGRpc3R1dGlscy5jb3JlIGltcG9ydCBzZXR1cCwgRXh0ZW5zaW9uCisKK1BZ
+X1BBVEhfV0FSTl9NU0cgPSAiIiIKKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS1XQVJOSU5HLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCitUaGUgaW5zdGFs
+bCBkaXJlY3RvcnkgdXNlZDpcbiAoe30pXG5pcyBub3QgaW5jbHVkZWQgaW4geW91ciBQWVRIT05Q
+QVRILgorCitUbyBhZGQgdGhpcyBkaXJlY3RvcnkgdG8geW91ciBQeXRob24gc2VhcmNoIHBhdGgg
+cGVybWFuZW50bHkgeW91IGNhbiBhZGQgdGhlCitmb2xsb3dpbmcgY29tbWFuZCB0byB5b3VyIC5i
+YXNocmMvLnpzaHJjOgorICAgIGV4cG9ydCBQWVRIT05QQVRIPSIke3tQWVRIT05QQVRIfX06e30i
+CistLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQorIiIiCisKK2RlZiBtYWluKCk6CisgICAgYmFiZWx0
+cmFjZV9leHQgPSBFeHRlbnNpb24oJ2JhYmVsdHJhY2UvX2JhYmVsdHJhY2UnLAorICAgICAgICAg
+ICAgICAgICAgICAgICAgc291cmNlcz1bJ2JhYmVsdHJhY2UvYmFiZWx0cmFjZS5pJywnYmFiZWx0
+cmFjZS9weXRob24tY29tcGxlbWVudHMuYyddLAorICAgICAgICAgICAgICAgICAgICAgICAgbGli
+cmFyaWVzPVsnYmFiZWx0cmFjZScsICdiYWJlbHRyYWNlLWN0ZiddLCkKKworICAgIGRpc3QgPSBz
+ZXR1cChuYW1lPSdiYWJlbHRyYWNlJywKKyAgICAgICAgICAgIHZlcnNpb249J0BQQUNLQUdFX1ZF
+UlNJT05AJywKKyAgICAgICAgICAgIGRlc2NyaXB0aW9uPSdCYWJlbHRyYWNlIFB5dGhvbiBCaW5k
+aW5ncycsCisgICAgICAgICAgICBwYWNrYWdlcz1bJ2JhYmVsdHJhY2UnXSwKKyAgICAgICAgICAg
+IHBhY2thZ2VfZGlyPXsnYmFiZWx0cmFjZSc6ICdiYWJlbHRyYWNlJ30sCisgICAgICAgICAgICBv
+cHRpb25zPXsnYnVpbGQnOgorICAgICAgICAgICAgICAgIHsKKyAgICAgICAgICAgICAgICAgICAg
+J2J1aWxkX2Jhc2UnOiAnYnVpbGQnLAorICAgICAgICAgICAgICAgICAgICAnYnVpbGRfbGliJzog
+J2J1aWxkL2J1aWxkX2xpYicKKyAgICAgICAgICAgICAgICB9LAorICAgICAgICAgICAgICAgICdi
+dWlsZF9leHQnOgorICAgICAgICAgICAgICAgIHsKKyAgICAgICAgICAgICAgICAgICAgJ2J1aWxk
+X2xpYic6ICdidWlsZC9idWlsZF9saWInCisgICAgICAgICAgICAgICAgfQorICAgICAgICAgICAg
+fSwKKyAgICAgICAgICAgIHVybD0naHR0cDovL2RpYW1vbi5vcmcvYmFiZWx0cmFjZScsCisgICAg
+ICAgICAgICBleHRfbW9kdWxlcz1bYmFiZWx0cmFjZV9leHRdLAorICAgICAgICAgICAgbGljZW5z
+ZT0nTUlUJywKKyAgICAgICAgICAgIGNsYXNzaWZpZXJzPVsKKyAgICAgICAgICAgICAgICAnRGV2
+ZWxvcG1lbnQgU3RhdHVzIDo6IDUgLSBQcm9kdWN0aW9uL1N0YWJsZScsCisgICAgICAgICAgICAg
+ICAgJ0ludGVuZGVkIEF1ZGllbmNlIDo6IERldmVsb3BlcnMnLAorICAgICAgICAgICAgICAgICdM
+aWNlbnNlIDo6IE9TSSBBcHByb3ZlZCA6OiBUaGUgTUlUIExpY2Vuc2UnLAorICAgICAgICAgICAg
+ICAgICdQcm9ncmFtbWluZyBMYW5ndWFnZSA6OiBQeXRob24gOjogMycKKyAgICAgICAgICAgICAg
+ICAnVG9waWMgOjogU3lzdGVtIDo6IExvZ2dpbmcnLAorICAgICAgICAgICAgICAgIF0pCisKKyMg
+QWZ0ZXIgdGhlIGluc3RhbGxhdGlvbiwgd2UgY2hlY2sgdGhhdCB0aGUgaW5zdGFsbCBkaXJlY3Rv
+cnkgaXMgaW5jbHVkZWQgaW4KKyMgdGhlIFB5dGhvbiBzZWFyY2ggcGF0aCBhbmQgd2UgcHJpbnQg
+YSB3YXJuaW5nIG1lc3NhZ2Ugd2hlbiBpdCdzIG5vdC4KKyMgV2UgbmVlZCB0byBkbyB0aGlzIGJl
+Y2F1c2UgUHl0aG9uIHNlYXJjaCBwYXRoIGRpZmZlcnMgZGVwZW5kaW5nIG9uIHRoZSBkaXN0cm8K
+KyMgYW5kIHNvbWUgZGlzdHJvcyBkb24ndCBpbmNsdWRlIGFueSAvdXNyL2xvY2FsLyBpbiB0aGUg
+c2VhcmNoIHBhdGguIFRoaXMgaXMKKyMgYWxzbyB1c2VmdWwgZm9yIG91dC1vZi10cmVlIGluc3Rh
+bGxzIGFuZCB0ZXN0cy4KKyMgSXQncyBvbmx5IHJlbGV2YW50IHRvIG1ha2UgdGhpcyBjaGVjayBv
+biB0aGUgYGluc3RhbGxgIGNvbW1hbmQuCisKKyAgICBpZiAnaW5zdGFsbCcgaW4gZGlzdC5jb21t
+YW5kX29iajoKKyAgICAgICAgaW5zdGFsbF9kaXIgPSBkaXN0LmNvbW1hbmRfb2JqWydpbnN0YWxs
+J10uaW5zdGFsbF9saWJiYXNlCisgICAgICAgIGlmIGluc3RhbGxfZGlyIG5vdCBpbiBzeXMucGF0
+aDoKKyAgICAgICAgICAgICMgV2UgY2FuJ3QgY29uc2lkZXIgdGhpcyBhbiBlcnJvciBiZWNhdXNl
+IGlmIGFmZmVjdHMgZXZlcnkKKyAgICAgICAgICAgICMgZGlzdHJvIGRpZmZlcmVudGx5LiBXZSBv
+bmx5IHdhcm4gdGhlIHVzZXIgdGhhdCBzb21lCisgICAgICAgICAgICAjIGV4dHJhIGNvbmZpZ3Vy
+YXRpb24gaXMgbmVlZGVkIHRvIHVzZSB0aGUgYmluZGluZ3MKKyAgICAgICAgICAgIHByaW50KFBZ
+X1BBVEhfV0FSTl9NU0cuZm9ybWF0KGluc3RhbGxfZGlyLCBpbnN0YWxsX2RpcikpCisKK2lmIF9f
+bmFtZV9fID09ICJfX21haW5fXyI6CisgICAgbWFpbigpCmRpZmYgLS1naXQgYS9jb25maWd1cmUu
+YWMgYi9jb25maWd1cmUuYWMKaW5kZXggMjM4MmU1My4uYTExNzIyOSAxMDA2NDQKLS0tIGEvY29u
+ZmlndXJlLmFjCisrKyBiL2NvbmZpZ3VyZS5hYwpAQCAtMjQxLDExICsyNDEsNiBAQCBpZiB0ZXN0
+ICJ4JHtlbmFibGVfcHl0aG9uOi15ZXN9IiA9IHh5ZXM7IHRoZW4KICAgQVhfUEtHX1NXSUcoJHN3
+aWdfdmVyc2lvbiwgW10sIFsgQUNfTVNHX0VSUk9SKFtTV0lHICRzd2lnX3ZlcnNpb24gb3IgbmV3
+ZXIgaXMgbmVlZGVkXSkgXSkKICAgQU1fUEFUSF9QWVRIT04KIAotICBBTV9QQVRIX1BZVEhPTl9N
+T0RVTEVTKFtQWVRIT05dKQotICAjIHB5dGhvbmRpciBpcyB0aGUgcGF0aCB3aGVyZSBleHRyYSBt
+b2R1bGVzIGFyZSB0byBiZSBpbnN0YWxsZWQKLSAgcHl0aG9uZGlyPSRQWVRIT05fUFJFRklYLyRQ
+WVRIT05fTU9EVUxFU19QQVRICi0gICMgcHlleGVjZGlyIGlzIHRoZSBwYXRoIHRoYXQgY29udGFp
+bnMgc2hhcmVkIG9iamVjdHMgdXNlZCBieSB0aGUgZXh0cmEgbW9kdWxlcwotICBweWV4ZWNkaXI9
+JFBZVEhPTl9FWEVDX1BSRUZJWC8kUFlUSE9OX01PRFVMRVNfUEFUSAogICBBQ19BUkdfVkFSKFtQ
+WVRIT05fSU5DTFVERV0sIFtJbmNsdWRlIGZsYWdzIGZvciBweXRob24sIGJ5cGFzc2luZyBweXRo
+b24tY29uZmlnXSkKICAgQUNfQVJHX1ZBUihbUFlUSE9OX0NPTkZJR10sIFtQYXRoIHRvIHB5dGhv
+bi1jb25maWddKQogICBBU19JRihbdGVzdCAteiAiJFBZVEhPTl9JTkNMVURFIl0sIFsKQEAgLTMz
+Myw3ICszMjgsOSBAQCBBQ19DT05GSUdfRklMRVMoWwogCWluY2x1ZGUvTWFrZWZpbGUKIAliaW5k
+aW5ncy9NYWtlZmlsZQogCWJpbmRpbmdzL3B5dGhvbi9NYWtlZmlsZQorCWJpbmRpbmdzL3B5dGhv
+bi9zZXR1cC5weQogCWJpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlL01ha2VmaWxlCisJYmluZGlu
+Z3MvcHl0aG9uL2JhYmVsdHJhY2UvX19pbml0X18ucHkKIAl0ZXN0cy9NYWtlZmlsZQogCXRlc3Rz
+L2Jpbi9NYWtlZmlsZQogCXRlc3RzL2Jpbi9pbnRlcnNlY3Rpb24vTWFrZWZpbGUKQEAgLTM1Nyw2
+ICszNTQsMTMgQEAgQUNfQ09ORklHX0ZJTEVTKFt0ZXN0cy9iaW4vaW50ZXJzZWN0aW9uL3Rlc3Rf
+aW50ZXJzZWN0aW9uXSwgW2NobW9kICt4IHRlc3RzL2Jpbi8KIEFDX0NPTkZJR19GSUxFUyhbdGVz
+dHMvYmluL2ludGVyc2VjdGlvbi9idF9weXRob25faGVscGVyLnB5XSkKIEFDX0NPTkZJR19GSUxF
+UyhbdGVzdHMvYmluL3Rlc3RfcGFja2V0X3NlcV9udW1dLCBbY2htb2QgK3ggdGVzdHMvYmluL3Rl
+c3RfcGFja2V0X3NlcV9udW1dKQogCisjIENyZWF0ZSBsaW5rIGZvciBCYWJlbHRyYWNlIGNvbXBs
+ZW1lbnRzIGZpbGVzIGZvciBvdXQtb2YtdHJlZSBidWlsZHMKK0FDX0NPTkZJR19MSU5LUyhbCisJ
+YmluZGluZ3MvcHl0aG9uL2JhYmVsdHJhY2UvcHl0aG9uLWNvbXBsZW1lbnRzLmM6YmluZGluZ3Mv
+cHl0aG9uL2JhYmVsdHJhY2UvcHl0aG9uLWNvbXBsZW1lbnRzLmMKKwliaW5kaW5ncy9weXRob24v
+YmFiZWx0cmFjZS9weXRob24tY29tcGxlbWVudHMuaDpiaW5kaW5ncy9weXRob24vYmFiZWx0cmFj
+ZS9weXRob24tY29tcGxlbWVudHMuaAorCWJpbmRpbmdzL3B5dGhvbi9iYWJlbHRyYWNlL2JhYmVs
+dHJhY2UuaS5pbjpiaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZS9iYWJlbHRyYWNlLmkuaW4KK10p
+CisKIEFDX09VVFBVVAogCiAjCmRpZmYgLS1naXQgYS9tNC9weXRob25fbW9kdWxlcy5tNCBiL200
+L3B5dGhvbl9tb2R1bGVzLm00CmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAxMzJjNGMy
+Li4wMDAwMDAwCi0tLSBhL200L3B5dGhvbl9tb2R1bGVzLm00CisrKyAvZGV2L251bGwKQEAgLTEs
+MjMgKzAsMCBAQAotIyBweXRob25fbW9kdWxlcy5tNCAtLSBHZXQgdGhlIFB5dGhvbiBtb2R1bGVz
+IGluc3RhbGwgcGF0aAotIwotIyBDb3B5cmlnaHQgKEMpIDIwMTQgLSBKw6lyw6ltaWUgR2FsYXJu
+ZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20+Ci0jCi0jIFRoaXMgZmlsZSBpcyBm
+cmVlIHNvZnR3YXJlOyB0aGUgRnJlZSBTb2Z0d2FyZSBGb3VuZGF0aW9uIGdpdmVzCi0jIHVubGlt
+aXRlZCBwZXJtaXNzaW9uIHRvIGNvcHkgYW5kL29yIGRpc3RyaWJ1dGUgaXQsIHdpdGggb3Igd2l0
+aG91dAotIyBtb2RpZmljYXRpb25zLCBhcyBsb25nIGFzIHRoaXMgbm90aWNlIGlzIHByZXNlcnZl
+ZC4KLQotIyBXaGlsZSBleHRyYSBQeXRob24gbW9kdWxlcyBhcmUgZ2VuZXJhbHkgaW5zdGFsbGVk
+IGluIHRoZSBQeXRob24KLSMgaW50ZXJwcmV0ZXIncyAic2l0ZS1wYWNrYWdlcyIgZGlyZWN0b3J5
+LCBEZWJpYW4gcHJlZmVycyB1c2luZyB0aGUKLSMgImRpc3QtcGFja2FnZXMiIG5vbWVuY2xhdHVy
+ZS4gVGhpcyBtYWNybyB1c2VzIHRoZSBpbnRlcnByZXRlcgotIyBkZXNpZ25hdGVkIGJ5IHRoZSBQ
+WVRIT04gdmFyaWFibGUgdG8gY2hlY2sgdGhlIGludGVycHJldGVyJ3MgUEFUSAotIyBhbmQgc2V0
+cyB0aGUgUFlUSE9OX01PRFVMRVNfUEFUSCBieSB0YWtpbmcgdGhlIHByZWZpeCBpbnRvIGFjY291
+bnQuCi0KLSMgQU1fUEFUSF9QWVRIT05fTU9EVUxFUyhQWVRIT04pCi0jIC0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLQotQUNfREVGVU4oW0FNX1BBVEhfUFlUSE9OX01PRFVMRVNdLAotIFtwcm9nPSJpbXBvcnQg
+c3lzCi1mb3IgcGF0aCBpbiBzeXMucGF0aDoKLSAgICBpZiBwYXRoLmVuZHN3aXRoKFwiLXBhY2th
+Z2VzXCIpOgotICAgICAgIHByaW50KHBhdGhbW3BhdGguZmluZChcIi9saWJcIik6XV0pCi0gICAg
+ICAgYnJlYWsiCi0gIFBZVEhPTl9NT0RVTEVTX1BBVEg9YCR7JDF9IC1jICIkcHJvZyJgXSkKZGlm
+ZiAtLWdpdCBhL3Rlc3RzL2Jpbi9pbnRlcnNlY3Rpb24vYnRfcHl0aG9uX2hlbHBlci5weS5pbiBi
+L3Rlc3RzL2Jpbi9pbnRlcnNlY3Rpb24vYnRfcHl0aG9uX2hlbHBlci5weS5pbgppbmRleCAxMWI0
+YWIxLi43NDdmMGU3IDEwMDY0NAotLS0gYS90ZXN0cy9iaW4vaW50ZXJzZWN0aW9uL2J0X3B5dGhv
+bl9oZWxwZXIucHkuaW4KKysrIGIvdGVzdHMvYmluL2ludGVyc2VjdGlvbi9idF9weXRob25faGVs
+cGVyLnB5LmluCkBAIC0yMywxNSArMjMsMTggQEAKICMgU09GVFdBUkUuCiAKIGltcG9ydCBzeXMK
+K2ltcG9ydCBjdHlwZXMKIAogIyBQb2ludCB0aGUgUHl0aG9uIGludGVycHJldGVyIHRvIHRoZSBi
+dWlsZGRpcidzIGxpYnJhcnkgYW5kIEJhYmVsdHJhY2UKICMgYmluZGluZ3MKLWJ0X21vZHVsZV9w
+YXRoID0gJ0BhYnNfdG9wX2J1aWxkZGlyQC9iaW5kaW5ncy9weXRob24vYmFiZWx0cmFjZScKLWJ0
+X2xpYl9weV9wYXRoID0gJ0BhYnNfdG9wX2J1aWxkZGlyQC9iaW5kaW5ncy9weXRob24vYmFiZWx0
+cmFjZS8ubGlicycKLWJ0X2xpYl9idF9wYXRoID0gJ0BhYnNfdG9wX2J1aWxkZGlyQC9saWIvLmxp
+YnMnCi1idF9saWJfY3RmX3BhdGggPSAnQGFic190b3BfYnVpbGRkaXJAL2Zvcm1hdC9jdGYvLmxp
+YnMnCitidF9tb2R1bGVfcGF0aCA9ICdAYWJzX3RvcF9idWlsZGRpckAvYmluZGluZ3MvcHl0aG9u
+L2J1aWxkL2J1aWxkX2xpYi8nCiAKIHN5cy5wYXRoLmluc2VydCgwLCBidF9tb2R1bGVfcGF0aCkK
+LXN5cy5wYXRoLmluc2VydCgxLCBidF9saWJfcHlfcGF0aCkKLXN5cy5wYXRoLmluc2VydCgyLCBi
+dF9saWJfYnRfcGF0aCkKLXN5cy5wYXRoLmluc2VydCgzLCBidF9saWJfY3RmX3BhdGgpCisKKyMg
+TWFudWFsbHkgbG9hZCB0aGUgc2hhcmVkIGxpYnJhcmllcyB1c2VkIGJ5IHRoZSBCYWJlbHRyYWNl
+IG1vZHVsZSBkdXJpbmcgdGhlCisjIHRlc3RzCitidF9saWJfY3RmX3BhdGggPSAnQGFic190b3Bf
+YnVpbGRkaXJAL2Zvcm1hdHMvY3RmLy5saWJzL2xpYmJhYmVsdHJhY2UtY3RmLnNvJworYnRfbGli
+X2J0X3BhdGggPSAnQGFic190b3BfYnVpbGRkaXJAL2xpYi8ubGlicy9saWJiYWJlbHRyYWNlLnNv
+JworCitjdHlwZXMuY2RsbC5Mb2FkTGlicmFyeShidF9saWJfY3RmX3BhdGgpCitjdHlwZXMuY2Rs
+bC5Mb2FkTGlicmFyeShidF9saWJfYnRfcGF0aCkKLS0gCjIuNy40CgpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
+YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
