@@ -1,16 +1,19 @@
-From: Milian Wolff <milian.wolff@kdab.com>
-Subject: Re: LTTng on Docker
-Date: Thu, 13 Apr 2017 09:39:36 +0200
-Message-ID: <1592853.1aOCMIPu85__6492.23763398385$1492069516$gmane$org@milian-kdab2>
-References: <CY4PR13MB152689FB577CFBEF185495EAC70C0@CY4PR13MB1526.namprd13.prod.outlook.com>
+From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
+Subject: Re: [PATCH lttng-modules] RFC: Always build vmscan probe
+Date: Wed, 19 Apr 2017 11:52:54 -0400
+Message-ID: <4e48f438-075a-64ae-2da7-df2e00fa00c2__20816.1833500073$1492617630$gmane$org@efficios.com>
+References: <1491850983-2984-1-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
- by lists.lttng.org (Postfix) with ESMTPS id 3w3Xrv6bjxzCZH
- for <lttng-dev@lists.lttng.org>; Thu, 13 Apr 2017 07:45:35 +0000 (UTC)
-In-Reply-To: <CY4PR13MB152689FB577CFBEF185495EAC70C0@CY4PR13MB1526.namprd13.prod.outlook.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3w7RYb4Y1NzCBL
+ for <lttng-dev@lists.lttng.org>; Wed, 19 Apr 2017 16:00:51 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 465F7340289
+ for <lttng-dev@lists.lttng.org>; Wed, 19 Apr 2017 15:54:31 +0000 (UTC)
+In-Reply-To: <1491850983-2984-1-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,17 +23,39 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Michael Jeanson <mjeanson@efficios.com>, lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGV5LCAKCmhvcGUgaXQncyBPSyB0byBoaWphY2sgdGhpcyB0aHJlYWQuIEFyZSB0aGVyZSBhbnkg
-ZG9jdW1lbnRhdGlvbnMgb24gd2hhdCB3b3JrcyAKYW5kIHdoYXQgZG9lc24ndCB3aXRoIExUVG5n
-IGluIGRvY2tlcj8gTW9zdCBub3RhYmx5OgoKLSBjYW4gb25lIGRvIGtlcm5lbC1sZXZlbCB0cmFj
-aW5nIGluc2lkZSBhIGNvbnRhaW5lcj8KLSBob3cgYW5kIHdoZXJlIGRvZXMgb25lIHNldCB0aGUg
-ZGFlbW9uIGFuZCBzZXNzaW9uIHVwPyBpbnNpZGUgb3Igb3V0c2lkZSB0aGUgCmNvbnRhaW5lcj8K
-ClRoYW5rcwoKLS0gCk1pbGlhbiBXb2xmZiB8IG1pbGlhbi53b2xmZkBrZGFiLmNvbSB8IFNvZnR3
-YXJlIEVuZ2luZWVyCktEQUIgKERldXRzY2hsYW5kKSBHbWJIJkNvIEtHLCBhIEtEQUIgR3JvdXAg
-Y29tcGFueQpUZWw6ICs0OS0zMC01MjEzMjU0NzAKS0RBQiAtIFRoZSBRdCBFeHBlcnRzCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
-aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+SGksCgpPbiAyMDE3LTA0LTEwIDAzOjAzIFBNLCBNaWNoYWVsIEplYW5zb24gd3JvdGU6Cj4gVGhl
+IG1tL3Ztc2Nhbi5jIGNvbXBpbGUgdW5pdCBpcyBhIG9iai15LCBldmVuIG9uIGFuIG9sZCAyLjYu
+MzYga2VybmVsLAo+IGFsd2F5cyBidWlsZCB0aGUgdm1zY2FuIHByb2JlIHJlZ2FyZGxlc3Mgb2Yg
+a2VybmVsIGNvbmZpZ3VyYXRpb24uCj4gCj4gQ2xvc2VzOiAjMTQzCgpQcm9iYWJseSB0aGUgaW5j
+b3JyZWN0IG51bWJlciBzaW5jZSB0aGUgIzE0MyBvZiBidWdzLmx0dG5nLm9yZyBwb2ludCB0byBh
+biBpbnRlcm5hbCBwcm9qZWN0IGlzc3VlIHRoYXQgZGF0ZSBiYWNrIHRvIDUgeWVhcnMgYWdvLgoK
+PiAKCkkgdGVzdGVkIGJ1aWxkIGFuZCBydW50aW1lIG9uIGEgNC40LjE0IGtlcm5lbCB3aXRoICFD
+T05GSUdfU1dBUCAmICFDT05GSUdfTUVNQ0cuIEV2ZXJ5dGhpbmcgc2VlbXMgZmluZSwgZXZlbnRz
+IGdldCBoaXRzIGNvcnJlY3RseSBvbiBhIG1lbW9yeSBzdHJlc3Mgd2l0aCAic3RyZXNzIiB3aXRo
+IDkwJSBtZW1vcnkgdXNhZ2Ugc2NlbmFyaW8uCgpUZXN0ZWQtYnk6IEpvbmF0aGFuIFJham90dGUg
+PGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT4KCj4gU2lnbmVkLW9mZi1ieTog
+TWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIHByb2Jlcy9L
+YnVpbGQgfCAxMCArLS0tLS0tLS0tCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwg
+OSBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvcHJvYmVzL0tidWlsZCBiL3Byb2Jlcy9L
+YnVpbGQKPiBpbmRleCAyYWZiNmRkLi5iZjE0Yzc1IDEwMDY0NAo+IC0tLSBhL3Byb2Jlcy9LYnVp
+bGQKPiArKysgYi9wcm9iZXMvS2J1aWxkCj4gQEAgLTE0MywxOSArMTQzLDExIEBAIGlmbmVxICgk
+KENPTkZJR19TQ1NJKSwpCj4gICAgICAgIGVjaG8gImx0dG5nLXByb2JlLXNjc2kubyIgOyBmaTsp
+Cj4gIGVuZGlmICMgQ09ORklHX1NDU0kKPiAgCj4gLXZtc2NhbiA9ICQoc2hlbGwgXAo+ICtvYmot
+JChDT05GSUdfTFRUTkcpICs9ICQoc2hlbGwgXAo+ICAgIGlmIFsgJChWRVJTSU9OKSAtZ2UgMyBc
+Cj4gICAgICAtbyBcKCAkKFZFUlNJT04pIC1lcSAyIC1hICQoUEFUQ0hMRVZFTCkgLWVxIDYgLWEg
+JChTVUJMRVZFTCkgLWdlIDM2IFwpIF0gOyB0aGVuIFwKPiAgICAgIGVjaG8gImx0dG5nLXByb2Jl
+LXZtc2Nhbi5vIiA7IGZpOykKCldlIG1pZ2h0IHdhbnQgdG8gbW92ZSB0aGlzIGNsb3NlciB0byBz
+aW1pbGFyIHN0YXRlbWVudHMgKGUuZy4gY2xvc2VyIHRvIGx0dG5nLXByb2JlLXNpZ25hbC5vKS4K
+CkNoZWVycwoKPiAgCj4gLWlmbmVxICgkKENPTkZJR19TV0FQKSwpCj4gLSAgb2JqLSQoQ09ORklH
+X0xUVE5HKSArPSAkKHZtc2NhbikKPiAtZWxzZQo+IC0gIGlmbmVxICgkKENPTkZJR19DR1JPVVBf
+TUVNX1JFU19DVExSKSwpCj4gLSAgICBvYmotJChDT05GSUdfTFRUTkcpICs9ICQodm1zY2FuKQo+
+IC0gIGVuZGlmICMgQ09ORklHX0NHUk9VUF9NRU1fUkVTX0NUTFIKPiAtZW5kaWYgIyBDT05GSUdf
+U1dBUAo+IC0KPiAgIyBsb2NrIHByb2JlIGRvZXMgbm90IHdvcmssIHNvIGRpc2FibGluZyBpdCBm
+b3Igbm93Cj4gICNpZm5lcSAoJChDT05GSUdfTE9DS0RFUCksKQo+ICAjICBvYmotJChDT05GSUdf
+TFRUTkcpICs9IGx0dG5nLXByb2JlLWxvY2subwo+IAoKLS0gCkpvbmF0aGFuIFIuIEp1bGllbgpF
+ZmZpY2lvcwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9s
+aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
