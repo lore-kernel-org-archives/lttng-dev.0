@@ -1,16 +1,17 @@
-From: Eric Dong <eric.dongxx@gmail.com>
-Subject: Regarding the liblttng:armhf installation
-Date: Fri, 21 Apr 2017 00:16:47 +0800
-Message-ID: <CA+JNVMxOZbe9j1f7Dm7HWd4YHeorBcfz_JwNWNw1s5PLHv7VtA__29358.3781960935$1492705059$gmane$org@mail.gmail.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-modules] Fix: Always build vmscan probe
+Date: Thu, 20 Apr 2017 15:23:25 -0400
+Message-ID: <1492716205-26717-1-git-send-email-mjeanson__29253.7926733077$1492716232$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4101514255528981838=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-io0-x22a.google.com (mail-io0-x22a.google.com
- [IPv6:2607:f8b0:4001:c06::22a])
- by lists.lttng.org (Postfix) with ESMTPS id 3w83v02bb5zCtM
- for <lttng-dev@lists.lttng.org>; Thu, 20 Apr 2017 16:18:04 +0000 (UTC)
-Received: by mail-io0-x22a.google.com with SMTP id o22so83667824iod.3
- for <lttng-dev@lists.lttng.org>; Thu, 20 Apr 2017 09:17:28 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3w881s5PGczD7V
+ for <lttng-dev@lists.lttng.org>; Thu, 20 Apr 2017 19:24:17 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id A269634030C
+ for <lttng-dev@lists.lttng.org>; Thu, 20 Apr 2017 19:25:12 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,55 +24,25 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============4101514255528981838==
-Content-Type: multipart/alternative; boundary=94eb2c05e7b4c47318054d9b7726
-
---94eb2c05e7b4c47318054d9b7726
-Content-Type: text/plain; charset=UTF-8
-
-Hello everyone,
-
-I am new to LTTNG and now trying to integrate into arm-linux-gnueabihf-
-toolchain to cross compile an application with LTTNG tracing capabilities.
-My host machine is Ubuntu 16.04. However, when I tried to install
-liblttng-ust-dev:armhf, the apt manager came across a few dependency
-errors, like libuuid1-dev. And somehow, I cannot resolve to install the
-libuuid-dev with apt install or dpkg install
-(libuuid1_2.27.1-6ubuntu3_armhf.deb).  Looking forward to the kind help
-with the method to integrate the LTTNG into a cross compiled application.
-Thank you.
-
-Regards,
-Eric
-
---94eb2c05e7b4c47318054d9b7726
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-family:verdana,=
-sans-serif">Hello everyone,<br><br></div><div class=3D"gmail_default" style=
-=3D"font-family:verdana,sans-serif">I am new to LTTNG and now trying to int=
-egrate into arm-linux-gnueabihf- toolchain to cross compile an application =
-with LTTNG tracing capabilities. My host machine is Ubuntu 16.04. However, =
-when I tried to install liblttng-ust-dev:armhf, the apt manager came across=
- a few dependency errors, like libuuid1-dev. And somehow, I cannot resolve =
-to install the libuuid-dev with apt install or dpkg install (libuuid1_2.27.=
-1-6ubuntu3_armhf.deb).=C2=A0 Looking forward to the kind help with the meth=
-od to integrate the LTTNG into a cross compiled application. Thank you.<br>=
-<br></div><div class=3D"gmail_default" style=3D"font-family:verdana,sans-se=
-rif">Regards,<br></div><div class=3D"gmail_default" style=3D"font-family:ve=
-rdana,sans-serif">Eric<br></div></div>
-
---94eb2c05e7b4c47318054d9b7726--
-
---===============4101514255528981838==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============4101514255528981838==--
+VGhlIG1tL3Ztc2Nhbi5jIGNvbXBpbGUgdW5pdCBpcyBhIG9iai15LCBldmVuIG9uIGFuIG9sZCAy
+LjYuMzYga2VybmVsLAphbHdheXMgYnVpbGQgdGhlIHZtc2NhbiBwcm9iZSByZWdhcmRsZXNzIG9m
+IGtlcm5lbCBjb25maWd1cmF0aW9uLgoKU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxt
+amVhbnNvbkBlZmZpY2lvcy5jb20+Ci0tLQogcHJvYmVzL0tidWlsZCB8IDEwICstLS0tLS0tLS0K
+IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgOSBkZWxldGlvbnMoLSkKCmRpZmYgLS1n
+aXQgYS9wcm9iZXMvS2J1aWxkIGIvcHJvYmVzL0tidWlsZAppbmRleCAyYWZiNmRkLi5iZjE0Yzc1
+IDEwMDY0NAotLS0gYS9wcm9iZXMvS2J1aWxkCisrKyBiL3Byb2Jlcy9LYnVpbGQKQEAgLTE0Mywx
+OSArMTQzLDExIEBAIGlmbmVxICgkKENPTkZJR19TQ1NJKSwpCiAgICAgICBlY2hvICJsdHRuZy1w
+cm9iZS1zY3NpLm8iIDsgZmk7KQogZW5kaWYgIyBDT05GSUdfU0NTSQogCi12bXNjYW4gPSAkKHNo
+ZWxsIFwKK29iai0kKENPTkZJR19MVFRORykgKz0gJChzaGVsbCBcCiAgIGlmIFsgJChWRVJTSU9O
+KSAtZ2UgMyBcCiAgICAgLW8gXCggJChWRVJTSU9OKSAtZXEgMiAtYSAkKFBBVENITEVWRUwpIC1l
+cSA2IC1hICQoU1VCTEVWRUwpIC1nZSAzNiBcKSBdIDsgdGhlbiBcCiAgICAgZWNobyAibHR0bmct
+cHJvYmUtdm1zY2FuLm8iIDsgZmk7KQogCi1pZm5lcSAoJChDT05GSUdfU1dBUCksKQotICBvYmot
+JChDT05GSUdfTFRUTkcpICs9ICQodm1zY2FuKQotZWxzZQotICBpZm5lcSAoJChDT05GSUdfQ0dS
+T1VQX01FTV9SRVNfQ1RMUiksKQotICAgIG9iai0kKENPTkZJR19MVFRORykgKz0gJCh2bXNjYW4p
+Ci0gIGVuZGlmICMgQ09ORklHX0NHUk9VUF9NRU1fUkVTX0NUTFIKLWVuZGlmICMgQ09ORklHX1NX
+QVAKLQogIyBsb2NrIHByb2JlIGRvZXMgbm90IHdvcmssIHNvIGRpc2FibGluZyBpdCBmb3Igbm93
+CiAjaWZuZXEgKCQoQ09ORklHX0xPQ0tERVApLCkKICMgIG9iai0kKENPTkZJR19MVFRORykgKz0g
+bHR0bmctcHJvYmUtbG9jay5vCi0tIAoyLjcuNAoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
+dHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
+aW5mby9sdHRuZy1kZXYK
