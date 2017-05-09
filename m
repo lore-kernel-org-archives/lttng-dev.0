@@ -1,19 +1,15 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Cleanup: initialize data to 0
-Date: Tue, 9 May 2017 08:37:25 -0400
-Message-ID: <CA+jJMxtU7oE3eLBJTiJ1BMy7wSC7ovUiE48dGf_2OsAVi27efA__47493.4529782788$1494333522$gmane$org@mail.gmail.com>
-References: <1494245720-8373-1-git-send-email-mathieu.desnoyers@efficios.com>
+From: Swati J <Swati.J@nectechnologies.in>
+Subject: lttng-ust traces are not generated
+Date: Tue, 9 May 2017 09:45:08 +0000
+Message-ID: <52CDBD4F986AFC4CAEE1C14068436E7B94531026__14824.2689007477$1494341301$gmane$org@EXCH-MB02-U1.nectechnologies.in>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============5838432406640491760=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yw0-x243.google.com (mail-yw0-x243.google.com
- [IPv6:2607:f8b0:4002:c05::243])
- by lists.lttng.org (Postfix) with ESMTPS id 3wMf6c09GkzdVR
- for <lttng-dev@lists.lttng.org>; Tue,  9 May 2017 12:38:15 +0000 (UTC)
-Received: by mail-yw0-x243.google.com with SMTP id 203so7186977ywe.0
- for <lttng-dev@lists.lttng.org>; Tue, 09 May 2017 05:37:26 -0700 (PDT)
-In-Reply-To: <1494245720-8373-1-git-send-email-mathieu.desnoyers@efficios.com>
+Received: from scanner.cloudmailstore.com (mx2.cloudmailstore.com
+ [103.11.84.249])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wMZRH5vMCzkxk
+ for <lttng-dev@lists.lttng.org>; Tue,  9 May 2017 09:52:27 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,48 +19,169 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIG1hc3Rlciwgc3RhYmxlLTIuMTAsIHN0YWJsZS0yLjkgYW5kIHN0YWJsZS0yLjgs
-IHRoYW5rcyEKCkrDqXLDqW1pZQoKT24gOCBNYXkgMjAxNyBhdCAwODoxNSwgTWF0aGlldSBEZXNu
-b3llcnMKPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gVmFsZ3JpbmQg
-Y2F0Y2hlcyByZWFkIG9mIHVuaW5pdGlhbGl6ZWQgZGF0YSBjYXVzZWQgYnkgdGhlIG9uLXN0YWNr
-Cj4gImRhdGEiIGFyZ3VtZW50IHdoaWNoIGVuZHMgdXAgbm90IGJlaW5nIGZ1bGx5IGluaXRpYWxp
-emVkIChpdCBjb250YWlucyBhCj4gdW5pb24pLgo+Cj4gU2lnbmVkLW9mZi1ieTogTWF0aGlldSBE
-ZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgc3JjL2Nv
-bW1vbi9ydW5hcy5jIHwgNCArKysrCj4gIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKykK
-Pgo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL3J1bmFzLmMgYi9zcmMvY29tbW9uL3J1bmFzLmMK
-PiBpbmRleCAwODFhM2QyLi45NDZlYTMxIDEwMDY0NAo+IC0tLSBhL3NyYy9jb21tb24vcnVuYXMu
-Ywo+ICsrKyBiL3NyYy9jb21tb24vcnVuYXMuYwo+IEBAIC00NjYsNiArNDY2LDcgQEAgaW50IHJ1
-bl9hc19ta2Rpcl9yZWN1cnNpdmUoY29uc3QgY2hhciAqcGF0aCwgbW9kZV90IG1vZGUsIHVpZF90
-IHVpZCwgZ2lkX3QgZ2lkKQo+ICB7Cj4gICAgICAgICBzdHJ1Y3QgcnVuX2FzX2RhdGEgZGF0YTsK
-Pgo+ICsgICAgICAgbWVtc2V0KCZkYXRhLCAwLCBzaXplb2YoZGF0YSkpOwo+ICAgICAgICAgREJH
-MygibWtkaXIoKSByZWN1cnNpdmUgJXMgd2l0aCBtb2RlICVkIGZvciB1aWQgJWQgYW5kIGdpZCAl
-ZCIsCj4gICAgICAgICAgICAgICAgICAgICAgICAgcGF0aCwgKGludCkgbW9kZSwgKGludCkgdWlk
-LCAoaW50KSBnaWQpOwo+ICAgICAgICAgc3RybmNweShkYXRhLnUubWtkaXIucGF0aCwgcGF0aCwg
-UEFUSF9NQVggLSAxKTsKPiBAQCAtNDc5LDYgKzQ4MCw3IEBAIGludCBydW5fYXNfbWtkaXIoY29u
-c3QgY2hhciAqcGF0aCwgbW9kZV90IG1vZGUsIHVpZF90IHVpZCwgZ2lkX3QgZ2lkKQo+ICB7Cj4g
-ICAgICAgICBzdHJ1Y3QgcnVuX2FzX2RhdGEgZGF0YTsKPgo+ICsgICAgICAgbWVtc2V0KCZkYXRh
-LCAwLCBzaXplb2YoZGF0YSkpOwo+ICAgICAgICAgREJHMygibWtkaXIoKSAlcyB3aXRoIG1vZGUg
-JWQgZm9yIHVpZCAlZCBhbmQgZ2lkICVkIiwKPiAgICAgICAgICAgICAgICAgICAgICAgICBwYXRo
-LCAoaW50KSBtb2RlLCAoaW50KSB1aWQsIChpbnQpIGdpZCk7Cj4gICAgICAgICBzdHJuY3B5KGRh
-dGEudS5ta2Rpci5wYXRoLCBwYXRoLCBQQVRIX01BWCAtIDEpOwo+IEBAIC00OTIsNiArNDk0LDcg
-QEAgaW50IHJ1bl9hc19vcGVuKGNvbnN0IGNoYXIgKnBhdGgsIGludCBmbGFncywgbW9kZV90IG1v
-ZGUsIHVpZF90IHVpZCwgZ2lkX3QgZ2lkKQo+ICB7Cj4gICAgICAgICBzdHJ1Y3QgcnVuX2FzX2Rh
-dGEgZGF0YTsKPgo+ICsgICAgICAgbWVtc2V0KCZkYXRhLCAwLCBzaXplb2YoZGF0YSkpOwo+ICAg
-ICAgICAgREJHMygib3BlbigpICVzIHdpdGggZmxhZ3MgJVggbW9kZSAlZCBmb3IgdWlkICVkIGFu
-ZCBnaWQgJWQiLAo+ICAgICAgICAgICAgICAgICAgICAgICAgIHBhdGgsIGZsYWdzLCAoaW50KSBt
-b2RlLCAoaW50KSB1aWQsIChpbnQpIGdpZCk7Cj4gICAgICAgICBzdHJuY3B5KGRhdGEudS5vcGVu
-LnBhdGgsIHBhdGgsIFBBVEhfTUFYIC0gMSk7Cj4gQEAgLTUwNiw2ICs1MDksNyBAQCBpbnQgcnVu
-X2FzX3VubGluayhjb25zdCBjaGFyICpwYXRoLCB1aWRfdCB1aWQsIGdpZF90IGdpZCkKPiAgewo+
-ICAgICAgICAgc3RydWN0IHJ1bl9hc19kYXRhIGRhdGE7Cj4KPiArICAgICAgIG1lbXNldCgmZGF0
-YSwgMCwgc2l6ZW9mKGRhdGEpKTsKPiAgICAgICAgIERCRzMoInVubGluaygpICVzIHdpdGggZm9y
-IHVpZCAlZCBhbmQgZ2lkICVkIiwKPiAgICAgICAgICAgICAgICAgICAgICAgICBwYXRoLCAoaW50
-KSB1aWQsIChpbnQpIGdpZCk7Cj4gICAgICAgICBzdHJuY3B5KGRhdGEudS51bmxpbmsucGF0aCwg
-cGF0aCwgUEFUSF9NQVggLSAxKTsKPiAtLQo+IDIuMS40Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxh
-cm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0
-Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
-bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============5838432406640491760==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_52CDBD4F986AFC4CAEE1C14068436E7B94531026EXCHMB02U1necte_"
+
+--_000_52CDBD4F986AFC4CAEE1C14068436E7B94531026EXCHMB02U1necte_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Dear All,
+
+I am using lttng tool to generate userspace traces but the userspace traces=
+ are not getting generated .
+I have used the following commands:
+
+[root@pcmk1 ~]# lttng create
+Session auto-20170506-152941 created.
+Traces will be written in /root/lttng-traces/auto-20170506-152941
+[root@pcmk1 ~]# lttng enable-event --userspace --all                       =
+     All UST events are enabled in channel channel0
+[root@pcmk1 ~]# lttng start                                                =
+     Tracing started for session auto-20170506-152941
+[root@pcmk1 ~]# systemctl start pcsd.service
+[root@pcmk1 ~]# lttng stop
+Waiting for data availability
+Tracing stopped for session auto-20170506-152941
+[root@pcmk1 ~]# lttng destroy
+Session auto-20170506-152941 destroyed
+
+
+I am not getting any error but also the file is not getting created
+I also tried to create userspace traces by logging-in via user rather than =
+root but there is no difference .
+
+
+If anyone has any alternative approach or any suggestion please let me know=
+ .
+
+
+Regards,
+Swati J
+
+
+--_000_52CDBD4F986AFC4CAEE1C14068436E7B94531026EXCHMB02U1necte_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-language:EN-US;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:#954F72;
+	text-decoration:underline;}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-language:EN-US;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-IN" link=3D"#0563C1" vlink=3D"#954F72">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal">Dear All, <o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">I am using lttng tool to generate userspace traces b=
+ut the userspace traces are not getting generated .<o:p></o:p></p>
+<p class=3D"MsoNormal">I have used the following commands:<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">[root@pcmk1 ~]# lttng create<o:p></o:p></p>
+<p class=3D"MsoNormal">Session auto-20170506-152941 created.<o:p></o:p></p>
+<p class=3D"MsoNormal">Traces will be written in /root/lttng-traces/auto-20=
+170506-152941<o:p></o:p></p>
+<p class=3D"MsoNormal">[root@pcmk1 ~]# lttng enable-event --userspace --all=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp; All UST events are enabled in channel channel0<o:p></o:p></p>
+<p class=3D"MsoNormal">[root@pcmk1 ~]# lttng start&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
+p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tracing star=
+ted for session auto-20170506-152941<o:p></o:p></p>
+<p class=3D"MsoNormal">[root@pcmk1 ~]# systemctl start pcsd.service<o:p></o=
+:p></p>
+<p class=3D"MsoNormal">[root@pcmk1 ~]# lttng stop<o:p></o:p></p>
+<p class=3D"MsoNormal">Waiting for data availability<o:p></o:p></p>
+<p class=3D"MsoNormal">Tracing stopped for session auto-20170506-152941<o:p=
+></o:p></p>
+<p class=3D"MsoNormal">[root@pcmk1 ~]# lttng destroy<o:p></o:p></p>
+<p class=3D"MsoNormal">Session auto-20170506-152941 destroyed<o:p></o:p></p=
+>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">I am not getting any error but also the file is not =
+getting created
+<o:p></o:p></p>
+<p class=3D"MsoNormal">I also tried to create userspace traces by logging-i=
+n via <b>
+user</b> rather than root but there is no difference .<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">If anyone has any alternative approach or any sugges=
+tion please let me know .<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Regards,<o:p></o:p></p>
+<p class=3D"MsoNormal">Swati J <o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+</div>
+</body>
+</html>
+
+--_000_52CDBD4F986AFC4CAEE1C14068436E7B94531026EXCHMB02U1necte_--
+
+--===============5838432406640491760==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============5838432406640491760==--
