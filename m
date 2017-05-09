@@ -1,20 +1,19 @@
 From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] doc: how to trace consumerd
-	with valgrind
-Date: Tue, 9 May 2017 08:37:22 -0400
-Message-ID: <CA+jJMxtEsxi76TkO797hBUkF7HnJ4pYG_nq-5jrPVqHYv8R0Zg__4573.91696186296$1494333507$gmane$org@mail.gmail.com>
-References: <1494247117-15085-1-git-send-email-mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools] Cleanup: initialize data to 0
+Date: Tue, 9 May 2017 08:37:25 -0400
+Message-ID: <CA+jJMxtU7oE3eLBJTiJ1BMy7wSC7ovUiE48dGf_2OsAVi27efA__47493.4529782788$1494333522$gmane$org@mail.gmail.com>
+References: <1494245720-8373-1-git-send-email-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yw0-x241.google.com (mail-yw0-x241.google.com
- [IPv6:2607:f8b0:4002:c05::241])
- by lists.lttng.org (Postfix) with ESMTPS id 3wMf6Y2ZMtzdVB
- for <lttng-dev@lists.lttng.org>; Tue,  9 May 2017 12:38:13 +0000 (UTC)
-Received: by mail-yw0-x241.google.com with SMTP id 203so7186894ywe.0
- for <lttng-dev@lists.lttng.org>; Tue, 09 May 2017 05:37:23 -0700 (PDT)
-In-Reply-To: <1494247117-15085-1-git-send-email-mathieu.desnoyers@efficios.com>
+Received: from mail-yw0-x243.google.com (mail-yw0-x243.google.com
+ [IPv6:2607:f8b0:4002:c05::243])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wMf6c09GkzdVR
+ for <lttng-dev@lists.lttng.org>; Tue,  9 May 2017 12:38:15 +0000 (UTC)
+Received: by mail-yw0-x243.google.com with SMTP id 203so7186977ywe.0
+ for <lttng-dev@lists.lttng.org>; Tue, 09 May 2017 05:37:26 -0700 (PDT)
+In-Reply-To: <1494245720-8373-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -29,22 +28,43 @@ Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <
 List-Id: lttng-dev@lists.lttng.org
 
 TWVyZ2VkIGluIG1hc3Rlciwgc3RhYmxlLTIuMTAsIHN0YWJsZS0yLjkgYW5kIHN0YWJsZS0yLjgs
-IHRoYW5rcyEKCkrDqXLDqW1pZQoKT24gOCBNYXkgMjAxNyBhdCAwODozOCwgTWF0aGlldSBEZXNu
-b3llcnMKPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gU2lnbmVkLW9m
-Zi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4K
-PiAtLS0KPiAgZG9jL3ZhbGdyaW5kLWhvd3RvLnR4dCB8IDUgKysrKysKPiAgMSBmaWxlIGNoYW5n
-ZWQsIDUgaW5zZXJ0aW9ucygrKQo+Cj4gZGlmZiAtLWdpdCBhL2RvYy92YWxncmluZC1ob3d0by50
-eHQgYi9kb2MvdmFsZ3JpbmQtaG93dG8udHh0Cj4gaW5kZXggNjhkY2FiYS4uYjE5MTBlMCAxMDA2
-NDQKPiAtLS0gYS9kb2MvdmFsZ3JpbmQtaG93dG8udHh0Cj4gKysrIGIvZG9jL3ZhbGdyaW5kLWhv
-d3RvLnR4dAo+IEBAIC0yLDMgKzIsOCBAQCBCdWlsZCBsdHRuZy10b29scyB3aXRoICItRFZBTEdS
-SU5EIiB0byBjcmVhdGUgZXhlY3V0YWJsZXMgY29tcGF0aWJsZQo+ICB3aXRoIHRoZSB2YWxncmlu
-ZCB0b29sLiBUaGUgc3RhcnQgd2l0aCBlLmcuOgo+Cj4gIHZhbGdyaW5kIC0tbGVhay1jaGVjaz1m
-dWxsIGx0dG5nLXNlc3Npb25kCj4gKwo+ICtJZiB5b3Ugd2FudCB0byB0cmFjayBtZW1vcnkgYWxs
-b2NhdGlvbnMgYW5kIGFjY2Vzc2VzIHdpdGhpbgo+ICtsdHRuZy1zZXNzaW9uZCBjaGlsZHJlbiBw
-cm9jZXNzZXMgKGUuZy4gbHR0bmctY29uc3VtZXJkKSBhcyB3ZWxsOgo+ICsKPiArdmFsZ3JpbmQg
-LS1sZWFrLWNoZWNrPWZ1bGwgLS10cmFjZS1jaGlsZHJlbj15ZXMgbHR0bmctc2Vzc2lvbmQKPiAt
-LQo+IDIuMS40Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRw
-Oi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
-LWRldgo=
+IHRoYW5rcyEKCkrDqXLDqW1pZQoKT24gOCBNYXkgMjAxNyBhdCAwODoxNSwgTWF0aGlldSBEZXNu
+b3llcnMKPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gVmFsZ3JpbmQg
+Y2F0Y2hlcyByZWFkIG9mIHVuaW5pdGlhbGl6ZWQgZGF0YSBjYXVzZWQgYnkgdGhlIG9uLXN0YWNr
+Cj4gImRhdGEiIGFyZ3VtZW50IHdoaWNoIGVuZHMgdXAgbm90IGJlaW5nIGZ1bGx5IGluaXRpYWxp
+emVkIChpdCBjb250YWlucyBhCj4gdW5pb24pLgo+Cj4gU2lnbmVkLW9mZi1ieTogTWF0aGlldSBE
+ZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgc3JjL2Nv
+bW1vbi9ydW5hcy5jIHwgNCArKysrCj4gIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKykK
+Pgo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9uL3J1bmFzLmMgYi9zcmMvY29tbW9uL3J1bmFzLmMK
+PiBpbmRleCAwODFhM2QyLi45NDZlYTMxIDEwMDY0NAo+IC0tLSBhL3NyYy9jb21tb24vcnVuYXMu
+Ywo+ICsrKyBiL3NyYy9jb21tb24vcnVuYXMuYwo+IEBAIC00NjYsNiArNDY2LDcgQEAgaW50IHJ1
+bl9hc19ta2Rpcl9yZWN1cnNpdmUoY29uc3QgY2hhciAqcGF0aCwgbW9kZV90IG1vZGUsIHVpZF90
+IHVpZCwgZ2lkX3QgZ2lkKQo+ICB7Cj4gICAgICAgICBzdHJ1Y3QgcnVuX2FzX2RhdGEgZGF0YTsK
+Pgo+ICsgICAgICAgbWVtc2V0KCZkYXRhLCAwLCBzaXplb2YoZGF0YSkpOwo+ICAgICAgICAgREJH
+MygibWtkaXIoKSByZWN1cnNpdmUgJXMgd2l0aCBtb2RlICVkIGZvciB1aWQgJWQgYW5kIGdpZCAl
+ZCIsCj4gICAgICAgICAgICAgICAgICAgICAgICAgcGF0aCwgKGludCkgbW9kZSwgKGludCkgdWlk
+LCAoaW50KSBnaWQpOwo+ICAgICAgICAgc3RybmNweShkYXRhLnUubWtkaXIucGF0aCwgcGF0aCwg
+UEFUSF9NQVggLSAxKTsKPiBAQCAtNDc5LDYgKzQ4MCw3IEBAIGludCBydW5fYXNfbWtkaXIoY29u
+c3QgY2hhciAqcGF0aCwgbW9kZV90IG1vZGUsIHVpZF90IHVpZCwgZ2lkX3QgZ2lkKQo+ICB7Cj4g
+ICAgICAgICBzdHJ1Y3QgcnVuX2FzX2RhdGEgZGF0YTsKPgo+ICsgICAgICAgbWVtc2V0KCZkYXRh
+LCAwLCBzaXplb2YoZGF0YSkpOwo+ICAgICAgICAgREJHMygibWtkaXIoKSAlcyB3aXRoIG1vZGUg
+JWQgZm9yIHVpZCAlZCBhbmQgZ2lkICVkIiwKPiAgICAgICAgICAgICAgICAgICAgICAgICBwYXRo
+LCAoaW50KSBtb2RlLCAoaW50KSB1aWQsIChpbnQpIGdpZCk7Cj4gICAgICAgICBzdHJuY3B5KGRh
+dGEudS5ta2Rpci5wYXRoLCBwYXRoLCBQQVRIX01BWCAtIDEpOwo+IEBAIC00OTIsNiArNDk0LDcg
+QEAgaW50IHJ1bl9hc19vcGVuKGNvbnN0IGNoYXIgKnBhdGgsIGludCBmbGFncywgbW9kZV90IG1v
+ZGUsIHVpZF90IHVpZCwgZ2lkX3QgZ2lkKQo+ICB7Cj4gICAgICAgICBzdHJ1Y3QgcnVuX2FzX2Rh
+dGEgZGF0YTsKPgo+ICsgICAgICAgbWVtc2V0KCZkYXRhLCAwLCBzaXplb2YoZGF0YSkpOwo+ICAg
+ICAgICAgREJHMygib3BlbigpICVzIHdpdGggZmxhZ3MgJVggbW9kZSAlZCBmb3IgdWlkICVkIGFu
+ZCBnaWQgJWQiLAo+ICAgICAgICAgICAgICAgICAgICAgICAgIHBhdGgsIGZsYWdzLCAoaW50KSBt
+b2RlLCAoaW50KSB1aWQsIChpbnQpIGdpZCk7Cj4gICAgICAgICBzdHJuY3B5KGRhdGEudS5vcGVu
+LnBhdGgsIHBhdGgsIFBBVEhfTUFYIC0gMSk7Cj4gQEAgLTUwNiw2ICs1MDksNyBAQCBpbnQgcnVu
+X2FzX3VubGluayhjb25zdCBjaGFyICpwYXRoLCB1aWRfdCB1aWQsIGdpZF90IGdpZCkKPiAgewo+
+ICAgICAgICAgc3RydWN0IHJ1bl9hc19kYXRhIGRhdGE7Cj4KPiArICAgICAgIG1lbXNldCgmZGF0
+YSwgMCwgc2l6ZW9mKGRhdGEpKTsKPiAgICAgICAgIERCRzMoInVubGluaygpICVzIHdpdGggZm9y
+IHVpZCAlZCBhbmQgZ2lkICVkIiwKPiAgICAgICAgICAgICAgICAgICAgICAgICBwYXRoLCAoaW50
+KSB1aWQsIChpbnQpIGdpZCk7Cj4gICAgICAgICBzdHJuY3B5KGRhdGEudS51bmxpbmsucGF0aCwg
+cGF0aCwgUEFUSF9NQVggLSAxKTsKPiAtLQo+IDIuMS40Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxh
+cm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0
+Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJp
+bi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
