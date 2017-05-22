@@ -1,22 +1,20 @@
-From: =?utf-8?Q?D=C3=A1vid_Beck?= <david.beck.priv@gmail.com>
-Subject: Patch for lttng tools to build on Mac OSX 10.11.6
-Date: Sun, 21 May 2017 16:30:45 +0100
-Message-ID: <A82E93B1-509F-424C-B36F-7011D685BDC9__21845.635775435$1495380656$gmane$org@gmail.com>
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Content-Type: multipart/mixed; boundary="===============6773555965466972361=="
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools 1/3] Fix: lttng-sessiond: cpu
+ hotplug stream number mismatch
+Date: Mon, 22 May 2017 11:30:11 -0400
+Message-ID: <CA+jJMxspEB4BGb87AXSU1ezmSUFiZ6NmWAsscb0DnLPS=hYafQ__24743.9380771995$1495467027$gmane$org@mail.gmail.com>
+References: <1494532856-13492-1-git-send-email-mathieu.desnoyers@efficios.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm0-x235.google.com (mail-wm0-x235.google.com
- [IPv6:2a00:1450:400c:c09::235])
- by lists.lttng.org (Postfix) with ESMTPS id 3wW5Nw1Fzdz10C4
- for <lttng-dev@lists.lttng.org>; Sun, 21 May 2017 15:31:27 +0000 (UTC)
-Received: by mail-wm0-x235.google.com with SMTP id 7so38236659wmo.1
- for <lttng-dev@lists.lttng.org>; Sun, 21 May 2017 08:30:47 -0700 (PDT)
-Received: from [192.168.0.14]
- (cpc108967-cmbg20-2-0-cust174.5-4.cable.virginm.net. [81.101.6.175])
- by smtp.gmail.com with ESMTPSA id x126sm18825164wme.12.2017.05.21.08.30.44
- for <lttng-dev@lists.lttng.org>
- (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
- Sun, 21 May 2017 08:30:44 -0700 (PDT)
+Received: from mail-yb0-x242.google.com (mail-yb0-x242.google.com
+ [IPv6:2607:f8b0:4002:c09::242])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wWjKt2BXDz10Gt
+ for <lttng-dev@lists.lttng.org>; Mon, 22 May 2017 15:30:57 +0000 (UTC)
+Received: by mail-yb0-x242.google.com with SMTP id l14so2611542ybl.1
+ for <lttng-dev@lists.lttng.org>; Mon, 22 May 2017 08:30:14 -0700 (PDT)
+In-Reply-To: <1494532856-13492-1-git-send-email-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,111 +24,56 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-
---===============6773555965466972361==
-Content-Type: multipart/alternative; boundary="Apple-Mail=_56FC087A-ADB0-4AF1-B238-556407B77BBF"
-
-
---Apple-Mail=_56FC087A-ADB0-4AF1-B238-556407B77BBF
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=us-ascii
-
-Hello Lttng Devs,
-
-Please find a patch attached for building lttng tools with these =
-configure flags (on Max OSX):
-
-./configure --without-lttng-ust --disable-man-pages =
---disable-bin-lttng-consumerd --disable-bin-lttng-sessiond =
---disable-bin-lttng-crash --disable-kmod --disable-extras
-
-
-Best, David
-
-
-
---Apple-Mail=_56FC087A-ADB0-4AF1-B238-556407B77BBF
-Content-Type: multipart/mixed;
-	boundary="Apple-Mail=_CDD5D47E-B07E-4B3D-9572-636293F1250B"
-
-
---Apple-Mail=_CDD5D47E-B07E-4B3D-9572-636293F1250B
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/html;
-	charset=us-ascii
-
-<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html =
-charset=3Dus-ascii"></head><body style=3D"word-wrap: break-word; =
--webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" =
-class=3D"">Hello Lttng Devs,<div class=3D""><br class=3D""></div><div =
-class=3D"">Please find a patch attached for building lttng tools with =
-these configure flags (on Max OSX):</div><div class=3D""><br =
-class=3D""></div><div class=3D""><div style=3D"margin: 0px; font-size: =
-11px; line-height: normal; font-family: Menlo;" class=3D""><span =
-style=3D"font-variant-ligatures: no-common-ligatures" =
-class=3D"">./configure --without-lttng-ust --disable-man-pages =
---disable-bin-lttng-consumerd --disable-bin-lttng-sessiond =
---disable-bin-lttng-crash --disable-kmod =
---disable-extras</span></div></div><div class=3D""><br =
-class=3D""></div><div class=3D""><br class=3D""></div><div =
-class=3D"">Best, David</div><div class=3D""><br class=3D""></div><div =
-class=3D""><br class=3D""></div><div class=3D""><div style=3D"margin: =
-0px; font-size: 11px; line-height: normal; font-family: Menlo;" =
-class=3D""></div></div></body></html>=
-
---Apple-Mail=_CDD5D47E-B07E-4B3D-9572-636293F1250B
-Content-Disposition: attachment;
-	filename=0001-Fix-build-on-Mac-OSX-10.11.6.patch
-Content-Type: application/octet-stream;
-	name="0001-Fix-build-on-Mac-OSX-10.11.6.patch"
-Content-Transfer-Encoding: quoted-printable
-
-=46rom=20b0050fde3ff3e9e81aba8491b00489515e7fd64b=20Mon=20Sep=2017=20=
-00:00:00=202001=0AFrom:=20David=20Beck=20<david.beck.priv@gmail.com>=0A=
-Date:=20Sun,=2021=20May=202017=2016:18:49=20+0100=0ASubject:=20[PATCH=20=
-lttng-tools]=20Fix=20build=20on=20Mac=20OSX=2010.11.6=0A=0A=
-Signed-off-by:=20David=20Beck=20<david.beck.priv@gmail.com>=0A---=0A=20=
-src/bin/lttng/commands/view.c=20|=209=20+++++++++=0A=20=
-src/common/compat/time.h=20=20=20=20=20=20|=201=20+=0A=202=20files=20=
-changed,=2010=20insertions(+)=0A=0Adiff=20--git=20=
-a/src/bin/lttng/commands/view.c=20b/src/bin/lttng/commands/view.c=0A=
-index=20c9a5fdc..d57f223=20100644=0A---=20=
-a/src/bin/lttng/commands/view.c=0A+++=20b/src/bin/lttng/commands/view.c=0A=
-@@=20-24,6=20+24,15=20@@=0A=20#include=20<sys/types.h>=0A=20#include=20=
-<unistd.h>=0A=20=0A+#ifdef=20__APPLE__=0A+#include=20<limits.h>=0A=
-+#ifndef=20HOST_NAME_MAX=0A+#ifdef=20_POSIX_HOST_NAME_MAX=0A+#define=20=
-HOST_NAME_MAX=20_POSIX_HOST_NAME_MAX=0A+#endif=20/*HOST_NAME_MAX*/=0A=
-+#endif=20/*_POSIX_HOST_NAME_MAX*/=0A+#endif=20/*__APPLE__*/=0A+=0A=20=
-#include=20"../command.h"=0A=20=0A=20static=20char=20*opt_session_name;=0A=
-diff=20--git=20a/src/common/compat/time.h=20b/src/common/compat/time.h=0A=
-index=2017447b3..cf4eb88=20100644=0A---=20a/src/common/compat/time.h=0A=
-+++=20b/src/common/compat/time.h=0A@@=20-29,6=20+29,7=20@@=0A=20=0A=20=
-typedef=20uint64_t=20timer_t;=0A=20=0A+#include=20<errno.h>=0A=20=
-#include=20<mach/mach.h>=0A=20#include=20<mach/clock.h>=0A=20=0A--=20=0A=
-2.8.4=20(Apple=20Git-73)=0A=0A=
-
---Apple-Mail=_CDD5D47E-B07E-4B3D-9572-636293F1250B
-Content-Transfer-Encoding: 7bit
-Content-Type: text/html;
-	charset=us-ascii
-
-<html><head><meta http-equiv="Content-Type" content="text/html charset=us-ascii"></head><body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;" class=""><div class=""><div style="margin: 0px; font-size: 11px; line-height: normal; font-family: Menlo;" class=""></div></div></body></html>
---Apple-Mail=_CDD5D47E-B07E-4B3D-9572-636293F1250B--
-
---Apple-Mail=_56FC087A-ADB0-4AF1-B238-556407B77BBF--
-
---===============6773555965466972361==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
+TWVyZ2VkIGluIG1hc3Rlciwgc3RhYmxlLTIuMTAsIHN0YWJsZS0yLjksIGFuZCBzdGFibGUtMi44
+LgoKVGhhbmtzIQpKw6lyw6ltaWUKCk9uIDExIE1heSAyMDE3IGF0IDE2OjAwLCBNYXRoaWV1IERl
+c25veWVycwo8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPiB3cm90ZToKPiBUaGUgY291
+bnRlciBzaG91bGQgYmUgYWx3YXlzIGluY3JlYXNpbmcgKGtlcHQgaW4gdGhlIGNoYW5uZWwpLCBy
+YXRoZXIKPiB0aGFuIGxvY2FsIHRvIHRoZSBmdW5jdGlvbi4gVGhpcyBjYXVzZXMgY3B1IGhvdHBs
+dWcgaGFuZGxpbmcgdG8KPiBkaXNyZWdhcmQgZnVydGhlciBzdHJlYW1zIHRoYXQgc2hvdWxkIGJl
+IGFkZGVkIHRvIHRoZSBjb25zdW1lciBvdXRwdXQKPiBvbiBDUFUgaG90cGx1Zy4KPgo+IFNpZ25l
+ZC1vZmYtYnk6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5j
+b20+Cj4gLS0tCj4gIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQva2VybmVsLmMgfCAxNCArKysrKysr
+Ky0tLS0tLQo+ICAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygt
+KQo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQva2VybmVsLmMgYi9zcmMv
+YmluL2x0dG5nLXNlc3Npb25kL2tlcm5lbC5jCj4gaW5kZXggYWE1MTY0OS4uZTQ3ODQ5OSAxMDA2
+NDQKPiAtLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL2tlcm5lbC5jCj4gKysrIGIvc3JjL2Jp
+bi9sdHRuZy1zZXNzaW9uZC9rZXJuZWwuYwo+IEBAIC02NDQsMTcgKzY0NCwyMiBAQCBlcnJvcjoK
+PiAgICogT3BlbiBzdHJlYW0gb2YgY2hhbm5lbCwgcmVnaXN0ZXIgaXQgdG8gdGhlIGtlcm5lbCB0
+cmFjZXIgYW5kIGFkZCBpdAo+ICAgKiB0byB0aGUgc3RyZWFtIGxpc3Qgb2YgdGhlIGNoYW5uZWwu
+Cj4gICAqCj4gKyAqIE5vdGU6IGdpdmVuIHRoYXQgdGhlIHN0cmVhbXMgbWF5IGFwcGVhciBpbiBy
+YW5kb20gb3JkZXIgd3J0IENQVQo+ICsgKiBudW1iZXIgKGUuZy4gY3B1IGhvdHBsdWcpLCB0aGUg
+aW5kZXggdmFsdWUgb2YgdGhlIHN0cmVhbSBudW1iZXIgaW4KPiArICogdGhlIHN0cmVhbSBuYW1l
+IGlzIG5vdCBuZWNlc3NhcmlseSBsaW5rZWQgdG8gdGhlIENQVSBudW1iZXIuCj4gKyAqCj4gICAq
+IFJldHVybiB0aGUgbnVtYmVyIG9mIGNyZWF0ZWQgc3RyZWFtLiBFbHNlLCBhIG5lZ2F0aXZlIHZh
+bHVlLgo+ICAgKi8KPiAgaW50IGtlcm5lbF9vcGVuX2NoYW5uZWxfc3RyZWFtKHN0cnVjdCBsdHRf
+a2VybmVsX2NoYW5uZWwgKmNoYW5uZWwpCj4gIHsKPiAtICAgICAgIGludCByZXQsIGNvdW50ID0g
+MDsKPiArICAgICAgIGludCByZXQ7Cj4gICAgICAgICBzdHJ1Y3QgbHR0X2tlcm5lbF9zdHJlYW0g
+KmxrczsKPgo+ICAgICAgICAgYXNzZXJ0KGNoYW5uZWwpOwo+Cj4gICAgICAgICB3aGlsZSAoKHJl
+dCA9IGtlcm5jdGxfY3JlYXRlX3N0cmVhbShjaGFubmVsLT5mZCkpID49IDApIHsKPiAtICAgICAg
+ICAgICAgICAgbGtzID0gdHJhY2Vfa2VybmVsX2NyZWF0ZV9zdHJlYW0oY2hhbm5lbC0+Y2hhbm5l
+bC0+bmFtZSwgY291bnQpOwo+ICsgICAgICAgICAgICAgICBsa3MgPSB0cmFjZV9rZXJuZWxfY3Jl
+YXRlX3N0cmVhbShjaGFubmVsLT5jaGFubmVsLT5uYW1lLAo+ICsgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgY2hhbm5lbC0+c3RyZWFtX2NvdW50KTsKPiAgICAgICAgICAgICAgICAgaWYg
+KGxrcyA9PSBOVUxMKSB7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0gY2xvc2UocmV0
+KTsKPiAgICAgICAgICAgICAgICAgICAgICAgICBpZiAocmV0KSB7Cj4gQEAgLTY3MywxMyArNjc4
+LDEwIEBAIGludCBrZXJuZWxfb3Blbl9jaGFubmVsX3N0cmVhbShzdHJ1Y3QgbHR0X2tlcm5lbF9j
+aGFubmVsICpjaGFubmVsKQo+ICAgICAgICAgICAgICAgICBsa3MtPnRyYWNlZmlsZV9zaXplID0g
+Y2hhbm5lbC0+Y2hhbm5lbC0+YXR0ci50cmFjZWZpbGVfc2l6ZTsKPiAgICAgICAgICAgICAgICAg
+bGtzLT50cmFjZWZpbGVfY291bnQgPSBjaGFubmVsLT5jaGFubmVsLT5hdHRyLnRyYWNlZmlsZV9j
+b3VudDsKPgo+IC0gICAgICAgICAgICAgICAvKiBBZGQgc3RyZWFtIHRvIGNoYW5uZSBzdHJlYW0g
+bGlzdCAqLwo+ICsgICAgICAgICAgICAgICAvKiBBZGQgc3RyZWFtIHRvIGNoYW5uZWwgc3RyZWFt
+IGxpc3QgKi8KPiAgICAgICAgICAgICAgICAgY2RzX2xpc3RfYWRkKCZsa3MtPmxpc3QsICZjaGFu
+bmVsLT5zdHJlYW1fbGlzdC5oZWFkKTsKPiAgICAgICAgICAgICAgICAgY2hhbm5lbC0+c3RyZWFt
+X2NvdW50Kys7Cj4KPiAtICAgICAgICAgICAgICAgLyogSW5jcmVtZW50IGNvdW50ZXIgd2hpY2gg
+cmVwcmVzZW50IENQVSBudW1iZXIuICovCj4gLSAgICAgICAgICAgICAgIGNvdW50Kys7Cj4gLQo+
+ICAgICAgICAgICAgICAgICBEQkcoIktlcm5lbCBzdHJlYW0gJXMgY3JlYXRlZCAoZmQ6ICVkLCBz
+dGF0ZTogJWQpIiwgbGtzLT5uYW1lLCBsa3MtPmZkLAo+ICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgbGtzLT5zdGF0ZSk7Cj4gICAgICAgICB9Cj4gLS0KPiAyLjEuNAo+CgoKCi0tIApK
+w6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
 X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============6773555965466972361==--
