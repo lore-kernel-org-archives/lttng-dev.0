@@ -1,13 +1,20 @@
-From: Milian Wolff <milian.wolff@kdab.com>
-Subject: tracing page_faults with lttng?
-Date: Wed, 24 May 2017 18:00:47 +0200
-Message-ID: <1807360.trHWC9KRqs__41028.421073179$1495642666$gmane$org@milian-kdab2>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-modules] Fix: update sched
+ instrumentation for kernel 4.12
+Date: Wed, 24 May 2017 16:11:48 +0000 (UTC)
+Message-ID: <417919179.24120.1495642308675.JavaMail.zimbra__31338.6293281384$1495642699$gmane$org@efficios.com>
+References: <1495568718-29003-1-git-send-email-mjeanson@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7661234762615165767=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
- by lists.lttng.org (Postfix) with ESMTPS id 3wXy6q1XW6z113N
- for <lttng-dev@lists.lttng.org>; Wed, 24 May 2017 16:10:42 +0000 (UTC)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wXy881GDmz113l
+ for <lttng-dev@lists.lttng.org>; Wed, 24 May 2017 16:11:52 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 81F54340378
+ for <lttng-dev@lists.lttng.org>; Wed, 24 May 2017 16:11:51 +0000 (UTC)
+In-Reply-To: <1495568718-29003-1-git-send-email-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -17,133 +24,38 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============7661234762615165767==
-Content-Type: multipart/signed; boundary="nextPart27721780.Zjmbixo6o5"; micalg="sha256"; protocol="application/pkcs7-signature"
-
---nextPart27721780.Zjmbixo6o5
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-
-Hey all,
-
-when I trace with perf, I can see page_faults occurring. But when I do 
-something like the following with lttng:
-
-lttng create
-lttng enable-channel kernel -k
-lttng enable-event -c kernel -k -a
-lttng start
-# trigger page faults
-lttng stop
-
-then I do not see any page faults in tracecompass/babeltrace. What do I need 
-to do to see those too? I'm aware that lttng comes with its own set of 
-tracepoints - i.e. it's not using the same tracepoints that perf knows about. 
-But googling shows me e.g. this:
-
-https://lists.lttng.org/pipermail/lttng-dev/2013-April/019954.html
-https://lists.lttng.org/pipermail/lttng-dev/2016-May/026033.html
-
-Which sounds like the feature should be available in lttng too?
-
-I'm using the ArchLinux packages in AUR, i.e. version 2.9.2 of LTTng and 
-kernel 4.10.13-1.
-
-Thanks
--- 
-Milian Wolff | milian.wolff@kdab.com | Software Engineer
-KDAB (Deutschland) GmbH&Co KG, a KDAB Group company
-Tel: +49-30-521325470
-KDAB - The Qt Experts
---nextPart27721780.Zjmbixo6o5
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCDEIw
-ggXmMIIDzqADAgECAhBqm+E4O/8ra58B1dm4p1JWMA0GCSqGSIb3DQEBDAUAMIGFMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYD
-VQQKExFDT01PRE8gQ0EgTGltaXRlZDErMCkGA1UEAxMiQ09NT0RPIFJTQSBDZXJ0aWZpY2F0aW9u
-IEF1dGhvcml0eTAeFw0xMzAxMTAwMDAwMDBaFw0yODAxMDkyMzU5NTlaMIGXMQswCQYDVQQGEwJH
-QjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYDVQQK
-ExFDT01PRE8gQ0EgTGltaXRlZDE9MDsGA1UEAxM0Q09NT0RPIFJTQSBDbGllbnQgQXV0aGVudGlj
-YXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
-AL6znlesKHZ1QBbHOAOY08YYdiFQ8yV5C0y1oNF9Olg+nKcxLqf2NHbZhGra0D00SOTq9bus3/mx
-gUsg/Wh/eXQ0pnp8tZ8XZWAnlyKMpjL+qUByRjXCA6RQyDMqVaVUkbIr5SU0RDX/kSsKwer3H1pT
-/HUrBN0X8sKtPTdGX8XAWt/VdMLBrZBlgvnkCos+KQWWCo63OTTqRvaq8aWccm+KOMjTcE6s2mj6
-RkalweyDI7X+7U5lNo6jzC8RTXtVV4/Vwdax720YpMPJQaDaElmOupyTf1Qib+cpukNJnQmwygjD
-8m046DQkLnpXNCAGjuJy1F5NATksUsbfJAr7FLUCAwEAAaOCATwwggE4MB8GA1UdIwQYMBaAFLuv
-fgI9+qbxPISOre44mOzZMjLUMB0GA1UdDgQWBBSCr2yM+MX+lmF86B89K3FIXsSLwDAOBgNVHQ8B
-Af8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIBADARBgNVHSAECjAIMAYGBFUdIAAwTAYDVR0fBEUw
-QzBBoD+gPYY7aHR0cDovL2NybC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2VydGlmaWNhdGlvbkF1
-dGhvcml0eS5jcmwwcQYIKwYBBQUHAQEEZTBjMDsGCCsGAQUFBzAChi9odHRwOi8vY3J0LmNvbW9k
-b2NhLmNvbS9DT01PRE9SU0FBZGRUcnVzdENBLmNydDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3Au
-Y29tb2RvY2EuY29tMA0GCSqGSIb3DQEBDAUAA4ICAQB4XLKBKDRPPO5fVs6fl1bsj6JrF/bz9kkI
-BtTYLzXN30D+03Hj6OxCDBEaIeNmsBhrJmuubvyE7HtoSmR809AgcYboW+rcTNZ/8u/Hv+GTrNI/
-AhqX2/kiQNxmgUPt/eJPs92Qclj0HnVyy9TnSvGkSDU7I5Px+TbO+88G4zipA2psZaWeEykgzClZ
-lPz1FjTCkk77ZXp5cQYYexE6zeeN4/0OqqoAloFrjAF4o50YJafX8mnahjp3I2Y2mkjhk0xQfhNq
-bzlLWPoT3m7j7U26u7zg6swjOq8hITYc3/np5tM5aVyu6t99p17bTbY7+1RTWBviN9YJzK8HxzOb
-XYWBf/L+VGOYNsQDTxAk0Hbvb1j6KjUhg7fO294F29QIhhmiNOr84JHoy+fNLpfvYc/Q9EtFOI5I
-SYgOxLk3nD/whbUe9rmEQXLp8MB933Ij474gwwCPUpwv9mj2PMnXoc7mbrS22XUSeTwxCTP9bcmU
-dp4jmIoWfhQm7X9w/Zgddg+JZ/YnIHOwsGsaTUgj7fIvxqith7DoJC91WJ8Lce3CVJqb1XWeKIJ8
-4F7YLXZN0oa7TktYgDdmQVxYkZo1c5noaDKH9Oq9cbm/vOYRUM1cWcef20Wkyk5S/GFyyPJwG0fR
-1nRas3DqAf4cXxMiEKcff7PNa4M3RGTqH0pWR8p6EjCCBlQwggU8oAMCAQICEAf6KCF9+1doL2oE
-OTPysLwwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNVBAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1h
-bmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0w
-OwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWls
-IENBMB4XDTE3MDUyMzAwMDAwMFoXDTIwMDUyMjIzNTk1OVowggFZMQswCQYDVQQGEwJTRTEPMA0G
-A1UEERMGNjgzIDMxMRIwEAYDVQQIEwlWYWVybWxhbmQxEDAOBgNVBAcTB0hhZ2ZvcnMxGDAWBgNV
-BAkTD05vcnJpbmdzIHZhZWcgMjEPMA0GA1UEEhMGQm94IDMwMSYwJAYDVQQKDB1LbGFyw6RsdmRh
-bGVucyBEYXRha29uc3VsdCBBQjEdMBsGA1UECxMUQSBLREFCIEdyb3VwIENvbXBhbnkxQzBBBgNV
-BAsMOklzc3VlZCB0aHJvdWdoIEtsYXLDpGx2ZGFsZW5zIERhdGFrb25zdWx0IEFCIEUtUEtJIE1h
-bmFnZXIxHzAdBgNVBAsTFkNvcnBvcmF0ZSBTZWN1cmUgRW1haWwxFTATBgNVBAMTDE1pbGlhbiBX
-b2xmZjEkMCIGCSqGSIb3DQEJARYVbWlsaWFuLndvbGZmQGtkYWIuY29tMIIBIjANBgkqhkiG9w0B
-AQEFAAOCAQ8AMIIBCgKCAQEAxrzfNBVvRbiAknuTBXuQnNm9sLIFLo0vbPB6kswk78A3tA++Zn5c
-lQUHhGlQq1cdYxagnUpqwvG3Sod15mPSOLkAPf/mabLN7p+lFbRaUP+97ZkTZtvb4BCC3osIEFI4
-G393OSFWqc2qmIPE/SwSASbAA20Fcaa2M6P1lhOk/ttUh2jIurTPF0wUycIA7lBddrOgaOA8e2m6
-iLTNHtlrfRbBaUX91D5ebY+UWmIjXSQ9+CtutMzBkwnF0rZKririvOkklg9VzEGNQVHrQfDF2s/U
-pOtmtuVSwElauGT/KALyCFuIrYC1pmaKH8S1xODJqiRaf6jH8E+KQzKjyM/ErwIDAQABo4IB1TCC
-AdEwHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFN+m99RtIuA1bSdw
-6b1brOX7X3AJMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
-BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
-dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
-LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
-Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
-Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
-KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAgBgNVHREEGTAXgRVtaWxpYW4ud29s
-ZmZAa2RhYi5jb20wDQYJKoZIhvcNAQELBQADggEBABf47LSJADqH+ow9INv3QM1NC/qq2bjxGvsZ
-68iD11VEUAFlsYfsVTgQqUirwPVTYenXtwVBELHZyywsui1JxL7HKQetLQegDDP/RyfjReVaWxhy
-3OpuItsgLVbru9QVgPifnoBFPtfZcwjeJDmeSbLT8oj4Rd0KYBOIve7WKvsfNPsNwfbLwY2zILkE
-LjxZcVi2AwZHDyab+dzL/3YcLuJj1lSawBGn7ilpcdZydlv4aye51pD/MemLIYLcylt+ImrmjnTV
-y+QlAHRF3s5FE8yAr+W1MBD/1bKZCSgFt8VQoAlz3hiQh8QqZp4Zl8WuVL4+mP/mT6VDEWgq/0Bo
-cukxggJuMIICagIBATCBrDCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hl
-c3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNV
-BAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
-EAf6KCF9+1doL2oEOTPysLwwDQYJYIZIAWUDBAIBBQCggZMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMTcwNTI0MTYwMDQ3WjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgAa+9dHxtQIxqNNRtUe1RGqz1uZAq
-QvqVEXJ32zSawQowDQYJKoZIhvcNAQEBBQAEggEABOpRKebRCTygUaNySjMDXDWY0W6mQIpX/lvi
-0/+CW4SISCuW42GBUjNSK9vw233N1bNL+NIb36/A8PUpYQCXFzxW1FlRaEXQt2uoIA/O+334NhD/
-djuqRFoZnX5CxecCRNRrTgd45epnRS80ODzmmvxUp1SKY4dzCILUcdBM3d4cbeLMhnP5S6H9yeXe
-oB8gYQoJEnbUK2hg1hNu1lbcxOeFy/4ZEAhKBXTJKPHIaWmsjqgzkwBp8+ulNqLHaTvO8Udh3pF/
-g7VhdsrPhN7xizn7/LqBjq6+SfKFS1Y98RpPrhxm8xVjTQzHZuWQCOrVS0AtUV8S+AaTb0Le8U8S
-KAAAAAAAAA==
-
-
---nextPart27721780.Zjmbixo6o5--
-
-
---===============7661234762615165767==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============7661234762615165767==--
+TWVyZ2VkIGludG8gbWFzdGVyLCAyLjEwLCAyLjksIDIuOC4KClRoYW5rcywKCk1hdGhpZXUKCi0t
+LS0tIE9uIE1heSAyMywgMjAxNywgYXQgOTo0NSBQTSwgTWljaGFlbCBKZWFuc29uIG1qZWFuc29u
+QGVmZmljaW9zLmNvbSB3cm90ZToKCj4gU2VlIHVwc3RyZWFtIGNvbW1pdCBiOTE0NzNmZjZlOTc5
+YzAwMjhmMDJmOTBlNDBjODQ0OTU5YzczNmQ4Cj4gCj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBK
+ZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gaW5zdHJ1bWVudGF0aW9uL2V2
+ZW50cy9sdHRuZy1tb2R1bGUvc2NoZWQuaCB8IDIwICsrKysrKysrKysrKysrKysrKystCj4gMSBm
+aWxlIGNoYW5nZWQsIDE5IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKPiAKPiBkaWZmIC0t
+Z2l0IGEvaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9sdHRuZy1tb2R1bGUvc2NoZWQuaAo+IGIvaW5z
+dHJ1bWVudGF0aW9uL2V2ZW50cy9sdHRuZy1tb2R1bGUvc2NoZWQuaAo+IGluZGV4IGU1MDY2YWYu
+LmM2OGRkMjcgMTAwNjQ0Cj4gLS0tIGEvaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9sdHRuZy1tb2R1
+bGUvc2NoZWQuaAo+ICsrKyBiL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxlL3Nj
+aGVkLmgKPiBAQCAtNTQwLDcgKzU0MCwyNSBAQCBMVFROR19UUkFDRVBPSU5UX0VWRU5UKHNjaGVk
+X3N0YXRfcnVudGltZSwKPiApCj4gI2VuZGlmCj4gCj4gLSNpZiAoTElOVVhfVkVSU0lPTl9DT0RF
+ID49IEtFUk5FTF9WRVJTSU9OKDIsNiwzNykpCj4gKyNpZiAoTElOVVhfVkVSU0lPTl9DT0RFID49
+IEtFUk5FTF9WRVJTSU9OKDQsMTIsMCkpCj4gKy8qCj4gKyAqIFRyYWNlcG9pbnQgZm9yIHNob3dp
+bmcgcHJpb3JpdHkgaW5oZXJpdGFuY2UgbW9kaWZ5aW5nIGEgdGFza3MKPiArICogcHJpb3JpdHku
+Cj4gKyAqLwo+ICtMVFROR19UUkFDRVBPSU5UX0VWRU5UKHNjaGVkX3BpX3NldHByaW8sCj4gKwo+
+ICsJVFBfUFJPVE8oc3RydWN0IHRhc2tfc3RydWN0ICp0c2ssIHN0cnVjdCB0YXNrX3N0cnVjdCAq
+cGlfdGFzayksCj4gKwo+ICsJVFBfQVJHUyh0c2ssIHBpX3Rhc2spLAo+ICsKPiArCVRQX0ZJRUxE
+UygKPiArCQljdGZfYXJyYXlfdGV4dChjaGFyLCBjb21tLCB0c2stPmNvbW0sIFRBU0tfQ09NTV9M
+RU4pCj4gKwkJY3RmX2ludGVnZXIocGlkX3QsIHRpZCwgdHNrLT5waWQpCj4gKwkJY3RmX2ludGVn
+ZXIoaW50LCBvbGRwcmlvLCB0c2stPnByaW8gLSBNQVhfUlRfUFJJTykKPiArCQljdGZfaW50ZWdl
+cihpbnQsIG5ld3ByaW8sIHBpX3Rhc2sgPyBwaV90YXNrLT5wcmlvIC0gTUFYX1JUX1BSSU8gOiB0
+c2stPnByaW8gLQo+IE1BWF9SVF9QUklPKQo+ICsJKQo+ICspCj4gKyNlbGlmIChMSU5VWF9WRVJT
+SU9OX0NPREUgPj0gS0VSTkVMX1ZFUlNJT04oMiw2LDM3KSkKPiAvKgo+ICAqIFRyYWNlcG9pbnQg
+Zm9yIHNob3dpbmcgcHJpb3JpdHkgaW5oZXJpdGFuY2UgbW9kaWZ5aW5nIGEgdGFza3MKPiAgKiBw
+cmlvcml0eS4KPiAtLQo+IDIuNy40CgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5j
+LgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5s
+dHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZv
+L2x0dG5nLWRldgo=
