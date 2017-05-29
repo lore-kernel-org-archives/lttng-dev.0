@@ -1,19 +1,17 @@
-From: kirankumarp@uurmi.com
-Subject: C APIs tracing control
-Date: Mon, 29 May 2017 06:32:35 +0000
-Message-ID: <4485def9e3e2e8b07f166e9fdbcdbe3a__46739.0065351084$1496071315$gmane$org@cloudmailn6.netcore.co.in>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: C APIs tracing control
+Date: Mon, 29 May 2017 11:40:39 -0400
+Message-ID: <20170529154039.lumcnlwq2kfbhk2s__49083.1006355167$1496073038$gmane$org@psrcode-TP-X230>
+References: <4485def9e3e2e8b07f166e9fdbcdbe3a@cloudmailn6.netcore.co.in>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6522534203387040974=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtpout3.netcore.co.in (mail75.cleanmail.in [202.162.241.75])
- by lists.lttng.org (Postfix) with ESMTPS id 3wbnFW5g2Xz11mR
- for <lttng-dev@lists.lttng.org>; Mon, 29 May 2017 06:41:19 +0000 (UTC)
-Received: from cf1.netcore.co.in (secure1.netcore.co.in [202.162.242.11])
- by smtpout3.netcore.co.in (Postfix) with ESMTP id 7DD7D52038F
- for <lttng-dev@lists.lttng.org>; Mon, 29 May 2017 12:02:56 +0530 (IST)
-Received: from cloudmailn6.netcore.co.in (unknown [202.162.242.59])
- by smtp16.netcore.in (Postfix) with ESMTP id C958F1CC4EA
- for <lttng-dev@lists.lttng.org>; Mon, 29 May 2017 12:02:35 +0530 (IST)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wc1FM52w1z11Xt
+ for <lttng-dev@lists.lttng.org>; Mon, 29 May 2017 15:41:59 +0000 (UTC)
+Content-Disposition: inline
+In-Reply-To: <4485def9e3e2e8b07f166e9fdbcdbe3a@cloudmailn6.netcore.co.in>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,66 +21,31 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: kirankumarp@uurmi.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-
---===============6522534203387040974==
-Content-Type: multipart/alternative;
- boundary="----=_Part_942_875295838.1496039555"
-
-
-------=_Part_942_875295838.1496039555
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: Quoted-Printable
-
-Hi,=0Awe are developing an application and want to have LTTng control wit=
-hin it. We would like to know the C APIs for it.=0Awe require following A=
-PIs following command line commands-=0Alttng create =0Alttng list =0Alttn=
-g enable-event =0Alttng start=0Alttng stop=0Alttng destroy=0AWe could fin=
-d some documentation at but not sure if we are right. Also it will be gre=
-at help, if you can provide an makefile for this (to link the libraries a=
-nd Paths to be included).=0AWe tried "lttng_create_handle", "lttng_create=
-_session" API (as mentioned in the documentation) but its not getting com=
-piled.=0APlease help on this regard.=0AThanks in advance.=0ARegards=0AKir=
-an Kumar
-
-------=_Part_942_875295838.1496039555
-Content-Type: text/html; charset="utf-8"
-Content-Transfer-Encoding: Quoted-Printable
-
-<!DOCTYPE html><html><head><meta http-equiv=3D"Content-Type" content=3D"t=
-ext/html; charset=3Dutf-8" /></head><body><div data-crea=3D"font-wrapper"=
- style=3D"font-family: Tahoma; font-size: 16px"><div><br>Hi,</div><div><b=
-r></div><div>we are developing an application and want to have LTTng cont=
-rol within it. We would like to know the C APIs for it.</div><div><br></d=
-iv><div>we require following APIs following command line commands-</div><=
-div><br></div><div>lttng create </div><div>lttng list </div><div>lttng en=
-able-event </div><div>lttng start</div><div>lttng stop<br>lttng destroy</=
-div><div><br></div><div>We could find some documentation at but not sure =
-if we are right. Also it will be great help, if you can provide an makefi=
-le for this (to link the libraries and Paths to be included).</div><div><=
-br></div><div>We tried "lttng_create_handle", "<span class=3D"nf"><font c=
-olor=3D"#000000">lttng_create_session"</font></span> API (as mentioned in=
- the documentation) but its not getting compiled.</div><div><br></div><di=
-v>Please help on this regard.</div><div><br></div><div><br></div><div>Tha=
-nks in advance.</div><div><br></div><div><br></div><div>Regards</div><div=
->Kiran Kumar</div><div><b></b><i></i><u></u><sub></sub><sup></sup><strike=
-></strike><b></b><i></i><u></u><sub></sub><sup></sup><strike></strike><b>=
-</b><i></i><u></u><sub></sub><sup></sup><strike></strike><b></b><i></i><u=
-></u><sub></sub><sup></sup><strike></strike><br></div><div></div></div></=
-body></html>
-
-------=_Part_942_875295838.1496039555--
-
---===============6522534203387040974==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============6522534203387040974==--
+SGksCgpPbiBNb24sIE1heSAyOSwgMjAxNyBhdCAwNjozMjozNUFNICswMDAwLCBraXJhbmt1bWFy
+cEB1dXJtaS5jb20gd3JvdGU6Cj4gSGksCj4gd2UgYXJlIGRldmVsb3BpbmcgYW4gYXBwbGljYXRp
+b24gYW5kIHdhbnQgdG8gaGF2ZSBMVFRuZyBjb250cm9sIHdpdGhpbiBpdC4gV2Ugd291bGQgbGlr
+ZSB0byBrbm93IHRoZSBDIEFQSXMgZm9yIGl0Lgo+IHdlIHJlcXVpcmUgZm9sbG93aW5nIEFQSXMg
+Zm9sbG93aW5nIGNvbW1hbmQgbGluZSBjb21tYW5kcy0KPiBsdHRuZyBjcmVhdGUgCj4gbHR0bmcg
+bGlzdCAKPiBsdHRuZyBlbmFibGUtZXZlbnQgCj4gbHR0bmcgc3RhcnQKPiBsdHRuZyBzdG9wCj4g
+bHR0bmcgZGVzdHJveQo+IFdlIGNvdWxkIGZpbmQgc29tZSBkb2N1bWVudGF0aW9uIGF0IGJ1dCBu
+b3Qgc3VyZSBpZiB3ZSBhcmUgcmlnaHQuIEFsc28gaXQgd2lsbCBiZSBncmVhdCBoZWxwLCBpZiB5
+b3UgY2FuIHByb3ZpZGUgYW4gbWFrZWZpbGUgZm9yIHRoaXMgKHRvIGxpbmsgdGhlIGxpYnJhcmll
+cyBhbmQgUGF0aHMgdG8gYmUgaW5jbHVkZWQpLgoKU2VlIGh0dHA6Ly9sdHRuZy5vcmcvZG9jcy92
+Mi45LyNkb2MtbGlibHR0bmctY3RsLWx0dG5nLgoKQXMgZm9yIHRoZSBleGFtcGxlcywgeW91IGNh
+biBsb29rIGF0IGFsbCB0aGUgY29kZSB1c2VkIHRvIGNyZWF0ZSB0aGUgY29tbWFuZCBsaW5lCnV0
+aWxpdHkgWzFdLgoKWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRuZy10b29scy90cmVl
+L21hc3Rlci9zcmMvYmluL2x0dG5nCgpDaGVlcnMsCgoKPiBXZSB0cmllZCAibHR0bmdfY3JlYXRl
+X2hhbmRsZSIsICJsdHRuZ19jcmVhdGVfc2Vzc2lvbiIgQVBJIChhcyBtZW50aW9uZWQgaW4gdGhl
+IGRvY3VtZW50YXRpb24pIGJ1dCBpdHMgbm90IGdldHRpbmcgY29tcGlsZWQuCj4gUGxlYXNlIGhl
+bHAgb24gdGhpcyByZWdhcmQuCj4gVGhhbmtzIGluIGFkdmFuY2UuCj4gUmVnYXJkcwo+IEtpcmFu
+IEt1bWFyCgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBo
+dHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
+CgoKLS0gCkpvbmF0aGFuIFJham90dGUtSnVsaWVuCkVmZmljaU9TCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
