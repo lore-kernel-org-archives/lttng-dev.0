@@ -1,17 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules] Fix: Build ftrace probe on
- kernels prior to 4.12
-Date: Tue, 30 May 2017 14:58:30 +0000 (UTC)
-Message-ID: <1657654750.1443.1496156310853.JavaMail.zimbra__16327.0086436116$1496156544$gmane$org@efficios.com>
-References: <1496151391-26076-1-git-send-email-francis.deslauriers@efficios.com>
+From: "Deneau, Tom" <tom.deneau@amd.com>
+Subject: Error: Kernel create channel failed
+Date: Tue, 30 May 2017 14:15:47 +0000
+Message-ID: <CY4PR12MB1912F9F050D1DF167B92DE089BF00__40967.1004549184$1496157460$gmane$org@CY4PR12MB1912.namprd12.prod.outlook.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3wccDm5bhFz12K1
- for <lttng-dev@lists.lttng.org>; Tue, 30 May 2017 14:58:32 +0000 (UTC)
-In-Reply-To: <1496151391-26076-1-git-send-email-francis.deslauriers@efficios.com>
+Received: from NAM02-CY1-obe.outbound.protection.outlook.com
+ (mail-cys01nam02on0050.outbound.protection.outlook.com [104.47.37.50])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wcbJz2gCgz12F3
+ for <lttng-dev@lists.lttng.org>; Tue, 30 May 2017 14:17:06 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,26 +20,38 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Francis Deslauriers <francis.deslauriers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIG1hc3RlciwgMi4xMCwgMi45LCAyLjgsIHRoYW5rcyEKCk1hdGhpZXUKCi0tLS0t
-IE9uIE1heSAzMCwgMjAxNywgYXQgOTozNiBBTSwgRnJhbmNpcyBEZXNsYXVyaWVycyBmcmFuY2lz
-LmRlc2xhdXJpZXJzQGVmZmljaW9zLmNvbSB3cm90ZToKCj4gU2lnbmVkLW9mZi1ieTogRnJhbmNp
-cyBEZXNsYXVyaWVycyA8ZnJhbmNpcy5kZXNsYXVyaWVyc0BlZmZpY2lvcy5jb20+Cj4gLS0tCj4g
-cHJvYmVzL0tidWlsZCB8IDUgKysrLS0KPiAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCsp
-LCAyIGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9wcm9iZXMvS2J1aWxkIGIvcHJvYmVz
-L0tidWlsZAo+IGluZGV4IGZlODY5ZDAuLjc4YmYzZmIgMTAwNjQ0Cj4gLS0tIGEvcHJvYmVzL0ti
-dWlsZAo+ICsrKyBiL3Byb2Jlcy9LYnVpbGQKPiBAQCAtMjY3LDggKzI2Nyw5IEBAIGlmbmVxICgk
-KENPTkZJR19EWU5BTUlDX0ZUUkFDRSksKQo+ICAgICAgICAgZWNobyAid2FybiIgOyBcCj4gICAg
-ICAgICBleGl0IDsgXAo+ICAgICAgIGZpOyBcCj4gLSAgICAgIGVjaG8gImx0dG5nLWZ0cmFjZS5v
-IiA7IFwKPiAtICAgIGZpOykKPiArICAgIGZpOyBcCj4gKyAgICBlY2hvICJsdHRuZy1mdHJhY2Uu
-byIgOyBcCj4gKyAgICApCj4gICBpZmVxICgkKGZ0cmFjZSksd2FybikKPiAgICAgJCh3YXJuaW5n
-IEZpbGVzICQoZnRyYWNlX2RlcCkgbm90IGZvdW5kLiBQcm9iZSAiZnRyYWNlIiBpcyBkaXNhYmxl
-ZC4gVXNlIGZ1bGwKPiAgICAga2VybmVsIHNvdXJjZSB0cmVlIHRvIGVuYWJsZSBpdC4pCj4gICAg
-IGZ0cmFjZSA9Cj4gLS0KPiAyLjcuNAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIElu
-Yy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
-by9sdHRuZy1kZXYK
+SSBzZWVtIHRvIGhhdmUgZ290dGVuIG15IGx0dG5nIGludG8gYSBzdGF0ZSB3aGVyZSBrZXJuZWwg
+dHJhY2luZyBkb2VzIG5vdCB3b3JrLgpJIGhhdmUgdHJpZWQgdW5pbnN0YWxsaW5nIGFuZCByZWlu
+c3RhbGxpbmcgcGFja2FnZXMgd2l0aCBubyBsdWNrIGFuZCBhbHNvIGJ1aWxkaW5nIGZyb20gc291
+cmNlLgpBbnkgc3VnZ2VzdGlvbnMgd2VsY29tZS4KCk15IGRpc3RybyBpcyBVYnVudHUgMTYuMDQg
+YnV0IHRoZSBrZXJuZWwgaXMgNC4xMC4wLTIwLWdlbmVyaWMuCgpJIGhhdmUgaW5zdGFsbGVkIDIu
+OSB1c2luZwphcHQgaW5zdGFsbCBsaW51eC10b29scy1nZW5lcmljIGRrbXMKYXB0LWFkZC1yZXBv
+c2l0b3J5IHBwYTpsdHRuZy9zdGFibGUtMi45CmFwdC1nZXQgdXBkYXRlCmFwdCBpbnN0YWxsIC15
+IGx0dG5nLXRvb2xzIGxpYmx0dG5nLXVzdC1kZXYgIGxpYmx0dG5nLXVzdC1hZ2VudC1qYXZhICBw
+eXRob24zLWx0dG5ndXN0IGx0dG5nLW1vZHVsZXMtZGttcwp3Z2V0IGh0dHA6Ly9mdHAudXMuZGVi
+aWFuLm9yZy9kZWJpYW4vcG9vbC9tYWluL2wvbHR0bmctbW9kdWxlcy9sdHRuZy1tb2R1bGVzLWRr
+bXNfMi45LjEtMV9hbGwuZGViCmRwa2cgLWkgbHR0bmctbW9kdWxlcy1ka21zXzIuOS4xLTFfYWxs
+LmRlYgphcHQgaW5zdGFsbCAteSBiYWJlbHRyYWNlIHB5dGhvbjMtYmFiZWx0cmFjZQoKQWZ0ZXIg
+bHR0bmcgY3JlYXRlIHRlc3QsIEkgdGhlbiB0cnkKCiMgbHR0bmcgLXZ2diBlbmFibGUtY2hhbm5l
+bCBrIC1rIC0tbnVtLXN1YmJ1ZiA2NCAtLXN1YmJ1Zi1zaXplIDUxMmsKREVCVUcxIC0gMDg6Mjc6
+NTQuNDE1OTk1IFsxMzk3Mi8xMzk3Ml06IENoYW5uZWwgc3ViYnVmIG51bSBzZXQgdG8gNjQgKGlu
+IGNtZF9lbmFibGVfY2hhbm5lbHMoKSBhdCBjb21tYW5kcy9lbmFibGVfY2hhbm5lbHMuYzo0MjAp
+CkRFQlVHMSAtIDA4OjI3OjU0LjQxNjA0NSBbMTM5NzIvMTM5NzJdOiBDaGFubmVsIHN1YmJ1ZiBz
+aXplIHNldCB0byA1MjQyODggKGluIGNtZF9lbmFibGVfY2hhbm5lbHMoKSBhdCBjb21tYW5kcy9l
+bmFibGVfY2hhbm5lbHMuYzozODQpCkRFQlVHMiAtIDA4OjI3OjU0LjQxNjA4MCBbMTM5NzIvMTM5
+NzJdOiBDb25maWcgZmlsZSBwYXRoIGZvdW5kOiAvcm9vdCAoaW4gX2dldF9zZXNzaW9uX25hbWUo
+KSBhdCB1dGlscy5jOjYzKQpERUJVRzEgLSAwODoyNzo1NC40MTYwODcgWzEzOTcyLzEzOTcyXTog
+U2Vzc2lvbiBuYW1lIGZvdW5kOiB0ZXN0IChpbiBfZ2V0X3Nlc3Npb25fbmFtZSgpIGF0IHV0aWxz
+LmM6NjQpCkRFQlVHMSAtIDA4OjI3OjU0LjQxNjA5OSBbMTM5NzIvMTM5NzJdOiBFbmFibGluZyBj
+aGFubmVsIGsgKGluIGVuYWJsZV9jaGFubmVsKCkgYXQgY29tbWFuZHMvZW5hYmxlX2NoYW5uZWxz
+LmM6MjI1KQpERUJVRzEgLSAwODoyNzo1NC40MTYxMjkgWzEzOTcyLzEzOTcyXTogTFNNIGNtZCB0
+eXBlIDogNSAoaW4gc2VuZF9zZXNzaW9uX21zZygpIGF0IGx0dG5nLWN0bC5jOjEzNSkKRXJyb3I6
+IENoYW5uZWwgazogS2VybmVsIGNyZWF0ZSBjaGFubmVsIGZhaWxlZCAoc2Vzc2lvbiB0ZXN0KQpF
+cnJvcjogQ29tbWFuZCBlcnJvcgpERUJVRzEgLSAwODoyNzo1NC40MTY0NzkgWzEzOTcyLzEzOTcy
+XTogQ2xlYW4gZXhpdCAoaW4gY2xlYW5fZXhpdCgpIGF0IGx0dG5nLmM6MTQ5KQoKCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9j
+Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
