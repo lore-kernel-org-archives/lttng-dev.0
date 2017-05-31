@@ -1,19 +1,19 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Deadlock in call_rcu_thread when destroy rculfhash
- node with nested rculfhash
-Date: Thu, 1 Jun 2017 13:01:21 +0000 (UTC)
-Message-ID: <5908376.2670.1496322081960.JavaMail.zimbra__49162.5897041105$1496322043$gmane$org@efficios.com>
-References: <CAO6Ho0ea+Mhdoea4b3EL-J4z2wifHPWohq1ps74LQBU+b0-OOQ@mail.gmail.com>
- <CAO6Ho0e27-JTmUPrTRZfr95Lm=ri+mOSRNr7Av5Ma0t1ucuH6g@mail.gmail.com>
- <85898265.59079.1476889412542.JavaMail.zimbra@efficios.com>
- <CAO6Ho0d+LkJi_2ebomx13D42CApEG-bakyTbtzvz+Jvxc4wy9A@mail.gmail.com>
+From: "Deneau, Tom" <tom.deneau@amd.com>
+Subject: Re: Error: Kernel create channel failed
+Date: Wed, 31 May 2017 23:18:07 +0000
+Message-ID: <CY4PR12MB19127ABD925A3E0EE70AED399BF10__21668.7831249603$1496328265$gmane$org@CY4PR12MB1912.namprd12.prod.outlook.com>
+References: <CY4PR12MB1912F9F050D1DF167B92DE089BF00@CY4PR12MB1912.namprd12.prod.outlook.com>
+ <20170531183000.vh5y266by4hmtmb3@psrcode-TP-X230>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1975198317383176315=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3wdnXt1Wm6z11Pg
- for <lttng-dev@lists.lttng.org>; Thu,  1 Jun 2017 13:01:33 +0000 (UTC)
-In-Reply-To: <CAO6Ho0d+LkJi_2ebomx13D42CApEG-bakyTbtzvz+Jvxc4wy9A@mail.gmail.com>
+Received: from NAM01-BN3-obe.outbound.protection.outlook.com
+ (mail-bn3nam01on0069.outbound.protection.outlook.com [104.47.33.69])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wdYPj4C74z1267
+ for <lttng-dev@lists.lttng.org>; Thu,  1 Jun 2017 03:54:33 +0000 (UTC)
+In-Reply-To: <20170531183000.vh5y266by4hmtmb3@psrcode-TP-X230>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,247 +23,68 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Evgeniy Ivanov <i@eivanov.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1975198317383176315==
-Content-Type: multipart/alternative;
-	boundary="=_9fd680d9-7eb8-475b-b9f2-8eefed163fa0"
-
---=_9fd680d9-7eb8-475b-b9f2-8eefed163fa0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
------ On Oct 21, 2016, at 4:19 AM, Evgeniy Ivanov <i@eivanov.com> wrote: 
-
-> On Wed, Oct 19, 2016 at 6:03 PM, Mathieu Desnoyers < [
-> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
-> wrote:
-
->> This is because we use call_rcu internally to trigger the hash table
->> resize.
-
->> In cds_lfht_destroy, we start by waiting for "in-flight" resize to complete.
->> Unfortunately, this requires that call_rcu worker thread progresses. If
->> cds_lfht_destroy is called from the call_rcu worker thread, it will wait
->> forever.
-
->> One alternative would be to implement our own worker thread scheme
->> for the rcu HT resize rather than use the call_rcu worker thread. This
->> would simplify cds_lfht_destroy requirements a lot.
-
->> Ideally I'd like to re-use all the call_rcu work dispatch/worker handling
->> scheme, just as a separate work queue.
-
->> Thoughts ?
-
-> Thank you for explaining. Sounds like a plan: in our prod there is no issue with
-> having extra thread for table resizes. And nested tables is important feature.
-
-I finally managed to find some time to implement a solution, feedback 
-would be welcome! 
-
-Here are the RFC patches: 
-
-https://lists.lttng.org/pipermail/lttng-dev/2017-May/027183.html 
-https://lists.lttng.org/pipermail/lttng-dev/2017-May/027184.html 
-
-Thanks, 
-
-Mathieu 
-
->> Thanks,
-
->> Mathieu
-
->> ----- On Oct 19, 2016, at 6:03 AM, Evgeniy Ivanov < [ mailto:i@eivanov.com |
->> i@eivanov.com ] > wrote:
-
->>> Sorry, found partial answer in docs which state that cds_lfht_destroy should not
->>> be called from a call_rcu thread context. Why does this limitation exists?
-
->>> On Wed, Oct 19, 2016 at 12:56 PM, Evgeniy Ivanov < [ mailto:i@eivanov.com |
->>> i@eivanov.com ] > wrote:
-
->>>> Hi,
-
->>>> Each node of top level rculfhash has nested rculfhash. Some thread clears the
->>>> top level map and then uses rcu_barrier() to wait until everything is destroyed
->>>> (it is done to check leaks). Recently it started to dead lock sometimes with
->>>> following stacks:
-
->>>> Thread1:
-
->>>> __poll
->>>> cds_lfht_destroy <---- nested map
->>>> ...
->>>> free_Node(rcu_head*) <----- node of top level map
->>>> call_rcu_thread
-
->>>> Thread2:
-
->>>> syscall
->>>> rcu_barrier_qsbr
->>>> destroy_all
->>>> main
-
->>>> Did call_rcu_thread dead lock with barrier thread? Or is it some kind of
->>>> internal deadlock because of nested maps?
-
->>>> --
->>>> Cheers,
->>>> Evgeniy
-
->>> --
->>> Cheers,
->>> Evgeniy
-
->>> _______________________________________________
->>> lttng-dev mailing list
->>> [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org ]
->>> [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
->>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
-
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> [ http://www.efficios.com/ | http://www.efficios.com ]
-
->> _______________________________________________
->> lttng-dev mailing list
->> [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org ]
->> [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
->> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
-
-> --
-> Cheers,
-> Evgeniy
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_9fd680d9-7eb8-475b-b9f2-8eefed163fa0
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
-__">----- On Oct 21, 2016, at 4:19 AM, Evgeniy Ivanov &lt;i@eivanov.com&gt;=
- wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockquote st=
-yle=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color=
-:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family=
-:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div class=3D=
-"gmail_extra"><div class=3D"gmail_quote">On Wed, Oct 19, 2016 at 6:03 PM, M=
-athieu Desnoyers <span dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoyers@=
-efficios.com" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;</spa=
-n> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px =
-0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div><div st=
-yle=3D"font-family:arial,helvetica,sans-serif;font-size:12pt;color:rgb(0,0,=
-0)"><div>This is because we use call_rcu internally to trigger the hash tab=
-le<br></div><div>resize.<br></div><br><div>In cds_lfht_destroy, we start by=
- waiting for "in-flight" resize to complete.<br></div><div>Unfortunately, t=
-his requires that call_rcu worker thread progresses. If<br></div><div>cds_l=
-fht_destroy is called from the call_rcu worker thread, it will wait<br></di=
-v><div>forever.<br></div><br><div>One alternative would be to implement our=
- own worker thread scheme<br></div><div>for the rcu HT resize rather than u=
-se the call_rcu worker thread. This</div><div>would simplify cds_lfht_destr=
-oy requirements a lot.<br></div><br><div>Ideally I'd like to re-use all the=
- call_rcu work dispatch/worker handling<br></div><div>scheme, just as a sep=
-arate work queue.<br></div><br><div>Thoughts ?<br></div></div></div></block=
-quote><br><div>Thank you for explaining. Sounds like a plan: in our prod th=
-ere is no issue with having extra thread for table resizes. And nested tabl=
-es is important feature.<br></div></div></div></div></blockquote><div>I fin=
-ally managed to find some time to implement a solution, feedback<br></div><=
-div>would be welcome!<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=
-=3D"1"></div><div>Here are the RFC patches:<br data-mce-bogus=3D"1"></div><=
-div><br data-mce-bogus=3D"1"></div><div>https://lists.lttng.org/pipermail/l=
-ttng-dev/2017-May/027183.html<br data-mce-bogus=3D"1"></div><div>https://li=
-sts.lttng.org/pipermail/lttng-dev/2017-May/027184.html<br data-mce-bogus=3D=
-"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogu=
-s=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-=
-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div><br data-mce-bog=
-us=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"bor=
-der-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font=
--weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica=
-,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div class=3D"gmail_ext=
-ra"><div class=3D"gmail_quote"><br><blockquote class=3D"gmail_quote" style=
-=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
--left:1ex"><div><div style=3D"font-family:arial,helvetica,sans-serif;font-s=
-ize:12pt;color:rgb(0,0,0)"><div><span style=3D"font-family:arial,sans-serif=
-;font-size:small;color:rgb(34,34,34)">&nbsp;</span><br></div></div></div></=
-blockquote><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.=
-8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div><div styl=
-e=3D"font-family:arial,helvetica,sans-serif;font-size:12pt;color:rgb(0,0,0)=
-"><div>Thanks,<br></div><br><div>Mathieu<br></div><div><div class=3D"gmail-=
-h5"><br><span id=3D"gmail-m_1548600653268589583zwchr">----- On Oct 19, 2016=
-, at 6:03 AM, Evgeniy Ivanov &lt;<a href=3D"mailto:i@eivanov.com" target=3D=
-"_blank">i@eivanov.com</a>&gt; wrote:<br></span></div></div><div><blockquot=
-e style=3D"border-left:2px solid rgb(16,16,255);margin-left:5px;padding-lef=
-t:5px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration=
-:none;font-family:helvetica,arial,sans-serif;font-size:12pt"><div><div clas=
-s=3D"gmail-h5"><div dir=3D"ltr">Sorry, found partial answer in docs which s=
-tate that&nbsp;cds_lfht_destroy should not be called&nbsp;from a call_rcu t=
-hread context. Why does this limitation exists?</div><div class=3D"gmail_ex=
-tra"><br><div class=3D"gmail_quote">On Wed, Oct 19, 2016 at 12:56 PM, Evgen=
-iy Ivanov <span dir=3D"ltr">&lt;<a href=3D"mailto:i@eivanov.com" target=3D"=
-_blank">i@eivanov.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_q=
-uote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,2=
-04);padding-left:1ex"><div dir=3D"ltr">Hi,<br><br>Each node of top level rc=
-ulfhash has nested rculfhash. Some thread clears the top level map and then=
- uses rcu_barrier() to wait until everything is destroyed (it is done to ch=
-eck leaks). Recently it started to dead lock sometimes with following stack=
-s:<br><br>Thread1:<br><span style=3D"font-family:monospace,monospace"><br><=
-/span><div><span style=3D"font-family:monospace,monospace">__poll<br>cds_lf=
-ht_destroy &nbsp; &nbsp;&lt;---- nested map<br>...<br>free_Node(rcu_head*) =
-&nbsp;&lt;----- node of top level map<br>call_rcu_thread<br></span><br>Thre=
-ad2:<div><br><span style=3D"font-family:monospace,monospace">syscall <br>rc=
-u_barrier_qsbr <br>destroy_all<br>main<br></span><br><br>Did&nbsp;call_rcu_=
-thread dead lock with barrier thread? Or is it some kind of internal deadlo=
-ck because of nested maps?<span class=3D"gmail-m_1548600653268589583HOEnZb"=
-><span style=3D"color:rgb(136,136,136)"><br><br><br>-- <br>Cheers,<br>Evgen=
-iy</span></span></div></div></div></blockquote></div><br><br clear=3D"all">=
-<br>-- <br><div class=3D"gmail-m_1548600653268589583gmail_signature">Cheers=
-,<br>Evgeniy</div></div><br></div></div>___________________________________=
-____________<br>lttng-dev mailing list<br><a href=3D"mailto:lttng-dev@lists=
-.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.org</a><br><a href=3D"h=
-ttps://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" target=3D"_blank=
-">https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><span class=
-=3D"gmail-HOEnZb"><span style=3D"color: #888888;" data-mce-style=3D"color: =
-#888888;" color=3D"#888888"><br></span></span></blockquote></div><span clas=
-s=3D"gmail-HOEnZb"><span style=3D"color: #888888;" data-mce-style=3D"color:=
- #888888;" color=3D"#888888"><br><div>-- <br></div><div>Mathieu Desnoyers<b=
-r>EfficiOS Inc.<br><a href=3D"http://www.efficios.com" target=3D"_blank">ht=
-tp://www.efficios.com</a><br data-mce-bogus=3D"1"></div></span></span></div=
-></div><br>_______________________________________________<br>
-lttng-dev mailing list<br><a href=3D"mailto:lttng-dev@lists.lttng.org" targ=
-et=3D"_blank">lttng-dev@lists.lttng.org</a><br><a href=3D"https://lists.ltt=
-ng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=3D"noreferrer" target=3D"_bl=
-ank">https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br><br>=
-</blockquote></div><br><br clear=3D"all"><br>-- <br><div class=3D"gmail_sig=
-nature">Cheers,<br>Evgeniy</div></div></div><br>___________________________=
-____________________<br>lttng-dev mailing list<br>lttng-dev@lists.lttng.org=
-<br>https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br></blockqu=
-ote></div><div><br></div><div data-marker=3D"__SIG_POST__">-- <br></div><di=
-v>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></div>=
-</body></html>
---=_9fd680d9-7eb8-475b-b9f2-8eefed163fa0--
-
---===============1975198317383176315==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============1975198317383176315==--
+VGhhbmtzLCB0aGUgbmV3IHBhY2thZ2VzIGluc3RhbGxlZCBmaW5lLgpNeSBvcmlnaW5hbCBwcm9i
+bGVtIEkgc29sdmVkIGJ5IGtpbGxpbmcgbHR0bmctc2Vzc2lvbmQgYW5kIHJlc3RhcnRpbmcgaXQu
+Li4KCi0tIFRvbQoKCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tCkZyb206IEpvbmF0aGFuIFJh
+am90dGUtSnVsaWVuIFttYWlsdG86am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29t
+XSAKU2VudDogV2VkbmVzZGF5LCBNYXkgMzEsIDIwMTcgMTozMCBQTQpUbzogRGVuZWF1LCBUb20g
+PHRvbS5kZW5lYXVAYW1kLmNvbT4KQ2M6IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKU3ViamVj
+dDogUmU6IFtsdHRuZy1kZXZdIEVycm9yOiBLZXJuZWwgY3JlYXRlIGNoYW5uZWwgZmFpbGVkCgpI
+aSwKCk9uIFR1ZSwgTWF5IDMwLCAyMDE3IGF0IDAyOjE1OjQ3UE0gKzAwMDAsIERlbmVhdSwgVG9t
+IHdyb3RlOgo+IEkgc2VlbSB0byBoYXZlIGdvdHRlbiBteSBsdHRuZyBpbnRvIGEgc3RhdGUgd2hl
+cmUga2VybmVsIHRyYWNpbmcgZG9lcyBub3Qgd29yay4KPiBJIGhhdmUgdHJpZWQgdW5pbnN0YWxs
+aW5nIGFuZCByZWluc3RhbGxpbmcgcGFja2FnZXMgd2l0aCBubyBsdWNrIGFuZCBhbHNvIGJ1aWxk
+aW5nIGZyb20gc291cmNlLgo+IEFueSBzdWdnZXN0aW9ucyB3ZWxjb21lLgo+IAo+IE15IGRpc3Ry
+byBpcyBVYnVudHUgMTYuMDQgYnV0IHRoZSBrZXJuZWwgaXMgNC4xMC4wLTIwLWdlbmVyaWMuCgpB
+cmUgeW91IHVzaW5nIHRoZSBod2UgcGFja2FnZT8gKGxpbnV4LWdlbmVyaWMtaHdlLTE2LjA0LWVk
+Z2UpCgo+IAo+IEkgaGF2ZSBpbnN0YWxsZWQgMi45IHVzaW5nCj4gYXB0IGluc3RhbGwgbGludXgt
+dG9vbHMtZ2VuZXJpYyBka21zbwoKSWYgdXNpbmcgdGhlIGh3ZSBwYWNrYWdlIHlvdSBwcm9iYWJs
+eSB3YW50IHRvIHVzZSB0aGUgZXF1aXZhbGVudCBsaW51eC10b29sLWdlbmVyaWMgaHdlIHBhY2th
+Z2UuCgo+IGFwdC1hZGQtcmVwb3NpdG9yeSBwcGE6bHR0bmcvc3RhYmxlLTIuOSBhcHQtZ2V0IHVw
+ZGF0ZSBhcHQgaW5zdGFsbCAteSAKPiBsdHRuZy10b29scyBsaWJsdHRuZy11c3QtZGV2ICBsaWJs
+dHRuZy11c3QtYWdlbnQtamF2YSAgCj4gcHl0aG9uMy1sdHRuZ3VzdCBsdHRuZy1tb2R1bGVzLWRr
+bXMgd2dldCAKPiBodHRwOi8vZnRwLnVzLmRlYmlhbi5vcmcvZGViaWFuL3Bvb2wvbWFpbi9sL2x0
+dG5nLW1vZHVsZXMvbHR0bmctbW9kdWxlCj4gcy1ka21zXzIuOS4xLTFfYWxsLmRlYiBkcGtnIC1p
+IGx0dG5nLW1vZHVsZXMtZGttc18yLjkuMS0xX2FsbC5kZWIKCkkgZ3Vlc3MgdGhhdCB0aGlzIHdh
+cyB0byAiZml4IiB0aGUgaW5zdGFsbGF0aW9uIGVycm9yIHlvdSBoYWQgd2l0aCBpbnN0YWxsaW5n
+IGx0dG5nLW1vZHVsZXMtZGttcy4gUmVwb3J0aW5nIHRoZSBpbnN0YWxsYXRpb24gaXNzdWUgd291
+bGQgaGF2ZSBiZWVuIG1vcmUgc3RyYWlnaHRmb3J3YXJkLgoKVGhlIHBwYSBwYWNrYWdlcyB3ZXJl
+IHVwZGF0ZWQgeWVzdGVyZGF5IHRvIGZpeCB0aGUgaXNzdWUgb24gaW5zdGFsbGF0aW9uLgpQbGVh
+c2UgdXBkYXRlIChhcHQgdXBkYXRlL3VwZ3JhZGUpIGFsbCBsdHRuZyByZWxhdGVkIHBhY2thZ2Vz
+LiBBbHNvIG1ha2Ugc3VyZSB0byBpbnN0YWxsIGJhYmVsdHJhY2UgKGFwdCBpbnN0YWxsIGJhYmVs
+dHJhY2UpIHdpdGggdXBkYXRlZCBsaWJiYWJlbHRyYWNlKiBkZXBlbmRlbmNpZXMuCgo+IGFwdCBp
+bnN0YWxsIC15IGJhYmVsdHJhY2UgcHl0aG9uMy1iYWJlbHRyYWNlCgo+IAo+IEFmdGVyIGx0dG5n
+IGNyZWF0ZSB0ZXN0LCBJIHRoZW4gdHJ5Cj4gCj4gIyBsdHRuZyAtdnZ2IGVuYWJsZS1jaGFubmVs
+IGsgLWsgLS1udW0tc3ViYnVmIDY0IC0tc3ViYnVmLXNpemUgNTEyawo+IERFQlVHMSAtIDA4OjI3
+OjU0LjQxNTk5NSBbMTM5NzIvMTM5NzJdOiBDaGFubmVsIHN1YmJ1ZiBudW0gc2V0IHRvIDY0IAo+
+IChpbiBjbWRfZW5hYmxlX2NoYW5uZWxzKCkgYXQgY29tbWFuZHMvZW5hYmxlX2NoYW5uZWxzLmM6
+NDIwKQo+IERFQlVHMSAtIDA4OjI3OjU0LjQxNjA0NSBbMTM5NzIvMTM5NzJdOiBDaGFubmVsIHN1
+YmJ1ZiBzaXplIHNldCB0byAKPiA1MjQyODggKGluIGNtZF9lbmFibGVfY2hhbm5lbHMoKSBhdCBj
+b21tYW5kcy9lbmFibGVfY2hhbm5lbHMuYzozODQpCj4gREVCVUcyIC0gMDg6Mjc6NTQuNDE2MDgw
+IFsxMzk3Mi8xMzk3Ml06IENvbmZpZyBmaWxlIHBhdGggZm91bmQ6IC9yb290IAo+IChpbiBfZ2V0
+X3Nlc3Npb25fbmFtZSgpIGF0IHV0aWxzLmM6NjMpCj4gREVCVUcxIC0gMDg6Mjc6NTQuNDE2MDg3
+IFsxMzk3Mi8xMzk3Ml06IFNlc3Npb24gbmFtZSBmb3VuZDogdGVzdCAoaW4gCj4gX2dldF9zZXNz
+aW9uX25hbWUoKSBhdCB1dGlscy5jOjY0KQo+IERFQlVHMSAtIDA4OjI3OjU0LjQxNjA5OSBbMTM5
+NzIvMTM5NzJdOiBFbmFibGluZyBjaGFubmVsIGsgKGluIAo+IGVuYWJsZV9jaGFubmVsKCkgYXQg
+Y29tbWFuZHMvZW5hYmxlX2NoYW5uZWxzLmM6MjI1KQo+IERFQlVHMSAtIDA4OjI3OjU0LjQxNjEy
+OSBbMTM5NzIvMTM5NzJdOiBMU00gY21kIHR5cGUgOiA1IChpbiAKPiBzZW5kX3Nlc3Npb25fbXNn
+KCkgYXQgbHR0bmctY3RsLmM6MTM1KQo+IEVycm9yOiBDaGFubmVsIGs6IEtlcm5lbCBjcmVhdGUg
+Y2hhbm5lbCBmYWlsZWQgKHNlc3Npb24gdGVzdCkKPiBFcnJvcjogQ29tbWFuZCBlcnJvcgo+IERF
+QlVHMSAtIDA4OjI3OjU0LjQxNjQ3OSBbMTM5NzIvMTM5NzJdOiBDbGVhbiBleGl0IChpbiBjbGVh
+bl9leGl0KCkgYXQgCj4gbHR0bmcuYzoxNDkpCgpJIHRlc3RlZCBwcGEgc3RhYmxlIDIuOSBpbnN0
+YWxsYXRpb24gb24gYm90aCB2YW5pbGxhIDE2LjA0IGFuZCAxNi4wNCB3aXRoIHRoZSA0LjEwLjAt
+MjEtZ2VuZXJpYyBrZXJuZWwgcHJvdmlkZWQgYnkgbGludXgtZ2VuZXJpYy1od2UtMTYuMDQtZWRn
+ZS4gQm90aCB3b3JrcyB3aXRoIHRoZSB1cGRhdGVkIHBwYSAodXBkYXRlIHBlcmZvcm1lZCBieSBN
+aWNoYWVsIEplYW5zb24pLgoKT25seSBoYWQgYSBtaW5vciBkZXBlbmRlbmN5IGlzc3VlIHdpdGgg
+YmFiZWx0cmFjZSBidXQgaXQgd2FzIGZpeGVkIGJ5IHJlaW5zdGFsbGluZyBpdC4KCkNoZWVycwoK
+PiAKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+
+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0
+cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoK
+LS0KSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4KRWZmaWNpT1MKX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1k
+ZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
+bi9saXN0aW5mby9sdHRuZy1kZXYK
