@@ -1,15 +1,15 @@
 From: "Deneau, Tom" <tom.deneau@amd.com>
-Subject: combined kernel and userspace trace
-Date: Thu, 1 Jun 2017 12:49:50 +0000
-Message-ID: <CY4PR12MB1912366BB625579DBDF8FD7D9BF60__43330.5062506863$1496328310$gmane$org@CY4PR12MB1912.namprd12.prod.outlook.com>
+Subject: lttng-track on userspace channel
+Date: Wed, 31 May 2017 23:28:45 +0000
+Message-ID: <CY4PR12MB191256DF4AFE069B55B133FB9BF10__25483.7562483319$1496340020$gmane$org@CY4PR12MB1912.namprd12.prod.outlook.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from NAM01-SN1-obe.outbound.protection.outlook.com
- (mail-sn1nam01on0075.outbound.protection.outlook.com [104.47.32.75])
- by lists.lttng.org (Postfix) with ESMTPS id 3wdqPm2MmZz11Wt
- for <lttng-dev@lists.lttng.org>; Thu,  1 Jun 2017 14:25:31 +0000 (UTC)
+Received: from NAM01-BY2-obe.outbound.protection.outlook.com
+ (mail-by2nam01on0074.outbound.protection.outlook.com [104.47.34.74])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wdtzY4bzqz11m2
+ for <lttng-dev@lists.lttng.org>; Thu,  1 Jun 2017 17:06:32 +0000 (UTC)
 Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -23,18 +23,26 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-VXNpbmcsIGx0dG5nIDIuOS40CgpEb2luZyBjb21iaW5lZCBrZXJuZWwgYW5kIHVzZXJtb2RlIHRy
-YWNpbmcgYW5kIHRoZW4gbG9va2luZyBhdCB0aGUgY29tYmluZWQgdHJhY2Ugd2l0aCBiYWJlbHRy
-YWNlLi4uCkkgaGF2ZSBub3RpY2VkIHRoZXJlIGlzIG9mdGVuIGEgcGVyaW9kIGF0IHRoZSBiZWdp
-bm5pbmcgb2YgdGhlIGNvbWJpbmVkIHRyYWNlIHdoaWNoIGlzIGFsbCBrZXJuZWwgZXZlbnRzIGFu
-ZCBzaW1pbGFybHkgYSBwZXJpb2QgYXQgdGhlIGVuZCBvZiB0aGUgY29tYmluZWQgdHJhY2Ugd2hp
-Y2ggaXMgYWxsIHVzZXJzcGFjZSBldmVudHMuCgpJIHN1cHBvc2UgSSBjYW4ganVzdCBzZWFyY2gg
-Zm9yIHRoZSBzZWN0aW9uIGluIHRoZSBtaWRkbGUgd2hlcmUgYm90aCBjaGFubmVscyBhcmUgYWN0
-aXZlIGJ1dCBpcyB0aGVyZSBhbnkgd2F5IHRvIGVsaW1pbmF0ZSB0aGUgc2luZ2xlLWNoYW5uZWwg
-c2VjdGlvbnMgYXQgdGhlIGJlZ2lubmluZyBhbmQgZW5kPwoKQWxzbywgaXMgaXQgZ3VhcmFudGVl
-ZCB0aGF0IG9uY2UgSSBnZXQgdG8gdGhlIHNlY3Rpb24gd2hlcmUgYm90aCBjaGFubmVscyBhcHBl
-YXIgYWN0aXZlIGluIHRoZSB0cmFjZSB0aGF0IEkgd2lsbCBiZSBzZWVpbmcgYWxsIGV2ZW50cyBp
-biB0aGUgY29tYmluZWQgdHJhY2U/CgotLSBUb20gRGVuZWF1Cl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmct
-ZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
-YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+SSBhbSB1c2luZyBsdHRuZyAyLjkuNC4KCkkgaGF2ZSBhIHNlcnZlciBkYXRhYmFzZSBkYWVtb24g
+d2l0aCBtYW55IHRocmVhZHMgYW5kIEkgd291bGQgbGlrZSB0byB0cmFjayBldmVudHMgb24gYSBz
+bWFsbGVyIHN1YnNldCBvZiB0aG9zZSB0aHJlYWRzLgpJIG5vdGljZWQgdGhhdCBvbiB0aGUga2Vy
+bmVsIGNoYW5uZWwgSSBjYW4gdXNlIGx0dG5nIHRyYWNrIC0tcGlkPTEyMywxMjQsMTI1CgphbmQg
+dGhpcyB3aWxsIHRyYWNlIGtlcm5lbCBldmVudHMgZm9yIGp1c3QgdGhvc2UgVElEUyAoaW4gc3Bp
+dGUgb2YgdGhlIGRvY3VtZW50YXRpb24gc2F5aW5nIGl0IHdpbGwgdHJhY2sgd2hvbGUgcGlkcyku
+CkJ1dCBJIGFtIGhhcHB5IGJlY2F1c2UgdGlkIHRyYWNraW5nIGlzIHdoYXQgSSB3YW50LgoKSG93
+ZXZlciwgaXMgdGhlcmUgYW4gZXF1aXZhbGVudCB3YXkgdG8gdHJhY2sgY2VydGFpbiB0aWRzIG9u
+IHRoZSB1c2Vyc3BhY2UgY2hhbm5lbD8gIEkgZmluZCB0aGF0IGlmIEkgdXNlCiAgICBsdHRuZyB0
+cmFjayAtdSAtLXBpZD14eHgKaXQganVzdCB0cmFja3MgYWxsIHRoZSB0aWRzIHVuZGVyIHRoYXQg
+cGlkLgoKSGVyZSBpcyBteSBzY3JpcHQgKHdoZXJlIDc5NjUzIGlzIGEgc2luZ2xlIHRpZCkuICBJ
+biB0aGlzIGNhc2UgaXQgdHJhY2VzIG9ubHkga2VybmVsIGV2ZW50cyBvbiB0aGF0IHRpZC4KLS0t
+LS0tLS0tLS0KbHR0bmcgY3JlYXRlCmx0dG5nIGVuYWJsZS1jaGFubmVsIHUgLXUgLS1udW0tc3Vi
+YnVmIDY0IC0tc3ViYnVmLXNpemUgNTEyawpsdHRuZyBlbmFibGUtY2hhbm5lbCBrIC1rIC0tbnVt
+LXN1YmJ1ZiA2NCAtLXN1YmJ1Zi1zaXplIDUxMmsKbHR0bmcgYWRkLWNvbnRleHQgLWsgLWMgayAt
+dCB0aWQgLXQgcGlkCmx0dG5nIGFkZC1jb250ZXh0IC11IC1jIHUgLXQgdnRpZCAtdCB2cGlkCmx0
+dG5nIGVuYWJsZS1ldmVudCAtdSAtYyB1IC1hCmx0dG5nIGVuYWJsZS1ldmVudCAtayAtYyBrIC0t
+c3lzY2FsbCBmdXRleApsdHRuZyB0cmFjayAtayAtLXBpZD03OTY1MwpsdHRuZyB0cmFjayAtdSAt
+LXBpZD03OTY1MwpsdHRuZyBzdGFydApzbGVlcCAxLjAKbHR0bmcgc3RvcApsdHRuZyBkZXN0cm95
+CgotLSBUb20gRGVuZWF1Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
+dHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
+Cg==
