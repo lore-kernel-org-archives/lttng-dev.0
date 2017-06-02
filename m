@@ -1,29 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Patch for lttng tools to build on Mac OSX 10.11.6
-Date: Thu, 1 Jun 2017 18:26:03 -0400
-Message-ID: <CA+jJMxvUXUDVFMwYHX=ZxoK=K6OiFEwSvMMCVpw2uHebZwXgZQ__35760.9209990644$1496356502$gmane$org@mail.gmail.com>
-References: <A82E93B1-509F-424C-B36F-7011D685BDC9@gmail.com>
- <CA+jJMxvpuZHDpOF2QvePMihbLRPFme_XpaLmWgzVOmx7QnWhYQ@mail.gmail.com>
- <CAA85PfLgiW329AhYcSbup+8jBz=25-pEM7LUC962ucUc3M6Gkw@mail.gmail.com>
- <CA+jJMxs-d6vZ4Q3t6UvDeqOqwYyyoVHtqrEw1uGuomovB_ohLw@mail.gmail.com>
- <eb2eec76-8ad8-bea2-5933-629ac1f1df07@efficios.com>
- <CA+jJMxs2=ua4LsaPS9DqBGY6gdLQqjCaibhnPYLt5k9d7Ke42Q@mail.gmail.com>
- <019415e6-017c-09b9-7f4a-0df71b51fc1a@efficios.com>
- <CA+jJMxvnbQuvPTR0uWw=XNXR-FARxyErDJhkND9kUwDUrLvNzQ@mail.gmail.com>
- <9EB290C2-A968-4B16-9A1D-AA7BC38E2DE5@gmail.com>
- <CA+jJMxuYV8nN0kgseMnO6Psgpk_XYsndyM93Rus5xv4Z-GX1_w@mail.gmail.com>
- <EF993367-57FA-41C2-A147-A9A7BC1439D6@gmail.com>
+From: craig harmer <charmster@gmail.com>
+Subject: porting LTTng to Go(lang)?
+Date: Thu, 1 Jun 2017 23:27:33 -0700
+Message-ID: <CADjtVtYQ2M_j=CnPrjP81ECZKa1vzfE-xJ5QnEkDhaT+uk=9cg__43483.1868079074$1496385319$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============5590087472965848608=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yw0-x241.google.com (mail-yw0-x241.google.com
- [IPv6:2607:f8b0:4002:c05::241])
- by lists.lttng.org (Postfix) with ESMTPS id 3wf25l3gCXz12Sc
- for <lttng-dev@lists.lttng.org>; Thu,  1 Jun 2017 22:27:23 +0000 (UTC)
-Received: by mail-yw0-x241.google.com with SMTP id p144so3616755ywp.2
- for <lttng-dev@lists.lttng.org>; Thu, 01 Jun 2017 15:26:04 -0700 (PDT)
-In-Reply-To: <EF993367-57FA-41C2-A147-A9A7BC1439D6@gmail.com>
+Received: from mail-wm0-x22c.google.com (mail-wm0-x22c.google.com
+ [IPv6:2a00:1450:400c:c09::22c])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wfDnS3MBxz11yh
+ for <lttng-dev@lists.lttng.org>; Fri,  2 Jun 2017 06:28:54 +0000 (UTC)
+Received: by mail-wm0-x22c.google.com with SMTP id 7so13360119wmo.1
+ for <lttng-dev@lists.lttng.org>; Thu, 01 Jun 2017 23:27:34 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -33,34 +20,111 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?UTF-8?Q?D=C3=A1vid_Beck?= <david.beck.priv@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMSBKdW5lIDIwMTcgYXQgMTg6MDMsIETDoXZpZCBCZWNrIDxkYXZpZC5iZWNrLnByaXZAZ21h
-aWwuY29tPiB3cm90ZToKPgo+Cj4gSSBoYWQgYSBxdWljayBsb29rIGludG8gdGhpcyBwdWxsIHJl
-cXVlc3QgYW5kIEkgaGF2ZW7igJl0IGZvdW5kIGhvdyB0aGlzCj4gcmVsYXRlcyB0aGUgaXNzdWVz
-IEkgZm91bmQ6Cj4KPiAxLCBIT1NUX05BTUVfTUFYIHdhcyBub3QgZGVmaW5lZAo+IDIsIGVycm5v
-Lmggd2FzIG5lZWRlZCBvbiBNYWMKPgo+IE1heSBiZSBpdCBpcyBvbmx5IG15IGxhY2sgb2YgYXV0
-byB0b29scyBrbm93bGVkZ2UsIEkgZG9u4oCZdCBrbm93LiBBbnl3YXlzLAo+IHRoYW5rIHlvdSBh
-Z2Fpbi4KPgo+Cj4gSW5kZWVkLCBpdCBkb2Vzbid0IGZpeCB0aG9zZSBpc3N1ZXMgZGlyZWN0bHk7
-IGl0IGRpc2FibGVzIHRoZSBidWlsZCBvZgo+IGV2ZXJ5dGhpbmcgZXhjZXB0IHRoZSBsdHRuZy1y
-ZWxheWQgb24gbWFjT1MgaW4gdGhlIGRlZmF1bHQgYnVpbGQKPiBjb25maWd1cmF0aW9uLgo+Cj4K
-PiBJIHNlZS4gQnV0IHRoZSBmaXhlcyBJIHNlbnQgeW91IGFyZSBhY3R1YWxseSBmaXhpbmcgdGhl
-IGJ1aWxkIG9mIHJlbGF5ZC4KCllvdXIgcGF0Y2ggYWZmZWN0cyB0d28gZmlsZXM6CgpzcmMvYmlu
-L2x0dG5nL2NvbW1hbmRzL3ZpZXcuYwp3aGljaCBpcyBwYXJ0IG9mIHRoZSBsdHRuZyBjbGllbnQg
-YW5kIG5vdCB1c2VkIGVsc2V3aGVyZS4gVGhlIGNsaWVudAppcyBub3QgYnVpbHQgb24gbWFjT1Mg
-YW55bW9yZSAoYXMgcGVyIHRoZSBQUikuCgpJIHdvbid0IG1lcmdlIHRoYXQgcGFydCB1bmxlc3Mg
-c29tZW9uZSBjb25maXJtcyB0aGUgdG9vbGNoYWluIHdvcmtzIG9uIG1hY09TLgoKc3JjL2NvbW1v
-bi9jb21wYXQvdGltZS5oClRoaXMgZml4IGxvb2tzIGdvb2QsIGJ1dCBJJ2xsIGhhdmUgdG8gbG9v
-ayBpbnRvIGl0IHNpbmNlIGNpLmx0dG5nLm9yZwpidWlsZHMgdGhlIGx0dG5nLXJlbGF5ZCBvbiBt
-YWNPUy4gUGVyaGFwcyBhIHN5c3RlbSBoZWFkZXIgY2hhbmdlZApzaW5jZSBiZXR3ZWVuIDEwLjEx
-LjYgYW5kIDEwLjEyLjUgKHdoaWNoIEkgdGhpbmsgaXMgd2hhdCB0aGUgQ0kgaXMKcnVubmluZyku
-CgpKw6lyw6ltaWUKCj4KPiBJIGRvbuKAmXQgdW5kZXJzdGFuZCBob3cgdGhpcyBQUiBoZWxwcyB0
-aGVuLgo+Cj4gSSdtIG5vdCBzdXJlIGl0IGlzIHdvcnRoIGFkZHJlc3NpbmcgdGhlIGJ1aWxkIGlz
-c3VlcywgZXhjZXB0IGlmCj4gc29tZW9uZSBjYW4gY29uZmlybSB3aGV0aGVyIG9yIG5vdCB0aGUg
-cmVzdCBvZiB0aGUgdG9vbGNoYWluIGFjdHVhbGx5Cj4gd29ya3Mgb24gbWFjT1MuCj4KPgoKCgot
-LSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3Mu
-Y29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============5590087472965848608==
+Content-Type: multipart/alternative; boundary="f403045cf68aa6e6e60550f43f4f"
+
+--f403045cf68aa6e6e60550f43f4f
+Content-Type: text/plain; charset="UTF-8"
+
+hi all,
+
+has anyone looked at porting LTTng to Go
+<https://en.wikipedia.org/wiki/Go_%28programming_language%29> (AKA Golang
+<https://golang.org/>)?
+
+Go is a language very similar to C, but it has intrinsic support for
+concurrency and better memory protection (at the expense of including
+garbage collection).  its from Google and is pretty hot these days for big
+data and "web scale" distributed systems.  the similarity to C is not
+surprising since two of the three authors were also involved in the
+development of UNIX in at AT&T in the 1970's: Rob Pike and Ken Thompson
+(Robert Griesemer is the third author).
+
+Go is able to link with C object files, so implementing support for
+tracef(3) should not be very difficult.
+
+but i want to have full support for user-defined tracepoint() events.  that
+looks to be much trickier since the LTTng tracepoint() functionality relies
+heavily on (some might say abuses) the C pre-processor, and Go does not
+have an equivalent of the C pre-processor.  however, i don't see an obvious
+reason why Go source files that contain tracepoints couldn't be run through
+the C pre-processor -- except that Go specific LTTng header files would be
+required.
+
+here is an example of "hello, world" in Go
+<https://tour.golang.org/welcome/1>.  (note the use of "import" rather then
+"#include").
+
+i've spent more than a few hours looking at the C code generated by the C
+pre-processor trying to track down exactly why a tracepoint() definition is
+causing a compiler error, so i think i have an idea of just how hard it
+would be to development equivalent header files for Go + C pre-processor.
+it may be the case that the Go "header files", once developed, would be
+compiler specific, i.e only work with gccgo
+<https://golang.org/doc/install/gccgo> (the gcc front-end for Go).
+
+anyway, i'm wondering if anybody has attempted this and/or what your
+thoughts would be.
+
+--craig
+
+--f403045cf68aa6e6e60550f43f4f
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-family:trebuche=
+t ms,sans-serif">hi all,<br><br></div><div class=3D"gmail_default" style=3D=
+"font-family:trebuchet ms,sans-serif">has anyone looked at porting LTTng to=
+ <a href=3D"https://en.wikipedia.org/wiki/Go_%28programming_language%29">Go=
+</a> (AKA <a href=3D"https://golang.org/">Golang</a>)?<br><br></div><div cl=
+ass=3D"gmail_default" style=3D"font-family:trebuchet ms,sans-serif">Go is a=
+ language very similar to C, but it has intrinsic support for concurrency a=
+nd better memory protection (at the expense of including garbage collection=
+).=C2=A0 its from Google and is pretty hot these days for big data and &quo=
+t;web scale&quot; distributed systems.=C2=A0 the similarity to C is not sur=
+prising since two of the three authors were also involved in the developmen=
+t of UNIX in at AT&amp;T in the 1970&#39;s: Rob Pike and Ken Thompson (Robe=
+rt Griesemer is the third author).<br><br>Go is able to link with C object =
+files, so implementing support for tracef(3) should not be very difficult. =
+<br></div><div class=3D"gmail_default" style=3D"font-family:trebuchet ms,sa=
+ns-serif"><br>but i want to have full support for user-defined tracepoint()=
+ events.=C2=A0 that looks to be much trickier since the LTTng tracepoint() =
+functionality relies heavily on (some might say abuses) the C pre-processor=
+, and Go does not have an equivalent of the C pre-processor.=C2=A0 however,=
+ i don&#39;t see an obvious reason why Go source files that contain tracepo=
+ints couldn&#39;t be run through the C pre-processor -- except that Go spec=
+ific LTTng header files would be required.<br><br><a href=3D"https://tour.g=
+olang.org/welcome/1">here is an example of &quot;hello, world&quot; in Go</=
+a>.=C2=A0 (note the use of &quot;import&quot; rather then &quot;#include&qu=
+ot;).<br><br></div><div class=3D"gmail_default" style=3D"font-family:trebuc=
+het ms,sans-serif">i&#39;ve spent more than a few hours looking at the C co=
+de generated by the C pre-processor trying to track down exactly why a trac=
+epoint() definition is causing a compiler error, so i think i have an idea =
+of just how hard it would be to development equivalent header files for Go =
++ C pre-processor.=C2=A0 it may be the case that the Go &quot;header files&=
+quot;, once developed, would be compiler specific, i.e only work with <a hr=
+ef=3D"https://golang.org/doc/install/gccgo">gccgo</a> (the gcc front-end fo=
+r Go).<br></div><div class=3D"gmail_default" style=3D"font-family:trebuchet=
+ ms,sans-serif"><br></div><div class=3D"gmail_default" style=3D"font-family=
+:trebuchet ms,sans-serif">anyway, i&#39;m wondering if anybody has attempte=
+d this and/or what your thoughts would be.<br></div><div class=3D"gmail_def=
+ault" style=3D"font-family:trebuchet ms,sans-serif"><br></div><div class=3D=
+"gmail_default" style=3D"font-family:trebuchet ms,sans-serif">--craig<br></=
+div></div>
+
+--f403045cf68aa6e6e60550f43f4f--
+
+--===============5590087472965848608==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============5590087472965848608==--
