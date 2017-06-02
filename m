@@ -1,19 +1,15 @@
-From: "Deneau, Tom" <tom.deneau@amd.com>
-Subject: Re: lttng-track on userspace channel
-Date: Thu, 1 Jun 2017 18:49:52 +0000
-Message-ID: <CY4PR12MB191245721EA7F28398101E919BF60__38391.5883060128$1496417756$gmane$org@CY4PR12MB1912.namprd12.prod.outlook.com>
-References: <CY4PR12MB191256DF4AFE069B55B133FB9BF10@CY4PR12MB1912.namprd12.prod.outlook.com>
- <1779097795.3456.1496341488306.JavaMail.zimbra@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: porting LTTng to Go(lang)?
+Date: Fri, 2 Jun 2017 15:58:01 +0000 (UTC)
+Message-ID: <1949609462.4236.1496419081125.JavaMail.zimbra__13465.7791037627$1496419583$gmane$org@efficios.com>
+References: <CADjtVtYQ2M_j=CnPrjP81ECZKa1vzfE-xJ5QnEkDhaT+uk=9cg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============7404951055105038590=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from NAM01-BY2-obe.outbound.protection.outlook.com
- (mail-by2nam01on0044.outbound.protection.outlook.com [104.47.34.44])
- by lists.lttng.org (Postfix) with ESMTPS id 3wf7l92VLJz11Th
- for <lttng-dev@lists.lttng.org>; Fri,  2 Jun 2017 02:41:40 +0000 (UTC)
-In-Reply-To: <1779097795.3456.1496341488306.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wfTQL5Rdyz11mw
+ for <lttng-dev@lists.lttng.org>; Fri,  2 Jun 2017 15:58:13 +0000 (UTC)
+In-Reply-To: <CADjtVtYQ2M_j=CnPrjP81ECZKa1vzfE-xJ5QnEkDhaT+uk=9cg@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,64 +19,190 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: craig harmer <charmster@gmail.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TWF0aGlldSAtLQ0KDQpTbyBqdXN0IHRvIGNvbmZpcm0sIG9uY2UgZml4ZWQgdGhlIGx0dG5nLXRy
-YWNrIGNvbW1hbmQgaW4gYm90aCBrZXJuZWwgYW5kIHVzZXINCndpbGwgdHJhY2sgcHJvY2VzcyBp
-ZHMsIG5vdCB0aHJlYWQgaWRzLCBhbmQgaWYgb25lIGRvZXMgd2FudCB0byB0cmFjayB0aHJlYWQg
-aWRzLA0Kb25lIHNob3VsZCB1c2UgLS1maWx0ZXIgd2l0aCAkY3R4LnRpZC4NCg0KQSByZWxhdGVk
-IHF1ZXN0aW9uLCBJIGdvdCBlcnJvcnMgd2hlbiB0cnlpbmcgdG8gZG8gdGhlIGZvbGxvd2luZzoN
-CiAgIGx0dG5nIGFkZC1jb250ZXh0IC11IC1jIHUgLXQgdGlkIC10IHBpZA0Kc28gaGFkIHRvIGNo
-YW5nZSB0byB2dGlkIGFuZCB2cGlkLg0KDQpTbyBpbiB1c2VyIGNoYW5uZWwgdG8gZmlsdGVyIHRv
-IGEgdGlkIGxldmVsIEkgd291bGQgZG8gc29tZXRoaW5nIGxpa2U6DQogICBsdHRuZyBhZGQtY29u
-dGV4dCAtdSAtYyB1IC10IHZ0aWQgLXQgdnBpZA0KICAgbHR0bmcgZW5hYmxlLWV2ZW50IC11IC1j
-IHUgLWEgLWZpbHRlciAnJGN0eC52dGlkID09IDEyMycNCg0KSXMgdGhhdCBjb3JyZWN0Pw0KDQot
-LSBUb20NCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBNYXRoaWV1IERl
-c25veWVycyBbbWFpbHRvOm1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbV0NCj4gU2VudDog
-VGh1cnNkYXksIEp1bmUgMDEsIDIwMTcgMToyNSBQTQ0KPiBUbzogRGVuZWF1LCBUb20gPHRvbS5k
-ZW5lYXVAYW1kLmNvbT4NCj4gQ2M6IGx0dG5nLWRldiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-Zz4NCj4gU3ViamVjdDogUmU6IFtsdHRuZy1kZXZdIGx0dG5nLXRyYWNrIG9uIHVzZXJzcGFjZSBj
-aGFubmVsDQo+IA0KPiAtLS0tLSBPbiBNYXkgMzEsIDIwMTcsIGF0IDc6MjggUE0sIERlbmVhdSwg
-VG9tIHRvbS5kZW5lYXVAYW1kLmNvbSB3cm90ZToNCj4gDQo+ID4gSSBhbSB1c2luZyBsdHRuZyAy
-LjkuNC4NCj4gPg0KPiA+IEkgaGF2ZSBhIHNlcnZlciBkYXRhYmFzZSBkYWVtb24gd2l0aCBtYW55
-IHRocmVhZHMgYW5kIEkgd291bGQgbGlrZSB0bw0KPiB0cmFjaw0KPiA+IGV2ZW50cyBvbiBhIHNt
-YWxsZXIgc3Vic2V0IG9mIHRob3NlIHRocmVhZHMuDQo+ID4gSSBub3RpY2VkIHRoYXQgb24gdGhl
-IGtlcm5lbCBjaGFubmVsIEkgY2FuIHVzZSBsdHRuZyB0cmFjayAtLQ0KPiBwaWQ9MTIzLDEyNCwx
-MjUNCj4gPg0KPiA+IGFuZCB0aGlzIHdpbGwgdHJhY2Uga2VybmVsIGV2ZW50cyBmb3IganVzdCB0
-aG9zZSBUSURTIChpbiBzcGl0ZSBvZiB0aGUNCj4gPiBkb2N1bWVudGF0aW9uIHNheWluZyBpdCB3
-aWxsIHRyYWNrIHdob2xlIHBpZHMpLg0KPiA+IEJ1dCBJIGFtIGhhcHB5IGJlY2F1c2UgdGlkIHRy
-YWNraW5nIGlzIHdoYXQgSSB3YW50Lg0KPiANCj4gQXJnaC4uIHRoaXMgaXMgYW4gdW5mb3J0dW5h
-dGUgZGlzY3JlcGFuY3khIEl0IHNob3VsZCBoYXZlIGJlZW4gdXNpbmcNCj4gdGhlIGtlcm5lbCAi
-dGdpZCIgYXQga2VybmVsLWxldmVsIHRvIG1hdGNoIHdoYXQgd2UgZG8gZm9yIHVzZXJzcGFjZS4N
-Cj4gSSdsbCBwcmVwYXJlIGEgcGF0Y2ggZml4aW5nIHRoYXQuDQo+IA0KPiBMVFRuZyByZWFsbHkg
-dHJ5IGhhcmQgdG8gc3RpY2sgdG8gInBpZCBtZWFucyBwcm9jZXNzIElEIiBhbmQgInRpZCBtZWFu
-cw0KPiB0aHJlYWQgSUQiLiBJbnRlcm5hbGx5IGluIGx0dG5nLW1vZHVsZXMgd2UgZG8gYWxsIHRo
-YXQgaXMgbmVlZGVkIHRvIG1hcA0KPiB0aGUgcGlkL3RnaWQgbm90aW9ucyBiYWNrIHRvIHRpZC9w
-aWQuDQo+IA0KPiA+DQo+ID4gSG93ZXZlciwgaXMgdGhlcmUgYW4gZXF1aXZhbGVudCB3YXkgdG8g
-dHJhY2sgY2VydGFpbiB0aWRzIG9uIHRoZQ0KPiB1c2Vyc3BhY2UNCj4gPiBjaGFubmVsPyAgSSBm
-aW5kIHRoYXQgaWYgSSB1c2UNCj4gPiAgICBsdHRuZyB0cmFjayAtdSAtLXBpZD14eHgNCj4gPiBp
-dCBqdXN0IHRyYWNrcyBhbGwgdGhlIHRpZHMgdW5kZXIgdGhhdCBwaWQuDQo+IA0KPiBZb3UgY2Fu
-IHVzZSBlLmcuDQo+IA0KPiBsdHRuZyBlbmFibGUtZXZlbnQgLWsgLWEgLS1maWx0ZXIgJyRjdHgu
-dGlkID09IDEyMycNCj4gDQo+IG9yIGlmIHlvdSB3YW50IGl0IGNvbnRhaW5lci1hd2FyZToNCj4g
-DQo+IGx0dG5nIGVuYWJsZS1ldmVudCAtayAtYSAtLWZpbHRlciAnJGN0eC52dGlkID09IDEyMycN
-Cj4gDQo+IFRoYW5rcywNCj4gDQo+IE1hdGhpZXUNCj4gDQo+ID4NCj4gPiBIZXJlIGlzIG15IHNj
-cmlwdCAod2hlcmUgNzk2NTMgaXMgYSBzaW5nbGUgdGlkKS4gIEluIHRoaXMgY2FzZSBpdCB0cmFj
-ZXMNCj4gb25seQ0KPiA+IGtlcm5lbCBldmVudHMgb24gdGhhdCB0aWQuDQo+ID4gLS0tLS0tLS0t
-LS0NCj4gPiBsdHRuZyBjcmVhdGUNCj4gPiBsdHRuZyBlbmFibGUtY2hhbm5lbCB1IC11IC0tbnVt
-LXN1YmJ1ZiA2NCAtLXN1YmJ1Zi1zaXplIDUxMmsNCj4gPiBsdHRuZyBlbmFibGUtY2hhbm5lbCBr
-IC1rIC0tbnVtLXN1YmJ1ZiA2NCAtLXN1YmJ1Zi1zaXplIDUxMmsNCj4gPiBsdHRuZyBhZGQtY29u
-dGV4dCAtayAtYyBrIC10IHRpZCAtdCBwaWQNCj4gPiBsdHRuZyBhZGQtY29udGV4dCAtdSAtYyB1
-IC10IHZ0aWQgLXQgdnBpZA0KPiA+IGx0dG5nIGVuYWJsZS1ldmVudCAtdSAtYyB1IC1hDQo+ID4g
-bHR0bmcgZW5hYmxlLWV2ZW50IC1rIC1jIGsgLS1zeXNjYWxsIGZ1dGV4DQo+ID4gbHR0bmcgdHJh
-Y2sgLWsgLS1waWQ9Nzk2NTMNCj4gPiBsdHRuZyB0cmFjayAtdSAtLXBpZD03OTY1Mw0KPiA+IGx0
-dG5nIHN0YXJ0DQo+ID4gc2xlZXAgMS4wDQo+ID4gbHR0bmcgc3RvcA0KPiA+IGx0dG5nIGRlc3Ry
-b3kNCj4gPg0KPiA+IC0tIFRvbSBEZW5lYXUNCj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXw0KPiA+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QNCj4gPiBs
-dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnDQo+ID4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
-LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldg0KPiANCj4gLS0NCj4gTWF0aGlldSBEZXNu
-b3llcnMNCj4gRWZmaWNpT1MgSW5jLg0KPiBodHRwOi8vd3d3LmVmZmljaW9zLmNvbQ0KX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
-bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3Jn
-L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============7404951055105038590==
+Content-Type: multipart/alternative;
+	boundary="=_a3256458-2d92-4ee3-89cf-9e8b81e9aa5a"
+
+--=_a3256458-2d92-4ee3-89cf-9e8b81e9aa5a
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+----- On Jun 2, 2017, at 2:27 AM, craig harmer <charmster@gmail.com> wrote: 
+
+> hi all,
+
+> has anyone looked at porting LTTng to [
+> https://en.wikipedia.org/wiki/Go_%28programming_language%29 | Go ] (AKA [
+> https://golang.org/ | Golang ] )?
+
+Not yet ! I'm glad someone is looking into it. :) 
+
+> Go is a language very similar to C, but it has intrinsic support for concurrency
+> and better memory protection (at the expense of including garbage collection).
+> its from Google and is pretty hot these days for big data and "web scale"
+> distributed systems. the similarity to C is not surprising since two of the
+> three authors were also involved in the development of UNIX in at AT&T in the
+> 1970's: Rob Pike and Ken Thompson (Robert Griesemer is the third author).
+
+> Go is able to link with C object files, so implementing support for tracef(3)
+> should not be very difficult.
+
+> but i want to have full support for user-defined tracepoint() events. that looks
+> to be much trickier since the LTTng tracepoint() functionality relies heavily
+> on (some might say abuses) the C pre-processor, and Go does not have an
+> equivalent of the C pre-processor. however, i don't see an obvious reason why
+> Go source files that contain tracepoints couldn't be run through the C
+> pre-processor -- except that Go specific LTTng header files would be required.
+
+> [ https://tour.golang.org/welcome/1 | here is an example of "hello, world" in Go
+> ] . (note the use of "import" rather then "#include").
+
+> i've spent more than a few hours looking at the C code generated by the C
+> pre-processor trying to track down exactly why a tracepoint() definition is
+> causing a compiler error, so i think i have an idea of just how hard it would
+> be to development equivalent header files for Go + C pre-processor. it may be
+> the case that the Go "header files", once developed, would be compiler
+> specific, i.e only work with [ https://golang.org/doc/install/gccgo | gccgo ]
+> (the gcc front-end for Go).
+
+> anyway, i'm wondering if anybody has attempted this and/or what your thoughts
+> would be.
+
+In the case of C/C++ code, using the C preprocessor got the job done without requiring any additional 
+dependency. Given the context you describe, perhaps it would be wise to consider introducing a dedicated 
+"lttng probe description" parser. The idea here would be to parse the tracepoint probe definitions and 
+translate those into native code for various languages (e.g. Golang). 
+
+This would create a new lttng utility that would be required to to produce the language-specific files from 
+those descriptions. I would allow us to port the "tracepoint" concept to many more languages easily, and 
+not be so much tied to the C preprocessor anymore. 
+
+So perhaps adding this new tool as a dependency that needs to be invoked prior to compilation might 
+not be too much of an issue ? I see it as being slightly similar to the role accomplished by Flex and 
+Bison: they are required to translate from source files to an intermediary language, and then the 
+resulting files can be included into the distribution source packages, so only those who aim at 
+changing the source descriptions need to have the translation tool installed. 
+
+Thoughts ? 
+
+Thanks, 
+
+Mathieu 
+
+> --craig
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+--=_a3256458-2d92-4ee3-89cf-9e8b81e9aa5a
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><br></div><span id=3D"zwchr" data-marker=3D=
+"__DIVIDER__">----- On Jun 2, 2017, at 2:27 AM, craig harmer &lt;charmster@=
+gmail.com&gt; wrote:<br></span><div data-marker=3D"__QUOTED_TEXT__"><blockq=
+uote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5p=
+x;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font=
+-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div c=
+lass=3D"gmail_default" style=3D"font-family:trebuchet ms,sans-serif">hi all=
+,<br><br></div><div class=3D"gmail_default" style=3D"font-family:trebuchet =
+ms,sans-serif">has anyone looked at porting LTTng to <a href=3D"https://en.=
+wikipedia.org/wiki/Go_%28programming_language%29" target=3D"_blank">Go</a> =
+(AKA <a href=3D"https://golang.org/" target=3D"_blank">Golang</a>)?</div></=
+div></blockquote><div><br></div><div>Not yet ! I'm glad someone is looking =
+into it. :)<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></d=
+iv><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;paddi=
+ng-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration=
+:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"l=
+tr"><div class=3D"gmail_default" style=3D"font-family:trebuchet ms,sans-ser=
+if"><br><br></div><div class=3D"gmail_default" style=3D"font-family:trebuch=
+et ms,sans-serif">Go is a language very similar to C, but it has intrinsic =
+support for concurrency and better memory protection (at the expense of inc=
+luding garbage collection).&nbsp; its from Google and is pretty hot these d=
+ays for big data and "web scale" distributed systems.&nbsp; the similarity =
+to C is not surprising since two of the three authors were also involved in=
+ the development of UNIX in at AT&amp;T in the 1970's: Rob Pike and Ken Tho=
+mpson (Robert Griesemer is the third author).<br><br>Go is able to link wit=
+h C object files, so implementing support for tracef(3) should not be very =
+difficult. <br></div><div class=3D"gmail_default" style=3D"font-family:treb=
+uchet ms,sans-serif"><br>but i want to have full support for user-defined t=
+racepoint() events.&nbsp; that looks to be much trickier since the LTTng tr=
+acepoint() functionality relies heavily on (some might say abuses) the C pr=
+e-processor, and Go does not have an equivalent of the C pre-processor.&nbs=
+p; however, i don't see an obvious reason why Go source files that contain =
+tracepoints couldn't be run through the C pre-processor -- except that Go s=
+pecific LTTng header files would be required.<br><br><a href=3D"https://tou=
+r.golang.org/welcome/1" target=3D"_blank">here is an example of "hello, wor=
+ld" in Go</a>.&nbsp; (note the use of "import" rather then "#include").<br>=
+<br></div><div class=3D"gmail_default" style=3D"font-family:trebuchet ms,sa=
+ns-serif">i've spent more than a few hours looking at the C code generated =
+by the C pre-processor trying to track down exactly why a tracepoint() defi=
+nition is causing a compiler error, so i think i have an idea of just how h=
+ard it would be to development equivalent header files for Go + C pre-proce=
+ssor.&nbsp; it may be the case that the Go "header files", once developed, =
+would be compiler specific, i.e only work with <a href=3D"https://golang.or=
+g/doc/install/gccgo" target=3D"_blank">gccgo</a> (the gcc front-end for Go)=
+.<br></div><div class=3D"gmail_default" style=3D"font-family:trebuchet ms,s=
+ans-serif"><br></div><div class=3D"gmail_default" style=3D"font-family:treb=
+uchet ms,sans-serif">anyway, i'm wondering if anybody has attempted this an=
+d/or what your thoughts would be.</div></div></blockquote><div>In the case =
+of C/C++ code, using the C preprocessor got the job done without requiring =
+any additional<br></div><div>dependency. Given the context you describe, pe=
+rhaps it would be wise to consider introducing a dedicated</div><div>"lttng=
+ probe description" parser. The idea here would be to parse the tracepoint =
+probe definitions and</div><div>translate those into native code for variou=
+s languages (e.g. Golang).<br data-mce-bogus=3D"1"></div><div><br data-mce-=
+bogus=3D"1"></div><div>This would create a new lttng utility that would be =
+required to to produce the language-specific files from</div><div>those des=
+criptions. I would allow us to port the "tracepoint" concept to many more l=
+anguages easily, and</div><div>not be so much tied to the C preprocessor an=
+ymore.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><d=
+iv>So perhaps adding this new tool as a dependency that needs to be invoked=
+ prior to compilation might</div><div>not be too much of an issue ? I see i=
+t as being slightly similar to the role accomplished by Flex and<br data-mc=
+e-bogus=3D"1"></div><div>Bison: they are required to translate from source =
+files to an intermediary language, and then the<br data-mce-bogus=3D"1"></d=
+iv><div>resulting files can be included into the distribution source packag=
+es, so only those who aim at<br data-mce-bogus=3D"1"></div><div>changing th=
+e source descriptions need to have the translation tool installed.<br data-=
+mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thoughts ?<b=
+r data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thank=
+s,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>M=
+athieu<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><d=
+iv><br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><bloc=
+kquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:=
+5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;fo=
+nt-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div=
+ class=3D"gmail_default" style=3D"font-family:trebuchet ms,sans-serif"><br>=
+</div><div class=3D"gmail_default" style=3D"font-family:trebuchet ms,sans-s=
+erif"><br></div><div class=3D"gmail_default" style=3D"font-family:trebuchet=
+ ms,sans-serif">--craig<br></div></div><br>________________________________=
+_______________<br>lttng-dev mailing list<br>lttng-dev@lists.lttng.org<br>h=
+ttps://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br></blockquote><=
+/div><br><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoy=
+ers<br>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></html>
+--=_a3256458-2d92-4ee3-89cf-9e8b81e9aa5a--
+
+--===============7404951055105038590==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============7404951055105038590==--
