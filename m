@@ -1,19 +1,19 @@
-From: Michael Steppe <msteppe91@gmail.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Subject: Re: CentOS 7.3 Support
-Date: Wed, 7 Jun 2017 06:35:58 -0400
-Message-ID: <CAN7pGttcwE7t-4xtggEMcyccohSqVzUoP6tbMXrKoKOxuf++jA__22500.2630068504$1496831783$gmane$org@mail.gmail.com>
+Date: Wed, 7 Jun 2017 12:00:43 -0400
+Message-ID: <20170607160043.vudwplus4mphvrh6__25953.508311841$1496851269$gmane$org@psrcode-TP-X230>
 References: <CAN7pGtvjM37=3zVt2_NaQME0ZeYq+cCp+5Mq7Gy2TTdfjii1YA@mail.gmail.com>
  <20170606185955.yqbwxcg2beslrvaa@psrcode-TP-X230>
+ <CAN7pGttcwE7t-4xtggEMcyccohSqVzUoP6tbMXrKoKOxuf++jA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2721465518969582399=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ua0-x236.google.com (mail-ua0-x236.google.com
- [IPv6:2607:f8b0:400c:c08::236])
- by lists.lttng.org (Postfix) with ESMTPS id 3wjQ413zGCz11bm
- for <lttng-dev@lists.lttng.org>; Wed,  7 Jun 2017 10:37:37 +0000 (UTC)
-Received: by mail-ua0-x236.google.com with SMTP id m31so3971660uam.1
- for <lttng-dev@lists.lttng.org>; Wed, 07 Jun 2017 03:35:59 -0700 (PDT)
-In-Reply-To: <20170606185955.yqbwxcg2beslrvaa@psrcode-TP-X230>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wjYGw5q6jz127f
+ for <lttng-dev@lists.lttng.org>; Wed,  7 Jun 2017 16:02:32 +0000 (UTC)
+Content-Disposition: inline
+In-Reply-To: <CAN7pGttcwE7t-4xtggEMcyccohSqVzUoP6tbMXrKoKOxuf++jA@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,180 +23,67 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+To: Michael Steppe <msteppe91@gmail.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============2721465518969582399==
-Content-Type: multipart/alternative; boundary="001a114bf1ec4672a705515c4d0b"
-
---001a114bf1ec4672a705515c4d0b
-Content-Type: text/plain; charset="UTF-8"
-
-Great! Thanks Jonathan. As a quick follow up question, I am now seeing some
-warnings about discarded events that I remember reading about in your
-release notes somewhere. Is there a way to silence these types of warnings?
-
-Thanks again!
-Michael Steppe
-
-On Tue, Jun 6, 2017 at 2:59 PM, Jonathan Rajotte-Julien <
-jonathan.rajotte-julien@efficios.com> wrote:
-
-> Hi,
->
-> On Tue, Jun 06, 2017 at 01:19:11PM -0400, Michael Steppe wrote:
-> > Hello!
-> >
-> > I had previously built LTTng-modules 2.8.0 from source without issue on
-> > CentOS 7.2 (3.10.0-327 kernel). When I tried to build on CentOS 7.3
-> > (3.10.0-514 kernel), however, it failed with multiple "error: struct has
-> no
-> > member named 'id'" and "error: struct has no member named 'name'"
-> errors. I
-> > tried building LTTng-modules 2.9.2 from source on CentOS 7.3 and was
-> > successful (it also built successfully on CentOS 7.2).
-> >
-> > I was just curious at what version of LTTng-modules did the newer kernel
-> in
-> > CentOS 7.3 get supported. I would like to jump as small as possible, so
-> if
-> > there was a version of the modules between 2.8.0 and 2.9.2 that was
-> > supported that would be great.
->
-> In the specific case of kernel 3.10.0-514, lttng-modules stable 2.8 is
-> fixed
-> starting from commit f61eb2851f482baee02bb508aef01f67fdb3fbaf (stable 2.8
-> branch) and 5f9ff4e230753160ccfc300d44004b117cf678ad (master branch):
->
-> -----------
-> commit f61eb2851f482baee02bb508aef01f67fdb3fbaf
-> Author: Michael Jeanson <mjeanson@efficios.com>
-> Date:   Wed Dec 7 14:17:33 2016 -0500
->
->     Fix: asoc instrumentation for RHEL 7.3
->
-> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> -----------
->
-> Hence you can upgrade lttng-modules to any tag greater or equal to v2.8.4.
->
-> If you can't upgrade to the 2.9.x stable release the v2.8.5 tag is
-> your best bet.
->
-> Cheers
->
-> >
-> > Thanks!
-> > Michael Steppe
->
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
-> --
-> Jonathan Rajotte-Julien
-> EfficiOS
->
-
---001a114bf1ec4672a705515c4d0b
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Great! Thanks Jonathan. As a quick follow up question=
-, I am now seeing some warnings about discarded events that I remember read=
-ing about in your release notes somewhere. Is there a way to silence these =
-types of warnings?</div><div><br></div><div>Thanks again!</div><div>Michael=
- Steppe</div></div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote=
-">On Tue, Jun 6, 2017 at 2:59 PM, Jonathan Rajotte-Julien <span dir=3D"ltr"=
->&lt;<a href=3D"mailto:jonathan.rajotte-julien@efficios.com" target=3D"_bla=
-nk">jonathan.rajotte-julien@efficios.com</a>&gt;</span> wrote:<br><blockquo=
-te class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc so=
-lid;padding-left:1ex">Hi,<br>
-<span><br>
-On Tue, Jun 06, 2017 at 01:19:11PM -0400, Michael Steppe wrote:<br>
-&gt; Hello!<br>
-&gt;<br>
-&gt; I had previously built LTTng-modules 2.8.0 from source without issue o=
-n<br>
-&gt; CentOS 7.2 (3.10.0-327 kernel). When I tried to build on CentOS 7.3<br=
->
-&gt; (3.10.0-514 kernel), however, it failed with multiple &quot;error: str=
-uct has no<br>
-&gt; member named &#39;id&#39;&quot; and &quot;error: struct has no member =
-named &#39;name&#39;&quot; errors. I<br>
-&gt; tried building LTTng-modules 2.9.2 from source on CentOS 7.3 and was<b=
-r>
-&gt; successful (it also built successfully on CentOS 7.2).<br>
-&gt;<br>
-&gt; I was just curious at what version of LTTng-modules did the newer kern=
-el in<br>
-&gt; CentOS 7.3 get supported. I would like to jump as small as possible, s=
-o if<br>
-&gt; there was a version of the modules between 2.8.0 and 2.9.2 that was<br=
->
-&gt; supported that would be great.<br>
-<br>
-</span>In the specific case of kernel <a href=3D"tel:3.10.0-514" value=3D"+=
-13100514">3.10.0-514</a>, lttng-modules stable 2.8 is fixed<br>
-starting from commit f61eb2851f482baee02bb508aef01f<wbr>67fdb3fbaf (stable =
-2.8<br>
-branch) and 5f9ff4e230753160ccfc300d44004b<wbr>117cf678ad (master branch):<=
-br>
-<br>
------------<br>
-commit f61eb2851f482baee02bb508aef01f<wbr>67fdb3fbaf<br>
-Author: Michael Jeanson &lt;<a href=3D"mailto:mjeanson@efficios.com">mjeans=
-on@efficios.com</a>&gt;<br>
-Date:=C2=A0 =C2=A0Wed Dec 7 14:17:33 2016 -0500<br>
-<br>
-=C2=A0 =C2=A0 Fix: asoc instrumentation for RHEL 7.3<br>
-<br>
-Signed-off-by: Michael Jeanson &lt;<a href=3D"mailto:mjeanson@efficios.com"=
->mjeanson@efficios.com</a>&gt;<br>
-Signed-off-by: Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers@ef=
-ficios.com">mathieu.desnoyers@efficios.<wbr>com</a>&gt;<br>
------------<br>
-<br>
-Hence you can upgrade lttng-modules to any tag greater or equal to v2.8.4.<=
-br>
-<br>
-If you can&#39;t upgrade to the 2.9.x stable release the v2.8.5 tag is<br>
-your best bet.<br>
-<br>
-Cheers<br>
-<br>
-&gt;<br>
-&gt; Thanks!<br>
-&gt; Michael Steppe<br>
-<br>
-&gt; ______________________________<wbr>_________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
-</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- target=3D"_blank" rel=3D"noreferrer">https://lists.lttng.org/cgi-<wbr>bin/=
-mailman/listinfo/lttng-dev</a><br>
-<span class=3D"HOEnZb"><font color=3D"#888888"><br>
-<br>
---<br>
-Jonathan Rajotte-Julien<br>
-EfficiOS<br>
-</font></span></blockquote></div><br></div>
-
---001a114bf1ec4672a705515c4d0b--
-
---===============2721465518969582399==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============2721465518969582399==--
+SGksCgpPbiBXZWQsIEp1biAwNywgMjAxNyBhdCAwNjozNTo1OEFNIC0wNDAwLCBNaWNoYWVsIFN0
+ZXBwZSB3cm90ZToKPiBHcmVhdCEgVGhhbmtzIEpvbmF0aGFuLiBBcyBhIHF1aWNrIGZvbGxvdyB1
+cCBxdWVzdGlvbiwgSSBhbSBub3cgc2VlaW5nIHNvbWUKPiB3YXJuaW5ncyBhYm91dCBkaXNjYXJk
+ZWQgZXZlbnRzIHRoYXQgSSByZW1lbWJlciByZWFkaW5nIGFib3V0IGluIHlvdXIKCkNvdWxkIHlv
+dSBnaXZlIHVzIHRoZSBvdXRwdXQgc28gd2UgY2FuIGJlIHN1cmUgd2hpY2ggd2FybmluZ3Mgd2Ug
+YXJlIHNwZWFraW5nIG9mCmV4YWN0bHk/Cgo+IHJlbGVhc2Ugbm90ZXMgc29tZXdoZXJlLiBJcyB0
+aGVyZSBhIHdheSB0byBzaWxlbmNlIHRoZXNlIHR5cGVzIG9mIHdhcm5pbmdzPwoKWW91IHByb2Jh
+Ymx5IGRvIG5vdCB3YW50IHRvIHNpbGVuY2UgdGhlbS4gWW91IGFyZSBwcm9iYWJseSBiZXR0ZXIg
+b2ZmCmNvbmZpZ3VyaW5nIHlvdXIgY2hhbm5lbHMgY29ycmVjdGx5IGJhc2VkIG9uIHRoZSB3b3Jr
+bG9hZCBvZiB5b3VyIGhvc3RzLgpIYXZpbmcgbG9zdCBldmVudHMgd2lsbCBoaW5kZXIgeW91ciBh
+YmlsaXR5IHRvIGFuYWx5emUgdGhlIHJlc3VsdGluZyB0cmFjZS4KClNlZSB0aGUgbWFuIHBhZ2Ug
+Zm9yICJsdHRuZyBlbmFibGUtY2hhbm5lbCIgWzFdIGZvciBtb3JlIGluZm9ybWF0aW9uIG9uIGhv
+dyB0bwppbmNyZWFzZSB0aGUgc3ViLWJ1ZmZlcnMgc2l6ZS4KCllvdSBjYW4gYWxzbyBmaW5kIGEg
+bW9yZSBmcmllbmRseSBleHBsYW5hdGlvbiBvbiBsdHRuZy5vcmcvZG9jcywgbW9yZQpzcGVjaWZp
+Y2FsbHkgWzJdIGFuZCBbM10KClsxXSBodHRwOi8vbHR0bmcub3JnL21hbi8xL2x0dG5nLWVuYWJs
+ZS1jaGFubmVsL3YyLjkvClsyXSBodHRwOi8vbHR0bmcub3JnL2RvY3MvdjIuOS8jZG9jLWNoYW5u
+ZWwtb3ZlcndyaXRlLW1vZGUtdnMtZGlzY2FyZC1tb2RlClszXSBodHRwOi8vbHR0bmcub3JnL2Rv
+Y3MvdjIuOS8jZG9jLWNoYW5uZWwtc3ViYnVmLXNpemUtdnMtc3ViYnVmLWNvdW50CgpOb3RlIHRo
+YXQgdGhlc2UgYXJlIGNvcmUgY29uY2VwdHMgYW5kIGRpZCBub3QgY2hhbmdlIGJldHdlZW4gMi44
+IGFuZCAyLjkgLgoKQ2hlZXJzCgo+IAo+IFRoYW5rcyBhZ2FpbiEKPiBNaWNoYWVsIFN0ZXBwZQo+
+IAo+IE9uIFR1ZSwgSnVuIDYsIDIwMTcgYXQgMjo1OSBQTSwgSm9uYXRoYW4gUmFqb3R0ZS1KdWxp
+ZW4gPAo+IGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gCj4g
+PiBIaSwKPiA+Cj4gPiBPbiBUdWUsIEp1biAwNiwgMjAxNyBhdCAwMToxOToxMVBNIC0wNDAwLCBN
+aWNoYWVsIFN0ZXBwZSB3cm90ZToKPiA+ID4gSGVsbG8hCj4gPiA+Cj4gPiA+IEkgaGFkIHByZXZp
+b3VzbHkgYnVpbHQgTFRUbmctbW9kdWxlcyAyLjguMCBmcm9tIHNvdXJjZSB3aXRob3V0IGlzc3Vl
+IG9uCj4gPiA+IENlbnRPUyA3LjIgKDMuMTAuMC0zMjcga2VybmVsKS4gV2hlbiBJIHRyaWVkIHRv
+IGJ1aWxkIG9uIENlbnRPUyA3LjMKPiA+ID4gKDMuMTAuMC01MTQga2VybmVsKSwgaG93ZXZlciwg
+aXQgZmFpbGVkIHdpdGggbXVsdGlwbGUgImVycm9yOiBzdHJ1Y3QgaGFzCj4gPiBubwo+ID4gPiBt
+ZW1iZXIgbmFtZWQgJ2lkJyIgYW5kICJlcnJvcjogc3RydWN0IGhhcyBubyBtZW1iZXIgbmFtZWQg
+J25hbWUnIgo+ID4gZXJyb3JzLiBJCj4gPiA+IHRyaWVkIGJ1aWxkaW5nIExUVG5nLW1vZHVsZXMg
+Mi45LjIgZnJvbSBzb3VyY2Ugb24gQ2VudE9TIDcuMyBhbmQgd2FzCj4gPiA+IHN1Y2Nlc3NmdWwg
+KGl0IGFsc28gYnVpbHQgc3VjY2Vzc2Z1bGx5IG9uIENlbnRPUyA3LjIpLgo+ID4gPgo+ID4gPiBJ
+IHdhcyBqdXN0IGN1cmlvdXMgYXQgd2hhdCB2ZXJzaW9uIG9mIExUVG5nLW1vZHVsZXMgZGlkIHRo
+ZSBuZXdlciBrZXJuZWwKPiA+IGluCj4gPiA+IENlbnRPUyA3LjMgZ2V0IHN1cHBvcnRlZC4gSSB3
+b3VsZCBsaWtlIHRvIGp1bXAgYXMgc21hbGwgYXMgcG9zc2libGUsIHNvCj4gPiBpZgo+ID4gPiB0
+aGVyZSB3YXMgYSB2ZXJzaW9uIG9mIHRoZSBtb2R1bGVzIGJldHdlZW4gMi44LjAgYW5kIDIuOS4y
+IHRoYXQgd2FzCj4gPiA+IHN1cHBvcnRlZCB0aGF0IHdvdWxkIGJlIGdyZWF0Lgo+ID4KPiA+IElu
+IHRoZSBzcGVjaWZpYyBjYXNlIG9mIGtlcm5lbCAzLjEwLjAtNTE0LCBsdHRuZy1tb2R1bGVzIHN0
+YWJsZSAyLjggaXMKPiA+IGZpeGVkCj4gPiBzdGFydGluZyBmcm9tIGNvbW1pdCBmNjFlYjI4NTFm
+NDgyYmFlZTAyYmI1MDhhZWYwMWY2N2ZkYjNmYmFmIChzdGFibGUgMi44Cj4gPiBicmFuY2gpIGFu
+ZCA1ZjlmZjRlMjMwNzUzMTYwY2NmYzMwMGQ0NDAwNGIxMTdjZjY3OGFkIChtYXN0ZXIgYnJhbmNo
+KToKPiA+Cj4gPiAtLS0tLS0tLS0tLQo+ID4gY29tbWl0IGY2MWViMjg1MWY0ODJiYWVlMDJiYjUw
+OGFlZjAxZjY3ZmRiM2ZiYWYKPiA+IEF1dGhvcjogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBl
+ZmZpY2lvcy5jb20+Cj4gPiBEYXRlOiAgIFdlZCBEZWMgNyAxNDoxNzozMyAyMDE2IC0wNTAwCj4g
+Pgo+ID4gICAgIEZpeDogYXNvYyBpbnN0cnVtZW50YXRpb24gZm9yIFJIRUwgNy4zCj4gPgo+ID4g
+U2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Cj4g
+PiBTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZm
+aWNpb3MuY29tPgo+ID4gLS0tLS0tLS0tLS0KPiA+Cj4gPiBIZW5jZSB5b3UgY2FuIHVwZ3JhZGUg
+bHR0bmctbW9kdWxlcyB0byBhbnkgdGFnIGdyZWF0ZXIgb3IgZXF1YWwgdG8gdjIuOC40Lgo+ID4K
+PiA+IElmIHlvdSBjYW4ndCB1cGdyYWRlIHRvIHRoZSAyLjkueCBzdGFibGUgcmVsZWFzZSB0aGUg
+djIuOC41IHRhZyBpcwo+ID4geW91ciBiZXN0IGJldC4KPiA+Cj4gPiBDaGVlcnMKPiA+Cj4gPiA+
+Cj4gPiA+IFRoYW5rcyEKPiA+ID4gTWljaGFlbCBTdGVwcGUKPiA+Cj4gPiA+IF9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gPiA+IGx0dG5nLWRldiBtYWls
+aW5nIGxpc3QKPiA+ID4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+ID4gPiBodHRwczovL2xp
+c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gPgo+ID4K
+PiA+IC0tCj4gPiBKb25hdGhhbiBSYWpvdHRlLUp1bGllbgo+ID4gRWZmaWNpT1MKPiA+CgotLSAK
+Sm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4KRWZmaWNpT1MKX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZA
+bGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9s
+aXN0aW5mby9sdHRuZy1kZXYK
