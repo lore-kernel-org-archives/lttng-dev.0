@@ -1,17 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: [RELEASE] Babeltrace 2.0.0-pre1
-Date: Fri, 9 Jun 2017 19:36:16 -0400
-Message-ID: <CA+jJMxtdXsJ_kc0NxWrSSP6G6iMo71deNYmaxg74_xAS-7OVPQ__35675.8699439981$1497051388$gmane$org@mail.gmail.com>
+From: arun kumar via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Cavium processor support
+Date: Mon, 12 Jun 2017 10:29:15 +0000 (UTC)
+Message-ID: <610007398.9112125.1497263355608__8043.43348504535$1497277071$gmane$org@mail.yahoo.com>
+References: <610007398.9112125.1497263355608.ref@mail.yahoo.com>
+Reply-To: arun kumar <jarun_3k@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============8157836416377224803=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yw0-x22c.google.com (mail-yw0-x22c.google.com
- [IPv6:2607:f8b0:4002:c05::22c])
- by lists.lttng.org (Postfix) with ESMTPS id 3wkzHc4SKjz12Fg
- for <lttng-dev@lists.lttng.org>; Fri,  9 Jun 2017 23:38:04 +0000 (UTC)
-Received: by mail-yw0-x22c.google.com with SMTP id l75so24737600ywc.3
- for <lttng-dev@lists.lttng.org>; Fri, 09 Jun 2017 16:36:18 -0700 (PDT)
+Received: from sonic306-21.consmr.mail.sg3.yahoo.com
+ (sonic306-21.consmr.mail.sg3.yahoo.com [106.10.241.141])
+ by lists.lttng.org (Postfix) with ESMTP id 3wmVbk4bLyz12CF
+ for <lttng-dev@lists.lttng.org>; Mon, 12 Jun 2017 11:12:18 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,81 +23,46 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgZXZlcnlvbmUhCgpBZnRlciBhIGxvbmcgdGltZSBpbiB0aGUgbWFraW5nLCB3ZSBhcmUgcHJv
-dWQgdG8gcmVsZWFzZSBCYWJlbHRyYWNlIDIuMC4wLXByZTEuCgpCYWJlbHRyYWNlIDIgaXMgYSBy
-ZXdyaXRlIG9mIHRoZSBvcmlnaW5hbCBCYWJlbHRyYWNlIHdoaWNoIGV4cGFuZHMgdGhlIHNjb3Bl
-IG9mCnRoZSBwcm9qZWN0IGZyb20gYSByZWZlcmVuY2UgaW1wbGVtZW50YXRpb24gb2YgYSBDVEYg
-cmVhZGVyIGFuZCB3cml0ZXIgdG8KYSBjb21wbGV0ZSB0cmFjZSBwcm9jZXNzaW5nIGZyYW1ld29y
-ay4KCldlIHdhbnQgdG8gbWFrZSBpdCBlYXN5IHRvIGNvbnN1bWUsIHByb2R1Y2UsIHRyaW0sIGFk
-ZCwgYW5kIHJlbW92ZSBpbmZvcm1hdGlvbgpmcm9tIHRyYWNlcyBpbiBhbnkgZm9ybWF0IGJvdGgg
-ZnJvbSB0aGUgY29tbWFuZCBsaW5lLCB0aGUgUHl0aG9uIGludGVyZmFjZSwgb3IKdXNpbmcgdGhl
-IEMvQysrIEFQSS4gU2VlIHRoZSBleGFtcGxlcyBiZWxvdyEKCldoaWxlIHRoZSBDL0MrKyBBUEkg
-d2FzIGNvbXBsZXRlbHkgb3ZlcmhhdWxlZCwgQmFiZWx0cmFjZSAyLjAgbWFpbnRhaW5zIGEKYmFj
-a3dhcmQgY29tcGF0aWJsZSBQeXRob24gQVBJIHdoaWNoIHNob3VsZCB3b3JrIGFzIGEgZHJvcC1p
-biByZXBsYWNlbWVudC4gQQpuZXcsIFB5dGhvbiBwYWNrYWdlIGV4cG9zaW5nIHRoZSBuZXcgZmVh
-dHVyZXMgaXMgYWxzbyBwcm92aWRlZC4KClRoaXMgZmlyc3QgInByZSIgcmVsZWFzZSBtYXJrcyBh
-IGJpZyBtaWxlc3RvbmUgb24gdGhlIHJvYWQgdG8gQmFiZWx0cmFjZSAyLjA6CnRoZSBkZXZlbG9w
-bWVudCBicmFuY2ggaGFzIG5vdyBiZWVuIG1lcmdlZCBpbiB0aGUgb2ZmaWNpYWwgbWFzdGVyIGJy
-YW5jaC4KCk91ciBvYmplY3RpdmUsIHdpdGggdGhpcyBmaXJzdCByZWxlYXNlLCBpcyB0byBnYXRo
-ZXIgc29tZSBlYXJseSBmZWVkYmFjayBhcyB3ZQptYWtlIG91ciB3YXkgdG8gdGhlIG9mZmljaWFs
-IEJhYmVsdHJhY2UgMi4wIHJlbGVhc2UuIEludGVyZmFjZXMgYXJlIG5vdCBmcm96ZW4KeWV0LCBz
-byBub3cgaXMgeW91ciBjaGFuY2UgdG8gcHJvcG9zZSBzb21lIGJpZyBjaGFuZ2VzLgoKCldoYXQn
-cyBuZXc/Ci0tLS0tLS0tLS0tCgoqIFN0YWJsZSBwbHVnaW4gaW50ZXJmYWNlCiogVHJhY2UgcHJv
-Y2Vzc2luZyBncmFwaHM6IEJhYmVsdHJhY2Ugbm93IGFsbG93cyB5b3UgdG8gY3JlYXRlIHRyYWNl
-IHByb2Nlc3NpbmcKICBncmFwaHMgdGhhdCBjb25uZWN0IHVzZXItcHJvdmlkZWQgc291cmNlLCBm
-aWx0ZXIsIGFuZCBzaW5rIGNvbXBvbmVudHMKCiAgQmFiZWx0cmFjZSAyLjAgcHJvdmlkZXMgdGhl
-IGZvbGxvd2luZyBjb21wb25lbnRzIG91dCBvZiB0aGUgYm94OgogICAgLSBDVEYgZmlsZXN5c3Rl
-bSBzb3VyY2UgKHNvdXJjZS5jdGYuZnMpCiAgICAtIExUVG5nIGxpdmUgc291cmNlIChzb3VyY2Uu
-Y3RmLmx0dG5nLWxpdmUpCiAgICAtIFRyYWNlIHRyaW1tZXIgKGZpbHRlci51dGlscy50cmltbWVy
-KQogICAgLSBUcmFjZSBtdXhlciAoZmlsdGVyLnV0aWxzLm11eGVyKQogICAgLSBEZWJ1ZyBpbmZv
-cm1hdGlvbiBmaWx0ZXIgKGZpbHRlci5sdHRuZy11dGlscy5kZWJ1Zy1pbmZvKQogICAgLSBDVEYg
-ZmlsZXN5c3RlbSBzaW5rIChzaW5rLmN0Zi5mcykKICAgIC0gVGV4dCBwcmV0dHktcHJpbnRlciAo
-bm93IHdpdGggY29sb3JzISkgKHNpbmsudGV4dC5wcmV0dHkpCiAgICAtIER1bW15IHNpbmsgKHNp
-bmsudXRpbHMuZHVtbXkpCiogT3ZlcmhhdWxlZCBkb2N1bWVudGF0aW9uCiogTFRUbmcgbGl2ZSBz
-b3VyY2UgdXNhYmxlIGZyb20gdGhlIENMSSwgQy9DKyssIGFuZCBQeXRob24gaW50ZXJmYWNlcwoq
-IFJlbW92ZWQgYSBsb3Qgb2YgbGltaXRhdGlvbnMgZnJvbSB0aGUgb3JpZ2luYWwgQVBJCiogV2lu
-ZG93cyBzdXBwb3J0IChNaW5HVy1iYXNlZCBidWlsZCkKCgpUcnlpbmcgb3V0IHRoZSBuZXcgZmVh
-dHVyZXMKLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgpIZXJlIGFyZSBhIGNvdXBsZSBvZiBz
-aG9ydCBleGFtcGxlcyBkZW1vbnN0cmF0aW5nIHRoZSB1c2Ugb2Ygc29tZSBvZiB0aGUgbmV3CkJh
-YmVsdHJhY2UgMi4wIGZlYXR1cmVzLgoKKiBUcmltIHRyYWNlLCBwcmV0dHktcHJpbnQgZXZlbnRz
-OgoKICAgICAgYmFiZWx0cmFjZSBteS10cmFjZSAtLWJlZ2luPTIyOjU1OjQzLjY1ODU4MjkzMSAt
-LWVuZD0yMjo1NTo0Ni45Njc2ODc1NjQKICAgICAgYmFiZWx0cmFjZSBteS10cmFjZSAtLWJlZ2lu
-PTIyOjU1OjQzLjY1ODU4MjkzMQogICAgICBiYWJlbHRyYWNlIG15LXRyYWNlIC0tZW5kPTIyOjU1
-OjQ2Ljk2NzY4NzU2NAogICAgICBiYWJlbHRyYWNlIG15LXRyYWNlIC0tdGltZXJhbmdlPTIyOjU1
-OjQzLjY1ODU4MjkzMSwyMjo1NTo0Ni45Njc2ODc1NjQKCiogVHJpbSB0cmFjZSwgZ2VuZXJhdGUg
-YSBDVEYgdHJhY2U6CgogICAgICBiYWJlbHRyYWNlIG15LXRyYWNlIC0tYmVnaW49MjI6NTU6NDMu
-NjU4NTgyOTMxIC0tZW5kPTIyOjU1OjQ2Ljk2NzY4NzU2NCBcCiAgICAgICAgICAgICAgICAgLW8g
-Y3RmIC0tb3V0cHV0IC9wYXRoL3RvL2dlbmVyYXRlZC90cmFjZQoKKiBSZWNvcmQgTFRUbmcgbGl2
-ZSB0cmFjZXMgdG8gdGhlIGZpbGUgc3lzdGVtOgoKICAgICAgYmFiZWx0cmFjZSAtaSBsdHRuZy1s
-aXZlIFwKICAgICAgICAgICAgICAgICBuZXQ6Ly9sb2NhbGhvc3QvaG9zdC9teWhvc3RuYW1lL2F1
-dG8tMjAxNzA0MTEtMTM0NTEyIFwKICAgICAgICAgICAgICAgICAtbyBjdGYgLS1vdXRwdXQgL3Bh
-dGgvdG8vZ2VuZXJhdGVkL3RyYWNlcwoKCktub3duIGxpbWl0YXRpb25zCi0tLS0tLS0tLS0tLS0t
-LS0tCgpCZWluZyBhICJwcmUiIHJlbGVhc2UsIGEgbnVtYmVyIG9mIGZlYXR1cmVzIGFyZSBzdGls
-bCBpbiBhY3RpdmUgZGV2ZWxvcG1lbnQgYW5kCmJ1Z3MgYXJlIGJlaW5nIHdvcmtlZCBvbi4KClRo
-aXMgZmlyc3QgcmVsZWFzZSBkb2VzIG5vdCBleHBvc2UgdGhlIFB5dGhvbiBwYWNrYWdlcyAocHJl
-c2VudCBpbiB0aGUgR2l0IHRyZWUpCmFzIHdlIGFyZSByZXdvcmtpbmcgdGhlbSB0byBhY2NvbW9k
-YXRlIHRoZSBsYXRlc3Qgcm91bmQgb2YgQVBJIGNoYW5nZXMuCgoqIFRoZSAiLS1zdHJlYW0taW50
-ZXJzZWN0aW9uIiBtb2RlIGlzIG5vdCBhdmFpbGFibGUuCiogVHJhY2VzIHdpdGhvdXQgdGhlaXIg
-cGFja2V0IGNvbnRleHQgZmllbGQgdHlwZSdzIGB0aW1lc3RhbXBfYmVnaW5gIGFuZAogIGB0aW1l
-c3RhbXBfZW5kYCBmaWVsZHMgbWFwcGVkIHRvIGEgY2xvY2sgY2xhc3MgZmFpbCB0byBiZSByZWFk
-CiAgKHRyYWNlcyBwcm9kdWNlZCBieSBvbGQgdmVyc2lvbnMgb2YgTFRUbmcgYW5kIENURiBXcml0
-ZXIpLgoqIFRoZSBtYW4gcGFnZSBoYXMgbm90IGJlZW4gdXBkYXRlZCB0byBtYXRjaCB0aGUgbmV3
-IENMSS4KKiBQZXJmb3JtYW5jZSBoYXMgbm90IGJlZW4gYSBmb2N1cyB5ZXQgYW5kICJ2ZXJib3Nl
-IiBsb2dnaW5nIGlzIGJ1aWx0LWluIGJ5CiAgZGVmYXVsdCB0byBmYWNpbGl0YXRlIGJ1ZyByZXBv
-cnRpbmcuIFdlIGV4cGVjdCB0aGlzIHRvIHNsb3cgZG93biBCYWJlbHRyYWNlCiAgc2lnbmlmaWNh
-bnRseS4KKiBBUEkgZG9jdW1lbnRhdGlvbiBpcyBpbmNvbXBsZXRlLgoqIFBsdWdpbiBtYW4gcGFn
-ZXMgYXJlIG5vdCBhdmFpbGFibGUuCiogRGlzY2FyZGVkIGV2ZW50cyBhbmQgZHJvcHBlZCBwYWNr
-ZXRzIG5vdGlmaWNhdGlvbnMgYXJlIG5vdCBlbWl0dGVkLgoqIEEgbnVtYmVyIG9mIHRlc3RzIGFy
-ZSBmYWlsaW5nLgoqIEJ1aWx0LWluIHBsdWdpbnMgYXJlIG5vdCByZS1saW5rZWQgaW50byB0aGUg
-YXBwbGljYXRpb24gaWYgdGhleSBhcmUgbW9kaWZpZWQuCiogVGhlIGJhYmVsdHJhY2UtbG9nIHV0
-aWxpdHkgaXMgbm90IHByZXNlbnQuCiogVGhpcyB2ZXJzaW9uIGRvZXMgbm90IGJ1aWxkIG9uIFdp
-bmRvd3MgKHBhdGNoZXMgcGVuZGluZykuCiogQVBJIGNsZWFudXBzIGFyZSBwbGFubmVkIChtb3N0
-bHkgbmFtZXNwYWNpbmcgY2hhbmdlcykuCgpMZXQgdXMga25vdyBvZiBhbGwgcHJvYmxlbXMvYnVn
-cyB5b3UgZW5jb3VudGVyIHdpdGggdGhpcyByZWxlYXNlIQpKw6lyw6ltaWUKClByb2plY3Qgd2Vi
-c2l0ZTogaHR0cDovL2RpYW1vbi5vcmcvYmFiZWx0cmFjZS8KRG93bmxvYWQgbGluazogaHR0cDov
-L3d3dy5lZmZpY2lvcy5jb20vZmlsZXMvYmFiZWx0cmFjZS9iYWJlbHRyYWNlLTIuMC4wLXByZTEu
-dGFyLmJ6MgpDVEYgc3BlY2lmaWNhdGlvbjogaHR0cDovL2RpYW1vbi5vcmcvY3RmLwoKCi0tIApK
-w6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
+--===============8157836416377224803==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_9112124_1626572888.1497263355607"
+
+------=_Part_9112124_1626572888.1497263355607
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+=C2=A0 Hi,=C2=A0I want to know whether Cavium processor family is supported=
+or not.=C2=A0Thanks and RegardsArunkumar
+------=_Part_9112124_1626572888.1497263355607
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<html><head></head><body><div style="color:#000; background-color:#fff; font-family:Courier New, courier, monaco, monospace, sans-serif;font-size:13px">&nbsp; <font id="yui_3_16_0_1_1497263313831_2375" face="Times New Roman" size="3">
+
+</font><div id="yui_3_16_0_1_1497263313831_2376" style="margin: 0in 0in 0pt;"><font id="yui_3_16_0_1_1497263313831_2377" face="Calibri" size="3">Hi,</font></div><font id="yui_3_16_0_1_1497263313831_2378" face="Times New Roman" size="3">
+
+</font><div id="yui_3_16_0_1_1497263313831_2379" style="margin: 0in 0in 0pt;"><font id="yui_3_16_0_1_1497263313831_2380" face="Calibri" size="3">&nbsp;</font></div><font id="yui_3_16_0_1_1497263313831_2381" face="Times New Roman" size="3">
+
+</font><div id="yui_3_16_0_1_1497263313831_2382" style="margin: 0in 0in 0pt;"><font id="yui_3_16_0_1_1497263313831_2383" face="Calibri" size="3">I want to know whether Cavium processor family is supported
+or not.</font></div><font id="yui_3_16_0_1_1497263313831_2384" face="Times New Roman" size="3">
+
+</font><div id="yui_3_16_0_1_1497263313831_2385" style="margin: 0in 0in 0pt;"><font id="yui_3_16_0_1_1497263313831_2386" face="Calibri" size="3">&nbsp;</font></div><font id="yui_3_16_0_1_1497263313831_2387" face="Times New Roman" size="3">
+
+</font><div id="yui_3_16_0_1_1497263313831_2388" style="margin: 0in 0in 0pt;"><font id="yui_3_16_0_1_1497263313831_2389" face="Calibri" size="3">Thanks and Regards</font></div><font id="yui_3_16_0_1_1497263313831_2390" face="Times New Roman" size="3">
+
+</font><div id="yui_3_16_0_1_1497263313831_2391" style="margin: 0in 0in 0pt;" dir="ltr"><font id="yui_3_16_0_1_1497263313831_2392" face="Calibri" size="3">Arunkumar</font></div><font id="yui_3_16_0_1_1497263313831_2393" face="Times New Roman" size="3">
+
+</font></div></body></html>
+------=_Part_9112124_1626572888.1497263355607--
+
+--===============8157836416377224803==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
 X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============8157836416377224803==--
