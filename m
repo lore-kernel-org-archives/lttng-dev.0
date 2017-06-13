@@ -1,180 +1,207 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.10.0, 0.9.4, 0.8.10 (EOL)
-Date: Tue, 13 Jun 2017 00:16:12 +0000 (UTC)
-Message-ID: <2029481774.11452.1497312972611.JavaMail.zimbra@efficios.com>
+From: Thomas McGuire <thomas.mcguire@kdab.com>
+Subject: Re: Wrong timestamps in trace
+Date: Tue, 13 Jun 2017 11:31:39 +0200
+Message-ID: <7c59a802-b9f7-d973-8a01-f86eda8fa5de__585.292318328534$1497346322$gmane$org@kdab.com>
+References: <9396da08-11fe-bb73-0915-7feaf8ef38ae@kdab.com>
+ <1444561955.10915.1497283734936.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Sender: linux-kernel-owner@vger.kernel.org
-To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu, lwn <lwn@lwn.net>
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Stephen Hemminger <stephen@networkplumber.org>, Alan Stern <stern@rowland.harvard.edu>, Lai Jiangshan <jiangshanlai@gmail.com>
+Content-Type: multipart/mixed; boundary="===============8899383002791509597=="
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wn4MX3T2Xz113N
+ for <lttng-dev@lists.lttng.org>; Tue, 13 Jun 2017 09:33:44 +0000 (UTC)
+In-Reply-To: <1444561955.10915.1497283734936.JavaMail.zimbra@efficios.com>
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
-data synchronization library provides read-side access which scales
-linearly with the number of cores. It does so by allowing multiple
-copies of a given data structure to live at the same time, and by
-monitoring the data structure accesses to detect grace periods after
-which memory reclamation is possible.
+This is a cryptographically signed message in MIME format.
 
-liburcu-cds provides efficient data structures based on RCU and
-lock-free algorithms. Those structures include hash tables, queues,
-stacks, and doubly-linked lists.
+--===============8899383002791509597==
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms040702020407070508020708"
 
-Version 0.10.0 of liburcu introduces mainly the following changes
-over version 0.9.x:
+This is a cryptographically signed message in MIME format.
 
-- Introduce a urcu_ref_get_safe API, which can return a failure in
-  case of reference count overflow,
+--------------ms040702020407070508020708
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
-- Remove RCU caller context restrictions on RCU lock-free hash table
-  cds_lfht_destroy API:
+Hi Mathieu,
 
-    Up to and including liburcu 0.9.x, the RCU lock-free hash table
-    required that the destroy function should not be called from
-    within RCU read-side critical sections. This is caused by the lazy
-    resize, which uses the call_rcu worker thread, even though all it
-    really needs is a workqueue/worker thread scheme.
-    
-    Use the new internal workqueue API instead of call_rcu in rculfhash to
-    remove this restriction starting from liburcu 0.10.x.
+On 12.06.2017 18:08, Mathieu Desnoyers wrote:
+>> I'm struggling to get lttng to run on an i.MX 25 board. I got everythi=
+ng
+>> working, however the timestamps in the resulting trace file are all th=
+e
+>> same. Because of the timestamps, TraceCompass fails at visualizing the=
 
-- Allow forcing the use of the sys_membarrier() system call:
+>> schedule.
+>> I record on the device and then copy the trace over to my host to
+>> examine it with babeltrace. See attached text files for the start and
+>> the end of the trace, showing the timestamps being the same, despite t=
+he
+>> trace running for a few seconds.
+>>
+>> The output of lttng-sessiond -v is also attached.
+>>
+>> I started everything the following way:
+>>  cd /lib/modules/4.9.28-20170428-1/kernel/extra
+>>  find . -type f -exec insmod {} \;
+>>  find . -type f -exec insmod {} \;
+>>  find . -type f -exec insmod {} \;
+>>  find . -type f -exec insmod {} \;
+>> lttng-sessiond -v --consumerd32-path=3D/usr/bin/lttng-consumerd &>
+>> sessiond-log.txt
+>>  lttng create my-session --output=3D/home/lttng/my-trace
+>>  lttng enable-event --kernel --syscall --all --channel channel0
+>>  lttng enable-event --kernel --channel channel0 sched*
+>>  lttng start
+>>  sleep 5 # do something
+>>  lttng stop
+>>
+>> The Linux distribution is Pengutronix's ptxdist, which doesn't have
+>> lttng rules, so I manually cross-compiled lttng-tools 2.9.4 and
+>> lttng-modules 2.9.2. Kernel is 4.9.28-20170428-1, babeltrace on the ho=
+st
+>> is 1.2.4.
+>>
+>> What do I need to do to get correct timestamps?
+>
+> Hi Thomas,
+>
+> It appears like you may have the lttng-modules tests/clock-plugin
+> kernel module loaded, which overrides the clock source with a
+> "dummy" clock for testing purposes.
+>
+> Can you provide the output of lsmod ? Or did you build lttng
+> within your kernel image ? If so, what is your kernel config ?
+>
+> Can you also provide the "metadata" file generated as attachment ?
+> It will allow us to confirm whether it's using the kernel clock
+> ("monotonic") or the dummy test clock ("lttng_test_clock_override").
 
-    When using the default (liburcu.so) and bulletproof (liburcu-bp.so)
-    flavours of Userspace RCU, kernel support for sys-membarrier is detected
-    dynamically and stored in the rcu_has_sys_membarrier_memb and
-    urcu_bp_has_sys_membarrier global variables.
-    
-    Checking the value of these variables adds a small but measurable overhead
-    to smp_mb_slave. On systems which support sys-membarrier, it would be
-    nice to have a way of avoiding that overhead.
-    
-    Here is the proposed approach: if CONFIG_RCU_FORCE_SYS_MEMBARRIER is
-    defined then rcu_has_sys_membarrier_memb/urcu_bp_has_sys_membarrier are
-    replaced with the constant 1, eliminating the overhead in smp_mb_slave.
-    As a sanity check, support for sys-membarrier is still detected at
-    startup. A program using liburcu or liburcu-bp compiled with this option
-    aborts in the library constructor if the membarrier system call is not
-    supported by the operating system.
+Thanks for the quick response, that was exactly my problem! I simply=20
+issued an "insmod" on every lttng-related .ko file that lttng built, and =
 
-- Introduce support for NIOS2 and m68k architectures,
+that included the test clock plugin.
+The reason why I used "insmod" is that for me, lttng-sessiond didn't=20
+load the lttng modules itself. I looked at this further now, and the=20
+reason was that I didn't issue a "depmod -a". With that, everything now=20
+works perfectly, the timestamps are correct and TraceCompass shows me a=20
+nice schedule :)
 
-- ARM32: use lighter-weight dmb ish (inner shareable domain) for smp barrier,
+Thanks again for your help and every developer here for providing lttng, =
 
-- Introduce a --enable-rcu-debug configure option, which builds internal
-  RCU consistency checks into the library,
+it's a great tool.
+
+Regards,
+Thomas
+--=20
+Thomas McGuire | thomas.mcguire@kdab.com | Senior Software Engineer
+KDAB (Deutschland) GmbH & Co KG, a KDAB Group company
+Tel: +49-30-521325470
+KDAB - The Qt, C++ and OpenGL Experts
 
 
-Versions 0.9.4 and 0.8.10 introduce an important fix for ARM32: a missing
-release barrier was added before uatomic_xchg(). They introduce other minor
-fixes.
+--------------ms040702020407070508020708
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-liburcu 0.8.10 will be the last release of the stable-0.8 series.
-liburcu stable-0.8 branch has now reached end of life with the release of
-liburcu 0.10.0. Users of liburcu 0.8.x should upgrade to 0.10.x or 0.9.x.
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCC
+Cx0wggSvMIIDl6ADAgECAhEA4CPLFRKDU4mtYW56VGdrITANBgkqhkiG9w0BAQsFADBvMQsw
+CQYDVQQGEwJTRTEUMBIGA1UEChMLQWRkVHJ1c3QgQUIxJjAkBgNVBAsTHUFkZFRydXN0IEV4
+dGVybmFsIFRUUCBOZXR3b3JrMSIwIAYDVQQDExlBZGRUcnVzdCBFeHRlcm5hbCBDQSBSb290
+MB4XDTE0MTIyMjAwMDAwMFoXDTIwMDUzMDEwNDgzOFowgZsxCzAJBgNVBAYTAkdCMRswGQYD
+VQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNVBAoTEUNP
+TU9ETyBDQSBMaW1pdGVkMUEwPwYDVQQDEzhDT01PRE8gU0hBLTI1NiBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC
+AQoCggEBAImxDdp6UxlOcFIdvFamBia3uEngludRq/HwWhNJFaO0jBtgvHpRQqd5jKQi3xdh
+TpHVdiMKFNNKAn+2HQmAbqUEPdm6uxb+oYepLkNSQxZ8rzJQyKZPWukI2M+TJZx7iOgwZOak
++FaA/SokFDMXmaxE5WmLo0YGS8Iz1OlAnwawsayTQLm1CJM6nCpToxDbPSBhPFUDjtlOdiUC
+ISn6o3xxdk/u4V+B6ftUgNvDezVSt4TeIj0sMC0xf1m9UjewM2ktQ+v61qXxl3dnUYzZ7ifr
+vKUHOHaMpKk4/9+M9QOsSb7K93OZOg8yq5yVOhM9DkY6V3RhUL7GQD/L5OKfoiECAwEAAaOC
+ARcwggETMB8GA1UdIwQYMBaAFK29mHo0tCb3+sQmVO8DveAky1QaMB0GA1UdDgQWBBSSYWuC
+4aKgqk/sZ/HCo/e0gADB7DAOBgNVHQ8BAf8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIBADAd
+BgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwEQYDVR0gBAowCDAGBgRVHSAAMEQGA1Ud
+HwQ9MDswOaA3oDWGM2h0dHA6Ly9jcmwudXNlcnRydXN0LmNvbS9BZGRUcnVzdEV4dGVybmFs
+Q0FSb290LmNybDA1BggrBgEFBQcBAQQpMCcwJQYIKwYBBQUHMAGGGWh0dHA6Ly9vY3NwLnVz
+ZXJ0cnVzdC5jb20wDQYJKoZIhvcNAQELBQADggEBABsqbqxVwTqriMXY7c1V86prYSvACRAj
+mQ/FZmpvsfW0tXdeDwJhAN99Bf4Ss6SAgAD8+x1banICCkG8BbrBWNUmwurVTYT7/oKYz1gb
+4yJjnFL4uwU2q31Ypd6rO2Pl2tVz7+zg+3vio//wQiOcyraNTT7kSxgDsqgt1Ni7QkuQaYUQ
+26Y3NOh74AEQpZzKOsefT4g0bopl0BqKu6ncyso20fT8wmQpNa/WsadxEdIDQ7GPPprsnjJT
+9HaSyoY0B7ksyuYcStiZDcGG4pCS+1pCaiMhEOllx/XVu37qjIUgAmLq0ToHLFnFmTPyOInl
+tukWeh95FPZKEBom+nyK+5swggZmMIIFTqADAgECAhAZI7LeyhSMlN2e4v936HQiMA0GCSqG
+SIb3DQEBCwUAMIGbMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRowGAYDVQQKExFDT01PRE8gQ0EgTGltaXRlZDFBMD8GA1UE
+AxM4Q09NT0RPIFNIQS0yNTYgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1h
+aWwgQ0EwHhcNMTYwNTIwMDAwMDAwWhcNMTkwNTIwMjM1OTU5WjCCAV0xCzAJBgNVBAYTAlNF
+MQ8wDQYDVQQREwY2ODMgMzExEjAQBgNVBAgTCVZhZXJtbGFuZDEQMA4GA1UEBxMHSGFnZm9y
+czEYMBYGA1UECRMPTm9ycmluZ3MgdmFlZyAyMQ8wDQYDVQQSEwZCb3ggMzAxJjAkBgNVBAoM
+HUtsYXLDpGx2ZGFsZW5zIERhdGFrb25zdWx0IEFCMR0wGwYDVQQLExRBIEtEQUIgR3JvdXAg
+Q29tcGFueTFDMEEGA1UECww6SXNzdWVkIHRocm91Z2ggS2xhcsOkbHZkYWxlbnMgRGF0YWtv
+bnN1bHQgQUIgRS1QS0kgTWFuYWdlcjEfMB0GA1UECxMWQ29ycG9yYXRlIFNlY3VyZSBFbWFp
+bDEXMBUGA1UEAxMOVGhvbWFzIE1jR3VpcmUxJjAkBgkqhkiG9w0BCQEWF3Rob21hcy5tY2d1
+aXJlQGtkYWIuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuDecKvDdY1ph
+SHzfXH9PNNU9p/uUYczsDFcOhZhgliTQIkhKYzfKHDS9whGctQgk24WW4pWljmqe04yR9PAa
+7W6P33fUIpRbLXpcJH/kbB5KKFvu6ngNCvvsMcc99O8VUpwpAQxQzD1wE2JMTaQP3qncEWnA
+w5BxqKmNwsPWSA83rtIymqdywH+XpW6OlGnobIeWbJs01DyWtk3fSihXkIScdSbseURGfe5I
+h8dgtwKcDOclIZMOpNrTIeUptaBgz0agyumGUng674yjLCsq2y56M0GVVqV/UuQVXD3hZ0sd
+NI6QwEpVv9SqYNG9P6EFZDLWOMoQ/Wr381u50Gi9SQIDAQABo4IB3zCCAdswHwYDVR0jBBgw
+FoAUkmFrguGioKpP7GfxwqP3tIAAwewwHQYDVR0OBBYEFFJkf3u3i5ya0btTxeE7SBUfMb4V
+MA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUFBwMEBggr
+BgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1odHRw
+czovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBdBgNVHR8EVjBUMFKgUKBOhkxodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9TSEEyNTZDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3Vy
+ZUVtYWlsQ0EuY3JsMIGQBggrBgEFBQcBAQSBgzCBgDBYBggrBgEFBQcwAoZMaHR0cDovL2Ny
+dC5jb21vZG9jYS5jb20vQ09NT0RPU0hBMjU2Q2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1
+cmVFbWFpbENBLmNydDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuY29tb2RvY2EuY29tMCIG
+A1UdEQQbMBmBF3Rob21hcy5tY2d1aXJlQGtkYWIuY29tMA0GCSqGSIb3DQEBCwUAA4IBAQAr
+10v3g3pwIwMrlnY0+Th+xn3abKxWFnjyMU53hI9AvSuw3GlnxxuCSRtqvAuOhT3UyPx0SmCa
+JmK4kWLmw7kcpCev9M0MX9CAoih81htOi227ejkK3I3+C+7x73/xaFRWxC33bO7aHF/UPF0D
+SuB7AJ7YbL/i/xk8hoTfi2ht5mzP22pkVYVjvQZsBB5wXMEGytPC5p1KXfK7kPF0JzwnnHGh
+ykXopklCR8QY65FULJHT/ESjEJ/8+XTx0HCkmGYja6n+9Zwh1oP9nXeIBrolhJIf74n97f3K
+cSbqGQDVuoH0JyUG9OtMpaEXoBw9TRX7qmfxjlYXdNjYRK/0NCE2MYIEQTCCBD0CAQEwgbAw
+gZsxCzAJBgNVBAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcT
+B1NhbGZvcmQxGjAYBgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMUEwPwYDVQQDEzhDT01PRE8g
+U0hBLTI1NiBDbGllbnQgQXV0aGVudGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIQGSOy
+3soUjJTdnuL/d+h0IjANBglghkgBZQMEAgEFAKCCAmEwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMTcwNjEzMDkzMTM5WjAvBgkqhkiG9w0BCQQxIgQgqdb8
+wJlTI80DWuHt2S1HX+KxtnBPu7poiHM+FGIAGOcwbAYJKoZIhvcNAQkPMV8wXTALBglghkgB
+ZQMEASowCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA4GCCqGSIb3DQMCAgIAgDANBggqhkiG
+9w0DAgIBQDAHBgUrDgMCBzANBggqhkiG9w0DAgIBKDCBwQYJKwYBBAGCNxAEMYGzMIGwMIGb
+MQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdT
+YWxmb3JkMRowGAYDVQQKExFDT01PRE8gQ0EgTGltaXRlZDFBMD8GA1UEAxM4Q09NT0RPIFNI
+QS0yNTYgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEBkjst7K
+FIyU3Z7i/3fodCIwgcMGCyqGSIb3DQEJEAILMYGzoIGwMIGbMQswCQYDVQQGEwJHQjEbMBkG
+A1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYDVQQKExFD
+T01PRE8gQ0EgTGltaXRlZDFBMD8GA1UEAxM4Q09NT0RPIFNIQS0yNTYgQ2xpZW50IEF1dGhl
+bnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0ECEBkjst7KFIyU3Z7i/3fodCIwDQYJKoZI
+hvcNAQEBBQAEggEASl4E3wKo3aTf7yBvan4J7UeQ9QdiE8nsS+5c6pvTPMfzD/RdUGIf9JNU
+BFmu1bULD6kPTItncmtqroPQyV6yYm6ntrS4L4QF+Gm10GpbvtLa6HqQHvHIokh9N5RevZVR
+5vCVd2D7izQOI+fyr49wg6nPWyaQnMgINw6dlYJcZNwink0jcoLdrsNeW5POApJBo0+pNi8n
+J8KcJZP7BI29v+bfOdDXqLYxhuvVBWLkUzVLstiNzol0fytY5jnhqhRai2+6g/oT8AWnjckn
+ZpareQfHLCzFUAIs7t0Hre4dQKemPgfpJAb8cUIB3jT/zV+lE1YPbpQzR3wdK8EnopzbuQAA
+AAAAAA==
+--------------ms040702020407070508020708--
 
-Enjoy!
+--===============8899383002791509597==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
 
-Mathieu
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
-Project website: http://liburcu.org
-Git repository: git://git.liburcu.org/urcu.git
-
-Changelog:
-
-2017-06-12 Userspace RCU 0.10.0
-        * Bump library soname due to urcu flavor structure change
-        * Cleanup: use mutex_lock() wrapper in rculfhash
-        * Use workqueue in rculfhash
-        * Implement urcu workqueues internal API
-        * Add support for m68k architecture
-        * Set -Wall globally in AM_CFLAGS
-        * Fix: remove double use of PTHREAD_CFLAGS
-        * Re-add PTHREAD_CFLAGS to global CFLAGS
-        * Fix: Don't override user variables within the build system
-        * Add report at the end of configure
-        * uatomic-api docs: use the third-person singular
-        * Add --enable-rcu-debug to configure
-        * ARM32: use dmb ish (inner shareable domain) for smp barriers
-        * Cleanup: remove cmm_wmb() from rcu_xchg_pointer and rcu_cmpxchg_pointer
-        * Fix: uatomic arm32: add missing release barrier before uatomic_xchg
-        * Tests: Add verbose support to test script
-        * Fix: add missing CONFIG_RCU_FORCE_SYS_MEMBARRIER to urcu/config.h.in
-        * Allow forcing the use of sys membarrier
-        * Fix: rcutorture: work-around signal issue on mac os x
-        * Fix: rcutorture should register thread using call_rcu
-        * Fix: add missing backslash in Makefile.am
-        * Fix: Do not use wildcards in include/Makefile.am
-        * Bump version to 0.10-pre
-        * Fix: check for rand_r() in compat-rand.h
-        * Fix: Move rand-compat to private src dir
-        * Fix: remove AC_FUNC_MALLOC from configure.ac
-        * Cleanup: Re-organise source dir
-        * Cleanup: remove leftover manual pthread detection
-        * Fix: update ax_pthread macro to handle newer clang
-        * Update library current version due to adding destroy API
-        * Fix: Use pthread_self to get threadid on OSX
-        * Fix: examples: use destroy API for queues/stacks
-        * Update library age due to new stack/queue destroy API
-        * Fix: tests: invoke destroy APIs for queues/stacks
-        * Fix: add missing destroy functions to queues/stack APIs
-        * Fix: add missing __cds_wfcq_init for LGPL API
-        * Fix: memory leak on hash table destroy
-        * Fix: Add failover for platforms without nproc
-        * Fix: use clock_get_time for caa_get_cycles fallback on MacOSX
-        * Fix: syscall-compat.h MacOSX support
-        * Fix: Add solaris-build.md to dist
-        * rculfhash: Documentation: clarify need for grace period before "re-using"
-        * Port: build shared libraries in Cygwin
-        * Port: fix compatibility header for Cygwin
-        * Add GNU Hurd support to syscall-compat.h
-        * Add support for aarch64_be
-        * Fix: urcu-bp: re-initialize list head on library exit
-        * bootstrap: Standardize on autoreconf -vi
-        * Harmonize bootstrap script across projects
-        * Fix: examples make distcheck failure
-        * wfcqueue: add C++ compatibility API
-        * Fix: CDS_WFCQ_WOULDBLOCK typing for c++
-        * Fix: configure.ac: check for possibly required libs for clock_gettime
-        * Support for NIOS2 architecture
-        * urcu_ref_get_safe: introduce new API
-        * Fix: handle reference count overflow
-        * Fix: compat_futex should work-around futex signal-restart kernel bug
-        * Support for Xeon-Phi with newer MPSS
-        * sparc64: allocate membarrier system call number
-        * hppa: allocate membarrier system call number
-        * Fix build on non-Linux Debian ports
-        * Fix: urcu-signal: smp_mb_master() needs registry lock
-        * Fix: rculfhash only needs to include urcu-pointers.h
-        * Fix: out-of-tree benchmark/regtest
-        * Fix: add missing regtest and benchmark files to dist tarball
-        * Fix: add missing run.sh to benchmark makefile
-
-2017-06-12 Userspace RCU 0.9.4
-        * Fix: Don't override user variables within the build system
-        * Fix: uatomic arm32: add missing release barrier before uatomic_xchg
-        * Tests: Add verbose support to test script
-
-2017-12-06 Userspace RCU 0.8.10 (End of Life)
-        * Fix: Don't override user variables within the build system
-        * Fix: uatomic arm32: add missing release barrier before uatomic_xchg
-        * Fix: rcutorture: work-around signal issue on mac os x
-        * Fix: rcutorture should register thread using call_rcu
-        * Fix: remove AC_FUNC_MALLOC from configure.ac
-        * Update library current version due to adding destroy API
-        * Fix: Use pthread_self to get threadid on OSX
-        * Fix: examples: use destroy API for queues/stacks
-        * Update library age due to new stack/queue destroy API
-        * Fix: tests: invoke destroy APIs for queues/stacks
-        * Fix: add missing destroy functions to queues/stack APIs
-        * Fix: memory leak on hash table destroy
-        * Fix: urcu-bp: re-initialize list head on library exit
-        * Fix: examples make distcheck failure
-        * Cleanup: remove unused return value warning from tests
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--===============8899383002791509597==--
