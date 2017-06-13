@@ -1,16 +1,19 @@
-From: "Deneau, Tom" <tom.deneau@amd.com>
-Subject: lost events in a trace
-Date: Mon, 12 Jun 2017 22:21:13 +0000
-Message-ID: <CY4PR12MB19125598FF6B51B788A84AE39BCD0__49943.806223064$1497361010$gmane$org@CY4PR12MB1912.namprd12.prod.outlook.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: Re: lost events in a trace
+Date: Tue, 13 Jun 2017 11:31:19 -0400
+Message-ID: <CAB4xu_2DaaFtOSRNcZ+5YfJgxzbmVhgQNtBTSXTkAE_CGCz4dA__30277.6709585034$1497367927$gmane$org@mail.gmail.com>
+References: <CY4PR12MB19125598FF6B51B788A84AE39BCD0@CY4PR12MB1912.namprd12.prod.outlook.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from NAM03-CO1-obe.outbound.protection.outlook.com
- (mail-co1nam03on0084.outbound.protection.outlook.com [104.47.40.84])
- by lists.lttng.org (Postfix) with ESMTPS id 3wn4Tj3rFzz114F
- for <lttng-dev@lists.lttng.org>; Tue, 13 Jun 2017 09:39:05 +0000 (UTC)
-Content-Language: en-US
+Received: from mail-qt0-x242.google.com (mail-qt0-x242.google.com
+ [IPv6:2607:f8b0:400d:c0d::242])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wnDM060HQz11fD
+ for <lttng-dev@lists.lttng.org>; Tue, 13 Jun 2017 15:33:48 +0000 (UTC)
+Received: by mail-qt0-x242.google.com with SMTP id x58so35255162qtc.2
+ for <lttng-dev@lists.lttng.org>; Tue, 13 Jun 2017 08:31:50 -0700 (PDT)
+In-Reply-To: <CY4PR12MB19125598FF6B51B788A84AE39BCD0@CY4PR12MB1912.namprd12.prod.outlook.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,14 +23,38 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: "Deneau, Tom" <tom.deneau@amd.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SSBhbSB1c2luZyB0aGUgYmFiZWx0cmFjZSBweXRob24zIGJpbmRpbmdzIG9uIGEgdHJhY2UgY29s
-bGVjdGVkIHdpdGggZXZlbnQtbG9zcy1tb2RlCnNldCB0byBkaXNjYXJkLiAgVGhlIHRyYWNlY29s
-bGVjdGlvbiBpcyBhIGNvbWJpbmF0aW9uIG9mIGEga2VybmVsIGNoYW5uZWwgYW5kIGEgdXNlcm1v
-ZGUKY2hhbm5lbC4gSG93IGNhbiBJIHRlbGwgd2hldGhlciB0aGVyZSBhcmUgYW55IGxvc3QgZXZl
-bnRzIGluIHRoaXMgdHJhY2U/CgotLSBUb20gRGVuZWF1CgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
-L2xpc3RpbmZvL2x0dG5nLWRldgo=
+T24gTW9uLCBKdW4gMTIsIDIwMTcgYXQgNjoyMSBQTSwgRGVuZWF1LCBUb20gPHRvbS5kZW5lYXVA
+YW1kLmNvbT4gd3JvdGU6Cj4KPiBJIGFtIHVzaW5nIHRoZSBiYWJlbHRyYWNlIHB5dGhvbjMgYmlu
+ZGluZ3Mgb24gYSB0cmFjZSBjb2xsZWN0ZWQgd2l0aCBldmVudC1sb3NzLW1vZGUKPiBzZXQgdG8g
+ZGlzY2FyZC4gIFRoZSB0cmFjZWNvbGxlY3Rpb24gaXMgYSBjb21iaW5hdGlvbiBvZiBhIGtlcm5l
+bCBjaGFubmVsIGFuZCBhIHVzZXJtb2RlCj4gY2hhbm5lbC4gSG93IGNhbiBJIHRlbGwgd2hldGhl
+ciB0aGVyZSBhcmUgYW55IGxvc3QgZXZlbnRzIGluIHRoaXMgdHJhY2U/CgpIZWxsbyBUb20uCgpV
+bmZvcnR1bmF0ZWx5LCB0aGUgYGJhYmVsdHJhY2VgIFB5dGhvbiBtb2R1bGUvcGFja2FnZSBkb2Vz
+IG5vdCBvZmZlcgphbiBBUEkgdG8gY2hlY2sgZm9yIGRpc2NhcmRlZCBldmVudHMgZGlyZWN0bHku
+CgpXaGF0IHlvdSBjb3VsZCB0cnkgaXMgdG8gY2hlY2sgdGhlIHBhY2tldCBjb250ZXh0J3MgYGV2
+ZW50c19kaXNjYXJkZWRgCmZpZWxkIGZvciBlYWNoIGV2ZW50IChub3QgdGVzdGVkKToKCiAgICBm
+cm9tIGJhYmVsdHJhY2UgaW1wb3J0IENURlNjb3BlCgogICAgZm9yIGV2ZW50IGluIG15X3RyYWNl
+X2NvbGxlY3Rpb24uZXZlbnRzOgogICAgICAgIGVkX2ZpZWxkID0gZXZlbnQuZmllbGRfd2l0aF9z
+Y29wZSgnZXZlbnRzX2Rpc2NhcmRlZCcsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIENURlNjb3BlLlNUUkVBTV9QQUNLRVRfQ09OVEVYVCkKCiAgICAgICAgaWYgZWRf
+ZmllbGQgaXMgbm90IE5vbmUgYW5kIGVkX2ZpZWxkICE9IDA6CiAgICAgICAgICAgIHBhdGggPSBl
+dmVudC5oYW5kbGUucGF0aAogICAgICAgICAgICBwcmludCgne30gZGlzY2FyZGVkIGV2ZW50cyBz
+byBmYXIgaW4gYHt9YC4nLmZvcm1hdChlZF9maWVsZCwgcGF0aCkpCgpCYWJlbHRyYWNlIDIgd2ls
+bCBvZmZlciBhbiBBUEkgKHdpdGggYm90aCB0aGUgbmF0aXZlIEMvQysrIEFQSSBhbmQgdGhlClB5
+dGhvbiBiaW5kaW5ncykgdG8gY2hlY2sgdGhpcyBtb3JlIG5hdHVyYWxseS4gQmFzaWNhbGx5LCB3
+aXRoIHRoZQpCYWJlbHRyYWNlIDIgQVBJLCB5b3UgZG8gbm90IGl0ZXJhdGUgb24gZXZlbnRzIG9u
+bHksIGJ1dCBvbiBvdGhlcgpub3RpZmljYXRpb25zIGFzIHdlbGwsIHNvbWUgb2YgdGhlbSBiZWlu
+ZyBkaWNhcmRlZCBldmVudHMgKGF0IHRyYWNpbmcKdGltZSkgYW5kIGRpc2NhcmRlZCBwYWNrZXRz
+IChhdCB0cmFjaW5nIHRpbWUpLiBUaGUgdXBjb21pbmcgYGJ0MmAgUHl0aG9uCnBhY2thZ2UgaXMg
+bm90IGF2YWlsYWJsZSB5ZXQgYXMgb2YgQmFiZWx0cmFjZSAyLjAuMC1wcmUxLCB0aGUgY3VycmVu
+dApyZWxlYXNlIGFzIG9mIHRoaXMgZGF0ZS4KCkhvcGUgaXQgaGVscHMsClBoaWwKCj4KPiAtLSBU
+b20gRGVuZWF1Cj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+Cj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
+LWRldgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
+Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0
+cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
