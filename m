@@ -1,22 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [RELEASE] Babeltrace 2.0.0-pre1
-Date: Tue, 13 Jun 2017 15:19:26 -0400
-Message-ID: <CA+jJMxsJj20GngvP=3WydhJErXxg+MASz5ugc1g9ffbS4-Rj=g__29429.2610408322$1497381574$gmane$org@mail.gmail.com>
-References: <CA+jJMxtdXsJ_kc0NxWrSSP6G6iMo71deNYmaxg74_xAS-7OVPQ@mail.gmail.com>
- <87h8zj7qnp.fsf@mentor.com>
- <CA+jJMxsC2Rb7OBs26m9n336RaqyHSGaEXyS57_Z1wRbdr821rQ@mail.gmail.com>
- <be10942d703277c4a2dcce2b644dbf72@polymtl.ca>
+From: "Deneau, Tom" <tom.deneau@amd.com>
+Subject: Reducing profiling overhead
+Date: Tue, 13 Jun 2017 19:41:34 +0000
+Message-ID: <CY4PR12MB19120E9E728DC75A57FDD7999BC20__12351.3514212847$1497385114$gmane$org@CY4PR12MB1912.namprd12.prod.outlook.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yw0-x243.google.com (mail-yw0-x243.google.com
- [IPv6:2607:f8b0:4002:c05::243])
- by lists.lttng.org (Postfix) with ESMTPS id 3wnKPf2H4Jz129v
- for <lttng-dev@lists.lttng.org>; Tue, 13 Jun 2017 19:21:25 +0000 (UTC)
-Received: by mail-yw0-x243.google.com with SMTP id j11so3662629ywa.2
- for <lttng-dev@lists.lttng.org>; Tue, 13 Jun 2017 12:19:27 -0700 (PDT)
-In-Reply-To: <be10942d703277c4a2dcce2b644dbf72@polymtl.ca>
+Received: from NAM01-BN3-obe.outbound.protection.outlook.com
+ (mail-bn3nam01on0078.outbound.protection.outlook.com [104.47.33.78])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wnKvK1WT0z12Dl
+ for <lttng-dev@lists.lttng.org>; Tue, 13 Jun 2017 19:43:40 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,27 +20,43 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Simon Marchi <simon.marchi@polymtl.ca>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Nathan Lynch <nathan_lynch@mentor.com>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMTMgSnVuZSAyMDE3IGF0IDE1OjA0LCBTaW1vbiBNYXJjaGkgPHNpbW9uLm1hcmNoaUBwb2x5
-bXRsLmNhPiB3cm90ZToKPiBPbiAyMDE3LTA2LTEzIDIwOjM4LCBKw6lyw6ltaWUgR2FsYXJuZWF1
-IHdyb3RlOgo+Pgo+PiBGWUksIHRoZSBpbi10cmVlIHBsdWdpbnMgYXJlIGVtYmVkLWFibGUgYnkg
-c2V0dGluZwo+PiBCVF9CVUlMVF9JTl9QTFVHSU5TPTEgYXQgY29uZmlndXJlIHRpbWUuCj4KPgo+
-IEkgd2FzIHdvbmRlcmluZyB3aHkgdGhpcyB3YXMgYW4gZW52aXJvbm1lbnQgdmFyaWFibGUgYW5k
-IG5vdCBhIGNvbW1hbmQgbGluZQo+IGZsYWcgdG8gY29uZmlndXJlLiAgSSBmaW5kIGVudiB2YXIt
-cmVsYXRlZCBwcm9ibGVtcyBtb3JlIGRpZmZpY3VsdCB0bwo+IGRpYWdub3NlIGluIGdlbmVyYWwg
-KGJlY2F1c2UgdGhleSBtaWdodCBub3QgYmUgbWVudGlvbmVkIGluIGJ1ZyByZXBvcnRzLCBmb3IK
-PiBleGFtcGxlKSwgc28gdGhhdCBjYXVnaHQgbXkgYXR0ZW50aW9uLgo+Cj4gU2ltb24KCkhvbmVz
-dGx5LCBpdCdzIG1haW5seSBiZWNhdXNlIGl0J3Mgbm90IGNsZWFyIGhvdyB0byBzZXQgaXQgYXMg
-YW4KYXV0b2NvbmYgb3B0aW9uIHdoaWxlIG9iZXlpbmcgdGhlaXIgZ3VpZGVsaW5lcy4KClNlZSBo
-dHRwczovL2F1dG90b29scy5pby9hdXRvY29uZi9hcmd1bWVudHMuaHRtbAoKVGhhdCBkb2Vzbid0
-IGZpdCB0aGUgLS1lbmFibGUvZGlzYWJsZSAoaXQncyBub3QgZW5hYmxpbmcgYSBmZWF0dXJlKSBv
-cgotLXdpdGgvd2l0aG91dCAoaXQncyBub3QgYWN0aW5nIG9uIGFuIGV4dGVybmFsIGRlcGVuZGVu
-Y3kpIHBhcmFkaWdtcy4KSW4gdGhpcyByZXNwZWN0LCBlbnZpcm9ubWVudCB2YXJpYWJsZXMgc2Vl
-bSAiZmFpciBnYW1lIi4KCkrDqXLDqW1pZQoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNp
-T1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBs
-aXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
-c3RpbmZvL2x0dG5nLWRldgo=
+SSBhbSB0cnlpbmcgdG8gdXNlIGx0dG5nIHRvIHNpbXVsdGFuZW91c2x5IHRyYWNlIHNvbWUga2Vy
+bmVsIGFuZCB1c2VyIGV2ZW50cy4KVGhlIGtlcm5lbCBldmVudHMgYXJlIGEgZmV3IHN5c2NhbGxz
+IChzZW5kdG8sIGZ1dGV4KS4KVGhlIHVzZXIgZXZlbnRzIGFyZSB0aGUgcHRocmVhZCBvbmVzIGlu
+IGx0dG5nLXVzdC1saWJjLXdyYXBwZXIuCgpMb29raW5nIGZvciByZWNvbW1lbmRlZCBsdHRuZyBj
+b25maWd1cmF0aW9ucyB0bzoKICAgKiBhdm9pZCBkcm9wcGluZyBhbnkgZXZlbnRzCiAgICogYXZv
+aWQgdG9vIG11Y2ggb3ZlcmhlYWQgdG8gc2xvdyBkb3duIHRoZSBwcm9maWxlZCBhcHBsaWNhdGlv
+bi4KCkFzIGJhY2tncm91bmQgaW5mbywgdGhlIHByb2ZpbGVkIGFwcGxpY2F0aW9uIG1pZ2h0IGJl
+IHJ1bm5pbmcgYXMgbWFueSBhcyA2NCBzb2Z0d2FyZSB0aHJlYWRzLgpFYWNoIHRocmVhZCBtaWdo
+dCBiZSBkb2luZyBhcyBtYW55IGFzIDQwMDAgIm9wZXJhdGlvbnMiLyBzZWMgc28gYXBwcm94aW1h
+dGVseSAyNTAsMDAwIHRvdGFsIApvcGVyYXRpb25zL3NlYy4gIEEgc2luZ2xlIG9wZXJhdGlvbiBp
+bnZvbHZlcyBhYm91dCA2MC03MCB0cmFjZSBldmVudHMgKHRoZSBudW1iZXIgaXMgdmFyaWFibGUK
+ZGVwZW5kaW5nIG9uIHRoZSBhbW91bnQgb2YgbG9jayBjb250ZW50aW9uKS4KCkFsbCB0aGUgdGhy
+ZWFkcyBhcmUgdmVyeSBzaW1pbGFyIHNvIHRoZXJlIGlzIG5vIG5lZWQgdG8gcHJvZmlsZSBhbGwg
+dGhlIHRocmVhZHMuCgpSaWdodCBub3cgSSBkb24ndCBnZXQgYW55IG1lc3NhZ2VzIGZyb20gbHR0
+bmctc3RvcCBub3IgZnJvbSBiYWJlbHRyYWNlIHNheWluZwp0aGF0IGFueSBldmVudHMgYXJlIGJl
+aW5nIGRyb3BwZWQgc28gdGhhdCdzIGdvb2QuCgpJIGFtIGhvd2V2ZXIgc2VlaW5nIGEgcHJldHR5
+IHNpZ25pZmljYW50IHBlcmZvcm1hbmNlIGRyb3AgaW4gdGhlIGFwcCB3aXRoIHByb2ZpbGluZy4K
+VGhlIDI1MCwwMDAgdG90YWwgb3BzL3NlYyBjYW4gZ28gZG93biB0byAxNzAsMDAwIG9wcy9zZWMu
+ICBJIGhhdmUgbWVhc3VyZWQgdGhpcwpieSBwcm9maWxpbmcgZm9yIHNldmVyYWwgc2Vjb25kcyBh
+bmQgb2JzZXJ2aW5nIHRoZSBlZmZlY3Qgb24gdGhlIHdvcmtsb2FkIHBlcmlvZGljIHBlcmZvcm1h
+bmNlIHJlcG9ydHMuCkFuZCBhbHNvIGJ5IG1lYXN1cmluZyB0aGUgbnVtYmVyIG9mIG9wcy9zZWMg
+cGVyIHRocmVhZCBpbiB0aGUgdHJhY2VzIHRoZW1zZWx2ZXMuICAoQW4gb3AgYWx3YXlzIGhhcwpv
+bmUgc2VuZHRvIHN5c2NhbGwpLgoKVGhlIHN1YmJ1ZiBzZXR1cCBJIGFtIGN1cnJlbnRseSB1c2lu
+ZyBwcm9iYWJseSBpcyBub3QgIG9wdGltYWw6CiAgICAgICAgbHR0bmcgZW5hYmxlLWNoYW5uZWwg
+ayAtayAtLW51bS1zdWJidWYgNjQgLS1zdWJidWYtc2l6ZSA1MTJrCiAgICAgICAgbHR0bmcgZW5h
+YmxlLWNoYW5uZWwgdSAtdSAtLW51bS1zdWJidWYgNjQgLS1zdWJidWYtc2l6ZSA1MTJrCiAgICAg
+ICAgbHR0bmcgYWRkLWNvbnRleHQgLWsgLWMgayAtdCB0aWQgLXQgcGlkCiAgICAgICAgbHR0bmcg
+YWRkLWNvbnRleHQgLXUgLWMgdSAtdCB2dGlkIC10IHZwaWQKCldoZW4gSSBlbmFibGUtZXZlbnRz
+LCBJIGdlbmVyYWxseSBmaWx0ZXIgb24gZWl0aGVyIGEgcGlkL3ZwaWQgKGZvciBib3RoIGtlcm5l
+bCBhbmQgdXNlcikKb3Igb24gYSBzbWFsbCBudW1iZXIgb2YgdGlkcy92dGlkcyAodG8ga2VlcCB0
+aGUgdHJhY2Ugc21hbGxlcikuCgpBbnkgcG9pbnRlcnMgZm9yIHN1YmJ1ZiBjb25maWd1cmF0aW9u
+IG9yIGFueXRoaW5nIHRvIHJlZHVjZSB0aGUgcHJvZmlsaW5nIG92ZXJoZWFkPwpPciBpcyB0aGUg
+MzMlIHBlcmYgaGl0IGZvciB0aGlzIGtpbmQgb2YgcHJvZmlsaW5nIGxvYWQgcHJldHR5IGV4cGVj
+dGVkPwoKLS0gVG9tIERlbmVhdQoKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRu
+Zy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
+dG5nLWRldgo=
