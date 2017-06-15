@@ -1,17 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: [RELEASE] LTTng-Tools 2.8.7 - Isseki Nicho
-Date: Wed, 14 Jun 2017 16:41:27 -0400
-Message-ID: <CA+jJMxu_zE1_KGyonH3Chd93xS3y45-akLsiR+auCeib7dJB_w__49900.6042759449$1497473592$gmane$org@mail.gmail.com>
+From: Denis Yevgenyevich <denis.yevgenyevich@gmail.com>
+Subject: liburcu's assertion failed when cannot allocate memory
+Date: Thu, 15 Jun 2017 16:02:30 +0300
+Message-ID: <CA+prXCGO_VUK5Y_Rj8M2w3S6SDof4eFSVv3WLOg2+XwgiKGwCQ__36282.333956524$1497539263$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1510464821836176539=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yw0-x236.google.com (mail-yw0-x236.google.com
- [IPv6:2607:f8b0:4002:c05::236])
- by lists.lttng.org (Postfix) with ESMTPS id 3wnz9t5QhGz11HK
- for <lttng-dev@lists.lttng.org>; Wed, 14 Jun 2017 20:43:30 +0000 (UTC)
-Received: by mail-yw0-x236.google.com with SMTP id 63so7936286ywr.0
- for <lttng-dev@lists.lttng.org>; Wed, 14 Jun 2017 13:41:28 -0700 (PDT)
+Received: from mail-yb0-x22b.google.com (mail-yb0-x22b.google.com
+ [IPv6:2607:f8b0:4002:c09::22b])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wpNxw6md4z12Ks
+ for <lttng-dev@lists.lttng.org>; Thu, 15 Jun 2017 13:04:36 +0000 (UTC)
+Received: by mail-yb0-x22b.google.com with SMTP id 4so3820525ybl.1
+ for <lttng-dev@lists.lttng.org>; Thu, 15 Jun 2017 06:02:32 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,51 +20,60 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgYWxsLAoKVG9kYXkgd2UgYXJlIHJlbGVhc2luZyB0aGUgc2V2ZW50aCBidWctZml4IHJlbGVh
-c2Ugb2YgTFRUbmctVG9vbHMgMi44LgpUaGlzIHJlbGVhc2UgYWRkcmVzc2VzIGEgbnVtYmVyIG9m
-IGlzc3VlcyBsaXN0ZWQgYmVsb3cuCgoyMDE3LTA2LTE0IGx0dG5nLXRvb2xzIDIuOC43IChOYXRp
-b25hbCBCb3VyYm9uIERheSkKICAgICAgICAqIEZpeDogdGVzdF91dGlsc19leHBhbmRfcGF0aCBw
-YXNzZXMgTlVMTCB0byBzcHJpbnRmCiAgICAgICAgKiBGaXg6IGx0dG5nIGxpc3Qgb2YgY2hhbm5l
-bHMgc2hvdWxkIHJldHVybiBlcnJvcnMKICAgICAgICAqIEZpeDogZGlzY2FyZCBldmVudC9sb3N0
-IHBhY2tldCBjb3VudGVycwogICAgICAgICogRml4OiByZWdpc3RyeSBjYW4gYmUgbnVsbCBvbiBs
-b29rdXAKICAgICAgICAqIEZpeDogdXNlICJmbHVzaCBlbXB0eSIgaW9jdGwgZm9yIHNuYXBzaG90
-cwogICAgICAgICogRml4OiBsdHRuZy1jb25zdW1lcmQ6IGNwdSBob3RwbHVnOiBzZW5kICJzdHJl
-YW1zX3NlbnQiIGNvbW1hbmQKICAgICAgICAqIEZpeDogbHR0bmctc2Vzc2lvbmQ6IGNwdSBob3Rw
-bHVnOiBzZW5kIGNoYW5uZWwgdG8gY29uc3VtZXIgb25seSBvbmNlCiAgICAgICAgKiBGaXg6IGx0
-dG5nLXNlc3Npb25kOiBjcHUgaG90cGx1ZyBzdHJlYW0gbnVtYmVyIG1pc21hdGNoCiAgICAgICAg
-KiBGaXg6IGNvbnN1bWVyX3RpbWVyX3NpZ25hbF90aHJlYWRfcXMgd2FpdHMgb24KTFRUTkdfQ09O
-U1VNRVJfU0lHX1NXSVRDSAogICAgICAgICogRml4OiB0aHJlYWQgZXhpdCB2cyBmdXRleCB3YWl0
-L3dha2V1cCByYWNlCiAgICAgICAgKiBGaXg6IHN0YXR1c19sb2MgYXJndW1lbnQgb2Ygd2FpdHBp
-ZCgpIGlzIHVzZWQgb24gZXJyb3IKICAgICAgICAqIEZpeDogQ09NUEFUX0VQT0xMX1BST0NfUEFU
-SCBpcyBhdmFpbGFibGUgZnJvbSBMaW51eCAyLjYuMjgKICAgICAgICAqIEZpeDogYXNzZXJ0KCkg
-b24gbnVsbCBpbmRleF9maWxlIGluIGx0dG5nX2luZGV4X2ZpbGVfd3JpdGUoKQogICAgICAgICog
-Rml4OiBmYWlsIG9uIHJlbGF5ZCBsb29rdXAgd2hlbiBmaW5kaW5nIGEgcmVsYXlkIGlzIGV4cGVj
-dGVkCiAgICAgICAgKiBkb2M6IGhvdyB0byB0cmFjZSBjb25zdW1lcmQgd2l0aCB2YWxncmluZAog
-ICAgICAgICogQ2xlYW51cDogaW5pdGlhbGl6ZSBrZXJuZWwgaW9jdGwgQUJJIHN0cnVjdHVyZXMg
-dG8gMAogICAgICAgICogQ2xlYW51cDogaW5pdGlhbGl6ZSBkYXRhIHRvIDAKICAgICAgICAqIEZp
-eDogdGVzdHM6IHJlZ2lzdGVyIHRocmVhZCBmb3IgUkNVIG9wZXJhdGlvbnMuCiAgICAgICAgKiBG
-aXg6IExhemlseSBpbml0aWFsaXplIG1heCBwb2xsIHNldCBzaXplIGluIHBvbGwgY29tcGF0CiAg
-ICAgICAgKiBGaXg6IG51bGwgZGVyZWZlcmVuY2Ugb24gZXJyb3IgcGF0aCBmb3IgY3JlYXRlX2N0
-eF90eXBlCiAgICAgICAgKiBGaXg6IHRlc3RfdXN0X2RhdGEgZGVyZWZlcmVuY2Ugb2YgbnVsbCBw
-b2ludGVyCiAgICAgICAgKiBGaXg6IHRlc3Rfa2VybmVsX2RhdGEgZGVyZWZlcmVuY2Ugb2YgbnVs
-bCBwb2ludGVyCiAgICAgICAgKiBNYW46IG1vdmUgW1NFU1NJT05dIGJlZm9yZSBvcHRpb25zCiAg
-ICAgICAgKiBGaXg6IGNvbnN1bWVyZDogYWRkIG1pc3NpbmcgcHV0X3N1YmJ1ZiBmb3IgdXN0IGFu
-ZCBrZXJuZWwgZXJyb3JzCiAgICAgICAgKiBGaXg6IHNlc3Npb25kOiBvbmx5IHNlbmQgc3RyZWFt
-cyB0byBjb25zdW1lciBvbmNlCiAgICAgICAgKiBGaXg6IGNvbnN1bWVyZCBtYWluOiBuZWVkcyB0
-byBiZSBhIHJlZ2lzdGVyZWQgUkNVIHRocmVhZAogICAgICAgICogRml4OiB0aHJlYWRfZGlzcGF0
-Y2hfdXN0X3JlZ2lzdHJhdGlvbiBuZWVkcyB0byBiZSBhIFJDVSB0aHJlYWQKICAgICAgICAqIEZp
-eDogZG9uJ3QgYWJvcnQgbWV0YWRhdGEgcHVzaCBvbiBjbG9zZWQgbWV0YWRhdGEKICAgICAgICAq
-IGx0dG5nLXRvb2xzOiByZW1vdmUgYm9ndXMgaW50ZXJwcmV0ZXIgbGluZSBmcm9tIHV0aWxzIHNo
-ZWxsIGxpYnJhcnkKCkFzIGFsd2F5cywgcGxlYXNlIHJlcG9ydCBhbnkgaXNzdWUgeW91IG1heSBl
-bmNvdW50ZXIgdG8gYnVncy5sdHRuZy5vcmcKb3Igb24gdGhpcyBtYWlsaW5nIGxpc3QuCgpQcm9q
-ZWN0IHdlYnNpdGU6IGh0dHBzOi8vbHR0bmcub3JnCgpEb3dubG9hZCBsaW5rOgpodHRwczovL2x0
-dG5nLm9yZy9maWxlcy9sdHRuZy10b29scy9sdHRuZy10b29scy0yLjguNy50YXIuYnoyCgpHUEcg
-c2lnOgpodHRwczovL2x0dG5nLm9yZy9maWxlcy9sdHRuZy10b29scy9sdHRuZy10b29scy0yLjgu
-Ny50YXIuYnoyLmFzYwoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRw
-Oi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
-LWRldgo=
+--===============1510464821836176539==
+Content-Type: multipart/alternative; boundary="001a114ff5d61009a80551ff485c"
+
+--001a114ff5d61009a80551ff485c
+Content-Type: text/plain; charset="UTF-8"
+
+My memory-constrained application dumps core saying
+
+Assertion failed: (!ret), function _cds_wfcq_init, file
+./urcu/static/wfcqueue.h, line 107.
+Abort
+
+The function was called from the call_rcu thread, my app does not call
+wfcqueue directly.
+
+My operating system is FreeBSD-10.3, you won't reproduce the failure in
+Linux.
+Apparently developers assumed that pthread_mutex_init cannot fail. This
+assumption is ok for Linux, but not so with FreeBSD, which allocates
+mutexes with calloc.
+
+Could you please add proper error handling so that (at least) call_rcu
+threads could cope with memory allocation failures?
+
+Cheers...
+
+--001a114ff5d61009a80551ff485c
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div><div>My memory-constrained application dumps cor=
+e saying<br><br>Assertion failed: (!ret), function _cds_wfcq_init, file ./u=
+rcu/static/wfcqueue.h, line 107.<br>Abort<br><br></div><div>The function wa=
+s called from the call_rcu thread, my app does not call wfcqueue directly.<=
+br></div><div><br>My operating system is FreeBSD-10.3, you won&#39;t reprod=
+uce the failure in Linux.<br></div> Apparently developers assumed that pthr=
+ead_mutex_init cannot fail. This assumption is ok for Linux, but not so wit=
+h FreeBSD, which allocates mutexes with calloc.<br><br></div>Could you plea=
+se add proper error handling so that (at least) call_rcu threads could cope=
+ with memory allocation failures?<br><br></div>Cheers...<br></div>
+
+--001a114ff5d61009a80551ff485c--
+
+--===============1510464821836176539==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============1510464821836176539==--
