@@ -1,16 +1,14 @@
-From: Denis Yevgenyevich <denis.yevgenyevich@gmail.com>
-Subject: liburcu's assertion failed when cannot allocate memory
-Date: Thu, 15 Jun 2017 16:02:30 +0300
-Message-ID: <CA+prXCGO_VUK5Y_Rj8M2w3S6SDof4eFSVv3WLOg2+XwgiKGwCQ__36282.333956524$1497539263$gmane$org@mail.gmail.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-tools] Typo: occured -> occurred
+Date: Fri, 16 Jun 2017 14:09:21 -0400
+Message-ID: <1497636561-399-1-git-send-email-mjeanson__35206.7370353781$1497637351$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1510464821836176539=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yb0-x22b.google.com (mail-yb0-x22b.google.com
- [IPv6:2607:f8b0:4002:c09::22b])
- by lists.lttng.org (Postfix) with ESMTPS id 3wpNxw6md4z12Ks
- for <lttng-dev@lists.lttng.org>; Thu, 15 Jun 2017 13:04:36 +0000 (UTC)
-Received: by mail-yb0-x22b.google.com with SMTP id 4so3820525ybl.1
- for <lttng-dev@lists.lttng.org>; Thu, 15 Jun 2017 06:02:32 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wq7jz2G6pz117Q
+ for <lttng-dev@lists.lttng.org>; Fri, 16 Jun 2017 18:11:51 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,59 +19,55 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
---===============1510464821836176539==
-Content-Type: multipart/alternative; boundary="001a114ff5d61009a80551ff485c"
-
---001a114ff5d61009a80551ff485c
-Content-Type: text/plain; charset="UTF-8"
-
-My memory-constrained application dumps core saying
-
-Assertion failed: (!ret), function _cds_wfcq_init, file
-./urcu/static/wfcqueue.h, line 107.
-Abort
-
-The function was called from the call_rcu thread, my app does not call
-wfcqueue directly.
-
-My operating system is FreeBSD-10.3, you won't reproduce the failure in
-Linux.
-Apparently developers assumed that pthread_mutex_init cannot fail. This
-assumption is ok for Linux, but not so with FreeBSD, which allocates
-mutexes with calloc.
-
-Could you please add proper error handling so that (at least) call_rcu
-threads could cope with memory allocation failures?
-
-Cheers...
-
---001a114ff5d61009a80551ff485c
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div><div><div>My memory-constrained application dumps cor=
-e saying<br><br>Assertion failed: (!ret), function _cds_wfcq_init, file ./u=
-rcu/static/wfcqueue.h, line 107.<br>Abort<br><br></div><div>The function wa=
-s called from the call_rcu thread, my app does not call wfcqueue directly.<=
-br></div><div><br>My operating system is FreeBSD-10.3, you won&#39;t reprod=
-uce the failure in Linux.<br></div> Apparently developers assumed that pthr=
-ead_mutex_init cannot fail. This assumption is ok for Linux, but not so wit=
-h FreeBSD, which allocates mutexes with calloc.<br><br></div>Could you plea=
-se add proper error handling so that (at least) call_rcu threads could cope=
- with memory allocation failures?<br><br></div>Cheers...<br></div>
-
---001a114ff5d61009a80551ff485c--
-
---===============1510464821836176539==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============1510464821836176539==--
+U2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Ci0t
+LQogaW5jbHVkZS9sdHRuZy9ub3RpZmljYXRpb24vY2hhbm5lbC1pbnRlcm5hbC5oICAgICAgIHwg
+MiArLQogc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9ub3RpZmljYXRpb24tdGhyZWFkLWV2ZW50cy5j
+IHwgNiArKystLS0KIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbm90aWZpY2F0aW9uLXRocmVhZC5j
+ICAgICAgICB8IDIgKy0KIDMgZmlsZXMgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCA1IGRlbGV0
+aW9ucygtKQoKZGlmZiAtLWdpdCBhL2luY2x1ZGUvbHR0bmcvbm90aWZpY2F0aW9uL2NoYW5uZWwt
+aW50ZXJuYWwuaCBiL2luY2x1ZGUvbHR0bmcvbm90aWZpY2F0aW9uL2NoYW5uZWwtaW50ZXJuYWwu
+aAppbmRleCBlZmU1MDJmLi4wNzc5ZDczIDEwMDY0NAotLS0gYS9pbmNsdWRlL2x0dG5nL25vdGlm
+aWNhdGlvbi9jaGFubmVsLWludGVybmFsLmgKKysrIGIvaW5jbHVkZS9sdHRuZy9ub3RpZmljYXRp
+b24vY2hhbm5lbC1pbnRlcm5hbC5oCkBAIC03MCw3ICs3MCw3IEBAIHN0cnVjdCBwZW5kaW5nX25v
+dGlmaWNhdGlvbiB7CiAgKiAgIC0gU3luY2hyb25vdXM6IGNvbW1hbmRzIGVtaXR0ZWQgYnkgdGhl
+IGNsaWVudCB0byB3aGljaCBhIHJlcGx5IGlzIGV4cGVjdGVkCiAgKiAgICAgKGUuZy4gc3Vic2Ny
+aWJpbmcvdW5zdWJzY3JpYmluZyB0byBjb25kaXRpb25zKSwKICAqICAgLSBBc3luY2hyb25vdXM6
+IG5vdGlmaWNhdGlvbnMgd2hpY2ggYXJlIHNlbnQgYnkgdGhlIGx0dG5nX2VuZHBvaW50IHRvIHRo
+ZQotICogICAgIGNsaWVudCBhcyBvbmUgb2YgdGhlIHN1YnNjcmliZWQgY29uZGl0aW9uIGhhcyBv
+Y2N1cmVkLgorICogICAgIGNsaWVudCBhcyBvbmUgb2YgdGhlIHN1YnNjcmliZWQgY29uZGl0aW9u
+IGhhcyBvY2N1cnJlZC4KICAqCiAgKiBUaGUgbmF0dXJlIG9mIHRoaXMgaHlicmlkIGNvbW11bmlj
+YXRpb24gbW9kZSBtZWFucyB0aGF0IGFzeW5jaHJvbm91cyBtZXNzYWdlcwogICogKGUuZy4gbm90
+aWZpY2F0aW9ucykgbWF5IGJlIGludGVybGVhdmVkIGJldHdlZW4gc3luY2hyb25vdXMgbWVzc2Fn
+ZXMgKGUuZy4gYQpkaWZmIC0tZ2l0IGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9ub3RpZmljYXRp
+b24tdGhyZWFkLWV2ZW50cy5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9ub3RpZmljYXRpb24t
+dGhyZWFkLWV2ZW50cy5jCmluZGV4IGFiMTIyNGEuLjc1MWU2NjUgMTAwNjQ0Ci0tLSBhL3NyYy9i
+aW4vbHR0bmctc2Vzc2lvbmQvbm90aWZpY2F0aW9uLXRocmVhZC1ldmVudHMuYworKysgYi9zcmMv
+YmluL2x0dG5nLXNlc3Npb25kL25vdGlmaWNhdGlvbi10aHJlYWQtZXZlbnRzLmMKQEAgLTEzNjgs
+NyArMTM2OCw3IEBAIGludCBoYW5kbGVfbm90aWZpY2F0aW9uX3RocmVhZF9jbGllbnRfZGlzY29u
+bmVjdF9hbGwoCiBpbnQgaGFuZGxlX25vdGlmaWNhdGlvbl90aHJlYWRfdHJpZ2dlcl91bnJlZ2lz
+dGVyX2FsbCgKIAkJc3RydWN0IG5vdGlmaWNhdGlvbl90aHJlYWRfc3RhdGUgKnN0YXRlKQogewot
+CWJvb2wgZXJyb3Jfb2NjdXJlZCA9IGZhbHNlOworCWJvb2wgZXJyb3Jfb2NjdXJyZWQgPSBmYWxz
+ZTsKIAlzdHJ1Y3QgY2RzX2xmaHRfaXRlciBpdGVyOwogCXN0cnVjdCBsdHRuZ190cmlnZ2VyX2h0
+X2VsZW1lbnQgKnRyaWdnZXJfaHRfZWxlbWVudDsKIApAQCAtMTM3NywxMCArMTM3NywxMCBAQCBp
+bnQgaGFuZGxlX25vdGlmaWNhdGlvbl90aHJlYWRfdHJpZ2dlcl91bnJlZ2lzdGVyX2FsbCgKIAkJ
+aW50IHJldCA9IGhhbmRsZV9ub3RpZmljYXRpb25fdGhyZWFkX2NvbW1hbmRfdW5yZWdpc3Rlcl90
+cmlnZ2VyKAogCQkJCXN0YXRlLCB0cmlnZ2VyX2h0X2VsZW1lbnQtPnRyaWdnZXIsIE5VTEwpOwog
+CQlpZiAocmV0KSB7Ci0JCQllcnJvcl9vY2N1cmVkID0gdHJ1ZTsKKwkJCWVycm9yX29jY3VycmVk
+ID0gdHJ1ZTsKIAkJfQogCX0KLQlyZXR1cm4gZXJyb3Jfb2NjdXJlZCA/IC0xIDogMDsKKwlyZXR1
+cm4gZXJyb3Jfb2NjdXJyZWQgPyAtMSA6IDA7CiB9CiAKIHN0YXRpYwpkaWZmIC0tZ2l0IGEvc3Jj
+L2Jpbi9sdHRuZy1zZXNzaW9uZC9ub3RpZmljYXRpb24tdGhyZWFkLmMgYi9zcmMvYmluL2x0dG5n
+LXNlc3Npb25kL25vdGlmaWNhdGlvbi10aHJlYWQuYwppbmRleCA3YmQ2NTM2Li5jNjUyYjZlIDEw
+MDY0NAotLS0gYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL25vdGlmaWNhdGlvbi10aHJlYWQuYwor
+KysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL25vdGlmaWNhdGlvbi10aHJlYWQuYwpAQCAtNTY5
+LDcgKzU2OSw3IEBAIGludCBoYW5kbGVfY2hhbm5lbF9tb25pdG9yaW5nX3BpcGUoaW50IGZkLCB1
+aW50MzJfdCByZXZlbnRzLAogCXJldCA9IGhhbmRsZV9ub3RpZmljYXRpb25fdGhyZWFkX2NoYW5u
+ZWxfc2FtcGxlKAogCQkJc3RhdGUsIGZkLCBkb21haW4pOwogCWlmIChyZXQpIHsKLQkJRVJSKCJb
+bm90aWZpY2F0aW9uLXRocmVhZF0gQ29uc3VtZXIgc2FtcGxlIGhhbmRsaW5nIGVycm9yIG9jY3Vy
+ZWQiKTsKKwkJRVJSKCJbbm90aWZpY2F0aW9uLXRocmVhZF0gQ29uc3VtZXIgc2FtcGxlIGhhbmRs
+aW5nIGVycm9yIG9jY3VycmVkIik7CiAJCXJldCA9IC0xOwogCQlnb3RvIGVuZDsKIAl9Ci0tIAoy
+LjcuNAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
+bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
