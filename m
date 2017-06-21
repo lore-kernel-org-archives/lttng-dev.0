@@ -1,16 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: lttng timestamp precision
-Date: Wed, 21 Jun 2017 19:56:18 +0000 (UTC)
-Message-ID: <815892591.17346.1498074977998.JavaMail.zimbra__27548.2599311092$1498074948$gmane$org@efficios.com>
-References: <CY4PR12MB19121ED60A517E3214B8AAB09BC50@CY4PR12MB1912.namprd12.prod.outlook.com>
+From: Kai via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Branch coverage
+Date: Wed, 21 Jun 2017 22:41:20 +0200
+Message-ID: <cc60631b-85b4-cff9-db31-6529a7414724__35067.1956585304$1498078250$gmane$org@yahoo.de>
+Reply-To: Kai <kaiutz@yahoo.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="------------66F24F5D28F6FFD375F6D336"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3wtFpQ5mx6zwNn
- for <lttng-dev@lists.lttng.org>; Wed, 21 Jun 2017 19:56:30 +0000 (UTC)
-In-Reply-To: <CY4PR12MB19121ED60A517E3214B8AAB09BC50@CY4PR12MB1912.namprd12.prod.outlook.com>
+Received: from nm14-vm1.bullet.mail.ir2.yahoo.com
+ (nm14-vm1.bullet.mail.ir2.yahoo.com [212.82.96.189])
+ by lists.lttng.org (Postfix) with ESMTPS id 3wtGrp5xjFzsp5
+ for <lttng-dev@lists.lttng.org>; Wed, 21 Jun 2017 20:43:38 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,27 +20,228 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Tom Deneau <tom.deneau@amd.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-RGVwZW5kaW5nIG9uIHRoZSBhcmNoaXRlY3R1cmUsIGl0IGNhbiB0YWtlIGJldHdlZW4gODBucyB0
-byAydXMgdG8gd3JpdGUgYW4KZXZlbnQuIFNvIGl0J3MgdmVyeSBtdWNoIHBvc3NpYmxlIHRoYXQg
-eW91ciBjb25maWd1cmF0aW9uIHRha2VzIGFib3V0CjQwMG5zIHRvIHdyaXRlIGFuIGV2ZW50LiBU
-aGlzIGhhcyBsaXR0bGUgdG8gZG8gd2l0aCBjbG9jayBzb3VyY2UgcHJlY2lzaW9uLApidXQgaXQg
-aXMgcmF0aGVyIHJlbGF0ZWQgdG8gdGhlIHJ1bnRpbWUgb3ZlcmhlYWQgb2YgdGhlIHRyYWNlci4K
-ClRoYW5rcywKCk1hdGhpZXUKCi0tLS0tIE9uIEp1biAyMCwgMjAxNywgYXQgMTowNSBQTSwgVG9t
-IERlbmVhdSB0b20uZGVuZWF1QGFtZC5jb20gd3JvdGU6Cgo+IElzIHRoZXJlIGEgd3JpdGUtdXAg
-b24gbHR0bmcgdGltZXN0YW1wIHByZWNpc2lvbj8KPiAKPiBJIGhhdmUgbm90aWNlZCBvbiBhIDQu
-MTAga2VybmVsIHdpdGggYSBtaXggb2Yga2VybmVsIGFuZCB1c2VybW9kZSBldmVudHMKPiB0aGF0
-IHRoZSBtaW5pbXVtIHRpbWUgYmV0d2VlbiBldmVudHMgb24gYSBzaW5nbGUgc29mdHdhcmUgdGhy
-ZWFkIHNlZW1zIHRvIGJlCj4gYWJvdXQgNDAwIG5zLgo+IAo+IEkgbm90aWNlZCBvbiB0aGlzIHNh
-bWUgc3lzdGVtIHRoYXQgY2xvY2tfZ2V0cmVzKENMT0NLX01PTk9UT05JQykgcmVwb3J0cyAxIG5z
-Cj4gcmVzb2x1dGlvbi4KPiAKPiAtLSBUb20gRGVuZWF1Cj4gCj4gX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4g
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
-aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZp
-Y2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2
-QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
-bGlzdGluZm8vbHR0bmctZGV2Cg==
+This is a multi-part message in MIME format.
+--------------66F24F5D28F6FFD375F6D336
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hello together,
+
+
+I already using lttng for function coverage. Now I want to trace branch 
+coverage as well. Is it possible to trace jump labels like jle and jne 
+and so on?
+
+Could you give me a hint how to solve this? In the attached file there 
+is the disassembly of the function 40195c <thread_start_read_fast>. How 
+can I trace the jump label e.g:
+
+
+4019b1:     jbe 4019by <thread_start_read_fast+0x60>
+
+
+At the moment iam using the liblttng-ust-cyg-profile.so for the 
+function_entry and function_exit.
+
+
+Thanks for your help.
+
+Best Regards
+
+
+Kai
+
+
+--------------66F24F5D28F6FFD375F6D336
+Content-Type: text/plain; charset=UTF-8;
+ name="disassembly_thread_start_read_fast"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="disassembly_thread_start_read_fast"
+
+MDAwMDAwMDAwMDQwMTk1YyA8dGhyZWFkX3N0YXJ0X3JlYWRfZmFzdD46CiAgNDAxOTVjOgk1
+NSAgICAgICAgICAgICAgICAgICAJcHVzaCAgICVyYnAKICA0MDE5NWQ6CTQ4IDg5IGU1ICAg
+ICAgICAgICAgIAltb3YgICAgJXJzcCwlcmJwCiAgNDAxOTYwOgk0OCA4MyBlYyA0MCAgICAg
+ICAgICAJc3ViICAgICQweDQwLCVyc3AKICA0MDE5NjQ6CTY0IDQ4IDhiIDA0IDI1IDI4IDAw
+IAltb3YgICAgJWZzOjB4MjgsJXJheAogIDQwMTk2YjoJMDAgMDAgCiAgNDAxOTZkOgk0OCA4
+OSA0NSBmOCAgICAgICAgICAJbW92ICAgICVyYXgsLTB4OCglcmJwKQogIDQwMTk3MToJMzEg
+YzAgICAgICAgICAgICAgICAgCXhvciAgICAlZWF4LCVlYXgKICA0MDE5NzM6CTQ4IDhiIDQ1
+IDA4ICAgICAgICAgIAltb3YgICAgMHg4KCVyYnApLCVyYXgKICA0MDE5Nzc6CTQ4IDg5IGM2
+ICAgICAgICAgICAgIAltb3YgICAgJXJheCwlcnNpCiAgNDAxOTdhOgliZiA1YyAxOSA0MCAw
+MCAgICAgICAJbW92ICAgICQweDQwMTk1YywlZWRpCiAgNDAxOTdmOgllOCA4YyBmMCBmZiBm
+ZiAgICAgICAJY2FsbHEgIDQwMGExMCA8X19jeWdfcHJvZmlsZV9mdW5jX2VudGVyQHBsdD4K
+ICA0MDE5ODQ6CWM3IDQ1IGNjIDAwIDAwIDAwIDAwIAltb3ZsICAgJDB4MCwtMHgzNCglcmJw
+KQogIDQwMTk4YjoJZTkgNjQgMDEgMDAgMDAgICAgICAgCWptcHEgICA0MDFhZjQgPHRocmVh
+ZF9zdGFydF9yZWFkX2Zhc3QrMHgxOTg+CiAgNDAxOTkwOgllOCBhYiBmMCBmZiBmZiAgICAg
+ICAJY2FsbHEgIDQwMGE0MCA8cmFuZEBwbHQ+CiAgNDAxOTk1Ogk2NiAwZiBlZiBjMCAgICAg
+ICAgICAJcHhvciAgICV4bW0wLCV4bW0wCiAgNDAxOTk5OglmMiAwZiAyYSBjMCAgICAgICAg
+ICAJY3Z0c2kyc2QgJWVheCwleG1tMAogIDQwMTk5ZDoJZjIgMGYgMTAgMGQgNTMgMDUgMDAg
+CW1vdnNkICAweDU1MyglcmlwKSwleG1tMSAgICAgICAgIyA0MDFlZjggPF9JT19zdGRpbl91
+c2VkKzB4MTI4PgogIDQwMTlhNDoJMDAgCiAgNDAxOWE1OglmMiAwZiA1ZSBjMSAgICAgICAg
+ICAJZGl2c2QgICV4bW0xLCV4bW0wCiAgNDAxOWE5Ogk2NiAwZiAyZSAwNSA1ZiAwNSAwMCAJ
+dWNvbWlzZCAweDU1ZiglcmlwKSwleG1tMCAgICAgICAgIyA0MDFmMTAgPF9JT19zdGRpbl91
+c2VkKzB4MTQwPgogIDQwMTliMDoJMDAgCiAgNDAxOWIxOgk3NiAwOSAgICAgICAgICAgICAg
+ICAJamJlICAgIDQwMTliYyA8dGhyZWFkX3N0YXJ0X3JlYWRfZmFzdCsweDYwPgogIDQwMTli
+MzoJYzcgNDUgYzggMDAgMDAgMDAgMDAgCW1vdmwgICAkMHgwLC0weDM4KCVyYnApCiAgNDAx
+OWJhOgllYiAwNyAgICAgICAgICAgICAgICAJam1wICAgIDQwMTljMyA8dGhyZWFkX3N0YXJ0
+X3JlYWRfZmFzdCsweDY3PgogIDQwMTliYzoJYzcgNDUgYzggMDEgMDAgMDAgMDAgCW1vdmwg
+ICAkMHgxLC0weDM4KCVyYnApCiAgNDAxOWMzOgk4YiA0NSBjOCAgICAgICAgICAgICAJbW92
+ICAgIC0weDM4KCVyYnApLCVlYXgKICA0MDE5YzY6CTQ4IDYzIGQwICAgICAgICAgICAgIAlt
+b3ZzbHEgJWVheCwlcmR4CiAgNDAxOWM5Ogk0OCA4OSBkMCAgICAgICAgICAgICAJbW92ICAg
+ICVyZHgsJXJheAogIDQwMTljYzoJNDggYzEgZTAgMDIgICAgICAgICAgCXNobCAgICAkMHgy
+LCVyYXgKICA0MDE5ZDA6CTQ4IDAxIGQwICAgICAgICAgICAgIAlhZGQgICAgJXJkeCwlcmF4
+CiAgNDAxOWQzOgk0OCBjMSBlMCAwMyAgICAgICAgICAJc2hsICAgICQweDMsJXJheAogIDQw
+MTlkNzoJNDggMDUgNDAgMzEgNjAgMDAgICAgCWFkZCAgICAkMHg2MDMxNDAsJXJheAogIDQw
+MTlkZDoJNDggODkgNDUgZDAgICAgICAgICAgCW1vdiAgICAlcmF4LC0weDMwKCVyYnApCiAg
+NDAxOWUxOglmMiAwZiAxMCAwNSA0ZiAwNSAwMCAJbW92c2QgIDB4NTRmKCVyaXApLCV4bW0w
+ICAgICAgICAjIDQwMWYzOCA8X0lPX3N0ZGluX3VzZWQrMHgxNjg+CiAgNDAxOWU4OgkwMCAK
+ICA0MDE5ZTk6CWYyIDBmIDExIDQ1IGQ4ICAgICAgIAltb3ZzZCAgJXhtbTAsLTB4MjgoJXJi
+cCkKICA0MDE5ZWU6CWJmIDYwIDMyIDYwIDAwICAgICAgIAltb3YgICAgJDB4NjAzMjYwLCVl
+ZGkKICA0MDE5ZjM6CWU4IDM4IGYwIGZmIGZmICAgICAgIAljYWxscSAgNDAwYTMwIDxwdGhy
+ZWFkX211dGV4X2xvY2tAcGx0PgogIDQwMTlmODoJOGIgMDUgOTIgMTggMjAgMDAgICAgCW1v
+diAgICAweDIwMTg5MiglcmlwKSwlZWF4ICAgICAgICAjIDYwMzI5MCA8ZGF0YV9maW5pc2hl
+ZD4KICA0MDE5ZmU6CTg1IGMwICAgICAgICAgICAgICAgIAl0ZXN0ICAgJWVheCwlZWF4CiAg
+NDAxYTAwOgk3NCAxOSAgICAgICAgICAgICAgICAJamUgICAgIDQwMWExYiA8dGhyZWFkX3N0
+YXJ0X3JlYWRfZmFzdCsweGJmPgogIDQwMWEwMjoJOGIgMDUgOGMgMTggMjAgMDAgICAgCW1v
+diAgICAweDIwMTg4YyglcmlwKSwlZWF4ICAgICAgICAjIDYwMzI5NCA8ZGF0YV9maW5pc2hl
+ZCsweDQ+CiAgNDAxYTA4Ogk4NSBjMCAgICAgICAgICAgICAgICAJdGVzdCAgICVlYXgsJWVh
+eAogIDQwMWEwYToJNzQgMGYgICAgICAgICAgICAgICAgCWplICAgICA0MDFhMWIgPHRocmVh
+ZF9zdGFydF9yZWFkX2Zhc3QrMHhiZj4KICA0MDFhMGM6CWJmIDYwIDMyIDYwIDAwICAgICAg
+IAltb3YgICAgJDB4NjAzMjYwLCVlZGkKICA0MDFhMTE6CWU4IGFhIGVmIGZmIGZmICAgICAg
+IAljYWxscSAgNDAwOWMwIDxwdGhyZWFkX211dGV4X3VubG9ja0BwbHQ+CiAgNDAxYTE2Ogll
+OSBlNiAwMCAwMCAwMCAgICAgICAJam1wcSAgIDQwMWIwMSA8dGhyZWFkX3N0YXJ0X3JlYWRf
+ZmFzdCsweDFhNT4KICA0MDFhMWI6CThiIDQ1IGM4ICAgICAgICAgICAgIAltb3YgICAgLTB4
+MzgoJXJicCksJWVheAogIDQwMWExZToJNDggOTggICAgICAgICAgICAgICAgCWNsdHEgICAK
+ICA0MDFhMjA6CThiIDA0IDg1IDkwIDMyIDYwIDAwIAltb3YgICAgMHg2MDMyOTAoLCVyYXgs
+NCksJWVheAogIDQwMWEyNzoJODUgYzAgICAgICAgICAgICAgICAgCXRlc3QgICAlZWF4LCVl
+YXgKICA0MDFhMjk6CTc0IDBmICAgICAgICAgICAgICAgIAlqZSAgICAgNDAxYTNhIDx0aHJl
+YWRfc3RhcnRfcmVhZF9mYXN0KzB4ZGU+CiAgNDAxYTJiOgliZiA2MCAzMiA2MCAwMCAgICAg
+ICAJbW92ICAgICQweDYwMzI2MCwlZWRpCiAgNDAxYTMwOgllOCA4YiBlZiBmZiBmZiAgICAg
+ICAJY2FsbHEgIDQwMDljMCA8cHRocmVhZF9tdXRleF91bmxvY2tAcGx0PgogIDQwMWEzNToJ
+ZTkgYjYgMDAgMDAgMDAgICAgICAgCWptcHEgICA0MDFhZjAgPHRocmVhZF9zdGFydF9yZWFk
+X2Zhc3QrMHgxOTQ+CiAgNDAxYTNhOgliZiA2MCAzMiA2MCAwMCAgICAgICAJbW92ICAgICQw
+eDYwMzI2MCwlZWRpCiAgNDAxYTNmOgllOCA3YyBlZiBmZiBmZiAgICAgICAJY2FsbHEgIDQw
+MDljMCA8cHRocmVhZF9tdXRleF91bmxvY2tAcGx0PgogIDQwMWE0NDoJZjIgMGYgMTAgNDUg
+ZDggICAgICAgCW1vdnNkICAtMHgyOCglcmJwKSwleG1tMAogIDQwMWE0OToJZjIgMGYgMmMg
+YzAgICAgICAgICAgCWN2dHRzZDJzaSAleG1tMCwlZWF4CiAgNDAxYTRkOgk0OCA5OCAgICAg
+ICAgICAgICAgICAJY2x0cSAgIAogIDQwMWE0ZjoJNDggODkgNDUgZTAgICAgICAgICAgCW1v
+diAgICAlcmF4LC0weDIwKCVyYnApCiAgNDAxYTUzOglmMiAwZiAxMCA0NSBkOCAgICAgICAJ
+bW92c2QgIC0weDI4KCVyYnApLCV4bW0wCiAgNDAxYTU4OglmMiAwZiAyYyBjMCAgICAgICAg
+ICAJY3Z0dHNkMnNpICV4bW0wLCVlYXgKICA0MDFhNWM6CTY2IDBmIGVmIGMwICAgICAgICAg
+IAlweG9yICAgJXhtbTAsJXhtbTAKICA0MDFhNjA6CWYyIDBmIDJhIGMwICAgICAgICAgIAlj
+dnRzaTJzZCAlZWF4LCV4bW0wCiAgNDAxYTY0OglmMiAwZiAxMCA0ZCBkOCAgICAgICAJbW92
+c2QgIC0weDI4KCVyYnApLCV4bW0xCiAgNDAxYTY5OglmMiAwZiA1YyBjOCAgICAgICAgICAJ
+c3Vic2QgICV4bW0wLCV4bW0xCiAgNDAxYTZkOgk2NiAwZiAyOCBjMSAgICAgICAgICAJbW92
+YXBkICV4bW0xLCV4bW0wCiAgNDAxYTcxOglmMiAwZiAxMCAwZCA4NyAwNCAwMCAJbW92c2Qg
+IDB4NDg3KCVyaXApLCV4bW0xICAgICAgICAjIDQwMWYwMCA8X0lPX3N0ZGluX3VzZWQrMHgx
+MzA+CiAgNDAxYTc4OgkwMCAKICA0MDFhNzk6CWYyIDBmIDU5IGMxICAgICAgICAgIAltdWxz
+ZCAgJXhtbTEsJXhtbTAKICA0MDFhN2Q6CWYyIDQ4IDBmIDJjIGMwICAgICAgIAljdnR0c2Qy
+c2kgJXhtbTAsJXJheAogIDQwMWE4MjoJNDggODkgNDUgZTggICAgICAgICAgCW1vdiAgICAl
+cmF4LC0weDE4KCVyYnApCiAgNDAxYTg2Ogk0OCA4ZCA0NSBlMCAgICAgICAgICAJbGVhICAg
+IC0weDIwKCVyYnApLCVyYXgKICA0MDFhOGE6CWJlIDAwIDAwIDAwIDAwICAgICAgIAltb3Yg
+ICAgJDB4MCwlZXNpCiAgNDAxYThmOgk0OCA4OSBjNyAgICAgICAgICAgICAJbW92ICAgICVy
+YXgsJXJkaQogIDQwMWE5MjoJZTggYzkgZWUgZmYgZmYgICAgICAgCWNhbGxxICA0MDA5NjAg
+PG5hbm9zbGVlcEBwbHQ+CiAgNDAxYTk3Ogk0OCA4YiA0NSBkMCAgICAgICAgICAJbW92ICAg
+IC0weDMwKCVyYnApLCVyYXgKICA0MDFhOWI6CTQ4IDg5IGM3ICAgICAgICAgICAgIAltb3Yg
+ICAgJXJheCwlcmRpCiAgNDAxYTllOgllOCA4ZCBlZiBmZiBmZiAgICAgICAJY2FsbHEgIDQw
+MGEzMCA8cHRocmVhZF9tdXRleF9sb2NrQHBsdD4KICA0MDFhYTM6CWU4IGViIGZhIGZmIGZm
+ICAgICAgIAljYWxscSAgNDAxNTkzIDxjc19mYXN0X2xvY2tfYWNjZXNzPgogIDQwMWFhODoJ
+NDggOGIgNDUgZDAgICAgICAgICAgCW1vdiAgICAtMHgzMCglcmJwKSwlcmF4CiAgNDAxYWFj
+Ogk0OCA4OSBjNyAgICAgICAgICAgICAJbW92ICAgICVyYXgsJXJkaQogIDQwMWFhZjoJZTgg
+MGMgZWYgZmYgZmYgICAgICAgCWNhbGxxICA0MDA5YzAgPHB0aHJlYWRfbXV0ZXhfdW5sb2Nr
+QHBsdD4KICA0MDFhYjQ6CThiIDRkIGNjICAgICAgICAgICAgIAltb3YgICAgLTB4MzQoJXJi
+cCksJWVjeAogIDQwMWFiNzoJYmEgMWYgODUgZWIgNTEgICAgICAgCW1vdiAgICAkMHg1MWVi
+ODUxZiwlZWR4CiAgNDAxYWJjOgk4OSBjOCAgICAgICAgICAgICAgICAJbW92ICAgICVlY3gs
+JWVheAogIDQwMWFiZToJZjcgZWEgICAgICAgICAgICAgICAgCWltdWwgICAlZWR4CiAgNDAx
+YWMwOgljMSBmYSAwNSAgICAgICAgICAgICAJc2FyICAgICQweDUsJWVkeAogIDQwMWFjMzoJ
+ODkgYzggICAgICAgICAgICAgICAgCW1vdiAgICAlZWN4LCVlYXgKICA0MDFhYzU6CWMxIGY4
+IDFmICAgICAgICAgICAgIAlzYXIgICAgJDB4MWYsJWVheAogIDQwMWFjODoJMjkgYzIgICAg
+ICAgICAgICAgICAgCXN1YiAgICAlZWF4LCVlZHgKICA0MDFhY2E6CTg5IGQwICAgICAgICAg
+ICAgICAgIAltb3YgICAgJWVkeCwlZWF4CiAgNDAxYWNjOgk2YiBjMCA2NCAgICAgICAgICAg
+ICAJaW11bCAgICQweDY0LCVlYXgsJWVheAogIDQwMWFjZjoJMjkgYzEgICAgICAgICAgICAg
+ICAgCXN1YiAgICAlZWF4LCVlY3gKICA0MDFhZDE6CTg5IGM4ICAgICAgICAgICAgICAgIAlt
+b3YgICAgJWVjeCwlZWF4CiAgNDAxYWQzOgk4NSBjMCAgICAgICAgICAgICAgICAJdGVzdCAg
+ICVlYXgsJWVheAogIDQwMWFkNToJNzUgMTkgICAgICAgICAgICAgICAgCWpuZSAgICA0MDFh
+ZjAgPHRocmVhZF9zdGFydF9yZWFkX2Zhc3QrMHgxOTQ+CiAgNDAxYWQ3Ogk4YiA0NSBjYyAg
+ICAgICAgICAgICAJbW92ICAgIC0weDM0KCVyYnApLCVlYXgKICA0MDFhZGE6CWJhIDEwIDI3
+IDAwIDAwICAgICAgIAltb3YgICAgJDB4MjcxMCwlZWR4CiAgNDAxYWRmOgk4OSBjNiAgICAg
+ICAgICAgICAgICAJbW92ICAgICVlYXgsJWVzaQogIDQwMWFlMToJYmYgNTEgMWUgNDAgMDAg
+ICAgICAgCW1vdiAgICAkMHg0MDFlNTEsJWVkaQogIDQwMWFlNjoJYjggMDAgMDAgMDAgMDAg
+ICAgICAgCW1vdiAgICAkMHgwLCVlYXgKICA0MDFhZWI6CWU4IDYwIGVlIGZmIGZmICAgICAg
+IAljYWxscSAgNDAwOTUwIDxwcmludGZAcGx0PgogIDQwMWFmMDoJODMgNDUgY2MgMDEgICAg
+ICAgICAgCWFkZGwgICAkMHgxLC0weDM0KCVyYnApCiAgNDAxYWY0Ogk4MSA3ZCBjYyAwZiAy
+NyAwMCAwMCAJY21wbCAgICQweDI3MGYsLTB4MzQoJXJicCkKICA0MDFhZmI6CTBmIDhlIDhm
+IGZlIGZmIGZmICAgIAlqbGUgICAgNDAxOTkwIDx0aHJlYWRfc3RhcnRfcmVhZF9mYXN0KzB4
+MzQ+CiAgNDAxYjAxOgliZiAwYyAxZSA0MCAwMCAgICAgICAJbW92ICAgICQweDQwMWUwYywl
+ZWRpCiAgNDAxYjA2OgllOCAyNSBlZSBmZiBmZiAgICAgICAJY2FsbHEgIDQwMDkzMCA8cHV0
+c0BwbHQ+CiAgNDAxYjBiOgliZiAwMCAwMCAwMCAwMCAgICAgICAJbW92ICAgICQweDAsJWVk
+aQogIDQwMWIxMDoJZTggYmIgZWUgZmYgZmYgICAgICAgCWNhbGxxICA0MDA5ZDAgPHB0aHJl
+YWRfZXhpdEBwbHQ+Cg==
+--------------66F24F5D28F6FFD375F6D336
+Content-Type: text/x-csrc;
+ name="thread_start_read_fast.c"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="thread_start_read_fast.c"
+
+void *thread_start_read_fast()
+{
+	
+	int mtx_index;
+	
+	for (int i=0; i<LOOP_WORK_READ; i++)
+	{		
+		if ((double)rand()/RAND_MAX > 0.5)
+			mtx_index = 0;
+		else
+			mtx_index = 1;
+		pthread_mutex_t *mtx = &mutex_common[mtx_index];
+		
+		double time = 100e-3;
+		
+		// if data already finished skip iteration
+		pthread_mutex_lock(&mtx_data_flag);
+		if (data_finished[0] && data_finished[1])
+		{
+			pthread_mutex_unlock(&mtx_data_flag);
+			break;
+		}
+		if (data_finished[mtx_index])
+		{
+			pthread_mutex_unlock(&mtx_data_flag);
+			continue;
+		}
+		pthread_mutex_unlock(&mtx_data_flag);
+		
+		struct timespec sleeptime;
+		sleeptime.tv_sec = (int)time;
+		sleeptime.tv_nsec = (long)((time - (int)time) * 1e9);
+		nanosleep(&sleeptime, NULL);
+		
+		// enter critical section and read data
+		pthread_mutex_lock(mtx);
+		cs_fast_lock_access();
+		pthread_mutex_unlock(mtx);
+		
+		if (i%100 == 0)
+			printf("read CS \t\t - %5d/%d\n", i, LOOP_WORK_READ);
+	}
+	
+	printf("thread finished\n");
+	pthread_exit(NULL);
+}
+
+--------------66F24F5D28F6FFD375F6D336
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--------------66F24F5D28F6FFD375F6D336--
