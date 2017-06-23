@@ -1,16 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: liburcu's assertion failed when cannot allocate
- memory
-Date: Fri, 23 Jun 2017 15:57:14 +0000 (UTC)
-Message-ID: <219865926.1427.1498233433988.JavaMail.zimbra__7165.87860738418$1498233852$gmane$org@efficios.com>
-References: <CA+prXCGO_VUK5Y_Rj8M2w3S6SDof4eFSVv3WLOg2+XwgiKGwCQ@mail.gmail.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-modules 1/2] Fix: handle missing ftrace
+	header on v4.12
+Date: Fri, 23 Jun 2017 14:29:42 -0400
+Message-ID: <1498242583-18230-1-git-send-email-mjeanson__33071.406701538$1498242607$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1025521823470627785=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3wvNZ22w1TztF3
- for <lttng-dev@lists.lttng.org>; Fri, 23 Jun 2017 16:04:41 +0000 (UTC)
-In-Reply-To: <CA+prXCGO_VUK5Y_Rj8M2w3S6SDof4eFSVv3WLOg2+XwgiKGwCQ@mail.gmail.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 3wvRpN2CRSztVq
+ for <lttng-dev@lists.lttng.org>; Fri, 23 Jun 2017 18:30:35 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 7D1BB340263
+ for <lttng-dev@lists.lttng.org>; Fri, 23 Jun 2017 18:30:01 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,128 +22,61 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Denis Yevgenyevich <denis.yevgenyevich@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1025521823470627785==
-Content-Type: multipart/alternative;
-	boundary="=_b3a7f61b-74c6-4b93-bf12-5953fe3c9f20"
-
---=_b3a7f61b-74c6-4b93-bf12-5953fe3c9f20
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
------ On Jun 15, 2017, at 9:02 AM, Denis Yevgenyevich <denis.yevgenyevich@gmail.com> wrote: 
-
-> My memory-constrained application dumps core saying
-
-> Assertion failed: (!ret), function _cds_wfcq_init, file
-> ./urcu/static/wfcqueue.h, line 107.
-> Abort
-
-> The function was called from the call_rcu thread, my app does not call wfcqueue
-> directly.
-
-> My operating system is FreeBSD-10.3, you won't reproduce the failure in Linux.
-> Apparently developers assumed that pthread_mutex_init cannot fail. This
-> assumption is ok for Linux, but not so with FreeBSD, which allocates mutexes
-> with calloc.
-
-> Could you please add proper error handling so that (at least) call_rcu threads
-> could cope with memory allocation failures?
-
-> Cheers...
-
-Hi, 
-
-There are interfaces in liburcu such as rcu_read_lock and call_rcu for which we 
-don't want to impose error-handling to users. And in a vast majority of applications, 
-aborting on memory allocation failure appears to be acceptable. So let's see how 
-we could allow special use-cases like yours to be fulfilled without making the API 
-needlessly complex. 
-
-One possibility would be to add optional handling of out-of-memory scenarios 
-through handlers registered by the application. An application could then use 
-setjmp before calling liburcu functions and longjmp from the registered handler 
-to recover from those errors. Of course, liburcu would have to ensure it's undoing 
-its side-effects before invoking the application-provided out-of-memory handler. 
-
-Thoughts ? 
-
-Thanks, 
-
-Mathieu 
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_b3a7f61b-74c6-4b93-bf12-5953fe3c9f20
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><br></div><span id=3D"zwchr" data-marker=3D=
-"__DIVIDER__">----- On Jun 15, 2017, at 9:02 AM, Denis Yevgenyevich &lt;den=
-is.yevgenyevich@gmail.com&gt; wrote:<br></span><div data-marker=3D"__QUOTED=
-_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px=
-;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-deco=
-ration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div di=
-r=3D"ltr"><div><div><div>My memory-constrained application dumps core sayin=
-g<br><br>Assertion failed: (!ret), function _cds_wfcq_init, file ./urcu/sta=
-tic/wfcqueue.h, line 107.<br>Abort<br><br></div><div>The function was calle=
-d from the call_rcu thread, my app does not call wfcqueue directly.<br></di=
-v><div><br>My operating system is FreeBSD-10.3, you won't reproduce the fai=
-lure in Linux.<br></div> Apparently developers assumed that pthread_mutex_i=
-nit cannot fail. This assumption is ok for Linux, but not so with FreeBSD, =
-which allocates mutexes with calloc.<br><br></div>Could you please add prop=
-er error handling so that (at least) call_rcu threads could cope with memor=
-y allocation failures?<br><br></div>Cheers...</div></blockquote><div><br></=
-div><div>Hi,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></=
-div><div>There are interfaces in liburcu such as rcu_read_lock and call_rcu=
- for which we<br data-mce-bogus=3D"1"></div><div>don't want to impose error=
--handling to users. And in a vast majority of applications,</div><div>abort=
-ing on memory allocation failure appears to be acceptable. So let's see how=
-</div><div>we could allow special use-cases like yours to be fulfilled with=
-out making the API</div><div>needlessly complex.<br data-mce-bogus=3D"1"></=
-div><div><br data-mce-bogus=3D"1"></div><div>One possibility would be to ad=
-d optional handling of out-of-memory scenarios<br data-mce-bogus=3D"1"></di=
-v><div>through handlers registered by the application. An application could=
- then use</div><div>setjmp before calling liburcu functions and longjmp fro=
-m the registered handler<br data-mce-bogus=3D"1"></div><div>to recover from=
- those errors. Of course, liburcu would have to ensure it's undoing<br data=
--mce-bogus=3D"1"></div><div>its side-effects before invoking the applicatio=
-n-provided out-of-memory handler.<br data-mce-bogus=3D"1"></div><div><br da=
-ta-mce-bogus=3D"1"></div><div>Thoughts ?<br data-mce-bogus=3D"1"></div><div=
-><br data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div>=
-<div><br data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></=
-div><div><br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div=
-><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px s=
-olid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal=
-;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-se=
-rif;font-size:12pt;"><div dir=3D"ltr"><br></div><br>_______________________=
-________________________<br>lttng-dev mailing list<br>lttng-dev@lists.lttng=
-.org<br>https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br></blo=
-ckquote></div><br><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathi=
-eu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></div></body>=
-</html>
---=_b3a7f61b-74c6-4b93-bf12-5953fe3c9f20--
-
---===============1025521823470627785==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============1025521823470627785==--
+UHJvcGVybHkgaGFuZGxlIHRoZSBjYXNlIHdoZXJlIHdlIGJ1aWxkIGFnYWluc3QgdGhlIGRpc3Ry
+byBoZWFkZXJzIG9mIGEKa2VybmVsID49IDQuMTIgYW5kIGZ0cmFjZSBpcyBlbmFibGVkIGJ1dCB0
+aGUgcHJpdmF0ZSBoZWFkZXIgaXMKdW5hdmFpbGFibGUuCgpTaWduZWQtb2ZmLWJ5OiBNaWNoYWVs
+IEplYW5zb24gPG1qZWFuc29uQGVmZmljaW9zLmNvbT4KLS0tCiBNYWtlZmlsZS5BQkkud29ya2Fy
+b3VuZHMgfCAyMSArKysrKysrKysrKysrKysrKysrKysKIGx0dG5nLWV2ZW50cy5oICAgICAgICAg
+ICB8ICAyICstCiBwcm9iZXMvS2J1aWxkICAgICAgICAgICAgfCAxOSArKysrLS0tLS0tLS0tLS0t
+LS0tCiAzIGZpbGVzIGNoYW5nZWQsIDI2IGluc2VydGlvbnMoKyksIDE2IGRlbGV0aW9ucygtKQoK
+ZGlmZiAtLWdpdCBhL01ha2VmaWxlLkFCSS53b3JrYXJvdW5kcyBiL01ha2VmaWxlLkFCSS53b3Jr
+YXJvdW5kcwppbmRleCBjMzcxN2Y4Li4yZTZjNGFhIDEwMDY0NAotLS0gYS9NYWtlZmlsZS5BQkku
+d29ya2Fyb3VuZHMKKysrIGIvTWFrZWZpbGUuQUJJLndvcmthcm91bmRzCkBAIC0yNywzICsyNywy
+NCBAQCBSVF9QQVRDSF9WRVJTSU9OOj0kKHNoZWxsICQoVE9QX0xUVE5HX01PRFVMRVNfRElSKS9y
+dC1wYXRjaC12ZXJzaW9uLnNoICQoQ1VSRElSKQogaWZuZXEgKCQoUlRfUEFUQ0hfVkVSU0lPTiks
+IDApCiAgIGNjZmxhZ3MteSArPSAtRFJUX1BBVENIX1ZFUlNJT049JChSVF9QQVRDSF9WRVJTSU9O
+KQogZW5kaWYKKworIyBTdGFydGluZyB3aXRoIGtlcm5lbCA0LjEyLCB0aGUgZnRyYWNlIGhlYWRl
+ciB3YXMgbW92ZWQgdG8gcHJpdmF0ZSBoZWFkZXJzCisjIGFuZCBhcyBzdWNoIGlzIG5vdCBhdmFp
+bGFibGUgd2hlbiBidWlsZGluZyBhZ2FpbnN0IGRpc3RybyBoZWFkZXJzIGluc3RlYWQKKyMgb2Yg
+dGhlIGZ1bGwga2VybmVsIHNvdXJjZXMuIEluIHRoZSBzaXR1YXRpb24sIGRlZmluZSBMVFROR19G
+VFJBQ0VfTUlTU0lOR19IRUFERVIKKyMgc28gd2UgY2FuIGVuYWJsZSB0aGUgY29tcGF0IGNvZGUg
+ZXZlbiBpZiBDT05GSUdfRFlOQU1JQ19GVFJBQ0UgaXMgZW5hYmxlZC4KK2lmbmVxICgkKENPTkZJ
+R19EWU5BTUlDX0ZUUkFDRSksKQorICBmdHJhY2VfZGVwID0gJChzcmN0cmVlKS9rZXJuZWwvdHJh
+Y2UvdHJhY2UuaAorICBmdHJhY2VfZGVwX2NoZWNrID0gJCh3aWxkY2FyZCAkKGZ0cmFjZV9kZXAp
+KQorICBoYXZlX2Z0cmFjZV9oZWFkZXIgPSAkKHNoZWxsIFwKKyAgICBpZiBbICQoVkVSU0lPTikg
+LWdlIDUgLW8gXCggJChWRVJTSU9OKSAtZXEgNCAtYSAkKFBBVENITEVWRUwpIC1nZSAxMiBcKSBd
+IDsgdGhlbiBcCisgICAgICBpZiBbIC16ICIkKGZ0cmFjZV9kZXBfY2hlY2spIiBdIDsgdGhlbiBc
+CisgICAgICAgIGVjaG8gIm5vIiA7IFwKKyAgICAgICAgZXhpdCA7IFwKKyAgICAgIGZpOyBcCisg
+ICAgZmk7IFwKKyAgICBlY2hvICJ5ZXMiIDsgXAorICAgICkKKyAgaWZlcSAoJChoYXZlX2Z0cmFj
+ZV9oZWFkZXIpLCBubykKKyAgICBjY2ZsYWdzLXkgKz0gLURMVFROR19GVFJBQ0VfTUlTU0lOR19I
+RUFERVIKKyAgZW5kaWYKK2VuZGlmCmRpZmYgLS1naXQgYS9sdHRuZy1ldmVudHMuaCBiL2x0dG5n
+LWV2ZW50cy5oCmluZGV4IGY1NWJmNjYuLjE3ZGQ4ZDMgMTAwNjQ0Ci0tLSBhL2x0dG5nLWV2ZW50
+cy5oCisrKyBiL2x0dG5nLWV2ZW50cy5oCkBAIC04MTAsNyArODEwLDcgQEAgaW50IGx0dG5nX2ty
+ZXRwcm9iZXNfZXZlbnRfZW5hYmxlX3N0YXRlKHN0cnVjdCBsdHRuZ19ldmVudCAqZXZlbnQsCiB9
+CiAjZW5kaWYKIAotI2lmZGVmIENPTkZJR19EWU5BTUlDX0ZUUkFDRQorI2lmIGRlZmluZWQoQ09O
+RklHX0RZTkFNSUNfRlRSQUNFKSAmJiAhZGVmaW5lZChMVFROR19GVFJBQ0VfTUlTU0lOR19IRUFE
+RVIpCiBpbnQgbHR0bmdfZnRyYWNlX3JlZ2lzdGVyKGNvbnN0IGNoYXIgKm5hbWUsCiAJCQkgIGNv
+bnN0IGNoYXIgKnN5bWJvbF9uYW1lLAogCQkJICBzdHJ1Y3QgbHR0bmdfZXZlbnQgKmV2ZW50KTsK
+ZGlmZiAtLWdpdCBhL3Byb2Jlcy9LYnVpbGQgYi9wcm9iZXMvS2J1aWxkCmluZGV4IDc4YmYzZmIu
+LmNjMWMwNjUgMTAwNjQ0Ci0tLSBhL3Byb2Jlcy9LYnVpbGQKKysrIGIvcHJvYmVzL0tidWlsZApA
+QCAtMjU5LDIyICsyNTksMTEgQEAgaWZuZXEgKCQoQ09ORklHX0tSRVRQUk9CRVMpLCkKIGVuZGlm
+ICMgQ09ORklHX0tSRVRQUk9CRVMKIAogaWZuZXEgKCQoQ09ORklHX0RZTkFNSUNfRlRSQUNFKSwp
+Ci0gIGZ0cmFjZV9kZXAgPSAkKHNyY3RyZWUpL2tlcm5lbC90cmFjZS90cmFjZS5oCi0gIGZ0cmFj
+ZV9kZXBfY2hlY2sgPSAkKHdpbGRjYXJkICQoZnRyYWNlX2RlcCkpCi0gIGZ0cmFjZSA9ICQoc2hl
+bGwgXAotICAgIGlmIFsgJChWRVJTSU9OKSAtZ2UgNSAtbyBcKCAkKFZFUlNJT04pIC1lcSA0IC1h
+ICQoUEFUQ0hMRVZFTCkgLWdlIDEyIFwpIF0gOyB0aGVuIFwKLSAgICAgIGlmIFsgLXogIiQoZnRy
+YWNlX2RlcF9jaGVjaykiIF0gOyB0aGVuIFwKLSAgICAgICAgZWNobyAid2FybiIgOyBcCi0gICAg
+ICAgIGV4aXQgOyBcCi0gICAgICBmaTsgXAotICAgIGZpOyBcCi0gICAgZWNobyAibHR0bmctZnRy
+YWNlLm8iIDsgXAotICAgICkKLSAgaWZlcSAoJChmdHJhY2UpLHdhcm4pCisgIGlmZXEgKCQoaGF2
+ZV9mdHJhY2VfaGVhZGVyKSx5ZXMpCisgICAgb2JqLSQoQ09ORklHX0xUVE5HKSArPSBsdHRuZy1m
+dHJhY2UubworICBlbHNlCiAgICAgJCh3YXJuaW5nIEZpbGVzICQoZnRyYWNlX2RlcCkgbm90IGZv
+dW5kLiBQcm9iZSAiZnRyYWNlIiBpcyBkaXNhYmxlZC4gVXNlIGZ1bGwga2VybmVsIHNvdXJjZSB0
+cmVlIHRvIGVuYWJsZSBpdC4pCi0gICAgZnRyYWNlID0KLSAgZW5kaWYgIyAkKGZ0cmFjZSksd2Fy
+bgotICBvYmotJChDT05GSUdfTFRUTkcpICs9ICQoZnRyYWNlKQorICBlbmRpZgogZW5kaWYgIyBD
+T05GSUdfRFlOQU1JQ19GVFJBQ0UKIAogIyB2aW06c3ludGF4PW1ha2UKLS0gCjIuNy40CgpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
+bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5v
+cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
