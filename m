@@ -1,79 +1,74 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Clarification on SCHED_FIFO support
-Date: Wed, 28 Jun 2017 18:22:38 +0000 (UTC)
-Message-ID: <57299872.4472.1498674158120.JavaMail.zimbra__30877.4356650703$1498674153$gmane$org@efficios.com>
+From: Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [lttng-dev] Clarification on SCHED_FIFO support
+Date: Wed, 28 Jun 2017 15:05:26 -0400
+Message-ID: <20170628150526.3f54c3f7@gandalf.local.home>
 References: <CAJ+0M9Mh8DOmSD41iY2Ds46YfWn4q+-UQpdV08msv7k4PdSvSQ@mail.gmail.com>
+        <57299872.4472.1498674158120.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3wyWPh0yhtzv8s
- for <lttng-dev@lists.lttng.org>; Wed, 28 Jun 2017 18:23:19 +0000 (UTC)
-In-Reply-To: <CAJ+0M9Mh8DOmSD41iY2Ds46YfWn4q+-UQpdV08msv7k4PdSvSQ@mail.gmail.com>
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Sukanya Sekar <ssekar@andrew.cmu.edu>
-Cc: Peter Zijlstra <peterz@infradead.org>, linux-kernel <linux-kernel@vger.kernel.org>, rostedt <rostedt@goodmis.org>, lttng-dev <lttng-dev@lists.lttng.org>, bristot <bristot@redhat.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-kernel-owner@vger.kernel.org>
+In-Reply-To: <57299872.4472.1498674158120.JavaMail.zimbra@efficios.com>
+Sender: linux-kernel-owner@vger.kernel.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Sukanya Sekar <ssekar@andrew.cmu.edu>, lttng-dev <lttng-dev@lists.lttng.org>, Julien Desfossez <jdesfossez@efficios.com>, linux-kernel <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, bristot <bristot@redhat.com>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT24gSnVuIDI3LCAyMDE3LCBhdCA3OjM2IFBNLCBTdWthbnlhIFNla2FyIHNzZWthckBh
-bmRyZXcuY211LmVkdSB3cm90ZToKCj4gR3JlZXRpbmdzIQo+IFdlIGFyZSBleHBsb3JpbmcgdGhl
-IExUVG5nIEtlcm5lbCBUcmFjZXIgKHZlcnNpb24gMi45KSBvbiBVYnVudHUgMTYuMDQuIFdlIGFy
-ZQo+IHBhcnRpY3VsYXJseSBpbnRlcmVzdGVkIGluIHJlYWwtdGltZSBhcHBsaWNhdGlvbnMuIEFz
-IGZhciBhcyB3ZSBleHBsb3JlZCwgd2UKPiBjb3VsZG4ndCBmaW5kIHN1cHBvcnQgZm9yIFNDSEVE
-X0ZJRk8gZXZlbnRzLiBBbHNvLCB3ZSBmb3VuZCBhIGNvbW1lbnQgaW4gdGhlCj4gc291cmNlIGNv
-ZGUgKC4uLi9zY2hlZC5oKSBpbmRpY2F0aW5nIHRoYXQgdGhlIHNjaGVkX3N0YXQgc3VwcG9ydCB0
-bwo+IFNDSEVEX0ZJRk8vUlIgaXMgeWV0IHRvIGJlIGFkZGVkLgoKPiBTbyB3ZSB3b3VsZCBsaWtl
-IHRvIGNvbmZpcm0gaWYgU0NIRURfRklGTyBpc24ndCBzdXBwb3J0ZWQgaW4gdGhlIGxhdGVzdCB2
-ZXJzaW9uCj4gb2YgdGhlIHRvb2wuCgpUaGlzIGlzIGEgcHJvYmxlbSBpbiB0aGUgdXBzdHJlYW0g
-TGludXgga2VybmVsIGluc3RydW1lbnRhdGlvbi4KCkkgYW0gYXNzdW1pbmcgeW91IHJlZmVyIHRv
-IHRoZSBzY2hlZF9zdGF0X3RlbXBsYXRlIGV2ZW50IGNsYXNzLCB1c2VkIGJ5IApzY2hlZF9zdGF0
-X3dhaXQsIHNjaGVkX3N0YXRfc2xlZXAsIHNjaGVkX3N0YXRfaW93YWl0LCBhbmQgc2NoZWRfc3Rh
-dF9ibG9ja2VkIApldmVudHMuIEZvciB0aG9zZSBzcGVjaWZpYyBldmVudHMsIExUVG5nIG1vZHVs
-ZXMgaGFzIHRoZSBzYW1lIGxpbWl0YXRpb24gYXMgCnRoZSBMaW51eCBrZXJuZWwgc2NoZWR1bGVy
-IGluc3RydW1lbnRhdGlvbiwgd2hlcmUgd2UgZmluZCB0aGlzIGNvbW1lbnQgCihpbmNsdWRlL3Ry
-YWNlL2V2ZW50cy9zY2hlZC5oKTogCgovKiAKKiBYWFggdGhlIGJlbG93IHNjaGVkX3N0YXQgdHJh
-Y2Vwb2ludHMgb25seSBhcHBseSB0byBTQ0hFRF9PVEhFUi9CQVRDSC9JRExFIAoqIGFkZGluZyBz
-Y2hlZF9zdGF0IHN1cHBvcnQgdG8gU0NIRURfRklGTy9SUiB3b3VsZCBiZSB3ZWxjb21lLiAKKi8g
-CgpUaGlzIGlzIG5vdCBzcGVjaWZpYyB0byBMVFRuZy4gRnRyYWNlLCBQZXJmLCBhbmQgU3lzdGVt
-VEFQIGhhdmUgdGhlIHNhbWUgbGltaXRhdGlvbiAKd2hlbiB1c2luZyB0aGlzIHNjaGVkdWxlciB0
-cmFjZXBvaW50LiAKCkluIHRoZSBwYXN0IHllYXIsIEp1bGllbiBEZXNmb3NzZXogcHJvcG9zZWQg
-ZW5oYW5jZW1lbnRzIHRvIHRoZSBMaW51eCBrZXJuZWwgCnNjaGVkdWxlciBpbnN0cnVtZW50YXRp
-b24gWzFdLCBidXQgdGhlcmUgYXJlIHN0aWxsIHNvbWUgZGlzYWdyZWVtZW50cyBvbiBob3cKdG8g
-ZXhwb3NlIHRoZSBuZXcgaW50ZXJmYWNlcyB0byB1c2VyLXNwYWNlLiAKClRocm91Z2ggYSBmb2xs
-b3cgdXAgSVJDIGRpc2N1c3Npb24gd2UgaGFkIHdpdGggUGV0ZXIgWmlqbHN0cmEgYW5kIFN0ZXZl
-biBSb3N0ZWR0LAp3ZSBmb3VuZCBvdXQgdGhhdCB0aGV5IGhhdmUgb3BpbmlvbnMgb24gaG93IHRv
-IGV2b2x2ZSB0aGUga2VybmVsIEFCSSBleHBvc2VkIGJ5CkZ0cmFjZSBhbmQgUGVyZiAoa2VlcGlu
-ZyBhIHNpbmdsZSBldmVudCBmb3Igc2NoZWRfc3dpdGNoLCBub3QgaGF2aW5nIHVubmVlZGVkCmlu
-Zm9ybWF0aW9uIGluIHRoZSBldmVudCwgZXhwb3NpbmcgbXVsdGlwbGUgbnVtYmVyZWQgZXZlbnQg
-Zm9ybWF0IGZpbGVzIGZvcm1hdCwKZm9ybWF0MiwgZm9ybWF0My4uLiwgY3VtdWxhdGl2ZSBlbmFi
-bGluZyBzZW1hbnRpYyAoZW5hYmxpbmcgZm9ybWF0MyBlbmFibGVzIGZvcm1hdDIgYW5kIApmb3Jt
-YXQpLCBhbmQgc28gb24pLCBidXQgdGhlIHNldCBvZiByZXF1aXJlbWVudHMgaXMgc3RpbGwgdW5j
-bGVhciwgYW5kIHRoZXkgaGF2ZSBub3QgCmZvcm11bGF0ZWQgYW4gQUJJIHByb3Bvc2FsIHRoYXQg
-dGhvc2UgaW52b2x2ZWQgZ2VuZXJhbGx5IGFncmVlIG9uLiAKCklNSE8sIHBhcnQgb2YgdGhlIGlz
-c3VlIGhlcmUgaXMgdG8gbWlzdGFrZSBrZXJuZWwgQUJJcyBmb3IgZW5kIHVzZXIgdG9vbGluZyBp
-bnRlcmZhY2VzLiAKSWYsIGZvciBpbnN0YW5jZSwgdHJhY2UtY21kIGV4cG9zZXMgdGhlIG5ldyBz
-Y2hlZF9zd2l0Y2hfe3J0LGZhaWwsZGx9IGV2ZW50cyBhcyBhIHNpbmdsZSAKc3ludGhldGljIHNj
-aGVkX3N3aXRjaCBldmVudCBmcm9tIGEgdXNlciBwZXJzcGVjdGl2ZSwgd2hhdCBkbyB3ZSByZWFs
-bHkgZ2FpbiBieQpjb21wbGV4aWZ5aW5nIHRoZSBrZXJuZWwgQUJJIHRvIHN0aWxsIGFsbG93IGVu
-YWJsaW5nIGEgc2luZ2xlIGV2ZW50IGluc3RlYWQgb2YgMyB1c2luZwoiZWNobyIgZnJvbSBhIHNo
-ZWxsID8KCkFzIHNvb24gYXMgdGhlIExpbnV4IGtlcm5lbCBhZGRzIHRoZSBwcm9wZXIgaW5zdHJ1
-bWVudGF0aW9uIHRvIGRlYWwgd2l0aCB0aG9zZSAKc2NoZWR1bGVyIHBvbGljaWVzLCB3ZSB3aWxs
-IGFkZCBzdXBwb3J0IGZvciBpdCBpbiBMVFRuZyAob25seSBmb3IgdGhlIG5ld2VyIGtlcm5lbHMg
-CnRoYXQgY29udGFpbiB0aGF0IGluc3RydW1lbnRhdGlvbiwgb2YgY291cnNlKS4gCgpUaGFua3Ms
-IAoKTWF0aGlldSAKClsxXSBodHRwczovL2xrbWwub3JnL2xrbWwvMjAxNy8xLzEzLzYyNCAKCj4g
-VGhhbmtzLAo+IFN1a2FueWEKCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0
-dG5nLm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
-by9sdHRuZy1kZXYKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3
-dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
-dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+On Wed, 28 Jun 2017 18:22:38 +0000 (UTC)
+Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+
+> ----- On Jun 27, 2017, at 7:36 PM, Sukanya Sekar ssekar@andrew.cmu.edu wrote:
+> 
+> > Greetings!
+> > We are exploring the LTTng Kernel Tracer (version 2.9) on Ubuntu 16.04. We are
+> > particularly interested in real-time applications. As far as we explored, we
+> > couldn't find support for SCHED_FIFO events. Also, we found a comment in the
+> > source code (.../sched.h) indicating that the sched_stat support to
+> > SCHED_FIFO/RR is yet to be added.  
+> 
+> > So we would like to confirm if SCHED_FIFO isn't supported in the latest version
+> > of the tool.  
+> 
+> This is a problem in the upstream Linux kernel instrumentation.
+> 
+> I am assuming you refer to the sched_stat_template event class, used by 
+> sched_stat_wait, sched_stat_sleep, sched_stat_iowait, and sched_stat_blocked 
+> events. For those specific events, LTTng modules has the same limitation as 
+> the Linux kernel scheduler instrumentation, where we find this comment 
+> (include/trace/events/sched.h): 
+> 
+> /* 
+> * XXX the below sched_stat tracepoints only apply to SCHED_OTHER/BATCH/IDLE 
+> * adding sched_stat support to SCHED_FIFO/RR would be welcome. 
+> */ 
+> 
+> This is not specific to LTTng. Ftrace, Perf, and SystemTAP have the same limitation 
+> when using this scheduler tracepoint. 
+> 
+> In the past year, Julien Desfossez proposed enhancements to the Linux kernel 
+> scheduler instrumentation [1], but there are still some disagreements on how
+> to expose the new interfaces to user-space. 
+> 
+> Through a follow up IRC discussion we had with Peter Zijlstra and Steven Rostedt,
+> we found out that they have opinions on how to evolve the kernel ABI exposed by
+> Ftrace and Perf (keeping a single event for sched_switch, not having unneeded
+> information in the event, exposing multiple numbered event format files format,
+> format2, format3..., cumulative enabling semantic (enabling format3 enables format2 and 
+> format), and so on), but the set of requirements is still unclear, and they have not 
+> formulated an ABI proposal that those involved generally agree on. 
+> 
+> IMHO, part of the issue here is to mistake kernel ABIs for end user tooling interfaces. 
+> If, for instance, trace-cmd exposes the new sched_switch_{rt,fail,dl} events as a single 
+> synthetic sched_switch event from a user perspective, what do we really gain by
+> complexifying the kernel ABI to still allow enabling a single event instead of 3 using
+> "echo" from a shell ?
+> 
+> As soon as the Linux kernel adds the proper instrumentation to deal with those 
+> scheduler policies, we will add support for it in LTTng (only for the newer kernels 
+> that contain that instrumentation, of course). 
+> 
+
+You can propose settling this as a [TECH TOPIC] for kernel summit in
+Prague.
+
+-- Steve
