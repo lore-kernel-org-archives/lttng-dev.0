@@ -1,16 +1,18 @@
-From: Saty Anand <satyanandiam@gmail.com>
-Subject: cross-compiling LTTNG for android on arm64
-Date: Wed, 12 Jul 2017 15:55:07 +0530
-Message-ID: <CAEj5SC4wFV=sfpddaNbdipcsLT7A2s31vGCT79y_vqyH1W5TwA__25272.0813420185$1499868981$gmane$org@mail.gmail.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-modules] Fix: probe_unregister for
+	v4.11.8-rt5
+Date: Wed, 12 Jul 2017 11:01:19 -0400
+Message-ID: <1499871679-29535-1-git-send-email-mjeanson__1909.62452111325$1499871718$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6102170217734461164=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wr0-x22a.google.com (mail-wr0-x22a.google.com
- [IPv6:2a00:1450:400c:c0c::22a])
- by lists.lttng.org (Postfix) with ESMTPS id 3x6w9Z3jylz13fB
- for <lttng-dev@lists.lttng.org>; Wed, 12 Jul 2017 10:26:58 +0000 (UTC)
-Received: by mail-wr0-x22a.google.com with SMTP id 77so27408720wrb.1
- for <lttng-dev@lists.lttng.org>; Wed, 12 Jul 2017 03:25:09 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3x72JW3YDdz1421
+ for <lttng-dev@lists.lttng.org>; Wed, 12 Jul 2017 15:03:23 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 5B3F334021B
+ for <lttng-dev@lists.lttng.org>; Wed, 12 Jul 2017 15:02:42 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,121 +25,35 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============6102170217734461164==
-Content-Type: multipart/alternative; boundary="001a11442d40eda1c805541c3aba"
-
---001a11442d40eda1c805541c3aba
-Content-Type: text/plain; charset="UTF-8"
-
-Hi all
-
-I've been trying to compile LTTng for android on arm architecture. Taking
-reference from https://lists.lttng.org/pipermail/lttng-dev/2013-
-February/019652.html I've been building Lttng-UST and Lttng-tools.
-Cross-compiling the kernel is having some issues:
-
-Using the following command to cross-compile Lttng modules:
-make KERNELDIR=/local....../obj/KERNEL_OBJ/ ARCH=arm64
-CROSS_COMPILE=/local/..../prebuilts/gcc/linux-x86/
-aarch64/aarch64-linuxandroid-4.9/bin/aarch64-linux-android-
-But it gives the following errors:
-
-error: conflicting types for 'trace_sched_migrate_task'
- void trace_##_name(_proto);
-      ^
-/local/......./../lttng_pos/lttng-modules-2.9.3/probes/../probes/lttng-tracepoint-event-impl.h:54:2:
-note: in expansion of macro 'LTTNG_TRACEPOINT_EVENT_INSTANCE_MAP'
-  LTTNG_TRACEPOINT_EVENT_INSTANCE_MAP(map, name, map, PARAMS(proto),
-PARAMS(args))
-  ^
-/local/......./../lttng_pos/lttng-modules-2.9.3/probes/../probes/lttng-tracepoint-event-impl.h:96:2:
-note: in expansion of macro 'LTTNG_TRACEPOINT_EVENT_MAP'
-  LTTNG_TRACEPOINT_EVENT_MAP(name, name,    \
-  ^
-/local/...../../lttng_pos/lttng-modules-2.9.3/probes/../instrumentation/events/lttng-module/sched.h:285:1:
-note: in expansion of macro 'LTTNG_TRACEPOINT_EVENT'
- LTTNG_TRACEPOINT_EVENT(sched_migrate_task,
- ^
-In file included from /local/..../kernel/include/linux/module.h:18:0,
-                 from
-/local/....../../lttng_pos/lttng-modules-2.9.3/probes/lttng-probe-sched.c:23:
-/local/....../kernel/include/linux/tracepoint.h:168:21: note: previous
-definition of 'trace_sched_migrate_task' was here
-  static inline void trace_##name(proto)    \
-                     ^
-/local/..../kernel/include/linux/tracepoint.h:275:3: note: in expansion of
-macro '__DECLARE_TRACE'
-   __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args), 1, \
-   ^
-/local/.../kernel/include/linux/tracepoint.h:405:2: note: in expansion of
-macro 'DECLARE_TRACE'
-  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-  ^
-/local/..../kernel/include/trace/events/sched.h:580:1: note: in expansion
-of macro 'TRACE_EVENT'
- TRACE_EVENT(sched_migrate_task,
-
-Am I not compiling the kernel modules how it's supposed to be?
-
-Thank you
-Saty Anand
-
---001a11442d40eda1c805541c3aba
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Hi all</div><div><br></div><div>I&#39;ve been trying =
-to compile LTTng for android on arm architecture. Taking reference from <a =
-href=3D"https://lists.lttng.org/pipermail/lttng-dev/2013-February/019652.ht=
-ml" target=3D"_blank">https://lists.lttng.org/<wbr>pipermail/lttng-dev/2013=
--<wbr>February/019652.html</a> I&#39;ve been building Lttng-UST and Lttng-t=
-ools. Cross-compiling the kernel is having some issues:</div><div><br></div=
-><div><span><span>Using the following command to cross-compile Lttng module=
-s:</span></span></div><div><span><span>make KERNELDIR=3D/local....../obj/<w=
-br>KERNEL_OBJ/ ARCH=3Darm64 CROSS_COMPILE=3D/local/..../<wbr>prebuilts/gcc/=
-linux-x86/<wbr>aarch64/aarch64-linuxandroid-<wbr>4.9/bin/aarch64-linux-andr=
-oid-</span></span></div><span><div>But it gives the following errors:</div>=
-<div><br></div><div>error: conflicting types for &#39;trace_sched_migrate_t=
-ask&#39;<br>=C2=A0void trace_##_name(_proto);<br>=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 ^<br>/local/......./../lttng_pos/lttng-modules-2.9.3/probes/../probe=
-s/lttng-tracepoint-event-impl.h:54:2: note: in expansion of macro &#39;LTTN=
-G_TRACEPOINT_EVENT_INSTANCE_MAP&#39;<br>=C2=A0 LTTNG_TRACEPOINT_EVENT_INSTA=
-NCE_MAP(map, name, map, PARAMS(proto), PARAMS(args))<br>=C2=A0 ^<br>/local/=
-......./../lttng_pos/lttng-modules-2.9.3/probes/../probes/lttng-tracepoint-=
-event-impl.h:96:2: note: in expansion of macro &#39;LTTNG_TRACEPOINT_EVENT_=
-MAP&#39;<br>=C2=A0 LTTNG_TRACEPOINT_EVENT_MAP(name, name,=C2=A0=C2=A0=C2=A0=
- \<br>=C2=A0 ^<br>/local/...../../lttng_pos/lttng-modules-2.9.3/probes/../i=
-nstrumentation/events/lttng-module/sched.h:285:1: note: in expansion of mac=
-ro &#39;LTTNG_TRACEPOINT_EVENT&#39;<br>=C2=A0LTTNG_TRACEPOINT_EVENT(sched_m=
-igrate_task,<br>=C2=A0^<br>In file included from /local/..../kernel/include=
-/linux/module.h:18:0,<br>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 from /local/....../../lttn=
-g_pos/lttng-modules-2.9.3/probes/lttng-probe-sched.c:23:<br>/local/....../k=
-ernel/include/linux/tracepoint.h:168:21: note: previous definition of &#39;=
-trace_sched_migrate_task&#39; was here<br>=C2=A0 static inline void trace_#=
-#name(proto)=C2=A0=C2=A0=C2=A0 \<br>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 ^<br>/local/..../kernel/include/linux/tracepoint.h:275:3: note: in e=
-xpansion of macro &#39;__DECLARE_TRACE&#39;<br>=C2=A0=C2=A0 __DECLARE_TRACE=
-(name, PARAMS(proto), PARAMS(args), 1, \<br>=C2=A0=C2=A0 ^<br>/local/.../ke=
-rnel/include/linux/tracepoint.h:405:2: note: in expansion of macro &#39;DEC=
-LARE_TRACE&#39;<br>=C2=A0 DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))<=
-br>=C2=A0 ^<br>/local/..../kernel/include/trace/events/sched.h:580:1: note:=
- in expansion of macro &#39;TRACE_EVENT&#39;<br>=C2=A0TRACE_EVENT(sched_mig=
-rate_task,<br></div><div><br></div><div>Am I not compiling the kernel modul=
-es how it&#39;s supposed to be? </div><div><br></div><div>Thank you</div><d=
-iv>Saty Anand<span><span><br></span></span></div><span></span></span></div>
-
---001a11442d40eda1c805541c3aba--
-
---===============6102170217734461164==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============6102170217734461164==--
+U2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Ci0t
+LQogbHR0bmctdHJhY2Vwb2ludC5jIHwgMjEgKysrKysrKysrKysrKysrKysrKy0tCiAxIGZpbGUg
+Y2hhbmdlZCwgMTkgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9s
+dHRuZy10cmFjZXBvaW50LmMgYi9sdHRuZy10cmFjZXBvaW50LmMKaW5kZXggN2E1MGRkMi4uM2Q3
+MGNhMCAxMDA2NDQKLS0tIGEvbHR0bmctdHJhY2Vwb2ludC5jCisrKyBiL2x0dG5nLXRyYWNlcG9p
+bnQuYwpAQCAtMjgsNiArMjgsNyBAQAogI2luY2x1ZGUgPGxpbnV4L2poYXNoLmg+CiAjaW5jbHVk
+ZSA8bGludXgvbW9kdWxlLmg+CiAKKyNpbmNsdWRlIDxsdHRuZy1rZXJuZWwtdmVyc2lvbi5oPgog
+I2luY2x1ZGUgPGx0dG5nLXRyYWNlcG9pbnQuaD4KICNpbmNsdWRlIDx3cmFwcGVyL2xpc3QuaD4K
+IApAQCAtMjAxLDYgKzIwMiwyMiBAQCBlbmQ6CiAJcmV0dXJuIHJldDsKIH0KIAorI2lmIChMVFRO
+R19SVF9LRVJORUxfUkFOR0UoNCwxMSw4LDUsIDQsMTIsMCwwKSkKK3N0YXRpYworaW50IGx0dG5n
+X3RyYWNlcG9pbnRfcHJvYmVfdW5yZWdpc3Rlcl9zdGF0aWMoc3RydWN0IHRyYWNlcG9pbnQgKnRw
+LAorCQl2b2lkICpwcm9iZSwgdm9pZCAqZGF0YSkKK3sKKwlyZXR1cm4gdHJhY2Vwb2ludF9wcm9i
+ZV91bnJlZ2lzdGVyKHRwLCBwcm9iZSwgZGF0YSwgZmFsc2UpOworfQorI2Vsc2UKK3N0YXRpYwor
+aW50IGx0dG5nX3RyYWNlcG9pbnRfcHJvYmVfdW5yZWdpc3Rlcl9zdGF0aWMoc3RydWN0IHRyYWNl
+cG9pbnQgKnRwLAorCQl2b2lkICpwcm9iZSwgdm9pZCAqZGF0YSkKK3sKKwlyZXR1cm4gdHJhY2Vw
+b2ludF9wcm9iZV91bnJlZ2lzdGVyKHRwLCBwcm9iZSwgZGF0YSk7Cit9CisjZW5kaWYKKwogaW50
+IGx0dG5nX3RyYWNlcG9pbnRfcHJvYmVfdW5yZWdpc3Rlcihjb25zdCBjaGFyICpuYW1lLCB2b2lk
+ICpwcm9iZSwgdm9pZCAqZGF0YSkKIHsKIAlzdHJ1Y3QgdHJhY2Vwb2ludF9lbnRyeSAqZTsKQEAg
+LTIxNyw3ICsyMzQsNyBAQCBpbnQgbHR0bmdfdHJhY2Vwb2ludF9wcm9iZV91bnJlZ2lzdGVyKGNv
+bnN0IGNoYXIgKm5hbWUsIHZvaWQgKnByb2JlLCB2b2lkICpkYXRhKQogCWlmIChyZXQpCiAJCWdv
+dG8gZW5kOwogCWlmIChlLT50cCkgewotCQlyZXQgPSB0cmFjZXBvaW50X3Byb2JlX3VucmVnaXN0
+ZXIoZS0+dHAsIHByb2JlLCBkYXRhKTsKKwkJcmV0ID0gbHR0bmdfdHJhY2Vwb2ludF9wcm9iZV91
+bnJlZ2lzdGVyX3N0YXRpYyhlLT50cCwgcHJvYmUsIGRhdGEpOwogCQlXQVJOX09OX09OQ0UocmV0
+KTsKIAkJcmV0ID0gMDsKIAl9CkBAIC0yOTAsNyArMzA3LDcgQEAgaW50IGx0dG5nX3RyYWNlcG9p
+bnRfZ29pbmcoc3RydWN0IHRwX21vZHVsZSAqdHBfbW9kKQogCQlsaXN0X2Zvcl9lYWNoX2VudHJ5
+KHAsICZlLT5wcm9iZXMsIGxpc3QpIHsKIAkJCWludCByZXQ7CiAKLQkJCXJldCA9IHRyYWNlcG9p
+bnRfcHJvYmVfdW5yZWdpc3RlcihlLT50cCwKKwkJCXJldCA9IGx0dG5nX3RyYWNlcG9pbnRfcHJv
+YmVfdW5yZWdpc3Rlcl9zdGF0aWMoZS0+dHAsCiAJCQkJCXAtPnRwX2Z1bmMuZnVuYywgcC0+dHBf
+ZnVuYy5kYXRhKTsKIAkJCVdBUk5fT05fT05DRShyZXQpOwogCQl9Ci0tIAoyLjcuNAoKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxp
+bmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3Jn
+L2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
