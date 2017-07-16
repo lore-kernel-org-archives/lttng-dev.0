@@ -1,16 +1,19 @@
-From: Nalin Pai <nalinpai@gmail.com>
-Subject: lttng questions
-Date: Sun, 16 Jul 2017 11:28:29 -0700
-Message-ID: <CALVR4zBENdRfGxAPwTuNxUhS5CJgJ5qzzrcnx5vMGZdg7BqmDg__9693.89615715972$1500247067$gmane$org@mail.gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: Re: lttng questions
+Date: Sun, 16 Jul 2017 19:49:14 -0400
+Message-ID: <CAB4xu_3Ypj-J17FcBMdKZHMfyKdf=E_3G63EaoARQ3Ur4EcT0Q__33243.3834825226$1500249000$gmane$org@mail.gmail.com>
+References: <CALVR4zBENdRfGxAPwTuNxUhS5CJgJ5qzzrcnx5vMGZdg7BqmDg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6427682888492089144=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ua0-x22d.google.com (mail-ua0-x22d.google.com
- [IPv6:2607:f8b0:400c:c08::22d])
- by lists.lttng.org (Postfix) with ESMTPS id 3x9Zjm38dpz144d
- for <lttng-dev@lists.lttng.org>; Sun, 16 Jul 2017 18:30:36 +0000 (UTC)
-Received: by mail-ua0-x22d.google.com with SMTP id z22so75121511uah.1
- for <lttng-dev@lists.lttng.org>; Sun, 16 Jul 2017 11:28:31 -0700 (PDT)
+Received: from mail-qt0-x22b.google.com (mail-qt0-x22b.google.com
+ [IPv6:2607:f8b0:400d:c0d::22b])
+ by lists.lttng.org (Postfix) with ESMTPS id 3x9jrR2DRpz12r3
+ for <lttng-dev@lists.lttng.org>; Sun, 16 Jul 2017 23:51:50 +0000 (UTC)
+Received: by mail-qt0-x22b.google.com with SMTP id 32so95047375qtv.1
+ for <lttng-dev@lists.lttng.org>; Sun, 16 Jul 2017 16:49:45 -0700 (PDT)
+In-Reply-To: <CALVR4zBENdRfGxAPwTuNxUhS5CJgJ5qzzrcnx5vMGZdg7BqmDg@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,103 +23,54 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Nalin Pai <nalinpai@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============6427682888492089144==
-Content-Type: multipart/alternative; boundary="94eb2c1b047af65207055473728c"
-
---94eb2c1b047af65207055473728c
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-We are looking at using lttng as a solution for all our trace and debug
-requirements. We want to get away from traditional file based string format
-logging and move to lttng, which then gives us the flexibility of dumping
-the traces to file or the network. With this background, I have several
-questions for the team.
-
-1) CTF supports struct fields. I don=E2=80=99t see any ctf_ macros in lttng=
- that
-will allow us to define tracepoints having struct fields. Is there a way to
-do this that I am missing?
-
-2) Display hints. Sometimes there is a need to display certain fields in a
-particular way, e.g. IP and MAC addresses. While the tracepoint definition
-for these fields are going to be integers or sequences of integers, we
-would like babeltrace to display these fields in a certain format. Short of
-modifying babeltrace to recognize these fields by their names and handle
-them specially, is there any other way of achieving the same?
-
--Nalin
-
---94eb2c1b047af65207055473728c
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<p class=3D"gmail-MsoPlainText">Hello,</p>
-
-<p class=3D"gmail-MsoPlainText">We are looking at using lttng as a solution=
- for all our
-trace and debug requirements. We want to get away from traditional file bas=
-ed string
-format logging and move to lttng, which then gives us the flexibility of
-dumping the traces to file or the network. With this background, I have sev=
-eral
-questions for the team.</p>
-
-<p class=3D"gmail-MsoPlainText">1) CTF supports struct fields. I don=E2=80=
-=99t see any ctf_
-macros in lttng that will allow us to define tracepoints having struct fiel=
-ds.
-Is there a way to do this that I am missing?</p>
-
-<p class=3D"gmail-MsoPlainText">2) Display hints. Sometimes there is a need=
- to display
-certain fields in a particular way, e.g. IP and MAC addresses. While the
-tracepoint definition for these fields are going to be integers or sequence=
-s of
-integers, we would like babeltrace to display these fields in a certain for=
-mat.
-Short of modifying babeltrace to recognize these fields by their names and
-handle them specially, is there any other way of achieving the same?<span><=
-/span></p>
-
-<p class=3D"gmail-MsoPlainText">-Nalin</p>
-
-<p class=3D"gmail-MsoPlainText"><span>=C2=A0</span></p>
-
-</div>
-
---94eb2c1b047af65207055473728c--
-
---===============6427682888492089144==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============6427682888492089144==--
+T24gU3VuLCBKdWwgMTYsIDIwMTcgYXQgMjoyOCBQTSwgTmFsaW4gUGFpIDxuYWxpbnBhaUBnbWFp
+bC5jb20+IHdyb3RlOgo+Cj4gSGVsbG8sCj4KPiBXZSBhcmUgbG9va2luZyBhdCB1c2luZyBsdHRu
+ZyBhcyBhIHNvbHV0aW9uIGZvciBhbGwgb3VyIHRyYWNlIGFuZCBkZWJ1ZyByZXF1aXJlbWVudHMu
+IFdlIHdhbnQgdG8gZ2V0IGF3YXkgZnJvbSB0cmFkaXRpb25hbCBmaWxlIGJhc2VkIHN0cmluZyBm
+b3JtYXQgbG9nZ2luZyBhbmQgbW92ZSB0byBsdHRuZywgd2hpY2ggdGhlbiBnaXZlcyB1cyB0aGUg
+ZmxleGliaWxpdHkgb2YgZHVtcGluZyB0aGUgdHJhY2VzIHRvIGZpbGUgb3IgdGhlIG5ldHdvcmsu
+IFdpdGggdGhpcyBiYWNrZ3JvdW5kLCBJIGhhdmUgc2V2ZXJhbCBxdWVzdGlvbnMgZm9yIHRoZSB0
+ZWFtLgo+Cj4gMSkgQ1RGIHN1cHBvcnRzIHN0cnVjdCBmaWVsZHMuIEkgZG9u4oCZdCBzZWUgYW55
+IGN0Zl8gbWFjcm9zIGluIGx0dG5nIHRoYXQgd2lsbCBhbGxvdyB1cyB0byBkZWZpbmUgdHJhY2Vw
+b2ludHMgaGF2aW5nIHN0cnVjdCBmaWVsZHMuIElzIHRoZXJlIGEgd2F5IHRvIGRvIHRoaXMgdGhh
+dCBJIGFtIG1pc3Npbmc/CgpDb21wbGV4IENURiB0eXBlcyAoZXhjZXB0IGEgZmV3IHZlcnkgc3Bl
+Y2lmaWMgZXhjZXB0aW9ucykgYXJlIG5vdApzdXBwb3J0ZWQgaW4gTFRUbmctVVNULCB0aGUgdXNl
+ciBzcGFjZSBMVFRuZyB0cmFjZXIuIElmIHlvdSBuZWVkIGEKc3RydWN0dXJlIGRhdGEgdHlwZSwg
+dGhlbiB5b3UgbmVlZCB0byAiZXhwbG9kZSIgaXQsIHBlcmhhcHMgd2l0aCBmaWVsZApuYW1lIHBy
+ZWZpeGVzLCBhcyBvZiB0aGUgbGF0ZXN0IHZlcnNpb24gb2YgTFRUbmcuIEZvciBleGFtcGxlOgpg
+bXlfc3RydWN0X3VzZXJfaWRgLCBgbXlfc3RydWN0X21zZ19pZGAsIGBteV9zdHJ1Y3RfbXNnYC4K
+Cj4KPiAyKSBEaXNwbGF5IGhpbnRzLiBTb21ldGltZXMgdGhlcmUgaXMgYSBuZWVkIHRvIGRpc3Bs
+YXkgY2VydGFpbiBmaWVsZHMgaW4gYSBwYXJ0aWN1bGFyIHdheSwgZS5nLiBJUCBhbmQgTUFDIGFk
+ZHJlc3Nlcy4gV2hpbGUgdGhlIHRyYWNlcG9pbnQgZGVmaW5pdGlvbiBmb3IgdGhlc2UgZmllbGRz
+IGFyZSBnb2luZyB0byBiZSBpbnRlZ2VycyBvciBzZXF1ZW5jZXMgb2YgaW50ZWdlcnMsIHdlIHdv
+dWxkIGxpa2UgYmFiZWx0cmFjZSB0byBkaXNwbGF5IHRoZXNlIGZpZWxkcyBpbiBhIGNlcnRhaW4g
+Zm9ybWF0LiBTaG9ydCBvZiBtb2RpZnlpbmcgYmFiZWx0cmFjZSB0byByZWNvZ25pemUgdGhlc2Ug
+ZmllbGRzIGJ5IHRoZWlyIG5hbWVzIGFuZCBoYW5kbGUgdGhlbSBzcGVjaWFsbHksIGlzIHRoZXJl
+IGFueSBvdGhlciB3YXkgb2YgYWNoaWV2aW5nIHRoZSBzYW1lPwoKSW4gdGhlIHNob3J0LSB0byBt
+ZWRpdW0tdGVybSwgd2l0aCBCYWJlbHRyYWNlIDIuMCAoY3VycmVudGx5IGluICJwcmUiCmRldmVs
+b3BtZW50IHN0YWdlKSwgeW91IGNhbiBjcmVhdGUgeW91ciBvd24gc2luayBjb21wb25lbnQgdG8g
+ZG8Kc29tZXRoaW5nIHdpdGggZXZlbnRzLiBUaGUgZGVmYXVsdCB0ZXh0dWFsIGRpc3BsYXkgaXMg
+Y2FsbGVkCnNpbmsudGV4dC5wcmV0dHkuIElmIHlvdSBuZWVkIGEgbW9kaWZpZWQgdmVyc2lvbiBv
+ZiB0aGlzIHNpbmsKY29tcG9uZW50IGNsYXNzLCB5b3UgY291bGQgY29weSBpdHMgc291cmNlIGFu
+ZCBjcmVhdGUgeW91ciBvd24KbW9kaWZpZWQgcGx1Z2luIHdoaWNoLCBhcyB5b3Ugd3JvdGUsIHdv
+dWxkIHJlY29nbml6ZSB0aGUgZmllbGRzIGJ5Cm5hbWUsIGV0Yy4gWW91IGNvdWxkIHRoZW4gcnVu
+IHRoZSBDTEkgYXMgc3VjaDoKCiAgICBiYWJlbHRyYWNlIC9wYXRoL3RvL3RyYWNlIC0tY29tcG9u
+ZW50PXNpbmsubXktcGx1Z2luLm15LWNvbXBvbmVudC1jbGFzcwoKSSBjYW4ndCBjb21tZW50IG9u
+IFRyYWNlIENvbXBhc3MvTFRUbmcgU2NvcGUuCgpJIHNlZSBubyBvdGhlciB3YXkgZm9yIHRoZSBt
+b21lbnQuIENURiAyIHdpbGwgaGF2ZSBhIHdheSB0byBpbmRpY2F0ZQp0aGF0IHNwZWNpZmljIGZp
+ZWxkcyBhcmUgdG8gYmUgZGlzcGxheWVkIHVzaW5nIGEgZ2l2ZW4gZm9ybWF0IHN0cmluZywKZm9y
+IGV4YW1wbGUsIGJ1dCBpdHMgc3BlY2lmaWNhdGlvbiBpcyBub3QgYXZhaWxhYmxlIGN1cnJlbnRs
+eSAob25seSBhCnByb3Bvc2FsIGlzIGF2YWlsYWJsZSBoZXJlCjxodHRwOi8vZGlhbW9uLm9yZy9j
+dGYvZmlsZXMvQ1RGMi1QUk9QLTEuMC5odG1sPikuIEJhYmVsdHJhY2UgMi4xIHdpbGwKc3VwcG9y
+dCBDVEYgMiwgYWZ0ZXIgd2hpY2ggYSBmdXR1cmUgdmVyc2lvbiBvZiBMVFRuZyB3aWxsIHByb2R1
+Y2UgaXQuCgpQaGlsCgo+Cj4gLU5hbGluCj4KPgo+Cj4KPiBfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
+YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
+Lmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
+Zm8vbHR0bmctZGV2Cg==
