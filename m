@@ -1,19 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH urcu] Fix: add missing m68k headers to dist
-Date: Fri, 14 Jul 2017 14:32:48 +0000 (UTC)
-Message-ID: <1703091027.15947.1500042768448.JavaMail.zimbra__28722.2183229916$1500042708$gmane$org@efficios.com>
-References: <1500042044-12824-1-git-send-email-mjeanson@efficios.com>
+From: Nalin Pai <nalinpai@gmail.com>
+Subject: lttng questions
+Date: Sun, 16 Jul 2017 11:28:29 -0700
+Message-ID: <CALVR4zBENdRfGxAPwTuNxUhS5CJgJ5qzzrcnx5vMGZdg7BqmDg__9693.89615715972$1500247067$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============6427682888492089144=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3x8FY33YYkz1385
- for <lttng-dev@lists.lttng.org>; Fri, 14 Jul 2017 14:33:27 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id A1B0334029A
- for <lttng-dev@lists.lttng.org>; Fri, 14 Jul 2017 14:32:52 +0000 (UTC)
-In-Reply-To: <1500042044-12824-1-git-send-email-mjeanson@efficios.com>
+Received: from mail-ua0-x22d.google.com (mail-ua0-x22d.google.com
+ [IPv6:2607:f8b0:400c:c08::22d])
+ by lists.lttng.org (Postfix) with ESMTPS id 3x9Zjm38dpz144d
+ for <lttng-dev@lists.lttng.org>; Sun, 16 Jul 2017 18:30:36 +0000 (UTC)
+Received: by mail-ua0-x22d.google.com with SMTP id z22so75121511uah.1
+ for <lttng-dev@lists.lttng.org>; Sun, 16 Jul 2017 11:28:31 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,27 +20,103 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGludG8gbWFzdGVyIGFuZCBzdGFibGUtMC4xMCwgdGhhbmtzIQoKTWF0aGlldQoKLS0t
-LS0gT24gSnVsIDE0LCAyMDE3LCBhdCAxMDoyMCBBTSwgTWljaGFlbCBKZWFuc29uIG1qZWFuc29u
-QGVmZmljaW9zLmNvbSB3cm90ZToKCj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxt
-amVhbnNvbkBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gaW5jbHVkZS9NYWtlZmlsZS5hbSB8IDIgKysK
-PiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL2luY2x1
-ZGUvTWFrZWZpbGUuYW0gYi9pbmNsdWRlL01ha2VmaWxlLmFtCj4gaW5kZXggMmY2OGFhMi4uZGNk
-ZjMwNCAxMDA2NDQKPiAtLS0gYS9pbmNsdWRlL01ha2VmaWxlLmFtCj4gKysrIGIvaW5jbHVkZS9N
-YWtlZmlsZS5hbQo+IEBAIC0yMyw2ICsyMyw3IEBAIEVYVFJBX0RJU1QgPSB1cmN1L2FyY2gvYWFy
-Y2g2NC5oIFwKPiAJdXJjdS9hcmNoL2dlbmVyaWMuaCBcCj4gCXVyY3UvYXJjaC9ocHBhLmggXAo+
-IAl1cmN1L2FyY2gvaWE2NC5oIFwKPiArCXVyY3UvYXJjaC9tNjhrLmggXAo+IAl1cmN1L2FyY2gv
-bWlwcy5oIFwKPiAJdXJjdS9hcmNoL25pb3MyLmggXAo+IAl1cmN1L2FyY2gvcHBjLmggXAo+IEBA
-IC0zOCw2ICszOSw3IEBAIEVYVFJBX0RJU1QgPSB1cmN1L2FyY2gvYWFyY2g2NC5oIFwKPiAJdXJj
-dS91YXRvbWljL2dlbmVyaWMuaCBcCj4gCXVyY3UvdWF0b21pYy9ocHBhLmggXAo+IAl1cmN1L3Vh
-dG9taWMvaWE2NC5oIFwKPiArCXVyY3UvdWF0b21pYy9tNjhrLmggXAo+IAl1cmN1L3VhdG9taWMv
-bWlwcy5oIFwKPiAJdXJjdS91YXRvbWljL25pb3MyLmggXAo+IAl1cmN1L3VhdG9taWMvcHBjLmgg
-XAo+IC0tCj4gMi43LjQKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6
-Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-ZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
-ZGV2Cg==
+--===============6427682888492089144==
+Content-Type: multipart/alternative; boundary="94eb2c1b047af65207055473728c"
+
+--94eb2c1b047af65207055473728c
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+We are looking at using lttng as a solution for all our trace and debug
+requirements. We want to get away from traditional file based string format
+logging and move to lttng, which then gives us the flexibility of dumping
+the traces to file or the network. With this background, I have several
+questions for the team.
+
+1) CTF supports struct fields. I don=E2=80=99t see any ctf_ macros in lttng=
+ that
+will allow us to define tracepoints having struct fields. Is there a way to
+do this that I am missing?
+
+2) Display hints. Sometimes there is a need to display certain fields in a
+particular way, e.g. IP and MAC addresses. While the tracepoint definition
+for these fields are going to be integers or sequences of integers, we
+would like babeltrace to display these fields in a certain format. Short of
+modifying babeltrace to recognize these fields by their names and handle
+them specially, is there any other way of achieving the same?
+
+-Nalin
+
+--94eb2c1b047af65207055473728c
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p class=3D"gmail-MsoPlainText">Hello,</p>
+
+<p class=3D"gmail-MsoPlainText">We are looking at using lttng as a solution=
+ for all our
+trace and debug requirements. We want to get away from traditional file bas=
+ed string
+format logging and move to lttng, which then gives us the flexibility of
+dumping the traces to file or the network. With this background, I have sev=
+eral
+questions for the team.</p>
+
+<p class=3D"gmail-MsoPlainText">1) CTF supports struct fields. I don=E2=80=
+=99t see any ctf_
+macros in lttng that will allow us to define tracepoints having struct fiel=
+ds.
+Is there a way to do this that I am missing?</p>
+
+<p class=3D"gmail-MsoPlainText">2) Display hints. Sometimes there is a need=
+ to display
+certain fields in a particular way, e.g. IP and MAC addresses. While the
+tracepoint definition for these fields are going to be integers or sequence=
+s of
+integers, we would like babeltrace to display these fields in a certain for=
+mat.
+Short of modifying babeltrace to recognize these fields by their names and
+handle them specially, is there any other way of achieving the same?<span><=
+/span></p>
+
+<p class=3D"gmail-MsoPlainText">-Nalin</p>
+
+<p class=3D"gmail-MsoPlainText"><span>=C2=A0</span></p>
+
+</div>
+
+--94eb2c1b047af65207055473728c--
+
+--===============6427682888492089144==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============6427682888492089144==--
