@@ -1,22 +1,20 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
+From: Nalin Pai <nalinpai@gmail.com>
 Subject: Re: lttng questions
-Date: Wed, 19 Jul 2017 16:24:15 -0400
-Message-ID: <CAB4xu_2skG2wz_Gu24D4r_evk_GpCBeNuVz8v_i4PrL1wmG2dA__49552.1677461967$1500495902$gmane$org@mail.gmail.com>
+Date: Wed, 19 Jul 2017 12:05:35 -0700
+Message-ID: <CALVR4zDU5L-eLg_ywdmDjCb5j5XeF_Z37Zy+LTVkgnaPHAXmzw__6519.88183749399$1500560961$gmane$org@mail.gmail.com>
 References: <CALVR4zBENdRfGxAPwTuNxUhS5CJgJ5qzzrcnx5vMGZdg7BqmDg@mail.gmail.com>
  <CAB4xu_3Ypj-J17FcBMdKZHMfyKdf=E_3G63EaoARQ3Ur4EcT0Q@mail.gmail.com>
  <CALVR4zDEA9iOEW5hCYaADnPHH2Ev1JoPD+Gdnv4aiphaWQceOQ@mail.gmail.com>
- <CALVR4zDU5L-eLg_ywdmDjCb5j5XeF_Z37Zy+LTVkgnaPHAXmzw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============5628787058977508155=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-x231.google.com (mail-qk0-x231.google.com
- [IPv6:2607:f8b0:400d:c09::231])
- by lists.lttng.org (Postfix) with ESMTPS id 3xCT8l66HBz13jn
- for <lttng-dev@lists.lttng.org>; Wed, 19 Jul 2017 20:27:03 +0000 (UTC)
-Received: by mail-qk0-x231.google.com with SMTP id d136so4424023qkg.3
- for <lttng-dev@lists.lttng.org>; Wed, 19 Jul 2017 13:24:47 -0700 (PDT)
-In-Reply-To: <CALVR4zDU5L-eLg_ywdmDjCb5j5XeF_Z37Zy+LTVkgnaPHAXmzw@mail.gmail.com>
+Received: from mail-ua0-x22a.google.com (mail-ua0-x22a.google.com
+ [IPv6:2607:f8b0:400c:c08::22a])
+ by lists.lttng.org (Postfix) with ESMTPS id 3xCRPP4zN6z13dC
+ for <lttng-dev@lists.lttng.org>; Wed, 19 Jul 2017 19:07:53 +0000 (UTC)
+Received: by mail-ua0-x22a.google.com with SMTP id f9so6755198uaf.4
+ for <lttng-dev@lists.lttng.org>; Wed, 19 Jul 2017 12:05:37 -0700 (PDT)
+In-Reply-To: <CALVR4zDEA9iOEW5hCYaADnPHH2Ev1JoPD+Gdnv4aiphaWQceOQ@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,85 +24,226 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Nalin Pai <nalinpai@gmail.com>
+To: Philippe Proulx <eeppeliteloop@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gV2VkLCBKdWwgMTksIDIwMTcgYXQgMzowNSBQTSwgTmFsaW4gUGFpIDxuYWxpbnBhaUBnbWFp
-bC5jb20+IHdyb3RlOgo+IE1vcmUgcXVlc3Rpb25zLgo+Cj4gSSBub3RpY2UgdGhhdCBmaWx0ZXIg
-ZXhwcmVzc2lvbiBwYXJzZXIgZG9lcyBub3QgdmFsaWRhdGUgdG8gY2hlY2sgaWYgdGhlCj4gZmll
-bGQtbmFtZSBpbiB0aGUgZXhwcmVzc2lvbiBpcyB2YWxpZCBvciB3aGV0aGVyIHRoZSBleHByZXNz
-aW9uIHZhbHVlIGlzCj4gY29uc2lzdGVudCB3aXRoIHRoZSBmaWVsZCB0eXBlIChlLmcgY2hlY2sg
-dGhhdCBleHByZXNzaW9uIHZhbHVlIGlzIGludGVnZXIKPiBpZiBmaWVsZCB0eXBlIGlzIGludGVn
-ZXIpLiBBcmUgdGhlcmUgYW55IHBsYW5zIG9mIHN0cmljdGVyIGNoZWNraW5nIG9mCj4gZXhwcmVz
-c2lvbnM/IElmIHRoZSB1c2VyIG1ha2VzIGEgbWlzdGFrZSB3aGlsZSB0eXBpbmcgb3V0IHRoZSBl
-eHByZXNzaW9uIGlzCj4gdGhlcmUgYW55IGZlZWRiYWNrIHRvIGluZGljYXRlIHRoZSBlcnJvcj8K
-Ckl0IGNhbm5vdCBiZSBpbmRpY2F0ZWQgdG8gdGhlIHVzZXIgYXQgZXZlbnQgcnVsZSBjcmVhdGlv
-biB0aW1lCihsdHRuZyBlbmFibGUtZXZlbnQpIGJlY2F1c2UgZnV0dXJlIGV2ZW50cyBjb3VsZCBt
-YXRjaCBhbiBldmVudCBydWxlCnlvdSBjcmVhdGUgbm93LgoKV2hlbiBhIGZpZWxkJ3MgdHlwZSBp
-cyBub3Qgd2hhdCBpdCBzaG91bGQgYmUgYWNjb3JkaW5nIHRvIHRoZSBldmVudApydWxlJ3MgZmls
-dGVyIGV4cHJlc3Npb24sIHRoZW4gdGhlIHdob2xlIGZpbHRlciBleHByZXNzaW9uIGV2YWx1YXRl
-cyB0bwowIChmYWxzZSksIHRodXMgdGhlIHdob2xlIGV2ZW50IHJ1bGUgaXMgY29uc2lkZXJlZCBu
-b3Qgc2F0aXNmaWVkLgoKPgo+IFRoYW5rcywKPiBOYWxpbgo+Cj4gT24gV2VkLCBKdWwgMTksIDIw
-MTcgYXQgMTA6MTEgQU0sIE5hbGluIFBhaSA8bmFsaW5wYWlAZ21haWwuY29tPiB3cm90ZToKPj4K
-Pj4gVGhhbmtzIGZvciB5b3VyIGFuc3dlcnMuIEkgaGF2ZSBhIHF1ZXN0aW9uIG9uIGV2ZW50IGZp
-bHRlcnMuIFdlIHdpbGwgYmUKPj4gcmVwcmVzZW50aW5nIElQdjYgYWRkcmVzc2VzIGFzIGFycmF5
-cyBvZiBieXRlcy4gV2Ugd291bGQgbGlrZSB0byBiZSBhYmxlIHRvCj4+IGZpbHRlciBvbiBJUHY2
-IGFkZHJlc3MgZmllbGRzLiBEb2VzIGx0dG5nIGZpbHRlcmluZyBvbiBhcnJheXMgYW5kIHNlcXVl
-bmNlcz8KPj4gSWYgeWVzLCB0aGVuIHdoYXQncyB0aGUgZmlsdGVyIGV4cHJlc3Npb24gZm9ybWF0
-IGZvciB0aGlzLgoKVGhpcyBpcyBhbiB1cGNvbWluZyBmZWF0dXJlLCBwcm9iYWJseSBwYXJ0IG9m
-IDIuMTEsIGJ1dCBJIGNvdWxkIGJlIHdyb25nCihhYm91dCB0aGUgdmVyc2lvbikuCgpQaGlsCgo+
-Pgo+PiBUaGFua3MsCj4+IE5hbGluCj4+Cj4+Cj4+Cj4+IE9uIFN1biwgSnVsIDE2LCAyMDE3IGF0
-IDQ6NDkgUE0sIFBoaWxpcHBlIFByb3VseCA8ZWVwcGVsaXRlbG9vcEBnbWFpbC5jb20+Cj4+IHdy
-b3RlOgo+Pj4KPj4+IE9uIFN1biwgSnVsIDE2LCAyMDE3IGF0IDI6MjggUE0sIE5hbGluIFBhaSA8
-bmFsaW5wYWlAZ21haWwuY29tPiB3cm90ZToKPj4+ID4KPj4+ID4gSGVsbG8sCj4+PiA+Cj4+PiA+
-IFdlIGFyZSBsb29raW5nIGF0IHVzaW5nIGx0dG5nIGFzIGEgc29sdXRpb24gZm9yIGFsbCBvdXIg
-dHJhY2UgYW5kIGRlYnVnCj4+PiA+IHJlcXVpcmVtZW50cy4gV2Ugd2FudCB0byBnZXQgYXdheSBm
-cm9tIHRyYWRpdGlvbmFsIGZpbGUgYmFzZWQgc3RyaW5nIGZvcm1hdAo+Pj4gPiBsb2dnaW5nIGFu
-ZCBtb3ZlIHRvIGx0dG5nLCB3aGljaCB0aGVuIGdpdmVzIHVzIHRoZSBmbGV4aWJpbGl0eSBvZiBk
-dW1waW5nCj4+PiA+IHRoZSB0cmFjZXMgdG8gZmlsZSBvciB0aGUgbmV0d29yay4gV2l0aCB0aGlz
-IGJhY2tncm91bmQsIEkgaGF2ZSBzZXZlcmFsCj4+PiA+IHF1ZXN0aW9ucyBmb3IgdGhlIHRlYW0u
-Cj4+PiA+Cj4+PiA+IDEpIENURiBzdXBwb3J0cyBzdHJ1Y3QgZmllbGRzLiBJIGRvbuKAmXQgc2Vl
-IGFueSBjdGZfIG1hY3JvcyBpbiBsdHRuZwo+Pj4gPiB0aGF0IHdpbGwgYWxsb3cgdXMgdG8gZGVm
-aW5lIHRyYWNlcG9pbnRzIGhhdmluZyBzdHJ1Y3QgZmllbGRzLiBJcyB0aGVyZSBhCj4+PiA+IHdh
-eSB0byBkbyB0aGlzIHRoYXQgSSBhbSBtaXNzaW5nPwo+Pj4KPj4+IENvbXBsZXggQ1RGIHR5cGVz
-IChleGNlcHQgYSBmZXcgdmVyeSBzcGVjaWZpYyBleGNlcHRpb25zKSBhcmUgbm90Cj4+PiBzdXBw
-b3J0ZWQgaW4gTFRUbmctVVNULCB0aGUgdXNlciBzcGFjZSBMVFRuZyB0cmFjZXIuIElmIHlvdSBu
-ZWVkIGEKPj4+IHN0cnVjdHVyZSBkYXRhIHR5cGUsIHRoZW4geW91IG5lZWQgdG8gImV4cGxvZGUi
-IGl0LCBwZXJoYXBzIHdpdGggZmllbGQKPj4+IG5hbWUgcHJlZml4ZXMsIGFzIG9mIHRoZSBsYXRl
-c3QgdmVyc2lvbiBvZiBMVFRuZy4gRm9yIGV4YW1wbGU6Cj4+PiBgbXlfc3RydWN0X3VzZXJfaWRg
-LCBgbXlfc3RydWN0X21zZ19pZGAsIGBteV9zdHJ1Y3RfbXNnYC4KPj4+Cj4+PiA+Cj4+PiA+IDIp
-IERpc3BsYXkgaGludHMuIFNvbWV0aW1lcyB0aGVyZSBpcyBhIG5lZWQgdG8gZGlzcGxheSBjZXJ0
-YWluIGZpZWxkcwo+Pj4gPiBpbiBhIHBhcnRpY3VsYXIgd2F5LCBlLmcuIElQIGFuZCBNQUMgYWRk
-cmVzc2VzLiBXaGlsZSB0aGUgdHJhY2Vwb2ludAo+Pj4gPiBkZWZpbml0aW9uIGZvciB0aGVzZSBm
-aWVsZHMgYXJlIGdvaW5nIHRvIGJlIGludGVnZXJzIG9yIHNlcXVlbmNlcyBvZgo+Pj4gPiBpbnRl
-Z2Vycywgd2Ugd291bGQgbGlrZSBiYWJlbHRyYWNlIHRvIGRpc3BsYXkgdGhlc2UgZmllbGRzIGlu
-IGEgY2VydGFpbgo+Pj4gPiBmb3JtYXQuIFNob3J0IG9mIG1vZGlmeWluZyBiYWJlbHRyYWNlIHRv
-IHJlY29nbml6ZSB0aGVzZSBmaWVsZHMgYnkgdGhlaXIKPj4+ID4gbmFtZXMgYW5kIGhhbmRsZSB0
-aGVtIHNwZWNpYWxseSwgaXMgdGhlcmUgYW55IG90aGVyIHdheSBvZiBhY2hpZXZpbmcgdGhlCj4+
-PiA+IHNhbWU/Cj4+Pgo+Pj4gSW4gdGhlIHNob3J0LSB0byBtZWRpdW0tdGVybSwgd2l0aCBCYWJl
-bHRyYWNlIDIuMCAoY3VycmVudGx5IGluICJwcmUiCj4+PiBkZXZlbG9wbWVudCBzdGFnZSksIHlv
-dSBjYW4gY3JlYXRlIHlvdXIgb3duIHNpbmsgY29tcG9uZW50IHRvIGRvCj4+PiBzb21ldGhpbmcg
-d2l0aCBldmVudHMuIFRoZSBkZWZhdWx0IHRleHR1YWwgZGlzcGxheSBpcyBjYWxsZWQKPj4+IHNp
-bmsudGV4dC5wcmV0dHkuIElmIHlvdSBuZWVkIGEgbW9kaWZpZWQgdmVyc2lvbiBvZiB0aGlzIHNp
-bmsKPj4+IGNvbXBvbmVudCBjbGFzcywgeW91IGNvdWxkIGNvcHkgaXRzIHNvdXJjZSBhbmQgY3Jl
-YXRlIHlvdXIgb3duCj4+PiBtb2RpZmllZCBwbHVnaW4gd2hpY2gsIGFzIHlvdSB3cm90ZSwgd291
-bGQgcmVjb2duaXplIHRoZSBmaWVsZHMgYnkKPj4+IG5hbWUsIGV0Yy4gWW91IGNvdWxkIHRoZW4g
-cnVuIHRoZSBDTEkgYXMgc3VjaDoKPj4+Cj4+PiAgICAgYmFiZWx0cmFjZSAvcGF0aC90by90cmFj
-ZQo+Pj4gLS1jb21wb25lbnQ9c2luay5teS1wbHVnaW4ubXktY29tcG9uZW50LWNsYXNzCj4+Pgo+
-Pj4gSSBjYW4ndCBjb21tZW50IG9uIFRyYWNlIENvbXBhc3MvTFRUbmcgU2NvcGUuCj4+Pgo+Pj4g
-SSBzZWUgbm8gb3RoZXIgd2F5IGZvciB0aGUgbW9tZW50LiBDVEYgMiB3aWxsIGhhdmUgYSB3YXkg
-dG8gaW5kaWNhdGUKPj4+IHRoYXQgc3BlY2lmaWMgZmllbGRzIGFyZSB0byBiZSBkaXNwbGF5ZWQg
-dXNpbmcgYSBnaXZlbiBmb3JtYXQgc3RyaW5nLAo+Pj4gZm9yIGV4YW1wbGUsIGJ1dCBpdHMgc3Bl
-Y2lmaWNhdGlvbiBpcyBub3QgYXZhaWxhYmxlIGN1cnJlbnRseSAob25seSBhCj4+PiBwcm9wb3Nh
-bCBpcyBhdmFpbGFibGUgaGVyZQo+Pj4gPGh0dHA6Ly9kaWFtb24ub3JnL2N0Zi9maWxlcy9DVEYy
-LVBST1AtMS4wLmh0bWw+KS4gQmFiZWx0cmFjZSAyLjEgd2lsbAo+Pj4gc3VwcG9ydCBDVEYgMiwg
-YWZ0ZXIgd2hpY2ggYSBmdXR1cmUgdmVyc2lvbiBvZiBMVFRuZyB3aWxsIHByb2R1Y2UgaXQuCj4+
-Pgo+Pj4gUGhpbAo+Pj4KPj4+ID4KPj4+ID4gLU5hbGluCj4+PiA+Cj4+PiA+Cj4+PiA+Cj4+PiA+
-Cj4+PiA+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+
-PiA+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4+ID4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-Zwo+Pj4gPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
-bHR0bmctZGV2Cj4+PiA+Cj4+Cj4+Cj4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
-dHRuZy1kZXYK
+--===============5628787058977508155==
+Content-Type: multipart/alternative; boundary="94eb2c07ddc224c4ba0554b051d3"
+
+--94eb2c07ddc224c4ba0554b051d3
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+More questions.
+
+I notice that filter expression parser does not validate to check if the
+field-name in the expression is valid or whether the expression value is
+consistent with the field type (e.g check that expression value is integer
+if field type is integer). Are there any plans of stricter checking of
+expressions? If the user makes a mistake while typing out the expression is
+there any feedback to indicate the error?
+
+Thanks,
+Nalin
+
+On Wed, Jul 19, 2017 at 10:11 AM, Nalin Pai <nalinpai@gmail.com> wrote:
+
+> Thanks for your answers. I have a question on event filters. We will be
+> representing IPv6 addresses as arrays of bytes. We would like to be able =
+to
+> filter on IPv6 address fields. Does lttng filtering on arrays and
+> sequences? If yes, then what's the filter expression format for this.
+>
+> Thanks,
+> Nalin
+>
+>
+>
+> On Sun, Jul 16, 2017 at 4:49 PM, Philippe Proulx <eeppeliteloop@gmail.com=
+>
+> wrote:
+>
+>> On Sun, Jul 16, 2017 at 2:28 PM, Nalin Pai <nalinpai@gmail.com> wrote:
+>> >
+>> > Hello,
+>> >
+>> > We are looking at using lttng as a solution for all our trace and debu=
+g
+>> requirements. We want to get away from traditional file based string for=
+mat
+>> logging and move to lttng, which then gives us the flexibility of dumpin=
+g
+>> the traces to file or the network. With this background, I have several
+>> questions for the team.
+>> >
+>> > 1) CTF supports struct fields. I don=E2=80=99t see any ctf_ macros in =
+lttng
+>> that will allow us to define tracepoints having struct fields. Is there =
+a
+>> way to do this that I am missing?
+>>
+>> Complex CTF types (except a few very specific exceptions) are not
+>> supported in LTTng-UST, the user space LTTng tracer. If you need a
+>> structure data type, then you need to "explode" it, perhaps with field
+>> name prefixes, as of the latest version of LTTng. For example:
+>> `my_struct_user_id`, `my_struct_msg_id`, `my_struct_msg`.
+>>
+>> >
+>> > 2) Display hints. Sometimes there is a need to display certain fields
+>> in a particular way, e.g. IP and MAC addresses. While the tracepoint
+>> definition for these fields are going to be integers or sequences of
+>> integers, we would like babeltrace to display these fields in a certain
+>> format. Short of modifying babeltrace to recognize these fields by their
+>> names and handle them specially, is there any other way of achieving the
+>> same?
+>>
+>> In the short- to medium-term, with Babeltrace 2.0 (currently in "pre"
+>> development stage), you can create your own sink component to do
+>> something with events. The default textual display is called
+>> sink.text.pretty. If you need a modified version of this sink
+>> component class, you could copy its source and create your own
+>> modified plugin which, as you wrote, would recognize the fields by
+>> name, etc. You could then run the CLI as such:
+>>
+>>     babeltrace /path/to/trace --component=3Dsink.my-plugin.my-
+>> component-class
+>>
+>> I can't comment on Trace Compass/LTTng Scope.
+>>
+>> I see no other way for the moment. CTF 2 will have a way to indicate
+>> that specific fields are to be displayed using a given format string,
+>> for example, but its specification is not available currently (only a
+>> proposal is available here
+>> <http://diamon.org/ctf/files/CTF2-PROP-1.0.html>). Babeltrace 2.1 will
+>> support CTF 2, after which a future version of LTTng will produce it.
+>>
+>> Phil
+>>
+>> >
+>> > -Nalin
+>> >
+>> >
+>> >
+>> >
+>> > _______________________________________________
+>> > lttng-dev mailing list
+>> > lttng-dev@lists.lttng.org
+>> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>> >
+>>
+>
+>
+
+--94eb2c07ddc224c4ba0554b051d3
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">More questions.<div><br></div><div>I notice that filter ex=
+pression parser does not validate to check if the field-name in the express=
+ion is valid or whether the expression value is consistent with the field t=
+ype (e.g check that expression value is integer if field type is integer). =
+Are there any plans of stricter checking of expressions? If the user makes =
+a mistake while typing out the expression is there any feedback to indicate=
+ the error?</div><div><br></div><div>Thanks,</div><div>Nalin</div></div><di=
+v class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Wed, Jul 19, 2017=
+ at 10:11 AM, Nalin Pai <span dir=3D"ltr">&lt;<a href=3D"mailto:nalinpai@gm=
+ail.com" target=3D"_blank">nalinpai@gmail.com</a>&gt;</span> wrote:<br><blo=
+ckquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #c=
+cc solid;padding-left:1ex"><div dir=3D"ltr">Thanks for your answers. I have=
+ a question on event filters. We will be representing IPv6 addresses as arr=
+ays of bytes. We would like to be able to filter on IPv6 address fields. Do=
+es lttng filtering on arrays and sequences? If yes, then what&#39;s the fil=
+ter expression format for this.<div><br></div><div>Thanks,</div><div>Nalin<=
+br><div><br></div><div><br></div></div></div><div class=3D"HOEnZb"><div cla=
+ss=3D"h5"><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On Sun,=
+ Jul 16, 2017 at 4:49 PM, Philippe Proulx <span dir=3D"ltr">&lt;<a href=3D"=
+mailto:eeppeliteloop@gmail.com" target=3D"_blank">eeppeliteloop@gmail.com</=
+a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0=
+ 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><span>On Sun, Jul 16=
+, 2017 at 2:28 PM, Nalin Pai &lt;<a href=3D"mailto:nalinpai@gmail.com" targ=
+et=3D"_blank">nalinpai@gmail.com</a>&gt; wrote:<br>
+&gt;<br>
+&gt; Hello,<br>
+&gt;<br>
+&gt; We are looking at using lttng as a solution for all our trace and debu=
+g requirements. We want to get away from traditional file based string form=
+at logging and move to lttng, which then gives us the flexibility of dumpin=
+g the traces to file or the network. With this background, I have several q=
+uestions for the team.<br>
+&gt;<br>
+&gt; 1) CTF supports struct fields. I don=E2=80=99t see any ctf_ macros in =
+lttng that will allow us to define tracepoints having struct fields. Is the=
+re a way to do this that I am missing?<br>
+<br>
+</span>Complex CTF types (except a few very specific exceptions) are not<br=
+>
+supported in LTTng-UST, the user space LTTng tracer. If you need a<br>
+structure data type, then you need to &quot;explode&quot; it, perhaps with =
+field<br>
+name prefixes, as of the latest version of LTTng. For example:<br>
+`my_struct_user_id`, `my_struct_msg_id`, `my_struct_msg`.<br>
+<span><br>
+&gt;<br>
+&gt; 2) Display hints. Sometimes there is a need to display certain fields =
+in a particular way, e.g. IP and MAC addresses. While the tracepoint defini=
+tion for these fields are going to be integers or sequences of integers, we=
+ would like babeltrace to display these fields in a certain format. Short o=
+f modifying babeltrace to recognize these fields by their names and handle =
+them specially, is there any other way of achieving the same?<br>
+<br>
+</span>In the short- to medium-term, with Babeltrace 2.0 (currently in &quo=
+t;pre&quot;<br>
+development stage), you can create your own sink component to do<br>
+something with events. The default textual display is called<br>
+sink.text.pretty. If you need a modified version of this sink<br>
+component class, you could copy its source and create your own<br>
+modified plugin which, as you wrote, would recognize the fields by<br>
+name, etc. You could then run the CLI as such:<br>
+<br>
+=C2=A0 =C2=A0 babeltrace /path/to/trace --component=3Dsink.my-plugin.my-<wb=
+r>component-class<br>
+<br>
+I can&#39;t comment on Trace Compass/LTTng Scope.<br>
+<br>
+I see no other way for the moment. CTF 2 will have a way to indicate<br>
+that specific fields are to be displayed using a given format string,<br>
+for example, but its specification is not available currently (only a<br>
+proposal is available here<br>
+&lt;<a href=3D"http://diamon.org/ctf/files/CTF2-PROP-1.0.html" rel=3D"noref=
+errer" target=3D"_blank">http://diamon.org/ctf/files/C<wbr>TF2-PROP-1.0.htm=
+l</a>&gt;). Babeltrace 2.1 will<br>
+support CTF 2, after which a future version of LTTng will produce it.<br>
+<br>
+Phil<br>
+<br>
+&gt;<br>
+&gt; -Nalin<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt;<br>
+&gt; ______________________________<wbr>_________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
+ev@lists.lttng.org</a><br>
+&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
+ rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bi<wbr>n/=
+mailman/listinfo/lttng-dev</a><br>
+&gt;<br>
+</blockquote></div><br></div>
+</div></div></blockquote></div><br></div>
+
+--94eb2c07ddc224c4ba0554b051d3--
+
+--===============5628787058977508155==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============5628787058977508155==--
