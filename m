@@ -1,101 +1,76 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH urcu v2] Fix: don't use overlapping mmap
-	mappings on Cygwin
-Date: Fri, 28 Jul 2017 11:51:15 -0400
-Message-ID: <1501257075-24067-1-git-send-email-mjeanson__33770.9530526356$1501257103$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-modules and LTTng-UST 2.10.0 (KeKriek)
+Date: Tue, 1 Aug 2017 20:19:10 +0000 (UTC)
+Message-ID: <979220567.3317.1501618750014.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3xJtgt5Kvgz12b4
- for <lttng-dev@lists.lttng.org>; Fri, 28 Jul 2017 15:54:18 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 623F034024C
- for <lttng-dev@lists.lttng.org>; Fri, 28 Jul 2017 15:53:38 +0000 (UTC)
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Sender: linux-kernel-owner@vger.kernel.org
+To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org, linux-kernel <linux-kernel@vger.kernel.org>
+Cc: lwn <lwn@lwn.net>
 List-Id: lttng-dev@lists.lttng.org
 
-VGhlIGFsbG9jYXRpb24gc2NoZW1lIHVzZWQgYnkgdGhlIG1tYXAgYmFzZWQgUkNVIGhhc2ggdGFi
-bGUgaXMgdG8gbWFrZSBhCmxhcmdlIHVuYWNjZXNzaWJsZSBtYXBwaW5nIHRvIHJlc2VydmUgbWVt
-b3J5IHdpdGhvdXQgYWxsb2NhdGluZyBpdC4KVGhlbiBzbWFsbGVyIGNodW5rcyBhcmUgYWxsb2Nh
-dGVkIGJ5IG92ZXJsYXBwaW5nIHJlYWQvd3JpdGUgbWFwcGluZ3Mgd2hpY2gKZG8gYWxsb2NhdGUg
-bWVtb3J5LiBEZWFsbG9jYXRpb24gaXMgZG9uZSBieSBhbiBvdmVybGFwcGluZyB1bmFjY2Vzc2li
-bGUKbWFwcGluZy4KClRoaXMgc2NoZW1lIHdhcyB0ZXN0ZWQgb24gTGludXgsIG1hY09TIGFuZCBT
-b2xhcmlzLiBIb3dldmVyLCBvbiBDeWd3aW4gdGhlCm1tYXAgd3JhcHBlciBpcyBiYXNlZCBvbiB0
-aGUgV2luZG93cyBOdE1hcFZpZXdPZlNlY3Rpb24gQVBJIHdoaWNoIGRvZXNuJ3QKc3VwcG9ydCBv
-dmVybGFwcGluZyBtYXBwaW5ncy4KCkFuIGFsdGVybmF0aXZlIHRvIHRoZSBvdmVybGFwcGluZyBt
-YXBwaW5ncyBpcyB0byB1c2UgbXByb3RlY3QgdG8gY2hhbmdlIHRoZQpwcm90ZWN0aW9uIG9uIGNo
-dW5rcyBvZiB0aGUgbGFyZ2UgbWFwcGluZywgcmVhZC93cml0ZSB0byBhbGxvY2F0ZSBhbmQgbm9u
-ZQp0byBkZWFsbG9jYXRlLiBUaGlzIHdvcmtzIHBlcmZlY3R5IG9uIEN5Z3dpbiBhbmQgU29sYXJp
-cyBidXQgb24gTGludXggYQpjYWxsIHRvIG1hZHZpc2UgaXMgYWxzbyByZXF1aXJlZCB0byBkZWFs
-bG9jYXRlIGFuZCBpdCBqdXN0IGRvZXNuJ3Qgd29yayBvbgptYWNPUy4KCkZvciB0aGlzIHJlYXNv
-biwgd2Uga2VlcCB0byBvcmlnaW5hbCBzY2hlbWUgb24gYWxsIHBsYXRmb3JtcyBleGNlcHQgQ3ln
-d2luLgoKU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5j
-b20+Ci0tLQogc3JjL3JjdWxmaGFzaC1tbS1tbWFwLmMgfCA2MSArKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKystLS0tCiAxIGZpbGUgY2hhbmdlZCwgNTYgaW5zZXJ0
-aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9zcmMvcmN1bGZoYXNoLW1tLW1t
-YXAuYyBiL3NyYy9yY3VsZmhhc2gtbW0tbW1hcC5jCmluZGV4IDNjYzNmYTAuLmE4ZmFkZjAgMTAw
-NjQ0Ci0tLSBhL3NyYy9yY3VsZmhhc2gtbW0tbW1hcC5jCisrKyBiL3NyYy9yY3VsZmhhc2gtbW0t
-bW1hcC5jCkBAIC0yOCw4ICsyOCwzMCBAQAogI2RlZmluZSBNQVBfQU5PTllNT1VTCQlNQVBfQU5P
-TgogI2VuZGlmCiAKLS8qIHJlc2VydmUgaW5hY2Nlc3NpYmxlIG1lbW9yeSBzcGFjZSB3aXRob3V0
-IGFsbG9jYXRpb24gYW55IG1lbW9yeSAqLwotc3RhdGljIHZvaWQgKm1lbW9yeV9tYXAoc2l6ZV90
-IGxlbmd0aCkKKy8qCisgKiBUaGUgYWxsb2NhdGlvbiBzY2hlbWUgdXNlZCBieSB0aGUgbW1hcCBi
-YXNlZCBSQ1UgaGFzaCB0YWJsZSBpcyB0byBtYWtlIGEKKyAqIGxhcmdlIHVuYWNjZXNzaWJsZSBt
-YXBwaW5nIHRvIHJlc2VydmUgbWVtb3J5IHdpdGhvdXQgYWxsb2NhdGluZyBpdC4KKyAqIFRoZW4g
-c21hbGxlciBjaHVua3MgYXJlIGFsbG9jYXRlZCBieSBvdmVybGFwcGluZyByZWFkL3dyaXRlIG1h
-cHBpbmdzIHdoaWNoCisgKiBkbyBhbGxvY2F0ZSBtZW1vcnkuIERlYWxsb2NhdGlvbiBpcyBkb25l
-IGJ5IGFuIG92ZXJsYXBwaW5nIHVuYWNjZXNzaWJsZQorICogbWFwcGluZy4KKyAqCisgKiBUaGlz
-IHNjaGVtZSB3YXMgdGVzdGVkIG9uIExpbnV4LCBtYWNPUyBhbmQgU29sYXJpcy4gSG93ZXZlciwg
-b24gQ3lnd2luIHRoZQorICogbW1hcCB3cmFwcGVyIGlzIGJhc2VkIG9uIHRoZSBXaW5kb3dzIE50
-TWFwVmlld09mU2VjdGlvbiBBUEkgd2hpY2ggZG9lc24ndAorICogc3VwcG9ydCBvdmVybGFwcGlu
-ZyBtYXBwaW5ncy4KKyAqCisgKiBBbiBhbHRlcm5hdGl2ZSB0byB0aGUgb3ZlcmxhcHBpbmcgbWFw
-cGluZ3MgaXMgdG8gdXNlIG1wcm90ZWN0IHRvIGNoYW5nZSB0aGUKKyAqIHByb3RlY3Rpb24gb24g
-Y2h1bmtzIG9mIHRoZSBsYXJnZSBtYXBwaW5nLCByZWFkL3dyaXRlIHRvIGFsbG9jYXRlIGFuZCBu
-b25lCisgKiB0byBkZWFsbG9jYXRlLiBUaGlzIHdvcmtzIHBlcmZlY3R5IG9uIEN5Z3dpbiBhbmQg
-U29sYXJpcyBidXQgb24gTGludXggYQorICogY2FsbCB0byBtYWR2aXNlIGlzIGFsc28gcmVxdWly
-ZWQgdG8gZGVhbGxvY2F0ZSBhbmQgaXQganVzdCBkb2Vzbid0IHdvcmsgb24KKyAqIG1hY09TLgor
-ICoKKyAqIEZvciB0aGlzIHJlYXNvbiwgd2Uga2VlcCB0byBvcmlnaW5hbCBzY2hlbWUgb24gYWxs
-IHBsYXRmb3JtcyBleGNlcHQgQ3lnd2luLgorICovCisKKworLyogUmVzZXJ2ZSBpbmFjY2Vzc2li
-bGUgbWVtb3J5IHNwYWNlIHdpdGhvdXQgYWxsb2NhdGluZyBpdCAqLworc3RhdGljCit2b2lkICpt
-ZW1vcnlfbWFwKHNpemVfdCBsZW5ndGgpCiB7CiAJdm9pZCAqcmV0ID0gbW1hcChOVUxMLCBsZW5n
-dGgsIFBST1RfTk9ORSwKIAkJCU1BUF9QUklWQVRFIHwgTUFQX0FOT05ZTU9VUywgLTEsIDApOwpA
-QCAtMzgsNyArNjAsOCBAQCBzdGF0aWMgdm9pZCAqbWVtb3J5X21hcChzaXplX3QgbGVuZ3RoKQog
-CXJldHVybiByZXQ7CiB9CiAKLXN0YXRpYyB2b2lkIG1lbW9yeV91bm1hcCh2b2lkICpwdHIsIHNp
-emVfdCBsZW5ndGgpCitzdGF0aWMKK3ZvaWQgbWVtb3J5X3VubWFwKHZvaWQgKnB0ciwgc2l6ZV90
-IGxlbmd0aCkKIHsKIAlpbnQgcmV0IF9fYXR0cmlidXRlX18oKHVudXNlZCkpOwogCkBAIC00Nyw3
-ICs3MCwzMyBAQCBzdGF0aWMgdm9pZCBtZW1vcnlfdW5tYXAodm9pZCAqcHRyLCBzaXplX3QgbGVu
-Z3RoKQogCWFzc2VydChyZXQgPT0gMCk7CiB9CiAKLXN0YXRpYyB2b2lkIG1lbW9yeV9wb3B1bGF0
-ZSh2b2lkICpwdHIsIHNpemVfdCBsZW5ndGgpCisjaWZkZWYgX19DWUdXSU5fXworLyogU2V0IHBy
-b3RlY3Rpb24gdG8gcmVhZC93cml0ZSB0byBhbGxvY2F0ZSBhIG1lbW9yeSBjaHVuayAqLworc3Rh
-dGljCit2b2lkIG1lbW9yeV9wb3B1bGF0ZSh2b2lkICpwdHIsIHNpemVfdCBsZW5ndGgpCit7CisJ
-aW50IHJldCBfX2F0dHJpYnV0ZV9fKCh1bnVzZWQpKTsKKworCXJldCA9IG1wcm90ZWN0KHB0ciwg
-bGVuZ3RoLCBQUk9UX1JFQUQgfCBQUk9UX1dSSVRFKTsKKworCWFzc2VydCghcmV0KTsKK30KKwor
-LyogU2V0IHByb3RlY3Rpb24gdG8gbm9uZSB0byBkZWFsbG9jYXRlIGEgbWVtb3J5IGNodW5rICov
-CitzdGF0aWMKK3ZvaWQgbWVtb3J5X2Rpc2NhcmQodm9pZCAqcHRyLCBzaXplX3QgbGVuZ3RoKQor
-eworCWludCByZXQgX19hdHRyaWJ1dGVfXygodW51c2VkKSk7CisKKwlyZXQgPSBtcHJvdGVjdChw
-dHIsIGxlbmd0aCwgUFJPVF9OT05FKTsKKworCWFzc2VydCghcmV0KTsKK30KKworI2Vsc2UgLyog
-X19DWUdXSU5fXyAqLworCitzdGF0aWMKK3ZvaWQgbWVtb3J5X3BvcHVsYXRlKHZvaWQgKnB0ciwg
-c2l6ZV90IGxlbmd0aCkKIHsKIAl2b2lkICpyZXQgX19hdHRyaWJ1dGVfXygodW51c2VkKSk7CiAK
-QEAgLTYxLDcgKzExMCw4IEBAIHN0YXRpYyB2b2lkIG1lbW9yeV9wb3B1bGF0ZSh2b2lkICpwdHIs
-IHNpemVfdCBsZW5ndGgpCiAgKiBEaXNjYXJkIGdhcmJhZ2UgbWVtb3J5IGFuZCBhdm9pZCBzeXN0
-ZW0gc2F2ZSBpdCB3aGVuIHRyeSB0byBzd2FwIGl0IG91dC4KICAqIE1ha2UgaXQgc3RpbGwgcmVz
-ZXJ2ZWQsIGluYWNjZXNzaWJsZS4KICAqLwotc3RhdGljIHZvaWQgbWVtb3J5X2Rpc2NhcmQodm9p
-ZCAqcHRyLCBzaXplX3QgbGVuZ3RoKQorc3RhdGljCit2b2lkIG1lbW9yeV9kaXNjYXJkKHZvaWQg
-KnB0ciwgc2l6ZV90IGxlbmd0aCkKIHsKIAl2b2lkICpyZXQgX19hdHRyaWJ1dGVfXygodW51c2Vk
-KSk7CiAKQEAgLTcwLDYgKzEyMCw3IEBAIHN0YXRpYyB2b2lkIG1lbW9yeV9kaXNjYXJkKHZvaWQg
-KnB0ciwgc2l6ZV90IGxlbmd0aCkKIAogCWFzc2VydChyZXQgPT0gcHRyKTsKIH0KKyNlbmRpZiAv
-KiBfX0NZR1dJTl9fICovCiAKIHN0YXRpYwogdm9pZCBjZHNfbGZodF9hbGxvY19idWNrZXRfdGFi
-bGUoc3RydWN0IGNkc19sZmh0ICpodCwgdW5zaWduZWQgbG9uZyBvcmRlcikKLS0gCjIuNy40Cgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
-bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi,
+
+Today, we release the 2.10 stable versions of LTTng kernel and user-space
+tracers. This release is named "KeKriek", which is a sour mashed
+golden wheat ale brewed by the Dunham microbrewery in Quebec.
+
+The new features included are:
+
+- A new "blocking" mode for LTTng-UST (it has been requested for a while).
+  It blocks application tracing when buffers are full (for "discard mode
+  tracing") rather than discarding events, until a user-specified timeout
+  is reached (or indefinitely). It affects only applications launched with
+  the LTTNG_UST_ALLOW_BLOCKING environment variable set, and channels
+  configured with the "--blocking-timeout" option. See lttng-ust(3)
+  for usage information.
+
+  This feature is useful if you intend to trace huge amounts of data
+  from applications (e.g. all memory allocation/free, or detailed
+  execution of a simulator) in use-cases where it is acceptable to
+  block the traced application.
+
+- Add support for multiple star-globbing patterns in LTTng-UST and LTTng-modules.
+  Now events can be enabled with a pattern containing many wildcards, e.g.
+  'sche*_sw*t*h'. Those can also be used when comparing strings with filter,
+  e.g.:
+  lttng enable-event -u myevent --filter 'myfield == "abc*d*e*fg"'
+
+- LTTng modules adds support for kernels 4.10, 4.11, 4.12 (which has been
+  backported to 2.8 and 2.9 stable branches).
+
+- LTTng modules adds the task CPU in threads state dump, improving precision
+  of the scheduler model.
+
+- LTTng modules now collects extend socketpair system call tracing data.
+
+For more information on new features introduced in this version,
+see: http://lttng.org/docs/v2.10/#doc-whats-new
+
+The 2.10.0 release marks the end of life for the old stable-2.8 branches.
+There will be one last stable-2.8 release for both lttng-modules and lttng-ust,
+after which they will become unsupported.
+
+Project website: http://lttng.org
+Documentation: http://lttng.org/docs
+Download link: http://lttng.org/download
+
+Changelog:
+
+2017-08-01 (World Wide Web Day) LTTng modules 2.10.0
+        * Fix: Sleeping function called from invalid context
+        * Fix: sched for v4.11.5-rt1
+        * Fix: handle missing ftrace header on v4.12
+
+2017-08-01 (World Wide Web Day) lttng-ust 2.10.0
+        * lttng-ust(3): reword and fix style of `LTTNG_UST_ALLOW_BLOCKING` variable
+        * lttng-ust(3): specify "If set" instead of "if set to 1" for some variables
+        * Fix: doc/man: use a single XSL file and match local names
+        * Fix: Expand the shmobj size for the sequence number
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
