@@ -1,30 +1,22 @@
-From: Jonah Graham <jonah@kichwacoders.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
 Subject: Re: Status of MinGW support for babeltrace (either 1.x
 	or 2.x)
-Date: Tue, 15 Aug 2017 18:09:16 +0100
-Message-ID: <CAPmGMvjaO3Gj8PZdLD1UC6AVMi9mAbc03M+-=E7mMQybbE5qPg__29016.6465602399$1502816973$gmane$org@mail.gmail.com>
+Date: Tue, 15 Aug 2017 14:10:07 -0400
+Message-ID: <CAB4xu_1QPYi_isqgf6i6-6_z6XXR_0hBGV7mBvskBypCkGNJsA__43689.4252351069$1502820651$gmane$org@mail.gmail.com>
 References: <CAPmGMvh9C2E7y3uDkdHqTizkuPAd9nuPn4OvOjvjDyCqyxhCag@mail.gmail.com>
  <CAB4xu_3HM+5At3=opwrZuzz9G7tqbg1JLxxgL0-F86m_+Zqc+w@mail.gmail.com>
+ <CAPmGMvjaO3Gj8PZdLD1UC6AVMi9mAbc03M+-=E7mMQybbE5qPg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8728779255845582548=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sasl.smtp.pobox.com (pb-smtp2.pobox.com [64.147.108.71])
- by lists.lttng.org (Postfix) with ESMTPS id 3xWzV90t8XzCng
- for <lttng-dev@lists.lttng.org>; Tue, 15 Aug 2017 17:09:20 +0000 (UTC)
-Received: from sasl.smtp.pobox.com (unknown [127.0.0.1])
- by pb-smtp2.pobox.com (Postfix) with ESMTP id A3A1897E74
- for <lttng-dev@lists.lttng.org>; Tue, 15 Aug 2017 13:09:18 -0400 (EDT)
-Received: from pb-smtp2.nyi.icgroup.com (unknown [127.0.0.1])
- by pb-smtp2.pobox.com (Postfix) with ESMTP id 9BB2297E73
- for <lttng-dev@lists.lttng.org>; Tue, 15 Aug 2017 13:09:18 -0400 (EDT)
-Received: from mail-it0-f48.google.com (unknown [209.85.214.48])
- (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
- (No client certificate requested)
- by pb-smtp2.pobox.com (Postfix) with ESMTPSA id 1644A97E71
- for <lttng-dev@lists.lttng.org>; Tue, 15 Aug 2017 13:09:18 -0400 (EDT)
-Received: by mail-it0-f48.google.com with SMTP id 76so7021234ith.0
- for <lttng-dev@lists.lttng.org>; Tue, 15 Aug 2017 10:09:18 -0700 (PDT)
-In-Reply-To: <CAB4xu_3HM+5At3=opwrZuzz9G7tqbg1JLxxgL0-F86m_+Zqc+w@mail.gmail.com>
+Received: from mail-qt0-x233.google.com (mail-qt0-x233.google.com
+ [IPv6:2607:f8b0:400d:c0d::233])
+ by lists.lttng.org (Postfix) with ESMTPS id 3xX0rt57kPzD1b
+ for <lttng-dev@lists.lttng.org>; Tue, 15 Aug 2017 18:10:38 +0000 (UTC)
+Received: by mail-qt0-x233.google.com with SMTP id a18so8665167qta.0
+ for <lttng-dev@lists.lttng.org>; Tue, 15 Aug 2017 11:10:38 -0700 (PDT)
+In-Reply-To: <CAPmGMvjaO3Gj8PZdLD1UC6AVMi9mAbc03M+-=E7mMQybbE5qPg@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -34,149 +26,48 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Philippe Proulx <eeppeliteloop@gmail.com>, mjeanson@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: Jonah Graham <jonah@kichwacoders.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============8728779255845582548==
-Content-Type: multipart/alternative; boundary="f403045d9adaea29110556cdd6e3"
-
---f403045d9adaea29110556cdd6e3
-Content-Type: text/plain; charset="UTF-8"
-
-Thank you both for the info. It looks like our timing is very good. I will
-have a look at the staging branch too.
-
-Our interest is in writing ctf files from our custom tools and then
-analysing the traces in tracecompass. We were trying to decide between
-libbabeltrace, barectf or spinning our own. With your goal of supporting
-mingw, it seems that libbabeltrace is the best idea.
-
-We'll do what we can to provide patches.
-
-Thanks,
-Jonah
-
-On 15 Aug 2017 17:39, "Philippe Proulx" <eeppeliteloop@gmail.com> wrote:
-
-> On Tue, Aug 15, 2017 at 12:12 PM, Jonah Graham <jonah@kichwacoders.com>
-> wrote:
-> >
-> > Hello,
-> >
-> > Over the years I have seen some discussions and patches about getting
-> > full MinGW support for babeltrace. I am interested in if someone can
-> > provide an overview of the current state of MinGW.
-> >
-> > I have tried to build 1.5.3 and (probably as expected) there are
-> > numerous compile issues (e.g. sys/mman.h)
-> >
-> > I have gotten further with current master (my primary interest is
-> > libbabeltrace so the issues I have with cli/babeltrace.c and
-> > tests/test_ctf_writer.c don't concern me too much yet). However when I
-> > try to run a simple example (that works on Linux) it fails on
-> > bt_ctf_stream_flush. I will debug further to identify the problem.
-> > However If someone does have a mingw port working well any guidance on
-> > building would be much appreciated.
->
-> MinGW support is on its way for the Babeltrace 2.0 release, but I'm
-> curious as to why your primary interest is libbabeltrace? Is it for CTF
-> writer or for the trace reading API?
->
-> Phil
->
-> >
-> > Thanks
-> > Jonah
-> >
-> >
-> > ~~~
-> > Jonah Graham
-> > Kichwa Coders Ltd.
-> > www.kichwacoders.com
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
---f403045d9adaea29110556cdd6e3
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto">Thank you both for the info. It looks like our timing is =
-very good. I will have a look at the staging branch too.<div dir=3D"auto"><=
-br></div><div dir=3D"auto">Our interest is in writing ctf files from our cu=
-stom tools and then analysing the traces in tracecompass. We were trying to=
- decide between libbabeltrace, barectf or spinning our own. With your goal =
-of supporting mingw, it seems that libbabeltrace is the best idea.</div><di=
-v dir=3D"auto"><br></div><div dir=3D"auto">We&#39;ll do what we can to prov=
-ide patches.</div><div dir=3D"auto"><br></div><div dir=3D"auto">Thanks,=C2=
-=A0</div><div dir=3D"auto">Jonah =C2=A0</div></div><div class=3D"gmail_extr=
-a"><br><div class=3D"gmail_quote">On 15 Aug 2017 17:39, &quot;Philippe Prou=
-lx&quot; &lt;<a href=3D"mailto:eeppeliteloop@gmail.com" target=3D"_blank">e=
-eppeliteloop@gmail.com</a>&gt; wrote:<br type=3D"attribution"><blockquote c=
-lass=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;=
-padding-left:1ex">On Tue, Aug 15, 2017 at 12:12 PM, Jonah Graham &lt;<a hre=
-f=3D"mailto:jonah@kichwacoders.com">jonah@kichwacoders.com</a>&gt; wrote:<b=
-r>
-&gt;<br>
-&gt; Hello,<br>
-&gt;<br>
-&gt; Over the years I have seen some discussions and patches about getting<=
-br>
-&gt; full MinGW support for babeltrace. I am interested in if someone can<b=
-r>
-&gt; provide an overview of the current state of MinGW.<br>
-&gt;<br>
-&gt; I have tried to build 1.5.3 and (probably as expected) there are<br>
-&gt; numerous compile issues (e.g. sys/mman.h)<br>
-&gt;<br>
-&gt; I have gotten further with current master (my primary interest is<br>
-&gt; libbabeltrace so the issues I have with cli/babeltrace.c and<br>
-&gt; tests/test_ctf_writer.c don&#39;t concern me too much yet). However wh=
-en I<br>
-&gt; try to run a simple example (that works on Linux) it fails on<br>
-&gt; bt_ctf_stream_flush. I will debug further to identify the problem.<br>
-&gt; However If someone does have a mingw port working well any guidance on=
-<br>
-&gt; building would be much appreciated.<br>
-<br>
-MinGW support is on its way for the Babeltrace 2.0 release, but I&#39;m<br>
-curious as to why your primary interest is libbabeltrace? Is it for CTF<br>
-writer or for the trace reading API?<br>
-<br>
-Phil<br>
-<br>
-&gt;<br>
-&gt; Thanks<br>
-&gt; Jonah<br>
-&gt;<br>
-&gt;<br>
-&gt; ~~~<br>
-&gt; Jonah Graham<br>
-&gt; Kichwa Coders Ltd.<br>
-&gt; <a href=3D"http://www.kichwacoders.com" rel=3D"noreferrer" target=3D"_=
-blank">www.kichwacoders.com</a><br>
-&gt; ______________________________<wbr>_________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
-</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-<wbr>bin/=
-mailman/listinfo/lttng-dev</a><br>
-</blockquote></div></div>
-
---f403045d9adaea29110556cdd6e3--
-
---===============8728779255845582548==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============8728779255845582548==--
+T24gVHVlLCBBdWcgMTUsIDIwMTcgYXQgMTowOSBQTSwgSm9uYWggR3JhaGFtIDxqb25haEBraWNo
+d2Fjb2RlcnMuY29tPiB3cm90ZToKPiBUaGFuayB5b3UgYm90aCBmb3IgdGhlIGluZm8uIEl0IGxv
+b2tzIGxpa2Ugb3VyIHRpbWluZyBpcyB2ZXJ5IGdvb2QuIEkgd2lsbAo+IGhhdmUgYSBsb29rIGF0
+IHRoZSBzdGFnaW5nIGJyYW5jaCB0b28uCj4KPiBPdXIgaW50ZXJlc3QgaXMgaW4gd3JpdGluZyBj
+dGYgZmlsZXMgZnJvbSBvdXIgY3VzdG9tIHRvb2xzIGFuZCB0aGVuCj4gYW5hbHlzaW5nIHRoZSB0
+cmFjZXMgaW4gdHJhY2Vjb21wYXNzLiBXZSB3ZXJlIHRyeWluZyB0byBkZWNpZGUgYmV0d2Vlbgo+
+IGxpYmJhYmVsdHJhY2UsIGJhcmVjdGYgb3Igc3Bpbm5pbmcgb3VyIG93bi4gV2l0aCB5b3VyIGdv
+YWwgb2Ygc3VwcG9ydGluZwo+IG1pbmd3LCBpdCBzZWVtcyB0aGF0IGxpYmJhYmVsdHJhY2UgaXMg
+dGhlIGJlc3QgaWRlYS4KCllvdSB3YW50IHRvIGFjdHVhbGx5IHRyYWNlLCB0aGF0IGlzLCBwcm9k
+dWNlIENURiBldmVudHMgZnJvbSB5b3VyCmFwcGxpY2F0aW9uLCBvciBjb252ZXJ0IGFuIGV4aXN0
+aW5nIHRyYWNlIGZvcm1hdCB0byBDVEY/CgpQaGlsCgo+Cj4gV2UnbGwgZG8gd2hhdCB3ZSBjYW4g
+dG8gcHJvdmlkZSBwYXRjaGVzLgo+Cj4gVGhhbmtzLAo+IEpvbmFoCj4KPiBPbiAxNSBBdWcgMjAx
+NyAxNzozOSwgIlBoaWxpcHBlIFByb3VseCIgPGVlcHBlbGl0ZWxvb3BAZ21haWwuY29tPiB3cm90
+ZToKPj4KPj4gT24gVHVlLCBBdWcgMTUsIDIwMTcgYXQgMTI6MTIgUE0sIEpvbmFoIEdyYWhhbSA8
+am9uYWhAa2ljaHdhY29kZXJzLmNvbT4KPj4gd3JvdGU6Cj4+ID4KPj4gPiBIZWxsbywKPj4gPgo+
+PiA+IE92ZXIgdGhlIHllYXJzIEkgaGF2ZSBzZWVuIHNvbWUgZGlzY3Vzc2lvbnMgYW5kIHBhdGNo
+ZXMgYWJvdXQgZ2V0dGluZwo+PiA+IGZ1bGwgTWluR1cgc3VwcG9ydCBmb3IgYmFiZWx0cmFjZS4g
+SSBhbSBpbnRlcmVzdGVkIGluIGlmIHNvbWVvbmUgY2FuCj4+ID4gcHJvdmlkZSBhbiBvdmVydmll
+dyBvZiB0aGUgY3VycmVudCBzdGF0ZSBvZiBNaW5HVy4KPj4gPgo+PiA+IEkgaGF2ZSB0cmllZCB0
+byBidWlsZCAxLjUuMyBhbmQgKHByb2JhYmx5IGFzIGV4cGVjdGVkKSB0aGVyZSBhcmUKPj4gPiBu
+dW1lcm91cyBjb21waWxlIGlzc3VlcyAoZS5nLiBzeXMvbW1hbi5oKQo+PiA+Cj4+ID4gSSBoYXZl
+IGdvdHRlbiBmdXJ0aGVyIHdpdGggY3VycmVudCBtYXN0ZXIgKG15IHByaW1hcnkgaW50ZXJlc3Qg
+aXMKPj4gPiBsaWJiYWJlbHRyYWNlIHNvIHRoZSBpc3N1ZXMgSSBoYXZlIHdpdGggY2xpL2JhYmVs
+dHJhY2UuYyBhbmQKPj4gPiB0ZXN0cy90ZXN0X2N0Zl93cml0ZXIuYyBkb24ndCBjb25jZXJuIG1l
+IHRvbyBtdWNoIHlldCkuIEhvd2V2ZXIgd2hlbiBJCj4+ID4gdHJ5IHRvIHJ1biBhIHNpbXBsZSBl
+eGFtcGxlICh0aGF0IHdvcmtzIG9uIExpbnV4KSBpdCBmYWlscyBvbgo+PiA+IGJ0X2N0Zl9zdHJl
+YW1fZmx1c2guIEkgd2lsbCBkZWJ1ZyBmdXJ0aGVyIHRvIGlkZW50aWZ5IHRoZSBwcm9ibGVtLgo+
+PiA+IEhvd2V2ZXIgSWYgc29tZW9uZSBkb2VzIGhhdmUgYSBtaW5ndyBwb3J0IHdvcmtpbmcgd2Vs
+bCBhbnkgZ3VpZGFuY2Ugb24KPj4gPiBidWlsZGluZyB3b3VsZCBiZSBtdWNoIGFwcHJlY2lhdGVk
+Lgo+Pgo+PiBNaW5HVyBzdXBwb3J0IGlzIG9uIGl0cyB3YXkgZm9yIHRoZSBCYWJlbHRyYWNlIDIu
+MCByZWxlYXNlLCBidXQgSSdtCj4+IGN1cmlvdXMgYXMgdG8gd2h5IHlvdXIgcHJpbWFyeSBpbnRl
+cmVzdCBpcyBsaWJiYWJlbHRyYWNlPyBJcyBpdCBmb3IgQ1RGCj4+IHdyaXRlciBvciBmb3IgdGhl
+IHRyYWNlIHJlYWRpbmcgQVBJPwo+Pgo+PiBQaGlsCj4+Cj4+ID4KPj4gPiBUaGFua3MKPj4gPiBK
+b25haAo+PiA+Cj4+ID4KPj4gPiB+fn4KPj4gPiBKb25haCBHcmFoYW0KPj4gPiBLaWNod2EgQ29k
+ZXJzIEx0ZC4KPj4gPiB3d3cua2ljaHdhY29kZXJzLmNvbQo+PiA+IF9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+ID4gbHR0bmctZGV2IG1haWxpbmcgbGlz
+dAo+PiA+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4gPiBodHRwczovL2xpc3RzLmx0dG5n
+Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
