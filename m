@@ -1,17 +1,28 @@
-From: Nathan Lynch <nathan_lynch@mentor.com>
-Subject: Re: babeltrace tests (master/2.0)
-Date: Fri, 11 Aug 2017 13:19:05 -0500
-Message-ID: <87shgy0xye.fsf__2686.54075121066$1502475566$gmane$org@mentor.com>
-References: <87y3r01j9o.fsf@mentor.com> <87valv14qy.fsf@mentor.com>
- <CAB4xu_1QFAGnaVn4u6riU38O5uXq83mS8rSS11LfSy-ETGbFDw@mail.gmail.com>
+From: Jonah Graham <jonah@kichwacoders.com>
+Subject: Status of MinGW support for babeltrace (either 1.x or
+	2.x)
+Date: Tue, 15 Aug 2017 17:12:30 +0100
+Message-ID: <CAPmGMvh9C2E7y3uDkdHqTizkuPAd9nuPn4OvOjvjDyCqyxhCag__25462.2818007649$1502813773$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com (relay1.mentorg.com [192.94.38.131])
- by lists.lttng.org (Postfix) with ESMTPS id 3xTYDb0hPJz15Dq
- for <lttng-dev@lists.lttng.org>; Fri, 11 Aug 2017 18:19:10 +0000 (UTC)
-In-Reply-To: <CAB4xu_1QFAGnaVn4u6riU38O5uXq83mS8rSS11LfSy-ETGbFDw@mail.gmail.com>
+Received: from sasl.smtp.pobox.com (pb-smtp2.pobox.com [64.147.108.71])
+ by lists.lttng.org (Postfix) with ESMTPS id 3xWyJc6nzgzCd6
+ for <lttng-dev@lists.lttng.org>; Tue, 15 Aug 2017 16:15:58 +0000 (UTC)
+Received: from sasl.smtp.pobox.com (unknown [127.0.0.1])
+ by pb-smtp2.pobox.com (Postfix) with ESMTP id D315296542
+ for <lttng-dev@lists.lttng.org>; Tue, 15 Aug 2017 12:13:11 -0400 (EDT)
+Received: from pb-smtp2.nyi.icgroup.com (unknown [127.0.0.1])
+ by pb-smtp2.pobox.com (Postfix) with ESMTP id CA8E396541
+ for <lttng-dev@lists.lttng.org>; Tue, 15 Aug 2017 12:13:11 -0400 (EDT)
+Received: from mail-it0-f46.google.com (unknown [209.85.214.46])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+ (No client certificate requested)
+ by pb-smtp2.pobox.com (Postfix) with ESMTPSA id 5C45D96540
+ for <lttng-dev@lists.lttng.org>; Tue, 15 Aug 2017 12:13:11 -0400 (EDT)
+Received: by mail-it0-f46.google.com with SMTP id 76so6527100ith.0
+ for <lttng-dev@lists.lttng.org>; Tue, 15 Aug 2017 09:13:11 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,28 +32,24 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-UGhpbGlwcGUgUHJvdWx4IDxlZXBwZWxpdGVsb29wQGdtYWlsLmNvbT4gd3JpdGVzOgoKPiBPbiBU
-aHUsIEF1ZyAxMCwgMjAxNyBhdCA1OjQwIFBNLCBOYXRoYW4gTHluY2ggPG5hdGhhbl9seW5jaEBt
-ZW50b3IuY29tPiB3cm90ZToKPj4KPj4gUGluZz8KPj4KPgo+IFNvcnJ5LiBXZSBsb29rZWQgaW50
-byB0aGlzLiBUaGVyZSBzZWVtcyB0byBiZSBubyBlYXN5IHdheSB3aXRoIEF1dG9tYWtlCj4gdG8g
-aGF2ZSBpbmRpdmlkdWFsIGBjaGVja2AgdGFyZ2V0cyBpbiBzdWJkaXJlY3RvcmllcyBhbmQgbWFr
-ZSB0aGUKPiB0b3AtbGV2ZWwgYGNoZWNrYCB0YXJnZXQgcmVjdXJzZSB3aXRob3V0IHN0b3BwaW5n
-IHdoZW4gYSBzdWJkaXJlY3RvcnkKPiBmYWlscy4KPgo+IEFzIHlvdSB3cm90ZSwgaXQgaXMgcG9z
-c2libGUgd2l0aCAtLWtlZXAtZ29pbmcsIGJ1dCB0aGlzIGlzIG5vdCBjb21tb24KPiBwcmFjdGlj
-ZSBhbmQgd2UgZG9uJ3QgZXhwZWN0IG91ciB1c2VycyB0byByZWFkIG1ha2UoMSkgdG8gYmUgYWJs
-ZSB0byBydW4KPiBhbGwgdGhlIHRlc3RzIHVuY29uZGl0aW9uYWxseS4KPgo+IEkgYXNrZWQgdGhl
-IEF1dG9tYWtlIG1haWxpbmcgbGlzdCBhYm91dCB0aGlzCj4gPGh0dHA6Ly9saXN0cy5nbnUub3Jn
-L2FyY2hpdmUvaHRtbC9hdXRvbWFrZS8yMDE3LTA4L21zZzAwMDA0Lmh0bWw+IGFuZAo+IHdlIHdp
-bGwgbW9zdCBwcm9iYWJseSBpbXBsZW1lbnQgdGhlIHN1Z2dlc3RlZCBzb2x1dGlvbiwgd2hpY2gg
-aXMgdG8gaGF2ZQo+IGluZGl2aWR1YWwgdG9wLWxldmVsIChpbiB0ZXN0cy8pIGBjaGVjay1YYCB0
-YXJnZXRzIHdoaWNoIHJlcnVuIE1ha2Ugd2l0aAo+IHNwZWNpZmljIHNldHMgb2YgdGVzdHMuCj4K
-PiBUaGFuayB5b3UgZm9yIHJlcG9ydGluZyB0aGlzIGJ5IHRoZSB3YXkuCgoKVGhhbmtzIGZvciBm
-b2xsb3dpbmcgdXAuICBBIHdlbGwtZnVuY3Rpb25pbmcgdGVzdCBzdWl0ZSBpcyBhIHJlYWxseQp1
-c2VmdWwgZ3VpZGUgZm9yIG9jY2FzaW9uYWwgY29udHJpYnV0b3JzIGxpa2UgbWUgOi0pCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
-aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+SGVsbG8sCgpPdmVyIHRoZSB5ZWFycyBJIGhhdmUgc2VlbiBzb21lIGRpc2N1c3Npb25zIGFuZCBw
+YXRjaGVzIGFib3V0IGdldHRpbmcKZnVsbCBNaW5HVyBzdXBwb3J0IGZvciBiYWJlbHRyYWNlLiBJ
+IGFtIGludGVyZXN0ZWQgaW4gaWYgc29tZW9uZSBjYW4KcHJvdmlkZSBhbiBvdmVydmlldyBvZiB0
+aGUgY3VycmVudCBzdGF0ZSBvZiBNaW5HVy4KCkkgaGF2ZSB0cmllZCB0byBidWlsZCAxLjUuMyBh
+bmQgKHByb2JhYmx5IGFzIGV4cGVjdGVkKSB0aGVyZSBhcmUKbnVtZXJvdXMgY29tcGlsZSBpc3N1
+ZXMgKGUuZy4gc3lzL21tYW4uaCkKCkkgaGF2ZSBnb3R0ZW4gZnVydGhlciB3aXRoIGN1cnJlbnQg
+bWFzdGVyIChteSBwcmltYXJ5IGludGVyZXN0IGlzCmxpYmJhYmVsdHJhY2Ugc28gdGhlIGlzc3Vl
+cyBJIGhhdmUgd2l0aCBjbGkvYmFiZWx0cmFjZS5jIGFuZAp0ZXN0cy90ZXN0X2N0Zl93cml0ZXIu
+YyBkb24ndCBjb25jZXJuIG1lIHRvbyBtdWNoIHlldCkuIEhvd2V2ZXIgd2hlbiBJCnRyeSB0byBy
+dW4gYSBzaW1wbGUgZXhhbXBsZSAodGhhdCB3b3JrcyBvbiBMaW51eCkgaXQgZmFpbHMgb24KYnRf
+Y3RmX3N0cmVhbV9mbHVzaC4gSSB3aWxsIGRlYnVnIGZ1cnRoZXIgdG8gaWRlbnRpZnkgdGhlIHBy
+b2JsZW0uCkhvd2V2ZXIgSWYgc29tZW9uZSBkb2VzIGhhdmUgYSBtaW5ndyBwb3J0IHdvcmtpbmcg
+d2VsbCBhbnkgZ3VpZGFuY2Ugb24KYnVpbGRpbmcgd291bGQgYmUgbXVjaCBhcHByZWNpYXRlZC4K
+ClRoYW5rcwpKb25haAoKCn5+fgpKb25haCBHcmFoYW0KS2ljaHdhIENvZGVycyBMdGQuCnd3dy5r
+aWNod2Fjb2RlcnMuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
+dHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
+Cg==
