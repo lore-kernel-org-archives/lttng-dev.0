@@ -1,18 +1,17 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: wrong use of the
- relay_streams_sent in snapshot
-Date: Wed, 23 Aug 2017 16:51:42 -0400
-Message-ID: <a6415366-2162-14b7-1a6c-19ca6200bac9__34818.4925773696$1503521880$gmane$org@efficios.com>
-References: <1503521034-3939-1-git-send-email-jdesfossez@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools v2] Fix: wrong use of
+	the	relay_streams_sent in snapshot
+Date: Thu, 24 Aug 2017 15:15:59 +0000 (UTC)
+Message-ID: <165346610.15437.1503587759926.JavaMail.zimbra__24958.7043807425$1503587735$gmane$org@efficios.com>
+References: <1503521333-4905-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3xd09z0zf5z147y
- for <lttng-dev@lists.lttng.org>; Wed, 23 Aug 2017 20:57:42 +0000 (UTC)
-In-Reply-To: <1503521034-3939-1-git-send-email-jdesfossez@efficios.com>
-Content-Language: fr-classic
+ by lists.lttng.org (Postfix) with ESMTPS id 3xdSXG1H1Dz15B2
+ for <lttng-dev@lists.lttng.org>; Thu, 24 Aug 2017 15:15:09 +0000 (UTC)
+In-Reply-To: <1503521333-4905-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,11 +21,57 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-TWlzc2luZyB0aGUgY2hhbmdlIGZyb20gdXN0LWNvbnN1bWVyLmMsIHNlZSB2Mi4KX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
-bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+SWYgeW91IHJlbW92ZSB0aGlzLCBJIHRoaW5rIHRoZSBzdHJlYW1zIHdpbGwgbmV2ZXIgZ2V0IHB1
+Ymxpc2hlZAp3aXRoaW4gdGhlIHJlbGF5ZC4gKHB1Ymxpc2hfY29ubmVjdGlvbl9sb2NhbF9zdHJl
+YW1zKCkpLiBJcyB0aGlzCmFuIGV4cGVjdGVkIHNpZGUtZWZmZWN0ID8gSXQgc2hvdWxkIGJlIGRv
+Y3VtZW50ZWQgaW4gdGhlIGNoYW5nZWxvZy4KTXkgZ3Vlc3MgaXMgdGhhdCB3ZSBpbmRlZWQgZG9u
+J3Qgd2FudCB0byBwdWJsaXNoIHRoZSBzbmFwc2hvdApzdHJlYW1zIHRvIHRoZSB2aWV3ZXJzLgoK
+VGhlIHJlYXNvbiBmb3IgZG9pbmcgdGhpcyBjaGFuZ2Ugc2hvdWxkIGFsc28gYmUgZG9jdW1lbnRl
+ZC4gV2hhdApiZWhhdmlvciBpcyB1bndhbnRlZCBoZXJlIGZyb20gYSByZWxheWQgcGVyc3BlY3Rp
+dmUgPwoKVGhhbmtzLAoKTWF0aGlldQoKLS0tLS0gT24gQXVnIDIzLCAyMDE3LCBhdCAxOjQ4IFBN
+LCBKdWxpZW4gRGVzZm9zc2V6IGpkZXNmb3NzZXpAZWZmaWNpb3MuY29tIHdyb3RlOgoKPiBUaGUg
+cmVsYXlfc3RyZWFtc19zZW50IG1lc3NhZ2UgaXMgb25seSB1c2VmdWwgaW4gbGl2ZSBzZXNzaW9u
+cyBhbmQKPiBzaG91bGQgb25seSBiZSBzZW50IGFmdGVyIGFsbCB0aGUgc3RyZWFtcyBvZiBhIGNo
+YW5uZWwgaGF2ZSBiZWVuIHNlbnQuCj4gCj4gSGVyZSB3ZSB3ZXJlIHNlbmRpbmcgdGhpcyBtZXNz
+YWdlIGV2ZXJ5IHRpbWUgd2Ugc2VudCBhIHN0cmVhbSB0byB0aGUKPiByZWxheSBkdXJpbmcgYSBz
+bmFwc2hvdCB3aGljaCBtYWtlcyBubyBzZW5zZS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKdWxpZW4g
+RGVzZm9zc2V6IDxqZGVzZm9zc2V6QGVmZmljaW9zLmNvbT4KPiAtLS0KPiBzcmMvY29tbW9uL2tl
+cm5lbC1jb25zdW1lci9rZXJuZWwtY29uc3VtZXIuYyB8IDggLS0tLS0tLS0KPiBzcmMvY29tbW9u
+L3VzdC1jb25zdW1lci91c3QtY29uc3VtZXIuYyAgICAgICB8IDYgLS0tLS0tCj4gMiBmaWxlcyBj
+aGFuZ2VkLCAxNCBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi9rZXJu
+ZWwtY29uc3VtZXIva2VybmVsLWNvbnN1bWVyLmMKPiBiL3NyYy9jb21tb24va2VybmVsLWNvbnN1
+bWVyL2tlcm5lbC1jb25zdW1lci5jCj4gaW5kZXggYTVkY2M2Ni4uMWMyNzUxYiAxMDA2NDQKPiAt
+LS0gYS9zcmMvY29tbW9uL2tlcm5lbC1jb25zdW1lci9rZXJuZWwtY29uc3VtZXIuYwo+ICsrKyBi
+L3NyYy9jb21tb24va2VybmVsLWNvbnN1bWVyL2tlcm5lbC1jb25zdW1lci5jCj4gQEAgLTE4Nywx
+NCArMTg3LDYgQEAgaW50IGx0dG5nX2tjb25zdW1lcl9zbmFwc2hvdF9jaGFubmVsKHVpbnQ2NF90
+IGtleSwgY2hhcgo+ICpwYXRoLAo+IAkJCURCRygiS2VybmVsIGNvbnN1bWVyIHNuYXBzaG90IHN0
+cmVhbSAlcy8lcyAoJSIgUFJJdTY0ICIpIiwKPiAJCQkJCXBhdGgsIHN0cmVhbS0+bmFtZSwgc3Ry
+ZWFtLT5rZXkpOwo+IAkJfQo+IC0JCWlmIChyZWxheWRfaWQgIT0gLTFVTEwpIHsKPiAtCQkJcmV0
+ID0gY29uc3VtZXJfc2VuZF9yZWxheWRfc3RyZWFtc19zZW50KHJlbGF5ZF9pZCk7Cj4gLQkJCWlm
+IChyZXQgPCAwKSB7Cj4gLQkJCQlFUlIoInNlbmRpbmcgc3RyZWFtcyBzZW50IHRvIHJlbGF5ZCIp
+Owo+IC0JCQkJZ290byBlbmRfdW5sb2NrOwo+IC0JCQl9Cj4gLQkJCWNoYW5uZWwtPnN0cmVhbXNf
+c2VudF90b19yZWxheWQgPSB0cnVlOwo+IC0JCX0KPiAKPiAJCXJldCA9IGtlcm5jdGxfYnVmZmVy
+X2ZsdXNoX2VtcHR5KHN0cmVhbS0+d2FpdF9mZCk7Cj4gCQlpZiAocmV0IDwgMCkgewo+IGRpZmYg
+LS1naXQgYS9zcmMvY29tbW9uL3VzdC1jb25zdW1lci91c3QtY29uc3VtZXIuYwo+IGIvc3JjL2Nv
+bW1vbi91c3QtY29uc3VtZXIvdXN0LWNvbnN1bWVyLmMKPiBpbmRleCAzNjZmODU1Li5iY2U3ZGI4
+IDEwMDY0NAo+IC0tLSBhL3NyYy9jb21tb24vdXN0LWNvbnN1bWVyL3VzdC1jb25zdW1lci5jCj4g
+KysrIGIvc3JjL2NvbW1vbi91c3QtY29uc3VtZXIvdXN0LWNvbnN1bWVyLmMKPiBAQCAtMTEwMSwx
+MiArMTEwMSw2IEBAIHN0YXRpYyBpbnQgc25hcHNob3RfY2hhbm5lbCh1aW50NjRfdCBrZXksIGNo
+YXIgKnBhdGgsCj4gdWludDY0X3QgcmVsYXlkX2lkLAo+IAkJCURCRygiVVNUIGNvbnN1bWVyIHNu
+YXBzaG90IHN0cmVhbSAlcy8lcyAoJSIgUFJJdTY0ICIpIiwgcGF0aCwKPiAJCQkJCXN0cmVhbS0+
+bmFtZSwgc3RyZWFtLT5rZXkpOwo+IAkJfQo+IC0JCWlmIChyZWxheWRfaWQgIT0gLTFVTEwpIHsK
+PiAtCQkJcmV0ID0gY29uc3VtZXJfc2VuZF9yZWxheWRfc3RyZWFtc19zZW50KHJlbGF5ZF9pZCk7
+Cj4gLQkJCWlmIChyZXQgPCAwKSB7Cj4gLQkJCQlnb3RvIGVycm9yX3VubG9jazsKPiAtCQkJfQo+
+IC0JCX0KPiAKPiAJCS8qCj4gCQkgKiBJZiB0cmFjaW5nIGlzIGFjdGl2ZSwgd2Ugd2FudCB0byBw
+ZXJmb3JtIGEgImZ1bGwiIGJ1ZmZlciBmbHVzaC4KPiAtLQo+IDIuNy40Cj4gCj4gX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGlu
+ZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0bmcu
+b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCi0tIApNYXRoaWV1IERlc25v
+eWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
+L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
