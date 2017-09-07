@@ -1,16 +1,13 @@
 From: Milian Wolff <milian.wolff@kdab.com>
-Subject: Re: large liblttng-ust startup overhead (ust_lock)
-Date: Thu, 07 Sep 2017 09:50:12 +0200
-Message-ID: <2249054.rOntnxvaLr__16742.7413900898$1504770662$gmane$org@milian-kdab2>
-References: <2117884.c1kuPXoiOA@milian-kdab2> <3211887.IErR8xQyUx@agathebauer>
- <1506174693.4712.1504727831374.JavaMail.zimbra@efficios.com>
+Subject: liblttng-ust overhead, take 2
+Date: Thu, 07 Sep 2017 10:47:46 +0200
+Message-ID: <1671874.aHIhmVXznC__28167.5262180672$1504774101$gmane$org@milian-kdab2>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6735125071035004926=="
+Content-Type: multipart/mixed; boundary="===============6957147221333004225=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
- by lists.lttng.org (Postfix) with ESMTPS id 3xnt0k2tQrzCVv
- for <lttng-dev@lists.lttng.org>; Thu,  7 Sep 2017 07:50:29 +0000 (UTC)
-In-Reply-To: <1506174693.4712.1504727831374.JavaMail.zimbra@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 3xnvGx3sG7zCf6
+ for <lttng-dev@lists.lttng.org>; Thu,  7 Sep 2017 08:47:52 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,644 +17,146 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============6735125071035004926==
-Content-Type: multipart/signed; boundary="nextPart3032029.J450EsyL5D"; micalg="sha256"; protocol="application/pkcs7-signature"
+--===============6957147221333004225==
+Content-Type: multipart/signed; boundary="nextPart1909254.iedNQQuK5R"; micalg="sha256"; protocol="application/pkcs7-signature"
 
---nextPart3032029.J450EsyL5D
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+--nextPart1909254.iedNQQuK5R
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-On Wednesday, September 6, 2017 9:57:11 PM CEST Mathieu Desnoyers wrote:
-> ----- On Sep 6, 2017, at 3:35 AM, Milian Wolff milian.wolff@kdab.com wrot=
-e:
-> > On Dienstag, 5. September 2017 20:11:58 CEST Mathieu Desnoyers wrote:
-> >> ----- On Sep 5, 2017, at 11:08 AM, Milian Wolff milian.wolff@kdab.com=
-=20
-wrote:
-> >> > On Tuesday, September 5, 2017 4:51:42 PM CEST Mathieu Desnoyers wrot=
-e:
-> >> >> ----- On Sep 5, 2017, at 10:34 AM, Milian Wolff milian.wolff@kdab.c=
-om
-> >=20
-> > wrote:
-> >> >> > Hey all,
-> >> >> >=20
-> >> >> > I have noticed a very large overhead when linking against
-> >> >> > liblttng-ust:
-> >> >> >=20
-> >> >> > ~~~~~
-> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
-> >> >> > =E2=94=94$ cat lttng-test.c
-> >> >> > int main()
-> >> >> > {
-> >> >> >=20
-> >> >> >  return 0;
-> >> >> >=20
-> >> >> > }
-> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
-> >> >> > =E2=94=94$ gcc -O2 -g -ldl lttng-test.c
-> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
-> >> >> > =E2=94=94$ perf stat -r 5 ./a.out
-> >> >> >=20
-> >> >> > Performance counter stats for './a.out' (5 runs):
-> >> >> >          0.209587      task-clock (msec)         #    0.596 CPUs
-> >> >> >          utilized
-> >> >> >=20
-> >> >> > ( +-  8.76% )
-> >> >> >=20
-> >> >> >                 0      context-switches          #    0.000 K/sec
-> >> >> >                 0      cpu-migrations            #    0.000 K/sec
-> >> >> >               =20
-> >> >> >                49      page-faults               #    0.235 M/sec
-> >> >> >=20
-> >> >> > ( +-  1.19% )
-> >> >> >=20
-> >> >> >           706,854      cycles                    #    3.373 GHz
-> >> >> >=20
-> >> >> > ( +-  8.82% )
-> >> >> >=20
-> >> >> >           773,603      instructions              #    1.09  insn =
-per
-> >> >> >           cycle
-> >> >> >=20
-> >> >> > ( +-  0.75% )
-> >> >> >=20
-> >> >> >           147,128      branches                  #  701.987 M/sec
-> >> >> >=20
-> >> >> > ( +-  0.70% )
-> >> >> >=20
-> >> >> >             4,096      branch-misses             #    2.78% of all
-> >> >> >             branches
-> >> >> >=20
-> >> >> > ( +-  5.27% )
-> >> >> >=20
-> >> >> >       0.000351422 seconds time elapsed
-> >> >> >=20
-> >> >> > ( +- 11.85% )
-> >> >> >=20
-> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
-> >> >> > =E2=94=94$ gcc -O2 -g -ldl -llttng-ust lttng-test.c
-> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
-> >> >> > =E2=94=94$ perf stat -r 5 ./a.out
-> >> >> >=20
-> >> >> > Performance counter stats for './a.out' (5 runs):
-> >> >> >          2.063040      task-clock (msec)         #    0.009 CPUs
-> >> >> >          utilized
-> >> >> >=20
-> >> >> > ( +-  1.37% )
-> >> >> >=20
-> >> >> >                44      context-switches          #    0.021 M/sec
-> >> >> >=20
-> >> >> > ( +-  1.95% )
-> >> >> >=20
-> >> >> >                 2      cpu-migrations            #    0.776 K/sec
-> >> >> >=20
-> >> >> > ( +- 25.00% )
-> >> >> >=20
-> >> >> >               209      page-faults               #    0.101 M/sec
-> >> >> >=20
-> >> >> > ( +-  0.34% )
-> >> >> >=20
-> >> >> >         7,053,686      cycles                    #    3.419 GHz
-> >> >> >=20
-> >> >> > ( +-  2.03% )
-> >> >> >=20
-> >> >> >         6,893,783      instructions              #    0.98  insn =
-per
-> >> >> >         cycle
-> >> >> >=20
-> >> >> > ( +-  0.25% )
-> >> >> >=20
-> >> >> >         1,342,492      branches                  #  650.735 M/sec
-> >> >> >=20
-> >> >> > ( +-  0.20% )
-> >> >> >=20
-> >> >> >            29,390      branch-misses             #    2.19% of all
-> >> >> >            branches
-> >> >> >=20
-> >> >> > ( +-  0.61% )
-> >> >> >=20
-> >> >> >       0.225597302 seconds time elapsed
-> >> >> >=20
-> >> >> > ( +-  6.68% )
-> >> >> > ~~~~~
-> >> >> >=20
-> >> >> > This is without any LTTng session configured. If I enable LTTng
-> >> >> > kernel
-> >> >> > and
-> >> >> > userspace events, this becomes even worse:
-> >> >> >=20
-> >> >> > ~~~~~
-> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
-> >> >> > =E2=94=94$ cat $(which run_lttng_trace.sh)
-> >> >> > #!/bin/sh
-> >> >> >=20
-> >> >> > if [ -z "$(pidof lttng-sessiond)" ]; then
-> >> >> >=20
-> >> >> >    sudo lttng-sessiond --daemonize
-> >> >> >=20
-> >> >> > fi
-> >> >> >=20
-> >> >> > sudo lttng create -o ~/lttng-traces/$(date -Iseconds)
-> >> >> > sudo lttng enable-channel kernel -k --subbuf-size 16M --num-subbu=
-f 8
-> >> >> > sudo lttng enable-event -c kernel -k -a
-> >> >> > sudo lttng enable-channel ust -u --subbuf-size 16M --num-subbuf 8
-> >> >> > sudo lttng enable-event -c ust -u lttng_ust_tracef:*
-> >> >> > sudo lttng start
-> >> >> > $@
-> >> >> > sudo lttng stop
-> >> >> >=20
-> >> >> > sudo chmod a+rx -R ~/lttng-traces
-> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
-> >> >> > =E2=94=94$ run_lttng_trace.sh perf stat -r 5 ./a.out
-> >> >> > Session auto-20170905-162818 created.
-> >> >> > Traces will be written in
-> >> >> > /home/milian/lttng-traces/2017-09-05T16:28:18+02:00 Kernel channel
-> >> >> > kernel
-> >> >> > enabled for session auto-20170905-162818
-> >> >> > All Kernel events are enabled in channel kernel
-> >> >> > UST channel ust enabled for session auto-20170905-162818
-> >> >> > UST event lttng_ust_tracef:* created in channel ust
-> >> >> > Tracing started for session auto-20170905-162818
-> >> >> >=20
-> >> >> > Performance counter stats for './a.out' (5 runs):
-> >> >> >          4.937820      task-clock (msec)         #    0.005 CPUs
-> >> >> >          utilized
-> >> >> >=20
-> >> >> > ( +-  1.28% )
-> >> >> >=20
-> >> >> >               117      context-switches          #    0.024 M/sec
-> >> >> >=20
-> >> >> > ( +-  0.70% )
-> >> >> >=20
-> >> >> >                 3      cpu-migrations            #    0.608 K/sec
-> >> >> >=20
-> >> >> > ( +- 23.57% )
-> >> >> >=20
-> >> >> >               245      page-faults               #    0.050 M/sec
-> >> >> >=20
-> >> >> > ( +-  0.20% )
-> >> >> >=20
-> >> >> >        16,541,355      cycles                    #    3.350 GHz
-> >> >> >=20
-> >> >> > ( +-  0.94% )
-> >> >> >=20
-> >> >> >        20,611,637      instructions              #    1.25  insn =
-per
-> >> >> >        cycle
-> >> >> >=20
-> >> >> > ( +-  0.23% )
-> >> >> >=20
-> >> >> >         3,580,525      branches                  #  725.123 M/sec
-> >> >> >=20
-> >> >> > ( +-  0.19% )
-> >> >> >=20
-> >> >> >            52,093      branch-misses             #    1.45% of all
-> >> >> >            branches
-> >> >> >=20
-> >> >> > ( +-  1.73% )
-> >> >> >=20
-> >> >> >       0.965545882 seconds time elapsed
-> >> >> >=20
-> >> >> > ( +- 16.96% )
-> >> >> >=20
-> >> >> > Waiting for data availability...
-> >> >> > Tracing stopped for session auto-20170905-162818
-> >> >> > ~~~~~
-> >> >> >=20
-> >> >> > I see this ~1s delay during startup in nearly all test applicatio=
-ns
-> >> >> > where
-> >> >> > I
-> >> >> > wanted to use lttng-ust. In tracecompass, and according to perf
-> >> >> > sleep
-> >> >> > time
-> >> >> > profiling, this seems to be mostly due to extensive sleeping on
-> >> >> > mutex
-> >> >> > locks
-> >> >> > (from ust_lock in liblttng-ust). With perf trace, I also see
-> >> >> > membarrier
-> >> >> > taking a lot of time:
-> >> >> >=20
-> >> >> > ~~~~~
-> >> >> > # without a running lttng session:
-> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
-> >> >> > =E2=94=94$ perf trace --duration 1 ./a.out
-> >> >> >=20
-> >> >> >     6.492 (52.468 ms): a.out/23672 recvmsg(fd: 3<socket:[1178439]=
->,
-> >=20
-> > msg:
-> >> >> > 0x7fbe2fbb1070                  ) =3D 1
-> >> >> >=20
-> >> >> >     5.077 (54.271 ms): a.out/23671 futex(uaddr: 0x7fbe30d508a0, o=
-p:
-> >> >> > WAIT_BITSET|PRIV|CLKRT, utime: 0x7ffc474ff5a0, val3: 4294967295) =
-=3D 0
-> >> >> >=20
-> >> >> >    59.598 (79.379 ms): a.out/23671 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   138.984 (39.945 ms): a.out/23671 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >    59.621 (119.324 ms): a.out/23672 futex(uaddr: 0x7fbe303e54c0, =
-op:
-> >> >> >    WAIT|
-> >> >> >=20
-> >> >> > PRIV, val: 2                    ) =3D 0
-> >> >> >=20
-> >> >> >   179.045 (79.918 ms): a.out/23671 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   258.971 (39.997 ms): a.out/23671 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   299.052 (79.883 ms): a.out/23671 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   378.942 (59.988 ms): a.out/23671 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   439.022 (69.908 ms): a.out/23671 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   508.937 (80.027 ms): a.out/23671 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> > # with a running lttng session:
-> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
-> >> >> > =E2=94=94$ run_lttng_trace.sh perf trace --duration 1 ./a.out
-> >> >> >=20
-> >> >> >     6.666 (392.496 ms): a.out-ust/23790 recvmsg(fd:
-> >> >> >     3<socket:[1185362]>,
-> >> >=20
-> >> > msg:
-> >> >> > 0x7fcd81d8a0b0                  ) =3D 612
-> >> >> >=20
-> >> >> >   400.238 (68.452 ms): a.out-ust/23790 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   468.698 (39.983 ms): a.out-ust/23790 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   510.567 (98.113 ms): a.out-ust/23790 recvmsg(fd:
-> >> >> >   3<socket:[1185362]>,
-> >> >=20
-> >> > msg:
-> >> >> > 0x7fcd81d8a070                  ) =3D 1
-> >> >> >=20
-> >> >> >     6.467 (603.500 ms): a.out/23789 futex(uaddr: 0x7fcd82f298a0, =
-op:
-> >> >> > WAIT_BITSET|PRIV|CLKRT, utime: 0x7fff4df6c970, val3: 4294967295) =
-=3D 0
-> >> >> >=20
-> >> >> >   610.020 ( 6.307 ms): a.out/23789 futex(uaddr: 0x7fcd82f29960, o=
-p:
-> >> >> >   WAIT|
-> >> >> >=20
-> >> >> > PRIV, val: 2                    ) =3D 0
-> >> >> >=20
-> >> >> >   616.446 (62.265 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   678.721 (59.916 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   616.332 (122.335 ms): a.out-ust/23790 futex(uaddr: 0x7fcd82f299=
-60,
-> >=20
-> > op:
-> >> >> > WAIT|PRIV, val: 2                    ) =3D 0
-> >> >> >=20
-> >> >> >   738.976 (49.658 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   788.642 (49.987 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   739.014 (99.644 ms): a.out-ust/23790 futex(uaddr: 0x7fcd825be4c=
-0,
-> >> >> >   op:
-> >> >> >   WAIT|
-> >> >> >=20
-> >> >> > PRIV, val: 2                    ) =3D 0
-> >> >> >=20
-> >> >> >   838.651 (49.977 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   888.636 (69.983 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >   838.662 (119.978 ms): a.out-ust/23790 futex(uaddr: 0x7fcd825be4=
-c0,
-> >=20
-> > op:
-> >> >> > WAIT|PRIV, val: 2                    ) =3D 0
-> >> >> >=20
-> >> >> >   958.739 (59.873 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >  1018.621 (80.058 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >  1098.782 (49.844 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >  1148.634 (59.998 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >  1208.731 (69.940 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >  1278.680 (79.947 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >  1358.727 (39.881 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >  1398.616 (39.980 ms): a.out/23789 membarrier(cmd: 1
-> >> >> >=20
-> >> >> > ) =3D 0
-> >> >> >=20
-> >> >> >     6.640 (1432.157 ms): a.out-ust/23791 futex(uaddr: 0x7fcd82f90=
-000
-> >> >> >=20
-> >> >> > ) =3D -1 (null) INTERNAL ERROR: strerror_r(512, 0x7ffdbc5467a0,
-> >> >> > 128)=3D22
-> >> >> > ~~~~~
-> >> >> >=20
-> >> >> > This makes lttng-ust pretty much unusable for any short-lived
-> >> >> > application.
-> >> >> > Is this a known limitation?
-> >> >>=20
-> >> >> This kind of delay is not completely unexpected, but a bit higher t=
-han
-> >> >> I
-> >> >> would expect. I'm interested in figuring out if most of this delay
-> >> >> happens
-> >> >> to be caused by sys_membarrier, either directly, or indirectly
-> >> >> (through a
-> >> >> lock).
-> >> >=20
-> >> > See my other email which adds some harder numbers from a perf sleep
-> >> > record.
-> >> >=20
-> >> >> > I'm using lttng-ust on Arch from the AUR packages, i.e. LTTng 2.9=
-=2E4.
-> >> >> > I've
-> >> >> > seen this problem also on Ubuntu 17.04 though I didn't do any of =
-the
-> >> >> > above measurements there. So far, I suspected the ust statedump to
-> >> >> > take
-> >> >> > too much time, but I disabled that one for the measurements above.
-> >> >> >=20
-> >> >> > Any help would be appreciated
-> >> >>=20
-> >> >> Can you reproduce with a Linux kernel that has CONFIG_MEMBARRIER=3D=
-n and
-> >> >> share the performance results ?
-> >> >=20
-> >> > I'd have to recompile the kernel, which is something I don't like to
-> >> > do.
-> >> > Why is this required, or put differently - why would the kernel opti=
-on
-> >> > influence the userspace LTTng library?
-> >>=20
-> >> liburcu 0.9.x and 0.10.x (a dependency of lttng-ust) uses the membarri=
-er
-> >> system call to speed up tracing, at the expense of slower execution of
-> >> tracing state update.
-> >>=20
-> >> I'm currently proposing a new sys_membarrier command for
-> >> PRIVATE_EXPEDITED
-> >> (single-process) use cases which should execute much faster than the
-> >> non-expedited SHARED command currently implemented.
-> >>=20
-> >> liburcu 0.9 and 0.10 detects that this system call is available, and u=
-ses
-> >> it when it can.
-> >=20
-> > May I ask whether you have such a configuration available? The test cas=
-e I
-> > have submitted should be easy to reproduce for everyone. Compiling my o=
-wn
-> > kernel version takes a huge amount of time which I'm quite frankly not
-> > willing to invest at this point.
->=20
-> We have reproduced the situation, and it's pointing towards our use of the
-> sys_membarrier system call. We'll try narrowing it down between its use by
-> lttng-ust (liburcu-bp.so) or by lttng-sessiond (liburcu.so).
->=20
-> You can try to patch liburcu so it won't try using sys_membarrier at all
-> (see attached patch)
+Hey all,
 
-It does improve the situation tremendously. I just compiled v0.10.0-6-g6447=
-802=20
-with and without the patch to record the numbers below. Note that apparentl=
-y=20
-your latest patch [1] in git master alone is not enough to fix the performa=
-nce=20
-bug, I do need to apply the patch you send by mail, too.
+after my latest report over liblttng-ust overhead yielded such quick results, 
+I would like to expand on this with a more realistic workload that I'm looking 
+at.
 
-[1]: https://github.com/urcu/userspace-rcu/commit/
-64478021edcf7a5ac3bca3fa9e8b8108d2fbb9b6
+We have two applications, one that sets up an SQLite database and then 
+launches multiple client applications that try to read and write concurrently 
+from that database. Of course, this will show file-level lock contention. I'd 
+like to use LTTng to visualize the effect.
 
-But once I also apply the patch you send by mail, things start to fly. In t=
-he=20
-below, "before" means running against userspace-rcu v0.10.0-6-g6447802,=20
-"after" means running against the same version with your emailed patch appl=
-ied=20
-on top.
+On my machine I get the following numbers.
 
-Measurement without an active LTTng session:
-
+1) Without LTTng and without UST:
 ~~~~~
-# before:
-=E2=94=8Cmilian@milian-kdab2:/tmp
-=E2=94=94$ perf stat -r 5 ./a.out
+ Performance counter stats for './launcher/lab_latency_launcher':
 
- Performance counter stats for './a.out' (5 runs):
+        495.075367      task-clock (msec)         #    0.150 CPUs utilized          
+             2,340      context-switches          #    0.005 M/sec                  
+               291      cpu-migrations            #    0.588 K/sec                  
+            52,265      page-faults               #    0.106 M/sec                  
+     3,098,760,038      cycles                    #    6.259 GHz                    
+     1,894,074,743      instructions              #    0.61  insn per cycle         
+       354,869,636      branches                  #  716.799 M/sec                  
+        10,317,266      branch-misses             #    2.91% of all branches        
 
-          3.973288      task-clock (msec)         #    0.005 CPUs utilized =
-          =20
-( +-  0.39% )
-               153      context-switches          #    0.039 M/sec         =
-          =20
-( +-  1.43% )
-                 2      cpu-migrations            #    0.554 K/sec         =
-          =20
-( +- 26.50% )
-               315      page-faults               #    0.079 M/sec         =
-          =20
-( +-  0.21% )
-        13,257,360      cycles                    #    3.337 GHz           =
-          =20
-( +-  0.34% )
-        14,906,461      instructions              #    1.12  insn per cycle=
-          =20
-( +-  0.11% )
-         2,910,368      branches                  #  732.483 M/sec         =
-          =20
-( +-  0.10% )
-            42,766      branch-misses             #    1.47% of all branche=
-s         =20
-( +-  0.89% )
+       3.298337574 seconds time elapsed
+~~~~~~
 
-       0.851654352 seconds time elapsed                                    =
-     =20
-( +-  4.33% )
+2) With LTTng (all kernel events enabled) and without UST:
+~~~~~
+ Performance counter stats for 'run_lttng_trace.sh ./launcher/
+lab_latency_launcher':
 
-# after:
-=E2=94=8Cmilian@milian-kdab2:/tmp
-=E2=94=94$ perf stat -r 5 ./a.out
+        296.329694      task-clock (msec)         #    0.068 CPUs utilized          
+             1,808      context-switches          #    0.006 M/sec                  
+               398      cpu-migrations            #    0.001 M/sec                  
+            53,493      page-faults               #    0.181 M/sec                  
+     2,411,871,165      cycles                    #    8.139 GHz                    
+     2,370,005,487      instructions              #    0.98  insn per cycle         
+       425,284,747      branches                  # 1435.174 M/sec                  
+        10,442,662      branch-misses             #    2.46% of all branches        
 
- Performance counter stats for './a.out' (5 runs):
+       4.338938821 seconds time elapsed
+~~~~~~
 
-          3.608242      task-clock (msec)         #    0.056 CPUs utilized =
-          =20
-( +-  1.84% )
-               138      context-switches          #    0.038 M/sec         =
-          =20
-( +-  2.70% )
-                 1      cpu-migrations            #    0.277 K/sec         =
-        =20
-               313      page-faults               #    0.087 M/sec         =
-          =20
-( +-  0.27% )
-        12,022,499      cycles                    #    3.332 GHz           =
-          =20
-( +-  1.73% )
-        14,861,318      instructions              #    1.24  insn per cycle=
-          =20
-( +-  0.32% )
-         2,902,920      branches                  #  804.525 M/sec         =
-          =20
-( +-  0.32% )
-            38,264      branch-misses             #    1.32% of all branche=
-s         =20
-( +-  0.78% )
+3) With LTTng (all kernel events enabled) and with UST `tracef()` events 
+enabled (~400 UST events in total):
 
-       0.063929538 seconds time elapsed                                    =
-     =20
-( +- 10.93% )
+~~~~~~
+ Performance counter stats for './launcher/lab_latency_launcher':
+
+        796.595231      task-clock (msec)         #    0.069 CPUs utilized          
+            17,728      context-switches          #    0.022 M/sec                  
+               429      cpu-migrations            #    0.539 K/sec                  
+            85,737      page-faults               #    0.108 M/sec                  
+     4,483,999,258      cycles                    #    5.629 GHz                    
+     5,112,633,073      instructions              #    1.14  insn per cycle         
+       985,315,773      branches                  # 1236.909 M/sec                  
+        14,993,555      branch-misses             #    1.52% of all branches        
+
+      11.505288968 seconds time elapsed
+~~~~~~
+
+4) This is running against the patched userspace-urcu. Without the performance 
+fix there, the performance is even worse:
+
+~~~~~~
+ Performance counter stats for 'run_lttng_trace.sh ./launcher/
+lab_latency_launcher':
+
+        952.959433      task-clock (msec)         #    0.019 CPUs utilized          
+             6,021      context-switches          #    0.006 M/sec                  
+               954      cpu-migrations            #    0.001 M/sec                  
+            69,310      page-faults               #    0.073 M/sec                  
+     5,335,988,506      cycles                    #    5.599 GHz                    
+     6,031,685,882      instructions              #    1.13  insn per cycle         
+     1,093,132,635      branches                  # 1147.093 M/sec                  
+        16,090,093      branch-misses             #    1.47% of all branches        
+
+      50.786464678 seconds time elapsed
 ~~~~~
 
-With an active LTTng session:
+So, I don't think we need to talk about 4) anymore. But I do think that 
+comparing 3) to 2) begs for clarifications. Just linking against lttng-ust 
+grinds the workload to a halt. The ~400 UST events cannot explain this at all. 
+Additionally, the timeline visualization of the processes becomes much harder, 
+as the UST overhead seems to dominate. This becomes apparent when comparing 
+the 2) and 3) data in tracecompass visually...
+
+Could anyone look into this please? As-is, I cannot recommend using lttng-ust. 
+Rather, I'd opt for "faking" the custom trace points by e.g. doing something 
+like open("/UST-FAKE/$payload-here"). This also allows me to "annotate" the 
+kernel trace, a bit clumsily, but at least it has extremely low overhead when 
+compared to UST...
+
+You can find a toy Qt 5 application to reproduce my measurements above here:
+
+https://swanson.kdab.com/owncloud/index.php/s/FGI2PZNvwzoR4RZ
+
+Unpack it, then build it with:
 
 ~~~~~
-# before:
- Performance counter stats for './a.out' (5 runs):
+cd ust-slowness
+mkdir build-with-ust build-no-ust
+cd build-with-ust
+qmake -r CONFIG+=with_lttng_ust ..
+make
+cd ../build-no-ust
+qmake -r ..
+make
+~~~~~~
 
-          9.152925      task-clock (msec)         #    0.005 CPUs utilized =
-          =20
-( +-  1.13% )
-               216      context-switches          #    0.024 M/sec         =
-          =20
-( +-  2.83% )
-                 4      cpu-migrations            #    0.459 K/sec         =
-          =20
-( +- 11.66% )
-               370      page-faults               #    0.040 M/sec         =
-          =20
-( +-  0.20% )
-        31,311,283      cycles                    #    3.421 GHz           =
-          =20
-( +-  0.69% )
-        40,509,922      instructions              #    1.29  insn per cycle=
-          =20
-( +-  0.40% )
-         7,192,651      branches                  #  785.831 M/sec         =
-          =20
-( +-  0.33% )
-            90,264      branch-misses             #    1.25% of all branche=
-s         =20
-( +-  1.46% )
+Then you can reproduce the issue by comparing runs of the `launcher` binary in 
+the two build folders. One will be quick, the other will be dog slow. I hope 
+you guys find more optimization opportunities here.
 
-       1.839545247 seconds time elapsed                                    =
-     =20
-( +-  6.95% )
+If not, then shouldn't it be possible to get something like tracef() simulated 
+via a custom syscall that gets directly handled by the kernel LTTng module? 
+This would hopefully be just as fast as using only the kernel tracing, while 
+removing the overhead of UST tracing... Just an idea.
 
-# after:
- Performance counter stats for './a.out' (5 runs):
+Cheers
 
-          7.052094      task-clock (msec)         #    0.026 CPUs utilized =
-          =20
-( +-  1.45% )
-               190      context-switches          #    0.027 M/sec         =
-          =20
-( +-  4.88% )
-                 1      cpu-migrations            #    0.142 K/sec         =
-          =20
-( +- 44.72% )
-               335      page-faults               #    0.048 M/sec         =
-          =20
-( +-  0.37% )
-        24,105,408      cycles                    #    3.418 GHz           =
-          =20
-( +-  1.39% )
-        35,100,950      instructions              #    1.46  insn per cycle=
-          =20
-( +-  0.17% )
-         6,197,972      branches                  #  878.884 M/sec         =
-          =20
-( +-  0.15% )
-            56,045      branch-misses             #    0.90% of all branche=
-s         =20
-( +-  1.41% )
-
-       0.272121270 seconds time elapsed                                    =
-     =20
-( +- 52.41% )
-~~~~~
-
-> > I simply wonder whether anyone else is actually using lttng-ust, or if
-> > they
-> > are, whether they are only doing that for long-lived applications where
-> > this overhead is not noticeable?
->=20
-> It appears that this application startup slowdown mainly appears with
-> LTTng linked against liburcu 0.9 and 0.10 running with rather recent
-> kernels. This would explain why you are the first one to report this acro=
-ss
-> our user base.
-
-Thank you, that explains it.
-
-=2D-=20
+-- 
 Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
 KDAB (Deutschland) GmbH&Co KG, a KDAB Group company
 Tel: +49-30-521325470
 KDAB - The Qt Experts
---nextPart3032029.J450EsyL5D
+--nextPart1909254.iedNQQuK5R
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -722,22 +221,22 @@ cukxggJuMIICagIBATCBrDCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hl
 c3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNV
 BAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
 EAf6KCF9+1doL2oEOTPysLwwDQYJYIZIAWUDBAIBBQCggZMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMTcwOTA3MDc1MDEyWjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgDp48RSsN45d1G62FBbWg8BUML7lP
-cfA+5Y1ouKtw8nAwDQYJKoZIhvcNAQEBBQAEggEAp08tzQmDY67nkw6gCkUELUv3XZE0XWMOsXoU
-WxVhE1NCk3cmb1qJL3c50BibeqYxyn4m7IvxcKZ/DH5GxyoPofChs42ZYeJiaAK6CDAxR1KfyN3U
-NMYkqQihbLvv9+RsHqXI3TLfyJz8FgCEf+2eLDyOKNe6trHJSvjYem+ebhHyuUT3cv3j8E6ybjd/
-8dbJsCfja1JzYNyjzkhspoSnpvl0zIcS3d5PalQ2zTdCJWmZTQx+h7brNVUkGwtgA1M93KY4rco/
-dkTfTbtA0nVSg/ak6czHrKaAc0OQI2jRHRwdHdZOf3ocPb5dPx+YFl2WNk1Nf1IUrZaZZazxw0wh
-pwAAAAAAAA==
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMTcwOTA3MDg0NzQ2WjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgMLZnWnC4rZDtjpchON6FHJq0zCAG
+1MP7jywsD2luZc4wDQYJKoZIhvcNAQEBBQAEggEALZGJGpbmcyXDrgY3SJSCXSUKD/g6h4ELkzWh
+g69GEhQ/aOeXfvqLYXFk0KGL3otusGIYnHzwM+i9Ye1Cu3wsvyesm1TrpAPeZLNLVM9v83/MP/Bh
+EqRnHlMXL4Qap53mJLnjfaqKU30hqaQMqdlR/AcU7Az/qStL1KVqs49d+vcELqjKsdwpy7MhAXO0
+waG/7haGQBHD2/YNJyLtLM7OJ22w6zaXvF7j3rJwqmLtRz10k4B0TD19njSG0Qdc1Ur2BFzWY/hs
+YhrbcTiMMrS5VVFx2Cx69cKaUlJj0V6NgAqPO/COqJB1NTOK5aeFQSnl2jIzr03TAYjFIwPjn2hH
+wQAAAAAAAA==
 
 
---nextPart3032029.J450EsyL5D--
+--nextPart1909254.iedNQQuK5R--
 
 
 
 
---===============6735125071035004926==
+--===============6957147221333004225==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -747,4 +246,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============6735125071035004926==--
+--===============6957147221333004225==--
