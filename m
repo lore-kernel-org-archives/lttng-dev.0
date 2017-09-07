@@ -1,36 +1,16 @@
-From: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+From: Milian Wolff <milian.wolff@kdab.com>
 Subject: Re: large liblttng-ust startup overhead (ust_lock)
-Date: Wed, 6 Sep 2017 14:22:36 -0700
-Message-ID: <20170906212236.GG15437__26388.0425984555$1504733003$gmane$org@linux.vnet.ibm.com>
-References: <2117884.c1kuPXoiOA@milian-kdab2> <3731578.YsMjlWojEO@milian-kdab2>
- <709369421.3343.1504635118648.JavaMail.zimbra@efficios.com>
- <3211887.IErR8xQyUx@agathebauer>
+Date: Thu, 07 Sep 2017 09:50:12 +0200
+Message-ID: <2249054.rOntnxvaLr__16742.7413900898$1504770662$gmane$org@milian-kdab2>
+References: <2117884.c1kuPXoiOA@milian-kdab2> <3211887.IErR8xQyUx@agathebauer>
  <1506174693.4712.1504727831374.JavaMail.zimbra@efficios.com>
- <643211580.4746.1504729420940.JavaMail.zimbra@efficios.com>
-Reply-To: paulmck@linux.vnet.ibm.com
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============6735125071035004926=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com
- [148.163.158.5])
- by lists.lttng.org (Postfix) with ESMTPS id 3xnc4P3LcYzCnt
- for <lttng-dev@lists.lttng.org>; Wed,  6 Sep 2017 21:22:44 +0000 (UTC)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
- by mx0b-001b2d01.pphosted.com (8.16.0.21/8.16.0.21) with SMTP id
- v86LMK2G064440
- for <lttng-dev@lists.lttng.org>; Wed, 6 Sep 2017 17:22:38 -0400
-Received: from e14.ny.us.ibm.com (e14.ny.us.ibm.com [129.33.205.204])
- by mx0b-001b2d01.pphosted.com with ESMTP id 2ctq9ryq5k-1
- (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NOT)
- for <lttng-dev@lists.lttng.org>; Wed, 06 Sep 2017 17:22:38 -0400
-Received: from localhost
- by e14.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only!
- Violators will be prosecuted
- for <lttng-dev@lists.lttng.org> from <paulmck@linux.vnet.ibm.com>;
- Wed, 6 Sep 2017 17:22:37 -0400
-Content-Disposition: inline
-In-Reply-To: <643211580.4746.1504729420940.JavaMail.zimbra@efficios.com>
+Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
+ by lists.lttng.org (Postfix) with ESMTPS id 3xnt0k2tQrzCVv
+ for <lttng-dev@lists.lttng.org>; Thu,  7 Sep 2017 07:50:29 +0000 (UTC)
+In-Reply-To: <1506174693.4712.1504727831374.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -44,303 +24,727 @@ To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-QlRXLCB5b3VyIGV4cGVkaXRlZCBjb21taXQgaGl0IG1haW5saW5lIGVhcmxpZXIgdGhpcyB3ZWVr
-LiAgSGVyZSBpcwpob3BpbmchICA7LSkKCgkJCQkJCQlUaGFueCwgUGF1bAoKT24gV2VkLCBTZXAg
-MDYsIDIwMTcgYXQgMDg6MjM6NDBQTSArMDAwMCwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4g
-LS0tLS0gT24gU2VwIDYsIDIwMTcsIGF0IDM6NTcgUE0sIE1hdGhpZXUgRGVzbm95ZXJzIG1hdGhp
-ZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbSB3cm90ZToKPiAKPiA+IC0tLS0tIE9uIFNlcCA2LCAy
-MDE3LCBhdCAzOjM1IEFNLCBNaWxpYW4gV29sZmYgbWlsaWFuLndvbGZmQGtkYWIuY29tIHdyb3Rl
-Ogo+ID4gCj4gPj4gT24gRGllbnN0YWcsIDUuIFNlcHRlbWJlciAyMDE3IDIwOjExOjU4IENFU1Qg
-TWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4gPj4+IC0tLS0tIE9uIFNlcCA1LCAyMDE3LCBhdCAx
-MTowOCBBTSwgTWlsaWFuIFdvbGZmIG1pbGlhbi53b2xmZkBrZGFiLmNvbSB3cm90ZToKPiA+Pj4g
-PiBPbiBUdWVzZGF5LCBTZXB0ZW1iZXIgNSwgMjAxNyA0OjUxOjQyIFBNIENFU1QgTWF0aGlldSBE
-ZXNub3llcnMgd3JvdGU6Cj4gPj4+ID4+IC0tLS0tIE9uIFNlcCA1LCAyMDE3LCBhdCAxMDozNCBB
-TSwgTWlsaWFuIFdvbGZmIG1pbGlhbi53b2xmZkBrZGFiLmNvbQo+ID4+IHdyb3RlOgo+ID4+PiA+
-PiA+IEhleSBhbGwsCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gSSBoYXZlIG5vdGljZWQgYSB2ZXJ5
-IGxhcmdlIG92ZXJoZWFkIHdoZW4gbGlua2luZyBhZ2FpbnN0IGxpYmx0dG5nLXVzdDoKPiA+Pj4g
-Pj4gPiAKPiA+Pj4gPj4gPiB+fn5+fgo+ID4+PiA+PiA+IOKUjG1pbGlhbkBtaWxpYW4ta2RhYjI6
-L3RtcAo+ID4+PiA+PiA+IOKUlCQgY2F0IGx0dG5nLXRlc3QuYwo+ID4+PiA+PiA+IGludCBtYWlu
-KCkKPiA+Pj4gPj4gPiB7Cj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gIHJldHVybiAwOwo+ID4+PiA+
-PiA+IAo+ID4+PiA+PiA+IH0KPiA+Pj4gPj4gPiDilIxtaWxpYW5AbWlsaWFuLWtkYWIyOi90bXAK
-PiA+Pj4gPj4gPiDilJQkIGdjYyAtTzIgLWcgLWxkbCBsdHRuZy10ZXN0LmMKPiA+Pj4gPj4gPiDi
-lIxtaWxpYW5AbWlsaWFuLWtkYWIyOi90bXAKPiA+Pj4gPj4gPiDilJQkIHBlcmYgc3RhdCAtciA1
-IC4vYS5vdXQKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiBQZXJmb3JtYW5jZSBjb3VudGVyIHN0YXRz
-IGZvciAnLi9hLm91dCcgKDUgcnVucyk6Cj4gPj4+ID4+ID4gICAgICAgICAgMC4yMDk1ODcgICAg
-ICB0YXNrLWNsb2NrIChtc2VjKSAgICAgICAgICMgICAgMC41OTYgQ1BVcwo+ID4+PiA+PiA+ICAg
-ICAgICAgIHV0aWxpemVkCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gKCArLSAgOC43NiUgKQo+ID4+
-PiA+PiA+IAo+ID4+PiA+PiA+ICAgICAgICAgICAgICAgICAwICAgICAgY29udGV4dC1zd2l0Y2hl
-cyAgICAgICAgICAjICAgIDAuMDAwIEsvc2VjCj4gPj4+ID4+ID4gICAgICAgICAgICAgICAgIDAg
-ICAgICBjcHUtbWlncmF0aW9ucyAgICAgICAgICAgICMgICAgMC4wMDAgSy9zZWMKPiA+Pj4gPj4g
-PiAgICAgICAgICAgICAgICAKPiA+Pj4gPj4gPiAgICAgICAgICAgICAgICA0OSAgICAgIHBhZ2Ut
-ZmF1bHRzICAgICAgICAgICAgICAgIyAgICAwLjIzNSBNL3NlYwo+ID4+PiA+PiA+IAo+ID4+PiA+
-PiA+ICggKy0gIDEuMTklICkKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAgICAgICAgICAgNzA2LDg1
-NCAgICAgIGN5Y2xlcyAgICAgICAgICAgICAgICAgICAgIyAgICAzLjM3MyBHSHoKPiA+Pj4gPj4g
-PiAKPiA+Pj4gPj4gPiAoICstICA4LjgyJSApCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICAgICAg
-ICAgIDc3Myw2MDMgICAgICBpbnN0cnVjdGlvbnMgICAgICAgICAgICAgICMgICAgMS4wOSAgaW5z
-biBwZXIKPiA+Pj4gPj4gPiAgICAgICAgICAgY3ljbGUKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAo
-ICstICAwLjc1JSApCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICAgICAgICAgIDE0NywxMjggICAg
-ICBicmFuY2hlcyAgICAgICAgICAgICAgICAgICMgIDcwMS45ODcgTS9zZWMKPiA+Pj4gPj4gPiAK
-PiA+Pj4gPj4gPiAoICstICAwLjcwJSApCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICAgICAgICAg
-ICAgNCwwOTYgICAgICBicmFuY2gtbWlzc2VzICAgICAgICAgICAgICMgICAgMi43OCUgb2YgYWxs
-Cj4gPj4+ID4+ID4gICAgICAgICAgICAgYnJhbmNoZXMKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAo
-ICstICA1LjI3JSApCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICAgICAgMC4wMDAzNTE0MjIgc2Vj
-b25kcyB0aW1lIGVsYXBzZWQKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAoICstIDExLjg1JSApCj4g
-Pj4+ID4+ID4gCj4gPj4+ID4+ID4g4pSMbWlsaWFuQG1pbGlhbi1rZGFiMjovdG1wCj4gPj4+ID4+
-ID4g4pSUJCBnY2MgLU8yIC1nIC1sZGwgLWxsdHRuZy11c3QgbHR0bmctdGVzdC5jCj4gPj4+ID4+
-ID4g4pSMbWlsaWFuQG1pbGlhbi1rZGFiMjovdG1wCj4gPj4+ID4+ID4g4pSUJCBwZXJmIHN0YXQg
-LXIgNSAuL2Eub3V0Cj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gUGVyZm9ybWFuY2UgY291bnRlciBz
-dGF0cyBmb3IgJy4vYS5vdXQnICg1IHJ1bnMpOgo+ID4+PiA+PiA+ICAgICAgICAgIDIuMDYzMDQw
-ICAgICAgdGFzay1jbG9jayAobXNlYykgICAgICAgICAjICAgIDAuMDA5IENQVXMKPiA+Pj4gPj4g
-PiAgICAgICAgICB1dGlsaXplZAo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICggKy0gIDEuMzclICkK
-PiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAgICAgICAgICAgICAgICA0NCAgICAgIGNvbnRleHQtc3dp
-dGNoZXMgICAgICAgICAgIyAgICAwLjAyMSBNL3NlYwo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICgg
-Ky0gIDEuOTUlICkKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAgICAgICAgICAgICAgICAgMiAgICAg
-IGNwdS1taWdyYXRpb25zICAgICAgICAgICAgIyAgICAwLjc3NiBLL3NlYwo+ID4+PiA+PiA+IAo+
-ID4+PiA+PiA+ICggKy0gMjUuMDAlICkKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAgICAgICAgICAg
-ICAgIDIwOSAgICAgIHBhZ2UtZmF1bHRzICAgICAgICAgICAgICAgIyAgICAwLjEwMSBNL3NlYwo+
-ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICggKy0gIDAuMzQlICkKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4g
-PiAgICAgICAgIDcsMDUzLDY4NiAgICAgIGN5Y2xlcyAgICAgICAgICAgICAgICAgICAgIyAgICAz
-LjQxOSBHSHoKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAoICstICAyLjAzJSApCj4gPj4+ID4+ID4g
-Cj4gPj4+ID4+ID4gICAgICAgICA2LDg5Myw3ODMgICAgICBpbnN0cnVjdGlvbnMgICAgICAgICAg
-ICAgICMgICAgMC45OCAgaW5zbiBwZXIKPiA+Pj4gPj4gPiAgICAgICAgIGN5Y2xlCj4gPj4+ID4+
-ID4gCj4gPj4+ID4+ID4gKCArLSAgMC4yNSUgKQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICAgICAg
-ICAgMSwzNDIsNDkyICAgICAgYnJhbmNoZXMgICAgICAgICAgICAgICAgICAjICA2NTAuNzM1IE0v
-c2VjCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gKCArLSAgMC4yMCUgKQo+ID4+PiA+PiA+IAo+ID4+
-PiA+PiA+ICAgICAgICAgICAgMjksMzkwICAgICAgYnJhbmNoLW1pc3NlcyAgICAgICAgICAgICAj
-ICAgIDIuMTklIG9mIGFsbAo+ID4+PiA+PiA+ICAgICAgICAgICAgYnJhbmNoZXMKPiA+Pj4gPj4g
-PiAKPiA+Pj4gPj4gPiAoICstICAwLjYxJSApCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICAgICAg
-MC4yMjU1OTczMDIgc2Vjb25kcyB0aW1lIGVsYXBzZWQKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAo
-ICstICA2LjY4JSApCj4gPj4+ID4+ID4gfn5+fn4KPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiBUaGlz
-IGlzIHdpdGhvdXQgYW55IExUVG5nIHNlc3Npb24gY29uZmlndXJlZC4gSWYgSSBlbmFibGUgTFRU
-bmcga2VybmVsCj4gPj4+ID4+ID4gYW5kCj4gPj4+ID4+ID4gdXNlcnNwYWNlIGV2ZW50cywgdGhp
-cyBiZWNvbWVzIGV2ZW4gd29yc2U6Cj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gfn5+fn4KPiA+Pj4g
-Pj4gPiDilIxtaWxpYW5AbWlsaWFuLWtkYWIyOi90bXAKPiA+Pj4gPj4gPiDilJQkIGNhdCAkKHdo
-aWNoIHJ1bl9sdHRuZ190cmFjZS5zaCkKPiA+Pj4gPj4gPiAjIS9iaW4vc2gKPiA+Pj4gPj4gPiAK
-PiA+Pj4gPj4gPiBpZiBbIC16ICIkKHBpZG9mIGx0dG5nLXNlc3Npb25kKSIgXTsgdGhlbgo+ID4+
-PiA+PiA+IAo+ID4+PiA+PiA+ICAgIHN1ZG8gbHR0bmctc2Vzc2lvbmQgLS1kYWVtb25pemUKPiA+
-Pj4gPj4gPiAKPiA+Pj4gPj4gPiBmaQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+IHN1ZG8gbHR0bmcg
-Y3JlYXRlIC1vIH4vbHR0bmctdHJhY2VzLyQoZGF0ZSAtSXNlY29uZHMpCj4gPj4+ID4+ID4gc3Vk
-byBsdHRuZyBlbmFibGUtY2hhbm5lbCBrZXJuZWwgLWsgLS1zdWJidWYtc2l6ZSAxNk0gLS1udW0t
-c3ViYnVmIDgKPiA+Pj4gPj4gPiBzdWRvIGx0dG5nIGVuYWJsZS1ldmVudCAtYyBrZXJuZWwgLWsg
-LWEKPiA+Pj4gPj4gPiBzdWRvIGx0dG5nIGVuYWJsZS1jaGFubmVsIHVzdCAtdSAtLXN1YmJ1Zi1z
-aXplIDE2TSAtLW51bS1zdWJidWYgOAo+ID4+PiA+PiA+IHN1ZG8gbHR0bmcgZW5hYmxlLWV2ZW50
-IC1jIHVzdCAtdSBsdHRuZ191c3RfdHJhY2VmOioKPiA+Pj4gPj4gPiBzdWRvIGx0dG5nIHN0YXJ0
-Cj4gPj4+ID4+ID4gJEAKPiA+Pj4gPj4gPiBzdWRvIGx0dG5nIHN0b3AKPiA+Pj4gPj4gPiAKPiA+
-Pj4gPj4gPiBzdWRvIGNobW9kIGErcnggLVIgfi9sdHRuZy10cmFjZXMKPiA+Pj4gPj4gPiDilIxt
-aWxpYW5AbWlsaWFuLWtkYWIyOi90bXAKPiA+Pj4gPj4gPiDilJQkIHJ1bl9sdHRuZ190cmFjZS5z
-aCBwZXJmIHN0YXQgLXIgNSAuL2Eub3V0Cj4gPj4+ID4+ID4gU2Vzc2lvbiBhdXRvLTIwMTcwOTA1
-LTE2MjgxOCBjcmVhdGVkLgo+ID4+PiA+PiA+IFRyYWNlcyB3aWxsIGJlIHdyaXR0ZW4gaW4KPiA+
-Pj4gPj4gPiAvaG9tZS9taWxpYW4vbHR0bmctdHJhY2VzLzIwMTctMDktMDVUMTY6Mjg6MTgrMDI6
-MDAgS2VybmVsIGNoYW5uZWwKPiA+Pj4gPj4gPiBrZXJuZWwKPiA+Pj4gPj4gPiBlbmFibGVkIGZv
-ciBzZXNzaW9uIGF1dG8tMjAxNzA5MDUtMTYyODE4Cj4gPj4+ID4+ID4gQWxsIEtlcm5lbCBldmVu
-dHMgYXJlIGVuYWJsZWQgaW4gY2hhbm5lbCBrZXJuZWwKPiA+Pj4gPj4gPiBVU1QgY2hhbm5lbCB1
-c3QgZW5hYmxlZCBmb3Igc2Vzc2lvbiBhdXRvLTIwMTcwOTA1LTE2MjgxOAo+ID4+PiA+PiA+IFVT
-VCBldmVudCBsdHRuZ191c3RfdHJhY2VmOiogY3JlYXRlZCBpbiBjaGFubmVsIHVzdAo+ID4+PiA+
-PiA+IFRyYWNpbmcgc3RhcnRlZCBmb3Igc2Vzc2lvbiBhdXRvLTIwMTcwOTA1LTE2MjgxOAo+ID4+
-PiA+PiA+IAo+ID4+PiA+PiA+IFBlcmZvcm1hbmNlIGNvdW50ZXIgc3RhdHMgZm9yICcuL2Eub3V0
-JyAoNSBydW5zKToKPiA+Pj4gPj4gPiAgICAgICAgICA0LjkzNzgyMCAgICAgIHRhc2stY2xvY2sg
-KG1zZWMpICAgICAgICAgIyAgICAwLjAwNSBDUFVzCj4gPj4+ID4+ID4gICAgICAgICAgdXRpbGl6
-ZWQKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAoICstICAxLjI4JSApCj4gPj4+ID4+ID4gCj4gPj4+
-ID4+ID4gICAgICAgICAgICAgICAxMTcgICAgICBjb250ZXh0LXN3aXRjaGVzICAgICAgICAgICMg
-ICAgMC4wMjQgTS9zZWMKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAoICstICAwLjcwJSApCj4gPj4+
-ID4+ID4gCj4gPj4+ID4+ID4gICAgICAgICAgICAgICAgIDMgICAgICBjcHUtbWlncmF0aW9ucyAg
-ICAgICAgICAgICMgICAgMC42MDggSy9zZWMKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAoICstIDIz
-LjU3JSApCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICAgICAgICAgICAgICAyNDUgICAgICBwYWdl
-LWZhdWx0cyAgICAgICAgICAgICAgICMgICAgMC4wNTAgTS9zZWMKPiA+Pj4gPj4gPiAKPiA+Pj4g
-Pj4gPiAoICstICAwLjIwJSApCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICAgICAgIDE2LDU0MSwz
-NTUgICAgICBjeWNsZXMgICAgICAgICAgICAgICAgICAgICMgICAgMy4zNTAgR0h6Cj4gPj4+ID4+
-ID4gCj4gPj4+ID4+ID4gKCArLSAgMC45NCUgKQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICAgICAg
-ICAyMCw2MTEsNjM3ICAgICAgaW5zdHJ1Y3Rpb25zICAgICAgICAgICAgICAjICAgIDEuMjUgIGlu
-c24gcGVyCj4gPj4+ID4+ID4gICAgICAgIGN5Y2xlCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gKCAr
-LSAgMC4yMyUgKQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICAgICAgICAgMyw1ODAsNTI1ICAgICAg
-YnJhbmNoZXMgICAgICAgICAgICAgICAgICAjICA3MjUuMTIzIE0vc2VjCj4gPj4+ID4+ID4gCj4g
-Pj4+ID4+ID4gKCArLSAgMC4xOSUgKQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICAgICAgICAgICAg
-NTIsMDkzICAgICAgYnJhbmNoLW1pc3NlcyAgICAgICAgICAgICAjICAgIDEuNDUlIG9mIGFsbAo+
-ID4+PiA+PiA+ICAgICAgICAgICAgYnJhbmNoZXMKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAoICst
-ICAxLjczJSApCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICAgICAgMC45NjU1NDU4ODIgc2Vjb25k
-cyB0aW1lIGVsYXBzZWQKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiAoICstIDE2Ljk2JSApCj4gPj4+
-ID4+ID4gCj4gPj4+ID4+ID4gV2FpdGluZyBmb3IgZGF0YSBhdmFpbGFiaWxpdHkuLi4KPiA+Pj4g
-Pj4gPiBUcmFjaW5nIHN0b3BwZWQgZm9yIHNlc3Npb24gYXV0by0yMDE3MDkwNS0xNjI4MTgKPiA+
-Pj4gPj4gPiB+fn5+fgo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+IEkgc2VlIHRoaXMgfjFzIGRlbGF5
-IGR1cmluZyBzdGFydHVwIGluIG5lYXJseSBhbGwgdGVzdCBhcHBsaWNhdGlvbnMKPiA+Pj4gPj4g
-PiB3aGVyZQo+ID4+PiA+PiA+IEkKPiA+Pj4gPj4gPiB3YW50ZWQgdG8gdXNlIGx0dG5nLXVzdC4g
-SW4gdHJhY2Vjb21wYXNzLCBhbmQgYWNjb3JkaW5nIHRvIHBlcmYgc2xlZXAKPiA+Pj4gPj4gPiB0
-aW1lCj4gPj4+ID4+ID4gcHJvZmlsaW5nLCB0aGlzIHNlZW1zIHRvIGJlIG1vc3RseSBkdWUgdG8g
-ZXh0ZW5zaXZlIHNsZWVwaW5nIG9uIG11dGV4Cj4gPj4+ID4+ID4gbG9ja3MKPiA+Pj4gPj4gPiAo
-ZnJvbSB1c3RfbG9jayBpbiBsaWJsdHRuZy11c3QpLiBXaXRoIHBlcmYgdHJhY2UsIEkgYWxzbyBz
-ZWUgbWVtYmFycmllcgo+ID4+PiA+PiA+IHRha2luZyBhIGxvdCBvZiB0aW1lOgo+ID4+PiA+PiA+
-IAo+ID4+PiA+PiA+IH5+fn5+Cj4gPj4+ID4+ID4gIyB3aXRob3V0IGEgcnVubmluZyBsdHRuZyBz
-ZXNzaW9uOgo+ID4+PiA+PiA+IOKUjG1pbGlhbkBtaWxpYW4ta2RhYjI6L3RtcAo+ID4+PiA+PiA+
-IOKUlCQgcGVyZiB0cmFjZSAtLWR1cmF0aW9uIDEgLi9hLm91dAo+ID4+PiA+PiA+IAo+ID4+PiA+
-PiA+ICAgICA2LjQ5MiAoNTIuNDY4IG1zKTogYS5vdXQvMjM2NzIgcmVjdm1zZyhmZDogMzxzb2Nr
-ZXQ6WzExNzg0MzldPiwKPiA+PiBtc2c6Cj4gPj4+ID4+ID4gMHg3ZmJlMmZiYjEwNzAgICAgICAg
-ICAgICAgICAgICApID0gMQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICAgICA1LjA3NyAoNTQuMjcx
-IG1zKTogYS5vdXQvMjM2NzEgZnV0ZXgodWFkZHI6IDB4N2ZiZTMwZDUwOGEwLCBvcDoKPiA+Pj4g
-Pj4gPiBXQUlUX0JJVFNFVHxQUklWfENMS1JULCB1dGltZTogMHg3ZmZjNDc0ZmY1YTAsIHZhbDM6
-IDQyOTQ5NjcyOTUpID0gMAo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICAgIDU5LjU5OCAoNzkuMzc5
-IG1zKTogYS5vdXQvMjM2NzEgbWVtYmFycmllcihjbWQ6IDEKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4g
-PiApID0gMAo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICAgMTM4Ljk4NCAoMzkuOTQ1IG1zKTogYS5v
-dXQvMjM2NzEgbWVtYmFycmllcihjbWQ6IDEKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiApID0gMAo+
-ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICAgIDU5LjYyMSAoMTE5LjMyNCBtcyk6IGEub3V0LzIzNjcy
-IGZ1dGV4KHVhZGRyOiAweDdmYmUzMDNlNTRjMCwgb3A6Cj4gPj4+ID4+ID4gICAgV0FJVHwKPiA+
-Pj4gPj4gPiAKPiA+Pj4gPj4gPiBQUklWLCB2YWw6IDIgICAgICAgICAgICAgICAgICAgICkgPSAw
-Cj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICAxNzkuMDQ1ICg3OS45MTggbXMpOiBhLm91dC8yMzY3
-MSBtZW1iYXJyaWVyKGNtZDogMQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICkgPSAwCj4gPj4+ID4+
-ID4gCj4gPj4+ID4+ID4gICAyNTguOTcxICgzOS45OTcgbXMpOiBhLm91dC8yMzY3MSBtZW1iYXJy
-aWVyKGNtZDogMQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICkgPSAwCj4gPj4+ID4+ID4gCj4gPj4+
-ID4+ID4gICAyOTkuMDUyICg3OS44ODMgbXMpOiBhLm91dC8yMzY3MSBtZW1iYXJyaWVyKGNtZDog
-MQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICkgPSAwCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICAz
-NzguOTQyICg1OS45ODggbXMpOiBhLm91dC8yMzY3MSBtZW1iYXJyaWVyKGNtZDogMQo+ID4+PiA+
-PiA+IAo+ID4+PiA+PiA+ICkgPSAwCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICA0MzkuMDIyICg2
-OS45MDggbXMpOiBhLm91dC8yMzY3MSBtZW1iYXJyaWVyKGNtZDogMQo+ID4+PiA+PiA+IAo+ID4+
-PiA+PiA+ICkgPSAwCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICA1MDguOTM3ICg4MC4wMjcgbXMp
-OiBhLm91dC8yMzY3MSBtZW1iYXJyaWVyKGNtZDogMQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICkg
-PSAwCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gIyB3aXRoIGEgcnVubmluZyBsdHRuZyBzZXNzaW9u
-Ogo+ID4+PiA+PiA+IOKUjG1pbGlhbkBtaWxpYW4ta2RhYjI6L3RtcAo+ID4+PiA+PiA+IOKUlCQg
-cnVuX2x0dG5nX3RyYWNlLnNoIHBlcmYgdHJhY2UgLS1kdXJhdGlvbiAxIC4vYS5vdXQKPiA+Pj4g
-Pj4gPiAKPiA+Pj4gPj4gPiAgICAgNi42NjYgKDM5Mi40OTYgbXMpOiBhLm91dC11c3QvMjM3OTAg
-cmVjdm1zZyhmZDoKPiA+Pj4gPj4gPiAgICAgMzxzb2NrZXQ6WzExODUzNjJdPiwKPiA+Pj4gPiAK
-PiA+Pj4gPiBtc2c6Cj4gPj4+ID4+ID4gMHg3ZmNkODFkOGEwYjAgICAgICAgICAgICAgICAgICAp
-ID0gNjEyCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICA0MDAuMjM4ICg2OC40NTIgbXMpOiBhLm91
-dC11c3QvMjM3OTAgbWVtYmFycmllcihjbWQ6IDEKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiApID0g
-MAo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICAgNDY4LjY5OCAoMzkuOTgzIG1zKTogYS5vdXQtdXN0
-LzIzNzkwIG1lbWJhcnJpZXIoY21kOiAxCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gKSA9IDAKPiA+
-Pj4gPj4gPiAKPiA+Pj4gPj4gPiAgIDUxMC41NjcgKDk4LjExMyBtcyk6IGEub3V0LXVzdC8yMzc5
-MCByZWN2bXNnKGZkOiAzPHNvY2tldDpbMTE4NTM2Ml0+LAo+ID4+PiA+IAo+ID4+PiA+IG1zZzoK
-PiA+Pj4gPj4gPiAweDdmY2Q4MWQ4YTA3MCAgICAgICAgICAgICAgICAgICkgPSAxCj4gPj4+ID4+
-ID4gCj4gPj4+ID4+ID4gICAgIDYuNDY3ICg2MDMuNTAwIG1zKTogYS5vdXQvMjM3ODkgZnV0ZXgo
-dWFkZHI6IDB4N2ZjZDgyZjI5OGEwLCBvcDoKPiA+Pj4gPj4gPiBXQUlUX0JJVFNFVHxQUklWfENM
-S1JULCB1dGltZTogMHg3ZmZmNGRmNmM5NzAsIHZhbDM6IDQyOTQ5NjcyOTUpID0gMAo+ID4+PiA+
-PiA+IAo+ID4+PiA+PiA+ICAgNjEwLjAyMCAoIDYuMzA3IG1zKTogYS5vdXQvMjM3ODkgZnV0ZXgo
-dWFkZHI6IDB4N2ZjZDgyZjI5OTYwLCBvcDoKPiA+Pj4gPj4gPiAgIFdBSVR8Cj4gPj4+ID4+ID4g
-Cj4gPj4+ID4+ID4gUFJJViwgdmFsOiAyICAgICAgICAgICAgICAgICAgICApID0gMAo+ID4+PiA+
-PiA+IAo+ID4+PiA+PiA+ICAgNjE2LjQ0NiAoNjIuMjY1IG1zKTogYS5vdXQvMjM3ODkgbWVtYmFy
-cmllcihjbWQ6IDEKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiApID0gMAo+ID4+PiA+PiA+IAo+ID4+
-PiA+PiA+ICAgNjc4LjcyMSAoNTkuOTE2IG1zKTogYS5vdXQvMjM3ODkgbWVtYmFycmllcihjbWQ6
-IDEKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiApID0gMAo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICAg
-NjE2LjMzMiAoMTIyLjMzNSBtcyk6IGEub3V0LXVzdC8yMzc5MCBmdXRleCh1YWRkcjogMHg3ZmNk
-ODJmMjk5NjAsCj4gPj4gb3A6Cj4gPj4+ID4+ID4gV0FJVHxQUklWLCB2YWw6IDIgICAgICAgICAg
-ICAgICAgICAgICkgPSAwCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICA3MzguOTc2ICg0OS42NTgg
-bXMpOiBhLm91dC8yMzc4OSBtZW1iYXJyaWVyKGNtZDogMQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+
-ICkgPSAwCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICA3ODguNjQyICg0OS45ODcgbXMpOiBhLm91
-dC8yMzc4OSBtZW1iYXJyaWVyKGNtZDogMQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICkgPSAwCj4g
-Pj4+ID4+ID4gCj4gPj4+ID4+ID4gICA3MzkuMDE0ICg5OS42NDQgbXMpOiBhLm91dC11c3QvMjM3
-OTAgZnV0ZXgodWFkZHI6IDB4N2ZjZDgyNWJlNGMwLCBvcDoKPiA+Pj4gPj4gPiAgIFdBSVR8Cj4g
-Pj4+ID4+ID4gCj4gPj4+ID4+ID4gUFJJViwgdmFsOiAyICAgICAgICAgICAgICAgICAgICApID0g
-MAo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICAgODM4LjY1MSAoNDkuOTc3IG1zKTogYS5vdXQvMjM3
-ODkgbWVtYmFycmllcihjbWQ6IDEKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiApID0gMAo+ID4+PiA+
-PiA+IAo+ID4+PiA+PiA+ICAgODg4LjYzNiAoNjkuOTgzIG1zKTogYS5vdXQvMjM3ODkgbWVtYmFy
-cmllcihjbWQ6IDEKPiA+Pj4gPj4gPiAKPiA+Pj4gPj4gPiApID0gMAo+ID4+PiA+PiA+IAo+ID4+
-PiA+PiA+ICAgODM4LjY2MiAoMTE5Ljk3OCBtcyk6IGEub3V0LXVzdC8yMzc5MCBmdXRleCh1YWRk
-cjogMHg3ZmNkODI1YmU0YzAsCj4gPj4gb3A6Cj4gPj4+ID4+ID4gV0FJVHxQUklWLCB2YWw6IDIg
-ICAgICAgICAgICAgICAgICAgICkgPSAwCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICA5NTguNzM5
-ICg1OS44NzMgbXMpOiBhLm91dC8yMzc4OSBtZW1iYXJyaWVyKGNtZDogMQo+ID4+PiA+PiA+IAo+
-ID4+PiA+PiA+ICkgPSAwCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gIDEwMTguNjIxICg4MC4wNTgg
-bXMpOiBhLm91dC8yMzc4OSBtZW1iYXJyaWVyKGNtZDogMQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+
-ICkgPSAwCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gIDEwOTguNzgyICg0OS44NDQgbXMpOiBhLm91
-dC8yMzc4OSBtZW1iYXJyaWVyKGNtZDogMQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICkgPSAwCj4g
-Pj4+ID4+ID4gCj4gPj4+ID4+ID4gIDExNDguNjM0ICg1OS45OTggbXMpOiBhLm91dC8yMzc4OSBt
-ZW1iYXJyaWVyKGNtZDogMQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICkgPSAwCj4gPj4+ID4+ID4g
-Cj4gPj4+ID4+ID4gIDEyMDguNzMxICg2OS45NDAgbXMpOiBhLm91dC8yMzc4OSBtZW1iYXJyaWVy
-KGNtZDogMQo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICkgPSAwCj4gPj4+ID4+ID4gCj4gPj4+ID4+
-ID4gIDEyNzguNjgwICg3OS45NDcgbXMpOiBhLm91dC8yMzc4OSBtZW1iYXJyaWVyKGNtZDogMQo+
-ID4+PiA+PiA+IAo+ID4+PiA+PiA+ICkgPSAwCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gIDEzNTgu
-NzI3ICgzOS44ODEgbXMpOiBhLm91dC8yMzc4OSBtZW1iYXJyaWVyKGNtZDogMQo+ID4+PiA+PiA+
-IAo+ID4+PiA+PiA+ICkgPSAwCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gIDEzOTguNjE2ICgzOS45
-ODAgbXMpOiBhLm91dC8yMzc4OSBtZW1iYXJyaWVyKGNtZDogMQo+ID4+PiA+PiA+IAo+ID4+PiA+
-PiA+ICkgPSAwCj4gPj4+ID4+ID4gCj4gPj4+ID4+ID4gICAgIDYuNjQwICgxNDMyLjE1NyBtcyk6
-IGEub3V0LXVzdC8yMzc5MSBmdXRleCh1YWRkcjogMHg3ZmNkODJmOTAwMDAKPiA+Pj4gPj4gPiAK
-PiA+Pj4gPj4gPiApID0gLTEgKG51bGwpIElOVEVSTkFMIEVSUk9SOiBzdHJlcnJvcl9yKDUxMiwg
-MHg3ZmZkYmM1NDY3YTAsIDEyOCk9MjIKPiA+Pj4gPj4gPiB+fn5+fgo+ID4+PiA+PiA+IAo+ID4+
-PiA+PiA+IFRoaXMgbWFrZXMgbHR0bmctdXN0IHByZXR0eSBtdWNoIHVudXNhYmxlIGZvciBhbnkg
-c2hvcnQtbGl2ZWQKPiA+Pj4gPj4gPiBhcHBsaWNhdGlvbi4KPiA+Pj4gPj4gPiBJcyB0aGlzIGEg
-a25vd24gbGltaXRhdGlvbj8KPiA+Pj4gPj4gCj4gPj4+ID4+IFRoaXMga2luZCBvZiBkZWxheSBp
-cyBub3QgY29tcGxldGVseSB1bmV4cGVjdGVkLCBidXQgYSBiaXQgaGlnaGVyIHRoYW4gSQo+ID4+
-PiA+PiB3b3VsZCBleHBlY3QuIEknbSBpbnRlcmVzdGVkIGluIGZpZ3VyaW5nIG91dCBpZiBtb3N0
-IG9mIHRoaXMgZGVsYXkKPiA+Pj4gPj4gaGFwcGVucwo+ID4+PiA+PiB0byBiZSBjYXVzZWQgYnkg
-c3lzX21lbWJhcnJpZXIsIGVpdGhlciBkaXJlY3RseSwgb3IgaW5kaXJlY3RseSAodGhyb3VnaCBh
-Cj4gPj4+ID4+IGxvY2spLgo+ID4+PiA+IAo+ID4+PiA+IFNlZSBteSBvdGhlciBlbWFpbCB3aGlj
-aCBhZGRzIHNvbWUgaGFyZGVyIG51bWJlcnMgZnJvbSBhIHBlcmYgc2xlZXAKPiA+Pj4gPiByZWNv
-cmQuCj4gPj4+ID4gCj4gPj4+ID4+ID4gSSdtIHVzaW5nIGx0dG5nLXVzdCBvbiBBcmNoIGZyb20g
-dGhlIEFVUiBwYWNrYWdlcywgaS5lLiBMVFRuZyAyLjkuNC4KPiA+Pj4gPj4gPiBJJ3ZlCj4gPj4+
-ID4+ID4gc2VlbiB0aGlzIHByb2JsZW0gYWxzbyBvbiBVYnVudHUgMTcuMDQgdGhvdWdoIEkgZGlk
-bid0IGRvIGFueSBvZiB0aGUKPiA+Pj4gPj4gPiBhYm92ZSBtZWFzdXJlbWVudHMgdGhlcmUuIFNv
-IGZhciwgSSBzdXNwZWN0ZWQgdGhlIHVzdCBzdGF0ZWR1bXAgdG8gdGFrZQo+ID4+PiA+PiA+IHRv
-byBtdWNoIHRpbWUsIGJ1dCBJIGRpc2FibGVkIHRoYXQgb25lIGZvciB0aGUgbWVhc3VyZW1lbnRz
-IGFib3ZlLgo+ID4+PiA+PiA+IAo+ID4+PiA+PiA+IEFueSBoZWxwIHdvdWxkIGJlIGFwcHJlY2lh
-dGVkCj4gPj4+ID4+IAo+ID4+PiA+PiBDYW4geW91IHJlcHJvZHVjZSB3aXRoIGEgTGludXgga2Vy
-bmVsIHRoYXQgaGFzIENPTkZJR19NRU1CQVJSSUVSPW4gYW5kCj4gPj4+ID4+IHNoYXJlIHRoZSBw
-ZXJmb3JtYW5jZSByZXN1bHRzID8KPiA+Pj4gPiAKPiA+Pj4gPiBJJ2QgaGF2ZSB0byByZWNvbXBp
-bGUgdGhlIGtlcm5lbCwgd2hpY2ggaXMgc29tZXRoaW5nIEkgZG9uJ3QgbGlrZSB0byBkby4KPiA+
-Pj4gPiBXaHkgaXMgdGhpcyByZXF1aXJlZCwgb3IgcHV0IGRpZmZlcmVudGx5IC0gd2h5IHdvdWxk
-IHRoZSBrZXJuZWwgb3B0aW9uCj4gPj4+ID4gaW5mbHVlbmNlIHRoZSB1c2Vyc3BhY2UgTFRUbmcg
-bGlicmFyeT8KPiA+Pj4gCj4gPj4+IGxpYnVyY3UgMC45LnggYW5kIDAuMTAueCAoYSBkZXBlbmRl
-bmN5IG9mIGx0dG5nLXVzdCkgdXNlcyB0aGUgbWVtYmFycmllcgo+ID4+PiBzeXN0ZW0gY2FsbCB0
-byBzcGVlZCB1cCB0cmFjaW5nLCBhdCB0aGUgZXhwZW5zZSBvZiBzbG93ZXIgZXhlY3V0aW9uIG9m
-Cj4gPj4+IHRyYWNpbmcgc3RhdGUgdXBkYXRlLgo+ID4+PiAKPiA+Pj4gSSdtIGN1cnJlbnRseSBw
-cm9wb3NpbmcgYSBuZXcgc3lzX21lbWJhcnJpZXIgY29tbWFuZCBmb3IgUFJJVkFURV9FWFBFRElU
-RUQKPiA+Pj4gKHNpbmdsZS1wcm9jZXNzKSB1c2UgY2FzZXMgd2hpY2ggc2hvdWxkIGV4ZWN1dGUg
-bXVjaCBmYXN0ZXIgdGhhbiB0aGUKPiA+Pj4gbm9uLWV4cGVkaXRlZCBTSEFSRUQgY29tbWFuZCBj
-dXJyZW50bHkgaW1wbGVtZW50ZWQuCj4gPj4+IAo+ID4+PiBsaWJ1cmN1IDAuOSBhbmQgMC4xMCBk
-ZXRlY3RzIHRoYXQgdGhpcyBzeXN0ZW0gY2FsbCBpcyBhdmFpbGFibGUsIGFuZCB1c2VzCj4gPj4+
-IGl0IHdoZW4gaXQgY2FuLgo+ID4+IAo+ID4+IE1heSBJIGFzayB3aGV0aGVyIHlvdSBoYXZlIHN1
-Y2ggYSBjb25maWd1cmF0aW9uIGF2YWlsYWJsZT8gVGhlIHRlc3QgY2FzZSBJCj4gPj4gaGF2ZSBz
-dWJtaXR0ZWQgc2hvdWxkIGJlIGVhc3kgdG8gcmVwcm9kdWNlIGZvciBldmVyeW9uZS4gQ29tcGls
-aW5nIG15IG93bgo+ID4+IGtlcm5lbCB2ZXJzaW9uIHRha2VzIGEgaHVnZSBhbW91bnQgb2YgdGlt
-ZSB3aGljaCBJJ20gcXVpdGUgZnJhbmtseSBub3Qgd2lsbGluZwo+ID4+IHRvIGludmVzdCBhdCB0
-aGlzIHBvaW50Lgo+ID4gCj4gPiBXZSBoYXZlIHJlcHJvZHVjZWQgdGhlIHNpdHVhdGlvbiwgYW5k
-IGl0J3MgcG9pbnRpbmcgdG93YXJkcyBvdXIgdXNlIG9mIHRoZQo+ID4gc3lzX21lbWJhcnJpZXIg
-c3lzdGVtIGNhbGwuIFdlJ2xsIHRyeSBuYXJyb3dpbmcgaXQgZG93biBiZXR3ZWVuIGl0cyB1c2Ug
-YnkKPiA+IGx0dG5nLXVzdCAobGlidXJjdS1icC5zbykgb3IgYnkgbHR0bmctc2Vzc2lvbmQgKGxp
-YnVyY3Uuc28pLgo+ID4gCj4gPiBZb3UgY2FuIHRyeSB0byBwYXRjaCBsaWJ1cmN1IHNvIGl0IHdv
-bid0IHRyeSB1c2luZyBzeXNfbWVtYmFycmllciBhdCBhbGwKPiA+IChzZWUgYXR0YWNoZWQgcGF0
-Y2gpCj4gPiAKPiA+PiAKPiA+PiBJIHNpbXBseSB3b25kZXIgd2hldGhlciBhbnlvbmUgZWxzZSBp
-cyBhY3R1YWxseSB1c2luZyBsdHRuZy11c3QsIG9yIGlmIHRoZXkKPiA+PiBhcmUsIHdoZXRoZXIg
-dGhleSBhcmUgb25seSBkb2luZyB0aGF0IGZvciBsb25nLWxpdmVkIGFwcGxpY2F0aW9ucyB3aGVy
-ZSB0aGlzCj4gPj4gb3ZlcmhlYWQgaXMgbm90IG5vdGljZWFibGU/Cj4gPiAKPiA+IEl0IGFwcGVh
-cnMgdGhhdCB0aGlzIGFwcGxpY2F0aW9uIHN0YXJ0dXAgc2xvd2Rvd24gbWFpbmx5IGFwcGVhcnMg
-d2l0aAo+ID4gTFRUbmcgbGlua2VkIGFnYWluc3QgbGlidXJjdSAwLjkgYW5kIDAuMTAgcnVubmlu
-ZyB3aXRoIHJhdGhlciByZWNlbnQga2VybmVscy4KPiA+IFRoaXMgd291bGQgZXhwbGFpbiB3aHkg
-eW91IGFyZSB0aGUgZmlyc3Qgb25lIHRvIHJlcG9ydCB0aGlzIGFjcm9zcyBvdXIgdXNlcgo+ID4g
-YmFzZS4KPiAKPiBXZSBoYXZlIGNvbmZpcm1lZCB0aGF0IGl0J3MgdGhlIHVzZSBvZiBzeXNfbWVt
-YmFycmllciBTSEFSRUQgYnkgbGlidXJjdS1icCwKPiB1c2VkIGJ5IGx0dG5nLXVzdCwgdGhhdCBj
-YXVzZXMgdGhvc2UgZGVsYXlzLgo+IAo+IGx0dG5nLXVzdCB1c2FnZSBwYXR0ZXJuIGlzIHRvIGNh
-bGwgc3luY2hyb25pemVfcmN1KCkgZGlyZWN0bHkuIEhhdmluZwo+IG1lbWJhcnJpZXIgc3lzdGVt
-IGNhbGxzIGVhY2ggdGltZSBhZGRzIHVwIHRvIHNpZ25pZmljYW50IGRlbGF5cywgYmVjYXVzZQo+
-IG1lbWJhcnJpZXIgU0hBUkVEIGJsb2NrcyB1bnRpbCBhIHNjaGVkdWxlciBzd2l0Y2ggaGFwcGVu
-cyBvbiBlYWNoIGNvcmUuCj4gV2UgYXJlIGludm9raW5nIHN5bmNocm9uaXplX3JjdSgpIGRpcmVj
-dGx5IHJhdGhlciB0aGFuIHVzaW5nIHRoZSBjYWxsX3JjdQo+IGJhdGNoaW5nIGZhY2lsaXRpZXMg
-YmVjYXVzZSB3ZSB3YW50IHRvIG1pbmltaXplIHRoZSBudW1iZXIgb2YgdGhyZWFkcyB3ZQo+IGhh
-dmUgdG8gaW5zZXJ0IGludG8gdGhlIGFwcGxpY2F0aW9uLgo+IAo+IEknbSBjdXJyZW50bHkgcHJv
-cG9zaW5nIGEgUFJJVkFURV9FWFBFRElURUQgY29tbWFuZCBmb3IgdGhlIG1lbWJhcnJpZXIKPiBz
-eXN0ZW0gY2FsbCBpbiBMaW51eC4gSXQgd2lsbCBhY3RpdmVseSBzZW5kIElQSXMgcmF0aGVyIHRo
-YW4gYmxvY2tpbmcuCj4gCj4gSSdtIGdvaW5nIHRvIHB1c2ggYSAiRml4IiBpbiBsaWJ1cmN1IG1h
-c3RlciwgMC4xMCwgMC45IHRoYXQgd2lsbCBtYWtlIGl0Cj4gc3RvcCB1c2luZyBzeXNfbWVtYmFy
-cmllciBpbiBsaWJ1cmN1LWJwLiBUaGVuLCBhZnRlciB0aGUgbmV3IFBSSVZBVEVfRVhQRURJVEVE
-Cj4gY29tbWFuZCBtYWtlcyBpdCB3YXkgaW50byB0aGUgdXBzdHJlYW0gTGludXgga2VybmVsLCBh
-IGZ1dHVyZSBsaWJ1cmN1Cj4gKDAuMTEgb3IgKykgd2lsbCBpbnRyb2R1Y2UgdXNhZ2Ugb2YgdGhh
-dCBuZXcgY29tbWFuZCwgZ2l2ZW4gdGhhdCBpdCBoYXMKPiBhIG11Y2gsIG11Y2ggc21hbGxlciBp
-bXBhY3QgY29tcGFyZWQgdG8gdGhlIFNIQVJFRCBjb21tYW5kLgo+IAo+IFRoZSByZWFzb24gd2h5
-IHdlIHdhbnQgc3lzX21lbWJhcnJpZXIgdGhlcmUgaXMgdG8gc3BlZWQgdXAgdHJhY2luZy4gV2hl
-bgo+IGNhbiB0cmFkZSBtZW1vcnkgYmFycmllcnMgZm9yIHNpbXBsZSBjb21waWxlciBiYXJyaWVy
-cyBvbiB0aGUgdHJhY2luZwo+IGZhc3QtcGF0aCBieSB1c2luZyBzeXNfbWVtYmFycmllciBvbiB0
-aGUgdXBkYXRlIHNpZGUuCj4gCj4gVGhhbmtzIGZvciByZXBvcnRpbmcgeW91ciBmaW5kaW5nIQo+
-IAo+IE1hdGhpZXUKPiAKPiAKPiA+IAo+ID4gVGhhbmtzLAo+ID4gCj4gPiBNYXRoaWV1Cj4gPiAK
-PiA+IAo+ID4+IAo+ID4+IFRoYW5rcwo+ID4+IAo+ID4+IC0tCj4gPj4gTWlsaWFuIFdvbGZmIHwg
-bWlsaWFuLndvbGZmQGtkYWIuY29tIHwgU2VuaW9yIFNvZnR3YXJlIEVuZ2luZWVyCj4gPj4gS0RB
-QiAoRGV1dHNjaGxhbmQpIEdtYkgmQ28gS0csIGEgS0RBQiBHcm91cCBjb21wYW55Cj4gPj4gVGVs
-OiArNDktMzAtNTIxMzI1NDcwCj4gPj4gS0RBQiAtIFRoZSBRdCBFeHBlcnRzCj4gPiAKPiA+IC0t
-Cj4gPiBNYXRoaWV1IERlc25veWVycwo+ID4gRWZmaWNpT1MgSW5jLgo+ID4gaHR0cHM6Ly91cmxk
-ZWZlbnNlLnByb29mcG9pbnQuY29tL3YyL3VybD91PWh0dHAtM0FfX3d3dy5lZmZpY2lvcy5jb20m
-ZD1Ed0lGYVEmYz1qZl9pYVNIdkpPYlRieC1zaUExWk9nJnI9dXg0MUNXM0I1QlNWeERNUk5SV3lM
-YlVtUGViWmM3MEtxNEFrZmRpUkdNSSZtPTNWeThTVnYxVjdXNTJwMmF2azczNjJOdTd6WTdJcktV
-Uk5yUHZLV0p5ZGsmcz1nSl94RDlYTFZlRTJSSkhxOU1tb1daUkpJazVJVWFiV0djRzBWZGlNN1U0
-JmU9IAo+IAo+IC0tIAo+IE1hdGhpZXUgRGVzbm95ZXJzCj4gRWZmaWNpT1MgSW5jLgo+IGh0dHBz
-Oi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw/dT1odHRwLTNBX193d3cuZWZmaWNp
-b3MuY29tJmQ9RHdJRmFRJmM9amZfaWFTSHZKT2JUYngtc2lBMVpPZyZyPXV4NDFDVzNCNUJTVnhE
-TVJOUld5TGJVbVBlYlpjNzBLcTRBa2ZkaVJHTUkmbT0zVnk4U1Z2MVY3VzUycDJhdms3MzYyTnU3
-elk3SXJLVVJOclB2S1dKeWRrJnM9Z0pfeEQ5WExWZUUyUkpIcTlNbW9XWlJKSWs1SVVhYldHY0cw
-VmRpTTdVNCZlPSAKPiAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
-dHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
-Cg==
+--===============6735125071035004926==
+Content-Type: multipart/signed; boundary="nextPart3032029.J450EsyL5D"; micalg="sha256"; protocol="application/pkcs7-signature"
+
+--nextPart3032029.J450EsyL5D
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+
+On Wednesday, September 6, 2017 9:57:11 PM CEST Mathieu Desnoyers wrote:
+> ----- On Sep 6, 2017, at 3:35 AM, Milian Wolff milian.wolff@kdab.com wrot=
+e:
+> > On Dienstag, 5. September 2017 20:11:58 CEST Mathieu Desnoyers wrote:
+> >> ----- On Sep 5, 2017, at 11:08 AM, Milian Wolff milian.wolff@kdab.com=
+=20
+wrote:
+> >> > On Tuesday, September 5, 2017 4:51:42 PM CEST Mathieu Desnoyers wrot=
+e:
+> >> >> ----- On Sep 5, 2017, at 10:34 AM, Milian Wolff milian.wolff@kdab.c=
+om
+> >=20
+> > wrote:
+> >> >> > Hey all,
+> >> >> >=20
+> >> >> > I have noticed a very large overhead when linking against
+> >> >> > liblttng-ust:
+> >> >> >=20
+> >> >> > ~~~~~
+> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
+> >> >> > =E2=94=94$ cat lttng-test.c
+> >> >> > int main()
+> >> >> > {
+> >> >> >=20
+> >> >> >  return 0;
+> >> >> >=20
+> >> >> > }
+> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
+> >> >> > =E2=94=94$ gcc -O2 -g -ldl lttng-test.c
+> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
+> >> >> > =E2=94=94$ perf stat -r 5 ./a.out
+> >> >> >=20
+> >> >> > Performance counter stats for './a.out' (5 runs):
+> >> >> >          0.209587      task-clock (msec)         #    0.596 CPUs
+> >> >> >          utilized
+> >> >> >=20
+> >> >> > ( +-  8.76% )
+> >> >> >=20
+> >> >> >                 0      context-switches          #    0.000 K/sec
+> >> >> >                 0      cpu-migrations            #    0.000 K/sec
+> >> >> >               =20
+> >> >> >                49      page-faults               #    0.235 M/sec
+> >> >> >=20
+> >> >> > ( +-  1.19% )
+> >> >> >=20
+> >> >> >           706,854      cycles                    #    3.373 GHz
+> >> >> >=20
+> >> >> > ( +-  8.82% )
+> >> >> >=20
+> >> >> >           773,603      instructions              #    1.09  insn =
+per
+> >> >> >           cycle
+> >> >> >=20
+> >> >> > ( +-  0.75% )
+> >> >> >=20
+> >> >> >           147,128      branches                  #  701.987 M/sec
+> >> >> >=20
+> >> >> > ( +-  0.70% )
+> >> >> >=20
+> >> >> >             4,096      branch-misses             #    2.78% of all
+> >> >> >             branches
+> >> >> >=20
+> >> >> > ( +-  5.27% )
+> >> >> >=20
+> >> >> >       0.000351422 seconds time elapsed
+> >> >> >=20
+> >> >> > ( +- 11.85% )
+> >> >> >=20
+> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
+> >> >> > =E2=94=94$ gcc -O2 -g -ldl -llttng-ust lttng-test.c
+> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
+> >> >> > =E2=94=94$ perf stat -r 5 ./a.out
+> >> >> >=20
+> >> >> > Performance counter stats for './a.out' (5 runs):
+> >> >> >          2.063040      task-clock (msec)         #    0.009 CPUs
+> >> >> >          utilized
+> >> >> >=20
+> >> >> > ( +-  1.37% )
+> >> >> >=20
+> >> >> >                44      context-switches          #    0.021 M/sec
+> >> >> >=20
+> >> >> > ( +-  1.95% )
+> >> >> >=20
+> >> >> >                 2      cpu-migrations            #    0.776 K/sec
+> >> >> >=20
+> >> >> > ( +- 25.00% )
+> >> >> >=20
+> >> >> >               209      page-faults               #    0.101 M/sec
+> >> >> >=20
+> >> >> > ( +-  0.34% )
+> >> >> >=20
+> >> >> >         7,053,686      cycles                    #    3.419 GHz
+> >> >> >=20
+> >> >> > ( +-  2.03% )
+> >> >> >=20
+> >> >> >         6,893,783      instructions              #    0.98  insn =
+per
+> >> >> >         cycle
+> >> >> >=20
+> >> >> > ( +-  0.25% )
+> >> >> >=20
+> >> >> >         1,342,492      branches                  #  650.735 M/sec
+> >> >> >=20
+> >> >> > ( +-  0.20% )
+> >> >> >=20
+> >> >> >            29,390      branch-misses             #    2.19% of all
+> >> >> >            branches
+> >> >> >=20
+> >> >> > ( +-  0.61% )
+> >> >> >=20
+> >> >> >       0.225597302 seconds time elapsed
+> >> >> >=20
+> >> >> > ( +-  6.68% )
+> >> >> > ~~~~~
+> >> >> >=20
+> >> >> > This is without any LTTng session configured. If I enable LTTng
+> >> >> > kernel
+> >> >> > and
+> >> >> > userspace events, this becomes even worse:
+> >> >> >=20
+> >> >> > ~~~~~
+> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
+> >> >> > =E2=94=94$ cat $(which run_lttng_trace.sh)
+> >> >> > #!/bin/sh
+> >> >> >=20
+> >> >> > if [ -z "$(pidof lttng-sessiond)" ]; then
+> >> >> >=20
+> >> >> >    sudo lttng-sessiond --daemonize
+> >> >> >=20
+> >> >> > fi
+> >> >> >=20
+> >> >> > sudo lttng create -o ~/lttng-traces/$(date -Iseconds)
+> >> >> > sudo lttng enable-channel kernel -k --subbuf-size 16M --num-subbu=
+f 8
+> >> >> > sudo lttng enable-event -c kernel -k -a
+> >> >> > sudo lttng enable-channel ust -u --subbuf-size 16M --num-subbuf 8
+> >> >> > sudo lttng enable-event -c ust -u lttng_ust_tracef:*
+> >> >> > sudo lttng start
+> >> >> > $@
+> >> >> > sudo lttng stop
+> >> >> >=20
+> >> >> > sudo chmod a+rx -R ~/lttng-traces
+> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
+> >> >> > =E2=94=94$ run_lttng_trace.sh perf stat -r 5 ./a.out
+> >> >> > Session auto-20170905-162818 created.
+> >> >> > Traces will be written in
+> >> >> > /home/milian/lttng-traces/2017-09-05T16:28:18+02:00 Kernel channel
+> >> >> > kernel
+> >> >> > enabled for session auto-20170905-162818
+> >> >> > All Kernel events are enabled in channel kernel
+> >> >> > UST channel ust enabled for session auto-20170905-162818
+> >> >> > UST event lttng_ust_tracef:* created in channel ust
+> >> >> > Tracing started for session auto-20170905-162818
+> >> >> >=20
+> >> >> > Performance counter stats for './a.out' (5 runs):
+> >> >> >          4.937820      task-clock (msec)         #    0.005 CPUs
+> >> >> >          utilized
+> >> >> >=20
+> >> >> > ( +-  1.28% )
+> >> >> >=20
+> >> >> >               117      context-switches          #    0.024 M/sec
+> >> >> >=20
+> >> >> > ( +-  0.70% )
+> >> >> >=20
+> >> >> >                 3      cpu-migrations            #    0.608 K/sec
+> >> >> >=20
+> >> >> > ( +- 23.57% )
+> >> >> >=20
+> >> >> >               245      page-faults               #    0.050 M/sec
+> >> >> >=20
+> >> >> > ( +-  0.20% )
+> >> >> >=20
+> >> >> >        16,541,355      cycles                    #    3.350 GHz
+> >> >> >=20
+> >> >> > ( +-  0.94% )
+> >> >> >=20
+> >> >> >        20,611,637      instructions              #    1.25  insn =
+per
+> >> >> >        cycle
+> >> >> >=20
+> >> >> > ( +-  0.23% )
+> >> >> >=20
+> >> >> >         3,580,525      branches                  #  725.123 M/sec
+> >> >> >=20
+> >> >> > ( +-  0.19% )
+> >> >> >=20
+> >> >> >            52,093      branch-misses             #    1.45% of all
+> >> >> >            branches
+> >> >> >=20
+> >> >> > ( +-  1.73% )
+> >> >> >=20
+> >> >> >       0.965545882 seconds time elapsed
+> >> >> >=20
+> >> >> > ( +- 16.96% )
+> >> >> >=20
+> >> >> > Waiting for data availability...
+> >> >> > Tracing stopped for session auto-20170905-162818
+> >> >> > ~~~~~
+> >> >> >=20
+> >> >> > I see this ~1s delay during startup in nearly all test applicatio=
+ns
+> >> >> > where
+> >> >> > I
+> >> >> > wanted to use lttng-ust. In tracecompass, and according to perf
+> >> >> > sleep
+> >> >> > time
+> >> >> > profiling, this seems to be mostly due to extensive sleeping on
+> >> >> > mutex
+> >> >> > locks
+> >> >> > (from ust_lock in liblttng-ust). With perf trace, I also see
+> >> >> > membarrier
+> >> >> > taking a lot of time:
+> >> >> >=20
+> >> >> > ~~~~~
+> >> >> > # without a running lttng session:
+> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
+> >> >> > =E2=94=94$ perf trace --duration 1 ./a.out
+> >> >> >=20
+> >> >> >     6.492 (52.468 ms): a.out/23672 recvmsg(fd: 3<socket:[1178439]=
+>,
+> >=20
+> > msg:
+> >> >> > 0x7fbe2fbb1070                  ) =3D 1
+> >> >> >=20
+> >> >> >     5.077 (54.271 ms): a.out/23671 futex(uaddr: 0x7fbe30d508a0, o=
+p:
+> >> >> > WAIT_BITSET|PRIV|CLKRT, utime: 0x7ffc474ff5a0, val3: 4294967295) =
+=3D 0
+> >> >> >=20
+> >> >> >    59.598 (79.379 ms): a.out/23671 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   138.984 (39.945 ms): a.out/23671 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >    59.621 (119.324 ms): a.out/23672 futex(uaddr: 0x7fbe303e54c0, =
+op:
+> >> >> >    WAIT|
+> >> >> >=20
+> >> >> > PRIV, val: 2                    ) =3D 0
+> >> >> >=20
+> >> >> >   179.045 (79.918 ms): a.out/23671 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   258.971 (39.997 ms): a.out/23671 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   299.052 (79.883 ms): a.out/23671 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   378.942 (59.988 ms): a.out/23671 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   439.022 (69.908 ms): a.out/23671 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   508.937 (80.027 ms): a.out/23671 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> > # with a running lttng session:
+> >> >> > =E2=94=8Cmilian@milian-kdab2:/tmp
+> >> >> > =E2=94=94$ run_lttng_trace.sh perf trace --duration 1 ./a.out
+> >> >> >=20
+> >> >> >     6.666 (392.496 ms): a.out-ust/23790 recvmsg(fd:
+> >> >> >     3<socket:[1185362]>,
+> >> >=20
+> >> > msg:
+> >> >> > 0x7fcd81d8a0b0                  ) =3D 612
+> >> >> >=20
+> >> >> >   400.238 (68.452 ms): a.out-ust/23790 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   468.698 (39.983 ms): a.out-ust/23790 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   510.567 (98.113 ms): a.out-ust/23790 recvmsg(fd:
+> >> >> >   3<socket:[1185362]>,
+> >> >=20
+> >> > msg:
+> >> >> > 0x7fcd81d8a070                  ) =3D 1
+> >> >> >=20
+> >> >> >     6.467 (603.500 ms): a.out/23789 futex(uaddr: 0x7fcd82f298a0, =
+op:
+> >> >> > WAIT_BITSET|PRIV|CLKRT, utime: 0x7fff4df6c970, val3: 4294967295) =
+=3D 0
+> >> >> >=20
+> >> >> >   610.020 ( 6.307 ms): a.out/23789 futex(uaddr: 0x7fcd82f29960, o=
+p:
+> >> >> >   WAIT|
+> >> >> >=20
+> >> >> > PRIV, val: 2                    ) =3D 0
+> >> >> >=20
+> >> >> >   616.446 (62.265 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   678.721 (59.916 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   616.332 (122.335 ms): a.out-ust/23790 futex(uaddr: 0x7fcd82f299=
+60,
+> >=20
+> > op:
+> >> >> > WAIT|PRIV, val: 2                    ) =3D 0
+> >> >> >=20
+> >> >> >   738.976 (49.658 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   788.642 (49.987 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   739.014 (99.644 ms): a.out-ust/23790 futex(uaddr: 0x7fcd825be4c=
+0,
+> >> >> >   op:
+> >> >> >   WAIT|
+> >> >> >=20
+> >> >> > PRIV, val: 2                    ) =3D 0
+> >> >> >=20
+> >> >> >   838.651 (49.977 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   888.636 (69.983 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >   838.662 (119.978 ms): a.out-ust/23790 futex(uaddr: 0x7fcd825be4=
+c0,
+> >=20
+> > op:
+> >> >> > WAIT|PRIV, val: 2                    ) =3D 0
+> >> >> >=20
+> >> >> >   958.739 (59.873 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >  1018.621 (80.058 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >  1098.782 (49.844 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >  1148.634 (59.998 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >  1208.731 (69.940 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >  1278.680 (79.947 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >  1358.727 (39.881 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >  1398.616 (39.980 ms): a.out/23789 membarrier(cmd: 1
+> >> >> >=20
+> >> >> > ) =3D 0
+> >> >> >=20
+> >> >> >     6.640 (1432.157 ms): a.out-ust/23791 futex(uaddr: 0x7fcd82f90=
+000
+> >> >> >=20
+> >> >> > ) =3D -1 (null) INTERNAL ERROR: strerror_r(512, 0x7ffdbc5467a0,
+> >> >> > 128)=3D22
+> >> >> > ~~~~~
+> >> >> >=20
+> >> >> > This makes lttng-ust pretty much unusable for any short-lived
+> >> >> > application.
+> >> >> > Is this a known limitation?
+> >> >>=20
+> >> >> This kind of delay is not completely unexpected, but a bit higher t=
+han
+> >> >> I
+> >> >> would expect. I'm interested in figuring out if most of this delay
+> >> >> happens
+> >> >> to be caused by sys_membarrier, either directly, or indirectly
+> >> >> (through a
+> >> >> lock).
+> >> >=20
+> >> > See my other email which adds some harder numbers from a perf sleep
+> >> > record.
+> >> >=20
+> >> >> > I'm using lttng-ust on Arch from the AUR packages, i.e. LTTng 2.9=
+=2E4.
+> >> >> > I've
+> >> >> > seen this problem also on Ubuntu 17.04 though I didn't do any of =
+the
+> >> >> > above measurements there. So far, I suspected the ust statedump to
+> >> >> > take
+> >> >> > too much time, but I disabled that one for the measurements above.
+> >> >> >=20
+> >> >> > Any help would be appreciated
+> >> >>=20
+> >> >> Can you reproduce with a Linux kernel that has CONFIG_MEMBARRIER=3D=
+n and
+> >> >> share the performance results ?
+> >> >=20
+> >> > I'd have to recompile the kernel, which is something I don't like to
+> >> > do.
+> >> > Why is this required, or put differently - why would the kernel opti=
+on
+> >> > influence the userspace LTTng library?
+> >>=20
+> >> liburcu 0.9.x and 0.10.x (a dependency of lttng-ust) uses the membarri=
+er
+> >> system call to speed up tracing, at the expense of slower execution of
+> >> tracing state update.
+> >>=20
+> >> I'm currently proposing a new sys_membarrier command for
+> >> PRIVATE_EXPEDITED
+> >> (single-process) use cases which should execute much faster than the
+> >> non-expedited SHARED command currently implemented.
+> >>=20
+> >> liburcu 0.9 and 0.10 detects that this system call is available, and u=
+ses
+> >> it when it can.
+> >=20
+> > May I ask whether you have such a configuration available? The test cas=
+e I
+> > have submitted should be easy to reproduce for everyone. Compiling my o=
+wn
+> > kernel version takes a huge amount of time which I'm quite frankly not
+> > willing to invest at this point.
+>=20
+> We have reproduced the situation, and it's pointing towards our use of the
+> sys_membarrier system call. We'll try narrowing it down between its use by
+> lttng-ust (liburcu-bp.so) or by lttng-sessiond (liburcu.so).
+>=20
+> You can try to patch liburcu so it won't try using sys_membarrier at all
+> (see attached patch)
+
+It does improve the situation tremendously. I just compiled v0.10.0-6-g6447=
+802=20
+with and without the patch to record the numbers below. Note that apparentl=
+y=20
+your latest patch [1] in git master alone is not enough to fix the performa=
+nce=20
+bug, I do need to apply the patch you send by mail, too.
+
+[1]: https://github.com/urcu/userspace-rcu/commit/
+64478021edcf7a5ac3bca3fa9e8b8108d2fbb9b6
+
+But once I also apply the patch you send by mail, things start to fly. In t=
+he=20
+below, "before" means running against userspace-rcu v0.10.0-6-g6447802,=20
+"after" means running against the same version with your emailed patch appl=
+ied=20
+on top.
+
+Measurement without an active LTTng session:
+
+~~~~~
+# before:
+=E2=94=8Cmilian@milian-kdab2:/tmp
+=E2=94=94$ perf stat -r 5 ./a.out
+
+ Performance counter stats for './a.out' (5 runs):
+
+          3.973288      task-clock (msec)         #    0.005 CPUs utilized =
+          =20
+( +-  0.39% )
+               153      context-switches          #    0.039 M/sec         =
+          =20
+( +-  1.43% )
+                 2      cpu-migrations            #    0.554 K/sec         =
+          =20
+( +- 26.50% )
+               315      page-faults               #    0.079 M/sec         =
+          =20
+( +-  0.21% )
+        13,257,360      cycles                    #    3.337 GHz           =
+          =20
+( +-  0.34% )
+        14,906,461      instructions              #    1.12  insn per cycle=
+          =20
+( +-  0.11% )
+         2,910,368      branches                  #  732.483 M/sec         =
+          =20
+( +-  0.10% )
+            42,766      branch-misses             #    1.47% of all branche=
+s         =20
+( +-  0.89% )
+
+       0.851654352 seconds time elapsed                                    =
+     =20
+( +-  4.33% )
+
+# after:
+=E2=94=8Cmilian@milian-kdab2:/tmp
+=E2=94=94$ perf stat -r 5 ./a.out
+
+ Performance counter stats for './a.out' (5 runs):
+
+          3.608242      task-clock (msec)         #    0.056 CPUs utilized =
+          =20
+( +-  1.84% )
+               138      context-switches          #    0.038 M/sec         =
+          =20
+( +-  2.70% )
+                 1      cpu-migrations            #    0.277 K/sec         =
+        =20
+               313      page-faults               #    0.087 M/sec         =
+          =20
+( +-  0.27% )
+        12,022,499      cycles                    #    3.332 GHz           =
+          =20
+( +-  1.73% )
+        14,861,318      instructions              #    1.24  insn per cycle=
+          =20
+( +-  0.32% )
+         2,902,920      branches                  #  804.525 M/sec         =
+          =20
+( +-  0.32% )
+            38,264      branch-misses             #    1.32% of all branche=
+s         =20
+( +-  0.78% )
+
+       0.063929538 seconds time elapsed                                    =
+     =20
+( +- 10.93% )
+~~~~~
+
+With an active LTTng session:
+
+~~~~~
+# before:
+ Performance counter stats for './a.out' (5 runs):
+
+          9.152925      task-clock (msec)         #    0.005 CPUs utilized =
+          =20
+( +-  1.13% )
+               216      context-switches          #    0.024 M/sec         =
+          =20
+( +-  2.83% )
+                 4      cpu-migrations            #    0.459 K/sec         =
+          =20
+( +- 11.66% )
+               370      page-faults               #    0.040 M/sec         =
+          =20
+( +-  0.20% )
+        31,311,283      cycles                    #    3.421 GHz           =
+          =20
+( +-  0.69% )
+        40,509,922      instructions              #    1.29  insn per cycle=
+          =20
+( +-  0.40% )
+         7,192,651      branches                  #  785.831 M/sec         =
+          =20
+( +-  0.33% )
+            90,264      branch-misses             #    1.25% of all branche=
+s         =20
+( +-  1.46% )
+
+       1.839545247 seconds time elapsed                                    =
+     =20
+( +-  6.95% )
+
+# after:
+ Performance counter stats for './a.out' (5 runs):
+
+          7.052094      task-clock (msec)         #    0.026 CPUs utilized =
+          =20
+( +-  1.45% )
+               190      context-switches          #    0.027 M/sec         =
+          =20
+( +-  4.88% )
+                 1      cpu-migrations            #    0.142 K/sec         =
+          =20
+( +- 44.72% )
+               335      page-faults               #    0.048 M/sec         =
+          =20
+( +-  0.37% )
+        24,105,408      cycles                    #    3.418 GHz           =
+          =20
+( +-  1.39% )
+        35,100,950      instructions              #    1.46  insn per cycle=
+          =20
+( +-  0.17% )
+         6,197,972      branches                  #  878.884 M/sec         =
+          =20
+( +-  0.15% )
+            56,045      branch-misses             #    0.90% of all branche=
+s         =20
+( +-  1.41% )
+
+       0.272121270 seconds time elapsed                                    =
+     =20
+( +- 52.41% )
+~~~~~
+
+> > I simply wonder whether anyone else is actually using lttng-ust, or if
+> > they
+> > are, whether they are only doing that for long-lived applications where
+> > this overhead is not noticeable?
+>=20
+> It appears that this application startup slowdown mainly appears with
+> LTTng linked against liburcu 0.9 and 0.10 running with rather recent
+> kernels. This would explain why you are the first one to report this acro=
+ss
+> our user base.
+
+Thank you, that explains it.
+
+=2D-=20
+Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
+KDAB (Deutschland) GmbH&Co KG, a KDAB Group company
+Tel: +49-30-521325470
+KDAB - The Qt Experts
+--nextPart3032029.J450EsyL5D
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCDEIw
+ggXmMIIDzqADAgECAhBqm+E4O/8ra58B1dm4p1JWMA0GCSqGSIb3DQEBDAUAMIGFMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYD
+VQQKExFDT01PRE8gQ0EgTGltaXRlZDErMCkGA1UEAxMiQ09NT0RPIFJTQSBDZXJ0aWZpY2F0aW9u
+IEF1dGhvcml0eTAeFw0xMzAxMTAwMDAwMDBaFw0yODAxMDkyMzU5NTlaMIGXMQswCQYDVQQGEwJH
+QjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYDVQQK
+ExFDT01PRE8gQ0EgTGltaXRlZDE9MDsGA1UEAxM0Q09NT0RPIFJTQSBDbGllbnQgQXV0aGVudGlj
+YXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+AL6znlesKHZ1QBbHOAOY08YYdiFQ8yV5C0y1oNF9Olg+nKcxLqf2NHbZhGra0D00SOTq9bus3/mx
+gUsg/Wh/eXQ0pnp8tZ8XZWAnlyKMpjL+qUByRjXCA6RQyDMqVaVUkbIr5SU0RDX/kSsKwer3H1pT
+/HUrBN0X8sKtPTdGX8XAWt/VdMLBrZBlgvnkCos+KQWWCo63OTTqRvaq8aWccm+KOMjTcE6s2mj6
+RkalweyDI7X+7U5lNo6jzC8RTXtVV4/Vwdax720YpMPJQaDaElmOupyTf1Qib+cpukNJnQmwygjD
+8m046DQkLnpXNCAGjuJy1F5NATksUsbfJAr7FLUCAwEAAaOCATwwggE4MB8GA1UdIwQYMBaAFLuv
+fgI9+qbxPISOre44mOzZMjLUMB0GA1UdDgQWBBSCr2yM+MX+lmF86B89K3FIXsSLwDAOBgNVHQ8B
+Af8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIBADARBgNVHSAECjAIMAYGBFUdIAAwTAYDVR0fBEUw
+QzBBoD+gPYY7aHR0cDovL2NybC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2VydGlmaWNhdGlvbkF1
+dGhvcml0eS5jcmwwcQYIKwYBBQUHAQEEZTBjMDsGCCsGAQUFBzAChi9odHRwOi8vY3J0LmNvbW9k
+b2NhLmNvbS9DT01PRE9SU0FBZGRUcnVzdENBLmNydDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3Au
+Y29tb2RvY2EuY29tMA0GCSqGSIb3DQEBDAUAA4ICAQB4XLKBKDRPPO5fVs6fl1bsj6JrF/bz9kkI
+BtTYLzXN30D+03Hj6OxCDBEaIeNmsBhrJmuubvyE7HtoSmR809AgcYboW+rcTNZ/8u/Hv+GTrNI/
+AhqX2/kiQNxmgUPt/eJPs92Qclj0HnVyy9TnSvGkSDU7I5Px+TbO+88G4zipA2psZaWeEykgzClZ
+lPz1FjTCkk77ZXp5cQYYexE6zeeN4/0OqqoAloFrjAF4o50YJafX8mnahjp3I2Y2mkjhk0xQfhNq
+bzlLWPoT3m7j7U26u7zg6swjOq8hITYc3/np5tM5aVyu6t99p17bTbY7+1RTWBviN9YJzK8HxzOb
+XYWBf/L+VGOYNsQDTxAk0Hbvb1j6KjUhg7fO294F29QIhhmiNOr84JHoy+fNLpfvYc/Q9EtFOI5I
+SYgOxLk3nD/whbUe9rmEQXLp8MB933Ij474gwwCPUpwv9mj2PMnXoc7mbrS22XUSeTwxCTP9bcmU
+dp4jmIoWfhQm7X9w/Zgddg+JZ/YnIHOwsGsaTUgj7fIvxqith7DoJC91WJ8Lce3CVJqb1XWeKIJ8
+4F7YLXZN0oa7TktYgDdmQVxYkZo1c5noaDKH9Oq9cbm/vOYRUM1cWcef20Wkyk5S/GFyyPJwG0fR
+1nRas3DqAf4cXxMiEKcff7PNa4M3RGTqH0pWR8p6EjCCBlQwggU8oAMCAQICEAf6KCF9+1doL2oE
+OTPysLwwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNVBAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1h
+bmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0w
+OwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWls
+IENBMB4XDTE3MDUyMzAwMDAwMFoXDTIwMDUyMjIzNTk1OVowggFZMQswCQYDVQQGEwJTRTEPMA0G
+A1UEERMGNjgzIDMxMRIwEAYDVQQIEwlWYWVybWxhbmQxEDAOBgNVBAcTB0hhZ2ZvcnMxGDAWBgNV
+BAkTD05vcnJpbmdzIHZhZWcgMjEPMA0GA1UEEhMGQm94IDMwMSYwJAYDVQQKDB1LbGFyw6RsdmRh
+bGVucyBEYXRha29uc3VsdCBBQjEdMBsGA1UECxMUQSBLREFCIEdyb3VwIENvbXBhbnkxQzBBBgNV
+BAsMOklzc3VlZCB0aHJvdWdoIEtsYXLDpGx2ZGFsZW5zIERhdGFrb25zdWx0IEFCIEUtUEtJIE1h
+bmFnZXIxHzAdBgNVBAsTFkNvcnBvcmF0ZSBTZWN1cmUgRW1haWwxFTATBgNVBAMTDE1pbGlhbiBX
+b2xmZjEkMCIGCSqGSIb3DQEJARYVbWlsaWFuLndvbGZmQGtkYWIuY29tMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAxrzfNBVvRbiAknuTBXuQnNm9sLIFLo0vbPB6kswk78A3tA++Zn5c
+lQUHhGlQq1cdYxagnUpqwvG3Sod15mPSOLkAPf/mabLN7p+lFbRaUP+97ZkTZtvb4BCC3osIEFI4
+G393OSFWqc2qmIPE/SwSASbAA20Fcaa2M6P1lhOk/ttUh2jIurTPF0wUycIA7lBddrOgaOA8e2m6
+iLTNHtlrfRbBaUX91D5ebY+UWmIjXSQ9+CtutMzBkwnF0rZKririvOkklg9VzEGNQVHrQfDF2s/U
+pOtmtuVSwElauGT/KALyCFuIrYC1pmaKH8S1xODJqiRaf6jH8E+KQzKjyM/ErwIDAQABo4IB1TCC
+AdEwHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFN+m99RtIuA1bSdw
+6b1brOX7X3AJMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAgBgNVHREEGTAXgRVtaWxpYW4ud29s
+ZmZAa2RhYi5jb20wDQYJKoZIhvcNAQELBQADggEBABf47LSJADqH+ow9INv3QM1NC/qq2bjxGvsZ
+68iD11VEUAFlsYfsVTgQqUirwPVTYenXtwVBELHZyywsui1JxL7HKQetLQegDDP/RyfjReVaWxhy
+3OpuItsgLVbru9QVgPifnoBFPtfZcwjeJDmeSbLT8oj4Rd0KYBOIve7WKvsfNPsNwfbLwY2zILkE
+LjxZcVi2AwZHDyab+dzL/3YcLuJj1lSawBGn7ilpcdZydlv4aye51pD/MemLIYLcylt+ImrmjnTV
+y+QlAHRF3s5FE8yAr+W1MBD/1bKZCSgFt8VQoAlz3hiQh8QqZp4Zl8WuVL4+mP/mT6VDEWgq/0Bo
+cukxggJuMIICagIBATCBrDCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hl
+c3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNV
+BAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
+EAf6KCF9+1doL2oEOTPysLwwDQYJYIZIAWUDBAIBBQCggZMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMTcwOTA3MDc1MDEyWjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgDp48RSsN45d1G62FBbWg8BUML7lP
+cfA+5Y1ouKtw8nAwDQYJKoZIhvcNAQEBBQAEggEAp08tzQmDY67nkw6gCkUELUv3XZE0XWMOsXoU
+WxVhE1NCk3cmb1qJL3c50BibeqYxyn4m7IvxcKZ/DH5GxyoPofChs42ZYeJiaAK6CDAxR1KfyN3U
+NMYkqQihbLvv9+RsHqXI3TLfyJz8FgCEf+2eLDyOKNe6trHJSvjYem+ebhHyuUT3cv3j8E6ybjd/
+8dbJsCfja1JzYNyjzkhspoSnpvl0zIcS3d5PalQ2zTdCJWmZTQx+h7brNVUkGwtgA1M93KY4rco/
+dkTfTbtA0nVSg/ak6czHrKaAc0OQI2jRHRwdHdZOf3ocPb5dPx+YFl2WNk1Nf1IUrZaZZazxw0wh
+pwAAAAAAAA==
+
+
+--nextPart3032029.J450EsyL5D--
+
+
+
+
+--===============6735125071035004926==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============6735125071035004926==--
