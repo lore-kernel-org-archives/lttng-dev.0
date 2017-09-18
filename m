@@ -1,16 +1,17 @@
-From: liguang li <liguang.lee6@gmail.com>
-Subject: Babeltrace performance issue in live-reading mode
-Date: Mon, 18 Sep 2017 11:32:07 +0800
-Message-ID: <CAMYaK0TVYEgM_qxCExiFn6BcgZ58+KXKqx72h_0Gv4g2JN40Yg__36680.5265345194$1505747121$gmane$org@mail.gmail.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: Babeltrace performance issue in live-reading mode
+Date: Mon, 18 Sep 2017 11:18:57 -0400
+Message-ID: <20170918151857.afnn5n6ntzhyzfnw__38248.7445291646$1505748389$gmane$org@psrcode-TP-X230>
+References: <CAMYaK0TVYEgM_qxCExiFn6BcgZ58+KXKqx72h_0Gv4g2JN40Yg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2520968728707713793=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-x232.google.com (mail-qk0-x232.google.com
- [IPv6:2607:f8b0:400d:c09::232])
- by lists.lttng.org (Postfix) with ESMTPS id 3xwWlY5dKBzDSS
- for <lttng-dev@lists.lttng.org>; Mon, 18 Sep 2017 03:32:09 +0000 (UTC)
-Received: by mail-qk0-x232.google.com with SMTP id c69so6151858qke.8
- for <lttng-dev@lists.lttng.org>; Sun, 17 Sep 2017 20:32:09 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3xwqbg1GSszCp7
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Sep 2017 15:26:22 +0000 (UTC)
+Content-Disposition: inline
+In-Reply-To: <CAMYaK0TVYEgM_qxCExiFn6BcgZ58+KXKqx72h_0Gv4g2JN40Yg@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,57 +21,38 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: liguang li <liguang.lee6@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============2520968728707713793==
-Content-Type: multipart/alternative; boundary="94eb2c072eba28776f05596e6312"
-
---94eb2c072eba28776f05596e6312
-Content-Type: text/plain; charset="UTF-8"
-
-Hi,
-
-Create a session in live-reading mode, run a application which having very
-high event throughput, then prints
-the events with babeltrace. We found the live trace viewer are viewing
-events a few seconds ago, and as time
-goes on, the delay will be bigger and bigger.
-
-I checked the source code, found Babeltrace in live-reading mode will read
-the recorded events in the CTF
-files, and then parse and print it in a single thread. The process is a
-little slow, do you have any ideas to
-improve the process.
-
-Thanks,
-Liguang
-
---94eb2c072eba28776f05596e6312
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div><div>Hi,<br><br></div></div><div>Create a session in =
-live-reading mode, run a application which having very high event throughpu=
-t, then prints</div><div> the events with babeltrace. We found the live tra=
-ce viewer are viewing events a few seconds ago, and as time</div><div> goes=
- on, the delay will be bigger and bigger.</div><div><br></div><div>I checke=
-d the source code, found Babeltrace in live-reading mode will read the reco=
-rded events in the CTF</div><div> files, and then parse and print it in a s=
-ingle thread. The process is a little slow, do you have any ideas to <br></=
-div><div>improve the process. <br></div><div><br></div><div>Thanks,</div><d=
-iv>Liguang<br></div></div>
-
---94eb2c072eba28776f05596e6312--
-
---===============2520968728707713793==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============2520968728707713793==--
+SGksCgpPbiBNb24sIFNlcCAxOCwgMjAxNyBhdCAxMTozMjowN0FNICswODAwLCBsaWd1YW5nIGxp
+IHdyb3RlOgo+ICAgIEhpLAo+IAo+ICAgIENyZWF0ZSBhIHNlc3Npb24gaW4gbGl2ZS1yZWFkaW5n
+IG1vZGUsIHJ1biBhIGFwcGxpY2F0aW9uIHdoaWNoIGhhdmluZyB2ZXJ5Cj4gICAgaGlnaCBldmVu
+dCB0aHJvdWdocHV0LCB0aGVuIHByaW50cwo+ICAgIHRoZSBldmVudHMgd2l0aCBiYWJlbHRyYWNl
+LiBXZSBmb3VuZCB0aGUgbGl2ZSB0cmFjZSB2aWV3ZXIgYXJlIHZpZXdpbmcKPiAgICBldmVudHMg
+YSBmZXcgc2Vjb25kcyBhZ28sIGFuZCBhcyB0aW1lCgpDb3VsZCB5b3UgcHJvdmlkZSB1cyB0aGUg
+dmVyc2lvbiB1c2VkIGZvciBiYWJlbHRyYWNlLCBsdHRuZy10b29scyBhbmQgbHR0bmctdXN0PwoK
+PiAgICBnb2VzIG9uLCB0aGUgZGVsYXkgd2lsbCBiZSBiaWdnZXIgYW5kIGJpZ2dlci4KCkEgc2lt
+aWxhciBpc3N1ZXMgd2FzIG9ic2VydmVkIGEgY291cGxlIG1vbnRocyBhZ28sIHdoaWNoIGltcGxp
+Y2F0ZWQgbXVsdGlwbGUgZGVsYXllZCBhY2sKcHJvYmxlbXMgZHVyaW5nIGNvbW11bmljYXRpb24g
+YmV0d2VlbiBsdHRuZy1yZWxheWQgYW5kIGJhYmVsdHJhY2UuCgpUaGUgZm9sbG93aW5nIGZpeGVz
+IHdlcmUgbWVyZ2VkOgoKWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRuZy10b29scy9j
+b21taXQvYjYwMjVlOTQ3NjMzMmI3NWViODE4NDM0NWMzZWIzZTkyNDc4MDA4OApbMl0gaHR0cHM6
+Ly9naXRodWIuY29tL2VmZmljaW9zL2JhYmVsdHJhY2UvY29tbWl0L2RlNDE3ZDA0MzE3Y2EzYmMz
+MGY1OTY4NWE5ZDE5ZGU2NzBlNGIxMWQKWzNdIGh0dHBzOi8vZ2l0aHViLmNvbS9lZmZpY2lvcy9i
+YWJlbHRyYWNlL2NvbW1pdC80NTk0ZGJkOGY3YzJhZjI0NDZhM2UzMTBiZWU3NGJhNGEyZTlkNjQ4
+CgpJbiB0aGUgZXZlbnQgdGhhdCB5b3UgYXJlIGFscmVhZHkgdXNpbmcgYW4gdXBkYXRlZCB2ZXJz
+aW9uIG9mIGJhYmVsdHJhY2UgYW5kCmx0dG5nLXRvb2xzLCBpdCB3b3VsZCBiZSBwZXJ0aW5lbnQg
+dG8gcHJvdmlkZSB1cyB3aXRoIGEgc2ltcGxlIHJlcHJvZHVjZXIgc28gd2UKY2FuIGFzc2VzcyB0
+aGUgaXNzdWUuCgpDaGVlcnMKCj4gICAgSSBjaGVja2VkIHRoZSBzb3VyY2UgY29kZSwgZm91bmQg
+QmFiZWx0cmFjZSBpbiBsaXZlLXJlYWRpbmcgbW9kZSB3aWxsIHJlYWQKPiAgICB0aGUgcmVjb3Jk
+ZWQgZXZlbnRzIGluIHRoZSBDVEYKPiAgICBmaWxlcywgYW5kIHRoZW4gcGFyc2UgYW5kIHByaW50
+IGl0IGluIGEgc2luZ2xlIHRocmVhZC4gVGhlIHByb2Nlc3MgaXMgYQo+ICAgIGxpdHRsZSBzbG93
+LCBkbyB5b3UgaGF2ZSBhbnkgaWRlYXMgdG8KPiAgICBpbXByb3ZlIHRoZSBwcm9jZXNzLgo+ICAg
+IFRoYW5rcywKPiAgICBMaWd1YW5nCgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2CgoKLS0gCkpvbmF0aGFuIFJham90dGUtSnVsaWVuCkVmZmljaU9TCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
+YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5n
+Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
