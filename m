@@ -1,14 +1,15 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH babeltrace] Fix: use the in-tree tap-driver.sh
-Date: Mon, 18 Sep 2017 17:06:59 -0400
-Message-ID: <1505768819-20248-1-git-send-email-mjeanson__46815.7910196625$1505768843$gmane$org@efficios.com>
+Subject: [PATCH babeltrace] Fix: ctf writer tests were moved to
+	test_python_babeltrace
+Date: Mon, 18 Sep 2017 17:25:37 -0400
+Message-ID: <1505769937-22584-1-git-send-email-mjeanson__8017.30313473872$1505769960$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3xwz901LqhzDLd
- for <lttng-dev@lists.lttng.org>; Mon, 18 Sep 2017 21:07:15 +0000 (UTC)
+ by lists.lttng.org (Postfix) with ESMTPS id 3xwzZS0SyhzDNJ
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Sep 2017 21:25:51 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,15 +24,15 @@ Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
 U2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Ci0t
-LQogdGVzdHMvTWFrZWZpbGUuYW0gfCAzICsrKwogMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9u
-cygrKQoKZGlmZiAtLWdpdCBhL3Rlc3RzL01ha2VmaWxlLmFtIGIvdGVzdHMvTWFrZWZpbGUuYW0K
-aW5kZXggYzVkNjFiYS4uZjljMjA3ZiAxMDA2NDQKLS0tIGEvdGVzdHMvTWFrZWZpbGUuYW0KKysr
-IGIvdGVzdHMvTWFrZWZpbGUuYW0KQEAgLTEsNSArMSw4IEBACiBTVUJESVJTID0gdXRpbHMgY2xp
-IGxpYiBiaW5kaW5ncyBwbHVnaW5zCiAKK0xPR19EUklWRVJfRkxBR1M9Jy0tbWVyZ2UnCitMT0df
-RFJJVkVSID0gZW52IEFNX1RBUF9BV0s9JyQoQVdLKScgJChTSEVMTCkgJCh0b3Bfc3JjZGlyKS9j
-b25maWcvdGFwLWRyaXZlci5zaAorCiBFWFRSQV9ESVNUID0gJChzcmNkaXIpL2N0Zi10cmFjZXMv
-KiogXAogCSAgICAgJChzcmNkaXIpL2RlYnVnLWluZm8tZGF0YS8qKiBcCiAJICAgICAkKHNyY2Rp
-cikvZGVidWctaW5mby1kYXRhLy5idWlsZC1pZC9jZC8qKgotLSAKMi43LjQKCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxp
-c3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
-YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+LQogdGVzdHMvTWFrZWZpbGUuYW0gfCA2IC0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDYgZGVsZXRp
+b25zKC0pCgpkaWZmIC0tZ2l0IGEvdGVzdHMvTWFrZWZpbGUuYW0gYi90ZXN0cy9NYWtlZmlsZS5h
+bQppbmRleCBmOWMyMDdmLi5lZTBkNzA2IDEwMDY0NAotLS0gYS90ZXN0cy9NYWtlZmlsZS5hbQor
+KysgYi90ZXN0cy9NYWtlZmlsZS5hbQpAQCAtMzgsMTIgKzM4LDYgQEAgVEVTVFNfTElCID0gXAog
+CWxpYi90ZXN0X2NjX3ByaW9fbWFwIFwKIAlsaWIvdGVzdF9idF9ub3RpZmljYXRpb25faXRlcmF0
+b3IKIAotaWYgRU5BQkxFX1BZVEhPTl9CSU5ESU5HUwotVEVTVFNfTElCICs9IFwKLQlsaWIvd3Jp
+dGVyL3Rlc3RfY3RmX3dyaXRlcl9ub19wYWNrZXRfY29udGV4dC5weSBcCi0JbGliL3dyaXRlci90
+ZXN0X2N0Zl93cml0ZXJfZW1wdHlfcGFja2V0LnB5Ci1lbmRpZgotCiBpZiAhRU5BQkxFX0JVSUxU
+X0lOX1BMVUdJTlMKIFRFU1RTX0xJQiArPSBsaWIvdGVzdF9wbHVnaW5fY29tcGxldGUKIGVuZGlm
+Ci0tIAoyLjcuNAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBz
+Oi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
