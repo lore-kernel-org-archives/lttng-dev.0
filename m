@@ -1,19 +1,16 @@
-From: Nathan Lynch <nathan_lynch@mentor.com>
-Subject: Re: babeltrace tests (master/2.0)
-Date: Mon, 18 Sep 2017 08:53:14 -0500
-Message-ID: <87mv5scdv9.fsf__6004.62324587188$1505742822$gmane$org@mentor.com>
-References: <87y3r01j9o.fsf@mentor.com> <87valv14qy.fsf@mentor.com>
- <CAB4xu_1QFAGnaVn4u6riU38O5uXq83mS8rSS11LfSy-ETGbFDw@mail.gmail.com>
- <87shgy0xye.fsf@mentor.com> <87poard9gu.fsf@mentor.com>
- <CAB4xu_2w1qOXqWHkmEY7qCthh6ODJZZ9P8U+3WVm5-pBuFrEGg@mail.gmail.com>
+From: liguang li <liguang.lee6@gmail.com>
+Subject: Babeltrace performance issue in live-reading mode
+Date: Mon, 18 Sep 2017 11:32:07 +0800
+Message-ID: <CAMYaK0TVYEgM_qxCExiFn6BcgZ58+KXKqx72h_0Gv4g2JN40Yg__36680.5265345194$1505747121$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============2520968728707713793=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from relay1.mentorg.com (relay1.mentorg.com [192.94.38.131])
- by lists.lttng.org (Postfix) with ESMTPS id 3xwnXS17j0zCdQ
- for <lttng-dev@lists.lttng.org>; Mon, 18 Sep 2017 13:53:27 +0000 (UTC)
-In-Reply-To: <CAB4xu_2w1qOXqWHkmEY7qCthh6ODJZZ9P8U+3WVm5-pBuFrEGg@mail.gmail.com>
+Received: from mail-qk0-x232.google.com (mail-qk0-x232.google.com
+ [IPv6:2607:f8b0:400d:c09::232])
+ by lists.lttng.org (Postfix) with ESMTPS id 3xwWlY5dKBzDSS
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Sep 2017 03:32:09 +0000 (UTC)
+Received: by mail-qk0-x232.google.com with SMTP id c69so6151858qke.8
+ for <lttng-dev@lists.lttng.org>; Sun, 17 Sep 2017 20:32:09 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,54 +20,57 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-UGhpbGlwcGUgUHJvdWx4IDxlZXBwZWxpdGVsb29wQGdtYWlsLmNvbT4gd3JpdGVzOgoKPiBPbiBG
-cmksIFNlcCAxNSwgMjAxNyBhdCAzOjUzIFBNLCBOYXRoYW4gTHluY2ggPG5hdGhhbl9seW5jaEBt
-ZW50b3IuY29tPiB3cm90ZToKPj4gTmF0aGFuIEx5bmNoIDxuYXRoYW5fbHluY2hAbWVudG9yLmNv
-bT4gd3JpdGVzOgo+Pj4gUGhpbGlwcGUgUHJvdWx4IDxlZXBwZWxpdGVsb29wQGdtYWlsLmNvbT4g
-d3JpdGVzOgo+Pj4+Cj4+Pj4gSSBhc2tlZCB0aGUgQXV0b21ha2UgbWFpbGluZyBsaXN0IGFib3V0
-IHRoaXMKPj4+PiA8aHR0cDovL2xpc3RzLmdudS5vcmcvYXJjaGl2ZS9odG1sL2F1dG9tYWtlLzIw
-MTctMDgvbXNnMDAwMDQuaHRtbD4gYW5kCj4+Pj4gd2Ugd2lsbCBtb3N0IHByb2JhYmx5IGltcGxl
-bWVudCB0aGUgc3VnZ2VzdGVkIHNvbHV0aW9uLCB3aGljaCBpcyB0byBoYXZlCj4+Pj4gaW5kaXZp
-ZHVhbCB0b3AtbGV2ZWwgKGluIHRlc3RzLykgYGNoZWNrLVhgIHRhcmdldHMgd2hpY2ggcmVydW4g
-TWFrZSB3aXRoCj4+Pj4gc3BlY2lmaWMgc2V0cyBvZiB0ZXN0cy4KPj4KPj4gSSBzaG91bGQgYmUg
-YWJsZSB0byBpbXBsZW1lbnQgdGhpcyBvdmVyIHRoZSBuZXh0IHdlZWsgb3Igc28gaWYgeW91IGRv
-bid0Cj4+IGFudGljaXBhdGUgY29uZmxpY3RzIHdpdGggb3RoZXIgb25nb2luZyB3b3JrLiAgV2hh
-dCBkbyB5b3Ugc2F5Pwo+Cj4gSXQncyBiZWVuIG1lcmdlZCBpbnRvIG1hc3RlciBhIGZldyBtaW51
-dGVzIGFnby4gSGVyZSdzIHRoZSBjb21taXQ6Cj4KPiAgICAgaHR0cHM6Ly9naXRodWIuY29tL2Vm
-ZmljaW9zL2JhYmVsdHJhY2UvY29tbWl0L2NkMWM1MzQ3Zjc1ODNhMjBlY2U1YTFhNjJmYzBlMGVk
-ZGI4MjMyMmIKPgoKVGhhbmtzIQoKSXMgdGhpcyB0aGUgZGVzaXJlZCByZXN1bHQ6CgpQQVNTOiBj
-bGkvdGVzdF90cmFjZV9yZWFkICAgICAgICAgICAgICAgICAgICAKUEFTUzogY2xpL3Rlc3RfcGFj
-a2V0X3NlcV9udW0gICAgICAgICAgICAgICAgClBBU1M6IGNsaS90ZXN0X2NvbnZlcnRfYXJncyAg
-ICAgICAgICAgICAgICAgIApQQVNTOiBjbGkvaW50ZXJzZWN0aW9uL3Rlc3RfaW50ZXJzZWN0aW9u
-ICAgICAKUEFTUzogY2xpL3Rlc3RfdHJhY2VfY29weSAgICAgICAgICAgICAgICAgICAgClBBU1M6
-IGNsaS90ZXN0X3RyaW1tZXIgICAgICAgICAgICAgICAgICAgICAgIApQQVNTOiBsaWIvdGVzdF9i
-aXRmaWVsZCAgICAgICAgICAgICAgICAgICAgICAKUEFTUzogbGliL3Rlc3RfY3RmX3dyaXRlcl9j
-b21wbGV0ZSAgICAgICAgICAgClBBU1M6IGxpYi90ZXN0X2J0X3ZhbHVlcyAgICAgICAgICAgICAg
-ICAgICAgIApQQVNTOiBsaWIvdGVzdF9jdGZfaXJfcmVmICAgICAgICAgICAgICAgICAgICAKUEFT
-UzogbGliL3Rlc3RfYnRfY3RmX2ZpZWxkX3R5cGVfdmFsaWRhdGlvbiAgClBBU1M6IGxpYi90ZXN0
-X2lyX3Zpc2l0ICAgICAgICAgICAgICAgICAgICAgIApQQVNTOiBsaWIvdGVzdF9idF9ub3RpZmlj
-YXRpb25faGVhcCAgICAgICAgICAKUEFTUzogbGliL3Rlc3RfZ3JhcGhfdG9wbyAgICAgICAgICAg
-ICAgICAgICAgClBBU1M6IGxpYi90ZXN0X2NjX3ByaW9fbWFwICAgICAgICAgICAgICAgICAgIApQ
-QVNTOiBsaWIvdGVzdF9idF9ub3RpZmljYXRpb25faXRlcmF0b3IgICAgICAKUEFTUzogbGliL3Rl
-c3RfcGx1Z2luX2NvbXBsZXRlICAgICAgICAgICAgICAgClBBU1M6IHBsdWdpbnMvdGVzdC11dGls
-cy1tdXhlci1jb21wbGV0ZSAgICAgIApQQVNTOiBwbHVnaW5zL3Rlc3RfZHdhcmZfY29tcGxldGUg
-ICAgICAgICAgICAKUEFTUzogcGx1Z2lucy90ZXN0X2Jpbl9pbmZvX2NvbXBsZXRlICAgICAgICAg
-Cj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT0gICAgICAgICAgICAgIApUZXN0c3VpdGUgc3VtbWFyeSBmb3Ig
-YmFiZWx0cmFjZSAyLjAuMC1wcmUxICAKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSAgICAgICAgICAgICAg
-CiMgVE9UQUw6IDIwICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAojIFBBU1M6ICAy
-MCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKIyBTS0lQOiAgMCAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgCiMgWEZBSUw6IDAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIAojIEZBSUw6ICAwICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAKIyBYUEFTUzogMCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiMgRVJST1I6
-IDAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAoKClRoZSBncmFudWxhcml0eSBv
-ZiByZXN1bHRzIHNlZW1zIHZlcnkgbXVjaCByZWR1Y2VkOyB0aGVyZSBoYWQgYmVlbgp+MTIwMCBp
-bmRpdmlkdWFsIHRlc3RzIHJ1biBiZWZvcmUuCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
-Zm8vbHR0bmctZGV2Cg==
+--===============2520968728707713793==
+Content-Type: multipart/alternative; boundary="94eb2c072eba28776f05596e6312"
+
+--94eb2c072eba28776f05596e6312
+Content-Type: text/plain; charset="UTF-8"
+
+Hi,
+
+Create a session in live-reading mode, run a application which having very
+high event throughput, then prints
+the events with babeltrace. We found the live trace viewer are viewing
+events a few seconds ago, and as time
+goes on, the delay will be bigger and bigger.
+
+I checked the source code, found Babeltrace in live-reading mode will read
+the recorded events in the CTF
+files, and then parse and print it in a single thread. The process is a
+little slow, do you have any ideas to
+improve the process.
+
+Thanks,
+Liguang
+
+--94eb2c072eba28776f05596e6312
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div>Hi,<br><br></div></div><div>Create a session in =
+live-reading mode, run a application which having very high event throughpu=
+t, then prints</div><div> the events with babeltrace. We found the live tra=
+ce viewer are viewing events a few seconds ago, and as time</div><div> goes=
+ on, the delay will be bigger and bigger.</div><div><br></div><div>I checke=
+d the source code, found Babeltrace in live-reading mode will read the reco=
+rded events in the CTF</div><div> files, and then parse and print it in a s=
+ingle thread. The process is a little slow, do you have any ideas to <br></=
+div><div>improve the process. <br></div><div><br></div><div>Thanks,</div><d=
+iv>Liguang<br></div></div>
+
+--94eb2c072eba28776f05596e6312--
+
+--===============2520968728707713793==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============2520968728707713793==--
