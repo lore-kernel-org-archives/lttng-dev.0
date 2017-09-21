@@ -1,22 +1,23 @@
-From: Jeffrey Chen <cpthk@live.com>
-Subject: Re: LTTng on Docker
-Date: Tue, 19 Sep 2017 22:26:49 +0000
-Message-ID: <CY4PR13MB12398D553E5F47E7B38971BEC7600__38651.1224940934$1505957711$gmane$org@CY4PR13MB1239.namprd13.prod.outlook.com>
-References: <CY4PR13MB152689FB577CFBEF185495EAC70C0@CY4PR13MB1526.namprd13.prod.outlook.com>
- <CA+jJMxvVeQFci4Yx5a=AJ-9NnSpxfbE00Jk8e2wnPZY67Hkk5g@mail.gmail.com>
- <CY4PR13MB1526BBB771C31BF53C41C6C4C7010@CY4PR13MB1526.namprd13.prod.outlook.com>
- <CA+jJMxs1Qn=WOQ087VYb3sKHxvd8NL-=o6FzCt44pRufNVvq7w@mail.gmail.com>
- <CY4PR13MB1526D1CD28EF1A8341D8B868C7000@CY4PR13MB1526.namprd13.prod.outlook.com>,
- <CA+jJMxuZp24FYOLoSO-39b+X9MbZCKvRp8gtG5mfFz9hs3_SjQ@mail.gmail.com>
+From: liguang li <liguang.lee6@gmail.com>
+Subject: Re: Babeltrace performance issue in live-reading mode
+Date: Thu, 21 Sep 2017 17:34:34 +0800
+Message-ID: <CAMYaK0TEWZGtZnvO5aDw5CZi8Rr1tXdoaBrkDRO6k-biydVn_g__45027.9875928119$1506004472$gmane$org@mail.gmail.com>
+References: <CAMYaK0TVYEgM_qxCExiFn6BcgZ58+KXKqx72h_0Gv4g2JN40Yg@mail.gmail.com>
+ <20170918151857.afnn5n6ntzhyzfnw@psrcode-TP-X230>
+ <CAMYaK0TGprotjj0v-HayqHAaKpJaTXgqqYh55CK9JmOKBO-U8A@mail.gmail.com>
+ <20170919145707.5wh3e23zet7jm3bc@psrcode-TP-X230>
+ <CAMYaK0SQkdjs_gp+4fwBL1BH1oqEiqYnN6PXq-H-=ApMRbe-bg@mail.gmail.com>
+ <cdf53e97-49f0-e6d4-e4b2-0bca6ab84534@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6385568143769509922=="
+Content-Type: multipart/mixed; boundary="===============2298720117342283576=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from NAM04-SN1-obe.outbound.protection.outlook.com
- (mail-oln040092011067.outbound.protection.outlook.com [40.92.11.67])
- by lists.lttng.org (Postfix) with ESMTPS id 3xyK0z47dHztV2
- for <lttng-dev@lists.lttng.org>; Thu, 21 Sep 2017 01:34:58 +0000 (UTC)
-In-Reply-To: <CA+jJMxuZp24FYOLoSO-39b+X9MbZCKvRp8gtG5mfFz9hs3_SjQ@mail.gmail.com>
-Content-Language: en-US
+Received: from mail-qk0-x230.google.com (mail-qk0-x230.google.com
+ [IPv6:2607:f8b0:400d:c09::230])
+ by lists.lttng.org (Postfix) with ESMTPS id 3xyWfN3qLgzCwt
+ for <lttng-dev@lists.lttng.org>; Thu, 21 Sep 2017 09:34:36 +0000 (UTC)
+Received: by mail-qk0-x230.google.com with SMTP id u67so5175673qkg.6
+ for <lttng-dev@lists.lttng.org>; Thu, 21 Sep 2017 02:34:36 -0700 (PDT)
+In-Reply-To: <cdf53e97-49f0-e6d4-e4b2-0bca6ab84534@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,578 +27,426 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?iso-8859-1?Q?J=E9r=E9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============6385568143769509922==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_CY4PR13MB12398D553E5F47E7B38971BEC7600CY4PR13MB1239namp_"
+--===============2298720117342283576==
+Content-Type: multipart/alternative; boundary="94eb2c070154e691ca0559afccbb"
 
---_000_CY4PR13MB12398D553E5F47E7B38971BEC7600CY4PR13MB1239namp_
-Content-Type: text/plain; charset="iso-8859-1"
+--94eb2c070154e691ca0559afccbb
+Content-Type: text/plain; charset="UTF-8"
+
+Hi,
+
+On Wed, Sep 20, 2017 at 10:58 PM, Jonathan Rajotte Julien <
+Jonathan.rajotte-julien@efficios.com> wrote:
+
+> Hi,
+>
+> On 2017-09-20 05:12 AM, liguang li wrote:
+> >
+> >
+> > On Tue, Sep 19, 2017 at 10:57 PM, Jonathan Rajotte-Julien <
+> jonathan.rajotte-julien@efficios.com <mailto:jonathan.rajotte-
+> julien@efficios.com>> wrote:
+> >
+> >     On Tue, Sep 19, 2017 at 03:53:27PM +0800, liguang li wrote:
+> >     >    Hi,
+> >     >    On Mon, Sep 18, 2017 at 11:18 PM, Jonathan Rajotte-Julien
+> >     >    <[1]jonathan.rajotte-julien@efficios.com <mailto:
+> jonathan.rajotte-julien@efficios.com>> wrote:
+> >     >
+> >     >      Hi,
+> >     >      On Mon, Sep 18, 2017 at 11:32:07AM +0800, liguang li wrote:
+> >     >      >    Hi,
+> >     >      >
+> >     >      >    Create a session in live-reading mode, run a application
+> which
+> >     >      having very
+> >     >      >    high event throughput, then prints
+> >     >      >    the events with babeltrace. We found the live trace
+> viewer are
+> >     >      viewing
+> >     >      >    events a few seconds ago, and as time
+> >     >
+> >     >      Could you provide us the version used for babeltrace,
+> lttng-tools and
+> >     >      lttng-ust?
+> >     >
+> >     >     Babeltrace: 1.5.1
+> >
+> >     Update to babeltrace 1.5.3.
+> >
+> >     >     Lttng-tools: 2.8.6
+> >
+> >     Update to lttng-tools 2.8.8
+> >
+> >     >     Lttng-ust: 2.8.2
+> >     >
+> >     >      >    goes on, the delay will be bigger and bigger.
+> >     >
+> >     >      A similar issues was observed a couple months ago, which
+> implicated
+> >     >      multiple delayed ack
+> >     >      problems during communication between lttng-relayd and
+> babeltrace.
+> >     >
+> >     >      The following fixes were merged:
+> >     >
+> >     >      [1]
+> >     >      [2]https://github.com/lttng/lttng-tools/commit/
+> b6025e9476332b75eb8184345c3eb3e924780088 <https://github.com/lttng/
+> lttng-tools/commit/b6025e9476332b75eb8184345c3eb3e924780088>
+> >     >      [2]
+> >     >      [3]https://github.com/efficios/babeltrace/commit/
+> de417d04317ca3bc30f59685a9d19de670e4b11d <https://github.com/efficios/
+> babeltrace/commit/de417d04317ca3bc30f59685a9d19de670e4b11d>
+> >     >      [3]
+> >     >      [4]https://github.com/efficios/babeltrace/commit/
+> 4594dbd8f7c2af2446a3e310bee74ba4a2e9d648 <https://github.com/efficios/
+> babeltrace/commit/4594dbd8f7c2af2446a3e310bee74ba4a2e9d648>
+> >     >
+> >     >      In the event that you are already using an updated version of
+> babeltrace
+> >     >      and
+> >     >      lttng-tools, it would be pertinent to provide us with a simple
+> >     >      reproducer so we
+> >     >      can assess the issue.
+> >
+> >     The version you are using does not include the mentioned fixes.
+> Please update
+> >     and redo your experiment.
+> >
+> >
+> > Test this issue in the version you have listed, the issue still exists.
+>
+> Given that previous versions had a major timing problem there I would
+> expect to have some improvement.
+>
+> In that case, we will need a lot more information on your benchmarking
+> strategy.
+> We will need a simple reproducer, your benchmark code (r,gnuplot etc.),
+> your overall methodology
+> to be able to reproduce the issue locally. Otherwise, it will be very hard
+> to come to any conclusion.
+>
+>
+Sorry, we can not provide the detailed information about the benchmark code
+due to the company regulations.
+
+
+> >
+> >
+> >     Cheers
+> >
+> >     >
+> >     >
+> >     >     Steps:
+> >     >     lttng create session --live -U net://*
+> >     >     lttng enable-channel -s session -u ch1
+> >     >     lttng enable-event -s session -c ch1 -u -a
+> >     >     lttng start
+> >     >
+> >     >     Run a high event throughput application, which is multithreaded
+> >     >    application>
+> >
+> > In the multithreaded application, each tracepoint will have the wall
+> > time of the system,then we can easily reproduce this issue through
+> > comparing the time of recorded event and the system wall time.
+> >
+> >
+> >     >     babeltrace -i lttng-live net://*
+> >     >
+> >     >     After a while, we found the timestamp of the event in the
+> babeltrace is
+> >     >    different with the time in host
+> >     >     which run the application. And the delay will be bigger and
+> bigger with
+> >     >    time goes.
+> >     >
+> >     >
+> >     >      Cheers
+> >     >      >    I checked the source code, found Babeltrace in
+> live-reading mode
+> >     >      will read
+> >     >      >    the recorded events in the CTF
+> >     >      >    files, and then parse and print it in a single thread.
+> The process
+> >     >      is a
+> >     >      >    little slow, do you have any ideas to
+> >     >      >    improve the process.
+> >
+> >
+> > From my understanding of the source code, the process of parse and
+> > print event will consume a lot of time. For example, the multithreaded
+> > application will consume 3 CPUs, in a specified time,3 subbuffers will
+> > be filled and sent to lttng-relayd daemon, recorded into the CTF files.
+> > If in the specified time, babeltrace only handled 2 subbuffers' event,
+> > thenthe issue will happens.
+>
+> Did you perform a bisection for where the delay come from? Reception of
+> packet? formatting of event?
+> What is the throughput of the application?
+> How many tracepoint definition?
+> Does babeltrace catch up if a quiescent period is given?
+>
+
+I think so.
+
+
+> Could you provide us with statistics, timing data, etc.?
+>
+What type of delay are we talking about?
+>
+>
+For example, the system wall time is 5:18 PM now, but the Babeltrace is
+still printing events which
+have time 5:10 PM. Then stop running the application, the Babeltrace still
+need some times to print
+the recorded events.
+
+I think the root cause is that the parsing and printing process is a bit
+slow. So i want to know if there
+are any method to improve the performance of this process.
+
+Regards,
+Liguang
+
+--
+> Jonathan R. Julien
+> Efficios
+>
+
+--94eb2c070154e691ca0559afccbb
+Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Are you able to repro this issue at your side?
-
-Thanks.
-
-
-________________________________
-From: jeremie.galarneau@gmail.com <jeremie.galarneau@gmail.com> on behalf o=
-f J=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com>
-Sent: Wednesday, April 12, 2017 10:34 AM
-To: Jeffrey Chen
-Cc: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] LTTng on Docker
-
-
-
-On 11 April 2017 at 16:49, Jeffrey Chen <cpthk@live.com<mailto:cpthk@live.c=
-om>> wrote:
-
-I just tried using smaller value of subbuf size, and it works fine. I have =
-16GB of memory in my host, so I should have more than enough memory. The sa=
-me size works fine in my host machine. My Docker container does not have an=
-y resource constraint. Do you know what could be the reason of the failure?
-
-Thanks.
-
-
-My guess is some limitation or bug where the subbuffer size and tracefile s=
-ize can't be the same. I'll have to look into it.
-
-J=E9r=E9mie
-
-
-________________________________
-From: jeremie.galarneau@gmail.com<mailto:jeremie.galarneau@gmail.com> <jere=
-mie.galarneau@gmail.com<mailto:jeremie.galarneau@gmail.com>> on behalf of J=
-=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com<mailto:jeremie.galarne=
-au@efficios.com>>
-Sent: Monday, April 10, 2017 12:26 PM
-
-To: Jeffrey Chen
-Cc: lttng-dev@lists.lttng.org<mailto:lttng-dev@lists.lttng.org>
-Subject: Re: [lttng-dev] LTTng on Docker
-
-
-
-On 10 April 2017 at 14:06, Jeffrey Chen <cpthk@live.com<mailto:cpthk@live.c=
-om>> wrote:
-
-I have attached the logs from the lttng daemon. I could see errors like bel=
-ow.
-
-
-Error: Error creating UST channel "channel0" on the consumer daemon
-
-
-My commands to create a session are:
-
-lttng create test
-lttng enable-channel --session test --userspace --tracefile-size 8388608 --=
-subbuf-size 8388608 channel0
-lttng enable-event --channel channel0 --userspace "service:*"
-lttng add-context -u -t vtid
-lttng add-context -u -t vpid
-lttng start
-
-Thanks for the info. Can you try to create the channel with the default val=
-ues and see if it works?
-
-$ lttng enable-channel --session test --userspace channel0
-
-Also, can you re-capture the session daemon logs launching it with the "-vv=
-v --verbose-consumer" option since the problem appears to occur on the cons=
-umer's end.
-
-Thanks,
-J=E9r=E9mie
-
-
-Installed:
-apt-get -y install lttng-tools lttng-modules-dkms liblttng-ust0 liblttng-us=
-t-dev
-
-
-Thanks.
-
-________________________________
-From: jeremie.galarneau@gmail.com<mailto:jeremie.galarneau@gmail.com> <jere=
-mie.galarneau@gmail.com<mailto:jeremie.galarneau@gmail.com>> on behalf of J=
-=E9r=E9mie Galarneau <jeremie.galarneau@efficios.com<mailto:jeremie.galarne=
-au@efficios.com>>
-Sent: Sunday, April 9, 2017 2:06 PM
-To: Jeffrey Chen
-Cc: lttng-dev@lists.lttng.org<mailto:lttng-dev@lists.lttng.org>
-Subject: Re: [lttng-dev] LTTng on Docker
-
-On 7 April 2017 at 18:35, Jeffrey Chen <cpthk@live.com<mailto:cpthk@live.co=
-m>> wrote:
-> Hi:
->
->
-> I am trying to have LTTng UST tracing inside a docker container. I wasn't
-> able to get the UST tracing working. LTTng would not write any UST trace
-> files in the directory, even though it printed it would. Has it been test=
-ed
-> before? Is there any known problem?
-
-Tracing inside a container (not Docker), where the LTTng daemons and
-the applications are running in the same container, is known to work
-as this is how most of the LTTng CI works.
-
-As far as Docker is concerned, I tested it a number of times and it
-worked. Can you provide the versions of LTTng and Docker you're using
-and the session daemon's logs (launching it with the -vvv option)?
-
-Thanks,
-J=E9r=E9mie
-
->
->
-> $ lttng enable-channel --session test --userspace channel0
->
-> Error: Channel channel0: UST create channel failed (session ServiceFabric=
-_0)
-> Error: Command error
->
->
-> Thanks.
->
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org<mailto:lttng-dev@lists.lttng.org>
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-lttng-dev Info Page<https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-=
-dev>
-lists.lttng.org<http://lists.lttng.org>
-To see the collection of prior postings to the list, visit the lttng-dev Ar=
-chives. Using lttng-dev: To post a message to all the list members, send ..=
-.
-
-
->
-
-
-
---
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-EfficiOS<http://www.efficios.com/>
-www.efficios.com<http://www.efficios.com>
-At EfficiOS, our main goal is diminishing the amount of time our clients sp=
-end identifying faults. We also enable our clients' applications to scale o=
-n massive multi ...
-
-
-
-
-
---
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-
-
-
---
-J=E9r=E9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-
---_000_CY4PR13MB12398D553E5F47E7B38971BEC7600CY4PR13MB1239namp_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style type=3D"text/css" style=3D"display:none;"><!-- P {margin-top:0;margi=
-n-bottom:0;} --></style>
-</head>
-<body dir=3D"ltr">
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;font=
--family:Calibri,Helvetica,sans-serif;" dir=3D"ltr">
-<p>Are you able to repro this issue at your side?</p>
-<p>Thanks.</p>
+<div dir=3D"ltr">Hi,<br><div><div class=3D"gmail_extra"><br><div class=3D"g=
+mail_quote">On Wed, Sep 20, 2017 at 10:58 PM, Jonathan Rajotte Julien <span=
+ dir=3D"ltr">&lt;<a href=3D"mailto:Jonathan.rajotte-julien@efficios.com" ta=
+rget=3D"_blank">Jonathan.rajotte-julien@efficios.com</a>&gt;</span> wrote:<=
+br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left=
+:1px #ccc solid;padding-left:1ex">Hi,<br>
 <br>
-<br>
-<div style=3D"color: rgb(0, 0, 0);">
-<hr tabindex=3D"-1" style=3D"display:inline-block; width:98%">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" co=
-lor=3D"#000000" style=3D"font-size:11pt"><b>From:</b> jeremie.galarneau@gma=
-il.com &lt;jeremie.galarneau@gmail.com&gt; on behalf of J=E9r=E9mie Galarne=
-au &lt;jeremie.galarneau@efficios.com&gt;<br>
-<b>Sent:</b> Wednesday, April 12, 2017 10:34 AM<br>
-<b>To:</b> Jeffrey Chen<br>
-<b>Cc:</b> lttng-dev@lists.lttng.org<br>
-<b>Subject:</b> Re: [lttng-dev] LTTng on Docker</font>
-<div>&nbsp;</div>
-</div>
-<div>
-<div dir=3D"ltr"><br>
-<div class=3D"gmail_extra"><br>
-<div class=3D"gmail_quote">On 11 April 2017 at 16:49, Jeffrey Chen <span di=
-r=3D"ltr">
-&lt;<a href=3D"mailto:cpthk@live.com" target=3D"_blank">cpthk@live.com</a>&=
-gt;</span> wrote:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex; border-left:1=
-px #ccc solid; padding-left:1ex">
-<div dir=3D"ltr">
-<div id=3D"m_-1350089122956405048divtagdefaultwrapper" dir=3D"ltr" style=3D=
-"font-size:12pt; color:#000000; font-family:Calibri,Arial,Helvetica,sans-se=
-rif">
-<p>I just tried using smaller value of subbuf size, and it works fine. I ha=
-ve 16GB of memory in my host, so I should have more than enough memory. The=
- same size works fine in my host machine. My Docker container does not have=
- any resource constraint. Do you
- know what could be the reason of the failure?</p>
-<p>Thanks.<br>
-</p>
-<br>
-</div>
-</div>
-</blockquote>
-<div><br>
-</div>
-<div>My guess is some limitation or bug where the subbuffer size and tracef=
-ile size can't be the same. I'll have to look into it.</div>
-<div><br>
-</div>
-<div>J=E9r=E9mie</div>
-<div>&nbsp;</div>
-<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex; border-left:1=
-px #ccc solid; padding-left:1ex">
-<div dir=3D"ltr">
-<div id=3D"m_-1350089122956405048divtagdefaultwrapper" dir=3D"ltr" style=3D=
-"font-size:12pt; color:#000000; font-family:Calibri,Arial,Helvetica,sans-se=
-rif">
-<br>
-<div style=3D"color:rgb(0,0,0)">
-<hr style=3D"display:inline-block; width:98%">
-<div id=3D"m_-1350089122956405048divRplyFwdMsg" dir=3D"ltr"><font face=3D"C=
-alibri, sans-serif" color=3D"#000000" style=3D"font-size:11pt"><span class=
-=3D""><b>From:</b>
-<a href=3D"mailto:jeremie.galarneau@gmail.com" target=3D"_blank">jeremie.ga=
-larneau@gmail.com</a> &lt;<a href=3D"mailto:jeremie.galarneau@gmail.com" ta=
-rget=3D"_blank">jeremie.galarneau@gmail.com</a>&gt; on behalf of J=E9r=E9mi=
-e Galarneau &lt;<a href=3D"mailto:jeremie.galarneau@efficios.com" target=3D=
-"_blank">jeremie.galarneau@efficios.<wbr>com</a>&gt;<br>
-</span><b>Sent:</b> Monday, April 10, 2017 12:26 PM
-<div>
-<div class=3D"h5"><br>
-<b>To:</b> Jeffrey Chen<br>
-<b>Cc:</b> <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">l=
-ttng-dev@lists.lttng.org</a><br>
-<b>Subject:</b> Re: [lttng-dev] LTTng on Docker</div>
-</div>
-</font>
-<div>&nbsp;</div>
-</div>
-<div>
-<div class=3D"h5">
-<div>
-<div dir=3D"ltr"><br>
-<div class=3D"gmail_extra"><br>
-<div class=3D"gmail_quote">On 10 April 2017 at 14:06, Jeffrey Chen <span di=
-r=3D"ltr">
-&lt;<a href=3D"mailto:cpthk@live.com" target=3D"_blank">cpthk@live.com</a>&=
-gt;</span> wrote:<br>
-<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex; border=
--left:1px solid rgb(204,204,204); padding-left:1ex">
-<div dir=3D"ltr">
-<div id=3D"m_-1350089122956405048gmail-m_-3517871239381958006divtagdefaultw=
-rapper" dir=3D"ltr" style=3D"font-size:12pt; color:rgb(0,0,0); font-family:=
-calibri,arial,helvetica,sans-serif">
-<p>I have attached the logs from the lttng daemon. I could see errors like =
-below.</p>
-<p><br>
-</p>
-<p></p>
-<div><span style=3D"background-color:rgb(255,255,0)">Error: Error creating =
-UST channel &quot;channel0&quot; on the consumer daemon</span><br>
-</div>
-<p></p>
-<p><br>
-</p>
-<p>My commands to create a session are:</p>
-<p></p>
-<div>lttng create test<br>
-lttng enable-channel --session test --userspace --tracefile-size 8388608 --=
-subbuf-size 8388608 channel0<br>
-lttng enable-event --channel channel0 --userspace &quot;service:*&quot;<br>
-lttng add-context -u -t vtid<br>
-lttng add-context -u -t vpid<br>
-lttng start<br>
-</div>
-</div>
-</div>
-</blockquote>
-<div><br>
-</div>
-<div>Thanks for the info. Can you try to create the channel with the defaul=
-t values and see if it works?</div>
-<div><br>
-</div>
-<div>$&nbsp;lttng enable-channel --session test --userspace channel0</div>
-<div>&nbsp;</div>
-<div>Also, can you re-capture the session daemon logs launching it with the=
- &quot;-vvv --verbose-consumer&quot; option since the problem appears to oc=
-cur on the consumer's end.</div>
-<div><br>
-</div>
-<div>Thanks,</div>
-<div>J=E9r=E9mie</div>
-<div><br>
-</div>
-<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex; border=
--left:1px solid rgb(204,204,204); padding-left:1ex">
-<div dir=3D"ltr">
-<div id=3D"m_-1350089122956405048gmail-m_-3517871239381958006divtagdefaultw=
-rapper" dir=3D"ltr" style=3D"font-size:12pt; color:rgb(0,0,0); font-family:=
-calibri,arial,helvetica,sans-serif">
-<div><br>
-Installed:<br>
-<span>apt-get -y install lttng-tools lttng-modules-dkms liblttng-ust0 <span=
->liblttng-ust-dev</span></span>
-<br>
-</div>
-<br>
-<p></p>
-Thanks.<br>
-<br>
-<div style=3D"color:rgb(0,0,0)">
-<div>
-<hr style=3D"display:inline-block; width:98%">
-<div id=3D"m_-1350089122956405048gmail-m_-3517871239381958006x_divRplyFwdMs=
-g" dir=3D"ltr">
-<font face=3D"Calibri, sans-serif" color=3D"#000000" style=3D"font-size:11p=
-t"><b>From:</b>
-<a href=3D"mailto:jeremie.galarneau@gmail.com" target=3D"_blank">jeremie.ga=
-larneau@gmail.com</a> &lt;<a href=3D"mailto:jeremie.galarneau@gmail.com" ta=
-rget=3D"_blank">jeremie.galarneau@gmail.com</a>&gt; on behalf of J=E9r=E9mi=
-e Galarneau &lt;<a href=3D"mailto:jeremie.galarneau@efficios.com" target=3D=
-"_blank">jeremie.galarneau@efficios.co<wbr>m</a>&gt;<br>
-<b>Sent:</b> Sunday, April 9, 2017 2:06 PM<br>
-<b>To:</b> Jeffrey Chen<br>
-<b>Cc:</b> <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">l=
-ttng-dev@lists.lttng.org</a><br>
-<b>Subject:</b> Re: [lttng-dev] LTTng on Docker</font>
-<div>&nbsp;</div>
-</div>
-</div>
-<font size=3D"2"><span style=3D"font-size:10pt">
-<div class=3D"m_-1350089122956405048gmail-m_-3517871239381958006PlainText">=
-<span class=3D"m_-1350089122956405048gmail-">On 7 April 2017 at 18:35, Jeff=
-rey Chen &lt;<a href=3D"mailto:cpthk@live.com" target=3D"_blank">cpthk@live=
-.com</a>&gt; wrote:<br>
-&gt; Hi:<br>
+On 2017-09-20 05:12 AM, liguang li wrote:<br>
+<span class=3D"">&gt;<br>
+&gt;<br>
+&gt; On Tue, Sep 19, 2017 at 10:57 PM, Jonathan Rajotte-Julien &lt;<a href=
+=3D"mailto:jonathan.rajotte-julien@efficios.com">jonathan.rajotte-julien@<w=
+br>efficios.com</a> &lt;mailto:<a href=3D"mailto:jonathan.rajotte-julien@ef=
+ficios.com">jonathan.rajotte-<wbr>julien@efficios.com</a>&gt;&gt; wrote:<br=
+>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0On Tue, Sep 19, 2017 at 03:53:27PM +0800, liguang l=
+i wrote:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 Hi,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 On Mon, Sep 18, 2017 at 11:18 PM,=
+ Jonathan Rajotte-Julien<br>
+</span><span class=3D"">&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 &lt;[1]<a=
+ href=3D"mailto:jonathan.rajotte-julien@efficios.com">jonathan.rajotte-juli=
+en@<wbr>efficios.com</a> &lt;mailto:<a href=3D"mailto:jonathan.rajotte-juli=
+en@efficios.com">jonathan.rajotte-<wbr>julien@efficios.com</a>&gt;&gt; wrot=
+e:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 Hi,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 On Mon, Sep 18, 2017 at 11=
+:32:07AM +0800, liguang li wrote:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 Hi,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 Create a=
+ session in live-reading mode, run a application which<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 having very<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 high eve=
+nt throughput, then prints<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 the even=
+ts with babeltrace. We found the live trace viewer are<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 viewing<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 events a=
+ few seconds ago, and as time<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 Could you provide us the v=
+ersion used for babeltrace, lttng-tools and<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 lttng-ust?<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Babeltrace: 1.5.1<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Update to babeltrace 1.5.3.<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Lttng-tools: 2.8.6<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Update to lttng-tools 2.8.8<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Lttng-ust: 2.8.2<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 goes on,=
+ the delay will be bigger and bigger.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 A similar issues was obser=
+ved a couple months ago, which implicated<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 multiple delayed ack<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 problems during communicat=
+ion between lttng-relayd and babeltrace.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 The following fixes were m=
+erged:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 [1]<br>
+</span>&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 [2]<a href=3D"https=
+://github.com/lttng/lttng-tools/commit/b6025e9476332b75eb8184345c3eb3e92478=
+0088" rel=3D"noreferrer" target=3D"_blank">https://github.com/lttng/<wbr>lt=
+tng-tools/commit/<wbr>b6025e9476332b75eb8184345c3eb3<wbr>e924780088</a> &lt=
+;<a href=3D"https://github.com/lttng/lttng-tools/commit/b6025e9476332b75eb8=
+184345c3eb3e924780088" rel=3D"noreferrer" target=3D"_blank">https://github.=
+com/lttng/<wbr>lttng-tools/commit/<wbr>b6025e9476332b75eb8184345c3eb3<wbr>e=
+924780088</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 [2]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 [3]<a href=3D"https://gith=
+ub.com/efficios/babeltrace/commit/de417d04317ca3bc30f59685a9d19de670e4b11d"=
+ rel=3D"noreferrer" target=3D"_blank">https://github.com/<wbr>efficios/babe=
+ltrace/commit/<wbr>de417d04317ca3bc30f59685a9d19d<wbr>e670e4b11d</a> &lt;<a=
+ href=3D"https://github.com/efficios/babeltrace/commit/de417d04317ca3bc30f5=
+9685a9d19de670e4b11d" rel=3D"noreferrer" target=3D"_blank">https://github.c=
+om/efficios/<wbr>babeltrace/commit/<wbr>de417d04317ca3bc30f59685a9d19d<wbr>=
+e670e4b11d</a>&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 [3]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 [4]<a href=3D"https://gith=
+ub.com/efficios/babeltrace/commit/4594dbd8f7c2af2446a3e310bee74ba4a2e9d648"=
+ rel=3D"noreferrer" target=3D"_blank">https://github.com/<wbr>efficios/babe=
+ltrace/commit/<wbr>4594dbd8f7c2af2446a3e310bee74b<wbr>a4a2e9d648</a> &lt;<a=
+ href=3D"https://github.com/efficios/babeltrace/commit/4594dbd8f7c2af2446a3=
+e310bee74ba4a2e9d648" rel=3D"noreferrer" target=3D"_blank">https://github.c=
+om/efficios/<wbr>babeltrace/commit/<wbr>4594dbd8f7c2af2446a3e310bee74b<wbr>=
+a4a2e9d648</a>&gt;<br>
+<span class=3D"">&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 In the event that you are =
+already using an updated version of babeltrace<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 and<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 lttng-tools, it would be p=
+ertinent to provide us with a simple<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 reproducer so we<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 can assess the issue.<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0The version you are using does not include the ment=
+ioned fixes. Please update<br>
+&gt;=C2=A0 =C2=A0 =C2=A0and redo your experiment.<br>
 &gt;<br>
 &gt;<br>
-&gt; I am trying to have LTTng UST tracing inside a docker container. I was=
-n't<br>
-&gt; able to get the UST tracing working. LTTng would not write any UST tra=
-ce<br>
-&gt; files in the directory, even though it printed it would. Has it been t=
-ested<br>
-&gt; before? Is there any known problem?<br>
+&gt; Test this issue in the version you have listed, the issue still exists=
+.<br>
 <br>
-Tracing inside a container (not Docker), where the LTTng daemons and<br>
-the applications are running in the same container, is known to work<br>
-as this is how most of the LTTng CI works.<br>
+</span>Given that previous versions had a major timing problem there I woul=
+d expect to have some improvement.<br>
 <br>
-As far as Docker is concerned, I tested it a number of times and it<br>
-worked. Can you provide the versions of LTTng and Docker you're using<br>
-and the session daemon's logs (launching it with the -vvv option)?<br>
-<br>
-Thanks,<br>
-J=E9r=E9mie<br>
-<br>
-&gt;<br>
-&gt;<br>
-&gt; $ lttng enable-channel --session test --userspace channel0<br>
-&gt;<br>
-&gt; Error: Channel channel0: UST create channel failed (session ServiceFab=
-ric_0)<br>
-&gt; Error: Command error<br>
-&gt;<br>
-&gt;<br>
-&gt; Thanks.<br>
-&gt;<br>
-&gt;<br>
-&gt;<br>
-&gt; ______________________________<wbr>_________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
-ev@lists.lttng.org</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPlnk632716" targe=
-t=3D"_blank">
-https://lists.lttng.org/cgi-bi<wbr>n/mailman/listinfo/lttng-dev</a> </span>
-<div id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPBorder_GT_14=
-918472778530.7749348336754354" style=3D"margin-bottom:20px; overflow:auto; =
-width:100%; text-indent:0px">
-<table id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPContainer_=
-14918472778450.52263434094437" cellspacing=3D"0" style=3D"width:90%; backgr=
-ound-color:rgb(255,255,255); overflow:auto; padding-top:20px; padding-botto=
-m:20px; margin-top:20px; border-top:1px dotted rgb(200,200,200); border-bot=
-tom:1px dotted rgb(200,200,200)">
-<tbody>
-<tr valign=3D"top">
-<td id=3D"m_-1350089122956405048gmail-m_-3517871239381958006TextCell_149184=
-72778480.4117515003584903" colspan=3D"2" style=3D"vertical-align:top; paddi=
-ng:0px; display:table-cell">
-<div id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPRemovePrevie=
-wContainer_14918472778480.343333967527086">
-</div>
-<div id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPTitle_149184=
-72778480.8766887868350135" style=3D"color:rgb(0,120,215); font-weight:400; =
-font-size:21px; font-family:wf_segoe-ui_light,&quot;segoe ui light&quot;,&q=
-uot;segoe wp light&quot;,&quot;segoe ui&quot;,&quot;segoe wp&quot;,tahoma,a=
-rial,&quot;apple color emoji&quot;,&quot;segoe ui emoji&quot;,notocoloremoj=
-i,&quot;segoe ui symbol&quot;,&quot;android emoji&quot;,emojisymbols,sans-s=
-erif; line-height:21px">
-<a id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPUrlAnchor_1491=
-8472778490.7079886027354777" href=3D"https://lists.lttng.org/cgi-bin/mailma=
-n/listinfo/lttng-dev" target=3D"_blank" style=3D"text-decoration:none">lttn=
-g-dev Info Page</a></div>
-<div id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPMetadata_149=
-18472778500.47112231589813147" style=3D"margin:10px 0px 16px; color:rgb(102=
-,102,102); font-weight:400; font-family:wf_segoe-ui_normal,&quot;segoe ui&q=
-uot;,&quot;segoe wp&quot;,tahoma,arial,&quot;apple color emoji&quot;,&quot;=
-segoe ui emoji&quot;,notocoloremoji,&quot;segoe ui symbol&quot;,&quot;andro=
-id emoji&quot;,emojisymbols,sans-serif; font-size:14px; line-height:14px">
-<a href=3D"http://lists.lttng.org" target=3D"_blank">lists.lttng.org</a></d=
-iv>
-<div id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPDescription_=
-14918472778520.6602582148353134" style=3D"display:block; color:rgb(102,102,=
-102); font-weight:400; font-family:wf_segoe-ui_normal,&quot;segoe ui&quot;,=
-&quot;segoe wp&quot;,tahoma,arial,&quot;apple color emoji&quot;,&quot;segoe=
- ui emoji&quot;,notocoloremoji,&quot;segoe ui symbol&quot;,&quot;android em=
-oji&quot;,emojisymbols,sans-serif; font-size:14px; line-height:20px; max-he=
-ight:100px; overflow:hidden">
-To see the collection of prior postings to the list, visit the lttng-dev Ar=
-chives. Using lttng-dev: To post a message to all the list members, send ..=
-.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<span class=3D"m_-1350089122956405048gmail-"><br>
-&gt;<br>
-<br>
-<br>
-<br>
--- <br>
-J=E9r=E9mie Galarneau<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" id=3D"m_-1350089122956405048gmail-m_-35=
-17871239381958006LPlnk440294" target=3D"_blank">http://www.efficios.com</a>
-</span>
-<div id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPBorder_GT_14=
-918473357550.248963055382728" style=3D"margin-bottom:20px; overflow:auto; w=
-idth:100%; text-indent:0px">
-<table id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPContainer_=
-14918473357460.414424549224911" cellspacing=3D"0" style=3D"width:90%; backg=
-round-color:rgb(255,255,255); overflow:auto; padding-top:20px; padding-bott=
-om:20px; margin-top:20px; border-top:1px dotted rgb(200,200,200); border-bo=
-ttom:1px dotted rgb(200,200,200)">
-<tbody>
-<tr valign=3D"top">
-<td id=3D"m_-1350089122956405048gmail-m_-3517871239381958006TextCell_149184=
-73357480.9923752452490312" colspan=3D"2" style=3D"vertical-align:top; paddi=
-ng:0px; display:table-cell">
-<div id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPRemovePrevie=
-wContainer_14918473357480.48768909434730534">
-</div>
-<div id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPTitle_149184=
-73357490.5288885228874352" style=3D"color:rgb(0,120,215); font-weight:400; =
-font-size:21px; font-family:wf_segoe-ui_light,&quot;segoe ui light&quot;,&q=
-uot;segoe wp light&quot;,&quot;segoe ui&quot;,&quot;segoe wp&quot;,tahoma,a=
-rial,&quot;apple color emoji&quot;,&quot;segoe ui emoji&quot;,notocoloremoj=
-i,&quot;segoe ui symbol&quot;,&quot;android emoji&quot;,emojisymbols,sans-s=
-erif; line-height:21px">
-<a id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPUrlAnchor_1491=
-8473357500.7067378978625205" href=3D"http://www.efficios.com/" target=3D"_b=
-lank" style=3D"text-decoration:none">EfficiOS</a></div>
-<div id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPMetadata_149=
-18473357520.6810205760820718" style=3D"margin:10px 0px 16px; color:rgb(102,=
-102,102); font-weight:400; font-family:wf_segoe-ui_normal,&quot;segoe ui&qu=
-ot;,&quot;segoe wp&quot;,tahoma,arial,&quot;apple color emoji&quot;,&quot;s=
-egoe ui emoji&quot;,notocoloremoji,&quot;segoe ui symbol&quot;,&quot;androi=
-d emoji&quot;,emojisymbols,sans-serif; font-size:14px; line-height:14px">
-<a href=3D"http://www.efficios.com" target=3D"_blank">www.efficios.com</a><=
-/div>
-<div id=3D"m_-1350089122956405048gmail-m_-3517871239381958006LPDescription_=
-14918473357530.6577156845495322" style=3D"display:block; color:rgb(102,102,=
-102); font-weight:400; font-family:wf_segoe-ui_normal,&quot;segoe ui&quot;,=
-&quot;segoe wp&quot;,tahoma,arial,&quot;apple color emoji&quot;,&quot;segoe=
- ui emoji&quot;,notocoloremoji,&quot;segoe ui symbol&quot;,&quot;android em=
-oji&quot;,emojisymbols,sans-serif; font-size:14px; line-height:20px; max-he=
-ight:100px; overflow:hidden">
-At EfficiOS, our main goal is diminishing the amount of time our clients sp=
-end identifying faults. We also enable our clients' applications to scale o=
-n massive multi ...</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<br>
-</div>
-</span></font></div>
-</div>
-</div>
-</blockquote>
-</div>
-<br>
-<br clear=3D"all">
-<div><br>
-</div>
--- <br>
-<div class=3D"m_-1350089122956405048gmail_signature">J=E9r=E9mie Galarneau<=
+In that case, we will need a lot more information on your benchmarking stra=
+tegy.<br>
+We will need a simple reproducer, your benchmark code (r,gnuplot etc.), you=
+r overall methodology<br>
+to be able to reproduce the issue locally. Otherwise, it will be very hard<=
 br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
-om</a></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</blockquote>
-</div>
+to come to any conclusion.<br>
+<span class=3D""><br></span></blockquote><div><br></div><div>Sorry, we can =
+not provide the detailed information about the benchmark code due to the co=
+mpany regulations.<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quo=
+te" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"=
+><span class=3D"">
+&gt; =C2=A0<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Cheers<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Steps:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0lttng create session --live=
+ -U net://*<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0lttng enable-channel -s ses=
+sion -u ch1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0lttng enable-event -s sessi=
+on -c ch1 -u -a<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0lttng start<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Run a high event throughput=
+ application, which is multithreaded<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 application&gt;<br>
+&gt;<br>
+</span><span class=3D"">&gt; In the multithreaded application, each tracepo=
+int will have the wall<br>
+&gt; time of the system,then we can easily reproduce this issue through<br>
+&gt; comparing the time of recorded event and the system wall time.<br>
+&gt; =C2=A0<br>
+&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0babeltrace -i lttng-live ne=
+t://*<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0After a while, we found the=
+ timestamp of the event in the babeltrace is<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 different with the time in host<b=
+r>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0which run the application. =
+And the delay will be bigger and bigger with<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 time goes.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 Cheers<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 I checke=
+d the source code, found Babeltrace in live-reading mode<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 will read<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 the reco=
+rded events in the CTF<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 files, a=
+nd then parse and print it in a single thread. The process<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 is a<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 little s=
+low, do you have any ideas to<br>
+&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 improve =
+the process.<br>
+&gt;<br>
+&gt;<br>
+&gt; From my understanding of the source code, the process of parse and<br>
+&gt; print event will consume a lot of time. For example, the multithreaded=
 <br>
-<br clear=3D"all">
-<div><br>
-</div>
--- <br>
-<div class=3D"gmail_signature">J=E9r=E9mie Galarneau<br>
-EfficiOS Inc.<br>
-<a href=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.c=
-om</a></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</body>
-</html>
+&gt; application will consume 3 CPUs, in a specified time,3 subbuffers will=
+<br>
+&gt; be filled and sent to lttng-relayd daemon, recorded into the CTF files=
+.<br>
+&gt; If in the specified time, babeltrace only handled 2 subbuffers&#39; ev=
+ent,<br>
+&gt; thenthe issue will happens.<br>
+<br>
+</span>Did you perform a bisection for where the delay come from? Reception=
+ of packet? formatting of event?<br>
+What is the throughput of the application?<br>
+How many tracepoint definition?<br>
+Does babeltrace catch up if a quiescent period is given?<br></blockquote><d=
+iv><br></div><div>I think so.<br></div><div>=C2=A0</div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
+ing-left:1ex">
+Could you provide us with statistics, timing data, etc.?<br></blockquote><b=
+lockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px =
+#ccc solid;padding-left:1ex">
+What type of delay are we talking about?<br>
+<span class=3D"HOEnZb"><font color=3D"#888888"><br></font></span></blockquo=
+te><br></div><div class=3D"gmail_quote">For example, the system wall time i=
+s 5:18 PM now, but the Babeltrace is still printing events which</div><div =
+class=3D"gmail_quote"> have time 5:10 PM. Then stop running the application=
+, the Babeltrace still need some times to print</div><div class=3D"gmail_qu=
+ote"> the recorded events.</div><div class=3D"gmail_quote"><br></div><div c=
+lass=3D"gmail_quote"> I think the root cause is that the parsing and printi=
+ng process is a bit slow. So i want to know if there</div><div class=3D"gma=
+il_quote"> are any method to improve the performance of this process. <br><=
+/div><div class=3D"gmail_quote"><br></div><div class=3D"gmail_quote">Regard=
+s,</div><div class=3D"gmail_quote">Liguang</div><div class=3D"gmail_quote">=
+<br></div><div class=3D"gmail_quote"><blockquote class=3D"gmail_quote" styl=
+e=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><span c=
+lass=3D"HOEnZb"><font color=3D"#888888">
+--<br>
+Jonathan R. Julien<br>
+Efficios<br>
+</font></span></blockquote></div><br></div></div></div>
 
---_000_CY4PR13MB12398D553E5F47E7B38971BEC7600CY4PR13MB1239namp_--
+--94eb2c070154e691ca0559afccbb--
 
---===============6385568143769509922==
+--===============2298720117342283576==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -607,4 +456,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============6385568143769509922==--
+--===============2298720117342283576==--
