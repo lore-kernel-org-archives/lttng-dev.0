@@ -1,23 +1,18 @@
-From: liguang li <liguang.lee6@gmail.com>
-Subject: Re: Babeltrace performance issue in live-reading mode
-Date: Thu, 21 Sep 2017 17:34:34 +0800
-Message-ID: <CAMYaK0TEWZGtZnvO5aDw5CZi8Rr1tXdoaBrkDRO6k-biydVn_g__45027.9875928119$1506004472$gmane$org@mail.gmail.com>
-References: <CAMYaK0TVYEgM_qxCExiFn6BcgZ58+KXKqx72h_0Gv4g2JN40Yg@mail.gmail.com>
- <20170918151857.afnn5n6ntzhyzfnw@psrcode-TP-X230>
- <CAMYaK0TGprotjj0v-HayqHAaKpJaTXgqqYh55CK9JmOKBO-U8A@mail.gmail.com>
- <20170919145707.5wh3e23zet7jm3bc@psrcode-TP-X230>
- <CAMYaK0SQkdjs_gp+4fwBL1BH1oqEiqYnN6PXq-H-=ApMRbe-bg@mail.gmail.com>
- <cdf53e97-49f0-e6d4-e4b2-0bca6ab84534@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-modules] RFC: Add kmalloc failover to
+	vmalloc
+Date: Thu, 21 Sep 2017 10:55:31 -0400
+Message-ID: <1506005731-22461-1-git-send-email-mjeanson__46642.6017148935$1506005817$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2298720117342283576=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk0-x230.google.com (mail-qk0-x230.google.com
- [IPv6:2607:f8b0:400d:c09::230])
- by lists.lttng.org (Postfix) with ESMTPS id 3xyWfN3qLgzCwt
- for <lttng-dev@lists.lttng.org>; Thu, 21 Sep 2017 09:34:36 +0000 (UTC)
-Received: by mail-qk0-x230.google.com with SMTP id u67so5175673qkg.6
- for <lttng-dev@lists.lttng.org>; Thu, 21 Sep 2017 02:34:36 -0700 (PDT)
-In-Reply-To: <cdf53e97-49f0-e6d4-e4b2-0bca6ab84534@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3xyfmp5dH1ztQk
+ for <lttng-dev@lists.lttng.org>; Thu, 21 Sep 2017 14:55:38 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 557DF34023C
+ for <lttng-dev@lists.lttng.org>; Thu, 21 Sep 2017 14:56:33 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,433 +22,172 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============2298720117342283576==
-Content-Type: multipart/alternative; boundary="94eb2c070154e691ca0559afccbb"
-
---94eb2c070154e691ca0559afccbb
-Content-Type: text/plain; charset="UTF-8"
-
-Hi,
-
-On Wed, Sep 20, 2017 at 10:58 PM, Jonathan Rajotte Julien <
-Jonathan.rajotte-julien@efficios.com> wrote:
-
-> Hi,
->
-> On 2017-09-20 05:12 AM, liguang li wrote:
-> >
-> >
-> > On Tue, Sep 19, 2017 at 10:57 PM, Jonathan Rajotte-Julien <
-> jonathan.rajotte-julien@efficios.com <mailto:jonathan.rajotte-
-> julien@efficios.com>> wrote:
-> >
-> >     On Tue, Sep 19, 2017 at 03:53:27PM +0800, liguang li wrote:
-> >     >    Hi,
-> >     >    On Mon, Sep 18, 2017 at 11:18 PM, Jonathan Rajotte-Julien
-> >     >    <[1]jonathan.rajotte-julien@efficios.com <mailto:
-> jonathan.rajotte-julien@efficios.com>> wrote:
-> >     >
-> >     >      Hi,
-> >     >      On Mon, Sep 18, 2017 at 11:32:07AM +0800, liguang li wrote:
-> >     >      >    Hi,
-> >     >      >
-> >     >      >    Create a session in live-reading mode, run a application
-> which
-> >     >      having very
-> >     >      >    high event throughput, then prints
-> >     >      >    the events with babeltrace. We found the live trace
-> viewer are
-> >     >      viewing
-> >     >      >    events a few seconds ago, and as time
-> >     >
-> >     >      Could you provide us the version used for babeltrace,
-> lttng-tools and
-> >     >      lttng-ust?
-> >     >
-> >     >     Babeltrace: 1.5.1
-> >
-> >     Update to babeltrace 1.5.3.
-> >
-> >     >     Lttng-tools: 2.8.6
-> >
-> >     Update to lttng-tools 2.8.8
-> >
-> >     >     Lttng-ust: 2.8.2
-> >     >
-> >     >      >    goes on, the delay will be bigger and bigger.
-> >     >
-> >     >      A similar issues was observed a couple months ago, which
-> implicated
-> >     >      multiple delayed ack
-> >     >      problems during communication between lttng-relayd and
-> babeltrace.
-> >     >
-> >     >      The following fixes were merged:
-> >     >
-> >     >      [1]
-> >     >      [2]https://github.com/lttng/lttng-tools/commit/
-> b6025e9476332b75eb8184345c3eb3e924780088 <https://github.com/lttng/
-> lttng-tools/commit/b6025e9476332b75eb8184345c3eb3e924780088>
-> >     >      [2]
-> >     >      [3]https://github.com/efficios/babeltrace/commit/
-> de417d04317ca3bc30f59685a9d19de670e4b11d <https://github.com/efficios/
-> babeltrace/commit/de417d04317ca3bc30f59685a9d19de670e4b11d>
-> >     >      [3]
-> >     >      [4]https://github.com/efficios/babeltrace/commit/
-> 4594dbd8f7c2af2446a3e310bee74ba4a2e9d648 <https://github.com/efficios/
-> babeltrace/commit/4594dbd8f7c2af2446a3e310bee74ba4a2e9d648>
-> >     >
-> >     >      In the event that you are already using an updated version of
-> babeltrace
-> >     >      and
-> >     >      lttng-tools, it would be pertinent to provide us with a simple
-> >     >      reproducer so we
-> >     >      can assess the issue.
-> >
-> >     The version you are using does not include the mentioned fixes.
-> Please update
-> >     and redo your experiment.
-> >
-> >
-> > Test this issue in the version you have listed, the issue still exists.
->
-> Given that previous versions had a major timing problem there I would
-> expect to have some improvement.
->
-> In that case, we will need a lot more information on your benchmarking
-> strategy.
-> We will need a simple reproducer, your benchmark code (r,gnuplot etc.),
-> your overall methodology
-> to be able to reproduce the issue locally. Otherwise, it will be very hard
-> to come to any conclusion.
->
->
-Sorry, we can not provide the detailed information about the benchmark code
-due to the company regulations.
-
-
-> >
-> >
-> >     Cheers
-> >
-> >     >
-> >     >
-> >     >     Steps:
-> >     >     lttng create session --live -U net://*
-> >     >     lttng enable-channel -s session -u ch1
-> >     >     lttng enable-event -s session -c ch1 -u -a
-> >     >     lttng start
-> >     >
-> >     >     Run a high event throughput application, which is multithreaded
-> >     >    application>
-> >
-> > In the multithreaded application, each tracepoint will have the wall
-> > time of the system,then we can easily reproduce this issue through
-> > comparing the time of recorded event and the system wall time.
-> >
-> >
-> >     >     babeltrace -i lttng-live net://*
-> >     >
-> >     >     After a while, we found the timestamp of the event in the
-> babeltrace is
-> >     >    different with the time in host
-> >     >     which run the application. And the delay will be bigger and
-> bigger with
-> >     >    time goes.
-> >     >
-> >     >
-> >     >      Cheers
-> >     >      >    I checked the source code, found Babeltrace in
-> live-reading mode
-> >     >      will read
-> >     >      >    the recorded events in the CTF
-> >     >      >    files, and then parse and print it in a single thread.
-> The process
-> >     >      is a
-> >     >      >    little slow, do you have any ideas to
-> >     >      >    improve the process.
-> >
-> >
-> > From my understanding of the source code, the process of parse and
-> > print event will consume a lot of time. For example, the multithreaded
-> > application will consume 3 CPUs, in a specified time,3 subbuffers will
-> > be filled and sent to lttng-relayd daemon, recorded into the CTF files.
-> > If in the specified time, babeltrace only handled 2 subbuffers' event,
-> > thenthe issue will happens.
->
-> Did you perform a bisection for where the delay come from? Reception of
-> packet? formatting of event?
-> What is the throughput of the application?
-> How many tracepoint definition?
-> Does babeltrace catch up if a quiescent period is given?
->
-
-I think so.
-
-
-> Could you provide us with statistics, timing data, etc.?
->
-What type of delay are we talking about?
->
->
-For example, the system wall time is 5:18 PM now, but the Babeltrace is
-still printing events which
-have time 5:10 PM. Then stop running the application, the Babeltrace still
-need some times to print
-the recorded events.
-
-I think the root cause is that the parsing and printing process is a bit
-slow. So i want to know if there
-are any method to improve the performance of this process.
-
-Regards,
-Liguang
-
---
-> Jonathan R. Julien
-> Efficios
->
-
---94eb2c070154e691ca0559afccbb
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi,<br><div><div class=3D"gmail_extra"><br><div class=3D"g=
-mail_quote">On Wed, Sep 20, 2017 at 10:58 PM, Jonathan Rajotte Julien <span=
- dir=3D"ltr">&lt;<a href=3D"mailto:Jonathan.rajotte-julien@efficios.com" ta=
-rget=3D"_blank">Jonathan.rajotte-julien@efficios.com</a>&gt;</span> wrote:<=
-br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left=
-:1px #ccc solid;padding-left:1ex">Hi,<br>
-<br>
-On 2017-09-20 05:12 AM, liguang li wrote:<br>
-<span class=3D"">&gt;<br>
-&gt;<br>
-&gt; On Tue, Sep 19, 2017 at 10:57 PM, Jonathan Rajotte-Julien &lt;<a href=
-=3D"mailto:jonathan.rajotte-julien@efficios.com">jonathan.rajotte-julien@<w=
-br>efficios.com</a> &lt;mailto:<a href=3D"mailto:jonathan.rajotte-julien@ef=
-ficios.com">jonathan.rajotte-<wbr>julien@efficios.com</a>&gt;&gt; wrote:<br=
->
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0On Tue, Sep 19, 2017 at 03:53:27PM +0800, liguang l=
-i wrote:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 Hi,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 On Mon, Sep 18, 2017 at 11:18 PM,=
- Jonathan Rajotte-Julien<br>
-</span><span class=3D"">&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 &lt;[1]<a=
- href=3D"mailto:jonathan.rajotte-julien@efficios.com">jonathan.rajotte-juli=
-en@<wbr>efficios.com</a> &lt;mailto:<a href=3D"mailto:jonathan.rajotte-juli=
-en@efficios.com">jonathan.rajotte-<wbr>julien@efficios.com</a>&gt;&gt; wrot=
-e:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 Hi,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 On Mon, Sep 18, 2017 at 11=
-:32:07AM +0800, liguang li wrote:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 Hi,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 Create a=
- session in live-reading mode, run a application which<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 having very<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 high eve=
-nt throughput, then prints<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 the even=
-ts with babeltrace. We found the live trace viewer are<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 viewing<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 events a=
- few seconds ago, and as time<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 Could you provide us the v=
-ersion used for babeltrace, lttng-tools and<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 lttng-ust?<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Babeltrace: 1.5.1<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Update to babeltrace 1.5.3.<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Lttng-tools: 2.8.6<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Update to lttng-tools 2.8.8<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Lttng-ust: 2.8.2<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 goes on,=
- the delay will be bigger and bigger.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 A similar issues was obser=
-ved a couple months ago, which implicated<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 multiple delayed ack<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 problems during communicat=
-ion between lttng-relayd and babeltrace.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 The following fixes were m=
-erged:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 [1]<br>
-</span>&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 [2]<a href=3D"https=
-://github.com/lttng/lttng-tools/commit/b6025e9476332b75eb8184345c3eb3e92478=
-0088" rel=3D"noreferrer" target=3D"_blank">https://github.com/lttng/<wbr>lt=
-tng-tools/commit/<wbr>b6025e9476332b75eb8184345c3eb3<wbr>e924780088</a> &lt=
-;<a href=3D"https://github.com/lttng/lttng-tools/commit/b6025e9476332b75eb8=
-184345c3eb3e924780088" rel=3D"noreferrer" target=3D"_blank">https://github.=
-com/lttng/<wbr>lttng-tools/commit/<wbr>b6025e9476332b75eb8184345c3eb3<wbr>e=
-924780088</a>&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 [2]<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 [3]<a href=3D"https://gith=
-ub.com/efficios/babeltrace/commit/de417d04317ca3bc30f59685a9d19de670e4b11d"=
- rel=3D"noreferrer" target=3D"_blank">https://github.com/<wbr>efficios/babe=
-ltrace/commit/<wbr>de417d04317ca3bc30f59685a9d19d<wbr>e670e4b11d</a> &lt;<a=
- href=3D"https://github.com/efficios/babeltrace/commit/de417d04317ca3bc30f5=
-9685a9d19de670e4b11d" rel=3D"noreferrer" target=3D"_blank">https://github.c=
-om/efficios/<wbr>babeltrace/commit/<wbr>de417d04317ca3bc30f59685a9d19d<wbr>=
-e670e4b11d</a>&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 [3]<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 [4]<a href=3D"https://gith=
-ub.com/efficios/babeltrace/commit/4594dbd8f7c2af2446a3e310bee74ba4a2e9d648"=
- rel=3D"noreferrer" target=3D"_blank">https://github.com/<wbr>efficios/babe=
-ltrace/commit/<wbr>4594dbd8f7c2af2446a3e310bee74b<wbr>a4a2e9d648</a> &lt;<a=
- href=3D"https://github.com/efficios/babeltrace/commit/4594dbd8f7c2af2446a3=
-e310bee74ba4a2e9d648" rel=3D"noreferrer" target=3D"_blank">https://github.c=
-om/efficios/<wbr>babeltrace/commit/<wbr>4594dbd8f7c2af2446a3e310bee74b<wbr>=
-a4a2e9d648</a>&gt;<br>
-<span class=3D"">&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 In the event that you are =
-already using an updated version of babeltrace<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 and<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 lttng-tools, it would be p=
-ertinent to provide us with a simple<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 reproducer so we<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 can assess the issue.<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0The version you are using does not include the ment=
-ioned fixes. Please update<br>
-&gt;=C2=A0 =C2=A0 =C2=A0and redo your experiment.<br>
-&gt;<br>
-&gt;<br>
-&gt; Test this issue in the version you have listed, the issue still exists=
-.<br>
-<br>
-</span>Given that previous versions had a major timing problem there I woul=
-d expect to have some improvement.<br>
-<br>
-In that case, we will need a lot more information on your benchmarking stra=
-tegy.<br>
-We will need a simple reproducer, your benchmark code (r,gnuplot etc.), you=
-r overall methodology<br>
-to be able to reproduce the issue locally. Otherwise, it will be very hard<=
-br>
-to come to any conclusion.<br>
-<span class=3D""><br></span></blockquote><div><br></div><div>Sorry, we can =
-not provide the detailed information about the benchmark code due to the co=
-mpany regulations.<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quo=
-te" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"=
-><span class=3D"">
-&gt; =C2=A0<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0Cheers<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Steps:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0lttng create session --live=
- -U net://*<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0lttng enable-channel -s ses=
-sion -u ch1<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0lttng enable-event -s sessi=
-on -c ch1 -u -a<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0lttng start<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0Run a high event throughput=
- application, which is multithreaded<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 application&gt;<br>
-&gt;<br>
-</span><span class=3D"">&gt; In the multithreaded application, each tracepo=
-int will have the wall<br>
-&gt; time of the system,then we can easily reproduce this issue through<br>
-&gt; comparing the time of recorded event and the system wall time.<br>
-&gt; =C2=A0<br>
-&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0babeltrace -i lttng-live ne=
-t://*<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0After a while, we found the=
- timestamp of the event in the babeltrace is<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 different with the time in host<b=
-r>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0which run the application. =
-And the delay will be bigger and bigger with<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 time goes.<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 Cheers<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 I checke=
-d the source code, found Babeltrace in live-reading mode<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 will read<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 the reco=
-rded events in the CTF<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 files, a=
-nd then parse and print it in a single thread. The process<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 is a<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 little s=
-low, do you have any ideas to<br>
-&gt;=C2=A0 =C2=A0 =C2=A0&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0 improve =
-the process.<br>
-&gt;<br>
-&gt;<br>
-&gt; From my understanding of the source code, the process of parse and<br>
-&gt; print event will consume a lot of time. For example, the multithreaded=
-<br>
-&gt; application will consume 3 CPUs, in a specified time,3 subbuffers will=
-<br>
-&gt; be filled and sent to lttng-relayd daemon, recorded into the CTF files=
-.<br>
-&gt; If in the specified time, babeltrace only handled 2 subbuffers&#39; ev=
-ent,<br>
-&gt; thenthe issue will happens.<br>
-<br>
-</span>Did you perform a bisection for where the delay come from? Reception=
- of packet? formatting of event?<br>
-What is the throughput of the application?<br>
-How many tracepoint definition?<br>
-Does babeltrace catch up if a quiescent period is given?<br></blockquote><d=
-iv><br></div><div>I think so.<br></div><div>=C2=A0</div><blockquote class=
-=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
-ing-left:1ex">
-Could you provide us with statistics, timing data, etc.?<br></blockquote><b=
-lockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px =
-#ccc solid;padding-left:1ex">
-What type of delay are we talking about?<br>
-<span class=3D"HOEnZb"><font color=3D"#888888"><br></font></span></blockquo=
-te><br></div><div class=3D"gmail_quote">For example, the system wall time i=
-s 5:18 PM now, but the Babeltrace is still printing events which</div><div =
-class=3D"gmail_quote"> have time 5:10 PM. Then stop running the application=
-, the Babeltrace still need some times to print</div><div class=3D"gmail_qu=
-ote"> the recorded events.</div><div class=3D"gmail_quote"><br></div><div c=
-lass=3D"gmail_quote"> I think the root cause is that the parsing and printi=
-ng process is a bit slow. So i want to know if there</div><div class=3D"gma=
-il_quote"> are any method to improve the performance of this process. <br><=
-/div><div class=3D"gmail_quote"><br></div><div class=3D"gmail_quote">Regard=
-s,</div><div class=3D"gmail_quote">Liguang</div><div class=3D"gmail_quote">=
-<br></div><div class=3D"gmail_quote"><blockquote class=3D"gmail_quote" styl=
-e=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><span c=
-lass=3D"HOEnZb"><font color=3D"#888888">
---<br>
-Jonathan R. Julien<br>
-Efficios<br>
-</font></span></blockquote></div><br></div></div></div>
-
---94eb2c070154e691ca0559afccbb--
-
---===============2298720117342283576==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============2298720117342283576==--
+VGhpcyBwYXRjaCBpcyBiYXNlZCBvbiB0aGUga3ZtYWxsb2MgaGVscGVycyBpbnRyb2R1Y2VkIGlu
+IGtlcm5lbCA0LjEyLgoKSXQgd2lsbCBncmFjZWZ1bGx5IGZhaWxvdmVyIG1lbW9yeSBhbGxvY2F0
+aW9ucyBvZiBtb3JlIHRoYW4gb25lIHBhZ2UgdG8Kdm1hbGxvYyBmb3Igc3lzdGVtcyB1bmRlciBo
+aWdoIG1lbW9yeSBwcmVzc3VyZSBvciBmcmFnbWVudGF0aW9uLgoKSSBvbmx5IHVzZWQgaXQgaW4g
+bHR0bmctZXZlbnRzLmMgYXMgYSBQT0MsIG1vc3QgYWxsb2NhdGlvbnMgZml0IGludG8gYQpzaW5n
+bGUgcGFnZSBzbyBJJ20gbm90IHN1cmUgaG93IHVzZWZ1bCB0aGlzIGFjdHVhbGx5IGlzLgoKVGhv
+dWdodHM/CgpTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVmZmljaW9z
+LmNvbT4KClNlZSB1cHN0cmVhbSBjb21taXQ6CiAgY29tbWl0IGE3YzNlOTAxYTQ2ZmY1NGMwMTZk
+MDQwODQ3ZWRhNTk4YTllM2U2NTMKICBBdXRob3I6IE1pY2hhbCBIb2NrbyA8bWhvY2tvQHN1c2Uu
+Y29tPgogIERhdGU6ICAgTW9uIE1heSA4IDE1OjU3OjA5IDIwMTcgLTA3MDAKCiAgICBtbTogaW50
+cm9kdWNlIGt2W216XWFsbG9jIGhlbHBlcnMKCiAgICBQYXRjaCBzZXJpZXMgImt2bWFsbG9jIiwg
+djUuCgogICAgVGhlcmUgYXJlIG1hbnkgb3BlbiBjb2RlZCBrbWFsbG9jIHdpdGggdm1hbGxvYyBm
+YWxsYmFjayBpbnN0YW5jZXMgaW4gdGhlCiAgICB0cmVlLiAgTW9zdCBvZiB0aGVtIGFyZSBub3Qg
+Y2FyZWZ1bCBlbm91Z2ggb3Igc2ltcGx5IGRvIG5vdCBjYXJlIGFib3V0CiAgICB0aGUgdW5kZXJs
+eWluZyBzZW1hbnRpYyBvZiB0aGUga21hbGxvYy9wYWdlIGFsbG9jYXRvciB3aGljaCBtZWFucyB0
+aGF0CiAgICBhKSBzb21lIHZtYWxsb2MgZmFsbGJhY2tzIGFyZSBiYXNpY2FsbHkgdW5yZWFjaGFi
+bGUgYmVjYXVzZSB0aGUga21hbGxvYwogICAgcGFydCB3aWxsIGtlZXAgcmV0cnlpbmcgdW50aWwg
+aXQgc3VjY2VlZHMgYikgdGhlIHBhZ2UgYWxsb2NhdG9yIGNhbgogICAgaW52b2tlIGEgcmVhbGx5
+IGRpc3J1cHRpdmUgc3RlcHMgbGlrZSB0aGUgT09NIGtpbGxlciB0byBtb3ZlIGZvcndhcmQKICAg
+IHdoaWNoIGRvZXNuJ3Qgc291bmQgYXBwcm9wcmlhdGUgd2hlbiB3ZSBjb25zaWRlciB0aGF0IHRo
+ZSB2bWFsbG9jCiAgICBmYWxsYmFjayBpcyBhdmFpbGFibGUuCgogICAgQXMgaXQgY2FuIGJlIHNl
+ZW4gaW1wbGVtZW50aW5nIGt2bWFsbG9jIHJlcXVpcmVzIHF1aXRlIGFuIGludGltYXRlCiAgICBr
+bm93bGVkZ2UgaWYgdGhlIHBhZ2UgYWxsb2NhdG9yIGFuZCB0aGUgbWVtb3J5IHJlY2xhaW0gaW50
+ZXJuYWxzIHdoaWNoCiAgICBzdHJvbmdseSBzdWdnZXN0cyB0aGF0IGEgaGVscGVyIHNob3VsZCBi
+ZSBpbXBsZW1lbnRlZCBpbiB0aGUgbWVtb3J5CiAgICBzdWJzeXN0ZW0gcHJvcGVyLgoKICAgIE1v
+c3QgY2FsbGVycywgSSBjb3VsZCBmaW5kLCBoYXZlIGJlZW4gY29udmVydGVkIHRvIHVzZSB0aGUg
+aGVscGVyCiAgICBpbnN0ZWFkLiAgVGhpcyBpcyBwYXRjaCA2LiAgVGhlcmUgYXJlIHNvbWUgbW9y
+ZSByZWx5aW5nIG9uIF9fR0ZQX1JFUEVBVAogICAgaW4gdGhlIG5ldHdvcmtpbmcgc3RhY2sgd2hp
+Y2ggSSBoYXZlIGNvbnZlcnRlZCBhcyB3ZWxsIGFuZCBFcmljIER1bWF6ZXQKICAgIHdhcyBub3Qg
+b3Bwb3NlZCBbMl0gdG8gY29udmVydCB0aGVtIGFzIHdlbGwuCgogICAgWzFdIGh0dHA6Ly9sa21s
+Lmtlcm5lbC5vcmcvci8yMDE3MDEzMDA5NDk0MC4xMzU0Ni0xLW1ob2Nrb0BrZXJuZWwub3JnCiAg
+ICBbMl0gaHR0cDovL2xrbWwua2VybmVsLm9yZy9yLzE0ODUyNzM2MjYuMTYzMjguMzAxLmNhbWVs
+QGVkdW1hemV0LWdsYXB0b3AzLnJvYW0uY29ycC5nb29nbGUuY29tCgogICAgVGhpcyBwYXRjaCAo
+b2YgOSk6CgogICAgVXNpbmcga21hbGxvYyB3aXRoIHRoZSB2bWFsbG9jIGZhbGxiYWNrIGZvciBs
+YXJnZXIgYWxsb2NhdGlvbnMgaXMgYQogICAgY29tbW9uIHBhdHRlcm4gaW4gdGhlIGtlcm5lbCBj
+b2RlLiAgWWV0IHdlIGRvIG5vdCBoYXZlIGFueSBjb21tb24gaGVscGVyCiAgICBmb3IgdGhhdCBh
+bmQgc28gdXNlcnMgaGF2ZSBpbnZlbnRlZCB0aGVpciBvd24gaGVscGVycy4gIFNvbWUgb2YgdGhl
+bSBhcmUKICAgIHJlYWxseSBjcmVhdGl2ZSB3aGVuIGRvaW5nIHNvLiAgTGV0J3MganVzdCBhZGQg
+a3ZbbXpdYWxsb2MgYW5kIG1ha2Ugc3VyZQogICAgaXQgaXMgaW1wbGVtZW50ZWQgcHJvcGVybHku
+ICBUaGlzIGltcGxlbWVudGF0aW9uIG1ha2VzIHN1cmUgdG8gbm90IG1ha2UKICAgIGEgbGFyZ2Ug
+bWVtb3J5IHByZXNzdXJlIGZvciA+IFBBR0VfU1pFIHJlcXVlc3RzIChfX0dGUF9OT1JFVFJZKSBh
+bmQgYWxzbwogICAgdG8gbm90IHdhcm4gYWJvdXQgYWxsb2NhdGlvbiBmYWlsdXJlcy4gIFRoaXMg
+YWxzbyBydWxlcyBvdXQgdGhlIE9PTQogICAga2lsbGVyIGFzIHRoZSB2bWFsbG9jIGlzIGEgbW9y
+ZSBhcHByb2FwcmlhdGUgZmFsbGJhY2sgdGhhbiBhIGRpc3J1cHRpdmUKICAgIHVzZXIgdmlzaWJs
+ZSBhY3Rpb24uCgpTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVmZmlj
+aW9zLmNvbT4KLS0tCiBsdHRuZy1ldmVudHMuYyAgICB8IDMwICsrKysrKysrKystLS0tLS0tLS0t
+LQogd3JhcHBlci92bWFsbG9jLmggfCA3OSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrKy0tCiAyIGZpbGVzIGNoYW5nZWQsIDkyIGluc2VydGlvbnMo
+KyksIDE3IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2x0dG5nLWV2ZW50cy5jIGIvbHR0bmct
+ZXZlbnRzLmMKaW5kZXggNmFhOTk0Yy4uMWU0Y2MxMCAxMDA2NDQKLS0tIGEvbHR0bmctZXZlbnRz
+LmMKKysrIGIvbHR0bmctZXZlbnRzLmMKQEAgLTEzMiwxNCArMTMyLDE0IEBAIHN0cnVjdCBsdHRu
+Z19zZXNzaW9uICpsdHRuZ19zZXNzaW9uX2NyZWF0ZSh2b2lkKQogCWludCBpOwogCiAJbXV0ZXhf
+bG9jaygmc2Vzc2lvbnNfbXV0ZXgpOwotCXNlc3Npb24gPSBremFsbG9jKHNpemVvZihzdHJ1Y3Qg
+bHR0bmdfc2Vzc2lvbiksIEdGUF9LRVJORUwpOworCXNlc3Npb24gPSBsdHRuZ19rdnphbGxvYyhz
+aXplb2Yoc3RydWN0IGx0dG5nX3Nlc3Npb24pLCBHRlBfS0VSTkVMKTsKIAlpZiAoIXNlc3Npb24p
+CiAJCWdvdG8gZXJyOwogCUlOSVRfTElTVF9IRUFEKCZzZXNzaW9uLT5jaGFuKTsKIAlJTklUX0xJ
+U1RfSEVBRCgmc2Vzc2lvbi0+ZXZlbnRzKTsKIAl1dWlkX2xlX2dlbigmc2Vzc2lvbi0+dXVpZCk7
+CiAKLQltZXRhZGF0YV9jYWNoZSA9IGt6YWxsb2Moc2l6ZW9mKHN0cnVjdCBsdHRuZ19tZXRhZGF0
+YV9jYWNoZSksCisJbWV0YWRhdGFfY2FjaGUgPSBsdHRuZ19rdnphbGxvYyhzaXplb2Yoc3RydWN0
+IGx0dG5nX21ldGFkYXRhX2NhY2hlKSwKIAkJCUdGUF9LRVJORUwpOwogCWlmICghbWV0YWRhdGFf
+Y2FjaGUpCiAJCWdvdG8gZXJyX2ZyZWVfc2Vzc2lvbjsKQEAgLTE2MSw5ICsxNjEsOSBAQCBzdHJ1
+Y3QgbHR0bmdfc2Vzc2lvbiAqbHR0bmdfc2Vzc2lvbl9jcmVhdGUodm9pZCkKIAlyZXR1cm4gc2Vz
+c2lvbjsKIAogZXJyX2ZyZWVfY2FjaGU6Ci0Ja2ZyZWUobWV0YWRhdGFfY2FjaGUpOworCWx0dG5n
+X2t2ZnJlZShtZXRhZGF0YV9jYWNoZSk7CiBlcnJfZnJlZV9zZXNzaW9uOgotCWtmcmVlKHNlc3Np
+b24pOworCWx0dG5nX2t2ZnJlZShzZXNzaW9uKTsKIGVycjoKIAltdXRleF91bmxvY2soJnNlc3Np
+b25zX211dGV4KTsKIAlyZXR1cm4gTlVMTDsKQEAgLTE3NCw3ICsxNzQsNyBAQCB2b2lkIG1ldGFk
+YXRhX2NhY2hlX2Rlc3Ryb3koc3RydWN0IGtyZWYgKmtyZWYpCiAJc3RydWN0IGx0dG5nX21ldGFk
+YXRhX2NhY2hlICpjYWNoZSA9CiAJCWNvbnRhaW5lcl9vZihrcmVmLCBzdHJ1Y3QgbHR0bmdfbWV0
+YWRhdGFfY2FjaGUsIHJlZmNvdW50KTsKIAl2ZnJlZShjYWNoZS0+ZGF0YSk7Ci0Ja2ZyZWUoY2Fj
+aGUpOworCWx0dG5nX2t2ZnJlZShjYWNoZSk7CiB9CiAKIHZvaWQgbHR0bmdfc2Vzc2lvbl9kZXN0
+cm95KHN0cnVjdCBsdHRuZ19zZXNzaW9uICpzZXNzaW9uKQpAQCAtMjEyLDcgKzIxMiw3IEBAIHZv
+aWQgbHR0bmdfc2Vzc2lvbl9kZXN0cm95KHN0cnVjdCBsdHRuZ19zZXNzaW9uICpzZXNzaW9uKQog
+CWtyZWZfcHV0KCZzZXNzaW9uLT5tZXRhZGF0YV9jYWNoZS0+cmVmY291bnQsIG1ldGFkYXRhX2Nh
+Y2hlX2Rlc3Ryb3kpOwogCWxpc3RfZGVsKCZzZXNzaW9uLT5saXN0KTsKIAltdXRleF91bmxvY2so
+JnNlc3Npb25zX211dGV4KTsKLQlrZnJlZShzZXNzaW9uKTsKKwlsdHRuZ19rdmZyZWUoc2Vzc2lv
+bik7CiB9CiAKIGludCBsdHRuZ19zZXNzaW9uX3N0YXRlZHVtcChzdHJ1Y3QgbHR0bmdfc2Vzc2lv
+biAqc2Vzc2lvbikKQEAgLTQ5NSw3ICs0OTUsNyBAQCBzdHJ1Y3QgbHR0bmdfY2hhbm5lbCAqbHR0
+bmdfY2hhbm5lbF9jcmVhdGUoc3RydWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Npb24sCiAJCXByaW50
+ayhLRVJOX1dBUk5JTkcgIkxUVCA6IENhbid0IGxvY2sgdHJhbnNwb3J0IG1vZHVsZS5cbiIpOwog
+CQlnb3RvIG5vdHJhbnNwb3J0OwogCX0KLQljaGFuID0ga3phbGxvYyhzaXplb2Yoc3RydWN0IGx0
+dG5nX2NoYW5uZWwpLCBHRlBfS0VSTkVMKTsKKwljaGFuID0gbHR0bmdfa3Z6YWxsb2Moc2l6ZW9m
+KHN0cnVjdCBsdHRuZ19jaGFubmVsKSwgR0ZQX0tFUk5FTCk7CiAJaWYgKCFjaGFuKQogCQlnb3Rv
+IG5vbWVtOwogCWNoYW4tPnNlc3Npb24gPSBzZXNzaW9uOwpAQCAtNTIwLDcgKzUyMCw3IEBAIHN0
+cnVjdCBsdHRuZ19jaGFubmVsICpsdHRuZ19jaGFubmVsX2NyZWF0ZShzdHJ1Y3QgbHR0bmdfc2Vz
+c2lvbiAqc2Vzc2lvbiwKIAlyZXR1cm4gY2hhbjsKIAogY3JlYXRlX2Vycm9yOgotCWtmcmVlKGNo
+YW4pOworCWx0dG5nX2t2ZnJlZShjaGFuKTsKIG5vbWVtOgogCWlmICh0cmFuc3BvcnQpCiAJCW1v
+ZHVsZV9wdXQodHJhbnNwb3J0LT5vd25lcik7CkBAIC01NDIsNyArNTQyLDcgQEAgdm9pZCBfbHR0
+bmdfY2hhbm5lbF9kZXN0cm95KHN0cnVjdCBsdHRuZ19jaGFubmVsICpjaGFuKQogCW1vZHVsZV9w
+dXQoY2hhbi0+dHJhbnNwb3J0LT5vd25lcik7CiAJbGlzdF9kZWwoJmNoYW4tPmxpc3QpOwogCWx0
+dG5nX2Rlc3Ryb3lfY29udGV4dChjaGFuLT5jdHgpOwotCWtmcmVlKGNoYW4pOworCWx0dG5nX2t2
+ZnJlZShjaGFuKTsKIH0KIAogdm9pZCBsdHRuZ19tZXRhZGF0YV9jaGFubmVsX2Rlc3Ryb3koc3Ry
+dWN0IGx0dG5nX2NoYW5uZWwgKmNoYW4pCkBAIC0xMzQzLDcgKzEzNDMsNyBAQCBpbnQgbHR0bmdf
+ZW5hYmxlcl9yZWZfZXZlbnRzKHN0cnVjdCBsdHRuZ19lbmFibGVyICplbmFibGVyKQogCQkJICog
+SWYgbm8gYmFja3dhcmQgcmVmLCBjcmVhdGUgaXQuCiAJCQkgKiBBZGQgYmFja3dhcmQgcmVmIGZy
+b20gZXZlbnQgdG8gZW5hYmxlci4KIAkJCSAqLwotCQkJZW5hYmxlcl9yZWYgPSBremFsbG9jKHNp
+emVvZigqZW5hYmxlcl9yZWYpLCBHRlBfS0VSTkVMKTsKKwkJCWVuYWJsZXJfcmVmID0gbHR0bmdf
+a3Z6YWxsb2Moc2l6ZW9mKCplbmFibGVyX3JlZiksIEdGUF9LRVJORUwpOwogCQkJaWYgKCFlbmFi
+bGVyX3JlZikKIAkJCQlyZXR1cm4gLUVOT01FTTsKIAkJCWVuYWJsZXJfcmVmLT5yZWYgPSBlbmFi
+bGVyOwpAQCAtMTM4MSw3ICsxMzgxLDcgQEAgc3RydWN0IGx0dG5nX2VuYWJsZXIgKmx0dG5nX2Vu
+YWJsZXJfY3JlYXRlKGVudW0gbHR0bmdfZW5hYmxlcl90eXBlIHR5cGUsCiB7CiAJc3RydWN0IGx0
+dG5nX2VuYWJsZXIgKmVuYWJsZXI7CiAKLQllbmFibGVyID0ga3phbGxvYyhzaXplb2YoKmVuYWJs
+ZXIpLCBHRlBfS0VSTkVMKTsKKwllbmFibGVyID0gbHR0bmdfa3Z6YWxsb2Moc2l6ZW9mKCplbmFi
+bGVyKSwgR0ZQX0tFUk5FTCk7CiAJaWYgKCFlbmFibGVyKQogCQlyZXR1cm4gTlVMTDsKIAllbmFi
+bGVyLT50eXBlID0gdHlwZTsKQEAgLTE0MjcsNyArMTQyNyw3IEBAIGludCBsdHRuZ19lbmFibGVy
+X2F0dGFjaF9ieXRlY29kZShzdHJ1Y3QgbHR0bmdfZW5hYmxlciAqZW5hYmxlciwKIAlyZXQgPSBn
+ZXRfdXNlcihieXRlY29kZV9sZW4sICZieXRlY29kZS0+bGVuKTsKIAlpZiAocmV0KQogCQlyZXR1
+cm4gcmV0OwotCWJ5dGVjb2RlX25vZGUgPSBremFsbG9jKHNpemVvZigqYnl0ZWNvZGVfbm9kZSkg
+KyBieXRlY29kZV9sZW4sCisJYnl0ZWNvZGVfbm9kZSA9IGx0dG5nX2t2emFsbG9jKHNpemVvZigq
+Ynl0ZWNvZGVfbm9kZSkgKyBieXRlY29kZV9sZW4sCiAJCQlHRlBfS0VSTkVMKTsKIAlpZiAoIWJ5
+dGVjb2RlX25vZGUpCiAJCXJldHVybiAtRU5PTUVNOwpAQCAtMTQ0Myw3ICsxNDQzLDcgQEAgaW50
+IGx0dG5nX2VuYWJsZXJfYXR0YWNoX2J5dGVjb2RlKHN0cnVjdCBsdHRuZ19lbmFibGVyICplbmFi
+bGVyLAogCXJldHVybiAwOwogCiBlcnJvcl9mcmVlOgotCWtmcmVlKGJ5dGVjb2RlX25vZGUpOwor
+CWx0dG5nX2t2ZnJlZShieXRlY29kZV9ub2RlKTsKIAlyZXR1cm4gcmV0OwogfQogCkBAIC0xNDYx
+LDE0ICsxNDYxLDE0IEBAIHZvaWQgbHR0bmdfZW5hYmxlcl9kZXN0cm95KHN0cnVjdCBsdHRuZ19l
+bmFibGVyICplbmFibGVyKQogCS8qIERlc3Ryb3kgZmlsdGVyIGJ5dGVjb2RlICovCiAJbGlzdF9m
+b3JfZWFjaF9lbnRyeV9zYWZlKGZpbHRlcl9ub2RlLCB0bXBfZmlsdGVyX25vZGUsCiAJCQkmZW5h
+Ymxlci0+ZmlsdGVyX2J5dGVjb2RlX2hlYWQsIG5vZGUpIHsKLQkJa2ZyZWUoZmlsdGVyX25vZGUp
+OworCQlsdHRuZ19rdmZyZWUoZmlsdGVyX25vZGUpOwogCX0KIAogCS8qIERlc3Ryb3kgY29udGV4
+dHMgKi8KIAlsdHRuZ19kZXN0cm95X2NvbnRleHQoZW5hYmxlci0+Y3R4KTsKIAogCWxpc3RfZGVs
+KCZlbmFibGVyLT5ub2RlKTsKLQlrZnJlZShlbmFibGVyKTsKKwlsdHRuZ19rdmZyZWUoZW5hYmxl
+cik7CiB9CiAKIC8qCmRpZmYgLS1naXQgYS93cmFwcGVyL3ZtYWxsb2MuaCBiL3dyYXBwZXIvdm1h
+bGxvYy5oCmluZGV4IDIzMzI0MzkuLmFkMmQ2Y2YgMTAwNjQ0Ci0tLSBhL3dyYXBwZXIvdm1hbGxv
+Yy5oCisrKyBiL3dyYXBwZXIvdm1hbGxvYy5oCkBAIC0yNSw2ICsyNSw5IEBACiAgKiBGb3VuZGF0
+aW9uLCBJbmMuLCA1MSBGcmFua2xpbiBTdHJlZXQsIEZpZnRoIEZsb29yLCBCb3N0b24sIE1BIDAy
+MTEwLTEzMDEgVVNBCiAgKi8KIAorI2luY2x1ZGUgPGxpbnV4L3ZlcnNpb24uaD4KKyNpbmNsdWRl
+IDxsaW51eC92bWFsbG9jLmg+CisKICNpZmRlZiBDT05GSUdfS0FMTFNZTVMKIAogI2luY2x1ZGUg
+PGxpbnV4L2thbGxzeW1zLmg+CkBAIC01MSw4ICs1NCw2IEBAIHZvaWQgd3JhcHBlcl92bWFsbG9j
+X3N5bmNfYWxsKHZvaWQpCiB9CiAjZWxzZQogCi0jaW5jbHVkZSA8bGludXgvdm1hbGxvYy5oPgot
+CiBzdGF0aWMgaW5saW5lCiB2b2lkIHdyYXBwZXJfdm1hbGxvY19zeW5jX2FsbCh2b2lkKQogewpA
+QCAtNjAsNCArNjEsNzggQEAgdm9pZCB3cmFwcGVyX3ZtYWxsb2Nfc3luY19hbGwodm9pZCkKIH0K
+ICNlbmRpZgogCisjaWYgKExJTlVYX1ZFUlNJT05fQ09ERSA+PSBLRVJORUxfVkVSU0lPTig0LDEy
+LDApKQorc3RhdGljIGlubGluZQordm9pZCAqbHR0bmdfa3ZtYWxsb2ModW5zaWduZWQgbG9uZyBz
+aXplLCBpbnQgZmxhZ3MpCit7CisJcmV0dXJuIGt2bWFsbG9jKHNpemUsIGZsYWdzKTsKK30KKwor
+c3RhdGljIGlubGluZQordm9pZCAqbHR0bmdfa3Z6YWxsb2ModW5zaWduZWQgbG9uZyBzaXplLCBp
+bnQgZmxhZ3MpCit7CisJcmV0dXJuIGt2emFsbG9jKHNpemUsIGZsYWdzKTsKK30KKyNlbHNlCisK
+KyNpbmNsdWRlIDxsaW51eC9zbGFiLmg+CisjaW5jbHVkZSA8bGludXgvbW0uaD4KKworLyoqCisg
+KiBsdHRuZ19rdm1hbGxvY19ub2RlIC0gYXR0ZW1wdCB0byBhbGxvY2F0ZSBwaHlzaWNhbGx5IGNv
+bnRpZ3VvdXMgbWVtb3J5LCBidXQgdXBvbgorICogZmFpbHVyZSwgZmFsbCBiYWNrIHRvIG5vbi1j
+b250aWd1b3VzICh2bWFsbG9jKSBhbGxvY2F0aW9uLgorICogQHNpemU6IHNpemUgb2YgdGhlIHJl
+cXVlc3QuCisgKiBAZmxhZ3M6IGdmcCBtYXNrIGZvciB0aGUgYWxsb2NhdGlvbiAtIG11c3QgYmUg
+Y29tcGF0aWJsZSB3aXRoIEdGUF9LRVJORUwuCisgKgorICogVXNlcyBrbWFsbG9jIHRvIGdldCB0
+aGUgbWVtb3J5IGJ1dCBpZiB0aGUgYWxsb2NhdGlvbiBmYWlscyB0aGVuIGZhbGxzIGJhY2sKKyAq
+IHRvIHRoZSB2bWFsbG9jIGFsbG9jYXRvci4gVXNlIGx0dG5nX2t2ZnJlZSB0byBmcmVlIHRoZSBt
+ZW1vcnkuCisgKgorICogUmVjbGFpbSBtb2RpZmllcnMgLSBfX0dGUF9OT1JFVFJZLCBfX0dGUF9S
+RVBFQVQgYW5kIF9fR0ZQX05PRkFJTCBhcmUgbm90IHN1cHBvcnRlZAorICovCitzdGF0aWMgaW5s
+aW5lCit2b2lkICpsdHRuZ19rdm1hbGxvYyh1bnNpZ25lZCBsb25nIHNpemUsIGludCBmbGFncykK
+K3sKKwl2b2lkICpyZXQ7CisKKwkvKgorCSAqIHZtYWxsb2MgdXNlcyBHRlBfS0VSTkVMIGZvciBz
+b21lIGludGVybmFsIGFsbG9jYXRpb25zIChlLmcgcGFnZSB0YWJsZXMpCisJICogc28gdGhlIGdp
+dmVuIHNldCBvZiBmbGFncyBoYXMgdG8gYmUgY29tcGF0aWJsZS4KKwkgKi8KKwlXQVJOX09OX09O
+Q0UoKGZsYWdzICYgR0ZQX0tFUk5FTCkgIT0gR0ZQX0tFUk5FTCk7CisKKwkvKgorCSAqIElmIHRo
+ZSBhbGxvY2F0aW9uIGZpdHMgaW4gYSBzaW5nbGUgcGFnZSwgZG8gbm90IGZhbGxiYWNrLgorCSAq
+LworCWlmIChzaXplIDw9IFBBR0VfU0laRSkgeworCQlyZXR1cm4ga21hbGxvYyhzaXplLCBmbGFn
+cyk7CisJfQorCisJLyoKKwkgKiBNYWtlIHN1cmUgdGhhdCBsYXJnZXIgcmVxdWVzdHMgYXJlIG5v
+dCB0b28gZGlzcnVwdGl2ZSAtIG5vIE9PTQorCSAqIGtpbGxlciBhbmQgbm8gYWxsb2NhdGlvbiBm
+YWlsdXJlIHdhcm5pbmdzIGFzIHdlIGhhdmUgYSBmYWxsYmFjaworCSAqLworCXJldCA9IGttYWxs
+b2Moc2l6ZSwgZmxhZ3MgfCBfX0dGUF9OT1dBUk4gfCBfX0dGUF9OT1JFVFJZKTsKKwlpZiAoIXJl
+dCkgeworCQlyZXQgPSBfX3ZtYWxsb2Moc2l6ZSwgZmxhZ3MgfCBfX0dGUF9ISUdITUVNLCBQQUdF
+X0tFUk5FTCk7CisJfQorCXJldHVybiByZXQ7Cit9CisKK3N0YXRpYyBpbmxpbmUKK3ZvaWQgKmx0
+dG5nX2t2emFsbG9jKHVuc2lnbmVkIGxvbmcgc2l6ZSwgaW50IGZsYWdzKQoreworCXJldHVybiBs
+dHRuZ19rdm1hbGxvYyhzaXplLCBmbGFncyB8IF9fR0ZQX1pFUk8pOworfQorCitzdGF0aWMgaW5s
+aW5lCit2b2lkIGx0dG5nX2t2ZnJlZShjb25zdCB2b2lkICphZGRyKQoreworCWlmIChpc192bWFs
+bG9jX2FkZHIoYWRkcikpIHsKKwkJdmZyZWUoYWRkcik7CisJfSBlbHNlIHsKKwkJa2ZyZWUoYWRk
+cik7CisJfQorfQorI2VuZGlmCisKICNlbmRpZiAvKiBfTFRUTkdfV1JBUFBFUl9WTUFMTE9DX0gg
+Ki8KLS0gCjIuNy40CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0
+cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
