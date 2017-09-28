@@ -1,16 +1,15 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Missing discarded events message in live-reading
- mode
-Date: Thu, 28 Sep 2017 14:04:03 +0000 (UTC)
-Message-ID: <1066884817.20960.1506607443853.JavaMail.zimbra__26716.9214472689$1506607392$gmane$org@efficios.com>
-References: <CAMYaK0RsEf4NaEV5ATXDyVoWq4sWQ5uLu4eWW0nVOzn43VwWGw@mail.gmail.com>
+Subject: [RFC PATCH lttng-modules] Use call_rcu_sched for pid
+	untrack
+Date: Thu, 28 Sep 2017 14:12:00 -0400
+Message-ID: <20170928181200.4693-1-mathieu.desnoyers__11580.1405780532$1506622338$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6353822258094677153=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3y2xGh4qTCzCZ9
- for <lttng-dev@lists.lttng.org>; Thu, 28 Sep 2017 14:02:52 +0000 (UTC)
-In-Reply-To: <CAMYaK0RsEf4NaEV5ATXDyVoWq4sWQ5uLu4eWW0nVOzn43VwWGw@mail.gmail.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 3y32pF1yxNzCt2
+ for <lttng-dev@lists.lttng.org>; Thu, 28 Sep 2017 18:12:05 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,141 +19,60 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: liguang li <liguang.lee6@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: dong.zhou.08@gmail.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============6353822258094677153==
-Content-Type: multipart/alternative;
-	boundary="=_407905ea-ad09-4704-be78-367e87c271d2"
-
---=_407905ea-ad09-4704-be78-367e87c271d2
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
----- On Sep 20, 2017, at 5:37 AM, liguang li <liguang.lee6@gmail.com> wrote: 
-
-> Hi,
-
-> Babeltrace in live mode is not displaying the discarded events message. But
-> on CTF traces the discarded events message will be printed on stderr.
-
-> Why? Is there any restriction?
-
-> I added the following patch into the ctf_live_packet_seek() function, and found
-> it works well. Is there any side effect?
-
-Hi, 
-
-I re-implemented this patch to have the proper declarations exported, and tested 
-it. It indeed works fine, and I don't expect odd side-effects. 
-
-See https://lists.lttng.org/pipermail/lttng-dev/2017-September/027485.html 
-for the resulting patch. 
-
-Thanks, 
-
-Mathieu 
-
-> diff --git a/formats/lttng-live/lttng-live-comm.c
-> b/formats/lttng-live/lttng-live-comm.c
-> index a1c95bb..dc14bf5 100644
-> --- a/formats/lttng-live/lttng-live-comm.c
-> +++ b/formats/lttng-live/lttng-live-comm.c
-> @@ -1297,6 +1297,11 @@ retry:
-> ctf_update_current_packet_index(&file_stream->parent,
-> prev_index, cur_index);
-
-> + if ((&file_stream->parent)->stream_class->trace->parent.collection) {
-> + ctf_print_discarded_lost(stderr, &file_stream->parent);
-> + }
-> +
-> +
-> file_stream->parent.cycles_timestamp =
-> cur_index->ts_cycles.timestamp_begin;
-> file_stream->parent.real_timestamp =
-> ...
-
-> Regards,
-> Liguang
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_407905ea-ad09-4704-be78-367e87c271d2
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
-__">---- On Sep 20, 2017, at 5:37 AM, liguang li &lt;liguang.lee6@gmail.com=
-&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockquot=
-e style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;c=
-olor:#000;font-weight:normal;font-style:normal;text-decoration:none;font-fa=
-mily:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div>Hi,<=
-br><br>Babeltrace in live mode is not displaying the discarded events messa=
-ge.=20
-But <br>on CTF traces the discarded events message will be printed on stder=
-r. <br></div><br><div>Why? Is there any restriction?<br></div><br><div>I ad=
-ded the following patch into the ctf_live_packet_seek() function, and found=
-</div><div>it works well. Is there any side effect?</div></div></blockquote=
-><div><br></div><div>Hi,<br data-mce-bogus=3D"1"></div><div><br data-mce-bo=
-gus=3D"1"></div><div>I re-implemented this patch to have the proper declara=
-tions exported, and tested<br data-mce-bogus=3D"1"></div><div>it. It indeed=
- works fine, and I don't expect odd side-effects.<br data-mce-bogus=3D"1"><=
-/div><div><br data-mce-bogus=3D"1"></div><div>See https://lists.lttng.org/p=
-ipermail/lttng-dev/2017-September/027485.html<br data-mce-bogus=3D"1"></div=
-><div>for the resulting patch.<br data-mce-bogus=3D"1"></div><div><br data-=
-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br d=
-ata-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><=
-br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid #1=
-010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-s=
-tyle:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;fon=
-t-size:12pt;"><div dir=3D"ltr"><br><div>diff --git a/formats/lttng-live/ltt=
-ng-live-comm.c b/formats/lttng-live/lttng-live-comm.c<br>index a1c95bb..dc1=
-4bf5 100644<br>--- a/formats/lttng-live/lttng-live-comm.c<br>+++ b/formats/=
-lttng-live/lttng-live-comm.c<br>@@ -1297,6 +1297,11 @@ retry:<br>&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp; ctf_update_current_packet_index(&amp;file_stream-&gt;parent,<br>&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; prev_index, cur_index);<br><br>+&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i=
-f ((&amp;file_stream-&gt;parent)-&gt;stream_class-&gt;trace-&gt;parent.coll=
-ection) {<br>+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ctf=
-_print_discarded_lost(stderr, &amp;file_stream-&gt;parent);<br>+&nbsp;&nbsp=
-;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }=
-<br>+<br>+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp; file_stream-&gt;parent.cycles_timestamp =3D<b=
-r>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbs=
-p;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cur_index-&gt;ts_cycles.timestamp_be=
-gin;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp; file_stream-&gt;parent.real_timestamp =3D<br></div>=
-<div>...</div><br><br><div>Regards,</div><div>Liguang<br></div></div><br>__=
-_____________________________________________<br>lttng-dev mailing list<br>=
-lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/listin=
-fo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D"__SIG=
-_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www=
-.efficios.com</div></div></body></html>
---=_407905ea-ad09-4704-be78-367e87c271d2--
-
---===============6353822258094677153==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============6353822258094677153==--
+QXV0b21hdGljYWxseSBmb2xsb3dpbmcgUElEcyByZXF1aXJlIHVudHJhY2sgdG8gY29tcGxldGUg
+ZmFzdGVyIHRoYW4gdGhlCnNsb3cgb25lLXN5bmNocm9uaXplLXNjaGVkLXBlci11bnRyYWNrIHNj
+aGVtZS4KClVzZSBjYWxsX3JjdV9zY2hlZCgpIGluc3RlYWQuCgpTaWduZWQtb2ZmLWJ5OiBNYXRo
+aWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgpDQzogZG9uZy56
+aG91LjA4QGdtYWlsLmNvbQotLS0KIGx0dG5nLWV2ZW50cy5jICAgICAgfCAgNCArKy0tCiBsdHRu
+Zy1ldmVudHMuaCAgICAgIHwgIDQgKysrKwogbHR0bmctdHJhY2tlci1waWQuYyB8IDI3ICsrKysr
+KysrKysrKysrKysrLS0tLS0tLS0tLQogMyBmaWxlcyBjaGFuZ2VkLCAyMyBpbnNlcnRpb25zKCsp
+LCAxMiBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9sdHRuZy1ldmVudHMuYyBiL2x0dG5nLWV2
+ZW50cy5jCmluZGV4IDIxYzQxMTMzLi41YzgwYzZiNCAxMDA2NDQKLS0tIGEvbHR0bmctZXZlbnRz
+LmMKKysrIGIvbHR0bmctZXZlbnRzLmMKQEAgLTkyMCw4ICs5MjAsOCBAQCBpbnQgbHR0bmdfc2Vz
+c2lvbl90cmFja19waWQoc3RydWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Npb24sIGludCBwaWQpCiAK
+IAkJCWxwZiA9IHNlc3Npb24tPnBpZF90cmFja2VyOwogCQkJcmN1X2Fzc2lnbl9wb2ludGVyKHNl
+c3Npb24tPnBpZF90cmFja2VyLCBOVUxMKTsKLQkJCXN5bmNocm9uaXplX3RyYWNlKCk7Ci0JCQls
+dHRuZ19waWRfdHJhY2tlcl9kZXN0cm95KGxwZik7CisJCQljYWxsX3JjdV9zY2hlZCgmbHBmLT5y
+Y3UsCisJCQkJCWx0dG5nX3BpZF90cmFja2VyX2Rlc3Ryb3lfcmN1KTsKIAkJfQogCQlyZXQgPSAw
+OwogCX0gZWxzZSB7CmRpZmYgLS1naXQgYS9sdHRuZy1ldmVudHMuaCBiL2x0dG5nLWV2ZW50cy5o
+CmluZGV4IDE3ZGQ4ZDNhLi5kZGI0YmU3YiAxMDA2NDQKLS0tIGEvbHR0bmctZXZlbnRzLmgKKysr
+IGIvbHR0bmctZXZlbnRzLmgKQEAgLTQ4NiwxMCArNDg2LDEyIEBAIERFQ0xBUkVfUEVSX0NQVShz
+dHJ1Y3QgbHR0bmdfZHluYW1pY19sZW5fc3RhY2ssIGx0dG5nX2R5bmFtaWNfbGVuX3N0YWNrKTsK
+IAogc3RydWN0IGx0dG5nX3BpZF90cmFja2VyIHsKIAlzdHJ1Y3QgaGxpc3RfaGVhZCBwaWRfaGFz
+aFtMVFROR19QSURfVEFCTEVfU0laRV07CisJc3RydWN0IHJjdV9oZWFkIHJjdTsKIH07CiAKIHN0
+cnVjdCBsdHRuZ19waWRfaGFzaF9ub2RlIHsKIAlzdHJ1Y3QgaGxpc3Rfbm9kZSBobGlzdDsKKwlz
+dHJ1Y3QgcmN1X2hlYWQgcmN1OwogCWludCBwaWQ7CiB9OwogCkBAIC02MTAsNiArNjEyLDggQEAg
+aW50IGx0dG5nX3Nlc3Npb25fdW50cmFja19waWQoc3RydWN0IGx0dG5nX3Nlc3Npb24gKnNlc3Np
+b24sIGludCBwaWQpOwogCiBpbnQgbHR0bmdfc2Vzc2lvbl9saXN0X3RyYWNrZXJfcGlkcyhzdHJ1
+Y3QgbHR0bmdfc2Vzc2lvbiAqc2Vzc2lvbik7CiAKK3ZvaWQgbHR0bmdfcGlkX3RyYWNrZXJfZGVz
+dHJveV9yY3Uoc3RydWN0IHJjdV9oZWFkICpyY3UpOworCiB2b2lkIGx0dG5nX2Nsb2NrX3JlZih2
+b2lkKTsKIHZvaWQgbHR0bmdfY2xvY2tfdW5yZWYodm9pZCk7CiAKZGlmZiAtLWdpdCBhL2x0dG5n
+LXRyYWNrZXItcGlkLmMgYi9sdHRuZy10cmFja2VyLXBpZC5jCmluZGV4IGQ3NGQ4YzkyLi5iZjE5
+NGU3OSAxMDA2NDQKLS0tIGEvbHR0bmctdHJhY2tlci1waWQuYworKysgYi9sdHRuZy10cmFja2Vy
+LXBpZC5jCkBAIC05MSwxOSArOTEsMTggQEAgaW50IGx0dG5nX3BpZF90cmFja2VyX2FkZChzdHJ1
+Y3QgbHR0bmdfcGlkX3RyYWNrZXIgKmxwZiwgaW50IHBpZCkKIH0KIAogc3RhdGljCit2b2lkIGZy
+ZWVfcGlkX2hhc2hfbm9kZV9yY3Uoc3RydWN0IHJjdV9oZWFkICpyY3UpCit7CisJc3RydWN0IGx0
+dG5nX3BpZF9oYXNoX25vZGUgKmUgPQorCQkJY29udGFpbmVyX29mKHJjdSwgc3RydWN0IGx0dG5n
+X3BpZF9oYXNoX25vZGUsIHJjdSk7CisJa2ZyZWUoZSk7Cit9CisKK3N0YXRpYwogdm9pZCBwaWRf
+dHJhY2tlcl9kZWxfbm9kZV9yY3Uoc3RydWN0IGx0dG5nX3BpZF9oYXNoX25vZGUgKmUpCiB7CiAJ
+aGxpc3RfZGVsX3JjdSgmZS0+aGxpc3QpOwotCS8qCi0JICogV2UgY2hvb3NlIHRvIHVzZSBhIGhl
+YXZ5d2VpZ2h0IHN5bmNocm9uaXplIG9uIHJlbW92YWwgaGVyZSwKLQkgKiBzaW5jZSByZW1vdmFs
+IG9mIGEgUElEIGZyb20gdGhlIHRyYWNrZXIgbWFzayBpcyBhIHJhcmUKLQkgKiBvcGVyYXRpb24s
+IGFuZCB3ZSBkb24ndCB3YW50IHRvIHVzZSBtb3JlIGNhY2hlIGxpbmVzIHRoYW4KLQkgKiB3aGF0
+IHdlIHJlYWxseSBuZWVkIHdoZW4gZG9pbmcgdGhlIFBJRCBsb29rdXBzLCBzbyB3ZSBkb24ndAot
+CSAqIHdhbnQgdG8gYWZmb3JkIGFkZGluZyBhIHJjdV9oZWFkIGZpZWxkIHRvIHRob3NlIHBpZCBo
+YXNoCi0JICogbm9kZS4KLQkgKi8KLQlzeW5jaHJvbml6ZV90cmFjZSgpOwotCWtmcmVlKGUpOwor
+CWNhbGxfcmN1X3NjaGVkKCZlLT5yY3UsIGZyZWVfcGlkX2hhc2hfbm9kZV9yY3UpOwogfQogCiAv
+KgpAQCAtMTU2LDMgKzE1NSwxMSBAQCB2b2lkIGx0dG5nX3BpZF90cmFja2VyX2Rlc3Ryb3koc3Ry
+dWN0IGx0dG5nX3BpZF90cmFja2VyICpscGYpCiAJfQogCWtmcmVlKGxwZik7CiB9CisKK3ZvaWQg
+bHR0bmdfcGlkX3RyYWNrZXJfZGVzdHJveV9yY3Uoc3RydWN0IHJjdV9oZWFkICpyY3UpCit7CisJ
+c3RydWN0IGx0dG5nX3BpZF90cmFja2VyICpscGYgPQorCQljb250YWluZXJfb2YocmN1LCBzdHJ1
+Y3QgbHR0bmdfcGlkX3RyYWNrZXIsIHJjdSk7CisKKwlsdHRuZ19waWRfdHJhY2tlcl9kZXN0cm95
+KGxwZik7Cit9Ci0tIAoyLjExLjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
+bmctZGV2Cg==
