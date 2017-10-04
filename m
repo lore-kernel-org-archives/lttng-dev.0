@@ -1,15 +1,17 @@
-From: Andreas Indlekofer <andreas.indlekofer@ch.abb.com>
-Subject: LTTNG question (Threads spawned by LTTNG)
-Date: Tue, 3 Oct 2017 08:33:13 +0000
-Message-ID: <VI1PR0601MB273405C7EE1426D9B726FBFBAE720__9412.27975204146$1507128680$gmane$org@VI1PR0601MB2734.eurprd06.prod.outlook.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: LTTNG question (Threads spawned by LTTNG)
+Date: Wed, 4 Oct 2017 12:44:08 -0400
+Message-ID: <20171004164408.zgtm5czoxsgsvajx__860.350443008606$1507135468$gmane$org@psrcode-TP-X230>
+References: <VI1PR0601MB273405C7EE1426D9B726FBFBAE720@VI1PR0601MB2734.eurprd06.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6961250837587737358=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com
- (mail-db5eur01on0078.outbound.protection.outlook.com [104.47.2.78])
- by lists.lttng.org (Postfix) with ESMTPS id 3y6QV12c2Zz108h
- for <lttng-dev@lists.lttng.org>; Wed,  4 Oct 2017 06:09:44 +0000 (UTC)
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3y6hZ86f2qzykw
+ for <lttng-dev@lists.lttng.org>; Wed,  4 Oct 2017 16:44:16 +0000 (UTC)
+Content-Disposition: inline
+In-Reply-To: <VI1PR0601MB273405C7EE1426D9B726FBFBAE720@VI1PR0601MB2734.eurprd06.prod.outlook.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,116 +21,68 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Andreas Indlekofer <andreas.indlekofer@ch.abb.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============6961250837587737358==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_VI1PR0601MB273405C7EE1426D9B726FBFBAE720VI1PR0601MB2734_"
-
---_000_VI1PR0601MB273405C7EE1426D9B726FBFBAE720VI1PR0601MB2734_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-Hello all,
-
-Our application consists of several services running in their own Linux pro=
-cess. Now we see that every process contains two threads with the same name=
- as the parent process and the ending '-ust'. We are wondering why we have =
-these threads, what is the purpose of the threads and did they influence th=
-e runtime behavior in case we do no tracing.
-Additionally we see atleast ten lttng-sessiond threads. Also here we have t=
-he question, why we have ten threads, what is the purpose and do they influ=
-ence the runtime behavior, if we have no tracing active.
-
-Best regards,
-Andreas
-
---_000_VI1PR0601MB273405C7EE1426D9B726FBFBAE720VI1PR0601MB2734_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
-osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
-xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
-//www.w3.org/TR/REC-html40">
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
-<style><!--
-/* Font Definitions */
-@font-face
-	{font-family:"Cambria Math";
-	panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-	{font-family:Calibri;
-	panose-1:2 15 5 2 2 2 4 3 2 4;}
-/* Style Definitions */
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-	{margin:0cm;
-	margin-bottom:.0001pt;
-	font-size:11.0pt;
-	font-family:"Calibri",sans-serif;}
-a:link, span.MsoHyperlink
-	{mso-style-priority:99;
-	color:#0563C1;
-	text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-	{mso-style-priority:99;
-	color:#954F72;
-	text-decoration:underline;}
-span.EmailStyle17
-	{mso-style-type:personal-compose;
-	font-family:"Calibri",sans-serif;
-	color:windowtext;}
-.MsoChpDefault
-	{mso-style-type:export-only;
-	font-family:"Calibri",sans-serif;}
-@page WordSection1
-	{size:612.0pt 792.0pt;
-	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
-div.WordSection1
-	{page:WordSection1;}
---></style><!--[if gte mso 9]><xml>
-<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
-</xml><![endif]--><!--[if gte mso 9]><xml>
-<o:shapelayout v:ext=3D"edit">
-<o:idmap v:ext=3D"edit" data=3D"1" />
-</o:shapelayout></xml><![endif]-->
-</head>
-<body lang=3D"EN-US" link=3D"#0563C1" vlink=3D"#954F72">
-<div class=3D"WordSection1">
-<p class=3D"MsoNormal">Hello all,<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Our application consists of several services running=
- in their own Linux process. Now we see that every process contains two thr=
-eads with the same name as the parent process and the ending &#8216;-ust&#8=
-217;. We are wondering why we have these threads,
- what is the purpose of the threads and did they influence the runtime beha=
-vior in case we do no tracing.<o:p></o:p></p>
-<p class=3D"MsoNormal">Additionally we see atleast ten lttng-sessiond threa=
-ds. Also here we have the question, why we have ten threads, what is the pu=
-rpose and do they influence the runtime behavior, if we have no tracing act=
-ive.<o:p></o:p></p>
-<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
-<p class=3D"MsoNormal">Best regards,<o:p></o:p></p>
-<p class=3D"MsoNormal">Andreas<o:p></o:p></p>
-</div>
-</body>
-</html>
-
---_000_VI1PR0601MB273405C7EE1426D9B726FBFBAE720VI1PR0601MB2734_--
-
---===============6961250837587737358==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============6961250837587737358==--
+T24gVHVlLCBPY3QgMDMsIDIwMTcgYXQgMDg6MzM6MTNBTSArMDAwMCwgQW5kcmVhcyBJbmRsZWtv
+ZmVyIHdyb3RlOgo+ICAgIEhlbGxvIGFsbCwKPiAKPiAgICBPdXIgYXBwbGljYXRpb24gY29uc2lz
+dHMgb2Ygc2V2ZXJhbCBzZXJ2aWNlcyBydW5uaW5nIGluIHRoZWlyIG93biBMaW51eAo+ICAgIHBy
+b2Nlc3MuIE5vdyB3ZSBzZWUgdGhhdCBldmVyeSBwcm9jZXNzIGNvbnRhaW5zIHR3byB0aHJlYWRz
+IHdpdGggdGhlIHNhbWUKPiAgICBuYW1lIGFzIHRoZSBwYXJlbnQgcHJvY2VzcyBhbmQgdGhlIGVu
+ZGluZyDigJgtdXN04oCZLiBXZSBhcmUgd29uZGVyaW5nIHdoeSB3ZQo+ICAgIGhhdmUgdGhlc2Ug
+dGhyZWFkcywgd2hhdCBpcyB0aGUgcHVycG9zZSBvZiB0aGUgdGhyZWFkcyBhbmQgZGlkIHRoZXkK
+PiAgICBpbmZsdWVuY2UgdGhlIHJ1bnRpbWUgYmVoYXZpb3IgaW4gY2FzZSB3ZSBkbyBubyB0cmFj
+aW5nLgoKVGhvc2UgdHdvIHRocmVhZCBhcmUgcmVzcG9uc2libGUgZm9yIGNvbW11bmljYXRpb24g
+d2l0aCBsdHRuZy1zZXNzaW9uZC4gT25lIGZvcgpnbG9iYWwgc2Vzc2lvbmQgYW5kIG9uZSBmb3Ig
+bG9jYWwgc2Vzc2lvbmQuIElmIHRoZSBiaW5hcnkgaXMgYSBzZXR1aWQgYmluYXJ5IG5vIHRocmVh
+ZApmb3IgbG9jYWwgc2Vzc2lvbmQgd2lsbCBiZSBzcGF3bmVkLiBUaGlzIGlzIHRvIGFjY29tbW9k
+YXRlIHNjZW5hcmlvIHdoZXJlIHRoZXJlIGlzIGEKdXNlciBkZWZpbmVkIGx0dG5nLXNlc3Npb25k
+IGFuZCBhIGdsb2JhbCBvbmUuIEJvdGggd2lsbCB3YWl0IGZvciB3YWtlIHVwIGJhc2VkCm9uIHNo
+YXJlZCBtZW1vcnkgZnV0ZXhlcy4gSGVuY2UgaWYgbm8gc2Vzc2lvbmQgaXMgcHJlc2VudCB0aGUg
+b25seSBydW50aW1lCmJlaGF2aW9yIGluZmx1ZW5jZSBpcyB0aGUgc3Bhd25pbmcgb2YgdGhlIHRo
+cmVhZHMgYW5kIHRoZSBjbGVhbnVwIGF0IHRoZSBlbmQgb2YKdGhlIGFwcGxpY2F0aW9uLiBJZiBh
+IHNlc3Npb25kIGlzIHByZXNlbnQsIHRoZSB1c3QgdGhyZWFkIHdpbGwgYWN0aXZhdGUgYW5kIHdp
+bGwKcGVyZm9ybSByZWdpc3RyYXRpb25zIGFuZCBzdWJzZXF1ZW50IGFjdGlvbnMgcmVxdWlyZWQg
+Zm9yIHRyYWNpbmcgYmFzZWQgb24KaW5zdHJ1Y3Rpb24gcGFzc2VkIHRvIGx0dG5nLXNlc3Npb25k
+LgoKPiAKPiAgICBBZGRpdGlvbmFsbHkgd2Ugc2VlIGF0bGVhc3QgdGVuIGx0dG5nLXNlc3Npb25k
+IHRocmVhZHMuIEFsc28gaGVyZSB3ZSBoYXZlCgpjbGllbnRfdGhyZWFkOgogICAgTWFuYWdlIGNs
+aWVudHMgKGx0dG5nIGNsaS9saWJsdHRuZy1jdGwpIHJlcXVlc3RzLgoKa2VybmVsX3RocmVhZDoK
+ICAgIE1hbmFnZSBldmVudHMgKENQVSBob3RwbHVnKSByZWxldmFudCB0byBrZXJuZWwgdHJhY2lu
+Zy4KCmFwcHNfdGhyZWFkOgogICAgUmVhY3Qgb24gYXBwcyBldmVudHMgZm9yIGx0dG5nLXNlc3Np
+b25kIHRvIGFwcHMgY29tbXVuaWNhdGlvbiBjaGFubmVsLgoKYXBwc19ub3RpZnlfdGhyZWFkOgog
+ICAgUmVhY3Qgb24gYXBwcyBldmVudHMgZm9yIGFwcHMgdG8gbHR0bmctc2Vzc2lvbmQgY29tbXVu
+aWNhdGlvbiBjaGFubmVsLgoKcmVnX2FwcHNfdGhyZWFkOgogICAgRmFzdCBhcHBzIHJlZ2lzdHJh
+dGlvbiBhY2tub3dsZWRnZW1lbnQgYW5kIHF1ZXVlIGFwcHMgZm9yIGZ1bGwgcmVnaXN0cmF0aW9u
+CiAgICBpbiBkaXNwYXRjaF90aHJlYWQuCgpkaXNwYXRjaF90aHJlYWQ6CiAgIERpZmZlcmVkIGFu
+ZCBmdWxsIHJlZ2lzdHJhdGlvbiBvZiBhcHBzLgoKaGVhbHRoX3RocmVhZDoKICAgIE1vbml0b3Jz
+IHRoZSBvdmVyYWxsIGhlYWx0aCBvZiB0aGUgc2Vzc2lvbmQuIFRoZSBoZWFsdGgKICAgIHN0YXR1
+cyBjYW4gYmUgcXVlcmllZCB2aWEgbHR0bmdfaGVhbHRoX3F1ZXJ5IGZyb20gbGlibHR0bmctY3Rs
+LgoKaHRfY2xlYW51cF90aHJlYWQ6CiAgICBQZXJmb3JtcyBSQ1UgaGFzaCB0YWJsZSBjbGVhbnVw
+LgoKYWdlbnRfcmVnX3RocmVhZDoKICAgIFJlc3BvbnNpYmxlIGZvciBhZ2VudCByZWdpc3RyYXRp
+b24gYW5kIG1hbmFnZW1lbnQgKEphdmEsIFB5dGhvbiB0cmFjaW5nKS4KCmxvYWRfc2Vzc2lvbl90
+aHJlYWQ6CiAgICBTaG9ydCBsaXZlZCB0aHJlYWQgdXNlZCBhdCBsdHRuZy1zZXNzaW9uZCBzdGFy
+dCB0byBsb2FkIGF1dG9tYXRpYyBzZXNzaW9uCiAgICAoc2VlIGx0dG5nIHNhdmUvbG9hZCkuCgpU
+aGVyZSBpcyBhbHNvIGNvbnN1bWVyZCBtYW5hZ2VtZW50IHRocmVhZHMuIFRoZSBudW1iZXIgd2ls
+bCB2YXJ5IGRlcGVuZGluZyBpZiB3ZQpzdXBwb3J0IHg4NiwgeDg2L182NCBhbmQvb3Iga2VybmVs
+IHRyYWNpbmcuCgo+ICAgIHRoZSBxdWVzdGlvbiwgd2h5IHdlIGhhdmUgdGVuIHRocmVhZHMsIHdo
+YXQgaXMgdGhlIHB1cnBvc2UgYW5kIGRvIHRoZXkKPiAgICBpbmZsdWVuY2UgdGhlIHJ1bnRpbWUg
+YmVoYXZpb3IsIGlmIHdlIGhhdmUgbm8gdHJhY2luZyBhY3RpdmUuCgpNb3N0IG9mIHRob3NlIHRo
+cmVhZHMgYXJlIGlkbGUsIHdhaXRpbmcgZm9yIGV2ZW50cywgaWYgbm8gdHJhY2luZy9pbnRlcmFj
+dGlvbiBpcwpoYXBwZW5pbmcuIEV2ZW4gd2hlbiB0cmFjaW5nIHRoZSBzZXNzaW9uZCBpcyBtb3N0
+bHkgaWRsZS4gVGhlIG5vdGFibGUgaW5mbHVlbmNlIHdpbGwKYmUgYXQgYXBwbGljYXRpb24gc3Rh
+cnR1cCB3aXRoIHRoZSByZWdpc3RyYXRpb24gcGhhc2UuIE1vc3Qgb2YgdGhlIHdvcmsgb2YKdHJh
+Y2luZyBpcyBwZXJmb3JtZWQgaW4gbHR0bmctY29uc3VtZXJkLiBJZiBubyB0cmFjaW5nIGlzIGFj
+dGl2YXRlZCwgdGhlCmFwcHMgd2lsbCByZWdpc3RlciB0byBsdHRuZy1zZXNzaW9uZCBidXQgc2lu
+Y2Ugbm8gc2Vzc2lvbiBpcyBhY3RpdmUgbm90IG11Y2gKd2lsbCBoYXBwZW4gYWZ0ZXJ3YXJkcyBi
+b3RoIG9uIGx0dG5nLXNlc3Npb25kIGFuZCBsdHRuZy1jb25zdW1lcmQgc2lkZS4KCk5vdGUgdGhh
+dCB0aGlzIGlzIGEgcXVpY2sgZXhwbGFuYXRpb24gYW5kIG1pZ2h0IG5vdCBiZSBhYnNvbHV0ZWx5
+IGFjY3VyYXRlLiBJJ20Kc3VyZSBzb21lb25lIHdpbGwgc3RlcCBpbiBpZiBzb21ldGhpbmcgaGVy
+ZSBpcyB3cm9uZy4KCkNoZWVycwoKPiAKPiAgICDCoAo+IAo+ICAgIEJlc3QgcmVnYXJkcywKPiAK
+PiAgICBBbmRyZWFzCgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
+cmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
+bmctZGV2CgoKLS0gCkpvbmF0aGFuIFJham90dGUtSnVsaWVuCkVmZmljaU9TCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxp
+c3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
+YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
