@@ -1,80 +1,44 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH babeltrace-1.5] lttng-live: print discarded
- event and packet lost warnings on stderr
-Date: Thu, 5 Oct 2017 11:59:37 -0400
-Message-ID: <CA+jJMxsnG9Gk22EYZngXMZvqnUPK6MHLg8uDcJBQNj=bErA-iw__34511.9353886277$1507219199$gmane$org@mail.gmail.com>
-References: <20170928140032.29879-1-mathieu.desnoyers@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.10.2 and 2.9.5 (Linux kernel tracer)
+Date: Thu, 5 Oct 2017 21:16:24 +0000 (UTC)
+Message-ID: <923225973.32274.1507238184545.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm0-x241.google.com (mail-wm0-x241.google.com
- [IPv6:2a00:1450:400c:c09::241])
- by lists.lttng.org (Postfix) with ESMTPS id 3y7HXC2VpGz10K9
- for <lttng-dev@lists.lttng.org>; Thu,  5 Oct 2017 15:59:39 +0000 (UTC)
-Received: by mail-wm0-x241.google.com with SMTP id i124so2995754wmf.3
- for <lttng-dev@lists.lttng.org>; Thu, 05 Oct 2017 08:59:38 -0700 (PDT)
-In-Reply-To: <20170928140032.29879-1-mathieu.desnoyers@efficios.com>
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: liguang.lee6@gmail.com, Jeremie Galarneau <jgalar@efficios.com>, "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Sender: linux-kernel-owner@vger.kernel.org
+To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org
+Cc: linux-kernel <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIHN0YWJsZS0xLjUgYW5kIHN0YWJsZS0xLjQuCgpUaGFua3MhCkrDqXLDqW1pZQoK
-T24gMjggU2VwdGVtYmVyIDIwMTcgYXQgMTA6MDAsIE1hdGhpZXUgRGVzbm95ZXJzCjxtYXRoaWV1
-LmRlc25veWVyc0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+IFJlcG9ydGVkLWJ5OiBMaWd1YW5nIExp
-IDxsaWd1YW5nLmxlZTZAZ21haWwuY29tPgo+IFNpZ25lZC1vZmYtYnk6IE1hdGhpZXUgRGVzbm95
-ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIGZvcm1hdHMvY3Rm
-L2N0Zi5jICAgICAgICAgICAgICAgICAgICB8ICAxIC0KPiAgZm9ybWF0cy9sdHRuZy1saXZlL2x0
-dG5nLWxpdmUtY29tbS5jIHwgMTAgKysrKysrKysrKwo+ICBpbmNsdWRlL2JhYmVsdHJhY2UvY3Rm
-L3R5cGVzLmggICAgICAgfCAgMSArCj4gIDMgZmlsZXMgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygr
-KSwgMSBkZWxldGlvbigtKQo+Cj4gZGlmZiAtLWdpdCBhL2Zvcm1hdHMvY3RmL2N0Zi5jIGIvZm9y
-bWF0cy9jdGYvY3RmLmMKPiBpbmRleCBkNmQwNzhmNS4uMzY0MjRkZTUgMTAwNjQ0Cj4gLS0tIGEv
-Zm9ybWF0cy9jdGYvY3RmLmMKPiArKysgYi9mb3JtYXRzL2N0Zi9jdGYuYwo+IEBAIC00MzQsNyAr
-NDM0LDYgQEAgdm9pZCBwcmludF91dWlkKEZJTEUgKmZwLCB1bnNpZ25lZCBjaGFyICp1dWlkKQo+
-ICAgKiBjb25zdW1lciBoYWQgdGltZSB0byBleHRyYWN0IHRoZW0uIFdlIGtlZXAgdHJhY2sgb2Yg
-dGhvc2UgZ2FwcyB3aXRoIHRoZQo+ICAgKiBwYWNrZXQgc2VxdWVuY2UgbnVtYmVyIGluIGVhY2gg
-cGFja2V0Lgo+ICAgKi8KPiAtc3RhdGljCj4gIHZvaWQgY3RmX3ByaW50X2Rpc2NhcmRlZF9sb3N0
-KEZJTEUgKmZwLCBzdHJ1Y3QgY3RmX3N0cmVhbV9kZWZpbml0aW9uICpzdHJlYW0pCj4gIHsKPiAg
-ICAgICAgIGlmICgoIXN0cmVhbS0+ZXZlbnRzX2Rpc2NhcmRlZCAmJiAhc3RyZWFtLT5wYWNrZXRz
-X2xvc3QpIHx8Cj4gZGlmZiAtLWdpdCBhL2Zvcm1hdHMvbHR0bmctbGl2ZS9sdHRuZy1saXZlLWNv
-bW0uYyBiL2Zvcm1hdHMvbHR0bmctbGl2ZS9sdHRuZy1saXZlLWNvbW0uYwo+IGluZGV4IGExYzk1
-YmJjLi43N2JmMzRhYyAxMDA2NDQKPiAtLS0gYS9mb3JtYXRzL2x0dG5nLWxpdmUvbHR0bmctbGl2
-ZS1jb21tLmMKPiArKysgYi9mb3JtYXRzL2x0dG5nLWxpdmUvbHR0bmctbGl2ZS1jb21tLmMKPiBA
-QCAtMTI5Nyw2ICsxMjk3LDE2IEBAIHJldHJ5Ogo+ICAgICAgICAgICAgICAgICBjdGZfdXBkYXRl
-X2N1cnJlbnRfcGFja2V0X2luZGV4KCZmaWxlX3N0cmVhbS0+cGFyZW50LAo+ICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgcHJldl9pbmRleCwgY3VyX2luZGV4KTsKPgo+ICsgICAgICAg
-ICAgICAgICAvKgo+ICsgICAgICAgICAgICAgICAgKiBXZSBuZWVkIHRvIGNoZWNrIGlmIHdlIGFy
-ZSBpbiB0cmFjZSByZWFkIG9yIGNhbGxlZAo+ICsgICAgICAgICAgICAgICAgKiBmcm9tIHBhY2tl
-dCBpbmRleGluZy4gIEluIHRoaXMgbGFzdCBjYXNlLCB0aGUKPiArICAgICAgICAgICAgICAgICog
-Y29sbGVjdGlvbiBpcyBub3QgdGhlcmUsIHNvIHdlIGNhbm5vdCBwcmludCB0aGUKPiArICAgICAg
-ICAgICAgICAgICogdGltZXN0YW1wcy4KPiArICAgICAgICAgICAgICAgICovCj4gKyAgICAgICAg
-ICAgICAgIGlmICgoJmZpbGVfc3RyZWFtLT5wYXJlbnQpLT5zdHJlYW1fY2xhc3MtPnRyYWNlLT5w
-YXJlbnQuY29sbGVjdGlvbikgewo+ICsgICAgICAgICAgICAgICAgICAgICAgIGN0Zl9wcmludF9k
-aXNjYXJkZWRfbG9zdChzdGRlcnIsICZmaWxlX3N0cmVhbS0+cGFyZW50KTsKPiArICAgICAgICAg
-ICAgICAgfQo+ICsKPiAgICAgICAgICAgICAgICAgZmlsZV9zdHJlYW0tPnBhcmVudC5jeWNsZXNf
-dGltZXN0YW1wID0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGN1cl9pbmRleC0+
-dHNfY3ljbGVzLnRpbWVzdGFtcF9iZWdpbjsKPiAgICAgICAgICAgICAgICAgZmlsZV9zdHJlYW0t
-PnBhcmVudC5yZWFsX3RpbWVzdGFtcCA9Cj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvYmFiZWx0cmFj
-ZS9jdGYvdHlwZXMuaCBiL2luY2x1ZGUvYmFiZWx0cmFjZS9jdGYvdHlwZXMuaAo+IGluZGV4IGNj
-OGFjYmY1Li41NzRmOTdiMyAxMDA2NDQKPiAtLS0gYS9pbmNsdWRlL2JhYmVsdHJhY2UvY3RmL3R5
-cGVzLmgKPiArKysgYi9pbmNsdWRlL2JhYmVsdHJhY2UvY3RmL3R5cGVzLmgKPiBAQCAtMjQ5LDUg
-KzI0OSw2IEBAIHZvaWQgY3RmX3ByaW50X3RpbWVzdGFtcChGSUxFICpmcCwgc3RydWN0IGN0Zl9z
-dHJlYW1fZGVmaW5pdGlvbiAqc3RyZWFtLAo+ICAgICAgICAgICAgICAgICAgICAgICAgIHVpbnQ2
-NF90IHRpbWVzdGFtcCk7Cj4gIGludCBjdGZfYXBwZW5kX3RyYWNlX21ldGFkYXRhKHN0cnVjdCBi
-dF90cmFjZV9kZXNjcmlwdG9yICp0ZHAsCj4gICAgICAgICAgICAgICAgICAgICAgICAgRklMRSAq
-bWV0YWRhdGFfZnApOwo+ICt2b2lkIGN0Zl9wcmludF9kaXNjYXJkZWRfbG9zdChGSUxFICpmcCwg
-c3RydWN0IGN0Zl9zdHJlYW1fZGVmaW5pdGlvbiAqc3RyZWFtKTsKPgo+ICAjZW5kaWYgLyogX0JB
-QkVMVFJBQ0VfQ1RGX1RZUEVTX0ggKi8KPiAtLQo+IDIuMTEuMAo+CgoKCi0tIApKw6lyw6ltaWUg
-R2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
-bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Hi,
+
+Those are two important bugfix releases coming shortly after 2.10.1 and
+2.9.4, which introduced a NULL pointer dereference in the block layer
+instrumentation for kernels before 4.14. This issue has been caught by
+our CI at <http://ci.lttng.org>.
+
+All LTTng-modules users of versions 2.10.1 and 2.9.4 should upgrade.
+
+Project website: http://lttng.org
+Documentation: http://lttng.org/docs
+Download link: http://lttng.org/download
+
+Changelog:
+
+2017-10-05 LTTng modules 2.10.2
+        * Fix: update block instrumentation for 4.14 kernel
+        * Revert "Fix: update block instrumentation for kernel 4.14"
+
+2017-10-05 LTTng modules 2.9.5
+        * Fix: update block instrumentation for 4.14 kernel
+        * Revert "Fix: update block instrumentation for kernel 4.14"
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
