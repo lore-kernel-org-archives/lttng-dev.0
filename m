@@ -1,17 +1,17 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools v2 2/2] man: document dead-peer
+Subject: [PATCH lttng-tools v3 2/2] man: document dead-peer
 	detection for relayd
-Date: Thu,  5 Oct 2017 18:06:45 -0400
-Message-ID: <20171005220645.11734-2-jonathan.rajotte-julien__11970.6894424327$1507241253$gmane$org@efficios.com>
-References: <20171005220645.11734-1-jonathan.rajotte-julien@efficios.com>
+Date: Fri,  6 Oct 2017 14:22:47 -0400
+Message-ID: <20171006182247.6874-2-jonathan.rajotte-julien__40875.2521653243$1507314196$gmane$org@efficios.com>
+References: <20171006182247.6874-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3y7RhT63zqz10sb
- for <lttng-dev@lists.lttng.org>; Thu,  5 Oct 2017 22:07:21 +0000 (UTC)
-In-Reply-To: <20171005220645.11734-1-jonathan.rajotte-julien@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 3y7ygH4vrtztBW
+ for <lttng-dev@lists.lttng.org>; Fri,  6 Oct 2017 18:23:07 +0000 (UTC)
+In-Reply-To: <20171006182247.6874-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
