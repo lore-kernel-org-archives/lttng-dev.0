@@ -1,17 +1,21 @@
-From: MMM via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Problem in finding Jar file of LTTng for adding to Java
-	project
-Date: Sun, 8 Oct 2017 20:15:25 +0000 (UTC)
-Message-ID: <797428900.3787919.1507493725940__6251.56066748804$1507497410$gmane$org@mail.yahoo.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Subject: Re: Problem in finding Jar file of LTTng for adding to
+ Java project
+Date: Sun, 8 Oct 2017 17:35:28 -0400
+Message-ID: <CAB4xu_26Qmpzf-mccjY3HutmFBBLdEEDAxx5_WLdxdFARSzgNA__47593.2940644727$1507498568$gmane$org@mail.gmail.com>
 References: <797428900.3787919.1507493725940.ref@mail.yahoo.com>
-Reply-To: MMM <e.morovati@yahoo.com>
+ <797428900.3787919.1507493725940@mail.yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6501094588799529120=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sonic315-21.consmr.mail.ne1.yahoo.com
- (sonic315-21.consmr.mail.ne1.yahoo.com [66.163.190.147])
- by lists.lttng.org (Postfix) with ESMTP id 3y9GQc3Gh3zyfC
- for <lttng-dev@lists.lttng.org>; Sun,  8 Oct 2017 21:16:39 +0000 (UTC)
+Received: from mail-qk0-x22c.google.com (mail-qk0-x22c.google.com
+ [IPv6:2607:f8b0:400d:c09::22c])
+ by lists.lttng.org (Postfix) with ESMTPS id 3y9Grv4Bs1zyh9
+ for <lttng-dev@lists.lttng.org>; Sun,  8 Oct 2017 21:35:59 +0000 (UTC)
+Received: by mail-qk0-x22c.google.com with SMTP id f199so8913254qke.2
+ for <lttng-dev@lists.lttng.org>; Sun, 08 Oct 2017 14:35:58 -0700 (PDT)
+In-Reply-To: <797428900.3787919.1507493725940@mail.yahoo.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,99 +25,35 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: MMM <e.morovati@yahoo.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============6501094588799529120==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_3787918_558077569.1507493725939"
-
-------=_Part_3787918_558077569.1507493725939
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Dear Users,
-I am beginner in tracing using LTTng. At present, I am going to trace a jav=
-a program in=C2=A0 Ubuntu, while I faced with a problem. When I install LTT=
-ng on Ubuntu, I also install=C2=A0"liblttng-ust-agent-java" by "apt-get ins=
-tall liblttng-ust-agent-java" command in Ubuntu. But, when I want to import=
- any libraries related to LTTng such as "org.lttng.ust.agent.jul.LttngLogHa=
-ndlerorg.lttng.ust.LTTngAgent" to my program, it is marked as unknown packa=
-ge. Indeed, I could not find LTTng Jar file for adding it to my program lib=
-raries. Furthermore, I searched in all files and folders, while I could not=
- find Jar file. Could you please help me to understand the cause of this pr=
-oblem and solve it.
-Best regards, Mehdi.
-------=_Part_3787918_558077569.1507493725939
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><head></head><body><div style=3D"font-family:courier new, courier, mo=
-naco, monospace, sans-serif;font-size:13px;"><div style=3D"font-family:cour=
-ier new, courier, monaco, monospace, sans-serif;font-size:13px;"><div>Dear =
-Users,</div><div><br></div><div>I am beginner in tracing using LTTng. At pr=
-esent, I am going to trace a java program in&nbsp; Ubuntu, while I faced wi=
-th a problem. When I install LTTng on Ubuntu, I also install&nbsp;<pre clas=
-s=3D"ydpa82cbe45commands" style=3D"margin-top: 0px; margin-bottom: 0px; pad=
-ding: 0px; border: 0px; font-stretch: inherit; font-size: 12px; line-height=
-: 15px; font-family: &quot;Andale Mono WT&quot;, &quot;Andale Mono&quot;, &=
-quot;Bitstream Vera Sans Mono&quot;, &quot;Liberation Mono&quot;, &quot;Nim=
-bus Mono L&quot;, &quot;Ubuntu Mono&quot;, Monaco, Consolas, &quot;Lucida C=
-onsole&quot;, &quot;Lucida Sans Typewriter&quot;, &quot;Courier New&quot;, =
-Courier, monospace; vertical-align: baseline; background-color: transparent=
-;">"liblttng-ust-agent-java" by "apt-get install liblttng-ust-agent-java" c=
-ommand in Ubuntu. But, when I want to import any libraries related to LTTng=
- such as "<code style=3D"background-color: transparent; font-style: inherit=
-; font-weight: inherit; margin: 0px; padding: 0px; border: 0px; font-stretc=
-h: inherit; font-size: 10.8px; line-height: inherit; font-family: &quot;And=
-ale Mono WT&quot;, &quot;Andale Mono&quot;, &quot;Bitstream Vera Sans Mono&=
-quot;, &quot;Liberation Mono&quot;, &quot;Nimbus Mono L&quot;, &quot;Ubuntu=
- Mono&quot;, Monaco, Consolas, &quot;Lucida Console&quot;, &quot;Lucida San=
-s Typewriter&quot;, &quot;Courier New&quot;, Courier, monospace; vertical-a=
-lign: baseline;"><span class=3D"ydp6e836cdnn" style=3D"margin: 0px; padding=
-: 0px; border: 0px; font-style: inherit; font-weight: inherit; font-stretch=
-: inherit; font-size: inherit; line-height: inherit; font-family: inherit; =
-vertical-align: baseline; color: rgb(85, 85, 85);">org.lttng.ust.agent.jul.=
-LttngLogHandlerorg.lttng.ust.LTTngAgent</span></code><span style=3D"backgro=
-und-color: transparent;">" to my program, it is marked as unknown package. =
-Indeed, I could not find LTTng Jar file for adding it to my program librari=
-es. Furthermore, I searched in all files and folders, while I could not fin=
-d Jar file. Could you please help me to understand the cause of this proble=
-m and solve it.</span></pre><pre class=3D"ydpa82cbe45commands" style=3D"mar=
-gin-top: 0px; margin-bottom: 0px; padding: 0px; border: 0px; font-stretch: =
-inherit; font-size: 12px; line-height: 15px; font-family: &quot;Andale Mono=
- WT&quot;, &quot;Andale Mono&quot;, &quot;Bitstream Vera Sans Mono&quot;, &=
-quot;Liberation Mono&quot;, &quot;Nimbus Mono L&quot;, &quot;Ubuntu Mono&qu=
-ot;, Monaco, Consolas, &quot;Lucida Console&quot;, &quot;Lucida Sans Typewr=
-iter&quot;, &quot;Courier New&quot;, Courier, monospace; vertical-align: ba=
-seline; background-color: transparent;"><span style=3D"background-color: tr=
-ansparent;"><br></span></pre><pre class=3D"ydpa82cbe45commands" style=3D"ma=
-rgin-top: 0px; margin-bottom: 0px; padding: 0px; border: 0px; font-stretch:=
- inherit; font-size: 12px; line-height: 15px; font-family: &quot;Andale Mon=
-o WT&quot;, &quot;Andale Mono&quot;, &quot;Bitstream Vera Sans Mono&quot;, =
-&quot;Liberation Mono&quot;, &quot;Nimbus Mono L&quot;, &quot;Ubuntu Mono&q=
-uot;, Monaco, Consolas, &quot;Lucida Console&quot;, &quot;Lucida Sans Typew=
-riter&quot;, &quot;Courier New&quot;, Courier, monospace; vertical-align: b=
-aseline; background-color: transparent;"><span style=3D"background-color: t=
-ransparent;">Best regards, </span></pre><pre class=3D"ydpa82cbe45commands" =
-style=3D"margin-top: 0px; margin-bottom: 0px; padding: 0px; border: 0px; fo=
-nt-stretch: inherit; font-size: 12px; line-height: 15px; font-family: &quot=
-;Andale Mono WT&quot;, &quot;Andale Mono&quot;, &quot;Bitstream Vera Sans M=
-ono&quot;, &quot;Liberation Mono&quot;, &quot;Nimbus Mono L&quot;, &quot;Ub=
-untu Mono&quot;, Monaco, Consolas, &quot;Lucida Console&quot;, &quot;Lucida=
- Sans Typewriter&quot;, &quot;Courier New&quot;, Courier, monospace; vertic=
-al-align: baseline; background-color: transparent;"><span style=3D"backgrou=
-nd-color: transparent;">Mehdi.</span></pre></div></div></div></body></html>
-------=_Part_3787918_558077569.1507493725939--
-
---===============6501094588799529120==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============6501094588799529120==--
+T24gU3VuLCBPY3QgOCwgMjAxNyBhdCA0OjE1IFBNLCBNTU0gdmlhIGx0dG5nLWRldgo8bHR0bmct
+ZGV2QGxpc3RzLmx0dG5nLm9yZz4gd3JvdGU6Cj4gRGVhciBVc2VycywKPgo+IEkgYW0gYmVnaW5u
+ZXIgaW4gdHJhY2luZyB1c2luZyBMVFRuZy4gQXQgcHJlc2VudCwgSSBhbSBnb2luZyB0byB0cmFj
+ZSBhIGphdmEKPiBwcm9ncmFtIGluICBVYnVudHUsIHdoaWxlIEkgZmFjZWQgd2l0aCBhIHByb2Js
+ZW0uIFdoZW4gSSBpbnN0YWxsIExUVG5nIG9uCj4gVWJ1bnR1LCBJIGFsc28gaW5zdGFsbAo+Cj4g
+ImxpYmx0dG5nLXVzdC1hZ2VudC1qYXZhIiBieSAiYXB0LWdldCBpbnN0YWxsIGxpYmx0dG5nLXVz
+dC1hZ2VudC1qYXZhIgo+IGNvbW1hbmQgaW4gVWJ1bnR1LiBCdXQsIHdoZW4gSSB3YW50IHRvIGlt
+cG9ydCBhbnkgbGlicmFyaWVzIHJlbGF0ZWQgdG8gTFRUbmcKPiBzdWNoIGFzICJvcmcubHR0bmcu
+dXN0LmFnZW50Lmp1bC5MdHRuZ0xvZ0hhbmRsZXJvcmcubHR0bmcudXN0LkxUVG5nQWdlbnQiIHRv
+Cj4gbXkgcHJvZ3JhbSwgaXQgaXMgbWFya2VkIGFzIHVua25vd24gcGFja2FnZS4gSW5kZWVkLCBJ
+IGNvdWxkIG5vdCBmaW5kIExUVG5nCj4gSmFyIGZpbGUgZm9yIGFkZGluZyBpdCB0byBteSBwcm9n
+cmFtIGxpYnJhcmllcy4gRnVydGhlcm1vcmUsIEkgc2VhcmNoZWQgaW4KPiBhbGwgZmlsZXMgYW5k
+IGZvbGRlcnMsIHdoaWxlIEkgY291bGQgbm90IGZpbmQgSmFyIGZpbGUuIENvdWxkIHlvdSBwbGVh
+c2UKPiBoZWxwIG1lIHRvIHVuZGVyc3RhbmQgdGhlIGNhdXNlIG9mIHRoaXMgcHJvYmxlbSBhbmQg
+c29sdmUgaXQuCgpJJ20gbm90IGEgVWJ1bnR1IHNwZWNpYWxpc3QsIGJ1dCBmcm9tCjxodHRwczov
+L3BhY2thZ2VzLnVidW50dS5jb20vemVzdHkvYWxsL2xpYmx0dG5nLXVzdC1hZ2VudC1qYXZhL2Zp
+bGVsaXN0PiwKSSB3b3VsZCBzYXk6CgoqIC91c3Ivc2hhcmUvamF2YS9sdHRuZy11c3QtYWdlbnQt
+anVsLmphcgoqIC91c3Ivc2hhcmUvamF2YS9sdHRuZy11c3QtYWdlbnQtbG9nNGouamFyCgpPbiAx
+Ni4wNCwgaXQnczoKCiogL3Vzci9zaGFyZS9qYXZhL2xpYmx0dG5nLXVzdC1hZ2VudC5qYXIKCkFk
+ZCB0aGUgcmVxdWlyZWQgSkFSIGZpbGUgdG8geW91ciBjbGFzc3BhdGguCgpIYXZlIGEgbG9vayBh
+dCA8aHR0cDovL2x0dG5nLm9yZy9kb2NzL3YyLjkvI2RvYy1qYXZhLWFwcGxpY2F0aW9uPi4KClBo
+aWwKCj4KPgo+IEJlc3QgcmVnYXJkcywKPgo+IE1laGRpLgo+Cj4KPiBfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
+LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+Cl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2
+QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4v
+bGlzdGluZm8vbHR0bmctZGV2Cg==
