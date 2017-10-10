@@ -1,20 +1,23 @@
-From: MMM via lttng-dev <lttng-dev@lists.lttng.org>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
 Subject: Re: Problem in finding Jar file of LTTng for adding to
  Java project
-Date: Tue, 10 Oct 2017 20:12:12 +0000 (UTC)
-Message-ID: <776772327.5312865.1507666332238__35492.8051973276$1507666357$gmane$org@mail.yahoo.com>
+Date: Tue, 10 Oct 2017 16:58:28 -0400
+Message-ID: <CAB4xu_3hyJBYFoBm0yrT5mNTTgRXSNs5MmOpagL74XSY-P8RPA__36578.8160394461$1507669155$gmane$org@mail.gmail.com>
 References: <797428900.3787919.1507493725940.ref@mail.yahoo.com>
  <797428900.3787919.1507493725940@mail.yahoo.com>
  <CAB4xu_26Qmpzf-mccjY3HutmFBBLdEEDAxx5_WLdxdFARSzgNA@mail.gmail.com>
-Reply-To: MMM <e.morovati@yahoo.com>
+ <776772327.5312865.1507666332238@mail.yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4283237090631100539=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sonic309-21.consmr.mail.ne1.yahoo.com
- (sonic309-21.consmr.mail.ne1.yahoo.com [66.163.184.147])
- by lists.lttng.org (Postfix) with ESMTP id 3yBSvZ3srhzskm
- for <lttng-dev@lists.lttng.org>; Tue, 10 Oct 2017 20:12:25 +0000 (UTC)
-In-Reply-To: <CAB4xu_26Qmpzf-mccjY3HutmFBBLdEEDAxx5_WLdxdFARSzgNA@mail.gmail.com>
+Received: from mail-qt0-x230.google.com (mail-qt0-x230.google.com
+ [IPv6:2607:f8b0:400d:c0d::230])
+ by lists.lttng.org (Postfix) with ESMTPS id 3yBTxH5B7nzt57
+ for <lttng-dev@lists.lttng.org>; Tue, 10 Oct 2017 20:58:59 +0000 (UTC)
+Received: by mail-qt0-x230.google.com with SMTP id x54so55353868qth.12
+ for <lttng-dev@lists.lttng.org>; Tue, 10 Oct 2017 13:58:59 -0700 (PDT)
+In-Reply-To: <776772327.5312865.1507666332238@mail.yahoo.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,279 +27,69 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Philippe Proulx <eeppeliteloop@gmail.com>
+To: MMM <e.morovati@yahoo.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============4283237090631100539==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_5312864_714234025.1507666332233"
-
-------=_Part_5312864_714234025.1507666332233
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
- Dear Philippe,
-Thanks a lot for your consideration. I solved former problem. While, I face=
-d with a new problem. Indeed, when I create a LTTng session, start it and f=
-inally stop LTTng, I could not find trace files in mentioned folder. My jav=
-a code is=C2=A0
-///////////////////////////////////////import java.io.IOException;import ja=
-va.util.logging.Handler;import java.util.logging.Logger;
-import org.lttng.ust.agent.LTTngAgent;import org.lttng.ust.agent.jul.LttngL=
-ogHandler;
-public class Hello {  private static final int answer =3D 42; private stati=
-c LTTngAgent lttngAgent;
- public static void main(String[] args) throws InterruptedException { Logge=
-r helloLog =3D Logger.getLogger("hello"); lttngAgent =3D LTTngAgent.getLTTn=
-gAgent();
- Thread.sleep(5000); helloLog.info("Hello World, the answer is " + answer);=
- lttngAgent.dispose(); }
-}///////////////////////
-Also, I used following LTTng commands.=C2=A0
-////////////////////////////////lttng create java-testlttng enable-event -a=
- -llttng start
-///Start My java Application///
-lttng stop////////////////////////////
-Besides, when I used "lttng view" after stopping LTTng, I received followin=
-g error message
-[error] Cannot open any trace for reading.[error] opening trace "/[path]/lt=
-tng-traces/java-test10-20171010-130909" for reading.[error] none of the spe=
-cified trace paths could be opened.
-Could you please help me to resolve it.
-Regards,Mehdi.
-
-
-
-
-
-
-
-
-    On Monday, October 9, 2017, 1:05:59 AM GMT+3:30, Philippe Proulx <eeppe=
-liteloop@gmail.com> wrote: =20
-=20
- On Sun, Oct 8, 2017 at 4:15 PM, MMM via lttng-dev
-<lttng-dev@lists.lttng.org> wrote:
-> Dear Users,
->
-> I am beginner in tracing using LTTng. At present, I am going to trace a j=
-ava
-> program in=C2=A0 Ubuntu, while I faced with a problem. When I install LTT=
-ng on
-> Ubuntu, I also install
->
-> "liblttng-ust-agent-java" by "apt-get install liblttng-ust-agent-java"
-> command in Ubuntu. But, when I want to import any libraries related to LT=
-Tng
-> such as "org.lttng.ust.agent.jul.LttngLogHandlerorg.lttng.ust.LTTngAgent"=
- to
-> my program, it is marked as unknown package. Indeed, I could not find LTT=
-ng
-> Jar file for adding it to my program libraries. Furthermore, I searched i=
-n
-> all files and folders, while I could not find Jar file. Could you please
-> help me to understand the cause of this problem and solve it.
-
-I'm not a Ubuntu specialist, but from
-<https://packages.ubuntu.com/zesty/all/liblttng-ust-agent-java/filelist>,
-I would say:
-
-* /usr/share/java/lttng-ust-agent-jul.jar
-* /usr/share/java/lttng-ust-agent-log4j.jar
-
-On 16.04, it's:
-
-* /usr/share/java/liblttng-ust-agent.jar
-
-Add the required JAR file to your classpath.
-
-Have a look at <http://lttng.org/docs/v2.9/#doc-java-application>.
-
-Phil
-
->
->
-> Best regards,
->
-> Mehdi.
->
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
-------=_Part_5312864_714234025.1507666332233
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><head></head><body><div style=3D"font-family:courier new, courier, mo=
-naco, monospace, sans-serif;font-size:13px;"><div></div>
-            <div>Dear Philippe,</div><div><br></div><div>Thanks a lot for y=
-our consideration. I solved former problem. While, I faced with a new probl=
-em. Indeed, when I create a LTTng session, start it and finally stop LTTng,=
- I could not find trace files in mentioned folder. My java code is&nbsp;</d=
-iv><div><br></div><div><div>///////////////////////////////////////</div><d=
-iv><font color=3D"#5b8828">import java.io.IOException;</font></div><div><fo=
-nt color=3D"#5b8828">import java.util.logging.Handler;</font></div><div><fo=
-nt color=3D"#5b8828">import java.util.logging.Logger;</font></div><div><fon=
-t color=3D"#5b8828"><br></font></div><div><font color=3D"#5b8828">import or=
-g.lttng.ust.agent.LTTngAgent;</font></div><div><font color=3D"#5b8828">impo=
-rt org.lttng.ust.agent.jul.LttngLogHandler;</font></div><div><br></div><div=
-><font color=3D"#5b8828">public class Hello {</font></div><div><span style=
-=3D"white-space: pre-wrap;"><font color=3D"#5b8828">=09</font></span></div>=
-<div><font color=3D"#5b8828"><span style=3D"white-space: pre-wrap;">=09</sp=
-an>private static final int answer =3D 42;</font></div><div><font color=3D"=
-#5b8828"><span style=3D"white-space: pre-wrap;">=09</span>private static LT=
-TngAgent lttngAgent;</font></div><div><font color=3D"#5b8828"><br></font></=
-div><div><font color=3D"#5b8828"><span style=3D"white-space: pre-wrap;">=09=
-</span>public static void main(String[] args) throws InterruptedException {=
-</font></div><div><font color=3D"#5b8828"><span style=3D"white-space: pre-w=
-rap;">=09=09</span>Logger helloLog =3D Logger.getLogger("hello");</font></d=
-iv><div><font color=3D"#5b8828"><span style=3D"white-space: pre-wrap;">=09=
-=09</span>lttngAgent =3D LTTngAgent.getLTTngAgent();</font></div><div><font=
- color=3D"#5b8828"><br></font></div><div><font color=3D"#5b8828"><span styl=
-e=3D"white-space: pre-wrap;">=09=09</span>Thread.sleep(5000);</font></div><=
-div><font color=3D"#5b8828"><span style=3D"white-space: pre-wrap;">=09=09</=
-span>helloLog.info("Hello World, the answer is " + answer);</font></div><di=
-v><font color=3D"#5b8828"><span style=3D"white-space: pre-wrap;">=09=09</sp=
-an>lttngAgent.dispose();</font></div><div><font color=3D"#5b8828"><span sty=
-le=3D"white-space: pre-wrap;">=09</span>}</font></div><div><font color=3D"#=
-5b8828"><br></font></div><div><font color=3D"#5b8828">}</font></div><div>//=
-/////////////////////</div><div><br></div><div>Also, I used following LTTng=
- commands.&nbsp;</div><div><br></div><div><span style=3D"font-family: &quot=
-;Andale Mono WT&quot;, &quot;Andale Mono&quot;, &quot;Bitstream Vera Sans M=
-ono&quot;, &quot;Liberation Mono&quot;, &quot;Nimbus Mono L&quot;, &quot;Ub=
-untu Mono&quot;, Monaco, Consolas, &quot;Lucida Console&quot;, &quot;Lucida=
- Sans Typewriter&quot;, &quot;Courier New&quot;, Courier, monospace; font-s=
-ize: 12px; white-space: pre-wrap;">////////////////////////////////</span><=
-/div><div><span style=3D"font-family: &quot;Andale Mono WT&quot;, &quot;And=
-ale Mono&quot;, &quot;Bitstream Vera Sans Mono&quot;, &quot;Liberation Mono=
-&quot;, &quot;Nimbus Mono L&quot;, &quot;Ubuntu Mono&quot;, Monaco, Consola=
-s, &quot;Lucida Console&quot;, &quot;Lucida Sans Typewriter&quot;, &quot;Co=
-urier New&quot;, Courier, monospace; font-size: 12px; white-space: pre-wrap=
-;">lttng create java-test</span></div><div><span style=3D"font-family: &quo=
-t;Andale Mono WT&quot;, &quot;Andale Mono&quot;, &quot;Bitstream Vera Sans =
-Mono&quot;, &quot;Liberation Mono&quot;, &quot;Nimbus Mono L&quot;, &quot;U=
-buntu Mono&quot;, Monaco, Consolas, &quot;Lucida Console&quot;, &quot;Lucid=
-a Sans Typewriter&quot;, &quot;Courier New&quot;, Courier, monospace; font-=
-size: 12px; white-space: pre-wrap;">lttng enable-event -a -l</span></div><d=
-iv><span style=3D"font-family: &quot;Andale Mono WT&quot;, &quot;Andale Mon=
-o&quot;, &quot;Bitstream Vera Sans Mono&quot;, &quot;Liberation Mono&quot;,=
- &quot;Nimbus Mono L&quot;, &quot;Ubuntu Mono&quot;, Monaco, Consolas, &quo=
-t;Lucida Console&quot;, &quot;Lucida Sans Typewriter&quot;, &quot;Courier N=
-ew&quot;, Courier, monospace; font-size: 12px; white-space: pre-wrap;">lttn=
-g start</span></div><div><span style=3D"font-family: &quot;Andale Mono WT&q=
-uot;, &quot;Andale Mono&quot;, &quot;Bitstream Vera Sans Mono&quot;, &quot;=
-Liberation Mono&quot;, &quot;Nimbus Mono L&quot;, &quot;Ubuntu Mono&quot;, =
-Monaco, Consolas, &quot;Lucida Console&quot;, &quot;Lucida Sans Typewriter&=
-quot;, &quot;Courier New&quot;, Courier, monospace; font-size: 12px; white-=
-space: pre-wrap;"><br></span></div><div><span style=3D"font-family: &quot;A=
-ndale Mono WT&quot;, &quot;Andale Mono&quot;, &quot;Bitstream Vera Sans Mon=
-o&quot;, &quot;Liberation Mono&quot;, &quot;Nimbus Mono L&quot;, &quot;Ubun=
-tu Mono&quot;, Monaco, Consolas, &quot;Lucida Console&quot;, &quot;Lucida S=
-ans Typewriter&quot;, &quot;Courier New&quot;, Courier, monospace; font-siz=
-e: 12px; white-space: pre-wrap;">///Start My java Application///</span></di=
-v><div><span style=3D"font-family: &quot;Andale Mono WT&quot;, &quot;Andale=
- Mono&quot;, &quot;Bitstream Vera Sans Mono&quot;, &quot;Liberation Mono&qu=
-ot;, &quot;Nimbus Mono L&quot;, &quot;Ubuntu Mono&quot;, Monaco, Consolas, =
-&quot;Lucida Console&quot;, &quot;Lucida Sans Typewriter&quot;, &quot;Couri=
-er New&quot;, Courier, monospace; font-size: 12px; white-space: pre-wrap;">=
-<br></span></div><div><span style=3D"font-family: &quot;Andale Mono WT&quot=
-;, &quot;Andale Mono&quot;, &quot;Bitstream Vera Sans Mono&quot;, &quot;Lib=
-eration Mono&quot;, &quot;Nimbus Mono L&quot;, &quot;Ubuntu Mono&quot;, Mon=
-aco, Consolas, &quot;Lucida Console&quot;, &quot;Lucida Sans Typewriter&quo=
-t;, &quot;Courier New&quot;, Courier, monospace; font-size: 12px; white-spa=
-ce: pre-wrap;">lttng stop</span></div><div>////////////////////////////</di=
-v><div><br></div><div>Besides, when I used "lttng view" after stopping LTTn=
-g, I received following error message</div><div><br></div><div><div>[error]=
- Cannot open any trace for reading.</div><div>[error] opening trace "/[path=
-]/lttng-traces/java-test10-20171010-130909" for reading.</div><div>[error] =
-none of the specified trace paths could be opened.</div><div><br></div><div=
->Could you please help me to resolve it.</div><div><br></div><div>Regards,<=
-/div><div>Mehdi.</div><br></div><div><span style=3D"font-family: &quot;Anda=
-le Mono WT&quot;, &quot;Andale Mono&quot;, &quot;Bitstream Vera Sans Mono&q=
-uot;, &quot;Liberation Mono&quot;, &quot;Nimbus Mono L&quot;, &quot;Ubuntu =
-Mono&quot;, Monaco, Consolas, &quot;Lucida Console&quot;, &quot;Lucida Sans=
- Typewriter&quot;, &quot;Courier New&quot;, Courier, monospace; font-size: =
-12px; white-space: pre-wrap;"><br></span></div><div><span style=3D"font-fam=
-ily: &quot;Andale Mono WT&quot;, &quot;Andale Mono&quot;, &quot;Bitstream V=
-era Sans Mono&quot;, &quot;Liberation Mono&quot;, &quot;Nimbus Mono L&quot;=
-, &quot;Ubuntu Mono&quot;, Monaco, Consolas, &quot;Lucida Console&quot;, &q=
-uot;Lucida Sans Typewriter&quot;, &quot;Courier New&quot;, Courier, monospa=
-ce; font-size: 12px; white-space: pre-wrap;"><br></span></div><div><span st=
-yle=3D"font-family: &quot;Andale Mono WT&quot;, &quot;Andale Mono&quot;, &q=
-uot;Bitstream Vera Sans Mono&quot;, &quot;Liberation Mono&quot;, &quot;Nimb=
-us Mono L&quot;, &quot;Ubuntu Mono&quot;, Monaco, Consolas, &quot;Lucida Co=
-nsole&quot;, &quot;Lucida Sans Typewriter&quot;, &quot;Courier New&quot;, C=
-ourier, monospace; font-size: 12px; white-space: pre-wrap;"><br></span></di=
-v><div><br></div><div><br></div><div><br></div><br></div><div><br></div>
-           =20
-            <div id=3D"yahoo_quoted_8362436092" class=3D"yahoo_quoted">
-                <div style=3D"font-family:'Helvetica Neue', Helvetica, Aria=
-l, sans-serif;font-size:13px;color:#26282a;">
-                   =20
-                    <div>
-                        On Monday, October 9, 2017, 1:05:59 AM GMT+3:30, Ph=
-ilippe Proulx &lt;eeppeliteloop@gmail.com&gt; wrote:
-                    </div>
-                    <div><br></div>
-                    <div><br></div>
-                    <div><div dir=3D'ltr'><html><body>On Sun, Oct 8, 2017 a=
-t 4:15 PM, MMM via lttng-dev<br clear=3D"none">&lt;<a shape=3D"rect" ymailt=
-o=3D"mailto:lttng-dev@lists.lttng.org" href=3D"mailto:lttng-dev@lists.lttng=
-.org">lttng-dev@lists.lttng.org</a>&gt; wrote:<br clear=3D"none">&gt; Dear =
-Users,<br clear=3D"none">&gt;<br clear=3D"none">&gt; I am beginner in traci=
-ng using LTTng. At present, I am going to trace a java<br clear=3D"none">&g=
-t; program in=C2=A0 Ubuntu, while I faced with a problem. When I install LT=
-Tng on<br clear=3D"none">&gt; Ubuntu, I also install<br clear=3D"none">&gt;=
-<br clear=3D"none">&gt; &quot;liblttng-ust-agent-java&quot; by &quot;apt-ge=
-t install liblttng-ust-agent-java&quot;<br clear=3D"none">&gt; command in U=
-buntu. But, when I want to import any libraries related to LTTng<br clear=
-=3D"none">&gt; such as &quot;org.lttng.ust.agent.jul.LttngLogHandlerorg.ltt=
-ng.ust.LTTngAgent&quot; to<br clear=3D"none">&gt; my program, it is marked =
-as unknown package. Indeed, I could not find LTTng<br clear=3D"none">&gt; J=
-ar file for adding it to my program libraries. Furthermore, I searched in<b=
-r clear=3D"none">&gt; all files and folders, while I could not find Jar fil=
-e. Could you please<br clear=3D"none">&gt; help me to understand the cause =
-of this problem and solve it.<br clear=3D"none"><br clear=3D"none">I&#39;m =
-not a Ubuntu specialist, but from<br clear=3D"none">&lt;<a shape=3D"rect" h=
-ref=3D"https://packages.ubuntu.com/zesty/all/liblttng-ust-agent-java/fileli=
-st" target=3D"_blank">https://packages.ubuntu.com/zesty/all/liblttng-ust-ag=
-ent-java/filelist</a>&gt;,<br clear=3D"none">I would say:<br clear=3D"none"=
-><br clear=3D"none">* /usr/share/java/lttng-ust-agent-jul.jar<br clear=3D"n=
-one">* /usr/share/java/lttng-ust-agent-log4j.jar<br clear=3D"none"><br clea=
-r=3D"none">On 16.04, it&#39;s:<br clear=3D"none"><br clear=3D"none">* /usr/=
-share/java/liblttng-ust-agent.jar<br clear=3D"none"><br clear=3D"none">Add =
-the required JAR file to your classpath.<br clear=3D"none"><br clear=3D"non=
-e">Have a look at &lt;<a shape=3D"rect" href=3D"http://lttng.org/docs/v2.9/=
-#doc-java-application" target=3D"_blank">http://lttng.org/docs/v2.9/#doc-ja=
-va-application</a>&gt;.<br clear=3D"none"><br clear=3D"none">Phil<div class=
-=3D"yqt0451103275" id=3D"yqtfd62043"><br clear=3D"none"><br clear=3D"none">=
-&gt;<br clear=3D"none">&gt;<br clear=3D"none">&gt; Best regards,<br clear=
-=3D"none">&gt;<br clear=3D"none">&gt; Mehdi.<br clear=3D"none">&gt;<br clea=
-r=3D"none">&gt;<br clear=3D"none">&gt; ____________________________________=
-___________<br clear=3D"none">&gt; lttng-dev mailing list<br clear=3D"none"=
->&gt; <a shape=3D"rect" ymailto=3D"mailto:lttng-dev@lists.lttng.org" href=
-=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><br clea=
-r=3D"none">&gt; <a shape=3D"rect" href=3D"https://lists.lttng.org/cgi-bin/m=
-ailman/listinfo/lttng-dev" target=3D"_blank">https://lists.lttng.org/cgi-bi=
-n/mailman/listinfo/lttng-dev</a><br clear=3D"none">&gt;<br clear=3D"none"><=
-/div></body></html></div></div>
-                </div>
-            </div></div></body></html>
-------=_Part_5312864_714234025.1507666332233--
-
---===============4283237090631100539==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============4283237090631100539==--
+T24gVHVlLCBPY3QgMTAsIDIwMTcgYXQgNDoxMiBQTSwgTU1NIDxlLm1vcm92YXRpQHlhaG9vLmNv
+bT4gd3JvdGU6Cj4gRGVhciBQaGlsaXBwZSwKPgo+IFRoYW5rcyBhIGxvdCBmb3IgeW91ciBjb25z
+aWRlcmF0aW9uLiBJIHNvbHZlZCBmb3JtZXIgcHJvYmxlbS4gV2hpbGUsIEkgZmFjZWQKPiB3aXRo
+IGEgbmV3IHByb2JsZW0uIEluZGVlZCwgd2hlbiBJIGNyZWF0ZSBhIExUVG5nIHNlc3Npb24sIHN0
+YXJ0IGl0IGFuZAo+IGZpbmFsbHkgc3RvcCBMVFRuZywgSSBjb3VsZCBub3QgZmluZCB0cmFjZSBm
+aWxlcyBpbiBtZW50aW9uZWQgZm9sZGVyLiBNeQo+IGphdmEgY29kZSBpcwo+Cj4gLy8vLy8vLy8v
+Ly8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vCj4gaW1wb3J0IGphdmEuaW8uSU9FeGNlcHRp
+b247Cj4gaW1wb3J0IGphdmEudXRpbC5sb2dnaW5nLkhhbmRsZXI7Cj4gaW1wb3J0IGphdmEudXRp
+bC5sb2dnaW5nLkxvZ2dlcjsKPgo+IGltcG9ydCBvcmcubHR0bmcudXN0LmFnZW50LkxUVG5nQWdl
+bnQ7Cj4gaW1wb3J0IG9yZy5sdHRuZy51c3QuYWdlbnQuanVsLkx0dG5nTG9nSGFuZGxlcjsKCkl0
+IGxvb2tzIGxpa2UgeW91J3JlIHVzaW5nIHRoZSBqYXZhLnV0aWwubG9nZ2luZyBhZ2VudC4uLgoK
+Pgo+IHB1YmxpYyBjbGFzcyBIZWxsbyB7Cj4gcHJpdmF0ZSBzdGF0aWMgZmluYWwgaW50IGFuc3dl
+ciA9IDQyOwo+IHByaXZhdGUgc3RhdGljIExUVG5nQWdlbnQgbHR0bmdBZ2VudDsKPgo+IHB1Ymxp
+YyBzdGF0aWMgdm9pZCBtYWluKFN0cmluZ1tdIGFyZ3MpIHRocm93cyBJbnRlcnJ1cHRlZEV4Y2Vw
+dGlvbiB7Cj4gTG9nZ2VyIGhlbGxvTG9nID0gTG9nZ2VyLmdldExvZ2dlcigiaGVsbG8iKTsKPiBs
+dHRuZ0FnZW50ID0gTFRUbmdBZ2VudC5nZXRMVFRuZ0FnZW50KCk7Cj4KPiBUaHJlYWQuc2xlZXAo
+NTAwMCk7Cj4gaGVsbG9Mb2cuaW5mbygiSGVsbG8gV29ybGQsIHRoZSBhbnN3ZXIgaXMgIiArIGFu
+c3dlcik7Cj4gbHR0bmdBZ2VudC5kaXNwb3NlKCk7Cj4gfQo+Cj4gfQo+IC8vLy8vLy8vLy8vLy8v
+Ly8vLy8vLy8vCj4KPiBBbHNvLCBJIHVzZWQgZm9sbG93aW5nIExUVG5nIGNvbW1hbmRzLgo+Cj4g
+Ly8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8KPiBsdHRuZyBjcmVhdGUgamF2YS10ZXN0
+Cj4gbHR0bmcgZW5hYmxlLWV2ZW50IC1hIC1sCgouLi4gYW5kIHRoZSAtbC8tLWxvZzRqIG9wdGlv
+bnMgYXBwbGllcyB0byB0aGUgbG9nNGogYWdlbnQuCgpVc2UgdGhlIC1qLy0tanVsIG9wdGlvbi4K
+Cj4gbHR0bmcgc3RhcnQKPgo+IC8vL1N0YXJ0IE15IGphdmEgQXBwbGljYXRpb24vLy8KPgo+IGx0
+dG5nIHN0b3AKPiAvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vCj4KPiBCZXNpZGVzLCB3aGVu
+IEkgdXNlZCAibHR0bmcgdmlldyIgYWZ0ZXIgc3RvcHBpbmcgTFRUbmcsIEkgcmVjZWl2ZWQgZm9s
+bG93aW5nCj4gZXJyb3IgbWVzc2FnZQo+Cj4gW2Vycm9yXSBDYW5ub3Qgb3BlbiBhbnkgdHJhY2Ug
+Zm9yIHJlYWRpbmcuCj4gW2Vycm9yXSBvcGVuaW5nIHRyYWNlICIvW3BhdGhdL2x0dG5nLXRyYWNl
+cy9qYXZhLXRlc3QxMC0yMDE3MTAxMC0xMzA5MDkiIGZvcgo+IHJlYWRpbmcuCj4gW2Vycm9yXSBu
+b25lIG9mIHRoZSBzcGVjaWZpZWQgdHJhY2UgcGF0aHMgY291bGQgYmUgb3BlbmVkLgoKVGhpcyBp
+cyBiZWNhdXNlIHlvdXIgdHJhY2UgaXMgZW1wdHkgKGRvZXMgbm90IGV2ZW4gZXhpc3QpLgoKUGhp
+bAoKPgo+IENvdWxkIHlvdSBwbGVhc2UgaGVscCBtZSB0byByZXNvbHZlIGl0Lgo+Cj4gUmVnYXJk
+cywKPiBNZWhkaS4KPgo+Cj4KPgo+Cj4KPgo+Cj4KPiBPbiBNb25kYXksIE9jdG9iZXIgOSwgMjAx
+NywgMTowNTo1OSBBTSBHTVQrMzozMCwgUGhpbGlwcGUgUHJvdWx4Cj4gPGVlcHBlbGl0ZWxvb3BA
+Z21haWwuY29tPiB3cm90ZToKPgo+Cj4gT24gU3VuLCBPY3QgOCwgMjAxNyBhdCA0OjE1IFBNLCBN
+TU0gdmlhIGx0dG5nLWRldgo+IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPiB3cm90ZToKPj4g
+RGVhciBVc2VycywKPj4KPj4gSSBhbSBiZWdpbm5lciBpbiB0cmFjaW5nIHVzaW5nIExUVG5nLiBB
+dCBwcmVzZW50LCBJIGFtIGdvaW5nIHRvIHRyYWNlIGEKPj4gamF2YQo+PiBwcm9ncmFtIGluICBV
+YnVudHUsIHdoaWxlIEkgZmFjZWQgd2l0aCBhIHByb2JsZW0uIFdoZW4gSSBpbnN0YWxsIExUVG5n
+IG9uCj4+IFVidW50dSwgSSBhbHNvIGluc3RhbGwKPj4KPj4gImxpYmx0dG5nLXVzdC1hZ2VudC1q
+YXZhIiBieSAiYXB0LWdldCBpbnN0YWxsIGxpYmx0dG5nLXVzdC1hZ2VudC1qYXZhIgo+PiBjb21t
+YW5kIGluIFVidW50dS4gQnV0LCB3aGVuIEkgd2FudCB0byBpbXBvcnQgYW55IGxpYnJhcmllcyBy
+ZWxhdGVkIHRvCj4+IExUVG5nCj4+IHN1Y2ggYXMgIm9yZy5sdHRuZy51c3QuYWdlbnQuanVsLkx0
+dG5nTG9nSGFuZGxlcm9yZy5sdHRuZy51c3QuTFRUbmdBZ2VudCIKPj4gdG8KPj4gbXkgcHJvZ3Jh
+bSwgaXQgaXMgbWFya2VkIGFzIHVua25vd24gcGFja2FnZS4gSW5kZWVkLCBJIGNvdWxkIG5vdCBm
+aW5kCj4+IExUVG5nCj4+IEphciBmaWxlIGZvciBhZGRpbmcgaXQgdG8gbXkgcHJvZ3JhbSBsaWJy
+YXJpZXMuIEZ1cnRoZXJtb3JlLCBJIHNlYXJjaGVkIGluCj4+IGFsbCBmaWxlcyBhbmQgZm9sZGVy
+cywgd2hpbGUgSSBjb3VsZCBub3QgZmluZCBKYXIgZmlsZS4gQ291bGQgeW91IHBsZWFzZQo+PiBo
+ZWxwIG1lIHRvIHVuZGVyc3RhbmQgdGhlIGNhdXNlIG9mIHRoaXMgcHJvYmxlbSBhbmQgc29sdmUg
+aXQuCj4KPiBJJ20gbm90IGEgVWJ1bnR1IHNwZWNpYWxpc3QsIGJ1dCBmcm9tCj4gPGh0dHBzOi8v
+cGFja2FnZXMudWJ1bnR1LmNvbS96ZXN0eS9hbGwvbGlibHR0bmctdXN0LWFnZW50LWphdmEvZmls
+ZWxpc3Q+LAo+IEkgd291bGQgc2F5Ogo+Cj4gKiAvdXNyL3NoYXJlL2phdmEvbHR0bmctdXN0LWFn
+ZW50LWp1bC5qYXIKPiAqIC91c3Ivc2hhcmUvamF2YS9sdHRuZy11c3QtYWdlbnQtbG9nNGouamFy
+Cj4KPiBPbiAxNi4wNCwgaXQnczoKPgo+ICogL3Vzci9zaGFyZS9qYXZhL2xpYmx0dG5nLXVzdC1h
+Z2VudC5qYXIKPgo+IEFkZCB0aGUgcmVxdWlyZWQgSkFSIGZpbGUgdG8geW91ciBjbGFzc3BhdGgu
+Cj4KPiBIYXZlIGEgbG9vayBhdCA8aHR0cDovL2x0dG5nLm9yZy9kb2NzL3YyLjkvI2RvYy1qYXZh
+LWFwcGxpY2F0aW9uPi4KPgo+IFBoaWwKPgo+Cj4+Cj4+Cj4+IEJlc3QgcmVnYXJkcywKPj4KPj4g
+TWVoZGkuCj4+Cj4+Cj4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4gbHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZwo+PiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
+bHR0bmctZGV2Cj4+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
+czovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
