@@ -1,16 +1,20 @@
-From: avkumar <anilzoom@gmail.com>
-Subject: How to user perf probes and module tracepoints in lttng
-Date: Wed, 11 Oct 2017 16:10:38 -0500
-Message-ID: <CANaS5jp1rE6Vnb1zmBgb+Gd5N_XLjFsH+HR7zD-UAo8FfYL43g__48332.7691596516$1507757051$gmane$org@mail.gmail.com>
+From: Francis Deslauriers <francis.deslauriers@efficios.com>
+Subject: Re: How to user perf probes and module tracepoints in
+	lttng
+Date: Wed, 11 Oct 2017 17:49:38 -0400
+Message-ID: <CADcCL0j4oasXdjNcrdN15fJbOhoBtyTsKi73u2dhprGZKdnm+A__5003.83368130333$1507758619$gmane$org@mail.gmail.com>
+References: <CANaS5jp1rE6Vnb1zmBgb+Gd5N_XLjFsH+HR7zD-UAo8FfYL43g@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5802361627162804698=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt0-x234.google.com (mail-qt0-x234.google.com
- [IPv6:2607:f8b0:400d:c0d::234])
- by lists.lttng.org (Postfix) with ESMTPS id 3yC68H6mdHz10qw
- for <lttng-dev@lists.lttng.org>; Wed, 11 Oct 2017 21:10:39 +0000 (UTC)
-Received: by mail-qt0-x234.google.com with SMTP id 1so9424613qtn.3
- for <lttng-dev@lists.lttng.org>; Wed, 11 Oct 2017 14:10:39 -0700 (PDT)
+Received: from mail-qt0-x243.google.com (mail-qt0-x243.google.com
+ [IPv6:2607:f8b0:400d:c0d::243])
+ by lists.lttng.org (Postfix) with ESMTPS id 3yC71g4ygrz10ws
+ for <lttng-dev@lists.lttng.org>; Wed, 11 Oct 2017 21:49:59 +0000 (UTC)
+Received: by mail-qt0-x243.google.com with SMTP id 24so4183641qts.3
+ for <lttng-dev@lists.lttng.org>; Wed, 11 Oct 2017 14:49:59 -0700 (PDT)
+In-Reply-To: <CANaS5jp1rE6Vnb1zmBgb+Gd5N_XLjFsH+HR7zD-UAo8FfYL43g@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,81 +24,50 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: avkumar <anilzoom@gmail.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============5802361627162804698==
-Content-Type: multipart/alternative; boundary="001a114faa2605be84055b4bdbac"
-
---001a114faa2605be84055b4bdbac
-Content-Type: text/plain; charset="UTF-8"
-
-Perf probes:
-How can we add the dynamic trace points created by perf probe into lttng?
-When I add the perf probe as kprobe type I get missing tracepoint error, If
-I add the perf probe as tracepoint , Lttng does not complain but it does
-not collect any data when the tracepoint is hit.
-
-perf probe -l
-  probe:tcp_gro        (on tcp_gro_receive@net/ipv4/tcp_offload.c with addr
-len)
-
-lttng enable-event -k --probe=tcp_gro
-Error: Missing event name(s).
-
-When I add it as a trace point
-
-lttng enable-event -k probe:tcp_gro
-Kernel event probe:tcp_gro created in channel channel0]
-
-it does not give any error but no data is collected
-
-
-
-Module tracepoints:
-I created module tracepoints in the kernel and compiled the trace points.
-The header file is in the driver module directory. When I write the
-adaptation layer for lttng, it does not compile as it is not able to fien
-the header file. I have given fill path name to the header file and still
-it does not work.
-
-
-Thanks
-
---001a114faa2605be84055b4bdbac
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Perf probes:</div><div>How can we add the dynamic tra=
-ce points created by perf probe into lttng? When I add the perf probe as kp=
-robe type I get missing tracepoint error, If I add the perf probe as tracep=
-oint , Lttng does not complain but it does not collect any data when the tr=
-acepoint is hit.=C2=A0</div><div><br></div><div><div>perf probe -l</div><di=
-v>=C2=A0 probe:tcp_gro =C2=A0 =C2=A0 =C2=A0 =C2=A0(on tcp_gro_receive@net/i=
-pv4/tcp_offload.c with addr len)</div></div><div><br></div><div><div>lttng =
-enable-event -k --probe=3Dtcp_gro</div><div>Error: Missing event name(s).</=
-div></div><div><br></div><div>When I add it as a trace point</div><div><br>=
-</div><div><div>lttng enable-event -k probe:tcp_gro</div><div>Kernel event =
-probe:tcp_gro created in channel channel0]</div></div><div><br></div><div>i=
-t does not give any error but no data is collected</div><div><br></div><div=
-><br></div><div><br></div>Module tracepoints:<div>I created module tracepoi=
-nts in the kernel and compiled the trace points. The header file is in the =
-driver module directory. When I write the adaptation layer for lttng, it do=
-es not compile as it is not able to fien the header file. I have given fill=
- path name to the header file and still it does not work.</div><div><br></d=
-iv><div><br></div><div>Thanks</div><div><br></div><div><br></div><div><br><=
-/div><div><br></div></div>
-
---001a114faa2605be84055b4bdbac--
-
---===============5802361627162804698==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============5802361627162804698==--
+SGksCjIwMTctMTAtMTEgMTc6MTAgR01ULTA0OjAwIGF2a3VtYXIgPGFuaWx6b29tQGdtYWlsLmNv
+bT46Cj4KPiBQZXJmIHByb2JlczoKPiBIb3cgY2FuIHdlIGFkZCB0aGUgZHluYW1pYyB0cmFjZSBw
+b2ludHMgY3JlYXRlZCBieSBwZXJmIHByb2JlIGludG8gbHR0bmc/IFdoZW4gSSBhZGQgdGhlIHBl
+cmYgcHJvYmUgYXMga3Byb2JlIHR5cGUgSSBnZXQgbWlzc2luZyB0cmFjZXBvaW50IGVycm9yLCBJ
+ZiBJIGFkZCB0aGUgcGVyZiBwcm9iZSBhcyB0cmFjZXBvaW50ICwgTHR0bmcgZG9lcyBub3QgY29t
+cGxhaW4gYnV0IGl0IGRvZXMgbm90IGNvbGxlY3QgYW55IGRhdGEgd2hlbiB0aGUgdHJhY2Vwb2lu
+dCBpcyBoaXQuCj4KPiBwZXJmIHByb2JlIC1sCj4gICBwcm9iZTp0Y3BfZ3JvICAgICAgICAob24g
+dGNwX2dyb19yZWNlaXZlQG5ldC9pcHY0L3RjcF9vZmZsb2FkLmMgd2l0aCBhZGRyIGxlbikKPgo+
+IGx0dG5nIGVuYWJsZS1ldmVudCAtayAtLXByb2JlPXRjcF9ncm8KCkZpcnN0LCB5b3UgaGF2ZSB0
+byBnaXZlIHlvdXIgcHJvYmUgZXZlbnQgYSBuYW1lLgpTZWNvbmQsIHRjcF9ncm8gaGFzIHRvIGJl
+IGEga2VybmVsIHN5bWJvbC4gQWNjb3JkaW5nIHRvIHRoZSBQZXJmCm91dHB1dCBhYm92ZSwgdGhl
+IHN5bWJvbCBuYW1lIGlzIGB0Y3BfZ3JvX3JlY2VpdmVgIHNvIHRoZSBjb21tYW5kIHlvdQp3YW50
+IHRvIHJ1biBpczoKbHR0bmcgZW5hYmxlLWV2ZW50IC1rIC0tcHJvYmU9dGNwX2dyb19yZWNlaXZl
+IEVWRU5UX05BTUUKCj4gRXJyb3I6IE1pc3NpbmcgZXZlbnQgbmFtZShzKS4KPgo+IFdoZW4gSSBh
+ZGQgaXQgYXMgYSB0cmFjZSBwb2ludAo+Cj4gbHR0bmcgZW5hYmxlLWV2ZW50IC1rIHByb2JlOnRj
+cF9ncm8KPiBLZXJuZWwgZXZlbnQgcHJvYmU6dGNwX2dybyBjcmVhdGVkIGluIGNoYW5uZWwgY2hh
+bm5lbDBdCj4KPiBpdCBkb2VzIG5vdCBnaXZlIGFueSBlcnJvciBidXQgbm8gZGF0YSBpcyBjb2xs
+ZWN0ZWQKCkl0J3MgZXhwZWN0ZWQgaWYgeW91IGRvbid0IGhhdmUgYSBrZXJuZWwgdHJhY2Vwb2lu
+dCBuYW1lZAoicHJvYmU6dGNwX2dybyIoeW91IHByb2JhYmx5IGRvbid0KSBjdXJyZW50bHkgbG9h
+ZGVkIGluIHlvdXIga2VybmVsLgpUaGVyZSBpcyBubyBlcnJvciBiZWNhdXNlIHRoZXJlIGlzIG5v
+IHdheSBmb3IgdGhlIGtlcm5lbCB0cmFjZXIgaWYgdGhlCnRyYWNlcG9pbnQgaXMgcGFydCBvZiBh
+biBub3QteWV0LWxvYWRlZCBrZXJuZWwgbW9kdWxlIG9yIG5vdC4KInByb2JlOnRjcF9ncm8iIGlz
+IGEgUGVyZiBzcGVjaWZpYyBkZXNjcmlwdGlvbiBvZiB0aGUga3Byb2JlIHlvdQplbmFibGVkLiBZ
+b3UgY2FuIG5vdCBkaXJlY3RseSByZXVzZSB0aGlzIGRlc2NyaXB0aW9uIGluIHRoZQpsdHRuZy1l
+bmFibGUtZXZlbnQgY29tbWFuZC4gVG8gdXNlIHRoZSBgbHR0bmcgZW5hYmxlLWV2ZW50IC1rClRS
+QUNFUE9JTlRgLCB0cnkgdGhlIGBsdHRuZyBsaXN0IC1rYCBjb21tYW5kICh3aXRoIGEgbHR0bmct
+c2Vzc2lvbmQKcnVubmluZyBhcyByb290KSB0byBsaXN0IHRoZSBjdXJyZW50bHkgYXZhaWxhYmxl
+IHRyYWNlcG9pbnRzLgoKPgo+Cj4KPiBNb2R1bGUgdHJhY2Vwb2ludHM6Cj4gSSBjcmVhdGVkIG1v
+ZHVsZSB0cmFjZXBvaW50cyBpbiB0aGUga2VybmVsIGFuZCBjb21waWxlZCB0aGUgdHJhY2UgcG9p
+bnRzLiBUaGUgaGVhZGVyIGZpbGUgaXMgaW4gdGhlIGRyaXZlciBtb2R1bGUgZGlyZWN0b3J5LiBX
+aGVuIEkgd3JpdGUgdGhlIGFkYXB0YXRpb24gbGF5ZXIgZm9yIGx0dG5nLCBpdCBkb2VzIG5vdCBj
+b21waWxlIGFzIGl0IGlzIG5vdCBhYmxlIHRvIGZpZW4gdGhlIGhlYWRlciBmaWxlLiBJIGhhdmUg
+Z2l2ZW4gZmlsbCBwYXRoIG5hbWUgdG8gdGhlIGhlYWRlciBmaWxlIGFuZCBzdGlsbCBpdCBkb2Vz
+IG5vdCB3b3JrLgoKQ2FuIHlvdSBnaXZlIHVzIGEgYml0IG1vcmUgZGV0YWlscy4gQ291bGQgeW91
+IHNlbmQgdXMgYSBwYXN0ZWJpbiBvZgp0aGUgZXJyb3IgeW91IGdldD8KClRoYW5rIHlvdSwKRnJh
+bmNpcwoKPgo+Cj4gVGhhbmtzCj4KPgo+Cj4KPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRl
+dkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
+YW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KCgoKLS0gCkZyYW5jaXMgRGVzbGF1cmllcnMKU29mdHdh
+cmUgZGV2ZWxvcGVyCkVmZmljaU9TIGluYy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMu
+bHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5m
+by9sdHRuZy1kZXYK
