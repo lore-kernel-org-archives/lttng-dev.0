@@ -1,19 +1,16 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: lttng-consumerd crash due
- to double free metadata stream
-Date: Wed, 11 Oct 2017 14:39:18 -0400
-Message-ID: <20171011183918.tmuqnzerivd6h3bz__48655.0630922013$1507747179$gmane$org@psrcode-TP-X230>
-References: <1506506279-23472-1-git-send-email-liguang.li@windriver.com>
- <20170928205742.rm66aato6q3vsilq@psrcode-TP-X230>
+From: avkumar <anilzoom@gmail.com>
+Subject: How to user perf probes and module tracepoints in lttng
+Date: Wed, 11 Oct 2017 16:10:38 -0500
+Message-ID: <CANaS5jp1rE6Vnb1zmBgb+Gd5N_XLjFsH+HR7zD-UAo8FfYL43g__48332.7691596516$1507757051$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============5802361627162804698=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3yC2nm625zz10b8
- for <lttng-dev@lists.lttng.org>; Wed, 11 Oct 2017 18:39:24 +0000 (UTC)
-Content-Disposition: inline
-In-Reply-To: <20170928205742.rm66aato6q3vsilq@psrcode-TP-X230>
+Received: from mail-qt0-x234.google.com (mail-qt0-x234.google.com
+ [IPv6:2607:f8b0:400d:c0d::234])
+ by lists.lttng.org (Postfix) with ESMTPS id 3yC68H6mdHz10qw
+ for <lttng-dev@lists.lttng.org>; Wed, 11 Oct 2017 21:10:39 +0000 (UTC)
+Received: by mail-qt0-x234.google.com with SMTP id 1so9424613qtn.3
+ for <lttng-dev@lists.lttng.org>; Wed, 11 Oct 2017 14:10:39 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,36 +20,81 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Liguang Li <liguang.li@windriver.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpPbiBUaHUsIFNlcCAyOCwgMjAxNyBhdCAwNDo1Nzo0MlBNIC0wNDAwLCBKb25hdGhhbiBS
-YWpvdHRlLUp1bGllbiB3cm90ZToKPiBIaSBMaWd1YW5nLAo+IAo+IFRoYW5rcyBmb3Igc3VibWl0
-dGluZyB0aGUgcGF0Y2guCj4gCj4gT24gV2VkLCBTZXAgMjcsIDIwMTcgYXQgMDU6NTc6NTlQTSAr
-MDgwMCwgTGlndWFuZyBMaSB3cm90ZToKPiA+IFdoZW4gc2V0dXAgbWV0YWRhdGEgZmFpbGVkLCB0
-aGUgZXhjZXB0aW9uIGhhbmRsaW5nIGZ1bmN0aW9uIHdpbGwgZnJlZQo+ID4gdGhlIG1ldGFkYXRh
-IHN0cmVhbSB0d2ljZS4KPiAKPiBUaGlzIGlzIGxhY2tpbmcgY29udGV4dCBhbmQgYSBnb29kIGV4
-cGxhbmF0aW9uIG9mIHRoZSBwcm9ibGVtIGF0IGhhbmQuCj4gUHJvdmlkaW5nIGEgZ29vZCByZXBy
-b2R1Y2VyIGlzIGEgZ29vZCBmaXJzdCBzdGVwIHRvIGFsbG93IGVhc2llciByZXZpZXcgb2YKPiBw
-YXRjaGVzLiBUaGlzIGFsc28gcmVtb3ZlIHVuY2VydGFpbnR5IG9uIHRoZSBvcmlnaW4gb2YgdGhl
-IGlzc3VlIGF0IHRoZSBmaXJzdAo+IHBsYWNlLgo+IAo+IEluIHRoaXMgY2FzZSwgSSdsbCBhc3N1
-bWUgdGhhdCB0aGUgaXNzdWUgaGFwcGVuIHdoZW4gdGhlIGNhbGwgdG8KPiBsdHRuZ19waXBlX3dy
-aXRlIGluc2lkZSBzZW5kX3N0cmVhbV90b190aHJlYWQgZmFpbHMuIEkgd291bGQgYmUgZXZlbiBt
-b3JlCj4gaW50ZXJlc3RlZCBvbiB0aGUgY29uZGl0aW9ucyhzY2VuYXJpbykgcmVxdWlyZWQgZm9y
-IHRoaXMgY2FsbCB0byBmYWlsIGluIHRoZQo+IGZpcnN0IHBsYWNlLiBJdCB3b3VsZCBiZSBuaWNl
-IGlmIHlvdSBjb3VsZCBwcm92aWRlIG1vcmUgaW5mb3JtYXRpb24gcmVnYXJkaW5nCj4gdGhhdC4K
-PiAKPiBTdGlsbCwgZmFraW5nIGEgZmFpbHVyZSBvbiBsdHRuZ19waXBlX3dyaXRlIHdoZW4gYSBt
-ZXRhZGF0YSBzdHJlYW0gaXMgdG8gYmUgc2VudAo+IGFsbG93cyBtZSB0byByZXByb2R1Y2UgYW4g
-aXNzdWUgc2ltaWxhciB0byB0aGUgb25lIHlvdSBhcmUgZGVzY3JpYmluZy4KPiAKPiBUaG9zZSB0
-d28gY2FsbHMgYXJlIGFscmVhZHkgcGVyZm9ybWVkIGluc2lkZSBkZXN0cm95X2Nsb3NlX3N0cmVh
-bSgpIHdoaWNoIGlzCj4gYWx3YXlzIGNhbGxlZCBpbnNpZGUgY29uc3VtZXJfc3RyZWFtX2Rlc3Ry
-b3koKS4gTm8gbmVlZCB0byBwZXJmb3JtCj4gdGhlbS4KPiAKPiBZb3UgY2FuIGZpbmQgYSByZXdv
-cmtlZCB2ZXJzaW9uIG9mIHRoaXMgZml4IGhlcmUgWzFdLiBDb3VsZCB5b3UgdmFsaWRhdGUgdGhh
-dCBpdAo+IGRvZXMgaW5kZWVkIGZpeGVzIHRoZSBpc3N1ZT8KPiAKPiBbMV0gaHR0cHM6Ly9saXN0
-cy5sdHRuZy5vcmcvcGlwZXJtYWlsL2x0dG5nLWRldi8yMDE3LVNlcHRlbWJlci8wMjc0ODguaHRt
-bAoKQW55IGZlZWRiYWNrIHJlZ2FyZGluZyB0aGUgcHJvdmlkZWQgcGF0Y2g/CgpDaGVlcnMKCi0t
-IApKb25hdGhhbiBSYWpvdHRlLUp1bGllbgpFZmZpY2lPUwpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
-L2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============5802361627162804698==
+Content-Type: multipart/alternative; boundary="001a114faa2605be84055b4bdbac"
+
+--001a114faa2605be84055b4bdbac
+Content-Type: text/plain; charset="UTF-8"
+
+Perf probes:
+How can we add the dynamic trace points created by perf probe into lttng?
+When I add the perf probe as kprobe type I get missing tracepoint error, If
+I add the perf probe as tracepoint , Lttng does not complain but it does
+not collect any data when the tracepoint is hit.
+
+perf probe -l
+  probe:tcp_gro        (on tcp_gro_receive@net/ipv4/tcp_offload.c with addr
+len)
+
+lttng enable-event -k --probe=tcp_gro
+Error: Missing event name(s).
+
+When I add it as a trace point
+
+lttng enable-event -k probe:tcp_gro
+Kernel event probe:tcp_gro created in channel channel0]
+
+it does not give any error but no data is collected
+
+
+
+Module tracepoints:
+I created module tracepoints in the kernel and compiled the trace points.
+The header file is in the driver module directory. When I write the
+adaptation layer for lttng, it does not compile as it is not able to fien
+the header file. I have given fill path name to the header file and still
+it does not work.
+
+
+Thanks
+
+--001a114faa2605be84055b4bdbac
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Perf probes:</div><div>How can we add the dynamic tra=
+ce points created by perf probe into lttng? When I add the perf probe as kp=
+robe type I get missing tracepoint error, If I add the perf probe as tracep=
+oint , Lttng does not complain but it does not collect any data when the tr=
+acepoint is hit.=C2=A0</div><div><br></div><div><div>perf probe -l</div><di=
+v>=C2=A0 probe:tcp_gro =C2=A0 =C2=A0 =C2=A0 =C2=A0(on tcp_gro_receive@net/i=
+pv4/tcp_offload.c with addr len)</div></div><div><br></div><div><div>lttng =
+enable-event -k --probe=3Dtcp_gro</div><div>Error: Missing event name(s).</=
+div></div><div><br></div><div>When I add it as a trace point</div><div><br>=
+</div><div><div>lttng enable-event -k probe:tcp_gro</div><div>Kernel event =
+probe:tcp_gro created in channel channel0]</div></div><div><br></div><div>i=
+t does not give any error but no data is collected</div><div><br></div><div=
+><br></div><div><br></div>Module tracepoints:<div>I created module tracepoi=
+nts in the kernel and compiled the trace points. The header file is in the =
+driver module directory. When I write the adaptation layer for lttng, it do=
+es not compile as it is not able to fien the header file. I have given fill=
+ path name to the header file and still it does not work.</div><div><br></d=
+iv><div><br></div><div>Thanks</div><div><br></div><div><br></div><div><br><=
+/div><div><br></div></div>
+
+--001a114faa2605be84055b4bdbac--
+
+--===============5802361627162804698==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============5802361627162804698==--
