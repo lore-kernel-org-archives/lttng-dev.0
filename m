@@ -1,8 +1,8 @@
-From: MMM via lttng-dev <lttng-dev@lists.lttng.org>
+From: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
 Subject: Re: Problem in finding Jar file of LTTng for adding to
  Java project
-Date: Sat, 14 Oct 2017 22:18:33 +0000 (UTC)
-Message-ID: <670458818.2469.1508019513394__5671.81226001612$1508020776$gmane$org@mail.yahoo.com>
+Date: Mon, 16 Oct 2017 08:13:34 -0400
+Message-ID: <34c576ec-e89f-60f2-fd8f-b3354a976bfc__12171.0126325072$1508156047$gmane$org@voxpopuli.im>
 References: <797428900.3787919.1507493725940.ref@mail.yahoo.com>
  <797428900.3787919.1507493725940@mail.yahoo.com>
  <CAB4xu_26Qmpzf-mccjY3HutmFBBLdEEDAxx5_WLdxdFARSzgNA@mail.gmail.com>
@@ -12,15 +12,17 @@ References: <797428900.3787919.1507493725940.ref@mail.yahoo.com>
  <415c1e82-6532-d4a8-c443-8263a1a3cc91@voxpopuli.im>
  <1302171483.738271.1507837087778@mail.yahoo.com>
  <5e5cbef3-794c-e4e1-8a02-bca432153031@voxpopuli.im>
-Reply-To: MMM <e.morovati@yahoo.com>
+ <670458818.2469.1508019513394@mail.yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5531734937214054176=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sonic306-22.consmr.mail.ne1.yahoo.com
- (sonic306-22.consmr.mail.ne1.yahoo.com [66.163.189.84])
- by lists.lttng.org (Postfix) with ESMTP id 3yDzzF21Xlz10n5
- for <lttng-dev@lists.lttng.org>; Sat, 14 Oct 2017 22:39:20 +0000 (UTC)
-In-Reply-To: <5e5cbef3-794c-e4e1-8a02-bca432153031@voxpopuli.im>
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by lists.lttng.org (Postfix) with ESMTPS id 3yFy0V1Bnqz101w
+ for <lttng-dev@lists.lttng.org>; Mon, 16 Oct 2017 12:13:45 +0000 (UTC)
+In-Reply-To: <670458818.2469.1508019513394@mail.yahoo.com>
+Content-Language: en-CA
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -30,588 +32,171 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Alexandre Montplaisir <alexmonthy@voxpopuli.im>
+To: MMM <e.morovati@yahoo.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============5531734937214054176==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_2468_1779604036.1508019513391"
-
-------=_Part_2468_1779604036.1508019513391
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
- I installed LTTng from source at first. While after that, I also reinstall=
- it from PPA. Is it the cause of my problem?    On Friday, October 13, 2017=
-, 11:57:33 PM GMT+3:30, Alexandre Montplaisir <alexmonthy@voxpopuli.im> wro=
-te: =20
-=20
- On 2017-10-12 03:38 PM, MMM wrote:
-> Dear Alex,
->
-> As I mentioned, I used sample examples. for instance, I used mentioned
-> simple program that you told tracing it return some result. While, I
-> can not receive any result from tracing it. Also, I use Ubuntu 16.04
-> LTS and lttng 2.9.5. Besides, the output of asked command is=C2=A0
->
-> //////////////////
-> -rw-r--r-- 1 root root 40871 Jun 16 13:56
-> /usr/share/java/lttng-ust-agent-common-2.9.1.jar
-> lrwxrwxrwx 1 root root=C2=A0 =C2=A0 32 Jun 16 13:56
-> /usr/share/java/lttng-ust-agent-common.jar ->
-> lttng-ust-agent-common-2.9.1.jar
-> -rw-r--r-- 1 root root=C2=A0 4369 Jun 16 13:56
-> /usr/share/java/lttng-ust-agent-jul-2.9.1.jar
-> lrwxrwxrwx 1 root root=C2=A0 =C2=A0 29 Jun 16 13:56
-> /usr/share/java/lttng-ust-agent-jul.jar -> lttng-ust-agent-jul-2.9.1.jar
-> -rw-r--r-- 1 root root=C2=A0 3933 Jun 16 13:56
-> /usr/share/java/lttng-ust-agent-log4j-2.9.1.jar
-> lrwxrwxrwx 1 root root=C2=A0 =C2=A0 31 Jun 16 13:56
-> /usr/share/java/lttng-ust-agent-log4j.jar ->
-> lttng-ust-agent-log4j-2.9.1.jar
-> ////////////////////////////
-
-Everything seems to be in order here.
-
-I will try your exact same environment to see if I can reproduce the issue.
-How did you install your LTTng 2.9? Was it from source, or from a PPA?
-The Ubuntu 16.04 main archive only has 2.7.*
-
-Cheers,
-Alex
-
->
-> Thanks for your attention.
-> Regards,
-> Mehdi.
->
-> On Thursday, October 12, 2017, 6:51:12 PM GMT+3:30, Alexandre
-> Montplaisir <alexmonthy@voxpopuli.im> wrote:
->
->
->
->
-> On 2017-10-11 06:05 PM, MMM wrote:
-> > Dear Alex,
-> >
-> > Thanks for your attention. I executed your commands step by step.
-> > While, again I received previous errors which are=C2=A0
-> >
-> > [error] Cannot open any trace for reading.
-> > [error] opening trace "[path]/lttng-traces/auto-20171011-145947" for
-> > reading.
-> > [error] none of the specified trace paths could be opened.
-> >
-> > I do not know the reason of this problem. Could you please help me to
-> > resolve it?
->
-> As Philippe mentioned previously, this means the trace is empty, so no
-> events were produced by the session.
->
-> Did any of the other commands (java, javac, lttng create,...) output any
-> error messages?
->
->
-> Finally, it would help if you could specify:
-> - What version of Ubuntu you are running
->
-> - What version of LTTng you are running ("lttng --version")
->
-> - The output of the following command:
-> $ ls -l /usr/share/java/lttng-ust*
->
-> Thanks,
-> Alex
->
-> >
-> > Regards,
-> > Mehdi.
-> >
-> >
-> >
-> >
-> > On Wednesday, October 11, 2017, 6:09:41 PM GMT+3:30, Alexandre
-> > Montplaisir <alexmonthy@voxpopuli.im
-> <mailto:alexmonthy@voxpopuli.im>> wrote:
-> >
-> >
-> > Hi,
-> >
-> > I tried compiling and running your program, and it runs fine on my end.
-> > Here is what I did:
-> >
-> > saved the snippet below to "Hello.java"
-> > $ apt install liblttng-ust-agent-java
-> > $ javac -cp /usr/share/java/lttng-ust-agent-jul.jar Hello.java
-> >
-> > $ lttng create
-> > $ lttng enable-event -a -j
-> > $ lttng start
-> > $ java -cp /usr/share/java/lttng-ust-agent-jul.jar:. Hello
-> > $ lttng stop
-> > $ lttng view
-> >
-> > and I get the following output:
-> > Trace directory: /home/alexandre/lttng-traces/auto-20171011-102431
-> >
-> > [10:24:49.326824061] (+?.?????????) calista lttng_jul:event: { cpu_id =
-=3D
-> > 2 }, { msg =3D "Hello World, the answer is 42", logger_name =3D "hello"=
-,
-> > class_name =3D "Hello", method_name =3D "main", long_millis =3D 1507731=
-889299,
-> > int_loglevel =3D 800, int_threadid =3D 1 }
-> >
-> >
-> > Make sure you are setting the -classpath/-cp option correctly, this
-> > could explain the "unknown package" error you were getting.
-> >
-> > Also note that you are using the deprecated "LTTngAgent.getLTTngAgent()=
-"
-> > API (the "javac" command should warn about it). It should still work,
-> > but it's highly recommended to use the new API, as described in
-> > https://lttng.org/docs/v2.10/#doc-jul
-> > <https://lttng.org/docs/v2.10/#doc-jul%20>. Basically you have to
-> > instantiate an "LttngLogHandler", and attach it to your Logger.
-> >
-> > HTH,
-> > Alex
-> >
-> >
-> > On 2017-10-10 04:12 PM, MMM via lttng-dev wrote:
-> > > Dear Philippe,
-> > >
-> > > Thanks a lot for your consideration. I solved former problem. While, =
-I
-> > > faced with a new problem. Indeed, when I create a LTTng session, star=
-t
-> > > it and finally stop LTTng, I could not find trace files in mentioned
-> > > folder. My java code is=C2=A0
-> > >
-> > > ///////////////////////////////////////
-> > > import java.io.IOException;
-> > > import java.util.logging.Handler;
-> > > import java.util.logging.Logger;
-> > >
-> > > import org.lttng.ust.agent.LTTngAgent;
-> > > import org.lttng.ust.agent.jul.LttngLogHandler;
-> > >
-> > > public class Hello {
-> > > private static final int answer =3D 42;
-> > > private static LTTngAgent lttngAgent;
-> > >
-> > > public static void main(String[] args) throws InterruptedException {
-> > > Logger helloLog =3D Logger.getLogger("hello");
-> > > lttngAgent =3D LTTngAgent.getLTTngAgent();
-> > >
-> > > Thread.sleep(5000);
-> > > helloLog.info("Hello World, the answer is " + answer);
-> > > lttngAgent.dispose();
-> > > }
-> > >
-> > > }
-> > > ///////////////////////
-> > >
-> > > Also, I used following LTTng commands.=C2=A0
-> > >
-> > > ////////////////////////////////
-> > > lttng create java-test
-> > > lttng enable-event -a -l
-> > > lttng start
-> > > ///Start My java Application///
-> > > lttng stop
-> > > ////////////////////////////
-> > >
-> > > Besides, when I used "lttng view" after stopping LTTng, I received
-> > > following error message
-> > >
-> > > [error] Cannot open any trace for reading.
-> > > [error] opening trace
-> > > "/[path]/lttng-traces/java-test10-20171010-130909" for reading.
-> > > [error] none of the specified trace paths could be opened.
-> > >
-> > > Could you please help me to resolve it.
-> > >
-> > > Regards,
-> > > Mehdi.
-> > >
-> > >
-> > >
-> > >
-> > >
-> > >
-> > > On Monday, October 9, 2017, 1:05:59 AM GMT+3:30, Philippe Proulx
-> > > <eeppeliteloop@gmail.com <mailto:eeppeliteloop@gmail.com>
-> <mailto:eeppeliteloop@gmail.com <mailto:eeppeliteloop@gmail.com>>> wrote:
-> > >
-> > >
-> > > On Sun, Oct 8, 2017 at 4:15 PM, MMM via lttng-dev
-> > > <lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>
-> <mailto:lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>>
-> > <mailto:lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>
-> <mailto:lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>>>>
-> > wrote:
-> > > > Dear Users,
-> > > >
-> > > > I am beginner in tracing using LTTng. At present, I am going to
-> > > trace a java
-> > > > program in=C2=A0 Ubuntu, while I faced with a problem. When I insta=
-ll
-> > > LTTng on
-> > > > Ubuntu, I also install
-> > > >
-> > > > "liblttng-ust-agent-java" by "apt-get install
-> liblttng-ust-agent-java"
-> > > > command in Ubuntu. But, when I want to import any libraries related
-> > > to LTTng
-> > > > such as
-> > > "org.lttng.ust.agent.jul.LttngLogHandlerorg.lttng.ust.LTTngAgent" to
-> > > > my program, it is marked as unknown package. Indeed, I could not
-> > > find LTTng
-> > > > Jar file for adding it to my program libraries. Furthermore, I
-> > > searched in
-> > > > all files and folders, while I could not find Jar file. Could you
-> > please
-> > > > help me to understand the cause of this problem and solve it.
-> > >
-> > > I'm not a Ubuntu specialist, but from
-> > >
-> >
-> <https://packages.ubuntu.com/zesty/all/liblttng-ust-agent-java/filelist>,
-> > > I would say:
-> > >
-> > > * /usr/share/java/lttng-ust-agent-jul.jar
-> > > * /usr/share/java/lttng-ust-agent-log4j.jar
-> > >
-> > > On 16.04, it's:
-> > >
-> > > * /usr/share/java/liblttng-ust-agent.jar
-> > >
-> > > Add the required JAR file to your classpath.
-> > >
-> > > Have a look at <http://lttng.org/docs/v2.9/#doc-java-application>.
-> > >
-> > > Phil
-> > >
-> > >
-> > > >
-> > > >
-> > > > Best regards,
-> > > >
-> > > > Mehdi.
-> > > >
-> > > >
-> > > > _______________________________________________
-> > > > lttng-dev mailing list
-> > > > lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>
-> <mailto:lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>>
-> > <mailto:lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>
-> <mailto:lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>>>
-> >
-> > > > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-> > > >
-> > >
-> > >
-> > > _______________________________________________
-> > > lttng-dev mailing list
-> > > lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>
-> <mailto:lttng-dev@lists.lttng.org <mailto:lttng-dev@lists.lttng.org>>
-> > > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >
->
-
-
-------=_Part_2468_1779604036.1508019513391
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><head></head><body><div style=3D"font-family:courier new, courier, mo=
-naco, monospace, sans-serif;font-size:13px;"><div></div>
-            <div>I installed LTTng from source at first. While after that, =
-I also reinstall it from PPA. Is it the cause of my problem?</div>
-           =20
-            <div id=3D"yahoo_quoted_8221160477" class=3D"yahoo_quoted">
-                <div style=3D"font-family:'Helvetica Neue', Helvetica, Aria=
-l, sans-serif;font-size:13px;color:#26282a;">
-                   =20
-                    <div>
-                        On Friday, October 13, 2017, 11:57:33 PM GMT+3:30, =
-Alexandre Montplaisir &lt;alexmonthy@voxpopuli.im&gt; wrote:
-                    </div>
-                    <div><br></div>
-                    <div><br></div>
-                    <div><div dir=3D'ltr'><html><body>On 2017-10-12 03:38 P=
-M, MMM wrote:<br clear=3D"none">&gt; Dear Alex,<br clear=3D"none">&gt;<br c=
-lear=3D"none">&gt; As I mentioned, I used sample examples. for instance, I =
-used mentioned<br clear=3D"none">&gt; simple program that you told tracing =
-it return some result. While, I<br clear=3D"none">&gt; can not receive any =
-result from tracing it. Also, I use Ubuntu 16.04<br clear=3D"none">&gt; LTS=
- and lttng 2.9.5. Besides, the output of asked command is=C2=A0<br clear=3D=
-"none">&gt;<br clear=3D"none">&gt; //////////////////<br clear=3D"none">&gt=
-; -rw-r--r-- 1 root root 40871 Jun 16 13:56<br clear=3D"none">&gt; /usr/sha=
-re/java/lttng-ust-agent-common-2.9.1.jar<br clear=3D"none">&gt; lrwxrwxrwx =
-1 root root=C2=A0 =C2=A0 32 Jun 16 13:56<br clear=3D"none">&gt; /usr/share/=
-java/lttng-ust-agent-common.jar -&gt;<br clear=3D"none">&gt; lttng-ust-agen=
-t-common-2.9.1.jar<br clear=3D"none">&gt; -rw-r--r-- 1 root root=C2=A0 4369=
- Jun 16 13:56<br clear=3D"none">&gt; /usr/share/java/lttng-ust-agent-jul-2.=
-9.1.jar<br clear=3D"none">&gt; lrwxrwxrwx 1 root root=C2=A0 =C2=A0 29 Jun 1=
-6 13:56<br clear=3D"none">&gt; /usr/share/java/lttng-ust-agent-jul.jar -&gt=
-; lttng-ust-agent-jul-2.9.1.jar<br clear=3D"none">&gt; -rw-r--r-- 1 root ro=
-ot=C2=A0 3933 Jun 16 13:56<br clear=3D"none">&gt; /usr/share/java/lttng-ust=
--agent-log4j-2.9.1.jar<br clear=3D"none">&gt; lrwxrwxrwx 1 root root=C2=A0 =
-=C2=A0 31 Jun 16 13:56<br clear=3D"none">&gt; /usr/share/java/lttng-ust-age=
-nt-log4j.jar -&gt;<br clear=3D"none">&gt; lttng-ust-agent-log4j-2.9.1.jar<b=
-r clear=3D"none">&gt; ////////////////////////////<br clear=3D"none"><br cl=
-ear=3D"none">Everything seems to be in order here.<br clear=3D"none"><br cl=
-ear=3D"none">I will try your exact same environment to see if I can reprodu=
-ce the issue.<br clear=3D"none">How did you install your LTTng 2.9? Was it =
-from source, or from a PPA?<br clear=3D"none">The Ubuntu 16.04 main archive=
- only has 2.7.*<br clear=3D"none"><br clear=3D"none">Cheers,<br clear=3D"no=
-ne">Alex<br clear=3D"none"><br clear=3D"none">&gt;<br clear=3D"none">&gt; T=
-hanks for your attention.<br clear=3D"none">&gt; Regards,<br clear=3D"none"=
->&gt; Mehdi.<br clear=3D"none">&gt;<br clear=3D"none">&gt; On Thursday, Oct=
-ober 12, 2017, 6:51:12 PM GMT+3:30, Alexandre<br clear=3D"none">&gt; Montpl=
-aisir &lt;<a shape=3D"rect" ymailto=3D"mailto:alexmonthy@voxpopuli.im" href=
-=3D"mailto:alexmonthy@voxpopuli.im">alexmonthy@voxpopuli.im</a>&gt; wrote:<=
-br clear=3D"none">&gt;<br clear=3D"none">&gt;<br clear=3D"none">&gt;<br cle=
-ar=3D"none">&gt;<br clear=3D"none">&gt; On 2017-10-11 06:05 PM, MMM wrote:<=
-br clear=3D"none">&gt; &gt; Dear Alex,<br clear=3D"none">&gt; &gt;<br clear=
-=3D"none">&gt; &gt; Thanks for your attention. I executed your commands ste=
-p by step.<br clear=3D"none">&gt; &gt; While, again I received previous err=
-ors which are=C2=A0<br clear=3D"none">&gt; &gt;<br clear=3D"none">&gt; &gt;=
- [error] Cannot open any trace for reading.<br clear=3D"none">&gt; &gt; [er=
-ror] opening trace &quot;[path]/lttng-traces/auto-20171011-145947&quot; for=
-<br clear=3D"none">&gt; &gt; reading.<br clear=3D"none">&gt; &gt; [error] n=
-one of the specified trace paths could be opened.<br clear=3D"none">&gt; &g=
-t;<br clear=3D"none">&gt; &gt; I do not know the reason of this problem. Co=
-uld you please help me to<br clear=3D"none">&gt; &gt; resolve it?<br clear=
-=3D"none">&gt;<br clear=3D"none">&gt; As Philippe mentioned previously, thi=
-s means the trace is empty, so no<br clear=3D"none">&gt; events were produc=
-ed by the session.<br clear=3D"none">&gt;<br clear=3D"none">&gt; Did any of=
- the other commands (java, javac, lttng create,...) output any<br clear=3D"=
-none">&gt; error messages?<br clear=3D"none">&gt;<br clear=3D"none">&gt;<br=
- clear=3D"none">&gt; Finally, it would help if you could specify:<br clear=
-=3D"none">&gt; - What version of Ubuntu you are running<br clear=3D"none">&=
-gt;<br clear=3D"none">&gt; - What version of LTTng you are running (&quot;l=
-ttng --version&quot;)<br clear=3D"none">&gt;<br clear=3D"none">&gt; - The o=
-utput of the following command:<br clear=3D"none">&gt; $ ls -l /usr/share/j=
-ava/lttng-ust*<br clear=3D"none">&gt;<br clear=3D"none">&gt; Thanks,<br cle=
-ar=3D"none">&gt; Alex<br clear=3D"none">&gt;<br clear=3D"none">&gt; &gt;<br=
- clear=3D"none">&gt; &gt; Regards,<br clear=3D"none">&gt; &gt; Mehdi.<br cl=
-ear=3D"none">&gt; &gt;<br clear=3D"none">&gt; &gt;<br clear=3D"none">&gt; &=
-gt;<br clear=3D"none">&gt; &gt;<br clear=3D"none">&gt; &gt; On Wednesday, O=
-ctober 11, 2017, 6:09:41 PM GMT+3:30, Alexandre<br clear=3D"none">&gt; &gt;=
- Montplaisir &lt;<a shape=3D"rect" ymailto=3D"mailto:alexmonthy@voxpopuli.i=
-m" href=3D"mailto:alexmonthy@voxpopuli.im">alexmonthy@voxpopuli.im</a><br c=
-lear=3D"none">&gt; &lt;mailto:<a shape=3D"rect" ymailto=3D"mailto:alexmonth=
-y@voxpopuli.im" href=3D"mailto:alexmonthy@voxpopuli.im">alexmonthy@voxpopul=
-i.im</a>&gt;&gt; wrote:<br clear=3D"none">&gt; &gt;<br clear=3D"none">&gt; =
-&gt;<br clear=3D"none">&gt; &gt; Hi,<br clear=3D"none">&gt; &gt;<br clear=
-=3D"none">&gt; &gt; I tried compiling and running your program, and it runs=
- fine on my end.<br clear=3D"none">&gt; &gt; Here is what I did:<br clear=
-=3D"none">&gt; &gt;<br clear=3D"none">&gt; &gt; saved the snippet below to =
-&quot;Hello.java&quot;<br clear=3D"none">&gt; &gt; $ apt install liblttng-u=
-st-agent-java<br clear=3D"none">&gt; &gt; $ javac -cp /usr/share/java/lttng=
--ust-agent-jul.jar Hello.java<br clear=3D"none">&gt; &gt;<br clear=3D"none"=
->&gt; &gt; $ lttng create<br clear=3D"none">&gt; &gt; $ lttng enable-event =
--a -j<br clear=3D"none">&gt; &gt; $ lttng start<br clear=3D"none">&gt; &gt;=
- $ java -cp /usr/share/java/lttng-ust-agent-jul.jar:. Hello<br clear=3D"non=
-e">&gt; &gt; $ lttng stop<br clear=3D"none">&gt; &gt; $ lttng view<br clear=
-=3D"none">&gt; &gt;<br clear=3D"none">&gt; &gt; and I get the following out=
-put:<br clear=3D"none">&gt; &gt; Trace directory: /home/alexandre/lttng-tra=
-ces/auto-20171011-102431<br clear=3D"none">&gt; &gt;<br clear=3D"none">&gt;=
- &gt; [10:24:49.326824061] (+?.?????????) calista lttng_jul:event: { cpu_id=
- =3D<br clear=3D"none">&gt; &gt; 2 }, { msg =3D &quot;Hello World, the answ=
-er is 42&quot;, logger_name =3D &quot;hello&quot;,<br clear=3D"none">&gt; &=
-gt; class_name =3D &quot;Hello&quot;, method_name =3D &quot;main&quot;, lon=
-g_millis =3D 1507731889299,<br clear=3D"none">&gt; &gt; int_loglevel =3D 80=
-0, int_threadid =3D 1 }<br clear=3D"none">&gt; &gt;<br clear=3D"none">&gt; =
-&gt;<br clear=3D"none">&gt; &gt; Make sure you are setting the -classpath/-=
-cp option correctly, this<br clear=3D"none">&gt; &gt; could explain the &qu=
-ot;unknown package&quot; error you were getting.<br clear=3D"none">&gt; &gt=
-;<br clear=3D"none">&gt; &gt; Also note that you are using the deprecated &=
-quot;LTTngAgent.getLTTngAgent()&quot;<br clear=3D"none">&gt; &gt; API (the =
-&quot;javac&quot; command should warn about it). It should still work,<br c=
-lear=3D"none">&gt; &gt; but it&#39;s highly recommended to use the new API,=
- as described in<br clear=3D"none">&gt; &gt; <a shape=3D"rect" href=3D"http=
-s://lttng.org/docs/v2.10/#doc-jul" target=3D"_blank">https://lttng.org/docs=
-/v2.10/#doc-jul</a><br clear=3D"none">&gt; &gt; &lt;<a shape=3D"rect" href=
-=3D"https://lttng.org/docs/v2.10/#doc-jul%20" target=3D"_blank">https://ltt=
-ng.org/docs/v2.10/#doc-jul%20</a>&gt;. Basically you have to<br clear=3D"no=
-ne">&gt; &gt; instantiate an &quot;LttngLogHandler&quot;, and attach it to =
-your Logger.<br clear=3D"none">&gt; &gt;<br clear=3D"none">&gt; &gt; HTH,<b=
-r clear=3D"none">&gt; &gt; Alex<br clear=3D"none">&gt; &gt;<br clear=3D"non=
-e">&gt; &gt;<br clear=3D"none">&gt; &gt; On 2017-10-10 04:12 PM, MMM via lt=
-tng-dev wrote:<br clear=3D"none">&gt; &gt; &gt; Dear Philippe,<br clear=3D"=
-none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; Thanks a lot for your=
- consideration. I solved former problem. While, I<br clear=3D"none">&gt; &g=
-t; &gt; faced with a new problem. Indeed, when I create a LTTng session, st=
-art<br clear=3D"none">&gt; &gt; &gt; it and finally stop LTTng, I could not=
- find trace files in mentioned<br clear=3D"none">&gt; &gt; &gt; folder. My =
-java code is=C2=A0<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; =
-&gt; &gt; ///////////////////////////////////////<br clear=3D"none">&gt; &g=
-t; &gt; import java.io.IOException;<br clear=3D"none">&gt; &gt; &gt; import=
- java.util.logging.Handler;<br clear=3D"none">&gt; &gt; &gt; import java.ut=
-il.logging.Logger;<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; =
-&gt; &gt; import org.lttng.ust.agent.LTTngAgent;<br clear=3D"none">&gt; &gt=
-; &gt; import org.lttng.ust.agent.jul.LttngLogHandler;<br clear=3D"none">&g=
-t; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; public class Hello {<br clear=
-=3D"none">&gt; &gt; &gt; private static final int answer =3D 42;<br clear=
-=3D"none">&gt; &gt; &gt; private static LTTngAgent lttngAgent;<br clear=3D"=
-none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; public static void ma=
-in(String[] args) throws InterruptedException {<br clear=3D"none">&gt; &gt;=
- &gt; Logger helloLog =3D Logger.getLogger(&quot;hello&quot;);<br clear=3D"=
-none">&gt; &gt; &gt; lttngAgent =3D LTTngAgent.getLTTngAgent();<br clear=3D=
-"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; Thread.sleep(5000);<=
-br clear=3D"none">&gt; &gt; &gt; helloLog.info(&quot;Hello World, the answe=
-r is &quot; + answer);<br clear=3D"none">&gt; &gt; &gt; lttngAgent.dispose(=
-);<br clear=3D"none">&gt; &gt; &gt; }<br clear=3D"none">&gt; &gt; &gt;<br c=
-lear=3D"none">&gt; &gt; &gt; }<br clear=3D"none">&gt; &gt; &gt; ///////////=
-////////////<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &=
-gt; Also, I used following LTTng commands.=C2=A0<br clear=3D"none">&gt; &gt=
-; &gt;<br clear=3D"none">&gt; &gt; &gt; ////////////////////////////////<br=
- clear=3D"none">&gt; &gt; &gt; lttng create java-test<br clear=3D"none">&gt=
-; &gt; &gt; lttng enable-event -a -l<br clear=3D"none">&gt; &gt; &gt; lttng=
- start<br clear=3D"none">&gt; &gt; &gt; ///Start My java Application///<br =
-clear=3D"none">&gt; &gt; &gt; lttng stop<br clear=3D"none">&gt; &gt; &gt; /=
-///////////////////////////<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"no=
-ne">&gt; &gt; &gt; Besides, when I used &quot;lttng view&quot; after stoppi=
-ng LTTng, I received<br clear=3D"none">&gt; &gt; &gt; following error messa=
-ge<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; [error=
-] Cannot open any trace for reading.<br clear=3D"none">&gt; &gt; &gt; [erro=
-r] opening trace<br clear=3D"none">&gt; &gt; &gt; &quot;/[path]/lttng-trace=
-s/java-test10-20171010-130909&quot; for reading.<br clear=3D"none">&gt; &gt=
-; &gt; [error] none of the specified trace paths could be opened.<br clear=
-=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; Could you please =
-help me to resolve it.<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&=
-gt; &gt; &gt; Regards,<br clear=3D"none">&gt; &gt; &gt; Mehdi.<br clear=3D"=
-none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt=
-; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &g=
-t;<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; On Mon=
-day, October 9, 2017, 1:05:59 AM GMT+3:30, Philippe Proulx<br clear=3D"none=
-">&gt; &gt; &gt; &lt;<a shape=3D"rect" ymailto=3D"mailto:eeppeliteloop@gmai=
-l.com" href=3D"mailto:eeppeliteloop@gmail.com">eeppeliteloop@gmail.com</a> =
-&lt;mailto:<a shape=3D"rect" ymailto=3D"mailto:eeppeliteloop@gmail.com" hre=
-f=3D"mailto:eeppeliteloop@gmail.com">eeppeliteloop@gmail.com</a>&gt;<br cle=
-ar=3D"none">&gt; &lt;mailto:<a shape=3D"rect" ymailto=3D"mailto:eeppelitelo=
-op@gmail.com" href=3D"mailto:eeppeliteloop@gmail.com">eeppeliteloop@gmail.c=
-om</a> &lt;mailto:<a shape=3D"rect" ymailto=3D"mailto:eeppeliteloop@gmail.c=
-om" href=3D"mailto:eeppeliteloop@gmail.com">eeppeliteloop@gmail.com</a>&gt;=
-&gt;&gt; wrote:<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt=
-; &gt;<br clear=3D"none">&gt; &gt; &gt; On Sun, Oct 8, 2017 at 4:15 PM, MMM=
- via lttng-dev<br clear=3D"none">&gt; &gt; &gt; &lt;<a shape=3D"rect" ymail=
-to=3D"mailto:lttng-dev@lists.lttng.org" href=3D"mailto:lttng-dev@lists.lttn=
-g.org">lttng-dev@lists.lttng.org</a> &lt;mailto:<a shape=3D"rect" ymailto=
-=3D"mailto:lttng-dev@lists.lttng.org" href=3D"mailto:lttng-dev@lists.lttng.=
-org">lttng-dev@lists.lttng.org</a>&gt;<br clear=3D"none">&gt; &lt;mailto:<a=
- shape=3D"rect" ymailto=3D"mailto:lttng-dev@lists.lttng.org" href=3D"mailto=
-:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a> &lt;mailto:<a sha=
-pe=3D"rect" ymailto=3D"mailto:lttng-dev@lists.lttng.org" href=3D"mailto:ltt=
-ng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>&gt;&gt;<br clear=3D"n=
-one">&gt; &gt; &lt;mailto:<a shape=3D"rect" ymailto=3D"mailto:lttng-dev@lis=
-ts.lttng.org" href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.ltt=
-ng.org</a> &lt;mailto:<a shape=3D"rect" ymailto=3D"mailto:lttng-dev@lists.l=
-ttng.org" href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.o=
-rg</a>&gt;<br clear=3D"none">&gt; &lt;mailto:<a shape=3D"rect" ymailto=3D"m=
-ailto:lttng-dev@lists.lttng.org" href=3D"mailto:lttng-dev@lists.lttng.org">=
-lttng-dev@lists.lttng.org</a> &lt;mailto:<a shape=3D"rect" ymailto=3D"mailt=
-o:lttng-dev@lists.lttng.org" href=3D"mailto:lttng-dev@lists.lttng.org">lttn=
-g-dev@lists.lttng.org</a>&gt;&gt;&gt;&gt;<br clear=3D"none">&gt; &gt; wrote=
-:<br clear=3D"none">&gt; &gt; &gt; &gt; Dear Users,<br clear=3D"none">&gt; =
-&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; &gt; I am beginner in traci=
-ng using LTTng. At present, I am going to<br clear=3D"none">&gt; &gt; &gt; =
-trace a java<br clear=3D"none">&gt; &gt; &gt; &gt; program in=C2=A0 Ubuntu,=
- while I faced with a problem. When I install<br clear=3D"none">&gt; &gt; &=
-gt; LTTng on<br clear=3D"none">&gt; &gt; &gt; &gt; Ubuntu, I also install<b=
-r clear=3D"none">&gt; &gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; &gt; =
-&quot;liblttng-ust-agent-java&quot; by &quot;apt-get install<br clear=3D"no=
-ne">&gt; liblttng-ust-agent-java&quot;<br clear=3D"none">&gt; &gt; &gt; &gt=
-; command in Ubuntu. But, when I want to import any libraries related<br cl=
-ear=3D"none">&gt; &gt; &gt; to LTTng<br clear=3D"none">&gt; &gt; &gt; &gt; =
-such as<br clear=3D"none">&gt; &gt; &gt; &quot;org.lttng.ust.agent.jul.Lttn=
-gLogHandlerorg.lttng.ust.LTTngAgent&quot; to<br clear=3D"none">&gt; &gt; &g=
-t; &gt; my program, it is marked as unknown package. Indeed, I could not<br=
- clear=3D"none">&gt; &gt; &gt; find LTTng<br clear=3D"none">&gt; &gt; &gt; =
-&gt; Jar file for adding it to my program libraries. Furthermore, I<br clea=
-r=3D"none">&gt; &gt; &gt; searched in<br clear=3D"none">&gt; &gt; &gt; &gt;=
- all files and folders, while I could not find Jar file. Could you<br clear=
-=3D"none">&gt; &gt; please<br clear=3D"none">&gt; &gt; &gt; &gt; help me to=
- understand the cause of this problem and solve it.<br clear=3D"none">&gt; =
-&gt; &gt;<br clear=3D"none">&gt; &gt; &gt; I&#39;m not a Ubuntu specialist,=
- but from<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt;<br c=
-lear=3D"none">&gt; &lt;<a shape=3D"rect" href=3D"https://packages.ubuntu.co=
-m/zesty/all/liblttng-ust-agent-java/filelist" target=3D"_blank">https://pac=
-kages.ubuntu.com/zesty/all/liblttng-ust-agent-java/filelist</a>&gt;,<br cle=
-ar=3D"none">&gt; &gt; &gt; I would say:<br clear=3D"none">&gt; &gt; &gt;<br=
- clear=3D"none">&gt; &gt; &gt; * /usr/share/java/lttng-ust-agent-jul.jar<br=
- clear=3D"none">&gt; &gt; &gt; * /usr/share/java/lttng-ust-agent-log4j.jar<=
-br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; On 16.04,=
- it&#39;s:<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt=
-; * /usr/share/java/liblttng-ust-agent.jar<br clear=3D"none">&gt; &gt; &gt;=
-<br clear=3D"none">&gt; &gt; &gt; Add the required JAR file to your classpa=
-th.<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; Have =
-a look at &lt;<a shape=3D"rect" href=3D"http://lttng.org/docs/v2.9/#doc-jav=
-a-application" target=3D"_blank">http://lttng.org/docs/v2.9/#doc-java-appli=
-cation</a>&gt;.<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt=
-; &gt; Phil<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &g=
-t;<br clear=3D"none">&gt; &gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; &=
-gt;<br clear=3D"none">&gt; &gt; &gt; &gt; Best regards,<br clear=3D"none">&=
-gt; &gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; &gt; Mehdi.<br clear=3D=
-"none">&gt; &gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt; &gt;<br clear=
-=3D"none">&gt; &gt; &gt; &gt; _____________________________________________=
-__<br clear=3D"none">&gt; &gt; &gt; &gt; lttng-dev mailing list<br clear=3D=
-"none">&gt; &gt; &gt; &gt; <a shape=3D"rect" ymailto=3D"mailto:lttng-dev@li=
-sts.lttng.org" href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lt=
-tng.org</a> &lt;mailto:<a shape=3D"rect" ymailto=3D"mailto:lttng-dev@lists.=
-lttng.org" href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.=
-org</a>&gt;<br clear=3D"none">&gt; &lt;mailto:<a shape=3D"rect" ymailto=3D"=
-mailto:lttng-dev@lists.lttng.org" href=3D"mailto:lttng-dev@lists.lttng.org"=
->lttng-dev@lists.lttng.org</a> &lt;mailto:<a shape=3D"rect" ymailto=3D"mail=
-to:lttng-dev@lists.lttng.org" href=3D"mailto:lttng-dev@lists.lttng.org">ltt=
-ng-dev@lists.lttng.org</a>&gt;&gt;<br clear=3D"none">&gt; &gt; &lt;mailto:<=
-a shape=3D"rect" ymailto=3D"mailto:lttng-dev@lists.lttng.org" href=3D"mailt=
-o:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a> &lt;mailto:<a sh=
-ape=3D"rect" ymailto=3D"mailto:lttng-dev@lists.lttng.org" href=3D"mailto:lt=
-tng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>&gt;<br clear=3D"none=
-">&gt; &lt;mailto:<a shape=3D"rect" ymailto=3D"mailto:lttng-dev@lists.lttng=
-.org" href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</=
-a> &lt;mailto:<a shape=3D"rect" ymailto=3D"mailto:lttng-dev@lists.lttng.org=
-" href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>&g=
-t;&gt;&gt;<br clear=3D"none">&gt; &gt;<br clear=3D"none">&gt; &gt; &gt; &gt=
-; <a shape=3D"rect" href=3D"https://lists.lttng.org/cgi-bin/mailman/listinf=
-o/lttng-dev" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailman/list=
-info/lttng-dev</a><div class=3D"yqt0280732580" id=3D"yqtfd34946"><br clear=
-=3D"none">&gt;<br clear=3D"none">&gt; &gt; &gt; &gt;<br clear=3D"none">&gt;=
- &gt; &gt;<br clear=3D"none">&gt; &gt; &gt;<br clear=3D"none">&gt; &gt; &gt=
-; _______________________________________________<br clear=3D"none">&gt; &g=
-t; &gt; lttng-dev mailing list<br clear=3D"none">&gt; &gt; &gt; <a shape=3D=
-"rect" ymailto=3D"mailto:lttng-dev@lists.lttng.org" href=3D"mailto:lttng-de=
-v@lists.lttng.org">lttng-dev@lists.lttng.org</a> &lt;mailto:<a shape=3D"rec=
-t" ymailto=3D"mailto:lttng-dev@lists.lttng.org" href=3D"mailto:lttng-dev@li=
-sts.lttng.org">lttng-dev@lists.lttng.org</a>&gt;<br clear=3D"none">&gt; &lt=
-;mailto:<a shape=3D"rect" ymailto=3D"mailto:lttng-dev@lists.lttng.org" href=
-=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a> &lt;mai=
-lto:<a shape=3D"rect" ymailto=3D"mailto:lttng-dev@lists.lttng.org" href=3D"=
-mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>&gt;&gt;<br =
-clear=3D"none">&gt; &gt; &gt; <a shape=3D"rect" href=3D"https://lists.lttng=
-.org/cgi-bin/mailman/listinfo/lttng-dev" target=3D"_blank">https://lists.lt=
-tng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br clear=3D"none">&gt; &gt;<=
-br clear=3D"none">&gt;<br clear=3D"none"><br clear=3D"none"></div></body></=
-html></div></div>
-                </div>
-            </div></div></body></html>
-------=_Part_2468_1779604036.1508019513391--
-
---===============5531734937214054176==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============5531734937214054176==--
+CgpPbiAyMDE3LTEwLTE0IDA2OjE4IFBNLCBNTU0gd3JvdGU6Cj4gIEkgaW5zdGFsbGVkIExUVG5n
+IGZyb20gc291cmNlIGF0IGZpcnN0LiBXaGlsZSBhZnRlciB0aGF0LCBJIGFsc28gcmVpbnN0YWxs
+IGl0IGZyb20gUFBBLiBJcyBpdCB0aGUgY2F1c2Ugb2YgbXkgcHJvYmxlbT8KClBlcmhhcHMhIEhh
+dmluZyBhIHNlY29uZCBpbnN0YWxsYXRpb24gaW4gcGFyYWxsZWwgaXMgYSBjb21tb24gc291cmNl
+IG9mCmVycm9ycywgYmVjYXVzZSBhIGJpbmFyeSBmcm9tIGEgZ2l2ZW4gdmVyc2lvbiBtYXkgdHJ5
+IHRvIGxpbmsgd2l0aCBhCmxpYnJhcnkgZnJvbSBhbm90aGVyIG9uZS4KCk1ha2Ugc3VyZSB5b3Ug
+ZG9uJ3QgaGF2ZSBhbnkgTFRUbmctcmVsYXRlZCBiaW5hcmllcyBvciBsaWJyYXJpZXMgaW4KL3Vz
+ci9sb2NhbC9iaW4sIC91c3IvbG9jYWwvbGliLCAvdXNyL2xvY2FsL3NoYXJlL2phdmEsIGV0Yy4K
+WW91IGNhbiBhbHNvIGNoZWNrIHRoZSBvdXRwdXQgb2YgImxkZCAvdXNyL2Jpbi9sdHRuZyIgYW5k
+IG1ha2Ugc3VyZSBvbmx5CmxpYnJhcmllcyBmcm9tIC91c3IvbGliIGFyZSBsaXN0ZWQsIGFuZCBu
+b3QgL3Vzci9sb2NhbC9saWIuCgpDaGVlcnMsCkFsZXgKCj4gICAgT24gRnJpZGF5LCBPY3RvYmVy
+IDEzLCAyMDE3LCAxMTo1NzozMyBQTSBHTVQrMzozMCwgQWxleGFuZHJlIE1vbnRwbGFpc2lyIDxh
+bGV4bW9udGh5QHZveHBvcHVsaS5pbT4gd3JvdGU6ICAKPiAgCj4gIE9uIDIwMTctMTAtMTIgMDM6
+MzggUE0sIE1NTSB3cm90ZToKPj4gRGVhciBBbGV4LAo+Pgo+PiBBcyBJIG1lbnRpb25lZCwgSSB1
+c2VkIHNhbXBsZSBleGFtcGxlcy4gZm9yIGluc3RhbmNlLCBJIHVzZWQgbWVudGlvbmVkCj4+IHNp
+bXBsZSBwcm9ncmFtIHRoYXQgeW91IHRvbGQgdHJhY2luZyBpdCByZXR1cm4gc29tZSByZXN1bHQu
+IFdoaWxlLCBJCj4+IGNhbiBub3QgcmVjZWl2ZSBhbnkgcmVzdWx0IGZyb20gdHJhY2luZyBpdC4g
+QWxzbywgSSB1c2UgVWJ1bnR1IDE2LjA0Cj4+IExUUyBhbmQgbHR0bmcgMi45LjUuIEJlc2lkZXMs
+IHRoZSBvdXRwdXQgb2YgYXNrZWQgY29tbWFuZCBpc8KgCj4+Cj4+IC8vLy8vLy8vLy8vLy8vLy8v
+Lwo+PiAtcnctci0tci0tIDEgcm9vdCByb290IDQwODcxIEp1biAxNiAxMzo1Ngo+PiAvdXNyL3No
+YXJlL2phdmEvbHR0bmctdXN0LWFnZW50LWNvbW1vbi0yLjkuMS5qYXIKPj4gbHJ3eHJ3eHJ3eCAx
+IHJvb3Qgcm9vdMKgIMKgIDMyIEp1biAxNiAxMzo1Ngo+PiAvdXNyL3NoYXJlL2phdmEvbHR0bmct
+dXN0LWFnZW50LWNvbW1vbi5qYXIgLT4KPj4gbHR0bmctdXN0LWFnZW50LWNvbW1vbi0yLjkuMS5q
+YXIKPj4gLXJ3LXItLXItLSAxIHJvb3Qgcm9vdMKgIDQzNjkgSnVuIDE2IDEzOjU2Cj4+IC91c3Iv
+c2hhcmUvamF2YS9sdHRuZy11c3QtYWdlbnQtanVsLTIuOS4xLmphcgo+PiBscnd4cnd4cnd4IDEg
+cm9vdCByb290wqAgwqAgMjkgSnVuIDE2IDEzOjU2Cj4+IC91c3Ivc2hhcmUvamF2YS9sdHRuZy11
+c3QtYWdlbnQtanVsLmphciAtPiBsdHRuZy11c3QtYWdlbnQtanVsLTIuOS4xLmphcgo+PiAtcnct
+ci0tci0tIDEgcm9vdCByb290wqAgMzkzMyBKdW4gMTYgMTM6NTYKPj4gL3Vzci9zaGFyZS9qYXZh
+L2x0dG5nLXVzdC1hZ2VudC1sb2c0ai0yLjkuMS5qYXIKPj4gbHJ3eHJ3eHJ3eCAxIHJvb3Qgcm9v
+dMKgIMKgIDMxIEp1biAxNiAxMzo1Ngo+PiAvdXNyL3NoYXJlL2phdmEvbHR0bmctdXN0LWFnZW50
+LWxvZzRqLmphciAtPgo+PiBsdHRuZy11c3QtYWdlbnQtbG9nNGotMi45LjEuamFyCj4+IC8vLy8v
+Ly8vLy8vLy8vLy8vLy8vLy8vLy8vLy8KPiBFdmVyeXRoaW5nIHNlZW1zIHRvIGJlIGluIG9yZGVy
+IGhlcmUuCj4KPiBJIHdpbGwgdHJ5IHlvdXIgZXhhY3Qgc2FtZSBlbnZpcm9ubWVudCB0byBzZWUg
+aWYgSSBjYW4gcmVwcm9kdWNlIHRoZSBpc3N1ZS4KPiBIb3cgZGlkIHlvdSBpbnN0YWxsIHlvdXIg
+TFRUbmcgMi45PyBXYXMgaXQgZnJvbSBzb3VyY2UsIG9yIGZyb20gYSBQUEE/Cj4gVGhlIFVidW50
+dSAxNi4wNCBtYWluIGFyY2hpdmUgb25seSBoYXMgMi43LioKPgo+IENoZWVycywKPiBBbGV4Cj4K
+Pj4gVGhhbmtzIGZvciB5b3VyIGF0dGVudGlvbi4KPj4gUmVnYXJkcywKPj4gTWVoZGkuCj4+Cj4+
+IE9uIFRodXJzZGF5LCBPY3RvYmVyIDEyLCAyMDE3LCA2OjUxOjEyIFBNIEdNVCszOjMwLCBBbGV4
+YW5kcmUKPj4gTW9udHBsYWlzaXIgPGFsZXhtb250aHlAdm94cG9wdWxpLmltPiB3cm90ZToKPj4K
+Pj4KPj4KPj4KPj4gT24gMjAxNy0xMC0xMSAwNjowNSBQTSwgTU1NIHdyb3RlOgo+Pj4gRGVhciBB
+bGV4LAo+Pj4KPj4+IFRoYW5rcyBmb3IgeW91ciBhdHRlbnRpb24uIEkgZXhlY3V0ZWQgeW91ciBj
+b21tYW5kcyBzdGVwIGJ5IHN0ZXAuCj4+PiBXaGlsZSwgYWdhaW4gSSByZWNlaXZlZCBwcmV2aW91
+cyBlcnJvcnMgd2hpY2ggYXJlwqAKPj4+Cj4+PiBbZXJyb3JdIENhbm5vdCBvcGVuIGFueSB0cmFj
+ZSBmb3IgcmVhZGluZy4KPj4+IFtlcnJvcl0gb3BlbmluZyB0cmFjZSAiW3BhdGhdL2x0dG5nLXRy
+YWNlcy9hdXRvLTIwMTcxMDExLTE0NTk0NyIgZm9yCj4+PiByZWFkaW5nLgo+Pj4gW2Vycm9yXSBu
+b25lIG9mIHRoZSBzcGVjaWZpZWQgdHJhY2UgcGF0aHMgY291bGQgYmUgb3BlbmVkLgo+Pj4KPj4+
+IEkgZG8gbm90IGtub3cgdGhlIHJlYXNvbiBvZiB0aGlzIHByb2JsZW0uIENvdWxkIHlvdSBwbGVh
+c2UgaGVscCBtZSB0bwo+Pj4gcmVzb2x2ZSBpdD8KPj4gQXMgUGhpbGlwcGUgbWVudGlvbmVkIHBy
+ZXZpb3VzbHksIHRoaXMgbWVhbnMgdGhlIHRyYWNlIGlzIGVtcHR5LCBzbyBubwo+PiBldmVudHMg
+d2VyZSBwcm9kdWNlZCBieSB0aGUgc2Vzc2lvbi4KPj4KPj4gRGlkIGFueSBvZiB0aGUgb3RoZXIg
+Y29tbWFuZHMgKGphdmEsIGphdmFjLCBsdHRuZyBjcmVhdGUsLi4uKSBvdXRwdXQgYW55Cj4+IGVy
+cm9yIG1lc3NhZ2VzPwo+Pgo+Pgo+PiBGaW5hbGx5LCBpdCB3b3VsZCBoZWxwIGlmIHlvdSBjb3Vs
+ZCBzcGVjaWZ5Ogo+PiAtIFdoYXQgdmVyc2lvbiBvZiBVYnVudHUgeW91IGFyZSBydW5uaW5nCj4+
+Cj4+IC0gV2hhdCB2ZXJzaW9uIG9mIExUVG5nIHlvdSBhcmUgcnVubmluZyAoImx0dG5nIC0tdmVy
+c2lvbiIpCj4+Cj4+IC0gVGhlIG91dHB1dCBvZiB0aGUgZm9sbG93aW5nIGNvbW1hbmQ6Cj4+ICQg
+bHMgLWwgL3Vzci9zaGFyZS9qYXZhL2x0dG5nLXVzdCoKPj4KPj4gVGhhbmtzLAo+PiBBbGV4Cj4+
+Cj4+PiBSZWdhcmRzLAo+Pj4gTWVoZGkuCj4+Pgo+Pj4KPj4+Cj4+Pgo+Pj4gT24gV2VkbmVzZGF5
+LCBPY3RvYmVyIDExLCAyMDE3LCA2OjA5OjQxIFBNIEdNVCszOjMwLCBBbGV4YW5kcmUKPj4+IE1v
+bnRwbGFpc2lyIDxhbGV4bW9udGh5QHZveHBvcHVsaS5pbQo+PiA8bWFpbHRvOmFsZXhtb250aHlA
+dm94cG9wdWxpLmltPj4gd3JvdGU6Cj4+Pgo+Pj4gSGksCj4+Pgo+Pj4gSSB0cmllZCBjb21waWxp
+bmcgYW5kIHJ1bm5pbmcgeW91ciBwcm9ncmFtLCBhbmQgaXQgcnVucyBmaW5lIG9uIG15IGVuZC4K
+Pj4+IEhlcmUgaXMgd2hhdCBJIGRpZDoKPj4+Cj4+PiBzYXZlZCB0aGUgc25pcHBldCBiZWxvdyB0
+byAiSGVsbG8uamF2YSIKPj4+ICQgYXB0IGluc3RhbGwgbGlibHR0bmctdXN0LWFnZW50LWphdmEK
+Pj4+ICQgamF2YWMgLWNwIC91c3Ivc2hhcmUvamF2YS9sdHRuZy11c3QtYWdlbnQtanVsLmphciBI
+ZWxsby5qYXZhCj4+Pgo+Pj4gJCBsdHRuZyBjcmVhdGUKPj4+ICQgbHR0bmcgZW5hYmxlLWV2ZW50
+IC1hIC1qCj4+PiAkIGx0dG5nIHN0YXJ0Cj4+PiAkIGphdmEgLWNwIC91c3Ivc2hhcmUvamF2YS9s
+dHRuZy11c3QtYWdlbnQtanVsLmphcjouIEhlbGxvCj4+PiAkIGx0dG5nIHN0b3AKPj4+ICQgbHR0
+bmcgdmlldwo+Pj4KPj4+IGFuZCBJIGdldCB0aGUgZm9sbG93aW5nIG91dHB1dDoKPj4+IFRyYWNl
+IGRpcmVjdG9yeTogL2hvbWUvYWxleGFuZHJlL2x0dG5nLXRyYWNlcy9hdXRvLTIwMTcxMDExLTEw
+MjQzMQo+Pj4KPj4+IFsxMDoyNDo0OS4zMjY4MjQwNjFdICgrPy4/Pz8/Pz8/Pz8pIGNhbGlzdGEg
+bHR0bmdfanVsOmV2ZW50OiB7IGNwdV9pZCA9Cj4+PiAyIH0sIHsgbXNnID0gIkhlbGxvIFdvcmxk
+LCB0aGUgYW5zd2VyIGlzIDQyIiwgbG9nZ2VyX25hbWUgPSAiaGVsbG8iLAo+Pj4gY2xhc3NfbmFt
+ZSA9ICJIZWxsbyIsIG1ldGhvZF9uYW1lID0gIm1haW4iLCBsb25nX21pbGxpcyA9IDE1MDc3MzE4
+ODkyOTksCj4+PiBpbnRfbG9nbGV2ZWwgPSA4MDAsIGludF90aHJlYWRpZCA9IDEgfQo+Pj4KPj4+
+Cj4+PiBNYWtlIHN1cmUgeW91IGFyZSBzZXR0aW5nIHRoZSAtY2xhc3NwYXRoLy1jcCBvcHRpb24g
+Y29ycmVjdGx5LCB0aGlzCj4+PiBjb3VsZCBleHBsYWluIHRoZSAidW5rbm93biBwYWNrYWdlIiBl
+cnJvciB5b3Ugd2VyZSBnZXR0aW5nLgo+Pj4KPj4+IEFsc28gbm90ZSB0aGF0IHlvdSBhcmUgdXNp
+bmcgdGhlIGRlcHJlY2F0ZWQgIkxUVG5nQWdlbnQuZ2V0TFRUbmdBZ2VudCgpIgo+Pj4gQVBJICh0
+aGUgImphdmFjIiBjb21tYW5kIHNob3VsZCB3YXJuIGFib3V0IGl0KS4gSXQgc2hvdWxkIHN0aWxs
+IHdvcmssCj4+PiBidXQgaXQncyBoaWdobHkgcmVjb21tZW5kZWQgdG8gdXNlIHRoZSBuZXcgQVBJ
+LCBhcyBkZXNjcmliZWQgaW4KPj4+IGh0dHBzOi8vbHR0bmcub3JnL2RvY3MvdjIuMTAvI2RvYy1q
+dWwKPj4+IDxodHRwczovL2x0dG5nLm9yZy9kb2NzL3YyLjEwLyNkb2MtanVsJTIwPi4gQmFzaWNh
+bGx5IHlvdSBoYXZlIHRvCj4+PiBpbnN0YW50aWF0ZSBhbiAiTHR0bmdMb2dIYW5kbGVyIiwgYW5k
+IGF0dGFjaCBpdCB0byB5b3VyIExvZ2dlci4KPj4+Cj4+PiBIVEgsCj4+PiBBbGV4Cj4+Pgo+Pj4K
+Pj4+IE9uIDIwMTctMTAtMTAgMDQ6MTIgUE0sIE1NTSB2aWEgbHR0bmctZGV2IHdyb3RlOgo+Pj4+
+IERlYXIgUGhpbGlwcGUsCj4+Pj4KPj4+PiBUaGFua3MgYSBsb3QgZm9yIHlvdXIgY29uc2lkZXJh
+dGlvbi4gSSBzb2x2ZWQgZm9ybWVyIHByb2JsZW0uIFdoaWxlLCBJCj4+Pj4gZmFjZWQgd2l0aCBh
+IG5ldyBwcm9ibGVtLiBJbmRlZWQsIHdoZW4gSSBjcmVhdGUgYSBMVFRuZyBzZXNzaW9uLCBzdGFy
+dAo+Pj4+IGl0IGFuZCBmaW5hbGx5IHN0b3AgTFRUbmcsIEkgY291bGQgbm90IGZpbmQgdHJhY2Ug
+ZmlsZXMgaW4gbWVudGlvbmVkCj4+Pj4gZm9sZGVyLiBNeSBqYXZhIGNvZGUgaXPCoAo+Pj4+Cj4+
+Pj4gLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vCj4+Pj4gaW1wb3J0IGph
+dmEuaW8uSU9FeGNlcHRpb247Cj4+Pj4gaW1wb3J0IGphdmEudXRpbC5sb2dnaW5nLkhhbmRsZXI7
+Cj4+Pj4gaW1wb3J0IGphdmEudXRpbC5sb2dnaW5nLkxvZ2dlcjsKPj4+Pgo+Pj4+IGltcG9ydCBv
+cmcubHR0bmcudXN0LmFnZW50LkxUVG5nQWdlbnQ7Cj4+Pj4gaW1wb3J0IG9yZy5sdHRuZy51c3Qu
+YWdlbnQuanVsLkx0dG5nTG9nSGFuZGxlcjsKPj4+Pgo+Pj4+IHB1YmxpYyBjbGFzcyBIZWxsbyB7
+Cj4+Pj4gcHJpdmF0ZSBzdGF0aWMgZmluYWwgaW50IGFuc3dlciA9IDQyOwo+Pj4+IHByaXZhdGUg
+c3RhdGljIExUVG5nQWdlbnQgbHR0bmdBZ2VudDsKPj4+Pgo+Pj4+IHB1YmxpYyBzdGF0aWMgdm9p
+ZCBtYWluKFN0cmluZ1tdIGFyZ3MpIHRocm93cyBJbnRlcnJ1cHRlZEV4Y2VwdGlvbiB7Cj4+Pj4g
+TG9nZ2VyIGhlbGxvTG9nID0gTG9nZ2VyLmdldExvZ2dlcigiaGVsbG8iKTsKPj4+PiBsdHRuZ0Fn
+ZW50ID0gTFRUbmdBZ2VudC5nZXRMVFRuZ0FnZW50KCk7Cj4+Pj4KPj4+PiBUaHJlYWQuc2xlZXAo
+NTAwMCk7Cj4+Pj4gaGVsbG9Mb2cuaW5mbygiSGVsbG8gV29ybGQsIHRoZSBhbnN3ZXIgaXMgIiAr
+IGFuc3dlcik7Cj4+Pj4gbHR0bmdBZ2VudC5kaXNwb3NlKCk7Cj4+Pj4gfQo+Pj4+Cj4+Pj4gfQo+
+Pj4+IC8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vCj4+Pj4KPj4+PiBBbHNvLCBJIHVzZWQgZm9sbG93
+aW5nIExUVG5nIGNvbW1hbmRzLsKgCj4+Pj4KPj4+PiAvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8v
+Ly8vLy8vLwo+Pj4+IGx0dG5nIGNyZWF0ZSBqYXZhLXRlc3QKPj4+PiBsdHRuZyBlbmFibGUtZXZl
+bnQgLWEgLWwKPj4+PiBsdHRuZyBzdGFydAo+Pj4+IC8vL1N0YXJ0IE15IGphdmEgQXBwbGljYXRp
+b24vLy8KPj4+PiBsdHRuZyBzdG9wCj4+Pj4gLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLwo+
+Pj4+Cj4+Pj4gQmVzaWRlcywgd2hlbiBJIHVzZWQgImx0dG5nIHZpZXciIGFmdGVyIHN0b3BwaW5n
+IExUVG5nLCBJIHJlY2VpdmVkCj4+Pj4gZm9sbG93aW5nIGVycm9yIG1lc3NhZ2UKPj4+Pgo+Pj4+
+IFtlcnJvcl0gQ2Fubm90IG9wZW4gYW55IHRyYWNlIGZvciByZWFkaW5nLgo+Pj4+IFtlcnJvcl0g
+b3BlbmluZyB0cmFjZQo+Pj4+ICIvW3BhdGhdL2x0dG5nLXRyYWNlcy9qYXZhLXRlc3QxMC0yMDE3
+MTAxMC0xMzA5MDkiIGZvciByZWFkaW5nLgo+Pj4+IFtlcnJvcl0gbm9uZSBvZiB0aGUgc3BlY2lm
+aWVkIHRyYWNlIHBhdGhzIGNvdWxkIGJlIG9wZW5lZC4KPj4+Pgo+Pj4+IENvdWxkIHlvdSBwbGVh
+c2UgaGVscCBtZSB0byByZXNvbHZlIGl0Lgo+Pj4+Cj4+Pj4gUmVnYXJkcywKPj4+PiBNZWhkaS4K
+Pj4+Pgo+Pj4+Cj4+Pj4KPj4+Pgo+Pj4+Cj4+Pj4KPj4+PiBPbiBNb25kYXksIE9jdG9iZXIgOSwg
+MjAxNywgMTowNTo1OSBBTSBHTVQrMzozMCwgUGhpbGlwcGUgUHJvdWx4Cj4+Pj4gPGVlcHBlbGl0
+ZWxvb3BAZ21haWwuY29tIDxtYWlsdG86ZWVwcGVsaXRlbG9vcEBnbWFpbC5jb20+Cj4+IDxtYWls
+dG86ZWVwcGVsaXRlbG9vcEBnbWFpbC5jb20gPG1haWx0bzplZXBwZWxpdGVsb29wQGdtYWlsLmNv
+bT4+PiB3cm90ZToKPj4+Pgo+Pj4+IE9uIFN1biwgT2N0IDgsIDIwMTcgYXQgNDoxNSBQTSwgTU1N
+IHZpYSBsdHRuZy1kZXYKPj4+PiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyA8bWFpbHRvOmx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+Cj4+IDxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5n
+Lm9yZyA8bWFpbHRvOmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+Pgo+Pj4gPG1haWx0bzpsdHRu
+Zy1kZXZAbGlzdHMubHR0bmcub3JnIDxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4K
+Pj4gPG1haWx0bzpsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIDxtYWlsdG86bHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZz4+Pj4KPj4+IHdyb3RlOgo+Pj4+PiBEZWFyIFVzZXJzLAo+Pj4+Pgo+Pj4+
+PiBJIGFtIGJlZ2lubmVyIGluIHRyYWNpbmcgdXNpbmcgTFRUbmcuIEF0IHByZXNlbnQsIEkgYW0g
+Z29pbmcgdG8KPj4+PiB0cmFjZSBhIGphdmEKPj4+Pj4gcHJvZ3JhbSBpbsKgIFVidW50dSwgd2hp
+bGUgSSBmYWNlZCB3aXRoIGEgcHJvYmxlbS4gV2hlbiBJIGluc3RhbGwKPj4+PiBMVFRuZyBvbgo+
+Pj4+PiBVYnVudHUsIEkgYWxzbyBpbnN0YWxsCj4+Pj4+Cj4+Pj4+ICJsaWJsdHRuZy11c3QtYWdl
+bnQtamF2YSIgYnkgImFwdC1nZXQgaW5zdGFsbAo+PiBsaWJsdHRuZy11c3QtYWdlbnQtamF2YSIK
+Pj4+Pj4gY29tbWFuZCBpbiBVYnVudHUuIEJ1dCwgd2hlbiBJIHdhbnQgdG8gaW1wb3J0IGFueSBs
+aWJyYXJpZXMgcmVsYXRlZAo+Pj4+IHRvIExUVG5nCj4+Pj4+IHN1Y2ggYXMKPj4+PiAib3JnLmx0
+dG5nLnVzdC5hZ2VudC5qdWwuTHR0bmdMb2dIYW5kbGVyb3JnLmx0dG5nLnVzdC5MVFRuZ0FnZW50
+IiB0bwo+Pj4+PiBteSBwcm9ncmFtLCBpdCBpcyBtYXJrZWQgYXMgdW5rbm93biBwYWNrYWdlLiBJ
+bmRlZWQsIEkgY291bGQgbm90Cj4+Pj4gZmluZCBMVFRuZwo+Pj4+PiBKYXIgZmlsZSBmb3IgYWRk
+aW5nIGl0IHRvIG15IHByb2dyYW0gbGlicmFyaWVzLiBGdXJ0aGVybW9yZSwgSQo+Pj4+IHNlYXJj
+aGVkIGluCj4+Pj4+IGFsbCBmaWxlcyBhbmQgZm9sZGVycywgd2hpbGUgSSBjb3VsZCBub3QgZmlu
+ZCBKYXIgZmlsZS4gQ291bGQgeW91Cj4+PiBwbGVhc2UKPj4+Pj4gaGVscCBtZSB0byB1bmRlcnN0
+YW5kIHRoZSBjYXVzZSBvZiB0aGlzIHByb2JsZW0gYW5kIHNvbHZlIGl0Lgo+Pj4+IEknbSBub3Qg
+YSBVYnVudHUgc3BlY2lhbGlzdCwgYnV0IGZyb20KPj4+Pgo+PiA8aHR0cHM6Ly9wYWNrYWdlcy51
+YnVudHUuY29tL3plc3R5L2FsbC9saWJsdHRuZy11c3QtYWdlbnQtamF2YS9maWxlbGlzdD4sCj4+
+Pj4gSSB3b3VsZCBzYXk6Cj4+Pj4KPj4+PiAqIC91c3Ivc2hhcmUvamF2YS9sdHRuZy11c3QtYWdl
+bnQtanVsLmphcgo+Pj4+ICogL3Vzci9zaGFyZS9qYXZhL2x0dG5nLXVzdC1hZ2VudC1sb2c0ai5q
+YXIKPj4+Pgo+Pj4+IE9uIDE2LjA0LCBpdCdzOgo+Pj4+Cj4+Pj4gKiAvdXNyL3NoYXJlL2phdmEv
+bGlibHR0bmctdXN0LWFnZW50Lmphcgo+Pj4+Cj4+Pj4gQWRkIHRoZSByZXF1aXJlZCBKQVIgZmls
+ZSB0byB5b3VyIGNsYXNzcGF0aC4KPj4+Pgo+Pj4+IEhhdmUgYSBsb29rIGF0IDxodHRwOi8vbHR0
+bmcub3JnL2RvY3MvdjIuOS8jZG9jLWphdmEtYXBwbGljYXRpb24+Lgo+Pj4+Cj4+Pj4gUGhpbAo+
+Pj4+Cj4+Pj4KPj4+Pj4KPj4+Pj4gQmVzdCByZWdhcmRzLAo+Pj4+Pgo+Pj4+PiBNZWhkaS4KPj4+
+Pj4KPj4+Pj4KPj4+Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18KPj4+Pj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+Pj4+PiBsdHRuZy1kZXZAbGlzdHMu
+bHR0bmcub3JnIDxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4KPj4gPG1haWx0bzps
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIDxtYWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
+Zz4+Cj4+PiA8bWFpbHRvOmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcgPG1haWx0bzpsdHRuZy1k
+ZXZAbGlzdHMubHR0bmcub3JnPgo+PiA8bWFpbHRvOmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcg
+PG1haWx0bzpsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPj4+Cj4+Pj4+IGh0dHBzOi8vbGlzdHMu
+bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4+Pgo+Pj4+IF9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+Pj4gbHR0bmct
+ZGV2IG1haWxpbmcgbGlzdAo+Pj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcgPG1haWx0bzps
+dHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPgo+PiA8bWFpbHRvOmx0dG5nLWRldkBsaXN0cy5sdHRu
+Zy5vcmcgPG1haWx0bzpsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPj4KPj4+PiBodHRwczovL2xp
+c3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4KCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWls
+aW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9y
+Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
