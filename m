@@ -1,14 +1,15 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Use initial-exec TLS model
-Date: Thu, 19 Oct 2017 10:51:09 -0400
-Message-ID: <20171019145109.17337-1-mathieu.desnoyers__12931.8406609402$1508424700$gmane$org@efficios.com>
+From: =?iso-8859-1?Q?Arnaud_Cl=E8re?= <arnaud.clere@minmaxmedical.com>
+Subject: Using LTTng for existing Qt-based tracepoints?
+Date: Thu, 19 Oct 2017 10:00:01 +0000
+Message-ID: <AM2PR03MB070508172009C835365F99B49E420__22152.7658206925$1508508933$gmane$org@AM2PR03MB0705.eurprd03.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1213351460487397506=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3yHsLw4KbNz10mH
- for <lttng-dev@lists.lttng.org>; Thu, 19 Oct 2017 14:51:20 +0000 (UTC)
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com
+ (mail-db5eur01on0060.outbound.protection.outlook.com [104.47.2.60])
+ by lists.lttng.org (Postfix) with ESMTPS id 3yJ6HS4b23zrg3
+ for <lttng-dev@lists.lttng.org>; Fri, 20 Oct 2017 00:34:12 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -18,60 +19,162 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-VGhlIGluaXRpYWwtZXhlYyBUTFMgbW9kZWwgaXMgYXN5bmMtc2lnbmFsLXNhZmUsIHdoZXJlYXMg
-dGhlCmdsb2JhbC1keW5hbWljIGlzIG5vdC4gVGhpcyBpcyBlc3BlY2lhbGx5IGltcG9ydGFudCBm
-b3IgdGhlIGxvZ2dpbmcKZmFjaWxpdHksIGJlY2F1c2UgdGhlIGZpcnN0IHRpbWUgYSB0aHJlYWQg
-dG91Y2hlcyB0aGUgVExTIGNvdWxkIGJlCmZyb20gYSBzaWduYWwgaGFuZGxlciAoY29ycmVjdG5l
-c3MpLgoKTW9yZW92ZXIsIElFIGlzIGZhc3RlciB0aGFuIEdEIG1vZGVsLgoKQWxzbyBjaGFuZ2Ug
-dGhlIGhlYWx0aCBzdGF0ZSB0byB0aGUgSUUgbW9kZWwsIGp1c3QgaW4gY2FzZSB3ZSBlbmQgdXAK
-cHV0dGluZyBoZWFsdGggcHJvZ3Jlc3MgcmVwb3J0aW5nIHN0YXRlbWVudHMgaW4gc2lnbmFsIGhh
-bmRsZXJzIGluIHRoZQpmdXR1cmUuIEdpdmVuIHRoYXQgd2UgbGluayBhZ2FpbnN0LCBidXQgZG9u
-J3QgZGxvcGVuLCB0aGF0IGxpYnJhcnksIGl0CmlzIG5vdCB1c2luZyBhbnkgb2YgdGhlIElFIGJh
-Y2t1cCBwb29sLCBzbyB0aGVyZSBpcyBubyBnb29kIHJlYXNvbiBmb3IKdXNpbmcgdGhlIEdEIG1v
-ZGVsLgoKTGluazogaHR0cHM6Ly9kb2NzLm9yYWNsZS5jb20vY2QvRTIzODI0XzAxL2h0bWwvODE5
-LTA2OTAvY2hhcHRlcjgtMjAuaHRtbApMaW5rOiBodHRwczovL2djYy5nbnUub3JnL29ubGluZWRv
-Y3MvZ2NjL0NvbW1vbi1WYXJpYWJsZS1BdHRyaWJ1dGVzLmh0bWwjQ29tbW9uLVZhcmlhYmxlLUF0
-dHJpYnV0ZXMKU2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95
-ZXJzQGVmZmljaW9zLmNvbT4KLS0tCiBjb25maWd1cmUuYWMgICAgICAgICAgICAgICB8IDcgKysr
-KysrLQogc3JjL2NvbW1vbi9lcnJvci5jICAgICAgICAgfCAyICstCiBzcmMvY29tbW9uL2hlYWx0
-aC9oZWFsdGguYyB8IDIgKy0KIDMgZmlsZXMgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCAzIGRl
-bGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2NvbmZpZ3VyZS5hYyBiL2NvbmZpZ3VyZS5hYwppbmRl
-eCAwMTZjNTZlYy4uNzczMTZhMjggMTAwNjQ0Ci0tLSBhL2NvbmZpZ3VyZS5hYworKysgYi9jb25m
-aWd1cmUuYWMKQEAgLTQ0MCw3ICs0NDAsNyBAQCBBQ19TVUJTVChVVUlEX0xJQlMpCiBBQ19DSEVD
-S19GVU5DKFtjbG9ja19nZXR0aW1lXSwgW0FDX0RFRklORV9VTlFVT1RFRChbTFRUTkdfSEFWRV9D
-TE9DS19HRVRUSU1FXSwgMSwgW0hhcyBjbG9ja19nZXR0aW1lKCkgc3VwcG9ydC5dKV0pCiAKICMg
-VVJDVSBsaWJyYXJ5IHZlcnNpb24gbmVlZGVkIG9yIG5ld2VyCi1tNF9kZWZpbmUoW1dST05HX0xJ
-QlVSQ1VfTVNHXSwgW1VzZXJzcGFjZSBSQ1UgKGxpYnVyY3UpID49IDAuOS4wIGlzIG5lZWRlZF0p
-CittNF9kZWZpbmUoW1dST05HX0xJQlVSQ1VfTVNHXSwgW1VzZXJzcGFjZSBSQ1UgKGxpYnVyY3Up
-ID49IDAuMTEuMCBpcyBuZWVkZWRdKQogCiAjIENoZWNrIGxpYnVyY3UgbmVlZGVkIGZ1bmN0aW9u
-IGNhbGxzCiBBQ19DSEVDS19ERUNMKFtjZHNfbGlzdF9hZGRdLCBbXSwKQEAgLTQ3MCw2ICs0NzAs
-MTEgQEAgQUNfQ0hFQ0tfREVDTChbdXJjdV9yZWZfZ2V0X3VubGVzc196ZXJvXSwgW10sCiAgICAg
-ICAgIFtBQ19NU0dfRVJST1IoW1dST05HX0xJQlVSQ1VfTVNHXSldLCBbWyNpbmNsdWRlIDx1cmN1
-L3JlZi5oPl1dCiApCiAKKyNNYWNybyBhZGRlZCBpbiB1cmN1IDAuMTEuMAorQUNfQ0hFQ0tfREVD
-TChbREVGSU5FX1VSQ1VfVExTX0lFXSwgW10sCisJW0FDX01TR19FUlJPUihbV1JPTkdfTElCVVJD
-VV9NU0ddKV0sIFtbI2luY2x1ZGUgPHVyY3UvdGxzLWNvbXBhdC5oPl1dCispCisKICMgQ2hlY2sg
-Zm9yIGxpYmttb2QsIGl0IHdpbGwgYmUgYXV0by1uZWFibGVkIGlmIGZvdW5kIGJ1dCB3b24ndCBm
-YWlsIGlmIGl0J3Mgbm90LAogIyBpdCBjYW4gYmUgZXhwbGljaXRseSBkaXNhYmxlZCB3aXRoIC0t
-d2l0aG91dC1rbW9kCiBBSF9URU1QTEFURShbSEFWRV9LTU9EXSwgW0RlZmluZSBpZiB5b3UgaGF2
-ZSBrbW9kIHN1cHBvcnRdKQpkaWZmIC0tZ2l0IGEvc3JjL2NvbW1vbi9lcnJvci5jIGIvc3JjL2Nv
-bW1vbi9lcnJvci5jCmluZGV4IDIyMTU4ODZkLi41YzQ1ZmM3MCAxMDA2NDQKLS0tIGEvc3JjL2Nv
-bW1vbi9lcnJvci5jCisrKyBiL3NyYy9jb21tb24vZXJyb3IuYwpAQCAtMzYsNyArMzYsNyBAQAog
-c3RhdGljIGludCBsdHRuZ19vcHRfYWJvcnRfb25fZXJyb3IgPSAtMTsKIAogLyogVExTIHZhcmlh
-YmxlIHRoYXQgY29udGFpbnMgdGhlIHRpbWUgb2Ygb25lIHNpbmdsZSBsb2cgZW50cnkuICovCi1E
-RUZJTkVfVVJDVV9UTFMoc3RydWN0IGxvZ190aW1lLCBlcnJvcl9sb2dfdGltZSk7CitERUZJTkVf
-VVJDVV9UTFNfSUUoc3RydWN0IGxvZ190aW1lLCBlcnJvcl9sb2dfdGltZSk7CiAKIExUVE5HX0hJ
-RERFTgogY29uc3QgY2hhciAqbG9nX2FkZF90aW1lKHZvaWQpCmRpZmYgLS1naXQgYS9zcmMvY29t
-bW9uL2hlYWx0aC9oZWFsdGguYyBiL3NyYy9jb21tb24vaGVhbHRoL2hlYWx0aC5jCmluZGV4IDgz
-MGI2ZjBlLi5iODdjNzBiNCAxMDA2NDQKLS0tIGEvc3JjL2NvbW1vbi9oZWFsdGgvaGVhbHRoLmMK
-KysrIGIvc3JjL2NvbW1vbi9oZWFsdGgvaGVhbHRoLmMKQEAgLTU0LDcgKzU0LDcgQEAgc3RydWN0
-IGhlYWx0aF9hcHAgewogfTsKIAogLyogRGVmaW5lIFRMUyBoZWFsdGggc3RhdGUuICovCi1ERUZJ
-TkVfVVJDVV9UTFMoc3RydWN0IGhlYWx0aF9zdGF0ZSwgaGVhbHRoX3N0YXRlKTsKK0RFRklORV9V
-UkNVX1RMU19JRShzdHJ1Y3QgaGVhbHRoX3N0YXRlLCBoZWFsdGhfc3RhdGUpOwogCiAvKgogICog
-SW5pdGlhbGl6ZSBoZWFsdGggY2hlY2sgc3Vic3l0ZW0uCi0tIAoyLjExLjAKCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxp
-c3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
-YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============1213351460487397506==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_AM2PR03MB070508172009C835365F99B49E420AM2PR03MB0705eurp_"
+
+--_000_AM2PR03MB070508172009C835365F99B49E420AM2PR03MB0705eurp_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+I am evaluating the feasibility of using LTTng as a backend for existing Qt=
+ tracepoints following the discussions at Qt Contributors Summit : https://=
+wiki.qt.io/QtCS2017_Discuss_Qt_Logging_enhancements .
+The idea would be to get less performance impact when tracing and more stru=
+ctured data to analyse without changing Qt users' code.
+
+I see that instead of describing all tracepoints, we could use a generic LT=
+T tracepoint like in Python:
+http://git.lttng.org/?p=3Dlttng-ust.git;a=3Dblob;f=3Dliblttng-ust-python-ag=
+ent/lttng_ust_python.h
+
+Except, I would like to structure the tracepoint data at run-time following=
+ a JSON-based data model.
+I think I could encode that part of CTF dynamically by appending binary use=
+r data, CTF variants, dynamically-sized CTF structures and sequences in a l=
+ocal buffer.
+
+But I am wondering how to pass this buffer along with its size to LTTng.
+I am afraid a TP_ARGS(void*, buffer) and TP_FIELDS(buffer) would not work s=
+ince it would require LTTng to read the CTF in "buffer" to discover where i=
+t stops...
+
+Or should I use some other API?
+
+Thanks for any advice on how to do that.
+Arnaud
+
+
+--_000_AM2PR03MB070508172009C835365F99B49E420AM2PR03MB0705eurp_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-language:EN-US;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:#954F72;
+	text-decoration:underline;}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri",sans-serif;
+	mso-fareast-language:EN-US;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:70.85pt 70.85pt 70.85pt 70.85pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"FR" link=3D"#0563C1" vlink=3D"#954F72">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal"><span lang=3D"EN-GB">Hi all,<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB">I am evaluating the feasibility=
+ of using LTTng as a backend for existing Qt tracepoints following the disc=
+ussions at Qt Contributors Summit :
+<a href=3D"https://wiki.qt.io/QtCS2017_Discuss_Qt_Logging_enhancements">htt=
+ps://wiki.qt.io/QtCS2017_Discuss_Qt_Logging_enhancements</a> .<o:p></o:p></=
+span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB">The idea would be to get less p=
+erformance impact when tracing and more structured data to analyse without =
+changing Qt users&#8217; code.
+<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB">I see that instead of describin=
+g all tracepoints, we could use a generic LTT tracepoint like in Python:<o:=
+p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB"><a href=3D"http://git.lttng.org=
+/?p=3Dlttng-ust.git;a=3Dblob;f=3Dliblttng-ust-python-agent/lttng_ust_python=
+.h">http://git.lttng.org/?p=3Dlttng-ust.git;a=3Dblob;f=3Dliblttng-ust-pytho=
+n-agent/lttng_ust_python.h</a><o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB">Except, I would like to structu=
+re the tracepoint data at run-time following a JSON-based data model.
+<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB">I think I could encode that par=
+t of CTF dynamically by appending binary user data, CTF variants, dynamical=
+ly-sized CTF structures and sequences in a local buffer.<o:p></o:p></span><=
+/p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB">But I am wondering how to pass =
+this buffer along with its size to LTTng.<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB">I am afraid a TP_ARGS(void*, bu=
+ffer) and TP_FIELDS(buffer) would not work since it would require LTTng to =
+read the CTF in &#8220;buffer&#8221; to discover where it stops&#8230;<o:p>=
+</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB">Or should I use some other API?=
+<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB">Thanks for any advice on how to=
+ do that.<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"mso-margin-top-alt:auto;mso-margin-bottom-a=
+lt:auto"><span lang=3D"EN-GB" style=3D"mso-fareast-language:FR">Arnaud<o:p>=
+</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-GB"><o:p>&nbsp;</o:p></span></p>
+</div>
+</body>
+</html>
+
+--_000_AM2PR03MB070508172009C835365F99B49E420AM2PR03MB0705eurp_--
+
+--===============1213351460487397506==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============1213351460487397506==--
