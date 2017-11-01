@@ -1,16 +1,25 @@
-From: Alok Priyadarshi <alokpr@gmail.com>
-Subject: CTF -> Chrome Trace Event
-Date: Tue, 31 Oct 2017 23:33:40 +0000
-Message-ID: <CADwgpi9pwMp_wWAEjtpvcGEx6R2wifaHABZjgmQD9QUGufa1AA__10791.7170077146$1509547646$gmane$org@mail.gmail.com>
+From: Genevieve Bastien <gbastien+lttng@versatic.net>
+Subject: Re: CTF -> Chrome Trace Event
+Date: Wed, 1 Nov 2017 11:57:08 -0400
+Message-ID: <9ea71b68-d929-b284-afff-8109df8225d4__20353.4350767315$1509553804$gmane$org@versatic.net>
+References: <CADwgpi9pwMp_wWAEjtpvcGEx6R2wifaHABZjgmQD9QUGufa1AA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6609931569594784482=="
+Content-Type: multipart/mixed; boundary="===============0666745286378779035=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-vk0-x22b.google.com (mail-vk0-x22b.google.com
- [IPv6:2607:f8b0:400c:c05::22b])
- by lists.lttng.org (Postfix) with ESMTPS id 3yRSNJ58y6ztQF
- for <lttng-dev@lists.lttng.org>; Tue, 31 Oct 2017 23:33:52 +0000 (UTC)
-Received: by mail-vk0-x22b.google.com with SMTP id j2so414922vki.4
- for <lttng-dev@lists.lttng.org>; Tue, 31 Oct 2017 16:33:52 -0700 (PDT)
+Received: from s056.panelboxmanager.com (s056.panelboxmanager.com
+ [174.142.230.146])
+ by lists.lttng.org (Postfix) with ESMTPS id 3yRtwV4y6yztBy
+ for <lttng-dev@lists.lttng.org>; Wed,  1 Nov 2017 16:29:46 +0000 (UTC)
+Received: from mailnull by s056.panelboxmanager.com with sa-checked (Exim 4.89)
+ (envelope-from <gbastien+lttng@versatic.net>) id 1e9vOA-003gxC-HR
+ for lttng-dev@lists.lttng.org; Wed, 01 Nov 2017 11:57:11 -0400
+Received: from [132.207.72.9] (port=51666)
+ by s056.panelboxmanager.com with esmtpsa
+ (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128) (Exim 4.89)
+ (envelope-from <gbastien+lttng@versatic.net>) id 1e9vO9-003gwk-8H
+ for lttng-dev@lists.lttng.org; Wed, 01 Nov 2017 11:57:09 -0400
+In-Reply-To: <CADwgpi9pwMp_wWAEjtpvcGEx6R2wifaHABZjgmQD9QUGufa1AA@mail.gmail.com>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,41 +32,134 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============6609931569594784482==
-Content-Type: multipart/alternative; boundary="001a114551d8030bd9055ce03032"
+This is a multi-part message in MIME format.
+--===============0666745286378779035==
+Content-Type: multipart/alternative;
+ boundary="------------35F11F4FDC803B8AA5FEA233"
+Content-Language: en-US
 
---001a114551d8030bd9055ce03032
-Content-Type: text/plain; charset="UTF-8"
+This is a multi-part message in MIME format.
+--------------35F11F4FDC803B8AA5FEA233
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 
-Hello,
+Hi Alok,
 
-I am considering using lttng in my current project. We also like Catapult
-<https://github.com/catapult-project/catapult> trace viewer used by
-chrome://tracing.
 
-I am wondering if someone has tried translating CTF tracepoints into
-Catapult trace events, whose format is described here:
-https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview
+I don't know about anyone converting CTF to Catapult trace events, (it
+would probably be rather straightforward to do with babeltrace 2 if you
+know how to translate the events correctly) but in the Trace Compass
+Incubator, we do have support for the trace-event format, so that Trace
+Compass can read both CTF and trace-event traces.
 
-Thanks in advance.
 
---001a114551d8030bd9055ce03032
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+See here [1] for instructions to install Incubator features and install
+the "Trace Compass TraceEvent Parser" feature. You'll get some of the
+catapult analyses with it.
 
-<div dir=3D"ltr">Hello,<div><br></div><div>I am considering using lttng in =
-my current project. We also like <a href=3D"https://github.com/catapult-pro=
-ject/catapult">Catapult</a> trace viewer used by <a href=3D"chrome://tracin=
-g">chrome://tracing</a>.</div><div><br></div><div>I am wondering if someone=
- has tried translating CTF tracepoints into Catapult trace events, whose fo=
-rmat is described here:=C2=A0<a href=3D"https://docs.google.com/document/d/=
-1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview">https://docs.google.c=
-om/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview</a></div=
-><div><br></div><div>Thanks in advance.</div></div>
 
---001a114551d8030bd9055ce03032--
+[1]
+http://versatic.net/tracecompass/incubator/2017/09/13/introducing-tracecompass-incubator.html
 
---===============6609931569594784482==
+
+Cheers,
+
+Geneviève
+
+
+On 2017-10-31 07:33 PM, Alok Priyadarshi wrote:
+> Hello,
+>
+> I am considering using lttng in my current project. We also like
+> Catapult <https://github.com/catapult-project/catapult> trace viewer
+> used by chrome://tracing.
+>
+> I am wondering if someone has tried translating CTF tracepoints into
+> Catapult trace events, whose format is described
+> here: https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview
+>
+> Thanks in advance.
+>
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+
+--------------35F11F4FDC803B8AA5FEA233
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 8bit
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  </head>
+  <body text="#000000" bgcolor="#FFFFFF">
+    <p>Hi Alok,</p>
+    <p><br>
+    </p>
+    <p>I don't know about anyone converting CTF to Catapult trace
+      events, (it would probably be rather straightforward to do with
+      babeltrace 2 if you know how to translate the events correctly)
+      but in the Trace Compass Incubator, we do have support for the
+      trace-event format, so that Trace Compass can read both CTF and
+      trace-event traces.</p>
+    <p><br>
+    </p>
+    <p>See here [1] for instructions to install Incubator features and
+      install the "Trace Compass TraceEvent Parser" feature. You'll get
+      some of the catapult analyses with it.<br>
+    </p>
+    <p><br>
+    </p>
+    <p>[1]
+<a class="moz-txt-link-freetext" href="http://versatic.net/tracecompass/incubator/2017/09/13/introducing-tracecompass-incubator.html">http://versatic.net/tracecompass/incubator/2017/09/13/introducing-tracecompass-incubator.html</a></p>
+    <p><br>
+    </p>
+    <p>Cheers,</p>
+    <p>Geneviève<br>
+    </p>
+    <br>
+    <div class="moz-cite-prefix">On 2017-10-31 07:33 PM, Alok
+      Priyadarshi wrote:<br>
+    </div>
+    <blockquote type="cite"
+cite="mid:CADwgpi9pwMp_wWAEjtpvcGEx6R2wifaHABZjgmQD9QUGufa1AA@mail.gmail.com">
+      <div dir="ltr">Hello,
+        <div><br>
+        </div>
+        <div>I am considering using lttng in my current project. We also
+          like <a href="https://github.com/catapult-project/catapult"
+            moz-do-not-send="true">Catapult</a> trace viewer used by <a
+            href="chrome://tracing" moz-do-not-send="true">chrome://tracing</a>.</div>
+        <div><br>
+        </div>
+        <div>I am wondering if someone has tried translating CTF
+          tracepoints into Catapult trace events, whose format is
+          described here: <a
+href="https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview"
+            moz-do-not-send="true">https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview</a></div>
+        <div><br>
+        </div>
+        <div>Thanks in advance.</div>
+      </div>
+      <br>
+      <fieldset class="mimeAttachmentHeader"></fieldset>
+      <br>
+      <pre wrap="">_______________________________________________
+lttng-dev mailing list
+<a class="moz-txt-link-abbreviated" href="mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>
+<a class="moz-txt-link-freetext" href="https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
+</pre>
+    </blockquote>
+    <br>
+  </body>
+</html>
+
+--------------35F11F4FDC803B8AA5FEA233--
+
+--===============0666745286378779035==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -67,4 +169,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============6609931569594784482==--
+--===============0666745286378779035==--
