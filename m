@@ -1,15 +1,15 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: Videos from the Tracing Summit 2017
-Date: Fri, 3 Nov 2017 14:11:35 -0400
-Message-ID: <0c315552-c637-14fd-d892-a51627880194__30694.0761664466$1509732710$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.9.6 and 2.10.3 (Linux kernel
+	tracer)
+Date: Fri, 3 Nov 2017 21:33:11 +0000 (UTC)
+Message-ID: <2109876270.3592.1509744791959.JavaMail.zimbra__16354.4353600175$1509744795$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3yT95D11h3ztnT
- for <lttng-dev@lists.lttng.org>; Fri,  3 Nov 2017 18:11:43 +0000 (UTC)
-Content-Language: fr-classic
+ by lists.lttng.org (Postfix) with ESMTPS id 3yTFYT40WSzv8j
+ for <lttng-dev@lists.lttng.org>; Fri,  3 Nov 2017 21:33:01 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,14 +19,24 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: diamon-discuss@lists.linuxfoundation.org, lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpUaGUgdmlkZW9zIGZyb20gdGhlIFRyYWNpbmcgU3VtbWl0IDIwMTcgYXJlIG5vdyBvbmxp
-bmU6Cmh0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9bThnaWc0QkJHUDAmaW5kZXg9MSZs
-aXN0PVBMdW80RTQ3cDVfN2JmZVp5WUl5TllNLWYtMnRtcjBuZXUKCllvdSBjYW4gYWxzbyBhY2Nl
-c3MgdGhlbSBmcm9tIHRoZSBzY2hlZHVsZSBoZXJlOgpodHRwOi8vdHJhY2luZ3N1bW1pdC5vcmcv
-d2lraS9UcmFjaW5nU3VtbWl0MjAxNyNTY2hlZHVsZQoKRW5qb3ksCgpKdWxpZW4KX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcg
-bGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2Nn
-aS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+SGksCgpWZXJzaW9ucyAyLjkuNiBhbmQgMi4xMC4zIGZpeCBhbiBpbnB1dCB2YWxpZGF0aW9uIGlz
+c3VlIHdpdGgKdGhlIC9wcm9jL2x0dG5nLWxvZ2dlciBpbnRlcmZhY2Ugb2YgbHR0bmctbW9kdWxl
+cy4gQW4gaWxsLWNyYWZ0ZWQgaW5wdXQKdG8gdGhlIHdyaXRlIHN5c3RlbSBjYWxsIHRvIC9wcm9j
+L2x0dG5nLWxvZ2dlciBjYW4gdHJpZ2dlciBhIGtlcm5lbCBPT1BTLgoKR2l2ZW4gdGhhdCBhbGwg
+dXNlcnMgY2FuIHdyaXRlIHRvIHRoYXQgZmlsZSwgaXQgbWVhbnMgdGhhdCBhcmJpdHJhcnkKbG9j
+YWwgdXNlcnMgY2FuIHRyaWdnZXIgYSBrZXJuZWwgT09QUy4gSXQgd291bGQgYmUgcHJlZmVyYWJs
+ZSB0bwp1cGdyYWRlIHlvdXIgbHR0bmctbW9kdWxlcyB0byBhIHZlcnNpb24gY29udGFpbmluZyB0
+aGlzIGZpeC4KClRoYW5rcywKCk1hdGhpZXUKClByb2plY3Qgd2Vic2l0ZTogaHR0cDovL2x0dG5n
+Lm9yZwpEb2N1bWVudGF0aW9uOiBodHRwOi8vbHR0bmcub3JnL2RvY3MKRG93bmxvYWQgbGluazog
+aHR0cDovL2x0dG5nLm9yZy9kb3dubG9hZAoKQ2hhbmdlbG9nOgoyMDE3LTExLTAzIChOYXRpb25h
+bCBTYW5kd2ljaCBEYXkpIExUVG5nIG1vZHVsZXMgMi45LjYKICAgICAgICAqIEZpeDogbHR0bmct
+bG9nZ2VyIGdldF91c2VyX3BhZ2VzX2Zhc3QgZXJyb3IgaGFuZGxpbmcKCjIwMTctMTEtMDMgKE5h
+dGlvbmFsIFNhbmR3aWNoIERheSkgTFRUbmcgbW9kdWxlcyAyLjEwLjMKICAgICAgICAqIEZpeDog
+bHR0bmctbG9nZ2VyIGdldF91c2VyX3BhZ2VzX2Zhc3QgZXJyb3IgaGFuZGxpbmcKCgotLSAKTWF0
+aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
+bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5v
+cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
