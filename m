@@ -1,15 +1,17 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [PATCH lttng-tools] Fix: wrong parameter to fcntl in
-	pipe_set_flag
-Date: Tue,  7 Nov 2017 18:10:10 -0500
-Message-ID: <1510096210-27806-1-git-send-email-jdesfossez__25846.5624916882$1510096728$gmane$org@efficios.com>
+From: MMM via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: show the ratio of reads from page cache vs reads from
+ disk, for a user space file read of a C program
+Date: Wed, 8 Nov 2017 04:26:15 +0000 (UTC)
+Message-ID: <1107287956.4196307.1510115175279__23595.2849303887$1510116649$gmane$org@mail.yahoo.com>
+References: <1107287956.4196307.1510115175279.ref@mail.yahoo.com>
+Reply-To: MMM <e.morovati@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============9055531470805949541=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com (albert.ini-tech.com [192.99.4.57])
- by lists.lttng.org (Postfix) with ESMTPS id 3yWljM5kmBz13ly
- for <lttng-dev@lists.lttng.org>; Tue,  7 Nov 2017 23:18:31 +0000 (UTC)
+Received: from sonic306-49.consmr.mail.ne1.yahoo.com
+ (sonic306-49.consmr.mail.ne1.yahoo.com [66.163.189.111])
+ by lists.lttng.org (Postfix) with ESMTP id 3yWv4R0tsmz15sN
+ for <lttng-dev@lists.lttng.org>; Wed,  8 Nov 2017 04:50:30 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,46 +21,45 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-RGVwZW5kaW5nIG9uIHRoZSBmbGFncyBwYXNzZWQsIGZjbnRsIG11c3QgYmUgY2FsbGVkIHdpdGgg
-Rl9TRVRGRCBvcgpGX1NFVEZMLiBUaGlzIGZpeCBjaGVja3MgdGhlIGZsYWcgcGFzc2VkIGFuZCBl
-bnN1cmUgaXQgaXMgdmFsaWQgYW5kCmNhbGxzIGZjbnRsIHdpdGggdGhlIHJpZ2h0IHBhcmFtZXRl
-ci4KCkFsc28sIGZvciBDTE9FWEVDLCB3ZSBuZWVkIHRvIHBhc3MgRkRfQ0xPRVhFQywgbm90IE9f
-Q0xPRVhFQy4KClNpZ25lZC1vZmYtYnk6IEp1bGllbiBEZXNmb3NzZXogPGpkZXNmb3NzZXpAZWZm
-aWNpb3MuY29tPgotLS0KIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbm90aWZpY2F0aW9uLXRocmVh
-ZC5jIHwgIDIgKy0KIHNyYy9jb21tb24vcGlwZS5jICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IHwgMjUgKysrKysrKysrKysrKysrKysrKysrKy0tLQogMiBmaWxlcyBjaGFuZ2VkLCAyMyBpbnNl
-cnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vz
-c2lvbmQvbm90aWZpY2F0aW9uLXRocmVhZC5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9ub3Rp
-ZmljYXRpb24tdGhyZWFkLmMKaW5kZXggYzQ3YjM2NS4uM2VmN2RmMSAxMDA2NDQKLS0tIGEvc3Jj
-L2Jpbi9sdHRuZy1zZXNzaW9uZC9ub3RpZmljYXRpb24tdGhyZWFkLmMKKysrIGIvc3JjL2Jpbi9s
-dHRuZy1zZXNzaW9uZC9ub3RpZmljYXRpb24tdGhyZWFkLmMKQEAgLTk2LDcgKzk2LDcgQEAgc3Ry
-dWN0IG5vdGlmaWNhdGlvbl90aHJlYWRfaGFuZGxlICpub3RpZmljYXRpb25fdGhyZWFkX2hhbmRs
-ZV9jcmVhdGUoCiAJCWdvdG8gZW5kOwogCX0KIAotCWV2ZW50X3BpcGUgPSBsdHRuZ19waXBlX29w
-ZW4oT19DTE9FWEVDKTsKKwlldmVudF9waXBlID0gbHR0bmdfcGlwZV9vcGVuKEZEX0NMT0VYRUMp
-OwogCWlmICghZXZlbnRfcGlwZSkgewogCQlFUlIoImV2ZW50X3BpcGUgY3JlYXRpb24iKTsKIAkJ
-Z290byBlcnJvcjsKZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vcGlwZS5jIGIvc3JjL2NvbW1vbi9w
-aXBlLmMKaW5kZXggNDIyMGE0MC4uNGZlNDVlZiAxMDA2NDQKLS0tIGEvc3JjL2NvbW1vbi9waXBl
-LmMKKysrIGIvc3JjL2NvbW1vbi9waXBlLmMKQEAgLTE1NCw5ICsxNTQsMjggQEAgc3RhdGljIGlu
-dCBfcGlwZV9zZXRfZmxhZ3Moc3RydWN0IGx0dG5nX3BpcGUgKnBpcGUsIGludCBmbGFncykKIAl9
-CiAKIAlmb3IgKGkgPSAwOyBpIDwgMjsgaSsrKSB7Ci0JCXJldCA9IGZjbnRsKHBpcGUtPmZkW2ld
-LCBGX1NFVEZELCBmbGFncyk7Ci0JCWlmIChyZXQgPCAwKSB7Ci0JCQlQRVJST1IoImZjbnRsIGx0
-dG5nIHBpcGUgJWQiLCBmbGFncyk7CisJCWlmIChmbGFncyAmIE9fTk9OQkxPQ0spIHsKKwkJCXJl
-dCA9IGZjbnRsKHBpcGUtPmZkW2ldLCBGX1NFVEZMLCBPX05PTkJMT0NLKTsKKwkJCWlmIChyZXQg
-PCAwKSB7CisJCQkJUEVSUk9SKCJmY250bCBsdHRuZyBwaXBlICVkIiwgZmxhZ3MpOworCQkJCWdv
-dG8gZW5kOworCQkJfQorCQl9CisJCWlmIChmbGFncyAmIEZEX0NMT0VYRUMpIHsKKwkJCXJldCA9
-IGZjbnRsKHBpcGUtPmZkW2ldLCBGX1NFVEZELCBGRF9DTE9FWEVDKTsKKwkJCWlmIChyZXQgPCAw
-KSB7CisJCQkJUEVSUk9SKCJmY250bCBsdHRuZyBwaXBlICVkIiwgZmxhZ3MpOworCQkJCWdvdG8g
-ZW5kOworCQkJfQorCQl9CisJCS8qCisJCSAqIFdlIG9ubHkgY2hlY2sgZm9yIE9fTk9OQkxPQ0sg
-b3IgRkRfQ0xPRVhFQywgaWYgYW5vdGhlciBmbGFnIGlzCisJCSAqIG5lZWRlZCwgd2UgY2FuIGFk
-ZCBpdCwgYnV0IGZvciBub3cganVzdCBtYWtlIHN1cmUgd2UgZG9uJ3QgbWFrZQorCQkgKiBtaXN0
-YWtlcyB3aXRoIHRoZSBwYXJhbWV0ZXJzIHdlIHBhc3MuCisJCSAqLworCQlpZiAoIShmbGFncyAm
-IE9fTk9OQkxPQ0spICYmICEoZmxhZ3MgJiBGRF9DTE9FWEVDKSkgeworCQkJZnByaW50ZihzdGRl
-cnIsICJVbnN1cHBvcnRlZCBmbGFnXG4iKTsKKwkJCXJldCA9IC0xOwogCQkJZ290byBlbmQ7CiAJ
-CX0KIAl9Ci0tIAoyLjcuNAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-Cmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
-ZXYK
+--===============9055531470805949541==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_4196306_862350624.1510115175277"
+
+------=_Part_4196306_862350624.1510115175277
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Dear Users,
+I am beginner in LTTng. I am going to trace a C program and=C2=A0show the r=
+atio of reads from page cache vs reads from disk, for a user space file rea=
+d using Trace Compass. While I can not write appropriate commands in trace_=
+point_provider.h and in the C program. Could you please guide me or introdu=
+ce a sufficient and simple reference to help me do it.
+Best regards,Mehdi.
+
+------=_Part_4196306_862350624.1510115175277
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<html><head></head><body><div style="font-family:courier new, courier, monaco, monospace, sans-serif;font-size:13px;"><div style="font-family:courier new, courier, monaco, monospace, sans-serif;font-size:13px;"><div style="font-family:courier new, courier, monaco, monospace, sans-serif;font-size:13px;"><div><div>Dear Users,</div><div><br></div><div>I am beginner in LTTng. I am going to trace a C program and&nbsp;<font size="2">show
+ the ratio of reads from page cache vs reads from disk, for a user space
+ file read using Trace Compass. While I can not write appropriate 
+commands in trace_point_provider.h and in the C program. Could you 
+please guide me or introduce a sufficient and simple reference to help 
+me do it.</font></div><div><font size="2"><br></font></div><div><font size="2">Best regards,</font></div><div><font size="2">Mehdi.</font></div><br></div></div></div></div></body></html>
+------=_Part_4196306_862350624.1510115175277--
+
+--===============9055531470805949541==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============9055531470805949541==--
