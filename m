@@ -1,20 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust v2] Fix: fd of an elf object must
- be registered to the fd tracker
-Date: Fri, 10 Nov 2017 16:22:29 +0000 (UTC)
-Message-ID: <418860153.12875.1510330949707.JavaMail.zimbra__15970.1194651008$1510330928$gmane$org@efficios.com>
-References: <20171110160641.11117-1-jonathan.rajotte-julien@efficios.com>
+From: Yu Yang <yyangplus@gmail.com>
+Subject: Is it safe to use multiple lfht instances?
+Date: Mon, 13 Nov 2017 10:44:59 +0000
+Message-ID: <CAML2tiS_JpMKH1fJ6EnJ_+OpzeGuEGibfNaDdqd_AoBN=hdK7w__44700.1608823941$1510569928$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============4321064629639348117=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3yYQKM0hSfz12Zh
- for <lttng-dev@lists.lttng.org>; Fri, 10 Nov 2017 16:21:58 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 643B5340374
- for <lttng-dev@lists.lttng.org>; Fri, 10 Nov 2017 16:22:30 +0000 (UTC)
-In-Reply-To: <20171110160641.11117-1-jonathan.rajotte-julien@efficios.com>
+Received: from mail-qt0-x22c.google.com (mail-qt0-x22c.google.com
+ [IPv6:2607:f8b0:400d:c0d::22c])
+ by lists.lttng.org (Postfix) with ESMTPS id 3yb6jL4yVlz131J
+ for <lttng-dev@lists.lttng.org>; Mon, 13 Nov 2017 10:45:10 +0000 (UTC)
+Received: by mail-qt0-x22c.google.com with SMTP id e19so14095039qte.8
+ for <lttng-dev@lists.lttng.org>; Mon, 13 Nov 2017 02:45:10 -0800 (PST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,59 +20,39 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGludG8gbWFzdGVyLCAyLjEwLCAyLjksIHRoYW5rcyEKCk1hdGhpZXUKCi0tLS0tIE9u
-IE5vdiAxMCwgMjAxNywgYXQgMTE6MDYgQU0sIEpvbmF0aGFuIFJham90dGUgam9uYXRoYW4ucmFq
-b3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tIHdyb3RlOgoKPiBUaGUgb3BlbiBjYWxsIHRha2UgcGxh
-Y2UgaW5zaWRlIHVzdCwgaXQgbXVzdCBiZSB0cmFja2VkIHRvIHByZXZlbnQgZXh0ZXJuYWwKPiBj
-bG9zaW5nLgo+IAo+IFRoZSBidWcgY2FuIGJlIGhpdCBkdXJpbmcgdHJhY2luZyBvZiBhbiBhcHBs
-aWNhdGlvbiBmb3Igd2hpY2ggdGhlIHByb2JlCj4gcHJvdmlkZXIgaXMgbG9hZGVkIHVzaW5nIExE
-X1BSRUxPQUQgaW4gY29tYmluYXRpb24gd2l0aCB0aGUgZmQgdXRpbGl0eQo+IHNoYXJlZCBvYmpl
-Y3QuIFRoZSBhcHBsaWNhdGlvbiBpcyByZXNwb25zaWJsZSBmb3IgY2xvc2luZyBhbGwgcG9zc2li
-bGUgZmQuCj4gCj4gU2lnbmVkLW9mZi1ieTogSm9uYXRoYW4gUmFqb3R0ZSA8am9uYXRoYW4ucmFq
-b3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPgo+IC0tLQo+IAo+IHYyOgo+IENsZWFudXAgZXJyb3Ig
-cGF0aCBvZiBsdHRuZ191c3RfZWxmX2NyZWF0ZSBieSB1c2luZyBsdHRuZ191c3RfZWxmX2Rlc3Ry
-b3kuCj4gVGhpcyB0YWtlIGNhcmUgb2YgbXkgcHJldmlvdXMgbWlzdGFrZSByZWdhcmRpbmcgZG91
-YmxlIGxvY2tpbmcgaW4gdGhlIGVycm9yCj4gcGF0aCBhbmQgbW92ZSB0aGUgY2xlYW51cCBsb2dp
-YyB0byBhIHNpbmdsZSBwbGFjZS4KPiAKPiBsdHRuZ191c3RfZWxmX2Rlc3Ryb3kgbm93IGhhbmRs
-ZSBjYXNlcyB3aGVyZSBmZCA8IDAuCj4gLS0tCj4gbGlibHR0bmctdXN0L2x0dG5nLXVzdC1lbGYu
-YyB8IDM0ICsrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0KPiAxIGZpbGUgY2hhbmdl
-ZCwgMjEgaW5zZXJ0aW9ucygrKSwgMTMgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2xp
-Ymx0dG5nLXVzdC9sdHRuZy11c3QtZWxmLmMgYi9saWJsdHRuZy11c3QvbHR0bmctdXN0LWVsZi5j
-Cj4gaW5kZXggYTQ5Njg0MWEuLmYyYzA5ODI5IDEwMDY0NAo+IC0tLSBhL2xpYmx0dG5nLXVzdC9s
-dHRuZy11c3QtZWxmLmMKPiArKysgYi9saWJsdHRuZy11c3QvbHR0bmctdXN0LWVsZi5jCj4gQEAg
-LTI3LDYgKzI3LDcgQEAKPiAjaW5jbHVkZSA8ZmNudGwuaD4KPiAjaW5jbHVkZSA8dW5pc3RkLmg+
-Cj4gI2luY2x1ZGUgPHN0ZGJvb2wuaD4KPiArI2luY2x1ZGUgPHVzdC1mZC5oPgo+ICNpbmNsdWRl
-ICJsdHRuZy10cmFjZXItY29yZS5oIgo+IAo+ICNkZWZpbmUgQlVGX0xFTgk0MDk2Cj4gQEAgLTI0
-OCwxNSArMjQ5LDIwIEBAIHN0cnVjdCBsdHRuZ191c3RfZWxmICpsdHRuZ191c3RfZWxmX2NyZWF0
-ZShjb25zdCBjaGFyCj4gKnBhdGgpCj4gCQlnb3RvIGVycm9yOwo+IAl9Cj4gCj4gKwo+IAllbGYt
-PnBhdGggPSBzdHJkdXAocGF0aCk7Cj4gCWlmICghZWxmLT5wYXRoKSB7Cj4gCQlnb3RvIGVycm9y
-Owo+IAl9Cj4gCj4gKwlsdHRuZ191c3RfbG9ja19mZF90cmFja2VyKCk7Cj4gCWVsZi0+ZmQgPSBv
-cGVuKGVsZi0+cGF0aCwgT19SRE9OTFkgfCBPX0NMT0VYRUMpOwo+IAlpZiAoZWxmLT5mZCA8IDAp
-IHsKPiArCQlsdHRuZ191c3RfdW5sb2NrX2ZkX3RyYWNrZXIoKTsKPiAJCWdvdG8gZXJyb3I7Cj4g
-CX0KPiArCWx0dG5nX3VzdF9hZGRfZmRfdG9fdHJhY2tlcihlbGYtPmZkKTsKPiArCWx0dG5nX3Vz
-dF91bmxvY2tfZmRfdHJhY2tlcigpOwo+IAo+IAlpZiAobHR0bmdfdXN0X3JlYWQoZWxmLT5mZCwg
-ZV9pZGVudCwgRUlfTklERU5UKSA8IEVJX05JREVOVCkgewo+IAkJZ290byBlcnJvcjsKPiBAQCAt
-MzA5LDE2ICszMTUsNyBAQCBzdHJ1Y3QgbHR0bmdfdXN0X2VsZiAqbHR0bmdfdXN0X2VsZl9jcmVh
-dGUoY29uc3QgY2hhcgo+ICpwYXRoKQo+IAlyZXR1cm4gZWxmOwo+IAo+IGVycm9yOgo+IC0JaWYg
-KGVsZikgewo+IC0JCWZyZWUoZWxmLT5laGRyKTsKPiAtCQlpZiAoZWxmLT5mZCA+PSAwKSB7Cj4g
-LQkJCWlmIChjbG9zZShlbGYtPmZkKSkgewo+IC0JCQkJYWJvcnQoKTsKPiAtCQkJfQo+IC0JCX0K
-PiAtCQlmcmVlKGVsZi0+cGF0aCk7Cj4gLQkJZnJlZShlbGYpOwo+IC0JfQo+ICsJbHR0bmdfdXN0
-X2VsZl9kZXN0cm95KGVsZik7Cj4gCXJldHVybiBOVUxMOwo+IH0KPiAKPiBAQCAtMzM5LDE0ICsz
-MzYsMjUgQEAgdWludDhfdCBsdHRuZ191c3RfZWxmX2lzX3BpYyhzdHJ1Y3QgbHR0bmdfdXN0X2Vs
-ZiAqZWxmKQo+ICAqLwo+IHZvaWQgbHR0bmdfdXN0X2VsZl9kZXN0cm95KHN0cnVjdCBsdHRuZ191
-c3RfZWxmICplbGYpCj4gewo+ICsJaW50IHJldDsKPiArCj4gCWlmICghZWxmKSB7Cj4gCQlyZXR1
-cm47Cj4gCX0KPiAKPiAtCWZyZWUoZWxmLT5laGRyKTsKPiAtCWlmIChjbG9zZShlbGYtPmZkKSkg
-ewo+IC0JCWFib3J0KCk7Cj4gKwlpZiAoZWxmLT5mZCA+PSAwKSB7Cj4gKwkJbHR0bmdfdXN0X2xv
-Y2tfZmRfdHJhY2tlcigpOwo+ICsJCXJldCA9IGNsb3NlKGVsZi0+ZmQpOwo+ICsJCWlmICghcmV0
-KSB7Cj4gKwkJCWx0dG5nX3VzdF9kZWxldGVfZmRfZnJvbV90cmFja2VyKGVsZi0+ZmQpOwo+ICsJ
-CX0gZWxzZSB7Cj4gKwkJCVBFUlJPUigiY2xvc2UiKTsKPiArCQkJYWJvcnQoKTsKPiArCQl9Cj4g
-KwkJbHR0bmdfdXN0X3VubG9ja19mZF90cmFja2VyKCk7Cj4gCX0KPiArCj4gKwlmcmVlKGVsZi0+
-ZWhkcik7Cj4gCWZyZWUoZWxmLT5wYXRoKTsKPiAJZnJlZShlbGYpOwo+IH0KPiAtLQo+IDIuMTEu
-MAoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lv
-cy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0
-bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlz
-dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============4321064629639348117==
+Content-Type: multipart/alternative; boundary="001a1143c5e8e14750055ddaf672"
+
+--001a1143c5e8e14750055ddaf672
+Content-Type: text/plain; charset="UTF-8"
+
+hello
+I want to implement a multi-tree using lfht in urcu, every node in the tree
+needs a lfht instance to track the children, I'm not sure if it is safe to
+use tree like this in multiple threads environments. thanks in advance.
+
+--001a1143c5e8e14750055ddaf672
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>hello</div>I want to implement a multi-tree using lfh=
+t in urcu, every node in the tree needs a lfht instance to track the childr=
+en, I&#39;m not sure if it is safe to use tree like this in multiple thread=
+s environments. thanks in advance.</div>
+
+--001a1143c5e8e14750055ddaf672--
+
+--===============4321064629639348117==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============4321064629639348117==--
