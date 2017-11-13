@@ -1,16 +1,15 @@
-From: Nalin Pai <nalinpai@gmail.com>
-Subject: Channel buffer allocation
-Date: Mon, 13 Nov 2017 10:40:14 -0800
-Message-ID: <CALVR4zA3F2RWH+Zc4Nddn59JnOfqxjjDJtS_0rJs1=+xjtZk6A__5787.84528556771$1510599202$gmane$org@mail.gmail.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH babeltrace stable-1.5] Fix: timegm compat on
+	Solaris
+Date: Mon, 13 Nov 2017 15:06:29 -0500
+Message-ID: <1510603589-9901-1-git-send-email-mjeanson__37108.3261365586$1510603610$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3965789768567252138=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ua0-x22a.google.com (mail-ua0-x22a.google.com
- [IPv6:2607:f8b0:400c:c08::22a])
- by lists.lttng.org (Postfix) with ESMTPS id 3ybKFX2ZNQz13mf
- for <lttng-dev@lists.lttng.org>; Mon, 13 Nov 2017 18:40:15 +0000 (UTC)
-Received: by mail-ua0-x22a.google.com with SMTP id e10so9377528uah.10
- for <lttng-dev@lists.lttng.org>; Mon, 13 Nov 2017 10:40:15 -0800 (PST)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3ybM9F0hskz13yd
+ for <lttng-dev@lists.lttng.org>; Mon, 13 Nov 2017 20:06:40 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,49 +20,23 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
---===============3965789768567252138==
-Content-Type: multipart/alternative; boundary="f403045f8ef0ef96a6055de19912"
-
---f403045f8ef0ef96a6055de19912
-Content-Type: text/plain; charset="UTF-8"
-
-Hi,
-
-In the per-pid buffer scheme, when are the ring buffers allocated for each
-pid? Is it when a channel is created or is it an event provided by that
-process is enabled for a specific channel.
-
-I am trying to understand whether there is an overhead to creating many
-channels. Will a process incur the allocation of buffers for a channel that
-is not interested in any of the events that the process is providing?
-
--Nalin
-
---f403045f8ef0ef96a6055de19912
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi,<div><br></div><div>In the per-pid buffer scheme, when =
-are the ring buffers allocated for each pid? Is it when a channel is create=
-d or is it an event provided by that process is enabled for a specific chan=
-nel.</div><div><br></div><div>I am trying to understand whether there is an=
- overhead to creating many channels. Will a process incur the allocation of=
- buffers for a channel that is not interested in any of the events that the=
- process is providing?</div><div><br></div><div>-Nalin</div><div><br></div>=
-</div>
-
---f403045f8ef0ef96a6055de19912--
-
---===============3965789768567252138==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============3965789768567252138==--
+T24gU29sYXJpcyAxMSBzZXR0aW5nIFRaIHRvIGFuIGVtcHR5IHN0cmluZyBiZWZvcmUgY2FsbGlu
+ZyBta3RpbWUgd2lsbAppbiBzb21lIGNpcmN1bXN0YW5jZXMgZG8gdGhlIGNvbnZlcnNpb24gaW4g
+bG9jYWx0aW1lIGluc3RlYWQgb2YgVVRDIGFzCmV4cGVjdGVkLgoKUmVwbGFjZSB0aGUgZW1wdHkg
+c3RyaW5nIGJ5ICJVVEMiLgoKU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNv
+bkBlZmZpY2lvcy5jb20+Ci0tLQogaW5jbHVkZS9iYWJlbHRyYWNlL2NvbXBhdC91dGMuaCB8IDQg
+KystLQogMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCmRp
+ZmYgLS1naXQgYS9pbmNsdWRlL2JhYmVsdHJhY2UvY29tcGF0L3V0Yy5oIGIvaW5jbHVkZS9iYWJl
+bHRyYWNlL2NvbXBhdC91dGMuaAppbmRleCBkNTlkODU2Li5hYjA4MGYyIDEwMDY0NAotLS0gYS9p
+bmNsdWRlL2JhYmVsdHJhY2UvY29tcGF0L3V0Yy5oCisrKyBiL2luY2x1ZGUvYmFiZWx0cmFjZS9j
+b21wYXQvdXRjLmgKQEAgLTY3LDggKzY3LDggQEAgdGltZV90IGJhYmVsdHJhY2VfdGltZWdtKHN0
+cnVjdCB0bSAqdG0pCiAJCX0KIAl9CiAKLQkvKiBUZW1wb3JhcmlseSBzZXR0aW5nIFRaIHRvIDEg
+Zm9yIFVUQyAqLwotCXNldGVudigiVFoiLCAiIiwgMSk7CisJLyogVGVtcG9yYXJpbHkgc2V0dGlu
+ZyBUWiB0byBVVEMgKi8KKwlzZXRlbnYoIlRaIiwgIlVUQyIsIDEpOwogCXR6c2V0KCk7CiAJcmV0
+ID0gbWt0aW1lKHRtKTsKIAlpZiAodHopIHsKLS0gCjIuNy40CgpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5n
+LWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
+bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
