@@ -1,15 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Channel buffer allocation
-Date: Tue, 14 Nov 2017 00:19:30 +0000 (UTC)
-Message-ID: <124557787.14370.1510618770915.JavaMail.zimbra__28065.1868939914$1510618738$gmane$org@efficios.com>
-References: <CALVR4zA3F2RWH+Zc4Nddn59JnOfqxjjDJtS_0rJs1=+xjtZk6A@mail.gmail.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: the return code of
+ lttcomm_send_unix_sock is signed
+Date: Mon, 13 Nov 2017 19:25:54 -0500
+Message-ID: <CA+jJMxupzbSdJu=8=Q7tOCN49mz2SO5j=7LFp6YcAZtd3rc96g__40449.0227498629$1510619168$gmane$org@mail.gmail.com>
+References: <1503521002-3810-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3642965680499592714=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3ybSmB1WTmz166W
- for <lttng-dev@lists.lttng.org>; Tue, 14 Nov 2017 00:18:49 +0000 (UTC)
-In-Reply-To: <CALVR4zA3F2RWH+Zc4Nddn59JnOfqxjjDJtS_0rJs1=+xjtZk6A@mail.gmail.com>
+Received: from mail-wr0-x242.google.com (mail-wr0-x242.google.com
+ [IPv6:2a00:1450:400c:c0c::242])
+ by lists.lttng.org (Postfix) with ESMTPS id 3ybSwN3wmQz168V
+ for <lttng-dev@lists.lttng.org>; Tue, 14 Nov 2017 00:25:56 +0000 (UTC)
+Received: by mail-wr0-x242.google.com with SMTP id u97so16036792wrc.1
+ for <lttng-dev@lists.lttng.org>; Mon, 13 Nov 2017 16:25:56 -0800 (PST)
+In-Reply-To: <1503521002-3810-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,109 +24,68 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Nalin Pai <nalinpai@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============3642965680499592714==
-Content-Type: multipart/alternative;
-	boundary="=_c0a3594c-0dd3-48fa-9f6a-27de2187f611"
-
---=_c0a3594c-0dd3-48fa-9f6a-27de2187f611
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
------ On Nov 13, 2017, at 1:40 PM, Nalin Pai <nalinpai@gmail.com> wrote: 
-
-> Hi,
-> In the per-pid buffer scheme, when are the ring buffers allocated for each pid?
-> Is it when a channel is created or is it an event provided by that process is
-> enabled for a specific channel.
-
-In per-pid buffers, the buffers are allocated for each registered process whenever 
-each of those process is registered (typically at program launch). Buffer allocation 
-of per-pid buffers brings a significant overhead on systems with short-lived processes. 
-Using "per-uid" buffers is recommended instead in those situations. 
-
-> I am trying to understand whether there is an overhead to creating many
-> channels. Will a process incur the allocation of buffers for a channel that is
-> not interested in any of the events that the process is providing?
-
-Yes, a process will have to allocate buffers if it's registered to lttng-sessiond, even if 
-it does not contain any event enabled for that channel. This is needed to handle 
-dynamically loaded libraries for instance, which may add additional events into a 
-process after its initial constructor execution. 
-
-Thanks, 
-
-Mathieu 
-
-> -Nalin
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_c0a3594c-0dd3-48fa-9f6a-27de2187f611
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><br></div><div><br></div><div><span id=3D"z=
-wchr" data-marker=3D"__DIVIDER__">----- On Nov 13, 2017, at 1:40 PM, Nalin =
-Pai &lt;nalinpai@gmail.com&gt; wrote:<br></span></div><div data-marker=3D"_=
-_QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-l=
-eft:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;te=
-xt-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;">=
-<div dir=3D"ltr">Hi,<br><div>In the per-pid buffer scheme, when are the rin=
-g buffers allocated for each pid? Is it when a channel is created or is it =
-an event provided by that process is enabled for a specific channel.</div><=
-/div></blockquote><div><br></div><div>In per-pid buffers, the buffers are a=
-llocated for each registered process whenever<br data-mce-bogus=3D"1"></div=
-><div>each of those process is registered (typically at program launch). Bu=
-ffer allocation<br data-mce-bogus=3D"1"></div><div>of per-pid buffers bring=
-s a significant overhead on systems with short-lived processes.<br data-mce=
--bogus=3D"1"></div><div>Using "per-uid" buffers is recommended instead in t=
-hose situations.<br data-mce-bogus=3D"1"></div><blockquote style=3D"border-=
-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-wei=
-ght:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Ari=
-al,sans-serif;font-size:12pt;"><div dir=3D"ltr"><br><div>I am trying to und=
-erstand whether there is an overhead to creating many channels. Will a proc=
-ess incur the allocation of buffers for a channel that is not interested in=
- any of the events that the process is providing?</div></div></blockquote><=
-div>Yes, a process will have to allocate buffers if it's registered to lttn=
-g-sessiond, even if<br></div><div>it does not contain any event enabled for=
- that channel. This is needed to handle<br data-mce-bogus=3D"1"></div><div>=
-dynamically loaded libraries for instance, which may add additional events =
-into a<br data-mce-bogus=3D"1"></div><div>process after its initial constru=
-ctor execution.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"=
-></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=
-=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-b=
-ogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"b=
-order-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;fo=
-nt-weight:normal;font-style:normal;text-decoration:none;font-family:Helveti=
-ca,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><br><div>-Nalin</div>=
-<br></div><br>_______________________________________________<br>lttng-dev =
-mailing list<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bi=
-n/mailman/listinfo/lttng-dev<br></blockquote></div><div><br></div><div data=
--marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS In=
-c.<br>http://www.efficios.com</div></div></body></html>
---=_c0a3594c-0dd3-48fa-9f6a-27de2187f611--
-
---===============3642965680499592714==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============3642965680499592714==--
+TWVyZ2VkLCB0aGFua3MhCgpKw6lyw6ltaWUKCk9uIDIzIEF1Z3VzdCAyMDE3IGF0IDE2OjQzLCBK
+dWxpZW4gRGVzZm9zc2V6IDxqZGVzZm9zc2V6QGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gU2lnbmVk
+LW9mZi1ieTogSnVsaWVuIERlc2Zvc3NleiA8amRlc2Zvc3NlekBlZmZpY2lvcy5jb20+Cj4gLS0t
+Cj4gIHNyYy9jb21tb24va2VybmVsLWNvbnN1bWVyL2tlcm5lbC1jb25zdW1lci5jIHwgMTggKysr
+KysrKysrKy0tLS0tLS0tCj4gIDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCA4IGRl
+bGV0aW9ucygtKQo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9jb21tb24va2VybmVsLWNvbnN1bWVyL2tl
+cm5lbC1jb25zdW1lci5jIGIvc3JjL2NvbW1vbi9rZXJuZWwtY29uc3VtZXIva2VybmVsLWNvbnN1
+bWVyLmMKPiBpbmRleCA3YmNiODZhLi5hNWRjYzY2IDEwMDY0NAo+IC0tLSBhL3NyYy9jb21tb24v
+a2VybmVsLWNvbnN1bWVyL2tlcm5lbC1jb25zdW1lci5jCj4gKysrIGIvc3JjL2NvbW1vbi9rZXJu
+ZWwtY29uc3VtZXIva2VybmVsLWNvbnN1bWVyLmMKPiBAQCAtOTgzLDcgKzk4Myw4IEBAIGludCBs
+dHRuZ19rY29uc3VtZXJfcmVjdl9jbWQoc3RydWN0IGx0dG5nX2NvbnN1bWVyX2xvY2FsX2RhdGEg
+KmN0eCwKPiAgICAgICAgIH0KPiAgICAgICAgIGNhc2UgTFRUTkdfQ09OU1VNRVJfRElTQ0FSREVE
+X0VWRU5UUzoKPiAgICAgICAgIHsKPiAtICAgICAgICAgICAgICAgdWludDY0X3QgcmV0Owo+ICsg
+ICAgICAgICAgICAgICBzc2l6ZV90IHJldDsKPiArICAgICAgICAgICAgICAgdWludDY0X3QgY291
+bnQ7Cj4gICAgICAgICAgICAgICAgIHN0cnVjdCBsdHRuZ19jb25zdW1lcl9jaGFubmVsICpjaGFu
+bmVsOwo+ICAgICAgICAgICAgICAgICB1aW50NjRfdCBpZCA9IG1zZy51LmRpc2NhcmRlZF9ldmVu
+dHMuc2Vzc2lvbl9pZDsKPiAgICAgICAgICAgICAgICAgdWludDY0X3Qga2V5ID0gbXNnLnUuZGlz
+Y2FyZGVkX2V2ZW50cy5jaGFubmVsX2tleTsKPiBAQCAtOTk1LDE1ICs5OTYsMTUgQEAgaW50IGx0
+dG5nX2tjb25zdW1lcl9yZWN2X2NtZChzdHJ1Y3QgbHR0bmdfY29uc3VtZXJfbG9jYWxfZGF0YSAq
+Y3R4LAo+ICAgICAgICAgICAgICAgICBpZiAoIWNoYW5uZWwpIHsKPiAgICAgICAgICAgICAgICAg
+ICAgICAgICBFUlIoIktlcm5lbCBjb25zdW1lciBkaXNjYXJkZWQgZXZlbnRzIGNoYW5uZWwgJSIK
+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgUFJJdTY0ICIgbm90IGZv
+dW5kIiwga2V5KTsKPiAtICAgICAgICAgICAgICAgICAgICAgICByZXQgPSAwOwo+ICsgICAgICAg
+ICAgICAgICAgICAgICAgIGNvdW50ID0gMDsKPiAgICAgICAgICAgICAgICAgfSBlbHNlIHsKPiAt
+ICAgICAgICAgICAgICAgICAgICAgICByZXQgPSBjaGFubmVsLT5kaXNjYXJkZWRfZXZlbnRzOwo+
+ICsgICAgICAgICAgICAgICAgICAgICAgIGNvdW50ID0gY2hhbm5lbC0+ZGlzY2FyZGVkX2V2ZW50
+czsKPiAgICAgICAgICAgICAgICAgfQo+Cj4gICAgICAgICAgICAgICAgIGhlYWx0aF9jb2RlX3Vw
+ZGF0ZSgpOwo+Cj4gICAgICAgICAgICAgICAgIC8qIFNlbmQgYmFjayByZXR1cm5lZCB2YWx1ZSB0
+byBzZXNzaW9uIGRhZW1vbiAqLwo+IC0gICAgICAgICAgICAgICByZXQgPSBsdHRjb21tX3NlbmRf
+dW5peF9zb2NrKHNvY2ssICZyZXQsIHNpemVvZihyZXQpKTsKPiArICAgICAgICAgICAgICAgcmV0
+ID0gbHR0Y29tbV9zZW5kX3VuaXhfc29jayhzb2NrLCAmY291bnQsIHNpemVvZihjb3VudCkpOwo+
+ICAgICAgICAgICAgICAgICBpZiAocmV0IDwgMCkgewo+ICAgICAgICAgICAgICAgICAgICAgICAg
+IFBFUlJPUigic2VuZCBkaXNjYXJkZWQgZXZlbnRzIik7Cj4gICAgICAgICAgICAgICAgICAgICAg
+ICAgZ290byBlcnJvcl9mYXRhbDsKPiBAQCAtMTAxMyw3ICsxMDE0LDggQEAgaW50IGx0dG5nX2tj
+b25zdW1lcl9yZWN2X2NtZChzdHJ1Y3QgbHR0bmdfY29uc3VtZXJfbG9jYWxfZGF0YSAqY3R4LAo+
+ICAgICAgICAgfQo+ICAgICAgICAgY2FzZSBMVFROR19DT05TVU1FUl9MT1NUX1BBQ0tFVFM6Cj4g
+ICAgICAgICB7Cj4gLSAgICAgICAgICAgICAgIHVpbnQ2NF90IHJldDsKPiArICAgICAgICAgICAg
+ICAgc3NpemVfdCByZXQ7Cj4gKyAgICAgICAgICAgICAgIHVpbnQ2NF90IGNvdW50Owo+ICAgICAg
+ICAgICAgICAgICBzdHJ1Y3QgbHR0bmdfY29uc3VtZXJfY2hhbm5lbCAqY2hhbm5lbDsKPiAgICAg
+ICAgICAgICAgICAgdWludDY0X3QgaWQgPSBtc2cudS5sb3N0X3BhY2tldHMuc2Vzc2lvbl9pZDsK
+PiAgICAgICAgICAgICAgICAgdWludDY0X3Qga2V5ID0gbXNnLnUubG9zdF9wYWNrZXRzLmNoYW5u
+ZWxfa2V5Owo+IEBAIC0xMDI1LDE1ICsxMDI3LDE1IEBAIGludCBsdHRuZ19rY29uc3VtZXJfcmVj
+dl9jbWQoc3RydWN0IGx0dG5nX2NvbnN1bWVyX2xvY2FsX2RhdGEgKmN0eCwKPiAgICAgICAgICAg
+ICAgICAgaWYgKCFjaGFubmVsKSB7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgRVJSKCJLZXJu
+ZWwgY29uc3VtZXIgbG9zdCBwYWNrZXRzIGNoYW5uZWwgJSIKPiAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgUFJJdTY0ICIgbm90IGZvdW5kIiwga2V5KTsKPiAtICAgICAg
+ICAgICAgICAgICAgICAgICByZXQgPSAwOwo+ICsgICAgICAgICAgICAgICAgICAgICAgIGNvdW50
+ID0gMDsKPiAgICAgICAgICAgICAgICAgfSBlbHNlIHsKPiAtICAgICAgICAgICAgICAgICAgICAg
+ICByZXQgPSBjaGFubmVsLT5sb3N0X3BhY2tldHM7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAg
+Y291bnQgPSBjaGFubmVsLT5sb3N0X3BhY2tldHM7Cj4gICAgICAgICAgICAgICAgIH0KPgo+ICAg
+ICAgICAgICAgICAgICBoZWFsdGhfY29kZV91cGRhdGUoKTsKPgo+ICAgICAgICAgICAgICAgICAv
+KiBTZW5kIGJhY2sgcmV0dXJuZWQgdmFsdWUgdG8gc2Vzc2lvbiBkYWVtb24gKi8KPiAtICAgICAg
+ICAgICAgICAgcmV0ID0gbHR0Y29tbV9zZW5kX3VuaXhfc29jayhzb2NrLCAmcmV0LCBzaXplb2Yo
+cmV0KSk7Cj4gKyAgICAgICAgICAgICAgIHJldCA9IGx0dGNvbW1fc2VuZF91bml4X3NvY2soc29j
+aywgJmNvdW50LCBzaXplb2YoY291bnQpKTsKPiAgICAgICAgICAgICAgICAgaWYgKHJldCA8IDAp
+IHsKPiAgICAgICAgICAgICAgICAgICAgICAgICBQRVJST1IoInNlbmQgbG9zdCBwYWNrZXRzIik7
+Cj4gICAgICAgICAgICAgICAgICAgICAgICAgZ290byBlcnJvcl9mYXRhbDsKPiAtLQo+IDIuNy40
+Cj4KCgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVm
+ZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6
+Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
