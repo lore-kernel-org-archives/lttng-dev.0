@@ -1,21 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: Error: opening metadata failed (LTTng on OpenWRT)
-Date: Tue, 14 Nov 2017 16:13:46 -0500
-Message-ID: <CA+jJMxsfhj7JKu8MDdLqVb0eELmTq8vORLmyccNQzYpk8yubWw__4582.47845895148$1510694037$gmane$org@mail.gmail.com>
-References: <01bf01d35d2c$b2f214b0$18d63e10$@gmail.com>
- <CA+jJMxuwsDjeWXTrypiu-2zXc8B2Akhbn--wyq9isoxo0wY=1w@mail.gmail.com>
- <062b01d35d6b$5189b720$f49d2560$@gmail.com>
+From: "Nwafor, Ebelechukwu" <ebelechukwu.nwafor@bison.howard.edu>
+Subject: Porting LTTNG or Barectf to Android
+Date: Thu, 16 Nov 2017 09:39:40 -0500
+Message-ID: <CAAuy2AQaGrH=dA8BVy2bxv=NXgJnfud5FzE25=YN6ORasjUE5w__35265.6355280944$1510843192$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1284846532465679442=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm0-x22e.google.com (mail-wm0-x22e.google.com
- [IPv6:2a00:1450:400c:c09::22e])
- by lists.lttng.org (Postfix) with ESMTPS id 3yc0cD6GDyzj6x
- for <lttng-dev@lists.lttng.org>; Tue, 14 Nov 2017 21:13:48 +0000 (UTC)
-Received: by mail-wm0-x22e.google.com with SMTP id z3so24854676wme.5
- for <lttng-dev@lists.lttng.org>; Tue, 14 Nov 2017 13:13:48 -0800 (PST)
-In-Reply-To: <062b01d35d6b$5189b720$f49d2560$@gmail.com>
+Received: from mail-yw0-x235.google.com (mail-yw0-x235.google.com
+ [IPv6:2607:f8b0:4002:c05::235])
+ by lists.lttng.org (Postfix) with ESMTPS id 3yd3mY46tvzjVc
+ for <lttng-dev@lists.lttng.org>; Thu, 16 Nov 2017 14:39:41 +0000 (UTC)
+Received: by mail-yw0-x235.google.com with SMTP id c197so4472191ywb.0
+ for <lttng-dev@lists.lttng.org>; Thu, 16 Nov 2017 06:39:41 -0800 (PST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,63 +20,48 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Robin Michielsen <robin.michielsen.1@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMTQgTm92ZW1iZXIgMjAxNyBhdCAxMjowOSwgUm9iaW4gTWljaGllbHNlbgo8cm9iaW4ubWlj
-aGllbHNlbi4xQGdtYWlsLmNvbT4gd3JvdGU6Cj4gSGkgSsOpcsOpbWllLAo+Cj4gTWF5YmUgSSBt
-aXN1bmRlcnN0b29kIGhvdyB0byBjcmVhdGUgYSBzZXNzaW9uLCBidXQgYXJlIHRoZSBjb21tYW5k
-cyB0aGF0IEkgbGlzdGVkIG5vdCBzdWZmaWNpZW50IGZvciB0aGlzPwo+Cj4g4oCiICAgICAgIGx0
-dG5nIGNyZWF0ZQo+IOKAoiAgICAgICBsdHRuZyBlbmFibGUtZXZlbnQgLS1rZXJuZWwgLS1zeXNj
-YWxsIG9wZW4sY2xvc2UKPiDigKIgICAgICAgbHR0bmcgc3RhcnQKPgoKWWVzLCBzb3JyeS4gSSBt
-aXNzZWQgaXQgb24gdGhlIGZpcnN0IHJlYWQgdGhyb3VnaC4KCkrDqXLDqW1pZQoKPiBLaW5kIHJl
-Z2FyZHMsCj4gUm9iaW4KPgo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tCj4gRnJvbTogamVy
-ZW1pZS5nYWxhcm5lYXVAZ21haWwuY29tIFttYWlsdG86amVyZW1pZS5nYWxhcm5lYXVAZ21haWwu
-Y29tXSBPbiBCZWhhbGYgT2YgSsOpcsOpbWllIEdhbGFybmVhdQo+IFNlbnQ6IFR1ZXNkYXksIDE0
-IE5vdmVtYmVyLCAyMDE3IDE3OjA5Cj4gVG86IFJvYmluIE1pY2hpZWxzZW4KPiBDYzogbHR0bmct
-ZGV2QGxpc3RzLmx0dG5nLm9yZwo+IFN1YmplY3Q6IFJlOiBbbHR0bmctZGV2XSBFcnJvcjogb3Bl
-bmluZyBtZXRhZGF0YSBmYWlsZWQgKExUVG5nIG9uIE9wZW5XUlQpCj4KPiBIaSBSb2JpbiwKPgo+
-IENhbiB5b3UgYWRkIHRoZSBjb21tYW5kcyB5b3UgdXNlIHRvIGNyZWF0ZSB0aGUgc2Vzc2lvbj8K
-Pgo+IFRoYW5rcywKPiBKw6lyw6ltaWUKPgo+IE9uIDE0IE5vdmVtYmVyIDIwMTcgYXQgMDQ6NDEs
-IFJvYmluIE1pY2hpZWxzZW4gPHJvYmluLm1pY2hpZWxzZW4uMUBnbWFpbC5jb20+IHdyb3RlOgo+
-PiBIaSBhbGwsCj4+Cj4+Cj4+Cj4+IEkgYW0gdHJ5aW5nIHRvIHRyYWNlIHRoZSBMaW51eCBrZXJu
-ZWwgKHN5c3RlbSBjYWxscykgdXNpbmcgTFRUbmcgb24gYQo+PiBwbGF0Zm9ybSB0aGF0IGlzIHJ1
-bm5pbmcgT3BlbldSVC4gSSBoYXZlIGNyb3NzIGNvbXBpbGVkIHRoZSBsYXRlc3QKPj4gdmVyc2lv
-bnMKPj4gKDIuMTAueCkgb2YgdGhlIGx0dG5nLW1vZHVsZXMsIGx0dG5nLXRvb2xzIGFuZCBsdHRu
-Zy11c3QgcGFja2FnZXMgYW5kCj4+IGluc3RhbGxlZCB0aGVzZSBvbiBteSBPcGVuV1JUIHN5c3Rl
-bS4gTm93IHdoZW4gSSBzdGFydCBhIGtlcm5lbCB0cmFjZQo+PiB0aGVuIHRoZSBsdHRuZyB0b29s
-IHJldHVybnMgdGhlIGVycm9yICJMVFRuZyB0cmFuc3BvcnQgcmVsYXktbWV0YWRhdGEKPj4gbm90
-IGZvdW5kIC8KPj4gRXJyb3I6IE9wZW5pbmcgbWV0YWRhdGEgZmFpbGVkIi4gRG9lcyBhbnlib2R5
-IGtub3cgd2hhdCBtaWdodCBjYXVzZQo+PiB0aGlzIGVycm9yLCBvciBoYXZlIGEgaGludCBvbiB3
-aGF0IHRvIGNoZWNrPwo+Pgo+Pgo+Pgo+PiBJIGhhdmUgYXR0YWNoZWQgdGhlIGNhcHR1cmVkIG91
-dHB1dCBvZiDigJhsdHRuZy1zZXNzaW9uZCAtdnZ2Cj4+IC0tdmVyYm9zZS1jb25zdW1lcuKAmS4g
-SGVyZSBpcyBzb21lIG1vcmUgY29udGV4dDoKPj4KPj4gwrcgICAgICAgICBNSVBTIHBsYXRmb3Jt
-IHJ1bm5pbmcgTGludXggMy4xOC4yOQo+Pgo+PiDCtyAgICAgICAgIFBhY2thZ2UgdmVyc2lvbnM6
-Cj4+Cj4+IG8gICBsdHRuZy1tb2R1bGVzLTIuMTAuNAo+Pgo+PiBvICAgbHR0bmctdG9vbHMtMi4x
-MC4xCj4+Cj4+IG8gICBsdHRuZy11c3QtMi4xMC4wCj4+Cj4+IMK3ICAgICAgICAgbHNtb2Qgc2hv
-d3MgdGhhdCB0aGUgZm9sbG93aW5nIG1vZHVsZXMgaGF2ZSBiZWVuIGxvYWRlZDoKPj4KPj4gbyAg
-IGx0dG5nX2Nsb2NrCj4+Cj4+IG8gICBsdHRuZ19saWJfcmluZ19idWZmZXIKPj4KPj4gbyAgIGx0
-dG5nX3JpbmdfYnVmZmVyX2NsaWVudF9kaXNjYXJkCj4+Cj4+IG8gICBsdHRuZ19zdGF0ZWR1bXAK
-Pj4KPj4gbyAgIGx0dG5nX3RyYWNlcgo+Pgo+PiDCtyAgICAgICAgIENvbW1hbmRzIHRvIGNyZWF0
-ZSBhbmQgc3RhcnQgYSBzZXNzaW9uOgo+Pgo+PiBvICAgbHR0bmcgY3JlYXRlCj4+Cj4+IG8gICBs
-dHRuZyBlbmFibGUtZXZlbnQgLS1rZXJuZWwgLS1zeXNjYWxsIG9wZW4sY2xvc2UKPj4KPj4gbyAg
-IGx0dG5nIHN0YXJ0Cj4+Cj4+Cj4+Cj4+IFdoZW4g4oCYbHR0bmcgc3RhcnTigJkgaXMgY2FsbGVk
-IHRoZW4gbHR0bmctc2Vzc2lvbmTigJlzIGRlYnVnIG91dHB1dCBzaG93cwo+PiDigJxDbG9zaW5n
-IG1ldGFkYXRhIGZkIC0xIChpbiB0cmFjZV9rZXJuZWxfZGVzdHJveV9tZXRhZGF0YSgpIGF0Cj4+
-IHRyYWNlLWtlcm5lbC5jOjU2OSnigJ0gZm9sbG93ZWQgYnkg4oCcU2VuZGluZyByZXNwb25zZSAo
-c2l6ZTogMjAsIHJldGNvZGU6Cj4+IE9wZW5pbmcgbWV0YWRhdGEgZmFpbGVkICg0NSkpIChpbiB0
-aHJlYWRfbWFuYWdlX2NsaWVudHMoKSBhdCBtYWluLmM6NDY0MSnigJ0uCj4+IEkgYXNzdW1lIHRo
-YXQgdGhlIGVycm9yIHRoYXQgSeKAmW0gc2VlaW5nIGlzIGJlY2F1c2UgZm9yIHNvbWUgcmVhc29u
-Cj4+IG1ldGFkYXRhIGZkIGlzIGJlaW5nIGNsb3NlZC4KPj4KPj4KPj4KPj4gRG9lcyBhbnlib2R5
-IGtub3cgd2hhdCBtYXkgY2F1c2UgdGhpcyBpc3N1ZSwgb3IgaGF2ZSBhIGhpbnQgb24gdG8gY2hl
-Y2s/Cj4+Cj4+Cj4+Cj4+IEtpbmQgcmVnYXJkcywKPj4KPj4gUm9iaW4KPj4KPj4KPj4KPj4KPj4g
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gbHR0bmct
-ZGV2IG1haWxpbmcgbGlzdAo+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+IGh0dHBzOi8v
-bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4KPgo+
-Cj4KPiAtLQo+IErDqXLDqW1pZSBHYWxhcm5lYXUKPiBFZmZpY2lPUyBJbmMuCj4gaHR0cDovL3d3
-dy5lZmZpY2lvcy5jb20KPgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJbmMu
-Cmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0
-dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8v
-bHR0bmctZGV2Cg==
+--===============1284846532465679442==
+Content-Type: multipart/alternative; boundary="94eb2c0362a4169c86055e1a974d"
+
+--94eb2c0362a4169c86055e1a974d
+Content-Type: text/plain; charset="UTF-8"
+
+Hello Everyone.
+
+I am working on generating CTF for android and I was wondering if anyone
+has had any success/experience with porting barectf or LTTNG to android the
+platform?
+
+-- 
+Ebelechukwu Nwafor,
+Graduate Student,
+Howard University.
+
+--94eb2c0362a4169c86055e1a974d
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello Everyone.<div><br></div><div>I am working on generat=
+ing CTF for android and I was wondering if anyone has had any success/exper=
+ience with porting barectf or LTTNG to android the platform?<br clear=3D"al=
+l"><div><br></div>-- <br><div class=3D"gmail_signature" data-smartmail=3D"g=
+mail_signature"><div dir=3D"ltr">Ebelechukwu Nwafor,<div>Graduate Student,<=
+/div><div>Howard University.</div></div></div>
+</div></div>
+
+--94eb2c0362a4169c86055e1a974d--
+
+--===============1284846532465679442==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============1284846532465679442==--
