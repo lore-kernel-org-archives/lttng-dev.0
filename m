@@ -1,21 +1,27 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools v3 2/2] man: document dead-peer
-	detection for relayd
-Date: Thu, 23 Nov 2017 14:03:13 -0500
-Message-ID: <CA+jJMxsm8WhcZkXNz3MQMhnE0ohXMLSektOJQRD5dtOZrMi-fQ__8673.74544400281$1511463810$gmane$org@mail.gmail.com>
-References: <20171006182247.6874-1-jonathan.rajotte-julien@efficios.com>
- <20171006182247.6874-2-jonathan.rajotte-julien@efficios.com>
+From: "Robin Michielsen" <robin.michielsen.1@gmail.com>
+Subject: Re: Error: opening metadata failed (LTTng on OpenWRT)
+Date: Thu, 23 Nov 2017 22:20:28 +0100
+Message-ID: <001401d364a0$e3092a50$a91b7ef0$__43448.6692226075$1511472045$gmane$org@gmail.com>
+References: <01bf01d35d2c$b2f214b0$18d63e10$@gmail.com>
+ <CA+jJMxuwsDjeWXTrypiu-2zXc8B2Akhbn--wyq9isoxo0wY=1w@mail.gmail.com>
+ <062b01d35d6b$5189b720$f49d2560$@gmail.com>
+ <CA+jJMxsfhj7JKu8MDdLqVb0eELmTq8vORLmyccNQzYpk8yubWw@mail.gmail.com>
+ <000801d363b8$d1073880$7315a980$@gmail.com>
+ <20171122185514.mvxrlkspqbwunwlt@psrcode-TP-X230>
+ <001201d3647f$59759a60$0c60cf20$@gmail.com>
+ <20171123185405.ogq622ssm22d2ye3@psrcode-TP-X230>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm0-x242.google.com (mail-wm0-x242.google.com
- [IPv6:2a00:1450:400c:c09::242])
- by lists.lttng.org (Postfix) with ESMTPS id 3yjTHR1zNXzjYX
- for <lttng-dev@lists.lttng.org>; Thu, 23 Nov 2017 19:03:15 +0000 (UTC)
-Received: by mail-wm0-x242.google.com with SMTP id b189so18437372wmd.5
- for <lttng-dev@lists.lttng.org>; Thu, 23 Nov 2017 11:03:15 -0800 (PST)
-In-Reply-To: <20171006182247.6874-2-jonathan.rajotte-julien@efficios.com>
+Received: from mail-wm0-x234.google.com (mail-wm0-x234.google.com
+ [IPv6:2a00:1450:400c:c09::234])
+ by lists.lttng.org (Postfix) with ESMTPS id 3yjXKr1hnGzhFm
+ for <lttng-dev@lists.lttng.org>; Thu, 23 Nov 2017 21:20:31 +0000 (UTC)
+Received: by mail-wm0-x234.google.com with SMTP id v186so18966570wma.2
+ for <lttng-dev@lists.lttng.org>; Thu, 23 Nov 2017 13:20:31 -0800 (PST)
+In-Reply-To: <20171123185405.ogq622ssm22d2ye3@psrcode-TP-X230>
+Content-Language: en-us
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,36 +31,40 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: 'Jonathan Rajotte-Julien' <jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-UGhpbCwgYW55IGNvbW1lbnRzIG9uIHRoaXMgcGF0Y2g/CgpKw6lyw6ltaWUKCk9uIDYgT2N0b2Jl
-ciAyMDE3IGF0IDE0OjIyLCBKb25hdGhhbiBSYWpvdHRlCjxqb25hdGhhbi5yYWpvdHRlLWp1bGll
-bkBlZmZpY2lvcy5jb20+IHdyb3RlOgo+IFNpZ25lZC1vZmYtYnk6IEpvbmF0aGFuIFJham90dGUg
-PGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT4KPiAtLS0KPiAgZG9jL21hbi9s
-dHRuZy1yZWxheWQuOC50eHQgfCAxOSArKysrKysrKysrKysrKysrKysrCj4gIDEgZmlsZSBjaGFu
-Z2VkLCAxOSBpbnNlcnRpb25zKCspCj4KPiBkaWZmIC0tZ2l0IGEvZG9jL21hbi9sdHRuZy1yZWxh
-eWQuOC50eHQgYi9kb2MvbWFuL2x0dG5nLXJlbGF5ZC44LnR4dAo+IGluZGV4IDIxODUyNmExLi5l
-MzdjZTg0NSAxMDA2NDQKPiAtLS0gYS9kb2MvbWFuL2x0dG5nLXJlbGF5ZC44LnR4dAo+ICsrKyBi
-L2RvYy9tYW4vbHR0bmctcmVsYXlkLjgudHh0Cj4gQEAgLTE2Miw2ICsxNjIsMjUgQEAgRU5WSVJP
-Tk1FTlQgVkFSSUFCTEVTCj4gIGBMVFROR19SRUxBWURfSEVBTFRIYDo6Cj4gICAgICBQYXRoIHRv
-IHJlbGF5IGRhZW1vbiBoZWFsdGgncyBzb2NrZXQuCj4KPiArYExUVE5HX1JFTEFZRF9UQ1BfS0VF
-UF9BTElWRV9FTkFCTEVgOjoKPiArICAgIFNldCB0byAxIHRvIGVuYWJsZSB0aGUgdXNlIG9mIHRj
-cCBrZWVwLWFsaXZlIGFsbG93aW5nIHRoZSBkZXRlY3Rpb24gb2YgZGVhZAo+ICsgICAgcGVlcnMu
-Cj4gKwo+ICtgTFRUTkdfUkVMQVlEX1RDUF9LRUVQX0FMSVZFX1RJTUVgOjoKPiArICAgIFNlZSB0
-Y3AoNykgdGNwX2tlZXBhbGl2ZV90aW1lIG9yIHRjcF9rZWVwYWxpdmVfaW50ZXJ2YWwgb24gU29s
-YXJpcyAxMS4KPiArICAgIEEgdmFsdWUgb2YgLTEgbGV0cyB0aGUgb3BlcmF0aW5nIHN5c3RlbSBt
-YW5hZ2UgdGhpcyBwYXJhbWV0ZXIgKGRlZmF1bHQpLgo+ICsKPiArYExUVE5HX1JFTEFZRF9UQ1Bf
-S0VFUF9BTElWRV9QUk9CRVNgOjoKPiArICAgIFNlZSB0Y3AoNykgdGNwX2tlZXBhbGl2ZV9wcm9i
-ZXMuCj4gKyAgICBBIHZhbHVlIG9mIC0xIGxldHMgdGhlIG9wZXJhdGluZyBzeXN0ZW0gbWFuYWdl
-IHRoaXMgcGFyYW1ldGVyIChkZWZhdWx0KS4KPiArCj4gK05PVEU6IE5vdCBzdXBwb3J0ZWQgb24g
-U29sYXJpcy4KPiArCj4gK2BMVFROR19SRUxBWURfVENQX0tFRVBfQUxJVkVfSU5UVkxgOjoKPiAr
-ICAgIFNlZSB0Y3AoNykgdGNwX2tlZXBhbGl2ZV9pbnR2bC4KPiArICAgIEEgdmFsdWUgb2YgLTEg
-bGV0cyB0aGUgb3BlcmF0aW5nIHN5c3RlbSBtYW5hZ2UgdGhpcyBwYXJhbWV0ZXIgKGRlZmF1bHQp
-Lgo+ICsKPiArTk9URTogTm90IHN1cHBvcnRlZCBvbiBTb2xhcmlzLgo+Cj4gIEZJTEVTCj4gIC0t
-LS0tCj4gLS0KPiAyLjExLjAKPgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJ
-bmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
-Zm8vbHR0bmctZGV2Cg==
+SGkgSm9uYXRoYW4sCgpZb3UgY2FuIGZpbmQgdGhlIG1vZHByb2JlIGNvZGUgKGttb2Rsb2FkZXIu
+YywgZGF0ZWQgMjAxNS0xMS0yMikgYXQKZ2l0Oi8vbmJkLm5hbWUvbHVjaTIvdWJveC5naXQKCktp
+bmQgcmVnYXJkcywKUm9iaW4KCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tCkZyb206IEpvbmF0
+aGFuIFJham90dGUtSnVsaWVuIFttYWlsdG86am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNp
+b3MuY29tXSAKU2VudDogVGh1cnNkYXksIDIzIE5vdmVtYmVyLCAyMDE3IDE5OjU0ClRvOiBSb2Jp
+biBNaWNoaWVsc2VuCkNjOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnClN1YmplY3Q6IFJlOiBb
+bHR0bmctZGV2XSBFcnJvcjogb3BlbmluZyBtZXRhZGF0YSBmYWlsZWQgKExUVG5nIG9uIE9wZW5X
+UlQpCgpIaSwKCk9uIFRodSwgTm92IDIzLCAyMDE3IGF0IDA2OjIwOjI0UE0gKzAxMDAsIFJvYmlu
+IE1pY2hpZWxzZW4gd3JvdGU6Cj4gSGkgSm9uYXRoYW4sCj4gCj4gVGhlIGx0dG5nLXNlc3Npb25k
+LmxvZyB0aGF0IEkgcHJvdmlkZWQgd2FzIGFjdHVhbGx5IGZyb20gYSBzZWNvbmQgdGltZQp0aGF0
+IEkgc3RhcnRlZCAnbHR0bmctc2Vzc2lvbmQnICAoZGlkIG5vdCByZWFsaXplIHRoYXQgdGhlcmUg
+aXMgYQpkaWZmZXJlbmNlKSwgd2hpY2ggcmVzdWx0ZWQgaW4gdGhlIGFscmVhZHkgbG9hZGVkIGVy
+cm9yLiBXaGVuIEkgY2FwdHVyZWQgdGhlCm91dHB1dCBmcm9tIGEgZnJlc2ggc3RhcnQgb2YgJ2x0
+dG5nLXNlc3Npb25kJyBJIG5vdGljZWQgbG90cyBvZiBtb2Rwcm9iZQplcnJvcnMgd2l0aCBtb2R1
+bGVzIHRoYXQgY291bGQgbm90IGJlIGxvYWRlZC4KCk5vcm1hbGx5LCBsdHRuZy1zZXNzaW9uZCB3
+aWxsIHVubG9hZCB0aGUgbW9kdWxlIGl0IGxvYWRlZCBvbiBzdGFydCBpZiBhCmNsZWFuIHRlYXJk
+b3duIGlzIGluaXRpYXRlZCAoU0lHVEVSTSkuCgo+IAo+IFR1cm5zIG91dCB0aGF0IHRoZSBtb2Rw
+cm9iZSBvbiBteSBPcGVuV3J0IHN5c3RlbSBjYW4gb25seSBoYW5kbGUgbW9kdWxlcwp3aXRoIGEg
+bmFtZSBvZiBtYXggMzIgY2hhcmFjdGVycyAoISkuIFRoZSBmaXJzdCBtYW5kYXRvcnkgY29yZSBt
+b2R1bGUKKCJsdHRuZy1yaW5nLWJ1ZmZlci1jbGllbnQtZGlzY2FyZCIpIGlzIHN0aWxsIGxvYWRl
+ZCBhcyBpdHMgbmFtZSBpcyBleGFjdGx5CjMyIGNoYXJzLCB0aGUgb3RoZXIgNSBjb3JlIG1vZHVs
+ZXMgZG8gbm90IGdldCBsb2FkZWQgYXMgdGhlaXIgbmFtZXMgYXJlCmxvbmdlciB0aGFuIDMyIGNo
+YXJzLiBJIHdpbGwgbW9kaWZ5IG1vZHByb2JlIGFzIGEgcHJvcGVyIGZpeCwgYnV0IHNob3J0ZW5p
+bmcKdGhlIG5hbWVzIG9mIHRoZSBsdHRuZy0qLmtvIG1vZHVsZXMgYW5kIG1hbnVhbGx5IGxvYWRp
+bmcgZWFjaCBjb3JlIG1vZHVsZQphbHJlYWR5IHNob3dlZCB0aGF0IHRoaXMgc29sdmVzIHRoZSBp
+c3N1ZS4KCkdsYWQgSSBjb3VsZCBoZWxwLiA6UCBJJ20gY3VyaW91cyBjb3VsZCB5b3UgcG9pbnQg
+bWUgdG8gdGhlIG1vZHByb2JlIGNvZGUKdGhhdCBvcGVuV1JUIHVzZXM/CgpDaGVlcnMhCgo+IAo+
+IFRoYW5rcyBmb3IgeW91ciByZXBseSEgVGhpcyBoZWxwZWQgaW4gcG9pbnRpbmcgbWUgaW4gdGhl
+IHJpZ2h0IGRpcmVjdGlvbi4KPiAKPiBLaW5kIHJlZ2FyZHMsCj4gUm9iaW4KPiAKIAotLQpKb25h
+dGhhbiBSYWpvdHRlLUp1bGllbgpFZmZpY2lPUwoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
+dHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
+aW5mby9sdHRuZy1kZXYK
