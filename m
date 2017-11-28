@@ -1,16 +1,18 @@
-From: MMM via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: More advanced tracing on C program
-Date: Fri, 24 Nov 2017 19:48:46 +0000 (UTC)
-Message-ID: <124201826.1871409.1511552926710__37217.9558071823$1511557187$gmane$org@mail.yahoo.com>
-References: <124201826.1871409.1511552926710.ref@mail.yahoo.com>
-Reply-To: MMM <e.morovati@yahoo.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-modules] Fix: update kmem instrumentation
+	for kernel 4.15
+Date: Tue, 28 Nov 2017 16:02:45 -0500
+Message-ID: <1511902965-9430-1-git-send-email-mjeanson__24531.2111489058$1511902991$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3854026594557923942=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sonic304-22.consmr.mail.ne1.yahoo.com
- (sonic304-22.consmr.mail.ne1.yahoo.com [66.163.191.148])
- by lists.lttng.org (Postfix) with ESMTP id 3yk7qG1P45zjWM
- for <lttng-dev@lists.lttng.org>; Fri, 24 Nov 2017 20:59:37 +0000 (UTC)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3ymbjJ4W05zhcd
+ for <lttng-dev@lists.lttng.org>; Tue, 28 Nov 2017 21:03:00 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 4ED84340242
+ for <lttng-dev@lists.lttng.org>; Tue, 28 Nov 2017 21:04:21 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,40 +22,40 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============3854026594557923942==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_1871408_391167661.1511552926707"
-
-------=_Part_1871408_391167661.1511552926707
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-I am newbie in using LTTng. I am going to trace a C program. I find a simpl=
-e template for doing this work in LTTng documents. While, I can not find an=
-y documents or guidance for more advanced tracing. Indeed, I want to show r=
-atio of show the ratio of=C2=A0reads from page cache vs reads from disk, fo=
-r a user space file read. could you please guide me to do it.
-Best rigards,=C2=A0Mehdi.
-------=_Part_1871408_391167661.1511552926707
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-<html><head></head><body><div style="font-family:courier new, courier, monaco, monospace, sans-serif;font-size:13px;"><div style="font-family:courier new, courier, monaco, monospace, sans-serif;font-size:13px;"><div>Hi,</div><div><font size="2"><br></font></div><div><font size="2">I am newbie in using LTTng. I am going to trace a C program. I find a simple template for doing this work in LTTng documents. While, I can not find any documents or guidance for more advanced tracing. Indeed, I want to show ratio of show the ratio of&nbsp;<span style="color: rgb(0, 0, 0);">reads from page cache vs reads from disk, for a user space file read. could you please guide me to do it.</span></font></div><div><font size="2"><span style="color: rgb(0, 0, 0);"><br></span></font></div><div><font size="2"><sp
- an style="color: rgb(0, 0, 0);">Best rigards,&nbsp;</span></font></div><div><font size="2"><span style="color: rgb(0, 0, 0);">Mehdi.</span></font></div></div></div></body></html>
-------=_Part_1871408_391167661.1511552926707--
-
---===============3854026594557923942==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============3854026594557923942==--
+U2VlIHVwc3RyZWFtIGNvbW1pdDoKCiAgY29tbWl0IDJkNDg5NGI1ZDJhZTBmZTE3MjVlYTdhYmQ1
+N2IzM2JmYmJlNDU0OTIKICBBdXRob3I6IE1lbCBHb3JtYW4gPG1nb3JtYW5AdGVjaHNpbmd1bGFy
+aXR5Lm5ldD4KICBEYXRlOiAgIFdlZCBOb3YgMTUgMTc6Mzc6NTkgMjAxNyAtMDgwMAoKICAgIG1t
+OiByZW1vdmUgY29sZCBwYXJhbWV0ZXIgZnJvbSBmcmVlX2hvdF9jb2xkX3BhZ2UqCgpTaWduZWQt
+b2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVmZmljaW9zLmNvbT4KLS0tCiBpbnN0
+cnVtZW50YXRpb24vZXZlbnRzL2x0dG5nLW1vZHVsZS9rbWVtLmggfCAyNyArKysrKysrKysrKysr
+KysrKysrKysrKysrLS0KIDEgZmlsZSBjaGFuZ2VkLCAyNSBpbnNlcnRpb25zKCspLCAyIGRlbGV0
+aW9ucygtKQoKZGlmZiAtLWdpdCBhL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxl
+L2ttZW0uaCBiL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxlL2ttZW0uaAppbmRl
+eCBhZDdiZjc3Li5jM2ZhMjVhIDEwMDY0NAotLS0gYS9pbnN0cnVtZW50YXRpb24vZXZlbnRzL2x0
+dG5nLW1vZHVsZS9rbWVtLmgKKysrIGIvaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9sdHRuZy1tb2R1
+bGUva21lbS5oCkBAIC0xMzIsMTEgKzEzMiwzMyBAQCBMVFROR19UUkFDRVBPSU5UX0VWRU5UX01B
+UChtbV9wYWdlX2ZyZWVfZGlyZWN0LCBrbWVtX21tX3BhZ2VfZnJlZV9kaXJlY3QsCiAJKQogKQog
+Ci0jaWYgKExJTlVYX1ZFUlNJT05fQ09ERSA+PSBLRVJORUxfVkVSU0lPTigzLDMsMCkpCisjaWYg
+KExJTlVYX1ZFUlNJT05fQ09ERSA+PSBLRVJORUxfVkVSU0lPTig0LDE1LDApKQorTFRUTkdfVFJB
+Q0VQT0lOVF9FVkVOVF9NQVAobW1fcGFnZV9mcmVlX2JhdGNoZWQsIGttZW1fbW1fcGFnZV9mcmVl
+X2JhdGNoZWQsCisKKwlUUF9QUk9UTyhzdHJ1Y3QgcGFnZSAqcGFnZSksCisKKwlUUF9BUkdTKHBh
+Z2UpLAorCisJVFBfRklFTERTKAorCQljdGZfaW50ZWdlcl9oZXgoc3RydWN0IHBhZ2UgKiwgcGFn
+ZSwgcGFnZSkKKwkJY3RmX2ludGVnZXIodW5zaWduZWQgbG9uZywgcGZuLCBwYWdlX3RvX3Bmbihw
+YWdlKSkKKwkpCispCisjZWxpZiAoTElOVVhfVkVSU0lPTl9DT0RFID49IEtFUk5FTF9WRVJTSU9O
+KDMsMywwKSkKIExUVE5HX1RSQUNFUE9JTlRfRVZFTlRfTUFQKG1tX3BhZ2VfZnJlZV9iYXRjaGVk
+LCBrbWVtX21tX3BhZ2VfZnJlZV9iYXRjaGVkLAorCisJVFBfUFJPVE8oc3RydWN0IHBhZ2UgKnBh
+Z2UsIGludCBjb2xkKSwKKworCVRQX0FSR1MocGFnZSwgY29sZCksCisKKwlUUF9GSUVMRFMoCisJ
+CWN0Zl9pbnRlZ2VyX2hleChzdHJ1Y3QgcGFnZSAqLCBwYWdlLCBwYWdlKQorCQljdGZfaW50ZWdl
+cih1bnNpZ25lZCBsb25nLCBwZm4sIHBhZ2VfdG9fcGZuKHBhZ2UpKQorCQljdGZfaW50ZWdlcihp
+bnQsIGNvbGQsIGNvbGQpCisJKQorKQogI2Vsc2UKIExUVE5HX1RSQUNFUE9JTlRfRVZFTlRfTUFQ
+KG1tX3BhZ2V2ZWNfZnJlZSwga21lbV9wYWdldmVjX2ZyZWUsCi0jZW5kaWYKIAogCVRQX1BST1RP
+KHN0cnVjdCBwYWdlICpwYWdlLCBpbnQgY29sZCksCiAKQEAgLTE0OCw2ICsxNzAsNyBAQCBMVFRO
+R19UUkFDRVBPSU5UX0VWRU5UX01BUChtbV9wYWdldmVjX2ZyZWUsIGttZW1fcGFnZXZlY19mcmVl
+LAogCQljdGZfaW50ZWdlcihpbnQsIGNvbGQsIGNvbGQpCiAJKQogKQorI2VuZGlmCiAKIExUVE5H
+X1RSQUNFUE9JTlRfRVZFTlRfTUFQKG1tX3BhZ2VfYWxsb2MsIGttZW1fbW1fcGFnZV9hbGxvYywK
+IAotLSAKMi43LjQKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRw
+czovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
