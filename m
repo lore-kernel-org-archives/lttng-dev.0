@@ -1,17 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RELEASE] LTTng-UST 2.9.2 and 2.10.1 (Linux
-	user-space tracer)
-Date: Thu, 30 Nov 2017 15:13:54 +0000 (UTC)
-Message-ID: <879632099.24809.1512054834863.JavaMail.zimbra__46356.328079901$1512054753$gmane$org@efficios.com>
-References: <518366848.24799.1512054156109.JavaMail.zimbra@efficios.com>
+From: MMM via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Problem in Tracing C Program
+Date: Thu, 30 Nov 2017 15:13:57 +0000 (UTC)
+Message-ID: <1968389067.5193789.1512054837510__19419.2766365179$1512054890$gmane$org@mail.yahoo.com>
+References: <1968389067.5193789.1512054837510.ref@mail.yahoo.com>
+Reply-To: MMM <e.morovati@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============2318782648123020429=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3yngqr3z9lzhvW
- for <lttng-dev@lists.lttng.org>; Thu, 30 Nov 2017 15:12:24 +0000 (UTC)
-In-Reply-To: <518366848.24799.1512054156109.JavaMail.zimbra@efficios.com>
+Received: from sonic310-22.consmr.mail.ne1.yahoo.com
+ (sonic310-22.consmr.mail.ne1.yahoo.com [66.163.186.203])
+ by lists.lttng.org (Postfix) with ESMTP id 3yngtP4gxvzhw7
+ for <lttng-dev@lists.lttng.org>; Thu, 30 Nov 2017 15:14:36 +0000 (UTC)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,40 +20,43 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev <lttng-dev@lists.lttng.org>, diamon-discuss@lists.linuxfoundation.org
+To: Lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT24gTm92IDMwLCAyMDE3LCBhdCA0OjAyIFBNLCBNYXRoaWV1IERlc25veWVycyBtYXRo
-aWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20gd3JvdGU6Cgo+IEhpLAo+IAo+IFRob3NlIGFyZSBi
-dWdmaXggcmVsZWFzZXMgb2YgdGhlIGx0dG5nLXVzdCB0cmFjZXIgZm9yCj4gdGhlIDIuOCBhbmQg
-Mi45IHN0YWJsZSBicmFuY2hlcy4KCkkgZGlkIG1lYW4gMi45IGFuZCAyLjEwLiBUaG9zZSB2ZXJz
-aW9uIG51bWJlciBuZXZlciBjZWFzZSB0bwppbmNyZWFzZSwgZG9uJ3QgdGhleSA/IDspCgpUaGFu
-a3MsCgpNYXRoaWV1Cgo+IAo+IEVuam95IQo+IAo+IE1hdGhpZXUKPiAKPiBQcm9qZWN0IHdlYnNp
-dGU6IGh0dHA6Ly9sdHRuZy5vcmcKPiBEb2N1bWVudGF0aW9uOiBodHRwOi8vbHR0bmcub3JnL2Rv
-Y3MKPiBEb3dubG9hZCBsaW5rOiBodHRwOi8vbHR0bmcub3JnL2Rvd25sb2FkCj4gCj4gQ2hhbmdl
-bG9nOgo+IAo+IDIwMTctMTEtMzAgKE5hdGlvbmFsIE1hc29uIEphciBEYXkpIGx0dG5nLXVzdCAy
-LjEwLjEKPiAgICAgICAgKiBGaXg6IHNwZWNpZnkgU09OQU1FIGluIHB5dGhvbi1sdHRuZ3VzdCBM
-b2FkTGlicmFyeQo+ICAgICAgICAqIEZpeDogZW5zdXJlIGZkIHRyYWNrZXIgaXMgaW5pdGlhbGl6
-ZWQgd2hlbiBjYWxsZWQgZnJvbSBjb25zdHJ1Y3RvcnMKPiAgICAgICAgKiBGaXg6IGZkIG9mIGFu
-IGVsZiBvYmplY3QgbXVzdCBiZSByZWdpc3RlcmVkIHRvIHRoZSBmZCB0cmFja2VyCj4gICAgICAg
-ICogRml4OiBsaWJsdHRuZy11c3QtZmQuc286IG92ZXJyaWRlIGZjbG9zZSBzeW1ib2wKPiAgICAg
-ICAgKiBGaXg6IGx0dG5nLWdlbi10cDogb25seSByZXBsYWNlIGZpbGUgZXh0ZW5zaW9uCj4gICAg
-ICAgICogRml4OiBtb3ZlIGZzeW5jIGFmdGVyIGZ0cnVuY2F0ZQo+ICAgICAgICAqIEZpeDogc3lu
-YyBidWZmZXIgZmlsZSBtZXRhZGF0YSBvbiBidWZmZXIgYWxsb2NhdGlvbgo+IAo+IDIwMTctMTEt
-MzAgKE5hdGlvbmFsIE1hc29uIEphciBEYXkpIGx0dG5nLXVzdCAyLjkuMgo+ICAgICAgICAqIEZp
-eDogc3BlY2lmeSBTT05BTUUgaW4gcHl0aG9uLWx0dG5ndXN0IExvYWRMaWJyYXJ5Cj4gICAgICAg
-ICogRml4OiBlbnN1cmUgZmQgdHJhY2tlciBpcyBpbml0aWFsaXplZCB3aGVuIGNhbGxlZCBmcm9t
-IGNvbnN0cnVjdG9ycwo+ICAgICAgICAqIEZpeDogZmQgb2YgYW4gZWxmIG9iamVjdCBtdXN0IGJl
-IHJlZ2lzdGVyZWQgdG8gdGhlIGZkIHRyYWNrZXIKPiAgICAgICAgKiBGaXg6IGxpYmx0dG5nLXVz
-dC1mZC5zbzogb3ZlcnJpZGUgZmNsb3NlIHN5bWJvbAo+ICAgICAgICAqIEZpeDogbHR0bmctZ2Vu
-LXRwOiBvbmx5IHJlcGxhY2UgZmlsZSBleHRlbnNpb24KPiAgICAgICAgKiBGaXg6IG1vdmUgZnN5
-bmMgYWZ0ZXIgZnRydW5jYXRlCj4gICAgICAgICogRml4OiBzeW5jIGJ1ZmZlciBmaWxlIG1ldGFk
-YXRhIG9uIGJ1ZmZlciBhbGxvY2F0aW9uCj4gICAgICAgICogbHR0bmctdXN0KDMpOiBzcGVjaWZ5
-ICJJZiBzZXQiIGluc3RlYWQgb2YgImlmIHNldCB0byAxIiBmb3Igc29tZSB2YXJpYWJsZXMKPiAg
-ICAgICAgKiBGaXg6IEV4cGFuZCB0aGUgc2htb2JqIHNpemUgZm9yIHRoZSBzZXF1ZW5jZSBudW1i
-ZXIKPiAKPiAtLQo+IE1hdGhpZXUgRGVzbm95ZXJzCj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93
-d3cuZWZmaWNpb3MuY29tCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRw
-Oi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
-LWRldgo=
+--===============2318782648123020429==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_5193788_843082792.1512054837508"
+
+------=_Part_5193788_843082792.1512054837508
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Dear Users,
+I have posted a couple of email about my problem in the past, while nobody =
+response those. It may be true that my question is amateurish, but due to t=
+he fact that I am a beginner, I can not find the sufficient document for so=
+lving my problem. I am going to trace a C program that read from a file and=
+ show the=C2=A0ratio of reads from page cache vs reads from disk. I read do=
+cument of LTTng website, but I can not find appropriate explanation for thi=
+s task. I just need a simple guidance to show me the right way for doing it=
+. Could you please help me.
+Regards,Mehdi.
+------=_Part_5193788_843082792.1512054837508
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+<html><head></head><body><div style="font-family:courier new, courier, monaco, monospace, sans-serif;font-size:13px;"><div>Dear Users,</div><div><br></div><div><font size="2">I have posted a couple of email about my problem in the past, while nobody response those. It may be true that my question is amateurish, but due to the fact that I am a beginner, I can not find the sufficient document for solving my problem. I am going to trace a C program that read from a file and show the&nbsp;<span style="color: rgb(0, 0, 0);">ratio of reads from page cache vs reads from disk. I read document of LTTng website, but I can not find appropriate explanation for this task. I just need a simple guidance to show me the right way for doing it. Could you please help me.</span></font></div><div><font size="2
+ "><span style="color: rgb(0, 0, 0);"><br></span></font></div><div><font size="2"><span style="color: rgb(0, 0, 0);">Regards,</span></font></div><div>Mehdi.</div></div></body></html>
+------=_Part_5193788_843082792.1512054837508--
+
+--===============2318782648123020429==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============2318782648123020429==--
