@@ -1,19 +1,19 @@
-From: Jonathan Rajotte Julien <Jonathan.rajotte-julien@efficios.com>
-Subject: Re: [RFC PATCH] Fix: consumerd(64/32)_lib_dir can be
-	NULL
-Date: Thu, 30 Nov 2017 11:10:01 -0500
-Message-ID: <e6efb69e-219b-7664-3539-49907e11eb75__44827.7085241445$1512058221$gmane$org@efficios.com>
-References: <20171129214229.22684-1-jonathan.rajotte-julien@efficios.com>
- <CA+jJMxtJNjJG8r7YxMgwk76mGEciHvdt+sy_kzH8PVTLWYaODA@mail.gmail.com>
+From: MMM via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: Problem in Tracing C Program
+Date: Thu, 30 Nov 2017 17:51:20 +0000 (UTC)
+Message-ID: <1222277784.5319970.1512064280572__640.710481866513$1512067343$gmane$org@mail.yahoo.com>
+References: <1968389067.5193789.1512054837510.ref@mail.yahoo.com>
+ <1968389067.5193789.1512054837510@mail.yahoo.com>
+ <78c5dc0c-f6d4-448e-2562-5c282e5ac538@efficios.com>
+Reply-To: MMM <e.morovati@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============8275622305561394693=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3ynj6M3zP1zj58
- for <lttng-dev@lists.lttng.org>; Thu, 30 Nov 2017 16:10:03 +0000 (UTC)
-In-Reply-To: <CA+jJMxtJNjJG8r7YxMgwk76mGEciHvdt+sy_kzH8PVTLWYaODA@mail.gmail.com>
-Content-Language: en-US
+Received: from sonic309-21.consmr.mail.ne1.yahoo.com
+ (sonic309-21.consmr.mail.ne1.yahoo.com [66.163.184.147])
+ by lists.lttng.org (Postfix) with ESMTP id 3ynmTw2zNzzjJs
+ for <lttng-dev@lists.lttng.org>; Thu, 30 Nov 2017 18:42:11 +0000 (UTC)
+In-Reply-To: <78c5dc0c-f6d4-448e-2562-5c282e5ac538@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,102 +23,112 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?UTF-8?Q?J=c3=a9r=c3=a9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: Lttng-dev <lttng-dev@lists.lttng.org>, Houssem Daoud <houssemmh@gmail.com>, Julien Desfossez <jdesfossez@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpPbiAyMDE3LTExLTMwIDEwOjQzIEFNLCBKw6lyw6ltaWUgR2FsYXJuZWF1IHdyb3RlOgo+
-IEhpIQo+IAo+IEknbSBwcm9wb3NpbmcgdGhpcyBkaWZmIG9uIHRvcCBvZiB5b3VyIHBhdGNoLCBy
-ZWFkIG9uLgo+IAo+IGRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYyBi
-L3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5jCj4gaW5kZXggZjkyMTYyMWIuLjFlYWY5YmVm
-IDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5jCj4gKysrIGIvc3Jj
-L2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKPiBAQCAtMjQ0Miw3ICsyNDQyLDcgQEAgc3RhdGlj
-IHBpZF90IHNwYXduX2NvbnN1bWVyZChzdHJ1Y3QKPiBjb25zdW1lcl9kYXRhICpjb25zdW1lcl9k
-YXRhKQo+ICAgICAgICAgICAgICAgICB7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgY2hhciAq
-dG1wbmV3ID0gTlVMTDsKPiAKPiAtICAgICAgICAgICAgICAgICAgICAgICBpZiAoY29uZmlnLmNv
-bnN1bWVyZDY0X2xpYl9kaXIudmFsdWUgJiYKPiBjb25maWcuY29uc3VtZXJkNjRfbGliX2Rpci52
-YWx1ZVswXSAhPSAnXDAnKSB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgaWYgKGNvbmZpZy5j
-b25zdW1lcmQ2NF9saWJfZGlyLnZhbHVlKSB7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICBjaGFyICp0bXA7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzaXplX3Qg
-dG1wbGVuOwo+IAo+IEBAIC0yNDc2LDE2ICsyNDc2LDE0IEBAIHN0YXRpYyBwaWRfdCBzcGF3bl9j
-b25zdW1lcmQoc3RydWN0Cj4gY29uc3VtZXJfZGF0YSAqY29uc3VtZXJfZGF0YSkKPiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIi0tY29uc3VtZXJkLWVyci1zb2NrIiwK
-PiBjb25zdW1lcl9kYXRhLT5lcnJfdW5peF9zb2NrX3BhdGgsCj4gICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICItLWdyb3VwIiwKPiBjb25maWcudHJhY2luZ19ncm91cF9u
-YW1lLnZhbHVlLAo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBOVUxM
-KTsKPiAtICAgICAgICAgICAgICAgICAgICAgICBpZiAoY29uZmlnLmNvbnN1bWVyZDY0X2xpYl9k
-aXIudmFsdWVbMF0gIT0gJ1wwJykgewo+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ZnJlZSh0bXBuZXcpOwo+IC0gICAgICAgICAgICAgICAgICAgICAgIH0KPiArICAgICAgICAgICAg
-ICAgICAgICAgICBmcmVlKHRtcG5ldyk7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgYnJlYWs7
-Cj4gICAgICAgICAgICAgICAgIH0KPiAgICAgICAgICAgICAgICAgY2FzZSBMVFROR19DT05TVU1F
-UjMyX1VTVDoKPiAgICAgICAgICAgICAgICAgewo+ICAgICAgICAgICAgICAgICAgICAgICAgIGNo
-YXIgKnRtcG5ldyA9IE5VTEw7Cj4gCj4gLSAgICAgICAgICAgICAgICAgICAgICAgaWYgKGNvbmZp
-Zy5jb25zdW1lcmQzMl9saWJfZGlyLnZhbHVlICYmCj4gY29uZmlnLmNvbnN1bWVyZDMyX2xpYl9k
-aXIudmFsdWVbMF0gIT0gJ1wwJykgewo+ICsgICAgICAgICAgICAgICAgICAgICAgIGlmIChjb25m
-aWcuY29uc3VtZXJkMzJfbGliX2Rpci52YWx1ZSkgewo+ICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgY2hhciAqdG1wOwo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc2l6
-ZV90IHRtcGxlbjsKPiAKPiBAQCAtMjUxOSw5ICsyNTE3LDcgQEAgc3RhdGljIHBpZF90IHNwYXdu
-X2NvbnN1bWVyZChzdHJ1Y3QKPiBjb25zdW1lcl9kYXRhICpjb25zdW1lcl9kYXRhKQo+ICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiLS1jb25zdW1lcmQtZXJyLXNvY2si
-LAo+IGNvbnN1bWVyX2RhdGEtPmVycl91bml4X3NvY2tfcGF0aCwKPiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIi0tZ3JvdXAiLAo+IGNvbmZpZy50cmFjaW5nX2dyb3Vw
-X25hbWUudmFsdWUsCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE5V
-TEwpOwo+IC0gICAgICAgICAgICAgICAgICAgICAgIGlmIChjb25maWcuY29uc3VtZXJkMzJfbGli
-X2Rpci52YWx1ZVswXSAhPSAnXDAnKSB7Cj4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBmcmVlKHRtcG5ldyk7Cj4gLSAgICAgICAgICAgICAgICAgICAgICAgfQo+ICsgICAgICAgICAg
-ICAgICAgICAgICAgIGZyZWUodG1wbmV3KTsKPiAgICAgICAgICAgICAgICAgICAgICAgICBicmVh
-azsKPiAgICAgICAgICAgICAgICAgfQo+ICAgICAgICAgICAgICAgICBkZWZhdWx0Ogo+IAo+IFRo
-YXQncyBhIGdvb2QgY2F0Y2guIFRoZSBzYW1lIHVuY2hlY2tlZCBhY2Nlc3NlcyBhcmUgcGVyZm9y
-bWVkIGJlZm9yZQo+IGNhbGxpbmcgImZyZWUodG1wbmV3KSIuIEhvd2V2ZXIsIHRoZSBjaGVjayBp
-cyBzdXBlcmZsdW91cyBzaW5jZSB0bXBuZXcKPiB3b3VsZCBiZSBOVUxMIGFueXdheS4KCldlaXJk
-LCB3aHkgZGlkIEkgZGlkIG5vdCBjYXRjaCB0aGF0Li4uCgo+IAo+IEZZSSwgc2luY2UgZTYxNDJm
-MmUsIEkgZGlkIGF3YXkgd2l0aCBtb3N0IG9mIHRoZSB0aGUgdmFsWzBdICE9ICdcMCcKPiBub25z
-ZW5zZSB0aGF0IHdhcyBkb25lIG9uIHN0cmluZyBjb25maWd1cmF0aW9uIG9wdGlvbnMuIEhlbmNl
-LCBpbiB0aGlzCj4gaW5zdGFuY2UsIG9ubHkgY2hlY2tpbmcgZm9yIE5VTEwgaXMgbmVjZXNzYXJ5
-LgoKT2thaQoKPiAKPiBMb29raW5nIGF0IHRoZSByZXN0IG9mIHRoYXQgZnVuY3Rpb24sIEkgc2Vl
-IHRoYXQgcHV0ZW52KCkgaXMgdXNlZCB3aXRoCj4gYSBkeW5hbWljYWxseSBhbGxvY2F0ZWQgc3Ry
-aW5nICh0bXBuZXcpIHRoYXQgaXMgdGhlbiBmcmVlJ2QuLi4gVGhhdCdzCj4gYnJva2VuLiBJJ2xs
-IGFkZCBhbm90aGVyIGZpeCBvbiB0b3AgKHByb2JhYmx5IHVzaW5nIHNldGVudigpIHRvIGNvcHkK
-PiB0byB0aGUgZW52KS4KCldlbGwgZ29vZCBjYXRjaCEgTG9va3MgbGlrZSBJIHdhcyBtb3JlIGlu
-dGVyZXN0ZWQgaW4gYW4gaW1tZWRpYXRlIGZpeC4KCj4gCj4gSSdsbCBlZGl0IGFuZCBwdXNoIHlv
-dXIgcGF0Y2ggaWYgdGhhdCdzIG9rYXkgd2l0aCB5b3U/CgpEb24ndCBzZWUgYW55IHByb2JsZW0g
-d2l0aCB0aGF0LgoKPiAKPiBUaGFua3MhCj4gSsOpcsOpbWllCj4gCj4gCj4gT24gMjkgTm92ZW1i
-ZXIgMjAxNyBhdCAyMjo0MiwgSm9uYXRoYW4gUmFqb3R0ZQo+IDxqb25hdGhhbi5yYWpvdHRlLWp1
-bGllbkBlZmZpY2lvcy5jb20+IHdyb3RlOgo+PiBSZXByb2R1Y2VyOgo+PiBsdHRuZy1zZXNzaW9u
-ZCBcCj4+ICAgICAtLWNvbnN1bWVyZDMyLXBhdGg9L3Vzci9sb2NhbC9saWIvbHR0bmcvbGliZXhl
-Yy9sdHRuZy1jb25zdW1lcmQgXAo+PiAgICAgLS1jb25zdW1lcmQ2NC1wYXRoPS91c3IvbG9jYWwv
-bGliL2x0dG5nL2xpYmV4ZWMvbHR0bmctY29uc3VtZXJkCj4+Cj4+IGx0dG5nIGNyZWF0ZQo+PiBs
-dHRuZyBlbmFibGUtZXZlbnQgLXUgLWEKPj4KPj4gT24gYSA2NGJpdCBtYWNoaW5lIHRoZSBpbnZv
-Y2F0aW9uIG9mIHRoZSA2NGJpdCBjb25zdW1lcmQgd2lsbCBub3QgZmFpbAo+PiBzaW5jZSBpdHMg
-bGliZGlyIGlzIHBvcHVsYXRlZCBieSBzZXNzaW9uZF9jb25maWdfaW5pdCBidXQgd2lsbCBzZWdm
-YXVsdCBvbgo+PiBzcGF3bmluZyBvZiB0aGUgMzIgYml0IGNvbnN1bWVyZCB3aGVuIHBlcmZvcm1p
-bmcgdGhlIGNoZWNrIG9mIGxpYmRpcgo+PiB2YWx1ZS4KPj4KPj4gT24gYSAzMmJpdCBtYWNoaW5l
-IHRoZSBvcHBvc2l0ZSB3aWxsIGhhcHBlbi4KPj4KPj4gU2lnbmVkLW9mZi1ieTogSm9uYXRoYW4g
-UmFqb3R0ZSA8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPgo+PiAtLS0KPj4K
-Pj4gQW5vdGhlciBwb3NzaWJpbGl0eSB3b3VsZCBiZSB0byBhbHdheXMgaW5pdGlhbGl6ZSB0byBh
-biBlbXB0eSAiIiBpbnN0ZWFkIG9mCj4+IE5VTEwuCj4+Cj4+IC0tLQo+PiAgc3JjL2Jpbi9sdHRu
-Zy1zZXNzaW9uZC9tYWluLmMgfCA0ICsrLS0KPj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlv
-bnMoKyksIDIgZGVsZXRpb25zKC0pCj4+Cj4+IGRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nLXNl
-c3Npb25kL21haW4uYyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvbWFpbi5jCj4+IGluZGV4IDNk
-MGE2NWRlLi5mOTIxNjIxYiAxMDA2NDQKPj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9t
-YWluLmMKPj4gKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKPj4gQEAgLTI0NDIs
-NyArMjQ0Miw3IEBAIHN0YXRpYyBwaWRfdCBzcGF3bl9jb25zdW1lcmQoc3RydWN0IGNvbnN1bWVy
-X2RhdGEgKmNvbnN1bWVyX2RhdGEpCj4+ICAgICAgICAgICAgICAgICB7Cj4+ICAgICAgICAgICAg
-ICAgICAgICAgICAgIGNoYXIgKnRtcG5ldyA9IE5VTEw7Cj4+Cj4+IC0gICAgICAgICAgICAgICAg
-ICAgICAgIGlmIChjb25maWcuY29uc3VtZXJkNjRfbGliX2Rpci52YWx1ZVswXSAhPSAnXDAnKSB7
-Cj4+ICsgICAgICAgICAgICAgICAgICAgICAgIGlmIChjb25maWcuY29uc3VtZXJkNjRfbGliX2Rp
-ci52YWx1ZSAmJiBjb25maWcuY29uc3VtZXJkNjRfbGliX2Rpci52YWx1ZVswXSAhPSAnXDAnKSB7
-Cj4+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2hhciAqdG1wOwo+PiAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIHNpemVfdCB0bXBsZW47Cj4+Cj4+IEBAIC0yNDg1LDcg
-KzI0ODUsNyBAQCBzdGF0aWMgcGlkX3Qgc3Bhd25fY29uc3VtZXJkKHN0cnVjdCBjb25zdW1lcl9k
-YXRhICpjb25zdW1lcl9kYXRhKQo+PiAgICAgICAgICAgICAgICAgewo+PiAgICAgICAgICAgICAg
-ICAgICAgICAgICBjaGFyICp0bXBuZXcgPSBOVUxMOwo+Pgo+PiAtICAgICAgICAgICAgICAgICAg
-ICAgICBpZiAoY29uZmlnLmNvbnN1bWVyZDMyX2xpYl9kaXIudmFsdWVbMF0gIT0gJ1wwJykgewo+
-PiArICAgICAgICAgICAgICAgICAgICAgICBpZiAoY29uZmlnLmNvbnN1bWVyZDMyX2xpYl9kaXIu
-dmFsdWUgJiYgY29uZmlnLmNvbnN1bWVyZDMyX2xpYl9kaXIudmFsdWVbMF0gIT0gJ1wwJykgewo+
-PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNoYXIgKnRtcDsKPj4gICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBzaXplX3QgdG1wbGVuOwo+Pgo+PiAtLQo+PiAyLjExLjAK
-Pj4KPiAKPiAKPiAKCi0tIApKb25hdGhhbiBSLiBKdWxpZW4KRWZmaWNpT1MKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
-dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
-aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============8275622305561394693==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_5319969_345942993.1512064280571"
+
+------=_Part_5319969_345942993.1512064280571
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+ Dear Julien,
+Thanks for your response. Is the mentioned task easier in Java or C program=
+?indeed, I think it can be easier in Java program. If it is true, I can swi=
+tch to Java language.
+    On Thursday, November 30, 2017, 7:15:21 PM GMT+3:30, Julien Desfossez <=
+jdesfossez@efficios.com> wrote: =20
+=20
+ On 2017-11-30 10:13 AM, MMM via lttng-dev wrote:
+> Dear Users,
+>=20
+> I have posted a couple of email about my problem in the past, while
+> nobody response those. It may be true that my question is amateurish,
+> but due to the fact that I am a beginner, I can not find the sufficient
+> document for solving my problem. I am going to trace a C program that
+> read from a file and show the=C2=A0ratio of reads from page cache vs read=
+s
+> from disk. I read document of LTTng website, but I can not find
+> appropriate explanation for this task. I just need a simple guidance to
+> show me the right way for doing it. Could you please help me.
+>=20
+> Regards,
+> Mehdi.
+
+Hi,
+
+This is a really non-trivial task to do. Basically, you need to
+distinguish the read() syscalls that lead to FS/disk access with the
+ones that don't (for the same FD).
+The main difficulty is to make the link between the syscall and the
+lower-level events and I am not sure we have all the data needed to
+establish this link from the payload of the events we have (something
+like FD -> FS inode -> block).
+
+I added Houssem to this thread because I think I remember he did some
+work around that, he may have more information.
+
+Julien =20
+------=_Part_5319969_345942993.1512064280571
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head></head><body><div style=3D"font-family:courier new, courier, mo=
+naco, monospace, sans-serif;font-size:13px;"><div></div>
+            <div>Dear Julien,</div><div><br></div><div>Thanks for your resp=
+onse. Is the mentioned task easier in Java or C program?</div><div>indeed, =
+I think it can be easier in Java program. If it is true, I can switch to Ja=
+va language.</div><div><br></div>
+           =20
+            <div id=3D"yahoo_quoted_2976374586" class=3D"yahoo_quoted">
+                <div style=3D"font-family:'Helvetica Neue', Helvetica, Aria=
+l, sans-serif;font-size:13px;color:#26282a;">
+                   =20
+                    <div>
+                        On Thursday, November 30, 2017, 7:15:21 PM GMT+3:30=
+, Julien Desfossez &lt;jdesfossez@efficios.com&gt; wrote:
+                    </div>
+                    <div><br></div>
+                    <div><br></div>
+                    <div><div dir=3D"ltr">On 2017-11-30 10:13 AM, MMM via l=
+ttng-dev wrote:<div class=3D"yqt7884770834" id=3D"yqtfd21507"><br clear=3D"=
+none">&gt; Dear Users,<br clear=3D"none">&gt; <br clear=3D"none">&gt; I hav=
+e posted a couple of email about my problem in the past, while<br clear=3D"=
+none">&gt; nobody response those. It may be true that my question is amateu=
+rish,<br clear=3D"none">&gt; but due to the fact that I am a beginner, I ca=
+n not find the sufficient<br clear=3D"none">&gt; document for solving my pr=
+oblem. I am going to trace a C program that<br clear=3D"none">&gt; read fro=
+m a file and show the&nbsp;ratio of reads from page cache vs reads<br clear=
+=3D"none">&gt; from disk. I read document of LTTng website, but I can not f=
+ind<br clear=3D"none">&gt; appropriate explanation for this task. I just ne=
+ed a simple guidance to<br clear=3D"none">&gt; show me the right way for do=
+ing it. Could you please help me.<br clear=3D"none">&gt; <br clear=3D"none"=
+>&gt; Regards,<br clear=3D"none">&gt; Mehdi.</div><br clear=3D"none"><br cl=
+ear=3D"none">Hi,<br clear=3D"none"><br clear=3D"none">This is a really non-=
+trivial task to do. Basically, you need to<br clear=3D"none">distinguish th=
+e read() syscalls that lead to FS/disk access with the<br clear=3D"none">on=
+es that don't (for the same FD).<br clear=3D"none">The main difficulty is t=
+o make the link between the syscall and the<br clear=3D"none">lower-level e=
+vents and I am not sure we have all the data needed to<br clear=3D"none">es=
+tablish this link from the payload of the events we have (something<br clea=
+r=3D"none">like FD -&gt; FS inode -&gt; block).<br clear=3D"none"><br clear=
+=3D"none">I added Houssem to this thread because I think I remember he did =
+some<br clear=3D"none">work around that, he may have more information.<br c=
+lear=3D"none"><br clear=3D"none">Julien</div></div>
+                </div>
+            </div></div></body></html>
+------=_Part_5319969_345942993.1512064280571--
+
+--===============8275622305561394693==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============8275622305561394693==--
