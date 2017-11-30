@@ -1,16 +1,20 @@
-From: MMM via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Problem in Tracing C Program
-Date: Thu, 30 Nov 2017 15:13:57 +0000 (UTC)
-Message-ID: <1968389067.5193789.1512054837510__19419.2766365179$1512054890$gmane$org@mail.yahoo.com>
-References: <1968389067.5193789.1512054837510.ref@mail.yahoo.com>
-Reply-To: MMM <e.morovati@yahoo.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [RFC PATCH] Fix: consumerd(64/32)_lib_dir can be
+	NULL
+Date: Thu, 30 Nov 2017 16:43:19 +0100
+Message-ID: <CA+jJMxtJNjJG8r7YxMgwk76mGEciHvdt+sy_kzH8PVTLWYaODA__39085.5265701704$1512056610$gmane$org@mail.gmail.com>
+References: <20171129214229.22684-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2318782648123020429=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sonic310-22.consmr.mail.ne1.yahoo.com
- (sonic310-22.consmr.mail.ne1.yahoo.com [66.163.186.203])
- by lists.lttng.org (Postfix) with ESMTP id 3yngtP4gxvzhw7
- for <lttng-dev@lists.lttng.org>; Thu, 30 Nov 2017 15:14:36 +0000 (UTC)
+Received: from mail-wm0-x241.google.com (mail-wm0-x241.google.com
+ [IPv6:2a00:1450:400c:c09::241])
+ by lists.lttng.org (Postfix) with ESMTPS id 3ynhWY4Jp9zj0W
+ for <lttng-dev@lists.lttng.org>; Thu, 30 Nov 2017 15:43:21 +0000 (UTC)
+Received: by mail-wm0-x241.google.com with SMTP id t8so13820862wmc.3
+ for <lttng-dev@lists.lttng.org>; Thu, 30 Nov 2017 07:43:21 -0800 (PST)
+In-Reply-To: <20171129214229.22684-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,43 +24,95 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Lttng-dev <lttng-dev@lists.lttng.org>
+To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============2318782648123020429==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_5193788_843082792.1512054837508"
-
-------=_Part_5193788_843082792.1512054837508
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Dear Users,
-I have posted a couple of email about my problem in the past, while nobody =
-response those. It may be true that my question is amateurish, but due to t=
-he fact that I am a beginner, I can not find the sufficient document for so=
-lving my problem. I am going to trace a C program that read from a file and=
- show the=C2=A0ratio of reads from page cache vs reads from disk. I read do=
-cument of LTTng website, but I can not find appropriate explanation for thi=
-s task. I just need a simple guidance to show me the right way for doing it=
-. Could you please help me.
-Regards,Mehdi.
-------=_Part_5193788_843082792.1512054837508
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-<html><head></head><body><div style="font-family:courier new, courier, monaco, monospace, sans-serif;font-size:13px;"><div>Dear Users,</div><div><br></div><div><font size="2">I have posted a couple of email about my problem in the past, while nobody response those. It may be true that my question is amateurish, but due to the fact that I am a beginner, I can not find the sufficient document for solving my problem. I am going to trace a C program that read from a file and show the&nbsp;<span style="color: rgb(0, 0, 0);">ratio of reads from page cache vs reads from disk. I read document of LTTng website, but I can not find appropriate explanation for this task. I just need a simple guidance to show me the right way for doing it. Could you please help me.</span></font></div><div><font size="2
- "><span style="color: rgb(0, 0, 0);"><br></span></font></div><div><font size="2"><span style="color: rgb(0, 0, 0);">Regards,</span></font></div><div>Mehdi.</div></div></body></html>
-------=_Part_5193788_843082792.1512054837508--
-
---===============2318782648123020429==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============2318782648123020429==--
+SGkhCgpJJ20gcHJvcG9zaW5nIHRoaXMgZGlmZiBvbiB0b3Agb2YgeW91ciBwYXRjaCwgcmVhZCBv
+bi4KCmRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYyBiL3NyYy9iaW4v
+bHR0bmctc2Vzc2lvbmQvbWFpbi5jCmluZGV4IGY5MjE2MjFiLi4xZWFmOWJlZiAxMDA2NDQKLS0t
+IGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNz
+aW9uZC9tYWluLmMKQEAgLTI0NDIsNyArMjQ0Miw3IEBAIHN0YXRpYyBwaWRfdCBzcGF3bl9jb25z
+dW1lcmQoc3RydWN0CmNvbnN1bWVyX2RhdGEgKmNvbnN1bWVyX2RhdGEpCiAgICAgICAgICAgICAg
+ICB7CiAgICAgICAgICAgICAgICAgICAgICAgIGNoYXIgKnRtcG5ldyA9IE5VTEw7CgotICAgICAg
+ICAgICAgICAgICAgICAgICBpZiAoY29uZmlnLmNvbnN1bWVyZDY0X2xpYl9kaXIudmFsdWUgJiYK
+Y29uZmlnLmNvbnN1bWVyZDY0X2xpYl9kaXIudmFsdWVbMF0gIT0gJ1wwJykgeworICAgICAgICAg
+ICAgICAgICAgICAgICBpZiAoY29uZmlnLmNvbnN1bWVyZDY0X2xpYl9kaXIudmFsdWUpIHsKICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjaGFyICp0bXA7CiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgc2l6ZV90IHRtcGxlbjsKCkBAIC0yNDc2LDE2ICsyNDc2LDE0IEBAIHN0
+YXRpYyBwaWRfdCBzcGF3bl9jb25zdW1lcmQoc3RydWN0CmNvbnN1bWVyX2RhdGEgKmNvbnN1bWVy
+X2RhdGEpCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiLS1jb25zdW1l
+cmQtZXJyLXNvY2siLApjb25zdW1lcl9kYXRhLT5lcnJfdW5peF9zb2NrX3BhdGgsCiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAiLS1ncm91cCIsCmNvbmZpZy50cmFjaW5n
+X2dyb3VwX25hbWUudmFsdWUsCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBOVUxMKTsKLSAgICAgICAgICAgICAgICAgICAgICAgaWYgKGNvbmZpZy5jb25zdW1lcmQ2NF9s
+aWJfZGlyLnZhbHVlWzBdICE9ICdcMCcpIHsKLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBmcmVlKHRtcG5ldyk7Ci0gICAgICAgICAgICAgICAgICAgICAgIH0KKyAgICAgICAgICAgICAg
+ICAgICAgICAgZnJlZSh0bXBuZXcpOwogICAgICAgICAgICAgICAgICAgICAgICBicmVhazsKICAg
+ICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGNhc2UgTFRUTkdfQ09OU1VNRVIzMl9VU1Q6
+CiAgICAgICAgICAgICAgICB7CiAgICAgICAgICAgICAgICAgICAgICAgIGNoYXIgKnRtcG5ldyA9
+IE5VTEw7CgotICAgICAgICAgICAgICAgICAgICAgICBpZiAoY29uZmlnLmNvbnN1bWVyZDMyX2xp
+Yl9kaXIudmFsdWUgJiYKY29uZmlnLmNvbnN1bWVyZDMyX2xpYl9kaXIudmFsdWVbMF0gIT0gJ1ww
+JykgeworICAgICAgICAgICAgICAgICAgICAgICBpZiAoY29uZmlnLmNvbnN1bWVyZDMyX2xpYl9k
+aXIudmFsdWUpIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjaGFyICp0bXA7CiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc2l6ZV90IHRtcGxlbjsKCkBAIC0yNTE5LDkg
+KzI1MTcsNyBAQCBzdGF0aWMgcGlkX3Qgc3Bhd25fY29uc3VtZXJkKHN0cnVjdApjb25zdW1lcl9k
+YXRhICpjb25zdW1lcl9kYXRhKQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgIi0tY29uc3VtZXJkLWVyci1zb2NrIiwKY29uc3VtZXJfZGF0YS0+ZXJyX3VuaXhfc29ja19w
+YXRoLAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIi0tZ3JvdXAiLApj
+b25maWcudHJhY2luZ19ncm91cF9uYW1lLnZhbHVlLAogICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgTlVMTCk7Ci0gICAgICAgICAgICAgICAgICAgICAgIGlmIChjb25maWcu
+Y29uc3VtZXJkMzJfbGliX2Rpci52YWx1ZVswXSAhPSAnXDAnKSB7Ci0gICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgZnJlZSh0bXBuZXcpOwotICAgICAgICAgICAgICAgICAgICAgICB9Cisg
+ICAgICAgICAgICAgICAgICAgICAgIGZyZWUodG1wbmV3KTsKICAgICAgICAgICAgICAgICAgICAg
+ICAgYnJlYWs7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBkZWZhdWx0OgoKVGhh
+dCdzIGEgZ29vZCBjYXRjaC4gVGhlIHNhbWUgdW5jaGVja2VkIGFjY2Vzc2VzIGFyZSBwZXJmb3Jt
+ZWQgYmVmb3JlCmNhbGxpbmcgImZyZWUodG1wbmV3KSIuIEhvd2V2ZXIsIHRoZSBjaGVjayBpcyBz
+dXBlcmZsdW91cyBzaW5jZSB0bXBuZXcKd291bGQgYmUgTlVMTCBhbnl3YXkuCgpGWUksIHNpbmNl
+IGU2MTQyZjJlLCBJIGRpZCBhd2F5IHdpdGggbW9zdCBvZiB0aGUgdGhlIHZhbFswXSAhPSAnXDAn
+Cm5vbnNlbnNlIHRoYXQgd2FzIGRvbmUgb24gc3RyaW5nIGNvbmZpZ3VyYXRpb24gb3B0aW9ucy4g
+SGVuY2UsIGluIHRoaXMKaW5zdGFuY2UsIG9ubHkgY2hlY2tpbmcgZm9yIE5VTEwgaXMgbmVjZXNz
+YXJ5LgoKTG9va2luZyBhdCB0aGUgcmVzdCBvZiB0aGF0IGZ1bmN0aW9uLCBJIHNlZSB0aGF0IHB1
+dGVudigpIGlzIHVzZWQgd2l0aAphIGR5bmFtaWNhbGx5IGFsbG9jYXRlZCBzdHJpbmcgKHRtcG5l
+dykgdGhhdCBpcyB0aGVuIGZyZWUnZC4uLiBUaGF0J3MKYnJva2VuLiBJJ2xsIGFkZCBhbm90aGVy
+IGZpeCBvbiB0b3AgKHByb2JhYmx5IHVzaW5nIHNldGVudigpIHRvIGNvcHkKdG8gdGhlIGVudiku
+CgpJJ2xsIGVkaXQgYW5kIHB1c2ggeW91ciBwYXRjaCBpZiB0aGF0J3Mgb2theSB3aXRoIHlvdT8K
+ClRoYW5rcyEKSsOpcsOpbWllCgoKT24gMjkgTm92ZW1iZXIgMjAxNyBhdCAyMjo0MiwgSm9uYXRo
+YW4gUmFqb3R0ZQo8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPiB3cm90ZToK
+PiBSZXByb2R1Y2VyOgo+IGx0dG5nLXNlc3Npb25kIFwKPiAgICAgLS1jb25zdW1lcmQzMi1wYXRo
+PS91c3IvbG9jYWwvbGliL2x0dG5nL2xpYmV4ZWMvbHR0bmctY29uc3VtZXJkIFwKPiAgICAgLS1j
+b25zdW1lcmQ2NC1wYXRoPS91c3IvbG9jYWwvbGliL2x0dG5nL2xpYmV4ZWMvbHR0bmctY29uc3Vt
+ZXJkCj4KPiBsdHRuZyBjcmVhdGUKPiBsdHRuZyBlbmFibGUtZXZlbnQgLXUgLWEKPgo+IE9uIGEg
+NjRiaXQgbWFjaGluZSB0aGUgaW52b2NhdGlvbiBvZiB0aGUgNjRiaXQgY29uc3VtZXJkIHdpbGwg
+bm90IGZhaWwKPiBzaW5jZSBpdHMgbGliZGlyIGlzIHBvcHVsYXRlZCBieSBzZXNzaW9uZF9jb25m
+aWdfaW5pdCBidXQgd2lsbCBzZWdmYXVsdCBvbgo+IHNwYXduaW5nIG9mIHRoZSAzMiBiaXQgY29u
+c3VtZXJkIHdoZW4gcGVyZm9ybWluZyB0aGUgY2hlY2sgb2YgbGliZGlyCj4gdmFsdWUuCj4KPiBP
+biBhIDMyYml0IG1hY2hpbmUgdGhlIG9wcG9zaXRlIHdpbGwgaGFwcGVuLgo+Cj4gU2lnbmVkLW9m
+Zi1ieTogSm9uYXRoYW4gUmFqb3R0ZSA8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3Mu
+Y29tPgo+IC0tLQo+Cj4gQW5vdGhlciBwb3NzaWJpbGl0eSB3b3VsZCBiZSB0byBhbHdheXMgaW5p
+dGlhbGl6ZSB0byBhbiBlbXB0eSAiIiBpbnN0ZWFkIG9mCj4gTlVMTC4KPgo+IC0tLQo+ICBzcmMv
+YmluL2x0dG5nLXNlc3Npb25kL21haW4uYyB8IDQgKystLQo+ICAxIGZpbGUgY2hhbmdlZCwgMiBp
+bnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQo+Cj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0
+bmctc2Vzc2lvbmQvbWFpbi5jIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9tYWluLmMKPiBpbmRl
+eCAzZDBhNjVkZS4uZjkyMTYyMWIgMTAwNjQ0Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9u
+ZC9tYWluLmMKPiArKysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL21haW4uYwo+IEBAIC0yNDQy
+LDcgKzI0NDIsNyBAQCBzdGF0aWMgcGlkX3Qgc3Bhd25fY29uc3VtZXJkKHN0cnVjdCBjb25zdW1l
+cl9kYXRhICpjb25zdW1lcl9kYXRhKQo+ICAgICAgICAgICAgICAgICB7Cj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgY2hhciAqdG1wbmV3ID0gTlVMTDsKPgo+IC0gICAgICAgICAgICAgICAgICAg
+ICAgIGlmIChjb25maWcuY29uc3VtZXJkNjRfbGliX2Rpci52YWx1ZVswXSAhPSAnXDAnKSB7Cj4g
+KyAgICAgICAgICAgICAgICAgICAgICAgaWYgKGNvbmZpZy5jb25zdW1lcmQ2NF9saWJfZGlyLnZh
+bHVlICYmIGNvbmZpZy5jb25zdW1lcmQ2NF9saWJfZGlyLnZhbHVlWzBdICE9ICdcMCcpIHsKPiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNoYXIgKnRtcDsKPiAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIHNpemVfdCB0bXBsZW47Cj4KPiBAQCAtMjQ4NSw3ICsyNDg1LDcg
+QEAgc3RhdGljIHBpZF90IHNwYXduX2NvbnN1bWVyZChzdHJ1Y3QgY29uc3VtZXJfZGF0YSAqY29u
+c3VtZXJfZGF0YSkKPiAgICAgICAgICAgICAgICAgewo+ICAgICAgICAgICAgICAgICAgICAgICAg
+IGNoYXIgKnRtcG5ldyA9IE5VTEw7Cj4KPiAtICAgICAgICAgICAgICAgICAgICAgICBpZiAoY29u
+ZmlnLmNvbnN1bWVyZDMyX2xpYl9kaXIudmFsdWVbMF0gIT0gJ1wwJykgewo+ICsgICAgICAgICAg
+ICAgICAgICAgICAgIGlmIChjb25maWcuY29uc3VtZXJkMzJfbGliX2Rpci52YWx1ZSAmJiBjb25m
+aWcuY29uc3VtZXJkMzJfbGliX2Rpci52YWx1ZVswXSAhPSAnXDAnKSB7Cj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICBjaGFyICp0bXA7Cj4gICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBzaXplX3QgdG1wbGVuOwo+Cj4gLS0KPiAyLjExLjAKPgoKCgotLSAKSsOpcsOpbWll
+IEdhbGFybmVhdQpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9j
+Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
