@@ -1,20 +1,16 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: [PATCH lttng-tools] Test for lttng-logger
-Date: Sun, 24 Dec 2017 13:07:10 -0500
-Message-ID: <20171224180710.m7wfxdnpt5kzqwen__39150.2398801551$1514138734$gmane$org@psrcode-TP-X230>
-References: <1513977728-21539-1-git-send-email-jdesfossez@efficios.com>
+From: Anup Pemmaiah <anup.pemmaiah@gmail.com>
+Subject: Latency tracing using LTTng
+Date: Wed, 27 Dec 2017 17:21:30 -0800
+Message-ID: <CAF_EZTMO2Npe+aR=OM9pmJ05hGQVZrkY2otDPK_=6+rjoNiZVQ__3223.60707582465$1514423983$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1669675964361107886=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3z4VZg2Pjlznjk
- for <lttng-dev@lists.lttng.org>; Sun, 24 Dec 2017 18:07:22 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 7B5DB340327
- for <lttng-dev@lists.lttng.org>; Sun, 24 Dec 2017 18:10:05 +0000 (UTC)
-Content-Disposition: inline
-In-Reply-To: <1513977728-21539-1-git-send-email-jdesfossez@efficios.com>
+Received: from mail-it0-x229.google.com (mail-it0-x229.google.com
+ [IPv6:2607:f8b0:4001:c0b::229])
+ by lists.lttng.org (Postfix) with ESMTPS id 3z6X4D24khzpLG
+ for <lttng-dev@lists.lttng.org>; Thu, 28 Dec 2017 01:21:31 +0000 (UTC)
+Received: by mail-it0-x229.google.com with SMTP id p139so26760352itb.1
+ for <lttng-dev@lists.lttng.org>; Wed, 27 Dec 2017 17:21:31 -0800 (PST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,114 +20,97 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Julien Desfossez <jdesfossez@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gRnJpLCBEZWMgMjIsIDIwMTcgYXQgMDQ6MjI6MDhQTSAtMDUwMCwgSnVsaWVuIERlc2Zvc3Nl
-eiB3cm90ZToKPiBCYXNpYyB0ZXN0IHRvIHdyaXRlIGluIC9wcm9jL2x0dG5nLWxvZ2dlciBhbmQg
-L2Rldi9sdHRuZy1sb2dnZXIgYW5kCj4gZW5zdXJlIHdlIGhhdmUgdGhlIHJpZ2h0IGFtb3VudCBv
-ZiBldmVudHMgaW4gdGhlIHRyYWNlIHJlc3VsdGluZyB0cmFjZS4KPiBXZSBhbHNvIHRlc3QgdGhl
-IDEwMjQgY2hhcmFjdGVycyBsaW1pdCBmb3IgdGhlIHBheWxvYWQuCgpJIGZlZWwgdGhhdCB0aGUg
-Y3VycmVudCB0ZXN0IGludHJvZHVjZWQgYnkgdGhpcyBwYXRjaCBjb3VsZCBiZSBzcGxpdCBpbgpt
-dWx0aXBsZSB0ZXN0cy4KCiAgIHRlc3RfZGV2X2xvZ2dlcgogICB0ZXN0X3Byb2NfbG9nZ2VyCiAg
-IHRlc3RfcGF5bG9hZF9saW1pdAoKInRlc3RfcGF5bG9hZF9saW1pdCIgY291bGQgZnVydGhlciBi
-ZSBzcGxpdCBiZXR3ZWVuIHByb2MgYW5kIGRldiBidXQgaXQgd291bGQKYWxyZWFkeSBiZSBhIGdv
-b2Qgc3RhcnQgZXZlbiBpZiBub3Qgc3BsaXQuCgpJIGRvbid0IGV4cGVjdCBhbnkgb2YgdGhpcyB0
-byBicmVhayBhbnl0aW1lIHNvb24gYnV0IGlmIGl0IGRvZXMgc29tZWRheSwgaGF2aW5nCmEgbW9y
-ZSBncmFudWxhciBhcHByb2FjaCB3aWxsIHNhdmUgdXMgc29tZSB0aW1lLgoKQSBiaXQgbW9yZSBp
-bmxpbmUuCgpDaGVlcnMKCgo+IAo+IFNpZ25lZC1vZmYtYnk6IEp1bGllbiBEZXNmb3NzZXogPGpk
-ZXNmb3NzZXpAZWZmaWNpb3MuY29tPgo+IC0tLQo+ICB0ZXN0cy9yZWdyZXNzaW9uL2tlcm5lbC9N
-YWtlZmlsZS5hbSAgICAgICB8ICAyICstCj4gIHRlc3RzL3JlZ3Jlc3Npb24va2VybmVsL3Rlc3Rf
-bHR0bmdfbG9nZ2VyIHwgODUgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+ICB0ZXN0
-cy9yb290X3JlZ3Jlc3Npb24gICAgICAgICAgICAgICAgICAgICB8ICAxICsKPiAgdGVzdHMvdXRp
-bHMvdXRpbHMuc2ggICAgICAgICAgICAgICAgICAgICAgfCAgMiArLQo+ICA0IGZpbGVzIGNoYW5n
-ZWQsIDg4IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4gIGNyZWF0ZSBtb2RlIDEwMDc1
-NSB0ZXN0cy9yZWdyZXNzaW9uL2tlcm5lbC90ZXN0X2x0dG5nX2xvZ2dlcgo+IAo+IGRpZmYgLS1n
-aXQgYS90ZXN0cy9yZWdyZXNzaW9uL2tlcm5lbC9NYWtlZmlsZS5hbSBiL3Rlc3RzL3JlZ3Jlc3Np
-b24va2VybmVsL01ha2VmaWxlLmFtCj4gaW5kZXggYzRlZTQ0My4uYTBhYmM3YiAxMDA2NDQKPiAt
-LS0gYS90ZXN0cy9yZWdyZXNzaW9uL2tlcm5lbC9NYWtlZmlsZS5hbQo+ICsrKyBiL3Rlc3RzL3Jl
-Z3Jlc3Npb24va2VybmVsL01ha2VmaWxlLmFtCj4gQEAgLTEsNiArMSw2IEBACj4gIEVYVFJBX0RJ
-U1QgPSB0ZXN0X2V2ZW50X2Jhc2ljIHRlc3RfYWxsX2V2ZW50cyB0ZXN0X3N5c2NhbGwgXAo+ICAJ
-CXRlc3RfY2xvY2tfb3ZlcnJpZGUgdGVzdF9yb3RhdGlvbl9kZXN0cm95X2ZsdXNoIFwKPiAtCQl0
-ZXN0X3NlbGVjdF9wb2xsX2Vwb2xsCj4gKwkJdGVzdF9zZWxlY3RfcG9sbF9lcG9sbCB0ZXN0X2x0
-dG5nX2xvZ2dlcgo+ICAKPiAgbm9pbnN0X1BST0dSQU1TID0gc2VsZWN0X3BvbGxfZXBvbGwKPiAg
-c2VsZWN0X3BvbGxfZXBvbGxfU09VUkNFUyA9IHNlbGVjdF9wb2xsX2Vwb2xsLmMKPiBkaWZmIC0t
-Z2l0IGEvdGVzdHMvcmVncmVzc2lvbi9rZXJuZWwvdGVzdF9sdHRuZ19sb2dnZXIgYi90ZXN0cy9y
-ZWdyZXNzaW9uL2tlcm5lbC90ZXN0X2x0dG5nX2xvZ2dlcgo+IG5ldyBmaWxlIG1vZGUgMTAwNzU1
-Cj4gaW5kZXggMDAwMDAwMC4uNTRmZDFjMwo+IC0tLSAvZGV2L251bGwKPiArKysgYi90ZXN0cy9y
-ZWdyZXNzaW9uL2tlcm5lbC90ZXN0X2x0dG5nX2xvZ2dlcgo+IEBAIC0wLDAgKzEsODUgQEAKPiAr
-IyEvYmluL2Jhc2gKPiArIwo+ICsjIENvcHlyaWdodCAoQykgLSAyMDE3IEp1bGllbiBEZXNmb3Nz
-ZXogPGpkZXNmb3NzZXpAZWZmaWNpb3MuY29tPgo+ICsjCj4gKyMgVGhpcyBwcm9ncmFtIGlzIGZy
-ZWUgc29mdHdhcmU7IHlvdSBjYW4gcmVkaXN0cmlidXRlIGl0IGFuZC9vciBtb2RpZnkgaXQKPiAr
-IyB1bmRlciB0aGUgdGVybXMgb2YgdGhlIEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlLCB2ZXJz
-aW9uIDIgb25seSwgYXMKPiArIyBwdWJsaXNoZWQgYnkgdGhlIEZyZWUgU29mdHdhcmUgRm91bmRh
-dGlvbi4KPiArIwo+ICsjIFRoaXMgcHJvZ3JhbSBpcyBkaXN0cmlidXRlZCBpbiB0aGUgaG9wZSB0
-aGF0IGl0IHdpbGwgYmUgdXNlZnVsLCBidXQgV0lUSE9VVAo+ICsjIEFOWSBXQVJSQU5UWTsgd2l0
-aG91dCBldmVuIHRoZSBpbXBsaWVkIHdhcnJhbnR5IG9mIE1FUkNIQU5UQUJJTElUWSBvcgo+ICsj
-IEZJVE5FU1MgRk9SIEEgUEFSVElDVUxBUiBQVVJQT1NFLiAgU2VlIHRoZSBHTlUgR2VuZXJhbCBQ
-dWJsaWMgTGljZW5zZSBmb3IKPiArIyBtb3JlIGRldGFpbHMuCj4gKyMKPiArIyBZb3Ugc2hvdWxk
-IGhhdmUgcmVjZWl2ZWQgYSBjb3B5IG9mIHRoZSBHTlUgR2VuZXJhbCBQdWJsaWMgTGljZW5zZSBh
-bG9uZyB3aXRoCj4gKyMgdGhpcyBwcm9ncmFtOyBpZiBub3QsIHdyaXRlIHRvIHRoZSBGcmVlIFNv
-ZnR3YXJlIEZvdW5kYXRpb24sIEluYy4sIDUxCj4gKyMgRnJhbmtsaW4gU3RyZWV0LCBGaWZ0aCBG
-bG9vciwgQm9zdG9uLCBNQSAwMjExMC0xMzAxIFVTQS4KPiArCj4gK1RFU1RfREVTQz0iS2VybmVs
-IHRyYWNlciAtIGx0dG5nLWxvZ2dlciIKPiArCj4gK0NVUkRJUj0kKGRpcm5hbWUgJDApLwo+ICtU
-RVNURElSPSRDVVJESVIvLi4vLi4KPiArTlVNX1RFU1RTPTEzCj4gKwo+ICtzb3VyY2UgJFRFU1RE
-SVIvdXRpbHMvdXRpbHMuc2gKPiArCj4gK2Z1bmN0aW9uIHRlc3RfbG9nZ2VyX25vcm1hbCgpCj4g
-K3sKPiArCVRSQUNFX1BBVEg9JChta3RlbXAgLWQpCj4gKwlTRVNTSU9OX05BTUU9Imtlcm5lbF9l
-dmVudF9iYXNpYyIKPiArCj4gKwlQQVlMT0FEPSJ0ZXN0X2xvZ2dlciIKPiArCj4gKwljcmVhdGVf
-bHR0bmdfc2Vzc2lvbl9vayAkU0VTU0lPTl9OQU1FICRUUkFDRV9QQVRICj4gKwo+ICsJbHR0bmdf
-ZW5hYmxlX2tlcm5lbF9ldmVudCAkU0VTU0lPTl9OQU1FICJsdHRuZ19sb2dnZXIiCj4gKwo+ICsJ
-c3RhcnRfbHR0bmdfdHJhY2luZ19vawo+ICsKPiArCXRlc3QgLWUgL3Byb2MvbHR0bmctbG9nZ2Vy
-Cj4gKwlvayAkPyAiL3Byb2MvbHR0bmctbG9nZ2VyIGV4aXN0cyIKPiArCWVjaG8gLW4gIiRQQVlM
-T0FEIHByb2MiID4gL3Byb2MvbHR0bmctbG9nZ2VyCj4gKwo+ICsJdGVzdCAtYyAvZGV2L2x0dG5n
-LWxvZ2dlcgo+ICsJaWYgdGVzdCAkPyA9IDA7IHRoZW4KCldoeSBpcyB0aGlzIGhhbmRsZWQgZGlm
-ZmVyZW50bHkgdGhhbiAvcHJvYy9sdHRuZy1sb2dnZXIgPwoKRGlkIHlvdSB3YW50IHRvIHByZXZl
-bnQgd3JpdGluZyB0byAvZGV2L2x0dG5nLWxvZ2dlcj8KCklmIHNvaSwgIHdoeSBub3QgZG8gdGhl
-IHNhbWUgZm9yIC9wcm92L2x0dG5nLWxvZ2dlcj8KCj4gKwkJcGFzcyAiL2Rldi9sdHRuZy1sb2dn
-ZXIgaXMgYSBjaGFyYWN0ZXIgZGV2aWNlIgo+ICsJCWVjaG8gLW4gIiRQQVlMT0FEIGRldiIgPiAv
-ZGV2L2x0dG5nLWxvZ2dlcgo+ICsJCW9rICQ/ICJXcml0ZSBpbiAvZGV2L2x0dG5nLWxvZ2dlciIK
-PiArCWVsc2UKPiArCQlmYWlsICJObyAvZGV2L2x0dG5nLWxvZ2dlciIgCgpUcmFpbGluZyB3aGl0
-ZXNwYWNlIGhlcmUuCgo+ICsJZmkKPiArCj4gKwkjIFdyaXRlIDEwMCB0aW1lcyAidGVzdF9sb2dn
-ZXIiLCB3aGljaCBnZW5lcmF0ZXMgMTIwMCBjaGFyYWN0ZXJzLCB3ZSBleHBlY3QKPiArCSMgdGhl
-IHRyYWNlciB0byB3cml0ZSAyIGV2ZW50cyBmcm9tIHRoYXQgc3RyaW5nIGJlY2F1c2UgaXQgbGlt
-aXRzIHRoZQo+ICsJIyBpbnB1dCB0byAxMDI0IHN0cmluZ3MuCj4gKwlwcmludGYgIiUucyAkUEFZ
-TE9BRCIgezEuLjEwMH0gPi9wcm9jL2x0dG5nLWxvZ2dlcgoKTWlzc2luZyBzcGFjZSBoZXJlICI+
-L3Byb2MvbHR0bmctbG9nZ2VyIgoKPiArCj4gKwlzdG9wX2x0dG5nX3RyYWNpbmdfb2sKPiArCj4g
-Kwl2YWxpZGF0ZV90cmFjZV9jb3VudCAibHR0bmdfbG9nZ2VyIiAkVFJBQ0VfUEFUSCA0Cj4gKwl2
-YWxpZGF0ZV90cmFjZV9vbmx5X2V4cCAiJFBBWUxPQUQiICRUUkFDRV9QQVRICj4gKwo+ICsJZGVz
-dHJveV9sdHRuZ19zZXNzaW9uX29rICRTRVNTSU9OX05BTUUKPiArCj4gKwlybSAtcmYgJFRSQUNF
-X1BBVEgKPiArfQo+ICsKPiArIyBNVVNUIHNldCBURVNURElSIGJlZm9yZSBjYWxsaW5nIHRob3Nl
-IGZ1bmN0aW9ucwo+ICtwbGFuX3Rlc3RzICROVU1fVEVTVFMKPiArCj4gK3ByaW50X3Rlc3RfYmFu
-bmVyICIkVEVTVF9ERVNDIgo+ICsKPiAraWYgWyAiJChpZCAtdSkiID09ICIwIiBdOyB0aGVuCj4g
-Kwlpc3Jvb3Q9MQo+ICtlbHNlCj4gKwlpc3Jvb3Q9MAo+ICtmaQo+ICsKPiArc2tpcCAkaXNyb290
-ICJSb290IGFjY2VzcyBpcyBuZWVkZWQuIFNraXBwaW5nIGFsbCB0ZXN0cy4iICROVU1fVEVTVFMg
-fHwKPiArewo+ICsJc3RhcnRfbHR0bmdfc2Vzc2lvbmQKPiArCj4gKwl0ZXN0X2xvZ2dlcl9ub3Jt
-YWwKPiArCj4gKwlzdG9wX2x0dG5nX3Nlc3Npb25kCj4gK30KPiBkaWZmIC0tZ2l0IGEvdGVzdHMv
-cm9vdF9yZWdyZXNzaW9uIGIvdGVzdHMvcm9vdF9yZWdyZXNzaW9uCj4gaW5kZXggNzYzOWMxOC4u
-ZjE3YWM5NyAxMDA2NDQKPiAtLS0gYS90ZXN0cy9yb290X3JlZ3Jlc3Npb24KPiArKysgYi90ZXN0
-cy9yb290X3JlZ3Jlc3Npb24KPiBAQCAtNCw2ICs0LDcgQEAgcmVncmVzc2lvbi9rZXJuZWwvdGVz
-dF9zeXNjYWxsCj4gIHJlZ3Jlc3Npb24va2VybmVsL3Rlc3RfY2xvY2tfb3ZlcnJpZGUKPiAgcmVn
-cmVzc2lvbi9rZXJuZWwvdGVzdF9yb3RhdGlvbl9kZXN0cm95X2ZsdXNoCj4gIHJlZ3Jlc3Npb24v
-a2VybmVsL3Rlc3Rfc2VsZWN0X3BvbGxfZXBvbGwKPiArcmVncmVzc2lvbi9rZXJuZWwvdGVzdF9s
-dHRuZ19sb2dnZXIKPiAgcmVncmVzc2lvbi90b29scy9saXZlL3Rlc3Rfa2VybmVsCj4gIHJlZ3Jl
-c3Npb24vdG9vbHMvbGl2ZS90ZXN0X2x0dG5nX2tlcm5lbAo+ICByZWdyZXNzaW9uL3Rvb2xzL3N0
-cmVhbWluZy90ZXN0X2hpZ2hfdGhyb3VnaHB1dF9saW1pdHMKPiBkaWZmIC0tZ2l0IGEvdGVzdHMv
-dXRpbHMvdXRpbHMuc2ggYi90ZXN0cy91dGlscy91dGlscy5zaAo+IGluZGV4IGU4ZGZjZGEuLjUw
-YjVkYjEgMTAwNjQ0Cj4gLS0tIGEvdGVzdHMvdXRpbHMvdXRpbHMuc2gKPiArKysgYi90ZXN0cy91
-dGlscy91dGlscy5zaAo+IEBAIC0xNDgwLDcgKzE0ODAsNyBAQCBmdW5jdGlvbiB2YWxpZGF0ZV90
-cmFjZV9vbmx5X2V4cCgpCj4gIAlsb2NhbCB0b3RhbD0kKCRCQUJFTFRSQUNFX0JJTiAkdHJhY2Vf
-cGF0aCB8IHdjIC1sKQo+ICAKPiAgCWlmIFsgIiRjb3VudCIgLW5lIDAgXSAmJiBbICIkdG90YWwi
-IC1lcSAiJGNvdW50IiBdOyB0aGVuCj4gLQkJcGFzcyAiVHJhY2UgbWF0Y2ggd2l0aCAkdG90YWwg
-Zm9yIGV4cHJlc3Npb24gJyR7ZXZlbnRfZXhwfSIKPiArCQlwYXNzICJUcmFjZSBtYXRjaCB3aXRo
-ICR0b3RhbCBmb3IgZXhwcmVzc2lvbiAnJHtldmVudF9leHB9JyIKPiAgCWVsc2UKPiAgCQlmYWls
-ICJUcmFjZSBtYXRjaCIKPiAgCQlkaWFnICIkdG90YWwgc3lzY2FsbCBldmVudChzKSBmb3VuZCwg
-b25seSBzeXNjYWxscyBtYXRjaGluZyBleHByZXNzaW9uICcke2V2ZW50X2V4cH0nICgkY291bnQg
-b2NjdXJyZW5jZXMpIGFyZSBleHBlY3RlZCIKPiAtLSAKPiAyLjcuNAo+IAo+IF9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcg
-bGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9y
-Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgotLSAKSm9uYXRoYW4gUmFqb3R0
-ZS1KdWxpZW4KRWZmaWNpT1MKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
-Cmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
-ZXYK
+--===============1669675964361107886==
+Content-Type: multipart/alternative; boundary="001a11448e78f8b3ef05615c55f9"
+
+--001a11448e78f8b3ef05615c55f9
+Content-Type: text/plain; charset="UTF-8"
+
+Hi,
+
+I am trying to find the reason of a intermittent latency that I am noticing
+on my Linux system running on a RT_PREEMPT kernel. I have patched it on a
+Ubuntu 16.04 LTS. Have stopped the desktop lightdm service and this is on a
+Arm aarch64 platform.
+
+At a very high level, there are two processes interacting with each other.
+Process-1 does some work and sends UDP messages to Process-2 (Using the
+FASTRTPS real time Publish-Subscribe protocol).
+Data is sent from Process-1 to Process-2 every 100ms. I see that often
+there is a delay in Process-2 receiving the message.
+
+
+Trying to use LTTng and along with other supported profiling tools like
+latency-tracker, lttng-profile.
+Something like the description in this link
+http://lttng.org/blog/2015/03/18/full-stack-latencies is what I am looking
+for, but I am facing issues. The latency_tracker kernel modules and also
+lttng-profile is a bit flaky as it sometimes work and sometimes panics the
+kernel.  Simple test cases as provided in
+https://github.com/fdoray/latency_tracker_demo works sometimes. And also
+profiling Process-1 works by providing some useful traces(intermittently
+kernel panics), but profiling Process-2 the process just hangs.
+
+Not sure how updated the above pasted links are, because I notice there is
+no more usec_threshold parameter and I use the threshold
+in /sys/kernel/debug/latency/syscalls/default/threshold
+
+I understand each situation is different, but was curious if  any of you
+have comments/suggestions that would help in debugging latency related
+issues using LTTng. I have looked many places to get required info but of
+not much help.
+
+Your comments/suggestions will be greatly appreciated.
+
+Thanks
+Anup
+
+--001a11448e78f8b3ef05615c55f9
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,<div><br></div><div>I am trying to find the reason of a=
+ intermittent latency that I am noticing on my Linux system running on a RT=
+_PREEMPT kernel. I have patched it on a Ubuntu 16.04 LTS. Have stopped the =
+desktop lightdm service and this is on a Arm aarch64 platform.</div><div><b=
+r></div><div>At a very high level, there are two processes interacting with=
+ each other. Process-1 does some work and sends UDP messages to Process-2 (=
+Using the FASTRTPS real time Publish-Subscribe protocol).</div><div>Data is=
+ sent from Process-1 to Process-2 every 100ms. I see that often there is a =
+delay in Process-2 receiving the message.</div><div><br></div><div><br></di=
+v><div>Trying to use LTTng and along with other supported profiling tools l=
+ike latency-tracker, lttng-profile.<br></div><div>Something like the descri=
+ption in this link <a href=3D"http://lttng.org/blog/2015/03/18/full-stack-l=
+atencies">http://lttng.org/blog/2015/03/18/full-stack-latencies</a> is what=
+ I am looking for, but I am facing issues. The latency_tracker kernel modul=
+es and also lttng-profile is a bit flaky as it sometimes work and sometimes=
+ panics the kernel.=C2=A0 Simple test cases as provided in=C2=A0<a href=3D"=
+https://github.com/fdoray/latency_tracker_demo">https://github.com/fdoray/l=
+atency_tracker_demo</a> works sometimes. And also profiling Process-1 works=
+ by providing some useful traces(intermittently kernel panics), but profili=
+ng Process-2 the process just hangs.</div><div><br></div><div>Not sure how =
+updated the above pasted links are, because I notice there is no more usec_=
+threshold parameter and I use the threshold in=C2=A0/sys/kernel/debug/laten=
+cy/syscalls/default/threshold</div><div><br></div><div>I understand each si=
+tuation is different, but was curious if=C2=A0 any of you have comments/sug=
+gestions that would help in debugging latency related issues using LTTng. I=
+ have looked many places to get required info but of not much help.</div><d=
+iv><br></div><div>Your comments/suggestions will be greatly appreciated.</d=
+iv><div><br></div><div>Thanks</div><div>Anup</div></div>
+
+--001a11448e78f8b3ef05615c55f9--
+
+--===============1669675964361107886==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============1669675964361107886==--
