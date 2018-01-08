@@ -1,16 +1,17 @@
-From: Atul Kandwal <atul.kandwal@druva.com>
-Subject: Lttng user space tracing not working
-Date: Sun, 7 Jan 2018 11:46:48 +0530
-Message-ID: <CANhw0wL2BnbAkOAjF5Wq6eyHMQr8wk+cqoV+MH9QJrMpJkGxCA__3196.60457685149$1515426714$gmane$org@mail.gmail.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: Lttng user space tracing not working
+Date: Mon, 8 Jan 2018 14:11:11 -0500
+Message-ID: <20180108191111.GA27104__5623.87293107367$1515439011$gmane$org@joraj-alpa>
+References: <CANhw0wL2BnbAkOAjF5Wq6eyHMQr8wk+cqoV+MH9QJrMpJkGxCA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9093433226084707251=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt0-x229.google.com (mail-qt0-x229.google.com
- [IPv6:2607:f8b0:400d:c0d::229])
- by lists.lttng.org (Postfix) with ESMTPS id 3zDp8L17Y2zpJP
- for <lttng-dev@lists.lttng.org>; Sun,  7 Jan 2018 06:16:49 +0000 (UTC)
-Received: by mail-qt0-x229.google.com with SMTP id i40so10308389qti.8
- for <lttng-dev@lists.lttng.org>; Sat, 06 Jan 2018 22:16:49 -0800 (PST)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3zFlRq30W7znTR
+ for <lttng-dev@lists.lttng.org>; Mon,  8 Jan 2018 19:18:31 +0000 (UTC)
+Content-Disposition: inline
+In-Reply-To: <CANhw0wL2BnbAkOAjF5Wq6eyHMQr8wk+cqoV+MH9QJrMpJkGxCA@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,83 +21,40 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Atul Kandwal <atul.kandwal@druva.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============9093433226084707251==
-Content-Type: multipart/alternative; boundary="001a113f291475ec92056229a023"
-
---001a113f291475ec92056229a023
-Content-Type: text/plain; charset="UTF-8"
-
-Hi,
-
-I am trying with same python code,which u guys have provided in your docs.
-Able to generate traces,but not getting any data in that.
-Is this anywhere related to python version.
-Please help or let me know if any other info is required
-
-
-Thanks
-Atul Kandwal
-
--- 
-
-
-This message contains confidential information and is intended only for the 
-individual to whom it is addressed. If you are not the intended recipient, 
-you should not disseminate, distribute or copy this e-mail. Please notify 
-the sender immediately by e-mail if you have received this e-mail by 
-mistake and permanently delete this e-mail from your system. E-mail 
-transmission cannot be guaranteed to be secure or error-free as information 
-could be intercepted, corrupted, lost, destroyed, late or incomplete, or 
-could contain viruses. The sender therefore does not accept liability for 
-any errors or omissions in the contents of this message, which arise as a 
-result of e-mail transmission. If verification is required, please request 
-a hard-copy version from the sender. Druva, www.druva.com
-
---001a113f291475ec92056229a023
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi,<div><br></div><div>I am trying with same python code,w=
-hich u guys have provided in your docs.</div><div>Able to generate traces,b=
-ut not getting any data in that.</div><div>Is this anywhere related to pyth=
-on version.</div><div>Please help or let me know if any other info is requi=
-red</div><div><br></div><div><br></div><div>Thanks</div><div>Atul Kandwal</=
-div></div>
-
-<br>
-<p><span style=3D"font:14.66px/normal &quot;Calibri Light&quot;,sans-serif;=
-color:rgb(68,84,106);text-transform:none;text-indent:0px;letter-spacing:nor=
-mal;word-spacing:0px;float:none;display:inline!important;white-space:normal=
-;font-size-adjust:none;font-stretch:normal;background-color:rgb(255,255,255=
-)">This message contains confidential information and is intended only for =
-the individual to whom it is addressed. If you are not the intended recipie=
-nt, you should not disseminate, distribute or copy this e-mail. Please noti=
-fy the sender immediately by e-mail if you have received this e-mail by mis=
-take and permanently delete this e-mail from your system. E-mail transmissi=
-on cannot be guaranteed to be secure or error-free as information could be =
-intercepted, corrupted, lost, destroyed, late or incomplete, or could conta=
-in viruses. The sender therefore does not accept liability for any errors o=
-r omissions in the contents of this message, which arise as a result of e-m=
-ail transmission. If verification is required, please request a hard-copy v=
-ersion from the sender. Druva,<span>=C2=A0</span></span><a style=3D"font:14=
-.66px/normal &quot;Calibri Light&quot;,sans-serif;color:rgb(17,85,204);text=
--transform:none;text-indent:0px;letter-spacing:normal;word-spacing:0px;whit=
-e-space:normal;font-size-adjust:none;font-stretch:normal;background-color:r=
-gb(255,255,255)" href=3D"http://www.druva.com/" target=3D"_blank">www.druva=
-.com</a></p>
---001a113f291475ec92056229a023--
-
---===============9093433226084707251==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============9093433226084707251==--
+SGksCgpPbiBTdW4sIEphbiAwNywgMjAxOCBhdCAxMTo0Njo0OEFNICswNTMwLCBBdHVsIEthbmR3
+YWwgd3JvdGU6Cj4gSGksCj4gCj4gSSBhbSB0cnlpbmcgd2l0aCBzYW1lIHB5dGhvbiBjb2RlLHdo
+aWNoIHUgZ3V5cyBoYXZlIHByb3ZpZGVkIGluIHlvdXIgZG9jcy4KCldoaWNoIHZlcnNpb24gb2Yg
+dGhlIGRvYz8gSSB3b3VsZCBndWVzcyAyLjEwIHNpbmNlIGl0IGlzIHRoZSBsYW5kaW5nIG9uZS4K
+CldoYXQgaXMgdGhlIHZlcnNpb24gb2YgbHR0bmctdXN0IGFuZCBsdHRuZy10b29scz8KCkhvdyBk
+aWQgeW91IGluc3RhbGwgbHR0bmc/Cgo+IEFibGUgdG8gZ2VuZXJhdGUgdHJhY2VzLGJ1dCBub3Qg
+Z2V0dGluZyBhbnkgZGF0YSBpbiB0aGF0LgoKV2hhdCBkbyB5b3UgbWVhbiBieSBub3QgZ2V0dGlu
+ZyBhbnkgImRhdGEiPwoKQ291bGQgeW91IGdpdmUgdXMgYSBleGNlcnB0IG9mIHRoZSBnZW5lcmF0
+ZWQgdHJhY2VzICh1c2luZyBiYWJlbHRyYWNlKT8/CgpDaGVlcnMKCj4gSXMgdGhpcyBhbnl3aGVy
+ZSByZWxhdGVkIHRvIHB5dGhvbiB2ZXJzaW9uLgo+IFBsZWFzZSBoZWxwIG9yIGxldCBtZSBrbm93
+IGlmIGFueSBvdGhlciBpbmZvIGlzIHJlcXVpcmVkCj4gCj4gCj4gVGhhbmtzCj4gQXR1bCBLYW5k
+d2FsCj4gCj4gLS0gCj4gCj4gCj4gVGhpcyBtZXNzYWdlIGNvbnRhaW5zIGNvbmZpZGVudGlhbCBp
+bmZvcm1hdGlvbiBhbmQgaXMgaW50ZW5kZWQgb25seSBmb3IgdGhlIAo+IGluZGl2aWR1YWwgdG8g
+d2hvbSBpdCBpcyBhZGRyZXNzZWQuIElmIHlvdSBhcmUgbm90IHRoZSBpbnRlbmRlZCByZWNpcGll
+bnQsIAo+IHlvdSBzaG91bGQgbm90IGRpc3NlbWluYXRlLCBkaXN0cmlidXRlIG9yIGNvcHkgdGhp
+cyBlLW1haWwuIFBsZWFzZSBub3RpZnkgCj4gdGhlIHNlbmRlciBpbW1lZGlhdGVseSBieSBlLW1h
+aWwgaWYgeW91IGhhdmUgcmVjZWl2ZWQgdGhpcyBlLW1haWwgYnkgCj4gbWlzdGFrZSBhbmQgcGVy
+bWFuZW50bHkgZGVsZXRlIHRoaXMgZS1tYWlsIGZyb20geW91ciBzeXN0ZW0uIEUtbWFpbCAKPiB0
+cmFuc21pc3Npb24gY2Fubm90IGJlIGd1YXJhbnRlZWQgdG8gYmUgc2VjdXJlIG9yIGVycm9yLWZy
+ZWUgYXMgaW5mb3JtYXRpb24gCj4gY291bGQgYmUgaW50ZXJjZXB0ZWQsIGNvcnJ1cHRlZCwgbG9z
+dCwgZGVzdHJveWVkLCBsYXRlIG9yIGluY29tcGxldGUsIG9yIAo+IGNvdWxkIGNvbnRhaW4gdmly
+dXNlcy4gVGhlIHNlbmRlciB0aGVyZWZvcmUgZG9lcyBub3QgYWNjZXB0IGxpYWJpbGl0eSBmb3Ig
+Cj4gYW55IGVycm9ycyBvciBvbWlzc2lvbnMgaW4gdGhlIGNvbnRlbnRzIG9mIHRoaXMgbWVzc2Fn
+ZSwgd2hpY2ggYXJpc2UgYXMgYSAKPiByZXN1bHQgb2YgZS1tYWlsIHRyYW5zbWlzc2lvbi4gSWYg
+dmVyaWZpY2F0aW9uIGlzIHJlcXVpcmVkLCBwbGVhc2UgcmVxdWVzdCAKPiBhIGhhcmQtY29weSB2
+ZXJzaW9uIGZyb20gdGhlIHNlbmRlci4gRHJ1dmEsIHd3dy5kcnV2YS5jb20KCj4gX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGlu
+ZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0bmcu
+b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCgotLSAKSm9uYXRoYW4gUmFq
+b3R0ZS1KdWxpZW4KRWZmaWNpT1MKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcu
+b3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
+Zy1kZXYK
