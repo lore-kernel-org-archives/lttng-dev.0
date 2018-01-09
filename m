@@ -1,17 +1,16 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: Lttng user space tracing not working
-Date: Mon, 8 Jan 2018 14:11:11 -0500
-Message-ID: <20180108191111.GA27104__5623.87293107367$1515439011$gmane$org@joraj-alpa>
-References: <CANhw0wL2BnbAkOAjF5Wq6eyHMQr8wk+cqoV+MH9QJrMpJkGxCA@mail.gmail.com>
+From: Majid Rezazadeh <majid3612@gmail.com>
+Subject: LD_PRELOAD applications using lttng-ust-pthread
+Date: Mon, 8 Jan 2018 22:35:39 -0500
+Message-ID: <CACbQsw8qxK=8sFZqUs_9KL_bRy+-bTY70PE3kKHEMeSyZHmjaA__4707.56872459805$1515468844$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============5761794222637885432=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3zFlRq30W7znTR
- for <lttng-dev@lists.lttng.org>; Mon,  8 Jan 2018 19:18:31 +0000 (UTC)
-Content-Disposition: inline
-In-Reply-To: <CANhw0wL2BnbAkOAjF5Wq6eyHMQr8wk+cqoV+MH9QJrMpJkGxCA@mail.gmail.com>
+Received: from mail-pf0-x22f.google.com (mail-pf0-x22f.google.com
+ [IPv6:2607:f8b0:400e:c00::22f])
+ by lists.lttng.org (Postfix) with ESMTPS id 3zFyTV2DVpzp76
+ for <lttng-dev@lists.lttng.org>; Tue,  9 Jan 2018 03:35:41 +0000 (UTC)
+Received: by mail-pf0-x22f.google.com with SMTP id y5so3707608pff.13
+ for <lttng-dev@lists.lttng.org>; Mon, 08 Jan 2018 19:35:41 -0800 (PST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,40 +20,65 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Atul Kandwal <atul.kandwal@druva.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpPbiBTdW4sIEphbiAwNywgMjAxOCBhdCAxMTo0Njo0OEFNICswNTMwLCBBdHVsIEthbmR3
-YWwgd3JvdGU6Cj4gSGksCj4gCj4gSSBhbSB0cnlpbmcgd2l0aCBzYW1lIHB5dGhvbiBjb2RlLHdo
-aWNoIHUgZ3V5cyBoYXZlIHByb3ZpZGVkIGluIHlvdXIgZG9jcy4KCldoaWNoIHZlcnNpb24gb2Yg
-dGhlIGRvYz8gSSB3b3VsZCBndWVzcyAyLjEwIHNpbmNlIGl0IGlzIHRoZSBsYW5kaW5nIG9uZS4K
-CldoYXQgaXMgdGhlIHZlcnNpb24gb2YgbHR0bmctdXN0IGFuZCBsdHRuZy10b29scz8KCkhvdyBk
-aWQgeW91IGluc3RhbGwgbHR0bmc/Cgo+IEFibGUgdG8gZ2VuZXJhdGUgdHJhY2VzLGJ1dCBub3Qg
-Z2V0dGluZyBhbnkgZGF0YSBpbiB0aGF0LgoKV2hhdCBkbyB5b3UgbWVhbiBieSBub3QgZ2V0dGlu
-ZyBhbnkgImRhdGEiPwoKQ291bGQgeW91IGdpdmUgdXMgYSBleGNlcnB0IG9mIHRoZSBnZW5lcmF0
-ZWQgdHJhY2VzICh1c2luZyBiYWJlbHRyYWNlKT8/CgpDaGVlcnMKCj4gSXMgdGhpcyBhbnl3aGVy
-ZSByZWxhdGVkIHRvIHB5dGhvbiB2ZXJzaW9uLgo+IFBsZWFzZSBoZWxwIG9yIGxldCBtZSBrbm93
-IGlmIGFueSBvdGhlciBpbmZvIGlzIHJlcXVpcmVkCj4gCj4gCj4gVGhhbmtzCj4gQXR1bCBLYW5k
-d2FsCj4gCj4gLS0gCj4gCj4gCj4gVGhpcyBtZXNzYWdlIGNvbnRhaW5zIGNvbmZpZGVudGlhbCBp
-bmZvcm1hdGlvbiBhbmQgaXMgaW50ZW5kZWQgb25seSBmb3IgdGhlIAo+IGluZGl2aWR1YWwgdG8g
-d2hvbSBpdCBpcyBhZGRyZXNzZWQuIElmIHlvdSBhcmUgbm90IHRoZSBpbnRlbmRlZCByZWNpcGll
-bnQsIAo+IHlvdSBzaG91bGQgbm90IGRpc3NlbWluYXRlLCBkaXN0cmlidXRlIG9yIGNvcHkgdGhp
-cyBlLW1haWwuIFBsZWFzZSBub3RpZnkgCj4gdGhlIHNlbmRlciBpbW1lZGlhdGVseSBieSBlLW1h
-aWwgaWYgeW91IGhhdmUgcmVjZWl2ZWQgdGhpcyBlLW1haWwgYnkgCj4gbWlzdGFrZSBhbmQgcGVy
-bWFuZW50bHkgZGVsZXRlIHRoaXMgZS1tYWlsIGZyb20geW91ciBzeXN0ZW0uIEUtbWFpbCAKPiB0
-cmFuc21pc3Npb24gY2Fubm90IGJlIGd1YXJhbnRlZWQgdG8gYmUgc2VjdXJlIG9yIGVycm9yLWZy
-ZWUgYXMgaW5mb3JtYXRpb24gCj4gY291bGQgYmUgaW50ZXJjZXB0ZWQsIGNvcnJ1cHRlZCwgbG9z
-dCwgZGVzdHJveWVkLCBsYXRlIG9yIGluY29tcGxldGUsIG9yIAo+IGNvdWxkIGNvbnRhaW4gdmly
-dXNlcy4gVGhlIHNlbmRlciB0aGVyZWZvcmUgZG9lcyBub3QgYWNjZXB0IGxpYWJpbGl0eSBmb3Ig
-Cj4gYW55IGVycm9ycyBvciBvbWlzc2lvbnMgaW4gdGhlIGNvbnRlbnRzIG9mIHRoaXMgbWVzc2Fn
-ZSwgd2hpY2ggYXJpc2UgYXMgYSAKPiByZXN1bHQgb2YgZS1tYWlsIHRyYW5zbWlzc2lvbi4gSWYg
-dmVyaWZpY2F0aW9uIGlzIHJlcXVpcmVkLCBwbGVhc2UgcmVxdWVzdCAKPiBhIGhhcmQtY29weSB2
-ZXJzaW9uIGZyb20gdGhlIHNlbmRlci4gRHJ1dmEsIHd3dy5kcnV2YS5jb20KCj4gX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGlu
-ZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0bmcu
-b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCgotLSAKSm9uYXRoYW4gUmFq
-b3R0ZS1KdWxpZW4KRWZmaWNpT1MKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcu
-b3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
-Zy1kZXYK
+--===============5761794222637885432==
+Content-Type: multipart/alternative; boundary="089e08210ae0dce7d005624f9bfc"
+
+--089e08210ae0dce7d005624f9bfc
+Content-Type: text/plain; charset="UTF-8"
+
+Hi all
+
+I am using lttng-ust-libc-wrapper for instrumenting some calls to libc for
+some applications like Firefox and Chrome, but I receive "Segmentation
+fault (core dumped)". I compile lttng-ust-pthread.c (gcc -fPIC -shared  -o
+test.so lttng-ust-pthread.c -ldl) and then I use "LD_PRELOAD=test.so
+firefox" but I receive segmentation fault (I have exported LD_LIBRARY_PATH
+to the absolute path of test.so file). I found out that when I replace
+tracepoints with printf in lttng_ust_pthread.c, I receive no error. It
+seems that hooking tracepoints in this wrapper makes some problems. Do you
+have any idea in this regard?
+
+Thanks
+
+Majid
+
+--089e08210ae0dce7d005624f9bfc
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><span style=3D"font-size:12.8px">Hi all</span><br><br><spa=
+n style=3D"font-size:12.8px">I am using lttng-ust-libc-wr</span><font face=
+=3D"arial, helvetica, sans-serif">apper=C2=A0<span style=3D"color:rgb(36,41=
+,46);white-space:pre-wrap">for instrumenting</span>=C2=A0</font><span style=
+=3D"color:rgb(36,41,46);white-space:pre-wrap"><font face=3D"arial, helvetic=
+a, sans-serif">some calls to libc for </font></span><font face=3D"arial, he=
+lvetica, sans-serif">som<span style=3D"font-size:12.8px">e applica</span></=
+font><span style=3D"font-size:12.8px">tions like Firefox and Chrome, but I =
+receive &quot;Segmentation fault (core dumped)&quot;. I compile lttng-ust-p=
+thread.c (gcc -fPIC -shared=C2=A0 -o test.so lttng-ust-pthread.c -ldl) and =
+then I use &quot;LD_PRELOAD=3Dtest.so firefox&quot; but I receive segmentat=
+ion fault (I have exported LD_LIBRARY_PATH to the absolute path of test.so =
+file). I found out that when I replace tracepoints with printf in lttng_ust=
+_pthread.c, I receive no error. It seems that hooking tracepoints in this w=
+rapper makes some problems. Do you have any idea in this regard?</span><br>=
+<div><div style=3D"font-size:12.8px"><br></div><div style=3D"font-size:12.8=
+px"><span style=3D"font-size:12.8px"><font color=3D"#000000">Thanks<br><br>=
+</font></span></div></div><div style=3D"font-size:12.8px"><span style=3D"fo=
+nt-size:12.8px"><font color=3D"#000000">Majid</font></span></div></div>
+
+--089e08210ae0dce7d005624f9bfc--
+
+--===============5761794222637885432==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============5761794222637885432==--
