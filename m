@@ -1,16 +1,17 @@
-From: Majid Rezazadeh <majid3612@gmail.com>
-Subject: Re: LD_PRELOAD applications using lttng-ust-pthread
-Date: Tue, 9 Jan 2018 17:22:47 -0500
-Message-ID: <CACbQsw_PXGsc3LcC=g_TJ9vx4=LKoqd_DCw=fx-OPHUDdhdQ=w__33938.1673177288$1515536463$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH babeltrace] Fix: lttng-live discarded
+	event	count after inactivity
+Date: Tue, 9 Jan 2018 22:35:14 +0000 (UTC)
+Message-ID: <675985594.49996.1515537314435.JavaMail.zimbra__10491.2037066699$1515537008$gmane$org@efficios.com>
+References: <1515535974-8377-1-git-send-email-jdesfossez@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0300697244717575844=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pg0-x236.google.com (mail-pg0-x236.google.com
- [IPv6:2607:f8b0:400e:c05::236])
- by lists.lttng.org (Postfix) with ESMTPS id 3zGRV10gXgzpLj
- for <lttng-dev@lists.lttng.org>; Tue,  9 Jan 2018 22:22:48 +0000 (UTC)
-Received: by mail-pg0-x236.google.com with SMTP id j4so8971321pgp.1
- for <lttng-dev@lists.lttng.org>; Tue, 09 Jan 2018 14:22:48 -0800 (PST)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3zGRhK5zrXzpNt
+ for <lttng-dev@lists.lttng.org>; Tue,  9 Jan 2018 22:31:45 +0000 (UTC)
+In-Reply-To: <1515535974-8377-1-git-send-email-jdesfossez@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,156 +21,67 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>, lttng-dev@lists.lttng.org
+To: Julien Desfossez <jdesfossez@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>, Jonathan Rajotte-Julien <joraj@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0300697244717575844==
-Content-Type: multipart/alternative; boundary="94eb2c140702c722a505625f5a73"
-
---94eb2c140702c722a505625f5a73
-Content-Type: text/plain; charset="UTF-8"
-
-Thanks for your response
-
-I reran my test in gdb and got the following information:
-
-(gdb) run
-Starting program: /usr/bin/env LD_PRELOAD=test.so firefox
-process 5288 is executing new program: /bin/dash
-[Thread debugging using libthread_db enabled]
-Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
-
-Program received signal SIGSEGV, Segmentation fault.
-0x00007ffff7de73a8 in ?? () from /lib64/ld-linux-x86-64.so.2
-
-Does it provide enough information?
-
-Thanks
-
-On Tue, Jan 9, 2018 at 10:43 AM, Jonathan Rajotte-Julien <
-jonathan.rajotte-julien@efficios.com> wrote:
-
-> Hi,
->
-> On Mon, Jan 08, 2018 at 10:35:39PM -0500, Majid Rezazadeh wrote:
-> > Hi all
-> >
-> > I am using lttng-ust-libc-wrapper for instrumenting some calls to libc
-> for
-> > some applications like Firefox and Chrome, but I receive "Segmentation
-> > fault (core dumped)". I compile lttng-ust-pthread.c (gcc -fPIC -shared
-> -o
-> > test.so lttng-ust-pthread.c -ldl) and then I use "LD_PRELOAD=test.so
-> > firefox" but I receive segmentation fault (I have exported
-> LD_LIBRARY_PATH
-> > to the absolute path of test.so file). I found out that when I replace
->
-> Could you give us more information regarding the coredump?
->
-> "thread apply all bt" in gdb with the corefile loaded.
->
-> Make sure to compile with debug symbol and rerun your test.
->
-> > tracepoints with printf in lttng_ust_pthread.c, I receive no error. It
-> > seems that hooking tracepoints in this wrapper makes some problems. Do
-> you
-> > have any idea in this regard?
-> >
-> > Thanks
-> >
-> > Majid
->
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
-> --
-> Jonathan Rajotte-Julien
-> EfficiOS
->
-
---94eb2c140702c722a505625f5a73
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><span style=3D"font-size:12.8px">Thanks for your response<=
-/span><div style=3D"font-size:12.8px"><br></div><div style=3D"font-size:12.=
-8px">I reran my test in gdb and got the following information:</div><div st=
-yle=3D"font-size:12.8px"><br></div><div style=3D"font-size:12.8px"><div>(gd=
-b) run</div><div>Starting program: /usr/bin/env LD_PRELOAD=3Dtest.so firefo=
-x</div><div>process 5288 is executing new program: /bin/dash</div><div>[Thr=
-ead debugging using libthread_db enabled]</div><div>Using host libthread_db=
- library &quot;/lib/x86_64-linux-gnu/<wbr>libthread_db.so.1&quot;.</div><di=
-v><br></div><div>Program received signal SIGSEGV, Segmentation fault.</div>=
-<div>0x00007ffff7de73a8 in ?? () from /lib64/ld-linux-x86-64.so.2</div></di=
-v><div style=3D"font-size:12.8px"><br></div><div style=3D"font-size:12.8px"=
->Does it provide enough information?</div><div style=3D"font-size:12.8px"><=
-br></div><div style=3D"font-size:12.8px">Thanks</div><div class=3D"gmail-yj=
-6qo gmail-ajU" style=3D"font-size:12.8px"></div><div class=3D"gmail_extra">=
-<br><div class=3D"gmail_quote">On Tue, Jan 9, 2018 at 10:43 AM, Jonathan Ra=
-jotte-Julien <span dir=3D"ltr">&lt;<a href=3D"mailto:jonathan.rajotte-julie=
-n@efficios.com" target=3D"_blank">jonathan.rajotte-julien@efficios.com</a>&=
-gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 =
-0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Hi,<br>
-<span class=3D""><br>
-On Mon, Jan 08, 2018 at 10:35:39PM -0500, Majid Rezazadeh wrote:<br>
-&gt; Hi all<br>
-&gt;<br>
-&gt; I am using lttng-ust-libc-wrapper for instrumenting some calls to libc=
- for<br>
-&gt; some applications like Firefox and Chrome, but I receive &quot;Segment=
-ation<br>
-&gt; fault (core dumped)&quot;. I compile lttng-ust-pthread.c (gcc -fPIC -s=
-hared=C2=A0 -o<br>
-&gt; test.so lttng-ust-pthread.c -ldl) and then I use &quot;LD_PRELOAD=3Dte=
-st.so<br>
-&gt; firefox&quot; but I receive segmentation fault (I have exported LD_LIB=
-RARY_PATH<br>
-&gt; to the absolute path of test.so file). I found out that when I replace=
-<br>
-<br>
-</span>Could you give us more information regarding the coredump?<br>
-<br>
-&quot;thread apply all bt&quot; in gdb with the corefile loaded.<br>
-<br>
-Make sure to compile with debug symbol and rerun your test.<br>
-<span class=3D""><br>
-&gt; tracepoints with printf in lttng_ust_pthread.c, I receive no error. It=
-<br>
-&gt; seems that hooking tracepoints in this wrapper makes some problems. Do=
- you<br>
-&gt; have any idea in this regard?<br>
-&gt;<br>
-&gt; Thanks<br>
-&gt;<br>
-&gt; Majid<br>
-<br>
-</span>&gt; ______________________________<wbr>_________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
-</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-<wbr>bin/=
-mailman/listinfo/lttng-dev</a><br>
-<span class=3D"HOEnZb"><font color=3D"#888888"><br>
-<br>
---<br>
-Jonathan Rajotte-Julien<br>
-EfficiOS<br>
-</font></span></blockquote></div><br></div></div>
-
---94eb2c140702c722a505625f5a73--
-
---===============0300697244717575844==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============0300697244717575844==--
+LS0tLS0gT24gSmFuIDksIDIwMTgsIGF0IDU6MTIgUE0sIEp1bGllbiBEZXNmb3NzZXogamRlc2Zv
+c3NlekBlZmZpY2lvcy5jb20gd3JvdGU6Cgo+IFdoZW4gYSBzdHJlYW0gaXMgaW5hY3RpdmUsIHRo
+ZSBjb25zdW1lciBwcm9kdWNlcyBmYWtlIGluZGV4ZXMgd2hpY2ggYXJlCj4gYmVhY29ucyB0byBs
+ZXQgdGhlIHZpZXdlciBrbm93IGEgc3RyZWFtIGhhcyBub3QgcHJvZHVjZWQgYW55IGRhdGEgdXAg
+dG8KPiBhIGNlcnRhaW4gdGltZXN0YW1wLiBUaGVzZSBiZWFjb24gYXJlIGFjdHVhbGx5IHJlYWwg
+cGFja2V0IGluZGV4ZXMgd2l0aAo+IGFsbCB0aGUgZmllbGRzIHNldCB0byAwIGV4Y2VwdCBmb3Ig
+dGhlIHRpbWVzdGFtcF9lbmQuIEN1cnJlbnRseSB3ZSBrZWVwCj4gdGhlc2UgYmVhY29ucyBqdXN0
+IGxpa2Ugd2Uga2VlcCByZWFsIGluZGV4ZXMuIFRoZSBwcm9ibGVtIGlzIHRoYXQgd2hlbgo+IHdl
+IHN3aXRjaCBwYWNrZXQsIHdlIGNvbXBhcmUgdGhlIGV2ZW50c19kaXNjYXJkZWQgZmllbGQgaW4g
+dGhlIGluZGV4IHdlCj4ganVzdCByZWNlaXZlZCB3aXRoIHRoZSBzYW1lIGZpZWxkIGluIHRoZSBw
+cmV2aW91cyBpbmRleC4gSW4gdGhlIGNhc2UKPiB3aGVyZSBhIHN0cmVhbSBoYXMgYmVlbiBpbmFj
+dGl2ZSwgd2UgaGF2ZSByZWNlaXZlZCBpbmFjdGl2aXR5IGJlYWNvbnMsCj4gYW5kIHNldCB0aGUg
+ZGlzY2FyZGVkX2V2ZW50IGZpZWxkIHRvIDAsIHNvIHRoZSBkaWZmZXJlbmNlIHdpdGggdGhlIG5l
+eHQKPiByZWFsIGluZGV4IG1pZ2h0IGJlIHdyb25nLgo+IAo+IEluIGZhY3QsIHNpbmNlIHRoZSBp
+bmFjdGl2aXR5IGJlYWNvbnMgYXJlIG9ubHkgdXNlZCB0byBwdXNoIHRoZQo+IHRpbWVzdGFtcCBl
+bmQgb2YgYSBzdHJlYW0sIHdlIGRvbid0IG5lZWQgdG8ga2VlcCB0aGVtIGFuZCB3ZSBhY3R1YWxs
+eQo+IG5lZWQgdG8ga2VlcCBtb3N0IG9mIHRoZSBkYXRhIGZyb20gdGhlIHJlYWwgcHJldmlvdXMg
+aW5kZXguIFNvIHdlIG5vdwo+IGNvcHkgdGhlIGVudGlyZSBwcmV2X2luZGV4IGludG8gdGhlIGN1
+cl9pbmRleCB3aGVuIHdlIHJlY2VpdmUgYW4KPiBpbmFjdGl2aXR5IGJlYWNvbi4gV2UgY291bGQg
+cmVmYWN0b3IgdGhlIGNvZGUgdG8gYXZvaWQgcGVyZm9ybWluZyB0aGUKPiBwb2ludGVyIHN3YXAg
+b2YgY3VyIGFuZCBwcmV2IGluZGV4ZXMsIGJ1dCB0aGlzIGltcGxpZXMgYSByZWRlc2lnbiBvZgo+
+IG11Y2ggb2YgdGhlIHBhY2tldCBzd2l0Y2hpbmcgY29kZSB3aGljaCB3b3VsZCBhZmZlY3Qgb3Ro
+ZXIgY29kZSBwYXRocy4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKdWxpZW4gRGVzZm9zc2V6IDxqZGVz
+Zm9zc2V6QGVmZmljaW9zLmNvbT4KCkFja2VkLWJ5OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGll
+dS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgoKPiAtLS0KPiBmb3JtYXRzL2x0dG5nLWxpdmUvbHR0
+bmctbGl2ZS1jb21tLmMgfCAxNiArKysrKysrKysrKysrKysrCj4gMSBmaWxlIGNoYW5nZWQsIDE2
+IGluc2VydGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvZm9ybWF0cy9sdHRuZy1saXZlL2x0dG5n
+LWxpdmUtY29tbS5jCj4gYi9mb3JtYXRzL2x0dG5nLWxpdmUvbHR0bmctbGl2ZS1jb21tLmMKPiBp
+bmRleCA3N2JmMzRhLi4zZmZhMjU3IDEwMDY0NAo+IC0tLSBhL2Zvcm1hdHMvbHR0bmctbGl2ZS9s
+dHRuZy1saXZlLWNvbW0uYwo+ICsrKyBiL2Zvcm1hdHMvbHR0bmctbGl2ZS9sdHRuZy1saXZlLWNv
+bW0uYwo+IEBAIC0xMjc1LDYgKzEyNzUsNyBAQCByZXRyeToKPiAJCXBvcy0+b2Zmc2V0ID0gMDsK
+PiAJfQo+IAo+ICsJLyogQmVhY29uIHBhY2tldCBpbmRleCAqLwo+IAlpZiAoY3VyX2luZGV4LT5j
+b250ZW50X3NpemUgPT0gMCkgewo+IAkJaWYgKGZpbGVfc3RyZWFtLT5wYXJlbnQuc3RyZWFtX2Ns
+YXNzKSB7Cj4gCQkJZmlsZV9zdHJlYW0tPnBhcmVudC5jeWNsZXNfdGltZXN0YW1wID0KPiBAQCAt
+MTI4Miw4ICsxMjgzLDIzIEBAIHJldHJ5Ogo+IAkJCWZpbGVfc3RyZWFtLT5wYXJlbnQucmVhbF90
+aW1lc3RhbXAgPSBjdGZfZ2V0X3JlYWxfdGltZXN0YW1wKAo+IAkJCQkJJmZpbGVfc3RyZWFtLT5w
+YXJlbnQsCj4gCQkJCQljdXJfaW5kZXgtPnRzX2N5Y2xlcy50aW1lc3RhbXBfZW5kKTsKPiArCj4g
+KwkJCS8qCj4gKwkJCSAqIER1cGxpY2F0ZSB0aGUgZGF0YSBmcm9tIHRoZSBwcmV2aW91cyBpbmRl
+eCwgYmVjYXVzZQo+ICsJCQkgKiB0aGUgb25lIHdlIGp1c3QgcmVjZWl2ZWQgaXMgb25seSBhIGJl
+YWNvbiB3aXRoIG5vCj4gKwkJCSAqIHJlbGV2YW50IGluZm9ybWF0aW9uIGV4Y2VwdCB0aGUgdGlt
+ZXN0YW1wX2VuZC4gV2UKPiArCQkJICogZG9uJ3QgbmVlZCB0byBrZWVwIHRoaXMgdGltZXN0YW1w
+X2VuZCBiZWNhdXNlIHdlIGFscmVhZHkKPiArCQkJICogdXBkYXRlZCB0aGUgZmlsZV9zdHJlYW0g
+dGltZXN0YW1wcywgc28gd2Ugb25seSBuZWVkCj4gKwkJCSAqIHRvIGtlZXAgdGhlIGxhc3QgcmVh
+bCBpbmRleCBkYXRhIGFzIHByZXZfaW5kZXguIFRoYXQKPiArCQkJICogd2F5LCB3ZSBrZWVwIHRo
+ZSBvcmlnaW5hbCBwcmV2IHRpbWVzdGFtcHMgYW5kCj4gKwkJCSAqIGRpc2NhcmRlZCBldmVudHMg
+Y291bnRlci4gVGhpcyBpcyB0aGUgc2FtZSBiZWhhdmlvdXIKPiArCQkJICogYXMgaWYgd2Ugd2Vy
+ZSByZWFkaW5nIGEgbG9jYWwgdHJhY2UsIHdlIHdvdWxkIG5vdAo+ICsJCQkgKiBoYXZlIGZha2Ug
+aW5kZXhlcyBiZXR3ZWVuIHJlYWwgaW5kZXhlcy4KPiArCQkJICovCj4gKwkJCW1lbWNweShjdXJf
+aW5kZXgsIHByZXZfaW5kZXgsIHNpemVvZihzdHJ1Y3QgcGFja2V0X2luZGV4KSk7Cj4gCQl9Cj4g
+CX0gZWxzZSB7Cj4gKwkvKiBSZWFsIHBhY2tldCBpbmRleCAqLwo+IAkJaWYgKGZpbGVfc3RyZWFt
+LT5wYXJlbnQuc3RyZWFtX2NsYXNzKSB7Cj4gCQkJLyogQ29udmVydCB0aGUgdGltZXN0YW1wcyBh
+bmQgYXBwZW5kIHRvIHRoZSByZWFsX2luZGV4LiAqLwo+IAkJCWN1cl9pbmRleC0+dHNfcmVhbC50
+aW1lc3RhbXBfYmVnaW4gPSBjdGZfZ2V0X3JlYWxfdGltZXN0YW1wKAo+IC0tCj4gMi43LjQKPiAK
+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9s
+aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKLS0gCk1h
+dGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
+aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcu
+b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
