@@ -1,70 +1,104 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.8.11, 0.9.5, 0.10.1
-Date: Tue, 23 Jan 2018 20:34:10 +0000 (UTC)
-Message-ID: <2066090908.8090.1516739650023.JavaMail.zimbra@efficios.com>
+From: =?UTF-8?Q?Bj=C3=B8rn_Forsman?= <bjorn.forsman@gmail.com>
+Subject: lttng-modules build broken against linux 4.9.x
+Date: Tue, 23 Jan 2018 21:43:20 +0100
+Message-ID: <CAEYzJUECg0sdn-z7QkW=0C+JYthcen2UdkdT5CkGo0ZKmpVsng__34601.5733237893$1516740099$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Sender: linux-kernel-owner@vger.kernel.org
-To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Stephen Hemminger <stephen@networkplumber.org>, Alan Stern <stern@rowland.harvard.edu>, Lai Jiangshan <jiangshanlai@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-io0-x22b.google.com (mail-io0-x22b.google.com
+ [IPv6:2607:f8b0:4001:c06::22b])
+ by lists.lttng.org (Postfix) with ESMTPS id 3zR0cp2ZHVzsHy
+ for <lttng-dev@lists.lttng.org>; Tue, 23 Jan 2018 20:43:22 +0000 (UTC)
+Received: by mail-io0-x22b.google.com with SMTP id 72so2369303iom.10
+ for <lttng-dev@lists.lttng.org>; Tue, 23 Jan 2018 12:43:22 -0800 (PST)
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-This is a set of releases for the stable branches of the Userspace
-RCU library.
-
-liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
-data synchronization library provides read-side access which scales
-linearly with the number of cores. It does so by allowing multiple
-copies of a given data structure to live at the same time, and by
-monitoring the data structure accesses to detect grace periods after
-which memory reclamation is possible.
-
-liburcu-cds provides efficient data structures based on RCU and
-lock-free algorithms. Those structures include hash tables, queues,
-stacks, and doubly-linked lists.
-
-On versions 0.8 and 0.9, the fixes introduced target pretty much only
-the Cygwin port.
-
-On 0.10, the use of SHARED membarrier by liburcu-bp is removed,
-because this kernel system call sometimes takes between 10-100ms
-to execute, which is not acceptable for some workloads. Note:
-a new PRIVATE_EXPEDITED membarrier is introduced in kernel 4.14,
-and the next version of liburcu will use it when available [1].
-
-Changelog:
-
-2018-01-23 Userspace RCU 0.8.11
-        * Fix: don't use overlapping mmap mappings on Cygwin
-        * Tests fix: add missing Cygwin thread id
-        * Fix: assignment from incompatible pointer type warnings
-        * Tests fix: unused variable warnings
-
-2018-01-23 Userspace RCU 0.9.5
-        * Fix: don't use overlapping mmap mappings on Cygwin
-        * Fix: don't use membarrier SHARED syscall command in liburcu-bp
-        * Tests fix: add missing Cygwin thread id
-        * Fix: assignment from incompatible pointer type warnings
-        * Tests fix: unused variable warnings
-
-2018-01-23 Userspace RCU 0.10.1
-        * Fix: don't use overlapping mmap mappings on Cygwin
-        * Fix: don't use membarrier SHARED syscall command in liburcu-bp
-        * Tests fix: add missing Cygwin thread id
-        * Fix: assignment from incompatible pointer type warnings
-        * Tests fix: unused variable warnings
-        * Fix: add missing m68k headers to dist
-
-[1] http://lttng.org/blog/2018/01/15/membarrier-system-call-performance-and-userspace-rcu/
-
-Project website: http://liburcu.org
-Git repository: git://git.liburcu.org/urcu.git
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+SGkgTFRUbmcgZGV2cywKCk5peE9TIHJlY2VudGx5IHVwZ3JhZGVkIHRoZSBzdGFibGUgbGludXgg
+a2VybmVsIGZyb20gNC45Ljc2IHRvIDQuOS43NwphbmQgd2l0aCB0aGF0IGx0dG5nLW1vZHVsZXMg
+bm8gbG9uZ2VyIGJ1aWxkLiBTZWUgYnVpbGQgZXJyb3IgYmVsb3cgbXkKc2lnbmF0dXJlLgoKLS0g
+CkJlc3QgcmVnYXJkcywKQmrDuHJuIEZvcnNtYW4KCiAgQ0MgW01dICAvdG1wL25peC1idWlsZC1s
+dHRuZy1tb2R1bGVzLTIuMTAuNC00LjkuNzcuZHJ2LTAvbHR0bmctbW9kdWxlcy0yLjEwLjQvcHJv
+YmVzL2x0dG5nLXByb2JlLWt2bS14ODYtbW11Lm8KSW4gZmlsZSBpbmNsdWRlZCBmcm9tCi90bXAv
+bml4LWJ1aWxkLWx0dG5nLW1vZHVsZXMtMi4xMC40LTQuOS43Ny5kcnYtMC9sdHRuZy1tb2R1bGVz
+LTIuMTAuNC9wcm9iZXMvLi4vcHJvYmVzL2RlZmluZV90cmFjZS5oOjEwMDowLAogICAgICAgICAg
+ICAgICAgIGZyb20KL3RtcC9uaXgtYnVpbGQtbHR0bmctbW9kdWxlcy0yLjEwLjQtNC45Ljc3LmRy
+di0wL2x0dG5nLW1vZHVsZXMtMi4xMC40L3Byb2Jlcy8uLi9pbnN0cnVtZW50YXRpb24vZXZlbnRz
+L2x0dG5nLW1vZHVsZS9rdm0uaDoyMzgsCiAgICAgICAgICAgICAgICAgZnJvbQovdG1wL25peC1i
+dWlsZC1sdHRuZy1tb2R1bGVzLTIuMTAuNC00LjkuNzcuZHJ2LTAvbHR0bmctbW9kdWxlcy0yLjEw
+LjQvcHJvYmVzL2x0dG5nLXByb2JlLWt2bS5jOjQyOgovdG1wL25peC1idWlsZC1sdHRuZy1tb2R1
+bGVzLTIuMTAuNC00LjkuNzcuZHJ2LTAvbHR0bmctbW9kdWxlcy0yLjEwLjQvcHJvYmVzLy4uL3By
+b2Jlcy9sdHRuZy10cmFjZXBvaW50LWV2ZW50LWltcGwuaDoxNDI6NjoKZXJyb3I6IGNvbmZsaWN0
+aW5nIHR5cGVzIGZvciAndHJhY2Vfa3ZtX21taW8nCiB2b2lkIHRyYWNlXyMjX25hbWUoX3Byb3Rv
+KTsKICAgICAgXgovdG1wL25peC1idWlsZC1sdHRuZy1tb2R1bGVzLTIuMTAuNC00LjkuNzcuZHJ2
+LTAvbHR0bmctbW9kdWxlcy0yLjEwLjQvcHJvYmVzLy4uL3Byb2Jlcy9sdHRuZy10cmFjZXBvaW50
+LWV2ZW50LWltcGwuaDo1NDoyOgpub3RlOiBpbiBleHBhbnNpb24gb2YgbWFjcm8gJ0xUVE5HX1RS
+QUNFUE9JTlRfRVZFTlRfSU5TVEFOQ0VfTUFQJwogIExUVE5HX1RSQUNFUE9JTlRfRVZFTlRfSU5T
+VEFOQ0VfTUFQKG1hcCwgbmFtZSwgbWFwLCBQQVJBTVMocHJvdG8pLApQQVJBTVMoYXJncykpCiAg
+Xn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4KL3RtcC9uaXgtYnVpbGQtbHR0bmct
+bW9kdWxlcy0yLjEwLjQtNC45Ljc3LmRydi0wL2x0dG5nLW1vZHVsZXMtMi4xMC40L3Byb2Jlcy8u
+Li9wcm9iZXMvbHR0bmctdHJhY2Vwb2ludC1ldmVudC1pbXBsLmg6OTY6MjoKbm90ZTogaW4gZXhw
+YW5zaW9uIG9mIG1hY3JvICdMVFROR19UUkFDRVBPSU5UX0VWRU5UX01BUCcKICBMVFROR19UUkFD
+RVBPSU5UX0VWRU5UX01BUChuYW1lLCBuYW1lLCAgICBcCiAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+
+fn5+fn4KL3RtcC9uaXgtYnVpbGQtbHR0bmctbW9kdWxlcy0yLjEwLjQtNC45Ljc3LmRydi0wL2x0
+dG5nLW1vZHVsZXMtMi4xMC40L3Byb2Jlcy8uLi9pbnN0cnVtZW50YXRpb24vZXZlbnRzL2x0dG5n
+LW1vZHVsZS9rdm0uaDo4NzoxOgpub3RlOiBpbiBleHBhbnNpb24gb2YgbWFjcm8gJ0xUVE5HX1RS
+QUNFUE9JTlRfRVZFTlQnCiBMVFROR19UUkFDRVBPSU5UX0VWRU5UKGt2bV9tbWlvLAogXn5+fn5+
+fn5+fn5+fn5+fn5+fn5+fgpJbiBmaWxlIGluY2x1ZGVkIGZyb20KL25peC9zdG9yZS9zeGNqeGdr
+MTNtbGtoeW1hMGFydjRpemFtZjA2NXZoZi1saW51eC00LjkuNzctZGV2L2xpYi9tb2R1bGVzLzQu
+OS43Ny9zb3VyY2UvYXJjaC94ODYvaW5jbHVkZS9hc20va3ZtX2hvc3QuaDoxNzowLAogICAgICAg
+ICAgICAgICAgIGZyb20KL25peC9zdG9yZS9zeGNqeGdrMTNtbGtoeW1hMGFydjRpemFtZjA2NXZo
+Zi1saW51eC00LjkuNzctZGV2L2xpYi9tb2R1bGVzLzQuOS43Ny9zb3VyY2UvaW5jbHVkZS9saW51
+eC9rdm1faG9zdC5oOjM2LAogICAgICAgICAgICAgICAgIGZyb20KL3RtcC9uaXgtYnVpbGQtbHR0
+bmctbW9kdWxlcy0yLjEwLjQtNC45Ljc3LmRydi0wL2x0dG5nLW1vZHVsZXMtMi4xMC40L3Byb2Jl
+cy9sdHRuZy1wcm9iZS1rdm0uYzoyNDoKL25peC9zdG9yZS9zeGNqeGdrMTNtbGtoeW1hMGFydjRp
+emFtZjA2NXZoZi1saW51eC00LjkuNzctZGV2L2xpYi9tb2R1bGVzLzQuOS43Ny9zb3VyY2UvaW5j
+bHVkZS9saW51eC90cmFjZXBvaW50Lmg6MTgzOjIxOgpub3RlOiBwcmV2aW91cyBkZWZpbml0aW9u
+IG9mICd0cmFjZV9rdm1fbW1pbycgd2FzIGhlcmUKICBzdGF0aWMgaW5saW5lIHZvaWQgdHJhY2Vf
+IyNuYW1lKHByb3RvKSAgICBcCiAgICAgICAgICAgICAgICAgICAgIF4KL25peC9zdG9yZS9zeGNq
+eGdrMTNtbGtoeW1hMGFydjRpemFtZjA2NXZoZi1saW51eC00LjkuNzctZGV2L2xpYi9tb2R1bGVz
+LzQuOS43Ny9zb3VyY2UvaW5jbHVkZS9saW51eC90cmFjZXBvaW50Lmg6MzQ4OjI6Cm5vdGU6IGlu
+IGV4cGFuc2lvbiBvZiBtYWNybyAnX19ERUNMQVJFX1RSQUNFJwogIF9fREVDTEFSRV9UUkFDRShu
+YW1lLCBQQVJBTVMocHJvdG8pLCBQQVJBTVMoYXJncyksICBcCiAgXn5+fn5+fn5+fn5+fn5+Ci9u
+aXgvc3RvcmUvc3hjanhnazEzbWxraHltYTBhcnY0aXphbWYwNjV2aGYtbGludXgtNC45Ljc3LWRl
+di9saWIvbW9kdWxlcy80LjkuNzcvc291cmNlL2luY2x1ZGUvbGludXgvdHJhY2Vwb2ludC5oOjQ4
+NDoyOgpub3RlOiBpbiBleHBhbnNpb24gb2YgbWFjcm8gJ0RFQ0xBUkVfVFJBQ0UnCiAgREVDTEFS
+RV9UUkFDRShuYW1lLCBQQVJBTVMocHJvdG8pLCBQQVJBTVMoYXJncykpCiAgXn5+fn5+fn5+fn5+
+fgovbml4L3N0b3JlL3N4Y2p4Z2sxM21sa2h5bWEwYXJ2NGl6YW1mMDY1dmhmLWxpbnV4LTQuOS43
+Ny1kZXYvbGliL21vZHVsZXMvNC45Ljc3L3NvdXJjZS9pbmNsdWRlL3RyYWNlL2V2ZW50cy9rdm0u
+aDoyMTA6MToKbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvICdUUkFDRV9FVkVOVCcKIFRSQUNF
+X0VWRU5UKGt2bV9tbWlvLAogXn5+fn5+fn5+fn4KbWFrZVs1XTogKioqIFsvbml4L3N0b3JlL3N4
+Y2p4Z2sxM21sa2h5bWEwYXJ2NGl6YW1mMDY1dmhmLWxpbnV4LTQuOS43Ny1kZXYvbGliL21vZHVs
+ZXMvNC45Ljc3L3NvdXJjZS9zY3JpcHRzL01ha2VmaWxlLmJ1aWxkOjI5OToKL3RtcC9uaXgtYnVp
+bGQtbHR0bmctbW9kdWxlcy0yLjEwLjQtNC45Ljc3LmRydi0wL2x0dG5nLW1vZHVsZXMtMi4xMC40
+L3Byb2Jlcy9sdHRuZy1wcm9iZS1rdm0ub10KRXJyb3IgMQptYWtlWzVdOiAqKiogV2FpdGluZyBm
+b3IgdW5maW5pc2hlZCBqb2JzLi4uLgptYWtlWzRdOiAqKiogWy9uaXgvc3RvcmUvc3hjanhnazEz
+bWxraHltYTBhcnY0aXphbWYwNjV2aGYtbGludXgtNC45Ljc3LWRldi9saWIvbW9kdWxlcy80Ljku
+Nzcvc291cmNlL3NjcmlwdHMvTWFrZWZpbGUuYnVpbGQ6NTQ0OgovdG1wL25peC1idWlsZC1sdHRu
+Zy1tb2R1bGVzLTIuMTAuNC00LjkuNzcuZHJ2LTAvbHR0bmctbW9kdWxlcy0yLjEwLjQvcHJvYmVz
+XQpFcnJvciAyCm1ha2VbNF06ICoqKiBXYWl0aW5nIGZvciB1bmZpbmlzaGVkIGpvYnMuLi4uCm1h
+a2VbM106ICoqKiBbL25peC9zdG9yZS9zeGNqeGdrMTNtbGtoeW1hMGFydjRpemFtZjA2NXZoZi1s
+aW51eC00LjkuNzctZGV2L2xpYi9tb2R1bGVzLzQuOS43Ny9zb3VyY2UvTWFrZWZpbGU6MTQ5NzoK
+X21vZHVsZV8vdG1wL25peC1idWlsZC1sdHRuZy1tb2R1bGVzLTIuMTAuNC00LjkuNzcuZHJ2LTAv
+bHR0bmctbW9kdWxlcy0yLjEwLjRdCkVycm9yIDIKbWFrZVsyXTogKioqIFtNYWtlZmlsZToxNTA6
+IHN1Yi1tYWtlXSBFcnJvciAyCm1ha2VbMV06ICoqKiBbTWFrZWZpbGU6MjQ6IF9fc3ViLW1ha2Vd
+IEVycm9yIDIKbWFrZVsxXTogTGVhdmluZyBkaXJlY3RvcnkKJy9uaXgvc3RvcmUvc3hjanhnazEz
+bWxraHltYTBhcnY0aXphbWYwNjV2aGYtbGludXgtNC45Ljc3LWRldi9saWIvbW9kdWxlcy80Ljku
+NzcvYnVpbGQnCm1ha2U6ICoqKiBbTWFrZWZpbGU6MTEwOiBtb2R1bGVzXSBFcnJvciAyCmJ1aWxk
+ZXIgZm9yIOKAmC9uaXgvc3RvcmUvNDBza2Z3NWE5anBtNjBsN24zc3pubm1tc3ZyMnltd3ktbHR0
+bmctbW9kdWxlcy0yLjEwLjQtNC45Ljc3LmRyduKAmQpmYWlsZWQgd2l0aCBleGl0IGNvZGUgMgpl
+cnJvcjogYnVpbGQgb2YK4oCYL25peC9zdG9yZS80MHNrZnc1YTlqcG02MGw3bjNzem5ubW1zdnIy
+eW13eS1sdHRuZy1tb2R1bGVzLTIuMTAuNC00LjkuNzcuZHJ24oCZCmZhaWxlZApfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBs
+aXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
+LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
