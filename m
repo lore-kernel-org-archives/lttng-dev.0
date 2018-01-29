@@ -1,15 +1,17 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools] Fix: do not flag consumer as
-	disabled on relayd comm failure
-Date: Thu, 25 Jan 2018 18:57:27 -0500
-Message-ID: <1516924647-22584-1-git-send-email-jonathan.rajotte-julien__27058.4944206805$1516924588$gmane$org@efficios.com>
+From: pedro pinto <pedro.e.pinto@gmail.com>
+Subject: statically linking liblttng
+Date: Mon, 29 Jan 2018 08:56:42 -0500
+Message-ID: <CAKOJUhQSk9YZsSvUiGV_u0C0YT43KvFVTBNwAR861m4-=LWa9Q__20440.6942161315$1517239885$gmane$org@mail.gmail.com>
+Reply-To: pedro.e.pinto@gmail.com
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============5492853176055246480=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3zSJrP267Fzvk0
- for <lttng-dev@lists.lttng.org>; Thu, 25 Jan 2018 23:57:56 +0000 (UTC)
+Received: from mail-qt0-x231.google.com (mail-qt0-x231.google.com
+ [IPv6:2607:f8b0:400d:c0d::231])
+ by lists.lttng.org (Postfix) with ESMTPS id 3zVWKC6pTmzD6w
+ for <lttng-dev@lists.lttng.org>; Mon, 29 Jan 2018 13:57:03 +0000 (UTC)
+Received: by mail-qt0-x231.google.com with SMTP id i1so12711767qtj.8
+ for <lttng-dev@lists.lttng.org>; Mon, 29 Jan 2018 05:57:03 -0800 (PST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,28 +22,59 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-U2lnbmVkLW9mZi1ieTogSm9uYXRoYW4gUmFqb3R0ZSA8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5A
-ZWZmaWNpb3MuY29tPgotLS0KIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvY21kLmMgfCAxMCArKysr
-Ky0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQoK
-ZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvY21kLmMgYi9zcmMvYmluL2x0dG5n
-LXNlc3Npb25kL2NtZC5jCmluZGV4IGEyOTUwNTkuLjFlZGNmZmUgMTAwNjQ0Ci0tLSBhL3NyYy9i
-aW4vbHR0bmctc2Vzc2lvbmQvY21kLmMKKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jbWQu
-YwpAQCAtOTIwLDcgKzkyMCw3IEBAIHN0YXRpYyBpbnQgc2VuZF9jb25zdW1lcl9yZWxheWRfc29j
-a2V0KGVudW0gbHR0bmdfZG9tYWluX3R5cGUgZG9tYWluLAogCS8qIENvbm5lY3QgdG8gcmVsYXlk
-IGFuZCBtYWtlIHZlcnNpb24gY2hlY2sgaWYgdXJpIGlzIHRoZSBjb250cm9sLiAqLwogCXJldCA9
-IGNyZWF0ZV9jb25uZWN0X3JlbGF5ZChyZWxheWRfdXJpLCAmcnNvY2ssIGNvbnN1bWVyKTsKIAlp
-ZiAocmV0ICE9IExUVE5HX09LKSB7Ci0JCWdvdG8gZXJyb3I7CisJCWdvdG8gcmVsYXlkX2NvbW1f
-ZXJyb3I7CiAJfQogCWFzc2VydChyc29jayk7CiAKQEAgLTk2MCwxMCArOTYwLDYgQEAgc3RhdGlj
-IGludCBzZW5kX2NvbnN1bWVyX3JlbGF5ZF9zb2NrZXQoZW51bSBsdHRuZ19kb21haW5fdHlwZSBk
-b21haW4sCiAJICovCiAKIGNsb3NlX3NvY2s6Ci0JKHZvaWQpIHJlbGF5ZF9jbG9zZShyc29jayk7
-Ci0JZnJlZShyc29jayk7Ci0KLWVycm9yOgogCWlmIChyZXQgIT0gTFRUTkdfT0spIHsKIAkJLyoK
-IAkJICogVGhlIGNvbnN1bWVyIG91dHB1dCBmb3IgdGhpcyBzZXNzaW9uIHNob3VsZCBub3QgYmUg
-dXNlZCBhbnltb3JlCkBAIC05NzIsNiArOTY4LDEwIEBAIGVycm9yOgogCQkgKi8KIAkJY29uc3Vt
-ZXItPmVuYWJsZWQgPSAwOwogCX0KKwkodm9pZCkgcmVsYXlkX2Nsb3NlKHJzb2NrKTsKKwlmcmVl
-KHJzb2NrKTsKKworcmVsYXlkX2NvbW1fZXJyb3I6CiAJcmV0dXJuIHJldDsKIH0KIAotLSAKMi43
-LjQKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============5492853176055246480==
+Content-Type: multipart/alternative; boundary="94eb2c03598ae214ae0563ea9ed3"
+
+--94eb2c03598ae214ae0563ea9ed3
+Content-Type: text/plain; charset="UTF-8"
+
+Hi there. I would like to instrument a C++ statically linked application
+using the lttng static libraries (i.e. libllttng-ust.a, etc). To try to get
+this working I took the quick start example and changed it to use the
+following link command line:
+
+gcc -o hello hello.o hello-tp.o -Wl,-Bstatic -llttng-ust
+-llttng-ust-tracepoint -lurcu-bp -lurcu-cds -Wl,-Bdynamic -lrt -ldl
+-pthread
+
+This does not return any errors but the resulting trace is empty. I was
+able to get a trace using the liblttng shared object though.
+
+Is it possible to statically link liblttng ? I am using v2.9.5 of lttng
+
+Thanks in advance!
+
+-pp
+
+--94eb2c03598ae214ae0563ea9ed3
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi there. I would like to instrument a C++ statically=
+ linked application using the lttng static libraries (i.e. libllttng-ust.a,=
+ etc). To try to get this working I took the quick start example and change=
+d it to use the following link command line:=C2=A0</div><div><br></div><div=
+>gcc -o hello hello.o hello-tp.o -Wl,-Bstatic -llttng-ust -llttng-ust-trace=
+point -lurcu-bp -lurcu-cds -Wl,-Bdynamic -lrt -ldl -pthread=C2=A0</div><div=
+><br></div><div><div>This does not return any errors but the resulting trac=
+e is empty. I was able to get a trace using the liblttng shared object thou=
+gh.<br></div></div><div><br></div><div>Is it possible to statically link li=
+blttng ? I am using v2.9.5 of lttng</div><div><br></div><div>Thanks in adva=
+nce!</div><div><br></div><div>-pp</div><div><br></div><div><br></div><div><=
+br></div><div><br></div></div>
+
+--94eb2c03598ae214ae0563ea9ed3--
+
+--===============5492853176055246480==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============5492853176055246480==--
