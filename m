@@ -1,20 +1,20 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 Subject: [PATCH lttng-ust 2/2] Use ust_lock on fd tracker add
 	operation for atomicity against fork
-Date: Thu,  1 Feb 2018 15:55:24 -0500
-Message-ID: <1517518524-14968-2-git-send-email-jonathan.rajotte-julien__37690.8139944591$1517518461$gmane$org@efficios.com>
-References: <1517518524-14968-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+Date: Thu,  1 Feb 2018 17:28:12 -0500
+Message-ID: <1517524092-10717-2-git-send-email-jonathan.rajotte-julien__6397.39674884385$1517524005$gmane$org@efficios.com>
+References: <1517524092-10717-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3zXXSs18xqzntL
- for <lttng-dev@lists.lttng.org>; Thu,  1 Feb 2018 20:55:40 +0000 (UTC)
+ by lists.lttng.org (Postfix) with ESMTPS id 3zXZWq0Mkkzp9p
+ for <lttng-dev@lists.lttng.org>; Thu,  1 Feb 2018 22:28:22 +0000 (UTC)
 Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 8B8E03402BA
- for <lttng-dev@lists.lttng.org>; Thu,  1 Feb 2018 20:56:12 +0000 (UTC)
-In-Reply-To: <1517518524-14968-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ by mail.efficios.com (Postfix) with ESMTP id 6FCEC3402C3
+ for <lttng-dev@lists.lttng.org>; Thu,  1 Feb 2018 22:29:00 +0000 (UTC)
+In-Reply-To: <1517524092-10717-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
