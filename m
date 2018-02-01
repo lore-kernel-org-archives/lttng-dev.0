@@ -1,18 +1,15 @@
-From: Francis Deslauriers <francis.deslauriers@efficios.com>
-Subject: [PATCH lttng-ust 0/8] Support provider duplicates and
-	unloading
-Date: Fri,  2 Feb 2018 14:48:03 -0500
-Message-ID: <1517600891-23632-1-git-send-email-francis.deslauriers__11735.8414143839$1517600905$gmane$org@efficios.com>
+From: Ramith Shetty <rshetty@infinera.com>
+Subject: lttng-relayd---->lttng-relayd communication
+Date: Thu, 1 Feb 2018 12:08:03 +0000
+Message-ID: <CY4PR1001MB2246EC77AA536AD1D087EDA4D0FA0__35259.0131726631$1517604228$gmane$org@CY4PR1001MB2246.namprd10.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============8094921764807947295=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3zY6x82km1ztFW
- for <lttng-dev@lists.lttng.org>; Fri,  2 Feb 2018 19:48:44 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 90FE5340222
- for <lttng-dev@lists.lttng.org>; Fri,  2 Feb 2018 19:49:23 +0000 (UTC)
+Received: from NAM01-BN3-obe.outbound.protection.outlook.com
+ (mail-bn3nam01on0046.outbound.protection.outlook.com [104.47.33.46])
+ by lists.lttng.org (Postfix) with ESMTPS id 3zY8Bc5k5PztbF
+ for <lttng-dev@lists.lttng.org>; Fri,  2 Feb 2018 20:45:28 +0000 (UTC)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,38 +19,117 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-VGhpcyBwYXRjaCBzZXQgYWRkcyB0aGUgc3VwcG9ydCBmb3IgZHVwbGljYXRlZCBwcm9iZSBwcm92
-aWRlcnMgYW5kCnN1cHBvcnQgZm9yIHVubG9hZGluZyBwcm9iZSBwcm92aWRlcnMgdXNpbmcgZGxj
-bG9zZSgpLgoKSXQgYWxsb3dzIHRvIGFkdmFuY2Ugc2NlbmFyaW9zIHdoZXJlIHByb2JlIHByb3Zp
-ZGVycyBjYW4gYmUgdXBncmFkZWQKZHVyaW5nIHRyYWNpbmcuCgpGb3IgZXhhbXBsZSwgZHVyaW5n
-IHRyYWNpbmcgdGhlIHVzZXIgY291bGQgZGxvcGVuKCkgYSBuZXcgdmVyc2lvbiBvZiBhIHByb2Jl
-CnByb3ZpZGVyIGFuZCBkbGNsb3NlKCkgdGhlIHByZXZpb3VzIG9uZS4gQWxsIHRoaXMgd2l0aG91
-dCBzdG9wIHRyYWNpbmcuCgpBIHBhdGNoIHNldCBmb3IgbHR0bmctdG9vbHMgcHJvamVjdCBpcyBu
-ZWNlc3NhcnkgdG8gdGFrZSBhZHZhbnRhZ2Ugb2YKdGhvc2UgY2hhbmdlcy4KClRoZSBsdHRuZy10
-b29scyBjaGFuZ2VzIGNhbiBiZSBmb3VuZCBvbiB0aGlzIGJyYW5jaCBvZiBteSBHaXRodWIgZm9y
-azoKaHR0cHM6Ly9naXRodWIuY29tL2ZyZGVzby9sdHRuZy10b29scy9jb21taXRzL211bHRpLWxp
-Yi1zdXBwb3J0CgpGcmFuY2lzIERlc2xhdXJpZXJzICg3KToKICBGaXg6IG1pc3NpbmcgZXZlbnQg
-cmVtb3ZhbCBmcm9tIHRoZSBldmVudCBoYXNodGFibGUKICBDbGVhbnVwOiBNb3ZlIHZlcnNpb24g
-bnVtYmVycyBpbiBzZXBhcmF0ZSB2YXJpYWJsZXMgaW4gY29uZmlndXJlCiAgICBzY3JpcHQKICBB
-ZGQgcHJvYmUgcHJvdmlkZXIgdW5yZWdpc3RlciBmdW5jdGlvbgogIEZpeDogbWlzc2luZyBlbnVt
-IHJlbW92YWwgZnJvbSB0aGUgZW51bSBoYXNodGFibGUKICBNYW51YWxseSBkbG9wZW4oKSBsaWJs
-dHRuZy11c3Quc28gdG8gcHJldmVudCB1bmxvYWRpbmcKICBSZW5hbWUgbHR0bmdfdXN0X2VudW1f
-Z2V0IHRvIGx0dG5nX3VzdF9lbnVtX2dldF9mcm9tX2Rlc2MKICBTdXBwb3J0IHVubG9hZGluZyBv
-ZiBwcm9iZSBwcm92aWRlcnMKCk1hdGhpZXUgRGVzbm95ZXJzICgxKToKICBSZW1vdmUgZHVwbGlj
-YXRlIHByb3ZpZGVyIG5hbWUgY2hlY2tzCgogY29uZmlndXJlLmFjICAgICAgICAgICAgICAgICAg
-ICAgICAgIHwgICA3ICstCiBpbmNsdWRlL2x0dG5nL3VzdC1ldmVudHMuaCAgICAgICAgICAgfCAg
-IDYgKy0KIGluY2x1ZGUvbHR0bmcvdXN0LXRyYWNlcG9pbnQtZXZlbnQuaCB8ICAgMiArLQogbGli
-bHR0bmctdXN0LWNvbW0vbHR0bmctdXN0LWNvbW0uYyAgIHwgICAzICstCiBsaWJsdHRuZy11c3Qv
-TWFrZWZpbGUuYW0gICAgICAgICAgICAgfCAgIDIgKwogbGlibHR0bmctdXN0L2x0dG5nLWV2ZW50
-cy5jICAgICAgICAgIHwgMTM5ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tCiBs
-aWJsdHRuZy11c3QvbHR0bmctcHJvYmVzLmMgICAgICAgICAgfCAgMjggKystLS0tLQogbGlibHR0
-bmctdXN0L2x0dG5nLXVzdC1jb21tLmMgICAgICAgIHwgIDIyICsrKysrKwogbGlibHR0bmctdXN0
-L3RyYWNlcG9pbnQuYyAgICAgICAgICAgIHwgIDQzICsrKysrKysrLS0tCiBsaWJsdHRuZy11c3Qv
-dXN0LWNvcmUuYyAgICAgICAgICAgICAgfCAgMTEgKystCiAxMCBmaWxlcyBjaGFuZ2VkLCAyMDAg
-aW5zZXJ0aW9ucygrKSwgNjMgZGVsZXRpb25zKC0pCgotLSAKMi43LjQKCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
-L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============8094921764807947295==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_CY4PR1001MB2246EC77AA536AD1D087EDA4D0FA0CY4PR1001MB2246_"
+
+--_000_CY4PR1001MB2246EC77AA536AD1D087EDA4D0FA0CY4PR1001MB2246_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+Could you please let us know if we can establish the below setup with the l=
+ttng-relayd?
+
+
+[target1:session-daemon]-------tracepath---> [target2:lttng-relayd]-------t=
+racepath------>[target3:lttng-relayd]-------->viewer
+
+
+Regards,
+Ramith
+
+--_000_CY4PR1001MB2246EC77AA536AD1D087EDA4D0FA0CY4PR1001MB2246_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{mso-style-priority:99;
+	color:#954F72;
+	text-decoration:underline;}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Calibri",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-family:"Calibri",sans-serif;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-US" link=3D"#0563C1" vlink=3D"#954F72">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal">Hi,<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Could you please let us know if we can establish the=
+ below setup with the lttng-relayd?<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">[target1:session-daemon]-------tracepath-<span style=
+=3D"font-family:Wingdings">=E0</span> [target2:lttng-relayd]-------tracepat=
+h----<span style=3D"font-family:Wingdings">=E0</span>[target3:lttng-relayd]=
+------<span style=3D"font-family:Wingdings">=E0</span>viewer<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">Regards,<o:p></o:p></p>
+<p class=3D"MsoNormal">Ramith <o:p></o:p></p>
+</div>
+</body>
+</html>
+
+--_000_CY4PR1001MB2246EC77AA536AD1D087EDA4D0FA0CY4PR1001MB2246_--
+
+--===============8094921764807947295==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============8094921764807947295==--
