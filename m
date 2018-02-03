@@ -1,22 +1,19 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools v5 1/2] lttng-relayd: use TCP
- keep-alive mechanism to detect dead-peer
-Date: Sat, 3 Feb 2018 15:13:19 -0500
-Message-ID: <CA+jJMxtF+ttQ+Q5u7osWFb63keEO4hSEStYz=yBxKEFB7a8X_A__40777.050323277$1517688729$gmane$org@mail.gmail.com>
-References: <1516653815-31654-1-git-send-email-jonathan.rajotte-julien@efficios.com>
- <CA+jJMxsjQVWAjdfCjAC__f09BCsA73-mvy8X=_DcJaiDw+-+wQ@mail.gmail.com>
- <20180201231053.GA15056@joraj-alpa>
+From: Ramith Shetty <rshetty@infinera.com>
+Subject: Re: lttng-relayd---->lttng-relayd communication
+Date: Sat, 3 Feb 2018 05:08:25 +0000
+Message-ID: <CY4PR1001MB22467FDB4FAA53FFD8F16AFDD0F80__2944.42866365916$1517694604$gmane$org@CY4PR1001MB2246.namprd10.prod.outlook.com>
+References: <CY4PR1001MB2246EC77AA536AD1D087EDA4D0FA0@CY4PR1001MB2246.namprd10.prod.outlook.com>
+ <20180202211856.GA20408@joraj-alpa>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yw0-x243.google.com (mail-yw0-x243.google.com
- [IPv6:2607:f8b0:4002:c05::243])
- by lists.lttng.org (Postfix) with ESMTPS id 3zYlRS5z72zs2P
- for <lttng-dev@lists.lttng.org>; Sat,  3 Feb 2018 20:13:40 +0000 (UTC)
-Received: by mail-yw0-x243.google.com with SMTP id x62so15766526ywg.11
- for <lttng-dev@lists.lttng.org>; Sat, 03 Feb 2018 12:13:40 -0800 (PST)
-In-Reply-To: <20180201231053.GA15056@joraj-alpa>
+Received: from NAM03-DM3-obe.outbound.protection.outlook.com
+ (mail-dm3nam03on0063.outbound.protection.outlook.com [104.47.41.63])
+ by lists.lttng.org (Postfix) with ESMTPS id 3zYncG6hZwzsMn
+ for <lttng-dev@lists.lttng.org>; Sat,  3 Feb 2018 21:51:26 +0000 (UTC)
+In-Reply-To: <20180202211856.GA20408@joraj-alpa>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,19 +24,35 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev@lists.lttng.org, Jeremie Galarneau <jgalar@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMSBGZWJydWFyeSAyMDE4IGF0IDE4OjEwLCBKb25hdGhhbiBSYWpvdHRlLUp1bGllbgo8am9u
-YXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPiB3cm90ZToKPiBUaGFua3MsCj4KPiBP
-biBUaHUsIEZlYiAwMSwgMjAxOCBhdCAwNjowMzoxM1BNIC0wNTAwLCBKw6lyw6ltaWUgR2FsYXJu
-ZWF1IHdyb3RlOgo+PiBNZXJnZWQgd2l0aCBzb21lIGNoYW5nZXMuCj4KPiBEbyB5b3UgcGxhbiBv
-biBiYWNrcG9ydGluZyB0aGlzPyBHaXZlbiB0aGF0IGl0IHByZXZlbnQgZmQgbGVha3MgZm9yIGxv
-bmcgcnVubmluZwo+IHJlbGF5ZCB3aGVyZSBkZWFkIHBlZXIgaXMgY29tbW9uLgoKWWVzLiBJdCBp
-cyBub3cgcGFydCBvZiB0aGUgc3RhYmxlLTIuMTAgYW5kIHN0YWJsZS0yLjkgYnJhbmNoZXMuCgpK
-w6lyw6ltaWUKCj4KPiBDaGVlcnMKPgo+Pgo+PiBUaGFua3MhCj4+IErDqXLDqW1pZQo+Pgo+PiBP
-biAyMiBKYW51YXJ5IDIwMTggYXQgMTU6NDMsIEpvbmF0aGFuIFJham90dGUKCgoKLS0gCkrDqXLD
-qW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
-bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5v
-cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+SGkgSm9uYXRoYW4sCgpUaGFua3MgZm9yIHlvdXIgc3VwcG9ydC4KCklmIHdlIGhhdmUgYSBzZXR1
+cCBhcyBiZWxvdy4gQ2FuIHdlIHN0cmVhbSB0aGUgbG9ncyB0byBob3N0IFN5c3RlbUEgIGZyb20g
+VGFyZ2V0QiBiZWxvdz8KCkhlcmUgVGFyZ2V0QSBhbmQgVGFyZ2V0QiBhcmUgcGFydCBvZiBhIHBy
+aXZhdGUgbmV0d29yay4gT25seSBUYXJnZXRBIGhhcyBjb25uZWN0aXZpdHkgdG8gU3lzdGVtQS4g
+V2UgbmVlZCB0byBzdHJlYW0gZGF0YSBmcm9tIFRhcmdldEIgdG8gU3lzdGVtQS4KClsgICAgVGFy
+Z2V0Qi0tLS0tPlRhcmdldEEgICAgXS0tLS0tLS0+W1N5c3RlbUFdCgpSZWdhcmRzLApSYW1pdGgK
+Ci0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tCkZyb206IEpvbmF0aGFuIFJham90dGUtSnVsaWVu
+IFttYWlsdG86am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tXSAKU2VudDogU2F0
+dXJkYXksIEZlYnJ1YXJ5IDMsIDIwMTggMjo0OSBBTQpUbzogUmFtaXRoIFNoZXR0eSA8cnNoZXR0
+eUBpbmZpbmVyYS5jb20+CkNjOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnClN1YmplY3Q6IFJl
+OiBbbHR0bmctZGV2XSBsdHRuZy1yZWxheWQtLS0tPmx0dG5nLXJlbGF5ZCBjb21tdW5pY2F0aW9u
+CgpDQVVUSU9OOiBUaGlzIGVtYWlsIG9yaWdpbmF0ZWQgZnJvbSBvdXRzaWRlIG9mIHRoZSBvcmdh
+bml6YXRpb24uIERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5
+b3UgcmVjb2duaXplIHRoZSBzZW5kZXIgYW5kIGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZS4KCgpI
+aSBSYW1pdGgsCgpPbiBUaHUsIEZlYiAwMSwgMjAxOCBhdCAxMjowODowM1BNICswMDAwLCBSYW1p
+dGggU2hldHR5IHdyb3RlOgo+IEhpLAo+Cj4gQ291bGQgeW91IHBsZWFzZSBsZXQgdXMga25vdyBp
+ZiB3ZSBjYW4gZXN0YWJsaXNoIHRoZSBiZWxvdyBzZXR1cCB3aXRoIHRoZSBsdHRuZy1yZWxheWQ/
+CgpBcyBvZiB0b2RheSBsdHRuZy1yZWxheWQgY2Fubm90IGFjdCBhcyBhICJjbGllbnQiIHRvIGFu
+b3RoZXIgbHR0bmctcmVsYXlkLgoKQ291bGQgeW91IGV4cGxhaW4gYSBiaXQgbW9yZSB3aGF0IHdv
+dWxkIGJlIHRoZSBlbmQgZ29hbCBoZXJlPwoKQ2hlZXJzCgo+Cj4KPiBbdGFyZ2V0MTpzZXNzaW9u
+LWRhZW1vbl0tLS0tLS0tdHJhY2VwYXRoLS0tPiBbdGFyZ2V0MjpsdHRuZy1yZWxheWRdLS0tLS0t
+LXRyYWNlcGF0aC0tLS0tLT5bdGFyZ2V0MzpsdHRuZy1yZWxheWRdLS0tLS0tLS0+dmlld2VyCj4K
+Pgo+IFJlZ2FyZHMsCj4gUmFtaXRoCgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2CgoKLS0KSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4KRWZmaWNpT1MKX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1h
+aWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcu
+b3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
