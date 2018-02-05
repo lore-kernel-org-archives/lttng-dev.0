@@ -1,20 +1,17 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-ust v2 2/2] Use ust_lock during sock_info
-	operations for atomicity against fork
-Date: Mon,  5 Feb 2018 17:58:19 -0500
-Message-ID: <1517871499-15532-2-git-send-email-jonathan.rajotte-julien__43876.9348817461$1517871405$gmane$org@efficios.com>
-References: <1517871499-15532-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools 2/2] Document add-context limitation
+	for started session
+Date: Mon,  5 Feb 2018 18:19:01 -0500
+Message-ID: <1517872741-18065-2-git-send-email-jonathan.rajotte-julien__10943.7168729075$1517872653$gmane$org@efficios.com>
+References: <1517872741-18065-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
- by lists.lttng.org (Postfix) with ESMTPS id 3zb30f71JvzpFx
- for <lttng-dev@lists.lttng.org>; Mon,  5 Feb 2018 22:58:26 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id 7BB35340225
- for <lttng-dev@lists.lttng.org>; Mon,  5 Feb 2018 22:59:11 +0000 (UTC)
-In-Reply-To: <1517871499-15532-1-git-send-email-jonathan.rajotte-julien@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 3zb3Sd0sNHzpLh
+ for <lttng-dev@lists.lttng.org>; Mon,  5 Feb 2018 23:19:12 +0000 (UTC)
+In-Reply-To: <1517872741-18065-1-git-send-email-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,25 +22,27 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
 U2lnbmVkLW9mZi1ieTogSm9uYXRoYW4gUmFqb3R0ZSA8am9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5A
-ZWZmaWNpb3MuY29tPgotLS0KdjI6IFBlcnRpbmVudCBsb2NraW5nLi4uCgpTaG91bGQgdGhlIGxv
-Y2tpbmcgYmUgbW9yZSBmaW5lLWdyYWluZWQgYW5kIGFwcGxpZWQgYXJvdW5kCnVzdGNvbW1fY2xv
-c2VfdW5peF9zb2NrIGFuZCBzb2NrX2luZm8gb24gYm90aCBjb2RlIHBhdGggb25seT8KCi0tLQog
-bGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMgfCA3ICsrKystLS0KIDEgZmlsZSBjaGFuZ2Vk
-LCA0IGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvbGlibHR0bmct
-dXN0L2x0dG5nLXVzdC1jb21tLmMgYi9saWJsdHRuZy11c3QvbHR0bmctdXN0LWNvbW0uYwppbmRl
-eCAzMmJhM2MxLi4wY2Y1ZWNkIDEwMDY0NAotLS0gYS9saWJsdHRuZy11c3QvbHR0bmctdXN0LWNv
-bW0uYworKysgYi9saWJsdHRuZy11c3QvbHR0bmctdXN0LWNvbW0uYwpAQCAtMTM5Niw2ICsxMzk2
-LDEwIEBAIHJlc3RhcnQ6CiAJCXByZXZfY29ubmVjdF9mYWlsZWQgPSAwOwogCX0KIAorCWlmICh1
-c3RfbG9jaygpKSB7CisJCWdvdG8gcXVpdDsKKwl9CisKIAlpZiAoc29ja19pbmZvLT5zb2NrZXQg
-IT0gLTEpIHsKIAkJLyogRkQgdHJhY2tlciBpcyB1cGRhdGVkIGJ5IHVzdGNvbW1fY2xvc2VfdW5p
-eF9zb2NrKCkgKi8KIAkJcmV0ID0gdXN0Y29tbV9jbG9zZV91bml4X3NvY2soc29ja19pbmZvLT5z
-b2NrZXQpOwpAQCAtMTQxNSw5ICsxNDE5LDYgQEAgcmVzdGFydDoKIAkJc29ja19pbmZvLT5ub3Rp
-Znlfc29ja2V0ID0gLTE7CiAJfQogCi0JaWYgKHVzdF9sb2NrKCkpIHsKLQkJZ290byBxdWl0Owot
-CX0KIAogCS8qCiAJICogUmVnaXN0ZXIuIFdlIG5lZWQgdG8gcGVyZm9ybSBib3RoIGNvbm5lY3Qg
-YW5kIHNlbmRpbmcKLS0gCjIuNy40CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo=
+ZWZmaWNpb3MuY29tPgotLS0KIGRvYy9tYW4vbHR0bmctYWRkLWNvbnRleHQuMS50eHQgfCAxMSAr
+KysrKysrKysrKwogMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQg
+YS9kb2MvbWFuL2x0dG5nLWFkZC1jb250ZXh0LjEudHh0IGIvZG9jL21hbi9sdHRuZy1hZGQtY29u
+dGV4dC4xLnR4dAppbmRleCBlM2M4ODEzLi5mYWIxNTc1IDEwMDY0NAotLS0gYS9kb2MvbWFuL2x0
+dG5nLWFkZC1jb250ZXh0LjEudHh0CisrKyBiL2RvYy9tYW4vbHR0bmctYWRkLWNvbnRleHQuMS50
+eHQKQEAgLTc5LDYgKzc5LDkgQEAgbW9zdCBzaGVsbHMuCiBVc2UgdGhlIG9wdGlvbjotLWxpc3Qg
+b3B0aW9uIHdpdGhvdXQgb3RoZXIgYXJndW1lbnRzIHRvIGxpc3QgdGhlCiBhdmFpbGFibGUgY29u
+dGV4dCBmaWVsZCBuYW1lcy4KIAorU2VlIHRoZSA8PGxpbWl0YXRpb25zLExJTUlUQVRJT05TPj4g
+c2VjdGlvbiBiZWxvdyBmb3IgYSBsaXN0IG9mCitsaW1pdGF0aW9ucyBvZiB0aGlzIGNvbW1hbmQg
+dG8gY29uc2lkZXIuCisKIAogaW5jbHVkZTo6Y29tbW9uLWNtZC1vcHRpb25zLWhlYWQudHh0W10K
+IApAQCAtMTIzLDYgKzEyNiwxNCBAQCBvcHRpb246LXQgJ1RZUEUnLCBvcHRpb246LS10eXBlPSdU
+WVBFJzo6CiAKIGluY2x1ZGU6OmNvbW1vbi1jbWQtaGVscC1vcHRpb25zLnR4dFtdCiAKK1tbbGlt
+aXRhdGlvbnNdXQorTElNSVRBVElPTlMKKy0tLS0tLS0tLS0tCitBcyBvZiB0aGlzIHZlcnNpb24g
+b2YgTFRUbmcsIGl0IGlzIG5vdCBwb3NzaWJsZSB0byBwZXJmb3JtIHRoZSBmb2xsb3dpbmcKK2Fj
+dGlvbnMgd2l0aCB0aGUgYGx0dG5nIGFkZC1jb250ZXh0YCBjb21tYW5kOgorCisqIEFkZCBhIGNv
+bnRleHQgb25jZSBpdHMgdHJhY2luZyBzZXNzaW9uIGhhcyBiZWVuIGFjdGl2ZQorICBhdCBsZWFz
+dCBvbmNlLgogCiBpbmNsdWRlOjpjb21tb24tY21kLWZvb3Rlci50eHRbXQogCi0tIAoyLjcuNAoK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
