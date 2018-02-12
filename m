@@ -1,16 +1,17 @@
-From: Shieryn Tjandra <shieryntjandra@gmail.com>
-Subject: [LTTNG] Empty traces output file
-Date: Fri, 9 Feb 2018 23:07:47 -0500
-Message-ID: <CALX4544xOYVTvNReG81s-DVmEC8mARm8kJpUWAyOT9M8D4TT+w__45589.3510290936$1518235570$gmane$org@mail.gmail.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: [LTTNG] Empty traces output file
+Date: Mon, 12 Feb 2018 09:49:55 -0500
+Message-ID: <20180212144955.GE15514__42679.1660175242$1518446913$gmane$org@joraj-alpa>
+References: <CALX4544xOYVTvNReG81s-DVmEC8mARm8kJpUWAyOT9M8D4TT+w@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4866440616843708435=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-yw0-x231.google.com (mail-yw0-x231.google.com
- [IPv6:2607:f8b0:4002:c05::231])
- by lists.lttng.org (Postfix) with ESMTPS id 3zddgm4mHqz11Yj
- for <lttng-dev@lists.lttng.org>; Sat, 10 Feb 2018 04:07:48 +0000 (UTC)
-Received: by mail-yw0-x231.google.com with SMTP id z82so123782ywb.1
- for <lttng-dev@lists.lttng.org>; Fri, 09 Feb 2018 20:07:48 -0800 (PST)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.141])
+ by lists.lttng.org (Postfix) with ESMTPS id 3zg7qn5PhGz11HJ
+ for <lttng-dev@lists.lttng.org>; Mon, 12 Feb 2018 14:49:57 +0000 (UTC)
+Content-Disposition: inline
+In-Reply-To: <CALX4544xOYVTvNReG81s-DVmEC8mARm8kJpUWAyOT9M8D4TT+w@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,237 +21,100 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Shieryn Tjandra <shieryntjandra@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============4866440616843708435==
-Content-Type: multipart/alternative; boundary="001a114f3652a5af920564d3c9e9"
-
---001a114f3652a5af920564d3c9e9
-Content-Type: text/plain; charset="UTF-8"
-
-Good Evening,
-
-Hi There,
-
-I have inquiries regarding LTTNG, I followed the tutorial in this link :
-
-http://lttng.org/docs/v2.10/#doc-tracing-your-own-user-application
-
-However, after executing the c application, when I checked whether the
-process was in the userspace event (UST), the process was not there. Next,
-I tried to record the  traces, as I thought, my traces output file does not
-contain any traces. I also have make sure that liblttng-ust has been
-installed. I really appreciate if you can help me to overcome this problem,
-if you need additional file, let me know.
-
-I am using centos 7 by the way.
-
-Here is my command line
-[root@localhost tracepractice]# gcc -c -I. app_tp.c
-[root@localhost tracepractice]# gcc -c app.c -lpthread
-[root@localhost tracepractice]# gcc -o try app.o app_tp.o -lpthread
--llttng-ust -ldl
-[root@localhost tracepractice]# ./try and beyond
-Main thread:     : pid = 17231 lwp = 17231 priority = 0
-Thread 4:     : pid = 17231 lwp = 17234 priority = 0
-Thread 2:     : pid = 17231 lwp = 17236 priority = 8
-Thread 1:     : pid = 17231 lwp = 17237 priority = 12
-Thread 1: Hello! I am thread 4 and I more important than 1, 2 and 3.     My
-count is now 0
-Thread 3:     : pid = 17231 lwp = 17235 priority = 4
-Thread 4: Hello! I am thread 1 and I not very important.         My count
-is now 1
-Thread 2: Hello! I am thread 3 and I more important than 1 and 2.     My
-count is now 0
-Thread 3: Hello! I am thread 2 and I more important than 1.         My
-count is now 1
-Thread 2: Hello! I am thread 3 and I more important than 1 and 2.     My
-count is now 262144
-Thread 3: Hello! I am thread 2 and I more important than 1.         My
-count is now 262145
-sig_ala [cound down=1]
-sig_ala [cound down=0]
-[root@localhost tracepractice]# lttng-sessiond --daemonize
-[root@localhost tracepractice]# lttng list --userspace
-UST events:
--------------
-None
-
-[root@localhost tracepractice]# lttng create mytrace
-Session mytrace created.
-Traces will be written in /root/lttng-traces/mytrace-20180209-013417
-[root@localhost tracepractice]# lttng enable-event --userspace
-app_tp:first_tracepoint
-UST event app_tp:first_tracepoint created in channel channel0
-[root@localhost tracepractice]# lttng start
-Tracing started for session mytrace
-[root@localhost tracepractice]# ./try
-Main thread:     : pid = 17301 lwp = 17301 priority = 0
-Thread 4:     : pid = 17301 lwp = 17304 priority = 0
-Thread 2:     : pid = 17301 lwp = 17306 priority = 8
-Thread 1:     : pid = 17301 lwp = 17307 priority = 12
-Thread 1: Hello! I am thread 4 and I more important than 1, 2 and 3.     My
-count is now 0
-Thread 4: Hello! I am thread 1 and I not very important.         My count
-is now 1
-Thread 3:     : pid = 17301 lwp = 17305 priority = 4
-Thread 2: Hello! I am thread 3 and I more important than 1 and 2.     My
-count is now 0
-Thread 3: Hello! I am thread 2 and I more important than 1.         My
-count is now 1
-Thread 2: Hello! I am thread 3 and I more important than 1 and 2.     My
-count is now 262144
-Thread 3: Hello! I am thread 2 and I more important than 1.         My
-count is now 262145
-sig_ala [cound down=1]
-Thread 2: Hello! I am thread 3 and I more important than 1 and 2.     My
-count is now 524288
-Thread 3: Hello! I am thread 2 and I more important than 1.         My
-count is now 524289
-sig_ala [cound down=0]
-[root@localhost tracepractice]# lttng stop
-Waiting for data availability
-Tracing stopped for session mytrace
-[root@localhost tracepractice]# babeltrace ~/lttng-traces/mytrace*
-[root@localhost tracepractice]# ls ~/lttng-traces/mytrace* -l
-total 0
-drwxrwx---. 3 root root 17 Feb  9 01:35 ust
-
-
-Thank you.
-
-
--- 
-
-
-Best Regards,
-
-*Shieryn Tjandra*
-
-
-
-
-
-
-
-
-
-
-
--- 
-
-
-Best Regards,
-
-*Shieryn Tjandra*
-*+1 613 501 0606*
-
---001a114f3652a5af920564d3c9e9
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div class=3D"gmail_quote"><br><div dir=3D"ltr"><div><div>=
-<div><div><div>Good Evening, <br><br></div>Hi There, <br><br></div>I have i=
-nquiries regarding LTTNG, I followed the tutorial in this link :<br><br><a =
-href=3D"http://lttng.org/docs/v2.10/#doc-tracing-your-own-user-application"=
- target=3D"_blank">http://lttng.org/docs/v2.10/#<wbr>doc-tracing-your-own-u=
-ser-<wbr>application</a><br><br></div>However, after executing the c applic=
-ation, when I checked whether the process was in the userspace event (UST),=
- the process was not there. Next, I tried to record the=C2=A0 traces, as I =
-thought, my traces output file does not contain any traces. I also have mak=
-e sure that liblttng-ust has been installed. I really appreciate if you can=
- help me to overcome this problem, if you need additional file, let me know=
-. <br><br>I am using centos 7 by the way. <br><br></div>Here is my command =
-line <br>[root@localhost tracepractice]# gcc -c -I. app_tp.c<br>[root@local=
-host tracepractice]# gcc -c app.c -lpthread<br>[root@localhost tracepractic=
-e]# gcc -o try app.o app_tp.o -lpthread -llttng-ust -ldl<br>[root@localhost=
- tracepractice]# ./try and beyond<br>Main thread: =C2=A0=C2=A0=C2=A0 : pid =
-=3D 17231 lwp =3D 17231 priority =3D 0<br>Thread 4: =C2=A0=C2=A0=C2=A0 : pi=
-d =3D 17231 lwp =3D 17234 priority =3D 0<br>Thread 2: =C2=A0=C2=A0=C2=A0 : =
-pid =3D 17231 lwp =3D 17236 priority =3D 8<br>Thread 1: =C2=A0=C2=A0=C2=A0 =
-: pid =3D 17231 lwp =3D 17237 priority =3D 12<br>Thread 1: Hello! I am thre=
-ad 4 and I more important than 1, 2 and 3. =C2=A0=C2=A0=C2=A0 My count is n=
-ow 0<br>Thread 3: =C2=A0=C2=A0=C2=A0 : pid =3D 17231 lwp =3D 17235 priority=
- =3D 4<br>Thread 4: Hello! I am thread 1 and I not very important. =C2=A0=
-=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 My count is now 1<br>Thread 2: Hello! I am =
-thread 3 and I more important than 1 and 2. =C2=A0=C2=A0=C2=A0 My count is =
-now 0<br>Thread 3: Hello! I am thread 2 and I more important than 1. =C2=A0=
-=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 My count is now 1<br>Thread 2: Hello! I am =
-thread 3 and I more important than 1 and 2. =C2=A0=C2=A0=C2=A0 My count is =
-now 262144<br>Thread 3: Hello! I am thread 2 and I more important than 1. =
-=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 My count is now 262145<br>sig_ala [co=
-und down=3D1]<br>sig_ala [cound down=3D0]<br>[root@localhost tracepractice]=
-# lttng-sessiond --daemonize<br>[root@localhost tracepractice]# lttng list =
---userspace<br>UST events:<br>-------------<br>None<br><br>[root@localhost =
-tracepractice]# lttng create mytrace<br>Session mytrace created.<br>Traces =
-will be written in /root/lttng-traces/mytrace-<wbr>20180209-013417<br>[root=
-@localhost tracepractice]# lttng enable-event --userspace app_tp:first_trac=
-epoint<br>UST event app_tp:first_tracepoint created in channel channel0<br>=
-[root@localhost tracepractice]# lttng start<br>Tracing started for session =
-mytrace<br>[root@localhost tracepractice]# ./try<br>Main thread: =C2=A0=C2=
-=A0=C2=A0 : pid =3D 17301 lwp =3D 17301 priority =3D 0<br>Thread 4: =C2=A0=
-=C2=A0=C2=A0 : pid =3D 17301 lwp =3D 17304 priority =3D 0<br>Thread 2: =C2=
-=A0=C2=A0=C2=A0 : pid =3D 17301 lwp =3D 17306 priority =3D 8<br>Thread 1: =
-=C2=A0=C2=A0=C2=A0 : pid =3D 17301 lwp =3D 17307 priority =3D 12<br>Thread =
-1: Hello! I am thread 4 and I more important than 1, 2 and 3. =C2=A0=C2=A0=
-=C2=A0 My count is now 0<br>Thread 4: Hello! I am thread 1 and I not very i=
-mportant. =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 My count is now 1<br>Thread=
- 3: =C2=A0=C2=A0=C2=A0 : pid =3D 17301 lwp =3D 17305 priority =3D 4<br>Thre=
-ad 2: Hello! I am thread 3 and I more important than 1 and 2. =C2=A0=C2=A0=
-=C2=A0 My count is now 0<br>Thread 3: Hello! I am thread 2 and I more impor=
-tant than 1. =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 My count is now 1<br>Thr=
-ead 2: Hello! I am thread 3 and I more important than 1 and 2. =C2=A0=C2=A0=
-=C2=A0 My count is now 262144<br>Thread 3: Hello! I am thread 2 and I more =
-important than 1. =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 My count is now 262=
-145<br>sig_ala [cound down=3D1]<br>Thread 2: Hello! I am thread 3 and I mor=
-e important than 1 and 2. =C2=A0=C2=A0=C2=A0 My count is now 524288<br>Thre=
-ad 3: Hello! I am thread 2 and I more important than 1. =C2=A0=C2=A0=C2=A0 =
-=C2=A0=C2=A0=C2=A0 My count is now 524289<br>sig_ala [cound down=3D0]<br>[r=
-oot@localhost tracepractice]# lttng stop<br>Waiting for data availability<b=
-r>Tracing stopped for session mytrace<br>[root@localhost tracepractice]# ba=
-beltrace ~/lttng-traces/mytrace*<br>[root@localhost tracepractice]# ls ~/lt=
-tng-traces/mytrace* -l<br>total 0<br>drwxrwx---. 3 root root 17 Feb=C2=A0 9=
- 01:35 ust<br><br><br></div>Thank you. <br><span class=3D"HOEnZb"><font col=
-or=3D"#888888"><div><br clear=3D"all"><div><div><div><div><div><br>-- <br><=
-div class=3D"m_-1298659101138999654gmail_signature"><div dir=3D"ltr"><div><=
-div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div><br></div><div><br><=
-div>Best Regards,</div><div><br></div><blockquote style=3D"margin:0px 0px 0=
-px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div styl=
-e=3D"text-align:left"><b style=3D"font-size:12.8px"><i><font color=3D"#0000=
-00" face=3D"garamond, serif" size=3D"4">Shieryn Tjandra</font></i></b></div=
-></blockquote><div style=3D"text-align:center"><br></div><div style=3D"font=
--size:12.8px"><br></div><div><b><br></b></div><div><br></div><div><b style=
-=3D"font-size:12.8px"><br></b></div><div><br></div><div><br></div></div></d=
-iv></div></div></div></div></div>
-</div></div></div></div></div></div></font></span></div>
-</div><br><br clear=3D"all"><br>-- <br><div class=3D"gmail_signature" data-=
-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div class=3D"gmail_signatur=
-e" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div><div dir=3D"ltr=
-"><div dir=3D"ltr"><div dir=3D"ltr"><div><br></div><div><br><div>Best Regar=
-ds,</div><div><br></div><blockquote style=3D"margin:0px 0px 0px 0.8ex;borde=
-r-left-width:1px;border-left-style:solid;border-left-color:rgb(204,204,204)=
-;padding-left:1ex"><div style=3D"text-align:left"><b style=3D"font-size:12.=
-8px"><i><font color=3D"#000000" face=3D"garamond, serif" size=3D"4">Shieryn=
- Tjandra</font></i></b></div><b><div style=3D"text-align:left"><b style=3D"=
-font-size:12.8px"><font color=3D"#000000" face=3D"georgia, serif" size=3D"2=
-">+1 613 501 0606</font></b></div></b></blockquote><div style=3D"text-align=
-:center"><br></div><div style=3D"font-size:12.8px"><br></div><div><b><br></=
-b></div><div><br></div><div><b style=3D"font-size:12.8px"><br></b></div><di=
-v><br></div><div><br></div></div></div></div></div></div></div></div></div>=
-</div>
-</div>
-
---001a114f3652a5af920564d3c9e9--
-
---===============4866440616843708435==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============4866440616843708435==--
+T24gRnJpLCBGZWIgMDksIDIwMTggYXQgMTE6MDc6NDdQTSAtMDUwMCwgU2hpZXJ5biBUamFuZHJh
+IHdyb3RlOgo+IEdvb2QgRXZlbmluZywKPiAKPiBIaSBUaGVyZSwKPiAKPiBJIGhhdmUgaW5xdWly
+aWVzIHJlZ2FyZGluZyBMVFRORywgSSBmb2xsb3dlZCB0aGUgdHV0b3JpYWwgaW4gdGhpcyBsaW5r
+IDoKPiAKPiBodHRwOi8vbHR0bmcub3JnL2RvY3MvdjIuMTAvI2RvYy10cmFjaW5nLXlvdXItb3du
+LXVzZXItYXBwbGljYXRpb24KCkRvZXMgaXQgd29yayB3aXRoIHRoZSBiYXNpYyBhcHBsaWNhdGlv
+biBkZXNjcmliZWQgaW4gdGhpcyBzZWN0aW9uID8gV2l0aG91dAp0aHJlYWQgYW5kIGFsbD8KCj4g
+Cj4gSG93ZXZlciwgYWZ0ZXIgZXhlY3V0aW5nIHRoZSBjIGFwcGxpY2F0aW9uLCB3aGVuIEkgY2hl
+Y2tlZCB3aGV0aGVyIHRoZQo+IHByb2Nlc3Mgd2FzIGluIHRoZSB1c2Vyc3BhY2UgZXZlbnQgKFVT
+VCksIHRoZSBwcm9jZXNzIHdhcyBub3QgdGhlcmUuIE5leHQsCj4gSSB0cmllZCB0byByZWNvcmQg
+dGhlICB0cmFjZXMsIGFzIEkgdGhvdWdodCwgbXkgdHJhY2VzIG91dHB1dCBmaWxlIGRvZXMgbm90
+Cj4gY29udGFpbiBhbnkgdHJhY2VzLiBJIGFsc28gaGF2ZSBtYWtlIHN1cmUgdGhhdCBsaWJsdHRu
+Zy11c3QgaGFzIGJlZW4KPiBpbnN0YWxsZWQuIEkgcmVhbGx5IGFwcHJlY2lhdGUgaWYgeW91IGNh
+biBoZWxwIG1lIHRvIG92ZXJjb21lIHRoaXMgcHJvYmxlbSwKPiBpZiB5b3UgbmVlZCBhZGRpdGlv
+bmFsIGZpbGUsIGxldCBtZSBrbm93Lgo+IAo+IEkgYW0gdXNpbmcgY2VudG9zIDcgYnkgdGhlIHdh
+eS4KPiAKPiBIZXJlIGlzIG15IGNvbW1hbmQgbGluZQo+IFtyb290QGxvY2FsaG9zdCB0cmFjZXBy
+YWN0aWNlXSMgZ2NjIC1jIC1JLiBhcHBfdHAuYwo+IFtyb290QGxvY2FsaG9zdCB0cmFjZXByYWN0
+aWNlXSMgZ2NjIC1jIGFwcC5jIC1scHRocmVhZAo+IFtyb290QGxvY2FsaG9zdCB0cmFjZXByYWN0
+aWNlXSMgZ2NjIC1vIHRyeSBhcHAubyBhcHBfdHAubyAtbHB0aHJlYWQKPiAtbGx0dG5nLXVzdCAt
+bGRsCj4gW3Jvb3RAbG9jYWxob3N0IHRyYWNlcHJhY3RpY2VdIyAuL3RyeSBhbmQgYmV5b25kCj4g
+TWFpbiB0aHJlYWQ6ICAgICA6IHBpZCA9IDE3MjMxIGx3cCA9IDE3MjMxIHByaW9yaXR5ID0gMAo+
+IFRocmVhZCA0OiAgICAgOiBwaWQgPSAxNzIzMSBsd3AgPSAxNzIzNCBwcmlvcml0eSA9IDAKPiBU
+aHJlYWQgMjogICAgIDogcGlkID0gMTcyMzEgbHdwID0gMTcyMzYgcHJpb3JpdHkgPSA4Cj4gVGhy
+ZWFkIDE6ICAgICA6IHBpZCA9IDE3MjMxIGx3cCA9IDE3MjM3IHByaW9yaXR5ID0gMTIKPiBUaHJl
+YWQgMTogSGVsbG8hIEkgYW0gdGhyZWFkIDQgYW5kIEkgbW9yZSBpbXBvcnRhbnQgdGhhbiAxLCAy
+IGFuZCAzLiAgICAgTXkKPiBjb3VudCBpcyBub3cgMAo+IFRocmVhZCAzOiAgICAgOiBwaWQgPSAx
+NzIzMSBsd3AgPSAxNzIzNSBwcmlvcml0eSA9IDQKPiBUaHJlYWQgNDogSGVsbG8hIEkgYW0gdGhy
+ZWFkIDEgYW5kIEkgbm90IHZlcnkgaW1wb3J0YW50LiAgICAgICAgIE15IGNvdW50Cj4gaXMgbm93
+IDEKPiBUaHJlYWQgMjogSGVsbG8hIEkgYW0gdGhyZWFkIDMgYW5kIEkgbW9yZSBpbXBvcnRhbnQg
+dGhhbiAxIGFuZCAyLiAgICAgTXkKPiBjb3VudCBpcyBub3cgMAo+IFRocmVhZCAzOiBIZWxsbyEg
+SSBhbSB0aHJlYWQgMiBhbmQgSSBtb3JlIGltcG9ydGFudCB0aGFuIDEuICAgICAgICAgTXkKPiBj
+b3VudCBpcyBub3cgMQo+IFRocmVhZCAyOiBIZWxsbyEgSSBhbSB0aHJlYWQgMyBhbmQgSSBtb3Jl
+IGltcG9ydGFudCB0aGFuIDEgYW5kIDIuICAgICBNeQo+IGNvdW50IGlzIG5vdyAyNjIxNDQKPiBU
+aHJlYWQgMzogSGVsbG8hIEkgYW0gdGhyZWFkIDIgYW5kIEkgbW9yZSBpbXBvcnRhbnQgdGhhbiAx
+LiAgICAgICAgIE15Cj4gY291bnQgaXMgbm93IDI2MjE0NQo+IHNpZ19hbGEgW2NvdW5kIGRvd249
+MV0KPiBzaWdfYWxhIFtjb3VuZCBkb3duPTBdCj4gW3Jvb3RAbG9jYWxob3N0IHRyYWNlcHJhY3Rp
+Y2VdIyBsdHRuZy1zZXNzaW9uZCAtLWRhZW1vbml6ZQo+IFtyb290QGxvY2FsaG9zdCB0cmFjZXBy
+YWN0aWNlXSMgbHR0bmcgbGlzdCAtLXVzZXJzcGFjZQo+IFVTVCBldmVudHM6Cj4gLS0tLS0tLS0t
+LS0tLQo+IE5vbmUKCklzIHlvdXIgYXBwbGljYXRpb24gcnVubmluZyBhdCB0aGF0IHBvaW50PwoK
+SWYgbm90LCAibHR0bmcgbGlzdCAtLXVzZXJzcGFjZSIgd2lsbCBvbmx5IGxpc3QgdHJhY2Vwb2lu
+dHMgZm9yIG9uZ29pbmcKYXBwbGljYXRpb24uCgo+IAo+IFtyb290QGxvY2FsaG9zdCB0cmFjZXBy
+YWN0aWNlXSMgbHR0bmcgY3JlYXRlIG15dHJhY2UKPiBTZXNzaW9uIG15dHJhY2UgY3JlYXRlZC4K
+PiBUcmFjZXMgd2lsbCBiZSB3cml0dGVuIGluIC9yb290L2x0dG5nLXRyYWNlcy9teXRyYWNlLTIw
+MTgwMjA5LTAxMzQxNwo+IFtyb290QGxvY2FsaG9zdCB0cmFjZXByYWN0aWNlXSMgbHR0bmcgZW5h
+YmxlLWV2ZW50IC0tdXNlcnNwYWNlCj4gYXBwX3RwOmZpcnN0X3RyYWNlcG9pbnQKPiBVU1QgZXZl
+bnQgYXBwX3RwOmZpcnN0X3RyYWNlcG9pbnQgY3JlYXRlZCBpbiBjaGFubmVsIGNoYW5uZWwwCj4g
+W3Jvb3RAbG9jYWxob3N0IHRyYWNlcHJhY3RpY2VdIyBsdHRuZyBzdGFydAo+IFRyYWNpbmcgc3Rh
+cnRlZCBmb3Igc2Vzc2lvbiBteXRyYWNlCj4gW3Jvb3RAbG9jYWxob3N0IHRyYWNlcHJhY3RpY2Vd
+IyAuL3RyeQoKQ291bGQgeW91IGxhdW5jaCB5b3VyIGFwcGxpY2F0aW9uIHdpdGggTFRUTkdfVVNU
+X0RFQlVHPXkgYW5kIHByb3ZpZGUgdXMgdGhlCnJlc3VsdGluZyBvdXRwdXQ/CgplLmc6CkxUVE5H
+X1VTVF9ERUJVRz15IC4vdHJ5CgpEb2VzIHlvdXIgYXBwbGljYXRpb24gdXNlcyBmb3JrKCk/CgpD
+b3VsZCB5b3UgcHJvdmlkZSB0aGUgc291cmNlIGNvZGUgb2YgeW91ciB0ZXN0IGFwcGxpY2F0aW9u
+IChnaXRodWI/KS4KCj4gTWFpbiB0aHJlYWQ6ICAgICA6IHBpZCA9IDE3MzAxIGx3cCA9IDE3MzAx
+IHByaW9yaXR5ID0gMAo+IFRocmVhZCA0OiAgICAgOiBwaWQgPSAxNzMwMSBsd3AgPSAxNzMwNCBw
+cmlvcml0eSA9IDAKPiBUaHJlYWQgMjogICAgIDogcGlkID0gMTczMDEgbHdwID0gMTczMDYgcHJp
+b3JpdHkgPSA4Cj4gVGhyZWFkIDE6ICAgICA6IHBpZCA9IDE3MzAxIGx3cCA9IDE3MzA3IHByaW9y
+aXR5ID0gMTIKPiBUaHJlYWQgMTogSGVsbG8hIEkgYW0gdGhyZWFkIDQgYW5kIEkgbW9yZSBpbXBv
+cnRhbnQgdGhhbiAxLCAyIGFuZCAzLiAgICAgTXkKPiBjb3VudCBpcyBub3cgMAo+IFRocmVhZCA0
+OiBIZWxsbyEgSSBhbSB0aHJlYWQgMSBhbmQgSSBub3QgdmVyeSBpbXBvcnRhbnQuICAgICAgICAg
+TXkgY291bnQKPiBpcyBub3cgMQo+IFRocmVhZCAzOiAgICAgOiBwaWQgPSAxNzMwMSBsd3AgPSAx
+NzMwNSBwcmlvcml0eSA9IDQKPiBUaHJlYWQgMjogSGVsbG8hIEkgYW0gdGhyZWFkIDMgYW5kIEkg
+bW9yZSBpbXBvcnRhbnQgdGhhbiAxIGFuZCAyLiAgICAgTXkKPiBjb3VudCBpcyBub3cgMAo+IFRo
+cmVhZCAzOiBIZWxsbyEgSSBhbSB0aHJlYWQgMiBhbmQgSSBtb3JlIGltcG9ydGFudCB0aGFuIDEu
+ICAgICAgICAgTXkKPiBjb3VudCBpcyBub3cgMQo+IFRocmVhZCAyOiBIZWxsbyEgSSBhbSB0aHJl
+YWQgMyBhbmQgSSBtb3JlIGltcG9ydGFudCB0aGFuIDEgYW5kIDIuICAgICBNeQo+IGNvdW50IGlz
+IG5vdyAyNjIxNDQKPiBUaHJlYWQgMzogSGVsbG8hIEkgYW0gdGhyZWFkIDIgYW5kIEkgbW9yZSBp
+bXBvcnRhbnQgdGhhbiAxLiAgICAgICAgIE15Cj4gY291bnQgaXMgbm93IDI2MjE0NQo+IHNpZ19h
+bGEgW2NvdW5kIGRvd249MV0KPiBUaHJlYWQgMjogSGVsbG8hIEkgYW0gdGhyZWFkIDMgYW5kIEkg
+bW9yZSBpbXBvcnRhbnQgdGhhbiAxIGFuZCAyLiAgICAgTXkKPiBjb3VudCBpcyBub3cgNTI0Mjg4
+Cj4gVGhyZWFkIDM6IEhlbGxvISBJIGFtIHRocmVhZCAyIGFuZCBJIG1vcmUgaW1wb3J0YW50IHRo
+YW4gMS4gICAgICAgICBNeQo+IGNvdW50IGlzIG5vdyA1MjQyODkKPiBzaWdfYWxhIFtjb3VuZCBk
+b3duPTBdCj4gW3Jvb3RAbG9jYWxob3N0IHRyYWNlcHJhY3RpY2VdIyBsdHRuZyBzdG9wCj4gV2Fp
+dGluZyBmb3IgZGF0YSBhdmFpbGFiaWxpdHkKPiBUcmFjaW5nIHN0b3BwZWQgZm9yIHNlc3Npb24g
+bXl0cmFjZQo+IFtyb290QGxvY2FsaG9zdCB0cmFjZXByYWN0aWNlXSMgYmFiZWx0cmFjZSB+L2x0
+dG5nLXRyYWNlcy9teXRyYWNlKgo+IFtyb290QGxvY2FsaG9zdCB0cmFjZXByYWN0aWNlXSMgbHMg
+fi9sdHRuZy10cmFjZXMvbXl0cmFjZSogLWwKPiB0b3RhbCAwCj4gZHJ3eHJ3eC0tLS4gMyByb290
+IHJvb3QgMTcgRmViICA5IDAxOjM1IHVzdAoKQWN0dWFsIHRyYWNlIGZpbGVzIGFyZSBub3JtYWxs
+eSBkZWVwZXIgaW4gdGhlIHRyYWNlIGRpcmVjdG9yeS4KCmUuZwokIHRyZWUgLWggbHR0bmctdHJh
+Y2VzL2F1dG8tMjAxODAyMDctMTUwNzM2LwoKbHR0bmctdHJhY2VzL2F1dG8tMjAxODAyMDctMTUw
+NzM2LwrilJTilIDilIAgWzQuMEtdICB1c3QKICAgIOKUlOKUgOKUgCBbNC4wS10gIHVpZAogICAg
+ICAgIOKUlOKUgOKUgCBbNC4wS10gIDEwMDAKICAgICAgICAgICAg4pSU4pSA4pSAIFs0LjBLXSAg
+NjQtYml0CiAgICAgICAgICAgICAgICDilJzilIDilIAgWzI5NktdICBjaGFubmVsMF8wCiAgICAg
+ICAgICAgICAgICDilJzilIDilIAgWzU3NktdICBjaGFubmVsMF8xCiAgICAgICAgICAgICAgICDi
+lJzilIDilIAgWzMwMEtdICBjaGFubmVsMF8yCiAgICAgICAgICAgICAgICDilJzilIDilIAgWzQw
+MEtdICBjaGFubmVsMF8zCiAgICAgICAgICAgICAgICDilJzilIDilIAgWzQuMEtdICBpbmRleAog
+ICAgICAgICAgICAgICAg4pSCwqDCoCDilJzilIDilIAgWyAyMzJdICBjaGFubmVsMF8wLmlkeAog
+ICAgICAgICAgICAgICAg4pSCwqDCoCDilJzilIDilIAgWyAzNzZdICBjaGFubmVsMF8xLmlkeAog
+ICAgICAgICAgICAgICAg4pSCwqDCoCDilJzilIDilIAgWyAyMzJdICBjaGFubmVsMF8yLmlkeAog
+ICAgICAgICAgICAgICAg4pSCwqDCoCDilJTilIDilIAgWyAzMDRdICBjaGFubmVsMF8zLmlkeAog
+ICAgICAgICAgICAgICAg4pSU4pSA4pSAIFsgMTZLXSAgbWV0YWRhdGEKCjUgZGlyZWN0b3JpZXMs
+IDkgZmlsZXMKCkNoZWVycwoKLS0gCkpvbmF0aGFuIFJham90dGUtSnVsaWVuCkVmZmljaU9TCl9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
+YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5n
+Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
