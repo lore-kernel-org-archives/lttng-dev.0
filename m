@@ -1,17 +1,16 @@
-From: Julien Desfossez <jdesfossez@efficios.com>
-Subject: [PATCH lttng-tools 2/2] Fix: reply to version check
-	even on protocol mismatch
-Date: Wed, 14 Feb 2018 16:32:45 -0500
-Message-ID: <1518643965-29904-2-git-send-email-jdesfossez__25738.59697809$1518643898$gmane$org@efficios.com>
-References: <1518643965-29904-1-git-send-email-jdesfossez@efficios.com>
+From: Shehab Elsayed <shehabyomn@gmail.com>
+Subject: Problem saving session in custom LTTNG_HOME
+Date: Fri, 16 Feb 2018 18:11:52 -0500
+Message-ID: <CAC-H6tviLrcGi3o8B76AjffGcMQ3_QXWod4_ss4anvWO1nGmJQ__8825.14490881494$1518822605$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============0472906088258502960=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.ini-tech.com (albert.ini-tech.com [192.99.4.57])
- by lists.lttng.org (Postfix) with ESMTPS id 3zhXgm2fFMz10y9
- for <lttng-dev@lists.lttng.org>; Wed, 14 Feb 2018 21:32:51 +0000 (UTC)
-In-Reply-To: <1518643965-29904-1-git-send-email-jdesfossez@efficios.com>
+Received: from mail-lf0-x229.google.com (mail-lf0-x229.google.com
+ [IPv6:2a00:1450:4010:c07::229])
+ by lists.lttng.org (Postfix) with ESMTPS id 3zjpn61QmlzqWb
+ for <lttng-dev@lists.lttng.org>; Fri, 16 Feb 2018 18:11:54 -0500 (EST)
+Received: by mail-lf0-x229.google.com with SMTP id j193so6127945lfe.0
+ for <lttng-dev@lists.lttng.org>; Fri, 16 Feb 2018 15:11:54 -0800 (PST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,39 +20,91 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: jgalar@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SW4gdGhlIHJlbGF5LCB3ZSBjdXJyZW50bHkgcHV0IHRoZSBjb25uZWN0aW9uIHdoZW4gd2UgZGV0
-ZWN0IHRoZSBtYWpvcgp2ZXJzaW9uIGZyb20gdGhlIHNlc3Npb24gZGFlbW9uIGlzIG5vdCBjb21w
-YXRpYmxlLiBXZSBkb24ndCByZXBseSB0byB0aGUKdmVyc2lvbiBjaGVjayBtZXNzYWdlLiBUaGUg
-cmVsYXkgc3RpbGwgaG9sZHMgYSByZWZlcmVuY2Ugb24gdGhlCmNvbm5lY3Rpb24gc28gaXQgaXMg
-bm90IGNsb3NlZCBhbmQgdGhlIHNlc3Npb24gZGFlbW9uIGlzIGxlZnQgYmxvY2tpbmcKaW4gcmVj
-dm1zZy4KClRoZSByZWxheSBub3cgcmVwbGllcyB0byB0aGUgdmVyc2lvbiBjaGVjayBzbyB0aGUg
-c2Vzc2lvbiBkYWVtb24ga25vd3MKaXQgaXMgbm90IGNvbXBhdGlibGUsIGFuZCB0aGUgcmVsYXkg
-Y29tcGxldGVseSBjbG9zZXMgdGhlIGNvbm5lY3Rpb24gb24KaXRzIHNpZGUgYW5kIHJlbW92ZXMg
-dGhlIEZEIGZyb20gdGhlIHBvbGwgc2V0LgoKU2lnbmVkLW9mZi1ieTogSnVsaWVuIERlc2Zvc3Nl
-eiA8amRlc2Zvc3NlekBlZmZpY2lvcy5jb20+Ci0tLQogc3JjL2Jpbi9sdHRuZy1yZWxheWQvbWFp
-bi5jIHwgMTAgKysrKysrKy0tLQogMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgMyBk
-ZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5nLXJlbGF5ZC9tYWluLmMgYi9z
-cmMvYmluL2x0dG5nLXJlbGF5ZC9tYWluLmMKaW5kZXggNjFmMjA2Zi4uY2Q0ZjA1OCAxMDA2NDQK
-LS0tIGEvc3JjL2Jpbi9sdHRuZy1yZWxheWQvbWFpbi5jCisrKyBiL3NyYy9iaW4vbHR0bmctcmVs
-YXlkL21haW4uYwpAQCAtMTYwMSw2ICsxNjAxLDcgQEAgc3RhdGljIGludCByZWxheV9zZW5kX3Zl
-cnNpb24oc3RydWN0IGx0dGNvbW1fcmVsYXlkX2hkciAqcmVjdl9oZHIsCiB7CiAJaW50IHJldDsK
-IAlzdHJ1Y3QgbHR0Y29tbV9yZWxheWRfdmVyc2lvbiByZXBseSwgbXNnOworCWJvb2wgY29tcGF0
-aWJsZSA9IHRydWU7CiAKIAljb25uLT52ZXJzaW9uX2NoZWNrX2RvbmUgPSAxOwogCkBAIC0xNjI1
-LDkgKzE2MjYsNyBAQCBzdGF0aWMgaW50IHJlbGF5X3NlbmRfdmVyc2lvbihzdHJ1Y3QgbHR0Y29t
-bV9yZWxheWRfaGRyICpyZWN2X2hkciwKIAlpZiAocmVwbHkubWFqb3IgIT0gYmUzMnRvaChtc2cu
-bWFqb3IpKSB7CiAJCURCRygiSW5jb21wYXRpYmxlIG1ham9yIHZlcnNpb25zICgldSB2cyAldSks
-IGRlbGV0aW5nIHNlc3Npb24iLAogCQkJCXJlcGx5Lm1ham9yLCBiZTMydG9oKG1zZy5tYWpvcikp
-OwotCQljb25uZWN0aW9uX3B1dChjb25uKTsKLQkJcmV0ID0gMDsKLQkJZ290byBlbmQ7CisJCWNv
-bXBhdGlibGUgPSBmYWxzZTsKIAl9CiAKIAljb25uLT5tYWpvciA9IHJlcGx5Lm1ham9yOwpAQCAt
-MTY0Niw2ICsxNjQ1LDExIEBAIHN0YXRpYyBpbnQgcmVsYXlfc2VuZF92ZXJzaW9uKHN0cnVjdCBs
-dHRjb21tX3JlbGF5ZF9oZHIgKnJlY3ZfaGRyLAogCQlFUlIoIlJlbGF5IHNlbmRpbmcgdmVyc2lv
-biIpOwogCX0KIAorCWlmICghY29tcGF0aWJsZSkgeworCQlyZXQgPSAtMTsKKwkJZ290byBlbmQ7
-CisJfQorCiAJREJHKCJWZXJzaW9uIGNoZWNrIGRvbmUgdXNpbmcgcHJvdG9jb2wgJXUuJXUiLCBj
-b25uLT5tYWpvciwKIAkJCWNvbm4tPm1pbm9yKTsKIAotLSAKMi43LjQKCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QK
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmlu
-L21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============0472906088258502960==
+Content-Type: multipart/alternative; boundary="001a1141291c43edaf05655c78e6"
+
+--001a1141291c43edaf05655c78e6
+Content-Type: text/plain; charset="UTF-8"
+
+Hi All,
+
+I am running into a problem when setting LTTNG_HOME and trying to save a
+session. When I do so, it always ends up saving the session to
+$HOME/.lttng/sessions instead of $LTTNG_HOME/.lttng/sessions.
+
+I looked at tools/src/bin/lttng-sessiond/save.c and in the save_session
+function it executes this line when there is no provided path
+
+char *home_dir = utils_get_user_home_dir ....
+
+Shouldn't it be calling utils_get_home_dir instead?
+
+When I do change the function, "lttng save" always ends up in an error
+of invalid pointer.
+
+Any idea why this might be happening?
+
+Thanks,
+
+Shehab Elsayed
+
+--001a1141291c43edaf05655c78e6
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div class=3D"gmail-gE gmail-iv gmail-gt"><table class=3D"=
+gmail-cf gmail-gJ" cellpadding=3D"0"><tbody><tr class=3D"gmail-acZ gmail-xD=
+"><td colspan=3D"3"><table class=3D"gmail-cf gmail-adz" cellpadding=3D"0"><=
+tbody><tr><td class=3D"gmail-ady"><div class=3D"gmail-ajy" tabindex=3D"0"><=
+img class=3D"gmail-ajz" id=3D"gmail-:14i" src=3D"https://mail.google.com/ma=
+il/u/0/images/cleardot.gif" alt=3D""></div></td></tr></tbody></table></td><=
+/tr></tbody></table></div><div id=3D"gmail-:121"><div class=3D"gmail-qQVYZb=
+"></div><div class=3D"gmail-utdU2e"></div><div class=3D"gmail-btm"></div></=
+div><div class=3D"gmail-aHl"></div><div id=3D"gmail-:41p" tabindex=3D"-1"><=
+/div><div id=3D"gmail-:434" class=3D"gmail-ii gmail-gt"><div id=3D"gmail-:4=
+33" class=3D"gmail-a3s gmail-aXjCH gmail-m161a0e1b50a68683"><div dir=3D"ltr=
+"><div><div><font color=3D"#000000">Hi All,<br><br></font></div><font color=
+=3D"#000000">I
+ am running into a problem when setting LTTNG_HOME and trying to save a=20
+session. When I do so, it always ends up saving the session to=20
+$HOME/.lttng/sessions instead of $LTTNG_HOME/.lttng/sessions.<br><br></font=
+></div><font color=3D"#000000">I looked at tools/src/bin/lttng-sessiond/<wb=
+r>save.<font size=3D"2">c and in the save_session function it executes this=
+ line when there is no provided path<br></font><pre><span class=3D"gmail-m_=
+-4132707992438582927gmail-kt">char</span> <span class=3D"gmail-m_-413270799=
+2438582927gmail-o">*</span><span class=3D"gmail-m_-4132707992438582927gmail=
+-n">home_dir</span> <span class=3D"gmail-m_-4132707992438582927gmail-o">=3D=
+</span> <span class=3D"gmail-m_-4132707992438582927gmail-n">utils_get_user_=
+home_dir ....<br><font size=3D"2"><span style=3D"font-family:arial,helvetic=
+a,sans-serif"><br></span></font></span></pre><pre><font size=3D"2"><span st=
+yle=3D"font-family:arial,helvetica,sans-serif"><span class=3D"gmail-m_-4132=
+707992438582927gmail-n">Shouldn&#39;t it be calling utils_get_home_dir inst=
+ead?<br><br></span></span></font></pre><pre><font size=3D"2"><span style=3D=
+"font-family:arial,helvetica,sans-serif"><span class=3D"gmail-m_-4132707992=
+438582927gmail-n">When I do change the function, &quot;lttng save&quot; alw=
+ays ends up in an error of invalid pointer.<br><br></span></span></font></p=
+re><pre><font size=3D"2"><span style=3D"font-family:arial,helvetica,sans-se=
+rif"><span class=3D"gmail-m_-4132707992438582927gmail-n">Any idea why this =
+might be happening?<br><br></span></span></font></pre><pre><font size=3D"2"=
+><span style=3D"font-family:arial,helvetica,sans-serif"><span class=3D"gmai=
+l-m_-4132707992438582927gmail-n">Thanks,<br></span></span></font></pre><pre=
+><font size=3D"2"><span style=3D"font-family:arial,helvetica,sans-serif"><s=
+pan class=3D"gmail-m_-4132707992438582927gmail-n">Shehab Elsayed</span></sp=
+an></font></pre></font></div></div></div></div>
+
+--001a1141291c43edaf05655c78e6--
+
+--===============0472906088258502960==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============0472906088258502960==--
