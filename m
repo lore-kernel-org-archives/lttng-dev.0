@@ -1,16 +1,17 @@
-From: Shehab Elsayed <shehabyomn@gmail.com>
-Subject: Problem saving session in custom LTTNG_HOME
-Date: Fri, 16 Feb 2018 18:10:02 -0500
-Message-ID: <CAC-H6tsYi4VGfOj6U2swnVU7mWb23_2NBAtdHgpUTfTSMwNL9w__7231.02038396082$1518824507$gmane$org@mail.gmail.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: Problem saving session in custom LTTNG_HOME
+Date: Mon, 19 Feb 2018 14:48:00 -0500
+Message-ID: <20180219194800.GB27157__21985.2680726492$1519069935$gmane$org@joraj-alpa>
+References: <CAC-H6tsYi4VGfOj6U2swnVU7mWb23_2NBAtdHgpUTfTSMwNL9w@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9168707864979781907=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lf0-x22b.google.com (mail-lf0-x22b.google.com
- [IPv6:2a00:1450:4010:c07::22b])
- by lists.lttng.org (Postfix) with ESMTPS id 3zjpl14RGpzqVt
- for <lttng-dev@lists.lttng.org>; Fri, 16 Feb 2018 18:10:05 -0500 (EST)
-Received: by mail-lf0-x22b.google.com with SMTP id g72so6091601lfg.5
- for <lttng-dev@lists.lttng.org>; Fri, 16 Feb 2018 15:10:05 -0800 (PST)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 3zlZFL0wVjzpwk
+ for <lttng-dev@lists.lttng.org>; Mon, 19 Feb 2018 14:53:57 -0500 (EST)
+Content-Disposition: inline
+In-Reply-To: <CAC-H6tsYi4VGfOj6U2swnVU7mWb23_2NBAtdHgpUTfTSMwNL9w@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,76 +21,35 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Shehab Elsayed <shehabyomn@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============9168707864979781907==
-Content-Type: multipart/alternative; boundary="001a114b8b08b7b26d05655c71fa"
-
---001a114b8b08b7b26d05655c71fa
-Content-Type: text/plain; charset="UTF-8"
-
-Hi All,
-
-I am running into a problem when setting LTTNG_HOME and trying to save a
-session. When I do so, it always ends up saving the session to
-$HOME/.lttng/sessions instead of $LTTNG_HOME/.lttng/sessions.
-
-I looked at tools/src/bin/lttng-sessiond/save.c and in the save_session
-function it executes this line when there is no provided path
-
-char *home_dir = utils_get_user_home_dir ....
-
-Shouldn't it be calling utils_get_home_dir instead?
-
-When I do change the function, "lttng save" always ends up in an error
-of invalid pointer.
-
-Any idea why this might be happening?
-
-Thanks,
-
-Shehab Elsayed
-
---001a114b8b08b7b26d05655c71fa
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div><div><font color=3D"#000000">Hi All,<br><br></font></=
-div><font color=3D"#000000">I am running into a problem when setting LTTNG_=
-HOME and trying to save a session. When I do so, it always ends up saving t=
-he session to $HOME/.lttng/sessions instead of $LTTNG_HOME/.lttng/sessions.=
-<br><br></font></div><font color=3D"#000000">I looked at tools/src/bin/lttn=
-g-sessiond/save.<font size=3D"2">c and in the save_session function it exec=
-utes this line when there is no provided path<br></font><pre><span class=3D=
-"gmail-kt">char</span> <span class=3D"gmail-o">*</span><span class=3D"gmail=
--n">home_dir</span> <span class=3D"gmail-o">=3D</span> <span class=3D"gmail=
--n">utils_get_user_home_dir ....<br><font size=3D"2"><span style=3D"font-fa=
-mily:arial,helvetica,sans-serif"><br></span></font></span></pre><pre><font =
-size=3D"2"><span style=3D"font-family:arial,helvetica,sans-serif"><span cla=
-ss=3D"gmail-n">Shouldn&#39;t it be calling utils_get_home_dir instead?<br><=
-br></span></span></font></pre><pre><font size=3D"2"><span style=3D"font-fam=
-ily:arial,helvetica,sans-serif"><span class=3D"gmail-n">When I do change th=
-e function, &quot;lttng save&quot; always ends up in an error of invalid po=
-inter.<br><br></span></span></font></pre><pre><font size=3D"2"><span style=
-=3D"font-family:arial,helvetica,sans-serif"><span class=3D"gmail-n">Any ide=
-a why this might be happening?<br><br></span></span></font></pre><pre><font=
- size=3D"2"><span style=3D"font-family:arial,helvetica,sans-serif"><span cl=
-ass=3D"gmail-n">Thanks,<br></span></span></font></pre><pre><font size=3D"2"=
-><span style=3D"font-family:arial,helvetica,sans-serif"><span class=3D"gmai=
-l-n">Shehab Elsayed<br></span></span></font></pre><br></font>
-</div>
-
---001a114b8b08b7b26d05655c71fa--
-
---===============9168707864979781907==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============9168707864979781907==--
+SGksCgpPbiBGcmksIEZlYiAxNiwgMjAxOCBhdCAwNjoxMDowMlBNIC0wNTAwLCBTaGVoYWIgRWxz
+YXllZCB3cm90ZToKPiBIaSBBbGwsCj4gCj4gSSBhbSBydW5uaW5nIGludG8gYSBwcm9ibGVtIHdo
+ZW4gc2V0dGluZyBMVFROR19IT01FIGFuZCB0cnlpbmcgdG8gc2F2ZSBhCj4gc2Vzc2lvbi4gV2hl
+biBJIGRvIHNvLCBpdCBhbHdheXMgZW5kcyB1cCBzYXZpbmcgdGhlIHNlc3Npb24gdG8KPiAkSE9N
+RS8ubHR0bmcvc2Vzc2lvbnMgaW5zdGVhZCBvZiAkTFRUTkdfSE9NRS8ubHR0bmcvc2Vzc2lvbnMu
+Cj4gCj4gSSBsb29rZWQgYXQgdG9vbHMvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9zYXZlLmMgYW5k
+IGluIHRoZSBzYXZlX3Nlc3Npb24KPiBmdW5jdGlvbiBpdCBleGVjdXRlcyB0aGlzIGxpbmUgd2hl
+biB0aGVyZSBpcyBubyBwcm92aWRlZCBwYXRoCj4gCj4gY2hhciAqaG9tZV9kaXIgPSB1dGlsc19n
+ZXRfdXNlcl9ob21lX2RpciAuLi4uCj4gCj4gU2hvdWxkbid0IGl0IGJlIGNhbGxpbmcgdXRpbHNf
+Z2V0X2hvbWVfZGlyIGluc3RlYWQ/CgpCYXNlZCBvbiB0aGUgbWFuIHBhZ2UsIHlvdSBzZWVtIHRv
+IGJlIHJpZ2h0LiBKw6lyw6ltaWUgbWlnaHQgd2FudCB0byB2YWxpZGF0ZSBpZgp0aGlzIHdhcyB0
+aGUgaW5pdGlhbCBpbnRlbnQuIE92ZXJhbGwsIGl0IHdvdWxkIG1ha2Ugc2Vuc2UgdG8gZ28gdGhl
+IHdheSB5b3UgYXJlCnByb3Bvc2luZy4gSSdtIG5vdCBzdXJlIHRoYXQgc2ltcGx5IHN3YXBwaW5n
+IG9uZSBmb3IgdGhlIG90aGVyIHdpbGwgZG8gd2hhdCB5b3UKZXhwZWN0LiBJZiBJJ20gbm90IG1p
+c3Rha2VuIHV0aWxzX2dldF9ob21lX2RpciB3aWxsIGVuZCB1cCBzYXZpbmcgZmlsZSBpbiB0aGUK
+TFRUTkdfSE9NRS9IT01FIG9mIHRoZSB1c2VyIHRoYXQgc3RhcnRlZCB0aGUgc2Vzc2lvbmQgYW5k
+IG5vdCB0aGUKY2FsbGVyIG9mIHRoZSBzYXZlIGNvbW1hbmQuIENvdWxkIHlvdSB2YWxpZGF0ZT8K
+Cj4gCj4gV2hlbiBJIGRvIGNoYW5nZSB0aGUgZnVuY3Rpb24sICJsdHRuZyBzYXZlIiBhbHdheXMg
+ZW5kcyB1cCBpbiBhbiBlcnJvcgo+IG9mIGludmFsaWQgcG9pbnRlci4KCktlZXAgaW4gbWluZCB0
+aGF0IHV0aWxzX2dldF91c2VyX2hvbWVfZGlyIGFsbG9jYXRlIGEgc3RyaW5nIHRoYXQgbmVlZHMg
+dG8gYmUKZnJlZWQgd2hpbGUgdXRpbHNfZ2V0X2hvbWVfZGlyIGRvZXMgbm90LiBZb3UgbWlnaHQg
+bmVlZCB0byByZXZpZXcgdGhlIG1lbW9yeQpoYW5kbGluZyBpbiB0aGlzIGZ1bmN0aW9uKHNhdmVf
+c2Vzc2lvbikuCgo+IAo+IEFueSBpZGVhIHdoeSB0aGlzIG1pZ2h0IGJlIGhhcHBlbmluZz8KCkVp
+dGhlciBhIGJhY2t0cmFjZSBvZiBsdHRuZy1zZXNzaW9uZCBvciBzb21lIGNvZGUgd291bGQgaGF2
+ZSBiZWVuIHVzZWZ1bCBoZXJlLgoKQ2hlZXJzLgoKLS0gCkpvbmF0aGFuIFJham90dGUtSnVsaWVu
+CkVmZmljaU9TCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczov
+L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
