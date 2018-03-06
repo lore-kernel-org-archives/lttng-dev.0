@@ -1,20 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust] Fix: ustfork: save and restore
- errno in syscall wrappers
-Date: Mon, 5 Mar 2018 16:13:44 -0500 (EST)
-Message-ID: <825105551.2511.1520284424371.JavaMail.zimbra__30701.8890548081$1520284315$gmane$org@efficios.com>
-References: <1520284147-31451-1-git-send-email-mjeanson@efficios.com>
+From: Shehab Elsayed <shehabyomn@gmail.com>
+Subject: Babeltrace with python bindings unable to read ust trace
+Date: Mon, 5 Mar 2018 21:07:29 -0500
+Message-ID: <CAC-H6tt_0gWE2dGWRe1KMkO4J0HsbiubiQ3bys60n_p__8=49A__34253.3882860609$1520301939$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1506539425118799793=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 3zwCLx3N3JzprR
- for <lttng-dev@lists.lttng.org>; Mon,  5 Mar 2018 16:13:45 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
- by mail.efficios.com (Postfix) with ESMTP id D759B41A234
- for <lttng-dev@lists.lttng.org>; Mon,  5 Mar 2018 16:13:44 -0500 (EST)
-In-Reply-To: <1520284147-31451-1-git-send-email-mjeanson@efficios.com>
+Received: from mail-lf0-x231.google.com (mail-lf0-x231.google.com
+ [IPv6:2a00:1450:4010:c07::231])
+ by lists.lttng.org (Postfix) with ESMTPS id 3zwKsv5sqGzqYY
+ for <lttng-dev@lists.lttng.org>; Mon,  5 Mar 2018 21:07:31 -0500 (EST)
+Received: by mail-lf0-x231.google.com with SMTP id i80so26164740lfg.5
+ for <lttng-dev@lists.lttng.org>; Mon, 05 Mar 2018 18:07:31 -0800 (PST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,68 +20,95 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGludG8gbWFzdGVyLCAyLjEwLCAyLjksIHRoYW5rcyEKCk1hdGhpZXUKCi0tLS0tIE9u
-IE1hciA1LCAyMDE4LCBhdCA0OjA5IFBNLCBNaWNoYWVsIEplYW5zb24gbWplYW5zb25AZWZmaWNp
-b3MuY29tIHdyb3RlOgoKPiBTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29u
-QGVmZmljaW9zLmNvbT4KPiAtLS0KPiBsaWJsdHRuZy11c3QtZm9yay91c3Rmb3JrLmMgfCAxMyAr
-KysrKysrKysrKysrCj4gMSBmaWxlIGNoYW5nZWQsIDEzIGluc2VydGlvbnMoKykKPiAKPiBkaWZm
-IC0tZ2l0IGEvbGlibHR0bmctdXN0LWZvcmsvdXN0Zm9yay5jIGIvbGlibHR0bmctdXN0LWZvcmsv
-dXN0Zm9yay5jCj4gaW5kZXggNDNiOGQ4Zi4uNzFjNGI4NiAxMDA2NDQKPiAtLS0gYS9saWJsdHRu
-Zy11c3QtZm9yay91c3Rmb3JrLmMKPiArKysgYi9saWJsdHRuZy11c3QtZm9yay91c3Rmb3JrLmMK
-PiBAQCAtMzMsNiArMzMsNyBAQCBwaWRfdCBmb3JrKHZvaWQpCj4gCXN0YXRpYyBwaWRfdCAoKnBs
-aWJjX2Z1bmMpKHZvaWQpID0gTlVMTDsKPiAJc2lnc2V0X3Qgc2lnc2V0Owo+IAlwaWRfdCByZXR2
-YWw7Cj4gKwlpbnQgc2F2ZWRfZXJybm87Cj4gCj4gCWlmIChwbGliY19mdW5jID09IE5VTEwpIHsK
-PiAJCXBsaWJjX2Z1bmMgPSBkbHN5bShSVExEX05FWFQsICJmb3JrIik7Cj4gQEAgLTQ2LDEyICs0
-NywxNCBAQCBwaWRfdCBmb3JrKHZvaWQpCj4gCXVzdF9iZWZvcmVfZm9yaygmc2lnc2V0KTsKPiAJ
-LyogRG8gdGhlIHJlYWwgZm9yayAqLwo+IAlyZXR2YWwgPSBwbGliY19mdW5jKCk7Cj4gKwlzYXZl
-ZF9lcnJubyA9IGVycm5vOwo+IAlpZiAocmV0dmFsID09IDApIHsKPiAJCS8qIGNoaWxkICovCj4g
-CQl1c3RfYWZ0ZXJfZm9ya19jaGlsZCgmc2lnc2V0KTsKPiAJfSBlbHNlIHsKPiAJCXVzdF9hZnRl
-cl9mb3JrX3BhcmVudCgmc2lnc2V0KTsKPiAJfQo+ICsJZXJybm8gPSBzYXZlZF9lcnJubzsKPiAJ
-cmV0dXJuIHJldHZhbDsKPiB9Cj4gCj4gQEAgLTYwLDYgKzYzLDcgQEAgaW50IGRhZW1vbihpbnQg
-bm9jaGRpciwgaW50IG5vY2xvc2UpCj4gCXN0YXRpYyBpbnQgKCpwbGliY19mdW5jKShpbnQgbm9j
-aGRpciwgaW50IG5vY2xvc2UpID0gTlVMTDsKPiAJc2lnc2V0X3Qgc2lnc2V0Owo+IAlpbnQgcmV0
-dmFsOwo+ICsJaW50IHNhdmVkX2Vycm5vOwo+IAo+IAlpZiAocGxpYmNfZnVuYyA9PSBOVUxMKSB7
-Cj4gCQlwbGliY19mdW5jID0gZGxzeW0oUlRMRF9ORVhULCAiZGFlbW9uIik7Cj4gQEAgLTczLDYg
-Kzc3LDcgQEAgaW50IGRhZW1vbihpbnQgbm9jaGRpciwgaW50IG5vY2xvc2UpCj4gCXVzdF9iZWZv
-cmVfZm9yaygmc2lnc2V0KTsKPiAJLyogRG8gdGhlIHJlYWwgZGFlbW9uIGNhbGwgKi8KPiAJcmV0
-dmFsID0gcGxpYmNfZnVuYyhub2NoZGlyLCBub2Nsb3NlKTsKPiArCXNhdmVkX2Vycm5vID0gZXJy
-bm87Cj4gCWlmIChyZXR2YWwgPT0gMCkgewo+IAkJLyogY2hpbGQsIHBhcmVudCBjYWxsZWQgX2V4
-aXQoKSBkaXJlY3RseSAqLwo+IAkJdXN0X2FmdGVyX2ZvcmtfY2hpbGQoJnNpZ3NldCk7Cj4gQEAg
-LTgwLDYgKzg1LDcgQEAgaW50IGRhZW1vbihpbnQgbm9jaGRpciwgaW50IG5vY2xvc2UpCj4gCQkv
-KiBvbiBlcnJvciBpbiB0aGUgcGFyZW50ICovCj4gCQl1c3RfYWZ0ZXJfZm9ya19wYXJlbnQoJnNp
-Z3NldCk7Cj4gCX0KPiArCWVycm5vID0gc2F2ZWRfZXJybm87Cj4gCXJldHVybiByZXR2YWw7Cj4g
-fQo+IAo+IEBAIC0xMTQsNiArMTIwLDcgQEAgaW50IGNsb25lKGludCAoKmZuKSh2b2lkICopLCB2
-b2lkICpjaGlsZF9zdGFjaywgaW50IGZsYWdzLAo+IHZvaWQgKmFyZywgLi4uKQo+IAkvKiBlbmQg
-b2YgdmFyIGFyZ3MgKi8KPiAJdmFfbGlzdCBhcDsKPiAJaW50IHJldHZhbDsKPiArCWludCBzYXZl
-ZF9lcnJubzsKPiAKPiAJdmFfc3RhcnQoYXAsIGFyZyk7Cj4gCXB0aWQgPSB2YV9hcmcoYXAsIHBp
-ZF90ICopOwo+IEBAIC0xMzcsNiArMTQ0LDcgQEAgaW50IGNsb25lKGludCAoKmZuKSh2b2lkICop
-LCB2b2lkICpjaGlsZF9zdGFjaywgaW50IGZsYWdzLAo+IHZvaWQgKmFyZywgLi4uKQo+IAkJICov
-Cj4gCQlyZXR2YWwgPSBwbGliY19mdW5jKGZuLCBjaGlsZF9zdGFjaywgZmxhZ3MsIGFyZywgcHRp
-ZCwKPiAJCQkJdGxzLCBjdGlkKTsKPiArCQlzYXZlZF9lcnJubyA9IGVycm5vOwo+IAl9IGVsc2Ug
-ewo+IAkJLyogQ3JlYXRpbmcgYSByZWFsIHByb2Nlc3MsIHdlIG5lZWQgdG8gaW50ZXJ2ZW5lLiAq
-Lwo+IAkJc3RydWN0IHVzdGZvcmtfY2xvbmVfaW5mbyBpbmZvID0geyAuZm4gPSBmbiwgLmFyZyA9
-IGFyZyB9Owo+IEBAIC0xNDQsOSArMTUyLDExIEBAIGludCBjbG9uZShpbnQgKCpmbikodm9pZCAq
-KSwgdm9pZCAqY2hpbGRfc3RhY2ssIGludCBmbGFncywKPiB2b2lkICphcmcsIC4uLikKPiAJCXVz
-dF9iZWZvcmVfZm9yaygmaW5mby5zaWdzZXQpOwo+IAkJcmV0dmFsID0gcGxpYmNfZnVuYyhjbG9u
-ZV9mbiwgY2hpbGRfc3RhY2ssIGZsYWdzLCAmaW5mbywKPiAJCQkJcHRpZCwgdGxzLCBjdGlkKTsK
-PiArCQlzYXZlZF9lcnJubyA9IGVycm5vOwo+IAkJLyogVGhlIGNoaWxkIGRvZXNuJ3QgZ2V0IGhl
-cmUuICovCj4gCQl1c3RfYWZ0ZXJfZm9ya19wYXJlbnQoJmluZm8uc2lnc2V0KTsKPiAJfQo+ICsJ
-ZXJybm8gPSBzYXZlZF9lcnJubzsKPiAJcmV0dXJuIHJldHZhbDsKPiB9Cj4gCj4gQEAgLTE1Nyw2
-ICsxNjcsNyBAQCBwaWRfdCByZm9yayhpbnQgZmxhZ3MpCj4gCXN0YXRpYyBwaWRfdCAoKnBsaWJj
-X2Z1bmMpKHZvaWQpID0gTlVMTDsKPiAJc2lnc2V0X3Qgc2lnc2V0Owo+IAlwaWRfdCByZXR2YWw7
-Cj4gKwlpbnQgc2F2ZWRfZXJybm87Cj4gCj4gCWlmIChwbGliY19mdW5jID09IE5VTEwpIHsKPiAJ
-CXBsaWJjX2Z1bmMgPSBkbHN5bShSVExEX05FWFQsICJyZm9yayIpOwo+IEBAIC0xNzAsMTIgKzE4
-MSwxNCBAQCBwaWRfdCByZm9yayhpbnQgZmxhZ3MpCj4gCXVzdF9iZWZvcmVfZm9yaygmc2lnc2V0
-KTsKPiAJLyogRG8gdGhlIHJlYWwgcmZvcmsgKi8KPiAJcmV0dmFsID0gcGxpYmNfZnVuYygpOwo+
-ICsJc2F2ZWRfZXJybm8gPSBlcnJubzsKPiAJaWYgKHJldHZhbCA9PSAwKSB7Cj4gCQkvKiBjaGls
-ZCAqLwo+IAkJdXN0X2FmdGVyX2ZvcmtfY2hpbGQoJnNpZ3NldCk7Cj4gCX0gZWxzZSB7Cj4gCQl1
-c3RfYWZ0ZXJfZm9ya19wYXJlbnQoJnNpZ3NldCk7Cj4gCX0KPiArCWVycm5vID0gc2F2ZWRfZXJy
-bm87Cj4gCXJldHVybiByZXR2YWw7Cj4gfQo+IAo+IC0tCj4gMi43LjQKCi0tIApNYXRoaWV1IERl
-c25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxp
-c3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
-YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============1506539425118799793==
+Content-Type: multipart/alternative; boundary="94eb2c1c22229df4b40566b4e761"
+
+--94eb2c1c22229df4b40566b4e761
+Content-Type: text/plain; charset="UTF-8"
+
+Hello All,
+
+I am running into this problem where using babeltrace with python bindings
+is unable to read a ust trace even though the trace can be processed
+normally if I run babeltrace from the command line.
+
+I have tried the example given in the LTTng documentation for using
+babeltrace with python bindings. It works normally with a kernel trace.
+However, when I give it a ust trace (just to see if it can open it) I get
+the following error:
+
+Unable to open metadata.
+[warning] Unable to open trace metadata for path "/md1200/home/elsayed9/
+LTTng/lttng-traces/hello-test-session-20180219-184952/ust/".
+[warning] [Context] Cannot open_trace of format ctf at path
+/md1200/home/elsayed9/LTTng/lttng-traces/hello-test-session-20180219-184952/
+ust/.
+Traceback (most recent call last):
+  File "test.py", line 70, in <module>
+    sys.exit(0 if top5proc() else 1)
+  File "test.py", line 18, in top5proc
+    raise RuntimeError('Cannot add trace')
+RuntimeError: Cannot add trace
+
+Any ideas on how to solve this problem are greatly appreciated.
+
+Thanks,
+Shehab
+
+--94eb2c1c22229df4b40566b4e761
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div><div><div><div>Hello All,<br><br></div>I am runn=
+ing into this problem where using babeltrace with python bindings is unable=
+ to read a <span class=3D"" style=3D"" id=3D":3iy.1" tabindex=3D"-1">ust</s=
+pan> trace even though the trace can be processed normally if I run <span c=
+lass=3D"" style=3D"" id=3D":3iy.2" tabindex=3D"-1">babeltrace</span> from t=
+he command line.<br><br></div>I have tried the example given in the <span c=
+lass=3D"" style=3D"" id=3D":3iy.3" tabindex=3D"-1">LTTng</span> documentati=
+on for using <span class=3D"" style=3D"" id=3D":3iy.4" tabindex=3D"-1">babe=
+ltrace</span> with python bindings. It works normally with a kernel trace. =
+However, when I give it a <span class=3D"" style=3D"" id=3D":3iy.5" tabinde=
+x=3D"-1">ust</span> trace (just to see if it can open it) I get the followi=
+ng error:<br><br>Unable to open <span class=3D"" style=3D"" id=3D":3iy.6" t=
+abindex=3D"-1">metadata</span>.<br>[warning] Unable to open trace <span cla=
+ss=3D"" style=3D"" id=3D":3iy.7" tabindex=3D"-1">metadata</span> for path &=
+quot;/md1200/home/elsayed9/<span class=3D"" style=3D"" id=3D":3iy.8" tabind=
+ex=3D"-1">LTTng</span>/<span class=3D"" style=3D"" id=3D":3iy.9" tabindex=
+=3D"-1">lttng</span>-traces/hello-test-session-20180219-184952/<span class=
+=3D"" style=3D"" id=3D":3iy.10" tabindex=3D"-1">ust</span>/&quot;.<br>[warn=
+ing] [Context] Cannot open_trace of format <span class=3D"" style=3D"" id=
+=3D":3iy.11" tabindex=3D"-1">ctf</span> at path /md1200/home/elsayed9/<span=
+ class=3D"" style=3D"" id=3D":3iy.12" tabindex=3D"-1">LTTng</span>/<span cl=
+ass=3D"" style=3D"" id=3D":3iy.13" tabindex=3D"-1">lttng</span>-traces/hell=
+o-test-session-20180219-184952/<span class=3D"" style=3D"" id=3D":3iy.14" t=
+abindex=3D"-1">ust</span>/.<br><span class=3D"" style=3D"" id=3D":3iy.15" t=
+abindex=3D"-1">Traceback</span> (most recent call last):<br>=C2=A0 File &qu=
+ot;test.<span class=3D"" style=3D"" id=3D":3iy.16" tabindex=3D"-1">py</span=
+>&quot;, line 70, in &lt;module&gt;<br>=C2=A0=C2=A0=C2=A0 <span class=3D"" =
+style=3D"" id=3D":3iy.17" tabindex=3D"-1">sys</span>.exit(0 if top5proc() e=
+lse 1)<br>=C2=A0 File &quot;test.<span class=3D"" style=3D"" id=3D":3iy.18"=
+ tabindex=3D"-1">py</span>&quot;, line 18, in top5proc<br>=C2=A0=C2=A0=C2=
+=A0 raise <span class=3D"" style=3D"" id=3D":3iy.19" tabindex=3D"-1">Runtim=
+eError</span>(&#39;Cannot add trace&#39;)<br><span class=3D"" style=3D"" id=
+=3D":3iy.20" tabindex=3D"-1">RuntimeError</span>: Cannot add trace<br><br><=
+/div>Any ideas on how to solve this problem are greatly appreciated.<br><br=
+></div>Thanks,<br></div><span class=3D"" style=3D"" id=3D":3iy.21" tabindex=
+=3D"-1">Shehab</span><br></div>
+
+--94eb2c1c22229df4b40566b4e761--
+
+--===============1506539425118799793==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============1506539425118799793==--
