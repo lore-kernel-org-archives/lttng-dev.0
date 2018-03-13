@@ -1,19 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] Fix: do not use CONFIG_HOTPLUG_CPU for the
- new hotplug API
-Date: Tue, 13 Mar 2018 12:09:51 -0400 (EDT)
-Message-ID: <28346474.8908.1520957391381.JavaMail.zimbra__23139.7789008499$1520957280$gmane$org@efficios.com>
-References: <20180311140243.4539-1-larper@axis.com>
- <1417917769.8200.1520868093286.JavaMail.zimbra@efficios.com>
- <b01f8309-513b-2369-4911-8848276afac2@axis.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-modules] Cleanup: comment about
+	CONFIG_HOTPLUG_CPU ifdef
+Date: Tue, 13 Mar 2018 12:14:43 -0400
+Message-ID: <1520957683-18969-1-git-send-email-mjeanson__27812.8254147761$1520957573$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 4010Dd1tjjzs4
- for <lttng-dev@lists.lttng.org>; Tue, 13 Mar 2018 12:09:52 -0400 (EDT)
-In-Reply-To: <b01f8309-513b-2369-4911-8848276afac2@axis.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 4010LJ4PRkztM
+ for <lttng-dev@lists.lttng.org>; Tue, 13 Mar 2018 12:14:48 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.efficios.com (Postfix) with ESMTP id 17FA941D38F
+ for <lttng-dev@lists.lttng.org>; Tue, 13 Mar 2018 12:14:48 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,43 +22,25 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Lars Persson <lars.persson@axis.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Lars Persson <larper@axis.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT24gTWFyIDEzLCAyMDE4LCBhdCA2OjIwIEFNLCBMYXJzIFBlcnNzb24gbGFycy5wZXJz
-c29uQGF4aXMuY29tIHdyb3RlOgoKPiBPbiAwMy8xMi8yMDE4IDA0OjIxIFBNLCBNYXRoaWV1IERl
-c25veWVycyB3cm90ZToKPj4gLS0tLS0gT24gTWFyIDExLCAyMDE4LCBhdCAxMDowMiBBTSwgTGFy
-cyBQZXJzc29uIGxhcnMucGVyc3NvbkBheGlzLmNvbSB3cm90ZToKPj4gCj4+PiBLZXJuZWwgY29u
-ZmlndXJhdGlvbnMgd2l0aG91dCBDT05GSUdfSE9UUExVR19DUFUgdGhyb3cgYW4gdW5rbm93bgo+
-Pj4gc3ltYm9sIGVycm9yIHdoZW4gYXR0ZW1wdGluZyB0byBpbnNlcnQgdGhlIGx0dG5nLXRyYWNl
-IG1vZHVsZToKPj4+IGx0dG5nX3RyYWNlcjogVW5rbm93biBzeW1ib2wgbHR0bmdfaHBfcHJlcGFy
-ZSAoZXJyIDApCj4+PiBsdHRuZ190cmFjZXI6IFVua25vd24gc3ltYm9sIGx0dG5nX2hwX29ubGlu
-ZSAoZXJyIDApCj4+Pgo+Pj4gVGhpcyB3YXMgY2F1c2VkIGJ5IGx0dG5nLWV2ZW50cyBhbmQgbHR0
-bmctY29udGV4dC1wZXJmLWNvdW50ZXIgbm90Cj4+PiBhZ3JlZWluZyBvbiB3aGljaCBwcmVwcm9j
-ZXNzb3IgY29uZGl0aW9uIHRoYXQgc2hvdWxkIGd1YXJkIHRoZSB1c2Ugb2YKPj4+IHRoZSBob3Rw
-bHVnIEFQSS4gSW4gZmFjdCB0aGUgQVBJIGlzIGF2YWlsYWJsZSBhbHNvIG9uIGtlcm5lbHMgYnVp
-bHQKPj4+IHdpdGhvdXQgQ09ORklHX0hPVFBMVUdfQVBJLgo+PiAKPj4gRG8geW91IG1lYW4gQ09O
-RklHX0hPVFBMVUdfQ1BVIGFib3ZlID8KPiAKPiBZZXMsIHRoYW5rcyBmb3Igc3BvdHRpbmcgdGhl
-IG1pc3Rha2UuIEZlZWwgZnJlZSB0byBlZGl0IG15IGNvbW1pdCBtZXNzYWdlLgoKTWVyZ2VkIHdp
-dGggdGhpcyBtb2RpZmljYXRpb24gaW50byBtYXN0ZXIsIDIuOSwgMi4xMCwgdGhhbmtzIQoKTWF0
-aGlldQoKPiAKPiAtIExhcnMKPiAKPj4gCj4+IFRoYW5rcywKPj4gCj4+IE1hdGhpZXUKPj4gCj4+
-Pgo+Pj4gU2lnbmVkLW9mZi1ieTogTGFycyBQZXJzc29uIDxsYXJwZXJAYXhpcy5jb20+Cj4+PiAt
-LS0KPj4+IGx0dG5nLWV2ZW50cy5jIHwgMiArLQo+Pj4gMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
-aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4+Pgo+Pj4gZGlmZiAtLWdpdCBhL2x0dG5nLWV2ZW50cy5j
-IGIvbHR0bmctZXZlbnRzLmMKPj4+IGluZGV4IDZmMTIyZGQuLjJjZDY1MGYgMTAwNjQ0Cj4+PiAt
-LS0gYS9sdHRuZy1ldmVudHMuYwo+Pj4gKysrIGIvbHR0bmctZXZlbnRzLmMKPj4+IEBAIC0yNjQ0
-LDcgKzI2NDQsNyBAQCB2b2lkIGx0dG5nX3RyYW5zcG9ydF91bnJlZ2lzdGVyKHN0cnVjdCBsdHRu
-Z190cmFuc3BvcnQKPj4+ICp0cmFuc3BvcnQpCj4+PiB9Cj4+PiBFWFBPUlRfU1lNQk9MX0dQTChs
-dHRuZ190cmFuc3BvcnRfdW5yZWdpc3Rlcik7Cj4+Pgo+Pj4gLSNpZiAoZGVmaW5lZChDT05GSUdf
-SE9UUExVR19DUFUpICYmIChMSU5VWF9WRVJTSU9OX0NPREUgPj0KPj4+IEtFUk5FTF9WRVJTSU9O
-KDQsMTAsMCkpKQo+Pj4gKyNpZiAoTElOVVhfVkVSU0lPTl9DT0RFID49IEtFUk5FTF9WRVJTSU9O
-KDQsMTAsMCkpCj4+Pgo+Pj4gZW51bSBjcHVocF9zdGF0ZSBsdHRuZ19ocF9wcmVwYXJlOwo+Pj4g
-ZW51bSBjcHVocF9zdGF0ZSBsdHRuZ19ocF9vbmxpbmU7Cj4+PiAtLQo+Pj4gMi4xMS4wCj4+Pgo+
-Pj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+IGx0
-dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4+IGh0
-dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-Ci0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3Mu
-Y29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+U2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Ci0t
+LQogbHR0bmctZXZlbnRzLmMgfCA0ICsrLS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMo
+KyksIDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvbHR0bmctZXZlbnRzLmMgYi9sdHRuZy1l
+dmVudHMuYwppbmRleCAyY2Q2NTBmLi42MDk4Y2U0IDEwMDY0NAotLS0gYS9sdHRuZy1ldmVudHMu
+YworKysgYi9sdHRuZy1ldmVudHMuYwpAQCAtMjc2MCw3ICsyNzYwLDcgQEAgc3RhdGljIHZvaWQg
+X19leGl0IGx0dG5nX2V4aXRfY3B1X2hvdHBsdWcodm9pZCkKIAljcHVocF9yZW1vdmVfbXVsdGlf
+c3RhdGUobHR0bmdfaHBfcHJlcGFyZSk7CiB9CiAKLSNlbHNlIC8qICNpZiAoQ09ORklHX0hPVFBM
+VUdfQ1BVICYmIChMSU5VWF9WRVJTSU9OX0NPREUgPj0gS0VSTkVMX1ZFUlNJT04oNCwxMCwwKSkp
+ICovCisjZWxzZSAvKiAjaWYgKExJTlVYX1ZFUlNJT05fQ09ERSA+PSBLRVJORUxfVkVSU0lPTig0
+LDEwLDApKSAqLwogc3RhdGljIGludCBsdHRuZ19pbml0X2NwdV9ob3RwbHVnKHZvaWQpCiB7CiAJ
+cmV0dXJuIDA7CkBAIC0yNzY4LDcgKzI3NjgsNyBAQCBzdGF0aWMgaW50IGx0dG5nX2luaXRfY3B1
+X2hvdHBsdWcodm9pZCkKIHN0YXRpYyB2b2lkIGx0dG5nX2V4aXRfY3B1X2hvdHBsdWcodm9pZCkK
+IHsKIH0KLSNlbmRpZiAvKiAjZWxzZSAjaWYgKENPTkZJR19IT1RQTFVHX0NQVSAmJiAoTElOVVhf
+VkVSU0lPTl9DT0RFID49IEtFUk5FTF9WRVJTSU9OKDQsMTAsMCkpKSAqLworI2VuZGlmIC8qICNl
+bHNlICNpZiAoTElOVVhfVkVSU0lPTl9DT0RFID49IEtFUk5FTF9WRVJTSU9OKDQsMTAsMCkpICov
+CiAKIAogc3RhdGljIGludCBfX2luaXQgbHR0bmdfZXZlbnRzX2luaXQodm9pZCkKLS0gCjIuNy40
+CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1k
+ZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5s
+dHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
