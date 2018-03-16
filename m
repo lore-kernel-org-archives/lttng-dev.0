@@ -1,30 +1,16 @@
-From: THEUNISSEN Rolf <rolf.theunissen@altran.com>
-Subject: Re: [lttng-ust] Missing events when just before a
- process exits
-Date: Thu, 15 Mar 2018 08:37:06 +0000
-Message-ID: <13B832E4CA0EA14BAB2DA7118C642FF76CFFCFFC__19902.8831361376$1521210435$gmane$org@XMB-DCFR-35.europe.corp.altran.com>
-References: <13B832E4CA0EA14BAB2DA7118C642FF76CFFCC43@XMB-DCFR-35.europe.corp.altran.com>
- <20180313153504.GD29367@joraj-alpa>
- <13B832E4CA0EA14BAB2DA7118C642FF76CFFCF86@XMB-DCFR-35.europe.corp.altran.com>
- <1853457730.9811.1521048274240.JavaMail.zimbra@efficios.com>
+From: Nesrine Zouari <nesrine.zouari@enis.tn>
+Subject: Front-end for LTTng
+Date: Fri, 16 Mar 2018 16:46:33 +0100
+Message-ID: <CAPHFV4nxeZeNEs9D8LpwPCpagzAwNiCEMGWdrtcAVqT2P2juFQ__790.174611802463$1521215307$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1751861307475151205=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx08-001f8a01.pphosted.com (mx08-001f8a01.pphosted.com
- [91.207.212.157])
- by lists.lttng.org (Postfix) with ESMTPS id 40225K677sz1NG
- for <lttng-dev@lists.lttng.org>; Thu, 15 Mar 2018 04:37:09 -0400 (EDT)
-Received: from pps.filterd (m0090857.ppops.net [127.0.0.1])
- by mx08-001f8a01.pphosted.com (8.16.0.22/8.16.0.22) with SMTP id
- w2F8WnK8011263
- for <lttng-dev@lists.lttng.org>; Thu, 15 Mar 2018 09:37:07 +0100
-Received: from xch-20v-dcfr-02.europe.corp.altran.com ([194.98.79.73])
- by mx08-001f8a01.pphosted.com with ESMTP id 2gq53419s1-1
- (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT)
- for <lttng-dev@lists.lttng.org>; Thu, 15 Mar 2018 09:37:07 +0100
-In-Reply-To: <1853457730.9811.1521048274240.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
+Received: from mail-qt0-x22e.google.com (mail-qt0-x22e.google.com
+ [IPv6:2607:f8b0:400d:c0d::22e])
+ by lists.lttng.org (Postfix) with ESMTPS id 402qZw4zgGz15q
+ for <lttng-dev@lists.lttng.org>; Fri, 16 Mar 2018 11:47:04 -0400 (EDT)
+Received: by mail-qt0-x22e.google.com with SMTP id c7so11328839qtn.3
+ for <lttng-dev@lists.lttng.org>; Fri, 16 Mar 2018 08:47:04 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -34,104 +20,185 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWF0aGlldSBEZXNub3ll
-cnMgW21haWx0bzptYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb21dDQo+IFNlbnQ6IFdlZG5l
-c2RheSwgTWFyY2ggMTQsIDIwMTggNjoyNSBQTQ0KPiBUbzogVEhFVU5JU1NFTiBSb2xmIDxyb2xm
-LnRoZXVuaXNzZW5AYWx0cmFuLmNvbT4NCj4gQ2M6IGx0dG5nLWRldiA8bHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZz4NCj4gU3ViamVjdDogUmU6IFtsdHRuZy1kZXZdIFtsdHRuZy11c3RdIE1pc3Np
-bmcgZXZlbnRzIHdoZW4ganVzdCBiZWZvcmUgYSBwcm9jZXNzDQo+IGV4aXRzDQo+IA0KPiAtLS0t
-LSBPbiBNYXIgMTQsIDIwMTgsIGF0IDEyOjM3IFBNLCBUSEVVTklTU0VOIFJvbGYNCj4gcm9sZi50
-aGV1bmlzc2VuQGFsdHJhbi5jb20gd3JvdGU6DQo+IA0KPiA+PiAtLS0tLU9yaWdpbmFsIE1lc3Nh
-Z2UtLS0tLQ0KPiA+PiBGcm9tOiBKb25hdGhhbiBSYWpvdHRlLUp1bGllbg0KPiA+PiBbbWFpbHRv
-OmpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbV0NCj4gPj4gU2VudDogVHVlc2Rh
-eSwgTWFyY2ggMTMsIDIwMTggNDozNSBQTQ0KPiA+PiBUbzogVEhFVU5JU1NFTiBSb2xmIDxyb2xm
-LnRoZXVuaXNzZW5AYWx0cmFuLmNvbT4NCj4gPj4gQ2M6IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcNCj4gPj4gU3ViamVjdDogUmU6IFtsdHRuZy1kZXZdIFtsdHRuZy11c3RdIE1pc3NpbmcgZXZl
-bnRzIHdoZW4ganVzdCBiZWZvcmUNCj4gPj4gYSBwcm9jZXNzIGV4aXRzDQo+ID4+DQo+ID4+IEhp
-IFJvbGYsDQo+ID4+DQo+ID4+IE9uIFR1ZSwgTWFyIDEzLCAyMDE4IGF0IDEwOjQ4OjE3QU0gKzAw
-MDAsIFRIRVVOSVNTRU4gUm9sZiB3cm90ZToNCj4gPj4gPiBIaSwNCj4gPj4gPg0KPiA+PiA+IEkg
-YW0gY3VycmVudGx5IHRyYWNpbmcgbWFueSBwcm9jZXNzZXMgd2l0aCBMVFRuZy1VU1Qgb24gYSBz
-eXN0ZW0NCj4gPj4gPiB1bmRlcg0KPiA+PiBoZWF2eSBsb2FkLCB3aXRoIDIgQ1BVcy4NCj4gPj4g
-Pg0KPiA+PiA+IFRoZSB0cmFjZXMgc2VlbSB0byBiZSBtaXNzaW5nIHVzdC1ldmVudHMgbmVhciB0
-aGUgZW5kIG9mIGEgdHJhY2UuDQo+ID4+ID4gQWZ0ZXINCj4gPj4gZG9pbmcgc29tZSBhbmFseXNp
-cywgaXQgc2VlbXMgdGhhdCBldmVudHMgYXJlIG1pc3NpbmcgZnJvbSB0aGUgb3RoZXINCj4gPj4g
-Q1BVIHRoZW4gdGhlIHByb2Nlc3MgZXhpdHMgb24uIE1vcmUgY29uY3JldGVseToNCj4gPj4gPg0K
-PiA+PiA+IER1cmluZyB0aGUgbGlmZXRpbWUgb2YgYSBwcm9jZXNzOg0KPiA+PiA+IC0gUHJvY2Vz
-cyBYIGV4ZWN1dGVzIG9uIENQVSAwLDE6IGFsbCBldmVudHMgYXJlIGluIHRoZSB0cmFjZSBKdXN0
-DQo+ID4+ID4gYmVmb3JlIHRoZSBwcm9jZXNzIGlzIGFib3V0IHRvIGV4aXQ6DQo+ID4+ID4gLSBQ
-cm9jZXNzIFggZXhlY3V0ZXMgb24gQ1BVIDA6IG1pc3NpbmcgZXZlbnRzIGZyb20gdGhlIHRyYWNl
-DQo+ID4+DQo+ID4+IEhvdyBhcmUgeW91IHZhbGlkYXRpbmcgdGhpcz8NCj4gPg0KPiA+IEkgYW0g
-YWxzbyB1c2luZyBrZXJuZWwgdHJhY2luZywgdG8gdHJhY2UgdGhlIHNjaGVkdWxlci4gSW4NCj4g
-PiBUcmFjZUNvbXBhc3MgSSBjYW4gdmlldyB0aGUgc3RhdGVzIG9mIHRoZSBwcm9jZXNzZXMgYW5k
-IENQVXMuDQo+ID4NCj4gPj4NCj4gPj4gPiBBIGZldyBtaWxpLXNlY29uZHMgbGF0ZXI6DQo+ID4+
-ID4gLSBQcm9jZXNzIFggZXhlY3V0ZXMgb24gQ1BVMSBhbmQgZXhpdHM6IFRoZSBsYXN0IGV2ZW50
-cyBhcmUgaW4gdGhlDQo+ID4+ID4gdHJhY2UNCj4gPj4NCj4gPj4gVGhpcyBpcyBub3QgZXhwZWN0
-ZWQuIERvIHlvdSBoYXZlIGEgcmVwcm9kdWNlciBzbyB3ZSBjYW4gY2hlY2sgd2hhdA0KPiA+PiBt
-aWdodCBiZSBoYXBwZW5pbmc/DQo+ID4NCj4gPiBJIGFtIG5vdCBhbGxvd2VkIHRvIHByb3ZpZGUg
-ZGV0YWlscyBhYm91dCBteSBjdXJyZW50IHRyYWNlcy4gQW5kIGl0IGlzDQo+ID4gaGFyZCB0byBt
-YWtlIGEgc21hbGwgZXhhbXBsZSwgYnV0IEkgZ290IHNvbWUgbW9yZSBjbHVlcyB3aGF0IGlzDQo+
-IGhhcHBlbmluZywgc2VlIGJlbG93Lg0KPiA+DQo+ID4+DQo+ID4+IFdlIHdpbGwgbmVlZCB0aGUg
-dmVyc2lvbiBmb3IgbHR0bmctdXN0LCBsdHRuZy10b29scywgYmFiZWx0cmFjZS4NCj4gPg0KPiA+
-IEkgYW0gdXNpbmcgdmVyc2lvbiAyLjEwLCBmb3IgYW5hbHl6aW5nIHRoZSB0cmFjZXMgSSBhbSB1
-c2luZw0KPiA+IFRyYWNlQ29tcGFzcyBLZXJuZWwgdmVyc2lvbjogMy4xMC42Mg0KPiA+DQo+ID4+
-DQo+ID4+IE5vdGUgdGhhdCB5b3UgY2FuIHJ1biB5b3VyIGFwcGxpY2F0aW9uIHdpdGggbHR0bmct
-dXN0IGluIGRlYnVnIG1vZGUNCj4gPj4gdXNpbmcgTFRUTkdfVVNUX0RFQlVHPXkuIERlYnVnIHN0
-YXRlbWVudHMgd2lsbCBiZSBvdXRwdXR0ZWQgb24NCj4gc3RkZXJyLg0KPiA+Pg0KPiA+PiBlLmc6
-DQo+ID4+ICAgICAkIExUVE5HX1VTVF9ERUJVRz15IC4vbXlfc2FtcGxlX2FwcA0KPiA+Pg0KPiA+
-DQo+ID4gRW5hYmxlbGluZyB0aGlzIGRlYnVnZ2luZyBmbGFnIGdhdmUgbWUgYSBjbHVlIHdoYXQg
-aXMgaGFwcGVuaW5nLiBGb3INCj4gPiBhbGwgcHJvY2Vzc2VzLCB0aGUgcmVnaXN0cmF0aW9uIGlz
-IGdvaW5nIE9LLiBCdXQgZm9yIHNvbWUgcHJvY2Vzc2VzLA0KPiA+IHRoZSB1bi1yZWdpc3RyYXRp
-b24gaXMgbm90IGxvZ2dlZC4gT24gY2xvc2VyIGFuYWx5c2lzIChub3cgd2l0aA0KPiA+IHRyYWNl
-cG9pbnRzIGZyb20gU3lzdGVtVGFwKSwgSSBzZWUgdGhhdCB0aGUgcHJvY2Vzc2VzIGZvciB3aGlj
-aCB0aGUNCj4gPiBldmVudHMgYXJlIG1pc3NpbmcgYW5kIHRoZSB1bi1yZWdpc3RyYXRpb24gaXMg
-bWlzc2luZyBhcmUga2lsbGVkIGJ5DQo+ID4gU0lHS0lMTCBzaWduYWwuIFRoaXMgcHJvYmFibHkg
-ZXhwbGFpbnMgd2h5IHNvbWUgZGF0YSBjYW4gYmUgbG9zdC4gQnV0DQo+ID4gbWF5YmUgc3RyYW5n
-ZSB0aGF0IG9ubHkgbWVzc2FnZXMgZ2V0IGxvc3QgdGhhdCB3ZXJlIHRyYWNlZCBvbiBhIGRpZmZl
-cmVudA0KPiBDUFUuDQo+ID4NCj4gPiBJIHJlbWFpbiBwdXp6bGVkIHdoeSB0aGUgU0lHS0lMTCBh
-cnJpdmVzIGF0IHRoZSBwcm9jZXNzLCBhcyBhIFNJR1RFUk0NCj4gPiBpcyBzZW50IHRvIHRoZSBw
-cm9jZXNzLiBTb21laG93IHRoZSBrZXJuZWwgZGVjaWRlcyB0byBkZWxpdmVyIGFuDQo+ID4gU0lH
-S0lMTCBpbnN0ZWFkIG9mIGEgU0lHVEVSTS4NCj4gDQo+IFdoZW4gdXNpbmcgbHR0bmctdXN0IHdp
-dGggcGVyLXVpZCBidWZmZXJzLCB0aGVyZSBpcyBhIGtub3duIGRlc2lnbiBsaW1pdGF0aW9uDQo+
-IHJlZ2FyZGluZyBwcm9jZXNzIHRlcm1pbmF0ZWQgYnkgbm9uLWhhbmRsZWQga2lsbCBzaWduYWxz
-OiBpZiB0aGlzIG9jY3VycyB3aGlsZQ0KPiB0aGUgYnVmZmVyIGlzIGJlaW5nIHdyaXR0ZW4gdG8g
-KGJldHdlZW4gcmVzZXJ2ZSBhbmQgY29tbWl0KSwgaXQgd2lsbCBjYXVzZSB0aGUNCj4gcmVzdCBv
-ZiB0aGUgcGVyLWNwdSBidWZmZXIgdG8gYmUgdW5yZWFkYWJsZS4gVGhpcyBhcHBsaWVzIHRvIGFs
-bCBldmVudHMNCj4gcmVjb3JkZWQgYnkgYWxsIGFwcGxpY2F0aW9ucyBvZiB0aGUgc2FtZSB1c2Vy
-IGlkIGZvciB0aGF0IHBhcnRpY3VsYXIgQ1BVLg0KPiBSZWNvdmVyaW5nIGZyb20gdGhpcyBpbnZv
-bHZlcyBkZXN0cm95aW5nIGFuZCByZS1jcmVhdGluZyB0aGUgdHJhY2luZyBzZXNzaW9uLg0KPiAN
-Cj4gSWYgdGhpcyBraW5kIG9mIHNjZW5hcmlvIGlzIGxpa2VseSBmb3IgeW91LCB5b3UgbWlnaHQg
-d2FudCB0byBjb25zaWRlciB1c2luZyBwZXItDQo+IHBpZCBidWZmZXJzIChsdHRuZyBlbmFibGUt
-Y2hhbm5lbCAtdSAtLWJ1ZmZlcnMtcGlkKSwgd2hpY2ggZG8gbm90IHN1ZmZlciBmcm9tDQo+IHRo
-aXMgZGVzaWduIGxpbWl0YXRpb24uIFRoZSBkb3duc2lkZSBvZiBwZXItcGlkIGJ1ZmZlcnMgaXMg
-dGhhdCBpdCBhbGxvY2F0ZXMNCj4gbW9yZSBtZW1vcnkgb24geW91ciBzeXN0ZW0gZm9yIGJ1ZmZl
-cmluZywgYW5kIGFkZHMgZXh0cmEgb3ZlcmhlYWQgd2hlbg0KPiB1c2VkIHdpdGggcHJvY2Vzc2Vz
-IHRoYXQgaGF2ZSBhIHNob3J0IGxpZmUtdGltZS4NCj4gDQo+IFRoYW5rcywNCj4gDQo+IE1hdGhp
-ZXUNCj4gDQoNClRoYW5rcyBmb3IgeW91ciByZXBseSwgaW5kZWVkIEkgd2FzIHVzaW5nIC0tYnVm
-ZmVycy11aWQgd2hlbiBJIGZpcnN0IG9ic2VydmVkIHRoaXMgaXNzdWUuIFRoZW4gSSBzd2l0Y2hl
-ZCBiYWNrIHRvIC0tYnVmZmVycy1waWQsIGFzIEkgc3VzcGVjdGVkIGl0IHRvIGJlIG1vcmUgcm9i
-dXN0LCBob3dldmVyIHRoZSBpc3N1ZSBkaWQgbm90IHJlc29sdmUgKHRob3VnaCBpdCBtaWdodCBv
-Y2N1ciBsZXNzIG9mdGVuKS4gQW55d2F5cywgaXQgaXMgZXhwZWN0ZWQgdG8gbG9zZSBkYXRhIHdo
-ZW4gYSBwcm9jZXNzIGlzIFNJR0tJTExlZC4NCkl0IG1pZ2h0IGJlIHdvcnRoIG1lbnRpb25pbmcg
-YWJvdmUgZGVzaWduIHJlc3RyaWN0aW9uIGluIHRoZSBtYW4gcGFnZXMgb2YgbHR0bmcuDQoNClRo
-YW5rcyBmb3IgeW91ciB0aW1lLg0KDQpLaW5kIFJlZ2FyZHMsDQpSb2xmDQoNCg0KPiANCj4gPg0K
-PiA+IFJvbGYNCj4gPg0KPiA+PiBDaGVlcnMNCj4gPj4NCj4gPj4gLS0NCj4gPj4gSm9uYXRoYW4g
-UmFqb3R0ZS1KdWxpZW4NCj4gPj4gRWZmaWNpT1MNCj4gPiBfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXw0KPiA+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QNCj4g
-PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnDQo+ID4gaHR0cHM6Ly91cmxkZWZlbnNlLnByb29m
-cG9pbnQuY29tL3YyL3VybD91PWh0dHBzLTNBX19saXN0cy5sdHRuZy5vcmdfYw0KPiA+IGdpLTJE
-YmluX21haWxtYW5fbGlzdGluZm9fbHR0bmctDQo+IDJEZGV2JmQ9RHdJQ2FRJmM9Y3hXTjJRU0Rv
-cHQ1U2tsTmZiaklqDQo+ID4NCj4gZyZyPVhCZzRMb2daOFoyeEdxdWg0czdWREd3c2dCY3dLT2RW
-OTl3YXBTMVQwSzgmbT0xVkFiWEFoRjkNCj4gMHFacHFVcmlwemcNCj4gPiBYdFQ4Ynlzd3BId080
-MmpDZXZBUUhRSSZzPUV2M193aS1hU09UREZUaUhRVTZzVFhCRkZiWmJZMmtLVi0NCj4gdXA0RFdq
-MnRzJg0KPiA+IGU9DQo+IA0KPiAtLQ0KPiBNYXRoaWV1IERlc25veWVycw0KPiBFZmZpY2lPUyBJ
-bmMuDQo+IGh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw/dT1odHRwLQ0K
-PiAzQV9fd3d3LmVmZmljaW9zLmNvbSZkPUR3SUNhUSZjPWN4V04yUVNEb3B0NVNrbE5mYmpJamcm
-cj1YQmc0TG8NCj4gZ1o4WjJ4R3F1aDRzN1ZER3dzZ0Jjd0tPZFY5OXdhcFMxVDBLOCZtPTFWQWJY
-QWhGOTBxWnBxVXJpcHpnDQo+IFh0VDhieXN3cEh3TzQyakNldkFRSFFJJnM9LUFibXJGQ0wtNUNH
-ekt4MnoxLQ0KPiBjUllkYk9FV2F4UXRPQWhveU5IdFVvamcmZT0NCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
-bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
-aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============1751861307475151205==
+Content-Type: multipart/alternative; boundary="001a114f2fce092e68056789854d"
+
+--001a114f2fce092e68056789854d
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+I am computer engineering student and I am actually working on my
+graduation project which is about Qemu Trace.
+
+In this project, Qemu is considered as a user-space instrumented
+application. I have used LTTng-Tools to control Qemu trace.
+
+Now, I aim to develop an application which is a front-end to LTTng. This
+application should be able to control the Qemu Trace (start, stop ..) and
+to visualize the traces.
+
+My question is the following: Could my application communicate with LTTng
+through TCP protocol ?? If yes, could you give me some hints ??
+I know that LTTng can control trace in a streaming mode using the TCP
+protocol, but this is not my use case.
+
+Best regards,
+
+---------------------------------------------------------------------------=
+--------------
+
+Nesrine ZOUARI
+Computer Engineering Student
+Department of Computer Engineering and Applied Mathematics
+National Engineering School of Sfax (ENIS)
+University of Sfax-Tunisia
+Tel: +216 52 620 475
+
+=E2=80=8C
+
+--001a114f2fce092e68056789854d
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><img width=3D"0" height=3D"0" class=3D"mailtrack-img" alt=
+=3D"" style=3D"display:flex" src=3D"https://mailtrack.io/trace/mail/f45f510=
+eb18e00742c7cb04b23dbc2a5372ac4de.png?u=3D2189147"><div></div><span style=
+=3D"color:rgb(34,34,34);font-family:arial,sans-serif;font-size:12.8px;font-=
+style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-we=
+ight:400;letter-spacing:normal;text-align:start;text-indent:0px;text-transf=
+orm:none;white-space:normal;word-spacing:0px;text-decoration-style:initial;=
+text-decoration-color:initial;background-color:rgb(255,255,255);float:none;=
+display:inline"><font color=3D"#000000">Hello,</font></span><div style=3D"c=
+olor:rgb(34,34,34);font-family:arial,sans-serif;font-size:12.8px;font-style=
+:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-weight:=
+400;letter-spacing:normal;text-align:start;text-indent:0px;text-transform:n=
+one;white-space:normal;word-spacing:0px;text-decoration-style:initial;text-=
+decoration-color:initial;background-color:rgb(255,255,255)"><span style=3D"=
+font-family:arial,sans-serif;font-style:normal;font-variant-ligatures:norma=
+l;font-variant-caps:normal;font-weight:400;letter-spacing:normal;text-align=
+:start;text-indent:0px;text-transform:none;white-space:normal;word-spacing:=
+0px;background-color:rgb(255,255,255);text-decoration-style:initial;text-de=
+coration-color:initial;float:none;display:inline"><font color=3D"#000000"><=
+br></font></span></div><div style=3D"color:rgb(34,34,34);font-family:arial,=
+sans-serif;font-size:12.8px;font-style:normal;font-variant-ligatures:normal=
+;font-variant-caps:normal;font-weight:400;letter-spacing:normal;text-align:=
+start;text-indent:0px;text-transform:none;white-space:normal;word-spacing:0=
+px;text-decoration-style:initial;text-decoration-color:initial;background-c=
+olor:rgb(255,255,255)"><font color=3D"#000000"><span style=3D"font-family:a=
+rial,sans-serif;font-style:normal;font-variant-ligatures:normal;font-varian=
+t-caps:normal;font-weight:400;letter-spacing:normal;text-align:start;text-i=
+ndent:0px;text-transform:none;white-space:normal;word-spacing:0px;backgroun=
+d-color:rgb(255,255,255);text-decoration-style:initial;text-decoration-colo=
+r:initial;float:none;display:inline">I am computer engineering student and =
+I am actually working on my graduation project which is about<span>=C2=A0</=
+span></span><span class=3D"gmail-m_5367336902020713707gmail-m_5679886430513=
+50633gmail-m_-2504658086804125746m_-670507402164016222gmail-il" style=3D"fo=
+nt-family:arial,sans-serif;font-style:normal;font-variant-ligatures:normal;=
+font-variant-caps:normal;font-weight:400;letter-spacing:normal;text-align:s=
+tart;text-indent:0px;text-transform:none;white-space:normal;word-spacing:0p=
+x;background-color:rgb(255,255,255);text-decoration-style:initial;text-deco=
+ration-color:initial">Qemu</span><span style=3D"font-family:arial,sans-seri=
+f;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;=
+font-weight:400;letter-spacing:normal;text-align:start;text-indent:0px;text=
+-transform:none;white-space:normal;word-spacing:0px;background-color:rgb(25=
+5,255,255);text-decoration-style:initial;text-decoration-color:initial;floa=
+t:none;display:inline"><span>=C2=A0</span>Trace.=C2=A0</span></font></div><=
+div style=3D"text-align:start;text-indent:0px;text-decoration-style:initial=
+;text-decoration-color:initial;background-color:rgb(255,255,255)"><font col=
+or=3D"#000000" style=3D"color:rgb(34,34,34);font-family:arial,sans-serif;fo=
+nt-size:12.8px;font-style:normal;font-variant-ligatures:normal;font-variant=
+-caps:normal;font-weight:400;letter-spacing:normal;text-transform:none;whit=
+e-space:normal;word-spacing:0px"><br></font><div style=3D""><span style=3D"=
+text-align:start;text-indent:0px;background-color:rgb(255,255,255);text-dec=
+oration-style:initial;text-decoration-color:initial;float:none;display:inli=
+ne"><font color=3D"#000000" style=3D""><font color=3D"#222222"><span style=
+=3D"font-size:12.8px">In this project, Qemu is </span></font><span style=3D=
+"font-size:12.8px">considered</span><font color=3D"#222222"><span style=3D"=
+font-size:12.8px">=C2=A0as a user-space instrumented application. I have us=
+ed LTTng-Tools to control Qemu trace.</span></font></font></span></div><div=
+ style=3D"color:rgb(34,34,34);font-family:arial,sans-serif;font-size:12.8px=
+;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;f=
+ont-weight:400;letter-spacing:normal;text-transform:none;white-space:normal=
+;word-spacing:0px"><span style=3D"font-size:12.8px;color:rgb(0,0,0);margin:=
+0px;padding:0px;font-family:Cabin,sans-serif;background-color:rgb(247,247,2=
+47)"><span style=3D"margin:0px;padding:0px"><br></span></span></div><div st=
+yle=3D"color:rgb(34,34,34);font-family:arial,sans-serif;font-size:12.8px;fo=
+nt-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font=
+-weight:400;letter-spacing:normal;text-transform:none;white-space:normal;wo=
+rd-spacing:0px"><span style=3D"background-color:rgb(247,247,247);color:rgb(=
+0,0,0);font-family:Cabin,sans-serif;font-size:12.8px">Now,=C2=A0</span><spa=
+n style=3D"color:rgb(0,0,0);font-size:12.8px">I aim to develop an applicati=
+on which is a front-end to LTTng. This application should be able to contro=
+l the Qemu Trace (start, stop ..) and to visualize the traces.</span><br></=
+div><div style=3D"color:rgb(34,34,34);font-family:arial,sans-serif;font-siz=
+e:12.8px;font-style:normal;font-variant-ligatures:normal;font-variant-caps:=
+normal;font-weight:400;letter-spacing:normal;text-transform:none;white-spac=
+e:normal;word-spacing:0px"><span style=3D"color:rgb(0,0,0);font-size:12.8px=
+"><br></span></div><div style=3D"color:rgb(34,34,34);font-family:arial,sans=
+-serif;font-size:12.8px;font-style:normal;font-variant-ligatures:normal;fon=
+t-variant-caps:normal;font-weight:400;letter-spacing:normal;text-transform:=
+none;white-space:normal;word-spacing:0px"><font color=3D"#000000">My questi=
+on is the following: Could my application communicate with LTTng through TC=
+P protocol ?? If yes, could you give me some hints ??=C2=A0</font></div><di=
+v style=3D"color:rgb(34,34,34);font-family:arial,sans-serif;font-size:12.8p=
+x;font-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;=
+font-weight:400;letter-spacing:normal;text-transform:none;white-space:norma=
+l;word-spacing:0px"><font color=3D"#000000">I know that LTTng can control t=
+race in a streaming mode using the TCP protocol, but this is not my use cas=
+e.</font></div><div style=3D"color:rgb(34,34,34);font-family:arial,sans-ser=
+if;font-size:12.8px;font-style:normal;font-variant-ligatures:normal;font-va=
+riant-caps:normal;font-weight:400;letter-spacing:normal;text-transform:none=
+;white-space:normal;word-spacing:0px"><div><font color=3D"#000000"><br styl=
+e=3D"font-family:arial,sans-serif;font-style:normal;font-variant-ligatures:=
+normal;font-variant-caps:normal;font-weight:400;letter-spacing:normal;text-=
+align:start;text-indent:0px;text-transform:none;white-space:normal;word-spa=
+cing:0px;background-color:rgb(255,255,255);text-decoration-style:initial;te=
+xt-decoration-color:initial"><span style=3D"font-family:arial,sans-serif;fo=
+nt-style:normal;font-variant-ligatures:normal;font-variant-caps:normal;font=
+-weight:400;letter-spacing:normal;text-align:start;text-indent:0px;text-tra=
+nsform:none;white-space:normal;word-spacing:0px;background-color:rgb(255,25=
+5,255);text-decoration-style:initial;text-decoration-color:initial;float:no=
+ne;display:inline">Best regards,=C2=A0</span></font></div></div></div><br><=
+div class=3D"gmail_signature" data-smartmail=3D"gmail_signature"><div dir=
+=3D"ltr"><div><div dir=3D"ltr"><div><div dir=3D"ltr"><div dir=3D"ltr"><div =
+dir=3D"ltr" style=3D"font-size:12.8px"><div dir=3D"ltr"><span style=3D"font=
+-size:12.8px"><font color=3D"#444444">-------------------------------------=
+----------------------------------------------------</font></span></div><di=
+v dir=3D"ltr"><font color=3D"#444444" face=3D"arial, helvetica, sans-serif"=
+ size=3D"2"><br></font></div><div dir=3D"ltr"><font color=3D"#444444" face=
+=3D"arial, helvetica, sans-serif" size=3D"2">Nesrine ZOUARI</font></div><di=
+v dir=3D"ltr"><font color=3D"#444444" face=3D"arial, helvetica, sans-serif"=
+ size=3D"2">Computer Engineering Student=C2=A0<br></font></div><div dir=3D"=
+ltr"><font color=3D"#444444" face=3D"arial, helvetica, sans-serif" size=3D"=
+2">Department of Computer Engineering and Applied Mathematics</font></div><=
+div dir=3D"ltr"><span style=3D"color:rgb(68,68,68);font-family:arial,helvet=
+ica,sans-serif;font-size:small">National Engineering School=C2=A0of=C2=A0Sf=
+ax (ENIS)</span></div><div dir=3D"ltr"><div dir=3D"ltr" style=3D"font-size:=
+12.8px;margin:0px;padding:0px;border:0px"><font color=3D"#444444"><font sty=
+le=3D"margin:0px;padding:0px;border:0px" face=3D"arial, helvetica, sans-ser=
+if" size=3D"2">University of Sfax-</font><span style=3D"font-family:arial,h=
+elvetica,sans-serif;font-size:small">Tunisia<br></span></font></div><div st=
+yle=3D"font-size:12.8px;margin:0px;padding:0px;border:0px none"><font color=
+=3D"#444444"><span style=3D"font-family:arial,helvetica,sans-serif;font-siz=
+e:small">Tel: +216 52 620 475<br></span></font></div><div dir=3D"ltr" style=
+=3D"font-size:12.8px;margin:0px;padding:0px;border:0px"><br></div></div></d=
+iv></div></div></div></div></div></div></div>=E2=80=8C</div>
+
+--001a114f2fce092e68056789854d--
+
+--===============1751861307475151205==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============1751861307475151205==--
