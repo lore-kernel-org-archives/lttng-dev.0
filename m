@@ -1,19 +1,20 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: Double free or corruption error (fasttop)
-Date: Mon, 19 Mar 2018 15:26:13 -0400 (EDT)
-Message-ID: <1672457853.270.1521487573519.JavaMail.zimbra__29473.7944881946$1521487462$gmane$org@efficios.com>
+Date: Mon, 19 Mar 2018 15:31:46 -0400 (EDT)
+Message-ID: <173668501.337.1521487906796.JavaMail.zimbra__9349.60603849522$1521487794$gmane$org@efficios.com>
 References: <CAC-H6ttMF-CjzDH7a6bmeoOPP8JRLptYTmGJVvrx5t-G0Se_gA@mail.gmail.com>
  <226204243.12548.1521476487812.JavaMail.zimbra@efficios.com>
  <CAC-H6tvncER6tVg7=fi+bk9CiU8h-wKnhOLSo3SQdrofPUmXsw@mail.gmail.com>
  <1858478883.106.1521483874370.JavaMail.zimbra@efficios.com>
  <CAC-H6tscb4SzTdu_Z+3jLjuUEqacZtyV1jGq-fd0xSXibm=mjw@mail.gmail.com>
+ <1672457853.270.1521487573519.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5191179306173639223=="
+Content-Type: multipart/mixed; boundary="===============4034228602798864938=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 404mJR2fXdznXG
- for <lttng-dev@lists.lttng.org>; Mon, 19 Mar 2018 15:26:14 -0400 (EDT)
-In-Reply-To: <CAC-H6tscb4SzTdu_Z+3jLjuUEqacZtyV1jGq-fd0xSXibm=mjw@mail.gmail.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 404mQr37QLznYG
+ for <lttng-dev@lists.lttng.org>; Mon, 19 Mar 2018 15:31:48 -0400 (EDT)
+In-Reply-To: <1672457853.270.1521487573519.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,281 +28,303 @@ To: Shehab Elsayed <shehabyomn@gmail.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============5191179306173639223==
+--===============4034228602798864938==
 Content-Type: multipart/alternative;
-	boundary="=_be3882fe-f9c3-4a44-a510-a1fb6f9dbef8"
+	boundary="=_f0703cd0-42b8-4b0c-b0d7-abd7d973cb28"
 
---=_be3882fe-f9c3-4a44-a510-a1fb6f9dbef8
+--=_f0703cd0-42b8-4b0c-b0d7-abd7d973cb28
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 
------ On Mar 19, 2018, at 2:26 PM, Shehab Elsayed <shehabyomn@gmail.com> wrote: 
+---- On Mar 19, 2018, at 3:26 PM, Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote: 
 
-> Yes, I tried with only one of those contexts and I still ran into the same
-> problem.
+> ----- On Mar 19, 2018, at 2:26 PM, Shehab Elsayed <shehabyomn@gmail.com> wrote:
 
-What is the setting returned by 
+>> Yes, I tried with only one of those contexts and I still ran into the same
+>> problem.
 
-cat /proc/sys/kernel/perf_event_paranoid 
+> What is the setting returned by
 
-on your system ? And do you run your test program as root or normal user ? 
+> cat /proc/sys/kernel/perf_event_paranoid
 
-Please CC the mailing list on your reply. 
+> on your system ? And do you run your test program as root or normal user ?
+
+> Please CC the mailing list on your reply.
+
+I will also need to know what glibc version you have on your system. 
 
 Thanks, 
 
 Mathieu 
 
-> Shehab Y. Elsayed, MSc.
-> PhD Student
-> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
-> University of Toronto
-> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
-> shehabyomn@gmail.com ]
+> Thanks,
 
-> On Mon, Mar 19, 2018 at 2:24 PM, Mathieu Desnoyers < [
-> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
-> wrote:
+> Mathieu
 
->> ----- On Mar 19, 2018, at 12:36 PM, Shehab Elsayed < [
->> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
+>> Shehab Y. Elsayed, MSc.
+>> PhD Student
+>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
+>> University of Toronto
+>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
+>> shehabyomn@gmail.com ]
 
->>> Hi Mathieu,
+>> On Mon, Mar 19, 2018 at 2:24 PM, Mathieu Desnoyers < [
+>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
+>> wrote:
 
->>> Thank you very much for your reply.
+>>> ----- On Mar 19, 2018, at 12:36 PM, Shehab Elsayed < [
+>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
 
->>> I manually built lttng-ust from source (commit #:
->>> 8a208943e21700211beee3ea64180a5a534c7d2a).
+>>>> Hi Mathieu,
 
->>> This is how I set up the tracing session:
->>> 1- lttng create lu_ncb_8_native -o {path}
->>> 2- lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_req
->>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_acq
->>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_trylock
->>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_unlock
->>> 3- lttng add-context -u -t procname
->>> lttng add-context -u -t vpid
->>> lttng add-context -u -t pthread_id
->>> lttng add-context -u -t vtid
->>> lttng add-context -u -t ip
+>>>> Thank you very much for your reply.
+
+>>>> I manually built lttng-ust from source (commit #:
+>>>> 8a208943e21700211beee3ea64180a5a534c7d2a).
+
+>>>> This is how I set up the tracing session:
+>>>> 1- lttng create lu_ncb_8_native -o {path}
+>>>> 2- lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_req
+>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_acq
+>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_trylock
+>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_unlock
+>>>> 3- lttng add-context -u -t procname
+>>>> lttng add-context -u -t vpid
+>>>> lttng add-context -u -t pthread_id
+>>>> lttng add-context -u -t vtid
+>>>> lttng add-context -u -t ip
+>>>> lttng add-context -u -t perf:thread:cpu-cycles
+>>>> lttng add-context -u -t perf:thread:cycles
+>>>> lttng add-context -u -t perf:thread:instructions
+>>>> 4- lttng start
+>>>> 5- LD_PRELOAD=/usr/local/lib/liblttng-ust-pthread-wrapper.so ./lu_ncb -p8 -n8096
+>>>> -b32
+>>>> 6- lttng stop
+>>>> 7- lttng destroy
+
+>>> Can you reproduce if you remove the following contexts ?
+
 >>> lttng add-context -u -t perf:thread:cpu-cycles
 >>> lttng add-context -u -t perf:thread:cycles
 >>> lttng add-context -u -t perf:thread:instructions
->>> 4- lttng start
->>> 5- LD_PRELOAD=/usr/local/lib/liblttng-ust-pthread-wrapper.so ./lu_ncb -p8 -n8096
->>> -b32
->>> 6- lttng stop
->>> 7- lttng destroy
 
->> Can you reproduce if you remove the following contexts ?
+>>> And if you only keep a single of those contexts ?
 
->> lttng add-context -u -t perf:thread:cpu-cycles
->> lttng add-context -u -t perf:thread:cycles
->> lttng add-context -u -t perf:thread:instructions
+>>> Thanks,
 
->> And if you only keep a single of those contexts ?
+>>> Mathieu
 
->> Thanks,
+>>>> Shehab Y. Elsayed, MSc.
+>>>> PhD Student
+>>>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
+>>>> University of Toronto
+>>>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
+>>>> shehabyomn@gmail.com ]
 
->> Mathieu
+>>>> On Mon, Mar 19, 2018 at 12:21 PM, Mathieu Desnoyers < [
+>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
+>>>> wrote:
 
->>> Shehab Y. Elsayed, MSc.
->>> PhD Student
->>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
->>> University of Toronto
->>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
->>> shehabyomn@gmail.com ]
+>>>>> ----- On Mar 16, 2018, at 5:37 PM, Shehab Elsayed < [
+>>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
 
->>> On Mon, Mar 19, 2018 at 12:21 PM, Mathieu Desnoyers < [
->>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
->>> wrote:
+>>>>>> Hello All,
 
->>>> ----- On Mar 16, 2018, at 5:37 PM, Shehab Elsayed < [
->>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
+>>>>>> I am trying to instrument a pthread application using the provided pthread
+>>>>>> wrapper, but I sometimes run into a "Double free or corruption error ( fasttop
+>>>>>> )" error.
 
->>>>> Hello All,
-
->>>>> I am trying to instrument a pthread application using the provided pthread
->>>>> wrapper, but I sometimes run into a "Double free or corruption error ( fasttop
->>>>> )" error.
-
->>>> Please provide more information about the version of lttng-ust you are using,
->>>> and how you setup
->>>> your tracing session.
-
->>>> Thanks,
-
->>>> Mathieu
-
->>>>> Here is a description of what I have tried and noticed:
->>>>> 1- The problem isn't consistent. It sometimes happen and sometimes works as
->>>>> expected.
->>>>> 2- From my experiments, the problem happens (more frequently at least) when
->>>>> adding performance counter contexts (I tried cycles, cpu _cycles and
->>>>> instructions).
->>>>> 3- I am testing using lu _ ncb from splash3 benchmark suite after setting LD _
->>>>> PRELOAD to use the pthread wrapper as described in the LTTng documents.
->>>>> 4- Here is the backtrace printed after exiting:
->>>>> ======= Backtrace : =========
->>>>> /lib64/ libc .so.6([Thread 0x7ffff5611700 ( LWP 97229) exited]
->>>>> / usr /local/lib/ liblttng - ust .so.0( lttng
->>>>> _destroy_context+0x35)[0x7ffff7471575]
->>>>> / usr /local/lib/ liblttng - ust .so.0( lttng
->>>>> _session_destroy+0x21c)[0x7ffff747363c]
->>>>> / usr /local/lib/ liblttng - ust .so.0(+0x1e906)[0x7ffff746d906]
->>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
->>>>> +0x9f)[0x7ffff746dccf]
->>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
->>>>> +0x9f)[0x7ffff746dccf]
->>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
->>>>> +0x9f)[0x7ffff746dccf]
->>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ abi
->>>>> _exit+0x68)[0x7ffff746ead8]
->>>>> / usr /local/lib/ liblttng - ust .so.0(+0x191d3)[0x7ffff74681d3]
->>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _exit+0x67)[0x7ffff745ed57]
->>>>> /lib64/ ld - linux -x86-64.so.2(+0xf85a)[0x7ffff7dec85a]
->>>>> /lib64/ libc .so.6(+0x38a49)[0x7ffff6ca6a49]
->>>>> /lib64/ libc .so.6(+0x38a95)[0x7ffff6ca6a95]
->>>>> / aenao -99/elsayed9/ LTTng /data/scripts/ tmp / lu _ ncb [0x401b51]
->>>>> /lib64/ libc .so.6(__ libc _start_main+0xf5)[0x7ffff6c8fb35]
->>>>> / aenao -99/elsayed9/ LTTng /data/scripts/ tmp / lu _ ncb [0x401c44]
->>>>> 5- Also, this is a backtrace I obtained from gdb :
->>>>> #0 0x00007ffff6eac1d7 in raise () from /lib64/ libc .so.6
->>>>> #1 0x00007ffff6ead8c8 in abort () from /lib64/ libc .so.6
->>>>> #2 0x00007ffff6eebf07 in __ libc _message () from /lib64/ libc .so.6
->>>>> #3 0x00007ffff6ef3503 in _int_free () from /lib64/ libc .so.6
->>>>> #4 0x00007ffff768ad25 in lttng _destroy_ perf _counter_field (
->>>>> field=<optimized out>) at lttng -context- perf -counters.c:418
->>>>> #5 0x00007ffff767a575 in lttng _destroy_context (
->>>>> ctx =0x7ffff0011090) at lttng -context.c:278
->>>>> #6 0x00007ffff767c63c in _ lttng _channel_ unmap (
->>>>> lttng _ chan =0x7ffff0010f40) at lttng -events.c:172
->>>>> #7 lttng _session_destroy (session=0x7ffff0000900)
->>>>> at lttng -events.c:247
->>>>> #8 0x00007ffff7676906 in lttng _release_session (
->>>>> objd =<optimized out>) at lttng - ust - abi .c:601
->>>>> #9 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=1,
->>>>> is_owner=<optimized out>) at lttng - ust - abi .c:216
->>>>> #10 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=2,
->>>>> is_owner=<optimized out>) at lttng - ust - abi .c:216
->>>>> #11 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=id@entry=18,
->>>>> is_owner=is_owner@entry=1) at lttng - ust - abi .c:216
->>>>> #12 0x00007ffff7677ad8 in objd _table_destroy ()
->>>>> at lttng - ust - abi .c:235
->>>>> #13 lttng _ ust _ abi _exit () at lttng - ust - abi .c:1002
->>>>> #14 0x00007ffff76711d3 in lttng _ ust _cleanup (exiting=1)
->>>>> at lttng - ust -comm.c:1807
->>>>> #15 0x00007ffff7667d57 in lttng _ ust _exit ()
->>>>> at lttng - ust -comm.c:1874
->>>>> #16 0x00007ffff7dec85a in _ dl _ fini ()
->>>>> from /lib64/ ld - linux -x86-64.so.2
->>>>> #17 0x00007ffff6eafa49 in __run_exit_handlers ()
->>>>> from /lib64/ libc .so.6
->>>>> #18 0x00007ffff6eafa95 in exit () from /lib64/ libc .so.6
->>>>> #19 0x0000000000401b51 in main ( argc =<optimized out>,
->>>>> argv =<optimized out>) at lu .c:368
-
->>>>> Any ideas, why this happens and how to fix it?
+>>>>> Please provide more information about the version of lttng-ust you are using,
+>>>>> and how you setup
+>>>>> your tracing session.
 
 >>>>> Thanks,
->>>>> Shehab
 
->>>>> _______________________________________________
->>>>> lttng-dev mailing list
->>>>> [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org ]
->>>>> [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
->>>>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
+>>>>> Mathieu
 
->>>> --
->>>> Mathieu Desnoyers
->>>> EfficiOS Inc.
->>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+>>>>>> Here is a description of what I have tried and noticed:
+>>>>>> 1- The problem isn't consistent. It sometimes happen and sometimes works as
+>>>>>> expected.
+>>>>>> 2- From my experiments, the problem happens (more frequently at least) when
+>>>>>> adding performance counter contexts (I tried cycles, cpu _cycles and
+>>>>>> instructions).
+>>>>>> 3- I am testing using lu _ ncb from splash3 benchmark suite after setting LD _
+>>>>>> PRELOAD to use the pthread wrapper as described in the LTTng documents.
+>>>>>> 4- Here is the backtrace printed after exiting:
+>>>>>> ======= Backtrace : =========
+>>>>>> /lib64/ libc .so.6([Thread 0x7ffff5611700 ( LWP 97229) exited]
+>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng
+>>>>>> _destroy_context+0x35)[0x7ffff7471575]
+>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng
+>>>>>> _session_destroy+0x21c)[0x7ffff747363c]
+>>>>>> / usr /local/lib/ liblttng - ust .so.0(+0x1e906)[0x7ffff746d906]
+>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
+>>>>>> +0x9f)[0x7ffff746dccf]
+>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
+>>>>>> +0x9f)[0x7ffff746dccf]
+>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
+>>>>>> +0x9f)[0x7ffff746dccf]
+>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ abi
+>>>>>> _exit+0x68)[0x7ffff746ead8]
+>>>>>> / usr /local/lib/ liblttng - ust .so.0(+0x191d3)[0x7ffff74681d3]
+>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _exit+0x67)[0x7ffff745ed57]
+>>>>>> /lib64/ ld - linux -x86-64.so.2(+0xf85a)[0x7ffff7dec85a]
+>>>>>> /lib64/ libc .so.6(+0x38a49)[0x7ffff6ca6a49]
+>>>>>> /lib64/ libc .so.6(+0x38a95)[0x7ffff6ca6a95]
+>>>>>> / aenao -99/elsayed9/ LTTng /data/scripts/ tmp / lu _ ncb [0x401b51]
+>>>>>> /lib64/ libc .so.6(__ libc _start_main+0xf5)[0x7ffff6c8fb35]
+>>>>>> / aenao -99/elsayed9/ LTTng /data/scripts/ tmp / lu _ ncb [0x401c44]
+>>>>>> 5- Also, this is a backtrace I obtained from gdb :
+>>>>>> #0 0x00007ffff6eac1d7 in raise () from /lib64/ libc .so.6
+>>>>>> #1 0x00007ffff6ead8c8 in abort () from /lib64/ libc .so.6
+>>>>>> #2 0x00007ffff6eebf07 in __ libc _message () from /lib64/ libc .so.6
+>>>>>> #3 0x00007ffff6ef3503 in _int_free () from /lib64/ libc .so.6
+>>>>>> #4 0x00007ffff768ad25 in lttng _destroy_ perf _counter_field (
+>>>>>> field=<optimized out>) at lttng -context- perf -counters.c:418
+>>>>>> #5 0x00007ffff767a575 in lttng _destroy_context (
+>>>>>> ctx =0x7ffff0011090) at lttng -context.c:278
+>>>>>> #6 0x00007ffff767c63c in _ lttng _channel_ unmap (
+>>>>>> lttng _ chan =0x7ffff0010f40) at lttng -events.c:172
+>>>>>> #7 lttng _session_destroy (session=0x7ffff0000900)
+>>>>>> at lttng -events.c:247
+>>>>>> #8 0x00007ffff7676906 in lttng _release_session (
+>>>>>> objd =<optimized out>) at lttng - ust - abi .c:601
+>>>>>> #9 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=1,
+>>>>>> is_owner=<optimized out>) at lttng - ust - abi .c:216
+>>>>>> #10 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=2,
+>>>>>> is_owner=<optimized out>) at lttng - ust - abi .c:216
+>>>>>> #11 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=id@entry=18,
+>>>>>> is_owner=is_owner@entry=1) at lttng - ust - abi .c:216
+>>>>>> #12 0x00007ffff7677ad8 in objd _table_destroy ()
+>>>>>> at lttng - ust - abi .c:235
+>>>>>> #13 lttng _ ust _ abi _exit () at lttng - ust - abi .c:1002
+>>>>>> #14 0x00007ffff76711d3 in lttng _ ust _cleanup (exiting=1)
+>>>>>> at lttng - ust -comm.c:1807
+>>>>>> #15 0x00007ffff7667d57 in lttng _ ust _exit ()
+>>>>>> at lttng - ust -comm.c:1874
+>>>>>> #16 0x00007ffff7dec85a in _ dl _ fini ()
+>>>>>> from /lib64/ ld - linux -x86-64.so.2
+>>>>>> #17 0x00007ffff6eafa49 in __run_exit_handlers ()
+>>>>>> from /lib64/ libc .so.6
+>>>>>> #18 0x00007ffff6eafa95 in exit () from /lib64/ libc .so.6
+>>>>>> #19 0x0000000000401b51 in main ( argc =<optimized out>,
+>>>>>> argv =<optimized out>) at lu .c:368
 
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> [ http://www.efficios.com/ | http://www.efficios.com ]
+>>>>>> Any ideas, why this happens and how to fix it?
+
+>>>>>> Thanks,
+>>>>>> Shehab
+
+>>>>>> _______________________________________________
+>>>>>> lttng-dev mailing list
+>>>>>> [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org ]
+>>>>>> [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
+>>>>>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
+
+>>>>> --
+>>>>> Mathieu Desnoyers
+>>>>> EfficiOS Inc.
+>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+
+>>> --
+>>> Mathieu Desnoyers
+>>> EfficiOS Inc.
+>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
 
 -- 
 Mathieu Desnoyers 
 EfficiOS Inc. 
 http://www.efficios.com 
 
---=_be3882fe-f9c3-4a44-a510-a1fb6f9dbef8
+--=_f0703cd0-42b8-4b0c-b0d7-abd7d973cb28
 Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 <html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
 ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
-__">----- On Mar 19, 2018, at 2:26 PM, Shehab Elsayed &lt;shehabyomn@gmail.=
-com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockq=
-uote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5p=
-x;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font=
--family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr">Yes, I=
- tried with only one of those contexts and I still ran into the same proble=
-m.</div></blockquote><div>What is the setting returned by<br></div><div><br=
- data-mce-bogus=3D"1"></div><div>cat /proc/sys/kernel/perf_event_paranoid<b=
-r data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>on yo=
-ur system ? And do you run your test program as root or normal user ?<br da=
-ta-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Please CC=
- the mailing list on your reply.<br data-mce-bogus=3D"1"></div><div><br dat=
-a-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br=
- data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div=
-><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid =
-#1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font=
--style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;f=
-ont-size:12pt;"><div dir=3D"ltr"><br></div><div class=3D"gmail_extra"><br c=
-lear=3D"all"><div><div class=3D"gmail_signature"><div dir=3D"ltr"><span dat=
-a-mce-style=3D"color: #888888;" style=3D"color: #888888;" color=3D"#888888"=
->Shehab Y. Elsayed, MSc.<br>
+__">---- On Mar 19, 2018, at 3:26 PM, Mathieu Desnoyers &lt;mathieu.desnoye=
+rs@efficios.com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TEX=
+T__"><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;pad=
+ding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decorati=
+on:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div style=
+=3D"font-family: arial, helvetica, sans-serif; font-size: 12pt; color: #000=
+000"><div><span id=3D"zwchr">----- On Mar 19, 2018, at 2:26 PM, Shehab Elsa=
+yed &lt;shehabyomn@gmail.com&gt; wrote:<br></span></div><div><blockquote st=
+yle=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color=
+:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family=
+:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr">Yes, I tried =
+with only one of those contexts and I still ran into the same problem.</div=
+></blockquote><div>What is the setting returned by<br></div><br><div>cat /p=
+roc/sys/kernel/perf_event_paranoid<br></div><br><div>on your system ? And d=
+o you run your test program as root or normal user ?<br></div><br><div>Plea=
+se CC the mailing list on your reply.</div></div></div></blockquote><div><b=
+r></div><div>I will also need to know what glibc version you have on your s=
+ystem.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><d=
+iv>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></di=
+v><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1">=
+</div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:=
+2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:n=
+ormal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sa=
+ns-serif;font-size:12pt;"><div style=3D"font-family: arial, helvetica, sans=
+-serif; font-size: 12pt; color: #000000"><div><div><br></div><br><div>Thank=
+s,<br></div><br><div>Mathieu<br></div><br><blockquote style=3D"border-left:=
+2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:n=
+ormal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sa=
+ns-serif;font-size:12pt;"><div dir=3D"ltr"><br></div><div class=3D"gmail_ex=
+tra"><br clear=3D"all"><div><div class=3D"gmail_signature"><div dir=3D"ltr"=
+><span style=3D"color: #888888;">Shehab Y. Elsayed, MSc.<br>
 PhD Student<br>The Edwards S. Rogers Sr. Dept. of Electrical and Computer E=
-ngineering<br>University of Toronto </span><span data-mce-style=3D"color: #=
-888888;" style=3D"color: #888888;" color=3D"#888888"><br>
+ngineering<br>University of Toronto </span><span style=3D"color: #888888;">=
+<br>
 E-mail: <a href=3D"https://webmail.rice.edu/imp/message.php?mailbox=3DINBOX=
-&amp;index=3D11#" target=3D"_blank">shehabyomn@gmail.com</a></span><br data=
--mce-bogus=3D"1"></div></div></div><br><div class=3D"gmail_quote">On Mon, M=
-ar 19, 2018 at 2:24 PM, Mathieu Desnoyers <span dir=3D"ltr">&lt;<a href=3D"=
-mailto:mathieu.desnoyers@efficios.com" target=3D"_blank">mathieu.desnoyers@=
-efficios.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" sty=
-le=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div><=
-div style=3D"font-family:arial,helvetica,sans-serif;font-size:12pt;color:#0=
-00000"><span class=3D""><div><span id=3D"m_-2379611272366386122zwchr">-----=
- On Mar 19, 2018, at 12:36 PM, Shehab Elsayed &lt;<a href=3D"mailto:shehaby=
-omn@gmail.com" target=3D"_blank">shehabyomn@gmail.com</a>&gt; wrote:<br></s=
-pan></div></span><div><span class=3D""><blockquote style=3D"border-left:2px=
- solid #1010ff;margin-left:5px;padding-left:5px;color:#000;font-weight:norm=
-al;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-=
-serif;font-size:12pt"><div dir=3D"ltr"><div><div><div><div><div><div><div>H=
-i Mathieu,<br><br>Thank you very much for your reply.<br><br>I manually bui=
-lt lttng-ust from source (commit #: 8a208943e21700211beee3ea64180a5a534c7d2=
-a).<br><br></div>This is how I set up the tracing session:<br></div>1- lttn=
-g create lu_ncb_8_native -o {path}<br></div>2- lttng enable-event --userspa=
-ce lttng_ust_pthread:pthread_mutex_lock_req<br>&nbsp;&nbsp;&nbsp; lttng ena=
-ble-event --userspace lttng_ust_pthread:pthread_mutex_lock_acq<br>&nbsp;&nb=
-sp;&nbsp; lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lo=
-ck_trylock<br>&nbsp;&nbsp;&nbsp; lttng enable-event --userspace lttng_ust_p=
-thread:pthread_mutex_lock_unlock<br></div>3- lttng add-context -u -t procna=
-me<br>&nbsp;&nbsp;&nbsp; lttng add-context -u -t vpid<br>&nbsp;&nbsp;&nbsp;=
-  lttng add-context -u -t pthread_id<br>&nbsp;&nbsp;&nbsp;  lttng add-conte=
-xt -u -t vtid<br>&nbsp;&nbsp;&nbsp;  lttng add-context -u -t ip<br>&nbsp;&n=
-bsp;&nbsp;  lttng add-context -u -t perf:thread:cpu-cycles<br>&nbsp;&nbsp;&=
-nbsp;  lttng add-context -u -t perf:thread:cycles<br>&nbsp;&nbsp;&nbsp;  lt=
-tng add-context -u -t perf:thread:instructions<br></div>4- lttng start<br>5=
-- LD_PRELOAD=3D/usr/local/lib/liblttng-ust-pthread-wrapper.so ./lu_ncb -p8 =
--n8096 -b32<br></div>6- lttng stop<br></div>7- lttng destroy</div></blockqu=
-ote><br></span><div>Can you reproduce if you remove the following contexts =
-?<br></div><span class=3D""><br><div>&nbsp;&nbsp;&nbsp; lttng add-context -=
-u -t perf:thread:cpu-cycles<br>&nbsp;&nbsp;&nbsp; lttng add-context -u -t p=
-erf:thread:cycles<br>&nbsp;&nbsp;&nbsp; lttng add-context -u -t perf:thread=
-:instructions</div><br></span><div>And if you only keep a single of those c=
-ontexts ?<br></div><br><div>Thanks,<br></div><br><div>Mathieu<br></div><div=
-><div class=3D"h5"><br><br><blockquote style=3D"border-left:2px solid #1010=
-ff;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-styl=
-e:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-s=
-ize:12pt"><div dir=3D"ltr"><br><br><div><div><div><br></div></div></div></d=
-iv><div class=3D"gmail_extra"><br clear=3D"all"><div><div class=3D"m_-23796=
-11272366386122gmail_signature"><div dir=3D"ltr"><span style=3D"color:#88888=
-8">Shehab Y. Elsayed, MSc.<br>
+&amp;index=3D11#" target=3D"_blank">shehabyomn@gmail.com</a></span><br></di=
+v></div></div><br><div class=3D"gmail_quote">On Mon, Mar 19, 2018 at 2:24 P=
+M, Mathieu Desnoyers <span dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoy=
+ers@efficios.com" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;<=
+/span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8=
+ex;border-left:1px #ccc solid;padding-left:1ex"><div><div style=3D"font-fam=
+ily:arial,helvetica,sans-serif;font-size:12pt;color:#000000"><span class=3D=
+""><div><span id=3D"m_-2379611272366386122zwchr">----- On Mar 19, 2018, at =
+12:36 PM, Shehab Elsayed &lt;<a href=3D"mailto:shehabyomn@gmail.com" target=
+=3D"_blank">shehabyomn@gmail.com</a>&gt; wrote:<br></span></div></span><div=
+><span class=3D""><blockquote style=3D"border-left:2px solid #1010ff;margin=
+-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;=
+text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt"=
+><div dir=3D"ltr"><div><div><div><div><div><div><div>Hi Mathieu,<br><br>Tha=
+nk you very much for your reply.<br><br>I manually built lttng-ust from sou=
+rce (commit #: 8a208943e21700211beee3ea64180a5a534c7d2a).<br><br></div>This=
+ is how I set up the tracing session:<br></div>1- lttng create lu_ncb_8_nat=
+ive -o {path}<br></div>2- lttng enable-event --userspace lttng_ust_pthread:=
+pthread_mutex_lock_req<br>&nbsp;&nbsp;&nbsp; lttng enable-event --userspace=
+ lttng_ust_pthread:pthread_mutex_lock_acq<br>&nbsp;&nbsp;&nbsp; lttng enabl=
+e-event --userspace lttng_ust_pthread:pthread_mutex_lock_trylock<br>&nbsp;&=
+nbsp;&nbsp; lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_=
+lock_unlock<br></div>3- lttng add-context -u -t procname<br>&nbsp;&nbsp;&nb=
+sp; lttng add-context -u -t vpid<br>&nbsp;&nbsp;&nbsp;  lttng add-context -=
+u -t pthread_id<br>&nbsp;&nbsp;&nbsp;  lttng add-context -u -t vtid<br>&nbs=
+p;&nbsp;&nbsp;  lttng add-context -u -t ip<br>&nbsp;&nbsp;&nbsp;  lttng add=
+-context -u -t perf:thread:cpu-cycles<br>&nbsp;&nbsp;&nbsp;  lttng add-cont=
+ext -u -t perf:thread:cycles<br>&nbsp;&nbsp;&nbsp;  lttng add-context -u -t=
+ perf:thread:instructions<br></div>4- lttng start<br>5- LD_PRELOAD=3D/usr/l=
+ocal/lib/liblttng-ust-pthread-wrapper.so ./lu_ncb -p8 -n8096 -b32<br></div>=
+6- lttng stop<br></div>7- lttng destroy</div></blockquote><br></span><div>C=
+an you reproduce if you remove the following contexts ?<br></div><span clas=
+s=3D""><br><div>&nbsp;&nbsp;&nbsp; lttng add-context -u -t perf:thread:cpu-=
+cycles<br>&nbsp;&nbsp;&nbsp; lttng add-context -u -t perf:thread:cycles<br>=
+&nbsp;&nbsp;&nbsp; lttng add-context -u -t perf:thread:instructions</div><b=
+r></span><div>And if you only keep a single of those contexts ?<br></div><b=
+r><div>Thanks,<br></div><br><div>Mathieu<br></div><div><div class=3D"h5"><b=
+r><br><blockquote style=3D"border-left:2px solid #1010ff;margin-left:5px;pa=
+dding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decorat=
+ion:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D=
+"ltr"><br><br><div><div><br></div></div></div><div class=3D"gmail_extra"><b=
+r clear=3D"all"><div><div class=3D"m_-2379611272366386122gmail_signature"><=
+div dir=3D"ltr"><span style=3D"color:#888888">Shehab Y. Elsayed, MSc.<br>
 PhD Student<br>The Edwards S. Rogers Sr. Dept. of Electrical and Computer E=
 ngineering<br>University of Toronto </span><span style=3D"color:#888888"><b=
 r>
@@ -540,14 +563,15 @@ ote></div><span class=3D"m_-2379611272366386122HOEnZb"><span style=3D"color=
 om</a><br></div></span></span></div></div></blockquote></div></div><br></bl=
 ockquote></div></div></div><div><div class=3D"h5"><br><div>-- <br></div><di=
 v>Mathieu Desnoyers<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com"=
- target=3D"_blank">http://www.efficios.com</a><br data-mce-bogus=3D"1"></di=
-v></div></div></div></div></blockquote></div></div><br></blockquote></div><=
-div><br></div><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu D=
-esnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></ht=
-ml>
---=_be3882fe-f9c3-4a44-a510-a1fb6f9dbef8--
+ target=3D"_blank">http://www.efficios.com</a><br></div></div></div></div><=
+/div></blockquote></div></div><br></blockquote></div><br><div>-- <br></div>=
+<div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></d=
+iv><br></blockquote></div><div><br></div><div data-marker=3D"__SIG_POST__">=
+-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios=
+.com</div></div></body></html>
+--=_f0703cd0-42b8-4b0c-b0d7-abd7d973cb28--
 
---===============5191179306173639223==
+--===============4034228602798864938==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -557,4 +581,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============5191179306173639223==--
+--===============4034228602798864938==--
