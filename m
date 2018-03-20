@@ -1,22 +1,22 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: Double free or corruption error (fasttop)
-Date: Tue, 20 Mar 2018 12:07:44 -0400 (EDT)
-Message-ID: <568213680.975.1521562064453.JavaMail.zimbra__32406.2561420307$1521561959$gmane$org@efficios.com>
+Date: Tue, 20 Mar 2018 16:58:29 -0400 (EDT)
+Message-ID: <446537616.1725.1521579509437.JavaMail.zimbra__312.284977599298$1521579402$gmane$org@efficios.com>
 References: <CAC-H6ttMF-CjzDH7a6bmeoOPP8JRLptYTmGJVvrx5t-G0Se_gA@mail.gmail.com>
- <1858478883.106.1521483874370.JavaMail.zimbra@efficios.com>
  <CAC-H6tscb4SzTdu_Z+3jLjuUEqacZtyV1jGq-fd0xSXibm=mjw@mail.gmail.com>
  <1672457853.270.1521487573519.JavaMail.zimbra@efficios.com>
  <173668501.337.1521487906796.JavaMail.zimbra@efficios.com>
  <CAC-H6tsWkYAxYFR6zsdcf+V_e3VYtDvZbYk80mc0raW-AKU5hA@mail.gmail.com>
  <1883907448.467.1521489713355.JavaMail.zimbra@efficios.com>
  <CAC-H6ttwT-tJVFE8iycjzUod2jyxHrfT1TYFhHZzyar98f6jtA@mail.gmail.com>
+ <568213680.975.1521562064453.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0075383558672282751=="
+Content-Type: multipart/mixed; boundary="===============2098112584033823388=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 405Hs44ZfQzwrn
- for <lttng-dev@lists.lttng.org>; Tue, 20 Mar 2018 12:07:51 -0400 (EDT)
-In-Reply-To: <CAC-H6ttwT-tJVFE8iycjzUod2jyxHrfT1TYFhHZzyar98f6jtA@mail.gmail.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 405QJS3vJ7zxPs
+ for <lttng-dev@lists.lttng.org>; Tue, 20 Mar 2018 16:58:32 -0400 (EDT)
+In-Reply-To: <568213680.975.1521562064453.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -30,371 +30,420 @@ To: Shehab Elsayed <shehabyomn@gmail.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0075383558672282751==
+--===============2098112584033823388==
 Content-Type: multipart/alternative;
-	boundary="=_91761d26-dd5f-44fb-b756-e679134e6fd9"
+	boundary="=_1a23b146-8a5d-4fd9-ac55-9745f54989e2"
 
---=_91761d26-dd5f-44fb-b756-e679134e6fd9
+--=_1a23b146-8a5d-4fd9-ac55-9745f54989e2
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 
------ On Mar 19, 2018, at 4:21 PM, Shehab Elsayed <shehabyomn@gmail.com> wrote: 
+----- On Mar 20, 2018, at 12:07 PM, Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote: 
 
-> I did "echo "-1" > /proc/sys/kernel/perf_event_paranoid " and made sure the
-> value was actually written by "cat /proc/sys/kernel/perf_event_paranoid"
+> ----- On Mar 19, 2018, at 4:21 PM, Shehab Elsayed <shehabyomn@gmail.com> wrote:
 
-> It executed normally 2 times but then got the same error.
+>> I did "echo "-1" > /proc/sys/kernel/perf_event_paranoid " and made sure the
+>> value was actually written by "cat /proc/sys/kernel/perf_event_paranoid"
 
-Can you provide the output when reproducing the issue with the 
-LTTNG_UST_DEBUG=1 environment variable set when starting 
-your test program ? 
+>> It executed normally 2 times but then got the same error.
+
+> Can you provide the output when reproducing the issue with the
+> LTTNG_UST_DEBUG=1 environment variable set when starting
+> your test program ?
+
+I just noticed something that might explain what goes wrong here: 
+
+lttng-context-perf-counters.c: add_thread_field() grabs the ust_lock(). Pthread mutex 
+in your case is instrumented with the pthread wrapper. This "add_thread_field" is invoked 
+the first time the perf counter is hit by each given thread. When this happens, the 
+instrumented pthread mutex will try to call into the instrumentation tracepoint again, 
+which will call add_thread_field() (again), and so on until we reach the libringbuffer 
+"lib_ring_buffer_nesting" threshold of 4 calls deep. 
+
+I suspect this situation where we recursively call add_thread_field is unexpected, 
+which may trigger your double-free here. 
+
+Will investigate more. 
 
 Thanks, 
 
 Mathieu 
 
-> Shehab Y. Elsayed, MSc.
-> PhD Student
-> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
-> University of Toronto
-> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
-> shehabyomn@gmail.com ]
+> Thanks,
 
-> On Mon, Mar 19, 2018 at 4:01 PM, Mathieu Desnoyers < [
-> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
-> wrote:
+> Mathieu
 
->> ----- On Mar 19, 2018, at 3:53 PM, Shehab Elsayed < [
->> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
+>> Shehab Y. Elsayed, MSc.
+>> PhD Student
+>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
+>> University of Toronto
+>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
+>> shehabyomn@gmail.com ]
 
->>> cat /proc/sys/kernel/perf_event_paranoid ---> returns 1
+>> On Mon, Mar 19, 2018 at 4:01 PM, Mathieu Desnoyers < [
+>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
+>> wrote:
 
->>> I run the program as a normal user
+>>> ----- On Mar 19, 2018, at 3:53 PM, Shehab Elsayed < [
+>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
 
->>> The glibc version I get by running "ldd --version" is 2.17
+>>>> cat /proc/sys/kernel/perf_event_paranoid ---> returns 1
 
->> Can you reproduce the issue after you do this as root ?
+>>>> I run the program as a normal user
 
->> echo "-1" > /proc/sys/kernel/perf_event_paranoid
+>>>> The glibc version I get by running "ldd --version" is 2.17
 
->> Based on this documentation of the Linux kernel:
+>>> Can you reproduce the issue after you do this as root ?
 
->> Documentation/sysctl/kernel.txt:
+>>> echo "-1" > /proc/sys/kernel/perf_event_paranoid
 
->> perf_event_paranoid:
+>>> Based on this documentation of the Linux kernel:
 
->> Controls use of the performance events system by unprivileged
->> users (without CAP_SYS_ADMIN). The default value is 2.
+>>> Documentation/sysctl/kernel.txt:
 
->> -1: Allow use of (almost) all events by all users
->> Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK
->> >=0: Disallow ftrace function tracepoint by users without CAP_SYS_ADMIN
->> Disallow raw tracepoint access by users without CAP_SYS_ADMIN
->> >=1: Disallow CPU event access by users without CAP_SYS_ADMIN
->> >=2: Disallow kernel profiling by users without CAP_SYS_ADMIN
+>>> perf_event_paranoid:
 
->> Thanks,
+>>> Controls use of the performance events system by unprivileged
+>>> users (without CAP_SYS_ADMIN). The default value is 2.
 
->> Mathieu
+>>> -1: Allow use of (almost) all events by all users
+>>> Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK
+>>> >=0: Disallow ftrace function tracepoint by users without CAP_SYS_ADMIN
+>>> Disallow raw tracepoint access by users without CAP_SYS_ADMIN
+>>> >=1: Disallow CPU event access by users without CAP_SYS_ADMIN
+>>> >=2: Disallow kernel profiling by users without CAP_SYS_ADMIN
 
->>> Shehab Y. Elsayed, MSc.
->>> PhD Student
->>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
->>> University of Toronto
->>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
->>> shehabyomn@gmail.com ]
+>>> Thanks,
 
->>> On Mon, Mar 19, 2018 at 3:31 PM, Mathieu Desnoyers < [
->>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
->>> wrote:
+>>> Mathieu
 
->>>> ---- On Mar 19, 2018, at 3:26 PM, Mathieu Desnoyers < [
+>>>> Shehab Y. Elsayed, MSc.
+>>>> PhD Student
+>>>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
+>>>> University of Toronto
+>>>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
+>>>> shehabyomn@gmail.com ]
+
+>>>> On Mon, Mar 19, 2018 at 3:31 PM, Mathieu Desnoyers < [
 >>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
 >>>> wrote:
 
->>>>> ----- On Mar 19, 2018, at 2:26 PM, Shehab Elsayed < [
->>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
+>>>>> ---- On Mar 19, 2018, at 3:26 PM, Mathieu Desnoyers < [
+>>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
+>>>>> wrote:
 
->>>>>> Yes, I tried with only one of those contexts and I still ran into the same
->>>>>> problem.
+>>>>>> ----- On Mar 19, 2018, at 2:26 PM, Shehab Elsayed < [
+>>>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
 
->>>>> What is the setting returned by
+>>>>>>> Yes, I tried with only one of those contexts and I still ran into the same
+>>>>>>> problem.
 
->>>>> cat /proc/sys/kernel/perf_event_paranoid
+>>>>>> What is the setting returned by
 
->>>>> on your system ? And do you run your test program as root or normal user ?
+>>>>>> cat /proc/sys/kernel/perf_event_paranoid
 
->>>>> Please CC the mailing list on your reply.
+>>>>>> on your system ? And do you run your test program as root or normal user ?
 
->>>> I will also need to know what glibc version you have on your system.
+>>>>>> Please CC the mailing list on your reply.
 
->>>> Thanks,
-
->>>> Mathieu
+>>>>> I will also need to know what glibc version you have on your system.
 
 >>>>> Thanks,
 
 >>>>> Mathieu
 
->>>>>> Shehab Y. Elsayed, MSc.
->>>>>> PhD Student
->>>>>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
->>>>>> University of Toronto
->>>>>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
->>>>>> shehabyomn@gmail.com ]
+>>>>>> Thanks,
 
->>>>>> On Mon, Mar 19, 2018 at 2:24 PM, Mathieu Desnoyers < [
->>>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
->>>>>> wrote:
+>>>>>> Mathieu
 
->>>>>>> ----- On Mar 19, 2018, at 12:36 PM, Shehab Elsayed < [
->>>>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
+>>>>>>> Shehab Y. Elsayed, MSc.
+>>>>>>> PhD Student
+>>>>>>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
+>>>>>>> University of Toronto
+>>>>>>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
+>>>>>>> shehabyomn@gmail.com ]
 
->>>>>>>> Hi Mathieu,
+>>>>>>> On Mon, Mar 19, 2018 at 2:24 PM, Mathieu Desnoyers < [
+>>>>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
+>>>>>>> wrote:
 
->>>>>>>> Thank you very much for your reply.
+>>>>>>>> ----- On Mar 19, 2018, at 12:36 PM, Shehab Elsayed < [
+>>>>>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
 
->>>>>>>> I manually built lttng-ust from source (commit #:
->>>>>>>> 8a208943e21700211beee3ea64180a5a534c7d2a).
+>>>>>>>>> Hi Mathieu,
 
->>>>>>>> This is how I set up the tracing session:
->>>>>>>> 1- lttng create lu_ncb_8_native -o {path}
->>>>>>>> 2- lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_req
->>>>>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_acq
->>>>>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_trylock
->>>>>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_unlock
->>>>>>>> 3- lttng add-context -u -t procname
->>>>>>>> lttng add-context -u -t vpid
->>>>>>>> lttng add-context -u -t pthread_id
->>>>>>>> lttng add-context -u -t vtid
->>>>>>>> lttng add-context -u -t ip
+>>>>>>>>> Thank you very much for your reply.
+
+>>>>>>>>> I manually built lttng-ust from source (commit #:
+>>>>>>>>> 8a208943e21700211beee3ea64180a5a534c7d2a).
+
+>>>>>>>>> This is how I set up the tracing session:
+>>>>>>>>> 1- lttng create lu_ncb_8_native -o {path}
+>>>>>>>>> 2- lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_req
+>>>>>>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_acq
+>>>>>>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_trylock
+>>>>>>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_unlock
+>>>>>>>>> 3- lttng add-context -u -t procname
+>>>>>>>>> lttng add-context -u -t vpid
+>>>>>>>>> lttng add-context -u -t pthread_id
+>>>>>>>>> lttng add-context -u -t vtid
+>>>>>>>>> lttng add-context -u -t ip
+>>>>>>>>> lttng add-context -u -t perf:thread:cpu-cycles
+>>>>>>>>> lttng add-context -u -t perf:thread:cycles
+>>>>>>>>> lttng add-context -u -t perf:thread:instructions
+>>>>>>>>> 4- lttng start
+>>>>>>>>> 5- LD_PRELOAD=/usr/local/lib/liblttng-ust-pthread-wrapper.so ./lu_ncb -p8 -n8096
+>>>>>>>>> -b32
+>>>>>>>>> 6- lttng stop
+>>>>>>>>> 7- lttng destroy
+
+>>>>>>>> Can you reproduce if you remove the following contexts ?
+
 >>>>>>>> lttng add-context -u -t perf:thread:cpu-cycles
 >>>>>>>> lttng add-context -u -t perf:thread:cycles
 >>>>>>>> lttng add-context -u -t perf:thread:instructions
->>>>>>>> 4- lttng start
->>>>>>>> 5- LD_PRELOAD=/usr/local/lib/liblttng-ust-pthread-wrapper.so ./lu_ncb -p8 -n8096
->>>>>>>> -b32
->>>>>>>> 6- lttng stop
->>>>>>>> 7- lttng destroy
 
->>>>>>> Can you reproduce if you remove the following contexts ?
+>>>>>>>> And if you only keep a single of those contexts ?
 
->>>>>>> lttng add-context -u -t perf:thread:cpu-cycles
->>>>>>> lttng add-context -u -t perf:thread:cycles
->>>>>>> lttng add-context -u -t perf:thread:instructions
+>>>>>>>> Thanks,
 
->>>>>>> And if you only keep a single of those contexts ?
+>>>>>>>> Mathieu
 
->>>>>>> Thanks,
+>>>>>>>>> Shehab Y. Elsayed, MSc.
+>>>>>>>>> PhD Student
+>>>>>>>>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
+>>>>>>>>> University of Toronto
+>>>>>>>>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
+>>>>>>>>> shehabyomn@gmail.com ]
 
->>>>>>> Mathieu
+>>>>>>>>> On Mon, Mar 19, 2018 at 12:21 PM, Mathieu Desnoyers < [
+>>>>>>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
+>>>>>>>>> wrote:
 
->>>>>>>> Shehab Y. Elsayed, MSc.
->>>>>>>> PhD Student
->>>>>>>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
->>>>>>>> University of Toronto
->>>>>>>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
->>>>>>>> shehabyomn@gmail.com ]
+>>>>>>>>>> ----- On Mar 16, 2018, at 5:37 PM, Shehab Elsayed < [
+>>>>>>>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
 
->>>>>>>> On Mon, Mar 19, 2018 at 12:21 PM, Mathieu Desnoyers < [
->>>>>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
->>>>>>>> wrote:
+>>>>>>>>>>> Hello All,
 
->>>>>>>>> ----- On Mar 16, 2018, at 5:37 PM, Shehab Elsayed < [
->>>>>>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
+>>>>>>>>>>> I am trying to instrument a pthread application using the provided pthread
+>>>>>>>>>>> wrapper, but I sometimes run into a "Double free or corruption error ( fasttop
+>>>>>>>>>>> )" error.
 
->>>>>>>>>> Hello All,
-
->>>>>>>>>> I am trying to instrument a pthread application using the provided pthread
->>>>>>>>>> wrapper, but I sometimes run into a "Double free or corruption error ( fasttop
->>>>>>>>>> )" error.
-
->>>>>>>>> Please provide more information about the version of lttng-ust you are using,
->>>>>>>>> and how you setup
->>>>>>>>> your tracing session.
-
->>>>>>>>> Thanks,
-
->>>>>>>>> Mathieu
-
->>>>>>>>>> Here is a description of what I have tried and noticed:
->>>>>>>>>> 1- The problem isn't consistent. It sometimes happen and sometimes works as
->>>>>>>>>> expected.
->>>>>>>>>> 2- From my experiments, the problem happens (more frequently at least) when
->>>>>>>>>> adding performance counter contexts (I tried cycles, cpu _cycles and
->>>>>>>>>> instructions).
->>>>>>>>>> 3- I am testing using lu _ ncb from splash3 benchmark suite after setting LD _
->>>>>>>>>> PRELOAD to use the pthread wrapper as described in the LTTng documents.
->>>>>>>>>> 4- Here is the backtrace printed after exiting:
->>>>>>>>>> ======= Backtrace : =========
->>>>>>>>>> /lib64/ libc .so.6([Thread 0x7ffff5611700 ( LWP 97229) exited]
->>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng
->>>>>>>>>> _destroy_context+0x35)[0x7ffff7471575]
->>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng
->>>>>>>>>> _session_destroy+0x21c)[0x7ffff747363c]
->>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0(+0x1e906)[0x7ffff746d906]
->>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
->>>>>>>>>> +0x9f)[0x7ffff746dccf]
->>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
->>>>>>>>>> +0x9f)[0x7ffff746dccf]
->>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
->>>>>>>>>> +0x9f)[0x7ffff746dccf]
->>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ abi
->>>>>>>>>> _exit+0x68)[0x7ffff746ead8]
->>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0(+0x191d3)[0x7ffff74681d3]
->>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _exit+0x67)[0x7ffff745ed57]
->>>>>>>>>> /lib64/ ld - linux -x86-64.so.2(+0xf85a)[0x7ffff7dec85a]
->>>>>>>>>> /lib64/ libc .so.6(+0x38a49)[0x7ffff6ca6a49]
->>>>>>>>>> /lib64/ libc .so.6(+0x38a95)[0x7ffff6ca6a95]
->>>>>>>>>> / aenao -99/elsayed9/ LTTng /data/scripts/ tmp / lu _ ncb [0x401b51]
->>>>>>>>>> /lib64/ libc .so.6(__ libc _start_main+0xf5)[0x7ffff6c8fb35]
->>>>>>>>>> / aenao -99/elsayed9/ LTTng /data/scripts/ tmp / lu _ ncb [0x401c44]
->>>>>>>>>> 5- Also, this is a backtrace I obtained from gdb :
->>>>>>>>>> #0 0x00007ffff6eac1d7 in raise () from /lib64/ libc .so.6
->>>>>>>>>> #1 0x00007ffff6ead8c8 in abort () from /lib64/ libc .so.6
->>>>>>>>>> #2 0x00007ffff6eebf07 in __ libc _message () from /lib64/ libc .so.6
->>>>>>>>>> #3 0x00007ffff6ef3503 in _int_free () from /lib64/ libc .so.6
->>>>>>>>>> #4 0x00007ffff768ad25 in lttng _destroy_ perf _counter_field (
->>>>>>>>>> field=<optimized out>) at lttng -context- perf -counters.c:418
->>>>>>>>>> #5 0x00007ffff767a575 in lttng _destroy_context (
->>>>>>>>>> ctx =0x7ffff0011090) at lttng -context.c:278
->>>>>>>>>> #6 0x00007ffff767c63c in _ lttng _channel_ unmap (
->>>>>>>>>> lttng _ chan =0x7ffff0010f40) at lttng -events.c:172
->>>>>>>>>> #7 lttng _session_destroy (session=0x7ffff0000900)
->>>>>>>>>> at lttng -events.c:247
->>>>>>>>>> #8 0x00007ffff7676906 in lttng _release_session (
->>>>>>>>>> objd =<optimized out>) at lttng - ust - abi .c:601
->>>>>>>>>> #9 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=1,
->>>>>>>>>> is_owner=<optimized out>) at lttng - ust - abi .c:216
->>>>>>>>>> #10 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=2,
->>>>>>>>>> is_owner=<optimized out>) at lttng - ust - abi .c:216
->>>>>>>>>> #11 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=id@entry=18,
->>>>>>>>>> is_owner=is_owner@entry=1) at lttng - ust - abi .c:216
->>>>>>>>>> #12 0x00007ffff7677ad8 in objd _table_destroy ()
->>>>>>>>>> at lttng - ust - abi .c:235
->>>>>>>>>> #13 lttng _ ust _ abi _exit () at lttng - ust - abi .c:1002
->>>>>>>>>> #14 0x00007ffff76711d3 in lttng _ ust _cleanup (exiting=1)
->>>>>>>>>> at lttng - ust -comm.c:1807
->>>>>>>>>> #15 0x00007ffff7667d57 in lttng _ ust _exit ()
->>>>>>>>>> at lttng - ust -comm.c:1874
->>>>>>>>>> #16 0x00007ffff7dec85a in _ dl _ fini ()
->>>>>>>>>> from /lib64/ ld - linux -x86-64.so.2
->>>>>>>>>> #17 0x00007ffff6eafa49 in __run_exit_handlers ()
->>>>>>>>>> from /lib64/ libc .so.6
->>>>>>>>>> #18 0x00007ffff6eafa95 in exit () from /lib64/ libc .so.6
->>>>>>>>>> #19 0x0000000000401b51 in main ( argc =<optimized out>,
->>>>>>>>>> argv =<optimized out>) at lu .c:368
-
->>>>>>>>>> Any ideas, why this happens and how to fix it?
+>>>>>>>>>> Please provide more information about the version of lttng-ust you are using,
+>>>>>>>>>> and how you setup
+>>>>>>>>>> your tracing session.
 
 >>>>>>>>>> Thanks,
->>>>>>>>>> Shehab
 
->>>>>>>>>> _______________________________________________
->>>>>>>>>> lttng-dev mailing list
->>>>>>>>>> [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org ]
->>>>>>>>>> [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
->>>>>>>>>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
+>>>>>>>>>> Mathieu
 
->>>>>>>>> --
->>>>>>>>> Mathieu Desnoyers
->>>>>>>>> EfficiOS Inc.
->>>>>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+>>>>>>>>>>> Here is a description of what I have tried and noticed:
+>>>>>>>>>>> 1- The problem isn't consistent. It sometimes happen and sometimes works as
+>>>>>>>>>>> expected.
+>>>>>>>>>>> 2- From my experiments, the problem happens (more frequently at least) when
+>>>>>>>>>>> adding performance counter contexts (I tried cycles, cpu _cycles and
+>>>>>>>>>>> instructions).
+>>>>>>>>>>> 3- I am testing using lu _ ncb from splash3 benchmark suite after setting LD _
+>>>>>>>>>>> PRELOAD to use the pthread wrapper as described in the LTTng documents.
+>>>>>>>>>>> 4- Here is the backtrace printed after exiting:
+>>>>>>>>>>> ======= Backtrace : =========
+>>>>>>>>>>> /lib64/ libc .so.6([Thread 0x7ffff5611700 ( LWP 97229) exited]
+>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng
+>>>>>>>>>>> _destroy_context+0x35)[0x7ffff7471575]
+>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng
+>>>>>>>>>>> _session_destroy+0x21c)[0x7ffff747363c]
+>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0(+0x1e906)[0x7ffff746d906]
+>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
+>>>>>>>>>>> +0x9f)[0x7ffff746dccf]
+>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
+>>>>>>>>>>> +0x9f)[0x7ffff746dccf]
+>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
+>>>>>>>>>>> +0x9f)[0x7ffff746dccf]
+>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ abi
+>>>>>>>>>>> _exit+0x68)[0x7ffff746ead8]
+>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0(+0x191d3)[0x7ffff74681d3]
+>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _exit+0x67)[0x7ffff745ed57]
+>>>>>>>>>>> /lib64/ ld - linux -x86-64.so.2(+0xf85a)[0x7ffff7dec85a]
+>>>>>>>>>>> /lib64/ libc .so.6(+0x38a49)[0x7ffff6ca6a49]
+>>>>>>>>>>> /lib64/ libc .so.6(+0x38a95)[0x7ffff6ca6a95]
+>>>>>>>>>>> / aenao -99/elsayed9/ LTTng /data/scripts/ tmp / lu _ ncb [0x401b51]
+>>>>>>>>>>> /lib64/ libc .so.6(__ libc _start_main+0xf5)[0x7ffff6c8fb35]
+>>>>>>>>>>> / aenao -99/elsayed9/ LTTng /data/scripts/ tmp / lu _ ncb [0x401c44]
+>>>>>>>>>>> 5- Also, this is a backtrace I obtained from gdb :
+>>>>>>>>>>> #0 0x00007ffff6eac1d7 in raise () from /lib64/ libc .so.6
+>>>>>>>>>>> #1 0x00007ffff6ead8c8 in abort () from /lib64/ libc .so.6
+>>>>>>>>>>> #2 0x00007ffff6eebf07 in __ libc _message () from /lib64/ libc .so.6
+>>>>>>>>>>> #3 0x00007ffff6ef3503 in _int_free () from /lib64/ libc .so.6
+>>>>>>>>>>> #4 0x00007ffff768ad25 in lttng _destroy_ perf _counter_field (
+>>>>>>>>>>> field=<optimized out>) at lttng -context- perf -counters.c:418
+>>>>>>>>>>> #5 0x00007ffff767a575 in lttng _destroy_context (
+>>>>>>>>>>> ctx =0x7ffff0011090) at lttng -context.c:278
+>>>>>>>>>>> #6 0x00007ffff767c63c in _ lttng _channel_ unmap (
+>>>>>>>>>>> lttng _ chan =0x7ffff0010f40) at lttng -events.c:172
+>>>>>>>>>>> #7 lttng _session_destroy (session=0x7ffff0000900)
+>>>>>>>>>>> at lttng -events.c:247
+>>>>>>>>>>> #8 0x00007ffff7676906 in lttng _release_session (
+>>>>>>>>>>> objd =<optimized out>) at lttng - ust - abi .c:601
+>>>>>>>>>>> #9 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=1,
+>>>>>>>>>>> is_owner=<optimized out>) at lttng - ust - abi .c:216
+>>>>>>>>>>> #10 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=2,
+>>>>>>>>>>> is_owner=<optimized out>) at lttng - ust - abi .c:216
+>>>>>>>>>>> #11 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=id@entry=18,
+>>>>>>>>>>> is_owner=is_owner@entry=1) at lttng - ust - abi .c:216
+>>>>>>>>>>> #12 0x00007ffff7677ad8 in objd _table_destroy ()
+>>>>>>>>>>> at lttng - ust - abi .c:235
+>>>>>>>>>>> #13 lttng _ ust _ abi _exit () at lttng - ust - abi .c:1002
+>>>>>>>>>>> #14 0x00007ffff76711d3 in lttng _ ust _cleanup (exiting=1)
+>>>>>>>>>>> at lttng - ust -comm.c:1807
+>>>>>>>>>>> #15 0x00007ffff7667d57 in lttng _ ust _exit ()
+>>>>>>>>>>> at lttng - ust -comm.c:1874
+>>>>>>>>>>> #16 0x00007ffff7dec85a in _ dl _ fini ()
+>>>>>>>>>>> from /lib64/ ld - linux -x86-64.so.2
+>>>>>>>>>>> #17 0x00007ffff6eafa49 in __run_exit_handlers ()
+>>>>>>>>>>> from /lib64/ libc .so.6
+>>>>>>>>>>> #18 0x00007ffff6eafa95 in exit () from /lib64/ libc .so.6
+>>>>>>>>>>> #19 0x0000000000401b51 in main ( argc =<optimized out>,
+>>>>>>>>>>> argv =<optimized out>) at lu .c:368
 
->>>>>>> --
->>>>>>> Mathieu Desnoyers
->>>>>>> EfficiOS Inc.
->>>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+>>>>>>>>>>> Any ideas, why this happens and how to fix it?
+
+>>>>>>>>>>> Thanks,
+>>>>>>>>>>> Shehab
+
+>>>>>>>>>>> _______________________________________________
+>>>>>>>>>>> lttng-dev mailing list
+>>>>>>>>>>> [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org ]
+>>>>>>>>>>> [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
+>>>>>>>>>>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
+
+>>>>>>>>>> --
+>>>>>>>>>> Mathieu Desnoyers
+>>>>>>>>>> EfficiOS Inc.
+>>>>>>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+
+>>>>>>>> --
+>>>>>>>> Mathieu Desnoyers
+>>>>>>>> EfficiOS Inc.
+>>>>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+
+>>>>>> --
+>>>>>> Mathieu Desnoyers
+>>>>>> EfficiOS Inc.
+>>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
 
 >>>>> --
 >>>>> Mathieu Desnoyers
 >>>>> EfficiOS Inc.
 >>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
 
->>>> --
->>>> Mathieu Desnoyers
->>>> EfficiOS Inc.
->>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+>>> --
+>>> Mathieu Desnoyers
+>>> EfficiOS Inc.
+>>> [ http://www.efficios.com/ | http://www.efficios.com ]
 
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> [ http://www.efficios.com/ | http://www.efficios.com ]
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
 
 -- 
 Mathieu Desnoyers 
 EfficiOS Inc. 
 http://www.efficios.com 
 
---=_91761d26-dd5f-44fb-b756-e679134e6fd9
+--=_1a23b146-8a5d-4fd9-ac55-9745f54989e2
 Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 <html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><br></div><div><span id=3D"zwchr" data-mark=
-er=3D"__DIVIDER__">----- On Mar 19, 2018, at 4:21 PM, Shehab Elsayed &lt;sh=
-ehabyomn@gmail.com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_=
-TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;=
-padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decor=
-ation:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=
-=3D"ltr"><div>I did "echo "-1" &gt; <span class=3D"gmail-m_5949702530543711=
-213gmail-im">/proc/sys/kernel/perf_event_paranoid</span>" and made sure the=
- value was actually written by "cat /proc/sys/kernel/perf_event_paranoid"<b=
-r><br></div><div>It executed normally 2 times but then got the same error.<=
-/div></div></blockquote><div><br></div><div>Can you provide the output when=
- reproducing the issue with the<br data-mce-bogus=3D"1"></div><div>LTTNG_US=
-T_DEBUG=3D1 environment variable set when starting<br data-mce-bogus=3D"1">=
-</div><div>your test program ?<br data-mce-bogus=3D"1"></div><div><br data-=
-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br d=
-ata-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><=
-br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquo=
+ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
+__">----- On Mar 20, 2018, at 12:07 PM, Mathieu Desnoyers &lt;mathieu.desno=
+yers@efficios.com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_T=
+EXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;p=
+adding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decora=
+tion:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div styl=
+e=3D"font-family: arial, helvetica, sans-serif; font-size: 12pt; color: #00=
+0000"><br><div><span id=3D"zwchr">----- On Mar 19, 2018, at 4:21 PM, Shehab=
+ Elsayed &lt;shehabyomn@gmail.com&gt; wrote:<br></span></div><div><blockquo=
 te style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;=
 color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-f=
-amily:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div><br=
-></div></div><div class=3D"gmail_extra"><br clear=3D"all"><div><div class=
-=3D"gmail_signature"><div dir=3D"ltr"><span data-mce-style=3D"color: #88888=
-8;" style=3D"color: #888888;" color=3D"#888888">Shehab Y. Elsayed, MSc.<br>
+amily:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div>I d=
+id "echo "-1" &gt; <span class=3D"gmail-m_5949702530543711213gmail-im">/pro=
+c/sys/kernel/perf_event_paranoid</span>" and made sure the value was actual=
+ly written by "cat /proc/sys/kernel/perf_event_paranoid"<br><br></div><div>=
+It executed normally 2 times but then got the same error.</div></div></bloc=
+kquote><br><div>Can you provide the output when reproducing the issue with =
+the<br></div><div>LTTNG_UST_DEBUG=3D1 environment variable set when startin=
+g<br></div><div>your test program ?</div></div></div></blockquote><div>I ju=
+st noticed something that might explain what goes wrong here:<br data-mce-b=
+ogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>lttng-context-per=
+f-counters.c: add_thread_field() grabs the ust_lock(). Pthread mutex<br dat=
+a-mce-bogus=3D"1"></div><div>in your case is instrumented with the pthread =
+wrapper. This "add_thread_field" is invoked<br data-mce-bogus=3D"1"></div><=
+div>the first time the perf counter is hit by each given thread. When this =
+happens, the<br data-mce-bogus=3D"1"></div><div>instrumented pthread mutex =
+will try to call into the instrumentation tracepoint again,<br data-mce-bog=
+us=3D"1"></div><div>which will call add_thread_field() (again), and so on u=
+ntil we reach the libringbuffer<br data-mce-bogus=3D"1"></div><div>"lib_rin=
+g_buffer_nesting" threshold of 4 calls deep.<br data-mce-bogus=3D"1"></div>=
+<div><br data-mce-bogus=3D"1"></div><div>I suspect this situation where we =
+recursively call add_thread_field is unexpected,<br data-mce-bogus=3D"1"></=
+div><div>which may trigger your double-free here.<br data-mce-bogus=3D"1"><=
+/div><div><br data-mce-bogus=3D"1"></div><div>Will investigate more.<br dat=
+a-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks,<br=
+ data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathie=
+u<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div><b=
+r data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px solid #10=
+10FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-st=
+yle:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font=
+-size:12pt;"><div style=3D"font-family: arial, helvetica, sans-serif; font-=
+size: 12pt; color: #000000"><div><div><br></div><br><div>Thanks,<br></div><=
+br><div>Mathieu<br></div><br><br><blockquote style=3D"border-left:2px solid=
+ #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;fon=
+t-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;=
+font-size:12pt;"><div dir=3D"ltr"><br></div><div class=3D"gmail_extra"><br =
+clear=3D"all"><div><div class=3D"gmail_signature"><div dir=3D"ltr"><span st=
+yle=3D"color: #888888;">Shehab Y. Elsayed, MSc.<br>
 PhD Student<br>The Edwards S. Rogers Sr. Dept. of Electrical and Computer E=
-ngineering<br>University of Toronto </span><span data-mce-style=3D"color: #=
-888888;" style=3D"color: #888888;" color=3D"#888888"><br>
+ngineering<br>University of Toronto </span><span style=3D"color: #888888;">=
+<br>
 E-mail: <a href=3D"https://webmail.rice.edu/imp/message.php?mailbox=3DINBOX=
-&amp;index=3D11#" target=3D"_blank">shehabyomn@gmail.com</a></span><br data=
--mce-bogus=3D"1"></div></div></div><br><div class=3D"gmail_quote">On Mon, M=
-ar 19, 2018 at 4:01 PM, Mathieu Desnoyers <span dir=3D"ltr">&lt;<a href=3D"=
-mailto:mathieu.desnoyers@efficios.com" target=3D"_blank">mathieu.desnoyers@=
-efficios.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" sty=
-le=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div><=
-div style=3D"font-family:arial,helvetica,sans-serif;font-size:12pt;color:#0=
-00000"><span class=3D""><br><br><span id=3D"m_5949702530543711213zwchr">---=
--- On Mar 19, 2018, at 3:53 PM, Shehab Elsayed &lt;<a href=3D"mailto:shehab=
-yomn@gmail.com" target=3D"_blank">shehabyomn@gmail.com</a>&gt; wrote:<br></=
-span></span><div><span class=3D""><blockquote style=3D"border-left:2px soli=
-d #1010ff;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;fo=
-nt-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif=
-;font-size:12pt"><div dir=3D"ltr"><div><div><span class=3D"m_59497025305437=
-11213gmail-im">cat /proc/sys/kernel/perf_event_paranoid</span> ---&gt; retu=
-rns 1<br><br></div>I run the program as a normal user<br><br></div>The glib=
-c version I get by running "ldd --version" is 2.17</div></blockquote><br></=
-span><div>Can you reproduce the issue after you do this as root ?<br></div>=
-<br><div>echo "-1" &gt; <span class=3D"m_5949702530543711213gmail-im">/proc=
-/sys/kernel/perf_event_paranoid</span><br></div><br><div>Based on this docu=
-mentation of the Linux kernel:<br></div><br><div>Documentation/sysctl/kerne=
-l.txt:<br></div><br><div>perf_event_paranoid:<br><br>Controls use of the pe=
-rformance events system by unprivileged<br>users (without CAP_SYS_ADMIN).&n=
-bsp; The default value is 2.<br><br>&nbsp;-1: Allow use of (almost) all eve=
-nts by all users<br>&nbsp;&nbsp;&nbsp;&nbsp; Ignore mlock limit after perf_=
-event_mlock_kb without CAP_IPC_LOCK<br>&gt;=3D0: Disallow ftrace function t=
-racepoint by users without CAP_SYS_ADMIN<br>&nbsp;&nbsp;&nbsp;&nbsp; Disall=
-ow raw tracepoint access by users without CAP_SYS_ADMIN<br>&gt;=3D1: Disall=
-ow CPU event access by users without CAP_SYS_ADMIN<br>&gt;=3D2: Disallow ke=
-rnel profiling by users without CAP_SYS_ADMIN<br><br></div><div><div class=
-=3D"h5"><div>Thanks,<br></div><br><div>Mathieu<br></div><br><blockquote sty=
-le=3D"border-left:2px solid #1010ff;margin-left:5px;padding-left:5px;color:=
-#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:=
-Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr"><br></div><div =
-class=3D"gmail_extra"><br clear=3D"all"><div><div class=3D"m_59497025305437=
-11213gmail_signature"><div dir=3D"ltr"><span style=3D"color:#888888">Shehab=
- Y. Elsayed, MSc.<br>
+&amp;index=3D11#" target=3D"_blank">shehabyomn@gmail.com</a></span><br></di=
+v></div></div><br><div class=3D"gmail_quote">On Mon, Mar 19, 2018 at 4:01 P=
+M, Mathieu Desnoyers <span dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.desnoy=
+ers@efficios.com" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;<=
+/span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8=
+ex;border-left:1px #ccc solid;padding-left:1ex"><div><div style=3D"font-fam=
+ily:arial,helvetica,sans-serif;font-size:12pt;color:#000000"><span class=3D=
+""><br><br><span id=3D"m_5949702530543711213zwchr">----- On Mar 19, 2018, a=
+t 3:53 PM, Shehab Elsayed &lt;<a href=3D"mailto:shehabyomn@gmail.com" targe=
+t=3D"_blank">shehabyomn@gmail.com</a>&gt; wrote:<br></span></span><div><spa=
+n class=3D""><blockquote style=3D"border-left:2px solid #1010ff;margin-left=
+:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text-=
+decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt"><div=
+ dir=3D"ltr"><div><div><span class=3D"m_5949702530543711213gmail-im">cat /p=
+roc/sys/kernel/perf_event_paranoid</span> ---&gt; returns 1<br><br></div>I =
+run the program as a normal user<br><br></div>The glibc version I get by ru=
+nning "ldd --version" is 2.17</div></blockquote><br></span><div>Can you rep=
+roduce the issue after you do this as root ?<br></div><br><div>echo "-1" &g=
+t; <span class=3D"m_5949702530543711213gmail-im">/proc/sys/kernel/perf_even=
+t_paranoid</span><br></div><br><div>Based on this documentation of the Linu=
+x kernel:<br></div><br><div>Documentation/sysctl/kernel.txt:<br></div><br><=
+div>perf_event_paranoid:<br><br>Controls use of the performance events syst=
+em by unprivileged<br>users (without CAP_SYS_ADMIN).&nbsp; The default valu=
+e is 2.<br><br>&nbsp;-1: Allow use of (almost) all events by all users<br>&=
+nbsp;&nbsp;&nbsp;&nbsp; Ignore mlock limit after perf_event_mlock_kb withou=
+t CAP_IPC_LOCK<br>&gt;=3D0: Disallow ftrace function tracepoint by users wi=
+thout CAP_SYS_ADMIN<br>&nbsp;&nbsp;&nbsp;&nbsp; Disallow raw tracepoint acc=
+ess by users without CAP_SYS_ADMIN<br>&gt;=3D1: Disallow CPU event access b=
+y users without CAP_SYS_ADMIN<br>&gt;=3D2: Disallow kernel profiling by use=
+rs without CAP_SYS_ADMIN<br><br></div><div><div class=3D"h5"><div>Thanks,<b=
+r></div><br><div>Mathieu<br></div><br><blockquote style=3D"border-left:2px =
+solid #1010ff;margin-left:5px;padding-left:5px;color:#000;font-weight:norma=
+l;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-s=
+erif;font-size:12pt"><div dir=3D"ltr"><br></div><div class=3D"gmail_extra">=
+<br clear=3D"all"><div><div class=3D"m_5949702530543711213gmail_signature">=
+<div dir=3D"ltr"><span style=3D"color:#888888">Shehab Y. Elsayed, MSc.<br>
 PhD Student<br>The Edwards S. Rogers Sr. Dept. of Electrical and Computer E=
 ngineering<br>University of Toronto </span><span style=3D"color:#888888"><b=
 r>
@@ -821,14 +870,15 @@ div></div><br></blockquote></div></div></div><div><div class=3D"m_594970253=
 os.com</a><br></div></div></div></div></div></blockquote></div></div><br></=
 blockquote></div></div></div><div><div class=3D"h5"><br><div>-- <br></div><=
 div>Mathieu Desnoyers<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.co=
-m" target=3D"_blank">http://www.efficios.com</a><br data-mce-bogus=3D"1"></=
-div></div></div></div></div></blockquote></div></div><br></blockquote></div=
-><div><br></div><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu=
- Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></=
-html>
---=_91761d26-dd5f-44fb-b756-e679134e6fd9--
+m" target=3D"_blank">http://www.efficios.com</a><br></div></div></div></div=
+></div></blockquote></div></div><br></blockquote></div><br><div>-- <br></di=
+v><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div><=
+/div><br></blockquote></div><div><br></div><div data-marker=3D"__SIG_POST__=
+">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.effici=
+os.com</div></div></body></html>
+--=_1a23b146-8a5d-4fd9-ac55-9745f54989e2--
 
---===============0075383558672282751==
+--===============2098112584033823388==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -838,4 +888,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============0075383558672282751==--
+--===============2098112584033823388==--
