@@ -1,23 +1,23 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: Double free or corruption error (fasttop)
-Date: Tue, 20 Mar 2018 17:42:39 -0400 (EDT)
-Message-ID: <1870456531.1798.1521582159880.JavaMail.zimbra__5909.84544619477$1521582050$gmane$org@efficios.com>
+Date: Wed, 21 Mar 2018 13:27:17 -0400 (EDT)
+Message-ID: <268788496.560.1521653237589.JavaMail.zimbra__31013.7883214795$1521653132$gmane$org@efficios.com>
 References: <CAC-H6ttMF-CjzDH7a6bmeoOPP8JRLptYTmGJVvrx5t-G0Se_gA@mail.gmail.com>
- <1672457853.270.1521487573519.JavaMail.zimbra@efficios.com>
  <173668501.337.1521487906796.JavaMail.zimbra@efficios.com>
  <CAC-H6tsWkYAxYFR6zsdcf+V_e3VYtDvZbYk80mc0raW-AKU5hA@mail.gmail.com>
  <1883907448.467.1521489713355.JavaMail.zimbra@efficios.com>
  <CAC-H6ttwT-tJVFE8iycjzUod2jyxHrfT1TYFhHZzyar98f6jtA@mail.gmail.com>
  <568213680.975.1521562064453.JavaMail.zimbra@efficios.com>
  <446537616.1725.1521579509437.JavaMail.zimbra@efficios.com>
+ <1870456531.1798.1521582159880.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: multipart/mixed;
- boundary="----=_Part_1794_978241766.1521582159874"
+ boundary="----=_Part_556_408660655.1521653237585"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 405RHQ2xwWzxVs
- for <lttng-dev@lists.lttng.org>; Tue, 20 Mar 2018 17:42:41 -0400 (EDT)
-In-Reply-To: <446537616.1725.1521579509437.JavaMail.zimbra@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 405xZQ2PdWzxVB
+ for <lttng-dev@lists.lttng.org>; Wed, 21 Mar 2018 13:27:25 -0400 (EDT)
+In-Reply-To: <1870456531.1798.1521582159880.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -31,51 +31,57 @@ To: Shehab Elsayed <shehabyomn@gmail.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-------=_Part_1794_978241766.1521582159874
+------=_Part_556_408660655.1521653237585
 Content-Type: multipart/alternative;
-	boundary="=_8c67a991-c749-4608-985f-5f0a4ff6c049"
+	boundary="=_421cce1e-7b82-4ae2-ba5c-12e34a0f1321"
 
---=_8c67a991-c749-4608-985f-5f0a4ff6c049
+--=_421cce1e-7b82-4ae2-ba5c-12e34a0f1321
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 
------ On Mar 20, 2018, at 4:58 PM, Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote: 
+----- On Mar 20, 2018, at 5:42 PM, Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote: 
 
-> ----- On Mar 20, 2018, at 12:07 PM, Mathieu Desnoyers
+> ----- On Mar 20, 2018, at 4:58 PM, Mathieu Desnoyers
 > <mathieu.desnoyers@efficios.com> wrote:
 
->> ----- On Mar 19, 2018, at 4:21 PM, Shehab Elsayed <shehabyomn@gmail.com> wrote:
+>> ----- On Mar 20, 2018, at 12:07 PM, Mathieu Desnoyers
+>> <mathieu.desnoyers@efficios.com> wrote:
 
->>> I did "echo "-1" > /proc/sys/kernel/perf_event_paranoid " and made sure the
->>> value was actually written by "cat /proc/sys/kernel/perf_event_paranoid"
+>>> ----- On Mar 19, 2018, at 4:21 PM, Shehab Elsayed <shehabyomn@gmail.com> wrote:
 
->>> It executed normally 2 times but then got the same error.
+>>>> I did "echo "-1" > /proc/sys/kernel/perf_event_paranoid " and made sure the
+>>>> value was actually written by "cat /proc/sys/kernel/perf_event_paranoid"
 
->> Can you provide the output when reproducing the issue with the
->> LTTNG_UST_DEBUG=1 environment variable set when starting
->> your test program ?
+>>>> It executed normally 2 times but then got the same error.
 
-> I just noticed something that might explain what goes wrong here:
+>>> Can you provide the output when reproducing the issue with the
+>>> LTTNG_UST_DEBUG=1 environment variable set when starting
+>>> your test program ?
 
-> lttng-context-perf-counters.c: add_thread_field() grabs the ust_lock(). Pthread
-> mutex
-> in your case is instrumented with the pthread wrapper. This "add_thread_field"
-> is invoked
-> the first time the perf counter is hit by each given thread. When this happens,
-> the
-> instrumented pthread mutex will try to call into the instrumentation tracepoint
-> again,
-> which will call add_thread_field() (again), and so on until we reach the
-> libringbuffer
-> "lib_ring_buffer_nesting" threshold of 4 calls deep.
+>> I just noticed something that might explain what goes wrong here:
 
-> I suspect this situation where we recursively call add_thread_field is
-> unexpected,
-> which may trigger your double-free here.
+>> lttng-context-perf-counters.c: add_thread_field() grabs the ust_lock(). Pthread
+>> mutex
+>> in your case is instrumented with the pthread wrapper. This "add_thread_field"
+>> is invoked
+>> the first time the perf counter is hit by each given thread. When this happens,
+>> the
+>> instrumented pthread mutex will try to call into the instrumentation tracepoint
+>> again,
+>> which will call add_thread_field() (again), and so on until we reach the
+>> libringbuffer
+>> "lib_ring_buffer_nesting" threshold of 4 calls deep.
 
-> Will investigate more.
+>> I suspect this situation where we recursively call add_thread_field is
+>> unexpected,
+>> which may trigger your double-free here.
 
-Can you try with the attached patch applied ? 
+>> Will investigate more.
+
+> Can you try with the attached patch applied ?
+
+Here is an updated v2 of the patch which tests the notrace tls counter sooner (before evaluating 
+filter). Please let me know how it goes. 
 
 Thanks, 
 
@@ -89,273 +95,282 @@ Mathieu
 
 >> Mathieu
 
->>> Shehab Y. Elsayed, MSc.
->>> PhD Student
->>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
->>> University of Toronto
->>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
->>> shehabyomn@gmail.com ]
+>>> Thanks,
 
->>> On Mon, Mar 19, 2018 at 4:01 PM, Mathieu Desnoyers < [
->>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
->>> wrote:
+>>> Mathieu
 
->>>> ----- On Mar 19, 2018, at 3:53 PM, Shehab Elsayed < [
->>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
+>>>> Shehab Y. Elsayed, MSc.
+>>>> PhD Student
+>>>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
+>>>> University of Toronto
+>>>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
+>>>> shehabyomn@gmail.com ]
 
->>>>> cat /proc/sys/kernel/perf_event_paranoid ---> returns 1
+>>>> On Mon, Mar 19, 2018 at 4:01 PM, Mathieu Desnoyers < [
+>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
+>>>> wrote:
 
->>>>> I run the program as a normal user
+>>>>> ----- On Mar 19, 2018, at 3:53 PM, Shehab Elsayed < [
+>>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
 
->>>>> The glibc version I get by running "ldd --version" is 2.17
+>>>>>> cat /proc/sys/kernel/perf_event_paranoid ---> returns 1
 
->>>> Can you reproduce the issue after you do this as root ?
+>>>>>> I run the program as a normal user
 
->>>> echo "-1" > /proc/sys/kernel/perf_event_paranoid
+>>>>>> The glibc version I get by running "ldd --version" is 2.17
 
->>>> Based on this documentation of the Linux kernel:
+>>>>> Can you reproduce the issue after you do this as root ?
 
->>>> Documentation/sysctl/kernel.txt:
+>>>>> echo "-1" > /proc/sys/kernel/perf_event_paranoid
 
->>>> perf_event_paranoid:
+>>>>> Based on this documentation of the Linux kernel:
 
->>>> Controls use of the performance events system by unprivileged
->>>> users (without CAP_SYS_ADMIN). The default value is 2.
+>>>>> Documentation/sysctl/kernel.txt:
 
->>>> -1: Allow use of (almost) all events by all users
->>>> Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK
->>>> >=0: Disallow ftrace function tracepoint by users without CAP_SYS_ADMIN
->>>> Disallow raw tracepoint access by users without CAP_SYS_ADMIN
->>>> >=1: Disallow CPU event access by users without CAP_SYS_ADMIN
->>>> >=2: Disallow kernel profiling by users without CAP_SYS_ADMIN
+>>>>> perf_event_paranoid:
 
->>>> Thanks,
+>>>>> Controls use of the performance events system by unprivileged
+>>>>> users (without CAP_SYS_ADMIN). The default value is 2.
 
->>>> Mathieu
+>>>>> -1: Allow use of (almost) all events by all users
+>>>>> Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK
+>>>>> >=0: Disallow ftrace function tracepoint by users without CAP_SYS_ADMIN
+>>>>> Disallow raw tracepoint access by users without CAP_SYS_ADMIN
+>>>>> >=1: Disallow CPU event access by users without CAP_SYS_ADMIN
+>>>>> >=2: Disallow kernel profiling by users without CAP_SYS_ADMIN
 
->>>>> Shehab Y. Elsayed, MSc.
->>>>> PhD Student
->>>>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
->>>>> University of Toronto
->>>>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
->>>>> shehabyomn@gmail.com ]
+>>>>> Thanks,
 
->>>>> On Mon, Mar 19, 2018 at 3:31 PM, Mathieu Desnoyers < [
->>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
->>>>> wrote:
+>>>>> Mathieu
 
->>>>>> ---- On Mar 19, 2018, at 3:26 PM, Mathieu Desnoyers < [
+>>>>>> Shehab Y. Elsayed, MSc.
+>>>>>> PhD Student
+>>>>>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
+>>>>>> University of Toronto
+>>>>>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
+>>>>>> shehabyomn@gmail.com ]
+
+>>>>>> On Mon, Mar 19, 2018 at 3:31 PM, Mathieu Desnoyers < [
 >>>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
 >>>>>> wrote:
 
->>>>>>> ----- On Mar 19, 2018, at 2:26 PM, Shehab Elsayed < [
->>>>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
+>>>>>>> ---- On Mar 19, 2018, at 3:26 PM, Mathieu Desnoyers < [
+>>>>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
+>>>>>>> wrote:
 
->>>>>>>> Yes, I tried with only one of those contexts and I still ran into the same
->>>>>>>> problem.
+>>>>>>>> ----- On Mar 19, 2018, at 2:26 PM, Shehab Elsayed < [
+>>>>>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
 
->>>>>>> What is the setting returned by
+>>>>>>>>> Yes, I tried with only one of those contexts and I still ran into the same
+>>>>>>>>> problem.
 
->>>>>>> cat /proc/sys/kernel/perf_event_paranoid
+>>>>>>>> What is the setting returned by
 
->>>>>>> on your system ? And do you run your test program as root or normal user ?
+>>>>>>>> cat /proc/sys/kernel/perf_event_paranoid
 
->>>>>>> Please CC the mailing list on your reply.
+>>>>>>>> on your system ? And do you run your test program as root or normal user ?
 
->>>>>> I will also need to know what glibc version you have on your system.
+>>>>>>>> Please CC the mailing list on your reply.
 
->>>>>> Thanks,
-
->>>>>> Mathieu
+>>>>>>> I will also need to know what glibc version you have on your system.
 
 >>>>>>> Thanks,
 
 >>>>>>> Mathieu
 
->>>>>>>> Shehab Y. Elsayed, MSc.
->>>>>>>> PhD Student
->>>>>>>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
->>>>>>>> University of Toronto
->>>>>>>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
->>>>>>>> shehabyomn@gmail.com ]
+>>>>>>>> Thanks,
 
->>>>>>>> On Mon, Mar 19, 2018 at 2:24 PM, Mathieu Desnoyers < [
->>>>>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
->>>>>>>> wrote:
+>>>>>>>> Mathieu
 
->>>>>>>>> ----- On Mar 19, 2018, at 12:36 PM, Shehab Elsayed < [
->>>>>>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
+>>>>>>>>> Shehab Y. Elsayed, MSc.
+>>>>>>>>> PhD Student
+>>>>>>>>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
+>>>>>>>>> University of Toronto
+>>>>>>>>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
+>>>>>>>>> shehabyomn@gmail.com ]
 
->>>>>>>>>> Hi Mathieu,
+>>>>>>>>> On Mon, Mar 19, 2018 at 2:24 PM, Mathieu Desnoyers < [
+>>>>>>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
+>>>>>>>>> wrote:
 
->>>>>>>>>> Thank you very much for your reply.
+>>>>>>>>>> ----- On Mar 19, 2018, at 12:36 PM, Shehab Elsayed < [
+>>>>>>>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
 
->>>>>>>>>> I manually built lttng-ust from source (commit #:
->>>>>>>>>> 8a208943e21700211beee3ea64180a5a534c7d2a).
+>>>>>>>>>>> Hi Mathieu,
 
->>>>>>>>>> This is how I set up the tracing session:
->>>>>>>>>> 1- lttng create lu_ncb_8_native -o {path}
->>>>>>>>>> 2- lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_req
->>>>>>>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_acq
->>>>>>>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_trylock
->>>>>>>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_unlock
->>>>>>>>>> 3- lttng add-context -u -t procname
->>>>>>>>>> lttng add-context -u -t vpid
->>>>>>>>>> lttng add-context -u -t pthread_id
->>>>>>>>>> lttng add-context -u -t vtid
->>>>>>>>>> lttng add-context -u -t ip
+>>>>>>>>>>> Thank you very much for your reply.
+
+>>>>>>>>>>> I manually built lttng-ust from source (commit #:
+>>>>>>>>>>> 8a208943e21700211beee3ea64180a5a534c7d2a).
+
+>>>>>>>>>>> This is how I set up the tracing session:
+>>>>>>>>>>> 1- lttng create lu_ncb_8_native -o {path}
+>>>>>>>>>>> 2- lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_req
+>>>>>>>>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_acq
+>>>>>>>>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_trylock
+>>>>>>>>>>> lttng enable-event --userspace lttng_ust_pthread:pthread_mutex_lock_unlock
+>>>>>>>>>>> 3- lttng add-context -u -t procname
+>>>>>>>>>>> lttng add-context -u -t vpid
+>>>>>>>>>>> lttng add-context -u -t pthread_id
+>>>>>>>>>>> lttng add-context -u -t vtid
+>>>>>>>>>>> lttng add-context -u -t ip
+>>>>>>>>>>> lttng add-context -u -t perf:thread:cpu-cycles
+>>>>>>>>>>> lttng add-context -u -t perf:thread:cycles
+>>>>>>>>>>> lttng add-context -u -t perf:thread:instructions
+>>>>>>>>>>> 4- lttng start
+>>>>>>>>>>> 5- LD_PRELOAD=/usr/local/lib/liblttng-ust-pthread-wrapper.so ./lu_ncb -p8 -n8096
+>>>>>>>>>>> -b32
+>>>>>>>>>>> 6- lttng stop
+>>>>>>>>>>> 7- lttng destroy
+
+>>>>>>>>>> Can you reproduce if you remove the following contexts ?
+
 >>>>>>>>>> lttng add-context -u -t perf:thread:cpu-cycles
 >>>>>>>>>> lttng add-context -u -t perf:thread:cycles
 >>>>>>>>>> lttng add-context -u -t perf:thread:instructions
->>>>>>>>>> 4- lttng start
->>>>>>>>>> 5- LD_PRELOAD=/usr/local/lib/liblttng-ust-pthread-wrapper.so ./lu_ncb -p8 -n8096
->>>>>>>>>> -b32
->>>>>>>>>> 6- lttng stop
->>>>>>>>>> 7- lttng destroy
 
->>>>>>>>> Can you reproduce if you remove the following contexts ?
+>>>>>>>>>> And if you only keep a single of those contexts ?
 
->>>>>>>>> lttng add-context -u -t perf:thread:cpu-cycles
->>>>>>>>> lttng add-context -u -t perf:thread:cycles
->>>>>>>>> lttng add-context -u -t perf:thread:instructions
+>>>>>>>>>> Thanks,
 
->>>>>>>>> And if you only keep a single of those contexts ?
+>>>>>>>>>> Mathieu
 
->>>>>>>>> Thanks,
+>>>>>>>>>>> Shehab Y. Elsayed, MSc.
+>>>>>>>>>>> PhD Student
+>>>>>>>>>>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
+>>>>>>>>>>> University of Toronto
+>>>>>>>>>>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
+>>>>>>>>>>> shehabyomn@gmail.com ]
 
->>>>>>>>> Mathieu
+>>>>>>>>>>> On Mon, Mar 19, 2018 at 12:21 PM, Mathieu Desnoyers < [
+>>>>>>>>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
+>>>>>>>>>>> wrote:
 
->>>>>>>>>> Shehab Y. Elsayed, MSc.
->>>>>>>>>> PhD Student
->>>>>>>>>> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
->>>>>>>>>> University of Toronto
->>>>>>>>>> E-mail: [ https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11# |
->>>>>>>>>> shehabyomn@gmail.com ]
+>>>>>>>>>>>> ----- On Mar 16, 2018, at 5:37 PM, Shehab Elsayed < [
+>>>>>>>>>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
 
->>>>>>>>>> On Mon, Mar 19, 2018 at 12:21 PM, Mathieu Desnoyers < [
->>>>>>>>>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
->>>>>>>>>> wrote:
+>>>>>>>>>>>>> Hello All,
 
->>>>>>>>>>> ----- On Mar 16, 2018, at 5:37 PM, Shehab Elsayed < [
->>>>>>>>>>> mailto:shehabyomn@gmail.com | shehabyomn@gmail.com ] > wrote:
+>>>>>>>>>>>>> I am trying to instrument a pthread application using the provided pthread
+>>>>>>>>>>>>> wrapper, but I sometimes run into a "Double free or corruption error ( fasttop
+>>>>>>>>>>>>> )" error.
 
->>>>>>>>>>>> Hello All,
-
->>>>>>>>>>>> I am trying to instrument a pthread application using the provided pthread
->>>>>>>>>>>> wrapper, but I sometimes run into a "Double free or corruption error ( fasttop
->>>>>>>>>>>> )" error.
-
->>>>>>>>>>> Please provide more information about the version of lttng-ust you are using,
->>>>>>>>>>> and how you setup
->>>>>>>>>>> your tracing session.
-
->>>>>>>>>>> Thanks,
-
->>>>>>>>>>> Mathieu
-
->>>>>>>>>>>> Here is a description of what I have tried and noticed:
->>>>>>>>>>>> 1- The problem isn't consistent. It sometimes happen and sometimes works as
->>>>>>>>>>>> expected.
->>>>>>>>>>>> 2- From my experiments, the problem happens (more frequently at least) when
->>>>>>>>>>>> adding performance counter contexts (I tried cycles, cpu _cycles and
->>>>>>>>>>>> instructions).
->>>>>>>>>>>> 3- I am testing using lu _ ncb from splash3 benchmark suite after setting LD _
->>>>>>>>>>>> PRELOAD to use the pthread wrapper as described in the LTTng documents.
->>>>>>>>>>>> 4- Here is the backtrace printed after exiting:
->>>>>>>>>>>> ======= Backtrace : =========
->>>>>>>>>>>> /lib64/ libc .so.6([Thread 0x7ffff5611700 ( LWP 97229) exited]
->>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng
->>>>>>>>>>>> _destroy_context+0x35)[0x7ffff7471575]
->>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng
->>>>>>>>>>>> _session_destroy+0x21c)[0x7ffff747363c]
->>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0(+0x1e906)[0x7ffff746d906]
->>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
->>>>>>>>>>>> +0x9f)[0x7ffff746dccf]
->>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
->>>>>>>>>>>> +0x9f)[0x7ffff746dccf]
->>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
->>>>>>>>>>>> +0x9f)[0x7ffff746dccf]
->>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ abi
->>>>>>>>>>>> _exit+0x68)[0x7ffff746ead8]
->>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0(+0x191d3)[0x7ffff74681d3]
->>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _exit+0x67)[0x7ffff745ed57]
->>>>>>>>>>>> /lib64/ ld - linux -x86-64.so.2(+0xf85a)[0x7ffff7dec85a]
->>>>>>>>>>>> /lib64/ libc .so.6(+0x38a49)[0x7ffff6ca6a49]
->>>>>>>>>>>> /lib64/ libc .so.6(+0x38a95)[0x7ffff6ca6a95]
->>>>>>>>>>>> / aenao -99/elsayed9/ LTTng /data/scripts/ tmp / lu _ ncb [0x401b51]
->>>>>>>>>>>> /lib64/ libc .so.6(__ libc _start_main+0xf5)[0x7ffff6c8fb35]
->>>>>>>>>>>> / aenao -99/elsayed9/ LTTng /data/scripts/ tmp / lu _ ncb [0x401c44]
->>>>>>>>>>>> 5- Also, this is a backtrace I obtained from gdb :
->>>>>>>>>>>> #0 0x00007ffff6eac1d7 in raise () from /lib64/ libc .so.6
->>>>>>>>>>>> #1 0x00007ffff6ead8c8 in abort () from /lib64/ libc .so.6
->>>>>>>>>>>> #2 0x00007ffff6eebf07 in __ libc _message () from /lib64/ libc .so.6
->>>>>>>>>>>> #3 0x00007ffff6ef3503 in _int_free () from /lib64/ libc .so.6
->>>>>>>>>>>> #4 0x00007ffff768ad25 in lttng _destroy_ perf _counter_field (
->>>>>>>>>>>> field=<optimized out>) at lttng -context- perf -counters.c:418
->>>>>>>>>>>> #5 0x00007ffff767a575 in lttng _destroy_context (
->>>>>>>>>>>> ctx =0x7ffff0011090) at lttng -context.c:278
->>>>>>>>>>>> #6 0x00007ffff767c63c in _ lttng _channel_ unmap (
->>>>>>>>>>>> lttng _ chan =0x7ffff0010f40) at lttng -events.c:172
->>>>>>>>>>>> #7 lttng _session_destroy (session=0x7ffff0000900)
->>>>>>>>>>>> at lttng -events.c:247
->>>>>>>>>>>> #8 0x00007ffff7676906 in lttng _release_session (
->>>>>>>>>>>> objd =<optimized out>) at lttng - ust - abi .c:601
->>>>>>>>>>>> #9 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=1,
->>>>>>>>>>>> is_owner=<optimized out>) at lttng - ust - abi .c:216
->>>>>>>>>>>> #10 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=2,
->>>>>>>>>>>> is_owner=<optimized out>) at lttng - ust - abi .c:216
->>>>>>>>>>>> #11 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=id@entry=18,
->>>>>>>>>>>> is_owner=is_owner@entry=1) at lttng - ust - abi .c:216
->>>>>>>>>>>> #12 0x00007ffff7677ad8 in objd _table_destroy ()
->>>>>>>>>>>> at lttng - ust - abi .c:235
->>>>>>>>>>>> #13 lttng _ ust _ abi _exit () at lttng - ust - abi .c:1002
->>>>>>>>>>>> #14 0x00007ffff76711d3 in lttng _ ust _cleanup (exiting=1)
->>>>>>>>>>>> at lttng - ust -comm.c:1807
->>>>>>>>>>>> #15 0x00007ffff7667d57 in lttng _ ust _exit ()
->>>>>>>>>>>> at lttng - ust -comm.c:1874
->>>>>>>>>>>> #16 0x00007ffff7dec85a in _ dl _ fini ()
->>>>>>>>>>>> from /lib64/ ld - linux -x86-64.so.2
->>>>>>>>>>>> #17 0x00007ffff6eafa49 in __run_exit_handlers ()
->>>>>>>>>>>> from /lib64/ libc .so.6
->>>>>>>>>>>> #18 0x00007ffff6eafa95 in exit () from /lib64/ libc .so.6
->>>>>>>>>>>> #19 0x0000000000401b51 in main ( argc =<optimized out>,
->>>>>>>>>>>> argv =<optimized out>) at lu .c:368
-
->>>>>>>>>>>> Any ideas, why this happens and how to fix it?
+>>>>>>>>>>>> Please provide more information about the version of lttng-ust you are using,
+>>>>>>>>>>>> and how you setup
+>>>>>>>>>>>> your tracing session.
 
 >>>>>>>>>>>> Thanks,
->>>>>>>>>>>> Shehab
 
->>>>>>>>>>>> _______________________________________________
->>>>>>>>>>>> lttng-dev mailing list
->>>>>>>>>>>> [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org ]
->>>>>>>>>>>> [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
->>>>>>>>>>>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
+>>>>>>>>>>>> Mathieu
 
->>>>>>>>>>> --
->>>>>>>>>>> Mathieu Desnoyers
->>>>>>>>>>> EfficiOS Inc.
->>>>>>>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+>>>>>>>>>>>>> Here is a description of what I have tried and noticed:
+>>>>>>>>>>>>> 1- The problem isn't consistent. It sometimes happen and sometimes works as
+>>>>>>>>>>>>> expected.
+>>>>>>>>>>>>> 2- From my experiments, the problem happens (more frequently at least) when
+>>>>>>>>>>>>> adding performance counter contexts (I tried cycles, cpu _cycles and
+>>>>>>>>>>>>> instructions).
+>>>>>>>>>>>>> 3- I am testing using lu _ ncb from splash3 benchmark suite after setting LD _
+>>>>>>>>>>>>> PRELOAD to use the pthread wrapper as described in the LTTng documents.
+>>>>>>>>>>>>> 4- Here is the backtrace printed after exiting:
+>>>>>>>>>>>>> ======= Backtrace : =========
+>>>>>>>>>>>>> /lib64/ libc .so.6([Thread 0x7ffff5611700 ( LWP 97229) exited]
+>>>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng
+>>>>>>>>>>>>> _destroy_context+0x35)[0x7ffff7471575]
+>>>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng
+>>>>>>>>>>>>> _session_destroy+0x21c)[0x7ffff747363c]
+>>>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0(+0x1e906)[0x7ffff746d906]
+>>>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
+>>>>>>>>>>>>> +0x9f)[0x7ffff746dccf]
+>>>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
+>>>>>>>>>>>>> +0x9f)[0x7ffff746dccf]
+>>>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ objd _ unref
+>>>>>>>>>>>>> +0x9f)[0x7ffff746dccf]
+>>>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _ abi
+>>>>>>>>>>>>> _exit+0x68)[0x7ffff746ead8]
+>>>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0(+0x191d3)[0x7ffff74681d3]
+>>>>>>>>>>>>> / usr /local/lib/ liblttng - ust .so.0( lttng _ ust _exit+0x67)[0x7ffff745ed57]
+>>>>>>>>>>>>> /lib64/ ld - linux -x86-64.so.2(+0xf85a)[0x7ffff7dec85a]
+>>>>>>>>>>>>> /lib64/ libc .so.6(+0x38a49)[0x7ffff6ca6a49]
+>>>>>>>>>>>>> /lib64/ libc .so.6(+0x38a95)[0x7ffff6ca6a95]
+>>>>>>>>>>>>> / aenao -99/elsayed9/ LTTng /data/scripts/ tmp / lu _ ncb [0x401b51]
+>>>>>>>>>>>>> /lib64/ libc .so.6(__ libc _start_main+0xf5)[0x7ffff6c8fb35]
+>>>>>>>>>>>>> / aenao -99/elsayed9/ LTTng /data/scripts/ tmp / lu _ ncb [0x401c44]
+>>>>>>>>>>>>> 5- Also, this is a backtrace I obtained from gdb :
+>>>>>>>>>>>>> #0 0x00007ffff6eac1d7 in raise () from /lib64/ libc .so.6
+>>>>>>>>>>>>> #1 0x00007ffff6ead8c8 in abort () from /lib64/ libc .so.6
+>>>>>>>>>>>>> #2 0x00007ffff6eebf07 in __ libc _message () from /lib64/ libc .so.6
+>>>>>>>>>>>>> #3 0x00007ffff6ef3503 in _int_free () from /lib64/ libc .so.6
+>>>>>>>>>>>>> #4 0x00007ffff768ad25 in lttng _destroy_ perf _counter_field (
+>>>>>>>>>>>>> field=<optimized out>) at lttng -context- perf -counters.c:418
+>>>>>>>>>>>>> #5 0x00007ffff767a575 in lttng _destroy_context (
+>>>>>>>>>>>>> ctx =0x7ffff0011090) at lttng -context.c:278
+>>>>>>>>>>>>> #6 0x00007ffff767c63c in _ lttng _channel_ unmap (
+>>>>>>>>>>>>> lttng _ chan =0x7ffff0010f40) at lttng -events.c:172
+>>>>>>>>>>>>> #7 lttng _session_destroy (session=0x7ffff0000900)
+>>>>>>>>>>>>> at lttng -events.c:247
+>>>>>>>>>>>>> #8 0x00007ffff7676906 in lttng _release_session (
+>>>>>>>>>>>>> objd =<optimized out>) at lttng - ust - abi .c:601
+>>>>>>>>>>>>> #9 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=1,
+>>>>>>>>>>>>> is_owner=<optimized out>) at lttng - ust - abi .c:216
+>>>>>>>>>>>>> #10 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=2,
+>>>>>>>>>>>>> is_owner=<optimized out>) at lttng - ust - abi .c:216
+>>>>>>>>>>>>> #11 0x00007ffff7676ccf in lttng _ ust _ objd _ unref (id=id@entry=18,
+>>>>>>>>>>>>> is_owner=is_owner@entry=1) at lttng - ust - abi .c:216
+>>>>>>>>>>>>> #12 0x00007ffff7677ad8 in objd _table_destroy ()
+>>>>>>>>>>>>> at lttng - ust - abi .c:235
+>>>>>>>>>>>>> #13 lttng _ ust _ abi _exit () at lttng - ust - abi .c:1002
+>>>>>>>>>>>>> #14 0x00007ffff76711d3 in lttng _ ust _cleanup (exiting=1)
+>>>>>>>>>>>>> at lttng - ust -comm.c:1807
+>>>>>>>>>>>>> #15 0x00007ffff7667d57 in lttng _ ust _exit ()
+>>>>>>>>>>>>> at lttng - ust -comm.c:1874
+>>>>>>>>>>>>> #16 0x00007ffff7dec85a in _ dl _ fini ()
+>>>>>>>>>>>>> from /lib64/ ld - linux -x86-64.so.2
+>>>>>>>>>>>>> #17 0x00007ffff6eafa49 in __run_exit_handlers ()
+>>>>>>>>>>>>> from /lib64/ libc .so.6
+>>>>>>>>>>>>> #18 0x00007ffff6eafa95 in exit () from /lib64/ libc .so.6
+>>>>>>>>>>>>> #19 0x0000000000401b51 in main ( argc =<optimized out>,
+>>>>>>>>>>>>> argv =<optimized out>) at lu .c:368
 
->>>>>>>>> --
->>>>>>>>> Mathieu Desnoyers
->>>>>>>>> EfficiOS Inc.
->>>>>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+>>>>>>>>>>>>> Any ideas, why this happens and how to fix it?
+
+>>>>>>>>>>>>> Thanks,
+>>>>>>>>>>>>> Shehab
+
+>>>>>>>>>>>>> _______________________________________________
+>>>>>>>>>>>>> lttng-dev mailing list
+>>>>>>>>>>>>> [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org ]
+>>>>>>>>>>>>> [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
+>>>>>>>>>>>>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
+
+>>>>>>>>>>>> --
+>>>>>>>>>>>> Mathieu Desnoyers
+>>>>>>>>>>>> EfficiOS Inc.
+>>>>>>>>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+
+>>>>>>>>>> --
+>>>>>>>>>> Mathieu Desnoyers
+>>>>>>>>>> EfficiOS Inc.
+>>>>>>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+
+>>>>>>>> --
+>>>>>>>> Mathieu Desnoyers
+>>>>>>>> EfficiOS Inc.
+>>>>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
 
 >>>>>>> --
 >>>>>>> Mathieu Desnoyers
 >>>>>>> EfficiOS Inc.
 >>>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
 
->>>>>> --
->>>>>> Mathieu Desnoyers
->>>>>> EfficiOS Inc.
->>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+>>>>> --
+>>>>> Mathieu Desnoyers
+>>>>> EfficiOS Inc.
+>>>>> [ http://www.efficios.com/ | http://www.efficios.com ]
 
->>>> --
->>>> Mathieu Desnoyers
->>>> EfficiOS Inc.
->>>> [ http://www.efficios.com/ | http://www.efficios.com ]
+>>> --
+>>> Mathieu Desnoyers
+>>> EfficiOS Inc.
+>>> http://www.efficios.com
 
 >> --
 >> Mathieu Desnoyers
@@ -372,67 +387,81 @@ Mathieu Desnoyers
 EfficiOS Inc. 
 http://www.efficios.com 
 
---=_8c67a991-c749-4608-985f-5f0a4ff6c049
+--=_421cce1e-7b82-4ae2-ba5c-12e34a0f1321
 Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 <html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
 ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
-__">----- On Mar 20, 2018, at 4:58 PM, Mathieu Desnoyers &lt;mathieu.desnoy=
+__">----- On Mar 20, 2018, at 5:42 PM, Mathieu Desnoyers &lt;mathieu.desnoy=
 ers@efficios.com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_TE=
 XT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;pa=
 dding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decorat=
 ion:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div style=
 =3D"font-family: arial, helvetica, sans-serif; font-size: 12pt; color: #000=
-000"><div><span id=3D"zwchr">----- On Mar 20, 2018, at 12:07 PM, Mathieu De=
-snoyers &lt;mathieu.desnoyers@efficios.com&gt; wrote:<br></span></div><div>=
-<blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-=
-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:no=
-ne;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div style=3D"fo=
-nt-family: arial, helvetica, sans-serif; font-size: 12pt; color: #000000"><=
-br><div><span id=3D"zwchr">----- On Mar 19, 2018, at 4:21 PM, Shehab Elsaye=
-d &lt;shehabyomn@gmail.com&gt; wrote:<br></span></div><div><blockquote styl=
-e=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#=
-000;font-weight:normal;font-style:normal;text-decoration:none;font-family:H=
-elvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div>I did "ech=
-o "-1" &gt; <span class=3D"gmail-m_5949702530543711213gmail-im">/proc/sys/k=
-ernel/perf_event_paranoid</span>" and made sure the value was actually writ=
-ten by "cat /proc/sys/kernel/perf_event_paranoid"<br><br></div><div>It exec=
-uted normally 2 times but then got the same error.</div></div></blockquote>=
-<br><div>Can you provide the output when reproducing the issue with the<br>=
-</div><div>LTTNG_UST_DEBUG=3D1 environment variable set when starting<br></=
-div><div>your test program ?</div></div></div></blockquote><div>I just noti=
-ced something that might explain what goes wrong here:<br></div><br><div>lt=
-tng-context-perf-counters.c: add_thread_field() grabs the ust_lock(). Pthre=
-ad mutex<br></div><div>in your case is instrumented with the pthread wrappe=
-r. This "add_thread_field" is invoked<br></div><div>the first time the perf=
- counter is hit by each given thread. When this happens, the<br></div><div>=
-instrumented pthread mutex will try to call into the instrumentation tracep=
-oint again,<br></div><div>which will call add_thread_field() (again), and s=
-o on until we reach the libringbuffer<br></div><div>"lib_ring_buffer_nestin=
-g" threshold of 4 calls deep.<br></div><br><div>I suspect this situation wh=
-ere we recursively call add_thread_field is unexpected,<br></div><div>which=
- may trigger your double-free here.<br></div><br><div>Will investigate more=
-.</div></div></div></blockquote><div>Can you try with the attached patch ap=
-plied ?<br></div><div><br data-mce-bogus=3D"1"></div><div>Thanks,<br data-m=
-ce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathieu<br da=
-ta-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div><br data-=
-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote style=
-=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#0=
-00;font-weight:normal;font-style:normal;text-decoration:none;font-family:He=
-lvetica,Arial,sans-serif;font-size:12pt;"><div style=3D"font-family: arial,=
- helvetica, sans-serif; font-size: 12pt; color: #000000"><div><div><br></di=
-v><br><div>Thanks,<br></div><br><div>Mathieu<br></div><br><br><blockquote s=
-tyle=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;colo=
-r:#000;font-weight:normal;font-style:normal;text-decoration:none;font-famil=
-y:Helvetica,Arial,sans-serif;font-size:12pt;"><div style=3D"font-family: ar=
-ial, helvetica, sans-serif; font-size: 12pt; color: #000000"><div><br><br><=
-div>Thanks,<br></div><br><div>Mathieu<br></div><br><br><blockquote style=3D=
-"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;=
-font-weight:normal;font-style:normal;text-decoration:none;font-family:Helve=
-tica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><br></div><div clas=
-s=3D"gmail_extra"><br clear=3D"all"><div><div class=3D"gmail_signature"><di=
-v dir=3D"ltr"><span style=3D"color: #888888;">Shehab Y. Elsayed, MSc.<br>
+000"><div><span id=3D"zwchr">----- On Mar 20, 2018, at 4:58 PM, Mathieu Des=
+noyers &lt;mathieu.desnoyers@efficios.com&gt; wrote:<br></span></div><div><=
+blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-l=
+eft:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:non=
+e;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div style=3D"fon=
+t-family: arial, helvetica, sans-serif; font-size: 12pt; color: #000000"><d=
+iv><span id=3D"zwchr">----- On Mar 20, 2018, at 12:07 PM, Mathieu Desnoyers=
+ &lt;mathieu.desnoyers@efficios.com&gt; wrote:<br></span></div><div><blockq=
+uote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5p=
+x;color:#000;font-weight:normal;font-style:normal;text-decoration:none;font=
+-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div style=3D"font-fami=
+ly: arial, helvetica, sans-serif; font-size: 12pt; color: #000000"><br><div=
+><span id=3D"zwchr">----- On Mar 19, 2018, at 4:21 PM, Shehab Elsayed &lt;s=
+hehabyomn@gmail.com&gt; wrote:<br></span></div><div><blockquote style=3D"bo=
+rder-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;fon=
+t-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetic=
+a,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div>I did "echo "-1" =
+&gt; <span class=3D"gmail-m_5949702530543711213gmail-im">/proc/sys/kernel/p=
+erf_event_paranoid</span>" and made sure the value was actually written by =
+"cat /proc/sys/kernel/perf_event_paranoid"<br><br></div><div>It executed no=
+rmally 2 times but then got the same error.</div></div></blockquote><br><di=
+v>Can you provide the output when reproducing the issue with the<br></div><=
+div>LTTNG_UST_DEBUG=3D1 environment variable set when starting<br></div><di=
+v>your test program ?</div></div></div></blockquote><div>I just noticed som=
+ething that might explain what goes wrong here:<br></div><br><div>lttng-con=
+text-perf-counters.c: add_thread_field() grabs the ust_lock(). Pthread mute=
+x<br></div><div>in your case is instrumented with the pthread wrapper. This=
+ "add_thread_field" is invoked<br></div><div>the first time the perf counte=
+r is hit by each given thread. When this happens, the<br></div><div>instrum=
+ented pthread mutex will try to call into the instrumentation tracepoint ag=
+ain,<br></div><div>which will call add_thread_field() (again), and so on un=
+til we reach the libringbuffer<br></div><div>"lib_ring_buffer_nesting" thre=
+shold of 4 calls deep.<br></div><br><div>I suspect this situation where we =
+recursively call add_thread_field is unexpected,<br></div><div>which may tr=
+igger your double-free here.<br></div><br><div>Will investigate more.</div>=
+</div></div></blockquote><div>Can you try with the attached patch applied ?=
+</div></div></div></blockquote><div>Here is an updated v2 of the patch whic=
+h tests the notrace tls counter sooner (before evaluating<br></div><div>fil=
+ter). Please let me know how it goes.<br data-mce-bogus=3D"1"></div><div><b=
+r data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><di=
+v><br data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div=
+><div><br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><d=
+iv><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px soli=
+d #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;fo=
+nt-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif=
+;font-size:12pt;"><div style=3D"font-family: arial, helvetica, sans-serif; =
+font-size: 12pt; color: #000000"><div><div><br></div><br><div>Thanks,<br></=
+div><br><div>Mathieu<br></div><br><br><br><blockquote style=3D"border-left:=
+2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:n=
+ormal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sa=
+ns-serif;font-size:12pt;"><div style=3D"font-family: arial, helvetica, sans=
+-serif; font-size: 12pt; color: #000000"><div><br><br><div>Thanks,<br></div=
+><br><div>Mathieu<br></div><br><br><blockquote style=3D"border-left:2px sol=
+id #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;f=
+ont-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-seri=
+f;font-size:12pt;"><div style=3D"font-family: arial, helvetica, sans-serif;=
+ font-size: 12pt; color: #000000"><div><br><br><div>Thanks,<br></div><br><d=
+iv>Mathieu<br></div><br><br><blockquote style=3D"border-left:2px solid #101=
+0FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-sty=
+le:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-=
+size:12pt;"><div dir=3D"ltr"><br></div><div class=3D"gmail_extra"><br clear=
+=3D"all"><div><div class=3D"gmail_signature"><div dir=3D"ltr"><span style=
+=3D"color: #888888;">Shehab Y. Elsayed, MSc.<br>
 PhD Student<br>The Edwards S. Rogers Sr. Dept. of Electrical and Computer E=
 ngineering<br>University of Toronto </span><span style=3D"color: #888888;">=
 <br>
@@ -904,110 +933,130 @@ m" target=3D"_blank">http://www.efficios.com</a><br></div></div></div></div=
 v><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div><=
 /div><br></blockquote></div><br><div>-- <br></div><div>Mathieu Desnoyers<br=
 >EfficiOS Inc.<br>http://www.efficios.com</div></div><br></blockquote></div=
-><div><br></div><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu=
- Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></=
-html>
---=_8c67a991-c749-4608-985f-5f0a4ff6c049--
+><br><div>-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://ww=
+w.efficios.com</div></div><br></blockquote></div><div><br></div><div data-m=
+arker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.=
+<br>http://www.efficios.com</div></div></body></html>
+--=_421cce1e-7b82-4ae2-ba5c-12e34a0f1321--
 
-------=_Part_1794_978241766.1521582159874
+------=_Part_556_408660655.1521653237585
 Content-Type: text/x-patch;
  name=0001-Fix-perf-event-mutex-with-pthread-wrapper.patch
 Content-Disposition: attachment;
  filename=0001-Fix-perf-event-mutex-with-pthread-wrapper.patch
 Content-Transfer-Encoding: base64
 
-RnJvbSA5NzhlNjgyMzIxOTYzZjViMTQyZGNiNDVlM2QxZGZlNmIyNjNjNmVhIE1vbiBTZXAgMTcg
+RnJvbSA4NjcxYzZhZTgzOTYxNWMwNzc5MDQxYWJhZGE0NzAzNjgwZmJjMDAzIE1vbiBTZXAgMTcg
 MDA6MDA6MDAgMjAwMQpGcm9tOiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNA
 ZWZmaWNpb3MuY29tPgpEYXRlOiBUdWUsIDIwIE1hciAyMDE4IDE3OjMyOjM2IC0wNDAwClN1Ympl
-Y3Q6IFtSRkMgUEFUQ0hdIEZpeDogcGVyZiBldmVudCBtdXRleCB3aXRoIHB0aHJlYWQgd3JhcHBl
-cgoKV2UgZG8gbm90IHdhbnQgdG8gcmVjdXJzZSBpbiB0aGUgcHRocmVhZCBtdXRleCBpbnN0cnVt
-ZW50YXRpb24gd2hlbgpzZXR0aW5nIHVwIHRoZSBwZXJmIGNvdW50ZXJzIGZvciBhIGdpdmVuIHRo
-cmVhZC4KCkludHJvZHVjZSBhICJub3RyYWNlIiBwZXItdGhyZWFkIGNvdW50ZXIgdG8gaW5oaWJp
-dCB0cmFjaW5nIGZvciB0aGUKY3VycmVudCB0aHJlYWQuCgpTaWduZWQtb2ZmLWJ5OiBNYXRoaWV1
-IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgotLS0KIGluY2x1ZGUv
-bHR0bmcvdXN0LWV2ZW50cy5oICAgICAgICAgICAgICAgICB8ICAzICsrKwogbGlibHR0bmctdXN0
-L2x0dG5nLWNvbnRleHQtcGVyZi1jb3VudGVycy5jIHwgIDggKysrKysrLS0KIGxpYmx0dG5nLXVz
-dC9sdHRuZy1yaW5nLWJ1ZmZlci1jbGllbnQuaCAgICB8ICAzICsrKwogbGlibHR0bmctdXN0L2x0
-dG5nLXRyYWNlci1jb3JlLmggICAgICAgICAgIHwgIDMgKysrCiBsaWJsdHRuZy11c3QvbHR0bmct
-dXN0LWNvbW0uYyAgICAgICAgICAgICAgfCAyMyArKysrKysrKysrKysrKysrKysrKysrKwogNSBm
-aWxlcyBjaGFuZ2VkLCAzOCBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdp
-dCBhL2luY2x1ZGUvbHR0bmcvdXN0LWV2ZW50cy5oIGIvaW5jbHVkZS9sdHRuZy91c3QtZXZlbnRz
-LmgKaW5kZXggODY3MzM1MDMuLmIzM2E4MDRiIDEwMDY0NAotLS0gYS9pbmNsdWRlL2x0dG5nL3Vz
-dC1ldmVudHMuaAorKysgYi9pbmNsdWRlL2x0dG5nL3VzdC1ldmVudHMuaApAQCAtNzM4LDYgKzcz
-OCw5IEBAIHN0cnVjdCBsdHRuZ19lbnVtICpsdHRuZ191c3RfZW51bV9nZXRfZnJvbV9kZXNjKHN0
-cnVjdCBsdHRuZ19zZXNzaW9uICpzZXNzaW9uLAogdm9pZCBsdHRuZ191c3RfZGxfdXBkYXRlKHZv
-aWQgKmlwKTsKIHZvaWQgbHR0bmdfdXN0X2ZpeHVwX2ZkX3RyYWNrZXJfdGxzKHZvaWQpOwogCit2
-b2lkIGx0dG5nX3VzdF9iZWdpbl9ub3RyYWNlKHZvaWQpOwordm9pZCBsdHRuZ191c3RfZW5kX25v
-dHJhY2Uodm9pZCk7CisKIC8qIEZvciBiYWNrd2FyZCBjb21wYXRpYmlsaXR5LiBMZWF2ZSB0aG9z
-ZSBleHBvcnRlZCBzeW1ib2xzIGluIHBsYWNlLiAqLwogZXh0ZXJuIHN0cnVjdCBsdHRuZ19jdHgg
-Kmx0dG5nX3N0YXRpY19jdHg7CiB2b2lkIGx0dG5nX2NvbnRleHRfaW5pdCh2b2lkKTsKZGlmZiAt
-LWdpdCBhL2xpYmx0dG5nLXVzdC9sdHRuZy1jb250ZXh0LXBlcmYtY291bnRlcnMuYyBiL2xpYmx0
-dG5nLXVzdC9sdHRuZy1jb250ZXh0LXBlcmYtY291bnRlcnMuYwppbmRleCBhMTU0MTdjYy4uMGNl
-ODkyNDUgMTAwNjQ0Ci0tLSBhL2xpYmx0dG5nLXVzdC9sdHRuZy1jb250ZXh0LXBlcmYtY291bnRl
-cnMuYworKysgYi9saWJsdHRuZy11c3QvbHR0bmctY29udGV4dC1wZXJmLWNvdW50ZXJzLmMKQEAg
-LTMyOCwxNiArMzI4LDIwIEBAIHN0cnVjdCBsdHRuZ19wZXJmX2NvdW50ZXJfdGhyZWFkX2ZpZWxk
-ICoKIAlzdHJ1Y3QgbHR0bmdfcGVyZl9jb3VudGVyX3RocmVhZCAqcGVyZl90aHJlYWQ7CiAJc3Ry
-dWN0IGx0dG5nX3BlcmZfY291bnRlcl90aHJlYWRfZmllbGQgKnRocmVhZF9maWVsZDsKIAorCWx0
-dG5nX3VzdF9iZWdpbl9ub3RyYWNlKCk7CiAJcGVyZl90aHJlYWQgPSBwdGhyZWFkX2dldHNwZWNp
-ZmljKHBlcmZfY291bnRlcl9rZXkpOwogCWlmICghcGVyZl90aHJlYWQpCiAJCXBlcmZfdGhyZWFk
-ID0gYWxsb2NfcGVyZl9jb3VudGVyX3RocmVhZCgpOwogCWNkc19saXN0X2Zvcl9lYWNoX2VudHJ5
-X3JjdSh0aHJlYWRfZmllbGQsICZwZXJmX3RocmVhZC0+cmN1X2ZpZWxkX2xpc3QsCiAJCQlyY3Vf
-ZmllbGRfbm9kZSkgewogCQlpZiAodGhyZWFkX2ZpZWxkLT5maWVsZCA9PSBmaWVsZCkKLQkJCXJl
-dHVybiB0aHJlYWRfZmllbGQ7CisJCQlnb3RvIGVuZDsKIAl9CiAJLyogcGVyZl9jb3VudGVyX3Ro
-cmVhZF9maWVsZCBub3QgZm91bmQsIG5lZWQgdG8gYWRkIG9uZSAqLwotCXJldHVybiBhZGRfdGhy
-ZWFkX2ZpZWxkKGZpZWxkLCBwZXJmX3RocmVhZCk7CisJdGhyZWFkX2ZpZWxkID0gYWRkX3RocmVh
-ZF9maWVsZChmaWVsZCwgcGVyZl90aHJlYWQpOworZW5kOgorCWx0dG5nX3VzdF9lbmRfbm90cmFj
-ZSgpOworCXJldHVybiB0aHJlYWRfZmllbGQ7CiB9CiAKIHN0YXRpYwpkaWZmIC0tZ2l0IGEvbGli
-bHR0bmctdXN0L2x0dG5nLXJpbmctYnVmZmVyLWNsaWVudC5oIGIvbGlibHR0bmctdXN0L2x0dG5n
-LXJpbmctYnVmZmVyLWNsaWVudC5oCmluZGV4IDBmYWU4ODc4Li4wOTYwZDRjYiAxMDA2NDQKLS0t
-IGEvbGlibHR0bmctdXN0L2x0dG5nLXJpbmctYnVmZmVyLWNsaWVudC5oCisrKyBiL2xpYmx0dG5n
-LXVzdC9sdHRuZy1yaW5nLWJ1ZmZlci1jbGllbnQuaApAQCAtNzI0LDYgKzcyNCw5IEBAIGludCBs
-dHRuZ19ldmVudF9yZXNlcnZlKHN0cnVjdCBsdHRuZ191c3RfbGliX3JpbmdfYnVmZmVyX2N0eCAq
-Y3R4LAogCXN0cnVjdCBsdHRuZ19jbGllbnRfY3R4IGNsaWVudF9jdHg7CiAJaW50IHJldCwgY3B1
-OwogCisJaWYgKGNhYV91bmxpa2VseShVUkNVX1RMUyhsdHRuZ191c3Rfbm90cmFjZV90aHJlYWQp
-KSA+IDApCisJCXJldHVybiAtRVBFUk07CisKIAkvKiBDb21wdXRlIGludGVybmFsIHNpemUgb2Yg
-Y29udGV4dCBzdHJ1Y3R1cmVzLiAqLwogCiAJaWYgKGx0dG5nX2N0eCkgewpkaWZmIC0tZ2l0IGEv
-bGlibHR0bmctdXN0L2x0dG5nLXRyYWNlci1jb3JlLmggYi9saWJsdHRuZy11c3QvbHR0bmctdHJh
-Y2VyLWNvcmUuaAppbmRleCBiYTIzMmYzMi4uOThkNzliZTggMTAwNjQ0Ci0tLSBhL2xpYmx0dG5n
-LXVzdC9sdHRuZy10cmFjZXItY29yZS5oCisrKyBiL2xpYmx0dG5nLXVzdC9sdHRuZy10cmFjZXIt
-Y29yZS5oCkBAIC0yNSw2ICsyNSw3IEBACiAjaW5jbHVkZSA8c3RkZGVmLmg+CiAjaW5jbHVkZSA8
-dXJjdS9hcmNoLmg+CiAjaW5jbHVkZSA8dXJjdS9saXN0Lmg+CisjaW5jbHVkZSA8dXJjdS90bHMt
-Y29tcGF0Lmg+CiAjaW5jbHVkZSA8bHR0bmcvdXN0LXRyYWNlci5oPgogI2luY2x1ZGUgPGx0dG5n
-L2J1Zy5oPgogI2luY2x1ZGUgPGx0dG5nL3JpbmdidWZmZXItY29uZmlnLmg+CkBAIC0zNyw2ICsz
-OCw4IEBAIHN0cnVjdCBsdHRuZ19jdHhfZmllbGQ7CiBzdHJ1Y3QgbHR0bmdfdXN0X2xpYl9yaW5n
-X2J1ZmZlcl9jdHg7CiBzdHJ1Y3QgbHR0bmdfY3R4X3ZhbHVlOwogCitleHRlcm4gREVDTEFSRV9V
-UkNVX1RMUyhpbnQsIGx0dG5nX3VzdF9ub3RyYWNlX3RocmVhZCk7CisKIGludCB1c3RfbG9jayh2
-b2lkKSBfX2F0dHJpYnV0ZV9fICgod2Fybl91bnVzZWRfcmVzdWx0KSk7CiB2b2lkIHVzdF9sb2Nr
-X25vY2hlY2sodm9pZCk7CiB2b2lkIHVzdF91bmxvY2sodm9pZCk7CmRpZmYgLS1naXQgYS9saWJs
-dHRuZy11c3QvbHR0bmctdXN0LWNvbW0uYyBiL2xpYmx0dG5nLXVzdC9sdHRuZy11c3QtY29tbS5j
-CmluZGV4IGQ0YWRkMWMwLi45NTIwZjI0NiAxMDA2NDQKLS0tIGEvbGlibHR0bmctdXN0L2x0dG5n
-LXVzdC1jb21tLmMKKysrIGIvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMKQEAgLTkyLDYg
-KzkyLDkgQEAgc3RhdGljIHB0aHJlYWRfbXV0ZXhfdCB1c3RfbXV0ZXggPSBQVEhSRUFEX01VVEVY
-X0lOSVRJQUxJWkVSOwogLyogQWxsb3cgbmVzdGluZyB0aGUgdXN0X211dGV4IHdpdGhpbiB0aGUg
-c2FtZSB0aHJlYWQuICovCiBzdGF0aWMgREVGSU5FX1VSQ1VfVExTKGludCwgdXN0X211dGV4X25l
-c3QpOwogCisvKiBEbyBub3QgdHJhY2UgZXZlbnRzIGZvciB0aGUgY3VycmVudCB0aHJlYWQuICov
-CitERUZJTkVfVVJDVV9UTFMoaW50LCBsdHRuZ191c3Rfbm90cmFjZV90aHJlYWQpIF9fYXR0cmli
-dXRlX18oKHZpc2liaWxpdHkoImhpZGRlbiIpKSk7CisKIC8qCiAgKiB1c3RfZXhpdF9tdXRleCBw
-cm90ZWN0cyB0aHJlYWRfYWN0aXZlIHZhcmlhYmxlIHdydCB0aHJlYWQgZXhpdC4gSXQKICAqIGNh
-bm5vdCBiZSBkb25lIGJ5IHVzdF9tdXRleCBiZWNhdXNlIHB0aHJlYWRfY2FuY2VsKCksIHdoaWNo
-IHRha2VzIGFuCkBAIC0xMjEsNiArMTI0LDE5IEBAIHN0YXRpYyBpbnQgbHR0bmdfdXN0X2NvbW1f
-c2hvdWxkX3F1aXQ7CiBpbnQgbHR0bmdfdXN0X2xvYWRlZCBfX2F0dHJpYnV0ZV9fKCh3ZWFrKSk7
-CiAKIC8qCisgKiBJbmhpYml0IGx0dG5nLXVzdCB0cmFjaW5nIGZvciB0aGlzIHRocmVhZC4KKyAq
-Lwordm9pZCBsdHRuZ191c3RfYmVnaW5fbm90cmFjZSh2b2lkKQoreworCVVSQ1VfVExTKGx0dG5n
-X3VzdF9ub3RyYWNlX3RocmVhZCkrKzsKK30KKwordm9pZCBsdHRuZ191c3RfZW5kX25vdHJhY2Uo
-dm9pZCkKK3sKKwktLVVSQ1VfVExTKGx0dG5nX3VzdF9ub3RyYWNlX3RocmVhZCk7Cit9CisKKy8q
-CiAgKiBSZXR1cm4gMCBvbiBzdWNjZXNzLCAtMSBpZiBzaG91bGQgcXVpdC4KICAqIFRoZSBsb2Nr
-IGlzIHRha2VuIGluIGJvdGggY2FzZXMuCiAgKiBTaWduYWwtc2FmZS4KQEAgLTM5Miw2ICs0MDgs
-MTIgQEAgdm9pZCBsdHRuZ19maXh1cF91c3RfbXV0ZXhfbmVzdF90bHModm9pZCkKIAlhc20gdm9s
-YXRpbGUgKCIiIDogOiAibSIgKFVSQ1VfVExTKHVzdF9tdXRleF9uZXN0KSkpOwogfQogCitzdGF0
-aWMKK3ZvaWQgbHR0bmdfZml4dXBfbHR0bmdfdXN0X25vdHJhY2VfdGxzKHZvaWQpCit7CisJYXNt
-IHZvbGF0aWxlICgiIiA6IDogIm0iIChVUkNVX1RMUyhsdHRuZ191c3Rfbm90cmFjZV90aHJlYWQp
-KSk7Cit9CisKIC8qCiAgKiBGaXh1cCB1cmN1IGJwIFRMUy4KICAqLwpAQCAtNDEwLDYgKzQzMiw3
-IEBAIHZvaWQgbHR0bmdfdXN0X2ZpeHVwX3Rscyh2b2lkKQogCWx0dG5nX2ZpeHVwX25lc3RfY291
-bnRfdGxzKCk7CiAJbHR0bmdfZml4dXBfcHJvY25hbWVfdGxzKCk7CiAJbHR0bmdfZml4dXBfdXN0
-X211dGV4X25lc3RfdGxzKCk7CisJbHR0bmdfZml4dXBfbHR0bmdfdXN0X25vdHJhY2VfdGxzKCk7
-CiAJbHR0bmdfdXN0X2ZpeHVwX2ZkX3RyYWNrZXJfdGxzKCk7CiB9CiAKLS0gCjIuMTEuMAoK
-------=_Part_1794_978241766.1521582159874
+Y3Q6IFtSRkMgUEFUQ0ggdjJdIEZpeDogcGVyZiBldmVudCBtdXRleCB3aXRoIHB0aHJlYWQgd3Jh
+cHBlcgoKV2UgZG8gbm90IHdhbnQgdG8gcmVjdXJzZSBpbiB0aGUgcHRocmVhZCBtdXRleCBpbnN0
+cnVtZW50YXRpb24gd2hlbgpzZXR0aW5nIHVwIHRoZSBwZXJmIGNvdW50ZXJzIGZvciBhIGdpdmVu
+IHRocmVhZC4KCkludHJvZHVjZSBhICJub3RyYWNlIiBwZXItdGhyZWFkIGNvdW50ZXIgdG8gaW5o
+aWJpdCB0cmFjaW5nIGZvciB0aGUKY3VycmVudCB0aHJlYWQuCgpTaWduZWQtb2ZmLWJ5OiBNYXRo
+aWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPgotLS0KIGluY2x1
+ZGUvbHR0bmcvdXN0LWV2ZW50cy5oICAgICAgICAgICAgICAgICB8ICA2ICsrKysrKwogaW5jbHVk
+ZS9sdHRuZy91c3QtdHJhY2Vwb2ludC1ldmVudC5oICAgICAgIHwgIDcgKystLS0tLQogbGlibHR0
+bmctdXN0L2x0dG5nLWNvbnRleHQtcGVyZi1jb3VudGVycy5jIHwgIDIgKysKIGxpYmx0dG5nLXVz
+dC9sdHRuZy1ldmVudHMuYyAgICAgICAgICAgICAgICB8IDE0ICsrKysrKysrKysrKysrCiBsaWJs
+dHRuZy11c3QvbHR0bmctdHJhY2VyLWNvcmUuaCAgICAgICAgICAgfCAgMyArKysKIGxpYmx0dG5n
+LXVzdC9sdHRuZy11c3QtY29tbS5jICAgICAgICAgICAgICB8IDIzICsrKysrKysrKysrKysrKysr
+KysrKysrCiA2IGZpbGVzIGNoYW5nZWQsIDUwIGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0p
+CgpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9sdHRuZy91c3QtZXZlbnRzLmggYi9pbmNsdWRlL2x0dG5n
+L3VzdC1ldmVudHMuaAppbmRleCA4NjczMzUwMy4uZjhjMTMwZjkgMTAwNjQ0Ci0tLSBhL2luY2x1
+ZGUvbHR0bmcvdXN0LWV2ZW50cy5oCisrKyBiL2luY2x1ZGUvbHR0bmcvdXN0LWV2ZW50cy5oCkBA
+IC03MzgsNiArNzM4LDEyIEBAIHN0cnVjdCBsdHRuZ19lbnVtICpsdHRuZ191c3RfZW51bV9nZXRf
+ZnJvbV9kZXNjKHN0cnVjdCBsdHRuZ19zZXNzaW9uICpzZXNzaW9uLAogdm9pZCBsdHRuZ191c3Rf
+ZGxfdXBkYXRlKHZvaWQgKmlwKTsKIHZvaWQgbHR0bmdfdXN0X2ZpeHVwX2ZkX3RyYWNrZXJfdGxz
+KHZvaWQpOwogCit2b2lkIGx0dG5nX3VzdF9iZWdpbl9ub3RyYWNlKHZvaWQpOwordm9pZCBsdHRu
+Z191c3RfZW5kX25vdHJhY2Uodm9pZCk7CisKK2ludCBsdHRuZ191c3RfZG9fdHJhY2Uoc3RydWN0
+IGx0dG5nX3Nlc3Npb24gKnNlc3Npb24sCisJCXN0cnVjdCBsdHRuZ19jaGFubmVsICpjaGFuLCBz
+dHJ1Y3QgbHR0bmdfZXZlbnQgKmV2ZW50KTsKKwogLyogRm9yIGJhY2t3YXJkIGNvbXBhdGliaWxp
+dHkuIExlYXZlIHRob3NlIGV4cG9ydGVkIHN5bWJvbHMgaW4gcGxhY2UuICovCiBleHRlcm4gc3Ry
+dWN0IGx0dG5nX2N0eCAqbHR0bmdfc3RhdGljX2N0eDsKIHZvaWQgbHR0bmdfY29udGV4dF9pbml0
+KHZvaWQpOwpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9sdHRuZy91c3QtdHJhY2Vwb2ludC1ldmVudC5o
+IGIvaW5jbHVkZS9sdHRuZy91c3QtdHJhY2Vwb2ludC1ldmVudC5oCmluZGV4IGVjMjkyZDI0Li4w
+YmMwMDJmNyAxMDA2NDQKLS0tIGEvaW5jbHVkZS9sdHRuZy91c3QtdHJhY2Vwb2ludC1ldmVudC5o
+CisrKyBiL2luY2x1ZGUvbHR0bmcvdXN0LXRyYWNlcG9pbnQtZXZlbnQuaApAQCAtNzY2LDExICs3
+NjYsOCBAQCB2b2lkIF9fZXZlbnRfcHJvYmVfXyMjX3Byb3ZpZGVyIyNfX18jI19uYW1lKF9UUF9B
+UkdTX0RBVEFfUFJPVE8oX2FyZ3MpKQkgICAgICBcCiAJCSh2b2lkKSBfX2R5bmFtaWNfbGVuX2lk
+eDsJLyogZG9uJ3Qgd2FybiBpZiB1bnVzZWQgKi8gICAgXAogCWlmICghX1RQX1NFU1NJT05fQ0hF
+Q0soc2Vzc2lvbiwgX19jaGFuLT5zZXNzaW9uKSkJCSAgICAgIFwKIAkJcmV0dXJuOwkJCQkJCQkg
+ICAgICBcCi0JaWYgKGNhYV91bmxpa2VseSghQ01NX0FDQ0VTU19PTkNFKF9fY2hhbi0+c2Vzc2lv
+bi0+YWN0aXZlKSkpCSAgICAgIFwKLQkJcmV0dXJuOwkJCQkJCQkgICAgICBcCi0JaWYgKGNhYV91
+bmxpa2VseSghQ01NX0FDQ0VTU19PTkNFKF9fY2hhbi0+ZW5hYmxlZCkpKQkJICAgICAgXAotCQly
+ZXR1cm47CQkJCQkJCSAgICAgIFwKLQlpZiAoY2FhX3VubGlrZWx5KCFDTU1fQUNDRVNTX09OQ0Uo
+X19ldmVudC0+ZW5hYmxlZCkpKQkJICAgICAgXAorCWlmIChjYWFfdW5saWtlbHkoIWx0dG5nX3Vz
+dF9kb190cmFjZShfX2NoYW4tPnNlc3Npb24sIF9fY2hhbiwJICAgICAgXAorCQkJCQkgICAgIF9f
+ZXZlbnQpKSkJCQkgICAgICBcCiAJCXJldHVybjsJCQkJCQkJICAgICAgXAogCWlmIChjYWFfdW5s
+aWtlbHkoIVRQX1JDVV9MSU5LX1RFU1QoKSkpCQkJCSAgICAgIFwKIAkJcmV0dXJuOwkJCQkJCQkg
+ICAgICBcCmRpZmYgLS1naXQgYS9saWJsdHRuZy11c3QvbHR0bmctY29udGV4dC1wZXJmLWNvdW50
+ZXJzLmMgYi9saWJsdHRuZy11c3QvbHR0bmctY29udGV4dC1wZXJmLWNvdW50ZXJzLmMKaW5kZXgg
+YTE1NDE3Y2MuLjEzMWFhYTU0IDEwMDY0NAotLS0gYS9saWJsdHRuZy11c3QvbHR0bmctY29udGV4
+dC1wZXJmLWNvdW50ZXJzLmMKKysrIGIvbGlibHR0bmctdXN0L2x0dG5nLWNvbnRleHQtcGVyZi1j
+b3VudGVycy5jCkBAIC0yOTEsNiArMjkxLDcgQEAgc3RydWN0IGx0dG5nX3BlcmZfY291bnRlcl90
+aHJlYWRfZmllbGQgKgogCXJldCA9IHB0aHJlYWRfc2lnbWFzayhTSUdfQkxPQ0ssICZuZXdtYXNr
+LCAmb2xkbWFzayk7CiAJaWYgKHJldCkKIAkJYWJvcnQoKTsKKwlsdHRuZ191c3RfYmVnaW5fbm90
+cmFjZSgpOwogCS8qIENoZWNrIGFnYWluIHdpdGggc2lnbmFscyBkaXNhYmxlZCAqLwogCWNkc19s
+aXN0X2Zvcl9lYWNoX2VudHJ5X3JjdSh0aHJlYWRfZmllbGQsICZwZXJmX3RocmVhZC0+cmN1X2Zp
+ZWxkX2xpc3QsCiAJCQlyY3VfZmllbGRfbm9kZSkgewpAQCAtMzE1LDYgKzMxNiw3IEBAIHN0cnVj
+dCBsdHRuZ19wZXJmX2NvdW50ZXJfdGhyZWFkX2ZpZWxkICoKIAkJCSZwZXJmX2ZpZWxkLT50aHJl
+YWRfZmllbGRfbGlzdCk7CiAJdXN0X3VubG9jaygpOwogc2tpcDoKKwlsdHRuZ191c3RfZW5kX25v
+dHJhY2UoKTsKIAlyZXQgPSBwdGhyZWFkX3NpZ21hc2soU0lHX1NFVE1BU0ssICZvbGRtYXNrLCBO
+VUxMKTsKIAlpZiAocmV0KQogCQlhYm9ydCgpOwpkaWZmIC0tZ2l0IGEvbGlibHR0bmctdXN0L2x0
+dG5nLWV2ZW50cy5jIGIvbGlibHR0bmctdXN0L2x0dG5nLWV2ZW50cy5jCmluZGV4IDI1NWM0Yjk1
+Li5kOGU0ZmQ3OSAxMDA2NDQKLS0tIGEvbGlibHR0bmctdXN0L2x0dG5nLWV2ZW50cy5jCisrKyBi
+L2xpYmx0dG5nLXVzdC9sdHRuZy1ldmVudHMuYwpAQCAtMTI4NCwzICsxMjg0LDE3IEBAIHZvaWQg
+bHR0bmdfdXN0X2NvbnRleHRfc2V0X3Nlc3Npb25fcHJvdmlkZXIoY29uc3QgY2hhciAqbmFtZSwK
+IAkJfQogCX0KIH0KKworaW50IGx0dG5nX3VzdF9kb190cmFjZShzdHJ1Y3QgbHR0bmdfc2Vzc2lv
+biAqc2Vzc2lvbiwKKwkJc3RydWN0IGx0dG5nX2NoYW5uZWwgKmNoYW4sIHN0cnVjdCBsdHRuZ19l
+dmVudCAqZXZlbnQpCit7CisJaWYgKGNhYV91bmxpa2VseSghQ01NX0FDQ0VTU19PTkNFKHNlc3Np
+b24tPmFjdGl2ZSkpKQorCQlyZXR1cm4gMDsKKwlpZiAoY2FhX3VubGlrZWx5KCFDTU1fQUNDRVNT
+X09OQ0UoY2hhbi0+ZW5hYmxlZCkpKQorCQlyZXR1cm4gMDsKKwlpZiAoY2FhX3VubGlrZWx5KCFD
+TU1fQUNDRVNTX09OQ0UoZXZlbnQtPmVuYWJsZWQpKSkKKwkJcmV0dXJuIDA7CisJaWYgKGNhYV91
+bmxpa2VseShVUkNVX1RMUyhsdHRuZ191c3Rfbm90cmFjZV90aHJlYWQpKSA+IDApCisJCXJldHVy
+biAwOworCXJldHVybiAxOworfQpkaWZmIC0tZ2l0IGEvbGlibHR0bmctdXN0L2x0dG5nLXRyYWNl
+ci1jb3JlLmggYi9saWJsdHRuZy11c3QvbHR0bmctdHJhY2VyLWNvcmUuaAppbmRleCBiYTIzMmYz
+Mi4uOThkNzliZTggMTAwNjQ0Ci0tLSBhL2xpYmx0dG5nLXVzdC9sdHRuZy10cmFjZXItY29yZS5o
+CisrKyBiL2xpYmx0dG5nLXVzdC9sdHRuZy10cmFjZXItY29yZS5oCkBAIC0yNSw2ICsyNSw3IEBA
+CiAjaW5jbHVkZSA8c3RkZGVmLmg+CiAjaW5jbHVkZSA8dXJjdS9hcmNoLmg+CiAjaW5jbHVkZSA8
+dXJjdS9saXN0Lmg+CisjaW5jbHVkZSA8dXJjdS90bHMtY29tcGF0Lmg+CiAjaW5jbHVkZSA8bHR0
+bmcvdXN0LXRyYWNlci5oPgogI2luY2x1ZGUgPGx0dG5nL2J1Zy5oPgogI2luY2x1ZGUgPGx0dG5n
+L3JpbmdidWZmZXItY29uZmlnLmg+CkBAIC0zNyw2ICszOCw4IEBAIHN0cnVjdCBsdHRuZ19jdHhf
+ZmllbGQ7CiBzdHJ1Y3QgbHR0bmdfdXN0X2xpYl9yaW5nX2J1ZmZlcl9jdHg7CiBzdHJ1Y3QgbHR0
+bmdfY3R4X3ZhbHVlOwogCitleHRlcm4gREVDTEFSRV9VUkNVX1RMUyhpbnQsIGx0dG5nX3VzdF9u
+b3RyYWNlX3RocmVhZCk7CisKIGludCB1c3RfbG9jayh2b2lkKSBfX2F0dHJpYnV0ZV9fICgod2Fy
+bl91bnVzZWRfcmVzdWx0KSk7CiB2b2lkIHVzdF9sb2NrX25vY2hlY2sodm9pZCk7CiB2b2lkIHVz
+dF91bmxvY2sodm9pZCk7CmRpZmYgLS1naXQgYS9saWJsdHRuZy11c3QvbHR0bmctdXN0LWNvbW0u
+YyBiL2xpYmx0dG5nLXVzdC9sdHRuZy11c3QtY29tbS5jCmluZGV4IGQ0YWRkMWMwLi45NTIwZjI0
+NiAxMDA2NDQKLS0tIGEvbGlibHR0bmctdXN0L2x0dG5nLXVzdC1jb21tLmMKKysrIGIvbGlibHR0
+bmctdXN0L2x0dG5nLXVzdC1jb21tLmMKQEAgLTkyLDYgKzkyLDkgQEAgc3RhdGljIHB0aHJlYWRf
+bXV0ZXhfdCB1c3RfbXV0ZXggPSBQVEhSRUFEX01VVEVYX0lOSVRJQUxJWkVSOwogLyogQWxsb3cg
+bmVzdGluZyB0aGUgdXN0X211dGV4IHdpdGhpbiB0aGUgc2FtZSB0aHJlYWQuICovCiBzdGF0aWMg
+REVGSU5FX1VSQ1VfVExTKGludCwgdXN0X211dGV4X25lc3QpOwogCisvKiBEbyBub3QgdHJhY2Ug
+ZXZlbnRzIGZvciB0aGUgY3VycmVudCB0aHJlYWQuICovCitERUZJTkVfVVJDVV9UTFMoaW50LCBs
+dHRuZ191c3Rfbm90cmFjZV90aHJlYWQpIF9fYXR0cmlidXRlX18oKHZpc2liaWxpdHkoImhpZGRl
+biIpKSk7CisKIC8qCiAgKiB1c3RfZXhpdF9tdXRleCBwcm90ZWN0cyB0aHJlYWRfYWN0aXZlIHZh
+cmlhYmxlIHdydCB0aHJlYWQgZXhpdC4gSXQKICAqIGNhbm5vdCBiZSBkb25lIGJ5IHVzdF9tdXRl
+eCBiZWNhdXNlIHB0aHJlYWRfY2FuY2VsKCksIHdoaWNoIHRha2VzIGFuCkBAIC0xMjEsNiArMTI0
+LDE5IEBAIHN0YXRpYyBpbnQgbHR0bmdfdXN0X2NvbW1fc2hvdWxkX3F1aXQ7CiBpbnQgbHR0bmdf
+dXN0X2xvYWRlZCBfX2F0dHJpYnV0ZV9fKCh3ZWFrKSk7CiAKIC8qCisgKiBJbmhpYml0IGx0dG5n
+LXVzdCB0cmFjaW5nIGZvciB0aGlzIHRocmVhZC4KKyAqLwordm9pZCBsdHRuZ191c3RfYmVnaW5f
+bm90cmFjZSh2b2lkKQoreworCVVSQ1VfVExTKGx0dG5nX3VzdF9ub3RyYWNlX3RocmVhZCkrKzsK
+K30KKwordm9pZCBsdHRuZ191c3RfZW5kX25vdHJhY2Uodm9pZCkKK3sKKwktLVVSQ1VfVExTKGx0
+dG5nX3VzdF9ub3RyYWNlX3RocmVhZCk7Cit9CisKKy8qCiAgKiBSZXR1cm4gMCBvbiBzdWNjZXNz
+LCAtMSBpZiBzaG91bGQgcXVpdC4KICAqIFRoZSBsb2NrIGlzIHRha2VuIGluIGJvdGggY2FzZXMu
+CiAgKiBTaWduYWwtc2FmZS4KQEAgLTM5Miw2ICs0MDgsMTIgQEAgdm9pZCBsdHRuZ19maXh1cF91
+c3RfbXV0ZXhfbmVzdF90bHModm9pZCkKIAlhc20gdm9sYXRpbGUgKCIiIDogOiAibSIgKFVSQ1Vf
+VExTKHVzdF9tdXRleF9uZXN0KSkpOwogfQogCitzdGF0aWMKK3ZvaWQgbHR0bmdfZml4dXBfbHR0
+bmdfdXN0X25vdHJhY2VfdGxzKHZvaWQpCit7CisJYXNtIHZvbGF0aWxlICgiIiA6IDogIm0iIChV
+UkNVX1RMUyhsdHRuZ191c3Rfbm90cmFjZV90aHJlYWQpKSk7Cit9CisKIC8qCiAgKiBGaXh1cCB1
+cmN1IGJwIFRMUy4KICAqLwpAQCAtNDEwLDYgKzQzMiw3IEBAIHZvaWQgbHR0bmdfdXN0X2ZpeHVw
+X3Rscyh2b2lkKQogCWx0dG5nX2ZpeHVwX25lc3RfY291bnRfdGxzKCk7CiAJbHR0bmdfZml4dXBf
+cHJvY25hbWVfdGxzKCk7CiAJbHR0bmdfZml4dXBfdXN0X211dGV4X25lc3RfdGxzKCk7CisJbHR0
+bmdfZml4dXBfbHR0bmdfdXN0X25vdHJhY2VfdGxzKCk7CiAJbHR0bmdfdXN0X2ZpeHVwX2ZkX3Ry
+YWNrZXJfdGxzKCk7CiB9CiAKLS0gCjIuMTEuMAoK
+------=_Part_556_408660655.1521653237585
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -1017,4 +1066,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
-------=_Part_1794_978241766.1521582159874--
+------=_Part_556_408660655.1521653237585--
