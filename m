@@ -1,19 +1,19 @@
-From: Alok Priyadarshi <alokpr@gmail.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Subject: Re: lttng_ust_cyg_profile
-Date: Fri, 23 Mar 2018 01:13:28 +0000
-Message-ID: <CADwgpi_5wd=FcP9FczgrWVqy=SqVW_3c6PWXcd+6ZHaQkZ1qyQ__48342.8897023716$1521767516$gmane$org@mail.gmail.com>
+Date: Fri, 23 Mar 2018 09:36:43 -0400
+Message-ID: <20180323133643.GA19465__48080.2170619883$1521812095$gmane$org@joraj-alpa>
 References: <CADwgpi8T=f_JmLDJf9tDAOFztih+mdJ=QFv27+XQkN0w+Mfw-A@mail.gmail.com>
  <20180322192513.GB9345@joraj-alpa>
+ <CADwgpi_5wd=FcP9FczgrWVqy=SqVW_3c6PWXcd+6ZHaQkZ1qyQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6087318164404259466=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ua0-x242.google.com (mail-ua0-x242.google.com
- [IPv6:2607:f8b0:400c:c08::242])
- by lists.lttng.org (Postfix) with ESMTPS id 406lsv5qQtzyBZ
- for <lttng-dev@lists.lttng.org>; Thu, 22 Mar 2018 21:13:39 -0400 (EDT)
-Received: by mail-ua0-x242.google.com with SMTP id w3so6825904uae.5
- for <lttng-dev@lists.lttng.org>; Thu, 22 Mar 2018 18:13:39 -0700 (PDT)
-In-Reply-To: <20180322192513.GB9345@joraj-alpa>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 4074MN2kRszx5F
+ for <lttng-dev@lists.lttng.org>; Fri, 23 Mar 2018 09:36:47 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <CADwgpi_5wd=FcP9FczgrWVqy=SqVW_3c6PWXcd+6ZHaQkZ1qyQ@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,247 +23,79 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+To: Alok Priyadarshi <alokpr@gmail.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============6087318164404259466==
-Content-Type: multipart/alternative; boundary="f40304373aec56d21e05680a22db"
-
---f40304373aec56d21e05680a22db
-Content-Type: text/plain; charset="UTF-8"
-
-Response inline.
-
-On Thu, Mar 22, 2018 at 12:25 PM Jonathan Rajotte-Julien <
-jonathan.rajotte-julien@efficios.com> wrote:
-
-> Hi Alok,
->
-> On Thu, Mar 22, 2018 at 06:31:41PM +0000, Alok Priyadarshi wrote:
-> > I am trying to collect a trace for visualizing callstack using
-> > lttng_ust_cyg_profile.
-> >
-> > Even though I have compiled a single source file with
-> > -finstrument-functions, I guess it is producing too many events to
-> > considerably slow down the instrumented process and cause lost events.
->
-> Did you have a look at [1]. A "fast" shared object is available.
->
-> [1] https://lttng.org/man/3/lttng-ust-cyg-profile/v2.10/
-
-
-Yes - I tried both - fast and regular. I did not notice any difference.
-
-
->
-> >
-> > I am using clang, which does not support
-> > -finstrument-functions-exclude-file-list.
->
-> Might want to give gcc a chance then.
->
-
-The version of gcc I am using has a bug which produces linker errors for
-intrinsics when compiled with -finstrument-functions.
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=78333
-I will either need to find a gcc version where this bug is fixed or figure
-out a workaround. Using clang seemed easier, but then it does not support
--finstrument-functions-exclude-file-list :|
-
-
-> > Is there any way to
-> > filter lttng_ust_cyg_profile events before they are written to the
-> trace? I
-> > have tried various things:
-> > 1. lttng-track to only track one process
-> >
-> > 2. Only enable lttng_ust_cyg_profile:* events
-> >
-> > 3. Increase the subbuffer size:
-> > lttng enable-channel --userspace --buffers-pid --subbuf-size=2M
-> > --num-subbuf=2 mychannel
->
-> Is there any reason you are using --buffer-pid instead of the default
-> per-uid buffering?
->
-
-No particular reason. I read somewhere in the mailing list that
---buffer-pid might be less susceptible to lose events. I can switch back to
-using the default per-uid buffering if that is better for my usecase.
-
-
-> > Using this option is very flaky however. It crashes lttng-sessiond.
-> >
->
-> We will need the log (lttng-sessiond -vvv) (pastebin) and the version of
-> lttng for this.
->
-
-OK. I will get you that when I back at work.
-
-
-> Does your workflow looks somewhat similar to this?
->
-> 1) Instrumented app is started with relevant LD_PRELOAD
-> 2) lttng create my_session
-> 3) lttng enable-channel -u --subbuf-size=2M --num-subbuf=8 my_channel
-> 4) lttng enable-event -u -c my_channel 'lttng_ust_cyg_profile:*'
-> 5) lttng track -u -p <PID>
-> 6) lttng start
-> ... some time pass
-> 7) lttng stop
-> 8) lttng destroy
->
-> If a discarded events warning is reported the solution is to increase
-> either the
-> size or the number of subbuffers per cpu. Note that the upper limit for
-> the total
-> subbuffers size is dictated by the available free memory of the system.
->
-
-Yup - exactly. Except I am using --num-subbuf=2. I have also tried
---subbuf-size as 4M and 8M, without much success.
-
-
-> > Any other ideas to filter events?
-> >
-> > I am also open to explicitly adding tracepoints to the functions I care
-> > about. But I am not sure how they can be visualized in trace-compass
-> > callstack view.
->
-> Neither am I, this might be a better question for the tracecompass mailing
-> list.
->
-
-OK. I will ping the tracecompass mailing list. Is there any tool that can
-just show events on each thread timeline? I have a multi-threaded
-application, and I want to just visualize when functions enter/exit on
-various thread with respect to each other.
-
-Using lttng_ust_cyg_profile seemed straightforward, but apparently not.
-Thanks for your help Jonathan.
-
---f40304373aec56d21e05680a22db
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Response inline.<br><br><div class=3D"gmail_quote"><div di=
-r=3D"ltr">On Thu, Mar 22, 2018 at 12:25 PM Jonathan Rajotte-Julien &lt;<a h=
-ref=3D"mailto:jonathan.rajotte-julien@efficios.com">jonathan.rajotte-julien=
-@efficios.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" sty=
-le=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Hi Alo=
-k,<br>
-<br>
-On Thu, Mar 22, 2018 at 06:31:41PM +0000, Alok Priyadarshi wrote:<br>
-&gt; I am trying to collect a trace for visualizing callstack using<br>
-&gt; lttng_ust_cyg_profile.<br>
-&gt;<br>
-&gt; Even though I have compiled a single source file with<br>
-&gt; -finstrument-functions, I guess it is producing too many events to<br>
-&gt; considerably slow down the instrumented process and cause lost events.=
-<br>
-<br>
-Did you have a look at [1]. A &quot;fast&quot; shared object is available.<=
-br>
-<br>
-[1] <a href=3D"https://lttng.org/man/3/lttng-ust-cyg-profile/v2.10/" rel=3D=
-"noreferrer" target=3D"_blank">https://lttng.org/man/3/lttng-ust-cyg-profil=
-e/v2.10/</a></blockquote><div><br></div><div>Yes - I tried both - fast and =
-regular. I did not notice any difference.</div><div>=C2=A0</div><blockquote=
- class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc soli=
-d;padding-left:1ex">
-<br>
-&gt;<br>
-&gt; I am using clang, which does not support<br>
-&gt; -finstrument-functions-exclude-file-list.<br>
-<br>
-Might want to give gcc a chance then.<br></blockquote><div><br></div><div>T=
-he version of gcc I am using has a bug which produces linker errors for int=
-rinsics when compiled with -finstrument-functions.=C2=A0<a href=3D"https://=
-gcc.gnu.org/bugzilla/show_bug.cgi?id=3D78333">https://gcc.gnu.org/bugzilla/=
-show_bug.cgi?id=3D78333</a></div><div>I will either need to find a gcc vers=
-ion where this bug is fixed or figure out a workaround. Using clang seemed =
-easier, but then it does not support -finstrument-functions-exclude-file-li=
-st :|</div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"marg=
-in:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
-&gt; Is there any way to<br>
-&gt; filter lttng_ust_cyg_profile events before they are written to the tra=
-ce? I<br>
-&gt; have tried various things:<br>
-&gt; 1. lttng-track to only track one process<br>
-&gt;<br>
-&gt; 2. Only enable lttng_ust_cyg_profile:* events<br>
-&gt;<br>
-&gt; 3. Increase the subbuffer size:<br>
-&gt; lttng enable-channel --userspace --buffers-pid --subbuf-size=3D2M<br>
-&gt; --num-subbuf=3D2 mychannel<br>
-<br>
-Is there any reason you are using --buffer-pid instead of the default per-u=
-id buffering?<br></blockquote><div><br></div><div>No particular reason. I r=
-ead somewhere in the mailing list that --buffer-pid might be less susceptib=
-le to lose events. I can switch back to using the default per-uid buffering=
- if that is better for my usecase.</div><div>=C2=A0</div><blockquote class=
-=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
-ing-left:1ex">
-&gt; Using this option is very flaky however. It crashes lttng-sessiond.<br=
->
-&gt;<br>
-<br>
-We will need the log (lttng-sessiond -vvv) (pastebin) and the version of lt=
-tng for this.<br></blockquote><div><br></div><div>OK. I will get you that w=
-hen I back at work.=C2=A0</div><div>=C2=A0</div><blockquote class=3D"gmail_=
-quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1=
-ex">
-Does your workflow looks somewhat similar to this?<br>
-<br>
-1) Instrumented app is started with relevant LD_PRELOAD<br>
-2) lttng create my_session<br>
-3) lttng enable-channel -u --subbuf-size=3D2M --num-subbuf=3D8 my_channel<b=
-r>
-4) lttng enable-event -u -c my_channel &#39;lttng_ust_cyg_profile:*&#39;<br=
->
-5) lttng track -u -p &lt;PID&gt;<br>
-6) lttng start<br>
-... some time pass<br>
-7) lttng stop<br>
-8) lttng destroy<br>
-<br>
-If a discarded events warning is reported the solution is to increase eithe=
-r the<br>
-size or the number of subbuffers per cpu. Note that the upper limit for the=
- total<br>
-subbuffers size is dictated by the available free memory of the system.<br>=
-</blockquote><div><br></div><div>Yup - exactly. Except I am using --num-sub=
-buf=3D2. I have also tried --subbuf-size as 4M and 8M, without much success=
-.</div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0=
- 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
-&gt; Any other ideas to filter events?<br>
-&gt;<br>
-&gt; I am also open to explicitly adding tracepoints to the functions I car=
-e<br>
-&gt; about. But I am not sure how they can be visualized in trace-compass<b=
-r>
-&gt; callstack view.<br>
-<br>
-Neither am I, this might be a better question for the tracecompass mailing =
-list.<br></blockquote><div><br></div><div>OK. I will ping the tracecompass =
-mailing list. Is there any tool that can just show events on each thread ti=
-meline? I have a multi-threaded application, and I want to just visualize w=
-hen functions enter/exit on various thread with respect to each other.=C2=
-=A0</div><div><br></div><div>Using lttng_ust_cyg_profile seemed straightfor=
-ward, but apparently not. Thanks for your help Jonathan.</div></div></div>
-
---f40304373aec56d21e05680a22db--
-
---===============6087318164404259466==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============6087318164404259466==--
+U2VlIGlubGluZS4KCj4gVGhlIHZlcnNpb24gb2YgZ2NjIEkgYW0gdXNpbmcgaGFzIGEgYnVnIHdo
+aWNoIHByb2R1Y2VzIGxpbmtlciBlcnJvcnMgZm9yCj4gaW50cmluc2ljcyB3aGVuIGNvbXBpbGVk
+IHdpdGggLWZpbnN0cnVtZW50LWZ1bmN0aW9ucy4KPiBodHRwczovL2djYy5nbnUub3JnL2J1Z3pp
+bGxhL3Nob3dfYnVnLmNnaT9pZD03ODMzMwo+IEkgd2lsbCBlaXRoZXIgbmVlZCB0byBmaW5kIGEg
+Z2NjIHZlcnNpb24gd2hlcmUgdGhpcyBidWcgaXMgZml4ZWQgb3IgZmlndXJlCj4gb3V0IGEgd29y
+a2Fyb3VuZC4gVXNpbmcgY2xhbmcgc2VlbWVkIGVhc2llciwgYnV0IHRoZW4gaXQgZG9lcyBub3Qg
+c3VwcG9ydAo+IC1maW5zdHJ1bWVudC1mdW5jdGlvbnMtZXhjbHVkZS1maWxlLWxpc3QgOnwKPiAK
+PiAKPiA+ID4gSXMgdGhlcmUgYW55IHdheSB0bwo+ID4gPiBmaWx0ZXIgbHR0bmdfdXN0X2N5Z19w
+cm9maWxlIGV2ZW50cyBiZWZvcmUgdGhleSBhcmUgd3JpdHRlbiB0byB0aGUKPiA+IHRyYWNlPyBJ
+Cj4gPiA+IGhhdmUgdHJpZWQgdmFyaW91cyB0aGluZ3M6Cj4gPiA+IDEuIGx0dG5nLXRyYWNrIHRv
+IG9ubHkgdHJhY2sgb25lIHByb2Nlc3MKPiA+ID4KPiA+ID4gMi4gT25seSBlbmFibGUgbHR0bmdf
+dXN0X2N5Z19wcm9maWxlOiogZXZlbnRzCj4gPiA+Cj4gPiA+IDMuIEluY3JlYXNlIHRoZSBzdWJi
+dWZmZXIgc2l6ZToKPiA+ID4gbHR0bmcgZW5hYmxlLWNoYW5uZWwgLS11c2Vyc3BhY2UgLS1idWZm
+ZXJzLXBpZCAtLXN1YmJ1Zi1zaXplPTJNCj4gPiA+IC0tbnVtLXN1YmJ1Zj0yIG15Y2hhbm5lbAo+
+ID4KPiA+IElzIHRoZXJlIGFueSByZWFzb24geW91IGFyZSB1c2luZyAtLWJ1ZmZlci1waWQgaW5z
+dGVhZCBvZiB0aGUgZGVmYXVsdAo+ID4gcGVyLXVpZCBidWZmZXJpbmc/Cj4gPgo+IAo+IE5vIHBh
+cnRpY3VsYXIgcmVhc29uLiBJIHJlYWQgc29tZXdoZXJlIGluIHRoZSBtYWlsaW5nIGxpc3QgdGhh
+dAo+IC0tYnVmZmVyLXBpZCBtaWdodCBiZSBsZXNzIHN1c2NlcHRpYmxlIHRvIGxvc2UgZXZlbnRz
+LiBJIGNhbiBzd2l0Y2ggYmFjayB0bwo+IHVzaW5nIHRoZSBkZWZhdWx0IHBlci11aWQgYnVmZmVy
+aW5nIGlmIHRoYXQgaXMgYmV0dGVyIGZvciBteSB1c2VjYXNlLgoKWW91ciB1c2UgY2FzZSBkb2Vz
+IG5vdCBzZWVtIHRvIHJlcXVpcmUgdGhlIHVzZSBvZiBwZXItcGlkLgoKPiA+ID4gVXNpbmcgdGhp
+cyBvcHRpb24gaXMgdmVyeSBmbGFreSBob3dldmVyLiBJdCBjcmFzaGVzIGx0dG5nLXNlc3Npb25k
+Lgo+ID4gPgo+ID4KPiA+IFdlIHdpbGwgbmVlZCB0aGUgbG9nIChsdHRuZy1zZXNzaW9uZCAtdnZ2
+KSAocGFzdGViaW4pIGFuZCB0aGUgdmVyc2lvbiBvZgo+ID4gbHR0bmcgZm9yIHRoaXMuCj4gPgo+
+IAo+IE9LLiBJIHdpbGwgZ2V0IHlvdSB0aGF0IHdoZW4gSSBiYWNrIGF0IHdvcmsuCj4gCj4gCj4g
+PiBEb2VzIHlvdXIgd29ya2Zsb3cgbG9va3Mgc29tZXdoYXQgc2ltaWxhciB0byB0aGlzPwo+ID4K
+PiA+IDEpIEluc3RydW1lbnRlZCBhcHAgaXMgc3RhcnRlZCB3aXRoIHJlbGV2YW50IExEX1BSRUxP
+QUQKPiA+IDIpIGx0dG5nIGNyZWF0ZSBteV9zZXNzaW9uCgpJZiB5b3UgcGVyZm9ybSBhICJsdHRu
+ZyBsaXN0IC11IiBoZXJlIGRvZXMgaXQgeWllbGRzIG9ubHkgeW91ciB0ZXN0IGFwcGxpY2F0aW9u
+PwoKSWYgc28sIHlvdSBkbyBub3QgbmVlZCB0byB1c2UgdGhlICJ0cmFja2luZyIgZmVhdHVyZSBz
+aW5jZSB0aGUgb25seSBhcHBsaWNhdGlvbgpyZWdpc3RlcmVkIGlzIHlvdXIgYXBwbGljYXRpb24u
+Cgo+ID4gMykgbHR0bmcgZW5hYmxlLWNoYW5uZWwgLXUgLS1zdWJidWYtc2l6ZT0yTSAtLW51bS1z
+dWJidWY9OCBteV9jaGFubmVsCj4gPiA0KSBsdHRuZyBlbmFibGUtZXZlbnQgLXUgLWMgbXlfY2hh
+bm5lbCAnbHR0bmdfdXN0X2N5Z19wcm9maWxlOionCj4gPiA1KSBsdHRuZyB0cmFjayAtdSAtcCA8
+UElEPgo+ID4gNikgbHR0bmcgc3RhcnQKPiA+IC4uLiBzb21lIHRpbWUgcGFzcwo+ID4gNykgbHR0
+bmcgc3RvcAo+ID4gOCkgbHR0bmcgZGVzdHJveQo+ID4KPiA+IElmIGEgZGlzY2FyZGVkIGV2ZW50
+cyB3YXJuaW5nIGlzIHJlcG9ydGVkIHRoZSBzb2x1dGlvbiBpcyB0byBpbmNyZWFzZQo+ID4gZWl0
+aGVyIHRoZQo+ID4gc2l6ZSBvciB0aGUgbnVtYmVyIG9mIHN1YmJ1ZmZlcnMgcGVyIGNwdS4gTm90
+ZSB0aGF0IHRoZSB1cHBlciBsaW1pdCBmb3IKPiA+IHRoZSB0b3RhbAo+ID4gc3ViYnVmZmVycyBz
+aXplIGlzIGRpY3RhdGVkIGJ5IHRoZSBhdmFpbGFibGUgZnJlZSBtZW1vcnkgb2YgdGhlIHN5c3Rl
+bS4KPiA+Cj4gCj4gWXVwIC0gZXhhY3RseS4gRXhjZXB0IEkgYW0gdXNpbmcgLS1udW0tc3ViYnVm
+PTIuIEkgaGF2ZSBhbHNvIHRyaWVkCj4gLS1zdWJidWYtc2l6ZSBhcyA0TSBhbmQgOE0sIHdpdGhv
+dXQgbXVjaCBzdWNjZXNzLgoKQ291bGQgeW91IGdpdmUgdXMgbW9yZSBpbmZvcm1hdGlvbiBvbiB0
+aGUgaG9zdCAobnVtYmVyIG9mIGNvcmUsIG1lbW9yeSBhdmFpbGFibGUpPwoKSWYgYSBsb3Qgb2Yg
+bWVtb3J5IGlzIGF2YWlsYWJsZSBkbyBub3QgaGVzaXRhdGUgdG8gYm9vc3QgYm90aCBzdWJidWZm
+ZXIKcGFyYW1ldGVycy4KCj4gCj4gCj4gPiA+IEFueSBvdGhlciBpZGVhcyB0byBmaWx0ZXIgZXZl
+bnRzPwo+ID4gPgo+ID4gPiBJIGFtIGFsc28gb3BlbiB0byBleHBsaWNpdGx5IGFkZGluZyB0cmFj
+ZXBvaW50cyB0byB0aGUgZnVuY3Rpb25zIEkgY2FyZQo+ID4gPiBhYm91dC4gQnV0IEkgYW0gbm90
+IHN1cmUgaG93IHRoZXkgY2FuIGJlIHZpc3VhbGl6ZWQgaW4gdHJhY2UtY29tcGFzcwo+ID4gPiBj
+YWxsc3RhY2sgdmlldy4KPiA+Cj4gPiBOZWl0aGVyIGFtIEksIHRoaXMgbWlnaHQgYmUgYSBiZXR0
+ZXIgcXVlc3Rpb24gZm9yIHRoZSB0cmFjZWNvbXBhc3MgbWFpbGluZwo+ID4gbGlzdC4KPiA+Cj4g
+Cj4gT0suIEkgd2lsbCBwaW5nIHRoZSB0cmFjZWNvbXBhc3MgbWFpbGluZyBsaXN0LiBJcyB0aGVy
+ZSBhbnkgdG9vbCB0aGF0IGNhbgo+IGp1c3Qgc2hvdyBldmVudHMgb24gZWFjaCB0aHJlYWQgdGlt
+ZWxpbmU/IEkgaGF2ZSBhIG11bHRpLXRocmVhZGVkCj4gYXBwbGljYXRpb24sIGFuZCBJIHdhbnQg
+dG8ganVzdCB2aXN1YWxpemUgd2hlbiBmdW5jdGlvbnMgZW50ZXIvZXhpdCBvbgo+IHZhcmlvdXMg
+dGhyZWFkIHdpdGggcmVzcGVjdCB0byBlYWNoIG90aGVyLgoKVHJhY2Vjb21wYXNzIGlzIGN1cnJl
+bnRseSB5b3VyIGJlc3QgYmV0LgoKWW91IG1pZ2h0IHdhbnQgdG8gZm9sbG93IHRoZSBkb2N1bWVu
+dGF0aW9uIGZyb20gVHJhY2Vjb21wYXNzIGhlcmUgWzFdLgpNb3JlIHNwZWNpZmljYWxseSB0aGUg
+IlVzaW5nIHRoZSBDYWxsc3RhY2sgVmlldyB3aXRoIExUVG5nLVVTVCB0cmFjZXMiIHNlY3Rpb24u
+CgpUaGUgImx0dG5nIGVuYWJsZS1ldmVudCAtdSAtYSIgbWlnaHQgbm90IGJlIHRoZSBiZXN0IHdh
+eSB0byBnbyBoZXJlLiBJIHdvdWxkIGdvCndpdGggImx0dG5nIGVuYWJsZS1ldmVudCAtdSAnbHR0
+bmdfKiciIGlmIHlvdSBhcmUgaW50ZXJlc3RlZCBpbiBvbmx5IHRoZQpjYWxsc3RhY2sgc3R1ZmYu
+CgoKWzFdIGh0dHA6Ly9hcmNoaXZlLmVjbGlwc2Uub3JnL3RyYWNlY29tcGFzcy9kb2Mvc3RhYmxl
+L29yZy5lY2xpcHNlLnRyYWNlY29tcGFzcy5kb2MudXNlci9MVFRuZy1VU1QtQW5hbHlzZXMuaHRt
+bAoKV2UgYXJlIGN1cnJlbnRseSB3b3JraW5nIG9uIExUVG5nIFNjb3BlIFsxXSBidXQgd2UgZG8g
+bm90IHN1cHBvcnQgdGhpcyB1c2UgY2FzZSBmb3Igbm93LgoKQ2hlZXJzCgpbMl0gaHR0cHM6Ly9s
+dHRuZy5vcmcvYmV0YS8KCj4gCj4gVXNpbmcgbHR0bmdfdXN0X2N5Z19wcm9maWxlIHNlZW1lZCBz
+dHJhaWdodGZvcndhcmQsIGJ1dCBhcHBhcmVudGx5IG5vdC4KPiBUaGFua3MgZm9yIHlvdXIgaGVs
+cCBKb25hdGhhbi4KCi0tIApKb25hdGhhbiBSYWpvdHRlLUp1bGllbgpFZmZpY2lPUwpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGlu
+ZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
