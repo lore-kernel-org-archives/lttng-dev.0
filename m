@@ -1,25 +1,18 @@
-From: Khalid Elmously <khalid.elmously@canonical.com>
-Subject: [PATCH lttng-modules v2] Update: kvm instrumentation
-	for ubuntu 4.13.0-38
-Date: Fri, 23 Mar 2018 11:55:02 -0400
-Message-ID: <20180323155502.25625-1-khalid.elmously__43198.8915698186$1521820463$gmane$org@canonical.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-modules v2] Update: kvm
+ instrumentation	for ubuntu 4.13.0-38
+Date: Fri, 23 Mar 2018 13:11:28 -0400 (EDT)
+Message-ID: <1493329339.3594.1521825088319.JavaMail.zimbra__20136.4737040878$1521824977$gmane$org@efficios.com>
 References: <b96ac777-0b5a-ae74-34fb-0a296491c1cd@efficios.com>
+ <20180323155502.25625-1-khalid.elmously@canonical.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from youngberry.canonical.com (youngberry.canonical.com
- [91.189.89.112])
- by lists.lttng.org (Postfix) with ESMTP id 4077R6263vzxTR
- for <lttng-dev@lists.lttng.org>; Fri, 23 Mar 2018 11:55:14 -0400 (EDT)
-Received: from mail-qk0-f200.google.com ([209.85.220.200])
- by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
- (Exim 4.76) (envelope-from <khalid.elmously@canonical.com>)
- id 1ezP28-0006Rd-Fp
- for lttng-dev@lists.lttng.org; Fri, 23 Mar 2018 15:55:12 +0000
-Received: by mail-qk0-f200.google.com with SMTP id x188so7928024qkc.12
- for <lttng-dev@lists.lttng.org>; Fri, 23 Mar 2018 08:55:12 -0700 (PDT)
-In-Reply-To: <b96ac777-0b5a-ae74-34fb-0a296491c1cd@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 4079755QQdzxhx
+ for <lttng-dev@lists.lttng.org>; Fri, 23 Mar 2018 13:11:29 -0400 (EDT)
+In-Reply-To: <20180323155502.25625-1-khalid.elmously@canonical.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -29,26 +22,35 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Khalid Elmously <khalid.elmously@canonical.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-U3RhcnRpbmcgZnJvbSA0LjEzLjAtMzggdGhlIHVidW50dSBrZXJuZWwgYmFja3BvcnQgYSBrdm0g
-aW5zdHJ1bWVudGF0aW9uCmNoYW5nZSBpbnRyb2R1Y2VkIGluIDQuMTUgd2hpY2ggYWZmZWN0cyB0
-aGUgcHJvdG90eXBlIG9mIHRoZSBrdm1fbW1pbyBldmVudC4KClNpZ25lZC1vZmYtYnk6IEtoYWxp
-ZCBFbG1vdXNseSA8a2hhbGlkLmVsbW91c2x5QGNhbm9uaWNhbC5jb20+Ci0tLQogaW5zdHJ1bWVu
-dGF0aW9uL2V2ZW50cy9sdHRuZy1tb2R1bGUva3ZtLmggfCAyICsrCiAxIGZpbGUgY2hhbmdlZCwg
-MiBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9sdHRu
-Zy1tb2R1bGUva3ZtLmggYi9pbnN0cnVtZW50YXRpb24vZXZlbnRzL2x0dG5nLW1vZHVsZS9rdm0u
-aAppbmRleCA4ZjlhMTMyLi5jNDE5ZjljIDEwMDY0NAotLS0gYS9pbnN0cnVtZW50YXRpb24vZXZl
-bnRzL2x0dG5nLW1vZHVsZS9rdm0uaAorKysgYi9pbnN0cnVtZW50YXRpb24vZXZlbnRzL2x0dG5n
-LW1vZHVsZS9rdm0uaApAQCAtOTIsNiArOTIsOCBAQCBMVFROR19UUkFDRVBPSU5UX0VWRU5UKGt2
-bV9hY2tfaXJxLAogCXx8IExUVE5HX0tFUk5FTF9SQU5HRSg0LDEsNTAsIDQsMiwwKSBcCiAJfHwg
-TFRUTkdfS0VSTkVMX1JBTkdFKDMsMTYsNTIsIDMsMTcsMCkgXAogCXx8IExUVE5HX0tFUk5FTF9S
-QU5HRSgzLDIsOTcsIDMsMywwKSBcCisJfHwgTFRUTkdfVUJVTlRVX0tFUk5FTF9SQU5HRSg0LDEz
-LDE2LDM4LCA0LDE0LDAsMCkgXAorCXx8IExUVE5HX1VCVU5UVV9LRVJORUxfUkFOR0UoNCwxNCww
-LDAsIDQsMTUsMCwwKSBcCiAJfHwgTFRUTkdfREVCSUFOX0tFUk5FTF9SQU5HRSg0LDksNjUsMCwz
-LDAsIDQsMTAsMCwwLDAsMCkgXAogCXx8IExUVE5HX0ZFRE9SQV9LRVJORUxfUkFOR0UoNCwxNCwx
-MywzMDAsIDQsMTUsMCwwKSkKIAotLSAKMi4xNC4xCgpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBs
-aXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
-c3RpbmZvL2x0dG5nLWRldgo=
+LS0tLS0gT24gTWFyIDIzLCAyMDE4LCBhdCAxMTo1NSBBTSwgS2hhbGlkIEVsbW91c2x5IGtoYWxp
+ZC5lbG1vdXNseUBjYW5vbmljYWwuY29tIHdyb3RlOgoKPiBTdGFydGluZyBmcm9tIDQuMTMuMC0z
+OCB0aGUgdWJ1bnR1IGtlcm5lbCBiYWNrcG9ydCBhIGt2bSBpbnN0cnVtZW50YXRpb24KPiBjaGFu
+Z2UgaW50cm9kdWNlZCBpbiA0LjE1IHdoaWNoIGFmZmVjdHMgdGhlIHByb3RvdHlwZSBvZiB0aGUg
+a3ZtX21taW8gZXZlbnQuCj4gCj4gU2lnbmVkLW9mZi1ieTogS2hhbGlkIEVsbW91c2x5IDxraGFs
+aWQuZWxtb3VzbHlAY2Fub25pY2FsLmNvbT4KPiAtLS0KPiBpbnN0cnVtZW50YXRpb24vZXZlbnRz
+L2x0dG5nLW1vZHVsZS9rdm0uaCB8IDIgKysKPiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25z
+KCspCj4gCj4gZGlmZiAtLWdpdCBhL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxl
+L2t2bS5oCj4gYi9pbnN0cnVtZW50YXRpb24vZXZlbnRzL2x0dG5nLW1vZHVsZS9rdm0uaAo+IGlu
+ZGV4IDhmOWExMzIuLmM0MTlmOWMgMTAwNjQ0Cj4gLS0tIGEvaW5zdHJ1bWVudGF0aW9uL2V2ZW50
+cy9sdHRuZy1tb2R1bGUva3ZtLmgKPiArKysgYi9pbnN0cnVtZW50YXRpb24vZXZlbnRzL2x0dG5n
+LW1vZHVsZS9rdm0uaAo+IEBAIC05Miw2ICs5Miw4IEBAIExUVE5HX1RSQUNFUE9JTlRfRVZFTlQo
+a3ZtX2Fja19pcnEsCj4gCXx8IExUVE5HX0tFUk5FTF9SQU5HRSg0LDEsNTAsIDQsMiwwKSBcCj4g
+CXx8IExUVE5HX0tFUk5FTF9SQU5HRSgzLDE2LDUyLCAzLDE3LDApIFwKPiAJfHwgTFRUTkdfS0VS
+TkVMX1JBTkdFKDMsMiw5NywgMywzLDApIFwKPiArCXx8IExUVE5HX1VCVU5UVV9LRVJORUxfUkFO
+R0UoNCwxMywxNiwzOCwgNCwxNCwwLDApIFwKPiArCXx8IExUVE5HX1VCVU5UVV9LRVJORUxfUkFO
+R0UoNCwxNCwwLDAsIDQsMTUsMCwwKSBcCgpJcyBpdCByZWFsbHkgYWxsIFVidW50dSBrZXJuZWxz
+IGZyb20gNC4xNC4wIHRvIDQuMTUuMCB0aGF0CmFyZSBhZmZlY3RlZCA/IEkgc3VzcGVjdCB0aGF0
+IGl0IGRvZXMgbm90IHN0YXJ0IGF0IC4wLgoKVGhhbmtzLAoKTWF0aGlldQoKPiAJfHwgTFRUTkdf
+REVCSUFOX0tFUk5FTF9SQU5HRSg0LDksNjUsMCwzLDAsIDQsMTAsMCwwLDAsMCkgXAo+IAl8fCBM
+VFROR19GRURPUkFfS0VSTkVMX1JBTkdFKDQsMTQsMTMsMzAwLCA0LDE1LDAsMCkpCj4gCj4gLS0K
+PiAyLjE0LjEKPiAKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+Cj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
+LWRldgoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZp
+Y2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8v
+bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
