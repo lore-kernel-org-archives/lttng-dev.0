@@ -1,27 +1,16 @@
-From: Khalid Elmously <khalid.elmously@canonical.com>
-Subject: Re: [PATCH lttng-modules v4] Update: kvm
- instrumentation for ubuntu 4.13.0-38
-Date: Sun, 25 Mar 2018 19:27:39 -0400
-Message-ID: <20180325232738.xepaudvaqhzlcsvt__2480.00262440673$1522020355$gmane$org@kbuntu>
-References: <20180325013610.2934-1-khalid.elmously@canonical.com>
- <1688548518.4247.1521989759551.JavaMail.zimbra@efficios.com>
+From: Denis Yevgenyevich <denis.yevgenyevich@gmail.com>
+Subject: [liburcu] rculfhash autoresizing creates huge tables
+Date: Mon, 26 Mar 2018 18:01:53 +0300
+Message-ID: <CA+prXCGNcY4n51hxQMCPDbs_5zUvG2SfURfFgd7eSDwjr4b_kQ__22225.4709261053$1522077523$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============6918674820199301289=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from youngberry.canonical.com (youngberry.canonical.com
- [91.189.89.112])
- by lists.lttng.org (Postfix) with ESMTP id 408YNL4qvCzyDg
- for <lttng-dev@lists.lttng.org>; Sun, 25 Mar 2018 19:27:46 -0400 (EDT)
-Received: from mail-qt0-f197.google.com ([209.85.216.197])
- by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
- (Exim 4.76) (envelope-from <khalid.elmously@canonical.com>)
- id 1f0F3A-0004eS-Cm
- for lttng-dev@lists.lttng.org; Sun, 25 Mar 2018 23:27:44 +0000
-Received: by mail-qt0-f197.google.com with SMTP id n51so12051213qta.9
- for <lttng-dev@lists.lttng.org>; Sun, 25 Mar 2018 16:27:44 -0700 (PDT)
-Content-Disposition: inline
-In-Reply-To: <1688548518.4247.1521989759551.JavaMail.zimbra@efficios.com>
+Received: from mail-yb0-x243.google.com (mail-yb0-x243.google.com
+ [IPv6:2607:f8b0:4002:c09::243])
+ by lists.lttng.org (Postfix) with ESMTPS id 408y6C3x5ZzyKX
+ for <lttng-dev@lists.lttng.org>; Mon, 26 Mar 2018 11:01:55 -0400 (EDT)
+Received: by mail-yb0-x243.google.com with SMTP id a12-v6so442765ybn.13
+ for <lttng-dev@lists.lttng.org>; Mon, 26 Mar 2018 08:01:55 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -31,66 +20,77 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMjAxOC0wMy0yNSAxMDo1NTo1OSAsIE1hdGhpZXUgRGVzbm95ZXJzIHdyb3RlOgo+IFRoaXMg
-b25lIGlzIHN0aWxsIGluIGJhc2U2NCwgd2hpY2ggZG9lcyBub3Qgd29yayB3aXRoIGdpdC1hbS4g
-SSdsbCBmZXRjaCBmcm9tIGdpdC4KClN0cmFuZ2UsIGJ1dCB0aGFua3MgZm9yIGZldGNoaW5nLgoK
-LUtoYWxpZAoKPiAKPiBUaGFua3MsCj4gCj4gTWF0aGlldQo+IAo+IENvbnRlbnQtVHlwZTogdGV4
-dC9wbGFpbjsgY2hhcnNldD0idXRmLTgiCj4gQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogYmFz
-ZTY0Cj4gRXJyb3JzLVRvOiBsdHRuZy1kZXYtYm91bmNlc0BsaXN0cy5sdHRuZy5vcmcKPiBTZW5k
-ZXI6ICJsdHRuZy1kZXYiIDxsdHRuZy1kZXYtYm91bmNlc0BsaXN0cy5sdHRuZy5vcmc+Cj4gCj4g
-VTNSaGNuUnBibWNnWm5KdmJTQTBMakV6TGpBdE16Z2dkR2hsSUhWaWRXNTBkU0JyWlhKdVpXd2dZ
-bUZqYTNCdmNuUWdZU0JyZG0wZwo+IGFXNXpkSEoxYldWdWRHRjBhVzl1Q21Ob1lXNW5aU0JwYm5S
-eWIyUjFZMlZrSUdsdUlEUXVNVFVnZDJocFkyZ2dZV1ptWldOMGN5QjAKPiBhR1VnY0hKdmRHOTBl
-WEJsSUc5bUlIUm9aU0JyZG0xZmJXMXBieUJsZG1WdWRDNEtDbE5wWjI1bFpDMXZabVl0WW5rNklF
-dG9ZV3hwCj4gWkNCRmJHMXZkWE5zZVNBOGEyaGhiR2xrTG1Wc2JXOTFjMng1UUdOaGJtOXVhV05o
-YkM1amIyMCtDaTB0TFFvZ2FXNXpkSEoxYldWdQo+IGRHRjBhVzl1TDJWMlpXNTBjeTlzZEhSdVp5
-MXRiMlIxYkdVdmEzWnRMbWdnZkNBeElDc0tJREVnWm1sc1pTQmphR0Z1WjJWa0xDQXgKPiBJR2x1
-YzJWeWRHbHZiaWdyS1FvS1pHbG1aaUF0TFdkcGRDQmhMMmx1YzNSeWRXMWxiblJoZEdsdmJpOWxk
-bVZ1ZEhNdmJIUjBibWN0Cj4gYlc5a2RXeGxMMnQyYlM1b0lHSXZhVzV6ZEhKMWJXVnVkR0YwYVc5
-dUwyVjJaVzUwY3k5c2RIUnVaeTF0YjJSMWJHVXZhM1p0TG1nSwo+IGFXNWtaWGdnT0dZNVlURXpN
-aTR1WVRVNU9ESmpPU0F4TURBMk5EUUtMUzB0SUdFdmFXNXpkSEoxYldWdWRHRjBhVzl1TDJWMlpX
-NTAKPiBjeTlzZEhSdVp5MXRiMlIxYkdVdmEzWnRMbWdLS3lzcklHSXZhVzV6ZEhKMWJXVnVkR0Yw
-YVc5dUwyVjJaVzUwY3k5c2RIUnVaeTF0Cj4gYjJSMWJHVXZhM1p0TG1nS1FFQWdMVGt5TERZZ0t6
-a3lMRGNnUUVBZ1RGUlVUa2RmVkZKQlEwVlFUMGxPVkY5RlZrVk9WQ2hyZG0xZgo+IFlXTnJYMmx5
-Y1N3S0lBbDhmQ0JNVkZST1IxOUxSVkpPUlV4ZlVrRk9SMFVvTkN3eExEVXdMQ0EwTERJc01Da2dY
-QW9nQ1h4OElFeFUKPiBWRTVIWDB0RlVrNUZURjlTUVU1SFJTZ3pMREUyTERVeUxDQXpMREUzTERB
-cElGd0tJQWw4ZkNCTVZGUk9SMTlMUlZKT1JVeGZVa0ZPCj4gUjBVb015d3lMRGszTENBekxETXNN
-Q2tnWEFvckNYeDhJRXhVVkU1SFgxVkNWVTVVVlY5TFJWSk9SVXhmVWtGT1IwVW9OQ3d4TXl3eAo+
-IE5pd3pPQ3dnTkN3eE5Dd3dMREFwSUZ3S0lBbDhmQ0JNVkZST1IxOUVSVUpKUVU1ZlMwVlNUa1ZN
-WDFKQlRrZEZLRFFzT1N3Mk5Td3cKPiBMRE1zTUN3Z05Dd3hNQ3d3TERBc01Dd3dLU0JjQ2lBSmZI
-d2dURlJVVGtkZlJrVkVUMUpCWDB0RlVrNUZURjlTUVU1SFJTZzBMREUwCj4gTERFekxETXdNQ3dn
-TkN3eE5Td3dMREFwS1FvZ0NpMHRJQW95TGpFMExqRUtDbDlmWDE5ZlgxOWZYMTlmWDE5ZlgxOWZY
-MTlmWDE5Zgo+IFgxOWZYMTlmWDE5ZlgxOWZYMTlmWDE5ZlgxOWZYMTlmQ214MGRHNW5MV1JsZGlC
-dFlXbHNhVzVuSUd4cGMzUUtiSFIwYm1jdFpHVjIKPiBRR3hwYzNSekxteDBkRzVuTG05eVp3cG9k
-SFJ3Y3pvdkwyeHBjM1J6TG14MGRHNW5MbTl5Wnk5aloya3RZbWx1TDIxaGFXeHRZVzR2Cj4gYkds
-emRHbHVabTh2YkhSMGJtY3RaR1YyQ2c9PQo+IAo+IC0tLS0tIE9uIE1hciAyNCwgMjAxOCwgYXQg
-OTozNiBQTSwgS2hhbGlkIEVsbW91c2x5IGtoYWxpZC5lbG1vdXNseUBjYW5vbmljYWwuY29tIHdy
-b3RlOgo+IAo+ID4gU3RhcnRpbmcgZnJvbSA0LjEzLjAtMzggdGhlIHVidW50dSBrZXJuZWwgYmFj
-a3BvcnQgYSBrdm0gaW5zdHJ1bWVudGF0aW9uCj4gPiBjaGFuZ2UgaW50cm9kdWNlZCBpbiA0LjE1
-IHdoaWNoIGFmZmVjdHMgdGhlIHByb3RvdHlwZSBvZiB0aGUga3ZtX21taW8gZXZlbnQuCj4gPiAK
-PiA+IFNpZ25lZC1vZmYtYnk6IEtoYWxpZCBFbG1vdXNseSA8a2hhbGlkLmVsbW91c2x5QGNhbm9u
-aWNhbC5jb20+Cj4gPiAtLS0KPiA+IGluc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxl
-L2t2bS5oIHwgMSArCj4gPiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKPiA+IAo+ID4g
-ZGlmZiAtLWdpdCBhL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxlL2t2bS5oCj4g
-PiBiL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxlL2t2bS5oCj4gPiBpbmRleCA4
-ZjlhMTMyLi5hNTk4MmM5IDEwMDY0NAo+ID4gLS0tIGEvaW5zdHJ1bWVudGF0aW9uL2V2ZW50cy9s
-dHRuZy1tb2R1bGUva3ZtLmgKPiA+ICsrKyBiL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmct
-bW9kdWxlL2t2bS5oCj4gPiBAQCAtOTIsNiArOTIsNyBAQCBMVFROR19UUkFDRVBPSU5UX0VWRU5U
-KGt2bV9hY2tfaXJxLAo+ID4gCXx8IExUVE5HX0tFUk5FTF9SQU5HRSg0LDEsNTAsIDQsMiwwKSBc
-Cj4gPiAJfHwgTFRUTkdfS0VSTkVMX1JBTkdFKDMsMTYsNTIsIDMsMTcsMCkgXAo+ID4gCXx8IExU
-VE5HX0tFUk5FTF9SQU5HRSgzLDIsOTcsIDMsMywwKSBcCj4gPiArCXx8IExUVE5HX1VCVU5UVV9L
-RVJORUxfUkFOR0UoNCwxMywxNiwzOCwgNCwxNCwwLDApIFwKPiA+IAl8fCBMVFROR19ERUJJQU5f
-S0VSTkVMX1JBTkdFKDQsOSw2NSwwLDMsMCwgNCwxMCwwLDAsMCwwKSBcCj4gPiAJfHwgTFRUTkdf
-RkVET1JBX0tFUk5FTF9SQU5HRSg0LDE0LDEzLDMwMCwgNCwxNSwwLDApKQo+ID4gCj4gPiAtLQo+
-ID4gMi4xNC4xCj4gPiAKPiA+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCj4gPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gPiBsdHRuZy1kZXZAbGlzdHMu
-bHR0bmcub3JnCj4gPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
-dGluZm8vbHR0bmctZGV2Cj4gCj4gLS0gCj4gTWF0aGlldSBEZXNub3llcnMKPiBFZmZpY2lPUyBJ
-bmMuCj4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlz
-dHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXYK
+--===============6918674820199301289==
+Content-Type: multipart/alternative; boundary="000000000000ea7d4f0568520df1"
+
+--000000000000ea7d4f0568520df1
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+I think rculfhash autoresizing (as enabled by CDS_LFHT_AUTO_RESIZE) does
+not behave well. Each time _cds_lfht_add finds a hash bucket with more than
+2 items, it basically tries to quadruple the hash table size. But even with
+a perfect hash function hash collisions are not that rare, given a large
+enough table. That is, every now and then the algorithm will come across a
+3-long chain and will grow the table unnecessarily.
+
+I created a table with cds_lfht_new(16, 16, 1<<16, CDS_LFHT_AUTO_RESIZE,
+NULL) and began adding an item each 10ms. Each item had a unique key and
+the hash function was very good (full 64-bit values of Siphash). Judging by
+messages I added to rculfhash.c, this was happening:
+after about 100 insertions, the table was resized to 512
+after about 500 insertions, the table was resized to 4096
+after about 1300 insertions, the table was resized to 16384 and immediately
+to 32768
+
+With CDS_LFHT_AUTO_RESIZE|CDS_LFHT_ACCOUNTING the behaviour was different
+but still unacceptable: the table got resized to 4096 after 900 insertions
+and then stopped growing!
+
+Could someone please implement saner resize conditions, or better yet, add
+a customisable hook for decisions as to when and how much should a table
+grow?
+
+Cheers, Denis.
+
+--000000000000ea7d4f0568520df1
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div><div><div>Hello,<br><br>I think rculfhash autore=
+sizing (as enabled by CDS_LFHT_AUTO_RESIZE) does not behave well. Each time=
+ _cds_lfht_add finds a hash bucket with more than 2 items, it basically tri=
+es to quadruple the hash table size. But even with a perfect hash function =
+hash collisions are not that rare, given a large enough table. That is, eve=
+ry now and then the algorithm will come across a 3-long chain and will grow=
+ the table unnecessarily.<br><br>I created a table with cds_lfht_new(16, 16=
+, 1&lt;&lt;16, CDS_LFHT_AUTO_RESIZE, NULL) and began adding an item each 10=
+ms. Each item had a unique key and the hash function was very good (full 64=
+-bit values of Siphash). Judging by messages I added to rculfhash.c, this w=
+as happening:<br></div>after about 100 insertions, the table was resized to=
+ 512<br>after about 500 insertions, the table was resized to 4096<br></div>=
+after about 1300 insertions, the table was resized to 16384 and immediately=
+ to 32768<br><br></div><div>With CDS_LFHT_AUTO_RESIZE|CDS_LFHT_ACCOUNTING t=
+he behaviour was different but still unacceptable: the table got resized to=
+ 4096 after 900 insertions and then stopped growing!<br><br></div>Could som=
+eone please implement saner resize conditions, or better yet, add a customi=
+sable hook for decisions as to when and how much should a table grow?<br><b=
+r></div>Cheers, Denis.<br></div>
+
+--000000000000ea7d4f0568520df1--
+
+--===============6918674820199301289==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============6918674820199301289==--
