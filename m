@@ -1,17 +1,20 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: [liburcu] rculfhash autoresizing creates huge tables
-Date: Tue, 27 Mar 2018 09:02:30 -0400 (EDT)
-Message-ID: <689232617.1005.1522155750694.JavaMail.zimbra__48236.1234644943$1522155639$gmane$org@efficios.com>
+Date: Tue, 27 Mar 2018 12:17:08 -0400 (EDT)
+Message-ID: <792877887.1312.1522167428053.JavaMail.zimbra__24014.8961115212$1522167321$gmane$org@efficios.com>
 References: <CA+prXCGNcY4n51hxQMCPDbs_5zUvG2SfURfFgd7eSDwjr4b_kQ@mail.gmail.com>
  <530644299.98.1522078357992.JavaMail.zimbra@efficios.com>
  <CA+prXCHWPUUrQW_doETZaBO4eMasjCJ9QgEGmODJ=NPf=H6CDQ@mail.gmail.com>
+ <689232617.1005.1522155750694.JavaMail.zimbra@efficios.com>
+ <CA+prXCFh8nhv_H-koPZRFMsCgKePGQTG3q-mrY4ffb_FtaRybA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0699318070577898792=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 409WQ06m6rzx8V
- for <lttng-dev@lists.lttng.org>; Tue, 27 Mar 2018 09:02:32 -0400 (EDT)
-In-Reply-To: <CA+prXCHWPUUrQW_doETZaBO4eMasjCJ9QgEGmODJ=NPf=H6CDQ@mail.gmail.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 409bkf3cZXzxwH
+ for <lttng-dev@lists.lttng.org>; Tue, 27 Mar 2018 12:17:14 -0400 (EDT)
+In-Reply-To: <CA+prXCFh8nhv_H-koPZRFMsCgKePGQTG3q-mrY4ffb_FtaRybA@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,291 +28,150 @@ To: Denis Yevgenyevich <denis.yevgenyevich@gmail.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0699318070577898792==
-Content-Type: multipart/alternative;
-	boundary="=_1f6bbe6d-0e55-4448-9ac0-050405ba247c"
-
---=_1f6bbe6d-0e55-4448-9ac0-050405ba247c
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
------ On Mar 27, 2018, at 5:55 AM, Denis Yevgenyevich <denis.yevgenyevich@gmail.com> wrote: 
-
->> The "accounting" option is meant to be enabled, otherwise you're using the hash
-> > table only with
-> > the bucket-length resize threshold, which has the imperfections you noticed
-> Well, given that my software has to maintain precise counts of items inserted
-> into some of hashtables,
-> I'd like to be able to avoid any performance overhead due to accounting.
-
->> only for small tables. Beyond a certain size, the numbers of elements in the
-> > hash table are used
-> > as a criterion for resize.
->> Why is it unexpected that the table stops growing beyond 4096 after 900
-> > insertions ?
-> Ah, thanks. Turns out that the table stopped growing because of the check
-> if (count >= (1UL << (COUNT_COMMIT_ORDER + split_count_order)))
-
-If both (CDS_LFHT_ACCOUNTING | CDS_LFHT_AUTO_RESIZE) flags are set, the table will 
-still grow after it has gone beyond this condition. 
-
-When both flags are set, check_resize() is only for the bucket-local chain length algorithm that deals 
-with very small tables. Then, when the table size goes above that threshold, split-counters are used to 
-adjust the required table size. We don't use the split-counters approximation of the number of elements 
-in the table for small tables because they are not accurate enough for small tables. It's a tradeoff 
-between accuracy and accounting overhead here. 
-
-Notice that ht_count_add() and ht_count_del() both invoke cds_lfht_resize_lazy_count(). It's that 
-function which is responsible for the split-counter based resize algorithm. 
-
-> I am a bit disappointed about that. Why can't we have tables that resize
-> 1. automatically
-> 2. from 10s to 100,000s of buckets
-> 3. without becoming too large too soon?
-
-The only thing here is that the bucket-length algorithm used for small tables can grow the 
-table more quickly than you would expect if you have hash collisions. But it should not 
-matter that much because it only applies to small tables. Do you experience "too aggressive" 
-hash table growth even beyond the threshold selecting the split-counters resize algorithm ? 
-
-That threshold is calculated as: 
-
-(1UL << (COUNT_COMMIT_ORDER + split_count_order) 
-
-Where COUNT_COMMIT_ORDER = 10 
-and split_count_order = log2(nr_cpus ceiled to next power of 2) 
-
-Assuming a 64-core machine: 
-
-log2(64) = 6 
-2 ^ (10 + 6) = 65536 
-
-Considering that you created your hash table with an initial size of 16 buckets, specified a minimum 
-number of buckets of 16, and a maximum number of buckets of 1 << 16 (65536), you'll always be 
-using the "hash-chain length" algorithm for resize on a 64-core machine. The split-counter algorithm 
-would never kick in. 
-
-You should therefore try tweaking the @max_nr_buckets parameter to a larger value when 
-calling cds_lfht_new(). 
-
-How many cores do you have ? 
-
-Let me know how is goes, 
-
-Thanks, 
-
-Mathieu 
-
-> On 26 March 2018 at 18:32, Mathieu Desnoyers < [
-> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
-> wrote:
-
->> ----- On Mar 26, 2018, at 11:01 AM, Denis Yevgenyevich < [
->> mailto:denis.yevgenyevich@gmail.com | denis.yevgenyevich@gmail.com ] > wrote:
-
->>> Hello,
-
->>> I think rculfhash autoresizing (as enabled by CDS_LFHT_AUTO_RESIZE) does not
->>> behave well. Each time _cds_lfht_add finds a hash bucket with more than 2
->>> items, it basically tries to quadruple the hash table size. But even with a
->>> perfect hash function hash collisions are not that rare, given a large enough
->>> table. That is, every now and then the algorithm will come across a 3-long
->>> chain and will grow the table unnecessarily.
-
->>> I created a table with cds_lfht_new(16, 16, 1<<16, CDS_LFHT_AUTO_RESIZE, NULL)
->>> and began adding an item each 10ms. Each item had a unique key and the hash
->>> function was very good (full 64-bit values of Siphash). Judging by messages I
->>> added to rculfhash.c, this was happening:
->>> after about 100 insertions, the table was resized to 512
->>> after about 500 insertions, the table was resized to 4096
->>> after about 1300 insertions, the table was resized to 16384 and immediately to
->>> 32768
-
->>> With CDS_LFHT_AUTO_RESIZE|CDS_LFHT_ACCOUNTING the behaviour was different but
->>> still unacceptable: the table got resized to 4096 after 900 insertions and then
->>> stopped growing!
-
->> The "accounting" option is meant to be enabled, otherwise you're using the hash
->> table only with
->> the bucket-length resize threshold, which has the imperfections you noticed.
-
->> With accounting enabled, the bucket length is used as an approximation for when
->> resize is needed
->> only for small tables. Beyond a certain size, the numbers of elements in the
->> hash table are used
->> as a criterion for resize.
-
->> Why is it unexpected that the table stops growing beyond 4096 after 900
->> insertions ? How many
->> more insertions did you do beyond 900 ?
-
->> Thanks,
-
->> Mathieu
-
->>> Could someone please implement saner resize conditions, or better yet, add a
->>> customisable hook for decisions as to when and how much should a table grow?
-
->>> Cheers, Denis.
-
->>> _______________________________________________
->>> lttng-dev mailing list
->>> [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org ]
->>> [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
->>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
-
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> [ http://www.efficios.com/ | http://www.efficios.com ]
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_1f6bbe6d-0e55-4448-9ac0-050405ba247c
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><br></div><div><br></div><span id=3D"zwchr"=
- data-marker=3D"__DIVIDER__">----- On Mar 27, 2018, at 5:55 AM, Denis Yevge=
-nyevich &lt;denis.yevgenyevich@gmail.com&gt; wrote:<br></span><div data-mar=
-ker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;=
-margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:n=
-ormal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size=
-:12pt;"><div dir=3D"ltr"><div><div><div>&gt; The "accounting" option is mea=
-nt to be enabled, otherwise you're using the hash table only with</div>&gt;=
- the bucket-length resize threshold, which has the imperfections you notice=
-d<br></div>Well, given that my software has to maintain precise counts of i=
-tems inserted into some of hashtables,<br>I'd like to be able to avoid any =
-performance overhead due to accounting.<br></div><div><br><div><div>&gt; on=
-ly for small tables. Beyond a certain size, the numbers of elements in the =
-hash table are used<br><div>&gt; as a criterion for resize.<br></div><div>&=
-gt; Why is it unexpected that the table stops growing beyond 4096 after 900=
- insertions ?<br></div><div>Ah, thanks. Turns out that the table stopped gr=
-owing because of the check<br>&nbsp;&nbsp;&nbsp; if (count &gt;=3D (1UL &lt=
-;&lt; (COUNT_COMMIT_ORDER + split_count_order)))</div></div></div></div></d=
-iv></blockquote><div><br></div><div>If both (CDS_LFHT_ACCOUNTING | CDS_LFHT=
-_AUTO_RESIZE) flags are set, the table will<br data-mce-bogus=3D"1"></div><=
-div>still grow after it has gone beyond this condition.<br></div><div><br d=
-ata-mce-bogus=3D"1"></div><div>When both flags are set, check_resize() is o=
-nly for the bucket-local chain length algorithm that deals</div><div>with v=
-ery small tables. Then, when the table size goes above that threshold, spli=
-t-counters are used to</div><div>adjust the required table size. We don't u=
-se the split-counters approximation of the number of elements</div><div>in =
-the table for small tables because they are not accurate enough for small t=
-ables. It's a tradeoff</div><div>between accuracy and accounting overhead h=
-ere.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div=
->Notice that ht_count_add() and ht_count_del() both invoke cds_lfht_resize_=
-lazy_count(). It's that<br data-mce-bogus=3D"1"></div><div>function which i=
-s responsible for the split-counter based resize algorithm.<br data-mce-bog=
-us=3D"1"></div><blockquote style=3D"border-left:2px solid #1010FF;margin-le=
-ft:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;tex=
-t-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><=
-div dir=3D"ltr"><div><div><div><div><br></div><div><br>I am a bit disappoin=
-ted about that. Why can't we have tables that resize<br>1. automatically<br=
-></div><div>2. from 10s to 100,000s of buckets<br></div><div>3. without bec=
-oming too large too soon?</div></div></div></div></div></blockquote><div>Th=
-e only thing here is that the bucket-length algorithm used for small tables=
- can grow the</div><div>table more quickly than you would expect if you hav=
-e hash collisions. But it should not<br></div><div>matter that much because=
- it only applies to small tables. Do you experience "too aggressive"</div><=
-div>hash table growth even beyond the threshold selecting the split-counter=
-s resize algorithm ?<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=
-=3D"1"></div><div>That threshold is calculated as:<br data-mce-bogus=3D"1">=
-</div><div><br data-mce-bogus=3D"1"></div><div>(1UL &lt;&lt; (COUNT_COMMIT_=
-ORDER + split_count_order)<br data-mce-bogus=3D"1"></div><div><br data-mce-=
-bogus=3D"1"></div><div>Where COUNT_COMMIT_ORDER =3D 10<br data-mce-bogus=3D=
-"1"></div><div>and split_count_order =3D log2(nr_cpus ceiled to next power =
-of 2)<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><di=
-v>Assuming a 64-core machine:</div><div><br data-mce-bogus=3D"1"></div><div=
->log2(64) =3D 6<br data-mce-bogus=3D"1"></div><div>2 ^ (10 + 6) =3D 65536<b=
-r data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Consi=
-dering that you created your hash table with an initial size of 16 buckets,=
- specified a minimum<br data-mce-bogus=3D"1"></div><div>number of buckets o=
-f 16, and a maximum number of buckets of 1 &lt;&lt; 16 (65536), you'll alwa=
-ys be</div><div>using the "hash-chain length" algorithm for resize on a 64-=
-core machine. The split-counter algorithm<br></div><div>would never kick in=
-.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Yo=
-u should therefore try tweaking the @max_nr_buckets parameter to a larger v=
-alue when</div><div>calling cds_lfht_new().<br data-mce-bogus=3D"1"></div><=
-div><br data-mce-bogus=3D"1"></div><div>How many cores do you have ?<br dat=
-a-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Let me kno=
-w how is goes,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1">=
-</div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D=
-"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-bogu=
-s=3D"1"></div><blockquote style=3D"border-left:2px solid #1010FF;margin-lef=
-t:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;text=
--decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><d=
-iv dir=3D"ltr"><div><div><div><div><br></div><br></div></div></div></div><d=
-iv class=3D"gmail_extra"><br><div class=3D"gmail_quote">On 26 March 2018 at=
- 18:32, Mathieu Desnoyers <span dir=3D"ltr">&lt;<a href=3D"mailto:mathieu.d=
-esnoyers@efficios.com" target=3D"_blank">mathieu.desnoyers@efficios.com</a>=
-&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0=
- 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div><div style=3D"fon=
-t-family:arial,helvetica,sans-serif;font-size:12pt;color:#000000"><div><spa=
-n id=3D"m_-6782962235010934370zwchr">----- On Mar 26, 2018, at 11:01 AM, De=
-nis Yevgenyevich &lt;<a href=3D"mailto:denis.yevgenyevich@gmail.com" target=
-=3D"_blank">denis.yevgenyevich@gmail.com</a>&gt; wrote:<br></span></div><di=
-v><blockquote style=3D"border-left:2px solid #1010ff;margin-left:5px;paddin=
-g-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:=
-none;font-family:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr=
-"><div><div><div><div>Hello,<br><br>I think rculfhash autoresizing (as enab=
-led by CDS_LFHT_AUTO_RESIZE) does not behave well. Each time _cds_lfht_add =
-finds a hash bucket with more than 2 items, it basically tries to quadruple=
- the hash table size. But even with a perfect hash function hash collisions=
- are not that rare, given a large enough table. That is, every now and then=
- the algorithm will come across a 3-long chain and will grow the table unne=
-cessarily.<br><br>I created a table with cds_lfht_new(16, 16, 1&lt;&lt;16, =
-CDS_LFHT_AUTO_RESIZE, NULL) and began adding an item each 10ms. Each item h=
-ad a unique key and the hash function was very good (full 64-bit values of =
-Siphash). Judging by messages I added to rculfhash.c, this was happening:<b=
-r></div>after about 100 insertions, the table was resized to 512<br>after a=
-bout 500 insertions, the table was resized to 4096<br></div>after about 130=
-0 insertions, the table was resized to 16384 and immediately to 32768<br><b=
-r></div><div>With CDS_LFHT_AUTO_RESIZE|CDS_LFHT_ACCOUNTING the behaviour wa=
-s different but still unacceptable: the table got resized to 4096 after 900=
- insertions and then stopped growing!</div></div></div></blockquote><br><di=
-v>The "accounting" option is meant to be enabled, otherwise you're using th=
-e hash table only with</div><div>the bucket-length resize threshold, which =
-has the imperfections you noticed.<br></div><br><div>With accounting enable=
-d, the bucket length is used as an approximation for when resize is needed<=
-br></div><div>only for small tables. Beyond a certain size, the numbers of =
-elements in the hash table are used<br></div><div>as a criterion for resize=
-.<br></div><br><div>Why is it unexpected that the table stops growing beyon=
-d 4096 after 900 insertions ? How many<br></div><div>more insertions did yo=
-u do beyond 900 ?<br></div><br><div>Thanks,<br></div><br><div>Mathieu</div>=
-<blockquote style=3D"border-left:2px solid #1010ff;margin-left:5px;padding-=
-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:no=
-ne;font-family:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr">=
-<div><div><br><br></div>Could someone please implement saner resize conditi=
-ons, or better yet, add a customisable hook for decisions as to when and ho=
-w much should a table grow?<br><br></div>Cheers, Denis.<br></div><br>______=
-_________________________________________<br>lttng-dev mailing list<br><a h=
-ref=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.=
-lttng.org</a><br><a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinf=
-o/lttng-dev" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailman/list=
-info/lttng-dev</a><span class=3D"HOEnZb"><span data-mce-style=3D"color: #88=
-8888;" style=3D"color: #888888;" color=3D"#888888"><br></span></span></bloc=
-kquote></div><span class=3D"HOEnZb"><span data-mce-style=3D"color: #888888;=
-" style=3D"color: #888888;" color=3D"#888888"><br><div>-- <br></div><div>Ma=
-thieu Desnoyers<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com" tar=
-get=3D"_blank">http://www.efficios.com</a><br data-mce-bogus=3D"1"></div></=
-span></span></div></div></blockquote></div></div><br></blockquote></div><br=
-><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>E=
-fficiOS Inc.<br>http://www.efficios.com</div></div></body></html>
---=_1f6bbe6d-0e55-4448-9ac0-050405ba247c--
-
---===============0699318070577898792==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============0699318070577898792==--
+KFBsZWFzZSBrZWVwIHRoZSBsdHRuZy1kZXYgbWFpbGluZyBsaXN0IGluIENDLikKCi0tLS0tIE9u
+IE1hciAyNywgMjAxOCwgYXQgMTI6MDcgUE0sIERlbmlzIFlldmdlbnlldmljaCBkZW5pcy55ZXZn
+ZW55ZXZpY2hAZ21haWwuY29tIHdyb3RlOgoKPj4gV2hlbiBib3RoIGZsYWdzIGFyZSBzZXQsIGNo
+ZWNrX3Jlc2l6ZSgpIGlzIG9ubHkgZm9yIHRoZSBidWNrZXQtbG9jYWwgY2hhaW4KPiA+IGxlbmd0
+aCBhbGdvcml0aG0gdGhhdCBkZWFscwo+PiB3aXRoIHZlcnkgc21hbGwgdGFibGVzLiBUaGVuLCB3
+aGVuIHRoZSB0YWJsZSBzaXplIGdvZXMgYWJvdmUgdGhhdCB0aHJlc2hvbGQsCj4gPiBzcGxpdC1j
+b3VudGVycyBhcmUgdXNlZCB0bwo+PiBhZGp1c3QgdGhlIHJlcXVpcmVkIHRhYmxlIHNpemUuIFdl
+IGRvbid0IHVzZSB0aGUgc3BsaXQtY291bnRlcnMgYXBwcm94aW1hdGlvbiBvZgo+ID4gdGhlIG51
+bWJlciBvZiBlbGVtZW50cwo+PiBpbiB0aGUgdGFibGUgZm9yIHNtYWxsIHRhYmxlcyBiZWNhdXNl
+IHRoZXkgYXJlIG5vdCBhY2N1cmF0ZSBlbm91Z2ggZm9yIHNtYWxsCj4gPiB0YWJsZXMuIEl0J3Mg
+YSB0cmFkZW9mZgo+ID4gYmV0d2VlbiBhY2N1cmFjeSBhbmQgYWNjb3VudGluZyBvdmVyaGVhZCBo
+ZXJlLgo+IFRoYW5rcyBmb3IgdGhlIGV4cGxhbmF0aW9uLgoKPj4gTm90aWNlIHRoYXQgaHRfY291
+bnRfYWRkKCkgYW5kIGh0X2NvdW50X2RlbCgpIGJvdGggaW52b2tlCj4gPiBjZHNfbGZodF9yZXNp
+emVfbGF6eV9jb3VudCgpLiBJdCdzIHRoYXQKPiA+IGZ1bmN0aW9uIHdoaWNoIGlzIHJlc3BvbnNp
+YmxlIGZvciB0aGUgc3BsaXQtY291bnRlciBiYXNlZCByZXNpemUgYWxnb3JpdGhtLgo+PiBJZiBi
+b3RoIChDRFNfTEZIVF9BQ0NPVU5USU5HIHwgQ0RTX0xGSFRfQVVUT19SRVNJWkUpIGZsYWdzIGFy
+ZSBzZXQsIHRoZSB0YWJsZQo+ID4gd2lsbAo+ID4gc3RpbGwgZ3JvdyBhZnRlciBpdCBoYXMgZ29u
+ZSBiZXlvbmQgdGhpcyBjb25kaXRpb24uCj4gVGhhdCdzIHdoYXQgSSBvdmVybG9va2VkLiBJJ3Zl
+IGp1c3QgcmVwZWF0ZWQgbXkgdGVzdCwgbGV0dGluZyBpdCBydW4gZm9yIGEKPiBsb25nZXIgdGlt
+ZS4KPiBBZnRlciA0MDk2IGl0ZW1zICg0LWNvcmUgY3B1KSBjaGVja19yZXNpemUoKSBzdG9wcGVk
+IGdyb3dpbmcgdGhlIHRhYmxlLgoKNDA5NiBidWNrZXRzIGlzIGluZGVlZCB0aGUgdGhyZXNob2xk
+IGZvciBhIDQtY29yZSBjcHUgc3lzdGVtLiAKCj4gQWZ0ZXIgMzI3NjggaXRlbXMgaHRfY291bmRf
+YWRkKCkgZmluYWxseSBncmV3IHRoZSB0YWJsZSB0byAzMjc2OC4gVGhhdCBpcyB3aGVuCj4gdGhl
+IGNoZWNrCj4gaWYgKChjb3VudCA+PiBDSEFJTl9MRU5fUkVTSVpFX1RIUkVTSE9MRCkgPCBzaXpl
+KQo+IHdlbnQgZmFsc2UuIFRoZSBhdmVyYWdlIGNoYWluIGxlbmd0aCBtaWdodCBoYXZlIGJlZW4g
+OCBieSB0aGF0IHRpbWUuIElzbid0IGl0Cj4gdG9vIG11Y2g/CgpBY3R1YWxseSwgdGhpcyBpcyBu
+b3QgdGhlIGF2ZXJhZ2UgY2hhaW4gbGVuZ3RoOiB0aGUgcmVzaXplIGhhcHBlbnMgd2hlbiB0aGUg
+Zmlyc3QgY2hhaW4gZ29pbmcgCmJleW9uZCB0aGUgdGhyZXNob2xkIGlzIGVuY291bnRlcmVkLiBJ
+IHdvdWxkIGV4cGVjdCB0aGUgYXZlcmFnZSBjaGFpbiBsZW5ndGggdG8gYmUgc29tZXdoZXJlIApi
+ZWxvdyB0aGF0IHRocmVzaG9sZC4gSXQgd291bGQgYmUgaW50ZXJlc3RpbmcgaWYgeW91IGNvdWxk
+IHByb3ZpZGUgaW5zaWdodCBpbnRvIHRoZSBkaXN0cmlidXRpb24gb2YgCnlvdXIgaGFzaCB0YWJs
+ZSBidWNrZXQgY2hhaW4gbGVuZ3RoIGJ5IGFkZGluZyBpbnN0cnVtZW50YXRpb24gY29kZS4gCgo+
+IFBlcmhhcHMgeW91IGNvdWxkIG1ha2UgQ0hBSU5fTEVOX1JFU0laRV9USFJFU0hPTEQgYSB0dW5h
+YmxlPwoKVGhhdCB3b3VsZCBiZSBhIHBvc3NpYmlsaXR5LCB5ZXMuIFdvdWxkIHlvdSBsaWtlIHRv
+IHByb3Bvc2UgYSBwYXRjaCA/IAoKPiBBbnl3YXksIEkgYW0gZ2xhZCBub3cgSSB1bmRlcnN0YW5k
+IGhvdyB0aGlzIHN0dWZmIHdvcmtzLiBUaGFuayB5b3UgYWdhaW4hCgpZb3UncmUgd2VsY29tZSEg
+CgpUaGFua3MsIAoKTWF0aGlldSAKCj4gT24gMjcgTWFyY2ggMjAxOCBhdCAxNjowMiwgTWF0aGll
+dSBEZXNub3llcnMgPCBbCj4gbWFpbHRvOm1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbSB8
+IG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbSBdID4KPiB3cm90ZToKCj4+IC0tLS0tIE9u
+IE1hciAyNywgMjAxOCwgYXQgNTo1NSBBTSwgRGVuaXMgWWV2Z2VueWV2aWNoIDwgWwo+PiBtYWls
+dG86ZGVuaXMueWV2Z2VueWV2aWNoQGdtYWlsLmNvbSB8IGRlbmlzLnlldmdlbnlldmljaEBnbWFp
+bC5jb20gXSA+IHdyb3RlOgoKPj4+PiBUaGUgImFjY291bnRpbmciIG9wdGlvbiBpcyBtZWFudCB0
+byBiZSBlbmFibGVkLCBvdGhlcndpc2UgeW91J3JlIHVzaW5nIHRoZSBoYXNoCj4+PiA+IHRhYmxl
+IG9ubHkgd2l0aAo+Pj4gPiB0aGUgYnVja2V0LWxlbmd0aCByZXNpemUgdGhyZXNob2xkLCB3aGlj
+aCBoYXMgdGhlIGltcGVyZmVjdGlvbnMgeW91IG5vdGljZWQKPj4+IFdlbGwsIGdpdmVuIHRoYXQg
+bXkgc29mdHdhcmUgaGFzIHRvIG1haW50YWluIHByZWNpc2UgY291bnRzIG9mIGl0ZW1zIGluc2Vy
+dGVkCj4+PiBpbnRvIHNvbWUgb2YgaGFzaHRhYmxlcywKPj4+IEknZCBsaWtlIHRvIGJlIGFibGUg
+dG8gYXZvaWQgYW55IHBlcmZvcm1hbmNlIG92ZXJoZWFkIGR1ZSB0byBhY2NvdW50aW5nLgoKPj4+
+PiBvbmx5IGZvciBzbWFsbCB0YWJsZXMuIEJleW9uZCBhIGNlcnRhaW4gc2l6ZSwgdGhlIG51bWJl
+cnMgb2YgZWxlbWVudHMgaW4gdGhlCj4+PiA+IGhhc2ggdGFibGUgYXJlIHVzZWQKPj4+ID4gYXMg
+YSBjcml0ZXJpb24gZm9yIHJlc2l6ZS4KPj4+PiBXaHkgaXMgaXQgdW5leHBlY3RlZCB0aGF0IHRo
+ZSB0YWJsZSBzdG9wcyBncm93aW5nIGJleW9uZCA0MDk2IGFmdGVyIDkwMAo+Pj4gPiBpbnNlcnRp
+b25zID8KPj4+IEFoLCB0aGFua3MuIFR1cm5zIG91dCB0aGF0IHRoZSB0YWJsZSBzdG9wcGVkIGdy
+b3dpbmcgYmVjYXVzZSBvZiB0aGUgY2hlY2sKPj4+IGlmIChjb3VudCA+PSAoMVVMIDw8IChDT1VO
+VF9DT01NSVRfT1JERVIgKyBzcGxpdF9jb3VudF9vcmRlcikpKQoKPj4gSWYgYm90aCAoQ0RTX0xG
+SFRfQUNDT1VOVElORyB8IENEU19MRkhUX0FVVE9fUkVTSVpFKSBmbGFncyBhcmUgc2V0LCB0aGUg
+dGFibGUKPj4gd2lsbAo+PiBzdGlsbCBncm93IGFmdGVyIGl0IGhhcyBnb25lIGJleW9uZCB0aGlz
+IGNvbmRpdGlvbi4KCj4+IFdoZW4gYm90aCBmbGFncyBhcmUgc2V0LCBjaGVja19yZXNpemUoKSBp
+cyBvbmx5IGZvciB0aGUgYnVja2V0LWxvY2FsIGNoYWluCj4+IGxlbmd0aCBhbGdvcml0aG0gdGhh
+dCBkZWFscwo+PiB3aXRoIHZlcnkgc21hbGwgdGFibGVzLiBUaGVuLCB3aGVuIHRoZSB0YWJsZSBz
+aXplIGdvZXMgYWJvdmUgdGhhdCB0aHJlc2hvbGQsCj4+IHNwbGl0LWNvdW50ZXJzIGFyZSB1c2Vk
+IHRvCj4+IGFkanVzdCB0aGUgcmVxdWlyZWQgdGFibGUgc2l6ZS4gV2UgZG9uJ3QgdXNlIHRoZSBz
+cGxpdC1jb3VudGVycyBhcHByb3hpbWF0aW9uIG9mCj4+IHRoZSBudW1iZXIgb2YgZWxlbWVudHMK
+Pj4gaW4gdGhlIHRhYmxlIGZvciBzbWFsbCB0YWJsZXMgYmVjYXVzZSB0aGV5IGFyZSBub3QgYWNj
+dXJhdGUgZW5vdWdoIGZvciBzbWFsbAo+PiB0YWJsZXMuIEl0J3MgYSB0cmFkZW9mZgo+PiBiZXR3
+ZWVuIGFjY3VyYWN5IGFuZCBhY2NvdW50aW5nIG92ZXJoZWFkIGhlcmUuCgo+PiBOb3RpY2UgdGhh
+dCBodF9jb3VudF9hZGQoKSBhbmQgaHRfY291bnRfZGVsKCkgYm90aCBpbnZva2UKPj4gY2RzX2xm
+aHRfcmVzaXplX2xhenlfY291bnQoKS4gSXQncyB0aGF0Cj4+IGZ1bmN0aW9uIHdoaWNoIGlzIHJl
+c3BvbnNpYmxlIGZvciB0aGUgc3BsaXQtY291bnRlciBiYXNlZCByZXNpemUgYWxnb3JpdGhtLgoK
+Pj4+IEkgYW0gYSBiaXQgZGlzYXBwb2ludGVkIGFib3V0IHRoYXQuIFdoeSBjYW4ndCB3ZSBoYXZl
+IHRhYmxlcyB0aGF0IHJlc2l6ZQo+Pj4gMS4gYXV0b21hdGljYWxseQo+Pj4gMi4gZnJvbSAxMHMg
+dG8gMTAwLDAwMHMgb2YgYnVja2V0cwo+Pj4gMy4gd2l0aG91dCBiZWNvbWluZyB0b28gbGFyZ2Ug
+dG9vIHNvb24/Cgo+PiBUaGUgb25seSB0aGluZyBoZXJlIGlzIHRoYXQgdGhlIGJ1Y2tldC1sZW5n
+dGggYWxnb3JpdGhtIHVzZWQgZm9yIHNtYWxsIHRhYmxlcwo+PiBjYW4gZ3JvdyB0aGUKPj4gdGFi
+bGUgbW9yZSBxdWlja2x5IHRoYW4geW91IHdvdWxkIGV4cGVjdCBpZiB5b3UgaGF2ZSBoYXNoIGNv
+bGxpc2lvbnMuIEJ1dCBpdAo+PiBzaG91bGQgbm90Cj4+IG1hdHRlciB0aGF0IG11Y2ggYmVjYXVz
+ZSBpdCBvbmx5IGFwcGxpZXMgdG8gc21hbGwgdGFibGVzLiBEbyB5b3UgZXhwZXJpZW5jZSAidG9v
+Cj4+IGFnZ3Jlc3NpdmUiCj4+IGhhc2ggdGFibGUgZ3Jvd3RoIGV2ZW4gYmV5b25kIHRoZSB0aHJl
+c2hvbGQgc2VsZWN0aW5nIHRoZSBzcGxpdC1jb3VudGVycyByZXNpemUKPj4gYWxnb3JpdGhtID8K
+Cj4+IFRoYXQgdGhyZXNob2xkIGlzIGNhbGN1bGF0ZWQgYXM6Cgo+PiAoMVVMIDw8IChDT1VOVF9D
+T01NSVRfT1JERVIgKyBzcGxpdF9jb3VudF9vcmRlcikKCj4+IFdoZXJlIENPVU5UX0NPTU1JVF9P
+UkRFUiA9IDEwCj4+IGFuZCBzcGxpdF9jb3VudF9vcmRlciA9IGxvZzIobnJfY3B1cyBjZWlsZWQg
+dG8gbmV4dCBwb3dlciBvZiAyKQoKPj4gQXNzdW1pbmcgYSA2NC1jb3JlIG1hY2hpbmU6Cgo+PiBs
+b2cyKDY0KSA9IDYKPj4gMiBeICgxMCArIDYpID0gNjU1MzYKCj4+IENvbnNpZGVyaW5nIHRoYXQg
+eW91IGNyZWF0ZWQgeW91ciBoYXNoIHRhYmxlIHdpdGggYW4gaW5pdGlhbCBzaXplIG9mIDE2IGJ1
+Y2tldHMsCj4+IHNwZWNpZmllZCBhIG1pbmltdW0KPj4gbnVtYmVyIG9mIGJ1Y2tldHMgb2YgMTYs
+IGFuZCBhIG1heGltdW0gbnVtYmVyIG9mIGJ1Y2tldHMgb2YgMSA8PCAxNiAoNjU1MzYpLAo+PiB5
+b3UnbGwgYWx3YXlzIGJlCj4+IHVzaW5nIHRoZSAiaGFzaC1jaGFpbiBsZW5ndGgiIGFsZ29yaXRo
+bSBmb3IgcmVzaXplIG9uIGEgNjQtY29yZSBtYWNoaW5lLiBUaGUKPj4gc3BsaXQtY291bnRlciBh
+bGdvcml0aG0KPj4gd291bGQgbmV2ZXIga2ljayBpbi4KCj4+IFlvdSBzaG91bGQgdGhlcmVmb3Jl
+IHRyeSB0d2Vha2luZyB0aGUgQG1heF9ucl9idWNrZXRzIHBhcmFtZXRlciB0byBhIGxhcmdlcgo+
+PiB2YWx1ZSB3aGVuCj4+IGNhbGxpbmcgY2RzX2xmaHRfbmV3KCkuCgo+PiBIb3cgbWFueSBjb3Jl
+cyBkbyB5b3UgaGF2ZSA/Cgo+PiBMZXQgbWUga25vdyBob3cgaXMgZ29lcywKCj4+IFRoYW5rcywK
+Cj4+IE1hdGhpZXUKCj4+PiBPbiAyNiBNYXJjaCAyMDE4IGF0IDE4OjMyLCBNYXRoaWV1IERlc25v
+eWVycyA8IFsKPj4+IG1haWx0bzptYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20gfCBtYXRo
+aWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20gXSA+Cj4+PiB3cm90ZToKCj4+Pj4gLS0tLS0gT24g
+TWFyIDI2LCAyMDE4LCBhdCAxMTowMSBBTSwgRGVuaXMgWWV2Z2VueWV2aWNoIDwgWwo+Pj4+IG1h
+aWx0bzpkZW5pcy55ZXZnZW55ZXZpY2hAZ21haWwuY29tIHwgZGVuaXMueWV2Z2VueWV2aWNoQGdt
+YWlsLmNvbSBdID4gd3JvdGU6Cgo+Pj4+PiBIZWxsbywKCj4+Pj4+IEkgdGhpbmsgcmN1bGZoYXNo
+IGF1dG9yZXNpemluZyAoYXMgZW5hYmxlZCBieSBDRFNfTEZIVF9BVVRPX1JFU0laRSkgZG9lcyBu
+b3QKPj4+Pj4gYmVoYXZlIHdlbGwuIEVhY2ggdGltZSBfY2RzX2xmaHRfYWRkIGZpbmRzIGEgaGFz
+aCBidWNrZXQgd2l0aCBtb3JlIHRoYW4gMgo+Pj4+PiBpdGVtcywgaXQgYmFzaWNhbGx5IHRyaWVz
+IHRvIHF1YWRydXBsZSB0aGUgaGFzaCB0YWJsZSBzaXplLiBCdXQgZXZlbiB3aXRoIGEKPj4+Pj4g
+cGVyZmVjdCBoYXNoIGZ1bmN0aW9uIGhhc2ggY29sbGlzaW9ucyBhcmUgbm90IHRoYXQgcmFyZSwg
+Z2l2ZW4gYSBsYXJnZSBlbm91Z2gKPj4+Pj4gdGFibGUuIFRoYXQgaXMsIGV2ZXJ5IG5vdyBhbmQg
+dGhlbiB0aGUgYWxnb3JpdGhtIHdpbGwgY29tZSBhY3Jvc3MgYSAzLWxvbmcKPj4+Pj4gY2hhaW4g
+YW5kIHdpbGwgZ3JvdyB0aGUgdGFibGUgdW5uZWNlc3NhcmlseS4KCj4+Pj4+IEkgY3JlYXRlZCBh
+IHRhYmxlIHdpdGggY2RzX2xmaHRfbmV3KDE2LCAxNiwgMTw8MTYsIENEU19MRkhUX0FVVE9fUkVT
+SVpFLCBOVUxMKQo+Pj4+PiBhbmQgYmVnYW4gYWRkaW5nIGFuIGl0ZW0gZWFjaCAxMG1zLiBFYWNo
+IGl0ZW0gaGFkIGEgdW5pcXVlIGtleSBhbmQgdGhlIGhhc2gKPj4+Pj4gZnVuY3Rpb24gd2FzIHZl
+cnkgZ29vZCAoZnVsbCA2NC1iaXQgdmFsdWVzIG9mIFNpcGhhc2gpLiBKdWRnaW5nIGJ5IG1lc3Nh
+Z2VzIEkKPj4+Pj4gYWRkZWQgdG8gcmN1bGZoYXNoLmMsIHRoaXMgd2FzIGhhcHBlbmluZzoKPj4+
+Pj4gYWZ0ZXIgYWJvdXQgMTAwIGluc2VydGlvbnMsIHRoZSB0YWJsZSB3YXMgcmVzaXplZCB0byA1
+MTIKPj4+Pj4gYWZ0ZXIgYWJvdXQgNTAwIGluc2VydGlvbnMsIHRoZSB0YWJsZSB3YXMgcmVzaXpl
+ZCB0byA0MDk2Cj4+Pj4+IGFmdGVyIGFib3V0IDEzMDAgaW5zZXJ0aW9ucywgdGhlIHRhYmxlIHdh
+cyByZXNpemVkIHRvIDE2Mzg0IGFuZCBpbW1lZGlhdGVseSB0bwo+Pj4+PiAzMjc2OAoKPj4+Pj4g
+V2l0aCBDRFNfTEZIVF9BVVRPX1JFU0laRXxDRFNfTEZIVF9BQ0NPVU5USU5HIHRoZSBiZWhhdmlv
+dXIgd2FzIGRpZmZlcmVudCBidXQKPj4+Pj4gc3RpbGwgdW5hY2NlcHRhYmxlOiB0aGUgdGFibGUg
+Z290IHJlc2l6ZWQgdG8gNDA5NiBhZnRlciA5MDAgaW5zZXJ0aW9ucyBhbmQgdGhlbgo+Pj4+PiBz
+dG9wcGVkIGdyb3dpbmchCgo+Pj4+IFRoZSAiYWNjb3VudGluZyIgb3B0aW9uIGlzIG1lYW50IHRv
+IGJlIGVuYWJsZWQsIG90aGVyd2lzZSB5b3UncmUgdXNpbmcgdGhlIGhhc2gKPj4+PiB0YWJsZSBv
+bmx5IHdpdGgKPj4+PiB0aGUgYnVja2V0LWxlbmd0aCByZXNpemUgdGhyZXNob2xkLCB3aGljaCBo
+YXMgdGhlIGltcGVyZmVjdGlvbnMgeW91IG5vdGljZWQuCgo+Pj4+IFdpdGggYWNjb3VudGluZyBl
+bmFibGVkLCB0aGUgYnVja2V0IGxlbmd0aCBpcyB1c2VkIGFzIGFuIGFwcHJveGltYXRpb24gZm9y
+IHdoZW4KPj4+PiByZXNpemUgaXMgbmVlZGVkCj4+Pj4gb25seSBmb3Igc21hbGwgdGFibGVzLiBC
+ZXlvbmQgYSBjZXJ0YWluIHNpemUsIHRoZSBudW1iZXJzIG9mIGVsZW1lbnRzIGluIHRoZQo+Pj4+
+IGhhc2ggdGFibGUgYXJlIHVzZWQKPj4+PiBhcyBhIGNyaXRlcmlvbiBmb3IgcmVzaXplLgoKPj4+
+PiBXaHkgaXMgaXQgdW5leHBlY3RlZCB0aGF0IHRoZSB0YWJsZSBzdG9wcyBncm93aW5nIGJleW9u
+ZCA0MDk2IGFmdGVyIDkwMAo+Pj4+IGluc2VydGlvbnMgPyBIb3cgbWFueQo+Pj4+IG1vcmUgaW5z
+ZXJ0aW9ucyBkaWQgeW91IGRvIGJleW9uZCA5MDAgPwoKPj4+PiBUaGFua3MsCgo+Pj4+IE1hdGhp
+ZXUKCj4+Pj4+IENvdWxkIHNvbWVvbmUgcGxlYXNlIGltcGxlbWVudCBzYW5lciByZXNpemUgY29u
+ZGl0aW9ucywgb3IgYmV0dGVyIHlldCwgYWRkIGEKPj4+Pj4gY3VzdG9taXNhYmxlIGhvb2sgZm9y
+IGRlY2lzaW9ucyBhcyB0byB3aGVuIGFuZCBob3cgbXVjaCBzaG91bGQgYSB0YWJsZSBncm93PwoK
+Pj4+Pj4gQ2hlZXJzLCBEZW5pcy4KCj4+Pj4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCj4+Pj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4+Pj4gWyBt
+YWlsdG86bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZyB8IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
+cmcgXQo+Pj4+PiBbIGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0
+aW5mby9sdHRuZy1kZXYgfAo+Pj4+PiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2IF0KCj4+Pj4gLS0KPj4+PiBNYXRoaWV1IERlc25veWVy
+cwo+Pj4+IEVmZmljaU9TIEluYy4KPj4+PiBbIGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tLyB8IGh0
+dHA6Ly93d3cuZWZmaWNpb3MuY29tIF0KCj4+IC0tCj4+IE1hdGhpZXUgRGVzbm95ZXJzCj4+IEVm
+ZmljaU9TIEluYy4KPj4gWyBodHRwOi8vd3d3LmVmZmljaW9zLmNvbS8gfCBodHRwOi8vd3d3LmVm
+ZmljaW9zLmNvbSBdCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8v
+d3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRl
+dgo=
