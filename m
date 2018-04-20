@@ -1,18 +1,19 @@
 From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: LTTng Time Stamp Issue
-Date: Fri, 20 Apr 2018 11:37:23 -0400
-Message-ID: <CA+jJMxvKyCt4VZ6U0gLu1KGA3S==CPTkTTGErOfXgBgms68xRg__48364.6617540673$1524238552$gmane$org@mail.gmail.com>
-References: <BY2PR0501MB21035DCCC28AFAD0D12C0587E3B40@BY2PR0501MB2103.namprd05.prod.outlook.com>
+Subject: Re: Notification event from lttng-relayd on trace
+ rotation completion?
+Date: Fri, 20 Apr 2018 14:58:27 -0400
+Message-ID: <CA+jJMxvKQEJXMJCrQy-pARpVo8xA-Zof4DJV0CQemRniH_wFfQ__42154.3333832689$1524250614$gmane$org@mail.gmail.com>
+References: <E2315562-B90A-4ABB-B6AC-74C9D896AA82@sinch.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4303726100677397844=="
+Content-Type: multipart/mixed; boundary="===============2089190273219798824=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lf0-x231.google.com (mail-lf0-x231.google.com
- [IPv6:2a00:1450:4010:c07::231])
- by lists.lttng.org (Postfix) with ESMTPS id 40SKk3025rz14Ny
- for <lttng-dev@lists.lttng.org>; Fri, 20 Apr 2018 11:37:46 -0400 (EDT)
-Received: by mail-lf0-x231.google.com with SMTP id o123-v6so3181328lfe.8
- for <lttng-dev@lists.lttng.org>; Fri, 20 Apr 2018 08:37:46 -0700 (PDT)
-In-Reply-To: <BY2PR0501MB21035DCCC28AFAD0D12C0587E3B40@BY2PR0501MB2103.namprd05.prod.outlook.com>
+Received: from mail-lf0-x229.google.com (mail-lf0-x229.google.com
+ [IPv6:2a00:1450:4010:c07::229])
+ by lists.lttng.org (Postfix) with ESMTPS id 40SQB23MXqz14fZ
+ for <lttng-dev@lists.lttng.org>; Fri, 20 Apr 2018 14:58:50 -0400 (EDT)
+Received: by mail-lf0-x229.google.com with SMTP id p142-v6so6532095lfd.6
+ for <lttng-dev@lists.lttng.org>; Fri, 20 Apr 2018 11:58:50 -0700 (PDT)
+In-Reply-To: <E2315562-B90A-4ABB-B6AC-74C9D896AA82@sinch.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,73 +23,80 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Sai Tujala <Sai.Tujala@mathworks.in>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Christoffer Ahlbin <Christoffer.Ahlbin@sinch.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============4303726100677397844==
-Content-Type: multipart/alternative; boundary="883d24f2195c26d4ab056a49788e"
+--===============2089190273219798824==
+Content-Type: multipart/alternative; boundary="000000000000360900056a4c47a2"
 
---883d24f2195c26d4ab056a49788e
+--000000000000360900056a4c47a2
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On 10 April 2018 at 10:56, Christoffer Ahlbin <Christoffer.Ahlbin@sinch.com=
+>
+wrote:
 
-I'm adding the LTTng mailing list in CC for the benefit of the community
-and so people add to or correct my explanation.
+> What is the recommended approach to have an external process notified
+> that a trace session rotation has completed on the lttng-relayd end?
+>
+> I'm trying out the trace rotation functionality available in 2.11
+> (pre-release) and will be running a trace session inside a Linux
+> container (userspace tracepoints only), and running lttng-relayd on
+> the container host. I would then like to have a third process, a
+> "collector"-like process, that will also be running on the container
+> host and will have the responsibility of collecting completeted trace
+> chunks (i.e. rotated chunks) and push them further along into a trace
+> analysis pipeline.
+>
+> So far I've looked at using inotify to watch the lttng-traces/
+> directory, and the idea would be to infer a trace rotation based on
+> that the destination directories post rotation are named on the format
+> "%Y%m%dT%H%M%S%z-%Y%m%dT%H%M%S%z-<seqno>". But I'm not entirely
+> satisifed with that approach. Ideally I would be able to be notified
+> more explicitly that a rotation completed.
+>
 
-The CTF specification describes the meaning of those fields:
-http://diamon.org/ctf/#spec8
+Hi Christopher,
 
-In your case, this means that the timestamps in the trace are expressed
-relative to an arbitrary time set 1524226572435601778 clock ticks after
-00:00:00 on 1 January 1970.
+There is a notification mechanism available on the target side (sessiond an=
+d
+consumerd) to which I'm adding notifications for ongoing and completed
+notifications.
 
-To take your specific example:
-Your clock is running at 1,000,000,000 Hz, meaning the duration of a clock
-tick (period) is of 1 ns.
+Unfortunately, those notifications are not forwarded over the network
+to the relay daemon. It would be nice to extend the notification
+system for that kind of use case.
 
-The event has occurred at
-1524226572435601778 (offset) + 00000003827855360941 (event clock value)
-nanoseconds after UNIX Epoch. That leads us to around Friday, April 20,
-2018 1:20:00 PM (GMT).
+In the short term, monitoring with inotify for new folders with the
+format you mentioned is pretty much the only mechanism we have if
+you can't monitor for notifications on the target.
 
-Regards,
+In the current master branch, there is a bug that can cause the
+relayd to rename the completed chunk too soon while it is
+still being written. In this case, you could fail to read the trace.
+
+We are working on a fix at the moment, so the inotify approach
+should be safe by the time of the release. Did you observe other
+problems using inotify?
+
+Thanks!
 J=C3=A9r=C3=A9mie
 
 
-
-On 20 April 2018 at 11:06, Sai Tujala <Sai.Tujala@mathworks.in> wrote:
-
-> Hi Jeremie,
 >
 >
+> Any thoughts and recommendations are most welcome.
 >
->                 In metadata file of LTTng trace session,  offset from
-> Epoch is =E2=80=9C1524226572435601778=E2=80=9D and time stamp of an event=
- in channel data
-> files is starting from =E2=80=9C00000003827855360941=E2=80=9D. Can you br=
-ief about
-> relevance between these two time stamps.
+> Thanks
 >
+> Christoffer Ahlbin
 >
->
-> freq =3D 1000000000; /* Frequency, in Hz */
->
->         /* clock value offset from Epoch is: offset * (1/freq) */
->
->         offset =3D 1524226572435601778;
->
->
->
->
->
-> Thanks & Regards,
->
-> T Sai Kiran
->
->
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 >
 
 
@@ -98,68 +106,76 @@ J=C3=A9r=C3=A9mie Galarneau
 EfficiOS Inc.
 http://www.efficios.com
 
---883d24f2195c26d4ab056a49788e
+--000000000000360900056a4c47a2
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div><div><div><div><div><div>Hi,<br><br></div><div>I&#39;=
-m adding the LTTng mailing list in CC for the benefit of the community and =
-so people add to or correct my explanation.<br></div><div><br>The CTF speci=
-fication describes the meaning of those fields:<br><a href=3D"http://diamon=
-.org/ctf/#spec8">http://diamon.org/ctf/#spec8</a><br><br></div>In your case=
-, this means that the timestamps in the trace are expressed relative to an =
-arbitrary time set 1524226572435601778 clock ticks after 00:00:00 on 1 Janu=
-ary 1970.<br><br></div>To take your specific example:<br></div>Your clock i=
-s running at 1,000,000,000 Hz, meaning the duration of a clock tick (period=
-) is of 1 ns.<br><br></div>The event has occurred at<br></div>1524226572435=
-601778 (offset) + 00000003827855360941 (event clock value) nanoseconds afte=
-r UNIX Epoch. That leads us to around Friday, April 20, 2018 1:20:00 PM (GM=
-T).<br><br></div><div>Regards,<br></div>J=C3=A9r=C3=A9mie<br><div><br><div>=
-<div><div><div><br></div></div></div></div></div></div><div class=3D"gmail_=
-extra"><br><div class=3D"gmail_quote">On 20 April 2018 at 11:06, Sai Tujala=
- <span dir=3D"ltr">&lt;<a href=3D"mailto:Sai.Tujala@mathworks.in" target=3D=
-"_blank">Sai.Tujala@mathworks.in</a>&gt;</span> wrote:<br><blockquote class=
-=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
-ing-left:1ex">
-
-
-
-
-
-<div link=3D"#0563C1" vlink=3D"#954F72" lang=3D"EN-US">
-<div class=3D"m_-293747052095318529WordSection1">
-<p class=3D"MsoNormal">Hi Jeremie,<u></u><u></u></p>
-<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
-<p class=3D"MsoNormal">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 In metadata file of LTTng trace ses=
-sion, =C2=A0offset from Epoch is =E2=80=9C1524226572435601778=E2=80=9D and =
-time stamp of an event in channel data files is starting from =E2=80=9C0000=
-0003827855360941=E2=80=9D. Can you brief about relevance between these two
- time stamps. <u></u><u></u></p>
-<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
-<p class=3D"MsoNormal" style=3D"text-indent:.5in">freq =3D 1000000000; /* F=
-requency, in Hz */<u></u><u></u></p>
-<p class=3D"MsoNormal">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* clock =
-value offset from Epoch is: offset * (1/freq) */<u></u><u></u></p>
-<p class=3D"MsoNormal">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 offset =
-=3D 1524226572435601778;<u></u><u></u></p>
-<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
-<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
-<p class=3D"MsoNormal">Thanks &amp; Regards,<u></u><u></u></p>
-<p class=3D"MsoNormal">T Sai Kiran<u></u><u></u></p>
-<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
-</div>
-</div>
-
+<div dir=3D"ltr"><br><div class=3D"gmail_extra"><br><div class=3D"gmail_quo=
+te">On 10 April 2018 at 10:56, Christoffer Ahlbin <span dir=3D"ltr">&lt;<a =
+href=3D"mailto:Christoffer.Ahlbin@sinch.com" target=3D"_blank">Christoffer.=
+Ahlbin@sinch.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote"=
+ style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Wh=
+at is the recommended approach to have an external process notified<br>
+that a trace session rotation has completed on the lttng-relayd end?<br>
+<br>
+I&#39;m trying out the trace rotation functionality available in 2.11<br>
+(pre-release) and will be running a trace session inside a Linux<br>
+container (userspace tracepoints only), and running lttng-relayd on<br>
+the container host. I would then like to have a third process, a<br>
+&quot;collector&quot;-like process, that will also be running on the contai=
+ner<br>
+host and will have the responsibility of collecting completeted trace<br>
+chunks (i.e. rotated chunks) and push them further along into a trace<br>
+analysis pipeline.<br>
+<br>
+So far I&#39;ve looked at using inotify to watch the lttng-traces/<br>
+directory, and the idea would be to infer a trace rotation based on<br>
+that the destination directories post rotation are named on the format<br>
+&quot;%Y%m%dT%H%M%S%z-%Y%m%dT%H%M%<wbr>S%z-&lt;seqno&gt;&quot;. But I&#39;m=
+ not entirely<br>
+satisifed with that approach. Ideally I would be able to be notified<br>
+more explicitly that a rotation completed.<br></blockquote><div><br></div><=
+div>Hi Christopher,<br><br></div><div>There is a notification mechanism ava=
+ilable on the target side (sessiond and<br>consumerd) to which I&#39;m addi=
+ng notifications for ongoing and completed<br>notifications.<br><br></div><=
+div>Unfortunately, those notifications are not forwarded over the network<b=
+r></div><div>to the relay daemon. It would be nice to extend the notificati=
+on<br></div><div>system for that kind of use case.<br><br></div><div>In the=
+ short term, monitoring with inotify for new folders with the<br>format you=
+ mentioned is pretty much the only mechanism we have if<br></div><div>you c=
+an&#39;t monitor for notifications on the target.<br><br></div><div>In the =
+current master branch, there is a bug that can cause the<br></div><div>rela=
+yd to rename the completed chunk too soon while it is<br></div><div>still b=
+eing written. In this case, you could fail to read the trace.<br><br></div>=
+<div>We are working on a fix at the moment, so the inotify approach<br>shou=
+ld be safe by the time of the release. Did you observe other<br></div><div>=
+problems using inotify?<br></div><div><br></div><div>Thanks!<br></div><div>=
+J=C3=A9r=C3=A9mie<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quot=
+e" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
+<br>
+<br>
+Any thoughts and recommendations are most welcome.<br>
+<br>
+Thanks<br>
+<br>
+Christoffer Ahlbin<br>
+<br>
+______________________________<wbr>_________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
+br>
+<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
+=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-<wbr>bin/mail=
+man/listinfo/lttng-dev</a><br>
 </blockquote></div><br><br clear=3D"all"><br>-- <br><div class=3D"gmail_sig=
 nature" data-smartmail=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>E=
 fficiOS Inc.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http:=
 //www.efficios.com</a></div>
-</div>
+</div></div>
 
---883d24f2195c26d4ab056a49788e--
+--000000000000360900056a4c47a2--
 
---===============4303726100677397844==
+--===============2089190273219798824==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -169,4 +185,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============4303726100677397844==--
+--===============2089190273219798824==--
