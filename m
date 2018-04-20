@@ -1,18 +1,18 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: Wrong procname if tracepoint is used before fork
-Date: Tue, 17 Apr 2018 11:16:39 -0400
-Message-ID: <20180417151639.GA30020__21645.9053605378$1523978087$gmane$org@joraj-alpa>
-References: <884129787.1408018.1523965476762.ref@mail.yahoo.com>
- <884129787.1408018.1523965476762@mail.yahoo.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: LTTng Time Stamp Issue
+Date: Fri, 20 Apr 2018 11:37:23 -0400
+Message-ID: <CA+jJMxvKyCt4VZ6U0gLu1KGA3S==CPTkTTGErOfXgBgms68xRg__48364.6617540673$1524238552$gmane$org@mail.gmail.com>
+References: <BY2PR0501MB21035DCCC28AFAD0D12C0587E3B40@BY2PR0501MB2103.namprd05.prod.outlook.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============4303726100677397844=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 40QTP80Qn4z14Fl
- for <lttng-dev@lists.lttng.org>; Tue, 17 Apr 2018 11:16:43 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <884129787.1408018.1523965476762@mail.yahoo.com>
+Received: from mail-lf0-x231.google.com (mail-lf0-x231.google.com
+ [IPv6:2a00:1450:4010:c07::231])
+ by lists.lttng.org (Postfix) with ESMTPS id 40SKk3025rz14Ny
+ for <lttng-dev@lists.lttng.org>; Fri, 20 Apr 2018 11:37:46 -0400 (EDT)
+Received: by mail-lf0-x231.google.com with SMTP id o123-v6so3181328lfe.8
+ for <lttng-dev@lists.lttng.org>; Fri, 20 Apr 2018 08:37:46 -0700 (PDT)
+In-Reply-To: <BY2PR0501MB21035DCCC28AFAD0D12C0587E3B40@BY2PR0501MB2103.namprd05.prod.outlook.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,112 +22,151 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: negoita catalin <negoitacatalin@yahoo.com>
-Cc: lttng-dev@lists.lttng.org
+To: Sai Tujala <Sai.Tujala@mathworks.in>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpPbiBUdWUsIEFwciAxNywgMjAxOCBhdCAxMTo0NDozNkFNICswMDAwLCBuZWdvaXRhIGNh
-dGFsaW4gdmlhIGx0dG5nLWRldiB3cm90ZToKPiBIZWxsbywKPiAKPiBVc2luZyB0aGUgZm9sbG93
-aW5nIHRlc3QgYXBwLCBpdCBjYW4gYmUgc2VlbiB0aGF0IGlmIHRyYWNlcG9pbnQgaXMgdXNlZCBi
-ZWZvcmUgZm9yaygpLCBwcm9jbmFtZSB2YWx1ZSBpcyB3cm9uZyBpbiBiYWJlbHRyYWNlIG91dHB1
-dCBsaXZlIHNlc3Npb24uCj4gCj4gVGVzdCBhcHBsaWNhdGlvbjoKClBsZWFzZSBwcm92aWRlIGEg
-bGluayB0byB0aGUgY29tcGxldGUgc291cmNlIGNvZGUgb2YgdGhpcyByZXByb2R1Y2VyLgoKSSB3
-YXMgYWJsZSB0byByZXByb2R1Y2UgdGhlIGJlaGF2aW91ciBkZXNjcmliZWQgaGVyZSBidXQgaXQg
-d291bGQgaGF2ZSBiZWVuCmZhc3RlciBpZiB5b3UgbGlua2VkIGEgZ2l0aHViIHJlcG8gb3Igc29t
-ZXRoaW5nIGxpa2UgaXQuIFNvbWV0aGluZyB0byBrZWVwIGluCm1pbmQgZm9yIG5leHQgdGltZS4K
-Cj4gCj4gLi4uCj4gaW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKmFyZ3ZbXSkKPiB7Cj4gcGlkX3Qg
-cGlkMTsKPiAvL3RyYWNlcG9pbnQoaGVsbG9fd29ybGQsIG15X2ZpcnN0X3RyYWNlcG9pbnQsIHBp
-ZDEsICJCZWZvcmUgZm9yayBQaWQ6ICIpOwo+IHBpZDEgPSBmb3JrKCk7CgpTaWRlIG5vdGUsIHlv
-dSB3aWxsIG5lZWQgdG8gdXNlIHRoZSBmb3JrIGxpYnJhcnkgdXRpbGl0eSB3aGVuIGxhdW5jaGlu
-ZyB5b3VyCmFwcGxpY2F0aW9uLiBodHRwczovL2x0dG5nLm9yZy9kb2NzL3YyLjEwLyNkb2MtdXNp
-bmctbHR0bmctdXN0LXdpdGgtZGFlbW9ucwoKVGhlIGN1cnJlbnQgaXNzdWUgaXMgbm90IHJlbGF0
-ZWQgdG8gdGhpcy4KCj4gaWYgKHBpZDEgPT0gMCl7Cj4gCXByY3RsKFBSX1NFVF9OQU1FLCJsdHRu
-Zy10ZXN0LWNoaWxkXDAiLCBOVUxMLCBOVUxMLCBOVUxMKTsKPiAJdHJhY2Vwb2ludChoZWxsb193
-b3JsZCwgbXlfZmlyc3RfdHJhY2Vwb2ludCwgMjMsICJpbiBpZiIpOwo+IAl9Cj4gZWxzZXsKPiAJ
-cHJjdGwoUFJfU0VUX05BTUUsImx0dG5nLXRlc3QtcGFyZW50XDAiLCBOVUxMLCBOVUxMLCBOVUxM
-KTsKPiAJdHJhY2Vwb2ludChoZWxsb193b3JsZCwgbXlfZmlyc3RfdHJhY2Vwb2ludCwgMjMsICJp
-biBlbHNlIik7Cj4gCX0KPiAKPiB0cmFjZXBvaW50KGhlbGxvX3dvcmxkLCBteV9maXJzdF90cmFj
-ZXBvaW50LCBwaWQxLCAiQmVmb3JlIHNsZWVwIFBpZDogIik7Cj4gc2xlZXAoNSk7Cj4gdHJhY2Vw
-b2ludChoZWxsb193b3JsZCwgbXlfZmlyc3RfdHJhY2Vwb2ludCwgcGlkMSwgIkFmdGVyIHNsZWVw
-IFBpZDogIik7Cj4gCj4gCj4gcmV0dXJuIDA7Cj4gfSAKPiAuLi4KPiAKPiBMdHRuZyBzZXNzaW9u
-Ogo+IAo+IGV4cG9ydCBUQz1NeVNlc3Npb24KPiBsdHRuZy1zZXNzaW9uZCAmCgpTaWRlIG5vdGUs
-IGRvaW5nIHRoaXMgaW4gYSBzY3JpcHQgaXMgbm90IGEgZ29vZCBpZGVhIHNpbmNlIHlvdSBkbyBu
-b3QgaGF2ZSBhbnkKZ3VhcmFudGVlIHRoYXQgbHR0bmctc2Vzc2lvbmQgaXMgcmVhZHkgZm9yIGZ1
-cnRoZXIgY29tbWFuZC4gRWl0aGVyIHVzZSB0aGUgLWIsCi1kLCAtUyBhcmd1bWVudC4gU2VlIG1h
-biBwYWdlIG9mIGx0dG5nLXNlc3Npb25kIGZvciBtb3JlIGRldGFpbHMuCgo+IGx0dG5nIGNyZWF0
-ZSAkVEMgLS1saXZlIDEwMDAwMDAgLVUgbmV0Oi8vbG9jYWxob3N0OjUzMDAwOjUzMDAxLy4vCj4g
-bHR0bmctcmVsYXlkIC1DIHRjcDovL2xvY2FsaG9zdDo1MzAwMCAtRCB0Y3A6Ly9sb2NhbGhvc3Q6
-NTMwMDEgLUwgbmV0Oi8vbG9jYWxob3N0OjUzMDAyIC1vIC90bXAvJFRDICYKClRoZSBwcmV2aW91
-cyBjb21tZW50IGFsc28gYXBwbGllcyB0byBsdHRuZy1yZWxheWQKCj4gbHR0bmcgZW5hYmxlLWNo
-YW5uZWwgY2hhbjEgLXUgLS1idWZmZXJzLXVpZCAKPiBsdHRuZyBlbmFibGUtZXZlbnQgICAtYyBj
-aGFuMSAtLXVzZXJzcGFjZSBoZWxsb193b3JsZDpteV9maXJzdF90cmFjZXBvaW50Cj4gbHR0bmcg
-YWRkLWNvbnRleHQgLS11c2Vyc3BhY2UgLXQgdnBpZCAtdCB2dGlkIC10IHByb2NuYW1lCj4gbHR0
-bmcgc3RhcnQgJFRDOwoKVGhpcyBiZWhhdmlvdXIgaXMgdW5yZWxhdGVkIHRvIGx0dG5nLXJlbGF5
-ZC4gSXQgY2FuIGJlIHJlcHJvZHVjZWQgbG9jYWxseS4KClRoaXMgY3V0IGRvd24gdG86CgpsdHRu
-ZyBjcmVhdGUKbHR0bmcgZW5hYmxlLWV2ZW50IC0tdXNlcnNwYWNlIGhlbGxvX3dvcmxkOm15X2Zp
-cnN0X3RyYWNlcG9pbnQKbHR0bmcgYWRkLWNvbnRleHQgLS11c2Vyc3BhY2UgLXQgdnBpZCAtdCB2
-dGlkIC10IHByb2NuYW1lCmx0dG5nIHN0YXJ0Ci4vcnVuX2FwcApsdHRuZyBzdG9wCmx0dG5nIHZp
-ZXcKbHR0bmcgZGVzdHJveQoKPiBJbiB0aGUgY2FzZSBvZiB1c2luZyAgdHJhY2Vwb2ludCBiZWZv
-cmUgZm9yaygpLCBwcm9jbmFtZSBpcyBpbmNvcnJlY3Q6Cj4gCj4gWzE0OjQ2OjM4LjExNTM1OTg4
-OV0gKCsxNC43MzQ0NTU2NDApIGxvY2FsaG9zdCBoZWxsb193b3JsZDpteV9maXJzdF90cmFjZXBv
-aW50OiB7IGNwdV9pZCA9IDEgfSwgeyB2cGlkID0gMTg1OCwgdnRpZCA9IDE4NTgsIHByb2NuYW1l
-ID0gInRzdF9hcHAiIH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0gIkJlZm9yZSBmb3JrIFBpZDogIiwg
-bXlfaW50ZWdlcl9maWVsZCA9IDAgfQo+IFsxNDo0NjozOC4xMjcxNzE3NTldICgrMC4wMTE4MTE4
-NzApIGxvY2FsaG9zdCBoZWxsb193b3JsZDpteV9maXJzdF90cmFjZXBvaW50OiB7IGNwdV9pZCA9
-IDEgfSwgeyB2cGlkID0gMTg1OCwgdnRpZCA9IDE4NTgsIHByb2NuYW1lID0gInRzdF9hcHAiIH0s
-IHsgbXlfc3RyaW5nX2ZpZWxkID0gImluIGVsc2UiLCBteV9pbnRlZ2VyX2ZpZWxkID0gMjMgfQo+
-IFsxNDo0NjozOC4xMjcxODcxMTldICgrMC4wMDAwMTUzNjApIGxvY2FsaG9zdCBoZWxsb193b3Js
-ZDpteV9maXJzdF90cmFjZXBvaW50OiB7IGNwdV9pZCA9IDEgfSwgeyB2cGlkID0gMTg1OCwgdnRp
-ZCA9IDE4NTgsIHByb2NuYW1lID0gInRzdF9hcHAiIH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0gIkJl
-Zm9yZSBzbGVlcCBQaWQ6ICIsIG15X2ludGVnZXJfZmllbGQgPSAxODYxIH0KPiBbMTQ6NDY6Mzgu
-MTI3OTM5NzYxXSAoKzAuMDAwNzUyNjQyKSBsb2NhbGhvc3QgaGVsbG9fd29ybGQ6bXlfZmlyc3Rf
-dHJhY2Vwb2ludDogeyBjcHVfaWQgPSAxIH0sIHsgdnBpZCA9IDE4NjEsIHZ0aWQgPSAxODU4LCBw
-cm9jbmFtZSA9ICJ0c3RfYXBwIiB9LCB7IG15X3N0cmluZ19maWVsZCA9ICJpbiBpZiIsIG15X2lu
-dGVnZXJfZmllbGQgPSAyMyB9Cj4gWzE0OjQ2OjM4LjEyODA3ODAwMl0gKCswLjAwMDEzODI0MSkg
-bG9jYWxob3N0IGhlbGxvX3dvcmxkOm15X2ZpcnN0X3RyYWNlcG9pbnQ6IHsgY3B1X2lkID0gMSB9
-LCB7IHZwaWQgPSAxODYxLCB2dGlkID0gMTg1OCwgcHJvY25hbWUgPSAidHN0X2FwcCIgfSwgeyBt
-eV9zdHJpbmdfZmllbGQgPSAiQmVmb3JlIHNsZWVwIFBpZDogIiwgbXlfaW50ZWdlcl9maWVsZCA9
-IDAgfQo+IFsxNDo0Njo0My4xMzk5OTczOTJdICgrNS4wMTE5MTkzOTApIGxvY2FsaG9zdCBoZWxs
-b193b3JsZDpteV9maXJzdF90cmFjZXBvaW50OiB7IGNwdV9pZCA9IDEgfSwgeyB2cGlkID0gMTg1
-OCwgdnRpZCA9IDE4NTgsIHByb2NuYW1lID0gInRzdF9hcHAiIH0sIHsgbXlfc3RyaW5nX2ZpZWxk
-ID0gIkFmdGVyIHNsZWVwIFBpZDogIiwgbXlfaW50ZWdlcl9maWVsZCA9IDE4NjEgfQo+IFsxNDo0
-Njo0My4xNDA0NzM1NTRdICgrMC4wMDA0NzYxNjIpIGxvY2FsaG9zdCBoZWxsb193b3JsZDpteV9m
-aXJzdF90cmFjZXBvaW50OiB7IGNwdV9pZCA9IDEgfSwgeyB2cGlkID0gMTg2MSwgdnRpZCA9IDE4
-NTgsIHByb2NuYW1lID0gInRzdF9hcHAiIH0sIHsgbXlfc3RyaW5nX2ZpZWxkID0gIkFmdGVyIHNs
-ZWVwIFBpZDogIiwgbXlfaW50ZWdlcl9maWVsZCA9IDAgfQoKQmFzZWQgb24gdGhlIGNvZGUgZm91
-bmQgaW4gbGlibHR0bmctdXN0L2x0dG5nLWNvbnRleHQtcHJvY25hbWUuYyBbMV0gb2YgbHR0bmct
-dXN0LAp0aGUgcHJvY25hbWUgaXMgY2FjaGVkIG9uIHRoZSBmaXJzdCBoaXQgYW5kIG5ldmVyIHJl
-c2V0ZWQgZXZlbiBhZnRlciBmb3JrLiBUaGUKZm9sbG93aW5nIGNvbW1lbnQgaW5kaWNhdGUgdGhh
-dCBhbiBleGVjIGFmdGVyIGZvcmsgd2lsbCAiY2xlYXIiIHRoZSBjYWNoZS4gVGhlCmNvbW1lbnQg
-YWxzbyBoaW50IGFzIHRvIHdoeSB3ZSBzZWUgaWRlbnRpY2FsIHZhbHVlIGZvciBwcm9jbmFtZSBl
-dmVudCBpZiBwcmN0bCBpcwp1c2VkLiBUaGUgbWFuIHBhZ2Ugb2YgbHR0bmctdXN0IGFsc28gaGlu
-dCB0aGlzIGxpbWl0YXRpb24gWzJdLgoKWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9sdHRuZy9sdHRu
-Zy11c3QvYmxvYi9tYXN0ZXIvbGlibHR0bmctdXN0L2x0dG5nLWNvbnRleHQtcHJvY25hbWUuYwpb
-Ml0gaHR0cHM6Ly9sdHRuZy5vcmcvbWFuLzMvbHR0bmctdXN0L3YyLjEwLyNkb2MtX2NvbnRleHRf
-aW5mb3JtYXRpb24gCgpUaGUgY29tbWVudDoKCiAgICAvKiAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICogV2Ug
-Y2FjaGUgdGhlIHJlc3VsdCB0byBlbnN1cmUgd2UgZG9uJ3QgdHJpZ2dlciBhIHN5c3RlbSBjYWxs
-IGZvciAgICAKICAgICAqIGVhY2ggZXZlbnQuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgKiBVcG9uIGV4ZWMsIHByb2NuYW1lIGNo
-YW5nZXMsIGJ1dCBleGVjIHRha2VzIGNhcmUgb2YgdGhyb3dpbmcgYXdheSAgIAogICAgICogdGhp
-cyBjYWNoZWQgdmVyc2lvbi4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAKICAgICAqIFRoZSBwcm9jbmFtZSBjYW4gYWxzbyBjaGFuZ2UgYnkgY2FsbGluZyBw
-cmN0bCgpLiBUaGUgcHJvY25hbWUgc2hvdWxkCiAgICAgKiBiZSBzZXQgZm9yIGEgdGhyZWFkIGJl
-Zm9yZSB0aGUgZmlyc3QgZXZlbnQgaXMgbG9nZ2VkIHdpdGhpbiB0aGlzICAgIAogICAgICogdGhy
-ZWFkLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAKICAgICAqLyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgCgpUaGUgbWFuIHBhZ2U6CgogICAgVGhyZWFkIG5h
-bWUsIGFzIHNldCBieSBleGVjKDMpIG9yIHByY3RsKDIpLiBJdCBpcyByZWNvbW1lbmRlZCB0aGF0
-IHByb2dyYW1zCiAgICBzZXQgdGhlaXIgdGhyZWFkIG5hbWUgd2l0aCBwcmN0bCgyKSBiZWZvcmUg
-aGl0dGluZyB0aGUgZmlyc3QgdHJhY2Vwb2ludCBmb3IKICAgIHRoYXQgdGhyZWFkLgoKV2UgY291
-bGQgZm9yY2UgYSByZXNldCBvZiB0aGUgY2FjaGUgb24gZm9yayBhcyBkb25lIHdpdGggdGhlIHZ0
-aWQgYW5kIHB0aWQgWzNdIGJ1dAp0aGlzIGRvZXMgbm90IGFsbGV2aWF0ZSB0aGUgcHJjdGwgcHJv
-YmxlbS4KClsyXSBodHRwczovL2dpdGh1Yi5jb20vbHR0bmcvbHR0bmctdXN0L2Jsb2IvNmQ5YjU0
-ZDg0NWIwOGQ1NGQzZjQ4M2YxMTMwYjQ5OTUxNjU4OGRiMy9saWJsdHRuZy11c3QvbHR0bmctdXN0
-LWNvbW0uYyNMMjAxMAoKVGhlIHJlYWwgc29sdXRpb24gd291bGQgcHJvYmFibHkgYmUgdG8gInNo
-aW0iIHByY3RsIGFuZCBjYXRjaCB0aGUgY2hhbmdlIG9mCnByb2NuYW1lLgoKTWF0aGlldSBEZXNu
-b3llcnMgbW9zdCBwcm9iYWJseSBoYXZlIG1vcmUgaW5zaWdodCByZWdhcmRpbmcgYWxsIHRoaXMu
-CgpDaGVlcnMKCi0tIApKb25hdGhhbiBSYWpvdHRlLUp1bGllbgpFZmZpY2lPUwpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBs
-aXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
-LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============4303726100677397844==
+Content-Type: multipart/alternative; boundary="883d24f2195c26d4ab056a49788e"
+
+--883d24f2195c26d4ab056a49788e
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+I'm adding the LTTng mailing list in CC for the benefit of the community
+and so people add to or correct my explanation.
+
+The CTF specification describes the meaning of those fields:
+http://diamon.org/ctf/#spec8
+
+In your case, this means that the timestamps in the trace are expressed
+relative to an arbitrary time set 1524226572435601778 clock ticks after
+00:00:00 on 1 January 1970.
+
+To take your specific example:
+Your clock is running at 1,000,000,000 Hz, meaning the duration of a clock
+tick (period) is of 1 ns.
+
+The event has occurred at
+1524226572435601778 (offset) + 00000003827855360941 (event clock value)
+nanoseconds after UNIX Epoch. That leads us to around Friday, April 20,
+2018 1:20:00 PM (GMT).
+
+Regards,
+J=C3=A9r=C3=A9mie
+
+
+
+On 20 April 2018 at 11:06, Sai Tujala <Sai.Tujala@mathworks.in> wrote:
+
+> Hi Jeremie,
+>
+>
+>
+>                 In metadata file of LTTng trace session,  offset from
+> Epoch is =E2=80=9C1524226572435601778=E2=80=9D and time stamp of an event=
+ in channel data
+> files is starting from =E2=80=9C00000003827855360941=E2=80=9D. Can you br=
+ief about
+> relevance between these two time stamps.
+>
+>
+>
+> freq =3D 1000000000; /* Frequency, in Hz */
+>
+>         /* clock value offset from Epoch is: offset * (1/freq) */
+>
+>         offset =3D 1524226572435601778;
+>
+>
+>
+>
+>
+> Thanks & Regards,
+>
+> T Sai Kiran
+>
+>
+>
+
+
+
+--=20
+J=C3=A9r=C3=A9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
+
+--883d24f2195c26d4ab056a49788e
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div><div><div><div><div><div>Hi,<br><br></div><div>I&#39;=
+m adding the LTTng mailing list in CC for the benefit of the community and =
+so people add to or correct my explanation.<br></div><div><br>The CTF speci=
+fication describes the meaning of those fields:<br><a href=3D"http://diamon=
+.org/ctf/#spec8">http://diamon.org/ctf/#spec8</a><br><br></div>In your case=
+, this means that the timestamps in the trace are expressed relative to an =
+arbitrary time set 1524226572435601778 clock ticks after 00:00:00 on 1 Janu=
+ary 1970.<br><br></div>To take your specific example:<br></div>Your clock i=
+s running at 1,000,000,000 Hz, meaning the duration of a clock tick (period=
+) is of 1 ns.<br><br></div>The event has occurred at<br></div>1524226572435=
+601778 (offset) + 00000003827855360941 (event clock value) nanoseconds afte=
+r UNIX Epoch. That leads us to around Friday, April 20, 2018 1:20:00 PM (GM=
+T).<br><br></div><div>Regards,<br></div>J=C3=A9r=C3=A9mie<br><div><br><div>=
+<div><div><div><br></div></div></div></div></div></div><div class=3D"gmail_=
+extra"><br><div class=3D"gmail_quote">On 20 April 2018 at 11:06, Sai Tujala=
+ <span dir=3D"ltr">&lt;<a href=3D"mailto:Sai.Tujala@mathworks.in" target=3D=
+"_blank">Sai.Tujala@mathworks.in</a>&gt;</span> wrote:<br><blockquote class=
+=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padd=
+ing-left:1ex">
+
+
+
+
+
+<div link=3D"#0563C1" vlink=3D"#954F72" lang=3D"EN-US">
+<div class=3D"m_-293747052095318529WordSection1">
+<p class=3D"MsoNormal">Hi Jeremie,<u></u><u></u></p>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+<p class=3D"MsoNormal">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 In metadata file of LTTng trace ses=
+sion, =C2=A0offset from Epoch is =E2=80=9C1524226572435601778=E2=80=9D and =
+time stamp of an event in channel data files is starting from =E2=80=9C0000=
+0003827855360941=E2=80=9D. Can you brief about relevance between these two
+ time stamps. <u></u><u></u></p>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+<p class=3D"MsoNormal" style=3D"text-indent:.5in">freq =3D 1000000000; /* F=
+requency, in Hz */<u></u><u></u></p>
+<p class=3D"MsoNormal">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* clock =
+value offset from Epoch is: offset * (1/freq) */<u></u><u></u></p>
+<p class=3D"MsoNormal">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 offset =
+=3D 1524226572435601778;<u></u><u></u></p>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+<p class=3D"MsoNormal">Thanks &amp; Regards,<u></u><u></u></p>
+<p class=3D"MsoNormal">T Sai Kiran<u></u><u></u></p>
+<p class=3D"MsoNormal"><u></u>=C2=A0<u></u></p>
+</div>
+</div>
+
+</blockquote></div><br><br clear=3D"all"><br>-- <br><div class=3D"gmail_sig=
+nature" data-smartmail=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>E=
+fficiOS Inc.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http:=
+//www.efficios.com</a></div>
+</div>
+
+--883d24f2195c26d4ab056a49788e--
+
+--===============4303726100677397844==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============4303726100677397844==--
