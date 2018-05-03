@@ -1,16 +1,18 @@
 From: Anders Wallin <wallinux@gmail.com>
-Subject: lttng-tools 2.10.4 broken when auto loading session
-Date: Thu, 03 May 2018 12:27:48 +0000
-Message-ID: <CAF2baFdqgzUQyfDn6gi8-+SvDYy058EzMkG8k3a5gnA1Df7tnw__49161.7388128818$1525350364$gmane$org@mail.gmail.com>
+Subject: Re: lttng-tools 2.10.4 broken when auto loading session
+Date: Thu, 03 May 2018 13:23:08 +0000
+Message-ID: <CAF2baFdhPU0MU8QsuC3TnFySTtKJK3tYd-Xs7UDoD1HDSbK91Q__38903.7499241114$1525353682$gmane$org@mail.gmail.com>
+References: <CAF2baFdqgzUQyfDn6gi8-+SvDYy058EzMkG8k3a5gnA1Df7tnw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1025047342460118694=="
+Content-Type: multipart/mixed; boundary="===============2570985329985982456=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ot0-x236.google.com (mail-ot0-x236.google.com
- [IPv6:2607:f8b0:4003:c0f::236])
- by lists.lttng.org (Postfix) with ESMTPS id 40cDv45DfKz18kg
- for <lttng-dev@lists.lttng.org>; Thu,  3 May 2018 08:28:00 -0400 (EDT)
-Received: by mail-ot0-x236.google.com with SMTP id l22-v6so20395712otj.0
- for <lttng-dev@lists.lttng.org>; Thu, 03 May 2018 05:28:00 -0700 (PDT)
+Received: from mail-ot0-x232.google.com (mail-ot0-x232.google.com
+ [IPv6:2607:f8b0:4003:c0f::232])
+ by lists.lttng.org (Postfix) with ESMTPS id 40cG6w3d52z17JG
+ for <lttng-dev@lists.lttng.org>; Thu,  3 May 2018 09:23:20 -0400 (EDT)
+Received: by mail-ot0-x232.google.com with SMTP id g7-v6so20569357otj.11
+ for <lttng-dev@lists.lttng.org>; Thu, 03 May 2018 06:23:20 -0700 (PDT)
+In-Reply-To: <CAF2baFdqgzUQyfDn6gi8-+SvDYy058EzMkG8k3a5gnA1Df7tnw@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,60 +25,73 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1025047342460118694==
-Content-Type: multipart/alternative; boundary="0000000000007704e9056b4c55ba"
+--===============2570985329985982456==
+Content-Type: multipart/alternative; boundary="0000000000005b7940056b4d1b2f"
 
---0000000000007704e9056b4c55ba
+--0000000000005b7940056b4d1b2f
 Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+25258405ed9590fcbcfb02c10dd8c018dba3a7bd introduced the bug
 
-lttng-tools hangs when a session is stored /etc/lttng/session/auto/
+tors 3 maj 2018 kl 14:27 skrev Anders Wallin <wallinux@gmail.com>:
 
-$ head -10 /etc/lttng/sessions/auto/test.lttng
-<?xml version="1.0" encoding="UTF-8"?>
-<sessions>
-        <session>
-                <name>test</name>
-                <domains>
-                        <domain>
-                                <type>UST</type>
-                                <buffer_type>PER_UID</buffer_type>
-                                <channels>
-                                        <channel>
-$ lttng-sessiond -d  # Hanging forever
+> Hi,
+>
+> lttng-tools hangs when a session is stored /etc/lttng/session/auto/
+>
+> $ head -10 /etc/lttng/sessions/auto/test.lttng
+> <?xml version="1.0" encoding="UTF-8"?>
+> <sessions>
+>         <session>
+>                 <name>test</name>
+>                 <domains>
+>                         <domain>
+>                                 <type>UST</type>
+>                                 <buffer_type>PER_UID</buffer_type>
+>                                 <channels>
+>                                         <channel>
+> $ lttng-sessiond -d  # Hanging forever
+>
+> I will continue investigate why, but I though you wanna know ASAP
+>
+> Regards
+> Anders Wallin
+>
+>
 
-I will continue investigate why, but I though you wanna know ASAP
-
-Regards
-Anders Wallin
-
---0000000000007704e9056b4c55ba
+--0000000000005b7940056b4d1b2f
 Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 
-PGRpdiBkaXI9Imx0ciI+SGksPGRpdj48YnI+PC9kaXY+PGRpdj5sdHRuZy10b29scyBoYW5ncyB3
-aGVuIGEgc2Vzc2lvbiBpcyBzdG9yZWQgL2V0Yy9sdHRuZy9zZXNzaW9uL2F1dG8vPGJyPjxkaXY+
-PGJyPjwvZGl2PjxkaXY+JCBoZWFkIC0xMCAvZXRjL2x0dG5nL3Nlc3Npb25zL2F1dG8vdGVzdC5s
-dHRuZ8KgPC9kaXY+PGRpdj4mbHQ7P3htbCB2ZXJzaW9uPSZxdW90OzEuMCZxdW90OyBlbmNvZGlu
-Zz0mcXVvdDtVVEYtOCZxdW90Oz8mZ3Q7PC9kaXY+PGRpdj4mbHQ7c2Vzc2lvbnMmZ3Q7PC9kaXY+
-PGRpdj7CoCDCoCDCoCDCoCAmbHQ7c2Vzc2lvbiZndDs8L2Rpdj48ZGl2PsKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgICZsdDtuYW1lJmd0O3Rlc3QmbHQ7L25hbWUmZ3Q7PC9kaXY+PGRpdj7CoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCAmbHQ7ZG9tYWlucyZndDs8L2Rpdj48ZGl2PsKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgICZsdDtkb21haW4mZ3Q7PC9kaXY+PGRpdj7CoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCAmbHQ7dHlwZSZndDtVU1QmbHQ7
-L3R5cGUmZ3Q7PC9kaXY+PGRpdj7CoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCAmbHQ7YnVmZmVyX3R5cGUmZ3Q7UEVSX1VJRCZsdDsvYnVmZmVyX3R5cGUmZ3Q7
-PC9kaXY+PGRpdj7CoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCAmbHQ7Y2hhbm5lbHMmZ3Q7PC9kaXY+PGRpdj7CoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCAmbHQ7Y2hhbm5lbCZndDs8L2Rpdj48ZGl2
-PiQgbHR0bmctc2Vzc2lvbmQgLWTCoCAjIEhhbmdpbmcgZm9yZXZlcjxicj48YnI+SSB3aWxsIGNv
-bnRpbnVlIGludmVzdGlnYXRlIHdoeSwgYnV0IEkgdGhvdWdoIHlvdSB3YW5uYSBrbm93IEFTQVA8
-YnI+PGJyPlJlZ2FyZHM8L2Rpdj48L2Rpdj48ZGl2PkFuZGVycyBXYWxsaW48L2Rpdj48ZGl2Pjxi
-cj48L2Rpdj48L2Rpdj4NCg==
---0000000000007704e9056b4c55ba--
+<div dir=3D"ltr">25258405ed9590fcbcfb02c10dd8c018dba3a7bd introduced the bu=
+g<br></div><br><div class=3D"gmail_quote"><div dir=3D"ltr">tors 3 maj 2018 =
+kl 14:27 skrev Anders Wallin &lt;<a href=3D"mailto:wallinux@gmail.com">wall=
+inux@gmail.com</a>&gt;:<br></div><blockquote class=3D"gmail_quote" style=3D=
+"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div dir=3D=
+"ltr">Hi,<div><br></div><div>lttng-tools hangs when a session is stored /et=
+c/lttng/session/auto/<br><div><br></div><div>$ head -10 /etc/lttng/sessions=
+/auto/test.lttng=C2=A0</div><div>&lt;?xml version=3D&quot;1.0&quot; encodin=
+g=3D&quot;UTF-8&quot;?&gt;</div><div>&lt;sessions&gt;</div><div>=C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 &lt;session&gt;</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 &lt;name&gt;test&lt;/name&gt;</div><div>=C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &lt;domains&gt;</div><div>=C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 &lt;domain&gt;</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &lt;t=
+ype&gt;UST&lt;/type&gt;</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &lt;=
+buffer_type&gt;PER_UID&lt;/buffer_type&gt;</div><div>=C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 &lt;channels&gt;</div><div>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 &lt;channel&gt;</div><div>$ lttng-se=
+ssiond -d=C2=A0 # Hanging forever<br><br>I will continue investigate why, b=
+ut I though you wanna know ASAP<br><br>Regards</div></div></div><div dir=3D=
+"ltr"><div>Anders Wallin</div><div><br></div></div></blockquote></div>
 
---===============1025047342460118694==
+--0000000000005b7940056b4d1b2f--
+
+--===============2570985329985982456==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -86,4 +101,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============1025047342460118694==--
+--===============2570985329985982456==--
