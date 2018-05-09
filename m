@@ -1,7 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-modules 2.10.6 (Linux kernel tracer)
-Date: Wed, 9 May 2018 14:11:09 -0400 (EDT)
-Message-ID: <502098485.209.1525889469176.JavaMail.zimbra@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.9.9 (Linux kernel tracer)
+Date: Wed, 9 May 2018 14:15:18 -0400 (EDT)
+Message-ID: <1944310744.230.1525889718516.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
@@ -11,12 +11,10 @@ To: lttng-dev <lttng-dev@lists.lttng.org>
 Cc: linux-kernel <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+This is a bugfix update of the stable-2.9 series of the LTTng modules
+project. It updates support to kernel 4.17-rc4 as well.
 
-This is a bugfix release of the LTTng modules stable-2.10 series.
-It provides Linux kernel tracing capability to the LTTng tracer toolset.
-
-Enjoy!
+Thanks,
 
 Mathieu
 
@@ -26,7 +24,7 @@ Download link: http://lttng.org/download
 
 Changelog:
 
-2018-05-09 (Lost Sock Memorial Day) LTTng modules 2.10.6
+2018-05-09 (Lost Sock Memorial Day) LTTng modules 2.9.9
         * Fix: update RCU instrumentation for 4.17
         * Fix: sunrpc instrumentation for 4.17
         * Fix: use struct reclaim_stat in mm_vmscan_lru_shrink_inactive for 4.17
@@ -49,7 +47,6 @@ Changelog:
         * Fix: update vmscan instrumentation for v4.16
         * Fix: update timer instrumentation on 4.16 and 4.14-rt
         * Update kvm instrumentation for debian kernel 4.14.0-3
-
 
 -- 
 Mathieu Desnoyers
