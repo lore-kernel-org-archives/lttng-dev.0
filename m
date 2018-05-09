@@ -1,69 +1,57 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: Re: Error building lttng 2.10.5 on Fedora 27
-Date: Wed, 9 May 2018 13:31:37 -0400
-Message-ID: <680ac78d-f473-227d-e28e-f4638d99b608__39069.2224762917$1525886987$gmane$org@efficios.com>
-References: <CANoO=wR7RamMcg+1WH+MGecPYFcyBCkd0Ek-knL32ziWk5YCjg@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [RELEASE] LTTng-modules 2.10.6 (Linux kernel tracer)
+Date: Wed, 9 May 2018 14:11:09 -0400 (EDT)
+Message-ID: <502098485.209.1525889469176.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 40h3Ln2NLnz18T0
- for <lttng-dev@lists.lttng.org>; Wed,  9 May 2018 13:31:44 -0400 (EDT)
-In-Reply-To: <CANoO=wR7RamMcg+1WH+MGecPYFcyBCkd0Ek-knL32ziWk5YCjg@mail.gmail.com>
-Content-Language: en-US
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Sender: linux-kernel-owner@vger.kernel.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: linux-kernel <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMjAxOC0wNS0wOCAwNDozMSBQTSwgSm9uYWggQmVudG9uIHdyb3RlOgo+IEhpIGZvbGtzLAo+
-IAo+IExvb2tpbmcgZm9yd2FyZCB0byB0YWtpbmcgbHR0bmcgZm9yIGEgc3Bpbi4KPiAKPiBJJ20g
-b246Cj4gCj4gW2piZW50b25AbG9jYWxob3N0IGx0dG5nLW1vZHVsZXMtMi4xMC41XSQgdW5hbWUg
-LWEKPiBMaW51eCBsb2NhbGhvc3QubG9jYWxkb21haW4gNC4xNi41LTIwMC5mYzI3Lng4Nl82NCAj
-MSBTTVAgRnJpIEFwciAyNwo+IDE5OjA1OjQ0IFVUQyAyMDE4IHg4Nl82NCB4ODZfNjQgeDg2XzY0
-IEdOVS9MaW51eAo+IAo+IEZvbGxvd2luZyBhbG9uZzoKPiAKPiBodHRwczovL2x0dG5nLm9yZy9k
-b2NzL3YyLjEwLyNkb2MtZmVkb3JhCj4gCj4gSSdtIGZhaWxpbmcgdG8gYnVpbGQ6Cj4gCj4gW2pi
-ZW50b25AbG9jYWxob3N0IGx0dG5nLW1vZHVsZXMtMi4xMC41XSQgbWFrZSBjbGVhbgo+IG1ha2Ug
-LUMgL2xpYi9tb2R1bGVzLzQuMTYuNS0yMDAuZmMyNy54ODZfNjQvYnVpbGQKPiBNPS9ob21lL2pi
-ZW50b24vc3JjL2xvY2FsL2tzb2Z0aXJxL2x0dG5nLW1vZHVsZXMtMi4xMC41IGNsZWFuCj4gbWFr
-ZVsxXTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvdXNyL3NyYy9rZXJuZWxzLzQuMTYuNS0yMDAuZmMy
-Ny54ODZfNjQnCj4gbWFrZVsxXTogTGVhdmluZyBkaXJlY3RvcnkgJy91c3Ivc3JjL2tlcm5lbHMv
-NC4xNi41LTIwMC5mYzI3Lng4Nl82NCcKPiAKPiBbamJlbnRvbkBsb2NhbGhvc3QgbHR0bmctbW9k
-dWxlcy0yLjEwLjVdJCBtYWtlCj4gbWFrZSAtQyAvbGliL21vZHVsZXMvNC4xNi41LTIwMC5mYzI3
-Lng4Nl82NC9idWlsZAo+IE09L2hvbWUvamJlbnRvbi9zcmMvbG9jYWwva3NvZnRpcnEvbHR0bmct
-bW9kdWxlcy0yLjEwLjUgQ09ORklHX0xUVE5HPW0KPiBDT05GSUdfTFRUTkdfQ0xPQ0tfUExVR0lO
-X1RFU1Q9bSBtb2R1bGVzCj4gbWFrZVsxXTogRW50ZXJpbmcgZGlyZWN0b3J5ICcvdXNyL3NyYy9r
-ZXJuZWxzLzQuMTYuNS0yMDAuZmMyNy54ODZfNjQnCj4gwqAgQ0MgW01dwqAKPiAvaG9tZS9qYmVu
-dG9uL3NyYy9sb2NhbC9rc29mdGlycS9sdHRuZy1tb2R1bGVzLTIuMTAuNS9sdHRuZy1yaW5nLWJ1
-ZmZlci1jbGllbnQtZGlzY2FyZC5vCj4gLi4uCj4gwqAgQ0MgW01dwqAKPiAvaG9tZS9qYmVudG9u
-L3NyYy9sb2NhbC9rc29mdGlycS9sdHRuZy1tb2R1bGVzLTIuMTAuNS9wcm9iZXMvbHR0bmctcHJv
-YmUtc2NoZWQubwo+IMKgIENDIFtNXcKgCj4gL2hvbWUvamJlbnRvbi9zcmMvbG9jYWwva3NvZnRp
-cnEvbHR0bmctbW9kdWxlcy0yLjEwLjUvcHJvYmVzL2x0dG5nLXByb2JlLWlycS5vCj4gwqAgQ0Mg
-W01dwqAKPiAvaG9tZS9qYmVudG9uL3NyYy9sb2NhbC9rc29mdGlycS9sdHRuZy1tb2R1bGVzLTIu
-MTAuNS9wcm9iZXMvbHR0bmctcHJvYmUtdGltZXIubwo+IEluIGZpbGUgaW5jbHVkZWQgZnJvbQo+
-IC9ob21lL2piZW50b24vc3JjL2xvY2FsL2tzb2Z0aXJxL2x0dG5nLW1vZHVsZXMtMi4xMC41L3By
-b2Jlcy8uLi9wcm9iZXMvZGVmaW5lX3RyYWNlLmg6MTAwOjAsCj4gwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqBmcm9tCj4gL2hvbWUvamJlbnRvbi9zcmMvbG9jYWwva3NvZnRpcnEvbHR0bmctbW9k
-dWxlcy0yLjEwLjUvcHJvYmVzLy4uL2luc3RydW1lbnRhdGlvbi9ldmVudHMvbHR0bmctbW9kdWxl
-L3RpbWVyLmg6MzMyLAo+IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgZnJvbQo+IC9ob21lL2pi
-ZW50b24vc3JjL2xvY2FsL2tzb2Z0aXJxL2x0dG5nLW1vZHVsZXMtMi4xMC41L3Byb2Jlcy9sdHRu
-Zy1wcm9iZS10aW1lci5jOjQzOgo+IC9ob21lL2piZW50b24vc3JjL2xvY2FsL2tzb2Z0aXJxL2x0
-dG5nLW1vZHVsZXMtMi4xMC41L3Byb2Jlcy8uLi9wcm9iZXMvbHR0bmctdHJhY2Vwb2ludC1ldmVu
-dC1pbXBsLmg6MTQyOjY6Cj4gZXJyb3I6IGNvbmZsaWN0aW5nIHR5cGVzIGZvciDigJh0cmFjZV9o
-cnRpbWVyX3N0YXJ04oCZCj4gwqB2b2lkIHRyYWNlXyMjX25hbWUoX3Byb3RvKTsKPiDCoCDCoCDC
-oCBeCj4gCj4gVGhvdWdodHM/Cj4gCj4gVGhhbmtzIQo+IAo+IEpvbmFoCgpIaSwKClN1cHBvcnQg
-Zm9yIGxpbnV4IDQuMTYgcmVxdWlyZXMgcGF0Y2hlcyB0aGF0IGFyZSBubyB5ZXQgaW4gYSBzdGFi
-bGUgMi4xMApyZWxlYXNlLiBZb3UgY2FuIGdldCB0aGVtIGZyb20gdGhlIGdpdCByZXBvIGluIHRo
-ZSBzdGFibGUtMi4xMCBicmFuY2ggb3IKd2FpdCBmb3IgdGhlIDIuMTAuNiByZWxlYXNlIHdoaWNo
-IHNob3VsZCBoYXBwZW4gYmVmb3JlIHRoZSBlbmQgb2YgdGhlIHdlZWsuCgpDaGVlcnMsCgpNaWNo
-YWVsCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0
-cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi,
+
+This is a bugfix release of the LTTng modules stable-2.10 series.
+It provides Linux kernel tracing capability to the LTTng tracer toolset.
+
+Enjoy!
+
+Mathieu
+
+Project website: http://lttng.org
+Documentation: http://lttng.org/docs
+Download link: http://lttng.org/download
+
+Changelog:
+
+2018-05-09 (Lost Sock Memorial Day) LTTng modules 2.10.6
+        * Fix: update RCU instrumentation for 4.17
+        * Fix: sunrpc instrumentation for 4.17
+        * Fix: use struct reclaim_stat in mm_vmscan_lru_shrink_inactive for 4.17
+        * Fix: Add gfp_flags arg to mm_vmscan_kswapd_wake for 4.17
+        * Update: kvm instrumentation for ubuntu 4.13.0-38
+        * Fix: update kvm instrumentation for Ubuntu 3.13.0-144
+        * Fix: btrfs instrumentation namespacing
+        * Cleanup: comment about CONFIG_HOTPLUG_CPU ifdef
+        * Fix: do not use CONFIG_HOTPLUG_CPU for the new hotplug API
+        * Fix: update kvm instrumentation for 4.1.50+
+        * Use the memory pool instead of kmalloc
+        * Create a memory pool for temporary tracepoint probes storage
+        * Fix: use proper pid_ns in the process statedump
+        * Fix: add variable quoting to shell scripts
+        * Update: kvm instrumentation for fedora 4.14.13-300
+        * Fix: Add Fedora version macros
+        * Fix: update btrfs instrumentation for SuSE 4.4.114-92
+        * Fix: update block instrumentation for SuSE 4.4.114-92
+        * Fix: update rcu instrumentation for v4.16
+        * Fix: update vmscan instrumentation for v4.16
+        * Fix: update timer instrumentation on 4.16 and 4.14-rt
+        * Update kvm instrumentation for debian kernel 4.14.0-3
+
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
