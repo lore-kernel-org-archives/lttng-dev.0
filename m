@@ -1,18 +1,20 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+From: Anders Wallin <wallinux@gmail.com>
 Subject: Re: [PATCH lttng-tools] Tests: Added autoloading
  session test cases
-Date: Mon, 14 May 2018 12:16:58 -0400
-Message-ID: <20180514161658.GB9461__40452.3223558956$1526314509$gmane$org@joraj-alpa>
+Date: Mon, 14 May 2018 22:52:40 +0200
+Message-ID: <CAF2baFfLWQ5KXB3g=R+cVVvKuN4kwXge=9Ci+NhY1Q-QPaRcwA__33602.1567266018$1526331056$gmane$org@mail.gmail.com>
 References: <20180514153053.27665-1-wallinux@gmail.com>
+ <20180514161658.GB9461@joraj-alpa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============7596256971950290081=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 40l5SK4BT9z17sQ
- for <lttng-dev@lists.lttng.org>; Mon, 14 May 2018 12:17:05 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <20180514153053.27665-1-wallinux@gmail.com>
+Received: from mail-oi0-x22b.google.com (mail-oi0-x22b.google.com
+ [IPv6:2607:f8b0:4003:c06::22b])
+ by lists.lttng.org (Postfix) with ESMTPS id 40lCZY4Jdvz18M8
+ for <lttng-dev@lists.lttng.org>; Mon, 14 May 2018 16:52:52 -0400 (EDT)
+Received: by mail-oi0-x22b.google.com with SMTP id k17-v6so12000739oih.5
+ for <lttng-dev@lists.lttng.org>; Mon, 14 May 2018 13:52:52 -0700 (PDT)
+In-Reply-To: <20180514161658.GB9461@joraj-alpa>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,90 +24,484 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Anders Wallin <wallinux@gmail.com>
+To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgQW5kZXJzCgpUaGFua3MgZm9yIHByb3Bvc2luZyB0aGlzIHBhdGNoLgoKV2Ugd2lsbCBuZWVk
-IG1vcmUgY29udGV4dCBoZXJlLiBBcmUgdGhvc2UgY3VycmVudGx5IGZhaWxpbmcgYW5kIGV4cG9z
-aW5nIGEKcHJvYmxlbT8KClNlZSBjb21tZW50cyBpbmxpbmUuCgoKT24gTW9uLCBNYXkgMTQsIDIw
-MTggYXQgMDU6MzA6NTNQTSArMDIwMCwgQW5kZXJzIFdhbGxpbiB3cm90ZToKPiBTaWduZWQtb2Zm
-LWJ5OiBBbmRlcnMgV2FsbGluIDx3YWxsaW51eEBnbWFpbC5jb20+Cj4gLS0tCj4gIHRlc3RzL2Zh
-c3RfcmVncmVzc2lvbiAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMSArCj4gIC4uLi9yZWdy
-ZXNzaW9uL3Rvb2xzL3NhdmUtbG9hZC90ZXN0X2F1dG9sb2FkICB8IDEwMSArKysrKysrKysrKysr
-KysrKysKPiAgMiBmaWxlcyBjaGFuZ2VkLCAxMDIgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9k
-ZSAxMDA3NTUgdGVzdHMvcmVncmVzc2lvbi90b29scy9zYXZlLWxvYWQvdGVzdF9hdXRvbG9hZAo+
-IAo+IGRpZmYgLS1naXQgYS90ZXN0cy9mYXN0X3JlZ3Jlc3Npb24gYi90ZXN0cy9mYXN0X3JlZ3Jl
-c3Npb24KPiBpbmRleCBiYmNlMDY4Zi4uMmYwMmY4NzIgMTAwNjQ0Cj4gLS0tIGEvdGVzdHMvZmFz
-dF9yZWdyZXNzaW9uCj4gKysrIGIvdGVzdHMvZmFzdF9yZWdyZXNzaW9uCj4gQEAgLTEzLDYgKzEz
-LDcgQEAgcmVncmVzc2lvbi90b29scy9zbmFwc2hvdHMvdGVzdF91c3RfZmFzdAo+ICByZWdyZXNz
-aW9uL3Rvb2xzL3NuYXBzaG90cy90ZXN0X3VzdF9zdHJlYW1pbmcKPiAgcmVncmVzc2lvbi90b29s
-cy9zYXZlLWxvYWQvdGVzdF9zYXZlCj4gIHJlZ3Jlc3Npb24vdG9vbHMvc2F2ZS1sb2FkL3Rlc3Rf
-bG9hZAo+ICtyZWdyZXNzaW9uL3Rvb2xzL3NhdmUtbG9hZC90ZXN0X2F1dG9sb2FkCj4gIHJlZ3Jl
-c3Npb24vdG9vbHMvbWkvdGVzdF9taQo+ICByZWdyZXNzaW9uL3Rvb2xzL3dpbGRjYXJkL3Rlc3Rf
-ZXZlbnRfd2lsZGNhcmQKPiAgcmVncmVzc2lvbi90b29scy9jcmFzaC90ZXN0X2NyYXNoCj4gZGlm
-ZiAtLWdpdCBhL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvc2F2ZS1sb2FkL3Rlc3RfYXV0b2xvYWQg
-Yi90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3NhdmUtbG9hZC90ZXN0X2F1dG9sb2FkCj4gbmV3IGZp
-bGUgbW9kZSAxMDA3NTUKPiBpbmRleCAwMDAwMDAwMC4uZWExMjEwZGUKPiAtLS0gL2Rldi9udWxs
-Cj4gKysrIGIvdGVzdHMvcmVncmVzc2lvbi90b29scy9zYXZlLWxvYWQvdGVzdF9hdXRvbG9hZAo+
-IEBAIC0wLDAgKzEsMTAxIEBACj4gKyMhL2Jpbi9iYXNoCj4gKyMKPiArIyBDb3B5cmlnaHQgKEMp
-IC0gMjAxNCBEYXZpZCBHb3VsZXQgPGRnb3VsZXRAZWZmaWNpb3MuY29tPgoKSSBkb3VidCBkZ291
-bGV0IHdyb3RlIHRoaXMgZmlsZSA6KS4gRXZlbiBpZiB0aGlzIHdhcyAiY29waWVkIiBmcm9tIGFu
-b3RoZXIgdGVzdApwbGFuIHRoZSBtYWpvcml0eSBvZiB0aGUgdGVzdCBwbGFuIHdhcyB3cml0dGVu
-L2NvbnRyaWJ1dGVkIGJ5IHlvdS4KWW91ciBuYW1lIGFuZCBlbWFpbCBzaG91bGQgYmUgdGhlcmUu
-Cgo+ICsjCj4gKyMgVGhpcyBsaWJyYXJ5IGlzIGZyZWUgc29mdHdhcmU7IHlvdSBjYW4gcmVkaXN0
-cmlidXRlIGl0IGFuZC9vciBtb2RpZnkgaXQgdW5kZXIKPiArIyB0aGUgdGVybXMgb2YgdGhlIEdO
-VSBMZXNzZXIgR2VuZXJhbCBQdWJsaWMgTGljZW5zZSBhcyBwdWJsaXNoZWQgYnkgdGhlIEZyZWUK
-PiArIyBTb2Z0d2FyZSBGb3VuZGF0aW9uOyB2ZXJzaW9uIDIuMSBvZiB0aGUgTGljZW5zZS4KPiAr
-Iwo+ICsjIFRoaXMgbGlicmFyeSBpcyBkaXN0cmlidXRlZCBpbiB0aGUgaG9wZSB0aGF0IGl0IHdp
-bGwgYmUgdXNlZnVsLCBidXQgV0lUSE9VVAo+ICsjIEFOWSBXQVJSQU5UWTsgd2l0aG91dCBldmVu
-IHRoZSBpbXBsaWVkIHdhcnJhbnR5IG9mIE1FUkNIQU5UQUJJTElUWSBvciBGSVRORVNTCj4gKyMg
-Rk9SIEEgUEFSVElDVUxBUiBQVVJQT1NFLiBTZWUgdGhlIEdOVSBMZXNzZXIgR2VuZXJhbCBQdWJs
-aWMgTGljZW5zZSBmb3IgbW9yZQo+ICsjIGRldGFpbHMuCj4gKyMKPiArIyBZb3Ugc2hvdWxkIGhh
-dmUgcmVjZWl2ZWQgYSBjb3B5IG9mIHRoZSBHTlUgTGVzc2VyIEdlbmVyYWwgUHVibGljIExpY2Vu
-c2UKPiArIyBhbG9uZyB3aXRoIHRoaXMgbGlicmFyeTsgaWYgbm90LCB3cml0ZSB0byB0aGUgRnJl
-ZSBTb2Z0d2FyZSBGb3VuZGF0aW9uLCBJbmMuLAo+ICsjIDUxIEZyYW5rbGluIFN0cmVldCwgRmlm
-dGggRmxvb3IsIEJvc3RvbiwgTUEgIDAyMTEwLTEzMDEgVVNBCj4gKwo+ICtURVNUX0RFU0M9Ikxv
-YWQgc2Vzc2lvbihzKSIKClNob3VsZCByZWZsZWN0IHRoZSBvdmVyYWxsIHRlc3Q6ICJBdXRvIGxv
-YWQgc2Vzc2lvbihzKSIKCj4gKwo+ICtDVVJESVI9JChkaXJuYW1lICQwKS8KPiArQ09ORklHX0RJ
-Uj0iJHtDVVJESVJ9L2NvbmZpZ3VyYXRpb24iCj4gK1RFU1RESVI9JENVUkRJUi8uLi8uLi8uLi8K
-PiArU0VTU0lPTkRfQklOPSJsdHRuZy1zZXNzaW9uZCIKPiArUkVMQVlEX0JJTj0ibHR0bmctcmVs
-YXlkIgo+ICtMVFROR19CSU49Imx0dG5nIgo+ICtleHBvcnQgTFRUTkdfU0VTU0lPTl9DT05GSUdf
-WFNEX1BBVEg9JChyZWFkbGluayAtbSAke1RFU1RESVJ9Li4vc3JjL2NvbW1vbi9jb25maWcvKQo+
-ICsKPiArRElSPSQocmVhZGxpbmsgLWYgJFRFU1RESVIpCj4gKwo+ICtOVU1fVEVTVFM9MTAKPiAr
-Cj4gK3NvdXJjZSAkVEVTVERJUi91dGlscy91dGlscy5zaAo+ICsKPiArIyBNVVNUIHNldCBURVNU
-RElSIGJlZm9yZSBjYWxsaW5nIHRob3NlIGZ1bmN0aW9ucwo+ICtwbGFuX3Rlc3RzICROVU1fVEVT
-VFMKPiArCj4gK3ByaW50X3Rlc3RfYmFubmVyICIkVEVTVF9ERVNDIgo+ICsKPiArZnVuY3Rpb24g
-dGVzdF9hdXRvX2xvYWRfZmlsZSgpCj4gK3sKPiArCWRpYWcgIlRlc3QgYXV0byBsb2FkIGZpbGUi
-Cj4gKwo+ICsJc3RvcF9sdHRuZ19zZXNzaW9uZAoKVGhlIHN0b3BfbHR0bmdfc2Vzc2lvbmQgc2hv
-dWxkIGJlIG1vdmVkIGF0IHRoZSBlbmQgb2YgZWFjaCBzdWIgdGVzdC4KCj4gKwlleHBvcnQgTFRU
-TkdfSE9NRT0KPiArCj4gKwlzdGFydF9sdHRuZ19zZXNzaW9uZCAkQ1VSRElSL2xvYWQtNDIubHR0
-bmcKPiArCWxpc3RfbHR0bmdfd2l0aF9vcHRzIGxvYWQtNDIKClB1dCBzdG9wX2x0dG5nX3Nlc3Np
-b25kIGhlcmUuCgo+ICt9Cj4gKwo+ICtmdW5jdGlvbiB0ZXN0X2F1dG9fbG9hZF9kaXIoKQo+ICt7
-Cj4gKwlkaWFnICJUZXN0IGF1dG8gbG9hZCBkaXJlY3RvcnkiCj4gKwo+ICsJc3RvcF9sdHRuZ19z
-ZXNzaW9uZAo+ICsKPiArCWV4cG9ydCBMVFROR19IT01FPQo+ICsJZXhwb3J0IExUVE5HX0RJUj0v
-dG1wL2x0dG5nX2hvbWUKClVzZSAibWt0ZW1wIC1kIiBoZXJlLgoKPiArCW1rZGlyIC1wICRMVFRO
-R19ESVIKPiArCWNwIC1mICRDVVJESVIvbG9hZC00Mi5sdHRuZyAkTFRUTkdfRElSLwo+ICsKPiAr
-CXN0YXJ0X2x0dG5nX3Nlc3Npb25kICRMVFROR19ESVIKPiArCWxpc3RfbHR0bmdfd2l0aF9vcHRz
-IGxvYWQtNDIKPiArCj4gKwlybSAtcmYgJExUVE5HX0RJUgo+ICt9Cj4gKwo+ICtmdW5jdGlvbiB0
-ZXN0X2F1dG9fbG9hZF9sdHRuZ19ob21lKCkKPiArewo+ICsJZGlhZyAiVGVzdCBhdXRvIGxvYWQg
-Ynkgc2V0dGluZyBMVFROR19IT01FIgo+ICsKPiArCXN0b3BfbHR0bmdfc2Vzc2lvbmQKPiArCj4g
-KwlleHBvcnQgTFRUTkdfSE9NRT0vdG1wL2x0dG5nX2hvbWUKClVzZSAibWt0ZW1wIC1kIiBoZXJl
-LgoKPiArCW1rZGlyIC1wICRMVFROR19IT01FLy5sdHRuZy9zZXNzaW9ucy9hdXRvCj4gKwljcCAt
-ZiAkQ1VSRElSL2xvYWQtNDIubHR0bmcgJExUVE5HX0hPTUUvLmx0dG5nL3Nlc3Npb25zL2F1dG8K
-PiArCj4gKwlzdGFydF9sdHRuZ19zZXNzaW9uZAo+ICsJbGlzdF9sdHRuZ193aXRoX29wdHMgbG9h
-ZC00Mgo+ICsKPiArCXJtIC1yZiAkTFRUTkdfSE9NRS8ubHR0bmcvc2Vzc2lvbnMvYXV0bwoKTWFr
-ZSBzdXJlIHRvIHJlbW92ZSB0aGUgY29tcGxldGUgTFRUTkdfSE9NRSBkaXJlY3RvcnkuCgo+ICt9
-Cj4gKwo+ICtURVNUUz0oCj4gKwl0ZXN0X2F1dG9fbG9hZF9maWxlCj4gKwl0ZXN0X2F1dG9fbG9h
-ZF9kaXIKPiArCXRlc3RfYXV0b19sb2FkX2x0dG5nX2hvbWUKPiArKQo+ICsKPiArZm9yIGZjdF90
-ZXN0IGluICR7VEVTVFNbQF19Owo+ICtkbwo+ICsJVFJBQ0VfUEFUSD0kKG1rdGVtcCAtZCkKPiAr
-Cj4gKwkke2ZjdF90ZXN0fQo+ICsJaWYgWyAkPyAtbmUgMCBdOyB0aGVuCj4gKwkJYnJlYWs7Cj4g
-KwlmaQo+ICsJIyBPbmx5IGRlbGV0ZSBpZiBzdWNjZXNzZnVsCj4gKwlybSAtcmYgJFRSQUNFX1BB
-VEgKPiArZG9uZQo+ICsKPiArc3RvcF9sdHRuZ19zZXNzaW9uZAoKUmVtb3ZlIHRoaXMuCgo+IC0t
-IAo+IDIuMTcuMAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
-bmctZGV2CgotLSAKSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4KRWZmaWNpT1MKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
-dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
-aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============7596256971950290081==
+Content-Type: multipart/alternative; boundary="00000000000045c5cc056c30ab34"
+
+--00000000000045c5cc056c30ab34
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+I will update the patch and resend it tomorrow
+
+Regards
+Anders
+
+m=C3=A5n 14 maj 2018 kl 18:17 skrev Jonathan Rajotte-Julien <
+jonathan.rajotte-julien@efficios.com>:
+
+> Hi Anders
+>
+> Thanks for proposing this patch.
+>
+> We will need more context here. Are those currently failing and exposing =
+a
+> problem?
+>
+Yes, lttng-tools 2.10.4 is broken when having auto-load sessions, see
+https://lists.lttng.org/pipermail/lttng-dev/2018-May/028014.html
+
+I will add a longer commit message
+
+>
+> See comments inline.
+>
+>
+> On Mon, May 14, 2018 at 05:30:53PM +0200, Anders Wallin wrote:
+> > Signed-off-by: Anders Wallin <wallinux@gmail.com>
+> > ---
+> >  tests/fast_regression                         |   1 +
+> >  .../regression/tools/save-load/test_autoload  | 101 ++++++++++++++++++
+> >  2 files changed, 102 insertions(+)
+> >  create mode 100755 tests/regression/tools/save-load/test_autoload
+> >
+> > diff --git a/tests/fast_regression b/tests/fast_regression
+> > index bbce068f..2f02f872 100644
+> > --- a/tests/fast_regression
+> > +++ b/tests/fast_regression
+> > @@ -13,6 +13,7 @@ regression/tools/snapshots/test_ust_fast
+> >  regression/tools/snapshots/test_ust_streaming
+> >  regression/tools/save-load/test_save
+> >  regression/tools/save-load/test_load
+> > +regression/tools/save-load/test_autoload
+> >  regression/tools/mi/test_mi
+> >  regression/tools/wildcard/test_event_wildcard
+> >  regression/tools/crash/test_crash
+> > diff --git a/tests/regression/tools/save-load/test_autoload
+> b/tests/regression/tools/save-load/test_autoload
+> > new file mode 100755
+> > index 00000000..ea1210de
+> > --- /dev/null
+> > +++ b/tests/regression/tools/save-load/test_autoload
+> > @@ -0,0 +1,101 @@
+> > +#!/bin/bash
+> > +#
+> > +# Copyright (C) - 2014 David Goulet <dgoulet@efficios.com>
+>
+> I doubt dgoulet wrote this file :). Even if this was "copied" from anothe=
+r
+> test
+> plan the majority of the test plan was written/contributed by you.
+> Your name and email should be there.
+>
+Ok
+
+>
+> > +#
+> > +# This library is free software; you can redistribute it and/or modify
+> it under
+> > +# the terms of the GNU Lesser General Public License as published by
+> the Free
+> > +# Software Foundation; version 2.1 of the License.
+> > +#
+> > +# This library is distributed in the hope that it will be useful, but
+> WITHOUT
+> > +# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY o=
+r
+> FITNESS
+> > +# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+> for more
+> > +# details.
+> > +#
+> > +# You should have received a copy of the GNU Lesser General Public
+> License
+> > +# along with this library; if not, write to the Free Software
+> Foundation, Inc.,
+> > +# 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+> > +
+> > +TEST_DESC=3D"Load session(s)"
+>
+> Should reflect the overall test: "Auto load session(s)"
+>
+OK
+
+>
+> > +
+> > +CURDIR=3D$(dirname $0)/
+> > +CONFIG_DIR=3D"${CURDIR}/configuration"
+> > +TESTDIR=3D$CURDIR/../../../
+> > +SESSIOND_BIN=3D"lttng-sessiond"
+> > +RELAYD_BIN=3D"lttng-relayd"
+> > +LTTNG_BIN=3D"lttng"
+> > +export LTTNG_SESSION_CONFIG_XSD_PATH=3D$(readlink -m
+> ${TESTDIR}../src/common/config/)
+> > +
+> > +DIR=3D$(readlink -f $TESTDIR)
+> > +
+> > +NUM_TESTS=3D10
+> > +
+> > +source $TESTDIR/utils/utils.sh
+> > +
+> > +# MUST set TESTDIR before calling those functions
+> > +plan_tests $NUM_TESTS
+> > +
+> > +print_test_banner "$TEST_DESC"
+> > +
+> > +function test_auto_load_file()
+> > +{
+> > +     diag "Test auto load file"
+> > +
+> > +     stop_lttng_sessiond
+>
+> The stop_lttng_sessiond should be moved at the end of each sub test.
+>
+Ok, but I need one stop_lttng_session before the test, since it can't be
+any lttng_sessiond
+running when starting the tests.
+
+>
+> > +     export LTTNG_HOME=3D
+> > +
+> > +     start_lttng_sessiond $CURDIR/load-42.lttng
+> > +     list_lttng_with_opts load-42
+>
+> Put stop_lttng_sessiond here.
+>
+> > +}
+> > +
+> > +function test_auto_load_dir()
+> > +{
+> > +     diag "Test auto load directory"
+> > +
+> > +     stop_lttng_sessiond
+> > +
+> > +     export LTTNG_HOME=3D
+> > +     export LTTNG_DIR=3D/tmp/lttng_home
+>
+> Use "mktemp -d" here.
+>
+OK
+
+>
+> > +     mkdir -p $LTTNG_DIR
+> > +     cp -f $CURDIR/load-42.lttng $LTTNG_DIR/
+> > +
+> > +     start_lttng_sessiond $LTTNG_DIR
+> > +     list_lttng_with_opts load-42
+> > +
+> > +     rm -rf $LTTNG_DIR
+> > +}
+> > +
+> > +function test_auto_load_lttng_home()
+> > +{
+> > +     diag "Test auto load by setting LTTNG_HOME"
+> > +
+> > +     stop_lttng_sessiond
+> > +
+> > +     export LTTNG_HOME=3D/tmp/lttng_home
+>
+> Use "mktemp -d" here.
+>
+OK
+
+>
+> > +     mkdir -p $LTTNG_HOME/.lttng/sessions/auto
+> > +     cp -f $CURDIR/load-42.lttng $LTTNG_HOME/.lttng/sessions/auto
+> > +
+> > +     start_lttng_sessiond
+> > +     list_lttng_with_opts load-42
+> > +
+> > +     rm -rf $LTTNG_HOME/.lttng/sessions/auto
+>
+> Make sure to remove the complete LTTNG_HOME directory.
+>
+OK
+
+>
+> > +}
+> > +
+> > +TESTS=3D(
+> > +     test_auto_load_file
+> > +     test_auto_load_dir
+> > +     test_auto_load_lttng_home
+> > +)
+> > +
+> > +for fct_test in ${TESTS[@]};
+> > +do
+> > +     TRACE_PATH=3D$(mktemp -d)
+> > +
+> > +     ${fct_test}
+> > +     if [ $? -ne 0 ]; then
+> > +             break;
+> > +     fi
+> > +     # Only delete if successful
+> > +     rm -rf $TRACE_PATH
+> > +done
+> > +
+> > +stop_lttng_sessiond
+>
+> Remove this.
+>
+OK
+
+>
+> > --
+> > 2.17.0
+> >
+> > _______________________________________________
+> > lttng-dev mailing list
+> > lttng-dev@lists.lttng.org
+> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+> --
+> Jonathan Rajotte-Julien
+> EfficiOS
+>
+
+--00000000000045c5cc056c30ab34
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi,=C2=A0<div><br></div><div>I will update the patch and r=
+esend it tomorrow</div><div><br></div><div>Regards</div><div>Anders<br><br>=
+<div class=3D"gmail_quote"><div dir=3D"ltr">m=C3=A5n 14 maj 2018 kl 18:17 s=
+krev Jonathan Rajotte-Julien &lt;<a href=3D"mailto:jonathan.rajotte-julien@=
+efficios.com">jonathan.rajotte-julien@efficios.com</a>&gt;:<br></div><block=
+quote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc=
+ solid;padding-left:1ex">Hi Anders<br>
+<br>
+Thanks for proposing this patch.<br>
+<br>
+We will need more context here. Are those currently failing and exposing a<=
+br>
+problem?<br></blockquote><div>Yes, lttng-tools 2.10.4 is broken when having=
+ auto-load sessions, see<br><a href=3D"https://lists.lttng.org/pipermail/lt=
+tng-dev/2018-May/028014.html">https://lists.lttng.org/pipermail/lttng-dev/2=
+018-May/028014.html</a></div><div><br>I will add a longer commit message=C2=
+=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;borde=
+r-left:1px #ccc solid;padding-left:1ex">
+<br>
+See comments inline.<br>
+<br>
+<br>
+On Mon, May 14, 2018 at 05:30:53PM +0200, Anders Wallin wrote:<br>
+&gt; Signed-off-by: Anders Wallin &lt;<a href=3D"mailto:wallinux@gmail.com"=
+ target=3D"_blank">wallinux@gmail.com</a>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 tests/fast_regression=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 =C2=A01 +<br>
+&gt;=C2=A0 .../regression/tools/save-load/test_autoload=C2=A0 | 101 +++++++=
++++++++++++<br>
+&gt;=C2=A0 2 files changed, 102 insertions(+)<br>
+&gt;=C2=A0 create mode 100755 tests/regression/tools/save-load/test_autoloa=
+d<br>
+&gt; <br>
+&gt; diff --git a/tests/fast_regression b/tests/fast_regression<br>
+&gt; index bbce068f..2f02f872 100644<br>
+&gt; --- a/tests/fast_regression<br>
+&gt; +++ b/tests/fast_regression<br>
+&gt; @@ -13,6 +13,7 @@ regression/tools/snapshots/test_ust_fast<br>
+&gt;=C2=A0 regression/tools/snapshots/test_ust_streaming<br>
+&gt;=C2=A0 regression/tools/save-load/test_save<br>
+&gt;=C2=A0 regression/tools/save-load/test_load<br>
+&gt; +regression/tools/save-load/test_autoload<br>
+&gt;=C2=A0 regression/tools/mi/test_mi<br>
+&gt;=C2=A0 regression/tools/wildcard/test_event_wildcard<br>
+&gt;=C2=A0 regression/tools/crash/test_crash<br>
+&gt; diff --git a/tests/regression/tools/save-load/test_autoload b/tests/re=
+gression/tools/save-load/test_autoload<br>
+&gt; new file mode 100755<br>
+&gt; index 00000000..ea1210de<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/tests/regression/tools/save-load/test_autoload<br>
+&gt; @@ -0,0 +1,101 @@<br>
+&gt; +#!/bin/bash<br>
+&gt; +#<br>
+&gt; +# Copyright (C) - 2014 David Goulet &lt;<a href=3D"mailto:dgoulet@eff=
+icios.com" target=3D"_blank">dgoulet@efficios.com</a>&gt;<br>
+<br>
+I doubt dgoulet wrote this file :). Even if this was &quot;copied&quot; fro=
+m another test<br>
+plan the majority of the test plan was written/contributed by you.<br>
+Your name and email should be there.<br></blockquote><div>Ok=C2=A0</div><bl=
+ockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #=
+ccc solid;padding-left:1ex">
+<br>
+&gt; +#<br>
+&gt; +# This library is free software; you can redistribute it and/or modif=
+y it under<br>
+&gt; +# the terms of the GNU Lesser General Public License as published by =
+the Free<br>
+&gt; +# Software Foundation; version 2.1 of the License.<br>
+&gt; +#<br>
+&gt; +# This library is distributed in the hope that it will be useful, but=
+ WITHOUT<br>
+&gt; +# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY =
+or FITNESS<br>
+&gt; +# FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License=
+ for more<br>
+&gt; +# details.<br>
+&gt; +#<br>
+&gt; +# You should have received a copy of the GNU Lesser General Public Li=
+cense<br>
+&gt; +# along with this library; if not, write to the Free Software Foundat=
+ion, Inc.,<br>
+&gt; +# 51 Franklin Street, Fifth Floor, Boston, MA=C2=A0 02110-1301 USA<br=
+>
+&gt; +<br>
+&gt; +TEST_DESC=3D&quot;Load session(s)&quot;<br>
+<br>
+Should reflect the overall test: &quot;Auto load session(s)&quot;<br></bloc=
+kquote><div>OK=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin=
+:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
+<br>
+&gt; +<br>
+&gt; +CURDIR=3D$(dirname $0)/<br>
+&gt; +CONFIG_DIR=3D&quot;${CURDIR}/configuration&quot;<br>
+&gt; +TESTDIR=3D$CURDIR/../../../<br>
+&gt; +SESSIOND_BIN=3D&quot;lttng-sessiond&quot;<br>
+&gt; +RELAYD_BIN=3D&quot;lttng-relayd&quot;<br>
+&gt; +LTTNG_BIN=3D&quot;lttng&quot;<br>
+&gt; +export LTTNG_SESSION_CONFIG_XSD_PATH=3D$(readlink -m ${TESTDIR}../src=
+/common/config/)<br>
+&gt; +<br>
+&gt; +DIR=3D$(readlink -f $TESTDIR)<br>
+&gt; +<br>
+&gt; +NUM_TESTS=3D10<br>
+&gt; +<br>
+&gt; +source $TESTDIR/utils/utils.sh<br>
+&gt; +<br>
+&gt; +# MUST set TESTDIR before calling those functions<br>
+&gt; +plan_tests $NUM_TESTS<br>
+&gt; +<br>
+&gt; +print_test_banner &quot;$TEST_DESC&quot;<br>
+&gt; +<br>
+&gt; +function test_auto_load_file()<br>
+&gt; +{<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0diag &quot;Test auto load file&quot;<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0stop_lttng_sessiond<br>
+<br>
+The stop_lttng_sessiond should be moved at the end of each sub test.<br></b=
+lockquote><div>Ok, but I need one stop_lttng_session before the test, since=
+ it can&#39;t be any lttng_sessiond=C2=A0</div><div>running when starting t=
+he tests.=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 =
+0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
+<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0export LTTNG_HOME=3D<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0start_lttng_sessiond $CURDIR/load-42.lttng<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0list_lttng_with_opts load-42<br>
+<br>
+Put stop_lttng_sessiond here.<br>
+<br>
+&gt; +}<br>
+&gt; +<br>
+&gt; +function test_auto_load_dir()<br>
+&gt; +{<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0diag &quot;Test auto load directory&quot;<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0stop_lttng_sessiond<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0export LTTNG_HOME=3D<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0export LTTNG_DIR=3D/tmp/lttng_home<br>
+<br>
+Use &quot;mktemp -d&quot; here.<br></blockquote><div>OK=C2=A0</div><blockqu=
+ote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc s=
+olid;padding-left:1ex">
+<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0mkdir -p $LTTNG_DIR<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0cp -f $CURDIR/load-42.lttng $LTTNG_DIR/<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0start_lttng_sessiond $LTTNG_DIR<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0list_lttng_with_opts load-42<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0rm -rf $LTTNG_DIR<br>
+&gt; +}<br>
+&gt; +<br>
+&gt; +function test_auto_load_lttng_home()<br>
+&gt; +{<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0diag &quot;Test auto load by setting LTTNG_HOME&q=
+uot;<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0stop_lttng_sessiond<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0export LTTNG_HOME=3D/tmp/lttng_home<br>
+<br>
+Use &quot;mktemp -d&quot; here.<br></blockquote><div>OK=C2=A0</div><blockqu=
+ote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc s=
+olid;padding-left:1ex">
+<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0mkdir -p $LTTNG_HOME/.lttng/sessions/auto<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0cp -f $CURDIR/load-42.lttng $LTTNG_HOME/.lttng/se=
+ssions/auto<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0start_lttng_sessiond<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0list_lttng_with_opts load-42<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0rm -rf $LTTNG_HOME/.lttng/sessions/auto<br>
+<br>
+Make sure to remove the complete LTTNG_HOME directory.<br></blockquote><div=
+>OK=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex=
+;border-left:1px #ccc solid;padding-left:1ex">
+<br>
+&gt; +}<br>
+&gt; +<br>
+&gt; +TESTS=3D(<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0test_auto_load_file<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0test_auto_load_dir<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0test_auto_load_lttng_home<br>
+&gt; +)<br>
+&gt; +<br>
+&gt; +for fct_test in ${TESTS[@]};<br>
+&gt; +do<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0TRACE_PATH=3D$(mktemp -d)<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0${fct_test}<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0if [ $? -ne 0 ]; then<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0break;<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0fi<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0# Only delete if successful<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0rm -rf $TRACE_PATH<br>
+&gt; +done<br>
+&gt; +<br>
+&gt; +stop_lttng_sessiond<br>
+<br>
+Remove this.<br></blockquote><div>OK=C2=A0</div><blockquote class=3D"gmail_=
+quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1=
+ex">
+<br>
+&gt; -- <br>
+&gt; 2.17.0<br>
+&gt; <br>
+&gt; _______________________________________________<br>
+&gt; lttng-dev mailing list<br>
+&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
+ev@lists.lttng.org</a><br>
+&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
+ rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailm=
+an/listinfo/lttng-dev</a><br>
+<br>
+-- <br>
+Jonathan Rajotte-Julien<br>
+EfficiOS<br>
+</blockquote></div></div></div>
+
+--00000000000045c5cc056c30ab34--
+
+--===============7596256971950290081==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============7596256971950290081==--
