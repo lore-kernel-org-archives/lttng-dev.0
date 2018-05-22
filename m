@@ -1,21 +1,21 @@
-From: Vlad <vlad@demoninsight.com>
-Subject: possible to configure LTTng to use a different CLOCK_*
-	? [Re: LTTng Time Stamp Issue]
-Date: Tue, 22 May 2018 11:16:20 -0400
-Message-ID: <3BE61771-4BA9-4E00-93B5-67ADA3276AC5__39510.90362757$1527002069$gmane$org@demoninsight.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: possible to configure LTTng to use a different
+ CLOCK_* ? [Re: LTTng Time Stamp Issue]
+Date: Tue, 22 May 2018 11:34:24 -0400
+Message-ID: <20180522153424.GA3613__42911.9913642809$1527003158$gmane$org@joraj-alpa>
 References: <BY2PR0501MB21035DCCC28AFAD0D12C0587E3B40@BY2PR0501MB2103.namprd05.prod.outlook.com>
  <CA+jJMxvKyCt4VZ6U0gLu1KGA3S==CPTkTTGErOfXgBgms68xRg@mail.gmail.com>
  <f1311a1d-33d4-4ae0-f9e8-1de1f7f552ed@suse.de>
-Mime-Version: 1.0 (Mac OS X Mail 7.3 \(1878.6\))
-Content-Type: multipart/mixed; boundary="===============7942254597946781732=="
+ <3BE61771-4BA9-4E00-93B5-67ADA3276AC5@demoninsight.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt0-x234.google.com (mail-qt0-x234.google.com
- [IPv6:2607:f8b0:400d:c0d::234])
- by lists.lttng.org (Postfix) with ESMTPS id 40qzkd0snRz17dt
- for <lttng-dev@lists.lttng.org>; Tue, 22 May 2018 11:16:24 -0400 (EDT)
-Received: by mail-qt0-x234.google.com with SMTP id f1-v6so23889480qtj.6
- for <lttng-dev@lists.lttng.org>; Tue, 22 May 2018 08:16:24 -0700 (PDT)
-In-Reply-To: <f1311a1d-33d4-4ae0-f9e8-1de1f7f552ed@suse.de>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 40r07c0F44z17h5
+ for <lttng-dev@lists.lttng.org>; Tue, 22 May 2018 11:34:35 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <3BE61771-4BA9-4E00-93B5-67ADA3276AC5@demoninsight.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,344 +25,90 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mohamad Gebai <mgebai@suse.de>
-Cc: Sai Tujala <Sai.Tujala@mathworks.in>, lttng-dev <lttng-dev@lists.lttng.org>
+To: Vlad <vlad@demoninsight.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Sai Tujala <Sai.Tujala@mathworks.in>
 List-Id: lttng-dev@lists.lttng.org
 
-
---===============7942254597946781732==
-Content-Type: multipart/alternative; boundary="Apple-Mail=_D27041AE-0929-44AD-A8D3-7E1208F5565F"
-
-
---Apple-Mail=_D27041AE-0929-44AD-A8D3-7E1208F5565F
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=windows-1252
-
-Greetings,
-
-	I have what I hope is a related question:
-
-- my use case is:
-	- I use LTTng for userspace events only (at this time);
-	- I have the system clock (CLOCK_REALTIME) driven by a PTP =
-driver that comes with a NIC (SolarFlare) that slaves the system to an =
-externally provided high-grade PTP master;
-	- the NIC stamps all arriving IP packets at the hardware level =
-and the driver then makes the timestamps available in userspace along =
-with each packet;
-	- I would like to be able to correlate these timestamps with =
-LTTng timestamps on the same system.
-
-- is there a way to configure LTTng to use a user-specified CLOCK_* =
-type? I understand that that would de-cohere the timestamps from other =
-interesting timestamps (kernel events, etc) but my case above is =
-valuable enough that I=92d be willing to forgo everything else.
-
-Thank you in advance,
-Vlad
-
-On Apr 20, 2018, at 4:53 PM, Mohamad Gebai <mgebai@suse.de> wrote:
-
-> LTTng uses the monotonic clock [1] to timestamp the event at =
-trace-time. The monotonic clock is more appropriate than the real time =
-(CLOCK_REALTIME) when you want to timestamp/compare/order certain events =
-within the same system relatively to each other.     Using the real time =
-clock would cause a problem if say someone (or something, like ntp, or =
-kvm in a VM) changed the system's time while tracing.
->=20
-> With that being said, the monotonic clock doesn't give you a time that =
-is very meaningful as a human (its reference is the system boot). Having =
-the timestamps as an actual date and time would be more interesting. =
-LTTng stores the real time at the beginning of the     trace and stores =
-it in the metadata, which is later used to convert the timestamps from =
-monotonic time to real time. If you change the system's real time while =
-tracing, it won't have any effect on the timestamps of the recorded =
-events.
->=20
-> Mohamad
->=20
-> [1] https://linux.die.net/man/3/clock_gettime
-> [2] =
-http://linuxmogeb.blogspot.ca/2013/10/how-does-clockgettime-work.html
->=20
->=20
-> On 04/20/2018 11:37 AM, J=E9r=E9mie Galarneau wrote:
->> Hi,
->>=20
->> I'm adding the LTTng mailing list in CC for the benefit of the =
-community and so people add to or correct my explanation.
->>=20
->> The CTF specification describes the meaning of those fields:
->> http://diamon.org/ctf/#spec8
->>=20
->> In your case, this means that the timestamps in the trace are =
-expressed relative to an arbitrary time set 1524226572435601778 clock =
-ticks after 00:00:00 on 1 January 1970.
->>=20
->> To take your specific example:
->> Your clock is running at 1,000,000,000 Hz, meaning the duration of a =
-clock tick (period) is of 1 ns.
->>=20
->> The event has occurred at
->> 1524226572435601778 (offset) + 00000003827855360941 (event clock =
-value) nanoseconds after UNIX Epoch. That leads us to around Friday, =
-April 20, 2018 1:20:00 PM (GMT).
->>=20
->> Regards,
->> J=E9r=E9mie
->>=20
->>=20
->>=20
->> On 20 April 2018 at 11:06, Sai Tujala <Sai.Tujala@mathworks.in> =
-wrote:
->> Hi Jeremie,
->>=20
->> =20
->>                 In metadata file of LTTng trace session,  offset from =
-Epoch is =931524226572435601778=94 and time stamp of an event in channel =
-data files is starting from =9300000003827855360941=94. Can you brief =
-about relevance between these two time stamps.
->>=20
->> =20
->> freq =3D 1000000000; /* Frequency, in Hz */
->>=20
->>         /* clock value offset from Epoch is: offset * (1/freq) */
->>=20
->>         offset =3D 1524226572435601778;
->>=20
->> =20
->> =20
->> Thanks & Regards,
->>=20
->> T Sai Kiran
->>=20
->> =20
->>=20
->>=20
->>=20
->> --=20
->> J=E9r=E9mie Galarneau
->> EfficiOS Inc.
->> http://www.efficios.com
->>=20
->>=20
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->=20
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
---Apple-Mail=_D27041AE-0929-44AD-A8D3-7E1208F5565F
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/html;
-	charset=windows-1252
-
-<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html =
-charset=3Dwindows-1252"></head><body style=3D"word-wrap: break-word; =
--webkit-nbsp-mode: space; -webkit-line-break: =
-after-white-space;"><div><div>Greetings,</div><div><br></div><div><span =
-class=3D"Apple-tab-span" style=3D"white-space: pre;">	</span>I have =
-what I hope is a related question:</div><div><br></div><div>- my use =
-case is:</div><div><span class=3D"Apple-tab-span" =
-style=3D"white-space:pre">	</span>- I use LTTng for userspace =
-events only (at this time);</div><div><span class=3D"Apple-tab-span" =
-style=3D"white-space:pre">	</span>-&nbsp;I have the system clock =
-(CLOCK_REALTIME) driven by a PTP driver that comes with a NIC =
-(SolarFlare) that slaves the system to an externally provided high-grade =
-PTP master;</div><div><span class=3D"Apple-tab-span" =
-style=3D"white-space:pre">	</span>-&nbsp;the NIC stamps all =
-arriving IP packets at the hardware level and the driver then makes the =
-timestamps available in userspace along with each =
-packet;</div><div><span class=3D"Apple-tab-span" =
-style=3D"white-space:pre">	</span>-&nbsp;I would like to be able to =
-correlate these timestamps with LTTng timestamps on the same =
-system.</div></div><div><br></div><div>- is there a way to configure =
-LTTng to use a user-specified CLOCK_* type? I understand that that would =
-de-cohere the timestamps from other interesting timestamps (kernel =
-events, etc) but my case above is valuable enough that I=92d be willing =
-to forgo everything else.</div><div><br></div><div>Thank you in =
-advance,</div><div>Vlad</div><br><div><div>On Apr 20, 2018, at 4:53 PM, =
-Mohamad Gebai &lt;<a href=3D"mailto:mgebai@suse.de">mgebai@suse.de</a>&gt;=
- wrote:</div><br class=3D"Apple-interchange-newline"><blockquote =
-type=3D"cite">
- =20
-    <meta http-equiv=3D"Content-Type" content=3D"text/html; =
-charset=3Dutf-8">
- =20
-  <div text=3D"#000000" bgcolor=3D"#FFFFFF">
-    LTTng uses the monotonic clock [1] to timestamp the event at
-    trace-time. The monotonic clock is more appropriate than the real
-    time (CLOCK_REALTIME) when you want to timestamp/compare/order
-    certain events within the same system relatively to each other.
-    Using the real time clock would cause a problem if say someone (or
-    something, like ntp, or kvm in a VM) changed the system's time while
-    tracing.<br>
-    <br>
-    With that being said, the monotonic clock doesn't give you a time
-    that is very meaningful as a human (its reference is the system
-    boot). Having the timestamps as an actual date and time would be
-    more interesting. LTTng stores the real time at the beginning of the
-    trace and stores it in the metadata, which is later used to convert
-    the timestamps from monotonic time to real time. If you change the
-    system's real time while tracing, it won't have any effect on the
-    timestamps of the recorded events.<br>
-    <br>
-    Mohamad<br>
-    <br>
-    [1] <a class=3D"moz-txt-link-freetext" =
-href=3D"https://linux.die.net/man/3/clock_gettime">https://linux.die.net/m=
-an/3/clock_gettime</a><br>
-    [2]
-    <a class=3D"moz-txt-link-freetext" =
-href=3D"http://linuxmogeb.blogspot.ca/2013/10/how-does-clockgettime-work.h=
-tml">http://linuxmogeb.blogspot.ca/2013/10/how-does-clockgettime-work.html=
-</a><br>
-    <br>
-    <br>
-    <div class=3D"moz-cite-prefix">On 04/20/2018 11:37 AM, J=E9r=E9mie
-      Galarneau wrote:<br>
-    </div>
-    <blockquote type=3D"cite" =
-cite=3D"mid:CA+jJMxvKyCt4VZ6U0gLu1KGA3S=3D=3DCPTkTTGErOfXgBgms68xRg@mail.g=
-mail.com">
-      <div dir=3D"ltr">
-        <div>
-          <div>
-            <div>
-              <div>
-                <div>
-                  <div>Hi,<br>
-                    <br>
-                  </div>
-                  <div>I'm adding the LTTng mailing list in CC for the
-                    benefit of the community and so people add to or
-                    correct my explanation.<br>
-                  </div>
-                  <div><br>
-                    The CTF specification describes the meaning of those
-                    fields:<br>
-                    <a href=3D"http://diamon.org/ctf/#spec8" =
-moz-do-not-send=3D"true">http://diamon.org/ctf/#spec8</a><br>
-                    <br>
-                  </div>
-                  In your case, this means that the timestamps in the
-                  trace are expressed relative to an arbitrary time set
-                  1524226572435601778 clock ticks after 00:00:00 on 1
-                  January 1970.<br>
-                  <br>
-                </div>
-                To take your specific example:<br>
-              </div>
-              Your clock is running at 1,000,000,000 Hz, meaning the
-              duration of a clock tick (period) is of 1 ns.<br>
-              <br>
-            </div>
-            The event has occurred at<br>
-          </div>
-          1524226572435601778 (offset) + 00000003827855360941 (event
-          clock value) nanoseconds after UNIX Epoch. That leads us to
-          around Friday, April 20, 2018 1:20:00 PM (GMT).<br>
-          <br>
-        </div>
-        <div>Regards,<br>
-        </div>
-        J=E9r=E9mie<br>
-        <div><br>
-          <div>
-            <div>
-              <div>
-                <div><br>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class=3D"gmail_extra"><br>
-        <div class=3D"gmail_quote">On 20 April 2018 at 11:06, Sai Tujala =
-<span dir=3D"ltr">&lt;<a href=3D"mailto:Sai.Tujala@mathworks.in" =
-target=3D"_blank" =
-moz-do-not-send=3D"true">Sai.Tujala@mathworks.in</a>&gt;</span>
-          wrote:<br>
-          <blockquote class=3D"gmail_quote" style=3D"margin:0 0 0
-            .8ex;border-left:1px #ccc solid;padding-left:1ex">
-            <div link=3D"#0563C1" vlink=3D"#954F72" lang=3D"EN-US">
-              <div class=3D"m_-293747052095318529WordSection1"><p =
-class=3D"MsoNormal">Hi Jeremie,</p><div>&nbsp;<br =
-class=3D"webkit-block-placeholder"></div><p =
-class=3D"MsoNormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; In metadata file of
-                  LTTng trace session, &nbsp;offset from Epoch is
-                  =931524226572435601778=94 and time stamp of an event =
-in
-                  channel data files is starting from
-                  =9300000003827855360941=94. Can you brief about =
-relevance
-                  between these two time stamps. </p><div>&nbsp;<br =
-class=3D"webkit-block-placeholder"></div><p class=3D"MsoNormal" =
-style=3D"text-indent:.5in">freq =3D
-                  1000000000; /* Frequency, in Hz */</p><p =
-class=3D"MsoNormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /* clock =
-value offset from
-                  Epoch is: offset * (1/freq) */</p><p =
-class=3D"MsoNormal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; offset =3D
-                  1524226572435601778;</p><div>&nbsp;<br =
-class=3D"webkit-block-placeholder"></div><div>&nbsp;<br =
-class=3D"webkit-block-placeholder"></div><p class=3D"MsoNormal">Thanks =
-&amp; Regards,</p><p class=3D"MsoNormal">T Sai Kiran</p><div>&nbsp;<br =
-class=3D"webkit-block-placeholder"></div>
-              </div>
-            </div>
-          </blockquote>
-        </div>
-        <br>
-        <br clear=3D"all">
-        <br>
-        -- <br>
-        <div class=3D"gmail_signature" =
-data-smartmail=3D"gmail_signature">J=E9r=E9mie
-          Galarneau<br>
-          EfficiOS Inc.<br>
-          <a href=3D"http://www.efficios.com/" target=3D"_blank" =
-moz-do-not-send=3D"true">http://www.efficios.com</a></div>
-      </div>
-      <br>
-      <fieldset class=3D"mimeAttachmentHeader"></fieldset>
-      <br>
-      <pre wrap=3D"">_______________________________________________
-lttng-dev mailing list
-<a class=3D"moz-txt-link-abbreviated" =
-href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a>
-<a class=3D"moz-txt-link-freetext" =
-href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev">https:=
-//lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
-</pre>
-    </blockquote>
-    <br>
-  </div>
-
-_______________________________________________<br>lttng-dev mailing =
-list<br><a =
-href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><br=
->https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br></blockquot=
-e></div><br></body></html>=
-
---Apple-Mail=_D27041AE-0929-44AD-A8D3-7E1208F5565F--
-
---===============7942254597946781732==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============7942254597946781732==--
+SGkgVmxhZCwKCkxUVG5nLXVzdCBkb2VzIHByb3ZpZGUgYSBjbG9jayBvdmVycmlkZSBtZWNoYW5p
+c20uCgpTZWUgWzFdIGZvciBhbiBleGFtcGxlIGFuZCBzb21lIGJhc2ljIGRvYy4KCkhvcGUgdGhp
+cyBjb3ZlciB5b3VyIHVzZSBjYXNlLgoKQ2hlZXJzCgpbMV0gaHR0cHM6Ly9naXRodWIuY29tL2x0
+dG5nL2x0dG5nLXVzdC90cmVlL21hc3Rlci9kb2MvZXhhbXBsZXMvY2xvY2stb3ZlcnJpZGUKCk9u
+IFR1ZSwgTWF5IDIyLCAyMDE4IGF0IDExOjE2OjIwQU0gLTA0MDAsIFZsYWQgd3JvdGU6Cj4gR3Jl
+ZXRpbmdzLAo+IAo+IAlJIGhhdmUgd2hhdCBJIGhvcGUgaXMgYSByZWxhdGVkIHF1ZXN0aW9uOgo+
+IAo+IC0gbXkgdXNlIGNhc2UgaXM6Cj4gCS0gSSB1c2UgTFRUbmcgZm9yIHVzZXJzcGFjZSBldmVu
+dHMgb25seSAoYXQgdGhpcyB0aW1lKTsKPiAJLSBJIGhhdmUgdGhlIHN5c3RlbSBjbG9jayAoQ0xP
+Q0tfUkVBTFRJTUUpIGRyaXZlbiBieSBhIFBUUCBkcml2ZXIgdGhhdCBjb21lcyB3aXRoIGEgTklD
+IChTb2xhckZsYXJlKSB0aGF0IHNsYXZlcyB0aGUgc3lzdGVtIHRvIGFuIGV4dGVybmFsbHkgcHJv
+dmlkZWQgaGlnaC1ncmFkZSBQVFAgbWFzdGVyOwo+IAktIHRoZSBOSUMgc3RhbXBzIGFsbCBhcnJp
+dmluZyBJUCBwYWNrZXRzIGF0IHRoZSBoYXJkd2FyZSBsZXZlbCBhbmQgdGhlIGRyaXZlciB0aGVu
+IG1ha2VzIHRoZSB0aW1lc3RhbXBzIGF2YWlsYWJsZSBpbiB1c2Vyc3BhY2UgYWxvbmcgd2l0aCBl
+YWNoIHBhY2tldDsKPiAJLSBJIHdvdWxkIGxpa2UgdG8gYmUgYWJsZSB0byBjb3JyZWxhdGUgdGhl
+c2UgdGltZXN0YW1wcyB3aXRoIExUVG5nIHRpbWVzdGFtcHMgb24gdGhlIHNhbWUgc3lzdGVtLgo+
+IAo+IC0gaXMgdGhlcmUgYSB3YXkgdG8gY29uZmlndXJlIExUVG5nIHRvIHVzZSBhIHVzZXItc3Bl
+Y2lmaWVkIENMT0NLXyogdHlwZT8gSSB1bmRlcnN0YW5kIHRoYXQgdGhhdCB3b3VsZCBkZS1jb2hl
+cmUgdGhlIHRpbWVzdGFtcHMgZnJvbSBvdGhlciBpbnRlcmVzdGluZyB0aW1lc3RhbXBzIChrZXJu
+ZWwgZXZlbnRzLCBldGMpIGJ1dCBteSBjYXNlIGFib3ZlIGlzIHZhbHVhYmxlIGVub3VnaCB0aGF0
+IEnigJlkIGJlIHdpbGxpbmcgdG8gZm9yZ28gZXZlcnl0aGluZyBlbHNlLgo+IAo+IFRoYW5rIHlv
+dSBpbiBhZHZhbmNlLAo+IFZsYWQKPiAKPiBPbiBBcHIgMjAsIDIwMTgsIGF0IDQ6NTMgUE0sIE1v
+aGFtYWQgR2ViYWkgPG1nZWJhaUBzdXNlLmRlPiB3cm90ZToKPiAKPiA+IExUVG5nIHVzZXMgdGhl
+IG1vbm90b25pYyBjbG9jayBbMV0gdG8gdGltZXN0YW1wIHRoZSBldmVudCBhdCB0cmFjZS10aW1l
+LiBUaGUgbW9ub3RvbmljIGNsb2NrIGlzIG1vcmUgYXBwcm9wcmlhdGUgdGhhbiB0aGUgcmVhbCB0
+aW1lIChDTE9DS19SRUFMVElNRSkgd2hlbiB5b3Ugd2FudCB0byB0aW1lc3RhbXAvY29tcGFyZS9v
+cmRlciBjZXJ0YWluIGV2ZW50cyB3aXRoaW4gdGhlIHNhbWUgc3lzdGVtIHJlbGF0aXZlbHkgdG8g
+ZWFjaCBvdGhlci4gICAgIFVzaW5nIHRoZSByZWFsIHRpbWUgY2xvY2sgd291bGQgY2F1c2UgYSBw
+cm9ibGVtIGlmIHNheSBzb21lb25lIChvciBzb21ldGhpbmcsIGxpa2UgbnRwLCBvciBrdm0gaW4g
+YSBWTSkgY2hhbmdlZCB0aGUgc3lzdGVtJ3MgdGltZSB3aGlsZSB0cmFjaW5nLgo+ID4gCj4gPiBX
+aXRoIHRoYXQgYmVpbmcgc2FpZCwgdGhlIG1vbm90b25pYyBjbG9jayBkb2Vzbid0IGdpdmUgeW91
+IGEgdGltZSB0aGF0IGlzIHZlcnkgbWVhbmluZ2Z1bCBhcyBhIGh1bWFuIChpdHMgcmVmZXJlbmNl
+IGlzIHRoZSBzeXN0ZW0gYm9vdCkuIEhhdmluZyB0aGUgdGltZXN0YW1wcyBhcyBhbiBhY3R1YWwg
+ZGF0ZSBhbmQgdGltZSB3b3VsZCBiZSBtb3JlIGludGVyZXN0aW5nLiBMVFRuZyBzdG9yZXMgdGhl
+IHJlYWwgdGltZSBhdCB0aGUgYmVnaW5uaW5nIG9mIHRoZSAgICAgdHJhY2UgYW5kIHN0b3JlcyBp
+dCBpbiB0aGUgbWV0YWRhdGEsIHdoaWNoIGlzIGxhdGVyIHVzZWQgdG8gY29udmVydCB0aGUgdGlt
+ZXN0YW1wcyBmcm9tIG1vbm90b25pYyB0aW1lIHRvIHJlYWwgdGltZS4gSWYgeW91IGNoYW5nZSB0
+aGUgc3lzdGVtJ3MgcmVhbCB0aW1lIHdoaWxlIHRyYWNpbmcsIGl0IHdvbid0IGhhdmUgYW55IGVm
+ZmVjdCBvbiB0aGUgdGltZXN0YW1wcyBvZiB0aGUgcmVjb3JkZWQgZXZlbnRzLgo+ID4gCj4gPiBN
+b2hhbWFkCj4gPiAKPiA+IFsxXSBodHRwczovL2xpbnV4LmRpZS5uZXQvbWFuLzMvY2xvY2tfZ2V0
+dGltZQo+ID4gWzJdIGh0dHA6Ly9saW51eG1vZ2ViLmJsb2dzcG90LmNhLzIwMTMvMTAvaG93LWRv
+ZXMtY2xvY2tnZXR0aW1lLXdvcmsuaHRtbAo+ID4gCj4gPiAKPiA+IE9uIDA0LzIwLzIwMTggMTE6
+MzcgQU0sIErDqXLDqW1pZSBHYWxhcm5lYXUgd3JvdGU6Cj4gPj4gSGksCj4gPj4gCj4gPj4gSSdt
+IGFkZGluZyB0aGUgTFRUbmcgbWFpbGluZyBsaXN0IGluIENDIGZvciB0aGUgYmVuZWZpdCBvZiB0
+aGUgY29tbXVuaXR5IGFuZCBzbyBwZW9wbGUgYWRkIHRvIG9yIGNvcnJlY3QgbXkgZXhwbGFuYXRp
+b24uCj4gPj4gCj4gPj4gVGhlIENURiBzcGVjaWZpY2F0aW9uIGRlc2NyaWJlcyB0aGUgbWVhbmlu
+ZyBvZiB0aG9zZSBmaWVsZHM6Cj4gPj4gaHR0cDovL2RpYW1vbi5vcmcvY3RmLyNzcGVjOAo+ID4+
+IAo+ID4+IEluIHlvdXIgY2FzZSwgdGhpcyBtZWFucyB0aGF0IHRoZSB0aW1lc3RhbXBzIGluIHRo
+ZSB0cmFjZSBhcmUgZXhwcmVzc2VkIHJlbGF0aXZlIHRvIGFuIGFyYml0cmFyeSB0aW1lIHNldCAx
+NTI0MjI2NTcyNDM1NjAxNzc4IGNsb2NrIHRpY2tzIGFmdGVyIDAwOjAwOjAwIG9uIDEgSmFudWFy
+eSAxOTcwLgo+ID4+IAo+ID4+IFRvIHRha2UgeW91ciBzcGVjaWZpYyBleGFtcGxlOgo+ID4+IFlv
+dXIgY2xvY2sgaXMgcnVubmluZyBhdCAxLDAwMCwwMDAsMDAwIEh6LCBtZWFuaW5nIHRoZSBkdXJh
+dGlvbiBvZiBhIGNsb2NrIHRpY2sgKHBlcmlvZCkgaXMgb2YgMSBucy4KPiA+PiAKPiA+PiBUaGUg
+ZXZlbnQgaGFzIG9jY3VycmVkIGF0Cj4gPj4gMTUyNDIyNjU3MjQzNTYwMTc3OCAob2Zmc2V0KSAr
+IDAwMDAwMDAzODI3ODU1MzYwOTQxIChldmVudCBjbG9jayB2YWx1ZSkgbmFub3NlY29uZHMgYWZ0
+ZXIgVU5JWCBFcG9jaC4gVGhhdCBsZWFkcyB1cyB0byBhcm91bmQgRnJpZGF5LCBBcHJpbCAyMCwg
+MjAxOCAxOjIwOjAwIFBNIChHTVQpLgo+ID4+IAo+ID4+IFJlZ2FyZHMsCj4gPj4gSsOpcsOpbWll
+Cj4gPj4gCj4gPj4gCj4gPj4gCj4gPj4gT24gMjAgQXByaWwgMjAxOCBhdCAxMTowNiwgU2FpIFR1
+amFsYSA8U2FpLlR1amFsYUBtYXRod29ya3MuaW4+IHdyb3RlOgo+ID4+IEhpIEplcmVtaWUsCj4g
+Pj4gCj4gPj4gIAo+ID4+ICAgICAgICAgICAgICAgICBJbiBtZXRhZGF0YSBmaWxlIG9mIExUVG5n
+IHRyYWNlIHNlc3Npb24sICBvZmZzZXQgZnJvbSBFcG9jaCBpcyDigJwxNTI0MjI2NTcyNDM1NjAx
+Nzc44oCdIGFuZCB0aW1lIHN0YW1wIG9mIGFuIGV2ZW50IGluIGNoYW5uZWwgZGF0YSBmaWxlcyBp
+cyBzdGFydGluZyBmcm9tIOKAnDAwMDAwMDAzODI3ODU1MzYwOTQx4oCdLiBDYW4geW91IGJyaWVm
+IGFib3V0IHJlbGV2YW5jZSBiZXR3ZWVuIHRoZXNlIHR3byB0aW1lIHN0YW1wcy4KPiA+PiAKPiA+
+PiAgCj4gPj4gZnJlcSA9IDEwMDAwMDAwMDA7IC8qIEZyZXF1ZW5jeSwgaW4gSHogKi8KPiA+PiAK
+PiA+PiAgICAgICAgIC8qIGNsb2NrIHZhbHVlIG9mZnNldCBmcm9tIEVwb2NoIGlzOiBvZmZzZXQg
+KiAoMS9mcmVxKSAqLwo+ID4+IAo+ID4+ICAgICAgICAgb2Zmc2V0ID0gMTUyNDIyNjU3MjQzNTYw
+MTc3ODsKPiA+PiAKPiA+PiAgCj4gPj4gIAo+ID4+IFRoYW5rcyAmIFJlZ2FyZHMsCj4gPj4gCj4g
+Pj4gVCBTYWkgS2lyYW4KPiA+PiAKPiA+PiAgCj4gPj4gCj4gPj4gCj4gPj4gCj4gPj4gLS0gCj4g
+Pj4gSsOpcsOpbWllIEdhbGFybmVhdQo+ID4+IEVmZmljaU9TIEluYy4KPiA+PiBodHRwOi8vd3d3
+LmVmZmljaW9zLmNvbQo+ID4+IAo+ID4+IAo+ID4+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCj4gPj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+ID4+IGx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiA+PiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
+YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gPiAKPiA+IF9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0
+Cj4gPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4gPiBodHRwczovL2xpc3RzLmx0dG5nLm9y
+Zy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cj4gCgo+IF9fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlz
+dAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9j
+Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2CgoKLS0gCkpvbmF0aGFuIFJham90dGUt
+SnVsaWVuCkVmZmljaU9TCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
+dHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
+Cg==
