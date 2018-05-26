@@ -1,40 +1,36 @@
 From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: possible to configure LTTng to use a different
- CLOCK_* ? [Re: LTTng Time Stamp Issue]
-Date: Thu, 24 May 2018 18:03:43 -0400
-Message-ID: <CA+jJMxsFKXJotyaezrq7cecya5vbRgMGGhT24wMcEE6+TWZm+w__14837.98772465$1527199337$gmane$org@mail.gmail.com>
-References: <BY2PR0501MB21035DCCC28AFAD0D12C0587E3B40@BY2PR0501MB2103.namprd05.prod.outlook.com>
- <CA+jJMxvKyCt4VZ6U0gLu1KGA3S==CPTkTTGErOfXgBgms68xRg@mail.gmail.com>
- <f1311a1d-33d4-4ae0-f9e8-1de1f7f552ed@suse.de>
- <3BE61771-4BA9-4E00-93B5-67ADA3276AC5@demoninsight.com>
- <CA+jJMxt_9dFKpCa15iX8eNgQdnxPPgA86csuBLc-CmzA8trCsg@mail.gmail.com>
+Subject: Re: [PATCH lttng-tools] Print consumerd32, 64, ,
+	kernel configuration
+Date: Sat, 26 May 2018 04:38:38 -0400
+Message-ID: <CA+jJMxs6dOD8cmDn2xygB5uUEMQwGn1LmrsTLhq7Wb9jLkKqBg__9529.95743505216$1527323831$gmane$org@mail.gmail.com>
+References: <20180518211640.5168-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4828922500876736741=="
+Content-Type: multipart/mixed; boundary="===============2050917684402502986=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 40sNhF2GzlznVn
- for <lttng-dev@lists.lttng.org>; Thu, 24 May 2018 18:04:12 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 40tGkN1FfGz18RR
+ for <lttng-dev@lists.lttng.org>; Sat, 26 May 2018 04:39:07 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 8B058223565
- for <lttng-dev@lists.lttng.org>; Thu, 24 May 2018 18:04:06 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id 18278F4BE
+ for <lttng-dev@lists.lttng.org>; Sat, 26 May 2018 04:39:01 -0400 (EDT)
 Received: from mail.efficios.com ([IPv6:::1])
  by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
- with ESMTP id PiIwoR7sk7qj for <lttng-dev@lists.lttng.org>;
- Thu, 24 May 2018 18:04:05 -0400 (EDT)
+ with ESMTP id BC_e93-K8GS4 for <lttng-dev@lists.lttng.org>;
+ Sat, 26 May 2018 04:39:00 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id CA8E3223555
- for <lttng-dev@lists.lttng.org>; Thu, 24 May 2018 18:04:05 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id 5A562F4B2
+ for <lttng-dev@lists.lttng.org>; Sat, 26 May 2018 04:39:00 -0400 (EDT)
 Received: from mail.efficios.com ([IPv6:::1])
  by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
- with ESMTP id JGmgHFZ-hpKe for <lttng-dev@lists.lttng.org>;
- Thu, 24 May 2018 18:04:05 -0400 (EDT)
-Received: from mail-wr0-f180.google.com (mail-wr0-f180.google.com
- [209.85.128.180])
- by mail.efficios.com (Postfix) with ESMTPSA id 6870522352D
- for <lttng-dev@lists.lttng.org>; Thu, 24 May 2018 18:04:05 -0400 (EDT)
-Received: by mail-wr0-f180.google.com with SMTP id j1-v6so5781393wrm.1
- for <lttng-dev@lists.lttng.org>; Thu, 24 May 2018 15:04:05 -0700 (PDT)
-In-Reply-To: <CA+jJMxt_9dFKpCa15iX8eNgQdnxPPgA86csuBLc-CmzA8trCsg@mail.gmail.com>
+ with ESMTP id 1Vjn6gqQ6_Ef for <lttng-dev@lists.lttng.org>;
+ Sat, 26 May 2018 04:39:00 -0400 (EDT)
+Received: from mail-wm0-f46.google.com (mail-wm0-f46.google.com [74.125.82.46])
+ by mail.efficios.com (Postfix) with ESMTPSA id E749EF495
+ for <lttng-dev@lists.lttng.org>; Sat, 26 May 2018 04:38:59 -0400 (EDT)
+Received: by mail-wm0-f46.google.com with SMTP id q4-v6so16671842wmq.1
+ for <lttng-dev@lists.lttng.org>; Sat, 26 May 2018 01:38:59 -0700 (PDT)
+In-Reply-To: <20180518211640.5168-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -44,185 +40,150 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Vlad <vlad@demoninsight.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Sai Tujala <Sai.Tujala@mathworks.in>
+To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============4828922500876736741==
-Content-Type: multipart/alternative; boundary="000000000000601cbe056cfad483"
+--===============2050917684402502986==
+Content-Type: multipart/alternative; boundary="000000000000d2767a056d17d0cb"
 
---000000000000601cbe056cfad483
+--000000000000d2767a056d17d0cb
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Just realized my e-mail client didn't show Jonathan's response. Sorry!
+The title of this patch has an extra comma.
 
+On 18 May 2018 at 17:16, Jonathan Rajotte <
+jonathan.rajotte-julien@efficios.com> wrote:
+
+> Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+> ---
+>  src/bin/lttng-sessiond/sessiond-config.c | 49 +++++++++++++++---------
+>  1 file changed, 31 insertions(+), 18 deletions(-)
+>
+> diff --git a/src/bin/lttng-sessiond/sessiond-config.c
+> b/src/bin/lttng-sessiond/sessiond-config.c
+> index 587f2f82..c0e0fec3 100644
+> --- a/src/bin/lttng-sessiond/sessiond-config.c
+> +++ b/src/bin/lttng-sessiond/sessiond-config.c
+> @@ -501,22 +501,35 @@ void sessiond_config_log(struct sessiond_config
+> *config)
+>                                 config->agent_tcp_port.begin,
+>                                 config->agent_tcp_port.end);
+>         }
+> -       DBG_NO_LOC("\tapplication socket timeout:   %i",
+> config->app_socket_timeout);
+> -       DBG_NO_LOC("\tno-kernel:                    %s", config->no_kerne=
+l
+> ? "True" : "False");
+> -       DBG_NO_LOC("\tbackground:                   %s",
+> config->background ? "True" : "False");
+> -       DBG_NO_LOC("\tdaemonize:                    %s", config->daemoniz=
+e
+> ? "True" : "False");
+> -       DBG_NO_LOC("\tsignal parent on start:       %s",
+> config->sig_parent ? "True" : "False");
+> -       DBG_NO_LOC("\ttracing group name:           %s",
+> config->tracing_group_name.value ? : "Unknown");
+> -       DBG_NO_LOC("\tkmod_probe_list:              %s",
+> config->kmod_probes_list.value ? : "None");
+> -       DBG_NO_LOC("\tkmod_extra_probe_list:        %s",
+> config->kmod_extra_probes_list.value ? : "None");
+> -       DBG_NO_LOC("\trundir:                       %s",
+> config->rundir.value ? : "Unknown");
+> -       DBG_NO_LOC("\tapplication socket path:      %s",
+> config->apps_unix_sock_path.value ? : "Unknown");
+> -       DBG_NO_LOC("\tclient socket path:           %s",
+> config->client_unix_sock_path.value ? : "Unknown");
+> -       DBG_NO_LOC("\twait shm path:                %s",
+> config->wait_shm_path.value ? : "Unknown");
+> -       DBG_NO_LOC("\thealth socket path:           %s",
+> config->health_unix_sock_path.value ? : "Unknown");
+> -       DBG_NO_LOC("\tLTTNG_UST_CLOCK_PLUGIN:       %s",
+> config->lttng_ust_clock_plugin.value ? : "None");
+> -       DBG_NO_LOC("\tpid file path:                %s",
+> config->pid_file_path.value ? : "Unknown");
+> -       DBG_NO_LOC("\tlock file path:               %s",
+> config->lock_file_path.value ? : "Unknown");
+> -       DBG_NO_LOC("\tsession load path:            %s",
+> config->load_session_path.value ? : "None");
+> -       DBG_NO_LOC("\tagent port file path:         %s",
+> config->agent_port_file_path.value ? : "Unknown");
+> +       DBG_NO_LOC("\tapplication socket timeout:    %i",
+> config->app_socket_timeout);
+> +       DBG_NO_LOC("\tno-kernel:                     %s",
+> config->no_kernel ? "True" : "False");
+> +       DBG_NO_LOC("\tbackground:                    %s",
+> config->background ? "True" : "False");
+> +       DBG_NO_LOC("\tdaemonize:                     %s",
+> config->daemonize ? "True" : "False");
+> +       DBG_NO_LOC("\tsignal parent on start:        %s",
+> config->sig_parent ? "True" : "False");
+> +       DBG_NO_LOC("\ttracing group name:            %s",
+> config->tracing_group_name.value ? : "Unknown");
+> +       DBG_NO_LOC("\tkmod_probe_list:               %s",
+> config->kmod_probes_list.value ? : "None");
+> +       DBG_NO_LOC("\tkmod_extra_probe_list:         %s",
+> config->kmod_extra_probes_list.value ? : "None");
+> +       DBG_NO_LOC("\trundir:                        %s",
+> config->rundir.value ? : "Unknown");
+> +       DBG_NO_LOC("\tapplication socket path:       %s",
+> config->apps_unix_sock_path.value ? : "Unknown");
+> +       DBG_NO_LOC("\tclient socket path:            %s",
+> config->client_unix_sock_path.value ? : "Unknown");
+> +       DBG_NO_LOC("\twait shm path:                 %s",
+> config->wait_shm_path.value ? : "Unknown");
+> +       DBG_NO_LOC("\thealth socket path:            %s",
+> config->health_unix_sock_path.value ? : "Unknown");
+> +       DBG_NO_LOC("\tLTTNG_UST_CLOCK_PLUGIN:        %s",
+> config->lttng_ust_clock_plugin.value ? : "None");
+> +       DBG_NO_LOC("\tpid file path:                 %s",
+> config->pid_file_path.value ? : "Unknown");
+> +       DBG_NO_LOC("\tlock file path:                %s",
+> config->lock_file_path.value ? : "Unknown");
+> +       DBG_NO_LOC("\tsession load path:             %s",
+> config->load_session_path.value ? : "None");
+> +       DBG_NO_LOC("\tagent port file path:          %s",
+> config->agent_port_file_path.value ? : "Unknown");
+> +       DBG_NO_LOC("\tconsumerd32 path:              %s",
+> config->consumerd32_path.value);
+> +       DBG_NO_LOC("\tconsumerd32 bin_path:          %s",
+> config->consumerd32_bin_path.value);
+> +       DBG_NO_LOC("\tconsumerd32 lib dir:           %s",
+> config->consumerd32_lib_dir.value);
+> +       DBG_NO_LOC("\tconsumerd32 err unix sock path:%s",
+> config->consumerd32_err_unix_sock_path.value);
+> +       DBG_NO_LOC("\tconsumerd32 cmd unix sock path:%s",
+> config->consumerd32_cmd_unix_sock_path.value);
+> +       DBG_NO_LOC("\tconsumerd64 path:              %s",
+> config->consumerd64_path.value);
+> +       DBG_NO_LOC("\tconsumerd64 bin path:          %s",
+> config->consumerd64_bin_path.value);
+> +       DBG_NO_LOC("\tconsumerd64 lib dir:           %s",
+> config->consumerd64_lib_dir.value);
+> +       DBG_NO_LOC("\tconsumerd64 err unix sock path:%s",
+> config->consumerd64_err_unix_sock_path.value);
+> +       DBG_NO_LOC("\tconsumerd64 cmd unix sock path:%s",
+> config->consumerd64_cmd_unix_sock_path.value);
+> +       DBG_NO_LOC("\tkconsumerd path:               %s",
+> config->kconsumerd_path.value);
+> +       DBG_NO_LOC("\tkconsumerd err unix sock path: %s",
+> config->kconsumerd_err_unix_sock_path.value);
+> +       DBG_NO_LOC("\tkconsumerd cmd unix sock path: %s",
+> config->kconsumerd_cmd_unix_sock_path.value);
+>
+
+Those string values can be NULL. Look at how this is handled for the
+existing string options (ternary + place holder). In this case, using
+"Unknown" seems appropriate.
+
+Thanks,
 J=C3=A9r=C3=A9mie
 
-On 24 May 2018 at 17:53, J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@eff=
-icios.com>
-wrote:
 
->
->
-> On 22 May 2018 at 11:16, Vlad <vlad@demoninsight.com> wrote:
->
->> Greetings,
->>
->> I have what I hope is a related question:
->>
->> - my use case is:
->> - I use LTTng for userspace events only (at this time);
->> - I have the system clock (CLOCK_REALTIME) driven by a PTP driver that
->> comes with a NIC (SolarFlare) that slaves the system to an externally
->> provided high-grade PTP master;
->> - the NIC stamps all arriving IP packets at the hardware level and the
->> driver then makes the timestamps available in userspace along with each
->> packet;
->> - I would like to be able to correlate these timestamps with LTTng
->> timestamps on the same system.
->>
->> - is there a way to configure LTTng to use a user-specified CLOCK_* type=
-?
->> I understand that that would de-cohere the timestamps from other
->> interesting timestamps (kernel events, etc) but my case above is valuabl=
-e
->> enough that I=E2=80=99d be willing to forgo everything else.
->>
->
-> Hi Vlad,
->
-> lttng-ust's clock plug-in interface seems like a good fit for what you
-> want.
->
-> Have a look at the example in lttng-ust's source tree:
-> https://github.com/lttng/lttng-ust/tree/master/doc/examples/clock-overrid=
-e
->
-> Thanks!
-> J=C3=A9r=C3=A9mie
->
->
->>
->> Thank you in advance,
->> Vlad
->>
->> On Apr 20, 2018, at 4:53 PM, Mohamad Gebai <mgebai@suse.de> wrote:
->>
->> LTTng uses the monotonic clock [1] to timestamp the event at trace-time.
->> The monotonic clock is more appropriate than the real time (CLOCK_REALTI=
-ME)
->> when you want to timestamp/compare/order certain events within the same
->> system relatively to each other. Using the real time clock would cause a
->> problem if say someone (or something, like ntp, or kvm in a VM) changed =
-the
->> system's time while tracing.
->>
->> With that being said, the monotonic clock doesn't give you a time that i=
-s
->> very meaningful as a human (its reference is the system boot). Having th=
-e
->> timestamps as an actual date and time would be more interesting. LTTng
->> stores the real time at the beginning of the trace and stores it in the
->> metadata, which is later used to convert the timestamps from monotonic t=
-ime
->> to real time. If you change the system's real time while tracing, it won=
-'t
->> have any effect on the timestamps of the recorded events.
->>
->> Mohamad
->>
->> [1] https://linux.die.net/man/3/clock_gettime
->> [2] http://linuxmogeb.blogspot.ca/2013/10/how-does-clockgettime-work.htm=
-l
->>
->>
->> On 04/20/2018 11:37 AM, J=C3=A9r=C3=A9mie Galarneau wrote:
->>
->> Hi,
->>
->> I'm adding the LTTng mailing list in CC for the benefit of the community
->> and so people add to or correct my explanation.
->>
->> The CTF specification describes the meaning of those fields:
->> http://diamon.org/ctf/#spec8
->>
->> In your case, this means that the timestamps in the trace are expressed
->> relative to an arbitrary time set 1524226572435601778 clock ticks after
->> 00:00:00 on 1 January 1970.
->>
->> To take your specific example:
->> Your clock is running at 1,000,000,000 Hz, meaning the duration of a
->> clock tick (period) is of 1 ns.
->>
->> The event has occurred at
->> 1524226572435601778 (offset) + 00000003827855360941 (event clock value)
->> nanoseconds after UNIX Epoch. That leads us to around Friday, April 20,
->> 2018 1:20:00 PM (GMT).
->>
->> Regards,
->> J=C3=A9r=C3=A9mie
->>
->>
->>
->> On 20 April 2018 at 11:06, Sai Tujala <Sai.Tujala@mathworks.in> wrote:
->>
->>> Hi Jeremie,
->>>
->>>
->>>                 In metadata file of LTTng trace session,  offset from
->>> Epoch is =E2=80=9C1524226572435601778=E2=80=9D and time stamp of an eve=
-nt in channel data
->>> files is starting from =E2=80=9C00000003827855360941=E2=80=9D. Can you =
-brief about
->>> relevance between these two time stamps.
->>>
->>>
->>> freq =3D 1000000000; /* Frequency, in Hz */
->>>
->>>         /* clock value offset from Epoch is: offset * (1/freq) */
->>>
->>>         offset =3D 1524226572435601778;
->>>
->>>
->>>
->>> Thanks & Regards,
->>>
->>> T Sai Kiran
->>>
->>>
->>
->>
->>
->> --
->> J=C3=A9r=C3=A9mie Galarneau
->> EfficiOS Inc.
->> http://www.efficios.com
->>
->>
->> _______________________________________________
->> lttng-dev mailing listlttng-dev@lists.lttng.orghttps://lists.lttng.org/c=
-gi-bin/mailman/listinfo/lttng-dev
->>
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
->>
->>
->
->
+>  }
 > --
-> J=C3=A9r=C3=A9mie Galarneau
-> EfficiOS Inc.
-> http://www.efficios.com
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> 2.17.0
 >
 >
 
@@ -232,243 +193,193 @@ J=C3=A9r=C3=A9mie Galarneau
 EfficiOS Inc.
 http://www.efficios.com
 
---000000000000601cbe056cfad483
+--000000000000d2767a056d17d0cb
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div>Just realized my e-mail client didn&#39;t show Jonath=
-an&#39;s response. Sorry!</div><div><br></div><div>J=C3=A9r=C3=A9mie<br></d=
-iv><div><div class=3D"gmail_extra"><br><div class=3D"gmail_quote">On 24 May=
- 2018 at 17:53, J=C3=A9r=C3=A9mie Galarneau <span dir=3D"ltr">&lt;<a href=
-=3D"mailto:jeremie.galarneau@efficios.com" target=3D"_blank">jeremie.galarn=
-eau@efficios.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote"=
- style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><d=
-iv dir=3D"ltr"><br><div class=3D"gmail_extra"><br><div class=3D"gmail_quote=
-"><span class=3D"">On 22 May 2018 at 11:16, Vlad <span dir=3D"ltr">&lt;<a h=
-ref=3D"mailto:vlad@demoninsight.com" target=3D"_blank">vlad@demoninsight.co=
+<div dir=3D"ltr">The title of this patch has an extra comma.<br><div><div c=
+lass=3D"gmail_extra"><br><div class=3D"gmail_quote">On 18 May 2018 at 17:16=
+, Jonathan Rajotte <span dir=3D"ltr">&lt;<a href=3D"mailto:jonathan.rajotte=
+-julien@efficios.com" target=3D"_blank">jonathan.rajotte-julien@efficios.co=
 m</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margi=
-n:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex=
-"><div><div><div>Greetings,</div><div><br></div><div><span class=3D"m_-9020=
-594725317779918gmail-m_2645552137873417523Apple-tab-span" style=3D"white-sp=
-ace:pre-wrap">	</span>I have what I hope is a related question:</div><div><=
-br></div><div>- my use case is:</div><div><span class=3D"m_-902059472531777=
-9918gmail-m_2645552137873417523Apple-tab-span" style=3D"white-space:pre-wra=
-p">	</span>- I use LTTng for userspace events only (at this time);</div><di=
-v><span class=3D"m_-9020594725317779918gmail-m_2645552137873417523Apple-tab=
--span" style=3D"white-space:pre-wrap">	</span>-=C2=A0I have the system cloc=
-k (CLOCK_REALTIME) driven by a PTP driver that comes with a NIC (SolarFlare=
-) that slaves the system to an externally provided high-grade PTP master;</=
-div><div><span class=3D"m_-9020594725317779918gmail-m_2645552137873417523Ap=
-ple-tab-span" style=3D"white-space:pre-wrap">	</span>-=C2=A0the NIC stamps =
-all arriving IP packets at the hardware level and the driver then makes the=
- timestamps available in userspace along with each packet;</div><div><span =
-class=3D"m_-9020594725317779918gmail-m_2645552137873417523Apple-tab-span" s=
-tyle=3D"white-space:pre-wrap">	</span>-=C2=A0I would like to be able to cor=
-relate these timestamps with LTTng timestamps on the same system.</div></di=
-v><div><br></div><div>- is there a way to configure LTTng to use a user-spe=
-cified CLOCK_* type? I understand that that would de-cohere the timestamps =
-from other interesting timestamps (kernel events, etc) but my case above is=
- valuable enough that I=E2=80=99d be willing to forgo everything else.</div=
-></div></blockquote><div><br></div></span><div>Hi Vlad,</div><div><br></div=
-><div>lttng-ust&#39;s clock plug-in interface seems like a good fit for wha=
-t you want.</div><div><br></div><div>Have a look at the example in lttng-us=
-t&#39;s source tree:<br></div><div><a href=3D"https://github.com/lttng/lttn=
-g-ust/tree/master/doc/examples/clock-override" target=3D"_blank">https://gi=
-thub.com/lttng/<wbr>lttng-ust/tree/master/doc/<wbr>examples/clock-override<=
-/a></div><div><br></div><div>Thanks!</div><span class=3D"HOEnZb"><font colo=
-r=3D"#888888"><div>J=C3=A9r=C3=A9mie<br></div></font></span><div><div class=
-=3D"h5"><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:=
-0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">=
-<div><div><br></div><div>Thank you in advance,</div><div>Vlad</div><br><div=
-><div>On Apr 20, 2018, at 4:53 PM, Mohamad Gebai &lt;<a href=3D"mailto:mgeb=
-ai@suse.de" target=3D"_blank">mgebai@suse.de</a>&gt; wrote:</div><br class=
-=3D"m_-9020594725317779918gmail-m_2645552137873417523Apple-interchange-newl=
-ine"><blockquote type=3D"cite">
- =20
-   =20
- =20
-  <div bgcolor=3D"#FFFFFF">
-    LTTng uses the monotonic clock [1] to timestamp the event at
-    trace-time. The monotonic clock is more appropriate than the real
-    time (CLOCK_REALTIME) when you want to timestamp/compare/order
-    certain events within the same system relatively to each other.
-    Using the real time clock would cause a problem if say someone (or
-    something, like ntp, or kvm in a VM) changed the system&#39;s time whil=
-e
-    tracing.<br>
-    <br>
-    With that being said, the monotonic clock doesn&#39;t give you a time
-    that is very meaningful as a human (its reference is the system
-    boot). Having the timestamps as an actual date and time would be
-    more interesting. LTTng stores the real time at the beginning of the
-    trace and stores it in the metadata, which is later used to convert
-    the timestamps from monotonic time to real time. If you change the
-    system&#39;s real time while tracing, it won&#39;t have any effect on t=
-he
-    timestamps of the recorded events.<br>
-    <br>
-    Mohamad<br>
-    <br>
-    [1] <a class=3D"m_-9020594725317779918gmail-m_2645552137873417523moz-tx=
-t-link-freetext" href=3D"https://linux.die.net/man/3/clock_gettime" target=
-=3D"_blank">https://linux.die.net/man/3/cl<wbr>ock_gettime</a><br>
-    [2]
-    <a class=3D"m_-9020594725317779918gmail-m_2645552137873417523moz-txt-li=
-nk-freetext" href=3D"http://linuxmogeb.blogspot.ca/2013/10/how-does-clockge=
-ttime-work.html" target=3D"_blank">http://linuxmogeb.blogspot.ca/<wbr>2013/=
-10/how-does-clockgettime-<wbr>work.html</a><br>
-    <br>
-    <br>
-    <div class=3D"m_-9020594725317779918gmail-m_2645552137873417523moz-cite=
--prefix">On 04/20/2018 11:37 AM, J=C3=A9r=C3=A9mie
-      Galarneau wrote:<br>
-    </div>
-    <blockquote type=3D"cite">
-      <div dir=3D"ltr">
-        <div>
-          <div>
-            <div>
-              <div>
-                <div>
-                  <div>Hi,<br>
-                    <br>
-                  </div>
-                  <div>I&#39;m adding the LTTng mailing list in CC for the
-                    benefit of the community and so people add to or
-                    correct my explanation.<br>
-                  </div>
-                  <div><br>
-                    The CTF specification describes the meaning of those
-                    fields:<br>
-                    <a href=3D"http://diamon.org/ctf/#spec8" target=3D"_bla=
-nk">http://diamon.org/ctf/#spec8</a><br>
-                    <br>
-                  </div>
-                  In your case, this means that the timestamps in the
-                  trace are expressed relative to an arbitrary time set
-                  1524226572435601778 clock ticks after 00:00:00 on 1
-                  January 1970.<br>
-                  <br>
-                </div>
-                To take your specific example:<br>
-              </div>
-              Your clock is running at 1,000,000,000 Hz, meaning the
-              duration of a clock tick (period) is of 1 ns.<br>
-              <br>
-            </div>
-            The event has occurred at<br>
-          </div>
-          1524226572435601778 (offset) + 00000003827855360941 (event
-          clock value) nanoseconds after UNIX Epoch. That leads us to
-          around Friday, April 20, 2018 1:20:00 PM (GMT).<br>
-          <br>
-        </div>
-        <div>Regards,<br>
-        </div>
-        J=C3=A9r=C3=A9mie<br>
-        <div><br>
-          <div>
-            <div>
-              <div>
-                <div><br>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class=3D"gmail_extra"><br>
-        <div class=3D"gmail_quote">On 20 April 2018 at 11:06, Sai Tujala <s=
-pan dir=3D"ltr">&lt;<a href=3D"mailto:Sai.Tujala@mathworks.in" target=3D"_b=
-lank">Sai.Tujala@mathworks.in</a>&gt;</span>
-          wrote:<br>
-          <blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8=
-ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-            <div lang=3D"EN-US">
-              <div class=3D"m_-9020594725317779918gmail-m_26455521378734175=
-23m_-293747052095318529WordSection1"><p class=3D"MsoNormal">Hi Jeremie,</p>=
-<div>=C2=A0<br class=3D"m_-9020594725317779918gmail-m_2645552137873417523we=
-bkit-block-placeholder"></div><p class=3D"MsoNormal">=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 In me=
-tadata file of
-                  LTTng trace session, =C2=A0offset from Epoch is
-                  =E2=80=9C1524226572435601778=E2=80=9D and time stamp of a=
-n event in
-                  channel data files is starting from
-                  =E2=80=9C00000003827855360941=E2=80=9D. Can you brief abo=
-ut relevance
-                  between these two time stamps. </p><div>=C2=A0<br class=
-=3D"m_-9020594725317779918gmail-m_2645552137873417523webkit-block-placehold=
-er"></div><p class=3D"MsoNormal" style=3D"text-indent:0.5in">freq =3D
-                  1000000000; /* Frequency, in Hz */</p><p class=3D"MsoNorm=
-al">=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* clock value offset from
-                  Epoch is: offset * (1/freq) */</p><p class=3D"MsoNormal">=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 offset =3D
-                  1524226572435601778;</p><div>=C2=A0<br class=3D"m_-902059=
-4725317779918gmail-m_2645552137873417523webkit-block-placeholder"></div><di=
-v>=C2=A0<br class=3D"m_-9020594725317779918gmail-m_2645552137873417523webki=
-t-block-placeholder"></div><p class=3D"MsoNormal">Thanks &amp; Regards,</p>=
-<p class=3D"MsoNormal">T Sai Kiran</p><div>=C2=A0<br class=3D"m_-9020594725=
-317779918gmail-m_2645552137873417523webkit-block-placeholder"></div>
-              </div>
-            </div>
-          </blockquote>
-        </div>
-        <br>
-        <br clear=3D"all">
-        <br>
-        -- <br>
-        <div class=3D"m_-9020594725317779918gmail-m_2645552137873417523gmai=
-l_signature">J=C3=A9r=C3=A9mie
-          Galarneau<br>
-          EfficiOS Inc.<br>
-          <a href=3D"http://www.efficios.com/" target=3D"_blank">http://www=
-.efficios.com</a></div>
-      </div>
-      <br>
-      <fieldset class=3D"m_-9020594725317779918gmail-m_2645552137873417523m=
-imeAttachmentHeader"></fieldset>
-      <br>
-      <pre>______________________________<wbr>_________________
-lttng-dev mailing list
-<a class=3D"m_-9020594725317779918gmail-m_2645552137873417523moz-txt-link-a=
-bbreviated" href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">ltt=
-ng-dev@lists.lttng.org</a>
-<a class=3D"m_-9020594725317779918gmail-m_2645552137873417523moz-txt-link-f=
-reetext" href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev=
-" target=3D"_blank">https://lists.lttng.org/cgi-bi<wbr>n/mailman/listinfo/l=
-ttng-dev</a>
-</pre>
-    </blockquote>
-    <br>
-  </div>
-
-______________________________<wbr>_________________<br>lttng-dev mailing l=
-ist<br><a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng=
--dev@lists.lttng.org</a><br><a href=3D"https://lists.lttng.org/cgi-bin/mail=
-man/listinfo/lttng-dev" target=3D"_blank">https://lists.lttng.org/cgi-bi<wb=
-r>n/mailman/listinfo/lttng-dev</a><br></blockquote></div><br></div></blockq=
-uote></div></div></div><div><div class=3D"h5"><br><br clear=3D"all"><br>-- =
-<br><div class=3D"m_-9020594725317779918gmail_signature">J=C3=A9r=C3=A9mie =
+n:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Signed-off-by: Jo=
+nathan Rajotte &lt;<a href=3D"mailto:jonathan.rajotte-julien@efficios.com">=
+jonathan.rajotte-julien@<wbr>efficios.com</a>&gt;<br>
+---<br>
+=C2=A0src/bin/lttng-sessiond/<wbr>sessiond-config.c | 49 +++++++++++++++---=
+------<br>
+=C2=A01 file changed, 31 insertions(+), 18 deletions(-)<br>
+<br>
+diff --git a/src/bin/lttng-sessiond/<wbr>sessiond-config.c b/src/bin/lttng-=
+sessiond/<wbr>sessiond-config.c<br>
+index 587f2f82..c0e0fec3 100644<br>
+--- a/src/bin/lttng-sessiond/<wbr>sessiond-config.c<br>
++++ b/src/bin/lttng-sessiond/<wbr>sessiond-config.c<br>
+@@ -501,22 +501,35 @@ void sessiond_config_log(struct sessiond_config *conf=
+ig)<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 config-&gt;agent_tcp_port.begin,<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 config-&gt;agent_tcp_port.end);<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 }<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tapplication socket timeout:=
+=C2=A0 =C2=A0%i&quot;, config-&gt;app_socket_timeout);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tno-kernel:=C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;n=
+o_kernel ? &quot;True&quot; : &quot;False&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tbackground:=C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;ba=
+ckground ? &quot;True&quot; : &quot;False&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tdaemonize:=C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;d=
+aemonize ? &quot;True&quot; : &quot;False&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tsignal parent on start:=C2=
+=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;sig_parent ? &quot;True&quot; =
+: &quot;False&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\ttracing group name:=C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;tracing_group_name.<=
+wbr>value ? : &quot;Unknown&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tkmod_probe_list:=C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;kmod_probes_lis=
+t.value ? : &quot;None&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tkmod_extra_<wbr>probe_list:=
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;kmod_extra_probes_<wbr>lis=
+t.value ? : &quot;None&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\trundir:=C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, con=
+fig-&gt;rundir.value ? : &quot;Unknown&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tapplication socket path:=C2=
+=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;apps_unix_sock_path.<wbr>value ? : &=
+quot;Unknown&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tclient socket path:=C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;client_unix_sock_pat=
+h.<wbr>value ? : &quot;Unknown&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\twait shm path:=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;wait_shm_pat=
+h.value ? : &quot;Unknown&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\thealth socket path:=C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;health_unix_sock_pat=
+h.<wbr>value ? : &quot;Unknown&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tLTTNG_UST_CLOCK_<wbr>PLUGIN:=
+=C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;lttng_ust_clock_<wbr>plugin=
+.value ? : &quot;None&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tpid file path:=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;pid_file_pat=
+h.value ? : &quot;Unknown&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tlock file path:=C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;lock_file_pa=
+th.value ? : &quot;Unknown&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tsession load path:=C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;load_session_path.<wbr=
+>value ? : &quot;None&quot;);<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tagent port file path:=C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;agent_port_file_path.<wbr>v=
+alue ? : &quot;Unknown&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tapplication socket timeout:=
+=C2=A0 =C2=A0 %i&quot;, config-&gt;app_socket_timeout);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tno-kernel:=C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config=
+-&gt;no_kernel ? &quot;True&quot; : &quot;False&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tbackground:=C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;b=
+ackground ? &quot;True&quot; : &quot;False&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tdaemonize:=C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config=
+-&gt;daemonize ? &quot;True&quot; : &quot;False&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tsignal parent on start:=C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;sig_parent ? &quot;True&quot;=
+ : &quot;False&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\ttracing group name:=C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;tracing_group_name.=
+<wbr>value ? : &quot;Unknown&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tkmod_probe_list:=C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;kmod_prob=
+es_list.value ? : &quot;None&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tkmod_extra_<wbr>probe_list:=
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;kmod_extra_probes_<w=
+br>list.value ? : &quot;None&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\trundir:=C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, co=
+nfig-&gt;rundir.value ? : &quot;Unknown&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tapplication socket path:=C2=
+=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;apps_unix_sock_path.<wbr>value=
+ ? : &quot;Unknown&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tclient socket path:=C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;client_unix_sock_pa=
+th.<wbr>value ? : &quot;Unknown&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\twait shm path:=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;wait_s=
+hm_path.value ? : &quot;Unknown&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\thealth socket path:=C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;health_unix_sock_pa=
+th.<wbr>value ? : &quot;Unknown&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tLTTNG_UST_CLOCK_<wbr>PLUGIN:=
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;lttng_ust_clock_<wbr>plugi=
+n.value ? : &quot;None&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tpid file path:=C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;pid_fi=
+le_path.value ? : &quot;Unknown&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tlock file path:=C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;lock_file_p=
+ath.value ? : &quot;Unknown&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tsession load path:=C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;load_session_pat=
+h.<wbr>value ? : &quot;None&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tagent port file path:=C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;agent_port_file_path.<wbr>=
+value ? : &quot;Unknown&quot;);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tconsumerd32 path:=C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;consumerd32_pat=
+h.<wbr>value);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tconsumerd32 bin_path:=C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;consumerd32_bin_path.<wbr>=
+value);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tconsumerd32 lib dir:=C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;consumerd32_lib_dir.=
+<wbr>value);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tconsumerd32 err unix sock pa=
+th:%s&quot;, config-&gt;consumerd32_err_unix_<wbr>sock_path.value);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tconsumerd32 cmd unix sock pa=
+th:%s&quot;, config-&gt;consumerd32_cmd_unix_<wbr>sock_path.value);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tconsumerd64 path:=C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;consumerd64_pat=
+h.<wbr>value);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tconsumerd64 bin path:=C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 %s&quot;, config-&gt;consumerd64_bin_path.<wbr>=
+value);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tconsumerd64 lib dir:=C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;consumerd64_lib_dir.=
+<wbr>value);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tconsumerd64 err unix sock pa=
+th:%s&quot;, config-&gt;consumerd64_err_unix_<wbr>sock_path.value);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tconsumerd64 cmd unix sock pa=
+th:%s&quot;, config-&gt;consumerd64_cmd_unix_<wbr>sock_path.value);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tkconsumerd path:=C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0%s&quot;, config-&gt;kconsumer=
+d_path.value)<wbr>;<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tkconsumerd err unix sock pat=
+h: %s&quot;, config-&gt;kconsumerd_err_unix_<wbr>sock_path.value);<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0DBG_NO_LOC(&quot;\tkconsumerd cmd unix sock pat=
+h: %s&quot;, config-&gt;kconsumerd_cmd_unix_<wbr>sock_path.value);<br></blo=
+ckquote><div><br></div><div>Those string values can be NULL. Look at how th=
+is is handled for the existing string options (ternary + place holder). In =
+this case, using &quot;Unknown&quot; seems appropriate.</div><div><br></div=
+><div>Thanks,</div><div>J=C3=A9r=C3=A9mie<br></div><div>=C2=A0</div><blockq=
+uote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc =
+solid;padding-left:1ex">
+=C2=A0}<br>
+<span class=3D"HOEnZb"><font color=3D"#888888">-- <br>
+2.17.0<br>
+<br>
+</font></span></blockquote></div><br><br clear=3D"all"><br>-- <br><div clas=
+s=3D"gmail_signature" data-smartmail=3D"gmail_signature">J=C3=A9r=C3=A9mie =
 Galarneau<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com" target=3D=
 "_blank">http://www.efficios.com</a></div>
-</div></div></div></div>
-<br>______________________________<wbr>_________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-<wbr>bin/mail=
-man/listinfo/lttng-dev</a><br>
-<br></blockquote></div><br><br clear=3D"all"><br>-- <br><div class=3D"gmail=
-_signature" data-smartmail=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<=
-br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com" target=3D"_blank">h=
-ttp://www.efficios.com</a></div>
 </div></div></div>
 
---000000000000601cbe056cfad483--
+--000000000000d2767a056d17d0cb--
 
---===============4828922500876736741==
+--===============2050917684402502986==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -478,4 +389,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============4828922500876736741==--
+--===============2050917684402502986==--
