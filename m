@@ -1,16 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Contributing to LTTng Open Source Community
-Date: Mon, 28 May 2018 12:38:35 -0400 (EDT)
-Message-ID: <479517232.1476.1527525515585.JavaMail.zimbra__5270.86229199103$1527525405$gmane$org@efficios.com>
-References: <CALGsHkMC-RT9U9HTEKFo8ws23bpgiyV8f-J0G=_VyaGBdo9Asg@mail.gmail.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: [PATCH lttng-tools] Print consumerd32, 64, ,
+	kernel configuration
+Date: Mon, 28 May 2018 16:09:34 -0400
+Message-ID: <20180528200934.GB17127__7828.29085733301$1527538061$gmane$org@joraj-alpa>
+References: <20180518211640.5168-1-jonathan.rajotte-julien@efficios.com>
+ <CA+jJMxs6dOD8cmDn2xygB5uUEMQwGn1LmrsTLhq7Wb9jLkKqBg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7494790438596581054=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 40vjGq1m66zpNY
- for <lttng-dev@lists.lttng.org>; Mon, 28 May 2018 12:38:42 -0400 (EDT)
-In-Reply-To: <CALGsHkMC-RT9U9HTEKFo8ws23bpgiyV8f-J0G=_VyaGBdo9Asg@mail.gmail.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 40vny83Zxsz17XW
+ for <lttng-dev@lists.lttng.org>; Mon, 28 May 2018 16:09:36 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <CA+jJMxs6dOD8cmDn2xygB5uUEMQwGn1LmrsTLhq7Wb9jLkKqBg@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,115 +24,128 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Santhosh Kumar Gunturu <santhosh.978.462@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============7494790438596581054==
-Content-Type: multipart/alternative;
-	boundary="=_4b70c2a1-b138-41ec-abdd-aeedb36e0988"
-
---=_4b70c2a1-b138-41ec-abdd-aeedb36e0988
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
------ On May 26, 2018, at 2:58 AM, Santhosh Kumar Gunturu <santhosh.978.462@gmail.com> wrote: 
-
-> Hi All,
-
-> From last few months, I have been thinking of contributing to open-source
-> community. I am interested in doing so but when never found the correct
-> platform to do so.
-
-> Whatever I learn in my daily life as an Engineer, I can contribute to something
-> signficant through this opensource community.
-
-> While I have started working on Performance Optimization for CFM Protocol in
-> Carrier Ethernet in networking industry. I came across this LTTng. So I have
-> seen significant contributions going on into LTTng.
-
-> Is there any opportunity that I can join this community ?
-> If not, What can I do to contributing to such communities in future ?
-
-Hi! 
-
-Thanks for your interest in our project. 
-
-Since you come from the networking industry, we are always very much interested to discuss the use-cases 
-you have. It helps us drive the features in a direction that is most useful for our user base. What is missing 
-in LTTng today to make it more useful for you ? 
-
-If you have specific feature ideas in mind, feel free to post them on the mailing list of on the 
-LTTng support tracker (https://bugs.lttng.org) under the "Features" category. 
-
-If you want to contribute code, I would recommend to start small, so we can provide feedback on 
-a small contribution as you familiarize yourself with the project. If it's a feature contribution, make sure 
-to discuss it with us on the mailing list or IRC before spending too much time implementing, just to make 
-sure there is no showstopper concern with the idea. 
-
-Best regards, 
-
-Mathieu 
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_4b70c2a1-b138-41ec-abdd-aeedb36e0988
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><span id=3D"zwchr" data-marker=3D"__DIVIDER=
-__">----- On May 26, 2018, at 2:58 AM, Santhosh Kumar Gunturu &lt;santhosh.=
-978.462@gmail.com&gt; wrote:<br></span></div><div data-marker=3D"__QUOTED_T=
-EXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;p=
-adding-left:5px;color:#000;font-weight:normal;font-style:normal;text-decora=
-tion:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=
-=3D"ltr"><div>Hi All,</div><br><div>From last few months, I have been think=
-ing of contributing to open-source community. I am interested in doing so b=
-ut when never found the correct platform to do so.&nbsp;</div><br><div>What=
-ever I learn in my daily life as an Engineer, I can contribute to something=
- signficant through this opensource community.</div><br><div>While I have s=
-tarted working on Performance Optimization for CFM Protocol in Carrier Ethe=
-rnet in networking industry. I came across this LTTng. So I have seen signi=
-ficant contributions going on into LTTng.</div><br><div>Is there any opport=
-unity that I can join this community ?</div><div>If not, What can I do to c=
-ontributing to such communities in future ?</div></div></blockquote><div>Hi=
-!<br></div><div><br data-mce-bogus=3D"1"></div><div>Thanks for your interes=
-t in our project.<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"=
-1"></div><div>Since you come from the networking industry, we are always ve=
-ry much interested to discuss the use-cases<br data-mce-bogus=3D"1"></div><=
-div>you have. It helps us drive the features in a direction that is most us=
-eful for our user base. What is missing<br data-mce-bogus=3D"1"></div><div>=
-in LTTng today to make it more useful for you ?<br data-mce-bogus=3D"1"></d=
-iv><div><br data-mce-bogus=3D"1"></div><div>If you have specific feature id=
-eas in mind, feel free to post them on the mailing list of on the<br data-m=
-ce-bogus=3D"1"></div><div>LTTng support tracker (https://bugs.lttng.org) un=
-der the "Features" category.<br data-mce-bogus=3D"1"></div><div><br data-mc=
-e-bogus=3D"1"></div><div>If you want to contribute code, I would recommend =
-to start small, so we can provide feedback on<br data-mce-bogus=3D"1"></div=
-><div>a small contribution as you familiarize yourself with the project. If=
- it's a feature contribution, make sure<br data-mce-bogus=3D"1"></div><div>=
-to discuss it with us on the mailing list or IRC before spending too much t=
-ime implementing, just to make<br data-mce-bogus=3D"1"></div><div>sure ther=
-e is no showstopper concern with the idea.<br data-mce-bogus=3D"1"></div><d=
-iv><br data-mce-bogus=3D"1"></div><div>Best regards,<br data-mce-bogus=3D"1=
-"></div><div><br data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=
-=3D"1"></div><div><br data-mce-bogus=3D"1"></div></div><div data-marker=3D"=
-__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http:=
-//www.efficios.com</div></div></body></html>
---=_4b70c2a1-b138-41ec-abdd-aeedb36e0988--
-
---===============7494790438596581054==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============7494790438596581054==--
+T24gU2F0LCBNYXkgMjYsIDIwMTggYXQgMDQ6Mzg6MzhBTSAtMDQwMCwgSsOpcsOpbWllIEdhbGFy
+bmVhdSB3cm90ZToKPiBUaGUgdGl0bGUgb2YgdGhpcyBwYXRjaCBoYXMgYW4gZXh0cmEgY29tbWEu
+Cj4gCj4gT24gMTggTWF5IDIwMTggYXQgMTc6MTYsIEpvbmF0aGFuIFJham90dGUgPAo+IGpvbmF0
+aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4gCj4gPiBTaWduZWQtb2Zm
+LWJ5OiBKb25hdGhhbiBSYWpvdHRlIDxqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5j
+b20+Cj4gPiAtLS0KPiA+ICBzcmMvYmluL2x0dG5nLXNlc3Npb25kL3Nlc3Npb25kLWNvbmZpZy5j
+IHwgNDkgKysrKysrKysrKysrKysrLS0tLS0tLS0tCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDMxIGlu
+c2VydGlvbnMoKyksIDE4IGRlbGV0aW9ucygtKQo+ID4KPiA+IGRpZmYgLS1naXQgYS9zcmMvYmlu
+L2x0dG5nLXNlc3Npb25kL3Nlc3Npb25kLWNvbmZpZy5jCj4gPiBiL3NyYy9iaW4vbHR0bmctc2Vz
+c2lvbmQvc2Vzc2lvbmQtY29uZmlnLmMKPiA+IGluZGV4IDU4N2YyZjgyLi5jMGUwZmVjMyAxMDA2
+NDQKPiA+IC0tLSBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvc2Vzc2lvbmQtY29uZmlnLmMKPiA+
+ICsrKyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvc2Vzc2lvbmQtY29uZmlnLmMKPiA+IEBAIC01
+MDEsMjIgKzUwMSwzNSBAQCB2b2lkIHNlc3Npb25kX2NvbmZpZ19sb2coc3RydWN0IHNlc3Npb25k
+X2NvbmZpZwo+ID4gKmNvbmZpZykKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+Y29uZmlnLT5hZ2VudF90Y3BfcG9ydC5iZWdpbiwKPiA+ICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgY29uZmlnLT5hZ2VudF90Y3BfcG9ydC5lbmQpOwo+ID4gICAgICAgICB9Cj4gPiAt
+ICAgICAgIERCR19OT19MT0MoIlx0YXBwbGljYXRpb24gc29ja2V0IHRpbWVvdXQ6ICAgJWkiLAo+
+ID4gY29uZmlnLT5hcHBfc29ja2V0X3RpbWVvdXQpOwo+ID4gLSAgICAgICBEQkdfTk9fTE9DKCJc
+dG5vLWtlcm5lbDogICAgICAgICAgICAgICAgICAgICVzIiwgY29uZmlnLT5ub19rZXJuZWwKPiA+
+ID8gIlRydWUiIDogIkZhbHNlIik7Cj4gPiAtICAgICAgIERCR19OT19MT0MoIlx0YmFja2dyb3Vu
+ZDogICAgICAgICAgICAgICAgICAgJXMiLAo+ID4gY29uZmlnLT5iYWNrZ3JvdW5kID8gIlRydWUi
+IDogIkZhbHNlIik7Cj4gPiAtICAgICAgIERCR19OT19MT0MoIlx0ZGFlbW9uaXplOiAgICAgICAg
+ICAgICAgICAgICAgJXMiLCBjb25maWctPmRhZW1vbml6ZQo+ID4gPyAiVHJ1ZSIgOiAiRmFsc2Ui
+KTsKPiA+IC0gICAgICAgREJHX05PX0xPQygiXHRzaWduYWwgcGFyZW50IG9uIHN0YXJ0OiAgICAg
+ICAlcyIsCj4gPiBjb25maWctPnNpZ19wYXJlbnQgPyAiVHJ1ZSIgOiAiRmFsc2UiKTsKPiA+IC0g
+ICAgICAgREJHX05PX0xPQygiXHR0cmFjaW5nIGdyb3VwIG5hbWU6ICAgICAgICAgICAlcyIsCj4g
+PiBjb25maWctPnRyYWNpbmdfZ3JvdXBfbmFtZS52YWx1ZSA/IDogIlVua25vd24iKTsKPiA+IC0g
+ICAgICAgREJHX05PX0xPQygiXHRrbW9kX3Byb2JlX2xpc3Q6ICAgICAgICAgICAgICAlcyIsCj4g
+PiBjb25maWctPmttb2RfcHJvYmVzX2xpc3QudmFsdWUgPyA6ICJOb25lIik7Cj4gPiAtICAgICAg
+IERCR19OT19MT0MoIlx0a21vZF9leHRyYV9wcm9iZV9saXN0OiAgICAgICAgJXMiLAo+ID4gY29u
+ZmlnLT5rbW9kX2V4dHJhX3Byb2Jlc19saXN0LnZhbHVlID8gOiAiTm9uZSIpOwo+ID4gLSAgICAg
+ICBEQkdfTk9fTE9DKCJcdHJ1bmRpcjogICAgICAgICAgICAgICAgICAgICAgICVzIiwKPiA+IGNv
+bmZpZy0+cnVuZGlyLnZhbHVlID8gOiAiVW5rbm93biIpOwo+ID4gLSAgICAgICBEQkdfTk9fTE9D
+KCJcdGFwcGxpY2F0aW9uIHNvY2tldCBwYXRoOiAgICAgICVzIiwKPiA+IGNvbmZpZy0+YXBwc191
+bml4X3NvY2tfcGF0aC52YWx1ZSA/IDogIlVua25vd24iKTsKPiA+IC0gICAgICAgREJHX05PX0xP
+QygiXHRjbGllbnQgc29ja2V0IHBhdGg6ICAgICAgICAgICAlcyIsCj4gPiBjb25maWctPmNsaWVu
+dF91bml4X3NvY2tfcGF0aC52YWx1ZSA/IDogIlVua25vd24iKTsKPiA+IC0gICAgICAgREJHX05P
+X0xPQygiXHR3YWl0IHNobSBwYXRoOiAgICAgICAgICAgICAgICAlcyIsCj4gPiBjb25maWctPndh
+aXRfc2htX3BhdGgudmFsdWUgPyA6ICJVbmtub3duIik7Cj4gPiAtICAgICAgIERCR19OT19MT0Mo
+Ilx0aGVhbHRoIHNvY2tldCBwYXRoOiAgICAgICAgICAgJXMiLAo+ID4gY29uZmlnLT5oZWFsdGhf
+dW5peF9zb2NrX3BhdGgudmFsdWUgPyA6ICJVbmtub3duIik7Cj4gPiAtICAgICAgIERCR19OT19M
+T0MoIlx0TFRUTkdfVVNUX0NMT0NLX1BMVUdJTjogICAgICAgJXMiLAo+ID4gY29uZmlnLT5sdHRu
+Z191c3RfY2xvY2tfcGx1Z2luLnZhbHVlID8gOiAiTm9uZSIpOwo+ID4gLSAgICAgICBEQkdfTk9f
+TE9DKCJcdHBpZCBmaWxlIHBhdGg6ICAgICAgICAgICAgICAgICVzIiwKPiA+IGNvbmZpZy0+cGlk
+X2ZpbGVfcGF0aC52YWx1ZSA/IDogIlVua25vd24iKTsKPiA+IC0gICAgICAgREJHX05PX0xPQygi
+XHRsb2NrIGZpbGUgcGF0aDogICAgICAgICAgICAgICAlcyIsCj4gPiBjb25maWctPmxvY2tfZmls
+ZV9wYXRoLnZhbHVlID8gOiAiVW5rbm93biIpOwo+ID4gLSAgICAgICBEQkdfTk9fTE9DKCJcdHNl
+c3Npb24gbG9hZCBwYXRoOiAgICAgICAgICAgICVzIiwKPiA+IGNvbmZpZy0+bG9hZF9zZXNzaW9u
+X3BhdGgudmFsdWUgPyA6ICJOb25lIik7Cj4gPiAtICAgICAgIERCR19OT19MT0MoIlx0YWdlbnQg
+cG9ydCBmaWxlIHBhdGg6ICAgICAgICAgJXMiLAo+ID4gY29uZmlnLT5hZ2VudF9wb3J0X2ZpbGVf
+cGF0aC52YWx1ZSA/IDogIlVua25vd24iKTsKPiA+ICsgICAgICAgREJHX05PX0xPQygiXHRhcHBs
+aWNhdGlvbiBzb2NrZXQgdGltZW91dDogICAgJWkiLAo+ID4gY29uZmlnLT5hcHBfc29ja2V0X3Rp
+bWVvdXQpOwo+ID4gKyAgICAgICBEQkdfTk9fTE9DKCJcdG5vLWtlcm5lbDogICAgICAgICAgICAg
+ICAgICAgICAlcyIsCj4gPiBjb25maWctPm5vX2tlcm5lbCA/ICJUcnVlIiA6ICJGYWxzZSIpOwo+
+ID4gKyAgICAgICBEQkdfTk9fTE9DKCJcdGJhY2tncm91bmQ6ICAgICAgICAgICAgICAgICAgICAl
+cyIsCj4gPiBjb25maWctPmJhY2tncm91bmQgPyAiVHJ1ZSIgOiAiRmFsc2UiKTsKPiA+ICsgICAg
+ICAgREJHX05PX0xPQygiXHRkYWVtb25pemU6ICAgICAgICAgICAgICAgICAgICAgJXMiLAo+ID4g
+Y29uZmlnLT5kYWVtb25pemUgPyAiVHJ1ZSIgOiAiRmFsc2UiKTsKPiA+ICsgICAgICAgREJHX05P
+X0xPQygiXHRzaWduYWwgcGFyZW50IG9uIHN0YXJ0OiAgICAgICAgJXMiLAo+ID4gY29uZmlnLT5z
+aWdfcGFyZW50ID8gIlRydWUiIDogIkZhbHNlIik7Cj4gPiArICAgICAgIERCR19OT19MT0MoIlx0
+dHJhY2luZyBncm91cCBuYW1lOiAgICAgICAgICAgICVzIiwKPiA+IGNvbmZpZy0+dHJhY2luZ19n
+cm91cF9uYW1lLnZhbHVlID8gOiAiVW5rbm93biIpOwo+ID4gKyAgICAgICBEQkdfTk9fTE9DKCJc
+dGttb2RfcHJvYmVfbGlzdDogICAgICAgICAgICAgICAlcyIsCj4gPiBjb25maWctPmttb2RfcHJv
+YmVzX2xpc3QudmFsdWUgPyA6ICJOb25lIik7Cj4gPiArICAgICAgIERCR19OT19MT0MoIlx0a21v
+ZF9leHRyYV9wcm9iZV9saXN0OiAgICAgICAgICVzIiwKPiA+IGNvbmZpZy0+a21vZF9leHRyYV9w
+cm9iZXNfbGlzdC52YWx1ZSA/IDogIk5vbmUiKTsKPiA+ICsgICAgICAgREJHX05PX0xPQygiXHRy
+dW5kaXI6ICAgICAgICAgICAgICAgICAgICAgICAgJXMiLAo+ID4gY29uZmlnLT5ydW5kaXIudmFs
+dWUgPyA6ICJVbmtub3duIik7Cj4gPiArICAgICAgIERCR19OT19MT0MoIlx0YXBwbGljYXRpb24g
+c29ja2V0IHBhdGg6ICAgICAgICVzIiwKPiA+IGNvbmZpZy0+YXBwc191bml4X3NvY2tfcGF0aC52
+YWx1ZSA/IDogIlVua25vd24iKTsKPiA+ICsgICAgICAgREJHX05PX0xPQygiXHRjbGllbnQgc29j
+a2V0IHBhdGg6ICAgICAgICAgICAgJXMiLAo+ID4gY29uZmlnLT5jbGllbnRfdW5peF9zb2NrX3Bh
+dGgudmFsdWUgPyA6ICJVbmtub3duIik7Cj4gPiArICAgICAgIERCR19OT19MT0MoIlx0d2FpdCBz
+aG0gcGF0aDogICAgICAgICAgICAgICAgICVzIiwKPiA+IGNvbmZpZy0+d2FpdF9zaG1fcGF0aC52
+YWx1ZSA/IDogIlVua25vd24iKTsKPiA+ICsgICAgICAgREJHX05PX0xPQygiXHRoZWFsdGggc29j
+a2V0IHBhdGg6ICAgICAgICAgICAgJXMiLAo+ID4gY29uZmlnLT5oZWFsdGhfdW5peF9zb2NrX3Bh
+dGgudmFsdWUgPyA6ICJVbmtub3duIik7Cj4gPiArICAgICAgIERCR19OT19MT0MoIlx0TFRUTkdf
+VVNUX0NMT0NLX1BMVUdJTjogICAgICAgICVzIiwKPiA+IGNvbmZpZy0+bHR0bmdfdXN0X2Nsb2Nr
+X3BsdWdpbi52YWx1ZSA/IDogIk5vbmUiKTsKPiA+ICsgICAgICAgREJHX05PX0xPQygiXHRwaWQg
+ZmlsZSBwYXRoOiAgICAgICAgICAgICAgICAgJXMiLAo+ID4gY29uZmlnLT5waWRfZmlsZV9wYXRo
+LnZhbHVlID8gOiAiVW5rbm93biIpOwo+ID4gKyAgICAgICBEQkdfTk9fTE9DKCJcdGxvY2sgZmls
+ZSBwYXRoOiAgICAgICAgICAgICAgICAlcyIsCj4gPiBjb25maWctPmxvY2tfZmlsZV9wYXRoLnZh
+bHVlID8gOiAiVW5rbm93biIpOwo+ID4gKyAgICAgICBEQkdfTk9fTE9DKCJcdHNlc3Npb24gbG9h
+ZCBwYXRoOiAgICAgICAgICAgICAlcyIsCj4gPiBjb25maWctPmxvYWRfc2Vzc2lvbl9wYXRoLnZh
+bHVlID8gOiAiTm9uZSIpOwo+ID4gKyAgICAgICBEQkdfTk9fTE9DKCJcdGFnZW50IHBvcnQgZmls
+ZSBwYXRoOiAgICAgICAgICAlcyIsCj4gPiBjb25maWctPmFnZW50X3BvcnRfZmlsZV9wYXRoLnZh
+bHVlID8gOiAiVW5rbm93biIpOwo+ID4gKyAgICAgICBEQkdfTk9fTE9DKCJcdGNvbnN1bWVyZDMy
+IHBhdGg6ICAgICAgICAgICAgICAlcyIsCj4gPiBjb25maWctPmNvbnN1bWVyZDMyX3BhdGgudmFs
+dWUpOwo+ID4gKyAgICAgICBEQkdfTk9fTE9DKCJcdGNvbnN1bWVyZDMyIGJpbl9wYXRoOiAgICAg
+ICAgICAlcyIsCj4gPiBjb25maWctPmNvbnN1bWVyZDMyX2Jpbl9wYXRoLnZhbHVlKTsKPiA+ICsg
+ICAgICAgREJHX05PX0xPQygiXHRjb25zdW1lcmQzMiBsaWIgZGlyOiAgICAgICAgICAgJXMiLAo+
+ID4gY29uZmlnLT5jb25zdW1lcmQzMl9saWJfZGlyLnZhbHVlKTsKPiA+ICsgICAgICAgREJHX05P
+X0xPQygiXHRjb25zdW1lcmQzMiBlcnIgdW5peCBzb2NrIHBhdGg6JXMiLAo+ID4gY29uZmlnLT5j
+b25zdW1lcmQzMl9lcnJfdW5peF9zb2NrX3BhdGgudmFsdWUpOwo+ID4gKyAgICAgICBEQkdfTk9f
+TE9DKCJcdGNvbnN1bWVyZDMyIGNtZCB1bml4IHNvY2sgcGF0aDolcyIsCj4gPiBjb25maWctPmNv
+bnN1bWVyZDMyX2NtZF91bml4X3NvY2tfcGF0aC52YWx1ZSk7Cj4gPiArICAgICAgIERCR19OT19M
+T0MoIlx0Y29uc3VtZXJkNjQgcGF0aDogICAgICAgICAgICAgICVzIiwKPiA+IGNvbmZpZy0+Y29u
+c3VtZXJkNjRfcGF0aC52YWx1ZSk7Cj4gPiArICAgICAgIERCR19OT19MT0MoIlx0Y29uc3VtZXJk
+NjQgYmluIHBhdGg6ICAgICAgICAgICVzIiwKPiA+IGNvbmZpZy0+Y29uc3VtZXJkNjRfYmluX3Bh
+dGgudmFsdWUpOwo+ID4gKyAgICAgICBEQkdfTk9fTE9DKCJcdGNvbnN1bWVyZDY0IGxpYiBkaXI6
+ICAgICAgICAgICAlcyIsCj4gPiBjb25maWctPmNvbnN1bWVyZDY0X2xpYl9kaXIudmFsdWUpOwo+
+ID4gKyAgICAgICBEQkdfTk9fTE9DKCJcdGNvbnN1bWVyZDY0IGVyciB1bml4IHNvY2sgcGF0aDol
+cyIsCj4gPiBjb25maWctPmNvbnN1bWVyZDY0X2Vycl91bml4X3NvY2tfcGF0aC52YWx1ZSk7Cj4g
+PiArICAgICAgIERCR19OT19MT0MoIlx0Y29uc3VtZXJkNjQgY21kIHVuaXggc29jayBwYXRoOiVz
+IiwKPiA+IGNvbmZpZy0+Y29uc3VtZXJkNjRfY21kX3VuaXhfc29ja19wYXRoLnZhbHVlKTsKPiA+
+ICsgICAgICAgREJHX05PX0xPQygiXHRrY29uc3VtZXJkIHBhdGg6ICAgICAgICAgICAgICAgJXMi
+LAo+ID4gY29uZmlnLT5rY29uc3VtZXJkX3BhdGgudmFsdWUpOwo+ID4gKyAgICAgICBEQkdfTk9f
+TE9DKCJcdGtjb25zdW1lcmQgZXJyIHVuaXggc29jayBwYXRoOiAlcyIsCj4gPiBjb25maWctPmtj
+b25zdW1lcmRfZXJyX3VuaXhfc29ja19wYXRoLnZhbHVlKTsKPiA+ICsgICAgICAgREJHX05PX0xP
+QygiXHRrY29uc3VtZXJkIGNtZCB1bml4IHNvY2sgcGF0aDogJXMiLAo+ID4gY29uZmlnLT5rY29u
+c3VtZXJkX2NtZF91bml4X3NvY2tfcGF0aC52YWx1ZSk7Cj4gPgo+IAo+IFRob3NlIHN0cmluZyB2
+YWx1ZXMgY2FuIGJlIE5VTEwuIExvb2sgYXQgaG93IHRoaXMgaXMgaGFuZGxlZCBmb3IgdGhlCgpH
+b29kIG9sZCBnbGliYyB0aGF0IHNpbXBseSBwcmludCAiKG51bGwpIi4gQW55d2F5LCB3aWxsIGZp
+eC4KCmh0dHBzOi8vZ2NjLmdudS5vcmcvYnVnemlsbGEvc2hvd19idWcuY2dpP2lkPTI1NjA5CgpH
+b29kIGNhdGNoLgoKPiBleGlzdGluZyBzdHJpbmcgb3B0aW9ucyAodGVybmFyeSArIHBsYWNlIGhv
+bGRlcikuIEluIHRoaXMgY2FzZSwgdXNpbmcKPiAiVW5rbm93biIgc2VlbXMgYXBwcm9wcmlhdGUu
+Cj4gCj4gVGhhbmtzLAo+IErDqXLDqW1pZQo+IAo+IAo+ID4gIH0KPiA+IC0tCj4gPiAyLjE3LjAK
+PiA+Cj4gPgo+IAo+IAo+IC0tIAo+IErDqXLDqW1pZSBHYWxhcm5lYXUKPiBFZmZpY2lPUyBJbmMu
+Cj4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KCi0tIApKb25hdGhhbiBSYWpvdHRlLUp1bGllbgpF
+ZmZpY2lPUwpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9s
+aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
