@@ -1,36 +1,18 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+From: =?utf-8?b?TG/Dr2M=?= Gelle <loic.gelle@polymtl.ca>
 Subject: Re: Golang agent for LTTng-ust
-Date: Mon, 28 May 2018 03:26:50 -0400
-Message-ID: <CA+jJMxtUh1dA=KcVSLSfdFQnRxC905X-omh=uObgxNNpPgbtXw__31797.0850774602$1527492317$gmane$org@mail.gmail.com>
+Date: Mon, 28 May 2018 14:30:56 +0000
+Message-ID: <20180528143056.Horde.mM3dXk9t6dVCD9zEbiuPwFi__43343.9049557366$1527517748$gmane$org@www.imp.polymtl.ca>
 References: <29167624-BBCE-401B-8FD9-6DFEB14D3E0E@polymtl.ca>
+ <CA+jJMxtUh1dA=KcVSLSfdFQnRxC905X-omh=uObgxNNpPgbtXw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8287240338448397824=="
+Content-Type: text/plain; charset="utf-8"; Format="flowed"; DelSp="Yes"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 40vT2V55nVznXk
- for <lttng-dev@lists.lttng.org>; Mon, 28 May 2018 03:27:14 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 85E771B99DD
- for <lttng-dev@lists.lttng.org>; Mon, 28 May 2018 03:27:13 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
- with ESMTP id ionl8zhS2sqA for <lttng-dev@lists.lttng.org>;
- Mon, 28 May 2018 03:27:12 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id AE6141B99D3
- for <lttng-dev@lists.lttng.org>; Mon, 28 May 2018 03:27:12 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
- with ESMTP id VlNc6JA4RWOR for <lttng-dev@lists.lttng.org>;
- Mon, 28 May 2018 03:27:12 -0400 (EDT)
-Received: from mail-wr0-f177.google.com (mail-wr0-f177.google.com
- [209.85.128.177])
- by mail.efficios.com (Postfix) with ESMTPSA id 439001B999E
- for <lttng-dev@lists.lttng.org>; Mon, 28 May 2018 03:27:12 -0400 (EDT)
-Received: by mail-wr0-f177.google.com with SMTP id w3-v6so18562676wrl.12
- for <lttng-dev@lists.lttng.org>; Mon, 28 May 2018 00:27:12 -0700 (PDT)
-In-Reply-To: <29167624-BBCE-401B-8FD9-6DFEB14D3E0E@polymtl.ca>
+Received: from smtp.polymtl.ca (smtp.polymtl.ca [132.207.4.11])
+ by lists.lttng.org (Postfix) with ESMTPS id 40vfRX69Zrzp9k
+ for <lttng-dev@lists.lttng.org>; Mon, 28 May 2018 10:31:04 -0400 (EDT)
+In-Reply-To: <CA+jJMxtUh1dA=KcVSLSfdFQnRxC905X-omh=uObgxNNpPgbtXw@mail.gmail.com>
+Content-Disposition: inline
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -40,206 +22,96 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: =?UTF-8?Q?Lo=C3=AFc_Gelle?= <loic.gelle@polymtl.ca>
+To: =?utf-8?b?SsOpcsOpbWll?= Galarneau <jeremie.galarneau@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============8287240338448397824==
-Content-Type: multipart/alternative; boundary="000000000000c00887056d3f0b13"
-
---000000000000c00887056d3f0b13
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On 4 May 2018 at 06:03, Lo=C3=AFc Gelle <loic.gelle@polymtl.ca> wrote:
-
-> Hi,
->
-> There has been a previous discussion on the mailing list about porting
-> LTTng to Golang, about a year ago: https://lists.lttng.org/
-> pipermail/lttng-dev/2017-June/027203.html . This new topic is to discuss
-> more precisely about implementation possibilities.
->
-> Currently, one has to use the the C UST agent from LTTng in order to
-> instrument Golang programs, and to compile the whole thing using custom
-> Makefiles and cgo. Here is a recent example that I wrote:
-> https://github.com/loicgelle/jaeger-go-lttng-instr
->
-> As you can guess, there are a low of drawbacks in that approach. It is
-> actually a hack and cannot be integrated into more complex Golang program
-> that use a more complex build process (e.g. the Golang runtime itself),
-> because of the compiler instructions that you have to include at the top =
-of
-> the Golang files. There is also a big concern about the performance of th=
-is
-> solution, as calling a C function from Go requires to do a full context
-> switch on the stack, because the calling conventions in C and Golang are
-> different.
->
-
-> I think a more integrated and performant solution is needed. We can=E2=80=
-=99t
-> really ignore a language such as Golang that is now widely adopted for
-> cloud applications. LTTng is really the best solution out there in terms =
-of
-> overhead per tracepoint, and could benefit from being made available to
-> such a large community. My question to the experts on this mailing list:
-> how much would it take to write a Golang agent for LTTng?
->
-
-
-Hi Lo=C3=AFc,
-
-Without having performed any measurements myself, it does seem like calling
-C from Go is very expensive. In that context, I can see that LTTng would
-probably lose its performance advantage over any native Go solution.
-However, it wouldn't hurt to measure the impact and see if it really is a
-deal breaker.
-
-We faced the same dilemma when implementing the Java and Python support in
-lttng-ust. In those cases, we ended up calling C code, with the performance
-penalties it implies. The correlation with other applications' and the
-kernel's events, along with the rest of LTTng's features, provided enough
-value to make that solution worthwhile.
-
-There aren't a ton of solutions if we can't call existing C code. We
-basically have to reimplement a ring-buffer and the setup/communication
-infrastructure to interact with the lttng-sessiond. The communication with
-the session daemon is not a big concern as the protocol is fairly
-straightforward.
-
-The "hairy" part is that lttng-ust and lttng-consumerd use a shared memory
-map to produce and consume the tracing buffers. This means that all changes
-to that memory layout would need to be replicated in the Go tracer, making
-future evolution more difficult. Also, I don't know how easy it would be to
-synchronize C and Go applications interacting in a shared memory map given
-those languages have different memory models. My knowledge of Go doesn't go
-that far.
-
-A more viable solution could be to introduce a Go-native consumer daemon
-implementing its own synchronization with Go applications. This way, that
-implementation could evolve on its own and could also start with a simpler
-ring buffer than lttng-ust's.
-
-Still, it is not a small undertaking and it basically means maintaining a
-third tracer implementation.
-
-
-What do you think?
-
-Thanks!
-J=C3=A9r=C3=A9mie
-
-
-> Cheers,
-> Lo=C3=AFc.
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
-
-
---=20
-J=C3=A9r=C3=A9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-
---000000000000c00887056d3f0b13
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><br><div class=3D"gmail_extra"><br><div class=3D"gmail_quo=
-te">On 4 May 2018 at 06:03, Lo=C3=AFc Gelle <span dir=3D"ltr">&lt;<a href=
-=3D"mailto:loic.gelle@polymtl.ca" target=3D"_blank">loic.gelle@polymtl.ca</=
-a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0=
- 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><div style=3D"word-w=
-rap:break-word;line-break:after-white-space">Hi,<div><br></div><div>There h=
-as been a previous discussion on the mailing list about porting LTTng to Go=
-lang, about a year ago:=C2=A0<a href=3D"https://lists.lttng.org/pipermail/l=
-ttng-dev/2017-June/027203.html" target=3D"_blank">https://lists.lttng.org/<=
-wbr>pipermail/lttng-dev/2017-June/<wbr>027203.html</a>=C2=A0.=C2=A0This new=
- topic is to discuss more precisely about implementation possibilities.</di=
-v><div><br></div><div>Currently, one has to use the the C UST agent from LT=
-Tng in order to instrument Golang programs, and to compile the whole thing =
-using custom Makefiles and cgo. Here is a recent example that I wrote:=C2=
-=A0<a href=3D"https://github.com/loicgelle/jaeger-go-lttng-instr" target=3D=
-"_blank">https://github.com/<wbr>loicgelle/jaeger-go-lttng-<wbr>instr</a></=
-div><div><br></div><div>As you can guess, there are a low of drawbacks in t=
-hat approach. It is actually a hack and cannot be integrated into more comp=
-lex Golang program that use a more complex build process (e.g. the Golang r=
-untime itself), because of the compiler instructions that you have to inclu=
-de at the top of the Golang files. There is also a big concern about the pe=
-rformance of this solution, as calling a C function from Go requires to do =
-a full context switch on the stack, because the calling conventions in C an=
-d Golang are different.</div></div></blockquote><blockquote class=3D"gmail_=
-quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1=
-ex"><div style=3D"word-wrap:break-word;line-break:after-white-space"><div><=
-br></div><div>I think a more integrated and performant solution is needed. =
-We can=E2=80=99t really ignore a language such as Golang that is now widely=
- adopted for cloud applications. LTTng is really the best solution out ther=
-e in terms of overhead per tracepoint, and could benefit from being made av=
-ailable to such a large community. My question to the experts on this maili=
-ng list: how much would it take to write a Golang agent for LTTng?</div></d=
-iv></blockquote><div><br></div><div><div><br></div><div>Hi Lo=C3=AFc,</div>=
-<div><br></div><div>Without having performed any measurements myself, it do=
-es seem like calling C from Go is very expensive. In that context, I can se=
-e that LTTng would probably lose its performance advantage over any native =
-Go solution. However, it wouldn&#39;t hurt to measure the impact and see if=
- it really is a deal breaker.<br></div><div><br></div><div><div>We faced th=
-e same dilemma when implementing the Java
- and Python support in lttng-ust. In those cases, we ended up calling C=20
-code, with the performance penalties it implies. The correlation with=20
-other applications&#39; and the kernel&#39;s events, along with the rest of=
- LTTng&#39;s features, provided enough value to=20
-make that solution worthwhile.<br></div><div><br></div></div><div>There are=
-n&#39;t a ton of solutions if we can&#39;t call existing C code. We basical=
-ly have to reimplement a ring-buffer and the setup/communication infrastruc=
-ture to interact with the lttng-sessiond. The communication with the sessio=
-n daemon is not a big concern as the protocol is fairly straightforward.</d=
-iv><div><br></div><div>The &quot;hairy&quot; part is that lttng-ust and ltt=
-ng-consumerd use a shared memory map to produce and consume the tracing buf=
-fers. This means that all changes to that memory layout would need to be re=
-plicated in the Go tracer, making future evolution more difficult. Also, I =
-don&#39;t know how easy it would be to synchronize C and Go applications in=
-teracting in a shared memory map given those languages have different memor=
-y models. My knowledge of Go doesn&#39;t go that far.<br></div><div><br></d=
-iv><div>A more viable solution could be to introduce a Go-native consumer d=
-aemon implementing its own synchronization with Go applications. This way, =
-that implementation could evolve on its own and could also start with a sim=
-pler ring buffer than lttng-ust&#39;s.<br></div><div></div><div><br></div><=
-div>Still, it is not a small undertaking and it basically means maintaining=
- a third tracer implementation.<br></div></div><div></div><div><br></div><d=
-iv><br></div><div>What do you think?<br></div><div><br></div><div>Thanks!<b=
-r></div><div>J=C3=A9r=C3=A9mie<br></div><div><br></div><blockquote class=3D=
-"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding=
--left:1ex"><div style=3D"word-wrap:break-word;line-break:after-white-space"=
-><div><br></div><div>Cheers,</div><div>Lo=C3=AFc.</div></div><br>__________=
-____________________<wbr>_________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org</a><=
-br>
-<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-<wbr>bin/mail=
-man/listinfo/lttng-dev</a><br>
-<br></blockquote></div><br><br clear=3D"all"><br>-- <br><div class=3D"gmail=
-_signature" data-smartmail=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<=
-br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com" target=3D"_blank">h=
-ttp://www.efficios.com</a></div>
-</div></div>
-
---000000000000c00887056d3f0b13--
-
---===============8287240338448397824==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============8287240338448397824==--
+SGkgSmVyZW1pZSwKClRoYW5rcyBmb3IgeW91ciBhbnN3ZXIuIEkgcm91Z2hseSBlc3RpbWF0ZWQg
+dGhlIG92ZXJoZWFkIG9mIGNhbGxpbmcgYW4gIAplbXB0eSBDIGZ1bmN0aW9uIChwYXNzaW5nIHR3
+byBpbnRlZ2VyIGFyZ3VtZW50cykgZnJvbSBHbyB0byA1MG5zIHBlciAgCmNhbGwuIE1heWJlIG5v
+dCBhIGJpZyBkZWFsIGZvciBhIGxvdCBvZiB1c2UgY2FzZXMsIGJ1dCBtb3JlICAKcHJvYmxlbWF0
+aWMgaWYgeW91IHdhbnQgdG8gdHJhY2UgcGVyZm9ybWFuY2UtY3JpdGljYWwgcGFydHMgb2YgR28g
+bGlrZSAgCml0cyBydW50aW1lIGl0c2VsZi4gVGhlIG92ZXJoZWFkIGNvdWxkIGV2ZW4gYmUgYmln
+Z2VyIHdoZW4gaXQgaW52b2x2ZXMgIApwYXNzaW5nIHN0cmluZ3Mgb3IgYXJyYXlzIHRoYXQgaGF2
+ZSBkaWZmZXJlbnQgbWVtb3J5IGxheW91dHMgaW4gR29sYW5nICAKYW5kIEMuIFdoYXQgd2FzIHRo
+ZSBvdmVyaGVhZCB0aGF0IHlvdSBvYnNlcnZlZCBmb3IgUHl0aG9uIGFuZCBKYXZhPwoKIEZyb20g
+d2hhdCBJIHVuZGVyc3RhbmQsIGl0IHdpbGwgYWx3YXlzIGJlIGEgcHJvYmxlbSB0byBoYXZlIGFn
+ZW50cyAgCmZvciBsYW5ndWFnZXMgZGlmZmVyZW50IHRoYW4gQywgZXNwZWNpYWxseSBpZiB5b3Ug
+d2FudCB0byBrZWVwIHJlbHlpbmcgIApvbiBleGlzdGluZyBDIGNvZGUuIEV2ZW4gaWYgdGhlIHNl
+c3Npb25kIHBhcnQgaXMgaW5kZXBlbmRhbnQgZnJvbSB0aGUgIAphZ2VudCBpdHNlbGYsIHRoZXJl
+IGFyZSB0b25zIG9mIGltcGxlbWVudGF0aW9uIGlzc3VlcyB0aGF0IGFyZSAgCnNwZWNpZmljIHRv
+IHRoZSBsYW5ndWFnZSBpdHNlbGYuIFRoZSBwcm9ibGVtIHdpdGggR28gaXMgdGhhdCBjYWxsaW5n
+IEMgIApmdW5jdGlvbnMgaXMgcmVhbGx5IGEgaGFjayB0aGF0IGRvZXMgbm90IGludGVncmF0ZSB3
+ZWxsIHdpdGggdGhlIGJ1aWxkICAKc3lzdGVtIHRoYXQgd2FzIGRlc2lnbmVkIGZvciBHby4KCkRp
+ZCBJIHByb3ZpZGUgbW9yZSBjb250ZXh0PwoKQ2hlZXJzLApMb8OvYy4KCkrDqXLDqW1pZSBHYWxh
+cm5lYXUgPGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNvbT4gYSDDqWNyaXTCoDoKCj4gT24g
+NCBNYXkgMjAxOCBhdCAwNjowMywgTG/Dr2MgR2VsbGUgPGxvaWMuZ2VsbGVAcG9seW10bC5jYT4g
+d3JvdGU6Cj4KPj4gSGksCj4+Cj4+IFRoZXJlIGhhcyBiZWVuIGEgcHJldmlvdXMgZGlzY3Vzc2lv
+biBvbiB0aGUgbWFpbGluZyBsaXN0IGFib3V0IHBvcnRpbmcKPj4gTFRUbmcgdG8gR29sYW5nLCBh
+Ym91dCBhIHllYXIgYWdvOiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy8KPj4gcGlwZXJtYWlsL2x0
+dG5nLWRldi8yMDE3LUp1bmUvMDI3MjAzLmh0bWwgLiBUaGlzIG5ldyB0b3BpYyBpcyB0byBkaXNj
+dXNzCj4+IG1vcmUgcHJlY2lzZWx5IGFib3V0IGltcGxlbWVudGF0aW9uIHBvc3NpYmlsaXRpZXMu
+Cj4+Cj4+IEN1cnJlbnRseSwgb25lIGhhcyB0byB1c2UgdGhlIHRoZSBDIFVTVCBhZ2VudCBmcm9t
+IExUVG5nIGluIG9yZGVyIHRvCj4+IGluc3RydW1lbnQgR29sYW5nIHByb2dyYW1zLCBhbmQgdG8g
+Y29tcGlsZSB0aGUgd2hvbGUgdGhpbmcgdXNpbmcgY3VzdG9tCj4+IE1ha2VmaWxlcyBhbmQgY2dv
+LiBIZXJlIGlzIGEgcmVjZW50IGV4YW1wbGUgdGhhdCBJIHdyb3RlOgo+PiBodHRwczovL2dpdGh1
+Yi5jb20vbG9pY2dlbGxlL2phZWdlci1nby1sdHRuZy1pbnN0cgo+Pgo+PiBBcyB5b3UgY2FuIGd1
+ZXNzLCB0aGVyZSBhcmUgYSBsb3cgb2YgZHJhd2JhY2tzIGluIHRoYXQgYXBwcm9hY2guIEl0IGlz
+Cj4+IGFjdHVhbGx5IGEgaGFjayBhbmQgY2Fubm90IGJlIGludGVncmF0ZWQgaW50byBtb3JlIGNv
+bXBsZXggR29sYW5nIHByb2dyYW0KPj4gdGhhdCB1c2UgYSBtb3JlIGNvbXBsZXggYnVpbGQgcHJv
+Y2VzcyAoZS5nLiB0aGUgR29sYW5nIHJ1bnRpbWUgaXRzZWxmKSwKPj4gYmVjYXVzZSBvZiB0aGUg
+Y29tcGlsZXIgaW5zdHJ1Y3Rpb25zIHRoYXQgeW91IGhhdmUgdG8gaW5jbHVkZSBhdCB0aGUgdG9w
+IG9mCj4+IHRoZSBHb2xhbmcgZmlsZXMuIFRoZXJlIGlzIGFsc28gYSBiaWcgY29uY2VybiBhYm91
+dCB0aGUgcGVyZm9ybWFuY2Ugb2YgdGhpcwo+PiBzb2x1dGlvbiwgYXMgY2FsbGluZyBhIEMgZnVu
+Y3Rpb24gZnJvbSBHbyByZXF1aXJlcyB0byBkbyBhIGZ1bGwgY29udGV4dAo+PiBzd2l0Y2ggb24g
+dGhlIHN0YWNrLCBiZWNhdXNlIHRoZSBjYWxsaW5nIGNvbnZlbnRpb25zIGluIEMgYW5kIEdvbGFu
+ZyBhcmUKPj4gZGlmZmVyZW50Lgo+Pgo+Cj4+IEkgdGhpbmsgYSBtb3JlIGludGVncmF0ZWQgYW5k
+IHBlcmZvcm1hbnQgc29sdXRpb24gaXMgbmVlZGVkLiBXZSBjYW7igJl0Cj4+IHJlYWxseSBpZ25v
+cmUgYSBsYW5ndWFnZSBzdWNoIGFzIEdvbGFuZyB0aGF0IGlzIG5vdyB3aWRlbHkgYWRvcHRlZCBm
+b3IKPj4gY2xvdWQgYXBwbGljYXRpb25zLiBMVFRuZyBpcyByZWFsbHkgdGhlIGJlc3Qgc29sdXRp
+b24gb3V0IHRoZXJlIGluIHRlcm1zIG9mCj4+IG92ZXJoZWFkIHBlciB0cmFjZXBvaW50LCBhbmQg
+Y291bGQgYmVuZWZpdCBmcm9tIGJlaW5nIG1hZGUgYXZhaWxhYmxlIHRvCj4+IHN1Y2ggYSBsYXJn
+ZSBjb21tdW5pdHkuIE15IHF1ZXN0aW9uIHRvIHRoZSBleHBlcnRzIG9uIHRoaXMgbWFpbGluZyBs
+aXN0Ogo+PiBob3cgbXVjaCB3b3VsZCBpdCB0YWtlIHRvIHdyaXRlIGEgR29sYW5nIGFnZW50IGZv
+ciBMVFRuZz8KPj4KPgo+Cj4gSGkgTG/Dr2MsCj4KPiBXaXRob3V0IGhhdmluZyBwZXJmb3JtZWQg
+YW55IG1lYXN1cmVtZW50cyBteXNlbGYsIGl0IGRvZXMgc2VlbSBsaWtlIGNhbGxpbmcKPiBDIGZy
+b20gR28gaXMgdmVyeSBleHBlbnNpdmUuIEluIHRoYXQgY29udGV4dCwgSSBjYW4gc2VlIHRoYXQg
+TFRUbmcgd291bGQKPiBwcm9iYWJseSBsb3NlIGl0cyBwZXJmb3JtYW5jZSBhZHZhbnRhZ2Ugb3Zl
+ciBhbnkgbmF0aXZlIEdvIHNvbHV0aW9uLgo+IEhvd2V2ZXIsIGl0IHdvdWxkbid0IGh1cnQgdG8g
+bWVhc3VyZSB0aGUgaW1wYWN0IGFuZCBzZWUgaWYgaXQgcmVhbGx5IGlzIGEKPiBkZWFsIGJyZWFr
+ZXIuCj4KPiBXZSBmYWNlZCB0aGUgc2FtZSBkaWxlbW1hIHdoZW4gaW1wbGVtZW50aW5nIHRoZSBK
+YXZhIGFuZCBQeXRob24gc3VwcG9ydCBpbgo+IGx0dG5nLXVzdC4gSW4gdGhvc2UgY2FzZXMsIHdl
+IGVuZGVkIHVwIGNhbGxpbmcgQyBjb2RlLCB3aXRoIHRoZSBwZXJmb3JtYW5jZQo+IHBlbmFsdGll
+cyBpdCBpbXBsaWVzLiBUaGUgY29ycmVsYXRpb24gd2l0aCBvdGhlciBhcHBsaWNhdGlvbnMnIGFu
+ZCB0aGUKPiBrZXJuZWwncyBldmVudHMsIGFsb25nIHdpdGggdGhlIHJlc3Qgb2YgTFRUbmcncyBm
+ZWF0dXJlcywgcHJvdmlkZWQgZW5vdWdoCj4gdmFsdWUgdG8gbWFrZSB0aGF0IHNvbHV0aW9uIHdv
+cnRod2hpbGUuCj4KPiBUaGVyZSBhcmVuJ3QgYSB0b24gb2Ygc29sdXRpb25zIGlmIHdlIGNhbid0
+IGNhbGwgZXhpc3RpbmcgQyBjb2RlLiBXZQo+IGJhc2ljYWxseSBoYXZlIHRvIHJlaW1wbGVtZW50
+IGEgcmluZy1idWZmZXIgYW5kIHRoZSBzZXR1cC9jb21tdW5pY2F0aW9uCj4gaW5mcmFzdHJ1Y3R1
+cmUgdG8gaW50ZXJhY3Qgd2l0aCB0aGUgbHR0bmctc2Vzc2lvbmQuIFRoZSBjb21tdW5pY2F0aW9u
+IHdpdGgKPiB0aGUgc2Vzc2lvbiBkYWVtb24gaXMgbm90IGEgYmlnIGNvbmNlcm4gYXMgdGhlIHBy
+b3RvY29sIGlzIGZhaXJseQo+IHN0cmFpZ2h0Zm9yd2FyZC4KPgo+IFRoZSAiaGFpcnkiIHBhcnQg
+aXMgdGhhdCBsdHRuZy11c3QgYW5kIGx0dG5nLWNvbnN1bWVyZCB1c2UgYSBzaGFyZWQgbWVtb3J5
+Cj4gbWFwIHRvIHByb2R1Y2UgYW5kIGNvbnN1bWUgdGhlIHRyYWNpbmcgYnVmZmVycy4gVGhpcyBt
+ZWFucyB0aGF0IGFsbCBjaGFuZ2VzCj4gdG8gdGhhdCBtZW1vcnkgbGF5b3V0IHdvdWxkIG5lZWQg
+dG8gYmUgcmVwbGljYXRlZCBpbiB0aGUgR28gdHJhY2VyLCBtYWtpbmcKPiBmdXR1cmUgZXZvbHV0
+aW9uIG1vcmUgZGlmZmljdWx0LiBBbHNvLCBJIGRvbid0IGtub3cgaG93IGVhc3kgaXQgd291bGQg
+YmUgdG8KPiBzeW5jaHJvbml6ZSBDIGFuZCBHbyBhcHBsaWNhdGlvbnMgaW50ZXJhY3RpbmcgaW4g
+YSBzaGFyZWQgbWVtb3J5IG1hcCBnaXZlbgo+IHRob3NlIGxhbmd1YWdlcyBoYXZlIGRpZmZlcmVu
+dCBtZW1vcnkgbW9kZWxzLiBNeSBrbm93bGVkZ2Ugb2YgR28gZG9lc24ndCBnbwo+IHRoYXQgZmFy
+Lgo+Cj4gQSBtb3JlIHZpYWJsZSBzb2x1dGlvbiBjb3VsZCBiZSB0byBpbnRyb2R1Y2UgYSBHby1u
+YXRpdmUgY29uc3VtZXIgZGFlbW9uCj4gaW1wbGVtZW50aW5nIGl0cyBvd24gc3luY2hyb25pemF0
+aW9uIHdpdGggR28gYXBwbGljYXRpb25zLiBUaGlzIHdheSwgdGhhdAo+IGltcGxlbWVudGF0aW9u
+IGNvdWxkIGV2b2x2ZSBvbiBpdHMgb3duIGFuZCBjb3VsZCBhbHNvIHN0YXJ0IHdpdGggYSBzaW1w
+bGVyCj4gcmluZyBidWZmZXIgdGhhbiBsdHRuZy11c3Qncy4KPgo+IFN0aWxsLCBpdCBpcyBub3Qg
+YSBzbWFsbCB1bmRlcnRha2luZyBhbmQgaXQgYmFzaWNhbGx5IG1lYW5zIG1haW50YWluaW5nIGEK
+PiB0aGlyZCB0cmFjZXIgaW1wbGVtZW50YXRpb24uCj4KPgo+IFdoYXQgZG8geW91IHRoaW5rPwo+
+Cj4gVGhhbmtzIQo+IErDqXLDqW1pZQo+Cj4KPj4gQ2hlZXJzLAo+PiBMb8OvYy4KPj4KPj4gX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4gbHR0bmctZGV2
+IG1haWxpbmcgbGlzdAo+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+IGh0dHBzOi8vbGlz
+dHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4KPj4KPgo+
+Cj4gLS0KPiBKw6lyw6ltaWUgR2FsYXJuZWF1Cj4gRWZmaWNpT1MgSW5jLgo+IGh0dHA6Ly93d3cu
+ZWZmaWNpb3MuY29tCgoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpo
+dHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
+Cg==
