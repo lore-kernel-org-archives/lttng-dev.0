@@ -1,20 +1,40 @@
-From: Shehab Elsayed <shehabyomn@gmail.com>
-Subject: Re: Tracepoints for pthreads conditional variables
-Date: Tue, 29 May 2018 10:36:07 -0400
-Message-ID: <CAC-H6tu3wfE-LJWCTL8+rggLkyJ75yjMEmi=rWGsWspWkaaoGg__36503.3823684373$1527604456$gmane$org@mail.gmail.com>
-References: <CAC-H6tv29C9RdoquefmAs6s-kM6o-RyYFMAYF1a1Vqk0PYX9dQ@mail.gmail.com>
- <20180501143953.GA26829@joraj-alpa>
- <CAC-H6tuewaghma5hN3R2iCGvpcYVMph1uwti3u0+1ZhZEn44-A@mail.gmail.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Golang agent for LTTng-ust
+Date: Tue, 29 May 2018 12:21:41 -0400
+Message-ID: <CA+jJMxsOZhyRxG55iAouZEDC7aDV3w0PskhiEscz83AvsboLAw__2383.91620009697$1527610815$gmane$org@mail.gmail.com>
+References: <29167624-BBCE-401B-8FD9-6DFEB14D3E0E@polymtl.ca>
+ <CA+jJMxtUh1dA=KcVSLSfdFQnRxC905X-omh=uObgxNNpPgbtXw@mail.gmail.com>
+ <20180528143056.Horde.mM3dXk9t6dVCD9zEbiuPwFi@www.imp.polymtl.ca>
+ <CA+jJMxsHLZ+KpdCewhC7fmgyaAHW5w4XeaXVtzB=PRg0-nesZQ@mail.gmail.com>
+ <20180529134733.Horde.Nqd88DxUsA9Xzr0DSFCiG40@www.imp.polymtl.ca>
+ <CA+jJMxsAXvBoMGHW2vxYsyNiC5y9vwqDLBzyi3yT5XW8K2Tt6Q@mail.gmail.com>
+ <20180529143249.Horde.huEeLvWyg8gza-OejCQu5oZ@www.imp.polymtl.ca>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7003345675335839388=="
+Content-Type: multipart/mixed; boundary="===============5249604981487451576=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-wm0-x230.google.com (mail-wm0-x230.google.com
- [IPv6:2a00:1450:400c:c09::230])
- by lists.lttng.org (Postfix) with ESMTPS id 40wGVx6RX2z17QS
- for <lttng-dev@lists.lttng.org>; Tue, 29 May 2018 10:36:09 -0400 (EDT)
-Received: by mail-wm0-x230.google.com with SMTP id 18-v6so35721651wml.2
- for <lttng-dev@lists.lttng.org>; Tue, 29 May 2018 07:36:09 -0700 (PDT)
-In-Reply-To: <CAC-H6tuewaghma5hN3R2iCGvpcYVMph1uwti3u0+1ZhZEn44-A@mail.gmail.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 40wJsJ0stmz17qF
+ for <lttng-dev@lists.lttng.org>; Tue, 29 May 2018 12:22:11 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 250C9222C3F
+ for <lttng-dev@lists.lttng.org>; Tue, 29 May 2018 12:22:05 -0400 (EDT)
+Received: from mail.efficios.com ([IPv6:::1])
+ by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
+ with ESMTP id sZ0zxCGiVplk for <lttng-dev@lists.lttng.org>;
+ Tue, 29 May 2018 12:22:04 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id EF5A3222C21
+ for <lttng-dev@lists.lttng.org>; Tue, 29 May 2018 12:22:03 -0400 (EDT)
+Received: from mail.efficios.com ([IPv6:::1])
+ by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
+ with ESMTP id VxenBUlg73X7 for <lttng-dev@lists.lttng.org>;
+ Tue, 29 May 2018 12:22:03 -0400 (EDT)
+Received: from mail-wm0-f42.google.com (mail-wm0-f42.google.com [74.125.82.42])
+ by mail.efficios.com (Postfix) with ESMTPSA id 844B3222C01
+ for <lttng-dev@lists.lttng.org>; Tue, 29 May 2018 12:22:03 -0400 (EDT)
+Received: by mail-wm0-f42.google.com with SMTP id l1-v6so42345953wmb.2
+ for <lttng-dev@lists.lttng.org>; Tue, 29 May 2018 09:22:03 -0700 (PDT)
+In-Reply-To: <20180529143249.Horde.huEeLvWyg8gza-OejCQu5oZ@www.imp.polymtl.ca>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,921 +44,892 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+To: =?UTF-8?Q?Lo=C3=AFc_Gelle?= <loic.gelle@polymtl.ca>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============7003345675335839388==
-Content-Type: multipart/alternative; boundary="000000000000aa58b5056d592761"
+--===============5249604981487451576==
+Content-Type: multipart/alternative; boundary="00000000000061e6d8056d5aa2e4"
 
---000000000000aa58b5056d592761
+--00000000000061e6d8056d5aa2e4
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I was wondering if you had a chance to look over this issue. Thanks!
+On 29 May 2018 at 10:32, Lo=C3=AFc Gelle <loic.gelle@polymtl.ca> wrote:
 
-Shehab Y. Elsayed, MSc.
-PhD Student
-The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
-University of Toronto
-E-mail: shehabyomn@gmail.com
-<https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11#>
+> I don't understand what you mean by "not sustainable".
+>>
+>
+> Not something you can keep in your codebase forever.
+>
 
-On Thu, May 3, 2018 at 4:37 PM, Shehab Elsayed <shehabyomn@gmail.com> wrote:
+I think we're talking past each other on this point. Beyond being "not
+elegant", I am not aware of Go dropping the support for calling C code.
 
-> Thanks for the reply. Here is a link to the repo https://github.com/
-> ShehabElsayed/LTTng_debugging.git
+I am not seeing how this isn't sustainable in the literal sense.
+
+
 >
-> It contains the LTTng source code I am using and one of the benchmarks
-> that is causing problems.
+> It really depends on who does it I would guess. It's very probably a coup=
+le
+>> of months to get something that is bullet-proof and mergeable.
+>>
 >
-> Shehab Y. Elsayed, MSc.
-> PhD Student
-> The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
-> University of Toronto
-> E-mail: shehabyomn@gmail.com
-> <https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11#>
+> Is it on the roadmap for a future version of LTTng?
 >
-> On Tue, May 1, 2018 at 10:39 AM, Jonathan Rajotte-Julien <
-> jonathan.rajotte-julien@efficios.com> wrote:
+
+It's something we would like to support, but it isn't on the roadmap in the
+short term, at least. This is not to say it can't be worked on.
+
+J=C3=A9r=C3=A9mie
+
+
 >
->> Hi Shehab,
->>
->> Please provide a link to a lttng-ust git tree or an actual patch (git
->> format-patch).
->> This will help any person who might be interested in helping you including
->> myself.
->>
->> Cheers
->>
->> On Tue, May 01, 2018 at 09:31:52AM -0400, Shehab Elsayed wrote:
->> > Hi,
->> >
->> > I am trying to create wrappers for pthreads conditional variables
->> functions
->> > (wait, signal and broadcast) to insert tracepoints. I followed the same
->> > approach done for the mutex functions already provided with lttng,
->> however
->> > I am running into some problems. Mainly the applications seem to get
->> stuck
->> > when the conditional variable wrappers are enabled.
->> >
->> > Here is my implementation for the wrapper functions:
->> > int pthread_cond_wait(pthread_cond_t *condition, pthread_mutex_t
->> > *mutex)
->> >
->> > {
->> >
->> >   static int (*cond_wait)(pthread_cond_t *, pthread_mutex_t
->> > *);
->> >   int retval;
->> >
->> >
->> >
->> >   if (!cond_wait)
->> > {
->> >
->> >     cond_wait = dlsym(RTLD_NEXT, "pthread_cond_wait");
->> >
->> >     if (!cond_wait)
->> > {
->> >
->> >       if (thread_in_trace)
->> > {
->> >
->> >
->> > abort();
->> >
->> >
->> > }
->> >
->> >       fprintf(stderr, "unable to initialize pthread wrapper
->> > library.\n");
->> >       return EINVAL;
->> >
->> >
->> > }
->> >
->> >
->> > }
->> >
->> >   if (thread_in_trace)
->> > {
->> >
->> >     return cond_wait(condition, mutex);
->> >
->> >
->> > }
->> >
->> >
->> >
->> >   thread_in_trace =
->> > 1;
->> >
->> >   tracepoint(lttng_ust_pthread, pthread_cond_wait_begin, condition,
->> > mutex,
->> >
->> >     LTTNG_UST_CALLER_IP());
->> >
->> >   retval = cond_wait(condition, mutex);
->> >
->> >   tracepoint(lttng_ust_pthread, pthread_cond_wait_end, condition,
->> > mutex,
->> >
->> >     LTTNG_UST_CALLER_IP());
->> >
->> >   thread_in_trace =
->> > 0;
->> >
->> >   return retval;
->> >
->> > }
->> >
->> >
->> >
->> > int pthread_cond_signal(pthread_cond_t
->> > *condition)
->> >
->> > {
->> >
->> >   static int (*cond_signal)(pthread_cond_t
->> > *);
->> >
->> >   int retval;
->> >
->> >
->> >
->> >   if (!cond_signal)
->> > {
->> >
->> >     cond_signal = dlsym(RTLD_NEXT, "pthread_cond_signal");
->> >
->> >     if (!cond_signal)
->> > {
->> >
->> >       if (thread_in_trace)
->> > {
->> >
->> >
->> > abort();
->> >
->> >
->> > }
->> >
->> >       fprintf(stderr, "unable to initialize pthread wrapper
->> > library.\n");
->> >       return EINVAL;
->> >
->> >
->> > }
->> >
->> >
->> > }
->> >
->> >   if (thread_in_trace)
->> > {
->> >
->> >     return cond_signal(condition);
->> >
->> >
->> > }
->> >
->> >
->> >
->> >   thread_in_trace =
->> > 1;
->> >
->> >   tracepoint(lttng_ust_pthread, pthread_cond_signal_begin,
->> > condition,
->> >     LTTNG_UST_CALLER_IP());
->> >
->> >   retval = cond_signal(condition);
->> >
->> >   tracepoint(lttng_ust_pthread, pthread_cond_signal_end,
->> > condition,
->> >     LTTNG_UST_CALLER_IP());
->> >
->> >   thread_in_trace =
->> > 0;
->> >
->> >   return retval;
->> >
->> > }
->> >
->> >
->> >
->> > int pthread_cond_broadcast(pthread_cond_t
->> > *condition)
->> >
->> > {
->> >
->> >   static int (*cond_broadcast)(pthread_cond_t
->> > *);
->> >   int retval;
->> >
->> >
->> >
->> >   if (!cond_broadcast)
->> > {
->> >
->> >     cond_broadcast = dlsym(RTLD_NEXT, "pthread_cond_broadcast");
->> >
->> >     if (!cond_broadcast)
->> > {
->> >
->> >       if (thread_in_trace)
->> > {
->> >
->> >
->> > abort();
->> >
->> >
->> > }
->> >
->> >       fprintf(stderr, "unable to initialize pthread wrapper
->> > library.\n");
->> >       return EINVAL;
->> >
->> >
->> > }
->> >
->> >
->> > }
->> >
->> >   if (thread_in_trace)
->> > {
->> >
->> >     return cond_broadcast(condition);
->> >
->> >
->> > }
->> >
->> >
->> >
->> >   thread_in_trace =
->> > 1;
->> >
->> >   tracepoint(lttng_ust_pthread, pthread_cond_broadcast_begin,
->> > condition,
->> >     LTTNG_UST_CALLER_IP());
->> >
->> >   retval = cond_broadcast(condition);
->> >
->> >   tracepoint(lttng_ust_pthread, pthread_cond_broadcast_end,
->> > condition,
->> >     LTTNG_UST_CALLER_IP());
->> >
->> >   thread_in_trace =
->> > 0;
->> >
->> >   return retval;
->> >
->> > }
->> >
->> > Things I have tried:
->> > 1- Comment out pthread_cond_wait function --> segmentation fault
->> > 2- Comment out pthread_cond_signal and _broadcast --> stuck (I can see
->> the
->> > program is still running but nor forward progress is being made)
->> compared
->> > to the case when the wrappers are not preloaded.
->> > 3- Comment out all tracepoint related code (basically the wrapper just
->> call
->> > the corresponding pthreads function) --> same results as points 1 and 2.
->> >
->> > Any idea what might be causing this or how I could debug this problem?
->> >
->> > Thank you very much in advance.
->> >
->> > Best Regards,
->> > Shehab
->>
->> > int pthread_cond_wait(pthread_cond_t *condition, pthread_mutex_t
->> *mutex)
->> > {
->>
->>
->>
->> >   static int (*cond_wait)(pthread_cond_t *, pthread_mutex_t *);
->>
->> >   int retval;
->>
->> >
->>
->> >   if (!cond_wait) {
->>
->> >     cond_wait = dlsym(RTLD_NEXT, "pthread_cond_wait");
->>
->> >     if (!cond_wait) {
->>
->> >       if (thread_in_trace) {
->>
->> >         abort();
->>
->> >       }
->>
->> >       fprintf(stderr, "unable to initialize pthread wrapper
->> library.\n");
->> >       return EINVAL;
->>
->> >     }
->>
->> >   }
->>
->> >   if (thread_in_trace) {
->>
->> >     return cond_wait(condition, mutex);
->>
->> >   }
->>
->> >
->>
->> >   thread_in_trace = 1;
->>
->> >   tracepoint(lttng_ust_pthread, pthread_cond_wait_begin, condition,
->> mutex,
->> >     LTTNG_UST_CALLER_IP());
->>
->> >   retval = cond_wait(condition, mutex);
->>
->> >   tracepoint(lttng_ust_pthread, pthread_cond_wait_end, condition,
->> mutex,
->> >     LTTNG_UST_CALLER_IP());
->>
->> >   thread_in_trace = 0;
->>
->> >   return retval;
->>
->> > }
->>
->> >
->>
->> > int pthread_cond_signal(pthread_cond_t *condition)
->>
->> > {
->>
->> >   static int (*cond_signal)(pthread_cond_t *);
->>
->> >   int retval;
->>
->> >
->>
->> >   if (!cond_signal) {
->>
->> >     cond_signal = dlsym(RTLD_NEXT, "pthread_cond_signal");
->>
->> >     if (!cond_signal) {
->>
->> >       if (thread_in_trace) {
->>
->> >         abort();
->>
->> >       }
->>
->> >       fprintf(stderr, "unable to initialize pthread wrapper
->> library.\n");
->> >       return EINVAL;
->>
->> >     }
->>
->> >   }
->>
->> >   if (thread_in_trace) {
->>
->> >     return cond_signal(condition);
->>
->> >   }
->>
->> >
->>
->> >   thread_in_trace = 1;
->>
->> >   tracepoint(lttng_ust_pthread, pthread_cond_signal_begin, condition,
->>
->> >     LTTNG_UST_CALLER_IP());
->>
->> >   retval = cond_signal(condition);
->>
->> >   tracepoint(lttng_ust_pthread, pthread_cond_signal_end, condition,
->>
->> >     LTTNG_UST_CALLER_IP());
->>
->> >   thread_in_trace = 0;
->>
->> >   return retval;
->>
->> > }
->>
->> >
->>
->> > int pthread_cond_broadcast(pthread_cond_t *condition)
->>
->> > {
->>
->> >   static int (*cond_broadcast)(pthread_cond_t *);
->>
->> >   int retval;
->>
->> >
->>
->> >   if (!cond_broadcast) {
->>
->> >     cond_broadcast = dlsym(RTLD_NEXT, "pthread_cond_broadcast");
->>
->> >     if (!cond_broadcast) {
->>
->> >       if (thread_in_trace) {
->>
->> >         abort();
->>
->> >       }
->>
->> >       fprintf(stderr, "unable to initialize pthread wrapper
->> library.\n");
->> >       return EINVAL;
->>
->> >     }
->>
->> >   }
->>
->> >   if (thread_in_trace) {
->>
->> >     return cond_broadcast(condition);
->>
->> >   }
->>
->> >
->>
->> >   thread_in_trace = 1;
->>
->> >   tracepoint(lttng_ust_pthread, pthread_cond_broadcast_begin,
->> condition,
->> >     LTTNG_UST_CALLER_IP());
->>
->> >   retval = cond_broadcast(condition);
->>
->> >   tracepoint(lttng_ust_pthread, pthread_cond_broadcast_end, condition,
->>
->> >     LTTNG_UST_CALLER_IP());
->>
->> >   thread_in_trace = 0;
->>
->> >   return retval;
->>
->> > }
->>
->> > _______________________________________________
->> > lttng-dev mailing list
->> > lttng-dev@lists.lttng.org
->> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
+> J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@efficios.com> a =C3=A9crit=
+ :
+>
+> On 29 May 2018 at 09:47, Lo=C3=AFc Gelle <loic.gelle@polymtl.ca> wrote:
+>>
+>> I agree that integrating C code into a Go codebase is somewhat inelegant=
+.
+>>>
+>>>>
+>>>>
+>>> Not only that, but it's not sustainable. It is more a hack than a
+>>> feature.
+>>>
+>>>
+>>
+>>
+>>
+>>> However, I'm not sure what you mean by "implementation issues that are
+>>>
+>>>> specific to the language itself".
+>>>>
+>>>>
+>>> I mean that if you put static calls to C tracepoints from a Go program,
+>>> you always have a function call (and the ~50ns overhead) triggered each
+>>> time you hit the tracepoint, whether the tracepoint is actually enabled
+>>> or
+>>> not. So basically you can't count on the compiler (specific to the
+>>> language) to do clever branch prediction for you, which reduces the
+>>> interest of instrumenting your code.
+>>>
+>>>
+>> In the case of the first solution, note that the agent tracks which even=
+ts
+>> are enabled or not. In that sense, the check is performed within the Go
+>> code, as is currently done for Python and Java.
+>>
+>>
+>>
+>>> I like the third solution that you propose. I think that the first one =
+is
+>>> definitely not ideal and that the second one is too much work and
+>>> maintaining. How much time do you estimate is necessary for the
+>>> development
+>>> of the third solution?
+>>>
+>>>
+>>
+>>
+>>
+>>> By the way, I am currently working on instrumenting the Go runtime to
+>>> capture information on the goroutines. I am using dyntrace (
+>>> https://github.com/charpercyr/dyntrace) for that, which kind of works
+>>> but
+>>> is really hacky.
+>>>
+>>>
+>> That sounds great. What kind of information are you capturing?
+>>
+>> Thanks,
+>> J=C3=A9r=C3=A9mie
+>>
+>>
+>>
+>>> J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@efficios.com> a =C3=A9cr=
+it :
+>>>
+>>> On 28 May 2018 at 10:30, Lo=C3=AFc Gelle <loic.gelle@polymtl.ca> wrote:
+>>>
+>>>>
+>>>> Hi Jeremie,
+>>>>
+>>>>>
+>>>>> Thanks for your answer. I roughly estimated the overhead of calling a=
+n
+>>>>> empty C function (passing two integer arguments) from Go to 50ns per
+>>>>> call.
+>>>>> Maybe not a big deal for a lot of use cases, but more problematic if
+>>>>> you
+>>>>> want to trace performance-critical parts of Go like its runtime itsel=
+f.
+>>>>> The
+>>>>> overhead could even be bigger when it involves passing strings or
+>>>>> arrays
+>>>>> that have different memory layouts in Golang and C. What was the
+>>>>> overhead
+>>>>> that you observed for Python and Java?
+>>>>>
+>>>>>
+>>>>> 50ns per call doesn't sound too bad honestly.
+>>>>
+>>>> You have to ask yourself if you could get within 50ns of lttng-ust's
+>>>> performance with a custom ring buffer implemented in Go.
+>>>>
+>>>> To use some very rough numbers, lttng-ust for that payload, takes arou=
+nd
+>>>> ~250ns per event. With Mathieu's work on restartable sequence, that
+>>>> number
+>>>> will be shaved off quite a bit (by half, if I remember correctly), and
+>>>> I'm
+>>>> not sure you'll be able to use that kind of mechanism from Go code.
+>>>>
+>>>> I don't have numbers on hand for Python and Java. In both cases, we ar=
+e
+>>>> hooking into logging frameworks so the overhead of calling into C code
+>>>> probably pales in comparison to the time spent formatting strings.
+>>>> That's another problem in using the current "agent" mechanism; it real=
+ly
+>>>> only accommodates a very specific tracepoint signature that takes a
+>>>> string
+>>>> payload.
+>>>>
+>>>>
+>>>>
+>>>> From what I understand, it will always be a problem to have agents for
+>>>>> languages different than C, especially if you want to keep relying on
+>>>>> existing C code. Even if the sessiond part is independant from the
+>>>>> agent
+>>>>> itself, there are tons of implementation issues that are specific to
+>>>>> the
+>>>>> language itself. The problem with Go is that calling C functions is
+>>>>> really
+>>>>> a hack that does not integrate well with the build system that was
+>>>>> designed
+>>>>> for Go.
+>>>>>
+>>>>>
+>>>>>
+>>>> The solutions I see:
+>>>>
+>>>> 1) Replicate the current "agent" scheme and serialize all Go events to
+>>>> strings
+>>>>
+>>>> Not ideal as you lose the events' typing, you have to serialize to
+>>>> strings
+>>>> on the fast path, and you can hardly filter on event payloads.
+>>>>
+>>>> 2) Write a native Go ring-buffer that can be consumed by LTTng
+>>>>
+>>>> In essence, all the tracing would happen in Go. Events would be
+>>>> serialized
+>>>> by Go code and the Go "agent" would produce the CTF metadata that
+>>>> describes
+>>>> their layout.
+>>>>
+>>>> From an integration standpoint, that's probably the most elegant
+>>>> solution
+>>>> as you have no hard dependency on native code in your go projects.
+>>>> However,
+>>>> it's a _lot_ of work.
+>>>>
+>>>> First, you have to re-implement a ring-buffer that needs to perform
+>>>> within
+>>>> 50ns of lttng-ust's ring-buffer to be useful. You also need to port th=
+e
+>>>> event filtering bytecode interpreter to Go.
+>>>> Then, we need to find a way to consume that ring-buffer's content from=
+ a
+>>>> form of consumer daemon within lttng-tools.
+>>>>
+>>>> 3) Add an lttng-ust API to allow dynamic event declaration
+>>>>
+>>>> This is something we have been considering for a while.
+>>>>
+>>>> Basically, we would like to introduce an API that allows applications =
+to
+>>>> dynamically declare tracepoints.
+>>>> Then, those events would be serialized from Go, but the ring-buffer
+>>>> logic
+>>>> would remain in C.
+>>>>
+>>>> On each event, we would:
+>>>>   - Obtain a memory area from lttng-ust (reserve phase, C code called
+>>>> from
+>>>> Go)
+>>>>   - Write the event's content to that area (from Go code)
+>>>>   - Commit the event (C code called from Go)
+>>>>
+>>>> With this, you don't have to manually declare tracepoints and integrat=
+e
+>>>> them into a build system to generate providers; the Go application jus=
+t
+>>>> needs to link to lttng-ust at runtime.
+>>>> It's not a perfect solution, but it seems like an interesting
+>>>> compromise.
+>>>>
+>>>>
+>>>> What do you think?
+>>>>
+>>>> J=C3=A9r=C3=A9mie
+>>>>
+>>>>
+>>>>
+>>>>
+>>>> Did I provide more context?
+>>>>>
+>>>>> Cheers,
+>>>>> Lo=C3=AFc.
+>>>>>
+>>>>> J=C3=A9r=C3=A9mie Galarneau <jeremie.galarneau@efficios.com> a =C3=A9=
+crit :
+>>>>>
+>>>>> On 4 May 2018 at 06:03, Lo=C3=AFc Gelle <loic.gelle@polymtl.ca> wrote=
+:
+>>>>>
+>>>>>
+>>>>>> Hi,
+>>>>>>
+>>>>>>
+>>>>>>> There has been a previous discussion on the mailing list about
+>>>>>>> porting
+>>>>>>> LTTng to Golang, about a year ago: https://lists.lttng.org/
+>>>>>>> pipermail/lttng-dev/2017-June/027203.html . This new topic is to
+>>>>>>> discuss
+>>>>>>>
+>>>>>>> more precisely about implementation possibilities.
+>>>>>>>
+>>>>>>> Currently, one has to use the the C UST agent from LTTng in order t=
+o
+>>>>>>> instrument Golang programs, and to compile the whole thing using
+>>>>>>> custom
+>>>>>>> Makefiles and cgo. Here is a recent example that I wrote:
+>>>>>>> https://github.com/loicgelle/jaeger-go-lttng-instr
+>>>>>>>
+>>>>>>> As you can guess, there are a low of drawbacks in that approach. It
+>>>>>>> is
+>>>>>>> actually a hack and cannot be integrated into more complex Golang
+>>>>>>> program
+>>>>>>> that use a more complex build process (e.g. the Golang runtime
+>>>>>>> itself),
+>>>>>>> because of the compiler instructions that you have to include at th=
+e
+>>>>>>> top
+>>>>>>> of
+>>>>>>> the Golang files. There is also a big concern about the performance
+>>>>>>> of
+>>>>>>> this
+>>>>>>> solution, as calling a C function from Go requires to do a full
+>>>>>>> context
+>>>>>>> switch on the stack, because the calling conventions in C and Golan=
+g
+>>>>>>> are
+>>>>>>> different.
+>>>>>>>
+>>>>>>>
+>>>>>>> I think a more integrated and performant solution is needed. We can=
+=E2=80=99t
+>>>>>>>
+>>>>>>
+>>>>>> really ignore a language such as Golang that is now widely adopted f=
+or
+>>>>>>> cloud applications. LTTng is really the best solution out there in
+>>>>>>> terms
+>>>>>>> of
+>>>>>>> overhead per tracepoint, and could benefit from being made availabl=
+e
+>>>>>>> to
+>>>>>>> such a large community. My question to the experts on this mailing
+>>>>>>> list:
+>>>>>>> how much would it take to write a Golang agent for LTTng?
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> Hi Lo=C3=AFc,
+>>>>>>
+>>>>>> Without having performed any measurements myself, it does seem like
+>>>>>> calling
+>>>>>> C from Go is very expensive. In that context, I can see that LTTng
+>>>>>> would
+>>>>>> probably lose its performance advantage over any native Go solution.
+>>>>>> However, it wouldn't hurt to measure the impact and see if it really
+>>>>>> is
+>>>>>> a
+>>>>>> deal breaker.
+>>>>>>
+>>>>>> We faced the same dilemma when implementing the Java and Python
+>>>>>> support
+>>>>>> in
+>>>>>> lttng-ust. In those cases, we ended up calling C code, with the
+>>>>>> performance
+>>>>>> penalties it implies. The correlation with other applications' and t=
+he
+>>>>>> kernel's events, along with the rest of LTTng's features, provided
+>>>>>> enough
+>>>>>> value to make that solution worthwhile.
+>>>>>>
+>>>>>> There aren't a ton of solutions if we can't call existing C code. We
+>>>>>> basically have to reimplement a ring-buffer and the
+>>>>>> setup/communication
+>>>>>> infrastructure to interact with the lttng-sessiond. The communicatio=
+n
+>>>>>> with
+>>>>>> the session daemon is not a big concern as the protocol is fairly
+>>>>>> straightforward.
+>>>>>>
+>>>>>> The "hairy" part is that lttng-ust and lttng-consumerd use a shared
+>>>>>> memory
+>>>>>> map to produce and consume the tracing buffers. This means that all
+>>>>>> changes
+>>>>>> to that memory layout would need to be replicated in the Go tracer,
+>>>>>> making
+>>>>>> future evolution more difficult. Also, I don't know how easy it woul=
+d
+>>>>>> be
+>>>>>> to
+>>>>>> synchronize C and Go applications interacting in a shared memory map
+>>>>>> given
+>>>>>> those languages have different memory models. My knowledge of Go
+>>>>>> doesn't
+>>>>>> go
+>>>>>> that far.
+>>>>>>
+>>>>>> A more viable solution could be to introduce a Go-native consumer
+>>>>>> daemon
+>>>>>> implementing its own synchronization with Go applications. This way,
+>>>>>> that
+>>>>>> implementation could evolve on its own and could also start with a
+>>>>>> simpler
+>>>>>> ring buffer than lttng-ust's.
+>>>>>>
+>>>>>> Still, it is not a small undertaking and it basically means
+>>>>>> maintaining
+>>>>>> a
+>>>>>> third tracer implementation.
+>>>>>>
+>>>>>>
+>>>>>> What do you think?
+>>>>>>
+>>>>>> Thanks!
+>>>>>> J=C3=A9r=C3=A9mie
+>>>>>>
+>>>>>>
+>>>>>> Cheers,
+>>>>>>
+>>>>>> Lo=C3=AFc.
+>>>>>>>
+>>>>>>> _______________________________________________
+>>>>>>> lttng-dev mailing list
+>>>>>>> lttng-dev@lists.lttng.org
+>>>>>>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> --
+>>>>>> J=C3=A9r=C3=A9mie Galarneau
+>>>>>> EfficiOS Inc.
+>>>>>> http://www.efficios.com
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>> --
+>>>> J=C3=A9r=C3=A9mie Galarneau
+>>>> EfficiOS Inc.
+>>>> http://www.efficios.com
+>>>>
+>>>>
+>>>
+>>>
+>>>
+>>>
 >>
 >> --
->> Jonathan Rajotte-Julien
->> EfficiOS
+>> J=C3=A9r=C3=A9mie Galarneau
+>> EfficiOS Inc.
+>> http://www.efficios.com
 >>
 >
 >
+>
+>
 
---000000000000aa58b5056d592761
+
+--=20
+J=C3=A9r=C3=A9mie Galarneau
+EfficiOS Inc.
+http://www.efficios.com
+
+--00000000000061e6d8056d5aa2e4
 Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 
-PGRpdiBkaXI9Imx0ciI+SSB3YXMgd29uZGVyaW5nIGlmIHlvdSBoYWQgYSBjaGFuY2UgdG8gbG9v
-ayBvdmVyIHRoaXMgaXNzdWUuIFRoYW5rcyE8YnI+PC9kaXY+PGRpdiBjbGFzcz0iZ21haWxfZXh0
-cmEiPjxiciBjbGVhcj0iYWxsIj48ZGl2PjxkaXYgY2xhc3M9ImdtYWlsX3NpZ25hdHVyZSIgZGF0
-YS1zbWFydG1haWw9ImdtYWlsX3NpZ25hdHVyZSI+PGRpdiBkaXI9Imx0ciI+PGZvbnQgY29sb3I9
-IiM4ODg4ODgiPlNoZWhhYiBZLiBFbHNheWVkLCBNU2MuPGJyPg0KUGhEIFN0dWRlbnQ8YnI+VGhl
-IEVkd2FyZHMgUy4gUm9nZXJzIFNyLiBEZXB0LiBvZiBFbGVjdHJpY2FsIGFuZCBDb21wdXRlciBF
-bmdpbmVlcmluZzxicj5Vbml2ZXJzaXR5IG9mIFRvcm9udG8gPC9mb250Pjxmb250IGNvbG9yPSIj
-ODg4ODg4Ij48YSB2YWx1ZT0iKzIwMTI0NDk4MzYwIj48c3BhbiBkaXI9Imx0ciI+PC9zcGFuPjwv
-YT48YnI+DQpFLW1haWw6IDxhIGhyZWY9Imh0dHBzOi8vd2VibWFpbC5yaWNlLmVkdS9pbXAvbWVz
-c2FnZS5waHA/bWFpbGJveD1JTkJPWCZhbXA7aW5kZXg9MTEjIiB0YXJnZXQ9Il9ibGFuayI+c2hl
-aGFieW9tbkBnbWFpbC5jb208L2E+PC9mb250PjwvZGl2PjwvZGl2PjwvZGl2Pg0KPGJyPjxkaXYg
-Y2xhc3M9ImdtYWlsX3F1b3RlIj5PbiBUaHUsIE1heSAzLCAyMDE4IGF0IDQ6MzcgUE0sIFNoZWhh
-YiBFbHNheWVkIDxzcGFuIGRpcj0ibHRyIj4mbHQ7PGEgaHJlZj0ibWFpbHRvOnNoZWhhYnlvbW5A
-Z21haWwuY29tIiB0YXJnZXQ9Il9ibGFuayI+c2hlaGFieW9tbkBnbWFpbC5jb208L2E+Jmd0Ozwv
-c3Bhbj4gd3JvdGU6PGJyPjxibG9ja3F1b3RlIGNsYXNzPSJnbWFpbF9xdW90ZSIgc3R5bGU9Im1h
-cmdpbjowIDAgMCAuOGV4O2JvcmRlci1sZWZ0OjFweCAjY2NjIHNvbGlkO3BhZGRpbmctbGVmdDox
-ZXgiPjxkaXYgZGlyPSJsdHIiPjxkaXY+VGhhbmtzIGZvciB0aGUgcmVwbHkuIEhlcmUgaXMgYSBs
-aW5rIHRvIHRoZSByZXBvIDxhIGhyZWY9Imh0dHBzOi8vZ2l0aHViLmNvbS9TaGVoYWJFbHNheWVk
-L0xUVG5nX2RlYnVnZ2luZy5naXQiIHRhcmdldD0iX2JsYW5rIj5odHRwczovL2dpdGh1Yi5jb20v
-PHdicj5TaGVoYWJFbHNheWVkL0xUVG5nX2RlYnVnZ2luZy48d2JyPmdpdDwvYT48YnI+PGJyPjwv
-ZGl2Pkl0IGNvbnRhaW5zIHRoZSBMVFRuZyBzb3VyY2UgY29kZSBJIGFtIHVzaW5nIGFuZCBvbmUg
-b2YgdGhlIGJlbmNobWFya3MgdGhhdCBpcyBjYXVzaW5nIHByb2JsZW1zLjxicj48L2Rpdj48ZGl2
-IGNsYXNzPSJnbWFpbF9leHRyYSI+PGJyIGNsZWFyPSJhbGwiPjxkaXY+PGRpdiBjbGFzcz0ibV8t
-NTU2OTk3MDU1MDY2NjQwNjUyMGdtYWlsX3NpZ25hdHVyZSIgZGF0YS1zbWFydG1haWw9ImdtYWls
-X3NpZ25hdHVyZSI+PGRpdiBkaXI9Imx0ciI+PGZvbnQgY29sb3I9IiM4ODg4ODgiPlNoZWhhYiBZ
-LiBFbHNheWVkLCBNU2MuPGJyPg0KUGhEIFN0dWRlbnQ8YnI+VGhlIEVkd2FyZHMgUy4gUm9nZXJz
-IFNyLiBEZXB0LiBvZiBFbGVjdHJpY2FsIGFuZCBDb21wdXRlciBFbmdpbmVlcmluZzxicj5Vbml2
-ZXJzaXR5IG9mIFRvcm9udG8gPC9mb250Pjxmb250IGNvbG9yPSIjODg4ODg4Ij48YSB2YWx1ZT0i
-KzIwMTI0NDk4MzYwIj48c3BhbiBkaXI9Imx0ciI+PC9zcGFuPjwvYT48YnI+DQpFLW1haWw6IDxh
-IGhyZWY9Imh0dHBzOi8vd2VibWFpbC5yaWNlLmVkdS9pbXAvbWVzc2FnZS5waHA/bWFpbGJveD1J
-TkJPWCZhbXA7aW5kZXg9MTEjIiB0YXJnZXQ9Il9ibGFuayI+c2hlaGFieW9tbkBnbWFpbC5jb208
-L2E+PC9mb250PjwvZGl2PjwvZGl2PjwvZGl2PjxkaXY+PGRpdiBjbGFzcz0iaDUiPg0KPGJyPjxk
-aXYgY2xhc3M9ImdtYWlsX3F1b3RlIj5PbiBUdWUsIE1heSAxLCAyMDE4IGF0IDEwOjM5IEFNLCBK
-b25hdGhhbiBSYWpvdHRlLUp1bGllbiA8c3BhbiBkaXI9Imx0ciI+Jmx0OzxhIGhyZWY9Im1haWx0
-bzpqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20iIHRhcmdldD0iX2JsYW5rIj5q
-b25hdGhhbi5yYWpvdHRlLWp1bGllbkA8d2JyPmVmZmljaW9zLmNvbTwvYT4mZ3Q7PC9zcGFuPiB3
-cm90ZTo8YnI+PGJsb2NrcXVvdGUgY2xhc3M9ImdtYWlsX3F1b3RlIiBzdHlsZT0ibWFyZ2luOjAg
-MCAwIC44ZXg7Ym9yZGVyLWxlZnQ6MXB4ICNjY2Mgc29saWQ7cGFkZGluZy1sZWZ0OjFleCI+SGkg
-U2hlaGFiLDxicj4NCjxicj4NClBsZWFzZSBwcm92aWRlIGEgbGluayB0byBhIGx0dG5nLXVzdCBn
-aXQgdHJlZSBvciBhbiBhY3R1YWwgcGF0Y2ggKGdpdCBmb3JtYXQtcGF0Y2gpLjxicj4NClRoaXMg
-d2lsbCBoZWxwIGFueSBwZXJzb24gd2hvIG1pZ2h0IGJlIGludGVyZXN0ZWQgaW4gaGVscGluZyB5
-b3UgaW5jbHVkaW5nPGJyPg0KbXlzZWxmLjxicj4NCjxicj4NCkNoZWVyczxicj4NCjxkaXY+PGRp
-diBjbGFzcz0ibV8tNTU2OTk3MDU1MDY2NjQwNjUyMGg1Ij48YnI+DQpPbiBUdWUsIE1heSAwMSwg
-MjAxOCBhdCAwOTozMTo1MkFNIC0wNDAwLCBTaGVoYWIgRWxzYXllZCB3cm90ZTo8YnI+DQomZ3Q7
-IEhpLDxicj4NCiZndDsgPGJyPg0KJmd0OyBJIGFtIHRyeWluZyB0byBjcmVhdGUgd3JhcHBlcnMg
-Zm9yIHB0aHJlYWRzIGNvbmRpdGlvbmFsIHZhcmlhYmxlcyBmdW5jdGlvbnM8YnI+DQomZ3Q7ICh3
-YWl0LCBzaWduYWwgYW5kIGJyb2FkY2FzdCkgdG8gaW5zZXJ0IHRyYWNlcG9pbnRzLiBJIGZvbGxv
-d2VkIHRoZSBzYW1lPGJyPg0KJmd0OyBhcHByb2FjaCBkb25lIGZvciB0aGUgbXV0ZXggZnVuY3Rp
-b25zIGFscmVhZHkgcHJvdmlkZWQgd2l0aCBsdHRuZywgaG93ZXZlcjxicj4NCiZndDsgSSBhbSBy
-dW5uaW5nIGludG8gc29tZSBwcm9ibGVtcy4gTWFpbmx5IHRoZSBhcHBsaWNhdGlvbnMgc2VlbSB0
-byBnZXQgc3R1Y2s8YnI+DQomZ3Q7IHdoZW4gdGhlIGNvbmRpdGlvbmFsIHZhcmlhYmxlIHdyYXBw
-ZXJzIGFyZSBlbmFibGVkLjxicj4NCiZndDsgPGJyPg0KJmd0OyBIZXJlIGlzIG15IGltcGxlbWVu
-dGF0aW9uIGZvciB0aGUgd3JhcHBlciBmdW5jdGlvbnM6PGJyPg0KJmd0OyBpbnQgcHRocmVhZF9j
-b25kX3dhaXQocHRocmVhZF9jb25kPHdicj5fdCAqY29uZGl0aW9uLCBwdGhyZWFkX211dGV4X3Q8
-YnI+DQomZ3Q7ICptdXRleCk8YnI+DQomZ3Q7IDxicj4NCiZndDsgezxicj4NCiZndDsgPGJyPg0K
-Jmd0O8KgIMKgc3RhdGljIGludCAoKmNvbmRfd2FpdCkocHRocmVhZF9jb25kX3QgKiwgcHRocmVh
-ZF9tdXRleF90PGJyPg0KJmd0OyAqKTs8YnI+DQomZ3Q7wqAgwqBpbnQgcmV0dmFsOzxicj4NCiZn
-dDsgPGJyPg0KJmd0OyA8YnI+DQomZ3Q7IDxicj4NCiZndDvCoCDCoGlmICghY29uZF93YWl0KTxi
-cj4NCiZndDsgezxicj4NCiZndDsgPGJyPg0KJmd0O8KgIMKgIMKgY29uZF93YWl0ID0gZGxzeW0o
-UlRMRF9ORVhULCAmcXVvdDtwdGhyZWFkX2NvbmRfd2FpdCZxdW90Oyk7PGJyPg0KJmd0OyA8YnI+
-DQomZ3Q7wqAgwqAgwqBpZiAoIWNvbmRfd2FpdCk8YnI+DQomZ3Q7IHs8YnI+DQomZ3Q7IDxicj4N
-CiZndDvCoCDCoCDCoCDCoGlmICh0aHJlYWRfaW5fdHJhY2UpPGJyPg0KJmd0OyB7PGJyPg0KJmd0
-OyA8YnI+DQomZ3Q7IDxicj4NCiZndDsgYWJvcnQoKTs8YnI+DQomZ3Q7IDxicj4NCiZndDsgPGJy
-Pg0KJmd0OyB9PGJyPg0KJmd0OyA8YnI+DQomZ3Q7wqAgwqAgwqAgwqBmcHJpbnRmKHN0ZGVyciwg
-JnF1b3Q7dW5hYmxlIHRvIGluaXRpYWxpemUgcHRocmVhZCB3cmFwcGVyPGJyPg0KJmd0OyBsaWJy
-YXJ5LlxuJnF1b3Q7KTs8YnI+DQomZ3Q7wqAgwqAgwqAgwqByZXR1cm4gRUlOVkFMOzxicj4NCiZn
-dDsgPGJyPg0KJmd0OyA8YnI+DQomZ3Q7IH08YnI+DQomZ3Q7IDxicj4NCiZndDsgPGJyPg0KJmd0
-OyB9PGJyPg0KJmd0OyA8YnI+DQomZ3Q7wqAgwqBpZiAodGhyZWFkX2luX3RyYWNlKTxicj4NCiZn
-dDsgezxicj4NCiZndDsgPGJyPg0KJmd0O8KgIMKgIMKgcmV0dXJuIGNvbmRfd2FpdChjb25kaXRp
-b24sIG11dGV4KTs8YnI+DQomZ3Q7IDxicj4NCiZndDsgPGJyPg0KJmd0OyB9PGJyPg0KJmd0OyA8
-YnI+DQomZ3Q7IDxicj4NCiZndDsgPGJyPg0KJmd0O8KgIMKgdGhyZWFkX2luX3RyYWNlID08YnI+
-DQomZ3Q7IDE7PGJyPg0KJmd0OyA8YnI+DQomZ3Q7wqAgwqB0cmFjZXBvaW50KGx0dG5nX3VzdF9w
-dGhyZWFkLCBwdGhyZWFkX2NvbmRfd2FpdF9iZWdpbiwgY29uZGl0aW9uLDxicj4NCiZndDsgbXV0
-ZXgsPGJyPg0KJmd0OyA8YnI+DQomZ3Q7wqAgwqAgwqBMVFROR19VU1RfQ0FMTEVSX0lQKCkpOzxi
-cj4NCiZndDsgPGJyPg0KJmd0O8KgIMKgcmV0dmFsID0gY29uZF93YWl0KGNvbmRpdGlvbiwgbXV0
-ZXgpOzxicj4NCiZndDsgPGJyPg0KJmd0O8KgIMKgdHJhY2Vwb2ludChsdHRuZ191c3RfcHRocmVh
-ZCwgcHRocmVhZF9jb25kX3dhaXRfZW5kLCBjb25kaXRpb24sPGJyPg0KJmd0OyBtdXRleCw8YnI+
-DQomZ3Q7IDxicj4NCiZndDvCoCDCoCDCoExUVE5HX1VTVF9DQUxMRVJfSVAoKSk7PGJyPg0KJmd0
-OyA8YnI+DQomZ3Q7wqAgwqB0aHJlYWRfaW5fdHJhY2UgPTxicj4NCiZndDsgMDs8YnI+DQomZ3Q7
-IDxicj4NCiZndDvCoCDCoHJldHVybiByZXR2YWw7PGJyPg0KJmd0OyA8YnI+DQomZ3Q7IH08YnI+
-DQomZ3Q7IDxicj4NCiZndDsgPGJyPg0KJmd0OyA8YnI+DQomZ3Q7IGludCBwdGhyZWFkX2NvbmRf
-c2lnbmFsKHB0aHJlYWRfY288d2JyPm5kX3Q8YnI+DQomZ3Q7ICpjb25kaXRpb24pPGJyPg0KJmd0
-OyA8YnI+DQomZ3Q7IHs8YnI+DQomZ3Q7IDxicj4NCiZndDvCoCDCoHN0YXRpYyBpbnQgKCpjb25k
-X3NpZ25hbCkocHRocmVhZF9jb25kX3Q8YnI+DQomZ3Q7ICopOzxicj4NCiZndDsgPGJyPg0KJmd0
-O8KgIMKgaW50IHJldHZhbDs8YnI+DQomZ3Q7IDxicj4NCiZndDsgPGJyPg0KJmd0OyA8YnI+DQom
-Z3Q7wqAgwqBpZiAoIWNvbmRfc2lnbmFsKTxicj4NCiZndDsgezxicj4NCiZndDsgPGJyPg0KJmd0
-O8KgIMKgIMKgY29uZF9zaWduYWwgPSBkbHN5bShSVExEX05FWFQsICZxdW90O3B0aHJlYWRfY29u
-ZF9zaWduYWwmcXVvdDspOzxicj4NCiZndDsgPGJyPg0KJmd0O8KgIMKgIMKgaWYgKCFjb25kX3Np
-Z25hbCk8YnI+DQomZ3Q7IHs8YnI+DQomZ3Q7IDxicj4NCiZndDvCoCDCoCDCoCDCoGlmICh0aHJl
-YWRfaW5fdHJhY2UpPGJyPg0KJmd0OyB7PGJyPg0KJmd0OyA8YnI+DQomZ3Q7IDxicj4NCiZndDsg
-YWJvcnQoKTs8YnI+DQomZ3Q7IDxicj4NCiZndDsgPGJyPg0KJmd0OyB9PGJyPg0KJmd0OyA8YnI+
-DQomZ3Q7wqAgwqAgwqAgwqBmcHJpbnRmKHN0ZGVyciwgJnF1b3Q7dW5hYmxlIHRvIGluaXRpYWxp
-emUgcHRocmVhZCB3cmFwcGVyPGJyPg0KJmd0OyBsaWJyYXJ5LlxuJnF1b3Q7KTs8YnI+DQomZ3Q7
-wqAgwqAgwqAgwqByZXR1cm4gRUlOVkFMOzxicj4NCiZndDsgPGJyPg0KJmd0OyA8YnI+DQomZ3Q7
-IH08YnI+DQomZ3Q7IDxicj4NCiZndDsgPGJyPg0KJmd0OyB9PGJyPg0KJmd0OyA8YnI+DQomZ3Q7
-wqAgwqBpZiAodGhyZWFkX2luX3RyYWNlKTxicj4NCiZndDsgezxicj4NCiZndDsgPGJyPg0KJmd0
-O8KgIMKgIMKgcmV0dXJuIGNvbmRfc2lnbmFsKGNvbmRpdGlvbik7PGJyPg0KJmd0OyA8YnI+DQom
-Z3Q7IDxicj4NCiZndDsgfTxicj4NCiZndDsgPGJyPg0KJmd0OyA8YnI+DQomZ3Q7IDxicj4NCiZn
-dDvCoCDCoHRocmVhZF9pbl90cmFjZSA9PGJyPg0KJmd0OyAxOzxicj4NCiZndDsgPGJyPg0KJmd0
-O8KgIMKgdHJhY2Vwb2ludChsdHRuZ191c3RfcHRocmVhZCwgcHRocmVhZF9jb25kX3NpZ25hbF9i
-ZWdpbiw8YnI+DQomZ3Q7IGNvbmRpdGlvbiw8YnI+DQomZ3Q7wqAgwqAgwqBMVFROR19VU1RfQ0FM
-TEVSX0lQKCkpOzxicj4NCiZndDsgPGJyPg0KJmd0O8KgIMKgcmV0dmFsID0gY29uZF9zaWduYWwo
-Y29uZGl0aW9uKTs8YnI+DQomZ3Q7IDxicj4NCiZndDvCoCDCoHRyYWNlcG9pbnQobHR0bmdfdXN0
-X3B0aHJlYWQsIHB0aHJlYWRfY29uZF9zaWduYWxfZW5kLDxicj4NCiZndDsgY29uZGl0aW9uLDxi
-cj4NCiZndDvCoCDCoCDCoExUVE5HX1VTVF9DQUxMRVJfSVAoKSk7PGJyPg0KJmd0OyA8YnI+DQom
-Z3Q7wqAgwqB0aHJlYWRfaW5fdHJhY2UgPTxicj4NCiZndDsgMDs8YnI+DQomZ3Q7IDxicj4NCiZn
-dDvCoCDCoHJldHVybiByZXR2YWw7PGJyPg0KJmd0OyA8YnI+DQomZ3Q7IH08YnI+DQomZ3Q7IDxi
-cj4NCiZndDsgPGJyPg0KJmd0OyA8YnI+DQomZ3Q7IGludCBwdGhyZWFkX2NvbmRfYnJvYWRjYXN0
-KHB0aHJlYWQ8d2JyPl9jb25kX3Q8YnI+DQomZ3Q7ICpjb25kaXRpb24pPGJyPg0KJmd0OyA8YnI+
-DQomZ3Q7IHs8YnI+DQomZ3Q7IDxicj4NCiZndDvCoCDCoHN0YXRpYyBpbnQgKCpjb25kX2Jyb2Fk
-Y2FzdCkocHRocmVhZF9jb25kPHdicj5fdDxicj4NCiZndDsgKik7PGJyPg0KJmd0O8KgIMKgaW50
-IHJldHZhbDs8YnI+DQomZ3Q7IDxicj4NCiZndDsgPGJyPg0KJmd0OyA8YnI+DQomZ3Q7wqAgwqBp
-ZiAoIWNvbmRfYnJvYWRjYXN0KTxicj4NCiZndDsgezxicj4NCiZndDsgPGJyPg0KJmd0O8KgIMKg
-IMKgY29uZF9icm9hZGNhc3QgPSBkbHN5bShSVExEX05FWFQsICZxdW90O3B0aHJlYWRfY29uZF9i
-cm9hZGNhc3QmcXVvdDspOzxicj4NCiZndDsgPGJyPg0KJmd0O8KgIMKgIMKgaWYgKCFjb25kX2Jy
-b2FkY2FzdCk8YnI+DQomZ3Q7IHs8YnI+DQomZ3Q7IDxicj4NCiZndDvCoCDCoCDCoCDCoGlmICh0
-aHJlYWRfaW5fdHJhY2UpPGJyPg0KJmd0OyB7PGJyPg0KJmd0OyA8YnI+DQomZ3Q7IDxicj4NCiZn
-dDsgYWJvcnQoKTs8YnI+DQomZ3Q7IDxicj4NCiZndDsgPGJyPg0KJmd0OyB9PGJyPg0KJmd0OyA8
-YnI+DQomZ3Q7wqAgwqAgwqAgwqBmcHJpbnRmKHN0ZGVyciwgJnF1b3Q7dW5hYmxlIHRvIGluaXRp
-YWxpemUgcHRocmVhZCB3cmFwcGVyPGJyPg0KJmd0OyBsaWJyYXJ5LlxuJnF1b3Q7KTs8YnI+DQom
-Z3Q7wqAgwqAgwqAgwqByZXR1cm4gRUlOVkFMOzxicj4NCiZndDsgPGJyPg0KJmd0OyA8YnI+DQom
-Z3Q7IH08YnI+DQomZ3Q7IDxicj4NCiZndDsgPGJyPg0KJmd0OyB9PGJyPg0KJmd0OyA8YnI+DQom
-Z3Q7wqAgwqBpZiAodGhyZWFkX2luX3RyYWNlKTxicj4NCiZndDsgezxicj4NCiZndDsgPGJyPg0K
-Jmd0O8KgIMKgIMKgcmV0dXJuIGNvbmRfYnJvYWRjYXN0KGNvbmRpdGlvbik7PGJyPg0KJmd0OyA8
-YnI+DQomZ3Q7IDxicj4NCiZndDsgfTxicj4NCiZndDsgPGJyPg0KJmd0OyA8YnI+DQomZ3Q7IDxi
-cj4NCiZndDvCoCDCoHRocmVhZF9pbl90cmFjZSA9PGJyPg0KJmd0OyAxOzxicj4NCiZndDsgPGJy
-Pg0KJmd0O8KgIMKgdHJhY2Vwb2ludChsdHRuZ191c3RfcHRocmVhZCwgcHRocmVhZF9jb25kX2Jy
-b2FkY2FzdF9iZWdpbiw8YnI+DQomZ3Q7IGNvbmRpdGlvbiw8YnI+DQomZ3Q7wqAgwqAgwqBMVFRO
-R19VU1RfQ0FMTEVSX0lQKCkpOzxicj4NCiZndDsgPGJyPg0KJmd0O8KgIMKgcmV0dmFsID0gY29u
-ZF9icm9hZGNhc3QoY29uZGl0aW9uKTs8YnI+DQomZ3Q7IDxicj4NCiZndDvCoCDCoHRyYWNlcG9p
-bnQobHR0bmdfdXN0X3B0aHJlYWQsIHB0aHJlYWRfY29uZF9icm9hZGNhc3RfZW5kLDxicj4NCiZn
-dDsgY29uZGl0aW9uLDxicj4NCiZndDvCoCDCoCDCoExUVE5HX1VTVF9DQUxMRVJfSVAoKSk7PGJy
-Pg0KJmd0OyA8YnI+DQomZ3Q7wqAgwqB0aHJlYWRfaW5fdHJhY2UgPTxicj4NCiZndDsgMDs8YnI+
-DQomZ3Q7IDxicj4NCiZndDvCoCDCoHJldHVybiByZXR2YWw7PGJyPg0KJmd0OyA8YnI+DQomZ3Q7
-IH08YnI+DQomZ3Q7IDxicj4NCiZndDsgVGhpbmdzIEkgaGF2ZSB0cmllZDo8YnI+DQomZ3Q7IDEt
-IENvbW1lbnQgb3V0IHB0aHJlYWRfY29uZF93YWl0IGZ1bmN0aW9uIC0tJmd0OyBzZWdtZW50YXRp
-b24gZmF1bHQ8YnI+DQomZ3Q7IDItIENvbW1lbnQgb3V0IHB0aHJlYWRfY29uZF9zaWduYWwgYW5k
-IF9icm9hZGNhc3QgLS0mZ3Q7IHN0dWNrIChJIGNhbiBzZWUgdGhlPGJyPg0KJmd0OyBwcm9ncmFt
-IGlzIHN0aWxsIHJ1bm5pbmcgYnV0IG5vciBmb3J3YXJkIHByb2dyZXNzIGlzIGJlaW5nIG1hZGUp
-IGNvbXBhcmVkPGJyPg0KJmd0OyB0byB0aGUgY2FzZSB3aGVuIHRoZSB3cmFwcGVycyBhcmUgbm90
-IHByZWxvYWRlZC48YnI+DQomZ3Q7IDMtIENvbW1lbnQgb3V0IGFsbCB0cmFjZXBvaW50IHJlbGF0
-ZWQgY29kZSAoYmFzaWNhbGx5IHRoZSB3cmFwcGVyIGp1c3QgY2FsbDxicj4NCiZndDsgdGhlIGNv
-cnJlc3BvbmRpbmcgcHRocmVhZHMgZnVuY3Rpb24pIC0tJmd0OyBzYW1lIHJlc3VsdHMgYXMgcG9p
-bnRzIDEgYW5kIDIuPGJyPg0KJmd0OyA8YnI+DQomZ3Q7IEFueSBpZGVhIHdoYXQgbWlnaHQgYmUg
-Y2F1c2luZyB0aGlzIG9yIGhvdyBJIGNvdWxkIGRlYnVnIHRoaXMgcHJvYmxlbT88YnI+DQomZ3Q7
-IDxicj4NCiZndDsgVGhhbmsgeW91IHZlcnkgbXVjaCBpbiBhZHZhbmNlLjxicj4NCiZndDsgPGJy
-Pg0KJmd0OyBCZXN0IFJlZ2FyZHMsPGJyPg0KJmd0OyBTaGVoYWI8YnI+DQo8YnI+DQomZ3Q7IGlu
-dCBwdGhyZWFkX2NvbmRfd2FpdChwdGhyZWFkX2NvbmQ8d2JyPl90ICpjb25kaXRpb24sIHB0aHJl
-YWRfbXV0ZXhfdCAqbXV0ZXgpwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgPGJyPg0KJmd0OyB7wqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqA8YnI+DQomZ3Q7wqAgwqBzdGF0aWMgaW50ICgq
-Y29uZF93YWl0KShwdGhyZWFkX2NvbmRfdCAqLCBwdGhyZWFkX211dGV4X3QgKik7wqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqA8YnI+DQomZ3Q7wqAgwqBpbnQgcmV0dmFsO8KgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgPGJyPg0KJmd0O8KgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgPGJy
-Pg0KJmd0O8KgIMKgaWYgKCFjb25kX3dhaXQpIHvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoDxicj4NCiZndDvCoCDCoCDCoGNvbmRfd2FpdCA9IGRsc3ltKFJUTERfTkVYVCwg
-JnF1b3Q7cHRocmVhZF9jb25kX3dhaXQmcXVvdDspO8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIDxicj4NCiZndDvCoCDCoCDCoGlmICghY29uZF93YWl0KSB7wqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqA8YnI+DQomZ3Q7wqAgwqAgwqAgwqBpZiAodGhyZWFk
-X2luX3RyYWNlKSB7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgPGJyPg0KJmd0O8KgIMKgIMKgIMKgIMKg
-YWJvcnQoKTvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCA8YnI+DQomZ3Q7
-wqAgwqAgwqAgwqB9wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqA8YnI+DQomZ3Q7wqAgwqAgwqAgwqBmcHJpbnRmKHN0ZGVyciwgJnF1b3Q7dW5hYmxl
-IHRvIGluaXRpYWxpemUgcHRocmVhZCB3cmFwcGVyIGxpYnJhcnkuXG4mcXVvdDspO8KgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgPGJyPg0KJmd0O8KgIMKgIMKgIMKgcmV0dXJuIEVJTlZBTDvCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCA8YnI+DQomZ3Q7wqAgwqAgwqB9wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqA8YnI+DQomZ3Q7wqAgwqB9wqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqA8YnI+
-DQomZ3Q7wqAgwqBpZiAodGhyZWFkX2luX3RyYWNlKSB7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgPGJyPg0KJmd0O8KgIMKgIMKgcmV0dXJuIGNvbmRfd2FpdChjb25kaXRpb24sIG11dGV4KTvC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoDxicj4NCiZndDvCoCDCoH3CoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoDxicj4NCiZndDvCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoDxicj4NCiZndDvC
-oCDCoHRocmVhZF9pbl90cmFjZSA9IDE7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgPGJy
-Pg0KJmd0O8KgIMKgdHJhY2Vwb2ludChsdHRuZ191c3RfcHRocmVhZCwgcHRocmVhZF9jb25kX3dh
-aXRfYmVnaW4sIGNvbmRpdGlvbiwgbXV0ZXgswqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgPGJyPg0KJmd0O8KgIMKgIMKgTFRU
-TkdfVVNUX0NBTExFUl9JUCgpKTvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoDxicj4NCiZndDvCoCDC
-oHJldHZhbCA9IGNvbmRfd2FpdChjb25kaXRpb24sIG11dGV4KTvCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoDxicj4NCiZndDvCoCDC
-oHRyYWNlcG9pbnQobHR0bmdfdXN0X3B0aHJlYWQsIHB0aHJlYWRfY29uZF93YWl0X2VuZCwgY29u
-ZGl0aW9uLCBtdXRleCzCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCA8YnI+DQomZ3Q7wqAgwqAgwqBMVFROR19VU1RfQ0FM
-TEVSX0lQKCkpO8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgPGJyPg0KJmd0O8KgIMKgdGhyZWFkX2lu
-X3RyYWNlID0gMDvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCA8YnI+DQomZ3Q7wqAgwqBy
-ZXR1cm4gcmV0dmFsO8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIDxicj4N
-CiZndDsgfcKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgPGJyPg0KJmd0O8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgPGJyPg0KJmd0OyBpbnQgcHRocmVh
-ZF9jb25kX3NpZ25hbChwdGhyZWFkX2NvPHdicj5uZF90ICpjb25kaXRpb24pwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgPGJyPg0KJmd0OyB7wqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqA8
-YnI+DQomZ3Q7wqAgwqBzdGF0aWMgaW50ICgqY29uZF9zaWduYWwpKHB0aHJlYWRfY29uZF90ICop
-O8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIDxi
-cj4NCiZndDvCoCDCoGludCByZXR2YWw7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqA8YnI+DQomZ3Q7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqA8YnI+DQomZ3Q7wqAgwqBpZiAoIWNv
-bmRfc2lnbmFsKSB7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqA8YnI+DQomZ3Q7
-wqAgwqAgwqBjb25kX3NpZ25hbCA9IGRsc3ltKFJUTERfTkVYVCwgJnF1b3Q7cHRocmVhZF9jb25k
-X3NpZ25hbCZxdW90Oyk7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgPGJyPg0K
-Jmd0O8KgIMKgIMKgaWYgKCFjb25kX3NpZ25hbCkge8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgPGJyPg0KJmd0O8KgIMKgIMKgIMKgaWYgKHRocmVhZF9pbl90cmFjZSkge8KgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIDxicj4NCiZndDvCoCDCoCDCoCDCoCDCoGFib3J0KCk7wqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgPGJyPg0KJmd0O8KgIMKgIMKgIMKgfcKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgPGJy
-Pg0KJmd0O8KgIMKgIMKgIMKgZnByaW50ZihzdGRlcnIsICZxdW90O3VuYWJsZSB0byBpbml0aWFs
-aXplIHB0aHJlYWQgd3JhcHBlciBsaWJyYXJ5LlxuJnF1b3Q7KTvCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoDxicj4N
-CiZndDvCoCDCoCDCoCDCoHJldHVybiBFSU5WQUw7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgPGJyPg0KJmd0O8KgIMKgIMKgfcKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgPGJyPg0KJmd0O8KgIMKgfcKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgPGJyPg0K
-Jmd0O8KgIMKgaWYgKHRocmVhZF9pbl90cmFjZSkge8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIDxicj4NCiZndDvCoCDCoCDCoHJldHVybiBjb25kX3NpZ25hbChjb25kaXRpb24pO8KgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIDxicj4NCiZndDvCoCDCoH3CoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoDxicj4NCiZndDvCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoDxicj4N
-CiZndDvCoCDCoHRocmVhZF9pbl90cmFjZSA9IDE7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgPGJyPg0KJmd0O8KgIMKgdHJhY2Vwb2ludChsdHRuZ191c3RfcHRocmVhZCwgcHRocmVh
-ZF9jb25kX3NpZ25hbF9iZWdpbiwgY29uZGl0aW9uLMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgPGJyPg0K
-Jmd0O8KgIMKgIMKgTFRUTkdfVVNUX0NBTExFUl9JUCgpKTvCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoDxicj4NCiZndDvCoCDCoHJldHZhbCA9IGNvbmRfc2lnbmFsKGNvbmRpdGlvbik7wqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgPGJyPg0KJmd0O8KgIMKgdHJhY2Vwb2ludChsdHRuZ191c3RfcHRocmVhZCwgcHRo
-cmVhZF9jb25kX3NpZ25hbF9lbmQsIGNvbmRpdGlvbizCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoDxi
-cj4NCiZndDvCoCDCoCDCoExUVE5HX1VTVF9DQUxMRVJfSVAoKSk7wqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqA8YnI+DQomZ3Q7wqAgwqB0aHJlYWRfaW5fdHJhY2UgPSAwO8KgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIDxicj4NCiZndDvCoCDCoHJldHVybiByZXR2YWw7wqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgPGJyPg0KJmd0OyB9wqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqA8YnI+
-DQomZ3Q7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqA8YnI+DQomZ3Q7IGludCBwdGhyZWFkX2NvbmRfYnJvYWRjYXN0KHB0
-aHJlYWQ8d2JyPl9jb25kX3QgKmNvbmRpdGlvbinCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoDxicj4NCiZndDsge8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgPGJyPg0KJmd0O8KgIMKgc3RhdGlj
-IGludCAoKmNvbmRfYnJvYWRjYXN0KShwdGhyZWFkX2NvbmQ8d2JyPl90ICopO8KgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgPGJyPg0KJmd0O8KgIMKgaW50
-IHJldHZhbDvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoDxi
-cj4NCiZndDvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoDxicj4NCiZndDvCoCDCoGlmICghY29uZF9icm9hZGNhc3QpIHvC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCA8YnI+DQomZ3Q7wqAgwqAgwqBjb25kX2Jyb2Fk
-Y2FzdCA9IGRsc3ltKFJUTERfTkVYVCwgJnF1b3Q7cHRocmVhZF9jb25kX2Jyb2FkY2FzdCZxdW90
-Oyk7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgPGJyPg0KJmd0O8KgIMKgIMKgaWYgKCFjb25k
-X2Jyb2FkY2FzdCkge8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIDxicj4NCiZndDvCoCDCoCDC
-oCDCoGlmICh0aHJlYWRfaW5fdHJhY2UpIHvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCA8YnI+DQom
-Z3Q7wqAgwqAgwqAgwqAgwqBhYm9ydCgpO8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIDxicj4NCiZndDvCoCDCoCDCoCDCoH3CoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoDxicj4NCiZndDvCoCDCoCDCoCDCoGZwcmlu
-dGYoc3RkZXJyLCAmcXVvdDt1bmFibGUgdG8gaW5pdGlhbGl6ZSBwdGhyZWFkIHdyYXBwZXIgbGli
-cmFyeS5cbiZxdW90Oyk7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqA8YnI+DQomZ3Q7wqAgwqAgwqAgwqByZXR1cm4g
-RUlOVkFMO8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIDxicj4NCiZndDvCoCDC
-oCDCoH3CoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoDxicj4NCiZndDvCoCDCoH3CoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoDxicj4NCiZndDvCoCDCoGlmICh0aHJlYWRfaW5f
-dHJhY2UpIHvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCA8YnI+DQomZ3Q7wqAgwqAgwqBy
-ZXR1cm4gY29uZF9icm9hZGNhc3QoY29uZGl0aW9uKTvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoDxicj4NCiZndDvCoCDC
-oH3CoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoDxicj4NCiZndDvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoDxicj4NCiZndDvCoCDCoHRocmVhZF9pbl90cmFj
-ZSA9IDE7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgPGJyPg0KJmd0O8KgIMKgdHJh
-Y2Vwb2ludChsdHRuZ191c3RfcHRocmVhZCwgcHRocmVhZF9jb25kX2Jyb2FkY2FzdF9iZWdpbiwg
-Y29uZGl0aW9uLMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIDxicj4NCiZndDvCoCDCoCDCoExUVE5HX1VTVF9DQUxM
-RVJfSVAoKSk7wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
-wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqA8YnI+DQomZ3Q7wqAgwqByZXR2YWwg
-PSBjb25kX2Jyb2FkY2FzdChjb25kaXRpb24pO8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgPGJyPg0KJmd0O8KgIMKgdHJh
-Y2Vwb2ludChsdHRuZ191c3RfcHRocmVhZCwgcHRocmVhZF9jb25kX2Jyb2FkY2FzdF9lbmQsIGNv
-bmRpdGlvbizCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCA8YnI+DQomZ3Q7wqAgwqAgwqBMVFROR19VU1RfQ0FM
-TEVSX0lQKCkpO8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgPGJyPg0KJmd0O8KgIMKgdGhyZWFk
-X2luX3RyYWNlID0gMDvCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
-oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCA8YnI+DQomZ3Q7
-wqAgwqByZXR1cm4gcmV0dmFsO8KgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKg
-IMKgIDxicj4NCiZndDsgfcKgIMKgIMKgPGJyPg0KPGJyPg0KPC9kaXY+PC9kaXY+Jmd0OyBfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX188d2JyPl9fX19fX19fX19fX19fX19fPGJyPg0KJmd0
-OyBsdHRuZy1kZXYgbWFpbGluZyBsaXN0PGJyPg0KJmd0OyA8YSBocmVmPSJtYWlsdG86bHR0bmct
-ZGV2QGxpc3RzLmx0dG5nLm9yZyIgdGFyZ2V0PSJfYmxhbmsiPmx0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmc8L2E+PGJyPg0KJmd0OyA8YSBocmVmPSJodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2kt
-YmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2IiByZWw9Im5vcmVmZXJyZXIiIHRhcmdldD0i
-X2JsYW5rIj5odHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmk8d2JyPm4vbWFpbG1hbi9saXN0
-aW5mby9sdHRuZy1kZXY8L2E+PGJyPg0KPHNwYW4gY2xhc3M9Im1fLTU1Njk5NzA1NTA2NjY0MDY1
-MjBIT0VuWmIiPjxmb250IGNvbG9yPSIjODg4ODg4Ij48YnI+DQo8YnI+DQotLSA8YnI+DQpKb25h
-dGhhbiBSYWpvdHRlLUp1bGllbjxicj4NCkVmZmljaU9TPGJyPg0KPC9mb250Pjwvc3Bhbj48L2Js
-b2NrcXVvdGU+PC9kaXY+PGJyPjwvZGl2PjwvZGl2PjwvZGl2Pg0KPC9ibG9ja3F1b3RlPjwvZGl2
-Pjxicj48L2Rpdj4NCg==
---000000000000aa58b5056d592761--
+<div dir=3D"ltr"><br><div class=3D"gmail_extra"><br><div class=3D"gmail_quo=
+te">On 29 May 2018 at 10:32, Lo=C3=AFc Gelle <span dir=3D"ltr">&lt;<a href=
+=3D"mailto:loic.gelle@polymtl.ca" target=3D"_blank">loic.gelle@polymtl.ca</=
+a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0=
+ 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><span class=3D""><bl=
+ockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #=
+ccc solid;padding-left:1ex">
+I don&#39;t understand what you mean by &quot;not sustainable&quot;.<br>
+</blockquote>
+<br></span>
+Not something you can keep in your codebase forever.<span class=3D""><br></=
+span></blockquote><br></div><div class=3D"gmail_quote">I think we&#39;re ta=
+lking past each other on this point. Beyond being &quot;not elegant&quot;, =
+I am not aware of Go dropping the support for calling C code.</div><div cla=
+ss=3D"gmail_quote"><br></div><div class=3D"gmail_quote">I am not seeing how=
+ this isn&#39;t sustainable in the literal sense.<br><div>=C2=A0</div><bloc=
+kquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #cc=
+c solid;padding-left:1ex"><span class=3D"">
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+It really depends on who does it I would guess. It&#39;s very probably a co=
+uple<br>
+of months to get something that is bullet-proof and mergeable.<br>
+</blockquote>
+<br></span>
+Is it on the roadmap for a future version of LTTng?<span class=3D""><br></s=
+pan></blockquote><div><br></div><div>It&#39;s something we would like to su=
+pport, but it isn&#39;t on the roadmap in the short term, at least. This is=
+ not to say it can&#39;t be worked on.</div><div><br></div><div>J=C3=A9r=C3=
+=A9mie<br></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D=
+"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex"><span class=
+=3D"">
+<br>
+J=C3=A9r=C3=A9mie Galarneau &lt;<a href=3D"mailto:jeremie.galarneau@efficio=
+s.com" target=3D"_blank">jeremie.galarneau@efficios.co<wbr>m</a>&gt; a =C3=
+=A9crit=C2=A0:<br>
+<br>
+</span><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-=
+left:1px #ccc solid;padding-left:1ex"><span class=3D"">
+On 29 May 2018 at 09:47, Lo=C3=AFc Gelle &lt;<a href=3D"mailto:loic.gelle@p=
+olymtl.ca" target=3D"_blank">loic.gelle@polymtl.ca</a>&gt; wrote:<br>
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+I agree that integrating C code into a Go codebase is somewhat inelegant.<b=
+r>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+<br>
+</blockquote>
+<br>
+Not only that, but it&#39;s not sustainable. It is more a hack than a featu=
+re.<br>
+<br>
+</blockquote>
+<br>
+<br>
+<br>
+</span><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-=
+left:1px #ccc solid;padding-left:1ex">
+<br><span class=3D"">
+However, I&#39;m not sure what you mean by &quot;implementation issues that=
+ are<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+specific to the language itself&quot;.<br>
+<br>
+</blockquote>
+<br>
+I mean that if you put static calls to C tracepoints from a Go program,<br>
+you always have a function call (and the ~50ns overhead) triggered each<br>
+time you hit the tracepoint, whether the tracepoint is actually enabled or<=
+br>
+not. So basically you can&#39;t count on the compiler (specific to the<br>
+language) to do clever branch prediction for you, which reduces the<br>
+interest of instrumenting your code.<br>
+<br>
+</span></blockquote><span class=3D"">
+<br>
+In the case of the first solution, note that the agent tracks which events<=
+br>
+are enabled or not. In that sense, the check is performed within the Go<br>
+code, as is currently done for Python and Java.<br>
+<br>
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+<br>
+I like the third solution that you propose. I think that the first one is<b=
+r>
+definitely not ideal and that the second one is too much work and<br>
+maintaining. How much time do you estimate is necessary for the development=
+<br>
+of the third solution?<br>
+<br>
+</blockquote>
+<br>
+<br>
+<br>
+</span><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-=
+left:1px #ccc solid;padding-left:1ex">
+<br><div><div class=3D"h5">
+By the way, I am currently working on instrumenting the Go runtime to<br>
+capture information on the goroutines. I am using dyntrace (<br>
+<a href=3D"https://github.com/charpercyr/dyntrace" rel=3D"noreferrer" targe=
+t=3D"_blank">https://github.com/charpercyr/<wbr>dyntrace</a>) for that, whi=
+ch kind of works but<br>
+is really hacky.<br>
+<br>
+</div></div></blockquote><div><div class=3D"h5">
+<br>
+That sounds great. What kind of information are you capturing?<br>
+<br>
+Thanks,<br>
+J=C3=A9r=C3=A9mie<br>
+<br>
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+<br>
+J=C3=A9r=C3=A9mie Galarneau &lt;<a href=3D"mailto:jeremie.galarneau@efficio=
+s.com" target=3D"_blank">jeremie.galarneau@efficios.co<wbr>m</a>&gt; a =C3=
+=A9crit :<br>
+<br>
+On 28 May 2018 at 10:30, Lo=C3=AFc Gelle &lt;<a href=3D"mailto:loic.gelle@p=
+olymtl.ca" target=3D"_blank">loic.gelle@polymtl.ca</a>&gt; wrote:<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+<br>
+Hi Jeremie,<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+<br>
+Thanks for your answer. I roughly estimated the overhead of calling an<br>
+empty C function (passing two integer arguments) from Go to 50ns per<br>
+call.<br>
+Maybe not a big deal for a lot of use cases, but more problematic if you<br=
+>
+want to trace performance-critical parts of Go like its runtime itself.<br>
+The<br>
+overhead could even be bigger when it involves passing strings or arrays<br=
+>
+that have different memory layouts in Golang and C. What was the overhead<b=
+r>
+that you observed for Python and Java?<br>
+<br>
+<br>
+</blockquote>
+50ns per call doesn&#39;t sound too bad honestly.<br>
+<br>
+You have to ask yourself if you could get within 50ns of lttng-ust&#39;s<br=
+>
+performance with a custom ring buffer implemented in Go.<br>
+<br>
+To use some very rough numbers, lttng-ust for that payload, takes around<br=
+>
+~250ns per event. With Mathieu&#39;s work on restartable sequence, that num=
+ber<br>
+will be shaved off quite a bit (by half, if I remember correctly), and I&#3=
+9;m<br>
+not sure you&#39;ll be able to use that kind of mechanism from Go code.<br>
+<br>
+I don&#39;t have numbers on hand for Python and Java. In both cases, we are=
+<br>
+hooking into logging frameworks so the overhead of calling into C code<br>
+probably pales in comparison to the time spent formatting strings.<br>
+That&#39;s another problem in using the current &quot;agent&quot; mechanism=
+; it really<br>
+only accommodates a very specific tracepoint signature that takes a string<=
+br>
+payload.<br>
+<br>
+<br>
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+From what I understand, it will always be a problem to have agents for<br>
+languages different than C, especially if you want to keep relying on<br>
+existing C code. Even if the sessiond part is independant from the agent<br=
+>
+itself, there are tons of implementation issues that are specific to the<br=
+>
+language itself. The problem with Go is that calling C functions is<br>
+really<br>
+a hack that does not integrate well with the build system that was<br>
+designed<br>
+for Go.<br>
+<br>
+<br>
+</blockquote>
+<br>
+The solutions I see:<br>
+<br>
+1) Replicate the current &quot;agent&quot; scheme and serialize all Go even=
+ts to<br>
+strings<br>
+<br>
+Not ideal as you lose the events&#39; typing, you have to serialize to stri=
+ngs<br>
+on the fast path, and you can hardly filter on event payloads.<br>
+<br>
+2) Write a native Go ring-buffer that can be consumed by LTTng<br>
+<br>
+In essence, all the tracing would happen in Go. Events would be serialized<=
+br>
+by Go code and the Go &quot;agent&quot; would produce the CTF metadata that=
+<br>
+describes<br>
+their layout.<br>
+<br>
+From an integration standpoint, that&#39;s probably the most elegant soluti=
+on<br>
+as you have no hard dependency on native code in your go projects.<br>
+However,<br>
+it&#39;s a _lot_ of work.<br>
+<br>
+First, you have to re-implement a ring-buffer that needs to perform within<=
+br>
+50ns of lttng-ust&#39;s ring-buffer to be useful. You also need to port the=
+<br>
+event filtering bytecode interpreter to Go.<br>
+Then, we need to find a way to consume that ring-buffer&#39;s content from =
+a<br>
+form of consumer daemon within lttng-tools.<br>
+<br>
+3) Add an lttng-ust API to allow dynamic event declaration<br>
+<br>
+This is something we have been considering for a while.<br>
+<br>
+Basically, we would like to introduce an API that allows applications to<br=
+>
+dynamically declare tracepoints.<br>
+Then, those events would be serialized from Go, but the ring-buffer logic<b=
+r>
+would remain in C.<br>
+<br>
+On each event, we would:<br>
+=C2=A0 - Obtain a memory area from lttng-ust (reserve phase, C code called =
+from<br>
+Go)<br>
+=C2=A0 - Write the event&#39;s content to that area (from Go code)<br>
+=C2=A0 - Commit the event (C code called from Go)<br>
+<br>
+With this, you don&#39;t have to manually declare tracepoints and integrate=
+<br>
+them into a build system to generate providers; the Go application just<br>
+needs to link to lttng-ust at runtime.<br>
+It&#39;s not a perfect solution, but it seems like an interesting compromis=
+e.<br>
+<br>
+<br>
+What do you think?<br>
+<br>
+J=C3=A9r=C3=A9mie<br>
+<br>
+<br>
+<br>
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+Did I provide more context?<br>
+<br>
+Cheers,<br>
+Lo=C3=AFc.<br>
+<br>
+J=C3=A9r=C3=A9mie Galarneau &lt;<a href=3D"mailto:jeremie.galarneau@efficio=
+s.com" target=3D"_blank">jeremie.galarneau@efficios.co<wbr>m</a>&gt; a =C3=
+=A9crit :<br>
+<br>
+On 4 May 2018 at 06:03, Lo=C3=AFc Gelle &lt;<a href=3D"mailto:loic.gelle@po=
+lymtl.ca" target=3D"_blank">loic.gelle@polymtl.ca</a>&gt; wrote:<br>
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+<br>
+Hi,<br>
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+<br>
+There has been a previous discussion on the mailing list about porting<br>
+LTTng to Golang, about a year ago: <a href=3D"https://lists.lttng.org/" rel=
+=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/</a><br>
+pipermail/lttng-dev/2017-June/<wbr>027203.html . This new topic is to<br>
+discuss<br>
+<br>
+more precisely about implementation possibilities.<br>
+<br>
+Currently, one has to use the the C UST agent from LTTng in order to<br>
+instrument Golang programs, and to compile the whole thing using custom<br>
+Makefiles and cgo. Here is a recent example that I wrote:<br>
+<a href=3D"https://github.com/loicgelle/jaeger-go-lttng-instr" rel=3D"noref=
+errer" target=3D"_blank">https://github.com/loicgelle/j<wbr>aeger-go-lttng-=
+instr</a><br>
+<br>
+As you can guess, there are a low of drawbacks in that approach. It is<br>
+actually a hack and cannot be integrated into more complex Golang<br>
+program<br>
+that use a more complex build process (e.g. the Golang runtime itself),<br>
+because of the compiler instructions that you have to include at the<br>
+top<br>
+of<br>
+the Golang files. There is also a big concern about the performance of<br>
+this<br>
+solution, as calling a C function from Go requires to do a full context<br>
+switch on the stack, because the calling conventions in C and Golang<br>
+are<br>
+different.<br>
+<br>
+<br>
+I think a more integrated and performant solution is needed. We can=E2=80=
+=99t<br>
+</blockquote>
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+really ignore a language such as Golang that is now widely adopted for<br>
+cloud applications. LTTng is really the best solution out there in<br>
+terms<br>
+of<br>
+overhead per tracepoint, and could benefit from being made available to<br>
+such a large community. My question to the experts on this mailing<br>
+list:<br>
+how much would it take to write a Golang agent for LTTng?<br>
+<br>
+<br>
+<br>
+</blockquote>
+Hi Lo=C3=AFc,<br>
+<br>
+Without having performed any measurements myself, it does seem like<br>
+calling<br>
+C from Go is very expensive. In that context, I can see that LTTng would<br=
+>
+probably lose its performance advantage over any native Go solution.<br>
+However, it wouldn&#39;t hurt to measure the impact and see if it really is=
+<br>
+a<br>
+deal breaker.<br>
+<br>
+We faced the same dilemma when implementing the Java and Python support<br>
+in<br>
+lttng-ust. In those cases, we ended up calling C code, with the<br>
+performance<br>
+penalties it implies. The correlation with other applications&#39; and the<=
+br>
+kernel&#39;s events, along with the rest of LTTng&#39;s features, provided<=
+br>
+enough<br>
+value to make that solution worthwhile.<br>
+<br>
+There aren&#39;t a ton of solutions if we can&#39;t call existing C code. W=
+e<br>
+basically have to reimplement a ring-buffer and the setup/communication<br>
+infrastructure to interact with the lttng-sessiond. The communication<br>
+with<br>
+the session daemon is not a big concern as the protocol is fairly<br>
+straightforward.<br>
+<br>
+The &quot;hairy&quot; part is that lttng-ust and lttng-consumerd use a shar=
+ed<br>
+memory<br>
+map to produce and consume the tracing buffers. This means that all<br>
+changes<br>
+to that memory layout would need to be replicated in the Go tracer,<br>
+making<br>
+future evolution more difficult. Also, I don&#39;t know how easy it would b=
+e<br>
+to<br>
+synchronize C and Go applications interacting in a shared memory map<br>
+given<br>
+those languages have different memory models. My knowledge of Go doesn&#39;=
+t<br>
+go<br>
+that far.<br>
+<br>
+A more viable solution could be to introduce a Go-native consumer daemon<br=
+>
+implementing its own synchronization with Go applications. This way,<br>
+that<br>
+implementation could evolve on its own and could also start with a<br>
+simpler<br>
+ring buffer than lttng-ust&#39;s.<br>
+<br>
+Still, it is not a small undertaking and it basically means maintaining<br>
+a<br>
+third tracer implementation.<br>
+<br>
+<br>
+What do you think?<br>
+<br>
+Thanks!<br>
+J=C3=A9r=C3=A9mie<br>
+<br>
+<br>
+Cheers,<br>
+<br>
+<blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1p=
+x #ccc solid;padding-left:1ex">
+Lo=C3=AFc.<br>
+<br>
+______________________________<wbr>_________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
+sts.lttng.org</a><br>
+<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
+=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bi<wbr>n/mail=
+man/listinfo/lttng-dev</a><br>
+<br>
+<br>
+<br>
+<br>
+</blockquote>
+--<br>
+J=C3=A9r=C3=A9mie Galarneau<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">ht=
+tp://www.efficios.com</a><br>
+<br>
+<br>
+</blockquote>
+<br>
+<br>
+<br>
+<br>
+</blockquote>
+<br>
+--<br>
+J=C3=A9r=C3=A9mie Galarneau<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">ht=
+tp://www.efficios.com</a><br>
+<br>
+</blockquote>
+<br>
+<br>
+<br>
+<br>
+</blockquote>
+<br>
+<br>
+--<br>
+J=C3=A9r=C3=A9mie Galarneau<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">ht=
+tp://www.efficios.com</a><br>
+</div></div></blockquote>
+<br>
+<br>
+<br>
+</blockquote></div><br><br clear=3D"all"><br>-- <br><div class=3D"gmail_sig=
+nature" data-smartmail=3D"gmail_signature">J=C3=A9r=C3=A9mie Galarneau<br>E=
+fficiOS Inc.<br><a href=3D"http://www.efficios.com" target=3D"_blank">http:=
+//www.efficios.com</a></div>
+</div></div>
 
---===============7003345675335839388==
+--00000000000061e6d8056d5aa2e4--
+
+--===============5249604981487451576==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -948,4 +939,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============7003345675335839388==--
+--===============5249604981487451576==--
