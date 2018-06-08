@@ -1,19 +1,23 @@
-From: BADEUIL Thierry <thierry.badeuil@thalesgroup.com>
-Subject: Re: Probleme with live session on LTTng 2.7.0
-Date: Fri, 8 Jun 2018 16:50:20 +0200
-Message-ID: <2588C50AE11CCC4B945875227E501190021891C9BA08__4721.58179986781$1528469316$gmane$org@THSONEA01CMS04P.one.grp>
-References: <2588C50AE11CCC4B945875227E501190021891C9B82F@THSONEA01CMS04P.one.grp>
- <614894989.8932.1528467044925.JavaMail.zimbra@efficios.com>
- <671747492.9056.1528468064761.JavaMail.zimbra@efficios.com>
+From: fmarianirinel <fmarianirinel@gmail.com>
+Subject: Re: Wrong procname if tracepoint is used before fork
+Date: Fri, 8 Jun 2018 19:18:16 +0300
+Message-ID: <407c7234-559e-381b-ce85-60fc9958e47a__35261.3505594947$1528471068$gmane$org@gmail.com>
+References: <884129787.1408018.1523965476762.ref@mail.yahoo.com>
+ <884129787.1408018.1523965476762@mail.yahoo.com>
+ <20180417151639.GA30020@joraj-alpa>
+Reply-To: 20180417151639.GA30020@joraj-alpa
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1636146228975074189=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from thsbbfxrt02p.thalesgroup.com (thsbbfxrt02p.thalesgroup.com
- [192.93.158.29])
- by lists.lttng.org (Postfix) with ESMTPS id 412QLr5VHYz17p8
- for <lttng-dev@lists.lttng.org>; Fri,  8 Jun 2018 10:50:28 -0400 (EDT)
-In-Reply-To: <671747492.9056.1528468064761.JavaMail.zimbra@efficios.com>
-Content-Language: fr-FR
+Received: from mail-wr0-x243.google.com (mail-wr0-x243.google.com
+ [IPv6:2a00:1450:400c:c0c::243])
+ by lists.lttng.org (Postfix) with ESMTPS id 412R0d1rCRz17th
+ for <lttng-dev@lists.lttng.org>; Fri,  8 Jun 2018 11:19:45 -0400 (EDT)
+Received: by mail-wr0-x243.google.com with SMTP id x4-v6so5637961wro.11
+ for <lttng-dev@lists.lttng.org>; Fri, 08 Jun 2018 08:19:45 -0700 (PDT)
+In-Reply-To: <20180417151639.GA30020@joraj-alpa>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,314 +27,72 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: jonathan.rajotte-julien@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1636146228975074189==
-Content-Language: fr-FR
-Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
-	micalg=SHA1; boundary="----=_NextPart_000_029C_01D3FF48.C746CAF0"
-
-------=_NextPart_000_029C_01D3FF48.C746CAF0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hello,
-
-I plan to consume trace events as soon as possible as they are produced =
-using BabelTrace. I do NOT want to start analysis after all tracing is =
-done.
-
-So ?
-
-Cheers
-
-Thierry BADEUIL
-THALES COMMUNICATIONS
-T : +33 1 46 133 591
-(  : +33 6 85 51 28 16
-  : thierry.badeuil@thalesgroup.com
-
------Message d'origine-----
-De : Jonathan Rajotte-Julien =
-[mailto:jonathan.rajotte-julien@efficios.com]=20
-Envoy=C3=A9 : vendredi 8 juin 2018 16:28
-=C3=80 : BADEUIL Thierry
-Cc : lttng-dev
-Objet : Re: [lttng-dev] Probleme with live session on LTTng 2.7.0
-
-Hi Thierry,
-
-I also forgot to mention that there might some confusion on your end =
-regarding the "live" mode.
-
-LTTng have two "main" network streaming mode, normal streaming and live =
-streaming.
-
-The normal streaming is useful in scenario where you perform analysis =
-after all tracing is done.=20
-This is the mode you are currently using in your example.
-
-The "live" mode is mostly used when you are interesting in consuming =
-trace events as soon as possible as they are produced using Babeltrace.
-
-Which mode do you plan on using?
-
-Cheers
-
-
------ Original Message -----
-> From: "Jonathan Rajotte-Julien" <jonathan.rajotte-julien@efficios.com>
-> To: "BADEUIL Thierry" <thierry.badeuil@thalesgroup.com>
-> Cc: "lttng-dev" <lttng-dev@lists.lttng.org>
-> Sent: Friday, June 8, 2018 10:10:44 AM
-> Subject: Re: [lttng-dev] Probleme with live session on LTTng 2.7.0
-
-> Hi Thierry,
->=20
-> ----- Original Message -----
->> From: "BADEUIL Thierry" <thierry.badeuil@thalesgroup.com>
->> To: lttng-dev@lists.lttng.org
->> Sent: Friday, June 8, 2018 9:45:44 AM
->> Subject: [lttng-dev] Probleme with live session on LTTng 2.7.0
->=20
->> Dear all,
->>=20
->>=20
->>=20
->> I have problem with LTTng in live mode : I would like to send trace =
-with TCP
->> from my target to a Linux Computer. I will use babletrace on the =
-Linux
->> Computer.
->=20
-> LTTng 2.7 is not officially supported by the opensource community =
-anymore.
-> Please upgrade if possible.
->=20
->>=20
->>=20
->>=20
->> Here is what I try to do on my target with LTTng 2.7.0 :
->>=20
->> o   Lttng create test =E2=80=93U net://192.168.0.1:5151
->=20
-> Did you start a lttng-relayd process on the 192.168.0.1 host? How was =
-it
-> started?
->=20
->>=20
->> o   Lttng enable-event =E2=80=93k sched_switch
->>=20
->> o   I got an error : =E2=80=9CError: sched_switch: Unable to connect =
-to lttng-relayd
->> (channel channel0, session test)=E2=80=9D
->>=20
->>=20
->>=20
->> Then I tried :
->>=20
->> o   Lttng-relayd =E2=80=93d
->=20
-> Was this done on the same machine where you run "lttng create" or on =
-the
-> 192.168.0.1 host?
->=20
->>=20
->> o   Lttng create test =E2=80=93U net://192.168.0.1:5151
->=20
-> 5151 is not the default port for lttng-relayd. Unless you specified =
-custom port
-> at lttng-relayd start, the default port are 5342:5343:5344.
-> See the lttng-relayd man page for more information.
->=20
->>=20
->> o   Lttng enable-event =E2=80=93k sched_switch
->>=20
->> o   I got the same error
->>=20
->>=20
->>=20
->> The IP address of the Linux Computer is 192.168.0.1 and the port 5151 =
-is
->> open.
->>=20
->>=20
->>=20
->> Why ?
->>=20
->>=20
->>=20
->> Thierry BADEUIL
->>=20
->> THALES COMMUNICATIONS
->>=20
->> ( : +33 1 46 133 591
->>=20
->> =C3=88  : +33 6 85 51 28 16
->>=20
->> * :  <mailto:thierry.badeuil@fr.thalesgroup.com>
->> thierry.badeuil@thalesgroup.com
->>=20
->>=20
->>=20
->>=20
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-------=_NextPart_000_029C_01D3FF48.C746CAF0
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-
-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
-kiaJk/IsZAEBEwhUMDAwNjI1NTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALGcevtX
-o4LWyOCysyfnr1OeF3kS7I+l+1wC24jD0lRwJKCKB7lBjGWzI8BuJTJebyAYrggY29bHU1sXmYzf
-VLUQgD9pUXEH5jRBP2z2qxg2+d66KL9+sa+XvXlUquMgxT/00ZDBIbTo2tz+f/cJCX9DaUSNLPt6
-pOU7o4If2AFle527O8z8xgpXvzfdEi0W8TfxXfdxMBfs6EAZaUJnM/c4gIGkabIqNIH6gxo7xfhq
-cBR7OKw1oe6dGBf6AtR2qBdtxrli/i0/phHb4gf3Da2Rvw/1st2oHFn7H4aHx0GJxqFu9ydDOwfF
-E2yVqq/ITm1vxVBp7tgoHpxnhfwvPgECAwEAAaOCAhEwggINMB0GA1UdDgQWBBQjatJpG1HNROhT
-4KJE3mpK07fnQzAfBgNVHSMEGDAWgBRFkJX/mV3SB42zEvbt8ig0klvbgTCB2gYDVR0gBIHSMIHP
-MIHMBgcqgXoBbAEDMIHAMDsGCCsGAQUFBwIBFi9odHRwOi8vd3d3LnRoYWxlc2dyb3VwLmNvbS9j
-ZXJ0aWZpY2F0aW9uX3BvbGljeTCBgAYIKwYBBQUHAgIwdBpyTW9yZSBpbmZvcm1hdGlvbiBvbiB0
-aGUgVGhhbGVzIENlcnRpZmljYXRlIFBvbGljeSBjYW4gYmUgZm91bmQgYXQgaHR0cDovL3d3dy50
-aGFsZXNncm91cC5jb20vY2VydGlmaWNhdGlvbl9wb2xpY3kgMB8GA1UdJQQYMBYGCCsGAQUFBwME
-BgorBgEEAYI3CgMBMA4GA1UdDwEB/wQEAwIGwDAqBgNVHREEIzAhgR90aGllcnJ5LmJhZGV1aWxA
-dGhhbGVzZ3JvdXAuY29tMEIGA1UdHwQ7MDkwN6A1oDOGMWh0dHA6Ly9jcmwudGhhbGVzZ3JvdXAu
-Y29tL1RoYWxlc0ludGVybmFsQ0FWMy5jcmwwTQYIKwYBBQUHAQEEQTA/MD0GCCsGAQUFBzAChjFo
-dHRwOi8vY3JsLnRoYWxlc2dyb3VwLmNvbS9UaGFsZXNJbnRlcm5hbENBVjMucDdjMA0GCSqGSIb3
-DQEBCwUAA4ICAQCL5rz1Rb46zacF499WZCl1tI9Qg3zhc3FbOuTR/fUNh5DfLBfbZo4U8Dbmw1HH
-sldB3Aol4hjBcfAXu/hVlNBXCJ0LEVIEN5vNrKAlmg0qJOJF/z8FOCWQX0KxHIyJOWwLgFTy4sy0
-pGtTuIB8hcZe9O/sNDPCeJB3NPZFTnKncRpneDFXgo0Hhjpc1e9HsYFTiXJvSK9+MyKPOwBlckwe
-UJ+4K8t02eOGrhHbqh3iZv4XWPLfwjLlNkXTwJV6ERjKq84XflSsRxM7KKfu8+aPLJVsOvWI9kD/
-gN9Vt+fou0BKJJ7lct21Wd1Nb5ELuqvyAUe/FiheSC/mUup8S8N9/1GS5iDOQgdLjiUQcM+B9oXC
-+ZFkKPFhPAz+4LCoWoTiJ6KQ1SU6UWT+eyidA8N3gIEcPke+JtqMVW993IEiSOuRHDXeV8hEdIzu
-RDvkZX1e6HUlUXeBYhTkq0jeHIOJbs8R9TuKzB+lpykpJuxFVOUu8W21fws4YXXJrzXCEBw6JEAN
-ZYyqcyatAZjIRJVMTUQdSjiOlKo9HGADBDfVbuEhELTbLsK+JfZD7paVALae/ruuTf8O+DpnIJ5T
-qlgFfAqYTQEuvwytUaNugzJ3Dgu+by0Vf4sHTCIvCPrWaaX5kFFN7kSaYcZ4f2DIgkENoOxRhGV2
-j56AEMxRPhhZlTCCBnswggRjoAMCAQICEhEhe8yEwSRlRHEmlUOl5JEq4DANBgkqhkiG9w0BAQsF
-ADBTMQswCQYDVQQGEwJGUjEPMA0GA1UECgwGVGhhbGVzMRcwFQYDVQQLDA4wMDAyIDU1MjA1OTAy
-NDEaMBgGA1UEAwwRVGhhbGVzIFJvb3QgQ0EgVjMwHhcNMTMxMTI2MDAwMDAwWhcNMjMxMTI2MDAw
-MDAwWjBXMQswCQYDVQQGEwJGUjEPMA0GA1UECgwGVGhhbGVzMRcwFQYDVQQLDA4wMDAyIDU1MjA1
-OTAyNDEeMBwGA1UEAwwVVGhhbGVzIEludGVybmFsIENBIFYzMIICIjANBgkqhkiG9w0BAQEFAAOC
-Ag8AMIICCgKCAgEA0rkMp5a0Ce4DJ+bUrZ3vpMKHymqvp96yPqWHzvKrqusI2ApwVZWW/Y2gCNdA
-UyE/gUN7BG+LXf5yyYhKRJO15OjwUVvpTUlIsR15RzHMnpFlgBIKHRV2OFOvIsIu456cFIIRU9Vq
-Lf8Rvbz/d8IM4dVJoOZ3zCj06m99s0Zad2VxxTlN81Ek0J3Lkbu5aqg1E2A7Q80XwKNkkovuiAz4
-klpbqyk2rothrnsZrMnE2UuEgwRkMBQufUk2PUha1E0DjG/iy7HyGkUuGL4k5E/57h0ebeqeMYVe
-X/owek4oUeKwK+Opvi6cooJuAWfHuy6kH8OAPfbu22Vy3WCYbIfJtlKlNuEjYCWcUSHgJPg9dDYZ
-ExBgTtEaK53xqJYWQUl8k7mScjhvxj+nF9h6/FYfdNUwv9OXkBFuiERWVil64zMGmPWiiAisnVLW
-uNnc5Jk8SLvU1ham82zXPvEL8f+Lp8vsyHQHhA6eleTTqIifj7nsrgJCHih9xEtY+PI1wOOJoIUl
-y9OOAM1LPeNyKCUQQbyPwNyhg9FuN3YOyIleYYHuWTMl4cCXiwmzeASGkhQC5icEHpYKRwL+ZAmG
-WNDsY4wrQnE5i2wEH0utOKdb+gnPiP8+QpbI56pJbrXZL0rj43MmApGuRXQmVafoP4OnvdwfKBIP
-7HzhQS7O8CvSxpsCAwEAAaOCAUMwggE/MA4GA1UdDwEB/wQEAwIBBjBRBgNVHSAESjBIMEYGBFUd
-IAAwPjA8BggrBgEFBQcCARYwaHR0cDovL2NybC50aGFsZXNncm91cC5jb20vY2VydGlmaWNhdGlv
-bl9wb2xpY3kvMA8GA1UdEwEB/wQFMAMBAf8wPgYDVR0fBDcwNTAzoDGgL4YtaHR0cDovL2NybC50
-aGFsZXNncm91cC5jb20vVGhhbGVzUm9vdENBVjMuY3JsMEkGCCsGAQUFBwEBBD0wOzA5BggrBgEF
-BQcwAoYtaHR0cDovL2NybC50aGFsZXNncm91cC5jb20vVGhhbGVzUm9vdENBVjMucDdjMB0GA1Ud
-DgQWBBRFkJX/mV3SB42zEvbt8ig0klvbgTAfBgNVHSMEGDAWgBQrJxeCGWDoBEdY85KumrfqjtZ5
-lTANBgkqhkiG9w0BAQsFAAOCAgEAhYwNoWezNu5n/I64uircImuPDaGQUGqAtyLF6LtcMkYB98Kq
-ZYGdGfCUOKDI/r4NRI1F2mzbE07mlF0i35YijDVaHD+l7c2qYgg+ZHUt2tjkVMnk9goaZuixdztM
-4IzY/1Br9q2Jum4jTdi9PYdO6pKHVtcFwLrza7l0rpVU5twguhSdSWVayOtjUQD63aWVDRuUOY+d
-DQ7jAGVcB2ZdkN+OxjbfpV/Xm+6hdEO5uE3ghZOzS/HQUdSc0zy9myJeOzZ9+DmpMKyPLVADgxbt
-2tOSC5ky4feLE3cOagJ0MIk93xWkajGo5BXqbqVl/gCXgrui4SRvUIUPQc8XHW1+usMzmiotDKGn
-pPnQMI0BwBsQFCZxMmF+rgTe2kB2/TykXWmc9JA6Gof7MKCbcN93liiOm5sAQaL5ZDZXEmH+7Xry
-N79AGWIxMqB9dbx/h6Pbp1bUtUf2htEN0S1MsE/RJtuGeYAdGn3rjidDjczoHCA9oRCZeeCXcr/W
-oYeMNCuR/n60x1JrIoDIB0p+LkvnCPtwdPv12t2QAsXk9wNYd9PuMF42Tccz0SCBZgyh16I4AHQ7
-GT3UuXBinFpVXY0MCd7pBwzMJsUizCN82jNvPnh9EewYMlxhres/AJvzu/4d5t3fLCudbW9VIBS5
-esq6HpZ1CzF27v39fHemAM5E6M4wggaGMIIEbqADAgECAgMA6PYwDQYJKoZIhvcNAQELBQAwVzEL
-MAkGA1UEBhMCRlIxDzANBgNVBAoMBlRoYWxlczEXMBUGA1UECwwOMDAwMiA1NTIwNTkwMjQxHjAc
-BgNVBAMMFVRoYWxlcyBJbnRlcm5hbCBDQSBWMzAeFw0xNDEyMDkwOTUxMDJaFw0xOTEyMDkwOTUx
-MDJaMHUxDzANBgNVBAoTBlRoYWxlczEYMBYGA1UEAxMPQkFERVVJTCBUaGllcnJ5MS4wLAYJKoZI
-hvcNAQkBFh90aGllcnJ5LmJhZGV1aWxAdGhhbGVzZ3JvdXAuY29tMRgwFgYKCZImiZPyLGQBARMI
-VDAwMDYyNTUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDXEYJPQNZD0AhY31Ma96ce
-6OuqSiHdS/34timZw7XazImdP9Dmm8KN6imyWShw9EW2ahPNKIxTIUlvddn4HW1yITI+kne58D4J
-e6z/x7D/4ijF660yyzMtxUs06XeB3qSJj2Hq8d0MM9Q/0MGtWOBtuXCI6t/1DivdWmIbdi4vYSp0
-phbehF1u0uZA3ll4peRSFX7m3I7ieJtgyTxdjiV90qR9MW7IwVea+/CDgG8G84DRl1MwoimKt2tP
-eATNpYPJNQB5IT+XL4oZJValzJauSwcbujeCWV1iiYO4khKxxV5dsuVNfUxfuXE1G+54BQfrBy8I
-pjFYYxIV+OgMjFwhAgMBAAGjggI7MIICNzAdBgNVHQ4EFgQU/5ddQuBN0xMrYVxN+gYXzl0ud2cw
-HwYDVR0jBBgwFoAURZCV/5ld0geNsxL27fIoNJJb24EwgdoGA1UdIASB0jCBzzCBzAYHKoF6AWwB
-AzCBwDA7BggrBgEFBQcCARYvaHR0cDovL3d3dy50aGFsZXNncm91cC5jb20vY2VydGlmaWNhdGlv
-bl9wb2xpY3kwgYAGCCsGAQUFBwICMHQack1vcmUgaW5mb3JtYXRpb24gb24gdGhlIFRoYWxlcyBD
-ZXJ0aWZpY2F0ZSBQb2xpY3kgY2FuIGJlIGZvdW5kIGF0IGh0dHA6Ly93d3cudGhhbGVzZ3JvdXAu
-Y29tL2NlcnRpZmljYXRpb25fcG9saWN5IDBJBgNVHSUEQjBABggrBgEFBQcDBAYKKwYBBAGCNwoD
-AQYKKwYBBAGCNwoDBAYIKwYBBQUHAwUGCCsGAQUFBwMGBggrBgEFBQcDBzAOBgNVHQ8BAf8EBAMC
-BDAwKgYDVR0RBCMwIYEfdGhpZXJyeS5iYWRldWlsQHRoYWxlc2dyb3VwLmNvbTBCBgNVHR8EOzA5
-MDegNaAzhjFodHRwOi8vY3JsLnRoYWxlc2dyb3VwLmNvbS9UaGFsZXNJbnRlcm5hbENBVjMuY3Js
-ME0GCCsGAQUFBwEBBEEwPzA9BggrBgEFBQcwAoYxaHR0cDovL2NybC50aGFsZXNncm91cC5jb20v
-VGhhbGVzSW50ZXJuYWxDQVYzLnA3YzANBgkqhkiG9w0BAQsFAAOCAgEAQwESrDlSkrBs2JOL+AZj
-FJ1OCLUYRf7BmWMyKeAuMaJtCkxF59OSuLgRFFpKk3VktQEJ0Ek6K4h9HnHh0zRR0bHnerFfz+Tz
-+XwGzaGxwj5OwHVal9vKJAO71F8pAo4iEAh3plkzvDRjoVliUMkwzp0szx6MUEEWlMo5XooW7U8B
-P55nfT/UR2oa/V3jMO2f7A0OxgE6G4S4E8BRvUmqhdVFYMqyIOFQvIsZbWxgyT91kM4+8M9ipmth
-eimPfe6DeYFWaqjk86v50UC0Ea2pVojaYkxh+AHlFN8a0rzRhdN3D4lBCTKv8/5AJRpQUCGT9Nn/
-PCS/vQFeVfdgxkcdoC6xKDvj32iiQr/bCz9uywArPmtIiGbYbYNhZBQDy8mtvz9xLWDDFFbO0rm6
-nQTWvY/w8O3xe/fbKINZwzD8Q4zhz9B/sttTUcaSJ/hOlKZxOD7Oye7VsHSZ1ejfOGhK28z5SHgc
-uSXQ5bgdv5w3thC6GfbKpcq49VJev90KC5fcdqaSXa0l8I5f+e/zRPg19Ke6pptAyM/W9Gf1GOE5
-wi31QNREhgnUOh5xhJeSvH1Yg/t+i4cfcj/lWn0orq3R0BT8y5tDGC9cyHFvPWIG7o5PhWoIcQxF
-LGuxt89SsQjFZrhVqOPYLZ1rPjA+jvF9+FFq04TxH1LdvcYqhNhTA/UxggMaMIIDFgIBATBeMFcx
-CzAJBgNVBAYTAkZSMQ8wDQYDVQQKDAZUaGFsZXMxFzAVBgNVBAsMDjAwMDIgNTUyMDU5MDI0MR4w
-HAYDVQQDDBVUaGFsZXMgSW50ZXJuYWwgQ0EgVjMCAwDo9DAJBgUrDgMCGgUAoIIBkTAYBgkqhkiG
-9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0xODA2MDgxNDUwMTZaMCMGCSqGSIb3
-DQEJBDEWBBS+QcIh3H11vUzPFm/wlZc3qPJYkzBSBgkqhkiG9w0BCQ8xRTBDMAoGCCqGSIb3DQMH
-MA4GCCqGSIb3DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUrDgMCBzANBggqhkiG9w0DAgIBKDBt
-BgkrBgEEAYI3EAQxYDBeMFcxCzAJBgNVBAYTAkZSMQ8wDQYDVQQKDAZUaGFsZXMxFzAVBgNVBAsM
-DjAwMDIgNTUyMDU5MDI0MR4wHAYDVQQDDBVUaGFsZXMgSW50ZXJuYWwgQ0EgVjMCAwDo9jBvBgsq
-hkiG9w0BCRACCzFgoF4wVzELMAkGA1UEBhMCRlIxDzANBgNVBAoMBlRoYWxlczEXMBUGA1UECwwO
-MDAwMiA1NTIwNTkwMjQxHjAcBgNVBAMMFVRoYWxlcyBJbnRlcm5hbCBDQSBWMwIDAOj2MA0GCSqG
-SIb3DQEBAQUABIIBAC2vzuEZRe8ZpFvQ0MrS1jmUO5YTIQTRZsOTXWA8OZ76olCzGXLrLpQ++dZn
-CK0ThSvjQOFS8fwPrg17PfOFvWTLJblAUlCKY7bG8KrEZmJaCS8KEFtcj42aY0fuKQoYmgCLgrx7
-4yE54CbG4V7cDzFKnqaDcj3dlq9uFDYRtkczPC/TpwsCIlvkcRPtLOApQtbWNe3VuhVqVk1jRFmT
-kRhtNrKTgkKvdI6Dk+BspsSq6JcbFMYsXCOjo6uF4KbU6ZNrcnEhrX7Xfs5Ui1rpCdbOgCw9MqRx
-Rtp750eNeZ6iu2ls6EYjS/O9/acFQMhT1iitD03e6HmBrqB+Hk9NX7UAAAAAAAA=
-
-------=_NextPart_000_029C_01D3FF48.C746CAF0--
-
---===============1636146228975074189==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============1636146228975074189==--
+SGksCgo+QmFzZWQgb24gdGhlIGNvZGUgZm91bmQgaW4gbGlibHR0bmctdXN0L2x0dG5nLWNvbnRl
+eHQtcHJvY25hbWUuYyBbMV0gb2YKPmx0dG5nLXVzdCwKPnRoZSBwcm9jbmFtZSBpcyBjYWNoZWQg
+b24gdGhlIGZpcnN0IGhpdCBhbmQgbmV2ZXIgcmVzZXRlZCBldmVuIGFmdGVyCj5mb3JrLiBUaGUK
+PmZvbGxvd2luZyBjb21tZW50IGluZGljYXRlIHRoYXQgYW4gZXhlYyBhZnRlciBmb3JrIHdpbGwg
+ImNsZWFyIiB0aGUKPmNhY2hlLiBUaGUKPmNvbW1lbnQgYWxzbyBoaW50IGFzIHRvIHdoeSB3ZSBz
+ZWUgaWRlbnRpY2FsIHZhbHVlIGZvciBwcm9jbmFtZSBldmVudAo+aWYgcHJjdGwgaXMKPnVzZWQu
+IFRoZSBtYW4gcGFnZSBvZiBsdHRuZy11c3QgYWxzbyBoaW50IHRoaXMgbGltaXRhdGlvbiBbMl0u
+Cj4KPlsxXSBodHRwczovL2dpdGh1Yi5jb20vbHR0bmcvbHR0bmctdXN0L2Jsb2IvbWFzdGVyL2xp
+Ymx0dG5nLXVzdC9sdHRuZy0KPmNvbnRleHQtcHJvY25hbWUuYwo+WzJdIGh0dHBzOi8vbHR0bmcu
+b3JnL21hbi8zL2x0dG5nLXVzdC92Mi4xMC8jZG9jLV9jb250ZXh0X2luZm9ybWF0aW9uCj5UaGUg
+Y29tbWVudDoKPgo+wqAgwqAgLyrCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoAo+wqAgwqAgwqAgKiBXZSBjYWNoZSB0aGUgcmVzdWx0IHRvIGVuc3VyZSB3ZSBkb24ndCB0
+cmlnZ2VyIGEgc3lzdGVtIGNhbGwKPmZvcsKgIMKgIMKgIMKgICogZWFjaCBldmVudC7CoCDCoCDC
+oCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDCoCDC
+oCDCoCDCoAo+wqAgwqAgwqAgwqAgwqAgwqAgKiBVcG9uIGV4ZWMsIHByb2NuYW1lIGNoYW5nZXMs
+IGJ1dCBleGVjIHRha2VzIGNhcmUgb2YKPnRocm93aW5nIGF3YXnCoCDCoCDCoCAqIHRoaXMgY2Fj
+aGVkIHZlcnNpb24uwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAK
+PsKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgICogVGhlIHByb2NuYW1lIGNhbiBhbHNv
+IGNoYW5nZSBieSBjYWxsaW5nCj5wcmN0bCgpLiBUaGUgcHJvY25hbWUgc2hvdWxkCj7CoCDCoCAq
+IGJlIHNldCBmb3IgYSB0aHJlYWQgYmVmb3JlIHRoZSBmaXJzdCBldmVudCBpcyBsb2dnZWQgd2l0
+aGluIHRoaXPCoAo+wqAgwqAgwqAgKiB0aHJlYWQuwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAK
+PsKgIMKgIMKgIMKgICovwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAg
+wqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAgwqAKPsKgIMKg
+IMKgCj5UaGUgbWFuIHBhZ2U6Cj4KPsKgIMKgIFRocmVhZCBuYW1lLCBhcyBzZXQgYnkgZXhlYygz
+KSBvciBwcmN0bCgyKS4gSXQgaXMgcmVjb21tZW5kZWQgdGhhdAo+cHJvZ3JhbXMKPsKgIMKgIHNl
+dCB0aGVpciB0aHJlYWQgbmFtZSB3aXRoIHByY3RsKDIpIGJlZm9yZSBoaXR0aW5nIHRoZSBmaXJz
+dAo+dHJhY2Vwb2ludCBmb3IKPsKgIMKgIHRoYXQgdGhyZWFkLgo+CgpDcmVhdGVkIGEgcGF0Y2gg
+d2l0aCB0aGlzIHN1Z2dlc3Rpb246CgotLS0KZGlmZiAtLWdpdCBhL2luY2x1ZGUvbHR0bmcvdXN0
+LWV2ZW50cy5oIGIvaW5jbHVkZS9sdHRuZy91c3QtZXZlbnRzLmgKaW5kZXggY2FmN2U2My4uZmIx
+ZGYxZSAxMDA2NDQKLS0tIGEvaW5jbHVkZS9sdHRuZy91c3QtZXZlbnRzLmgKKysrIGIvaW5jbHVk
+ZS9sdHRuZy91c3QtZXZlbnRzLmgKQEAgLTY3NSw2ICs2NzUsNyBAQCBpbnQgbHR0bmdfYWRkX2Nw
+dV9pZF90b19jdHgoc3RydWN0IGx0dG5nX2N0eCAqKmN0eCk7CiBpbnQgbHR0bmdfYWRkX2R5bnRl
+c3RfdG9fY3R4KHN0cnVjdCBsdHRuZ19jdHggKipjdHgpOwogdm9pZCBsdHRuZ19jb250ZXh0X3Z0
+aWRfcmVzZXQodm9pZCk7CiB2b2lkIGx0dG5nX2NvbnRleHRfdnBpZF9yZXNldCh2b2lkKTsKK3Zv
+aWQgbHR0bmdfY29udGV4dF9wcm9jbmFtZV9yZXNldCh2b2lkKTsKCiAjaWZkZWYgTFRUTkdfVVNU
+X0hBVkVfUEVSRl9FVkVOVAogaW50IGx0dG5nX2FkZF9wZXJmX2NvdW50ZXJfdG9fY3R4KHVpbnQz
+Ml90IHR5cGUsCmRpZmYgLS1naXQgYS9saWJsdHRuZy11c3QvbHR0bmctdXN0LWNvbW0uYyBiL2xp
+Ymx0dG5nLXVzdC9sdHRuZy11c3QtY29tbS5jCmluZGV4IGQ5OGZhZTQuLmJkNGQ3MTUgMTAwNjQ0
+Ci0tLSBhL2xpYmx0dG5nLXVzdC9sdHRuZy11c3QtY29tbS5jCisrKyBiL2xpYmx0dG5nLXVzdC9s
+dHRuZy11c3QtY29tbS5jCkBAIC0xOTg4LDYgKzE5ODgsNyBAQCB2b2lkIHVzdF9hZnRlcl9mb3Jr
+X2NoaWxkKHNpZ3NldF90ICpyZXN0b3JlX3NpZ3NldCkKICAgICAgICAgICAgICAgIHJldHVybjsK
+ICAgICAgICBsdHRuZ19jb250ZXh0X3ZwaWRfcmVzZXQoKTsKICAgICAgICBsdHRuZ19jb250ZXh0
+X3Z0aWRfcmVzZXQoKTsKKyAgICAgICBsdHRuZ19jb250ZXh0X3Byb2NuYW1lX3Jlc2V0KCk7CiAg
+ICAgICAgREJHKCJwcm9jZXNzICVkIiwgZ2V0cGlkKCkpOwogICAgICAgIC8qIFJlbGVhc2UgdXJj
+dSBtdXRleGVzICovCiAgICAgICAgcmN1X2JwX2FmdGVyX2ZvcmtfY2hpbGQoKTsKLS0tCgpBbmQg
+SSB0ZXN0ZWQgaXQgd2l0aCB0aGlzIHJlcHJvZHVjZXI6CgpodHRwczovL2dpdGh1Yi5jb20vTWFy
+aWFuLUlyaW5lbC9sdHRuZy1mb3JrLXByb2NuYW1lLWlzc3VlLXJlcHJvZHVjZXIuZ2l0CgpUaGUg
+cmVzdWx0cyBhcmUgd2hhdCB5b3Ugd291bGQgZXhwZWN0IGlmIHlvdSB0YWtlIGluIGNvbnNpZGVy
+YXRpb24gdGhlCm1hbiBwYWdlLiBUaGF0IGlzIHRoZSBjaGlsZCBwcm9jZXNzIGNhbiBjaGFuZ2Ug
+aXQncyBuYW1lIGJlZm9yZSBsZWF2aW5nCmFueSB0cmFjZXMgKGNvdWxkIG5vdCBkbyB0aGF0IGJl
+Zm9yZSB0aGlzLCBzdHVjayB3aXRoIHBhcmVudCBuYW1lIGlmIGl0CmxlZnQgdHJhY2VzIGJlZm9y
+ZSBmb3JrKCkpLgoKUmVnYXJkcywKICBNYXJpYW4uCgo+V2UgY291bGQgZm9yY2UgYSByZXNldCBv
+ZiB0aGUgY2FjaGUgb24gZm9yayBhcyBkb25lIHdpdGggdGhlIHZ0aWQgYW5kCj5wdGlkIFszXSBi
+dXQKPnRoaXMgZG9lcyBub3QgYWxsZXZpYXRlIHRoZSBwcmN0bCBwcm9ibGVtLgo+Cj5bMl0KaHR0
+cHM6Ly9naXRodWIuY29tL2x0dG5nL2x0dG5nLXVzdC9ibG9iXC82ZDliNTRkODQ1YjA4ZDU0ZDNm
+NDgzZjExMzBiNDk5NTE2NTg4ZGIzL2xpYmx0dG5nLXVzdC9sdHRuZy11c3QtY29tbS5jI0wyMDEw
+Cj4KPlRoZSByZWFsIHNvbHV0aW9uIHdvdWxkIHByb2JhYmx5IGJlIHRvICJzaGltIiBwcmN0bCBh
+bmQgY2F0Y2ggdGhlIGNoYW5nZSBvZgo+cHJvY25hbWUuCj4KPk1hdGhpZXUgRGVzbm95ZXJzIG1v
+c3QgcHJvYmFibHkgaGF2ZSBtb3JlIGluc2lnaHQgcmVnYXJkaW5nIGFsbCB0aGlzLgo+Cj5DaGVl
+cnMKPgo+LS0KPkpvbmF0aGFuIFJham90dGUtSnVsaWVuCj5FZmZpY2lPUwoKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
+dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
+aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
