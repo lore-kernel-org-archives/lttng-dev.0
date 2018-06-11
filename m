@@ -1,21 +1,16 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: Probleme with live session on LTTng 2.7.0
-Date: Mon, 11 Jun 2018 13:26:14 -0400 (EDT)
-Message-ID: <1305764551.10725.1528737974718.JavaMail.zimbra__23703.7904131741$1528737864$gmane$org@efficios.com>
-References: <2588C50AE11CCC4B945875227E501190021891C9B82F@THSONEA01CMS04P.one.grp>
- <614894989.8932.1528467044925.JavaMail.zimbra@efficios.com>
- <671747492.9056.1528468064761.JavaMail.zimbra@efficios.com>
- <2588C50AE11CCC4B945875227E501190021891C9BA08@THSONEA01CMS04P.one.grp>
- <1520189977.9229.1528471194855.JavaMail.zimbra@efficios.com>
- <2588C50AE11CCC4B945875227E501190021891DC7EBB@THSONEA01CMS04P.one.grp>
+From: Douglas Graham <douglas.graham@ericsson.com>
+Subject: Re: Race condition between lttng destroy and lttng load
+	commands
+Date: Mon, 11 Jun 2018 19:50:49 +0000
+Message-ID: <DM5PR15MB15933B93925FD9EE8FA7B65AF0780__45228.5496904098$1528746536$gmane$org@DM5PR15MB1593.namprd15.prod.outlook.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 414KgK6CyVz18jJ
- for <lttng-dev@lists.lttng.org>; Mon, 11 Jun 2018 13:26:21 -0400 (EDT)
-In-Reply-To: <2588C50AE11CCC4B945875227E501190021891DC7EBB@THSONEA01CMS04P.one.grp>
+Received: from sessmg22.ericsson.net (sessmg22.ericsson.net [193.180.251.58])
+ by lists.lttng.org (Postfix) with ESMTPS id 414Nt56phZznSR
+ for <lttng-dev@lists.lttng.org>; Mon, 11 Jun 2018 15:50:53 -0400 (EDT)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,31 +20,33 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: BADEUIL Thierry <thierry.badeuil@thalesgroup.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgotLS0tLSBPcmlnaW5hbCBNZXNzYWdlIC0tLS0tCj4gRnJvbTogIkJBREVVSUwgVGhpZXJy
-eSIgPHRoaWVycnkuYmFkZXVpbEB0aGFsZXNncm91cC5jb20+Cj4gVG86ICJKb25hdGhhbiBSYWpv
-dHRlLUp1bGllbiIgPGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT4KPiBDYzog
-Imx0dG5nLWRldiIgPGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmc+Cj4gU2VudDogTW9uZGF5LCBK
-dW5lIDExLCAyMDE4IDE6MDk6NTggUE0KPiBTdWJqZWN0OiBSRTogW2x0dG5nLWRldl0gUHJvYmxl
-bWUgd2l0aCBsaXZlIHNlc3Npb24gb24gTFRUbmcgMi43LjAKCj4gSGVsbG8sCj4gCj4gRXZlcnl0
-aGluZyBpcyBhbG1vc3QgT0sgZXhjZXB0IHdoZW4gSSB0cmllZCA6IGJhYmVsdHJhY2UgLWkgbHR0
-bmctbGl2ZQo+IG5ldDovL2xvY2FsaG9zdC9ob3N0Lzx5b3VyIGhvc3RuYW1lPi88c2Vzc2lvbi1u
-YW1lPgoKUGxlYXNlIGdpdmUgdXMgdGhlIG91dHB1dCBvZiB0aGUgZm9sbG93aW5nIHdoZW4gZXZl
-cnl0aGluZyBlbHNlIGlzIHNldHVwOgoKYmFiZWx0cmFjZSAtaSBsdHRuZy1saXZlIG5ldDovL2xv
-Y2FsaG9zdAoKPiAKPiBFcnJvciBtZXNzYWdlcyA6Cj4gLSBbZXJyb3JdIEZvcm1hdCA6IG5ldDov
-Ly4uLi4KPiAtIFt3YXJuaW5nXSBbQ29udGV4dF0gQ2Fubm90IG9wZW5fdHJhY2Ugb2YgZm9ybWF0
-IGx0dG5nLWxpdmUgYXQgcGF0aC4uLgo+IC0gW3dhcm5pbmddIFtDb250ZXh0XSBDYW5ub3Qgb3Bl
-biB0cmFjZSAiLi4uIiBmb3IgcmVhZGluZwo+IC0gW2Vycm9yXSBvcGVuaW5nIHRyYWNlICIuLi4i
-Cj4gLSBbZXJyb3JdIG5vbmUgb2YgdGhlIHNwZWNpZmllZCB0cmFjZSBwYXRocyBjb3VsZCBiZSBv
-cGVuZWQuCgpCYXNlIG9uIHRoaXMgb3V0cHV0IHlvdSBzZWVtIHRvIGJlICJvcGVuaW5nIiB0aGUg
-Im5ldDovLy4uLiIgcGF0aD8gTm90IHN1cmUgd2h5LgoKPiAKPiBEbyB5b3Uga25vdyB3aHkgPwo+
-IAo+IEkgdXBkYXRlZCBiYWJlbHRyYWNlIHRvIDEuNS41IHZlcnNpb24gYW5kIEkgaW5zdGFsbGVk
-IDIuNyBMVFRuZy4KClBlcmZlY3QgcmVnYXJkaW5nIEJhYmVsdHJhY2UgYnV0IEkgd291bGQgcmVj
-b21tZW5kIHRoYXQgeW91IHVwZ3JhZGUgbHR0bmcgdG8gdGhlIGxhdGVzdCBzdGFibGUgKDIuMTAp
-LgoKPiAKPiBSZWdhcmRzCj4gCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9y
-ZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
-ZGV2Cg==
+UmVnYXJkaW5nIGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL3BpcGVybWFpbC9sdHRuZy1kZXYvMjAx
+OC1KdW5lLzAyODA3NC5odG1sLAppdCBtYXkgbm90IGJlIG9idmlvdXMgdGhhdCB0aGUgcmVhc29u
+IGhlIGlzIGJyaW5naW5nIHRoYXQgdXAgaXMgdGhhdCB3ZSAoRXJpY3Nzb24pCm5lZWQgdGhhdCBm
+dW5jdGlvbmFsaXR5IHRvIGltcGxlbWVudCB0aGUgY2xlYXIgbG9nIGZ1bmN0aW9uYWxpdHkgdGhh
+dCB3ZSBoYXZlCm1lbnRpb25lZCB0byB5b3UgYmVmb3JlLiBUbyBjbGVhciB0aGUgbG9ncywgd2Ug
+Y3VycmVudGx5IGRvOgoKJCBsdHRuZyBzYXZlIDxzYXZlX2ZpbGU+CiQgbHR0bmcgc3RvcAokIGx0
+dG5nIGRlc3Ryb3kKJCBsdHRuZyBsb2FkIDxzYXZlX2ZpbGU+CgpUaGUgbHR0bmcgZGVzdHJveSBp
+cyBzdXBwb3NlZCB0byBzaHV0IGRvd24gdGhlIGx0dG5nIHNlc3Npb24gYW5kIGNsZWFyIGFsbCB0
+aGUKZXhpc3RpbmcgbG9ncy4gIFRoZW4gdGhlIGx0dG5nIGxvYWQgcmVzdG9yZXMgdGhlIHNlc3Np
+b24gYXMgaXQgd2FzIGJlZm9yZSB0aGUKZGVzdHJveS4gIFRoaXMgd29ya3MgbW9zdCBvZiB0aGUg
+dGltZSBidXQgaXQgc2VlbXMgdGhhdCB0aGVyZSBpcyBhIHJhY2UuCkx0dG5nIGRlc3Ryb3kgaXNu
+J3QgZ3VhcmFudGVlZCB0byBoYXZlIGZpbmlzaGVkIHNodXR0aW5nIGRvd24gYW5kIGRlc3Ryb3lp
+bmcKdGhlIHNlc3Npb24gYnkgdGhlIHRpbWUgY29udHJvbCByZXR1cm5zIHRvIHRoZSBzaGVsbC4g
+IFdlIG9jY2FzaW9uYWxseSBzZWUgdGhlCiJsdHRuZyBsb2FkIiBmYWlsIGJlY2F1c2UgaXQgaXMg
+dHJ5aW5nIHRvIHJlY3JlYXRlIGEgZGlyZWN0b3J5IHRyZWUgdGhhdCBpcyBzdGlsbAppbiB0aGUg
+cHJvY2VzcyBvZiBiZWluZyByZW1vdmVkIGJ5ICJsdHRuZyBkZXN0cm95Ii4KClRoZSBwcm9ibGVt
+IHNlZW1zIHRvIGJlIHRoYXQgdGhlIGRpcmVjdG9yeSB0cmVlIGlzIHJlbW92ZWQgd2l0aCBhIGNh
+bGwgdG8KY2FsbF9yY3UoJnJlZ3AtPm5vZGUuaGVhZCwgcmN1X2ZyZWVfYnVmZmVyX3JlZ191aWQp
+LiBUaGUgZnVuY3Rpb24KcmN1X2ZyZWVfYnVmZmVyX3JlZ191aWQoKSBpcyBydW4gYXN5bmNocm9u
+b3VzbHkgYW5kIGlzIG5vdCBndWFyYW50ZWVkIHRvIGhhdmUKZmluaXNoZWQgYnkgdGhlIHRpbWUg
+Y2FsbF9yY3UoKSByZXR1cm5zLiAgSSB0aGluayB0aGlzIHNob3VsZCBwcm9iYWJseSBiZQpjb25z
+aWRlcmVkIGEgZGVmaWNpZW5jeSBpbiB0aGUgaW1wbGVtZW50YXRpb24gb2YgImx0dG5nIGRlc3Ry
+b3kiLiAgSXMgdGhpcwpzb21ldGhpbmcgdGhhdCBjYW4gYmUgZWFzaWx5IGZpeGVkIG9yIHNob3Vs
+ZCB3ZSBiZSBsb29raW5nIGZvciBhIHdvcmthcm91bmQ/CgpUaGFua3MsCkRvdWcKCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5n
+IGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9j
+Z2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
