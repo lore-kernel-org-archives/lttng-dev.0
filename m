@@ -1,7 +1,7 @@
 From: BADEUIL Thierry <thierry.badeuil@thalesgroup.com>
 Subject: Re: Probleme with live session on LTTng 2.7.0
-Date: Tue, 12 Jun 2018 12:20:12 +0200
-Message-ID: <2588C50AE11CCC4B945875227E501190021891E98AE4__44975.0493899502$1528798830$gmane$org@THSONEA01CMS04P.one.grp>
+Date: Tue, 12 Jun 2018 12:53:16 +0200
+Message-ID: <2588C50AE11CCC4B945875227E501190021891E98B4C__9950.53276788003$1528800686$gmane$org@THSONEA01CMS04P.one.grp>
 References: <2588C50AE11CCC4B945875227E501190021891C9B82F@THSONEA01CMS04P.one.grp>
  <614894989.8932.1528467044925.JavaMail.zimbra@efficios.com>
  <671747492.9056.1528468064761.JavaMail.zimbra@efficios.com>
@@ -10,12 +10,12 @@ References: <2588C50AE11CCC4B945875227E501190021891C9B82F@THSONEA01CMS04P.one.gr
  <2588C50AE11CCC4B945875227E501190021891DC7EBB@THSONEA01CMS04P.one.grp>
  <1305764551.10725.1528737974718.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3354597227389744941=="
+Content-Type: multipart/mixed; boundary="===============1333844675159873237=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from thsbbfxrt02p.thalesgroup.com (thsbbfxrt02p.thalesgroup.com
- [192.93.158.29])
- by lists.lttng.org (Postfix) with ESMTPS id 414mCl1KSfz18kQ
- for <lttng-dev@lists.lttng.org>; Tue, 12 Jun 2018 06:22:27 -0400 (EDT)
+Received: from thsbbfxrt01p.thalesgroup.com (thsbbfxrt01p.thalesgroup.com
+ [192.54.144.131])
+ by lists.lttng.org (Postfix) with ESMTPS id 414mvM47fkz17Hr
+ for <lttng-dev@lists.lttng.org>; Tue, 12 Jun 2018 06:53:19 -0400 (EDT)
 In-Reply-To: <1305764551.10725.1528737974718.JavaMail.zimbra@efficios.com>
 Content-Language: fr-FR
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -31,25 +31,35 @@ To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============3354597227389744941==
+--===============1333844675159873237==
 Content-Language: fr-FR
 Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
-	micalg=SHA1; boundary="----=_NextPart_000_003E_01D40247.B3F294A0"
+	micalg=SHA1; boundary="----=_NextPart_000_0042_01D4024C.52B4D5E0"
 
-------=_NextPart_000_003E_01D40247.B3F294A0
+------=_NextPart_000_0042_01D4024C.52B4D5E0
 Content-Type: text/plain;
 	charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-About the Babeltrace version, I can not update the 1.5.5 to 2.10 =
-version.
+And last answer, here is the exact error message :
+tmxv3@tmxv3-ThinkPad-T530:~$ sudo babeltrace -i lttng-live =
+net://localhost/host/\(none\)/test -v
+[verbose] Verbose mode active.
+[verbose] Converting from directory(ies):
+[verbose]     net://localhost/host/(none)/test
+[verbose] Converting from format: lttng-live
+[verbose] Converting to target: <stdout>
+[verbose] Converting to format: text <default>
+[error] Format : net://<hostname>/host/<traced_hostname>/<session_name>
+[warning] [Context] Cannot open_trace of format lttng-live at path =
+net://localhost/host/(none)/test.
+[warning] [Context] cannot open trace "net://localhost/host/(none)/test" =
+for reading.
+[error] opening trace "net://localhost/host/(none)/test" for reading.
 
-I am with LTTng 2.70, Ubuntu 16.04.04 and did=20
-sudo apt-add-repository ppa:lttng/ppa
-sudo apt-get update
-sudo apt-get install babeltrace
+[error] none of the specified trace paths could be opened.
 
-Normal ?
+So ?
 
 Thierry BADEUIL
 THALES COMMUNICATIONS
@@ -109,7 +119,7 @@ lttng to the latest stable (2.10).
 > Regards
 >=20
 
-------=_NextPart_000_003E_01D40247.B3F294A0
+------=_NextPart_000_0042_01D4024C.52B4D5E0
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -231,22 +241,22 @@ wi31QNREhgnUOh5xhJeSvH1Yg/t+i4cfcj/lWn0orq3R0BT8y5tDGC9cyHFvPWIG7o5PhWoIcQxF
 LGuxt89SsQjFZrhVqOPYLZ1rPjA+jvF9+FFq04TxH1LdvcYqhNhTA/UxggMaMIIDFgIBATBeMFcx
 CzAJBgNVBAYTAkZSMQ8wDQYDVQQKDAZUaGFsZXMxFzAVBgNVBAsMDjAwMDIgNTUyMDU5MDI0MR4w
 HAYDVQQDDBVUaGFsZXMgSW50ZXJuYWwgQ0EgVjMCAwDo9DAJBgUrDgMCGgUAoIIBkTAYBgkqhkiG
-9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0xODA2MTIxMDIwMDhaMCMGCSqGSIb3
-DQEJBDEWBBTEWN5ZBQMr3Vdmvqx/A4Z27NBoTTBSBgkqhkiG9w0BCQ8xRTBDMAoGCCqGSIb3DQMH
+9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0xODA2MTIxMDUzMTJaMCMGCSqGSIb3
+DQEJBDEWBBRnRwHhsvnrOrDml3OgKqtrV8JZYTBSBgkqhkiG9w0BCQ8xRTBDMAoGCCqGSIb3DQMH
 MA4GCCqGSIb3DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUrDgMCBzANBggqhkiG9w0DAgIBKDBt
 BgkrBgEEAYI3EAQxYDBeMFcxCzAJBgNVBAYTAkZSMQ8wDQYDVQQKDAZUaGFsZXMxFzAVBgNVBAsM
 DjAwMDIgNTUyMDU5MDI0MR4wHAYDVQQDDBVUaGFsZXMgSW50ZXJuYWwgQ0EgVjMCAwDo9jBvBgsq
 hkiG9w0BCRACCzFgoF4wVzELMAkGA1UEBhMCRlIxDzANBgNVBAoMBlRoYWxlczEXMBUGA1UECwwO
 MDAwMiA1NTIwNTkwMjQxHjAcBgNVBAMMFVRoYWxlcyBJbnRlcm5hbCBDQSBWMwIDAOj2MA0GCSqG
-SIb3DQEBAQUABIIBAEU5E6dfaFTybDOBOxl4bLFs/ORO91fcKKfZynayPH/YrgcT1Tb8sh4Tb18c
-DdkPrkQ8v0ziqvQQYwlgfnUE8Ljp8/6ocdPX7qIYg4k6Bz3HF7Z/Q3axU7HhSAsY6/rBZGPEJD6+
-k4gojN45ow+Gkus4FxEzTTv0LajfLAdvU8RzHDXanGpwIPXuRBqNX8BO66NX+8ryFYlJBVxlVRB+
-O8oO/TiSGFyil6IMZ81Ri9PC++rj3dOlzVtfEylJTgAuzHmoBtzeEQK/MQ51UblsDBU94cZ9C/Sl
-FGDl+JzeaLccEFcc2bIgpcBgTTCDkVN2bxrQjo4t/LjDJ4RkOjwXYaoAAAAAAAA=
+SIb3DQEBAQUABIIBAFmPL+iEFLa63uKMIGS/k/aWi8zKmrYiUe8vlatjFQ89AuGmjLDJpzKBmeB+
+li+UbFdCjDTMC0vzB3znISfkpu6pHjgU2jJmjA19wY4ikVZtfX67DwYqYRyG/IJKNBUnExVKi3Uu
+TjSW64mBvopEeCUlr8wFYQAmYLWRfmBboPO7niTdsdbcwDrzH6L+Vr1adxN20nkRHJYDXrShs0Me
+bWGzkrfXh4IY9f6FyGJxFCzG5tduyunepZGJJo30RLuIuPXhxdfogaO0yNVPqt9vV1/OxloJac3M
+O+8cH0KKWleEWfiFpC3FC7qtTLRWBXUqRfTsdC7G76GsEja5WXlXeRoAAAAAAAA=
 
-------=_NextPart_000_003E_01D40247.B3F294A0--
+------=_NextPart_000_0042_01D4024C.52B4D5E0--
 
---===============3354597227389744941==
+--===============1333844675159873237==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -256,4 +266,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============3354597227389744941==--
+--===============1333844675159873237==--
