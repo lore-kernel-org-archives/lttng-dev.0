@@ -1,7 +1,7 @@
 From: BADEUIL Thierry <thierry.badeuil@thalesgroup.com>
 Subject: Re: Probleme with live session on LTTng 2.7.0
-Date: Tue, 12 Jun 2018 12:01:50 +0200
-Message-ID: <2588C50AE11CCC4B945875227E501190021891E98A8F__45760.5290496305$1528797601$gmane$org@THSONEA01CMS04P.one.grp>
+Date: Tue, 12 Jun 2018 12:20:12 +0200
+Message-ID: <2588C50AE11CCC4B945875227E501190021891E98AE4__44975.0493899502$1528798830$gmane$org@THSONEA01CMS04P.one.grp>
 References: <2588C50AE11CCC4B945875227E501190021891C9B82F@THSONEA01CMS04P.one.grp>
  <614894989.8932.1528467044925.JavaMail.zimbra@efficios.com>
  <671747492.9056.1528468064761.JavaMail.zimbra@efficios.com>
@@ -10,12 +10,12 @@ References: <2588C50AE11CCC4B945875227E501190021891C9B82F@THSONEA01CMS04P.one.gr
  <2588C50AE11CCC4B945875227E501190021891DC7EBB@THSONEA01CMS04P.one.grp>
  <1305764551.10725.1528737974718.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6223661580288197183=="
+Content-Type: multipart/mixed; boundary="===============3354597227389744941=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from thsbbfxrt01p.thalesgroup.com (thsbbfxrt01p.thalesgroup.com
- [192.54.144.131])
- by lists.lttng.org (Postfix) with ESMTPS id 414lm26ZXbz18gS
- for <lttng-dev@lists.lttng.org>; Tue, 12 Jun 2018 06:01:54 -0400 (EDT)
+Received: from thsbbfxrt02p.thalesgroup.com (thsbbfxrt02p.thalesgroup.com
+ [192.93.158.29])
+ by lists.lttng.org (Postfix) with ESMTPS id 414mCl1KSfz18kQ
+ for <lttng-dev@lists.lttng.org>; Tue, 12 Jun 2018 06:22:27 -0400 (EDT)
 In-Reply-To: <1305764551.10725.1528737974718.JavaMail.zimbra@efficios.com>
 Content-Language: fr-FR
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -31,36 +31,32 @@ To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============6223661580288197183==
+--===============3354597227389744941==
 Content-Language: fr-FR
 Content-Type: multipart/signed; protocol="application/x-pkcs7-signature";
-	micalg=SHA1; boundary="----=_NextPart_000_0033_01D40245.23965240"
+	micalg=SHA1; boundary="----=_NextPart_000_003E_01D40247.B3F294A0"
 
-------=_NextPart_000_0033_01D40245.23965240
+------=_NextPart_000_003E_01D40247.B3F294A0
 Content-Type: text/plain;
 	charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hello,
+About the Babeltrace version, I can not update the 1.5.5 to 2.10 =
+version.
 
-I had :
-Net://localhsot/host/(none)/test (timer =3D 2000000, 3 stream(s), 0 =
-client(s) connected).
+I am with LTTng 2.70, Ubuntu 16.04.04 and did=20
+sudo apt-add-repository ppa:lttng/ppa
+sudo apt-get update
+sudo apt-get install babeltrace
 
-So ?
-
-Questions :
- - how to change (none) into an other name ?
- - on the target, I have "Warning : No tracing group detected", how to =
-remove this warning ?
-
-Regards
+Normal ?
 
 Thierry BADEUIL
 THALES COMMUNICATIONS
 T : +33 1 46 133 591
 (  : +33 6 85 51 28 16
   : thierry.badeuil@thalesgroup.com
+
 
 -----Message d'origine-----
 De : Jonathan Rajotte-Julien =
@@ -113,7 +109,7 @@ lttng to the latest stable (2.10).
 > Regards
 >=20
 
-------=_NextPart_000_0033_01D40245.23965240
+------=_NextPart_000_003E_01D40247.B3F294A0
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -235,22 +231,22 @@ wi31QNREhgnUOh5xhJeSvH1Yg/t+i4cfcj/lWn0orq3R0BT8y5tDGC9cyHFvPWIG7o5PhWoIcQxF
 LGuxt89SsQjFZrhVqOPYLZ1rPjA+jvF9+FFq04TxH1LdvcYqhNhTA/UxggMaMIIDFgIBATBeMFcx
 CzAJBgNVBAYTAkZSMQ8wDQYDVQQKDAZUaGFsZXMxFzAVBgNVBAsMDjAwMDIgNTUyMDU5MDI0MR4w
 HAYDVQQDDBVUaGFsZXMgSW50ZXJuYWwgQ0EgVjMCAwDo9DAJBgUrDgMCGgUAoIIBkTAYBgkqhkiG
-9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0xODA2MTIxMDAxNDdaMCMGCSqGSIb3
-DQEJBDEWBBR528W008hDsmbV6vUDwrxT9z7UMzBSBgkqhkiG9w0BCQ8xRTBDMAoGCCqGSIb3DQMH
+9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0xODA2MTIxMDIwMDhaMCMGCSqGSIb3
+DQEJBDEWBBTEWN5ZBQMr3Vdmvqx/A4Z27NBoTTBSBgkqhkiG9w0BCQ8xRTBDMAoGCCqGSIb3DQMH
 MA4GCCqGSIb3DQMCAgIAgDANBggqhkiG9w0DAgIBQDAHBgUrDgMCBzANBggqhkiG9w0DAgIBKDBt
 BgkrBgEEAYI3EAQxYDBeMFcxCzAJBgNVBAYTAkZSMQ8wDQYDVQQKDAZUaGFsZXMxFzAVBgNVBAsM
 DjAwMDIgNTUyMDU5MDI0MR4wHAYDVQQDDBVUaGFsZXMgSW50ZXJuYWwgQ0EgVjMCAwDo9jBvBgsq
 hkiG9w0BCRACCzFgoF4wVzELMAkGA1UEBhMCRlIxDzANBgNVBAoMBlRoYWxlczEXMBUGA1UECwwO
 MDAwMiA1NTIwNTkwMjQxHjAcBgNVBAMMFVRoYWxlcyBJbnRlcm5hbCBDQSBWMwIDAOj2MA0GCSqG
-SIb3DQEBAQUABIIBAA3d+Q3WwQ4J6J+1v6Z7ExEsrYCP/+MUubsvPCotezml3wEgfaj0hIyPeHB5
-xJt/oWmyLqyOtQeF1UEYPN9CxoKZuF0ScU+OmD2zW61SIfzcWcaMlpKBUjghq2HE08a/Y6VA49E/
-7qyYms7Q/bKvVnNCQgm1qJu80K7969g8WOl1gpF0+aBo9KuyfcxEWF5AmIpXQ4vss9/2nZmdp7Pr
-6YByq2vvKmfHpzw/s1l2rUhVzXvlt8P/KfY+JTUIngh0Y7NhgPElTKfOLnSuIbwoGzFjkE/GHNxO
-fy/+O4ZgKDUckDamVbQuqal5+5RPQzgJQ6rdUmgIUehUfJcFWUkBLtwAAAAAAAA=
+SIb3DQEBAQUABIIBAEU5E6dfaFTybDOBOxl4bLFs/ORO91fcKKfZynayPH/YrgcT1Tb8sh4Tb18c
+DdkPrkQ8v0ziqvQQYwlgfnUE8Ljp8/6ocdPX7qIYg4k6Bz3HF7Z/Q3axU7HhSAsY6/rBZGPEJD6+
+k4gojN45ow+Gkus4FxEzTTv0LajfLAdvU8RzHDXanGpwIPXuRBqNX8BO66NX+8ryFYlJBVxlVRB+
+O8oO/TiSGFyil6IMZ81Ri9PC++rj3dOlzVtfEylJTgAuzHmoBtzeEQK/MQ51UblsDBU94cZ9C/Sl
+FGDl+JzeaLccEFcc2bIgpcBgTTCDkVN2bxrQjo4t/LjDJ4RkOjwXYaoAAAAAAAA=
 
-------=_NextPart_000_0033_01D40245.23965240--
+------=_NextPart_000_003E_01D40247.B3F294A0--
 
---===============6223661580288197183==
+--===============3354597227389744941==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: base64
@@ -260,4 +256,4 @@ X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
---===============6223661580288197183==--
+--===============3354597227389744941==--
