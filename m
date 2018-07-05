@@ -1,35 +1,19 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: [RELEASE] Babeltrace 1.5.6
-Date: Tue, 3 Jul 2018 17:29:43 -0400
-Message-ID: <CA+jJMxvycMLMgsfB0ROM+1J-shfonNft9p0m3bSwHAkwFEfcJw__19201.0067207322$1530653313$gmane$org@mail.gmail.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: Query reagrding babeltrace generated output
+Date: Thu, 5 Jul 2018 09:16:21 -0400
+Message-ID: <20180705131621.GA7643__48963.1381504752$1530796477$gmane$org@joraj-alpa>
+References: <CAF7HkZNg7yxDne042jNhZn6pmyxw98=0mBuPcx-EsEUTThXUOg@mail.gmail.com>
+ <20180703143920.GA19455@joraj-alpa>
+ <CAF7HkZMxPiYuY8VchPGOb5wSx5CKjez0b4XPpsiWvF-cbfZ0OA@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 41Ky2q4VgWz19Ms
- for <lttng-dev@lists.lttng.org>; Tue,  3 Jul 2018 17:30:27 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id CE28E1A7BFC
- for <lttng-dev@lists.lttng.org>; Tue,  3 Jul 2018 17:30:26 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
- with ESMTP id EcN3kLQ97sco for <lttng-dev@lists.lttng.org>;
- Tue,  3 Jul 2018 17:30:26 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 50C771A7BF9
- for <lttng-dev@lists.lttng.org>; Tue,  3 Jul 2018 17:30:26 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
- with ESMTP id e8lV7JTLajZJ for <lttng-dev@lists.lttng.org>;
- Tue,  3 Jul 2018 17:30:26 -0400 (EDT)
-Received: from mail-lf0-f42.google.com (mail-lf0-f42.google.com
- [209.85.215.42])
- by mail.efficios.com (Postfix) with ESMTPSA id F03581A7BF4
- for <lttng-dev@lists.lttng.org>; Tue,  3 Jul 2018 17:30:25 -0400 (EDT)
-Received: by mail-lf0-f42.google.com with SMTP id h7-v6so2723549lfc.11
- for <lttng-dev@lists.lttng.org>; Tue, 03 Jul 2018 14:30:25 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 41Lyzz5MzTz19Fb
+ for <lttng-dev@lists.lttng.org>; Thu,  5 Jul 2018 09:16:31 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <CAF7HkZMxPiYuY8VchPGOb5wSx5CKjez0b4XPpsiWvF-cbfZ0OA@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -39,21 +23,34 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: Vidushi Vashishth <reachvidu@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgYWxsLAoKVG9kYXkgd2UgYXJlIHJlbGVhc2luZyB0aGUgc2l4dGggYnVnLWZpeCByZWxlYXNl
-IG9mIEJhYmVsdHJhY2UgMS41LjYuClRoaXMgcmVsZWFzZSBhZGRyZXNzZXMgYSBudW1iZXIgb2Yg
-aXNzdWVzIGxpc3RlZCBiZWxvdy4KCjIwMTgtMDctMDMgYmFiZWx0cmFjZSAxLjUuNiAoTmF0aW9u
-YWwgRnJpZWQgQ2xhbSBEYXkpCiAgICAgICAgKiBGaXg6IHJlbW92ZSBsZWZ0LW92ZXIgZGVidWcg
-bG9nZ2luZyBzdGF0ZW1lbnQKICAgICAgICAqIFVzZSB0cmFjZS0+dHJhY2VfaWQgaW4gY2hlY2sg
-dG8gcmVtb3ZlIHRyYWNlIGZyb20gYnRfY3R4CiAgICAgICAgKiBGaXg6IG1pc3NpbmcgaW5pdGlh
-bGl6ZXIgYnJhY2VzIHdhcm5pbmcKICAgICAgICAqIEZpeDogemVybyBvdXQgVVJMIHBhcnNpbmcg
-YXJyYXkgYmVmb3JlIHVzZSBhbmQgZW5zdXJlIHByb3BlcgplcnJvciByZXBvcnRpbmcKClByb2pl
-Y3Qgd2Vic2l0ZTogaHR0cDovL2RpYW1vbi5vcmcvYmFiZWx0cmFjZS8KRG93bmxvYWQgbGluazog
-aHR0cDovL3d3dy5lZmZpY2lvcy5jb20vZmlsZXMvYmFiZWx0cmFjZS9iYWJlbHRyYWNlLTEuNS42
-LnRhci5iejIKQ1RGIHNwZWNpZmljYXRpb246IGh0dHA6Ly9kaWFtb24ub3JnL2N0Zi8KCi0tIApK
-w6lyw6ltaWUgR2FsYXJuZWF1CkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20K
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+SGkgVmlkdXNoaSwKCgpPbiBUaHUsIEp1bCAwNSwgMjAxOCBhdCAwNjoxMDo0N0FNICswNTMwLCBW
+aWR1c2hpIFZhc2hpc2h0aCB3cm90ZToKPiBTb3JyeSBmb3IgdGhlIGRlbGF5ZWQgcmVzcG9uc2Uu
+Cj4gCj4gPldlIHdvdWxkIG5lZWQgdGhlIGNvbXBsZXRlICJiYWJlbHRyYWNlIHJ1biIgY29tbWFu
+ZC4gQnV0IGl0IHNlZW1zIHRoYXQKPiB0aGlzIGlzIGEKPiBwZXJtaXNzaW9uIHByb2JsZW0gbW9y
+ZSB0aGFuIGEgcHJvYmxlbSB3aXRoIGJhYmVsdHJhY2UKPiAKPiBJIGZpZ3VyZWQgaXQgb3V0LiBU
+aGUgcHJvYmxlbSB3YXMgd2l0aCBteSBydW4gY29tbWFuZC4gSSB3YXMgdXNpbmc6Cj4gCj4gc3Vk
+byBiYWJlbHRyYWNlIHJ1biAtLWNvbXBvbmVudD1BOnNvdXJjZS50ZXh0LmRtZXNnCj4gLS1wYXJh
+bXM9J25vLWV4dHJhY3QtdGltZXN0YW1wPXllcycgLS1rZXk9cGF0aCAtLXZhbHVlIH4vRGVza3Rv
+cC9hZGQudHh0Cj4gLS1jb21wb25lbnQ9QjpzaW5rLmN0Zi5mcyAtLWtleT1wYXRoIC0tdmFsdWUg
+fi9EZXNrdG9wLyAtLWNvbm5lY3Q9QTpCCj4gCgpHb29kIQoKPiBUaGUgYHN1ZG9gIGluIHRoZSBj
+b21tYW5kIHdhcyBjcmVhdGluZyBwcm9ibGVtcy4gSXQgd29ya3Mgd2hlbiBJIGRyb3AgaXQuIEkK
+PiBoYXZlIGFub3RoZXIgcXVlc3Rpb24sIFJURU1TIHRyYWNlIG91dHB1dCBpcyBlaXRoZXIgcHJp
+bnRlZCBvbiBjb25zb2xlIG9yCj4gY2FuIGJlIHNhdmVkIGluIGJpbmFyeSBmaWxlcy4gSG93IHNo
+b3VsZCBJIGdvIGFib3V0IGNyZWF0aW5nIGEgcGx1Z2luIGZvcgo+IFJURU1TIGJpbmFyeSBvdXRw
+dXQ/CgpZb3UgY2FuIHRha2UgYSBsb29rIGF0IGhvdyB0aGUgc291cmNlIHBsdWdpbnMgYXJlIGlt
+cGxlbWVudGVkIFsxXSBbMl0uCgpbMV0gaHR0cHM6Ly9naXRodWIuY29tL2VmZmljaW9zL2JhYmVs
+dHJhY2UvdHJlZS9tYXN0ZXIvcGx1Z2lucy90ZXh0L2RtZXNnClsyXSBodHRwczovL2dpdGh1Yi5j
+b20vZWZmaWNpb3MvYmFiZWx0cmFjZS90cmVlL21hc3Rlci9wbHVnaW5zL2N0Zi9mcy1zcmMKCgo+
+IEFyZSB0aGVyZSBhbnkgc2FtcGxlcyBvciBkb2N1bWVudGF0aW9uIHdoaWNoIGNhbiBndWlkZQo+
+IG1lIGluIHRoaXMgcmVnYXJkPwoKUGhpbGlwcGUgUHJvdWx4IG1pZ2h0IGhhdmUgbW9yZSBpbmZv
+cm1hdGlvbiByZWdhcmRpbmcgdGhlIHN0YXRlIG9mIGRvY3VtZW50YXRpb24KZm9yIGJhYmVsdHJh
+Y2UgMi4gVGhlIGJlc3QgZXhhbXBsZSBpcyBwcm9iYWJseSBob3cgdGhlIHNvdXJjZS5jdGYuZnMg
+cGx1Z2luIGlzCmRvbmUgWzJdIHNpbmNlIGl0IGRlYWxzIHdpdGggYSBiaW5hcnkgZm9ybWF0LgoK
+Q2hlZXJzCgotLSAKSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4KRWZmaWNpT1MKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
+dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
+aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
