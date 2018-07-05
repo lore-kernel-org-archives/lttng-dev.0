@@ -1,20 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules 1/4] Add extra version
- information framework
-Date: Thu, 5 Jul 2018 14:25:26 -0400 (EDT)
-Message-ID: <1261012232.512.1530815126266.JavaMail.zimbra__42434.0828242295$1530815126$gmane$org@efficios.com>
-References: <20180629212833.4126-1-mjeanson@efficios.com>
+From: Francis Deslauriers <francis.deslauriers@efficios.com>
+Subject: [CFP] Tracing Summit 2018 Call for Presentations,
+ October 25th, 2018, Edinburgh, UK
+Date: Thu, 5 Jul 2018 17:31:22 -0400
+Message-ID: <CADcCL0hkQ7e7i4K3ZX9fEEbdgvLzxB=KPENKE-PEVEnrXP5D1g__41785.4230654941$1530826179$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============3772605057811492575=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 41M5rS02PSz19fF
- for <lttng-dev@lists.lttng.org>; Thu,  5 Jul 2018 14:25:27 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 2148F2310F3
- for <lttng-dev@lists.lttng.org>; Thu,  5 Jul 2018 14:25:27 -0400 (EDT)
-In-Reply-To: <20180629212833.4126-1-mjeanson@efficios.com>
+Received: from mail-io0-f180.google.com (mail-io0-f180.google.com
+ [209.85.223.180])
+ by lists.lttng.org (Postfix) with ESMTPS id 41M9zC3KqFz1B0J
+ for <lttng-dev@lists.lttng.org>; Thu,  5 Jul 2018 17:31:35 -0400 (EDT)
+Received: by mail-io0-f180.google.com with SMTP id l7-v6so9074130ioj.1
+ for <lttng-dev@lists.lttng.org>; Thu, 05 Jul 2018 14:31:35 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,155 +21,229 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-UGF0Y2ggMSBtZXJnZWQgaW50byBtYXN0ZXIsIDIuMTAsIDIuOSwKClBhdGNoZXMgMiwgMywgNCBt
-ZXJnZWQgaW50byBtYXN0ZXIsCgpUaGFua3MhCgpNYXRoaWV1CgotLS0tLSBPbiBKdW4gMjksIDIw
-MTgsIGF0IDU6MjggUE0sIE1pY2hhZWwgSmVhbnNvbiBtamVhbnNvbkBlZmZpY2lvcy5jb20gd3Jv
-dGU6Cgo+IFNpZ25lZC1vZmYtYnk6IE1pY2hhZWwgSmVhbnNvbiA8bWplYW5zb25AZWZmaWNpb3Mu
-Y29tPgo+IC0tLQo+IC5naXRpZ25vcmUgICAgICAgICAgICAgICAgICAgfCAgMiArKwo+IEtidWls
-ZC5jb21tb24gICAgICAgICAgICAgICAgfCAxNCArKysrKysrKysrKwo+IGV4dHJhLXZlcnNpb24t
-Z2l0LnNoICAgICAgICAgfCAyMCArKysrKysrKysrKysrKysKPiBleHRyYS12ZXJzaW9uLW5hbWUu
-c2ggICAgICAgIHwgMTMgKysrKysrKysrKwo+IGV4dHJhLXZlcnNpb24tcGF0Y2hlcy5zaCAgICAg
-fCAyMSArKysrKysrKysrKysrKysrCj4gZXh0cmFfdmVyc2lvbi9SRUFETUUgICAgICAgICB8ICAy
-ICsrCj4gZXh0cmFfdmVyc2lvbi9wYXRjaGVzL1JFQURNRSB8ICAyICsrCj4gbHR0bmctZXZlbnRz
-LmMgICAgICAgICAgICAgICB8IDQ5ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0t
-LQo+IDggZmlsZXMgY2hhbmdlZCwgMTE3IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pCj4g
-Y3JlYXRlIG1vZGUgMTAwNzU1IGV4dHJhLXZlcnNpb24tZ2l0LnNoCj4gY3JlYXRlIG1vZGUgMTAw
-NzU1IGV4dHJhLXZlcnNpb24tbmFtZS5zaAo+IGNyZWF0ZSBtb2RlIDEwMDc1NSBleHRyYS12ZXJz
-aW9uLXBhdGNoZXMuc2gKPiBjcmVhdGUgbW9kZSAxMDA2NDQgZXh0cmFfdmVyc2lvbi9SRUFETUUK
-PiBjcmVhdGUgbW9kZSAxMDA2NDQgZXh0cmFfdmVyc2lvbi9wYXRjaGVzL1JFQURNRQo+IAo+IGRp
-ZmYgLS1naXQgYS8uZ2l0aWdub3JlIGIvLmdpdGlnbm9yZQo+IGluZGV4IGYyMmU4MjguLjM4ZTE2
-ODQgMTAwNjQ0Cj4gLS0tIGEvLmdpdGlnbm9yZQo+ICsrKyBiLy5naXRpZ25vcmUKPiBAQCAtNzks
-MyArNzksNSBAQCBHVEFHUwo+ICoub3JpZwo+ICp+Cj4gXCMqIwo+ICsKPiArL2V4dHJhX3ZlcnNp
-b24KPiBkaWZmIC0tZ2l0IGEvS2J1aWxkLmNvbW1vbiBiL0tidWlsZC5jb21tb24KPiBpbmRleCBj
-MGQ1NDA5Li5iZDI0ZTgwIDEwMDY0NAo+IC0tLSBhL0tidWlsZC5jb21tb24KPiArKysgYi9LYnVp
-bGQuY29tbW9uCj4gQEAgLTM0LDYgKzM0LDIwIEBAIGlmbmVxICgkKFJUX1BBVENIX1ZFUlNJT04p
-LCAwKQo+ICAgY2NmbGFncy15ICs9IC1EUlRfUEFUQ0hfVkVSU0lPTj0kKFJUX1BBVENIX1ZFUlNJ
-T04pCj4gZW5kaWYKPiAKPiArRVhUUkFfVkVSU0lPTl9OQU1FOj0kKHNoZWxsICQoVE9QX0xUVE5H
-X01PRFVMRVNfRElSKS9leHRyYS12ZXJzaW9uLW5hbWUuc2gKPiAkKFRPUF9MVFROR19NT0RVTEVT
-X0RJUikpCj4gKwo+ICtpZm5lcSAoJChFWFRSQV9WRVJTSU9OX05BTUUpLCAwKQo+ICsgIGNjZmxh
-Z3MteSArPSAtRExUVE5HX0VYVFJBX1ZFUlNJT05fTkFNRT0nIiQoRVhUUkFfVkVSU0lPTl9OQU1F
-KSInCj4gK2VuZGlmCj4gKwo+ICtFWFRSQV9WRVJTSU9OX0dJVDo9JChzaGVsbCAkKFRPUF9MVFRO
-R19NT0RVTEVTX0RJUikvZXh0cmEtdmVyc2lvbi1naXQuc2gKPiAkKFRPUF9MVFROR19NT0RVTEVT
-X0RJUikpCj4gKwo+ICtpZm5lcSAoJChFWFRSQV9WRVJTSU9OX0dJVCksIDApCj4gKyAgY2NmbGFn
-cy15ICs9IC1ETFRUTkdfRVhUUkFfVkVSU0lPTl9HSVQ9JyIkKEVYVFJBX1ZFUlNJT05fR0lUKSIn
-Cj4gK2VuZGlmCj4gKwo+ICtFWFRSQV9WRVJTSU9OX1BBVENIRVM6PSQoc2hlbGwKPiAkKFRPUF9M
-VFROR19NT0RVTEVTX0RJUikvZXh0cmEtdmVyc2lvbi1wYXRjaGVzLnNoICQoVE9QX0xUVE5HX01P
-RFVMRVNfRElSKSkKPiArCj4gIyBTdGFydGluZyB3aXRoIGtlcm5lbCA0LjEyLCB0aGUgZnRyYWNl
-IGhlYWRlciB3YXMgbW92ZWQgdG8gcHJpdmF0ZSBoZWFkZXJzCj4gIyBhbmQgYXMgc3VjaCBpcyBu
-b3QgYXZhaWxhYmxlIHdoZW4gYnVpbGRpbmcgYWdhaW5zdCBkaXN0cm8gaGVhZGVycyBpbnN0ZWFk
-Cj4gIyBvZiB0aGUgZnVsbCBrZXJuZWwgc291cmNlcy4gSW4gdGhlIHNpdHVhdGlvbiwgZGVmaW5l
-Cj4gTFRUTkdfRlRSQUNFX01JU1NJTkdfSEVBREVSCj4gZGlmZiAtLWdpdCBhL2V4dHJhLXZlcnNp
-b24tZ2l0LnNoIGIvZXh0cmEtdmVyc2lvbi1naXQuc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDc1NQo+
-IGluZGV4IDAwMDAwMDAuLmU1YTNlMTcKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvZXh0cmEtdmVy
-c2lvbi1naXQuc2gKPiBAQCAtMCwwICsxLDIwIEBACj4gKyMhL2Jpbi9zaAo+ICsjIFNQRFgtTGlj
-ZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMCBPUiBMR1BMLTIuMSkKPiArCj4gKyMgRmlyc3QgYXJn
-dW1lbnQgaXMgdGhlIHBhdGggdG8gdGhlIGx0dG5nIG1vZHVsZXMgc291cmNlcy4KPiArVE9QX0xU
-VE5HX01PRFVMRVNfRElSPSIkMSIKPiArCj4gK0dJVF9WRVJTSU9OPSIwIgo+ICsKPiAraWYgdGVz
-dCAteCAiJCh3aGljaCBnaXQgMj4mMTt0cnVlKSIgJiYgdGVzdCAtciAiJHtUT1BfTFRUTkdfTU9E
-VUxFU19ESVJ9Ly5naXQiOwo+IHRoZW4KPiArCUdJVF9WRVJTSU9OX1NUUj0iJChjZCAiJHtUT1Bf
-TFRUTkdfTU9EVUxFU19ESVJ9IiAmJiBnaXQgZGVzY3JpYmUgLS10YWdzCj4gLS1kaXJ0eSkiCj4g
-KwlHSVRfQ1VSUkVOVF9UQUc9IiQoY2QgIiR7VE9QX0xUVE5HX01PRFVMRVNfRElSfSIgJiYgZ2l0
-IGRlc2NyaWJlIC0tdGFncwo+IC0tZXhhY3QtbWF0Y2ggLS1tYXRjaD0idlswLTldKiIgSEVBRCAy
-PiAvZGV2L251bGwpIgo+ICsKPiArCUdJVF9WRVJTSU9OPSIke0dJVF9WRVJTSU9OX1NUUn0iCj4g
-Kwo+ICsJaWYgISBlY2hvICIke0dJVF9WRVJTSU9OX1NUUn0iIHwgZ3JlcCAtLSAiLWRpcnR5IiA+
-L2Rldi9udWxsICYmIHRlc3QKPiAieCRHSVRfQ1VSUkVOVF9UQUciICE9ICJ4IjsgdGhlbgo+ICsJ
-CUdJVF9WRVJTSU9OPSIwIgo+ICsJZmkKPiArZmkKPiArCj4gK2VjaG8gIiR7R0lUX1ZFUlNJT059
-Igo+IGRpZmYgLS1naXQgYS9leHRyYS12ZXJzaW9uLW5hbWUuc2ggYi9leHRyYS12ZXJzaW9uLW5h
-bWUuc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDc1NQo+IGluZGV4IDAwMDAwMDAuLmY3MDQyNTYKPiAt
-LS0gL2Rldi9udWxsCj4gKysrIGIvZXh0cmEtdmVyc2lvbi1uYW1lLnNoCj4gQEAgLTAsMCArMSwx
-MyBAQAo+ICsjIS9iaW4vc2gKPiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKEdQTC0yLjAg
-T1IgTEdQTC0yLjEpCj4gKwo+ICsjIEZpcnN0IGFyZ3VtZW50IGlzIHRoZSBwYXRoIHRvIHRoZSBs
-dHRuZyBtb2R1bGVzIHNvdXJjZXMuCj4gK1RPUF9MVFROR19NT0RVTEVTX0RJUj0iJDEiCj4gKwo+
-ICtFWFRSQV9WRVJTSU9OX05BTUU9IiQoc2VkIC1uICcxcCcgIiR7VE9QX0xUVE5HX01PRFVMRVNf
-RElSfS9leHRyYV92ZXJzaW9uL25hbWUiCj4gMj4gL2Rldi9udWxsKSIKPiArCj4gK2lmIFsgIngk
-e0VYVFJBX1ZFUlNJT05fTkFNRX0iICE9ICJ4IiBdOyB0aGVuCj4gKwllY2hvICIke0VYVFJBX1ZF
-UlNJT05fTkFNRX0iCj4gK2Vsc2UKPiArCWVjaG8gIjAiCj4gK2ZpCj4gZGlmZiAtLWdpdCBhL2V4
-dHJhLXZlcnNpb24tcGF0Y2hlcy5zaCBiL2V4dHJhLXZlcnNpb24tcGF0Y2hlcy5zaAo+IG5ldyBm
-aWxlIG1vZGUgMTAwNzU1Cj4gaW5kZXggMDAwMDAwMC4uNGU4YTFiNQo+IC0tLSAvZGV2L251bGwK
-PiArKysgYi9leHRyYS12ZXJzaW9uLXBhdGNoZXMuc2gKPiBAQCAtMCwwICsxLDIxIEBACj4gKyMh
-L2Jpbi9zaAo+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMCBPUiBMR1BMLTIu
-MSkKPiArCj4gKyMgRmlyc3QgYXJndW1lbnQgaXMgdGhlIHBhdGggdG8gdGhlIGx0dG5nIG1vZHVs
-ZXMgc291cmNlcy4KPiArVE9QX0xUVE5HX01PRFVMRVNfRElSPSIkMSIKPiArCj4gK2lmICEgdGVz
-dCAtZCAiJHtUT1BfTFRUTkdfTU9EVUxFU19ESVJ9IjsgdGhlbgo+ICsJZXhpdCAxCj4gK2ZpCj4g
-Kwo+ICtUTVBGSUxFPSIkKG1rdGVtcCkiCj4gKwo+ICtmaW5kICIke1RPUF9MVFROR19NT0RVTEVT
-X0RJUn0vZXh0cmFfdmVyc2lvbi9wYXRjaGVzLyIgLW1heGRlcHRoIDEgISAtbmFtZQo+ICdSRUFE
-TUUnIC10eXBlIGYgLXByaW50ZiAnJWZcbicgfCBzb3J0IC1yIFwKPiArCXwgc2VkIC1FICdzL1te
-YS16QS1aMC05IFwuXS8tL2cgOyBzLyguKikvTU9EVUxFX0lORk8oZXh0cmFfdmVyc2lvbl9wYXRj
-aCwKPiAiXDEiKTsvZycgPiIke1RNUEZJTEV9IiAyPi9kZXYvbnVsbAo+ICsKPiAraWYgdGVzdCAh
-IC1mICIke1RPUF9MVFROR19NT0RVTEVTX0RJUn0vZXh0cmFfdmVyc2lvbi9wYXRjaGVzLmkiIHx8
-IFwKPiArCXRlc3QgeCIkKGNhdCAiJHtUTVBGSUxFfSIpIiAhPSB4IiQoY2F0Cj4gIiR7VE9QX0xU
-VE5HX01PRFVMRVNfRElSfS9leHRyYV92ZXJzaW9uL3BhdGNoZXMuaSIpIjsgdGhlbgo+ICsJbXYg
-IiR7VE1QRklMRX0iICIke1RPUF9MVFROR19NT0RVTEVTX0RJUn0vZXh0cmFfdmVyc2lvbi9wYXRj
-aGVzLmkiCj4gK2ZpCj4gKwo+ICtybSAtZiAiJHtUTVBGSUxFfSIKPiBkaWZmIC0tZ2l0IGEvZXh0
-cmFfdmVyc2lvbi9SRUFETUUgYi9leHRyYV92ZXJzaW9uL1JFQURNRQo+IG5ldyBmaWxlIG1vZGUg
-MTAwNjQ0Cj4gaW5kZXggMDAwMDAwMC4uNWVlZjQ5Ngo+IC0tLSAvZGV2L251bGwKPiArKysgYi9l
-eHRyYV92ZXJzaW9uL1JFQURNRQo+IEBAIC0wLDAgKzEsMiBAQAo+ICtUaGUgZmlyc3QgbGluZSBv
-ZiB0aGUgIm5hbWUiIGZpbGUgaXMgdXNlZCB0byBwb3B1bGF0ZSB0aGUgImV4dHJhX3ZlcnNpb25f
-bmFtZSIKPiArbW9kaW5mbyBrZXkgb2YgZWFjaCBidWlsdCBtb2R1bGUuCj4gZGlmZiAtLWdpdCBh
-L2V4dHJhX3ZlcnNpb24vcGF0Y2hlcy9SRUFETUUgYi9leHRyYV92ZXJzaW9uL3BhdGNoZXMvUkVB
-RE1FCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwLi4yMmVhM2QzCj4gLS0t
-IC9kZXYvbnVsbAo+ICsrKyBiL2V4dHJhX3ZlcnNpb24vcGF0Y2hlcy9SRUFETUUKPiBAQCAtMCww
-ICsxLDIgQEAKPiArVGhlIG5hbWUgb2YgZWFjaCBmaWxlIGluIHRoaXMgZGlyZWN0b3J5IGV4Y2Vw
-dCB0aGlzIFJFQURNRSB3aWxsIGJlIHVzZWQgdG8KPiArcG9wdWxhdGUgYSAiZXh0cmFfdmVyc2lv
-bl9wYXRoIiBtb2RpbmZvIGtleSBmb3IgZWFjaCBidWlsdCBtb2R1bGUuCj4gZGlmZiAtLWdpdCBh
-L2x0dG5nLWV2ZW50cy5jIGIvbHR0bmctZXZlbnRzLmMKPiBpbmRleCBlYzQ0NTAyLi5jMWYwMGZm
-IDEwMDY0NAo+IC0tLSBhL2x0dG5nLWV2ZW50cy5jCj4gKysrIGIvbHR0bmctZXZlbnRzLmMKPiBA
-QCAtMjgwOSwxMiArMjgwOSwyMiBAQCBzdGF0aWMgaW50IF9faW5pdCBsdHRuZ19ldmVudHNfaW5p
-dCh2b2lkKQo+IAlyZXQgPSBsdHRuZ19pbml0X2NwdV9ob3RwbHVnKCk7Cj4gCWlmIChyZXQpCj4g
-CQlnb3RvIGVycm9yX2hvdHBsdWc7Cj4gLQlwcmludGsoS0VSTl9OT1RJQ0UgIkxUVG5nOiBMb2Fk
-ZWQgbW9kdWxlcyB2JXMuJXMuJXMlcyAoJXMpXG4iLAo+ICsJcHJpbnRrKEtFUk5fTk9USUNFICJM
-VFRuZzogTG9hZGVkIG1vZHVsZXMgdiVzLiVzLiVzJXMgKCVzKSVzJXNcbiIsCj4gCQlfX3N0cmlu
-Z2lmeShMVFROR19NT0RVTEVTX01BSk9SX1ZFUlNJT04pLAo+IAkJX19zdHJpbmdpZnkoTFRUTkdf
-TU9EVUxFU19NSU5PUl9WRVJTSU9OKSwKPiAJCV9fc3RyaW5naWZ5KExUVE5HX01PRFVMRVNfUEFU
-Q0hMRVZFTF9WRVJTSU9OKSwKPiAJCUxUVE5HX01PRFVMRVNfRVhUUkFWRVJTSU9OLAo+IC0JCUxU
-VE5HX1ZFUlNJT05fTkFNRSk7Cj4gKwkJTFRUTkdfVkVSU0lPTl9OQU1FLAo+ICsjaWZkZWYgTFRU
-TkdfRVhUUkFfVkVSU0lPTl9HSVQKPiArCQlMVFROR19FWFRSQV9WRVJTSU9OX0dJVFswXSA9PSAn
-XDAnID8gIiIgOiAiIC0gIiBMVFROR19FWFRSQV9WRVJTSU9OX0dJVCwKPiArI2Vsc2UKPiArCQki
-IiwKPiArI2VuZGlmCj4gKyNpZmRlZiBMVFROR19FWFRSQV9WRVJTSU9OX05BTUUKPiArCQlMVFRO
-R19FWFRSQV9WRVJTSU9OX05BTUVbMF0gPT0gJ1wwJyA/ICIiIDogIiAtICIgTFRUTkdfRVhUUkFf
-VkVSU0lPTl9OQU1FKTsKPiArI2Vsc2UKPiArCQkiIik7Cj4gKyNlbmRpZgo+IAlyZXR1cm4gMDsK
-PiAKPiBlcnJvcl9ob3RwbHVnOgo+IEBAIC0yODI3LDEyICsyODM3LDIyIEBAIGVycm9yX2ttZW06
-Cj4gCWx0dG5nX3RyYWNlcG9pbnRfZXhpdCgpOwo+IGVycm9yX3RwOgo+IAlsdHRuZ19jb250ZXh0
-X2V4aXQoKTsKPiAtCXByaW50ayhLRVJOX05PVElDRSAiTFRUbmc6IEZhaWxlZCB0byBsb2FkIG1v
-ZHVsZXMgdiVzLiVzLiVzJXMgKCVzKVxuIiwKPiArCXByaW50ayhLRVJOX05PVElDRSAiTFRUbmc6
-IEZhaWxlZCB0byBsb2FkIG1vZHVsZXMgdiVzLiVzLiVzJXMgKCVzKSVzJXNcbiIsCj4gCQlfX3N0
-cmluZ2lmeShMVFROR19NT0RVTEVTX01BSk9SX1ZFUlNJT04pLAo+IAkJX19zdHJpbmdpZnkoTFRU
-TkdfTU9EVUxFU19NSU5PUl9WRVJTSU9OKSwKPiAJCV9fc3RyaW5naWZ5KExUVE5HX01PRFVMRVNf
-UEFUQ0hMRVZFTF9WRVJTSU9OKSwKPiAJCUxUVE5HX01PRFVMRVNfRVhUUkFWRVJTSU9OLAo+IC0J
-CUxUVE5HX1ZFUlNJT05fTkFNRSk7Cj4gKwkJTFRUTkdfVkVSU0lPTl9OQU1FLAo+ICsjaWZkZWYg
-TFRUTkdfRVhUUkFfVkVSU0lPTl9HSVQKPiArCQlMVFROR19FWFRSQV9WRVJTSU9OX0dJVFswXSA9
-PSAnXDAnID8gIiIgOiAiIC0gIiBMVFROR19FWFRSQV9WRVJTSU9OX0dJVCwKPiArI2Vsc2UKPiAr
-CQkiIiwKPiArI2VuZGlmCj4gKyNpZmRlZiBMVFROR19FWFRSQV9WRVJTSU9OX05BTUUKPiArCQlM
-VFROR19FWFRSQV9WRVJTSU9OX05BTUVbMF0gPT0gJ1wwJyA/ICIiIDogIiAtICIgTFRUTkdfRVhU
-UkFfVkVSU0lPTl9OQU1FKTsKPiArI2Vsc2UKPiArCQkiIik7Cj4gKyNlbmRpZgo+IAlyZXR1cm4g
-cmV0Owo+IH0KPiAKPiBAQCAtMjg1MCwxNiArMjg3MCwzMyBAQCBzdGF0aWMgdm9pZCBfX2V4aXQg
-bHR0bmdfZXZlbnRzX2V4aXQodm9pZCkKPiAJa21lbV9jYWNoZV9kZXN0cm95KGV2ZW50X2NhY2hl
-KTsKPiAJbHR0bmdfdHJhY2Vwb2ludF9leGl0KCk7Cj4gCWx0dG5nX2NvbnRleHRfZXhpdCgpOwo+
-IC0JcHJpbnRrKEtFUk5fTk9USUNFICJMVFRuZzogVW5sb2FkZWQgbW9kdWxlcyB2JXMuJXMuJXMl
-cyAoJXMpXG4iLAo+ICsJcHJpbnRrKEtFUk5fTk9USUNFICJMVFRuZzogVW5sb2FkZWQgbW9kdWxl
-cyB2JXMuJXMuJXMlcyAoJXMpJXMlc1xuIiwKPiAJCV9fc3RyaW5naWZ5KExUVE5HX01PRFVMRVNf
-TUFKT1JfVkVSU0lPTiksCj4gCQlfX3N0cmluZ2lmeShMVFROR19NT0RVTEVTX01JTk9SX1ZFUlNJ
-T04pLAo+IAkJX19zdHJpbmdpZnkoTFRUTkdfTU9EVUxFU19QQVRDSExFVkVMX1ZFUlNJT04pLAo+
-IAkJTFRUTkdfTU9EVUxFU19FWFRSQVZFUlNJT04sCj4gLQkJTFRUTkdfVkVSU0lPTl9OQU1FKTsK
-PiArCQlMVFROR19WRVJTSU9OX05BTUUsCj4gKyNpZmRlZiBMVFROR19FWFRSQV9WRVJTSU9OX0dJ
-VAo+ICsJCUxUVE5HX0VYVFJBX1ZFUlNJT05fR0lUWzBdID09ICdcMCcgPyAiIiA6ICIgLSAiIExU
-VE5HX0VYVFJBX1ZFUlNJT05fR0lULAo+ICsjZWxzZQo+ICsJCSIiLAo+ICsjZW5kaWYKPiArI2lm
-ZGVmIExUVE5HX0VYVFJBX1ZFUlNJT05fTkFNRQo+ICsJCUxUVE5HX0VYVFJBX1ZFUlNJT05fTkFN
-RVswXSA9PSAnXDAnID8gIiIgOiAiIC0gIiBMVFROR19FWFRSQV9WRVJTSU9OX05BTUUpOwo+ICsj
-ZWxzZQo+ICsJCSIiKTsKPiArI2VuZGlmCj4gfQo+IAo+IG1vZHVsZV9leGl0KGx0dG5nX2V2ZW50
-c19leGl0KTsKPiAKPiArI2luY2x1ZGUgImV4dHJhX3ZlcnNpb24vcGF0Y2hlcy5pIgo+ICsjaWZk
-ZWYgTFRUTkdfRVhUUkFfVkVSU0lPTl9HSVQKPiArTU9EVUxFX0lORk8oZXh0cmFfdmVyc2lvbl9n
-aXQsIExUVE5HX0VYVFJBX1ZFUlNJT05fR0lUKTsKPiArI2VuZGlmCj4gKyNpZmRlZiBMVFROR19F
-WFRSQV9WRVJTSU9OX05BTUUKPiArTU9EVUxFX0lORk8oZXh0cmFfdmVyc2lvbl9uYW1lLCBMVFRO
-R19FWFRSQV9WRVJTSU9OX05BTUUpOwo+ICsjZW5kaWYKPiBNT0RVTEVfTElDRU5TRSgiR1BMIGFu
-ZCBhZGRpdGlvbmFsIHJpZ2h0cyIpOwo+IE1PRFVMRV9BVVRIT1IoIk1hdGhpZXUgRGVzbm95ZXJz
-IDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Iik7Cj4gTU9EVUxFX0RFU0NSSVBUSU9O
-KCJMVFRuZyBFdmVudHMiKTsKPiAtLQo+IDIuMTcuMQoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVm
-ZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1k
-ZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
-bi9saXN0aW5mby9sdHRuZy1kZXYK
+--===============3772605057811492575==
+Content-Type: multipart/alternative; boundary="0000000000007b88bb0570474526"
+
+--0000000000007b88bb0570474526
+Content-Type: text/plain; charset="UTF-8"
+
+Hi,
+
+This is a Call for Presentations for the Tracing Summit 2018 which will be
+held
+in Edinburgh, UK on October 25th, 2018, at the Edinburgh International
+Conference Centre, co-located with the Open Source Summit Europe & Embedded
+Linux Conference Europe.
+
+The Tracing Summit is single-day, single-track conference on the topic of
+tracing. The event focuses on the field of software and hardware tracing,
+gathering developers and end-users of tracing and trace analysis
+tools. The main goal of the Tracing Summit is to provide space for
+discussion
+between people of the various areas that benefit from tracing, namely
+parallel,
+distributed and/or real-time systems, as well as kernel development.
+
+We are welcoming 30 minutes presentations from both users and developers,
+on topics covering, but not limited to:
+
+ * Investigation workflow of Real-Time, latency, and throughput issues,
+ * Trace collection and extraction,
+ * Trace filtering,
+ * Trace aggregation,
+ * Trace formats,
+ * Tracing multi-core systems,
+ * Trace abstraction,
+ * Trace modeling,
+ * Automated trace analysis (e.g. dependency analysis),
+ * Tracing large clusters and distributed systems,
+ * Hardware-level tracing (e.g. DSP, GPU, bare-metal),
+ * Trace visualisation,
+ * Interaction between debugging and tracing,
+ * Tracing remote control,
+ * Analysis of large trace datasets,
+ * Cloud trace collection and analysis,
+ * Integration between trace tools,
+ * Live tracing & monitoring.
+
+Those can cover recently available technologies, ongoing work, and yet
+non-existing technologies (which are compellingly interesting to
+end-users). Please understand that this open forum is not the proper
+place to present sales or marketing pitches, nor technologies which are
+prevented from being freely used in open source.
+
+If you are interested in presenting, please submit a proposal to
+submission@tracingsummit.org before *September 1st, 2018, at 23:59 EST*.
+
+Please provide the following information:
+ * Talk title,
+ * Talk abstract, (900 characters maximum)
+ * Description of the targeted audience (900 characters maximum),
+ * Short biography (900 characters maximum).
+
+Attending the Tracing Summit is free of charge. More details on registration
+will be available shortly, be sure to checkout the Tracing Summit 2018
+website
+for all the latest information on this topic:
+https://www.tracingsummit.org/wiki/TracingSummit2018
+
+The Tracing Summit is organized by the Linux Foundation Diagnostic and
+Monitoring Workgroup (https://diamon.org).
+
+The Tracing Summit is sponsored by EfficiOS <https://www.efficios.com/>.
+Please let us know if your company
+is interested in sponsoring this event.
+
+Thank you,
+
+On behalf of the Diagnostic and Monitoring Workgroup,
+Francis Deslauriers & Mathieu Desnoyers
+
+--0000000000007b88bb0570474526
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div style=3D"font-size:small;text-decoration-style:initia=
+l;text-decoration-color:initial">Hi,</div><div style=3D"font-size:small;tex=
+t-decoration-style:initial;text-decoration-color:initial"><br></div><div st=
+yle=3D"font-size:small;text-decoration-style:initial;text-decoration-color:=
+initial">This is a Call for Presentations for the Tracing Summit 2018 which=
+ will be held</div><div style=3D"font-size:small;text-decoration-style:init=
+ial;text-decoration-color:initial">in Edinburgh, UK on October 25th, 2018, =
+at the Edinburgh International</div><div style=3D"font-size:small;text-deco=
+ration-style:initial;text-decoration-color:initial">Conference Centre, co-l=
+ocated with the Open Source Summit Europe &amp; Embedded</div><div style=3D=
+"font-size:small;text-decoration-style:initial;text-decoration-color:initia=
+l">Linux Conference Europe.</div><div style=3D"font-size:small;text-decorat=
+ion-style:initial;text-decoration-color:initial"><br></div><div style=3D"fo=
+nt-size:small;text-decoration-style:initial;text-decoration-color:initial">=
+The Tracing Summit is single-day, single-track conference on the topic of</=
+div><div style=3D"font-size:small;text-decoration-style:initial;text-decora=
+tion-color:initial">tracing. The event focuses on the field of software and=
+ hardware tracing,</div><div style=3D"font-size:small;text-decoration-style=
+:initial;text-decoration-color:initial">gathering developers and end-users =
+of tracing and trace analysis</div><div style=3D"font-size:small;text-decor=
+ation-style:initial;text-decoration-color:initial">tools. The main goal of =
+the Tracing Summit is to provide space for discussion</div><div style=3D"fo=
+nt-size:small;text-decoration-style:initial;text-decoration-color:initial">=
+between people of the various areas that benefit from tracing, namely paral=
+lel,</div><div style=3D"font-size:small;text-decoration-style:initial;text-=
+decoration-color:initial">distributed and/or real-time systems, as well as =
+kernel development.</div><div style=3D"font-size:small;text-decoration-styl=
+e:initial;text-decoration-color:initial"><br></div><div style=3D"font-size:=
+small;text-decoration-style:initial;text-decoration-color:initial">We are w=
+elcoming 30 minutes presentations from both users and developers,</div><div=
+ style=3D"font-size:small;text-decoration-style:initial;text-decoration-col=
+or:initial">on topics covering, but not limited to:</div><div style=3D"font=
+-size:small;text-decoration-style:initial;text-decoration-color:initial"><b=
+r></div><div style=3D"font-size:small;text-decoration-style:initial;text-de=
+coration-color:initial">=C2=A0* Investigation workflow of Real-Time, latenc=
+y, and throughput issues,</div><div style=3D"font-size:small;text-decoratio=
+n-style:initial;text-decoration-color:initial">=C2=A0* Trace collection and=
+ extraction,</div><div style=3D"font-size:small;text-decoration-style:initi=
+al;text-decoration-color:initial">=C2=A0* Trace filtering,</div><div style=
+=3D"font-size:small;text-decoration-style:initial;text-decoration-color:ini=
+tial">=C2=A0* Trace aggregation,</div><div style=3D"font-size:small;text-de=
+coration-style:initial;text-decoration-color:initial">=C2=A0* Trace formats=
+,</div><div style=3D"font-size:small;text-decoration-style:initial;text-dec=
+oration-color:initial">=C2=A0* Tracing multi-core systems,</div><div style=
+=3D"font-size:small;text-decoration-style:initial;text-decoration-color:ini=
+tial">=C2=A0* Trace abstraction,</div><div style=3D"font-size:small;text-de=
+coration-style:initial;text-decoration-color:initial">=C2=A0* Trace modelin=
+g,</div><div style=3D"font-size:small;text-decoration-style:initial;text-de=
+coration-color:initial">=C2=A0* Automated trace analysis (e.g. dependency a=
+nalysis),</div><div style=3D"font-size:small;text-decoration-style:initial;=
+text-decoration-color:initial">=C2=A0* Tracing large clusters and distribut=
+ed systems,</div><div style=3D"font-size:small;text-decoration-style:initia=
+l;text-decoration-color:initial">=C2=A0* Hardware-level tracing (e.g. DSP, =
+GPU, bare-metal),</div><div style=3D"font-size:small;text-decoration-style:=
+initial;text-decoration-color:initial">=C2=A0* Trace visualisation,</div><d=
+iv style=3D"font-size:small;text-decoration-style:initial;text-decoration-c=
+olor:initial">=C2=A0* Interaction between debugging and tracing,</div><div =
+style=3D"font-size:small;text-decoration-style:initial;text-decoration-colo=
+r:initial">=C2=A0* Tracing remote control,</div><div style=3D"font-size:sma=
+ll;text-decoration-style:initial;text-decoration-color:initial">=C2=A0* Ana=
+lysis of large trace datasets,</div><div style=3D"font-size:small;text-deco=
+ration-style:initial;text-decoration-color:initial">=C2=A0* Cloud trace col=
+lection and analysis,</div><div style=3D"font-size:small;text-decoration-st=
+yle:initial;text-decoration-color:initial">=C2=A0* Integration between trac=
+e tools,</div><div style=3D"font-size:small;text-decoration-style:initial;t=
+ext-decoration-color:initial">=C2=A0* Live tracing &amp; monitoring.</div><=
+div style=3D"font-size:small;text-decoration-style:initial;text-decoration-=
+color:initial"><br></div><div style=3D"font-size:small;text-decoration-styl=
+e:initial;text-decoration-color:initial">Those can cover recently available=
+ technologies, ongoing work, and yet</div><div style=3D"font-size:small;tex=
+t-decoration-style:initial;text-decoration-color:initial">non-existing tech=
+nologies (which are compellingly interesting to</div><div style=3D"font-siz=
+e:small;text-decoration-style:initial;text-decoration-color:initial">end-us=
+ers). Please understand that this open forum is not the proper</div><div st=
+yle=3D"font-size:small;text-decoration-style:initial;text-decoration-color:=
+initial">place to present sales or marketing pitches, nor technologies whic=
+h are</div><div style=3D"font-size:small;text-decoration-style:initial;text=
+-decoration-color:initial">prevented from being freely used in open source.=
+</div><div style=3D"font-size:small;text-decoration-style:initial;text-deco=
+ration-color:initial"><br></div><div style=3D"font-size:small;text-decorati=
+on-style:initial;text-decoration-color:initial">If you are interested in pr=
+esenting, please submit a proposal to</div><div style=3D"font-size:small;te=
+xt-decoration-style:initial;text-decoration-color:initial"><a href=3D"mailt=
+o:submission@tracingsummit.org" target=3D"_blank" style=3D"color:rgb(17,85,=
+204)">submission@tracingsummit.org</a><span>=C2=A0</span>before<span>=C2=A0=
+</span><b>September 1st, 2018, at 23:59 EST</b>.</div><div style=3D"font-si=
+ze:small;text-decoration-style:initial;text-decoration-color:initial"><br><=
+/div><div style=3D"font-size:small;text-decoration-style:initial;text-decor=
+ation-color:initial">Please provide the following information:</div><div st=
+yle=3D"font-size:small;text-decoration-style:initial;text-decoration-color:=
+initial">=C2=A0* Talk title,</div><div style=3D"font-size:small;text-decora=
+tion-style:initial;text-decoration-color:initial">=C2=A0* Talk abstract, (9=
+00 characters maximum)</div><div style=3D"font-size:small;text-decoration-s=
+tyle:initial;text-decoration-color:initial">=C2=A0* Description of the targ=
+eted audience (900 characters maximum),</div><div style=3D"font-size:small;=
+text-decoration-style:initial;text-decoration-color:initial">=C2=A0* Short =
+biography (900 characters maximum).</div><div style=3D"font-size:small;text=
+-decoration-style:initial;text-decoration-color:initial"><br></div><div sty=
+le=3D"font-size:small;text-decoration-style:initial;text-decoration-color:i=
+nitial"><div>Attending the Tracing Summit is free of charge. More details o=
+n registration</div><div>will be available shortly, be sure to checkout the=
+ Tracing Summit 2018 website</div><div>for all the latest information on th=
+is topic:</div><div><a href=3D"https://www.tracingsummit.org/wiki/TracingSu=
+mmit2018" target=3D"_blank" style=3D"color:rgb(17,85,204)">https://www.trac=
+ingsummit.org/wiki/TracingSummit2018</a></div></div><div style=3D"font-size=
+:small;text-decoration-style:initial;text-decoration-color:initial"><br></d=
+iv><div style=3D"font-size:small;text-decoration-style:initial;text-decorat=
+ion-color:initial">The Tracing Summit is organized by the Linux Foundation =
+Diagnostic and</div><div style=3D"font-size:small;text-decoration-style:ini=
+tial;text-decoration-color:initial">Monitoring Workgroup (<a href=3D"https:=
+//diamon.org/" target=3D"_blank" style=3D"color:rgb(17,85,204)">https://dia=
+mon.org</a>).</div><div style=3D"font-size:small;text-decoration-style:init=
+ial;text-decoration-color:initial"><br></div><div style=3D"font-size:small;=
+text-decoration-style:initial;text-decoration-color:initial">The Tracing Su=
+mmit is sponsored by<span>=C2=A0</span><a href=3D"https://www.efficios.com/=
+" target=3D"_blank" style=3D"color:rgb(17,85,204)">EfficiOS</a>. Please let=
+ us know if your company</div><div style=3D"font-size:small;text-decoration=
+-style:initial;text-decoration-color:initial">is interested in sponsoring t=
+his event.</div><div style=3D"font-size:small;text-decoration-style:initial=
+;text-decoration-color:initial"><br></div><div style=3D"font-size:small;tex=
+t-decoration-style:initial;text-decoration-color:initial">Thank you,</div><=
+div style=3D"font-size:small;text-decoration-style:initial;text-decoration-=
+color:initial"><br></div><div style=3D"font-size:small;text-decoration-styl=
+e:initial;text-decoration-color:initial">On behalf of the Diagnostic and Mo=
+nitoring Workgroup,</div><div style=3D"font-size:small;text-decoration-styl=
+e:initial;text-decoration-color:initial">Francis Deslauriers &amp; Mathieu =
+Desnoyers</div></div>
+
+--0000000000007b88bb0570474526--
+
+--===============3772605057811492575==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============3772605057811492575==--
