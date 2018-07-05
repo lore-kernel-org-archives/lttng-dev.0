@@ -1,19 +1,20 @@
-From: Vidushi Vashishth <reachvidu@gmail.com>
-Subject: Re: Query reagrding babeltrace generated output
-Date: Thu, 5 Jul 2018 06:10:47 +0530
-Message-ID: <CAF7HkZMxPiYuY8VchPGOb5wSx5CKjez0b4XPpsiWvF-cbfZ0OA__30.4856840104506$1530799969$gmane$org@mail.gmail.com>
-References: <CAF7HkZNg7yxDne042jNhZn6pmyxw98=0mBuPcx-EsEUTThXUOg@mail.gmail.com>
- <20180703143920.GA19455@joraj-alpa>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-modules 1/4] Add extra version
+ information framework
+Date: Thu, 5 Jul 2018 14:25:26 -0400 (EDT)
+Message-ID: <1261012232.512.1530815126266.JavaMail.zimbra__42434.0828242295$1530815126$gmane$org@efficios.com>
+References: <20180629212833.4126-1-mjeanson@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0890891344438490782=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by lists.lttng.org (Postfix) with ESMTPS id 41LfD131M8z19pK
- for <lttng-dev@lists.lttng.org>; Wed,  4 Jul 2018 20:40:49 -0400 (EDT)
-Received: by mail-ed1-x52b.google.com with SMTP id u11-v6so5082961eds.10
- for <lttng-dev@lists.lttng.org>; Wed, 04 Jul 2018 17:40:49 -0700 (PDT)
-In-Reply-To: <20180703143920.GA19455@joraj-alpa>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 41M5rS02PSz19fF
+ for <lttng-dev@lists.lttng.org>; Thu,  5 Jul 2018 14:25:27 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 2148F2310F3
+ for <lttng-dev@lists.lttng.org>; Thu,  5 Jul 2018 14:25:27 -0400 (EDT)
+In-Reply-To: <20180629212833.4126-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,194 +24,155 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev@lists.lttng.org
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============0890891344438490782==
-Content-Type: multipart/alternative; boundary="0000000000005fd84b057035cc15"
-
---0000000000005fd84b057035cc15
-Content-Type: text/plain; charset="UTF-8"
-
-Sorry for the delayed response.
-
->We would need the complete "babeltrace run" command. But it seems that
-this is a
-permission problem more than a problem with babeltrace
-
-I figured it out. The problem was with my run command. I was using:
-
-sudo babeltrace run --component=A:source.text.dmesg
---params='no-extract-timestamp=yes' --key=path --value ~/Desktop/add.txt
---component=B:sink.ctf.fs --key=path --value ~/Desktop/ --connect=A:B
-
-The `sudo` in the command was creating problems. It works when I drop it. I
-have another question, RTEMS trace output is either printed on console or
-can be saved in binary files. How should I go about creating a plugin for
-RTEMS binary output? Are there any samples or documentation which can guide
-me in this regard?
-
-Thanks
-
-On Tue, Jul 3, 2018 at 8:09 PM, Jonathan Rajotte-Julien <
-jonathan.rajotte-julien@efficios.com> wrote:
-
-> Hi Vidushi,
->
-> On Tue, Jul 03, 2018 at 12:23:04AM +0530, Vidushi Vashishth wrote:
-> > Hi!
-> >
-> > I am Vidushi. I am working on adding CTF trace generation capability to
-> the
-> > tracing framework of RTEMS this summer (as a part of my GSoC project).
->
-> Nice!
->
-> >I am
-> > using babeltrace in this regard. While I am able to convert the RTEMS
-> text
-> > output to CTF format using `babeltrace run` on the command line, the
-> output
-> > is stored in a directory which does not have access permissions.
->
-> We would need the complete "babeltrace run" command. But it seems that
-> this is a
-> permission problem more than a problem with babeltrace.
->
-> > I am able
-> > to get inside the directory by changing permissions (chmod) and list its
-> > contents (sudo ls) but I cannot view the metadata and CTF stream output
-> or
-> > delete the said directory. Is there a way I can view/delete the contents
-> of
-> > the trace directory?
->
-> Do you have "tree" installed on you system?
->
-> Could you try "tree -ugp <directory>"
->
-> What do you mean by "I cannot view the metadata and CTF stream output"?
->
-> Cheers
->
->
-> >
-> > I am sorry if this is too obvious. I am new to this.
-> >
-> > Thanks
-> > Vidushi Vashishth
->
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
-> --
-> Jonathan Rajotte-Julien
-> EfficiOS
->
-
---0000000000005fd84b057035cc15
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>Sorry for the delayed response. <br></div><div><span =
-style=3D"color:rgb(76,17,48)"><br></span></div><div><span style=3D"color:rg=
-b(76,17,48)">&gt;We would need the complete &quot;babeltrace run&quot; comm=
-and. But it seems that this is a<br>
-permission problem more than a problem with babeltrace</span></div><div><br=
-></div><div><font color=3D"#000000">I figured it out. The problem was with =
-my run command. I was using:</font></div><div><font color=3D"#000000"><br><=
-/font></div><div><font color=3D"#000000">sudo babeltrace run --component=3D=
-A:source.text.dmesg --params=3D&#39;no-extract-timestamp=3Dyes&#39; --key=
-=3Dpath --value ~/Desktop/add.txt --component=3DB:sink.ctf.fs --key=3Dpath =
---value ~/Desktop/ --connect=3DA:B<br></font></div><div><font color=3D"#000=
-000"><br></font></div><div><span style=3D"color:rgb(0,0,0)">The `sudo` in t=
-he command was creating problems. It works when I drop it. I have another q=
-uestion, RTEMS trace output is either printed on console or can be saved in=
- binary files. How should I go about creating a plugin for RTEMS binary out=
-put? Are there any samples or documentation which can guide me in this rega=
-rd?<br></span></div><div><span style=3D"color:rgb(0,0,0)"><br></span></div>=
-<div><span style=3D"color:rgb(0,0,0)">Thanks</span></div></div><div class=
-=3D"gmail_extra"><br><div class=3D"gmail_quote">On Tue, Jul 3, 2018 at 8:09=
- PM, Jonathan Rajotte-Julien <span dir=3D"ltr">&lt;<a href=3D"mailto:jonath=
-an.rajotte-julien@efficios.com" target=3D"_blank">jonathan.rajotte-julien@e=
-fficios.com</a>&gt;</span> wrote:<br><blockquote class=3D"gmail_quote" styl=
-e=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Hi Vidu=
-shi,<br>
-<span class=3D""><br>
-On Tue, Jul 03, 2018 at 12:23:04AM +0530, Vidushi Vashishth wrote:<br>
-&gt; Hi!<br>
-&gt; <br>
-&gt; I am Vidushi. I am working on adding CTF trace generation capability t=
-o the<br>
-&gt; tracing framework of RTEMS this summer (as a part of my GSoC project).=
-<br>
-<br>
-</span>Nice!<br>
-<span class=3D""><br>
-&gt;I am<br>
-&gt; using babeltrace in this regard. While I am able to convert the RTEMS =
-text<br>
-&gt; output to CTF format using `babeltrace run` on the command line, the o=
-utput<br>
-&gt; is stored in a directory which does not have access permissions.<br>
-<br>
-</span>We would need the complete &quot;babeltrace run&quot; command. But i=
-t seems that this is a<br>
-permission problem more than a problem with babeltrace.<br>
-<span class=3D""><br>
-&gt; I am able<br>
-&gt; to get inside the directory by changing permissions (chmod) and list i=
-ts<br>
-&gt; contents (sudo ls) but I cannot view the metadata and CTF stream outpu=
-t or<br>
-&gt; delete the said directory. Is there a way I can view/delete the conten=
-ts of<br>
-&gt; the trace directory?<br>
-<br>
-</span>Do you have &quot;tree&quot; installed on you system?<br>
-<br>
-Could you try &quot;tree -ugp &lt;directory&gt;&quot;<br>
-<br>
-What do you mean by &quot;I cannot view the metadata and CTF stream output&=
-quot;?<br>
-<br>
-Cheers<br>
-<span class=3D""><br>
-<br>
-&gt; <br>
-&gt; I am sorry if this is too obvious. I am new to this.<br>
-&gt; <br>
-&gt; Thanks<br>
-&gt; Vidushi Vashishth<br>
-<br>
-</span>&gt; ______________________________<wbr>_________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
-</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-<wbr>bin/=
-mailman/listinfo/lttng-dev</a><br>
-<span class=3D"HOEnZb"><font color=3D"#888888"><br>
-<br>
--- <br>
-Jonathan Rajotte-Julien<br>
-EfficiOS<br>
-</font></span></blockquote></div><br></div>
-
---0000000000005fd84b057035cc15--
-
---===============0890891344438490782==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============0890891344438490782==--
+UGF0Y2ggMSBtZXJnZWQgaW50byBtYXN0ZXIsIDIuMTAsIDIuOSwKClBhdGNoZXMgMiwgMywgNCBt
+ZXJnZWQgaW50byBtYXN0ZXIsCgpUaGFua3MhCgpNYXRoaWV1CgotLS0tLSBPbiBKdW4gMjksIDIw
+MTgsIGF0IDU6MjggUE0sIE1pY2hhZWwgSmVhbnNvbiBtamVhbnNvbkBlZmZpY2lvcy5jb20gd3Jv
+dGU6Cgo+IFNpZ25lZC1vZmYtYnk6IE1pY2hhZWwgSmVhbnNvbiA8bWplYW5zb25AZWZmaWNpb3Mu
+Y29tPgo+IC0tLQo+IC5naXRpZ25vcmUgICAgICAgICAgICAgICAgICAgfCAgMiArKwo+IEtidWls
+ZC5jb21tb24gICAgICAgICAgICAgICAgfCAxNCArKysrKysrKysrKwo+IGV4dHJhLXZlcnNpb24t
+Z2l0LnNoICAgICAgICAgfCAyMCArKysrKysrKysrKysrKysKPiBleHRyYS12ZXJzaW9uLW5hbWUu
+c2ggICAgICAgIHwgMTMgKysrKysrKysrKwo+IGV4dHJhLXZlcnNpb24tcGF0Y2hlcy5zaCAgICAg
+fCAyMSArKysrKysrKysrKysrKysrCj4gZXh0cmFfdmVyc2lvbi9SRUFETUUgICAgICAgICB8ICAy
+ICsrCj4gZXh0cmFfdmVyc2lvbi9wYXRjaGVzL1JFQURNRSB8ICAyICsrCj4gbHR0bmctZXZlbnRz
+LmMgICAgICAgICAgICAgICB8IDQ5ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0t
+LQo+IDggZmlsZXMgY2hhbmdlZCwgMTE3IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pCj4g
+Y3JlYXRlIG1vZGUgMTAwNzU1IGV4dHJhLXZlcnNpb24tZ2l0LnNoCj4gY3JlYXRlIG1vZGUgMTAw
+NzU1IGV4dHJhLXZlcnNpb24tbmFtZS5zaAo+IGNyZWF0ZSBtb2RlIDEwMDc1NSBleHRyYS12ZXJz
+aW9uLXBhdGNoZXMuc2gKPiBjcmVhdGUgbW9kZSAxMDA2NDQgZXh0cmFfdmVyc2lvbi9SRUFETUUK
+PiBjcmVhdGUgbW9kZSAxMDA2NDQgZXh0cmFfdmVyc2lvbi9wYXRjaGVzL1JFQURNRQo+IAo+IGRp
+ZmYgLS1naXQgYS8uZ2l0aWdub3JlIGIvLmdpdGlnbm9yZQo+IGluZGV4IGYyMmU4MjguLjM4ZTE2
+ODQgMTAwNjQ0Cj4gLS0tIGEvLmdpdGlnbm9yZQo+ICsrKyBiLy5naXRpZ25vcmUKPiBAQCAtNzks
+MyArNzksNSBAQCBHVEFHUwo+ICoub3JpZwo+ICp+Cj4gXCMqIwo+ICsKPiArL2V4dHJhX3ZlcnNp
+b24KPiBkaWZmIC0tZ2l0IGEvS2J1aWxkLmNvbW1vbiBiL0tidWlsZC5jb21tb24KPiBpbmRleCBj
+MGQ1NDA5Li5iZDI0ZTgwIDEwMDY0NAo+IC0tLSBhL0tidWlsZC5jb21tb24KPiArKysgYi9LYnVp
+bGQuY29tbW9uCj4gQEAgLTM0LDYgKzM0LDIwIEBAIGlmbmVxICgkKFJUX1BBVENIX1ZFUlNJT04p
+LCAwKQo+ICAgY2NmbGFncy15ICs9IC1EUlRfUEFUQ0hfVkVSU0lPTj0kKFJUX1BBVENIX1ZFUlNJ
+T04pCj4gZW5kaWYKPiAKPiArRVhUUkFfVkVSU0lPTl9OQU1FOj0kKHNoZWxsICQoVE9QX0xUVE5H
+X01PRFVMRVNfRElSKS9leHRyYS12ZXJzaW9uLW5hbWUuc2gKPiAkKFRPUF9MVFROR19NT0RVTEVT
+X0RJUikpCj4gKwo+ICtpZm5lcSAoJChFWFRSQV9WRVJTSU9OX05BTUUpLCAwKQo+ICsgIGNjZmxh
+Z3MteSArPSAtRExUVE5HX0VYVFJBX1ZFUlNJT05fTkFNRT0nIiQoRVhUUkFfVkVSU0lPTl9OQU1F
+KSInCj4gK2VuZGlmCj4gKwo+ICtFWFRSQV9WRVJTSU9OX0dJVDo9JChzaGVsbCAkKFRPUF9MVFRO
+R19NT0RVTEVTX0RJUikvZXh0cmEtdmVyc2lvbi1naXQuc2gKPiAkKFRPUF9MVFROR19NT0RVTEVT
+X0RJUikpCj4gKwo+ICtpZm5lcSAoJChFWFRSQV9WRVJTSU9OX0dJVCksIDApCj4gKyAgY2NmbGFn
+cy15ICs9IC1ETFRUTkdfRVhUUkFfVkVSU0lPTl9HSVQ9JyIkKEVYVFJBX1ZFUlNJT05fR0lUKSIn
+Cj4gK2VuZGlmCj4gKwo+ICtFWFRSQV9WRVJTSU9OX1BBVENIRVM6PSQoc2hlbGwKPiAkKFRPUF9M
+VFROR19NT0RVTEVTX0RJUikvZXh0cmEtdmVyc2lvbi1wYXRjaGVzLnNoICQoVE9QX0xUVE5HX01P
+RFVMRVNfRElSKSkKPiArCj4gIyBTdGFydGluZyB3aXRoIGtlcm5lbCA0LjEyLCB0aGUgZnRyYWNl
+IGhlYWRlciB3YXMgbW92ZWQgdG8gcHJpdmF0ZSBoZWFkZXJzCj4gIyBhbmQgYXMgc3VjaCBpcyBu
+b3QgYXZhaWxhYmxlIHdoZW4gYnVpbGRpbmcgYWdhaW5zdCBkaXN0cm8gaGVhZGVycyBpbnN0ZWFk
+Cj4gIyBvZiB0aGUgZnVsbCBrZXJuZWwgc291cmNlcy4gSW4gdGhlIHNpdHVhdGlvbiwgZGVmaW5l
+Cj4gTFRUTkdfRlRSQUNFX01JU1NJTkdfSEVBREVSCj4gZGlmZiAtLWdpdCBhL2V4dHJhLXZlcnNp
+b24tZ2l0LnNoIGIvZXh0cmEtdmVyc2lvbi1naXQuc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDc1NQo+
+IGluZGV4IDAwMDAwMDAuLmU1YTNlMTcKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvZXh0cmEtdmVy
+c2lvbi1naXQuc2gKPiBAQCAtMCwwICsxLDIwIEBACj4gKyMhL2Jpbi9zaAo+ICsjIFNQRFgtTGlj
+ZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMCBPUiBMR1BMLTIuMSkKPiArCj4gKyMgRmlyc3QgYXJn
+dW1lbnQgaXMgdGhlIHBhdGggdG8gdGhlIGx0dG5nIG1vZHVsZXMgc291cmNlcy4KPiArVE9QX0xU
+VE5HX01PRFVMRVNfRElSPSIkMSIKPiArCj4gK0dJVF9WRVJTSU9OPSIwIgo+ICsKPiAraWYgdGVz
+dCAteCAiJCh3aGljaCBnaXQgMj4mMTt0cnVlKSIgJiYgdGVzdCAtciAiJHtUT1BfTFRUTkdfTU9E
+VUxFU19ESVJ9Ly5naXQiOwo+IHRoZW4KPiArCUdJVF9WRVJTSU9OX1NUUj0iJChjZCAiJHtUT1Bf
+TFRUTkdfTU9EVUxFU19ESVJ9IiAmJiBnaXQgZGVzY3JpYmUgLS10YWdzCj4gLS1kaXJ0eSkiCj4g
+KwlHSVRfQ1VSUkVOVF9UQUc9IiQoY2QgIiR7VE9QX0xUVE5HX01PRFVMRVNfRElSfSIgJiYgZ2l0
+IGRlc2NyaWJlIC0tdGFncwo+IC0tZXhhY3QtbWF0Y2ggLS1tYXRjaD0idlswLTldKiIgSEVBRCAy
+PiAvZGV2L251bGwpIgo+ICsKPiArCUdJVF9WRVJTSU9OPSIke0dJVF9WRVJTSU9OX1NUUn0iCj4g
+Kwo+ICsJaWYgISBlY2hvICIke0dJVF9WRVJTSU9OX1NUUn0iIHwgZ3JlcCAtLSAiLWRpcnR5IiA+
+L2Rldi9udWxsICYmIHRlc3QKPiAieCRHSVRfQ1VSUkVOVF9UQUciICE9ICJ4IjsgdGhlbgo+ICsJ
+CUdJVF9WRVJTSU9OPSIwIgo+ICsJZmkKPiArZmkKPiArCj4gK2VjaG8gIiR7R0lUX1ZFUlNJT059
+Igo+IGRpZmYgLS1naXQgYS9leHRyYS12ZXJzaW9uLW5hbWUuc2ggYi9leHRyYS12ZXJzaW9uLW5h
+bWUuc2gKPiBuZXcgZmlsZSBtb2RlIDEwMDc1NQo+IGluZGV4IDAwMDAwMDAuLmY3MDQyNTYKPiAt
+LS0gL2Rldi9udWxsCj4gKysrIGIvZXh0cmEtdmVyc2lvbi1uYW1lLnNoCj4gQEAgLTAsMCArMSwx
+MyBAQAo+ICsjIS9iaW4vc2gKPiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKEdQTC0yLjAg
+T1IgTEdQTC0yLjEpCj4gKwo+ICsjIEZpcnN0IGFyZ3VtZW50IGlzIHRoZSBwYXRoIHRvIHRoZSBs
+dHRuZyBtb2R1bGVzIHNvdXJjZXMuCj4gK1RPUF9MVFROR19NT0RVTEVTX0RJUj0iJDEiCj4gKwo+
+ICtFWFRSQV9WRVJTSU9OX05BTUU9IiQoc2VkIC1uICcxcCcgIiR7VE9QX0xUVE5HX01PRFVMRVNf
+RElSfS9leHRyYV92ZXJzaW9uL25hbWUiCj4gMj4gL2Rldi9udWxsKSIKPiArCj4gK2lmIFsgIngk
+e0VYVFJBX1ZFUlNJT05fTkFNRX0iICE9ICJ4IiBdOyB0aGVuCj4gKwllY2hvICIke0VYVFJBX1ZF
+UlNJT05fTkFNRX0iCj4gK2Vsc2UKPiArCWVjaG8gIjAiCj4gK2ZpCj4gZGlmZiAtLWdpdCBhL2V4
+dHJhLXZlcnNpb24tcGF0Y2hlcy5zaCBiL2V4dHJhLXZlcnNpb24tcGF0Y2hlcy5zaAo+IG5ldyBm
+aWxlIG1vZGUgMTAwNzU1Cj4gaW5kZXggMDAwMDAwMC4uNGU4YTFiNQo+IC0tLSAvZGV2L251bGwK
+PiArKysgYi9leHRyYS12ZXJzaW9uLXBhdGNoZXMuc2gKPiBAQCAtMCwwICsxLDIxIEBACj4gKyMh
+L2Jpbi9zaAo+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAoR1BMLTIuMCBPUiBMR1BMLTIu
+MSkKPiArCj4gKyMgRmlyc3QgYXJndW1lbnQgaXMgdGhlIHBhdGggdG8gdGhlIGx0dG5nIG1vZHVs
+ZXMgc291cmNlcy4KPiArVE9QX0xUVE5HX01PRFVMRVNfRElSPSIkMSIKPiArCj4gK2lmICEgdGVz
+dCAtZCAiJHtUT1BfTFRUTkdfTU9EVUxFU19ESVJ9IjsgdGhlbgo+ICsJZXhpdCAxCj4gK2ZpCj4g
+Kwo+ICtUTVBGSUxFPSIkKG1rdGVtcCkiCj4gKwo+ICtmaW5kICIke1RPUF9MVFROR19NT0RVTEVT
+X0RJUn0vZXh0cmFfdmVyc2lvbi9wYXRjaGVzLyIgLW1heGRlcHRoIDEgISAtbmFtZQo+ICdSRUFE
+TUUnIC10eXBlIGYgLXByaW50ZiAnJWZcbicgfCBzb3J0IC1yIFwKPiArCXwgc2VkIC1FICdzL1te
+YS16QS1aMC05IFwuXS8tL2cgOyBzLyguKikvTU9EVUxFX0lORk8oZXh0cmFfdmVyc2lvbl9wYXRj
+aCwKPiAiXDEiKTsvZycgPiIke1RNUEZJTEV9IiAyPi9kZXYvbnVsbAo+ICsKPiAraWYgdGVzdCAh
+IC1mICIke1RPUF9MVFROR19NT0RVTEVTX0RJUn0vZXh0cmFfdmVyc2lvbi9wYXRjaGVzLmkiIHx8
+IFwKPiArCXRlc3QgeCIkKGNhdCAiJHtUTVBGSUxFfSIpIiAhPSB4IiQoY2F0Cj4gIiR7VE9QX0xU
+VE5HX01PRFVMRVNfRElSfS9leHRyYV92ZXJzaW9uL3BhdGNoZXMuaSIpIjsgdGhlbgo+ICsJbXYg
+IiR7VE1QRklMRX0iICIke1RPUF9MVFROR19NT0RVTEVTX0RJUn0vZXh0cmFfdmVyc2lvbi9wYXRj
+aGVzLmkiCj4gK2ZpCj4gKwo+ICtybSAtZiAiJHtUTVBGSUxFfSIKPiBkaWZmIC0tZ2l0IGEvZXh0
+cmFfdmVyc2lvbi9SRUFETUUgYi9leHRyYV92ZXJzaW9uL1JFQURNRQo+IG5ldyBmaWxlIG1vZGUg
+MTAwNjQ0Cj4gaW5kZXggMDAwMDAwMC4uNWVlZjQ5Ngo+IC0tLSAvZGV2L251bGwKPiArKysgYi9l
+eHRyYV92ZXJzaW9uL1JFQURNRQo+IEBAIC0wLDAgKzEsMiBAQAo+ICtUaGUgZmlyc3QgbGluZSBv
+ZiB0aGUgIm5hbWUiIGZpbGUgaXMgdXNlZCB0byBwb3B1bGF0ZSB0aGUgImV4dHJhX3ZlcnNpb25f
+bmFtZSIKPiArbW9kaW5mbyBrZXkgb2YgZWFjaCBidWlsdCBtb2R1bGUuCj4gZGlmZiAtLWdpdCBh
+L2V4dHJhX3ZlcnNpb24vcGF0Y2hlcy9SRUFETUUgYi9leHRyYV92ZXJzaW9uL3BhdGNoZXMvUkVB
+RE1FCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwLi4yMmVhM2QzCj4gLS0t
+IC9kZXYvbnVsbAo+ICsrKyBiL2V4dHJhX3ZlcnNpb24vcGF0Y2hlcy9SRUFETUUKPiBAQCAtMCww
+ICsxLDIgQEAKPiArVGhlIG5hbWUgb2YgZWFjaCBmaWxlIGluIHRoaXMgZGlyZWN0b3J5IGV4Y2Vw
+dCB0aGlzIFJFQURNRSB3aWxsIGJlIHVzZWQgdG8KPiArcG9wdWxhdGUgYSAiZXh0cmFfdmVyc2lv
+bl9wYXRoIiBtb2RpbmZvIGtleSBmb3IgZWFjaCBidWlsdCBtb2R1bGUuCj4gZGlmZiAtLWdpdCBh
+L2x0dG5nLWV2ZW50cy5jIGIvbHR0bmctZXZlbnRzLmMKPiBpbmRleCBlYzQ0NTAyLi5jMWYwMGZm
+IDEwMDY0NAo+IC0tLSBhL2x0dG5nLWV2ZW50cy5jCj4gKysrIGIvbHR0bmctZXZlbnRzLmMKPiBA
+QCAtMjgwOSwxMiArMjgwOSwyMiBAQCBzdGF0aWMgaW50IF9faW5pdCBsdHRuZ19ldmVudHNfaW5p
+dCh2b2lkKQo+IAlyZXQgPSBsdHRuZ19pbml0X2NwdV9ob3RwbHVnKCk7Cj4gCWlmIChyZXQpCj4g
+CQlnb3RvIGVycm9yX2hvdHBsdWc7Cj4gLQlwcmludGsoS0VSTl9OT1RJQ0UgIkxUVG5nOiBMb2Fk
+ZWQgbW9kdWxlcyB2JXMuJXMuJXMlcyAoJXMpXG4iLAo+ICsJcHJpbnRrKEtFUk5fTk9USUNFICJM
+VFRuZzogTG9hZGVkIG1vZHVsZXMgdiVzLiVzLiVzJXMgKCVzKSVzJXNcbiIsCj4gCQlfX3N0cmlu
+Z2lmeShMVFROR19NT0RVTEVTX01BSk9SX1ZFUlNJT04pLAo+IAkJX19zdHJpbmdpZnkoTFRUTkdf
+TU9EVUxFU19NSU5PUl9WRVJTSU9OKSwKPiAJCV9fc3RyaW5naWZ5KExUVE5HX01PRFVMRVNfUEFU
+Q0hMRVZFTF9WRVJTSU9OKSwKPiAJCUxUVE5HX01PRFVMRVNfRVhUUkFWRVJTSU9OLAo+IC0JCUxU
+VE5HX1ZFUlNJT05fTkFNRSk7Cj4gKwkJTFRUTkdfVkVSU0lPTl9OQU1FLAo+ICsjaWZkZWYgTFRU
+TkdfRVhUUkFfVkVSU0lPTl9HSVQKPiArCQlMVFROR19FWFRSQV9WRVJTSU9OX0dJVFswXSA9PSAn
+XDAnID8gIiIgOiAiIC0gIiBMVFROR19FWFRSQV9WRVJTSU9OX0dJVCwKPiArI2Vsc2UKPiArCQki
+IiwKPiArI2VuZGlmCj4gKyNpZmRlZiBMVFROR19FWFRSQV9WRVJTSU9OX05BTUUKPiArCQlMVFRO
+R19FWFRSQV9WRVJTSU9OX05BTUVbMF0gPT0gJ1wwJyA/ICIiIDogIiAtICIgTFRUTkdfRVhUUkFf
+VkVSU0lPTl9OQU1FKTsKPiArI2Vsc2UKPiArCQkiIik7Cj4gKyNlbmRpZgo+IAlyZXR1cm4gMDsK
+PiAKPiBlcnJvcl9ob3RwbHVnOgo+IEBAIC0yODI3LDEyICsyODM3LDIyIEBAIGVycm9yX2ttZW06
+Cj4gCWx0dG5nX3RyYWNlcG9pbnRfZXhpdCgpOwo+IGVycm9yX3RwOgo+IAlsdHRuZ19jb250ZXh0
+X2V4aXQoKTsKPiAtCXByaW50ayhLRVJOX05PVElDRSAiTFRUbmc6IEZhaWxlZCB0byBsb2FkIG1v
+ZHVsZXMgdiVzLiVzLiVzJXMgKCVzKVxuIiwKPiArCXByaW50ayhLRVJOX05PVElDRSAiTFRUbmc6
+IEZhaWxlZCB0byBsb2FkIG1vZHVsZXMgdiVzLiVzLiVzJXMgKCVzKSVzJXNcbiIsCj4gCQlfX3N0
+cmluZ2lmeShMVFROR19NT0RVTEVTX01BSk9SX1ZFUlNJT04pLAo+IAkJX19zdHJpbmdpZnkoTFRU
+TkdfTU9EVUxFU19NSU5PUl9WRVJTSU9OKSwKPiAJCV9fc3RyaW5naWZ5KExUVE5HX01PRFVMRVNf
+UEFUQ0hMRVZFTF9WRVJTSU9OKSwKPiAJCUxUVE5HX01PRFVMRVNfRVhUUkFWRVJTSU9OLAo+IC0J
+CUxUVE5HX1ZFUlNJT05fTkFNRSk7Cj4gKwkJTFRUTkdfVkVSU0lPTl9OQU1FLAo+ICsjaWZkZWYg
+TFRUTkdfRVhUUkFfVkVSU0lPTl9HSVQKPiArCQlMVFROR19FWFRSQV9WRVJTSU9OX0dJVFswXSA9
+PSAnXDAnID8gIiIgOiAiIC0gIiBMVFROR19FWFRSQV9WRVJTSU9OX0dJVCwKPiArI2Vsc2UKPiAr
+CQkiIiwKPiArI2VuZGlmCj4gKyNpZmRlZiBMVFROR19FWFRSQV9WRVJTSU9OX05BTUUKPiArCQlM
+VFROR19FWFRSQV9WRVJTSU9OX05BTUVbMF0gPT0gJ1wwJyA/ICIiIDogIiAtICIgTFRUTkdfRVhU
+UkFfVkVSU0lPTl9OQU1FKTsKPiArI2Vsc2UKPiArCQkiIik7Cj4gKyNlbmRpZgo+IAlyZXR1cm4g
+cmV0Owo+IH0KPiAKPiBAQCAtMjg1MCwxNiArMjg3MCwzMyBAQCBzdGF0aWMgdm9pZCBfX2V4aXQg
+bHR0bmdfZXZlbnRzX2V4aXQodm9pZCkKPiAJa21lbV9jYWNoZV9kZXN0cm95KGV2ZW50X2NhY2hl
+KTsKPiAJbHR0bmdfdHJhY2Vwb2ludF9leGl0KCk7Cj4gCWx0dG5nX2NvbnRleHRfZXhpdCgpOwo+
+IC0JcHJpbnRrKEtFUk5fTk9USUNFICJMVFRuZzogVW5sb2FkZWQgbW9kdWxlcyB2JXMuJXMuJXMl
+cyAoJXMpXG4iLAo+ICsJcHJpbnRrKEtFUk5fTk9USUNFICJMVFRuZzogVW5sb2FkZWQgbW9kdWxl
+cyB2JXMuJXMuJXMlcyAoJXMpJXMlc1xuIiwKPiAJCV9fc3RyaW5naWZ5KExUVE5HX01PRFVMRVNf
+TUFKT1JfVkVSU0lPTiksCj4gCQlfX3N0cmluZ2lmeShMVFROR19NT0RVTEVTX01JTk9SX1ZFUlNJ
+T04pLAo+IAkJX19zdHJpbmdpZnkoTFRUTkdfTU9EVUxFU19QQVRDSExFVkVMX1ZFUlNJT04pLAo+
+IAkJTFRUTkdfTU9EVUxFU19FWFRSQVZFUlNJT04sCj4gLQkJTFRUTkdfVkVSU0lPTl9OQU1FKTsK
+PiArCQlMVFROR19WRVJTSU9OX05BTUUsCj4gKyNpZmRlZiBMVFROR19FWFRSQV9WRVJTSU9OX0dJ
+VAo+ICsJCUxUVE5HX0VYVFJBX1ZFUlNJT05fR0lUWzBdID09ICdcMCcgPyAiIiA6ICIgLSAiIExU
+VE5HX0VYVFJBX1ZFUlNJT05fR0lULAo+ICsjZWxzZQo+ICsJCSIiLAo+ICsjZW5kaWYKPiArI2lm
+ZGVmIExUVE5HX0VYVFJBX1ZFUlNJT05fTkFNRQo+ICsJCUxUVE5HX0VYVFJBX1ZFUlNJT05fTkFN
+RVswXSA9PSAnXDAnID8gIiIgOiAiIC0gIiBMVFROR19FWFRSQV9WRVJTSU9OX05BTUUpOwo+ICsj
+ZWxzZQo+ICsJCSIiKTsKPiArI2VuZGlmCj4gfQo+IAo+IG1vZHVsZV9leGl0KGx0dG5nX2V2ZW50
+c19leGl0KTsKPiAKPiArI2luY2x1ZGUgImV4dHJhX3ZlcnNpb24vcGF0Y2hlcy5pIgo+ICsjaWZk
+ZWYgTFRUTkdfRVhUUkFfVkVSU0lPTl9HSVQKPiArTU9EVUxFX0lORk8oZXh0cmFfdmVyc2lvbl9n
+aXQsIExUVE5HX0VYVFJBX1ZFUlNJT05fR0lUKTsKPiArI2VuZGlmCj4gKyNpZmRlZiBMVFROR19F
+WFRSQV9WRVJTSU9OX05BTUUKPiArTU9EVUxFX0lORk8oZXh0cmFfdmVyc2lvbl9uYW1lLCBMVFRO
+R19FWFRSQV9WRVJTSU9OX05BTUUpOwo+ICsjZW5kaWYKPiBNT0RVTEVfTElDRU5TRSgiR1BMIGFu
+ZCBhZGRpdGlvbmFsIHJpZ2h0cyIpOwo+IE1PRFVMRV9BVVRIT1IoIk1hdGhpZXUgRGVzbm95ZXJz
+IDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Iik7Cj4gTU9EVUxFX0RFU0NSSVBUSU9O
+KCJMVFRuZyBFdmVudHMiKTsKPiAtLQo+IDIuMTcuMQoKLS0gCk1hdGhpZXUgRGVzbm95ZXJzCkVm
+ZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1k
+ZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
+bi9saXN0aW5mby9sdHRuZy1kZXYK
