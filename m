@@ -1,19 +1,21 @@
-From: Shehab Elsayed <shehabyomn@gmail.com>
+From: Philippe Proulx <eeppeliteloop@gmail.com>
 Subject: Re: Processing large trace files
-Date: Tue, 10 Jul 2018 11:32:42 -0400
-Message-ID: <CAC-H6ttKES1etr8MY1nNJQDKCw1KDAejW6fpouFKM92Ap1330A__8995.97237953476$1531236646$gmane$org@mail.gmail.com>
+Date: Tue, 10 Jul 2018 18:51:29 -0400
+Message-ID: <CAB4xu_2hYumLVDg2GRLUwEgz7HTaWo8PQ3u3U-QPcqpNBm3M5A__31601.9500409768$1531262999$gmane$org@mail.gmail.com>
 References: <CAC-H6tsw80-0R+06MJi7k9yz41C=oMp25gZOujVk7JjqEtOpNQ@mail.gmail.com>
  <20180710133745.GB4999@joraj-alpa>
+ <CAC-H6ttKES1etr8MY1nNJQDKCw1KDAejW6fpouFKM92Ap1330A@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2672871745142485646=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
- [IPv6:2a00:1450:4864:20::22d])
- by lists.lttng.org (Postfix) with ESMTPS id 41Q5mr6KQbztm3
- for <lttng-dev@lists.lttng.org>; Tue, 10 Jul 2018 11:32:44 -0400 (EDT)
-Received: by mail-lj1-x22d.google.com with SMTP id t21-v6so17069192lji.0
- for <lttng-dev@lists.lttng.org>; Tue, 10 Jul 2018 08:32:44 -0700 (PDT)
-In-Reply-To: <20180710133745.GB4999@joraj-alpa>
+Received: from mail-qt0-x234.google.com (mail-qt0-x234.google.com
+ [IPv6:2607:f8b0:400d:c0d::234])
+ by lists.lttng.org (Postfix) with ESMTPS id 41QHWc2tDNz19Y1
+ for <lttng-dev@lists.lttng.org>; Tue, 10 Jul 2018 18:51:56 -0400 (EDT)
+Received: by mail-qt0-x234.google.com with SMTP id a18-v6so19848242qtj.4
+ for <lttng-dev@lists.lttng.org>; Tue, 10 Jul 2018 15:51:56 -0700 (PDT)
+In-Reply-To: <CAC-H6ttKES1etr8MY1nNJQDKCw1KDAejW6fpouFKM92Ap1330A@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,177 +25,62 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: shehabyomn@gmail.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============2672871745142485646==
-Content-Type: multipart/alternative; boundary="000000000000552be40570a6d78f"
-
---000000000000552be40570a6d78f
-Content-Type: text/plain; charset="UTF-8"
-
-I haven't tried the C API yet.
-
-A smaller trace of about 2.7GB took +5 hrs before I had to kill the
-process.
-
-As for trace cutting, that sounds promising. How broken is it in babeltrace
-2? I mean, can I use it to some extent or is it not functioning at all?
-
-Thanks!
-
-Shehab Y. Elsayed, MSc.
-PhD Student
-The Edwards S. Rogers Sr. Dept. of Electrical and Computer Engineering
-University of Toronto
-E-mail: shehabyomn@gmail.com
-<https://webmail.rice.edu/imp/message.php?mailbox=INBOX&index=11#>
-
-On Tue, Jul 10, 2018 at 9:37 AM, Jonathan Rajotte-Julien <
-jonathan.rajotte-julien@efficios.com> wrote:
-
-> Hi Shehab,
->
-> On Mon, Jul 09, 2018 at 06:48:05PM -0400, Shehab Elsayed wrote:
-> > Hello All,
-> >
-> > I was wondering if anyone had any suggestions on how to speedup trace
-> > processing. Right now I am using babeltrace in python to read the traces
-> > and process them. Some of the traces I am dealing with reach up to 10GB.
->
-> Well Babeltrace also provide a C API. You might get some performance gains
-> there.
->
-> Depending of the data you extract you might be able to split the 10 GB
-> trace
-> into smaller chunk and parallelize your analysis. Babeltrace 2 will support
-> trace cutting, it seems that it is broken for now. Babeltrace 1 does not
-> support
-> trace cutting.
->
-> You might want to look at ways to reduce the size of your traces using
-> tracing
-> mechanism such as the snapshot feature and enabling/recording only
-> pertinent
-> event if it is not already the case.
->
-> Could you share with us the time it take for analyzing your bigger trace?
->
-> Cheers
->
-> >
-> > I read the trace, extract the info I need and write them to a csv gzipped
-> > file (all in python). I fill up a list first with all extracted info for
-> > each tracked event and then write once after the script has gone through
-> > all events in the trace.
-> >
-> > Thanks,
-> > Shehab
->
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
->
-> --
-> Jonathan Rajotte-Julien
-> EfficiOS
->
-
---000000000000552be40570a6d78f
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div>I haven&#39;t tried the C API yet. <br></div><div><br=
-></div><div>A smaller trace of about 2.7GB took +5 hrs before I had to kill=
- the process. <br></div><div><br></div><div>As for trace cutting, that soun=
-ds promising. How broken is it in babeltrace 2? I mean, can I use it to som=
-e extent or is it not functioning at all?</div><div><br></div><div>Thanks!<=
-br></div></div><div class=3D"gmail_extra"><br clear=3D"all"><div><div class=
-=3D"gmail_signature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><f=
-ont color=3D"#888888">Shehab Y. Elsayed, MSc.<br>
-PhD Student<br>The Edwards S. Rogers Sr. Dept. of Electrical and Computer E=
-ngineering<br>University of Toronto </font><font color=3D"#888888"><a value=
-=3D"+20124498360"><span dir=3D"ltr"></span></a><br>
-E-mail: <a href=3D"https://webmail.rice.edu/imp/message.php?mailbox=3DINBOX=
-&amp;index=3D11#" target=3D"_blank">shehabyomn@gmail.com</a></font></div></=
-div></div>
-<br><div class=3D"gmail_quote">On Tue, Jul 10, 2018 at 9:37 AM, Jonathan Ra=
-jotte-Julien <span dir=3D"ltr">&lt;<a href=3D"mailto:jonathan.rajotte-julie=
-n@efficios.com" target=3D"_blank">jonathan.rajotte-julien@efficios.com</a>&=
-gt;</span> wrote:<br><blockquote class=3D"gmail_quote" style=3D"margin:0 0 =
-0 .8ex;border-left:1px #ccc solid;padding-left:1ex">Hi Shehab,<br>
-<span class=3D""><br>
-On Mon, Jul 09, 2018 at 06:48:05PM -0400, Shehab Elsayed wrote:<br>
-&gt; Hello All,<br>
-&gt; <br>
-&gt; I was wondering if anyone had any suggestions on how to speedup trace<=
-br>
-&gt; processing. Right now I am using babeltrace in python to read the trac=
-es<br>
-&gt; and process them. Some of the traces I am dealing with reach up to 10G=
-B.<br>
-<br>
-</span>Well Babeltrace also provide a C API. You might get some performance=
- gains there.<br>
-<br>
-Depending of the data you extract you might be able to split the 10 GB trac=
-e<br>
-into smaller chunk and parallelize your analysis. Babeltrace 2 will support=
-<br>
-trace cutting, it seems that it is broken for now. Babeltrace 1 does not su=
-pport<br>
-trace cutting.<br>
-<br>
-You might want to look at ways to reduce the size of your traces using trac=
-ing<br>
-mechanism such as the snapshot feature and enabling/recording only pertinen=
-t<br>
-event if it is not already the case.<br>
-<br>
-Could you share with us the time it take for analyzing your bigger trace?<b=
-r>
-<br>
-Cheers<br>
-<span class=3D""><br>
-&gt; <br>
-&gt; I read the trace, extract the info I need and write them to a csv gzip=
-ped<br>
-&gt; file (all in python). I fill up a list first with all extracted info f=
-or<br>
-&gt; each tracked event and then write once after the script has gone throu=
-gh<br>
-&gt; all events in the trace.<br>
-&gt; <br>
-&gt; Thanks,<br>
-&gt; Shehab<br>
-<br>
-</span>&gt; ______________________________<wbr>_________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org">lttng-dev@lists.lttng.org=
-</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-<wbr>bin/=
-mailman/listinfo/lttng-dev</a><br>
-<span class=3D"HOEnZb"><font color=3D"#888888"><br>
-<br>
--- <br>
-Jonathan Rajotte-Julien<br>
-EfficiOS<br>
-</font></span></blockquote></div><br></div>
-
---000000000000552be40570a6d78f--
-
---===============2672871745142485646==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============2672871745142485646==--
+T24gVHVlLCBKdWwgMTAsIDIwMTggYXQgMTE6MzMgQU0gU2hlaGFiIEVsc2F5ZWQgPHNoZWhhYnlv
+bW5AZ21haWwuY29tPiB3cm90ZToKPgo+IEkgaGF2ZW4ndCB0cmllZCB0aGUgQyBBUEkgeWV0Lgo+
+Cj4gQSBzbWFsbGVyIHRyYWNlIG9mIGFib3V0IDIuN0dCIHRvb2sgKzUgaHJzIGJlZm9yZSBJIGhh
+ZCB0byBraWxsIHRoZSBwcm9jZXNzLgoKV293LiBUaGUgUHl0aG9uIGJpbmRpbmdzIGFyZSBzbG93
+IGJ5IG5hdHVyZSwgYnV0IHRoYXQncyBhIGxvdCBvZiB0aW1lIQoKPgo+IEFzIGZvciB0cmFjZSBj
+dXR0aW5nLCB0aGF0IHNvdW5kcyBwcm9taXNpbmcuIEhvdyBicm9rZW4gaXMgaXQgaW4gYmFiZWx0
+cmFjZSAyPyBJIG1lYW4sIGNhbiBJIHVzZSBpdCB0byBzb21lIGV4dGVudCBvciBpcyBpdCBub3Qg
+ZnVuY3Rpb25pbmcgYXQgYWxsPwoKSXQgd29ya3MgaW4gZmFjdCwgYnV0IHRoZSBtYXN0ZXIgYnJh
+bmNoIG9mIEJhYmVsdHJhY2UgMiBkb2VzIG5vdCBjb250YWluCnNvbWUgaW1wb3J0YW50IG9wdGlt
+aXphdGlvbnMgeWV0IHNvIGl0IGNhbiBiZSBzbG93LCB3aGljaCBpcyBhbHJlYWR5CnlvdXIgaXNz
+dWUsIHRoZXJlZm9yZSBJIGNhbid0IHNheSBpZiBpdCB3aWxsIGhlbHAuCgpPbmNlIGJ1aWx0LCB0
+aGUgY29tbWFuZCBsaW5lIHdvdWxkIGxvb2sgbGlrZToKCiAgICBiYWJlbHRyYWNlIC9wYXRoL3Rv
+L3RyYWNlL2RpciAtLWJlZ2luPTIwOjMyOjE3LjE4MjczODQ3NSBcCiAgICAgICAgICAgICAgIC0t
+ZW5kPTIwOjMyOjI0LjE3NzI4Mzc0NiAtb2N0ZiAtdy9vdXRwdXQvZGlyCgpTZWUgYmFiZWx0cmFj
+ZS1jb252ZXJ0KDEpIGZvciBtb3JlIGRldGFpbHMuCgpUcnkgaXQgYW5kIHNlZSBpZiB5b3UgY2Fu
+IHNhdmUgdGltZS4gTW9yZW92ZXIgSSdtIHdvcmtpbmcgb24gdmFyaW91cwpvcHRpbWl6YXRpb25z
+LCBvbmUgb2Ygd2hpY2ggdGFyZ2V0cyBmYXN0ZXIgdHJpbW1pbmcuIFRoaXMgd2lsbCBiZSBwYXJ0
+Cm9mIDIuMC1yYzEuCgpQaGlsCgo+Cj4gVGhhbmtzIQo+Cj4gU2hlaGFiIFkuIEVsc2F5ZWQsIE1T
+Yy4KPiBQaEQgU3R1ZGVudAo+IFRoZSBFZHdhcmRzIFMuIFJvZ2VycyBTci4gRGVwdC4gb2YgRWxl
+Y3RyaWNhbCBhbmQgQ29tcHV0ZXIgRW5naW5lZXJpbmcKPiBVbml2ZXJzaXR5IG9mIFRvcm9udG8K
+PiBFLW1haWw6IHNoZWhhYnlvbW5AZ21haWwuY29tCj4KPiBPbiBUdWUsIEp1bCAxMCwgMjAxOCBh
+dCA5OjM3IEFNLCBKb25hdGhhbiBSYWpvdHRlLUp1bGllbiA8am9uYXRoYW4ucmFqb3R0ZS1qdWxp
+ZW5AZWZmaWNpb3MuY29tPiB3cm90ZToKPj4KPj4gSGkgU2hlaGFiLAo+Pgo+PiBPbiBNb24sIEp1
+bCAwOSwgMjAxOCBhdCAwNjo0ODowNVBNIC0wNDAwLCBTaGVoYWIgRWxzYXllZCB3cm90ZToKPj4g
+PiBIZWxsbyBBbGwsCj4+ID4KPj4gPiBJIHdhcyB3b25kZXJpbmcgaWYgYW55b25lIGhhZCBhbnkg
+c3VnZ2VzdGlvbnMgb24gaG93IHRvIHNwZWVkdXAgdHJhY2UKPj4gPiBwcm9jZXNzaW5nLiBSaWdo
+dCBub3cgSSBhbSB1c2luZyBiYWJlbHRyYWNlIGluIHB5dGhvbiB0byByZWFkIHRoZSB0cmFjZXMK
+Pj4gPiBhbmQgcHJvY2VzcyB0aGVtLiBTb21lIG9mIHRoZSB0cmFjZXMgSSBhbSBkZWFsaW5nIHdp
+dGggcmVhY2ggdXAgdG8gMTBHQi4KPj4KPj4gV2VsbCBCYWJlbHRyYWNlIGFsc28gcHJvdmlkZSBh
+IEMgQVBJLiBZb3UgbWlnaHQgZ2V0IHNvbWUgcGVyZm9ybWFuY2UgZ2FpbnMgdGhlcmUuCj4+Cj4+
+IERlcGVuZGluZyBvZiB0aGUgZGF0YSB5b3UgZXh0cmFjdCB5b3UgbWlnaHQgYmUgYWJsZSB0byBz
+cGxpdCB0aGUgMTAgR0IgdHJhY2UKPj4gaW50byBzbWFsbGVyIGNodW5rIGFuZCBwYXJhbGxlbGl6
+ZSB5b3VyIGFuYWx5c2lzLiBCYWJlbHRyYWNlIDIgd2lsbCBzdXBwb3J0Cj4+IHRyYWNlIGN1dHRp
+bmcsIGl0IHNlZW1zIHRoYXQgaXQgaXMgYnJva2VuIGZvciBub3cuIEJhYmVsdHJhY2UgMSBkb2Vz
+IG5vdCBzdXBwb3J0Cj4+IHRyYWNlIGN1dHRpbmcuCj4+Cj4+IFlvdSBtaWdodCB3YW50IHRvIGxv
+b2sgYXQgd2F5cyB0byByZWR1Y2UgdGhlIHNpemUgb2YgeW91ciB0cmFjZXMgdXNpbmcgdHJhY2lu
+Zwo+PiBtZWNoYW5pc20gc3VjaCBhcyB0aGUgc25hcHNob3QgZmVhdHVyZSBhbmQgZW5hYmxpbmcv
+cmVjb3JkaW5nIG9ubHkgcGVydGluZW50Cj4+IGV2ZW50IGlmIGl0IGlzIG5vdCBhbHJlYWR5IHRo
+ZSBjYXNlLgo+Pgo+PiBDb3VsZCB5b3Ugc2hhcmUgd2l0aCB1cyB0aGUgdGltZSBpdCB0YWtlIGZv
+ciBhbmFseXppbmcgeW91ciBiaWdnZXIgdHJhY2U/Cj4+Cj4+IENoZWVycwo+Pgo+PiA+Cj4+ID4g
+SSByZWFkIHRoZSB0cmFjZSwgZXh0cmFjdCB0aGUgaW5mbyBJIG5lZWQgYW5kIHdyaXRlIHRoZW0g
+dG8gYSBjc3YgZ3ppcHBlZAo+PiA+IGZpbGUgKGFsbCBpbiBweXRob24pLiBJIGZpbGwgdXAgYSBs
+aXN0IGZpcnN0IHdpdGggYWxsIGV4dHJhY3RlZCBpbmZvIGZvcgo+PiA+IGVhY2ggdHJhY2tlZCBl
+dmVudCBhbmQgdGhlbiB3cml0ZSBvbmNlIGFmdGVyIHRoZSBzY3JpcHQgaGFzIGdvbmUgdGhyb3Vn
+aAo+PiA+IGFsbCBldmVudHMgaW4gdGhlIHRyYWNlLgo+PiA+Cj4+ID4gVGhhbmtzLAo+PiA+IFNo
+ZWhhYgo+Pgo+PiA+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCj4+ID4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+PiA+IGx0dG5nLWRldkBsaXN0cy5sdHRu
+Zy5vcmcKPj4gPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
+Zm8vbHR0bmctZGV2Cj4+Cj4+Cj4+IC0tCj4+IEpvbmF0aGFuIFJham90dGUtSnVsaWVuCj4+IEVm
+ZmljaU9TCj4KPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
+PiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
+ZGV2Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
+LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
+Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
