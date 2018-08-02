@@ -1,22 +1,20 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: LTTng streams not Hung up even session is destroyed
-Date: Wed, 1 Aug 2018 18:28:12 -0400
-Message-ID: <20180801222812.GA18033__5175.4513792277$1533162383$gmane$org@joraj-alpa>
-References: <CAPB=nBs16oE95zHyX3xF6F895g1Phe=8AKFmsX185M8rZvyhEw@mail.gmail.com>
- <1098573093.6842.1532966434523.JavaMail.zimbra@efficios.com>
- <2025170812.6867.1532966515434.JavaMail.zimbra@efficios.com>
- <CAPB=nBs84oqYvPECThCoheHQZr6QGONBhSR1o61iB1bS7vbXdg@mail.gmail.com>
- <20180801171307.GA23912@joraj-alpa>
- <CAPB=nBvc8JMvrppOBOF+SDcH5k-e=Uoh9eb3fCQcqPBW1OLYkQ@mail.gmail.com>
+From: Attel Raghavendra <attel.raghavendra@gmail.com>
+Subject: Re: LTTng undefined reference while building the sample
+	application.
+Date: Thu, 2 Aug 2018 11:40:49 +0530
+Message-ID: <CAEN7SXNggOTubKvvAOJ8FTmJLpORGEauk1D7+MX6QwThk1uxEg__29197.9373353117$1533190246$gmane$org@mail.gmail.com>
+References: <CAEN7SXPpZKTgHDU91AwwrzdVQeM+fr=06CKmLJqKUn6uiRbZwg@mail.gmail.com>
+ <365f8241-e04e-95b7-881a-f9ffc6d0e555@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============6538110654254277108=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 41gnyB6PP3z146v
- for <lttng-dev@lists.lttng.org>; Wed,  1 Aug 2018 18:28:18 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <CAPB=nBvc8JMvrppOBOF+SDcH5k-e=Uoh9eb3fCQcqPBW1OLYkQ@mail.gmail.com>
+Received: from mail-oi0-x233.google.com (mail-oi0-x233.google.com
+ [IPv6:2607:f8b0:4003:c06::233])
+ by lists.lttng.org (Postfix) with ESMTPS id 41h0D53MFCz15PS
+ for <lttng-dev@lists.lttng.org>; Thu,  2 Aug 2018 02:11:01 -0400 (EDT)
+Received: by mail-oi0-x233.google.com with SMTP id n21-v6so1941023oig.3
+ for <lttng-dev@lists.lttng.org>; Wed, 01 Aug 2018 23:11:01 -0700 (PDT)
+In-Reply-To: <365f8241-e04e-95b7-881a-f9ffc6d0e555@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,88 +24,112 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: sai kiran <sai9951775108@gmail.com>
+To: mjeanson@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgU2FpLAoKWW91IGRpZCBub3QgYW5zd2VyIHRoZSBvdGhlciBxdWVzdGlvbnMgSSBhc2tlZC4g
-VGhvc2UgYW5zd2VycyBhcmUgbmVjZXNzYXJ5IGZvciB1cwp0byB1bmRlcnN0YW5kIHdoYXQgaXMg
-Z29pbmcgb24uCgpPbiBXZWQsIEF1ZyAwMSwgMjAxOCBhdCAxMToxMTozOVBNICswNTMwLCBzYWkg
-a2lyYW4gd3JvdGU6Cj4gSGksCj4gVGhlIHJlYXNvbiBmb3IgcmVhZGVyIHRpbWVyIG9wdGlvbiBp
-cywgVVNUIGV2ZW50IHRocm91Z2hwdXQgaXMgdmVyeSBsb3cgc28KPiBpZiBJIGRvbid0IHVzZSB0
-aGlzIG9wdGlvbiBJJ20gbm90IGF0IGFsbCBnZXR0aW5nIFVTVCB0cmFjZSBkYXRhLiBFdmVuCj4g
-dGhvdWdoIHRoZSBkaWZmZXJlbmNlIGJldHdlZW4gInJlYWRlci10aW1lciIgYW5kICJzd2l0Y2gt
-dGltZXIiIGlzIG5vdAo+IGNsZWFyIGZvciBtZS4gQ29ycmVjdCBtZSBpZiBJIHdyb25nLAoKUGxl
-YXNlIHJlYWQgdGhlIGRvYy9tYW4gcGFnZSBmb3IgbW9yZSBpbmZvcm1hdGlvbiByZWdhcmRpbmcg
-dGhvc2UgdGltZXIgWzFdLgoKWzFdIGh0dHBzOi8vbHR0bmcub3JnL21hbi8xL2x0dG5nLWVuYWJs
-ZS1jaGFubmVsL3YyLjEwLyNkb2MtX3N3aXRjaF90aW1lcgoKIldoZW4gYSBjaGFubmVs4oCZcyBz
-d2l0Y2ggdGltZXIgZmlyZXMsIGEgc3ViLWJ1ZmZlciBzd2l0Y2ggaGFwcGVucy4gVGhpcyB0aW1l
-cgptYXkgYmUgdXNlZCB0byBlbnN1cmUgdGhhdCBldmVudCBkYXRhIGlzIGNvbnN1bWVkIGFuZCBj
-b21taXR0ZWQgdG8gdHJhY2UgZmlsZXMKcGVyaW9kaWNhbGx5IGluIGNhc2Ugb2YgYSBsb3cgZXZl
-bnQgdGhyb3VnaHB1dC4iCgpUaGlzIHNlZW1zIHRvIGZpdCB5b3VyIHVzZSBjYXNlLiBZb3UgbWln
-aHQgYmUgYmV0dGVyIG9mZiB1c2luZyB0aGUgc3dpdGNoIHRpbWVyLgoKQ2hlZXJzCj4gCj4gICJT
-d2l0Y2gtVGltZXIiOiBBZnRlciBzd2l0Y2ggdGltZXIgZXhwaXJlcywgQ29uc3VtZXIgZGFlbW9u
-IHdpbGwgdGFrZSB0aGUKPiBjdXJyZW50IHN1Yi1idWZmZXIgZGF0YSBhbmQgbmV3IHRyYWNlIGRh
-dGEgd2lsbCBiZSB3cml0dGVuIHRvIG5leHQKPiBzdWItYnVmZmVyIChpZiBhdmFpbGFibGUpLiBT
-byBzd2l0Y2ggYmV0d2VlbiBzdWItYnVmZmVyIHdpbGwgaGFwcGVuLgo+ICJSZWFkZXItVGltZXIi
-OiBBZnRlciBSZWFkZXItVGltZXIgZXhwaXJlcywgQ29uc3VtZXIgZGFlbW9uIHdpbGwgY2hlY2sK
-PiBzdWItYnVmZmVyIGlzIGZ1bGwgb3Igbm90LiBJZiBGdWxsIHRoZW4gY29uc3VtZXIgZGFlbW9u
-IHdpbGwgdGFrZSB0aGUgZGF0YQo+IG9yIGVsc2UgY29uc3VtZXIgZGFlbW9uIHdvbid0IHRha2Ug
-dHJhY2UgZGF0YS4KPiAKPiBJJ20gdXNpbmcgbXkgb3duIGFwcGxpY2F0aW9uLgo+IAo+IFRoYW5r
-cywKPiBUIFNBSSBLSVJBTi4KPiAKPiBPbiBXZWQsIEF1ZyAxLCAyMDE4IGF0IDEwOjQzIFBNLCBK
-b25hdGhhbiBSYWpvdHRlLUp1bGllbiA8Cj4gam9uYXRoYW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNp
-b3MuY29tPiB3cm90ZToKPiAKPiA+IEhpIFNhaSwKPiA+Cj4gPiBPbiBXZWQsIEF1ZyAwMSwgMjAx
-OCBhdCAxMDowNTozMFBNICswNTMwLCBzYWkga2lyYW4gd3JvdGU6Cj4gPiA+IEhpLAo+ID4gPiAg
-SSdtIHVzaW5nIExUVG5nIDIuOS40ICB2ZXJzaW9uIG9mIGx0dG5nLXRvb2xzLCBsdHRuZy1tb2R1
-bGVzLCBhbmQKPiA+ID4gbHR0bmctdXN0LiBJJ20gZG9pbmcgdHJhY2luZyBpbiBYaWxpbnggWnlu
-cSBaQzcwNiBldmFsdWF0aW9uIGtpdC4KPiA+ID4gdGhlIHNlcXVlbmNlIG9mIGNvbW1hbmRzIHVz
-ZWQgZm9yIHRyYWNpbmc6Cj4gPiA+IE1vZGU6Cj4gPiA+IGxpdmUgbW9kZS4KPiA+Cj4gPiBXaGF0
-IGlzIHRoZSByZWFzb24gYmVoaW5kIHVzaW5nIHRoZSBsaXZlIGZlYXR1cmUgaGVyZSBzaW5jZSB5
-b3UgYXJlIHJ1bm5pbmcKPiA+IHRoaW5ncyBsb2NhbGx5IChsdHRuZy1yZWxheWQvLS1zZXQtdXJs
-IDEyNy4wLjAuMSk/Cj4gPgo+ID4gQXJlIHlvdSBkb2luZyBsaXZlIGFuYWx5c2lzIG9yIHBlcmZv
-cm1pbmcgYW5hbHlzaXMgYWZ0ZXIgdGhlCj4gPiBmYWN0Pwo+ID4KPiA+IEluIG90aGVyIHdvcmQs
-IHdoYXQgYXJlIHlvdSB0cnlpbmcgdG8gYWNoaWV2ZSB3aXRoIHRyYWNpbmc/Cj4gPgo+ID4gSSBq
-dXN0IHdhbnQgdG8gbWFrZSBzdXJlIHRoYXQgeW91IGFyZSB1c2luZyB0aGUgbW9zdCBhcHByb3By
-aWF0ZSB3YXkgb2YKPiA+IHRyYWNpbmcKPiA+IHRvIGFjaGlldmUgeW91ciBnb2FsLgo+ID4KPiA+
-ID4gRm9yIHJlbGF5IGRhZW1vbjoKPiA+ID4gbHR0bmctcmVsYXlkIC1MIHRjcDovLzEyNy4wLjAu
-MTo1MzQ0LS1vdXRwdXQ9L3RtcC9sdHRuZ2xvZ3MvCj4gPiA+IFNlc3Npb24gY29tbWRzOgo+ID4g
-PiAxKSBsdHRuZyBjcmVhdGUgbXktc2Vzc2lvbiAtLWxpdmUgLS1zZXQtdXJsPW5ldDovLzEyNy4w
-LjAuMQo+ID4gPiAyKSBsdHRuZyBlbmFibGUtY2hhbm5lbCAtLWtlcm5lbCAtLXN1YmJ1Zi1zaXpl
-PTEzMTA3MiAtLW51bS1zdWJidWY9OAo+ID4gPiBjaGFubmVsMAo+ID4gPiAzKSBsdHRuZyBlbmFi
-bGUtY2hhbm5lbCAtdSAtLXJlYWQtdGltZXI9MjAwMDAwMCBjaGFubmVsMAo+ID4KPiA+IEFyZSB5
-b3Ugc3VyZSB5b3Ugd2FudCB0byB1c2UgdGhlIHJlYWQtdGltZXIgb3B0aW9uPwo+ID4KPiA+IFVz
-aW5nIDIwMDAwMDAgYXMgaXRzIHZhbHVlIG1lYW4gdGhhdCB1c2Vyc3BhY2Ugc3ViYnVmZmVycyBz
-dGF0dXMgd2lsbCBvbmx5Cj4gPiBiZSBjaGVja2VkCj4gPiB1cG9uIGVhY2ggMiBzZWNvbmRzLgo+
-ID4KPiA+ID4gNCkgbHR0bmcgZW5hYmxlLWV2ZW50IC0ta2VybmVsCj4gPiA+IHNjaGVkX3Byb2Nl
-c3NfZm9yayxzY2hlZF9wcm9jZXNzX2V4aXQsaXJxX2hhbmRsZXJfCj4gPiBlbnRyeSxpcnFfaGFu
-ZGxlcl9leGl0LHNjaGVkX3N3aXRjaCxzY2hlZF93YWtpbmcKPiA+ID4gLWMgY2hhbm5lbDAgLS1z
-ZXNzaW9uPW15LXNlc3Npb24KPiA+ID4gNSkgbHR0bmcgZW5hYmxlLWV2ZW50IC11IGtlcm5lbHBy
-b2ZpbGVyOmtlcm5lbHByb2ZpbGVyX3Rhc2tfZHJvcCAtYwo+ID4gPiBjaGFubmVsMCAtLXNlc3Np
-b249bXlzZXNzaW9uCj4gPiA+IDYpIGx0dG5nIHN0YXJ0Cj4gPiA+IDcpIGx0dG5nIHN0b3AKPiA+
-ID4gOCkgbHR0bmcgZGVzdHJveQo+ID4gPgo+ID4gPiBIZXJlIG15IGFwcGxpY2F0aW9uIGhhcyBh
-IHRyYWNlcG9pbnQgb2YKPiA+ID4gImtlcm5lbHByb2ZpbGVyOmtlcm5lbHByb2ZpbGVyX3Rhc2tf
-ZHJvcCIKPiA+ID4gZXZlbnQuCj4gPiA+Cj4gPgo+ID4gPiA+IEhpLAo+ID4gPiA+Cj4gPiA+ID4g
-QWZ0ZXIgTFRUbmcgc2Vzc2lvbiBpcyBkZXN0cm95ZWQsIG5vIHN0cmVhbSBpcyDigJwqSHVuZyB1
-cCrigJ0uCj4gPiBDb250aW51b3VzbHkKPiA+Cj4gPiBXaGF0IGRvIHlvdSBtZWFuIGJ5ICJIdW5n
-IHVwIj8gQXJlIHlvdSB1c2luZyBiYWJlbHRyYWNlIGFuZCBjb25uZWN0aW5nIHRvCj4gPiB0aGUK
-PiA+IGx0dG5nLXJlbGF5ZCBkYWVtb24gb24gbG9jYWxob3N0Pwo+ID4KPiA+IFdoYXQgaXMgeW91
-ciBleHBlY3RhdGlvbj8KPiA+Cj4gPiBEbyB5b3UgbWVhbiB0aGF0IHlvdSBhcmUgc3RpbGwgcmVj
-ZWl2aW5nIGRhdGEgb24gYmFiZWx0cmFjZSBzaWRlIGV2ZW4gd2hlbgo+ID4gcGVyZm9ybWluZyBh
-IGx0dG5nIHN0b3AvZGVzdHJveSBjb21tYW5kPwo+ID4KPiA+ID4gPiBJ4oCZbSBnZXR0aW5nIGRh
-dGEgZnJvbSDigJwqcmVsYXkgZGFlbW9uKuKAnS4gSeKAmXZlIGtpbGxlZCBjb25zdW1lciBkYWVt
-b24sCj4gPiBldmVuCj4gPiA+ID4gdGhvdWdoIHRyYWNpbmcgZGF0YSBjb21pbmcgZnJvbSByZWxh
-eSBkYWVtb24uCj4gPgo+ID4gVGhpcyBjYW4gaGFwcGVuIGlmIGJhYmVsdHJhY2UgaXMgImNhdGNo
-aW5nLXVwIiBvbiB0aGUgZGF0YSwga2VlcCBpbiBtaW5kCj4gPiB0aGF0Cj4gPiBsdHRuZy1yZWxh
-eWQgaGF2ZSB0aGUgdHJhY2UgZGF0YSBhbmQgY2FuIGNvbnRpbnVlIHRvIHNlbmQgaW5mb3JtYXRp
-b24gdG8gYQo+ID4gYmFiZWx0cmFjZSBjbGllbnQgZXZlbiBpZiB0aGUgY29uc3VtZXJkL3Nlc3Np
-b25kIGlzIGtpbGxlZCBvciB0aGUgc2Vzc2lvbgo+ID4gc3RvcHBlZC9kZXN0cm95ZWQuCj4gPgo+
-ID4gPiA+IFBsZWFzZSBoZWxwIG1lLiBPbmUgbW9yZQo+ID4gPiA+IHRoaW5nIGFwcGxpY2F0aW9u
-IGlzIHJ1bm5pbmcgaW5maW5pdGVseS4KPiA+Cj4gPiBXaGljaCBhcHBsaWNhdGlvbj8gWW91ciBh
-cHBsaWNhdGlvbj8gQmFiZWx0cmFjZT8gbHR0bmctc2Vzc2lvbmQ/Cj4gPgo+ID4gSWYgeW91IGFy
-ZSB0YWxraW5nIGFib3V0IHlvdXIgYXBwbGljYXRpb24sIGNvdWxkIHlvdSBwcm92aWRlIGEgYmFj
-a3RyYWNlCj4gPiBpbmRpY2F0aW5nIHRoYXQgdXN0IGlzIHRoZSBjdWxwcml0IGhlcmU/Cj4gPgo+
-ID4gQ2hlZXJzCj4gPgo+ID4gLS0KPiA+IEpvbmF0aGFuIFJham90dGUtSnVsaWVuCj4gPiBFZmZp
-Y2lPUwo+ID4KCi0tIApKb25hdGhhbiBSYWpvdHRlLUp1bGllbgpFZmZpY2lPUwpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBs
-aXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dp
-LWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============6538110654254277108==
+Content-Type: multipart/alternative; boundary="000000000000ced56f05726dac43"
+
+--000000000000ced56f05726dac43
+Content-Type: text/plain; charset="UTF-8"
+
+Thank you for your help!
+Raghu
+
+On Wed, Aug 1, 2018 at 8:36 PM Michael Jeanson <mjeanson@efficios.com>
+wrote:
+
+> On 2018-08-01 07:22 AM, Attel Raghavendra wrote:
+> > Hi Team,
+> >
+> > I have new to the LTTng. I am trying to build a sample application to
+> > test the LTTng.
+> > I was able to compile the sample application successfully, however
+> > facing the following linker problems. Please help to resolve the same.
+> >
+> > xx_app.o:(__tracepoints+0x18): undefined reference to
+> > `__tracepoint_provider_rttLogger'
+> > xx_tpp.o: In function `__tracepoint_provider_check_rttlogger':
+> > xx_tpp.c:(.text+0x271): undefined reference to
+> > `__tracepoint_provider_mismatch_rttLogger'
+> > xx_tpp.c:(.text+0x27b): undefined reference to
+> > `__tracepoint_provider_mismatch_rttLogger'
+> > collect2: error: ld returned 1 exit status
+> >
+> >
+> > Thank you,
+> > Raghu.
+> >
+> Hi Raghu,
+>
+> The correct address to reach the mailing list is:
+>
+>  lttng-dev@lists.lttng.org
+>
+> I've CC'd the list so someone can answer your question.
+>
+> Cheers,
+>
+> Michael
+>
+
+--000000000000ced56f05726dac43
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Thank you for your help!=C2=A0<br><div>Raghu</div></div><b=
+r><div class=3D"gmail_quote"><div dir=3D"ltr">On Wed, Aug 1, 2018 at 8:36 P=
+M Michael Jeanson &lt;<a href=3D"mailto:mjeanson@efficios.com">mjeanson@eff=
+icios.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">On 2018-=
+08-01 07:22 AM, Attel Raghavendra wrote:<br>
+&gt; Hi Team,<br>
+&gt; <br>
+&gt; I have new to the LTTng. I am trying to build a sample application to<=
+br>
+&gt; test the LTTng.<br>
+&gt; I was able to compile the sample application successfully, however<br>
+&gt; facing the following linker problems. Please help to resolve the same.=
+=C2=A0=C2=A0<br>
+&gt; <br>
+&gt; xx_app.o:(__tracepoints+0x18): undefined reference to<br>
+&gt; `__tracepoint_provider_rttLogger&#39;<br>
+&gt; xx_tpp.o: In function `__tracepoint_provider_check_rttlogger&#39;:<br>
+&gt; xx_tpp.c:(.text+0x271): undefined reference to<br>
+&gt; `__tracepoint_provider_mismatch_rttLogger&#39;<br>
+&gt; xx_tpp.c:(.text+0x27b): undefined reference to<br>
+&gt; `__tracepoint_provider_mismatch_rttLogger&#39;<br>
+&gt; collect2: error: ld returned 1 exit status<br>
+&gt; <br>
+&gt; <br>
+&gt; Thank you,<br>
+&gt; Raghu.<br>
+&gt; <br>
+Hi Raghu,<br>
+<br>
+The correct address to reach the mailing list is:<br>
+<br>
+=C2=A0<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-=
+dev@lists.lttng.org</a><br>
+<br>
+I&#39;ve CC&#39;d the list so someone can answer your question.<br>
+<br>
+Cheers,<br>
+<br>
+Michael<br>
+</blockquote></div>
+
+--000000000000ced56f05726dac43--
+
+--===============6538110654254277108==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============6538110654254277108==--
