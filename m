@@ -1,16 +1,18 @@
-From: Francis Deslauriers <francis.deslauriers@efficios.com>
-Subject: Tracing Summit 2018 - CFP extended until Sept. 10th
-Date: Wed, 5 Sep 2018 09:21:55 -0400
-Message-ID: <CADcCL0itKnMuixOD0sBho2H1PajFPgNAXR9JRqtizM9v56=Obw__39850.8349819624$1536153610$gmane$org@mail.gmail.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-ust] Fix: add missing stdbool.h include
+Date: Wed,  5 Sep 2018 15:56:59 -0400
+Message-ID: <20180905195659.13418-1-mjeanson__14551.3898962692$1536177308$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6376567383787917921=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-oi0-f45.google.com (mail-oi0-f45.google.com
- [209.85.218.45])
- by lists.lttng.org (Postfix) with ESMTPS id 42549q4mrFztxP
- for <lttng-dev@lists.lttng.org>; Wed,  5 Sep 2018 09:22:07 -0400 (EDT)
-Received: by mail-oi0-f45.google.com with SMTP id k12-v6so13482710oiw.8
- for <lttng-dev@lists.lttng.org>; Wed, 05 Sep 2018 06:22:07 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 425DxY5Sp3zt4D
+ for <lttng-dev@lists.lttng.org>; Wed,  5 Sep 2018 15:57:05 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 935691C78B0
+ for <lttng-dev@lists.lttng.org>; Wed,  5 Sep 2018 15:57:04 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,65 +22,18 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev <lttng-dev@lists.lttng.org>
-Cc: info@tracingsummit.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============6376567383787917921==
-Content-Type: multipart/alternative; boundary="0000000000002f3b3a05751fa98a"
-
---0000000000002f3b3a05751fa98a
-Content-Type: text/plain; charset="UTF-8"
-
-Hi all,
-
-To take into account that a lot of people are on vacations over the month of
-August, we are announcing the extension of the CFP for the Tracing Summit
-2018
-until Monday September 10th. This gives 6 more days to get your talk
-proposals
-in.
-
-Thank you to all of you who submitted talks. We received great ones!
-
-More info: https://tracingsummit.org/wiki/TracingSummit2018
-
-Thank you,
-
---
-On behalf of the Diagnostic and Monitoring Workgroup,
-Francis Deslauriers
-
---0000000000002f3b3a05751fa98a
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div di=
-r=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr">Hi all,</div><=
-div dir=3D"ltr"><br></div><div dir=3D"ltr">To take into account that a lot =
-of people are on vacations over the month of</div><div dir=3D"ltr">August, =
-we are announcing the extension of the CFP for the Tracing Summit 2018</div=
-><div dir=3D"ltr">until Monday September 10th. This gives 6 more days to ge=
-t your talk proposals</div><div dir=3D"ltr">in.</div><div dir=3D"ltr"><br><=
-/div><div dir=3D"ltr">Thank you to all of you who submitted talks. We recei=
-ved great ones!</div><div dir=3D"ltr"><br></div><div dir=3D"ltr">More info:=
- <a href=3D"https://tracingsummit.org/wiki/TracingSummit2018">https://traci=
-ngsummit.org/wiki/TracingSummit2018</a></div><div dir=3D"ltr"><br></div><di=
-v>Thank you,</div><div><br></div><div>--</div><div dir=3D"ltr"><div dir=3D"=
-ltr">On behalf of the Diagnostic and Monitoring Workgroup,</div><div dir=3D=
-"ltr">Francis Deslauriers</div><div><br></div></div><div dir=3D"ltr"></div>=
-</div></div></div></div></div></div></div>
-
---0000000000002f3b3a05751fa98a--
-
---===============6376567383787917921==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============6376567383787917921==--
+U2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lvcy5jb20+Ci0t
+LQogbGlibHR0bmctdXN0L2x0dG5nLWZpbHRlci5oIHwgMSArCiAxIGZpbGUgY2hhbmdlZCwgMSBp
+bnNlcnRpb24oKykKCmRpZmYgLS1naXQgYS9saWJsdHRuZy11c3QvbHR0bmctZmlsdGVyLmggYi9s
+aWJsdHRuZy11c3QvbHR0bmctZmlsdGVyLmgKaW5kZXggZTQyNWI0YTUuLmNjMTVjMTU0IDEwMDY0
+NAotLS0gYS9saWJsdHRuZy11c3QvbHR0bmctZmlsdGVyLmgKKysrIGIvbGlibHR0bmctdXN0L2x0
+dG5nLWZpbHRlci5oCkBAIC0yOSw2ICsyOSw3IEBACiAKICNpbmNsdWRlIDxlcnJuby5oPgogI2lu
+Y2x1ZGUgPHN0ZGlvLmg+CisjaW5jbHVkZSA8c3RkYm9vbC5oPgogI2luY2x1ZGUgPGhlbHBlci5o
+PgogI2luY2x1ZGUgPGx0dG5nL3VzdC1ldmVudHMuaD4KICNpbmNsdWRlIDxsdHRuZy91c3QtY29u
+dGV4dC1wcm92aWRlci5oPgotLSAKMi4xNy4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0
+cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
+bmZvL2x0dG5nLWRldgo=
