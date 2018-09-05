@@ -1,20 +1,16 @@
-From: John O'Sullivan <John.OSullivan@BlackBox.com>
-Subject: Re: [EXTERNAL] Re: LTTng: block device enumeration is
- not supported by	kernel
-Date: Wed, 5 Sep 2018 09:02:57 +0000
-Message-ID: <1536138177210.58440__35992.6092591651$1536138132$gmane$org@BlackBox.com>
-References: <ee3eb56ebddc435eab50601fe76d557a@PGHPRDEXCH02.corp.bbns.com>,
- <1111919729.8189.1536098150300.JavaMail.zimbra@efficios.com>
+From: Francis Deslauriers <francis.deslauriers@efficios.com>
+Subject: Tracing Summit 2018 - CFP extended until Sept. 10th
+Date: Wed, 5 Sep 2018 09:21:55 -0400
+Message-ID: <CADcCL0itKnMuixOD0sBho2H1PajFPgNAXR9JRqtizM9v56=Obw__39850.8349819624$1536153610$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============6376567383787917921=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from esa4.hc2026-0.iphmx.com (esa4.hc2026-0.iphmx.com
- [68.232.154.207])
- by lists.lttng.org (Postfix) with ESMTPS id 424yS83vbRztNd
- for <lttng-dev@lists.lttng.org>; Wed,  5 Sep 2018 05:04:08 -0400 (EDT)
-In-Reply-To: <1111919729.8189.1536098150300.JavaMail.zimbra@efficios.com>
-Content-Language: en-IE
+Received: from mail-oi0-f45.google.com (mail-oi0-f45.google.com
+ [209.85.218.45])
+ by lists.lttng.org (Postfix) with ESMTPS id 42549q4mrFztxP
+ for <lttng-dev@lists.lttng.org>; Wed,  5 Sep 2018 09:22:07 -0400 (EDT)
+Received: by mail-oi0-f45.google.com with SMTP id k12-v6so13482710oiw.8
+ for <lttng-dev@lists.lttng.org>; Wed, 05 Sep 2018 06:22:07 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,46 +20,65 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: info@tracingsummit.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgTWljaGVhbCwKCkkgYW0gdXNpbmcgNC45LjAteGlsaW54LXYyMDE3LjIgKGh0dHBzOi8vZ2l0
-aHViLmNvbS9YaWxpbngvbGludXgteGxueC9yZWxlYXNlcy90YWcveGlsaW54LXYyMDE3LjIpICwg
-YnVpbHQgdXNpbmcgYnVpbGRyb290LTIwMTcuMDIuNCBydW5uaW5nIG9uIGEgWGlsaW54IE1QU29j
-LgpMVFROR19UT09MU19WRVJTSU9OID0gMi45LjMKVXNpbmcgdGhlIGNvbnRyb2wgdmlldyBJIGNy
-ZWF0ZWQgYSBzZXNzaW9uLCByaWdodCBjbGlja2VkIG9uIFVTVCBHbG9iYWwsIHNlbGVjdGVkIEFk
-ZCBDb250ZXh0LCBob3dldmVyIHRoaXMgbW9ybmluZyBJIGtlZXAgZ2V0dGluZyBhIGZhaWx1cmUg
-dG8gYWRkIGEgY29udGV4dCBzbyBJIGFtIG5vdCBzdXJlIGV4YWN0bHkgd2hhdCBzZXQgb2YgY29u
-dGV4dHMgY2F1c2VkIHRoZSBlcnJvciB5ZXN0ZXJkYXkuCkkgYW0gZ29pbmcgdG8gYWJhbmRvbiB0
-aGUgY29udHJvbCB2aWV3IGluIENvbXBhc3MgZm9yIG5vdyBhbmQgZ28gYmFjayB0byBzY3JpcHRp
-bmcgc3R1ZmYgdG8gc2VlIGlmIEkgY2FuIHJlY3JlYXRlIHRoZSBlcnJvci4KCnJlZ2FyZHMKSm9o
-bgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCkZyb206IE1pY2hhZWwg
-SmVhbnNvbiA8bWplYW5zb25AZWZmaWNpb3MuY29tPgpTZW50OiAwNCBTZXB0ZW1iZXIgMjAxOCAy
-Mjo1NQpUbzogSm9obiBPJ1N1bGxpdmFuCkNjOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnClN1
-YmplY3Q6IFtFWFRFUk5BTF0gUmU6IFtsdHRuZy1kZXZdIExUVG5nOiBibG9jayBkZXZpY2UgZW51
-bWVyYXRpb24gaXMgbm90IHN1cHBvcnRlZCBieSBrZXJuZWwKCkhpIEpvaG4sCgpXaGljaCBkaXN0
-cmlidXRpb24gYW5kIGtlcm5lbCB2ZXJzaW9uIGFyZSB5b3UgcnVubmluZz8gSWYgaXQncyBhIHBh
-dGNoZWQga2VybmVsLCBhcmUgdGhlCnBhdGNoZXMgLyBzb3VyY2UgdHJlZSBwdWJsaWNseSBhdmFp
-bGFibGU/IFdoaWNoIHZlcnNpb24gb2YgbHR0bmc/IERpc3RybyBwYWNrYWdlcyBvcgpjdXN0b20g
-YnVpbHQ/CgpJIHdvdWxkIGFsc28gbmVlZCBhbGwgdGhlIGNvbW1hbmRzIHJlcXVpcmVkIHRvIHJl
-cHJvZHVjZWQgdGhlIHByb2JsZW0uCgpSZWdhcmRzLAoKTWljaGFlbAoKLS0tLS0gT24gU2VwIDQs
-IDIwMTgsIGF0IDEyOjEwIFBNLCBKb2huIE8nU3VsbGl2YW4gSm9obi5PU3VsbGl2YW5AQmxhY2tC
-b3guY29tIHdyb3RlOgoKPiBIaSwKPgo+IFdoZW4gSSB0cnkgdG8gYWRkIGNvbnRleHQgdG8gYSBz
-ZXNzaW9uIG9uIG15IGFybSBiYXNlZCB0YXJnZXQgSSBnZXQgdGhlCj4gZm9sbG93aW5nOgo+Cj4g
-TFRUbmc6IGJsb2NrIGRldmljZSBlbnVtZXJhdGlvbiBpcyBub3Qgc3VwcG9ydGVkIGJ5IGtlcm5l
-bAo+Cj4gQWZ0ZXIgd2hpY2ggdGhlIGJvYXJkIGxvY2tzIHVwLgo+Cj4gQW55IGluc2lnaHQgYXMg
-dG8gdGhlIGlzc3VlPwo+Cj4KPiBKb2huIE/igJlTdWxsaXZhbgoKCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCgpUaGlzIGVtYWlsIGFuZCBhbnkgZmlsZXMgdHJhbnNtaXR0ZWQgd2l0
-aCBpdCBhcmUgY29uZmlkZW50aWFsIGFuZCBhcmUgaW50ZW5kZWQgZm9yIHRoZSBzb2xlIHVzZSBv
-ZiB0aGUgaW5kaXZpZHVhbCB0byB3aG9tIHRoZXkgYXJlIGFkZHJlc3NlZC4gQmxhY2sgQm94IENv
-cnBvcmF0aW9uIHJlc2VydmVzIHRoZSByaWdodCB0byBzY2FuIGFsbCBlLW1haWwgdHJhZmZpYyBm
-b3IgcmVzdHJpY3RlZCBjb250ZW50IGFuZCB0byBtb25pdG9yIGFsbCBlLW1haWwgaW4gZ2VuZXJh
-bC4gSWYgeW91IGFyZSBub3QgdGhlIGludGVuZGVkIHJlY2lwaWVudCBvciB5b3UgaGF2ZSByZWNl
-aXZlZCB0aGlzIGVtYWlsIGluIGVycm9yLCBhbnkgdXNlLCBkaXNzZW1pbmF0aW9uIG9yIGZvcndh
-cmRpbmcgb2YgdGhpcyBlbWFpbCBpcyBzdHJpY3RseSBwcm9oaWJpdGVkLiBJZiB5b3UgaGF2ZSBy
-ZWNlaXZlZCB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYnkg
-cmVwbHlpbmcgdG8gdGhpcyBlbWFpbC4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0
-bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
-dHRuZy1kZXYK
+--===============6376567383787917921==
+Content-Type: multipart/alternative; boundary="0000000000002f3b3a05751fa98a"
+
+--0000000000002f3b3a05751fa98a
+Content-Type: text/plain; charset="UTF-8"
+
+Hi all,
+
+To take into account that a lot of people are on vacations over the month of
+August, we are announcing the extension of the CFP for the Tracing Summit
+2018
+until Monday September 10th. This gives 6 more days to get your talk
+proposals
+in.
+
+Thank you to all of you who submitted talks. We received great ones!
+
+More info: https://tracingsummit.org/wiki/TracingSummit2018
+
+Thank you,
+
+--
+On behalf of the Diagnostic and Monitoring Workgroup,
+Francis Deslauriers
+
+--0000000000002f3b3a05751fa98a
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div di=
+r=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr">Hi all,</div><=
+div dir=3D"ltr"><br></div><div dir=3D"ltr">To take into account that a lot =
+of people are on vacations over the month of</div><div dir=3D"ltr">August, =
+we are announcing the extension of the CFP for the Tracing Summit 2018</div=
+><div dir=3D"ltr">until Monday September 10th. This gives 6 more days to ge=
+t your talk proposals</div><div dir=3D"ltr">in.</div><div dir=3D"ltr"><br><=
+/div><div dir=3D"ltr">Thank you to all of you who submitted talks. We recei=
+ved great ones!</div><div dir=3D"ltr"><br></div><div dir=3D"ltr">More info:=
+ <a href=3D"https://tracingsummit.org/wiki/TracingSummit2018">https://traci=
+ngsummit.org/wiki/TracingSummit2018</a></div><div dir=3D"ltr"><br></div><di=
+v>Thank you,</div><div><br></div><div>--</div><div dir=3D"ltr"><div dir=3D"=
+ltr">On behalf of the Diagnostic and Monitoring Workgroup,</div><div dir=3D=
+"ltr">Francis Deslauriers</div><div><br></div></div><div dir=3D"ltr"></div>=
+</div></div></div></div></div></div></div>
+
+--0000000000002f3b3a05751fa98a--
+
+--===============6376567383787917921==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============6376567383787917921==--
