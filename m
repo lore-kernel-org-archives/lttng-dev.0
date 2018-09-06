@@ -1,128 +1,81 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng-UST 2.11.0-rc1 (Linux user-space tracer)
-Date: Thu, 6 Sep 2018 12:03:29 -0400 (EDT)
-Message-ID: <650389638.9188.1536249809628.JavaMail.zimbra@efficios.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: Regarding lttng ust trace-point usage
+Date: Thu, 6 Sep 2018 16:49:57 -0400
+Message-ID: <CA+jJMxuNW9jAtM3ZE+B3Q0GCpkjSDB=jwy4Lu_ozw5CBar6FtQ__13191.3483063274$1536266926$gmane$org@mail.gmail.com>
+References: <CAEQd43P0u=ikq=OKOjO0fC1vhwFEmvH0fEBRENzCbPLx8aP0eA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Sender: linux-kernel-owner@vger.kernel.org
-To: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org, linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 425t4w6zttzv6B
+ for <lttng-dev@lists.lttng.org>; Thu,  6 Sep 2018 16:50:40 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 353CC1C8B2B
+ for <lttng-dev@lists.lttng.org>; Thu,  6 Sep 2018 16:50:40 -0400 (EDT)
+Received: from mail.efficios.com ([IPv6:::1])
+ by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
+ with ESMTP id pUf7cZK0htif for <lttng-dev@lists.lttng.org>;
+ Thu,  6 Sep 2018 16:50:39 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id B606C1C8B19
+ for <lttng-dev@lists.lttng.org>; Thu,  6 Sep 2018 16:50:39 -0400 (EDT)
+Received: from mail.efficios.com ([IPv6:::1])
+ by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
+ with ESMTP id 6mDNu-EXjzsK for <lttng-dev@lists.lttng.org>;
+ Thu,  6 Sep 2018 16:50:39 -0400 (EDT)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com
+ [209.85.167.49])
+ by mail.efficios.com (Postfix) with ESMTPSA id 607181C8B03
+ for <lttng-dev@lists.lttng.org>; Thu,  6 Sep 2018 16:50:39 -0400 (EDT)
+Received: by mail-lf1-f49.google.com with SMTP id v77-v6so10254704lfa.6
+ for <lttng-dev@lists.lttng.org>; Thu, 06 Sep 2018 13:50:39 -0700 (PDT)
+In-Reply-To: <CAEQd43P0u=ikq=OKOjO0fC1vhwFEmvH0fEBRENzCbPLx8aP0eA@mail.gmail.com>
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: jagadeesh konakalla <kjagadeesh27@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
-
-Here is the first release candidate of LTTng-UST 2.11 Linux
-user-space tracer.
-
-This release is named after a modern Saison beer from Montr=C3=A9al's Oshla=
-g
-microbrewery. It is a refreshing, zesty, rice beer with hints of fruit and
-spices. Some even say it makes for a great Somaek when mixed with Chamisul
-Soju, not that we've tried!
-
-Lafontaine is also a tongue-in-cheek reference to a water leak that
-affected EfficiOS's offices during the development of this release.
-
-The most notable features of this new release that apply to lttng-ust
-are:
-
-  - Introduce the LTTNG_UST_ALLOW_BLOCKING environment variable,
-  - Take NUMA configuration into account for UST buffer allocation,
-  - Support unloading of probe providers (dlclose),
-  - Session rotation,
-  - Support for arrays and bitwise binary operators in filters.
-
-The new LTTNG_UST_ALLOW_BLOCKING env. var. can be used with the
-'--blocking-timeout' channel parameter to allow tracing to block
-the application (or wait for a specified timeout) when buffers are
-full. This is useful when dealing with very high throughput tracing
-workloads. See lttng-ust(3) and lttng-enable-channel(1) for details.
-
-See the lttng-tools release tag for more information about session
-rotation, as well as support for arrays and bitwise binary operators
-in filters at: https://github.com/lttng/lttng-tools/releases/tag/v2.11.0-rc=
-1
-
-Project website: http://lttng.org
-Documentation: http://lttng.org/docs
-Download link: http://lttng.org/download
-
-Changelog:
-2018-09-06 (Fight Procrastination Day) lttng-ust 2.11.0-rc1
-        * Fix: add missing stdbool.h include
-        * Move symbol preventing unloading of probe providers
-        * Fix: Remove unused line from liblttng-ust-fd makefile
-        * Fix: add liblttng-ust dependency to liblttng-ust-fd
-        * Fix: use LIBDL/LIBC_DL to select either libdl or libc
-        * Fix: lttng filter validator ERANGE error handling
-        * Filter: implement dynamic typing for load object
-        * Filter: add FILTER_OP_RETURN_S64 instruction
-        * Perform bitwise ops on unsigned types
-        * Filter: catch shift undefined behavior
-        * Filter: implement bitwise lshift, rshift, not
-        * Filter: index array, sequences, implement bitwise binary operator=
-s
-        * Fix: AM_CONDITIONAL should be outside AS_IF block
-        * Fix: build jni libs with openjdk >=3D 10
-        * Fix: ustfork: save and restore errno in syscall wrappers
-        * Fix: cache the result of getpid() internally
-        * Fix: reset cached vpid context on fork
-        * Fix: build example SO when PIE is enabled
-        * Fix: string comparison on incorrect length in context provider
-        * Support unloading of probe providers
-        * Rename lttng_ust_enum_get to lttng_ust_enum_get_from_desc
-        * dlopen() liblttng-ust.so from constructor to prevent unloading
-        * Add probe provider unregister function
-        * Cleanup: Move version numbers in separate variables in configure =
-script
-        * Remove duplicate provider name checks
-        * Fix: remove for() loop initial declarations
-        * Use ust_lock during sock_info operations for atomicity against fo=
-rk
-        * Force tracked fd to be bigger than STDERR_FILENO
-        * Fix: numa: dynamically check that numa is available
-        * Fix: specify SONAME in python-lttngust LoadLibrary
-        * Fix: ensure fd tracker is initialized when called from constructo=
-rs
-        * Fix: fd of an elf object must be registered to the fd tracker
-        * Cleanup: clock description for metadata was moved to lttng-sessio=
-nd
-        * Fix: liblttng-ust-fd.so: override fclose symbol
-        * Revert "Use initial-exec TLS model"
-        * Revert "Fix: typo: DECLARE_URCU_TLS_IE -> DEFINE_URCU_TLS_IE"
-        * configure.ac: add --disable-examples option to not build/install =
-examples
-        * Disable NUMA by default on 32bit arm
-        * Update Makefile.am output about libnuma not found
-        * Update readme to document opt dep on numa
-        * numa support: allow disabling numa support
-        * Update README to document dependency on libnuma
-        * Take NUMA configuration into account for UST buffer allocation
-        * Fix: typo: DECLARE_URCU_TLS_IE -> DEFINE_URCU_TLS_IE
-        * Use initial-exec TLS model
-        * lttng-gen-tp: formatting
-        * Fix: lttng-gen-tp: only replace file extension
-        * Fix: move fsync after ftruncate
-        * Fix: sync buffer file metadata on buffer allocation
-        * lttng-ust(3): reword and fix style of `LTTNG_UST_ALLOW_BLOCKING` =
-variable
-        * lttng-ust(3): specify "If set" instead of "if set to 1" for some =
-variables
-        * Fix: doc/man: use a single XSL file and match local names
-        * Fix: Expand the shmobj size for the sequence number
-        * Introduce LTTNG_UST_ALLOW_BLOCKING env. var.
-        * Fix: lttng-ust-elf.c: define NT_GNU_BUILD_ID if not defined
-        * Calculate context length outside of retry loop
-        * Fix: Quote CMAKE variable assignment in Makefile
-        * Rework configure script
-        * Fix: Typo in doc/examples/Makefile.am
-        * Fix: Don't override user variables within the build system
-        * Move m4 scripts to m4 dir
-        * doc: remove duplicate LTTNG_UST_BLOCKING_RETRY_TIMEOUT man page e=
-ntry
-
---=20
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+T24gMTQgQXVndXN0IDIwMTggYXQgMDg6MDYsIGphZ2FkZWVzaCBrb25ha2FsbGEgPGtqYWdhZGVl
+c2gyN0BnbWFpbC5jb20+IHdyb3RlOgo+IEhpIE1hdGhpZXUsCj4KPiBUaGlzIGlzIEphZ2FkZWVz
+aC4gSSBhbSB1c2VyIG9mIGx0dG5nIHRvb2xzLgo+Cj4gSSBoYXZlIG9uZSBxdWVyeSByZWdhcmRp
+bmcgdGhlIGx0dG5nIHVzdCB1c2FnZS4KPgo+IEkgaGF2ZSB3cml0dGVuIG15IGxpbnV4IGFwcGxp
+Y2F0aW9uIHdoaWNoIGhhcyB0cmFjZSBwb2ludCBBUEkncyB0byB0cmFjZSB0aGUKPiB1c2VyIGFw
+cGxpY2F0aW9uLgo+IE15IHJlcXVpcmVtZW50IGlzIHRvIGRvIGJvdGgga2VybmVsIGRvbWFpbiB0
+cmFjZSBhbmQgdXNlciBkb21haW4gdHJhY2UgZm9yCj4gbXkgYXBwbGljYXRpb24uCj4KPiBXaGVu
+IGkgc3RhcnQgdGhlIGx0dG5nIGFuZCB0aGVuIHJ1biBteSBhcHBsaWNhdGlvbiwgaSBkbyBub3Qg
+c2VlIGFueSBpc3N1ZXMuCj4gSSBtZWFuIHRvIHNheSB0aGF0IGkgZ2V0IGFsbCB0aGUgdXNlciB0
+cmFjZSBldmVudHMgYW5kIGtlcm5lbCBldmVudHMuCj4KPiBJZiBpIHN0YXJ0IHRoZSBhcHBsaWNh
+dGlvbiwgdGhlbiBpIGNvbmZpZ3VyZSBhbmQgc3RhcnQgdGhlIGx0dG5nLCBpIHNlZSBzb21lCj4g
+dXNlciBldmVudHMgYXJlIG5vdCBjYXB0dXJlZCBhdCB0aGUgc3RhcnQgKG1heSBiZSBkcm9wcGVk
+KS4gSSBoYXZlIG9ic2VydmVkCj4gdGhhdCB0aGVyZSBpcyBhIGRlbGF5IGluIHRoZSBmaXJzdCBr
+ZXJuZWwgZXZlbnQgb2NjdXJyZW5jZSB0byBmaXJzdCB1c2VyCj4gZXZlbnQgb2NjdXJyZW5jZS4g
+SSBoYXZlIG5vdCBzZWVuIHRoaXMgYmVoYXZpb3IgaWYgaSBzdGFydCB0aGUgbHR0bmcgYW5kIHJ1
+bgo+IG15IGFwcGxpY2F0aW9uLgoKSGksCgpJdCBpcyBleHBlY3RlZCBmb3IgdGhlIGtlcm5lbCB0
+cmFjZXIgdG8gc3RhcnQgdHJhY2luZyBiZWZvcmUgdGhlIHVzZXIgc3BhY2UKdHJhY2VyIGR1cmlu
+ZyB0aGUgZXhlY3V0aW9uIG9mIHRoZSBzdGFydCBjb21tYW5kLiBTdGFydGluZyB0aGUgdHJhY2lu
+ZwphY3Jvc3MgZG9tYWlucyBpcyBub3QgZG9uZSBpbiBhIHNpbmdsZSBvcGVyYXRpb24uCgpMVFRu
+ZyBndWFyYW50ZWVzIHRoYXQgYWxsIGV2ZW50cyB0aGF0IG9jY3VyIGFmdGVyIHRoZSAnbHR0bmcg
+c3RhcnQnIGNvbW1hbmQKcmV0dXJucyB3aWxsIGJlIGNhcHR1cmVkIChwcm92aWRlZCB0aGF0IHRo
+ZSBidWZmZXJzIGFyZSBub3QgZnVsbCkuCgpKw6lyw6ltaWUKCj4KPiBIZXJlIGlzIG15IHF1ZXN0
+aW9uIDogSXMgdGhpcyB0aGUgZXhwZWN0ZWQgYmVoYXZpb3IgPwo+IG9yCj4gQXJlIHRoZXJlIGFu
+eSBzZXR0aW5ncyB0aGF0IGNhbiBoZWxwIG1lIHRvIHJlc29sdmUgdGhpcyBpc3N1ZSA/Cj4KPiBW
+ZXJzaW9uIG9mIGx0dG5nIHVzZWQgOgo+IGx0dG5nLXRvb2xzICgyLjkuNCkKPiBsdHRuZy1tb2R1
+bGVzICgyLjkuMSkKPiBsdHRuZy1saWJ1c3QgKDIuOS4wICkKPgo+IEkgYXBwcmVjaWF0ZSB5b3Vy
+IGhlbHAuIFBsZWFzZSBsZXQgbWUga25vdyBpZiB5b3UgbmVlZCBtb3JlIGluZm9ybWF0aW9uLgo+
+Cj4gV2l0aCByZWdhcmRzLAo+IEphZ2FkZWVzaCBLLgo+Cj4gX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
+bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpF
+ZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmct
+ZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
+YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
