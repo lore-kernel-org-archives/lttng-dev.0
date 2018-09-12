@@ -1,21 +1,16 @@
-From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Tests: do not bound test app
- iteration when in background mode
-Date: Tue, 11 Sep 2018 15:25:11 -0400
-Message-ID: <20180911192510.GA17757__35227.9172548608$1536693953$gmane$org@gmail.com>
-References: <20180703184923.22741-1-jonathan.rajotte-julien@efficios.com>
+From: syed zaidi <zaidi1039@gmail.com>
+Subject: Is lttng reliable enough to use it for billing component
+Date: Tue, 11 Sep 2018 17:59:52 -0700
+Message-ID: <CAD6O9aofSMdi6FpgUCKuVmQpsk=Ymu+skoWaae3T5XWa-SaR2g__29822.7671454244$1536713891$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============8183696668231444397=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt0-f194.google.com (mail-qt0-f194.google.com
- [209.85.216.194])
- by lists.lttng.org (Postfix) with ESMTPS id 428vy32VKfzy7N
- for <lttng-dev@lists.lttng.org>; Tue, 11 Sep 2018 15:25:15 -0400 (EDT)
-Received: by mail-qt0-f194.google.com with SMTP id t39-v6so29475426qtc.8
- for <lttng-dev@lists.lttng.org>; Tue, 11 Sep 2018 12:25:15 -0700 (PDT)
-Content-Disposition: inline
-In-Reply-To: <20180703184923.22741-1-jonathan.rajotte-julien@efficios.com>
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com
+ [IPv6:2a00:1450:4864:20::12e])
+ by lists.lttng.org (Postfix) with ESMTPS id 4293NQ2lyqzdF
+ for <lttng-dev@lists.lttng.org>; Tue, 11 Sep 2018 21:00:06 -0400 (EDT)
+Received: by mail-lf1-x12e.google.com with SMTP id z11-v6so149399lff.9
+ for <lttng-dev@lists.lttng.org>; Tue, 11 Sep 2018 18:00:06 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,74 +20,47 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
+To: lttng-dev <lttng-dev@lists.lttng.org>
+Cc: Mhatre.abhay@gmail.com
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIG1hc3Rlciwgd2lsbCBiYWNrcG9ydCB0byB0aGUgc3RhYmxlIGJyYW5jaGVzLgoK
-VGhhbmtzIQpKw6lyw6ltaWUKCk9uIFR1ZSwgSnVsIDAzLCAyMDE4IGF0IDAyOjQ5OjIzUE0gLTA0
-MDAsIEpvbmF0aGFuIFJham90dGUgd3JvdGU6Cj4gT24gc3lzdGVtIHdpdGggYSBoaWdoIG51bWJl
-ciBvZiBDUFVzIGFuZCBzbG93IGRpc2ssIHRha2luZyBzbmFwc2hvdCBjYW4KPiB0YWtlIGEgbG9u
-ZyB0aW1lLiBXaGVuIHJ1bm5pbmcgYSBsb25nIHJlZ3Jlc3Npb24gdGVzdCwgdGhlCj4gdGVzdHMg
-b3V0bGl2ZWQgdGhlIHRlc3QgYXBwbGljYXRpb24uIFRoZSB0ZXN0IGFwcGxpY2F0aW9uCj4gd291
-bGQgZXhpdCBzaW5jZSB0aGUgcmVxdWlyZWQgbnVtYmVyIG9mIGl0ZXJhdGlvbnMgd2FzIGNvbXBs
-ZXRlZAo+IChOUl9JVEVSPTIwMDAwMDApLgo+IAo+IFNldCB0aGUgaXRlcmF0aW9ucyBwYXJhbWV0
-ZXIgdG8gLTEgZW5zdXJpbmcgdGhlIGxpZmV0aW1lIG9mIHRoZSB0ZXN0Cj4gYXBwbGljYXRpb24u
-Cj4gCj4gU2lnbmVkLW9mZi1ieTogSm9uYXRoYW4gUmFqb3R0ZSA8am9uYXRoYW4ucmFqb3R0ZS1q
-dWxpZW5AZWZmaWNpb3MuY29tPgo+IC0tLQo+ICAuLi4vdG9vbHMvc25hcHNob3RzL3Rlc3RfdXN0
-X3N0cmVhbWluZyAgICAgICAgICAgfCAgMiArLQo+ICB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3Nu
-YXBzaG90cy91c3RfdGVzdCAgICAgICAgfCAxNiArKysrKystLS0tLS0tLS0tCj4gIDIgZmlsZXMg
-Y2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCAxMSBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0
-IGEvdGVzdHMvcmVncmVzc2lvbi90b29scy9zbmFwc2hvdHMvdGVzdF91c3Rfc3RyZWFtaW5nIGIv
-dGVzdHMvcmVncmVzc2lvbi90b29scy9zbmFwc2hvdHMvdGVzdF91c3Rfc3RyZWFtaW5nCj4gaW5k
-ZXggMzhmZmJhMDkuLmM5NzgxM2U0IDEwMDc1NQo+IC0tLSBhL3Rlc3RzL3JlZ3Jlc3Npb24vdG9v
-bHMvc25hcHNob3RzL3Rlc3RfdXN0X3N0cmVhbWluZwo+ICsrKyBiL3Rlc3RzL3JlZ3Jlc3Npb24v
-dG9vbHMvc25hcHNob3RzL3Rlc3RfdXN0X3N0cmVhbWluZwo+IEBAIC0yNSw3ICsyNSw3IEBAIEJJ
-Tl9OQU1FPSJnZW4tbmV2ZW50cyIKPiAgVEVTVEFQUF9QQVRIPSIkVEVTVERJUi91dGlscy90ZXN0
-YXBwIgo+ICBURVNUQVBQX05BTUU9Imdlbi11c3QtZXZlbnRzIgo+ICBURVNUQVBQX0JJTj0iJFRF
-U1RBUFBfUEFUSC8kVEVTVEFQUF9OQU1FLyRURVNUQVBQX05BTUUiCj4gLU5SX0lURVI9MjAwMDAw
-MAo+ICtOUl9JVEVSPS0xCj4gIE5SX1VTRUNfV0FJVD0xMDAKPiAgQVBQU19QSUQ9Cj4gIAo+IGRp
-ZmYgLS1naXQgYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3NuYXBzaG90cy91c3RfdGVzdCBiL3Rl
-c3RzL3JlZ3Jlc3Npb24vdG9vbHMvc25hcHNob3RzL3VzdF90ZXN0Cj4gaW5kZXggNTQzMjE4MTcu
-LjFlMDFlYjIxIDEwMDc1NQo+IC0tLSBhL3Rlc3RzL3JlZ3Jlc3Npb24vdG9vbHMvc25hcHNob3Rz
-L3VzdF90ZXN0Cj4gKysrIGIvdGVzdHMvcmVncmVzc2lvbi90b29scy9zbmFwc2hvdHMvdXN0X3Rl
-c3QKPiBAQCAtMTU2LDggKzE1Niw2IEBAIGZ1bmN0aW9uIGVuYWJsZV9tbWFwX3NtYWxsX292ZXJ3
-cml0ZV91c3RfY2hhbm5lbCAoKQo+ICBmdW5jdGlvbiB0ZXN0X3VzdF9saXN0X291dHB1dCAoKQo+
-ICB7Cj4gIAlvdXRwdXRfbmFtZXM9KCJyYW5kb21uYW1lIiAic29tZXNuYXBzaG90IikKPiAtCU5S
-X0lURVI9MjAwMDAwMAo+IC0JTlJfVVNFQ19XQUlUPTEwMAo+ICAKPiAgCWRpYWcgIlRlc3QgVVNU
-IHNuYXBzaG90IG91dHB1dCBsaXN0aW5nIgo+ICAJY3JlYXRlX2x0dG5nX3Nlc3Npb25fbm9fb3V0
-cHV0ICRTRVNTSU9OX05BTUUKPiBAQCAtMTg3LDcgKzE4NSw3IEBAIGZ1bmN0aW9uIHRlc3RfdXN0
-X2xpc3Rfb3V0cHV0ICgpCj4gIAo+ICBmdW5jdGlvbiB0ZXN0X3VzdF9sb2NhbF9zbmFwc2hvdCAo
-KQo+ICB7Cj4gLQlOUl9JVEVSPTIwMDAwMDAKPiArCU5SX0lURVI9LTEKPiAgCU5SX1VTRUNfV0FJ
-VD0xMDAKPiAgCj4gIAlkaWFnICJUZXN0IGxvY2FsIFVTVCBzbmFwc2hvdHMiCj4gQEAgLTMwNiw3
-ICszMDQsNyBAQCBmdW5jdGlvbiB0ZXN0X3VzdF9sb2NhbF9zbmFwc2hvdF9zbWFsbF9vdmVyd3Jp
-dGVfYnVmZmVycyAoKQo+ICAKPiAgZnVuY3Rpb24gdGVzdF91c3RfbG9jYWxfc25hcHNob3RfbWF4
-X3NpemUgKCkKPiAgewo+IC0JTlJfSVRFUj0yMDAwMDAwCj4gKwlOUl9JVEVSPS0xCj4gIAlOUl9V
-U0VDX1dBSVQ9MTAwCj4gIAlwYWdlX3NpemU9YGdldGNvbmYgUEFHRV9TSVpFYAo+ICAJbnVtX2Nw
-dXM9JChjb25mX3Byb2NfY291bnQpCj4gQEAgLTM1OSw4ICszNTcsNiBAQCBmdW5jdGlvbiB0ZXN0
-X3VzdF9sb2NhbF9zbmFwc2hvdF9tYXhfc2l6ZSAoKQo+ICAKPiAgZnVuY3Rpb24gdGVzdF91c3Rf
-bG9jYWxfc25hcHNob3RfbGFyZ2VfbWV0YWRhdGEgKCkKPiAgewo+IC0JTlJfSVRFUj0yMDAwMDAw
-Cj4gLQlOUl9VU0VDX1dBSVQ9MTAwCj4gIAlMTV9FVkVOVD0idHA6dHB0ZXN0MSx0cDp0cHRlc3Qy
-LHRwOnRwdGVzdDMsdHA6dHB0ZXN0NCx0cDp0cHRlc3Q1Igo+ICAJTE1fUEFUSD0iJFRFU1RESVIv
-dXRpbHMvdGVzdGFwcCIKPiAgCUxNX05BTUU9Imdlbi11c3QtbmV2ZW50cyIKPiBAQCAtMzg4LDgg
-KzM4NCw2IEBAIGZ1bmN0aW9uIHRlc3RfdXN0X2xvY2FsX3NuYXBzaG90X2xhcmdlX21ldGFkYXRh
-ICgpCj4gIAo+ICBmdW5jdGlvbiBlbmFibGVfY2hhbm5lbF9wZXJfdWlkX21tYXBfb3ZlcndyaXRl
-KCkKPiAgewo+IC0JTlJfSVRFUj0yMDAwMDAwCj4gLQlOUl9VU0VDX1dBSVQ9MTAwCj4gIAlzZXNz
-X25hbWU9JDEKPiAgCWNoYW5uZWxfbmFtZT0kMgo+ICAKPiBAQCAtMzk5LDYgKzM5Myw4IEBAIGZ1
-bmN0aW9uIGVuYWJsZV9jaGFubmVsX3Blcl91aWRfbW1hcF9vdmVyd3JpdGUoKQo+ICAKPiAgZnVu
-Y3Rpb24gdGVzdF91c3RfcGVyX3VpZF9sb2NhbF9zbmFwc2hvdCAoKQo+ICB7Cj4gKwlOUl9JVEVS
-PS0xCj4gKwlOUl9VU0VDX1dBSVQ9MTAwCj4gIAlkaWFnICJUZXN0IHBlci11aWQgbG9jYWwgVVNU
-IHNuYXBzaG90cyIKPiAgCWNyZWF0ZV9sdHRuZ19zZXNzaW9uX25vX291dHB1dCAkU0VTU0lPTl9O
-QU1FCj4gIAllbmFibGVfY2hhbm5lbF9wZXJfdWlkX21tYXBfb3ZlcndyaXRlICRTRVNTSU9OX05B
-TUUgJENIQU5ORUxfTkFNRQo+IEBAIC00MjUsNyArNDIxLDcgQEAgZnVuY3Rpb24gdGVzdF91c3Rf
-cGVyX3VpZF9sb2NhbF9zbmFwc2hvdCAoKQo+ICAKPiAgZnVuY3Rpb24gdGVzdF91c3RfcGVyX3Vp
-ZF9sb2NhbF9zbmFwc2hvdF9wb3N0X21vcnRlbSAoKQo+ICB7Cj4gLQlOUl9JVEVSPTIwMDAwMDAK
-PiArCU5SX0lURVI9LTEKPiAgCU5SX1VTRUNfV0FJVD0xMDAKPiAgCj4gIAlkaWFnICJUZXN0IGxv
-Y2FsIFVTVCBzbmFwc2hvdHMgcG9zdC1tb3J0ZW0iCj4gQEAgLTQ1Myw3ICs0NDksNyBAQCBmdW5j
-dGlvbiB0ZXN0X3VzdF9wZXJfdWlkX2xvY2FsX3NuYXBzaG90X3Bvc3RfbW9ydGVtICgpCj4gIAo+
-ICBmdW5jdGlvbiB0ZXN0X3VzdF9sb2NhbF9zbmFwc2hvdHMgKCkKPiAgewo+IC0JTlJfSVRFUj0y
-MDAwMDAwCj4gKwlOUl9JVEVSPS0xCj4gIAlOUl9VU0VDX1dBSVQ9MTAwCj4gIAo+ICAJZGlhZyAi
-VGVzdCAkTlJfU05BUFNIT1QgbG9jYWwgVVNUIHNuYXBzaG90cyIKPiAtLSAKPiAyLjE3LjEKPiAK
+--===============8183696668231444397==
+Content-Type: multipart/alternative; boundary="000000000000515a820575a21c2d"
+
+--000000000000515a820575a21c2d
+Content-Type: text/plain; charset="UTF-8"
+
+Hey guys,
+I am trying to evaluate if lttng is reliable enough to be used as a source
+for billing component? The main demand here is to make sure that we don't
+lose any traces and have a way to recover from failures for example the
+session dying unexpectedly.
+Please guide me if its a good idea or not to use lttng in this scenario.
+
+Thanks
+Ammar
+
+--000000000000515a820575a21c2d
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hey guys,<div>I am trying to evaluate if lttng is reliable=
+ enough to be used as a source for billing component? The main demand here =
+is to make sure that we don&#39;t lose any traces and have a way to recover=
+ from failures for example the session dying unexpectedly.</div><div>Please=
+ guide me if its a good idea or not to use lttng in this scenario.</div><di=
+v><br></div><div>Thanks</div><div>Ammar</div></div>
+
+--000000000000515a820575a21c2d--
+
+--===============8183696668231444397==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
 X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
 IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
 bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============8183696668231444397==--
