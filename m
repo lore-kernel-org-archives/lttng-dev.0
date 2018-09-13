@@ -1,17 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace] Add git version string
-Date: Thu, 13 Sep 2018 11:41:14 -0400 (EDT)
-Message-ID: <1880147867.2867.1536853274643.JavaMail.zimbra__3398.55403076417$1536853197$gmane$org@efficios.com>
-References: <20180501183002.19732-1-mjeanson@efficios.com>
- <20180912194320.GA21099@gmail.com>
+Subject: Re: Is lttng reliable enough to use it for billing
+ component
+Date: Thu, 13 Sep 2018 14:30:59 -0400 (EDT)
+Message-ID: <1420145716.3048.1536863459551.JavaMail.zimbra__8809.20250569961$1536863351$gmane$org@efficios.com>
+References: <CAD6O9aofSMdi6FpgUCKuVmQpsk=Ymu+skoWaae3T5XWa-SaR2g@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============4167283443890908285=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 42B2th0pSrzxFH
- for <lttng-dev@lists.lttng.org>; Thu, 13 Sep 2018 11:41:15 -0400 (EDT)
-In-Reply-To: <20180912194320.GA21099@gmail.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 42B6fg2XzCzxTy
+ for <lttng-dev@lists.lttng.org>; Thu, 13 Sep 2018 14:31:07 -0400 (EDT)
+In-Reply-To: <CAD6O9aofSMdi6FpgUCKuVmQpsk=Ymu+skoWaae3T5XWa-SaR2g@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,132 +20,98 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jeremie Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: syed zaidi <zaidi1039@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Mhatre abhay <Mhatre.abhay@gmail.com>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT24gU2VwIDEyLCAyMDE4LCBhdCAzOjQzIFBNLCBKZXJlbWllIEdhbGFybmVhdSBqZXJl
-bWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20gd3JvdGU6Cgo+IE1lcmdlZCBpbiBtYXN0ZXIgYW5k
-IHN0YWJsZS0yLjAuCgpzdGFibGUtMi4wLCByZWFsbHkgPyA6KSBUaGF0IGJyaW5ncyB1cCBnb29k
-IG1lbW9yaWVzLgoKVGhhbmtzLAoKTWF0aGlldQoKPiAKPiBUaGFua3MhCj4gSsOpcsOpbWllCj4g
-Cj4gT24gVHVlLCBNYXkgMDEsIDIwMTggYXQgMDI6MzA6MDJQTSAtMDQwMCwgTWljaGFlbCBKZWFu
-c29uIHdyb3RlOgo+PiBTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVm
-ZmljaW9zLmNvbT4KPj4gLS0tCj4+ICAuZ2l0aWdub3JlICAgICAgICAgICAgICAgICAgICB8ICAy
-ICsKPj4gIGNsaS9iYWJlbHRyYWNlLWNmZy1jbGktYXJncy5jIHwgIDcgKysrLQo+PiAgaW5jbHVk
-ZS9NYWtlZmlsZS5hbSAgICAgICAgICAgfCA3NCArKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrLQo+PiAgaW5jbHVkZS92ZXJzaW9uLmggICAgICAgICAgICAgfCAyOCArKysrKysrKysr
-KysrCj4+ICA0IGZpbGVzIGNoYW5nZWQsIDEwOSBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygt
-KQo+PiAgY3JlYXRlIG1vZGUgMTAwNjQ0IGluY2x1ZGUvdmVyc2lvbi5oCj4+IAo+PiBkaWZmIC0t
-Z2l0IGEvLmdpdGlnbm9yZSBiLy5naXRpZ25vcmUKPj4gaW5kZXggYTE3NDBjYjEuLmVkY2Y4ZWRj
-IDEwMDY0NAo+PiAtLS0gYS8uZ2l0aWdub3JlCj4+ICsrKyBiLy5naXRpZ25vcmUKPj4gQEAgLTY0
-LDYgKzY0LDggQEAgcGx1Z2lucy9jdGYvY29tbW9uL21ldGFkYXRhL3BhcnNlci5vdXRwdXQKPj4g
-IC9jbGkvYmFiZWx0cmFjZS1sb2cuYmluCj4+ICAvaW5jbHVkZS9jb25maWcuaAo+PiAgL2luY2x1
-ZGUvY29uZmlnLmguaW4KPj4gKy9pbmNsdWRlL3ZlcnNpb24uaQo+PiArL2luY2x1ZGUvdmVyc2lv
-bi5pLnRtcAo+PiAgL2NvbmZpZy5zdGF0dXMKPj4gICoubG9nCj4+ICBhY2xvY2FsLm00Cj4+IGRp
-ZmYgLS1naXQgYS9jbGkvYmFiZWx0cmFjZS1jZmctY2xpLWFyZ3MuYyBiL2NsaS9iYWJlbHRyYWNl
-LWNmZy1jbGktYXJncy5jCj4+IGluZGV4IDhmMDFlNjRiLi43NzgzZjI1YSAxMDA2NDQKPj4gLS0t
-IGEvY2xpL2JhYmVsdHJhY2UtY2ZnLWNsaS1hcmdzLmMKPj4gKysrIGIvY2xpL2JhYmVsdHJhY2Ut
-Y2ZnLWNsaS1hcmdzLmMKPj4gQEAgLTQxLDYgKzQxLDcgQEAKPj4gICNpbmNsdWRlICJiYWJlbHRy
-YWNlLWNmZy5oIgo+PiAgI2luY2x1ZGUgImJhYmVsdHJhY2UtY2ZnLWNsaS1hcmdzLmgiCj4+ICAj
-aW5jbHVkZSAiYmFiZWx0cmFjZS1jZmctY2xpLWFyZ3MtY29ubmVjdC5oIgo+PiArI2luY2x1ZGUg
-InZlcnNpb24uaCIKPj4gIAo+PiAgLyoKPj4gICAqIEVycm9yIHByaW50ZigpIG1hY3JvIHdoaWNo
-IHByZXBlbmRzICJFcnJvcjogIiB0aGUgZmlyc3QgdGltZSBpdCdzCj4+IEBAIC03MjksNyArNzMw
-LDExIEBAIGVuZDoKPj4gIHN0YXRpYwo+PiAgdm9pZCBwcmludF92ZXJzaW9uKHZvaWQpCj4+ICB7
-Cj4+IC0JcHV0cygiQmFiZWx0cmFjZSAiIFZFUlNJT04pOwo+PiArCWlmIChHSVRfVkVSU0lPTlsw
-XSA9PSAnXDAnKSB7Cj4+ICsJCXB1dHMoIkJhYmVsdHJhY2UgIiBWRVJTSU9OKTsKPj4gKwl9IGVs
-c2Ugewo+PiArCQlwdXRzKCJCYWJlbHRyYWNlICIgVkVSU0lPTiAgIiAtICIgR0lUX1ZFUlNJT04p
-Owo+PiArCX0KPj4gIH0KPj4gIAo+PiAgLyoKPj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvTWFrZWZp
-bGUuYW0gYi9pbmNsdWRlL01ha2VmaWxlLmFtCj4+IGluZGV4IGMwMjZlNzRjLi42NjllMDAzYiAx
-MDA2NDQKPj4gLS0tIGEvaW5jbHVkZS9NYWtlZmlsZS5hbQo+PiArKysgYi9pbmNsdWRlL01ha2Vm
-aWxlLmFtCj4+IEBAIC0xLDMgKzEsNzMgQEAKPj4gKyMjCj4+ICsjIyBUaGlzIHRhcmdldCBnZW5l
-cmF0ZXMgYW4gaW5jbHVkZSBmaWxlIHRoYXQgY29udGFpbnMgdGhlIGdpdCB2ZXJzaW9uCj4+ICsj
-IyBzdHJpbmcgb2YgdGhlIGN1cnJlbnQgYnJhbmNoLCBpdCBtdXN0IGJlIGNvbnRpbnVvdXNseSB1
-cGRhdGVkIHdoZW4KPj4gKyMjIHdlIGJ1aWxkIGluIHRoZSBnaXQgcmVwbyBhbmQgc2hpcHBlZCBp
-biBkaXN0IHRhcmJhbGxzIHRvIHJlZmxlY3QgdGhlCj4+ICsjIyBzdGF0dXMgb2YgdGhlIHRyZWUg
-d2hlbiBpdCB3YXMgZ2VuZXJhdGVkLiBJZiB0aGUgdHJlZSBpcyBjbGVhbiBhbmQKPj4gKyMjIHRo
-ZSBjdXJyZW50IGNvbW1pdCBpcyB0YWcgYSBzdGFydGluZyB3aXRoICJ2IiwgY29uc2lkZXIgdGhp
-cyBhCj4+ICsjIyByZWxlYXNlIHZlcnNpb24gYW5kIHNldCBhbiBlbXB0eSBnaXQgdmVyc2lvbi4K
-Pj4gKyMjCj4+ICsjIyBIZXJlIGlzIHdoYXQgdGhlIGlubGluZSBzY3JpcHQgZG9lczoKPj4gKyMj
-Cj4+ICsjIyBGaXJzdCwgZGVsZXRlIGFueSBzdGFsZSAidmVyc2lvbi5pLnRtcCIgZmlsZS4KPj4g
-KyMjCj4+ICsjIyBJZiAiYm9vdHN0cmFwIiBhbmQgIi5naXQiIGV4aXN0cyBpbiB0aGUgdG9wIHNv
-dXJjZSBkaXJlY3RvcnkgYW5kIHRoZSBnaXQKPj4gKyMjIGV4ZWN1dGFibGUgaXMgYXZhaWxhYmxl
-LCBnZXQgdGhlIGN1cnJlbnQgZ2l0IHZlcnNpb24gc3RyaW5nIGluIHRoZSBmb3JtOgo+PiArIyMK
-Pj4gKyMjICAibGF0ZXN0X3RhZyIoLSJudW1iZXJfb2ZfY29tbWl0c19vbl90b3AiKSgtZyJsYXRl
-c3RfY29tbWl0X2hhc2giKSgtZGlydHkpCj4+ICsjIwo+PiArIyMgQW5kIHN0b3JlIGl0IGluICJ2
-ZXJzaW9uLmkudG1wIiwgaWYgdGhlIGN1cnJlbnQgY29tbWl0IGlzIHRhZ2dlZCwgdGhlIHRhZwo+
-PiArIyMgc3RhcnRzIHdpdGggInYiIGFuZCB0aGUgdHJlZSBpcyBjbGVhbiwgY29uc2lkZXIgdGhp
-cyBhIHJlbGVhc2UgdmVyc2lvbiBhbmQKPj4gKyMjIG92ZXJ3cml0ZSB0aGUgZ2l0IHZlcnNpb24g
-d2l0aCBhbiBlbXB0eSBzdHJpbmcgaW4gInZlcnNpb24uaS50bXAiLgo+PiArIyMKPj4gKyMjIElm
-IHdlIGRvbid0IGhhdmUgYSAidmVyc2lvbi5pLnRtcCIgbm9yIGEgInZlcnNpb24uaSIsIGdlbmVy
-YXRlIGFuIGVtcHR5Cj4+ICsjIyBzdHJpbmcgYXMgYSBmYWlsb3Zlci4KPj4gKyMjCj4+ICsjIyBJ
-ZiB3ZSBkb24ndCBoYXZlIGEgInZlcnNpb24uaSIgb3Igd2UgaGF2ZSBib3RoIGZpbGVzIGFuZCB0
-aGV5IGFyZSBkaWZmZXJlbnQsCj4+ICsjIyBjb3B5ICJ2ZXJzaW9uLmkudG1wIiBvdmVyICJ2ZXJz
-aW9uLmkiLiBUaGlzIHdheSB0aGUgZGVwZW5kZW50IHRhcmdldHMgYXJlCj4+ICsjIyBvbmx5IHJl
-YnVpbHQgd2hlbiB0aGUgdmVyc2lvbiBzdHJpbmcgY2hhbmdlcy4KPj4gKyMjCj4+ICsKPj4gK3Zl
-cnNpb25fdmVyYm9zZSA9ICQodmVyc2lvbl92ZXJib3NlX0BBTV9WQCkKPj4gK3ZlcnNpb25fdmVy
-Ym9zZV8gPSAkKHZlcnNpb25fdmVyYm9zZV9AQU1fREVGQVVMVF9WQCkKPj4gK3ZlcnNpb25fdmVy
-Ym9zZV8wID0gQGVjaG8gIiAgR0VOICAgICAgICIgJEA7Cj4+ICsKPj4gK3ZlcnNpb24uaToKPj4g
-KwkkKHZlcnNpb25fdmVyYm9zZSlybSAtZiB2ZXJzaW9uLmkudG1wOyBcCj4+ICsJaWYgKHRlc3Qg
-LXIgIiQodG9wX3NyY2RpcikvYm9vdHN0cmFwIiAmJiB0ZXN0IC1yICIkKHRvcF9zcmNkaXIpLy5n
-aXQiKSAmJiBcCj4+ICsJCQl0ZXN0IC14ICJgd2hpY2ggZ2l0IDI+JjE7dHJ1ZWAiOyB0aGVuIFwK
-Pj4gKwkJR0lUX1ZFUlNJT05fU1RSPSJgY2QgIiQodG9wX3NyY2RpcikiICYmIGdpdCBkZXNjcmli
-ZSAtLXRhZ3MgLS1kaXJ0eWAiOyBcCj4+ICsJCUdJVF9DVVJSRU5UX1RBRz0iYGNkICIkKHRvcF9z
-cmNkaXIpIiAmJiBnaXQgZGVzY3JpYmUgLS10YWdzIC0tZXhhY3QtbWF0Y2gKPj4gLS1tYXRjaD0i
-dlswLTldKiIgSEVBRCAyPiAvZGV2L251bGxgIjsgXAo+PiArCQllY2hvICIjZGVmaW5lIEdJVF9W
-RVJTSU9OIFwiJCRHSVRfVkVSU0lPTl9TVFJcIiIgPiB2ZXJzaW9uLmkudG1wOyBcCj4+ICsJCWlm
-ICEgJChHUkVQKSAtLSAiLWRpcnR5IiB2ZXJzaW9uLmkudG1wID4gL2Rldi9udWxsICYmIFwKPj4g
-KwkJCQl0ZXN0ICJ4JCRHSVRfQ1VSUkVOVF9UQUciICE9ICJ4IjsgdGhlbiBcCj4+ICsJCQllY2hv
-ICIjZGVmaW5lIEdJVF9WRVJTSU9OIFwiXCIiID4gdmVyc2lvbi5pLnRtcDsgXAo+PiArCQlmaTsg
-XAo+PiArCWZpOyBcCj4+ICsJaWYgdGVzdCAhIC1mIHZlcnNpb24uaS50bXA7IHRoZW4gXAo+PiAr
-CQlpZiB0ZXN0ICEgLWYgdmVyc2lvbi5pOyB0aGVuIFwKPj4gKwkJCWVjaG8gJyNkZWZpbmUgR0lU
-X1ZFUlNJT04gIiInID4gdmVyc2lvbi5pOyBcCj4+ICsJCWZpOyBcCj4+ICsJZWxpZiB0ZXN0ICEg
-LWYgdmVyc2lvbi5pIHx8IFwKPj4gKwkJCXRlc3QgeCJgY2F0IHZlcnNpb24uaS50bXBgIiAhPSB4
-ImBjYXQgdmVyc2lvbi5pYCI7IHRoZW4gXAo+PiArCQltdiB2ZXJzaW9uLmkudG1wIHZlcnNpb24u
-aTsgXAo+PiArCWZpOyBcCj4+ICsJcm0gLWYgdmVyc2lvbi5pLnRtcDsgXAo+PiArCXRydWUKPj4g
-Kwo+PiArIyMKPj4gKyMjIHZlcnNpb24uaSBpcyBkZWZpbmVkIGFzIGEgLlBIT05ZIHRhcmdldCBl
-dmVuIGlmIGl0J3MgYSByZWFsIGZpbGUsCj4+ICsjIyB3ZSB3YW50IHRoZSB0YXJnZXQgdG8gYmUg
-cmUtcnVuIG9uIGV2ZXJ5IG1ha2UuCj4+ICsjIwo+PiArLlBIT05ZOiB2ZXJzaW9uLmkKPj4gKwo+
-PiArQ0xFQU5GSUxFUyA9IHZlcnNpb24uaS50bXAKPj4gKwo+PiArIyMKPj4gKyMjIE9ubHkgY2xl
-YW4gInZlcnNpb24uaSIgb24gZGlzdC1jbGVhbiwgd2UgbmVlZCB0byBrZWVwIGl0IG9uIHJlZ3Vs
-YXIKPj4gKyMjIGNsZWFuIHdoZW4gaXQncyBwYXJ0IG9mIGEgZGlzdCB0YXJiYWxsLgo+PiArIyMK
-Pj4gK0RJU1RDTEVBTkZJTEVTID0gdmVyc2lvbi5pCj4+ICsKPj4gICMgQ29yZSBBUEkKPj4gIGJh
-YmVsdHJhY2VpbmNsdWRlZGlyID0gIiQoaW5jbHVkZWRpcikvYmFiZWx0cmFjZSIKPj4gIGJhYmVs
-dHJhY2VpbmNsdWRlX0hFQURFUlMgPSBcCj4+IEBAIC0xNTEsNCArMjIxLDYgQEAgbm9pbnN0X0hF
-QURFUlMgPSBcCj4+ICAJYmFiZWx0cmFjZS9wbHVnaW4vcGx1Z2luLXNvLWludGVybmFsLmggXAo+
-PiAgCWJhYmVsdHJhY2UvcHJpby1oZWFwLWludGVybmFsLmggXAo+PiAgCWJhYmVsdHJhY2UvcmVm
-LWludGVybmFsLmggXAo+PiAtCWJhYmVsdHJhY2UvdmFsdWVzLWludGVybmFsLmgKPj4gKwliYWJl
-bHRyYWNlL3ZhbHVlcy1pbnRlcm5hbC5oIFwKPj4gKwl2ZXJzaW9uLmggXAo+PiArCXZlcnNpb24u
-aQo+PiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS92ZXJzaW9uLmggYi9pbmNsdWRlL3ZlcnNpb24uaAo+
-PiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+PiBpbmRleCAwMDAwMDAwMC4uNGY4MDI1MTcKPj4gLS0t
-IC9kZXYvbnVsbAo+PiArKysgYi9pbmNsdWRlL3ZlcnNpb24uaAo+PiBAQCAtMCwwICsxLDI4IEBA
-Cj4+ICsjaWZuZGVmIFZFUlNJT05fSAo+PiArI2RlZmluZSBWRVJTSU9OX0gKPj4gKwo+PiArLyoK
-Pj4gKyAqIENvcHlyaWdodCAoQykgMjAxOCBNaWNoYWVsIEplYW5zb24gPG1qZWFuc29uQGVmZmlj
-aW9zLmNvbT4KPj4gKyAqCj4+ICsgKiBQZXJtaXNzaW9uIGlzIGhlcmVieSBncmFudGVkLCBmcmVl
-IG9mIGNoYXJnZSwgdG8gYW55IHBlcnNvbiBvYnRhaW5pbmcgYSBjb3B5Cj4+ICsgKiBvZiB0aGlz
-IHNvZnR3YXJlIGFuZCBhc3NvY2lhdGVkIGRvY3VtZW50YXRpb24gZmlsZXMgKHRoZSAiU29mdHdh
-cmUiKSwgdG8KPj4gZGVhbAo+PiArICogaW4gdGhlIFNvZnR3YXJlIHdpdGhvdXQgcmVzdHJpY3Rp
-b24sIGluY2x1ZGluZyB3aXRob3V0IGxpbWl0YXRpb24gdGhlIHJpZ2h0cwo+PiArICogdG8gdXNl
-LCBjb3B5LCBtb2RpZnksIG1lcmdlLCBwdWJsaXNoLCBkaXN0cmlidXRlLCBzdWJsaWNlbnNlLCBh
-bmQvb3Igc2VsbAo+PiArICogY29waWVzIG9mIHRoZSBTb2Z0d2FyZSwgYW5kIHRvIHBlcm1pdCBw
-ZXJzb25zIHRvIHdob20gdGhlIFNvZnR3YXJlIGlzCj4+ICsgKiBmdXJuaXNoZWQgdG8gZG8gc28s
-IHN1YmplY3QgdG8gdGhlIGZvbGxvd2luZyBjb25kaXRpb25zOgo+PiArICoKPj4gKyAqIFRoZSBh
-Ym92ZSBjb3B5cmlnaHQgbm90aWNlIGFuZCB0aGlzIHBlcm1pc3Npb24gbm90aWNlIHNoYWxsIGJl
-IGluY2x1ZGVkIGluCj4+ICsgKiBhbGwgY29waWVzIG9yIHN1YnN0YW50aWFsIHBvcnRpb25zIG9m
-IHRoZSBTb2Z0d2FyZS4KPj4gKyAqCj4+ICsgKiBUSEUgU09GVFdBUkUgSVMgUFJPVklERUQgIkFT
-IElTIiwgV0lUSE9VVCBXQVJSQU5UWSBPRiBBTlkgS0lORCwgRVhQUkVTUyBPUgo+PiArICogSU1Q
-TElFRCwgSU5DTFVESU5HIEJVVCBOT1QgTElNSVRFRCBUTyBUSEUgV0FSUkFOVElFUyBPRiBNRVJD
-SEFOVEFCSUxJVFksCj4+ICsgKiBGSVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIgUFVSUE9TRSBBTkQg
-Tk9OSU5GUklOR0VNRU5ULiBJTiBOTyBFVkVOVCBTSEFMTCBUSEUKPj4gKyAqIEFVVEhPUlMgT1Ig
-Q09QWVJJR0hUIEhPTERFUlMgQkUgTElBQkxFIEZPUiBBTlkgQ0xBSU0sIERBTUFHRVMgT1IgT1RI
-RVIKPj4gKyAqIExJQUJJTElUWSwgV0hFVEhFUiBJTiBBTiBBQ1RJT04gT0YgQ09OVFJBQ1QsIFRP
-UlQgT1IgT1RIRVJXSVNFLCBBUklTSU5HCj4+IEZST00sCj4+ICsgKiBPVVQgT0YgT1IgSU4gQ09O
-TkVDVElPTiBXSVRIIFRIRSBTT0ZUV0FSRSBPUiBUSEUgVVNFIE9SIE9USEVSIERFQUxJTkdTIElO
-Cj4+IFRIRQo+PiArICogU09GVFdBUkUuCj4+ICsgKi8KPj4gKwo+PiArI2luY2x1ZGUgInZlcnNp
-b24uaSIKPj4gKwo+PiArI2VuZGlmIC8qIFZFUlNJT05fSCAqLwo+PiAtLQo+PiAyLjE3LjAKPj4g
-Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cj4gbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwo+IGh0dHBzOi8v
-bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKCi0tIApN
-YXRoaWV1IERlc25veWVycwpFZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBt
-YWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5n
-Lm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============4167283443890908285==
+Content-Type: multipart/alternative;
+	boundary="=_5a746519-3711-483b-8181-c47b044ab7c6"
+
+--=_5a746519-3711-483b-8181-c47b044ab7c6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+Hi, 
+
+----- On Sep 11, 2018, at 8:59 PM, syed zaidi <zaidi1039@gmail.com> wrote: 
+
+> Hey guys,
+> I am trying to evaluate if lttng is reliable enough to be used as a source for
+> billing component? The main demand here is to make sure that we don't lose any
+> traces and have a way to recover from failures for example the session dying
+> unexpectedly.
+> Please guide me if its a good idea or not to use lttng in this scenario.
+
+LTTng has not been designed with those use-cases in mind, so chances are that it will 
+not provide the kind of recovery from failures and "don't lose any data" types of 
+guarantees you are looking for. 
+
+Buffering tracing data for system monitoring/debugging has a different set of 
+requirements compared to your use-case. 
+
+Thanks, 
+
+Mathieu 
+
+> Thanks
+> Ammar
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+--=_5a746519-3711-483b-8181-c47b044ab7c6
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div>Hi,<br></div><div><br data-mce-bogus=3D"1">=
+</div><div><span id=3D"zwchr" data-marker=3D"__DIVIDER__">----- On Sep 11, =
+2018, at 8:59 PM, syed zaidi &lt;zaidi1039@gmail.com&gt; wrote:<br></span><=
+/div><div data-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left:=
+2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:n=
+ormal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sa=
+ns-serif;font-size:12pt;"><div dir=3D"ltr">Hey guys,<div>I am trying to eva=
+luate if lttng is reliable enough to be used as a source for billing compon=
+ent? The main demand here is to make sure that we don't lose any traces and=
+ have a way to recover from failures for example the session dying unexpect=
+edly.</div><div>Please guide me if its a good idea or not to use lttng in t=
+his scenario.</div></div></blockquote><div><div><br data-mce-bogus=3D"1"></=
+div><div>LTTng has not been designed with those use-cases in mind, so chanc=
+es are that it will</div><div>not provide the kind of recovery from failure=
+s and "don't lose any data" types of</div><div>guarantees you are looking f=
+or.</div></div><div><br data-mce-bogus=3D"1"></div><div>Buffering tracing d=
+ata for system monitoring/debugging has a different set of<br data-mce-bogu=
+s=3D"1"></div><div>requirements compared to your use-case.<br data-mce-bogu=
+s=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-=
+bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathieu<br data-=
+mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote style=
+=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#0=
+00;font-weight:normal;font-style:normal;text-decoration:none;font-family:He=
+lvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><br><div>Thanks<=
+/div><div>Ammar</div></div>
+<br>_______________________________________________<br>lttng-dev mailing li=
+st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
+listinfo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D=
+"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http=
+://www.efficios.com</div></div></body></html>
+--=_5a746519-3711-483b-8181-c47b044ab7c6--
+
+--===============4167283443890908285==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============4167283443890908285==--
