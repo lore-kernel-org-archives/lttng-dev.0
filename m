@@ -1,21 +1,22 @@
 From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools 1/2] Fix: use
- LTTNG_VIEWER_ATTACH_UNK to report a closed session
-Date: Wed, 19 Sep 2018 11:54:24 -0400
-Message-ID: <20180919155423.GF2836__5524.96997775069$1537372363$gmane$org@gmail.com>
+Subject: Re: [PATCH lttng-tools 2/2] Skip closed session on
+	viewer listing
+Date: Wed, 19 Sep 2018 11:54:46 -0400
+Message-ID: <20180919155444.GG2836__47998.0936310769$1537372519$gmane$org@gmail.com>
 References: <20180907191838.17832-1-jonathan.rajotte-julien@efficios.com>
+ <20180907191838.17832-2-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt0-f196.google.com (mail-qt0-f196.google.com
- [209.85.216.196])
- by lists.lttng.org (Postfix) with ESMTPS id 42Fkv9060XzxSG
- for <lttng-dev@lists.lttng.org>; Wed, 19 Sep 2018 11:54:29 -0400 (EDT)
-Received: by mail-qt0-f196.google.com with SMTP id l42-v6so5515360qtf.13
- for <lttng-dev@lists.lttng.org>; Wed, 19 Sep 2018 08:54:28 -0700 (PDT)
+Received: from mail-qk1-f193.google.com (mail-qk1-f193.google.com
+ [209.85.222.193])
+ by lists.lttng.org (Postfix) with ESMTPS id 42Fkvc0n7mzxSl
+ for <lttng-dev@lists.lttng.org>; Wed, 19 Sep 2018 11:54:51 -0400 (EDT)
+Received: by mail-qk1-f193.google.com with SMTP id g13-v6so3267371qki.9
+ for <lttng-dev@lists.lttng.org>; Wed, 19 Sep 2018 08:54:51 -0700 (PDT)
 Content-Disposition: inline
-In-Reply-To: <20180907191838.17832-1-jonathan.rajotte-julien@efficios.com>
+In-Reply-To: <20180907191838.17832-2-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -30,23 +31,23 @@ Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
 TWVyZ2VkIGluIG1hc3Rlciwgc3RhYmxlLTIuMTEsIHN0YWJsZS0yLjEwLCBhbmQgc3RhYmxlLTIu
-OS4KClRoYW5rcywKSsOpcsOpbWllCgpPbiBGcmksIFNlcCAwNywgMjAxOCBhdCAwMzoxODozN1BN
-IC0wNDAwLCBKb25hdGhhbiBSYWpvdHRlIHdyb3RlOgo+IExUVE5HX1ZJRVdFUl9ORVdfU1RSRUFN
-U19IVVAgaXMgbm90IGEgdmFsaWQgZXJyb3IgbnVtYmVyIGZvciB0aGUKPiBMVFROR19WSUVXRVJf
-QVRUQUNIX1NFU1NJT04gY29tbWFuZC4gVGhpcyByZXN1bHQgaW4gZXJyb25lb3VzIGVycm9yCj4g
-cmVwb3J0aW5nIG9uIHRoZSBjbGllbnQgc2lkZS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBKb25hdGhh
-biBSYWpvdHRlIDxqb25hdGhhbi5yYWpvdHRlLWp1bGllbkBlZmZpY2lvcy5jb20+Cj4gLS0tCj4g
-IHNyYy9iaW4vbHR0bmctcmVsYXlkL2xpdmUuYyB8IDIgKy0KPiAgMSBmaWxlIGNoYW5nZWQsIDEg
-aW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0
-bmctcmVsYXlkL2xpdmUuYyBiL3NyYy9iaW4vbHR0bmctcmVsYXlkL2xpdmUuYwo+IGluZGV4IDZm
-NTBhZmM2Yy4uYmMwZTQ1MjlhIDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmctcmVsYXlkL2xp
-dmUuYwo+ICsrKyBiL3NyYy9iaW4vbHR0bmctcmVsYXlkL2xpdmUuYwo+IEBAIC0xMDg5LDcgKzEw
-ODksNyBAQCBpbnQgdmlld2VyX2F0dGFjaF9zZXNzaW9uKHN0cnVjdCByZWxheV9jb25uZWN0aW9u
-ICpjb25uKQo+ICAJaWYgKGNsb3NlZCkgewo+ICAJCXNlbmRfc3RyZWFtcyA9IDA7Cj4gIAkJcmVz
-cG9uc2Uuc3RyZWFtc19jb3VudCA9IDA7Cj4gLQkJcmVzcG9uc2Uuc3RhdHVzID0gaHRvYmUzMihM
-VFROR19WSUVXRVJfTkVXX1NUUkVBTVNfSFVQKTsKPiArCQlyZXNwb25zZS5zdGF0dXMgPSBodG9i
-ZTMyKExUVE5HX1ZJRVdFUl9BVFRBQ0hfVU5LKTsKPiAgCQlnb3RvIHNlbmRfcmVwbHk7Cj4gIAl9
-Cj4gIAo+IC0tIAo+IDIuMTcuMQo+IApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo=
+OS4KClRoYW5rcywKSsOpcsOpbWllCgpPbiBGcmksIFNlcCAwNywgMjAxOCBhdCAwMzoxODozOFBN
+IC0wNDAwLCBKb25hdGhhbiBSYWpvdHRlIHdyb3RlOgo+IFRoZXJlIGlzIG5vIHZhbHVlIGluIGxp
+c3RpbmcgYSBjbG9zZWQgc2Vzc2lvbi4gQSB2aWV3ZXIgY2Fubm90IGhvb2sgaXRzZWxmCj4gdG8g
+YSBjbG9zZWQgc2Vzc2lvbiBpbiBsaXZlIG1vZGUgYW5kIHRoZSBzZXNzaW9uIGlzIGFib3V0IHRv
+IGJlIHJlbW92ZWQgZnJvbSB0aGUKPiBzZXNzaW9ucyBoYXNoIHRhYmxlLgo+IAo+IFNpZ25lZC1v
+ZmYtYnk6IEpvbmF0aGFuIFJham90dGUgPGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9z
+LmNvbT4KPiAtLS0KPiAgc3JjL2Jpbi9sdHRuZy1yZWxheWQvbGl2ZS5jIHwgNSArKysrKwo+ICAx
+IGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4v
+bHR0bmctcmVsYXlkL2xpdmUuYyBiL3NyYy9iaW4vbHR0bmctcmVsYXlkL2xpdmUuYwo+IGluZGV4
+IGJjMGU0NTI5YS4uMGZkNDFmMWE4IDEwMDY0NAo+IC0tLSBhL3NyYy9iaW4vbHR0bmctcmVsYXlk
+L2xpdmUuYwo+ICsrKyBiL3NyYy9iaW4vbHR0bmctcmVsYXlkL2xpdmUuYwo+IEBAIC04MzUsNiAr
+ODM1LDExIEBAIGludCB2aWV3ZXJfbGlzdF9zZXNzaW9ucyhzdHJ1Y3QgcmVsYXlfY29ubmVjdGlv
+biAqY29ubikKPiAgCj4gIAkJaGVhbHRoX2NvZGVfdXBkYXRlKCk7Cj4gIAo+ICsJCWlmIChzZXNz
+aW9uLT5jb25uZWN0aW9uX2Nsb3NlZCkgewo+ICsJCQkvKiBTa2lwIGNsb3NlZCBzZXNzaW9uICov
+Cj4gKwkJCWNvbnRpbnVlOwo+ICsJCX0KPiArCj4gIAkJaWYgKGNvdW50ID49IGJ1Zl9jb3VudCkg
+ewo+ICAJCQlzdHJ1Y3QgbHR0bmdfdmlld2VyX3Nlc3Npb24gKm5ld2J1ZjsKPiAgCQkJdWludDMy
+X3QgbmV3X2J1Zl9jb3VudCA9IGJ1Zl9jb3VudCA8PCAxOwo+IC0tIAo+IDIuMTcuMQo+IApfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFp
+bGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5v
+cmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
