@@ -1,21 +1,18 @@
-From: =?UTF-8?Q?Genevi=c3=a8ve_Bastien?= <gbastien@versatic.net>
-Subject: Re: Lacking instrumentation for threaded IRQs
-Date: Tue, 2 Oct 2018 11:40:51 -0400
-Message-ID: <a3fe526e-710a-715f-05ce-36eb92602e5a__36978.1501045965$1538494803$gmane$org@versatic.net>
-References: <e6194c95-9580-f24f-e8e2-1df8e67f804b@versatic.net>
- <b1c31153-da2f-0d40-a678-4428c78dd11e@klipix.org>
+From: John O'Sullivan <John.OSullivan@BlackBox.com>
+Subject: Re: [EXTERNAL] lttng-dev Digest, Vol 125, Issue 18
+Date: Tue, 2 Oct 2018 15:49:52 +0000
+Message-ID: <7e60ab4813c646db9597dd46060d6565__47118.2553600103$1538495356$gmane$org@PGHPRDEXCH02.corp.bbns.com>
+References: <mailman.1.1538150401.7229.lttng-dev@lists.lttng.org>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7024796966177299760=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from s056.panelboxmanager.com (s056.panelboxmanager.com
- [174.142.230.146])
- by lists.lttng.org (Postfix) with ESMTPS id 42PjzW0sDJz13n9
- for <lttng-dev@lists.lttng.org>; Tue,  2 Oct 2018 11:40:54 -0400 (EDT)
-Received: from mailnull by s056.panelboxmanager.com with sa-checked (Exim 4.91)
- (envelope-from <gbastien@versatic.net>) id 1g7Mn7-005spn-Nm
- for lttng-dev@lists.lttng.org; Tue, 02 Oct 2018 11:40:54 -0400
-In-Reply-To: <b1c31153-da2f-0d40-a678-4428c78dd11e@klipix.org>
-Content-Language: en-US-large
+Received: from esa2.hc2026-0.iphmx.com (esa2.hc2026-0.iphmx.com
+ [68.232.154.60])
+ by lists.lttng.org (Postfix) with ESMTPS id 42PkCM5QVzz13pt
+ for <lttng-dev@lists.lttng.org>; Tue,  2 Oct 2018 11:51:11 -0400 (EDT)
+In-Reply-To: <mailman.1.1538150401.7229.lttng-dev@lists.lttng.org>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,365 +22,216 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Julien Desfossez <ju@klipix.org>, lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-This is a multi-part message in MIME format.
---===============7024796966177299760==
-Content-Type: multipart/alternative;
- boundary="------------A074354F291321251A58BE22"
-Content-Language: en-US-large
-
-This is a multi-part message in MIME format.
---------------A074354F291321251A58BE22
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-
-Hi,
-
-On 2018-10-02 10:23 a.m., Julien Desfossez wrote:
-> On 10/01/2018 01:25 PM, Geneviève Bastien wrote:
->> Hi,
->>
->>
->> I was writing a tutorial on distributed critical path in Trace Compass.
->> I was tracing a client (my laptop on wifi) and a server. And to my
->> surprise, it didn't work! After further investigation, here's the issue:
->>
->>
->> The critical path assumes that a network packet is received in a softirq
->> that wakes up the process to whom the packet is meant. This is right for
->> ethernet network, but not wifi. Wifi packets are handled by a threaded
->> IRQ. Here's the flow:
->>
->>
->> 1- There's an irq that is handled with a return value of 2 (IRQ_WAKE_THREAD)
->>
->> 2- The 2 means to wake up a process _after_ the irq_handler_exit
->> tracepoint is hit
->>
->> 3- The IRQ thread is woken up, scheduled in and is running
->>
->> 4- The packet is received during that time
->>
->> 5- The packet reception is hence not on the critical path!
->>
->>
->> The issue we have here with the critical path for network will also be
->> an issue for all threaded irqs and there is some additional
->> instrumentation needed to be able to automatically take those into
->> account in analyses.
->>
->> There's additional instrumentation needed
->>
->> 1- To associate the wakeup of the IRQ thread to the actual IRQ. The way
->> it is now, the wakeup happens in the context of whatever else was
->> running before the IRQ handler.
->>
->> 2- To make it obvious that the IRQ thread is really an IRQ thread, so
->> whatever is running there should be considered in the context of a
->> threaded IRQ and not a simple running process.
->>
->>
->> Here are some options for each, not mutually exclusive:
->>
->> For 1-
->>
->> * Instrument the kernel: Add tracepoints to the beginning and end of
->> do_IRQ, to show the full IRQ duration, not just the handler and all
->> events happening during that time can be associated with the IRQ.
->>
->> * Instrument the kernel: Add tracepoints before and after waking
->> processes if the return value of the handler is IRQ_WAKE_THREAD. Those
->> tracepoints would be hit only if a process needs to be woken and would
->> not add overhead otherwise
->>
->> * At analysis time: Look at the return value of irq_handler_exit and if
->> 2, wait for the next waking on that CPU and associate it with the last
->> IRQ. But could there be more than one process to wakeup? Looking at the
->> kernel code, it seems that not. But this is more error-prone.
->>
->>
->> For 2-
->>
->> * Instrument the kernel: Add tracepoints to the beginning and end of the
->> irq_thread_fn function. Those events would indicate the context of a
->> threaded IRQ so all events inside can be considered the results of an IRQ.
->>
->> * Instrument LTTng: Add a field to the lttng_statedump_interrupt
->> tracepoint to add the thread handling this IRQ if available. That would
->> give this thread a special state: instead of running, whatever happens
->> there would be considered as the result of an IRQ. But only LTTng traces
->> would benefit from this tracepoint, and only if there's a statedump (so
->> not snapshot). It's sad... But would make a quick win for now.
->>
->>
->> Here's a pad showing those possible options:
->> https://hebdo.framapad.org/p/threadedirqlttnglinux8gjkh51yhfha
->>
->> What do you think? I'm mostly interested to know if there's a case to
->> add instrumentation to the kernel and where.
-> For #1, I think adding the do_IRQ begin/end instrumentation, would be
-> very valuable, we did it with a kretprobe in the latency-tracker, but I
-> think this deserves a real tracepoint. In your example trace, we can see
-> with the do_IRQ event that the whole interruption lasted 5.2
-> micro-seconds, whereas the interrupt handler only lasted 482ns, so
-> without this event we are clearly missing long periods of interruption.
->
-> Using the "ret = 2" would work as a temporary fix, but there are some
-> corner cases where it could lead us into wrong assumptions (the process
-> to be woken up is exiting somehow and the interrupt arrived during a
-> syscall that needed to wake another process), so I think the real fix is
-> the do_IRQ instrumentation.
-I agree
-> For #2, I am not exactly sure why we need special events for those
-> kernel threads, with the fix for #1, we know they are interrupt-related
-> threads, but they are not interrupts in the sense of "doing work while
-> the current task is interrupted". To me, everything this thread does is
-> related to the previous source of wakeup and I would imagine every chunk
-> of work it does is between an irq_thread_fn_entry/return block.
-> I am not against adding this information (or the statedump approach if
-> we are sure there is a 1 to 1 mapping), but I would like to understand
-> more precisely what this information would add to our understanding of
-> the trace.
->
-We need to know that those threads are really interrupt thread for the
-dependency analysis. Look at the following sequence of events:
-
-[12:02:17.779984311] (+0.000002224) dorsallaptop *sched_waking*: {
-cpu_id = 3 }, { comm = "irq/130-iwlwifi", tid = *639*, prio = -51,
-target_cpu = 3 }
-[12:02:17.779985668] (+0.000000565) dorsallaptop *do_IRQ_return*: {
-cpu_id = 3 }, { ip = 0xFFFFFFFF89A01C30, parent_ip = 0xFFFFFFFF89A0098F }
-[12:02:17.779986575] (+0.000000907) dorsallaptop *sched_switch*: {
-cpu_id = 3 }, { prev_comm = "swapper/3", prev_tid = 0, prev_prio = 20,
-prev_state = 0, next_comm = "irq/130-iwlwifi", next_tid = *639*,
-next_prio = -51 }
-[12:02:17.779998608] (+0.000011174) dorsallaptop net_if_receive_skb: {
-cpu_id = 3 }, { ... }
-[12:02:17.780019468] (+0.000020860) dorsallaptop sched_waking: { cpu_id
-= 3 }, { comm = "wget", tid = 2430, prio = 20, target_cpu = 0 }
-
-If we do the critical path of the wget process, with the irq/130-iwlwifi
-thread considered a normal thread, we see it is woken up by an hardware
-interrupt, that we know if iwlwifi, but we don't know anything else
-about it, so the critical path ends up following the swapper process...
-Now if we consider the irq/130-iwlwifi thread as an interrupt-running
-process, we see that wget is actually woken up by the net_if_receive_skb
-event and we can follow this to the packet sent by another machine.
-Of course this can all be done at analysis time: if (ret = 2 and a
-wakeup inside the do_IRQ but outside the irq_handler) { assume the woken
-thread will be handling the interrupt } But it's the "assume" part that
-I don't like. With instrumentation, we can clarify this.
-
---------------A074354F291321251A58BE22
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: 8bit
-
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  </head>
-  <body text="#000000" bgcolor="#FFFFFF">
-    <p>Hi,<br>
-    </p>
-    <div class="moz-cite-prefix">On 2018-10-02 10:23 a.m., Julien
-      Desfossez wrote:<br>
-    </div>
-    <blockquote type="cite"
-      cite="mid:b1c31153-da2f-0d40-a678-4428c78dd11e@klipix.org">
-      <pre class="moz-quote-pre" wrap="">On 10/01/2018 01:25 PM, Geneviève Bastien wrote:
-</pre>
-      <blockquote type="cite">
-        <pre class="moz-quote-pre" wrap="">Hi,
-
-
-I was writing a tutorial on distributed critical path in Trace Compass.
-I was tracing a client (my laptop on wifi) and a server. And to my
-surprise, it didn't work! After further investigation, here's the issue:
-
-
-The critical path assumes that a network packet is received in a softirq
-that wakes up the process to whom the packet is meant. This is right for
-ethernet network, but not wifi. Wifi packets are handled by a threaded
-IRQ. Here's the flow:
-
-
-1- There's an irq that is handled with a return value of 2 (IRQ_WAKE_THREAD)
-
-2- The 2 means to wake up a process _after_ the irq_handler_exit
-tracepoint is hit
-
-3- The IRQ thread is woken up, scheduled in and is running
-
-4- The packet is received during that time
-
-5- The packet reception is hence not on the critical path!
-
-
-The issue we have here with the critical path for network will also be
-an issue for all threaded irqs and there is some additional
-instrumentation needed to be able to automatically take those into
-account in analyses.
-
-There's additional instrumentation needed
-
-1- To associate the wakeup of the IRQ thread to the actual IRQ. The way
-it is now, the wakeup happens in the context of whatever else was
-running before the IRQ handler.
-
-2- To make it obvious that the IRQ thread is really an IRQ thread, so
-whatever is running there should be considered in the context of a
-threaded IRQ and not a simple running process.
-
-
-Here are some options for each, not mutually exclusive:
-
-For 1-
-
-* Instrument the kernel: Add tracepoints to the beginning and end of
-do_IRQ, to show the full IRQ duration, not just the handler and all
-events happening during that time can be associated with the IRQ.
-
-* Instrument the kernel: Add tracepoints before and after waking
-processes if the return value of the handler is IRQ_WAKE_THREAD. Those
-tracepoints would be hit only if a process needs to be woken and would
-not add overhead otherwise
-
-* At analysis time: Look at the return value of irq_handler_exit and if
-2, wait for the next waking on that CPU and associate it with the last
-IRQ. But could there be more than one process to wakeup? Looking at the
-kernel code, it seems that not. But this is more error-prone.
-
-
-For 2-
-
-* Instrument the kernel: Add tracepoints to the beginning and end of the
-irq_thread_fn function. Those events would indicate the context of a
-threaded IRQ so all events inside can be considered the results of an IRQ.
-
-* Instrument LTTng: Add a field to the lttng_statedump_interrupt
-tracepoint to add the thread handling this IRQ if available. That would
-give this thread a special state: instead of running, whatever happens
-there would be considered as the result of an IRQ. But only LTTng traces
-would benefit from this tracepoint, and only if there's a statedump (so
-not snapshot). It's sad... But would make a quick win for now.
-
-
-Here's a pad showing those possible options:
-<a class="moz-txt-link-freetext" href="https://hebdo.framapad.org/p/threadedirqlttnglinux8gjkh51yhfha">https://hebdo.framapad.org/p/threadedirqlttnglinux8gjkh51yhfha</a>
-
-What do you think? I'm mostly interested to know if there's a case to
-add instrumentation to the kernel and where.
-</pre>
-      </blockquote>
-      <pre class="moz-quote-pre" wrap="">
-For #1, I think adding the do_IRQ begin/end instrumentation, would be
-very valuable, we did it with a kretprobe in the latency-tracker, but I
-think this deserves a real tracepoint. In your example trace, we can see
-with the do_IRQ event that the whole interruption lasted 5.2
-micro-seconds, whereas the interrupt handler only lasted 482ns, so
-without this event we are clearly missing long periods of interruption.
-
-Using the "ret = 2" would work as a temporary fix, but there are some
-corner cases where it could lead us into wrong assumptions (the process
-to be woken up is exiting somehow and the interrupt arrived during a
-syscall that needed to wake another process), so I think the real fix is
-the do_IRQ instrumentation.</pre>
-    </blockquote>
-    I agree
-    <blockquote type="cite"
-      cite="mid:b1c31153-da2f-0d40-a678-4428c78dd11e@klipix.org">
-      <pre class="moz-quote-pre" wrap="">
-For #2, I am not exactly sure why we need special events for those
-kernel threads, with the fix for #1, we know they are interrupt-related
-threads, but they are not interrupts in the sense of "doing work while
-the current task is interrupted". To me, everything this thread does is
-related to the previous source of wakeup and I would imagine every chunk
-of work it does is between an irq_thread_fn_entry/return block.
-I am not against adding this information (or the statedump approach if
-we are sure there is a 1 to 1 mapping), but I would like to understand
-more precisely what this information would add to our understanding of
-the trace.
-
-</pre>
-    </blockquote>
-    <p>We need to know that those threads are really interrupt thread
-      for the dependency analysis. Look at the following sequence of
-      events:</p>
-    <div id="magicdomid17" class=""><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l">[12:02:17.779984311]
-        (+0.000002224) dorsallaptop </span><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l b"><b>sched_waking</b></span><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l">: { cpu_id =
-        3 }, { comm = "irq/130-iwlwifi", tid = </span><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l b"><b>639</b></span><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l">, prio =
-        -51, target_cpu = 3 }</span></div>
-    <div id="magicdomid19" class=""><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l">[12:02:17.779985668]
-        (+0.000000565) dorsallaptop </span><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l b
-        color:green"><b>do_IRQ_return</b></span><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l">: { cpu_id =
-        3 }, { ip = 0xFFFFFFFF89A01C30, parent_ip = 0xFFFFFFFF89A0098F }</span></div>
-    <div id="magicdomid20" class=""><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l">[12:02:17.779986575]
-        (+0.000000907) dorsallaptop </span><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l b color:blue"><b>sched_switch</b></span><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l">: { cpu_id =
-        3 }, { prev_comm = "swapper/3", prev_tid = 0, prev_prio = 20,
-        prev_state = 0, next_comm = "irq/130-iwlwifi", next_tid = </span><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l b color:blue"><b>639</b></span><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l">, next_prio
-        = -51 }</span></div>
-    <span class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l">[12:02:17.779998608]
-      (+0.000011174) dorsallaptop net_if_receive_skb: { cpu_id = 3 }, {
-      ... }</span>
-    <div id="magicdomid23" class=""><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l">[12:02:17.780019468]
-        (+0.000020860) dorsallaptop sched_waking: { cpu_id = 3 }, { comm
-        = "wget", tid = 2430, prio = 20, target_cpu = 0 }</span></div>
-    <div class=""><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l"><br>
-      </span></div>
-    <div class=""><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l">If we do the
-        critical path of the wget process, with the irq/130-iwlwifi
-        thread considered a normal thread, we see it is woken up by an
-        hardware interrupt, that we know if iwlwifi, but we don't know
-        anything else about it, so the critical path ends up following
-        the swapper process...<br>
-      </span></div>
-    <div class=""><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l">Now if we
-        consider the irq/130-iwlwifi thread as an interrupt-running
-        process, we see that wget is actually woken up by the
-        net_if_receive_skb event and we can follow this to the packet
-        sent by another machine. <br>
-      </span></div>
-    <div class=""><span
-        class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l">Of course
-        this can all be done at analysis time: if (ret = 2 and a wakeup
-        inside the do_IRQ but outside the irq_handler) { assume the
-        woken thread will be handling the interrupt } But it's the
-        "assume" part that I don't like. With instrumentation, we can
-        clarify this.<br>
-      </span></div>
-    <span class="author-a-vmz80z5z89zkdz79zz75z6nez68zz65z6l"></span>
-  </body>
-</html>
-
---------------A074354F291321251A58BE22--
-
---===============7024796966177299760==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Disposition: inline
-
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
-IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
-bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
-
---===============7024796966177299760==--
+VGhhbmtzIEd1eXMsIHRoYXQgd2FzIHRoZSBpc3N1ZSwgSSBhcHByZWNpYXRlIHlvdXIgaGVscA0K
+DQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogbHR0bmctZGV2IFttYWlsdG86bHR0
+bmctZGV2LWJvdW5jZXNAbGlzdHMubHR0bmcub3JnXSBPbiBCZWhhbGYgT2YgbHR0bmctZGV2LXJl
+cXVlc3RAbGlzdHMubHR0bmcub3JnDQpTZW50OiAyOCBTZXB0ZW1iZXIgMjAxOCAxNzowMA0KVG86
+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcNClN1YmplY3Q6IFtFWFRFUk5BTF0gbHR0bmctZGV2
+IERpZ2VzdCwgVm9sIDEyNSwgSXNzdWUgMTgNCg0KU2VuZCBsdHRuZy1kZXYgbWFpbGluZyBsaXN0
+IHN1Ym1pc3Npb25zIHRvDQoJbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZw0KDQpUbyBzdWJzY3Jp
+YmUgb3IgdW5zdWJzY3JpYmUgdmlhIHRoZSBXb3JsZCBXaWRlIFdlYiwgdmlzaXQNCglodHRwczov
+L2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2DQpvciwg
+dmlhIGVtYWlsLCBzZW5kIGEgbWVzc2FnZSB3aXRoIHN1YmplY3Qgb3IgYm9keSAnaGVscCcgdG8N
+CglsdHRuZy1kZXYtcmVxdWVzdEBsaXN0cy5sdHRuZy5vcmcNCg0KWW91IGNhbiByZWFjaCB0aGUg
+cGVyc29uIG1hbmFnaW5nIHRoZSBsaXN0IGF0DQoJbHR0bmctZGV2LW93bmVyQGxpc3RzLmx0dG5n
+Lm9yZw0KDQpXaGVuIHJlcGx5aW5nLCBwbGVhc2UgZWRpdCB5b3VyIFN1YmplY3QgbGluZSBzbyBp
+dCBpcyBtb3JlIHNwZWNpZmljDQp0aGFuICJSZTogQ29udGVudHMgb2YgbHR0bmctZGV2IGRpZ2Vz
+dC4uLiINCg0KDQpUb2RheSdzIFRvcGljczoNCg0KICAgMS4gVXNlciBTcGFjZSBUcmFjaW5nIChK
+b2huIE8nU3VsbGl2YW4pDQogICAyLiBSZTogVXNlciBTcGFjZSBUcmFjaW5nIChQaGlsaXBwZSBQ
+cm91bHgpDQogICAzLiBSZTogVXNlciBTcGFjZSBUcmFjaW5nIChNYXRoaWV1IERlc25veWVycykN
+Cg0KDQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tDQoNCk1lc3NhZ2U6IDENCkRhdGU6IFRodSwgMjcgU2VwIDIwMTgg
+MTY6MTM6MzcgKzAwMDANCkZyb206IEpvaG4gTydTdWxsaXZhbiA8Sm9obi5PU3VsbGl2YW5AQmxh
+Y2tCb3guY29tPg0KVG86ICJsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnIiA8bHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZz4NClN1YmplY3Q6IFtsdHRuZy1kZXZdIFVzZXIgU3BhY2UgVHJhY2luZw0K
+TWVzc2FnZS1JRDogPDE1MzgwNjQ4MTcxNzguNDQ1OTJAQmxhY2tCb3guY29tPg0KQ29udGVudC1U
+eXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PSJpc28tODg1OS0xIg0KDQpJIGFtIHJlYWxseSBzdHJ1
+Z2dsaW5nIHRyeWluZyB0byBnZXQgdXNlciBzcGFjZSB0cmFjaW5nIHdvcmtpbmcgcHJlZGljdGFi
+bHkgYW5kIGNvbnNpc3RlbnRseSBhbmQgd291bGQgYXBwcmVjaWF0ZSBzb21lIGhlbHAuDQoNCg0K
+SSBjcmVhdGVkIGEgdHJhY2UgZXZlbnQgY2FsbGVkDQoNCmt2bV9zZXJ2ZXI6bmV3X2Nvbm5lY3Rp
+b25fdHJhY2Vwb2ludCAoc2VlIGF0dGFjaGVkKSwgSSB0aGVuIHVzZSBsdHRuZy1nZW4tdHAgdG8g
+Z2VuZXJhdGUgdGhlIC5jIGFuZCAuaCBmaWxlcyB3aGljaCBJIGxpbmsgdG8gdGhlIHByb2dyYW0g
+YW5kIGNhbGwgd2l0aA0KDQp0cmFjZXBvaW50KGt2bV9zZXJ2ZXIsIG5ld19jb25uZWN0aW9uX3Ry
+YWNlcG9pbnQsIC4uLi4uLi4uLi4uLi4uLi4uKQ0KDQpUaGlzIGFwcGVhcnMgcHJlZGljdGFibHkg
+aW4gbXkgdHJhY2VzDQoNCkhvd2V2ZXIgaWYgSSBjYWxsIG15IHNlY29uZCB0cmFjZXBvaW50IChz
+ZWUgYXR0YWNoZWQpDQoNCnRyYWNlcG9pbnQocmVzb2x1dGlvbl9tYW5hZ2VtZW50LCByZXNvbHV0
+aW9uX21hbmFnZW1lbnRfdHJhY2Vwb2ludCwuLi4uLi4uKQ0KDQpJdCBuZXZlciBhcHBlYXJzIGlu
+IGFueSBvZiB0aGUgdHJhY2VzDQoNCkkgY2FuIHNlZSBubyBzaWduaWZpY2FudCBkaWZmZXJlbmNl
+IGJldHdlZW4gdGhlIHR3byBkZWZpbml0aW9ucy4NCg0KDQpJIHRoZW4gY3JlYXRlZCBhIHRoaXJk
+IHRyYWNlIGRlZmluaXRpb24gY2FsbGVkIHNpbXBsZV9leGFtcGxlIChzZWUgYXR0YWNoZWQpDQoN
+CnRyYWNlcG9pbnQoc2ltcGxlX2V4YW1wbGUsIHNpbXBsZV9leGFtcGxlX3RyYWNlcG9pbnQsIC4u
+Li4uKQ0KDQpUaGlzIGFnYWluIGFwcGVhcnMgaW4gdGhlIHRyYWNlDQoNCg0KSSBzdGFydCB0aGUg
+dHJhY2luZyB1c2luZw0KDQpsdHRuZyBlbmFibGUtZXZlbnQgLXUgLWEgICAgICAjIGVuYWJsZSB1
+c2VyLXNwYWNlIHRyYWNpbmcNCg0KSSB0aGVuIHVzZSBiYWJlbCB0cmFjZSB0byBkdW1wIHRoZSB0
+cmFjZSwNCg0KDQona3ZtX3NlcnZlcicgYW5kICdzaW1wbGVfZXhhbXBsZScgYXBwZWFyIGluIHRo
+ZSB0cmFjZSwgIHJlc29sdXRpb25fbWFuYWdlbWVudCBkb2VzIG5vdC4NCg0KDQoNCkFueSBpZGVh
+IHdoeSB0aGUgcmVzb2x1dGlvbl9tYW5hZ2VtZW50IHRyYWNlcG9pbnQgZG9lcyBub3QgYXBwZWFy
+IGluIGFueSB0cmFjZXMgb3IgaXMgdGhlcmUgc29tZSB3YXkgb2YgZGVidWdnaW5nIHRoZSB0cmFj
+ZWNhbGwgbWFjcm8gaXRzZWxmPw0KDQoNCnJlZ2FyZHMNCg0KSm9obg0KDQpfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXw0KDQpUaGlzIGVtYWlsIGFuZCBhbnkgZmlsZXMgdHJhbnNtaXR0
+ZWQgd2l0aCBpdCBhcmUgY29uZmlkZW50aWFsIGFuZCBhcmUgaW50ZW5kZWQgZm9yIHRoZSBzb2xl
+IHVzZSBvZiB0aGUgaW5kaXZpZHVhbCB0byB3aG9tIHRoZXkgYXJlIGFkZHJlc3NlZC4gQmxhY2sg
+Qm94IENvcnBvcmF0aW9uIHJlc2VydmVzIHRoZSByaWdodCB0byBzY2FuIGFsbCBlLW1haWwgdHJh
+ZmZpYyBmb3IgcmVzdHJpY3RlZCBjb250ZW50IGFuZCB0byBtb25pdG9yIGFsbCBlLW1haWwgaW4g
+Z2VuZXJhbC4gSWYgeW91IGFyZSBub3QgdGhlIGludGVuZGVkIHJlY2lwaWVudCBvciB5b3UgaGF2
+ZSByZWNlaXZlZCB0aGlzIGVtYWlsIGluIGVycm9yLCBhbnkgdXNlLCBkaXNzZW1pbmF0aW9uIG9y
+IGZvcndhcmRpbmcgb2YgdGhpcyBlbWFpbCBpcyBzdHJpY3RseSBwcm9oaWJpdGVkLiBJZiB5b3Ug
+aGF2ZSByZWNlaXZlZCB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5k
+ZXIgYnkgcmVwbHlpbmcgdG8gdGhpcyBlbWFpbC4NCi0tLS0tLS0tLS0tLS0tIG5leHQgcGFydCAt
+LS0tLS0tLS0tLS0tLQ0KQW4gSFRNTCBhdHRhY2htZW50IHdhcyBzY3J1YmJlZC4uLg0KVVJMOiA8
+aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvcGlwZXJtYWlsL2x0dG5nLWRldi9hdHRhY2htZW50cy8y
+MDE4MDkyNy83NDlkNzM5OC9hdHRhY2htZW50LTAwMDEuaHRtbD4NCi0tLS0tLS0tLS0tLS0tIG5l
+eHQgcGFydCAtLS0tLS0tLS0tLS0tLQ0KQSBub24tdGV4dCBhdHRhY2htZW50IHdhcyBzY3J1YmJl
+ZC4uLg0KTmFtZTogY29ubmVjdGlvbl9tYW5hZ2VtZW50X3RwLnRwDQpUeXBlOiBhcHBsaWNhdGlv
+bi9vY3RldC1zdHJlYW0NClNpemU6IDIxMDAgYnl0ZXMNCkRlc2M6IGNvbm5lY3Rpb25fbWFuYWdl
+bWVudF90cC50cA0KVVJMOiA8aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvcGlwZXJtYWlsL2x0dG5n
+LWRldi9hdHRhY2htZW50cy8yMDE4MDkyNy83NDlkNzM5OC9hdHRhY2htZW50LTAwMDMub2JqPg0K
+LS0tLS0tLS0tLS0tLS0gbmV4dCBwYXJ0IC0tLS0tLS0tLS0tLS0tDQpBIG5vbi10ZXh0IGF0dGFj
+aG1lbnQgd2FzIHNjcnViYmVkLi4uDQpOYW1lOiByZXNvbHV0aW9uX21hbmFnZW1lbnRfdHAudHAN
+ClR5cGU6IGFwcGxpY2F0aW9uL29jdGV0LXN0cmVhbQ0KU2l6ZTogMTU2OCBieXRlcw0KRGVzYzog
+cmVzb2x1dGlvbl9tYW5hZ2VtZW50X3RwLnRwDQpVUkw6IDxodHRwczovL2xpc3RzLmx0dG5nLm9y
+Zy9waXBlcm1haWwvbHR0bmctZGV2L2F0dGFjaG1lbnRzLzIwMTgwOTI3Lzc0OWQ3Mzk4L2F0dGFj
+aG1lbnQtMDAwNC5vYmo+DQotLS0tLS0tLS0tLS0tLSBuZXh0IHBhcnQgLS0tLS0tLS0tLS0tLS0N
+CkEgbm9uLXRleHQgYXR0YWNobWVudCB3YXMgc2NydWJiZWQuLi4NCk5hbWU6IHNpbXBsZV90cmFj
+ZV90cC50cA0KVHlwZTogYXBwbGljYXRpb24vb2N0ZXQtc3RyZWFtDQpTaXplOiA3OTggYnl0ZXMN
+CkRlc2M6IHNpbXBsZV90cmFjZV90cC50cA0KVVJMOiA8aHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
+cGlwZXJtYWlsL2x0dG5nLWRldi9hdHRhY2htZW50cy8yMDE4MDkyNy83NDlkNzM5OC9hdHRhY2ht
+ZW50LTAwMDUub2JqPg0KDQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCg0KTWVzc2Fn
+ZTogMg0KRGF0ZTogVGh1LCAyNyBTZXAgMjAxOCAxMzo1MTowNSAtMDQwMA0KRnJvbTogUGhpbGlw
+cGUgUHJvdWx4IDxlZXBwZWxpdGVsb29wQGdtYWlsLmNvbT4NClRvOiBKb2huLk9TdWxsaXZhbkBi
+bGFja2JveC5jb20NCkNjOiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnDQpTdWJqZWN0OiBSZTog
+W2x0dG5nLWRldl0gVXNlciBTcGFjZSBUcmFjaW5nDQpNZXNzYWdlLUlEOg0KCTxDQUI0eHVfMXpP
+ZnUwMmlhX3h4UDBMenUyVStSX3JRTHRxLWVBRFhPTDF6NjZLYmI5ZFFAbWFpbC5nbWFpbC5jb20+
+DQpDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9IlVURi04Ig0KDQpJbiBgcmVzb2x1
+dGlvbl9tYW5hZ2VtZW50X3RwLnRwYCwgY2FuIHlvdSB0cnkgdXNpbmcgdGhlIGV4YWN0IHNhbWUN
+CmBUUF9BUkdTYCBjb250ZW50IGZvciBib3RoIGBUUkFDRVBPSU5UX0VWRU5UX0lOU1RBTkNFYCAo
+YWxzbyBtYXRjaGluZw0KdGhlIGBUUF9BUkdTYCBjb250ZW50IG9mIGBUUkFDRVBPSU5UX0VWRU5U
+X0NMQVNTYCk/IEl0J3MgdGhlIG9ubHkNCmRpZmZlcmVuY2UgSSBjYW4gc2VlLg0KDQpQaGlsaXBw
+ZSBQcm91bHgNClBoaWxpcHBlIFByb3VseA0KDQoNCk9uIFRodSwgU2VwIDI3LCAyMDE4IGF0IDEy
+OjE1IFBNIEpvaG4gTydTdWxsaXZhbg0KPEpvaG4uT1N1bGxpdmFuQGJsYWNrYm94LmNvbT4gd3Jv
+dGU6DQo+DQo+IEkgYW0gcmVhbGx5IHN0cnVnZ2xpbmcgdHJ5aW5nIHRvIGdldCB1c2VyIHNwYWNl
+IHRyYWNpbmcgd29ya2luZyBwcmVkaWN0YWJseSBhbmQgY29uc2lzdGVudGx5IGFuZCB3b3VsZCBh
+cHByZWNpYXRlIHNvbWUgaGVscC4NCj4NCj4NCj4gSSBjcmVhdGVkIGEgdHJhY2UgZXZlbnQgY2Fs
+bGVkDQo+DQo+IGt2bV9zZXJ2ZXI6bmV3X2Nvbm5lY3Rpb25fdHJhY2Vwb2ludCAoc2VlIGF0dGFj
+aGVkKSwgSSB0aGVuIHVzZSBsdHRuZy1nZW4tdHAgdG8gZ2VuZXJhdGUgdGhlIC5jIGFuZCAuaCBm
+aWxlcyB3aGljaCBJIGxpbmsgdG8gdGhlIHByb2dyYW0gYW5kIGNhbGwgd2l0aA0KPg0KPiB0cmFj
+ZXBvaW50KGt2bV9zZXJ2ZXIsIG5ld19jb25uZWN0aW9uX3RyYWNlcG9pbnQsIC4uLi4uLi4uLi4u
+Li4uLi4uKQ0KPg0KPiBUaGlzIGFwcGVhcnMgcHJlZGljdGFibHkgaW4gbXkgdHJhY2VzDQo+DQo+
+IEhvd2V2ZXIgaWYgSSBjYWxsIG15IHNlY29uZCB0cmFjZXBvaW50IChzZWUgYXR0YWNoZWQpDQo+
+DQo+IHRyYWNlcG9pbnQocmVzb2x1dGlvbl9tYW5hZ2VtZW50LCByZXNvbHV0aW9uX21hbmFnZW1l
+bnRfdHJhY2Vwb2ludCwuLi4uLi4uKQ0KPg0KPiBJdCBuZXZlciBhcHBlYXJzIGluIGFueSBvZiB0
+aGUgdHJhY2VzDQo+DQo+IEkgY2FuIHNlZSBubyBzaWduaWZpY2FudCBkaWZmZXJlbmNlIGJldHdl
+ZW4gdGhlIHR3byBkZWZpbml0aW9ucy4NCj4NCj4NCj4gSSB0aGVuIGNyZWF0ZWQgYSB0aGlyZCB0
+cmFjZSBkZWZpbml0aW9uIGNhbGxlZCBzaW1wbGVfZXhhbXBsZSAoc2VlIGF0dGFjaGVkKQ0KPg0K
+PiB0cmFjZXBvaW50KHNpbXBsZV9leGFtcGxlLCBzaW1wbGVfZXhhbXBsZV90cmFjZXBvaW50LCAu
+Li4uLikNCj4NCj4gVGhpcyBhZ2FpbiBhcHBlYXJzIGluIHRoZSB0cmFjZQ0KPg0KPg0KPiBJIHN0
+YXJ0IHRoZSB0cmFjaW5nIHVzaW5nDQo+DQo+IGx0dG5nIGVuYWJsZS1ldmVudCAtdSAtYSAgICAg
+ICMgZW5hYmxlIHVzZXItc3BhY2UgdHJhY2luZw0KPg0KPiBJIHRoZW4gdXNlIGJhYmVsIHRyYWNl
+IHRvIGR1bXAgdGhlIHRyYWNlLA0KPg0KPg0KPiAna3ZtX3NlcnZlcicgYW5kICdzaW1wbGVfZXhh
+bXBsZScgYXBwZWFyIGluIHRoZSB0cmFjZSwgIHJlc29sdXRpb25fbWFuYWdlbWVudCBkb2VzIG5v
+dC4NCj4NCj4NCj4NCj4gQW55IGlkZWEgd2h5IHRoZSByZXNvbHV0aW9uX21hbmFnZW1lbnQgdHJh
+Y2Vwb2ludCBkb2VzIG5vdCBhcHBlYXIgaW4gYW55IHRyYWNlcyBvciBpcyB0aGVyZSBzb21lIHdh
+eSBvZiBkZWJ1Z2dpbmcgdGhlIHRyYWNlY2FsbCBtYWNybyBpdHNlbGY/DQo+DQo+DQo+IHJlZ2Fy
+ZHMNCj4NCj4gSm9obg0KPg0KPg0KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0K
+Pg0KPiBUaGlzIGVtYWlsIGFuZCBhbnkgZmlsZXMgdHJhbnNtaXR0ZWQgd2l0aCBpdCBhcmUgY29u
+ZmlkZW50aWFsIGFuZCBhcmUgaW50ZW5kZWQgZm9yIHRoZSBzb2xlIHVzZSBvZiB0aGUgaW5kaXZp
+ZHVhbCB0byB3aG9tIHRoZXkgYXJlIGFkZHJlc3NlZC4gQmxhY2sgQm94IENvcnBvcmF0aW9uIHJl
+c2VydmVzIHRoZSByaWdodCB0byBzY2FuIGFsbCBlLW1haWwgdHJhZmZpYyBmb3IgcmVzdHJpY3Rl
+ZCBjb250ZW50IGFuZCB0byBtb25pdG9yIGFsbCBlLW1haWwgaW4gZ2VuZXJhbC4gSWYgeW91IGFy
+ZSBub3QgdGhlIGludGVuZGVkIHJlY2lwaWVudCBvciB5b3UgaGF2ZSByZWNlaXZlZCB0aGlzIGVt
+YWlsIGluIGVycm9yLCBhbnkgdXNlLCBkaXNzZW1pbmF0aW9uIG9yIGZvcndhcmRpbmcgb2YgdGhp
+cyBlbWFpbCBpcyBzdHJpY3RseSBwcm9oaWJpdGVkLiBJZiB5b3UgaGF2ZSByZWNlaXZlZCB0aGlz
+IGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYnkgcmVwbHlpbmcgdG8g
+dGhpcyBlbWFpbC4NCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX18NCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdA0KPiBsdHRuZy1kZXZAbGlzdHMubHR0bmcu
+b3JnDQo+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9s
+dHRuZy1kZXYNCg0KDQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCg0KTWVzc2FnZTog
+Mw0KRGF0ZTogVGh1LCAyNyBTZXAgMjAxOCAxNTozMjo0OCAtMDQwMCAoRURUKQ0KRnJvbTogTWF0
+aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4NClRvOiBQaGls
+aXBwZSBQcm91bHggPGVlcHBlbGl0ZWxvb3BAZ21haWwuY29tPg0KQ2M6IEpvaG4gT1N1bGxpdmFu
+IDxKb2huLk9TdWxsaXZhbkBibGFja2JveC5jb20+LCAgbHR0bmctZGV2DQoJPGx0dG5nLWRldkBs
+aXN0cy5sdHRuZy5vcmc+DQpTdWJqZWN0OiBSZTogW2x0dG5nLWRldl0gVXNlciBTcGFjZSBUcmFj
+aW5nDQpNZXNzYWdlLUlEOg0KCTwxNDkxMDM5MjQ1LjExNzA3LjE1MzgwNzY3Njg1MTguSmF2YU1h
+aWwuemltYnJhQGVmZmljaW9zLmNvbT4NCkNvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNl
+dD11dGYtOA0KDQpHb29kIGNhdGNoIFBoaWxpcHBlLA0KDQpJIHB1c2hlZCBhIGNvbW1pdCB0aGF0
+IGVuZm9yY2VzIHZhbGlkYXRpb24gb2YgZXZlbnQgY2xhc3MvaW5zdGFuY2UNCnByb3RvdHlwZXMg
+KFRQX0FSR1MoKSkgYXQgY29tcGlsZS10aW1lLg0KDQpJdCBpcyBwdXNoZWQgaW50byBsdHRuZy11
+c3QgbWFzdGVyIGFzOg0KDQpjb21taXQgYzc1YzA0MjJjNjRmMzNjMDEwMmUxNzc4Y2VjYzgxMmM1
+OGI3MDBlNQ0KQXV0aG9yOiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZm
+aWNpb3MuY29tPg0KRGF0ZTogICBUaHUgU2VwIDI3IDE1OjIxOjE2IDIwMTggLTA0MDANCg0KICAg
+IEZpeDogY2hlY2sgZm9yIGV2ZW50IGNsYXNzL2luc3RhbmNlIHByb3RvdHlwZSBtaXNtYXRjaA0K
+ICAgIA0KICAgIFRoZSBUUF9BUkdTKCkgZm9yIGFuIGV2ZW50IGluc3RhbmNlIGJlbG9uZ2luZyB0
+byBhbiBldmVudCBjbGFzcw0KICAgIG11c3QgaGF2ZSBjb21wYXRpYmxlIHR5cGVzIHdpdGggdGhl
+IGV2ZW50IGNsYXNzIFRQX0FSR1MoKS4NCiAgICANCiAgICBGYWlsdXJlIHRvIGZvbGxvdyB0aGlz
+IHJ1bGUgbGVhZHMgdG8gYSBwcm90b3R5cGUgbWlzbWF0Y2ggYmV0d2VlbiB0aGUNCiAgICB0cmFj
+ZXBvaW50IGNhbGwgc2l0ZSBhbmQgdGhlIHByb2JlIGZ1bmN0aW9uLiBBIGNvbW1vbiBlZmZlY3Qg
+cGVyY2VpdmVkDQogICAgaXMgdGhhdCBldmVudHMgd2l0aCBwcm90b3R5cGUgbWlzbWF0Y2ggYmV0
+d2VlbiBjYWxsIHNpdGUgYW5kIHByb2JlDQogICAgZnVuY3Rpb24gYXJlIG5ldmVyIHRyYWNlZC4N
+CiAgICANCiAgICBGaXggdGhpcyBieSBlbmZvcmNpbmcgYSBjb21waWxlLXRpbWUgY2hlY2sgb2Yg
+dGhlIGV2ZW50IGluc3RhbmNlIGFuZA0KICAgIGNsYXNzIHByb3RvdHlwZXMsIHNpbWlsYXJseSB0
+byB3aGF0IGlzIGRvbmUgaW4gTFRUbmcgbW9kdWxlcy4NCiAgICANCiAgICBTaWduZWQtb2ZmLWJ5
+OiBNYXRoaWV1IERlc25veWVycyA8bWF0aGlldS5kZXNub3llcnNAZWZmaWNpb3MuY29tPg0KDQpB
+bmQgY2hlcnJ5LXBpY2tlZCBpbnRvIGx0dG5nLXVzdCAyLjExLCAyLjEwLCAyLjkgc3RhYmxlIGJy
+YW5jaGVzLA0KDQpUaGFua3MhDQoNCk1hdGhpZXUNCg0KLS0tLS0gT24gU2VwIDI3LCAyMDE4LCBh
+dCAxOjUxIFBNLCBQaGlsaXBwZSBQcm91bHggZWVwcGVsaXRlbG9vcEBnbWFpbC5jb20gd3JvdGU6
+DQoNCj4gSW4gYHJlc29sdXRpb25fbWFuYWdlbWVudF90cC50cGAsIGNhbiB5b3UgdHJ5IHVzaW5n
+IHRoZSBleGFjdCBzYW1lDQo+IGBUUF9BUkdTYCBjb250ZW50IGZvciBib3RoIGBUUkFDRVBPSU5U
+X0VWRU5UX0lOU1RBTkNFYCAoYWxzbyBtYXRjaGluZw0KPiB0aGUgYFRQX0FSR1NgIGNvbnRlbnQg
+b2YgYFRSQUNFUE9JTlRfRVZFTlRfQ0xBU1NgKT8gSXQncyB0aGUgb25seQ0KPiBkaWZmZXJlbmNl
+IEkgY2FuIHNlZS4NCj4gDQo+IFBoaWxpcHBlIFByb3VseA0KPiBQaGlsaXBwZSBQcm91bHgNCj4g
+DQo+IA0KPiBPbiBUaHUsIFNlcCAyNywgMjAxOCBhdCAxMjoxNSBQTSBKb2huIE8nU3VsbGl2YW4N
+Cj4gPEpvaG4uT1N1bGxpdmFuQGJsYWNrYm94LmNvbT4gd3JvdGU6DQo+Pg0KPj4gSSBhbSByZWFs
+bHkgc3RydWdnbGluZyB0cnlpbmcgdG8gZ2V0IHVzZXIgc3BhY2UgdHJhY2luZyB3b3JraW5nIHBy
+ZWRpY3RhYmx5IGFuZA0KPj4gY29uc2lzdGVudGx5IGFuZCB3b3VsZCBhcHByZWNpYXRlIHNvbWUg
+aGVscC4NCj4+DQo+Pg0KPj4gSSBjcmVhdGVkIGEgdHJhY2UgZXZlbnQgY2FsbGVkDQo+Pg0KPj4g
+a3ZtX3NlcnZlcjpuZXdfY29ubmVjdGlvbl90cmFjZXBvaW50IChzZWUgYXR0YWNoZWQpLCBJIHRo
+ZW4gdXNlIGx0dG5nLWdlbi10cCB0bw0KPj4gZ2VuZXJhdGUgdGhlIC5jIGFuZCAuaCBmaWxlcyB3
+aGljaCBJIGxpbmsgdG8gdGhlIHByb2dyYW0gYW5kIGNhbGwgd2l0aA0KPj4NCj4+IHRyYWNlcG9p
+bnQoa3ZtX3NlcnZlciwgbmV3X2Nvbm5lY3Rpb25fdHJhY2Vwb2ludCwgLi4uLi4uLi4uLi4uLi4u
+Li4pDQo+Pg0KPj4gVGhpcyBhcHBlYXJzIHByZWRpY3RhYmx5IGluIG15IHRyYWNlcw0KPj4NCj4+
+IEhvd2V2ZXIgaWYgSSBjYWxsIG15IHNlY29uZCB0cmFjZXBvaW50IChzZWUgYXR0YWNoZWQpDQo+
+Pg0KPj4gdHJhY2Vwb2ludChyZXNvbHV0aW9uX21hbmFnZW1lbnQsIHJlc29sdXRpb25fbWFuYWdl
+bWVudF90cmFjZXBvaW50LC4uLi4uLi4pDQo+Pg0KPj4gSXQgbmV2ZXIgYXBwZWFycyBpbiBhbnkg
+b2YgdGhlIHRyYWNlcw0KPj4NCj4+IEkgY2FuIHNlZSBubyBzaWduaWZpY2FudCBkaWZmZXJlbmNl
+IGJldHdlZW4gdGhlIHR3byBkZWZpbml0aW9ucy4NCj4+DQo+Pg0KPj4gSSB0aGVuIGNyZWF0ZWQg
+YSB0aGlyZCB0cmFjZSBkZWZpbml0aW9uIGNhbGxlZCBzaW1wbGVfZXhhbXBsZSAoc2VlIGF0dGFj
+aGVkKQ0KPj4NCj4+IHRyYWNlcG9pbnQoc2ltcGxlX2V4YW1wbGUsIHNpbXBsZV9leGFtcGxlX3Ry
+YWNlcG9pbnQsIC4uLi4uKQ0KPj4NCj4+IFRoaXMgYWdhaW4gYXBwZWFycyBpbiB0aGUgdHJhY2UN
+Cj4+DQo+Pg0KPj4gSSBzdGFydCB0aGUgdHJhY2luZyB1c2luZw0KPj4NCj4+IGx0dG5nIGVuYWJs
+ZS1ldmVudCAtdSAtYSAgICAgICMgZW5hYmxlIHVzZXItc3BhY2UgdHJhY2luZw0KPj4NCj4+IEkg
+dGhlbiB1c2UgYmFiZWwgdHJhY2UgdG8gZHVtcCB0aGUgdHJhY2UsDQo+Pg0KPj4NCj4+ICdrdm1f
+c2VydmVyJyBhbmQgJ3NpbXBsZV9leGFtcGxlJyBhcHBlYXIgaW4gdGhlIHRyYWNlLCAgcmVzb2x1
+dGlvbl9tYW5hZ2VtZW50DQo+PiBkb2VzIG5vdC4NCj4+DQo+Pg0KPj4NCj4+IEFueSBpZGVhIHdo
+eSB0aGUgcmVzb2x1dGlvbl9tYW5hZ2VtZW50IHRyYWNlcG9pbnQgZG9lcyBub3QgYXBwZWFyIGlu
+IGFueSB0cmFjZXMNCj4+IG9yIGlzIHRoZXJlIHNvbWUgd2F5IG9mIGRlYnVnZ2luZyB0aGUgdHJh
+Y2VjYWxsIG1hY3JvIGl0c2VsZj8NCj4+DQo+Pg0KPj4gcmVnYXJkcw0KPj4NCj4+IEpvaG4NCj4+
+DQo+Pg0KPj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCj4+DQo+PiBUaGlzIGVt
+YWlsIGFuZCBhbnkgZmlsZXMgdHJhbnNtaXR0ZWQgd2l0aCBpdCBhcmUgY29uZmlkZW50aWFsIGFu
+ZCBhcmUgaW50ZW5kZWQNCj4+IGZvciB0aGUgc29sZSB1c2Ugb2YgdGhlIGluZGl2aWR1YWwgdG8g
+d2hvbSB0aGV5IGFyZSBhZGRyZXNzZWQuIEJsYWNrIEJveA0KPj4gQ29ycG9yYXRpb24gcmVzZXJ2
+ZXMgdGhlIHJpZ2h0IHRvIHNjYW4gYWxsIGUtbWFpbCB0cmFmZmljIGZvciByZXN0cmljdGVkDQo+
+PiBjb250ZW50IGFuZCB0byBtb25pdG9yIGFsbCBlLW1haWwgaW4gZ2VuZXJhbC4gSWYgeW91IGFy
+ZSBub3QgdGhlIGludGVuZGVkDQo+PiByZWNpcGllbnQgb3IgeW91IGhhdmUgcmVjZWl2ZWQgdGhp
+cyBlbWFpbCBpbiBlcnJvciwgYW55IHVzZSwgZGlzc2VtaW5hdGlvbiBvcg0KPj4gZm9yd2FyZGlu
+ZyBvZiB0aGlzIGVtYWlsIGlzIHN0cmljdGx5IHByb2hpYml0ZWQuIElmIHlvdSBoYXZlIHJlY2Vp
+dmVkIHRoaXMNCj4+IGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYnkg
+cmVwbHlpbmcgdG8gdGhpcyBlbWFpbC4NCj4+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fDQo+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0DQo+PiBsdHRuZy1k
+ZXZAbGlzdHMubHR0bmcub3JnDQo+PiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2DQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fDQo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QNCj4gbHR0bmctZGV2
+QGxpc3RzLmx0dG5nLm9yZw0KPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
+YW4vbGlzdGluZm8vbHR0bmctZGV2DQoNCi0tIA0KTWF0aGlldSBEZXNub3llcnMNCkVmZmljaU9T
+IEluYy4NCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tDQoNCg0KLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tDQoNClN1YmplY3Q6IERpZ2VzdCBGb290ZXINCg0KX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18NCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QNCmx0
+dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcNCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4v
+bWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYNCg0KDQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0NCg0KRW5kIG9mIGx0dG5nLWRldiBEaWdlc3QsIFZvbCAxMjUsIElzc3VlIDE4DQoqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioNCl9fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0
+bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21h
+aWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
