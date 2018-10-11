@@ -1,18 +1,24 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: lttng create call trace on kernel 4.19
-Date: Thu, 11 Oct 2018 09:22:53 -0400
-Message-ID: <20181011132253.GA13655__24886.5670328543$1539264062$gmane$org@joraj-alpa>
-References: <eee78bd1-4d5c-63e7-dc74-ff5a51426666@windriver.com>
+From: Omair Majid <omajid@redhat.com>
+Subject: [PATCH lttng-ust] Fix: address shellcheck
+ warnings/errors in example scripts
+Date: Thu, 11 Oct 2018 16:45:29 -0400
+Message-ID: <20181011204529.GA3421__43438.9480659322$1539290621$gmane$org@redhat.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="mYCpIKhGyMATD0i+"
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 42WBVC0F6sz12qm
- for <lttng-dev@lists.lttng.org>; Thu, 11 Oct 2018 09:22:58 -0400 (EDT)
+Received: from mx1.redhat.com (mx1.redhat.com [209.132.183.28])
+ by lists.lttng.org (Postfix) with ESMTPS id 42WNJy3XnQz13WX
+ for <lttng-dev@lists.lttng.org>; Thu, 11 Oct 2018 16:45:38 -0400 (EDT)
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com
+ [10.5.11.16])
+ (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+ (No client certificate requested)
+ by mx1.redhat.com (Postfix) with ESMTPS id 4007C30BF46F
+ for <lttng-dev@lists.lttng.org>; Thu, 11 Oct 2018 20:45:37 +0000 (UTC)
+Received: from redhat.com (ovpn-123-39.rdu2.redhat.com [10.10.123.39])
+ by smtp.corp.redhat.com (Postfix) with ESMTPS id 984CA76516
+ for <lttng-dev@lists.lttng.org>; Thu, 11 Oct 2018 20:45:36 +0000 (UTC)
 Content-Disposition: inline
-In-Reply-To: <eee78bd1-4d5c-63e7-dc74-ff5a51426666@windriver.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,119 +28,93 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Dengke Du <dengke.du@windriver.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGksCgpPbiBUaHUsIE9jdCAxMSwgMjAxOCBhdCAwMjowMDoxMVBNICswODAwLCBEZW5na2UgRHUg
-d3JvdGU6Cj4gSGkgYWxsCj4gCj4gV2hlbiBJIGNyZWF0ZSBhIGxvY2FsIHRyYWNlIHNlc3Npb24s
-IG1lZXRpbmcgYSBjYWxsIHRyYWNlOgo+IAo+IHVuYW1lIC1hOgo+IAo+IExpbnV4IHFlbXV4ODYt
-NjQgNC4xOS4wLXJjNy15b2N0b2Rldi1zdGFuZGFyZCAjMSBTTVAgUFJFRU1QVCBUaHUgT2N0IDEx
-Cj4gMDM6MzI6NDggVVRDIDIwMTggeDg2XzY0IHg4Nl82NCB4ODZfNjQgR05VL0xpbnV4CgpXaGlj
-aCB5b2N0byBicmFuY2gsIHJlY2lwZXMoZm9yIGtlcm5lbCwgbHR0bmctdG9vbHMsIGx0dG5nLW1v
-ZHVsZXMpIGFuZCB0YXJnZXQ/CgpXaGljaCB2ZXJzaW9uIG9mIGx0dG5nLW1vZHVsZXMgYXJlIHlv
-dSB1c2luZz8KCkFueSBtb2RpZmljYXRpb24gdG8gdGhlIGtlcm5lbD8KCj4gCj4gbHR0bmcgY3Jl
-YXRlIHRyYWNlX3Nlc3Npb24gLS1saXZlIC1VIG5ldDovLzEyNy4wLjAuMQo+IAo+IC0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiAKPiBbwqAgMjIyLjM5
-MDYwMV0gbHR0bmdfa3JldHByb2JlczogbG9hZGluZyBvdXQtb2YtdHJlZSBtb2R1bGUgdGFpbnRz
-IGtlcm5lbC4KPiBbwqAgMjIzLjU1MDcyNV0gQlVHOiB1bmFibGUgdG8gaGFuZGxlIGtlcm5lbCBw
-YWdpbmcgcmVxdWVzdCBhdAo+IDAwMDAxMTE0MDAwMDExNTgKPiBbwqAgMjIzLjU1MTY2MV0gUEdE
-IDAgUDREIDAKPiBbwqAgMjIzLjU1MjQ3Nl0gT29wczogMDAwMCBbIzFdIFBSRUVNUFQgU01QIFBU
-SQo+IFvCoCAyMjMuNTUzMTcwXSBDUFU6IDAgUElEOiA1MDAgQ29tbTogbW9kcHJvYmUgVGFpbnRl
-ZDogRyBPwqDCoMKgwqDCoAo+IDQuMTkuMC1yYzcteW9jdG9kZXYtc3RhbmRhcmQgIzEKPiBbwqAg
-MjIzLjU1Mzg5Ml0gSGFyZHdhcmUgbmFtZTogUUVNVSBTdGFuZGFyZCBQQyAoaTQ0MEZYICsgUElJ
-WCwgMTk5NiksIEJJT1MKPiByZWwtMS4xMS4yLTAtZ2Y5NjI2Y2NiOTEtcHJlYnVpbHQucWVtdS1w
-cm9qZWN0Lm9yZyAwNC8wMS8yMDE0Cj4gW8KgIDIyMy41NTY2MTldIFJJUDogMDAxMDpsdHRuZ190
-cmFjZXBvaW50X25vdGlmeSsweDE2ZS8weDIwMCBbbHR0bmdfdHJhY2VyXQo+IFvCoCAyMjMuNTU3
-NzUxXSBDb2RlOiBlYiBiZCA0OCAzOSBjMSAwZiA4NSBhMyAwMCAwMCAwMCA0OSA4YiA1NSAxMCA0
-MSA4MyBjNAo+IDAxIDQ0IDM5IGEyIDhjIDAyIDAwIDAwIDc2IGEzIDQ4IDhiIDkyIDkwIDAyIDAw
-IDAwIDQ5IDYzIGM0IDQ4IDhiIDBjIGMyIDw0Yz4KPiA4YiAzMSA0OCA4OSA0ZCBkMCA0YyA4OSBm
-NyBlOCA5MAo+IFvCoCAyMjMuNTU5NzY5XSBSU1A6IDAwMDA6ZmZmZmEzOWEwMDM3M2JjMCBFRkxB
-R1M6IDAwMDAwMjA2Cj4gW8KgIDIyMy41NjAzMDNdIFJBWDogMDAwMDAwMDAwMDAwMDAwMCBSQlg6
-IGZmZmY5YjNkZDQ1YTgzYTAgUkNYOgo+IDAwMDAxMTE0MDAwMDExNTgKPiBbwqAgMjIzLjU2MDk1
-OV0gUkRYOiBmZmZmZmZmZmMwMWI5MDQ4IFJTSTogMDAwMDAwMDAwMDAwMDAwMSBSREk6Cj4gZmZm
-ZmZmZmZjMDJmMTEwMAo+IFvCoCAyMjMuNTYxNTc5XSBSQlA6IGZmZmZhMzlhMDAzNzNiZjAgUjA4
-OiAwMDAwMDAwMDAwMDAwMDY0IFIwOToKPiBmZmZmOWIzZGRlYzAxNjAwCj4gW8KgIDIyMy41NjIz
-ODhdIFIxMDogZmZmZmZmZmZjMDI4NzQxMSBSMTE6IGZmZmZmZmZmOThkYzk2NjAgUjEyOgo+IDAw
-MDAwMDAwMDAwMDAwMDAKPiBbwqAgMjIzLjU2MzAwOF0gUjEzOiBmZmZmOWIzZGQ0NWE4M2EwIFIx
-NDogZmZmZmEzOWEwMDM3M2U3OCBSMTU6Cj4gMDAwMDAwMDAwMDAwMDAwMgo+IFvCoCAyMjMuNTYz
-OTA1XSBGUzrCoCAwMDAwN2ZiMDQ5MDE1NzQwKDAwMDApIEdTOmZmZmY5YjNkZGYyMDAwMDAoMDAw
-MCkKPiBrbmxHUzowMDAwMDAwMDAwMDAwMDAwCj4gW8KgIDIyMy41NjQ5NDFdIENTOsKgIDAwMTAg
-RFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzCj4gW8KgIDIyMy41NjU1MDFd
-IENSMjogMDAwMDExMTQwMDAwMTE1OCBDUjM6IDAwMDAwMDAwMTQ1ODYwMDAgQ1I0Ogo+IDAwMDAw
-MDAwMDAwMDA2ZjAKPiBbwqAgMjIzLjU2NjQ1MF0gQ2FsbCBUcmFjZToKPiBbwqAgMjIzLjU2ODM2
-N13CoCA/IGx0dG5nX2tlcm5lbF90cmFjZXBvaW50X2FkZCsweDUwLzB4YzAgW2x0dG5nX3RyYWNl
-cl0KPiBbwqAgMjIzLjU2OTkzMl3CoCByZWdpc3Rlcl90cmFjZXBvaW50X21vZHVsZV9ub3RpZmll
-cisweDU3LzB4ODAKPiBbwqAgMjIzLjU3MTMwOV3CoCA/IDB4ZmZmZmZmZmZjMDMwOTAwMAo+IFvC
-oCAyMjMuNTcyMTg3XcKgIGx0dG5nX3RyYWNlcG9pbnRfaW5pdCsweDQ1LzB4YmY5IFtsdHRuZ190
-cmFjZXJdCj4gW8KgIDIyMy41NzMxMjVdwqAgbHR0bmdfZXZlbnRzX2luaXQrMHg0MC8weDFjYyBb
-bHR0bmdfdHJhY2VyXQo+IFvCoCAyMjMuNTczODIwXcKgID8gMHhmZmZmZmZmZmMwMzA5MDAwCj4g
-W8KgIDIyMy41NzQyMzddwqAgZG9fb25lX2luaXRjYWxsKzB4NTMvMHgxZmUKPiBbwqAgMjIzLjU3
-NDY4Ml3CoCA/IF9fdnVubWFwKzB4OGUvMHhjMAo+IFvCoCAyMjMuNTc1MTk2XcKgID8ga21lbV9j
-YWNoZV9hbGxvY190cmFjZSsweGZjLzB4MWQwCj4gW8KgIDIyMy41NzU2ODRdwqAgPyBkb19pbml0
-X21vZHVsZSsweDI3LzB4MjEwCj4gW8KgIDIyMy41NzYyODVdwqAgZG9faW5pdF9tb2R1bGUrMHg2
-MC8weDIxMAo+IFvCoCAyMjMuNTc2NzAyXcKgIGxvYWRfbW9kdWxlKzB4MjQwNi8weDI1NzAKPiBb
-wqAgMjIzLjU3NzE0MF3CoCA/IHZmc19yZWFkKzB4MTE1LzB4MTQwCj4gW8KgIDIyMy41Nzc2MTFd
-wqAgPyB2ZnNfcmVhZCsweDExNS8weDE0MAo+IFvCoCAyMjMuNTc4MDM0XcKgIF9fc2Vfc3lzX2Zp
-bml0X21vZHVsZSsweGMzLzB4ZTAKPiBbwqAgMjIzLjU3ODU4MV3CoCA/IF9fc2Vfc3lzX2Zpbml0
-X21vZHVsZSsweGMzLzB4ZTAKPiBbwqAgMjIzLjU3OTEzNV3CoCBfX3g2NF9zeXNfZmluaXRfbW9k
-dWxlKzB4MWEvMHgyMAo+IFvCoCAyMjMuNTc5NjI3XcKgIGRvX3N5c2NhbGxfNjQrMHg0ZC8weGYw
-Cj4gW8KgIDIyMy41ODAwNzFdwqAgZW50cnlfU1lTQ0FMTF82NF9hZnRlcl9od2ZyYW1lKzB4NDQv
-MHhhOQo+IFvCoCAyMjMuNTgwODM3XSBSSVA6IDAwMzM6MHg3ZmIwNDkxMDc1NjkKPiBbwqAgMjIz
-LjU4MTI4Nl0gQ29kZTogMDAgYzMgNjYgMmUgMGYgMWYgODQgMDAgMDAgMDAgMDAgMDAgMGYgMWYg
-NDQgMDAgMDAgNDgKPiA4OSBmOCA0OCA4OSBmNyA0OCA4OSBkNiA0OCA4OSBjYSA0ZCA4OSBjMiA0
-ZCA4OSBjOCA0YyA4YiA0YyAyNCAwOCAwZiAwNSA8NDg+Cj4gM2QgMDEgZjAgZmYgZmYgNzMgMDEg
-YzMgNDggOGIgMDgKPiBbwqAgMjIzLjU4MzIxMF0gUlNQOiAwMDJiOjAwMDA3ZmZjODA2MjA0OTgg
-RUZMQUdTOiAwMDAwMDI0NiBPUklHX1JBWDoKPiAwMDAwMDAwMDAwMDAwMTM5Cj4gW8KgIDIyMy41
-ODM5NThdIFJBWDogZmZmZmZmZmZmZmZmZmZkYSBSQlg6IDAwMDA1NTkzMWI2ODBiNzAgUkNYOgo+
-IDAwMDA3ZmIwNDkxMDc1NjkKPiBbwqAgMjIzLjU4NDY3N10gUkRYOiAwMDAwMDAwMDAwMDAwMDAw
-IFJTSTogMDAwMDU1OTMxYjY3NzM0ZSBSREk6Cj4gMDAwMDAwMDAwMDAwMDAwYQo+IFvCoCAyMjMu
-NTg1MzcyXSBSQlA6IDAwMDAwMDAwMDAwMDAwMDAgUjA4OiAwMDAwMDAwMDAwMDAwMDAwIFIwOToK
-PiAwMDAwNTU5MzFiNjgwYjcwCj4gW8KgIDIyMy41ODYwMDhdIFIxMDogMDAwMDAwMDAwMDAwMDAw
-YSBSMTE6IDAwMDAwMDAwMDAwMDAyNDYgUjEyOgo+IDAwMDA1NTkzMWI2NzczNGUKPiBbwqAgMjIz
-LjU4NjY5Nl0gUjEzOiAwMDAwMDAwMDAwMDQwMDAwIFIxNDogMDAwMDAwMDAwMDAwMDAwMCBSMTU6
-Cj4gMDAwMDAwMDAwMDAwMDAwMAo+IFvCoCAyMjMuNTg3NjIwXSBNb2R1bGVzIGxpbmtlZCBpbjog
-bHR0bmdfdHJhY2VyKE8rKSBsdHRuZ19zdGF0ZWR1bXAoTykKPiBsdHRuZ19mdHJhY2UoTykgbHR0
-bmdfa3Byb2JlcyhPKSBsdHRuZ19jbG9jayhPKSBsdHRuZ19saWJfcmluZ19idWZmZXIoTykKPiBs
-dHRuZ19rcmV0cHJvYmVzKE8pIGRlZmxhdGUgdHdvZmlzaF9nZW5lYgo+IFvCoCAyMjMuNTk3NjE1
-XSBDUjI6IDAwMDAxMTE0MDAwMDExNTgKPiBbwqAgMjIzLjYxNDY3M10gLS0tWyBlbmQgdHJhY2Ug
-NTE0ODg0YzM2MTFhMDFhZiBdLS0tCj4gW8KgIDIyMy42MTU3OTNdIFJJUDogMDAxMDpsdHRuZ190
-cmFjZXBvaW50X25vdGlmeSsweDE2ZS8weDIwMCBbbHR0bmdfdHJhY2VyXQo+IFvCoCAyMjMuNjE2
-NjA0XSBDb2RlOiBlYiBiZCA0OCAzOSBjMSAwZiA4NSBhMyAwMCAwMCAwMCA0OSA4YiA1NSAxMCA0
-MSA4MyBjNAo+IDAxIDQ0IDM5IGEyIDhjIDAyIDAwIDAwIDc2IGEzIDQ4IDhiIDkyIDkwIDAyIDAw
-IDAwIDQ5IDYzIGM0IDQ4IDhiIDBjIGMyIDw0Yz4KPiA4YiAzMSA0OCA4OSA0ZCBkMCA0YyA4OSBm
-NyBlOCA5MAo+IFvCoCAyMjMuNjI0Njg0XSBSU1A6IDAwMDA6ZmZmZmEzOWEwMDM3M2JjMCBFRkxB
-R1M6IDAwMDAwMjA2Cj4gW8KgIDIyMy42MjUxNzddIFJBWDogMDAwMDAwMDAwMDAwMDAwMCBSQlg6
-IGZmZmY5YjNkZDQ1YTgzYTAgUkNYOgo+IDAwMDAxMTE0MDAwMDExNTgKPiBbwqAgMjIzLjYyNjEw
-Ml0gUkRYOiBmZmZmZmZmZmMwMWI5MDQ4IFJTSTogMDAwMDAwMDAwMDAwMDAwMSBSREk6Cj4gZmZm
-ZmZmZmZjMDJmMTEwMAo+IFvCoCAyMjMuNjMyNTQxXSBSQlA6IGZmZmZhMzlhMDAzNzNiZjAgUjA4
-OiAwMDAwMDAwMDAwMDAwMDY0IFIwOToKPiBmZmZmOWIzZGRlYzAxNjAwCj4gW8KgIDIyMy42MzMx
-MTBdIFIxMDogZmZmZmZmZmZjMDI4NzQxMSBSMTE6IGZmZmZmZmZmOThkYzk2NjAgUjEyOgo+IDAw
-MDAwMDAwMDAwMDAwMDAKPiBbwqAgMjIzLjYzNzY5MF0gUjEzOiBmZmZmOWIzZGQ0NWE4M2EwIFIx
-NDogZmZmZmEzOWEwMDM3M2U3OCBSMTU6Cj4gMDAwMDAwMDAwMDAwMDAwMgo+IFvCoCAyMjMuNjQx
-NTgzXSBGUzrCoCAwMDAwN2ZiMDQ5MDE1NzQwKDAwMDApIEdTOmZmZmY5YjNkZGYyMDAwMDAoMDAw
-MCkKPiBrbmxHUzowMDAwMDAwMDAwMDAwMDAwCj4gW8KgIDIyMy42NDIyMzhdIENTOsKgIDAwMTAg
-RFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzCj4gW8KgIDIyMy42NDI5MDZd
-IENSMjogMDAwMDdmNmVhZTNlNGI1OCBDUjM6IDAwMDAwMDAwMTQ1ODYwMDAgQ1I0Ogo+IDAwMDAw
-MDAwMDAwMDA2ZjAKPiAyMDE4IE9jdCAxMSAwNTozNzowNyBxZW11eDg2LTY0IFvCoCAyMjMuNTUw
-NzI1XSBCVUc6IHVuYWJsZSB0byBoYW5kbGUga2VybmVsCj4gcGFnaW5nIHJlcXVlc3QgYXQgMDAw
-MDExMTQwMDAwMTE1OAo+IDIwMTggT2N0IDExIDA1OjM3OjA3IHFlbXV4ODYtNjQgQlVHOiB1bmFi
-bGUgdG8gaGFuZGxlIGtlcm5lbCBwYWdpbmcgcmVxdWVzdAo+IGF0IDAwMDAxMTE0MDAwMDExNTgK
-PiAKPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4g
-Cj4gV2hlbiBJIHR5cGUgdGhhdCBjb21tYW5kIGFnYWluOgo+IAo+IC0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPiAKPiBTcGF3bmluZyBhIHNlc3Npb24g
-ZGFlbW9uCj4gRXJyb3I6IFNlc3Npb24gZGFlbW9uIHRlcm1pbmF0ZWQgd2l0aCBhbiBlcnJvciAo
-ZXhpdCBzdGF0dXM6IDEpCj4gRXJyb3I6IFByb2JsZW0gb2NjdXJyZWQgd2hpbGUgbGF1bmNoaW5n
-IHNlc3Npb24gZGFlbW9uCj4gKC91c3IvYmluL2x0dG5nLXNlc3Npb25kKQo+IEVycm9yOiBDb21t
-YW5kIGVycm9yCj4gCj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLQo+IAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5v
-cmcKPiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0
-bmctZGV2CgotLSAKSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4KRWZmaWNpT1MKX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
-dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
-aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--mYCpIKhGyMATD0i+
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+
+
+--mYCpIKhGyMATD0i+
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: attachment; filename="0001-Fix-address-shellcheck-warnings-errors-in-example-sc.patch"
+
+From 377e35cdcc5ec057dd48accccc619b7ba295a59b Mon Sep 17 00:00:00 2001
+From: Omair Majid <omajid@redhat.com>
+Date: Thu, 11 Oct 2018 14:28:49 -0400
+Subject: [PATCH lttng-ust] Fix: address shellcheck warnings/errors in example
+ scripts
+
+ShellCheck points out a number of warnings in the example scripts. In
+particular, a number of normal and special shell variables are not
+quoted correctly.
+
+Signed-off-by: Omair Majid <omajid@redhat.com>
+---
+ doc/examples/clock-override/run-clock-override   | 6 +++---
+ doc/examples/demo/demo-trace                     | 6 +++---
+ doc/examples/getcpu-override/run-getcpu-override | 6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/doc/examples/clock-override/run-clock-override b/doc/examples/clock-override/run-clock-override
+index 295b4839..3c7f82be 100755
+--- a/doc/examples/clock-override/run-clock-override
++++ b/doc/examples/clock-override/run-clock-override
+@@ -2,7 +2,7 @@
+ 
+ # launch with: run-clock-override progname args
+ 
+-DIR=$(dirname $0)
+-DIR=$(readlink -f $DIR)
++DIR=$(dirname "$0")
++DIR=$(readlink -f "$DIR")
+ 
+-LTTNG_UST_CLOCK_PLUGIN="$DIR/lttng-ust-clock-override-example.so" ${*}
++LTTNG_UST_CLOCK_PLUGIN="$DIR/lttng-ust-clock-override-example.so" "${@}"
+diff --git a/doc/examples/demo/demo-trace b/doc/examples/demo/demo-trace
+index dd677277..000139b8 100755
+--- a/doc/examples/demo/demo-trace
++++ b/doc/examples/demo/demo-trace
+@@ -1,6 +1,6 @@
+ #!/bin/sh
+ 
+-DIR=$(dirname $0)
+-DIR=$(readlink -f $DIR)
++DIR=$(dirname "$0")
++DIR=$(readlink -f "$DIR")
+ 
+-LD_PRELOAD=$DIR/lttng-ust-provider-ust-tests-demo.so:$DIR/lttng-ust-provider-ust-tests-demo3.so $DIR/demo ${*}
++LD_PRELOAD="$DIR/lttng-ust-provider-ust-tests-demo.so:$DIR/lttng-ust-provider-ust-tests-demo3.so" "$DIR/demo" "${@}"
+diff --git a/doc/examples/getcpu-override/run-getcpu-override b/doc/examples/getcpu-override/run-getcpu-override
+index d0532334..3602c249 100755
+--- a/doc/examples/getcpu-override/run-getcpu-override
++++ b/doc/examples/getcpu-override/run-getcpu-override
+@@ -2,7 +2,7 @@
+ 
+ # launch with: run-getcpu-override progname args
+ 
+-DIR=$(dirname $0)
+-DIR=$(readlink -f $DIR)
++DIR=$(dirname "$0")
++DIR=$(readlink -f "$DIR")
+ 
+-LTTNG_UST_GETCPU_PLUGIN="$DIR/lttng-ust-getcpu-override-example.so" ${*}
++LTTNG_UST_GETCPU_PLUGIN="$DIR/lttng-ust-getcpu-override-example.so" "${@}"
+-- 
+2.17.1
+
+
+--mYCpIKhGyMATD0i+
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--mYCpIKhGyMATD0i+--
