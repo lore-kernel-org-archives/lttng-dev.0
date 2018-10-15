@@ -1,70 +1,57 @@
-From: Francis Deslauriers <francis.deslauriers@efficios.com>
-Subject: [BETA RELEASE] LTTng Scope 0.4
-Date: Mon, 15 Oct 2018 12:19:24 -0400
-Message-ID: <CADcCL0gyN=vAPLAYX010NAoCyg_XCqzW2at7PtbZdrjSbfRChw@mail.gmail.com>
+From: Andrey Dubinin <dubinin.andrey88@gmail.com>
+Subject: How can I get traces in live mode from lttng in my c++
+ application without using tcp sockets?
+Date: Mon, 15 Oct 2018 18:21:42 +0300
+Message-ID: <CAHaeqCJxxv0SUQOHrFKEGj4-YuHxyqL4Mp8jd60ihDYswkxAuw__13322.9989478879$1539635402$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Sender: linux-kernel-owner@vger.kernel.org
-To: lttng-dev <lttng-dev@lists.lttng.org>, diamon-discuss@lists.linuxfoundation.org, linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="===============4692886363279215359=="
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com
+ [IPv6:2607:f8b0:4864:20::631])
+ by lists.lttng.org (Postfix) with ESMTPS id 42Yhxb6Zhrz13mp
+ for <lttng-dev@lists.lttng.org>; Mon, 15 Oct 2018 11:21:55 -0400 (EDT)
+Received: by mail-pl1-x631.google.com with SMTP id y11-v6so9466874plt.3
+ for <lttng-dev@lists.lttng.org>; Mon, 15 Oct 2018 08:21:55 -0700 (PDT)
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi all,
+--===============4692886363279215359==
+Content-Type: multipart/alternative; boundary="0000000000003950f1057845fffa"
 
-We are announcing the release of LTTng Scope 0.4.0.
+--0000000000003950f1057845fffa
+Content-Type: text/plain; charset="UTF-8"
 
-This release has a few improvements over LTTng Scope 0.3:
+Hi,
 
-* Open more than one trace thanks to the new "Trace Project Setup"
-  window. (e.g. Kernel + UST traces)
+I'm using lttng api in my c++ application to get traces, but the only
+solution I found is using tcp sockets. Can I do this without using network?
 
-  You can always reopen this window to add traces to or remove traces
-  from the current trace project by clicking
-  "File" -> "Project Setup..." or by right-clicking the project item in
-  the left pane and clicking "Project Setup".
+--0000000000003950f1057845fffa
+Content-Type: text/html; charset="UTF-8"
 
-* Event count chart: use vertical bars instead of an area chart. A given
-  bar indicates the number of event records of which the timestamps are
-  between the beginning and the end of the bar.
+<div dir="ltr"><div>Hi,<br></div><div><br></div><div>I&#39;m using lttng api in my c++ application to get traces, but the only 
+solution I found is using tcp sockets. Can I do this without using 
+network?</div></div>
 
-* Event count chart: use natural ticks, depending on the current zoom
-  level, on the horizontal (time) axis. For example, the difference
-  between individual ticks can be 100 ms, 500 ms, 1 s, 2 s, 15 s, 30
-  minutes, 1 day, etc.
+--0000000000003950f1057845fffa--
 
-* Event count chart: add axis units ("Count / Time") below the view's
-  title on the left.
+--===============4692886363279215359==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
 
-* Add the version to the main window's title bar.
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
 
-* Bug fix: refresh the views when you move vertical dividers or when you
-  resize the main window.
-
-* Bug fix: event count chart: round tick labels correctly to avoid
-  noticing floating point number errors.
-
-Of course, because LTTng Scope's development is still in the beta phase,
-you could discover bugs when trying the tool. Feel free to report them
-on GitHub: <https://github.com/lttng/lttng-scope/issues>.
-
-Project's description and screenshot:
-    <https://lttng.org/beta/#lttng-scope>
-
-GitHub page:
-    <https://github.com/lttng/lttng-scope>
-
-Installer for Linux:
-    <https://lttng.org/files/lttng-scope/lttng-scope-0.4.0-linux-x64-installer.run>
-
-Installer for Windows:
-    <https://lttng.org/files/lttng-scope/lttng-scope-0.4.0-windows-installer.exe>
-
-Installer for macOS:
-    <https://lttng.org/files/lttng-scope/lttng-scope-0.4.0-osx-installer.dmg>
-
-On the behalf of the EfficiOS team,
-
---
-Francis Deslauriers
-Software developer
-EfficiOS inc.
+--===============4692886363279215359==--
