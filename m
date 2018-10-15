@@ -1,160 +1,70 @@
-From: Dengke Du <dengke.du@windriver.com>
-Subject: Re: lttng create call trace on kernel 4.19
-Date: Mon, 15 Oct 2018 10:04:36 +0800
-Message-ID: <7e210b52-2daa-0354-3332-dd8a99b1ff90__17069.0556210049$1539572293$gmane$org@windriver.com>
-References: <eee78bd1-4d5c-63e7-dc74-ff5a51426666@windriver.com>
- <20181011132253.GA13655@joraj-alpa>
- <82561ba6-42f9-d816-0d33-f9906d0affcd@windriver.com>
- <2081244858.3133.1539357009809.JavaMail.zimbra@efficios.com>
+From: Francis Deslauriers <francis.deslauriers@efficios.com>
+Subject: [BETA RELEASE] LTTng Scope 0.4
+Date: Mon, 15 Oct 2018 12:19:24 -0400
+Message-ID: <CADcCL0gyN=vAPLAYX010NAoCyg_XCqzW2at7PtbZdrjSbfRChw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail1.windriver.com (mail1.windriver.com [147.11.146.13])
- by lists.lttng.org (Postfix) with ESMTPS id 42YNTh6S1qz144C
- for <lttng-dev@lists.lttng.org>; Sun, 14 Oct 2018 23:00:08 -0400 (EDT)
-In-Reply-To: <2081244858.3133.1539357009809.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset="UTF-8"
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Sender: linux-kernel-owner@vger.kernel.org
+To: lttng-dev <lttng-dev@lists.lttng.org>, diamon-discuss@lists.linuxfoundation.org, linux-kernel <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-CgpPbiAyMDE45bm0MTDmnIgxMuaXpSAyMzoxMCwgTWF0aGlldSBEZXNub3llcnMgd3JvdGU6Cj4g
-LS0tLS0gT24gT2N0IDExLCAyMDE4LCBhdCA5OjIxIFBNLCBEZW5na2UgRHUgZGVuZ2tlLmR1QHdp
-bmRyaXZlci5jb20gd3JvdGU6Cj4KPj4gT24gMjAxOOW5tDEw5pyIMTHml6UgMjE6MjIsIEpvbmF0
-aGFuIFJham90dGUtSnVsaWVuIHdyb3RlOgo+Pj4gSGksCj4+Pgo+Pj4gT24gVGh1LCBPY3QgMTEs
-IDIwMTggYXQgMDI6MDA6MTFQTSArMDgwMCwgRGVuZ2tlIER1IHdyb3RlOgo+Pj4+IEhpIGFsbAo+
-Pj4+Cj4+Pj4gV2hlbiBJIGNyZWF0ZSBhIGxvY2FsIHRyYWNlIHNlc3Npb24sIG1lZXRpbmcgYSBj
-YWxsIHRyYWNlOgo+Pj4+Cj4+Pj4gdW5hbWUgLWE6Cj4+Pj4KPj4+PiBMaW51eCBxZW11eDg2LTY0
-IDQuMTkuMC1yYzcteW9jdG9kZXYtc3RhbmRhcmQgIzEgU01QIFBSRUVNUFQgVGh1IE9jdCAxMQo+
-Pj4+IDAzOjMyOjQ4IFVUQyAyMDE4IHg4Nl82NCB4ODZfNjQgeDg2XzY0IEdOVS9MaW51eAo+Pj4g
-V2hpY2ggeW9jdG8gYnJhbmNoLCByZWNpcGVzKGZvciBrZXJuZWwsIGx0dG5nLXRvb2xzLCBsdHRu
-Zy1tb2R1bGVzKSBhbmQgdGFyZ2V0Pwo+Pj4KPj4+IFdoaWNoIHZlcnNpb24gb2YgbHR0bmctbW9k
-dWxlcyBhcmUgeW91IHVzaW5nPwoKMi45LjUKCj4gUGxlYXNlIGFuc3dlciB0aGUgcXVlc3Rpb25z
-IGFib3ZlIGFzIHdlbGwuCj4KPiBUaGFua3MsCj4KPiBNYXRoaWV1Cj4KPgo+Pj4gQW55IG1vZGlm
-aWNhdGlvbiB0byB0aGUga2VybmVsPwo+PiBZb2N0bzogbWFzdGVyIGJyYW5jaAo+PiBLZXJuZWw6
-IGxpbnV4LXlvY3RvLWRldgo+Pgo+PiBwaGVub21lbm9uIDE6Cj4+ICDCoMKgwqAgbGludXgteW9j
-dG8gd2FzIG9rICh2NC4xOCkKPj4gcGhlbm9tZW5vbiAyOgo+PiAgwqDCoMKgIGxpbnV4LXlvY3Rv
-LWRldiB3YXMgbm90IG9rICh2NC4xOSkKPj4KPj4gTWF5YmUgc29tZSBrZXJuZWwgY29tbWl0IGJy
-ZWFrcyBpdC4KPj4KPj4+PiBsdHRuZyBjcmVhdGUgdHJhY2Vfc2Vzc2lvbiAtLWxpdmUgLVUgbmV0
-Oi8vMTI3LjAuMC4xCj4+Pj4KPj4+PiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tCj4+Pj4KPj4+PiBbwqAgMjIyLjM5MDYwMV0gbHR0bmdfa3JldHByb2Jl
-czogbG9hZGluZyBvdXQtb2YtdHJlZSBtb2R1bGUgdGFpbnRzIGtlcm5lbC4KPj4+PiBbwqAgMjIz
-LjU1MDcyNV0gQlVHOiB1bmFibGUgdG8gaGFuZGxlIGtlcm5lbCBwYWdpbmcgcmVxdWVzdCBhdAo+
-Pj4+IDAwMDAxMTE0MDAwMDExNTgKPj4+PiBbwqAgMjIzLjU1MTY2MV0gUEdEIDAgUDREIDAKPj4+
-PiBbwqAgMjIzLjU1MjQ3Nl0gT29wczogMDAwMCBbIzFdIFBSRUVNUFQgU01QIFBUSQo+Pj4+IFvC
-oCAyMjMuNTUzMTcwXSBDUFU6IDAgUElEOiA1MDAgQ29tbTogbW9kcHJvYmUgVGFpbnRlZDogRyBP
-Cj4+Pj4gNC4xOS4wLXJjNy15b2N0b2Rldi1zdGFuZGFyZCAjMQo+Pj4+IFvCoCAyMjMuNTUzODky
-XSBIYXJkd2FyZSBuYW1lOiBRRU1VIFN0YW5kYXJkIFBDIChpNDQwRlggKyBQSUlYLCAxOTk2KSwg
-QklPUwo+Pj4+IHJlbC0xLjExLjItMC1nZjk2MjZjY2I5MS1wcmVidWlsdC5xZW11LXByb2plY3Qu
-b3JnIDA0LzAxLzIwMTQKPj4+PiBbwqAgMjIzLjU1NjYxOV0gUklQOiAwMDEwOmx0dG5nX3RyYWNl
-cG9pbnRfbm90aWZ5KzB4MTZlLzB4MjAwIFtsdHRuZ190cmFjZXJdCj4+Pj4gW8KgIDIyMy41NTc3
-NTFdIENvZGU6IGViIGJkIDQ4IDM5IGMxIDBmIDg1IGEzIDAwIDAwIDAwIDQ5IDhiIDU1IDEwIDQx
-IDgzIGM0Cj4+Pj4gMDEgNDQgMzkgYTIgOGMgMDIgMDAgMDAgNzYgYTMgNDggOGIgOTIgOTAgMDIg
-MDAgMDAgNDkgNjMgYzQgNDggOGIgMGMgYzIgPDRjPgo+Pj4+IDhiIDMxIDQ4IDg5IDRkIGQwIDRj
-IDg5IGY3IGU4IDkwCj4+Pj4gW8KgIDIyMy41NTk3NjldIFJTUDogMDAwMDpmZmZmYTM5YTAwMzcz
-YmMwIEVGTEFHUzogMDAwMDAyMDYKPj4+PiBbwqAgMjIzLjU2MDMwM10gUkFYOiAwMDAwMDAwMDAw
-MDAwMDAwIFJCWDogZmZmZjliM2RkNDVhODNhMCBSQ1g6Cj4+Pj4gMDAwMDExMTQwMDAwMTE1OAo+
-Pj4+IFvCoCAyMjMuNTYwOTU5XSBSRFg6IGZmZmZmZmZmYzAxYjkwNDggUlNJOiAwMDAwMDAwMDAw
-MDAwMDAxIFJESToKPj4+PiBmZmZmZmZmZmMwMmYxMTAwCj4+Pj4gW8KgIDIyMy41NjE1NzldIFJC
-UDogZmZmZmEzOWEwMDM3M2JmMCBSMDg6IDAwMDAwMDAwMDAwMDAwNjQgUjA5Ogo+Pj4+IGZmZmY5
-YjNkZGVjMDE2MDAKPj4+PiBbwqAgMjIzLjU2MjM4OF0gUjEwOiBmZmZmZmZmZmMwMjg3NDExIFIx
-MTogZmZmZmZmZmY5OGRjOTY2MCBSMTI6Cj4+Pj4gMDAwMDAwMDAwMDAwMDAwMAo+Pj4+IFvCoCAy
-MjMuNTYzMDA4XSBSMTM6IGZmZmY5YjNkZDQ1YTgzYTAgUjE0OiBmZmZmYTM5YTAwMzczZTc4IFIx
-NToKPj4+PiAwMDAwMDAwMDAwMDAwMDAyCj4+Pj4gW8KgIDIyMy41NjM5MDVdIEZTOsKgIDAwMDA3
-ZmIwNDkwMTU3NDAoMDAwMCkgR1M6ZmZmZjliM2RkZjIwMDAwMCgwMDAwKQo+Pj4+IGtubEdTOjAw
-MDAwMDAwMDAwMDAwMDAKPj4+PiBbwqAgMjIzLjU2NDk0MV0gQ1M6wqAgMDAxMCBEUzogMDAwMCBF
-UzogMDAwMCBDUjA6IDAwMDAwMDAwODAwNTAwMzMKPj4+PiBbwqAgMjIzLjU2NTUwMV0gQ1IyOiAw
-MDAwMTExNDAwMDAxMTU4IENSMzogMDAwMDAwMDAxNDU4NjAwMCBDUjQ6Cj4+Pj4gMDAwMDAwMDAw
-MDAwMDZmMAo+Pj4+IFvCoCAyMjMuNTY2NDUwXSBDYWxsIFRyYWNlOgo+Pj4+IFvCoCAyMjMuNTY4
-MzY3XcKgID8gbHR0bmdfa2VybmVsX3RyYWNlcG9pbnRfYWRkKzB4NTAvMHhjMCBbbHR0bmdfdHJh
-Y2VyXQo+Pj4+IFvCoCAyMjMuNTY5OTMyXcKgIHJlZ2lzdGVyX3RyYWNlcG9pbnRfbW9kdWxlX25v
-dGlmaWVyKzB4NTcvMHg4MAo+Pj4+IFvCoCAyMjMuNTcxMzA5XcKgID8gMHhmZmZmZmZmZmMwMzA5
-MDAwCj4+Pj4gW8KgIDIyMy41NzIxODddwqAgbHR0bmdfdHJhY2Vwb2ludF9pbml0KzB4NDUvMHhi
-ZjkgW2x0dG5nX3RyYWNlcl0KPj4+PiBbwqAgMjIzLjU3MzEyNV3CoCBsdHRuZ19ldmVudHNfaW5p
-dCsweDQwLzB4MWNjIFtsdHRuZ190cmFjZXJdCj4+Pj4gW8KgIDIyMy41NzM4MjBdwqAgPyAweGZm
-ZmZmZmZmYzAzMDkwMDAKPj4+PiBbwqAgMjIzLjU3NDIzN13CoCBkb19vbmVfaW5pdGNhbGwrMHg1
-My8weDFmZQo+Pj4+IFvCoCAyMjMuNTc0NjgyXcKgID8gX192dW5tYXArMHg4ZS8weGMwCj4+Pj4g
-W8KgIDIyMy41NzUxOTZdwqAgPyBrbWVtX2NhY2hlX2FsbG9jX3RyYWNlKzB4ZmMvMHgxZDAKPj4+
-PiBbwqAgMjIzLjU3NTY4NF3CoCA/IGRvX2luaXRfbW9kdWxlKzB4MjcvMHgyMTAKPj4+PiBbwqAg
-MjIzLjU3NjI4NV3CoCBkb19pbml0X21vZHVsZSsweDYwLzB4MjEwCj4+Pj4gW8KgIDIyMy41NzY3
-MDJdwqAgbG9hZF9tb2R1bGUrMHgyNDA2LzB4MjU3MAo+Pj4+IFvCoCAyMjMuNTc3MTQwXcKgID8g
-dmZzX3JlYWQrMHgxMTUvMHgxNDAKPj4+PiBbwqAgMjIzLjU3NzYxMV3CoCA/IHZmc19yZWFkKzB4
-MTE1LzB4MTQwCj4+Pj4gW8KgIDIyMy41NzgwMzRdwqAgX19zZV9zeXNfZmluaXRfbW9kdWxlKzB4
-YzMvMHhlMAo+Pj4+IFvCoCAyMjMuNTc4NTgxXcKgID8gX19zZV9zeXNfZmluaXRfbW9kdWxlKzB4
-YzMvMHhlMAo+Pj4+IFvCoCAyMjMuNTc5MTM1XcKgIF9feDY0X3N5c19maW5pdF9tb2R1bGUrMHgx
-YS8weDIwCj4+Pj4gW8KgIDIyMy41Nzk2MjddwqAgZG9fc3lzY2FsbF82NCsweDRkLzB4ZjAKPj4+
-PiBbwqAgMjIzLjU4MDA3MV3CoCBlbnRyeV9TWVNDQUxMXzY0X2FmdGVyX2h3ZnJhbWUrMHg0NC8w
-eGE5Cj4+Pj4gW8KgIDIyMy41ODA4MzddIFJJUDogMDAzMzoweDdmYjA0OTEwNzU2OQo+Pj4+IFvC
-oCAyMjMuNTgxMjg2XSBDb2RlOiAwMCBjMyA2NiAyZSAwZiAxZiA4NCAwMCAwMCAwMCAwMCAwMCAw
-ZiAxZiA0NCAwMCAwMCA0OAo+Pj4+IDg5IGY4IDQ4IDg5IGY3IDQ4IDg5IGQ2IDQ4IDg5IGNhIDRk
-IDg5IGMyIDRkIDg5IGM4IDRjIDhiIDRjIDI0IDA4IDBmIDA1IDw0OD4KPj4+PiAzZCAwMSBmMCBm
-ZiBmZiA3MyAwMSBjMyA0OCA4YiAwOAo+Pj4+IFvCoCAyMjMuNTgzMjEwXSBSU1A6IDAwMmI6MDAw
-MDdmZmM4MDYyMDQ5OCBFRkxBR1M6IDAwMDAwMjQ2IE9SSUdfUkFYOgo+Pj4+IDAwMDAwMDAwMDAw
-MDAxMzkKPj4+PiBbwqAgMjIzLjU4Mzk1OF0gUkFYOiBmZmZmZmZmZmZmZmZmZmRhIFJCWDogMDAw
-MDU1OTMxYjY4MGI3MCBSQ1g6Cj4+Pj4gMDAwMDdmYjA0OTEwNzU2OQo+Pj4+IFvCoCAyMjMuNTg0
-Njc3XSBSRFg6IDAwMDAwMDAwMDAwMDAwMDAgUlNJOiAwMDAwNTU5MzFiNjc3MzRlIFJESToKPj4+
-PiAwMDAwMDAwMDAwMDAwMDBhCj4+Pj4gW8KgIDIyMy41ODUzNzJdIFJCUDogMDAwMDAwMDAwMDAw
-MDAwMCBSMDg6IDAwMDAwMDAwMDAwMDAwMDAgUjA5Ogo+Pj4+IDAwMDA1NTkzMWI2ODBiNzAKPj4+
-PiBbwqAgMjIzLjU4NjAwOF0gUjEwOiAwMDAwMDAwMDAwMDAwMDBhIFIxMTogMDAwMDAwMDAwMDAw
-MDI0NiBSMTI6Cj4+Pj4gMDAwMDU1OTMxYjY3NzM0ZQo+Pj4+IFvCoCAyMjMuNTg2Njk2XSBSMTM6
-IDAwMDAwMDAwMDAwNDAwMDAgUjE0OiAwMDAwMDAwMDAwMDAwMDAwIFIxNToKPj4+PiAwMDAwMDAw
-MDAwMDAwMDAwCj4+Pj4gW8KgIDIyMy41ODc2MjBdIE1vZHVsZXMgbGlua2VkIGluOiBsdHRuZ190
-cmFjZXIoTyspIGx0dG5nX3N0YXRlZHVtcChPKQo+Pj4+IGx0dG5nX2Z0cmFjZShPKSBsdHRuZ19r
-cHJvYmVzKE8pIGx0dG5nX2Nsb2NrKE8pIGx0dG5nX2xpYl9yaW5nX2J1ZmZlcihPKQo+Pj4+IGx0
-dG5nX2tyZXRwcm9iZXMoTykgZGVmbGF0ZSB0d29maXNoX2dlbmViCj4+Pj4gW8KgIDIyMy41OTc2
-MTVdIENSMjogMDAwMDExMTQwMDAwMTE1OAo+Pj4+IFvCoCAyMjMuNjE0NjczXSAtLS1bIGVuZCB0
-cmFjZSA1MTQ4ODRjMzYxMWEwMWFmIF0tLS0KPj4+PiBbwqAgMjIzLjYxNTc5M10gUklQOiAwMDEw
-Omx0dG5nX3RyYWNlcG9pbnRfbm90aWZ5KzB4MTZlLzB4MjAwIFtsdHRuZ190cmFjZXJdCj4+Pj4g
-W8KgIDIyMy42MTY2MDRdIENvZGU6IGViIGJkIDQ4IDM5IGMxIDBmIDg1IGEzIDAwIDAwIDAwIDQ5
-IDhiIDU1IDEwIDQxIDgzIGM0Cj4+Pj4gMDEgNDQgMzkgYTIgOGMgMDIgMDAgMDAgNzYgYTMgNDgg
-OGIgOTIgOTAgMDIgMDAgMDAgNDkgNjMgYzQgNDggOGIgMGMgYzIgPDRjPgo+Pj4+IDhiIDMxIDQ4
-IDg5IDRkIGQwIDRjIDg5IGY3IGU4IDkwCj4+Pj4gW8KgIDIyMy42MjQ2ODRdIFJTUDogMDAwMDpm
-ZmZmYTM5YTAwMzczYmMwIEVGTEFHUzogMDAwMDAyMDYKPj4+PiBbwqAgMjIzLjYyNTE3N10gUkFY
-OiAwMDAwMDAwMDAwMDAwMDAwIFJCWDogZmZmZjliM2RkNDVhODNhMCBSQ1g6Cj4+Pj4gMDAwMDEx
-MTQwMDAwMTE1OAo+Pj4+IFvCoCAyMjMuNjI2MTAyXSBSRFg6IGZmZmZmZmZmYzAxYjkwNDggUlNJ
-OiAwMDAwMDAwMDAwMDAwMDAxIFJESToKPj4+PiBmZmZmZmZmZmMwMmYxMTAwCj4+Pj4gW8KgIDIy
-My42MzI1NDFdIFJCUDogZmZmZmEzOWEwMDM3M2JmMCBSMDg6IDAwMDAwMDAwMDAwMDAwNjQgUjA5
-Ogo+Pj4+IGZmZmY5YjNkZGVjMDE2MDAKPj4+PiBbwqAgMjIzLjYzMzExMF0gUjEwOiBmZmZmZmZm
-ZmMwMjg3NDExIFIxMTogZmZmZmZmZmY5OGRjOTY2MCBSMTI6Cj4+Pj4gMDAwMDAwMDAwMDAwMDAw
-MAo+Pj4+IFvCoCAyMjMuNjM3NjkwXSBSMTM6IGZmZmY5YjNkZDQ1YTgzYTAgUjE0OiBmZmZmYTM5
-YTAwMzczZTc4IFIxNToKPj4+PiAwMDAwMDAwMDAwMDAwMDAyCj4+Pj4gW8KgIDIyMy42NDE1ODNd
-IEZTOsKgIDAwMDA3ZmIwNDkwMTU3NDAoMDAwMCkgR1M6ZmZmZjliM2RkZjIwMDAwMCgwMDAwKQo+
-Pj4+IGtubEdTOjAwMDAwMDAwMDAwMDAwMDAKPj4+PiBbwqAgMjIzLjY0MjIzOF0gQ1M6wqAgMDAx
-MCBEUzogMDAwMCBFUzogMDAwMCBDUjA6IDAwMDAwMDAwODAwNTAwMzMKPj4+PiBbwqAgMjIzLjY0
-MjkwNl0gQ1IyOiAwMDAwN2Y2ZWFlM2U0YjU4IENSMzogMDAwMDAwMDAxNDU4NjAwMCBDUjQ6Cj4+
-Pj4gMDAwMDAwMDAwMDAwMDZmMAo+Pj4+IDIwMTggT2N0IDExIDA1OjM3OjA3IHFlbXV4ODYtNjQg
-W8KgIDIyMy41NTA3MjVdIEJVRzogdW5hYmxlIHRvIGhhbmRsZSBrZXJuZWwKPj4+PiBwYWdpbmcg
-cmVxdWVzdCBhdCAwMDAwMTExNDAwMDAxMTU4Cj4+Pj4gMjAxOCBPY3QgMTEgMDU6Mzc6MDcgcWVt
-dXg4Ni02NCBCVUc6IHVuYWJsZSB0byBoYW5kbGUga2VybmVsIHBhZ2luZyByZXF1ZXN0Cj4+Pj4g
-YXQgMDAwMDExMTQwMDAwMTE1OAo+Pj4+Cj4+Pj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+Pj4+Cj4+Pj4gV2hlbiBJIHR5cGUgdGhhdCBjb21tYW5k
-IGFnYWluOgo+Pj4+Cj4+Pj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLQo+Pj4+Cj4+Pj4gU3Bhd25pbmcgYSBzZXNzaW9uIGRhZW1vbgo+Pj4+IEVycm9y
-OiBTZXNzaW9uIGRhZW1vbiB0ZXJtaW5hdGVkIHdpdGggYW4gZXJyb3IgKGV4aXQgc3RhdHVzOiAx
-KQo+Pj4+IEVycm9yOiBQcm9ibGVtIG9jY3VycmVkIHdoaWxlIGxhdW5jaGluZyBzZXNzaW9uIGRh
-ZW1vbgo+Pj4+ICgvdXNyL2Jpbi9sdHRuZy1zZXNzaW9uZCkKPj4+PiBFcnJvcjogQ29tbWFuZCBl
-cnJvcgo+Pj4+Cj4+Pj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLQo+Pj4+Cj4+Pj4KPj4+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwo+Pj4+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4+PiBsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnCj4+Pj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
-bWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwo+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+IGx0dG5nLWRldkBs
-aXN0cy5sdHRuZy5vcmcKPj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
-L2xpc3RpbmZvL2x0dG5nLWRldgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcu
-b3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRu
-Zy1kZXYK
+Hi all,
+
+We are announcing the release of LTTng Scope 0.4.0.
+
+This release has a few improvements over LTTng Scope 0.3:
+
+* Open more than one trace thanks to the new "Trace Project Setup"
+  window. (e.g. Kernel + UST traces)
+
+  You can always reopen this window to add traces to or remove traces
+  from the current trace project by clicking
+  "File" -> "Project Setup..." or by right-clicking the project item in
+  the left pane and clicking "Project Setup".
+
+* Event count chart: use vertical bars instead of an area chart. A given
+  bar indicates the number of event records of which the timestamps are
+  between the beginning and the end of the bar.
+
+* Event count chart: use natural ticks, depending on the current zoom
+  level, on the horizontal (time) axis. For example, the difference
+  between individual ticks can be 100 ms, 500 ms, 1 s, 2 s, 15 s, 30
+  minutes, 1 day, etc.
+
+* Event count chart: add axis units ("Count / Time") below the view's
+  title on the left.
+
+* Add the version to the main window's title bar.
+
+* Bug fix: refresh the views when you move vertical dividers or when you
+  resize the main window.
+
+* Bug fix: event count chart: round tick labels correctly to avoid
+  noticing floating point number errors.
+
+Of course, because LTTng Scope's development is still in the beta phase,
+you could discover bugs when trying the tool. Feel free to report them
+on GitHub: <https://github.com/lttng/lttng-scope/issues>.
+
+Project's description and screenshot:
+    <https://lttng.org/beta/#lttng-scope>
+
+GitHub page:
+    <https://github.com/lttng/lttng-scope>
+
+Installer for Linux:
+    <https://lttng.org/files/lttng-scope/lttng-scope-0.4.0-linux-x64-installer.run>
+
+Installer for Windows:
+    <https://lttng.org/files/lttng-scope/lttng-scope-0.4.0-windows-installer.exe>
+
+Installer for macOS:
+    <https://lttng.org/files/lttng-scope/lttng-scope-0.4.0-osx-installer.dmg>
+
+On the behalf of the EfficiOS team,
+
+--
+Francis Deslauriers
+Software developer
+EfficiOS inc.
