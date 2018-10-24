@@ -1,16 +1,16 @@
-From: Michel Dagenais <michel.dagenais@polymtl.ca>
-Subject: Re: LTTNG-ust detailed architecture?
-Date: Wed, 24 Oct 2018 07:29:00 -0400 (EDT)
-Message-ID: <877059459.4054523.1540380540780.JavaMail.zimbra__6969.59530837393$1540380740$gmane$org@polymtl.ca>
-References: <6dea49d5-f25b-a790-3354-e961e739bb1e@siemens.com>
+From: Alok Priyadarshi <alokpr@gmail.com>
+Subject: Adding thread timestamp to event context
+Date: Wed, 24 Oct 2018 15:05:08 -0700
+Message-ID: <CADwgpi8Nvz4--8V16mU=GoQN5z9dUSvphuSQ3eOL3m0RVYxEeQ__29374.8839795173$1540418603$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============6238573106779717526=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca (smtp.polymtl.ca [132.207.4.11])
- by lists.lttng.org (Postfix) with ESMTPS id 42g7Sn1lZ3zfj2
- for <lttng-dev@lists.lttng.org>; Wed, 24 Oct 2018 07:34:17 -0400 (EDT)
-In-Reply-To: <6dea49d5-f25b-a790-3354-e961e739bb1e@siemens.com>
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com
+ [IPv6:2607:f8b0:4864:20::b31])
+ by lists.lttng.org (Postfix) with ESMTPS id 42gPSx24Ttzgdv
+ for <lttng-dev@lists.lttng.org>; Wed, 24 Oct 2018 18:05:21 -0400 (EDT)
+Received: by mail-yb1-xb31.google.com with SMTP id d18-v6so2815830yba.4
+ for <lttng-dev@lists.lttng.org>; Wed, 24 Oct 2018 15:05:21 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,67 +20,65 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "Scheler, Fabian (CT RDA IOT SES-DE)" <Fabian.Scheler@siemens.com>
-Cc: lttng-dev@lists.lttng.org
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-V2UgaGF2ZSBiZWVuIHVzaW5nIExUVG5nLVVTVCBmb3IgaGFyZCByZWFsLXRpbWUgc3lzdGVtcyBm
-b3IgYSB3aGlsZS4gT25jZSB0cmFjaW5nIGlzIHNldHVwLCB0aGVyZSBhcmUgZmV3IGludGVyYWN0
-aW9ucyBiZXR3ZWVuIHRoZSB0cmFjZWQgYXBwbGljYXRpb24gYW5kIHRoZSByZXN0LiBUaGUgdHJh
-Y2luZyBjb2RlIHNpbXBseSBmaWxscyB0aGUgc3ViLWJ1ZmZlcnMgYW5kIHN3aXRjaGVzIHRvIGFu
-b3RoZXIgc3ViLWJ1ZmZlciB3aGVuIHRoZSBjdXJyZW50IG9uZSBpcyBmdWxsLiBJbiBvbmUgbW9k
-ZSwgdGhlIGNvbnN1bWVyIGRhZW1vbiBwb2xscyB0aGUgc3RhdGUgb2YgdHJhY2luZyBzdWItYnVm
-ZmVycyB0byBrbm93IHdoZW4gdGhleSBhcmUgZnVsbCBhbmQgY2FuIGJlIGNvcGllZCBhbmQgZW1w
-dGllZDsgdGhlIHRyYWNlZCBhcHBsaWNhdGlvbiBkb2VzIG5vdCBoYXZlIHRvIGlzc3VlIGFueSBw
-b3RlbnRpYWxseSBibG9ja2luZyBzeXN0ZW0gY2FsbC4gSW4gdGhlIGRlZmF1bHQgbW9kZSwgdGhl
-IHRyYWNlZCBhcHBsaWNhdGlvbiBzZW5kcyBhIHNob3J0IG1lc3NhZ2Ugb24gYSBwaXBlIHRvIHRo
-ZSBjb25zdW1lciBkYWVtb24gdG8gc2lnbmFsIHdoZW4gYSBzdWItYnVmZmVyIGlzIHJlYWR5IHRv
-IGJlIGNvbnN1bWVkLgoKLS0tLS0gTGUgMjQgT2N0IDE4LCDDoCA2OjUzLCBTY2hlbGVyLCBGYWJp
-YW4gKENUIFJEQSBJT1QgU0VTLURFKSBGYWJpYW4uU2NoZWxlckBzaWVtZW5zLmNvbSBhIMOpY3Jp
-dCA6Cgo+IEhpLAo+IAo+IHdlIHdvdWxkIGxpa2UgdG8gdHJhY2UgcmVhbC10aW1lIGFwcGxpY2F0
-aW9ucyBhbmQgd2UgY29uc2lkZXIgTFRUTkctdXN0Cj4gYXMgb25lIHBvc3NpYmxlIHdheSB0byBk
-byB0aGlzLiBCdXQgYmVmb3JlIHdlIGdvIGZvciBMVFRORy11c3QsIHdlIG5lZWQKPiB0byBlc3Rp
-bWF0ZSB0aGUgaW1wYWN0IExUVE5HLXVzdCBjb3VsZCBoYXZlIG9uIHRoZSBpbnN0cnVtZW50ZWQK
-PiBhcHBsaWNhdGlvbi4gV2hpbGUgSSBjb25zaWRlciB0aGUgdXNlci1tYW51YWwgb2YgTFRUTkct
-dXN0IHRvIGJlIHJlYWxseQo+IGdyZWF0LCBJIGFtIG1pc3NpbmcgYSBtb3JlIGRldGFpbGVkIGFy
-Y2hpdGVjdHVyZSBkb2N1bWVudGF0aW9uLCB0aGF0Cj4gd291bGQgYmUgcmVhbGx5IGhlbHBmdWwg
-dG8gYW5zd2VyIHRoaXMgcXVlc3Rpb24uCj4gCj4gSGF2aW5nIGEgbG9vayBhdCB0aGUgcGljdHVy
-ZSBoZXJlCj4gCj4gaHR0cHM6Ly9sdHRuZy5vcmcvZG9jcy92Mi4xMC8jZG9jLXBsdW1iaW5nCj4g
-Cj4gSSB3YW50IHRvIHJldmlldyB0aGVzZSBjb21wb25lbnQgaW50ZXJhY3Rpb25zIG1vcmUgY2xv
-c2VseToKPiAKPiAxLiBTZXNzaW9uIGRhZW1vbiAtPiBsaWJsdHRuZy11c3QKPiAKPiBUaGlzIGxp
-YnJhcnkgc2VlbXMgdG8gY3JlYXRlIGEgbmV3IHRocmVhZCBpbiB0aGUgY29udGV4dCBvZiB0aGUK
-PiBpbnN0cnVtZW50ZWQgYXBwbGljYXRpb24uIEhvdyBjb3VsZCB0aGlzIHRocmVhZCBpbXBhY3Qg
-dGhlIHJ1bi10aW1lCj4gYmVoYXZpb3Igb2YgdGhlIGluc3RydW1lbnRlZCBhcHBsaWNhdGlvbiwg
-d2hlbiBpdCBjb21lcyB0bwo+IAo+IC0gc3VibWl0dGluZyBldmVudHMgdG8gdGhlIGJ1ZmZlcgo+
-IAo+ICAgKiBXaGljaCBjb21wb25lbnQgY29udHJvbHMvaW5zdGFudGlhdGVzL21haW50YWlucyB0
-aGUgYnVmZmVyPwo+ICAgKiBIb3cgaXMgdGhlIGJ1ZmZlciBzeW5jaHJvbml6ZWQ/Cj4gCj4gLSBz
-ZXR0aW5nIGV2ZW50LXJ1bGVzIChpLmUuIGVuYWJsaW5nL2Rpc2FibGluZyBldmVudHMpCj4gLSBz
-dGFydGluZyB0cmFjaW5nIHNlc3Npb25zCj4gLSAuLi4KPiAKPiAgICogV2hhdCBkb2VzIGhhcHBl
-biBhbG9uZyB0aGUgcmVkIGRhc2hlZCBhcnJvdwo+ICAgICAiU2Vzc2lvbiBEYWVtb24gLT4gbGli
-bHR0bmctdXN0Ij8KPiAKPiAyLiBsaWJsdHRuZy11c3QgLT4gQ29uc3VtZXIgZGFlbW9uCj4gCj4g
-QXQgc29tZSBwb2ludCB0aGUgY29uc3VtZXIgZGFlbW9uIHJlYWRzIHRoZSBldmVudHMgc3RvcmVk
-IGluIHRoZSBidWZmZXIKPiBhbmQgd3JpdGVzIHRoZW0gdG8gc29tZSBvdXRwdXQtZmlsZS4KPiAK
-PiAgICogV2hhdCBkb2VzIGhhcHBlbiBhbG9uZyB0aGUgdmlvbGV0IGFycm93Cj4gICAgICJsaWJs
-dHRuZy11c3QgLT4gQ29uc3VtZXIgZGFlbW9uIj8KPiAgICogQ291bGQgdGhlIGluc3RydW1lbnRl
-ZCBhcHBsaWNhdGlvbiBiZSBhZmZlY3RlZCBoZXJlIHNvbWVob3c/Cj4gCj4gSXMgdGhpcyBkb2N1
-bWVudGVkIHNvbWV3aGVyZSAtIG1heWJlIEkgc2ltcGx5IG1pc3NlZCBpdC4KPiAKPiBDaWFvCj4g
-RmFiaWFuCj4gLS0KPiBXaXRoIGJlc3QgcmVnYXJkcywKPiBEci4gRmFiaWFuIFNjaGVsZXIKPiAK
-PiBTaWVtZW5zIEFHCj4gQ29ycG9yYXRlIFRlY2hub2xvZ3kKPiBSZXNlYXJjaCBhbmQgRGV2ZWxv
-cG1lbnQgZm9yIERpZ2l0YWxpemF0aW9uIGFuZCBBdXRvbWF0aW9uCj4gU21hcnQgRW1iZWRkZWQg
-U3lzdGVtcwo+IENUIFJEQSBJT1QgU0VTLURFCj4gR3VlbnRoZXItU2NoYXJvd3NreS1TdHIuIDEK
-PiA5MTA1OCBFcmxhbmdlbiwgR2VybWFueQo+IFRlbC46ICs0OSAxNTIyIDE3MDI5NzMKPiBNb2Jp
-bGU6ICs0OSAxNTIyIDE3MDI5NzMKPiBtYWlsdG86ZmFiaWFuLnNjaGVsZXJAc2llbWVucy5jb20K
-PiAKPiB3d3cuc2llbWVucy5jb20vaW5nZW51aXR5Zm9ybGlmZQo+IAo+IFNpZW1lbnMgQWt0aWVu
-Z2VzZWxsc2NoYWZ0OiBDaGFpcm1hbiBvZiB0aGUgU3VwZXJ2aXNvcnkgQm9hcmQ6IEppbQo+IEhh
-Z2VtYW5uIFNuYWJlOyBNYW5hZ2luZyBCb2FyZDogSm9lIEthZXNlciwgQ2hhaXJtYW4sIFByZXNp
-ZGVudCBhbmQKPiBDaGllZiBFeGVjdXRpdmUgT2ZmaWNlcjsgUm9sYW5kIEJ1c2NoLCBMaXNhIERh
-dmlzLCBLbGF1cyBIZWxtcmljaCwKPiBKYW5pbmEgS3VnZWwsIENlZHJpayBOZWlrZSwgTWljaGFl
-bCBTZW4sIFJhbGYgUC4gVGhvbWFzOyBSZWdpc3RlcmVkCj4gb2ZmaWNlczogQmVybGluIGFuZCBN
-dW5pY2gsIEdlcm1hbnk7IENvbW1lcmNpYWwgcmVnaXN0cmllczogQmVybGluCj4gQ2hhcmxvdHRl
-bmJ1cmcsIEhSQiAxMjMwMCwgTXVuaWNoLCBIUkIgNjY4NDsgV0VFRS1SZWcuLU5vLiBERSAyMzY5
-MTMyMgo+IAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCj4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
-PiBodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmct
-ZGV2Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5n
-LWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3Rz
-Lmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+--===============6238573106779717526==
+Content-Type: multipart/alternative; boundary="000000000000958ee7057900ae9b"
+
+--000000000000958ee7057900ae9b
+Content-Type: text/plain; charset="UTF-8"
+
+I am trying to add a thread timestamp to trace events. By thread timestamp
+I mean the value returned by clock_gettime(CLOCK_THREAD_CPUTIME_ID):
+https://linux.die.net/man/3/clock_gettime
+
+I could do this by creating custom events, but I am wondering if there is
+already a way to add this information to event context. I have tried using
+the following arguments to lttng-add-context, but none of them add any
+additional information:
+perf:cpu:cpu-cycles
+perf:cpu:cycles
+perf:thread:cpu-cycles
+perf:thread:cycles
+
+Note that I have only enabled userspace events. I use the following
+sequence of commands to capture trace:
+lttng create
+lttng enable-event --userspace --all
+lttng add-context --userspace -t vpid -t vtid -t perf:thread:cycles
+lttng start
+lttng stop
+
+--000000000000958ee7057900ae9b
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">I am trying to add a thread timestamp to trace events. By =
+thread timestamp I mean the value returned by=C2=A0clock_gettime(CLOCK_THRE=
+AD_CPUTIME_ID):<div><a href=3D"https://linux.die.net/man/3/clock_gettime">h=
+ttps://linux.die.net/man/3/clock_gettime</a><br></div><div><br></div><div>I=
+ could do this by creating custom events, but I am wondering if there is al=
+ready a way to add this information to event context. I have tried using th=
+e following arguments to lttng-add-context, but none of them add any additi=
+onal information:</div><div><div>perf:cpu:cpu-cycles</div><div>perf:cpu:cyc=
+les</div></div><div><div>perf:thread:cpu-cycles</div><div>perf:thread:cycle=
+s</div></div><div><br></div><div>Note that I have only enabled userspace ev=
+ents. I use the following sequence of commands to capture trace:</div><div>=
+<div>lttng create</div><div>lttng enable-event --userspace --all</div><div>=
+lttng add-context --userspace -t vpid -t vtid -t perf:thread:cycles</div><d=
+iv>lttng start</div><div>lttng stop</div></div><div><br></div></div>
+
+--000000000000958ee7057900ae9b--
+
+--===============6238573106779717526==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2
+IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0
+bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+
+--===============6238573106779717526==--
