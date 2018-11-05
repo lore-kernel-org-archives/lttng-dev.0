@@ -1,42 +1,148 @@
-From: Joel Fernandes <joelaf@google.com>
-Subject: Re: [diamon-discuss] [RELEASE] LTTng-modules 2.9.11, 2.10.8,
- 2.11.0-rc2 (Linux kernel tracer)
-Date: Thu, 1 Nov 2018 16:33:47 -0700
-Message-ID: <CAJWu+ooEbjOXgVeq+g4MGEve9PTo7p7UUKjYYHhq-Wz6UbUhfg@mail.gmail.com>
-References: <60988959.4070.1541112982406.JavaMail.zimbra@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-modules 1/3] Fix: signal: Distinguish
+ between kernel_siginfo and siginfo (v4.20)
+Date: Mon,  5 Nov 2018 11:35:52 -0500
+Message-ID: <20181105163554.32095-1-mjeanson__24551.4584858485$1541435644$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <60988959.4070.1541112982406.JavaMail.zimbra@efficios.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org, diamon-discuss@lists.linuxfoundation.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 42pdbM5dmwzqmP
+ for <lttng-dev@lists.lttng.org>; Mon,  5 Nov 2018 11:35:59 -0500 (EST)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 18E04248E02
+ for <lttng-dev@lists.lttng.org>; Mon,  5 Nov 2018 11:35:59 -0500 (EST)
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Thu, Nov 1, 2018 at 3:56 PM Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
->
-> Hi,
->
-> This is a set of bugfix releases of the LTTng modules kernel tracer.
-> It covers the three currently active lttng-modules branches: the
-> 2.9 and 2.10 stable branches, as well as the 2.11 branch in release
-> candidate cycle.
->
-> Those releases add support for kernel 4.19.
->
-> One important improvement is to prevent allocation of buffers larger
-> than the available memory, which can cause the OOM killer to trigger.
-> Even if the OOM killer end up having to trigger, the current OOM kill
-> target is set to the current thread while allocating buffers.
+See upstream commit :
 
-This is interesting. Me and Steve were looking at exactly this issue
-with the ftrace ring buffer a few months ago. Turns out that even
-setting the OOM kill target may not be enough to prevent all OOMs. I
-don't remember the reason why not, I'll have to dig out those threads
-but that's what the -mm folks said at the time. I did remember vaguely
-that I tested it and the kill target doesn't always get killed.. its
-possible that something *other* parallel allocation can be victimized
-AFAIR, even though the culprit is the kill target.
+  commit ae7795bc6187a15ec51cf258abae656a625f9980
+  Author: Eric W. Biederman <ebiederm@xmission.com>
+  Date:   Tue Sep 25 11:27:20 2018 +0200
 
- - Joel
+    signal: Distinguish between kernel_siginfo and siginfo
+
+    Linus recently observed that if we did not worry about the padding
+    member in struct siginfo it is only about 48 bytes, and 48 bytes is
+    much nicer than 128 bytes for allocating on the stack and copying
+    around in the kernel.
+
+    The obvious thing of only adding the padding when userspace is
+    including siginfo.h won't work as there are sigframe definitions in
+    the kernel that embed struct siginfo.
+
+    So split siginfo in two; kernel_siginfo and siginfo.  Keeping the
+    traditional name for the userspace definition.  While the version that
+    is used internally to the kernel and ultimately will not be padded to
+    128 bytes is called kernel_siginfo.
+
+    The definition of struct kernel_siginfo I have put in include/signal_types.h
+
+    A set of buildtime checks has been added to verify the two structures have
+    the same field offsets.
+
+    To make it easy to verify the change kernel_siginfo retains the same
+    size as siginfo.  The reduction in size comes in a following change.
+
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ instrumentation/events/lttng-module/signal.h | 41 ++++++++++++++++++--
+ 1 file changed, 37 insertions(+), 4 deletions(-)
+
+diff --git a/instrumentation/events/lttng-module/signal.h b/instrumentation/events/lttng-module/signal.h
+index 68045ce..6c484ba 100644
+--- a/instrumentation/events/lttng-module/signal.h
++++ b/instrumentation/events/lttng-module/signal.h
+@@ -36,21 +36,24 @@
+  * SEND_SIG_NOINFO means that si_code is SI_USER, and SEND_SIG_PRIV
+  * means that si_code is SI_KERNEL.
+  */
+-#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,4,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0))
+ LTTNG_TRACEPOINT_EVENT(signal_generate,
+ 
+-	TP_PROTO(int sig, struct siginfo *info, struct task_struct *task),
++	TP_PROTO(int sig, struct kernel_siginfo *info, struct task_struct *task,
++			int group, int result),
+ 
+-	TP_ARGS(sig, info, task),
++	TP_ARGS(sig, info, task, group, result),
+ 
+ 	TP_FIELDS(
+ 		ctf_integer(int, sig, sig)
+ 		LTTNG_FIELDS_SIGINFO(info)
+ 		ctf_array_text(char, comm, task->comm, TASK_COMM_LEN)
+ 		ctf_integer(pid_t, pid, task->pid)
++		ctf_integer(int, group, group)
++		ctf_integer(int, result, result)
+ 	)
+ )
+-#else
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
+ LTTNG_TRACEPOINT_EVENT(signal_generate,
+ 
+ 	TP_PROTO(int sig, struct siginfo *info, struct task_struct *task,
+@@ -67,6 +70,20 @@ LTTNG_TRACEPOINT_EVENT(signal_generate,
+ 		ctf_integer(int, result, result)
+ 	)
+ )
++#else
++LTTNG_TRACEPOINT_EVENT(signal_generate,
++
++	TP_PROTO(int sig, struct siginfo *info, struct task_struct *task),
++
++	TP_ARGS(sig, info, task),
++
++	TP_FIELDS(
++		ctf_integer(int, sig, sig)
++		LTTNG_FIELDS_SIGINFO(info)
++		ctf_array_text(char, comm, task->comm, TASK_COMM_LEN)
++		ctf_integer(pid_t, pid, task->pid)
++	)
++)
+ #endif
+ 
+ /**
+@@ -83,6 +100,21 @@ LTTNG_TRACEPOINT_EVENT(signal_generate,
+  * This means, this can show which signals are actually delivered, but
+  * matching generated signals and delivered signals may not be correct.
+  */
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0))
++LTTNG_TRACEPOINT_EVENT(signal_deliver,
++
++	TP_PROTO(int sig, struct kernel_siginfo *info, struct k_sigaction *ka),
++
++	TP_ARGS(sig, info, ka),
++
++	TP_FIELDS(
++		ctf_integer(int, sig, sig)
++		LTTNG_FIELDS_SIGINFO(info)
++		ctf_integer(unsigned long, sa_handler, (unsigned long) ka->sa.sa_handler)
++		ctf_integer(unsigned long, sa_flags, ka->sa.sa_flags)
++	)
++)
++#else
+ LTTNG_TRACEPOINT_EVENT(signal_deliver,
+ 
+ 	TP_PROTO(int sig, struct siginfo *info, struct k_sigaction *ka),
+@@ -96,6 +128,7 @@ LTTNG_TRACEPOINT_EVENT(signal_deliver,
+ 		ctf_integer(unsigned long, sa_flags, ka->sa.sa_flags)
+ 	)
+ )
++#endif
+ 
+ #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,4,0))
+ LTTNG_TRACEPOINT_EVENT_CLASS(signal_queue_overflow,
+-- 
+2.17.1
