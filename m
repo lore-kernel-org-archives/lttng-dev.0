@@ -1,18 +1,21 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules 1/3] Fix: signal: Distinguish
- between kernel_siginfo and siginfo (v4.20)
-Date: Mon,  5 Nov 2018 11:35:52 -0500
-Message-ID: <20181105163554.32095-1-mjeanson__24551.4584858485$1541435644$gmane$org@efficios.com>
+Subject: [PATCH lttng-modules 2/3] Fix: signal: Remove
+ SEND_SIG_FORCED (v4.20)
+Date: Mon,  5 Nov 2018 11:35:53 -0500
+Message-ID: <20181105163554.32095-2-mjeanson__23774.7088926428$1541435666$gmane$org@efficios.com>
+References: <20181105163554.32095-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 42pdbM5dmwzqmP
- for <lttng-dev@lists.lttng.org>; Mon,  5 Nov 2018 11:35:59 -0500 (EST)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 42pdbN3nD6zqmR
+ for <lttng-dev@lists.lttng.org>; Mon,  5 Nov 2018 11:36:00 -0500 (EST)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 18E04248E02
- for <lttng-dev@lists.lttng.org>; Mon,  5 Nov 2018 11:35:59 -0500 (EST)
+ by mail.efficios.com (Postfix) with ESMTP id 30621248E15
+ for <lttng-dev@lists.lttng.org>; Mon,  5 Nov 2018 11:36:00 -0500 (EST)
+In-Reply-To: <20181105163554.32095-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,122 +30,56 @@ List-Id: lttng-dev@lists.lttng.org
 
 See upstream commit :
 
-  commit ae7795bc6187a15ec51cf258abae656a625f9980
+  commit 4ff4c31a6e85f4c49fbeebeaa28018d002884b5a
   Author: Eric W. Biederman <ebiederm@xmission.com>
-  Date:   Tue Sep 25 11:27:20 2018 +0200
+  Date:   Mon Sep 3 10:39:04 2018 +0200
 
-    signal: Distinguish between kernel_siginfo and siginfo
+    signal: Remove SEND_SIG_FORCED
 
-    Linus recently observed that if we did not worry about the padding
-    member in struct siginfo it is only about 48 bytes, and 48 bytes is
-    much nicer than 128 bytes for allocating on the stack and copying
-    around in the kernel.
+    There are no more users of SEND_SIG_FORCED so it may be safely removed.
 
-    The obvious thing of only adding the padding when userspace is
-    including siginfo.h won't work as there are sigframe definitions in
-    the kernel that embed struct siginfo.
+    Remove the definition of SEND_SIG_FORCED, it's use in is_si_special,
+    it's use in TP_STORE_SIGINFO, and it's use in __send_signal as without
+    any users the uses of SEND_SIG_FORCED are now unncessary.
 
-    So split siginfo in two; kernel_siginfo and siginfo.  Keeping the
-    traditional name for the userspace definition.  While the version that
-    is used internally to the kernel and ultimately will not be padded to
-    128 bytes is called kernel_siginfo.
-
-    The definition of struct kernel_siginfo I have put in include/signal_types.h
-
-    A set of buildtime checks has been added to verify the two structures have
-    the same field offsets.
-
-    To make it easy to verify the change kernel_siginfo retains the same
-    size as siginfo.  The reduction in size comes in a following change.
+    This makes the code simpler, easier to understand and use.  Users of
+    signal sending functions now no longer need to ask themselves do I
+    need to use SEND_SIG_FORCED.
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- instrumentation/events/lttng-module/signal.h | 41 ++++++++++++++++++--
- 1 file changed, 37 insertions(+), 4 deletions(-)
+ instrumentation/events/lttng-module/signal.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/instrumentation/events/lttng-module/signal.h b/instrumentation/events/lttng-module/signal.h
-index 68045ce..6c484ba 100644
+index 6c484ba..7e9631d 100644
 --- a/instrumentation/events/lttng-module/signal.h
 +++ b/instrumentation/events/lttng-module/signal.h
-@@ -36,21 +36,24 @@
-  * SEND_SIG_NOINFO means that si_code is SI_USER, and SEND_SIG_PRIV
-  * means that si_code is SI_KERNEL.
-  */
--#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,4,0))
+@@ -13,6 +13,17 @@
+ #include <linux/signal.h>
+ #include <linux/sched.h>
+ #undef LTTNG_FIELDS_SIGINFO
 +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0))
- LTTNG_TRACEPOINT_EVENT(signal_generate,
- 
--	TP_PROTO(int sig, struct siginfo *info, struct task_struct *task),
-+	TP_PROTO(int sig, struct kernel_siginfo *info, struct task_struct *task,
-+			int group, int result),
- 
--	TP_ARGS(sig, info, task),
-+	TP_ARGS(sig, info, task, group, result),
- 
- 	TP_FIELDS(
- 		ctf_integer(int, sig, sig)
- 		LTTNG_FIELDS_SIGINFO(info)
- 		ctf_array_text(char, comm, task->comm, TASK_COMM_LEN)
- 		ctf_integer(pid_t, pid, task->pid)
-+		ctf_integer(int, group, group)
-+		ctf_integer(int, result, result)
- 	)
- )
--#else
-+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
- LTTNG_TRACEPOINT_EVENT(signal_generate,
- 
- 	TP_PROTO(int sig, struct siginfo *info, struct task_struct *task,
-@@ -67,6 +70,20 @@ LTTNG_TRACEPOINT_EVENT(signal_generate,
- 		ctf_integer(int, result, result)
- 	)
- )
-+#else
-+LTTNG_TRACEPOINT_EVENT(signal_generate,
-+
-+	TP_PROTO(int sig, struct siginfo *info, struct task_struct *task),
-+
-+	TP_ARGS(sig, info, task),
-+
-+	TP_FIELDS(
-+		ctf_integer(int, sig, sig)
-+		LTTNG_FIELDS_SIGINFO(info)
-+		ctf_array_text(char, comm, task->comm, TASK_COMM_LEN)
-+		ctf_integer(pid_t, pid, task->pid)
-+	)
-+)
- #endif
++#define LTTNG_FIELDS_SIGINFO(info)				\
++		ctf_integer(int, errno,				\
++			(info == SEND_SIG_NOINFO || info == SEND_SIG_PRIV) ? \
++			0 :					\
++			info->si_errno)				\
++		ctf_integer(int, code,				\
++			(info == SEND_SIG_NOINFO) ? 		\
++			SI_USER : 				\
++			((info == SEND_SIG_PRIV) ? SI_KERNEL : info->si_code))
++#else /* LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0) */
+ #define LTTNG_FIELDS_SIGINFO(info)				\
+ 		ctf_integer(int, errno,				\
+ 			(info == SEND_SIG_NOINFO || info == SEND_SIG_FORCED || info == SEND_SIG_PRIV) ? \
+@@ -22,6 +33,7 @@
+ 			(info == SEND_SIG_NOINFO || info == SEND_SIG_FORCED) ? \
+ 			SI_USER : 				\
+ 			((info == SEND_SIG_PRIV) ? SI_KERNEL : info->si_code))
++#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0) */
+ #endif /* _TRACE_SIGNAL_DEF */
  
  /**
-@@ -83,6 +100,21 @@ LTTNG_TRACEPOINT_EVENT(signal_generate,
-  * This means, this can show which signals are actually delivered, but
-  * matching generated signals and delivered signals may not be correct.
-  */
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0))
-+LTTNG_TRACEPOINT_EVENT(signal_deliver,
-+
-+	TP_PROTO(int sig, struct kernel_siginfo *info, struct k_sigaction *ka),
-+
-+	TP_ARGS(sig, info, ka),
-+
-+	TP_FIELDS(
-+		ctf_integer(int, sig, sig)
-+		LTTNG_FIELDS_SIGINFO(info)
-+		ctf_integer(unsigned long, sa_handler, (unsigned long) ka->sa.sa_handler)
-+		ctf_integer(unsigned long, sa_flags, ka->sa.sa_flags)
-+	)
-+)
-+#else
- LTTNG_TRACEPOINT_EVENT(signal_deliver,
- 
- 	TP_PROTO(int sig, struct siginfo *info, struct k_sigaction *ka),
-@@ -96,6 +128,7 @@ LTTNG_TRACEPOINT_EVENT(signal_deliver,
- 		ctf_integer(unsigned long, sa_flags, ka->sa.sa_flags)
- 	)
- )
-+#endif
- 
- #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,4,0))
- LTTNG_TRACEPOINT_EVENT_CLASS(signal_queue_overflow,
 -- 
 2.17.1
