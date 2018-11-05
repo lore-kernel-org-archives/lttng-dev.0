@@ -1,19 +1,18 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules 2/3] Fix: signal: Remove
- SEND_SIG_FORCED (v4.20)
-Date: Mon,  5 Nov 2018 11:35:53 -0500
-Message-ID: <20181105163554.32095-2-mjeanson__23774.7088926428$1541435666$gmane$org@efficios.com>
+Subject: [PATCH lttng-modules 3/3] Fix: ext4: adjust reserved
+ cluster count when removing extents (v4.20)
+Date: Mon,  5 Nov 2018 11:35:54 -0500
+Message-ID: <20181105163554.32095-3-mjeanson__11910.4069345214$1541435682$gmane$org@efficios.com>
 References: <20181105163554.32095-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 42pdbN3nD6zqmR
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 42pdbN6qhZzqmk
  for <lttng-dev@lists.lttng.org>; Mon,  5 Nov 2018 11:36:00 -0500 (EST)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 30621248E15
+ by mail.efficios.com (Postfix) with ESMTP id E9215248E23
  for <lttng-dev@lists.lttng.org>; Mon,  5 Nov 2018 11:36:00 -0500 (EST)
 In-Reply-To: <20181105163554.32095-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -30,56 +29,137 @@ List-Id: lttng-dev@lists.lttng.org
 
 See upstream commit :
 
-  commit 4ff4c31a6e85f4c49fbeebeaa28018d002884b5a
-  Author: Eric W. Biederman <ebiederm@xmission.com>
-  Date:   Mon Sep 3 10:39:04 2018 +0200
+  commit 9fe671496b6c286f9033aedfc1718d67721da0ae
+  Author: Eric Whitney <enwlinux@gmail.com>
+  Date:   Mon Oct 1 14:25:08 2018 -0400
 
-    signal: Remove SEND_SIG_FORCED
+    ext4: adjust reserved cluster count when removing extents
 
-    There are no more users of SEND_SIG_FORCED so it may be safely removed.
+    Modify ext4_ext_remove_space() and the code it calls to correct the
+    reserved cluster count for pending reservations (delayed allocated
+    clusters shared with allocated blocks) when a block range is removed
+    from the extent tree.  Pending reservations may be found for the clusters
+    at the ends of written or unwritten extents when a block range is removed.
+    If a physical cluster at the end of an extent is freed, it's necessary
+    to increment the reserved cluster count to maintain correct accounting
+    if the corresponding logical cluster is shared with at least one
+    delayed and unwritten extent as found in the extents status tree.
 
-    Remove the definition of SEND_SIG_FORCED, it's use in is_si_special,
-    it's use in TP_STORE_SIGINFO, and it's use in __send_signal as without
-    any users the uses of SEND_SIG_FORCED are now unncessary.
+    Add a new function, ext4_rereserve_cluster(), to reapply a reservation
+    on a delayed allocated cluster sharing blocks with a freed allocated
+    cluster.  To avoid ENOSPC on reservation, a flag is applied to
+    ext4_free_blocks() to briefly defer updating the freeclusters counter
+    when an allocated cluster is freed.  This prevents another thread
+    from allocating the freed block before the reservation can be reapplied.
 
-    This makes the code simpler, easier to understand and use.  Users of
-    signal sending functions now no longer need to ask themselves do I
-    need to use SEND_SIG_FORCED.
+    Redefine the partial cluster object as a struct to carry more state
+    information and to clarify the code using it.
+
+    Adjust the conditional code structure in ext4_ext_remove_space to
+    reduce the indentation level in the main body of the code to improve
+    readability.
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- instrumentation/events/lttng-module/signal.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ instrumentation/events/lttng-module/ext4.h | 72 +++++++++++++++++++++-
+ 1 file changed, 69 insertions(+), 3 deletions(-)
 
-diff --git a/instrumentation/events/lttng-module/signal.h b/instrumentation/events/lttng-module/signal.h
-index 6c484ba..7e9631d 100644
---- a/instrumentation/events/lttng-module/signal.h
-+++ b/instrumentation/events/lttng-module/signal.h
-@@ -13,6 +13,17 @@
- #include <linux/signal.h>
- #include <linux/sched.h>
- #undef LTTNG_FIELDS_SIGINFO
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0))
-+#define LTTNG_FIELDS_SIGINFO(info)				\
-+		ctf_integer(int, errno,				\
-+			(info == SEND_SIG_NOINFO || info == SEND_SIG_PRIV) ? \
-+			0 :					\
-+			info->si_errno)				\
-+		ctf_integer(int, code,				\
-+			(info == SEND_SIG_NOINFO) ? 		\
-+			SI_USER : 				\
-+			((info == SEND_SIG_PRIV) ? SI_KERNEL : info->si_code))
-+#else /* LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0) */
- #define LTTNG_FIELDS_SIGINFO(info)				\
- 		ctf_integer(int, errno,				\
- 			(info == SEND_SIG_NOINFO || info == SEND_SIG_FORCED || info == SEND_SIG_PRIV) ? \
-@@ -22,6 +33,7 @@
- 			(info == SEND_SIG_NOINFO || info == SEND_SIG_FORCED) ? \
- 			SI_USER : 				\
- 			((info == SEND_SIG_PRIV) ? SI_KERNEL : info->si_code))
-+#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0) */
- #endif /* _TRACE_SIGNAL_DEF */
+diff --git a/instrumentation/events/lttng-module/ext4.h b/instrumentation/events/lttng-module/ext4.h
+index 740f288..307021a 100644
+--- a/instrumentation/events/lttng-module/ext4.h
++++ b/instrumentation/events/lttng-module/ext4.h
+@@ -1603,7 +1603,30 @@ LTTNG_TRACEPOINT_EVENT(ext4_ext_show_extent,
+ 	)
+ )
  
- /**
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0))
++
++LTTNG_TRACEPOINT_EVENT(ext4_remove_blocks,
++	TP_PROTO(struct inode *inode, struct ext4_extent *ex,
++		 ext4_lblk_t from, ext4_fsblk_t to,
++		 struct partial_cluster *pc),
++
++	TP_ARGS(inode, ex, from, to, pc),
++
++	TP_FIELDS(
++		ctf_integer(dev_t, dev, inode->i_sb->s_dev)
++		ctf_integer(ino_t, ino, inode->i_ino)
++		ctf_integer(ext4_lblk_t, from, from)
++		ctf_integer(ext4_lblk_t, to, to)
++		ctf_integer(ext4_fsblk_t, ee_pblk, ext4_ext_pblock(ex))
++		ctf_integer(ext4_lblk_t, ee_lblk, le32_to_cpu(ex->ee_block))
++		ctf_integer(unsigned short, ee_len, ext4_ext_get_actual_len(ex))
++		ctf_integer(ext4_fsblk_t, pc_pclu, pc->pclu)
++		ctf_integer(ext4_lblk_t, pc_lblk, pc->lblk)
++		ctf_integer(int, pc_state, pc->state)
++	)
++)
++
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
+ 
+ LTTNG_TRACEPOINT_EVENT(ext4_remove_blocks,
+ 	    TP_PROTO(struct inode *inode, struct ext4_extent *ex,
+@@ -1647,7 +1670,29 @@ LTTNG_TRACEPOINT_EVENT(ext4_remove_blocks,
+ 
+ #endif
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0))
++
++LTTNG_TRACEPOINT_EVENT(ext4_ext_rm_leaf,
++	TP_PROTO(struct inode *inode, ext4_lblk_t start,
++		 struct ext4_extent *ex,
++		 struct partial_cluster *pc),
++
++	TP_ARGS(inode, start, ex, pc),
++
++	TP_FIELDS(
++		ctf_integer(dev_t, dev, inode->i_sb->s_dev)
++		ctf_integer(ino_t, ino, inode->i_ino)
++		ctf_integer(ext4_lblk_t, start, start)
++		ctf_integer(ext4_lblk_t, ee_lblk, le32_to_cpu(ex->ee_block))
++		ctf_integer(ext4_fsblk_t, ee_pblk, ext4_ext_pblock(ex))
++		ctf_integer(short, ee_len, ext4_ext_get_actual_len(ex))
++		ctf_integer(ext4_fsblk_t, pc_pclu, pc->pclu)
++		ctf_integer(ext4_lblk_t, pc_lblk, pc->lblk)
++		ctf_integer(int, pc_state, pc->state)
++	)
++)
++
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
+ 
+ LTTNG_TRACEPOINT_EVENT(ext4_ext_rm_leaf,
+ 	TP_PROTO(struct inode *inode, ext4_lblk_t start,
+@@ -1734,7 +1779,28 @@ LTTNG_TRACEPOINT_EVENT(ext4_ext_remove_space,
+ 
+ #endif
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0))
++
++LTTNG_TRACEPOINT_EVENT(ext4_ext_remove_space_done,
++	TP_PROTO(struct inode *inode, ext4_lblk_t start, ext4_lblk_t end,
++		 int depth, struct partial_cluster *pc, __le16 eh_entries),
++
++	TP_ARGS(inode, start, end, depth, pc, eh_entries),
++
++	TP_FIELDS(
++		ctf_integer(dev_t, dev, inode->i_sb->s_dev)
++		ctf_integer(ino_t, ino, inode->i_ino)
++		ctf_integer(ext4_lblk_t, start, start)
++		ctf_integer(ext4_lblk_t, end, end)
++		ctf_integer(int, depth, depth)
++		ctf_integer(unsigned short, eh_entries, le16_to_cpu(eh_entries))
++		ctf_integer(ext4_fsblk_t, pc_pclu, pc->pclu)
++		ctf_integer(ext4_lblk_t, pc_lblk, pc->lblk)
++		ctf_integer(int, pc_state, pc->state)
++	)
++)
++
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
+ 
+ LTTNG_TRACEPOINT_EVENT(ext4_ext_remove_space_done,
+ 	TP_PROTO(struct inode *inode, ext4_lblk_t start, ext4_lblk_t end,
 -- 
 2.17.1
