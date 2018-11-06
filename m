@@ -1,20 +1,18 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules 3/3] Fix: ext4: adjust reserved
- cluster count when removing extents (v4.20)
-Date: Mon,  5 Nov 2018 11:35:54 -0500
-Message-ID: <20181105163554.32095-3-mjeanson__11910.4069345214$1541435682$gmane$org@efficios.com>
-References: <20181105163554.32095-1-mjeanson@efficios.com>
+From: Alok Priyadarshi <alokpr@gmail.com>
+Subject: Re: lost trace events
+Date: Tue, 6 Nov 2018 14:48:24 -0800
+Message-ID: <CADwgpi8CooU1uKTzFFRwaBzBVHVbM_jkTRjucajTJ5Y=JKjcYQ__505.411453969096$1541544402$gmane$org@mail.gmail.com>
+References: <CADwgpi8TmCUgz4uF8CpPs-1-SooENXvYgA2ZqjXbcMgsSwzRdg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1754865192524586104=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 42pdbN6qhZzqmk
- for <lttng-dev@lists.lttng.org>; Mon,  5 Nov 2018 11:36:00 -0500 (EST)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id E9215248E23
- for <lttng-dev@lists.lttng.org>; Mon,  5 Nov 2018 11:36:00 -0500 (EST)
-In-Reply-To: <20181105163554.32095-1-mjeanson@efficios.com>
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com
+ [IPv6:2607:f8b0:4864:20::b34])
+ by lists.lttng.org (Postfix) with ESMTPS id 42qPps5f59zq78
+ for <lttng-dev@lists.lttng.org>; Tue,  6 Nov 2018 17:48:37 -0500 (EST)
+Received: by mail-yb1-xb34.google.com with SMTP id u103-v6so4508717ybi.5
+ for <lttng-dev@lists.lttng.org>; Tue, 06 Nov 2018 14:48:37 -0800 (PST)
+In-Reply-To: <CADwgpi8TmCUgz4uF8CpPs-1-SooENXvYgA2ZqjXbcMgsSwzRdg@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,142 +22,93 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-See upstream commit :
+--===============1754865192524586104==
+Content-Type: multipart/alternative; boundary="000000000000486fff057a06cde3"
 
-  commit 9fe671496b6c286f9033aedfc1718d67721da0ae
-  Author: Eric Whitney <enwlinux@gmail.com>
-  Date:   Mon Oct 1 14:25:08 2018 -0400
+--000000000000486fff057a06cde3
+Content-Type: text/plain; charset="UTF-8"
 
-    ext4: adjust reserved cluster count when removing extents
+Any advice on how to debug lost events? Thanks in advance!
 
-    Modify ext4_ext_remove_space() and the code it calls to correct the
-    reserved cluster count for pending reservations (delayed allocated
-    clusters shared with allocated blocks) when a block range is removed
-    from the extent tree.  Pending reservations may be found for the clusters
-    at the ends of written or unwritten extents when a block range is removed.
-    If a physical cluster at the end of an extent is freed, it's necessary
-    to increment the reserved cluster count to maintain correct accounting
-    if the corresponding logical cluster is shared with at least one
-    delayed and unwritten extent as found in the extents status tree.
 
-    Add a new function, ext4_rereserve_cluster(), to reapply a reservation
-    on a delayed allocated cluster sharing blocks with a freed allocated
-    cluster.  To avoid ENOSPC on reservation, a flag is applied to
-    ext4_free_blocks() to briefly defer updating the freeclusters counter
-    when an allocated cluster is freed.  This prevents another thread
-    from allocating the freed block before the reservation can be reapplied.
+On Wed, Oct 31, 2018 at 2:58 PM Alok Priyadarshi <alokpr@gmail.com> wrote:
 
-    Redefine the partial cluster object as a struct to carry more state
-    information and to clarify the code using it.
+> We are tracing a multi-process application that generates high-frequency
+> user-space trace events.
+>
+> Environment:
+> - Ubuntu 16.04 LTS
+> - Lttng 2.10.4 - KeKriek
+>
+> Session:
+> - Snapshot mode
+> - One channel with default config:
+> overwrite=1, subbuf_size=524288, num_subbuf=4
+>
+> We have noticed that a few events are missing. I understand that in
+> overwrite mode we can lose entire sub-buffers but IIUC we would only lose
+> events at the beginning, not in-between events in a sub-buffer.
+>
+> Is it not true that only the oldest sub-buffer is overwritten and when
+> overwrite happens, none of the latest events are discarded?
+>
+> Few more things to note:
+> - Before lttng-snapshot-record, we stop tracing as recommended by the
+> documentation
+> - Packet context field events_discarded is always set to 0
+> - Event loss seems to happen around packet transition. I have noticed this
+> in at least two traces
+>
+> The snapshot mode seems perfect for our use case. It is OK to lose events
+> from either ends of the snapshot, but it is essential to not lose any
+> in-between events. I was under the impression that overwrite mode
+> guarantees that. If not, is there anything else we can try?
+>
 
-    Adjust the conditional code structure in ext4_ext_remove_space to
-    reduce the indentation level in the main body of the code to improve
-    readability.
+--000000000000486fff057a06cde3
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
----
- instrumentation/events/lttng-module/ext4.h | 72 +++++++++++++++++++++-
- 1 file changed, 69 insertions(+), 3 deletions(-)
+<div dir=3D"ltr">Any advice on how to debug lost events? Thanks in advance!=
+<div><br></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr">On Wed=
+, Oct 31, 2018 at 2:58 PM Alok Priyadarshi &lt;<a href=3D"mailto:alokpr@gma=
+il.com">alokpr@gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail=
+_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:=
+1ex"><div dir=3D"ltr">We are tracing a multi-process application that gener=
+ates high-frequency user-space trace events.<div><br></div><div>Environment=
+:<br><div>- Ubuntu 16.04 LTS</div><div>- Lttng=C2=A02.10.4 - KeKriek</div><=
+div><br></div></div><div>Session:</div><div>- Snapshot mode</div><div>- One=
+ channel with default config: overwrite=3D1,=C2=A0subbuf_size=3D524288,=C2=
+=A0num_subbuf=3D4</div><div><br></div><div>We have noticed that a few event=
+s are missing. I understand that in overwrite mode we can lose entire sub-b=
+uffers but IIUC we would only lose events at the beginning, not in-between =
+events in a sub-buffer.</div><div><br></div><div>Is it not true that only t=
+he oldest sub-buffer is overwritten and when overwrite happens, none of the=
+ latest events are discarded?</div><div><br></div><div>Few more things to n=
+ote:</div><div>- Before lttng-snapshot-record, we stop tracing as recommend=
+ed by the documentation</div><div>- Packet context field events_discarded i=
+s always set to 0</div><div>- Event loss seems to happen around packet tran=
+sition. I have noticed this in at least two traces</div><div><br></div><div=
+>The snapshot mode seems perfect for our use case. It is OK to lose events =
+from either ends of the snapshot, but it is essential to not lose any in-be=
+tween events. I was under the impression that overwrite mode guarantees tha=
+t. If not, is there anything else we can try?</div></div>
+</blockquote></div>
 
-diff --git a/instrumentation/events/lttng-module/ext4.h b/instrumentation/events/lttng-module/ext4.h
-index 740f288..307021a 100644
---- a/instrumentation/events/lttng-module/ext4.h
-+++ b/instrumentation/events/lttng-module/ext4.h
-@@ -1603,7 +1603,30 @@ LTTNG_TRACEPOINT_EVENT(ext4_ext_show_extent,
- 	)
- )
- 
--#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0))
-+
-+LTTNG_TRACEPOINT_EVENT(ext4_remove_blocks,
-+	TP_PROTO(struct inode *inode, struct ext4_extent *ex,
-+		 ext4_lblk_t from, ext4_fsblk_t to,
-+		 struct partial_cluster *pc),
-+
-+	TP_ARGS(inode, ex, from, to, pc),
-+
-+	TP_FIELDS(
-+		ctf_integer(dev_t, dev, inode->i_sb->s_dev)
-+		ctf_integer(ino_t, ino, inode->i_ino)
-+		ctf_integer(ext4_lblk_t, from, from)
-+		ctf_integer(ext4_lblk_t, to, to)
-+		ctf_integer(ext4_fsblk_t, ee_pblk, ext4_ext_pblock(ex))
-+		ctf_integer(ext4_lblk_t, ee_lblk, le32_to_cpu(ex->ee_block))
-+		ctf_integer(unsigned short, ee_len, ext4_ext_get_actual_len(ex))
-+		ctf_integer(ext4_fsblk_t, pc_pclu, pc->pclu)
-+		ctf_integer(ext4_lblk_t, pc_lblk, pc->lblk)
-+		ctf_integer(int, pc_state, pc->state)
-+	)
-+)
-+
-+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
- 
- LTTNG_TRACEPOINT_EVENT(ext4_remove_blocks,
- 	    TP_PROTO(struct inode *inode, struct ext4_extent *ex,
-@@ -1647,7 +1670,29 @@ LTTNG_TRACEPOINT_EVENT(ext4_remove_blocks,
- 
- #endif
- 
--#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0))
-+
-+LTTNG_TRACEPOINT_EVENT(ext4_ext_rm_leaf,
-+	TP_PROTO(struct inode *inode, ext4_lblk_t start,
-+		 struct ext4_extent *ex,
-+		 struct partial_cluster *pc),
-+
-+	TP_ARGS(inode, start, ex, pc),
-+
-+	TP_FIELDS(
-+		ctf_integer(dev_t, dev, inode->i_sb->s_dev)
-+		ctf_integer(ino_t, ino, inode->i_ino)
-+		ctf_integer(ext4_lblk_t, start, start)
-+		ctf_integer(ext4_lblk_t, ee_lblk, le32_to_cpu(ex->ee_block))
-+		ctf_integer(ext4_fsblk_t, ee_pblk, ext4_ext_pblock(ex))
-+		ctf_integer(short, ee_len, ext4_ext_get_actual_len(ex))
-+		ctf_integer(ext4_fsblk_t, pc_pclu, pc->pclu)
-+		ctf_integer(ext4_lblk_t, pc_lblk, pc->lblk)
-+		ctf_integer(int, pc_state, pc->state)
-+	)
-+)
-+
-+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
- 
- LTTNG_TRACEPOINT_EVENT(ext4_ext_rm_leaf,
- 	TP_PROTO(struct inode *inode, ext4_lblk_t start,
-@@ -1734,7 +1779,28 @@ LTTNG_TRACEPOINT_EVENT(ext4_ext_remove_space,
- 
- #endif
- 
--#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,20,0))
-+
-+LTTNG_TRACEPOINT_EVENT(ext4_ext_remove_space_done,
-+	TP_PROTO(struct inode *inode, ext4_lblk_t start, ext4_lblk_t end,
-+		 int depth, struct partial_cluster *pc, __le16 eh_entries),
-+
-+	TP_ARGS(inode, start, end, depth, pc, eh_entries),
-+
-+	TP_FIELDS(
-+		ctf_integer(dev_t, dev, inode->i_sb->s_dev)
-+		ctf_integer(ino_t, ino, inode->i_ino)
-+		ctf_integer(ext4_lblk_t, start, start)
-+		ctf_integer(ext4_lblk_t, end, end)
-+		ctf_integer(int, depth, depth)
-+		ctf_integer(unsigned short, eh_entries, le16_to_cpu(eh_entries))
-+		ctf_integer(ext4_fsblk_t, pc_pclu, pc->pclu)
-+		ctf_integer(ext4_lblk_t, pc_lblk, pc->lblk)
-+		ctf_integer(int, pc_state, pc->state)
-+	)
-+)
-+
-+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
- 
- LTTNG_TRACEPOINT_EVENT(ext4_ext_remove_space_done,
- 	TP_PROTO(struct inode *inode, ext4_lblk_t start, ext4_lblk_t end,
--- 
-2.17.1
+--000000000000486fff057a06cde3--
+
+--===============1754865192524586104==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1754865192524586104==--
