@@ -1,18 +1,19 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+From: Alok Priyadarshi <alokpr@gmail.com>
 Subject: Re: lost trace events
-Date: Wed, 7 Nov 2018 10:31:20 -0500
-Message-ID: <20181107153120.GA15594__43395.3244392343$1541604573$gmane$org@joraj-alpa>
+Date: Wed, 7 Nov 2018 11:53:25 -0800
+Message-ID: <CADwgpi9Hpm9hYuRi9y9qOVyUvoGWcVkX0ZEm6AvQaPyeN_QWkQ__14140.6419490979$1541620301$gmane$org@mail.gmail.com>
 References: <CADwgpi8TmCUgz4uF8CpPs-1-SooENXvYgA2ZqjXbcMgsSwzRdg@mail.gmail.com>
+ <20181107153120.GA15594@joraj-alpa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6341989211285957451=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 42qr414nlrzqZN
- for <lttng-dev@lists.lttng.org>; Wed,  7 Nov 2018 10:31:29 -0500 (EST)
-Content-Disposition: inline
-In-Reply-To: <CADwgpi8TmCUgz4uF8CpPs-1-SooENXvYgA2ZqjXbcMgsSwzRdg@mail.gmail.com>
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com
+ [IPv6:2607:f8b0:4864:20::b34])
+ by lists.lttng.org (Postfix) with ESMTPS id 42qxtV4Wlnzqj2
+ for <lttng-dev@lists.lttng.org>; Wed,  7 Nov 2018 14:53:38 -0500 (EST)
+Received: by mail-yb1-xb34.google.com with SMTP id j9-v6so7338907ybj.6
+ for <lttng-dev@lists.lttng.org>; Wed, 07 Nov 2018 11:53:38 -0800 (PST)
+In-Reply-To: <20181107153120.GA15594@joraj-alpa>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,64 +23,52 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Alok Priyadarshi <alokpr@gmail.com>
+To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+--===============6341989211285957451==
+Content-Type: multipart/alternative; boundary="000000000000534d90057a18793b"
 
-On Wed, Oct 31, 2018 at 02:58:37PM -0700, Alok Priyadarshi wrote:
-> We are tracing a multi-process application that generates high-frequency
-> user-space trace events.
-> 
-> Environment:
-> - Ubuntu 16.04 LTS
-> - Lttng 2.10.4 - KeKriek
-> 
-> Session:
-> - Snapshot mode
-> - One channel with default config:
-> overwrite=1, subbuf_size=524288, num_subbuf=4
-> 
-> We have noticed that a few events are missing. I understand that in
+--000000000000534d90057a18793b
+Content-Type: text/plain; charset="UTF-8"
 
-How did you notice those "missing" events?
+Hi Jonathan,
 
-Would you be able to share a small reproducer with us so that we can assess the
-situation?
+Thanks for your response.
 
-> overwrite mode we can lose entire sub-buffers but IIUC we would only lose
-> events at the beginning, not in-between events in a sub-buffer.
-> 
-> Is it not true that only the oldest sub-buffer is overwritten and when
-> overwrite happens, none of the latest events are discarded?
+We are tracing function scopes. Each scope emits two events - begin and
+end. We noticed that some begin events did not have corresponding end
+events in the trace.
 
-This is how it should work yes.
+I have the trace with this problem available. Would that provide any clue?
+If not, I will try to extract a small reproducer.
 
-> 
-> Few more things to note:
-> - Before lttng-snapshot-record, we stop tracing as recommended by the
-> documentation
+-Alok
 
-Good.
+--000000000000534d90057a18793b
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> - Packet context field events_discarded is always set to 0
-> - Event loss seems to happen around packet transition. I have noticed this
-> in at least two traces
+<div dir=3D"ltr">Hi Jonathan,<div><br></div><div>Thanks for your response.<=
+/div><div><br></div><div>We are tracing function scopes. Each scope emits t=
+wo events - begin and end. We noticed that some begin events did not have c=
+orresponding end events in the trace.</div><div><br></div><div>I have the t=
+race with this problem available. Would that provide any clue? If not, I wi=
+ll try to extract a small reproducer.</div><div><br></div><div>-Alok</div><=
+div><br></div></div>
 
-Please provide us with how you arrived to this conclusion and a small
-reproducer if possible.
+--000000000000534d90057a18793b--
 
-> 
-> The snapshot mode seems perfect for our use case. It is OK to lose events
-> from either ends of the snapshot, but it is essential to not lose any
-> in-between events. I was under the impression that overwrite mode
-> guarantees that.
+--===============6341989211285957451==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-It should.
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-Cheers
-
--- 
-Jonathan Rajotte-Julien
-EfficiOS
+--===============6341989211285957451==--
