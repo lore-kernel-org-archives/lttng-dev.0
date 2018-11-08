@@ -1,8 +1,8 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [RFC PATCH lttng-modules v2 30/30] Drop support for
- kernels < 3.0 from Makefiles
-Date: Thu,  8 Nov 2018 16:45:35 -0500
-Message-ID: <20181108214535.12081-30-mjeanson__41093.0949765772$1541713839$gmane$org@efficios.com>
+Subject: Re: [RFC PATCH lttng-modules v2 01/30] Bump minimum
+ kernel version to 3.0
+Date: Thu, 8 Nov 2018 16:59:36 -0500
+Message-ID: <9f28b4a4-2561-c158-198d-c25bd30c4335__23562.7958005809$1541714263$gmane$org@efficios.com>
 References: <20181108214535.12081-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,12 +10,13 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 42rcKr5rkgzqKN
- for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:46:08 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 42rcdR4NLQzqbD
+ for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:59:38 -0500 (EST)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id C6DA124AF62
- for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:46:08 -0500 (EST)
+ by mail.efficios.com (Postfix) with ESMTP id 8E0F224B9AB
+ for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:59:37 -0500 (EST)
 In-Reply-To: <20181108214535.12081-1-mjeanson@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -28,165 +29,59 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
----
- Makefile      |  5 +---
- probes/Kbuild | 73 +++++++++++++--------------------------------------
- 2 files changed, 19 insertions(+), 59 deletions(-)
+On 2018-11-08 4:45 p.m., Michael Jeanson wrote:
+> Upstream Linux 3.0 was released 7 years ago, the oldest longterm release
+> still supported is 3.16. On the distro kernels side, we still cover :
+> 
+>  RHEL / CentOS 7 and up
+>  SLES11 SP2 and up
+>  SLES12 and up
+>  Ubuntu 12.04 (Precise) and up
+>  Debian 7 (Wheezy) and up
+>  Fedora 16 and up
+> 
+> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 
-diff --git a/Makefile b/Makefile
-index ae2b195..c7b8a41 100644
---- a/Makefile
-+++ b/Makefile
-@@ -66,10 +66,7 @@ ifneq ($(KERNELRELEASE),)
-   endif # CONFIG_HAVE_SYSCALL_TRACEPOINTS
- 
-   ifneq ($(CONFIG_PERF_EVENTS),)
--    lttng-tracer-objs += $(shell \
--      if [ $(VERSION) -ge 3 \
--        -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -eq 6 -a $(SUBLEVEL) -ge 33 \) ] ; then \
--        echo "lttng-context-perf-counters.o" ; fi;)
-+    lttng-tracer-objs += lttng-context-perf-counters.o
-   endif # CONFIG_PERF_EVENTS
- 
-   ifneq ($(CONFIG_PREEMPT_RT_FULL),)
-diff --git a/probes/Kbuild b/probes/Kbuild
-index 0b1e016..b43dd49 100644
---- a/probes/Kbuild
-+++ b/probes/Kbuild
-@@ -35,14 +35,8 @@ ifneq ($(CONFIG_KVM),)
-       ifneq ($(wildcard $(kvm_dep)),)
-         CFLAGS_lttng-probe-kvm-x86.o += -I$(srctree)/virt/kvm
-         CFLAGS_lttng-probe-kvm-x86-mmu.o += -I$(srctree)/virt/kvm
--        obj-$(CONFIG_LTTNG) +=  $(shell \
--          if [ $(VERSION) -ge 3 \
--            -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -eq 6 -a $(SUBLEVEL) -ge 38 \) ] ; then \
--            echo "lttng-probe-kvm-x86.o" ; fi;)
--        obj-$(CONFIG_LTTNG) +=  $(shell \
--          if [ $(VERSION) -ge 3 \
--            -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -eq 6 -a $(SUBLEVEL) -ge 38 \) ] ; then \
--            echo "lttng-probe-kvm-x86-mmu.o" ; fi;)
-+        obj-$(CONFIG_LTTNG) += lttng-probe-kvm-x86.o
-+        obj-$(CONFIG_LTTNG) += lttng-probe-kvm-x86-mmu.o
-       else
-         $(warning File $(kvm_dep) not found. Probe "kvm" x86-specific is disabled. Use full kernel source tree to enable it.)
-       endif # $(wildcard $(kvm_dep))
-@@ -66,10 +60,7 @@ ifneq ($(CONFIG_X86),)
-   endif # $(wildcard $(x86_exceptions_dep))
- endif # CONFIG_X86
- 
--obj-$(CONFIG_LTTNG) +=  $(shell \
--  if [ $(VERSION) -ge 3 \
--    -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -eq 6 -a $(SUBLEVEL) -ge 33 \) ] ; then \
--    echo "lttng-probe-signal.o" ; fi;)
-+obj-$(CONFIG_LTTNG) += lttng-probe-signal.o
- 
- ifneq ($(CONFIG_BLOCK),)
-   # need blk_cmd_buf_len
-@@ -81,10 +72,7 @@ endif # CONFIG_BLOCK
- ifneq ($(CONFIG_NET),)
-   obj-$(CONFIG_LTTNG) += lttng-probe-napi.o
-   obj-$(CONFIG_LTTNG) += lttng-probe-skb.o
--  obj-$(CONFIG_LTTNG) +=  $(shell \
--    if [ $(VERSION) -ge 3 \
--      -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -eq 6 -a $(SUBLEVEL) -ge 37 \) ] ; then \
--      echo "lttng-probe-net.o" ; fi;)
-+  obj-$(CONFIG_LTTNG) += lttng-probe-net.o
-   obj-$(CONFIG_LTTNG) +=  $(shell \
-     if [ $(VERSION) -ge 4 \
-       -o \( $(VERSION) -eq 3 -a $(PATCHLEVEL) -ge 1 \) ] ; then \
-@@ -96,10 +84,7 @@ ifneq ($(CONFIG_NET),)
- endif # CONFIG_NET
- 
- ifneq ($(CONFIG_SND_SOC),)
--  obj-$(CONFIG_LTTNG) +=  $(shell \
--    if [ $(VERSION) -ge 3 \
--      -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -eq 6 -a $(SUBLEVEL) -ge 38 \) ] ; then \
--      echo "lttng-probe-asoc.o" ; fi;)
-+  obj-$(CONFIG_LTTNG) += lttng-probe-asoc.o
- endif # CONFIG_SND_SOC
- 
- ifneq ($(CONFIG_EXT3_FS),)
-@@ -141,23 +126,14 @@ ifneq ($(CONFIG_JBD),)
- endif # CONFIG_JBD
- 
- ifneq ($(CONFIG_REGULATOR),)
--  obj-$(CONFIG_LTTNG) +=  $(shell \
--    if [ $(VERSION) -ge 3 \
--      -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -eq 6 -a $(SUBLEVEL) -ge 38 \) ] ; then \
--      echo "lttng-probe-regulator.o" ; fi;)
-+  obj-$(CONFIG_LTTNG) += lttng-probe-regulator.o
- endif # CONFIG_REGULATOR
- 
- ifneq ($(CONFIG_SCSI),)
--  obj-$(CONFIG_LTTNG) +=  $(shell \
--    if [ $(VERSION) -ge 3 \
--      -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -eq 6 -a $(SUBLEVEL) -ge 35 \) ] ; then \
--      echo "lttng-probe-scsi.o" ; fi;)
-+  obj-$(CONFIG_LTTNG) += lttng-probe-scsi.o
- endif # CONFIG_SCSI
- 
--obj-$(CONFIG_LTTNG) += $(shell \
--  if [ $(VERSION) -ge 3 \
--    -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -eq 6 -a $(SUBLEVEL) -ge 36 \) ] ; then \
--    echo "lttng-probe-vmscan.o" ; fi;)
-+obj-$(CONFIG_LTTNG) += lttng-probe-vmscan.o
- 
- # lock probe does not work, so disabling it for now
- #ifneq ($(CONFIG_LOCKDEP),)
-@@ -166,32 +142,22 @@ obj-$(CONFIG_LTTNG) += $(shell \
- 
- ifneq ($(CONFIG_BTRFS_FS),)
-   btrfs_dep = $(srctree)/fs/btrfs/*.h
--  btrfs = $(shell \
--    if [ $(VERSION) -ge 3 \
--      -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -eq 6 -a $(SUBLEVEL) -ge 39 \) ] ; then \
--      echo "lttng-probe-btrfs.o" ; fi;)
--  ifneq ($(btrfs),)
--    ifeq ($(wildcard $(btrfs_dep)),)
--      $(warning Files $(btrfs_dep) not found. Probe "btrfs" is disabled. Use full kernel source tree to enable it.)
--      btrfs =
--    endif # $(wildcard $(btrfs_dep))
--  endif # $(btrfs)
--  obj-$(CONFIG_LTTNG) += $(btrfs)
-+  ifneq ($(wildcard $(btrfs_dep)),)
-+    obj-$(CONFIG_LTTNG) += lttng-probe-btrfs.o
-+  else
-+    $(warning Files $(btrfs_dep) not found. Probe "btrfs" is disabled. Use full kernel source tree to enable it.)
-+  endif # $(wildcard $(btrfs_dep))
- endif # CONFIG_BTRFS_FS
- 
--obj-$(CONFIG_LTTNG) +=  $(shell \
--  if [ $(VERSION) -ge 3 \
--    -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -eq 6 -a $(SUBLEVEL) -ge 38 \) ] ; then \
--    echo "lttng-probe-compaction.o" ; fi;)
-+obj-$(CONFIG_LTTNG) += lttng-probe-compaction.o
- 
- ifneq ($(CONFIG_EXT4_FS),)
-   ext4_dep = $(srctree)/fs/ext4/*.h
--  ext4 = lttng-probe-ext4.o
--  ifeq ($(wildcard $(ext4_dep)),)
-+  ifneq ($(wildcard $(ext4_dep)),)
-+    obj-$(CONFIG_LTTNG) += lttng-probe-ext4.o
-+  else
-     $(warning Files $(ext4_dep) not found. Probe "ext4" is disabled. Use full kernel source tree to enable it.)
--    ext4 =
-   endif # $(wildcard $(ext4_dep))
--  obj-$(CONFIG_LTTNG) += $(ext4)
- endif # CONFIG_EXT4_FS
- 
- obj-$(CONFIG_LTTNG) +=  $(shell \
-@@ -249,10 +215,7 @@ endif # CONFIG_VIDEO_V4L2
- obj-$(CONFIG_LTTNG) += lttng-probe-workqueue.o
- 
- ifneq ($(CONFIG_KALLSYMS_ALL),)
--  obj-$(CONFIG_LTTNG) +=  $(shell \
--    if [ $(VERSION) -ge 3 \
--      -o \( $(VERSION) -eq 2 -a $(PATCHLEVEL) -eq 6 -a $(SUBLEVEL) -ge 36 \) ] ; then \
--      echo "lttng-probe-writeback.o" ; fi;)
-+  obj-$(CONFIG_LTTNG) += lttng-probe-writeback.o
- else
-   ifdef CONFIG_LOCALVERSION # Check if dot-config is included.
-     $(warning CONFIG_KALLSYMS_ALL is disabled, therefore probe "writeback" is disabled. Rebuild your kernel with this configuration option enabled in order to trace this subsystem.)
--- 
-2.17.1
+This patchset was compile tested on :
+
+16:42:48 #538 (v4.7.10) completed with status SUCCESS
+16:42:48 #543 (v4.1.52) completed with status SUCCESS
+16:42:48 #531 (v4.14.79) completed with status SUCCESS
+16:42:48 #533 (v4.12.14) completed with status SUCCESS
+16:42:48 #537 (v4.8.17) completed with status SUCCESS
+16:42:48 #528 (v4.17.19) completed with status SUCCESS
+16:42:48 #535 (v4.10.17) completed with status SUCCESS
+16:42:48 #539 (v4.6.7) completed with status SUCCESS
+16:42:48 #544 (v4.2.8) completed with status SUCCESS
+16:42:48 #534 (v4.11.12) completed with status SUCCESS
+16:42:48 #525 (v4.20-rc1) completed with status SUCCESS
+16:42:48 #526 (v4.19.1) completed with status SUCCESS
+16:42:48 #542 (v4.3.6) completed with status SUCCESS
+16:42:48 #532 (v4.13.16) completed with status SUCCESS
+16:42:48 #545 (v4.0.9) completed with status SUCCESS
+16:42:48 #546 (v3.19.8) completed with status SUCCESS
+16:42:48 #540 (v4.5.7) completed with status SUCCESS
+16:42:48 #536 (v4.9.135) completed with status SUCCESS
+16:42:48 #541 (v4.4.162) completed with status SUCCESS
+16:42:48 #530 (v4.15.18) completed with status SUCCESS
+16:42:48 #529 (v4.16.18) completed with status SUCCESS
+16:42:48 #550 (v3.15.10) completed with status SUCCESS
+16:42:48 #527 (v4.18.17) completed with status SUCCESS
+16:42:48 #551 (v3.14.79) completed with status SUCCESS
+16:42:48 #552 (v3.13.11) completed with status SUCCESS
+16:42:48 #547 (v3.18.124) completed with status SUCCESS
+16:42:48 #548 (v3.17.8) completed with status SUCCESS
+16:42:48 #549 (v3.16.60) completed with status SUCCESS
+16:42:48 #553 (v3.12.74) completed with status SUCCESS
+16:42:48 #555 (v3.10.108) completed with status SUCCESS
+16:42:48 #554 (v3.11.10) completed with status SUCCESS
+16:42:48 #556 (v3.9.11) completed with status SUCCESS
+16:42:48 #560 (v3.5.7) completed with status SUCCESS
+16:42:48 #559 (v3.6.11) completed with status SUCCESS
+16:42:48 #563 (v3.2.102) completed with status SUCCESS
+16:42:48 #557 (v3.8.13) completed with status SUCCESS
+16:42:48 #558 (v3.7.10) completed with status SUCCESS
+16:42:48 #561 (v3.4.113) completed with status SUCCESS
+16:42:48 #564 (v3.1.10) completed with status SUCCESS
+16:42:48 #562 (v3.3.8) completed with status SUCCESS
+16:42:48 #565 (v3.0.101) completed with status SUCCESS
