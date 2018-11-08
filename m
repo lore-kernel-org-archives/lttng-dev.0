@@ -1,24 +1,21 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC PATCH lttng-modules v2 01/30] Bump minimum
- kernel version to 3.0
-Date: Thu, 8 Nov 2018 18:51:28 -0500 (EST)
-Message-ID: <240854161.2918.1541721088583.JavaMail.zimbra__122.493509161536$1541720975$gmane$org@efficios.com>
-References: <20181108214535.12081-1-mjeanson@efficios.com>
- <9f28b4a4-2561-c158-198d-c25bd30c4335@efficios.com>
- <105083008.2757.1541714752908.JavaMail.zimbra@efficios.com>
- <533559e3-ebe3-2535-c0aa-8bb18029c779@efficios.com>
+Subject: Re: [PATCH lttng-modules v2] Add missing SPDX license
+ identifiers to uprobes
+Date: Thu, 8 Nov 2018 18:51:39 -0500 (EST)
+Message-ID: <1220127651.2919.1541721099527.JavaMail.zimbra__5420.39036886326$1541720989$gmane$org@efficios.com>
+References: <20181108233745.7046-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 42rg6T6N8wzqy8
- for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 18:51:29 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 42rg6h0qJtzqyT
+ for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 18:51:39 -0500 (EST)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 50052236604
- for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 18:51:29 -0500 (EST)
-In-Reply-To: <533559e3-ebe3-2535-c0aa-8bb18029c779@efficios.com>
+ by mail.efficios.com (Postfix) with ESMTP id E71E4236625
+ for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 18:51:39 -0500 (EST)
+In-Reply-To: <20181108233745.7046-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -36,33 +33,86 @@ Merged, thanks!
 
 Mathieu
 
------ On Nov 8, 2018, at 5:09 PM, Michael Jeanson mjeanson@efficios.com wrote:
+----- On Nov 8, 2018, at 6:37 PM, Michael Jeanson mjeanson@efficios.com wrote:
 
-> On 2018-11-08 5:05 p.m., Mathieu Desnoyers wrote:
->> 
->> ----- On Nov 8, 2018, at 4:59 PM, Michael Jeanson mjeanson@efficios.com wrote:
->> 
->>> On 2018-11-08 4:45 p.m., Michael Jeanson wrote:
->>>> Upstream Linux 3.0 was released 7 years ago, the oldest longterm release
->>>> still supported is 3.16. On the distro kernels side, we still cover :
->>>>
->>>>  RHEL / CentOS 7 and up
->>>>  SLES11 SP2 and up
->>>>  SLES12 and up
->>>>  Ubuntu 12.04 (Precise) and up
->>>>  Debian 7 (Wheezy) and up
->>>>  Fedora 16 and up
->>>>
->>>> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
->> 
->> Great patchset! Can I get a pointer to a git branch containing
->> this series I could pull from ?
->> 
->> Thanks,
->> 
->> Mathieu
+> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+> ---
+> probes/lttng-uprobes.c | 16 ++--------------
+> wrapper/uprobes.h      | 22 +++++-----------------
+> 2 files changed, 7 insertions(+), 31 deletions(-)
 > 
-> Here you go : https://github.com/mjeanson/lttng-modules/tree/kernel3.0
+> diff --git a/probes/lttng-uprobes.c b/probes/lttng-uprobes.c
+> index bcdbbd8..64d8237 100644
+> --- a/probes/lttng-uprobes.c
+> +++ b/probes/lttng-uprobes.c
+> @@ -1,4 +1,5 @@
+> -/*
+> +/* SPDX-License-Identifier: (GPL-2.0 OR LGPL-2.1)
+> + *
+>  * probes/lttng-uprobes.c
+>  *
+>  * LTTng uprobes integration module.
+> @@ -6,19 +7,6 @@
+>  * Copyright (C) 2013 Yannick Brosseau <yannick.brosseau@gmail.com>
+>  * Copyright (C) 2009-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>  *
+> - * This library is free software; you can redistribute it and/or
+> - * modify it under the terms of the GNU Lesser General Public
+> - * License as published by the Free Software Foundation; only
+> - * version 2.1 of the License.
+> - *
+> - * This library is distributed in the hope that it will be useful,
+> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+> - * Lesser General Public License for more details.
+> - *
+> - * You should have received a copy of the GNU Lesser General Public
+> - * License along with this library; if not, write to the Free Software
+> - * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+>  */
+> 
+> #include <linux/fdtable.h>
+> diff --git a/wrapper/uprobes.h b/wrapper/uprobes.h
+> index e38a541..6ea9df1 100644
+> --- a/wrapper/uprobes.h
+> +++ b/wrapper/uprobes.h
+> @@ -1,7 +1,5 @@
+> -#ifndef _LTTNG_WRAPPER_UPROBES_H
+> -#define _LTTNG_WRAPPER_UPROBES_H
+> -
+> -/*
+> +/* SPDX-License-Identifier: (GPL-2.0 or LGPL-2.1)
+> + *
+>  * wrapper/uprobes.h
+>  *
+>  * wrapper around uprobes. Using KALLSYMS to get its address when
+> @@ -11,21 +9,11 @@
+>  * Copyright (C) 2013 Yannick Brosseau <yannick.brosseau@gmail.com>
+>  * Copyright (C) 2017 Francis Deslauriers <francis.deslauriers@efficios.com>
+>  *
+> - * This library is free software; you can redistribute it and/or
+> - * modify it under the terms of the GNU Lesser General Public
+> - * License as published by the Free Software Foundation; only
+> - * version 2.1 of the License.
+> - *
+> - * This library is distributed in the hope that it will be useful,
+> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+> - * Lesser General Public License for more details.
+> - *
+> - * You should have received a copy of the GNU Lesser General Public
+> - * License along with this library; if not, write to the Free Software
+> - * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+>  */
+> 
+> +#ifndef _LTTNG_WRAPPER_UPROBES_H
+> +#define _LTTNG_WRAPPER_UPROBES_H
+> +
+> #include <linux/version.h>
+> 
+> #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0))
+> --
+> 2.17.1
 
 -- 
 Mathieu Desnoyers
