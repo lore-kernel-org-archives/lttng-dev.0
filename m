@@ -1,8 +1,8 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [RFC PATCH lttng-modules v2 11/30] Drop support for
- kernels < 3.0 from lttng-events.h
-Date: Thu,  8 Nov 2018 16:45:16 -0500
-Message-ID: <20181108214535.12081-11-mjeanson__27352.8124708266$1541713594$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-modules v2 12/30] Drop support for
+ kernels < 3.0 from lttng-kernel-version.h
+Date: Thu,  8 Nov 2018 16:45:17 -0500
+Message-ID: <20181108214535.12081-12-mjeanson__7923.21411795474$1541713608$gmane$org@efficios.com>
 References: <20181108214535.12081-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,11 +10,11 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 42rcKc5bnjzqCj
- for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:45:56 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 42rcKd39FzzqDM
+ for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:45:57 -0500 (EST)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id BF09A24AD7E
- for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:45:56 -0500 (EST)
+ by mail.efficios.com (Postfix) with ESMTP id 6BC1924ADBB
+ for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:45:57 -0500 (EST)
 In-Reply-To: <20181108214535.12081-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -30,30 +30,25 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- lttng-events.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ lttng-kernel-version.h | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/lttng-events.h b/lttng-events.h
-index f62e0cb..1903706 100644
---- a/lttng-events.h
-+++ b/lttng-events.h
-@@ -716,7 +716,7 @@ int lttng_add_migratable_to_ctx(struct lttng_ctx **ctx)
+diff --git a/lttng-kernel-version.h b/lttng-kernel-version.h
+index 6b545db..26f816c 100644
+--- a/lttng-kernel-version.h
++++ b/lttng-kernel-version.h
+@@ -11,12 +11,7 @@
+ #define _LTTNG_KERNEL_VERSION_H
  
- int lttng_add_callstack_to_ctx(struct lttng_ctx **ctx, int type);
+ #include <linux/version.h>
+-
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
+ #include <generated/utsrelease.h>
+-#else /* #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33)) */
+-#include <linux/utsrelease.h>
+-#endif /* #else #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33)) */
  
--#if defined(CONFIG_PERF_EVENTS) && (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
-+#if defined(CONFIG_PERF_EVENTS)
- int lttng_add_perf_counter_to_ctx(uint32_t type,
- 				  uint64_t config,
- 				  const char *name,
-@@ -891,8 +891,6 @@ int lttng_calibrate(struct lttng_kernel_calibrate *calibrate);
- extern const struct file_operations lttng_tracepoint_list_fops;
- extern const struct file_operations lttng_syscall_list_fops;
- 
--#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35))
- #define TRACEPOINT_HAS_DATA_ARG
--#endif
- 
- #endif /* _LTTNG_EVENTS_H */
+ /*
+  * This macro checks if the kernel version is between the two specified
 -- 
 2.17.1
