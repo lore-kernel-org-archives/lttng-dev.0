@@ -1,19 +1,18 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [RFC PATCH lttng-modules v2 03/30] Drop support for
- kernels < 3.0 from atomic.h wrapper
-Date: Thu,  8 Nov 2018 16:45:08 -0500
-Message-ID: <20181108214535.12081-3-mjeanson__44632.8023834669$1541713467$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-modules v2 04/30] Drop support for
+ kernels < 3.0 from perf.h wrapper
+Date: Thu,  8 Nov 2018 16:45:09 -0500
+Message-ID: <20181108214535.12081-4-mjeanson__34333.2061930143$1541713484$gmane$org@efficios.com>
 References: <20181108214535.12081-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 42rcKW4NBWzq8m
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 42rcKW614mzq8q
  for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:45:51 -0500 (EST)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 1E1DC24ACC0
+ by mail.efficios.com (Postfix) with ESMTP id CD02724ACD2
  for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:45:51 -0500 (EST)
 In-Reply-To: <20181108214535.12081-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -30,24 +29,51 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- wrapper/atomic.h | 4 ----
- 1 file changed, 4 deletions(-)
+ wrapper/perf.h | 25 -------------------------
+ 1 file changed, 25 deletions(-)
 
-diff --git a/wrapper/atomic.h b/wrapper/atomic.h
-index 51920c4..5ead899 100644
---- a/wrapper/atomic.h
-+++ b/wrapper/atomic.h
-@@ -11,11 +11,7 @@
- #define _LTTNG_WRAPPER_ATOMIC_H
- 
- #include <linux/version.h>
+diff --git a/wrapper/perf.h b/wrapper/perf.h
+index 48e256c..4a7f6d8 100644
+--- a/wrapper/perf.h
++++ b/wrapper/perf.h
+@@ -22,8 +22,6 @@ wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
+ 	return perf_event_create_kernel_counter(attr, cpu, task, callback, NULL);
+ }
+ #else /* (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0)) */
+-
 -#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
- #include <linux/atomic.h>
--#else
--#include <asm/atomic.h>
+ static inline struct perf_event *
+ wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
+ 				int cpu,
+@@ -32,29 +30,6 @@ wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
+ {
+ 	return perf_event_create_kernel_counter(attr, cpu, task, callback);
+ }
+-#else /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) */
+-static inline struct perf_event *
+-wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
+-				int cpu,
+-				struct task_struct *task,
+-				perf_overflow_handler_t callback)
+-{
+-	pid_t pid;
+-
+-	if (!task)
+-		pid = -1;
+-	else
+-		pid = task->pid;
+-
+-	return perf_event_create_kernel_counter(attr, cpu, pid, callback);
+-}
+-
+-#endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) */
+-
+-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,36))
+-#define local64_read(l)		atomic64_read(l)
 -#endif
+-
+ #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0)) */
  
- #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,16,0))
- static inline void lttng_smp_mb__before_atomic(void)
+ #endif /* CONFIG_PERF_EVENTS */
 -- 
 2.17.1
