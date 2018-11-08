@@ -1,42 +1,24 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: lost trace events
-Date: Thu, 8 Nov 2018 18:44:13 -0500
-Message-ID: <CA+jJMxuudFyD8ER1qYkUACe9MxsExaFJE8pEr=J3DxXs_N46Sw__8005.1846140579$1541720580$gmane$org@mail.gmail.com>
-References: <CADwgpi8TmCUgz4uF8CpPs-1-SooENXvYgA2ZqjXbcMgsSwzRdg@mail.gmail.com>
- <20181107153120.GA15594@joraj-alpa>
- <CADwgpi9Hpm9hYuRi9y9qOVyUvoGWcVkX0ZEm6AvQaPyeN_QWkQ@mail.gmail.com>
- <20181107200929.GA12330@joraj-alpa>
- <CADwgpi9Yc+Z15Pit8M4SDzcj9s8UoA2h1NOW8aXgqrRdSfhqYw@mail.gmail.com>
- <1342273247.2139.1541699566757.JavaMail.zimbra@efficios.com>
- <CADwgpi8D2rdsZo6M9SWFvuw1G_kxQKb-PKPA0b-MBoWbK3xDwg@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [RFC PATCH lttng-modules v2 01/30] Bump minimum
+ kernel version to 3.0
+Date: Thu, 8 Nov 2018 18:51:28 -0500 (EST)
+Message-ID: <240854161.2918.1541721088583.JavaMail.zimbra__122.493509161536$1541720975$gmane$org@efficios.com>
+References: <20181108214535.12081-1-mjeanson@efficios.com>
+ <9f28b4a4-2561-c158-198d-c25bd30c4335@efficios.com>
+ <105083008.2757.1541714752908.JavaMail.zimbra@efficios.com>
+ <533559e3-ebe3-2535-c0aa-8bb18029c779@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 42rfyv0Jg2zqxQ
- for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 18:44:54 -0500 (EST)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 42rg6T6N8wzqy8
+ for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 18:51:29 -0500 (EST)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 0E9FE236433
- for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 18:44:53 -0500 (EST)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
- with ESMTP id mH6r6KOb9ZdH for <lttng-dev@lists.lttng.org>;
- Thu,  8 Nov 2018 18:44:52 -0500 (EST)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 401ED236424
- for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 18:44:52 -0500 (EST)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
- with ESMTP id eCWZGWV3z7D3 for <lttng-dev@lists.lttng.org>;
- Thu,  8 Nov 2018 18:44:52 -0500 (EST)
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com
- [209.85.208.181])
- by mail.efficios.com (Postfix) with ESMTPSA id DD8B723640F
- for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 18:44:51 -0500 (EST)
-Received: by mail-lj1-f181.google.com with SMTP id q186-v6so42590ljb.5
- for <lttng-dev@lists.lttng.org>; Thu, 08 Nov 2018 15:44:51 -0800 (PST)
-In-Reply-To: <CADwgpi8D2rdsZo6M9SWFvuw1G_kxQKb-PKPA0b-MBoWbK3xDwg@mail.gmail.com>
+ by mail.efficios.com (Postfix) with ESMTP id 50052236604
+ for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 18:51:29 -0500 (EST)
+In-Reply-To: <533559e3-ebe3-2535-c0aa-8bb18029c779@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -46,87 +28,43 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: alokpr@gmail.com
+To: Michael Jeanson <mjeanson@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-T24gVGh1LCA4IE5vdiAyMDE4IGF0IDE4OjMxLCBBbG9rIFByaXlhZGFyc2hpIDxhbG9rcHJAZ21h
-aWwuY29tPiB3cm90ZToKPgo+IEpvbmF0aGFuOiBUaGUgc3lzdGVtIGlzIHg4Nl82NCwgMTYgY29y
-ZXMsIG5vIGNwdSBhZmZpbml0eSBzZXQuIE5vdCB0b28gc3VyZSBhYm91dCBsb2FkIHlldC4KPgo+
-IE1hdGhpZXU6IFRoZSBleHBsYW5hdGlvbiBtYWtlcyBzZW5zZS4gUnVubmluZyBiYWJlbHRyYWNl
-IHdpdGggLS1zdHJlYW0taW50ZXJzZWN0aW9uIGZsYWcgZGlkIGZpbHRlciBvdXQgYSBsb3Qgb2Yg
-ZXZlbnRzLiBIb3dldmVyIGl0IGlzIGhhcmQgdG8gdmVyaWZ5IHRoZSBmaWx0ZXJlZCByZXN1bHQg
-YmVjYXVzZSB3ZSBkbyBub3QgeWV0IGtub3cgaG93IHRvIHJlYWQgdGhlIHRleHQgZm9ybWF0LiBE
-b2VzIHRoZSBiYWJlbHRyYWNlIHB5dGhvbiBBUEkgc3VwcG9ydCBzdHJlYW0gaW50ZXJzZWN0aW9u
-IGJ5IGFueSBjaGFuY2U/CgpIaSBBbG9rLAoKVGhlIFRyYWNlQ29sbGVjdGlvbiBjb25zdHJ1Y3Rv
-ciBhY2NlcHRzIGFuICJpbnRlcnNlY3RfbW9kZSIgcGFyYW1ldGVyCndoaWNoIHdpbGwgcHJvdmlk
-ZSB0aGUgc2FtZSBzZW1hbnRpY3MgYXMgLS1zdHJlYW0taW50ZXJzZWN0aW9uLgoKUmVnYXJkcywK
-SsOpcsOpbWllCgo+Cj4KPiBPbiBUaHUsIE5vdiA4LCAyMDE4IGF0IDk6NTIgQU0gTWF0aGlldSBE
-ZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4+Cj4+IEhp
-IEFsb2ssCj4+Cj4+IFdpdGggYSBzbmFwc2hvdCB0cmFjZSwgeW91IGNhbiBlbmQgdXAgd2l0aCBz
-b21lIHBlci1jcHUgYnVmZmVycyB0aGF0IGNvbnRhaW4gaW5mb3JtYXRpb24KPj4gZ29pbmcgZnVy
-dGhlciBiYWNrIGluIHRpbWUgY29tcGFyZWQgdG8gb3RoZXIgcGVyLWNwdSBidWZmZXJzLiBUaGlz
-IGRlcGVuZHMgb24gdGhlIGxldmVsIG9mCj4+IHN5c3RlbSBhY3Rpdml0eSBhbmQgdHJhY2luZyB0
-aHJvdWdocHV0IGZvciBlYWNoIENQVS4KPj4KPj4gVGhlIHNpdHVhdGlvbiB5b3UgZXhwZXJpZW5j
-ZSBjYW4gdmVyeSB3ZWxsIGJlIHRyaWdnZXJlZCBieSBoYXZpbmcgdGhlIGJlZ2luIGV2ZW50IG9u
-IG9uZSBDUFUsCj4+IGJlaW5nIG1pZ3JhdGVkIHRvIGFub3RoZXIgQ1BVLCBhbmQgaGF2aW5nIHRo
-ZSBlbmQgZXZlbnQgb24gYW5vdGhlciBDUFUuIElmIGVpdGhlciB0aGUKPj4gc291cmNlIG9yIGRl
-c3RpbmF0aW9uIENQVSBoYXMgYmVlbiBtb3JlIGFjdGl2ZSB0aGFuIHRoZSBvdGhlciwgeW91IG1h
-eSBmaW5kIHRoYXQgeW91Cj4+IGhhdmUgb25seSB0aGUgYmVnaW4gb3IgdGhlIGVuZCBldmVudCBp
-biB5b3VyIHRyYWNlLgo+Pgo+PiBUaGlzIGlzIHdoeSB3ZSBpbXBsZW1lbnRlZCB0aGUgInN0cmVh
-bSBpbnRlcnNlY3Rpb24iIG1vZGUgaW4gYmFiZWx0cmFjZS4gSXQgZW5zdXJlcyB0aGF0Cj4+IGJh
-YmVsdHJhY2UgY3V0cyBhd2F5IHRyYWNlIGRhdGEgYmVsb25naW5nIHRvIHRpbWUgc3BhbnMgdGhh
-dCBvbmx5IGFwcGVhciBpbiBzb21lIG9mCj4+IHRoZSBzdHJlYW1zLiBJdCBpcyBub3QgaG93ZXZl
-ciBhY3RpdmF0ZWQgYnkgZGVmYXVsdC4KPj4KPj4gVG8gdHJ5IGl0IG91dCwgeW91IGNhbiBkbyB0
-aGlzOgo+Pgo+PiBiYWJlbHRyYWNlIC0tc3RyZWFtLWludGVyc2VjdGlvbiBwYXRoL3RvL3RyYWNl
-Cj4+Cj4+IERvZXMgaXQgaGVscCA/Cj4+Cj4+IFRoYW5rcywKPj4KPj4gTWF0aGlldQo+Pgo+PiAt
-LS0tLSBPbiBOb3YgNywgMjAxOCwgYXQgNzoxMiBQTSwgQWxvayBQcml5YWRhcnNoaSA8YWxva3By
-QGdtYWlsLmNvbT4gd3JvdGU6Cj4+Cj4+IEEgY3VzdG9tIHRyYWNlIGV2ZW50IGNsYXNzIGVtaXRz
-ICJiZWdpbiIgYW5kICJlbmQiIGV2ZW50cyBpbiBpdHMgY29uc3RydWN0b3IgYW5kIGRlc3RydWN0
-b3IgcmVzcGVjdGl2ZWx5LiBTbyBJIGRvIG5vdCB0aGluayB0aGlzIGlzIGR1ZSB0byBjb25kaXRp
-b25hbCBwYXRoLgo+Pgo+PiBTZXF1ZW5jZSBvZiBjb21tYW5kcyB0byBjYXB0dXJlIGEgc25hcHNo
-b3QgYXJlOgo+PiBsdHRuZyBjcmVhdGUgLS1zbmFwc2hvdAo+PiBsdHRuZyBlbmFibGUtZXZlbnQg
-LS11c2Vyc3BhY2UgLS1hbGwKPj4gbHR0bmcgYWRkLWNvbnRleHQgLS11c2Vyc3BhY2UgLXQgdnBp
-ZCAtdCB2dGlkCj4+IGx0dG5nIHN0YXJ0Cj4+IGx0dG5nIHN0b3AKPj4gbHR0bmcgc25hcHNob3Qg
-cmVjb3JkCj4+Cj4+IFdlIGNyZWF0ZSBhIG5ldyBzZXNzaW9uIGZvciBlYWNoIHNuYXBzaG90IHRv
-IG1ha2Ugc3VyZSB0aGF0IHRoZSBidWZmZXIgZG9lcyBub3QgaGF2ZSBhbnkgbGVmdC1vdmVyIGV2
-ZW50cyBmcm9tIHRoZSBwcmV2aW91cyBzZXNzaW9uLiBCdXQgSSBhbSBjdXJpb3VzIGlmIGx0dG5n
-IHNoYXJlcyBidWZmZXJzIGJldHdlZW4gc2Vzc2lvbnMgb3IgcmUtdXNlcyBidWZmZXJzIGZyb20g
-YW4gb2xkIHNlc3Npb24gd2l0aG91dCBmbHVzaGluZz8KPj4KPj4gTm90ZSB0aGF0IEkgYW0gdXNp
-bmcgdGhlIGRlZmF1bHQgTFRUTkdfQlVGRkVSX1BFUl9VSUQgbW9kZS4gQWxsIHByb2Nlc3NlcyBm
-b3Igb3VyIGFwcGxpY2F0aW9uIHJ1biB1bmRlciBvbmUgVUlELCBhbmQgb25seSBvbmUgdHJhY2lu
-ZyBzZXNzaW9uIGlzIGFjdGl2ZSBhdCBhIHRpbWUuCj4+Cj4+IE9uIFdlZCwgTm92IDcsIDIwMTgg
-YXQgMTI6MDkgUE0gSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4gPGpvbmF0aGFuLnJham90dGUtanVs
-aWVuQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4+Pgo+Pj4gSGkgQWxvaywKPj4+Cj4+PiBPbiBXZWQs
-IE5vdiAwNywgMjAxOCBhdCAxMTo1MzoyNUFNIC0wODAwLCBBbG9rIFByaXlhZGFyc2hpIHdyb3Rl
-Ogo+Pj4gPiBIaSBKb25hdGhhbiwKPj4+ID4KPj4+ID4gVGhhbmtzIGZvciB5b3VyIHJlc3BvbnNl
-Lgo+Pj4gPgo+Pj4gPiBXZSBhcmUgdHJhY2luZyBmdW5jdGlvbiBzY29wZXMuIEVhY2ggc2NvcGUg
-ZW1pdHMgdHdvIGV2ZW50cyAtIGJlZ2luIGFuZAo+Pj4gPiBlbmQuIFdlIG5vdGljZWQgdGhhdCBz
-b21lIGJlZ2luIGV2ZW50cyBkaWQgbm90IGhhdmUgY29ycmVzcG9uZGluZyBlbmQKPj4+ID4gZXZl
-bnRzIGluIHRoZSB0cmFjZS4KPj4+Cj4+PiBTZWVtcyBsaWtlIGEgc29saWQgZ3JvdW5kIGFzIGxv
-bmcgYXMgdGhlIGNvcnJlc3BvbmRpbmcgZW5kaW5nIGV2ZW50IGlzIG5vdAo+Pj4gaW5zaWRlIGFu
-eSBjb25kaXRpb25hbCBwYXRocy4gSSdtIHN1cmUgeW91IGFscmVhZHkgdmFsaWRhdGVkIHRoYXQg
-YnV0IHdlIG5ldmVyCj4+PiBrbm93Lgo+Pj4KPj4+ID4KPj4+ID4gSSBoYXZlIHRoZSB0cmFjZSB3
-aXRoIHRoaXMgcHJvYmxlbSBhdmFpbGFibGUuIFdvdWxkIHRoYXQgcHJvdmlkZSBhbnkgY2x1ZT8K
-Pj4+Cj4+PiBJdCBjb3VsZCBoZWxwIGJ1dCBJIHByZXN1bWUgaXQgbWlnaHQgY29udGFpbnMgY29u
-ZmlkZW50aWFsIG9yIHNlbnNpYmxlCj4+PiBpbmZvcm1hdGlvbi4gTGV0J3MgZGVmaW5lIHRoZSBz
-Y2VuYXJpbyBmaXJzdCBhbmQgd2Ugd2lsbCBnbyBiYWNrIHRvIGFjdHVhbAo+Pj4gdHJhY2UgZGF0
-YSBpZiBuZWVkZWQuCj4+Pgo+Pj4gPiBJZiBub3QsIEkgd2lsbCB0cnkgdG8gZXh0cmFjdCBhIHNt
-YWxsIHJlcHJvZHVjZXIuCj4+Pgo+Pj4gVGhhdCB3b3VsZCBiZSBiZXN0LiBJbiB0aGUgbWVhbnRp
-bWUsIGNvdWxkIHlvdSBwcm92aWRlIHRoZSBleGFjdCBsdHRuZyBjb21tYW5kcwo+Pj4gdXNlZCB0
-byBzZXR1cCBldmVyeXRoaW5nIGFuZCBkZXNjcmliZSBzdWJzZXF1ZW50IGx0dG5nIGNvbW1hbmRz
-IHVzZWQgZm9yCj4+PiBzbmFwc2hvdCBldGMuCj4+Pgo+Pj4gWW91IGNhbiBvbWl0IGV2ZW50IG5h
-bWUgb3IgcmVwbGFjZSB0aGVtIHdpdGggZHVtbXkgbmFtZSBpZiBuZWNlc3NhcnkuCj4+Pgo+Pj4g
-Q2hlZXJzCj4+Pgo+Pj4gLS0KPj4+IEpvbmF0aGFuIFJham90dGUtSnVsaWVuCj4+PiBFZmZpY2lP
-Uwo+Pgo+Pgo+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Xwo+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcK
-Pj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5n
-LWRldgo+Pgo+Pgo+PiAtLQo+PiBNYXRoaWV1IERlc25veWVycwo+PiBFZmZpY2lPUyBJbmMuCj4+
-IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCj4KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZA
-bGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
-L2xpc3RpbmZvL2x0dG5nLWRldgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lPUyBJ
-bmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
-Lmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
-Zm8vbHR0bmctZGV2Cg==
+Merged, thanks!
+
+Mathieu
+
+----- On Nov 8, 2018, at 5:09 PM, Michael Jeanson mjeanson@efficios.com wrote:
+
+> On 2018-11-08 5:05 p.m., Mathieu Desnoyers wrote:
+>> 
+>> ----- On Nov 8, 2018, at 4:59 PM, Michael Jeanson mjeanson@efficios.com wrote:
+>> 
+>>> On 2018-11-08 4:45 p.m., Michael Jeanson wrote:
+>>>> Upstream Linux 3.0 was released 7 years ago, the oldest longterm release
+>>>> still supported is 3.16. On the distro kernels side, we still cover :
+>>>>
+>>>>  RHEL / CentOS 7 and up
+>>>>  SLES11 SP2 and up
+>>>>  SLES12 and up
+>>>>  Ubuntu 12.04 (Precise) and up
+>>>>  Debian 7 (Wheezy) and up
+>>>>  Fedora 16 and up
+>>>>
+>>>> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+>> 
+>> Great patchset! Can I get a pointer to a git branch containing
+>> this series I could pull from ?
+>> 
+>> Thanks,
+>> 
+>> Mathieu
+> 
+> Here you go : https://github.com/mjeanson/lttng-modules/tree/kernel3.0
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
