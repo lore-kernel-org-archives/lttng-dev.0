@@ -1,19 +1,20 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [RFC PATCH lttng-modules v2 04/30] Drop support for
- kernels < 3.0 from perf.h wrapper
-Date: Thu,  8 Nov 2018 16:45:09 -0500
-Message-ID: <20181108214535.12081-4-mjeanson__34333.2061930143$1541713484$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-modules v2 05/30] Drop support for
+ kernels < 3.0 from tracepoint.h wrapper
+Date: Thu,  8 Nov 2018 16:45:10 -0500
+Message-ID: <20181108214535.12081-5-mjeanson__14780.9371621863$1541713503$gmane$org@efficios.com>
 References: <20181108214535.12081-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 42rcKW614mzq8q
- for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:45:51 -0500 (EST)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 42rcKX3NSLzq97
+ for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:45:52 -0500 (EST)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id CD02724ACD2
- for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:45:51 -0500 (EST)
+ by mail.efficios.com (Postfix) with ESMTP id 7324F24ACE1
+ for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:45:52 -0500 (EST)
 In-Reply-To: <20181108214535.12081-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -29,51 +30,25 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- wrapper/perf.h | 25 -------------------------
- 1 file changed, 25 deletions(-)
+ wrapper/tracepoint.h | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/wrapper/perf.h b/wrapper/perf.h
-index 48e256c..4a7f6d8 100644
---- a/wrapper/perf.h
-+++ b/wrapper/perf.h
-@@ -22,8 +22,6 @@ wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
- 	return perf_event_create_kernel_counter(attr, cpu, task, callback, NULL);
- }
- #else /* (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0)) */
+diff --git a/wrapper/tracepoint.h b/wrapper/tracepoint.h
+index 0c5a296..6ee4217 100644
+--- a/wrapper/tracepoint.h
++++ b/wrapper/tracepoint.h
+@@ -14,12 +14,6 @@
+ #include <linux/tracepoint.h>
+ #include <linux/module.h>
+ 
+-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
 -
--#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37))
- static inline struct perf_event *
- wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
- 				int cpu,
-@@ -32,29 +30,6 @@ wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
- {
- 	return perf_event_create_kernel_counter(attr, cpu, task, callback);
- }
--#else /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) */
--static inline struct perf_event *
--wrapper_perf_event_create_kernel_counter(struct perf_event_attr *attr,
--				int cpu,
--				struct task_struct *task,
--				perf_overflow_handler_t callback)
--{
--	pid_t pid;
+-#define DECLARE_EVENT_CLASS(name, proto, args, tstruct, assign, print)
 -
--	if (!task)
--		pid = -1;
--	else
--		pid = task->pid;
--
--	return perf_event_create_kernel_counter(attr, cpu, pid, callback);
--}
--
--#endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) */
--
--#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,36))
--#define local64_read(l)		atomic64_read(l)
 -#endif
 -
- #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0)) */
+ #ifndef HAVE_KABI_2635_TRACEPOINT
  
- #endif /* CONFIG_PERF_EVENTS */
+ #define kabi_2635_tracepoint_probe_register tracepoint_probe_register
 -- 
 2.17.1
