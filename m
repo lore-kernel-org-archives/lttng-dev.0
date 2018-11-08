@@ -1,18 +1,18 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [RFC PATCH lttng-modules v2 18/30] Drop support for
- kernels < 3.0 from kmem instrumentation
-Date: Thu,  8 Nov 2018 16:45:23 -0500
-Message-ID: <20181108214535.12081-18-mjeanson__38163.4907833815$1541713689$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-modules v2 19/30] Drop support for
+ kernels < 3.0 from kvm instrumentation
+Date: Thu,  8 Nov 2018 16:45:24 -0500
+Message-ID: <20181108214535.12081-19-mjeanson__35591.8497815312$1541713701$gmane$org@efficios.com>
 References: <20181108214535.12081-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 42rcKj0gs3zqFj
+ by lists.lttng.org (Postfix) with ESMTPS id 42rcKj5CKVzqGD
  for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:46:01 -0500 (EST)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 15E3F24AE7F
+ by mail.efficios.com (Postfix) with ESMTP id B0A6924AE8F
  for <lttng-dev@lists.lttng.org>; Thu,  8 Nov 2018 16:46:01 -0500 (EST)
 In-Reply-To: <20181108214535.12081-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -29,40 +29,56 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- instrumentation/events/lttng-module/kmem.h | 7 -------
- 1 file changed, 7 deletions(-)
+ instrumentation/events/lttng-module/kvm.h | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/instrumentation/events/lttng-module/kmem.h b/instrumentation/events/lttng-module/kmem.h
-index 8270fce..2313ae8 100644
---- a/instrumentation/events/lttng-module/kmem.h
-+++ b/instrumentation/events/lttng-module/kmem.h
-@@ -115,7 +115,6 @@ LTTNG_TRACEPOINT_EVENT_INSTANCE(kmem_free, kmem_cache_free,
- 	TP_ARGS(call_site, ptr)
+diff --git a/instrumentation/events/lttng-module/kvm.h b/instrumentation/events/lttng-module/kvm.h
+index 62030fc..4868d89 100644
+--- a/instrumentation/events/lttng-module/kvm.h
++++ b/instrumentation/events/lttng-module/kvm.h
+@@ -8,8 +8,6 @@
+ #undef TRACE_SYSTEM
+ #define TRACE_SYSTEM kvm
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
+-
+ LTTNG_TRACEPOINT_EVENT(kvm_userspace_exit,
+ 	    TP_PROTO(__u32 reason, int errno),
+ 	    TP_ARGS(reason, errno),
+@@ -19,7 +17,6 @@ LTTNG_TRACEPOINT_EVENT(kvm_userspace_exit,
+ 		ctf_integer(int, errno, errno)
+ 	)
  )
- 
--#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
- #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,3,0))
- LTTNG_TRACEPOINT_EVENT_MAP(mm_page_free, kmem_mm_page_free,
- #else
-@@ -218,11 +217,7 @@ LTTNG_TRACEPOINT_EVENT_INSTANCE_MAP(kmem_mm_page, mm_page_pcpu_drain,
- 
- 	kmem_mm_page_pcpu_drain,
- 
--#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33))
- 	TP_PROTO(struct page *page, unsigned int order, int migratetype),
--#else
--	TP_PROTO(struct page *page, int order, int migratetype),
 -#endif
  
- 	TP_ARGS(page, order, migratetype)
- )
-@@ -337,8 +332,6 @@ LTTNG_TRACEPOINT_EVENT_MAP(mm_page_alloc_extfrag,
+ #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,6,0))
+ #if defined(__KVM_HAVE_IOAPIC)
+@@ -142,8 +139,6 @@ LTTNG_TRACEPOINT_EVENT(kvm_mmio,
  
- #endif /* #else #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,12,0)) */
+ #endif
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
+-
+ #define kvm_fpu_load_symbol	\
+ 	{0, "unload"},		\
+ 	{1, "load"}
+@@ -187,9 +182,6 @@ LTTNG_TRACEPOINT_EVENT(kvm_age_page,
+ 	)
+ )
+ #endif
+-#endif
+-
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
+ 
+ #ifdef CONFIG_KVM_ASYNC_PF
+ LTTNG_TRACEPOINT_EVENT_CLASS(kvm_async_get_page_class,
+@@ -276,8 +268,6 @@ LTTNG_TRACEPOINT_EVENT(
+ 
+ #endif
  
 -#endif
 -
- #endif /* LTTNG_TRACE_KMEM_H */
+ #endif /* LTTNG_TRACE_KVM_MAIN_H */
  
  /* This part must be outside protection */
 -- 
