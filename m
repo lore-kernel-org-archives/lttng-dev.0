@@ -1,17 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 2/2] Fix: max_t/min_t macros are
- missing cast on input
-Date: Fri,  9 Nov 2018 17:40:47 -0500
-Message-ID: <20181109224047.18750-2-mathieu.desnoyers__27238.114787224$1541803549$gmane$org@efficios.com>
-References: <20181109224047.18750-1-mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools 1/2] Fix: Connect timeout
+ arithmetic in inet/inet6
+Date: Fri, 9 Nov 2018 17:41:17 -0500 (EST)
+Message-ID: <173329488.3421.1541803277072.JavaMail.zimbra__24675.1934210353$1541803575$gmane$org@efficios.com>
+References: <20181109222749.27267-1-mathieu.desnoyers@efficios.com>
+ <20181109223407.GA27438@joraj-alpa>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 42sFVV1cfdzqYC
- for <lttng-dev@lists.lttng.org>; Fri,  9 Nov 2018 17:40:49 -0500 (EST)
-In-Reply-To: <20181109224047.18750-1-mathieu.desnoyers@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 42sFW20bfczqYp
+ for <lttng-dev@lists.lttng.org>; Fri,  9 Nov 2018 17:41:17 -0500 (EST)
+In-Reply-To: <20181109223407.GA27438@joraj-alpa>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,43 +22,52 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: jgalar@efficios.com, jonathan.rajotte-julien@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-The semantic expected from max_t and min_t is to perform the max/min
-comparison in the type provided as first parameter.
 
-Cast the input parameters to the proper type before comparing them,
-rather than after. There is no more need to cast the result of the
-expression now that both inputs are cast to the right type.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- src/common/macros.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+----- On Nov 9, 2018, at 5:34 PM, Jonathan Rajotte jonathan.rajotte-julien@efficios.com wrote:
+[...]
+>> +
+>> +LTTNG_HIDDEN
+>> +struct timespec timespec_abs_diff(struct timespec t1, struct timespec t2)
+>> +{
+>> +	uint64_t ts1 = (uint64_t) t1.tv_sec * INT64_C(1000000000) + (uint64_t)
+>> t1.tv_nsec;
+>> +	uint64_t ts2 = (uint64_t) t2.tv_sec * INT64_C(1000000000) + (uint64_t)
+>> t2.tv_nsec;
+> 
+> Use NSEC_PER_SEC here.
+> 
+>> +	uint64_t diff = max(ts1, ts2) - min(ts1, ts2);
+>> +	struct timespec res;
+>> +
+>> +	res.tv_sec = diff / INT64_C(1000000000);
+> 
+> Use NSEC_PER_SEC here.
+> 
+>> +	res.tv_nsec = diff % INT64_C(1000000000);
+> 
+> Use NSEC_PER_SEC here.
 
-diff --git a/src/common/macros.h b/src/common/macros.h
-index c521aacd..461202ff 100644
---- a/src/common/macros.h
-+++ b/src/common/macros.h
-@@ -72,7 +72,7 @@ void *zmalloc(size_t len)
- #endif
- 
- #ifndef max_t
--#define max_t(type, a, b)	((type) max(a, b))
-+#define max_t(type, a, b)	max((type) a, (type) b)
- #endif
- 
- #ifndef min
-@@ -80,7 +80,7 @@ void *zmalloc(size_t len)
- #endif
- 
- #ifndef min_t
--#define min_t(type, a, b)	((type) min(a, b))
-+#define min_t(type, a, b)	min((type) a, (type) b)
- #endif
- 
- #ifndef LTTNG_PACKED
+Fixing in v2, thanks,
+
+Mathieu
+
+> 
+>> +	return res;
+>> +}
+>> --
+>> 2.11.0
+>> 
+> 
+> --
+> Jonathan Rajotte-Julien
+> EfficiOS
+
 -- 
-2.11.0
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
