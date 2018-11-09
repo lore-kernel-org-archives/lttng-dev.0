@@ -1,17 +1,16 @@
 From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Subject: Re: [PATCH lttng-tools 1/2] Fix: Connect timeout
  arithmetic in inet/inet6 (v2)
-Date: Fri, 9 Nov 2018 18:13:11 -0500
-Message-ID: <20181109231311.GB27438__782.313271384005$1541805080$gmane$org@joraj-alpa>
+Date: Fri, 9 Nov 2018 18:43:06 -0500
+Message-ID: <20181109234306.GC27438__41053.5149429508$1541806872$gmane$org@joraj-alpa>
 References: <20181109224047.18750-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 42sGCt2Qkmzqh0
- for <lttng-dev@lists.lttng.org>; Fri,  9 Nov 2018 18:13:14 -0500 (EST)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 42sGtN5zTwzqmt
+ for <lttng-dev@lists.lttng.org>; Fri,  9 Nov 2018 18:43:08 -0500 (EST)
 Content-Disposition: inline
 In-Reply-To: <20181109224047.18750-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -27,185 +26,7 @@ To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-As discussed on IRC, could you make sure to test it manually at least once since
-the problematic scenario is never tested by regression test.
-Looks much better than my first attempt but we never know.
 
-You can force delay locally using tc.
-
-Something like:
-
-    LTTNG_NETWORK_SOCKET_TIMEOUT=4000 lttng-sessiond -b -vvv
-    lttng-relayd -b
-    lttng create --live
-    sudo tc qdisc add dev lo root netem delay 10000ms
-    lttng enable-event -u -a
-    #Should see errors of connection timeout taking around 4 secs, validate using
-    #the logs.
-
-    sudo tc qdisc del dev lo root netem delay 10000ms
-
-You can also do the opposite for delays to validate working connect that take a
-long time.
-
-As Simon pointed out, unit tests would be even better for these new functions.
-Something like test_utils_expand_path.c perhaps? A regression test would be nice
-but I'm not sure how we would do it based on the current test framework.
-
-Other comments inline for stuff I did not see the first time.
-
-On Fri, Nov 09, 2018 at 05:40:46PM -0500, Mathieu Desnoyers wrote:
-> The nanoseconds part of the timespec struct time_a is not always
-> bigger than time_b since it wrap around each seconds.
-> 
-> Use 64-bit arithmetic to perform the difference.
-> 
-> Merge/move duplicated code into utils.c.
-> 
-> This function is really doing two things. Split it into timespec_to_ms()
-> and timespec_abs_diff().
-> 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
-> Changes since v1:
-> - Use NSEC_PER_SEC constant.
-> ---
->  src/common/common.h              |  5 +++++
->  src/common/sessiond-comm/inet.c  | 28 ++++++++--------------------
->  src/common/sessiond-comm/inet6.c | 28 ++++++++--------------------
->  src/common/utils.c               | 31 +++++++++++++++++++++++++++++++
->  4 files changed, 52 insertions(+), 40 deletions(-)
-> 
-> diff --git a/src/common/common.h b/src/common/common.h
-> index 41eb0361..48f39e0e 100644
-> --- a/src/common/common.h
-> +++ b/src/common/common.h
-> @@ -19,9 +19,14 @@
->  #ifndef _COMMON_H
->  #define _COMMON_H
->  
-> +#include <time.h>
-> +
->  #include "error.h"
->  #include "macros.h"
->  #include "runas.h"
->  #include "readwrite.h"
->  
-
-Given the current format of common.h, wouldn't it be better to have a
-timespec_ops.h file with these declaration in it? I guess it can be done in a
-later commit to minimize backporting since it is not necessary for the fix.
-
-Please add a comment explaining behaviour on error and what it represent.
-
-> +int timespec_to_ms(struct timespec ts, unsigned long *ms);
-> +struct timespec timespec_abs_diff(struct timespec ts_a, struct timespec ts_b);
-> +
->  #endif /* _COMMON_H */
-> diff --git a/src/common/sessiond-comm/inet.c b/src/common/sessiond-comm/inet.c
-> index e0b3e7a9..76a3b7ff 100644
-> --- a/src/common/sessiond-comm/inet.c
-> +++ b/src/common/sessiond-comm/inet.c
-> @@ -112,31 +112,13 @@ int connect_no_timeout(struct lttcomm_sock *sock)
->  			sizeof(sock->sockaddr.addr.sin));
->  }
->  
-> -/*
-> - * Return time_a - time_b  in milliseconds.
-> - */
-> -static
-> -unsigned long time_diff_ms(struct timespec *time_a,
-> -		struct timespec *time_b)
-> -{
-> -	time_t sec_diff;
-> -	long nsec_diff;
-> -	unsigned long result_ms;
-> -
-> -	sec_diff = time_a->tv_sec - time_b->tv_sec;
-> -	nsec_diff = time_a->tv_nsec - time_b->tv_nsec;
-> -
-> -	result_ms = sec_diff * MSEC_PER_SEC;
-> -	result_ms += nsec_diff / NSEC_PER_MSEC;
-> -	return result_ms;
-> -}
-> -
->  static
->  int connect_with_timeout(struct lttcomm_sock *sock)
->  {
->  	unsigned long timeout = lttcomm_get_network_timeout();
->  	int ret, flags, connect_ret;
->  	struct timespec orig_time, cur_time;
-> +	unsigned long diff_ms;
->  
->  	ret = fcntl(sock->fd, F_GETFL, 0);
->  	if (ret == -1) {
-> @@ -217,7 +199,13 @@ int connect_with_timeout(struct lttcomm_sock *sock)
->  			connect_ret = ret;
->  			goto error;
->  		}
-> -	} while (time_diff_ms(&cur_time, &orig_time) < timeout);
-> +		if (timespec_to_ms(timespec_abs_diff(cur_time, orig_time), &diff_ms) < 0) {
-> +			ERR("timespec_to_ms input overflows milliseconds output");
-> +			errno = EOVERFLOW;
-> +			connect_ret = -1;
-> +			goto error;
-> +		}
-> +	} while (diff_ms < timeout);
->  
->  	/* Timeout */
->  	errno = ETIMEDOUT;
-> diff --git a/src/common/sessiond-comm/inet6.c b/src/common/sessiond-comm/inet6.c
-> index dfb5fc5d..5c1ac2e0 100644
-> --- a/src/common/sessiond-comm/inet6.c
-> +++ b/src/common/sessiond-comm/inet6.c
-> @@ -110,31 +110,13 @@ int connect_no_timeout(struct lttcomm_sock *sock)
->  			sizeof(sock->sockaddr.addr.sin6));
->  }
->  
-> -/*
-> - * Return time_a - time_b  in milliseconds.
-> - */
-> -static
-> -unsigned long time_diff_ms(struct timespec *time_a,
-> -		struct timespec *time_b)
-> -{
-> -	time_t sec_diff;
-> -	long nsec_diff;
-> -	unsigned long result_ms;
-> -
-> -	sec_diff = time_a->tv_sec - time_b->tv_sec;
-> -	nsec_diff = time_a->tv_nsec - time_b->tv_nsec;
-> -
-> -	result_ms = sec_diff * MSEC_PER_SEC;
-> -	result_ms += nsec_diff / NSEC_PER_MSEC;
-> -	return result_ms;
-> -}
-> -
->  static
->  int connect_with_timeout(struct lttcomm_sock *sock)
->  {
->  	unsigned long timeout = lttcomm_get_network_timeout();
->  	int ret, flags, connect_ret;
->  	struct timespec orig_time, cur_time;
-> +	unsigned long diff_ms;
->  
->  	ret = fcntl(sock->fd, F_GETFL, 0);
->  	if (ret == -1) {
-> @@ -216,7 +198,13 @@ int connect_with_timeout(struct lttcomm_sock *sock)
->  			connect_ret = ret;
->  			goto error;
->  		}
-> -	} while (time_diff_ms(&cur_time, &orig_time) < timeout);
-> +		if (timespec_to_ms(timespec_abs_diff(cur_time, orig_time), &diff_ms) < 0) {
-> +			ERR("timespec_to_ms input overflows milliseconds output");
-> +			errno = EOVERFLOW;
-> +			connect_ret = -1;
-> +			goto error;
-> +		}
-> +	} while (diff_ms < timeout);
->  
->  	/* Timeout */
->  	errno = ETIMEDOUT;
 > diff --git a/src/common/utils.c b/src/common/utils.c
 > index 3442bef8..5b4e1d3c 100644
 > --- a/src/common/utils.c
@@ -239,6 +60,14 @@ Please add a comment explaining behaviour on error and what it represent.
 > +	if (ts.tv_sec + 1 > ULONG_MAX / MSEC_PER_SEC) {
 > +		return -1;
 > +	}
+
+This is not accurate. It return -1 for the all the following valid timespec:
+
+   tv_sec = 4294967
+   0 < tv_nsec < 295000000
+
+You will need to check multiplication and addition separately.
+
 > +	res = ts.tv_sec * MSEC_PER_SEC;
 > +	res += ts.tv_nsec / NSEC_PER_MSEC;
 > +	*ms = res;
