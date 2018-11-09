@@ -1,17 +1,20 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools v3] Fix: timeout for connect is not
- respected
-Date: Fri,  9 Nov 2018 15:11:03 -0500
-Message-ID: <20181109201103.29537-1-jonathan.rajotte-julien__31619.9870584116$1541794301$gmane$org@efficios.com>
-References: <189861781.3267.1541782550119.JavaMail.zimbra@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools v2] Fix: timeout for connect is
+ not respected
+Date: Fri, 9 Nov 2018 15:16:03 -0500 (EST)
+Message-ID: <736902293.3308.1541794563725.JavaMail.zimbra__40920.8833276809$1541794447$gmane$org@efficios.com>
+References: <237752dff54ba084bc7dcb4b117a66e6@polymtl.ca>
+ <20181109153728.10409-1-jonathan.rajotte-julien@efficios.com>
+ <189861781.3267.1541782550119.JavaMail.zimbra@efficios.com>
+ <20181109185247.GA18673@joraj-alpa>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 42sB9q27rCzqnn
- for <lttng-dev@lists.lttng.org>; Fri,  9 Nov 2018 15:11:10 -0500 (EST)
-In-Reply-To: <189861781.3267.1541782550119.JavaMail.zimbra@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 42sBHT1Rtgzqpv
+ for <lttng-dev@lists.lttng.org>; Fri,  9 Nov 2018 15:16:04 -0500 (EST)
+In-Reply-To: <20181109185247.GA18673@joraj-alpa>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,138 +24,100 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Problem:
-
-The previous algorithm was not *wrong* but was prone to C type conversion
-error.
-
-Previous algorithm:
-
-((A.sec - B.sec) * MSEC_PER_SEC) + ((A.nsec - B.nsec) / NSEC_PER_SEC)
-
-((A.sec - B.sec) * 1000000ULL) + ((A.nsec - B.nsec) / 1000000ULL)
-
-Note that "(A.nsec - B.nsec)" can be negative.
-
-A *quick* fix here is to cast the NSEC_PER_SEC to long allowing a valid
-division operation.
-
-The problem was introduced by 395d6b02dda3db1acd08936f49c1dc8efc48e613.
-
-Solution:
-
-Perform the time diff using a temporary timespec struct and perform the
-carry operation manually. This prevent negative value for nsec and help
-prevent C type promotion problems.
-
-Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
----
-
-Implement difference without posing the hypothesis that time_a is necessarily
-bigger than time_b.
-
-Fixed type in comment.
-
-Added an assert statement to ensure premises before returning. Feel free to
-remove.
-
- src/common/sessiond-comm/inet.c  | 32 ++++++++++++++++++++++++--------
- src/common/sessiond-comm/inet6.c | 32 ++++++++++++++++++++++++--------
- 2 files changed, 48 insertions(+), 16 deletions(-)
-
-diff --git a/src/common/sessiond-comm/inet.c b/src/common/sessiond-comm/inet.c
-index e0b3e7a96..f03fd1fb5 100644
---- a/src/common/sessiond-comm/inet.c
-+++ b/src/common/sessiond-comm/inet.c
-@@ -119,16 +119,32 @@ static
- unsigned long time_diff_ms(struct timespec *time_a,
- 		struct timespec *time_b)
- {
--	time_t sec_diff;
--	long nsec_diff;
--	unsigned long result_ms;
-+	struct timespec diff;
- 
--	sec_diff = time_a->tv_sec - time_b->tv_sec;
--	nsec_diff = time_a->tv_nsec - time_b->tv_nsec;
-+	if ((time_a->tv_sec > time_b->tv_sec)
-+		|| ((time_a->tv_sec == time_b->tv_sec)
-+			&& (time_a->tv_nsec > time_b->tv_nsec))) {
-+		/* time_a is bigger */
-+		diff.tv_sec = time_a->tv_sec - time_b->tv_sec;
-+		diff.tv_nsec = time_a->tv_nsec - time_b->tv_nsec;
-+	} else {
-+		/* time_b is bigger */
-+		diff.tv_sec = time_b->tv_sec - time_a->tv_sec;
-+		diff.tv_nsec = time_b->tv_nsec - time_a->tv_nsec;
-+	}
- 
--	result_ms = sec_diff * MSEC_PER_SEC;
--	result_ms += nsec_diff / NSEC_PER_MSEC;
--	return result_ms;
-+	if (diff.tv_nsec < 0) {
-+		/* Perform borrow operation */
-+		diff.tv_sec -= 1;
-+		diff.tv_nsec += NSEC_PER_SEC;
-+	}
-+
-+	/*
-+	 * Transform into MSEC, diff.tv_nsec is always positive due to borrow
-+	 * operation. diff.tv_sec is always positive.
-+	 */
-+	assert(diff.tv_sec >= 0 && diff.tv_nsec >= 0);
-+	return (diff.tv_sec * MSEC_PER_SEC) + (diff.tv_nsec / NSEC_PER_MSEC);
- }
- 
- static
-diff --git a/src/common/sessiond-comm/inet6.c b/src/common/sessiond-comm/inet6.c
-index dfb5fc5d1..beb2dd9ed 100644
---- a/src/common/sessiond-comm/inet6.c
-+++ b/src/common/sessiond-comm/inet6.c
-@@ -117,16 +117,32 @@ static
- unsigned long time_diff_ms(struct timespec *time_a,
- 		struct timespec *time_b)
- {
--	time_t sec_diff;
--	long nsec_diff;
--	unsigned long result_ms;
-+	struct timespec diff;
- 
--	sec_diff = time_a->tv_sec - time_b->tv_sec;
--	nsec_diff = time_a->tv_nsec - time_b->tv_nsec;
-+	if ((time_a->tv_sec > time_b->tv_sec)
-+		|| ((time_a->tv_sec == time_b->tv_sec)
-+			&& (time_a->tv_nsec > time_b->tv_nsec))) {
-+		/* time_a is bigger */
-+		diff.tv_sec = time_a->tv_sec - time_b->tv_sec;
-+		diff.tv_nsec = time_a->tv_nsec - time_b->tv_nsec;
-+	} else {
-+		/* time_b is bigger */
-+		diff.tv_sec = time_b->tv_sec - time_a->tv_sec;
-+		diff.tv_nsec = time_b->tv_nsec - time_a->tv_nsec;
-+	}
- 
--	result_ms = sec_diff * MSEC_PER_SEC;
--	result_ms += nsec_diff / NSEC_PER_MSEC;
--	return result_ms;
-+	if (diff.tv_nsec < 0) {
-+		/* Perform borrow operation */
-+		diff.tv_sec -= 1;
-+		diff.tv_nsec += NSEC_PER_SEC;
-+	}
-+
-+	/*
-+	 * Transform into MSEC, diff.tv_nsec is always positive due to borrow
-+	 * operation. diff.tv_sec is always positive.
-+	 */
-+	assert(diff.tv_sec >= 0 && diff.tv_nsec >= 0);
-+	return (diff.tv_sec * MSEC_PER_SEC) + (diff.tv_nsec / NSEC_PER_MSEC);
- }
- 
- static
--- 
-2.17.1
+LS0tLS0gT24gTm92IDksIDIwMTgsIGF0IDE6NTIgUE0sIEpvbmF0aGFuIFJham90dGUgam9uYXRo
+YW4ucmFqb3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tIHdyb3RlOgoKPj4gPiBkaWZmIC0tZ2l0IGEv
+c3JjL2NvbW1vbi9zZXNzaW9uZC1jb21tL2luZXQuYyBiL3NyYy9jb21tb24vc2Vzc2lvbmQtY29t
+bS9pbmV0LmMKPj4gPiBpbmRleCBlMGIzZTdhOTYuLjk0YTNjM2E2NyAxMDA2NDQKPj4gPiAtLS0g
+YS9zcmMvY29tbW9uL3Nlc3Npb25kLWNvbW0vaW5ldC5jCj4+ID4gKysrIGIvc3JjL2NvbW1vbi9z
+ZXNzaW9uZC1jb21tL2luZXQuYwo+PiA+IEBAIC0xMTksMTYgKzExOSwyOCBAQCBzdGF0aWMKPj4g
+PiB1bnNpZ25lZCBsb25nIHRpbWVfZGlmZl9tcyhzdHJ1Y3QgdGltZXNwZWMgKnRpbWVfYSwKPj4g
+PiAJCXN0cnVjdCB0aW1lc3BlYyAqdGltZV9iKQo+PiA+IHsKPj4gPiAtCXRpbWVfdCBzZWNfZGlm
+ZjsKPj4gPiAtCWxvbmcgbnNlY19kaWZmOwo+PiA+IC0JdW5zaWduZWQgbG9uZyByZXN1bHRfbXM7
+Cj4+ID4gKwlzdHJ1Y3QgdGltZXNwZWMgZGlmZjsKPj4gPiAKPj4gPiAtCXNlY19kaWZmID0gdGlt
+ZV9hLT50dl9zZWMgLSB0aW1lX2ItPnR2X3NlYzsKPj4gPiAtCW5zZWNfZGlmZiA9IHRpbWVfYS0+
+dHZfbnNlYyAtIHRpbWVfYi0+dHZfbnNlYzsKPj4gPiArCWRpZmYudHZfc2VjID0gdGltZV9hLT50
+dl9zZWMgLSB0aW1lX2ItPnR2X3NlYzsKPj4gPiArCWRpZmYudHZfbnNlYyA9IHRpbWVfYS0+dHZf
+bnNlYyAtIHRpbWVfYi0+dHZfbnNlYzsKPj4gPiAKPj4gPiAtCXJlc3VsdF9tcyA9IHNlY19kaWZm
+ICogTVNFQ19QRVJfU0VDOwo+PiA+IC0JcmVzdWx0X21zICs9IG5zZWNfZGlmZiAvIE5TRUNfUEVS
+X01TRUM7Cj4+ID4gLQlyZXR1cm4gcmVzdWx0X21zOwo+PiA+ICsJaWYgKGRpZmYudHZfbnNlYyA8
+IDApIHsKPj4gPiArCQkvKiBQZXJmb3JtIGJvcnJvdyBvcGVyYXRpb24gKi8KPj4gPiArCQlkaWZm
+LnR2X3NlYyAtPSAxOwo+PiA+ICsJCWRpZmYudHZfbnNlYyArPSBOU0VDX1BFUl9TRUM7Cj4+ID4g
+Kwl9Cj4+ID4gKwo+PiA+ICsJaWYgKGRpZmYudHZfc2VjIDwgMCkgewo+PiA+ICsJCS8qIFdlIHdl
+bnQgYmFjayBpbiB0aW1lLiBQdXQgYWxsIHRvIHplcm8gKi8KPj4gPiArCQlkaWZmLnR2X3NlYyA9
+IDA7Cj4+ID4gKwkJZGlmZi50dl9uc2VjID0gMDsKPj4gPiArCX0KPj4gCj4+IFdoeSB3b3VsZCBh
+IGRpZmYgb3BlcmF0aW9uIGltcGxpY2l0bHkgZmxvb3IgZXZlcnl0aGluZyB0byAwIHdoZW4KPj4g
+dGltZV9hIDwgdGltZV9iID8KPiAKPiBTdXJlIEkgY2FuIGltcGxlbWVudCBpdCBhcyBhIHJlYWwg
+ZGlmZmVyZW5jZSB3aXRob3V0IHRoZSBzYW1lICJhc3N1bXB0aW9ucyIgb2YKPiB0aW1lX2EgPiB0
+aW1lX2Igc2luY2Ugd2UgYXJlIGNvbXBhcmluZyBwYXNzaW5nIHRpbWUuCj4gCj4gTWFrZSBzdXJl
+IHRvIHRlbGwgdGhpcyB0byBwYXN0IE1hdGhpZXUgOykuCgpJJ2xsIHRyeSwgYXMgc29vbiBhcyBJ
+IGZpbmQgYSB0aW1lIG1hY2hpbmUgOikKCj4gCj4+IAo+PiA+ICsKPj4gPiArCS8qCj4+ID4gKwkg
+KiBUcmFuc2Zvcm0gaW50byBNU0VDLCBkaWZmLnR2X25zZWMgaXMgYWx3YXlzIHBvc2l0aXZlIGR1
+ZSB0byBib3Jyb3cKPj4gPiArCSAqIG9wZXJhdGlvbi4gZGlmZi50Yl9zZWMgaXMgYWx3YXlzIHBv
+c2l0aXZlLgo+PiAKPj4gdGJfc2VjIC0+IHR2X25zZWMKPiAKPiBGaXhlZC4KPiAKPj4gCj4+IAo+
+PiA+ICsJICovCj4+ID4gKwlyZXR1cm4gKGRpZmYudHZfc2VjICogTVNFQ19QRVJfU0VDKSArIChk
+aWZmLnR2X25zZWMgLyBOU0VDX1BFUl9NU0VDKTsKPj4gCj4+IEhvdyBkbyB3ZSBoYW5kbGUgdGlt
+ZSBkZWx0YSBkaWZmZXJlbmNlIHRoYXQgb3ZlcmZsb3dzIHVuc2lnbmVkIGxvbmcgPwo+IAo+IExl
+dCdzIGRvIGEgcXVpY2sgY2FsY3VsYXRpb24uIENvcnJlY3QgbWUgaWYgYW55dGhpbmcgaXMgd3Jv
+bmcgaGVyZS4KPiAKPiBIb3cgbWFueSBtc2VjIGRvZXMgYSB1bnNpZ25lZCBsb25nIGhvbGQ/Cj4g
+QSBsb25nIGlzICptaW5pbXVtKiAzMiBiaXRzLiBZaWVsZGluZyBhIG1heGltdW0gdmFsdWUgb2Yg
+NDI5NDk2NzI5NS4gWzFdCj4gCj4gTGV0cyBhc3N1bWUgdGhhdCB0aGUgbmFub3NlY29uZHMgcGFy
+dCBvZiB0aGUgZGlmZiBzdHJ1Y3QgaXMgbWF4ZWQgb3V0LiBUaGUKPiBuYW5vc2Vjb25kcyBwYXJ0
+IHlpZWxkIDk5IG1zLgo+IAo+IDQyOTQ5NjcyOTUgLSA5OSA9IDQyOTQ5NjcxOTZtcwo+IAo+IEhv
+dyBiaWcgd291bGQgdGhlIHNlY29uZCBmaWVsZCBvZiBkaWZmIGJlIGEgcHJvYmxlbT8KPiAKPiA0
+Mjk0OTY3MTk2LyBNU0VDX1BFUl9TRUMgPSA0Mjk0OTY3cyBvciA0OSBkYXlzLgo+IAo+IEkgd291
+bGQgZXJyIG9uIHRoZSBzaWRlIG9mICJ0aGF0IGl0J3MgZW5vdWdoIi4gV2UgYWxzbyBoYXZlIHRv
+IHRha2UgaW50bwo+IGFjY291bnQgdGhhdCBmb3IgdGhpcyB0byBoYXBwZW4gZWl0aGVyIHNvbWV0
+aGluZyBpcyBnb2luZyBob3JyaWJseSB3cm9uZyBkdXJpbmcKPiBnZXR0aW5nIHRoZSBjdXJyZW50
+IHRpbWUgb3IgdGhlIHVzZXIgcHVycG9zZWx5IHNldCB0aGUgdGltZW91dCB0byB0aGlzIHZhbHVl
+Cj4gc2luY2Ugd2Ugc2FtcGxlIGV2ZXJ5IDIwMG1zLgo+IFdoaWNoIGF0IHRoaXMgcG9pbnQgZ29l
+cyBpbnRvIHRoZSBQRUJLQUMgY2F0ZWdvcnkuCj4gCj4gRG8geW91IGFncmVlPwoKSXQgd291bGQg
+YmUgY2xlYW5lciB0byByZXR1cm4gdGhlIHJlc3VsdCBpbiBhbiBvdXRwdXQgcGFyYW1ldGVyLCBy
+ZXR1cm4gMCBvbiBzdWNjZXNzLApuZWdhdGl2ZSBlcnJvciBvbiBlcnJvciwgYW5kIGNoZWNrIGZv
+ciBlcnJvcnMgaW4gdGhlIGNhbGxlci4KClRodXMsIHdlIGNhbiBmaWd1cmUgb3V0IGlmIHRoZSBy
+ZXN1bHQgZW5kIHVwIG92ZXJmbG93aW5nIHVuc2lnbmVkIGxvbmcsIGFuZCByZXR1cm4KYW4gZXJy
+b3IgYWNjb3JkaW5nbHkuCgpUaGFua3MsCgpNYXRoaWV1CgoKPiAKPiBbMV0gaHR0cDovL3d3dy5v
+cGVuLXN0ZC5vcmcvanRjMS9zYzIyL3dnMTQvd3d3L2RvY3MvbjEyNTYucGRmIHAuMjIgwqc1LjIu
+NC4yLjEKPiAKPj4gCj4+ID4gfQo+PiA+IAo+PiA+IHN0YXRpYwo+PiA+IGRpZmYgLS1naXQgYS9z
+cmMvY29tbW9uL3Nlc3Npb25kLWNvbW0vaW5ldDYuYyBiL3NyYy9jb21tb24vc2Vzc2lvbmQtY29t
+bS9pbmV0Ni5jCj4+ID4gaW5kZXggZGZiNWZjNWQxLi4wNzA0M2U5M2YgMTAwNjQ0Cj4+ID4gLS0t
+IGEvc3JjL2NvbW1vbi9zZXNzaW9uZC1jb21tL2luZXQ2LmMKPj4gPiArKysgYi9zcmMvY29tbW9u
+L3Nlc3Npb25kLWNvbW0vaW5ldDYuYwo+PiA+IEBAIC0xMTcsMTYgKzExNywyOCBAQCBzdGF0aWMK
+Pj4gPiB1bnNpZ25lZCBsb25nIHRpbWVfZGlmZl9tcyhzdHJ1Y3QgdGltZXNwZWMgKnRpbWVfYSwK
+Pj4gPiAJCXN0cnVjdCB0aW1lc3BlYyAqdGltZV9iKQo+PiAKPj4gVGhpcyBzaG91bGQgYmUgbW92
+ZWQgdG8gYSBjb21tb24gaW1wbGVtZW50YXRpb24gZmlsZS4gSXQncyBhIGN1dCBhbmQKPj4gcGFz
+dGUgZnJvbSBpbmV0LmMuCj4gCj4gUGFzdCBNYXRoaWV1IGRpZCBub3Qgc2VlbXMgdG8gYm90aGVy
+IGhlcmUuCj4gCj4gSSdtIG9wZW4gaW50byBkb2luZyB0aGlzIGluIHR3byBwYXRjaGVzIHNpbmNl
+IHRoaXMgc2hvdWxkIGJlIGJhY2twb3J0ZWQuIERvIHlvdQo+IGhhdmUgYSBzdWdnZXN0aW9uIHJl
+Z2FyZGluZyB3aGVyZSB0byBwdXQgaXQ/Cj4gCj4+IAo+PiBUaGFua3MsCj4+IAo+PiBNYXRoaWV1
+Cj4+IAo+PiA+IHsKPj4gPiAtCXRpbWVfdCBzZWNfZGlmZjsKPj4gPiAtCWxvbmcgbnNlY19kaWZm
+Owo+PiA+IC0JdW5zaWduZWQgbG9uZyByZXN1bHRfbXM7Cj4+ID4gKwlzdHJ1Y3QgdGltZXNwZWMg
+ZGlmZjsKPj4gPiAKPj4gPiAtCXNlY19kaWZmID0gdGltZV9hLT50dl9zZWMgLSB0aW1lX2ItPnR2
+X3NlYzsKPj4gPiAtCW5zZWNfZGlmZiA9IHRpbWVfYS0+dHZfbnNlYyAtIHRpbWVfYi0+dHZfbnNl
+YzsKPj4gPiArCWRpZmYudHZfc2VjID0gdGltZV9hLT50dl9zZWMgLSB0aW1lX2ItPnR2X3NlYzsK
+Pj4gPiArCWRpZmYudHZfbnNlYyA9IHRpbWVfYS0+dHZfbnNlYyAtIHRpbWVfYi0+dHZfbnNlYzsK
+Pj4gPiAKPj4gPiAtCXJlc3VsdF9tcyA9IHNlY19kaWZmICogTVNFQ19QRVJfU0VDOwo+PiA+IC0J
+cmVzdWx0X21zICs9IG5zZWNfZGlmZiAvIE5TRUNfUEVSX01TRUM7Cj4+ID4gLQlyZXR1cm4gcmVz
+dWx0X21zOwo+PiA+ICsJaWYgKGRpZmYudHZfbnNlYyA8IDApIHsKPj4gPiArCQkvKiBQZXJmb3Jt
+IGJvcnJvdyBvcGVyYXRpb24gKi8KPj4gPiArCQlkaWZmLnR2X3NlYyAtPSAxOwo+PiA+ICsJCWRp
+ZmYudHZfbnNlYyArPSBOU0VDX1BFUl9TRUM7Cj4+ID4gKwl9Cj4+ID4gKwo+PiA+ICsJaWYgKGRp
+ZmYudHZfc2VjIDwgMCkgewo+PiA+ICsJCS8qIFdlIHdlbnQgYmFjayBpbiB0aW1lLiBQdXQgYWxs
+IHRvIHplcm8gKi8KPj4gPiArCQlkaWZmLnR2X3NlYyA9IDA7Cj4+ID4gKwkJZGlmZi50dl9uc2Vj
+ID0gMDsKPj4gPiArCX0KPj4gPiArCj4+ID4gKwkvKgo+PiA+ICsJICogVHJhbnNmb3JtIGludG8g
+TVNFQywgZGlmZi50dl9uc2VjIGlzIGFsd2F5cyBwb3NpdGl2ZSBkdWUgdG8gYm9ycm93Cj4+ID4g
+KwkgKiBvcGVyYXRpb24uIGRpZmYudGJfc2VjIGlzIGFsd2F5cyBwb3NpdGl2ZS4KPj4gPiArCSAq
+Lwo+PiA+ICsJcmV0dXJuIChkaWZmLnR2X3NlYyAqIE1TRUNfUEVSX1NFQykgKyAoZGlmZi50dl9u
+c2VjIC8gTlNFQ19QRVJfTVNFQyk7Cj4+ID4gfQo+PiA+IAo+PiA+IHN0YXRpYwo+PiA+IC0tCj4+
+ID4gMi4xNy4xCj4+ID4gCj4+ID4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KPj4gPiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cj4+ID4gbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZwo+PiA+IGh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1h
+bi9saXN0aW5mby9sdHRuZy1kZXYKPj4gCj4+IC0tCj4+IE1hdGhpZXUgRGVzbm95ZXJzCj4+IEVm
+ZmljaU9TIEluYy4KPj4gaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KPiAKPiAtLQo+IEpvbmF0aGFu
+IFJham90dGUtSnVsaWVuCj4gRWZmaWNpT1MKCi0tIApNYXRoaWV1IERlc25veWVycwpFZmZpY2lP
+UyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
+c3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
+dGluZm8vbHR0bmctZGV2Cg==
