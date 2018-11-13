@@ -1,16 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 2/2] Fix: max_t/min_t macros are
- missing cast on input
-Date: Tue, 13 Nov 2018 12:12:21 -0500
-Message-ID: <20181113171221.2634-2-mathieu.desnoyers__33958.9702235118$1542129082$gmane$org@efficios.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: [PATCH lttng-tools 1/2] Fix: Connect timeout
+ arithmetic in inet/inet6 (v4)
+Date: Tue, 13 Nov 2018 15:21:56 -0500
+Message-ID: <20181113202156.GB11229__26013.7880257846$1542140403$gmane$org@joraj-alpa>
 References: <20181113171221.2634-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 42vZ1r2H5XzrYW
- for <lttng-dev@lists.lttng.org>; Tue, 13 Nov 2018 12:12:31 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 42vfDQ3r50zs1W
+ for <lttng-dev@lists.lttng.org>; Tue, 13 Nov 2018 15:21:58 -0500 (EST)
+Content-Disposition: inline
 In-Reply-To: <20181113171221.2634-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -21,43 +22,33 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: jgalar@efficios.com, jonathan.rajotte-julien@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-The semantic expected from max_t and min_t is to perform the max/min
-comparison in the type provided as first parameter.
+Acked-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 
-Cast the input parameters to the proper type before comparing them,
-rather than after. There is no more need to cast the result of the
-expression now that both inputs are cast to the right type.
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- src/common/macros.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/src/common/macros.h b/src/common/macros.h
-index c521aacd..461202ff 100644
---- a/src/common/macros.h
-+++ b/src/common/macros.h
-@@ -72,7 +72,7 @@ void *zmalloc(size_t len)
- #endif
- 
- #ifndef max_t
--#define max_t(type, a, b)	((type) max(a, b))
-+#define max_t(type, a, b)	max((type) a, (type) b)
- #endif
- 
- #ifndef min
-@@ -80,7 +80,7 @@ void *zmalloc(size_t len)
- #endif
- 
- #ifndef min_t
--#define min_t(type, a, b)	((type) min(a, b))
-+#define min_t(type, a, b)	min((type) a, (type) b)
- #endif
- 
- #ifndef LTTNG_PACKED
--- 
-2.11.0
+On Tue, Nov 13, 2018 at 12:12:20PM -0500, Mathieu Desnoyers wrote:
+> The nanoseconds part of the timespec struct time_a is not always
+> bigger than time_b since it wrap around each seconds.
+> 
+> Use 64-bit arithmetic to perform the difference.
+> 
+> Merge/move duplicated code into utils.c.
+> 
+> This function is really doing two things. Split it into timespec_to_ms()
+> and timespec_abs_diff().
+> 
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> ---
+> Changes since v1:
+> - Use NSEC_PER_SEC constant.
+> 
+> Changes since v2:
+> - Move prototypes to time.h.
+> - Adapt timespec_to_ms() range check to take into account tv_nsec beyond
+>   1000000000-1.
+> 
+> Changes since v3:
+> - Use remainer for detection of overflow.
+> - set errno to EOVERFLOW in timespec_to_ms.
