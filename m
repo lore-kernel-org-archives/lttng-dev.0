@@ -1,19 +1,17 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-ust] Fix: Initialize fd field of struct
- lttng_ust_elf to -1 at allocation
-Date: Wed, 14 Nov 2018 14:38:37 -0500
-Message-ID: <20181114193837.23813-1-jonathan.rajotte-julien__30927.6562919424$1542224213$gmane$org@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-tools 2/2] Fix: typo 'convet' -> 'convert'
+Date: Thu, 15 Nov 2018 12:16:37 -0500
+Message-ID: <20181115171637.3839-2-mjeanson__16999.0159375176$1542302089$gmane$org@efficios.com>
+References: <20181115171637.3839-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 42wFDB1hTMzs2R
- for <lttng-dev@lists.lttng.org>; Wed, 14 Nov 2018 14:38:49 -0500 (EST)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id C7788249A53
- for <lttng-dev@lists.lttng.org>; Wed, 14 Nov 2018 14:38:42 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 42wp1m2HvDzrFg
+ for <lttng-dev@lists.lttng.org>; Thu, 15 Nov 2018 12:16:44 -0500 (EST)
+In-Reply-To: <20181115171637.3839-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,31 +22,26 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-In rare cases when the executable cannot be open, using a default value
-of zero lead to invalid close call and fd tracker removal.
-
-fixes #1171
-
-Reported-by: Stefan Palade <stefan.palade@windriver.com>
-Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- liblttng-ust/lttng-ust-elf.c | 2 ++
- 1 file changed, 2 insertions(+)
+ src/common/lttng-elf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/liblttng-ust/lttng-ust-elf.c b/liblttng-ust/lttng-ust-elf.c
-index c073e7a5..3d6a9379 100644
---- a/liblttng-ust/lttng-ust-elf.c
-+++ b/liblttng-ust/lttng-ust-elf.c
-@@ -250,6 +250,8 @@ struct lttng_ust_elf *lttng_ust_elf_create(const char *path)
- 		goto error;
+diff --git a/src/common/lttng-elf.c b/src/common/lttng-elf.c
+index 52e05f0c6..cb01f7bb7 100644
+--- a/src/common/lttng-elf.c
++++ b/src/common/lttng-elf.c
+@@ -861,7 +861,7 @@ int lttng_elf_get_symbol_offset(int fd, char *symbol, uint64_t *offset)
+ 	 */
+ 	ret = lttng_elf_convert_addr_in_text_to_offset(elf, addr, offset);
+ 	if (ret) {
+-		DBG("Cannot convet addr to offset.");
++		DBG("Cannot convert addr to offset.");
+ 		goto free_string_table_data;
  	}
  
-+	/* Initialize fd field to -1. 0 is a valid fd number */
-+	elf->fd = -1;
- 
- 	elf->path = strdup(path);
- 	if (!elf->path) {
 -- 
 2.17.1
