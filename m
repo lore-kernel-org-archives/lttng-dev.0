@@ -1,15 +1,16 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-tools 1/2] Fix: typo 'leat' -> 'least'
-Date: Thu, 15 Nov 2018 12:16:36 -0500
-Message-ID: <20181115171637.3839-1-mjeanson__693.245713091706$1542302112$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 1/2] Fix: typo 'retrive' ->
+ 'retrieve'
+Date: Thu, 15 Nov 2018 12:24:47 -0500
+Message-ID: <20181115172448.6171-1-mjeanson__35620.6520148136$1542302576$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 42wp1m2JHXzrFh
- for <lttng-dev@lists.lttng.org>; Thu, 15 Nov 2018 12:16:43 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 42wpCB3ZxXzrGw
+ for <lttng-dev@lists.lttng.org>; Thu, 15 Nov 2018 12:24:54 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,21 +26,21 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- src/common/defaults.c | 2 +-
+ src/bin/lttng/commands/add_context.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/src/common/defaults.c b/src/common/defaults.c
-index 3bb42280f..874578183 100644
---- a/src/common/defaults.c
-+++ b/src/common/defaults.c
-@@ -118,7 +118,7 @@ static void __attribute__((constructor)) init_default_pthread_attr(void)
- 	}
+diff --git a/src/bin/lttng/commands/add_context.c b/src/bin/lttng/commands/add_context.c
+index 2c29a45ca..7aef4d50f 100644
+--- a/src/bin/lttng/commands/add_context.c
++++ b/src/bin/lttng/commands/add_context.c
+@@ -541,7 +541,7 @@ int mi_open(void)
  
- 	if (rlim.rlim_max > 0 && selected_ss > rlim.rlim_max) {
--		WARN("Your system's stack size restrictions (%zu bytes) may be too low for the LTTng daemons to function properly, please set the stack size limit to at leat %zu bytes to ensure reliable operation",
-+		WARN("Your system's stack size restrictions (%zu bytes) may be too low for the LTTng daemons to function properly, please set the stack size limit to at least %zu bytes to ensure reliable operation",
- 			(size_t) rlim.rlim_max, (size_t) DEFAULT_LTTNG_THREAD_STACK_SIZE);
- 		selected_ss = (size_t) rlim.rlim_max;
+ 	ret = fileno(stdout);
+ 	if (ret < 0) {
+-		PERROR("Unable to retrive fileno of stdout");
++		PERROR("Unable to retrieve fileno of stdout");
+ 		ret = CMD_ERROR;
+ 		goto end;
  	}
 -- 
 2.17.1
