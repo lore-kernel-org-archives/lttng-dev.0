@@ -1,18 +1,20 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH urcu 1/4] Fix: compat_futex_noasync on Cygwin
-Date: Fri, 23 Nov 2018 15:27:04 -0500
-Message-ID: <20181123202707.19851-1-mjeanson__47811.8623760112$1543004758$gmane$org@efficios.com>
+Subject: [PATCH urcu 3/4] Add *.exe to gitignore for Cygwin
+Date: Fri, 23 Nov 2018 15:27:06 -0500
+Message-ID: <20181123202707.19851-3-mjeanson__41495.8324320198$1543004777$gmane$org@efficios.com>
+References: <20181123202707.19851-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 431nt63tfTzyCg
- for <lttng-dev@lists.lttng.org>; Fri, 23 Nov 2018 15:27:26 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 431nt813yTzyD0
+ for <lttng-dev@lists.lttng.org>; Fri, 23 Nov 2018 15:27:28 -0500 (EST)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id DE3179A04B
- for <lttng-dev@lists.lttng.org>; Fri, 23 Nov 2018 15:27:19 -0500 (EST)
+ by mail.efficios.com (Postfix) with ESMTP id 0E3DF9A080
+ for <lttng-dev@lists.lttng.org>; Fri, 23 Nov 2018 15:27:22 -0500 (EST)
+In-Reply-To: <20181123202707.19851-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,44 +27,22 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-The futex_noasync compat code uses a weak symbol to share state across
-different shared object which is not possible on Windows with the
- Portable Executable format. Use the async compat code for both cases.
-
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- include/urcu/futex.h | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ .gitignore | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/urcu/futex.h b/include/urcu/futex.h
-index 0486ff6..753df62 100644
---- a/include/urcu/futex.h
-+++ b/include/urcu/futex.h
-@@ -102,6 +102,25 @@ static inline int futex_async(int32_t *uaddr, int op, int32_t val,
- 	return ret;
- }
+diff --git a/.gitignore b/.gitignore
+index d02ed09..4daa824 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -76,6 +76,7 @@ tests/benchmark/test_urcu_wfcq_dynlink
  
-+#elif defined(__CYGWIN__)
-+
-+/*
-+ * The futex_noasync compat code uses a weak symbol to share state across
-+ * different shared object which is not possible on Windows with the
-+ * Portable Executable format. Use the async compat code for both cases.
-+ */
-+static inline int futex_noasync(int32_t *uaddr, int op, int32_t val,
-+		const struct timespec *timeout, int32_t *uaddr2, int32_t val3)
-+{
-+	return compat_futex_async(uaddr, op, val, timeout, uaddr2, val3);
-+}
-+
-+static inline int futex_async(int32_t *uaddr, int op, int32_t val,
-+		const struct timespec *timeout, int32_t *uaddr2, int32_t val3)
-+{
-+	return compat_futex_async(uaddr, op, val, timeout, uaddr2, val3);
-+}
-+
- #else
+ tests/benchmark/*.log
+ *.so
++*.exe
  
- static inline int futex_noasync(int32_t *uaddr, int op, int32_t val,
+ doc/examples/urcu-flavors/qsbr
+ doc/examples/urcu-flavors/mb
 -- 
 2.17.1
