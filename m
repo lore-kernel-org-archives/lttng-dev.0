@@ -1,21 +1,18 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH urcu 2/4] Fix: pthread_rwlock initialization on
- Cygwin
-Date: Fri, 23 Nov 2018 15:27:05 -0500
-Message-ID: <20181123202707.19851-2-mjeanson__39715.3681763031$1543004731$gmane$org@efficios.com>
-References: <20181123202707.19851-1-mjeanson@efficios.com>
+Subject: [PATCH urcu 1/4] Fix: compat_futex_noasync on Cygwin
+Date: Fri, 23 Nov 2018 15:27:04 -0500
+Message-ID: <20181123202707.19851-1-mjeanson__47811.8623760112$1543004758$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 431nt63tF9zyCf
+ by lists.lttng.org (Postfix) with ESMTPS id 431nt63tfTzyCg
  for <lttng-dev@lists.lttng.org>; Fri, 23 Nov 2018 15:27:26 -0500 (EST)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id CE4C99A06F
- for <lttng-dev@lists.lttng.org>; Fri, 23 Nov 2018 15:27:20 -0500 (EST)
-In-Reply-To: <20181123202707.19851-1-mjeanson@efficios.com>
+ by mail.efficios.com (Postfix) with ESMTP id DE3179A04B
+ for <lttng-dev@lists.lttng.org>; Fri, 23 Nov 2018 15:27:19 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -28,172 +25,44 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org, mathieu.desnoyers@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-On Cygwin the PTHREAD_RWLOCK_INITIALIZER macro is not
-sufficient to get a properly initialized pthread_rwlock_t
-struct. Use the pthread_rwlock_init function instead which
-should work on all platforms.
+The futex_noasync compat code uses a weak symbol to share state across
+different shared object which is not possible on Windows with the
+ Portable Executable format. Use the async compat code for both cases.
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- tests/benchmark/test_rwlock.c        | 34 +++++++++++++++++++++++-----
- tests/benchmark/test_rwlock_timing.c | 33 +++++++++++++++++++++------
- 2 files changed, 54 insertions(+), 13 deletions(-)
+ include/urcu/futex.h | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/tests/benchmark/test_rwlock.c b/tests/benchmark/test_rwlock.c
-index 4448597..c23e782 100644
---- a/tests/benchmark/test_rwlock.c
-+++ b/tests/benchmark/test_rwlock.c
-@@ -48,7 +48,7 @@ struct test_array {
- 	int a;
- };
+diff --git a/include/urcu/futex.h b/include/urcu/futex.h
+index 0486ff6..753df62 100644
+--- a/include/urcu/futex.h
++++ b/include/urcu/futex.h
+@@ -102,6 +102,25 @@ static inline int futex_async(int32_t *uaddr, int op, int32_t val,
+ 	return ret;
+ }
  
--pthread_rwlock_t lock = PTHREAD_RWLOCK_INITIALIZER;
-+pthread_rwlock_t lock;
- 
- static volatile int test_go, test_stop;
- 
-@@ -173,14 +173,21 @@ void *thr_reader(void *_count)
- 	}
- 
- 	for (;;) {
--		int a;
-+		int a, ret;
++#elif defined(__CYGWIN__)
 +
-+		ret = pthread_rwlock_rdlock(&lock);
-+		if (ret)
-+			fprintf(stderr, "reader pthread_rwlock_rdlock: %s\n", strerror(ret));
++/*
++ * The futex_noasync compat code uses a weak symbol to share state across
++ * different shared object which is not possible on Windows with the
++ * Portable Executable format. Use the async compat code for both cases.
++ */
++static inline int futex_noasync(int32_t *uaddr, int op, int32_t val,
++		const struct timespec *timeout, int32_t *uaddr2, int32_t val3)
++{
++	return compat_futex_async(uaddr, op, val, timeout, uaddr2, val3);
++}
++
++static inline int futex_async(int32_t *uaddr, int op, int32_t val,
++		const struct timespec *timeout, int32_t *uaddr2, int32_t val3)
++{
++	return compat_futex_async(uaddr, op, val, timeout, uaddr2, val3);
++}
++
+ #else
  
--		pthread_rwlock_rdlock(&lock);
- 		a = test_array.a;
- 		assert(a == 8);
- 		if (caa_unlikely(rduration))
- 			loop_sleep(rduration);
--		pthread_rwlock_unlock(&lock);
-+
-+		ret = pthread_rwlock_unlock(&lock);
-+		if (ret)
-+			fprintf(stderr, "reader pthread_rwlock_unlock: %s\n", strerror(ret));
-+
- 		URCU_TLS(nr_reads)++;
- 		if (caa_unlikely(!test_duration_read()))
- 			break;
-@@ -208,12 +215,21 @@ void *thr_writer(void *_count)
- 	cmm_smp_mb();
- 
- 	for (;;) {
--		pthread_rwlock_wrlock(&lock);
-+		int ret;
-+
-+		ret = pthread_rwlock_wrlock(&lock);
-+		if (ret)
-+			fprintf(stderr, "writer pthread_rwlock_wrlock: %s\n", strerror(ret));
-+
- 		test_array.a = 0;
- 		test_array.a = 8;
- 		if (caa_unlikely(wduration))
- 			loop_sleep(wduration);
--		pthread_rwlock_unlock(&lock);
-+
-+		ret = pthread_rwlock_unlock(&lock);
-+		if (ret)
-+			fprintf(stderr, "writer pthread_rwlock_unlock: %s\n", strerror(ret));
-+
- 		URCU_TLS(nr_writes)++;
- 		if (caa_unlikely(!test_duration_write()))
- 			break;
-@@ -321,6 +337,12 @@ int main(int argc, char **argv)
- 	printf_verbose("thread %-6s, tid %lu\n",
- 			"main", urcu_get_thread_id());
- 
-+	err = pthread_rwlock_init(&lock, NULL);
-+	if (err != 0) {
-+		fprintf(stderr, "pthread_rwlock_init: (%d) %s\n", err, strerror(err));
-+		exit(1);
-+	}
-+
- 	tid_reader = calloc(nr_readers, sizeof(*tid_reader));
- 	tid_writer = calloc(nr_writers, sizeof(*tid_writer));
- 	count_reader = calloc(nr_readers, sizeof(*count_reader));
-diff --git a/tests/benchmark/test_rwlock_timing.c b/tests/benchmark/test_rwlock_timing.c
-index a52da38..1e7863a 100644
---- a/tests/benchmark/test_rwlock_timing.c
-+++ b/tests/benchmark/test_rwlock_timing.c
-@@ -42,7 +42,7 @@ struct test_array {
- 	int a;
- };
- 
--pthread_rwlock_t lock = PTHREAD_RWLOCK_INITIALIZER;
-+pthread_rwlock_t lock;
- 
- static struct test_array test_array = { 8 };
- 
-@@ -65,7 +65,7 @@ static caa_cycles_t __attribute__((aligned(CAA_CACHE_LINE_SIZE))) *writer_time;
- 
- void *thr_reader(void *arg)
- {
--	int i, j;
-+	int i, j, ret;
- 	caa_cycles_t time1, time2;
- 
- 	printf("thread_begin %s, tid %lu\n",
-@@ -75,9 +75,15 @@ void *thr_reader(void *arg)
- 	time1 = caa_get_cycles();
- 	for (i = 0; i < OUTER_READ_LOOP; i++) {
- 		for (j = 0; j < INNER_READ_LOOP; j++) {
--			pthread_rwlock_rdlock(&lock);
-+			ret = pthread_rwlock_rdlock(&lock);
-+			if (ret)
-+				fprintf(stderr, "reader pthread_rwlock_rdlock: %s\n", strerror(ret));
-+
- 			assert(test_array.a == 8);
--			pthread_rwlock_unlock(&lock);
-+
-+			ret = pthread_rwlock_unlock(&lock);
-+			if (ret)
-+				fprintf(stderr, "reader pthread_rwlock_unlock: %s\n", strerror(ret));
- 		}
- 	}
- 	time2 = caa_get_cycles();
-@@ -93,7 +99,7 @@ void *thr_reader(void *arg)
- 
- void *thr_writer(void *arg)
- {
--	int i, j;
-+	int i, j, ret;
- 	caa_cycles_t time1, time2;
- 
- 	printf("thread_begin %s, tid %lu\n",
-@@ -103,9 +109,16 @@ void *thr_writer(void *arg)
- 	for (i = 0; i < OUTER_WRITE_LOOP; i++) {
- 		for (j = 0; j < INNER_WRITE_LOOP; j++) {
- 			time1 = caa_get_cycles();
--			pthread_rwlock_wrlock(&lock);
-+			ret = pthread_rwlock_wrlock(&lock);
-+			if (ret)
-+				fprintf(stderr, "writer pthread_rwlock_wrlock: %s\n", strerror(ret));
-+
- 			test_array.a = 8;
--			pthread_rwlock_unlock(&lock);
-+
-+			ret = pthread_rwlock_unlock(&lock);
-+			if (ret)
-+				fprintf(stderr, "writer pthread_rwlock_unlock: %s\n", strerror(ret));
-+
- 			time2 = caa_get_cycles();
- 			writer_time[(unsigned long)arg] += time2 - time1;
- 			usleep(1);
-@@ -133,6 +146,12 @@ int main(int argc, char **argv)
- 	num_read = atoi(argv[1]);
- 	num_write = atoi(argv[2]);
- 
-+	err = pthread_rwlock_init(&lock, NULL);
-+	if (err != 0) {
-+		fprintf(stderr, "pthread_rwlock_init: (%d) %s\n", err, strerror(err));
-+		exit(1);
-+	}
-+
- 	reader_time = calloc(num_read, sizeof(*reader_time));
- 	writer_time = calloc(num_write, sizeof(*writer_time));
- 	tid_reader = calloc(num_read, sizeof(*tid_reader));
+ static inline int futex_noasync(int32_t *uaddr, int op, int32_t val,
 -- 
 2.17.1
