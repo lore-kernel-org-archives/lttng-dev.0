@@ -1,18 +1,15 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH urcu 1/4] Fix: mixup between
- URCU_WORKQUEUE_RT and URCU_CALL_RCU_RT
-Date: Sun, 9 Dec 2018 06:54:47 -0500 (EST)
-Message-ID: <1070076059.25.1544356487836.JavaMail.zimbra__21900.3465529115$1544356381$gmane$org@efficios.com>
-References: <20181207220639.4801-1-jeremie.galarneau@efficios.com>
+Subject: [PATCH lttng-tools] Fix: notification thread: RCU-safe
+ reclaim of hash table nodes
+Date: Wed, 12 Dec 2018 12:16:44 -0500
+Message-ID: <20181212171644.16634-1-mathieu.desnoyers__45863.9194061563$1544634897$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 43CPlM5gvyz164l
- for <lttng-dev@lists.lttng.org>; Sun,  9 Dec 2018 06:54:55 -0500 (EST)
-In-Reply-To: <20181207220639.4801-1-jeremie.galarneau@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 43FNlT3BpDz170Q
+ for <lttng-dev@lists.lttng.org>; Wed, 12 Dec 2018 12:16:53 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,52 +19,264 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jeremie Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
+To: jgalar@efficios.com, joraj@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Ci0tLS0tIE9uIERlYyA3LCAyMDE4LCBhdCA1OjA2IFBNLCBKZXJlbWllIEdhbGFybmVhdSBqZXJl
-bWllLmdhbGFybmVhdUBlZmZpY2lvcy5jb20gd3JvdGU6Cgo+IFRoZSB3b3JrIHF1ZXVlIGltcGxl
-bWVudGF0aW9uIGlzIGRlcml2ZWQgZnJvbSB0aGUgY2FsbC1yY3UgdGhyZWFkLiBBCj4gbnVtYmVy
-IG9mIHJlZmVyZW5jZXMgc2VlbSB0byBoYXZlIGJlZW4gbGVmdCBpbiBwbGFjZSB3aGVuIGFkYXB0
-aW5nIHRoZQo+IGNvZGUgZm9yIGl0cyBuZXcgcHVycG9zZS4KCkFsbCA0IHBhdGNoZXMgbWVyZ2Vk
-IGludG8gbWFzdGVyLCBzdGFibGUtMC4xMC4gSXQgaXMgbm90IG5lZWRlZCBpbgpzdGFibGUtMC45
-IGJlY2F1c2Ugd29ya3F1ZXVlLmMgd2FzIG9ubHkgaW50cm9kdWNlZCBpbiAwLjEwLiBPbmUKdGhp
-bmcgdG8ga2VlcCBpbiBtaW5kOiB3b3JrcXVldWUue2MsaH0gaXMgYW4gaW50ZXJuYWwgQVBJIGZv
-ciBub3csCnNvIHRoZXJlIGlzIHJlYWxseSBvbmx5IGp1c3QgYSBzaW5nbGUgdXNlciBvZiB0aGlz
-IEFQSSAocmN1bGZoYXNoKQphdCB0aGUgbW9tZW50LgoKSSBhZGRlZCB0d28gYWRkaXRpb25hbCBw
-YXRjaGVzLCBmb3IgdGhlIGZvbGxvd2luZyBzZXF1ZW5jZXMgb2YKY29tbWl0czoKCjViYmU5NWIg
-Rml4OiBvbmx5IHdhaXQgaWYgd29yayBxdWV1ZSBpcyBlbXB0eSBpbiByZWFsLXRpbWUgbW9kZQpj
-Njg3MWI2IEZpeDogZG9uJ3Qgd2FpdCBhZnRlciBjb21wbGV0aW9uIG9mIGEgd29yayBxdWV1ZSBq
-b2IgYmF0Y2gKNzNkOGI1MiBGaXg6IGRvbid0IHdhaXQgYWZ0ZXIgY29tcGxldGlvbiBvZiBqb2Ig
-YmF0Y2ggaWYgd29yayBxdWV1ZSBpcyBlbXB0eQpkMjVmMjVkIEZpeDogd29ya3F1ZXVlOiBzdHJ1
-Y3QgdXJjdV93b3JrIHZzIHJjdV9oZWFkIG1peHVwCjFiNmZjMTcgQ2xlYW51cDogd29ya3F1ZXVl
-OiB1cGRhdGUgY29tbWVudHMgcmVmZXJyaW5nIHRvIGNhbGwtcmN1CjlkYjllZGMgRml4OiBtaXh1
-cCBiZXR3ZWVuIFVSQ1VfV09SS1FVRVVFX1JUIGFuZCBVUkNVX0NBTExfUkNVX1JUCgpUaGFua3Mh
-CgpNYXRoaWV1Cgo+IAo+IFRoZSBVUkNVX0NBTExfUkNVX1JUIGZsYWcgaXMgdXNlZCBieSB3YWtl
-X3dvcmtlcl90aHJlYWQoKSB3aGlsZSB0aGUKPiByZXN0IG9mIHRoZSB3b3JrcXVldWUuYyBjb2Rl
-IHVzZXMgVVJDVV9XT1JLUVVFVUVfUlQgdG8gZGV0ZXJtaW5lIGlmCj4gdGhlIHdvcmsgcXVldWUg
-d2FzIGNvbmZpZ3VyZWQgaW4gcmVhbC10aW1lIG1vZGUuIEJvdGggZmxhZ3MgYXJlIGRlZmluZWQK
-PiB0byB0aGUgc2FtZSB2YWx1ZSAoMHgxKSBhbmQgdGhlIGN1cnJlbnQgaW50ZXJuYWwgdXNlciBv
-ZiB0aGUKPiB3b3JrIHF1ZXVlIChsZmh0KSBuZXZlciBzcGVjaWZpZXMgYW55IGZsYWdzLgo+IAo+
-IEluIHByYWN0aWNlLCB0aGlzIGRvZXMgbm90IGNhdXNlIGFueSBwcm9ibGVtIHNvIEkgZG91YnQg
-dGhpcyBwYXRjaAo+IG5lZWRzIHRvIGJlIGJhY2twb3J0ZWQuIEZlZWwgZnJlZSB0byByZW5hbWUg
-IkZpeCIgdG8gIkNsZWFuLXVwIi4KPiAKPiBUaGVyZSBhcmUgYSBudW1iZXIgb2YgY29tbWVudHMg
-cmVmZXJlbmNpbmcgY2FsbC1yY3Ugd2hpY2ggbWF5IG5lZWQKPiB0byBiZSBhZGFwdGVkLiBDaGFu
-Z2luZyB0aGVtIGlzIGxlZnQgYXMgYW4gZXhlcmNpc2UgdG8gdGhlIG1haW50YWluZXIKPiBhcyBJ
-IGRvbid0IGtub3cgaWYgdGhleSBhcHBseSB0byB0aGUgd29ya3F1ZXVlIHRocmVhZC4KPiAKPiBT
-aWduZWQtb2ZmLWJ5OiBKw6lyw6ltaWUgR2FsYXJuZWF1IDxqZXJlbWllLmdhbGFybmVhdUBlZmZp
-Y2lvcy5jb20+Cj4gLS0tCj4gc3JjL3dvcmtxdWV1ZS5jIHwgMiArLQo+IDEgZmlsZSBjaGFuZ2Vk
-LCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQo+IAo+IGRpZmYgLS1naXQgYS9zcmMvd29y
-a3F1ZXVlLmMgYi9zcmMvd29ya3F1ZXVlLmMKPiBpbmRleCAxN2VhODM1Li44NTYxYTdhIDEwMDY0
-NAo+IC0tLSBhL3NyYy93b3JrcXVldWUuYwo+ICsrKyBiL3NyYy93b3JrcXVldWUuYwo+IEBAIC0z
-MDksNyArMzA5LDcgQEAgc3RydWN0IHVyY3Vfd29ya3F1ZXVlICp1cmN1X3dvcmtxdWV1ZV9jcmVh
-dGUodW5zaWduZWQgbG9uZwo+IGZsYWdzLAo+IAo+IHN0YXRpYyB2b2lkIHdha2Vfd29ya2VyX3Ro
-cmVhZChzdHJ1Y3QgdXJjdV93b3JrcXVldWUgKndvcmtxdWV1ZSkKPiB7Cj4gLQlpZiAoIShfQ01N
-X0xPQURfU0hBUkVEKHdvcmtxdWV1ZS0+ZmxhZ3MpICYgVVJDVV9DQUxMX1JDVV9SVCkpCj4gKwlp
-ZiAoIShfQ01NX0xPQURfU0hBUkVEKHdvcmtxdWV1ZS0+ZmxhZ3MpICYgVVJDVV9XT1JLUVVFVUVf
-UlQpKQo+IAkJZnV0ZXhfd2FrZV91cCgmd29ya3F1ZXVlLT5mdXRleCk7Cj4gfQo+IAo+IC0tCj4g
-Mi4xOS4yCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVm
-ZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6
-Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Nodes that are put in a rculfhash hash table created with the
+"auto resize" flag need to beware that a worker thread can access the
+hash table nodes as a RCU reader concurrently, and that this worker
+thread can modify the hash table content, effectively adding and
+removing "bucket" nodes, and changing the size of the hash table
+index.
+
+Therefore, even though only a single thread reads and updates the hash
+table, a grace period is needed before reclaiming the memory holding
+the rculfhash nodes.
+
+Moreover, handle_notification_thread_command_add_channel() misses a
+RCU read-side lock around iteration on the triggers hash table. Failure
+to hold this read-side lock could cause segmentation faults when
+accessing hash table objects if a hash table resize is done by the
+worker thread in parallel with iteration over the hash table.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ .../lttng-sessiond/notification-thread-events.c    | 73 +++++++++++++++++++---
+ .../lttng-sessiond/notification-thread-internal.h  |  4 ++
+ 2 files changed, 70 insertions(+), 7 deletions(-)
+
+diff --git a/src/bin/lttng-sessiond/notification-thread-events.c b/src/bin/lttng-sessiond/notification-thread-events.c
+index 1233bf30..ba4e5a05 100644
+--- a/src/bin/lttng-sessiond/notification-thread-events.c
++++ b/src/bin/lttng-sessiond/notification-thread-events.c
+@@ -70,6 +70,8 @@ struct lttng_channel_trigger_list {
+ 	struct cds_list_head list;
+ 	/* Node in the channel_triggers_ht */
+ 	struct cds_lfht_node channel_triggers_ht_node;
++	/* call_rcu delayed reclaim. */
++	struct rcu_head rcu_node;
+ };
+ 
+ /*
+@@ -116,6 +118,8 @@ struct lttng_session_trigger_list {
+ struct lttng_trigger_ht_element {
+ 	struct lttng_trigger *trigger;
+ 	struct cds_lfht_node node;
++	/* call_rcu delayed reclaim. */
++	struct rcu_head rcu_node;
+ };
+ 
+ struct lttng_condition_list_element {
+@@ -132,6 +136,8 @@ struct notification_client_list {
+ 	const struct lttng_trigger *trigger;
+ 	struct cds_list_head list;
+ 	struct cds_lfht_node notification_trigger_ht_node;
++	/* call_rcu delayed reclaim. */
++	struct rcu_head rcu_node;
+ };
+ 
+ struct notification_client {
+@@ -198,6 +204,8 @@ struct notification_client {
+ 			struct lttng_dynamic_buffer buffer;
+ 		} outbound;
+ 	} communication;
++	/* call_rcu delayed reclaim. */
++	struct rcu_head rcu_node;
+ };
+ 
+ struct channel_state_sample {
+@@ -206,6 +214,8 @@ struct channel_state_sample {
+ 	uint64_t highest_usage;
+ 	uint64_t lowest_usage;
+ 	uint64_t channel_total_consumed;
++	/* call_rcu delayed reclaim. */
++	struct rcu_head rcu_node;
+ };
+ 
+ static unsigned long hash_channel_key(struct channel_key *key);
+@@ -501,6 +511,12 @@ enum lttng_object_type get_condition_binding_object(
+ }
+ 
+ static
++void free_channel_info_rcu(struct rcu_head *node)
++{
++	free(caa_container_of(node, struct channel_info, rcu_node));
++}
++
++static
+ void channel_info_destroy(struct channel_info *channel_info)
+ {
+ 	if (!channel_info) {
+@@ -515,7 +531,13 @@ void channel_info_destroy(struct channel_info *channel_info)
+ 	if (channel_info->name) {
+ 		free(channel_info->name);
+ 	}
+-	free(channel_info);
++	call_rcu(&channel_info->rcu_node, free_channel_info_rcu);
++}
++
++static
++void free_session_info_rcu(struct rcu_head *node)
++{
++	free(caa_container_of(node, struct session_info, rcu_node));
+ }
+ 
+ /* Don't call directly, use the ref-counting mechanism. */
+@@ -539,7 +561,7 @@ void session_info_destroy(void *_data)
+ 			&session_info->sessions_ht_node);
+ 	rcu_read_unlock();
+ 	free(session_info->name);
+-	free(session_info);
++	call_rcu(&session_info->rcu_node, free_session_info_rcu);
+ }
+ 
+ static
+@@ -1099,6 +1121,12 @@ end:
+ }
+ 
+ static
++void free_notification_client_rcu(struct rcu_head *node)
++{
++	free(caa_container_of(node, struct notification_client, rcu_node));
++}
++
++static
+ void notification_client_destroy(struct notification_client *client,
+ 		struct notification_thread_state *state)
+ {
+@@ -1120,7 +1148,7 @@ void notification_client_destroy(struct notification_client *client,
+ 	}
+ 	lttng_dynamic_buffer_reset(&client->communication.inbound.buffer);
+ 	lttng_dynamic_buffer_reset(&client->communication.outbound.buffer);
+-	free(client);
++	call_rcu(&client->rcu_node, free_notification_client_rcu);
+ }
+ 
+ /*
+@@ -1544,6 +1572,7 @@ int handle_notification_thread_command_add_channel(
+ 		goto error;
+ 	}
+ 
++	rcu_read_lock();
+ 	/* Build a list of all triggers applying to the new channel. */
+ 	cds_lfht_for_each_entry(state->triggers_ht, &iter, trigger_ht_element,
+ 			node) {
+@@ -1556,6 +1585,7 @@ int handle_notification_thread_command_add_channel(
+ 
+ 		new_element = zmalloc(sizeof(*new_element));
+ 		if (!new_element) {
++			rcu_read_unlock();
+ 			goto error;
+ 		}
+ 		CDS_INIT_LIST_HEAD(&new_element->node);
+@@ -1563,6 +1593,7 @@ int handle_notification_thread_command_add_channel(
+ 		cds_list_add(&new_element->node, &trigger_list);
+ 		trigger_count++;
+ 	}
++	rcu_read_unlock();
+ 
+ 	DBG("[notification-thread] Found %i triggers that apply to newly added channel",
+ 			trigger_count);
+@@ -1598,6 +1629,20 @@ error:
+ }
+ 
+ static
++void free_channel_trigger_list_rcu(struct rcu_head *node)
++{
++	free(caa_container_of(node, struct lttng_channel_trigger_list,
++			rcu_node));
++}
++
++static
++void free_channel_state_sample_rcu(struct rcu_head *node)
++{
++	free(caa_container_of(node, struct channel_state_sample,
++			rcu_node));
++}
++
++static
+ int handle_notification_thread_command_remove_channel(
+ 	struct notification_thread_state *state,
+ 	uint64_t channel_key, enum lttng_domain_type domain,
+@@ -1639,7 +1684,7 @@ int handle_notification_thread_command_remove_channel(
+ 		free(trigger_list_element);
+ 	}
+ 	cds_lfht_del(state->channel_triggers_ht, node);
+-	free(trigger_list);
++	call_rcu(&trigger_list->rcu_node, free_channel_trigger_list_rcu);
+ 
+ 	/* Free sampled channel state. */
+ 	cds_lfht_lookup(state->channel_state_ht,
+@@ -1658,7 +1703,7 @@ int handle_notification_thread_command_remove_channel(
+ 				channel_state_ht_node);
+ 
+ 		cds_lfht_del(state->channel_state_ht, node);
+-		free(sample);
++		call_rcu(&sample->rcu_node, free_channel_state_sample_rcu);
+ 	}
+ 
+ 	/* Remove the channel from the channels_ht and free it. */
+@@ -2118,6 +2163,20 @@ error:
+ }
+ 
+ static
++void free_notification_client_list_rcu(struct rcu_head *node)
++{
++	free(caa_container_of(node, struct notification_client_list,
++			rcu_node));
++}
++
++static
++void free_lttng_trigger_ht_element_rcu(struct rcu_head *node)
++{
++	free(caa_container_of(node, struct lttng_trigger_ht_element,
++			rcu_node));
++}
++
++static
+ int handle_notification_thread_command_unregister_trigger(
+ 		struct notification_thread_state *state,
+ 		struct lttng_trigger *trigger,
+@@ -2186,7 +2245,7 @@ int handle_notification_thread_command_unregister_trigger(
+ 	}
+ 	cds_lfht_del(state->notification_trigger_clients_ht,
+ 			&client_list->notification_trigger_ht_node);
+-	free(client_list);
++	call_rcu(&client_list->rcu_node, free_notification_client_list_rcu);
+ 
+ 	/* Remove trigger from triggers_ht. */
+ 	trigger_ht_element = caa_container_of(triggers_ht_node,
+@@ -2198,7 +2257,7 @@ int handle_notification_thread_command_unregister_trigger(
+ 	action = lttng_trigger_get_action(trigger_ht_element->trigger);
+ 	lttng_action_destroy(action);
+ 	lttng_trigger_destroy(trigger_ht_element->trigger);
+-	free(trigger_ht_element);
++	call_rcu(&trigger_ht_element->rcu_node, free_lttng_trigger_ht_element_rcu);
+ end:
+ 	rcu_read_unlock();
+ 	if (_cmd_reply) {
+diff --git a/src/bin/lttng-sessiond/notification-thread-internal.h b/src/bin/lttng-sessiond/notification-thread-internal.h
+index 397159da..e217995f 100644
+--- a/src/bin/lttng-sessiond/notification-thread-internal.h
++++ b/src/bin/lttng-sessiond/notification-thread-internal.h
+@@ -53,6 +53,8 @@ struct session_info {
+ 		/* Identifier of the currently ongoing rotation. */
+ 		uint64_t id;
+ 	} rotation;
++	/* call_rcu delayed reclaim. */
++	struct rcu_head rcu_node;
+ };
+ 
+ struct channel_info {
+@@ -68,6 +70,8 @@ struct channel_info {
+ 	struct cds_lfht_node channels_ht_node;
+ 	/* Node in the session_info's channels_ht. */
+ 	struct cds_lfht_node session_info_channels_ht_node;
++	/* call_rcu delayed reclaim. */
++	struct rcu_head rcu_node;
+ };
+ 
+ #endif /* NOTIFICATION_THREAD_INTERNAL_H */
+-- 
+2.11.0
