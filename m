@@ -1,16 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 1/2] Fix: notification thread: free
- session trigger list on error
-Date: Wed, 12 Dec 2018 15:11:14 -0500
-Message-ID: <20181212201115.14997-1-mathieu.desnoyers__28087.584678042$1544645362$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 2/2] Fix:
+ handle_notification_thread_command: handle partial read
+Date: Wed, 12 Dec 2018 15:11:15 -0500
+Message-ID: <20181212201115.14997-2-mathieu.desnoyers__45737.9108797342$1544645376$gmane$org@efficios.com>
+References: <20181212201115.14997-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 43FScl6Tptz1785
+ by lists.lttng.org (Postfix) with ESMTPS id 43FScl6VGQz1786
  for <lttng-dev@lists.lttng.org>; Wed, 12 Dec 2018 15:11:19 -0500 (EST)
+In-Reply-To: <20181212201115.14997-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,22 +26,29 @@ To: jgalar@efficios.com, joraj@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+Use lttng_read() to handle partial reads (returning less than the
+requested amount of bytes) as well as ret = -1, errno == EINTR.
+
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- src/bin/lttng-sessiond/notification-thread-events.c | 1 +
- 1 file changed, 1 insertion(+)
+ src/bin/lttng-sessiond/notification-thread-events.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/src/bin/lttng-sessiond/notification-thread-events.c b/src/bin/lttng-sessiond/notification-thread-events.c
-index ba4e5a05..3482a7e8 100644
+index 3482a7e8..9cc91cc4 100644
 --- a/src/bin/lttng-sessiond/notification-thread-events.c
 +++ b/src/bin/lttng-sessiond/notification-thread-events.c
-@@ -1518,6 +1518,7 @@ struct session_info *find_or_create_session_info(
- 	if (!session) {
- 		ERR("[notification-thread] Failed to allocation session info for session \"%s\" (uid = %i, gid = %i)",
- 				name, uid, gid);
-+		lttng_session_trigger_list_destroy(trigger_list);
+@@ -2277,9 +2277,9 @@ int handle_notification_thread_command(
+ 	struct notification_thread_command *cmd;
+ 
+ 	/* Read the event pipe to put it back into a quiescent state. */
+-	ret = read(lttng_pipe_get_readfd(handle->cmd_queue.event_pipe), &counter,
++	ret = lttng_read(lttng_pipe_get_readfd(handle->cmd_queue.event_pipe), &counter,
+ 			sizeof(counter));
+-	if (ret == -1) {
++	if (ret != sizeof(counter)) {
  		goto error;
  	}
- 	trigger_list = NULL;
+ 
 -- 
 2.11.0
