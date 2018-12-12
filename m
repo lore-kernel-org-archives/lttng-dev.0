@@ -1,15 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools] Fix: do not repurpose iterator
- while it is being used
-Date: Wed, 12 Dec 2018 17:24:11 -0500
-Message-ID: <20181212222411.24517-1-mathieu.desnoyers__21192.1462476768$1544653337$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 2.10] Fix: do not repurpose iterator
+ while it is being used (register trigger, 2.10)
+Date: Wed, 12 Dec 2018 17:37:54 -0500
+Message-ID: <20181212223754.26205-1-mathieu.desnoyers__39953.041150193$1544654159$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 43FWZ66xZgz15mw
- for <lttng-dev@lists.lttng.org>; Wed, 12 Dec 2018 17:24:14 -0500 (EST)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 43FWsx0MMkz15pK
+ for <lttng-dev@lists.lttng.org>; Wed, 12 Dec 2018 17:37:56 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,8 +25,13 @@ Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
 The hash table iteration uses an iterator that needs to stay valid for
-the next loop. Using that same iterator variable in a nested lookup
-in a different hash table leads to segmentation fault.
+the next loop. Using that same iterator variable in a nested lookup in a
+different hash table leads to segmentation fault.
+
+This is a 2.10-specific instance of the issue affecting
+bind_trigger_to_matching_channels() which was found in the
+master and 2.11 branches. This one affects
+handle_notification_thread_command_register_trigger().
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
@@ -33,10 +39,10 @@ Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/src/bin/lttng-sessiond/notification-thread-events.c b/src/bin/lttng-sessiond/notification-thread-events.c
-index 9cc91cc4..9d82b831 100644
+index 6777fd6d..f54141e7 100644
 --- a/src/bin/lttng-sessiond/notification-thread-events.c
 +++ b/src/bin/lttng-sessiond/notification-thread-events.c
-@@ -1931,6 +1931,7 @@ int bind_trigger_to_matching_channels(const struct lttng_trigger *trigger,
+@@ -1119,6 +1119,7 @@ int handle_notification_thread_command_register_trigger(
  			channels_ht_node) {
  		struct lttng_trigger_list_element *trigger_list_element;
  		struct lttng_channel_trigger_list *trigger_list;
@@ -44,7 +50,7 @@ index 9cc91cc4..9d82b831 100644
  
  		if (!trigger_applies_to_channel(trigger, channel)) {
  			continue;
-@@ -1940,8 +1941,8 @@ int bind_trigger_to_matching_channels(const struct lttng_trigger *trigger,
+@@ -1128,8 +1129,8 @@ int handle_notification_thread_command_register_trigger(
  				hash_channel_key(&channel->key),
  				match_channel_trigger_list,
  				&channel->key,
