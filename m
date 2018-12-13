@@ -1,18 +1,16 @@
-From: Jonas Andersson L <jonas.l.andersson@ericsson.com>
-Subject: Re: Cost of enabling context field procname
-Date: Thu, 13 Dec 2018 13:26:56 +0000
-Message-ID: <AM6PR07MB4868BFEBD846A6E9A853F6AFC1A00__33015.9574201845$1544707504$gmane$org@AM6PR07MB4868.eurprd07.prod.outlook.com>
-References: <AM6PR07MB4868FE662DA42A674E2A6091C1A80@AM6PR07MB4868.eurprd07.prod.outlook.com>
- <20181205170409.GA26650@joraj-alpa>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools] Fix: run_command_wait() handle
+ partial write
+Date: Thu, 13 Dec 2018 13:56:35 -0500
+Message-ID: <20181213185635.8019-1-mathieu.desnoyers__9103.91749716855$1544727282$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sessmg22.ericsson.net (sessmg22.ericsson.net [193.180.251.58])
- by lists.lttng.org (Postfix) with ESMTPS id 43Fvbn0Fttz16hK
- for <lttng-dev@lists.lttng.org>; Thu, 13 Dec 2018 08:27:00 -0500 (EST)
-In-Reply-To: <20181205170409.GA26650@joraj-alpa>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 43G2w64Wqdz1721
+ for <lttng-dev@lists.lttng.org>; Thu, 13 Dec 2018 13:56:38 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,55 +20,33 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: jgalar@efficios.com, joraj@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Thanks for answers.. what spiked my interest was just making sure it would not cost too much to enable in an environment where a high number of traces are generated.
-BR, Jonas
+Use lttng_write() to handle partial writes (writing less than the
+requested amount of bytes) as well as ret = -1, errno = EINTR.
 
------Original Message-----
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com> 
-Sent: den 5 december 2018 18:04
-To: Jonas Andersson L <jonas.l.andersson@ericsson.com>
-Cc: lttng-dev@lists.lttng.org
-Subject: Re: [lttng-dev] Cost of enabling context field procname
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ src/bin/lttng-sessiond/notification-thread-commands.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Hi Jonas,
-
-Good question.
-
-Let's take a look at the source code.
-
-We should find what we are looking for in liblttng-ust/lttng-context-procname.c [1].
-
-[1] https://github.com/lttng/lttng-ust/blob/master/liblttng-ust/lttng-context-procname.c
-
-The comment at the top hint that we do cache the result and perform lookup only one time except for case where the cache is reset.
-
-You can dig a bit more if you want but most of the job is done in wrapper_getprocname.
-
-As for the cost, I guess we could find this doing a "simulation" using the same TLS scheme and measuring the cost of accessing procname the first time and each subsequent access to the TLS.
-
-Mathieu Desnoyers might have more information on this and also the cost of having context information compare to not having any at all.
-
-I'm curious. What spiked your interest in this?
-
-Cheers
-
-On Wed, Dec 05, 2018 at 12:21:22PM +0000, Jonas Andersson L wrote:
-> Hi
-> 
-> I'm interested in information regarding the cost of enabling procname context field. Is this field cached and read only at initialization or is the thread name fetched at each trace point? Thanks!
-> 
-> BR, Jonas
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-
---
-Jonathan Rajotte-Julien
-EfficiOS
+diff --git a/src/bin/lttng-sessiond/notification-thread-commands.c b/src/bin/lttng-sessiond/notification-thread-commands.c
+index 11275ffc..129cf4ee 100644
+--- a/src/bin/lttng-sessiond/notification-thread-commands.c
++++ b/src/bin/lttng-sessiond/notification-thread-commands.c
+@@ -44,9 +44,9 @@ int run_command_wait(struct notification_thread_handle *handle,
+ 	cds_list_add_tail(&cmd->cmd_list_node,
+ 			&handle->cmd_queue.list);
+ 	/* Wake-up thread. */
+-	ret = write(lttng_pipe_get_writefd(handle->cmd_queue.event_pipe),
++	ret = lttng_write(lttng_pipe_get_writefd(handle->cmd_queue.event_pipe),
+ 			&notification_counter, sizeof(notification_counter));
+-	if (ret < 0) {
++	if (ret != sizeof(notification_counter)) {
+ 		PERROR("write to notification thread's queue event fd");
+ 		/*
+ 		 * Remove the command from the list so the notification
+-- 
+2.11.0
