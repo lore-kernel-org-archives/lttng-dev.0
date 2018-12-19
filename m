@@ -1,17 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Yonghong Yan <yanyh15@gmail.com>
 Subject: Re: tracing multithread user program and API support
  for enabling/disabling events and for adding/removing context fields
-Date: Wed, 19 Dec 2018 16:20:32 -0500 (EST)
-Message-ID: <1102294099.6322.1545254432246.JavaMail.zimbra__5282.49267158589$1545254322$gmane$org@efficios.com>
+Date: Wed, 19 Dec 2018 17:07:02 -0500
+Message-ID: <CACJEY86eaYaw_-ifOv-LD_c6UigagM27tSngRMgUq2rfeKgArQ__2029.07874850116$1545257123$gmane$org@mail.gmail.com>
 References: <CACJEY87s+TAkMtKrW7UczWJCBaisjtKVJifM5cAqwDtnWnGt9A@mail.gmail.com>
+ <1102294099.6322.1545254432246.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1310163470441828936=="
+Content-Type: multipart/mixed; boundary="===============3246431782652502767=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 43KnqW25Djz16c6
- for <lttng-dev@lists.lttng.org>; Wed, 19 Dec 2018 16:20:39 -0500 (EST)
-In-Reply-To: <CACJEY87s+TAkMtKrW7UczWJCBaisjtKVJifM5cAqwDtnWnGt9A@mail.gmail.com>
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com
+ [IPv6:2607:f8b0:4864:20::42e])
+ by lists.lttng.org (Postfix) with ESMTPS id 43KpsH2dRzz16fR
+ for <lttng-dev@lists.lttng.org>; Wed, 19 Dec 2018 17:07:15 -0500 (EST)
+Received: by mail-pf1-x42e.google.com with SMTP id b85so10471307pfc.3
+ for <lttng-dev@lists.lttng.org>; Wed, 19 Dec 2018 14:07:14 -0800 (PST)
+In-Reply-To: <1102294099.6322.1545254432246.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,98 +24,157 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Yonghong Yan <yanyh15@gmail.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1310163470441828936==
-Content-Type: multipart/alternative;
-	boundary="=_22054d14-255e-43ed-942d-9ff0f4f88ea0"
+--===============3246431782652502767==
+Content-Type: multipart/alternative; boundary="0000000000007cce17057d673ccb"
 
---=_22054d14-255e-43ed-942d-9ff0f4f88ea0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+--0000000000007cce17057d673ccb
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Yonghong, 
+Mathieu,
 
------ On Dec 19, 2018, at 1:19 PM, Yonghong Yan <yanyh15@gmail.com> wrote: 
+Thank you for your response. see inline ...
 
-> We are experimenting LTTng for tracing multi-threaded program, it works very
-> well for us. Thank you for having this great tool. But we have some concerns
-> about the overhead and scalability of the tracing. Could you share some insight
-> of the following questions?
-> 1. The session domain communicates with the user application via Unix domain
-> socket, from LTTng document. is the communication frequent, such as each event
-> requires communication, or the communication just happens at the beginning to
-> configure user space tracing?
+On Wed, Dec 19, 2018 at 4:20 PM Mathieu Desnoyers <
+mathieu.desnoyers@efficios.com> wrote:
 
-This Unix socket is only for "control" of tracing (infrequent communication). The high-throughput tracing data goes through a shared memory map (per-cpu buffers). 
+> Hi Yonghong,
+>
+> ----- On Dec 19, 2018, at 1:19 PM, Yonghong Yan <yanyh15@gmail.com> wrote:
+>
+> We are experimenting LTTng for tracing multi-threaded program, it works
+> very well for us. Thank you for having this great tool. But we have some
+> concerns about the overhead and scalability of the tracing. Could you share
+> some insight of the following questions?
+> 1. The session domain communicates with the user application via Unix
+> domain socket, from LTTng document. is the communication frequent, such as
+> each event requires communication, or the communication just happens at the
+> beginning to configure user space tracing?
+>
+> This Unix socket is only for "control" of tracing (infrequent
+> communication). The high-throughput tracing data goes through a shared
+> memory map (per-cpu buffers).
+>
+> 2. For the consumer domain, is the consumer domain has a thread per
+> CPU/channel to write to disk or relay the traces, or it is a single
+> threaded-process handling all the channels and ring buffers, which could
+> become a bottleneck if we have large number of user threads all feeding
+> traces?
+>
+> Each consumer daemon is a single thread at the moment. It could be
+> improved by implementing a multithreaded design in the future. It should
+> help especially in NUMA setups, where having the consumer daemon on the
+> same NUMA node as the ring buffer it reads from would minimize the amount
+> of remote NUMA accesses.
+>
+> Another point is cases where I/O is performed to various target locations
+> (different network interfaces or disks). When all I/O goes through the same
+> interface, the bottleneck becomes the block device or the network
+> interface. However, for scenarios involving many network interfaces or
+> block devices, then multithreading the consumer daemon could become useful.
+>
+> This has not been a priority for anyone so far though.
+>
+That makes sense.
 
-> 2. For the consumer domain, is the consumer domain has a thread per CPU/channel
-> to write to disk or relay the traces, or it is a single threaded-process
-> handling all the channels and ring buffers, which could become a bottleneck if
-> we have large number of user threads all feeding traces?
+> 3. In the one channel/ring buffer per CPU setting, if a user thread
+> migrates from one CPU to another, are the traces generated by that user
+> thread fed to the two channels/buffers for the two CPUs?
+>
+> The event generated will belong to the per-cpu buffer on which the
+> "sched_getcpu()" invocation occurs for the event. It is only saved into a
+> single per-cpu buffer, even if the thread is migrated to a different CPU
+> before it completes writing the event. This effectively creates infrequent
+> situations where threads write into other cpu's per-cpu buffers. Note that
+> the "reserve" and "commit" operations are smp-safe in lttng-ust for that
+> reason.
+>
 
-Each consumer daemon is a single thread at the moment. It could be improved by implementing a multithreaded design in the future. It should help especially in NUMA setups, where having the consumer daemon on the same NUMA node as the ring buffer it reads from would minimize the amount of remote NUMA accesses. 
+so after the migration, new events will still be written to another CPU's
+buffer?
 
-Another point is cases where I/O is performed to various target locations (different network interfaces or disks). When all I/O goes through the same interface, the bottleneck becomes the block device or the network interface. However, for scenarios involving many network interfaces or block devices, then multithreading the consumer daemon could become useful. 
+> 4. So far, the events for tracing can be enabled and disabled from command
+> line, are you considering to have runtime options (APIs) to enable or
+> disable certain events? Or this is the feature that already in or can be
+> implemented in different way?
+>
+> We already expose a public LGPLv2.1 API for this. See lttng-tools:
+>
+> include/lttng/event.h: lttng_enable_event()
+>
+> It is implemented by liblttng-ctl.so
+>
+Great and will try that.
 
-This has not been a priority for anyone so far though. 
+> 5. For context field, from the document, context fields cannot be removed
+> from a channel once you add it. I would like to request a feature to allow
+> removing context fields in the user program.
+>
+> That's unfortunately not that simple. The channel context field belongs to
+> the channel, which maps to the "stream" description in the resulting CTF
+> metadata in the output trace. That stream description is invariant once it
+> has been created.
+>
+That makes senses.
 
-> 3. In the one channel/ring buffer per CPU setting, if a user thread migrates
-> from one CPU to another, are the traces generated by that user thread fed to
-> the two channels/buffers for the two CPUs?
+We use babeltrace to process trace records. So far, it presents a
+single-ordered event sequence and we have to use a dedicated event record
+filed to separate the traces what are from different channels/threads. Is
+there library or API (C or python-based) that allows us to process traces
+channel by channel? I saw the traces are saved in files of channels.
 
-The event generated will belong to the per-cpu buffer on which the "sched_getcpu()" invocation occurs for the event. It is only saved into a single per-cpu buffer, even if the thread is migrated to a different CPU before it completes writing the event. This effectively creates infrequent situations where threads write into other cpu's per-cpu buffers. Note that the "reserve" and "commit" operations are smp-safe in lttng-ust for that reason. 
+Thank you.
+Yonghong
 
-> 4. So far, the events for tracing can be enabled and disabled from command line,
-> are you considering to have runtime options (APIs) to enable or disable certain
-> events? Or this is the feature that already in or can be implemented in
-> different way?
 
-We already expose a public LGPLv2.1 API for this. See lttng-tools: 
-
-include/lttng/event.h: lttng_enable_event() 
-
-It is implemented by liblttng-ctl.so 
-
-> 5. For context field, from the document, context fields cannot be removed from a
-> channel once you add it. I would like to request a feature to allow removing
-> context fields in the user program.
-
-That's unfortunately not that simple. The channel context field belongs to the channel, which maps to the "stream" description in the resulting CTF metadata in the output trace. That stream description is invariant once it has been created. 
-
-So currently the only way to remove a context would be to destroy your tracing session and create a new one. 
-
-Thanks for your interest in LTTng! 
-
-Mathieu 
-
+>
+> So currently the only way to remove a context would be to destroy your
+> tracing session and create a new one.
+>
+> Thanks for your interest in LTTng!
+>
+> Mathieu
+>
+>
+>
 > Thank you very much.
 > Yonghong
-
+>
+>
+>
 > _______________________________________________
 > lttng-dev mailing list
 > lttng-dev@lists.lttng.org
 > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+>
 
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_22054d14-255e-43ed-942d-9ff0f4f88ea0
-Content-Type: text/html; charset=utf-8
+--0000000000007cce17057d673ccb
+Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div>Hi Yonghong,<br></div><div><br data-mce-bog=
-us=3D"1"></div><div><span id=3D"zwchr" data-marker=3D"__DIVIDER__">----- On=
- Dec 19, 2018, at 1:19 PM, Yonghong Yan &lt;yanyh15@gmail.com&gt; wrote:<br=
-></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"bor=
-der-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font=
--weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica=
-,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div dir=3D"ltr">We are=
+<div dir=3D"ltr"><div dir=3D"ltr">Mathieu,=C2=A0<div><br>Thank you for your=
+ response. see inline ...</div></div><br><div class=3D"gmail_quote"><div di=
+r=3D"ltr">On Wed, Dec 19, 2018 at 4:20 PM Mathieu Desnoyers &lt;<a href=3D"=
+mailto:mathieu.desnoyers@efficios.com">mathieu.desnoyers@efficios.com</a>&g=
+t; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0p=
+x 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div><=
+div style=3D"font-family:arial,helvetica,sans-serif;font-size:12pt;color:rg=
+b(0,0,0)"><div>Hi Yonghong,<br></div><div><br></div><div><span id=3D"gmail-=
+m_2077673380353905976zwchr">----- On Dec 19, 2018, at 1:19 PM, Yonghong Yan=
+ &lt;<a href=3D"mailto:yanyh15@gmail.com" target=3D"_blank">yanyh15@gmail.c=
+om</a>&gt; wrote:<br></span></div><div><blockquote style=3D"border-left:2px=
+ solid rgb(16,16,255);margin-left:5px;padding-left:5px;color:rgb(0,0,0);fon=
+t-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetic=
+a,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr"><div dir=3D"ltr">We are=
  experimenting LTTng for tracing multi-threaded program, it works very well=
  for us. Thank you for having this great tool. But we have some concerns ab=
 out the overhead and scalability of the tracing. Could you share some insig=
@@ -121,79 +183,104 @@ main communicates with the user application via Unix domain socket, from LT=
 Tng document. is the communication frequent, such as each event requires co=
 mmunication, or the communication just happens at the beginning to configur=
 e user space tracing?</div></div></div></blockquote><div>This Unix socket i=
-s only for "control" of tracing (infrequent communication). The high-throug=
-hput tracing data goes through a shared memory map (per-cpu buffers).<br></=
-div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2p=
-x solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:nor=
-mal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans=
--serif;font-size:12pt;"><div dir=3D"ltr"><div dir=3D"ltr"><div>2. For the c=
-onsumer domain, is the consumer domain has a thread per CPU/channel to writ=
-e to disk or relay the traces, or it is a single threaded-process handling =
-all the channels and ring buffers, which could become a bottleneck if we ha=
-ve large number of user threads all feeding traces?</div></div></div></bloc=
-kquote><div>Each consumer daemon is a single thread at the moment. It could=
- be improved by implementing a multithreaded design in the future. It shoul=
-d help especially in NUMA setups, where having the consumer daemon on the s=
-ame NUMA node as the ring buffer it reads from would minimize the amount of=
- remote NUMA accesses.<br></div><div><br data-mce-bogus=3D"1"></div><div>An=
-other point is cases where I/O is performed to various target locations (di=
-fferent network interfaces or disks). When all I/O goes through the same in=
-terface, the bottleneck becomes the block device or the network interface. =
-However, for scenarios involving many network interfaces or block devices, =
-then multithreading the consumer daemon could become useful.</div><div><br =
-data-mce-bogus=3D"1"></div><div>This has not been a priority for anyone so =
-far though.<br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:=
-2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:n=
+s only for &quot;control&quot; of tracing (infrequent communication). The h=
+igh-throughput tracing data goes through a shared memory map (per-cpu buffe=
+rs).<br></div><div><br></div><blockquote style=3D"border-left:2px solid rgb=
+(16,16,255);margin-left:5px;padding-left:5px;color:rgb(0,0,0);font-weight:n=
 ormal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sa=
-ns-serif;font-size:12pt;"><div dir=3D"ltr"><div dir=3D"ltr"><div>3. In the =
-one channel/ring buffer per CPU setting, if a user thread migrates from one=
- CPU to another, are the traces generated by that user thread fed to the tw=
-o channels/buffers for the two CPUs?</div></div></div></blockquote><div>The=
- event generated will belong to the per-cpu buffer on which the "sched_getc=
-pu()" invocation occurs for the event. It is only saved into a single per-c=
-pu buffer, even if the thread is migrated to a different CPU before it comp=
-letes writing the event. This effectively creates infrequent situations whe=
-re threads write into other cpu's per-cpu buffers. Note that the "reserve" =
-and "commit" operations are smp-safe in lttng-ust for that reason.</div><bl=
-ockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-lef=
-t:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;=
-font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><d=
-iv dir=3D"ltr"><div>4. So far, the events for tracing can be enabled and di=
-sabled from command line, are you considering to have runtime options (APIs=
-) to enable or disable certain events? Or this is the feature that already =
-in or can be implemented in different way?</div></div></div></blockquote><d=
-iv>We already expose a public LGPLv2.1 API for this. See lttng-tools:<br></=
-div><div><br data-mce-bogus=3D"1"></div><div>include/lttng/event.h: lttng_e=
-nable_event()<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"><=
-/div><div>It is implemented by liblttng-ctl.so<br data-mce-bogus=3D"1"></di=
-v><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;paddin=
-g-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:=
-none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"lt=
-r"><div dir=3D"ltr"><div>5. For context field, from the document,&nbsp;cont=
-ext fields cannot be removed from a channel once you add it. I would like t=
-o request a feature to allow removing context fields in the user program.&n=
-bsp;</div></div></div></blockquote><div>That's unfortunately not that simpl=
-e. The channel context field belongs to the channel, which maps to the "str=
-eam" description in the resulting CTF metadata in the output trace. That st=
-ream description is invariant once it has been created.<br></div><div><br d=
-ata-mce-bogus=3D"1"></div><div>So currently the only way to remove a contex=
-t would be to destroy your tracing session and create a new one.<br data-mc=
-e-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks for you=
-r interest in LTTng!<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=
-=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-b=
-ogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"b=
-order-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;fo=
-nt-weight:normal;font-style:normal;text-decoration:none;font-family:Helveti=
-ca,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div dir=3D"ltr"><br>=
-<div>Thank you very much.</div><div>Yonghong</div><br><br></div></div>
+ns-serif;font-size:12pt"><div dir=3D"ltr"><div dir=3D"ltr"><div>2. For the =
+consumer domain, is the consumer domain has a thread per CPU/channel to wri=
+te to disk or relay the traces, or it is a single threaded-process handling=
+ all the channels and ring buffers, which could become a bottleneck if we h=
+ave large number of user threads all feeding traces?</div></div></div></blo=
+ckquote><div>Each consumer daemon is a single thread at the moment. It coul=
+d be improved by implementing a multithreaded design in the future. It shou=
+ld help especially in NUMA setups, where having the consumer daemon on the =
+same NUMA node as the ring buffer it reads from would minimize the amount o=
+f remote NUMA accesses.<br></div><div><br></div><div>Another point is cases=
+ where I/O is performed to various target locations (different network inte=
+rfaces or disks). When all I/O goes through the same interface, the bottlen=
+eck becomes the block device or the network interface. However, for scenari=
+os involving many network interfaces or block devices, then multithreading =
+the consumer daemon could become useful.</div><div><br></div><div>This has =
+not been a priority for anyone so far though.<br></div></div></div></div></=
+blockquote><div>That makes sense.=C2=A0=C2=A0</div><blockquote class=3D"gma=
+il_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,2=
+04,204);padding-left:1ex"><div><div style=3D"font-family:arial,helvetica,sa=
+ns-serif;font-size:12pt;color:rgb(0,0,0)"><div><div></div><blockquote style=
+=3D"border-left:2px solid rgb(16,16,255);margin-left:5px;padding-left:5px;c=
+olor:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration:none;f=
+ont-family:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr"><div=
+ dir=3D"ltr"><div>3. In the one channel/ring buffer per CPU setting, if a u=
+ser thread migrates from one CPU to another, are the traces generated by th=
+at user thread fed to the two channels/buffers for the two CPUs?</div></div=
+></div></blockquote><div>The event generated will belong to the per-cpu buf=
+fer on which the &quot;sched_getcpu()&quot; invocation occurs for the event=
+. It is only saved into a single per-cpu buffer, even if the thread is migr=
+ated to a different CPU before it completes writing the event. This effecti=
+vely creates infrequent situations where threads write into other cpu&#39;s=
+ per-cpu buffers. Note that the &quot;reserve&quot; and &quot;commit&quot; =
+operations are smp-safe in lttng-ust for that reason.</div></div></div></di=
+v></blockquote><div><br></div><div>so after the migration, new events will =
+still be written to another CPU&#39;s buffer?=C2=A0</div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex"><div><div style=3D"font-family:arial,helve=
+tica,sans-serif;font-size:12pt;color:rgb(0,0,0)"><div><blockquote style=3D"=
+border-left:2px solid rgb(16,16,255);margin-left:5px;padding-left:5px;color=
+:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration:none;font-=
+family:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr"><div dir=
+=3D"ltr"><div>4. So far, the events for tracing can be enabled and disabled=
+ from command line, are you considering to have runtime options (APIs) to e=
+nable or disable certain events? Or this is the feature that already in or =
+can be implemented in different way?</div></div></div></blockquote><div>We =
+already expose a public LGPLv2.1 API for this. See lttng-tools:<br></div><d=
+iv><br></div><div>include/lttng/event.h: lttng_enable_event()<br></div><div=
+><br></div><div>It is implemented by liblttng-ctl.so<br></div></div></div><=
+/div></blockquote><div>Great and will try that.=C2=A0=C2=A0</div><blockquot=
+e class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px s=
+olid rgb(204,204,204);padding-left:1ex"><div><div style=3D"font-family:aria=
+l,helvetica,sans-serif;font-size:12pt;color:rgb(0,0,0)"><div><div></div><bl=
+ockquote style=3D"border-left:2px solid rgb(16,16,255);margin-left:5px;padd=
+ing-left:5px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-dec=
+oration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt"><div di=
+r=3D"ltr"><div dir=3D"ltr"><div>5. For context field, from the document,=C2=
+=A0context fields cannot be removed from a channel once you add it. I would=
+ like to request a feature to allow removing context fields in the user pro=
+gram.=C2=A0</div></div></div></blockquote><div>That&#39;s unfortunately not=
+ that simple. The channel context field belongs to the channel, which maps =
+to the &quot;stream&quot; description in the resulting CTF metadata in the =
+output trace. That stream description is invariant once it has been created=
+.<br></div></div></div></div></blockquote><div>That makes senses.=C2=A0</di=
+v><div><br></div><div>We use babeltrace to process trace records. So far, i=
+t presents a single-ordered event sequence and we have to use a dedicated e=
+vent record filed to separate the traces what are from different channels/t=
+hreads. Is there library or API (C or python-based) that allows us to proce=
+ss traces channel by channel? I saw the traces are saved in files of channe=
+ls.=C2=A0</div><div><br></div><div>Thank you.</div><div>Yonghong</div><div>=
+=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0=
+.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div><div sty=
+le=3D"font-family:arial,helvetica,sans-serif;font-size:12pt;color:rgb(0,0,0=
+)"><div><div></div><div><br></div><div>So currently the only way to remove =
+a context would be to destroy your tracing session and create a new one.<br=
+></div><div><br></div><div>Thanks for your interest in LTTng!<br></div><div=
+><br></div><div>Mathieu<br></div><div><br></div><div><br></div><blockquote =
+style=3D"border-left:2px solid rgb(16,16,255);margin-left:5px;padding-left:=
+5px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration:n=
+one;font-family:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr"=
+><div dir=3D"ltr"><br><div>Thank you very much.</div><div>Yonghong</div><br=
+><br></div></div>
 <br>_______________________________________________<br>lttng-dev mailing li=
-st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
-listinfo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D=
-"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http=
-://www.efficios.com</div></div></body></html>
---=_22054d14-255e-43ed-942d-9ff0f4f88ea0--
+st<br><a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-=
+dev@lists.lttng.org</a><br><a href=3D"https://lists.lttng.org/cgi-bin/mailm=
+an/listinfo/lttng-dev" target=3D"_blank">https://lists.lttng.org/cgi-bin/ma=
+ilman/listinfo/lttng-dev</a><br></blockquote></div><div><br></div><div>-- <=
+br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br><a href=3D"http://www.e=
+fficios.com" target=3D"_blank">http://www.efficios.com</a></div></div></div=
+></blockquote></div></div>
 
---===============1310163470441828936==
+--0000000000007cce17057d673ccb--
+
+--===============3246431782652502767==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -204,4 +291,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1310163470441828936==--
+--===============3246431782652502767==--
