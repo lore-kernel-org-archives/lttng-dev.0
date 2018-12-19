@@ -1,15 +1,17 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools] Fix: session list lock must be held
- on session put operation
-Date: Wed, 19 Dec 2018 13:47:23 -0500
-Message-ID: <20181219184723.11974-1-jonathan.rajotte-julien__35648.3504096561$1545245139$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: tracing multithread user program and API support
+ for enabling/disabling events and for adding/removing context fields
+Date: Wed, 19 Dec 2018 16:20:32 -0500 (EST)
+Message-ID: <1102294099.6322.1545254432246.JavaMail.zimbra__5282.49267158589$1545254322$gmane$org@efficios.com>
+References: <CACJEY87s+TAkMtKrW7UczWJCBaisjtKVJifM5cAqwDtnWnGt9A@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1310163470441828936=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 43KkQw5Fl4z16Tx
- for <lttng-dev@lists.lttng.org>; Wed, 19 Dec 2018 13:47:36 -0500 (EST)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 43KnqW25Djz16c6
+ for <lttng-dev@lists.lttng.org>; Wed, 19 Dec 2018 16:20:39 -0500 (EST)
+In-Reply-To: <CACJEY87s+TAkMtKrW7UczWJCBaisjtKVJifM5cAqwDtnWnGt9A@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,45 +21,187 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: Yonghong Yan <yanyh15@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
----
- src/bin/lttng-sessiond/rotation-thread.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--===============1310163470441828936==
+Content-Type: multipart/alternative;
+	boundary="=_22054d14-255e-43ed-942d-9ff0f4f88ea0"
 
-diff --git a/src/bin/lttng-sessiond/rotation-thread.c b/src/bin/lttng-sessiond/rotation-thread.c
-index 8e63e160f..6669372dd 100644
---- a/src/bin/lttng-sessiond/rotation-thread.c
-+++ b/src/bin/lttng-sessiond/rotation-thread.c
-@@ -761,9 +761,9 @@ int handle_job_queue(struct rotation_thread_handle *handle,
- 			 * possible for a job targeting that session to have
- 			 * already been queued before it was destroyed.
- 			 */
--			session_unlock_list();
- 			free(job);
- 			session_put(session);
-+			session_unlock_list();
- 			continue;
- 		}
- 
-@@ -832,7 +832,6 @@ int handle_condition(const struct lttng_condition *condition,
- 		goto end;
- 	}
- 	session_lock(session);
--	session_unlock_list();
- 
- 	ret = unsubscribe_session_consumed_size_rotation(session,
- 			notification_thread_handle);
-@@ -861,6 +860,7 @@ int handle_condition(const struct lttng_condition *condition,
- end_unlock:
- 	session_unlock(session);
- 	session_put(session);
-+	session_unlock_list();
- end:
- 	return ret;
- }
+--=_22054d14-255e-43ed-942d-9ff0f4f88ea0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+Hi Yonghong, 
+
+----- On Dec 19, 2018, at 1:19 PM, Yonghong Yan <yanyh15@gmail.com> wrote: 
+
+> We are experimenting LTTng for tracing multi-threaded program, it works very
+> well for us. Thank you for having this great tool. But we have some concerns
+> about the overhead and scalability of the tracing. Could you share some insight
+> of the following questions?
+> 1. The session domain communicates with the user application via Unix domain
+> socket, from LTTng document. is the communication frequent, such as each event
+> requires communication, or the communication just happens at the beginning to
+> configure user space tracing?
+
+This Unix socket is only for "control" of tracing (infrequent communication). The high-throughput tracing data goes through a shared memory map (per-cpu buffers). 
+
+> 2. For the consumer domain, is the consumer domain has a thread per CPU/channel
+> to write to disk or relay the traces, or it is a single threaded-process
+> handling all the channels and ring buffers, which could become a bottleneck if
+> we have large number of user threads all feeding traces?
+
+Each consumer daemon is a single thread at the moment. It could be improved by implementing a multithreaded design in the future. It should help especially in NUMA setups, where having the consumer daemon on the same NUMA node as the ring buffer it reads from would minimize the amount of remote NUMA accesses. 
+
+Another point is cases where I/O is performed to various target locations (different network interfaces or disks). When all I/O goes through the same interface, the bottleneck becomes the block device or the network interface. However, for scenarios involving many network interfaces or block devices, then multithreading the consumer daemon could become useful. 
+
+This has not been a priority for anyone so far though. 
+
+> 3. In the one channel/ring buffer per CPU setting, if a user thread migrates
+> from one CPU to another, are the traces generated by that user thread fed to
+> the two channels/buffers for the two CPUs?
+
+The event generated will belong to the per-cpu buffer on which the "sched_getcpu()" invocation occurs for the event. It is only saved into a single per-cpu buffer, even if the thread is migrated to a different CPU before it completes writing the event. This effectively creates infrequent situations where threads write into other cpu's per-cpu buffers. Note that the "reserve" and "commit" operations are smp-safe in lttng-ust for that reason. 
+
+> 4. So far, the events for tracing can be enabled and disabled from command line,
+> are you considering to have runtime options (APIs) to enable or disable certain
+> events? Or this is the feature that already in or can be implemented in
+> different way?
+
+We already expose a public LGPLv2.1 API for this. See lttng-tools: 
+
+include/lttng/event.h: lttng_enable_event() 
+
+It is implemented by liblttng-ctl.so 
+
+> 5. For context field, from the document, context fields cannot be removed from a
+> channel once you add it. I would like to request a feature to allow removing
+> context fields in the user program.
+
+That's unfortunately not that simple. The channel context field belongs to the channel, which maps to the "stream" description in the resulting CTF metadata in the output trace. That stream description is invariant once it has been created. 
+
+So currently the only way to remove a context would be to destroy your tracing session and create a new one. 
+
+Thanks for your interest in LTTng! 
+
+Mathieu 
+
+> Thank you very much.
+> Yonghong
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 -- 
-2.17.1
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+--=_22054d14-255e-43ed-942d-9ff0f4f88ea0
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div>Hi Yonghong,<br></div><div><br data-mce-bog=
+us=3D"1"></div><div><span id=3D"zwchr" data-marker=3D"__DIVIDER__">----- On=
+ Dec 19, 2018, at 1:19 PM, Yonghong Yan &lt;yanyh15@gmail.com&gt; wrote:<br=
+></span></div><div data-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"bor=
+der-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font=
+-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica=
+,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div dir=3D"ltr">We are=
+ experimenting LTTng for tracing multi-threaded program, it works very well=
+ for us. Thank you for having this great tool. But we have some concerns ab=
+out the overhead and scalability of the tracing. Could you share some insig=
+ht of the following questions?</div><div dir=3D"ltr"><div>1. The session do=
+main communicates with the user application via Unix domain socket, from LT=
+Tng document. is the communication frequent, such as each event requires co=
+mmunication, or the communication just happens at the beginning to configur=
+e user space tracing?</div></div></div></blockquote><div>This Unix socket i=
+s only for "control" of tracing (infrequent communication). The high-throug=
+hput tracing data goes through a shared memory map (per-cpu buffers).<br></=
+div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2p=
+x solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:nor=
+mal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans=
+-serif;font-size:12pt;"><div dir=3D"ltr"><div dir=3D"ltr"><div>2. For the c=
+onsumer domain, is the consumer domain has a thread per CPU/channel to writ=
+e to disk or relay the traces, or it is a single threaded-process handling =
+all the channels and ring buffers, which could become a bottleneck if we ha=
+ve large number of user threads all feeding traces?</div></div></div></bloc=
+kquote><div>Each consumer daemon is a single thread at the moment. It could=
+ be improved by implementing a multithreaded design in the future. It shoul=
+d help especially in NUMA setups, where having the consumer daemon on the s=
+ame NUMA node as the ring buffer it reads from would minimize the amount of=
+ remote NUMA accesses.<br></div><div><br data-mce-bogus=3D"1"></div><div>An=
+other point is cases where I/O is performed to various target locations (di=
+fferent network interfaces or disks). When all I/O goes through the same in=
+terface, the bottleneck becomes the block device or the network interface. =
+However, for scenarios involving many network interfaces or block devices, =
+then multithreading the consumer daemon could become useful.</div><div><br =
+data-mce-bogus=3D"1"></div><div>This has not been a priority for anyone so =
+far though.<br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:=
+2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:n=
+ormal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sa=
+ns-serif;font-size:12pt;"><div dir=3D"ltr"><div dir=3D"ltr"><div>3. In the =
+one channel/ring buffer per CPU setting, if a user thread migrates from one=
+ CPU to another, are the traces generated by that user thread fed to the tw=
+o channels/buffers for the two CPUs?</div></div></div></blockquote><div>The=
+ event generated will belong to the per-cpu buffer on which the "sched_getc=
+pu()" invocation occurs for the event. It is only saved into a single per-c=
+pu buffer, even if the thread is migrated to a different CPU before it comp=
+letes writing the event. This effectively creates infrequent situations whe=
+re threads write into other cpu's per-cpu buffers. Note that the "reserve" =
+and "commit" operations are smp-safe in lttng-ust for that reason.</div><bl=
+ockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-lef=
+t:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;=
+font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><d=
+iv dir=3D"ltr"><div>4. So far, the events for tracing can be enabled and di=
+sabled from command line, are you considering to have runtime options (APIs=
+) to enable or disable certain events? Or this is the feature that already =
+in or can be implemented in different way?</div></div></div></blockquote><d=
+iv>We already expose a public LGPLv2.1 API for this. See lttng-tools:<br></=
+div><div><br data-mce-bogus=3D"1"></div><div>include/lttng/event.h: lttng_e=
+nable_event()<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"><=
+/div><div>It is implemented by liblttng-ctl.so<br data-mce-bogus=3D"1"></di=
+v><blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;paddin=
+g-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:=
+none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"lt=
+r"><div dir=3D"ltr"><div>5. For context field, from the document,&nbsp;cont=
+ext fields cannot be removed from a channel once you add it. I would like t=
+o request a feature to allow removing context fields in the user program.&n=
+bsp;</div></div></div></blockquote><div>That's unfortunately not that simpl=
+e. The channel context field belongs to the channel, which maps to the "str=
+eam" description in the resulting CTF metadata in the output trace. That st=
+ream description is invariant once it has been created.<br></div><div><br d=
+ata-mce-bogus=3D"1"></div><div>So currently the only way to remove a contex=
+t would be to destroy your tracing session and create a new one.<br data-mc=
+e-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks for you=
+r interest in LTTng!<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=
+=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><br data-mce-b=
+ogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"b=
+order-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;fo=
+nt-weight:normal;font-style:normal;text-decoration:none;font-family:Helveti=
+ca,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div dir=3D"ltr"><br>=
+<div>Thank you very much.</div><div>Yonghong</div><br><br></div></div>
+<br>_______________________________________________<br>lttng-dev mailing li=
+st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
+listinfo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D=
+"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http=
+://www.efficios.com</div></div></body></html>
+--=_22054d14-255e-43ed-942d-9ff0f4f88ea0--
+
+--===============1310163470441828936==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1310163470441828936==--
