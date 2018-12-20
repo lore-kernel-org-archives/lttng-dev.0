@@ -1,18 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: TP_ARGS for TRACEPOINT_EVENT_CLASS and
- TRACEPOINT_EVENT_INSTANCE
-Date: Thu, 20 Dec 2018 14:28:08 -0500 (EST)
-Message-ID: <281166750.7024.1545334088913.JavaMail.zimbra__5957.44975512407$1545333973$gmane$org@efficios.com>
-References: <CACJEY862Ytj85N+sidwaq1JEQ+FCiAFo7x5JGuTb992mUrYkdg@mail.gmail.com>
- <CAB4xu_0JxAfA9QtU-NHgtoTOh6c_eT+zQPBvXNr_HZgKE6GvWA@mail.gmail.com>
- <CACJEY84HU4jdKWdo_6ZJO88MYhHN7XvQ-2uDSQAjE-6L06zwiw@mail.gmail.com>
+Subject: Re: tracing multithread user program and API support
+ for enabling/disabling events and for adding/removing context fields
+Date: Thu, 20 Dec 2018 14:49:15 -0500 (EST)
+Message-ID: <172660935.7098.1545335355004.JavaMail.zimbra__46555.5077455521$1545335241$gmane$org@efficios.com>
+References: <CACJEY87s+TAkMtKrW7UczWJCBaisjtKVJifM5cAqwDtnWnGt9A@mail.gmail.com>
+ <1102294099.6322.1545254432246.JavaMail.zimbra@efficios.com>
+ <CACJEY86A_nte0t7pqNQA_TnshWokXSUha44rh4aq+4-bMsN0Cg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9185042519307266054=="
+Content-Type: multipart/mixed; boundary="===============3488692453084603734=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 43LMHG3524z16Th
- for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2018 14:28:10 -0500 (EST)
-In-Reply-To: <CACJEY84HU4jdKWdo_6ZJO88MYhHN7XvQ-2uDSQAjE-6L06zwiw@mail.gmail.com>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 43LMlc750rz16WY
+ for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2018 14:49:16 -0500 (EST)
+In-Reply-To: <CACJEY86A_nte0t7pqNQA_TnshWokXSUha44rh4aq+4-bMsN0Cg@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,228 +27,242 @@ To: Yonghong Yan <yanyh15@gmail.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============9185042519307266054==
+--===============3488692453084603734==
 Content-Type: multipart/alternative;
-	boundary="=_8703ba5a-2c4a-4bdd-9d55-e6d8fe5bc3df"
+	boundary="=_00f0a9e4-3c23-4132-b0fd-ad80ca5f2111"
 
---=_8703ba5a-2c4a-4bdd-9d55-e6d8fe5bc3df
+--=_00f0a9e4-3c23-4132-b0fd-ad80ca5f2111
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-This is due to limitations of the C preprocessor. We need to have the TP_ARGS() available 
-both in the TRACEPOINT_EVENT_INSTANCE(), which generates the tracepoint prototype 
-used to validate type compability of the tracepoint callsite within the application, and within 
-TRACEPOINT_EVENT_CLASS() which is used to generate the probe callback with the 
-correct arguments. 
+Hi, 
 
-Unfortunately, the C preprocessor does not allow much freedom when it comes to accessing 
-arguments of another macro. 
+Can you define what you mean by "per-user-thread tracepoint" and "whole-user-process" ? AFAIK 
+those concepts don't appear anywhere in the LTTng documentations. 
 
 Thanks, 
 
 Mathieu 
 
------ On Dec 20, 2018, at 12:21 PM, Yonghong Yan <yanyh15@gmail.com> wrote: 
+----- On Dec 19, 2018, at 6:06 PM, Yonghong Yan <yanyh15@gmail.com> wrote: 
 
-> Then why bother to require to have the TP_ARGS in TRACEPOINT_EVENT_INSTANCE?
+> Got another question about lttng_enable_event(): Using this API will impact
+> per-user-thread tracepoint or the whole-user-process? I am thinking of the
+> whole process, but want to confirm.
 
 > Yonghong
 
-> On Thu, Dec 20, 2018 at 11:56 AM Philippe Proulx < [
-> mailto:eeppeliteloop@gmail.com | eeppeliteloop@gmail.com ] > wrote:
+> On Wed, Dec 19, 2018 at 4:20 PM Mathieu Desnoyers < [
+> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
+> wrote:
 
->> On Thu, Dec 20, 2018 at 11:47 AM Yonghong Yan < [ mailto:yanyh15@gmail.com |
+>> Hi Yonghong,
+
+>> ----- On Dec 19, 2018, at 1:19 PM, Yonghong Yan < [ mailto:yanyh15@gmail.com |
 >> yanyh15@gmail.com ] > wrote:
 
->>> I am looking at the following example from lttng-ust manual. The same TP_ARGS (
->>> ... ) are repeated in both the TRACEPOINT_EVENT_CLASS and
->>> TRACEPOINT_EVENT_INSTANCE definition. My understanding is that it actually
->>> allows using different arguments, even in this example it is the same. Am I
->> > right?
+>>> We are experimenting LTTng for tracing multi-threaded program, it works very
+>>> well for us. Thank you for having this great tool. But we have some concerns
+>>> about the overhead and scalability of the tracing. Could you share some insight
+>>> of the following questions?
+>>> 1. The session domain communicates with the user application via Unix domain
+>>> socket, from LTTng document. is the communication frequent, such as each event
+>>> requires communication, or the communication just happens at the beginning to
+>>> configure user space tracing?
 
->> No it does not: they need to match.
+>> This Unix socket is only for "control" of tracing (infrequent communication).
+>> The high-throughput tracing data goes through a shared memory map (per-cpu
+>> buffers).
 
->> See < [
->> https://github.com/lttng/lttng-ust/commit/c75c0422c64f33c0102e1778cecc812c58b700e5
->> |
->> https://github.com/lttng/lttng-ust/commit/c75c0422c64f33c0102e1778cecc812c58b700e5
->> ] >.
+>>> 2. For the consumer domain, is the consumer domain has a thread per CPU/channel
+>>> to write to disk or relay the traces, or it is a single threaded-process
+>>> handling all the channels and ring buffers, which could become a bottleneck if
+>>> we have large number of user threads all feeding traces?
 
->> Phil
+>> Each consumer daemon is a single thread at the moment. It could be improved by
+>> implementing a multithreaded design in the future. It should help especially in
+>> NUMA setups, where having the consumer daemon on the same NUMA node as the ring
+>> buffer it reads from would minimize the amount of remote NUMA accesses.
 
+>> Another point is cases where I/O is performed to various target locations
+>> (different network interfaces or disks). When all I/O goes through the same
+>> interface, the bottleneck becomes the block device or the network interface.
+>> However, for scenarios involving many network interfaces or block devices, then
+>> multithreading the consumer daemon could become useful.
 
->>> I also like the feature of having one TP_ARGS in the TRACEPOINT_EVENT_CLASS that
->>> declares the arguments for several TRACEPOINT_EVENT_INSTANCE so we do not need
->> > to have TP_ARGS in TRACEPOINT_EVENT_INSTANCE. Is that possible?
+>> This has not been a priority for anyone so far though.
 
->> > Thank you
->> > Yonghong
+>>> 3. In the one channel/ring buffer per CPU setting, if a user thread migrates
+>>> from one CPU to another, are the traces generated by that user thread fed to
+>>> the two channels/buffers for the two CPUs?
 
->> > TRACEPOINT_EVENT_CLASS(
->> > my_provider,
->> > my_tracepoint_class,
->> > TP_ARGS(
->> > int, my_integer_arg,
->> > struct app_struct *, app_struct_arg
->> > ),
->> > TP_FIELDS(
->> > ctf_integer(int, a, my_integer_arg)
->> > ctf_integer(unsigned long, b, app_struct_arg->b)
->> > ctf_string(c, app_struct_arg->c)
->> > )
->> > )
+>> The event generated will belong to the per-cpu buffer on which the
+>> "sched_getcpu()" invocation occurs for the event. It is only saved into a
+>> single per-cpu buffer, even if the thread is migrated to a different CPU before
+>> it completes writing the event. This effectively creates infrequent situations
+>> where threads write into other cpu's per-cpu buffers. Note that the "reserve"
+>> and "commit" operations are smp-safe in lttng-ust for that reason.
 
->> > TRACEPOINT_EVENT_INSTANCE(
->> > my_provider,
->> > my_tracepoint_class,
->> > event_instance1,
->> > TP_ARGS(
->> > int, my_integer_arg,
->> > struct app_struct *, app_struct_arg
->> > )
->> > )
+>>> 4. So far, the events for tracing can be enabled and disabled from command line,
+>>> are you considering to have runtime options (APIs) to enable or disable certain
+>>> events? Or this is the feature that already in or can be implemented in
+>>> different way?
 
->> > TRACEPOINT_EVENT_INSTANCE(
->> > my_provider,
->> > my_tracepoint_class,
->> > event_instance2,
->> > TP_ARGS(
->> > int, my_integer_arg,
->> > struct app_struct *, app_struct_arg
->> > )
->> > )
+>> We already expose a public LGPLv2.1 API for this. See lttng-tools:
 
+>> include/lttng/event.h: lttng_enable_event()
 
->> > _______________________________________________
->> > lttng-dev mailing list
->> > [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org ]
+>> It is implemented by liblttng-ctl.so
+
+>>> 5. For context field, from the document, context fields cannot be removed from a
+>>> channel once you add it. I would like to request a feature to allow removing
+>>> context fields in the user program.
+
+>> That's unfortunately not that simple. The channel context field belongs to the
+>> channel, which maps to the "stream" description in the resulting CTF metadata
+>> in the output trace. That stream description is invariant once it has been
+>> created.
+
+>> So currently the only way to remove a context would be to destroy your tracing
+>> session and create a new one.
+
+>> Thanks for your interest in LTTng!
+
+>> Mathieu
+
+>>> Thank you very much.
+>>> Yonghong
+
+>>> _______________________________________________
+>>> lttng-dev mailing list
+>>> [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org ]
 >>> [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
->> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
+>>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>> --
+>> Mathieu Desnoyers
+>> EfficiOS Inc.
+>> [ http://www.efficios.com/ | http://www.efficios.com ]
 
 -- 
 Mathieu Desnoyers 
 EfficiOS Inc. 
 http://www.efficios.com 
 
---=_8703ba5a-2c4a-4bdd-9d55-e6d8fe5bc3df
+--=_00f0a9e4-3c23-4132-b0fd-ad80ca5f2111
 Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 <html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div>This is due to limitations of the C preproc=
-essor. We need to have the TP_ARGS() available<br></div><div>both in the TR=
-ACEPOINT_EVENT_INSTANCE(), which generates the tracepoint prototype<br data=
--mce-bogus=3D"1"></div><div>used to validate type compability of the tracep=
-oint callsite within the application, and within<br data-mce-bogus=3D"1"></=
-div><div>TRACEPOINT_EVENT_CLASS() which is used to generate the probe callb=
-ack with the</div><div>correct arguments.<br data-mce-bogus=3D"1"></div><di=
-v><br data-mce-bogus=3D"1"></div><div>Unfortunately, the C preprocessor doe=
-s not allow much freedom when it comes to accessing<br></div><div>arguments=
- of another macro.<br data-mce-bogus=3D"1"></div><div><br></div><div>Thanks=
-,<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Ma=
-thieu<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><di=
-v><span id=3D"zwchr" data-marker=3D"__DIVIDER__">----- On Dec 20, 2018, at =
-12:21 PM, Yonghong Yan &lt;yanyh15@gmail.com&gt; wrote:<br></span></div><di=
-v data-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left:2px soli=
-d #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;fo=
-nt-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif=
-;font-size:12pt;"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr" class=
-=3D"gmail_signature"><div dir=3D"ltr"><div dir=3D"ltr"><div>Then why bother=
- to require to have the TP_ARGS in TRACEPOINT_EVENT_INSTANCE?&nbsp;</div><b=
-r><div>Yonghong</div><br></div></div></div></div><div class=3D"gmail_quote"=
-><div dir=3D"ltr">On Thu, Dec 20, 2018 at 11:56 AM Philippe Proulx &lt;<a h=
-ref=3D"mailto:eeppeliteloop@gmail.com" target=3D"_blank">eeppeliteloop@gmai=
-l.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"ma=
-rgin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:=
-1ex">On Thu, Dec 20, 2018 at 11:47 AM Yonghong Yan &lt;<a href=3D"mailto:ya=
-nyh15@gmail.com" target=3D"_blank">yanyh15@gmail.com</a>&gt; wrote:<br>
-&gt;<br>
-&gt; I am looking at the following example from lttng-ust manual. The same =
-TP_ARGS ( ... ) are repeated in both the TRACEPOINT_EVENT_CLASS and TRACEPO=
-INT_EVENT_INSTANCE definition. My understanding is that it actually allows =
-using different arguments, even in this example it is the same. Am I right?=
-<br>
-<br>
-No it does not: they need to match.<br>
-<br>
-See &lt;<a href=3D"https://github.com/lttng/lttng-ust/commit/c75c0422c64f33=
-c0102e1778cecc812c58b700e5" rel=3D"noreferrer" target=3D"_blank">https://gi=
-thub.com/lttng/lttng-ust/commit/c75c0422c64f33c0102e1778cecc812c58b700e5</a=
->&gt;.<br>
-<br>
-Phil<br>
-<br>
-&gt;<br>
-&gt; I also like the feature of having one TP_ARGS in the TRACEPOINT_EVENT_=
-CLASS that declares the arguments for several TRACEPOINT_EVENT_INSTANCE so =
-we do not need to have TP_ARGS in TRACEPOINT_EVENT_INSTANCE. Is that possib=
-le?<br>
-&gt;<br>
-&gt; Thank you<br>
-&gt; Yonghong<br>
-&gt;<br>
-&gt; TRACEPOINT_EVENT_CLASS(<br>
-&gt;&nbsp; &nbsp; &nbsp;my_provider,<br>
-&gt;&nbsp; &nbsp; &nbsp;my_tracepoint_class,<br>
-&gt;&nbsp; &nbsp; &nbsp;TP_ARGS(<br>
-&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;int, my_integer_arg,<br>
-&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;struct app_struct *, app_struct_arg<b=
-r>
-&gt;&nbsp; &nbsp; &nbsp;),<br>
-&gt;&nbsp; &nbsp; &nbsp;TP_FIELDS(<br>
-&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ctf_integer(int, a, my_integer_arg)<b=
-r>
-&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ctf_integer(unsigned long, b, app_str=
-uct_arg-&gt;b)<br>
-&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ctf_string(c, app_struct_arg-&gt;c)<b=
-r>
-&gt;&nbsp; &nbsp; &nbsp;)<br>
-&gt; )<br>
-&gt;<br>
-&gt; TRACEPOINT_EVENT_INSTANCE(<br>
-&gt;&nbsp; &nbsp; &nbsp;my_provider,<br>
-&gt;&nbsp; &nbsp; &nbsp;my_tracepoint_class,<br>
-&gt;&nbsp; &nbsp; &nbsp;event_instance1,<br>
-&gt;&nbsp; &nbsp; &nbsp;TP_ARGS(<br>
-&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;int, my_integer_arg,<br>
-&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;struct app_struct *, app_struct_arg<b=
-r>
-&gt;&nbsp; &nbsp; &nbsp;)<br>
-&gt; )<br>
-&gt;<br>
-&gt; TRACEPOINT_EVENT_INSTANCE(<br>
-&gt;&nbsp; &nbsp; &nbsp;my_provider,<br>
-&gt;&nbsp; &nbsp; &nbsp;my_tracepoint_class,<br>
-&gt;&nbsp; &nbsp; &nbsp;event_instance2,<br>
-&gt;&nbsp; &nbsp; &nbsp;TP_ARGS(<br>
-&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;int, my_integer_arg,<br>
-&gt;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;struct app_struct *, app_struct_arg<b=
-r>
-&gt;&nbsp; &nbsp; &nbsp;)<br>
-&gt; )<br>
-&gt;<br>
-&gt;<br>
-&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
-ev@lists.lttng.org</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailm=
-an/listinfo/lttng-dev</a><br>
-</blockquote></div></div>
+ize: 12pt; color: #000000"><div>Hi,<br></div><div><br data-mce-bogus=3D"1">=
+</div><div>Can you define what you mean by "per-user-thread tracepoint" and=
+ "whole-user-process" ? AFAIK</div><div>those concepts don't appear anywher=
+e in the LTTng documentations.<br data-mce-bogus=3D"1"></div><div><br data-=
+mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div><br d=
+ata-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><div><=
+br></div><div><span id=3D"zwchr" data-marker=3D"__DIVIDER__">----- On Dec 1=
+9, 2018, at 6:06 PM, Yonghong Yan &lt;yanyh15@gmail.com&gt; wrote:<br></spa=
+n></div><div data-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-le=
+ft:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weigh=
+t:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial=
+,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"=
+ltr">Got another question about lttng_enable_event(): Using this API will i=
+mpact per-user-thread tracepoint or the whole-user-process? I am thinking o=
+f the whole process, but want to confirm.&nbsp;<div><br><div>Yonghong<br><b=
+r></div></div></div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr">O=
+n Wed, Dec 19, 2018 at 4:20 PM Mathieu Desnoyers &lt;<a href=3D"mailto:math=
+ieu.desnoyers@efficios.com" target=3D"_blank">mathieu.desnoyers@efficios.co=
+m</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin=
+:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"=
+><div><div style=3D"font-family:arial,helvetica,sans-serif;font-size:12pt;c=
+olor:rgb(0,0,0)"><div>Hi Yonghong,<br></div><br><div><span id=3D"gmail-m_20=
+77673380353905976zwchr">----- On Dec 19, 2018, at 1:19 PM, Yonghong Yan &lt=
+;<a href=3D"mailto:yanyh15@gmail.com" target=3D"_blank">yanyh15@gmail.com</=
+a>&gt; wrote:<br></span></div><div><blockquote style=3D"border-left:2px sol=
+id rgb(16,16,255);margin-left:5px;padding-left:5px;color:rgb(0,0,0);font-we=
+ight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Ar=
+ial,sans-serif;font-size:12pt"><div dir=3D"ltr"><div dir=3D"ltr">We are exp=
+erimenting LTTng for tracing multi-threaded program, it works very well for=
+ us. Thank you for having this great tool. But we have some concerns about =
+the overhead and scalability of the tracing. Could you share some insight o=
+f the following questions?</div><div dir=3D"ltr"><div>1. The session domain=
+ communicates with the user application via Unix domain socket, from LTTng =
+document. is the communication frequent, such as each event requires commun=
+ication, or the communication just happens at the beginning to configure us=
+er space tracing?</div></div></div></blockquote><div>This Unix socket is on=
+ly for "control" of tracing (infrequent communication). The high-throughput=
+ tracing data goes through a shared memory map (per-cpu buffers).<br></div>=
+<br><blockquote style=3D"border-left:2px solid rgb(16,16,255);margin-left:5=
+px;padding-left:5px;color:rgb(0,0,0);font-weight:normal;font-style:normal;t=
+ext-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt">=
+<div dir=3D"ltr"><div dir=3D"ltr"><div>2. For the consumer domain, is the c=
+onsumer domain has a thread per CPU/channel to write to disk or relay the t=
+races, or it is a single threaded-process handling all the channels and rin=
+g buffers, which could become a bottleneck if we have large number of user =
+threads all feeding traces?</div></div></div></blockquote><div>Each consume=
+r daemon is a single thread at the moment. It could be improved by implemen=
+ting a multithreaded design in the future. It should help especially in NUM=
+A setups, where having the consumer daemon on the same NUMA node as the rin=
+g buffer it reads from would minimize the amount of remote NUMA accesses.<b=
+r></div><br><div>Another point is cases where I/O is performed to various t=
+arget locations (different network interfaces or disks). When all I/O goes =
+through the same interface, the bottleneck becomes the block device or the =
+network interface. However, for scenarios involving many network interfaces=
+ or block devices, then multithreading the consumer daemon could become use=
+ful.</div><br><div>This has not been a priority for anyone so far though.<b=
+r></div><blockquote style=3D"border-left:2px solid rgb(16,16,255);margin-le=
+ft:5px;padding-left:5px;color:rgb(0,0,0);font-weight:normal;font-style:norm=
+al;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12=
+pt"><div dir=3D"ltr"><div dir=3D"ltr"><div>3. In the one channel/ring buffe=
+r per CPU setting, if a user thread migrates from one CPU to another, are t=
+he traces generated by that user thread fed to the two channels/buffers for=
+ the two CPUs?</div></div></div></blockquote><div>The event generated will =
+belong to the per-cpu buffer on which the "sched_getcpu()" invocation occur=
+s for the event. It is only saved into a single per-cpu buffer, even if the=
+ thread is migrated to a different CPU before it completes writing the even=
+t. This effectively creates infrequent situations where threads write into =
+other cpu's per-cpu buffers. Note that the "reserve" and "commit" operation=
+s are smp-safe in lttng-ust for that reason.</div><blockquote style=3D"bord=
+er-left:2px solid rgb(16,16,255);margin-left:5px;padding-left:5px;color:rgb=
+(0,0,0);font-weight:normal;font-style:normal;text-decoration:none;font-fami=
+ly:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr"><div dir=3D"=
+ltr"><div>4. So far, the events for tracing can be enabled and disabled fro=
+m command line, are you considering to have runtime options (APIs) to enabl=
+e or disable certain events? Or this is the feature that already in or can =
+be implemented in different way?</div></div></div></blockquote><div>We alre=
+ady expose a public LGPLv2.1 API for this. See lttng-tools:<br></div><br><d=
+iv>include/lttng/event.h: lttng_enable_event()<br></div><br><div>It is impl=
+emented by liblttng-ctl.so<br></div><blockquote style=3D"border-left:2px so=
+lid rgb(16,16,255);margin-left:5px;padding-left:5px;color:rgb(0,0,0);font-w=
+eight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,A=
+rial,sans-serif;font-size:12pt"><div dir=3D"ltr"><div dir=3D"ltr"><div>5. F=
+or context field, from the document,&nbsp;context fields cannot be removed =
+from a channel once you add it. I would like to request a feature to allow =
+removing context fields in the user program.&nbsp;</div></div></div></block=
+quote><div>That's unfortunately not that simple. The channel context field =
+belongs to the channel, which maps to the "stream" description in the resul=
+ting CTF metadata in the output trace. That stream description is invariant=
+ once it has been created.<br></div><br><div>So currently the only way to r=
+emove a context would be to destroy your tracing session and create a new o=
+ne.<br></div><br><div>Thanks for your interest in LTTng!<br></div><br><div>=
+Mathieu<br></div><br><br><blockquote style=3D"border-left:2px solid rgb(16,=
+16,255);margin-left:5px;padding-left:5px;color:rgb(0,0,0);font-weight:norma=
+l;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-s=
+erif;font-size:12pt"><div dir=3D"ltr"><div dir=3D"ltr"><br><div>Thank you v=
+ery much.</div><div>Yonghong</div><br><br></div></div>
 <br>_______________________________________________<br>lttng-dev mailing li=
-st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
-listinfo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D=
-"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http=
-://www.efficios.com</div></div></body></html>
---=_8703ba5a-2c4a-4bdd-9d55-e6d8fe5bc3df--
+st<br><a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-=
+dev@lists.lttng.org</a><br><a href=3D"https://lists.lttng.org/cgi-bin/mailm=
+an/listinfo/lttng-dev" target=3D"_blank">https://lists.lttng.org/cgi-bin/ma=
+ilman/listinfo/lttng-dev</a><br></blockquote></div><br><div>-- <br></div><d=
+iv>Mathieu Desnoyers<br>EfficiOS Inc.<br><a href=3D"http://www.efficios.com=
+" target=3D"_blank">http://www.efficios.com</a><br data-mce-bogus=3D"1"></d=
+iv></div></div></blockquote></div></div><br></blockquote></div><div><br></d=
+iv><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br=
+>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></html>
+--=_00f0a9e4-3c23-4132-b0fd-ad80ca5f2111--
 
---===============9185042519307266054==
+--===============3488692453084603734==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -258,4 +273,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============9185042519307266054==--
+--===============3488692453084603734==--
