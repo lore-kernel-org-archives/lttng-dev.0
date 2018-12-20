@@ -1,20 +1,18 @@
-From: Yonghong Yan <yanyh15@gmail.com>
-Subject: Re: TP_ARGS for TRACEPOINT_EVENT_CLASS and
- TRACEPOINT_EVENT_INSTANCE
-Date: Thu, 20 Dec 2018 12:21:32 -0500
-Message-ID: <CACJEY84HU4jdKWdo_6ZJO88MYhHN7XvQ-2uDSQAjE-6L06zwiw__6486.24456157467$1545326388$gmane$org@mail.gmail.com>
-References: <CACJEY862Ytj85N+sidwaq1JEQ+FCiAFo7x5JGuTb992mUrYkdg@mail.gmail.com>
- <CAB4xu_0JxAfA9QtU-NHgtoTOh6c_eT+zQPBvXNr_HZgKE6GvWA@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: tracing multithread user program and API support
+ for enabling/disabling events and for adding/removing context fields
+Date: Thu, 20 Dec 2018 12:56:46 -0500 (EST)
+Message-ID: <1419164969.6928.1545328606605.JavaMail.zimbra__18657.8067289249$1545328498$gmane$org@efficios.com>
+References: <CACJEY87s+TAkMtKrW7UczWJCBaisjtKVJifM5cAqwDtnWnGt9A@mail.gmail.com>
+ <1102294099.6322.1545254432246.JavaMail.zimbra@efficios.com>
+ <CACJEY86eaYaw_-ifOv-LD_c6UigagM27tSngRMgUq2rfeKgArQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1863655459866778394=="
+Content-Type: multipart/mixed; boundary="===============5627891613859788773=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com
- [IPv6:2607:f8b0:4864:20::62a])
- by lists.lttng.org (Postfix) with ESMTPS id 43LJTP1DNjz16LJ
- for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2018 12:21:45 -0500 (EST)
-Received: by mail-pl1-x62a.google.com with SMTP id u18so1176817plq.7
- for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2018 09:21:44 -0800 (PST)
-In-Reply-To: <CAB4xu_0JxAfA9QtU-NHgtoTOh6c_eT+zQPBvXNr_HZgKE6GvWA@mail.gmail.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 43LKFy5d30z16Nl
+ for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2018 12:56:54 -0500 (EST)
+In-Reply-To: <CACJEY86eaYaw_-ifOv-LD_c6UigagM27tSngRMgUq2rfeKgArQ@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,183 +22,165 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Philippe Proulx <eeppeliteloop@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Yonghong Yan <yanyh15@gmail.com>
+Cc: Philippe Proulx <pproulx@efficios.com>, lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============1863655459866778394==
-Content-Type: multipart/alternative; boundary="0000000000004acec4057d775d73"
+--===============5627891613859788773==
+Content-Type: multipart/alternative;
+	boundary="=_d62e0abd-fed5-4cd5-b4be-a20827140aac"
 
---0000000000004acec4057d775d73
-Content-Type: text/plain; charset="UTF-8"
+--=_d62e0abd-fed5-4cd5-b4be-a20827140aac
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Then why bother to require to have the TP_ARGS in
-TRACEPOINT_EVENT_INSTANCE?
+----- On Dec 19, 2018, at 5:07 PM, Yonghong Yan <yanyh15@gmail.com> wrote: 
 
-Yonghong
+> Mathieu,
 
-On Thu, Dec 20, 2018 at 11:56 AM Philippe Proulx <eeppeliteloop@gmail.com>
-wrote:
+> Thank you for your response. see inline ...
 
-> On Thu, Dec 20, 2018 at 11:47 AM Yonghong Yan <yanyh15@gmail.com> wrote:
-> >
-> > I am looking at the following example from lttng-ust manual. The same
-> TP_ARGS ( ... ) are repeated in both the TRACEPOINT_EVENT_CLASS and
-> TRACEPOINT_EVENT_INSTANCE definition. My understanding is that it actually
-> allows using different arguments, even in this example it is the same. Am I
-> right?
->
-> No it does not: they need to match.
->
-> See <
-> https://github.com/lttng/lttng-ust/commit/c75c0422c64f33c0102e1778cecc812c58b700e5
-> >.
->
-> Phil
->
-> >
-> > I also like the feature of having one TP_ARGS in the
-> TRACEPOINT_EVENT_CLASS that declares the arguments for several
-> TRACEPOINT_EVENT_INSTANCE so we do not need to have TP_ARGS in
-> TRACEPOINT_EVENT_INSTANCE. Is that possible?
-> >
-> > Thank you
-> > Yonghong
-> >
-> > TRACEPOINT_EVENT_CLASS(
-> >     my_provider,
-> >     my_tracepoint_class,
-> >     TP_ARGS(
-> >         int, my_integer_arg,
-> >         struct app_struct *, app_struct_arg
-> >     ),
-> >     TP_FIELDS(
-> >         ctf_integer(int, a, my_integer_arg)
-> >         ctf_integer(unsigned long, b, app_struct_arg->b)
-> >         ctf_string(c, app_struct_arg->c)
-> >     )
-> > )
-> >
-> > TRACEPOINT_EVENT_INSTANCE(
-> >     my_provider,
-> >     my_tracepoint_class,
-> >     event_instance1,
-> >     TP_ARGS(
-> >         int, my_integer_arg,
-> >         struct app_struct *, app_struct_arg
-> >     )
-> > )
-> >
-> > TRACEPOINT_EVENT_INSTANCE(
-> >     my_provider,
-> >     my_tracepoint_class,
-> >     event_instance2,
-> >     TP_ARGS(
-> >         int, my_integer_arg,
-> >         struct app_struct *, app_struct_arg
-> >     )
-> > )
-> >
-> >
-> > _______________________________________________
-> > lttng-dev mailing list
-> > lttng-dev@lists.lttng.org
-> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
+> On Wed, Dec 19, 2018 at 4:20 PM Mathieu Desnoyers < [
+> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
+> wrote:
 
---0000000000004acec4057d775d73
-Content-Type: text/html; charset="UTF-8"
+[...] 
+
+>>> 3. In the one channel/ring buffer per CPU setting, if a user thread migrates
+>>> from one CPU to another, are the traces generated by that user thread fed to
+>>> the two channels/buffers for the two CPUs?
+
+>> The event generated will belong to the per-cpu buffer on which the
+>> "sched_getcpu()" invocation occurs for the event. It is only saved into a
+>> single per-cpu buffer, even if the thread is migrated to a different CPU before
+>> it completes writing the event. This effectively creates infrequent situations
+>> where threads write into other cpu's per-cpu buffers. Note that the "reserve"
+>> and "commit" operations are smp-safe in lttng-ust for that reason.
+
+> so after the migration, new events will still be written to another CPU's
+> buffer?
+
+After migration of a thread, the value returned by following calls to sched_getcpu() will match the target processor onto which the thread is migrated. Therefore, "new events" will be written into the buffers belonging to the CPU onto which the thread has been migrated. 
+
+I'm not sure I fully understand your question though, as the concept of "another CPU's buffer" related to a migrated thread can technically mean the CPU that is either the source or the target of the migration. The wording of the question is therefore imprecise. 
+
+The infrequent cases where events are written into other CPU's buffers is only if migration happens between invocation of sched_getcpu() by lttng-ust and the associated commit of an event. 
+
+[...] 
+
+>>> 5. For context field, from the document, context fields cannot be removed from a
+>>> channel once you add it. I would like to request a feature to allow removing
+>>> context fields in the user program.
+
+>> That's unfortunately not that simple. The channel context field belongs to the
+>> channel, which maps to the "stream" description in the resulting CTF metadata
+>> in the output trace. That stream description is invariant once it has been
+>> created.
+
+> That makes senses.
+
+> We use babeltrace to process trace records. So far, it presents a single-ordered
+> event sequence and we have to use a dedicated event record filed to separate
+> the traces what are from different channels/threads. Is there library or API (C
+> or python-based) that allows us to process traces channel by channel? I saw the
+> traces are saved in files of channels.
+
+Not that I know of, but it would make a good feature request for a babeltrace 2 plugin, either as a filter plugin, or as an extension to the CTF source plugin (not sure what would be the best approach design-wise, I would have to defer to Philippe and Jeremie on this topic). 
+
+Thanks, 
+
+Mathieu 
+
+-- 
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+--=_d62e0abd-fed5-4cd5-b4be-a20827140aac
+Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr" class=3D"gmail_signature=
-" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div dir=3D"ltr"><div=
->Then why bother to require to have the TP_ARGS in TRACEPOINT_EVENT_INSTANC=
-E?=C2=A0</div><div><br></div><div>Yonghong</div><div><br></div></div></div>=
-</div></div><div class=3D"gmail_quote"><div dir=3D"ltr">On Thu, Dec 20, 201=
-8 at 11:56 AM Philippe Proulx &lt;<a href=3D"mailto:eeppeliteloop@gmail.com=
-">eeppeliteloop@gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmai=
-l_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,20=
-4,204);padding-left:1ex">On Thu, Dec 20, 2018 at 11:47 AM Yonghong Yan &lt;=
-<a href=3D"mailto:yanyh15@gmail.com" target=3D"_blank">yanyh15@gmail.com</a=
->&gt; wrote:<br>
-&gt;<br>
-&gt; I am looking at the following example from lttng-ust manual. The same =
-TP_ARGS ( ... ) are repeated in both the TRACEPOINT_EVENT_CLASS and TRACEPO=
-INT_EVENT_INSTANCE definition. My understanding is that it actually allows =
-using different arguments, even in this example it is the same. Am I right?=
-<br>
-<br>
-No it does not: they need to match.<br>
-<br>
-See &lt;<a href=3D"https://github.com/lttng/lttng-ust/commit/c75c0422c64f33=
-c0102e1778cecc812c58b700e5" rel=3D"noreferrer" target=3D"_blank">https://gi=
-thub.com/lttng/lttng-ust/commit/c75c0422c64f33c0102e1778cecc812c58b700e5</a=
->&gt;.<br>
-<br>
-Phil<br>
-<br>
-&gt;<br>
-&gt; I also like the feature of having one TP_ARGS in the TRACEPOINT_EVENT_=
-CLASS that declares the arguments for several TRACEPOINT_EVENT_INSTANCE so =
-we do not need to have TP_ARGS in TRACEPOINT_EVENT_INSTANCE. Is that possib=
-le?<br>
-&gt;<br>
-&gt; Thank you<br>
-&gt; Yonghong<br>
-&gt;<br>
-&gt; TRACEPOINT_EVENT_CLASS(<br>
-&gt;=C2=A0 =C2=A0 =C2=A0my_provider,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0my_tracepoint_class,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0TP_ARGS(<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0int, my_integer_arg,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct app_struct *, app_struct_arg<b=
-r>
-&gt;=C2=A0 =C2=A0 =C2=A0),<br>
-&gt;=C2=A0 =C2=A0 =C2=A0TP_FIELDS(<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ctf_integer(int, a, my_integer_arg)<b=
-r>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ctf_integer(unsigned long, b, app_str=
-uct_arg-&gt;b)<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0ctf_string(c, app_struct_arg-&gt;c)<b=
-r>
-&gt;=C2=A0 =C2=A0 =C2=A0)<br>
-&gt; )<br>
-&gt;<br>
-&gt; TRACEPOINT_EVENT_INSTANCE(<br>
-&gt;=C2=A0 =C2=A0 =C2=A0my_provider,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0my_tracepoint_class,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0event_instance1,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0TP_ARGS(<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0int, my_integer_arg,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct app_struct *, app_struct_arg<b=
-r>
-&gt;=C2=A0 =C2=A0 =C2=A0)<br>
-&gt; )<br>
-&gt;<br>
-&gt; TRACEPOINT_EVENT_INSTANCE(<br>
-&gt;=C2=A0 =C2=A0 =C2=A0my_provider,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0my_tracepoint_class,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0event_instance2,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0TP_ARGS(<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0int, my_integer_arg,<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0struct app_struct *, app_struct_arg<b=
-r>
-&gt;=C2=A0 =C2=A0 =C2=A0)<br>
-&gt; )<br>
-&gt;<br>
-&gt;<br>
-&gt; _______________________________________________<br>
-&gt; lttng-dev mailing list<br>
-&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-d=
-ev@lists.lttng.org</a><br>
-&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev"=
- rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailm=
-an/listinfo/lttng-dev</a><br>
-</blockquote></div></div>
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><br data-mce-bogus=3D"1"></div><div><span i=
+d=3D"zwchr" data-marker=3D"__DIVIDER__">----- On Dec 19, 2018, at 5:07 PM, =
+Yonghong Yan &lt;yanyh15@gmail.com&gt; wrote:<br></span></div><div data-mar=
+ker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;=
+margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:n=
+ormal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size=
+:12pt;"><div dir=3D"ltr"><div dir=3D"ltr">Mathieu,&nbsp;<div><br>Thank you =
+for your response. see inline ...</div></div><br><div class=3D"gmail_quote"=
+><div dir=3D"ltr">On Wed, Dec 19, 2018 at 4:20 PM Mathieu Desnoyers &lt;<a =
+href=3D"mailto:mathieu.desnoyers@efficios.com" target=3D"_blank">mathieu.de=
+snoyers@efficios.com</a>&gt; wrote:<br></div></div></div></blockquote>[...]=
+<div><br></div><blockquote style=3D"border-left:2px solid #1010FF;margin-le=
+ft:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;tex=
+t-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><=
+div dir=3D"ltr"><div class=3D"gmail_quote"><br><blockquote class=3D"gmail_q=
+uote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,2=
+04);padding-left:1ex"><div><div style=3D"font-family:arial,helvetica,sans-s=
+erif;font-size:12pt;color:rgb(0,0,0)"><div><blockquote style=3D"border-left=
+:2px solid rgb(16,16,255);margin-left:5px;padding-left:5px;color:rgb(0,0,0)=
+;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helv=
+etica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr"><div dir=3D"ltr"><d=
+iv>3. In the one channel/ring buffer per CPU setting, if a user thread migr=
+ates from one CPU to another, are the traces generated by that user thread =
+fed to the two channels/buffers for the two CPUs?</div></div></div></blockq=
+uote><div>The event generated will belong to the per-cpu buffer on which th=
+e "sched_getcpu()" invocation occurs for the event. It is only saved into a=
+ single per-cpu buffer, even if the thread is migrated to a different CPU b=
+efore it completes writing the event. This effectively creates infrequent s=
+ituations where threads write into other cpu's per-cpu buffers. Note that t=
+he "reserve" and "commit" operations are smp-safe in lttng-ust for that rea=
+son.</div></div></div></div></blockquote><br><div>so after the migration, n=
+ew events will still be written to another CPU's buffer?&nbsp;</div></div><=
+/div></blockquote><div><br data-mce-bogus=3D"1"></div><div>After migration =
+of a thread, the value returned by following calls to sched_getcpu() will m=
+atch the target processor onto which the thread is migrated. Therefore, "ne=
+w events" will be written into the buffers belonging to the CPU onto which =
+the thread has been migrated.<br data-mce-bogus=3D"1"></div><div><br data-m=
+ce-bogus=3D"1"></div><div>I'm not sure I fully understand your question tho=
+ugh, as the concept of "another CPU's buffer" related to a migrated thread =
+can technically mean the CPU that is either the source or the target of the=
+ migration. The wording of the question is therefore imprecise.<br data-mce=
+-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>The infrequent =
+cases where events are written into other CPU's buffers is only if migratio=
+n happens between invocation of sched_getcpu() by lttng-ust and the associa=
+ted commit of an event.<br data-mce-bogus=3D"1"></div><div><br data-mce-bog=
+us=3D"1"></div><div>[...]<br data-mce-bogus=3D"1"></div><blockquote style=
+=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#0=
+00;font-weight:normal;font-style:normal;text-decoration:none;font-family:He=
+lvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><div class=3D"gm=
+ail_quote"><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.=
+8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div><div styl=
+e=3D"font-family:arial,helvetica,sans-serif;font-size:12pt;color:rgb(0,0,0)=
+"><div><blockquote style=3D"border-left:2px solid rgb(16,16,255);margin-lef=
+t:5px;padding-left:5px;color:rgb(0,0,0);font-weight:normal;font-style:norma=
+l;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12p=
+t"><div dir=3D"ltr"><div dir=3D"ltr"><div>5. For context field, from the do=
+cument,&nbsp;context fields cannot be removed from a channel once you add i=
+t. I would like to request a feature to allow removing context fields in th=
+e user program.&nbsp;</div></div></div></blockquote><div>That's unfortunate=
+ly not that simple. The channel context field belongs to the channel, which=
+ maps to the "stream" description in the resulting CTF metadata in the outp=
+ut trace. That stream description is invariant once it has been created.<br=
+></div></div></div></div></blockquote><div>That makes senses.&nbsp;</div><b=
+r><div>We use babeltrace to process trace records. So far, it presents a si=
+ngle-ordered event sequence and we have to use a dedicated event record fil=
+ed to separate the traces what are from different channels/threads. Is ther=
+e library or API (C or python-based) that allows us to process traces chann=
+el by channel? I saw the traces are saved in files of channels.&nbsp;</div>=
+</div></div></blockquote><div>Not that I know of, but it would make a good =
+feature request for a babeltrace 2 plugin, either as a filter plugin, or as=
+ an extension to the CTF source plugin (not sure what would be the best app=
+roach design-wise, I would have to defer to Philippe and Jeremie on this to=
+pic).<br></div><div><br data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce=
+-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathieu<br data=
+-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div></div><div><br><=
+/div><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<=
+br>EfficiOS Inc.<br>http://www.efficios.com</div></div></body></html>
+--=_d62e0abd-fed5-4cd5-b4be-a20827140aac--
 
---0000000000004acec4057d775d73--
-
---===============1863655459866778394==
+--===============5627891613859788773==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -211,4 +191,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============1863655459866778394==--
+--===============5627891613859788773==--
