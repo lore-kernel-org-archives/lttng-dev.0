@@ -1,20 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: tracing multithread user program and API support
- for enabling/disabling events and for adding/removing context fields
-Date: Thu, 20 Dec 2018 15:02:49 -0500 (EST)
-Message-ID: <2092764094.7505.1545336169036.JavaMail.zimbra__45466.3877877921$1545336053$gmane$org@efficios.com>
-References: <CACJEY87s+TAkMtKrW7UczWJCBaisjtKVJifM5cAqwDtnWnGt9A@mail.gmail.com>
- <1102294099.6322.1545254432246.JavaMail.zimbra@efficios.com>
- <CACJEY86eaYaw_-ifOv-LD_c6UigagM27tSngRMgUq2rfeKgArQ@mail.gmail.com>
- <1419164969.6928.1545328606605.JavaMail.zimbra@efficios.com>
- <CACJEY84vSXiD8aYY77=kZNkjKpd4iSw=_qi=S6H7uZyY7oFXaQ@mail.gmail.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-ust 1/4] Use a variable to select the
+ dlopen lib in Makefiles
+Date: Thu, 20 Dec 2018 15:22:39 -0500
+Message-ID: <20181220202242.6119-1-mjeanson__23458.6007697091$1545337252$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9085019680189643697=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 43LN3G1vmpz16Yr
- for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2018 15:02:50 -0500 (EST)
-In-Reply-To: <CACJEY84vSXiD8aYY77=kZNkjKpd4iSw=_qi=S6H7uZyY7oFXaQ@mail.gmail.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 43LNVL444nz16bl
+ for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2018 15:22:50 -0500 (EST)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id BC264A7B7B
+ for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2018 15:22:49 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,235 +22,402 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Yonghong Yan <yanyh15@gmail.com>
-Cc: Philippe Proulx <pproulx@efficios.com>, lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============9085019680189643697==
-Content-Type: multipart/alternative;
-	boundary="=_632b7fca-f9a7-4272-8134-a804dc7a391a"
+Instead of multiple conditionnals, it makes for cleaner and more
+readable Makefiles.
 
---=_632b7fca-f9a7-4272-8134-a804dc7a391a
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ configure.ac                           |  8 +++-----
+ liblttng-ust-cyg-profile/Makefile.am   | 17 ++++++-----------
+ liblttng-ust-dl/Makefile.am            | 11 +++--------
+ liblttng-ust-fd/Makefile.am            | 11 +++--------
+ liblttng-ust-fork/Makefile.am          | 10 ++--------
+ liblttng-ust-libc-wrapper/Makefile.am  | 18 +++++++-----------
+ liblttng-ust/Makefile.am               | 22 ++++++----------------
+ tests/benchmark/Makefile.am            | 14 +++-----------
+ tests/ctf-types/Makefile.am            |  9 +--------
+ tests/hello-many/Makefile.am           |  9 +--------
+ tests/hello.cxx/Makefile.am            |  9 +--------
+ tests/hello/Makefile.am                |  9 +--------
+ tests/same_line_tracepoint/Makefile.am |  9 +--------
+ tests/test-app-ctx/Makefile.am         |  9 +--------
+ tests/ust-variant/Makefile.am          |  9 +--------
+ 15 files changed, 40 insertions(+), 134 deletions(-)
 
-If you want to follow the activity of a given thread, you would need to enable the "vtid" context 
-with "lttng add-context -u -t vtid". Then, you will be able to follow the activity of each thread even 
-though the events are recorded into per-cpu buffers. 
-
-Cheers! 
-
-Mathieu 
-
------ On Dec 20, 2018, at 2:59 PM, Yonghong Yan <yanyh15@gmail.com> wrote: 
-
-> Thank you Mathieu. I agree that my question is not precise, but I got what I
-> need from your answer. I wanted to know that when a user thread migrates, the
-> ring buffer the events go to will change. This is not what we want, but i
-> understand why LTTng does that way since it needs to trace the activities on
-> each CPU.
-
-> On Thu, Dec 20, 2018 at 12:56 PM Mathieu Desnoyers < [
-> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
-> wrote:
-
->> ----- On Dec 19, 2018, at 5:07 PM, Yonghong Yan < [ mailto:yanyh15@gmail.com |
->> yanyh15@gmail.com ] > wrote:
-
->>> Mathieu,
-
->>> Thank you for your response. see inline ...
-
->>> On Wed, Dec 19, 2018 at 4:20 PM Mathieu Desnoyers < [
->>> mailto:mathieu.desnoyers@efficios.com | mathieu.desnoyers@efficios.com ] >
->>> wrote:
-
->> [...]
-
->>>>> 3. In the one channel/ring buffer per CPU setting, if a user thread migrates
->>>>> from one CPU to another, are the traces generated by that user thread fed to
->>>>> the two channels/buffers for the two CPUs?
-
->>>> The event generated will belong to the per-cpu buffer on which the
->>>> "sched_getcpu()" invocation occurs for the event. It is only saved into a
->>>> single per-cpu buffer, even if the thread is migrated to a different CPU before
->>>> it completes writing the event. This effectively creates infrequent situations
->>>> where threads write into other cpu's per-cpu buffers. Note that the "reserve"
->>>> and "commit" operations are smp-safe in lttng-ust for that reason.
-
->>> so after the migration, new events will still be written to another CPU's
->>> buffer?
-
->> After migration of a thread, the value returned by following calls to
->> sched_getcpu() will match the target processor onto which the thread is
->> migrated. Therefore, "new events" will be written into the buffers belonging to
->> the CPU onto which the thread has been migrated.
-
->> I'm not sure I fully understand your question though, as the concept of "another
->> CPU's buffer" related to a migrated thread can technically mean the CPU that is
->> either the source or the target of the migration. The wording of the question
->> is therefore imprecise.
-
->> The infrequent cases where events are written into other CPU's buffers is only
->> if migration happens between invocation of sched_getcpu() by lttng-ust and the
->> associated commit of an event.
-
->> [...]
-
->>>>> 5. For context field, from the document, context fields cannot be removed from a
->>>>> channel once you add it. I would like to request a feature to allow removing
->>>>> context fields in the user program.
-
->>>> That's unfortunately not that simple. The channel context field belongs to the
->>>> channel, which maps to the "stream" description in the resulting CTF metadata
->>>> in the output trace. That stream description is invariant once it has been
->>>> created.
-
->>> That makes senses.
-
->>> We use babeltrace to process trace records. So far, it presents a single-ordered
->>> event sequence and we have to use a dedicated event record filed to separate
->>> the traces what are from different channels/threads. Is there library or API (C
->>> or python-based) that allows us to process traces channel by channel? I saw the
->>> traces are saved in files of channels.
-
->> Not that I know of, but it would make a good feature request for a babeltrace 2
->> plugin, either as a filter plugin, or as an extension to the CTF source plugin
->> (not sure what would be the best approach design-wise, I would have to defer to
->> Philippe and Jeremie on this topic).
-
->> Thanks,
-
->> Mathieu
-
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> [ http://www.efficios.com/ | http://www.efficios.com ]
-
+diff --git a/configure.ac b/configure.ac
+index 2ea15533..431ed21a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -207,17 +207,18 @@ AH_TEMPLATE([LTTNG_UST_HAVE_PERF_EVENT], [Perf event integration via perf_event.
+ 
+ # Checks for libraries.
+ AC_CHECK_LIB([dl], [dlopen], [
+-	have_libdl=yes
+ 	libdl_name=dl
++	DL_LIBS="-ldl"
+ ], [
+ 	#libdl not found, check for dlopen in libc.
+ 	AC_CHECK_LIB([c], [dlopen], [
+-		have_libc_dl=yes
+ 		libdl_name=c
++		DL_LIBS="-lc"
+ 	], [
+ 		AC_MSG_ERROR([Cannot find dlopen in libdl nor libc. Use [LDFLAGS]=-Ldir to specify their location.])
+ 	])
+ ])
++AC_SUBST(DL_LIBS)
+ 
+ # Check if libdl has dlmopen support.
+ AH_TEMPLATE([HAVE_DLMOPEN], ["Define to 1 if dlmopen is available."])
+@@ -225,9 +226,6 @@ AC_CHECK_LIB([$libdl_name], [dlmopen],
+ 	[AC_DEFINE([HAVE_DLMOPEN], [1])]
+ )
+ 
+-AM_CONDITIONAL([LTTNG_UST_BUILD_WITH_LIBDL], [test "x$have_libdl" = "xyes"])
+-AM_CONDITIONAL([LTTNG_UST_BUILD_WITH_LIBC_DL], [test "x$have_libc_dl" = "xyes"])
+-
+ AC_CHECK_LIB([pthread], [pthread_create])
+ AC_CHECK_LIB([pthread], [pthread_setname_np],
+ 	AC_DEFINE([HAVE_PTHREAD_SETNAME_NP], [1], [Define to 1 if pthread_setname_np is available.]),
+diff --git a/liblttng-ust-cyg-profile/Makefile.am b/liblttng-ust-cyg-profile/Makefile.am
+index 3130282d..0ed2cd9c 100644
+--- a/liblttng-ust-cyg-profile/Makefile.am
++++ b/liblttng-ust-cyg-profile/Makefile.am
+@@ -7,25 +7,20 @@ lib_LTLIBRARIES = liblttng-ust-cyg-profile.la \
+ liblttng_ust_cyg_profile_la_SOURCES = \
+ 	lttng-ust-cyg-profile.c \
+ 	lttng-ust-cyg-profile.h
++
+ liblttng_ust_cyg_profile_la_LIBADD = \
+ 	-L$(top_builddir)/liblttng-ust/.libs \
+-	-llttng-ust
++	-llttng-ust \
++	$(DL_LIBS)
+ 
+ liblttng_ust_cyg_profile_fast_la_SOURCES = \
+ 	lttng-ust-cyg-profile-fast.c \
+ 	lttng-ust-cyg-profile-fast.h
++
+ liblttng_ust_cyg_profile_fast_la_LIBADD = \
+ 	-L$(top_builddir)/liblttng-ust/.libs \
+-	-llttng-ust
+-
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-liblttng_ust_cyg_profile_la_LIBADD += -ldl
+-liblttng_ust_cyg_profile_fast_la_LIBADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-liblttng_ust_cyg_profile_la_LIBADD += -lc
+-liblttng_ust_cyg_profile_fast_la_LIBADD += -lc
+-endif
++	-llttng-ust \
++	$(DL_LIBS)
+ 
+ noinst_SCRIPTS = run run-fast
+ EXTRA_DIST = run run-fast
+diff --git a/liblttng-ust-dl/Makefile.am b/liblttng-ust-dl/Makefile.am
+index c0168f39..1f6d166a 100644
+--- a/liblttng-ust-dl/Makefile.am
++++ b/liblttng-ust-dl/Makefile.am
+@@ -6,14 +6,9 @@ liblttng_ust_dl_la_SOURCES = \
+ 	lttng-ust-dl.c \
+ 	ust_dl.c \
+ 	ust_dl.h
+-liblttng_ust_dl_la_LIBADD = \
+-	$(top_builddir)/liblttng-ust/liblttng-ust.la
+ 
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-liblttng_ust_dl_la_LIBADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-liblttng_ust_dl_la_LIBADD += -lc
+-endif
++liblttng_ust_dl_la_LIBADD = \
++	$(top_builddir)/liblttng-ust/liblttng-ust.la \
++	$(DL_LIBS)
+ 
+ liblttng_ust_dl_la_CFLAGS = -DUST_COMPONENT=liblttng-ust-dl $(AM_CFLAGS)
+diff --git a/liblttng-ust-fd/Makefile.am b/liblttng-ust-fd/Makefile.am
+index f7706634..57122ec7 100644
+--- a/liblttng-ust-fd/Makefile.am
++++ b/liblttng-ust-fd/Makefile.am
+@@ -4,14 +4,9 @@ AM_CFLAGS += -fno-strict-aliasing
+ lib_LTLIBRARIES = liblttng-ust-fd.la
+ liblttng_ust_fd_la_SOURCES = \
+ 	lttng-ust-fd.c
+-liblttng_ust_fd_la_LIBADD = \
+-	$(top_builddir)/liblttng-ust/liblttng-ust.la
+ 
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-liblttng_ust_fd_la_LIBADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-liblttng_ust_fd_la_LIBADD += -lc
+-endif
++liblttng_ust_fd_la_LIBADD = \
++	$(top_builddir)/liblttng-ust/liblttng-ust.la \
++	$(DL_LIBS)
+ 
+ liblttng_ust_fd_la_CFLAGS = -DUST_COMPONENT=liblttng-ust-fd $(AM_CFLAGS)
+diff --git a/liblttng-ust-fork/Makefile.am b/liblttng-ust-fork/Makefile.am
+index 2f0976d4..d05f5b93 100644
+--- a/liblttng-ust-fork/Makefile.am
++++ b/liblttng-ust-fork/Makefile.am
+@@ -4,13 +4,7 @@ AM_CFLAGS += -fno-strict-aliasing
+ lib_LTLIBRARIES = liblttng-ust-fork.la
+ liblttng_ust_fork_la_SOURCES = ustfork.c
+ liblttng_ust_fork_la_LIBADD = \
+-	$(top_builddir)/liblttng-ust/liblttng-ust.la
+-
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-liblttng_ust_fork_la_LIBADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-liblttng_ust_fork_la_LIBADD += -lc
+-endif
++	$(top_builddir)/liblttng-ust/liblttng-ust.la \
++	$(DL_LIBS)
+ 
+ liblttng_ust_fork_la_CFLAGS = -DUST_COMPONENT=liblttng-ust-fork $(AM_CFLAGS)
+diff --git a/liblttng-ust-libc-wrapper/Makefile.am b/liblttng-ust-libc-wrapper/Makefile.am
+index e73b4d88..e510a11a 100644
+--- a/liblttng-ust-libc-wrapper/Makefile.am
++++ b/liblttng-ust-libc-wrapper/Makefile.am
+@@ -3,28 +3,24 @@ AM_CFLAGS += -fno-strict-aliasing
+ 
+ lib_LTLIBRARIES = liblttng-ust-libc-wrapper.la \
+   liblttng-ust-pthread-wrapper.la
++
+ liblttng_ust_libc_wrapper_la_SOURCES = \
+ 	lttng-ust-malloc.c \
+ 	ust_libc.h
++
+ liblttng_ust_libc_wrapper_la_LIBADD = \
+ 	-L$(top_builddir)/liblttng-ust/.libs \
+-	-llttng-ust
++	-llttng-ust \
++	$(DL_LIBS)
+ 
+ liblttng_ust_pthread_wrapper_la_SOURCES = \
+ 	lttng-ust-pthread.c \
+ 	ust_pthread.h
++
+ liblttng_ust_pthread_wrapper_la_LIBADD = \
+ 	-L$(top_builddir)/liblttng-ust/.libs \
+-	-llttng-ust
+-
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-liblttng_ust_libc_wrapper_la_LIBADD += -ldl
+-liblttng_ust_pthread_wrapper_la_LIBADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-liblttng_ust_libc_wrapper_la_LIBADD += -lc
+-liblttng_ust_pthread_wrapper_la_LIBADD += -lc
+-endif
++	-llttng-ust \
++	$(DL_LIBS)
+ 
+ noinst_SCRIPTS = run
+ EXTRA_DIST = run
+diff --git a/liblttng-ust/Makefile.am b/liblttng-ust/Makefile.am
+index 57df3aed..ea4c8f61 100644
+--- a/liblttng-ust/Makefile.am
++++ b/liblttng-ust/Makefile.am
+@@ -12,20 +12,16 @@ liblttng_ust_tracepoint_la_SOURCES = \
+ 	lttng-tracer-core.h \
+ 	jhash.h \
+ 	error.h
++
+ liblttng_ust_tracepoint_la_LIBADD = \
+ 	-lurcu-bp \
+ 	-lpthread \
+-	$(top_builddir)/snprintf/libustsnprintf.la
++	$(top_builddir)/snprintf/libustsnprintf.la \
++	$(DL_LIBS)
++
+ liblttng_ust_tracepoint_la_LDFLAGS = -no-undefined -version-info $(LTTNG_UST_LIBRARY_VERSION)
+ liblttng_ust_tracepoint_la_CFLAGS = -DUST_COMPONENT="liblttng_ust_tracepoint" $(AM_CFLAGS)
+ 
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-liblttng_ust_tracepoint_la_LIBADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-liblttng_ust_tracepoint_la_LIBADD += -lc
+-endif
+-
+ liblttng_ust_runtime_la_SOURCES = \
+ 	lttng-ust-comm.c \
+ 	lttng-ust-abi.c \
+@@ -106,13 +102,7 @@ liblttng_ust_la_LIBADD = \
+ 	$(top_builddir)/snprintf/libustsnprintf.la \
+ 	$(top_builddir)/liblttng-ust-comm/liblttng-ust-comm.la \
+ 	liblttng-ust-tracepoint.la \
+-	liblttng-ust-runtime.la liblttng-ust-support.la
+-
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-liblttng_ust_la_LIBADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-liblttng_ust_la_LIBADD += -lc
+-endif
++	liblttng-ust-runtime.la liblttng-ust-support.la \
++	$(DL_LIBS)
+ 
+ liblttng_ust_la_CFLAGS = -DUST_COMPONENT="liblttng_ust" $(AM_CFLAGS)
+diff --git a/tests/benchmark/Makefile.am b/tests/benchmark/Makefile.am
+index 4ea420c6..ef9635c0 100644
+--- a/tests/benchmark/Makefile.am
++++ b/tests/benchmark/Makefile.am
+@@ -2,20 +2,12 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
+ 
+ noinst_PROGRAMS = bench1 bench2
+ bench1_SOURCES = bench.c tp.c ust_tests_benchmark.h
+-bench1_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la
++bench1_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la $(DL_LIBS)
++
+ bench2_SOURCES = bench.c tp.c ust_tests_benchmark.h
+-bench2_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la
++bench2_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la $(DL_LIBS)
+ bench2_CFLAGS = -DTRACING $(AM_CFLAGS)
+ 
+ dist_noinst_SCRIPTS = test_benchmark ptime
+ 
+ extra_DIST = README
+-
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-bench1_LDADD += -ldl
+-bench2_LDADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-bench1_LDADD += -lc
+-bench2_LDADD += -lc
+-endif
+diff --git a/tests/ctf-types/Makefile.am b/tests/ctf-types/Makefile.am
+index a9b40b6a..42d803f2 100644
+--- a/tests/ctf-types/Makefile.am
++++ b/tests/ctf-types/Makefile.am
+@@ -2,12 +2,5 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
+ 
+ noinst_PROGRAMS = ctf-types
+ ctf_types_SOURCES = ctf-types.c tp.c ust_tests_ctf_types.h
+-ctf_types_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la
++ctf_types_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la $(DL_LIBS)
+ ctf_types_CFLAGS = -Werror=old-style-definition $(AM_CFLAGS)
+-
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-ctf_types_LDADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-ctf_types_LDADD += -lc
+-endif
+diff --git a/tests/hello-many/Makefile.am b/tests/hello-many/Makefile.am
+index 338b7986..ee648225 100644
+--- a/tests/hello-many/Makefile.am
++++ b/tests/hello-many/Makefile.am
+@@ -2,12 +2,5 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
+ 
+ noinst_PROGRAMS = hello-many
+ hello_many_SOURCES = hello-many.c tp.c ust_tests_hello_many.h
+-hello_many_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la
++hello_many_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la $(DL_LIBS)
+ hello_many_CFLAGS = -Werror=old-style-definition $(AM_CFLAGS)
+-
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-hello_many_LDADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-hello_many_LDADD += -lc
+-endif
+diff --git a/tests/hello.cxx/Makefile.am b/tests/hello.cxx/Makefile.am
+index f8a8f46d..4b0fb234 100644
+--- a/tests/hello.cxx/Makefile.am
++++ b/tests/hello.cxx/Makefile.am
+@@ -2,11 +2,4 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
+ 
+ noinst_PROGRAMS = hello
+ hello_SOURCES = hello.cpp tp-cpp.cpp ust_tests_hello.h
+-hello_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la
+-
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-hello_LDADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-hello_LDADD += -lc
+-endif
++hello_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la $(DL_LIBS)
+diff --git a/tests/hello/Makefile.am b/tests/hello/Makefile.am
+index cb4d4626..d5e42d33 100644
+--- a/tests/hello/Makefile.am
++++ b/tests/hello/Makefile.am
+@@ -2,12 +2,5 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
+ 
+ noinst_PROGRAMS = hello
+ hello_SOURCES = hello.c tp.c ust_tests_hello.h
+-hello_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la
++hello_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la $(DL_LIBS)
+ hello_CFLAGS = -Werror=old-style-definition $(AM_CFLAGS)
+-
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-hello_LDADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-hello_LDADD += -lc
+-endif
+diff --git a/tests/same_line_tracepoint/Makefile.am b/tests/same_line_tracepoint/Makefile.am
+index 5cb4f36b..ae1f773d 100644
+--- a/tests/same_line_tracepoint/Makefile.am
++++ b/tests/same_line_tracepoint/Makefile.am
+@@ -2,11 +2,4 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
+ 
+ noinst_PROGRAMS = same_line_tracepoint
+ same_line_tracepoint_SOURCES = same_line_tracepoint.c ust_tests_sameline.h
+-same_line_tracepoint_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la
+-
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-same_line_tracepoint_LDADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-same_line_tracepoint_LDADD += -lc
+-endif
++same_line_tracepoint_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la $(DL_LIBS)
+diff --git a/tests/test-app-ctx/Makefile.am b/tests/test-app-ctx/Makefile.am
+index cb4d4626..d5e42d33 100644
+--- a/tests/test-app-ctx/Makefile.am
++++ b/tests/test-app-ctx/Makefile.am
+@@ -2,12 +2,5 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
+ 
+ noinst_PROGRAMS = hello
+ hello_SOURCES = hello.c tp.c ust_tests_hello.h
+-hello_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la
++hello_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la $(DL_LIBS)
+ hello_CFLAGS = -Werror=old-style-definition $(AM_CFLAGS)
+-
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-hello_LDADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-hello_LDADD += -lc
+-endif
+diff --git a/tests/ust-variant/Makefile.am b/tests/ust-variant/Makefile.am
+index 5d741bdf..28e62009 100644
+--- a/tests/ust-variant/Makefile.am
++++ b/tests/ust-variant/Makefile.am
+@@ -2,12 +2,5 @@ AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_builddir)/include -Wsystem-headers
+ 
+ noinst_PROGRAMS = ust-variant
+ ust_variant_SOURCES = ust-variant.c
+-ust_variant_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la
++ust_variant_LDADD = $(top_builddir)/liblttng-ust/liblttng-ust.la $(DL_LIBS)
+ ust_variant_CFLAGS = -Werror=old-style-definition $(AM_CFLAGS)
+-
+-if LTTNG_UST_BUILD_WITH_LIBDL
+-ust_variant_LDADD += -ldl
+-endif
+-if LTTNG_UST_BUILD_WITH_LIBC_DL
+-ust_variant_LDADD += -lc
+-endif
 -- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_632b7fca-f9a7-4272-8134-a804dc7a391a
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div>If you want to follow the activity of a giv=
-en thread, you would need to enable the "vtid" context<br></div><div>with "=
-lttng add-context -u -t vtid". Then, you will be able to follow the activit=
-y of each thread even<br data-mce-bogus=3D"1"></div><div>though the events =
-are recorded into per-cpu buffers.<br data-mce-bogus=3D"1"></div><div><br d=
-ata-mce-bogus=3D"1"></div><div>Cheers!<br data-mce-bogus=3D"1"></div><div><=
-br data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><d=
-iv><br></div><div><span id=3D"zwchr" data-marker=3D"__DIVIDER__">----- On D=
-ec 20, 2018, at 2:59 PM, Yonghong Yan &lt;yanyh15@gmail.com&gt; wrote:<br><=
-/span></div><div data-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"borde=
-r-left:2px solid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-w=
-eight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,A=
-rial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><br clear=3D"all"><div><d=
-iv dir=3D"ltr" class=3D"m_8943814718100383173gmail_signature"><div dir=3D"l=
-tr"><div><div dir=3D"ltr"><div dir=3D"ltr"><div>Thank you Mathieu. I agree =
-that my question is not precise, but I got what I need from your answer. I =
-wanted to know that when a user thread migrates, the ring buffer the events=
- go to will change. This is not what we want, but i understand why LTTng do=
-es that way since it needs to trace the activities on each CPU.&nbsp;</div>=
-</div></div></div></div></div></div><br></div><br><div class=3D"gmail_quote=
-"><div dir=3D"ltr">On Thu, Dec 20, 2018 at 12:56 PM Mathieu Desnoyers &lt;<=
-a href=3D"mailto:mathieu.desnoyers@efficios.com" target=3D"_blank">mathieu.=
-desnoyers@efficios.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_q=
-uote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,2=
-04);padding-left:1ex"><div><div style=3D"font-family:arial,helvetica,sans-s=
-erif;font-size:12pt;color:rgb(0,0,0)"><br><div><span id=3D"gmail-m_89438147=
-18100383173gmail-m_7917991090276113216zwchr">----- On Dec 19, 2018, at 5:07=
- PM, Yonghong Yan &lt;<a href=3D"mailto:yanyh15@gmail.com" target=3D"_blank=
-">yanyh15@gmail.com</a>&gt; wrote:<br></span></div><div><blockquote style=
-=3D"border-left:2px solid rgb(16,16,255);margin-left:5px;padding-left:5px;c=
-olor:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration:none;f=
-ont-family:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr"><div=
- dir=3D"ltr">Mathieu,&nbsp;<div><br>Thank you for your response. see inline=
- ...</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr">On Wed, Dec=
- 19, 2018 at 4:20 PM Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoy=
-ers@efficios.com" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt; =
-wrote:<br></div></div></div></blockquote>[...]<br><blockquote style=3D"bord=
-er-left:2px solid rgb(16,16,255);margin-left:5px;padding-left:5px;color:rgb=
-(0,0,0);font-weight:normal;font-style:normal;text-decoration:none;font-fami=
-ly:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr"><div class=
-=3D"gmail_quote"><br><blockquote class=3D"gmail_quote" style=3D"margin:0px =
-0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div=
-><div style=3D"font-family:arial,helvetica,sans-serif;font-size:12pt;color:=
-rgb(0,0,0)"><div><blockquote style=3D"border-left:2px solid rgb(16,16,255);=
-margin-left:5px;padding-left:5px;color:rgb(0,0,0);font-weight:normal;font-s=
-tyle:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;fon=
-t-size:12pt"><div dir=3D"ltr"><div dir=3D"ltr"><div>3. In the one channel/r=
-ing buffer per CPU setting, if a user thread migrates from one CPU to anoth=
-er, are the traces generated by that user thread fed to the two channels/bu=
-ffers for the two CPUs?</div></div></div></blockquote><div>The event genera=
-ted will belong to the per-cpu buffer on which the "sched_getcpu()" invocat=
-ion occurs for the event. It is only saved into a single per-cpu buffer, ev=
-en if the thread is migrated to a different CPU before it completes writing=
- the event. This effectively creates infrequent situations where threads wr=
-ite into other cpu's per-cpu buffers. Note that the "reserve" and "commit" =
-operations are smp-safe in lttng-ust for that reason.</div></div></div></di=
-v></blockquote><br><div>so after the migration, new events will still be wr=
-itten to another CPU's buffer?&nbsp;</div></div></div></blockquote><br><div=
->After migration of a thread, the value returned by following calls to sche=
-d_getcpu() will match the target processor onto which the thread is migrate=
-d. Therefore, "new events" will be written into the buffers belonging to th=
-e CPU onto which the thread has been migrated.<br></div><br><div>I'm not su=
-re I fully understand your question though, as the concept of "another CPU'=
-s buffer" related to a migrated thread can technically mean the CPU that is=
- either the source or the target of the migration. The wording of the quest=
-ion is therefore imprecise.<br></div><br><div>The infrequent cases where ev=
-ents are written into other CPU's buffers is only if migration happens betw=
-een invocation of sched_getcpu() by lttng-ust and the associated commit of =
-an event.<br></div><br><div>[...]<br></div><blockquote style=3D"border-left=
-:2px solid rgb(16,16,255);margin-left:5px;padding-left:5px;color:rgb(0,0,0)=
-;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helv=
-etica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr"><div class=3D"gmail=
-_quote"><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex=
-;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div><div style=
-=3D"font-family:arial,helvetica,sans-serif;font-size:12pt;color:rgb(0,0,0)"=
-><div><blockquote style=3D"border-left:2px solid rgb(16,16,255);margin-left=
-:5px;padding-left:5px;color:rgb(0,0,0);font-weight:normal;font-style:normal=
-;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt=
-"><div dir=3D"ltr"><div dir=3D"ltr"><div>5. For context field, from the doc=
-ument,&nbsp;context fields cannot be removed from a channel once you add it=
-. I would like to request a feature to allow removing context fields in the=
- user program.&nbsp;</div></div></div></blockquote><div>That's unfortunatel=
-y not that simple. The channel context field belongs to the channel, which =
-maps to the "stream" description in the resulting CTF metadata in the outpu=
-t trace. That stream description is invariant once it has been created.<br>=
-</div></div></div></div></blockquote><div>That makes senses.&nbsp;</div><br=
-><div>We use babeltrace to process trace records. So far, it presents a sin=
-gle-ordered event sequence and we have to use a dedicated event record file=
-d to separate the traces what are from different channels/threads. Is there=
- library or API (C or python-based) that allows us to process traces channe=
-l by channel? I saw the traces are saved in files of channels.&nbsp;</div><=
-/div></div></blockquote><div>Not that I know of, but it would make a good f=
-eature request for a babeltrace 2 plugin, either as a filter plugin, or as =
-an extension to the CTF source plugin (not sure what would be the best appr=
-oach design-wise, I would have to defer to Philippe and Jeremie on this top=
-ic).<br></div><br><div>Thanks,<br></div><br><div>Mathieu<br></div><br></div=
-><br><div>-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br><a href=
-=3D"http://www.efficios.com" target=3D"_blank">http://www.efficios.com</a><=
-br data-mce-bogus=3D"1"></div></div></div></blockquote></div><br></blockquo=
-te></div><div><br></div><div data-marker=3D"__SIG_POST__">-- <br></div><div=
->Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></div><=
-/body></html>
---=_632b7fca-f9a7-4272-8134-a804dc7a391a--
-
---===============9085019680189643697==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============9085019680189643697==--
+2.17.1
