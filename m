@@ -1,19 +1,18 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-ust 2/4] Use config.h to define SONAME
- major number
-Date: Thu, 20 Dec 2018 15:22:40 -0500
-Message-ID: <20181220202242.6119-2-mjeanson__42219.3075101406$1545337265$gmane$org@efficios.com>
+Subject: [PATCH lttng-ust 3/4] Add silent rules support for docs
+Date: Thu, 20 Dec 2018 15:22:41 -0500
+Message-ID: <20181220202242.6119-3-mjeanson__14983.658589381$1545337279$gmane$org@efficios.com>
 References: <20181220202242.6119-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 43LNVL6JbRz16bn
- for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2018 15:22:50 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 43LNVN01x1z16cW
+ for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2018 15:22:51 -0500 (EST)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id D7167A7B9B
- for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2018 15:22:50 -0500 (EST)
+ by mail.efficios.com (Postfix) with ESMTP id EF732A7BAC
+ for <lttng-dev@lists.lttng.org>; Thu, 20 Dec 2018 15:22:51 -0500 (EST)
 In-Reply-To: <20181220202242.6119-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -29,49 +28,52 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- configure.ac                  | 2 +-
- liblttng-ust/Makefile.am      | 2 --
- liblttng-ust/lttng-ust-comm.c | 2 +-
- 3 files changed, 2 insertions(+), 4 deletions(-)
+ doc/man/Makefile.am | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/configure.ac b/configure.ac
-index 431ed21a..9ab76501 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -25,7 +25,7 @@ m4_define([UST_LIB_V_MINOR], [0])
- m4_define([UST_LIB_V_PATCH], [0])
+diff --git a/doc/man/Makefile.am b/doc/man/Makefile.am
+index fcc4c5c7..f562bfd1 100644
+--- a/doc/man/Makefile.am
++++ b/doc/man/Makefile.am
+@@ -47,26 +47,35 @@ MAN = $(MAN1) $(MAN3)
+ if MAN_PAGES_OPT
+ # At this point, we know the user asked to build the man pages.
+ if HAVE_ASCIIDOC_XMLTO
++
++asciidoc_verbose = $(asciidoc_verbose_@AM_V@)
++asciidoc_verbose_ = $(asciidoc_verbose_@AM_DEFAULT_V@)
++asciidoc_verbose_0 = @echo "  ASCIIDOC  " $@;
++
++xmlto_verbose = $(xmlto_verbose_@AM_V@)
++xmlto_verbose_ = $(xmlto_verbose_@AM_DEFAULT_V@)
++xmlto_verbose_0 = @echo "  XMLTO     " $@;
++
+ # Tools to execute:
+-ADOC = $(ASCIIDOC) -f $(ASCIIDOC_CONF) -d manpage \
++ADOC = $(asciidoc_verbose)$(ASCIIDOC) -f $(ASCIIDOC_CONF) -d manpage \
+ 	-a lttng_version="$(PACKAGE_VERSION)" \
+ 	-a lttng_ust_register_timeout="@LTTNG_UST_DEFAULT_CONSTRUCTOR_TIMEOUT_MS@"
  
- AC_SUBST([LTTNG_UST_LIBRARY_VERSION], [UST_LIB_V_MAJOR:UST_LIB_V_MINOR:UST_LIB_V_PATCH])
--AC_SUBST([LTTNG_UST_LIBRARY_VERSION_MAJOR], [UST_LIB_V_MAJOR])
-+AC_DEFINE([CONFIG_LTTNG_UST_LIBRARY_VERSION_MAJOR], [UST_LIB_V_MAJOR], [Major SONAME number of the ust library])
- # note: remember to update tracepoint.h dlopen() to match this version
- # number. TODO: eventually automate by exporting the major number.
+ ADOC_DOCBOOK = $(ADOC) -b docbook
+-XTO = $(XMLTO) -m $(XSL_FILE) man
++XTO = $(xmlto_verbose)$(XMLTO) -m $(XSL_FILE) man
  
-diff --git a/liblttng-ust/Makefile.am b/liblttng-ust/Makefile.am
-index ea4c8f61..15655280 100644
---- a/liblttng-ust/Makefile.am
-+++ b/liblttng-ust/Makefile.am
-@@ -63,8 +63,6 @@ liblttng_ust_runtime_la_SOURCES = \
- 	string-utils.c \
- 	string-utils.h
+ # Recipes:
+ %.1.xml: $(srcdir)/%.1.txt $(COMMON_DEPS)
+ 	$(ADOC_DOCBOOK) -o $@ $<
  
--liblttng_ust_runtime_la_CFLAGS = -DLTTNG_UST_LIBRARY_VERSION_MAJOR=\"$(LTTNG_UST_LIBRARY_VERSION_MAJOR)\"
--
- if HAVE_PERF_EVENT
- liblttng_ust_runtime_la_SOURCES += \
- 	lttng-context-perf-counters.c \
-diff --git a/liblttng-ust/lttng-ust-comm.c b/liblttng-ust/lttng-ust-comm.c
-index a09f676a..eab2d8eb 100644
---- a/liblttng-ust/lttng-ust-comm.c
-+++ b/liblttng-ust/lttng-ust-comm.c
-@@ -61,7 +61,7 @@
- #include "getenv.h"
+ %.1: %.1.xml $(XSL_FILE)
+-	$(XTO) $<
++	$(XTO) $< 2>/dev/null
  
- /* Concatenate lttng ust shared library name with its major version number. */
--#define LTTNG_UST_LIB_SO_NAME "liblttng-ust.so." LTTNG_UST_LIBRARY_VERSION_MAJOR
-+#define LTTNG_UST_LIB_SO_NAME "liblttng-ust.so." __ust_stringify(CONFIG_LTTNG_UST_LIBRARY_VERSION_MAJOR)
+ %.3.xml: $(srcdir)/%.3.txt $(COMMON_DEPS)
+ 	$(ADOC_DOCBOOK) -o $@ $<
  
- /*
-  * Has lttng ust comm constructor been called ?
+ %.3: %.3.xml $(XSL_FILE)
+-	$(XTO) $<
++	$(XTO) $< 2>/dev/null
+ 
+ # Only clean the generated files if we have the tools to generate them again.
+ CLEANFILES = $(MAN_XML) $(MAN)
 -- 
 2.17.1
