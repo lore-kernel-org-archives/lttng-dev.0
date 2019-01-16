@@ -1,15 +1,20 @@
-From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools] Fix: run-as thread deadlock on
- itself in restart error path
-Date: Wed, 16 Jan 2019 13:38:57 -0500
-Message-ID: <20190116183857.24550-1-jonathan.rajotte-julien__6011.05151367864$1547663828$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-modules 1/4] Fix: Remove 'type'
+ argument from access_ok() function (v5.0)
+Date: Wed, 16 Jan 2019 15:38:18 -0500 (EST)
+Message-ID: <677583374.1823.1547671098981.JavaMail.zimbra__26631.3400854871$1547670985$gmane$org@efficios.com>
+References: <20190109195918.31730-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 43fww95190znjH
- for <lttng-dev@lists.lttng.org>; Wed, 16 Jan 2019 13:39:05 -0500 (EST)
+ by lists.lttng.org (Postfix) with ESMTPS id 43fzYn1bHZznmP
+ for <lttng-dev@lists.lttng.org>; Wed, 16 Jan 2019 15:38:21 -0500 (EST)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id C25D4B3A53
+ for <lttng-dev@lists.lttng.org>; Wed, 16 Jan 2019 15:38:19 -0500 (EST)
+In-Reply-To: <20190109195918.31730-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,180 +24,217 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-The deadlock was found using this backtrace
+All merged into master, stable-2.11, all but last patch merged into
+stable-2.10 and stable-2.9,
 
-Thread 5:
-0  __lll_lock_wait () at ../sysdeps/unix/sysv/linux/x86_64/lowlevellock.S:135
-1  0x00007efc6b650023 in __GI___pthread_mutex_lock (mutex=mutex@entry=0x55fc37128400 <worker_lock>) at ../nptl/pthread_mutex_lock.c:78
-2  0x000055fc36efbe05 in run_as_destroy_worker () at runas.c:1233
-3  0x000055fc36efc2e7 in run_as_restart_worker (worker=<optimized out>) at runas.c:998
-4  run_as (cmd=cmd@entry=RUN_AS_UNLINK, data=data@entry=0x7efc5b7fa630, ret_value=ret_value@entry=0x7efc5b7fa510, uid=uid@entry=1000, gid=gid@entry=1000) at runas.c:1033
-5  0x000055fc36efc9ce in run_as_unlink (path=path@entry=0x7efc5b7fb690 "/home/joraj/lttng-traces/auto-20190116-111518/20190116T111729-0500-33/kernel/index/channel0_3.idx", uid=uid@entry=1000, gid=gid@entry=1000) at runas.c :1120
-6  0x000055fc36ef7feb in utils_unlink_stream_file (path_name=path_name@entry=0x7efc5b7fc7e0 "/home/joraj/lttng-traces/auto-20190116-111518/20190116T111729-0500-33/kernel/index", file_name=file_name@entry=0x7efc500085d4 "channel0_3", size=size@entry=0, count=count@entry=0, uid=uid@entry=1000, gid=gid@entry=1000, suffix=0x55fc36f19b26 ".idx") at utils.c:929
-7  0x000055fc36f01d4e in lttng_index_file_create (path_name=path_name@entry=0x7efc500087a0 "/home/joraj/lttng-traces/auto-20190116-111518/20190116T111729-0500-33/kernel", stream_name=stream_name@entry=0x7efc500085d4 "channel0_3", uid=1000, gid=1000, size=0, count=0, major=1, minor=1) at index.c:79
-8  0x000055fc36ed9475 in rotate_local_stream (ctx=<optimized out>, stream=0x7efc50008460) at consumer.c:4105
-9  0x000055fc36ed98b5 in lttng_consumer_rotate_stream (ctx=ctx@entry=0x55fc37428d80, stream=stream@entry=0x7efc50008460, rotated=rotated@entry=0x7efc5b7fdb27) at consumer.c:4181
-10 0x000055fc36ee354e in lttng_kconsumer_read_subbuffer (stream=stream@entry=0x7efc50008460, ctx=ctx@entry=0x55fc37428d80, rotated=rotated@entry=0x7efc5b7fdb27) at kernel-consumer.c:1740
-11 0x000055fc36ed7a30 in lttng_consumer_read_subbuffer (stream=0x7efc50008460, ctx=0x55fc37428d80) at consumer.c:3383
-12 0x000055fc36ed4b74 in consumer_thread_data_poll (data=0x55fc37428d80) at consumer.c:2751
-13 0x00007efc6b64d6db in start_thread (arg=0x7efc5b7fe700) at pthread_create.c:463
-14 0x00007efc6af6488f in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:95
+Thanks!
 
-The owner of the lock is itself:
-  print worker_lock.__data.__owner
-    $2 = 25725
-  thread find 25725
-    Thread 5 has target id 'Thread 0x7efc5b7fe700 (LWP 25725)'
+Mathieu
 
-The worker_lock is first taken in frame #4: run_as runas.c:1033
+----- On Jan 9, 2019, at 2:59 PM, Michael Jeanson mjeanson@efficios.com wrote:
 
-  pthread_mutex_lock(&worker_lock);
-  if (use_clone()) {
-...
-    /*
-     * If the worker thread crashed the errno is set to EIO. we log
-     * the error and  start a new worker process.
-     */
-    if (ret == -1 && saved_errno == EIO) {
-        DBG("Socket closed unexpectedly... "
-        "Restarting the worker process");
-->      ret = run_as_restart_worker(global_worker);
-        if (ret == -1) {
-          ERR("Failed to restart worker process.");
-          goto err;
-        }
+> See upstream commit :
+> 
+>  commit 96d4f267e40f9509e8a66e2b39e8b95655617693
+>  Author: Linus Torvalds <torvalds@linux-foundation.org>
+>  Date:   Thu Jan 3 18:57:57 2019 -0800
+> 
+>    Remove 'type' argument from access_ok() function
+> 
+>    Nobody has actually used the type (VERIFY_READ vs VERIFY_WRITE) argument
+>    of the user address range verification function since we got rid of the
+>    old racy i386-only code to walk page tables by hand.
+> 
+>    It existed because the original 80386 would not honor the write protect
+>    bit when in kernel mode, so you had to do COW by hand before doing any
+>    user access.  But we haven't supported that in a long time, and these
+>    days the 'type' argument is a purely historical artifact.
+> 
+>    A discussion about extending 'user_access_begin()' to do the range
+>    checking resulted this patch, because there is no way we're going to
+>    move the old VERIFY_xyz interface to that model.  And it's best done at
+>    the end of the merge window when I've done most of my merges, so let's
+>    just get this done once and for all.
+> 
+>    This patch was mostly done with a sed-script, with manual fix-ups for
+>    the cases that weren't of the trivial 'access_ok(VERIFY_xyz' form.
+> 
+>    There were a couple of notable cases:
+> 
+>     - csky still had the old "verify_area()" name as an alias.
+> 
+>     - the iter_iov code had magical hardcoded knowledge of the actual
+>       values of VERIFY_{READ,WRITE} (not that they mattered, since nothing
+>       really used it)
+> 
+>     - microblaze used the type argument for a debug printout
+> 
+>    but other than those oddities this should be a total no-op patch.
+> 
+>    I tried to fix up all architectures, did fairly extensive grepping for
+>    access_ok() uses, and the changes are trivial, but I may have missed
+>    something.  Any missed conversion should be trivially fixable, though.
+> 
+> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+> ---
+> lib/ringbuffer/backend.h              |  8 ++++----
+> lib/ringbuffer/ring_buffer_iterator.c |  3 ++-
+> lttng-filter-interpreter.c            |  4 ++--
+> probes/lttng-probe-user.c             |  3 ++-
+> wrapper/uaccess.h                     | 28 +++++++++++++++++++++++++++
+> 5 files changed, 38 insertions(+), 8 deletions(-)
+> create mode 100644 wrapper/uaccess.h
+> 
+> diff --git a/lib/ringbuffer/backend.h b/lib/ringbuffer/backend.h
+> index 501fad4..da937f2 100644
+> --- a/lib/ringbuffer/backend.h
+> +++ b/lib/ringbuffer/backend.h
+> @@ -21,7 +21,7 @@
+> #include <linux/list.h>
+> #include <linux/fs.h>
+> #include <linux/mm.h>
+> -#include <linux/uaccess.h>
+> +#include <wrapper/uaccess.h>
+> 
+> /* Internal helpers */
+> #include <wrapper/ringbuffer/backend_internal.h>
+> @@ -289,7 +289,7 @@ void lib_ring_buffer_copy_from_user_inatomic(const struct
+> lib_ring_buffer_config
+> 
+> 	set_fs(KERNEL_DS);
+> 	pagefault_disable();
+> -	if (unlikely(!access_ok(VERIFY_READ, src, len)))
+> +	if (unlikely(!lttng_access_ok(VERIFY_READ, src, len)))
+> 		goto fill_buffer;
+> 
+> 	if (likely(pagecpy == len)) {
+> @@ -359,7 +359,7 @@ void lib_ring_buffer_strcpy_from_user_inatomic(const struct
+> lib_ring_buffer_conf
+> 
+> 	set_fs(KERNEL_DS);
+> 	pagefault_disable();
+> -	if (unlikely(!access_ok(VERIFY_READ, src, len)))
+> +	if (unlikely(!lttng_access_ok(VERIFY_READ, src, len)))
+> 		goto fill_buffer;
+> 
+> 	if (likely(pagecpy == len)) {
+> @@ -449,7 +449,7 @@ unsigned long
+> lib_ring_buffer_copy_from_user_check_nofault(void *dest,
+> 	unsigned long ret;
+> 	mm_segment_t old_fs;
+> 
+> -	if (!access_ok(VERIFY_READ, src, len))
+> +	if (!lttng_access_ok(VERIFY_READ, src, len))
+> 		return 1;
+> 	old_fs = get_fs();
+> 	set_fs(KERNEL_DS);
+> diff --git a/lib/ringbuffer/ring_buffer_iterator.c
+> b/lib/ringbuffer/ring_buffer_iterator.c
+> index 9efe491..d25db72 100644
+> --- a/lib/ringbuffer/ring_buffer_iterator.c
+> +++ b/lib/ringbuffer/ring_buffer_iterator.c
+> @@ -11,6 +11,7 @@
+> 
+> #include <wrapper/ringbuffer/iterator.h>
+> #include <wrapper/file.h>
+> +#include <wrapper/uaccess.h>
+> #include <linux/jiffies.h>
+> #include <linux/delay.h>
+> #include <linux/module.h>
+> @@ -605,7 +606,7 @@ ssize_t channel_ring_buffer_file_read(struct file *filp,
+> 	ssize_t len;
+> 
+> 	might_sleep();
+> -	if (!access_ok(VERIFY_WRITE, user_buf, count))
+> +	if (!lttng_access_ok(VERIFY_WRITE, user_buf, count))
+> 		return -EFAULT;
+> 
+> 	/* Finish copy of previous record */
+> diff --git a/lttng-filter-interpreter.c b/lttng-filter-interpreter.c
+> index bf69549..3dad6cc 100644
+> --- a/lttng-filter-interpreter.c
+> +++ b/lttng-filter-interpreter.c
+> @@ -7,7 +7,7 @@
+>  * Copyright (C) 2010-2016 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>  */
+> 
+> -#include <linux/uaccess.h>
+> +#include <wrapper/uaccess.h>
+> #include <wrapper/frame.h>
+> #include <wrapper/types.h>
+> #include <linux/swab.h>
+> @@ -30,7 +30,7 @@ char get_char(struct estack_entry *reg, size_t offset)
+> 		char c;
+> 
+> 		/* Handle invalid access as end of string. */
+> -		if (unlikely(!access_ok(VERIFY_READ,
+> +		if (unlikely(!lttng_access_ok(VERIFY_READ,
+> 				reg->u.s.user_str + offset,
+> 				sizeof(c))))
+> 			return '\0';
+> diff --git a/probes/lttng-probe-user.c b/probes/lttng-probe-user.c
+> index 4162a7e..0d1f95f 100644
+> --- a/probes/lttng-probe-user.c
+> +++ b/probes/lttng-probe-user.c
+> @@ -7,6 +7,7 @@
+> 
+> #include <linux/uaccess.h>
+> #include <linux/module.h>
+> +#include <wrapper/uaccess.h>
+> #include <probes/lttng-probe-user.h>
+> 
+> /*
+> @@ -30,7 +31,7 @@ long lttng_strlen_user_inatomic(const char *addr)
+> 		char v;
+> 		unsigned long ret;
+> 
+> -		if (unlikely(!access_ok(VERIFY_READ,
+> +		if (unlikely(!lttng_access_ok(VERIFY_READ,
+> 				(__force const char __user *) addr,
+> 				sizeof(v))))
+> 			break;
+> diff --git a/wrapper/uaccess.h b/wrapper/uaccess.h
+> new file mode 100644
+> index 0000000..c56427c
+> --- /dev/null
+> +++ b/wrapper/uaccess.h
+> @@ -0,0 +1,28 @@
+> +/* SPDX-License-Identifier: (GPL-2.0 or LGPL-2.1)
+> + *
+> + * wrapper/uaccess.h
+> + *
+> + * wrapper around linux/uaccess.h.
+> + *
+> + * Copyright (C) 2019 Michael Jeanson <mjeanson@efficios.com>
+> + */
+> +
+> +#ifndef _LTTNG_WRAPPER_UACCESS_H
+> +#define _LTTNG_WRAPPER_UACCESS_H
+> +
+> +#include <linux/uaccess.h>
+> +#include <lttng-kernel-version.h>
+> +
+> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0))
+> +
+> +#define VERIFY_READ	0
+> +#define VERIFY_WRITE	1
+> +#define lttng_access_ok(type, addr, size) access_ok(addr, size)
+> +
+> +#else /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0) */
+> +
+> +#define lttng_access_ok(type, addr, size) access_ok(type, addr, size)
+> +
+> +#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0) */
+> +
+> +#endif /* _LTTNG_WRAPPER_UACCESS_H */
+> --
+> 2.17.1
 
-Solution
-========
-
-Create run_as_restart_worker_no_lock which does not to take the lock on
-execution.
-Use run_as_restart_worker_no_lock at the run_as error path call site.
-Use run_as_restart_worker_no_lock inside run_as_restart_worker while
-holding the worker lock to provide identical behaviour to other call sites.
-
-Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
----
- src/common/runas.c | 89 ++++++++++++++++++++++++----------------------
- 1 file changed, 47 insertions(+), 42 deletions(-)
-
-diff --git a/src/common/runas.c b/src/common/runas.c
-index d727cf417..9e6277078 100644
---- a/src/common/runas.c
-+++ b/src/common/runas.c
-@@ -986,6 +986,51 @@ error_procname_alloc:
- 	return ret;
- }
- 
-+static
-+void run_as_destroy_worker_no_lock(void)
-+{
-+	struct run_as_worker *worker = global_worker;
-+
-+	DBG("Destroying run_as worker");
-+	if (!worker) {
-+		return;
-+	}
-+	/* Close unix socket */
-+	DBG("Closing run_as worker socket");
-+	if (lttcomm_close_unix_sock(worker->sockpair[0])) {
-+		PERROR("close");
-+	}
-+	worker->sockpair[0] = -1;
-+	/* Wait for worker. */
-+	for (;;) {
-+		int status;
-+		pid_t wait_ret;
-+
-+		wait_ret = waitpid(worker->pid, &status, 0);
-+		if (wait_ret < 0) {
-+			if (errno == EINTR) {
-+				continue;
-+			}
-+			PERROR("waitpid");
-+			break;
-+		}
-+
-+		if (WIFEXITED(status)) {
-+			LOG(WEXITSTATUS(status) == 0 ? PRINT_DBG : PRINT_ERR,
-+					DEFAULT_RUN_AS_WORKER_NAME " terminated with status code %d",
-+				        WEXITSTATUS(status));
-+			break;
-+		} else if (WIFSIGNALED(status)) {
-+			ERR(DEFAULT_RUN_AS_WORKER_NAME " was killed by signal %d",
-+					WTERMSIG(status));
-+			break;
-+		}
-+	}
-+	free(worker->procname);
-+	free(worker);
-+	global_worker = NULL;
-+}
-+
- static
- int run_as_restart_worker(struct run_as_worker *worker)
- {
-@@ -995,7 +1040,7 @@ int run_as_restart_worker(struct run_as_worker *worker)
- 	procname = worker->procname;
- 
- 	/* Close socket to run_as worker process and clean up the zombie process */
--	run_as_destroy_worker();
-+	run_as_destroy_worker_no_lock();
- 
- 	/* Create a new run_as worker process*/
- 	ret = run_as_create_worker_no_lock(procname);
-@@ -1227,47 +1272,7 @@ int run_as_create_worker(const char *procname)
- LTTNG_HIDDEN
- void run_as_destroy_worker(void)
- {
--	struct run_as_worker *worker = global_worker;
--
--	DBG("Destroying run_as worker");
- 	pthread_mutex_lock(&worker_lock);
--	if (!worker) {
--		goto end;
--	}
--	/* Close unix socket */
--	DBG("Closing run_as worker socket");
--	if (lttcomm_close_unix_sock(worker->sockpair[0])) {
--		PERROR("close");
--	}
--	worker->sockpair[0] = -1;
--	/* Wait for worker. */
--	for (;;) {
--		int status;
--		pid_t wait_ret;
--
--		wait_ret = waitpid(worker->pid, &status, 0);
--		if (wait_ret < 0) {
--			if (errno == EINTR) {
--				continue;
--			}
--			PERROR("waitpid");
--			break;
--		}
--
--		if (WIFEXITED(status)) {
--			LOG(WEXITSTATUS(status) == 0 ? PRINT_DBG : PRINT_ERR,
--					DEFAULT_RUN_AS_WORKER_NAME " terminated with status code %d",
--				        WEXITSTATUS(status));
--			break;
--		} else if (WIFSIGNALED(status)) {
--			ERR(DEFAULT_RUN_AS_WORKER_NAME " was killed by signal %d",
--					WTERMSIG(status));
--			break;
--		}
--	}
--	free(worker->procname);
--	free(worker);
--	global_worker = NULL;
--end:
-+	run_as_destroy_worker_no_lock();
- 	pthread_mutex_unlock(&worker_lock);
- }
 -- 
-2.17.1
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
