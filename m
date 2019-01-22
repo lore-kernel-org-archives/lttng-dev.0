@@ -1,21 +1,19 @@
-From: Yonghong Yan <yanyh15@gmail.com>
-Subject: Re: add cpu_id context to the channel
-Date: Tue, 22 Jan 2019 11:44:51 -0500
-Message-ID: <CACJEY86jVwQ4qYXgSqEhvqf__=P-XM-CTcBZi1D+vbChK_AEXw__10681.4105690987$1548175530$gmane$org@mail.gmail.com>
-References: <CACJEY86QpFpjiDe_eHfCnpEhRRPgsfW-+xW5LdM=xRFWNgOL-Q@mail.gmail.com>
- <2127783106.260.1548097581357.JavaMail.zimbra@efficios.com>
- <CACJEY85gdy86ttpJJwK==1zOhkTERrRcSG_6WQET1_znLSqTdw@mail.gmail.com>
- <439e2c9e-cd74-c0fb-ae25-53455082265f@versatic.net>
+From: Francis Deslauriers <francis.deslauriers@efficios.com>
+Subject: Re: "Hands-free" tracepoints using LD_PRELOAD
+Date: Tue, 22 Jan 2019 12:16:07 -0500
+Message-ID: <CADcCL0gLBOs1L0sqOsPg3+nyHp0sVFGK2ymk0-pw4QRGO7UhGw__9448.527304788$1548177399$gmane$org@mail.gmail.com>
+References: <CAF=ZobxSoNuto2U9NTihytCpdNODfH8Bv6JtGCym_g6hg3Uz4w@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2984407499011626648=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
- [IPv6:2607:f8b0:4864:20::42b])
- by lists.lttng.org (Postfix) with ESMTPS id 43kZ5v3qRmznGY
- for <lttng-dev@lists.lttng.org>; Tue, 22 Jan 2019 11:45:07 -0500 (EST)
-Received: by mail-pf1-x42b.google.com with SMTP id b7so12024592pfi.8
- for <lttng-dev@lists.lttng.org>; Tue, 22 Jan 2019 08:45:07 -0800 (PST)
-In-Reply-To: <439e2c9e-cd74-c0fb-ae25-53455082265f@versatic.net>
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com
+ [209.85.167.181])
+ by lists.lttng.org (Postfix) with ESMTPS id 43kZnw1VJ5znJF
+ for <lttng-dev@lists.lttng.org>; Tue, 22 Jan 2019 12:16:19 -0500 (EST)
+Received: by mail-oi1-f181.google.com with SMTP id y23so18028091oia.4
+ for <lttng-dev@lists.lttng.org>; Tue, 22 Jan 2019 09:16:19 -0800 (PST)
+In-Reply-To: <CAF=ZobxSoNuto2U9NTihytCpdNODfH8Bv6JtGCym_g6hg3Uz4w@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,264 +23,87 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Genevieve Bastien <gbastien@versatic.net>
+To: Brian Rossa <br@f0cal.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============2984407499011626648==
-Content-Type: multipart/alternative; boundary="00000000000018936105800eb388"
-
---00000000000018936105800eb388
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Thank you Genevieve, "cpu" field works.
-
-Yonghong
-
-
-On Mon, Jan 21, 2019 at 7:57 PM Genevieve Bastien <gbastien@versatic.net>
-wrote:
-
-> Hi Yonghong,
->
-> With TraceCompass XML analyses, you can use as state value or attribute a=
-n
-> eventField called 'cpu' to get the CPU id of an event. For example,
->
-> <stateAttribute type=3D"eventField" value=3D"cpu" />
->
-> With LTTng traces, it will automatically be the CPU, obtained as Mathieu
-> described, no need for an extra field.
->
-> Regards,
->
-> Genevi=C3=A8ve
->
->
-> On 2019-01-21 4:21 p.m., Yonghong Yan wrote:
->
-> Thank you. make sense. I am using Trace Compass XML based approach to
-> display UST trace records. Using CPU id helps me easier to sort out the
-> event records in trace compass. I will check out more on trace compass.
->
-> Yonghong
->
->
-> On Mon, Jan 21, 2019 at 2:06 PM Mathieu Desnoyers <
-> mathieu.desnoyers@efficios.com> wrote:
->
->>
->> ----- On Jan 21, 2019, at 12:14 PM, Yonghong Yan <yanyh15@gmail.com>
->> wrote:
->>
->> I saw there is cpu_id field in babeltrace list, how can I add it to the
->> context of UST tracepoint events. lttng add-context --list does not show
->> that field and I do not see a similar field for the cpu_id.
->>
->>
->> The cpu_id context only exists for the purpose of lttng-ust and
->> lttng-modules filtering.
->> (e.g. lttng enable-event {-u,-k} --filter '$ctx.cpu_id =3D=3D 2').
->>
->> It is not possible to add it as context to the streams, because its
->> information would
->> be completely redundant with the fact that all the data is written into
->> per-cpu buffers,
->> and the cpu_id field is available within each packet context (which is
->> right after each
->> packet header).
->>
->> You just need to use babeltrace to convert to text, and while doing so,
->> it prints a
->> "cpu_id =3D N" context based on the packet_context cpu_id field for each
->> event.
->>
->> Thanks,
->>
->> Mathieu
->>
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> http://www.efficios.com
->>
->
-> _______________________________________________
-> lttng-dev mailing listlttng-dev@lists.lttng.orghttps://lists.lttng.org/cg=
-i-bin/mailman/listinfo/lttng-dev
->
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->
-
---00000000000018936105800eb388
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><div><div dir=3D"ltr" class=3D"gmail_sign=
-ature" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div dir=3D"ltr"=
-><div>Thank you Genevieve, &quot;cpu&quot; field works.=C2=A0</div><div><br=
-></div><div>Yonghong</div></div></div></div></div><br></div><br><div class=
-=3D"gmail_quote"><div dir=3D"ltr">On Mon, Jan 21, 2019 at 7:57 PM Genevieve=
- Bastien &lt;<a href=3D"mailto:gbastien@versatic.net">gbastien@versatic.net=
-</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:=
-0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
- =20
-   =20
- =20
-  <div bgcolor=3D"#FFFFFF">
-    <p>Hi Yonghong,</p>
-    <p>With TraceCompass XML analyses, you can use as state value or
-      attribute an eventField called &#39;cpu&#39; to get the CPU id of an
-      event. For example,<br>
-    </p>
-    <p>&lt;stateAttribute type=3D&quot;eventField&quot; value=3D&quot;cpu&q=
-uot; /&gt;</p>
-    <p>With LTTng traces, it will automatically be the CPU, obtained as
-      Mathieu described, no need for an extra field.<br>
-    </p>
-    <p>Regards,</p>
-    <p>Genevi=C3=A8ve<br>
-    </p>
-    <p><br>
-    </p>
-    <div class=3D"gmail-m_1715309599997022837moz-cite-prefix">On 2019-01-21=
- 4:21 p.m., Yonghong Yan
-      wrote:<br>
-    </div>
-    <blockquote type=3D"cite">
-     =20
-      <div dir=3D"ltr">Thank you. make sense. I am using Trace Compass XML
-        based approach to display UST trace records. Using CPU id helps
-        me easier to sort out the event records in trace compass. I will
-        check out more on trace compass.=C2=A0
-        <div><br>
-        </div>
-        <div>Yonghong<br>
-          <br>
-        </div>
-      </div>
-      <br>
-      <div class=3D"gmail_quote">
-        <div dir=3D"ltr">On Mon, Jan 21, 2019 at 2:06 PM Mathieu Desnoyers
-          &lt;<a href=3D"mailto:mathieu.desnoyers@efficios.com" target=3D"_=
-blank">mathieu.desnoyers@efficios.com</a>&gt;
-          wrote:<br>
-        </div>
-        <blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex=
-;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-          <div>
-            <div style=3D"font-family:arial,helvetica,sans-serif;font-size:=
-12pt;color:rgb(0,0,0)">
-              <div><br>
-              </div>
-              <div><span id=3D"gmail-m_1715309599997022837gmail-m_-65114540=
-66164686156zwchr">----- On
-                  Jan 21, 2019, at 12:14 PM, Yonghong Yan &lt;<a href=3D"ma=
-ilto:yanyh15@gmail.com" target=3D"_blank">yanyh15@gmail.com</a>&gt;
-                  wrote:<br>
-                </span></div>
-              <div>
-                <blockquote style=3D"border-left:2px solid rgb(16,16,255);m=
-argin-left:5px;padding-left:5px;color:rgb(0,0,0);font-weight:normal;font-st=
-yle:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font=
--size:12pt">
-                  <div dir=3D"ltr">
-                    <div dir=3D"ltr">I saw there is cpu_id field in
-                      babeltrace list, how can I add it to the context
-                      of UST tracepoint events.=C2=A0lttng add-context --li=
-st
-                      does not show that field and I do not see a
-                      similar field for the cpu_id.=C2=A0</div>
-                  </div>
-                </blockquote>
-                <div><br>
-                </div>
-                <div>The cpu_id context only exists for the purpose of
-                  lttng-ust and lttng-modules filtering.<br>
-                </div>
-                <div>(e.g. lttng enable-event {-u,-k} --filter
-                  &#39;$ctx.cpu_id =3D=3D 2&#39;).<br>
-                </div>
-                <div><br>
-                </div>
-                <div>It is not possible to add it as context to the
-                  streams, because its information would<br>
-                </div>
-                <div>be completely redundant with the fact that all the
-                  data is written into per-cpu buffers,</div>
-                <div>and the cpu_id field is available within each
-                  packet context (which is right after each</div>
-                <div>packet header).<br>
-                </div>
-                <div><br>
-                </div>
-                <div>You just need to use babeltrace to convert to text,
-                  and while doing so, it prints a<br>
-                </div>
-                <div>&quot;cpu_id =3D N&quot; context based on the packet_c=
-ontext
-                  cpu_id field for each event.<br>
-                </div>
-                <div><br>
-                </div>
-                <div>Thanks,</div>
-                <div><br>
-                </div>
-                <div>Mathieu<br>
-                </div>
-              </div>
-              <div><br>
-              </div>
-              <div>-- <br>
-              </div>
-              <div>Mathieu Desnoyers<br>
-                EfficiOS Inc.<br>
-                <a href=3D"http://www.efficios.com" target=3D"_blank">http:=
-//www.efficios.com</a></div>
-            </div>
-          </div>
-        </blockquote>
-      </div>
-      <br>
-      <fieldset class=3D"gmail-m_1715309599997022837mimeAttachmentHeader"><=
-/fieldset>
-      <pre class=3D"gmail-m_1715309599997022837moz-quote-pre">_____________=
-__________________________________
-lttng-dev mailing list
-<a class=3D"gmail-m_1715309599997022837moz-txt-link-abbreviated" href=3D"ma=
-ilto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@lists.lttng.org=
-</a>
-<a class=3D"gmail-m_1715309599997022837moz-txt-link-freetext" href=3D"https=
-://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" target=3D"_blank">ht=
-tps://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a>
-</pre>
-    </blockquote>
-  </div>
-
-_______________________________________________<br>
-lttng-dev mailing list<br>
-<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
-sts.lttng.org</a><br>
-<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
-=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailman/l=
-istinfo/lttng-dev</a><br>
-</blockquote></div></div>
-
---00000000000018936105800eb388--
-
---===============2984407499011626648==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============2984407499011626648==--
+SGkgQnJpYW4sCklmIEkgdW5kZXJzdGFuZCBjb3JyZWN0bHksIHlvdSB3YW50IGRldmVsb3BlcnMg
+dG8gcHJvdmlkZSBhIHdoaXRlbGlzdApvZiBmdW5jdGlvbnMgdGhhdCB0aGV5IHdhbnQgdG8gaW5z
+dHJ1bWVudCBpbiBhbiBhcmJpdHJhcnkgc2hhcmVkCmxpYnJhcnksIGFuZCB0aGVuIGhhdmUgYSBz
+eXN0ZW0gdGhhdCBpbnN0cnVtZW50cyB0aG9zZSBmdW5jdGlvbnMKd2l0aG91dCBoYXZpbmcgdG8g
+cmVjb21waWxlIHRoZSBsaWJyYXJ5IHdpdGggTFRUbmctVVNUIHRyYWNlcG9pbnRzLgpDYW4geW91
+IGdpdmUgdXMgYW4gZXhhbXBsZSBvZiBhbm5vdGF0aW9uIHRoYXQgdGhlIHNoaW0gZGV2ZWxvcGVy
+IHdvdWxkCnByb3ZpZGU/CkRvIHlvdSBuZWVkIHRvIHN1cHBvcnQgdGhlIGV4dHJhY3Rpb24gb2Yg
+ZnVuY3Rpb24gYXJndW1lbnRzPyBJZiB5b3UKZG9uJ3QsIGhlcmUgYXJlIHR3byBzdHJhaWdodGZv
+cndhcmQgYW5kIHRlc3RlZCBhcHByb2FjaGVzIHRvIHNvbHZlCnlvdXIgcHJvYmxlbToKCkZpcnN0
+LCBvdmVycmlkaW5nIHRhcmdldCBzeW1ib2xzIHVzaW5nIExEX1BSRUxPQUQgKGxpa2UgeW91IHN1
+Z2dlc3RlZCBhYm92ZSk6CjEuIENyZWF0ZSBib2lsZXJwbGF0ZSBzY3JpcHQgIzEgdGhhdCBnZW5l
+cmF0ZXMgdHJhY2Vwb2ludHMgZGVmaW5pdGlvbnMKWzFdIGJhc2VkIG9uIGZ1bmN0aW9uIG5hbWUs
+CjIuIENyZWF0ZSBib2lsZXJwbGF0ZSBzY3JpcHQgIzIgdGhhdCBnZW5lcmF0ZXMgYSBmdW5jdGlv
+biBjYWxsaW5nIHRoZQpyaWdodCB0cmFjZXBvaW50IGFuZCB0aGUgb3JpZ2luYWwgdGFyZ2V0IGZ1
+bmN0aW9uIFsyXSwKMy4gRm9yIGVhY2ggdGFyZ2V0IHN5bWJvbCAiYmFyIiwgdXNpbmcgc2NyaXB0
+ICMxLCBjcmVhdGUgYSB0cmFjZXBvaW50CmRlZmluaXRpb24gImxpYmZvbzpiYXJfdHAiLCBhbmQg
+Y29tcGlsZSB0aGVtIGludG8gYSB0cmFjZXBvaW50cy5vLgpvYmplY3QgZmlsZSwKNC4gRm9yIGVh
+Y2ggdGFyZ2V0IHN5bWJvbCAiYmFyIiwgdXNpbmcgc2NyaXB0ICMyLCBjcmVhdGUgYSBmdW5jdGlv
+bgoiYmFyIiB0aGF0IGNhbGxzIHRoZSBiYXJfdHAgdHJhY2Vwb2ludCAoZS5nLiB0cmFjZXBvaW50
+KGxpYmZvbywKYmFyX3RwKSApIGFuZCB0aGVuIGNhbGxzIHRoZSBvcmlnaW5hbCBiYXIgZnVuY3Rp
+b24gaW4gbGliZm9vLnNvICh1c2luZwpkbHN5bSgzKSksIGFuZCBjb21waWxlIHRob3NlIGNhbGxz
+aXRlcyBpbnRvIGEgY2FsbHNpdGVzLm8gb2JqZWN0IGZpbGUsCjUuIENyZWF0ZSBhIHNoYXJlZCBs
+aWJyYXJ5IGxpYnNoaW0uc28gdXNpbmcgdHJhY2Vwb2ludHMubyBhbmQKY2FsbHNpdGVzLm8gb2Jq
+ZWN0IGZpbGVzIGFuZCBsaW5rIGl0IHRvIGx0dG5nLXVzdCBsaWIgYW5kIHRoZSBkeW5hbWljCmxv
+YWRlciBsaWIgdXNpbmcgOiItbGx0dG5nLXVzdCAtbGRsIiwKVGhvc2Ugc3RlcHMgcmVzdWx0cyBp
+biB0aGUgY3JlYXRpb24gb2YgYSBsaWJzaGltLnNvIGZpbGUgdGhhdCBjb250YWlucwp0aGUgImJh
+ciIgb3ZlcnJpZGluZyBmdW5jdGlvbiAoY29udGFpbmluZyB0aGUgdHJhY2Vwb2ludCBjYWxsc2l0
+ZSkKdGhhdCB3aWxsIGJlIGNhbGxlZCBpbnN0ZWFkIG9mICJiYXIiIGZ1bmN0aW9uIGluIHRoZSBs
+aWJmb28uc28gbGlicmFyeQp3aGVuIExEX1BSRUxPQURpbmcgaXQgKGUuZy4gTERfUFJFTE9BRD1s
+aWJzaGltLnNvIC4vZm9vYXBwKS4gSGVyZSBpcwp0aGUgTWFrZWZpbGUgSSB1c2VkIHRvIHRlc3Qg
+dGhpcyBbM10gdG8gZ2l2ZSB5b3UgYSBzZW5zZSBvZiB0aGUKcGlwZWxpbmUuCgpTZWNvbmQsIHVz
+aW5nIHRoZSBuZXdseSBhZGRlZCAtLXVzZXJzcGFjZS1wcm9iZSBpbnN0cnVtZW50YXRpb246ClRo
+aXMgb3B0aW9uIGFsbG93cyB5b3UgdG8gaW5zdHJ1bWVudCBhbnkgRUxGIHN5bWJvbCB3aXRob3V0
+CnJlY29tcGlsaW5nIG9yIHJlc3RhcnRpbmcgdGhlIHRhcmdldCBwcm9jZXNzLgpGb3IgZXhhbXBs
+ZSwgdG8gaW5zdHJ1bWVudCB0aGUgImJhciIgZnVuY3Rpb24gaW4gdGhlIC90bXAvbGliZm9vLnNv
+CmZpbGUgeW91IGNvdWxkIHJ1biB0byBmb2xsb3dpbmcgY29tbWFuZDoKICAgID4gbHR0bmcgZW5h
+YmxlLWV2ZW50IC1rIC0tdXNlcnNwYWNlLXByb2JlPSJlbGY6L3RtcC9saWJmb28uc286YmFyIgok
+ZXZlbnRfbmFtZQpZb3UgY291bGQgd3JpdGUgYSBzY3JpcHQgdGhhdCB0YWtlcyB0aGUgbGlzdCBv
+ZiB0YXJnZXQgZnVuY3Rpb25zIGFuZAphZGRzIHVzZXJzcGFjZS1wcm9iZXMgb24gZWFjaCBvZiB0
+aGVtLgpUaGlzIGFwcHJvYWNoIGhhcyB0aGUgYWR2YW50YWdlIHRoYXQgeW91IGNhbiBhbHNvIGlu
+c3RydW1lbnQgZnVuY3Rpb25zCmluIHRoZSBiaW5hcnkgYW5kIG5vdCBvbmx5IGZ1bmN0aW9ucyBp
+biBzaGFyZWQgbGlicmFyaWVzLgpUaGlzIGluc3RydW1lbnRhdGlvbiB0eXBlIHVzZXMgdGhlIGtl
+cm5lbCB0cmFjZXIgYW5kIHRodXMgcmVxdWlyZXMKdXNpbmcgdGhlIGx0dG5nLW1vZHVsZXMuCgpJ
+ZiB5b3UgZG8gbmVlZCB0byBzYXZlIHRoZSBmdW5jdGlvbiBhcmd1bWVudHMsIEkgYmVsaWV2ZSBp
+dCdzIHBvc3NpYmxlCnVzaW5nIHRoZSBmaXJzdCBhcHByb2FjaCwgYnkgdHdlYWtpbmcgdGhlIHR3
+byBib2lsZXJwbGF0ZSBzY3JpcHRzCmRlcGVuZGluZyBvbiB3aGF0IGFyZSB0aGUgYW5ub3RhdGlv
+bnMgeW91IHdhbnQgdG8gcHJvdmlkZS4KU3VwcG9ydGluZyBhcmd1bWVudCBleHRyYWN0aW9uIHdp
+dGggdXNlcnNwYWNlLXByb2JlcyBpcyBwYXJ0IG9mIG91cgpsb25nIHRlcm0gZ29hbCBhbmQgd291
+bGQgYmUgYSByZWFsbHkgcG93ZXJmdWwgZmVhdHVyZSBidXQgd2lsbCByZXF1aXJlCmEgc2lnbmlm
+aWNhbnQgZW5naW5lZXJpbmcgZWZmb3J0IHRvIGFjY29tcGxpc2guCgpbMV0gOiBodHRwczovL2x0
+dG5nLm9yZy9kb2NzL3YyLjEwLyNkb2MtdHBwLWhlYWRlcgpbMl06IGh0dHBzOi8vbHR0bmcub3Jn
+L2RvY3MvdjIuMTAvI2RvYy1wcm9iaW5nLXRoZS1hcHBsaWNhdGlvbi1zb3VyY2UtY29kZQpbM106
+IGh0dHA6Ly9wYXN0ZS51YnVudHUuY29tL3AvNWZCU2dScVhzQi8KCkkgaG9wZSB0aGlzIG1ha2Ug
+c2Vuc2UuIFBsZWFzZSBkb24ndCBoZXNpdGF0ZSBpZiB5b3Ugd2FudCBtb3JlIGRldGFpbHMuCgpU
+aGFuayB5b3UsCkZyYW5jaXMKCkxlIHZlbi4gMTggamFudi4gMjAxOSwgw6AgMTYgaCAwNCwgQnJp
+YW4gUm9zc2EgPGJyQGYwY2FsLmNvbT4gYSDDqWNyaXQgOgo+Cj4gSGVsbG8sCj4KPiBJIGhhdmUg
+YSBjdXN0b20gdHJhY2luZyBzb2x1dGlvbiB0aGF0IEknbSBpbnRlcmVzdGVkIGluIHBvcnRpbmcg
+dG8gTFRUbmcuIEl0IHdvcmtzIGFzIGZvbGxvd3M6Cj4KPiBJbnB1dCBpcyBhIHdoaXRlbGlzdCBv
+ZiBtYW5nbGVkIG5hbWVzIHRha2VuIGZyb20gYSB0YXJnZXQgbGlicmFyeSwgbGliZm9vLnNvLgo+
+IEZvciBlYWNoIG5hbWUsIGdlbmVyYXRlIGEgbG9nZ2luZyBzaGltIChleGFtcGxlKSBmb3IgdGhl
+IGNvcnJlc3BvbmRpbmcgY2FsbC4KPiBDb21waWxlIGFsbCB0aGUgbG9nZ2luZyBzaGltcyBpbnRv
+IGEgc2hhcmVkIGxpYnJhcnksIGxpYnNoaW0uc28uCj4gVHJhY2UgYW55IGFwcGxpY2F0aW9uIHVz
+aW5nIGxpYmZvbyBieSBydW5uaW5nIGl0IGFzIExEX1BSRUxPQUQ9bGlic2hpbS5zbyAuL2Zvb2Fw
+cAo+Cj4gVGhlcmUgYXJlIHR3byBuaWNlIHRoaW5ncyBhYm91dCB0aGlzIGFwcHJvYWNoIHRoYXQg
+SSB3b3VsZCBsaWtlIHRvIHByZXNlcnZlOgo+Cj4gVGhlIHNoaW0gZGV2ZWxvcGVyIG9ubHkgbmVl
+ZHMgdG8gcHJvdmlkZSB0aGUgd2hpdGVsaXN0IGFuZCBhIGJpdCBvZiBleHRyYSBhbm5vdGF0aW9u
+LiBGcm9tIHRoZXJlLCB0aGUgc2hpbSBjYW4gYmUgYmUgYXV0aG9yZWQgdXNpbmcgYSBib2lsZXJw
+bGF0ZSBnZW5lcmF0b3IuCj4gVGhlIGFwcCBkZXZlbG9wZXIgZG9lc24ndCBoYXZlIHRvIGRvIGFu
+eXRoaW5nIG90aGVyIHRoYW4gcGFzcyB0aGUgTERfUFJFTE9BRCBmbGFnLgo+Cj4gVGhlIGRvd25z
+aWRlIGlzIHRoYXQgdGhlIG9ubHkgdHJhY2Vwb2ludHMgYXJlIHRob3NlIGNvcnJlc3BvbmRpbmcg
+dG8gdGhlIHdoaXRlbGlzdCwgYnV0IEknbSBmaW5lIHdpdGggdGhhdC4KPgo+IENhbiB0aGlzIGtp
+bmQgb2YgImhhbmRzLWZyZWUiIGRldmVsb3BlciBleHBlcmllbmNlIGJlIHN1cHBvcnRlZCBieSBM
+VFRuZz8KPgo+IFRoYW5rcyEKPiB+YnIKPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1kZXZAbGlz
+dHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xp
+c3RpbmZvL2x0dG5nLWRldgoKCgotLQpGcmFuY2lzIERlc2xhdXJpZXJzCkNvbXB1dGVyIEVuZ2lu
+ZWVyCkVmZmljaU9TIGluYy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3Jn
+Cmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1k
+ZXYK
