@@ -1,38 +1,24 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Fix: notification thread:
- RCU-safe reclaim of hash table nodes
-Date: Tue, 22 Jan 2019 15:35:53 -0500
-Message-ID: <CA+jJMxvRyD+PZqKqTqZ1BE1Ph7Q8+s=kunoj0P-47XQKh770wg__29046.7432163254$1548189412$gmane$org@mail.gmail.com>
-References: <20181212171644.16634-1-mathieu.desnoyers@efficios.com>
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Subject: [RELEASE] LTTng-Tools 2.10.6 - KeKriek
+Date: Tue, 22 Jan 2019 15:42:53 -0500
+Message-ID: <20190122204252.GA1927__32627.9479939089$1548189795$gmane$org@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 43kgDw28qwznfb
- for <lttng-dev@lists.lttng.org>; Tue, 22 Jan 2019 15:36:32 -0500 (EST)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id D55BAB5DC6
- for <lttng-dev@lists.lttng.org>; Tue, 22 Jan 2019 15:36:31 -0500 (EST)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
- with ESMTP id gRBfWRrJVWQT for <lttng-dev@lists.lttng.org>;
- Tue, 22 Jan 2019 15:36:31 -0500 (EST)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 6D954B5DBB
- for <lttng-dev@lists.lttng.org>; Tue, 22 Jan 2019 15:36:31 -0500 (EST)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
- with ESMTP id UaVNpdi1QgAd for <lttng-dev@lists.lttng.org>;
- Tue, 22 Jan 2019 15:36:31 -0500 (EST)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com
- [209.85.208.174])
- by mail.efficios.com (Postfix) with ESMTPSA id 161C8B5DB6
- for <lttng-dev@lists.lttng.org>; Tue, 22 Jan 2019 15:36:31 -0500 (EST)
-Received: by mail-lj1-f174.google.com with SMTP id s5-v6so21829600ljd.12
- for <lttng-dev@lists.lttng.org>; Tue, 22 Jan 2019 12:36:31 -0800 (PST)
-In-Reply-To: <20181212171644.16634-1-mathieu.desnoyers@efficios.com>
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com
+ [209.85.222.176])
+ by lists.lttng.org (Postfix) with ESMTPS id 43kgNL0q2FznhP
+ for <lttng-dev@lists.lttng.org>; Tue, 22 Jan 2019 15:42:57 -0500 (EST)
+Received: by mail-qk1-f176.google.com with SMTP id m17so251287qki.5
+ for <lttng-dev@lists.lttng.org>; Tue, 22 Jan 2019 12:42:57 -0800 (PST)
+Received: from gmail.com (192-222-157-41.qc.cable.ebox.net. [192.222.157.41])
+ by smtp.gmail.com with ESMTPSA id
+ b134sm53038559qkg.78.2019.01.22.12.42.55
+ for <lttng-dev@lists.lttng.org>
+ (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+ Tue, 22 Jan 2019 12:42:55 -0800 (PST)
+Content-Disposition: inline
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -42,183 +28,76 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>, Jonathan Rajotte-Julien <joraj@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-TWVyZ2VkIGluIG1hc3RlciBhbmQgc3RhYmxlLTIuMTEuCgpUaGFua3MsCkrDqXLDqW1pZQoKT24g
-V2VkLCAxMiBEZWMgMjAxOCBhdCAxMjoxNiwgTWF0aGlldSBEZXNub3llcnMKPG1hdGhpZXUuZGVz
-bm95ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4KPiBOb2RlcyB0aGF0IGFyZSBwdXQgaW4gYSBy
-Y3VsZmhhc2ggaGFzaCB0YWJsZSBjcmVhdGVkIHdpdGggdGhlCj4gImF1dG8gcmVzaXplIiBmbGFn
-IG5lZWQgdG8gYmV3YXJlIHRoYXQgYSB3b3JrZXIgdGhyZWFkIGNhbiBhY2Nlc3MgdGhlCj4gaGFz
-aCB0YWJsZSBub2RlcyBhcyBhIFJDVSByZWFkZXIgY29uY3VycmVudGx5LCBhbmQgdGhhdCB0aGlz
-IHdvcmtlcgo+IHRocmVhZCBjYW4gbW9kaWZ5IHRoZSBoYXNoIHRhYmxlIGNvbnRlbnQsIGVmZmVj
-dGl2ZWx5IGFkZGluZyBhbmQKPiByZW1vdmluZyAiYnVja2V0IiBub2RlcywgYW5kIGNoYW5naW5n
-IHRoZSBzaXplIG9mIHRoZSBoYXNoIHRhYmxlCj4gaW5kZXguCj4KPiBUaGVyZWZvcmUsIGV2ZW4g
-dGhvdWdoIG9ubHkgYSBzaW5nbGUgdGhyZWFkIHJlYWRzIGFuZCB1cGRhdGVzIHRoZSBoYXNoCj4g
-dGFibGUsIGEgZ3JhY2UgcGVyaW9kIGlzIG5lZWRlZCBiZWZvcmUgcmVjbGFpbWluZyB0aGUgbWVt
-b3J5IGhvbGRpbmcKPiB0aGUgcmN1bGZoYXNoIG5vZGVzLgo+Cj4gTW9yZW92ZXIsIGhhbmRsZV9u
-b3RpZmljYXRpb25fdGhyZWFkX2NvbW1hbmRfYWRkX2NoYW5uZWwoKSBtaXNzZXMgYQo+IFJDVSBy
-ZWFkLXNpZGUgbG9jayBhcm91bmQgaXRlcmF0aW9uIG9uIHRoZSB0cmlnZ2VycyBoYXNoIHRhYmxl
-LiBGYWlsdXJlCj4gdG8gaG9sZCB0aGlzIHJlYWQtc2lkZSBsb2NrIGNvdWxkIGNhdXNlIHNlZ21l
-bnRhdGlvbiBmYXVsdHMgd2hlbgo+IGFjY2Vzc2luZyBoYXNoIHRhYmxlIG9iamVjdHMgaWYgYSBo
-YXNoIHRhYmxlIHJlc2l6ZSBpcyBkb25lIGJ5IHRoZQo+IHdvcmtlciB0aHJlYWQgaW4gcGFyYWxs
-ZWwgd2l0aCBpdGVyYXRpb24gb3ZlciB0aGUgaGFzaCB0YWJsZS4KPgo+IFNpZ25lZC1vZmYtYnk6
-IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gLS0t
-Cj4gIC4uLi9sdHRuZy1zZXNzaW9uZC9ub3RpZmljYXRpb24tdGhyZWFkLWV2ZW50cy5jICAgIHwg
-NzMgKysrKysrKysrKysrKysrKysrKy0tLQo+ICAuLi4vbHR0bmctc2Vzc2lvbmQvbm90aWZpY2F0
-aW9uLXRocmVhZC1pbnRlcm5hbC5oICB8ICA0ICsrCj4gIDIgZmlsZXMgY2hhbmdlZCwgNzAgaW5z
-ZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkKPgo+IGRpZmYgLS1naXQgYS9zcmMvYmluL2x0dG5n
-LXNlc3Npb25kL25vdGlmaWNhdGlvbi10aHJlYWQtZXZlbnRzLmMgYi9zcmMvYmluL2x0dG5nLXNl
-c3Npb25kL25vdGlmaWNhdGlvbi10aHJlYWQtZXZlbnRzLmMKPiBpbmRleCAxMjMzYmYzMC4uYmE0
-ZTVhMDUgMTAwNjQ0Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9ub3RpZmljYXRpb24t
-dGhyZWFkLWV2ZW50cy5jCj4gKysrIGIvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9ub3RpZmljYXRp
-b24tdGhyZWFkLWV2ZW50cy5jCj4gQEAgLTcwLDYgKzcwLDggQEAgc3RydWN0IGx0dG5nX2NoYW5u
-ZWxfdHJpZ2dlcl9saXN0IHsKPiAgICAgICAgIHN0cnVjdCBjZHNfbGlzdF9oZWFkIGxpc3Q7Cj4g
-ICAgICAgICAvKiBOb2RlIGluIHRoZSBjaGFubmVsX3RyaWdnZXJzX2h0ICovCj4gICAgICAgICBz
-dHJ1Y3QgY2RzX2xmaHRfbm9kZSBjaGFubmVsX3RyaWdnZXJzX2h0X25vZGU7Cj4gKyAgICAgICAv
-KiBjYWxsX3JjdSBkZWxheWVkIHJlY2xhaW0uICovCj4gKyAgICAgICBzdHJ1Y3QgcmN1X2hlYWQg
-cmN1X25vZGU7Cj4gIH07Cj4KPiAgLyoKPiBAQCAtMTE2LDYgKzExOCw4IEBAIHN0cnVjdCBsdHRu
-Z19zZXNzaW9uX3RyaWdnZXJfbGlzdCB7Cj4gIHN0cnVjdCBsdHRuZ190cmlnZ2VyX2h0X2VsZW1l
-bnQgewo+ICAgICAgICAgc3RydWN0IGx0dG5nX3RyaWdnZXIgKnRyaWdnZXI7Cj4gICAgICAgICBz
-dHJ1Y3QgY2RzX2xmaHRfbm9kZSBub2RlOwo+ICsgICAgICAgLyogY2FsbF9yY3UgZGVsYXllZCBy
-ZWNsYWltLiAqLwo+ICsgICAgICAgc3RydWN0IHJjdV9oZWFkIHJjdV9ub2RlOwo+ICB9Owo+Cj4g
-IHN0cnVjdCBsdHRuZ19jb25kaXRpb25fbGlzdF9lbGVtZW50IHsKPiBAQCAtMTMyLDYgKzEzNiw4
-IEBAIHN0cnVjdCBub3RpZmljYXRpb25fY2xpZW50X2xpc3Qgewo+ICAgICAgICAgY29uc3Qgc3Ry
-dWN0IGx0dG5nX3RyaWdnZXIgKnRyaWdnZXI7Cj4gICAgICAgICBzdHJ1Y3QgY2RzX2xpc3RfaGVh
-ZCBsaXN0Owo+ICAgICAgICAgc3RydWN0IGNkc19sZmh0X25vZGUgbm90aWZpY2F0aW9uX3RyaWdn
-ZXJfaHRfbm9kZTsKPiArICAgICAgIC8qIGNhbGxfcmN1IGRlbGF5ZWQgcmVjbGFpbS4gKi8KPiAr
-ICAgICAgIHN0cnVjdCByY3VfaGVhZCByY3Vfbm9kZTsKPiAgfTsKPgo+ICBzdHJ1Y3Qgbm90aWZp
-Y2F0aW9uX2NsaWVudCB7Cj4gQEAgLTE5OCw2ICsyMDQsOCBAQCBzdHJ1Y3Qgbm90aWZpY2F0aW9u
-X2NsaWVudCB7Cj4gICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGx0dG5nX2R5bmFtaWNf
-YnVmZmVyIGJ1ZmZlcjsKPiAgICAgICAgICAgICAgICAgfSBvdXRib3VuZDsKPiAgICAgICAgIH0g
-Y29tbXVuaWNhdGlvbjsKPiArICAgICAgIC8qIGNhbGxfcmN1IGRlbGF5ZWQgcmVjbGFpbS4gKi8K
-PiArICAgICAgIHN0cnVjdCByY3VfaGVhZCByY3Vfbm9kZTsKPiAgfTsKPgo+ICBzdHJ1Y3QgY2hh
-bm5lbF9zdGF0ZV9zYW1wbGUgewo+IEBAIC0yMDYsNiArMjE0LDggQEAgc3RydWN0IGNoYW5uZWxf
-c3RhdGVfc2FtcGxlIHsKPiAgICAgICAgIHVpbnQ2NF90IGhpZ2hlc3RfdXNhZ2U7Cj4gICAgICAg
-ICB1aW50NjRfdCBsb3dlc3RfdXNhZ2U7Cj4gICAgICAgICB1aW50NjRfdCBjaGFubmVsX3RvdGFs
-X2NvbnN1bWVkOwo+ICsgICAgICAgLyogY2FsbF9yY3UgZGVsYXllZCByZWNsYWltLiAqLwo+ICsg
-ICAgICAgc3RydWN0IHJjdV9oZWFkIHJjdV9ub2RlOwo+ICB9Owo+Cj4gIHN0YXRpYyB1bnNpZ25l
-ZCBsb25nIGhhc2hfY2hhbm5lbF9rZXkoc3RydWN0IGNoYW5uZWxfa2V5ICprZXkpOwo+IEBAIC01
-MDEsNiArNTExLDEyIEBAIGVudW0gbHR0bmdfb2JqZWN0X3R5cGUgZ2V0X2NvbmRpdGlvbl9iaW5k
-aW5nX29iamVjdCgKPiAgfQo+Cj4gIHN0YXRpYwo+ICt2b2lkIGZyZWVfY2hhbm5lbF9pbmZvX3Jj
-dShzdHJ1Y3QgcmN1X2hlYWQgKm5vZGUpCj4gK3sKPiArICAgICAgIGZyZWUoY2FhX2NvbnRhaW5l
-cl9vZihub2RlLCBzdHJ1Y3QgY2hhbm5lbF9pbmZvLCByY3Vfbm9kZSkpOwo+ICt9Cj4gKwo+ICtz
-dGF0aWMKPiAgdm9pZCBjaGFubmVsX2luZm9fZGVzdHJveShzdHJ1Y3QgY2hhbm5lbF9pbmZvICpj
-aGFubmVsX2luZm8pCj4gIHsKPiAgICAgICAgIGlmICghY2hhbm5lbF9pbmZvKSB7Cj4gQEAgLTUx
-NSw3ICs1MzEsMTMgQEAgdm9pZCBjaGFubmVsX2luZm9fZGVzdHJveShzdHJ1Y3QgY2hhbm5lbF9p
-bmZvICpjaGFubmVsX2luZm8pCj4gICAgICAgICBpZiAoY2hhbm5lbF9pbmZvLT5uYW1lKSB7Cj4g
-ICAgICAgICAgICAgICAgIGZyZWUoY2hhbm5lbF9pbmZvLT5uYW1lKTsKPiAgICAgICAgIH0KPiAt
-ICAgICAgIGZyZWUoY2hhbm5lbF9pbmZvKTsKPiArICAgICAgIGNhbGxfcmN1KCZjaGFubmVsX2lu
-Zm8tPnJjdV9ub2RlLCBmcmVlX2NoYW5uZWxfaW5mb19yY3UpOwo+ICt9Cj4gKwo+ICtzdGF0aWMK
-PiArdm9pZCBmcmVlX3Nlc3Npb25faW5mb19yY3Uoc3RydWN0IHJjdV9oZWFkICpub2RlKQo+ICt7
-Cj4gKyAgICAgICBmcmVlKGNhYV9jb250YWluZXJfb2Yobm9kZSwgc3RydWN0IHNlc3Npb25faW5m
-bywgcmN1X25vZGUpKTsKPiAgfQo+Cj4gIC8qIERvbid0IGNhbGwgZGlyZWN0bHksIHVzZSB0aGUg
-cmVmLWNvdW50aW5nIG1lY2hhbmlzbS4gKi8KPiBAQCAtNTM5LDcgKzU2MSw3IEBAIHZvaWQgc2Vz
-c2lvbl9pbmZvX2Rlc3Ryb3kodm9pZCAqX2RhdGEpCj4gICAgICAgICAgICAgICAgICAgICAgICAg
-JnNlc3Npb25faW5mby0+c2Vzc2lvbnNfaHRfbm9kZSk7Cj4gICAgICAgICByY3VfcmVhZF91bmxv
-Y2soKTsKPiAgICAgICAgIGZyZWUoc2Vzc2lvbl9pbmZvLT5uYW1lKTsKPiAtICAgICAgIGZyZWUo
-c2Vzc2lvbl9pbmZvKTsKPiArICAgICAgIGNhbGxfcmN1KCZzZXNzaW9uX2luZm8tPnJjdV9ub2Rl
-LCBmcmVlX3Nlc3Npb25faW5mb19yY3UpOwo+ICB9Cj4KPiAgc3RhdGljCj4gQEAgLTEwOTksNiAr
-MTEyMSwxMiBAQCBlbmQ6Cj4gIH0KPgo+ICBzdGF0aWMKPiArdm9pZCBmcmVlX25vdGlmaWNhdGlv
-bl9jbGllbnRfcmN1KHN0cnVjdCByY3VfaGVhZCAqbm9kZSkKPiArewo+ICsgICAgICAgZnJlZShj
-YWFfY29udGFpbmVyX29mKG5vZGUsIHN0cnVjdCBub3RpZmljYXRpb25fY2xpZW50LCByY3Vfbm9k
-ZSkpOwo+ICt9Cj4gKwo+ICtzdGF0aWMKPiAgdm9pZCBub3RpZmljYXRpb25fY2xpZW50X2Rlc3Ry
-b3koc3RydWN0IG5vdGlmaWNhdGlvbl9jbGllbnQgKmNsaWVudCwKPiAgICAgICAgICAgICAgICAg
-c3RydWN0IG5vdGlmaWNhdGlvbl90aHJlYWRfc3RhdGUgKnN0YXRlKQo+ICB7Cj4gQEAgLTExMjAs
-NyArMTE0OCw3IEBAIHZvaWQgbm90aWZpY2F0aW9uX2NsaWVudF9kZXN0cm95KHN0cnVjdCBub3Rp
-ZmljYXRpb25fY2xpZW50ICpjbGllbnQsCj4gICAgICAgICB9Cj4gICAgICAgICBsdHRuZ19keW5h
-bWljX2J1ZmZlcl9yZXNldCgmY2xpZW50LT5jb21tdW5pY2F0aW9uLmluYm91bmQuYnVmZmVyKTsK
-PiAgICAgICAgIGx0dG5nX2R5bmFtaWNfYnVmZmVyX3Jlc2V0KCZjbGllbnQtPmNvbW11bmljYXRp
-b24ub3V0Ym91bmQuYnVmZmVyKTsKPiAtICAgICAgIGZyZWUoY2xpZW50KTsKPiArICAgICAgIGNh
-bGxfcmN1KCZjbGllbnQtPnJjdV9ub2RlLCBmcmVlX25vdGlmaWNhdGlvbl9jbGllbnRfcmN1KTsK
-PiAgfQo+Cj4gIC8qCj4gQEAgLTE1NDQsNiArMTU3Miw3IEBAIGludCBoYW5kbGVfbm90aWZpY2F0
-aW9uX3RocmVhZF9jb21tYW5kX2FkZF9jaGFubmVsKAo+ICAgICAgICAgICAgICAgICBnb3RvIGVy
-cm9yOwo+ICAgICAgICAgfQo+Cj4gKyAgICAgICByY3VfcmVhZF9sb2NrKCk7Cj4gICAgICAgICAv
-KiBCdWlsZCBhIGxpc3Qgb2YgYWxsIHRyaWdnZXJzIGFwcGx5aW5nIHRvIHRoZSBuZXcgY2hhbm5l
-bC4gKi8KPiAgICAgICAgIGNkc19sZmh0X2Zvcl9lYWNoX2VudHJ5KHN0YXRlLT50cmlnZ2Vyc19o
-dCwgJml0ZXIsIHRyaWdnZXJfaHRfZWxlbWVudCwKPiAgICAgICAgICAgICAgICAgICAgICAgICBu
-b2RlKSB7Cj4gQEAgLTE1NTYsNiArMTU4NSw3IEBAIGludCBoYW5kbGVfbm90aWZpY2F0aW9uX3Ro
-cmVhZF9jb21tYW5kX2FkZF9jaGFubmVsKAo+Cj4gICAgICAgICAgICAgICAgIG5ld19lbGVtZW50
-ID0gem1hbGxvYyhzaXplb2YoKm5ld19lbGVtZW50KSk7Cj4gICAgICAgICAgICAgICAgIGlmICgh
-bmV3X2VsZW1lbnQpIHsKPiArICAgICAgICAgICAgICAgICAgICAgICByY3VfcmVhZF91bmxvY2so
-KTsKPiAgICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGVycm9yOwo+ICAgICAgICAgICAgICAg
-ICB9Cj4gICAgICAgICAgICAgICAgIENEU19JTklUX0xJU1RfSEVBRCgmbmV3X2VsZW1lbnQtPm5v
-ZGUpOwo+IEBAIC0xNTYzLDYgKzE1OTMsNyBAQCBpbnQgaGFuZGxlX25vdGlmaWNhdGlvbl90aHJl
-YWRfY29tbWFuZF9hZGRfY2hhbm5lbCgKPiAgICAgICAgICAgICAgICAgY2RzX2xpc3RfYWRkKCZu
-ZXdfZWxlbWVudC0+bm9kZSwgJnRyaWdnZXJfbGlzdCk7Cj4gICAgICAgICAgICAgICAgIHRyaWdn
-ZXJfY291bnQrKzsKPiAgICAgICAgIH0KPiArICAgICAgIHJjdV9yZWFkX3VubG9jaygpOwo+Cj4g
-ICAgICAgICBEQkcoIltub3RpZmljYXRpb24tdGhyZWFkXSBGb3VuZCAlaSB0cmlnZ2VycyB0aGF0
-IGFwcGx5IHRvIG5ld2x5IGFkZGVkIGNoYW5uZWwiLAo+ICAgICAgICAgICAgICAgICAgICAgICAg
-IHRyaWdnZXJfY291bnQpOwo+IEBAIC0xNTk4LDYgKzE2MjksMjAgQEAgZXJyb3I6Cj4gIH0KPgo+
-ICBzdGF0aWMKPiArdm9pZCBmcmVlX2NoYW5uZWxfdHJpZ2dlcl9saXN0X3JjdShzdHJ1Y3QgcmN1
-X2hlYWQgKm5vZGUpCj4gK3sKPiArICAgICAgIGZyZWUoY2FhX2NvbnRhaW5lcl9vZihub2RlLCBz
-dHJ1Y3QgbHR0bmdfY2hhbm5lbF90cmlnZ2VyX2xpc3QsCj4gKyAgICAgICAgICAgICAgICAgICAg
-ICAgcmN1X25vZGUpKTsKPiArfQo+ICsKPiArc3RhdGljCj4gK3ZvaWQgZnJlZV9jaGFubmVsX3N0
-YXRlX3NhbXBsZV9yY3Uoc3RydWN0IHJjdV9oZWFkICpub2RlKQo+ICt7Cj4gKyAgICAgICBmcmVl
-KGNhYV9jb250YWluZXJfb2Yobm9kZSwgc3RydWN0IGNoYW5uZWxfc3RhdGVfc2FtcGxlLAo+ICsg
-ICAgICAgICAgICAgICAgICAgICAgIHJjdV9ub2RlKSk7Cj4gK30KPiArCj4gK3N0YXRpYwo+ICBp
-bnQgaGFuZGxlX25vdGlmaWNhdGlvbl90aHJlYWRfY29tbWFuZF9yZW1vdmVfY2hhbm5lbCgKPiAg
-ICAgICAgIHN0cnVjdCBub3RpZmljYXRpb25fdGhyZWFkX3N0YXRlICpzdGF0ZSwKPiAgICAgICAg
-IHVpbnQ2NF90IGNoYW5uZWxfa2V5LCBlbnVtIGx0dG5nX2RvbWFpbl90eXBlIGRvbWFpbiwKPiBA
-QCAtMTYzOSw3ICsxNjg0LDcgQEAgaW50IGhhbmRsZV9ub3RpZmljYXRpb25fdGhyZWFkX2NvbW1h
-bmRfcmVtb3ZlX2NoYW5uZWwoCj4gICAgICAgICAgICAgICAgIGZyZWUodHJpZ2dlcl9saXN0X2Vs
-ZW1lbnQpOwo+ICAgICAgICAgfQo+ICAgICAgICAgY2RzX2xmaHRfZGVsKHN0YXRlLT5jaGFubmVs
-X3RyaWdnZXJzX2h0LCBub2RlKTsKPiAtICAgICAgIGZyZWUodHJpZ2dlcl9saXN0KTsKPiArICAg
-ICAgIGNhbGxfcmN1KCZ0cmlnZ2VyX2xpc3QtPnJjdV9ub2RlLCBmcmVlX2NoYW5uZWxfdHJpZ2dl
-cl9saXN0X3JjdSk7Cj4KPiAgICAgICAgIC8qIEZyZWUgc2FtcGxlZCBjaGFubmVsIHN0YXRlLiAq
-Lwo+ICAgICAgICAgY2RzX2xmaHRfbG9va3VwKHN0YXRlLT5jaGFubmVsX3N0YXRlX2h0LAo+IEBA
-IC0xNjU4LDcgKzE3MDMsNyBAQCBpbnQgaGFuZGxlX25vdGlmaWNhdGlvbl90aHJlYWRfY29tbWFu
-ZF9yZW1vdmVfY2hhbm5lbCgKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNoYW5u
-ZWxfc3RhdGVfaHRfbm9kZSk7Cj4KPiAgICAgICAgICAgICAgICAgY2RzX2xmaHRfZGVsKHN0YXRl
-LT5jaGFubmVsX3N0YXRlX2h0LCBub2RlKTsKPiAtICAgICAgICAgICAgICAgZnJlZShzYW1wbGUp
-Owo+ICsgICAgICAgICAgICAgICBjYWxsX3JjdSgmc2FtcGxlLT5yY3Vfbm9kZSwgZnJlZV9jaGFu
-bmVsX3N0YXRlX3NhbXBsZV9yY3UpOwo+ICAgICAgICAgfQo+Cj4gICAgICAgICAvKiBSZW1vdmUg
-dGhlIGNoYW5uZWwgZnJvbSB0aGUgY2hhbm5lbHNfaHQgYW5kIGZyZWUgaXQuICovCj4gQEAgLTIx
-MTgsNiArMjE2MywyMCBAQCBlcnJvcjoKPiAgfQo+Cj4gIHN0YXRpYwo+ICt2b2lkIGZyZWVfbm90
-aWZpY2F0aW9uX2NsaWVudF9saXN0X3JjdShzdHJ1Y3QgcmN1X2hlYWQgKm5vZGUpCj4gK3sKPiAr
-ICAgICAgIGZyZWUoY2FhX2NvbnRhaW5lcl9vZihub2RlLCBzdHJ1Y3Qgbm90aWZpY2F0aW9uX2Ns
-aWVudF9saXN0LAo+ICsgICAgICAgICAgICAgICAgICAgICAgIHJjdV9ub2RlKSk7Cj4gK30KPiAr
-Cj4gK3N0YXRpYwo+ICt2b2lkIGZyZWVfbHR0bmdfdHJpZ2dlcl9odF9lbGVtZW50X3JjdShzdHJ1
-Y3QgcmN1X2hlYWQgKm5vZGUpCj4gK3sKPiArICAgICAgIGZyZWUoY2FhX2NvbnRhaW5lcl9vZihu
-b2RlLCBzdHJ1Y3QgbHR0bmdfdHJpZ2dlcl9odF9lbGVtZW50LAo+ICsgICAgICAgICAgICAgICAg
-ICAgICAgIHJjdV9ub2RlKSk7Cj4gK30KPiArCj4gK3N0YXRpYwo+ICBpbnQgaGFuZGxlX25vdGlm
-aWNhdGlvbl90aHJlYWRfY29tbWFuZF91bnJlZ2lzdGVyX3RyaWdnZXIoCj4gICAgICAgICAgICAg
-ICAgIHN0cnVjdCBub3RpZmljYXRpb25fdGhyZWFkX3N0YXRlICpzdGF0ZSwKPiAgICAgICAgICAg
-ICAgICAgc3RydWN0IGx0dG5nX3RyaWdnZXIgKnRyaWdnZXIsCj4gQEAgLTIxODYsNyArMjI0NSw3
-IEBAIGludCBoYW5kbGVfbm90aWZpY2F0aW9uX3RocmVhZF9jb21tYW5kX3VucmVnaXN0ZXJfdHJp
-Z2dlcigKPiAgICAgICAgIH0KPiAgICAgICAgIGNkc19sZmh0X2RlbChzdGF0ZS0+bm90aWZpY2F0
-aW9uX3RyaWdnZXJfY2xpZW50c19odCwKPiAgICAgICAgICAgICAgICAgICAgICAgICAmY2xpZW50
-X2xpc3QtPm5vdGlmaWNhdGlvbl90cmlnZ2VyX2h0X25vZGUpOwo+IC0gICAgICAgZnJlZShjbGll
-bnRfbGlzdCk7Cj4gKyAgICAgICBjYWxsX3JjdSgmY2xpZW50X2xpc3QtPnJjdV9ub2RlLCBmcmVl
-X25vdGlmaWNhdGlvbl9jbGllbnRfbGlzdF9yY3UpOwo+Cj4gICAgICAgICAvKiBSZW1vdmUgdHJp
-Z2dlciBmcm9tIHRyaWdnZXJzX2h0LiAqLwo+ICAgICAgICAgdHJpZ2dlcl9odF9lbGVtZW50ID0g
-Y2FhX2NvbnRhaW5lcl9vZih0cmlnZ2Vyc19odF9ub2RlLAo+IEBAIC0yMTk4LDcgKzIyNTcsNyBA
-QCBpbnQgaGFuZGxlX25vdGlmaWNhdGlvbl90aHJlYWRfY29tbWFuZF91bnJlZ2lzdGVyX3RyaWdn
-ZXIoCj4gICAgICAgICBhY3Rpb24gPSBsdHRuZ190cmlnZ2VyX2dldF9hY3Rpb24odHJpZ2dlcl9o
-dF9lbGVtZW50LT50cmlnZ2VyKTsKPiAgICAgICAgIGx0dG5nX2FjdGlvbl9kZXN0cm95KGFjdGlv
-bik7Cj4gICAgICAgICBsdHRuZ190cmlnZ2VyX2Rlc3Ryb3kodHJpZ2dlcl9odF9lbGVtZW50LT50
-cmlnZ2VyKTsKPiAtICAgICAgIGZyZWUodHJpZ2dlcl9odF9lbGVtZW50KTsKPiArICAgICAgIGNh
-bGxfcmN1KCZ0cmlnZ2VyX2h0X2VsZW1lbnQtPnJjdV9ub2RlLCBmcmVlX2x0dG5nX3RyaWdnZXJf
-aHRfZWxlbWVudF9yY3UpOwo+ICBlbmQ6Cj4gICAgICAgICByY3VfcmVhZF91bmxvY2soKTsKPiAg
-ICAgICAgIGlmIChfY21kX3JlcGx5KSB7Cj4gZGlmZiAtLWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vz
-c2lvbmQvbm90aWZpY2F0aW9uLXRocmVhZC1pbnRlcm5hbC5oIGIvc3JjL2Jpbi9sdHRuZy1zZXNz
-aW9uZC9ub3RpZmljYXRpb24tdGhyZWFkLWludGVybmFsLmgKPiBpbmRleCAzOTcxNTlkYS4uZTIx
-Nzk5NWYgMTAwNjQ0Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9ub3RpZmljYXRpb24t
-dGhyZWFkLWludGVybmFsLmgKPiArKysgYi9zcmMvYmluL2x0dG5nLXNlc3Npb25kL25vdGlmaWNh
-dGlvbi10aHJlYWQtaW50ZXJuYWwuaAo+IEBAIC01Myw2ICs1Myw4IEBAIHN0cnVjdCBzZXNzaW9u
-X2luZm8gewo+ICAgICAgICAgICAgICAgICAvKiBJZGVudGlmaWVyIG9mIHRoZSBjdXJyZW50bHkg
-b25nb2luZyByb3RhdGlvbi4gKi8KPiAgICAgICAgICAgICAgICAgdWludDY0X3QgaWQ7Cj4gICAg
-ICAgICB9IHJvdGF0aW9uOwo+ICsgICAgICAgLyogY2FsbF9yY3UgZGVsYXllZCByZWNsYWltLiAq
-Lwo+ICsgICAgICAgc3RydWN0IHJjdV9oZWFkIHJjdV9ub2RlOwo+ICB9Owo+Cj4gIHN0cnVjdCBj
-aGFubmVsX2luZm8gewo+IEBAIC02OCw2ICs3MCw4IEBAIHN0cnVjdCBjaGFubmVsX2luZm8gewo+
-ICAgICAgICAgc3RydWN0IGNkc19sZmh0X25vZGUgY2hhbm5lbHNfaHRfbm9kZTsKPiAgICAgICAg
-IC8qIE5vZGUgaW4gdGhlIHNlc3Npb25faW5mbydzIGNoYW5uZWxzX2h0LiAqLwo+ICAgICAgICAg
-c3RydWN0IGNkc19sZmh0X25vZGUgc2Vzc2lvbl9pbmZvX2NoYW5uZWxzX2h0X25vZGU7Cj4gKyAg
-ICAgICAvKiBjYWxsX3JjdSBkZWxheWVkIHJlY2xhaW0uICovCj4gKyAgICAgICBzdHJ1Y3QgcmN1
-X2hlYWQgcmN1X25vZGU7Cj4gIH07Cj4KPiAgI2VuZGlmIC8qIE5PVElGSUNBVElPTl9USFJFQURf
-SU5URVJOQUxfSCAqLwo+IC0tCj4gMi4xMS4wCj4KCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpF
-ZmZpY2lPUyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmct
-ZGV2QGxpc3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxt
-YW4vbGlzdGluZm8vbHR0bmctZGV2Cg==
+Hi all,
+
+The sixth bug-fix release of LTTng-Tools 2.10 - KeKriek has just been
+released. This release addresses a number of issues listed below.
+
+2019-01-22 lttng-tools 2.10.6 (Blonde Brownie Day)
+        * Fix: worker structure is leaked in run_as process
+        * Fix: only free trace_path when it is dynamically allocated
+        * Fix: leak of filter bytecode and expression on agent event re-enable
+        * Test fix: python logging test spams its output
+        * Fix: leak of rundir config string
+        * Fix: do not repurpose iterator while it is being used
+        * Fix: run_command_wait() handle partial write
+        * Fix: tests: test_crash should start sessions
+        * Add *.exe to gitignore for Cygwin
+        * Fix: warning 'fd' may be used uninitialized
+        * Fix: max_t/min_t macros are missing cast on input
+        * Fix: Connect timeout arithmetic in inet/inet6 (v4)
+        * Fix: create_channel_per_pid: remove channel on error
+        * Fix: channel errors on local stress-tests
+        * Fix: channel_ust_create: remove channel on agent error
+        * Always choose large event header for UST channels
+        * Remove unnecessary check of output parameter
+        * Fix: perform local data pending before checking data pending with relayd
+        * Fix: double put on error path
+        * Fix: holding the stream lock does not equate to having data pending
+        * Fix: skip uid registry when metadata key is 0
+        * Docs: document the meaning of a ust app channel key set to 0
+        * Fix: acquire stream lock during kernel metadata snapshot
+        * Fix: skip closed session on viewer listing
+        * Fix: use LTTNG_VIEWER_ATTACH_UNK to report a closed session
+        * Doc: withinin -> within
+        * Fix: perform relayd socket pair cleanup on control socket error
+        * Fix: relayd control socket mutex is not destroyed
+        * Tests: do not bound test app iterations when in background mode
+        * Tests: add missing rotation and autoload tests to check target
+        * Tests: remove temporary folder
+        * Tests: remove mi result files when done
+        * Tests: Remove unused set +x
+        * Tests: Kill relayd after sessiond to ensure a clean tear down
+        * Tests: Remove unused variable
+        * Tests: Use stop relayd from utils.sh
+        * Tests: remove declaration already present in utils.sh
+        * Fix: incorrect error message on regenerate missing argument
+        * Fix: incorrect error message on metadata missing argument
+        * Fix: snapshot command mishandles missing arguments
+        * Fix: potential use of NULL path in stat() use
+        * Fix: passing null to closedir() on error
+        * Fix: unchecked access to pids array
+        * Fix: returned pids may be uninitialized
+        * Fix: lttng-save command producing wrong XML fields
+        * Fix: memory is not zeroed on first set_capacity
+        * Fix: dynamic buffer mishandles setting capacity to 0
+        * Fix: client_list_element leak on failure to evaluate a condition
+        * Fix: possible NULL dereference in uri_parse_str_urls()
+        * Fix: clean-up sessiond condig structure on initialization error
+        * Fix: unchecked return value in sessiond path configuration
+        * Set consumer's verbosity to the max level on --verbose-consumer
+        * Tests: added test_autoload to noinst_SCRIPTS
+
+As always, please report any issue you may encounter to bugs.lttng.org
+or on this mailing list.
+
+Project website: https://lttng.org
+
+Download link:
+https://lttng.org/files/lttng-tools/lttng-tools-2.10.6.tar.bz2
+
+GPG sig:
+https://lttng.org/files/lttng-tools/lttng-tools-2.10.6.tar.bz2.asc
