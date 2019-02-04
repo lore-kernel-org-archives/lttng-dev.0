@@ -1,89 +1,50 @@
-From: ddu <dengke.du@windriver.com>
-Subject: Re: conflicting types for 'trace_signal_generate'
-Date: Fri, 1 Feb 2019 14:57:02 +0800
-Message-ID: <e9d1caa1-d8d0-e620-317e-5525e8c0c20c__49239.110543725$1549006674$gmane$org@windriver.com>
-References: <39d9fb3a-4613-7e77-b586-9df3f811d294@windriver.com>
- <79761919.445.1548950798791.JavaMail.zimbra@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: BUG: optimized kprobes illegal instructions in v4.19 stable kernels
+Date: Mon, 4 Feb 2019 14:15:21 -0500 (EST)
+Message-ID: <342740659.2887.1549307721609.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail5.wrs.com (mail5.windriver.com [192.103.53.11])
- by lists.lttng.org (Postfix) with ESMTPS id 43rTTQ3bSRznCR
- for <lttng-dev@lists.lttng.org>; Fri,  1 Feb 2019 02:37:29 -0500 (EST)
-In-Reply-To: <79761919.445.1548950798791.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Return-path: <stable-owner@vger.kernel.org>
+Sender: stable-owner@vger.kernel.org
+To: Kees Cook <keescook@chromium.org>
+Cc: William Cohen <wcohen@redhat.com>, stable@vger.kernel.org, Laura Abbott <labbott@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>, Russell King <rmk+kernel@armlinux.org.uk>, linux-kernel <linux-kernel@vger.kernel.org>, lttng@reliableembeddedsystems.com, lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-VGhhbmtzISBMZXQgbWUgdHJ5IGl0LgoK5ZyoIDIwMTkvMi8xIOS4iuWNiDEyOjA2LCBNYXRoaWV1
-IERlc25veWVycyDlhpnpgZM6Cj4gSGksCj4KPiBDYW4geW91IHRyeSB3aXRoIGx0dG5nLW1vZHVs
-ZXMgc3RhYmxlLTIuMTAgYnJhbmNoIEhFQUQgPwo+Cj4gSXQgY29udGFpbnMgZml4ZXMgcmVsYXRl
-ZCB0byBzdXBwb3J0IG9mIHRoZSA1LjAtcmMgTGludXgga2VybmVsLgo+Cj4gVGhhbmtzLAo+Cj4g
-TWF0aGlldQo+Cj4gLS0tLS0gT24gSmFuIDMxLCAyMDE5LCBhdCAxOjQ5IEFNLCBEZW5na2UgRHUg
-ZGVuZ2tlLmR1QHdpbmRyaXZlci5jb20gd3JvdGU6Cj4KPj4gSGkgYWxsCj4+Cj4+IFlvY3RvIGJy
-YW5jaDogbWFzdGVyCj4+Cj4+IGx0dG5nLW1vZHVsZXM6IDIuMTAuOAo+Pgo+PiBrZXJuZWw6IDUu
-MC1yYwo+Pgo+PiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KPj4KPj4gIMKgL2J1aWxkYXJl
-YTEvZGR1L3dycC8xMDE5L2x0dG5nL2J1aWxkL3dvcmtzcGFjZS9zb3VyY2VzL2x0dG5nLW1vZHVs
-ZXMvcHJvYmVzLy4uL3Byb2Jlcy9sdHRuZy10cmFjZXBvaW50LWV2ZW50LWltcGwuaDoxNDM6NjoK
-Pj4gIMKgZXJyb3I6IGNvbmZsaWN0aW5nIHR5cGVzIGZvciAndHJhY2Vfc2lnbmFsX2dlbmVyYcKg
-wqDCoMKgIHRlJwo+PiAgwqAgdm9pZCB0cmFjZV8jI19uYW1lKF9wcm90byk7Cj4+ICDCoMKgwqDC
-oMKgwqAgXn5+fn5+Cj4+ICDCoC9idWlsZGFyZWExL2RkdS93cnAvMTAxOS9sdHRuZy9idWlsZC93
-b3Jrc3BhY2Uvc291cmNlcy9sdHRuZy1tb2R1bGVzL3Byb2Jlcy8uLi9wcm9iZXMvbHR0bmctdHJh
-Y2Vwb2ludC1ldmVudC1pbXBsLmg6NTU6MjoKPj4gIMKgbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1h
-Y3JvICdMVFROR19UUkFDRVBPSU5UX0VWRU4gVF9JTlNUQU5DRV9NQVAnCj4+ICDCoMKgIExUVE5H
-X1RSQUNFUE9JTlRfRVZFTlRfSU5TVEFOQ0VfTUFQKG1hcCwgbmFtZSwgbWFwLCBQQVJBTVMocHJv
-dG8pLAo+PiBQQVJBTVMoYXJncykpCj4+ICDCoMKgIF5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+Cj4+ICDCoC9idWlsZGFyZWExL2RkdS93cnAvMTAxOS9sdHRuZy9idWlsZC93b3Jr
-c3BhY2Uvc291cmNlcy9sdHRuZy1tb2R1bGVzL3Byb2Jlcy8uLi9wcm9iZXMvbHR0bmctdHJhY2Vw
-b2ludC1ldmVudC1pbXBsLmg6OTc6MjoKPj4gIMKgbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3Jv
-ICdMVFROR19UUkFDRVBPSU5UX0VWRU7CoMKgwqDCoCBUX01BUCcKPj4gIMKgwqAgTFRUTkdfVFJB
-Q0VQT0lOVF9FVkVOVF9NQVAobmFtZSwgbmFtZSzCoMKgwqAgXAo+PiAgwqDCoCBefn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fgo+PiAgwqAvYnVpbGRhcmVhMS9kZHUvd3JwLzEwMTkvbHR0bmcvYnVp
-bGQvd29ya3NwYWNlL3NvdXJjZXMvbHR0bmctbW9kdWxlcy9wcm9iZXMvLi4vaW5zdHJ1bWVudGF0
-aW9uL2V2ZW50cy9sdHRuZy1tb2R1bGUvc2lnbmFsLmg6NTM6MToKPj4gIMKgbm90ZTogaW4gZXhw
-YW5zaW9uIG9mIG1hY3JvICdMVFROR19UUkFDRVBPwqDCoMKgwqAgSU5UX0VWRU5UJwo+PiAgwqAg
-TFRUTkdfVFJBQ0VQT0lOVF9FVkVOVChzaWduYWxfZ2VuZXJhdGUsCj4+ICDCoCBefn5+fn5+fn5+
-fn5+fn5+fn5+fn5+Cj4+ICDCoEluIGZpbGUgaW5jbHVkZWQgZnJvbQo+PiAvYnVpbGRhcmVhMS9k
-ZHUvd3JwLzEwMTkvbHR0bmcvYnVpbGQvdG1wLWdsaWJjL3dvcmstc2hhcmVkL3FlbXV4ODYtNjQv
-a2VybmVsLXNvdXJjZS9pbmNsdWRlL3RyYWNlL2V2ZW50cy9zaWduYWwuaDoxMCwKPj4gIMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZnJvbQo+PiAvYnVpbGRhcmVhMS9kZHUvd3Jw
-LzEwMTkvbHR0bmcvYnVpbGQvd29ya3NwYWNlL3NvdXJjZXMvbHR0bmctbW9kdWxlcy9wcm9iZXMv
-bHR0bmctcHJvYmUtc2lnbmFsLmM6MzA6Cj4+ICDCoC9idWlsZGFyZWExL2RkdS93cnAvMTAxOS9s
-dHRuZy9idWlsZC90bXAtZ2xpYmMvd29yay1zaGFyZWQvcWVtdXg4Ni02NC9rZXJuZWwtc291cmNl
-L2luY2x1ZGUvbGludXgvdHJhY2Vwb2ludC5oOjIzNToyMToKPj4gIMKgbm90ZTogcHJldmlvdXMg
-ZGVmaW5pdGlvbiBvZiAndHJhY2Vfc2lnbmFsX2dlbmVyYXRlJ8KgwqDCoMKgwqAgd2FzIGhlcmUK
-Pj4gIMKgwqAgc3RhdGljIGlubGluZSB2b2lkIHRyYWNlXyMjbmFtZShwcm90bynCoMKgwqAgXAo+
-PiAgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIF5+fn5+fgo+PiAg
-wqAvYnVpbGRhcmVhMS9kZHUvd3JwLzEwMTkvbHR0bmcvYnVpbGQvdG1wLWdsaWJjL3dvcmstc2hh
-cmVkL3FlbXV4ODYtNjQva2VybmVsLXNvdXJjZS9pbmNsdWRlL2xpbnV4L3RyYWNlcG9pbnQuaDoz
-OTg6MjoKPj4gIMKgbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvICdfX0RFQ0xBUkVfVFJBQ0Un
-Cj4+ICDCoMKgIF9fREVDTEFSRV9UUkFDRShuYW1lLCBQQVJBTVMocHJvdG8pLCBQQVJBTVMoYXJn
-cykswqAgXAo+PiAgwqDCoCBefn5+fn5+fn5+fn5+fn4KPj4gIMKgL2J1aWxkYXJlYTEvZGR1L3dy
-cC8xMDE5L2x0dG5nL2J1aWxkL3RtcC1nbGliYy93b3JrLXNoYXJlZC9xZW11eDg2LTY0L2tlcm5l
-bC1zb3VyY2UvaW5jbHVkZS9saW51eC90cmFjZXBvaW50Lmg6NTM0OjI6Cj4+ICDCoG5vdGU6IGlu
-IGV4cGFuc2lvbiBvZiBtYWNybyAnREVDTEFSRV9UUkFDRScKPj4gIMKgwqAgREVDTEFSRV9UUkFD
-RShuYW1lLCBQQVJBTVMocHJvdG8pLCBQQVJBTVMoYXJncykpCj4+ICDCoMKgIF5+fn5+fn5+fn5+
-fn4KPj4gIMKgL2J1aWxkYXJlYTEvZGR1L3dycC8xMDE5L2x0dG5nL2J1aWxkL3RtcC1nbGliYy93
-b3JrLXNoYXJlZC9xZW11eDg2LTY0L2tlcm5lbC1zb3VyY2UvaW5jbHVkZS90cmFjZS9ldmVudHMv
-c2lnbmFsLmg6NTA6MToKPj4gIMKgbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvICdUUkFDRV9F
-VkVOVCcKPj4gIMKgIFRSQUNFX0VWRU5UKHNpZ25hbF9nZW5lcmF0ZSwKPj4gIMKgIF5+fn5+fn5+
-fn5+Cj4+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+Pgo+PiBfX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+PiBsdHRuZy1kZXYgbWFpbGluZyBsaXN0
-Cj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
-Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRl
-dkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFu
-L2xpc3RpbmZvL2x0dG5nLWRldgo=
+Hi,
+
+I notice this commit as a possible culprit of the illegal instructions my lttng
+users are noticing on arm32 when using kprobes on a v4.19.13 Linux kernel
+in a Yocto environment [1]. They were able to reproduce the issue with perf
+as well.
+
+commit e46daee53bb50bde38805f1823a182979724c229
+Author: Kees Cook <keescook@chromium.org>
+Date:   Tue Oct 30 22:12:56 2018 +0100
+
+    ARM: 8806/1: kprobes: Fix false positive with FORTIFY_SOURCE
+
+I *think* the intent there was to do
+
+-       memcpy(code, &optprobe_template_entry,
++       memcpy(code, (unsigned long *)&optprobe_template_entry,
+
+But if you look at the commit, the "&" seems to have been stripped away,
+which happens to change the behavior significantly.
+
+Has this change ever been runtime-tested ?
+
+It has been backported to:
+- 4.19 stable as commit 3fe0c68aea21
+- 4.14 stable as commit f9e0bc710347
+
+Thanks,
+
+Mathieu
+
+[1] https://bugs.lttng.org/issues/1174
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
