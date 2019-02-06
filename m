@@ -1,90 +1,35 @@
-From: Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: BUG: optimized kprobes illegal instructions in v4.19 stable
- kernels
-Date: Wed, 6 Feb 2019 13:41:15 +0900
-Message-ID: <20190206134115.baba291e33022a2f6b6ae5f8@kernel.org>
+From: David Laight <David.Laight@ACULAB.COM>
+Subject: RE: optimized kprobes illegal instructions in v4.19 stable kernels
+Date: Wed, 6 Feb 2019 11:48:44 +0000
+Message-ID: <76948cf5011e454494107cea61c6930c@AcuMS.aculab.com>
 References: <342740659.2887.1549307721609.JavaMail.zimbra@efficios.com>
-        <CAGXu5jJYbc0xhQGqS6L43o_1tOdWmL=rhRmu_L8qT4-tOheHPw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-In-Reply-To: <CAGXu5jJYbc0xhQGqS6L43o_1tOdWmL=rhRmu_L8qT4-tOheHPw@mail.gmail.com>
-Sender: linux-kernel-owner@vger.kernel.org
-To: Kees Cook <keescook@chromium.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, William Cohen <wcohen@redhat.com>, "# 3.4.x" <stable@vger.kernel.org>, Laura Abbott <labbott@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>, Russell King <rmk+kernel@armlinux.org.uk>, linux-kernel <linux-kernel@vger.kernel.org>, lttng@reliableembeddedsystems.com, lttng-dev <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+Return-path: <stable-owner@vger.kernel.org>
+In-Reply-To: <342740659.2887.1549307721609.JavaMail.zimbra@efficios.com>
+Content-Language: en-US
+Sender: stable-owner@vger.kernel.org
+To: 'Mathieu Desnoyers' <mathieu.desnoyers@efficios.com>, Kees Cook <keescook@chromium.org>
+Cc: William Cohen <wcohen@redhat.com>, "stable@vger.kernel.org" <stable@vger.kernel.org>, Laura Abbott <labbott@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>, Russell King <rmk+kernel@armlinux.org.uk>, linux-kernel <linux-kernel@vger.kernel.org>, "lttng@reliableembeddedsystems.com" <lttng@reliableembeddedsystems.com>, lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Tue, 5 Feb 2019 15:06:10 +0000
-Kees Cook <keescook@chromium.org> wrote:
-
-> On Mon, Feb 4, 2019 at 7:15 PM Mathieu Desnoyers
-> <mathieu.desnoyers@efficios.com> wrote:
-> >
-> > Hi,
-> >
-> > I notice this commit as a possible culprit of the illegal instructions my lttng
-> > users are noticing on arm32 when using kprobes on a v4.19.13 Linux kernel
-> > in a Yocto environment [1]. They were able to reproduce the issue with perf
-> > as well.
-> >
-> > commit e46daee53bb50bde38805f1823a182979724c229
-> > Author: Kees Cook <keescook@chromium.org>
-> > Date:   Tue Oct 30 22:12:56 2018 +0100
-> >
-> >     ARM: 8806/1: kprobes: Fix false positive with FORTIFY_SOURCE
-> >
-> > I *think* the intent there was to do
-> >
-> > -       memcpy(code, &optprobe_template_entry,
-> > +       memcpy(code, (unsigned long *)&optprobe_template_entry,
-> >
-> > But if you look at the commit, the "&" seems to have been stripped away,
-> > which happens to change the behavior significantly.
-> 
-> Yeah, this was a typo on my part. :(
-
-Ah, I thought it had been fixed as same as x86.
-On x86, all optprobe_template_* are defined as kprobe_opcode_t [],
-but on arm, it still be kprobe_opcode_t.
-
-Hmm, but I think we should use kprobe_opcode_t [] or char[] as asm/sections.h does.
-OK, I'll prepare for the change.
-
-Thank you,
-
-
-> 
-> > Has this change ever been runtime-tested ?
-> 
-> I thought I had, given the details from the original bug report, but
-> clearly it didn't exercise it.
-> 
-> Thanks for fixing this!
-> 
-> -Kees
-> 
-> >
-> > It has been backported to:
-> > - 4.19 stable as commit 3fe0c68aea21
-> > - 4.14 stable as commit f9e0bc710347
-> >
-> > Thanks,
-> >
-> > Mathieu
-> >
-> > [1] https://bugs.lttng.org/issues/1174
-> >
-> > --
-> > Mathieu Desnoyers
-> > EfficiOS Inc.
-> > http://www.efficios.com
-> 
-> 
-> 
-> -- 
-> Kees Cook
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+RnJvbTogTWF0aGlldSBEZXNub3llcnMNCj4gU2VudDogMDQgRmVicnVhcnkgMjAxOSAxOToxNQ0K
+PiBJIG5vdGljZSB0aGlzIGNvbW1pdCBhcyBhIHBvc3NpYmxlIGN1bHByaXQgb2YgdGhlIGlsbGVn
+YWwgaW5zdHJ1Y3Rpb25zIG15IGx0dG5nDQo+IHVzZXJzIGFyZSBub3RpY2luZyBvbiBhcm0zMiB3
+aGVuIHVzaW5nIGtwcm9iZXMgb24gYSB2NC4xOS4xMyBMaW51eCBrZXJuZWwNCj4gaW4gYSBZb2N0
+byBlbnZpcm9ubWVudCBbMV0uIFRoZXkgd2VyZSBhYmxlIHRvIHJlcHJvZHVjZSB0aGUgaXNzdWUg
+d2l0aCBwZXJmDQo+IGFzIHdlbGwuDQo+IA0KPiBjb21taXQgZTQ2ZGFlZTUzYmI1MGJkZTM4ODA1
+ZjE4MjNhMTgyOTc5NzI0YzIyOQ0KPiBBdXRob3I6IEtlZXMgQ29vayA8a2Vlc2Nvb2tAY2hyb21p
+dW0ub3JnPg0KPiBEYXRlOiAgIFR1ZSBPY3QgMzAgMjI6MTI6NTYgMjAxOCArMDEwMA0KPiANCj4g
+ICAgIEFSTTogODgwNi8xOiBrcHJvYmVzOiBGaXggZmFsc2UgcG9zaXRpdmUgd2l0aCBGT1JUSUZZ
+X1NPVVJDRQ0KPiANCj4gSSAqdGhpbmsqIHRoZSBpbnRlbnQgdGhlcmUgd2FzIHRvIGRvDQo+IA0K
+PiAtICAgICAgIG1lbWNweShjb2RlLCAmb3B0cHJvYmVfdGVtcGxhdGVfZW50cnksDQo+ICsgICAg
+ICAgbWVtY3B5KGNvZGUsICh1bnNpZ25lZCBsb25nICopJm9wdHByb2JlX3RlbXBsYXRlX2VudHJ5
+LA0KPiANCj4gQnV0IGlmIHlvdSBsb29rIGF0IHRoZSBjb21taXQsIHRoZSAiJiIgc2VlbXMgdG8g
+aGF2ZSBiZWVuIHN0cmlwcGVkIGF3YXksDQo+IHdoaWNoIGhhcHBlbnMgdG8gY2hhbmdlIHRoZSBi
+ZWhhdmlvciBzaWduaWZpY2FudGx5Lg0KDQpXaGljaCBpcyB3aHkgeW91IHNob3VsZG4ndCBhZGQg
+Y2FzdHMgdG8gc2h1dCB1cCBjb21waWxlciB3YXJuaW5ncyAuLi4uDQoNCglEYXZpZA0KDQotDQpS
+ZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWls
+dG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMp
+DQo=
