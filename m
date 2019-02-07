@@ -1,35 +1,56 @@
-From: David Laight <David.Laight@ACULAB.COM>
-Subject: RE: optimized kprobes illegal instructions in v4.19 stable kernels
-Date: Wed, 6 Feb 2019 11:48:44 +0000
-Message-ID: <76948cf5011e454494107cea61c6930c@AcuMS.aculab.com>
-References: <342740659.2887.1549307721609.JavaMail.zimbra@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-ust] Cleanup: fix typo 'acces' -> 'access'
+Date: Thu,  7 Feb 2019 15:24:31 -0500
+Message-ID: <20190207202431.21827-1-mjeanson__25208.3927671023$1549571094$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-Return-path: <stable-owner@vger.kernel.org>
-In-Reply-To: <342740659.2887.1549307721609.JavaMail.zimbra@efficios.com>
-Content-Language: en-US
-Sender: stable-owner@vger.kernel.org
-To: 'Mathieu Desnoyers' <mathieu.desnoyers@efficios.com>, Kees Cook <keescook@chromium.org>
-Cc: William Cohen <wcohen@redhat.com>, "stable@vger.kernel.org" <stable@vger.kernel.org>, Laura Abbott <labbott@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>, Russell King <rmk+kernel@armlinux.org.uk>, linux-kernel <linux-kernel@vger.kernel.org>, "lttng@reliableembeddedsystems.com" <lttng@reliableembeddedsystems.com>, lttng-dev <lttng-dev@lists.lttng.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 43wVCn3qtzzp9n
+ for <lttng-dev@lists.lttng.org>; Thu,  7 Feb 2019 15:24:37 -0500 (EST)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id B7FB69AA2A
+ for <lttng-dev@lists.lttng.org>; Thu,  7 Feb 2019 15:24:36 -0500 (EST)
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-RnJvbTogTWF0aGlldSBEZXNub3llcnMNCj4gU2VudDogMDQgRmVicnVhcnkgMjAxOSAxOToxNQ0K
-PiBJIG5vdGljZSB0aGlzIGNvbW1pdCBhcyBhIHBvc3NpYmxlIGN1bHByaXQgb2YgdGhlIGlsbGVn
-YWwgaW5zdHJ1Y3Rpb25zIG15IGx0dG5nDQo+IHVzZXJzIGFyZSBub3RpY2luZyBvbiBhcm0zMiB3
-aGVuIHVzaW5nIGtwcm9iZXMgb24gYSB2NC4xOS4xMyBMaW51eCBrZXJuZWwNCj4gaW4gYSBZb2N0
-byBlbnZpcm9ubWVudCBbMV0uIFRoZXkgd2VyZSBhYmxlIHRvIHJlcHJvZHVjZSB0aGUgaXNzdWUg
-d2l0aCBwZXJmDQo+IGFzIHdlbGwuDQo+IA0KPiBjb21taXQgZTQ2ZGFlZTUzYmI1MGJkZTM4ODA1
-ZjE4MjNhMTgyOTc5NzI0YzIyOQ0KPiBBdXRob3I6IEtlZXMgQ29vayA8a2Vlc2Nvb2tAY2hyb21p
-dW0ub3JnPg0KPiBEYXRlOiAgIFR1ZSBPY3QgMzAgMjI6MTI6NTYgMjAxOCArMDEwMA0KPiANCj4g
-ICAgIEFSTTogODgwNi8xOiBrcHJvYmVzOiBGaXggZmFsc2UgcG9zaXRpdmUgd2l0aCBGT1JUSUZZ
-X1NPVVJDRQ0KPiANCj4gSSAqdGhpbmsqIHRoZSBpbnRlbnQgdGhlcmUgd2FzIHRvIGRvDQo+IA0K
-PiAtICAgICAgIG1lbWNweShjb2RlLCAmb3B0cHJvYmVfdGVtcGxhdGVfZW50cnksDQo+ICsgICAg
-ICAgbWVtY3B5KGNvZGUsICh1bnNpZ25lZCBsb25nICopJm9wdHByb2JlX3RlbXBsYXRlX2VudHJ5
-LA0KPiANCj4gQnV0IGlmIHlvdSBsb29rIGF0IHRoZSBjb21taXQsIHRoZSAiJiIgc2VlbXMgdG8g
-aGF2ZSBiZWVuIHN0cmlwcGVkIGF3YXksDQo+IHdoaWNoIGhhcHBlbnMgdG8gY2hhbmdlIHRoZSBi
-ZWhhdmlvciBzaWduaWZpY2FudGx5Lg0KDQpXaGljaCBpcyB3aHkgeW91IHNob3VsZG4ndCBhZGQg
-Y2FzdHMgdG8gc2h1dCB1cCBjb21waWxlciB3YXJuaW5ncyAuLi4uDQoNCglEYXZpZA0KDQotDQpS
-ZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWls
-dG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMp
-DQo=
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ liblttng-ust-dl/lttng-ust-dl.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/liblttng-ust-dl/lttng-ust-dl.c b/liblttng-ust-dl/lttng-ust-dl.c
+index ce2ae0e7..231e9ec3 100644
+--- a/liblttng-ust-dl/lttng-ust-dl.c
++++ b/liblttng-ust-dl/lttng-ust-dl.c
+@@ -107,7 +107,7 @@ void lttng_ust_dl_dlopen(void *so_base, const char *so_name,
+ 
+ 	elf = lttng_ust_elf_create(resolved_path);
+ 	if (!elf) {
+-		ERR("could not acces file %s", resolved_path);
++		ERR("could not access file %s", resolved_path);
+ 		return;
+ 	}
+ 
+@@ -169,7 +169,7 @@ void lttng_ust_dl_dlmopen(void *so_base, Lmid_t nsid, const char *so_name,
+ 
+ 	elf = lttng_ust_elf_create(resolved_path);
+ 	if (!elf) {
+-		ERR("could not acces file %s", resolved_path);
++		ERR("could not access file %s", resolved_path);
+ 		return;
+ 	}
+ 
+-- 
+2.17.1
