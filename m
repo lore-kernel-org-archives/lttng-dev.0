@@ -1,16 +1,17 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools 1/2] Tests: take multiple snapshots
- in streaming mode
-Date: Thu,  7 Feb 2019 20:25:41 -0500
-Message-ID: <20190208012542.30069-1-jonathan.rajotte-julien__29684.2725410656$1549589171$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 2/2] Fix: don't destroy the sockets
+ if the snapshot was successful
+Date: Thu,  7 Feb 2019 20:25:42 -0500
+Message-ID: <20190208012542.30069-2-jonathan.rajotte-julien__512.69128905318$1549589188$gmane$org@efficios.com>
+References: <20190208012542.30069-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 43wcvL1DCRzfjH
- for <lttng-dev@lists.lttng.org>; Thu,  7 Feb 2019 20:25:49 -0500 (EST)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 43wcvL3hk3zfjP
+ for <lttng-dev@lists.lttng.org>; Thu,  7 Feb 2019 20:25:50 -0500 (EST)
+In-Reply-To: <20190208012542.30069-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,132 +25,36 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
+Missing a goto to skip the error condition that was destroying the
+relayd sockets even if a snapshot was successful. We want to keep them
+open to reuse them for the next snapshots.
+
+This is verbatim from the fix 1371fc1228461eb532118280e67ab3e9de015757
+
+It is also the same fix.
+
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- .../tools/snapshots/test_kernel_streaming     | 35 ++++++++++++++++--
- .../tools/snapshots/test_ust_streaming        | 36 +++++++++++++++++--
- 2 files changed, 66 insertions(+), 5 deletions(-)
+ src/bin/lttng-sessiond/cmd.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tests/regression/tools/snapshots/test_kernel_streaming b/tests/regression/tools/snapshots/test_kernel_streaming
-index 06e0a5c4a..0b535c612 100755
---- a/tests/regression/tools/snapshots/test_kernel_streaming
-+++ b/tests/regression/tools/snapshots/test_kernel_streaming
-@@ -24,7 +24,7 @@ CHANNEL_NAME="chan1"
+diff --git a/src/bin/lttng-sessiond/cmd.c b/src/bin/lttng-sessiond/cmd.c
+index d3c8376be..d91869fae 100644
+--- a/src/bin/lttng-sessiond/cmd.c
++++ b/src/bin/lttng-sessiond/cmd.c
+@@ -4179,10 +4179,13 @@ static enum lttng_error_code record_ust_snapshot(struct ltt_ust_session *usess,
+ 		goto error_snapshot;
+ 	}
  
- TRACE_PATH=$(mktemp -d)
- 
--NUM_TESTS=36
-+NUM_TESTS=61
- 
- source $TESTDIR/utils/utils.sh
- 
-@@ -124,6 +124,32 @@ function test_kernel_custom_name()
- 	return $out
++	goto end;
++
+ error_snapshot:
+ 	/* Clean up copied sockets so this output can use some other later on. */
+ 	consumer_destroy_output_sockets(output->consumer);
+ error:
++end:
+ 	return status;
  }
  
-+function test_kernel_n_snapshot()
-+{
-+	diag "Test kernel snapshot streaming multiple consecutive snapshot"
-+	create_lttng_session_no_output $SESSION_NAME
-+	enable_lttng_mmap_overwrite_kernel_channel $SESSION_NAME $CHANNEL_NAME
-+	lttng_enable_kernel_event $SESSION_NAME $EVENT_NAME $CHANNEL_NAME
-+	snapshot_add_output $SESSION_NAME "net://localhost"
-+
-+	for i in {1..5};
-+	do
-+		start_lttng_tracing_ok $SESSION_NAME
-+		lttng_snapshot_record $SESSION_NAME
-+		stop_lttng_tracing_ok $SESSION_NAME
-+		validate_trace $EVENT_NAME $TRACE_PATH/$HOSTNAME/snapshot-1*
-+		if [ $? -ne 0 ]; then
-+			return 1
-+		fi
-+		set -u
-+		rm -rf $TRACE_PATH/$HOSTNAME
-+		set +u
-+	done
-+
-+	destroy_lttng_session_ok $SESSION_NAME
-+	return 0
-+}
-+
- plan_tests $NUM_TESTS
- 
- print_test_banner "$TEST_DESC"
-@@ -141,8 +167,11 @@ skip $isroot "Root access is needed. Skipping all kernel streaming tests." $NUM_
- 	start_lttng_relayd "-o $TRACE_PATH"
- 	start_lttng_sessiond
- 
--	tests=( test_kernel_default_name test_kernel_custom_name \
--			test_kernel_default_name_with_del )
-+	tests=( test_kernel_default_name
-+		test_kernel_custom_name
-+		test_kernel_default_name_with_del
-+		test_kernel_n_snapshot
-+	)
- 
- 	for fct_test in ${tests[@]};
- 	do
-diff --git a/tests/regression/tools/snapshots/test_ust_streaming b/tests/regression/tools/snapshots/test_ust_streaming
-index c97813e40..20d4f7f6b 100755
---- a/tests/regression/tools/snapshots/test_ust_streaming
-+++ b/tests/regression/tools/snapshots/test_ust_streaming
-@@ -31,7 +31,7 @@ APPS_PID=
- 
- TRACE_PATH=$(mktemp -d)
- 
--NUM_TESTS=49
-+NUM_TESTS=75
- 
- source $TESTDIR/utils/utils.sh
- 
-@@ -206,6 +206,33 @@ function test_ust_custom_name()
- 	return $out
- }
- 
-+function test_ust_n_snapshot()
-+{
-+	diag "Test ust snapshot streaming multiple consecutive snapshot"
-+	create_lttng_session_no_output $SESSION_NAME
-+	enable_lttng_mmap_overwrite_ust_channel $SESSION_NAME $CHANNEL_NAME
-+	enable_ust_lttng_event_ok $SESSION_NAME $EVENT_NAME $CHANNEL_NAME
-+	snapshot_add_output $SESSION_NAME "net://localhost" $name
-+	start_test_app
-+	for i in {1..5};
-+	do
-+		start_lttng_tracing_ok $SESSION_NAME
-+		lttng_snapshot_record $SESSION_NAME
-+		stop_lttng_tracing_ok $SESSION_NAME
-+		validate_trace $EVENT_NAME $TRACE_PATH/$HOSTNAME/snapshot-1*
-+		if [ $? -ne 0 ]; then
-+			return 1
-+		fi
-+		set -u
-+		rm -rf $TRACE_PATH/$HOSTNAME
-+		set +u
-+	done
-+
-+	destroy_lttng_session_ok $SESSION_NAME
-+	stop_test_apps
-+	return 0
-+}
-+
- plan_tests $NUM_TESTS
- 
- print_test_banner "$TEST_DESC"
-@@ -219,7 +246,12 @@ fi
- start_lttng_relayd "-o $TRACE_PATH"
- start_lttng_sessiond
- 
--tests=( test_ust_default_name_with_del test_ust_default_name test_ust_custom_name test_ust_default_name_custom_uri )
-+tests=( test_ust_default_name_with_del
-+	test_ust_default_name
-+	test_ust_custom_name
-+	test_ust_default_name_custom_uri
-+	test_ust_n_snapshot
-+)
- 
- for fct_test in ${tests[@]};
- do
 -- 
 2.17.1
