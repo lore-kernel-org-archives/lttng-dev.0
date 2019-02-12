@@ -1,17 +1,37 @@
-From: Trent Piepho <tpiepho@gmail.com>
-Subject: Manually supplying tracepoint timestamps
-Date: Fri, 8 Feb 2019 11:58:18 -0800
-Message-ID: <CA+7tXiiYrHVr5E=JOQaNHTSAW3awLNCtSPTei-Zz1gp7+QaoLg__11570.5403544538$1549655927$gmane$org@mail.gmail.com>
+From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools] Support minute and hour as time
+ suffix
+Date: Tue, 12 Feb 2019 11:22:22 -0500
+Message-ID: <CA+jJMxuwkv6H5WoLxKQpjwwM+QvqbnkTQpNP-sG4Ct8fqCm4kA__34446.547371202$1549988604$gmane$org@mail.gmail.com>
+References: <20181214213212.31562-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com
- [IPv6:2607:f8b0:4864:20::82f])
- by lists.lttng.org (Postfix) with ESMTPS id 43x5bC0rpyzgQR
- for <lttng-dev@lists.lttng.org>; Fri,  8 Feb 2019 14:58:30 -0500 (EST)
-Received: by mail-qt1-x82f.google.com with SMTP id e5so5310340qtr.12
- for <lttng-dev@lists.lttng.org>; Fri, 08 Feb 2019 11:58:30 -0800 (PST)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 43zScr2npCzgf0
+ for <lttng-dev@lists.lttng.org>; Tue, 12 Feb 2019 11:23:08 -0500 (EST)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 7551119D5C6
+ for <lttng-dev@lists.lttng.org>; Tue, 12 Feb 2019 11:23:01 -0500 (EST)
+Received: from mail.efficios.com ([IPv6:::1])
+ by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
+ with ESMTP id z2UYkUrA38zY for <lttng-dev@lists.lttng.org>;
+ Tue, 12 Feb 2019 11:23:01 -0500 (EST)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 14EA219D5C1
+ for <lttng-dev@lists.lttng.org>; Tue, 12 Feb 2019 11:23:01 -0500 (EST)
+Received: from mail.efficios.com ([IPv6:::1])
+ by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
+ with ESMTP id iiaap2CdfagZ for <lttng-dev@lists.lttng.org>;
+ Tue, 12 Feb 2019 11:23:01 -0500 (EST)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com
+ [209.85.208.176])
+ by mail.efficios.com (Postfix) with ESMTPSA id B282619D5B5
+ for <lttng-dev@lists.lttng.org>; Tue, 12 Feb 2019 11:23:00 -0500 (EST)
+Received: by mail-lj1-f176.google.com with SMTP id v16so2709262ljg.13
+ for <lttng-dev@lists.lttng.org>; Tue, 12 Feb 2019 08:23:00 -0800 (PST)
+In-Reply-To: <20181214213212.31562-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,50 +41,136 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-I've got a device that has an additional hardware, beyond the main
-Linux CPU, that generates traceable events, asynchronously with
-anything happening in Linux.  It would nice if these trace points
-could show up in an lttng trace along with normal lttng-ust and kernel
-tracepoints.
-
-Getting the FPGA, which creates these events, to stream them over PCI
-express into a DMA buffer that is then parsed in Linux userspace to
-turn the trace data stream into lttng-ust events, while complex, is
-relatively straightforward.
-
-But these events will be time stamped with the time they are receive
-and converted to trace points.  They should be time stamped with the
-time they were originally generated in the FPGA.  Of course we thought
-of that, and the trace data has timestamps in it.  Converting these
-timestamps into one that sync with CLOCK_MONOTONIC is actually a very
-complex problem, since the FPGA and CPU are in entirely separate clock
-domains, so the offset between them is not constant, nor is the rate
-of drift of that offset constant!  But let's not worry about that and
-assume we can get appropriate timestamps.
-
-This gets to the issue with lttng-ust.  I don't see any way to specify
-a timestamp when creating a trace event.  lttng will always call a
-clock function internally to create a timestamp at the time the event
-is added to the ring buffer.
-
-The best I could come up with, would be to make a custom clock that
-returns fake timestamps preloaded into it before the event is
-generated.  Something like:
-
-uint64_t fake_timestamp;
-uint64_t fake_clock_read64(void)
-{  return fake_timestamp; }
-
-/* setup an override clock that uses fake_clock_read64 goes here */
-/* generate a tracepoint with a manual timestamp */
-fake_timestamp = 12345;
-tracepoint(sample_tracepoint, message,  "Hello World\n");
-
-This seems like somewhat of a kludge.  And I'm also concerned that
-lttng be unhappy with how this clock behaves.  I.e., will getting the
-same value if multiple calls are done trigger the timestamp wraparound
-logic?  Am I assured that lttng-ust will read the clock before the
-tracepoint(), etc. call returns?
+TWVyZ2VkIGluIG1hc3RlciBhbmQgc3RhYmxlLTIuMTEuCgpUaGFua3MhCkrDqXLDqW1pZQoKT24g
+RnJpLCAxNCBEZWMgMjAxOCBhdCAxNjozMiwgSm9uYXRoYW4gUmFqb3R0ZQo8am9uYXRoYW4ucmFq
+b3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPiB3cm90ZToKPgo+IHV0aWxzX3BhcnNlX3RpbWVfc3Vm
+Zml4IG5vdyBzdXBwb3J0IHRoZSBmb2xsb3dpbmcgc3VmZml4Ogo+Cj4gICAgICJ1cyIgZm9yIG1p
+Y3Jvc2Vjb25kLAo+ICAgICAibXMiIGZvciBtaWxsaXNlY29uZCwKPiAgICAgInMiICBmb3Igc2Vj
+b25kLAo+ICAgICAibSIgIGZvciBtaW51dGUsCj4gICAgICJoIiAgZm9yIGhvdXIKPgo+IFRoaXMg
+cmVtb3ZlIHRoZSB1c2Ugb2YgIm0iIGZvciBtaWxsaXNlY29uZHMgYW5kICJ1IiBmb3IgbWljcm9z
+ZWNvbmRzLgo+Cj4gU2lnbmVkLW9mZi1ieTogSm9uYXRoYW4gUmFqb3R0ZSA8am9uYXRoYW4ucmFq
+b3R0ZS1qdWxpZW5AZWZmaWNpb3MuY29tPgo+IC0tLQo+ICBzcmMvYmluL2x0dG5nLXNlc3Npb25k
+L3RocmVhZC11dGlscy5jICAgICB8ICAyIC0KPiAgc3JjL2NvbW1vbi90aW1lLmggICAgICAgICAg
+ICAgICAgICAgICAgICAgfCAgOCArKysrCj4gIHNyYy9jb21tb24vdXRpbHMuYyAgICAgICAgICAg
+ICAgICAgICAgICAgIHwgNDggKysrKysrKysrKysrKysrKystLS0tLS0KPiAgdGVzdHMvdW5pdC90
+ZXN0X3V0aWxzX3BhcnNlX3RpbWVfc3VmZml4LmMgfCAzMCArKysrKysrKystLS0tLQo+ICA0IGZp
+bGVzIGNoYW5nZWQsIDY1IGluc2VydGlvbnMoKyksIDIzIGRlbGV0aW9ucygtKQo+Cj4gZGlmZiAt
+LWdpdCBhL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdGhyZWFkLXV0aWxzLmMgYi9zcmMvYmluL2x0
+dG5nLXNlc3Npb25kL3RocmVhZC11dGlscy5jCj4gaW5kZXggNTQ5Y2Q2OWY4Li4xNmFlOWQ2OTIg
+MTAwNjQ0Cj4gLS0tIGEvc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC90aHJlYWQtdXRpbHMuYwo+ICsr
+KyBiL3NyYy9iaW4vbHR0bmctc2Vzc2lvbmQvdGhyZWFkLXV0aWxzLmMKPiBAQCAtMjIsOCArMjIs
+NiBAQAo+ICAjaW5jbHVkZSA8Y29tbW9uL3V0aWxzLmg+Cj4gICNpbmNsdWRlIDxwdGhyZWFkLmg+
+Cj4KPiAtI2RlZmluZSBVU0VDX1BFUl9TRUMgMTAwMDAwMAo+IC0KPiAgLyoKPiAgICogUXVpdCBw
+aXBlIGZvciBhbGwgdGhyZWFkcy4gVGhpcyBwZXJtaXRzIGEgc2luZ2xlIGNhbmNlbGxhdGlvbiBw
+b2ludAo+ICAgKiBmb3IgYWxsIHRocmVhZHMgd2hlbiByZWNlaXZpbmcgYW4gZXZlbnQgb24gdGhl
+IHBpcGUuCj4gZGlmZiAtLWdpdCBhL3NyYy9jb21tb24vdGltZS5oIGIvc3JjL2NvbW1vbi90aW1l
+LmgKPiBpbmRleCA4YTdkZDk1OGYuLjkyNzc1YjliMiAxMDA2NDQKPiAtLS0gYS9zcmMvY29tbW9u
+L3RpbWUuaAo+ICsrKyBiL3NyYy9jb21tb24vdGltZS5oCj4gQEAgLTI1LDYgKzI1LDE0IEBACj4g
+ICNkZWZpbmUgTlNFQ19QRVJfU0VDICAgMTAwMDAwMDAwMFVMTAo+ICAjZGVmaW5lIE5TRUNfUEVS
+X01TRUMgIDEwMDAwMDBVTEwKPiAgI2RlZmluZSBOU0VDX1BFUl9VU0VDICAxMDAwVUxMCj4gKyNk
+ZWZpbmUgVVNFQ19QRVJfU0VDICAgMTAwMDAwMFVMTAo+ICsjZGVmaW5lIFVTRUNfUEVSX01TRUMg
+IDEwMDBVTEwKPiArCj4gKyNkZWZpbmUgU0VDX1BFUl9NSU5VVEUgNjBVTEwKPiArI2RlZmluZSBN
+SU5VVEVfUEVSX0hPVVIgICAgICAgIDYwVUxMCj4gKwo+ICsjZGVmaW5lIFVTRUNfUEVSX01JTlVU
+RSAgICAgICAgKFVTRUNfUEVSX1NFQyAqIFNFQ19QRVJfTUlOVVRFKQo+ICsjZGVmaW5lIFVTRUNf
+UEVSX0hPVVJTIChVU0VDX1BFUl9NSU5VVEUgKiBNSU5VVEVfUEVSX0hPVVIpCj4KPiAgLyoKPiAg
+ICogdGltZXNwZWNfdG9fbXM6IENvbnZlcnQgdGltZXNwZWMgdG8gbWlsbGlzZWNvbmRzLgo+IGRp
+ZmYgLS1naXQgYS9zcmMvY29tbW9uL3V0aWxzLmMgYi9zcmMvY29tbW9uL3V0aWxzLmMKPiBpbmRl
+eCAwODEzOWU1ZTIuLjIzMjdiN2Q5NCAxMDA2NDQKPiAtLS0gYS9zcmMvY29tbW9uL3V0aWxzLmMK
+PiArKysgYi9zcmMvY29tbW9uL3V0aWxzLmMKPiBAQCAtMTEwNCwxMiArMTEwNCwxOSBAQCBlbmQ6
+Cj4KPiAgLyoqCj4gICAqIFBhcnNlIGEgc3RyaW5nIHRoYXQgcmVwcmVzZW50cyBhIHRpbWUgaW4g
+aHVtYW4gcmVhZGFibGUgZm9ybWF0LiBJdAo+IC0gKiBzdXBwb3J0cyBkZWNpbWFsIGludGVnZXJz
+IHN1ZmZpeGVkIGJ5ICdzJywgJ3UnLCAnbScsICd1cycsIGFuZCAnbXMnLgo+ICsgKiBzdXBwb3J0
+cyBkZWNpbWFsIGludGVnZXJzIHN1ZmZpeGVkIGJ5Ogo+ICsgKiAgICAgInVzIiBmb3IgbWljcm9z
+ZWNvbmQsCj4gKyAqICAgICAibXMiIGZvciBtaWxsaXNlY29uZCwKPiArICogICAgICJzIiAgZm9y
+IHNlY29uZCwKPiArICogICAgICJtIiAgZm9yIG1pbnV0ZSwKPiArICogICAgICJoIiAgZm9yIGhv
+dXIKPiAgICoKPiAgICogVGhlIHN1ZmZpeCBtdWx0aXBseSB0aGUgaW50ZWdlciBieToKPiAtICog
+J3UnLyd1cyc6IDEKPiAtICogJ20nLydtcyc6IDEwMDAKPiAtICogJ3MnOiAxMDAwMDAwCj4gKyAq
+ICAgICAidXMiIDogMQo+ICsgKiAgICAgIm1zIiA6IDEwMDAKPiArICogICAgICJzIiAgOiAxMDAw
+MDAwCj4gKyAqICAgICAibSIgIDogNjAwMDAwMDAKPiArICogICAgICJoIiAgOiAzNjAwMDAwMDAw
+Cj4gICAqCj4gICAqIE5vdGUgdGhhdCB1bml0LWxlc3MgbnVtYmVycyBhcmUgYXNzdW1lZCB0byBi
+ZSBtaWNyb3NlY29uZHMuCj4gICAqCj4gQEAgLTExMjQsNyArMTEzMSw3IEBAIGludCB1dGlsc19w
+YXJzZV90aW1lX3N1ZmZpeChjaGFyIGNvbnN0ICogY29uc3Qgc3RyLCB1aW50NjRfdCAqIGNvbnN0
+IHRpbWVfdXMpCj4gIHsKPiAgICAgICAgIGludCByZXQ7Cj4gICAgICAgICB1aW50NjRfdCBiYXNl
+X3RpbWU7Cj4gLSAgICAgICBsb25nIG11bHRpcGxpZXIgPSAxOwo+ICsgICAgICAgdWludDY0X3Qg
+bXVsdGlwbGllciA9IDE7Cj4gICAgICAgICBjb25zdCBjaGFyICpzdHJfZW5kOwo+ICAgICAgICAg
+Y2hhciAqbnVtX2VuZDsKPgo+IEBAIC0xMTYxLDE3ICsxMTY4LDM0IEBAIGludCB1dGlsc19wYXJz
+ZV90aW1lX3N1ZmZpeChjaGFyIGNvbnN0ICogY29uc3Qgc3RyLCB1aW50NjRfdCAqIGNvbnN0IHRp
+bWVfdXMpCj4gICAgICAgICAvKiBDaGVjayBpZiBhIHByZWZpeCBpcyBwcmVzZW50LiAqLwo+ICAg
+ICAgICAgc3dpdGNoICgqbnVtX2VuZCkgewo+ICAgICAgICAgY2FzZSAndSc6Cj4gLSAgICAgICAg
+ICAgICAgIG11bHRpcGxpZXIgPSAxOwo+IC0gICAgICAgICAgICAgICAvKiBTa2lwIGFub3RoZXIg
+bGV0dGVyIGluIHRoZSAndXMnIGNhc2UuICovCj4gLSAgICAgICAgICAgICAgIG51bV9lbmQgKz0g
+KCoobnVtX2VuZCArIDEpID09ICdzJykgPyAyIDogMTsKPiArICAgICAgICAgICAgICAgLyogTWlj
+cm9zZWNvbmQgKHVzKSAqLwo+ICsgICAgICAgICAgICAgICBpZiAoKihudW1fZW5kICsgMSkgIT0g
+J3MnKSB7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgREJHKCJ1dGlsc19wYXJzZV90aW1lX3N1
+ZmZpeDogaW52YWxpZCBzdWZmaXguIik7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0ID0g
+LTE7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgZ290byBlbmQ7Cj4gKyAgICAgICAgICAgICAg
+IH0KPiArICAgICAgICAgICAgICAgbnVtX2VuZCArPSAyOwo+ICAgICAgICAgICAgICAgICBicmVh
+azsKPiAgICAgICAgIGNhc2UgJ20nOgo+IC0gICAgICAgICAgICAgICBtdWx0aXBsaWVyID0gMTAw
+MDsKPiAtICAgICAgICAgICAgICAgLyogU2tpcCBhbm90aGVyIGxldHRlciBpbiB0aGUgJ21zJyBj
+YXNlLiAqLwo+IC0gICAgICAgICAgICAgICBudW1fZW5kICs9ICgqKG51bV9lbmQgKyAxKSA9PSAn
+cycpID8gMiA6IDE7Cj4gKyAgICAgICAgICAgICAgIGlmICgqKG51bV9lbmQgKyAxKSA9PSAncycp
+IHsKPiArICAgICAgICAgICAgICAgICAgICAgICAvKiBNaWxsaXNlY29uZCAobXMpICovCj4gKyAg
+ICAgICAgICAgICAgICAgICAgICAgbXVsdGlwbGllciA9IFVTRUNfUEVSX01TRUM7Cj4gKyAgICAg
+ICAgICAgICAgICAgICAgICAgLyogU2tpcCB0aGUgJ3MnICovCj4gKyAgICAgICAgICAgICAgICAg
+ICAgICAgbnVtX2VuZCsrOwo+ICsgICAgICAgICAgICAgICB9IGVsc2Ugewo+ICsgICAgICAgICAg
+ICAgICAgICAgICAgIC8qIE1pbnV0ZSAobSkgKi8KPiArICAgICAgICAgICAgICAgICAgICAgICBt
+dWx0aXBsaWVyID0gVVNFQ19QRVJfTUlOVVRFOwo+ICsgICAgICAgICAgICAgICB9Cj4gKyAgICAg
+ICAgICAgICAgIG51bV9lbmQrKzsKPiAgICAgICAgICAgICAgICAgYnJlYWs7Cj4gICAgICAgICBj
+YXNlICdzJzoKPiAtICAgICAgICAgICAgICAgbXVsdGlwbGllciA9IDEwMDAwMDA7Cj4gKyAgICAg
+ICAgICAgICAgIC8qIFNlY29uZCAqLwo+ICsgICAgICAgICAgICAgICBtdWx0aXBsaWVyID0gVVNF
+Q19QRVJfU0VDOwo+ICsgICAgICAgICAgICAgICBudW1fZW5kKys7Cj4gKyAgICAgICAgICAgICAg
+IGJyZWFrOwo+ICsgICAgICAgY2FzZSAnaCc6Cj4gKyAgICAgICAgICAgICAgIC8qIEhvdXIgKi8K
+PiArICAgICAgICAgICAgICAgbXVsdGlwbGllciA9IFVTRUNfUEVSX0hPVVJTOwo+ICAgICAgICAg
+ICAgICAgICBudW1fZW5kKys7Cj4gICAgICAgICAgICAgICAgIGJyZWFrOwo+ICAgICAgICAgY2Fz
+ZSAnXDAnOgo+IGRpZmYgLS1naXQgYS90ZXN0cy91bml0L3Rlc3RfdXRpbHNfcGFyc2VfdGltZV9z
+dWZmaXguYyBiL3Rlc3RzL3VuaXQvdGVzdF91dGlsc19wYXJzZV90aW1lX3N1ZmZpeC5jCj4gaW5k
+ZXggOTY0ODI3NjliLi4xZTdhYTIyZjEgMTAwNjQ0Cj4gLS0tIGEvdGVzdHMvdW5pdC90ZXN0X3V0
+aWxzX3BhcnNlX3RpbWVfc3VmZml4LmMKPiArKysgYi90ZXN0cy91bml0L3Rlc3RfdXRpbHNfcGFy
+c2VfdGltZV9zdWZmaXguYwo+IEBAIC0xOCw2ICsxOCw3IEBACj4gICNpbmNsdWRlIDxhc3NlcnQu
+aD4KPiAgI2luY2x1ZGUgPHN0cmluZy5oPgo+ICAjaW5jbHVkZSA8c3RkaW8uaD4KPiArI2luY2x1
+ZGUgPGludHR5cGVzLmg+Cj4KPiAgI2luY2x1ZGUgPHRhcC90YXAuaD4KPgo+IEBAIC0zNywxNiAr
+MzgsMjUgQEAgc3RydWN0IHZhbGlkX3Rlc3RfaW5wdXQgewo+ICBzdGF0aWMgc3RydWN0IHZhbGlk
+X3Rlc3RfaW5wdXQgdmFsaWRfdGVzdHNfaW5wdXRzW10gPSB7Cj4gICAgICAgICAgICAgICAgIHsg
+IjAiLCAwIH0sCj4gICAgICAgICAgICAgICAgIHsgIjEyMzQiLCAxMjM0IH0sCj4gLSAgICAgICAg
+ICAgICAgIHsgIjB1IiwgMCB9LAo+IC0gICAgICAgICAgICAgICB7ICIxMjM0dSIsIDEyMzQgfSwK
+PiAtICAgICAgICAgICAgICAgeyAiMTZtIiwgMTYwMDAgfSwKPiAtICAgICAgICAgICAgICAgeyAi
+MTI4bSIsIDEyODAwMCB9LAo+ICsgICAgICAgICAgICAgICB7ICIxMjM0dXMiLCAxMjM0IH0sCj4g
+KyAgICAgICAgICAgICAgIHsgIjE2bXMiLCAxNjAwMCB9LAo+ICsgICAgICAgICAgICAgICB7ICIx
+MjhtcyIsIDEyODAwMCB9LAo+ICAgICAgICAgICAgICAgICB7ICIzMnMiLCAzMjAwMDAwMCB9LAo+
+ICsgICAgICAgICAgICAgICB7ICIxbSIsIDYwMDAwMDAwIH0sCj4gKyAgICAgICAgICAgICAgIHsg
+IjIwbSIsIDEyMDAwMDAwMDAgfSwKPiArICAgICAgICAgICAgICAgeyAiMWgiLCAzNjAwMDAwMDAw
+IH0sCj4gKyAgICAgICAgICAgICAgIHsgIjVoIiwgMTgwMDAwMDAwMDAgfSwKPiAgICAgICAgICAg
+ICAgICAgeyAiMDAiLCAwIH0sCj4gLSAgICAgICAgICAgICAgIHsgIjBtIiwgMCB9LAo+ICsgICAg
+ICAgICAgICAgICB7ICIwdXMiLCAwIH0sCj4gKyAgICAgICAgICAgICAgIHsgIjBtcyIsIDAgfSwK
+PiAgICAgICAgICAgICAgICAgeyAiMHMiLCAwIH0sCj4gLSAgICAgICAgICAgICAgIHsgIjAwbSIs
+IDAgfSwKPiArICAgICAgICAgICAgICAgeyAiMG0iLCAwIH0sCj4gKyAgICAgICAgICAgICAgIHsg
+IjBoIiwgMCB9LAo+ICsgICAgICAgICAgICAgICB7ICIwMHVzIiwgMCB9LAo+ICsgICAgICAgICAg
+ICAgICB7ICIwMG1zIiwgMCB9LAo+ICAgICAgICAgICAgICAgICB7ICIwMHMiLCAwIH0sCj4gKyAg
+ICAgICAgICAgICAgIHsgIjAwbSIsIDAgfSwKPiArICAgICAgICAgICAgICAgeyAiMDBoIiwgMCB9
+LAo+ICAgICAgICAgICAgICAgICB7ICIxMm1zIiwgMTIwMDAgfSwKPiAgICAgICAgICAgICAgICAg
+eyAiMzU5N3VzIiwgMzU5NyB9LAo+ICAgICAgICAgICAgICAgICB7ICIrNSIsIDUgfSwKPiBAQCAt
+NzksNiArODksOSBAQCBzdGF0aWMgY2hhciAqaW52YWxpZF90ZXN0c19pbnB1dHNbXSA9IHsKPiAg
+ICAgICAgICAgICAgICAgIjE0bnMiLAo+ICAgICAgICAgICAgICAgICAiMTRtcyBnYXJiYWdlIGFm
+dGVyIHZhbHVlIiwKPiAgICAgICAgICAgICAgICAgIjB4MTRzIiwKPiArICAgICAgICAgICAgICAg
+IjB1IiwKPiArICAgICAgICAgICAgICAgIjVtUyIsCj4gKyAgICAgICAgICAgICAgICI1TXMiLAo+
+ICB9Owo+ICBzdGF0aWMgY29uc3QgaW50IG51bV9pbnZhbGlkX3Rlc3RzID0gc2l6ZW9mKGludmFs
+aWRfdGVzdHNfaW5wdXRzKSAvIHNpemVvZihpbnZhbGlkX3Rlc3RzX2lucHV0c1swXSk7Cj4KPiBA
+QCAtOTAsMTEgKzEwMywxMCBAQCBzdGF0aWMgdm9pZCB0ZXN0X3V0aWxzX3BhcnNlX3RpbWVfc3Vm
+Zml4KHZvaWQpCj4KPiAgICAgICAgIC8qIFRlc3QgdmFsaWQgY2FzZXMgKi8KPiAgICAgICAgIGZv
+ciAoaSA9IDA7IGkgPCBudW1fdmFsaWRfdGVzdHM7IGkrKykgewo+IC0gICAgICAgICAgICAgICBj
+aGFyIG5hbWVbMTAwXTsKPiAtCj4gLSAgICAgICAgICAgICAgIHNwcmludGYobmFtZSwgInZhbGlk
+IHRlc3QgY2FzZTogJXMiLCB2YWxpZF90ZXN0c19pbnB1dHNbaV0uaW5wdXQpOwo+ICsgICAgICAg
+ICAgICAgICBjaGFyIG5hbWVbMjU2XTsKPgo+ICAgICAgICAgICAgICAgICByZXQgPSB1dGlsc19w
+YXJzZV90aW1lX3N1ZmZpeCh2YWxpZF90ZXN0c19pbnB1dHNbaV0uaW5wdXQsICZyZXN1bHQpOwo+
+ICsgICAgICAgICAgICAgICBzcHJpbnRmKG5hbWUsICJ2YWxpZCB0ZXN0IGNhc2U6ICVzIGV4cGVj
+dGVkICUiIFBSSXU2NCwgdmFsaWRfdGVzdHNfaW5wdXRzW2ldLmlucHV0LCByZXN1bHQpOwo+ICAg
+ICAgICAgICAgICAgICBvayhyZXQgPT0gMCAmJiByZXN1bHQgPT0gdmFsaWRfdGVzdHNfaW5wdXRz
+W2ldLmV4cGVjdGVkX3Jlc3VsdCwgbmFtZSk7Cj4gICAgICAgICB9Cj4KPiAtLQo+IDIuMTcuMQo+
+CgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmlj
+aW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
+dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9s
+aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
