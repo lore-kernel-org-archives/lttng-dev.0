@@ -1,21 +1,22 @@
-From: Mosleh Uddin <mosleh1235@gmail.com>
+From: Francis Deslauriers <francis.deslauriers@efficios.com>
 Subject: Re: Tracepoints firing without being enabled in LTTng
-Date: Fri, 15 Feb 2019 14:36:25 -0500
-Message-ID: <CAJyWpKEgHDa2gPte2eTVg9UCo6RBOBKfPLg9XFUyVcVxMoj8tA__17062.7425120742$1550259413$gmane$org@mail.gmail.com>
+Date: Fri, 15 Feb 2019 14:48:13 -0500
+Message-ID: <CADcCL0gt=kQop0miSLD3edcKLNERgg+XEjmgkvzdX=A4t_MzuQ__49046.5145370521$1550260123$gmane$org@mail.gmail.com>
 References: <CAJyWpKEMbN8RHuGbODZYFiOff_pN08Zn4A=6dMEEe7C7h3nn1g@mail.gmail.com>
  <CADcCL0jBrNyhbVvpbhmLD_vZgi9bcgDUN5dAGpbf5JvuG9MDmw@mail.gmail.com>
  <CAJyWpKH2TWmCXhvtSaE-h+jKfmt8aKQ0MaYOr_TqQ0q+M1f_gw@mail.gmail.com>
  <CADcCL0hnLNyzOvfpBRW=TzDR9Ekckei5NGOqpAQ=rMUpGnRLEQ@mail.gmail.com>
+ <CAJyWpKEgHDa2gPte2eTVg9UCo6RBOBKfPLg9XFUyVcVxMoj8tA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7878591175862012403=="
+Content-Type: multipart/mixed; boundary="===============3486297516532363396=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-it1-x141.google.com (mail-it1-x141.google.com
- [IPv6:2607:f8b0:4864:20::141])
- by lists.lttng.org (Postfix) with ESMTPS id 441Nmj666kzg6S
- for <lttng-dev@lists.lttng.org>; Fri, 15 Feb 2019 14:36:37 -0500 (EST)
-Received: by mail-it1-x141.google.com with SMTP id f10so3336918ita.4
- for <lttng-dev@lists.lttng.org>; Fri, 15 Feb 2019 11:36:37 -0800 (PST)
-In-Reply-To: <CADcCL0hnLNyzOvfpBRW=TzDR9Ekckei5NGOqpAQ=rMUpGnRLEQ@mail.gmail.com>
+Received: from mail-ot1-f65.google.com (mail-ot1-f65.google.com
+ [209.85.210.65])
+ by lists.lttng.org (Postfix) with ESMTPS id 441P2M613Pzg8f
+ for <lttng-dev@lists.lttng.org>; Fri, 15 Feb 2019 14:48:27 -0500 (EST)
+Received: by mail-ot1-f65.google.com with SMTP id 98so18579822oty.1
+ for <lttng-dev@lists.lttng.org>; Fri, 15 Feb 2019 11:48:27 -0800 (PST)
+In-Reply-To: <CAJyWpKEgHDa2gPte2eTVg9UCo6RBOBKfPLg9XFUyVcVxMoj8tA@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,179 +26,216 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Francis Deslauriers <francis.deslauriers@efficios.com>
+To: Mosleh Uddin <mosleh1235@gmail.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============7878591175862012403==
-Content-Type: multipart/related; boundary="000000000000a1ab1e0581f3e446"
+--===============3486297516532363396==
+Content-Type: multipart/related; boundary="000000000000e9d2020581f40efc"
 
---000000000000a1ab1e0581f3e446
-Content-Type: multipart/alternative; boundary="000000000000a1ab1c0581f3e445"
+--000000000000e9d2020581f40efc
+Content-Type: multipart/alternative; boundary="000000000000e9d2000581f40efb"
 
---000000000000a1ab1c0581f3e445
+--000000000000e9d2000581f40efb
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-That's correct, I don't enable any events or do: lttng start.
-Here is some snapshots of starting everything up, followed by starting my
-application.
-[image: image.png]
+Can you start the lttng-sessiond in verbose mode using the following
+command:
+> lttng-sessiond -vvv
+and then do the lttng create, start of application and lttng view on
+another console.
 
-Here are the outputs for the commands:
+Then copy the output of the sessiond on https://pastebin.com/ and send us
+the link.
 
-[image: image.png]
+Thank you,
+Francis
 
-[image: image.png]
+Le ven. 15 f=C3=A9vr. 2019, =C3=A0 14 h 36, Mosleh Uddin <mosleh1235@gmail.=
+com> a
+=C3=A9crit :
 
-[image: image.png]
-
-Note that even though the session is inactive, when a trace event occurs in
-my application it is being recorded in the appropriate directory:
-
-[image: image.png]
-
-Also maybe important, the system has root only user. Would having the
-application belonging to a different user and trying to run as root cause
-these kinds of complications? I did notice when testing on a raspberry pi
-that running an application as a root user would mean running sessions as
-root user as well.
-
-Thanks,
-Mosleh
-
-On Fri, Feb 15, 2019 at 11:55 AM Francis Deslauriers <
-francis.deslauriers@efficios.com> wrote:
-
-> Adding back lttng-dev mailing list.
+> That's correct, I don't enable any events or do: lttng start.
+> Here is some snapshots of starting everything up, followed by starting my
+> application.
+> [image: image.png]
 >
-> So you don't even run a lttng-enable-event command?
-> That's odd.
+> Here are the outputs for the commands:
 >
-> Can you send us the output of the following commands:
-> Is it possible that there are other lttng-sessiond daemons running on
-> the machine?
-> > ps aux | grep "lttng-sessiond"
-> Verify if there are other active tracing sessions:
-> > lttng list
-> Check the details of the current session:
-> > lttng status
+> [image: image.png]
 >
-> Thank you,
-> Francis
+> [image: image.png]
 >
-> Le ven. 15 f=C3=A9vr. 2019, =C3=A0 11 h 29, Mosleh Uddin <mosleh1235@gmai=
-l.com> a
-> =C3=A9crit :
-> >
-> > Hi Francis,
-> >
-> > Thank you for the quick response.
-> > Just to clear things up, my application is running when I run that
-> command.
-> >
-> > The commands I am running are:
-> > > lttng-sessiond -d
-> > > lttng create my-sess --live
-> > After this command I start my application. If I then do the command:
-> > > lttng view
-> > I will see the tracepoints in the application in the terminal even
-> though I have not done: lttng start.
-> >
-> > I thought it was strange that I cannot find my application in the: lttn=
-g
-> list command under any domain.
-> > Also the reason I start my application after creating a session is
-> because the system automatically starts the application using systemd,
-> > in order to get tracing data at all I have to manually stop the
-> application and start it again after creating a session.
-> >
-> > Thanks again for any help,
-> > Mosleh
-> >
-> > On Fri, Feb 15, 2019 at 10:32 AM Francis Deslauriers <
+> [image: image.png]
+>
+> Note that even though the session is inactive, when a trace event occurs
+> in my application it is being recorded in the appropriate directory:
+>
+> [image: image.png]
+>
+> Also maybe important, the system has root only user. Would having the
+> application belonging to a different user and trying to run as root cause
+> these kinds of complications? I did notice when testing on a raspberry pi
+> that running an application as a root user would mean running sessions as
+> root user as well.
+>
+> Thanks,
+> Mosleh
+>
+> On Fri, Feb 15, 2019 at 11:55 AM Francis Deslauriers <
 > francis.deslauriers@efficios.com> wrote:
-> >>
-> >> Hi Mosleh,
-> >> It's expected to not see any event when running lttng list -u if no
-> >> lttng-ust instrumented applications are running.
-> >>
-> >> What are the exact lttng commands you are running to see those
-> >> unexpected events?
-> >>
-> >> Thank you,
-> >> Francis
-> >>
-> >>
-> >> Le ven. 15 f=C3=A9vr. 2019, =C3=A0 10 h 08, Mosleh Uddin <mosleh1235@g=
-mail.com>
-> a =C3=A9crit :
-> >> >
-> >> > Hello,
-> >> >
-> >> > I am having a strange issue with my current application. For some
-> context, I have integrated LTTng into a Yocto build and put custom trace
-> points in my embedded system application. Once I load the built image ont=
-o
-> my system and start a session daemon, I try to list all available userspa=
-ce
-> events (using lttng list -u), but no events show up.
-> >> >
-> >> > The strange occurrence is when I create a session (lltng create
-> my-sess) and not start tracing the trace events will display on the scree=
-n
-> regardless (when starting session in live mode with lttng view). I was
-> wondering if anyone has any insight on this issue I am having.
-> >> >
-> >> > Thanks for any assistance,
-> >> > Mosleh
-> >> > _______________________________________________
-> >> > lttng-dev mailing list
-> >> > lttng-dev@lists.lttng.org
-> >> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-> >>
-> >> --
-> >> Francis Deslauriers
-> >> Computer Engineer
-> >> EfficiOS inc.
 >
->
->
-> --
-> Francis Deslauriers
-> Computer Engineer
-> EfficiOS inc.
+>> Adding back lttng-dev mailing list.
+>>
+>> So you don't even run a lttng-enable-event command?
+>> That's odd.
+>>
+>> Can you send us the output of the following commands:
+>> Is it possible that there are other lttng-sessiond daemons running on
+>> the machine?
+>> > ps aux | grep "lttng-sessiond"
+>> Verify if there are other active tracing sessions:
+>> > lttng list
+>> Check the details of the current session:
+>> > lttng status
+>>
+>> Thank you,
+>> Francis
+>>
+>> Le ven. 15 f=C3=A9vr. 2019, =C3=A0 11 h 29, Mosleh Uddin <mosleh1235@gma=
+il.com> a
+>> =C3=A9crit :
+>> >
+>> > Hi Francis,
+>> >
+>> > Thank you for the quick response.
+>> > Just to clear things up, my application is running when I run that
+>> command.
+>> >
+>> > The commands I am running are:
+>> > > lttng-sessiond -d
+>> > > lttng create my-sess --live
+>> > After this command I start my application. If I then do the command:
+>> > > lttng view
+>> > I will see the tracepoints in the application in the terminal even
+>> though I have not done: lttng start.
+>> >
+>> > I thought it was strange that I cannot find my application in the:
+>> lttng list command under any domain.
+>> > Also the reason I start my application after creating a session is
+>> because the system automatically starts the application using systemd,
+>> > in order to get tracing data at all I have to manually stop the
+>> application and start it again after creating a session.
+>> >
+>> > Thanks again for any help,
+>> > Mosleh
+>> >
+>> > On Fri, Feb 15, 2019 at 10:32 AM Francis Deslauriers <
+>> francis.deslauriers@efficios.com> wrote:
+>> >>
+>> >> Hi Mosleh,
+>> >> It's expected to not see any event when running lttng list -u if no
+>> >> lttng-ust instrumented applications are running.
+>> >>
+>> >> What are the exact lttng commands you are running to see those
+>> >> unexpected events?
+>> >>
+>> >> Thank you,
+>> >> Francis
+>> >>
+>> >>
+>> >> Le ven. 15 f=C3=A9vr. 2019, =C3=A0 10 h 08, Mosleh Uddin <mosleh1235@=
+gmail.com>
+>> a =C3=A9crit :
+>> >> >
+>> >> > Hello,
+>> >> >
+>> >> > I am having a strange issue with my current application. For some
+>> context, I have integrated LTTng into a Yocto build and put custom trace
+>> points in my embedded system application. Once I load the built image on=
+to
+>> my system and start a session daemon, I try to list all available usersp=
+ace
+>> events (using lttng list -u), but no events show up.
+>> >> >
+>> >> > The strange occurrence is when I create a session (lltng create
+>> my-sess) and not start tracing the trace events will display on the scre=
+en
+>> regardless (when starting session in live mode with lttng view). I was
+>> wondering if anyone has any insight on this issue I am having.
+>> >> >
+>> >> > Thanks for any assistance,
+>> >> > Mosleh
+>> >> > _______________________________________________
+>> >> > lttng-dev mailing list
+>> >> > lttng-dev@lists.lttng.org
+>> >> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>> >>
+>> >> --
+>> >> Francis Deslauriers
+>> >> Computer Engineer
+>> >> EfficiOS inc.
+>>
+>>
+>>
+>> --
+>> Francis Deslauriers
+>> Computer Engineer
+>> EfficiOS inc.
+>>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 >
 
---000000000000a1ab1c0581f3e445
+
+--=20
+Francis Deslauriers
+Computer Engineer
+EfficiOS inc.
+
+--000000000000e9d2000581f40efb
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">That&#39;s correct, I don&#39;t enable any events or do: l=
-ttng start.<div>Here is some snapshots of starting everything up, followed =
-by starting my application.</div><div><div><img src=3D"cid:ii_js6g2ray1" al=
-t=3D"image.png" width=3D"447" height=3D"112"><br></div></div><div><br><div>=
-Here are the outputs for the commands:</div><div><br></div><div><div><img s=
-rc=3D"cid:ii_js6fxufp0" alt=3D"image.png" width=3D"562" height=3D"42"><br><=
-/div></div><div><br></div><div><div><div><div><img src=3D"cid:ii_js6g5bt54"=
- alt=3D"image.png" width=3D"510" height=3D"127"><br></div></div></div></div=
-></div><div><br></div><div><div><img src=3D"cid:ii_js6g9qc36" alt=3D"image.=
-png" width=3D"431" height=3D"57"><br></div></div><div><br></div><div>Note t=
-hat even though the session is inactive, when a trace event occurs in my ap=
-plication it is being recorded in the appropriate directory:</div><div><div=
-><br></div></div><div><div><img src=3D"cid:ii_js6gbonl8" alt=3D"image.png" =
-width=3D"197" height=3D"35"><br></div></div><div><br></div><div>Also maybe =
-important, the system has root only user. Would having the application belo=
-nging to a different user and trying to run as root cause these kinds of co=
-mplications? I did notice when testing on a raspberry pi that running an ap=
-plication as a root user would mean running sessions as root user as well.<=
-/div><div><br></div><div>Thanks,</div><div>Mosleh</div></div><br><div class=
-=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Fri, Feb 15, 2019=
- at 11:55 AM Francis Deslauriers &lt;<a href=3D"mailto:francis.deslauriers@=
-efficios.com">francis.deslauriers@efficios.com</a>&gt; wrote:<br></div><blo=
-ckquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left=
-:1px solid rgb(204,204,204);padding-left:1ex">Adding back lttng-dev mailing=
- list.<br>
+<div dir=3D"ltr"><div dir=3D"ltr">Can you start the lttng-sessiond in verbo=
+se mode using the following command:</div><div>&gt; lttng-sessiond -vvv</di=
+v><div>and then do the lttng create, start of application and lttng view on=
+ another console.</div><div><br></div><div>Then copy the output of the sess=
+iond on=C2=A0<a href=3D"https://pastebin.com/">https://pastebin.com/</a> an=
+d send us the link.<br></div><div><br></div><div>Thank you,</div><div>Franc=
+is</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmai=
+l_attr">Le ven. 15 f=C3=A9vr. 2019, =C3=A0 14 h 36, Mosleh Uddin &lt;<a hre=
+f=3D"mailto:mosleh1235@gmail.com">mosleh1235@gmail.com</a>&gt; a =C3=A9crit=
+=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px =
+0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=
+=3D"ltr">That&#39;s correct, I don&#39;t enable any events or do: lttng sta=
+rt.<div>Here is some snapshots of starting everything up, followed by start=
+ing my application.</div><div><div><img src=3D"cid:ii_js6g2ray1" alt=3D"ima=
+ge.png" width=3D"447" height=3D"112"><br></div></div><div><br><div>Here are=
+ the outputs for the commands:</div><div><br></div><div><div><img src=3D"ci=
+d:ii_js6fxufp0" alt=3D"image.png" width=3D"562" height=3D"42"><br></div></d=
+iv><div><br></div><div><div><div><div><img src=3D"cid:ii_js6g5bt54" alt=3D"=
+image.png" width=3D"510" height=3D"127"><br></div></div></div></div></div><=
+div><br></div><div><div><img src=3D"cid:ii_js6g9qc36" alt=3D"image.png" wid=
+th=3D"431" height=3D"57"><br></div></div><div><br></div><div>Note that even=
+ though the session is inactive, when a trace event occurs in my applicatio=
+n it is being recorded in the appropriate directory:</div><div><div><br></d=
+iv></div><div><div><img src=3D"cid:ii_js6gbonl8" alt=3D"image.png" width=3D=
+"197" height=3D"35"><br></div></div><div><br></div><div>Also maybe importan=
+t, the system has root only user. Would having the application belonging to=
+ a different user and trying to run as root cause these kinds of complicati=
+ons? I did notice when testing on a raspberry pi that running an applicatio=
+n as a root user would mean running sessions as root user as well.</div><di=
+v><br></div><div>Thanks,</div><div>Mosleh</div></div><br><div class=3D"gmai=
+l_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Fri, Feb 15, 2019 at 11:5=
+5 AM Francis Deslauriers &lt;<a href=3D"mailto:francis.deslauriers@efficios=
+.com" target=3D"_blank">francis.deslauriers@efficios.com</a>&gt; wrote:<br>=
+</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;b=
+order-left:1px solid rgb(204,204,204);padding-left:1ex">Adding back lttng-d=
+ev mailing list.<br>
 <br>
 So you don&#39;t even run a lttng-enable-event command?<br>
 That&#39;s odd.<br>
@@ -298,10 +336,21 @@ Francis Deslauriers<br>
 Computer Engineer<br>
 EfficiOS inc.<br>
 </blockquote></div>
+_______________________________________________<br>
+lttng-dev mailing list<br>
+<a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-dev@li=
+sts.lttng.org</a><br>
+<a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" rel=
+=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-bin/mailman/l=
+istinfo/lttng-dev</a><br>
+</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
+ class=3D"gmail_signature"><div dir=3D"ltr"><div><div dir=3D"ltr"><div><div=
+>Francis Deslauriers</div><div dir=3D"ltr">Computer Engineer<div>EfficiOS i=
+nc.</div></div></div></div></div></div></div>
 
---000000000000a1ab1c0581f3e445--
+--000000000000e9d2000581f40efb--
 
---000000000000a1ab1e0581f3e446
+--000000000000e9d2020581f40efc
 Content-Type: image/png; name="image.png"
 Content-Disposition: inline; filename="image.png"
 Content-Transfer-Encoding: base64
@@ -469,7 +518,7 @@ ms2VZznrCngg6dJyiBm1mXrVmgei91NQ40h4a6kkYYh3PvUGvrn4D0+hXFwGRoARYAQYAUaAEWAE
 GIHnDIH44zF5ZuE5Q4CLywgwAowAI8AIMAKMACPwJBB4lg1feRJl4kI8dQToPazqd1RFZBojwAgw
 AowAI8AIPFUEOMb2qdbsUy9XmfGqMnqfOi5cPkaAEWAEGAFG4DlG4P8DMHHvU8r9ahoAAAAASUVO
 RK5CYII=
---000000000000a1ab1e0581f3e446
+--000000000000e9d2020581f40efc
 Content-Type: image/png; name="image.png"
 Content-Disposition: inline; filename="image.png"
 Content-Transfer-Encoding: base64
@@ -705,7 +754,7 @@ ErXNBlCcy4BvDhu+/oP1g04HtbUKqvURvZ2E7dHPGoE9isABXP33nRMf/WNNabRHK1ibpRHQCGgE
 NAK9CIxl2rNXjA7RCGgENAIaAY3A5CCgO7/JqQutiUZAI6AR0AhsEwIH2SmObRKmxWgENAIaAY2A
 RmASEEh01GESFNU6aASUL2oHNEYaAY2ARiAZAnraMxlOOpVGQCOgEdAI7CEE/j8MxIvcM8raDwAA
 AABJRU5ErkJggg==
---000000000000a1ab1e0581f3e446
+--000000000000e9d2020581f40efc
 Content-Type: image/png; name="image.png"
 Content-Disposition: inline; filename="image.png"
 Content-Transfer-Encoding: base64
@@ -924,7 +973,7 @@ MSos/I4Xz2bC0z8F2yn0L7Jfufpl/NIS5f5KLd4LF/d1aVFmtABSXX7R9YXqK24fHQznAqOUcNH1
 TRVf7vqQKpp/MIEcAnt47Me8u3/714WOPyfVLQ7SDQstiM87bzEMVp0JMAEmwAS2noD6Gf/Wq7i8
 AuKoKXgdcVVzrcvLwjmYABNgAkyACaySAHf8OTSHnWOE7ynkxHIQE2ACTIAJMIHtJXDHf9Nxe+Vn
 yZlAOQLi5iu5OaLnrLmRHMgEmAAT2BkC/x+7qaduQtlm0QAAAABJRU5ErkJggg==
---000000000000a1ab1e0581f3e446
+--000000000000e9d2020581f40efc
 Content-Type: image/png; name="image.png"
 Content-Disposition: inline; filename="image.png"
 Content-Transfer-Encoding: base64
@@ -1037,7 +1086,7 @@ ghFgBBgBRmCfEbgxFmzsM4icPSPACDACjMB8EeDOa754c26MACPACDACM0CAO68ZgMgsGAFGgBFg
 BOaLAHde88Wbc2MEGAFGgBGYAQLcec0ARGbBCDACjAAjMF8EuPOaL96cGyPACDACjMAMEODOawYg
 MgtGgBFgBBiB+SLAndd88ebcGAFGgBFgBGaAAHdeMwCRWTACjAAjwAjMFwHuvOaLN+fGCDACjAAj
 MAMEuPOaAYjMghFgBBgBRmC+CPw/vOmI97eOy8sAAAAASUVORK5CYII=
---000000000000a1ab1e0581f3e446
+--000000000000e9d2020581f40efc
 Content-Type: image/png; name="image.png"
 Content-Disposition: inline; filename="image.png"
 Content-Transfer-Encoding: base64
@@ -1098,9 +1147,9 @@ ipI8lu9lMA6ZAd+no+LHDCJfZcaGSRVFqkpFvEAhP1b8d5XcjIXzYSJFRV3cJcvpV3+GAUbbKVBN
 0W5WMWkXfqyGg3q7+gvanb9y+lGi3aLTKcy0TbzoOCVXmlUl+LZvFkEHly4FFh1TVHN4v3RfTzDz
 i0GBeSjaF2OYQZ8BBRaOAovupFi4qQc9LSkKlP6hUH3YpR+PVIc3URqcFE0QK0C9NCjwf8N1y376
 mGb4AAAAAElFTkSuQmCC
---000000000000a1ab1e0581f3e446--
+--000000000000e9d2020581f40efc--
 
---===============7878591175862012403==
+--===============3486297516532363396==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -1111,4 +1160,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============7878591175862012403==--
+--===============3486297516532363396==--
