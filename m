@@ -1,37 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools 1/2] Tests: take multiple
- snapshots in streaming mode
-Date: Tue, 12 Feb 2019 11:23:54 -0500
-Message-ID: <CA+jJMxuc-ZxMN-oaGo_5K8r3ULmB5H2SvXVzUktDhqY2zpu8ZQ__12497.1273284004$1549988827$gmane$org@mail.gmail.com>
-References: <20190208012542.30069-1-jonathan.rajotte-julien@efficios.com>
+From: Mosleh Uddin <mosleh1235@gmail.com>
+Subject: Tracepoints firing without being enabled in LTTng
+Date: Fri, 15 Feb 2019 10:08:19 -0500
+Message-ID: <CAJyWpKEMbN8RHuGbODZYFiOff_pN08Zn4A=6dMEEe7C7h3nn1g__23131.634648756$1550243326$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============4094459073587118100=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 43zSfT29CPzggy
- for <lttng-dev@lists.lttng.org>; Tue, 12 Feb 2019 11:24:33 -0500 (EST)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 8B9FA19D738
- for <lttng-dev@lists.lttng.org>; Tue, 12 Feb 2019 11:24:32 -0500 (EST)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
- with ESMTP id 87nTdLHSacMp for <lttng-dev@lists.lttng.org>;
- Tue, 12 Feb 2019 11:24:32 -0500 (EST)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 27B5219D730
- for <lttng-dev@lists.lttng.org>; Tue, 12 Feb 2019 11:24:32 -0500 (EST)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
- with ESMTP id Bojo5Edw_Ocu for <lttng-dev@lists.lttng.org>;
- Tue, 12 Feb 2019 11:24:32 -0500 (EST)
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com
- [209.85.167.47])
- by mail.efficios.com (Postfix) with ESMTPSA id C587019D721
- for <lttng-dev@lists.lttng.org>; Tue, 12 Feb 2019 11:24:31 -0500 (EST)
-Received: by mail-lf1-f47.google.com with SMTP id q11so2480774lfd.3
- for <lttng-dev@lists.lttng.org>; Tue, 12 Feb 2019 08:24:31 -0800 (PST)
-In-Reply-To: <20190208012542.30069-1-jonathan.rajotte-julien@efficios.com>
+Received: from mail-it1-x136.google.com (mail-it1-x136.google.com
+ [IPv6:2607:f8b0:4864:20::136])
+ by lists.lttng.org (Postfix) with ESMTPS id 441GqM3Kl7zfrq
+ for <lttng-dev@lists.lttng.org>; Fri, 15 Feb 2019 10:08:31 -0500 (EST)
+Received: by mail-it1-x136.google.com with SMTP id l131so23937863ita.2
+ for <lttng-dev@lists.lttng.org>; Fri, 15 Feb 2019 07:08:31 -0800 (PST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -41,92 +20,58 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Qm90aCBwYXRjaGVzIG9mIHRoaXMgc2VyaWVzIHdlcmUgbWVyZ2VkIGFsbCB0aGUgd2F5IHRvIDIu
-OS4KClRoYW5rcyEKSsOpcsOpbWllCgpPbiBUaHUsIDcgRmViIDIwMTkgYXQgMjA6MjUsIEpvbmF0
-aGFuIFJham90dGUKPGpvbmF0aGFuLnJham90dGUtanVsaWVuQGVmZmljaW9zLmNvbT4gd3JvdGU6
-Cj4KPiBTaWduZWQtb2ZmLWJ5OiBKb25hdGhhbiBSYWpvdHRlIDxqb25hdGhhbi5yYWpvdHRlLWp1
-bGllbkBlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIC4uLi90b29scy9zbmFwc2hvdHMvdGVzdF9rZXJu
-ZWxfc3RyZWFtaW5nICAgICB8IDM1ICsrKysrKysrKysrKysrKystLQo+ICAuLi4vdG9vbHMvc25h
-cHNob3RzL3Rlc3RfdXN0X3N0cmVhbWluZyAgICAgICAgfCAzNiArKysrKysrKysrKysrKysrKy0t
-Cj4gIDIgZmlsZXMgY2hhbmdlZCwgNjYgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKPgo+
-IGRpZmYgLS1naXQgYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3NuYXBzaG90cy90ZXN0X2tlcm5l
-bF9zdHJlYW1pbmcgYi90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3NuYXBzaG90cy90ZXN0X2tlcm5l
-bF9zdHJlYW1pbmcKPiBpbmRleCAwNmUwYTVjNGEuLjBiNTM1YzYxMiAxMDA3NTUKPiAtLS0gYS90
-ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3NuYXBzaG90cy90ZXN0X2tlcm5lbF9zdHJlYW1pbmcKPiAr
-KysgYi90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3NuYXBzaG90cy90ZXN0X2tlcm5lbF9zdHJlYW1p
-bmcKPiBAQCAtMjQsNyArMjQsNyBAQCBDSEFOTkVMX05BTUU9ImNoYW4xIgo+Cj4gIFRSQUNFX1BB
-VEg9JChta3RlbXAgLWQpCj4KPiAtTlVNX1RFU1RTPTM2Cj4gK05VTV9URVNUUz02MQo+Cj4gIHNv
-dXJjZSAkVEVTVERJUi91dGlscy91dGlscy5zaAo+Cj4gQEAgLTEyNCw2ICsxMjQsMzIgQEAgZnVu
-Y3Rpb24gdGVzdF9rZXJuZWxfY3VzdG9tX25hbWUoKQo+ICAgICAgICAgcmV0dXJuICRvdXQKPiAg
-fQo+Cj4gK2Z1bmN0aW9uIHRlc3Rfa2VybmVsX25fc25hcHNob3QoKQo+ICt7Cj4gKyAgICAgICBk
-aWFnICJUZXN0IGtlcm5lbCBzbmFwc2hvdCBzdHJlYW1pbmcgbXVsdGlwbGUgY29uc2VjdXRpdmUg
-c25hcHNob3QiCj4gKyAgICAgICBjcmVhdGVfbHR0bmdfc2Vzc2lvbl9ub19vdXRwdXQgJFNFU1NJ
-T05fTkFNRQo+ICsgICAgICAgZW5hYmxlX2x0dG5nX21tYXBfb3ZlcndyaXRlX2tlcm5lbF9jaGFu
-bmVsICRTRVNTSU9OX05BTUUgJENIQU5ORUxfTkFNRQo+ICsgICAgICAgbHR0bmdfZW5hYmxlX2tl
-cm5lbF9ldmVudCAkU0VTU0lPTl9OQU1FICRFVkVOVF9OQU1FICRDSEFOTkVMX05BTUUKPiArICAg
-ICAgIHNuYXBzaG90X2FkZF9vdXRwdXQgJFNFU1NJT05fTkFNRSAibmV0Oi8vbG9jYWxob3N0Igo+
-ICsKPiArICAgICAgIGZvciBpIGluIHsxLi41fTsKPiArICAgICAgIGRvCj4gKyAgICAgICAgICAg
-ICAgIHN0YXJ0X2x0dG5nX3RyYWNpbmdfb2sgJFNFU1NJT05fTkFNRQo+ICsgICAgICAgICAgICAg
-ICBsdHRuZ19zbmFwc2hvdF9yZWNvcmQgJFNFU1NJT05fTkFNRQo+ICsgICAgICAgICAgICAgICBz
-dG9wX2x0dG5nX3RyYWNpbmdfb2sgJFNFU1NJT05fTkFNRQo+ICsgICAgICAgICAgICAgICB2YWxp
-ZGF0ZV90cmFjZSAkRVZFTlRfTkFNRSAkVFJBQ0VfUEFUSC8kSE9TVE5BTUUvc25hcHNob3QtMSoK
-PiArICAgICAgICAgICAgICAgaWYgWyAkPyAtbmUgMCBdOyB0aGVuCj4gKyAgICAgICAgICAgICAg
-ICAgICAgICAgcmV0dXJuIDEKPiArICAgICAgICAgICAgICAgZmkKPiArICAgICAgICAgICAgICAg
-c2V0IC11Cj4gKyAgICAgICAgICAgICAgIHJtIC1yZiAkVFJBQ0VfUEFUSC8kSE9TVE5BTUUKPiAr
-ICAgICAgICAgICAgICAgc2V0ICt1Cj4gKyAgICAgICBkb25lCj4gKwo+ICsgICAgICAgZGVzdHJv
-eV9sdHRuZ19zZXNzaW9uX29rICRTRVNTSU9OX05BTUUKPiArICAgICAgIHJldHVybiAwCj4gK30K
-PiArCj4gIHBsYW5fdGVzdHMgJE5VTV9URVNUUwo+Cj4gIHByaW50X3Rlc3RfYmFubmVyICIkVEVT
-VF9ERVNDIgo+IEBAIC0xNDEsOCArMTY3LDExIEBAIHNraXAgJGlzcm9vdCAiUm9vdCBhY2Nlc3Mg
-aXMgbmVlZGVkLiBTa2lwcGluZyBhbGwga2VybmVsIHN0cmVhbWluZyB0ZXN0cy4iICROVU1fCj4g
-ICAgICAgICBzdGFydF9sdHRuZ19yZWxheWQgIi1vICRUUkFDRV9QQVRIIgo+ICAgICAgICAgc3Rh
-cnRfbHR0bmdfc2Vzc2lvbmQKPgo+IC0gICAgICAgdGVzdHM9KCB0ZXN0X2tlcm5lbF9kZWZhdWx0
-X25hbWUgdGVzdF9rZXJuZWxfY3VzdG9tX25hbWUgXAo+IC0gICAgICAgICAgICAgICAgICAgICAg
-IHRlc3Rfa2VybmVsX2RlZmF1bHRfbmFtZV93aXRoX2RlbCApCj4gKyAgICAgICB0ZXN0cz0oIHRl
-c3Rfa2VybmVsX2RlZmF1bHRfbmFtZQo+ICsgICAgICAgICAgICAgICB0ZXN0X2tlcm5lbF9jdXN0
-b21fbmFtZQo+ICsgICAgICAgICAgICAgICB0ZXN0X2tlcm5lbF9kZWZhdWx0X25hbWVfd2l0aF9k
-ZWwKPiArICAgICAgICAgICAgICAgdGVzdF9rZXJuZWxfbl9zbmFwc2hvdAo+ICsgICAgICAgKQo+
-Cj4gICAgICAgICBmb3IgZmN0X3Rlc3QgaW4gJHt0ZXN0c1tAXX07Cj4gICAgICAgICBkbwo+IGRp
-ZmYgLS1naXQgYS90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3NuYXBzaG90cy90ZXN0X3VzdF9zdHJl
-YW1pbmcgYi90ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL3NuYXBzaG90cy90ZXN0X3VzdF9zdHJlYW1p
-bmcKPiBpbmRleCBjOTc4MTNlNDAuLjIwZDRmN2Y2YiAxMDA3NTUKPiAtLS0gYS90ZXN0cy9yZWdy
-ZXNzaW9uL3Rvb2xzL3NuYXBzaG90cy90ZXN0X3VzdF9zdHJlYW1pbmcKPiArKysgYi90ZXN0cy9y
-ZWdyZXNzaW9uL3Rvb2xzL3NuYXBzaG90cy90ZXN0X3VzdF9zdHJlYW1pbmcKPiBAQCAtMzEsNyAr
-MzEsNyBAQCBBUFBTX1BJRD0KPgo+ICBUUkFDRV9QQVRIPSQobWt0ZW1wIC1kKQo+Cj4gLU5VTV9U
-RVNUUz00OQo+ICtOVU1fVEVTVFM9NzUKPgo+ICBzb3VyY2UgJFRFU1RESVIvdXRpbHMvdXRpbHMu
-c2gKPgo+IEBAIC0yMDYsNiArMjA2LDMzIEBAIGZ1bmN0aW9uIHRlc3RfdXN0X2N1c3RvbV9uYW1l
-KCkKPiAgICAgICAgIHJldHVybiAkb3V0Cj4gIH0KPgo+ICtmdW5jdGlvbiB0ZXN0X3VzdF9uX3Nu
-YXBzaG90KCkKPiArewo+ICsgICAgICAgZGlhZyAiVGVzdCB1c3Qgc25hcHNob3Qgc3RyZWFtaW5n
-IG11bHRpcGxlIGNvbnNlY3V0aXZlIHNuYXBzaG90Igo+ICsgICAgICAgY3JlYXRlX2x0dG5nX3Nl
-c3Npb25fbm9fb3V0cHV0ICRTRVNTSU9OX05BTUUKPiArICAgICAgIGVuYWJsZV9sdHRuZ19tbWFw
-X292ZXJ3cml0ZV91c3RfY2hhbm5lbCAkU0VTU0lPTl9OQU1FICRDSEFOTkVMX05BTUUKPiArICAg
-ICAgIGVuYWJsZV91c3RfbHR0bmdfZXZlbnRfb2sgJFNFU1NJT05fTkFNRSAkRVZFTlRfTkFNRSAk
-Q0hBTk5FTF9OQU1FCj4gKyAgICAgICBzbmFwc2hvdF9hZGRfb3V0cHV0ICRTRVNTSU9OX05BTUUg
-Im5ldDovL2xvY2FsaG9zdCIgJG5hbWUKPiArICAgICAgIHN0YXJ0X3Rlc3RfYXBwCj4gKyAgICAg
-ICBmb3IgaSBpbiB7MS4uNX07Cj4gKyAgICAgICBkbwo+ICsgICAgICAgICAgICAgICBzdGFydF9s
-dHRuZ190cmFjaW5nX29rICRTRVNTSU9OX05BTUUKPiArICAgICAgICAgICAgICAgbHR0bmdfc25h
-cHNob3RfcmVjb3JkICRTRVNTSU9OX05BTUUKPiArICAgICAgICAgICAgICAgc3RvcF9sdHRuZ190
-cmFjaW5nX29rICRTRVNTSU9OX05BTUUKPiArICAgICAgICAgICAgICAgdmFsaWRhdGVfdHJhY2Ug
-JEVWRU5UX05BTUUgJFRSQUNFX1BBVEgvJEhPU1ROQU1FL3NuYXBzaG90LTEqCj4gKyAgICAgICAg
-ICAgICAgIGlmIFsgJD8gLW5lIDAgXTsgdGhlbgo+ICsgICAgICAgICAgICAgICAgICAgICAgIHJl
-dHVybiAxCj4gKyAgICAgICAgICAgICAgIGZpCj4gKyAgICAgICAgICAgICAgIHNldCAtdQo+ICsg
-ICAgICAgICAgICAgICBybSAtcmYgJFRSQUNFX1BBVEgvJEhPU1ROQU1FCj4gKyAgICAgICAgICAg
-ICAgIHNldCArdQo+ICsgICAgICAgZG9uZQo+ICsKPiArICAgICAgIGRlc3Ryb3lfbHR0bmdfc2Vz
-c2lvbl9vayAkU0VTU0lPTl9OQU1FCj4gKyAgICAgICBzdG9wX3Rlc3RfYXBwcwo+ICsgICAgICAg
-cmV0dXJuIDAKPiArfQo+ICsKPiAgcGxhbl90ZXN0cyAkTlVNX1RFU1RTCj4KPiAgcHJpbnRfdGVz
-dF9iYW5uZXIgIiRURVNUX0RFU0MiCj4gQEAgLTIxOSw3ICsyNDYsMTIgQEAgZmkKPiAgc3RhcnRf
-bHR0bmdfcmVsYXlkICItbyAkVFJBQ0VfUEFUSCIKPiAgc3RhcnRfbHR0bmdfc2Vzc2lvbmQKPgo+
-IC10ZXN0cz0oIHRlc3RfdXN0X2RlZmF1bHRfbmFtZV93aXRoX2RlbCB0ZXN0X3VzdF9kZWZhdWx0
-X25hbWUgdGVzdF91c3RfY3VzdG9tX25hbWUgdGVzdF91c3RfZGVmYXVsdF9uYW1lX2N1c3RvbV91
-cmkgKQo+ICt0ZXN0cz0oIHRlc3RfdXN0X2RlZmF1bHRfbmFtZV93aXRoX2RlbAo+ICsgICAgICAg
-dGVzdF91c3RfZGVmYXVsdF9uYW1lCj4gKyAgICAgICB0ZXN0X3VzdF9jdXN0b21fbmFtZQo+ICsg
-ICAgICAgdGVzdF91c3RfZGVmYXVsdF9uYW1lX2N1c3RvbV91cmkKPiArICAgICAgIHRlc3RfdXN0
-X25fc25hcHNob3QKPiArKQo+Cj4gIGZvciBmY3RfdGVzdCBpbiAke3Rlc3RzW0BdfTsKPiAgZG8K
-PiAtLQo+IDIuMTcuMQo+CgoKLS0gCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpo
-dHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo=
+--===============4094459073587118100==
+Content-Type: multipart/alternative; boundary="000000000000d0ed5a0581f025e5"
+
+--000000000000d0ed5a0581f025e5
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+I am having a strange issue with my current application. For some context,
+I have integrated LTTng into a Yocto build and put custom trace points in
+my embedded system application. Once I load the built image onto my system
+and start a session daemon, I try to list all available userspace events
+(using lttng list -u), but no events show up.
+
+The strange occurrence is when I create a session (lltng create my-sess)
+and not start tracing the trace events will display on the screen
+regardless (when starting session in live mode with lttng view). I was
+wondering if anyone has any insight on this issue I am having.
+
+Thanks for any assistance,
+Mosleh
+
+--000000000000d0ed5a0581f025e5
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello,<div><br></div><div>I am having a strange issue with=
+ my current application. For some context, I have integrated LTTng into a Y=
+octo build and put custom trace points in my embedded system application. O=
+nce I load the built image onto my system and start a session daemon, I try=
+ to list all available userspace events (using lttng list -u), but no event=
+s show up.</div><div><br></div><div>The strange occurrence is when I create=
+ a session (lltng create my-sess) and not start tracing the trace events wi=
+ll display on the screen regardless (when starting session in live mode wit=
+h lttng view). I was wondering if anyone has any insight on this issue I am=
+ having.</div><div><br></div><div>Thanks for any assistance,</div><div>Mosl=
+eh</div></div>
+
+--000000000000d0ed5a0581f025e5--
+
+--===============4094459073587118100==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============4094459073587118100==--
