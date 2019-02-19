@@ -1,25 +1,15 @@
-From: Francis Deslauriers <francis.deslauriers@efficios.com>
-Subject: Re: Tracepoints firing without being enabled in LTTng
-Date: Tue, 19 Feb 2019 17:16:39 -0500
-Message-ID: <CADcCL0ieGaTA4_=rxaLT2=LAuhQdJGfjM7HYg34eTo-Oo_JDYg__44041.1980658368$1550614632$gmane$org@mail.gmail.com>
-References: <CAJyWpKEMbN8RHuGbODZYFiOff_pN08Zn4A=6dMEEe7C7h3nn1g@mail.gmail.com>
- <CADcCL0jBrNyhbVvpbhmLD_vZgi9bcgDUN5dAGpbf5JvuG9MDmw@mail.gmail.com>
- <CAJyWpKH2TWmCXhvtSaE-h+jKfmt8aKQ0MaYOr_TqQ0q+M1f_gw@mail.gmail.com>
- <CADcCL0hnLNyzOvfpBRW=TzDR9Ekckei5NGOqpAQ=rMUpGnRLEQ@mail.gmail.com>
- <CAJyWpKEgHDa2gPte2eTVg9UCo6RBOBKfPLg9XFUyVcVxMoj8tA@mail.gmail.com>
- <CADcCL0gt=kQop0miSLD3edcKLNERgg+XEjmgkvzdX=A4t_MzuQ@mail.gmail.com>
- <CAJyWpKGEC5dXZXWTupdJA6BVUQhzp5dT-jDX6iX_EE=JrvU4KA@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-tools 1/1] Fix: consumer snapshot: handle
+ unsigned long overflow
+Date: Tue, 19 Feb 2019 17:47:49 -0500
+Message-ID: <20190219224749.8979-1-mathieu.desnoyers__35061.8201702432$1550616505$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ot1-f65.google.com (mail-ot1-f65.google.com
- [209.85.210.65])
- by lists.lttng.org (Postfix) with ESMTPS id 443w7m3vrSz120p
- for <lttng-dev@lists.lttng.org>; Tue, 19 Feb 2019 17:16:52 -0500 (EST)
-Received: by mail-ot1-f65.google.com with SMTP id m1so37085960otf.5
- for <lttng-dev@lists.lttng.org>; Tue, 19 Feb 2019 14:16:52 -0800 (PST)
-In-Reply-To: <CAJyWpKGEC5dXZXWTupdJA6BVUQhzp5dT-jDX6iX_EE=JrvU4KA@mail.gmail.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 443wqn3JmJz122Z
+ for <lttng-dev@lists.lttng.org>; Tue, 19 Feb 2019 17:48:05 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -29,122 +19,48 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mosleh Uddin <mosleh1235@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: jgalar@efficios.com, joraj@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgTW9zbGVoLApKdXN0IHRvIGJlIGNsZWFyOgpXaGVuIHlvdSBydW4geW91ciBhcHAgYXMgYSBz
-ZXJ2aWNlIChiYWNrZ3JvdW5kKSwgbHR0bmcgbGlzdCAtdSBkb2Vzbid0CmRpc3BsYXkgYW55IGV2
-ZW50cyBBTkQgeW91IHNlZSBldmVudHMgaW4gdGhlIGxpdmUgc2Vzc2lvbiB3aXRob3V0Cmhhdmlu
-ZyBydW4gZW5hYmxlLWV2ZW50IGFuZCBzdGFydCBjb21tYW5kcy4KV2hlbiB5b3UgcnVuIHlvdXIg
-YXBwIG5vcm1hbGx5LCBsdHRuZyBsaXN0IC11IGRpc3BsYXlzIGV2ZW50cyBBTkQgeW91Cm9ubHkg
-c2VlIGV2ZW50cyBhZnRlciBydW5uaW5nIGVuYWJsZS1ldmVudCBhbmQgc3RhcnQgY29tbWFuZHMu
-CklzIHRoYXQgY29ycmVjdD8KClBsZWFzZSBwcm92aWRlIHRoZSBvdXRwdXQgb2YgdGhlIGx0dG5n
-LXNlc3Npb25kIGluIHZlcmJvc2UgbW9kZSB1c2luZwp0aGUgZm9sbG93aW5nIGNvbW1hbmQ6Cj4g
-bHR0bmctc2Vzc2lvbmQgLXZ2dgpwbGVhc2UgcHJvdmlkZSB0aGUgb3V0cHV0IG9mIHlvdXIgYXBw
-bGljYXRpb24gYXMgYSBzZXJ2aWNlIHdpdGggdGhpcwplbnZpcm9ubWVudCB2YXJpYWJsZTogIExU
-VE5HX1VTVF9ERUJVRz0xCmFuZCBwbGVhc2UgcHJvdmlkZSB1cyB3aXRoIHRoZSBzZXJ2aWNlIGZp
-bGUgZGVzY3JpYmluZyBob3cgeW91cgpzZXJ2aWNlIGlzIHN0YXJ0ZWQuClB1dCBhbGwgb2YgdGhp
-cyBvbiBhIHBhc3RlYmluLmNvbQoKSXMgeW91ciBhcHBsaWNhdGlvbiBtYXNzLWNsb3NpbmcgZmls
-ZSBkZXNjcmlwdG9ycyB3aGVuIGl0J3MKZGFlbW9uaXppbmc/IGhvdyBhYm91dCB1c2luZyBmb3Jr
-KCkgc3lzY2FsbCB3aXRob3V0IGFuIGV4ZWMoKSBhZnRlcgppdD8gSWYgc28sIGhhdmUgYSBsb29r
-IGF0IHRoaXMgcGFydCBvZiB0aGUgVVNUIG1hbiBwYWdlOgpodHRwczovL2x0dG5nLm9yZy9tYW4v
-My9sdHRuZy11c3QvdjIuMTAvI2RvYy1fdXNpbmdfbHR0bmdfdXN0X3dpdGhfZGFlbW9ucwoKVGhh
-bmsgeW91LApGcmFuY2lzCgoKTGUgbWFyLiAxOSBmw6l2ci4gMjAxOSwgw6AgMTYgaCAzNywgTW9z
-bGVoIFVkZGluIDxtb3NsZWgxMjM1QGdtYWlsLmNvbT4gYSDDqWNyaXQgOgo+Cj4gSGVsbG8sCj4K
-PiBTb3JyeSBmb3IgdGhlIGxhdGUgcmVwbHkuIEkgd2FzIGFibGUgdG8gZmlndXJlIG91dCB0aGUg
-d2VpcmQgYmVoYXZpb3IgZnJvbSB0aGUgYXBwbGljYXRpb24uIFR1cm5zIG91dCBpZiBJIHJ1biBt
-eSBhcHBsaWNhdGlvbiBhcyBhIHNlcnZpY2UsICBsdHRuZyBubyBsb25nZXIgY2FuIHNlZSBhbnkg
-b2YgdGhlIFVTVCB0cmFjZXBvaW50cyBhbmQgY2F1c2VzIHRoZSBiZWhhdmlvciBJIHdhcyBleHBs
-YWluaW5nLgo+IFdoZW4gSSBleGVjdXRlIHRoZSBhcHBsaWNhdGlvbiBub3JtYWxseSAoLi9hcHBf
-bmFtZSksIHRoZSBmdW5jdGlvbmFsaXR5IGlzIGFzIGV4cGVjdGVkLiBJcyB0aGlzIHRoZSBleHBl
-Y3RlZCBiZWhhdmlvcj8gSXMgdGhlcmUgc29tZSB3YXkgSSBjYW4gdHJhY2UgdGhlIHVzZXJzcGFj
-ZSBhcHBsaWNhdGlvbiB3aGlsZSBydW5uaW5nIGl0IGFzIGEgc2VydmljZSBzaW11bHRhbmVvdXNs
-eT8KPgo+IFRoYW5rcyBmb3IgYW55IGluZm8sCj4gTW9zbGVoCj4KPiBPbiBGcmksIEZlYiAxNSwg
-MjAxOSBhdCAyOjQ4IFBNIEZyYW5jaXMgRGVzbGF1cmllcnMgPGZyYW5jaXMuZGVzbGF1cmllcnNA
-ZWZmaWNpb3MuY29tPiB3cm90ZToKPj4KPj4gQ2FuIHlvdSBzdGFydCB0aGUgbHR0bmctc2Vzc2lv
-bmQgaW4gdmVyYm9zZSBtb2RlIHVzaW5nIHRoZSBmb2xsb3dpbmcgY29tbWFuZDoKPj4gPiBsdHRu
-Zy1zZXNzaW9uZCAtdnZ2Cj4+IGFuZCB0aGVuIGRvIHRoZSBsdHRuZyBjcmVhdGUsIHN0YXJ0IG9m
-IGFwcGxpY2F0aW9uIGFuZCBsdHRuZyB2aWV3IG9uIGFub3RoZXIgY29uc29sZS4KPj4KPj4gVGhl
-biBjb3B5IHRoZSBvdXRwdXQgb2YgdGhlIHNlc3Npb25kIG9uIGh0dHBzOi8vcGFzdGViaW4uY29t
-LyBhbmQgc2VuZCB1cyB0aGUgbGluay4KPj4KPj4gVGhhbmsgeW91LAo+PiBGcmFuY2lzCj4+Cj4+
-IExlIHZlbi4gMTUgZsOpdnIuIDIwMTksIMOgIDE0IGggMzYsIE1vc2xlaCBVZGRpbiA8bW9zbGVo
-MTIzNUBnbWFpbC5jb20+IGEgw6ljcml0IDoKPj4+Cj4+PiBUaGF0J3MgY29ycmVjdCwgSSBkb24n
-dCBlbmFibGUgYW55IGV2ZW50cyBvciBkbzogbHR0bmcgc3RhcnQuCj4+PiBIZXJlIGlzIHNvbWUg
-c25hcHNob3RzIG9mIHN0YXJ0aW5nIGV2ZXJ5dGhpbmcgdXAsIGZvbGxvd2VkIGJ5IHN0YXJ0aW5n
-IG15IGFwcGxpY2F0aW9uLgo+Pj4KPj4+Cj4+PiBIZXJlIGFyZSB0aGUgb3V0cHV0cyBmb3IgdGhl
-IGNvbW1hbmRzOgo+Pj4KPj4+Cj4+Pgo+Pj4KPj4+Cj4+Pgo+Pj4KPj4+IE5vdGUgdGhhdCBldmVu
-IHRob3VnaCB0aGUgc2Vzc2lvbiBpcyBpbmFjdGl2ZSwgd2hlbiBhIHRyYWNlIGV2ZW50IG9jY3Vy
-cyBpbiBteSBhcHBsaWNhdGlvbiBpdCBpcyBiZWluZyByZWNvcmRlZCBpbiB0aGUgYXBwcm9wcmlh
-dGUgZGlyZWN0b3J5Ogo+Pj4KPj4+Cj4+Pgo+Pj4gQWxzbyBtYXliZSBpbXBvcnRhbnQsIHRoZSBz
-eXN0ZW0gaGFzIHJvb3Qgb25seSB1c2VyLiBXb3VsZCBoYXZpbmcgdGhlIGFwcGxpY2F0aW9uIGJl
-bG9uZ2luZyB0byBhIGRpZmZlcmVudCB1c2VyIGFuZCB0cnlpbmcgdG8gcnVuIGFzIHJvb3QgY2F1
-c2UgdGhlc2Uga2luZHMgb2YgY29tcGxpY2F0aW9ucz8gSSBkaWQgbm90aWNlIHdoZW4gdGVzdGlu
-ZyBvbiBhIHJhc3BiZXJyeSBwaSB0aGF0IHJ1bm5pbmcgYW4gYXBwbGljYXRpb24gYXMgYSByb290
-IHVzZXIgd291bGQgbWVhbiBydW5uaW5nIHNlc3Npb25zIGFzIHJvb3QgdXNlciBhcyB3ZWxsLgo+
-Pj4KPj4+IFRoYW5rcywKPj4+IE1vc2xlaAo+Pj4KPj4+IE9uIEZyaSwgRmViIDE1LCAyMDE5IGF0
-IDExOjU1IEFNIEZyYW5jaXMgRGVzbGF1cmllcnMgPGZyYW5jaXMuZGVzbGF1cmllcnNAZWZmaWNp
-b3MuY29tPiB3cm90ZToKPj4+Pgo+Pj4+IEFkZGluZyBiYWNrIGx0dG5nLWRldiBtYWlsaW5nIGxp
-c3QuCj4+Pj4KPj4+PiBTbyB5b3UgZG9uJ3QgZXZlbiBydW4gYSBsdHRuZy1lbmFibGUtZXZlbnQg
-Y29tbWFuZD8KPj4+PiBUaGF0J3Mgb2RkLgo+Pj4+Cj4+Pj4gQ2FuIHlvdSBzZW5kIHVzIHRoZSBv
-dXRwdXQgb2YgdGhlIGZvbGxvd2luZyBjb21tYW5kczoKPj4+PiBJcyBpdCBwb3NzaWJsZSB0aGF0
-IHRoZXJlIGFyZSBvdGhlciBsdHRuZy1zZXNzaW9uZCBkYWVtb25zIHJ1bm5pbmcgb24KPj4+PiB0
-aGUgbWFjaGluZT8KPj4+PiA+IHBzIGF1eCB8IGdyZXAgImx0dG5nLXNlc3Npb25kIgo+Pj4+IFZl
-cmlmeSBpZiB0aGVyZSBhcmUgb3RoZXIgYWN0aXZlIHRyYWNpbmcgc2Vzc2lvbnM6Cj4+Pj4gPiBs
-dHRuZyBsaXN0Cj4+Pj4gQ2hlY2sgdGhlIGRldGFpbHMgb2YgdGhlIGN1cnJlbnQgc2Vzc2lvbjoK
-Pj4+PiA+IGx0dG5nIHN0YXR1cwo+Pj4+Cj4+Pj4gVGhhbmsgeW91LAo+Pj4+IEZyYW5jaXMKPj4+
-Pgo+Pj4+IExlIHZlbi4gMTUgZsOpdnIuIDIwMTksIMOgIDExIGggMjksIE1vc2xlaCBVZGRpbiA8
-bW9zbGVoMTIzNUBnbWFpbC5jb20+IGEgw6ljcml0IDoKPj4+PiA+Cj4+Pj4gPiBIaSBGcmFuY2lz
-LAo+Pj4+ID4KPj4+PiA+IFRoYW5rIHlvdSBmb3IgdGhlIHF1aWNrIHJlc3BvbnNlLgo+Pj4+ID4g
-SnVzdCB0byBjbGVhciB0aGluZ3MgdXAsIG15IGFwcGxpY2F0aW9uIGlzIHJ1bm5pbmcgd2hlbiBJ
-IHJ1biB0aGF0IGNvbW1hbmQuCj4+Pj4gPgo+Pj4+ID4gVGhlIGNvbW1hbmRzIEkgYW0gcnVubmlu
-ZyBhcmU6Cj4+Pj4gPiA+IGx0dG5nLXNlc3Npb25kIC1kCj4+Pj4gPiA+IGx0dG5nIGNyZWF0ZSBt
-eS1zZXNzIC0tbGl2ZQo+Pj4+ID4gQWZ0ZXIgdGhpcyBjb21tYW5kIEkgc3RhcnQgbXkgYXBwbGlj
-YXRpb24uIElmIEkgdGhlbiBkbyB0aGUgY29tbWFuZDoKPj4+PiA+ID4gbHR0bmcgdmlldwo+Pj4+
-ID4gSSB3aWxsIHNlZSB0aGUgdHJhY2Vwb2ludHMgaW4gdGhlIGFwcGxpY2F0aW9uIGluIHRoZSB0
-ZXJtaW5hbCBldmVuIHRob3VnaCBJIGhhdmUgbm90IGRvbmU6IGx0dG5nIHN0YXJ0Lgo+Pj4+ID4K
-Pj4+PiA+IEkgdGhvdWdodCBpdCB3YXMgc3RyYW5nZSB0aGF0IEkgY2Fubm90IGZpbmQgbXkgYXBw
-bGljYXRpb24gaW4gdGhlOiBsdHRuZyBsaXN0IGNvbW1hbmQgdW5kZXIgYW55IGRvbWFpbi4KPj4+
-PiA+IEFsc28gdGhlIHJlYXNvbiBJIHN0YXJ0IG15IGFwcGxpY2F0aW9uIGFmdGVyIGNyZWF0aW5n
-IGEgc2Vzc2lvbiBpcyBiZWNhdXNlIHRoZSBzeXN0ZW0gYXV0b21hdGljYWxseSBzdGFydHMgdGhl
-IGFwcGxpY2F0aW9uIHVzaW5nIHN5c3RlbWQsCj4+Pj4gPiBpbiBvcmRlciB0byBnZXQgdHJhY2lu
-ZyBkYXRhIGF0IGFsbCBJIGhhdmUgdG8gbWFudWFsbHkgc3RvcCB0aGUgYXBwbGljYXRpb24gYW5k
-IHN0YXJ0IGl0IGFnYWluIGFmdGVyIGNyZWF0aW5nIGEgc2Vzc2lvbi4KPj4+PiA+Cj4+Pj4gPiBU
-aGFua3MgYWdhaW4gZm9yIGFueSBoZWxwLAo+Pj4+ID4gTW9zbGVoCj4+Pj4gPgo+Pj4+ID4gT24g
-RnJpLCBGZWIgMTUsIDIwMTkgYXQgMTA6MzIgQU0gRnJhbmNpcyBEZXNsYXVyaWVycyA8ZnJhbmNp
-cy5kZXNsYXVyaWVyc0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+Pj4+ID4+Cj4+Pj4gPj4gSGkgTW9z
-bGVoLAo+Pj4+ID4+IEl0J3MgZXhwZWN0ZWQgdG8gbm90IHNlZSBhbnkgZXZlbnQgd2hlbiBydW5u
-aW5nIGx0dG5nIGxpc3QgLXUgaWYgbm8KPj4+PiA+PiBsdHRuZy11c3QgaW5zdHJ1bWVudGVkIGFw
-cGxpY2F0aW9ucyBhcmUgcnVubmluZy4KPj4+PiA+Pgo+Pj4+ID4+IFdoYXQgYXJlIHRoZSBleGFj
-dCBsdHRuZyBjb21tYW5kcyB5b3UgYXJlIHJ1bm5pbmcgdG8gc2VlIHRob3NlCj4+Pj4gPj4gdW5l
-eHBlY3RlZCBldmVudHM/Cj4+Pj4gPj4KPj4+PiA+PiBUaGFuayB5b3UsCj4+Pj4gPj4gRnJhbmNp
-cwo+Pj4+ID4+Cj4+Pj4gPj4KPj4+PiA+PiBMZSB2ZW4uIDE1IGbDqXZyLiAyMDE5LCDDoCAxMCBo
-IDA4LCBNb3NsZWggVWRkaW4gPG1vc2xlaDEyMzVAZ21haWwuY29tPiBhIMOpY3JpdCA6Cj4+Pj4g
-Pj4gPgo+Pj4+ID4+ID4gSGVsbG8sCj4+Pj4gPj4gPgo+Pj4+ID4+ID4gSSBhbSBoYXZpbmcgYSBz
-dHJhbmdlIGlzc3VlIHdpdGggbXkgY3VycmVudCBhcHBsaWNhdGlvbi4gRm9yIHNvbWUgY29udGV4
-dCwgSSBoYXZlIGludGVncmF0ZWQgTFRUbmcgaW50byBhIFlvY3RvIGJ1aWxkIGFuZCBwdXQgY3Vz
-dG9tIHRyYWNlIHBvaW50cyBpbiBteSBlbWJlZGRlZCBzeXN0ZW0gYXBwbGljYXRpb24uIE9uY2Ug
-SSBsb2FkIHRoZSBidWlsdCBpbWFnZSBvbnRvIG15IHN5c3RlbSBhbmQgc3RhcnQgYSBzZXNzaW9u
-IGRhZW1vbiwgSSB0cnkgdG8gbGlzdCBhbGwgYXZhaWxhYmxlIHVzZXJzcGFjZSBldmVudHMgKHVz
-aW5nIGx0dG5nIGxpc3QgLXUpLCBidXQgbm8gZXZlbnRzIHNob3cgdXAuCj4+Pj4gPj4gPgo+Pj4+
-ID4+ID4gVGhlIHN0cmFuZ2Ugb2NjdXJyZW5jZSBpcyB3aGVuIEkgY3JlYXRlIGEgc2Vzc2lvbiAo
-bGx0bmcgY3JlYXRlIG15LXNlc3MpIGFuZCBub3Qgc3RhcnQgdHJhY2luZyB0aGUgdHJhY2UgZXZl
-bnRzIHdpbGwgZGlzcGxheSBvbiB0aGUgc2NyZWVuIHJlZ2FyZGxlc3MgKHdoZW4gc3RhcnRpbmcg
-c2Vzc2lvbiBpbiBsaXZlIG1vZGUgd2l0aCBsdHRuZyB2aWV3KS4gSSB3YXMgd29uZGVyaW5nIGlm
-IGFueW9uZSBoYXMgYW55IGluc2lnaHQgb24gdGhpcyBpc3N1ZSBJIGFtIGhhdmluZy4KPj4+PiA+
-PiA+Cj4+Pj4gPj4gPiBUaGFua3MgZm9yIGFueSBhc3Npc3RhbmNlLAo+Pj4+ID4+ID4gTW9zbGVo
-Cj4+Pj4gPj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-Xwo+Pj4+ID4+ID4gbHR0bmctZGV2IG1haWxpbmcgbGlzdAo+Pj4+ID4+ID4gbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZwo+Pj4+ID4+ID4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9t
-YWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo+Pj4+ID4+Cj4+Pj4gPj4gLS0KPj4+PiA+PiBGcmFu
-Y2lzIERlc2xhdXJpZXJzCj4+Pj4gPj4gQ29tcHV0ZXIgRW5naW5lZXIKPj4+PiA+PiBFZmZpY2lP
-UyBpbmMuCj4+Pj4KPj4+Pgo+Pj4+Cj4+Pj4gLS0KPj4+PiBGcmFuY2lzIERlc2xhdXJpZXJzCj4+
-Pj4gQ29tcHV0ZXIgRW5naW5lZXIKPj4+PiBFZmZpY2lPUyBpbmMuCj4+Pgo+Pj4gX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPj4+IGx0dG5nLWRldiBtYWls
-aW5nIGxpc3QKPj4+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4+IGh0dHBzOi8vbGlzdHMu
-bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4KPj4KPj4KPj4g
-LS0KPj4gRnJhbmNpcyBEZXNsYXVyaWVycwo+PiBDb21wdXRlciBFbmdpbmVlcgo+PiBFZmZpY2lP
-UyBpbmMuCgoKCi0tIApGcmFuY2lzIERlc2xhdXJpZXJzCkNvbXB1dGVyIEVuZ2luZWVyCkVmZmlj
-aU9TIGluYy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-bHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8v
-bGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+Comparing the consumed iterator and the produced position without
+using a difference generates an empty snapshot when the iterator is
+before unsigned long overflow and the produced position is after
+unsigned long overflow.
+
+This applies to both UST and kernel consumers.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+---
+ src/common/kernel-consumer/kernel-consumer.c | 2 +-
+ src/common/ust-consumer/ust-consumer.c       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/common/kernel-consumer/kernel-consumer.c b/src/common/kernel-consumer/kernel-consumer.c
+index 9bed7b55..1533e9ef 100644
+--- a/src/common/kernel-consumer/kernel-consumer.c
++++ b/src/common/kernel-consumer/kernel-consumer.c
+@@ -234,7 +234,7 @@ int lttng_kconsumer_snapshot_channel(struct lttng_consumer_channel *channel,
+ 				produced_pos, nb_packets_per_stream,
+ 				stream->max_sb_size);
+ 
+-		while (consumed_pos < produced_pos) {
++		while ((long) (consumed_pos - produced_pos) < 0) {
+ 			ssize_t read_len;
+ 			unsigned long len, padded_len;
+ 
+diff --git a/src/common/ust-consumer/ust-consumer.c b/src/common/ust-consumer/ust-consumer.c
+index 46f33005..94b761cb 100644
+--- a/src/common/ust-consumer/ust-consumer.c
++++ b/src/common/ust-consumer/ust-consumer.c
+@@ -1168,7 +1168,7 @@ static int snapshot_channel(struct lttng_consumer_channel *channel,
+ 				produced_pos, nb_packets_per_stream,
+ 				stream->max_sb_size);
+ 
+-		while (consumed_pos < produced_pos) {
++		while ((long) (consumed_pos - produced_pos) < 0) {
+ 			ssize_t read_len;
+ 			unsigned long len, padded_len;
+ 
+-- 
+2.11.0
