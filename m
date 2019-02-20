@@ -1,9 +1,8 @@
-From: Francis Deslauriers <francis.deslauriers@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Subject: Re: Tracepoints firing without being enabled in LTTng
-Date: Wed, 20 Feb 2019 09:27:55 -0500
-Message-ID: <CADcCL0g6-gLhR-=u69HWsdfLhUAsLQ3FcX8UdbMScGHLkAkJKw__25167.4629793101$1550672905$gmane$org@mail.gmail.com>
+Date: Wed, 20 Feb 2019 09:46:57 -0500 (EST)
+Message-ID: <1429830431.1895.1550674017298.JavaMail.zimbra__28656.8430646852$1550674044$gmane$org@efficios.com>
 References: <CAJyWpKEMbN8RHuGbODZYFiOff_pN08Zn4A=6dMEEe7C7h3nn1g@mail.gmail.com>
- <CADcCL0jBrNyhbVvpbhmLD_vZgi9bcgDUN5dAGpbf5JvuG9MDmw@mail.gmail.com>
  <CAJyWpKH2TWmCXhvtSaE-h+jKfmt8aKQ0MaYOr_TqQ0q+M1f_gw@mail.gmail.com>
  <CADcCL0hnLNyzOvfpBRW=TzDR9Ekckei5NGOqpAQ=rMUpGnRLEQ@mail.gmail.com>
  <CAJyWpKEgHDa2gPte2eTVg9UCo6RBOBKfPLg9XFUyVcVxMoj8tA@mail.gmail.com>
@@ -12,15 +11,12 @@ References: <CAJyWpKEMbN8RHuGbODZYFiOff_pN08Zn4A=6dMEEe7C7h3nn1g@mail.gmail.com>
  <CADcCL0ieGaTA4_=rxaLT2=LAuhQdJGfjM7HYg34eTo-Oo_JDYg@mail.gmail.com>
  <CAJyWpKG2mJJ-DnHLr1gRhrPw5Qsj=TT0j_5FCaQKv7t0qkqcdA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============6006033575858441240=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ot1-f66.google.com (mail-ot1-f66.google.com
- [209.85.210.66])
- by lists.lttng.org (Postfix) with ESMTPS id 444KhS0z8Gzg9j
- for <lttng-dev@lists.lttng.org>; Wed, 20 Feb 2019 09:28:07 -0500 (EST)
-Received: by mail-ot1-f66.google.com with SMTP id z19so40471210otm.2
- for <lttng-dev@lists.lttng.org>; Wed, 20 Feb 2019 06:28:07 -0800 (PST)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 444L6K3nX8zgC3
+ for <lttng-dev@lists.lttng.org>; Wed, 20 Feb 2019 09:47:05 -0500 (EST)
 In-Reply-To: <CAJyWpKG2mJJ-DnHLr1gRhrPw5Qsj=TT0j_5FCaQKv7t0qkqcdA@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -35,149 +31,599 @@ To: Mosleh Uddin <mosleh1235@gmail.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-TGUgbWVyLiAyMCBmw6l2ci4gMjAxOSwgw6AgMDkgaCAxMCwgTW9zbGVoIFVkZGluIDxtb3NsZWgx
-MjM1QGdtYWlsLmNvbT4gYSDDqWNyaXQgOgo+Cj4gSGVsbG8sCj4KPiBIZXJlIGlzIHdoYXQgSSBk
-byB0byBnZXQgdGhlIGNvbnNpc3RlbnQgYmVoYXZpb3I6Cj4gV2hlbiB0aGUgYXBwIGlzIHJ1bm5p
-bmcgYXMgYSBzZXJ2aWNlLCBsdHRuZyBsaXN0IC11IGRvZXMgbm90IGRpc3BsYXkgYW55IGV2ZW50
-cywgaW5pdGlhbGx5IEkgZG8gaGF2ZSB0byBsdHRuZyBlbmFibGUtZXZlbnRzIGFuZCBsdHRuZyBz
-dGFydCB0byBzZWUgdGhlIHRyYWNlcG9pbnRzIGluIGx0dG5nIHZpZXcuIEhvd2V2ZXIsIGFmdGVy
-IGx0dG5nIHN0YXJ0LCBJIGNhbiBkaXNhYmxlIGFsbCBldmVudHMgYW5kIEkgY2FuIHN0aWxsIHNl
-ZSB0aGUgZXZlbnRzIGNvbWluZyB0aHJvdWdoIGluIGx0dG5nIHZpZXcuIFdoZW4gSSBydW4gdGhl
-IGFwcCBub3JtYWxseSwgbHR0bmcgbGlzdCAtdSBkaXNwbGF5cyB0aGUgdHJhY2Vwb2ludHMgSSBw
-bGFjZSBpbiB0aGUgYXBwLCBhbmQgYWxsIGZ1bmN0aW9uYWxpdHkgb2YgbHR0bmcgd29ya3MgYXMg
-ZXhwZWN0ZWQuCj4KPiBJIGFwb2xvZ2l6ZSwgSSBhbSBpbiB0aGUgcHJvY2VzcyBvZiB0cnlpbmcg
-dG8gZ2V0IHlvdSB0aGUgb3V0cHV0cyB5b3UgYXJlIGFza2luZyBmb3IsIGhvd2V2ZXIgZHVlIHRv
-IGNvbmZpZGVudGlhbGl0eSB3aXRoIHRoZSBhcHAgdGhlIG91dHB1dHMgb2YgcnVubmluZyB0aGUg
-Y29tbWFuZHMgbmVlZCB0byBiZSByZXZpZXdlZCBieSBvdGhlcnMuIEkgd2lsbCB0cnkgdG8gZ2V0
-IHRoaXMgdG8geW91IGFzIHNvb24gYXMgSSBjYW4uCkkgdW5kZXJzdGFuZC4KClRoYW5rcywKRnJh
-bmNpcwo+Cj4gSSBjYW4gc2F5IHRoZSBzZXJ2aWNlIGlzIGJlaW5nIGtpY2sgc3RhcnRlZCBieSBz
-eXN0ZW1kLiBBbHNvIEkgYmVsaWV2ZSB0aGUgYXBwIGlzIG1hc3MtY2xvc2luZyBmaWxlIGRlc2Ny
-aXB0b3JzIHdoZW4gaXQgaXMgZGFlbW9uaXppbmcuIEkgdHJpZWQgdG8gZHluYW1pY2FsbHkgbG9h
-ZCB0aGUgbGlibHR0bmctdXN0LWZkLnNvIGJ1dCB0aGUgYmVoYXZpb3IgZGlkIG5vdCBjaGFuZ2Uu
-Cj4KPiBUaGFua3MsCj4gTW9zbGVoCj4KPiBPbiBUdWUsIEZlYiAxOSwgMjAxOSBhdCA1OjE2IFBN
-IEZyYW5jaXMgRGVzbGF1cmllcnMgPGZyYW5jaXMuZGVzbGF1cmllcnNAZWZmaWNpb3MuY29tPiB3
-cm90ZToKPj4KPj4gSGkgTW9zbGVoLAo+PiBKdXN0IHRvIGJlIGNsZWFyOgo+PiBXaGVuIHlvdSBy
-dW4geW91ciBhcHAgYXMgYSBzZXJ2aWNlIChiYWNrZ3JvdW5kKSwgbHR0bmcgbGlzdCAtdSBkb2Vz
-bid0Cj4+IGRpc3BsYXkgYW55IGV2ZW50cyBBTkQgeW91IHNlZSBldmVudHMgaW4gdGhlIGxpdmUg
-c2Vzc2lvbiB3aXRob3V0Cj4+IGhhdmluZyBydW4gZW5hYmxlLWV2ZW50IGFuZCBzdGFydCBjb21t
-YW5kcy4KPj4gV2hlbiB5b3UgcnVuIHlvdXIgYXBwIG5vcm1hbGx5LCBsdHRuZyBsaXN0IC11IGRp
-c3BsYXlzIGV2ZW50cyBBTkQgeW91Cj4+IG9ubHkgc2VlIGV2ZW50cyBhZnRlciBydW5uaW5nIGVu
-YWJsZS1ldmVudCBhbmQgc3RhcnQgY29tbWFuZHMuCj4+IElzIHRoYXQgY29ycmVjdD8KPj4KPj4g
-UGxlYXNlIHByb3ZpZGUgdGhlIG91dHB1dCBvZiB0aGUgbHR0bmctc2Vzc2lvbmQgaW4gdmVyYm9z
-ZSBtb2RlIHVzaW5nCj4+IHRoZSBmb2xsb3dpbmcgY29tbWFuZDoKPj4gPiBsdHRuZy1zZXNzaW9u
-ZCAtdnZ2Cj4+IHBsZWFzZSBwcm92aWRlIHRoZSBvdXRwdXQgb2YgeW91ciBhcHBsaWNhdGlvbiBh
-cyBhIHNlcnZpY2Ugd2l0aCB0aGlzCj4+IGVudmlyb25tZW50IHZhcmlhYmxlOiAgTFRUTkdfVVNU
-X0RFQlVHPTEKPj4gYW5kIHBsZWFzZSBwcm92aWRlIHVzIHdpdGggdGhlIHNlcnZpY2UgZmlsZSBk
-ZXNjcmliaW5nIGhvdyB5b3VyCj4+IHNlcnZpY2UgaXMgc3RhcnRlZC4KPj4gUHV0IGFsbCBvZiB0
-aGlzIG9uIGEgcGFzdGViaW4uY29tCj4+Cj4+IElzIHlvdXIgYXBwbGljYXRpb24gbWFzcy1jbG9z
-aW5nIGZpbGUgZGVzY3JpcHRvcnMgd2hlbiBpdCdzCj4+IGRhZW1vbml6aW5nPyBob3cgYWJvdXQg
-dXNpbmcgZm9yaygpIHN5c2NhbGwgd2l0aG91dCBhbiBleGVjKCkgYWZ0ZXIKPj4gaXQ/IElmIHNv
-LCBoYXZlIGEgbG9vayBhdCB0aGlzIHBhcnQgb2YgdGhlIFVTVCBtYW4gcGFnZToKPj4gaHR0cHM6
-Ly9sdHRuZy5vcmcvbWFuLzMvbHR0bmctdXN0L3YyLjEwLyNkb2MtX3VzaW5nX2x0dG5nX3VzdF93
-aXRoX2RhZW1vbnMKPj4KPj4gVGhhbmsgeW91LAo+PiBGcmFuY2lzCj4+Cj4+Cj4+IExlIG1hci4g
-MTkgZsOpdnIuIDIwMTksIMOgIDE2IGggMzcsIE1vc2xlaCBVZGRpbiA8bW9zbGVoMTIzNUBnbWFp
-bC5jb20+IGEgw6ljcml0IDoKPj4gPgo+PiA+IEhlbGxvLAo+PiA+Cj4+ID4gU29ycnkgZm9yIHRo
-ZSBsYXRlIHJlcGx5LiBJIHdhcyBhYmxlIHRvIGZpZ3VyZSBvdXQgdGhlIHdlaXJkIGJlaGF2aW9y
-IGZyb20gdGhlIGFwcGxpY2F0aW9uLiBUdXJucyBvdXQgaWYgSSBydW4gbXkgYXBwbGljYXRpb24g
-YXMgYSBzZXJ2aWNlLCAgbHR0bmcgbm8gbG9uZ2VyIGNhbiBzZWUgYW55IG9mIHRoZSBVU1QgdHJh
-Y2Vwb2ludHMgYW5kIGNhdXNlcyB0aGUgYmVoYXZpb3IgSSB3YXMgZXhwbGFpbmluZy4KPj4gPiBX
-aGVuIEkgZXhlY3V0ZSB0aGUgYXBwbGljYXRpb24gbm9ybWFsbHkgKC4vYXBwX25hbWUpLCB0aGUg
-ZnVuY3Rpb25hbGl0eSBpcyBhcyBleHBlY3RlZC4gSXMgdGhpcyB0aGUgZXhwZWN0ZWQgYmVoYXZp
-b3I/IElzIHRoZXJlIHNvbWUgd2F5IEkgY2FuIHRyYWNlIHRoZSB1c2Vyc3BhY2UgYXBwbGljYXRp
-b24gd2hpbGUgcnVubmluZyBpdCBhcyBhIHNlcnZpY2Ugc2ltdWx0YW5lb3VzbHk/Cj4+ID4KPj4g
-PiBUaGFua3MgZm9yIGFueSBpbmZvLAo+PiA+IE1vc2xlaAo+PiA+Cj4+ID4gT24gRnJpLCBGZWIg
-MTUsIDIwMTkgYXQgMjo0OCBQTSBGcmFuY2lzIERlc2xhdXJpZXJzIDxmcmFuY2lzLmRlc2xhdXJp
-ZXJzQGVmZmljaW9zLmNvbT4gd3JvdGU6Cj4+ID4+Cj4+ID4+IENhbiB5b3Ugc3RhcnQgdGhlIGx0
-dG5nLXNlc3Npb25kIGluIHZlcmJvc2UgbW9kZSB1c2luZyB0aGUgZm9sbG93aW5nIGNvbW1hbmQ6
-Cj4+ID4+ID4gbHR0bmctc2Vzc2lvbmQgLXZ2dgo+PiA+PiBhbmQgdGhlbiBkbyB0aGUgbHR0bmcg
-Y3JlYXRlLCBzdGFydCBvZiBhcHBsaWNhdGlvbiBhbmQgbHR0bmcgdmlldyBvbiBhbm90aGVyIGNv
-bnNvbGUuCj4+ID4+Cj4+ID4+IFRoZW4gY29weSB0aGUgb3V0cHV0IG9mIHRoZSBzZXNzaW9uZCBv
-biBodHRwczovL3Bhc3RlYmluLmNvbS8gYW5kIHNlbmQgdXMgdGhlIGxpbmsuCj4+ID4+Cj4+ID4+
-IFRoYW5rIHlvdSwKPj4gPj4gRnJhbmNpcwo+PiA+Pgo+PiA+PiBMZSB2ZW4uIDE1IGbDqXZyLiAy
-MDE5LCDDoCAxNCBoIDM2LCBNb3NsZWggVWRkaW4gPG1vc2xlaDEyMzVAZ21haWwuY29tPiBhIMOp
-Y3JpdCA6Cj4+ID4+Pgo+PiA+Pj4gVGhhdCdzIGNvcnJlY3QsIEkgZG9uJ3QgZW5hYmxlIGFueSBl
-dmVudHMgb3IgZG86IGx0dG5nIHN0YXJ0Lgo+PiA+Pj4gSGVyZSBpcyBzb21lIHNuYXBzaG90cyBv
-ZiBzdGFydGluZyBldmVyeXRoaW5nIHVwLCBmb2xsb3dlZCBieSBzdGFydGluZyBteSBhcHBsaWNh
-dGlvbi4KPj4gPj4+Cj4+ID4+Pgo+PiA+Pj4gSGVyZSBhcmUgdGhlIG91dHB1dHMgZm9yIHRoZSBj
-b21tYW5kczoKPj4gPj4+Cj4+ID4+Pgo+PiA+Pj4KPj4gPj4+Cj4+ID4+Pgo+PiA+Pj4KPj4gPj4+
-Cj4+ID4+PiBOb3RlIHRoYXQgZXZlbiB0aG91Z2ggdGhlIHNlc3Npb24gaXMgaW5hY3RpdmUsIHdo
-ZW4gYSB0cmFjZSBldmVudCBvY2N1cnMgaW4gbXkgYXBwbGljYXRpb24gaXQgaXMgYmVpbmcgcmVj
-b3JkZWQgaW4gdGhlIGFwcHJvcHJpYXRlIGRpcmVjdG9yeToKPj4gPj4+Cj4+ID4+Pgo+PiA+Pj4K
-Pj4gPj4+IEFsc28gbWF5YmUgaW1wb3J0YW50LCB0aGUgc3lzdGVtIGhhcyByb290IG9ubHkgdXNl
-ci4gV291bGQgaGF2aW5nIHRoZSBhcHBsaWNhdGlvbiBiZWxvbmdpbmcgdG8gYSBkaWZmZXJlbnQg
-dXNlciBhbmQgdHJ5aW5nIHRvIHJ1biBhcyByb290IGNhdXNlIHRoZXNlIGtpbmRzIG9mIGNvbXBs
-aWNhdGlvbnM/IEkgZGlkIG5vdGljZSB3aGVuIHRlc3Rpbmcgb24gYSByYXNwYmVycnkgcGkgdGhh
-dCBydW5uaW5nIGFuIGFwcGxpY2F0aW9uIGFzIGEgcm9vdCB1c2VyIHdvdWxkIG1lYW4gcnVubmlu
-ZyBzZXNzaW9ucyBhcyByb290IHVzZXIgYXMgd2VsbC4KPj4gPj4+Cj4+ID4+PiBUaGFua3MsCj4+
-ID4+PiBNb3NsZWgKPj4gPj4+Cj4+ID4+PiBPbiBGcmksIEZlYiAxNSwgMjAxOSBhdCAxMTo1NSBB
-TSBGcmFuY2lzIERlc2xhdXJpZXJzIDxmcmFuY2lzLmRlc2xhdXJpZXJzQGVmZmljaW9zLmNvbT4g
-d3JvdGU6Cj4+ID4+Pj4KPj4gPj4+PiBBZGRpbmcgYmFjayBsdHRuZy1kZXYgbWFpbGluZyBsaXN0
-Lgo+PiA+Pj4+Cj4+ID4+Pj4gU28geW91IGRvbid0IGV2ZW4gcnVuIGEgbHR0bmctZW5hYmxlLWV2
-ZW50IGNvbW1hbmQ/Cj4+ID4+Pj4gVGhhdCdzIG9kZC4KPj4gPj4+Pgo+PiA+Pj4+IENhbiB5b3Ug
-c2VuZCB1cyB0aGUgb3V0cHV0IG9mIHRoZSBmb2xsb3dpbmcgY29tbWFuZHM6Cj4+ID4+Pj4gSXMg
-aXQgcG9zc2libGUgdGhhdCB0aGVyZSBhcmUgb3RoZXIgbHR0bmctc2Vzc2lvbmQgZGFlbW9ucyBy
-dW5uaW5nIG9uCj4+ID4+Pj4gdGhlIG1hY2hpbmU/Cj4+ID4+Pj4gPiBwcyBhdXggfCBncmVwICJs
-dHRuZy1zZXNzaW9uZCIKPj4gPj4+PiBWZXJpZnkgaWYgdGhlcmUgYXJlIG90aGVyIGFjdGl2ZSB0
-cmFjaW5nIHNlc3Npb25zOgo+PiA+Pj4+ID4gbHR0bmcgbGlzdAo+PiA+Pj4+IENoZWNrIHRoZSBk
-ZXRhaWxzIG9mIHRoZSBjdXJyZW50IHNlc3Npb246Cj4+ID4+Pj4gPiBsdHRuZyBzdGF0dXMKPj4g
-Pj4+Pgo+PiA+Pj4+IFRoYW5rIHlvdSwKPj4gPj4+PiBGcmFuY2lzCj4+ID4+Pj4KPj4gPj4+PiBM
-ZSB2ZW4uIDE1IGbDqXZyLiAyMDE5LCDDoCAxMSBoIDI5LCBNb3NsZWggVWRkaW4gPG1vc2xlaDEy
-MzVAZ21haWwuY29tPiBhIMOpY3JpdCA6Cj4+ID4+Pj4gPgo+PiA+Pj4+ID4gSGkgRnJhbmNpcywK
-Pj4gPj4+PiA+Cj4+ID4+Pj4gPiBUaGFuayB5b3UgZm9yIHRoZSBxdWljayByZXNwb25zZS4KPj4g
-Pj4+PiA+IEp1c3QgdG8gY2xlYXIgdGhpbmdzIHVwLCBteSBhcHBsaWNhdGlvbiBpcyBydW5uaW5n
-IHdoZW4gSSBydW4gdGhhdCBjb21tYW5kLgo+PiA+Pj4+ID4KPj4gPj4+PiA+IFRoZSBjb21tYW5k
-cyBJIGFtIHJ1bm5pbmcgYXJlOgo+PiA+Pj4+ID4gPiBsdHRuZy1zZXNzaW9uZCAtZAo+PiA+Pj4+
-ID4gPiBsdHRuZyBjcmVhdGUgbXktc2VzcyAtLWxpdmUKPj4gPj4+PiA+IEFmdGVyIHRoaXMgY29t
-bWFuZCBJIHN0YXJ0IG15IGFwcGxpY2F0aW9uLiBJZiBJIHRoZW4gZG8gdGhlIGNvbW1hbmQ6Cj4+
-ID4+Pj4gPiA+IGx0dG5nIHZpZXcKPj4gPj4+PiA+IEkgd2lsbCBzZWUgdGhlIHRyYWNlcG9pbnRz
-IGluIHRoZSBhcHBsaWNhdGlvbiBpbiB0aGUgdGVybWluYWwgZXZlbiB0aG91Z2ggSSBoYXZlIG5v
-dCBkb25lOiBsdHRuZyBzdGFydC4KPj4gPj4+PiA+Cj4+ID4+Pj4gPiBJIHRob3VnaHQgaXQgd2Fz
-IHN0cmFuZ2UgdGhhdCBJIGNhbm5vdCBmaW5kIG15IGFwcGxpY2F0aW9uIGluIHRoZTogbHR0bmcg
-bGlzdCBjb21tYW5kIHVuZGVyIGFueSBkb21haW4uCj4+ID4+Pj4gPiBBbHNvIHRoZSByZWFzb24g
-SSBzdGFydCBteSBhcHBsaWNhdGlvbiBhZnRlciBjcmVhdGluZyBhIHNlc3Npb24gaXMgYmVjYXVz
-ZSB0aGUgc3lzdGVtIGF1dG9tYXRpY2FsbHkgc3RhcnRzIHRoZSBhcHBsaWNhdGlvbiB1c2luZyBz
-eXN0ZW1kLAo+PiA+Pj4+ID4gaW4gb3JkZXIgdG8gZ2V0IHRyYWNpbmcgZGF0YSBhdCBhbGwgSSBo
-YXZlIHRvIG1hbnVhbGx5IHN0b3AgdGhlIGFwcGxpY2F0aW9uIGFuZCBzdGFydCBpdCBhZ2FpbiBh
-ZnRlciBjcmVhdGluZyBhIHNlc3Npb24uCj4+ID4+Pj4gPgo+PiA+Pj4+ID4gVGhhbmtzIGFnYWlu
-IGZvciBhbnkgaGVscCwKPj4gPj4+PiA+IE1vc2xlaAo+PiA+Pj4+ID4KPj4gPj4+PiA+IE9uIEZy
-aSwgRmViIDE1LCAyMDE5IGF0IDEwOjMyIEFNIEZyYW5jaXMgRGVzbGF1cmllcnMgPGZyYW5jaXMu
-ZGVzbGF1cmllcnNAZWZmaWNpb3MuY29tPiB3cm90ZToKPj4gPj4+PiA+Pgo+PiA+Pj4+ID4+IEhp
-IE1vc2xlaCwKPj4gPj4+PiA+PiBJdCdzIGV4cGVjdGVkIHRvIG5vdCBzZWUgYW55IGV2ZW50IHdo
-ZW4gcnVubmluZyBsdHRuZyBsaXN0IC11IGlmIG5vCj4+ID4+Pj4gPj4gbHR0bmctdXN0IGluc3Ry
-dW1lbnRlZCBhcHBsaWNhdGlvbnMgYXJlIHJ1bm5pbmcuCj4+ID4+Pj4gPj4KPj4gPj4+PiA+PiBX
-aGF0IGFyZSB0aGUgZXhhY3QgbHR0bmcgY29tbWFuZHMgeW91IGFyZSBydW5uaW5nIHRvIHNlZSB0
-aG9zZQo+PiA+Pj4+ID4+IHVuZXhwZWN0ZWQgZXZlbnRzPwo+PiA+Pj4+ID4+Cj4+ID4+Pj4gPj4g
-VGhhbmsgeW91LAo+PiA+Pj4+ID4+IEZyYW5jaXMKPj4gPj4+PiA+Pgo+PiA+Pj4+ID4+Cj4+ID4+
-Pj4gPj4gTGUgdmVuLiAxNSBmw6l2ci4gMjAxOSwgw6AgMTAgaCAwOCwgTW9zbGVoIFVkZGluIDxt
-b3NsZWgxMjM1QGdtYWlsLmNvbT4gYSDDqWNyaXQgOgo+PiA+Pj4+ID4+ID4KPj4gPj4+PiA+PiA+
-IEhlbGxvLAo+PiA+Pj4+ID4+ID4KPj4gPj4+PiA+PiA+IEkgYW0gaGF2aW5nIGEgc3RyYW5nZSBp
-c3N1ZSB3aXRoIG15IGN1cnJlbnQgYXBwbGljYXRpb24uIEZvciBzb21lIGNvbnRleHQsIEkgaGF2
-ZSBpbnRlZ3JhdGVkIExUVG5nIGludG8gYSBZb2N0byBidWlsZCBhbmQgcHV0IGN1c3RvbSB0cmFj
-ZSBwb2ludHMgaW4gbXkgZW1iZWRkZWQgc3lzdGVtIGFwcGxpY2F0aW9uLiBPbmNlIEkgbG9hZCB0
-aGUgYnVpbHQgaW1hZ2Ugb250byBteSBzeXN0ZW0gYW5kIHN0YXJ0IGEgc2Vzc2lvbiBkYWVtb24s
-IEkgdHJ5IHRvIGxpc3QgYWxsIGF2YWlsYWJsZSB1c2Vyc3BhY2UgZXZlbnRzICh1c2luZyBsdHRu
-ZyBsaXN0IC11KSwgYnV0IG5vIGV2ZW50cyBzaG93IHVwLgo+PiA+Pj4+ID4+ID4KPj4gPj4+PiA+
-PiA+IFRoZSBzdHJhbmdlIG9jY3VycmVuY2UgaXMgd2hlbiBJIGNyZWF0ZSBhIHNlc3Npb24gKGxs
-dG5nIGNyZWF0ZSBteS1zZXNzKSBhbmQgbm90IHN0YXJ0IHRyYWNpbmcgdGhlIHRyYWNlIGV2ZW50
-cyB3aWxsIGRpc3BsYXkgb24gdGhlIHNjcmVlbiByZWdhcmRsZXNzICh3aGVuIHN0YXJ0aW5nIHNl
-c3Npb24gaW4gbGl2ZSBtb2RlIHdpdGggbHR0bmcgdmlldykuIEkgd2FzIHdvbmRlcmluZyBpZiBh
-bnlvbmUgaGFzIGFueSBpbnNpZ2h0IG9uIHRoaXMgaXNzdWUgSSBhbSBoYXZpbmcuCj4+ID4+Pj4g
-Pj4gPgo+PiA+Pj4+ID4+ID4gVGhhbmtzIGZvciBhbnkgYXNzaXN0YW5jZSwKPj4gPj4+PiA+PiA+
-IE1vc2xlaAo+PiA+Pj4+ID4+ID4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KPj4gPj4+PiA+PiA+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPj4gPj4+PiA+
-PiA+IGx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKPj4gPj4+PiA+PiA+IGh0dHBzOi8vbGlzdHMu
-bHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYKPj4gPj4+PiA+Pgo+
-PiA+Pj4+ID4+IC0tCj4+ID4+Pj4gPj4gRnJhbmNpcyBEZXNsYXVyaWVycwo+PiA+Pj4+ID4+IENv
-bXB1dGVyIEVuZ2luZWVyCj4+ID4+Pj4gPj4gRWZmaWNpT1MgaW5jLgo+PiA+Pj4+Cj4+ID4+Pj4K
-Pj4gPj4+Pgo+PiA+Pj4+IC0tCj4+ID4+Pj4gRnJhbmNpcyBEZXNsYXVyaWVycwo+PiA+Pj4+IENv
-bXB1dGVyIEVuZ2luZWVyCj4+ID4+Pj4gRWZmaWNpT1MgaW5jLgo+PiA+Pj4KPj4gPj4+IF9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4+ID4+PiBsdHRuZy1k
-ZXYgbWFpbGluZyBsaXN0Cj4+ID4+PiBsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCj4+ID4+PiBo
-dHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGluZm8vbHR0bmctZGV2
-Cj4+ID4+Cj4+ID4+Cj4+ID4+Cj4+ID4+IC0tCj4+ID4+IEZyYW5jaXMgRGVzbGF1cmllcnMKPj4g
-Pj4gQ29tcHV0ZXIgRW5naW5lZXIKPj4gPj4gRWZmaWNpT1MgaW5jLgo+Pgo+Pgo+Pgo+PiAtLQo+
-PiBGcmFuY2lzIERlc2xhdXJpZXJzCj4+IENvbXB1dGVyIEVuZ2luZWVyCj4+IEVmZmljaU9TIGlu
-Yy4KCgoKLS0gCkZyYW5jaXMgRGVzbGF1cmllcnMKQ29tcHV0ZXIgRW5naW5lZXIKRWZmaWNpT1Mg
-aW5jLgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0
-cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+--===============6006033575858441240==
+Content-Type: multipart/alternative;
+	boundary="=_26d154aa-14be-41b2-9f66-5dfa1966c5ff"
+
+--=_26d154aa-14be-41b2-9f66-5dfa1966c5ff
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+----- On Feb 20, 2019, at 9:10 AM, Mosleh Uddin <mosleh1235@gmail.com> wrot=
+e:=20
+
+> Hello,
+> Here is what I do to get the consistent behavior:
+> When the app is running as a service, lttng list -u does not display any =
+events,
+> initially I do have to lttng enable-events and lttng start to see the
+> tracepoints in lttng view. However, after lttng start, I can disable all =
+events
+> and I can still see the events coming through in lttng view. When I run t=
+he app
+> normally, lttng list -u displays the tracepoints I place in the app, and =
+all
+> functionality of lttng works as expected.
+
+> I apologize, I am in the process of trying to get you the outputs you are=
+ asking
+> for, however due to confidentiality with the app the outputs of running t=
+he
+> commands need to be reviewed by others. I will try to get this to you as =
+soon
+> as I can.
+
+> I can say the service is being kick started by systemd. Also I believe th=
+e app
+> is mass-closing file descriptors when it is daemonizing. I tried to dynam=
+ically
+> load the liblttng-ust-fd.so but the behavior did not change.
+
+Did you load both liblttng-ust-fork.so and liblttng-ust-fd.so with LD_PRELO=
+AD when launching your application ?=20
+
+If not using LD_PRELOAD env. var., how did you load them ?=20
+
+Thanks,=20
+
+Mathieu=20
+
+> Thanks,
+> Mosleh
+
+> On Tue, Feb 19, 2019 at 5:16 PM Francis Deslauriers < [
+> mailto:francis.deslauriers@efficios.com | francis.deslauriers@efficios.co=
+m ] >
+> wrote:
+
+>> Hi Mosleh,
+>> Just to be clear:
+>> When you run your app as a service (background), lttng list -u doesn't
+>> display any events AND you see events in the live session without
+>> having run enable-event and start commands.
+>> When you run your app normally, lttng list -u displays events AND you
+>> only see events after running enable-event and start commands.
+>> Is that correct?
+
+>> Please provide the output of the lttng-sessiond in verbose mode using
+>> the following command:
+>> > lttng-sessiond -vvv
+>> please provide the output of your application as a service with this
+>> environment variable: LTTNG_UST_DEBUG=3D1
+>> and please provide us with the service file describing how your
+>> service is started.
+>> Put all of this on a [ http://pastebin.com/ | pastebin.com ]
+
+>> Is your application mass-closing file descriptors when it's
+>> daemonizing? how about using fork() syscall without an exec() after
+>> it? If so, have a look at this part of the UST man page:
+>> [ https://lttng.org/man/3/lttng-ust/v2.10/#doc-_using_lttng_ust_with_dae=
+mons |
+>> https://lttng.org/man/3/lttng-ust/v2.10/#doc-_using_lttng_ust_with_daemo=
+ns ]
+
+>> Thank you,
+>> Francis
+
+>> Le mar. 19 f=C3=A9vr. 2019, =C3=A0 16 h 37, Mosleh Uddin < [ mailto:mosl=
+eh1235@gmail.com |
+>> mosleh1235@gmail.com ] > a =C3=A9crit :
+
+>> > Hello,
+
+>>> Sorry for the late reply. I was able to figure out the weird behavior f=
+rom the
+>>> application. Turns out if I run my application as a service, lttng no l=
+onger
+>> > can see any of the UST tracepoints and causes the behavior I was expla=
+ining.
+>>> When I execute the application normally (./app_name), the functionality=
+ is as
+>>> expected. Is this the expected behavior? Is there some way I can trace =
+the
+>> > userspace application while running it as a service simultaneously?
+
+>> > Thanks for any info,
+>> > Mosleh
+
+>>> On Fri, Feb 15, 2019 at 2:48 PM Francis Deslauriers < [
+>>> mailto:francis.deslauriers@efficios.com | francis.deslauriers@efficios.=
+com ] >
+>> > wrote:
+
+>> >> Can you start the lttng-sessiond in verbose mode using the following =
+command:
+>> >> > lttng-sessiond -vvv
+>>>> and then do the lttng create, start of application and lttng view on a=
+nother
+>> >> console.
+
+>>>> Then copy the output of the sessiond on [ https://pastebin.com/ |
+>> >> https://pastebin.com/ ] and send us the link.
+
+>> >> Thank you,
+>> >> Francis
+
+>>>> Le ven. 15 f=C3=A9vr. 2019, =C3=A0 14 h 36, Mosleh Uddin < [ mailto:mo=
+sleh1235@gmail.com |
+>> >> mosleh1235@gmail.com ] > a =C3=A9crit :
+
+>> >>> That's correct, I don't enable any events or do: lttng start.
+>>>>> Here is some snapshots of starting everything up, followed by startin=
+g my
+>> >>> application.
+
+
+>> >>> Here are the outputs for the commands:
+
+
+
+
+
+
+
+>>>>> Note that even though the session is inactive, when a trace event occ=
+urs in my
+>> >>> application it is being recorded in the appropriate directory:
+
+
+
+>>>>> Also maybe important, the system has root only user. Would having the
+>>>>> application belonging to a different user and trying to run as root c=
+ause these
+>>>>> kinds of complications? I did notice when testing on a raspberry pi t=
+hat
+>>>>> running an application as a root user would mean running sessions as =
+root user
+>> >>> as well.
+
+>> >>> Thanks,
+>> >>> Mosleh
+
+>>>>> On Fri, Feb 15, 2019 at 11:55 AM Francis Deslauriers < [
+>>>>> mailto:francis.deslauriers@efficios.com | francis.deslauriers@efficio=
+s.com ] >
+>> >>> wrote:
+
+>> >>>> Adding back lttng-dev mailing list.
+
+>> >>>> So you don't even run a lttng-enable-event command?
+>> >>>> That's odd.
+
+>> >>>> Can you send us the output of the following commands:
+>> >>>> Is it possible that there are other lttng-sessiond daemons running =
+on
+>> >>>> the machine?
+>> >>>> > ps aux | grep "lttng-sessiond"
+>> >>>> Verify if there are other active tracing sessions:
+>> >>>> > lttng list
+>> >>>> Check the details of the current session:
+>> >>>> > lttng status
+
+>> >>>> Thank you,
+>> >>>> Francis
+
+>>>>>> Le ven. 15 f=C3=A9vr. 2019, =C3=A0 11 h 29, Mosleh Uddin < [ mailto:=
+mosleh1235@gmail.com |
+>> >>>> mosleh1235@gmail.com ] > a =C3=A9crit :
+
+>> >>>> > Hi Francis,
+
+>> >>>> > Thank you for the quick response.
+>> >>>> > Just to clear things up, my application is running when I run tha=
+t command.
+
+>> >>>> > The commands I am running are:
+>> >>>> > > lttng-sessiond -d
+>> >>>> > > lttng create my-sess --live
+>> >>>> > After this command I start my application. If I then do the comma=
+nd:
+>> >>>> > > lttng view
+>>>>>> > I will see the tracepoints in the application in the terminal even=
+ though I have
+>> >>>> > not done: lttng start.
+
+>>>>>> > I thought it was strange that I cannot find my application in the:=
+ lttng list
+>> >>>> > command under any domain.
+>>>>>> > Also the reason I start my application after creating a session is=
+ because the
+>> >>>> > system automatically starts the application using systemd,
+>>>>>> > in order to get tracing data at all I have to manually stop the ap=
+plication and
+>> >>>> > start it again after creating a session.
+
+>> >>>> > Thanks again for any help,
+>> >>>> > Mosleh
+
+>>>>>> > On Fri, Feb 15, 2019 at 10:32 AM Francis Deslauriers < [
+>>>>>> > mailto:francis.deslauriers@efficios.com | francis.deslauriers@effi=
+cios.com ] >
+>> >>>> > wrote:
+
+>> >>>> >> Hi Mosleh,
+>> >>>> >> It's expected to not see any event when running lttng list -u if=
+ no
+>> >>>> >> lttng-ust instrumented applications are running.
+
+>> >>>> >> What are the exact lttng commands you are running to see those
+>> >>>> >> unexpected events?
+
+>> >>>> >> Thank you,
+>> >>>> >> Francis
+
+
+>>>>>> >> Le ven. 15 f=C3=A9vr. 2019, =C3=A0 10 h 08, Mosleh Uddin < [ mail=
+to:mosleh1235@gmail.com |
+>> >>>> >> mosleh1235@gmail.com ] > a =C3=A9crit :
+
+>> >>>> >> > Hello,
+
+>>>>>> >> > I am having a strange issue with my current application. For so=
+me context, I
+>>>>>> >> > have integrated LTTng into a Yocto build and put custom trace p=
+oints in my
+>>>>>> >> > embedded system application. Once I load the built image onto m=
+y system and
+>>>>>> >> > start a session daemon, I try to list all available userspace e=
+vents (using
+>> >>>> >> > lttng list -u), but no events show up.
+
+>>>>>> >> > The strange occurrence is when I create a session (lltng create=
+ my-sess) and not
+>>>>>> >> > start tracing the trace events will display on the screen regar=
+dless (when
+>>>>>> >> > starting session in live mode with lttng view). I was wondering=
+ if anyone has
+>> >>>> >> > any insight on this issue I am having.
+
+>> >>>> >> > Thanks for any assistance,
+>> >>>> >> > Mosleh
+>> >>>> >> > _______________________________________________
+>> >>>> >> > lttng-dev mailing list
+>> >>>> >> > [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org=
+ ]
+>>>>>> >> > [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
+>> >>>> >> > https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
+
+>> >>>> >> --
+>> >>>> >> Francis Deslauriers
+>> >>>> >> Computer Engineer
+>> >>>> >> EfficiOS inc.
+
+
+
+>> >>>> --
+>> >>>> Francis Deslauriers
+>> >>>> Computer Engineer
+>> >>>> EfficiOS inc.
+
+>> >>> _______________________________________________
+>> >>> lttng-dev mailing list
+>> >>> [ mailto:lttng-dev@lists.lttng.org | lttng-dev@lists.lttng.org ]
+>>>>> [ https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev |
+>> >>> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev ]
+
+
+
+>> >> --
+>> >> Francis Deslauriers
+>> >> Computer Engineer
+>> >> EfficiOS inc.
+
+>> --
+>> Francis Deslauriers
+>> Computer Engineer
+>> EfficiOS inc.
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--=20
+Mathieu Desnoyers=20
+EfficiOS Inc.=20
+http://www.efficios.com=20
+
+--=_26d154aa-14be-41b2-9f66-5dfa1966c5ff
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><br></div><div><br></div><div><span id=3D"z=
+wchr" data-marker=3D"__DIVIDER__">----- On Feb 20, 2019, at 9:10 AM, Mosleh=
+ Uddin &lt;mosleh1235@gmail.com&gt; wrote:<br></span></div><div data-marker=
+=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;mar=
+gin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style:norm=
+al;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12=
+pt;"><div dir=3D"ltr">Hello,<br><div>Here is what I do to get the consisten=
+t behavior:</div><div>When the app is running as a service, lttng list -u d=
+oes not display any events, initially I do have to lttng enable-events and =
+lttng start to see the tracepoints in lttng view. However, after lttng star=
+t, I can disable all events and I can still see the events coming through i=
+n lttng view. When I run the app normally, lttng list -u displays the trace=
+points I place in the app, and all functionality of lttng works as expected=
+.</div><br><div>I apologize, I am in the process of trying to get you the o=
+utputs you are asking for, however due to confidentiality with the app the =
+outputs of running the commands need to be reviewed by others. I will try t=
+o get this to you as soon as I can.</div><br><div>I can say the service is =
+being kick started by systemd. Also I believe the app is mass-closing file =
+descriptors when it is daemonizing. I tried to dynamically load the liblttn=
+g-ust-fd.so but the behavior did not change.&nbsp;</div></div></blockquote>=
+<div><br></div><div>Did you load both liblttng-ust-fork.so and liblttng-ust=
+-fd.so with LD_PRELOAD when launching your application ?<br data-mce-bogus=
+=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>If not using LD_PRELO=
+AD env. var., how did you load them ?<br data-mce-bogus=3D"1"></div><div><b=
+r data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><di=
+v><br data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div=
+><div><br data-mce-bogus=3D"1"></div><blockquote style=3D"border-left:2px s=
+olid #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal=
+;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-se=
+rif;font-size:12pt;"><div dir=3D"ltr"><br><div>Thanks,</div><div>Mosleh</di=
+v></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr=
+">On Tue, Feb 19, 2019 at 5:16 PM Francis Deslauriers &lt;<a href=3D"mailto=
+:francis.deslauriers@efficios.com" target=3D"_blank">francis.deslauriers@ef=
+ficios.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex">Hi Mosleh,<br>
+Just to be clear:<br>
+When you run your app as a service (background), lttng list -u doesn't<br>
+display any events AND you see events in the live session without<br>
+having run enable-event and start commands.<br>
+When you run your app normally, lttng list -u displays events AND you<br>
+only see events after running enable-event and start commands.<br>
+Is that correct?<br>
+<br>
+Please provide the output of the lttng-sessiond in verbose mode using<br>
+the following command:<br>
+&gt; lttng-sessiond -vvv<br>
+please provide the output of your application as a service with this<br>
+environment variable:&nbsp; LTTNG_UST_DEBUG=3D1<br>
+and please provide us with the service file describing how your<br>
+service is started.<br>
+Put all of this on a <a href=3D"http://pastebin.com" rel=3D"noreferrer" tar=
+get=3D"_blank">pastebin.com</a><br>
+<br>
+Is your application mass-closing file descriptors when it's<br>
+daemonizing? how about using fork() syscall without an exec() after<br>
+it? If so, have a look at this part of the UST man page:<br>
+<a href=3D"https://lttng.org/man/3/lttng-ust/v2.10/#doc-_using_lttng_ust_wi=
+th_daemons" rel=3D"noreferrer" target=3D"_blank">https://lttng.org/man/3/lt=
+tng-ust/v2.10/#doc-_using_lttng_ust_with_daemons</a><br>
+<br>
+Thank you,<br>
+Francis<br>
+<br>
+<br>
+Le mar. 19 f=C3=A9vr. 2019, =C3=A0 16 h 37, Mosleh Uddin &lt;<a href=3D"mai=
+lto:mosleh1235@gmail.com" target=3D"_blank">mosleh1235@gmail.com</a>&gt; a =
+=C3=A9crit :<br>
+&gt;<br>
+&gt; Hello,<br>
+&gt;<br>
+&gt; Sorry for the late reply. I was able to figure out the weird behavior =
+from the application. Turns out if I run my application as a service,&nbsp;=
+ lttng no longer can see any of the UST tracepoints and causes the behavior=
+ I was explaining.<br>
+&gt; When I execute the application normally (./app_name), the functionalit=
+y is as expected. Is this the expected behavior? Is there some way I can tr=
+ace the userspace application while running it as a service simultaneously?=
+<br>
+&gt;<br>
+&gt; Thanks for any info,<br>
+&gt; Mosleh<br>
+&gt;<br>
+&gt; On Fri, Feb 15, 2019 at 2:48 PM Francis Deslauriers &lt;<a href=3D"mai=
+lto:francis.deslauriers@efficios.com" target=3D"_blank">francis.deslauriers=
+@efficios.com</a>&gt; wrote:<br>
+&gt;&gt;<br>
+&gt;&gt; Can you start the lttng-sessiond in verbose mode using the followi=
+ng command:<br>
+&gt;&gt; &gt; lttng-sessiond -vvv<br>
+&gt;&gt; and then do the lttng create, start of application and lttng view =
+on another console.<br>
+&gt;&gt;<br>
+&gt;&gt; Then copy the output of the sessiond on <a href=3D"https://pastebi=
+n.com/" rel=3D"noreferrer" target=3D"_blank">https://pastebin.com/</a> and =
+send us the link.<br>
+&gt;&gt;<br>
+&gt;&gt; Thank you,<br>
+&gt;&gt; Francis<br>
+&gt;&gt;<br>
+&gt;&gt; Le ven. 15 f=C3=A9vr. 2019, =C3=A0 14 h 36, Mosleh Uddin &lt;<a hr=
+ef=3D"mailto:mosleh1235@gmail.com" target=3D"_blank">mosleh1235@gmail.com</=
+a>&gt; a =C3=A9crit :<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; That's correct, I don't enable any events or do: lttng start.<=
+br>
+&gt;&gt;&gt; Here is some snapshots of starting everything up, followed by =
+starting my application.<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; Here are the outputs for the commands:<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; Note that even though the session is inactive, when a trace ev=
+ent occurs in my application it is being recorded in the appropriate direct=
+ory:<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; Also maybe important, the system has root only user. Would hav=
+ing the application belonging to a different user and trying to run as root=
+ cause these kinds of complications? I did notice when testing on a raspber=
+ry pi that running an application as a root user would mean running session=
+s as root user as well.<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; Thanks,<br>
+&gt;&gt;&gt; Mosleh<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; On Fri, Feb 15, 2019 at 11:55 AM Francis Deslauriers &lt;<a hr=
+ef=3D"mailto:francis.deslauriers@efficios.com" target=3D"_blank">francis.de=
+slauriers@efficios.com</a>&gt; wrote:<br>
+&gt;&gt;&gt;&gt;<br>
+&gt;&gt;&gt;&gt; Adding back lttng-dev mailing list.<br>
+&gt;&gt;&gt;&gt;<br>
+&gt;&gt;&gt;&gt; So you don't even run a lttng-enable-event command?<br>
+&gt;&gt;&gt;&gt; That's odd.<br>
+&gt;&gt;&gt;&gt;<br>
+&gt;&gt;&gt;&gt; Can you send us the output of the following commands:<br>
+&gt;&gt;&gt;&gt; Is it possible that there are other lttng-sessiond daemons=
+ running on<br>
+&gt;&gt;&gt;&gt; the machine?<br>
+&gt;&gt;&gt;&gt; &gt; ps aux | grep "lttng-sessiond"<br>
+&gt;&gt;&gt;&gt; Verify if there are other active tracing sessions:<br>
+&gt;&gt;&gt;&gt; &gt; lttng list<br>
+&gt;&gt;&gt;&gt; Check the details of the current session:<br>
+&gt;&gt;&gt;&gt; &gt; lttng status<br>
+&gt;&gt;&gt;&gt;<br>
+&gt;&gt;&gt;&gt; Thank you,<br>
+&gt;&gt;&gt;&gt; Francis<br>
+&gt;&gt;&gt;&gt;<br>
+&gt;&gt;&gt;&gt; Le ven. 15 f=C3=A9vr. 2019, =C3=A0 11 h 29, Mosleh Uddin &=
+lt;<a href=3D"mailto:mosleh1235@gmail.com" target=3D"_blank">mosleh1235@gma=
+il.com</a>&gt; a =C3=A9crit :<br>
+&gt;&gt;&gt;&gt; &gt;<br>
+&gt;&gt;&gt;&gt; &gt; Hi Francis,<br>
+&gt;&gt;&gt;&gt; &gt;<br>
+&gt;&gt;&gt;&gt; &gt; Thank you for the quick response.<br>
+&gt;&gt;&gt;&gt; &gt; Just to clear things up, my application is running wh=
+en I run that command.<br>
+&gt;&gt;&gt;&gt; &gt;<br>
+&gt;&gt;&gt;&gt; &gt; The commands I am running are:<br>
+&gt;&gt;&gt;&gt; &gt; &gt; lttng-sessiond -d<br>
+&gt;&gt;&gt;&gt; &gt; &gt; lttng create my-sess --live<br>
+&gt;&gt;&gt;&gt; &gt; After this command I start my application. If I then =
+do the command:<br>
+&gt;&gt;&gt;&gt; &gt; &gt; lttng view<br>
+&gt;&gt;&gt;&gt; &gt; I will see the tracepoints in the application in the =
+terminal even though I have not done: lttng start.<br>
+&gt;&gt;&gt;&gt; &gt;<br>
+&gt;&gt;&gt;&gt; &gt; I thought it was strange that I cannot find my applic=
+ation in the: lttng list command under any domain.<br>
+&gt;&gt;&gt;&gt; &gt; Also the reason I start my application after creating=
+ a session is because the system automatically starts the application using=
+ systemd,<br>
+&gt;&gt;&gt;&gt; &gt; in order to get tracing data at all I have to manuall=
+y stop the application and start it again after creating a session.<br>
+&gt;&gt;&gt;&gt; &gt;<br>
+&gt;&gt;&gt;&gt; &gt; Thanks again for any help,<br>
+&gt;&gt;&gt;&gt; &gt; Mosleh<br>
+&gt;&gt;&gt;&gt; &gt;<br>
+&gt;&gt;&gt;&gt; &gt; On Fri, Feb 15, 2019 at 10:32 AM Francis Deslauriers =
+&lt;<a href=3D"mailto:francis.deslauriers@efficios.com" target=3D"_blank">f=
+rancis.deslauriers@efficios.com</a>&gt; wrote:<br>
+&gt;&gt;&gt;&gt; &gt;&gt;<br>
+&gt;&gt;&gt;&gt; &gt;&gt; Hi Mosleh,<br>
+&gt;&gt;&gt;&gt; &gt;&gt; It's expected to not see any event when running l=
+ttng list -u if no<br>
+&gt;&gt;&gt;&gt; &gt;&gt; lttng-ust instrumented applications are running.<=
+br>
+&gt;&gt;&gt;&gt; &gt;&gt;<br>
+&gt;&gt;&gt;&gt; &gt;&gt; What are the exact lttng commands you are running=
+ to see those<br>
+&gt;&gt;&gt;&gt; &gt;&gt; unexpected events?<br>
+&gt;&gt;&gt;&gt; &gt;&gt;<br>
+&gt;&gt;&gt;&gt; &gt;&gt; Thank you,<br>
+&gt;&gt;&gt;&gt; &gt;&gt; Francis<br>
+&gt;&gt;&gt;&gt; &gt;&gt;<br>
+&gt;&gt;&gt;&gt; &gt;&gt;<br>
+&gt;&gt;&gt;&gt; &gt;&gt; Le ven. 15 f=C3=A9vr. 2019, =C3=A0 10 h 08, Mosle=
+h Uddin &lt;<a href=3D"mailto:mosleh1235@gmail.com" target=3D"_blank">mosle=
+h1235@gmail.com</a>&gt; a =C3=A9crit :<br>
+&gt;&gt;&gt;&gt; &gt;&gt; &gt;<br>
+&gt;&gt;&gt;&gt; &gt;&gt; &gt; Hello,<br>
+&gt;&gt;&gt;&gt; &gt;&gt; &gt;<br>
+&gt;&gt;&gt;&gt; &gt;&gt; &gt; I am having a strange issue with my current =
+application. For some context, I have integrated LTTng into a Yocto build a=
+nd put custom trace points in my embedded system application. Once I load t=
+he built image onto my system and start a session daemon, I try to list all=
+ available userspace events (using lttng list -u), but no events show up.<b=
+r>
+&gt;&gt;&gt;&gt; &gt;&gt; &gt;<br>
+&gt;&gt;&gt;&gt; &gt;&gt; &gt; The strange occurrence is when I create a se=
+ssion (lltng create my-sess) and not start tracing the trace events will di=
+splay on the screen regardless (when starting session in live mode with ltt=
+ng view). I was wondering if anyone has any insight on this issue I am havi=
+ng.<br>
+&gt;&gt;&gt;&gt; &gt;&gt; &gt;<br>
+&gt;&gt;&gt;&gt; &gt;&gt; &gt; Thanks for any assistance,<br>
+&gt;&gt;&gt;&gt; &gt;&gt; &gt; Mosleh<br>
+&gt;&gt;&gt;&gt; &gt;&gt; &gt; ____________________________________________=
+___<br>
+&gt;&gt;&gt;&gt; &gt;&gt; &gt; lttng-dev mailing list<br>
+&gt;&gt;&gt;&gt; &gt;&gt; &gt; <a href=3D"mailto:lttng-dev@lists.lttng.org"=
+ target=3D"_blank">lttng-dev@lists.lttng.org</a><br>
+&gt;&gt;&gt;&gt; &gt;&gt; &gt; <a href=3D"https://lists.lttng.org/cgi-bin/m=
+ailman/listinfo/lttng-dev" rel=3D"noreferrer" target=3D"_blank">https://lis=
+ts.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a><br>
+&gt;&gt;&gt;&gt; &gt;&gt;<br>
+&gt;&gt;&gt;&gt; &gt;&gt; --<br>
+&gt;&gt;&gt;&gt; &gt;&gt; Francis Deslauriers<br>
+&gt;&gt;&gt;&gt; &gt;&gt; Computer Engineer<br>
+&gt;&gt;&gt;&gt; &gt;&gt; EfficiOS inc.<br>
+&gt;&gt;&gt;&gt;<br>
+&gt;&gt;&gt;&gt;<br>
+&gt;&gt;&gt;&gt;<br>
+&gt;&gt;&gt;&gt; --<br>
+&gt;&gt;&gt;&gt; Francis Deslauriers<br>
+&gt;&gt;&gt;&gt; Computer Engineer<br>
+&gt;&gt;&gt;&gt; EfficiOS inc.<br>
+&gt;&gt;&gt;<br>
+&gt;&gt;&gt; _______________________________________________<br>
+&gt;&gt;&gt; lttng-dev mailing list<br>
+&gt;&gt;&gt; <a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank"=
+>lttng-dev@lists.lttng.org</a><br>
+&gt;&gt;&gt; <a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lt=
+tng-dev" rel=3D"noreferrer" target=3D"_blank">https://lists.lttng.org/cgi-b=
+in/mailman/listinfo/lttng-dev</a><br>
+&gt;&gt;<br>
+&gt;&gt;<br>
+&gt;&gt;<br>
+&gt;&gt; --<br>
+&gt;&gt; Francis Deslauriers<br>
+&gt;&gt; Computer Engineer<br>
+&gt;&gt; EfficiOS inc.<br>
+<br>
+<br>
+<br>
+-- <br>
+Francis Deslauriers<br>
+Computer Engineer<br>
+EfficiOS inc.<br>
+</blockquote></div>
+<br>_______________________________________________<br>lttng-dev mailing li=
+st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
+listinfo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D=
+"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http=
+://www.efficios.com</div></div></body></html>
+--=_26d154aa-14be-41b2-9f66-5dfa1966c5ff--
+
+--===============6006033575858441240==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============6006033575858441240==--
