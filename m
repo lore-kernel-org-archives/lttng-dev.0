@@ -1,18 +1,16 @@
-From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [PATCH lttng-tools v3 2/2] Enforce DL_LIBS value
- instead of hard coded -ldl
-Date: Fri, 22 Feb 2019 14:33:38 -0500
-Message-ID: <20190222193338.7240-2-ylamarre__41979.7685391799$1550864071$gmane$org@efficios.com>
-References: <20190222193338.7240-1-ylamarre@efficios.com>
+From: RAJAN GUPTA via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Babel-trace exit with 0(Zero)
+Date: Wed, 27 Feb 2019 11:57:19 +0000 (UTC)
+Message-ID: <925694812.5908095.1551268639884__41017.0080767543$1551277164$gmane$org@mail.yahoo.com>
+References: <925694812.5908095.1551268639884.ref@mail.yahoo.com>
+Reply-To: RAJAN GUPTA <rajangpt58@yahoo.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7877582375562279080=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 445hNJ6llKzh4G
- for <lttng-dev@lists.lttng.org>; Fri, 22 Feb 2019 14:33:52 -0500 (EST)
-In-Reply-To: <20190222193338.7240-1-ylamarre@efficios.com>
+Received: from sonic311-3.consmr.mail.sg3.yahoo.com
+ (sonic311-3.consmr.mail.sg3.yahoo.com [106.10.244.180])
+ by lists.lttng.org (Postfix) with ESMTP id 448Zyb6FBrzgDW
+ for <lttng-dev@lists.lttng.org>; Wed, 27 Feb 2019 07:40:07 -0500 (EST)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,72 +20,41 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Generated makefiles would ignore DL_LIBS value selected by configure
-script and use the hard coded value -ldl. Generated makefiles will
-now use DL_LIBS.
+--===============7877582375562279080==
+Content-Type: multipart/alternative;
+	boundary="----=_Part_5908094_1419357637.1551268639883"
 
-Refs: #1165
+------=_Part_5908094_1419357637.1551268639883
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
----
- src/common/testpoint/Makefile.am                           | 2 +-
- tests/regression/ust/baddr-statedump/Makefile.am           | 2 +-
- tests/regression/ust/ust-dl/Makefile.am                    | 2 +-
- tests/utils/testapp/userspace-probe-sdt-binary/Makefile.am | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+Hi,
+We are using Lttng version 2.10.3 to stream and capture trace and error log=
+s form node in live mode. Once session is created and streaming starts on n=
+ode, suddenly babel-trace exit with code 0(Zero) and restart. This happens =
+in a silent loop until we kill the lttng process.Is this a known issue and =
+if so is it going to be addresses in future versions of lttng or yet to be =
+fixed ?Any help will be appreciated.Thanks in advance.
+Regards,Rajan Gupta=C2=A0
+------=_Part_5908094_1419357637.1551268639883
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-diff --git a/src/common/testpoint/Makefile.am b/src/common/testpoint/Makefile.am
-index 5c15725e..a2f9d407 100644
---- a/src/common/testpoint/Makefile.am
-+++ b/src/common/testpoint/Makefile.am
-@@ -1,4 +1,4 @@
- noinst_LTLIBRARIES = libtestpoint.la
- 
- libtestpoint_la_SOURCES = testpoint.h testpoint.c
--libtestpoint_la_LIBADD = -ldl
-+libtestpoint_la_LIBADD = $(DL_LIBS)
-diff --git a/tests/regression/ust/baddr-statedump/Makefile.am b/tests/regression/ust/baddr-statedump/Makefile.am
-index bf327179..bf51f948 100644
---- a/tests/regression/ust/baddr-statedump/Makefile.am
-+++ b/tests/regression/ust/baddr-statedump/Makefile.am
-@@ -6,7 +6,7 @@ AM_CPPFLAGS += -I$(srcdir) -g
- 
- noinst_PROGRAMS = prog
- prog_SOURCES = prog.c tp.c tp.h
--prog_LDADD = -llttng-ust -ldl
-+prog_LDADD = -llttng-ust $(DL_LIBS)
- 
- noinst_SCRIPTS = test_baddr-statedump test_baddr-statedump.py
- EXTRA_DIST = test_baddr-statedump test_baddr-statedump.py
-diff --git a/tests/regression/ust/ust-dl/Makefile.am b/tests/regression/ust/ust-dl/Makefile.am
-index 9889e85a..c51e072f 100644
---- a/tests/regression/ust/ust-dl/Makefile.am
-+++ b/tests/regression/ust/ust-dl/Makefile.am
-@@ -19,7 +19,7 @@ AM_CPPFLAGS += -I$(srcdir) -g
- 
- noinst_PROGRAMS = prog
- prog_SOURCES = prog.c
--prog_LDADD = -ldl
-+prog_LDADD = $(DL_LIBS)
- 
- noinst_LTLIBRARIES = libzzz.la libbar.la libfoo.la libtp.la
- 
-diff --git a/tests/utils/testapp/userspace-probe-sdt-binary/Makefile.am b/tests/utils/testapp/userspace-probe-sdt-binary/Makefile.am
-index e86939b4..d79ce0ea 100644
---- a/tests/utils/testapp/userspace-probe-sdt-binary/Makefile.am
-+++ b/tests/utils/testapp/userspace-probe-sdt-binary/Makefile.am
-@@ -3,7 +3,7 @@ BUILT_SOURCES = foobar_provider.h
- 
- noinst_PROGRAMS = userspace-probe-sdt-binary
- userspace_probe_sdt_binary_SOURCES = userspace-probe-sdt-binary.c sema.h sema.c
--userspace_probe_sdt_binary_LDADD = foobar_provider.o libfoo.la libbar.la -ldl
-+userspace_probe_sdt_binary_LDADD = foobar_provider.o libfoo.la libbar.la $(DL_LIBS)
- userspace_probe_sdt_binary_CFLAGS = -I$(abs_builddir)
- nodist_userspace_probe_sdt_binary_SOURCES = $(abs_builddir)/foobar_provider.h
- 
--- 
-2.11.0
+<html><head></head><body><div class="ydp64c5df6fyahoo-style-wrap" style="font-family:Helvetica Neue, Helvetica, Arial, sans-serif;font-size:16px;"><span><div>Hi,</div><div><br></div><div>We are using Lttng version 2.10.3 to stream and capture trace and error logs form node in live mode. Once session is created and streaming starts on node, suddenly babel-trace exit with code 0(Zero) and restart. This happens in a silent loop until we kill the lttng process.</div><div>Is this a known issue and if so is it going to be addresses in future versions of lttng or yet to be fixed ?</div><div>Any help will be appreciated.</div><div>Thanks in advance.</div><div><br></div><div>Regards,</div><div>Rajan Gupta&nbsp;</div></span></div></body></html>
+------=_Part_5908094_1419357637.1551268639883--
+
+--===============7877582375562279080==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============7877582375562279080==--
