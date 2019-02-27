@@ -1,16 +1,19 @@
-From: RAJAN GUPTA via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Babel-trace exit with 0(Zero)
-Date: Wed, 27 Feb 2019 11:57:19 +0000 (UTC)
-Message-ID: <925694812.5908095.1551268639884__41017.0080767543$1551277164$gmane$org@mail.yahoo.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: Babel-trace exit with 0(Zero)
+Date: Wed, 27 Feb 2019 09:41:07 -0500
+Message-ID: <20190227144107.GC9757__23136.8240247079$1551278491$gmane$org@joraj-alpa>
 References: <925694812.5908095.1551268639884.ref@mail.yahoo.com>
-Reply-To: RAJAN GUPTA <rajangpt58@yahoo.com>
+ <925694812.5908095.1551268639884@mail.yahoo.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7877582375562279080=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sonic311-3.consmr.mail.sg3.yahoo.com
- (sonic311-3.consmr.mail.sg3.yahoo.com [106.10.244.180])
- by lists.lttng.org (Postfix) with ESMTP id 448Zyb6FBrzgDW
- for <lttng-dev@lists.lttng.org>; Wed, 27 Feb 2019 07:40:07 -0500 (EST)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 448dfF60MHzgJY
+ for <lttng-dev@lists.lttng.org>; Wed, 27 Feb 2019 09:41:09 -0500 (EST)
+Content-Disposition: inline
+In-Reply-To: <925694812.5908095.1551268639884@mail.yahoo.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,41 +23,46 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: RAJAN GUPTA <rajangpt58@yahoo.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============7877582375562279080==
-Content-Type: multipart/alternative;
-	boundary="----=_Part_5908094_1419357637.1551268639883"
+Hi Rajan,
 
-------=_Part_5908094_1419357637.1551268639883
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On Wed, Feb 27, 2019 at 11:57:19AM +0000, RAJAN GUPTA via lttng-dev wrote:
+> Hi,
+> We are using Lttng version 2.10.3 to stream and capture trace and error logs
+> form node in live mode.
 
-Hi,
-We are using Lttng version 2.10.3 to stream and capture trace and error log=
-s form node in live mode. Once session is created and streaming starts on n=
-ode, suddenly babel-trace exit with code 0(Zero) and restart. This happens =
-in a silent loop until we kill the lttng process.Is this a known issue and =
-if so is it going to be addresses in future versions of lttng or yet to be =
-fixed ?Any help will be appreciated.Thanks in advance.
-Regards,Rajan Gupta=C2=A0
-------=_Part_5908094_1419357637.1551268639883
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Side note, the stable 2.10 branch latest release is 2.10.6. I encourage you to
+upgrade regardless of this problem.
 
-<html><head></head><body><div class="ydp64c5df6fyahoo-style-wrap" style="font-family:Helvetica Neue, Helvetica, Arial, sans-serif;font-size:16px;"><span><div>Hi,</div><div><br></div><div>We are using Lttng version 2.10.3 to stream and capture trace and error logs form node in live mode. Once session is created and streaming starts on node, suddenly babel-trace exit with code 0(Zero) and restart. This happens in a silent loop until we kill the lttng process.</div><div>Is this a known issue and if so is it going to be addresses in future versions of lttng or yet to be fixed ?</div><div>Any help will be appreciated.</div><div>Thanks in advance.</div><div><br></div><div>Regards,</div><div>Rajan Gupta&nbsp;</div></span></div></body></html>
-------=_Part_5908094_1419357637.1551268639883--
+> Once session is created and streaming starts on node,
+> suddenly babel-trace exit with code 0(Zero) and restart. This happens in a
 
---===============7877582375562279080==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+AFAIK we do not provide any automatic way to start babeltrace on
+session creation. Can you explain how babeltrace is launched? Are you using
+"lttng view"? Launching it manually on another host? Are you using a wrapper for
+babeltrace that tries to connect to a session in a loop?
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+> silent loop until we kill the lttng process.
 
---===============7877582375562279080==--
+Babeltrace does not have an auto respawn mechanism, if it exit something else is
+starting it.
+
+> Is this a known issue and if so is it going to be addresses in future versions
+> of lttng or yet to be fixed ?
+> Any help will be appreciated.
+
+The first step, and one you should have done before sending this email, is to
+read [1] and gather as much information as possible, at least logs for:
+babeltrace, lttng-session, lttng-relayd . Then open a bug on [2].
+
+[1] https://lttng.org/community/#bug-reporting-guidelines
+[2] https://bugs.lttng.org/
+
+Cheers
+
+-- 
+Jonathan Rajotte-Julien
+EfficiOS
