@@ -1,16 +1,18 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: "Schickentanz, Thomas" <thomas.schickentanz@harman.com>
 Subject: Re: Tracing directly into shared memory
-Date: Mon, 4 Mar 2019 11:00:49 -0500 (EST)
-Message-ID: <2083651965.623.1551715249037.JavaMail.zimbra__11977.7878209547$1551715283$gmane$org@efficios.com>
+Date: Tue, 5 Mar 2019 09:43:15 +0000
+Message-ID: <387583b7903a4b57bc56c89410fe3c0d__47069.6852354862$1551779015$gmane$org@HIMDWSMB04.ad.harman.com>
 References: <54c5b5d42fb8448298afc17af0513b6b@HIMDWSMB04.ad.harman.com>
+ <2083651965.623.1551715249037.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8816761086392749005=="
+Content-Type: multipart/mixed; boundary="===============5883959793545716762=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44ClB10ZK9z12Q5
- for <lttng-dev@lists.lttng.org>; Mon,  4 Mar 2019 11:00:56 -0500 (EST)
-In-Reply-To: <54c5b5d42fb8448298afc17af0513b6b@HIMDWSMB04.ad.harman.com>
+Received: from mail1.bemta23.messagelabs.com (mail1.bemta23.messagelabs.com
+ [67.219.246.116])
+ by lists.lttng.org (Postfix) with ESMTPS id 44DBlp6bDHzfpt
+ for <lttng-dev@lists.lttng.org>; Tue,  5 Mar 2019 04:43:18 -0500 (EST)
+In-Reply-To: <2083651965.623.1551715249037.JavaMail.zimbra@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,235 +22,372 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Thomas Schickentanz <thomas.schickentanz@harman.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============8816761086392749005==
+--===============5883959793545716762==
+Content-Language: en-US
 Content-Type: multipart/alternative;
-	boundary="=_7281c42d-bcc7-4b94-b904-bc865ac381a4"
+	boundary="_000_387583b7903a4b57bc56c89410fe3c0dHIMDWSMB04adharmancom_"
 
---=_7281c42d-bcc7-4b94-b904-bc865ac381a4
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+--_000_387583b7903a4b57bc56c89410fe3c0dHIMDWSMB04adharmancom_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
------ On Mar 4, 2019, at 4:28 AM, Thomas Schickentanz <thomas.schickentanz@=
-harman.com> wrote:=20
+SGkgTWF0aGlldSwNCg0KVGhhbmtzIGZvciBjbGFyaWZ5aW5nIHRoZSByZXN0cmljdGlvbnMgb2Yg
+4oCYc2htLXBhdGjigJkgb3B0aW9uIQ0KT3VyIHB1cnBvc2UgaXMgdG8gdXNlIGV4Y2x1c2l2ZWx5
+IHJlc2VydmVkIG1lbW9yeSBmb3IgdHJhY2luZy4gT3VyIGN1c3RvbWVycyByZXF1ZXN0IGEgY2Vy
+dGFpbiBhbW91bnQgb2YgZnJlZSBtZW1vcnkgb24gdGhlIHN5c3RlbSBmb3IgZnV0dXJlIGRldmVs
+b3BtZW50LiBJbiBkZXZlbG9wbWVudCBzdGFnZSBjaHVua3Mgb2YgdGhpcyDigJxmcmVl4oCdIG1l
+bW9yeSBhcmUgZ3JhYmJlZCBieSB0aGUgYXBwbGljYXRpb25zIGFuZCB0cmFjaW5nIGxhY2tzIG1l
+bW9yeS4gV2Ugd2FudCB0byBhbGxvY2F0ZSB0aGlzIOKAnGZyZWXigJ0gbWVtb3J5IGluIGFuIGVh
+cmx5IGJvb3Qgc3RhZ2UgdG8gZW5zdXJlIHRoYXQgd2UgZ2V0IHRoZSBhbW91bnQgb2YgbWVtb3J5
+IHdlIG5lZWQgZm9yIHRyYWNpbmcuIEUuZy4gaWYgd2UgaGF2ZSByZXNlcnZlZCA1MTIgTWJ5dGUg
+b2YgbWVtb3J5LCB3ZSBrbm93IHRoYXQgd2UgY2FuIHN0YXJ0IGx0dG5nIGF0IGEgbGF0ZXIgcG9p
+bnQgb2YgdGltZSB3aXRoIDE2IGJ1ZmZlcnMgb2YgNCBNYnl0ZSBvbiBhIDggY29yZSBzeXN0ZW0u
+IEJ1dCB0aGlzIHdvcmtzIG9ubHksIGlmIHdlIGNhbiBwcm92aWRlIHRoZSBwcmV2aW91c2x5IHJl
+c2VydmVkIG1lbW9yeSB0byBsdHRuZyBmb3IgYnVmZmVyIGFsbG9jYXRpb24uDQpJcyB0aGVyZSBz
+b21lIGdlbmVyYWwgY29uY2VybiBhYm91dCB1c2luZyBQT1NJWCBzaGFyZWQgbWVtb3J5IGZvciBi
+dWZmZXJzIGluIGtlcm5lbCB0cmFjaW5nIG1vZGUgKGFwYXJ0IGZyb20gcGVyZm9ybWFuY2UgcmVh
+c29ucyk/DQoNCkkgdXNlZCBsdHRuZy1jcmFzaCBvbmx5IGZvciB0ZXN0aW5nLCBiZWNhdXNlIEkg
+d2FudGVkIHRvIHZlcmlmeSwgaWYgdHJhY2luZyBkYXRhIGlzIGF2YWlsYWJsZSBmcm9tIHByb3Zp
+ZGVkIHNoYXJlZCBtZW1vcnkuIElmIHRoaXMgaXMgZW5zdXJlZCwgSSBhZ3JlZSB3aXRoIHlvdSwg
+dGhhdCDigJhsdHRuZyBzbmFwc2hvdOKAmSBjYW4gZG8gdGhlIHdvcmsuDQoNClJlZ2FyZHMsDQpU
+aG9tYXMNCg0KRnJvbTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmlj
+aW9zLmNvbT4NClNlbnQ6IE1vbnRhZywgNC4gTcOkcnogMjAxOSAxNzowMQ0KVG86IFNjaGlja2Vu
+dGFueiwgVGhvbWFzIDx0aG9tYXMuc2NoaWNrZW50YW56QGhhcm1hbi5jb20+DQpDYzogbHR0bmct
+ZGV2IDxsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnPg0KU3ViamVjdDogW0VYVEVSTkFMXSBSZTog
+W2x0dG5nLWRldl0gVHJhY2luZyBkaXJlY3RseSBpbnRvIHNoYXJlZCBtZW1vcnkNCg0KDQotLS0t
+LSBPbiBNYXIgNCwgMjAxOSwgYXQgNDoyOCBBTSwgVGhvbWFzIFNjaGlja2VudGFueiA8dGhvbWFz
+LnNjaGlja2VudGFuekBoYXJtYW4uY29tPG1haWx0bzp0aG9tYXMuc2NoaWNrZW50YW56QGhhcm1h
+bi5jb20+PiB3cm90ZToNCg0KSGkgYWxsLA0KTXkgaWRlYSBpcyB0byBwcmUtYWxsb2NhdGUgbWVt
+b3J5IG9uIHN5c3RlbSBzdGFydHVwIHdoaWNoIGNhbiBsYXRlciBiZSB1c2VkIGJ5IGx0dG5nIGZv
+ciB0cmFjaW5nLiBJdCBzaG91bGQgd29yayBsaWtlIGZsaWdodCByZWNvcmRlciBtb2RlIHdpdGhv
+dXQgZXh0cmFjdGluZyBkYXRhIGZyb20gcmluZ2J1ZmZlcnMgdG8gdHJhY2UgZmlsZSB3aGlsZSBy
+ZWNvcmRpbmcgZGF0YS4gRGF0YSBleHRyYWN0aW9uIG9mIHNobSByaW5nYnVmZmVycyBzaG91bGQg
+YmUgZG9uZSB3aGVuIHJlY29yZGluZyBoYXMgYmVlbiBmaW5pc2hlZC4NCkFzIHBlciBkb2N1bWVu
+dGlvbiB3aXRoIG9wdGlvbiBgLS1zaG0tcGF0aOKAmCByaW5nYnVmZmVyIGZvciB0cmFjaW5nIGNh
+biBiZSBjcmVhdGVkIGluIHNoYXJlZCBtZW1vcnkuIFdpdGggbHR0bmctY3Jhc2ggZGF0YSBjYW4g
+YmUgZXh0cmFjdGVkIGZyb20gcmluZ2J1ZmZlci4NCkNhbiB0aGlzIG9wdGlvbiBiZSB1c2VkIHdp
+dGggc2hhcmVkIG1lbW9yeSBpbiB2b2xhdGlsZSBtZW1vcnkgKGRlZmF1bHQgcmFtKSwgdG9vPyBB
+bmQgaXMgaXQgcG9zc2libGUgdG8gcmVjb3JkIGtlcm5lbCBzcGFjZSB0cmFjZXMgd2l0aCB0aGlz
+IG9wdGlvbj8NCkkgdHJpZWQNCmx0dG5nIGNyZWF0ZSB0ZXN0c2htIC0tc2htLXBhdGg9L2Rldi9z
+aG0gLS1zbmFwc2hvdA0KbHR0bmcgZW5hYmxlLWNoYW5uZWwgYzAgLXMgdGVzdHNobSAtaw0KbHR0
+bmcgZW5hYmxlLWV2ZW50IC1zIHRlc3RzaG0gLWMgYzAgLWsgLWENCmx0dG5nIHN0YXJ0DQpsdHRu
+ZyBzdG9wDQpsdHRuZy1jcmFzaCAtZXh0cmFjdD0vaG9tZS90ZXN0IC9kZXYvc2htDQpXaXRoIGx0
+dG5nIGFuZCBsdHRuZy1jcmFzaCBldmVyeXRoaW5nIHNlZW1zIHRvIHdvcmsgZmluZSAobm8gZXJy
+b3IgbWVzc2FnZXMpLg0KSG93ZXZlciB0aGUgZXh0cmFjdCBmb2xkZXIga2VlcHMgZW1wdHkuDQpI
+YXMgc29tZW9uZSByZXNlYXJjaGVkIGludG8gdGhpcyBvcHRpb24gYW5kIGNhbiBoZWxwIHRvIGNs
+YXJpZnkgdGhlIHBvaW50cz8NCkhpIFRob21hcywNCg0KQWJvdXQgIi0tc2htLXBhdGgiIGFuZCBs
+dHRuZy1jcmFzaCwgdGhvc2UgYXJlIGRpc2N1c3NlZCBoZXJlOiBodHRwczovL2x0dG5nLm9yZy9k
+b2NzL3YyLjEwLyNkb2MtcGVyc2lzdGVudC1tZW1vcnktZmlsZS1zeXN0ZW1zPGh0dHBzOi8vY2xp
+Y2t0aW1lLnN5bWFudGVjLmNvbS8zWVoxNXBiSlZTRDQ3eWVYeGhYaXdxRTdWYz91PWh0dHBzJTNB
+JTJGJTJGbHR0bmcub3JnJTJGZG9jcyUyRnYyLjEwJTJGJTIzZG9jLXBlcnNpc3RlbnQtbWVtb3J5
+LWZpbGUtc3lzdGVtcz4NCg0KSSdtIG5vdCBzdXJlIEkgY29tcGxldGVseSB1bmRlcnN0YW5kIHlv
+dXIgdXNlLWNhc2UgYW5kIHdoZXRoZXIgeW91ciBpbnRlbnQgaXMgdG8gZXh0cmFjdCB0cmFjZSBk
+YXRhIGFmdGVyIGENCnN5c3RlbSBjcmFzaCBvciBpZiB0aGUgInNuYXBzaG90IiBtb2RlIGlzIGVu
+b3VnaCBmb3IgeW91ciBuZWVkcy4NCg0KTm90ZSB0aGF0IHRoZSAic2htLXBhdGgiIG9wdGlvbiBv
+bmx5IGFwcGxpZXMgdG8gVVNUICh1c2VyLXNwYWNlKSB0cmFjZXMgYXQgdGhlIG1vbWVudC4gSXQg
+aGFzIG5vdCBiZWVuIGltcGxlbWVudGVkDQpmb3Iga2VybmVsIHRyYWNpbmcgeWV0Lg0KDQpUaGUg
+d2F5IHdlIHR5cGljYWxseSB1c2UgaXQgZm9yIGV4dHJhY3Rpb24gb2YgdHJhY2UgZGF0YSBmcm9t
+IHVzZXItc3BhY2Ugd2hlbiBhIHN5c3RlbSBjcmFzaGVzIGlzIHRvIHVzZSB0aGUgcG1lbSBkcml2
+ZXIgdG8NCmNyZWF0ZSBhIGJsb2NrIGRldmljZSBvdXQgb2YgYSByYW5nZSBvZiB0aGUgc3lzdGVt
+IG1lbW9yeSwgYW5kIHRoZW4gdXNlIGV4dDIgb3IgZXh0NCB3aXRoIHRoZSBEQVggbW91bnQgb3B0
+aW9uIHRvIGVuc3VyZQ0KdGhlIGZpbGVzeXN0ZW0gYnlwYXNzZXMgdGhlIHBhZ2UgY2FjaGUuDQoN
+ClRoZW4gd2UgZW5zdXJlIHRoYXQga2V4ZWMgaXMgdXNlZCB0byBib290IGEgbmV3IGtlcm5lbCBv
+biBjcmFzaCwgb3IgbWFrZSBzdXJlIHRoZSBCSU9TIGRvZXMgbm90IGVyYXNlIHRoZQ0KbWVtb3J5
+IGNvbnRlbnQgb24gc29mdCByZWJvb3QsIHdoaWNoIGdpdmVzIGFjY2VzcyB0byB0aGUgc2htLXBh
+dGggYnVmZmVycyBhZnRlciBjcmFzaC9yZWJvb3QuDQoNCldlIGRvbid0IHVzdWFsbHkgdXNlIC9k
+ZXYvc2htIGFzIGFuIGFyZ3VtZW50IHRvIC0tc2htLXBhdGguIFRoaXMgcGF0aCBpcyBub3JtYWxs
+eSB1c2VkIHRvIGhvbGQgUE9TSVggc2hhcmVkIG1lbW9yeQ0KZmlsZXMuIEkgd291bGQgZXhwZWN0
+IGEgZGlmZmVyZW50IG1vdW50IHBvaW50IHBhdGggYXMgYXJndW1lbnQgdG8gLS1zaG0tcGF0aCB3
+aGljaCBwb2ludHMgdG8gYSBEQVgtZW5hYmxlZCBmaWxlc3lzdGVtDQpiYWNrZWQgYnkgYSBQTUVN
+IGJsb2NrIGRldmljZS4NCg0KVGhhbmtzLA0KDQpNYXRoaWV1DQoNCg0KLS0NCk1hdGhpZXUgRGVz
+bm95ZXJzDQpFZmZpY2lPUyBJbmMuDQpodHRwczovL2NsaWNrdGltZS5zeW1hbnRlYy5jb20vMzJ2
+blNQVXNWQ2ZIQ2trd295UHltVng3VmM/dT1odHRwJTNBJTJGJTJGd3d3LmVmZmljaW9zLmNvbQ0K
 
-> Hi all,
+--_000_387583b7903a4b57bc56c89410fe3c0dHIMDWSMB04adharmancom_
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-> My idea is to pre-allocate memory on system startup which can later be us=
-ed by
-> lttng for tracing. It should work like flight recorder mode without extra=
-cting
-> data from ringbuffers to trace file while recording data. Data extraction=
- of
-> shm ringbuffers should be done when recording has been finished.
+PGh0bWwgeG1sbnM6dj0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp2bWwiIHhtbG5zOm89InVy
+bjpzY2hlbWFzLW1pY3Jvc29mdC1jb206b2ZmaWNlOm9mZmljZSIgeG1sbnM6dz0idXJuOnNjaGVt
+YXMtbWljcm9zb2Z0LWNvbTpvZmZpY2U6d29yZCIgeG1sbnM6bT0iaHR0cDovL3NjaGVtYXMubWlj
+cm9zb2Z0LmNvbS9vZmZpY2UvMjAwNC8xMi9vbW1sIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcv
+VFIvUkVDLWh0bWw0MCI+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIg
+Y29udGVudD0idGV4dC9odG1sOyBjaGFyc2V0PXV0Zi04Ij4NCjxtZXRhIG5hbWU9IkdlbmVyYXRv
+ciIgY29udGVudD0iTWljcm9zb2Z0IFdvcmQgMTUgKGZpbHRlcmVkIG1lZGl1bSkiPg0KPHN0eWxl
+PjwhLS0NCi8qIEZvbnQgRGVmaW5pdGlvbnMgKi8NCkBmb250LWZhY2UNCgl7Zm9udC1mYW1pbHk6
+IkNhbWJyaWEgTWF0aCI7DQoJcGFub3NlLTE6MiA0IDUgMyA1IDQgNiAzIDIgNDt9DQpAZm9udC1m
+YWNlDQoJe2ZvbnQtZmFtaWx5OkNhbGlicmk7DQoJcGFub3NlLTE6MiAxNSA1IDIgMiAyIDQgMyAy
+IDQ7fQ0KLyogU3R5bGUgRGVmaW5pdGlvbnMgKi8NCnAuTXNvTm9ybWFsLCBsaS5Nc29Ob3JtYWws
+IGRpdi5Nc29Ob3JtYWwNCgl7bWFyZ2luOjBjbTsNCgltYXJnaW4tYm90dG9tOi4wMDAxcHQ7DQoJ
+Zm9udC1zaXplOjExLjBwdDsNCglmb250LWZhbWlseToiQ2FsaWJyaSIsc2Fucy1zZXJpZjsNCglt
+c28tZmFyZWFzdC1sYW5ndWFnZTpFTi1VUzt9DQphOmxpbmssIHNwYW4uTXNvSHlwZXJsaW5rDQoJ
+e21zby1zdHlsZS1wcmlvcml0eTo5OTsNCgljb2xvcjojMDU2M0MxOw0KCXRleHQtZGVjb3JhdGlv
+bjp1bmRlcmxpbmU7fQ0KYTp2aXNpdGVkLCBzcGFuLk1zb0h5cGVybGlua0ZvbGxvd2VkDQoJe21z
+by1zdHlsZS1wcmlvcml0eTo5OTsNCgljb2xvcjojOTU0RjcyOw0KCXRleHQtZGVjb3JhdGlvbjp1
+bmRlcmxpbmU7fQ0KcC5tc29ub3JtYWwwLCBsaS5tc29ub3JtYWwwLCBkaXYubXNvbm9ybWFsMA0K
+CXttc28tc3R5bGUtbmFtZTptc29ub3JtYWw7DQoJbXNvLW1hcmdpbi10b3AtYWx0OmF1dG87DQoJ
+bWFyZ2luLXJpZ2h0OjBjbTsNCgltc28tbWFyZ2luLWJvdHRvbS1hbHQ6YXV0bzsNCgltYXJnaW4t
+bGVmdDowY207DQoJZm9udC1zaXplOjEyLjBwdDsNCglmb250LWZhbWlseToiVGltZXMgTmV3IFJv
+bWFuIixzZXJpZjt9DQpzcGFuLkVtYWlsU3R5bGUxOA0KCXttc28tc3R5bGUtdHlwZTpwZXJzb25h
+bDsNCglmb250LWZhbWlseToiQ2FsaWJyaSIsc2Fucy1zZXJpZjsNCgljb2xvcjp3aW5kb3d0ZXh0
+Ow0KCWZvbnQtd2VpZ2h0Om5vcm1hbDsNCglmb250LXN0eWxlOm5vcm1hbDsNCgl0ZXh0LWRlY29y
+YXRpb246bm9uZSBub25lO30NCnNwYW4uRW1haWxTdHlsZTE5DQoJe21zby1zdHlsZS10eXBlOnBl
+cnNvbmFsLXJlcGx5Ow0KCWZvbnQtZmFtaWx5OiJDYWxpYnJpIixzYW5zLXNlcmlmOw0KCWNvbG9y
+OiMxRjQ5N0Q7DQoJZm9udC13ZWlnaHQ6bm9ybWFsOw0KCWZvbnQtc3R5bGU6bm9ybWFsOw0KCXRl
+eHQtZGVjb3JhdGlvbjpub25lIG5vbmU7fQ0KLk1zb0NocERlZmF1bHQNCgl7bXNvLXN0eWxlLXR5
+cGU6ZXhwb3J0LW9ubHk7DQoJZm9udC1zaXplOjEwLjBwdDt9DQpAcGFnZSBXb3JkU2VjdGlvbjEN
+Cgl7c2l6ZTo2MTIuMHB0IDc5Mi4wcHQ7DQoJbWFyZ2luOjcwLjg1cHQgNzAuODVwdCAyLjBjbSA3
+MC44NXB0O30NCmRpdi5Xb3JkU2VjdGlvbjENCgl7cGFnZTpXb3JkU2VjdGlvbjE7fQ0KLS0+PC9z
+dHlsZT48IS0tW2lmIGd0ZSBtc28gOV0+PHhtbD4NCjxvOnNoYXBlZGVmYXVsdHMgdjpleHQ9ImVk
+aXQiIHNwaWRtYXg9IjEwMjYiIC8+DQo8L3htbD48IVtlbmRpZl0tLT48IS0tW2lmIGd0ZSBtc28g
+OV0+PHhtbD4NCjxvOnNoYXBlbGF5b3V0IHY6ZXh0PSJlZGl0Ij4NCjxvOmlkbWFwIHY6ZXh0PSJl
+ZGl0IiBkYXRhPSIxIiAvPg0KPC9vOnNoYXBlbGF5b3V0PjwveG1sPjwhW2VuZGlmXS0tPg0KPC9o
+ZWFkPg0KPGJvZHkgbGFuZz0iREUiIGxpbms9IiMwNTYzQzEiIHZsaW5rPSIjOTU0RjcyIj4NCjxk
+aXYgY2xhc3M9IldvcmRTZWN0aW9uMSI+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHls
+ZT0iZm9udC1zaXplOjEyLjBwdDtjb2xvcjojMUY0OTdEIj5IaSBNYXRoaWV1LDxvOnA+PC9vOnA+
+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6
+MTIuMHB0O2NvbG9yOiMxRjQ5N0QiPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNs
+YXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIiBzdHlsZT0iZm9udC1zaXplOjEyLjBw
+dDtjb2xvcjojMUY0OTdEIj5UaGFua3MgZm9yIGNsYXJpZnlpbmcgdGhlIHJlc3RyaWN0aW9ucyBv
+ZiDigJhzaG0tcGF0aOKAmSBvcHRpb24hPG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9
+Ik1zb05vcm1hbCI+PHNwYW4gbGFuZz0iRU4tVVMiIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2Nv
+bG9yOiMxRjQ5N0QiPk91ciBwdXJwb3NlIGlzIHRvIHVzZSBleGNsdXNpdmVseSByZXNlcnZlZCBt
+ZW1vcnkgZm9yIHRyYWNpbmcuIE91ciBjdXN0b21lcnMgcmVxdWVzdCBhIGNlcnRhaW4gYW1vdW50
+IG9mIGZyZWUgbWVtb3J5IG9uIHRoZSBzeXN0ZW0gZm9yIGZ1dHVyZSBkZXZlbG9wbWVudC4gSW4g
+ZGV2ZWxvcG1lbnQgc3RhZ2UgY2h1bmtzDQogb2YgdGhpcyDigJxmcmVl4oCdIG1lbW9yeSBhcmUg
+Z3JhYmJlZCBieSB0aGUgYXBwbGljYXRpb25zIGFuZCB0cmFjaW5nIGxhY2tzIG1lbW9yeS4gV2Ug
+d2FudCB0byBhbGxvY2F0ZSB0aGlzIOKAnGZyZWXigJ0gbWVtb3J5IGluIGFuIGVhcmx5IGJvb3Qg
+c3RhZ2UgdG8gZW5zdXJlIHRoYXQgd2UgZ2V0IHRoZSBhbW91bnQgb2YgbWVtb3J5IHdlIG5lZWQg
+Zm9yIHRyYWNpbmcuIEUuZy4gaWYgd2UgaGF2ZSByZXNlcnZlZCA1MTIgTWJ5dGUgb2YgbWVtb3J5
+LCB3ZSBrbm93DQogdGhhdCB3ZSBjYW4gc3RhcnQgbHR0bmcgYXQgYSBsYXRlciBwb2ludCBvZiB0
+aW1lIHdpdGggMTYgYnVmZmVycyBvZiA0IE1ieXRlIG9uIGEgOCBjb3JlIHN5c3RlbS4gQnV0IHRo
+aXMgd29ya3Mgb25seSwgaWYgd2UgY2FuIHByb3ZpZGUgdGhlIHByZXZpb3VzbHkgcmVzZXJ2ZWQg
+bWVtb3J5IHRvIGx0dG5nIGZvciBidWZmZXIgYWxsb2NhdGlvbi48bzpwPjwvbzpwPjwvc3Bhbj48
+L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyIgc3R5bGU9ImZvbnQt
+c2l6ZToxMi4wcHQ7Y29sb3I6IzFGNDk3RCI+PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xh
+c3M9Ik1zb05vcm1hbCI+PHNwYW4gbGFuZz0iRU4tVVMiIHN0eWxlPSJmb250LXNpemU6MTIuMHB0
+O2NvbG9yOiMxRjQ5N0QiPklzIHRoZXJlIHNvbWUgZ2VuZXJhbCBjb25jZXJuIGFib3V0IHVzaW5n
+IFBPU0lYIHNoYXJlZCBtZW1vcnkgZm9yIGJ1ZmZlcnMgaW4ga2VybmVsIHRyYWNpbmcgbW9kZSAo
+YXBhcnQgZnJvbSBwZXJmb3JtYW5jZSByZWFzb25zKT8NCjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4N
+CjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIiBzdHlsZT0iZm9udC1zaXpl
+OjEyLjBwdDtjb2xvcjojMUY0OTdEIj48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8cCBj
+bGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyIgc3R5bGU9ImZvbnQtc2l6ZToxMi4w
+cHQ7Y29sb3I6IzFGNDk3RCI+SSB1c2VkIGx0dG5nLWNyYXNoIG9ubHkgZm9yIHRlc3RpbmcsIGJl
+Y2F1c2UgSSB3YW50ZWQgdG8gdmVyaWZ5LCBpZiB0cmFjaW5nIGRhdGEgaXMgYXZhaWxhYmxlIGZy
+b20gcHJvdmlkZWQgc2hhcmVkIG1lbW9yeS4gSWYgdGhpcyBpcyBlbnN1cmVkLCBJIGFncmVlIHdp
+dGggeW91LCB0aGF0IOKAmGx0dG5nIHNuYXBzaG904oCZDQogY2FuIGRvIHRoZSB3b3JrLjxvOnA+
+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVT
+IiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtjb2xvcjojMUY0OTdEIj48bzpwPiZuYnNwOzwvbzpw
+Pjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyIgc3R5
+bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Y29sb3I6IzFGNDk3RCI+UmVnYXJkcyw8bzpwPjwvbzpwPjwv
+c3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyIgc3R5bGU9
+ImZvbnQtc2l6ZToxMi4wcHQ7Y29sb3I6IzFGNDk3RCI+VGhvbWFzDQo8bzpwPjwvbzpwPjwvc3Bh
+bj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyI+PG86cD4mbmJz
+cDs8L286cD48L3NwYW4+PC9wPg0KPGRpdj4NCjxkaXYgc3R5bGU9ImJvcmRlcjpub25lO2JvcmRl
+ci10b3A6c29saWQgI0UxRTFFMSAxLjBwdDtwYWRkaW5nOjMuMHB0IDBjbSAwY20gMGNtIj4NCjxw
+IGNsYXNzPSJNc29Ob3JtYWwiPjxiPjxzcGFuIGxhbmc9IkVOLVVTIiBzdHlsZT0ibXNvLWZhcmVh
+c3QtbGFuZ3VhZ2U6REUiPkZyb206PC9zcGFuPjwvYj48c3BhbiBsYW5nPSJFTi1VUyIgc3R5bGU9
+Im1zby1mYXJlYXN0LWxhbmd1YWdlOkRFIj4gTWF0aGlldSBEZXNub3llcnMgJmx0O21hdGhpZXUu
+ZGVzbm95ZXJzQGVmZmljaW9zLmNvbSZndDsNCjxicj4NCjxiPlNlbnQ6PC9iPiBNb250YWcsIDQu
+IE3DpHJ6IDIwMTkgMTc6MDE8YnI+DQo8Yj5Ubzo8L2I+IFNjaGlja2VudGFueiwgVGhvbWFzICZs
+dDt0aG9tYXMuc2NoaWNrZW50YW56QGhhcm1hbi5jb20mZ3Q7PGJyPg0KPGI+Q2M6PC9iPiBsdHRu
+Zy1kZXYgJmx0O2x0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcmZ3Q7PGJyPg0KPGI+U3ViamVjdDo8
+L2I+IFtFWFRFUk5BTF0gUmU6IFtsdHRuZy1kZXZdIFRyYWNpbmcgZGlyZWN0bHkgaW50byBzaGFy
+ZWQgbWVtb3J5PG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8L2Rpdj4NCjxwIGNsYXNz
+PSJNc29Ob3JtYWwiPjxvOnA+Jm5ic3A7PC9vOnA+PC9wPg0KPGRpdj4NCjxkaXY+DQo8cCBjbGFz
+cz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTom
+cXVvdDtBcmlhbCZxdW90OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrO21zby1mYXJlYXN0LWxhbmd1
+YWdlOkRFIj48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBj
+bGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWls
+eTomcXVvdDtBcmlhbCZxdW90OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrO21zby1mYXJlYXN0LWxh
+bmd1YWdlOkRFIj4tLS0tLSBPbiBNYXIgNCwgMjAxOSwgYXQgNDoyOCBBTSwgVGhvbWFzIFNjaGlj
+a2VudGFueiAmbHQ7PGEgaHJlZj0ibWFpbHRvOnRob21hcy5zY2hpY2tlbnRhbnpAaGFybWFuLmNv
+bSI+dGhvbWFzLnNjaGlja2VudGFuekBoYXJtYW4uY29tPC9hPiZndDsNCiB3cm90ZTo8YnI+DQo8
+YnI+DQo8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8YmxvY2txdW90ZSBz
+dHlsZT0iYm9yZGVyOm5vbmU7Ym9yZGVyLWxlZnQ6c29saWQgIzEwMTBGRiAxLjVwdDtwYWRkaW5n
+OjBjbSAwY20gMGNtIDQuMHB0O21hcmdpbi1sZWZ0OjMuNzVwdDttYXJnaW4tdG9wOjUuMHB0O21h
+cmdpbi1ib3R0b206NS4wcHQiPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZv
+bnQtc2l6ZToxMi4wcHQ7Y29sb3I6YmxhY2siPkhpIGFsbCw8L3NwYW4+PHNwYW4gc3R5bGU9ImNv
+bG9yOmJsYWNrIj48bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48
+c3BhbiBsYW5nPSJFTi1VUyIgc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Y29sb3I6YmxhY2siPk15
+IGlkZWEgaXMgdG8gcHJlLWFsbG9jYXRlIG1lbW9yeSBvbiBzeXN0ZW0gc3RhcnR1cCB3aGljaCBj
+YW4gbGF0ZXIgYmUgdXNlZCBieSBsdHRuZyBmb3IgdHJhY2luZy4gSXQgc2hvdWxkIHdvcmsgbGlr
+ZSBmbGlnaHQgcmVjb3JkZXIgbW9kZSB3aXRob3V0IGV4dHJhY3RpbmcgZGF0YSBmcm9tIHJpbmdi
+dWZmZXJzDQogdG8gdHJhY2UgZmlsZSB3aGlsZSByZWNvcmRpbmcgZGF0YS4gRGF0YSBleHRyYWN0
+aW9uIG9mIHNobSByaW5nYnVmZmVycyBzaG91bGQgYmUgZG9uZSB3aGVuIHJlY29yZGluZyBoYXMg
+YmVlbiBmaW5pc2hlZC48L3NwYW4+PHNwYW4gc3R5bGU9ImNvbG9yOmJsYWNrIj48bzpwPjwvbzpw
+Pjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyIgc3R5
+bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Y29sb3I6YmxhY2siPkFzIHBlciBkb2N1bWVudGlvbiB3aXRo
+IG9wdGlvbg0KPC9zcGFuPjxzcGFuIGxhbmc9IkVOLVVTIiBzdHlsZT0iZm9udC1zaXplOjEyLjBw
+dDtmb250LWZhbWlseTomcXVvdDtDb3VyaWVyIE5ldyZxdW90Oztjb2xvcjpibGFjayI+YC0tc2ht
+LXBhdGjigJg8L3NwYW4+PHNwYW4gbGFuZz0iRU4tVVMiIHN0eWxlPSJmb250LXNpemU6MTIuMHB0
+O2NvbG9yOmJsYWNrIj4gcmluZ2J1ZmZlciBmb3IgdHJhY2luZyBjYW4gYmUgY3JlYXRlZCBpbiBz
+aGFyZWQgbWVtb3J5LiBXaXRoDQo8L3NwYW4+PHNwYW4gbGFuZz0iRU4tVVMiIHN0eWxlPSJmb250
+LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0NvdXJpZXIgTmV3JnF1b3Q7O2NvbG9yOmJs
+YWNrIj5sdHRuZy1jcmFzaDwvc3Bhbj48c3BhbiBsYW5nPSJFTi1VUyIgc3R5bGU9ImZvbnQtc2l6
+ZToxMi4wcHQ7Y29sb3I6YmxhY2siPiBkYXRhIGNhbiBiZSBleHRyYWN0ZWQgZnJvbSByaW5nYnVm
+ZmVyLjwvc3Bhbj48c3BhbiBzdHlsZT0iY29sb3I6YmxhY2siPjxvOnA+PC9vOnA+PC9zcGFuPjwv
+cD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIiBzdHlsZT0iZm9udC1z
+aXplOjEyLjBwdDtjb2xvcjpibGFjayI+Q2FuIHRoaXMgb3B0aW9uIGJlIHVzZWQgd2l0aCBzaGFy
+ZWQgbWVtb3J5IGluIHZvbGF0aWxlIG1lbW9yeSAoZGVmYXVsdCByYW0pLCB0b28/IEFuZCBpcyBp
+dCBwb3NzaWJsZSB0byByZWNvcmQga2VybmVsIHNwYWNlIHRyYWNlcyB3aXRoIHRoaXMgb3B0aW9u
+Pzwvc3Bhbj48c3BhbiBzdHlsZT0iY29sb3I6YmxhY2siPjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4N
+CjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIiBzdHlsZT0iZm9udC1zaXpl
+OjEyLjBwdDtjb2xvcjpibGFjayI+SSB0cmllZA0KPC9zcGFuPjxzcGFuIHN0eWxlPSJjb2xvcjpi
+bGFjayI+PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4g
+bGFuZz0iRU4tVVMiIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0Nv
+dXJpZXIgTmV3JnF1b3Q7O2NvbG9yOmJsYWNrIj5sdHRuZyBjcmVhdGUgdGVzdHNobSAtLXNobS1w
+YXRoPS9kZXYvc2htIC0tc25hcHNob3Q8L3NwYW4+PHNwYW4gc3R5bGU9ImNvbG9yOmJsYWNrIj48
+bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJF
+Ti1VUyIgc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7Q291cmllciBO
+ZXcmcXVvdDs7Y29sb3I6YmxhY2siPmx0dG5nIGVuYWJsZS1jaGFubmVsIGMwIC1zIHRlc3RzaG0g
+LWs8L3NwYW4+PHNwYW4gc3R5bGU9ImNvbG9yOmJsYWNrIj48bzpwPjwvbzpwPjwvc3Bhbj48L3A+
+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5nPSJFTi1VUyIgc3R5bGU9ImZvbnQtc2l6
+ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7Q291cmllciBOZXcmcXVvdDs7Y29sb3I6YmxhY2si
+Pmx0dG5nIGVuYWJsZS1ldmVudCAtcyB0ZXN0c2htIC1jIGMwIC1rIC1hPC9zcGFuPjxzcGFuIHN0
+eWxlPSJjb2xvcjpibGFjayI+PG86cD48L286cD48L3NwYW4+PC9wPg0KPHAgY2xhc3M9Ik1zb05v
+cm1hbCI+PHNwYW4gbGFuZz0iRU4tVVMiIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFt
+aWx5OiZxdW90O0NvdXJpZXIgTmV3JnF1b3Q7O2NvbG9yOmJsYWNrIj5sdHRuZyBzdGFydDwvc3Bh
+bj48c3BhbiBzdHlsZT0iY29sb3I6YmxhY2siPjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNs
+YXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIiBzdHlsZT0iZm9udC1zaXplOjEyLjBw
+dDtmb250LWZhbWlseTomcXVvdDtDb3VyaWVyIE5ldyZxdW90Oztjb2xvcjpibGFjayI+bHR0bmcg
+c3RvcDwvc3Bhbj48c3BhbiBzdHlsZT0iY29sb3I6YmxhY2siPjxvOnA+PC9vOnA+PC9zcGFuPjwv
+cD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIiBzdHlsZT0iZm9udC1z
+aXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtDb3VyaWVyIE5ldyZxdW90Oztjb2xvcjpibGFj
+ayI+bHR0bmctY3Jhc2ggLWV4dHJhY3Q9L2hvbWUvdGVzdCAvZGV2L3NobTwvc3Bhbj48c3BhbiBz
+dHlsZT0iY29sb3I6YmxhY2siPjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29O
+b3JtYWwiPjxzcGFuIGxhbmc9IkVOLVVTIiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtjb2xvcjpi
+bGFjayI+V2l0aCBsdHRuZyBhbmQgbHR0bmctY3Jhc2ggZXZlcnl0aGluZyBzZWVtcyB0byB3b3Jr
+IGZpbmUgKG5vIGVycm9yIG1lc3NhZ2VzKS48L3NwYW4+PHNwYW4gc3R5bGU9ImNvbG9yOmJsYWNr
+Ij48bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBsYW5n
+PSJFTi1VUyIgc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Y29sb3I6YmxhY2siPkhvd2V2ZXIgdGhl
+IGV4dHJhY3QgZm9sZGVyIGtlZXBzIGVtcHR5Ljwvc3Bhbj48c3BhbiBzdHlsZT0iY29sb3I6Ymxh
+Y2siPjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIGxh
+bmc9IkVOLVVTIiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtjb2xvcjpibGFjayI+SGFzIHNvbWVv
+bmUgcmVzZWFyY2hlZCBpbnRvIHRoaXMgb3B0aW9uIGFuZCBjYW4gaGVscCB0byBjbGFyaWZ5IHRo
+ZSBwb2ludHM/PC9zcGFuPjxzcGFuIHN0eWxlPSJjb2xvcjpibGFjayI+PG86cD48L286cD48L3Nw
+YW4+PC9wPg0KPC9ibG9ja3F1b3RlPg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFu
+IHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNh
+bnMtc2VyaWY7Y29sb3I6YmxhY2s7bXNvLWZhcmVhc3QtbGFuZ3VhZ2U6REUiPkhpIFRob21hcyw8
+bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFs
+Ij48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlhbCZx
+dW90OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrO21zby1mYXJlYXN0LWxhbmd1YWdlOkRFIj48bzpw
+PiZuYnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9y
+bWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlh
+bCZxdW90OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrO21zby1mYXJlYXN0LWxhbmd1YWdlOkRFIj5B
+Ym91dCAmcXVvdDstLXNobS1wYXRoJnF1b3Q7IGFuZCBsdHRuZy1jcmFzaCwgdGhvc2UgYXJlIGRp
+c2N1c3NlZCBoZXJlOg0KPGEgaHJlZj0iaHR0cHM6Ly9jbGlja3RpbWUuc3ltYW50ZWMuY29tLzNZ
+WjE1cGJKVlNENDd5ZVh4aFhpd3FFN1ZjP3U9aHR0cHMlM0ElMkYlMkZsdHRuZy5vcmclMkZkb2Nz
+JTJGdjIuMTAlMkYlMjNkb2MtcGVyc2lzdGVudC1tZW1vcnktZmlsZS1zeXN0ZW1zIj4NCmh0dHBz
+Oi8vbHR0bmcub3JnL2RvY3MvdjIuMTAvI2RvYy1wZXJzaXN0ZW50LW1lbW9yeS1maWxlLXN5c3Rl
+bXM8L2E+PG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1z
+b05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7
+QXJpYWwmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjpibGFjazttc28tZmFyZWFzdC1sYW5ndWFnZTpE
+RSI+PG86cD4mbmJzcDs8L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9
+Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1
+b3Q7QXJpYWwmcXVvdDssc2Fucy1zZXJpZjtjb2xvcjpibGFjazttc28tZmFyZWFzdC1sYW5ndWFn
+ZTpERSI+SSdtIG5vdCBzdXJlIEkgY29tcGxldGVseSB1bmRlcnN0YW5kIHlvdXIgdXNlLWNhc2Ug
+YW5kIHdoZXRoZXIgeW91ciBpbnRlbnQgaXMgdG8gZXh0cmFjdCB0cmFjZSBkYXRhIGFmdGVyIGE8
+bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFs
+Ij48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlhbCZx
+dW90OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrO21zby1mYXJlYXN0LWxhbmd1YWdlOkRFIj5zeXN0
+ZW0gY3Jhc2ggb3IgaWYgdGhlICZxdW90O3NuYXBzaG90JnF1b3Q7IG1vZGUgaXMgZW5vdWdoIGZv
+ciB5b3VyIG5lZWRzLjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNs
+YXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5
+OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2s7bXNvLWZhcmVhc3QtbGFu
+Z3VhZ2U6REUiPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxw
+IGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFt
+aWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2s7bXNvLWZhcmVhc3Qt
+bGFuZ3VhZ2U6REUiPk5vdGUgdGhhdCB0aGUgJnF1b3Q7c2htLXBhdGgmcXVvdDsgb3B0aW9uIG9u
+bHkgYXBwbGllcyB0byBVU1QgKHVzZXItc3BhY2UpIHRyYWNlcyBhdCB0aGUgbW9tZW50LiBJdCBo
+YXMgbm90IGJlZW4gaW1wbGVtZW50ZWQ8bzpwPjwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxk
+aXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtm
+b250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrO21zby1m
+YXJlYXN0LWxhbmd1YWdlOkRFIj5mb3Iga2VybmVsIHRyYWNpbmcgeWV0LjxvOnA+PC9vOnA+PC9z
+cGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxl
+PSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2Vy
+aWY7Y29sb3I6YmxhY2s7bXNvLWZhcmVhc3QtbGFuZ3VhZ2U6REUiPjxvOnA+Jm5ic3A7PC9vOnA+
+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0
+eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMt
+c2VyaWY7Y29sb3I6YmxhY2s7bXNvLWZhcmVhc3QtbGFuZ3VhZ2U6REUiPlRoZSB3YXkgd2UgdHlw
+aWNhbGx5IHVzZSBpdCBmb3IgZXh0cmFjdGlvbiBvZiB0cmFjZSBkYXRhIGZyb20gdXNlci1zcGFj
+ZSB3aGVuIGEgc3lzdGVtIGNyYXNoZXMgaXMgdG8gdXNlIHRoZSBwbWVtIGRyaXZlciB0bzxvOnA+
+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxz
+cGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7
+LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2s7bXNvLWZhcmVhc3QtbGFuZ3VhZ2U6REUiPmNyZWF0ZSBh
+IGJsb2NrIGRldmljZSBvdXQgb2YgYSByYW5nZSBvZiB0aGUgc3lzdGVtIG1lbW9yeSwgYW5kIHRo
+ZW4gdXNlIGV4dDIgb3IgZXh0NCB3aXRoIHRoZSBEQVggbW91bnQgb3B0aW9uIHRvIGVuc3VyZTxv
+OnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwi
+PjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1
+b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2s7bXNvLWZhcmVhc3QtbGFuZ3VhZ2U6REUiPnRoZSBm
+aWxlc3lzdGVtIGJ5cGFzc2VzIHRoZSBwYWdlIGNhY2hlLjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4N
+CjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNp
+emU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6
+YmxhY2s7bXNvLWZhcmVhc3QtbGFuZ3VhZ2U6REUiPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwv
+cD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250
+LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29s
+b3I6YmxhY2s7bXNvLWZhcmVhc3QtbGFuZ3VhZ2U6REUiPlRoZW4gd2UgZW5zdXJlIHRoYXQga2V4
+ZWMgaXMgdXNlZCB0byBib290IGEgbmV3IGtlcm5lbCBvbiBjcmFzaCwgb3IgbWFrZSBzdXJlIHRo
+ZSBCSU9TIGRvZXMgbm90IGVyYXNlIHRoZTxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0K
+PGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0
+O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2s7bXNv
+LWZhcmVhc3QtbGFuZ3VhZ2U6REUiPm1lbW9yeSBjb250ZW50IG9uIHNvZnQgcmVib290LCB3aGlj
+aCBnaXZlcyBhY2Nlc3MgdG8gdGhlIHNobS1wYXRoIGJ1ZmZlcnMgYWZ0ZXIgY3Jhc2gvcmVib290
+LjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3Jt
+YWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFs
+JnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2s7bXNvLWZhcmVhc3QtbGFuZ3VhZ2U6REUiPjxv
+OnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29O
+b3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0Fy
+aWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2s7bXNvLWZhcmVhc3QtbGFuZ3VhZ2U6REUi
+PldlIGRvbid0IHVzdWFsbHkgdXNlIC9kZXYvc2htIGFzIGFuIGFyZ3VtZW50IHRvIC0tc2htLXBh
+dGguIFRoaXMgcGF0aCBpcyBub3JtYWxseSB1c2VkIHRvIGhvbGQgUE9TSVggc2hhcmVkIG1lbW9y
+eTxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3Jt
+YWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFs
+JnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2s7bXNvLWZhcmVhc3QtbGFuZ3VhZ2U6REUiPmZp
+bGVzLiBJIHdvdWxkIGV4cGVjdCBhIGRpZmZlcmVudCBtb3VudCBwb2ludCBwYXRoIGFzIGFyZ3Vt
+ZW50IHRvIC0tc2htLXBhdGggd2hpY2ggcG9pbnRzIHRvIGEgREFYLWVuYWJsZWQgZmlsZXN5c3Rl
+bTxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3Jt
+YWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFs
+JnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2s7bXNvLWZhcmVhc3QtbGFuZ3VhZ2U6REUiPmJh
+Y2tlZCBieSBhIFBNRU0gYmxvY2sgZGV2aWNlLjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2
+Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6MTIu
+MHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6YmxhY2s7
+bXNvLWZhcmVhc3QtbGFuZ3VhZ2U6REUiPjxvOnA+Jm5ic3A7PC9vOnA+PC9zcGFuPjwvcD4NCjwv
+ZGl2Pg0KPGRpdj4NCjxwIGNsYXNzPSJNc29Ob3JtYWwiPjxzcGFuIHN0eWxlPSJmb250LXNpemU6
+MTIuMHB0O2ZvbnQtZmFtaWx5OiZxdW90O0FyaWFsJnF1b3Q7LHNhbnMtc2VyaWY7Y29sb3I6Ymxh
+Y2s7bXNvLWZhcmVhc3QtbGFuZ3VhZ2U6REUiPlRoYW5rcyw8bzpwPjwvbzpwPjwvc3Bhbj48L3A+
+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9udC1z
+aXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90OyxzYW5zLXNlcmlmO2NvbG9y
+OmJsYWNrO21zby1mYXJlYXN0LWxhbmd1YWdlOkRFIj48bzpwPiZuYnNwOzwvbzpwPjwvc3Bhbj48
+L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48c3BhbiBzdHlsZT0iZm9u
+dC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90OyxzYW5zLXNlcmlmO2Nv
+bG9yOmJsYWNrO21zby1mYXJlYXN0LWxhbmd1YWdlOkRFIj5NYXRoaWV1PG86cD48L286cD48L3Nw
+YW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1hbCI+PHNwYW4gc3R5bGU9
+ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwmcXVvdDssc2Fucy1zZXJp
+Zjtjb2xvcjpibGFjazttc28tZmFyZWFzdC1sYW5ndWFnZTpERSI+PG86cD4mbmJzcDs8L286cD48
+L3NwYW4+PC9wPg0KPC9kaXY+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFsIj48
+c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlhbCZxdW90
+OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrO21zby1mYXJlYXN0LWxhbmd1YWdlOkRFIj48bzpwPiZu
+YnNwOzwvbzpwPjwvc3Bhbj48L3A+DQo8L2Rpdj4NCjxkaXY+DQo8cCBjbGFzcz0iTXNvTm9ybWFs
+Ij48c3BhbiBzdHlsZT0iZm9udC1zaXplOjEyLjBwdDtmb250LWZhbWlseTomcXVvdDtBcmlhbCZx
+dW90OyxzYW5zLXNlcmlmO2NvbG9yOmJsYWNrO21zby1mYXJlYXN0LWxhbmd1YWdlOkRFIj4tLQ0K
+PG86cD48L286cD48L3NwYW4+PC9wPg0KPC9kaXY+DQo8ZGl2Pg0KPHAgY2xhc3M9Ik1zb05vcm1h
+bCI+PHNwYW4gc3R5bGU9ImZvbnQtc2l6ZToxMi4wcHQ7Zm9udC1mYW1pbHk6JnF1b3Q7QXJpYWwm
+cXVvdDssc2Fucy1zZXJpZjtjb2xvcjpibGFjazttc28tZmFyZWFzdC1sYW5ndWFnZTpERSI+TWF0
+aGlldSBEZXNub3llcnM8YnI+DQpFZmZpY2lPUyBJbmMuPGJyPg0KPGEgaHJlZj0iaHR0cHM6Ly9j
+bGlja3RpbWUuc3ltYW50ZWMuY29tLzMydm5TUFVzVkNmSENra3dveVB5bVZ4N1ZjP3U9aHR0cCUz
+QSUyRiUyRnd3dy5lZmZpY2lvcy5jb20iPmh0dHBzOi8vY2xpY2t0aW1lLnN5bWFudGVjLmNvbS8z
+MnZuU1BVc1ZDZkhDa2t3b3lQeW1WeDdWYz91PWh0dHAlM0ElMkYlMkZ3d3cuZWZmaWNpb3MuY29t
+PC9hPjxvOnA+PC9vOnA+PC9zcGFuPjwvcD4NCjwvZGl2Pg0KPC9kaXY+DQo8L2Rpdj4NCjwvYm9k
+eT4NCjwvaHRtbD4NCg==
 
-> As per documention with option `--shm-path=E2=80=98 ringbuffer for tracin=
-g can be
-> created in shared memory. With lttng-crash data can be extracted from
-> ringbuffer.
+--_000_387583b7903a4b57bc56c89410fe3c0dHIMDWSMB04adharmancom_--
 
-> Can this option be used with shared memory in volatile memory (default ra=
-m),
-> too? And is it possible to record kernel space traces with this option?
-
-> I tried
-
-> lttng create testshm --shm-path=3D/dev/shm --snapshot
-
-> lttng enable-channel c0 -s testshm -k
-
-> lttng enable-event -s testshm -c c0 -k -a
-
-> lttng start
-
-> lttng stop
-
-> lttng-crash -extract=3D/home/test /dev/shm
-
-> With lttng and lttng-crash everything seems to work fine (no error messag=
-es).
-
-> However the extract folder keeps empty.
-
-> Has someone researched into this option and can help to clarify the point=
-s?
-
-Hi Thomas,=20
-
-About "--shm-path" and lttng-crash, those are discussed here: [ https://ltt=
-ng.org/docs/v2.10/#doc-persistent-memory-file-systems | https://lttng.org/d=
-ocs/v2.10/#doc-persistent-memory-file-systems ]=20
-
-I'm not sure I completely understand your use-case and whether your intent =
-is to extract trace data after a=20
-system crash or if the "snapshot" mode is enough for your needs.=20
-
-Note that the "shm-path" option only applies to UST (user-space) traces at =
-the moment. It has not been implemented=20
-for kernel tracing yet.=20
-
-The way we typically use it for extraction of trace data from user-space wh=
-en a system crashes is to use the pmem driver to=20
-create a block device out of a range of the system memory, and then use ext=
-2 or ext4 with the DAX mount option to ensure=20
-the filesystem bypasses the page cache.=20
-
-Then we ensure that kexec is used to boot a new kernel on crash, or make su=
-re the BIOS does not erase the=20
-memory content on soft reboot, which gives access to the shm-path buffers a=
-fter crash/reboot.=20
-
-We don't usually use /dev/shm as an argument to --shm-path. This path is no=
-rmally used to hold POSIX shared memory=20
-files. I would expect a different mount point path as argument to --shm-pat=
-h which points to a DAX-enabled filesystem=20
-backed by a PMEM block device.=20
-
-Thanks,=20
-
-Mathieu=20
-
---=20
-Mathieu Desnoyers=20
-EfficiOS Inc.=20
-http://www.efficios.com=20
-
---=_7281c42d-bcc7-4b94-b904-bc865ac381a4
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div><style><!--
-
-@font-face
-=09{font-family:"Cambria Math";
-=09panose-1:2 4 5 3 5 4 6 3 2 4;}
-@font-face
-=09{font-family:Calibri;
-=09panose-1:2 15 5 2 2 2 4 3 2 4;}
-
-p.MsoNormal, li.MsoNormal, div.MsoNormal
-=09{margin:0cm;
-=09margin-bottom:.0001pt;
-=09font-size:11.0pt;
-=09font-family:"Calibri",sans-serif;
-=09mso-fareast-language:EN-US;}
-a:link, span.MsoHyperlink
-=09{mso-style-priority:99;
-=09color:#0563C1;
-=09text-decoration:underline;}
-a:visited, span.MsoHyperlinkFollowed
-=09{mso-style-priority:99;
-=09color:#954F72;
-=09text-decoration:underline;}
-span.EmailStyle17
-=09{mso-style-type:personal-compose;
-=09font-family:"Calibri",sans-serif;
-=09color:windowtext;
-=09font-weight:normal;
-=09font-style:normal;
-=09text-decoration:none none;}
-.MsoChpDefault
-=09{mso-style-type:export-only;
-=09font-family:"Calibri",sans-serif;
-=09mso-fareast-language:EN-US;}
-@page WordSection1
-=09{size:612.0pt 792.0pt;
-=09margin:70.85pt 70.85pt 2.0cm 70.85pt;}
-div.WordSection1
-=09{page:WordSection1;}
---></style></div><div><br data-mce-bogus=3D"1"></div><div><span id=3D"zwchr=
-" data-marker=3D"__DIVIDER__">----- On Mar 4, 2019, at 4:28 AM, Thomas Schi=
-ckentanz &lt;thomas.schickentanz@harman.com&gt; wrote:<br></span></div><div=
- data-marker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid=
- #1010FF;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;fon=
-t-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;=
-font-size:12pt;"><div class=3D"WordSection1">
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt">Hi all,</span></p>
-
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt" lang=3D"EN-US">My i=
-dea is to pre-allocate memory on system startup which can later be used by =
-lttng for tracing. It should work like flight recorder mode without extract=
-ing data from ringbuffers to trace file
- while recording data. Data extraction of shm ringbuffers should be done wh=
-en recording has been finished.</span></p>
-
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt" lang=3D"EN-US">As p=
-er documention with option
-</span><span style=3D"font-size:12.0pt;font-family:&quot;Courier New&quot;"=
- lang=3D"EN-US">`--shm-path=E2=80=98</span><span style=3D"font-size:12.0pt"=
- lang=3D"EN-US"> ringbuffer for tracing can be created in shared memory. Wi=
-th
-</span><span style=3D"font-size:12.0pt;font-family:&quot;Courier New&quot;"=
- lang=3D"EN-US">lttng-crash</span><span style=3D"font-size:12.0pt" lang=3D"=
-EN-US"> data can be extracted from ringbuffer.</span></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt" lang=3D"EN-US">Can =
-this option be used with shared memory in volatile memory (default ram), to=
-o? And is it possible to record kernel space traces with this option?</span=
-></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt" lang=3D"EN-US">I tr=
-ied </span></p>
-
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Co=
-urier New&quot;" lang=3D"EN-US">lttng create testshm --shm-path=3D/dev/shm =
---snapshot</span></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Co=
-urier New&quot;" lang=3D"EN-US">lttng enable-channel c0 -s testshm -k</span=
-></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Co=
-urier New&quot;" lang=3D"EN-US">lttng enable-event -s testshm -c c0 -k -a</=
-span></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Co=
-urier New&quot;" lang=3D"EN-US">lttng start</span></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Co=
-urier New&quot;" lang=3D"EN-US">lttng stop</span></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt;font-family:&quot;Co=
-urier New&quot;" lang=3D"EN-US">lttng-crash -extract=3D/home/test /dev/shm<=
-/span></p>
-
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt" lang=3D"EN-US">With=
- lttng and lttng-crash everything seems to work fine (no error messages).</=
-span></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt" lang=3D"EN-US">Howe=
-ver the extract folder keeps empty.</span></p>
-<p class=3D"MsoNormal"><span style=3D"font-size:12.0pt" lang=3D"EN-US">Has =
-someone researched into this option and can help to clarify the points?</sp=
-an></p></div></blockquote><div>Hi Thomas,<br></div><div><br data-mce-bogus=
-=3D"1"></div><div>About "--shm-path" and lttng-crash, those are discussed h=
-ere: <a href=3D"https://lttng.org/docs/v2.10/#doc-persistent-memory-file-sy=
-stems">https://lttng.org/docs/v2.10/#doc-persistent-memory-file-systems</a>=
-<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>I'm=
- not sure I completely understand your use-case and whether your intent is =
-to extract trace data after a<br data-mce-bogus=3D"1"></div><div>system cra=
-sh or if the "snapshot" mode is enough for your needs.<br data-mce-bogus=3D=
-"1"></div><div><br data-mce-bogus=3D"1"></div><div>Note that the "shm-path"=
- option only applies to UST (user-space) traces at the moment. It has not b=
-een implemented<br data-mce-bogus=3D"1"></div><div>for kernel tracing yet.<=
-br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>The =
-way we typically use it for extraction of trace data from user-space when a=
- system crashes is to use the pmem driver to</div><div>create a block devic=
-e out of a range of the system memory, and then use ext2 or ext4 with the D=
-AX mount option to ensure</div><div>the filesystem bypasses the page cache.=
-<br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>The=
-n we ensure that kexec is used to boot a new kernel on crash, or make sure =
-the BIOS does not erase the<br data-mce-bogus=3D"1"></div><div>memory conte=
-nt on soft reboot, which gives access to the shm-path buffers after crash/r=
-eboot.</div><div><br data-mce-bogus=3D"1"></div><div>We don't usually use /=
-dev/shm as an argument to --shm-path. This path is normally used to hold PO=
-SIX shared memory</div><div>files. I would expect a different mount point p=
-ath as argument to --shm-path which points to a DAX-enabled filesystem</div=
-><div>backed by a PMEM block device.<br data-mce-bogus=3D"1"></div><div><br=
- data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div=
-><br data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div>=
-<div><br data-mce-bogus=3D"1"></div></div><div><br data-mce-bogus=3D"1"></d=
-iv><div data-marker=3D"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br=
->EfficiOS Inc.<br>http://www.efficios.com</div></div></body></html>
---=_7281c42d-bcc7-4b94-b904-bc865ac381a4--
-
---===============8816761086392749005==
+--===============5883959793545716762==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -259,4 +398,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============8816761086392749005==--
+--===============5883959793545716762==--
