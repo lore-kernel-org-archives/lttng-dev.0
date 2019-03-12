@@ -1,22 +1,22 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+From: Doug Schaefer <dschaefer@blackberry.com>
 Subject: Re: [tracecompass-dev] Scalability
-Date: Tue, 12 Mar 2019 11:34:37 -0400
-Message-ID: <20190312153437.GA25992__47995.3167656035$1552404897$gmane$org@joraj-alpa>
+Date: Tue, 12 Mar 2019 15:47:09 +0000
+Message-ID: <c2ef7a391ab1a7305d71fd0165729d130bc94f5c.camel__22853.8477838569$1552405649$gmane$org@blackberry.com>
 References: <559e65b28a33c3a2d28bc5a32c3fdc4dfeacaf93.camel@blackberry.com>
  <DM6PR15MB3100B14E05117F439A6A08DE9E490@DM6PR15MB3100.namprd15.prod.outlook.com>
  <2b4e7937f739eda6102a62e736a6313c39ea5385.camel@blackberry.com>
  <20190312150314.GC13925@joraj-alpa>
  <484bb42bc0d287b251e2542e8d7e242ee72863b1.camel@blackberry.com>
+ <20190312153437.GA25992@joraj-alpa>
+Reply-To: Doug Schaefer <dschaefer@blackberry.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8042743149658061625=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44JfD10htKz15yZ
- for <lttng-dev@lists.lttng.org>; Tue, 12 Mar 2019 11:34:40 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <484bb42bc0d287b251e2542e8d7e242ee72863b1.camel@blackberry.com>
+Received: from smtp-p02.blackberry.com (smtp-p02.blackberry.com [208.65.78.89])
+ by lists.lttng.org (Postfix) with ESMTPS id 44JfVR529fz1613
+ for <lttng-dev@lists.lttng.org>; Tue, 12 Mar 2019 11:47:11 -0400 (EDT)
+In-Reply-To: <20190312153437.GA25992@joraj-alpa>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,25 +26,92 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Doug Schaefer <dschaefer@blackberry.com>
+To: "jonathan.rajotte-julien@efficios.com" <jonathan.rajotte-julien@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "tracecompass-dev@eclipse.org" <tracecompass-dev@eclipse.org>
 List-Id: lttng-dev@lists.lttng.org
 
-On Tue, Mar 12, 2019 at 03:23:23PM +0000, Doug Schaefer wrote:
-> It should be easy to generate a random one with the class I mentioned below
-> and fill it with 16 million events.
+--===============8042743149658061625==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_c2ef7a391ab1a7305d71fd0165729d130bc94f5ccamelblackberry_"
 
-Not if the problem is in the generator code ;).
+--_000_c2ef7a391ab1a7305d71fd0165729d130bc94f5ccamelblackberry_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-> BTW, two of the int fields are 5 and 10
-> bits respectively, but I'm not sure that matters (or at least it shouldn't).
+SW4gdGhlIHRocmVhZCBvbiB0aGUgdHJhY2Vjb21wYXNzIGxpc3QsIEkgYWxzbyBtZW50aW9uZWQg
+dGhhdCB0aGUgYmFiZWx0cmFjZSB1dGlsaXR5IGl0c2VsZiByYW4gb3V0IG9mIG1lbW9yeSB3aGVu
+IHJlYWRpbmcgdGhlIGZpbGUuIFRoYXQncyBhY3R1YWxseSBteSBiaWdnZXN0IHdvcnJ5LiBJIGdv
+dCBhcm91bmQgdGhlIGdlbmVyYXRvciBpc3N1ZSBieSBmbHVzaGluZyBldmVyeSAxMDBLIGV2ZW50
+cy4NCg0KSSdsbCBjcmVhdGUgYSBxdWljayBnZW5lcmF0b3IgdGhhdCBzaG93cyB0aGUgc2FtZSBp
+c3N1ZSBhbmQgcG9zdCBpdCBpbiBhIGJpdC4NCg0KRG91Zy4NCg0KT24gVHVlLCAyMDE5LTAzLTEy
+IGF0IDExOjM0IC0wNDAwLCBKb25hdGhhbiBSYWpvdHRlLUp1bGllbiB3cm90ZToNCg0KT24gVHVl
+LCBNYXIgMTIsIDIwMTkgYXQgMDM6MjM6MjNQTSArMDAwMCwgRG91ZyBTY2hhZWZlciB3cm90ZToN
+Cg0KSXQgc2hvdWxkIGJlIGVhc3kgdG8gZ2VuZXJhdGUgYSByYW5kb20gb25lIHdpdGggdGhlIGNs
+YXNzIEkgbWVudGlvbmVkIGJlbG93DQoNCmFuZCBmaWxsIGl0IHdpdGggMTYgbWlsbGlvbiBldmVu
+dHMuDQoNCg0KTm90IGlmIHRoZSBwcm9ibGVtIGlzIGluIHRoZSBnZW5lcmF0b3IgY29kZSA7KS4N
+Cg0KDQpCVFcsIHR3byBvZiB0aGUgaW50IGZpZWxkcyBhcmUgNSBhbmQgMTANCg0KYml0cyByZXNw
+ZWN0aXZlbHksIGJ1dCBJJ20gbm90IHN1cmUgdGhhdCBtYXR0ZXJzIChvciBhdCBsZWFzdCBpdCBz
+aG91bGRuJ3QpLg0KDQoNCk1ha2Ugc3VyZSB0byBjaGVjayB0aGUgZW5kaWFuLW5lc3Mgb2YgdGhv
+c2UgZmllbGRzLg0KDQoNCldoYXQgY2xhc3M/IE5vdCBzdXJlIEkgc2VlIGFueSByZWZlcmVuY2Ug
+dG8gYW55Lg0KDQoNClNpbmNlIHlvdSBhcmUgZ2VuZXJhdGluZyBDVEYgdGhlIGVycm9yIGNhbiBi
+ZSBpbiB0aGUgZ2VuZXJhdG9yIGNvZGUuIFBsZWFzZQ0KDQpwcm92aWRlIGVpdGhlciBhIHRyYWNl
+IHJlcHJvZHVjaW5nIHRoZSBpc3N1ZSBvciBhIGJhc2UgcmVwcm9kdWNlci4gSXQgd2lsbCBiZQ0K
+DQptdWNoIGVhc2llciBvdmVyYWxsIHRoYW4gdXMgdHJ5aW5nIHRvIHJlcHJvZHVjZSBpdCBibGlu
+ZGx5Lg0KDQoNCkNoZWVycy4NCg0K
 
-Make sure to check the endian-ness of those fields.
+--_000_c2ef7a391ab1a7305d71fd0165729d130bc94f5ccamelblackberry_
+Content-Type: text/html; charset="utf-8"
+Content-ID: <E25E2D8778A495438BF9F57E236A69D5@rim.com>
+Content-Transfer-Encoding: base64
 
-What class? Not sure I see any reference to any.
+PGh0bWwgZGlyPSJsdHIiPg0KPGhlYWQ+DQo8bWV0YSBodHRwLWVxdWl2PSJDb250ZW50LVR5cGUi
+IGNvbnRlbnQ9InRleHQvaHRtbDsgY2hhcnNldD11dGYtOCI+DQo8L2hlYWQ+DQo8Ym9keSBzdHls
+ZT0idGV4dC1hbGlnbjpsZWZ0OyBkaXJlY3Rpb246bHRyOyI+DQo8ZGl2PkluIHRoZSB0aHJlYWQg
+b24gdGhlIHRyYWNlY29tcGFzcyBsaXN0LCBJIGFsc28gbWVudGlvbmVkIHRoYXQgdGhlIGJhYmVs
+dHJhY2UgdXRpbGl0eSBpdHNlbGYgcmFuIG91dCBvZiBtZW1vcnkgd2hlbiByZWFkaW5nIHRoZSBm
+aWxlLiBUaGF0J3MgYWN0dWFsbHkgbXkgYmlnZ2VzdCB3b3JyeS4gSSBnb3QgYXJvdW5kIHRoZSBn
+ZW5lcmF0b3IgaXNzdWUgYnkgZmx1c2hpbmcgZXZlcnkgMTAwSyBldmVudHMuPC9kaXY+DQo8ZGl2
+Pjxicj4NCjwvZGl2Pg0KPGRpdj5JJ2xsIGNyZWF0ZSBhIHF1aWNrIGdlbmVyYXRvciB0aGF0IHNo
+b3dzIHRoZSBzYW1lIGlzc3VlIGFuZCBwb3N0IGl0IGluIGEgYml0LjwvZGl2Pg0KPGRpdj48YnI+
+DQo8L2Rpdj4NCjxkaXY+RG91Zy48L2Rpdj4NCjxkaXY+PGJyPg0KPC9kaXY+DQo8ZGl2Pk9uIFR1
+ZSwgMjAxOS0wMy0xMiBhdCAxMTozNCAtMDQwMCwgSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4gd3Jv
+dGU6PC9kaXY+DQo8YmxvY2txdW90ZSB0eXBlPSJjaXRlIiBzdHlsZT0ibWFyZ2luOjAgMCAwIC44
+ZXg7IGJvcmRlci1sZWZ0OjJweCAjNzI5ZmNmIHNvbGlkO3BhZGRpbmctbGVmdDoxZXgiPg0KPHBy
+ZT5PbiBUdWUsIE1hciAxMiwgMjAxOSBhdCAwMzoyMzoyM1BNICYjNDM7MDAwMCwgRG91ZyBTY2hh
+ZWZlciB3cm90ZTo8L3ByZT4NCjxwcmU+PGJsb2NrcXVvdGUgdHlwZT0iY2l0ZSIgc3R5bGU9Im1h
+cmdpbjowIDAgMCAuOGV4OyBib3JkZXItbGVmdDoycHggIzcyOWZjZiBzb2xpZDtwYWRkaW5nLWxl
+ZnQ6MWV4Ij48L2Jsb2NrcXVvdGU+PC9wcmU+DQo8cHJlPkl0IHNob3VsZCBiZSBlYXN5IHRvIGdl
+bmVyYXRlIGEgcmFuZG9tIG9uZSB3aXRoIHRoZSBjbGFzcyBJIG1lbnRpb25lZCBiZWxvdzwvcHJl
+Pg0KPHByZT5hbmQgZmlsbCBpdCB3aXRoIDE2IG1pbGxpb24gZXZlbnRzLjwvcHJlPg0KPHByZT48
+L3ByZT4NCjxwcmU+PGJyPjwvcHJlPg0KPHByZT5Ob3QgaWYgdGhlIHByb2JsZW0gaXMgaW4gdGhl
+IGdlbmVyYXRvciBjb2RlIDspLjwvcHJlPg0KPHByZT48YnI+PC9wcmU+DQo8cHJlPjxibG9ja3F1
+b3RlIHR5cGU9ImNpdGUiIHN0eWxlPSJtYXJnaW46MCAwIDAgLjhleDsgYm9yZGVyLWxlZnQ6MnB4
+ICM3MjlmY2Ygc29saWQ7cGFkZGluZy1sZWZ0OjFleCI+PC9ibG9ja3F1b3RlPjwvcHJlPg0KPHBy
+ZT5CVFcsIHR3byBvZiB0aGUgaW50IGZpZWxkcyBhcmUgNSBhbmQgMTA8L3ByZT4NCjxwcmU+Yml0
+cyByZXNwZWN0aXZlbHksIGJ1dCBJJ20gbm90IHN1cmUgdGhhdCBtYXR0ZXJzIChvciBhdCBsZWFz
+dCBpdCBzaG91bGRuJ3QpLjwvcHJlPg0KPHByZT48L3ByZT4NCjxwcmU+PGJyPjwvcHJlPg0KPHBy
+ZT5NYWtlIHN1cmUgdG8gY2hlY2sgdGhlIGVuZGlhbi1uZXNzIG9mIHRob3NlIGZpZWxkcy48L3By
+ZT4NCjxwcmU+PGJyPjwvcHJlPg0KPHByZT5XaGF0IGNsYXNzPyBOb3Qgc3VyZSBJIHNlZSBhbnkg
+cmVmZXJlbmNlIHRvIGFueS48L3ByZT4NCjxwcmU+PGJyPjwvcHJlPg0KPHByZT5TaW5jZSB5b3Ug
+YXJlIGdlbmVyYXRpbmcgQ1RGIHRoZSBlcnJvciBjYW4gYmUgaW4gdGhlIGdlbmVyYXRvciBjb2Rl
+LiBQbGVhc2U8L3ByZT4NCjxwcmU+cHJvdmlkZSBlaXRoZXIgYSB0cmFjZSByZXByb2R1Y2luZyB0
+aGUgaXNzdWUgb3IgYSBiYXNlIHJlcHJvZHVjZXIuIEl0IHdpbGwgYmU8L3ByZT4NCjxwcmU+bXVj
+aCBlYXNpZXIgb3ZlcmFsbCB0aGFuIHVzIHRyeWluZyB0byByZXByb2R1Y2UgaXQgYmxpbmRseS48
+L3ByZT4NCjxwcmU+PGJyPjwvcHJlPg0KPHByZT5DaGVlcnMuPC9wcmU+DQo8cHJlPjxicj48L3By
+ZT4NCjwvYmxvY2txdW90ZT4NCjwvYm9keT4NCjwvaHRtbD4NCg==
 
-Since you are generating CTF the error can be in the generator code. Please
-provide either a trace reproducing the issue or a base reproducer. It will be
-much easier overall than us trying to reproduce it blindly.
+--_000_c2ef7a391ab1a7305d71fd0165729d130bc94f5ccamelblackberry_--
 
-Cheers.
+--===============8042743149658061625==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============8042743149658061625==--
