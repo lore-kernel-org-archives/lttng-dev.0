@@ -1,17 +1,18 @@
-From: Matthew Khouzam <matthew.khouzam@ericsson.com>
+From: Doug Schaefer <dschaefer@blackberry.com>
 Subject: Re: [tracecompass-dev] Scalability
-Date: Tue, 12 Mar 2019 15:10:21 +0000
-Message-ID: <DM6PR15MB310066EB15FFCE5AD1CC207D9E490__9351.96310035593$1552403488$gmane$org@DM6PR15MB3100.namprd15.prod.outlook.com>
+Date: Tue, 12 Mar 2019 15:23:23 +0000
+Message-ID: <484bb42bc0d287b251e2542e8d7e242ee72863b1.camel__7899.69418417371$1552404534$gmane$org@blackberry.com>
 References: <559e65b28a33c3a2d28bc5a32c3fdc4dfeacaf93.camel@blackberry.com>
  <DM6PR15MB3100B14E05117F439A6A08DE9E490@DM6PR15MB3100.namprd15.prod.outlook.com>
- <2b4e7937f739eda6102a62e736a6313c39ea5385.camel@blackberry.com>,
+ <2b4e7937f739eda6102a62e736a6313c39ea5385.camel@blackberry.com>
  <20190312150314.GC13925@joraj-alpa>
+Reply-To: Doug Schaefer <dschaefer@blackberry.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3219916082334219730=="
+Content-Type: multipart/mixed; boundary="===============7424323944048851881=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sesbmg23.ericsson.net (sesbmg23.ericsson.net [193.180.251.37])
- by lists.lttng.org (Postfix) with ESMTPS id 44Jdh35QL7z15vV
- for <lttng-dev@lists.lttng.org>; Tue, 12 Mar 2019 11:10:27 -0400 (EDT)
+Received: from smtp-p02.blackberry.com (smtp-p02.blackberry.com [208.65.78.89])
+ by lists.lttng.org (Postfix) with ESMTPS id 44Jf5367tZz15xN
+ for <lttng-dev@lists.lttng.org>; Tue, 12 Mar 2019 11:28:39 -0400 (EDT)
 In-Reply-To: <20190312150314.GC13925@joraj-alpa>
 Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -23,341 +24,229 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>, Doug
- Schaefer <dschaefer@blackberry.com>, tracecompass developer discussions <tracecompass-dev@eclipse.org>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: "tracecompass-dev@eclipse.org" <tracecompass-dev@eclipse.org>, "jonathan.rajotte-julien@efficios.com" <jonathan.rajotte-julien@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============3219916082334219730==
+--===============7424323944048851881==
 Content-Language: en-US
 Content-Type: multipart/alternative;
-	boundary="_000_DM6PR15MB310066EB15FFCE5AD1CC207D9E490DM6PR15MB3100namp_"
+	boundary="_000_484bb42bc0d287b251e2542e8d7e242ee72863b1camelblackberry_"
 
---_000_DM6PR15MB310066EB15FFCE5AD1CC207D9E490DM6PR15MB3100namp_
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+--_000_484bb42bc0d287b251e2542e8d7e242ee72863b1camelblackberry_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-Welcome Jonathan,
+SXQgc2hvdWxkIGJlIGVhc3kgdG8gZ2VuZXJhdGUgYSByYW5kb20gb25lIHdpdGggdGhlIGNsYXNz
+IEkgbWVudGlvbmVkIGJlbG93IGFuZCBmaWxsIGl0IHdpdGggMTYgbWlsbGlvbiBldmVudHMuIEJU
+VywgdHdvIG9mIHRoZSBpbnQgZmllbGRzIGFyZSA1IGFuZCAxMCBiaXRzIHJlc3BlY3RpdmVseSwg
+YnV0IEknbSBub3Qgc3VyZSB0aGF0IG1hdHRlcnMgKG9yIGF0IGxlYXN0IGl0IHNob3VsZG4ndCku
+DQoNCkknbGwgYWxzbyB0YWtlIGEgbG9vayBhdCB0aGUgYmFiZWx0cmFjZSBjb2RlIGFuZCBzZWUg
+d2hhdCBJIGNhbiBzZWUuDQoNCkJUVywgbXkgZm9jdXMgb24gbGliYmFiZWx0cmFjZSBpcyB0byBh
+bGxvdyBmb3IgYSBmdWxsIHJhbmdlIG9mIHRvb2xpbmcgZm9yIG91ciB1c2VycyB1c2luZyB0aGUg
+bGFuZ3VhZ2Ugb2YgdGhlaXIgY2hvaWNlLiBUaGUgcHl0aG9uIGJpbmRpbmcgaXMgcGFydGljdWxh
+cmx5IGludGVyZXN0aW5nLiBBcyB3ZSBtb3ZlIGZvcndhcmQgaW50byB0aGUgbmV3IHdvcmxkIG9m
+IElERXMsIEkgY2FuIHNlZSBhIG5vZGUuanMgYmluZGluZyBiZWluZyBpbnRlcmVzdGluZyBhcyB3
+ZWxsLiBBbmQgaXQgbWF5IGV2ZW4gbWFrZSBzZW5zZSB0byB1c2UgaXQgaW4gSmF2YSB0b29saW5n
+IGxpa2UgVHJhY2VDb21wYXNzIHVzaW5nIEpOQS4gVGhhdCdzIHRoZSB2aXNpb24gYXQgbGVhc3Qs
+IGJ1dCBmaXJzdCwgYmFieSBzdGVwcyDimLouDQoNCkRvdWcuDQoNCk9uIFR1ZSwgMjAxOS0wMy0x
+MiBhdCAxMTowMyAtMDQwMCwgSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4gd3JvdGU6DQoNCkhpIERv
+dWcsDQoNCg0KT24gVHVlLCBNYXIgMTIsIDIwMTkgYXQgMDI6NTY6MjZQTSArMDAwMCwgRG91ZyBT
+Y2hhZWZlciB3cm90ZToNCg0KVGhhbmtzLCBNYXR0aGV3LCBJIGVuZGVkIHVwIGZsdXNoaW5nIGV2
+ZXJ5IDEwMEsgZXZlbnRzIGFuZCB0aGF0IHNlZW1lZCBPSy4NCg0KDQpNeSBiaWdnZXN0IHdvcnJ5
+IGlzIG9uIHRoZSByZWFkIHNpZGUuIEJhYmVsdHJhY2UgYmxldyB1cCBvbiB0aGF0IGZpbGUuIEl0
+J3MgYSBwcmV0dHkgc2ltcGxlIHRyYWNlIChmb3Igbm93KSB3aXRoIGEgc2luZ2xlIGV2ZW50IGNs
+YXNzIHdpdGggNCBpbnRzIGFuZCBhIHNlcXVlbmNlIG9mIDMyLWJpdCB1bnNpZ25lZCBpbnRzIHdo
+aWNoIGlzIHVzdWFsbHkgb25seSAyIGVsZW1lbnRzIGxvbmcuDQoNCg0KVGhpcyBpcyBub3QgSSBl
+eHBlY3QuIFN0aWxsIGVpdGhldCBqZ2FsYXIgb3IgZWVwIG1pZ2h0IGhhdmUgYSBtb3JlIGluc2ln
+aHQgb24NCg0KdGhpcy4gQ0NpbmcgdGhlIGx0dG5nLWRldiBtYWlsaW5nIGxpc3QuDQoNCg0KSXMg
+dGhlcmUgYW55IHdheSB0byBzaGFyZSB1cyBhIHNpbWlsYXIgdHJhY2U/IEVpdGhlciB3aXRoIGEg
+Z2VuZXJhdG9yIG9yIHdlIGNhbg0KDQpwcm92aWRlIGEgbGluayBmb3IgeW91IHRvIHVwbG9hZCBp
+dC4gVGhlIGN1cnJlbnQgbGltaXQgb24gYnVncy5sdHRuZy5vcmcgaXMgYQ0KDQpiaXQgdG9vIHNt
+YWxsIGZvciBzdWNoIHRyYWNlLg0KDQoNCg0KQXNpZGUgZnJvbSB0aGF0LCBhbSB2ZXJ5IHBsZWFz
+ZWQgd2l0aCB0aGUgaG93IGVhc3kgQ1RGIGlzIHRvIHdvcmsgd2l0aC4gTG9va2luZyBmb3J3YXJk
+IHRvIGRvaW5nIG1vcmUuDQoNCg0KRG91Zy4NCg0KDQpPbiBUdWUsIDIwMTktMDMtMTIgYXQgMTQ6
+NDEgKzAwMDAsIE1hdHRoZXcgS2hvdXphbSB3cm90ZToNCg0KDQpIaSBEb3VnLA0KDQoNCg0KR3Jl
+YXQgdG8gaGVhciB5b3UncmUgY29taW5nIHRvIGEgc3RhbmRhcmQhIEkgZG9uJ3Qga25vdyBpZiB0
+cmFjZSBjb21wYXNzIHdpbGwgc2NhbGUgcHJvcGVybHkgYXMgSSBkb24ndCBrbm93IHdoYXQgdGhl
+IHRyYWNlIGNvbmZpZ3VyYXRpb24gaXMuDQoNCg0KDQpJIGhhdmUgb25lIG9mIG91ciB0cmFjZSB3
+aGljaCBoYXMgMTYgbWlsbGlvbiBldmVudHMsIHRoZSBzaXplIG9mIGVhY2ggZXZlbnQgaXMgYXJv
+dW5kIDMyIGJ5dGVzIGdpdmluZyBtZSBhIDU0ME1CIGZpbGUuIE15IGZpcnN0IGF0dGVtcHQgYXQg
+c2ltcGx5IHdyaXRpbmcgb3V0IHRoZSBDVEYgZXZlbnRzIHdpdGhvdXQgYSBmbHVzaCByYW4gb3V0
+IG9mIHZpcnR1YWwgbWVtb3J5LiBJIHRoZW4gZmx1c2hlZCBhZnRlciBldmVyeSBldmVudCB3aGlj
+aCBtYWRlIGVhY2ggZXZlbnQgdGFrZSAzMksuIFNvIEkgZm91bmQgYSBtaWRkbGUgZ3JvdW5kIGFu
+ZCB0aGUgcmVzdWx0aW5nIHN0cmVhbSBmaWxlIGlzIGNsb3NlIHRvIHRoZSBzYW1lIHNpemUuDQoN
+Cg0KDQoNCk15IHN1Z2dlc3Rpb24gaXMgdG8gaGF2ZSAxIE1CIHBhY2tldHMuIFRoaXMgbWFrZXMg
+c2Vla2luZyB2ZXJ5IGVmZmljaWVudC4gSWYgZWFjaCBldmVudCBpcyAzMiBieXRlcywgYmFzaWNh
+bGx5IGZsdXNoIGV2ZXJ5IDI1ayBldmVudHMgb3Igc28uDQoNCg0KDQpQbGVhc2Uga2VlcCB1cyBw
+b3N0ZWQhDQoNCg0KDQpNYXR0aGV3Lg0KDQoNCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fDQoNCkZyb206IHRyYWNlY29tcGFzcy1kZXYtYm91bmNlc0BlY2xpcHNlLm9yZzxtYWlsdG86
+dHJhY2Vjb21wYXNzLWRldi1ib3VuY2VzQGVjbGlwc2Uub3JnPiA8dHJhY2Vjb21wYXNzLWRldi1i
+b3VuY2VzQGVjbGlwc2Uub3JnPG1haWx0bzp0cmFjZWNvbXBhc3MtZGV2LWJvdW5jZXNAZWNsaXBz
+ZS5vcmc+PiBvbiBiZWhhbGYgb2YgRG91ZyBTY2hhZWZlciA8ZHNjaGFlZmVyQGJsYWNrYmVycnku
+Y29tPG1haWx0bzpkc2NoYWVmZXJAYmxhY2tiZXJyeS5jb20+Pg0KDQpTZW50OiBUdWVzZGF5LCBN
+YXJjaCAxMiwgMjAxOSAxMDozMDoxNSBBTQ0KDQpUbzogdHJhY2Vjb21wYXNzLWRldkBlY2xpcHNl
+Lm9yZzxtYWlsdG86dHJhY2Vjb21wYXNzLWRldkBlY2xpcHNlLm9yZz4NCg0KU3ViamVjdDogW3Ry
+YWNlY29tcGFzcy1kZXZdIFNjYWxhYmlsaXR5DQoNCg0KSGV5IGdhbmcsDQoNCg0KV2UncmUgZmlu
+YWxseSBzdGFydGluZyB0byBsb29rIGF0IGNvbnZlcnRpbmcgb3VyIGN1c3RvbSB0cmFjZXMgaW50
+byBDVEYgc28gd2UgY2FuIGxldmVyYWdlIHRvb2xzIGxpa2UgVHJhY2VDb21wYXNzIGFuZCwgb2Yg
+Y291cnNlLCBjb250cmlidXRlIHRvIGl0LiBPbmUgdGhpbmcgSSBxdWlja2x5IHJhbiBpbnRvIGlz
+IGEgc2NhbGFiaWxpdHkgaXNzdWUgSSdtIHNlZWluZyB3aXRoIGxpYmJhYmVsdHJhY2UuDQoNCg0K
+SSBoYXZlIG9uZSBvZiBvdXIgdHJhY2Ugd2hpY2ggaGFzIDE2IG1pbGxpb24gZXZlbnRzLCB0aGUg
+c2l6ZSBvZiBlYWNoIGV2ZW50IGlzIGFyb3VuZCAzMiBieXRlcyBnaXZpbmcgbWUgYSA1NDBNQiBm
+aWxlLiBNeSBmaXJzdCBhdHRlbXB0IGF0IHNpbXBseSB3cml0aW5nIG91dCB0aGUgQ1RGIGV2ZW50
+cyB3aXRob3V0IGEgZmx1c2ggcmFuIG91dCBvZiB2aXJ0dWFsIG1lbW9yeS4gSSB0aGVuIGZsdXNo
+ZWQgYWZ0ZXIgZXZlcnkgZXZlbnQgd2hpY2ggbWFkZSBlYWNoIGV2ZW50IHRha2UgMzJLLiBTbyBJ
+IGZvdW5kIGEgbWlkZGxlIGdyb3VuZCBhbmQgdGhlIHJlc3VsdGluZyBzdHJlYW0gZmlsZSBpcyBj
+bG9zZSB0byB0aGUgc2FtZSBzaXplLg0KDQoNCkJ1dCB3aGVuIEkgdXNlIGJhYmVsdHJhY2UgdG8g
+cHJpbnQgaXQgb3V0LCBJIHJhbiBvdXQgb2YgdmlydHVhbCBtZW1vcnkuIEkgdGhlbiBoYW5kIGNv
+ZGVkIGEgcmVhZGVyIGFuZCBzaW1wbHkgYWRkaW5nIHRoZSB0cmFjZSB0byB0aGUgY29udGV4dCBj
+YXVzZWQgdGhlIG1lbW9yeSBpc3N1ZS4gSXQgcmVhbGx5IGxvb2tzIGxpa2UgbGliYmFiZWx0cmFj
+ZSAodmVyc2lvbiAxLjUgZnJvbSB0aGUgVWJ1bnR1IDE4LjA0IGRpc3RybyksIHRyaWVzIHRvIGlu
+ZmxhdGUgdGhlIGV2ZW50cyBpbnRvIGl0J3MgaW50ZXJuYWwgcmVwcmVzZW50YXRpb24gZm9yIHRo
+ZSBlbnRpcmUgdHJhY2UuIEkgbmVlZCB0byBkbyBtb3JlIGludmVzdGlnYXRpb24gdG8gY29uZmly
+bSB0aGF0Lg0KDQoNClNvIG15IHF1ZXN0aW9uIGZvciB0aGlzIGxpc3QsIHdvdWxkIFRyYWNlQ29t
+cGFzcyBkbyBiZXR0ZXI/IERvZXMgaXQgaGF2ZSBpdCdzIG93biBwYXJzaW5nIGxpYnJhcmllcz8N
+Cg0KDQpUaGFua3MsDQoNCkRvdWcNCg0KDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXw0KDQp0cmFjZWNvbXBhc3MtZGV2IG1haWxpbmcgbGlzdA0KDQp0cmFj
+ZWNvbXBhc3MtZGV2QGVjbGlwc2Uub3JnPG1haWx0bzp0cmFjZWNvbXBhc3MtZGV2QGVjbGlwc2Uu
+b3JnPg0KDQpUbyBjaGFuZ2UgeW91ciBkZWxpdmVyeSBvcHRpb25zLCByZXRyaWV2ZSB5b3VyIHBh
+c3N3b3JkLCBvciB1bnN1YnNjcmliZSBmcm9tIHRoaXMgbGlzdCwgdmlzaXQNCg0KaHR0cHM6Ly91
+cmxkZWZlbnNlLnByb29mcG9pbnQuY29tL3YyL3VybD91PWh0dHBzLTNBX193d3cuZWNsaXBzZS5v
+cmdfbWFpbG1hbl9saXN0aW5mb190cmFjZWNvbXBhc3MtMkRkZXYmZD1Ed0lCQWcmYz15em9IT2Nf
+Wkstc3hsLWtmR05TRXZsSllhbnNzWE4zcS1saGowc3AyNndFJnI9TnJyYnZUSFdhMk5icF9rQU4w
+SGwxbzNsTTFXQXdTZXM2NHVCanhqTmhNYyZtPVpvQ3g2MVZFX3NIR2E2ajNEWGVoYnFqWDVQMU5H
+RXVEdEVGYUdPUkNoOWsmcz1xaTlxMXp2RGFDOWNKQ2NpMHkxMjNPLWo2Nk02NDNZd3hSSmNjSkN6
+Z19jJmU9DQoNCg0KDQo=
 
+--_000_484bb42bc0d287b251e2542e8d7e242ee72863b1camelblackberry_
+Content-Type: text/html; charset="utf-8"
+Content-ID: <1D739C9A7D57354EB6912EFA0254E5D3@rim.com>
+Content-Transfer-Encoding: base64
 
-Also, for people seeking great babeltrace support, I feel I should plug the=
- lttng-dev mailinglist.
+PGh0bWwgZGlyPSJsdHIiPg0KPGhlYWQ+DQo8bWV0YSBodHRwLWVxdWl2PSJDb250ZW50LVR5cGUi
+IGNvbnRlbnQ9InRleHQvaHRtbDsgY2hhcnNldD11dGYtOCI+DQo8L2hlYWQ+DQo8Ym9keSBzdHls
+ZT0idGV4dC1hbGlnbjpsZWZ0OyBkaXJlY3Rpb246bHRyOyI+DQo8ZGl2Pkl0IHNob3VsZCBiZSBl
+YXN5IHRvIGdlbmVyYXRlIGEgcmFuZG9tIG9uZSB3aXRoIHRoZSBjbGFzcyBJIG1lbnRpb25lZCBi
+ZWxvdyBhbmQgZmlsbCBpdCB3aXRoIDE2IG1pbGxpb24gZXZlbnRzLiBCVFcsIHR3byBvZiB0aGUg
+aW50IGZpZWxkcyBhcmUgNSBhbmQgMTAgYml0cyByZXNwZWN0aXZlbHksIGJ1dCBJJ20gbm90IHN1
+cmUgdGhhdCBtYXR0ZXJzIChvciBhdCBsZWFzdCBpdCBzaG91bGRuJ3QpLjwvZGl2Pg0KPGRpdj48
+YnI+DQo8L2Rpdj4NCjxkaXY+SSdsbCBhbHNvIHRha2UgYSBsb29rIGF0IHRoZSBiYWJlbHRyYWNl
+IGNvZGUgYW5kIHNlZSB3aGF0IEkgY2FuIHNlZS48L2Rpdj4NCjxkaXY+PGJyPg0KPC9kaXY+DQo8
+ZGl2PkJUVywgbXkgZm9jdXMgb24gbGliYmFiZWx0cmFjZSBpcyB0byBhbGxvdyBmb3IgYSBmdWxs
+IHJhbmdlIG9mIHRvb2xpbmcgZm9yIG91ciB1c2VycyB1c2luZyB0aGUgbGFuZ3VhZ2Ugb2YgdGhl
+aXIgY2hvaWNlLiBUaGUgcHl0aG9uIGJpbmRpbmcgaXMgcGFydGljdWxhcmx5IGludGVyZXN0aW5n
+LiBBcyB3ZSBtb3ZlIGZvcndhcmQgaW50byB0aGUgbmV3IHdvcmxkIG9mIElERXMsIEkgY2FuIHNl
+ZSBhIG5vZGUuanMgYmluZGluZyBiZWluZyBpbnRlcmVzdGluZw0KIGFzIHdlbGwuIEFuZCBpdCBt
+YXkgZXZlbiBtYWtlIHNlbnNlIHRvIHVzZSBpdCBpbiBKYXZhIHRvb2xpbmcgbGlrZSBUcmFjZUNv
+bXBhc3MgdXNpbmcgSk5BLiBUaGF0J3MgdGhlIHZpc2lvbiBhdCBsZWFzdCwgYnV0IGZpcnN0LCBi
+YWJ5IHN0ZXBzIOKYui48L2Rpdj4NCjxkaXY+PGJyPg0KPC9kaXY+DQo8ZGl2PkRvdWcuPC9kaXY+
+DQo8ZGl2Pjxicj4NCjwvZGl2Pg0KPGRpdj5PbiBUdWUsIDIwMTktMDMtMTIgYXQgMTE6MDMgLTA0
+MDAsIEpvbmF0aGFuIFJham90dGUtSnVsaWVuIHdyb3RlOjwvZGl2Pg0KPGJsb2NrcXVvdGUgdHlw
+ZT0iY2l0ZSIgc3R5bGU9Im1hcmdpbjowIDAgMCAuOGV4OyBib3JkZXItbGVmdDoycHggIzcyOWZj
+ZiBzb2xpZDtwYWRkaW5nLWxlZnQ6MWV4Ij4NCjxwcmU+SGkgRG91Zyw8L3ByZT4NCjxwcmU+PGJy
+PjwvcHJlPg0KPHByZT5PbiBUdWUsIE1hciAxMiwgMjAxOSBhdCAwMjo1NjoyNlBNICYjNDM7MDAw
+MCwgRG91ZyBTY2hhZWZlciB3cm90ZTo8L3ByZT4NCjxwcmU+PGJsb2NrcXVvdGUgdHlwZT0iY2l0
+ZSIgc3R5bGU9Im1hcmdpbjowIDAgMCAuOGV4OyBib3JkZXItbGVmdDoycHggIzcyOWZjZiBzb2xp
+ZDtwYWRkaW5nLWxlZnQ6MWV4Ij48L2Jsb2NrcXVvdGU+PC9wcmU+DQo8cHJlPlRoYW5rcywgTWF0
+dGhldywgSSBlbmRlZCB1cCBmbHVzaGluZyBldmVyeSAxMDBLIGV2ZW50cyBhbmQgdGhhdCBzZWVt
+ZWQgT0suPC9wcmU+DQo8cHJlPjxicj48L3ByZT4NCjxwcmU+TXkgYmlnZ2VzdCB3b3JyeSBpcyBv
+biB0aGUgcmVhZCBzaWRlLiBCYWJlbHRyYWNlIGJsZXcgdXAgb24gdGhhdCBmaWxlLiBJdCdzIGEg
+cHJldHR5IHNpbXBsZSB0cmFjZSAoZm9yIG5vdykgd2l0aCBhIHNpbmdsZSBldmVudCBjbGFzcyB3
+aXRoIDQgaW50cyBhbmQgYSBzZXF1ZW5jZSBvZiAzMi1iaXQgdW5zaWduZWQgaW50cyB3aGljaCBp
+cyB1c3VhbGx5IG9ubHkgMiBlbGVtZW50cyBsb25nLjwvcHJlPg0KPHByZT48L3ByZT4NCjxwcmU+
+PGJyPjwvcHJlPg0KPHByZT5UaGlzIGlzIG5vdCBJIGV4cGVjdC4gU3RpbGwgZWl0aGV0IGpnYWxh
+ciBvciBlZXAgbWlnaHQgaGF2ZSBhIG1vcmUgaW5zaWdodCBvbjwvcHJlPg0KPHByZT50aGlzLiBD
+Q2luZyB0aGUgbHR0bmctZGV2IG1haWxpbmcgbGlzdC48L3ByZT4NCjxwcmU+PGJyPjwvcHJlPg0K
+PHByZT5JcyB0aGVyZSBhbnkgd2F5IHRvIHNoYXJlIHVzIGEgc2ltaWxhciB0cmFjZT8gRWl0aGVy
+IHdpdGggYSBnZW5lcmF0b3Igb3Igd2UgY2FuPC9wcmU+DQo8cHJlPnByb3ZpZGUgYSBsaW5rIGZv
+ciB5b3UgdG8gdXBsb2FkIGl0LiBUaGUgY3VycmVudCBsaW1pdCBvbiBidWdzLmx0dG5nLm9yZyBp
+cyBhPC9wcmU+DQo8cHJlPmJpdCB0b28gc21hbGwgZm9yIHN1Y2ggdHJhY2UuPC9wcmU+DQo8cHJl
+Pjxicj48L3ByZT4NCjxwcmU+PGJsb2NrcXVvdGUgdHlwZT0iY2l0ZSIgc3R5bGU9Im1hcmdpbjow
+IDAgMCAuOGV4OyBib3JkZXItbGVmdDoycHggIzcyOWZjZiBzb2xpZDtwYWRkaW5nLWxlZnQ6MWV4
+Ij48L2Jsb2NrcXVvdGU+PC9wcmU+DQo8cHJlPjxicj48L3ByZT4NCjxwcmU+QXNpZGUgZnJvbSB0
+aGF0LCBhbSB2ZXJ5IHBsZWFzZWQgd2l0aCB0aGUgaG93IGVhc3kgQ1RGIGlzIHRvIHdvcmsgd2l0
+aC4gTG9va2luZyBmb3J3YXJkIHRvIGRvaW5nIG1vcmUuPC9wcmU+DQo8cHJlPjxicj48L3ByZT4N
+CjxwcmU+RG91Zy48L3ByZT4NCjxwcmU+PGJyPjwvcHJlPg0KPHByZT5PbiBUdWUsIDIwMTktMDMt
+MTIgYXQgMTQ6NDEgJiM0MzswMDAwLCBNYXR0aGV3IEtob3V6YW0gd3JvdGU6PC9wcmU+DQo8cHJl
+Pjxicj48L3ByZT4NCjxwcmU+SGkgRG91Zyw8L3ByZT4NCjxwcmU+PGJyPjwvcHJlPg0KPHByZT48
+YnI+PC9wcmU+DQo8cHJlPkdyZWF0IHRvIGhlYXIgeW91J3JlIGNvbWluZyB0byBhIHN0YW5kYXJk
+ISBJIGRvbid0IGtub3cgaWYgdHJhY2UgY29tcGFzcyB3aWxsIHNjYWxlIHByb3Blcmx5IGFzIEkg
+ZG9uJ3Qga25vdyB3aGF0IHRoZSB0cmFjZSBjb25maWd1cmF0aW9uIGlzLjwvcHJlPg0KPHByZT48
+YnI+PC9wcmU+DQo8cHJlPjxicj48L3ByZT4NCjxwcmU+PGJsb2NrcXVvdGUgdHlwZT0iY2l0ZSIg
+c3R5bGU9Im1hcmdpbjowIDAgMCAuOGV4OyBib3JkZXItbGVmdDoycHggIzcyOWZjZiBzb2xpZDtw
+YWRkaW5nLWxlZnQ6MWV4Ij48L2Jsb2NrcXVvdGU+PC9wcmU+DQo8cHJlPkkgaGF2ZSBvbmUgb2Yg
+b3VyIHRyYWNlIHdoaWNoIGhhcyAxNiBtaWxsaW9uIGV2ZW50cywgdGhlIHNpemUgb2YgZWFjaCBl
+dmVudCBpcyBhcm91bmQgMzIgYnl0ZXMgZ2l2aW5nIG1lIGEgNTQwTUIgZmlsZS4gTXkgZmlyc3Qg
+YXR0ZW1wdCBhdCBzaW1wbHkgd3JpdGluZyBvdXQgdGhlIENURiBldmVudHMgd2l0aG91dCBhIGZs
+dXNoIHJhbiBvdXQgb2YgdmlydHVhbCBtZW1vcnkuIEkgdGhlbiBmbHVzaGVkIGFmdGVyIGV2ZXJ5
+IGV2ZW50IHdoaWNoIG1hZGUgZWFjaCBldmVudCB0YWtlIDMySy4gU28gSSBmb3VuZCBhIG1pZGRs
+ZSBncm91bmQgYW5kIHRoZSByZXN1bHRpbmcgc3RyZWFtIGZpbGUgaXMgY2xvc2UgdG8gdGhlIHNh
+bWUgc2l6ZS48L3ByZT4NCjxwcmU+PC9wcmU+DQo8cHJlPjxicj48L3ByZT4NCjxwcmU+PGJyPjwv
+cHJlPg0KPHByZT48YnI+PC9wcmU+DQo8cHJlPk15IHN1Z2dlc3Rpb24gaXMgdG8gaGF2ZSAxIE1C
+IHBhY2tldHMuIFRoaXMgbWFrZXMgc2Vla2luZyB2ZXJ5IGVmZmljaWVudC4gSWYgZWFjaCBldmVu
+dCBpcyAzMiBieXRlcywgYmFzaWNhbGx5IGZsdXNoIGV2ZXJ5IDI1ayBldmVudHMgb3Igc28uPC9w
+cmU+DQo8cHJlPjxicj48L3ByZT4NCjxwcmU+PGJyPjwvcHJlPg0KPHByZT5QbGVhc2Uga2VlcCB1
+cyBwb3N0ZWQhPC9wcmU+DQo8cHJlPjxicj48L3ByZT4NCjxwcmU+PGJyPjwvcHJlPg0KPHByZT5N
+YXR0aGV3LjwvcHJlPg0KPHByZT48YnI+PC9wcmU+DQo8cHJlPl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fPC9wcmU+DQo8cHJlPkZyb206IDxhIGhyZWY9Im1haWx0bzp0cmFjZWNvbXBh
+c3MtZGV2LWJvdW5jZXNAZWNsaXBzZS5vcmciPnRyYWNlY29tcGFzcy1kZXYtYm91bmNlc0BlY2xp
+cHNlLm9yZzwvYT4gJmx0OzxhIGhyZWY9Im1haWx0bzp0cmFjZWNvbXBhc3MtZGV2LWJvdW5jZXNA
+ZWNsaXBzZS5vcmciPnRyYWNlY29tcGFzcy1kZXYtYm91bmNlc0BlY2xpcHNlLm9yZzwvYT4mZ3Q7
+IG9uIGJlaGFsZiBvZiBEb3VnIFNjaGFlZmVyICZsdDs8YSBocmVmPSJtYWlsdG86ZHNjaGFlZmVy
+QGJsYWNrYmVycnkuY29tIj5kc2NoYWVmZXJAYmxhY2tiZXJyeS5jb208L2E+Jmd0OzwvcHJlPg0K
+PHByZT5TZW50OiBUdWVzZGF5LCBNYXJjaCAxMiwgMjAxOSAxMDozMDoxNSBBTTwvcHJlPg0KPHBy
+ZT5UbzogPGEgaHJlZj0ibWFpbHRvOnRyYWNlY29tcGFzcy1kZXZAZWNsaXBzZS5vcmciPnRyYWNl
+Y29tcGFzcy1kZXZAZWNsaXBzZS5vcmc8L2E+PC9wcmU+DQo8cHJlPlN1YmplY3Q6IFt0cmFjZWNv
+bXBhc3MtZGV2XSBTY2FsYWJpbGl0eTwvcHJlPg0KPHByZT48YnI+PC9wcmU+DQo8cHJlPkhleSBn
+YW5nLDwvcHJlPg0KPHByZT48YnI+PC9wcmU+DQo8cHJlPldlJ3JlIGZpbmFsbHkgc3RhcnRpbmcg
+dG8gbG9vayBhdCBjb252ZXJ0aW5nIG91ciBjdXN0b20gdHJhY2VzIGludG8gQ1RGIHNvIHdlIGNh
+biBsZXZlcmFnZSB0b29scyBsaWtlIFRyYWNlQ29tcGFzcyBhbmQsIG9mIGNvdXJzZSwgY29udHJp
+YnV0ZSB0byBpdC4gT25lIHRoaW5nIEkgcXVpY2tseSByYW4gaW50byBpcyBhIHNjYWxhYmlsaXR5
+IGlzc3VlIEknbSBzZWVpbmcgd2l0aCBsaWJiYWJlbHRyYWNlLjwvcHJlPg0KPHByZT48YnI+PC9w
+cmU+DQo8cHJlPkkgaGF2ZSBvbmUgb2Ygb3VyIHRyYWNlIHdoaWNoIGhhcyAxNiBtaWxsaW9uIGV2
+ZW50cywgdGhlIHNpemUgb2YgZWFjaCBldmVudCBpcyBhcm91bmQgMzIgYnl0ZXMgZ2l2aW5nIG1l
+IGEgNTQwTUIgZmlsZS4gTXkgZmlyc3QgYXR0ZW1wdCBhdCBzaW1wbHkgd3JpdGluZyBvdXQgdGhl
+IENURiBldmVudHMgd2l0aG91dCBhIGZsdXNoIHJhbiBvdXQgb2YgdmlydHVhbCBtZW1vcnkuIEkg
+dGhlbiBmbHVzaGVkIGFmdGVyIGV2ZXJ5IGV2ZW50IHdoaWNoIG1hZGUgZWFjaCBldmVudCB0YWtl
+IDMySy4gU28gSSBmb3VuZCBhIG1pZGRsZSBncm91bmQgYW5kIHRoZSByZXN1bHRpbmcgc3RyZWFt
+IGZpbGUgaXMgY2xvc2UgdG8gdGhlIHNhbWUgc2l6ZS48L3ByZT4NCjxwcmU+PGJyPjwvcHJlPg0K
+PHByZT5CdXQgd2hlbiBJIHVzZSBiYWJlbHRyYWNlIHRvIHByaW50IGl0IG91dCwgSSByYW4gb3V0
+IG9mIHZpcnR1YWwgbWVtb3J5LiBJIHRoZW4gaGFuZCBjb2RlZCBhIHJlYWRlciBhbmQgc2ltcGx5
+IGFkZGluZyB0aGUgdHJhY2UgdG8gdGhlIGNvbnRleHQgY2F1c2VkIHRoZSBtZW1vcnkgaXNzdWUu
+IEl0IHJlYWxseSBsb29rcyBsaWtlIGxpYmJhYmVsdHJhY2UgKHZlcnNpb24gMS41IGZyb20gdGhl
+IFVidW50dSAxOC4wNCBkaXN0cm8pLCB0cmllcyB0byBpbmZsYXRlIHRoZSBldmVudHMgaW50byBp
+dCdzIGludGVybmFsIHJlcHJlc2VudGF0aW9uIGZvciB0aGUgZW50aXJlIHRyYWNlLiBJIG5lZWQg
+dG8gZG8gbW9yZSBpbnZlc3RpZ2F0aW9uIHRvIGNvbmZpcm0gdGhhdC48L3ByZT4NCjxwcmU+PGJy
+PjwvcHJlPg0KPHByZT5TbyBteSBxdWVzdGlvbiBmb3IgdGhpcyBsaXN0LCB3b3VsZCBUcmFjZUNv
+bXBhc3MgZG8gYmV0dGVyPyBEb2VzIGl0IGhhdmUgaXQncyBvd24gcGFyc2luZyBsaWJyYXJpZXM/
+PC9wcmU+DQo8cHJlPjxicj48L3ByZT4NCjxwcmU+VGhhbmtzLDwvcHJlPg0KPHByZT5Eb3VnPC9w
+cmU+DQo8cHJlPjwvcHJlPg0KPHByZT48YnI+PC9wcmU+DQo8cHJlPjxibG9ja3F1b3RlIHR5cGU9
+ImNpdGUiIHN0eWxlPSJtYXJnaW46MCAwIDAgLjhleDsgYm9yZGVyLWxlZnQ6MnB4ICM3MjlmY2Yg
+c29saWQ7cGFkZGluZy1sZWZ0OjFleCI+PC9ibG9ja3F1b3RlPjwvcHJlPg0KPHByZT5fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXzwvcHJlPg0KPHByZT50cmFj
+ZWNvbXBhc3MtZGV2IG1haWxpbmcgbGlzdDwvcHJlPg0KPHByZT48YSBocmVmPSJtYWlsdG86dHJh
+Y2Vjb21wYXNzLWRldkBlY2xpcHNlLm9yZyI+dHJhY2Vjb21wYXNzLWRldkBlY2xpcHNlLm9yZzwv
+YT48L3ByZT4NCjxwcmU+VG8gY2hhbmdlIHlvdXIgZGVsaXZlcnkgb3B0aW9ucywgcmV0cmlldmUg
+eW91ciBwYXNzd29yZCwgb3IgdW5zdWJzY3JpYmUgZnJvbSB0aGlzIGxpc3QsIHZpc2l0PC9wcmU+
+DQo8cHJlPjxhIGhyZWY9Imh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw/
+dT1odHRwcy0zQV9fd3d3LmVjbGlwc2Uub3JnX21haWxtYW5fbGlzdGluZm9fdHJhY2Vjb21wYXNz
+LTJEZGV2JmFtcDtkPUR3SUJBZyZhbXA7Yz15em9IT2NfWkstc3hsLWtmR05TRXZsSllhbnNzWE4z
+cS1saGowc3AyNndFJmFtcDtyPU5ycmJ2VEhXYTJOYnBfa0FOMEhsMW8zbE0xV0F3U2VzNjR1Qmp4
+ak5oTWMmYW1wO209Wm9DeDYxVkVfc0hHYTZqM0RYZWhicWpYNVAxTkdFdUR0RUZhR09SQ2g5ayZh
+bXA7cz1xaTlxMXp2RGFDOWNKQ2NpMHkxMjNPLWo2Nk02NDNZd3hSSmNjSkN6Z19jJmFtcDtlPSI+
+aHR0cHM6Ly91cmxkZWZlbnNlLnByb29mcG9pbnQuY29tL3YyL3VybD91PWh0dHBzLTNBX193d3cu
+ZWNsaXBzZS5vcmdfbWFpbG1hbl9saXN0aW5mb190cmFjZWNvbXBhc3MtMkRkZXYmYW1wO2Q9RHdJ
+QkFnJmFtcDtjPXl6b0hPY19aSy1zeGwta2ZHTlNFdmxKWWFuc3NYTjNxLWxoajBzcDI2d0UmYW1w
+O3I9TnJyYnZUSFdhMk5icF9rQU4wSGwxbzNsTTFXQXdTZXM2NHVCanhqTmhNYyZhbXA7bT1ab0N4
+NjFWRV9zSEdhNmozRFhlaGJxalg1UDFOR0V1RHRFRmFHT1JDaDlrJmFtcDtzPXFpOXExenZEYUM5
+Y0pDY2kweTEyM08tajY2TTY0M1l3eFJKY2NKQ3pnX2MmYW1wO2U9PC9hPjwvcHJlPg0KPHByZT48
+L3ByZT4NCjxwcmU+PGJyPjwvcHJlPg0KPHByZT48YnI+PC9wcmU+DQo8cHJlPjxicj48L3ByZT4N
+CjwvYmxvY2txdW90ZT4NCjwvYm9keT4NCjwvaHRtbD4NCg==
 
+--_000_484bb42bc0d287b251e2542e8d7e242ee72863b1camelblackberry_--
 
-I hope the URL is not censored. https://lists.lttng.org/cgi-bin/mailman/lis=
-tinfo/lttng-dev if it is, just search for "lttng-dev -- LTTng development l=
-ist"
-
-lttng-dev Info Page<https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-=
-dev>
-lists.lttng.org
-To see the collection of prior postings to the list, visit the lttng-dev Ar=
-chives.. Using lttng-dev: To post a message to all the list members, send e=
-mail to lttng-dev@lists.lttng.org. You can subscribe to the list, or change=
- your existing subscription, in the sections below.
-
-
-
-________________________________
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Sent: Tuesday, March 12, 2019 11:03:14 AM
-To: Doug Schaefer; tracecompass developer discussions
-Cc: Matthew Khouzam; lttng-dev
-Subject: Re: [tracecompass-dev] Scalability
-
-Hi Doug,
-
-On Tue, Mar 12, 2019 at 02:56:26PM +0000, Doug Schaefer wrote:
-> Thanks, Matthew, I ended up flushing every 100K events and that seemed OK=
-.
->
-> My biggest worry is on the read side. Babeltrace blew up on that file. It=
-'s a pretty simple trace (for now) with a single event class with 4 ints an=
-d a sequence of 32-bit unsigned ints which is usually only 2 elements long.
-
-This is not I expect. Still eithet jgalar or eep might have a more insight =
-on
-this. CCing the lttng-dev mailing list.
-
-Is there any way to share us a similar trace? Either with a generator or we=
- can
-provide a link for you to upload it. The current limit on bugs.lttng.org is=
- a
-bit too small for such trace.
-
->
-> Aside from that, am very pleased with the how easy CTF is to work with. L=
-ooking forward to doing more.
->
-> Doug.
->
-> On Tue, 2019-03-12 at 14:41 +0000, Matthew Khouzam wrote:
->
-> Hi Doug,
->
->
-> Great to hear you're coming to a standard! I don't know if trace compass =
-will scale properly as I don't know what the trace configuration is.
->
->
-> > I have one of our trace which has 16 million events, the size of each e=
-vent is around 32 bytes giving me a 540MB file. My first attempt at simply =
-writing out the CTF events without a flush ran out of virtual memory. I the=
-n flushed after every event which made each event take 32K. So I found a mi=
-ddle ground and the resulting stream file is close to the same size.
->
->
->
-> My suggestion is to have 1 MB packets. This makes seeking very efficient.=
- If each event is 32 bytes, basically flush every 25k events or so.
->
->
-> Please keep us posted!
->
->
-> Matthew.
->
-> ________________________________
-> From: tracecompass-dev-bounces@eclipse.org <tracecompass-dev-bounces@ecli=
-pse.org> on behalf of Doug Schaefer <dschaefer@blackberry.com>
-> Sent: Tuesday, March 12, 2019 10:30:15 AM
-> To: tracecompass-dev@eclipse.org
-> Subject: [tracecompass-dev] Scalability
->
-> Hey gang,
->
-> We're finally starting to look at converting our custom traces into CTF s=
-o we can leverage tools like TraceCompass and, of course, contribute to it.=
- One thing I quickly ran into is a scalability issue I'm seeing with libbab=
-eltrace.
->
-> I have one of our trace which has 16 million events, the size of each eve=
-nt is around 32 bytes giving me a 540MB file. My first attempt at simply wr=
-iting out the CTF events without a flush ran out of virtual memory. I then =
-flushed after every event which made each event take 32K. So I found a midd=
-le ground and the resulting stream file is close to the same size.
->
-> But when I use babeltrace to print it out, I ran out of virtual memory. I=
- then hand coded a reader and simply adding the trace to the context caused=
- the memory issue. It really looks like libbabeltrace (version 1.5 from the=
- Ubuntu 18.04 distro), tries to inflate the events into it's internal repre=
-sentation for the entire trace. I need to do more investigation to confirm =
-that.
->
-> So my question for this list, would TraceCompass do better? Does it have =
-it's own parsing libraries?
->
-> Thanks,
-> Doug
-
-> _______________________________________________
-> tracecompass-dev mailing list
-> tracecompass-dev@eclipse.org
-> To change your delivery options, retrieve your password, or unsubscribe f=
-rom this list, visit
-> https://www.eclipse.org/mailman/listinfo/tracecompass-dev
-
-
---
-Jonathan Rajotte-Julien
-EfficiOS
-
---_000_DM6PR15MB310066EB15FFCE5AD1CC207D9E490DM6PR15MB3100namp_
-Content-Type: text/html; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
->
-<style type=3D"text/css" style=3D"display:none;"><!-- P {margin-top:0;margi=
-n-bottom:0;} --></style>
-</head>
-<body dir=3D"ltr">
-<div id=3D"divtagdefaultwrapper" style=3D"font-size:12pt;color:#000000;font=
--family:Calibri,Helvetica,sans-serif;" dir=3D"ltr">
-<p style=3D"margin-top:0;margin-bottom:0">Welcome Jonathan,</p>
-<p style=3D"margin-top:0;margin-bottom:0"><br>
-</p>
-<p style=3D"margin-top:0;margin-bottom:0">Also, for people seeking great ba=
-beltrace support, I feel I should plug the lttng-dev mailinglist.
-<br>
-</p>
-<p style=3D"margin-top:0;margin-bottom:0"><br>
-</p>
-<p style=3D"margin-top:0;margin-bottom:0">I hope the URL is not censored. <=
-a href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev" class=
-=3D"OWAAutoLink" id=3D"LPlnk853878" previewremoved=3D"true">
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev</a> if it is, ju=
-st search for &quot;<b><font size=3D"&#43;1" color=3D"#000000">lttng-dev --=
- LTTng development list</font></b>&quot;<br>
-</p>
-<div id=3D"LPBorder_GT_15524033734260.13838571933289845" style=3D"margin-bo=
-ttom: 20px; overflow: auto; width: 100%; text-indent: 0px;">
-<table id=3D"LPContainer_15524033734220.025667838474824234" style=3D"width:=
- 90%; background-color: rgb(255, 255, 255); position: relative; overflow: a=
-uto; padding-top: 20px; padding-bottom: 20px; margin-top: 20px; border-top:=
- 1px dotted rgb(200, 200, 200); border-bottom: 1px dotted rgb(200, 200, 200=
-);" role=3D"presentation" cellspacing=3D"0">
-<tbody>
-<tr style=3D"border-spacing: 0px;" valign=3D"top">
-<td id=3D"TextCell_15524033734240.05101294807418255" style=3D"vertical-alig=
-n: top; position: relative; padding: 0px; display: table-cell;" colspan=3D"=
-2">
-<div id=3D"LPRemovePreviewContainer_15524033734240.45704162409583526"></div=
->
-<div id=3D"LPTitle_15524033734240.768426324418359" style=3D"top: 0px; color=
-: rgb(0, 75, 139); font-weight: 400; font-size: 21px; font-family: &quot;wf=
-_segoe-ui_light&quot;, &quot;Segoe UI Light&quot;, &quot;Segoe WP Light&quo=
-t;, &quot;Segoe UI&quot;, &quot;Segoe WP&quot;, Tahoma, Arial, sans-serif; =
-line-height: 21px;">
-<a id=3D"LPUrlAnchor_15524033734240.08400261288183442" style=3D"text-decora=
-tion: none;" href=3D"https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng=
--dev" target=3D"_blank">lttng-dev Info Page</a></div>
-<div id=3D"LPMetadata_15524033734250.5254476983267053" style=3D"margin: 10p=
-x 0px 16px; color: rgb(102, 102, 102); font-weight: 400; font-family: &quot=
-;wf_segoe-ui_normal&quot;, &quot;Segoe UI&quot;, &quot;Segoe WP&quot;, Taho=
-ma, Arial, sans-serif; font-size: 14px; line-height: 14px;">
-lists.lttng.org</div>
-<div id=3D"LPDescription_15524033734250.43499263846109015" style=3D"display=
-: block; color: rgb(102, 102, 102); font-weight: 400; font-family: &quot;wf=
-_segoe-ui_normal&quot;, &quot;Segoe UI&quot;, &quot;Segoe WP&quot;, Tahoma,=
- Arial, sans-serif; font-size: 14px; line-height: 20px; max-height: 100px; =
-overflow: hidden;">
-To see the collection of prior postings to the list, visit the lttng-dev Ar=
-chives.. Using lttng-dev: To post a message to all the list members, send e=
-mail to lttng-dev@lists.lttng.org. You can subscribe to the list, or change=
- your existing subscription, in
- the sections below.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<br>
-<p></p>
-</div>
-<hr style=3D"display:inline-block;width:98%" tabindex=3D"-1">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" st=
-yle=3D"font-size:11pt" color=3D"#000000"><b>From:</b> Jonathan Rajotte-Juli=
-en &lt;jonathan.rajotte-julien@efficios.com&gt;<br>
-<b>Sent:</b> Tuesday, March 12, 2019 11:03:14 AM<br>
-<b>To:</b> Doug Schaefer; tracecompass developer discussions<br>
-<b>Cc:</b> Matthew Khouzam; lttng-dev<br>
-<b>Subject:</b> Re: [tracecompass-dev] Scalability</font>
-<div>&nbsp;</div>
-</div>
-<div class=3D"BodyFragment"><font size=3D"2"><span style=3D"font-size:11pt;=
-">
-<div class=3D"PlainText">Hi Doug,<br>
-<br>
-On Tue, Mar 12, 2019 at 02:56:26PM &#43;0000, Doug Schaefer wrote:<br>
-&gt; Thanks, Matthew, I ended up flushing every 100K events and that seemed=
- OK.<br>
-&gt; <br>
-&gt; My biggest worry is on the read side. Babeltrace blew up on that file.=
- It's a pretty simple trace (for now) with a single event class with 4 ints=
- and a sequence of 32-bit unsigned ints which is usually only 2 elements lo=
-ng.<br>
-<br>
-This is not I expect. Still eithet jgalar or eep might have a more insight =
-on<br>
-this. CCing the lttng-dev mailing list.<br>
-<br>
-Is there any way to share us a similar trace? Either with a generator or we=
- can<br>
-provide a link for you to upload it. The current limit on bugs.lttng.org is=
- a<br>
-bit too small for such trace.<br>
-<br>
-&gt; <br>
-&gt; Aside from that, am very pleased with the how easy CTF is to work with=
-. Looking forward to doing more.<br>
-&gt; <br>
-&gt; Doug.<br>
-&gt; <br>
-&gt; On Tue, 2019-03-12 at 14:41 &#43;0000, Matthew Khouzam wrote:<br>
-&gt; <br>
-&gt; Hi Doug,<br>
-&gt; <br>
-&gt; <br>
-&gt; Great to hear you're coming to a standard! I don't know if trace compa=
-ss will scale properly as I don't know what the trace configuration is.<br>
-&gt; <br>
-&gt; <br>
-&gt; &gt; I have one of our trace which has 16 million events, the size of =
-each event is around 32 bytes giving me a 540MB file. My first attempt at s=
-imply writing out the CTF events without a flush ran out of virtual memory.=
- I then flushed after every event which
- made each event take 32K. So I found a middle ground and the resulting str=
-eam file is close to the same size.<br>
-&gt; <br>
-&gt; <br>
-&gt; <br>
-&gt; My suggestion is to have 1 MB packets. This makes seeking very efficie=
-nt. If each event is 32 bytes, basically flush every 25k events or so.<br>
-&gt; <br>
-&gt; <br>
-&gt; Please keep us posted!<br>
-&gt; <br>
-&gt; <br>
-&gt; Matthew.<br>
-&gt; <br>
-&gt; ________________________________<br>
-&gt; From: tracecompass-dev-bounces@eclipse.org &lt;tracecompass-dev-bounce=
-s@eclipse.org&gt; on behalf of Doug Schaefer &lt;dschaefer@blackberry.com&g=
-t;<br>
-&gt; Sent: Tuesday, March 12, 2019 10:30:15 AM<br>
-&gt; To: tracecompass-dev@eclipse.org<br>
-&gt; Subject: [tracecompass-dev] Scalability<br>
-&gt; <br>
-&gt; Hey gang,<br>
-&gt; <br>
-&gt; We're finally starting to look at converting our custom traces into CT=
-F so we can leverage tools like TraceCompass and, of course, contribute to =
-it. One thing I quickly ran into is a scalability issue I'm seeing with lib=
-babeltrace.<br>
-&gt; <br>
-&gt; I have one of our trace which has 16 million events, the size of each =
-event is around 32 bytes giving me a 540MB file. My first attempt at simply=
- writing out the CTF events without a flush ran out of virtual memory. I th=
-en flushed after every event which
- made each event take 32K. So I found a middle ground and the resulting str=
-eam file is close to the same size.<br>
-&gt; <br>
-&gt; But when I use babeltrace to print it out, I ran out of virtual memory=
-. I then hand coded a reader and simply adding the trace to the context cau=
-sed the memory issue. It really looks like libbabeltrace (version 1.5 from =
-the Ubuntu 18.04 distro), tries to
- inflate the events into it's internal representation for the entire trace.=
- I need to do more investigation to confirm that.<br>
-&gt; <br>
-&gt; So my question for this list, would TraceCompass do better? Does it ha=
-ve it's own parsing libraries?<br>
-&gt; <br>
-&gt; Thanks,<br>
-&gt; Doug<br>
-<br>
-&gt; _______________________________________________<br>
-&gt; tracecompass-dev mailing list<br>
-&gt; tracecompass-dev@eclipse.org<br>
-&gt; To change your delivery options, retrieve your password, or unsubscrib=
-e from this list, visit<br>
-&gt; <a href=3D"https://www.eclipse.org/mailman/listinfo/tracecompass-dev">=
-https://www.eclipse.org/mailman/listinfo/tracecompass-dev</a><br>
-<br>
-<br>
--- <br>
-Jonathan Rajotte-Julien<br>
-EfficiOS<br>
-</div>
-</span></font></div>
-</body>
-</html>
-
---_000_DM6PR15MB310066EB15FFCE5AD1CC207D9E490DM6PR15MB3100namp_--
-
---===============3219916082334219730==
+--===============7424323944048851881==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -368,4 +257,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============3219916082334219730==--
+--===============7424323944048851881==--
