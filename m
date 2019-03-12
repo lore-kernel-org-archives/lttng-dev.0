@@ -1,16 +1,17 @@
 From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
-Subject: [PATCH lttng-tools 1/2] Fix: test: skip
- test_getcpu_override on single thread system
-Date: Tue, 12 Mar 2019 14:30:30 -0400
-Message-ID: <20190312183031.20265-1-jonathan.rajotte-julien__30433.7745344796$1552415456$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 2/2] Fix: test: unit: the tree
+ origin can be a symlink itself
+Date: Tue, 12 Mar 2019 14:30:31 -0400
+Message-ID: <20190312183031.20265-2-jonathan.rajotte-julien__20007.4083217018$1552415487$gmane$org@efficios.com>
+References: <20190312183031.20265-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44Jk736BKdz16BX
- for <lttng-dev@lists.lttng.org>; Tue, 12 Mar 2019 14:30:39 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 44Jk746cMjz16Bp
+ for <lttng-dev@lists.lttng.org>; Tue, 12 Mar 2019 14:30:40 -0400 (EDT)
+In-Reply-To: <20190312183031.20265-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,45 +25,72 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-There is no value in performing this test on single thread system
-since the only valid value for the cpu field is 0.
+Problem:
 
-This test currently fails on single thread system (i.e yocto runquemu)
-on the test_getcpu_override_fail test case.
+The base tree is defined as "/tmp/.....XXXXXX".
+On systems where "/tmp/" is itself a symlink utils_expand_path will
+expand the tree origin itself.
+
+For example on a base core-image-minimal Yocto build /tmp is a symlink
+to "/var/tmp", which is a symlink to "/var/volatile".
+
+utils_expand_path will return something like this for the symlink test:
+"/var/volative/.....XXXXXX/...." which is the valid result.
+
+Solution:
+
+Simply use realpath on the tree_origin and use this path to perform the
+test validation.
+
+This work was performed in the effort to support yocto fully and be able
+to run the test suite to detect problem as early as possible.
 
 Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- .../ust/getcpu-override/test_getcpu_override     | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ tests/unit/test_utils_expand_path.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/tests/regression/ust/getcpu-override/test_getcpu_override b/tests/regression/ust/getcpu-override/test_getcpu_override
-index 4ca385aeb..ee3e31953 100755
---- a/tests/regression/ust/getcpu-override/test_getcpu_override
-+++ b/tests/regression/ust/getcpu-override/test_getcpu_override
-@@ -157,13 +157,19 @@ plan_tests $NUM_TESTS
+diff --git a/tests/unit/test_utils_expand_path.c b/tests/unit/test_utils_expand_path.c
+index d5cab002e..d047c207d 100644
+--- a/tests/unit/test_utils_expand_path.c
++++ b/tests/unit/test_utils_expand_path.c
+@@ -281,8 +281,8 @@ error:
+ static void test_utils_expand_path(void)
+ {
+ 	char *result;
+-	char name[100], tmppath[PATH_MAX];
+-	int i;
++	char name[100], tmppath[PATH_MAX], real_tree_origin[PATH_MAX];
++	int i, treelen;
  
- print_test_banner "$TEST_DESC"
+ 	/* Test valid cases */
+ 	for (i = 0; i < num_valid_tests; i++) {
+@@ -295,14 +295,24 @@ static void test_utils_expand_path(void)
+ 		free(result);
+ 	}
  
--if [ -x "$CURDIR/.libs/lttng-ust-getcpu-override-test.so" ]; then
--	foundobj=1
--else
--	foundobj=0
-+if [ ! -x "$CURDIR/.libs/lttng-ust-getcpu-override-test.so" ]; then
-+	skip 0 "No shared object generated. Skipping all tests." $NUM_TESTS && exit 0
-+fi
++	/*
++	 * Get the realpath for the tree_origin since it can itself be a
++	 * symlink.
++	 */
++	result = realpath(tree_origin, real_tree_origin);
++	if (!result) {
++		fail("realpath failed.");
++		return;
++	}
 +
-+if [ "$num_cpus" -eq "1" ]; then
-+	# Skip the test since we cannot perform it as designed since N mod 1
-+	# is always equals to zero. There is no point testing this on a system
-+	# with a single thread. LTTng-UST limits the get_cpu function to return
-+	# value inside the [0, NUM_CPU - 1] range for a valid event (present in
-+	# trace).
-+	skip 0 "Test system only have a single thread. Skipping all tests." $NUM_TESTS && exit 0
- fi
+ 	/* Test symlink tree cases */
+-	int treelen = strlen(tree_origin) + 1;
++	treelen = strlen(real_tree_origin) + 1;
+ 	for (i = 0; i < num_symlink_tests; i++) {
+ 		sprintf(name, "symlink tree test case: [tmppath/]%s",
+ 				symlink_tests_inputs[i].input);
  
--skip $foundobj "No shared object generated. Skipping all tests." $NUM_TESTS && exit 0
- 
- TESTS=(
- 	test_getcpu_override_fail
+ 		snprintf(tmppath, PATH_MAX, "%s/%s",
+-				tree_origin, symlink_tests_inputs[i].input);
++				real_tree_origin, symlink_tests_inputs[i].input);
+ 		result = utils_expand_path(tmppath);
+ 		ok(result != NULL && strcmp(result + treelen,
+ 					symlink_tests_inputs[i].expected_result) == 0, name);
 -- 
 2.17.1
