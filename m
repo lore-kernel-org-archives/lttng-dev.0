@@ -1,16 +1,19 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH babeltrace] tap-driver.sh: flush stdout after
- each test result
-Date: Wed, 13 Mar 2019 17:50:55 -0400
-Message-ID: <20190313215055.12687-1-mjeanson__22931.2571276509$1552513881$gmane$org@efficios.com>
+From: Sebastien Boisvert <seb@boisvert.info>
+Subject: [PATCH lttng-ust] doc: remove repeated word in coding
+ style
+Date: Thu, 14 Mar 2019 08:56:15 -0400
+Message-ID: <20190314125615.3501-1-seb__2094.76544275589$1552568598$gmane$org@boisvert.info>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44KQWv2hVMz16Bx
- for <lttng-dev@lists.lttng.org>; Wed, 13 Mar 2019 17:51:07 -0400 (EDT)
+Received: from boisvert.info (68.ip-144-217-240.net [144.217.240.68])
+ by lists.lttng.org (Postfix) with ESMTP id 44Kpm73zkxz175M
+ for <lttng-dev@lists.lttng.org>; Thu, 14 Mar 2019 09:03:03 -0400 (EDT)
+Received: from modemcable049.202-81-70.mc.videotron.ca
+ (modemcable049.202-81-70.mc.videotron.ca [70.81.202.49])
+ by boisvert.info (Postfix) with ESMTPSA id 3199D215C9
+ for <lttng-dev@lists.lttng.org>; Thu, 14 Mar 2019 08:56:25 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,30 +24,24 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-This is useful in a CI system where stdout is fully buffered and you
-look at the console output to see which test is hanging.
-
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+Signed-off-by: Sebastien Boisvert <seb@boisvert.info>
 ---
- config/tap-driver.sh | 3 +++
- 1 file changed, 3 insertions(+)
+ CodingStyle | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/config/tap-driver.sh b/config/tap-driver.sh
-index 4254e2b3..12742cae 100755
---- a/config/tap-driver.sh
-+++ b/config/tap-driver.sh
-@@ -273,6 +273,9 @@ function report(result, details)
-     msg = msg " " details
-   # Output on console might be colorized.
-   print decorate_result(result) msg
-+  # Flush stdout after each test result, this is useful when stdout
-+  # is buffered, for example in a CI system.
-+  fflush()
-   # Log the result in the log file too, to help debugging (this is
-   # especially true when said result is a TAP error or "Bail out!").
-   print result msg | "cat >&3";
+diff --git a/CodingStyle b/CodingStyle
+index 4fe2bdfe..a7f512ea 100644
+--- a/CodingStyle
++++ b/CodingStyle
+@@ -1,6 +1,6 @@
+ LTTng-UST Coding Style
+ 
+-The coding style used for this project follows the the Linux kernel
++The coding style used for this project follows the Linux kernel
+ guide lines. Please refer to:
+ 
+ - Linux kernel Documentation/CodingStyle document for details,
 -- 
 2.17.1
