@@ -1,7 +1,7 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+From: Doug Schaefer <dschaefer@blackberry.com>
 Subject: Re: [tracecompass-dev] Scalability
-Date: Fri, 15 Mar 2019 10:56:29 -0400
-Message-ID: <20190315145629.GB6994__38538.8268435904$1552661820$gmane$org@joraj-alpa>
+Date: Fri, 15 Mar 2019 18:01:44 +0000
+Message-ID: <57cd45e0d7741b08777e6345b2fcffd4ebd1b282.camel__29390.6669759721$1552672940$gmane$org@blackberry.com>
 References: <559e65b28a33c3a2d28bc5a32c3fdc4dfeacaf93.camel@blackberry.com>
  <DM6PR15MB3100B14E05117F439A6A08DE9E490@DM6PR15MB3100.namprd15.prod.outlook.com>
  <2b4e7937f739eda6102a62e736a6313c39ea5385.camel@blackberry.com>
@@ -9,16 +9,16 @@ References: <559e65b28a33c3a2d28bc5a32c3fdc4dfeacaf93.camel@blackberry.com>
  <484bb42bc0d287b251e2542e8d7e242ee72863b1.camel@blackberry.com>
  <dfd2c677-b134-8675-e5a7-5307ac4b5ca9@versatic.net>
  <a0cbd2107e8e5321eaffe995344a22ed041db510.camel@blackberry.com>
+ <20190315145629.GB6994@joraj-alpa>
+Reply-To: Doug Schaefer <dschaefer@blackberry.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="===============1301683991083391695=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44LTDk0cr4z16Jy
- for <lttng-dev@lists.lttng.org>; Fri, 15 Mar 2019 10:56:37 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <a0cbd2107e8e5321eaffe995344a22ed041db510.camel@blackberry.com>
+Received: from smtp-p02.blackberry.com (smtp-p02.blackberry.com [208.65.78.89])
+ by lists.lttng.org (Postfix) with ESMTPS id 44LYLb3XMzz16YW
+ for <lttng-dev@lists.lttng.org>; Fri, 15 Mar 2019 14:01:59 -0400 (EDT)
+In-Reply-To: <20190315145629.GB6994@joraj-alpa>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -28,27 +28,108 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Doug Schaefer <dschaefer@blackberry.com>
+To: "jonathan.rajotte-julien@efficios.com" <jonathan.rajotte-julien@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "tracecompass-dev@eclipse.org" <tracecompass-dev@eclipse.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Hi Doug,
+--===============1301683991083391695==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_57cd45e0d7741b08777e6345b2fcffd4ebd1b282camelblackberry_"
 
-On Fri, Mar 15, 2019 at 02:17:04PM +0000, Doug Schaefer wrote:
-> Hi Genevi=E8ve, thanks for this.
-> =
+--_000_57cd45e0d7741b08777e6345b2fcffd4ebd1b282camelblackberry_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-> For now, I'm focused on libbabeltrace. I think this is something my users=
- will like to work with. They're mainly C hacks working on our kernel to st=
-art. I think they'll also like using the python bindings.
+T24gRnJpLCAyMDE5LTAzLTE1IGF0IDEwOjU2IC0wNDAwLCBKb25hdGhhbiBSYWpvdHRlLUp1bGll
+biB3cm90ZToNCg0KSGkgRG91ZywNCg0KDQpPbiBGcmksIE1hciAxNSwgMjAxOSBhdCAwMjoxNzow
+NFBNICswMDAwLCBEb3VnIFNjaGFlZmVyIHdyb3RlOg0KDQpIaSBHZW5ldmnDqHZlLCB0aGFua3Mg
+Zm9yIHRoaXMuDQoNCg0KRm9yIG5vdywgSSdtIGZvY3VzZWQgb24gbGliYmFiZWx0cmFjZS4gSSB0
+aGluayB0aGlzIGlzIHNvbWV0aGluZyBteSB1c2VycyB3aWxsIGxpa2UgdG8gd29yayB3aXRoLiBU
+aGV5J3JlIG1haW5seSBDIGhhY2tzIHdvcmtpbmcgb24gb3VyIGtlcm5lbCB0byBzdGFydC4gSSB0
+aGluayB0aGV5J2xsIGFsc28gbGlrZSB1c2luZyB0aGUgcHl0aG9uIGJpbmRpbmdzLg0KDQoNCkRp
+ZCB5b3UgaGF2ZSBhIGxvb2sgYXQgdGhlc2UgcHJvamVjdHM/DQoNCg0KTFRUbmctYW5hbHlzZXMg
+OiBodHRwczovL3VybGRlZmVuc2UucHJvb2Zwb2ludC5jb20vdjIvdXJsP3U9aHR0cHMtM0FfX2dp
+dGh1Yi5jb21fbHR0bmdfbHR0bmctMkRhbmFseXNlcyZkPUR3SUZBdyZjPXl6b0hPY19aSy1zeGwt
+a2ZHTlNFdmxKWWFuc3NYTjNxLWxoajBzcDI2d0Umcj1OcnJidlRIV2EyTmJwX2tBTjBIbDFvM2xN
+MVdBd1NlczY0dUJqeGpOaE1jJm09MXBLX1hNQkllNzFMbFlTM1JSRHdpVE16YlNoYlBTUV9USWMx
+OGpqZ2h0TSZzPXFiVWxXd2FiSmNmSllOVlNkVDRCem54LTdObTB6QlE1MWVaX1FCMzB2ZVEmZT0N
+Cg0KTFRUbmctbGFtaSAoTWFjaGluZSBpbnRlcmZhY2Ugc3BlYykgOiBodHRwczovL3VybGRlZmVu
+c2UucHJvb2Zwb2ludC5jb20vdjIvdXJsP3U9aHR0cHMtM0FfX2dpdGh1Yi5jb21fbHR0bmdfbGFt
+aS0yRHNwZWMmZD1Ed0lGQXcmYz15em9IT2NfWkstc3hsLWtmR05TRXZsSllhbnNzWE4zcS1saGow
+c3AyNndFJnI9TnJyYnZUSFdhMk5icF9rQU4wSGwxbzNsTTFXQXdTZXM2NHVCanhqTmhNYyZtPTFw
+S19YTUJJZTcxTGxZUzNSUkR3aVRNemJTaGJQU1FfVEljMThqamdodE0mcz1iR0t2WTZoZ3hud1l4
+SkpISXFFMzBRODZjcXByeWJhZ09aa1VFZlFWX3hNJmU9DQoNCg0KSXQgbWlnaHQgYmUgYSBnb29k
+IHN0YXJ0aW5nIHBvaW50IG9yIGV4YW1wbGUgZm9yIHdoYXQgY2FuIGJlIGFjaGlldmVkIHZpYSB0
+aGUNCg0KYmluZGluZy4gS2VlcCBpbiBtaW5kIHRoYXQgdGhlc2UgcHJvamVjdHMgYXJlICpleHBl
+cmltZW50YWwqLg0KDQpDb29sLiBUaGFua3MhIEV2ZXJ5dGhpbmcgSSdtIGRvaW5nIGF0IHRoZSBt
+b21lbnQgaXMgZXhwZXJpbWVudGFsIHNvIHRoZXNlIGZpdCByaWdodCBpbiDimLouDQoNCg0KDQpD
+aGVlcnMNCg0K
 
-Did you have a look at these projects?
+--_000_57cd45e0d7741b08777e6345b2fcffd4ebd1b282camelblackberry_
+Content-Type: text/html; charset="utf-8"
+Content-ID: <6BA097986C97614EA9BDDA05DBCEBAD1@rim.com>
+Content-Transfer-Encoding: base64
 
-LTTng-analyses : https://github.com/lttng/lttng-analyses
-LTTng-lami (Machine interface spec) : https://github.com/lttng/lami-spec
+PGh0bWwgZGlyPSJsdHIiPg0KPGhlYWQ+DQo8bWV0YSBodHRwLWVxdWl2PSJDb250ZW50LVR5cGUi
+IGNvbnRlbnQ9InRleHQvaHRtbDsgY2hhcnNldD11dGYtOCI+DQo8L2hlYWQ+DQo8Ym9keSBzdHls
+ZT0idGV4dC1hbGlnbjpsZWZ0OyBkaXJlY3Rpb246bHRyOyI+DQo8ZGl2Pk9uIEZyaSwgMjAxOS0w
+My0xNSBhdCAxMDo1NiAtMDQwMCwgSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4gd3JvdGU6PC9kaXY+
+DQo8YmxvY2txdW90ZSB0eXBlPSJjaXRlIiBzdHlsZT0ibWFyZ2luOjAgMCAwIC44ZXg7IGJvcmRl
+ci1sZWZ0OjJweCAjNzI5ZmNmIHNvbGlkO3BhZGRpbmctbGVmdDoxZXgiPg0KPHByZT5IaSBEb3Vn
+LDwvcHJlPg0KPHByZT48YnI+PC9wcmU+DQo8cHJlPk9uIEZyaSwgTWFyIDE1LCAyMDE5IGF0IDAy
+OjE3OjA0UE0gJiM0MzswMDAwLCBEb3VnIFNjaGFlZmVyIHdyb3RlOjwvcHJlPg0KPHByZT48L3By
+ZT4NCjxwcmU+SGkgR2VuZXZpw6h2ZSwgdGhhbmtzIGZvciB0aGlzLjwvcHJlPg0KPHByZT48YnI+
+PC9wcmU+DQo8cHJlPkZvciBub3csIEknbSBmb2N1c2VkIG9uIGxpYmJhYmVsdHJhY2UuIEkgdGhp
+bmsgdGhpcyBpcyBzb21ldGhpbmcgbXkgdXNlcnMgd2lsbCBsaWtlIHRvIHdvcmsgd2l0aC4gVGhl
+eSdyZSBtYWlubHkgQyBoYWNrcyB3b3JraW5nIG9uIG91ciBrZXJuZWwgdG8gc3RhcnQuIEkgdGhp
+bmsgdGhleSdsbCBhbHNvIGxpa2UgdXNpbmcgdGhlIHB5dGhvbiBiaW5kaW5ncy48L3ByZT4NCjxw
+cmU+PGJyPjwvcHJlPg0KPHByZT5EaWQgeW91IGhhdmUgYSBsb29rIGF0IHRoZXNlIHByb2plY3Rz
+PzwvcHJlPg0KPHByZT48YnI+PC9wcmU+DQo8cHJlPkxUVG5nLWFuYWx5c2VzIDogPGEgaHJlZj0i
+aHR0cHM6Ly91cmxkZWZlbnNlLnByb29mcG9pbnQuY29tL3YyL3VybD91PWh0dHBzLTNBX19naXRo
+dWIuY29tX2x0dG5nX2x0dG5nLTJEYW5hbHlzZXMmYW1wO2Q9RHdJRkF3JmFtcDtjPXl6b0hPY19a
+Sy1zeGwta2ZHTlNFdmxKWWFuc3NYTjNxLWxoajBzcDI2d0UmYW1wO3I9TnJyYnZUSFdhMk5icF9r
+QU4wSGwxbzNsTTFXQXdTZXM2NHVCanhqTmhNYyZhbXA7bT0xcEtfWE1CSWU3MUxsWVMzUlJEd2lU
+TXpiU2hiUFNRX1RJYzE4ampnaHRNJmFtcDtzPXFiVWxXd2FiSmNmSllOVlNkVDRCem54LTdObTB6
+QlE1MWVaX1FCMzB2ZVEmYW1wO2U9Ij5odHRwczovL3VybGRlZmVuc2UucHJvb2Zwb2ludC5jb20v
+djIvdXJsP3U9aHR0cHMtM0FfX2dpdGh1Yi5jb21fbHR0bmdfbHR0bmctMkRhbmFseXNlcyZhbXA7
+ZD1Ed0lGQXcmYW1wO2M9eXpvSE9jX1pLLXN4bC1rZkdOU0V2bEpZYW5zc1hOM3EtbGhqMHNwMjZ3
+RSZhbXA7cj1OcnJidlRIV2EyTmJwX2tBTjBIbDFvM2xNMVdBd1NlczY0dUJqeGpOaE1jJmFtcDtt
+PTFwS19YTUJJZTcxTGxZUzNSUkR3aVRNemJTaGJQU1FfVEljMThqamdodE0mYW1wO3M9cWJVbFd3
+YWJKY2ZKWU5WU2RUNEJ6bngtN05tMHpCUTUxZVpfUUIzMHZlUSZhbXA7ZT08L2E+PC9wcmU+DQo8
+cHJlPkxUVG5nLWxhbWkgKE1hY2hpbmUgaW50ZXJmYWNlIHNwZWMpIDogPGEgaHJlZj0iaHR0cHM6
+Ly91cmxkZWZlbnNlLnByb29mcG9pbnQuY29tL3YyL3VybD91PWh0dHBzLTNBX19naXRodWIuY29t
+X2x0dG5nX2xhbWktMkRzcGVjJmFtcDtkPUR3SUZBdyZhbXA7Yz15em9IT2NfWkstc3hsLWtmR05T
+RXZsSllhbnNzWE4zcS1saGowc3AyNndFJmFtcDtyPU5ycmJ2VEhXYTJOYnBfa0FOMEhsMW8zbE0x
+V0F3U2VzNjR1Qmp4ak5oTWMmYW1wO209MXBLX1hNQkllNzFMbFlTM1JSRHdpVE16YlNoYlBTUV9U
+SWMxOGpqZ2h0TSZhbXA7cz1iR0t2WTZoZ3hud1l4SkpISXFFMzBRODZjcXByeWJhZ09aa1VFZlFW
+X3hNJmFtcDtlPSI+aHR0cHM6Ly91cmxkZWZlbnNlLnByb29mcG9pbnQuY29tL3YyL3VybD91PWh0
+dHBzLTNBX19naXRodWIuY29tX2x0dG5nX2xhbWktMkRzcGVjJmFtcDtkPUR3SUZBdyZhbXA7Yz15
+em9IT2NfWkstc3hsLWtmR05TRXZsSllhbnNzWE4zcS1saGowc3AyNndFJmFtcDtyPU5ycmJ2VEhX
+YTJOYnBfa0FOMEhsMW8zbE0xV0F3U2VzNjR1Qmp4ak5oTWMmYW1wO209MXBLX1hNQkllNzFMbFlT
+M1JSRHdpVE16YlNoYlBTUV9USWMxOGpqZ2h0TSZhbXA7cz1iR0t2WTZoZ3hud1l4SkpISXFFMzBR
+ODZjcXByeWJhZ09aa1VFZlFWX3hNJmFtcDtlPTwvYT48L3ByZT4NCjxwcmU+PGJyPjwvcHJlPg0K
+PHByZT5JdCBtaWdodCBiZSBhIGdvb2Qgc3RhcnRpbmcgcG9pbnQgb3IgZXhhbXBsZSBmb3Igd2hh
+dCBjYW4gYmUgYWNoaWV2ZWQgdmlhIHRoZTwvcHJlPg0KPHByZT5iaW5kaW5nLiBLZWVwIGluIG1p
+bmQgdGhhdCB0aGVzZSBwcm9qZWN0cyBhcmUgKmV4cGVyaW1lbnRhbCouPC9wcmU+DQo8L2Jsb2Nr
+cXVvdGU+DQo8ZGl2Pjxicj4NCjwvZGl2Pg0KPGRpdj5Db29sLiBUaGFua3MhIEV2ZXJ5dGhpbmcg
+SSdtIGRvaW5nIGF0IHRoZSBtb21lbnQgaXMgZXhwZXJpbWVudGFsIHNvIHRoZXNlIGZpdCByaWdo
+dCBpbiDimLouPC9kaXY+DQo8ZGl2Pjxicj4NCjwvZGl2Pg0KPGJsb2NrcXVvdGUgdHlwZT0iY2l0
+ZSIgc3R5bGU9Im1hcmdpbjowIDAgMCAuOGV4OyBib3JkZXItbGVmdDoycHggIzcyOWZjZiBzb2xp
+ZDtwYWRkaW5nLWxlZnQ6MWV4Ij4NCjxwcmU+PGJyPjwvcHJlPg0KPHByZT5DaGVlcnM8L3ByZT4N
+CjxwcmU+PGJyPjwvcHJlPg0KPC9ibG9ja3F1b3RlPg0KPC9ib2R5Pg0KPC9odG1sPg0K
 
-It might be a good starting point or example for what can be achieved via t=
-he
-binding. Keep in mind that these projects are *experimental*.
+--_000_57cd45e0d7741b08777e6345b2fcffd4ebd1b282camelblackberry_--
 
-Cheers
+--===============1301683991083391695==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1301683991083391695==--
