@@ -1,18 +1,18 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules 4/5] Fix: Revert "KVM: MMU: show
- mmu_valid_gen..." (v5.1)
-Date: Mon, 18 Mar 2019 16:20:35 -0400
-Message-ID: <20190318202036.17523-4-mjeanson__45601.3139382534$1552940586$gmane$org@efficios.com>
+Subject: [PATCH lttng-modules 5/5] Fix: atomic_long_add_unless()
+ returns a boolean
+Date: Mon, 18 Mar 2019 16:20:36 -0400
+Message-ID: <20190318202036.17523-5-mjeanson__30660.2582031459$1552940617$gmane$org@efficios.com>
 References: <20190318202036.17523-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44NSHh1YD0z17Xk
+ by lists.lttng.org (Postfix) with ESMTPS id 44NSHh4yG8z17Xw
  for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:21:04 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 337621C8DA0
+ by mail.efficios.com (Postfix) with ESMTP id A8CE31C8DBE
  for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:21:04 -0400 (EDT)
 In-Reply-To: <20190318202036.17523-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -27,45 +27,58 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-See upstream commit :
+Because of a documentation error in older kernels, it was assumed that
+atomic_long_add_unless would return the 'unless' value when it failed
+but the implementation actually returns a boolean.
 
-  commit b59c4830ca185ba0e9f9e046fb1cd10a4a92627a
-  Author: Sean Christopherson <sean.j.christopherson@intel.com>
-  Date:   Tue Feb 5 13:01:30 2019 -0800
-
-    Revert "KVM: MMU: show mmu_valid_gen in shadow page related tracepoints"
-
-    ...as part of removing x86 KVM's fast invalidate mechanism, i.e. this
-    is one part of a revert all patches from the series that introduced the
-    mechanism[1].
-
-    This reverts commit 2248b023219251908aedda0621251cffc548f258.
+Also add missing error code int 'ret' and compare against the right type
+max value.
 
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- .../events/lttng-module/arch/x86/kvm/mmutrace.h        | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ lttng-abi.c    | 7 +++----
+ lttng-events.c | 4 ++--
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/instrumentation/events/lttng-module/arch/x86/kvm/mmutrace.h b/instrumentation/events/lttng-module/arch/x86/kvm/mmutrace.h
-index 39ec6a9..e25a774 100644
---- a/instrumentation/events/lttng-module/arch/x86/kvm/mmutrace.h
-+++ b/instrumentation/events/lttng-module/arch/x86/kvm/mmutrace.h
-@@ -14,7 +14,15 @@
- #undef TRACE_SYSTEM
- #define TRACE_SYSTEM kvm_mmu
- 
--#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0))
-+
-+#define LTTNG_KVM_MMU_PAGE_FIELDS \
-+	ctf_integer(__u64, gfn, (sp)->gfn) \
-+	ctf_integer(__u32, role, (sp)->role.word) \
-+	ctf_integer(__u32, root_count, (sp)->root_count) \
-+	ctf_integer(bool, unsync, (sp)->unsync)
-+
-+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3,11,0))
- 
- #define LTTNG_KVM_MMU_PAGE_FIELDS \
- 	ctf_integer(unsigned long, mmu_valid_gen, (sp)->mmu_valid_gen) \
+diff --git a/lttng-abi.c b/lttng-abi.c
+index 0534472..ca94379 100644
+--- a/lttng-abi.c
++++ b/lttng-abi.c
+@@ -419,8 +419,8 @@ int lttng_abi_create_channel(struct file *session_file,
+ 		transport_name = "<unknown>";
+ 		break;
+ 	}
+-	if (atomic_long_add_unless(&session_file->f_count,
+-		1, INT_MAX) == INT_MAX) {
++	if (!atomic_long_add_unless(&session_file->f_count, 1, LONG_MAX)) {
++		ret = -EOVERFLOW;
+ 		goto refcount_error;
+ 	}
+ 	/*
+@@ -1072,8 +1072,7 @@ int lttng_abi_create_event(struct file *channel_file,
+ 		goto file_error;
+ 	}
+ 	/* The event holds a reference on the channel */
+-	if (atomic_long_add_unless(&channel_file->f_count,
+-		1, INT_MAX) == INT_MAX) {
++	if (!atomic_long_add_unless(&channel_file->f_count, 1, LONG_MAX)) {
+ 		ret = -EOVERFLOW;
+ 		goto refcount_error;
+ 	}
+diff --git a/lttng-events.c b/lttng-events.c
+index f4206c5..a4570b7 100644
+--- a/lttng-events.c
++++ b/lttng-events.c
+@@ -1140,8 +1140,8 @@ int lttng_session_list_tracker_pids(struct lttng_session *session)
+ 		ret = PTR_ERR(tracker_pids_list_file);
+ 		goto file_error;
+ 	}
+-	if (atomic_long_add_unless(&session->file->f_count,
+-		1, INT_MAX) == INT_MAX) {
++	if (!atomic_long_add_unless(&session->file->f_count, 1, LONG_MAX)) {
++		ret = -EOVERFLOW;
+ 		goto refcount_error;
+ 	}
+ 	ret = lttng_tracker_pids_list_fops.open(NULL, tracker_pids_list_file);
 -- 
 2.17.1
