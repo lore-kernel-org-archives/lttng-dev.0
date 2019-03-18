@@ -1,24 +1,19 @@
-From: Doug Schaefer <dschaefer@blackberry.com>
-Subject: Re: [tracecompass-dev] Scalability
-Date: Fri, 15 Mar 2019 18:01:44 +0000
-Message-ID: <57cd45e0d7741b08777e6345b2fcffd4ebd1b282.camel__29390.6669759721$1552672940$gmane$org@blackberry.com>
-References: <559e65b28a33c3a2d28bc5a32c3fdc4dfeacaf93.camel@blackberry.com>
- <DM6PR15MB3100B14E05117F439A6A08DE9E490@DM6PR15MB3100.namprd15.prod.outlook.com>
- <2b4e7937f739eda6102a62e736a6313c39ea5385.camel@blackberry.com>
- <20190312150314.GC13925@joraj-alpa>
- <484bb42bc0d287b251e2542e8d7e242ee72863b1.camel@blackberry.com>
- <dfd2c677-b134-8675-e5a7-5307ac4b5ca9@versatic.net>
- <a0cbd2107e8e5321eaffe995344a22ed041db510.camel@blackberry.com>
- <20190315145629.GB6994@joraj-alpa>
-Reply-To: Doug Schaefer <dschaefer@blackberry.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-modules 1/5] Fix: mm: create the new
+ vm_fault_t type (v5.1)
+Date: Mon, 18 Mar 2019 16:20:32 -0400
+Message-ID: <20190318202036.17523-1-mjeanson__24219.5179381937$1552940484$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1301683991083391695=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp-p02.blackberry.com (smtp-p02.blackberry.com [208.65.78.89])
- by lists.lttng.org (Postfix) with ESMTPS id 44LYLb3XMzz16YW
- for <lttng-dev@lists.lttng.org>; Fri, 15 Mar 2019 14:01:59 -0400 (EDT)
-In-Reply-To: <20190315145629.GB6994@joraj-alpa>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 44NSHf4D4Zz17XM
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:21:02 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id F1B821C8D5D
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:21:00 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -28,108 +23,61 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "jonathan.rajotte-julien@efficios.com" <jonathan.rajotte-julien@efficios.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>, "tracecompass-dev@eclipse.org" <tracecompass-dev@eclipse.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============1301683991083391695==
-Content-Language: en-US
-Content-Type: multipart/alternative;
-	boundary="_000_57cd45e0d7741b08777e6345b2fcffd4ebd1b282camelblackberry_"
+See upstream commit:
 
---_000_57cd45e0d7741b08777e6345b2fcffd4ebd1b282camelblackberry_
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+  commit 3d3539018d2cbd12e5af4a132636ee7fd8d43ef0
+  Author: Souptick Joarder <jrdr.linux@gmail.com>
+  Date:   Thu Mar 7 16:31:14 2019 -0800
 
-T24gRnJpLCAyMDE5LTAzLTE1IGF0IDEwOjU2IC0wNDAwLCBKb25hdGhhbiBSYWpvdHRlLUp1bGll
-biB3cm90ZToNCg0KSGkgRG91ZywNCg0KDQpPbiBGcmksIE1hciAxNSwgMjAxOSBhdCAwMjoxNzow
-NFBNICswMDAwLCBEb3VnIFNjaGFlZmVyIHdyb3RlOg0KDQpIaSBHZW5ldmnDqHZlLCB0aGFua3Mg
-Zm9yIHRoaXMuDQoNCg0KRm9yIG5vdywgSSdtIGZvY3VzZWQgb24gbGliYmFiZWx0cmFjZS4gSSB0
-aGluayB0aGlzIGlzIHNvbWV0aGluZyBteSB1c2VycyB3aWxsIGxpa2UgdG8gd29yayB3aXRoLiBU
-aGV5J3JlIG1haW5seSBDIGhhY2tzIHdvcmtpbmcgb24gb3VyIGtlcm5lbCB0byBzdGFydC4gSSB0
-aGluayB0aGV5J2xsIGFsc28gbGlrZSB1c2luZyB0aGUgcHl0aG9uIGJpbmRpbmdzLg0KDQoNCkRp
-ZCB5b3UgaGF2ZSBhIGxvb2sgYXQgdGhlc2UgcHJvamVjdHM/DQoNCg0KTFRUbmctYW5hbHlzZXMg
-OiBodHRwczovL3VybGRlZmVuc2UucHJvb2Zwb2ludC5jb20vdjIvdXJsP3U9aHR0cHMtM0FfX2dp
-dGh1Yi5jb21fbHR0bmdfbHR0bmctMkRhbmFseXNlcyZkPUR3SUZBdyZjPXl6b0hPY19aSy1zeGwt
-a2ZHTlNFdmxKWWFuc3NYTjNxLWxoajBzcDI2d0Umcj1OcnJidlRIV2EyTmJwX2tBTjBIbDFvM2xN
-MVdBd1NlczY0dUJqeGpOaE1jJm09MXBLX1hNQkllNzFMbFlTM1JSRHdpVE16YlNoYlBTUV9USWMx
-OGpqZ2h0TSZzPXFiVWxXd2FiSmNmSllOVlNkVDRCem54LTdObTB6QlE1MWVaX1FCMzB2ZVEmZT0N
-Cg0KTFRUbmctbGFtaSAoTWFjaGluZSBpbnRlcmZhY2Ugc3BlYykgOiBodHRwczovL3VybGRlZmVu
-c2UucHJvb2Zwb2ludC5jb20vdjIvdXJsP3U9aHR0cHMtM0FfX2dpdGh1Yi5jb21fbHR0bmdfbGFt
-aS0yRHNwZWMmZD1Ed0lGQXcmYz15em9IT2NfWkstc3hsLWtmR05TRXZsSllhbnNzWE4zcS1saGow
-c3AyNndFJnI9TnJyYnZUSFdhMk5icF9rQU4wSGwxbzNsTTFXQXdTZXM2NHVCanhqTmhNYyZtPTFw
-S19YTUJJZTcxTGxZUzNSUkR3aVRNemJTaGJQU1FfVEljMThqamdodE0mcz1iR0t2WTZoZ3hud1l4
-SkpISXFFMzBRODZjcXByeWJhZ09aa1VFZlFWX3hNJmU9DQoNCg0KSXQgbWlnaHQgYmUgYSBnb29k
-IHN0YXJ0aW5nIHBvaW50IG9yIGV4YW1wbGUgZm9yIHdoYXQgY2FuIGJlIGFjaGlldmVkIHZpYSB0
-aGUNCg0KYmluZGluZy4gS2VlcCBpbiBtaW5kIHRoYXQgdGhlc2UgcHJvamVjdHMgYXJlICpleHBl
-cmltZW50YWwqLg0KDQpDb29sLiBUaGFua3MhIEV2ZXJ5dGhpbmcgSSdtIGRvaW5nIGF0IHRoZSBt
-b21lbnQgaXMgZXhwZXJpbWVudGFsIHNvIHRoZXNlIGZpdCByaWdodCBpbiDimLouDQoNCg0KDQpD
-aGVlcnMNCg0K
+    mm: create the new vm_fault_t type
 
---_000_57cd45e0d7741b08777e6345b2fcffd4ebd1b282camelblackberry_
-Content-Type: text/html; charset="utf-8"
-Content-ID: <6BA097986C97614EA9BDDA05DBCEBAD1@rim.com>
-Content-Transfer-Encoding: base64
+    Page fault handlers are supposed to return VM_FAULT codes, but some
+    drivers/file systems mistakenly return error numbers.  Now that all
+    drivers/file systems have been converted to use the vm_fault_t return
+    type, change the type definition to no longer be compatible with 'int'.
+    By making it an unsigned int, the function prototype becomes
+    incompatible with a function which returns int.  Sparse will detect any
+    attempts to return a value which is not a VM_FAULT code.
 
-PGh0bWwgZGlyPSJsdHIiPg0KPGhlYWQ+DQo8bWV0YSBodHRwLWVxdWl2PSJDb250ZW50LVR5cGUi
-IGNvbnRlbnQ9InRleHQvaHRtbDsgY2hhcnNldD11dGYtOCI+DQo8L2hlYWQ+DQo8Ym9keSBzdHls
-ZT0idGV4dC1hbGlnbjpsZWZ0OyBkaXJlY3Rpb246bHRyOyI+DQo8ZGl2Pk9uIEZyaSwgMjAxOS0w
-My0xNSBhdCAxMDo1NiAtMDQwMCwgSm9uYXRoYW4gUmFqb3R0ZS1KdWxpZW4gd3JvdGU6PC9kaXY+
-DQo8YmxvY2txdW90ZSB0eXBlPSJjaXRlIiBzdHlsZT0ibWFyZ2luOjAgMCAwIC44ZXg7IGJvcmRl
-ci1sZWZ0OjJweCAjNzI5ZmNmIHNvbGlkO3BhZGRpbmctbGVmdDoxZXgiPg0KPHByZT5IaSBEb3Vn
-LDwvcHJlPg0KPHByZT48YnI+PC9wcmU+DQo8cHJlPk9uIEZyaSwgTWFyIDE1LCAyMDE5IGF0IDAy
-OjE3OjA0UE0gJiM0MzswMDAwLCBEb3VnIFNjaGFlZmVyIHdyb3RlOjwvcHJlPg0KPHByZT48L3By
-ZT4NCjxwcmU+SGkgR2VuZXZpw6h2ZSwgdGhhbmtzIGZvciB0aGlzLjwvcHJlPg0KPHByZT48YnI+
-PC9wcmU+DQo8cHJlPkZvciBub3csIEknbSBmb2N1c2VkIG9uIGxpYmJhYmVsdHJhY2UuIEkgdGhp
-bmsgdGhpcyBpcyBzb21ldGhpbmcgbXkgdXNlcnMgd2lsbCBsaWtlIHRvIHdvcmsgd2l0aC4gVGhl
-eSdyZSBtYWlubHkgQyBoYWNrcyB3b3JraW5nIG9uIG91ciBrZXJuZWwgdG8gc3RhcnQuIEkgdGhp
-bmsgdGhleSdsbCBhbHNvIGxpa2UgdXNpbmcgdGhlIHB5dGhvbiBiaW5kaW5ncy48L3ByZT4NCjxw
-cmU+PGJyPjwvcHJlPg0KPHByZT5EaWQgeW91IGhhdmUgYSBsb29rIGF0IHRoZXNlIHByb2plY3Rz
-PzwvcHJlPg0KPHByZT48YnI+PC9wcmU+DQo8cHJlPkxUVG5nLWFuYWx5c2VzIDogPGEgaHJlZj0i
-aHR0cHM6Ly91cmxkZWZlbnNlLnByb29mcG9pbnQuY29tL3YyL3VybD91PWh0dHBzLTNBX19naXRo
-dWIuY29tX2x0dG5nX2x0dG5nLTJEYW5hbHlzZXMmYW1wO2Q9RHdJRkF3JmFtcDtjPXl6b0hPY19a
-Sy1zeGwta2ZHTlNFdmxKWWFuc3NYTjNxLWxoajBzcDI2d0UmYW1wO3I9TnJyYnZUSFdhMk5icF9r
-QU4wSGwxbzNsTTFXQXdTZXM2NHVCanhqTmhNYyZhbXA7bT0xcEtfWE1CSWU3MUxsWVMzUlJEd2lU
-TXpiU2hiUFNRX1RJYzE4ampnaHRNJmFtcDtzPXFiVWxXd2FiSmNmSllOVlNkVDRCem54LTdObTB6
-QlE1MWVaX1FCMzB2ZVEmYW1wO2U9Ij5odHRwczovL3VybGRlZmVuc2UucHJvb2Zwb2ludC5jb20v
-djIvdXJsP3U9aHR0cHMtM0FfX2dpdGh1Yi5jb21fbHR0bmdfbHR0bmctMkRhbmFseXNlcyZhbXA7
-ZD1Ed0lGQXcmYW1wO2M9eXpvSE9jX1pLLXN4bC1rZkdOU0V2bEpZYW5zc1hOM3EtbGhqMHNwMjZ3
-RSZhbXA7cj1OcnJidlRIV2EyTmJwX2tBTjBIbDFvM2xNMVdBd1NlczY0dUJqeGpOaE1jJmFtcDtt
-PTFwS19YTUJJZTcxTGxZUzNSUkR3aVRNemJTaGJQU1FfVEljMThqamdodE0mYW1wO3M9cWJVbFd3
-YWJKY2ZKWU5WU2RUNEJ6bngtN05tMHpCUTUxZVpfUUIzMHZlUSZhbXA7ZT08L2E+PC9wcmU+DQo8
-cHJlPkxUVG5nLWxhbWkgKE1hY2hpbmUgaW50ZXJmYWNlIHNwZWMpIDogPGEgaHJlZj0iaHR0cHM6
-Ly91cmxkZWZlbnNlLnByb29mcG9pbnQuY29tL3YyL3VybD91PWh0dHBzLTNBX19naXRodWIuY29t
-X2x0dG5nX2xhbWktMkRzcGVjJmFtcDtkPUR3SUZBdyZhbXA7Yz15em9IT2NfWkstc3hsLWtmR05T
-RXZsSllhbnNzWE4zcS1saGowc3AyNndFJmFtcDtyPU5ycmJ2VEhXYTJOYnBfa0FOMEhsMW8zbE0x
-V0F3U2VzNjR1Qmp4ak5oTWMmYW1wO209MXBLX1hNQkllNzFMbFlTM1JSRHdpVE16YlNoYlBTUV9U
-SWMxOGpqZ2h0TSZhbXA7cz1iR0t2WTZoZ3hud1l4SkpISXFFMzBRODZjcXByeWJhZ09aa1VFZlFW
-X3hNJmFtcDtlPSI+aHR0cHM6Ly91cmxkZWZlbnNlLnByb29mcG9pbnQuY29tL3YyL3VybD91PWh0
-dHBzLTNBX19naXRodWIuY29tX2x0dG5nX2xhbWktMkRzcGVjJmFtcDtkPUR3SUZBdyZhbXA7Yz15
-em9IT2NfWkstc3hsLWtmR05TRXZsSllhbnNzWE4zcS1saGowc3AyNndFJmFtcDtyPU5ycmJ2VEhX
-YTJOYnBfa0FOMEhsMW8zbE0xV0F3U2VzNjR1Qmp4ak5oTWMmYW1wO209MXBLX1hNQkllNzFMbFlT
-M1JSRHdpVE16YlNoYlBTUV9USWMxOGpqZ2h0TSZhbXA7cz1iR0t2WTZoZ3hud1l4SkpISXFFMzBR
-ODZjcXByeWJhZ09aa1VFZlFWX3hNJmFtcDtlPTwvYT48L3ByZT4NCjxwcmU+PGJyPjwvcHJlPg0K
-PHByZT5JdCBtaWdodCBiZSBhIGdvb2Qgc3RhcnRpbmcgcG9pbnQgb3IgZXhhbXBsZSBmb3Igd2hh
-dCBjYW4gYmUgYWNoaWV2ZWQgdmlhIHRoZTwvcHJlPg0KPHByZT5iaW5kaW5nLiBLZWVwIGluIG1p
-bmQgdGhhdCB0aGVzZSBwcm9qZWN0cyBhcmUgKmV4cGVyaW1lbnRhbCouPC9wcmU+DQo8L2Jsb2Nr
-cXVvdGU+DQo8ZGl2Pjxicj4NCjwvZGl2Pg0KPGRpdj5Db29sLiBUaGFua3MhIEV2ZXJ5dGhpbmcg
-SSdtIGRvaW5nIGF0IHRoZSBtb21lbnQgaXMgZXhwZXJpbWVudGFsIHNvIHRoZXNlIGZpdCByaWdo
-dCBpbiDimLouPC9kaXY+DQo8ZGl2Pjxicj4NCjwvZGl2Pg0KPGJsb2NrcXVvdGUgdHlwZT0iY2l0
-ZSIgc3R5bGU9Im1hcmdpbjowIDAgMCAuOGV4OyBib3JkZXItbGVmdDoycHggIzcyOWZjZiBzb2xp
-ZDtwYWRkaW5nLWxlZnQ6MWV4Ij4NCjxwcmU+PGJyPjwvcHJlPg0KPHByZT5DaGVlcnM8L3ByZT4N
-CjxwcmU+PGJyPjwvcHJlPg0KPC9ibG9ja3F1b3RlPg0KPC9ib2R5Pg0KPC9odG1sPg0K
+    VM_FAULT_SET_HINDEX and VM_FAULT_GET_HINDEX values are changed to avoid
+    conflict with other VM_FAULT codes.
+---
+ lib/ringbuffer/ring_buffer_mmap.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
---_000_57cd45e0d7741b08777e6345b2fcffd4ebd1b282camelblackberry_--
-
---===============1301683991083391695==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============1301683991083391695==--
+diff --git a/lib/ringbuffer/ring_buffer_mmap.c b/lib/ringbuffer/ring_buffer_mmap.c
+index 30dd93e..fab9458 100644
+--- a/lib/ringbuffer/ring_buffer_mmap.c
++++ b/lib/ringbuffer/ring_buffer_mmap.c
+@@ -20,7 +20,11 @@
+ /*
+  * fault() vm_op implementation for ring buffer file mapping.
+  */
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0))
++static vm_fault_t lib_ring_buffer_fault_compat(struct vm_area_struct *vma, struct vm_fault *vmf)
++#else
+ static int lib_ring_buffer_fault_compat(struct vm_area_struct *vma, struct vm_fault *vmf)
++#endif
+ {
+ 	struct lib_ring_buffer *buf = vma->vm_private_data;
+ 	struct channel *chan = buf->backend.chan;
+@@ -53,7 +57,13 @@ static int lib_ring_buffer_fault_compat(struct vm_area_struct *vma, struct vm_fa
+ 	return 0;
+ }
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0))
++static vm_fault_t lib_ring_buffer_fault(struct vm_fault *vmf)
++{
++	struct vm_area_struct *vma = vmf->vma;
++	return lib_ring_buffer_fault_compat(vma, vmf);
++}
++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0))
+ static int lib_ring_buffer_fault(struct vm_fault *vmf)
+ {
+ 	struct vm_area_struct *vma = vmf->vma;
+-- 
+2.17.1
