@@ -1,19 +1,20 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules 5/5] Fix: atomic_long_add_unless()
- returns a boolean
-Date: Mon, 18 Mar 2019 16:20:36 -0400
-Message-ID: <20190318202036.17523-5-mjeanson__30660.2582031459$1552940617$gmane$org@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-modules 1/5] Fix: mm: create the new
+ vm_fault_t type (v5.1)
+Date: Mon, 18 Mar 2019 16:39:14 -0400 (EDT)
+Message-ID: <1358703581.1113.1552941554240.JavaMail.zimbra__4646.75535201735$1552941577$gmane$org@efficios.com>
 References: <20190318202036.17523-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44NSHh4yG8z17Xw
- for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:21:04 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 44NShh0rpWz17cc
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:39:15 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id A8CE31C8DBE
- for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:21:04 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id CE065AB601
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:39:14 -0400 (EDT)
 In-Reply-To: <20190318202036.17523-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -24,61 +25,77 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Because of a documentation error in older kernels, it was assumed that
-atomic_long_add_unless would return the 'unless' value when it failed
-but the implementation actually returns a boolean.
+All merged into master, 2.11, 2.10, 2.9, thanks!
 
-Also add missing error code int 'ret' and compare against the right type
-max value.
+Mathieu
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
----
- lttng-abi.c    | 7 +++----
- lttng-events.c | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+----- On Mar 18, 2019, at 4:20 PM, Michael Jeanson mjeanson@efficios.com wrote:
 
-diff --git a/lttng-abi.c b/lttng-abi.c
-index 0534472..ca94379 100644
---- a/lttng-abi.c
-+++ b/lttng-abi.c
-@@ -419,8 +419,8 @@ int lttng_abi_create_channel(struct file *session_file,
- 		transport_name = "<unknown>";
- 		break;
- 	}
--	if (atomic_long_add_unless(&session_file->f_count,
--		1, INT_MAX) == INT_MAX) {
-+	if (!atomic_long_add_unless(&session_file->f_count, 1, LONG_MAX)) {
-+		ret = -EOVERFLOW;
- 		goto refcount_error;
- 	}
- 	/*
-@@ -1072,8 +1072,7 @@ int lttng_abi_create_event(struct file *channel_file,
- 		goto file_error;
- 	}
- 	/* The event holds a reference on the channel */
--	if (atomic_long_add_unless(&channel_file->f_count,
--		1, INT_MAX) == INT_MAX) {
-+	if (!atomic_long_add_unless(&channel_file->f_count, 1, LONG_MAX)) {
- 		ret = -EOVERFLOW;
- 		goto refcount_error;
- 	}
-diff --git a/lttng-events.c b/lttng-events.c
-index f4206c5..a4570b7 100644
---- a/lttng-events.c
-+++ b/lttng-events.c
-@@ -1140,8 +1140,8 @@ int lttng_session_list_tracker_pids(struct lttng_session *session)
- 		ret = PTR_ERR(tracker_pids_list_file);
- 		goto file_error;
- 	}
--	if (atomic_long_add_unless(&session->file->f_count,
--		1, INT_MAX) == INT_MAX) {
-+	if (!atomic_long_add_unless(&session->file->f_count, 1, LONG_MAX)) {
-+		ret = -EOVERFLOW;
- 		goto refcount_error;
- 	}
- 	ret = lttng_tracker_pids_list_fops.open(NULL, tracker_pids_list_file);
+> See upstream commit:
+> 
+>  commit 3d3539018d2cbd12e5af4a132636ee7fd8d43ef0
+>  Author: Souptick Joarder <jrdr.linux@gmail.com>
+>  Date:   Thu Mar 7 16:31:14 2019 -0800
+> 
+>    mm: create the new vm_fault_t type
+> 
+>    Page fault handlers are supposed to return VM_FAULT codes, but some
+>    drivers/file systems mistakenly return error numbers.  Now that all
+>    drivers/file systems have been converted to use the vm_fault_t return
+>    type, change the type definition to no longer be compatible with 'int'.
+>    By making it an unsigned int, the function prototype becomes
+>    incompatible with a function which returns int.  Sparse will detect any
+>    attempts to return a value which is not a VM_FAULT code.
+> 
+>    VM_FAULT_SET_HINDEX and VM_FAULT_GET_HINDEX values are changed to avoid
+>    conflict with other VM_FAULT codes.
+> ---
+> lib/ringbuffer/ring_buffer_mmap.c | 12 +++++++++++-
+> 1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/ringbuffer/ring_buffer_mmap.c
+> b/lib/ringbuffer/ring_buffer_mmap.c
+> index 30dd93e..fab9458 100644
+> --- a/lib/ringbuffer/ring_buffer_mmap.c
+> +++ b/lib/ringbuffer/ring_buffer_mmap.c
+> @@ -20,7 +20,11 @@
+> /*
+>  * fault() vm_op implementation for ring buffer file mapping.
+>  */
+> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0))
+> +static vm_fault_t lib_ring_buffer_fault_compat(struct vm_area_struct *vma,
+> struct vm_fault *vmf)
+> +#else
+> static int lib_ring_buffer_fault_compat(struct vm_area_struct *vma, struct
+> vm_fault *vmf)
+> +#endif
+> {
+> 	struct lib_ring_buffer *buf = vma->vm_private_data;
+> 	struct channel *chan = buf->backend.chan;
+> @@ -53,7 +57,13 @@ static int lib_ring_buffer_fault_compat(struct vm_area_struct
+> *vma, struct vm_fa
+> 	return 0;
+> }
+> 
+> -#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0))
+> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0))
+> +static vm_fault_t lib_ring_buffer_fault(struct vm_fault *vmf)
+> +{
+> +	struct vm_area_struct *vma = vmf->vma;
+> +	return lib_ring_buffer_fault_compat(vma, vmf);
+> +}
+> +#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0))
+> static int lib_ring_buffer_fault(struct vm_fault *vmf)
+> {
+> 	struct vm_area_struct *vma = vmf->vma;
+> --
+> 2.17.1
+
 -- 
-2.17.1
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
