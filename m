@@ -1,20 +1,19 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules 2/5] Fix: rcu: Remove wrapper
- definitions for obsolete RCU... (v5.1)
-Date: Mon, 18 Mar 2019 16:20:33 -0400
-Message-ID: <20190318202036.17523-2-mjeanson__3073.7266688206$1552940513$gmane$org@efficios.com>
+Subject: [PATCH lttng-modules 3/5] Fix: pipe: stop using
+ ->can_merge (v5.1)
+Date: Mon, 18 Mar 2019 16:20:34 -0400
+Message-ID: <20190318202036.17523-3-mjeanson__18686.5611978405$1552940552$gmane$org@efficios.com>
 References: <20190318202036.17523-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44NSHf4DQmz17XN
- for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:21:02 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 44NSHg24BBz17XT
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:21:03 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id EB72D1C8D6D
- for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:21:01 -0400 (EDT)
+ by mail.efficios.com (Postfix) with ESMTP id E66531C8D85
+ for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:21:02 -0400 (EDT)
 In-Reply-To: <20190318202036.17523-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -28,39 +27,36 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-See upstream commit :
+See upstream commit:
 
-commit 6ba7d681aca22e53385bdb35b1d7662e61905760
-Author: Paul E. McKenney <paulmck@linux.ibm.com>
-Date:   Wed Jan 9 15:22:03 2019 -0800
+  commit 01e7187b41191376cee8bea8de9f907b001e87b4
+  Author: Jann Horn <jannh@google.com>
+  Date:   Wed Jan 23 15:19:18 2019 +0100
 
-    rcu: Remove wrapper definitions for obsolete RCU update functions
+    pipe: stop using ->can_merge
 
-    None of synchronize_rcu_bh, synchronize_rcu_bh_expedited, call_rcu_bh,
-    rcu_barrier_bh, synchronize_sched, synchronize_sched_expedited,
-    call_rcu_sched, rcu_barrier_sched, get_state_synchronize_sched, and
-    cond_synchronize_sched are actually used.  This commit therefore removes
-    their trivial wrapper-function definitions.
+    Al Viro pointed out that since there is only one pipe buffer type to which
+    new data can be appended, it isn't necessary to have a ->can_merge field in
+    struct pipe_buf_operations, we can just check for a magic type.
+
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- lttng-events.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ lib/ringbuffer/ring_buffer_splice.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/lttng-events.c b/lttng-events.c
-index 566080a..f4206c5 100644
---- a/lttng-events.c
-+++ b/lttng-events.c
-@@ -75,7 +75,12 @@ int _lttng_field_statedump(struct lttng_session *session,
+diff --git a/lib/ringbuffer/ring_buffer_splice.c b/lib/ringbuffer/ring_buffer_splice.c
+index 468641b..52179a7 100644
+--- a/lib/ringbuffer/ring_buffer_splice.c
++++ b/lib/ringbuffer/ring_buffer_splice.c
+@@ -43,7 +43,9 @@ static void lib_ring_buffer_pipe_buf_release(struct pipe_inode_info *pipe,
+ }
  
- void synchronize_trace(void)
- {
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0))
-+	synchronize_rcu();
-+#else
- 	synchronize_sched();
+ static const struct pipe_buf_operations ring_buffer_pipe_buf_ops = {
++#if (LINUX_VERSION_CODE < KERNEL_VERSION(5,1,0))
+ 	.can_merge = 0,
 +#endif
-+
- #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,4,0))
- #ifdef CONFIG_PREEMPT_RT_FULL
- 	synchronize_rcu();
+ #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,15,0))
+ 	.map = generic_pipe_buf_map,
+ 	.unmap = generic_pipe_buf_unmap,
 -- 
 2.17.1
