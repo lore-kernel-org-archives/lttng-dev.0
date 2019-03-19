@@ -1,99 +1,75 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-modules 1/5] Fix: mm: create the new
- vm_fault_t type (v5.1)
-Date: Mon, 18 Mar 2019 16:39:14 -0400 (EDT)
-Message-ID: <1358703581.1113.1552941554240.JavaMail.zimbra__4646.75535201735$1552941577$gmane$org@efficios.com>
-References: <20190318202036.17523-1-mjeanson@efficios.com>
+Subject: Re: [diamon-discuss] [RELEASE] LTTng-modules 2.9.11, 2.10.8,
+ 2.11.0-rc2 (Linux kernel tracer)
+Date: Tue, 19 Mar 2019 13:34:34 -0400 (EDT)
+Message-ID: <1199524058.2398.1553016874435.JavaMail.zimbra@efficios.com>
+References: <60988959.4070.1541112982406.JavaMail.zimbra@efficios.com> <CAJWu+ooEbjOXgVeq+g4MGEve9PTo7p7UUKjYYHhq-Wz6UbUhfg@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44NShh0rpWz17cc
- for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:39:15 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id CE065AB601
- for <lttng-dev@lists.lttng.org>; Mon, 18 Mar 2019 16:39:14 -0400 (EDT)
-In-Reply-To: <20190318202036.17523-1-mjeanson@efficios.com>
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+Return-path: <linux-kernel-owner@vger.kernel.org>
+In-Reply-To: <CAJWu+ooEbjOXgVeq+g4MGEve9PTo7p7UUKjYYHhq-Wz6UbUhfg@mail.gmail.com>
+Sender: linux-kernel-owner@vger.kernel.org
+To: Joel Fernandes <joelaf@google.com>
+Cc: diamon-discuss@lists.linuxfoundation.org, lttng-dev <lttng-dev@lists.lttng.org>, linux-kernel <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-All merged into master, 2.11, 2.10, 2.9, thanks!
+----- On Nov 1, 2018, at 7:33 PM, Joel Fernandes via diamon-discuss diamon-discuss@lists.linuxfoundation.org wrote:
+
+> On Thu, Nov 1, 2018 at 3:56 PM Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+>>
+>> Hi,
+>>
+>> This is a set of bugfix releases of the LTTng modules kernel tracer.
+>> It covers the three currently active lttng-modules branches: the
+>> 2.9 and 2.10 stable branches, as well as the 2.11 branch in release
+>> candidate cycle.
+>>
+>> Those releases add support for kernel 4.19.
+>>
+>> One important improvement is to prevent allocation of buffers larger
+>> than the available memory, which can cause the OOM killer to trigger.
+>> Even if the OOM killer end up having to trigger, the current OOM kill
+>> target is set to the current thread while allocating buffers.
+> 
+> This is interesting. Me and Steve were looking at exactly this issue
+> with the ftrace ring buffer a few months ago. Turns out that even
+> setting the OOM kill target may not be enough to prevent all OOMs. I
+> don't remember the reason why not, I'll have to dig out those threads
+> but that's what the -mm folks said at the time. I did remember vaguely
+> that I tested it and the kill target doesn't always get killed.. its
+> possible that something *other* parallel allocation can be victimized
+> AFAIR, even though the culprit is the kill target.
+> 
+
+Hi Joel,
+
+Sorry for the late reply. Thanks for your input!
+
+Here is a description of the solution we implemented:
+
+"   Get an estimate of the number of available pages and return ENOMEM if
+    there are not enough pages to cover the needs of the caller. Also, mark
+    the calling user thread as the first target for the OOM killer in case
+    the estimate of available pages was wrong.
+    
+    This greatly reduces the attack surface of this issue as well as reducing
+    its potential impact.
+    
+    This approach is inspired by the one taken by the Linux kernel
+    trace ring buffer[1]."
+
+This is implemented in commit 1f0ab1eb040 "Prevent allocation of buffers if exceeding available memory"
+within lttng-modules.
+
+Are you aware of another way to achieve this that would prevent the incorrect
+OOM victimization scenario you describe above ?
+
+Thanks,
 
 Mathieu
 
------ On Mar 18, 2019, at 4:20 PM, Michael Jeanson mjeanson@efficios.com wrote:
-
-> See upstream commit:
-> 
->  commit 3d3539018d2cbd12e5af4a132636ee7fd8d43ef0
->  Author: Souptick Joarder <jrdr.linux@gmail.com>
->  Date:   Thu Mar 7 16:31:14 2019 -0800
-> 
->    mm: create the new vm_fault_t type
-> 
->    Page fault handlers are supposed to return VM_FAULT codes, but some
->    drivers/file systems mistakenly return error numbers.  Now that all
->    drivers/file systems have been converted to use the vm_fault_t return
->    type, change the type definition to no longer be compatible with 'int'.
->    By making it an unsigned int, the function prototype becomes
->    incompatible with a function which returns int.  Sparse will detect any
->    attempts to return a value which is not a VM_FAULT code.
-> 
->    VM_FAULT_SET_HINDEX and VM_FAULT_GET_HINDEX values are changed to avoid
->    conflict with other VM_FAULT codes.
-> ---
-> lib/ringbuffer/ring_buffer_mmap.c | 12 +++++++++++-
-> 1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/lib/ringbuffer/ring_buffer_mmap.c
-> b/lib/ringbuffer/ring_buffer_mmap.c
-> index 30dd93e..fab9458 100644
-> --- a/lib/ringbuffer/ring_buffer_mmap.c
-> +++ b/lib/ringbuffer/ring_buffer_mmap.c
-> @@ -20,7 +20,11 @@
-> /*
->  * fault() vm_op implementation for ring buffer file mapping.
->  */
-> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0))
-> +static vm_fault_t lib_ring_buffer_fault_compat(struct vm_area_struct *vma,
-> struct vm_fault *vmf)
-> +#else
-> static int lib_ring_buffer_fault_compat(struct vm_area_struct *vma, struct
-> vm_fault *vmf)
-> +#endif
-> {
-> 	struct lib_ring_buffer *buf = vma->vm_private_data;
-> 	struct channel *chan = buf->backend.chan;
-> @@ -53,7 +57,13 @@ static int lib_ring_buffer_fault_compat(struct vm_area_struct
-> *vma, struct vm_fa
-> 	return 0;
-> }
-> 
-> -#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0))
-> +#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0))
-> +static vm_fault_t lib_ring_buffer_fault(struct vm_fault *vmf)
-> +{
-> +	struct vm_area_struct *vma = vmf->vma;
-> +	return lib_ring_buffer_fault_compat(vma, vmf);
-> +}
-> +#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0))
-> static int lib_ring_buffer_fault(struct vm_fault *vmf)
-> {
-> 	struct vm_area_struct *vma = vmf->vma;
-> --
-> 2.17.1
 
 -- 
 Mathieu Desnoyers
