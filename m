@@ -1,15 +1,15 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [PATCH lttng-tools 8/8] Fix typo
-Date: Tue, 19 Mar 2019 17:17:35 -0400
-Message-ID: <20190319211735.7187-9-ylamarre__20990.074034647$1553030443$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 4/8] Adapt poll layer behaviour to
+ match the epoll layer
+Date: Tue, 19 Mar 2019 17:17:31 -0400
+Message-ID: <20190319211735.7187-5-ylamarre__23444.6546340891$1553030477$gmane$org@efficios.com>
 References: <20190319211735.7187-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44P5VZ4JZWz17bF
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 44P5VZ4yN1z17bK
  for <lttng-dev@lists.lttng.org>; Tue, 19 Mar 2019 17:17:42 -0400 (EDT)
 In-Reply-To: <20190319211735.7187-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -27,21 +27,109 @@ List-Id: lttng-dev@lists.lttng.org
 
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
- src/common/compat/poll.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ src/common/compat/compat-poll.c | 28 ++++++++++++++++++----------
+ src/common/compat/poll.h        |  1 +
+ 2 files changed, 19 insertions(+), 10 deletions(-)
 
+diff --git a/src/common/compat/compat-poll.c b/src/common/compat/compat-poll.c
+index b45b39dc..b7c17df7 100644
+--- a/src/common/compat/compat-poll.c
++++ b/src/common/compat/compat-poll.c
+@@ -1,5 +1,6 @@
+ /*
+  * Copyright (C)  2011 - David Goulet <david.goulet@polymtl.ca>
++ * Copyright (C)  2019 - Yannick Lamarre <ylamarre@efficios.com>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License, version 2 only,
+@@ -204,10 +205,10 @@ int compat_poll_mod(struct lttng_poll_event *events, int fd,
+ 		uint32_t req_events)
+ {
+ 	int i;
+-	bool fd_found = false;
+ 	struct compat_poll_event_array *current;
+ 
+-	if (events == NULL || events->current.events == NULL || fd < 0) {
++	if (events == NULL || events->current.nb_fd == 0 || events->current.events
++			== NULL || fd < 0) {
+ 		ERR("Bad compat poll mod arguments");
+ 		goto error;
+ 	}
+@@ -216,16 +217,15 @@ int compat_poll_mod(struct lttng_poll_event *events, int fd,
+ 
+ 	for (i = 0; i < current->nb_fd; i++) {
+ 		if (current->events[i].fd == fd) {
+-			fd_found = true;
+ 			current->events[i].events = req_events;
+ 			events->need_update = 1;
+ 			break;
+ 		}
+ 	}
+ 
+-	if (!fd_found) {
+-		goto error;
+-	}
++	/* 
++	 * The epoll flavor doesn't flag modifying a non-included FD as an error.
++	 */
+ 
+ 	return 0;
+ 
+@@ -238,11 +238,12 @@ error:
+  */
+ int compat_poll_del(struct lttng_poll_event *events, int fd)
+ {
+-	int new_size, i, count = 0, ret;
++	int i, count = 0, ret;
++	uint32_t new_size;
+ 	struct compat_poll_event_array *current;
+ 
+-	if (events == NULL || events->current.events == NULL || fd < 0) {
+-		ERR("Wrong arguments for poll del");
++	if (events == NULL || events->current.nb_fd == 0 || events->current.events
++			== NULL || fd < 0) {
+ 		goto error;
+ 	}
+ 
+@@ -257,13 +258,19 @@ int compat_poll_del(struct lttng_poll_event *events, int fd)
+ 			count++;
+ 		}
+ 	}
++
++	/* The fd was not in our set, return no error as with epoll. */
++	if (current->nb_fd == count) {
++		goto skip;
++	}
++
+ 	/* No fd duplicate should be ever added into array. */
+ 	assert(current->nb_fd - 1 == count);
+ 	current->nb_fd = count;
+ 
+ 	/* Resize array if needed. */
+ 	new_size = 1U << utils_get_count_order_u32(current->nb_fd);
+-	if (new_size != current->alloc_size && new_size >= current->init_size) {
++	if (new_size != current->alloc_size && new_size >= current->init_size && current->nb_fd != 0) {
+ 		ret = resize_poll_event(current, new_size);
+ 		if (ret < 0) {
+ 			goto error;
+@@ -272,6 +279,7 @@ int compat_poll_del(struct lttng_poll_event *events, int fd)
+ 
+ 	events->need_update = 1;
+ 
++skip:
+ 	return 0;
+ 
+ error:
 diff --git a/src/common/compat/poll.h b/src/common/compat/poll.h
-index a8a08d9e..4272374c 100644
+index 7dd8741b..a8a08d9e 100644
 --- a/src/common/compat/poll.h
 +++ b/src/common/compat/poll.h
-@@ -361,7 +361,7 @@ extern int compat_poll_del(struct lttng_poll_event *events, int fd);
- 	compat_poll_del(events, fd)
- 
+@@ -1,5 +1,6 @@
  /*
-- * Modify an fd's events in the epoll set.
-+ * Modify an fd's events in the poll set.
-  */
- extern int compat_poll_mod(struct lttng_poll_event *events,
- 		int fd, uint32_t req_events);
+  * Copyright (C) 2011 - David Goulet <david.goulet@polymtl.ca>
++ * Copyright (C) 2019 - Yannick Lamarre <ylamarre@efficios.com>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License, version 2 only,
 -- 
 2.11.0
