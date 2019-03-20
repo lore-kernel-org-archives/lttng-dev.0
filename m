@@ -1,19 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools 2/8] Add Unit test to poll
- compatibility layer
-Date: Wed, 20 Mar 2019 15:19:43 -0400 (EDT)
-Message-ID: <246146048.4551.1553109583412.JavaMail.zimbra__45395.4901475058$1553109608$gmane$org@efficios.com>
+Subject: Re: [PATCH lttng-tools 3/8] Change LTTNG_POLL_GETNB
+ behaviour for poll flavor
+Date: Wed, 20 Mar 2019 15:22:37 -0400 (EDT)
+Message-ID: <1637986872.4562.1553109757478.JavaMail.zimbra__6232.8321671643$1553109773$gmane$org@efficios.com>
 References: <20190319211735.7187-1-ylamarre@efficios.com>
- <20190319211735.7187-3-ylamarre@efficios.com>
+ <20190319211735.7187-4-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44Pfr76tmSz17hn
- for <lttng-dev@lists.lttng.org>; Wed, 20 Mar 2019 15:19:51 -0400 (EDT)
-In-Reply-To: <20190319211735.7187-3-ylamarre@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 44PfvL24hCz17jg
+ for <lttng-dev@lists.lttng.org>; Wed, 20 Mar 2019 15:22:38 -0400 (EDT)
+In-Reply-To: <20190319211735.7187-4-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,381 +27,58 @@ To: Yannick Lamarre <ylamarre@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
+
+
 ----- On Mar 19, 2019, at 5:17 PM, Yannick Lamarre ylamarre@efficios.com wrote:
 
+> LTTNG_POLL_GETNB was modified to provide compatibility with the epoll
+
+LTTNG_POLL_GETNB was modified -> Modify LTTNG_POLL_GETNB...
+
+(use present, not past)
+
+> flavor. Since it is only used after a lttng_poll_wait call with no
+> modification (add, del, mod) between, this change does not modify the
+> behaviour in its current usage while still providing test compatibility.
+
+still providing test compatibility -> ensuring similar API behavior between
+compatibility layer implementations.
+
+> 
 > Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 > ---
-> .gitignore                          |   1 +
-> tests/unit/Makefile.am              |   9 +-
-> tests/unit/test_utils_compat_poll.c | 246 ++++++++++++++++++++++++++++++++++++
-> 3 files changed, 255 insertions(+), 1 deletion(-)
-> create mode 100644 tests/unit/test_utils_compat_poll.c
+> src/common/compat/poll.h | 6 +++++-
+> 1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/.gitignore b/.gitignore
-> index 19276012..b5d2a55a 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -73,6 +73,7 @@ TAGS
-> /tests/unit/test_session
-> /tests/unit/test_uri
-> /tests/unit/test_ust_data
-> +/tests/unit/test_utils_compat_poll
-> /tests/unit/test_utils_parse_size_suffix
-> /tests/unit/test_utils_parse_time_suffix
-> /tests/unit/test_utils_expand_path
-> diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
-> index 5f485f00..bcda6a5c 100644
-> --- a/tests/unit/Makefile.am
-> +++ b/tests/unit/Makefile.am
-> @@ -12,6 +12,7 @@ TESTS = test_kernel_data \
-> 	test_utils_parse_size_suffix \
-> 	test_utils_parse_time_suffix \
-> 	test_utils_expand_path \
-> +	test_utils_compat_poll \
-> 	test_string_utils \
-> 	test_notification \
-> 	ini_config/test_ini_config
-> @@ -28,7 +29,8 @@ LIBLTTNG_CTL=$(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la
-> # Define test programs
-> noinst_PROGRAMS = test_uri test_session test_kernel_data \
->                   test_utils_parse_size_suffix test_utils_parse_time_suffix \
-> -                  test_utils_expand_path test_string_utils test_notification
-> +                  test_utils_expand_path test_utils_compat_poll \
-> +		  test_string_utils test_notification
-> 
-> if HAVE_LIBLTTNG_UST_CTL
-> noinst_PROGRAMS += test_ust_data
-> @@ -145,6 +147,11 @@ test_utils_parse_size_suffix_LDADD = $(LIBTAP)
-> $(LIBHASHTABLE) $(LIBCOMMON) $(DL
-> test_utils_parse_time_suffix_SOURCES = test_utils_parse_time_suffix.c
-> test_utils_parse_time_suffix_LDADD = $(LIBTAP) $(LIBHASHTABLE) $(LIBCOMMON)
-> 
-> +# compat_poll unit test
-> +test_utils_compat_poll_SOURCES = test_utils_compat_poll.c
-> +test_utils_compat_poll_LDADD  = $(LIBTAP) $(LIBHASHTABLE) $(DL_LIBS) \
-> +		      $(top_builddir)/src/common/compat/libcompat.la $(LIBCOMMON)
-> +
-> # expand_path unit test
-> test_utils_expand_path_SOURCES = test_utils_expand_path.c
-> test_utils_expand_path_LDADD = $(LIBTAP) $(LIBHASHTABLE) $(LIBCOMMON) $(DL_LIBS)
-> diff --git a/tests/unit/test_utils_compat_poll.c
-> b/tests/unit/test_utils_compat_poll.c
-> new file mode 100644
-> index 00000000..f1d756d3
-> --- /dev/null
-> +++ b/tests/unit/test_utils_compat_poll.c
-> @@ -0,0 +1,246 @@
-> +/*
-> + * test_utils_compat_poll.c
-> + *
-> + * Unit tests for the compatibility layer of poll/epoll API.
-> + *
-> + * Copyright (C) 2019 Yannick Lamarre <ylamarre@efficios.com>
-> + *
-> + * Permission is hereby granted, free of charge, to any person obtaining a copy
-> + * of this software and associated documentation files (the "Software"), to
-> deal
-> + * in the Software without restriction, including without limitation the rights
-> + * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-> + * copies of the Software, and to permit persons to whom the Software is
-> + * furnished to do so, subject to the following conditions:
-> + *
-> + * The above copyright notice and this permission notice shall be included in
-> + * all copies or substantial portions of the Software.
-> + *
-> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> + * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-> FROM,
-> + * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-> THE
-> + * SOFTWARE.
+> diff --git a/src/common/compat/poll.h b/src/common/compat/poll.h
+> index fde54ddb..7dd8741b 100644
+> --- a/src/common/compat/poll.h
+> +++ b/src/common/compat/poll.h
+> @@ -315,10 +315,14 @@ static inline int __lttng_poll_get_prev_fd(struct
+> lttng_poll_event *events,
+> /*
+>  * For the following calls, consider 'e' to be a lttng_poll_event pointer and i
+>  * being the index of the events array.
+> + * LTTNG_POLL_GETNB was modified to provide compatibility with the epoll
 
-Tests in lttng-tools are GPLv2.
-
-> + */
-> +
-> +#include <assert.h>
-> +#include <inttypes.h>
-> +#include <stdio.h>
-> +#include <string.h>
-> +#include <unistd.h>
-> +#include <sys/types.h>
-> +#include <sys/wait.h>
-> +
-> +#include <tap/tap.h>
-> +
-> +#include <common/compat/poll.h>
-> +#include <common/readwrite.h>
-> +
-> +/* Verification without trashing test order in the child process */
-> +#define childok(e, test, ...) do { \
-> +	if (!(e)) { \
-> +		diag(test, ## __VA_ARGS__); \
-> +		_exit(EXIT_FAILURE); \
-> +	} \
-> +} while(0)
-> +
-> +/* For error.h */
-> +int lttng_opt_quiet = 1;
-> +int lttng_opt_verbose;
-> +int lttng_opt_mi;
-> +
-> +#ifdef HAVE_EPOLL
-> +#define NUM_TESTS 44
-> +#else
-> +#define NUM_TESTS 43
-> +#endif
-> +
-> +#ifdef HAVE_EPOLL
-> +#if defined(HAVE_EPOLL_CREATE1) && defined(EPOLL_CLOEXEC)
-> +#define CLOE_VALUE EPOLL_CLOEXEC
-> +#else
-> +#define CLOE_VALUE FD_CLOEXEC
-> +#endif
-> +
-> +void test_epoll_compat()
-
-In C, you want (void) here. () is same as (...)   (unlike c++)
-
-Applies everywhere when functions don't take parameters.
-
-> +{
-> +	/*
-> +	 * Type conversion present to disable warning of anonymous enum from
-> +	 * compiler
-
-End comments with ".".
-
-> +	 */
-> +	ok((int)LTTNG_CLOEXEC == (int)CLOE_VALUE, "epoll's CLOEXEC value");
-> +}
-> +#endif
-> +
-> +void test_alloc()
-> +{
-> +	struct lttng_poll_event poll_events;
-> +
-> +	lttng_poll_init(&poll_events);
-> +
-> +	/* Null pointer */
-> +	ok(lttng_poll_create(NULL, 1, 0) != 0, "Create over NULL pointer fails");
-> +	/* Size 0 */
-> +	ok(lttng_poll_create(&poll_events, 0, 0) != 0, "Create with size 0 fails");
-> +	/* without CLOEXEC */
-> +	ok(lttng_poll_create(&poll_events, 1, 0) == 0, "Create valid poll set
-> succeeds");
-> +	/*
-> +	 * lttng_poll_event structure untested due to imcompatibility across
-
-incompatibility
-
-> +	 * sublayers. lttng_poll_clean cannot be tested. There is no success
-> +	 * criteria. Verify set's max size cases.
-> +	 */
-> +	lttng_poll_clean(&poll_events);
-> +}
-> +
-> +/* Tests stuff related to what would be handled with epoll_ctl. */
-> +void test_add_del()
-> +{
-> +	struct lttng_poll_event poll_events;
-> +
-> +	lttng_poll_init(&poll_events);
-> +	ok(lttng_poll_add(NULL, 1, LPOLLIN) != 0, "Adding to NULL set fails");
-> +	ok(lttng_poll_add(&poll_events, 1, LPOLLIN) != 0, "Adding to uninitialized
-> structure fails");
-> +	ok(lttng_poll_add(&poll_events, -1, LPOLLIN) != 0, "Adding invalid FD fails");
-> +
-> +	lttng_poll_create(&poll_events, 1, 0);
-> +	ok(LTTNG_POLL_GETNB(&poll_events) == 0, "Set created empty");
-> +
-> +	ok(lttng_poll_add(NULL, 1, LPOLLIN) != 0, "Adding to NULL set fails");
-> +	ok(LTTNG_POLL_GETNB(&poll_events) == 0, "Set still empty");
-> +	ok(lttng_poll_add(&poll_events, -1, LPOLLIN) != 0, "Adding invalid FD fails");
-> +	ok(LTTNG_POLL_GETNB(&poll_events) == 0, "Set still empty");
-> +
-> +	ok(lttng_poll_add(&poll_events, 1, LPOLLIN) == 0, "Adding valid FD succeeds");
-> +	ok(LTTNG_POLL_GETNB(&poll_events) == 1, "Nb of elements incremented");
-> +
-> +	ok(lttng_poll_del(NULL, 1) != 0, "Removing from NULL set fails");
-> +	ok(LTTNG_POLL_GETNB(&poll_events) == 1, "Number of FD in set unchanged");
-> +
-> +	ok(lttng_poll_del(&poll_events, -1) != 0, "Removing from negative FD fails");
-> +	ok(LTTNG_POLL_GETNB(&poll_events) == 1, "Number of FD in set unchanged");
-> +
-> +	ok(lttng_poll_del(&poll_events, 2) == 0, "Removing invalid FD still
-> succeeds");
-> +	ok(LTTNG_POLL_GETNB(&poll_events) == 1, "Number of elements unchanged");
-> +
-> +	ok(lttng_poll_del(&poll_events, 1) == 0, "Removing valid FD succeeds");
-> +	ok(LTTNG_POLL_GETNB(&poll_events) == 0, "Nb of elements decremented");
-> +
-> +	ok(lttng_poll_del(&poll_events, 1) != 0, "Removing from empty set fails");
-> +	ok(LTTNG_POLL_GETNB(&poll_events) == 0, "Nb of elements unchanged");
-> +
-> +	lttng_poll_clean(&poll_events);
-> +}
-> +
-> +void test_mod_wait()
-> +{
-> +	struct lttng_poll_event poll_events;
-> +	struct lttng_poll_event cpoll_events;
-> +	/* Code unshamelly taken from pipe(2) man page */
-
-No need for this comment.
-
-> +	int hupfd[2];
-> +	int infd[2];
-> +	pid_t cpid;
-> +	char rbuf, tbuf = 0xCA;
-
-What is the purpose of 0xCA for tbuf ?
-
-Also we try to never hardcode constants in code. At least we #define it
-at the top of the file or in a header with a comment.
-
-> +	int wstatus;
-> +
-> +	lttng_poll_init(&poll_events);
-> +	lttng_poll_init(&cpoll_events);
-> +	if (pipe(hupfd) == -1) {
-> +		diag("We should really abort the test...");
-
-Then you might want to call abort(), or, better, check this is a ok() test ?
-
-> +	}
-> +
-> +	if (pipe(infd) == -1) {
-> +		diag("We should really abort the test...");
-
-Likewise.
-
-> +	}
-> +
-> +	cpid = fork();
-> +	if (cpid == 0) {
-> +		childok(lttng_poll_create(&cpoll_events, 1, 0) == 0, "Create valid poll set
-> succeeds");
-> +		childok(lttng_poll_mod(NULL, infd[0], LPOLLIN) == -1, "lttng_poll_mod with
-> invalid input returns an error");
-> +		childok(lttng_poll_mod(&cpoll_events, infd[0], LPOLLIN) == -1,
-> "lttng_poll_mod with invalid input returns an error");
-> +		childok(lttng_poll_add(&cpoll_events, infd[0], LPOLLHUP) == 0, "Add valid FD
-> succeeds");
-> +		childok(lttng_poll_mod(&cpoll_events, -1, LPOLLIN) == -1, "lttng_poll_mod
-> with invalid input returns an error");
-> +		childok(lttng_poll_mod(&cpoll_events, hupfd[0], LPOLLIN) == 0,
-> "lttng_poll_mod on unincluded FD goes on");
-> +		childok(lttng_poll_mod(&cpoll_events, infd[0], LPOLLIN) == 0, "Modify event
-> type succeeds");
-> +		childok(close(infd[1]) == 0, "Close valid FD succeeds");
-> +		childok(lttng_poll_wait(&cpoll_events, -1) == 1, "Wait on close times out");
-> +		childok(lttng_read(infd[0], &rbuf, 1) == 1, "Data is present in the pipe");
-> +		childok(rbuf == (char)0xCA, "Received data is consistent with transmitted
-> data");
-> +		childok(lttng_poll_del(&cpoll_events, infd[0]) == 0, "Removing valid FD
-> succeeds");
-> +		childok(close(infd[0]) == 0, "Close valid FD succeeds");
-> +		childok(close(hupfd[0]) == 0, "Close valid FD succeeds");
-> +		childok(close(hupfd[1]) == 0, "Close valid FD succeeds");
-> +		lttng_poll_clean(&cpoll_events);
-> +		_exit(EXIT_SUCCESS);
-> +	} else {
-> +		ok(close(hupfd[1]) == 0, "Close valid FD succeeds");
-> +		ok(close(infd[0]) == 0, "Close valid FD succeeds");
-> +
-> +		ok(lttng_poll_wait(NULL, -1) == -1, "lttng_poll_wait call with invalid input
-> returns error");
-> +
-> +		ok(lttng_poll_create(&poll_events, 1, 0) == 0, "Create valid poll set
-> succeeds");
-> +		ok(lttng_poll_wait(&poll_events, -1) == -1, "lttng_poll_wait call with
-> invalid input returns error");
-> +		ok(lttng_poll_add(&poll_events, hupfd[0], LPOLLHUP) == 0, "Add valid FD
-> succeeds");
-> +		tbuf = 0xCA;
-
-Purpose of setting tbuf to 0xCA here ?
-
-> +		ok(lttng_write(infd[1], &tbuf, 1) == 1, "Write to pipe succeeds");
-> +		ok(lttng_poll_wait(&poll_events, -1) == 1, "Wakes up on one event");
-> +		ok(lttng_poll_del(&poll_events, hupfd[0]) == 0, "Removing valid FD
-> succeeds");
-> +		ok(close(hupfd[0]) == 0, "Close valid FD succeeds");
-> +		ok(close(infd[1]) == 0, "Close valid FD succeeds");
-> +		lttng_poll_clean(&poll_events);
-> +
-> +		ok(waitpid(cpid, &wstatus, 0) == cpid, "waitpid returns child's pid");
-> +		ok(WIFEXITED(wstatus) == 1, "Child process exited");
-> +		ok(WEXITSTATUS(wstatus) == (EXIT_SUCCESS & 0xff), "EXIT_SUCCESS is %i while
-> exit status is %i\n", EXIT_SUCCESS, WEXITSTATUS(wstatus));
-> +	}
-> +
-> +}
-> +
-> +void test_func_def()
-> +{
-> +#ifdef LTTNG_POLL_GETFD
-> +#define PASS_GETFD 1
-> +#else
-> +#define PASS_GETFD 0
-> +#endif
-> +
-> +#ifdef LTTNG_POLL_GETEV
-> +#define PASS_GETEV 1
-> +#else
-> +#define PASS_GETEV 0
-> +#endif
-> +
-> +#ifdef LTTNG_POLL_GETSZ
-> +#define PASS_GETSZ 1
-> +#else
-> +#define PASS_GETSZ 0
-> +#endif
-> +
-> +#ifdef LTTNG_POLL_GET_PREV_FD
-> +#define PASS_GET_PREV_FD 1
-> +#else
-> +#define PASS_GET_PREV_FD 0
-> +#endif
-> +
-> +	/* Typecast to turn off -Waddress warnings */
-
-This above looks like a stale comment.
-
-> +	ok(lttng_poll_reset == lttng_poll_reset, "lttng_poll_reset is defined");
-> +	ok(lttng_poll_init == lttng_poll_init , "lttng_poll_reset is defined");
-> +	ok(PASS_GETFD, "GETFD is defined");
-> +	ok(PASS_GETEV, "GETEV is defined");
-> +	ok(PASS_GETSZ, "GETSZ is defined");
-> +	ok(PASS_GET_PREV_FD, "GET_PREV_FD is defined");
-> +
-> +}
-> +
-> +int main(int argc, const char *argv[])
-
-considering argc/argv are unused, the standard allows int main(void), which
-is preferred in that situation to ensure we don't have "unused" variables from
-static checkers.
+No reason to describe the evolution of the code in a comment. We document
+what is there now.
 
 Thanks,
 
 Mathieu
 
-> +{
-> +	plan_tests(NUM_TESTS);
-> +#ifdef HAVE_EPOLL
-> +	test_epoll_compat();
-> +#endif
-> +	test_func_def();
-> +	test_alloc();
-> +	test_add_del();
-> +	test_mod_wait();
-> +	return exit_status();
-> +}
+> + * flavor. Since it is only used after a lttng_poll_wait call with no
+> + * modification (add, del, mod) between, this change does not modify the
+> + * behaviour in its current usage while still providing test compatibility.
+>  */
+> #define LTTNG_POLL_GETFD(e, i) LTTNG_REF(e)->wait.events[i].fd
+> #define LTTNG_POLL_GETEV(e, i) LTTNG_REF(e)->wait.events[i].revents
+> -#define LTTNG_POLL_GETNB(e) LTTNG_REF(e)->wait.nb_fd
+> +#define LTTNG_POLL_GETNB(e) LTTNG_REF(e)->current.nb_fd
+> #define LTTNG_POLL_GETSZ(e) LTTNG_REF(e)->wait.events_size
+> #define LTTNG_POLL_GET_PREV_FD(e, i, nb_fd) \
+> 	__lttng_poll_get_prev_fd(LTTNG_REF(e), i, nb_fd)
 > --
 > 2.11.0
 > 
