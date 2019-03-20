@@ -1,18 +1,18 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: [PATCH lttng-tools] fix: tests: link
- libpause_consumer on liblttng-ctl
-Date: Wed, 20 Mar 2019 11:01:04 -0400
-Message-ID: <20190320150104.GA8086__29649.1798640758$1553094097$gmane$org@joraj-alpa>
-References: <20190319205603.15707-1-mjeanson@efficios.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-ust] compat: work around broken
+ _SC_NPROCESSORS_CONF on MUSL libc
+Date: Wed, 20 Mar 2019 11:07:35 -0400
+Message-ID: <20190320150735.29865-1-mjeanson__49205.1135211781$1553094481$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44PY5n12nhz17Lk
- for <lttng-dev@lists.lttng.org>; Wed, 20 Mar 2019 11:01:16 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <20190319205603.15707-1-mjeanson@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 44PYFH0gDZz17Mg
+ for <lttng-dev@lists.lttng.org>; Wed, 20 Mar 2019 11:07:46 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 962B91CA7A4
+ for <lttng-dev@lists.lttng.org>; Wed, 20 Mar 2019 11:07:46 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,46 +22,105 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On Tue, Mar 19, 2019 at 04:56:03PM -0400, Michael Jeanson wrote:
-> This preload test library uses symbols from liblttng-ctl which are
-> resolved when preloaded by GLIBC but not by MUSL.
-> 
+On MUSL libc the _SC_NPROCESSORS_CONF sysconf will report the number of
+CPUs allocated to the task based on the affinity mask instead of the
+total number of CPUs configured on the system.
 
-Tested-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ libringbuffer/smp.c | 66 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-> ---
->  tests/regression/tools/notification/Makefile.am | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tests/regression/tools/notification/Makefile.am b/tests/regression/tools/notification/Makefile.am
-> index 33e95886..b869bdb1 100644
-> --- a/tests/regression/tools/notification/Makefile.am
-> +++ b/tests/regression/tools/notification/Makefile.am
-> @@ -20,7 +20,10 @@ FORCE_SHARED_LIB_OPTIONS = -module -shared -avoid-version \
->  			   -rpath $(abs_builddir)
->  
->  libpause_consumer_la_SOURCES = consumer_testpoints.c
-> -libpause_consumer_la_LIBADD = $(top_builddir)/src/common/libcommon.la $(DL_LIBS)
-> +libpause_consumer_la_LIBADD = \
-> +	$(top_builddir)/src/common/libcommon.la \
-> +	$(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la \
-> +	$(DL_LIBS)
->  libpause_consumer_la_LDFLAGS = $(FORCE_SHARED_LIB_OPTIONS)
->  noinst_LTLIBRARIES = libpause_consumer.la
->  
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
+diff --git a/libringbuffer/smp.c b/libringbuffer/smp.c
+index 9e7114be..656a75da 100644
+--- a/libringbuffer/smp.c
++++ b/libringbuffer/smp.c
+@@ -2,6 +2,7 @@
+  * libringbuffer/smp.c
+  *
+  * Copyright (C) 2011-2012 Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright (C) 2019 Michael Jeanson <mjeanson@efficios.com>
+  *
+  * This library is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU Lesser General Public
+@@ -26,6 +27,7 @@
+ 
+ int __num_possible_cpus;
+ 
++#if (defined(__GLIBC__) || defined( __UCLIBC__))
+ void _get_num_possible_cpus(void)
+ {
+ 	int result;
+@@ -43,3 +45,67 @@ void _get_num_possible_cpus(void)
+ 		return;
+ 	__num_possible_cpus = result;
+ }
++
++#else
++
++/*
++ * The MUSL libc implementation of the _SC_NPROCESSORS_CONF sysconf does not
++ * return the number of configured CPUs in the system but relies on the cpu
++ * affinity mask of the current task.
++ *
++ * So instead we use a strategy similar to GLIBC's, counting the cpu
++ * directories in "/sys/devices/system/cpu" and fallback on the value from
++ * sysconf if it fails.
++ */
++
++#include <dirent.h>
++#include <limits.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/types.h>
++
++#define __max(a,b) ((a)>(b)?(a):(b))
++
++void _get_num_possible_cpus(void)
++{
++	int result, count = 0;
++	DIR *cpudir;
++	struct dirent *entry;
++
++	cpudir = opendir("/sys/devices/system/cpu");
++	if (cpudir == NULL)
++		goto end;
++
++	/*
++	 * Count the number of directories named "cpu" followed by and
++	 * integer. This is the same strategy as glibc uses.
++	 */
++	while ((entry = readdir(cpudir))) {
++		if (entry->d_type == DT_DIR &&
++			strncmp(entry->d_name, "cpu", 3) == 0) {
++
++			char *endptr;
++			unsigned long cpu_num;
++
++			cpu_num = strtoul(entry->d_name + 3, &endptr, 10);
++			if ((cpu_num < ULONG_MAX) && (endptr != entry->d_name + 3)
++					&& (*endptr == '\0')) {
++				count++;
++			}
++		}
++	}
++
++end:
++	/*
++	 * Get the sysconf value as a fallback. Keep the highest number.
++	 */
++	result = __max(sysconf(_SC_NPROCESSORS_CONF), count);
++
++	/*
++	 * If both methods failed, don't store the value.
++	 */
++	if (result < 1)
++		return;
++	__num_possible_cpus = result;
++}
++#endif
 -- 
-Jonathan Rajotte-Julien
-EfficiOS
+2.17.1
