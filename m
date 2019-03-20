@@ -1,18 +1,19 @@
-From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [PATCH lttng-tools] Add test cases for options
- sanitizing
-Date: Wed, 20 Mar 2019 12:33:13 -0400
-Message-ID: <20190320163313.15616-2-ylamarre__9535.21163189492$1553099647$gmane$org@efficios.com>
-References: <20190320163313.15616-1-ylamarre@efficios.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools 2/8] Add Unit test to poll
+ compatibility layer
+Date: Wed, 20 Mar 2019 15:19:43 -0400 (EDT)
+Message-ID: <246146048.4551.1553109583412.JavaMail.zimbra__45395.4901475058$1553109608$gmane$org@efficios.com>
+References: <20190319211735.7187-1-ylamarre@efficios.com>
+ <20190319211735.7187-3-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44Pb816Xwcz17VK
- for <lttng-dev@lists.lttng.org>; Wed, 20 Mar 2019 12:33:21 -0400 (EDT)
-In-Reply-To: <20190320163313.15616-1-ylamarre@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 44Pfr76tmSz17hn
+ for <lttng-dev@lists.lttng.org>; Wed, 20 Mar 2019 15:19:51 -0400 (EDT)
+In-Reply-To: <20190319211735.7187-3-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,226 +23,394 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: Yannick Lamarre <ylamarre@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-Test cases now covers options that require full string matches which
-were previously missing.
+----- On Mar 19, 2019, at 5:17 PM, Yannick Lamarre ylamarre@efficios.com wrote:
 
-Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
----
- tests/regression/kernel/test_channel               | 24 ++++++++++-
- .../regression/tools/snapshots/test_ust_streaming  | 46 +++++++++++++++++++++-
- tests/regression/ust/test_event_basic              |  8 +++-
- tests/regression/ust/test_event_perf               |  6 ++-
- tests/utils/utils.sh                               | 26 ++++++++++++
- 5 files changed, 106 insertions(+), 4 deletions(-)
+> Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
+> ---
+> .gitignore                          |   1 +
+> tests/unit/Makefile.am              |   9 +-
+> tests/unit/test_utils_compat_poll.c | 246 ++++++++++++++++++++++++++++++++++++
+> 3 files changed, 255 insertions(+), 1 deletion(-)
+> create mode 100644 tests/unit/test_utils_compat_poll.c
+> 
+> diff --git a/.gitignore b/.gitignore
+> index 19276012..b5d2a55a 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -73,6 +73,7 @@ TAGS
+> /tests/unit/test_session
+> /tests/unit/test_uri
+> /tests/unit/test_ust_data
+> +/tests/unit/test_utils_compat_poll
+> /tests/unit/test_utils_parse_size_suffix
+> /tests/unit/test_utils_parse_time_suffix
+> /tests/unit/test_utils_expand_path
+> diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
+> index 5f485f00..bcda6a5c 100644
+> --- a/tests/unit/Makefile.am
+> +++ b/tests/unit/Makefile.am
+> @@ -12,6 +12,7 @@ TESTS = test_kernel_data \
+> 	test_utils_parse_size_suffix \
+> 	test_utils_parse_time_suffix \
+> 	test_utils_expand_path \
+> +	test_utils_compat_poll \
+> 	test_string_utils \
+> 	test_notification \
+> 	ini_config/test_ini_config
+> @@ -28,7 +29,8 @@ LIBLTTNG_CTL=$(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la
+> # Define test programs
+> noinst_PROGRAMS = test_uri test_session test_kernel_data \
+>                   test_utils_parse_size_suffix test_utils_parse_time_suffix \
+> -                  test_utils_expand_path test_string_utils test_notification
+> +                  test_utils_expand_path test_utils_compat_poll \
+> +		  test_string_utils test_notification
+> 
+> if HAVE_LIBLTTNG_UST_CTL
+> noinst_PROGRAMS += test_ust_data
+> @@ -145,6 +147,11 @@ test_utils_parse_size_suffix_LDADD = $(LIBTAP)
+> $(LIBHASHTABLE) $(LIBCOMMON) $(DL
+> test_utils_parse_time_suffix_SOURCES = test_utils_parse_time_suffix.c
+> test_utils_parse_time_suffix_LDADD = $(LIBTAP) $(LIBHASHTABLE) $(LIBCOMMON)
+> 
+> +# compat_poll unit test
+> +test_utils_compat_poll_SOURCES = test_utils_compat_poll.c
+> +test_utils_compat_poll_LDADD  = $(LIBTAP) $(LIBHASHTABLE) $(DL_LIBS) \
+> +		      $(top_builddir)/src/common/compat/libcompat.la $(LIBCOMMON)
+> +
+> # expand_path unit test
+> test_utils_expand_path_SOURCES = test_utils_expand_path.c
+> test_utils_expand_path_LDADD = $(LIBTAP) $(LIBHASHTABLE) $(LIBCOMMON) $(DL_LIBS)
+> diff --git a/tests/unit/test_utils_compat_poll.c
+> b/tests/unit/test_utils_compat_poll.c
+> new file mode 100644
+> index 00000000..f1d756d3
+> --- /dev/null
+> +++ b/tests/unit/test_utils_compat_poll.c
+> @@ -0,0 +1,246 @@
+> +/*
+> + * test_utils_compat_poll.c
+> + *
+> + * Unit tests for the compatibility layer of poll/epoll API.
+> + *
+> + * Copyright (C) 2019 Yannick Lamarre <ylamarre@efficios.com>
+> + *
+> + * Permission is hereby granted, free of charge, to any person obtaining a copy
+> + * of this software and associated documentation files (the "Software"), to
+> deal
+> + * in the Software without restriction, including without limitation the rights
+> + * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> + * copies of the Software, and to permit persons to whom the Software is
+> + * furnished to do so, subject to the following conditions:
+> + *
+> + * The above copyright notice and this permission notice shall be included in
+> + * all copies or substantial portions of the Software.
+> + *
+> + * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> + * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> + * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> + * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> + * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+> FROM,
+> + * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+> THE
+> + * SOFTWARE.
 
-diff --git a/tests/regression/kernel/test_channel b/tests/regression/kernel/test_channel
-index cb0fa518..f3fcee38 100755
---- a/tests/regression/kernel/test_channel
-+++ b/tests/regression/kernel/test_channel
-@@ -19,10 +19,31 @@ TEST_DESC="Kernel tracer - Channel configuration"
- 
- CURDIR=$(dirname $0)/
- TESTDIR=$CURDIR/../..
--NUM_TESTS=8
-+NUM_TESTS=14
- 
- source $TESTDIR/utils/utils.sh
- 
-+function test_channel_output_opt()
-+{
-+	TRACE_PATH=$(mktemp -d)
-+	SESSION_NAME="test_session_name"
-+	CHANNEL_NAME="test_channel_name"
-+	CHANNEL_NAME2="test_channel_name2"
-+	create_lttng_session_ok "$SESSION_NAME" "$TRACE_PATH"
-+
-+	# Try to create channel with invalid output types
-+	lttng_enable_kernel_channel_fail "$SESSION_NAME" "$CHANNEL_NAME" "--output=splicethenice"
-+	lttng_enable_kernel_channel_fail "$SESSION_NAME" "$CHANNEL_NAME" "--output=mmap-o-spread"
-+
-+	# Try to create channel with valid output types
-+	lttng_enable_kernel_channel_ok "$SESSION_NAME" "$CHANNEL_NAME" "--output=splice"
-+	lttng_enable_kernel_channel_ok "$SESSION_NAME" "$CHANNEL_NAME2" "--output=mmap"
-+
-+	destroy_lttng_session_ok "$SESSION_NAME"
-+
-+	rm -rf "$TRACE_PATH"
-+}
-+
- function test_channel_buffer()
- {
- 	TRACE_PATH=$(mktemp -d)
-@@ -69,6 +90,7 @@ skip $isroot "Root access is needed. Skipping all tests." $NUM_TESTS ||
- 
- 	test_channel_buffer
- 	test_channel_buffer_too_large
-+	test_channel_output_opt
- 
- 	stop_lttng_sessiond
- }
-diff --git a/tests/regression/tools/snapshots/test_ust_streaming b/tests/regression/tools/snapshots/test_ust_streaming
-index 20d4f7f6..6a926710 100755
---- a/tests/regression/tools/snapshots/test_ust_streaming
-+++ b/tests/regression/tools/snapshots/test_ust_streaming
-@@ -31,7 +31,7 @@ APPS_PID=
- 
- TRACE_PATH=$(mktemp -d)
- 
--NUM_TESTS=75
-+NUM_TESTS=91
- 
- source $TESTDIR/utils/utils.sh
- 
-@@ -233,6 +233,49 @@ function test_ust_n_snapshot()
- 	return 0
- }
- 
-+# Test commandline parsing of snapshot options
-+function test_ust_cmd_opt()
-+{
-+	diag "Test commandline parsing of snapshot options"
-+	create_lttng_session_no_output $SESSION_NAME
-+	enable_lttng_mmap_overwrite_ust_channel $SESSION_NAME $CHANNEL_NAME
-+	enable_ust_lttng_event_ok $SESSION_NAME $EVENT_NAME $CHANNEL_NAME
-+	start_lttng_tracing_ok $SESSION_NAME
-+
-+	start_test_app
-+
-+	snapshot_add_output $SESSION_NAME "net://localhost"
-+	lttng_snapshot_record $SESSION_NAME
-+
-+	# Validate test
-+	echo $TRACE_PATH/$HOSTNAME/snapshot-1
-+	validate_trace $EVENT_NAME $TRACE_PATH/$HOSTNAME/snapshot-1*
-+	if [ $? -ne 0 ]; then
-+		stop_test_apps
-+		return $?
-+	fi
-+
-+	lttng_snapshot_del_output_by_name_fail $SESSION_NAME "snap"
-+	lttng_snapshot_del_output_by_name_fail $SESSION_NAME "snapshot-100"
-+	lttng_snapshot_del_output_by_name_ok $SESSION_NAME "snapshot-1"
-+	snapshot_add_output $SESSION_NAME "net://localhost"
-+	lttng_snapshot_record $SESSION_NAME
-+
-+	# Validate test with the next ID since a del output was done prior.
-+	validate_trace $EVENT_NAME $TRACE_PATH/$HOSTNAME/snapshot-2*
-+	if [ $? -ne 0 ]; then
-+		stop_test_apps
-+		return $?
-+	fi
-+
-+	stop_lttng_tracing_ok $SESSION_NAME
-+	destroy_lttng_session_ok $SESSION_NAME
-+
-+	stop_test_apps
-+
-+	return 0
-+}
-+
- plan_tests $NUM_TESTS
- 
- print_test_banner "$TEST_DESC"
-@@ -251,6 +294,7 @@ tests=( test_ust_default_name_with_del
- 	test_ust_custom_name
- 	test_ust_default_name_custom_uri
- 	test_ust_n_snapshot
-+	test_ust_cmd_opt
- )
- 
- for fct_test in ${tests[@]};
-diff --git a/tests/regression/ust/test_event_basic b/tests/regression/ust/test_event_basic
-index 9b58cb27..c0243728 100755
---- a/tests/regression/ust/test_event_basic
-+++ b/tests/regression/ust/test_event_basic
-@@ -24,7 +24,7 @@ SESSION_NAME="valid_filter"
- EVENT_NAME="tp:tptest"
- 
- 
--NUM_TESTS=25
-+NUM_TESTS=28
- 
- source $TESTDIR/utils/utils.sh
- 
-@@ -43,8 +43,14 @@ function test_event_basic()
- 	create_lttng_session_ok $SESSION_NAME2 $TRACE_PATH
- 
- 	enable_ust_lttng_channel_ok $SESSION_NAME $CHAN_NAME
-+
-+	enable_ust_lttng_channel_fail $SESSION_NAME2 $CHAN_NAME2 "--output=splice"
-+	enable_ust_lttng_channel_fail $SESSION_NAME2 $CHAN_NAME2 "--output=mmap-o-spread"
-+
- 	enable_ust_lttng_channel_ok $SESSION_NAME2 $CHAN_NAME2
- 
-+	enable_ust_lttng_channel_fail $SESSION_NAME2 $CHAN_NAME2
-+
- 	enable_ust_lttng_event_ok $SESSION_NAME $EVENT_NAME $CHAN_NAME
- 	enable_ust_lttng_event_ok $SESSION_NAME $EVENT_NAME2 $CHAN_NAME
- 	enable_ust_lttng_event_ok $SESSION_NAME2 $EVENT_NAME3 $CHAN_NAME2
-diff --git a/tests/regression/ust/test_event_perf b/tests/regression/ust/test_event_perf
-index 4e665e65..8a1fce63 100755
---- a/tests/regression/ust/test_event_perf
-+++ b/tests/regression/ust/test_event_perf
-@@ -22,7 +22,7 @@ CURDIR=$(dirname $0)/
- TESTDIR=$CURDIR/../..
- SESSION_NAME="perf_counters"
- EVENT_NAME="tp:tptest"
--NUM_TESTS=24
-+NUM_TESTS=28
- NR_ITER=1
- NR_USEC_WAIT=1
- TESTAPP_PATH="$TESTDIR/utils/testapp"
-@@ -55,6 +55,10 @@ function test_parsing_raw()
- 	enable_ust_lttng_event_per_chan $SESSION_NAME $EVENT_NAME $CHAN_NAME
- 
- 	add_context_ust_ok $SESSION_NAME $CHAN_NAME "perf:thread:raw:r0110:test"
-+	add_context_ust_fail $SESSION_NAME $CHAN_NAME "perform:thread:raw:r0110:test"
-+	add_context_ust_fail $SESSION_NAME $CHAN_NAME "perf:threadish:raw:r0110:test"
-+	add_context_ust_fail $SESSION_NAME $CHAN_NAME "perf:cpush:raw:r0110:test"
-+	add_context_ust_fail $SESSION_NAME $CHAN_NAME "perf:thread:rawesome:r0110:test"
- 	add_context_ust_fail $SESSION_NAME $CHAN_NAME "perf:thread:raw:rZZZ:test"
- 	add_context_ust_fail $SESSION_NAME $CHAN_NAME "perf:thread:raw:b0110:test"
- 	add_context_ust_fail $SESSION_NAME $CHAN_NAME "perf:thread:raw:r0110:"
-diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
-index 94b3a3c4..cba38b93 100644
---- a/tests/utils/utils.sh
-+++ b/tests/utils/utils.sh
-@@ -1282,6 +1282,32 @@ function lttng_snapshot_del_output_fail ()
- 	lttng_snapshot_del_output 1 "$@"
- }
- 
-+function lttng_snapshot_del_output_by_name ()
-+{
-+	local expected_to_fail=$1
-+	local sess_name=$2
-+	local name=$3
-+
-+	$TESTDIR/../src/bin/lttng/$LTTNG_BIN snapshot del-output -s $sess_name $name 1> $OUTPUT_DEST 2> $ERROR_OUTPUT_DEST
-+	ret=$?
-+	if [[ $expected_to_fail -eq "1" ]]; then
-+		test "$ret" -ne "0"
-+		ok $? "Deleted snapshot output name $name failed as expected"
-+	else
-+		ok $ret "Deleted snapshot output name $name"
-+	fi
-+}
-+
-+function lttng_snapshot_del_output_by_name_ok ()
-+{
-+	lttng_snapshot_del_output_by_name 0 "$@"
-+}
-+
-+function lttng_snapshot_del_output_by_name_fail ()
-+{
-+	lttng_snapshot_del_output_by_name 1 "$@"
-+}
-+
- function lttng_snapshot_record ()
- {
- 	local sess_name=$1
+Tests in lttng-tools are GPLv2.
+
+> + */
+> +
+> +#include <assert.h>
+> +#include <inttypes.h>
+> +#include <stdio.h>
+> +#include <string.h>
+> +#include <unistd.h>
+> +#include <sys/types.h>
+> +#include <sys/wait.h>
+> +
+> +#include <tap/tap.h>
+> +
+> +#include <common/compat/poll.h>
+> +#include <common/readwrite.h>
+> +
+> +/* Verification without trashing test order in the child process */
+> +#define childok(e, test, ...) do { \
+> +	if (!(e)) { \
+> +		diag(test, ## __VA_ARGS__); \
+> +		_exit(EXIT_FAILURE); \
+> +	} \
+> +} while(0)
+> +
+> +/* For error.h */
+> +int lttng_opt_quiet = 1;
+> +int lttng_opt_verbose;
+> +int lttng_opt_mi;
+> +
+> +#ifdef HAVE_EPOLL
+> +#define NUM_TESTS 44
+> +#else
+> +#define NUM_TESTS 43
+> +#endif
+> +
+> +#ifdef HAVE_EPOLL
+> +#if defined(HAVE_EPOLL_CREATE1) && defined(EPOLL_CLOEXEC)
+> +#define CLOE_VALUE EPOLL_CLOEXEC
+> +#else
+> +#define CLOE_VALUE FD_CLOEXEC
+> +#endif
+> +
+> +void test_epoll_compat()
+
+In C, you want (void) here. () is same as (...)   (unlike c++)
+
+Applies everywhere when functions don't take parameters.
+
+> +{
+> +	/*
+> +	 * Type conversion present to disable warning of anonymous enum from
+> +	 * compiler
+
+End comments with ".".
+
+> +	 */
+> +	ok((int)LTTNG_CLOEXEC == (int)CLOE_VALUE, "epoll's CLOEXEC value");
+> +}
+> +#endif
+> +
+> +void test_alloc()
+> +{
+> +	struct lttng_poll_event poll_events;
+> +
+> +	lttng_poll_init(&poll_events);
+> +
+> +	/* Null pointer */
+> +	ok(lttng_poll_create(NULL, 1, 0) != 0, "Create over NULL pointer fails");
+> +	/* Size 0 */
+> +	ok(lttng_poll_create(&poll_events, 0, 0) != 0, "Create with size 0 fails");
+> +	/* without CLOEXEC */
+> +	ok(lttng_poll_create(&poll_events, 1, 0) == 0, "Create valid poll set
+> succeeds");
+> +	/*
+> +	 * lttng_poll_event structure untested due to imcompatibility across
+
+incompatibility
+
+> +	 * sublayers. lttng_poll_clean cannot be tested. There is no success
+> +	 * criteria. Verify set's max size cases.
+> +	 */
+> +	lttng_poll_clean(&poll_events);
+> +}
+> +
+> +/* Tests stuff related to what would be handled with epoll_ctl. */
+> +void test_add_del()
+> +{
+> +	struct lttng_poll_event poll_events;
+> +
+> +	lttng_poll_init(&poll_events);
+> +	ok(lttng_poll_add(NULL, 1, LPOLLIN) != 0, "Adding to NULL set fails");
+> +	ok(lttng_poll_add(&poll_events, 1, LPOLLIN) != 0, "Adding to uninitialized
+> structure fails");
+> +	ok(lttng_poll_add(&poll_events, -1, LPOLLIN) != 0, "Adding invalid FD fails");
+> +
+> +	lttng_poll_create(&poll_events, 1, 0);
+> +	ok(LTTNG_POLL_GETNB(&poll_events) == 0, "Set created empty");
+> +
+> +	ok(lttng_poll_add(NULL, 1, LPOLLIN) != 0, "Adding to NULL set fails");
+> +	ok(LTTNG_POLL_GETNB(&poll_events) == 0, "Set still empty");
+> +	ok(lttng_poll_add(&poll_events, -1, LPOLLIN) != 0, "Adding invalid FD fails");
+> +	ok(LTTNG_POLL_GETNB(&poll_events) == 0, "Set still empty");
+> +
+> +	ok(lttng_poll_add(&poll_events, 1, LPOLLIN) == 0, "Adding valid FD succeeds");
+> +	ok(LTTNG_POLL_GETNB(&poll_events) == 1, "Nb of elements incremented");
+> +
+> +	ok(lttng_poll_del(NULL, 1) != 0, "Removing from NULL set fails");
+> +	ok(LTTNG_POLL_GETNB(&poll_events) == 1, "Number of FD in set unchanged");
+> +
+> +	ok(lttng_poll_del(&poll_events, -1) != 0, "Removing from negative FD fails");
+> +	ok(LTTNG_POLL_GETNB(&poll_events) == 1, "Number of FD in set unchanged");
+> +
+> +	ok(lttng_poll_del(&poll_events, 2) == 0, "Removing invalid FD still
+> succeeds");
+> +	ok(LTTNG_POLL_GETNB(&poll_events) == 1, "Number of elements unchanged");
+> +
+> +	ok(lttng_poll_del(&poll_events, 1) == 0, "Removing valid FD succeeds");
+> +	ok(LTTNG_POLL_GETNB(&poll_events) == 0, "Nb of elements decremented");
+> +
+> +	ok(lttng_poll_del(&poll_events, 1) != 0, "Removing from empty set fails");
+> +	ok(LTTNG_POLL_GETNB(&poll_events) == 0, "Nb of elements unchanged");
+> +
+> +	lttng_poll_clean(&poll_events);
+> +}
+> +
+> +void test_mod_wait()
+> +{
+> +	struct lttng_poll_event poll_events;
+> +	struct lttng_poll_event cpoll_events;
+> +	/* Code unshamelly taken from pipe(2) man page */
+
+No need for this comment.
+
+> +	int hupfd[2];
+> +	int infd[2];
+> +	pid_t cpid;
+> +	char rbuf, tbuf = 0xCA;
+
+What is the purpose of 0xCA for tbuf ?
+
+Also we try to never hardcode constants in code. At least we #define it
+at the top of the file or in a header with a comment.
+
+> +	int wstatus;
+> +
+> +	lttng_poll_init(&poll_events);
+> +	lttng_poll_init(&cpoll_events);
+> +	if (pipe(hupfd) == -1) {
+> +		diag("We should really abort the test...");
+
+Then you might want to call abort(), or, better, check this is a ok() test ?
+
+> +	}
+> +
+> +	if (pipe(infd) == -1) {
+> +		diag("We should really abort the test...");
+
+Likewise.
+
+> +	}
+> +
+> +	cpid = fork();
+> +	if (cpid == 0) {
+> +		childok(lttng_poll_create(&cpoll_events, 1, 0) == 0, "Create valid poll set
+> succeeds");
+> +		childok(lttng_poll_mod(NULL, infd[0], LPOLLIN) == -1, "lttng_poll_mod with
+> invalid input returns an error");
+> +		childok(lttng_poll_mod(&cpoll_events, infd[0], LPOLLIN) == -1,
+> "lttng_poll_mod with invalid input returns an error");
+> +		childok(lttng_poll_add(&cpoll_events, infd[0], LPOLLHUP) == 0, "Add valid FD
+> succeeds");
+> +		childok(lttng_poll_mod(&cpoll_events, -1, LPOLLIN) == -1, "lttng_poll_mod
+> with invalid input returns an error");
+> +		childok(lttng_poll_mod(&cpoll_events, hupfd[0], LPOLLIN) == 0,
+> "lttng_poll_mod on unincluded FD goes on");
+> +		childok(lttng_poll_mod(&cpoll_events, infd[0], LPOLLIN) == 0, "Modify event
+> type succeeds");
+> +		childok(close(infd[1]) == 0, "Close valid FD succeeds");
+> +		childok(lttng_poll_wait(&cpoll_events, -1) == 1, "Wait on close times out");
+> +		childok(lttng_read(infd[0], &rbuf, 1) == 1, "Data is present in the pipe");
+> +		childok(rbuf == (char)0xCA, "Received data is consistent with transmitted
+> data");
+> +		childok(lttng_poll_del(&cpoll_events, infd[0]) == 0, "Removing valid FD
+> succeeds");
+> +		childok(close(infd[0]) == 0, "Close valid FD succeeds");
+> +		childok(close(hupfd[0]) == 0, "Close valid FD succeeds");
+> +		childok(close(hupfd[1]) == 0, "Close valid FD succeeds");
+> +		lttng_poll_clean(&cpoll_events);
+> +		_exit(EXIT_SUCCESS);
+> +	} else {
+> +		ok(close(hupfd[1]) == 0, "Close valid FD succeeds");
+> +		ok(close(infd[0]) == 0, "Close valid FD succeeds");
+> +
+> +		ok(lttng_poll_wait(NULL, -1) == -1, "lttng_poll_wait call with invalid input
+> returns error");
+> +
+> +		ok(lttng_poll_create(&poll_events, 1, 0) == 0, "Create valid poll set
+> succeeds");
+> +		ok(lttng_poll_wait(&poll_events, -1) == -1, "lttng_poll_wait call with
+> invalid input returns error");
+> +		ok(lttng_poll_add(&poll_events, hupfd[0], LPOLLHUP) == 0, "Add valid FD
+> succeeds");
+> +		tbuf = 0xCA;
+
+Purpose of setting tbuf to 0xCA here ?
+
+> +		ok(lttng_write(infd[1], &tbuf, 1) == 1, "Write to pipe succeeds");
+> +		ok(lttng_poll_wait(&poll_events, -1) == 1, "Wakes up on one event");
+> +		ok(lttng_poll_del(&poll_events, hupfd[0]) == 0, "Removing valid FD
+> succeeds");
+> +		ok(close(hupfd[0]) == 0, "Close valid FD succeeds");
+> +		ok(close(infd[1]) == 0, "Close valid FD succeeds");
+> +		lttng_poll_clean(&poll_events);
+> +
+> +		ok(waitpid(cpid, &wstatus, 0) == cpid, "waitpid returns child's pid");
+> +		ok(WIFEXITED(wstatus) == 1, "Child process exited");
+> +		ok(WEXITSTATUS(wstatus) == (EXIT_SUCCESS & 0xff), "EXIT_SUCCESS is %i while
+> exit status is %i\n", EXIT_SUCCESS, WEXITSTATUS(wstatus));
+> +	}
+> +
+> +}
+> +
+> +void test_func_def()
+> +{
+> +#ifdef LTTNG_POLL_GETFD
+> +#define PASS_GETFD 1
+> +#else
+> +#define PASS_GETFD 0
+> +#endif
+> +
+> +#ifdef LTTNG_POLL_GETEV
+> +#define PASS_GETEV 1
+> +#else
+> +#define PASS_GETEV 0
+> +#endif
+> +
+> +#ifdef LTTNG_POLL_GETSZ
+> +#define PASS_GETSZ 1
+> +#else
+> +#define PASS_GETSZ 0
+> +#endif
+> +
+> +#ifdef LTTNG_POLL_GET_PREV_FD
+> +#define PASS_GET_PREV_FD 1
+> +#else
+> +#define PASS_GET_PREV_FD 0
+> +#endif
+> +
+> +	/* Typecast to turn off -Waddress warnings */
+
+This above looks like a stale comment.
+
+> +	ok(lttng_poll_reset == lttng_poll_reset, "lttng_poll_reset is defined");
+> +	ok(lttng_poll_init == lttng_poll_init , "lttng_poll_reset is defined");
+> +	ok(PASS_GETFD, "GETFD is defined");
+> +	ok(PASS_GETEV, "GETEV is defined");
+> +	ok(PASS_GETSZ, "GETSZ is defined");
+> +	ok(PASS_GET_PREV_FD, "GET_PREV_FD is defined");
+> +
+> +}
+> +
+> +int main(int argc, const char *argv[])
+
+considering argc/argv are unused, the standard allows int main(void), which
+is preferred in that situation to ensure we don't have "unused" variables from
+static checkers.
+
+Thanks,
+
+Mathieu
+
+> +{
+> +	plan_tests(NUM_TESTS);
+> +#ifdef HAVE_EPOLL
+> +	test_epoll_compat();
+> +#endif
+> +	test_func_def();
+> +	test_alloc();
+> +	test_add_del();
+> +	test_mod_wait();
+> +	return exit_status();
+> +}
+> --
+> 2.11.0
+> 
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 -- 
-2.11.0
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
