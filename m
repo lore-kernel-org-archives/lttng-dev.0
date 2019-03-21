@@ -1,112 +1,90 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-tools] Fix: skip test when ust doesn't
- have perf support
-Date: Wed, 20 Mar 2019 17:49:00 -0400
-Message-ID: <20190320214900.16654-1-mjeanson__48200.8602515393$1553118565$gmane$org@efficios.com>
+From: Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [diamon-discuss] [RELEASE] LTTng-modules 2.9.11, 2.10.8,
+ 2.11.0-rc2 (Linux kernel tracer)
+Date: Thu, 21 Mar 2019 08:41:22 -0400
+Message-ID: <20190321124122.GA30542@google.com>
+References: <60988959.4070.1541112982406.JavaMail.zimbra@efficios.com>
+ <CAJWu+ooEbjOXgVeq+g4MGEve9PTo7p7UUKjYYHhq-Wz6UbUhfg@mail.gmail.com>
+ <1199524058.2398.1553016874435.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44Pk8R68j3z185d
- for <lttng-dev@lists.lttng.org>; Wed, 20 Mar 2019 17:49:11 -0400 (EDT)
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+Content-Type: text/plain; charset=us-ascii
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <1199524058.2398.1553016874435.JavaMail.zimbra@efficios.com>
+Sender: linux-kernel-owner@vger.kernel.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: diamon-discuss@lists.linuxfoundation.org, lttng-dev <lttng-dev@lists.lttng.org>, linux-kernel <linux-kernel@vger.kernel.org>, rostedt@goodmis.org
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
----
- tests/regression/ust/test_event_perf | 43 +++++++++++++++++++++++-----
- 1 file changed, 36 insertions(+), 7 deletions(-)
+On Tue, Mar 19, 2019 at 01:34:34PM -0400, Mathieu Desnoyers wrote:
+> ----- On Nov 1, 2018, at 7:33 PM, Joel Fernandes via diamon-discuss diamon-discuss@lists.linuxfoundation.org wrote:
+> 
+> > On Thu, Nov 1, 2018 at 3:56 PM Mathieu Desnoyers
+> > <mathieu.desnoyers@efficios.com> wrote:
+> >>
+> >> Hi,
+> >>
+> >> This is a set of bugfix releases of the LTTng modules kernel tracer.
+> >> It covers the three currently active lttng-modules branches: the
+> >> 2.9 and 2.10 stable branches, as well as the 2.11 branch in release
+> >> candidate cycle.
+> >>
+> >> Those releases add support for kernel 4.19.
+> >>
+> >> One important improvement is to prevent allocation of buffers larger
+> >> than the available memory, which can cause the OOM killer to trigger.
+> >> Even if the OOM killer end up having to trigger, the current OOM kill
+> >> target is set to the current thread while allocating buffers.
+> > 
+> > This is interesting. Me and Steve were looking at exactly this issue
+> > with the ftrace ring buffer a few months ago. Turns out that even
+> > setting the OOM kill target may not be enough to prevent all OOMs. I
+> > don't remember the reason why not, I'll have to dig out those threads
+> > but that's what the -mm folks said at the time. I did remember vaguely
+> > that I tested it and the kill target doesn't always get killed.. its
+> > possible that something *other* parallel allocation can be victimized
+> > AFAIR, even though the culprit is the kill target.
+> > 
+> 
+> Hi Joel,
+> 
+> Sorry for the late reply. Thanks for your input!
 
-diff --git a/tests/regression/ust/test_event_perf b/tests/regression/ust/test_event_perf
-index 4e665e65..9b1dea3e 100755
---- a/tests/regression/ust/test_event_perf
-+++ b/tests/regression/ust/test_event_perf
-@@ -41,6 +41,29 @@ function enable_ust_lttng_event_per_chan()
- 	ok $? "Enable event $event_name for session $sess_name in channel $chan_name"
- }
- 
-+function add_context_ust_skip_ok()
-+{
-+	local session_name=$1
-+	local channel_name=$2
-+	local context_name=$3
-+	local skip_num=$4
-+
-+	local ret
-+
-+	"$TESTDIR/../src/bin/lttng/$LTTNG_BIN" add-context -u \
-+		-s "$session_name" -c "$channel_name" \
-+		-t "$context_name"  1>"$OUTPUT_DEST" 2>"$ERROR_OUTPUT_DEST"
-+	ret=$?
-+
-+	if [ "$ret" == "4" ]; then
-+		skip 0 "Current UST lib doesn't implement '$context_name' context" "$skip_num"
-+	else
-+		ok $ret "Add context command for type: $context_name"
-+	fi
-+
-+	return $ret
-+}
-+
- # Only test parsing of the enabling by raw ID
- function test_parsing_raw()
- {
-@@ -54,7 +77,7 @@ function test_parsing_raw()
- 
- 	enable_ust_lttng_event_per_chan $SESSION_NAME $EVENT_NAME $CHAN_NAME
- 
--	add_context_ust_ok $SESSION_NAME $CHAN_NAME "perf:thread:raw:r0110:test"
-+	add_context_ust_skip_ok $SESSION_NAME $CHAN_NAME "perf:thread:raw:r0110:test" 1
- 	add_context_ust_fail $SESSION_NAME $CHAN_NAME "perf:thread:raw:rZZZ:test"
- 	add_context_ust_fail $SESSION_NAME $CHAN_NAME "perf:thread:raw:b0110:test"
- 	add_context_ust_fail $SESSION_NAME $CHAN_NAME "perf:thread:raw:r0110:"
-@@ -76,24 +99,30 @@ function test_event_basic()
- 	SESSION_NAME="ust_event_basic"
- 	CHAN_NAME="mychan"
- 
-+	local ret
-+
- 	create_lttng_session_ok $SESSION_NAME $TRACE_PATH
- 
- 	enable_ust_lttng_channel_ok $SESSION_NAME $CHAN_NAME
- 
- 	enable_ust_lttng_event_per_chan $SESSION_NAME $EVENT_NAME $CHAN_NAME
- 
--	add_context_ust_ok $SESSION_NAME $CHAN_NAME "perf:thread:page-fault"
-+	add_context_ust_skip_ok $SESSION_NAME $CHAN_NAME "perf:thread:page-fault" 4
-+	ret=$?
- 
--	start_lttng_tracing_ok
-+	if [ "$ret" != "4" ]; then
-+		start_lttng_tracing_ok
- 
--	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1
-+		$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1
- 
--	stop_lttng_tracing_ok
-+		stop_lttng_tracing_ok
-+
-+		validate_trace "perf_thread_page_fault" "$TRACE_PATH"
-+	fi
- 
- 	destroy_lttng_session_ok $SESSION_NAME
- 
--	validate_trace "perf_thread_page_fault" $TRACE_PATH
--	rm -rf $TRACE_PATH
-+	rm -rf "$TRACE_PATH"
- }
- 
- # MUST set TESTDIR before calling those functions
--- 
-2.17.1
+No problem, thanks for the reply :)
+
+> Here is a description of the solution we implemented:
+> 
+> "   Get an estimate of the number of available pages and return ENOMEM if
+>     there are not enough pages to cover the needs of the caller. Also, mark
+>     the calling user thread as the first target for the OOM killer in case
+>     the estimate of available pages was wrong.
+>     
+>     This greatly reduces the attack surface of this issue as well as reducing
+>     its potential impact.
+>     
+>     This approach is inspired by the one taken by the Linux kernel
+>     trace ring buffer[1]."
+> 
+> This is implemented in commit 1f0ab1eb040 "Prevent allocation of buffers if exceeding available memory"
+> within lttng-modules.
+> 
+> Are you aware of another way to achieve this that would prevent the incorrect
+> OOM victimization scenario you describe above ?
+
+Adding Steve as well.
+
+As far as I can see, lttng does exactly the same thing ftrace does, however
+ftrace also does allocations with __GFP_RETRY_MAYFAIL. I think you want to do
+that too. That will prevent the ring buffer allocation from being the source
+of the OOM trigger. However, if OOM is triggered due to parallel allocations
+from other sources, then the ring-buffer allocation will still be killed even
+though it is not the only source of the large allocation.  That is the best
+we came up with.
+
+Also does it also make sense for lttng ring buffer to use the ftrace code for
+ring buffer, or make the ftrace ring buffer better and have lttng use it? Or
+is the lttng ring buffer design too radically different?
+
+thanks,
+
+ - Joel
