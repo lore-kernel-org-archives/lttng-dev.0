@@ -1,17 +1,14 @@
-From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [PATCH lttng-tools v2] Clean code base from redundant
- verification
-Date: Thu, 21 Mar 2019 11:04:52 -0400
-Message-ID: <20190321150453.7312-7-ylamarre__40000.5672172242$1553180942$gmane$org@efficios.com>
-References: <20190321150453.7312-1-ylamarre@efficios.com>
+From: Milian Wolff via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: lttng-track by process/thread name
+Date: Thu, 21 Mar 2019 17:21:19 +0100
+Message-ID: <2888384.MPZEDsI9Ek__18401.7115550645$1553185783$gmane$org@milian-kdab2>
+Reply-To: Milian Wolff <milian.wolff@kdab.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4342508545551648396=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44Q97n4xDLz189K
- for <lttng-dev@lists.lttng.org>; Thu, 21 Mar 2019 11:05:09 -0400 (EDT)
-In-Reply-To: <20190321150453.7312-1-ylamarre@efficios.com>
+Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
+ by lists.lttng.org (Postfix) with ESMTPS id 44QC1404RTz18Pw
+ for <lttng-dev@lists.lttng.org>; Thu, 21 Mar 2019 12:29:27 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,355 +19,118 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Remove redundant verification for file descriptors with 0 revents in
-code base.
+--===============4342508545551648396==
+Content-Type: multipart/signed; boundary="nextPart4462502.icCKZlPj0Q";
+ micalg="sha256"; protocol="application/pkcs7-signature"
 
-Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
----
- src/bin/lttng-consumerd/health-consumerd.c   |  5 -----
- src/bin/lttng-relayd/health-relayd.c         |  5 -----
- src/bin/lttng-relayd/live.c                  | 10 ----------
- src/bin/lttng-relayd/main.c                  | 16 ----------------
- src/bin/lttng-sessiond/agent-thread.c        |  5 -----
- src/bin/lttng-sessiond/client.c              |  5 -----
- src/bin/lttng-sessiond/dispatch.c            |  5 -----
- src/bin/lttng-sessiond/health.c              |  5 -----
- src/bin/lttng-sessiond/ht-cleanup.c          |  5 -----
- src/bin/lttng-sessiond/manage-apps.c         |  5 -----
- src/bin/lttng-sessiond/manage-consumer.c     | 10 ----------
- src/bin/lttng-sessiond/manage-kernel.c       |  5 -----
- src/bin/lttng-sessiond/notification-thread.c |  3 ---
- src/bin/lttng-sessiond/notify-apps.c         |  5 -----
- src/bin/lttng-sessiond/register.c            |  5 -----
- src/bin/lttng-sessiond/rotation-thread.c     |  4 ----
- src/common/consumer/consumer.c               | 10 ----------
- 17 files changed, 108 deletions(-)
+--nextPart4462502.icCKZlPj0Q
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-diff --git a/src/bin/lttng-consumerd/health-consumerd.c b/src/bin/lttng-consumerd/health-consumerd.c
-index 1e2f31e4..7d60e54e 100644
---- a/src/bin/lttng-consumerd/health-consumerd.c
-+++ b/src/bin/lttng-consumerd/health-consumerd.c
-@@ -259,11 +259,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			ret = check_health_quit_pipe(pollfd, revents);
- 			if (ret) {
-diff --git a/src/bin/lttng-relayd/health-relayd.c b/src/bin/lttng-relayd/health-relayd.c
-index ba996621..b782c3e7 100644
---- a/src/bin/lttng-relayd/health-relayd.c
-+++ b/src/bin/lttng-relayd/health-relayd.c
-@@ -329,11 +329,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			ret = check_health_quit_pipe(pollfd, revents);
- 			if (ret) {
-diff --git a/src/bin/lttng-relayd/live.c b/src/bin/lttng-relayd/live.c
-index 9efab8a7..9503ba47 100644
---- a/src/bin/lttng-relayd/live.c
-+++ b/src/bin/lttng-relayd/live.c
-@@ -543,11 +543,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			ret = check_thread_quit_pipe(pollfd, revents);
- 			if (ret) {
-@@ -2000,11 +1995,6 @@ restart:
- 
- 			health_code_update();
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			ret = check_thread_quit_pipe(pollfd, revents);
- 			if (ret) {
-diff --git a/src/bin/lttng-relayd/main.c b/src/bin/lttng-relayd/main.c
-index de14cdb4..42f871b5 100644
---- a/src/bin/lttng-relayd/main.c
-+++ b/src/bin/lttng-relayd/main.c
-@@ -858,14 +858,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/*
--				 * No activity for this FD (poll
--				 * implementation).
--				 */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			ret = check_thread_quit_pipe(pollfd, revents);
- 			if (ret) {
-@@ -3811,14 +3803,6 @@ restart:
- 
- 			health_code_update();
- 
--			if (!revents) {
--				/*
--				 * No activity for this FD (poll
--				 * implementation).
--				 */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			ret = check_thread_quit_pipe(pollfd, revents);
- 			if (ret) {
-diff --git a/src/bin/lttng-sessiond/agent-thread.c b/src/bin/lttng-sessiond/agent-thread.c
-index f7be1ef7..575f6aee 100644
---- a/src/bin/lttng-sessiond/agent-thread.c
-+++ b/src/bin/lttng-sessiond/agent-thread.c
-@@ -404,11 +404,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			if (pollfd == quit_pipe_read_fd) {
- 				goto exit;
-diff --git a/src/bin/lttng-sessiond/client.c b/src/bin/lttng-sessiond/client.c
-index a889529a..0be065ec 100644
---- a/src/bin/lttng-sessiond/client.c
-+++ b/src/bin/lttng-sessiond/client.c
-@@ -2174,11 +2174,6 @@ static void *thread_manage_clients(void *data)
- 
- 			health_code_update();
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			if (pollfd == thread_quit_pipe_fd) {
- 				err = 0;
- 				goto exit;
-diff --git a/src/bin/lttng-sessiond/dispatch.c b/src/bin/lttng-sessiond/dispatch.c
-index 04b3954c..a637f23d 100644
---- a/src/bin/lttng-sessiond/dispatch.c
-+++ b/src/bin/lttng-sessiond/dispatch.c
-@@ -144,11 +144,6 @@ static void sanitize_wait_queue(struct ust_reg_wait_queue *wait_queue)
- 		uint32_t revents = LTTNG_POLL_GETEV(&events, i);
- 		int pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--		if (!revents) {
--			/* No activity for this FD (poll implementation). */
--			continue;
--		}
--
- 		cds_list_for_each_entry_safe(wait_node, tmp_wait_node,
- 				&wait_queue->head, head) {
- 			if (pollfd == wait_node->app->sock &&
-diff --git a/src/bin/lttng-sessiond/health.c b/src/bin/lttng-sessiond/health.c
-index 921b4526..5b4f5f8f 100644
---- a/src/bin/lttng-sessiond/health.c
-+++ b/src/bin/lttng-sessiond/health.c
-@@ -158,11 +158,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Event on the registration socket */
- 			if (pollfd == sock) {
- 				if (revents & LPOLLIN) {
-diff --git a/src/bin/lttng-sessiond/ht-cleanup.c b/src/bin/lttng-sessiond/ht-cleanup.c
-index 91c0544c..02244f0c 100644
---- a/src/bin/lttng-sessiond/ht-cleanup.c
-+++ b/src/bin/lttng-sessiond/ht-cleanup.c
-@@ -155,11 +155,6 @@ static void *thread_ht_cleanup(void *data)
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			if (pollfd != ht_cleanup_pipe[0]) {
- 				continue;
- 			}
-diff --git a/src/bin/lttng-sessiond/manage-apps.c b/src/bin/lttng-sessiond/manage-apps.c
-index f9ec356d..356c147a 100644
---- a/src/bin/lttng-sessiond/manage-apps.c
-+++ b/src/bin/lttng-sessiond/manage-apps.c
-@@ -123,11 +123,6 @@ static void *thread_application_management(void *data)
- 
- 			health_code_update();
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			if (pollfd == quit_pipe_read_fd) {
- 				err = 0;
- 				goto exit;
-diff --git a/src/bin/lttng-sessiond/manage-consumer.c b/src/bin/lttng-sessiond/manage-consumer.c
-index b710c61f..fa802adc 100644
---- a/src/bin/lttng-sessiond/manage-consumer.c
-+++ b/src/bin/lttng-sessiond/manage-consumer.c
-@@ -134,11 +134,6 @@ void *thread_consumer_management(void *data)
- 
- 		health_code_update();
- 
--		if (!revents) {
--			/* No activity for this FD (poll implementation). */
--			continue;
--		}
--
- 		/* Thread quit pipe has been closed. Killing thread. */
- 		if (pollfd == quit_pipe_read_fd) {
- 			err = 0;
-@@ -298,11 +293,6 @@ void *thread_consumer_management(void *data)
- 
- 			health_code_update();
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/*
- 			 * Thread quit pipe has been triggered, flag that we should stop
- 			 * but continue the current loop to handle potential data from
-diff --git a/src/bin/lttng-sessiond/manage-kernel.c b/src/bin/lttng-sessiond/manage-kernel.c
-index 34887d7b..f656c9f5 100644
---- a/src/bin/lttng-sessiond/manage-kernel.c
-+++ b/src/bin/lttng-sessiond/manage-kernel.c
-@@ -267,11 +267,6 @@ static void *thread_kernel_management(void *data)
- 
- 			health_code_update();
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			if (pollfd == quit_pipe_read_fd) {
- 				err = 0;
- 				goto exit;
-diff --git a/src/bin/lttng-sessiond/notification-thread.c b/src/bin/lttng-sessiond/notification-thread.c
-index b42b282e..0a1fd557 100644
---- a/src/bin/lttng-sessiond/notification-thread.c
-+++ b/src/bin/lttng-sessiond/notification-thread.c
-@@ -562,9 +562,6 @@ void *thread_notification(void *data)
- 			int fd = LTTNG_POLL_GETFD(&state.events, i);
- 			uint32_t revents = LTTNG_POLL_GETEV(&state.events, i);
- 
--			if (!revents) {
--				continue;
--			}
- 			DBG("[notification-thread] Handling fd (%i) activity (%u)", fd, revents);
- 
- 			if (fd == state.notification_channel_socket) {
-diff --git a/src/bin/lttng-sessiond/notify-apps.c b/src/bin/lttng-sessiond/notify-apps.c
-index bc7405c7..17f3cd0c 100644
---- a/src/bin/lttng-sessiond/notify-apps.c
-+++ b/src/bin/lttng-sessiond/notify-apps.c
-@@ -109,11 +109,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			if (pollfd == quit_pipe_read_fd) {
- 				err = 0;
-diff --git a/src/bin/lttng-sessiond/register.c b/src/bin/lttng-sessiond/register.c
-index 6ce25ad0..e809834f 100644
---- a/src/bin/lttng-sessiond/register.c
-+++ b/src/bin/lttng-sessiond/register.c
-@@ -239,11 +239,6 @@ static void *thread_application_registration(void *data)
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			if (pollfd == quit_pipe_read_fd) {
- 				err = 0;
-diff --git a/src/bin/lttng-sessiond/rotation-thread.c b/src/bin/lttng-sessiond/rotation-thread.c
-index b86b1668..6669372d 100644
---- a/src/bin/lttng-sessiond/rotation-thread.c
-+++ b/src/bin/lttng-sessiond/rotation-thread.c
-@@ -974,10 +974,6 @@ void *thread_rotation(void *data)
- 			int fd = LTTNG_POLL_GETFD(&thread.events, i);
- 			uint32_t revents = LTTNG_POLL_GETEV(&thread.events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
- 			DBG("[rotation-thread] Handling fd (%i) activity (%u)",
- 					fd, revents);
- 
-diff --git a/src/common/consumer/consumer.c b/src/common/consumer/consumer.c
-index 10273e66..c70d95a5 100644
---- a/src/common/consumer/consumer.c
-+++ b/src/common/consumer/consumer.c
-@@ -2396,11 +2396,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			if (pollfd == lttng_pipe_get_readfd(ctx->consumer_metadata_pipe)) {
- 				if (revents & LPOLLIN) {
- 					ssize_t pipe_len;
-@@ -2990,11 +2985,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			if (pollfd == ctx->consumer_channel_pipe[0]) {
- 				if (revents & LPOLLIN) {
- 					enum consumer_channel_action action;
+Hey all,
+
+I stumbled upon lttng-track which sounds quite useful when one wants to 
+concentrate on the events of a single process. But how is one supposed to use 
+this? Usually, I start lttng before I start my application - I thus don't know 
+the PID yet. Is there a trick that I'm not aware of, or can it really only be 
+used to track after starting an application?
+
+Thanks
 -- 
-2.11.0
+Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
+KDAB (Deutschland) GmbH, a KDAB Group company
+Tel: +49-30-521325470
+KDAB - The Qt, C++ and OpenGL Experts
+--nextPart4462502.icCKZlPj0Q
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCDEIw
+ggXmMIIDzqADAgECAhBqm+E4O/8ra58B1dm4p1JWMA0GCSqGSIb3DQEBDAUAMIGFMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYD
+VQQKExFDT01PRE8gQ0EgTGltaXRlZDErMCkGA1UEAxMiQ09NT0RPIFJTQSBDZXJ0aWZpY2F0aW9u
+IEF1dGhvcml0eTAeFw0xMzAxMTAwMDAwMDBaFw0yODAxMDkyMzU5NTlaMIGXMQswCQYDVQQGEwJH
+QjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYDVQQK
+ExFDT01PRE8gQ0EgTGltaXRlZDE9MDsGA1UEAxM0Q09NT0RPIFJTQSBDbGllbnQgQXV0aGVudGlj
+YXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+AL6znlesKHZ1QBbHOAOY08YYdiFQ8yV5C0y1oNF9Olg+nKcxLqf2NHbZhGra0D00SOTq9bus3/mx
+gUsg/Wh/eXQ0pnp8tZ8XZWAnlyKMpjL+qUByRjXCA6RQyDMqVaVUkbIr5SU0RDX/kSsKwer3H1pT
+/HUrBN0X8sKtPTdGX8XAWt/VdMLBrZBlgvnkCos+KQWWCo63OTTqRvaq8aWccm+KOMjTcE6s2mj6
+RkalweyDI7X+7U5lNo6jzC8RTXtVV4/Vwdax720YpMPJQaDaElmOupyTf1Qib+cpukNJnQmwygjD
+8m046DQkLnpXNCAGjuJy1F5NATksUsbfJAr7FLUCAwEAAaOCATwwggE4MB8GA1UdIwQYMBaAFLuv
+fgI9+qbxPISOre44mOzZMjLUMB0GA1UdDgQWBBSCr2yM+MX+lmF86B89K3FIXsSLwDAOBgNVHQ8B
+Af8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIBADARBgNVHSAECjAIMAYGBFUdIAAwTAYDVR0fBEUw
+QzBBoD+gPYY7aHR0cDovL2NybC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2VydGlmaWNhdGlvbkF1
+dGhvcml0eS5jcmwwcQYIKwYBBQUHAQEEZTBjMDsGCCsGAQUFBzAChi9odHRwOi8vY3J0LmNvbW9k
+b2NhLmNvbS9DT01PRE9SU0FBZGRUcnVzdENBLmNydDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3Au
+Y29tb2RvY2EuY29tMA0GCSqGSIb3DQEBDAUAA4ICAQB4XLKBKDRPPO5fVs6fl1bsj6JrF/bz9kkI
+BtTYLzXN30D+03Hj6OxCDBEaIeNmsBhrJmuubvyE7HtoSmR809AgcYboW+rcTNZ/8u/Hv+GTrNI/
+AhqX2/kiQNxmgUPt/eJPs92Qclj0HnVyy9TnSvGkSDU7I5Px+TbO+88G4zipA2psZaWeEykgzClZ
+lPz1FjTCkk77ZXp5cQYYexE6zeeN4/0OqqoAloFrjAF4o50YJafX8mnahjp3I2Y2mkjhk0xQfhNq
+bzlLWPoT3m7j7U26u7zg6swjOq8hITYc3/np5tM5aVyu6t99p17bTbY7+1RTWBviN9YJzK8HxzOb
+XYWBf/L+VGOYNsQDTxAk0Hbvb1j6KjUhg7fO294F29QIhhmiNOr84JHoy+fNLpfvYc/Q9EtFOI5I
+SYgOxLk3nD/whbUe9rmEQXLp8MB933Ij474gwwCPUpwv9mj2PMnXoc7mbrS22XUSeTwxCTP9bcmU
+dp4jmIoWfhQm7X9w/Zgddg+JZ/YnIHOwsGsaTUgj7fIvxqith7DoJC91WJ8Lce3CVJqb1XWeKIJ8
+4F7YLXZN0oa7TktYgDdmQVxYkZo1c5noaDKH9Oq9cbm/vOYRUM1cWcef20Wkyk5S/GFyyPJwG0fR
+1nRas3DqAf4cXxMiEKcff7PNa4M3RGTqH0pWR8p6EjCCBlQwggU8oAMCAQICEAf6KCF9+1doL2oE
+OTPysLwwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNVBAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1h
+bmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0w
+OwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWls
+IENBMB4XDTE3MDUyMzAwMDAwMFoXDTIwMDUyMjIzNTk1OVowggFZMQswCQYDVQQGEwJTRTEPMA0G
+A1UEERMGNjgzIDMxMRIwEAYDVQQIEwlWYWVybWxhbmQxEDAOBgNVBAcTB0hhZ2ZvcnMxGDAWBgNV
+BAkTD05vcnJpbmdzIHZhZWcgMjEPMA0GA1UEEhMGQm94IDMwMSYwJAYDVQQKDB1LbGFyw6RsdmRh
+bGVucyBEYXRha29uc3VsdCBBQjEdMBsGA1UECxMUQSBLREFCIEdyb3VwIENvbXBhbnkxQzBBBgNV
+BAsMOklzc3VlZCB0aHJvdWdoIEtsYXLDpGx2ZGFsZW5zIERhdGFrb25zdWx0IEFCIEUtUEtJIE1h
+bmFnZXIxHzAdBgNVBAsTFkNvcnBvcmF0ZSBTZWN1cmUgRW1haWwxFTATBgNVBAMTDE1pbGlhbiBX
+b2xmZjEkMCIGCSqGSIb3DQEJARYVbWlsaWFuLndvbGZmQGtkYWIuY29tMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAxrzfNBVvRbiAknuTBXuQnNm9sLIFLo0vbPB6kswk78A3tA++Zn5c
+lQUHhGlQq1cdYxagnUpqwvG3Sod15mPSOLkAPf/mabLN7p+lFbRaUP+97ZkTZtvb4BCC3osIEFI4
+G393OSFWqc2qmIPE/SwSASbAA20Fcaa2M6P1lhOk/ttUh2jIurTPF0wUycIA7lBddrOgaOA8e2m6
+iLTNHtlrfRbBaUX91D5ebY+UWmIjXSQ9+CtutMzBkwnF0rZKririvOkklg9VzEGNQVHrQfDF2s/U
+pOtmtuVSwElauGT/KALyCFuIrYC1pmaKH8S1xODJqiRaf6jH8E+KQzKjyM/ErwIDAQABo4IB1TCC
+AdEwHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFN+m99RtIuA1bSdw
+6b1brOX7X3AJMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAgBgNVHREEGTAXgRVtaWxpYW4ud29s
+ZmZAa2RhYi5jb20wDQYJKoZIhvcNAQELBQADggEBABf47LSJADqH+ow9INv3QM1NC/qq2bjxGvsZ
+68iD11VEUAFlsYfsVTgQqUirwPVTYenXtwVBELHZyywsui1JxL7HKQetLQegDDP/RyfjReVaWxhy
+3OpuItsgLVbru9QVgPifnoBFPtfZcwjeJDmeSbLT8oj4Rd0KYBOIve7WKvsfNPsNwfbLwY2zILkE
+LjxZcVi2AwZHDyab+dzL/3YcLuJj1lSawBGn7ilpcdZydlv4aye51pD/MemLIYLcylt+ImrmjnTV
+y+QlAHRF3s5FE8yAr+W1MBD/1bKZCSgFt8VQoAlz3hiQh8QqZp4Zl8WuVL4+mP/mT6VDEWgq/0Bo
+cukxggJuMIICagIBATCBrDCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hl
+c3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNV
+BAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
+EAf6KCF9+1doL2oEOTPysLwwDQYJYIZIAWUDBAIBBQCggZMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkwMzIxMTYyMTE5WjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgiJmen4vdFFwqj7mQgH9NY3pONebQ
+zzEtWaKFJUVBRF0wDQYJKoZIhvcNAQEBBQAEggEAL0OOZVKGuPlYcLLliKLf5TH4EwpGs1IH7u8L
+t9Lo3nhoK+upe7Rz4IONPEOByQMqX8KnEMQQaFB7bju4zmSogl/F0Ix4g+7z2eZNjJXfmQUyrQ8L
+ghOOAMJfIBWlWlRyz9Hmup1mxqp7EJQY4WIqjO8v4Gu53Qx9bUBliCV/PvqbSiEgdWerLmV0gUAq
+p6eafG4/VGsdn04ZG/YXs1FXAe4ViXa+6yw4pjzGx+k2sBf3OVZQGF+9fOuB8KU6y8cqFHJRlQQ4
++7c2XsqYiZUjC5+YDfiskXPJ/htiTJgizbEdqJEBbHlYQcnNKys51xWGeUwOXbPcrv5gV6vLejf9
+agAAAAAAAA==
+
+
+--nextPart4462502.icCKZlPj0Q--
+
+
+
+--===============4342508545551648396==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============4342508545551648396==--
