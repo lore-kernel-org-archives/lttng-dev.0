@@ -1,16 +1,15 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [PATCH lttng-tools v3 6/8] Change lttng_poll_wait
- behaviour of compat-poll to match compat-epoll
-Date: Fri, 22 Mar 2019 14:19:26 -0400
-Message-ID: <20190322181928.6186-6-ylamarre__32838.9688323782$1553278995$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools v3 8/8] Fix typo
+Date: Fri, 22 Mar 2019 14:19:28 -0400
+Message-ID: <20190322181928.6186-8-ylamarre__45009.889528022$1553279025$gmane$org@efficios.com>
 References: <20190322181928.6186-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44QsPm639gz18TB
- for <lttng-dev@lists.lttng.org>; Fri, 22 Mar 2019 14:19:40 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 44QsPn6lDtz18Tr
+ for <lttng-dev@lists.lttng.org>; Fri, 22 Mar 2019 14:19:41 -0400 (EDT)
 In-Reply-To: <20190322181928.6186-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,72 +24,23 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-This removes the need to verify for idle file descriptors and mitigates
-risks of bug due to behaviour mismatch.
-
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
- src/common/compat/compat-poll.c | 39 +++++++++++++++++++++++++++++++++++----
- 1 file changed, 35 insertions(+), 4 deletions(-)
+ src/common/compat/poll.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/src/common/compat/compat-poll.c b/src/common/compat/compat-poll.c
-index be655728..8263b64b 100644
---- a/src/common/compat/compat-poll.c
-+++ b/src/common/compat/compat-poll.c
-@@ -293,7 +293,8 @@ error:
+diff --git a/src/common/compat/poll.h b/src/common/compat/poll.h
+index 5eb7ff9c..d7020f36 100644
+--- a/src/common/compat/poll.h
++++ b/src/common/compat/poll.h
+@@ -358,7 +358,7 @@ extern int compat_poll_del(struct lttng_poll_event *events, int fd);
+ 	compat_poll_del(events, fd)
+ 
+ /*
+- * Modify an fd's events in the epoll set.
++ * Modify an fd's events in the poll set.
   */
- int compat_poll_wait(struct lttng_poll_event *events, int timeout)
- {
--	int ret;
-+	int ret, active_fd_count;
-+	int idle_pfd_index = 0;
- 
- 	if (events == NULL || events->current.events == NULL) {
- 		ERR("poll wait arguments error");
-@@ -325,11 +326,41 @@ int compat_poll_wait(struct lttng_poll_event *events, int timeout)
- 		goto error;
- 	}
- 
-+	active_fd_count = ret;
-+
- 	/*
--	 * poll() should always iterate on all FDs since we handle the pollset in
--	 * user space and after poll returns, we have to try every fd for a match.
-+	 * Swap all active pollfd structs to the beginning of the
-+	 * array to emulate compat-epoll behaviour. This algorithm takes
-+	 * advantage of poll's returned value and the burst nature of active
-+	 * events on the file descriptors. The while loop guarantees that
-+	 * idle_pfd will always point to an idle fd.
- 	 */
--	return events->wait.nb_fd;
-+	if (active_fd_count == events->wait.nb_fd) {
-+		goto end;
-+	}
-+	while (idle_pfd_index < active_fd_count &&
-+			events->wait.events[idle_pfd_index].revents != 0) {
-+		idle_pfd_index++;
-+	}
-+
-+	for (int i = idle_pfd_index + 1; idle_pfd_index < active_fd_count;
-+			i++) {
-+		struct pollfd swap_pfd;
-+		struct pollfd *idle_pfd = &events->wait.events[idle_pfd_index];
-+		struct pollfd *current_pfd = &events->wait.events[i];
-+
-+		assert(i < events->wait.nb_fd);
-+
-+		if (ipfd->revents != 0) {
-+			swap_pfd = *current_pfd;
-+			*current_pfd = *idle_pfd;
-+			*idle_pfd = swap_pfd;
-+			idle_pfd_index++;
-+		}
-+	}
-+
-+end:
-+	return ret;
- 
- error:
- 	return -1;
+ extern int compat_poll_mod(struct lttng_poll_event *events,
+ 		int fd, uint32_t req_events);
 -- 
 2.11.0
