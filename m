@@ -1,19 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-tools v2] Change lttng_poll_wait
- behaviour of compat-poll to match compat-epoll
-Date: Fri, 22 Mar 2019 11:04:36 -0400 (EDT)
-Message-ID: <8703543.6154.1553267076349.JavaMail.zimbra__25639.0459647932$1553267098$gmane$org@efficios.com>
-References: <20190321150453.7312-1-ylamarre@efficios.com>
- <20190321150453.7312-6-ylamarre@efficios.com>
- <CA+jJMxui0_5EF6XLH-9G90-yJEE63zdiBifTeF4i9iQp95D7tg@mail.gmail.com>
+From: Yannick Lamarre <ylamarre@efficios.com>
+Subject: [PATCH lttng-tools v3 1/8] Fix: lttng_poll_mod calls
+ compat_(e)poll_add
+Date: Fri, 22 Mar 2019 14:19:21 -0400
+Message-ID: <20190322181928.6186-1-ylamarre__5930.52837518684$1553278793$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44Qn4j6srvz184q
- for <lttng-dev@lists.lttng.org>; Fri, 22 Mar 2019 11:04:37 -0400 (EDT)
-In-Reply-To: <CA+jJMxui0_5EF6XLH-9G90-yJEE63zdiBifTeF4i9iQp95D7tg@mail.gmail.com>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 44QsPf5B9dz18S1
+ for <lttng-dev@lists.lttng.org>; Fri, 22 Mar 2019 14:19:34 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,36 +20,38 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jeremie Galarneau <jeremie.galarneau@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
------ On Mar 21, 2019, at 4:25 PM, Jeremie Galarneau jeremie.galarneau@efficios.com wrote:
+lttng_poll_mod should call compat_(e)poll_mod.
 
-[...]
->> +               assert(idx < events->wait.nb_fd);
-> 
-> Not needed. Using assert() is fine to highlight assumptions across
-> interfaces/functions and/or catch catastrophic internal errors. Here,
-> this would be a very local condition that seems to be already
-> enforced.
-> 
-> Reworking the 'for' condition to use 'i < events->wait.nb_fd' and
-> breaking out early of the loop is also an option here.
+Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
+---
+ src/common/compat/poll.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The reason for using assert() here is to ensure that there is no discrepancy
-between the number of active poll fd in the set and the value returned by
-poll indicating that same number of active fds.
-
-We'd need a kernel bug (or memory corruption) to have a mismatch, but I thought
-having an assert in there would not hurt, since it might help diagnose issues
-that cross user-kernel boundaries.
-
-Thoughts ?
-
-Mathieu
-
+diff --git a/src/common/compat/poll.h b/src/common/compat/poll.h
+index d4bd87f5..fde54ddb 100644
+--- a/src/common/compat/poll.h
++++ b/src/common/compat/poll.h
+@@ -177,7 +177,7 @@ extern int compat_epoll_del(struct lttng_poll_event *events, int fd);
+ extern int compat_epoll_mod(struct lttng_poll_event *events,
+ 		int fd, uint32_t req_events);
+ #define lttng_poll_mod(events, fd, req_events) \
+-	compat_epoll_add(events, fd, req_events)
++	compat_epoll_mod(events, fd, req_events)
+ 
+ /*
+  * Set up the poll set limits variable poll_max_size
+@@ -361,7 +361,7 @@ extern int compat_poll_del(struct lttng_poll_event *events, int fd);
+ extern int compat_poll_mod(struct lttng_poll_event *events,
+ 		int fd, uint32_t req_events);
+ #define lttng_poll_mod(events, fd, req_events) \
+-	compat_poll_add(events, fd, req_events)
++	compat_poll_mod(events, fd, req_events)
+ 
+ /*
+  * Set up the poll set limits variable poll_max_size
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.11.0
