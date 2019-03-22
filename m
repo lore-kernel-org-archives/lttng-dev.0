@@ -1,135 +1,37 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools v2] Change lttng_poll_wait
- behaviour of compat-poll to match compat-epoll
-Date: Thu, 21 Mar 2019 16:25:11 -0400
-Message-ID: <CA+jJMxui0_5EF6XLH-9G90-yJEE63zdiBifTeF4i9iQp95D7tg__9210.65162853978$1553200036$gmane$org@mail.gmail.com>
-References: <20190321150453.7312-1-ylamarre@efficios.com>
- <20190321150453.7312-6-ylamarre@efficios.com>
+From: Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [diamon-discuss] [RELEASE] LTTng-modules 2.9.11, 2.10.8,
+ 2.11.0-rc2 (Linux kernel tracer)
+Date: Fri, 22 Mar 2019 09:48:14 -0400
+Message-ID: <20190322134814.GB56461@google.com>
+References: <60988959.4070.1541112982406.JavaMail.zimbra@efficios.com>
+ <CAJWu+ooEbjOXgVeq+g4MGEve9PTo7p7UUKjYYHhq-Wz6UbUhfg@mail.gmail.com>
+ <1199524058.2398.1553016874435.JavaMail.zimbra@efficios.com>
+ <20190321124122.GA30542@google.com>
+ <20190321091356.38a6988d@gandalf.local.home>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44QJFx0dtZz17Lb
- for <lttng-dev@lists.lttng.org>; Thu, 21 Mar 2019 16:25:56 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 4F9341CCE37
- for <lttng-dev@lists.lttng.org>; Thu, 21 Mar 2019 16:25:50 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
- with ESMTP id igngWPEr1m3W for <lttng-dev@lists.lttng.org>;
- Thu, 21 Mar 2019 16:25:49 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 5C6DB1CCE2E
- for <lttng-dev@lists.lttng.org>; Thu, 21 Mar 2019 16:25:49 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
- with ESMTP id EhWqvd8o1VGc for <lttng-dev@lists.lttng.org>;
- Thu, 21 Mar 2019 16:25:49 -0400 (EDT)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com
- [209.85.167.46])
- by mail.efficios.com (Postfix) with ESMTPSA id EB7D31CCE20
- for <lttng-dev@lists.lttng.org>; Thu, 21 Mar 2019 16:25:48 -0400 (EDT)
-Received: by mail-lf1-f46.google.com with SMTP id g7so5545170lfh.10
- for <lttng-dev@lists.lttng.org>; Thu, 21 Mar 2019 13:25:48 -0700 (PDT)
-In-Reply-To: <20190321150453.7312-6-ylamarre@efficios.com>
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Yannick Lamarre <ylamarre@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>
+Content-Type: text/plain; charset=us-ascii
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Content-Disposition: inline
+In-Reply-To: <20190321091356.38a6988d@gandalf.local.home>
+Sender: linux-kernel-owner@vger.kernel.org
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, diamon-discuss@lists.linuxfoundation.org, lttng-dev <lttng-dev@lists.lttng.org>, linux-kernel <linux-kernel@vger.kernel.org>
 List-Id: lttng-dev@lists.lttng.org
 
-VGhhbmtzIGZvciB0aGlzIHBhdGNoLCBpdCBkb2VzIGFsbG93IGEgd29ydGh3aGlsZSBjbGVhbi11
-cCEKUmVhZCBvbiBmb3IgY29tbWVudHMgYWJvdXQgc3R5bGUuCgpPbiBUaHUsIDIxIE1hciAyMDE5
-IGF0IDExOjA1LCBZYW5uaWNrIExhbWFycmUgPHlsYW1hcnJlQGVmZmljaW9zLmNvbT4gd3JvdGU6
-Cj4KPiBUaGlzIHJlbW92ZXMgdGhlIG5lZWQgdG8gdmVyaWZ5IGZvciBldmVudGxlc3MgZmlsZSBk
-ZXNjcmlwdG9ycyBhbmQKPiBtaXRpZ2F0ZXMgcmlza3Mgb2YgYnVnIGR1ZSB0byBiZWhhdmlvdXIg
-bWlzbWF0Y2guCj4KPiBTaWduZWQtb2ZmLWJ5OiBZYW5uaWNrIExhbWFycmUgPHlsYW1hcnJlQGVm
-ZmljaW9zLmNvbT4KPiAtLS0KPiAgc3JjL2NvbW1vbi9jb21wYXQvY29tcGF0LXBvbGwuYyB8IDMz
-ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLQo+ICAxIGZpbGUgY2hhbmdlZCwgMzAg
-aW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKPgo+IGRpZmYgLS1naXQgYS9zcmMvY29tbW9u
-L2NvbXBhdC9jb21wYXQtcG9sbC5jIGIvc3JjL2NvbW1vbi9jb21wYXQvY29tcGF0LXBvbGwuYwo+
-IGluZGV4IGI3YzE3ZGY3Li42YWE5NDE0ZCAxMDA2NDQKPiAtLS0gYS9zcmMvY29tbW9uL2NvbXBh
-dC9jb21wYXQtcG9sbC5jCj4gKysrIGIvc3JjL2NvbW1vbi9jb21wYXQvY29tcGF0LXBvbGwuYwo+
-IEBAIC0yOTIsNiArMjkyLDcgQEAgZXJyb3I6Cj4gIGludCBjb21wYXRfcG9sbF93YWl0KHN0cnVj
-dCBsdHRuZ19wb2xsX2V2ZW50ICpldmVudHMsIGludCB0aW1lb3V0KQo+ICB7Cj4gICAgICAgICBp
-bnQgcmV0Owo+ICsgICAgICAgaW50IGVpZHggPSAwOwoKUmVhZGluZyB0aGUgY29kZSwgdGhpcyBz
-ZWVtcyB0byBtZWFuIHRoZSAiaW5kZXggb2YgdGhlIGZpcnN0IGlkbGUgZmlsZQpkZXNjcmlwdG9y
-Ii4KCkFzIGEgZ2VuZXJhbCBydWxlLCBkb24ndCB1c2UgdW5jb21tb24gYWJicmV2aWF0aW9ucy4g
-QWJicmV2aWF0aW9ucwphcmUgb2theSB3aGVuIHRoZXkgYXJlIGNvbW1vbi1wbGFjZSwgdW5hbWJp
-Z3VvdXMgYW5kIHNhdmUKYSBsb3Qgb2YgY2hhcmFjdGVycyAoZS5nLiBjZmcgZm9yIGNvbmZpZ3Vy
-YXRpb24sIG9yIGx0dG5nIGZvcgpsaW51eF90cmFjZV90b29sa2l0X25leHRfZ2VuZXJhdGlvbiku
-CgpXaGVuIGluIGRvdWJ0LCBwcmVmZXIgdmVyYm9zZSBuYW1lcy4KCkluIHRoaXMgY2FzZSwgImlk
-bGVfcGZkX2luZGV4IiBhbmQgYSBjb21tZW50IChzZWUgYmVsb3cpIHdvdWxkCmNsYXJpZnkgdGhl
-IGludGVudC4KCj4KPiAgICAgICAgIGlmIChldmVudHMgPT0gTlVMTCB8fCBldmVudHMtPmN1cnJl
-bnQuZXZlbnRzID09IE5VTEwpIHsKPiAgICAgICAgICAgICAgICAgRVJSKCJwb2xsIHdhaXQgYXJn
-dW1lbnRzIGVycm9yIik7Cj4gQEAgLTMyNCwxMCArMzI1LDM2IEBAIGludCBjb21wYXRfcG9sbF93
-YWl0KHN0cnVjdCBsdHRuZ19wb2xsX2V2ZW50ICpldmVudHMsIGludCB0aW1lb3V0KQo+ICAgICAg
-ICAgfQo+Cj4gICAgICAgICAvKgo+IC0gICAgICAgICogcG9sbCgpIHNob3VsZCBhbHdheXMgaXRl
-cmF0ZSBvbiBhbGwgRkRzIHNpbmNlIHdlIGhhbmRsZSB0aGUgcG9sbHNldCBpbgo+IC0gICAgICAg
-ICogdXNlciBzcGFjZSBhbmQgYWZ0ZXIgcG9sbCByZXR1cm5zLCB3ZSBoYXZlIHRvIHRyeSBldmVy
-eSBmZCBmb3IgYSBtYXRjaC4KPiArICAgICAgICAqIFN3YXAgYWxsIG5vbnplcm8gcmV2ZW50cyBw
-b2xsZmQgc3RydWN0cyB0byB0aGUgYmVnaW5uaW5nIG9mIHRoZSBhcnJheSB0bwo+ICsgICAgICAg
-ICogZW11bGF0ZSBjb21wYXQtZXBvbGwgYmVoYXZpb3VyLiBUaGlzIGFsZ29yaXRobSB0YWtlcyBh
-ZHZhbnRhZ2Ugb2YgcG9sbCdzCj4gKyAgICAgICAgKiByZXR1cm5lZCB2YWx1ZSBhbmQgdGhlIGJ1
-cnN0IG5hdHVyZSBvZiB3YWtpbmcgZXZlbnRzIG9uIHRoZSBmaWxlCj4gKyAgICAgICAgKiBkZXNj
-cmlwdG9ycy4gVGhlIHdoaWxlIGxvb3AgZ2FyYW50ZWVzIHRoYXQgaWRsZXBmZCB3aWxsIGFsd2F5
-cyBwb2ludCB0bwoKZ2FyYW50ZWVzIC0+IGd1YXJhbnRlZXMKClRoaXMgY29tbWVudCBibG9jayBl
-eGNlZWRzIDgwIGNoYXJzLiBNYWtlIHN1cmUgeW91ciBlZGl0b3IncyB0YWIgd2lkdGggaXMgc2V0
-CnRvIDggY2hhcmFjdGVycy4KClRoZSBjb2RlLCBjb21taXQgbWVzc2FnZSwgYW5kIGNvbW1lbnRz
-IG1ha2UgdXNlIG9mIG11bHRpcGxlIHRlcm1zCnRvIHJlZmVyIHRvIHRoZSBzYW1lIGZpbGUgZGVz
-Y3JpcHRvciBzdGF0ZSAoJ2lkbGUnLCAnZW1wdHknLAonZXZlbnRsZXNzJywgYW5kICd6ZXJvJyku
-CgpQbGVhc2Ugc3RpY2sgdG8gb25lIG9mIHRob3NlIHRlcm1zLgoKSWRsZSBzZWVtcyBwcmVmZXJh
-YmxlLCBidXQgZmVlbCBmcmVlIHRvIHdoaWNoZXZlciB0ZXJtIHRoZSBwb2xsKCkgc3BlY2lmaWNh
-dGlvbgp1c2VzLgoKPiArICAgICAgICAqIGEgcG9sbGZkIHdpdGggcmV2ZW50cyA9PSAwLgo+ICAg
-ICAgICAgICovCj4gLSAgICAgICByZXR1cm4gZXZlbnRzLT53YWl0Lm5iX2ZkOwo+ICsgICAgICAg
-aWYgKHJldCA9PSBldmVudHMtPndhaXQubmJfZmQpIHsKPiArICAgICAgICAgICAgICAgZ290byBz
-a2lwOwo+ICsgICAgICAgfQo+ICsgICAgICAgd2hpbGUgKGVpZHggPCByZXQgJiYgZXZlbnRzLT53
-YWl0LmV2ZW50c1tlaWR4XS5yZXZlbnRzICE9IDApIHsKPiArICAgICAgICAgICAgICAgZWlkeCAr
-PSAxOwoKUHJlZmVyICJlaWR4KysiLgoKVXNpbmcgdmFyaWFibGVzIGZvciBhIHNpbmdsZSBwdXJw
-b3NlIGlzIGZpbmUgYW5kIHRlbmRzIHRvIG1ha2UgdGhlCmNvZGUgY2xlYXJlci4KCkZvciBleGFt
-cGxlLCByZXdvcmtpbmcgdGhpcyBzZWN0aW9uIG9mIGNvZGUgdG86CgphY3RpdmVfZmRfY291bnQg
-PSByZXQ7Ci8qIEZpbmQgdGhlIGZpcnN0IGlkbGUgcG9sbGZkLiAqLwp3aGlsZSAoaWRsZV9wZmRf
-aW5kZXggPCBhY3RpdmVfZmRfY291bnQgJiYKZXZlbnRzLT53YWl0LmV2ZW50c1tpZGxlX3BmZF9p
-bmRleF0ucmV2ZW50cyAhPSAwKSB7CiAgICAgICAgaWRsZV9wZmRfaW5kZXgrKzsKfQoKbWFrZXMg
-dGhlIGludGVudCBjbGVhcmVyLgoKPiArICAgICAgIH0KPiArCj4gKyAgICAgICBmb3IgKGludCBp
-ZHggPSBlaWR4ICsgMTsgZWlkeCA8IHJldDsgaWR4KyspIHsKClNhbWUgY2hhbmdlIGhlcmUgKHJl
-Z2FyZGluZyAncmV0JykuCgpUbyBtYWludGFpbiB1bmlmb3JtaXR5IHdpdGggdGhlIHJlc3Qgb2Yg
-dGhlIGNvZGUgYmFzZSwgcGxlYXNlIGRlY2xhcmUKdmFyaWFibGVzIGF0IHRoZSB0b3Agb2YgdGhl
-IGlubmVyLW1vc3Qgc2NvcGUgY29udGFpbmluZyB0aGUgbG9vcC4KCldoZW4gZGVjbGFyaW5nIGEg
-dHJpdmlhbCBsb29wIGNvdW50ZXIvaW5kZXgsIHVzZSB0aGUgbmFtZSAnaScuIEhlcmUsIHRoZQpk
-aWZmZXJlbmNlIGJldHdlZW4gJ2lkeCcgYW5kICdlaWR4JyBpcyBub3QgaW1tZWRpYXRlbHkgYXBw
-YXJlbnQuClJlbmFtaW5nICdlaWR4JyBtYWtlcyB0aGUgbG9vcCBjbGVhcmVyLgoKQWxzbywgaW4g
-dGhpcyBwYXJ0aWN1bGFyIGNhc2UsICdpJyBpcyBmaW5lIHNpbmNlIHlvdSBhcmUgb25seSB1c2lu
-ZyBpdCB0bwphc3NpZ24gdGhlIGN1cnJlbnQgcG9sbGZkLCB3aGljaCBpcyBmYWlybHkgZGVzY3Jp
-cHRpdmUuCgo+ICsgICAgICAgICAgICAgICBzdHJ1Y3QgcG9sbGZkIHN3YXBmZDsKPiArICAgICAg
-ICAgICAgICAgc3RydWN0IHBvbGxmZCAqaWRsZXBmZCA9ICZldmVudHMtPndhaXQuZXZlbnRzW2Vp
-ZHhdOwo+ICsgICAgICAgICAgICAgICBzdHJ1Y3QgcG9sbGZkICppcGZkID0gJmV2ZW50cy0+d2Fp
-dC5ldmVudHNbaWR4XTsKClVzZSBhbiB1bmRlcnNjb3JlIHRvIHNwbGl0IHZhcmlhYmxlIG5hbWVz
-LCBlLmcuIHN3YXBfcGZkLCBpZGxlX3BmZCwKY3VycmVudF9wZmQuIEFnYWluLCB2ZXJib3NlIG5h
-bWVzIGFyZSBwcmVmZXJhYmxlLgoKPiArCj4gKyAgICAgICAgICAgICAgIGFzc2VydChpZHggPCBl
-dmVudHMtPndhaXQubmJfZmQpOwoKTm90IG5lZWRlZC4gVXNpbmcgYXNzZXJ0KCkgaXMgZmluZSB0
-byBoaWdobGlnaHQgYXNzdW1wdGlvbnMgYWNyb3NzCmludGVyZmFjZXMvZnVuY3Rpb25zIGFuZC9v
-ciBjYXRjaCBjYXRhc3Ryb3BoaWMgaW50ZXJuYWwgZXJyb3JzLiBIZXJlLAp0aGlzIHdvdWxkIGJl
-IGEgdmVyeSBsb2NhbCBjb25kaXRpb24gdGhhdCBzZWVtcyB0byBiZSBhbHJlYWR5CmVuZm9yY2Vk
-LgoKUmV3b3JraW5nIHRoZSAnZm9yJyBjb25kaXRpb24gdG8gdXNlICdpIDwgZXZlbnRzLT53YWl0
-Lm5iX2ZkJyBhbmQKYnJlYWtpbmcgb3V0IGVhcmx5IG9mIHRoZSBsb29wIGlzIGFsc28gYW4gb3B0
-aW9uIGhlcmUuCgo+ICsKPiArICAgICAgICAgICAgICAgaWYgKGlwZmQtPnJldmVudHMgIT0gMCkg
-ewo+ICsgICAgICAgICAgICAgICAgICAgICAgIHN3YXBmZCA9ICppcGZkOwo+ICsgICAgICAgICAg
-ICAgICAgICAgICAgICppcGZkID0gKmlkbGVwZmQ7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAg
-KmlkbGVwZmQgPSBzd2FwZmQ7Cj4gKyAgICAgICAgICAgICAgICAgICAgICAgZWlkeCArPSAxOwoK
-ZWlkeCsrOwoKPiArICAgICAgICAgICAgICAgfQo+ICsgICAgICAgfQo+ICsKPiArc2tpcDoKClJl
-bmFtZSBsYWJlbCB0byAnZW5kJy4KClRoYW5rcyEKSsOpcsOpbWllCgoKPiArICAgICAgIHJldHVy
-biByZXQ7Cj4KPiAgZXJyb3I6Cj4gICAgICAgICByZXR1cm4gLTE7Cj4gLS0KPiAyLjExLjAKPgoK
-Ci0tCkrDqXLDqW1pZSBHYWxhcm5lYXUKRWZmaWNpT1MgSW5jLgpodHRwOi8vd3d3LmVmZmljaW9z
-LmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRu
-Zy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0
-cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+On Thu, Mar 21, 2019 at 09:13:56AM -0400, Steven Rostedt wrote:
+> On Thu, 21 Mar 2019 08:41:22 -0400
+> Joel Fernandes <joel@joelfernandes.org> wrote:
+> 
+> > Also does it also make sense for lttng ring buffer to use the ftrace code for
+> > ring buffer, or make the ftrace ring buffer better and have lttng use it? Or
+> > is the lttng ring buffer design too radically different?
+> 
+> We tried in the past and never actually got something that we both
+> could agree on. Now I believe the user space tools depend on the way
+> each one is, so to change one will break the tools that read it.
+
+I understand :-\
+
+thanks,
+
+ - Joel
