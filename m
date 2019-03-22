@@ -1,16 +1,18 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [PATCH lttng-tools v3 1/8] Fix: lttng_poll_mod calls
- compat_(e)poll_add
-Date: Fri, 22 Mar 2019 14:19:21 -0400
-Message-ID: <20190322181928.6186-1-ylamarre__5930.52837518684$1553278793$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools v3 5/8] Fix hang in thread_rotation
+ when using compat-poll
+Date: Fri, 22 Mar 2019 14:19:25 -0400
+Message-ID: <20190322181928.6186-5-ylamarre__18922.2490343795$1553278828$gmane$org@efficios.com>
+References: <20190322181928.6186-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44QsPf5B9dz18S1
+ by lists.lttng.org (Postfix) with ESMTPS id 44QsPf5BbMz18S2
  for <lttng-dev@lists.lttng.org>; Fri, 22 Mar 2019 14:19:34 -0400 (EDT)
+In-Reply-To: <20190322181928.6186-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,34 +26,27 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-lttng_poll_mod should call compat_(e)poll_mod.
+Add missing verification to prevent a blocking read on an empty fd.
 
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
- src/common/compat/poll.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ src/bin/lttng-sessiond/rotation-thread.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/src/common/compat/poll.h b/src/common/compat/poll.h
-index d4bd87f5..fde54ddb 100644
---- a/src/common/compat/poll.h
-+++ b/src/common/compat/poll.h
-@@ -177,7 +177,7 @@ extern int compat_epoll_del(struct lttng_poll_event *events, int fd);
- extern int compat_epoll_mod(struct lttng_poll_event *events,
- 		int fd, uint32_t req_events);
- #define lttng_poll_mod(events, fd, req_events) \
--	compat_epoll_add(events, fd, req_events)
-+	compat_epoll_mod(events, fd, req_events)
+diff --git a/src/bin/lttng-sessiond/rotation-thread.c b/src/bin/lttng-sessiond/rotation-thread.c
+index 6669372d..b86b1668 100644
+--- a/src/bin/lttng-sessiond/rotation-thread.c
++++ b/src/bin/lttng-sessiond/rotation-thread.c
+@@ -974,6 +974,10 @@ void *thread_rotation(void *data)
+ 			int fd = LTTNG_POLL_GETFD(&thread.events, i);
+ 			uint32_t revents = LTTNG_POLL_GETEV(&thread.events, i);
  
- /*
-  * Set up the poll set limits variable poll_max_size
-@@ -361,7 +361,7 @@ extern int compat_poll_del(struct lttng_poll_event *events, int fd);
- extern int compat_poll_mod(struct lttng_poll_event *events,
- 		int fd, uint32_t req_events);
- #define lttng_poll_mod(events, fd, req_events) \
--	compat_poll_add(events, fd, req_events)
-+	compat_poll_mod(events, fd, req_events)
++			if (!revents) {
++				/* No activity for this FD (poll implementation). */
++				continue;
++			}
+ 			DBG("[rotation-thread] Handling fd (%i) activity (%u)",
+ 					fd, revents);
  
- /*
-  * Set up the poll set limits variable poll_max_size
 -- 
 2.11.0
