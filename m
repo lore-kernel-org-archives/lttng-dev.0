@@ -1,23 +1,15 @@
-From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: Re: [PATCH lttng-tools v2] Change lttng_poll_wait
- behaviour of compat-poll to match compat-epoll
-Date: Mon, 25 Mar 2019 11:59:31 -0400 (EDT)
-Message-ID: <292974793.7664.1553529571670.JavaMail.zimbra__37355.2393679105$1553529587$gmane$org@efficios.com>
-References: <20190321150453.7312-1-ylamarre@efficios.com>
- <20190321150453.7312-6-ylamarre@efficios.com>
- <CA+jJMxui0_5EF6XLH-9G90-yJEE63zdiBifTeF4i9iQp95D7tg@mail.gmail.com>
- <8703543.6154.1553267076349.JavaMail.zimbra@efficios.com>
- <CA+jJMxsbA0ksOJN9yqbtCVXkTLKOqfEMek6P9_bxSdKH75zEPQ@mail.gmail.com>
- <1869646214.7612.1553529371615.JavaMail.zimbra@efficios.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools] Tests: check for lttng-modules
+ presence
+Date: Mon, 25 Mar 2019 14:49:39 -0400
+Message-ID: <20190325184939.24845-1-jonathan.rajotte-julien__42611.5242576756$1553539807$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44Sf8h3xX2z18VW
- for <lttng-dev@lists.lttng.org>; Mon, 25 Mar 2019 11:59:32 -0400 (EDT)
-In-Reply-To: <1869646214.7612.1553529371615.JavaMail.zimbra@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 44SjxB3vKqz18nX
+ for <lttng-dev@lists.lttng.org>; Mon, 25 Mar 2019 14:49:50 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,50 +19,26 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, jgalar <jgalar@efficios.com>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-QWxyaWdodCwgSSdsbCByZW1vdmUgdGhlIGFzc2VydCBmb3IgdjQuCgotLS0tLSBPcmlnaW5hbCBN
-ZXNzYWdlIC0tLS0tCkZyb206ICJNYXRoaWV1IERlc25veWVycyIgPG1hdGhpZXUuZGVzbm95ZXJz
-QGVmZmljaW9zLmNvbT4KVG86ICJKZXJlbWllIEdhbGFybmVhdSIgPGplcmVtaWUuZ2FsYXJuZWF1
-QGVmZmljaW9zLmNvbT4KQ2M6ICJZYW5uaWNrIExhbWFycmUiIDx5bGFtYXJyZUBlZmZpY2lvcy5j
-b20+LCAibHR0bmctZGV2IiA8bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4sICJqZ2FsYXIiIDxq
-Z2FsYXJAZWZmaWNpb3MuY29tPgpTZW50OiBNb25kYXksIE1hcmNoIDI1LCAyMDE5IDExOjU2OjEx
-IEFNClN1YmplY3Q6IFJlOiBbbHR0bmctZGV2XSBbUEFUQ0ggbHR0bmctdG9vbHMgdjJdIENoYW5n
-ZSBsdHRuZ19wb2xsX3dhaXQgYmVoYXZpb3VyIG9mIGNvbXBhdC1wb2xsIHRvIG1hdGNoIGNvbXBh
-dC1lcG9sbAoKLS0tLS0gT24gTWFyIDI1LCAyMDE5LCBhdCAxMToxMCBBTSwgSmVyZW1pZSBHYWxh
-cm5lYXUgamVyZW1pZS5nYWxhcm5lYXVAZWZmaWNpb3MuY29tIHdyb3RlOgoKPiBPbiBGcmksIDIy
-IE1hciAyMDE5IGF0IDExOjA0LCBNYXRoaWV1IERlc25veWVycwo+IDxtYXRoaWV1LmRlc25veWVy
-c0BlZmZpY2lvcy5jb20+IHdyb3RlOgo+Pgo+PiAtLS0tLSBPbiBNYXIgMjEsIDIwMTksIGF0IDQ6
-MjUgUE0sIEplcmVtaWUgR2FsYXJuZWF1Cj4+IGplcmVtaWUuZ2FsYXJuZWF1QGVmZmljaW9zLmNv
-bSB3cm90ZToKPj4KPj4gWy4uLl0KPj4gPj4gKyAgICAgICAgICAgICAgIGFzc2VydChpZHggPCBl
-dmVudHMtPndhaXQubmJfZmQpOwo+PiA+Cj4+ID4gTm90IG5lZWRlZC4gVXNpbmcgYXNzZXJ0KCkg
-aXMgZmluZSB0byBoaWdobGlnaHQgYXNzdW1wdGlvbnMgYWNyb3NzCj4+ID4gaW50ZXJmYWNlcy9m
-dW5jdGlvbnMgYW5kL29yIGNhdGNoIGNhdGFzdHJvcGhpYyBpbnRlcm5hbCBlcnJvcnMuIEhlcmUs
-Cj4+ID4gdGhpcyB3b3VsZCBiZSBhIHZlcnkgbG9jYWwgY29uZGl0aW9uIHRoYXQgc2VlbXMgdG8g
-YmUgYWxyZWFkeQo+PiA+IGVuZm9yY2VkLgo+PiA+Cj4+ID4gUmV3b3JraW5nIHRoZSAnZm9yJyBj
-b25kaXRpb24gdG8gdXNlICdpIDwgZXZlbnRzLT53YWl0Lm5iX2ZkJyBhbmQKPj4gPiBicmVha2lu
-ZyBvdXQgZWFybHkgb2YgdGhlIGxvb3AgaXMgYWxzbyBhbiBvcHRpb24gaGVyZS4KPj4KPj4gVGhl
-IHJlYXNvbiBmb3IgdXNpbmcgYXNzZXJ0KCkgaGVyZSBpcyB0byBlbnN1cmUgdGhhdCB0aGVyZSBp
-cyBubyBkaXNjcmVwYW5jeQo+PiBiZXR3ZWVuIHRoZSBudW1iZXIgb2YgYWN0aXZlIHBvbGwgZmQg
-aW4gdGhlIHNldCBhbmQgdGhlIHZhbHVlIHJldHVybmVkIGJ5Cj4+IHBvbGwgaW5kaWNhdGluZyB0
-aGF0IHNhbWUgbnVtYmVyIG9mIGFjdGl2ZSBmZHMuCj4+Cj4+IFdlJ2QgbmVlZCBhIGtlcm5lbCBi
-dWcgKG9yIG1lbW9yeSBjb3JydXB0aW9uKSB0byBoYXZlIGEgbWlzbWF0Y2gsIGJ1dCBJIHRob3Vn
-aHQKPj4gaGF2aW5nIGFuIGFzc2VydCBpbiB0aGVyZSB3b3VsZCBub3QgaHVydCwgc2luY2UgaXQg
-bWlnaHQgaGVscCBkaWFnbm9zZSBpc3N1ZXMKPj4gdGhhdCBjcm9zcyB1c2VyLWtlcm5lbCBib3Vu
-ZGFyaWVzLgo+Pgo+PiBUaG91Z2h0cyA/Cj4gCj4gSGksCj4gCj4gSSB1bmRlcnN0YW5kIHRoZSBp
-bnRlbnQsIGJ1dCBJIGRvbid0IGZlZWwgdGhlc2UgdHlwZSBvZiBrZXJuZWwgdGVzdHMvY2hlY2tz
-Cj4gYmVsb25nIGluIHRoZSBjb2RlLgo+IAo+IEhvd2V2ZXIsIGlmIHRoZXJlIGlzIGEgc3BlY2lm
-aWMgY29uY2VybiB0aGF0IG91ciB1c2Ugb2YgcG9sbCgpIGNvdWxkIGhpZ2hsaWdodAo+IHRoaXMg
-dHlwZSBvZiBidWcgKGluIHRoZSBrZXJuZWwgb3IgaW4gdGhlIGludGVyYWN0aW9ucyB3aXRoIGx0
-dG5nLW1vZHVsZXMpLAo+IHdlIGNhbiBhZGQgdGVzdHMgZm9yIHRoYXQuCgpUaGVyZSBpcyBubyBz
-cGVjaWZpYyBjb25jZXJuLiBXZSBjYW4gcmVtb3ZlIHRoZSBhc3NlcnQuCgpUaGFua3MsCgpNYXRo
-aWV1Cgo+IAo+IFRoYW5rcywKPiBKw6lyw6ltaWUKPiAKPj4KPj4gTWF0aGlldQo+Pgo+PiAtLQo+
-PiBNYXRoaWV1IERlc25veWVycwo+PiBFZmZpY2lPUyBJbmMuCj4+IGh0dHA6Ly93d3cuZWZmaWNp
-b3MuY29tCj4gCj4gCj4gLS0KPiBKw6lyw6ltaWUgR2FsYXJuZWF1Cj4gRWZmaWNpT1MgSW5jLgo+
-IGh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCgotLSAKTWF0aGlldSBEZXNub3llcnMKRWZmaWNpT1Mg
-SW5jLgpodHRwOi8vd3d3LmVmZmljaW9zLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0
-cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3Rp
-bmZvL2x0dG5nLWRldgo=
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+ tests/regression/tools/notification/test_notification_kernel | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tests/regression/tools/notification/test_notification_kernel b/tests/regression/tools/notification/test_notification_kernel
+index 6d7f256ae..e7368df26 100755
+--- a/tests/regression/tools/notification/test_notification_kernel
++++ b/tests/regression/tools/notification/test_notification_kernel
+@@ -108,6 +108,7 @@ function kernel_test
+ }
+ 
+ if [ "$(id -u)" == "0" ]; then
++	validate_lttng_modules_present
+ 	kernel_test
+ else
+ 	# Kernel tests are skipped.
+-- 
+2.17.1
