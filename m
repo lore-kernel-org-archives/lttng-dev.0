@@ -1,17 +1,19 @@
-From: Genevieve Bastien <gbastien@versatic.net>
-Subject: Re: Question related to LTTng
-Date: Wed, 27 Mar 2019 13:03:08 -0400
-Message-ID: <f0d5b7b4-dacc-ca93-10d5-cc3f7c88d320__44901.3410530583$1553707079$gmane$org@versatic.net>
-References: <CAEWVvOTEJjw3kYfPfrcW68Ux6fy1g5utoHBpy=o++d71rxddbg@mail.gmail.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: Creating custom application
+Date: Wed, 27 Mar 2019 13:52:51 -0400
+Message-ID: <20190327175251.GA7976__20239.1856744484$1553709195$gmane$org@joraj-alpa>
+References: <CAJyWpKHE_4eZwMAhU-q4sbAAA3-nPWgxtGqpXYLpMyztNzmm-w@mail.gmail.com>
+ <20190326152942.GE17481@joraj-alpa>
+ <CAJyWpKHtXHAgyjwZVnSCnnDTmCsOVsydaZgqpMuALQWMy5nfiA@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from barracuda.ebox.ca (barracuda.ebox.ca [96.127.255.19])
- by lists.lttng.org (Postfix) with ESMTPS id 44Tvnn3Mp7z180F
- for <lttng-dev@lists.lttng.org>; Wed, 27 Mar 2019 13:17:33 -0400 (EDT)
-In-Reply-To: <CAEWVvOTEJjw3kYfPfrcW68Ux6fy1g5utoHBpy=o++d71rxddbg@mail.gmail.com>
-Content-Language: en-US
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 44TwZc5Q7Jz182F
+ for <lttng-dev@lists.lttng.org>; Wed, 27 Mar 2019 13:52:56 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <CAJyWpKHtXHAgyjwZVnSCnnDTmCsOVsydaZgqpMuALQWMy5nfiA@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,41 +23,63 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org, Ravindra Kumar Meena <rmeena840@gmail.com>, tracecompass-dev@eclipse.org
+To: Mosleh Uddin <mosleh1235@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgUmF2aW5kcmEsCgpJJ20gc2VuZGluZyB0aGUgcmVwbHkgYWxzbyB0byB0aGUgdHJhY2Vjb21w
-YXNzIG1haWxpbmcgbGlzdCwgd2hlcmUgaXQgaXMKbW9yZSBvbiB0b3BpYy4KCk9uIDIwMTktMDMt
-MjcgNzoyMyBhLm0uLCBSYXZpbmRyYSBLdW1hciBNZWVuYSB3cm90ZToKPiBIaSBEZXZlbG9wZXJz
-LAo+Cj4gSSBhbSB3b3JraW5nIG9uIGHCoHByb2plY3Qgd2hlcmUgSSB3YW50IFRyYWNlIENvbXBh
-c3MgdG8gYW5hbHl6ZSBhbmQKPiBkaXNwbGF5IHNvbWUgaW5mb3JtYXRpb24uIEkgd2FubmEgYXNr
-IGEgZmV3IHRoaW5nczoKPgo+IFExLiBJcyB0aGVyZSBhbnkgd2F5IHRvIGV4dGVuZCBUcmFjZSBD
-b21wYXNzIHRvIHdvcmsgdHJhY2UgZGF0YSBpbiBDVEYKPiBmb3JtYXQ/CgpGcm9tIHdoYXQgSSB1
-bmRlcnN0YW5kLCB5b3UgaGF2ZSBhIENURiB0cmFjZSBhbmQgd291bGQgbGlrZSB0byBpbXBsZW1l
-bnQKYSBzcGVjaWZpYyB0cmFjZSB0eXBlIGZyb20gaXQsIGZvciBleGFtcGxlLCB0byBiZSBhYmxl
-IHRvIGFkZCBjdXN0b20KYW5hbHlzZXMgZm9yIHRoaXMgc3BlY2lmaWMgdHlwZS4gUmlnaHQ/CgpZ
-b3UgY2FuIHJlYWQgdGhlIGRldmVsb3BlciBkb2N1bWVudGF0aW9uIG9uIGhvdyB0byBhZGQgbmV3
-IHRyYWNlIHR5cGVzClsxXS4gWW91IG1heSB3YW50IHRvIHRha2UgYSBsb29rIGF0IHRoZSBMdHRu
-Z0tlcm5lbFRyYWNlIGNsYXNzIGZvciBhbgpleGFtcGxlIG9mIHN1Y2ggZXh0ZW5zaW9uIG9mIENU
-RiBUcmFjZSBbMl0uIFRoZXJlIGFyZSBhIGZldyBtb3JlIGFyb3VuZAp0aGUgY29kZSwgbG9va2lu
-ZyBhdCB0aGUgY2xhc3MgaGllcmFyY2h5IGZvciBDdGZUbWZUcmFjZSB3aWxsIHNob3cgeW91Cndo
-aWNoIG9uZXMuCgo+Cj4gUTIuIEhvdyB0cmFjZSBkYXRhKENURikgY2FuIGJlIGNvbnZlcnRlZCB0
-byBMaW51eCBrZXJuZWwgdHJhY2UKPiBkYXRhKExUVG5nKSB3aGljaCBUcmFjZSBDb21wYXNzIGFs
-cmVhZHkgdW5kZXJzdGFuZHM/Cktlcm5lbCB0cmFjZXMgbmVlZCB0byBpbXBsZW1lbnQgSUtlcm5l
-bFRyYWNlLiBUaGlzIGludGVyZmFjZSBwcm92aWRlcyBhbgpldmVudCBsYXlvdXQgKElLZXJuZWxB
-bmFseXNpc0V2ZW50TGF5b3V0KSB3aGljaCB3aWxsIGRlZmluZSB3aGljaCBldmVudHMKaW4gdGhl
-IHRyYWNlIGNvcnJlc3BvbmQgdG8gY29tbW9uICJjb25jZXB0cyIgb2YgdGhlIGtlcm5lbCwgbGlr
-ZQpzY2hlZF9zd2l0Y2hlcywgc3lzY2FsbHMsIGlycXMsIGV0Yy4gVGhhdCdzIGhvdyBhbnkga2Vy
-bmVsIHRyYWNlIGZvcm1hdApsaWtlIGZ0cmFjZSwgcGVyZiBhbmQgbHR0bmcgY2FuIHVzZSBjb21t
-b24gYW5hbHlzZXMgbWFkZSBmb3Iga2VybmVsLiBZb3UKd291bGQgbmVlZCB0byBpbXBsZW1lbnQg
-dGhpcyBldmVudCBsYXlvdXQgZm9yIHlvdXIgb3duIHRyYWNlIHR5cGVzLgoKClsxXQpodHRwOi8v
-YXJjaGl2ZS5lY2xpcHNlLm9yZy90cmFjZWNvbXBhc3MvZG9jL29yZy5lY2xpcHNlLnRyYWNlY29t
-cGFzcy5kb2MuZGV2L0ltcGxlbWVudGluZy1hLU5ldy1UcmFjZS1UeXBlLmh0bWwjSW1wbGVtZW50
-aW5nX2FfTmV3X1RyYWNlX1R5cGUKClsyXQpodHRwczovL2dpdC5lY2xpcHNlLm9yZy9jL3RyYWNl
-Y29tcGFzcy9vcmcuZWNsaXBzZS50cmFjZWNvbXBhc3MuZ2l0L3RyZWUvbHR0bmcvb3JnLmVjbGlw
-c2UudHJhY2Vjb21wYXNzLmx0dG5nMi5rZXJuZWwuY29yZS9zcmMvb3JnL2VjbGlwc2UvdHJhY2Vj
-b21wYXNzL2x0dG5nMi9rZXJuZWwvY29yZS90cmFjZS9MdHRuZ0tlcm5lbFRyYWNlLmphdmEKCgpD
-aGVlcnMsCgpHZW5ldmnDqHZlCgoKCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRu
-Zy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0
-dG5nLWRldgo=
+Hi Mosleh,
+
+On Wed, Mar 27, 2019 at 12:09:54PM -0400, Mosleh Uddin wrote:
+> Hello,
+> 
+> Thank you for the quick response. I was able to use the documentation you
+> provided to start a session and get tracepoint list. I do have some
+> follow-up questions:
+> 
+> 1) I needed to create a session daemon before executing my custom
+> application. In the API I did see functionality to see if a daemon is
+> active, however, it is possible to spawn a session daemon in my custom app?
+
+liblttng-ctl does not expose a lttng-sessiond spawning function since by
+definition it is a daemon executable (think apache,mysql etc.), you will have to
+use system/popen/exec.. to spawn the lttng-sessiond process etc. if you want to
+control its lifetime using your custom application.
+
+> 
+> 2) I am able to get a list of active traces lttng can see in userspace, I
+> enable all the traces and start tracing. The traces however seem to not be
+> written anywhere on my filesystem. Do I have to specify a location? Or am I
+> missing something? My current flow is:
+
+Please refer to the create command. If outputting locally you will need to pass
+a "file://...." url to lttng_create_session.
+
+You can check on the result for each steps using "lttng list" and "lttng list
+<session_name>" as you go to troubleshot your setup script.
+
+While debugging you can also start the lttng-sessiond in verbose mode to
+understand what is going on.
+
+Also note that you could also use the lttng "load" api if the session you are
+trying to load is "static" and always the same. You would only need to ship an
+xml file with your application.
+
+Cheers
+
+> 
+>    - Creating a session
+>    - Specifying the domain
+>    - Creating a handle
+>    - Creating a channel (with default attributes)
+>    - Enabling the channel
+>    - Enabling event (for all traces)
+>    - Start tracing
+> 
+> Thanks again for all the assistance.
+> 
+> Regards,
+> Mosleh
+> 
+> On Tue, Mar 26, 2019 at 11:29 AM Jonathan Rajotte-Julien <
+> jonathan.rajotte-julien@efficios.com> wrote:
+> 
