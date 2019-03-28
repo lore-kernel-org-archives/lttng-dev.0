@@ -1,15 +1,15 @@
-From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [PATCH lttng-tools] Clean-up: Remove double buffer
- initialisation
-Date: Thu, 28 Mar 2019 15:07:43 -0400
-Message-ID: <20190328190743.4146-1-ylamarre__46628.3902221889$1553800091$gmane$org@efficios.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools v2 1/2] Tests: check for
+ lttng-modules presence
+Date: Thu, 28 Mar 2019 17:02:20 -0400
+Message-ID: <20190328210221.27662-1-jonathan.rajotte-julien__44623.1991330691$1553806969$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44VZBg6qgfz185f
- for <lttng-dev@lists.lttng.org>; Thu, 28 Mar 2019 15:07:55 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 44Vckv1wkCz18DT
+ for <lttng-dev@lists.lttng.org>; Thu, 28 Mar 2019 17:02:30 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,40 +23,22 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- src/lib/lttng-ctl/lttng-ctl.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ tests/regression/tools/notification/test_notification_kernel | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/src/lib/lttng-ctl/lttng-ctl.c b/src/lib/lttng-ctl/lttng-ctl.c
-index 165fef4d..92634c00 100644
---- a/src/lib/lttng-ctl/lttng-ctl.c
-+++ b/src/lib/lttng-ctl/lttng-ctl.c
-@@ -1078,7 +1078,11 @@ int lttng_enable_event_with_exclusions(struct lttng_handle *handle,
- 	unsigned int free_filter_expression = 0;
- 	struct filter_parser_ctx *ctx = NULL;
+diff --git a/tests/regression/tools/notification/test_notification_kernel b/tests/regression/tools/notification/test_notification_kernel
+index 6d7f256ae..e7368df26 100755
+--- a/tests/regression/tools/notification/test_notification_kernel
++++ b/tests/regression/tools/notification/test_notification_kernel
+@@ -108,6 +108,7 @@ function kernel_test
+ }
  
--	memset(&send_buffer, 0, sizeof(send_buffer));
-+	/*
-+	 * We have either a filter or some exclusions, so we need to set up
-+	 * a variable-length memory block from where to send the data.
-+	 */
-+	lttng_dynamic_buffer_init(&send_buffer);
- 
- 	/*
- 	 * Cast as non-const since we may replace the filter expression
-@@ -1128,12 +1132,6 @@ int lttng_enable_event_with_exclusions(struct lttng_handle *handle,
- 	lsm.u.enable.exclusion_count = exclusion_count;
- 	lsm.u.enable.bytecode_len = 0;
- 
--	/*
--	 * We have either a filter or some exclusions, so we need to set up
--	 * a variable-length memory block from where to send the data.
--	 */
--	lttng_dynamic_buffer_init(&send_buffer);
--
- 	/* Parse filter expression. */
- 	if (filter_expression != NULL || handle->domain.type == LTTNG_DOMAIN_JUL
- 			|| handle->domain.type == LTTNG_DOMAIN_LOG4J
+ if [ "$(id -u)" == "0" ]; then
++	validate_lttng_modules_present
+ 	kernel_test
+ else
+ 	# Kernel tests are skipped.
 -- 
-2.11.0
+2.17.1
