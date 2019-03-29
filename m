@@ -1,21 +1,21 @@
 From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] fix: tests: link
- libpause_consumer on liblttng-ctl
-Date: Fri, 29 Mar 2019 14:18:18 -0400
-Message-ID: <20190329181817.GC28162__22011.8295912229$1553883516$gmane$org@gmail.com>
-References: <20190319205603.15707-1-mjeanson@efficios.com>
+Subject: Re: [PATCH lttng-tools] tap-driver.sh: flush stdout
+ after each test result
+Date: Fri, 29 Mar 2019 14:31:36 -0400
+Message-ID: <20190329183135.GD28162__33375.1171756134$1553884322$gmane$org@gmail.com>
+References: <20190314154134.20191-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail-qk1-f196.google.com (mail-qk1-f196.google.com
  [209.85.222.196])
- by lists.lttng.org (Postfix) with ESMTPS id 44W9324SMKz1KYQ
- for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 14:18:22 -0400 (EDT)
-Received: by mail-qk1-f196.google.com with SMTP id g1so1936593qki.5
- for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 11:18:22 -0700 (PDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 44W9LP4fvQz1KZm
+ for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 14:31:41 -0400 (EDT)
+Received: by mail-qk1-f196.google.com with SMTP id y5so1931389qkc.11
+ for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 11:31:41 -0700 (PDT)
 Content-Disposition: inline
-In-Reply-To: <20190319205603.15707-1-mjeanson@efficios.com>
+In-Reply-To: <20190314154134.20191-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -29,43 +29,36 @@ To: Michael Jeanson <mjeanson@efficios.com>
 Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Merged in master, stable-2.11, and stable-2.10.
+Merged in master, stable-2.11, stable-2.10, and stable-2.9.
 
 Thanks!
 J=E9r=E9mie
 
-On Tue, Mar 19, 2019 at 04:56:03PM -0400, Michael Jeanson wrote:
-> This preload test library uses symbols from liblttng-ctl which are
-> resolved when preloaded by GLIBC but not by MUSL.
+On Thu, Mar 14, 2019 at 11:41:34AM -0400, Michael Jeanson wrote:
+> This is useful in a CI system where stdout is fully buffered and you
+> look at the console output to see which test is hanging.
 > =
 
 > Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 > ---
->  tests/regression/tools/notification/Makefile.am | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  config/tap-driver.sh | 3 +++
+>  1 file changed, 3 insertions(+)
 > =
 
-> diff --git a/tests/regression/tools/notification/Makefile.am b/tests/regr=
-ession/tools/notification/Makefile.am
-> index 33e95886..b869bdb1 100644
-> --- a/tests/regression/tools/notification/Makefile.am
-> +++ b/tests/regression/tools/notification/Makefile.am
-> @@ -20,7 +20,10 @@ FORCE_SHARED_LIB_OPTIONS =3D -module -shared -avoid-ve=
-rsion \
->  			   -rpath $(abs_builddir)
->  =
-
->  libpause_consumer_la_SOURCES =3D consumer_testpoints.c
-> -libpause_consumer_la_LIBADD =3D $(top_builddir)/src/common/libcommon.la =
-$(DL_LIBS)
-> +libpause_consumer_la_LIBADD =3D \
-> +	$(top_builddir)/src/common/libcommon.la \
-> +	$(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la \
-> +	$(DL_LIBS)
->  libpause_consumer_la_LDFLAGS =3D $(FORCE_SHARED_LIB_OPTIONS)
->  noinst_LTLIBRARIES =3D libpause_consumer.la
->  =
-
+> diff --git a/config/tap-driver.sh b/config/tap-driver.sh
+> index 32521614..65037ab6 100755
+> --- a/config/tap-driver.sh
+> +++ b/config/tap-driver.sh
+> @@ -275,6 +275,9 @@ function report(result, details)
+>      msg =3D msg " " details
+>    # Output on console might be colorized.
+>    print decorate_result(result) msg
+> +  # Flush stdout after each test result, this is useful when stdout
+> +  # is buffered, for example in a CI system.
+> +  fflush()
+>    # Log the result in the log file too, to help debugging (this is
+>    # especially true when said result is a TAP error or "Bail out!").
+>    print result msg | "cat >&3";
 > -- =
 
 > 2.17.1
