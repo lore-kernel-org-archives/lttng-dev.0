@@ -1,21 +1,21 @@
 From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools 1/1] Fix: consumer snapshot:
- handle unsigned long overflow
-Date: Fri, 29 Mar 2019 14:37:35 -0400
-Message-ID: <20190329183734.GG28162__19289.9863862962$1553884672$gmane$org@gmail.com>
-References: <20190219224749.8979-1-mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-tools] Fix: skip test when ust doesn't
+ have perf support
+Date: Fri, 29 Mar 2019 14:52:27 -0400
+Message-ID: <20190329185225.GH28162__7165.06103506021$1553885565$gmane$org@gmail.com>
+References: <20190320214900.16654-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt1-f194.google.com (mail-qt1-f194.google.com
- [209.85.160.194])
- by lists.lttng.org (Postfix) with ESMTPS id 44W9TH2F7Vz1Kcn
- for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 14:37:39 -0400 (EDT)
-Received: by mail-qt1-f194.google.com with SMTP id t28so3741176qte.6
- for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 11:37:39 -0700 (PDT)
+Received: from mail-qt1-f196.google.com (mail-qt1-f196.google.com
+ [209.85.160.196])
+ by lists.lttng.org (Postfix) with ESMTPS id 44W9pQ6vMrz1KfJ
+ for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 14:52:30 -0400 (EDT)
+Received: by mail-qt1-f196.google.com with SMTP id w30so3539324qta.8
+ for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 11:52:30 -0700 (PDT)
 Content-Disposition: inline
-In-Reply-To: <20190219224749.8979-1-mathieu.desnoyers@efficios.com>
+In-Reply-To: <20190320214900.16654-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,8 +25,8 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com, joraj@efficios.com
+To: Michael Jeanson <mjeanson@efficios.com>
+Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
 Merged in master, stable-2.11, stable-2.10, and stable-2.9.
@@ -34,58 +34,114 @@ Merged in master, stable-2.11, stable-2.10, and stable-2.9.
 Thanks!
 J=E9r=E9mie
 
-On Tue, Feb 19, 2019 at 05:47:49PM -0500, Mathieu Desnoyers wrote:
-> Comparing the consumed iterator and the produced position without
-> using a difference generates an empty snapshot when the iterator is
-> before unsigned long overflow and the produced position is after
-> unsigned long overflow.
-> =
-
-> This applies to both UST and kernel consumers.
-> =
-
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+On Wed, Mar 20, 2019 at 05:49:00PM -0400, Michael Jeanson wrote:
+> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 > ---
->  src/common/kernel-consumer/kernel-consumer.c | 2 +-
->  src/common/ust-consumer/ust-consumer.c       | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  tests/regression/ust/test_event_perf | 43 +++++++++++++++++++++++-----
+>  1 file changed, 36 insertions(+), 7 deletions(-)
 > =
 
-> diff --git a/src/common/kernel-consumer/kernel-consumer.c b/src/common/ke=
-rnel-consumer/kernel-consumer.c
-> index 9bed7b55..1533e9ef 100644
-> --- a/src/common/kernel-consumer/kernel-consumer.c
-> +++ b/src/common/kernel-consumer/kernel-consumer.c
-> @@ -234,7 +234,7 @@ int lttng_kconsumer_snapshot_channel(struct lttng_con=
-sumer_channel *channel,
->  				produced_pos, nb_packets_per_stream,
->  				stream->max_sb_size);
+> diff --git a/tests/regression/ust/test_event_perf b/tests/regression/ust/=
+test_event_perf
+> index 4e665e65..9b1dea3e 100755
+> --- a/tests/regression/ust/test_event_perf
+> +++ b/tests/regression/ust/test_event_perf
+> @@ -41,6 +41,29 @@ function enable_ust_lttng_event_per_chan()
+>  	ok $? "Enable event $event_name for session $sess_name in channel $chan=
+_name"
+>  }
 >  =
 
-> -		while (consumed_pos < produced_pos) {
-> +		while ((long) (consumed_pos - produced_pos) < 0) {
->  			ssize_t read_len;
->  			unsigned long len, padded_len;
+> +function add_context_ust_skip_ok()
+> +{
+> +	local session_name=3D$1
+> +	local channel_name=3D$2
+> +	local context_name=3D$3
+> +	local skip_num=3D$4
+> +
+> +	local ret
+> +
+> +	"$TESTDIR/../src/bin/lttng/$LTTNG_BIN" add-context -u \
+> +		-s "$session_name" -c "$channel_name" \
+> +		-t "$context_name"  1>"$OUTPUT_DEST" 2>"$ERROR_OUTPUT_DEST"
+> +	ret=3D$?
+> +
+> +	if [ "$ret" =3D=3D "4" ]; then
+> +		skip 0 "Current UST lib doesn't implement '$context_name' context" "$s=
+kip_num"
+> +	else
+> +		ok $ret "Add context command for type: $context_name"
+> +	fi
+> +
+> +	return $ret
+> +}
+> +
+>  # Only test parsing of the enabling by raw ID
+>  function test_parsing_raw()
+>  {
+> @@ -54,7 +77,7 @@ function test_parsing_raw()
 >  =
 
-> diff --git a/src/common/ust-consumer/ust-consumer.c b/src/common/ust-cons=
-umer/ust-consumer.c
-> index 46f33005..94b761cb 100644
-> --- a/src/common/ust-consumer/ust-consumer.c
-> +++ b/src/common/ust-consumer/ust-consumer.c
-> @@ -1168,7 +1168,7 @@ static int snapshot_channel(struct lttng_consumer_c=
-hannel *channel,
->  				produced_pos, nb_packets_per_stream,
->  				stream->max_sb_size);
+>  	enable_ust_lttng_event_per_chan $SESSION_NAME $EVENT_NAME $CHAN_NAME
 >  =
 
-> -		while (consumed_pos < produced_pos) {
-> +		while ((long) (consumed_pos - produced_pos) < 0) {
->  			ssize_t read_len;
->  			unsigned long len, padded_len;
+> -	add_context_ust_ok $SESSION_NAME $CHAN_NAME "perf:thread:raw:r0110:test"
+> +	add_context_ust_skip_ok $SESSION_NAME $CHAN_NAME "perf:thread:raw:r0110=
+:test" 1
+>  	add_context_ust_fail $SESSION_NAME $CHAN_NAME "perf:thread:raw:rZZZ:tes=
+t"
+>  	add_context_ust_fail $SESSION_NAME $CHAN_NAME "perf:thread:raw:b0110:te=
+st"
+>  	add_context_ust_fail $SESSION_NAME $CHAN_NAME "perf:thread:raw:r0110:"
+> @@ -76,24 +99,30 @@ function test_event_basic()
+>  	SESSION_NAME=3D"ust_event_basic"
+>  	CHAN_NAME=3D"mychan"
 >  =
 
+> +	local ret
+> +
+>  	create_lttng_session_ok $SESSION_NAME $TRACE_PATH
+>  =
+
+>  	enable_ust_lttng_channel_ok $SESSION_NAME $CHAN_NAME
+>  =
+
+>  	enable_ust_lttng_event_per_chan $SESSION_NAME $EVENT_NAME $CHAN_NAME
+>  =
+
+> -	add_context_ust_ok $SESSION_NAME $CHAN_NAME "perf:thread:page-fault"
+> +	add_context_ust_skip_ok $SESSION_NAME $CHAN_NAME "perf:thread:page-faul=
+t" 4
+> +	ret=3D$?
+>  =
+
+> -	start_lttng_tracing_ok
+> +	if [ "$ret" !=3D "4" ]; then
+> +		start_lttng_tracing_ok
+>  =
+
+> -	$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1
+> +		$TESTAPP_BIN $NR_ITER $NR_USEC_WAIT >/dev/null 2>&1
+>  =
+
+> -	stop_lttng_tracing_ok
+> +		stop_lttng_tracing_ok
+> +
+> +		validate_trace "perf_thread_page_fault" "$TRACE_PATH"
+> +	fi
+>  =
+
+>  	destroy_lttng_session_ok $SESSION_NAME
+>  =
+
+> -	validate_trace "perf_thread_page_fault" $TRACE_PATH
+> -	rm -rf $TRACE_PATH
+> +	rm -rf "$TRACE_PATH"
+>  }
+>  =
+
+>  # MUST set TESTDIR before calling those functions
 > -- =
 
-> 2.11.0
+> 2.17.1
 > =
