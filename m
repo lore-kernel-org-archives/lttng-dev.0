@@ -1,21 +1,21 @@
 From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools 1/2] Fix: test: skip
- test_getcpu_override on single thread system
-Date: Fri, 29 Mar 2019 14:33:43 -0400
-Message-ID: <20190329183341.GE28162__16440.9305829153$1553884441$gmane$org@gmail.com>
-References: <20190312183031.20265-1-jonathan.rajotte-julien@efficios.com>
+Subject: Re: [PATCH lttng-tools v3 1/2] Fix: Add POPT_CFLAGS to
+ lttng_CFLAGS
+Date: Fri, 29 Mar 2019 14:36:08 -0400
+Message-ID: <20190329183607.GF28162__29235.7535612368$1553884592$gmane$org@gmail.com>
+References: <20190222193338.7240-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk1-f194.google.com (mail-qk1-f194.google.com
- [209.85.222.194])
- by lists.lttng.org (Postfix) with ESMTPS id 44W9Nq0Rdbz1KbZ
- for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 14:33:46 -0400 (EDT)
-Received: by mail-qk1-f194.google.com with SMTP id w20so1952821qka.7
- for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 11:33:46 -0700 (PDT)
+Received: from mail-qt1-f195.google.com (mail-qt1-f195.google.com
+ [209.85.160.195])
+ by lists.lttng.org (Postfix) with ESMTPS id 44W9Rc4NWdz1KcD
+ for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 14:36:12 -0400 (EDT)
+Received: by mail-qt1-f195.google.com with SMTP id x12so3727696qts.7
+ for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 11:36:12 -0700 (PDT)
 Content-Disposition: inline
-In-Reply-To: <20190312183031.20265-1-jonathan.rajotte-julien@efficios.com>
+In-Reply-To: <20190222193338.7240-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,69 +25,96 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+To: Yannick Lamarre <ylamarre@efficios.com>
 Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Both patches were merged in master, stable-2.11, stable-2.10, and
-stable-2.9.
+The first patch was merged in master, stable-2.11, and stable-2.10.
+The second patch was merged in master and stable-2.11.
 
 Thanks!
 J=E9r=E9mie
 
-On Tue, Mar 12, 2019 at 02:30:30PM -0400, Jonathan Rajotte wrote:
-> There is no value in performing this test on single thread system
-> since the only valid value for the cpu field is 0.
+On Fri, Feb 22, 2019 at 02:33:37PM -0500, Yannick Lamarre wrote:
+> The generated makefile was ignoring POPT_CFLAGS when compiling
+> lttng, but was adding POPT_LIBS to lttng_LDADD. With this commit,
+> make now honors both settings for applications and tests.
 > =
 
-> This test currently fails on single thread system (i.e yocto runquemu)
-> on the test_getcpu_override_fail test case.
+> Fixes: #1165
 > =
 
-> Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+> Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 > ---
->  .../ust/getcpu-override/test_getcpu_override     | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
+>  src/bin/lttng/Makefile.am                  | 2 ++
+>  tests/regression/kernel/Makefile.am        | 2 +-
+>  tests/regression/ust/multi-lib/Makefile.am | 8 ++++----
+>  3 files changed, 7 insertions(+), 5 deletions(-)
 > =
 
-> diff --git a/tests/regression/ust/getcpu-override/test_getcpu_override b/=
-tests/regression/ust/getcpu-override/test_getcpu_override
-> index 4ca385aeb..ee3e31953 100755
-> --- a/tests/regression/ust/getcpu-override/test_getcpu_override
-> +++ b/tests/regression/ust/getcpu-override/test_getcpu_override
-> @@ -157,13 +157,19 @@ plan_tests $NUM_TESTS
+> diff --git a/src/bin/lttng/Makefile.am b/src/bin/lttng/Makefile.am
+> index b0e1247d..62ae0593 100644
+> --- a/src/bin/lttng/Makefile.am
+> +++ b/src/bin/lttng/Makefile.am
+> @@ -28,6 +28,8 @@ lttng_SOURCES =3D command.h conf.c conf.h commands/star=
+t.c \
+>  				commands/disable_rotation.c \
+>  				utils.c utils.h lttng.c
 >  =
 
->  print_test_banner "$TEST_DESC"
->  =
-
-> -if [ -x "$CURDIR/.libs/lttng-ust-getcpu-override-test.so" ]; then
-> -	foundobj=3D1
-> -else
-> -	foundobj=3D0
-> +if [ ! -x "$CURDIR/.libs/lttng-ust-getcpu-override-test.so" ]; then
-> +	skip 0 "No shared object generated. Skipping all tests." $NUM_TESTS && =
-exit 0
-> +fi
+> +lttng_CFLAGS =3D $(AM_CFLAGS) $(POPT_CFLAGS)
 > +
-> +if [ "$num_cpus" -eq "1" ]; then
-> +	# Skip the test since we cannot perform it as designed since N mod 1
-> +	# is always equals to zero. There is no point testing this on a system
-> +	# with a single thread. LTTng-UST limits the get_cpu function to return
-> +	# value inside the [0, NUM_CPU - 1] range for a valid event (present in
-> +	# trace).
-> +	skip 0 "Test system only have a single thread. Skipping all tests." $NU=
-M_TESTS && exit 0
->  fi
+>  lttng_LDADD =3D $(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la \
+>  			$(top_builddir)/src/common/libcommon.la \
+>  			$(top_builddir)/src/common/config/libconfig.la \
+> diff --git a/tests/regression/kernel/Makefile.am b/tests/regression/kerne=
+l/Makefile.am
+> index a787e4fa..3ab6d75b 100644
+> --- a/tests/regression/kernel/Makefile.am
+> +++ b/tests/regression/kernel/Makefile.am
+> @@ -7,7 +7,7 @@ EXTRA_DIST =3D test_event_basic test_all_events test_sysc=
+all \
+>  noinst_PROGRAMS =3D select_poll_epoll
+>  select_poll_epoll_SOURCES =3D select_poll_epoll.c
+>  select_poll_epoll_LDADD =3D $(POPT_LIBS)
+> -select_poll_epoll_CFLAGS =3D -fno-stack-protector -D_FORTIFY_SOURCE=3D0 =
+$(AM_CFLAGS)
+> +select_poll_epoll_CFLAGS =3D $(POPT_CFLAGS) -fno-stack-protector -D_FORT=
+IFY_SOURCE=3D0 $(AM_CFLAGS)
 >  =
 
-> -skip $foundobj "No shared object generated. Skipping all tests." $NUM_TE=
-STS && exit 0
+>  all-local:
+>  	@if [ x"$(srcdir)" !=3D x"$(builddir)" ]; then \
+> diff --git a/tests/regression/ust/multi-lib/Makefile.am b/tests/regressio=
+n/ust/multi-lib/Makefile.am
+> index 3fb4ae74..17ccf3e6 100644
+> --- a/tests/regression/ust/multi-lib/Makefile.am
+> +++ b/tests/regression/ust/multi-lib/Makefile.am
+> @@ -3,13 +3,13 @@ EXTRA_DIST =3D test_multi_lib
+>  noinst_PROGRAMS =3D exec-with-callsites exec-without-callsites
 >  =
 
->  TESTS=3D(
->  	test_getcpu_override_fail
+>  exec_with_callsites_SOURCES =3D multi-lib-test.c callsites.c
+> -exec_with_callsites_LDFLAGS =3D -ldl -lpopt
+> -exec_with_callsites_CFLAGS =3D $(AM_CFLAGS) -DHAS_CALLSITES=3D1
+> +exec_with_callsites_LDFLAGS =3D -ldl $(POPT_LIBS)
+> +exec_with_callsites_CFLAGS =3D $(POPT_CFLAGS) $(AM_CFLAGS) -DHAS_CALLSIT=
+ES=3D1
+>  =
+
+>  exec_without_callsites_SOURCES =3D multi-lib-test.c
+> -exec_without_callsites_LDFLAGS =3D -ldl -lpopt -llttng-ust
+> +exec_without_callsites_LDFLAGS =3D -ldl $(POPT_LIBS) -llttng-ust
+>  exec_without_callsites_LDADD =3D probes.o
+> -exec_without_callsites_CFLAGS =3D $(AM_CFLAGS) -DHAS_CALLSITES=3D0
+> +exec_without_callsites_CFLAGS =3D $(POPT_CFLAGS) $(AM_CFLAGS) -DHAS_CALL=
+SITES=3D0
+>  =
+
+>  PROBES_SRC=3Dprobes.c probes.h
+>  PROBES_LDF=3D-shared -module -llttng-ust -avoid-version -rpath $(abs_bui=
+lddir)/.libs/
 > -- =
 
-> 2.17.1
+> 2.11.0
 > =
