@@ -1,21 +1,21 @@
 From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] tap-driver.sh: flush stdout
- after each test result
-Date: Fri, 29 Mar 2019 14:31:36 -0400
-Message-ID: <20190329183135.GD28162__33375.1171756134$1553884322$gmane$org@gmail.com>
-References: <20190314154134.20191-1-mjeanson@efficios.com>
+Subject: Re: [PATCH lttng-tools 1/2] Fix: test: skip
+ test_getcpu_override on single thread system
+Date: Fri, 29 Mar 2019 14:33:43 -0400
+Message-ID: <20190329183341.GE28162__16440.9305829153$1553884441$gmane$org@gmail.com>
+References: <20190312183031.20265-1-jonathan.rajotte-julien@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qk1-f196.google.com (mail-qk1-f196.google.com
- [209.85.222.196])
- by lists.lttng.org (Postfix) with ESMTPS id 44W9LP4fvQz1KZm
- for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 14:31:41 -0400 (EDT)
-Received: by mail-qk1-f196.google.com with SMTP id y5so1931389qkc.11
- for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 11:31:41 -0700 (PDT)
+Received: from mail-qk1-f194.google.com (mail-qk1-f194.google.com
+ [209.85.222.194])
+ by lists.lttng.org (Postfix) with ESMTPS id 44W9Nq0Rdbz1KbZ
+ for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 14:33:46 -0400 (EDT)
+Received: by mail-qk1-f194.google.com with SMTP id w20so1952821qka.7
+ for <lttng-dev@lists.lttng.org>; Fri, 29 Mar 2019 11:33:46 -0700 (PDT)
 Content-Disposition: inline
-In-Reply-To: <20190314154134.20191-1-mjeanson@efficios.com>
+In-Reply-To: <20190312183031.20265-1-jonathan.rajotte-julien@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,40 +25,68 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
+To: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Merged in master, stable-2.11, stable-2.10, and stable-2.9.
+Both patches were merged in master, stable-2.11, stable-2.10, and
+stable-2.9.
 
 Thanks!
 J=E9r=E9mie
 
-On Thu, Mar 14, 2019 at 11:41:34AM -0400, Michael Jeanson wrote:
-> This is useful in a CI system where stdout is fully buffered and you
-> look at the console output to see which test is hanging.
+On Tue, Mar 12, 2019 at 02:30:30PM -0400, Jonathan Rajotte wrote:
+> There is no value in performing this test on single thread system
+> since the only valid value for the cpu field is 0.
 > =
 
-> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+> This test currently fails on single thread system (i.e yocto runquemu)
+> on the test_getcpu_override_fail test case.
+> =
+
+> Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 > ---
->  config/tap-driver.sh | 3 +++
->  1 file changed, 3 insertions(+)
+>  .../ust/getcpu-override/test_getcpu_override     | 16 +++++++++++-----
+>  1 file changed, 11 insertions(+), 5 deletions(-)
 > =
 
-> diff --git a/config/tap-driver.sh b/config/tap-driver.sh
-> index 32521614..65037ab6 100755
-> --- a/config/tap-driver.sh
-> +++ b/config/tap-driver.sh
-> @@ -275,6 +275,9 @@ function report(result, details)
->      msg =3D msg " " details
->    # Output on console might be colorized.
->    print decorate_result(result) msg
-> +  # Flush stdout after each test result, this is useful when stdout
-> +  # is buffered, for example in a CI system.
-> +  fflush()
->    # Log the result in the log file too, to help debugging (this is
->    # especially true when said result is a TAP error or "Bail out!").
->    print result msg | "cat >&3";
+> diff --git a/tests/regression/ust/getcpu-override/test_getcpu_override b/=
+tests/regression/ust/getcpu-override/test_getcpu_override
+> index 4ca385aeb..ee3e31953 100755
+> --- a/tests/regression/ust/getcpu-override/test_getcpu_override
+> +++ b/tests/regression/ust/getcpu-override/test_getcpu_override
+> @@ -157,13 +157,19 @@ plan_tests $NUM_TESTS
+>  =
+
+>  print_test_banner "$TEST_DESC"
+>  =
+
+> -if [ -x "$CURDIR/.libs/lttng-ust-getcpu-override-test.so" ]; then
+> -	foundobj=3D1
+> -else
+> -	foundobj=3D0
+> +if [ ! -x "$CURDIR/.libs/lttng-ust-getcpu-override-test.so" ]; then
+> +	skip 0 "No shared object generated. Skipping all tests." $NUM_TESTS && =
+exit 0
+> +fi
+> +
+> +if [ "$num_cpus" -eq "1" ]; then
+> +	# Skip the test since we cannot perform it as designed since N mod 1
+> +	# is always equals to zero. There is no point testing this on a system
+> +	# with a single thread. LTTng-UST limits the get_cpu function to return
+> +	# value inside the [0, NUM_CPU - 1] range for a valid event (present in
+> +	# trace).
+> +	skip 0 "Test system only have a single thread. Skipping all tests." $NU=
+M_TESTS && exit 0
+>  fi
+>  =
+
+> -skip $foundobj "No shared object generated. Skipping all tests." $NUM_TE=
+STS && exit 0
+>  =
+
+>  TESTS=3D(
+>  	test_getcpu_override_fail
 > -- =
 
 > 2.17.1
