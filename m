@@ -1,8 +1,8 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [PATCH lttng-tools v4 6/8] Change lttng_poll_wait
- behaviour of compat-poll to match compat-epoll
-Date: Mon,  1 Apr 2019 13:59:23 -0400
-Message-ID: <20190401175925.8512-7-ylamarre__30957.3179272533$1554141763$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools v4 4/8] Adapt poll layer behaviour
+ to match the epoll layer
+Date: Mon,  1 Apr 2019 13:59:21 -0400
+Message-ID: <20190401175925.8512-5-ylamarre__43539.8535498948$1554141784$gmane$org@efficios.com>
 References: <20190401175925.8512-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +10,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44Y0V46B1jz17wx
- for <lttng-dev@lists.lttng.org>; Mon,  1 Apr 2019 13:59:40 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 44Y0V560ssz17xj
+ for <lttng-dev@lists.lttng.org>; Mon,  1 Apr 2019 13:59:41 -0400 (EDT)
 In-Reply-To: <20190401175925.8512-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -26,73 +26,101 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-This removes the need to verify for idle file descriptors and mitigates
-risks of bug due to behaviour mismatch.
-
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
-
-The assert in the for loop is removed.
-
- src/common/compat/compat-poll.c | 37 +++++++++++++++++++++++++++++++++----
- 1 file changed, 33 insertions(+), 4 deletions(-)
+ src/common/compat/compat-poll.c | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
 diff --git a/src/common/compat/compat-poll.c b/src/common/compat/compat-poll.c
-index be655728..5b752a28 100644
+index b45b39dc..be655728 100644
 --- a/src/common/compat/compat-poll.c
 +++ b/src/common/compat/compat-poll.c
-@@ -293,7 +293,8 @@ error:
-  */
- int compat_poll_wait(struct lttng_poll_event *events, int timeout)
+@@ -1,5 +1,6 @@
+ /*
+  * Copyright (C)  2011 - David Goulet <david.goulet@polymtl.ca>
++ * Copyright (C)  2019 - Yannick Lamarre <ylamarre@efficios.com>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License, version 2 only,
+@@ -204,10 +205,10 @@ int compat_poll_mod(struct lttng_poll_event *events, int fd,
+ 		uint32_t req_events)
  {
--	int ret;
-+	int ret, active_fd_count;
-+	int idle_pfd_index = 0;
+ 	int i;
+-	bool fd_found = false;
+ 	struct compat_poll_event_array *current;
  
- 	if (events == NULL || events->current.events == NULL) {
- 		ERR("poll wait arguments error");
-@@ -325,11 +326,39 @@ int compat_poll_wait(struct lttng_poll_event *events, int timeout)
+-	if (events == NULL || events->current.events == NULL || fd < 0) {
++	if (events == NULL || events->current.nb_fd == 0 ||
++			events->current.events == NULL || fd < 0) {
+ 		ERR("Bad compat poll mod arguments");
+ 		goto error;
+ 	}
+@@ -216,16 +217,16 @@ int compat_poll_mod(struct lttng_poll_event *events, int fd,
+ 
+ 	for (i = 0; i < current->nb_fd; i++) {
+ 		if (current->events[i].fd == fd) {
+-			fd_found = true;
+ 			current->events[i].events = req_events;
+ 			events->need_update = 1;
+ 			break;
+ 		}
+ 	}
+ 
+-	if (!fd_found) {
+-		goto error;
+-	}
++	/* 
++	 * The epoll flavor doesn't flag modifying a non-included FD as an
++	 * error.
++	 */
+ 
+ 	return 0;
+ 
+@@ -238,11 +239,12 @@ error:
+  */
+ int compat_poll_del(struct lttng_poll_event *events, int fd)
+ {
+-	int new_size, i, count = 0, ret;
++	int i, count = 0, ret;
++	uint32_t new_size;
+ 	struct compat_poll_event_array *current;
+ 
+-	if (events == NULL || events->current.events == NULL || fd < 0) {
+-		ERR("Wrong arguments for poll del");
++	if (events == NULL || events->current.nb_fd == 0 ||
++			events->current.events == NULL || fd < 0) {
  		goto error;
  	}
  
-+	active_fd_count = ret;
+@@ -257,13 +259,20 @@ int compat_poll_del(struct lttng_poll_event *events, int fd)
+ 			count++;
+ 		}
+ 	}
 +
- 	/*
--	 * poll() should always iterate on all FDs since we handle the pollset in
--	 * user space and after poll returns, we have to try every fd for a match.
-+	 * Swap all active pollfd structs to the beginning of the
-+	 * array to emulate compat-epoll behaviour. This algorithm takes
-+	 * advantage of poll's returned value and the burst nature of active
-+	 * events on the file descriptors. The while loop guarantees that
-+	 * idle_pfd will always point to an idle fd.
- 	 */
--	return events->wait.nb_fd;
-+	if (active_fd_count == events->wait.nb_fd) {
++	/* The fd was not in our set, return no error as with epoll. */
++	if (current->nb_fd == count) {
 +		goto end;
 +	}
-+	while (idle_pfd_index < active_fd_count &&
-+			events->wait.events[idle_pfd_index].revents != 0) {
-+		idle_pfd_index++;
-+	}
 +
-+	for (int i = idle_pfd_index + 1; idle_pfd_index < active_fd_count;
-+			i++) {
-+		struct pollfd swap_pfd;
-+		struct pollfd *idle_pfd = &events->wait.events[idle_pfd_index];
-+		struct pollfd *current_pfd = &events->wait.events[i];
-+
-+		if (ipfd->revents != 0) {
-+			swap_pfd = *current_pfd;
-+			*current_pfd = *idle_pfd;
-+			*idle_pfd = swap_pfd;
-+			idle_pfd_index++;
-+		}
-+	}
-+
+ 	/* No fd duplicate should be ever added into array. */
+ 	assert(current->nb_fd - 1 == count);
+ 	current->nb_fd = count;
+ 
+ 	/* Resize array if needed. */
+ 	new_size = 1U << utils_get_count_order_u32(current->nb_fd);
+-	if (new_size != current->alloc_size && new_size >= current->init_size) {
++	if (new_size != current->alloc_size && new_size >= current->init_size
++			&& current->nb_fd != 0) {
+ 		ret = resize_poll_event(current, new_size);
+ 		if (ret < 0) {
+ 			goto error;
+@@ -272,6 +281,7 @@ int compat_poll_del(struct lttng_poll_event *events, int fd)
+ 
+ 	events->need_update = 1;
+ 
 +end:
-+	return ret;
+ 	return 0;
  
  error:
- 	return -1;
 -- 
 2.11.0
