@@ -1,18 +1,19 @@
-From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [PATCH lttng-tools v4 4/8] Adapt poll layer behaviour
- to match the epoll layer
-Date: Mon,  1 Apr 2019 13:59:21 -0400
-Message-ID: <20190401175925.8512-5-ylamarre__43539.8535498948$1554141784$gmane$org@efficios.com>
-References: <20190401175925.8512-1-ylamarre@efficios.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: [PATCH lttng-tools] Tests: check for lttng-modules
+ presence
+Date: Mon, 1 Apr 2019 16:26:15 -0400
+Message-ID: <20190401202615.GA28595__28666.987775226$1554150542$gmane$org@joraj-alpa>
+References: <20190325184939.24845-1-jonathan.rajotte-julien@efficios.com>
+ <20190329181555.GB28162@gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44Y0V560ssz17xj
- for <lttng-dev@lists.lttng.org>; Mon,  1 Apr 2019 13:59:41 -0400 (EDT)
-In-Reply-To: <20190401175925.8512-1-ylamarre@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 44Y3lK1xy0z18GX
+ for <lttng-dev@lists.lttng.org>; Mon,  1 Apr 2019 16:26:21 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <20190329181555.GB28162@gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,105 +23,54 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
----
- src/common/compat/compat-poll.c | 30 ++++++++++++++++++++----------
- 1 file changed, 20 insertions(+), 10 deletions(-)
+Hi,
 
-diff --git a/src/common/compat/compat-poll.c b/src/common/compat/compat-poll.c
-index b45b39dc..be655728 100644
---- a/src/common/compat/compat-poll.c
-+++ b/src/common/compat/compat-poll.c
-@@ -1,5 +1,6 @@
- /*
-  * Copyright (C)  2011 - David Goulet <david.goulet@polymtl.ca>
-+ * Copyright (C)  2019 - Yannick Lamarre <ylamarre@efficios.com>
-  *
-  * This program is free software; you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License, version 2 only,
-@@ -204,10 +205,10 @@ int compat_poll_mod(struct lttng_poll_event *events, int fd,
- 		uint32_t req_events)
- {
- 	int i;
--	bool fd_found = false;
- 	struct compat_poll_event_array *current;
- 
--	if (events == NULL || events->current.events == NULL || fd < 0) {
-+	if (events == NULL || events->current.nb_fd == 0 ||
-+			events->current.events == NULL || fd < 0) {
- 		ERR("Bad compat poll mod arguments");
- 		goto error;
- 	}
-@@ -216,16 +217,16 @@ int compat_poll_mod(struct lttng_poll_event *events, int fd,
- 
- 	for (i = 0; i < current->nb_fd; i++) {
- 		if (current->events[i].fd == fd) {
--			fd_found = true;
- 			current->events[i].events = req_events;
- 			events->need_update = 1;
- 			break;
- 		}
- 	}
- 
--	if (!fd_found) {
--		goto error;
--	}
-+	/* 
-+	 * The epoll flavor doesn't flag modifying a non-included FD as an
-+	 * error.
-+	 */
- 
- 	return 0;
- 
-@@ -238,11 +239,12 @@ error:
-  */
- int compat_poll_del(struct lttng_poll_event *events, int fd)
- {
--	int new_size, i, count = 0, ret;
-+	int i, count = 0, ret;
-+	uint32_t new_size;
- 	struct compat_poll_event_array *current;
- 
--	if (events == NULL || events->current.events == NULL || fd < 0) {
--		ERR("Wrong arguments for poll del");
-+	if (events == NULL || events->current.nb_fd == 0 ||
-+			events->current.events == NULL || fd < 0) {
- 		goto error;
- 	}
- 
-@@ -257,13 +259,20 @@ int compat_poll_del(struct lttng_poll_event *events, int fd)
- 			count++;
- 		}
- 	}
-+
-+	/* The fd was not in our set, return no error as with epoll. */
-+	if (current->nb_fd == count) {
-+		goto end;
-+	}
-+
- 	/* No fd duplicate should be ever added into array. */
- 	assert(current->nb_fd - 1 == count);
- 	current->nb_fd = count;
- 
- 	/* Resize array if needed. */
- 	new_size = 1U << utils_get_count_order_u32(current->nb_fd);
--	if (new_size != current->alloc_size && new_size >= current->init_size) {
-+	if (new_size != current->alloc_size && new_size >= current->init_size
-+			&& current->nb_fd != 0) {
- 		ret = resize_poll_event(current, new_size);
- 		if (ret < 0) {
- 			goto error;
-@@ -272,6 +281,7 @@ int compat_poll_del(struct lttng_poll_event *events, int fd)
- 
- 	events->need_update = 1;
- 
-+end:
- 	return 0;
- 
- error:
--- 
-2.11.0
+On Fri, Mar 29, 2019 at 02:15:56PM -0400, J=E9r=E9mie Galarneau wrote:
+> Merged in master, stable-2.11, and stable-2.10.
+
+Note that to be valid on stable-2.10 you will also have to backport another
+patch. 2.11 is okai.
+
+9c8a396496a28702730192ae1ded06105c54c5dc on master.
+
+> =
+
+> Thanks!
+> J=E9r=E9mie
+> =
+
+> On Mon, Mar 25, 2019 at 02:49:39PM -0400, Jonathan Rajotte wrote:
+> > Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+> > ---
+> >  tests/regression/tools/notification/test_notification_kernel | 1 +
+> >  1 file changed, 1 insertion(+)
+> > =
+
+> > diff --git a/tests/regression/tools/notification/test_notification_kern=
+el b/tests/regression/tools/notification/test_notification_kernel
+> > index 6d7f256ae..e7368df26 100755
+> > --- a/tests/regression/tools/notification/test_notification_kernel
+> > +++ b/tests/regression/tools/notification/test_notification_kernel
+> > @@ -108,6 +108,7 @@ function kernel_test
+> >  }
+> >  =
+
+> >  if [ "$(id -u)" =3D=3D "0" ]; then
+> > +	validate_lttng_modules_present
+> >  	kernel_test
+> >  else
+> >  	# Kernel tests are skipped.
+> > -- =
+
+> > 2.17.1
+> > =
+
+
+-- =
+
+Jonathan Rajotte-Julien
+EfficiOS
