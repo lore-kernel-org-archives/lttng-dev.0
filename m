@@ -1,16 +1,16 @@
 From: Milian Wolff via lttng-dev <lttng-dev@lists.lttng.org>
 Subject: Re: decoding tracef msg string via babeltrace API
-Date: Tue, 02 Apr 2019 21:40:02 +0200
-Message-ID: <5382125.x1mbapOiNS__31151.0242916242$1554234025$gmane$org@agathebauer>
-References: <33072915.QNGMzHgIAz@agathebauer>
+Date: Tue, 02 Apr 2019 21:54:09 +0200
+Message-ID: <1961627.gSXHHgtAgD__14713.3094187424$1554234870$gmane$org@agathebauer>
+References: <33072915.QNGMzHgIAz@agathebauer> <5382125.x1mbapOiNS@agathebauer>
 Reply-To: Milian Wolff <milian.wolff@kdab.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3818558249736486837=="
+Content-Type: multipart/mixed; boundary="===============5174328640162781778=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
- by lists.lttng.org (Postfix) with ESMTPS id 44YfgV6DHzz1L5c
- for <lttng-dev@lists.lttng.org>; Tue,  2 Apr 2019 15:40:06 -0400 (EDT)
-In-Reply-To: <33072915.QNGMzHgIAz@agathebauer>
+ by lists.lttng.org (Postfix) with ESMTPS id 44Yfzp3TRcz1L7N
+ for <lttng-dev@lists.lttng.org>; Tue,  2 Apr 2019 15:54:14 -0400 (EDT)
+In-Reply-To: <5382125.x1mbapOiNS@agathebauer>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,148 +23,172 @@ Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
 To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============3818558249736486837==
-Content-Type: multipart/signed; boundary="nextPart518082153.8bjd64lSC9";
+--===============5174328640162781778==
+Content-Type: multipart/signed; boundary="nextPart2038491.BQSFbKhl9Z";
  micalg="sha256"; protocol="application/pkcs7-signature"
 
---nextPart518082153.8bjd64lSC9
+--nextPart2038491.BQSFbKhl9Z
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
 
-On Dienstag, 2. April 2019 21:03:41 CEST Milian Wolff wrote:
-> Hey all
+On Dienstag, 2. April 2019 21:40:02 CEST Milian Wolff wrote:
+> On Dienstag, 2. April 2019 21:03:41 CEST Milian Wolff wrote:
+> > Hey all
+> > 
+> > I added a tracef tracepoint and want to decode it's `msg` field in the
+> > BT_EVENT_FIELDS scope. Babeltrace on the command line seems to handle this
+> > nicely, but whatever I try, it doesn't work with the API.
+> > 
+> > I'm using babeltrace from the stable-1.5 branch.
+> > 
+> > First, the output from babeltrace on the command line:
+> > 
+> > ```
+> > event {
+> > 
+> >         name = "lttng_ust_tracef:event";
+> >         id = 9;
+> >         stream_id = 0;
+> >         loglevel = 14;
+> >         fields := struct {
+> >         
+> >                 integer { size = 32; align = 8; signed = 0; encoding =
+> >                 none;
+> > 
+> > base = 10; } __msg_length;
+> > 
+> >                 integer { size = 8; align = 8; signed = 1; encoding =
+> >                 UTF8;
+> > 
+> > base = 10; } _msg[ __msg_length ];
+> > 
+> >         };
+> > 
+> > };
+> > ...
+> > timestamp = 15:56:15.404973865, delta = +0.000023594, trace = 1000/64-bit,
+> > trace:hostname = agathebauer, trace:domain = ust, loglevel = TRACE_DEBUG
+> > (14), name = lttng_ust_tracef:event, stream.packet.context = {
+> > timestamp_begin = 4382372875047, timestamp_end = 4462741641629,
+> > content_size = 47177888, packet_size = 47185920, packet_seq_num = 0,
+> > events_discarded = 0, cpu_id = 3 }, stream.event.header = { id = (
+> > "compact" : container = 9 ), v = { compact = { timestamp = 70385656 } } },
+> > event.fields = { _msg_length = 33, msg = "run_event_entry: ImageCache,
+> > 1000" }
+> > ...
+> > ```
+> > 
+> > Now, in my code I find the event and then I've tried:
+> > 
+> > ```
+> > 
+> >             auto definition = bt_ctf_get_field(event, scope, "msg");
+> >             auto declaration = bt_ctf_get_decl_from_def(definition);
+> >             auto type = bt_ctf_field_type(declaration);
+> >             auto encoding = bt_ctf_get_encoding(declaration);
+> >             auto string = bt_ctf_get_string(definition);
+> >             auto char_array = bt_ctf_get_char_array(definition);
+> >             const bt_definition* const* list = nullptr;
+> >             unsigned num_list = 0;
+> >             auto field_list_ret = bt_ctf_get_field_list(ctf_event,
+> > 
+> > definition, &list, &num_list);
+> > 
+> >             fprintf(stderr, "tracef dbg: %p %p | %d %d | %s | %s | %p %u
+> > 
+> > %d\n", definition, declaration, type, encoding, string, char_array, list,
+> > num_list, field_list_ret);
+> > ```
+> > 
+> > the output is:
+> > 
+> > ```
+> > tracef dbg: 0x55e4c5b084f0 0x55e4c5b3f220 | 9 1 | (null) | (null) | (nil)
+> > 0
+> > -1
+> > 
+> > ```
+> > 
+> > So, it's a sequence (type 9), but I can't get the sequence... Actually,
+> > when I tried this the firs ttime without patching babeltrace, then it
+> > crashed in events.c:256 [1]. The def_sequence is non-null, but
+> > def_sequence->elems is null and that's not checked...
+> > 
+> > [1]: https://github.com/efficios/babeltrace/blob/stable-1.5/formats/ctf/
+> > events.c#L256
+> > 
+> > I'm quite stumped - what am I doing wrong? How does babeltrace handle the
+> > string-decoding of tracef's msg arg?
 > 
-> I added a tracef tracepoint and want to decode it's `msg` field in the
-> BT_EVENT_FIELDS scope. Babeltrace on the command line seems to handle this
-> nicely, but whatever I try, it doesn't work with the API.
-> 
-> I'm using babeltrace from the stable-1.5 branch.
-> 
-> First, the output from babeltrace on the command line:
+> I've found out that babeltrace seems to not consume the public API. Instead,
+> in `sequence.c` it's directly accessing the sequence's string member. If I
+> patch `bt_ctf_get_string` like this:
 > 
 > ```
-> event {
->         name = "lttng_ust_tracef:event";
->         id = 9;
->         stream_id = 0;
->         loglevel = 14;
->         fields := struct {
->                 integer { size = 32; align = 8; signed = 0; encoding = none;
-> base = 10; } __msg_length;
->                 integer { size = 8; align = 8; signed = 1; encoding = UTF8;
-> base = 10; } _msg[ __msg_length ];
->         };
-> };
-> ...
-> timestamp = 15:56:15.404973865, delta = +0.000023594, trace = 1000/64-bit,
-> trace:hostname = agathebauer, trace:domain = ust, loglevel = TRACE_DEBUG
-> (14), name = lttng_ust_tracef:event, stream.packet.context = {
-> timestamp_begin = 4382372875047, timestamp_end = 4462741641629,
-> content_size = 47177888, packet_size = 47185920, packet_seq_num = 0,
-> events_discarded = 0, cpu_id = 3 }, stream.event.header = { id = (
-> "compact" : container = 9 ), v = { compact = { timestamp = 70385656 } } },
-> event.fields = { _msg_length = 33, msg = "run_event_entry: ImageCache,
-> 1000" }
-> ...
+> diff --git a/formats/ctf/events.c b/formats/ctf/events.c
+> index bd195b93..f0ea49c8 100644
+> --- a/formats/ctf/events.c
+> +++ b/formats/ctf/events.c
+> @@ -599,12 +599,26 @@ end:
+>  char *bt_ctf_get_string(const struct bt_definition *field)
+>  {
+>  	char *ret = NULL;
+> +	const struct bt_declaration *decl = field ?
+> bt_ctf_get_decl_from_def(field) : NULL;
+> +	enum ctf_type_id type = decl ? bt_ctf_field_type(decl) :
+> CTF_TYPE_UNKNOWN;
+> 
+> -	if (field && bt_ctf_field_type(bt_ctf_get_decl_from_def(field)) ==
+> CTF_TYPE_STRING)
+> +	if (type == CTF_TYPE_SEQUENCE) {
+> +		enum ctf_string_encoding encoding = bt_ctf_get_encoding(decl);
+> +		struct definition_sequence *sequence_definition;
+> +		if (encoding == CTF_STRING_UTF8 || encoding  ==
+> CTF_STRING_ASCII) {
+> +			sequence_definition = container_of(field, struct
+> definition_sequence, p);
+> +			ret = sequence_definition->string->str;
+> +			goto end;
+> +		}
+> +	} else if (type == CTF_TYPE_STRING) {
+>  		ret = bt_get_string(field);
+> -	else
+> -		bt_ctf_field_set_error(-EINVAL);
+> +		goto end;
+> +	}
+> 
+> +error:
+> +	bt_ctf_field_set_error(-EINVAL);
+> +
+> +end:
+>  	return ret;
+>  }
 > ```
 > 
-> Now, in my code I find the event and then I've tried:
+> it seems to be doing what I was hoping for. Would something like that be
+> accepted upstream, or do we need a third string-returning function
+> `bt_ctf_get_string_sequence` or similar?
 > 
-> ```
->             auto definition = bt_ctf_get_field(event, scope, "msg");
->             auto declaration = bt_ctf_get_decl_from_def(definition);
->             auto type = bt_ctf_field_type(declaration);
->             auto encoding = bt_ctf_get_encoding(declaration);
->             auto string = bt_ctf_get_string(definition);
->             auto char_array = bt_ctf_get_char_array(definition);
->             const bt_definition* const* list = nullptr;
->             unsigned num_list = 0;
->             auto field_list_ret = bt_ctf_get_field_list(ctf_event,
-> definition, &list, &num_list);
->             fprintf(stderr, "tracef dbg: %p %p | %d %d | %s | %s | %p %u
-> %d\n", definition, declaration, type, encoding, string, char_array, list,
-> num_list, field_list_ret);
-> ```
-> 
-> the output is:
-> 
-> ```
-> tracef dbg: 0x55e4c5b084f0 0x55e4c5b3f220 | 9 1 | (null) | (null) | (nil) 0
-> -1
-> 
-> ```
-> 
-> So, it's a sequence (type 9), but I can't get the sequence... Actually, when
-> I tried this the firs ttime without patching babeltrace, then it crashed in
-> events.c:256 [1]. The def_sequence is non-null, but def_sequence->elems is
-> null and that's not checked...
-> 
-> [1]: https://github.com/efficios/babeltrace/blob/stable-1.5/formats/ctf/
-> events.c#L256
-> 
-> I'm quite stumped - what am I doing wrong? How does babeltrace handle the
-> string-decoding of tracef's msg arg?
+> Generally, I already dislike it very much that there is a distinction
+> between `bt_ctf_get_string` and `bt_ctf_get_char_array` - both should - imo
+> - be handled through `bt_ctf_get_string`.
 
-I've found out that babeltrace seems to not consume the public API. Instead, 
-in `sequence.c` it's directly accessing the sequence's string member. If I 
-patch `bt_ctf_get_string` like this:
+And now I found out that this is known and a patch is even available:
 
-```
-diff --git a/formats/ctf/events.c b/formats/ctf/events.c
-index bd195b93..f0ea49c8 100644
---- a/formats/ctf/events.c
-+++ b/formats/ctf/events.c
-@@ -599,12 +599,26 @@ end:
- char *bt_ctf_get_string(const struct bt_definition *field)
- {
- 	char *ret = NULL;
-+	const struct bt_declaration *decl = field ? 
-bt_ctf_get_decl_from_def(field) : NULL;
-+	enum ctf_type_id type = decl ? bt_ctf_field_type(decl) : 
-CTF_TYPE_UNKNOWN;
- 
--	if (field && bt_ctf_field_type(bt_ctf_get_decl_from_def(field)) == 
-CTF_TYPE_STRING)
-+	if (type == CTF_TYPE_SEQUENCE) {
-+		enum ctf_string_encoding encoding = bt_ctf_get_encoding(decl);
-+		struct definition_sequence *sequence_definition;
-+		if (encoding == CTF_STRING_UTF8 || encoding  == 
-CTF_STRING_ASCII) {
-+			sequence_definition = container_of(field, struct 
-definition_sequence, p);
-+			ret = sequence_definition->string->str;
-+			goto end;
-+		}
-+	} else if (type == CTF_TYPE_STRING) {
- 		ret = bt_get_string(field);
--	else
--		bt_ctf_field_set_error(-EINVAL);
-+		goto end;
-+	}
- 
-+error:
-+	bt_ctf_field_set_error(-EINVAL);
-+
-+end:
- 	return ret;
- }
-```
+https://github.com/efficios/babeltrace/pull/98/commits/
+3ab89a428ce2a8a4f76218f79c9eb6c26ae5aeee
 
-it seems to be doing what I was hoping for. Would something like that be 
-accepted upstream, or do we need a third string-returning function 
-`bt_ctf_get_string_sequence` or similar?
+It's been nearly 1.5 years and babeltrace 2.0 is still not ready. Can you 
+please merge this into babeltrace 1.5 and release a new version of that stable 
+branch?
 
-Generally, I already dislike it very much that there is a distinction between 
-`bt_ctf_get_string` and `bt_ctf_get_char_array` - both should - imo - be 
-handled through `bt_ctf_get_string`.
-
-Cheers
+Thanks
 -- 
 Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
 KDAB (Deutschland) GmbH, a KDAB Group company
 Tel: +49-30-521325470
 KDAB - The Qt, C++ and OpenGL Experts
---nextPart518082153.8bjd64lSC9
+--nextPart2038491.BQSFbKhl9Z
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -229,21 +253,21 @@ cukxggJuMIICagIBATCBrDCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hl
 c3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNV
 BAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
 EAf6KCF9+1doL2oEOTPysLwwDQYJYIZIAWUDBAIBBQCggZMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkwNDAyMTk0MDAyWjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgB6k1jQVtwC1nNeQ4F4CH89V5ALXj
-LfjpbWyfrR3qg0owDQYJKoZIhvcNAQEBBQAEggEAmB4xHWwq8fZJTf7ePeU//EXOr4pgvsPICutk
-53P3BJMtcldHgl9hM3rEXvr3TNiQP8TSjwOdqlzPTgQyjGR3bY5wlE4aC15IqW9UC+qukvBjtZlg
-vyFRVyoXBtAqIabWEVhhD53U73E/Qsfx4y4wQGK1B+4oSlE6QhGgQidcrUPIURtMm9PRO0wBawgL
-FGRv2CV5yugZstH73/1NM2/KzeKuBGGKhI/IRxw5Evm/389STGeQw9aXiHilV2trC9ciLysKpKHq
-s4nAGKAeOAcSpe0ZKVVBybd2M9sNIwRmm845N2b78U9pUWLo3JKx0J9+MLRDRmoQIrnA8nigCg+h
-xgAAAAAAAA==
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkwNDAyMTk1NDA5WjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgJNMOiIW0QwZozhkQrZvJ8q7KT4LT
+5w05UPheGpdJip4wDQYJKoZIhvcNAQEBBQAEggEAR+yIE9SKamg+PYGl1AmJOtZbxwPwTkBdbQBJ
+VtXNNfGk4ak8Kb74iF3tPR7L3xc9GTKEHilAWk5L2bNzLU7/hmMGFe0+8sm8lhiGRSM8oJLA6dX0
+A/II0j08BWqJWuh00lvFQt3mdHU76gGix5PegEUdI7zOSuMDyzW2xtYodZJgNS4CikkzbmDVsO4P
+efmy2Bp+3PLfv5KabIj+cBia0yzd8oa9IxKbOSUYyezuDuOKV/9Pk1bNLh4KbRz5oVqw6b3nTswp
+LkSL1SrOPW4ugQ4G8MQZIs/wegDIkw8a3ZJeCwxOKCiRhAMCbWosUvHPJPp0xOVK8K4Q0L5x/e60
+VAAAAAAAAA==
 
 
---nextPart518082153.8bjd64lSC9--
+--nextPart2038491.BQSFbKhl9Z--
 
 
 
---===============3818558249736486837==
+--===============5174328640162781778==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -254,4 +278,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============3818558249736486837==--
+--===============5174328640162781778==--
