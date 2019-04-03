@@ -1,23 +1,24 @@
 From: Mosleh Uddin <mosleh1235@gmail.com>
 Subject: Re: Creating custom application
-Date: Tue, 2 Apr 2019 18:01:40 -0400
-Message-ID: <CAJyWpKGDrF9J=yDALm+1cn7cTd+TJZK30tXLHKKKXvkntmQDoQ__14175.4293626704$1554242529$gmane$org@mail.gmail.com>
+Date: Wed, 3 Apr 2019 09:08:45 -0400
+Message-ID: <CAJyWpKFxRqsVYc=dDvaoTMGkrkLmktaudYJgvVkzzvUyeFx-NQ__23432.9114014812$1554296953$gmane$org@mail.gmail.com>
 References: <CAJyWpKHE_4eZwMAhU-q4sbAAA3-nPWgxtGqpXYLpMyztNzmm-w@mail.gmail.com>
  <20190326152942.GE17481@joraj-alpa>
  <CAJyWpKHtXHAgyjwZVnSCnnDTmCsOVsydaZgqpMuALQWMy5nfiA@mail.gmail.com>
  <20190327175251.GA7976@joraj-alpa>
  <CAJyWpKEhLdREuCFJEfSojHuqQ9jTA12SWE_FAJ3HTdP1irO-sw@mail.gmail.com>
  <20190402211757.GA23381@joraj-alpa>
+ <CAJyWpKGDrF9J=yDALm+1cn7cTd+TJZK30tXLHKKKXvkntmQDoQ@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6446740097938181749=="
+Content-Type: multipart/mixed; boundary="===============6595218540099471726=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-it1-x12c.google.com (mail-it1-x12c.google.com
- [IPv6:2607:f8b0:4864:20::12c])
- by lists.lttng.org (Postfix) with ESMTPS id 44Yjq50FYJz17gm
- for <lttng-dev@lists.lttng.org>; Tue,  2 Apr 2019 18:01:52 -0400 (EDT)
-Received: by mail-it1-x12c.google.com with SMTP id u65so8007367itc.2
- for <lttng-dev@lists.lttng.org>; Tue, 02 Apr 2019 15:01:52 -0700 (PDT)
-In-Reply-To: <20190402211757.GA23381@joraj-alpa>
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
+ [IPv6:2607:f8b0:4864:20::d2d])
+ by lists.lttng.org (Postfix) with ESMTPS id 44Z5xj4D3Mz1JyV
+ for <lttng-dev@lists.lttng.org>; Wed,  3 Apr 2019 09:08:57 -0400 (EDT)
+Received: by mail-io1-xd2d.google.com with SMTP id b9so13963361iot.13
+ for <lttng-dev@lists.lttng.org>; Wed, 03 Apr 2019 06:08:57 -0700 (PDT)
+In-Reply-To: <CAJyWpKGDrF9J=yDALm+1cn7cTd+TJZK30tXLHKKKXvkntmQDoQ@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -31,157 +32,191 @@ To: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
 Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============6446740097938181749==
-Content-Type: multipart/alternative; boundary="000000000000d230d2058593485a"
+--===============6595218540099471726==
+Content-Type: multipart/alternative; boundary="000000000000c5f99205859ff487"
 
---000000000000d230d2058593485a
+--000000000000c5f99205859ff487
 Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Hello,
 
-That makes complete sense. I was more curious about the sessiond
-executable. I'm guessing this is something I will have to create along with
-my build?
+Sorry, I should be more specific. I am creating a custom yocto build. I
+have seen some examples where systemd is utilized to start the sessiond as
+a service. The limitation I have is that I don't want to include the whole
+lttng-tools librray in my build. I understand that the sessiond is an
+executable, I am just unsure how I could build or get this in my build.
+Moving forward from this I could use fork/exec to daemonize which would be
+simple.
+Is there perhaps a existing recipe?
 
 Regards,
 Mosleh
 
-On Tue, Apr 2, 2019 at 5:18 PM Jonathan Rajotte-Julien <
-jonathan.rajotte-julien@efficios.com> wrote:
+On Tue, Apr 2, 2019 at 6:01 PM Mosleh Uddin <mosleh1235@gmail.com> wrote:
 
-> On Tue, Apr 02, 2019 at 04:54:00PM -0400, Mosleh Uddin wrote:
-> > Hello,
-> >
-> > Could you give me some more insight into spawning my own sessiond? Sorry
-> > I'm not completely clear on the topic.
-> > Thank you for all your assistance.
+> Hi,
 >
-> Normally lttng-sessiond is treated as a "server/service/daemon" (think http
-> server as apache) and is *normally* launched as a daemon
-> (systemd/sysVinit) at
-> boot time.
+> That makes complete sense. I was more curious about the sessiond
+> executable. I'm guessing this is something I will have to create along with
+> my build?
 >
-> Managing manually the lifetime of a lttng-sessiond process is done the
-> same way
-> as any other process. You can manage it via the command line
-> (./lttng-sessiond), via a
-> service manager (systemd/upstart etc.) or with a custom service manager (a
-> python script/c etc.).
+> Regards,
+> Mosleh
 >
-> You could spawn a lttng-sessiond from your application with the appropriate
-> parameters set to isolate it if you need. LTTNG_HOME is an important one.
-> The
-> output directory also can be manipulated. See man lttng-sessiond for more
-> details. You will need to manage the process or leave it to a system
-> administrator and only active tracing when a sessiond is present for
-> example.
+> On Tue, Apr 2, 2019 at 5:18 PM Jonathan Rajotte-Julien <
+> jonathan.rajotte-julien@efficios.com> wrote:
 >
-> Cheers
->
-> >
-> > Regards,
-> > Mosleh
-> >
-> > On Wed, Mar 27, 2019 at 1:52 PM Jonathan Rajotte-Julien <
-> > jonathan.rajotte-julien@efficios.com> wrote:
-> >
-> > > Hi Mosleh,
-> > >
-> > > On Wed, Mar 27, 2019 at 12:09:54PM -0400, Mosleh Uddin wrote:
-> > > > Hello,
-> > > >
-> > > > Thank you for the quick response. I was able to use the
-> documentation you
-> > > > provided to start a session and get tracepoint list. I do have some
-> > > > follow-up questions:
-> > > >
-> > > > 1) I needed to create a session daemon before executing my custom
-> > > > application. In the API I did see functionality to see if a daemon is
-> > > > active, however, it is possible to spawn a session daemon in my
-> custom
-> > > app?
-> > >
-> > > liblttng-ctl does not expose a lttng-sessiond spawning function since
-> by
-> > > definition it is a daemon executable (think apache,mysql etc.), you
-> will
-> > > have to
-> > > use system/popen/exec.. to spawn the lttng-sessiond process etc. if you
-> > > want to
-> > > control its lifetime using your custom application.
-> > >
-> > > >
-> > > > 2) I am able to get a list of active traces lttng can see in
-> userspace, I
-> > > > enable all the traces and start tracing. The traces however seem to
-> not
-> > > be
-> > > > written anywhere on my filesystem. Do I have to specify a location?
-> Or
-> > > am I
-> > > > missing something? My current flow is:
-> > >
-> > > Please refer to the create command. If outputting locally you will
-> need to
-> > > pass
-> > > a "file://...." url to lttng_create_session.
-> > >
-> > > You can check on the result for each steps using "lttng list" and
-> "lttng
-> > > list
-> > > <session_name>" as you go to troubleshot your setup script.
-> > >
-> > > While debugging you can also start the lttng-sessiond in verbose mode
-> to
-> > > understand what is going on.
-> > >
-> > > Also note that you could also use the lttng "load" api if the session
-> you
-> > > are
-> > > trying to load is "static" and always the same. You would only need to
-> > > ship an
-> > > xml file with your application.
-> > >
-> > > Cheers
-> > >
-> > > >
-> > > >    - Creating a session
-> > > >    - Specifying the domain
-> > > >    - Creating a handle
-> > > >    - Creating a channel (with default attributes)
-> > > >    - Enabling the channel
-> > > >    - Enabling event (for all traces)
-> > > >    - Start tracing
-> > > >
-> > > > Thanks again for all the assistance.
-> > > >
-> > > > Regards,
-> > > > Mosleh
-> > > >
-> > > > On Tue, Mar 26, 2019 at 11:29 AM Jonathan Rajotte-Julien <
-> > > > jonathan.rajotte-julien@efficios.com> wrote:
-> > > >
-> > >
->
-> --
-> Jonathan Rajotte-Julien
-> EfficiOS
+>> On Tue, Apr 02, 2019 at 04:54:00PM -0400, Mosleh Uddin wrote:
+>> > Hello,
+>> >
+>> > Could you give me some more insight into spawning my own sessiond? Sorry
+>> > I'm not completely clear on the topic.
+>> > Thank you for all your assistance.
+>>
+>> Normally lttng-sessiond is treated as a "server/service/daemon" (think
+>> http
+>> server as apache) and is *normally* launched as a daemon
+>> (systemd/sysVinit) at
+>> boot time.
+>>
+>> Managing manually the lifetime of a lttng-sessiond process is done the
+>> same way
+>> as any other process. You can manage it via the command line
+>> (./lttng-sessiond), via a
+>> service manager (systemd/upstart etc.) or with a custom service manager (a
+>> python script/c etc.).
+>>
+>> You could spawn a lttng-sessiond from your application with the
+>> appropriate
+>> parameters set to isolate it if you need. LTTNG_HOME is an important one.
+>> The
+>> output directory also can be manipulated. See man lttng-sessiond for more
+>> details. You will need to manage the process or leave it to a system
+>> administrator and only active tracing when a sessiond is present for
+>> example.
+>>
+>> Cheers
+>>
+>> >
+>> > Regards,
+>> > Mosleh
+>> >
+>> > On Wed, Mar 27, 2019 at 1:52 PM Jonathan Rajotte-Julien <
+>> > jonathan.rajotte-julien@efficios.com> wrote:
+>> >
+>> > > Hi Mosleh,
+>> > >
+>> > > On Wed, Mar 27, 2019 at 12:09:54PM -0400, Mosleh Uddin wrote:
+>> > > > Hello,
+>> > > >
+>> > > > Thank you for the quick response. I was able to use the
+>> documentation you
+>> > > > provided to start a session and get tracepoint list. I do have some
+>> > > > follow-up questions:
+>> > > >
+>> > > > 1) I needed to create a session daemon before executing my custom
+>> > > > application. In the API I did see functionality to see if a daemon
+>> is
+>> > > > active, however, it is possible to spawn a session daemon in my
+>> custom
+>> > > app?
+>> > >
+>> > > liblttng-ctl does not expose a lttng-sessiond spawning function since
+>> by
+>> > > definition it is a daemon executable (think apache,mysql etc.), you
+>> will
+>> > > have to
+>> > > use system/popen/exec.. to spawn the lttng-sessiond process etc. if
+>> you
+>> > > want to
+>> > > control its lifetime using your custom application.
+>> > >
+>> > > >
+>> > > > 2) I am able to get a list of active traces lttng can see in
+>> userspace, I
+>> > > > enable all the traces and start tracing. The traces however seem to
+>> not
+>> > > be
+>> > > > written anywhere on my filesystem. Do I have to specify a location?
+>> Or
+>> > > am I
+>> > > > missing something? My current flow is:
+>> > >
+>> > > Please refer to the create command. If outputting locally you will
+>> need to
+>> > > pass
+>> > > a "file://...." url to lttng_create_session.
+>> > >
+>> > > You can check on the result for each steps using "lttng list" and
+>> "lttng
+>> > > list
+>> > > <session_name>" as you go to troubleshot your setup script.
+>> > >
+>> > > While debugging you can also start the lttng-sessiond in verbose mode
+>> to
+>> > > understand what is going on.
+>> > >
+>> > > Also note that you could also use the lttng "load" api if the session
+>> you
+>> > > are
+>> > > trying to load is "static" and always the same. You would only need to
+>> > > ship an
+>> > > xml file with your application.
+>> > >
+>> > > Cheers
+>> > >
+>> > > >
+>> > > >    - Creating a session
+>> > > >    - Specifying the domain
+>> > > >    - Creating a handle
+>> > > >    - Creating a channel (with default attributes)
+>> > > >    - Enabling the channel
+>> > > >    - Enabling event (for all traces)
+>> > > >    - Start tracing
+>> > > >
+>> > > > Thanks again for all the assistance.
+>> > > >
+>> > > > Regards,
+>> > > > Mosleh
+>> > > >
+>> > > > On Tue, Mar 26, 2019 at 11:29 AM Jonathan Rajotte-Julien <
+>> > > > jonathan.rajotte-julien@efficios.com> wrote:
+>> > > >
+>> > >
+>>
+>> --
+>> Jonathan Rajotte-Julien
+>> EfficiOS
+>>
 >
 
---000000000000d230d2058593485a
+--000000000000c5f99205859ff487
 Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr">Hi,<div><br></div><div>That makes complete sense. I was mo=
-re curious about the sessiond executable. I&#39;m guessing this is somethin=
-g I will have to create along with my build?=C2=A0</div><div><br></div><div=
->Regards,</div><div>Mosleh</div></div><br><div class=3D"gmail_quote"><div d=
-ir=3D"ltr" class=3D"gmail_attr">On Tue, Apr 2, 2019 at 5:18 PM Jonathan Raj=
-otte-Julien &lt;<a href=3D"mailto:jonathan.rajotte-julien@efficios.com">jon=
-athan.rajotte-julien@efficios.com</a>&gt; wrote:<br></div><blockquote class=
-=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
-b(204,204,204);padding-left:1ex">On Tue, Apr 02, 2019 at 04:54:00PM -0400, =
-Mosleh Uddin wrote:<br>
+<div dir=3D"ltr">Hello,<div><br></div><div>Sorry, I should be more specific=
+. I am creating a custom yocto build. I have seen some examples where syste=
+md is utilized to start the sessiond as a service. The limitation I have is=
+ that I don&#39;t want to include the whole lttng-tools librray in my build=
+. I understand that the sessiond is an executable, I am just unsure how I c=
+ould build or get this in my build. Moving forward from this I could use fo=
+rk/exec to daemonize which would be simple.=C2=A0</div><div>Is there perhap=
+s a existing recipe?</div><div><br></div><div>Regards,</div><div>Mosleh</di=
+v></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr=
+">On Tue, Apr 2, 2019 at 6:01 PM Mosleh Uddin &lt;<a href=3D"mailto:mosleh1=
+235@gmail.com">mosleh1235@gmail.com</a>&gt; wrote:<br></div><blockquote cla=
+ss=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid =
+rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr">Hi,<div><br></div><div>=
+That makes complete sense. I was more curious about the sessiond executable=
+. I&#39;m guessing this is something I will have to create along with my bu=
+ild?=C2=A0</div><div><br></div><div>Regards,</div><div>Mosleh</div></div><b=
+r><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Tue, =
+Apr 2, 2019 at 5:18 PM Jonathan Rajotte-Julien &lt;<a href=3D"mailto:jonath=
+an.rajotte-julien@efficios.com" target=3D"_blank">jonathan.rajotte-julien@e=
+fficios.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex">On Tue, Apr 02, 2019 at 04:54:00PM -0400, Mosleh Uddin wrote:<br=
+>
 &gt; Hello,<br>
 &gt; <br>
 &gt; Could you give me some more insight into spawning my own sessiond? Sor=
@@ -314,10 +349,11 @@ et=3D"_blank">jonathan.rajotte-julien@efficios.com</a>&gt; wrote:<br>
 Jonathan Rajotte-Julien<br>
 EfficiOS<br>
 </blockquote></div>
+</blockquote></div>
 
---000000000000d230d2058593485a--
+--000000000000c5f99205859ff487--
 
---===============6446740097938181749==
+--===============6595218540099471726==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -328,4 +364,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============6446740097938181749==--
+--===============6595218540099471726==--
