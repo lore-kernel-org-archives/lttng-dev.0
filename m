@@ -1,37 +1,16 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: decoding tracef msg string via babeltrace API
-Date: Thu, 4 Apr 2019 14:25:51 -0400
-Message-ID: <CA+jJMxs4UAiWSanNqTigrGSLBdm+4WfcFxM5HOhvubDtXemjEA__47055.2159402118$1554402550$gmane$org@mail.gmail.com>
-References: <33072915.QNGMzHgIAz@agathebauer>
+From: Mosleh Uddin <mosleh1235@gmail.com>
+Subject: SIG33 message
+Date: Thu, 4 Apr 2019 15:26:18 -0400
+Message-ID: <CAJyWpKFdOV6uiwWUicD5GNSSjWsD1TXjn=p45p_g6xu7F3HJbQ__28576.8003713869$1554406009$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============1280083667427811605=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44Zrxn1xHNz1KhY
- for <lttng-dev@lists.lttng.org>; Thu,  4 Apr 2019 14:26:37 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 43E9F1A9D48
- for <lttng-dev@lists.lttng.org>; Thu,  4 Apr 2019 14:26:30 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
- with ESMTP id gRFjPkB4Mrmt for <lttng-dev@lists.lttng.org>;
- Thu,  4 Apr 2019 14:26:29 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 8357A1A9D42
- for <lttng-dev@lists.lttng.org>; Thu,  4 Apr 2019 14:26:29 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
- with ESMTP id dL_audJikySQ for <lttng-dev@lists.lttng.org>;
- Thu,  4 Apr 2019 14:26:29 -0400 (EDT)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com
- [209.85.208.169])
- by mail.efficios.com (Postfix) with ESMTPSA id 27E5C1A9D2F
- for <lttng-dev@lists.lttng.org>; Thu,  4 Apr 2019 14:26:29 -0400 (EDT)
-Received: by mail-lj1-f169.google.com with SMTP id v13so2973422ljk.4
- for <lttng-dev@lists.lttng.org>; Thu, 04 Apr 2019 11:26:29 -0700 (PDT)
-In-Reply-To: <33072915.QNGMzHgIAz@agathebauer>
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by lists.lttng.org (Postfix) with ESMTPS id 44ZtGt6Mkzz1KmR
+ for <lttng-dev@lists.lttng.org>; Thu,  4 Apr 2019 15:26:30 -0400 (EDT)
+Received: by mail-io1-xd30.google.com with SMTP id n11so3059795ioh.1
+ for <lttng-dev@lists.lttng.org>; Thu, 04 Apr 2019 12:26:30 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -41,78 +20,48 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Milian Wolff <milian.wolff@kdab.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-SGkgTWlsaWFuLAoKSSBoYXZlIHB1c2hlZCBhIGZpeCBbMV0gaW4gdGhlIHN0YWJsZS0xLjUgYnJh
-bmNoIHRoYXQgYWRkcmVzc2VzIHRoZQppc3N1ZSB5b3UgaGF2ZSBlbmNvdW50ZXJlZCB3aXRoIHVz
-aW5nIGJ0X2N0Zl9nZXRfZmllbGRfbGlzdCgpLgpUaGlzIG1ha2VzIGl0IHBvc3NpYmxlIHRvIGNv
-bnN1bWUgYSBjaGFyYWN0ZXIgc2VxdWVuY2UncyBjb250ZW50LgoKVGhlIGNvbW1pdCBtZXNzYWdl
-IGNvbnRhaW5zIGFuIGV4YW1wbGUgdG8gc2hvdyBob3cgdG8gZXNzZW50aWFsbHkKcGVyZm9ybSB3
-aGF0IHRoZSAnY3RmLXRleHQnIGZvcm1hdCBwbHVnLWluIGFjaGlldmVzIGJ5IGFjY2Vzc2luZyB0
-aGUKaW50ZXJuYWwgc3RyaW5nIGZpZWxkLgoKTGV0IG1lIGtub3cgaWYgdGhhdCB3b3JrcyBmb3Ig
-eW91IGFuZCBJJ2xsIHJlbGVhc2UgYW4gdXBkYXRlZCB2ZXJzaW9uCm9mIHRoZSAxLjUgYnJhbmNo
-LgoKVGhhbmtzLApKw6lyw6ltaWUKClsxXSBodHRwczovL2dpdGh1Yi5jb20vZWZmaWNpb3MvYmFi
-ZWx0cmFjZS9jb21taXQvZTdmMWFkMzZiODJiYjg2NTFjOTFjNmM2ZmFmOGI5MmYxNDVmMzJiYwoK
-T24gVHVlLCAyIEFwciAyMDE5IGF0IDE1OjA5LCBNaWxpYW4gV29sZmYgdmlhIGx0dG5nLWRldgo8
-bHR0bmctZGV2QGxpc3RzLmx0dG5nLm9yZz4gd3JvdGU6Cj4KPiBIZXkgYWxsCj4KPiBJIGFkZGVk
-IGEgdHJhY2VmIHRyYWNlcG9pbnQgYW5kIHdhbnQgdG8gZGVjb2RlIGl0J3MgYG1zZ2AgZmllbGQg
-aW4gdGhlCj4gQlRfRVZFTlRfRklFTERTIHNjb3BlLiBCYWJlbHRyYWNlIG9uIHRoZSBjb21tYW5k
-IGxpbmUgc2VlbXMgdG8gaGFuZGxlIHRoaXMKPiBuaWNlbHksIGJ1dCB3aGF0ZXZlciBJIHRyeSwg
-aXQgZG9lc24ndCB3b3JrIHdpdGggdGhlIEFQSS4KPgo+IEknbSB1c2luZyBiYWJlbHRyYWNlIGZy
-b20gdGhlIHN0YWJsZS0xLjUgYnJhbmNoLgo+Cj4gRmlyc3QsIHRoZSBvdXRwdXQgZnJvbSBiYWJl
-bHRyYWNlIG9uIHRoZSBjb21tYW5kIGxpbmU6Cj4KPiBgYGAKPiBldmVudCB7Cj4gICAgICAgICBu
-YW1lID0gImx0dG5nX3VzdF90cmFjZWY6ZXZlbnQiOwo+ICAgICAgICAgaWQgPSA5Owo+ICAgICAg
-ICAgc3RyZWFtX2lkID0gMDsKPiAgICAgICAgIGxvZ2xldmVsID0gMTQ7Cj4gICAgICAgICBmaWVs
-ZHMgOj0gc3RydWN0IHsKPiAgICAgICAgICAgICAgICAgaW50ZWdlciB7IHNpemUgPSAzMjsgYWxp
-Z24gPSA4OyBzaWduZWQgPSAwOyBlbmNvZGluZyA9IG5vbmU7Cj4gYmFzZSA9IDEwOyB9IF9fbXNn
-X2xlbmd0aDsKPiAgICAgICAgICAgICAgICAgaW50ZWdlciB7IHNpemUgPSA4OyBhbGlnbiA9IDg7
-IHNpZ25lZCA9IDE7IGVuY29kaW5nID0gVVRGODsKPiBiYXNlID0gMTA7IH0gX21zZ1sgX19tc2df
-bGVuZ3RoIF07Cj4gICAgICAgICB9Owo+IH07Cj4gLi4uCj4gdGltZXN0YW1wID0gMTU6NTY6MTUu
-NDA0OTczODY1LCBkZWx0YSA9ICswLjAwMDAyMzU5NCwgdHJhY2UgPSAxMDAwLzY0LWJpdCwKPiB0
-cmFjZTpob3N0bmFtZSA9IGFnYXRoZWJhdWVyLCB0cmFjZTpkb21haW4gPSB1c3QsIGxvZ2xldmVs
-ID0gVFJBQ0VfREVCVUcgKDE0KSwKPiBuYW1lID0gbHR0bmdfdXN0X3RyYWNlZjpldmVudCwgc3Ry
-ZWFtLnBhY2tldC5jb250ZXh0ID0geyB0aW1lc3RhbXBfYmVnaW4gPQo+IDQzODIzNzI4NzUwNDcs
-IHRpbWVzdGFtcF9lbmQgPSA0NDYyNzQxNjQxNjI5LCBjb250ZW50X3NpemUgPSA0NzE3Nzg4OCwK
-PiBwYWNrZXRfc2l6ZSA9IDQ3MTg1OTIwLCBwYWNrZXRfc2VxX251bSA9IDAsIGV2ZW50c19kaXNj
-YXJkZWQgPSAwLCBjcHVfaWQgPSAzCj4gfSwgc3RyZWFtLmV2ZW50LmhlYWRlciA9IHsgaWQgPSAo
-ICJjb21wYWN0IiA6IGNvbnRhaW5lciA9IDkgKSwgdiA9IHsgY29tcGFjdCA9Cj4geyB0aW1lc3Rh
-bXAgPSA3MDM4NTY1NiB9IH0gfSwgZXZlbnQuZmllbGRzID0geyBfbXNnX2xlbmd0aCA9IDMzLCBt
-c2cgPQo+ICJydW5fZXZlbnRfZW50cnk6IEltYWdlQ2FjaGUsIDEwMDAiIH0KPiAuLi4KPiBgYGAK
-Pgo+IE5vdywgaW4gbXkgY29kZSBJIGZpbmQgdGhlIGV2ZW50IGFuZCB0aGVuIEkndmUgdHJpZWQ6
-Cj4KPiBgYGAKPiAgICAgICAgICAgICBhdXRvIGRlZmluaXRpb24gPSBidF9jdGZfZ2V0X2ZpZWxk
-KGV2ZW50LCBzY29wZSwgIm1zZyIpOwo+ICAgICAgICAgICAgIGF1dG8gZGVjbGFyYXRpb24gPSBi
-dF9jdGZfZ2V0X2RlY2xfZnJvbV9kZWYoZGVmaW5pdGlvbik7Cj4gICAgICAgICAgICAgYXV0byB0
-eXBlID0gYnRfY3RmX2ZpZWxkX3R5cGUoZGVjbGFyYXRpb24pOwo+ICAgICAgICAgICAgIGF1dG8g
-ZW5jb2RpbmcgPSBidF9jdGZfZ2V0X2VuY29kaW5nKGRlY2xhcmF0aW9uKTsKPiAgICAgICAgICAg
-ICBhdXRvIHN0cmluZyA9IGJ0X2N0Zl9nZXRfc3RyaW5nKGRlZmluaXRpb24pOwo+ICAgICAgICAg
-ICAgIGF1dG8gY2hhcl9hcnJheSA9IGJ0X2N0Zl9nZXRfY2hhcl9hcnJheShkZWZpbml0aW9uKTsK
-PiAgICAgICAgICAgICBjb25zdCBidF9kZWZpbml0aW9uKiBjb25zdCogbGlzdCA9IG51bGxwdHI7
-Cj4gICAgICAgICAgICAgdW5zaWduZWQgbnVtX2xpc3QgPSAwOwo+ICAgICAgICAgICAgIGF1dG8g
-ZmllbGRfbGlzdF9yZXQgPSBidF9jdGZfZ2V0X2ZpZWxkX2xpc3QoY3RmX2V2ZW50LCBkZWZpbml0
-aW9uLAo+ICZsaXN0LCAmbnVtX2xpc3QpOwo+ICAgICAgICAgICAgIGZwcmludGYoc3RkZXJyLCAi
-dHJhY2VmIGRiZzogJXAgJXAgfCAlZCAlZCB8ICVzIHwgJXMgfCAlcCAldQo+ICVkXG4iLCBkZWZp
-bml0aW9uLCBkZWNsYXJhdGlvbiwgdHlwZSwgZW5jb2RpbmcsIHN0cmluZywgY2hhcl9hcnJheSwg
-bGlzdCwKPiBudW1fbGlzdCwgZmllbGRfbGlzdF9yZXQpOwo+IGBgYAo+Cj4gdGhlIG91dHB1dCBp
-czoKPgo+IGBgYAo+IHRyYWNlZiBkYmc6IDB4NTVlNGM1YjA4NGYwIDB4NTVlNGM1YjNmMjIwIHwg
-OSAxIHwgKG51bGwpIHwgKG51bGwpIHwgKG5pbCkgMCAtMQo+Cj4gYGBgCj4KPiBTbywgaXQncyBh
-IHNlcXVlbmNlICh0eXBlIDkpLCBidXQgSSBjYW4ndCBnZXQgdGhlIHNlcXVlbmNlLi4uIEFjdHVh
-bGx5LCB3aGVuIEkKPiB0cmllZCB0aGlzIHRoZSBmaXJzIHR0aW1lIHdpdGhvdXQgcGF0Y2hpbmcg
-YmFiZWx0cmFjZSwgdGhlbiBpdCBjcmFzaGVkIGluCj4gZXZlbnRzLmM6MjU2IFsxXS4gVGhlIGRl
-Zl9zZXF1ZW5jZSBpcyBub24tbnVsbCwgYnV0IGRlZl9zZXF1ZW5jZS0+ZWxlbXMgaXMKPiBudWxs
-IGFuZCB0aGF0J3Mgbm90IGNoZWNrZWQuLi4KPgo+IFsxXTogaHR0cHM6Ly9naXRodWIuY29tL2Vm
-ZmljaW9zL2JhYmVsdHJhY2UvYmxvYi9zdGFibGUtMS41L2Zvcm1hdHMvY3RmLwo+IGV2ZW50cy5j
-I0wyNTYKPgo+IEknbSBxdWl0ZSBzdHVtcGVkIC0gd2hhdCBhbSBJIGRvaW5nIHdyb25nPyBIb3cg
-ZG9lcyBiYWJlbHRyYWNlIGhhbmRsZSB0aGUKPiBzdHJpbmctZGVjb2Rpbmcgb2YgdHJhY2VmJ3Mg
-bXNnIGFyZz8KPgo+IFRoYW5rcwo+IC0tCj4gTWlsaWFuIFdvbGZmIHwgbWlsaWFuLndvbGZmQGtk
-YWIuY29tIHwgU2VuaW9yIFNvZnR3YXJlIEVuZ2luZWVyCj4gS0RBQiAoRGV1dHNjaGxhbmQpIEdt
-YkgsIGEgS0RBQiBHcm91cCBjb21wYW55Cj4gVGVsOiArNDktMzAtNTIxMzI1NDcwCj4gSUtEQUIg
-LSBUaGUgUXQsIEMrKyBhbmQgT3BlbkdMIEV4cGVydHNfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwo+IGx0dG5nLWRldiBtYWlsaW5nIGxpc3QKPiBsdHRuZy1k
-ZXZAbGlzdHMubHR0bmcub3JnCj4gaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWls
-bWFuL2xpc3RpbmZvL2x0dG5nLWRldgoKCgotLSAKSsOpcsOpbWllIEdhbGFybmVhdQpFZmZpY2lP
-UyBJbmMuCmh0dHA6Ly93d3cuZWZmaWNpb3MuY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxp
-c3RzLmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlz
-dGluZm8vbHR0bmctZGV2Cg==
+--===============1280083667427811605==
+Content-Type: multipart/alternative; boundary="000000000000dc45290585b958f3"
+
+--000000000000dc45290585b958f3
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+I am building an application which I am compiling with the 'lttng-ust'
+flag. When I try to debug the application using gdb, I get a 'Suspended:
+Signal: SIG33:Real-time event 33' message. This only happens when I compile
+with the 'lttng-ust' flag, if I remove it I no longer have this issue. Any
+insight?
+
+Regards,
+Mosleh
+
+--000000000000dc45290585b958f3
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello,<div><br></div><div>I am building an application whi=
+ch I am compiling with the &#39;lttng-ust&#39; flag. When I try to debug th=
+e application using gdb, I get a &#39;Suspended: Signal: SIG33:Real-time ev=
+ent 33&#39; message. This only happens when I compile with the &#39;lttng-u=
+st&#39; flag, if I remove it I no longer have this issue. Any insight?</div=
+><div><br></div><div>Regards,</div><div>Mosleh</div></div>
+
+--000000000000dc45290585b958f3--
+
+--===============1280083667427811605==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============1280083667427811605==--
