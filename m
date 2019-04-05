@@ -1,16 +1,15 @@
-From: "CaptainWonka ." <fusion1542001@gmail.com>
-Subject: Forum - Using liblttng-ctl
-Date: Fri, 5 Apr 2019 11:59:06 -0400
-Message-ID: <CAML1w2qLPnVcZ3=r6sKTvM3m1LaUQOBygdiSLpZnrQt1rUND5A__14434.085814149$1554480038$gmane$org@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: Forum - Using liblttng-ctl
+Date: Fri, 5 Apr 2019 12:05:57 -0400 (EDT)
+Message-ID: <1835227690.3195.1554480357602.JavaMail.zimbra__13229.3830903777$1554480387$gmane$org@efficios.com>
+References: <CAML1w2qLPnVcZ3=r6sKTvM3m1LaUQOBygdiSLpZnrQt1rUND5A@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5829219888059236944=="
+Content-Type: multipart/mixed; boundary="===============1828480860958577595=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com
- [IPv6:2607:f8b0:4864:20::332])
- by lists.lttng.org (Postfix) with ESMTPS id 44bPdK6q9Sz1Klc
- for <lttng-dev@lists.lttng.org>; Fri,  5 Apr 2019 11:59:17 -0400 (EDT)
-Received: by mail-ot1-x332.google.com with SMTP id u15so6047850otq.10
- for <lttng-dev@lists.lttng.org>; Fri, 05 Apr 2019 08:59:17 -0700 (PDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 44bPn92WZKz1KnB
+ for <lttng-dev@lists.lttng.org>; Fri,  5 Apr 2019 12:06:05 -0400 (EDT)
+In-Reply-To: <CAML1w2qLPnVcZ3=r6sKTvM3m1LaUQOBygdiSLpZnrQt1rUND5A@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,43 +19,88 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: "CaptainWonka ." <fusion1542001@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============5829219888059236944==
-Content-Type: multipart/alternative; boundary="000000000000a118e70585ca9110"
+--===============1828480860958577595==
+Content-Type: multipart/alternative;
+	boundary="=_0bcd180a-73e6-4d34-9ec8-ca6b072c0a60"
 
---000000000000a118e70585ca9110
-Content-Type: text/plain; charset="UTF-8"
+--=_0bcd180a-73e6-4d34-9ec8-ca6b072c0a60
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Hi Devs,
+----- On Apr 5, 2019, at 11:59 AM, CaptainWonka . <fusion1542001@gmail.com> wrote: 
 
-I am using trying to use the lttng-ctl api you guys provide. When building
-I get this error:
+> Hi Devs,
+> I am using trying to use the lttng-ctl api you guys provide. When building I get
+> this error:
 
-*undefined reference to `lttng_channel_create(&dom)'*
+> undefined reference to `lttng_channel_create(&dom)'
 
-Other calls, like creating sessions work. Its just trying to create and
-destroy the channel which throws this error. I am using lttng-tools 2.9, is
-this perhaps deprecated?
+> Other calls, like creating sessions work. Its just trying to create and destroy
+> the channel which throws this error. I am using lttng-tools 2.9, is this
+> perhaps deprecated?
 
-- Ryan
+In order to be deprecated, it would need to have existed at some point. 
 
---000000000000a118e70585ca9110
-Content-Type: text/html; charset="UTF-8"
+Can you point at the documentation or header implementation that makes you 
+assume this function ever existed at all ? 
+
+Thanks, 
+
+Mathieu 
+
+> - Ryan
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+-- 
+Mathieu Desnoyers 
+EfficiOS Inc. 
+http://www.efficios.com 
+
+--=_0bcd180a-73e6-4d34-9ec8-ca6b072c0a60
+Content-Type: text/html; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div dir=3D"ltr">Hi Devs,<div><br></div><div>I am using tr=
-ying to use the lttng-ctl api you guys provide. When building I get this er=
-ror:</div><div><b><br></b></div><div><b>undefined reference to `lttng_chann=
-el_create(&amp;dom)&#39;</b><br></div><div><br></div><div>Other calls, like=
- creating sessions work. Its just trying to create and destroy the channel =
-which throws this error. I am using lttng-tools 2.9, is this perhaps deprec=
-ated?</div><div><br></div><div>- Ryan</div></div></div>
+<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
+ize: 12pt; color: #000000"><div><br></div><div><br></div><div><span id=3D"z=
+wchr" data-marker=3D"__DIVIDER__">----- On Apr 5, 2019, at 11:59 AM, Captai=
+nWonka . &lt;fusion1542001@gmail.com&gt; wrote:<br></span></div><div data-m=
+arker=3D"__QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010F=
+F;margin-left:5px;padding-left:5px;color:#000;font-weight:normal;font-style=
+:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-si=
+ze:12pt;"><div dir=3D"ltr"><div dir=3D"ltr">Hi Devs,<br><div>I am using try=
+ing to use the lttng-ctl api you guys provide. When building I get this err=
+or:</div><div><b><br></b></div><div><b>undefined reference to `lttng_channe=
+l_create(&amp;dom)'</b><br></div><br><div>Other calls, like creating sessio=
+ns work. Its just trying to create and destroy the channel which throws thi=
+s error. I am using lttng-tools 2.9, is this perhaps deprecated?</div></div=
+></div></blockquote><div><br></div><div>In order to be deprecated, it would=
+ need to have existed at some point.<br data-mce-bogus=3D"1"></div><div><br=
+ data-mce-bogus=3D"1"></div><div>Can you point at the documentation or head=
+er implementation that makes you<br data-mce-bogus=3D"1"></div><div>assume =
+this function ever existed at all ?<br data-mce-bogus=3D"1"></div><div><br =
+data-mce-bogus=3D"1"></div><div>Thanks,<br data-mce-bogus=3D"1"></div><div>=
+<br data-mce-bogus=3D"1"></div><div>Mathieu<br data-mce-bogus=3D"1"></div><=
+div><br data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><blo=
+ckquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-left=
+:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:none;f=
+ont-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"><di=
+v dir=3D"ltr"><br><div>- Ryan</div></div></div>
+<br>_______________________________________________<br>lttng-dev mailing li=
+st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
+listinfo/lttng-dev<br></blockquote></div><div><br></div><div data-marker=3D=
+"__SIG_POST__">-- <br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http=
+://www.efficios.com</div></div></body></html>
+--=_0bcd180a-73e6-4d34-9ec8-ca6b072c0a60--
 
---000000000000a118e70585ca9110--
-
---===============5829219888059236944==
+--===============1828480860958577595==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -67,4 +111,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============5829219888059236944==--
+--===============1828480860958577595==--
