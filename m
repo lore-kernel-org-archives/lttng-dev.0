@@ -1,37 +1,18 @@
-From: =?UTF-8?Q?J=C3=A9r=C3=A9mie_Galarneau?= <jeremie.galarneau@efficios.com>
-Subject: Re: decoding tracef msg string via babeltrace API
-Date: Tue, 9 Apr 2019 13:02:06 -0400
-Message-ID: <CA+jJMxvD4HOVaDpKM2-gAQ3WLiPC7odsdXLyEzxvDzVH2p3t9Q__21780.9656912991$1554829389$gmane$org@mail.gmail.com>
-References: <33072915.QNGMzHgIAz@agathebauer>
- <CA+jJMxs4UAiWSanNqTigrGSLBdm+4WfcFxM5HOhvubDtXemjEA@mail.gmail.com>
- <2088473.4UkR9GzeEB@milian-kdab2>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-modules] RFC: fix: Remove start and number
+ from syscall_get_arguments() args (v5.1)
+Date: Tue,  9 Apr 2019 14:12:41 -0400
+Message-ID: <20190409181241.10294-1-mjeanson__8808.77166507474$1554833585$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7839943455932463847=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44dtrq53Kpz1Jw8
- for <lttng-dev@lists.lttng.org>; Tue,  9 Apr 2019 13:02:51 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 44dwPY1Xvxz1JyS
+ for <lttng-dev@lists.lttng.org>; Tue,  9 Apr 2019 14:12:48 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 54D707D7F6
- for <lttng-dev@lists.lttng.org>; Tue,  9 Apr 2019 13:02:45 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
- with ESMTP id qWtG-Wh6Tw6r for <lttng-dev@lists.lttng.org>;
- Tue,  9 Apr 2019 13:02:44 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 5E2927D7EB
- for <lttng-dev@lists.lttng.org>; Tue,  9 Apr 2019 13:02:44 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
- by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
- with ESMTP id uePLTx7KmCch for <lttng-dev@lists.lttng.org>;
- Tue,  9 Apr 2019 13:02:44 -0400 (EDT)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com
- [209.85.167.41])
- by mail.efficios.com (Postfix) with ESMTPSA id DF5027D7CC
- for <lttng-dev@lists.lttng.org>; Tue,  9 Apr 2019 13:02:43 -0400 (EDT)
-Received: by mail-lf1-f41.google.com with SMTP id u24so5996495lfg.5
- for <lttng-dev@lists.lttng.org>; Tue, 09 Apr 2019 10:02:43 -0700 (PDT)
-In-Reply-To: <2088473.4UkR9GzeEB@milian-kdab2>
+ by mail.efficios.com (Postfix) with ESMTP id 2A8131BED4A
+ for <lttng-dev@lists.lttng.org>; Tue,  9 Apr 2019 14:12:48 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -41,195 +22,255 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Milian Wolff <milian.wolff@kdab.com>
-Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============7839943455932463847==
-Content-Type: multipart/alternative; boundary="000000000000d5c87205861beb25"
+  commit b35f549df1d7520d37ba1e6d4a8d4df6bd52d136
+  Author: Steven Rostedt (Red Hat) <rostedt@goodmis.org>
+  Date:   Mon Nov 7 16:26:37 2016 -0500
 
---000000000000d5c87205861beb25
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+    syscalls: Remove start and number from syscall_get_arguments() args
 
-On Tue, 9 Apr 2019 at 04:36, Milian Wolff <milian.wolff@kdab.com> wrote:
+    At Linux Plumbers, Andy Lutomirski approached me and pointed out that the
+    function call syscall_get_arguments() implemented in x86 was horribly
+    written and not optimized for the standard case of passing in 0 and 6 for
+    the starting index and the number of system calls to get. When looking at
+    all the users of this function, I discovered that all instances pass in only
+    0 and 6 for these arguments. Instead of having this function handle
+    different cases that are never used, simply rewrite it to return the first 6
+    arguments of a system call.
 
-> On Thursday, April 4, 2019 8:25:51 PM CEST J=C3=A9r=C3=A9mie Galarneau wr=
-ote:
-> > Hi Milian,
-> >
-> > I have pushed a fix [1] in the stable-1.5 branch that addresses the
-> > issue you have encountered with using bt_ctf_get_field_list().
-> > This makes it possible to consume a character sequence's content.
-> >
-> > The commit message contains an example to show how to essentially
-> > perform what the 'ctf-text' format plug-in achieves by accessing the
-> > internal string field.
-> >
-> > Let me know if that works for you and I'll release an updated version
-> > of the 1.5 branch.
->
-> Thank you, I'll try that out in the next days!
->
-> But: why can't we make bt_ctf_get_string return the string for us? Why do
-> we
-> need to reinvent the wheel in consumers of the babeltrace API? You point
-> out
->
+    This should help out the performance of tracing system calls by ptrace,
+    ftrace and perf.
 
-Hi,
+    Link: http://lkml.kernel.org/r/20161107213233.754809394@goodmis.org
 
-Strings, sequences and arrays are three different types in CTF.
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ lttng-syscalls.c  | 57 ++++++++++++++++++++++++-----------------------
+ wrapper/syscall.h | 34 ++++++++++++++++++++++++++++
+ 2 files changed, 63 insertions(+), 28 deletions(-)
+ create mode 100644 wrapper/syscall.h
 
-bt_ctf_get_string() can only be used on CTF strings. In the babeltrace 1.x
-API, those are expressed through 'bt_definition's that have a
-'bt_declaration'
-of type CTF_TYPE_STRING. It is not a general-purpose accessor to get
-a field's content as a C-string.
-
-Changing this in the 1.x release series goes against the design of the
-API (dedicated functions per definition type) and would, arguably, be an
-ABI breaking change.
-
-As pointed out in the commit message, bt_ctf_get_char_array() is
-a convenience function to access a character-array's contents as
-a C-string. An equivalent function could be added for sequences.
-
-Since you pointed-out a bug in the existing API, my priority was
-in fixing that bug which prevented users from accessing the sequences'
-contents at all in the "looks like a string" case. That fix can be
-back-ported into existing releases and made available in a point-release.
-
-Adding new APIs is an orthogonal concern. I'm not against a
-convenience function that does what you want; but it won't be
-shoe-horned into an existing one.
-
-J=C3=A9r=C3=A9mie
-
-
-
->
-> Cheers
->
-
-
-> that it's non-trivial to get the strings decoded properly, so I'd really
-> appreciate if we get that code implemented once and then can leverage it
-> everywhere.
->
-
-> Generally, I don't understand why there's both, bt_ctf_get_string and
-> bt_ctf_get_char_array in the first place....
->
---=20
-> Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
-> KDAB (Deutschland) GmbH, a KDAB Group company
-> Tel: +49-30-521325470
-> KDAB - The Qt, C++ and OpenGL Experts
-
-
-
---=20
-J=C3=A9r=C3=A9mie Galarneau
-EfficiOS Inc.
-http://www.efficios.com
-
---000000000000d5c87205861beb25
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote">=
-<div dir=3D"ltr" class=3D"gmail_attr">On Tue, 9 Apr 2019 at 04:36, Milian W=
-olff &lt;<a href=3D"mailto:milian.wolff@kdab.com" target=3D"_blank">milian.=
-wolff@kdab.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" st=
-yle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padd=
-ing-left:1ex">On Thursday, April 4, 2019 8:25:51 PM CEST J=C3=A9r=C3=A9mie =
-Galarneau wrote:<br>
-&gt; Hi Milian,<br>
-&gt; <br>
-&gt; I have pushed a fix [1] in the stable-1.5 branch that addresses the<br=
->
-&gt; issue you have encountered with using bt_ctf_get_field_list().<br>
-&gt; This makes it possible to consume a character sequence&#39;s content.<=
-br>
-&gt; <br>
-&gt; The commit message contains an example to show how to essentially<br>
-&gt; perform what the &#39;ctf-text&#39; format plug-in achieves by accessi=
-ng the<br>
-&gt; internal string field.<br>
-&gt; <br>
-&gt; Let me know if that works for you and I&#39;ll release an updated vers=
-ion<br>
-&gt; of the 1.5 branch.<br>
-<br>
-Thank you, I&#39;ll try that out in the next days!<br>
-<br>
-But: why can&#39;t we make bt_ctf_get_string return the string for us? Why =
-do we <br>
-need to reinvent the wheel in consumers of the babeltrace API? You point ou=
-t <br>
-</blockquote><div><br></div><div><div></div><div>Hi,<br></div><br><div clas=
-s=3D"gmail_quote"><div>Strings, sequences and arrays are three different ty=
-pes in CTF.</div><div><br></div><div>bt_ctf_get_string() can only be used o=
-n CTF strings. In the babeltrace 1.x</div><div>API, those are expressed thr=
-ough &#39;bt_definition&#39;s that have a &#39;bt_declaration&#39;</div><di=
-v>of type CTF_TYPE_STRING. It is not a general-purpose accessor to get</div=
-><div>a field&#39;s content as a C-string.</div><div><br></div><div>Changin=
-g this in the 1.x release series goes against the design of the</div><div>A=
-PI (dedicated functions per definition type) and would, arguably, be an</di=
-v><div>ABI breaking change.<br></div></div><div class=3D"gmail_quote"><br><=
-/div><div class=3D"gmail_quote"><div>As pointed out in the commit message, =
-bt_ctf_get_char_array() is</div><div>a convenience function to access a cha=
-racter-array&#39;s contents as</div><div>a C-string. An equivalent function=
- could be added for sequences.</div><div><br></div><div><div>Since you poin=
-ted-out a bug in the existing API, my priority was</div><div>in fixing that=
- bug which prevented users from accessing the sequences&#39;</div><div>cont=
-ents at all in the &quot;looks like a string&quot; case. That fix can be</d=
-iv><div>back-ported into existing releases and made available in a point-re=
-lease.</div><div><br></div><div>Adding new APIs is an orthogonal concern. I=
-&#39;m not against a</div><div>convenience function that does what you want=
-; but it won&#39;t be</div><div>shoe-horned into an existing one.</div></di=
-v><div><br></div><div>J=C3=A9r=C3=A9mie<br></div><div><br></div><div></div>=
-<div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px =
-0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
-<br>
-Cheers<br>
-</blockquote></div></div><div>=C2=A0</div><blockquote class=3D"gmail_quote"=
- style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);p=
-adding-left:1ex">that it&#39;s non-trivial to get the strings decoded prope=
-rly, so I&#39;d really <br>
-appreciate if we get that code implemented once and then can leverage it <b=
-r>
-everywhere.<br></blockquote><div></div><blockquote class=3D"gmail_quote" st=
-yle=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padd=
-ing-left:1ex">
-<br>
-Generally, I don&#39;t understand why there&#39;s both, bt_ctf_get_string a=
-nd <br>
-bt_ctf_get_char_array in the first place....<br></blockquote></div><div cla=
-ss=3D"gmail_quote"><blockquote class=3D"gmail_quote" style=3D"margin:0px 0p=
-x 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
--- <br>
-Milian Wolff | <a href=3D"mailto:milian.wolff@kdab.com" target=3D"_blank">m=
-ilian.wolff@kdab.com</a> | Senior Software Engineer<br>
-KDAB (Deutschland) GmbH, a KDAB Group company<br>
-Tel: +49-30-521325470<br>
-KDAB - The Qt, C++ and OpenGL Experts</blockquote></div><br clear=3D"all"><=
-br>-- <br><div dir=3D"ltr" class=3D"m_-777251763788995089gmail_signature">J=
-=C3=A9r=C3=A9mie Galarneau<br>EfficiOS Inc.<br><a href=3D"http://www.effici=
-os.com" target=3D"_blank">http://www.efficios.com</a></div></div>
-
---000000000000d5c87205861beb25--
-
---===============7839943455932463847==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============7839943455932463847==--
+diff --git a/lttng-syscalls.c b/lttng-syscalls.c
+index bcc06b5..ebd9246 100644
+--- a/lttng-syscalls.c
++++ b/lttng-syscalls.c
+@@ -25,6 +25,7 @@
+ #include <wrapper/tracepoint.h>
+ #include <wrapper/file.h>
+ #include <wrapper/rcu.h>
++#include <wrapper/syscall.h>
+ #include <lttng-events.h>
+ 
+ #ifndef CONFIG_COMPAT
+@@ -361,9 +362,9 @@ struct lttng_syscall_filter {
+ static void syscall_entry_unknown(struct lttng_event *event,
+ 	struct pt_regs *regs, unsigned int id)
+ {
+-	unsigned long args[UNKNOWN_SYSCALL_NRARGS];
++	unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-	syscall_get_arguments(current, regs, 0, UNKNOWN_SYSCALL_NRARGS, args);
++	lttng_syscall_get_arguments(current, regs, args);
+ 	if (unlikely(in_compat_syscall()))
+ 		__event_probe__compat_syscall_entry_unknown(event, id, args);
+ 	else
+@@ -432,9 +433,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
+ 	case 1:
+ 	{
+ 		void (*fptr)(void *__data, unsigned long arg0) = entry->func;
+-		unsigned long args[1];
++		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
++		lttng_syscall_get_arguments(current, regs, args);
+ 		fptr(event, args[0]);
+ 		break;
+ 	}
+@@ -443,9 +444,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
+ 		void (*fptr)(void *__data,
+ 			unsigned long arg0,
+ 			unsigned long arg1) = entry->func;
+-		unsigned long args[2];
++		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
++		lttng_syscall_get_arguments(current, regs, args);
+ 		fptr(event, args[0], args[1]);
+ 		break;
+ 	}
+@@ -455,9 +456,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
+ 			unsigned long arg0,
+ 			unsigned long arg1,
+ 			unsigned long arg2) = entry->func;
+-		unsigned long args[3];
++		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
++		lttng_syscall_get_arguments(current, regs, args);
+ 		fptr(event, args[0], args[1], args[2]);
+ 		break;
+ 	}
+@@ -468,9 +469,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
+ 			unsigned long arg1,
+ 			unsigned long arg2,
+ 			unsigned long arg3) = entry->func;
+-		unsigned long args[4];
++		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
++		lttng_syscall_get_arguments(current, regs, args);
+ 		fptr(event, args[0], args[1], args[2], args[3]);
+ 		break;
+ 	}
+@@ -482,9 +483,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
+ 			unsigned long arg2,
+ 			unsigned long arg3,
+ 			unsigned long arg4) = entry->func;
+-		unsigned long args[5];
++		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
++		lttng_syscall_get_arguments(current, regs, args);
+ 		fptr(event, args[0], args[1], args[2], args[3], args[4]);
+ 		break;
+ 	}
+@@ -497,9 +498,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
+ 			unsigned long arg3,
+ 			unsigned long arg4,
+ 			unsigned long arg5) = entry->func;
+-		unsigned long args[6];
++		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
++		lttng_syscall_get_arguments(current, regs, args);
+ 		fptr(event, args[0], args[1], args[2],
+ 			args[3], args[4], args[5]);
+ 		break;
+@@ -512,9 +513,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
+ static void syscall_exit_unknown(struct lttng_event *event,
+ 	struct pt_regs *regs, int id, long ret)
+ {
+-	unsigned long args[UNKNOWN_SYSCALL_NRARGS];
++	unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-	syscall_get_arguments(current, regs, 0, UNKNOWN_SYSCALL_NRARGS, args);
++	lttng_syscall_get_arguments(current, regs, args);
+ 	if (unlikely(in_compat_syscall()))
+ 		__event_probe__compat_syscall_exit_unknown(event, id, ret,
+ 			args);
+@@ -588,9 +589,9 @@ void syscall_exit_probe(void *__data, struct pt_regs *regs, long ret)
+ 		void (*fptr)(void *__data,
+ 			long ret,
+ 			unsigned long arg0) = entry->func;
+-		unsigned long args[1];
++		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
++		lttng_syscall_get_arguments(current, regs, args);
+ 		fptr(event, ret, args[0]);
+ 		break;
+ 	}
+@@ -600,9 +601,9 @@ void syscall_exit_probe(void *__data, struct pt_regs *regs, long ret)
+ 			long ret,
+ 			unsigned long arg0,
+ 			unsigned long arg1) = entry->func;
+-		unsigned long args[2];
++		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
++		lttng_syscall_get_arguments(current, regs, args);
+ 		fptr(event, ret, args[0], args[1]);
+ 		break;
+ 	}
+@@ -613,9 +614,9 @@ void syscall_exit_probe(void *__data, struct pt_regs *regs, long ret)
+ 			unsigned long arg0,
+ 			unsigned long arg1,
+ 			unsigned long arg2) = entry->func;
+-		unsigned long args[3];
++		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
++		lttng_syscall_get_arguments(current, regs, args);
+ 		fptr(event, ret, args[0], args[1], args[2]);
+ 		break;
+ 	}
+@@ -627,9 +628,9 @@ void syscall_exit_probe(void *__data, struct pt_regs *regs, long ret)
+ 			unsigned long arg1,
+ 			unsigned long arg2,
+ 			unsigned long arg3) = entry->func;
+-		unsigned long args[4];
++		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
++		lttng_syscall_get_arguments(current, regs, args);
+ 		fptr(event, ret, args[0], args[1], args[2], args[3]);
+ 		break;
+ 	}
+@@ -642,9 +643,9 @@ void syscall_exit_probe(void *__data, struct pt_regs *regs, long ret)
+ 			unsigned long arg2,
+ 			unsigned long arg3,
+ 			unsigned long arg4) = entry->func;
+-		unsigned long args[5];
++		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
++		lttng_syscall_get_arguments(current, regs, args);
+ 		fptr(event, ret, args[0], args[1], args[2], args[3], args[4]);
+ 		break;
+ 	}
+@@ -658,9 +659,9 @@ void syscall_exit_probe(void *__data, struct pt_regs *regs, long ret)
+ 			unsigned long arg3,
+ 			unsigned long arg4,
+ 			unsigned long arg5) = entry->func;
+-		unsigned long args[6];
++		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
+ 
+-		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
++		lttng_syscall_get_arguments(current, regs, args);
+ 		fptr(event, ret, args[0], args[1], args[2],
+ 			args[3], args[4], args[5]);
+ 		break;
+diff --git a/wrapper/syscall.h b/wrapper/syscall.h
+new file mode 100644
+index 0000000..8715f0c
+--- /dev/null
++++ b/wrapper/syscall.h
+@@ -0,0 +1,34 @@
++/* SPDX-License-Identifier: (GPL-2.0 or LGPL-2.1)
++ *
++ * wrapper/syscall.h
++ *
++ * wrapper around asm/syscall.h.
++ *
++ * Copyright (C) 2019 Michael Jeanson <mjeanson@efficios.com>
++ */
++
++#ifndef _LTTNG_WRAPPER_SYSCALL_H
++#define _LTTNG_WRAPPER_SYSCALL_H
++
++#include <asm/syscall.h>
++#include <lttng-kernel-version.h>
++
++#define LTTNG_SYSCALL_NR_ARGS 6
++
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0))
++
++#define lttng_syscall_get_arguments(task, regs, args) \
++	syscall_get_arguments(task, regs, args)
++
++#else /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0) */
++
++static inline
++void lttng_syscall_get_arguments(struct task_struct *task,
++		struct pt_regs *regs, unsigned long *args)
++{
++	syscall_get_arguments(task, regs, 0, LTTNG_SYSCALL_NR_ARGS, args);
++}
++
++#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0) */
++
++#endif /* _LTTNG_WRAPPER_SYSCALL_H */
+-- 
+2.17.1
