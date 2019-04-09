@@ -1,16 +1,17 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Forum - Using liblttng-ctl
-Date: Fri, 5 Apr 2019 12:16:45 -0400 (EDT)
-Message-ID: <1305559971.3387.1554481005204.JavaMail.zimbra__17354.7164233$1554481022$gmane$org@efficios.com>
-References: <CAML1w2qLPnVcZ3=r6sKTvM3m1LaUQOBygdiSLpZnrQt1rUND5A@mail.gmail.com>
- <1360056369.3262.1554480682602.JavaMail.zimbra@efficios.com>
+From: Milian Wolff via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: decoding tracef msg string via babeltrace API
+Date: Tue, 09 Apr 2019 10:36:44 +0200
+Message-ID: <2088473.4UkR9GzeEB__34454.7804373846$1554799032$gmane$org@milian-kdab2>
+References: <33072915.QNGMzHgIAz@agathebauer>
+ <CA+jJMxs4UAiWSanNqTigrGSLBdm+4WfcFxM5HOhvubDtXemjEA@mail.gmail.com>
+Reply-To: Milian Wolff <milian.wolff@kdab.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8953530376380741150=="
+Content-Type: multipart/mixed; boundary="===============2904037886888310282=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44bQ1V4hzdz1KqF
- for <lttng-dev@lists.lttng.org>; Fri,  5 Apr 2019 12:16:46 -0400 (EDT)
-In-Reply-To: <1360056369.3262.1554480682602.JavaMail.zimbra@efficios.com>
+Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
+ by lists.lttng.org (Postfix) with ESMTPS id 44dgd23PC5z1L9X
+ for <lttng-dev@lists.lttng.org>; Tue,  9 Apr 2019 04:36:54 -0400 (EDT)
+In-Reply-To: <CA+jJMxs4UAiWSanNqTigrGSLBdm+4WfcFxM5HOhvubDtXemjEA@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,120 +21,132 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Yannick Lamarre <ylamarre@efficios.com>
-Cc: CaptainWonka <fusion1542001@gmail.com>, lttng-dev <lttng-dev@lists.lttng.org>
+To: =?ISO-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============8953530376380741150==
-Content-Type: multipart/alternative;
-	boundary="=_b3d728d8-e6ac-4b98-af1d-07ac18320939"
+--===============2904037886888310282==
+Content-Type: multipart/signed; boundary="nextPart1746499.LlmB1Ye6ba";
+ micalg="sha256"; protocol="application/pkcs7-signature"
 
---=_b3d728d8-e6ac-4b98-af1d-07ac18320939
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-
-Hi Yannick, 
-
-Good point about it being part of 2.11. I looked at 2.9 (as stated in the original email) and missed it. 
-
-A correction to your statement: It is however part of the liblttng-ctl library, which is not internal at all. So it's OK 
-to use it, but it's was not present in 2.9, which is what was reported to be linked against. 
-
-Thanks, 
-
-Mathieu 
-
------ On Apr 5, 2019, at 12:11 PM, Yannick Lamarre <ylamarre@efficios.com> wrote: 
-
-> Hi Ryan
-> While this function "exists" in 2.11, it's part of the internal librairy and
-> shouldn't be used. lttng_enable_channel does exactly what you want and is part
-> of the exposed API both in 2.9n and 2.11.
-> Regards,
-> YL
-
-> From: "CaptainWonka ." <fusion1542001@gmail.com>
-> To: "lttng-dev" <lttng-dev@lists.lttng.org>
-> Sent: Friday, April 5, 2019 11:59:06 AM
-> Subject: [lttng-dev] Forum - Using liblttng-ctl
-
-> Hi Devs,
-> I am using trying to use the lttng-ctl api you guys provide. When building I get
-> this error:
-
-> undefined reference to `lttng_channel_create(&dom)'
-
-> Other calls, like creating sessions work. Its just trying to create and destroy
-> the channel which throws this error. I am using lttng-tools 2.9, is this
-> perhaps deprecated?
-
-> - Ryan
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
--- 
-Mathieu Desnoyers 
-EfficiOS Inc. 
-http://www.efficios.com 
-
---=_b3d728d8-e6ac-4b98-af1d-07ac18320939
-Content-Type: text/html; charset=utf-8
+--nextPart1746499.LlmB1Ye6ba
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div>Hi Yannick,<br></div><div><br data-mce-bogu=
-s=3D"1"></div><div>Good point about it being part of 2.11. I looked at 2.9 =
-(as stated in the original email) and missed it.<br data-mce-bogus=3D"1"></=
-div><div><br data-mce-bogus=3D"1"></div><div>A correction to your statement=
-: It is however part of the liblttng-ctl library, which is not internal at =
-all. So it's OK<br data-mce-bogus=3D"1"></div><div>to use it, but it's was =
-not present in 2.9, which is what was reported to be linked against.<br dat=
-a-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Thanks,<br=
- data-mce-bogus=3D"1"></div><div><br data-mce-bogus=3D"1"></div><div>Mathie=
-u<br data-mce-bogus=3D"1"></div><div><br></div><div><span id=3D"zwchr" data=
--marker=3D"__DIVIDER__">----- On Apr 5, 2019, at 12:11 PM, Yannick Lamarre =
-&lt;ylamarre@efficios.com&gt; wrote:<br></span></div><div data-marker=3D"__=
-QUOTED_TEXT__"><blockquote style=3D"border-left:2px solid #1010FF;margin-le=
-ft:5px;padding-left:5px;color:#000;font-weight:normal;font-style:normal;tex=
-t-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><=
-div style=3D"font-family: arial, helvetica, sans-serif; font-size: 12pt; co=
-lor: #000000"><div><div style=3D"font-family: arial, helvetica, sans-serif;=
- font-size: 12pt; color: #000000"><div>Hi Ryan<br></div>While this function=
- "exists" in 2.11, it's part of the internal librairy and shouldn't be used=
-. lttng_enable_channel does exactly what you want and is part of the expose=
-d API both in 2.9n and 2.11.</div><div style=3D"font-family: arial, helveti=
-ca, sans-serif; font-size: 12pt; color: #000000">Regards,</div><div style=
-=3D"font-family: arial, helvetica, sans-serif; font-size: 12pt; color: #000=
-000">YL<br><br><hr id=3D"zwchr"><div><b>From: </b>"CaptainWonka ." &lt;fusi=
-on1542001@gmail.com&gt;<br><b>To: </b>"lttng-dev" &lt;lttng-dev@lists.lttng=
-.org&gt;<br><b>Sent: </b>Friday, April 5, 2019 11:59:06 AM<br><b>Subject: <=
-/b>[lttng-dev] Forum - Using liblttng-ctl<br></div><br><div><div dir=3D"ltr=
-"><div dir=3D"ltr">Hi Devs,<br><div>I am using trying to use the lttng-ctl =
-api you guys provide. When building I get this error:</div><div><b><br></b>=
-</div><div><b>undefined reference to `lttng_channel_create(&amp;dom)'</b><b=
-r></div><br><div>Other calls, like creating sessions work. Its just trying =
-to create and destroy the channel which throws this error. I am using lttng=
--tools 2.9, is this perhaps deprecated?</div><br><div>- Ryan</div></div></d=
-iv>
-<br>_______________________________________________<br>lttng-dev mailing li=
-st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
-listinfo/lttng-dev</div></div><br></div></div><br>_________________________=
-______________________<br>lttng-dev mailing list<br>lttng-dev@lists.lttng.o=
-rg<br>https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev<br></block=
-quote></div><div><br></div><div data-marker=3D"__SIG_POST__">-- <br></div><=
-div>Mathieu Desnoyers<br>EfficiOS Inc.<br>http://www.efficios.com</div></di=
-v></body></html>
---=_b3d728d8-e6ac-4b98-af1d-07ac18320939--
+On Thursday, April 4, 2019 8:25:51 PM CEST J=E9r=E9mie Galarneau wrote:
+> Hi Milian,
+>=20
+> I have pushed a fix [1] in the stable-1.5 branch that addresses the
+> issue you have encountered with using bt_ctf_get_field_list().
+> This makes it possible to consume a character sequence's content.
+>=20
+> The commit message contains an example to show how to essentially
+> perform what the 'ctf-text' format plug-in achieves by accessing the
+> internal string field.
+>=20
+> Let me know if that works for you and I'll release an updated version
+> of the 1.5 branch.
 
---===============8953530376380741150==
+Thank you, I'll try that out in the next days!
+
+But: why can't we make bt_ctf_get_string return the string for us? Why do w=
+e=20
+need to reinvent the wheel in consumers of the babeltrace API? You point ou=
+t=20
+that it's non-trivial to get the strings decoded properly, so I'd really=20
+appreciate if we get that code implemented once and then can leverage it=20
+everywhere.
+
+Generally, I don't understand why there's both, bt_ctf_get_string and=20
+bt_ctf_get_char_array in the first place....
+
+Cheers
+
+=2D-=20
+Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
+KDAB (Deutschland) GmbH, a KDAB Group company
+Tel: +49-30-521325470
+KDAB - The Qt, C++ and OpenGL Experts
+--nextPart1746499.LlmB1Ye6ba
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCDEIw
+ggXmMIIDzqADAgECAhBqm+E4O/8ra58B1dm4p1JWMA0GCSqGSIb3DQEBDAUAMIGFMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYD
+VQQKExFDT01PRE8gQ0EgTGltaXRlZDErMCkGA1UEAxMiQ09NT0RPIFJTQSBDZXJ0aWZpY2F0aW9u
+IEF1dGhvcml0eTAeFw0xMzAxMTAwMDAwMDBaFw0yODAxMDkyMzU5NTlaMIGXMQswCQYDVQQGEwJH
+QjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYDVQQK
+ExFDT01PRE8gQ0EgTGltaXRlZDE9MDsGA1UEAxM0Q09NT0RPIFJTQSBDbGllbnQgQXV0aGVudGlj
+YXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+AL6znlesKHZ1QBbHOAOY08YYdiFQ8yV5C0y1oNF9Olg+nKcxLqf2NHbZhGra0D00SOTq9bus3/mx
+gUsg/Wh/eXQ0pnp8tZ8XZWAnlyKMpjL+qUByRjXCA6RQyDMqVaVUkbIr5SU0RDX/kSsKwer3H1pT
+/HUrBN0X8sKtPTdGX8XAWt/VdMLBrZBlgvnkCos+KQWWCo63OTTqRvaq8aWccm+KOMjTcE6s2mj6
+RkalweyDI7X+7U5lNo6jzC8RTXtVV4/Vwdax720YpMPJQaDaElmOupyTf1Qib+cpukNJnQmwygjD
+8m046DQkLnpXNCAGjuJy1F5NATksUsbfJAr7FLUCAwEAAaOCATwwggE4MB8GA1UdIwQYMBaAFLuv
+fgI9+qbxPISOre44mOzZMjLUMB0GA1UdDgQWBBSCr2yM+MX+lmF86B89K3FIXsSLwDAOBgNVHQ8B
+Af8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIBADARBgNVHSAECjAIMAYGBFUdIAAwTAYDVR0fBEUw
+QzBBoD+gPYY7aHR0cDovL2NybC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2VydGlmaWNhdGlvbkF1
+dGhvcml0eS5jcmwwcQYIKwYBBQUHAQEEZTBjMDsGCCsGAQUFBzAChi9odHRwOi8vY3J0LmNvbW9k
+b2NhLmNvbS9DT01PRE9SU0FBZGRUcnVzdENBLmNydDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3Au
+Y29tb2RvY2EuY29tMA0GCSqGSIb3DQEBDAUAA4ICAQB4XLKBKDRPPO5fVs6fl1bsj6JrF/bz9kkI
+BtTYLzXN30D+03Hj6OxCDBEaIeNmsBhrJmuubvyE7HtoSmR809AgcYboW+rcTNZ/8u/Hv+GTrNI/
+AhqX2/kiQNxmgUPt/eJPs92Qclj0HnVyy9TnSvGkSDU7I5Px+TbO+88G4zipA2psZaWeEykgzClZ
+lPz1FjTCkk77ZXp5cQYYexE6zeeN4/0OqqoAloFrjAF4o50YJafX8mnahjp3I2Y2mkjhk0xQfhNq
+bzlLWPoT3m7j7U26u7zg6swjOq8hITYc3/np5tM5aVyu6t99p17bTbY7+1RTWBviN9YJzK8HxzOb
+XYWBf/L+VGOYNsQDTxAk0Hbvb1j6KjUhg7fO294F29QIhhmiNOr84JHoy+fNLpfvYc/Q9EtFOI5I
+SYgOxLk3nD/whbUe9rmEQXLp8MB933Ij474gwwCPUpwv9mj2PMnXoc7mbrS22XUSeTwxCTP9bcmU
+dp4jmIoWfhQm7X9w/Zgddg+JZ/YnIHOwsGsaTUgj7fIvxqith7DoJC91WJ8Lce3CVJqb1XWeKIJ8
+4F7YLXZN0oa7TktYgDdmQVxYkZo1c5noaDKH9Oq9cbm/vOYRUM1cWcef20Wkyk5S/GFyyPJwG0fR
+1nRas3DqAf4cXxMiEKcff7PNa4M3RGTqH0pWR8p6EjCCBlQwggU8oAMCAQICEAf6KCF9+1doL2oE
+OTPysLwwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNVBAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1h
+bmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0w
+OwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWls
+IENBMB4XDTE3MDUyMzAwMDAwMFoXDTIwMDUyMjIzNTk1OVowggFZMQswCQYDVQQGEwJTRTEPMA0G
+A1UEERMGNjgzIDMxMRIwEAYDVQQIEwlWYWVybWxhbmQxEDAOBgNVBAcTB0hhZ2ZvcnMxGDAWBgNV
+BAkTD05vcnJpbmdzIHZhZWcgMjEPMA0GA1UEEhMGQm94IDMwMSYwJAYDVQQKDB1LbGFyw6RsdmRh
+bGVucyBEYXRha29uc3VsdCBBQjEdMBsGA1UECxMUQSBLREFCIEdyb3VwIENvbXBhbnkxQzBBBgNV
+BAsMOklzc3VlZCB0aHJvdWdoIEtsYXLDpGx2ZGFsZW5zIERhdGFrb25zdWx0IEFCIEUtUEtJIE1h
+bmFnZXIxHzAdBgNVBAsTFkNvcnBvcmF0ZSBTZWN1cmUgRW1haWwxFTATBgNVBAMTDE1pbGlhbiBX
+b2xmZjEkMCIGCSqGSIb3DQEJARYVbWlsaWFuLndvbGZmQGtkYWIuY29tMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAxrzfNBVvRbiAknuTBXuQnNm9sLIFLo0vbPB6kswk78A3tA++Zn5c
+lQUHhGlQq1cdYxagnUpqwvG3Sod15mPSOLkAPf/mabLN7p+lFbRaUP+97ZkTZtvb4BCC3osIEFI4
+G393OSFWqc2qmIPE/SwSASbAA20Fcaa2M6P1lhOk/ttUh2jIurTPF0wUycIA7lBddrOgaOA8e2m6
+iLTNHtlrfRbBaUX91D5ebY+UWmIjXSQ9+CtutMzBkwnF0rZKririvOkklg9VzEGNQVHrQfDF2s/U
+pOtmtuVSwElauGT/KALyCFuIrYC1pmaKH8S1xODJqiRaf6jH8E+KQzKjyM/ErwIDAQABo4IB1TCC
+AdEwHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFN+m99RtIuA1bSdw
+6b1brOX7X3AJMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAgBgNVHREEGTAXgRVtaWxpYW4ud29s
+ZmZAa2RhYi5jb20wDQYJKoZIhvcNAQELBQADggEBABf47LSJADqH+ow9INv3QM1NC/qq2bjxGvsZ
+68iD11VEUAFlsYfsVTgQqUirwPVTYenXtwVBELHZyywsui1JxL7HKQetLQegDDP/RyfjReVaWxhy
+3OpuItsgLVbru9QVgPifnoBFPtfZcwjeJDmeSbLT8oj4Rd0KYBOIve7WKvsfNPsNwfbLwY2zILkE
+LjxZcVi2AwZHDyab+dzL/3YcLuJj1lSawBGn7ilpcdZydlv4aye51pD/MemLIYLcylt+ImrmjnTV
+y+QlAHRF3s5FE8yAr+W1MBD/1bKZCSgFt8VQoAlz3hiQh8QqZp4Zl8WuVL4+mP/mT6VDEWgq/0Bo
+cukxggJuMIICagIBATCBrDCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hl
+c3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNV
+BAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
+EAf6KCF9+1doL2oEOTPysLwwDQYJYIZIAWUDBAIBBQCggZMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkwNDA5MDgzNjQ0WjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgE4fvjYCHO5RyaAYNJj0YS1jUGnTw
+NvC+5CkpH7SL0b8wDQYJKoZIhvcNAQEBBQAEggEAdJnC/uZb5KXyaqWNKkdoE0ludMbsVXtfO0m3
+SX2hVp3vk3uuFR/mT4IrLrKc8Org8M09D3F2N2uESqDaX1Era63gOMdwYxqBUsbLGt5xVvBDPctR
+R27z5h25gzMl21z0VgLXzqlTJLH+HRn5iG/HeVvnLFAGXcig/d2/W/KlPQWn1pGP4d89CRvdUfA8
+i8FBhANxwVppprmtKOkyR7qxSBw/0V8S5UTbhtxAZcqtT6R7TyrInhfxgWVMmW2FZmAMUg5QpMZ7
+8HeSq3uZY+sE9iCYhHFoeFvxQWqktuENFcsWJgQ/8uYNcRyQfy8VAmVzlJhjWKeTrkYo4u/+xya6
+xwAAAAAAAA==
+
+
+--nextPart1746499.LlmB1Ye6ba--
+
+
+
+--===============2904037886888310282==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -144,4 +157,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============8953530376380741150==--
+--===============2904037886888310282==--
