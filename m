@@ -1,18 +1,17 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-modules] RFC: fix: Remove start and number
- from syscall_get_arguments() args (v5.1)
-Date: Tue,  9 Apr 2019 14:12:41 -0400
-Message-ID: <20190409181241.10294-1-mjeanson__8808.77166507474$1554833585$gmane$org@efficios.com>
+From: Milian Wolff via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: decoding tracef msg string via babeltrace API
+Date: Wed, 10 Apr 2019 09:56:43 +0200
+Message-ID: <2430999.6Ms1xt7J43__9971.1522505217$1554883026$gmane$org@milian-kdab2>
+References: <33072915.QNGMzHgIAz@agathebauer> <2088473.4UkR9GzeEB@milian-kdab2>
+ <CA+jJMxvD4HOVaDpKM2-gAQ3WLiPC7odsdXLyEzxvDzVH2p3t9Q@mail.gmail.com>
+Reply-To: Milian Wolff <milian.wolff@kdab.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4842130578311963523=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44dwPY1Xvxz1JyS
- for <lttng-dev@lists.lttng.org>; Tue,  9 Apr 2019 14:12:48 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 2A8131BED4A
- for <lttng-dev@lists.lttng.org>; Tue,  9 Apr 2019 14:12:48 -0400 (EDT)
+Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
+ by lists.lttng.org (Postfix) with ESMTPS id 44fGhM2FR4z1KMw
+ for <lttng-dev@lists.lttng.org>; Wed, 10 Apr 2019 03:56:50 -0400 (EDT)
+In-Reply-To: <CA+jJMxvD4HOVaDpKM2-gAQ3WLiPC7odsdXLyEzxvDzVH2p3t9Q@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,255 +21,192 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: =?ISO-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-  commit b35f549df1d7520d37ba1e6d4a8d4df6bd52d136
-  Author: Steven Rostedt (Red Hat) <rostedt@goodmis.org>
-  Date:   Mon Nov 7 16:26:37 2016 -0500
+--===============4842130578311963523==
+Content-Type: multipart/signed; boundary="nextPart2974502.f8XNZp5ghJ";
+ micalg="sha256"; protocol="application/pkcs7-signature"
 
-    syscalls: Remove start and number from syscall_get_arguments() args
+--nextPart2974502.f8XNZp5ghJ
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-    At Linux Plumbers, Andy Lutomirski approached me and pointed out that the
-    function call syscall_get_arguments() implemented in x86 was horribly
-    written and not optimized for the standard case of passing in 0 and 6 for
-    the starting index and the number of system calls to get. When looking at
-    all the users of this function, I discovered that all instances pass in only
-    0 and 6 for these arguments. Instead of having this function handle
-    different cases that are never used, simply rewrite it to return the first 6
-    arguments of a system call.
+On Tuesday, April 9, 2019 7:02:06 PM CEST J=E9r=E9mie Galarneau wrote:
+> On Tue, 9 Apr 2019 at 04:36, Milian Wolff <milian.wolff@kdab.com> wrote:
+> > On Thursday, April 4, 2019 8:25:51 PM CEST J=E9r=E9mie Galarneau wrote:
+> > > Hi Milian,
+> > >=20
+> > > I have pushed a fix [1] in the stable-1.5 branch that addresses the
+> > > issue you have encountered with using bt_ctf_get_field_list().
+> > > This makes it possible to consume a character sequence's content.
+> > >=20
+> > > The commit message contains an example to show how to essentially
+> > > perform what the 'ctf-text' format plug-in achieves by accessing the
+> > > internal string field.
+> > >=20
+> > > Let me know if that works for you and I'll release an updated version
+> > > of the 1.5 branch.
+> >=20
+> > Thank you, I'll try that out in the next days!
+> >=20
+> > But: why can't we make bt_ctf_get_string return the string for us? Why =
+do
+> > we
+> > need to reinvent the wheel in consumers of the babeltrace API? You point
+> > out
+>=20
+> Hi,
+>=20
+> Strings, sequences and arrays are three different types in CTF.
+>=20
+> bt_ctf_get_string() can only be used on CTF strings. In the babeltrace 1.x
+> API, those are expressed through 'bt_definition's that have a
+> 'bt_declaration'
+> of type CTF_TYPE_STRING. It is not a general-purpose accessor to get
+> a field's content as a C-string.
+>=20
+> Changing this in the 1.x release series goes against the design of the
+> API (dedicated functions per definition type) and would, arguably, be an
+> ABI breaking change.
+>=20
+> As pointed out in the commit message, bt_ctf_get_char_array() is
+> a convenience function to access a character-array's contents as
+> a C-string. An equivalent function could be added for sequences.
+>=20
+> Since you pointed-out a bug in the existing API, my priority was
+> in fixing that bug which prevented users from accessing the sequences'
+> contents at all in the "looks like a string" case. That fix can be
+> back-ported into existing releases and made available in a point-release.
+>=20
+> Adding new APIs is an orthogonal concern. I'm not against a
+> convenience function that does what you want; but it won't be
+> shoe-horned into an existing one.
 
-    This should help out the performance of tracing system calls by ptrace,
-    ftrace and perf.
+I see. I'll have to live with this, but note how the current situation is f=
+ar=20
+from perfect:
 
-    Link: http://lkml.kernel.org/r/20161107213233.754809394@goodmis.org
+There's no way to figure out the exact version of babeltrace, neither at=20
+compile nor at runtime. So any user of babeltrace will potentially crash wh=
+en=20
+calling bt_ctf_get_field_list to read a string-sequence.
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
----
- lttng-syscalls.c  | 57 ++++++++++++++++++++++++-----------------------
- wrapper/syscall.h | 34 ++++++++++++++++++++++++++++
- 2 files changed, 63 insertions(+), 28 deletions(-)
- create mode 100644 wrapper/syscall.h
+Looking ahead, babeltrace 2.0 is supposedly ready any time now. Is that rea=
+lly=20
+true - I've been hearing this for about two years now I think. Is there any=
+=20
+documentation that shows how one would transition from the 1.0 API to 2.0? =
+I=20
+notice e.g. that `include/babeltrace/ctf/iterator.h` is gone? I can only fi=
+nd=20
+Python binding API documentation, but nothing for the C API? There does see=
+m=20
+to be API documentation in the code though, is the doxygen generated HTML=20
+hosted somewhere? Would the issue above be resolves with the 2.0 API - i.e.=
+ is=20
+there a single function to call to get strings-data out of either STRING,=20
+ARRAY or SEQUENCE trace points?
 
-diff --git a/lttng-syscalls.c b/lttng-syscalls.c
-index bcc06b5..ebd9246 100644
---- a/lttng-syscalls.c
-+++ b/lttng-syscalls.c
-@@ -25,6 +25,7 @@
- #include <wrapper/tracepoint.h>
- #include <wrapper/file.h>
- #include <wrapper/rcu.h>
-+#include <wrapper/syscall.h>
- #include <lttng-events.h>
- 
- #ifndef CONFIG_COMPAT
-@@ -361,9 +362,9 @@ struct lttng_syscall_filter {
- static void syscall_entry_unknown(struct lttng_event *event,
- 	struct pt_regs *regs, unsigned int id)
- {
--	unsigned long args[UNKNOWN_SYSCALL_NRARGS];
-+	unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--	syscall_get_arguments(current, regs, 0, UNKNOWN_SYSCALL_NRARGS, args);
-+	lttng_syscall_get_arguments(current, regs, args);
- 	if (unlikely(in_compat_syscall()))
- 		__event_probe__compat_syscall_entry_unknown(event, id, args);
- 	else
-@@ -432,9 +433,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
- 	case 1:
- 	{
- 		void (*fptr)(void *__data, unsigned long arg0) = entry->func;
--		unsigned long args[1];
-+		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
-+		lttng_syscall_get_arguments(current, regs, args);
- 		fptr(event, args[0]);
- 		break;
- 	}
-@@ -443,9 +444,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
- 		void (*fptr)(void *__data,
- 			unsigned long arg0,
- 			unsigned long arg1) = entry->func;
--		unsigned long args[2];
-+		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
-+		lttng_syscall_get_arguments(current, regs, args);
- 		fptr(event, args[0], args[1]);
- 		break;
- 	}
-@@ -455,9 +456,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
- 			unsigned long arg0,
- 			unsigned long arg1,
- 			unsigned long arg2) = entry->func;
--		unsigned long args[3];
-+		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
-+		lttng_syscall_get_arguments(current, regs, args);
- 		fptr(event, args[0], args[1], args[2]);
- 		break;
- 	}
-@@ -468,9 +469,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
- 			unsigned long arg1,
- 			unsigned long arg2,
- 			unsigned long arg3) = entry->func;
--		unsigned long args[4];
-+		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
-+		lttng_syscall_get_arguments(current, regs, args);
- 		fptr(event, args[0], args[1], args[2], args[3]);
- 		break;
- 	}
-@@ -482,9 +483,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
- 			unsigned long arg2,
- 			unsigned long arg3,
- 			unsigned long arg4) = entry->func;
--		unsigned long args[5];
-+		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
-+		lttng_syscall_get_arguments(current, regs, args);
- 		fptr(event, args[0], args[1], args[2], args[3], args[4]);
- 		break;
- 	}
-@@ -497,9 +498,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
- 			unsigned long arg3,
- 			unsigned long arg4,
- 			unsigned long arg5) = entry->func;
--		unsigned long args[6];
-+		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
-+		lttng_syscall_get_arguments(current, regs, args);
- 		fptr(event, args[0], args[1], args[2],
- 			args[3], args[4], args[5]);
- 		break;
-@@ -512,9 +513,9 @@ void syscall_entry_probe(void *__data, struct pt_regs *regs, long id)
- static void syscall_exit_unknown(struct lttng_event *event,
- 	struct pt_regs *regs, int id, long ret)
- {
--	unsigned long args[UNKNOWN_SYSCALL_NRARGS];
-+	unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--	syscall_get_arguments(current, regs, 0, UNKNOWN_SYSCALL_NRARGS, args);
-+	lttng_syscall_get_arguments(current, regs, args);
- 	if (unlikely(in_compat_syscall()))
- 		__event_probe__compat_syscall_exit_unknown(event, id, ret,
- 			args);
-@@ -588,9 +589,9 @@ void syscall_exit_probe(void *__data, struct pt_regs *regs, long ret)
- 		void (*fptr)(void *__data,
- 			long ret,
- 			unsigned long arg0) = entry->func;
--		unsigned long args[1];
-+		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
-+		lttng_syscall_get_arguments(current, regs, args);
- 		fptr(event, ret, args[0]);
- 		break;
- 	}
-@@ -600,9 +601,9 @@ void syscall_exit_probe(void *__data, struct pt_regs *regs, long ret)
- 			long ret,
- 			unsigned long arg0,
- 			unsigned long arg1) = entry->func;
--		unsigned long args[2];
-+		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
-+		lttng_syscall_get_arguments(current, regs, args);
- 		fptr(event, ret, args[0], args[1]);
- 		break;
- 	}
-@@ -613,9 +614,9 @@ void syscall_exit_probe(void *__data, struct pt_regs *regs, long ret)
- 			unsigned long arg0,
- 			unsigned long arg1,
- 			unsigned long arg2) = entry->func;
--		unsigned long args[3];
-+		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
-+		lttng_syscall_get_arguments(current, regs, args);
- 		fptr(event, ret, args[0], args[1], args[2]);
- 		break;
- 	}
-@@ -627,9 +628,9 @@ void syscall_exit_probe(void *__data, struct pt_regs *regs, long ret)
- 			unsigned long arg1,
- 			unsigned long arg2,
- 			unsigned long arg3) = entry->func;
--		unsigned long args[4];
-+		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
-+		lttng_syscall_get_arguments(current, regs, args);
- 		fptr(event, ret, args[0], args[1], args[2], args[3]);
- 		break;
- 	}
-@@ -642,9 +643,9 @@ void syscall_exit_probe(void *__data, struct pt_regs *regs, long ret)
- 			unsigned long arg2,
- 			unsigned long arg3,
- 			unsigned long arg4) = entry->func;
--		unsigned long args[5];
-+		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
-+		lttng_syscall_get_arguments(current, regs, args);
- 		fptr(event, ret, args[0], args[1], args[2], args[3], args[4]);
- 		break;
- 	}
-@@ -658,9 +659,9 @@ void syscall_exit_probe(void *__data, struct pt_regs *regs, long ret)
- 			unsigned long arg3,
- 			unsigned long arg4,
- 			unsigned long arg5) = entry->func;
--		unsigned long args[6];
-+		unsigned long args[LTTNG_SYSCALL_NR_ARGS];
- 
--		syscall_get_arguments(current, regs, 0, entry->nrargs, args);
-+		lttng_syscall_get_arguments(current, regs, args);
- 		fptr(event, ret, args[0], args[1], args[2],
- 			args[3], args[4], args[5]);
- 		break;
-diff --git a/wrapper/syscall.h b/wrapper/syscall.h
-new file mode 100644
-index 0000000..8715f0c
---- /dev/null
-+++ b/wrapper/syscall.h
-@@ -0,0 +1,34 @@
-+/* SPDX-License-Identifier: (GPL-2.0 or LGPL-2.1)
-+ *
-+ * wrapper/syscall.h
-+ *
-+ * wrapper around asm/syscall.h.
-+ *
-+ * Copyright (C) 2019 Michael Jeanson <mjeanson@efficios.com>
-+ */
-+
-+#ifndef _LTTNG_WRAPPER_SYSCALL_H
-+#define _LTTNG_WRAPPER_SYSCALL_H
-+
-+#include <asm/syscall.h>
-+#include <lttng-kernel-version.h>
-+
-+#define LTTNG_SYSCALL_NR_ARGS 6
-+
-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0))
-+
-+#define lttng_syscall_get_arguments(task, regs, args) \
-+	syscall_get_arguments(task, regs, args)
-+
-+#else /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0) */
-+
-+static inline
-+void lttng_syscall_get_arguments(struct task_struct *task,
-+		struct pt_regs *regs, unsigned long *args)
-+{
-+	syscall_get_arguments(task, regs, 0, LTTNG_SYSCALL_NR_ARGS, args);
-+}
-+
-+#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(5,1,0) */
-+
-+#endif /* _LTTNG_WRAPPER_SYSCALL_H */
--- 
-2.17.1
+Orthogonally, can someone explain why tracelog/tracef tracepoints use a=20
+SEQUENCE instead of a STRING type for the data?
+
+Thanks
+
+=2D-=20
+Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
+KDAB (Deutschland) GmbH, a KDAB Group company
+Tel: +49-30-521325470
+KDAB - The Qt, C++ and OpenGL Experts
+--nextPart2974502.f8XNZp5ghJ
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCDEIw
+ggXmMIIDzqADAgECAhBqm+E4O/8ra58B1dm4p1JWMA0GCSqGSIb3DQEBDAUAMIGFMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYD
+VQQKExFDT01PRE8gQ0EgTGltaXRlZDErMCkGA1UEAxMiQ09NT0RPIFJTQSBDZXJ0aWZpY2F0aW9u
+IEF1dGhvcml0eTAeFw0xMzAxMTAwMDAwMDBaFw0yODAxMDkyMzU5NTlaMIGXMQswCQYDVQQGEwJH
+QjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYDVQQK
+ExFDT01PRE8gQ0EgTGltaXRlZDE9MDsGA1UEAxM0Q09NT0RPIFJTQSBDbGllbnQgQXV0aGVudGlj
+YXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+AL6znlesKHZ1QBbHOAOY08YYdiFQ8yV5C0y1oNF9Olg+nKcxLqf2NHbZhGra0D00SOTq9bus3/mx
+gUsg/Wh/eXQ0pnp8tZ8XZWAnlyKMpjL+qUByRjXCA6RQyDMqVaVUkbIr5SU0RDX/kSsKwer3H1pT
+/HUrBN0X8sKtPTdGX8XAWt/VdMLBrZBlgvnkCos+KQWWCo63OTTqRvaq8aWccm+KOMjTcE6s2mj6
+RkalweyDI7X+7U5lNo6jzC8RTXtVV4/Vwdax720YpMPJQaDaElmOupyTf1Qib+cpukNJnQmwygjD
+8m046DQkLnpXNCAGjuJy1F5NATksUsbfJAr7FLUCAwEAAaOCATwwggE4MB8GA1UdIwQYMBaAFLuv
+fgI9+qbxPISOre44mOzZMjLUMB0GA1UdDgQWBBSCr2yM+MX+lmF86B89K3FIXsSLwDAOBgNVHQ8B
+Af8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIBADARBgNVHSAECjAIMAYGBFUdIAAwTAYDVR0fBEUw
+QzBBoD+gPYY7aHR0cDovL2NybC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2VydGlmaWNhdGlvbkF1
+dGhvcml0eS5jcmwwcQYIKwYBBQUHAQEEZTBjMDsGCCsGAQUFBzAChi9odHRwOi8vY3J0LmNvbW9k
+b2NhLmNvbS9DT01PRE9SU0FBZGRUcnVzdENBLmNydDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3Au
+Y29tb2RvY2EuY29tMA0GCSqGSIb3DQEBDAUAA4ICAQB4XLKBKDRPPO5fVs6fl1bsj6JrF/bz9kkI
+BtTYLzXN30D+03Hj6OxCDBEaIeNmsBhrJmuubvyE7HtoSmR809AgcYboW+rcTNZ/8u/Hv+GTrNI/
+AhqX2/kiQNxmgUPt/eJPs92Qclj0HnVyy9TnSvGkSDU7I5Px+TbO+88G4zipA2psZaWeEykgzClZ
+lPz1FjTCkk77ZXp5cQYYexE6zeeN4/0OqqoAloFrjAF4o50YJafX8mnahjp3I2Y2mkjhk0xQfhNq
+bzlLWPoT3m7j7U26u7zg6swjOq8hITYc3/np5tM5aVyu6t99p17bTbY7+1RTWBviN9YJzK8HxzOb
+XYWBf/L+VGOYNsQDTxAk0Hbvb1j6KjUhg7fO294F29QIhhmiNOr84JHoy+fNLpfvYc/Q9EtFOI5I
+SYgOxLk3nD/whbUe9rmEQXLp8MB933Ij474gwwCPUpwv9mj2PMnXoc7mbrS22XUSeTwxCTP9bcmU
+dp4jmIoWfhQm7X9w/Zgddg+JZ/YnIHOwsGsaTUgj7fIvxqith7DoJC91WJ8Lce3CVJqb1XWeKIJ8
+4F7YLXZN0oa7TktYgDdmQVxYkZo1c5noaDKH9Oq9cbm/vOYRUM1cWcef20Wkyk5S/GFyyPJwG0fR
+1nRas3DqAf4cXxMiEKcff7PNa4M3RGTqH0pWR8p6EjCCBlQwggU8oAMCAQICEAf6KCF9+1doL2oE
+OTPysLwwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNVBAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1h
+bmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0w
+OwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWls
+IENBMB4XDTE3MDUyMzAwMDAwMFoXDTIwMDUyMjIzNTk1OVowggFZMQswCQYDVQQGEwJTRTEPMA0G
+A1UEERMGNjgzIDMxMRIwEAYDVQQIEwlWYWVybWxhbmQxEDAOBgNVBAcTB0hhZ2ZvcnMxGDAWBgNV
+BAkTD05vcnJpbmdzIHZhZWcgMjEPMA0GA1UEEhMGQm94IDMwMSYwJAYDVQQKDB1LbGFyw6RsdmRh
+bGVucyBEYXRha29uc3VsdCBBQjEdMBsGA1UECxMUQSBLREFCIEdyb3VwIENvbXBhbnkxQzBBBgNV
+BAsMOklzc3VlZCB0aHJvdWdoIEtsYXLDpGx2ZGFsZW5zIERhdGFrb25zdWx0IEFCIEUtUEtJIE1h
+bmFnZXIxHzAdBgNVBAsTFkNvcnBvcmF0ZSBTZWN1cmUgRW1haWwxFTATBgNVBAMTDE1pbGlhbiBX
+b2xmZjEkMCIGCSqGSIb3DQEJARYVbWlsaWFuLndvbGZmQGtkYWIuY29tMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAxrzfNBVvRbiAknuTBXuQnNm9sLIFLo0vbPB6kswk78A3tA++Zn5c
+lQUHhGlQq1cdYxagnUpqwvG3Sod15mPSOLkAPf/mabLN7p+lFbRaUP+97ZkTZtvb4BCC3osIEFI4
+G393OSFWqc2qmIPE/SwSASbAA20Fcaa2M6P1lhOk/ttUh2jIurTPF0wUycIA7lBddrOgaOA8e2m6
+iLTNHtlrfRbBaUX91D5ebY+UWmIjXSQ9+CtutMzBkwnF0rZKririvOkklg9VzEGNQVHrQfDF2s/U
+pOtmtuVSwElauGT/KALyCFuIrYC1pmaKH8S1xODJqiRaf6jH8E+KQzKjyM/ErwIDAQABo4IB1TCC
+AdEwHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFN+m99RtIuA1bSdw
+6b1brOX7X3AJMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAgBgNVHREEGTAXgRVtaWxpYW4ud29s
+ZmZAa2RhYi5jb20wDQYJKoZIhvcNAQELBQADggEBABf47LSJADqH+ow9INv3QM1NC/qq2bjxGvsZ
+68iD11VEUAFlsYfsVTgQqUirwPVTYenXtwVBELHZyywsui1JxL7HKQetLQegDDP/RyfjReVaWxhy
+3OpuItsgLVbru9QVgPifnoBFPtfZcwjeJDmeSbLT8oj4Rd0KYBOIve7WKvsfNPsNwfbLwY2zILkE
+LjxZcVi2AwZHDyab+dzL/3YcLuJj1lSawBGn7ilpcdZydlv4aye51pD/MemLIYLcylt+ImrmjnTV
+y+QlAHRF3s5FE8yAr+W1MBD/1bKZCSgFt8VQoAlz3hiQh8QqZp4Zl8WuVL4+mP/mT6VDEWgq/0Bo
+cukxggJuMIICagIBATCBrDCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hl
+c3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNV
+BAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
+EAf6KCF9+1doL2oEOTPysLwwDQYJYIZIAWUDBAIBBQCggZMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkwNDEwMDc1NjQzWjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgbrX0A3/FeUVleuhNkFNMX7GciIJ5
+TigXAQuj6bu+OVowDQYJKoZIhvcNAQEBBQAEggEAYp9JsnrlBAe4KbQBEP3NhFgWTXVCIoauDho+
+QJwfKBInHA57z9rDIgckIayUEsFpvFACGn+1KuwDEgk/FvdJTr32jSu73m9DNAiStX48mSbfQCU4
+EF6WuOl7z5m7wwWYGx5FzZoqA+B+bxbqPk0IXlq1+qCk2N+fle7aPOafz6ygCSkB6uYFkMqq3Iqd
+JjN/ATu0L2D6cItSKzzvUBAj6U14upY4vEoUUwN+pPPOZFY313a39WD060pq6z3JG/5VryLZymeV
+HxmiJsgZiDsFr+f0Oj8EnA4Cxonf1KNkCy9W0nsDJ5tbqi5GrC2m3ezQ3Avve/aOzwMXi9PJhU53
+qwAAAAAAAA==
+
+
+--nextPart2974502.f8XNZp5ghJ--
+
+
+
+--===============4842130578311963523==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============4842130578311963523==--
