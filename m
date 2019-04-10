@@ -1,17 +1,18 @@
 From: Milian Wolff via lttng-dev <lttng-dev@lists.lttng.org>
 Subject: Re: decoding tracef msg string via babeltrace API
-Date: Wed, 10 Apr 2019 09:56:43 +0200
-Message-ID: <2430999.6Ms1xt7J43__9971.1522505217$1554883026$gmane$org@milian-kdab2>
-References: <33072915.QNGMzHgIAz@agathebauer> <2088473.4UkR9GzeEB@milian-kdab2>
+Date: Wed, 10 Apr 2019 10:57:35 +0200
+Message-ID: <13178500.jIEOPmTTT8__46717.6245221467$1554886682$gmane$org@milian-kdab2>
+References: <33072915.QNGMzHgIAz@agathebauer>
  <CA+jJMxvD4HOVaDpKM2-gAQ3WLiPC7odsdXLyEzxvDzVH2p3t9Q@mail.gmail.com>
+ <2430999.6Ms1xt7J43@milian-kdab2>
 Reply-To: Milian Wolff <milian.wolff@kdab.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4842130578311963523=="
+Content-Type: multipart/mixed; boundary="===============6137908555948221706=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
- by lists.lttng.org (Postfix) with ESMTPS id 44fGhM2FR4z1KMw
- for <lttng-dev@lists.lttng.org>; Wed, 10 Apr 2019 03:56:50 -0400 (EDT)
-In-Reply-To: <CA+jJMxvD4HOVaDpKM2-gAQ3WLiPC7odsdXLyEzxvDzVH2p3t9Q@mail.gmail.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 44fJ2f0ZSXz1KQC
+ for <lttng-dev@lists.lttng.org>; Wed, 10 Apr 2019 04:57:45 -0400 (EDT)
+In-Reply-To: <2430999.6Ms1xt7J43@milian-kdab2>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -25,92 +26,87 @@ To: =?ISO-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
 Cc: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
---===============4842130578311963523==
-Content-Type: multipart/signed; boundary="nextPart2974502.f8XNZp5ghJ";
+--===============6137908555948221706==
+Content-Type: multipart/signed; boundary="nextPart40919564.QW1g1hyK2F";
  micalg="sha256"; protocol="application/pkcs7-signature"
 
---nextPart2974502.f8XNZp5ghJ
+--nextPart40919564.QW1g1hyK2F
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="iso-8859-1"
 
-On Tuesday, April 9, 2019 7:02:06 PM CEST J=E9r=E9mie Galarneau wrote:
-> On Tue, 9 Apr 2019 at 04:36, Milian Wolff <milian.wolff@kdab.com> wrote:
-> > On Thursday, April 4, 2019 8:25:51 PM CEST J=E9r=E9mie Galarneau wrote:
-> > > Hi Milian,
+On Wednesday, April 10, 2019 9:56:43 AM CEST Milian Wolff wrote:
+> On Tuesday, April 9, 2019 7:02:06 PM CEST J=E9r=E9mie Galarneau wrote:
+> > On Tue, 9 Apr 2019 at 04:36, Milian Wolff <milian.wolff@kdab.com> wrote:
+> > > On Thursday, April 4, 2019 8:25:51 PM CEST J=E9r=E9mie Galarneau wrot=
+e:
+> > > > Hi Milian,
+> > > >=20
+> > > > I have pushed a fix [1] in the stable-1.5 branch that addresses the
+> > > > issue you have encountered with using bt_ctf_get_field_list().
+> > > > This makes it possible to consume a character sequence's content.
+> > > >=20
+> > > > The commit message contains an example to show how to essentially
+> > > > perform what the 'ctf-text' format plug-in achieves by accessing the
+> > > > internal string field.
+> > > >=20
+> > > > Let me know if that works for you and I'll release an updated versi=
+on
+> > > > of the 1.5 branch.
 > > >=20
-> > > I have pushed a fix [1] in the stable-1.5 branch that addresses the
-> > > issue you have encountered with using bt_ctf_get_field_list().
-> > > This makes it possible to consume a character sequence's content.
+> > > Thank you, I'll try that out in the next days!
 > > >=20
-> > > The commit message contains an example to show how to essentially
-> > > perform what the 'ctf-text' format plug-in achieves by accessing the
-> > > internal string field.
-> > >=20
-> > > Let me know if that works for you and I'll release an updated version
-> > > of the 1.5 branch.
+> > > But: why can't we make bt_ctf_get_string return the string for us? Why
+> > > do
+> > > we
+> > > need to reinvent the wheel in consumers of the babeltrace API? You po=
+int
+> > > out
 > >=20
-> > Thank you, I'll try that out in the next days!
+> > Hi,
 > >=20
-> > But: why can't we make bt_ctf_get_string return the string for us? Why =
-do
-> > we
-> > need to reinvent the wheel in consumers of the babeltrace API? You point
-> > out
+> > Strings, sequences and arrays are three different types in CTF.
+> >=20
+> > bt_ctf_get_string() can only be used on CTF strings. In the babeltrace =
+1.x
+> > API, those are expressed through 'bt_definition's that have a
+> > 'bt_declaration'
+> > of type CTF_TYPE_STRING. It is not a general-purpose accessor to get
+> > a field's content as a C-string.
+> >=20
+> > Changing this in the 1.x release series goes against the design of the
+> > API (dedicated functions per definition type) and would, arguably, be an
+> > ABI breaking change.
+> >=20
+> > As pointed out in the commit message, bt_ctf_get_char_array() is
+> > a convenience function to access a character-array's contents as
+> > a C-string. An equivalent function could be added for sequences.
+> >=20
+> > Since you pointed-out a bug in the existing API, my priority was
+> > in fixing that bug which prevented users from accessing the sequences'
+> > contents at all in the "looks like a string" case. That fix can be
+> > back-ported into existing releases and made available in a point-releas=
+e.
+> >=20
+> > Adding new APIs is an orthogonal concern. I'm not against a
+> > convenience function that does what you want; but it won't be
+> > shoe-horned into an existing one.
 >=20
-> Hi,
+> I see. I'll have to live with this, but note how the current situation is
+> far from perfect:
 >=20
-> Strings, sequences and arrays are three different types in CTF.
->=20
-> bt_ctf_get_string() can only be used on CTF strings. In the babeltrace 1.x
-> API, those are expressed through 'bt_definition's that have a
-> 'bt_declaration'
-> of type CTF_TYPE_STRING. It is not a general-purpose accessor to get
-> a field's content as a C-string.
->=20
-> Changing this in the 1.x release series goes against the design of the
-> API (dedicated functions per definition type) and would, arguably, be an
-> ABI breaking change.
->=20
-> As pointed out in the commit message, bt_ctf_get_char_array() is
-> a convenience function to access a character-array's contents as
-> a C-string. An equivalent function could be added for sequences.
->=20
-> Since you pointed-out a bug in the existing API, my priority was
-> in fixing that bug which prevented users from accessing the sequences'
-> contents at all in the "looks like a string" case. That fix can be
-> back-ported into existing releases and made available in a point-release.
->=20
-> Adding new APIs is an orthogonal concern. I'm not against a
-> convenience function that does what you want; but it won't be
-> shoe-horned into an existing one.
+> There's no way to figure out the exact version of babeltrace, neither at
+> compile nor at runtime. So any user of babeltrace will potentially crash
+> when calling bt_ctf_get_field_list to read a string-sequence.
 
-I see. I'll have to live with this, but note how the current situation is f=
-ar=20
-from perfect:
+Additionally, the suggested approach of iterating over the individual chars=
+ in=20
+the sequence doesn't allow for a zero-copy approach as is done with=20
+bt_ctf_get_char_array or bt_ctf_get_string.
 
-There's no way to figure out the exact version of babeltrace, neither at=20
-compile nor at runtime. So any user of babeltrace will potentially crash wh=
-en=20
-calling bt_ctf_get_field_list to read a string-sequence.
-
-Looking ahead, babeltrace 2.0 is supposedly ready any time now. Is that rea=
-lly=20
-true - I've been hearing this for about two years now I think. Is there any=
-=20
-documentation that shows how one would transition from the 1.0 API to 2.0? =
-I=20
-notice e.g. that `include/babeltrace/ctf/iterator.h` is gone? I can only fi=
-nd=20
-Python binding API documentation, but nothing for the C API? There does see=
-m=20
-to be API documentation in the code though, is the doxygen generated HTML=20
-hosted somewhere? Would the issue above be resolves with the 2.0 API - i.e.=
+Both could be solved if a bt_ctf_get_string_sequence or similar would be=20
+introduced. Would this be accepted upstream, if I create a pull request, or=
  is=20
-there a single function to call to get strings-data out of either STRING,=20
-ARRAY or SEQUENCE trace points?
-
-Orthogonally, can someone explain why tracelog/tracef tracepoints use a=20
-SEQUENCE instead of a STRING type for the data?
+1.5 frozen and no new API is allowed to be added?
 
 Thanks
 
@@ -119,7 +115,7 @@ Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
 KDAB (Deutschland) GmbH, a KDAB Group company
 Tel: +49-30-521325470
 KDAB - The Qt, C++ and OpenGL Experts
---nextPart2974502.f8XNZp5ghJ
+--nextPart40919564.QW1g1hyK2F
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -184,21 +180,21 @@ cukxggJuMIICagIBATCBrDCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hl
 c3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNV
 BAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
 EAf6KCF9+1doL2oEOTPysLwwDQYJYIZIAWUDBAIBBQCggZMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkwNDEwMDc1NjQzWjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgbrX0A3/FeUVleuhNkFNMX7GciIJ5
-TigXAQuj6bu+OVowDQYJKoZIhvcNAQEBBQAEggEAYp9JsnrlBAe4KbQBEP3NhFgWTXVCIoauDho+
-QJwfKBInHA57z9rDIgckIayUEsFpvFACGn+1KuwDEgk/FvdJTr32jSu73m9DNAiStX48mSbfQCU4
-EF6WuOl7z5m7wwWYGx5FzZoqA+B+bxbqPk0IXlq1+qCk2N+fle7aPOafz6ygCSkB6uYFkMqq3Iqd
-JjN/ATu0L2D6cItSKzzvUBAj6U14upY4vEoUUwN+pPPOZFY313a39WD060pq6z3JG/5VryLZymeV
-HxmiJsgZiDsFr+f0Oj8EnA4Cxonf1KNkCy9W0nsDJ5tbqi5GrC2m3ezQ3Avve/aOzwMXi9PJhU53
-qwAAAAAAAA==
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkwNDEwMDg1NzM1WjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgNCwiyDoFJMJN5IiZOT1gSctm/Wul
+sW8V8dNkSQojslAwDQYJKoZIhvcNAQEBBQAEggEAOb7gM3k72pQ9dRzJnO0Sr1sFwrDD18ktw/kk
+XVAnq+14jjQGcHMcguCCP4T5Rsas0yv73JPKbii8i2tZgKOux624mBVnZDa71HkpUOgSjNKYzYbi
+py+JZsaTG8ac401AgmfuSzGa9JZxf0As5B/9fYCrJ52WIZPL1suz7ij+8LDLrZqlqxxmsKrdF45Y
+yqgh9c+CrHTVC+L/iwHhL1mhOuEf7Zrm8WBur/snVXYmxa+YHvNkURKkO7twPC8q2BCKszFKAP5g
+CCHhbM0iEEhi0+vQzpmVb1llXHic9HygYPOIhl8bw4tluyW8gdjkG85J5ny3R+VfRQHWLRn3PYU4
+owAAAAAAAA==
 
 
---nextPart2974502.f8XNZp5ghJ--
+--nextPart40919564.QW1g1hyK2F--
 
 
 
---===============4842130578311963523==
+--===============6137908555948221706==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -209,4 +205,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============4842130578311963523==--
+--===============6137908555948221706==--
