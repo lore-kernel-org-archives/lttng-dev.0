@@ -1,20 +1,19 @@
-From: Nicholas Sadjoli <nick.sadjoli@gmail.com>
-Subject: Re: Problems setting up lttng on PREEMPT_RT Raspberry Pi
-Date: Wed, 17 Apr 2019 03:05:57 +0800
-Message-ID: <CAKUXLvcs+dCUn1-LqGRpL2AAH6SamOLob2kUcOZRfeuC=-TmKQ__38856.1363144376$1555441587$gmane$org@mail.gmail.com>
-References: <CAKUXLvdNYPitwKb8D5VDC7nXA4-z3OiApGX=qbVxV5LWFkDyJw@mail.gmail.com>
- <725895933.460.1555337504175.JavaMail.zimbra@efficios.com>
- <CAKUXLveyWXTsh6vG0V-isbj2YptT_r8vtMuUF-V2Aysb9SRBKg@mail.gmail.com>
+From: Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH lttng-ust 1/2] Update macros from the autoconf
+ archive
+Date: Tue, 16 Apr 2019 16:17:30 -0400
+Message-ID: <20190416201731.27244-1-mjeanson__5807.64145577035$1555445879$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5664938991771351210=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-it1-x143.google.com (mail-it1-x143.google.com
- [IPv6:2607:f8b0:4864:20::143])
- by lists.lttng.org (Postfix) with ESMTPS id 44kFFt0gjxz1KrJ
- for <lttng-dev@lists.lttng.org>; Tue, 16 Apr 2019 15:06:10 -0400 (EDT)
-Received: by mail-it1-x143.google.com with SMTP id k64so496955itb.5
- for <lttng-dev@lists.lttng.org>; Tue, 16 Apr 2019 12:06:10 -0700 (PDT)
-In-Reply-To: <CAKUXLveyWXTsh6vG0V-isbj2YptT_r8vtMuUF-V2Aysb9SRBKg@mail.gmail.com>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 44kGrP6fJxz1KwJ
+ for <lttng-dev@lists.lttng.org>; Tue, 16 Apr 2019 16:17:40 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id E448A1D7295
+ for <lttng-dev@lists.lttng.org>; Tue, 16 Apr 2019 16:17:39 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,412 +23,718 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Tom Zanussi <tom.zanussi@linux.intel.com>, linux-rt-users <linux-rt-users@vger.kernel.org>, rostedt <rostedt@goodmis.org>, dev-raspberry-pi@lists.mozilla.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============5664938991771351210==
-Content-Type: multipart/alternative; boundary="0000000000002d82d10586aa7655"
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
+---
+ m4/ax_c___attribute__.m4  |  6 ++--
+ m4/ax_check_class.m4      | 75 +++------------------------------------
+ m4/ax_check_classpath.m4  |  6 ++--
+ m4/ax_check_rqrd_class.m4 |  6 ++--
+ m4/ax_java_options.m4     |  4 +--
+ m4/ax_jni_include_dir.m4  | 57 ++++++++++++++++++++---------
+ m4/ax_prog_jar.m4         |  4 +--
+ m4/ax_prog_java.m4        |  6 ++--
+ m4/ax_prog_java_works.m4  | 51 +++-----------------------
+ m4/ax_prog_javac.m4       |  6 ++--
+ m4/ax_prog_javac_works.m4 |  6 ++--
+ m4/ax_prog_javah.m4       | 35 +++++++++++++-----
+ m4/ax_sys_weak_alias.m4   |  8 ++---
+ m4/ax_try_compile_java.m4 |  8 ++---
+ m4/ax_try_run_java.m4     |  4 +--
+ 15 files changed, 108 insertions(+), 174 deletions(-)
 
---0000000000002d82d10586aa7655
-Content-Type: text/plain; charset="UTF-8"
-
-Dear Mathieu,
-
-Apoplogies but please ignore my previous email as it wasn't properly
-finished.
-
-Thank you so much for your reply Mathieu! I have actually asked about this
-to the raspberry pi github forum, but unfortunately it seems that I have
-not gotten any reply from them on this matter yet. I'll be asking about how
-to turn off the CONFIG_OPTPROBES from them again if that's the case.
-
-If this still fails then I'll be trying out Tom Zanussi's upstream version
-of the kernel as you suggested then.
-
-Thank you so much for your help once again and keep up the nice support
-that you have for lttng!
-
-
-Best Regards,
-
-
-Nicholas Sadjoli
-
-On Wed, Apr 17, 2019 at 3:04 AM Nicholas Sadjoli <nick.sadjoli@gmail.com>
-wrote:
-
-> Dear Mathieu,
->
-> Thank you so much for your reply Mathieu! I have actually asked about this
-> to the raspberry pi github forum, but unfortunately it seems that I have
-> not gotten any reply from them on this matter yet. I'll be asking about how
-> to turn off the CONFIG_OPTPROBES from them again if that's the case.
->
-> If this still fails then I'll be trying out Tom Zanussi's upstream version
-> of the kernel as you suggested then. Thank you so much for your help once
-> again
->
-> On Mon, Apr 15, 2019 at 10:11 PM Mathieu Desnoyers <
-> mathieu.desnoyers@efficios.com> wrote:
->
->> ----- On Apr 15, 2019, at 7:07 AM, Nicholas Sadjoli <
->> nick.sadjoli@gmail.com> wrote:
->>
->> Dear Lttng dev Team,
->> I am currently interested in using lttng to measure the interrupt or
->> hardware real-time latencies experienced within my user-space applications.
->> Unfortunately I have been having issues installing lttng on my Raspberry Pi
->> that is using the PREEMPT_RT patched kernel, version 4.14.91-rt49-v7+.
->> The problems so far can be seen documented in the RPi Linux github forum
->> page here: https://github.com/raspberrypi/linux/issues/2930
->>
->> Initially I was about to just install the Debian package of the lttng
->> onto the RPi, and just proceeded with the commands 'sudo apt-get install
->> lttng-modules-dkms liblttng-ust-dev lttng-tools' However, I was unable
->> to use lttng package at all and found out that for the RPi, a build from
->> source is necessary for lttng, as described here:
->> https://stackoverflow.com/questions/52386448/linux-trace-tool-lttng-on-raspbian-kernel-tracer-not-available
->>
->> Following their suggestion, I then tried to build the lttng packages from
->> source, and even re-building the RPi kernel locally to ensure the kernel
->> headers are in the RPi and linked up properly to the source packages.
->>
->> Unfortunately when I tried to do this for the lttng-modules package, it
->> instead gave me the following warning in my latest attempt:
->>
->> In file included from
->> /home/pi/BangEco_rvmscan/stagelight_project/lttng/lttng-modules/probes/lttng-kprobes.c:31:0:
->> /home/pi/BangEco_rvmscan/stagelight_project/lttng/lttng-modules/probes/../blacklist/kprobes.h:19:4:
->> error: #error "Your kernel is known to have buggy optimized kprobes
->> implementation. Fixed by commit 0ac569bf6a7983c0c5747d6df8db9dc05bc92b6c
->> \"ARM: 8834/1: Fix: kprobes: optimized kprobes illegal instruction\" in
->> Linux. Disable CONFIG_OPTPROBES or upgrade your kernel."
->>  #  error "Your kernel is known to have buggy optimized kprobes
->> implementation. Fixed by commit 0ac569bf6a7983c0c5747d6df8db9dc05bc92b6c
->> \"ARM: 8834/1: Fix: kprobes: optimized kprobes illegal instruction\" in
->> Linux. Disable CONFIG_OPTPROBES or upgrade your kernel."
->>
->> I then tried to turn off the CONFIG_OPTPROBES kernel config, but it
->> seemed to be automatically overwritten during kernel building and is
->> considered an important part of the real-time RPi kernels. Has such
->> problems been reported with this version of the PREEMPT_RT kernel in the
->> past (again, the current kernel version that I am using is 4.14.91-rt49-v7+)?
->> If there are I would like to know how this issue was resolved so that I can
->> properly build and use the lttng package for my project.
->>
->> Hi Nicholas,
->>
->> It looks like our lttng-modules kernel version blacklist is acting
->> exactly as it should. Looking at this
->> git tree:
->>
->> git clone https://github.com/raspberrypi/linux.git -b rpi-4.14.y-rt
->>
->> I notice that in the git log, we find this bogus commit:
->>
->> commit f9e0bc710347fadad55910846ee36f0681d0dca8
->> Author: Kees Cook <keescook@chromium.org>
->> Date:   Tue Oct 30 22:12:56 2018 +0100
->>
->>     ARM: 8806/1: kprobes: Fix false positive with FORTIFY_SOURCE
->>
->>     commit e46daee53bb50bde38805f1823a182979724c229 upstream.
->>
->> But not the fix for it (upstream):
->>
->> commit 0ac569bf6a7983c0c5747d6df8db9dc05bc92b6c
->> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->> Date:   Tue Feb 5 16:37:40 2019 +0100
->>
->>     ARM: 8834/1: Fix: kprobes: optimized kprobes illegal instruction
->>
->> So lttng-modules refuses to build against your kernel configuration with
->> CONFIG_OPTPROBES=y
->> to save you the trouble of having kprobes trigger illegal instruction
->> OOPS at runtime.
->>
->> I'm unusure who maintains that raspberrypi rt kernel tree. However, the
->> upstream rt tree
->> for 4.14-rt maintained by Tom Zanussi seems to contain the fix:
->>
->>
->> https://kernel.googlesource.com/pub/scm/linux/kernel/git/rt/linux-stable-rt/+/refs/heads/v4.14-rt
->>
->> (currently at 4.14.109-rt57).
->>
->> So you should contact your raspberrypi linux rt tree clone maintainer and
->> ask him
->> to upgrade, or, as stated in the #error generated by lttng-modules,
->> simply ensure
->> CONFIG_OPTPROBES is unset when you build your kernel. You should ask the
->> raspberrypi community advice on how to ensure this configuration option
->> is not
->> overridden by the raspberrypi build system.
->>
->> Thanks,
->>
->> Mathieu
->>
->>
->>
->> Thank you so much for your attention and looking forward to your reply
->> soon.
->>
->>
->>
->> Best Regards,
->>
->>
->>
->> Nicholas Sadjoli
->>
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
->>
->>
->> --
->> Mathieu Desnoyers
->> EfficiOS Inc.
->> http://www.efficios.com
->>
->
-
---0000000000002d82d10586aa7655
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Dear Mathieu,<div><br></div><div>Apoplogies but please ign=
-ore my previous email as it wasn&#39;t properly finished.</div><div><br></d=
-iv><div>Thank you so much for your reply Mathieu! I have actually asked abo=
-ut this to the raspberry pi github forum, but unfortunately it seems that I=
- have not gotten any reply from them on this matter yet. I&#39;ll be asking=
- about how to turn off the CONFIG_OPTPROBES from them again if that&#39;s t=
-he case.</div><div><br></div><div>If this still fails then I&#39;ll be tryi=
-ng out Tom Zanussi&#39;s upstream version of the kernel as you suggested th=
-en.=C2=A0</div><div><br></div><div>Thank you so much for your help once aga=
-in and keep up the nice support that you have for lttng!</div><div><br></di=
-v><div><br></div><div>Best Regards,</div><div><br></div><div><br></div><div=
->Nicholas Sadjoli</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr=
-" class=3D"gmail_attr">On Wed, Apr 17, 2019 at 3:04 AM Nicholas Sadjoli &lt=
-;<a href=3D"mailto:nick.sadjoli@gmail.com">nick.sadjoli@gmail.com</a>&gt; w=
-rote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0p=
-x 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=
-=3D"ltr">Dear Mathieu,<div><br></div><div>Thank you so much for your reply =
-Mathieu! I have actually asked about this to the raspberry pi github forum,=
- but unfortunately it seems that I have not gotten any reply from them on t=
-his matter yet. I&#39;ll be asking about how to turn off the CONFIG_OPTPROB=
-ES from them again if that&#39;s the case.</div><div><br></div><div>If this=
- still fails then I&#39;ll be trying out Tom Zanussi&#39;s upstream version=
- of the kernel as you suggested then. Thank you so much for your help once =
-again</div></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"g=
-mail_attr">On Mon, Apr 15, 2019 at 10:11 PM Mathieu Desnoyers &lt;<a href=
-=3D"mailto:mathieu.desnoyers@efficios.com" target=3D"_blank">mathieu.desnoy=
-ers@efficios.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" =
-style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);pa=
-dding-left:1ex"><div><div style=3D"font-family:arial,helvetica,sans-serif;f=
-ont-size:12pt;color:rgb(0,0,0)"><div><span id=3D"gmail-m_-83453649305563690=
-8gmail-m_-6063565989240103262zwchr">----- On Apr 15, 2019, at 7:07 AM, Nich=
-olas Sadjoli &lt;<a href=3D"mailto:nick.sadjoli@gmail.com" target=3D"_blank=
-">nick.sadjoli@gmail.com</a>&gt; wrote:<br></span></div><div><blockquote st=
-yle=3D"border-left:2px solid rgb(16,16,255);margin-left:5px;padding-left:5p=
-x;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration:non=
-e;font-family:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr"><=
-div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr">Dear Lttng dev Team,<br><=
-div>I am currently interested in using lttng to measure the interrupt or ha=
-rdware real-time latencies experienced within my user-space applications. U=
-nfortunately I have been having issues installing lttng on my Raspberry Pi =
-that is using the PREEMPT_RT patched kernel, version=C2=A0<span style=3D"co=
-lor:rgb(36,41,46);font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe =
-UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Seg=
-oe UI Emoji&quot;,&quot;Segoe UI Symbol&quot;;font-size:14px">4.14.91-rt49-=
-v7+. The problems so far can be seen documented in the RPi Linux github for=
-um page here:=C2=A0</span><font face=3D"-apple-system, BlinkMacSystemFont, =
-Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, =
-Segoe UI Symbol" color=3D"#24292e"><span style=3D"font-size:14px"><a href=
-=3D"https://github.com/raspberrypi/linux/issues/2930" target=3D"_blank">htt=
-ps://github.com/raspberrypi/linux/issues/2930</a></span></font><br></div><d=
-iv><span style=3D"color:rgb(36,41,46);font-family:-apple-system,BlinkMacSys=
-temFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color E=
-moji&quot;,&quot;Segoe UI Emoji&quot;,&quot;Segoe UI Symbol&quot;;font-size=
-:14px"><br></span></div><div><span style=3D"color:rgb(36,41,46);font-family=
-:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans=
--serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;,&quot;Segoe=
- UI Symbol&quot;;font-size:14px">Initially I was about to just install the =
-Debian package of the lttng onto the RPi, and just proceeded with the comma=
-nds &#39;</span><font face=3D"Andale Mono WT, Andale Mono, Bitstream Vera S=
-ans Mono, Liberation Mono, Nimbus Mono L, Ubuntu Mono, Monaco, Consolas, Lu=
-cida Console, Lucida Sans Typewriter, Courier New, Courier, monospace" colo=
-r=3D"rgba(0, 0, 0, 0.749019607843137)">sudo apt-get install lttng-modules-d=
-kms liblttng-ust-dev lttng-tools&#39; </font>However, I was unable to use l=
-ttng package at all and found out that for the RPi, a build from source is =
-necessary for lttng, as described here:=C2=A0<span style=3D"background-colo=
-r:transparent"><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, H=
-elvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Sy=
-mbol" color=3D"#24292e"><span style=3D"font-size:14px"><a href=3D"https://s=
-tackoverflow.com/questions/52386448/linux-trace-tool-lttng-on-raspbian-kern=
-el-tracer-not-available" target=3D"_blank">https://stackoverflow.com/questi=
-ons/52386448/linux-trace-tool-lttng-on-raspbian-kernel-tracer-not-available=
-</a></span></font></span><br></div><div><span style=3D"background-color:tra=
-nsparent"><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvet=
-ica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol"=
- color=3D"#24292e"><span style=3D"font-size:14px"><br></span></font></span>=
-</div><div><span style=3D"background-color:transparent"><font face=3D"-appl=
-e-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple=
- Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e"><span styl=
-e=3D"font-size:14px">Following their suggestion, I then tried to build the =
-lttng packages from source, and even re-building the RPi kernel locally to =
-ensure the kernel headers are in the RPi and linked up properly to the sour=
-ce packages.=C2=A0</span></font></span></div><div><span style=3D"background=
--color:transparent"><font face=3D"-apple-system, BlinkMacSystemFont, Segoe =
-UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe =
-UI Symbol" color=3D"#24292e"><span style=3D"font-size:14px"><br></span></fo=
-nt></span></div><div><span style=3D"background-color:transparent"><font fac=
-e=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-se=
-rif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e">=
-<span style=3D"font-size:14px">Unfortunately when I tried to do this for th=
-e lttng-modules package, it instead gave me the following warning in my lat=
-est attempt:=C2=A0</span></font></span></div><div><font face=3D"-apple-syst=
-em, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color=
- Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e"><span style=3D"f=
-ont-size:14px"><br></span></font></div><div><font face=3D"-apple-system, Bl=
-inkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji=
-, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e"><span style=3D"font-si=
-ze:14px">I</span></font><span style=3D"font-size:14px;color:rgb(36,41,46);f=
-ont-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helvetica,=
-Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;,&=
-quot;Segoe UI Symbol&quot;">n file included from /home/pi/BangEco_rvmscan/s=
-tagelight_project/lttng/lttng-modules/probes/lttng-kprobes.c:31:0:</span></=
-div><div><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helveti=
-ca, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" =
-color=3D"#24292e"><span style=3D"font-size:14px">/home/pi/BangEco_rvmscan/s=
-tagelight_project/lttng/lttng-modules/probes/../blacklist/kprobes.h:19:4: e=
-rror: #error &quot;Your kernel is known to have buggy optimized kprobes imp=
-lementation. Fixed by commit 0ac569bf6a7983c0c5747d6df8db9dc05bc92b6c \&quo=
-t;ARM: 8834/1: Fix: kprobes: optimized kprobes illegal instruction\&quot; i=
-n Linux. Disable CONFIG_OPTPROBES or upgrade your kernel.&quot;</span></fon=
-t></div><div><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Hel=
-vetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symb=
-ol" color=3D"#24292e"><span style=3D"font-size:14px">=C2=A0#=C2=A0 error &q=
-uot;Your kernel is known to have buggy optimized kprobes implementation. Fi=
-xed by commit 0ac569bf6a7983c0c5747d6df8db9dc05bc92b6c \&quot;ARM: 8834/1: =
-Fix: kprobes: optimized kprobes illegal instruction\&quot; in Linux. Disabl=
-e CONFIG_OPTPROBES or upgrade your kernel.&quot;</span></font></div><div><f=
-ont face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, =
-sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#2=
-4292e"><span style=3D"font-size:14px"><br></span></font></div><div><font fa=
-ce=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-s=
-erif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e"=
-><span style=3D"font-size:14px">I then tried to turn off the CONFIG_OPTPROB=
-ES kernel config, but it seemed to be automatically overwritten during kern=
-el building and is considered an important part of the real-time RPi kernel=
-s. Has such problems been reported with this version of the PREEMPT_RT kern=
-el in the past (again, the current kernel version that I am using is=C2=A0<=
-/span></font><span style=3D"color:rgb(36,41,46);font-family:-apple-system,B=
-linkMacSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;App=
-le Color Emoji&quot;,&quot;Segoe UI Emoji&quot;,&quot;Segoe UI Symbol&quot;=
-;font-size:14px">4.14.91-rt49-v7+)? If there are I would like to know how t=
-his issue was resolved so that I can properly build and use the lttng packa=
-ge for my project.</span></div></div></div></div></div></blockquote><div>Hi=
- Nicholas,<br></div><div><br></div><div>It looks like our lttng-modules ker=
-nel version blacklist is acting exactly as it should. Looking at this<br></=
-div><div>git tree:<br></div><div><br></div><div>git clone <a href=3D"https:=
-//github.com/raspberrypi/linux.git" target=3D"_blank">https://github.com/ra=
-spberrypi/linux.git</a> -b rpi-4.14.y-rt<br></div><div><pre><code class=3D"=
-gmail-m_-834536493055636908gmail-m_-6063565989240103262language-sh gmail-m_=
--834536493055636908gmail-m_-6063565989240103262hljs gmail-m_-83453649305563=
-6908gmail-m_-6063565989240103262bash"></code></pre></div><div>I notice that=
- in the git log, we find this bogus commit:<br></div><div><br></div><div>co=
-mmit f9e0bc710347fadad55910846ee36f0681d0dca8<br>Author: Kees Cook &lt;<a h=
-ref=3D"mailto:keescook@chromium.org" target=3D"_blank">keescook@chromium.or=
-g</a>&gt;<br>Date:=C2=A0=C2=A0 Tue Oct 30 22:12:56 2018 +0100<br><br>=C2=A0=
-=C2=A0=C2=A0 ARM: 8806/1: kprobes: Fix false positive with FORTIFY_SOURCE<b=
-r>=C2=A0=C2=A0=C2=A0 <br>=C2=A0=C2=A0=C2=A0 commit e46daee53bb50bde38805f18=
-23a182979724c229 upstream.<br><br></div><div>But not the fix for it (upstre=
-am):<br></div><div><br></div><div>commit 0ac569bf6a7983c0c5747d6df8db9dc05b=
-c92b6c<br>Author: Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers=
-@efficios.com" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;<br>=
-Date:=C2=A0=C2=A0 Tue Feb 5 16:37:40 2019 +0100<br><br>=C2=A0=C2=A0=C2=A0 A=
-RM: 8834/1: Fix: kprobes: optimized kprobes illegal instruction<br><br></di=
-v><div>So lttng-modules refuses to build against your kernel configuration =
-with CONFIG_OPTPROBES=3Dy</div><div>to save you the trouble of having kprob=
-es trigger illegal instruction OOPS at runtime.<br></div><div><br></div><di=
-v>I&#39;m unusure who maintains that raspberrypi rt kernel tree. However, t=
-he upstream rt tree<br></div><div>for 4.14-rt maintained by Tom Zanussi see=
-ms to contain the fix:<br></div><div><br></div><div><a href=3D"https://kern=
-el.googlesource.com/pub/scm/linux/kernel/git/rt/linux-stable-rt/+/refs/head=
-s/v4.14-rt" target=3D"_blank">https://kernel.googlesource.com/pub/scm/linux=
-/kernel/git/rt/linux-stable-rt/+/refs/heads/v4.14-rt</a><br></div><div><br>=
-</div><div>(currently at 4.14.109-rt57).<br></div><div><br></div><div>So yo=
-u should contact your raspberrypi linux rt tree clone maintainer and ask hi=
-m<br></div><div>to upgrade, or, as stated in the #error generated by lttng-=
-modules, simply ensure<br></div><div>CONFIG_OPTPROBES is unset when you bui=
-ld your kernel. You should ask the<br></div><div>raspberrypi community advi=
-ce on how to ensure this configuration option is not</div><div>overridden b=
-y the raspberrypi build system.<br></div><div><br></div><div>Thanks,<br></d=
-iv><div><br></div><div>Mathieu</div><div><br></div><blockquote style=3D"bor=
-der-left:2px solid rgb(16,16,255);margin-left:5px;padding-left:5px;color:rg=
-b(0,0,0);font-weight:normal;font-style:normal;text-decoration:none;font-fam=
-ily:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr"><div dir=3D=
-"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div><span style=3D"color:rgb(36,41=
-,46);font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helv=
-etica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&q=
-uot;,&quot;Segoe UI Symbol&quot;;font-size:14px"><br></span></div><div><spa=
-n style=3D"color:rgb(36,41,46);font-family:-apple-system,BlinkMacSystemFont=
-,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&qu=
-ot;,&quot;Segoe UI Emoji&quot;,&quot;Segoe UI Symbol&quot;;font-size:14px">=
-<br></span></div><div><font face=3D"-apple-system, BlinkMacSystemFont, Sego=
-e UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Sego=
-e UI Symbol" color=3D"#24292e"><span style=3D"font-size:14px">Thank you so =
-much for your attention and looking forward to your reply soon.</span></fon=
-t></div><div><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Hel=
-vetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symb=
-ol" color=3D"#24292e"><span style=3D"font-size:14px"><br></span></font></di=
-v><div><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica=
-, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" co=
-lor=3D"#24292e"><span style=3D"font-size:14px"><br></span></font></div><div=
-><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Aria=
-l, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D=
-"#24292e"><span style=3D"font-size:14px"><br></span></font></div><div><font=
- face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, san=
-s-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#2429=
-2e"><span style=3D"font-size:14px">Best Regards,</span></font></div><div><f=
-ont face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, =
-sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#2=
-4292e"><span style=3D"font-size:14px"><br></span></font></div><div><font fa=
-ce=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-s=
-erif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e"=
-><span style=3D"font-size:14px"><br></span></font></div><div><font face=3D"=
--apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, =
-Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e"><span=
- style=3D"font-size:14px"><br></span></font></div><div><font face=3D"-apple=
--system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple =
-Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e"><span style=
-=3D"font-size:14px">Nicholas Sadjoli</span></font></div></div></div></div><=
-/div>
-<br>_______________________________________________<br>lttng-dev mailing li=
-st<br><a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-=
-dev@lists.lttng.org</a><br><a href=3D"https://lists.lttng.org/cgi-bin/mailm=
-an/listinfo/lttng-dev" target=3D"_blank">https://lists.lttng.org/cgi-bin/ma=
-ilman/listinfo/lttng-dev</a><br></blockquote></div><div><br></div><div>-- <=
-br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br><a href=3D"http://www.e=
-fficios.com" target=3D"_blank">http://www.efficios.com</a></div></div></div=
-></blockquote></div>
-</blockquote></div>
-
---0000000000002d82d10586aa7655--
-
---===============5664938991771351210==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============5664938991771351210==--
+diff --git a/m4/ax_c___attribute__.m4 b/m4/ax_c___attribute__.m4
+index cf3d62bb..6a1ede15 100644
+--- a/m4/ax_c___attribute__.m4
++++ b/m4/ax_c___attribute__.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#    http://www.gnu.org/software/autoconf-archive/ax_c___attribute__.html
++#    https://www.gnu.org/software/autoconf-archive/ax_c___attribute__.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -28,7 +28,7 @@
+ #   Public License for more details.
+ #
+ #   You should have received a copy of the GNU General Public License along
+-#   with this program. If not, see <http://www.gnu.org/licenses/>.
++#   with this program. If not, see <https://www.gnu.org/licenses/>.
+ #
+ #   As a special exception, the respective Autoconf Macro's copyright owner
+ #   gives unlimited permission to copy, distribute and modify the configure
+@@ -43,7 +43,7 @@
+ #   modified version of the Autoconf Macro, you may extend this special
+ #   exception to the GPL to apply to your modified version as well.
+ 
+-#serial 8
++#serial 9
+ 
+ AC_DEFUN([AX_C___ATTRIBUTE__], [
+   AC_CACHE_CHECK([for __attribute__], [ax_cv___attribute__],
+diff --git a/m4/ax_check_class.m4 b/m4/ax_check_class.m4
+index 42b51d72..e673c2d3 100644
+--- a/m4/ax_check_class.m4
++++ b/m4/ax_check_class.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#      http://www.gnu.org/software/autoconf-archive/ax_check_class.html
++#      https://www.gnu.org/software/autoconf-archive/ax_check_class.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -36,7 +36,7 @@
+ #   Public License for more details.
+ #
+ #   You should have received a copy of the GNU General Public License along
+-#   with this program. If not, see <http://www.gnu.org/licenses/>.
++#   with this program. If not, see <https://www.gnu.org/licenses/>.
+ #
+ #   As a special exception, the respective Autoconf Macro's copyright owner
+ #   gives unlimited permission to copy, distribute and modify the configure
+@@ -51,83 +51,18 @@
+ #   modified version of the Autoconf Macro, you may extend this special
+ #   exception to the GPL to apply to your modified version as well.
+ 
+-#serial 7
++#serial 12
+ 
+ AU_ALIAS([AC_CHECK_CLASS], [AX_CHECK_CLASS])
+ AC_DEFUN([AX_CHECK_CLASS],[
+ AC_REQUIRE([AX_PROG_JAVA])
+ ac_var_name=`echo $1 | sed 's/\./_/g'`
+-dnl Normaly I'd use a AC_CACHE_CHECK here but since the variable name is
++dnl Normally I'd use a AC_CACHE_CHECK here but since the variable name is
+ dnl dynamic I need an extra level of extraction
+ AC_MSG_CHECKING([for $1 class])
+ AC_CACHE_VAL(ax_cv_class_$ac_var_name, [
+-if test x$ac_cv_prog_uudecode_base64 = xyes; then
+-dnl /**
+-dnl  * Test.java: used to test dynamicaly if a class exists.
+-dnl  */
+-dnl public class Test
+-dnl {
+-dnl
+-dnl public static void
+-dnl main( String[] argv )
+-dnl {
+-dnl     Class lib;
+-dnl     if (argv.length < 1)
+-dnl      {
+-dnl             System.err.println ("Missing argument");
+-dnl             System.exit (77);
+-dnl      }
+-dnl     try
+-dnl      {
+-dnl             lib = Class.forName (argv[0]);
+-dnl      }
+-dnl     catch (ClassNotFoundException e)
+-dnl      {
+-dnl             System.exit (1);
+-dnl      }
+-dnl     lib = null;
+-dnl     System.exit (0);
+-dnl }
+-dnl
+-dnl }
+-cat << \EOF > Test.uue
+-begin-base64 644 Test.class
+-yv66vgADAC0AKQcAAgEABFRlc3QHAAQBABBqYXZhL2xhbmcvT2JqZWN0AQAE
+-bWFpbgEAFihbTGphdmEvbGFuZy9TdHJpbmc7KVYBAARDb2RlAQAPTGluZU51
+-bWJlclRhYmxlDAAKAAsBAANlcnIBABVMamF2YS9pby9QcmludFN0cmVhbTsJ
+-AA0ACQcADgEAEGphdmEvbGFuZy9TeXN0ZW0IABABABBNaXNzaW5nIGFyZ3Vt
+-ZW50DAASABMBAAdwcmludGxuAQAVKExqYXZhL2xhbmcvU3RyaW5nOylWCgAV
+-ABEHABYBABNqYXZhL2lvL1ByaW50U3RyZWFtDAAYABkBAARleGl0AQAEKEkp
+-VgoADQAXDAAcAB0BAAdmb3JOYW1lAQAlKExqYXZhL2xhbmcvU3RyaW5nOylM
+-amF2YS9sYW5nL0NsYXNzOwoAHwAbBwAgAQAPamF2YS9sYW5nL0NsYXNzBwAi
+-AQAgamF2YS9sYW5nL0NsYXNzTm90Rm91bmRFeGNlcHRpb24BAAY8aW5pdD4B
+-AAMoKVYMACMAJAoAAwAlAQAKU291cmNlRmlsZQEACVRlc3QuamF2YQAhAAEA
+-AwAAAAAAAgAJAAUABgABAAcAAABtAAMAAwAAACkqvgSiABCyAAwSD7YAFBBN
+-uAAaKgMyuAAeTKcACE0EuAAaAUwDuAAasQABABMAGgAdACEAAQAIAAAAKgAK
+-AAAACgAAAAsABgANAA4ADgATABAAEwASAB4AFgAiABgAJAAZACgAGgABACMA
+-JAABAAcAAAAhAAEAAQAAAAUqtwAmsQAAAAEACAAAAAoAAgAAAAQABAAEAAEA
+-JwAAAAIAKA==
+-====
+-EOF
+-                if $UUDECODE Test.uue; then
+-                        :
+-                else
+-                        echo "configure: __oline__: uudecode had trouble decoding base 64 file 'Test.uue'" >&AS_MESSAGE_LOG_FD
+-                        echo "configure: failed file was:" >&AS_MESSAGE_LOG_FD
+-                        cat Test.uue >&AS_MESSAGE_LOG_FD
+-                        ac_cv_prog_uudecode_base64=no
+-                fi
+-        rm -f Test.uue
+-        if AC_TRY_COMMAND($JAVA -classpath ".:$CLASSPATH" $JAVAFLAGS Test $1) >/dev/null 2>&1; then
+-                eval "ac_cv_class_$ac_var_name=yes"
+-        else
+-                eval "ac_cv_class_$ac_var_name=no"
+-        fi
+-        rm -f Test.class
+-else
+         AX_TRY_COMPILE_JAVA([$1], , [eval "ac_cv_class_$ac_var_name=yes"],
+                 [eval "ac_cv_class_$ac_var_name=no"])
+-fi
+ eval "ac_var_val=$`eval echo ac_cv_class_$ac_var_name`"
+ eval "HAVE_$ac_var_name=$`echo ac_cv_class_$ac_var_val`"
+ HAVE_LAST_CLASS=$ac_var_val
+@@ -137,7 +72,7 @@ else
+         ifelse([$3], , :, [$3])
+ fi
+ ])
+-dnl for some reason the above statment didn't fall though here?
++dnl for some reason the above statement didn't fall though here?
+ dnl do scripts have variable scoping?
+ eval "ac_var_val=$`eval echo ac_cv_class_$ac_var_name`"
+ AC_MSG_RESULT($ac_var_val)
+diff --git a/m4/ax_check_classpath.m4 b/m4/ax_check_classpath.m4
+index 3c9081a0..e08a253d 100644
+--- a/m4/ax_check_classpath.m4
++++ b/m4/ax_check_classpath.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#    http://www.gnu.org/software/autoconf-archive/ax_check_classpath.html
++#    https://www.gnu.org/software/autoconf-archive/ax_check_classpath.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -33,7 +33,7 @@
+ #   Public License for more details.
+ #
+ #   You should have received a copy of the GNU General Public License along
+-#   with this program. If not, see <http://www.gnu.org/licenses/>.
++#   with this program. If not, see <https://www.gnu.org/licenses/>.
+ #
+ #   As a special exception, the respective Autoconf Macro's copyright owner
+ #   gives unlimited permission to copy, distribute and modify the configure
+@@ -48,7 +48,7 @@
+ #   modified version of the Autoconf Macro, you may extend this special
+ #   exception to the GPL to apply to your modified version as well.
+ 
+-#serial 5
++#serial 6
+ 
+ AU_ALIAS([AC_CHECK_CLASSPATH], [AX_CHECK_CLASSPATH])
+ AC_DEFUN([AX_CHECK_CLASSPATH],[
+diff --git a/m4/ax_check_rqrd_class.m4 b/m4/ax_check_rqrd_class.m4
+index 8f14241b..baa041ac 100644
+--- a/m4/ax_check_rqrd_class.m4
++++ b/m4/ax_check_rqrd_class.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#    http://www.gnu.org/software/autoconf-archive/ax_check_rqrd_class.html
++#   https://www.gnu.org/software/autoconf-archive/ax_check_rqrd_class.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -35,7 +35,7 @@
+ #   Public License for more details.
+ #
+ #   You should have received a copy of the GNU General Public License along
+-#   with this program. If not, see <http://www.gnu.org/licenses/>.
++#   with this program. If not, see <https://www.gnu.org/licenses/>.
+ #
+ #   As a special exception, the respective Autoconf Macro's copyright owner
+ #   gives unlimited permission to copy, distribute and modify the configure
+@@ -50,7 +50,7 @@
+ #   modified version of the Autoconf Macro, you may extend this special
+ #   exception to the GPL to apply to your modified version as well.
+ 
+-#serial 5
++#serial 6
+ 
+ AU_ALIAS([AC_CHECK_RQRD_CLASS], [AX_CHECK_RQRD_CLASS])
+ AC_DEFUN([AX_CHECK_RQRD_CLASS],[
+diff --git a/m4/ax_java_options.m4 b/m4/ax_java_options.m4
+index 36c10d92..722d7880 100644
+--- a/m4/ax_java_options.m4
++++ b/m4/ax_java_options.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#      http://www.gnu.org/software/autoconf-archive/ax_java_options.html
++#     https://www.gnu.org/software/autoconf-archive/ax_java_options.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -27,7 +27,7 @@
+ #   and this notice are preserved. This file is offered as-is, without any
+ #   warranty.
+ 
+-#serial 6
++#serial 7
+ 
+ AU_ALIAS([AC_JAVA_OPTIONS], [AX_JAVA_OPTIONS])
+ AC_DEFUN([AX_JAVA_OPTIONS],[
+diff --git a/m4/ax_jni_include_dir.m4 b/m4/ax_jni_include_dir.m4
+index b664d80b..ae7a5f04 100644
+--- a/m4/ax_jni_include_dir.m4
++++ b/m4/ax_jni_include_dir.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#    http://www.gnu.org/software/autoconf-archive/ax_jni_include_dir.html
++#    https://www.gnu.org/software/autoconf-archive/ax_jni_include_dir.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -32,6 +32,10 @@
+ #
+ #   - at the configure level, setenv JAVAC
+ #
++#   This macro depends on AC_CANONICAL_HOST which requires that config.guess
++#   and config.sub be distributed along with the source code.  See autoconf
++#   manual for details.
++#
+ #   Note: This macro can work with the autoconf M4 macros for Java programs.
+ #   This particular macro is not part of the original set of macros.
+ #
+@@ -44,11 +48,13 @@
+ #   and this notice are preserved. This file is offered as-is, without any
+ #   warranty.
+ 
+-#serial 10
++#serial 15
+ 
+ AU_ALIAS([AC_JNI_INCLUDE_DIR], [AX_JNI_INCLUDE_DIR])
+ AC_DEFUN([AX_JNI_INCLUDE_DIR],[
+ 
++AC_REQUIRE([AC_CANONICAL_HOST])
++
+ JNI_INCLUDE_DIRS=""
+ 
+ if test "x$JAVA_HOME" != x; then
+@@ -66,9 +72,17 @@ else
+ fi
+ 
+ case "$host_os" in
+-        darwin*)        _JTOPDIR=`echo "$_JTOPDIR" | sed -e 's:/[[^/]]*$::'`
+-                        _JINC="$_JTOPDIR/Headers";;
+-        *)              _JINC="$_JTOPDIR/include";;
++        darwin*)        # Apple Java headers are inside the Xcode bundle.
++            macos_version=$(sw_vers -productVersion | sed -n -e 's/^@<:@0-9@:>@*.\(@<:@0-9@:>@*\).@<:@0-9@:>@*/\1/p')
++            if @<:@ "$macos_version" -gt "7" @:>@; then
++                _JTOPDIR="$(xcrun --show-sdk-path)/System/Library/Frameworks/JavaVM.framework"
++                _JINC="$_JTOPDIR/Headers"
++            else
++                _JTOPDIR="/System/Library/Frameworks/JavaVM.framework"
++                _JINC="$_JTOPDIR/Headers"
++            fi
++            ;;
++        *) _JINC="$_JTOPDIR/include";;
+ esac
+ _AS_ECHO_LOG([_JTOPDIR=$_JTOPDIR])
+ _AS_ECHO_LOG([_JINC=$_JINC])
+@@ -76,18 +90,27 @@ _AS_ECHO_LOG([_JINC=$_JINC])
+ # On Mac OS X 10.6.4, jni.h is a symlink:
+ # /System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers/jni.h
+ # -> ../../CurrentJDK/Headers/jni.h.
+-AC_CHECK_FILE([$_JINC/jni.h],
+-	[JNI_INCLUDE_DIRS="$JNI_INCLUDE_DIRS $_JINC"],
+-	[_JTOPDIR=`echo "$_JTOPDIR" | sed -e 's:/[[^/]]*$::'`
+-	 AC_CHECK_FILE([$_JTOPDIR/include/jni.h],
+-		[JNI_INCLUDE_DIRS="$JNI_INCLUDE_DIRS $_JTOPDIR/include"],
+-                AC_MSG_ERROR([cannot find JDK header files]))
+-	])
++AC_CACHE_CHECK(jni headers, ac_cv_jni_header_path,
++[
++  if test -f "$_JINC/jni.h"; then
++    ac_cv_jni_header_path="$_JINC"
++    JNI_INCLUDE_DIRS="$JNI_INCLUDE_DIRS $ac_cv_jni_header_path"
++  else
++    _JTOPDIR=`echo "$_JTOPDIR" | sed -e 's:/[[^/]]*$::'`
++    if test -f "$_JTOPDIR/include/jni.h"; then
++      ac_cv_jni_header_path="$_JTOPDIR/include"
++      JNI_INCLUDE_DIRS="$JNI_INCLUDE_DIRS $ac_cv_jni_header_path"
++    else
++      ac_cv_jni_header_path=none
++    fi
++  fi
++])
+ 
+ # get the likely subdirectories for system specific java includes
+ case "$host_os" in
+ bsdi*)          _JNI_INC_SUBDIRS="bsdos";;
+ freebsd*)       _JNI_INC_SUBDIRS="freebsd";;
++darwin*)        _JNI_INC_SUBDIRS="darwin";;
+ linux*)         _JNI_INC_SUBDIRS="linux genunix";;
+ osf*)           _JNI_INC_SUBDIRS="alpha";;
+ solaris*)       _JNI_INC_SUBDIRS="solaris";;
+@@ -96,13 +119,15 @@ cygwin*)	_JNI_INC_SUBDIRS="win32";;
+ *)              _JNI_INC_SUBDIRS="genunix";;
+ esac
+ 
+-# add any subdirectories that are present
+-for JINCSUBDIR in $_JNI_INC_SUBDIRS
+-do
++if test "x$ac_cv_jni_header_path" != "xnone"; then
++  # add any subdirectories that are present
++  for JINCSUBDIR in $_JNI_INC_SUBDIRS
++  do
+     if test -d "$_JTOPDIR/include/$JINCSUBDIR"; then
+          JNI_INCLUDE_DIRS="$JNI_INCLUDE_DIRS $_JTOPDIR/include/$JINCSUBDIR"
+     fi
+-done
++  done
++fi
+ ])
+ 
+ # _ACJNI_FOLLOW_SYMLINKS <path>
+diff --git a/m4/ax_prog_jar.m4 b/m4/ax_prog_jar.m4
+index 3c60fcaf..d474912a 100644
+--- a/m4/ax_prog_jar.m4
++++ b/m4/ax_prog_jar.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#        http://www.gnu.org/software/autoconf-archive/ax_prog_jar.html
++#       https://www.gnu.org/software/autoconf-archive/ax_prog_jar.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -37,7 +37,7 @@
+ #   and this notice are preserved. This file is offered as-is, without any
+ #   warranty.
+ 
+-#serial 7
++#serial 8
+ 
+ AU_ALIAS([AC_PROG_JAR], [AX_PROG_JAR])
+ AC_DEFUN([AX_PROG_JAR],[
+diff --git a/m4/ax_prog_java.m4 b/m4/ax_prog_java.m4
+index 03961db5..c2e6964e 100644
+--- a/m4/ax_prog_java.m4
++++ b/m4/ax_prog_java.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#       http://www.gnu.org/software/autoconf-archive/ax_prog_java.html
++#       https://www.gnu.org/software/autoconf-archive/ax_prog_java.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -85,7 +85,7 @@
+ #   Public License for more details.
+ #
+ #   You should have received a copy of the GNU General Public License along
+-#   with this program. If not, see <http://www.gnu.org/licenses/>.
++#   with this program. If not, see <https://www.gnu.org/licenses/>.
+ #
+ #   As a special exception, the respective Autoconf Macro's copyright owner
+ #   gives unlimited permission to copy, distribute and modify the configure
+@@ -100,7 +100,7 @@
+ #   modified version of the Autoconf Macro, you may extend this special
+ #   exception to the GPL to apply to your modified version as well.
+ 
+-#serial 9
++#serial 10
+ 
+ AU_ALIAS([AC_PROG_JAVA], [AX_PROG_JAVA])
+ AC_DEFUN([AX_PROG_JAVA],[
+diff --git a/m4/ax_prog_java_works.m4 b/m4/ax_prog_java_works.m4
+index 54e132af..bc705261 100644
+--- a/m4/ax_prog_java_works.m4
++++ b/m4/ax_prog_java_works.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#    http://www.gnu.org/software/autoconf-archive/ax_prog_java_works.html
++#    https://www.gnu.org/software/autoconf-archive/ax_prog_java_works.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -32,7 +32,7 @@
+ #   Public License for more details.
+ #
+ #   You should have received a copy of the GNU General Public License along
+-#   with this program. If not, see <http://www.gnu.org/licenses/>.
++#   with this program. If not, see <https://www.gnu.org/licenses/>.
+ #
+ #   As a special exception, the respective Autoconf Macro's copyright owner
+ #   gives unlimited permission to copy, distribute and modify the configure
+@@ -47,57 +47,16 @@
+ #   modified version of the Autoconf Macro, you may extend this special
+ #   exception to the GPL to apply to your modified version as well.
+ 
+-#serial 9
++#serial 11
+ 
+ AU_ALIAS([AC_PROG_JAVA_WORKS], [AX_PROG_JAVA_WORKS])
+ AC_DEFUN([AX_PROG_JAVA_WORKS], [
+-AC_PATH_PROG(UUDECODE, uudecode, [no])
+-if test x$UUDECODE != xno; then
+-AC_CACHE_CHECK([if uudecode can decode base 64 file], ac_cv_prog_uudecode_base64, [
+-dnl /**
+-dnl  * Test.java: used to test if java compiler works.
+-dnl  */
+-dnl public class Test
+-dnl {
+-dnl
+-dnl public static void
+-dnl main( String[] argv )
+-dnl {
+-dnl     System.exit (0);
+-dnl }
+-dnl
+-dnl }
+-cat << \EOF > Test.uue
+-begin-base64 644 Test.class
+-yv66vgADAC0AFQcAAgEABFRlc3QHAAQBABBqYXZhL2xhbmcvT2JqZWN0AQAE
+-bWFpbgEAFihbTGphdmEvbGFuZy9TdHJpbmc7KVYBAARDb2RlAQAPTGluZU51
+-bWJlclRhYmxlDAAKAAsBAARleGl0AQAEKEkpVgoADQAJBwAOAQAQamF2YS9s
+-YW5nL1N5c3RlbQEABjxpbml0PgEAAygpVgwADwAQCgADABEBAApTb3VyY2VG
+-aWxlAQAJVGVzdC5qYXZhACEAAQADAAAAAAACAAkABQAGAAEABwAAACEAAQAB
+-AAAABQO4AAyxAAAAAQAIAAAACgACAAAACgAEAAsAAQAPABAAAQAHAAAAIQAB
+-AAEAAAAFKrcAErEAAAABAAgAAAAKAAIAAAAEAAQABAABABMAAAACABQ=
+-====
+-EOF
+-if $UUDECODE Test.uue; then
+-        ac_cv_prog_uudecode_base64=yes
+-else
+-        echo "configure: __oline__: uudecode had trouble decoding base 64 file 'Test.uue'" >&AS_MESSAGE_LOG_FD
+-        echo "configure: failed file was:" >&AS_MESSAGE_LOG_FD
+-        cat Test.uue >&AS_MESSAGE_LOG_FD
+-        ac_cv_prog_uudecode_base64=no
+-fi
+-rm -f Test.uue])
+-fi
+-if test x$ac_cv_prog_uudecode_base64 != xyes; then
+-        rm -f Test.class
+-        AC_MSG_WARN([I have to compile Test.class from scratch])
+         if test x$ac_cv_prog_javac_works = xno; then
+                 AC_MSG_ERROR([Cannot compile java source. $JAVAC does not work properly])
+         fi
+         if test x$ac_cv_prog_javac_works = x; then
+                 AX_PROG_JAVAC
+         fi
+-fi
+ AC_CACHE_CHECK(if $JAVA works, ac_cv_prog_java_works, [
+ JAVA_TEST=Test.java
+ CLASS_TEST=Test.class
+@@ -111,7 +70,6 @@ public static void main (String args[]) {
+ } }
+ EOF
+ changequote([, ])dnl
+-if test x$ac_cv_prog_uudecode_base64 != xyes; then
+         if AC_TRY_COMMAND($JAVAC $JAVACFLAGS $JAVA_TEST) && test -s $CLASS_TEST; then
+                 :
+         else
+@@ -119,7 +77,6 @@ if test x$ac_cv_prog_uudecode_base64 != xyes; then
+           cat $JAVA_TEST >&AS_MESSAGE_LOG_FD
+           AC_MSG_ERROR(The Java compiler $JAVAC failed (see config.log, check the CLASSPATH?))
+         fi
+-fi
+ if AC_TRY_COMMAND($JAVA -classpath . $JAVAFLAGS $TEST) >/dev/null 2>&1; then
+   ac_cv_prog_java_works=yes
+ else
+@@ -127,7 +84,7 @@ else
+   cat $JAVA_TEST >&AS_MESSAGE_LOG_FD
+   AC_MSG_ERROR(The Java VM $JAVA failed (see config.log, check the CLASSPATH?))
+ fi
+-rm -fr $JAVA_TEST $CLASS_TEST Test.uue
++rm -f $JAVA_TEST $CLASS_TEST
+ ])
+ AC_PROVIDE([$0])dnl
+ ]
+diff --git a/m4/ax_prog_javac.m4 b/m4/ax_prog_javac.m4
+index d061243c..8abb733f 100644
+--- a/m4/ax_prog_javac.m4
++++ b/m4/ax_prog_javac.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#       http://www.gnu.org/software/autoconf-archive/ax_prog_javac.html
++#      https://www.gnu.org/software/autoconf-archive/ax_prog_javac.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -49,7 +49,7 @@
+ #   Public License for more details.
+ #
+ #   You should have received a copy of the GNU General Public License along
+-#   with this program. If not, see <http://www.gnu.org/licenses/>.
++#   with this program. If not, see <https://www.gnu.org/licenses/>.
+ #
+ #   As a special exception, the respective Autoconf Macro's copyright owner
+ #   gives unlimited permission to copy, distribute and modify the configure
+@@ -64,7 +64,7 @@
+ #   modified version of the Autoconf Macro, you may extend this special
+ #   exception to the GPL to apply to your modified version as well.
+ 
+-#serial 7
++#serial 8
+ 
+ AU_ALIAS([AC_PROG_JAVAC], [AX_PROG_JAVAC])
+ AC_DEFUN([AX_PROG_JAVAC],[
+diff --git a/m4/ax_prog_javac_works.m4 b/m4/ax_prog_javac_works.m4
+index 7dfa1e37..9b48149d 100644
+--- a/m4/ax_prog_javac_works.m4
++++ b/m4/ax_prog_javac_works.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#    http://www.gnu.org/software/autoconf-archive/ax_prog_javac_works.html
++#   https://www.gnu.org/software/autoconf-archive/ax_prog_javac_works.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -32,7 +32,7 @@
+ #   Public License for more details.
+ #
+ #   You should have received a copy of the GNU General Public License along
+-#   with this program. If not, see <http://www.gnu.org/licenses/>.
++#   with this program. If not, see <https://www.gnu.org/licenses/>.
+ #
+ #   As a special exception, the respective Autoconf Macro's copyright owner
+ #   gives unlimited permission to copy, distribute and modify the configure
+@@ -47,7 +47,7 @@
+ #   modified version of the Autoconf Macro, you may extend this special
+ #   exception to the GPL to apply to your modified version as well.
+ 
+-#serial 6
++#serial 7
+ 
+ AU_ALIAS([AC_PROG_JAVAC_WORKS], [AX_PROG_JAVAC_WORKS])
+ AC_DEFUN([AX_PROG_JAVAC_WORKS],[
+diff --git a/m4/ax_prog_javah.m4 b/m4/ax_prog_javah.m4
+index 2809f29c..935ec896 100644
+--- a/m4/ax_prog_javah.m4
++++ b/m4/ax_prog_javah.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#       http://www.gnu.org/software/autoconf-archive/ax_prog_javah.html
++#      https://www.gnu.org/software/autoconf-archive/ax_prog_javah.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -21,7 +21,7 @@
+ #   and this notice are preserved. This file is offered as-is, without any
+ #   warranty.
+ 
+-#serial 7
++#serial 11
+ 
+ AU_ALIAS([AC_PROG_JAVAH], [AX_PROG_JAVAH])
+ AC_DEFUN([AX_PROG_JAVAH],[
+@@ -30,18 +30,35 @@ AC_REQUIRE([AC_PROG_CPP])dnl
+ AC_PATH_PROG(JAVAH,javah)
+ AS_IF([test -n "$ac_cv_path_JAVAH"],
+       [
+-        AC_TRY_CPP([#include <jni.h>],,[
++        AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <jni.h>]])],[],[
+         ac_save_CPPFLAGS="$CPPFLAGS"
+-        ax_prog_javah_bin_dir=`AS_DIRNAME([$ac_cv_path_JAVAH])`
+-        ac_dir="`AS_DIRNAME([$ax_prog_javah_bin])`/include"
++        _ACJAVAH_FOLLOW_SYMLINKS("$ac_cv_path_JAVAH")
++        ax_prog_javah_bin_dir=`AS_DIRNAME([$_ACJAVAH_FOLLOWED])`
++        ac_dir="`AS_DIRNAME([$ax_prog_javah_bin_dir])`/include"
+         AS_CASE([$build_os],
+-                [cygwin*],
++                [cygwin*|mingw*],
+                 [ac_machdep=win32],
+                 [ac_machdep=`AS_ECHO($build_os) | sed 's,[[-0-9]].*,,'`])
+         CPPFLAGS="$ac_save_CPPFLAGS -I$ac_dir -I$ac_dir/$ac_machdep"
+-        AC_TRY_CPP([#include <jni.h>],
+-                   ac_save_CPPFLAGS="$CPPFLAGS",
+-                   AC_MSG_WARN([unable to include <jni.h>]))
++        AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <jni.h>]])],
++                          [ac_save_CPPFLAGS="$CPPFLAGS"],
++                          [AC_MSG_WARN([unable to include <jni.h>])])
+         CPPFLAGS="$ac_save_CPPFLAGS"])
+       ])
+ ])
++
++AC_DEFUN([_ACJAVAH_FOLLOW_SYMLINKS],[
++# find the include directory relative to the javac executable
++_cur="$1"
++while ls -ld "$_cur" 2>/dev/null | grep " -> " >/dev/null; do
++        AC_MSG_CHECKING([symlink for $_cur])
++        _slink=`ls -ld "$_cur" | sed 's/.* -> //'`
++        case "$_slink" in
++        /*) _cur="$_slink";;
++        # 'X' avoids triggering unwanted echo options.
++        *) _cur=`echo "X$_cur" | sed -e 's/^X//' -e 's:[[^/]]*$::'`"$_slink";;
++        esac
++        AC_MSG_RESULT([$_cur])
++done
++_ACJAVAH_FOLLOWED="$_cur"
++])
+diff --git a/m4/ax_sys_weak_alias.m4 b/m4/ax_sys_weak_alias.m4
+index e1bfd336..733b1ddd 100644
+--- a/m4/ax_sys_weak_alias.m4
++++ b/m4/ax_sys_weak_alias.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#     http://www.gnu.org/software/autoconf-archive/ax_sys_weak_alias.html
++#    https://www.gnu.org/software/autoconf-archive/ax_sys_weak_alias.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -22,8 +22,8 @@
+ #   another object file.
+ #
+ #   There are four known schemes of declaring weak symbols; each scheme is
+-#   checked in turn, and the first one found is prefered. Note that only one
+-#   of the mentioned preprocessor macros will be defined!
++#   checked in turn, and the first one found is preferred. Note that only
++#   one of the mentioned preprocessor macros will be defined!
+ #
+ #   1. Function attributes
+ #
+@@ -110,7 +110,7 @@
+ #   and this notice are preserved. This file is offered as-is, without any
+ #   warranty.
+ 
+-#serial 6
++#serial 8
+ 
+ AU_ALIAS([KLM_SYS_WEAK_ALIAS], [AX_SYS_WEAK_ALIAS])
+ AC_DEFUN([AX_SYS_WEAK_ALIAS], [
+diff --git a/m4/ax_try_compile_java.m4 b/m4/ax_try_compile_java.m4
+index a8ed6b2a..245c36c4 100644
+--- a/m4/ax_try_compile_java.m4
++++ b/m4/ax_try_compile_java.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#    http://www.gnu.org/software/autoconf-archive/ax_try_compile_java.html
++#   https://www.gnu.org/software/autoconf-archive/ax_try_compile_java.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -29,7 +29,7 @@
+ #   and this notice are preserved. This file is offered as-is, without any
+ #   warranty.
+ 
+-#serial 8
++#serial 10
+ 
+ AU_ALIAS([AC_TRY_COMPILE_JAVA], [AX_TRY_COMPILE_JAVA])
+ AC_DEFUN([AX_TRY_COMPILE_JAVA],[
+@@ -48,8 +48,8 @@ dnl Don't remove the temporary files here, so they can be examined.
+ else
+   echo "configure: failed program was:" >&AS_MESSAGE_LOG_FD
+   cat Test.java >&AS_MESSAGE_LOG_FD
+-ifelse([$4], , , [  rm -fr Test.java Test.class
++ifelse([$4], , , [  rm -f Test.java Test.class
+   $4
+ ])dnl
+ fi
+-rm -fr Test.java Test.class])
++rm -f Test.java Test.class])
+diff --git a/m4/ax_try_run_java.m4 b/m4/ax_try_run_java.m4
+index c680f03f..2ebb86d6 100644
+--- a/m4/ax_try_run_java.m4
++++ b/m4/ax_try_run_java.m4
+@@ -1,5 +1,5 @@
+ # ===========================================================================
+-#      http://www.gnu.org/software/autoconf-archive/ax_try_run_java.html
++#     https://www.gnu.org/software/autoconf-archive/ax_try_run_java.html
+ # ===========================================================================
+ #
+ # SYNOPSIS
+@@ -29,7 +29,7 @@
+ #   and this notice are preserved. This file is offered as-is, without any
+ #   warranty.
+ 
+-#serial 2
++#serial 3
+ 
+ AU_ALIAS([AC_TRY_RUN_JAVA], [AX_TRY_RUN_JAVA])
+ AC_DEFUN([AX_TRY_RUN_JAVA],[
+-- 
+2.17.1
