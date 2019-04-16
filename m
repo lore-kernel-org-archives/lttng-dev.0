@@ -1,88 +1,66 @@
-From: Francis Deslauriers <francis.deslauriers@efficios.com>
-Subject: Tracing Summit 2019: Announcement and Call for Proposals, August
- 20th, 2019, San Diego, CA
-Date: Tue, 16 Apr 2019 11:54:34 -0400
-Message-ID: <CADcCL0irokZ8Xp7S3eBV728qpL5yipwW+=2QvwiZrixqSdtBog@mail.gmail.com>
+From: Joe Sutker <jomasu22@gmail.com>
+Subject: SIG33
+Date: Tue, 16 Apr 2019 11:26:13 -0400
+Message-ID: <CAHryLm7o6X3pvu+=7m2b6TMFUMXNYhJOW8cid5v-FFTD948oHA__31422.6271280617$1555435209$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Sender: linux-kernel-owner@vger.kernel.org
-To: diamon-discuss@lists.linuxfoundation.org, linux-kernel <linux-kernel@vger.kernel.org>, linux-perf-users@vger.kernel.org, linux-trace-devel@vger.kernel.org, linux-trace-users@vger.kernel.org, linuxtools-dev@eclipse.org, lttng-dev <lttng-dev@lists.lttng.org>, lwn@lwn.net, tracecompass-dev@eclipse.org
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, info@tracingsummit.org
+Content-Type: multipart/mixed; boundary="===============1170301359423694413=="
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com
+ [IPv6:2a00:1450:4864:20::22a])
+ by lists.lttng.org (Postfix) with ESMTPS id 44k8NM4RRxz1KTK
+ for <lttng-dev@lists.lttng.org>; Tue, 16 Apr 2019 11:26:27 -0400 (EDT)
+Received: by mail-lj1-x22a.google.com with SMTP id v22so19477380lje.9
+ for <lttng-dev@lists.lttng.org>; Tue, 16 Apr 2019 08:26:27 -0700 (PDT)
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Hi all,
+--===============1170301359423694413==
+Content-Type: multipart/alternative; boundary="0000000000005bf6820586a764c2"
 
-This is a Call for Proposals for the Tracing Summit 2019 [0] which
-will be held in San Diego, California, USA at the Hilton San Diego
-Bayfront, co-located with the Open Source Summit & Embedded Linux
-Conference North America 2019 [1] on August 20th, 2019.
+--0000000000005bf6820586a764c2
+Content-Type: text/plain; charset="UTF-8"
 
-You can subscribe to our mailing list ot get the latest info on the event: [2]
+Hello LTTng Devs,
 
-The Tracing Summit is single-day, single-track conference on the topic
-of tracing. The event focuses on the field of software and hardware
-tracing, gathering developers and end-users of tracing and trace
-analysis tools. The main goal of the Tracing Summit is to provide
-space for discussion between people of the various areas that benefit
-from tracing, namely parallel, distributed and/or real-time systems,
-as well as kernel development.
+I am working on a project that uses LTTng, and it seems that LTTng is
+throwing a SIG33 signal (Real-time event 33), which Eclipse does not seem
+to appreciate. Would you be able to direct me to the place in lttng-tools
+that this signal is thrown?
 
-We are welcoming 30 minute presentations from both end users and
-developers, on topics covering, but not limited to:
--Investigation workflow of Real-Time, latency, and throughput issues,
--Trace collection and extraction,
--Trace filtering,
--Trace aggregation,
--Trace formats,
--Tracing multi-core systems,
--Trace abstraction,
--Trace modeling,
--Automated trace analysis (e.g. dependency analysis),
--Tracing large clusters and distributed systems,
--Hardware-level tracing (e.g. DSP, GPU, bare-metal),
--Trace visualisation,
--Interaction between debugging and tracing,
--Tracing remote control,
--Analysis of large trace datasets,
--Cloud trace collection and analysis,
--Integration between trace tools,
--Live tracing & monitoring,
--Programmable tracing (e.g. eBPF).
+Thanks,
 
-Those can cover recently available technologies, ongoing work, and yet
-non-existing technologies (which are compellingly interesting to
-end-users). Please understand that this open forum is not the proper
-place to present sales or marketing pitches, nor technologies which
-are prevented from being freely used in open source.
+Joe
 
-* Submit you talk today using this form: https://forms.gle/L6mR2ZN3Nt7bUxY98 *
+--0000000000005bf6820586a764c2
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The submission deadline is July 1st 2019 at 23:59 EST.
+<div dir=3D"ltr">Hello LTTng Devs,<div><br></div><div>I am working on a pro=
+ject that uses LTTng, and it seems that LTTng is throwing a SIG33 signal (R=
+eal-time event 33), which Eclipse does not seem to appreciate. Would you be=
+ able to direct me to the place in lttng-tools that this signal is thrown?<=
+/div><div><br></div><div>Thanks,</div><div><br></div><div>Joe</div></div>
 
-This year tickets are $100 and seating is limited to 100 people. To
-register, you can add the Tracing Summit as an addon to your Open
-Source Summit ticket [3] or use this link [4] to register solely for
-the Tracing Summit.
+--0000000000005bf6820586a764c2--
 
-The Tracing Summit is sponsored by EfficiOS. We are actively looking
-for sponsors to support the Tracing Summit. Contact us at
-info@tracingsummit.org.
+--===============1170301359423694413==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Please send any query about this conference to info@tracingsummit.org.
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-This event is organized by Francis Deslauriers and Mathieu Desnoyers
-on the behalf of the Linux Foundation Diagnostic and Monitoring
-Workgroup [5].
-
-[0] : https://tracingsummit.org
-[1]: https://events.linuxfoundation.org/events/open-source-summit-north-america-2019
-[2]: http://eepurl.com/goakfv
-[3]: https://www.cvent.com/events/open-source-summit-embedded-linux-conference-north-america-2019/registration-0ed1330c38bd4845be29b91c9d2444ce.aspx?fqp=true
-[4]: https://www.cvent.com/events/tracing-summit-2019/registration-63351d06945a46d890b8e5a200dbc0fc.aspx?fqp=true
-[5]: https://diamon.org
-
---
-Francis Deslauriers
-Computer Engineer
-EfficiOS inc.
+--===============1170301359423694413==--
