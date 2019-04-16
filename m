@@ -1,15 +1,15 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-tools 3/5] Harmonize rw_prog_cxx_works
- macro across projects
-Date: Tue, 16 Apr 2019 16:43:46 -0400
-Message-ID: <20190416204348.29127-3-mjeanson__20268.4253499442$1555447534$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 4/5] Update the ac_define_dir macro
+ from the autoconf archive
+Date: Tue, 16 Apr 2019 16:43:47 -0400
+Message-ID: <20190416204348.29127-4-mjeanson__18559.2154318996$1555447553$gmane$org@efficios.com>
 References: <20190416204348.29127-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44kHQn0fYgz1L0Y
+ by lists.lttng.org (Postfix) with ESMTPS id 44kHQn44PQz1L0x
  for <lttng-dev@lists.lttng.org>; Tue, 16 Apr 2019 16:44:01 -0400 (EDT)
 In-Reply-To: <20190416204348.29127-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -25,107 +25,131 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
+This macro was removed many years ago from the archive because it crosses
+the boundary between configure and make time variables. For the moment
+update it to the latest released version.
+
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- configure.ac            |  2 +-
- m4/rw_prog_cxx_works.m4 | 69 ++++++++++++++++++++++++-----------------
- 2 files changed, 42 insertions(+), 29 deletions(-)
+ configure.ac        |  2 +-
+ m4/ac_define_dir.m4 | 34 ----------------------------
+ m4/ax_define_dir.m4 | 54 +++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 55 insertions(+), 35 deletions(-)
+ delete mode 100644 m4/ac_define_dir.m4
+ create mode 100644 m4/ax_define_dir.m4
 
 diff --git a/configure.ac b/configure.ac
-index f95ccb7e..f0a4d975 100644
+index f0a4d975..dd99855e 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -22,7 +22,7 @@ AC_SYS_LARGEFILE
- AC_PROG_CC
- AC_PROG_CC_STDC
- AC_PROG_CXX
--rw_PROG_CXX_WORKS
-+RW_PROG_CXX_WORKS
- AM_CONDITIONAL([CXX_WORKS], [test "x$rw_cv_prog_cxx_works" = "xyes"])
+@@ -425,7 +425,7 @@ CONFDIR=`eval echo $sysconfdir`
+ AC_SUBST(CONFDIR)
+ AC_DEFINE_UNQUOTED([CONFIG_LTTNG_SYSTEM_CONFIGDIR],"$CONFDIR", [LTTng system configuration directory.])
  
- LTTNG_CHECK_SDT_WORKS
-diff --git a/m4/rw_prog_cxx_works.m4 b/m4/rw_prog_cxx_works.m4
-index 1950d94d..f3d6bde6 100644
---- a/m4/rw_prog_cxx_works.m4
-+++ b/m4/rw_prog_cxx_works.m4
-@@ -1,37 +1,50 @@
--# rw_PROG_CXX_WORKS
+-AC_DEFINE_DIR([CONFIG_LTTNG_SYSTEM_DATADIR],[datadir], [LTTng system data directory.])
++AX_DEFINE_DIR([CONFIG_LTTNG_SYSTEM_DATADIR], [datadir], [LTTng system data directory.])
+ 
+ # Check libpopt
+ PKG_CHECK_MODULES([POPT], [popt],
+diff --git a/m4/ac_define_dir.m4 b/m4/ac_define_dir.m4
+deleted file mode 100644
+index e15cea2c..00000000
+--- a/m4/ac_define_dir.m4
++++ /dev/null
+@@ -1,34 +0,0 @@
+-dnl @synopsis AC_DEFINE_DIR(VARNAME, DIR [, DESCRIPTION])
+-dnl
+-dnl This macro sets VARNAME to the expansion of the DIR variable,
+-dnl taking care of fixing up ${prefix} and such.
+-dnl
+-dnl VARNAME is then offered as both an output variable and a C
+-dnl preprocessor symbol.
+-dnl
+-dnl Example:
+-dnl
+-dnl    AC_DEFINE_DIR([DATADIR], [datadir], [Where data are placed to.])
+-dnl
+-dnl @category Misc
+-dnl @author Stepan Kasal <kasal@ucw.cz>
+-dnl @author Andreas Schwab <schwab@suse.de>
+-dnl @author Guido U. Draheim <guidod@gmx.de>
+-dnl @author Alexandre Oliva
+-dnl @version 2006-10-13
+-dnl @license AllPermissive
+-
+-AC_DEFUN([AC_DEFINE_DIR], [
+-  prefix_NONE=
+-  exec_prefix_NONE=
+-  test "x$prefix" = xNONE && prefix_NONE=yes && prefix=$ac_default_prefix
+-  test "x$exec_prefix" = xNONE && exec_prefix_NONE=yes && exec_prefix=$prefix
+-dnl In Autoconf 2.60, ${datadir} refers to ${datarootdir}, which in turn
+-dnl refers to ${prefix}.  Thus we have to use `eval' twice.
+-  eval ac_define_dir="\"[$]$2\""
+-  eval ac_define_dir="\"$ac_define_dir\""
+-  AC_SUBST($1, "$ac_define_dir")
+-  AC_DEFINE_UNQUOTED($1, "$ac_define_dir", [$3])
+-  test "$prefix_NONE" && prefix=NONE
+-  test "$exec_prefix_NONE" && exec_prefix=NONE
+-])
+diff --git a/m4/ax_define_dir.m4 b/m4/ax_define_dir.m4
+new file mode 100644
+index 00000000..a26ba372
+--- /dev/null
++++ b/m4/ax_define_dir.m4
+@@ -0,0 +1,54 @@
++# ===========================================================================
++#       http://www.gnu.org/software/autoconf-archive/ax_define_dir.html
++# ===========================================================================
++#
++# OBSOLETE MACRO
++#
++#   Deprecated because it does not comply with the GNU Coding Standards. See
++#   the autoconf manual section "Defining Directories" for alternatives.
++#
 +# SYNOPSIS
- #
--# Check whether the C++ compiler works. There's a bit of oversight in
--# autoconf that will set the C++ compiler to g++ if no compiler is found,
--# even if g++ is not present! So we need an extra test to make sure that
--# the compiler works.
--# Script copied from the lttng-ust project.
-+#   RW_PROG_CXX_WORKS
- #
--AC_DEFUN([rw_PROG_CXX_WORKS], [
++#
++#   AX_DEFINE_DIR(VARNAME, DIR [, DESCRIPTION])
++#
 +# DESCRIPTION
 +#
-+#   RW_PROG_CXX_WORKS checks whether the C++ compiler works.
++#   This macro sets VARNAME to the expansion of the DIR variable, taking
++#   care of fixing up ${prefix} and such.
 +#
-+#   There's a bit of oversight in autoconf that will set the C++ compiler to
-+#   g++ if no compiler is found, even if g++ is not present! So we need an
-+#   extra test to make sure that the compiler works.
++#   VARNAME is then offered as both an output variable and a C preprocessor
++#   symbol.
++#
++#   Example:
++#
++#     AX_DEFINE_DIR([DATADIR], [datadir], [Where data are placed to.])
 +#
 +# LICENSE
++#
++#   Copyright (c) 2008 Stepan Kasal <kasal@ucw.cz>
++#   Copyright (c) 2008 Andreas Schwab <schwab@suse.de>
++#   Copyright (c) 2008 Guido U. Draheim <guidod@gmx.de>
++#   Copyright (c) 2008 Alexandre Oliva
 +#
 +#   Copying and distribution of this file, with or without modification, are
 +#   permitted in any medium without royalty provided the copyright notice
 +#   and this notice are preserved. This file is offered as-is, without any
 +#   warranty.
 +
-+#serial 1
++#serial 8
 +
-+AC_DEFUN([RW_PROG_CXX_WORKS], [
- AC_REQUIRE([AC_PROG_CXX])
- AC_CACHE_CHECK([whether the C++ compiler works],
--   [rw_cv_prog_cxx_works],
--   [AC_LANG_PUSH([C++])
-+	[rw_cv_prog_cxx_works],
-+	[AC_LANG_PUSH([C++])
- 
--   AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])], [
--       check_cxx_designated_initializers=yes
--   ], [
--       rw_cv_prog_cxx_works=no
--   ])
-+	AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])], [
-+		check_cxx_designated_initializers=yes
-+	], [
-+		rw_cv_prog_cxx_works=no
-+	])
- 
--   AS_IF([test "x$check_cxx_designated_initializers" = "xyes"], [
--       AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
--           struct foo { int a; int b; };
--           void fct(void)
--           {
--               struct foo f = { .a = 0, .b = 1 };
--           }
--       ]])], [
--           rw_cv_prog_cxx_works=yes
--       ], [
--           rw_cv_prog_cxx_works=no
--       ])
--   ])
-+	AS_IF([test "x$check_cxx_designated_initializers" = "xyes"], [
-+		AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-+			struct foo { int a; int b; };
-+			void fct(void)
-+			{
-+				struct foo f = { .a = 0, .b = 1 };
-+			}
-+		]])], [
-+			rw_cv_prog_cxx_works=yes
-+		], [
-+			rw_cv_prog_cxx_works=no
-+		])
-+	])
- 
--   AC_LANG_POP([C++])
-+	AC_LANG_POP([C++])
- ])
- ])
++AU_ALIAS([AC_DEFINE_DIR], [AX_DEFINE_DIR])
++AC_DEFUN([AX_DEFINE_DIR], [
++  prefix_NONE=
++  exec_prefix_NONE=
++  test "x$prefix" = xNONE && prefix_NONE=yes && prefix=$ac_default_prefix
++  test "x$exec_prefix" = xNONE && exec_prefix_NONE=yes && exec_prefix=$prefix
++dnl In Autoconf 2.60, ${datadir} refers to ${datarootdir}, which in turn
++dnl refers to ${prefix}.  Thus we have to use `eval' twice.
++  eval ax_define_dir="\"[$]$2\""
++  eval ax_define_dir="\"$ax_define_dir\""
++  AC_SUBST($1, "$ax_define_dir")
++  AC_DEFINE_UNQUOTED($1, "$ax_define_dir", [$3])
++  test "$prefix_NONE" && prefix=NONE
++  test "$exec_prefix_NONE" && exec_prefix=NONE
++])
 -- 
 2.17.1
