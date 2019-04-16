@@ -1,16 +1,17 @@
 From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-tools 4/5] Update the ac_define_dir macro
- from the autoconf archive
-Date: Tue, 16 Apr 2019 16:43:47 -0400
-Message-ID: <20190416204348.29127-4-mjeanson__18559.2154318996$1555447553$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 5/5] Harmonize pprint macro across
+ projects
+Date: Tue, 16 Apr 2019 16:43:48 -0400
+Message-ID: <20190416204348.29127-5-mjeanson__9861.19402093522$1555447583$gmane$org@efficios.com>
 References: <20190416204348.29127-1-mjeanson@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44kHQn44PQz1L0x
- for <lttng-dev@lists.lttng.org>; Tue, 16 Apr 2019 16:44:01 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 44kHQp6nQjz1L1Q
+ for <lttng-dev@lists.lttng.org>; Tue, 16 Apr 2019 16:44:02 -0400 (EDT)
 In-Reply-To: <20190416204348.29127-1-mjeanson@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,131 +26,87 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-This macro was removed many years ago from the archive because it crosses
-the boundary between configure and make time variables. For the moment
-update it to the latest released version.
-
 Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 ---
- configure.ac        |  2 +-
- m4/ac_define_dir.m4 | 34 ----------------------------
- m4/ax_define_dir.m4 | 54 +++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 55 insertions(+), 35 deletions(-)
- delete mode 100644 m4/ac_define_dir.m4
- create mode 100644 m4/ax_define_dir.m4
+ m4/pprint.m4 | 50 +++++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 41 insertions(+), 9 deletions(-)
 
-diff --git a/configure.ac b/configure.ac
-index f0a4d975..dd99855e 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -425,7 +425,7 @@ CONFDIR=`eval echo $sysconfdir`
- AC_SUBST(CONFDIR)
- AC_DEFINE_UNQUOTED([CONFIG_LTTNG_SYSTEM_CONFIGDIR],"$CONFDIR", [LTTng system configuration directory.])
+diff --git a/m4/pprint.m4 b/m4/pprint.m4
+index c7024c34..a7cfd94c 100644
+--- a/m4/pprint.m4
++++ b/m4/pprint.m4
+@@ -2,6 +2,8 @@
+ #
+ # Author: Philippe Proulx <pproulx@efficios.com>
  
--AC_DEFINE_DIR([CONFIG_LTTNG_SYSTEM_DATADIR],[datadir], [LTTng system data directory.])
-+AX_DEFINE_DIR([CONFIG_LTTNG_SYSTEM_DATADIR], [datadir], [LTTng system data directory.])
++#serial 1
++
+ # PPRINT_INIT(): initializes the pretty printing system.
+ #
+ # Use this macro before using any other PPRINT_* macro.
+@@ -15,17 +17,17 @@ AC_DEFUN([PPRINT_INIT], [
+   AC_PATH_PROG([pprint_tput], [tput])
  
- # Check libpopt
- PKG_CHECK_MODULES([POPT], [popt],
-diff --git a/m4/ac_define_dir.m4 b/m4/ac_define_dir.m4
-deleted file mode 100644
-index e15cea2c..00000000
---- a/m4/ac_define_dir.m4
-+++ /dev/null
-@@ -1,34 +0,0 @@
--dnl @synopsis AC_DEFINE_DIR(VARNAME, DIR [, DESCRIPTION])
--dnl
--dnl This macro sets VARNAME to the expansion of the DIR variable,
--dnl taking care of fixing up ${prefix} and such.
--dnl
--dnl VARNAME is then offered as both an output variable and a C
--dnl preprocessor symbol.
--dnl
--dnl Example:
--dnl
--dnl    AC_DEFINE_DIR([DATADIR], [datadir], [Where data are placed to.])
--dnl
--dnl @category Misc
--dnl @author Stepan Kasal <kasal@ucw.cz>
--dnl @author Andreas Schwab <schwab@suse.de>
--dnl @author Guido U. Draheim <guidod@gmx.de>
--dnl @author Alexandre Oliva
--dnl @version 2006-10-13
--dnl @license AllPermissive
--
--AC_DEFUN([AC_DEFINE_DIR], [
--  prefix_NONE=
--  exec_prefix_NONE=
--  test "x$prefix" = xNONE && prefix_NONE=yes && prefix=$ac_default_prefix
--  test "x$exec_prefix" = xNONE && exec_prefix_NONE=yes && exec_prefix=$prefix
--dnl In Autoconf 2.60, ${datadir} refers to ${datarootdir}, which in turn
--dnl refers to ${prefix}.  Thus we have to use `eval' twice.
--  eval ac_define_dir="\"[$]$2\""
--  eval ac_define_dir="\"$ac_define_dir\""
--  AC_SUBST($1, "$ac_define_dir")
--  AC_DEFINE_UNQUOTED($1, "$ac_define_dir", [$3])
--  test "$prefix_NONE" && prefix=NONE
--  test "$exec_prefix_NONE" && exec_prefix=NONE
--])
-diff --git a/m4/ax_define_dir.m4 b/m4/ax_define_dir.m4
-new file mode 100644
-index 00000000..a26ba372
---- /dev/null
-+++ b/m4/ax_define_dir.m4
-@@ -0,0 +1,54 @@
-+# ===========================================================================
-+#       http://www.gnu.org/software/autoconf-archive/ax_define_dir.html
-+# ===========================================================================
+   AS_IF([test -n "$pprint_tput"], [
+-    AS_IF([test -n "$PS1" && test `"$pprint_tput" colors` -ge 8 && test -t 1], [
++    AS_IF([test -n "$PS1" && test `"$pprint_tput" colors` -eq 256 && test -t 1], [
+       # interactive shell and colors supported and standard output
+       # file descriptor is opened on a terminal
+-      PPRINT_COLOR_TXTBLK="`"$pprint_tput" setf 0`"
+-      PPRINT_COLOR_TXTBLU="`"$pprint_tput" setf 1`"
+-      PPRINT_COLOR_TXTGRN="`"$pprint_tput" setf 2`"
+-      PPRINT_COLOR_TXTCYN="`"$pprint_tput" setf 3`"
+-      PPRINT_COLOR_TXTRED="`"$pprint_tput" setf 4`"
+-      PPRINT_COLOR_TXTPUR="`"$pprint_tput" setf 5`"
+-      PPRINT_COLOR_TXTYLW="`"$pprint_tput" setf 6`"
+-      PPRINT_COLOR_TXTWHT="`"$pprint_tput" setf 7`"
++      PPRINT_COLOR_TXTBLK="`"$pprint_tput" setaf 0`"
++      PPRINT_COLOR_TXTBLU="`"$pprint_tput" setaf 4`"
++      PPRINT_COLOR_TXTGRN="`"$pprint_tput" setaf 2`"
++      PPRINT_COLOR_TXTCYN="`"$pprint_tput" setaf 6`"
++      PPRINT_COLOR_TXTRED="`"$pprint_tput" setaf 1`"
++      PPRINT_COLOR_TXTPUR="`"$pprint_tput" setaf 5`"
++      PPRINT_COLOR_TXTYLW="`"$pprint_tput" setaf 3`"
++      PPRINT_COLOR_TXTWHT="`"$pprint_tput" setaf 7`"
+       PPRINT_COLOR_BLD=`"$pprint_tput" bold`
+       PPRINT_COLOR_BLDBLK="$PPRINT_COLOR_BLD$PPRINT_COLOR_TXTBLK"
+       PPRINT_COLOR_BLDBLU="$PPRINT_COLOR_BLD$PPRINT_COLOR_TXTBLU"
+@@ -148,6 +150,36 @@ AC_DEFUN([PPRINT_PROP_BOOL], [
+   m4_popdef([pprint_title])
+ ])
+ 
++# PPRINT_PROP_BOOL_CUSTOM(title, value, no_msg, title_color?): pretty prints a boolean
++# property.
 +#
-+# OBSOLETE MACRO
++# The title is put as is in a double-quoted shell string so the user
++# needs to escape ".
 +#
-+#   Deprecated because it does not comply with the GNU Coding Standards. See
-+#   the autoconf manual section "Defining Directories" for alternatives.
++# The value is evaluated at shell runtime. Its evaluation must be
++# 0 (false) or 1 (true).
 +#
-+# SYNOPSIS
++# Uses the PPRINT_PROP_STRING() with the "yes" or "no" string.
 +#
-+#   AX_DEFINE_DIR(VARNAME, DIR [, DESCRIPTION])
-+#
-+# DESCRIPTION
-+#
-+#   This macro sets VARNAME to the expansion of the DIR variable, taking
-+#   care of fixing up ${prefix} and such.
-+#
-+#   VARNAME is then offered as both an output variable and a C preprocessor
-+#   symbol.
-+#
-+#   Example:
-+#
-+#     AX_DEFINE_DIR([DATADIR], [datadir], [Where data are placed to.])
-+#
-+# LICENSE
-+#
-+#   Copyright (c) 2008 Stepan Kasal <kasal@ucw.cz>
-+#   Copyright (c) 2008 Andreas Schwab <schwab@suse.de>
-+#   Copyright (c) 2008 Guido U. Draheim <guidod@gmx.de>
-+#   Copyright (c) 2008 Alexandre Oliva
-+#
-+#   Copying and distribution of this file, with or without modification, are
-+#   permitted in any medium without royalty provided the copyright notice
-+#   and this notice are preserved. This file is offered as-is, without any
-+#   warranty.
++# Use PPRINT_INIT() before using this macro.
++AC_DEFUN([PPRINT_PROP_BOOL_CUSTOM], [
++  m4_pushdef([pprint_title], [$1])
++  m4_pushdef([pprint_value], [$2])
++  m4_pushdef([pprint_value_no_msg], [$3])
 +
-+#serial 8
++  test pprint_value -eq 0 && pprint_msg="$PPRINT_NO_MSG (pprint_value_no_msg)" || pprint_msg="$PPRINT_YES_MSG"
 +
-+AU_ALIAS([AC_DEFINE_DIR], [AX_DEFINE_DIR])
-+AC_DEFUN([AX_DEFINE_DIR], [
-+  prefix_NONE=
-+  exec_prefix_NONE=
-+  test "x$prefix" = xNONE && prefix_NONE=yes && prefix=$ac_default_prefix
-+  test "x$exec_prefix" = xNONE && exec_prefix_NONE=yes && exec_prefix=$prefix
-+dnl In Autoconf 2.60, ${datadir} refers to ${datarootdir}, which in turn
-+dnl refers to ${prefix}.  Thus we have to use `eval' twice.
-+  eval ax_define_dir="\"[$]$2\""
-+  eval ax_define_dir="\"$ax_define_dir\""
-+  AC_SUBST($1, "$ax_define_dir")
-+  AC_DEFINE_UNQUOTED($1, "$ax_define_dir", [$3])
-+  test "$prefix_NONE" && prefix=NONE
-+  test "$exec_prefix_NONE" && exec_prefix=NONE
++  m4_if([$#], [4], [
++    PPRINT_PROP_STRING(pprint_title, [$pprint_msg], $4)
++  ], [
++    PPRINT_PROP_STRING(pprint_title, [$pprint_msg])
++  ])
++
++  m4_popdef([pprint_value_no_msg])
++  m4_popdef([pprint_value])
++  m4_popdef([pprint_title])
 +])
++
+ # PPRINT_WARN(msg): pretty prints a warning message.
+ #
+ # The message is put as is in a double-quoted shell string so the user
 -- 
 2.17.1
