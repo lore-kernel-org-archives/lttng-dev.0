@@ -1,154 +1,88 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: Problems setting up lttng on PREEMPT_RT Raspberry Pi
-Date: Mon, 15 Apr 2019 10:14:35 -0400 (EDT)
-Message-ID: <149638318.491.1555337675226.JavaMail.zimbra__20732.3055643187$1555337693$gmane$org@efficios.com>
-References: <CAKUXLvdNYPitwKb8D5VDC7nXA4-z3OiApGX=qbVxV5LWFkDyJw@mail.gmail.com>
- <725895933.460.1555337504175.JavaMail.zimbra@efficios.com>
+From: Francis Deslauriers <francis.deslauriers@efficios.com>
+Subject: Tracing Summit 2019: Announcement and Call for Proposals, August
+ 20th, 2019, San Diego, CA
+Date: Tue, 16 Apr 2019 11:54:34 -0400
+Message-ID: <CADcCL0irokZ8Xp7S3eBV728qpL5yipwW+=2QvwiZrixqSdtBog@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44jVqw4qKXz1JvK
- for <lttng-dev@lists.lttng.org>; Mon, 15 Apr 2019 10:14:36 -0400 (EDT)
-In-Reply-To: <725895933.460.1555337504175.JavaMail.zimbra@efficios.com>
-List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
-List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
-List-Post: <mailto:lttng-dev@lists.lttng.org>
-List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
-List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
- <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
-Errors-To: lttng-dev-bounces@lists.lttng.org
-Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Nicholas Sadjoli <nick.sadjoli@gmail.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>, Tom Zanussi <tom.zanussi@linux.intel.com>, linux-rt-users <linux-rt-users@vger.kernel.org>, rostedt <rostedt@goodmis.org>, dev-raspberry-pi <dev-raspberry-pi@lists.mozilla.org>
+Content-Type: text/plain; charset="UTF-8"
+Return-path: <linux-kernel-owner@vger.kernel.org>
+Sender: linux-kernel-owner@vger.kernel.org
+To: diamon-discuss@lists.linuxfoundation.org, linux-kernel <linux-kernel@vger.kernel.org>, linux-perf-users@vger.kernel.org, linux-trace-devel@vger.kernel.org, linux-trace-users@vger.kernel.org, linuxtools-dev@eclipse.org, lttng-dev <lttng-dev@lists.lttng.org>, lwn@lwn.net, tracecompass-dev@eclipse.org
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, info@tracingsummit.org
 List-Id: lttng-dev@lists.lttng.org
 
-Re-sent as plain text.
+Hi all,
 
------ On Apr 15, 2019, at 10:11 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+This is a Call for Proposals for the Tracing Summit 2019 [0] which
+will be held in San Diego, California, USA at the Hilton San Diego
+Bayfront, co-located with the Open Source Summit & Embedded Linux
+Conference North America 2019 [1] on August 20th, 2019.
 
-> ----- On Apr 15, 2019, at 7:07 AM, Nicholas Sadjoli <nick.sadjoli@gmail.com>
-> wrote:
+You can subscribe to our mailing list ot get the latest info on the event: [2]
 
->> Dear Lttng dev Team,
->> I am currently interested in using lttng to measure the interrupt or hardware
->> real-time latencies experienced within my user-space applications.
->> Unfortunately I have been having issues installing lttng on my Raspberry Pi
->> that is using the PREEMPT_RT patched kernel, version 4.14.91-rt49-v7+. The
->> problems so far can be seen documented in the RPi Linux github forum page here:
->> [ https://github.com/raspberrypi/linux/issues/2930 |
->> https://github.com/raspberrypi/linux/issues/2930 ]
+The Tracing Summit is single-day, single-track conference on the topic
+of tracing. The event focuses on the field of software and hardware
+tracing, gathering developers and end-users of tracing and trace
+analysis tools. The main goal of the Tracing Summit is to provide
+space for discussion between people of the various areas that benefit
+from tracing, namely parallel, distributed and/or real-time systems,
+as well as kernel development.
 
->> Initially I was about to just install the Debian package of the lttng onto the
->> RPi, and just proceeded with the commands ' sudo apt-get install
->> lttng-modules-dkms liblttng-ust-dev lttng-tools' However, I was unable to use
->> lttng package at all and found out that for the RPi, a build from source is
->> necessary for lttng, as described here: [
->> https://stackoverflow.com/questions/52386448/linux-trace-tool-lttng-on-raspbian-kernel-tracer-not-available
->> |
->> https://stackoverflow.com/questions/52386448/linux-trace-tool-lttng-on-raspbian-kernel-tracer-not-available
->> ]
+We are welcoming 30 minute presentations from both end users and
+developers, on topics covering, but not limited to:
+-Investigation workflow of Real-Time, latency, and throughput issues,
+-Trace collection and extraction,
+-Trace filtering,
+-Trace aggregation,
+-Trace formats,
+-Tracing multi-core systems,
+-Trace abstraction,
+-Trace modeling,
+-Automated trace analysis (e.g. dependency analysis),
+-Tracing large clusters and distributed systems,
+-Hardware-level tracing (e.g. DSP, GPU, bare-metal),
+-Trace visualisation,
+-Interaction between debugging and tracing,
+-Tracing remote control,
+-Analysis of large trace datasets,
+-Cloud trace collection and analysis,
+-Integration between trace tools,
+-Live tracing & monitoring,
+-Programmable tracing (e.g. eBPF).
 
->> Following their suggestion, I then tried to build the lttng packages from
->> source, and even re-building the RPi kernel locally to ensure the kernel
->> headers are in the RPi and linked up properly to the source packages.
+Those can cover recently available technologies, ongoing work, and yet
+non-existing technologies (which are compellingly interesting to
+end-users). Please understand that this open forum is not the proper
+place to present sales or marketing pitches, nor technologies which
+are prevented from being freely used in open source.
 
->> Unfortunately when I tried to do this for the lttng-modules package, it instead
->> gave me the following warning in my latest attempt:
+* Submit you talk today using this form: https://forms.gle/L6mR2ZN3Nt7bUxY98 *
 
->> I n file included from
->> /home/pi/BangEco_rvmscan/stagelight_project/lttng/lttng-modules/probes/lttng-kprobes.c:31:0:
->> /home/pi/BangEco_rvmscan/stagelight_project/lttng/lttng-modules/probes/../blacklist/kprobes.h:19:4:
->> error: #error "Your kernel is known to have buggy optimized kprobes
->> implementation. Fixed by commit 0ac569bf6a7983c0c5747d6df8db9dc05bc92b6c \"ARM:
->> 8834/1: Fix: kprobes: optimized kprobes illegal instruction\" in Linux. Disable
->> CONFIG_OPTPROBES or upgrade your kernel."
->> # error "Your kernel is known to have buggy optimized kprobes implementation.
->> Fixed by commit 0ac569bf6a7983c0c5747d6df8db9dc05bc92b6c \"ARM: 8834/1: Fix:
->> kprobes: optimized kprobes illegal instruction\" in Linux. Disable
->> CONFIG_OPTPROBES or upgrade your kernel."
+The submission deadline is July 1st 2019 at 23:59 EST.
 
->> I then tried to turn off the CONFIG_OPTPROBES kernel config, but it seemed to be
->> automatically overwritten during kernel building and is considered an important
->> part of the real-time RPi kernels. Has such problems been reported with this
->> version of the PREEMPT_RT kernel in the past (again, the current kernel version
->> that I am using is 4.14.91-rt49-v7+)? If there are I would like to know how
->> this issue was resolved so that I can properly build and use the lttng package
->> for my project.
+This year tickets are $100 and seating is limited to 100 people. To
+register, you can add the Tracing Summit as an addon to your Open
+Source Summit ticket [3] or use this link [4] to register solely for
+the Tracing Summit.
 
-> Hi Nicholas,
+The Tracing Summit is sponsored by EfficiOS. We are actively looking
+for sponsors to support the Tracing Summit. Contact us at
+info@tracingsummit.org.
 
-> It looks like our lttng-modules kernel version blacklist is acting exactly as it
-> should. Looking at this
-> git tree:
+Please send any query about this conference to info@tracingsummit.org.
 
-> git clone https://github.com/raspberrypi/linux.git -b rpi-4.14.y-rt
-> I notice that in the git log, we find this bogus commit:
+This event is organized by Francis Deslauriers and Mathieu Desnoyers
+on the behalf of the Linux Foundation Diagnostic and Monitoring
+Workgroup [5].
 
-> commit f9e0bc710347fadad55910846ee36f0681d0dca8
-> Author: Kees Cook <keescook@chromium.org>
-> Date: Tue Oct 30 22:12:56 2018 +0100
+[0] : https://tracingsummit.org
+[1]: https://events.linuxfoundation.org/events/open-source-summit-north-america-2019
+[2]: http://eepurl.com/goakfv
+[3]: https://www.cvent.com/events/open-source-summit-embedded-linux-conference-north-america-2019/registration-0ed1330c38bd4845be29b91c9d2444ce.aspx?fqp=true
+[4]: https://www.cvent.com/events/tracing-summit-2019/registration-63351d06945a46d890b8e5a200dbc0fc.aspx?fqp=true
+[5]: https://diamon.org
 
-> ARM: 8806/1: kprobes: Fix false positive with FORTIFY_SOURCE
-
-> commit e46daee53bb50bde38805f1823a182979724c229 upstream.
-
-> But not the fix for it (upstream):
-
-> commit 0ac569bf6a7983c0c5747d6df8db9dc05bc92b6c
-> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Date: Tue Feb 5 16:37:40 2019 +0100
-
-> ARM: 8834/1: Fix: kprobes: optimized kprobes illegal instruction
-
-> So lttng-modules refuses to build against your kernel configuration with
-> CONFIG_OPTPROBES=y
-> to save you the trouble of having kprobes trigger illegal instruction OOPS at
-> runtime.
-
-> I'm unusure who maintains that raspberrypi rt kernel tree. However, the upstream
-> rt tree
-> for 4.14-rt maintained by Tom Zanussi seems to contain the fix:
-
-> [
-> https://kernel.googlesource.com/pub/scm/linux/kernel/git/rt/linux-stable-rt/+/refs/heads/v4.14-rt
-> |
-> https://kernel.googlesource.com/pub/scm/linux/kernel/git/rt/linux-stable-rt/+/refs/heads/v4.14-rt
-> ]
-
-> (currently at 4.14.109-rt57).
-
-> So you should contact your raspberrypi linux rt tree clone maintainer and ask
-> him
-> to upgrade, or, as stated in the #error generated by lttng-modules, simply
-> ensure
-> CONFIG_OPTPROBES is unset when you build your kernel. You should ask the
-> raspberrypi community advice on how to ensure this configuration option is not
-> overridden by the raspberrypi build system.
-
-> Thanks,
-
-> Mathieu
-
->> Thank you so much for your attention and looking forward to your reply soon.
-
->> Best Regards,
-
->> Nicholas Sadjoli
-
->> _______________________________________________
->> lttng-dev mailing list
->> lttng-dev@lists.lttng.org
->> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
-> --
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+--
+Francis Deslauriers
+Computer Engineer
+EfficiOS inc.
