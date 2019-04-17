@@ -1,18 +1,19 @@
-From: Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH lttng-tools 5/5] Harmonize pprint macro across
- projects
-Date: Tue, 16 Apr 2019 16:43:48 -0400
-Message-ID: <20190416204348.29127-5-mjeanson__9861.19402093522$1555447583$gmane$org@efficios.com>
-References: <20190416204348.29127-1-mjeanson@efficios.com>
+From: Luis Ayuso <luis.f.ayuso@gmail.com>
+Subject: Re: unable to profile example
+Date: Wed, 17 Apr 2019 14:57:53 +0200
+Message-ID: <CAGkk+5A3=cGh6oTO5TOESu0LYq61M9DDw3qC9bW+ufJa-OZpFg__14965.0378430792$1555510544$gmane$org@mail.gmail.com>
+References: <CAGkk+5Be9mMt6Nni8BdRwH4hfXG_QsKKjNPtYWm2xDtGOvNruA@mail.gmail.com>
+ <1864353373.2210.1555436765140.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7249629808424394895=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44kHQp6nQjz1L1Q
- for <lttng-dev@lists.lttng.org>; Tue, 16 Apr 2019 16:44:02 -0400 (EDT)
-In-Reply-To: <20190416204348.29127-1-mjeanson@efficios.com>
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com
+ [IPv6:2607:f8b0:4864:20::636])
+ by lists.lttng.org (Postfix) with ESMTPS id 44kj2k1cWWz1KhP
+ for <lttng-dev@lists.lttng.org>; Wed, 17 Apr 2019 08:58:05 -0400 (EDT)
+Received: by mail-pl1-x636.google.com with SMTP id b3so12009050plr.7
+ for <lttng-dev@lists.lttng.org>; Wed, 17 Apr 2019 05:58:05 -0700 (PDT)
+In-Reply-To: <1864353373.2210.1555436765140.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,91 +23,159 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
-Cc: jgalar@efficios.com
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
----
- m4/pprint.m4 | 50 +++++++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 41 insertions(+), 9 deletions(-)
+--===============7249629808424394895==
+Content-Type: multipart/alternative; boundary="000000000000b425d50586b96f2f"
 
-diff --git a/m4/pprint.m4 b/m4/pprint.m4
-index c7024c34..a7cfd94c 100644
---- a/m4/pprint.m4
-+++ b/m4/pprint.m4
-@@ -2,6 +2,8 @@
- #
- # Author: Philippe Proulx <pproulx@efficios.com>
- 
-+#serial 1
-+
- # PPRINT_INIT(): initializes the pretty printing system.
- #
- # Use this macro before using any other PPRINT_* macro.
-@@ -15,17 +17,17 @@ AC_DEFUN([PPRINT_INIT], [
-   AC_PATH_PROG([pprint_tput], [tput])
- 
-   AS_IF([test -n "$pprint_tput"], [
--    AS_IF([test -n "$PS1" && test `"$pprint_tput" colors` -ge 8 && test -t 1], [
-+    AS_IF([test -n "$PS1" && test `"$pprint_tput" colors` -eq 256 && test -t 1], [
-       # interactive shell and colors supported and standard output
-       # file descriptor is opened on a terminal
--      PPRINT_COLOR_TXTBLK="`"$pprint_tput" setf 0`"
--      PPRINT_COLOR_TXTBLU="`"$pprint_tput" setf 1`"
--      PPRINT_COLOR_TXTGRN="`"$pprint_tput" setf 2`"
--      PPRINT_COLOR_TXTCYN="`"$pprint_tput" setf 3`"
--      PPRINT_COLOR_TXTRED="`"$pprint_tput" setf 4`"
--      PPRINT_COLOR_TXTPUR="`"$pprint_tput" setf 5`"
--      PPRINT_COLOR_TXTYLW="`"$pprint_tput" setf 6`"
--      PPRINT_COLOR_TXTWHT="`"$pprint_tput" setf 7`"
-+      PPRINT_COLOR_TXTBLK="`"$pprint_tput" setaf 0`"
-+      PPRINT_COLOR_TXTBLU="`"$pprint_tput" setaf 4`"
-+      PPRINT_COLOR_TXTGRN="`"$pprint_tput" setaf 2`"
-+      PPRINT_COLOR_TXTCYN="`"$pprint_tput" setaf 6`"
-+      PPRINT_COLOR_TXTRED="`"$pprint_tput" setaf 1`"
-+      PPRINT_COLOR_TXTPUR="`"$pprint_tput" setaf 5`"
-+      PPRINT_COLOR_TXTYLW="`"$pprint_tput" setaf 3`"
-+      PPRINT_COLOR_TXTWHT="`"$pprint_tput" setaf 7`"
-       PPRINT_COLOR_BLD=`"$pprint_tput" bold`
-       PPRINT_COLOR_BLDBLK="$PPRINT_COLOR_BLD$PPRINT_COLOR_TXTBLK"
-       PPRINT_COLOR_BLDBLU="$PPRINT_COLOR_BLD$PPRINT_COLOR_TXTBLU"
-@@ -148,6 +150,36 @@ AC_DEFUN([PPRINT_PROP_BOOL], [
-   m4_popdef([pprint_title])
- ])
- 
-+# PPRINT_PROP_BOOL_CUSTOM(title, value, no_msg, title_color?): pretty prints a boolean
-+# property.
-+#
-+# The title is put as is in a double-quoted shell string so the user
-+# needs to escape ".
-+#
-+# The value is evaluated at shell runtime. Its evaluation must be
-+# 0 (false) or 1 (true).
-+#
-+# Uses the PPRINT_PROP_STRING() with the "yes" or "no" string.
-+#
-+# Use PPRINT_INIT() before using this macro.
-+AC_DEFUN([PPRINT_PROP_BOOL_CUSTOM], [
-+  m4_pushdef([pprint_title], [$1])
-+  m4_pushdef([pprint_value], [$2])
-+  m4_pushdef([pprint_value_no_msg], [$3])
-+
-+  test pprint_value -eq 0 && pprint_msg="$PPRINT_NO_MSG (pprint_value_no_msg)" || pprint_msg="$PPRINT_YES_MSG"
-+
-+  m4_if([$#], [4], [
-+    PPRINT_PROP_STRING(pprint_title, [$pprint_msg], $4)
-+  ], [
-+    PPRINT_PROP_STRING(pprint_title, [$pprint_msg])
-+  ])
-+
-+  m4_popdef([pprint_value_no_msg])
-+  m4_popdef([pprint_value])
-+  m4_popdef([pprint_title])
-+])
-+
- # PPRINT_WARN(msg): pretty prints a warning message.
- #
- # The message is put as is in a double-quoted shell string so the user
--- 
-2.17.1
+--000000000000b425d50586b96f2f
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+the example works now. thanks for your time
+
+El mar., 16 abr. 2019 a las 19:46, Mathieu Desnoyers (<
+mathieu.desnoyers@efficios.com>) escribi=C3=B3:
+
+>
+>
+> ----- On Apr 16, 2019, at 11:34 AM, Luis Ayuso luis.f.ayuso@gmail.com
+> wrote:
+>
+> > Dear Lttng community.
+>
+> > I tried to profile the example code, as described in the documentation =
+@
+> [
+> > https://lttng.org/docs/v2.10 | https://lttng.org/docs/v2.10 ]
+> > and I could not get any satisfactory result.
+>
+> > I am using
+> > - lttng (LTTng Trace Control) 2.10.2 - KeKriek
+> > - Ubuntu 18.04.2
+>
+> > I created the files hello-tp.c hello-tp.h hello.c as described in the
+> > documentation
+> > The code succesfully compiles.
+> > Kernel modules are loaded.
+> > lttng-sessiond --daemonize runs with not acknowledgement.
+>
+> > nevertheless, lttng create session command returns an error I am unable
+> to
+> > justify:
+> > lttng create test
+> > Session test created.
+> > Traces will be written in /home/luis/lttng-traces/test-20190416-173219
+> > Error: Unable to create config file
+> > Error: Command error
+>
+> > - Do I need any extra setup step that is no documented in the web?
+> > - Is the package at ubuntu repos working correctly?
+> > - are there known conflicts with any other software
+>
+> This message appears when lttng fails to create either:
+>
+> - $LTTNG_HOME/.lttngrc (if the LTTNG_HOME environment variable is set), o=
+r
+> - $HOME/.lttngrc otherwise.
+>
+> Please double-check the content of those environment variables and access
+> rights
+> to the directories they lead to.
+>
+> Thanks,
+>
+> Mathieu
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+
+--000000000000b425d50586b96f2f
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">the example works now. thanks for your time<br></div><br><=
+div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">El mar., 16=
+ abr. 2019 a las 19:46, Mathieu Desnoyers (&lt;<a href=3D"mailto:mathieu.de=
+snoyers@efficios.com">mathieu.desnoyers@efficios.com</a>&gt;) escribi=C3=B3=
+:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.=
+8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><br>
+<br>
+----- On Apr 16, 2019, at 11:34 AM, Luis Ayuso <a href=3D"mailto:luis.f.ayu=
+so@gmail.com" target=3D"_blank">luis.f.ayuso@gmail.com</a> wrote:<br>
+<br>
+&gt; Dear Lttng community.<br>
+<br>
+&gt; I tried to profile the example code, as described in the documentation=
+ @ [<br>
+&gt; <a href=3D"https://lttng.org/docs/v2.10" rel=3D"noreferrer" target=3D"=
+_blank">https://lttng.org/docs/v2.10</a> | <a href=3D"https://lttng.org/doc=
+s/v2.10" rel=3D"noreferrer" target=3D"_blank">https://lttng.org/docs/v2.10<=
+/a> ]<br>
+&gt; and I could not get any satisfactory result.<br>
+<br>
+&gt; I am using<br>
+&gt; - lttng (LTTng Trace Control) 2.10.2 - KeKriek<br>
+&gt; - Ubuntu 18.04.2<br>
+<br>
+&gt; I created the files hello-tp.c hello-tp.h hello.c as described in the<=
+br>
+&gt; documentation<br>
+&gt; The code succesfully compiles.<br>
+&gt; Kernel modules are loaded.<br>
+&gt; lttng-sessiond --daemonize runs with not acknowledgement.<br>
+<br>
+&gt; nevertheless, lttng create session command returns an error I am unabl=
+e to<br>
+&gt; justify:<br>
+&gt; lttng create test<br>
+&gt; Session test created.<br>
+&gt; Traces will be written in /home/luis/lttng-traces/test-20190416-173219=
+<br>
+&gt; Error: Unable to create config file<br>
+&gt; Error: Command error<br>
+<br>
+&gt; - Do I need any extra setup step that is no documented in the web?<br>
+&gt; - Is the package at ubuntu repos working correctly?<br>
+&gt; - are there known conflicts with any other software<br>
+<br>
+This message appears when lttng fails to create either:<br>
+<br>
+- $LTTNG_HOME/.lttngrc (if the LTTNG_HOME environment variable is set), or<=
+br>
+- $HOME/.lttngrc otherwise.<br>
+<br>
+Please double-check the content of those environment variables and access r=
+ights<br>
+to the directories they lead to.<br>
+<br>
+Thanks,<br>
+<br>
+Mathieu<br>
+<br>
+-- <br>
+Mathieu Desnoyers<br>
+EfficiOS Inc.<br>
+<a href=3D"http://www.efficios.com" rel=3D"noreferrer" target=3D"_blank">ht=
+tp://www.efficios.com</a><br>
+</blockquote></div>
+
+--000000000000b425d50586b96f2f--
+
+--===============7249629808424394895==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============7249629808424394895==--
