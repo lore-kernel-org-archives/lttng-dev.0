@@ -1,8 +1,8 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [RFC PATCH lttng-tools 14/18] Add serdes functions for
- lttng_event_context
-Date: Thu, 18 Apr 2019 12:18:46 -0400
-Message-ID: <20190418161850.1536-15-ylamarre__45101.815909014$1555604663$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-tools 15/18] Integrate serialized
+ communication in lttng-ctl and sessiond
+Date: Thu, 18 Apr 2019 12:18:47 -0400
+Message-ID: <20190418161850.1536-16-ylamarre__14475.3795628034$1555604690$gmane$org@efficios.com>
 References: <20190418161850.1536-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44lPS54TwFz1JnR
+ by lists.lttng.org (Postfix) with ESMTPS id 44lPS56znlz1Jnt
  for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2019 12:19:01 -0400 (EDT)
 In-Reply-To: <20190418161850.1536-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -26,158 +26,126 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Since those structs are only transfered across unix sockets, endianess
-is kept in host order.
+lttng-ctl and lttng-sessiond use serialized communication for
+messages using lttng_event.
 
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
- include/lttng/event-internal.h           |   6 ++
- src/common/sessiond-comm/sessiond-comm.c | 116 +++++++++++++++++++++++++++++++
- 2 files changed, 122 insertions(+)
+ src/bin/lttng-sessiond/client.c          | 23 ++++++++++++++++++++---
+ src/common/sessiond-comm/sessiond-comm.h |  4 ++--
+ src/lib/lttng-ctl/lttng-ctl.c            | 14 ++++++++++----
+ 3 files changed, 32 insertions(+), 9 deletions(-)
 
-diff --git a/include/lttng/event-internal.h b/include/lttng/event-internal.h
-index a43007de..ec261af4 100644
---- a/include/lttng/event-internal.h
-+++ b/include/lttng/event-internal.h
-@@ -95,6 +95,12 @@ struct lttng_event_extended {
- LTTNG_HIDDEN
- struct lttng_event *lttng_event_copy(const struct lttng_event *event);
+diff --git a/src/bin/lttng-sessiond/client.c b/src/bin/lttng-sessiond/client.c
+index 24e688c5..aed415ee 100644
+--- a/src/bin/lttng-sessiond/client.c
++++ b/src/bin/lttng-sessiond/client.c
+@@ -1150,6 +1150,7 @@ error_add_context:
+ 	case LTTNG_DISABLE_EVENT:
+ 	{
  
-+int lttng_event_probe_attr_serialize(struct lttng_event_serialized *dst, const struct lttng_event *src);
-+int lttng_event_function_attr_serialize(struct lttng_event_serialized *dst, const struct lttng_event *src);
-+int lttng_event_no_attr_serialize(struct lttng_event_serialized *dst, const struct lttng_event *src);
-+int lttng_event_probe_attr_deserialize(struct lttng_event *dst, const struct lttng_event_serialized *src);
-+int lttng_event_function_attr_deserialize(struct lttng_event *dst, const struct lttng_event_serialized *src);
-+int lttng_event_no_attr_deserialize(struct lttng_event *dst, const struct lttng_event_serialized *src);
- int lttng_event_context_serialize(struct lttng_event_context_serialized *dst, const struct lttng_event_context *src);
- int lttng_event_context_deserialize(struct lttng_event_context *dst, const struct lttng_event_context_serialized *src);
- int lttng_event_perf_counter_ctx_serialize(struct lttng_event_perf_counter_ctx_serialized *dst, const struct lttng_event_perf_counter_ctx *src);
-diff --git a/src/common/sessiond-comm/sessiond-comm.c b/src/common/sessiond-comm/sessiond-comm.c
-index 84beb90d..d71abe0c 100644
---- a/src/common/sessiond-comm/sessiond-comm.c
-+++ b/src/common/sessiond-comm/sessiond-comm.c
-@@ -77,6 +77,122 @@ static const char *lttcomm_readable_code[] = {
- static unsigned long network_timeout;
++		struct lttng_event event;
+ 		/*
+ 		 * FIXME: handle filter; for now we just receive the filter's
+ 		 * bytecode along with the filter expression which are sent by
+@@ -1176,10 +1177,17 @@ error_add_context:
+ 				count -= (size_t) ret;
+ 			}
+ 		}
+-		/* FIXME: passing packed structure to non-packed pointer */
++		lttng_event_no_attr_deserialize(&event, &cmd_ctx->lsm->u.disable.event);
++		if (cmd_ctx->lsm->domain.type == LTTNG_DOMAIN_KERNEL) {
++			if (event.type == LTTNG_EVENT_PROBE || event.type == LTTNG_EVENT_FUNCTION || event.type == LTTNG_EVENT_USERSPACE_PROBE) {
++				lttng_event_probe_attr_deserialize(&event, &cmd_ctx->lsm->u.disable.event);
++			} else if (event.type == LTTNG_EVENT_FUNCTION_ENTRY) {
++				lttng_event_function_attr_deserialize(&event, &cmd_ctx->lsm->u.disable.event);
++			}
++		}
+ 		ret = cmd_disable_event(cmd_ctx->session, cmd_ctx->lsm->domain.type,
+ 				cmd_ctx->lsm->u.disable.channel_name,
+-				&cmd_ctx->lsm->u.disable.event);
++				&event);
+ 		break;
+ 	}
+ 	case LTTNG_ENABLE_CHANNEL:
+@@ -1210,6 +1218,7 @@ error_add_context:
+ 	}
+ 	case LTTNG_ENABLE_EVENT:
+ 	{
++		struct lttng_event event;
+ 		struct lttng_event *ev = NULL;
+ 		struct lttng_event_exclusion *exclusion = NULL;
+ 		struct lttng_filter_bytecode *bytecode = NULL;
+@@ -1312,7 +1321,15 @@ error_add_context:
+ 			}
+ 		}
  
- LTTNG_HIDDEN
-+int lttng_event_common_serialize(struct lttng_event_serialized *dst,
-+		const struct lttng_event *src)
-+{
-+	dst->type = (uint32_t) src->type;
+-		ev = lttng_event_copy(&cmd_ctx->lsm->u.enable.event);
++		lttng_event_no_attr_deserialize(&event, &cmd_ctx->lsm->u.disable.event);
++		if (cmd_ctx->lsm->domain.type == LTTNG_DOMAIN_KERNEL) {
++			if (event.type == LTTNG_EVENT_PROBE || event.type == LTTNG_EVENT_FUNCTION || event.type == LTTNG_EVENT_USERSPACE_PROBE) {
++				lttng_event_probe_attr_deserialize(&event, &cmd_ctx->lsm->u.disable.event);
++			} else if (event.type == LTTNG_EVENT_FUNCTION_ENTRY) {
++				lttng_event_function_attr_deserialize(&event, &cmd_ctx->lsm->u.disable.event);
++			}
++		}
++		ev = lttng_event_copy(&event);
+ 		if (!ev) {
+ 			DBG("Failed to copy event: %s",
+ 					cmd_ctx->lsm->u.enable.event.name);
+diff --git a/src/common/sessiond-comm/sessiond-comm.h b/src/common/sessiond-comm/sessiond-comm.h
+index 78b18185..4c2240a0 100644
+--- a/src/common/sessiond-comm/sessiond-comm.h
++++ b/src/common/sessiond-comm/sessiond-comm.h
+@@ -370,7 +370,7 @@ struct lttcomm_session_msg {
+ 		/* Event data */
+ 		struct {
+ 			char channel_name[LTTNG_SYMBOL_NAME_LEN];
+-			struct lttng_event event LTTNG_PACKED;
++			struct lttng_event_serialized event;
+ 			/* Length of following filter expression. */
+ 			uint32_t expression_len;
+ 			/* Length of following bytecode for filter. */
+@@ -389,7 +389,7 @@ struct lttcomm_session_msg {
+ 		} LTTNG_PACKED enable;
+ 		struct {
+ 			char channel_name[LTTNG_SYMBOL_NAME_LEN];
+-			struct lttng_event event LTTNG_PACKED;
++			struct lttng_event_serialized event;
+ 			/* Length of following filter expression. */
+ 			uint32_t expression_len;
+ 			/* Length of following bytecode for filter. */
+diff --git a/src/lib/lttng-ctl/lttng-ctl.c b/src/lib/lttng-ctl/lttng-ctl.c
+index 686a98ef..a9adb5c2 100644
+--- a/src/lib/lttng-ctl/lttng-ctl.c
++++ b/src/lib/lttng-ctl/lttng-ctl.c
+@@ -1110,8 +1110,15 @@ int lttng_enable_event_with_exclusions(struct lttng_handle *handle,
+ 	}
+ 
+ 	lttng_ctl_copy_lttng_domain(&lsm.domain, &handle->domain);
+-	/* FIXME: copying non-packed struct to packed struct. */
+-	memcpy(&lsm.u.enable.event, ev, sizeof(lsm.u.enable.event));
 +
-+	memcpy(dst->name, src->name, LTTNG_SYMBOL_NAME_LEN);
-+
-+	dst->loglevel_type = (uint32_t) src->loglevel_type;
-+	dst->loglevel = src->loglevel;
-+	dst->enabled = src->enabled;
-+	dst->pid = src->pid;
-+	dst->filter = src->filter;
-+	dst->exclusion = src->exclusion;
-+	dst->flags = (uint32_t) src->flags;
-+
-+	return 0;
-+}
-+
-+LTTNG_HIDDEN
-+int lttng_event_common_deserialize(struct lttng_event *dst,
-+		const struct lttng_event_serialized *src)
-+{
-+	dst->type = (enum lttng_event_type) src->type;
-+
-+	memcpy(dst->name, src->name, LTTNG_SYMBOL_NAME_LEN);
-+
-+	dst->loglevel_type = (enum lttng_loglevel_type) src->loglevel_type;
-+	dst->loglevel = src->loglevel;
-+	dst->enabled = src->enabled;
-+	dst->pid = src->pid;
-+	dst->filter = src->filter;
-+	dst->exclusion = src->exclusion;
-+	dst->flags = (enum lttng_event_flag) src->flags;
-+
-+	return 0;
-+}
-+
-+LTTNG_HIDDEN
-+int lttng_event_probe_attr_serialize(struct lttng_event_serialized *dst,
-+		const struct lttng_event *src)
-+{
-+	assert(src && dst);
-+	lttng_event_common_serialize(dst, src);
-+
-+	dst->attr.probe.addr = src->attr.probe.addr;
-+	dst->attr.probe.offset = src->attr.probe.offset;
-+
-+	memcpy(dst->attr.probe.symbol_name, src->attr.probe.symbol_name, LTTNG_SYMBOL_NAME_LEN);
-+
-+	return 0;
-+}
-+
-+LTTNG_HIDDEN
-+int lttng_event_probe_attr_deserialize(struct lttng_event *dst,
-+		const struct lttng_event_serialized *src)
-+{
-+	assert(src && dst);
-+	lttng_event_common_deserialize(dst, src);
-+
-+	dst->attr.probe.addr = src->attr.probe.addr;
-+	dst->attr.probe.offset = src->attr.probe.offset;
-+
-+	memcpy(dst->attr.probe.symbol_name, src->attr.probe.symbol_name, LTTNG_SYMBOL_NAME_LEN);
-+
-+	return 0;
-+}
-+
-+LTTNG_HIDDEN
-+int lttng_event_function_attr_serialize(struct lttng_event_serialized *dst,
-+		const struct lttng_event *src)
-+{
-+	assert(src && dst);
-+	lttng_event_common_serialize(dst, src);
-+
-+	memcpy(dst->attr.ftrace.symbol_name, src->attr.ftrace.symbol_name, LTTNG_SYMBOL_NAME_LEN);
-+
-+	return 0;
-+}
-+
-+LTTNG_HIDDEN
-+int lttng_event_function_attr_deserialize(struct lttng_event *dst,
-+		const struct lttng_event_serialized *src)
-+{
-+	assert(src && dst);
-+	lttng_event_common_deserialize(dst, src);
-+
-+	memcpy(dst->attr.ftrace.symbol_name, src->attr.ftrace.symbol_name, LTTNG_SYMBOL_NAME_LEN);
-+
-+	return 0;
-+}
-+
-+LTTNG_HIDDEN
-+int lttng_event_no_attr_serialize(struct lttng_event_serialized *dst,
-+		const struct lttng_event *src)
-+{
-+	assert(src && dst);
-+	lttng_event_common_serialize(dst, src);
-+
-+	memset(&dst->attr, 0, sizeof(dst->attr));
-+
-+	return 0;
-+}
-+
-+LTTNG_HIDDEN
-+int lttng_event_no_attr_deserialize(struct lttng_event *dst,
-+		const struct lttng_event_serialized *src)
-+{
-+	assert(src && dst);
-+	lttng_event_common_deserialize(dst, src);
-+
-+	memset(&dst->attr, 0, sizeof(dst->attr));
-+
-+	return 0;
-+}
-+
-+LTTNG_HIDDEN
- int lttng_event_perf_counter_ctx_serialize(struct lttng_event_perf_counter_ctx_serialized *dst,
- 		const struct lttng_event_perf_counter_ctx *src)
- {
++	lttng_event_no_attr_serialize(&lsm.u.enable.event, ev);
++	if (handle->domain.type == LTTNG_DOMAIN_KERNEL) {
++		if (ev->type == LTTNG_EVENT_PROBE || ev->type == LTTNG_EVENT_FUNCTION || ev->type == LTTNG_EVENT_USERSPACE_PROBE) {
++			lttng_event_probe_attr_serialize(&lsm.u.enable.event, ev);
++		} else if (ev->type == LTTNG_EVENT_FUNCTION_ENTRY) {
++			lttng_event_function_attr_serialize(&lsm.u.enable.event, ev);
++		}
++	}
+ 
+ 	lttng_ctl_copy_string(lsm.session.name, handle->session_name,
+ 			sizeof(lsm.session.name));
+@@ -1310,8 +1317,7 @@ int lttng_disable_event_ext(struct lttng_handle *handle,
+ 	lsm.cmd_type = LTTNG_DISABLE_EVENT;
+ 
+ 	lttng_ctl_copy_lttng_domain(&lsm.domain, &handle->domain);
+-	/* FIXME: copying non-packed struct to packed struct. */
+-	memcpy(&lsm.u.disable.event, ev, sizeof(lsm.u.disable.event));
++	lttng_event_no_attr_serialize(&lsm.u.disable.event, ev);
+ 
+ 	lttng_ctl_copy_string(lsm.session.name, handle->session_name,
+ 			sizeof(lsm.session.name));
 -- 
 2.11.0
