@@ -1,15 +1,15 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [RFC PATCH lttng-tools 12/18] Integrate serialized
- communication in lttng-ctl and sessiond
-Date: Thu, 18 Apr 2019 12:18:44 -0400
-Message-ID: <20190418161850.1536-13-ylamarre__46313.9035434992$1555604601$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-tools 13/18] Add serialized versions
+ of lttng_event structs
+Date: Thu, 18 Apr 2019 12:18:45 -0400
+Message-ID: <20190418161850.1536-14-ylamarre__38249.3432190799$1555604628$gmane$org@efficios.com>
 References: <20190418161850.1536-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44lPS51FBMz1Jn9
+ by lists.lttng.org (Postfix) with ESMTPS id 44lPS52jnlz1JnH
  for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2019 12:19:01 -0400 (EDT)
 In-Reply-To: <20190418161850.1536-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -25,116 +25,68 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-lttng-ctl and lttng-sessiond use serialized communication for
-messages using lttng_event_context.
+Serialized versions of lttng_event, lttng_event_function_attr and
+lttng_event_probe_attr are packed structures to be used in communication
+protocols for consistent sizes across platforms. The serialized versions are
+stripped of pointers and padding.
+
+Pointers are removed since their size can vary on platforms supporting
+variable sized registers (x86-64).
+Padding is also removed since it defeats the purpose of a packed struct.
 
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
- include/lttng/event-internal.h           |  4 ++++
- src/bin/lttng-sessiond/client.c          | 16 +++++++++-------
- src/common/sessiond-comm/sessiond-comm.h |  2 +-
- src/lib/lttng-ctl/lttng-ctl.c            | 12 +-----------
- 4 files changed, 15 insertions(+), 19 deletions(-)
+ include/lttng/event-internal.h | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
 diff --git a/include/lttng/event-internal.h b/include/lttng/event-internal.h
-index 25a88448..09b4d232 100644
+index 09b4d232..a43007de 100644
 --- a/include/lttng/event-internal.h
 +++ b/include/lttng/event-internal.h
-@@ -57,4 +57,8 @@ struct lttng_event_extended {
- LTTNG_HIDDEN
- struct lttng_event *lttng_event_copy(const struct lttng_event *event);
+@@ -27,6 +27,44 @@
  
-+int lttng_event_context_serialize(struct lttng_event_context_serialized *dst, const struct lttng_event_context *src);
-+int lttng_event_context_deserialize(struct lttng_event_context *dst, const struct lttng_event_context_serialized *src);
-+int lttng_event_perf_counter_ctx_serialize(struct lttng_event_perf_counter_ctx_serialized *dst, const struct lttng_event_perf_counter_ctx *src);
-+int lttng_event_perf_counter_ctx_deserialize(struct lttng_event_perf_counter_ctx *dst, const struct lttng_event_perf_counter_ctx_serialized *src);
- #endif /* LTTNG_EVENT_INTERNAL_H */
-diff --git a/src/bin/lttng-sessiond/client.c b/src/bin/lttng-sessiond/client.c
-index 0e36e5ad..24e688c5 100644
---- a/src/bin/lttng-sessiond/client.c
-+++ b/src/bin/lttng-sessiond/client.c
-@@ -1069,6 +1069,8 @@ skip_domain:
- 	switch (cmd_ctx->lsm->cmd_type) {
- 	case LTTNG_ADD_CONTEXT:
- 	{
-+		struct lttng_event_context evt_ctx;
-+		lttng_event_context_deserialize(&evt_ctx, &cmd_ctx->lsm->u.context.ctx);
- 		/*
- 		 * An LTTNG_ADD_CONTEXT command might have a supplementary
- 		 * payload if the context being added is an application context.
-@@ -1095,7 +1097,7 @@ skip_domain:
- 				ret = -LTTNG_ERR_NOMEM;
- 				goto error;
- 			}
--			cmd_ctx->lsm->u.context.ctx.u.app_ctx.provider_name =
-+			evt_ctx.u.app_ctx.provider_name =
- 					provider_name;
+ struct lttng_userspace_probe_location;
  
- 			context_name = zmalloc(context_name_len + 1);
-@@ -1103,7 +1105,7 @@ skip_domain:
- 				ret = -LTTNG_ERR_NOMEM;
- 				goto error_add_context;
- 			}
--			cmd_ctx->lsm->u.context.ctx.u.app_ctx.ctx_name =
-+			evt_ctx.u.app_ctx.ctx_name =
- 					context_name;
- 
- 			ret = lttcomm_recv_unix_sock(sock, provider_name,
-@@ -1126,14 +1128,14 @@ skip_domain:
- 		ret = cmd_add_context(cmd_ctx->session,
- 				cmd_ctx->lsm->domain.type,
- 				cmd_ctx->lsm->u.context.channel_name,
--				&cmd_ctx->lsm->u.context.ctx,
-+				&evt_ctx,
- 				kernel_poll_pipe[1]);
- 
--		cmd_ctx->lsm->u.context.ctx.u.app_ctx.provider_name = NULL;
--		cmd_ctx->lsm->u.context.ctx.u.app_ctx.ctx_name = NULL;
-+		evt_ctx.u.app_ctx.provider_name = NULL;
-+		evt_ctx.u.app_ctx.ctx_name = NULL;
- error_add_context:
--		free(cmd_ctx->lsm->u.context.ctx.u.app_ctx.provider_name);
--		free(cmd_ctx->lsm->u.context.ctx.u.app_ctx.ctx_name);
-+		free(evt_ctx.u.app_ctx.provider_name);
-+		free(evt_ctx.u.app_ctx.ctx_name);
- 		if (ret < 0) {
- 			goto error;
- 		}
-diff --git a/src/common/sessiond-comm/sessiond-comm.h b/src/common/sessiond-comm/sessiond-comm.h
-index 2760af3a..78b18185 100644
---- a/src/common/sessiond-comm/sessiond-comm.h
-+++ b/src/common/sessiond-comm/sessiond-comm.h
-@@ -410,7 +410,7 @@ struct lttcomm_session_msg {
- 		/* Context */
- 		struct {
- 			char channel_name[LTTNG_SYMBOL_NAME_LEN];
--			struct lttng_event_context ctx LTTNG_PACKED;
-+			struct lttng_event_context_serialized ctx;
- 			uint32_t provider_name_len;
- 			uint32_t context_name_len;
- 		} LTTNG_PACKED context;
-diff --git a/src/lib/lttng-ctl/lttng-ctl.c b/src/lib/lttng-ctl/lttng-ctl.c
-index 789534c8..686a98ef 100644
---- a/src/lib/lttng-ctl/lttng-ctl.c
-+++ b/src/lib/lttng-ctl/lttng-ctl.c
-@@ -821,17 +821,7 @@ int lttng_add_context(struct lttng_handle *handle,
- 		memcpy(buf, provider_name, provider_len);
- 		memcpy(buf + provider_len, ctx_name, ctx_len);
- 	}
--	memcpy(&lsm.u.context.ctx, ctx, sizeof(struct lttng_event_context));
--
--	if (ctx->ctx == LTTNG_EVENT_CONTEXT_APP_CONTEXT) {
--		/*
--		 * Don't leak application addresses to the sessiond.
--		 * This is only necessary when ctx is for an app ctx otherwise
--		 * the values inside the union (type & config) are overwritten.
--		 */
--		lsm.u.context.ctx.u.app_ctx.provider_name = NULL;
--		lsm.u.context.ctx.u.app_ctx.ctx_name = NULL;
--	}
-+	lttng_event_context_serialize(&lsm.u.context.ctx, ctx);
- 
- 	ret = lttng_ctl_ask_sessiond_varlen_no_cmd_header(&lsm, buf, len, NULL);
- end:
++struct lttng_event_probe_attr_serialized {
++	uint64_t addr;
++
++	uint64_t offset;
++	char symbol_name[LTTNG_SYMBOL_NAME_LEN];
++} LTTNG_PACKED;
++
++struct lttng_event_function_attr_serialized {
++	char symbol_name[LTTNG_SYMBOL_NAME_LEN];
++} LTTNG_PACKED;
++
++struct lttng_event_serialized {
++	uint32_t type; /* enum lttng_event_type */
++
++	char name[LTTNG_SYMBOL_NAME_LEN];
++
++	uint32_t loglevel_type; /* enum lttng_loglevel_type */
++
++	int loglevel;
++
++	int32_t enabled;	/* Does not apply: -1 */
++
++	pid_t pid;
++
++	unsigned char filter;	/* filter enabled ? */
++
++	unsigned char exclusion; /* exclusions added ? */
++
++	/* Event flag, from 2.6 and above. */
++	uint32_t flags; /* enum lttng_event_flag */
++
++	/* Per event type configuration */
++	union {
++		struct lttng_event_probe_attr_serialized probe;
++		struct lttng_event_function_attr_serialized ftrace;
++	} attr;
++} LTTNG_PACKED;
++
+ struct lttng_event_perf_counter_ctx_serialized {
+ 	uint32_t type;
+ 	uint64_t config;
 -- 
 2.11.0
