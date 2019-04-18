@@ -1,16 +1,17 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [RFC PATCH lttng-tools 09/18] Integrate serialized
- communication in lttng-ctl and sessiond
-Date: Thu, 18 Apr 2019 12:18:41 -0400
-Message-ID: <20190418161850.1536-10-ylamarre__904.513678845831$1555604480$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-tools 10/18] Add serialized versions
+ of lttng_event_context structs
+Date: Thu, 18 Apr 2019 12:18:42 -0400
+Message-ID: <20190418161850.1536-11-ylamarre__42181.632032019$1555604514$gmane$org@efficios.com>
 References: <20190418161850.1536-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44lPS35r6Rz1Jmf
- for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2019 12:18:59 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 44lPS40rCLz1Jmh
+ for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2019 12:19:00 -0400 (EDT)
 In-Reply-To: <20190418161850.1536-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,95 +26,41 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-lttng-ctl and lttng-sessiond use serialized communication for
-messages using lttng_channel.
+Serialized versions of lttng_event_context and lttng_event_perf_counter_ctx are
+packed structures to be used in communication protocols for consistent
+sizes across platforms. The serialized versions are stripped of pointers
+and padding.
+
+Pointers are removed since their size can vary on platforms supporting
+variable sized registers (x86-64).
+Padding is also removed since it defeats the purpose of a packed struct.
 
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
- src/bin/lttng-sessiond/client.c          |  9 ++++++---
- src/common/sessiond-comm/sessiond-comm.h |  4 ++--
- src/lib/lttng-ctl/lttng-ctl.c            | 24 ++++--------------------
- 3 files changed, 12 insertions(+), 25 deletions(-)
+ include/lttng/event-internal.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/src/bin/lttng-sessiond/client.c b/src/bin/lttng-sessiond/client.c
-index a889529a..0e36e5ad 100644
---- a/src/bin/lttng-sessiond/client.c
-+++ b/src/bin/lttng-sessiond/client.c
-@@ -1182,10 +1182,13 @@ error_add_context:
- 	}
- 	case LTTNG_ENABLE_CHANNEL:
- 	{
--		cmd_ctx->lsm->u.channel.chan.attr.extended.ptr =
--				(struct lttng_channel_extended *) &cmd_ctx->lsm->u.channel.extended;
-+		struct lttng_channel channel;
-+		struct lttng_channel_extended extended;
-+		lttng_channel_extended_deserialize(&extended, &cmd_ctx->lsm->u.channel.extended);
-+		lttng_channel_deserialize(&channel, &cmd_ctx->lsm->u.channel.chan);
-+		channel.attr.extended.ptr = &extended;
- 		ret = cmd_enable_channel(cmd_ctx->session, &cmd_ctx->lsm->domain,
--				&cmd_ctx->lsm->u.channel.chan,
-+				&channel,
- 				kernel_poll_pipe[1]);
- 		break;
- 	}
-diff --git a/src/common/sessiond-comm/sessiond-comm.h b/src/common/sessiond-comm/sessiond-comm.h
-index 23e82c8a..d0905f9e 100644
---- a/src/common/sessiond-comm/sessiond-comm.h
-+++ b/src/common/sessiond-comm/sessiond-comm.h
-@@ -402,9 +402,9 @@ struct lttcomm_session_msg {
- 		} LTTNG_PACKED disable;
- 		/* Create channel */
- 		struct {
--			struct lttng_channel chan LTTNG_PACKED;
-+			struct lttng_channel_serialized chan;
- 			/* struct lttng_channel_extended is already packed. */
--			struct lttng_channel_extended extended;
-+			struct lttng_channel_extended_serialized extended;
- 		} LTTNG_PACKED channel;
- 		/* Context */
- 		struct {
-diff --git a/src/lib/lttng-ctl/lttng-ctl.c b/src/lib/lttng-ctl/lttng-ctl.c
-index 165fef4d..789534c8 100644
---- a/src/lib/lttng-ctl/lttng-ctl.c
-+++ b/src/lib/lttng-ctl/lttng-ctl.c
-@@ -1527,34 +1527,18 @@ int lttng_enable_channel(struct lttng_handle *handle,
- 	}
+diff --git a/include/lttng/event-internal.h b/include/lttng/event-internal.h
+index f8130e3b..25a88448 100644
+--- a/include/lttng/event-internal.h
++++ b/include/lttng/event-internal.h
+@@ -27,6 +27,17 @@
  
- 	memset(&lsm, 0, sizeof(lsm));
--	memcpy(&lsm.u.channel.chan, in_chan, sizeof(lsm.u.channel.chan));
--	lsm.u.channel.chan.attr.extended.ptr = NULL;
--
- 	if (!in_chan->attr.extended.ptr) {
--		struct lttng_channel *channel;
--		struct lttng_channel_extended *extended;
--
--		channel = lttng_channel_create(&handle->domain);
--		if (!channel) {
--			return -LTTNG_ERR_NOMEM;
--		}
--
--		/*
--		 * Create a new channel in order to use default extended
--		 * attribute values.
--		 */
--		extended = (struct lttng_channel_extended *)
--				channel->attr.extended.ptr;
--		memcpy(&lsm.u.channel.extended, extended, sizeof(*extended));
--		lttng_channel_destroy(channel);
-+		init_serialized_extended_channel(&handle->domain, &lsm.u.channel.extended);
- 	} else {
- 		struct lttng_channel_extended *extended;
+ struct lttng_userspace_probe_location;
  
- 		extended = (struct lttng_channel_extended *)
- 				in_chan->attr.extended.ptr;
--		memcpy(&lsm.u.channel.extended, extended, sizeof(*extended));
-+		lttng_channel_extended_serialize(&lsm.u.channel.extended, extended);
- 	}
- 
-+	lttng_channel_serialize(&lsm.u.channel.chan, in_chan);
++struct lttng_event_perf_counter_ctx_serialized {
++	uint32_t type;
++	uint64_t config;
++	char name[LTTNG_SYMBOL_NAME_LEN];
++} LTTNG_PACKED;
 +
++struct lttng_event_context_serialized {
++	uint32_t ctx; /* enum lttng_event_context_type */
++	struct lttng_event_perf_counter_ctx_serialized perf_counter;
++} LTTNG_PACKED;
++
+ struct lttng_event_extended {
  	/*
- 	 * Verify that the amount of memory required to create the requested
- 	 * buffer is available on the system at the moment.
+ 	 * exclusions and filter_expression are only set when the lttng_event
 -- 
 2.11.0
