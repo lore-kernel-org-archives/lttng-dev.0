@@ -1,8 +1,8 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [RFC PATCH lttng-tools 10/18] Add serialized versions
- of lttng_event_context structs
-Date: Thu, 18 Apr 2019 12:18:42 -0400
-Message-ID: <20190418161850.1536-11-ylamarre__42181.632032019$1555604514$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-tools 04/18] Clean-up: Switch enum
+ fields in lttcomm_consumer_status_channel
+Date: Thu, 18 Apr 2019 12:18:36 -0400
+Message-ID: <20190418161850.1536-5-ylamarre__34771.4980993018$1555604544$gmane$org@efficios.com>
 References: <20190418161850.1536-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44lPS40rCLz1Jmh
+ by lists.lttng.org (Postfix) with ESMTPS id 44lPS44sF2z1Jmk
  for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2019 12:19:00 -0400 (EDT)
 In-Reply-To: <20190418161850.1536-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -26,41 +26,23 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Serialized versions of lttng_event_context and lttng_event_perf_counter_ctx are
-packed structures to be used in communication protocols for consistent
-sizes across platforms. The serialized versions are stripped of pointers
-and padding.
-
-Pointers are removed since their size can vary on platforms supporting
-variable sized registers (x86-64).
-Padding is also removed since it defeats the purpose of a packed struct.
-
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
- include/lttng/event-internal.h | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ src/common/sessiond-comm/sessiond-comm.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/lttng/event-internal.h b/include/lttng/event-internal.h
-index f8130e3b..25a88448 100644
---- a/include/lttng/event-internal.h
-+++ b/include/lttng/event-internal.h
-@@ -27,6 +27,17 @@
+diff --git a/src/common/sessiond-comm/sessiond-comm.h b/src/common/sessiond-comm/sessiond-comm.h
+index 1324f0b3..92cab8e6 100644
+--- a/src/common/sessiond-comm/sessiond-comm.h
++++ b/src/common/sessiond-comm/sessiond-comm.h
+@@ -760,7 +760,7 @@ struct lttcomm_consumer_status_msg {
+ } LTTNG_PACKED;
  
- struct lttng_userspace_probe_location;
- 
-+struct lttng_event_perf_counter_ctx_serialized {
-+	uint32_t type;
-+	uint64_t config;
-+	char name[LTTNG_SYMBOL_NAME_LEN];
-+} LTTNG_PACKED;
-+
-+struct lttng_event_context_serialized {
-+	uint32_t ctx; /* enum lttng_event_context_type */
-+	struct lttng_event_perf_counter_ctx_serialized perf_counter;
-+} LTTNG_PACKED;
-+
- struct lttng_event_extended {
- 	/*
- 	 * exclusions and filter_expression are only set when the lttng_event
+ struct lttcomm_consumer_status_channel {
+-	enum lttcomm_return_code ret_code;
++	uint32_t ret_code; /* enum lttcomm_return_code */
+ 	uint64_t key;
+ 	unsigned int stream_count;
+ } LTTNG_PACKED;
 -- 
 2.11.0
