@@ -1,19 +1,19 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [RFC PATCH lttng-tools 10/18] Add serialized
- versions of lttng_event_context structs
-Date: Thu, 18 Apr 2019 15:41:58 -0400 (EDT)
-Message-ID: <1217725376.1553.1555616518918.JavaMail.zimbra__20467.9399075516$1555616704$gmane$org@efficios.com>
+Subject: Re: [RFC PATCH lttng-tools 11/18] Add serdes functions
+ for lttng_event_context
+Date: Thu, 18 Apr 2019 15:42:43 -0400 (EDT)
+Message-ID: <39679180.1555.1555616563659.JavaMail.zimbra__30934.342362319$1555616740$gmane$org@efficios.com>
 References: <20190418161850.1536-1-ylamarre@efficios.com>
- <20190418161850.1536-11-ylamarre@efficios.com>
+ <20190418161850.1536-12-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44lTyH5mZBz1KPJ
- for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2019 15:41:59 -0400 (EDT)
-In-Reply-To: <20190418161850.1536-11-ylamarre@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 44lTz84t7Qz1KPb
+ for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2019 15:42:44 -0400 (EDT)
+In-Reply-To: <20190418161850.1536-12-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -29,60 +29,13 @@ List-Id: lttng-dev@lists.lttng.org
 
 ----- On Apr 18, 2019, at 12:18 PM, Yannick Lamarre ylamarre@efficios.com wrote:
 
-> Serialized versions of lttng_event_context and lttng_event_perf_counter_ctx are
-> packed structures to be used in communication protocols for consistent
-> sizes across platforms. The serialized versions are stripped of pointers
-> and padding.
-> 
-> Pointers are removed since their size can vary on platforms supporting
-> variable sized registers (x86-64).
+> Since those structs are only transfered across unix sockets, endianess
 
-Same question as prior commit about the explanation here.
-
-> Padding is also removed since it defeats the purpose of a packed struct.
-
-Same question as prior commit about padding purpose. How do we intend to
-extend this in the future ? We should document this plan.
+endianness
 
 Thanks,
 
 Mathieu
-
-> 
-> Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
-> ---
-> include/lttng/event-internal.h | 11 +++++++++++
-> 1 file changed, 11 insertions(+)
-> 
-> diff --git a/include/lttng/event-internal.h b/include/lttng/event-internal.h
-> index f8130e3b..25a88448 100644
-> --- a/include/lttng/event-internal.h
-> +++ b/include/lttng/event-internal.h
-> @@ -27,6 +27,17 @@
-> 
-> struct lttng_userspace_probe_location;
-> 
-> +struct lttng_event_perf_counter_ctx_serialized {
-> +	uint32_t type;
-> +	uint64_t config;
-> +	char name[LTTNG_SYMBOL_NAME_LEN];
-> +} LTTNG_PACKED;
-> +
-> +struct lttng_event_context_serialized {
-> +	uint32_t ctx; /* enum lttng_event_context_type */
-> +	struct lttng_event_perf_counter_ctx_serialized perf_counter;
-> +} LTTNG_PACKED;
-> +
-> struct lttng_event_extended {
-> 	/*
-> 	 * exclusions and filter_expression are only set when the lttng_event
-> --
-> 2.11.0
-> 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
 -- 
 Mathieu Desnoyers
