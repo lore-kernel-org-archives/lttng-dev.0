@@ -1,19 +1,15 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH urcu] Harmonize pprint macro across projects
-Date: Wed, 17 Apr 2019 16:16:50 -0400 (EDT)
-Message-ID: <460816998.710.1555532210339.JavaMail.zimbra__8963.23966314725$1555532236$gmane$org@efficios.com>
-References: <20190416204145.28437-1-mjeanson@efficios.com>
+From: Yannick Lamarre <ylamarre@efficios.com>
+Subject: [RFC PATCH lttng-tools 00/18] Improvements in
+ sessiond-comm
+Date: Thu, 18 Apr 2019 12:18:32 -0400
+Message-ID: <20190418161850.1536-1-ylamarre__10816.8363849231$1555604353$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44ktn470r4z1JjX
- for <lttng-dev@lists.lttng.org>; Wed, 17 Apr 2019 16:16:56 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id B29BC1D889A
- for <lttng-dev@lists.lttng.org>; Wed, 17 Apr 2019 16:16:50 -0400 (EDT)
-In-Reply-To: <20190416204145.28437-1-mjeanson@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 44lPS02KrDz1JlK
+ for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2019 12:18:56 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,106 +19,58 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Michael Jeanson <mjeanson@efficios.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-merged into liburcu master branch, thanks!
-
-Mathieu
-
------ On Apr 16, 2019, at 4:41 PM, Michael Jeanson mjeanson@efficios.com wrote:
-
-> Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-> ---
-> m4/pprint.m4 | 50 +++++++++++++++++++++++++++++++++++++++++---------
-> 1 file changed, 41 insertions(+), 9 deletions(-)
-> 
-> diff --git a/m4/pprint.m4 b/m4/pprint.m4
-> index c7024c3..a7cfd94 100644
-> --- a/m4/pprint.m4
-> +++ b/m4/pprint.m4
-> @@ -2,6 +2,8 @@
-> #
-> # Author: Philippe Proulx <pproulx@efficios.com>
-> 
-> +#serial 1
-> +
-> # PPRINT_INIT(): initializes the pretty printing system.
-> #
-> # Use this macro before using any other PPRINT_* macro.
-> @@ -15,17 +17,17 @@ AC_DEFUN([PPRINT_INIT], [
->   AC_PATH_PROG([pprint_tput], [tput])
-> 
->   AS_IF([test -n "$pprint_tput"], [
-> -    AS_IF([test -n "$PS1" && test `"$pprint_tput" colors` -ge 8 && test -t 1],
-> [
-> +    AS_IF([test -n "$PS1" && test `"$pprint_tput" colors` -eq 256 && test -t
-> 1], [
->       # interactive shell and colors supported and standard output
->       # file descriptor is opened on a terminal
-> -      PPRINT_COLOR_TXTBLK="`"$pprint_tput" setf 0`"
-> -      PPRINT_COLOR_TXTBLU="`"$pprint_tput" setf 1`"
-> -      PPRINT_COLOR_TXTGRN="`"$pprint_tput" setf 2`"
-> -      PPRINT_COLOR_TXTCYN="`"$pprint_tput" setf 3`"
-> -      PPRINT_COLOR_TXTRED="`"$pprint_tput" setf 4`"
-> -      PPRINT_COLOR_TXTPUR="`"$pprint_tput" setf 5`"
-> -      PPRINT_COLOR_TXTYLW="`"$pprint_tput" setf 6`"
-> -      PPRINT_COLOR_TXTWHT="`"$pprint_tput" setf 7`"
-> +      PPRINT_COLOR_TXTBLK="`"$pprint_tput" setaf 0`"
-> +      PPRINT_COLOR_TXTBLU="`"$pprint_tput" setaf 4`"
-> +      PPRINT_COLOR_TXTGRN="`"$pprint_tput" setaf 2`"
-> +      PPRINT_COLOR_TXTCYN="`"$pprint_tput" setaf 6`"
-> +      PPRINT_COLOR_TXTRED="`"$pprint_tput" setaf 1`"
-> +      PPRINT_COLOR_TXTPUR="`"$pprint_tput" setaf 5`"
-> +      PPRINT_COLOR_TXTYLW="`"$pprint_tput" setaf 3`"
-> +      PPRINT_COLOR_TXTWHT="`"$pprint_tput" setaf 7`"
->       PPRINT_COLOR_BLD=`"$pprint_tput" bold`
->       PPRINT_COLOR_BLDBLK="$PPRINT_COLOR_BLD$PPRINT_COLOR_TXTBLK"
->       PPRINT_COLOR_BLDBLU="$PPRINT_COLOR_BLD$PPRINT_COLOR_TXTBLU"
-> @@ -148,6 +150,36 @@ AC_DEFUN([PPRINT_PROP_BOOL], [
->   m4_popdef([pprint_title])
-> ])
-> 
-> +# PPRINT_PROP_BOOL_CUSTOM(title, value, no_msg, title_color?): pretty prints a
-> boolean
-> +# property.
-> +#
-> +# The title is put as is in a double-quoted shell string so the user
-> +# needs to escape ".
-> +#
-> +# The value is evaluated at shell runtime. Its evaluation must be
-> +# 0 (false) or 1 (true).
-> +#
-> +# Uses the PPRINT_PROP_STRING() with the "yes" or "no" string.
-> +#
-> +# Use PPRINT_INIT() before using this macro.
-> +AC_DEFUN([PPRINT_PROP_BOOL_CUSTOM], [
-> +  m4_pushdef([pprint_title], [$1])
-> +  m4_pushdef([pprint_value], [$2])
-> +  m4_pushdef([pprint_value_no_msg], [$3])
-> +
-> +  test pprint_value -eq 0 && pprint_msg="$PPRINT_NO_MSG (pprint_value_no_msg)"
-> || pprint_msg="$PPRINT_YES_MSG"
-> +
-> +  m4_if([$#], [4], [
-> +    PPRINT_PROP_STRING(pprint_title, [$pprint_msg], $4)
-> +  ], [
-> +    PPRINT_PROP_STRING(pprint_title, [$pprint_msg])
-> +  ])
-> +
-> +  m4_popdef([pprint_value_no_msg])
-> +  m4_popdef([pprint_value])
-> +  m4_popdef([pprint_title])
-> +])
-> +
-> # PPRINT_WARN(msg): pretty prints a warning message.
-> #
-> # The message is put as is in a double-quoted shell string so the user
-> --
-> 2.17.1
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+VGhpcyBwYXRjaCBpbnRyb2R1Y2VzIHNlcmlhbGl6ZWQgY29tbXVuaWNhdGlvbiBiZXR3ZWVuIGx0
+dG5nLWN0bCwKbHR0bmctc2Vzc2lvbmQgYW5kIGNvbnN1bWVyZC4gSXQgYnVpbGRzIG9uIFsxXSBh
+cyBhIHN0eWxlIGd1aWRlIHdoaWxlIHBhdGNoaW5nCml0IHRvIGFjY29tb2RhdGUgY2hhbmdlcyBp
+biB0aGUgY29kZSBzaW5jZSAyMDE0LiBFYWNoIG5ldyBncm91cCBvZiBzZXJpYWxpemVkIApzdHJ1
+Y3RzIGlzIGludHJvZHVjZWQgaW4gdGhyZWUgcGF0Y2hlcy4gVGhlIGZpcnN0IGRlZmluZXMgdGhl
+IHNlcmlhbGl6ZWQKc3RydWN0LCB0aGUgc2Vjb25kIGFkZHMgdGhlIHJlcXVpcmVkIGZ1bmN0aW9u
+cyB0byBzZXJpYWxpemUgYW5kIGRlc2VyaWFsaXplCnRoZSBzdHJ1Y3R1cmVzIGFuZCB0aGUgdGhp
+cmQgbW9kaWZpZXMgbHR0bmctY3RsIGFuZCBsdHRuZy1zZXNzaW9uZCB0byB1c2UgdGhlCnNlcmlh
+bGl6ZWQgc3RydWN0dXJlcyBpbiBjb21tdW5pY2F0aW9uLgoKVGhpcyBwYXRjaCBhbHNvIGNsZWFu
+cyB1cCB0aGUgdmFyaW91cyBzdHJ1Y3RzIGRlZmluaW5nIGNvbW11bmljYXRpb24gcHJvdG9jb2xz
+CmJ5IGNoYW5naW5nIGZpZWxkIHdpdGggYW4gZW51bSB0eXBlIHRvIHVpbnQzMl90LiBUaGlzIGlz
+IHRvIGJldHRlciBndWFyYW50ZWUKdGhlIHN0cnVjdCdzIHNpemUuCgpDb25zaWRlcmluZyB0aGF0
+IGEgZmV3IGZ1bmN0aW9ucyBhcmUgbm90IHVzZWQgaW4gdGhlIGNvZGUgYmFzZSwgYSB1bml0IHRl
+c3QgaXMKdG8gYmUgaW50cm9kdWNlZCB0byBjb3ZlciB0aG9zZSBmdW5jdGlvbnMuCgpbMV0gaHR0
+cHM6Ly9naXRodWIuY29tL2pnYWxhci9sdHRuZy10b29scy9jb21taXQvYWI2NDI0NzEwMzM1NWE1
+YWYwNjM0ZTVmZGU0OTliOWY0NjViYWFkYwoKSsOpcsOpbWllIEdhbGFybmVhdSAoMSk6CiAgRml4
+OiBVc2UgcGxhdGZvcm0taW5kZXBlbmRhbnQgdHlwZXMgaW4gc2Vzc2lvbmQgdG8gY29uc3VtZXJk
+CiAgICBjb21tdW5pY2F0aW9uCgpZYW5uaWNrIExhbWFycmUgKDE3KToKICBDbGVhbi11cDogU3dp
+dGNoIGVudW0gZmllbGRzIGluIGx0dGNvbW1fY29uc3VtZXJfbXNnCiAgQ2xlYW4tdXA6IFN3aXRj
+aCBlbnVtIGZpZWxkcyBpbiBsdHRjb21tX2NvbnN1bWVyX3N0YXR1c19tc2cKICBDbGVhbi11cDog
+U3dpdGNoIGVudW0gZmllbGRzIGluIGx0dGNvbW1fY29uc3VtZXJfc3RhdHVzX2NoYW5uZWwKICBD
+bGVhbi11cDogUmVtb3ZlIHVudXNlZCBzdHJ1Y3R1cmUKICBDbGVhbi11cDogUmVtb3ZlZCBkZXBy
+ZWNhdGVkIGZpZWxkCiAgQWRkIHNlcmlhbGl6ZWQgdmVyc2lvbnMgb2YgbHR0bmdfY2hhbm5lbCBz
+dHJ1Y3RzCiAgQWRkIHNlcmRlcyBmdW5jdGlvbnMgZm9yIGx0dG5nX2NoYW5uZWwKICBJbnRlZ3Jh
+dGUgc2VyaWFsaXplZCBjb21tdW5pY2F0aW9uIGluIGx0dG5nLWN0bCBhbmQgc2Vzc2lvbmQKICBB
+ZGQgc2VyaWFsaXplZCB2ZXJzaW9ucyBvZiBsdHRuZ19ldmVudF9jb250ZXh0IHN0cnVjdHMKICBB
+ZGQgc2VyZGVzIGZ1bmN0aW9ucyBmb3IgbHR0bmdfZXZlbnRfY29udGV4dAogIEludGVncmF0ZSBz
+ZXJpYWxpemVkIGNvbW11bmljYXRpb24gaW4gbHR0bmctY3RsIGFuZCBzZXNzaW9uZAogIEFkZCBz
+ZXJpYWxpemVkIHZlcnNpb25zIG9mIGx0dG5nX2V2ZW50IHN0cnVjdHMKICBBZGQgc2VyZGVzIGZ1
+bmN0aW9ucyBmb3IgbHR0bmdfZXZlbnRfY29udGV4dAogIEludGVncmF0ZSBzZXJpYWxpemVkIGNv
+bW11bmljYXRpb24gaW4gbHR0bmctY3RsIGFuZCBzZXNzaW9uZAogIEFkZCBzZXJpYWxpemVkIHZl
+cnNpb25zIG9mIGx0dG5nX2V2ZW50IHN0cnVjdHMKICBBZGQgc2VyZGVzIGZ1bmN0aW9ucyBmb3Ig
+bHR0bmdfc25hcHNob3Rfb3V0cHV0CiAgSW50ZWdyYXRlIHNlcmlhbGl6ZWQgY29tbXVuaWNhdGlv
+biBpbiBsdHRuZy1jdGwgYW5kIHNlc3Npb25kCgogaW5jbHVkZS9sdHRuZy9jaGFubmVsLWludGVy
+bmFsLmggICAgICAgICAgICAgfCAgMzUgKysKIGluY2x1ZGUvbHR0bmcvZXZlbnQtaW50ZXJuYWwu
+aCAgICAgICAgICAgICAgIHwgIDU5ICsrKysKIGluY2x1ZGUvbHR0bmcvc25hcHNob3QtaW50ZXJu
+YWwuaCAgICAgICAgICAgIHwgIDExICsKIHNyYy9iaW4vbHR0bmctc2Vzc2lvbmQvY2xpZW50LmMg
+ICAgICAgICAgICAgIHwgIDc1ICsrKystCiBzcmMvYmluL2x0dG5nLXNlc3Npb25kL2NvbnN1bWVy
+LmMgICAgICAgICAgICB8ICAgNSArLQogc3JjL2NvbW1vbi9rZXJuZWwtY29uc3VtZXIva2VybmVs
+LWNvbnN1bWVyLmMgfCAgMTEgKy0KIHNyYy9jb21tb24vc2Vzc2lvbmQtY29tbS9zZXNzaW9uZC1j
+b21tLmMgICAgIHwgNDc3ICsrKysrKysrKysrKysrKysrKysrKysrKysrKwogc3JjL2NvbW1vbi9z
+ZXNzaW9uZC1jb21tL3Nlc3Npb25kLWNvbW0uaCAgICAgfCAxNTAgKysrKysrKy0tCiBzcmMvY29t
+bW9uL3VzdC1jb25zdW1lci91c3QtY29uc3VtZXIuYyAgICAgICB8ICAxMSArLQogc3JjL2xpYi9s
+dHRuZy1jdGwvbHR0bmctY3RsLmMgICAgICAgICAgICAgICAgfCAgNTAgKy0tCiBzcmMvbGliL2x0
+dG5nLWN0bC9zbmFwc2hvdC5jICAgICAgICAgICAgICAgICB8ICAyNCArLQogdGVzdHMvcmVncmVz
+c2lvbi90b29scy9saXZlL01ha2VmaWxlLmFtICAgICAgfCAgIDIgKy0KIHRlc3RzL3VuaXQvTWFr
+ZWZpbGUuYW0gICAgICAgICAgICAgICAgICAgICAgIHwgICA2ICstCiAxMyBmaWxlcyBjaGFuZ2Vk
+LCA4MTkgaW5zZXJ0aW9ucygrKSwgOTcgZGVsZXRpb25zKC0pCgotLSAKMi4xMS4wCgpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYgbWFpbGlu
+ZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRuZy5vcmcv
+Y2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
