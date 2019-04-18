@@ -1,15 +1,16 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [RFC PATCH lttng-tools 13/18] Add serialized versions
- of lttng_event structs
-Date: Thu, 18 Apr 2019 12:18:45 -0400
-Message-ID: <20190418161850.1536-14-ylamarre__38249.3432190799$1555604628$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-tools 14/18] Add serdes functions for
+ lttng_event_context
+Date: Thu, 18 Apr 2019 12:18:46 -0400
+Message-ID: <20190418161850.1536-15-ylamarre__45101.815909014$1555604663$gmane$org@efficios.com>
 References: <20190418161850.1536-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44lPS52jnlz1JnH
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 44lPS54TwFz1JnR
  for <lttng-dev@lists.lttng.org>; Thu, 18 Apr 2019 12:19:01 -0400 (EDT)
 In-Reply-To: <20190418161850.1536-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -25,68 +26,158 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Serialized versions of lttng_event, lttng_event_function_attr and
-lttng_event_probe_attr are packed structures to be used in communication
-protocols for consistent sizes across platforms. The serialized versions are
-stripped of pointers and padding.
-
-Pointers are removed since their size can vary on platforms supporting
-variable sized registers (x86-64).
-Padding is also removed since it defeats the purpose of a packed struct.
+Since those structs are only transfered across unix sockets, endianess
+is kept in host order.
 
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
- include/lttng/event-internal.h | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ include/lttng/event-internal.h           |   6 ++
+ src/common/sessiond-comm/sessiond-comm.c | 116 +++++++++++++++++++++++++++++++
+ 2 files changed, 122 insertions(+)
 
 diff --git a/include/lttng/event-internal.h b/include/lttng/event-internal.h
-index 09b4d232..a43007de 100644
+index a43007de..ec261af4 100644
 --- a/include/lttng/event-internal.h
 +++ b/include/lttng/event-internal.h
-@@ -27,6 +27,44 @@
+@@ -95,6 +95,12 @@ struct lttng_event_extended {
+ LTTNG_HIDDEN
+ struct lttng_event *lttng_event_copy(const struct lttng_event *event);
  
- struct lttng_userspace_probe_location;
++int lttng_event_probe_attr_serialize(struct lttng_event_serialized *dst, const struct lttng_event *src);
++int lttng_event_function_attr_serialize(struct lttng_event_serialized *dst, const struct lttng_event *src);
++int lttng_event_no_attr_serialize(struct lttng_event_serialized *dst, const struct lttng_event *src);
++int lttng_event_probe_attr_deserialize(struct lttng_event *dst, const struct lttng_event_serialized *src);
++int lttng_event_function_attr_deserialize(struct lttng_event *dst, const struct lttng_event_serialized *src);
++int lttng_event_no_attr_deserialize(struct lttng_event *dst, const struct lttng_event_serialized *src);
+ int lttng_event_context_serialize(struct lttng_event_context_serialized *dst, const struct lttng_event_context *src);
+ int lttng_event_context_deserialize(struct lttng_event_context *dst, const struct lttng_event_context_serialized *src);
+ int lttng_event_perf_counter_ctx_serialize(struct lttng_event_perf_counter_ctx_serialized *dst, const struct lttng_event_perf_counter_ctx *src);
+diff --git a/src/common/sessiond-comm/sessiond-comm.c b/src/common/sessiond-comm/sessiond-comm.c
+index 84beb90d..d71abe0c 100644
+--- a/src/common/sessiond-comm/sessiond-comm.c
++++ b/src/common/sessiond-comm/sessiond-comm.c
+@@ -77,6 +77,122 @@ static const char *lttcomm_readable_code[] = {
+ static unsigned long network_timeout;
  
-+struct lttng_event_probe_attr_serialized {
-+	uint64_t addr;
+ LTTNG_HIDDEN
++int lttng_event_common_serialize(struct lttng_event_serialized *dst,
++		const struct lttng_event *src)
++{
++	dst->type = (uint32_t) src->type;
 +
-+	uint64_t offset;
-+	char symbol_name[LTTNG_SYMBOL_NAME_LEN];
-+} LTTNG_PACKED;
++	memcpy(dst->name, src->name, LTTNG_SYMBOL_NAME_LEN);
 +
-+struct lttng_event_function_attr_serialized {
-+	char symbol_name[LTTNG_SYMBOL_NAME_LEN];
-+} LTTNG_PACKED;
++	dst->loglevel_type = (uint32_t) src->loglevel_type;
++	dst->loglevel = src->loglevel;
++	dst->enabled = src->enabled;
++	dst->pid = src->pid;
++	dst->filter = src->filter;
++	dst->exclusion = src->exclusion;
++	dst->flags = (uint32_t) src->flags;
 +
-+struct lttng_event_serialized {
-+	uint32_t type; /* enum lttng_event_type */
++	return 0;
++}
 +
-+	char name[LTTNG_SYMBOL_NAME_LEN];
++LTTNG_HIDDEN
++int lttng_event_common_deserialize(struct lttng_event *dst,
++		const struct lttng_event_serialized *src)
++{
++	dst->type = (enum lttng_event_type) src->type;
 +
-+	uint32_t loglevel_type; /* enum lttng_loglevel_type */
++	memcpy(dst->name, src->name, LTTNG_SYMBOL_NAME_LEN);
 +
-+	int loglevel;
++	dst->loglevel_type = (enum lttng_loglevel_type) src->loglevel_type;
++	dst->loglevel = src->loglevel;
++	dst->enabled = src->enabled;
++	dst->pid = src->pid;
++	dst->filter = src->filter;
++	dst->exclusion = src->exclusion;
++	dst->flags = (enum lttng_event_flag) src->flags;
 +
-+	int32_t enabled;	/* Does not apply: -1 */
++	return 0;
++}
 +
-+	pid_t pid;
++LTTNG_HIDDEN
++int lttng_event_probe_attr_serialize(struct lttng_event_serialized *dst,
++		const struct lttng_event *src)
++{
++	assert(src && dst);
++	lttng_event_common_serialize(dst, src);
 +
-+	unsigned char filter;	/* filter enabled ? */
++	dst->attr.probe.addr = src->attr.probe.addr;
++	dst->attr.probe.offset = src->attr.probe.offset;
 +
-+	unsigned char exclusion; /* exclusions added ? */
++	memcpy(dst->attr.probe.symbol_name, src->attr.probe.symbol_name, LTTNG_SYMBOL_NAME_LEN);
 +
-+	/* Event flag, from 2.6 and above. */
-+	uint32_t flags; /* enum lttng_event_flag */
++	return 0;
++}
 +
-+	/* Per event type configuration */
-+	union {
-+		struct lttng_event_probe_attr_serialized probe;
-+		struct lttng_event_function_attr_serialized ftrace;
-+	} attr;
-+} LTTNG_PACKED;
++LTTNG_HIDDEN
++int lttng_event_probe_attr_deserialize(struct lttng_event *dst,
++		const struct lttng_event_serialized *src)
++{
++	assert(src && dst);
++	lttng_event_common_deserialize(dst, src);
 +
- struct lttng_event_perf_counter_ctx_serialized {
- 	uint32_t type;
- 	uint64_t config;
++	dst->attr.probe.addr = src->attr.probe.addr;
++	dst->attr.probe.offset = src->attr.probe.offset;
++
++	memcpy(dst->attr.probe.symbol_name, src->attr.probe.symbol_name, LTTNG_SYMBOL_NAME_LEN);
++
++	return 0;
++}
++
++LTTNG_HIDDEN
++int lttng_event_function_attr_serialize(struct lttng_event_serialized *dst,
++		const struct lttng_event *src)
++{
++	assert(src && dst);
++	lttng_event_common_serialize(dst, src);
++
++	memcpy(dst->attr.ftrace.symbol_name, src->attr.ftrace.symbol_name, LTTNG_SYMBOL_NAME_LEN);
++
++	return 0;
++}
++
++LTTNG_HIDDEN
++int lttng_event_function_attr_deserialize(struct lttng_event *dst,
++		const struct lttng_event_serialized *src)
++{
++	assert(src && dst);
++	lttng_event_common_deserialize(dst, src);
++
++	memcpy(dst->attr.ftrace.symbol_name, src->attr.ftrace.symbol_name, LTTNG_SYMBOL_NAME_LEN);
++
++	return 0;
++}
++
++LTTNG_HIDDEN
++int lttng_event_no_attr_serialize(struct lttng_event_serialized *dst,
++		const struct lttng_event *src)
++{
++	assert(src && dst);
++	lttng_event_common_serialize(dst, src);
++
++	memset(&dst->attr, 0, sizeof(dst->attr));
++
++	return 0;
++}
++
++LTTNG_HIDDEN
++int lttng_event_no_attr_deserialize(struct lttng_event *dst,
++		const struct lttng_event_serialized *src)
++{
++	assert(src && dst);
++	lttng_event_common_deserialize(dst, src);
++
++	memset(&dst->attr, 0, sizeof(dst->attr));
++
++	return 0;
++}
++
++LTTNG_HIDDEN
+ int lttng_event_perf_counter_ctx_serialize(struct lttng_event_perf_counter_ctx_serialized *dst,
+ 		const struct lttng_event_perf_counter_ctx *src)
+ {
 -- 
 2.11.0
