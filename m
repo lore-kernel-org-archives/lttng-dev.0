@@ -1,22 +1,22 @@
 From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools v4 4/8] Adapt poll layer
- behaviour to match the epoll layer
-Date: Wed, 24 Apr 2019 17:02:18 -0400
-Message-ID: <20190424210217.GA4486__41593.4004400455$1556139761$gmane$org@gmail.com>
+Subject: Re: [PATCH lttng-tools v4 6/8] Change lttng_poll_wait
+ behaviour of compat-poll to match compat-epoll
+Date: Wed, 24 Apr 2019 17:08:53 -0400
+Message-ID: <20190424210852.GB4486__41609.9961077393$1556140152$gmane$org@gmail.com>
 References: <20190401175925.8512-1-ylamarre@efficios.com>
- <20190401175925.8512-5-ylamarre@efficios.com>
+ <20190401175925.8512-7-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt1-f194.google.com (mail-qt1-f194.google.com
- [209.85.160.194])
- by lists.lttng.org (Postfix) with ESMTPS id 44qCSG3JhQz1Jx4
- for <lttng-dev@lists.lttng.org>; Wed, 24 Apr 2019 17:02:22 -0400 (EDT)
-Received: by mail-qt1-f194.google.com with SMTP id j6so2793428qtq.1
- for <lttng-dev@lists.lttng.org>; Wed, 24 Apr 2019 14:02:22 -0700 (PDT)
+Received: from mail-qt1-f193.google.com (mail-qt1-f193.google.com
+ [209.85.160.193])
+ by lists.lttng.org (Postfix) with ESMTPS id 44qCbs1nSrz1Jxh
+ for <lttng-dev@lists.lttng.org>; Wed, 24 Apr 2019 17:08:57 -0400 (EDT)
+Received: by mail-qt1-f193.google.com with SMTP id l17so2886215qtp.2
+ for <lttng-dev@lists.lttng.org>; Wed, 24 Apr 2019 14:08:57 -0700 (PDT)
 Content-Disposition: inline
-In-Reply-To: <20190401175925.8512-5-ylamarre@efficios.com>
+In-Reply-To: <20190401175925.8512-7-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -30,130 +30,93 @@ To: Yannick Lamarre <ylamarre@efficios.com>
 Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-On Mon, Apr 01, 2019 at 01:59:21PM -0400, Yannick Lamarre wrote:
+On Mon, Apr 01, 2019 at 01:59:23PM -0400, Yannick Lamarre wrote:
+> This removes the need to verify for idle file descriptors and mitigates
+> risks of bug due to behaviour mismatch.
+> =
+
 > Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 > ---
->  src/common/compat/compat-poll.c | 30 ++++++++++++++++++++----------
->  1 file changed, 20 insertions(+), 10 deletions(-)
+> =
+
+> The assert in the for loop is removed.
+> =
+
+>  src/common/compat/compat-poll.c | 37 +++++++++++++++++++++++++++++++++--=
+--
+>  1 file changed, 33 insertions(+), 4 deletions(-)
 > =
 
 > diff --git a/src/common/compat/compat-poll.c b/src/common/compat/compat-p=
 oll.c
-> index b45b39dc..be655728 100644
+> index be655728..5b752a28 100644
 > --- a/src/common/compat/compat-poll.c
 > +++ b/src/common/compat/compat-poll.c
-> @@ -1,5 +1,6 @@
->  /*
->   * Copyright (C)  2011 - David Goulet <david.goulet@polymtl.ca>
-> + * Copyright (C)  2019 - Yannick Lamarre <ylamarre@efficios.com>
->   *
->   * This program is free software; you can redistribute it and/or modify
->   * it under the terms of the GNU General Public License, version 2 only,
-> @@ -204,10 +205,10 @@ int compat_poll_mod(struct lttng_poll_event *events=
-, int fd,
->  		uint32_t req_events)
+> @@ -293,7 +293,8 @@ error:
+>   */
+>  int compat_poll_wait(struct lttng_poll_event *events, int timeout)
 >  {
->  	int i;
-> -	bool fd_found =3D false;
->  	struct compat_poll_event_array *current;
+> -	int ret;
+> +	int ret, active_fd_count;
+> +	int idle_pfd_index =3D 0;
 >  =
 
-> -	if (events =3D=3D NULL || events->current.events =3D=3D NULL || fd < 0)=
- {
-> +	if (events =3D=3D NULL || events->current.nb_fd =3D=3D 0 ||
-> +			events->current.events =3D=3D NULL || fd < 0) {
->  		ERR("Bad compat poll mod arguments");
+>  	if (events =3D=3D NULL || events->current.events =3D=3D NULL) {
+>  		ERR("poll wait arguments error");
+> @@ -325,11 +326,39 @@ int compat_poll_wait(struct lttng_poll_event *event=
+s, int timeout)
 >  		goto error;
 >  	}
-> @@ -216,16 +217,16 @@ int compat_poll_mod(struct lttng_poll_event *events=
-, int fd,
 >  =
 
->  	for (i =3D 0; i < current->nb_fd; i++) {
->  		if (current->events[i].fd =3D=3D fd) {
-> -			fd_found =3D true;
->  			current->events[i].events =3D req_events;
->  			events->need_update =3D 1;
->  			break;
->  		}
->  	}
->  =
+> +	active_fd_count =3D ret;
+> +
+>  	/*
+> -	 * poll() should always iterate on all FDs since we handle the pollset =
+in
+> -	 * user space and after poll returns, we have to try every fd for a mat=
+ch.
+> +	 * Swap all active pollfd structs to the beginning of the
+> +	 * array to emulate compat-epoll behaviour. This algorithm takes
+> +	 * advantage of poll's returned value and the burst nature of active
+> +	 * events on the file descriptors. The while loop guarantees that
+> +	 * idle_pfd will always point to an idle fd.
+>  	 */
+> -	return events->wait.nb_fd;
+> +	if (active_fd_count =3D=3D events->wait.nb_fd) {
+> +		goto end;
+> +	}
+> +	while (idle_pfd_index < active_fd_count &&
+> +			events->wait.events[idle_pfd_index].revents !=3D 0) {
+> +		idle_pfd_index++;
+> +	}
+> +
+> +	for (int i =3D idle_pfd_index + 1; idle_pfd_index < active_fd_count;
+> +			i++) {
 
-> -	if (!fd_found) {
-> -		goto error;
-> -	}
-> +	/*
-
-Remove space after '/*'
+Declare 'i' at the beginning of the function.
 
 Thanks!
 J=E9r=E9mie
 
-> +	 * The epoll flavor doesn't flag modifying a non-included FD as an
-> +	 * error.
-> +	 */
->  =
-
->  	return 0;
->  =
-
-> @@ -238,11 +239,12 @@ error:
->   */
->  int compat_poll_del(struct lttng_poll_event *events, int fd)
->  {
-> -	int new_size, i, count =3D 0, ret;
-> +	int i, count =3D 0, ret;
-> +	uint32_t new_size;
->  	struct compat_poll_event_array *current;
->  =
-
-> -	if (events =3D=3D NULL || events->current.events =3D=3D NULL || fd < 0)=
- {
-> -		ERR("Wrong arguments for poll del");
-> +	if (events =3D=3D NULL || events->current.nb_fd =3D=3D 0 ||
-> +			events->current.events =3D=3D NULL || fd < 0) {
->  		goto error;
->  	}
->  =
-
-> @@ -257,13 +259,20 @@ int compat_poll_del(struct lttng_poll_event *events=
-, int fd)
->  			count++;
->  		}
->  	}
+> +		struct pollfd swap_pfd;
+> +		struct pollfd *idle_pfd =3D &events->wait.events[idle_pfd_index];
+> +		struct pollfd *current_pfd =3D &events->wait.events[i];
 > +
-> +	/* The fd was not in our set, return no error as with epoll. */
-> +	if (current->nb_fd =3D=3D count) {
-> +		goto end;
+> +		if (ipfd->revents !=3D 0) {
+> +			swap_pfd =3D *current_pfd;
+> +			*current_pfd =3D *idle_pfd;
+> +			*idle_pfd =3D swap_pfd;
+> +			idle_pfd_index++;
+> +		}
 > +	}
 > +
->  	/* No fd duplicate should be ever added into array. */
->  	assert(current->nb_fd - 1 =3D=3D count);
->  	current->nb_fd =3D count;
->  =
-
->  	/* Resize array if needed. */
->  	new_size =3D 1U << utils_get_count_order_u32(current->nb_fd);
-> -	if (new_size !=3D current->alloc_size && new_size >=3D current->init_si=
-ze) {
-> +	if (new_size !=3D current->alloc_size && new_size >=3D current->init_si=
-ze
-> +			&& current->nb_fd !=3D 0) {
->  		ret =3D resize_poll_event(current, new_size);
->  		if (ret < 0) {
->  			goto error;
-> @@ -272,6 +281,7 @@ int compat_poll_del(struct lttng_poll_event *events, =
-int fd)
->  =
-
->  	events->need_update =3D 1;
->  =
-
 > +end:
->  	return 0;
+> +	return ret;
 >  =
 
 >  error:
+>  	return -1;
 > -- =
 
 > 2.11.0
