@@ -1,16 +1,16 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [PATCH lttng-tools v5 4/8] Adapt poll layer behaviour
- to match the epoll layer
-Date: Thu, 25 Apr 2019 10:36:16 -0400
-Message-ID: <20190425143620.3348-5-ylamarre__16829.5051132858$1556203127$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools v5 3/8] Change LTTNG_POLL_GETNB
+ behaviour for poll flavor
+Date: Thu, 25 Apr 2019 10:36:15 -0400
+Message-ID: <20190425143620.3348-4-ylamarre__16169.7775519983$1556203153$gmane$org@efficios.com>
 References: <20190425143620.3348-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44qfrX6X5Lz1KRt
- for <lttng-dev@lists.lttng.org>; Thu, 25 Apr 2019 10:36:28 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 44qfrb1wglz1KSs
+ for <lttng-dev@lists.lttng.org>; Thu, 25 Apr 2019 10:36:31 -0400 (EDT)
 In-Reply-To: <20190425143620.3348-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,103 +25,34 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
+Modify LTTNG_POLL_GETNB to provide compatibility with the epoll flavor.
+Since it is only used after a lttng_poll_wait call with no modification
+(add, del, mod) between, this change does not modify the behaviour in
+its current usage while ensuring similar API behavior between
+compatibility layer implementations.
+
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
-Removed trailing trailing whitespace in comments.
+ src/common/compat/poll.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
- src/common/compat/compat-poll.c | 30 ++++++++++++++++++++----------
- 1 file changed, 20 insertions(+), 10 deletions(-)
-
-diff --git a/src/common/compat/compat-poll.c b/src/common/compat/compat-poll.c
-index b45b39dc..2318920a 100644
---- a/src/common/compat/compat-poll.c
-+++ b/src/common/compat/compat-poll.c
-@@ -1,5 +1,6 @@
+diff --git a/src/common/compat/poll.h b/src/common/compat/poll.h
+index fde54ddb..5eb7ff9c 100644
+--- a/src/common/compat/poll.h
++++ b/src/common/compat/poll.h
+@@ -315,10 +315,12 @@ static inline int __lttng_poll_get_prev_fd(struct lttng_poll_event *events,
  /*
-  * Copyright (C)  2011 - David Goulet <david.goulet@polymtl.ca>
-+ * Copyright (C)  2019 - Yannick Lamarre <ylamarre@efficios.com>
-  *
-  * This program is free software; you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License, version 2 only,
-@@ -204,10 +205,10 @@ int compat_poll_mod(struct lttng_poll_event *events, int fd,
- 		uint32_t req_events)
- {
- 	int i;
--	bool fd_found = false;
- 	struct compat_poll_event_array *current;
- 
--	if (events == NULL || events->current.events == NULL || fd < 0) {
-+	if (events == NULL || events->current.nb_fd == 0 ||
-+			events->current.events == NULL || fd < 0) {
- 		ERR("Bad compat poll mod arguments");
- 		goto error;
- 	}
-@@ -216,16 +217,16 @@ int compat_poll_mod(struct lttng_poll_event *events, int fd,
- 
- 	for (i = 0; i < current->nb_fd; i++) {
- 		if (current->events[i].fd == fd) {
--			fd_found = true;
- 			current->events[i].events = req_events;
- 			events->need_update = 1;
- 			break;
- 		}
- 	}
- 
--	if (!fd_found) {
--		goto error;
--	}
-+	/*
-+	 * The epoll flavor doesn't flag modifying a non-included FD as an
-+	 * error.
-+	 */
- 
- 	return 0;
- 
-@@ -238,11 +239,12 @@ error:
+  * For the following calls, consider 'e' to be a lttng_poll_event pointer and i
+  * being the index of the events array.
++ * LTTNG_POLL_GETNB is always used after lttng_poll_wait, thus we can use the
++ * current list for test compatibility purposes.
   */
- int compat_poll_del(struct lttng_poll_event *events, int fd)
- {
--	int new_size, i, count = 0, ret;
-+	int i, count = 0, ret;
-+	uint32_t new_size;
- 	struct compat_poll_event_array *current;
- 
--	if (events == NULL || events->current.events == NULL || fd < 0) {
--		ERR("Wrong arguments for poll del");
-+	if (events == NULL || events->current.nb_fd == 0 ||
-+			events->current.events == NULL || fd < 0) {
- 		goto error;
- 	}
- 
-@@ -257,13 +259,20 @@ int compat_poll_del(struct lttng_poll_event *events, int fd)
- 			count++;
- 		}
- 	}
-+
-+	/* The fd was not in our set, return no error as with epoll. */
-+	if (current->nb_fd == count) {
-+		goto end;
-+	}
-+
- 	/* No fd duplicate should be ever added into array. */
- 	assert(current->nb_fd - 1 == count);
- 	current->nb_fd = count;
- 
- 	/* Resize array if needed. */
- 	new_size = 1U << utils_get_count_order_u32(current->nb_fd);
--	if (new_size != current->alloc_size && new_size >= current->init_size) {
-+	if (new_size != current->alloc_size && new_size >= current->init_size
-+			&& current->nb_fd != 0) {
- 		ret = resize_poll_event(current, new_size);
- 		if (ret < 0) {
- 			goto error;
-@@ -272,6 +281,7 @@ int compat_poll_del(struct lttng_poll_event *events, int fd)
- 
- 	events->need_update = 1;
- 
-+end:
- 	return 0;
- 
- error:
+ #define LTTNG_POLL_GETFD(e, i) LTTNG_REF(e)->wait.events[i].fd
+ #define LTTNG_POLL_GETEV(e, i) LTTNG_REF(e)->wait.events[i].revents
+-#define LTTNG_POLL_GETNB(e) LTTNG_REF(e)->wait.nb_fd
++#define LTTNG_POLL_GETNB(e) LTTNG_REF(e)->current.nb_fd
+ #define LTTNG_POLL_GETSZ(e) LTTNG_REF(e)->wait.events_size
+ #define LTTNG_POLL_GET_PREV_FD(e, i, nb_fd) \
+ 	__lttng_poll_get_prev_fd(LTTNG_REF(e), i, nb_fd)
 -- 
 2.11.0
