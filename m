@@ -1,14 +1,17 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [PATCH lttng-tools v5 0/8] Change in poll compat layer
-Date: Thu, 25 Apr 2019 10:36:12 -0400
-Message-ID: <20190425143620.3348-1-ylamarre__46971.7102985427$1556203004$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools v5 1/8] Fix: lttng_poll_mod calls
+ compat_(e)poll_add
+Date: Thu, 25 Apr 2019 10:36:13 -0400
+Message-ID: <20190425143620.3348-2-ylamarre__23472.3897346825$1556203034$gmane$org@efficios.com>
+References: <20190425143620.3348-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44qfrV3ZnQz1KRR
- for <lttng-dev@lists.lttng.org>; Thu, 25 Apr 2019 10:36:26 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 44qfrX1npfz1KRl
+ for <lttng-dev@lists.lttng.org>; Thu, 25 Apr 2019 10:36:28 -0400 (EDT)
+In-Reply-To: <20190425143620.3348-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,42 +25,34 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-This revision adresses issues raised on v4. Changes between versions are
-listed in there own patch.
+lttng_poll_mod should call compat_(e)poll_mod.
 
-Yannick Lamarre (8):
-  Fix: lttng_poll_mod calls compat_(e)poll_add
-  Add Unit test to poll compatibility layer
-  Change LTTNG_POLL_GETNB behaviour for poll flavor
-  Adapt poll layer behaviour to match the epoll layer
-  Fix hang in thread_rotation when using compat-poll
-  Change lttng_poll_wait behaviour of compat-poll to match compat-epoll
-  Clean code base from redundant verification
-  Fix typo
+Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
+---
+ src/common/compat/poll.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- .gitignore                                   |   1 +
- src/bin/lttng-consumerd/health-consumerd.c   |   5 -
- src/bin/lttng-relayd/health-relayd.c         |   5 -
- src/bin/lttng-relayd/live.c                  |  10 --
- src/bin/lttng-relayd/main.c                  |  16 --
- src/bin/lttng-sessiond/agent-thread.c        |   5 -
- src/bin/lttng-sessiond/client.c              |   5 -
- src/bin/lttng-sessiond/dispatch.c            |   5 -
- src/bin/lttng-sessiond/health.c              |   5 -
- src/bin/lttng-sessiond/ht-cleanup.c          |   5 -
- src/bin/lttng-sessiond/manage-apps.c         |   5 -
- src/bin/lttng-sessiond/manage-consumer.c     |  10 --
- src/bin/lttng-sessiond/manage-kernel.c       |   5 -
- src/bin/lttng-sessiond/notification-thread.c |   3 -
- src/bin/lttng-sessiond/notify-apps.c         |   5 -
- src/bin/lttng-sessiond/register.c            |   5 -
- src/common/compat/compat-poll.c              |  68 ++++++--
- src/common/compat/poll.h                     |  10 +-
- src/common/consumer/consumer.c               |  10 --
- tests/unit/Makefile.am                       |   9 +-
- tests/unit/test_utils_compat_poll.c          | 234 +++++++++++++++++++++++++++
- 21 files changed, 303 insertions(+), 123 deletions(-)
- create mode 100644 tests/unit/test_utils_compat_poll.c
-
+diff --git a/src/common/compat/poll.h b/src/common/compat/poll.h
+index d4bd87f5..fde54ddb 100644
+--- a/src/common/compat/poll.h
++++ b/src/common/compat/poll.h
+@@ -177,7 +177,7 @@ extern int compat_epoll_del(struct lttng_poll_event *events, int fd);
+ extern int compat_epoll_mod(struct lttng_poll_event *events,
+ 		int fd, uint32_t req_events);
+ #define lttng_poll_mod(events, fd, req_events) \
+-	compat_epoll_add(events, fd, req_events)
++	compat_epoll_mod(events, fd, req_events)
+ 
+ /*
+  * Set up the poll set limits variable poll_max_size
+@@ -361,7 +361,7 @@ extern int compat_poll_del(struct lttng_poll_event *events, int fd);
+ extern int compat_poll_mod(struct lttng_poll_event *events,
+ 		int fd, uint32_t req_events);
+ #define lttng_poll_mod(events, fd, req_events) \
+-	compat_poll_add(events, fd, req_events)
++	compat_poll_mod(events, fd, req_events)
+ 
+ /*
+  * Set up the poll set limits variable poll_max_size
 -- 
 2.11.0
