@@ -1,15 +1,16 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [PATCH lttng-tools v6 5/8] Fix: hang in thread_rotation
- when using compat-poll
-Date: Thu, 25 Apr 2019 18:23:31 -0400
-Message-ID: <20190425222334.30349-6-ylamarre__4390.04603992856$1556231213$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools v6 4/8] Adapt poll layer behaviour
+ to match the epoll layer
+Date: Thu, 25 Apr 2019 18:23:30 -0400
+Message-ID: <20190425222334.30349-5-ylamarre__29280.2355879516$1556231248$gmane$org@efficios.com>
 References: <20190425222334.30349-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44qsCn4q7Lz1L3w
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 44qsCn4rt7z1L3x
  for <lttng-dev@lists.lttng.org>; Thu, 25 Apr 2019 18:23:49 -0400 (EDT)
 In-Reply-To: <20190425222334.30349-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -25,27 +26,101 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Add missing verification to prevent a blocking read on an empty fd.
-
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
- src/bin/lttng-sessiond/rotation-thread.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ src/common/compat/compat-poll.c | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
-diff --git a/src/bin/lttng-sessiond/rotation-thread.c b/src/bin/lttng-sessiond/rotation-thread.c
-index 6669372d..b86b1668 100644
---- a/src/bin/lttng-sessiond/rotation-thread.c
-+++ b/src/bin/lttng-sessiond/rotation-thread.c
-@@ -974,6 +974,10 @@ void *thread_rotation(void *data)
- 			int fd = LTTNG_POLL_GETFD(&thread.events, i);
- 			uint32_t revents = LTTNG_POLL_GETEV(&thread.events, i);
+diff --git a/src/common/compat/compat-poll.c b/src/common/compat/compat-poll.c
+index b45b39dc..2318920a 100644
+--- a/src/common/compat/compat-poll.c
++++ b/src/common/compat/compat-poll.c
+@@ -1,5 +1,6 @@
+ /*
+  * Copyright (C)  2011 - David Goulet <david.goulet@polymtl.ca>
++ * Copyright (C)  2019 - Yannick Lamarre <ylamarre@efficios.com>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License, version 2 only,
+@@ -204,10 +205,10 @@ int compat_poll_mod(struct lttng_poll_event *events, int fd,
+ 		uint32_t req_events)
+ {
+ 	int i;
+-	bool fd_found = false;
+ 	struct compat_poll_event_array *current;
  
-+			if (!revents) {
-+				/* No activity for this FD (poll implementation). */
-+				continue;
-+			}
- 			DBG("[rotation-thread] Handling fd (%i) activity (%u)",
- 					fd, revents);
+-	if (events == NULL || events->current.events == NULL || fd < 0) {
++	if (events == NULL || events->current.nb_fd == 0 ||
++			events->current.events == NULL || fd < 0) {
+ 		ERR("Bad compat poll mod arguments");
+ 		goto error;
+ 	}
+@@ -216,16 +217,16 @@ int compat_poll_mod(struct lttng_poll_event *events, int fd,
  
+ 	for (i = 0; i < current->nb_fd; i++) {
+ 		if (current->events[i].fd == fd) {
+-			fd_found = true;
+ 			current->events[i].events = req_events;
+ 			events->need_update = 1;
+ 			break;
+ 		}
+ 	}
+ 
+-	if (!fd_found) {
+-		goto error;
+-	}
++	/*
++	 * The epoll flavor doesn't flag modifying a non-included FD as an
++	 * error.
++	 */
+ 
+ 	return 0;
+ 
+@@ -238,11 +239,12 @@ error:
+  */
+ int compat_poll_del(struct lttng_poll_event *events, int fd)
+ {
+-	int new_size, i, count = 0, ret;
++	int i, count = 0, ret;
++	uint32_t new_size;
+ 	struct compat_poll_event_array *current;
+ 
+-	if (events == NULL || events->current.events == NULL || fd < 0) {
+-		ERR("Wrong arguments for poll del");
++	if (events == NULL || events->current.nb_fd == 0 ||
++			events->current.events == NULL || fd < 0) {
+ 		goto error;
+ 	}
+ 
+@@ -257,13 +259,20 @@ int compat_poll_del(struct lttng_poll_event *events, int fd)
+ 			count++;
+ 		}
+ 	}
++
++	/* The fd was not in our set, return no error as with epoll. */
++	if (current->nb_fd == count) {
++		goto end;
++	}
++
+ 	/* No fd duplicate should be ever added into array. */
+ 	assert(current->nb_fd - 1 == count);
+ 	current->nb_fd = count;
+ 
+ 	/* Resize array if needed. */
+ 	new_size = 1U << utils_get_count_order_u32(current->nb_fd);
+-	if (new_size != current->alloc_size && new_size >= current->init_size) {
++	if (new_size != current->alloc_size && new_size >= current->init_size
++			&& current->nb_fd != 0) {
+ 		ret = resize_poll_event(current, new_size);
+ 		if (ret < 0) {
+ 			goto error;
+@@ -272,6 +281,7 @@ int compat_poll_del(struct lttng_poll_event *events, int fd)
+ 
+ 	events->need_update = 1;
+ 
++end:
+ 	return 0;
+ 
+ error:
 -- 
 2.11.0
