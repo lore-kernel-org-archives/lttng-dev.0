@@ -1,18 +1,15 @@
-From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [PATCH lttng-tools v5 7/8] Clean code base from
- redundant verification
-Date: Thu, 25 Apr 2019 10:36:19 -0400
-Message-ID: <20190425143620.3348-8-ylamarre__40533.4662225627$1556203239$gmane$org@efficios.com>
-References: <20190425143620.3348-1-ylamarre@efficios.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools] Fix: libcompat is now part of
+ libcommon
+Date: Thu, 25 Apr 2019 14:12:37 -0400
+Message-ID: <20190425181237.8139-1-jonathan.rajotte-julien__47160.1369603135$1556216043$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44qfrd5phZz1KTY
- for <lttng-dev@lists.lttng.org>; Thu, 25 Apr 2019 10:36:33 -0400 (EDT)
-In-Reply-To: <20190425143620.3348-1-ylamarre@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 44qlf72cXGz1Kkg
+ for <lttng-dev@lists.lttng.org>; Thu, 25 Apr 2019 14:12:47 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,352 +23,330 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Remove redundant verification for file descriptors with 0 revents in
-code base.
+18710679a8ac57fda5dbd26cf16bb180dce9e286 includes libcompat into libcommon.
 
-Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
+This also make the compat_(e)poll_* symbols visible through liblttng-ctl.
+Same for fcntl compat.
+
+Mark them as hidden.
+
+These symbols are not visible on the 2.10/2.11 branches.
+
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
 ---
- src/bin/lttng-consumerd/health-consumerd.c   |  5 -----
- src/bin/lttng-relayd/health-relayd.c         |  5 -----
- src/bin/lttng-relayd/live.c                  | 10 ----------
- src/bin/lttng-relayd/main.c                  | 16 ----------------
- src/bin/lttng-sessiond/agent-thread.c        |  5 -----
- src/bin/lttng-sessiond/client.c              |  5 -----
- src/bin/lttng-sessiond/dispatch.c            |  5 -----
- src/bin/lttng-sessiond/health.c              |  5 -----
- src/bin/lttng-sessiond/ht-cleanup.c          |  5 -----
- src/bin/lttng-sessiond/manage-apps.c         |  5 -----
- src/bin/lttng-sessiond/manage-consumer.c     | 10 ----------
- src/bin/lttng-sessiond/manage-kernel.c       |  5 -----
- src/bin/lttng-sessiond/notification-thread.c |  3 ---
- src/bin/lttng-sessiond/notify-apps.c         |  5 -----
- src/bin/lttng-sessiond/register.c            |  5 -----
- src/bin/lttng-sessiond/rotation-thread.c     |  4 ----
- src/common/consumer/consumer.c               | 10 ----------
- 17 files changed, 108 deletions(-)
+ src/bin/lttng-relayd/Makefile.am   |  1 -
+ src/bin/lttng-sessiond/Makefile.am |  1 -
+ src/common/compat/compat-epoll.c   |  6 +++++
+ src/common/compat/compat-fcntl.c   |  1 +
+ src/common/compat/compat-poll.c    |  5 +++++
+ src/common/compat/fcntl.h          |  4 +++-
+ src/common/compat/poll.h           | 36 ++++++++++++++++++++----------
+ tests/unit/Makefile.am             |  4 ----
+ 8 files changed, 39 insertions(+), 19 deletions(-)
 
-diff --git a/src/bin/lttng-consumerd/health-consumerd.c b/src/bin/lttng-consumerd/health-consumerd.c
-index 1e2f31e4..7d60e54e 100644
---- a/src/bin/lttng-consumerd/health-consumerd.c
-+++ b/src/bin/lttng-consumerd/health-consumerd.c
-@@ -259,11 +259,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
+diff --git a/src/bin/lttng-relayd/Makefile.am b/src/bin/lttng-relayd/Makefile.am
+index cf56ea495..6320375b4 100644
+--- a/src/bin/lttng-relayd/Makefile.am
++++ b/src/bin/lttng-relayd/Makefile.am
+@@ -29,7 +29,6 @@ lttng_relayd_LDADD = -lurcu-common -lurcu \
+ 		$(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la \
+ 		$(top_builddir)/src/common/hashtable/libhashtable.la \
+ 		$(top_builddir)/src/common/libcommon.la \
+-		$(top_builddir)/src/common/compat/libcompat.la \
+ 		$(top_builddir)/src/common/index/libindex.la \
+ 		$(top_builddir)/src/common/health/libhealth.la \
+ 		$(top_builddir)/src/common/config/libconfig.la \
+diff --git a/src/bin/lttng-sessiond/Makefile.am b/src/bin/lttng-sessiond/Makefile.am
+index 9800c4b2c..6bfa5f389 100644
+--- a/src/bin/lttng-sessiond/Makefile.am
++++ b/src/bin/lttng-sessiond/Makefile.am
+@@ -68,7 +68,6 @@ lttng_sessiond_LDADD = -lurcu-common -lurcu $(KMOD_LIBS) \
+ 		$(top_builddir)/src/common/kernel-ctl/libkernel-ctl.la \
+ 		$(top_builddir)/src/common/hashtable/libhashtable.la \
+ 		$(top_builddir)/src/common/libcommon.la \
+-		$(top_builddir)/src/common/compat/libcompat.la \
+ 		$(top_builddir)/src/common/relayd/librelayd.la \
+ 		$(top_builddir)/src/common/testpoint/libtestpoint.la \
+ 		$(top_builddir)/src/common/health/libhealth.la \
+diff --git a/src/common/compat/compat-epoll.c b/src/common/compat/compat-epoll.c
+index 6a781c7ae..cf92c63b4 100644
+--- a/src/common/compat/compat-epoll.c
++++ b/src/common/compat/compat-epoll.c
+@@ -67,6 +67,7 @@ error:
+ /*
+  * Create epoll set and allocate returned events structure.
+  */
++LTTNG_HIDDEN
+ int compat_epoll_create(struct lttng_poll_event *events, int size, int flags)
+ {
+ 	int ret;
+@@ -119,6 +120,7 @@ error:
+ /*
+  * Add a fd to the epoll set with requesting events.
+  */
++LTTNG_HIDDEN
+ int compat_epoll_add(struct lttng_poll_event *events, int fd, uint32_t req_events)
+ {
+ 	int ret;
+@@ -166,6 +168,7 @@ error:
+ /*
+  * Remove a fd from the epoll set.
+  */
++LTTNG_HIDDEN
+ int compat_epoll_del(struct lttng_poll_event *events, int fd)
+ {
+ 	int ret;
+@@ -200,6 +203,7 @@ error:
+ /*
+  * Set an fd's events.
+  */
++LTTNG_HIDDEN
+ int compat_epoll_mod(struct lttng_poll_event *events, int fd, uint32_t req_events)
+ {
+ 	int ret;
+@@ -241,6 +245,7 @@ error:
+ /*
+  * Wait on epoll set. This is a blocking call of timeout value.
+  */
++LTTNG_HIDDEN
+ int compat_epoll_wait(struct lttng_poll_event *events, int timeout)
+ {
+ 	int ret;
+@@ -293,6 +298,7 @@ error:
+ /*
+  * Setup poll set maximum size.
+  */
++LTTNG_HIDDEN
+ int compat_epoll_set_max_size(void)
+ {
+ 	int ret, fd, retval = 0;
+diff --git a/src/common/compat/compat-fcntl.c b/src/common/compat/compat-fcntl.c
+index c6c6b4e99..a0f4a1997 100644
+--- a/src/common/compat/compat-fcntl.c
++++ b/src/common/compat/compat-fcntl.c
+@@ -21,6 +21,7 @@
  
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			ret = check_health_quit_pipe(pollfd, revents);
- 			if (ret) {
-diff --git a/src/bin/lttng-relayd/health-relayd.c b/src/bin/lttng-relayd/health-relayd.c
-index ba996621..b782c3e7 100644
---- a/src/bin/lttng-relayd/health-relayd.c
-+++ b/src/bin/lttng-relayd/health-relayd.c
-@@ -329,11 +329,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
+ #ifdef __linux__
  
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			ret = check_health_quit_pipe(pollfd, revents);
- 			if (ret) {
-diff --git a/src/bin/lttng-relayd/live.c b/src/bin/lttng-relayd/live.c
-index 9efab8a7..9503ba47 100644
---- a/src/bin/lttng-relayd/live.c
-+++ b/src/bin/lttng-relayd/live.c
-@@ -543,11 +543,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
++LTTNG_HIDDEN
+ int compat_sync_file_range(int fd, off64_t offset, off64_t nbytes,
+ 		unsigned int flags)
+ {
+diff --git a/src/common/compat/compat-poll.c b/src/common/compat/compat-poll.c
+index b45b39dc6..11149f4d4 100644
+--- a/src/common/compat/compat-poll.c
++++ b/src/common/compat/compat-poll.c
+@@ -102,6 +102,7 @@ error:
+ /*
+  * Create pollfd data structure.
+  */
++LTTNG_HIDDEN
+ int compat_poll_create(struct lttng_poll_event *events, int size)
+ {
+ 	struct compat_poll_event_array *current, *wait;
+@@ -200,6 +201,7 @@ error:
+ /*
+  * Modify an fd's events..
+  */
++LTTNG_HIDDEN
+ int compat_poll_mod(struct lttng_poll_event *events, int fd,
+ 		uint32_t req_events)
+ {
+@@ -236,6 +238,7 @@ error:
+ /*
+  * Remove a fd from the pollfd structure.
+  */
++LTTNG_HIDDEN
+ int compat_poll_del(struct lttng_poll_event *events, int fd)
+ {
+ 	int new_size, i, count = 0, ret;
+@@ -281,6 +284,7 @@ error:
+ /*
+  * Wait on poll() with timeout. Blocking call.
+  */
++LTTNG_HIDDEN
+ int compat_poll_wait(struct lttng_poll_event *events, int timeout)
+ {
+ 	int ret;
+@@ -328,6 +332,7 @@ error:
+ /*
+  * Setup poll set maximum size.
+  */
++LTTNG_HIDDEN
+ int compat_poll_set_max_size(void)
+ {
+ 	int ret, retval = 0;
+diff --git a/src/common/compat/fcntl.h b/src/common/compat/fcntl.h
+index 1efcea797..edb19906d 100644
+--- a/src/common/compat/fcntl.h
++++ b/src/common/compat/fcntl.h
+@@ -21,6 +21,7 @@
+ #include <fcntl.h>
+ #include <errno.h>
+ #include <sys/types.h>
++#include <common/macros.h>
  
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			ret = check_thread_quit_pipe(pollfd, revents);
- 			if (ret) {
-@@ -2000,11 +1995,6 @@ restart:
+ #if (defined(__FreeBSD__) || defined(__CYGWIN__))
+ typedef long long off64_t;
+@@ -31,7 +32,8 @@ typedef off64_t loff_t;
+ #endif
  
- 			health_code_update();
+ #ifdef __linux__
+-extern int compat_sync_file_range(int fd, off64_t offset, off64_t nbytes,
++LTTNG_HIDDEN
++int compat_sync_file_range(int fd, off64_t offset, off64_t nbytes,
+ 		unsigned int flags);
+ #define lttng_sync_file_range(fd, offset, nbytes, flags) \
+ 	compat_sync_file_range(fd, offset, nbytes, flags)
+diff --git a/src/common/compat/poll.h b/src/common/compat/poll.h
+index d4bd87f58..5379c806a 100644
+--- a/src/common/compat/poll.h
++++ b/src/common/compat/poll.h
+@@ -122,7 +122,8 @@ static inline int __lttng_epoll_get_prev_fd(struct lttng_poll_event *events,
+ /*
+  * Create the epoll set. No memory allocation is done here.
+  */
+-extern int compat_epoll_create(struct lttng_poll_event *events,
++LTTNG_HIDDEN
++int compat_epoll_create(struct lttng_poll_event *events,
+ 		int size, int flags);
+ #define lttng_poll_create(events, size, flags) \
+ 	compat_epoll_create(events, size, flags)
+@@ -152,14 +153,16 @@ static inline int compat_glibc_epoll_create(int size, int flags)
+  * Wait on epoll set with the number of fd registered to the lttng_poll_event
+  * data structure (events).
+  */
+-extern int compat_epoll_wait(struct lttng_poll_event *events, int timeout);
++LTTNG_HIDDEN
++int compat_epoll_wait(struct lttng_poll_event *events, int timeout);
+ #define lttng_poll_wait(events, timeout) \
+ 	compat_epoll_wait(events, timeout)
  
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			ret = check_thread_quit_pipe(pollfd, revents);
- 			if (ret) {
-diff --git a/src/bin/lttng-relayd/main.c b/src/bin/lttng-relayd/main.c
-index e81bdeff..0ee27efc 100644
---- a/src/bin/lttng-relayd/main.c
-+++ b/src/bin/lttng-relayd/main.c
-@@ -858,14 +858,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
+ /*
+  * Add a fd to the epoll set and resize the epoll_event structure if needed.
+  */
+-extern int compat_epoll_add(struct lttng_poll_event *events,
++LTTNG_HIDDEN
++int compat_epoll_add(struct lttng_poll_event *events,
+ 		int fd, uint32_t req_events);
+ #define lttng_poll_add(events, fd, req_events) \
+ 	compat_epoll_add(events, fd, req_events)
+@@ -167,14 +170,16 @@ extern int compat_epoll_add(struct lttng_poll_event *events,
+ /*
+  * Remove a fd from the epoll set.
+  */
+-extern int compat_epoll_del(struct lttng_poll_event *events, int fd);
++LTTNG_HIDDEN
++int compat_epoll_del(struct lttng_poll_event *events, int fd);
+ #define lttng_poll_del(events, fd) \
+ 	compat_epoll_del(events, fd)
  
--			if (!revents) {
--				/*
--				 * No activity for this FD (poll
--				 * implementation).
--				 */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			ret = check_thread_quit_pipe(pollfd, revents);
- 			if (ret) {
-@@ -3813,14 +3805,6 @@ restart:
+ /*
+  * Modify an fd's events in the epoll set.
+  */
+-extern int compat_epoll_mod(struct lttng_poll_event *events,
++LTTNG_HIDDEN
++int compat_epoll_mod(struct lttng_poll_event *events,
+ 		int fd, uint32_t req_events);
+ #define lttng_poll_mod(events, fd, req_events) \
+ 	compat_epoll_add(events, fd, req_events)
+@@ -182,7 +187,8 @@ extern int compat_epoll_mod(struct lttng_poll_event *events,
+ /*
+  * Set up the poll set limits variable poll_max_size
+  */
+-extern int compat_epoll_set_max_size(void);
++LTTNG_HIDDEN
++int compat_epoll_set_max_size(void);
+ #define lttng_poll_set_max_size() \
+ 	compat_epoll_set_max_size()
  
- 			health_code_update();
+@@ -326,7 +332,8 @@ static inline int __lttng_poll_get_prev_fd(struct lttng_poll_event *events,
+ /*
+  * Create a pollfd structure of size 'size'.
+  */
+-extern int compat_poll_create(struct lttng_poll_event *events, int size);
++LTTNG_HIDDEN
++int compat_poll_create(struct lttng_poll_event *events, int size);
+ #define lttng_poll_create(events, size, flags) \
+ 	compat_poll_create(events, size)
  
--			if (!revents) {
--				/*
--				 * No activity for this FD (poll
--				 * implementation).
--				 */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			ret = check_thread_quit_pipe(pollfd, revents);
- 			if (ret) {
-diff --git a/src/bin/lttng-sessiond/agent-thread.c b/src/bin/lttng-sessiond/agent-thread.c
-index f7be1ef7..575f6aee 100644
---- a/src/bin/lttng-sessiond/agent-thread.c
-+++ b/src/bin/lttng-sessiond/agent-thread.c
-@@ -404,11 +404,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
+@@ -334,14 +341,16 @@ extern int compat_poll_create(struct lttng_poll_event *events, int size);
+  * Wait on poll(2) event with nb_fd registered to the lttng_poll_event data
+  * structure.
+  */
+-extern int compat_poll_wait(struct lttng_poll_event *events, int timeout);
++LTTNG_HIDDEN
++int compat_poll_wait(struct lttng_poll_event *events, int timeout);
+ #define lttng_poll_wait(events, timeout) \
+ 	compat_poll_wait(events, timeout)
  
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			if (pollfd == quit_pipe_read_fd) {
- 				goto exit;
-diff --git a/src/bin/lttng-sessiond/client.c b/src/bin/lttng-sessiond/client.c
-index f3002f91..4565a18c 100644
---- a/src/bin/lttng-sessiond/client.c
-+++ b/src/bin/lttng-sessiond/client.c
-@@ -2090,11 +2090,6 @@ static void *thread_manage_clients(void *data)
+ /*
+  * Add the fd to the pollfd structure. Resize if needed.
+  */
+-extern int compat_poll_add(struct lttng_poll_event *events,
++LTTNG_HIDDEN
++int compat_poll_add(struct lttng_poll_event *events,
+ 		int fd, uint32_t req_events);
+ #define lttng_poll_add(events, fd, req_events) \
+ 	compat_poll_add(events, fd, req_events)
+@@ -351,14 +360,16 @@ extern int compat_poll_add(struct lttng_poll_event *events,
+  * pollfd, data is copied from the old pollfd to the new and, finally, the old
+  * one is freed().
+  */
+-extern int compat_poll_del(struct lttng_poll_event *events, int fd);
++LTTNG_HIDDEN
++int compat_poll_del(struct lttng_poll_event *events, int fd);
+ #define lttng_poll_del(events, fd) \
+ 	compat_poll_del(events, fd)
  
- 			health_code_update();
+ /*
+  * Modify an fd's events in the epoll set.
+  */
+-extern int compat_poll_mod(struct lttng_poll_event *events,
++LTTNG_HIDDEN
++int compat_poll_mod(struct lttng_poll_event *events,
+ 		int fd, uint32_t req_events);
+ #define lttng_poll_mod(events, fd, req_events) \
+ 	compat_poll_add(events, fd, req_events)
+@@ -366,7 +377,8 @@ extern int compat_poll_mod(struct lttng_poll_event *events,
+ /*
+  * Set up the poll set limits variable poll_max_size
+  */
+-extern int compat_poll_set_max_size(void);
++LTTNG_HIDDEN
++int compat_poll_set_max_size(void);
+ #define lttng_poll_set_max_size() \
+ 	compat_poll_set_max_size()
  
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			if (pollfd == thread_quit_pipe_fd) {
- 				err = 0;
- 				goto exit;
-diff --git a/src/bin/lttng-sessiond/dispatch.c b/src/bin/lttng-sessiond/dispatch.c
-index 04b3954c..a637f23d 100644
---- a/src/bin/lttng-sessiond/dispatch.c
-+++ b/src/bin/lttng-sessiond/dispatch.c
-@@ -144,11 +144,6 @@ static void sanitize_wait_queue(struct ust_reg_wait_queue *wait_queue)
- 		uint32_t revents = LTTNG_POLL_GETEV(&events, i);
- 		int pollfd = LTTNG_POLL_GETFD(&events, i);
+diff --git a/tests/unit/Makefile.am b/tests/unit/Makefile.am
+index 5f485f007..bd25d6a3f 100644
+--- a/tests/unit/Makefile.am
++++ b/tests/unit/Makefile.am
+@@ -70,9 +70,7 @@ SESSIOND_OBJS = $(top_builddir)/src/bin/lttng-sessiond/buffer-registry.$(OBJEXT)
+ 	 $(top_builddir)/src/bin/lttng-sessiond/thread-utils.$(OBJEXT) \
+ 	 $(top_builddir)/src/bin/lttng-sessiond/process-utils.$(OBJEXT) \
+ 	 $(top_builddir)/src/bin/lttng-sessiond/thread.$(OBJEXT) \
+-	 $(top_builddir)/src/common/libcommon.la \
+ 	 $(top_builddir)/src/common/testpoint/libtestpoint.la \
+-	 $(top_builddir)/src/common/compat/libcompat.la \
+ 	 $(top_builddir)/src/common/health/libhealth.la \
+ 	 $(top_builddir)/src/common/sessiond-comm/libsessiond-comm.la
  
--		if (!revents) {
--			/* No activity for this FD (poll implementation). */
--			continue;
--		}
--
- 		cds_list_for_each_entry_safe(wait_node, tmp_wait_node,
- 				&wait_queue->head, head) {
- 			if (pollfd == wait_node->app->sock &&
-diff --git a/src/bin/lttng-sessiond/health.c b/src/bin/lttng-sessiond/health.c
-index 921b4526..5b4f5f8f 100644
---- a/src/bin/lttng-sessiond/health.c
-+++ b/src/bin/lttng-sessiond/health.c
-@@ -158,11 +158,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Event on the registration socket */
- 			if (pollfd == sock) {
- 				if (revents & LPOLLIN) {
-diff --git a/src/bin/lttng-sessiond/ht-cleanup.c b/src/bin/lttng-sessiond/ht-cleanup.c
-index 91c0544c..02244f0c 100644
---- a/src/bin/lttng-sessiond/ht-cleanup.c
-+++ b/src/bin/lttng-sessiond/ht-cleanup.c
-@@ -155,11 +155,6 @@ static void *thread_ht_cleanup(void *data)
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			if (pollfd != ht_cleanup_pipe[0]) {
- 				continue;
- 			}
-diff --git a/src/bin/lttng-sessiond/manage-apps.c b/src/bin/lttng-sessiond/manage-apps.c
-index f9ec356d..356c147a 100644
---- a/src/bin/lttng-sessiond/manage-apps.c
-+++ b/src/bin/lttng-sessiond/manage-apps.c
-@@ -123,11 +123,6 @@ static void *thread_application_management(void *data)
- 
- 			health_code_update();
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			if (pollfd == quit_pipe_read_fd) {
- 				err = 0;
- 				goto exit;
-diff --git a/src/bin/lttng-sessiond/manage-consumer.c b/src/bin/lttng-sessiond/manage-consumer.c
-index b710c61f..fa802adc 100644
---- a/src/bin/lttng-sessiond/manage-consumer.c
-+++ b/src/bin/lttng-sessiond/manage-consumer.c
-@@ -134,11 +134,6 @@ void *thread_consumer_management(void *data)
- 
- 		health_code_update();
- 
--		if (!revents) {
--			/* No activity for this FD (poll implementation). */
--			continue;
--		}
--
- 		/* Thread quit pipe has been closed. Killing thread. */
- 		if (pollfd == quit_pipe_read_fd) {
- 			err = 0;
-@@ -298,11 +293,6 @@ void *thread_consumer_management(void *data)
- 
- 			health_code_update();
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/*
- 			 * Thread quit pipe has been triggered, flag that we should stop
- 			 * but continue the current loop to handle potential data from
-diff --git a/src/bin/lttng-sessiond/manage-kernel.c b/src/bin/lttng-sessiond/manage-kernel.c
-index 34887d7b..f656c9f5 100644
---- a/src/bin/lttng-sessiond/manage-kernel.c
-+++ b/src/bin/lttng-sessiond/manage-kernel.c
-@@ -267,11 +267,6 @@ static void *thread_kernel_management(void *data)
- 
- 			health_code_update();
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			if (pollfd == quit_pipe_read_fd) {
- 				err = 0;
- 				goto exit;
-diff --git a/src/bin/lttng-sessiond/notification-thread.c b/src/bin/lttng-sessiond/notification-thread.c
-index b42b282e..0a1fd557 100644
---- a/src/bin/lttng-sessiond/notification-thread.c
-+++ b/src/bin/lttng-sessiond/notification-thread.c
-@@ -562,9 +562,6 @@ void *thread_notification(void *data)
- 			int fd = LTTNG_POLL_GETFD(&state.events, i);
- 			uint32_t revents = LTTNG_POLL_GETEV(&state.events, i);
- 
--			if (!revents) {
--				continue;
--			}
- 			DBG("[notification-thread] Handling fd (%i) activity (%u)", fd, revents);
- 
- 			if (fd == state.notification_channel_socket) {
-diff --git a/src/bin/lttng-sessiond/notify-apps.c b/src/bin/lttng-sessiond/notify-apps.c
-index bc7405c7..17f3cd0c 100644
---- a/src/bin/lttng-sessiond/notify-apps.c
-+++ b/src/bin/lttng-sessiond/notify-apps.c
-@@ -109,11 +109,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			if (pollfd == quit_pipe_read_fd) {
- 				err = 0;
-diff --git a/src/bin/lttng-sessiond/register.c b/src/bin/lttng-sessiond/register.c
-index 6ce25ad0..e809834f 100644
---- a/src/bin/lttng-sessiond/register.c
-+++ b/src/bin/lttng-sessiond/register.c
-@@ -239,11 +239,6 @@ static void *thread_application_registration(void *data)
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			/* Thread quit pipe has been closed. Killing thread. */
- 			if (pollfd == quit_pipe_read_fd) {
- 				err = 0;
-diff --git a/src/bin/lttng-sessiond/rotation-thread.c b/src/bin/lttng-sessiond/rotation-thread.c
-index b86b1668..6669372d 100644
---- a/src/bin/lttng-sessiond/rotation-thread.c
-+++ b/src/bin/lttng-sessiond/rotation-thread.c
-@@ -974,10 +974,6 @@ void *thread_rotation(void *data)
- 			int fd = LTTNG_POLL_GETFD(&thread.events, i);
- 			uint32_t revents = LTTNG_POLL_GETEV(&thread.events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
- 			DBG("[rotation-thread] Handling fd (%i) activity (%u)",
- 					fd, revents);
- 
-diff --git a/src/common/consumer/consumer.c b/src/common/consumer/consumer.c
-index 10273e66..c70d95a5 100644
---- a/src/common/consumer/consumer.c
-+++ b/src/common/consumer/consumer.c
-@@ -2396,11 +2396,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			if (pollfd == lttng_pipe_get_readfd(ctx->consumer_metadata_pipe)) {
- 				if (revents & LPOLLIN) {
- 					ssize_t pipe_len;
-@@ -2990,11 +2985,6 @@ restart:
- 			revents = LTTNG_POLL_GETEV(&events, i);
- 			pollfd = LTTNG_POLL_GETFD(&events, i);
- 
--			if (!revents) {
--				/* No activity for this FD (poll implementation). */
--				continue;
--			}
--
- 			if (pollfd == ctx->consumer_channel_pipe[0]) {
- 				if (revents & LPOLLIN) {
- 					enum consumer_channel_action action;
+@@ -93,7 +91,6 @@ test_session_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBRELAYD) $(LIBSESSIOND_COMM) \
+ 		     $(KMOD_LIBS) \
+ 		     $(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la \
+ 		     $(top_builddir)/src/common/kernel-ctl/libkernel-ctl.la \
+-		     $(top_builddir)/src/common/compat/libcompat.la \
+ 		     $(top_builddir)/src/common/testpoint/libtestpoint.la \
+ 		     $(top_builddir)/src/common/health/libhealth.la \
+ 		     $(top_builddir)/src/common/config/libconfig.la \
+@@ -114,7 +111,6 @@ test_ust_data_LDADD = $(LIBTAP) $(LIBCOMMON) $(LIBRELAYD) $(LIBSESSIOND_COMM) \
+ 		      $(KMOD_LIBS) \
+ 		      $(top_builddir)/src/lib/lttng-ctl/liblttng-ctl.la \
+ 		      $(top_builddir)/src/common/kernel-ctl/libkernel-ctl.la \
+-		      $(top_builddir)/src/common/compat/libcompat.la \
+ 		      $(top_builddir)/src/common/testpoint/libtestpoint.la \
+ 		      $(top_builddir)/src/common/health/libhealth.la \
+ 		      $(top_builddir)/src/common/config/libconfig.la \
 -- 
-2.11.0
+2.17.1
