@@ -1,19 +1,19 @@
-From: whalajam--- via lttng-dev <lttng-dev@lists.lttng.org>
-Subject: Re: running lttng 2.10 on Docker 1.13.1
-Date: Sat, 27 Apr 2019 01:44:47 +0000 (UTC)
-Message-ID: <925094052.1088921.1556329487899__35488.7235489272$1556331336$gmane$org@mail.yahoo.com>
-References: <97612750.1097694.1556328978552.ref@mail.yahoo.com>
- <97612750.1097694.1556328978552@mail.yahoo.com>
-Reply-To: "whalajam@yahoo.com" <whalajam@yahoo.com>
+From: Nicholas Sadjoli <nick.sadjoli@gmail.com>
+Subject: Re: Problems setting up lttng on PREEMPT_RT Raspberry Pi
+Date: Sun, 28 Apr 2019 18:11:26 +0800
+Message-ID: <CAKUXLvdQ0ELiGLDg-gQGh4Ja1+q3_Jpc8GcB6Pnvh522=FE_fw__16783.2691733324$1556446466$gmane$org@mail.gmail.com>
+References: <CAKUXLvdNYPitwKb8D5VDC7nXA4-z3OiApGX=qbVxV5LWFkDyJw@mail.gmail.com>
+ <725895933.460.1555337504175.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="----=_Part_1088920_1868740719.1556329487899"
+Content-Type: multipart/mixed; boundary="===============6164888423423465612=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from sonic306-3.consmr.mail.bf2.yahoo.com
- (sonic306-3.consmr.mail.bf2.yahoo.com [74.6.132.42])
- by lists.lttng.org (Postfix) with ESMTPS id 44rZJM33VMz1KM3
- for <lttng-dev@lists.lttng.org>; Fri, 26 Apr 2019 22:15:15 -0400 (EDT)
-In-Reply-To: <97612750.1097694.1556328978552@mail.yahoo.com>
+Received: from mail-it1-x144.google.com (mail-it1-x144.google.com
+ [IPv6:2607:f8b0:4864:20::144])
+ by lists.lttng.org (Postfix) with ESMTPS id 44sNqd1NLXz1JyP
+ for <lttng-dev@lists.lttng.org>; Sun, 28 Apr 2019 06:11:40 -0400 (EDT)
+Received: by mail-it1-x144.google.com with SMTP id r85so3416560itc.2
+ for <lttng-dev@lists.lttng.org>; Sun, 28 Apr 2019 03:11:40 -0700 (PDT)
+In-Reply-To: <725895933.460.1555337504175.JavaMail.zimbra@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,163 +23,391 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Tom Zanussi <tom.zanussi@linux.intel.com>, linux-rt-users <linux-rt-users@vger.kernel.org>, rostedt <rostedt@goodmis.org>, dev-raspberry-pi@lists.mozilla.org
 List-Id: lttng-dev@lists.lttng.org
 
-------=_Part_1088920_1868740719.1556329487899
-Content-Type: multipart/alternative;
-	boundary="----=_Part_1088919_1252295608.1556329487898"
+--===============6164888423423465612==
+Content-Type: multipart/alternative; boundary="000000000000d114d90587946491"
 
-------=_Part_1088919_1252295608.1556329487898
-Content-Type: text/plain; charset=UTF-8
+--000000000000d114d90587946491
+Content-Type: text/plain; charset="UTF-8"
+
+Hello again Mathieu,
+
+I apologize that this is a rather late re-opening of the topic again.
+However, after consulting with the RPi kernel side, it seems that even
+after trying to fix for the mentioned issue (i.e. by upgrading to the
+listed 'fixed' commit), I am still having issues installing the
+lttng-modules. The following link is the thread that I am having with the
+RPi kernel github: https://github.com/raspberrypi/linux/issues/2930
+
+Even though it is listed that version 2.9 seems to be okay, recently I
+tried to re-install the lttng-modules onto another RPi, but this time even
+with the 'fixed' commit as suggested in the thread, lttng-modules still
+give the same 'buggy kernel implementation' error. Please do note that it
+seems CONFIG_OPTPROBES cannot be turned off at all during the kernel build,
+as it will be overriden by default and seems to be integral to the build of
+the RPi's RT kernel as well, hence this is not really an option either.
+
+Is there a specific way on how to upgrade to the mentioned 'fixed' commit
+without requiring a complete kernel overhaul? I am getting rather desparate
+as I need this to work for an upcoming assignment deadline this week. So
+I'm hoping that there is still potential solution to this.
+
+
+Best Regards,
+
+
+
+Nicholas Sadjoli
+
+On Mon, Apr 15, 2019 at 10:11 PM Mathieu Desnoyers <
+mathieu.desnoyers@efficios.com> wrote:
+
+> ----- On Apr 15, 2019, at 7:07 AM, Nicholas Sadjoli <
+> nick.sadjoli@gmail.com> wrote:
+>
+> Dear Lttng dev Team,
+> I am currently interested in using lttng to measure the interrupt or
+> hardware real-time latencies experienced within my user-space applications.
+> Unfortunately I have been having issues installing lttng on my Raspberry Pi
+> that is using the PREEMPT_RT patched kernel, version 4.14.91-rt49-v7+.
+> The problems so far can be seen documented in the RPi Linux github forum
+> page here: https://github.com/raspberrypi/linux/issues/2930
+>
+> Initially I was about to just install the Debian package of the lttng onto
+> the RPi, and just proceeded with the commands 'sudo apt-get install
+> lttng-modules-dkms liblttng-ust-dev lttng-tools' However, I was unable to
+> use lttng package at all and found out that for the RPi, a build from
+> source is necessary for lttng, as described here:
+> https://stackoverflow.com/questions/52386448/linux-trace-tool-lttng-on-raspbian-kernel-tracer-not-available
+>
+> Following their suggestion, I then tried to build the lttng packages from
+> source, and even re-building the RPi kernel locally to ensure the kernel
+> headers are in the RPi and linked up properly to the source packages.
+>
+> Unfortunately when I tried to do this for the lttng-modules package, it
+> instead gave me the following warning in my latest attempt:
+>
+> In file included from
+> /home/pi/BangEco_rvmscan/stagelight_project/lttng/lttng-modules/probes/lttng-kprobes.c:31:0:
+> /home/pi/BangEco_rvmscan/stagelight_project/lttng/lttng-modules/probes/../blacklist/kprobes.h:19:4:
+> error: #error "Your kernel is known to have buggy optimized kprobes
+> implementation. Fixed by commit 0ac569bf6a7983c0c5747d6df8db9dc05bc92b6c
+> \"ARM: 8834/1: Fix: kprobes: optimized kprobes illegal instruction\" in
+> Linux. Disable CONFIG_OPTPROBES or upgrade your kernel."
+>  #  error "Your kernel is known to have buggy optimized kprobes
+> implementation. Fixed by commit 0ac569bf6a7983c0c5747d6df8db9dc05bc92b6c
+> \"ARM: 8834/1: Fix: kprobes: optimized kprobes illegal instruction\" in
+> Linux. Disable CONFIG_OPTPROBES or upgrade your kernel."
+>
+> I then tried to turn off the CONFIG_OPTPROBES kernel config, but it seemed
+> to be automatically overwritten during kernel building and is considered an
+> important part of the real-time RPi kernels. Has such problems been
+> reported with this version of the PREEMPT_RT kernel in the past (again, the
+> current kernel version that I am using is 4.14.91-rt49-v7+)? If there are
+> I would like to know how this issue was resolved so that I can properly
+> build and use the lttng package for my project.
+>
+> Hi Nicholas,
+>
+> It looks like our lttng-modules kernel version blacklist is acting exactly
+> as it should. Looking at this
+> git tree:
+>
+> git clone https://github.com/raspberrypi/linux.git -b rpi-4.14.y-rt
+>
+> I notice that in the git log, we find this bogus commit:
+>
+> commit f9e0bc710347fadad55910846ee36f0681d0dca8
+> Author: Kees Cook <keescook@chromium.org>
+> Date:   Tue Oct 30 22:12:56 2018 +0100
+>
+>     ARM: 8806/1: kprobes: Fix false positive with FORTIFY_SOURCE
+>
+>     commit e46daee53bb50bde38805f1823a182979724c229 upstream.
+>
+> But not the fix for it (upstream):
+>
+> commit 0ac569bf6a7983c0c5747d6df8db9dc05bc92b6c
+> Author: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Date:   Tue Feb 5 16:37:40 2019 +0100
+>
+>     ARM: 8834/1: Fix: kprobes: optimized kprobes illegal instruction
+>
+> So lttng-modules refuses to build against your kernel configuration with
+> CONFIG_OPTPROBES=y
+> to save you the trouble of having kprobes trigger illegal instruction OOPS
+> at runtime.
+>
+> I'm unusure who maintains that raspberrypi rt kernel tree. However, the
+> upstream rt tree
+> for 4.14-rt maintained by Tom Zanussi seems to contain the fix:
+>
+>
+> https://kernel.googlesource.com/pub/scm/linux/kernel/git/rt/linux-stable-rt/+/refs/heads/v4.14-rt
+>
+> (currently at 4.14.109-rt57).
+>
+> So you should contact your raspberrypi linux rt tree clone maintainer and
+> ask him
+> to upgrade, or, as stated in the #error generated by lttng-modules, simply
+> ensure
+> CONFIG_OPTPROBES is unset when you build your kernel. You should ask the
+> raspberrypi community advice on how to ensure this configuration option is
+> not
+> overridden by the raspberrypi build system.
+>
+> Thanks,
+>
+> Mathieu
+>
+>
+>
+> Thank you so much for your attention and looking forward to your reply
+> soon.
+>
+>
+>
+> Best Regards,
+>
+>
+>
+> Nicholas Sadjoli
+>
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+>
+>
+> --
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> http://www.efficios.com
+>
+
+--000000000000d114d90587946491
+Content-Type: text/html; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
- I attach the lttng-sessiond -vvv output,John
-    On Friday, April 26, 2019, 9:38:36 p.m. EDT, whalajam--- via lttng-dev =
-<lttng-dev@lists.lttng.org> wrote: =20
-=20
- Hi,I have one docker container on which I installed LTTng version 2.10.I u=
-se the same Docker container to build and run the application.=C2=A0The pro=
-blem I have is that there are no traces in the path specified when doing "l=
-ttng create". "lttng view"fails complaining about files not found, the trac=
-e directories are sometimes added to the path but the /root/lttng../../../c=
-hannel0_* files are empty.=3DC2=3DA0I've followed the installation instruct=
-ions from=3DC2=3DA0http://frederic-wou.net/lttng/and docs on=3DC2=3DA0https=
-://lttng.org/docs/v2.10/=3DC2=3DA0These are the commands: "lttng enable -u =
-a:b", "lttng start", <excercise-the-tracepoints>,"lttng stop" and "lttng vi=
-ew". lttng-consumerd is running. Running 'lttng-sessiond --vvv' returns DEB=
-UG info and an error about server already runningWhat could be the reason f=
-or the failure, how can I debug it?John
+<div dir=3D"ltr">Hello again Mathieu,<div><br></div><div>I apologize that t=
+his is a rather late re-opening of the topic again. However, after consulti=
+ng with the RPi kernel side, it seems that even after trying to fix for the=
+ mentioned issue (i.e. by upgrading to the listed &#39;fixed&#39; commit), =
+I am still having issues installing the lttng-modules. The following link i=
+s the thread that I am having with the RPi kernel github:=C2=A0<a href=3D"h=
+ttps://github.com/raspberrypi/linux/issues/2930">https://github.com/raspber=
+rypi/linux/issues/2930</a></div><div><br></div><div>Even though it is liste=
+d that version 2.9 seems to be okay, recently I tried to re-install the ltt=
+ng-modules onto another RPi, but this time even with the &#39;fixed&#39; co=
+mmit as suggested in the thread, lttng-modules still give the same &#39;bug=
+gy kernel implementation&#39; error. Please do note that it seems CONFIG_OP=
+TPROBES cannot be turned off at all during the kernel build, as it will be =
+overriden by default and seems to be integral to the build of the RPi&#39;s=
+ RT kernel as well, hence this is not really an option either.</div><div><b=
+r></div><div>Is there a specific way on how to upgrade to the mentioned &#3=
+9;fixed&#39; commit without requiring a complete kernel overhaul? I am gett=
+ing rather desparate as I need this to work for an upcoming assignment dead=
+line this week. So I&#39;m hoping that there is still potential solution to=
+ this.</div><div><br></div><div><br></div><div>Best Regards,</div><div><br>=
+</div><div><br></div><div><br></div><div>Nicholas Sadjoli</div></div><br><d=
+iv class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, Apr =
+15, 2019 at 10:11 PM Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoy=
+ers@efficios.com">mathieu.desnoyers@efficios.com</a>&gt; wrote:<br></div><b=
+lockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-le=
+ft:1px solid rgb(204,204,204);padding-left:1ex"><div><div style=3D"font-fam=
+ily:arial,helvetica,sans-serif;font-size:12pt;color:rgb(0,0,0)"><div><span =
+id=3D"gmail-m_9106008346192568069zwchr">----- On Apr 15, 2019, at 7:07 AM, =
+Nicholas Sadjoli &lt;<a href=3D"mailto:nick.sadjoli@gmail.com" target=3D"_b=
+lank">nick.sadjoli@gmail.com</a>&gt; wrote:<br></span></div><div><blockquot=
+e style=3D"border-left:2px solid rgb(16,16,255);margin-left:5px;padding-lef=
+t:5px;color:rgb(0,0,0);font-weight:normal;font-style:normal;text-decoration=
+:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D"lt=
+r"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr">Dear Lttng dev Team,<=
+br><div>I am currently interested in using lttng to measure the interrupt o=
+r hardware real-time latencies experienced within my user-space application=
+s. Unfortunately I have been having issues installing lttng on my Raspberry=
+ Pi that is using the PREEMPT_RT patched kernel, version=C2=A0<span style=
+=3D"color:rgb(36,41,46);font-family:-apple-system,BlinkMacSystemFont,&quot;=
+Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&qu=
+ot;Segoe UI Emoji&quot;,&quot;Segoe UI Symbol&quot;;font-size:14px">4.14.91=
+-rt49-v7+. The problems so far can be seen documented in the RPi Linux gith=
+ub forum page here:=C2=A0</span><font face=3D"-apple-system, BlinkMacSystem=
+Font, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI E=
+moji, Segoe UI Symbol" color=3D"#24292e"><span style=3D"font-size:14px"><a =
+href=3D"https://github.com/raspberrypi/linux/issues/2930" target=3D"_blank"=
+>https://github.com/raspberrypi/linux/issues/2930</a></span></font><br></di=
+v><div><span style=3D"color:rgb(36,41,46);font-family:-apple-system,BlinkMa=
+cSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Col=
+or Emoji&quot;,&quot;Segoe UI Emoji&quot;,&quot;Segoe UI Symbol&quot;;font-=
+size:14px"><br></span></div><div><span style=3D"color:rgb(36,41,46);font-fa=
+mily:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,=
+sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;,&quot;S=
+egoe UI Symbol&quot;;font-size:14px">Initially I was about to just install =
+the Debian package of the lttng onto the RPi, and just proceeded with the c=
+ommands &#39;</span><font face=3D"Andale Mono WT, Andale Mono, Bitstream Ve=
+ra Sans Mono, Liberation Mono, Nimbus Mono L, Ubuntu Mono, Monaco, Consolas=
+, Lucida Console, Lucida Sans Typewriter, Courier New, Courier, monospace" =
+color=3D"rgba(0, 0, 0, 0.749019607843137)">sudo apt-get install lttng-modul=
+es-dkms liblttng-ust-dev lttng-tools&#39; </font>However, I was unable to u=
+se lttng package at all and found out that for the RPi, a build from source=
+ is necessary for lttng, as described here:=C2=A0<span style=3D"background-=
+color:transparent"><font face=3D"-apple-system, BlinkMacSystemFont, Segoe U=
+I, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe U=
+I Symbol" color=3D"#24292e"><span style=3D"font-size:14px"><a href=3D"https=
+://stackoverflow.com/questions/52386448/linux-trace-tool-lttng-on-raspbian-=
+kernel-tracer-not-available" target=3D"_blank">https://stackoverflow.com/qu=
+estions/52386448/linux-trace-tool-lttng-on-raspbian-kernel-tracer-not-avail=
+able</a></span></font></span><br></div><div><span style=3D"background-color=
+:transparent"><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, He=
+lvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Sym=
+bol" color=3D"#24292e"><span style=3D"font-size:14px"><br></span></font></s=
+pan></div><div><span style=3D"background-color:transparent"><font face=3D"-=
+apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, A=
+pple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e"><span =
+style=3D"font-size:14px">Following their suggestion, I then tried to build =
+the lttng packages from source, and even re-building the RPi kernel locally=
+ to ensure the kernel headers are in the RPi and linked up properly to the =
+source packages.=C2=A0</span></font></span></div><div><span style=3D"backgr=
+ound-color:transparent"><font face=3D"-apple-system, BlinkMacSystemFont, Se=
+goe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Se=
+goe UI Symbol" color=3D"#24292e"><span style=3D"font-size:14px"><br></span>=
+</font></span></div><div><span style=3D"background-color:transparent"><font=
+ face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, san=
+s-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#2429=
+2e"><span style=3D"font-size:14px">Unfortunately when I tried to do this fo=
+r the lttng-modules package, it instead gave me the following warning in my=
+ latest attempt:=C2=A0</span></font></span></div><div><font face=3D"-apple-=
+system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple C=
+olor Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e"><span style=
+=3D"font-size:14px"><br></span></font></div><div><font face=3D"-apple-syste=
+m, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color =
+Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e"><span style=3D"fo=
+nt-size:14px">I</span></font><span style=3D"font-size:14px;color:rgb(36,41,=
+46);font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helve=
+tica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&qu=
+ot;,&quot;Segoe UI Symbol&quot;">n file included from /home/pi/BangEco_rvms=
+can/stagelight_project/lttng/lttng-modules/probes/lttng-kprobes.c:31:0:</sp=
+an></div><div><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, He=
+lvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Sym=
+bol" color=3D"#24292e"><span style=3D"font-size:14px">/home/pi/BangEco_rvms=
+can/stagelight_project/lttng/lttng-modules/probes/../blacklist/kprobes.h:19=
+:4: error: #error &quot;Your kernel is known to have buggy optimized kprobe=
+s implementation. Fixed by commit 0ac569bf6a7983c0c5747d6df8db9dc05bc92b6c =
+\&quot;ARM: 8834/1: Fix: kprobes: optimized kprobes illegal instruction\&qu=
+ot; in Linux. Disable CONFIG_OPTPROBES or upgrade your kernel.&quot;</span>=
+</font></div><div><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI=
+, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI=
+ Symbol" color=3D"#24292e"><span style=3D"font-size:14px">=C2=A0#=C2=A0 err=
+or &quot;Your kernel is known to have buggy optimized kprobes implementatio=
+n. Fixed by commit 0ac569bf6a7983c0c5747d6df8db9dc05bc92b6c \&quot;ARM: 883=
+4/1: Fix: kprobes: optimized kprobes illegal instruction\&quot; in Linux. D=
+isable CONFIG_OPTPROBES or upgrade your kernel.&quot;</span></font></div><d=
+iv><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Ar=
+ial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=
+=3D"#24292e"><span style=3D"font-size:14px"><br></span></font></div><div><f=
+ont face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, =
+sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#2=
+4292e"><span style=3D"font-size:14px">I then tried to turn off the CONFIG_O=
+PTPROBES kernel config, but it seemed to be automatically overwritten durin=
+g kernel building and is considered an important part of the real-time RPi =
+kernels. Has such problems been reported with this version of the PREEMPT_R=
+T kernel in the past (again, the current kernel version that I am using is=
+=C2=A0</span></font><span style=3D"color:rgb(36,41,46);font-family:-apple-s=
+ystem,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&q=
+uot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&quot;,&quot;Segoe UI Symbo=
+l&quot;;font-size:14px">4.14.91-rt49-v7+)? If there are I would like to kno=
+w how this issue was resolved so that I can properly build and use the lttn=
+g package for my project.</span></div></div></div></div></div></blockquote>=
+<div>Hi Nicholas,<br></div><div><br></div><div>It looks like our lttng-modu=
+les kernel version blacklist is acting exactly as it should. Looking at thi=
+s<br></div><div>git tree:<br></div><div><br></div><div>git clone <a href=3D=
+"https://github.com/raspberrypi/linux.git" target=3D"_blank">https://github=
+.com/raspberrypi/linux.git</a> -b rpi-4.14.y-rt<br></div><div><pre><code cl=
+ass=3D"gmail-m_9106008346192568069language-sh gmail-m_9106008346192568069hl=
+js gmail-m_9106008346192568069bash"></code></pre></div><div>I notice that i=
+n the git log, we find this bogus commit:<br></div><div><br></div><div>comm=
+it f9e0bc710347fadad55910846ee36f0681d0dca8<br>Author: Kees Cook &lt;<a hre=
+f=3D"mailto:keescook@chromium.org" target=3D"_blank">keescook@chromium.org<=
+/a>&gt;<br>Date:=C2=A0=C2=A0 Tue Oct 30 22:12:56 2018 +0100<br><br>=C2=A0=
+=C2=A0=C2=A0 ARM: 8806/1: kprobes: Fix false positive with FORTIFY_SOURCE<b=
+r>=C2=A0=C2=A0=C2=A0 <br>=C2=A0=C2=A0=C2=A0 commit e46daee53bb50bde38805f18=
+23a182979724c229 upstream.<br><br></div><div>But not the fix for it (upstre=
+am):<br></div><div><br></div><div>commit 0ac569bf6a7983c0c5747d6df8db9dc05b=
+c92b6c<br>Author: Mathieu Desnoyers &lt;<a href=3D"mailto:mathieu.desnoyers=
+@efficios.com" target=3D"_blank">mathieu.desnoyers@efficios.com</a>&gt;<br>=
+Date:=C2=A0=C2=A0 Tue Feb 5 16:37:40 2019 +0100<br><br>=C2=A0=C2=A0=C2=A0 A=
+RM: 8834/1: Fix: kprobes: optimized kprobes illegal instruction<br><br></di=
+v><div>So lttng-modules refuses to build against your kernel configuration =
+with CONFIG_OPTPROBES=3Dy</div><div>to save you the trouble of having kprob=
+es trigger illegal instruction OOPS at runtime.<br></div><div><br></div><di=
+v>I&#39;m unusure who maintains that raspberrypi rt kernel tree. However, t=
+he upstream rt tree<br></div><div>for 4.14-rt maintained by Tom Zanussi see=
+ms to contain the fix:<br></div><div><br></div><div><a href=3D"https://kern=
+el.googlesource.com/pub/scm/linux/kernel/git/rt/linux-stable-rt/+/refs/head=
+s/v4.14-rt" target=3D"_blank">https://kernel.googlesource.com/pub/scm/linux=
+/kernel/git/rt/linux-stable-rt/+/refs/heads/v4.14-rt</a><br></div><div><br>=
+</div><div>(currently at 4.14.109-rt57).<br></div><div><br></div><div>So yo=
+u should contact your raspberrypi linux rt tree clone maintainer and ask hi=
+m<br></div><div>to upgrade, or, as stated in the #error generated by lttng-=
+modules, simply ensure<br></div><div>CONFIG_OPTPROBES is unset when you bui=
+ld your kernel. You should ask the<br></div><div>raspberrypi community advi=
+ce on how to ensure this configuration option is not</div><div>overridden b=
+y the raspberrypi build system.<br></div><div><br></div><div>Thanks,<br></d=
+iv><div><br></div><div>Mathieu</div><div><br></div><blockquote style=3D"bor=
+der-left:2px solid rgb(16,16,255);margin-left:5px;padding-left:5px;color:rg=
+b(0,0,0);font-weight:normal;font-style:normal;text-decoration:none;font-fam=
+ily:Helvetica,Arial,sans-serif;font-size:12pt"><div dir=3D"ltr"><div dir=3D=
+"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div><span style=3D"color:rgb(36,41=
+,46);font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,Helv=
+etica,Arial,sans-serif,&quot;Apple Color Emoji&quot;,&quot;Segoe UI Emoji&q=
+uot;,&quot;Segoe UI Symbol&quot;;font-size:14px"><br></span></div><div><spa=
+n style=3D"color:rgb(36,41,46);font-family:-apple-system,BlinkMacSystemFont=
+,&quot;Segoe UI&quot;,Helvetica,Arial,sans-serif,&quot;Apple Color Emoji&qu=
+ot;,&quot;Segoe UI Emoji&quot;,&quot;Segoe UI Symbol&quot;;font-size:14px">=
+<br></span></div><div><font face=3D"-apple-system, BlinkMacSystemFont, Sego=
+e UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Sego=
+e UI Symbol" color=3D"#24292e"><span style=3D"font-size:14px">Thank you so =
+much for your attention and looking forward to your reply soon.</span></fon=
+t></div><div><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Hel=
+vetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symb=
+ol" color=3D"#24292e"><span style=3D"font-size:14px"><br></span></font></di=
+v><div><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica=
+, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" co=
+lor=3D"#24292e"><span style=3D"font-size:14px"><br></span></font></div><div=
+><font face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Aria=
+l, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D=
+"#24292e"><span style=3D"font-size:14px"><br></span></font></div><div><font=
+ face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, san=
+s-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#2429=
+2e"><span style=3D"font-size:14px">Best Regards,</span></font></div><div><f=
+ont face=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, =
+sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#2=
+4292e"><span style=3D"font-size:14px"><br></span></font></div><div><font fa=
+ce=3D"-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-s=
+erif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e"=
+><span style=3D"font-size:14px"><br></span></font></div><div><font face=3D"=
+-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, =
+Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e"><span=
+ style=3D"font-size:14px"><br></span></font></div><div><font face=3D"-apple=
+-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple =
+Color Emoji, Segoe UI Emoji, Segoe UI Symbol" color=3D"#24292e"><span style=
+=3D"font-size:14px">Nicholas Sadjoli</span></font></div></div></div></div><=
+/div>
+<br>_______________________________________________<br>lttng-dev mailing li=
+st<br><a href=3D"mailto:lttng-dev@lists.lttng.org" target=3D"_blank">lttng-=
+dev@lists.lttng.org</a><br><a href=3D"https://lists.lttng.org/cgi-bin/mailm=
+an/listinfo/lttng-dev" target=3D"_blank">https://lists.lttng.org/cgi-bin/ma=
+ilman/listinfo/lttng-dev</a><br></blockquote></div><div><br></div><div>-- <=
+br></div><div>Mathieu Desnoyers<br>EfficiOS Inc.<br><a href=3D"http://www.e=
+fficios.com" target=3D"_blank">http://www.efficios.com</a></div></div></div=
+></blockquote></div>
 
+--000000000000d114d90587946491--
 
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
- =20
-------=_Part_1088919_1252295608.1556329487898
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-<html><head></head><body><div class=3D"ydp501fd31eyahoo-style-wrap" style=
-=3D"font-family:Helvetica Neue, Helvetica, Arial, sans-serif;font-size:16px=
-;"><div></div>
-        <div>I attach the lttng-sessiond -vvv output,</div><div>John</div><=
-div><br></div>
-       =20
-        </div><div id=3D"yahoo_quoted_6882624374" class=3D"yahoo_quoted">
-            <div style=3D"font-family:'Helvetica Neue', Helvetica, Arial, s=
-ans-serif;font-size:13px;color:#26282a;">
-               =20
-                <div>
-                    On Friday, April 26, 2019, 9:38:36 p.m. EDT, whalajam--=
-- via lttng-dev &lt;lttng-dev@lists.lttng.org&gt; wrote:
-                </div>
-                <div><br></div>
-                <div><br></div>
-                <div><div id=3D"yiv3630930461"><div><div class=3D"yiv363093=
-0461yahoo-style-wrap" style=3D"font-family:Helvetica Neue, Helvetica, Arial=
-, sans-serif;font-size:16px;"><div><span><div dir=3D"ltr" style=3D"font-fam=
-ily:Helvetica, Arial, sans-serif;">Hi,</div><div dir=3D"ltr" style=3D"font-=
-family:Helvetica, Arial, sans-serif;">I have one docker container on which =
-I installed LTTng version 2.10.I use the same Docker container to build and=
- run the application.&nbsp;</div><div dir=3D"ltr" style=3D"font-family:Helv=
-etica, Arial, sans-serif;">The problem I have is that there are no traces i=
-n the path specified when doing "lttng create". "lttng view"fails complaini=
-ng about files not found, the trace directories are sometimes added to the =
-path but the /root/lttng../../../channel0_* files are empty.=3DC2=3DA0I've =
-followed the installation instructions from=3DC2=3DA0http://frederic-wou.ne=
-t/lttng/and docs on=3DC2=3DA0https://lttng.org/docs/v2.10/=3DC2=3DA0These a=
-re the commands: "lttng enable -u a:b", "lttng start", &lt;excercise-the-tr=
-acepoints&gt;,"lttng stop" and "lttng view". lttng-consumerd is running. Ru=
-nning 'lttng-sessiond --vvv' returns DEBUG info and an error about server a=
-lready runningWhat could be the reason for the failure, how can I debug it?=
-</div><div dir=3D"ltr" style=3D"font-family:Helvetica, Arial, sans-serif;">=
-John<br></div><div><br></div></span><br></div></div></div></div>___________=
-____________________________________<br>lttng-dev mailing list<br><a ymailt=
-o=3D"mailto:lttng-dev@lists.lttng.org" href=3D"mailto:lttng-dev@lists.lttng=
-.org">lttng-dev@lists.lttng.org</a><br><a href=3D"https://lists.lttng.org/c=
-gi-bin/mailman/listinfo/lttng-dev" target=3D"_blank">https://lists.lttng.or=
-g/cgi-bin/mailman/listinfo/lttng-dev</a><br></div>
-            </div>
-        </div></body></html>
-------=_Part_1088919_1252295608.1556329487898--
-
-------=_Part_1088920_1868740719.1556329487899
-Content-Type: text/plain
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="=?UTF-8?b?bHR0bmcudHh0?="
-Content-ID: <0afeda91-e20b-7a2a-c8d1-3c4689769c0f@yahoo.com>
-
-IyBsdHRuZy1zZXNzaW9uZCAtdnZ2CkRFQlVHMSAtIDIyOjM2OjM5LjkwODQyODYwMCBbMjM1MTEv
-MjM1MTFdOiBbc2Vzc2lvbmQgY29uZmlndXJhdGlvbl0KREVCVUcxIC0gMjI6MzY6MzkuOTA4NTQ0
-NDAwIFsyMzUxMS8yMzUxMV06IAl2ZXJib3NlOiAgICAgICAgICAgICAgICAgICAgICAgMwpERUJV
-RzEgLSAyMjozNjozOS45MDg1NTMwMDAgWzIzNTExLzIzNTExXTogCXZlcmJvc2UgY29uc3VtZXI6
-ICAgICAgICAgICAgICAwCkRFQlVHMSAtIDIyOjM2OjM5LjkwODU2MDgwMCBbMjM1MTEvMjM1MTFd
-OiAJcXVpZXQgbW9kZTogICAgICAgICAgICAgICAgICAgIEZhbHNlCkRFQlVHMSAtIDIyOjM2OjM5
-LjkwODU2ODAwMCBbMjM1MTEvMjM1MTFdOiAJYWdlbnRfdGNwX3BvcnQ6ICAgICAgICAgICAgICAg
-IFs1MzQ1LCA1MzU0XQpERUJVRzEgLSAyMjozNjozOS45MDg1NzU0MDAgWzIzNTExLzIzNTExXTog
-CWFwcGxpY2F0aW9uIHNvY2tldCB0aW1lb3V0OiAgICA1CkRFQlVHMSAtIDIyOjM2OjM5LjkwODU4
-MzAwMCBbMjM1MTEvMjM1MTFdOiAJbm8ta2VybmVsOiAgICAgICAgICAgICAgICAgICAgIEZhbHNl
-CkRFQlVHMSAtIDIyOjM2OjM5LjkwODU5MTYwMCBbMjM1MTEvMjM1MTFdOiAJYmFja2dyb3VuZDog
-ICAgICAgICAgICAgICAgICAgIEZhbHNlCkRFQlVHMSAtIDIyOjM2OjM5LjkwODU5OTIwMCBbMjM1
-MTEvMjM1MTFdOiAJZGFlbW9uaXplOiAgICAgICAgICAgICAgICAgICAgIEZhbHNlCkRFQlVHMSAt
-IDIyOjM2OjM5LjkwODYwNjcwMCBbMjM1MTEvMjM1MTFdOiAJc2lnbmFsIHBhcmVudCBvbiBzdGFy
-dDogICAgICAgIEZhbHNlCkRFQlVHMSAtIDIyOjM2OjM5LjkwODYxMzcwMCBbMjM1MTEvMjM1MTFd
-OiAJdHJhY2luZyBncm91cCBuYW1lOiAgICAgICAgICAgIHRyYWNpbmcKREVCVUcxIC0gMjI6MzY6
-MzkuOTA4NjIxMjAwIFsyMzUxMS8yMzUxMV06IAlrbW9kX3Byb2JlX2xpc3Q6ICAgICAgICAgICAg
-ICAgTm9uZQpERUJVRzEgLSAyMjozNjozOS45MDg2Mjg3MDAgWzIzNTExLzIzNTExXTogCWttb2Rf
-ZXh0cmFfcHJvYmVfbGlzdDogICAgICAgICBOb25lCkRFQlVHMSAtIDIyOjM2OjM5LjkwODYzNTkw
-MCBbMjM1MTEvMjM1MTFdOiAJcnVuZGlyOiAgICAgICAgICAgICAgICAgICAgICAgIC92YXIvcnVu
-L2x0dG5nCkRFQlVHMSAtIDIyOjM2OjM5LjkwODY0MzMwMCBbMjM1MTEvMjM1MTFdOiAJYXBwbGlj
-YXRpb24gc29ja2V0IHBhdGg6ICAgICAgIC92YXIvcnVuL2x0dG5nL2x0dG5nLXVzdC1zb2NrLTcK
-REVCVUcxIC0gMjI6MzY6MzkuOTA4NjUxMDAwIFsyMzUxMS8yMzUxMV06IAljbGllbnQgc29ja2V0
-IHBhdGg6ICAgICAgICAgICAgL3Zhci9ydW4vbHR0bmcvY2xpZW50LWx0dG5nLXNlc3Npb25kCkRF
-QlVHMSAtIDIyOjM2OjM5LjkwODY1ODQwMCBbMjM1MTEvMjM1MTFdOiAJd2FpdCBzaG0gcGF0aDog
-ICAgICAgICAgICAgICAgIC9sdHRuZy11c3Qtd2FpdC03CkRFQlVHMSAtIDIyOjM2OjM5LjkwODY2
-NTQwMCBbMjM1MTEvMjM1MTFdOiAJaGVhbHRoIHNvY2tldCBwYXRoOiAgICAgICAgICAgIC92YXIv
-cnVuL2x0dG5nL3Nlc3Npb25kLWhlYWx0aApERUJVRzEgLSAyMjozNjozOS45MDg2NzI5MDAgWzIz
-NTExLzIzNTExXTogCUxUVE5HX1VTVF9DTE9DS19QTFVHSU46ICAgICAgICBOb25lCkRFQlVHMSAt
-IDIyOjM2OjM5LjkwODY4MDAwMCBbMjM1MTEvMjM1MTFdOiAJcGlkIGZpbGUgcGF0aDogICAgICAg
-ICAgICAgICAgIC92YXIvcnVuL2x0dG5nL2x0dG5nLXNlc3Npb25kLnBpZApERUJVRzEgLSAyMjoz
-NjozOS45MDg2ODczMDAgWzIzNTExLzIzNTExXTogCWxvY2sgZmlsZSBwYXRoOiAgICAgICAgICAg
-ICAgICAvdmFyL3J1bi9sdHRuZy9sdHRuZy1zZXNzaW9uZC5sY2sKREVCVUcxIC0gMjI6MzY6Mzku
-OTA4Njk0NDAwIFsyMzUxMS8yMzUxMV06IAlzZXNzaW9uIGxvYWQgcGF0aDogICAgICAgICAgICAg
-Tm9uZQpERUJVRzEgLSAyMjozNjozOS45MDg3MDE3MDAgWzIzNTExLzIzNTExXTogCWFnZW50IHBv
-cnQgZmlsZSBwYXRoOiAgICAgICAgICAvdmFyL3J1bi9sdHRuZy9hZ2VudC5wb3J0CkRFQlVHMSAt
-IDIyOjM2OjM5LjkwODcxMjEwMCBbMjM1MTEvMjM1MTFdOiAJY29uc3VtZXJkMzIgcGF0aDogICAg
-ICAgICAgICAgIC92YXIvcnVuL2x0dG5nL3VzdGNvbnN1bWVyZDMyCkRFQlVHMSAtIDIyOjM2OjM5
-LjkwODcxOTcwMCBbMjM1MTEvMjM1MTFdOiAJY29uc3VtZXJkMzIgYmluIHBhdGg6ICAgICAgICAg
-IFVua25vd24KREVCVUcxIC0gMjI6MzY6MzkuOTA4NzI2NzAwIFsyMzUxMS8yMzUxMV06IAljb25z
-dW1lcmQzMiBsaWIgZGlyOiAgICAgICAgICAgVW5rbm93bgpERUJVRzEgLSAyMjozNjozOS45MDg3
-MzM2MDAgWzIzNTExLzIzNTExXTogCWNvbnN1bWVyZDMyIGVyciB1bml4IHNvY2sgcGF0aDovdmFy
-L3J1bi9sdHRuZy91c3Rjb25zdW1lcmQzMi9lcnJvcgpERUJVRzEgLSAyMjozNjozOS45MDg3NDA5
-MDAgWzIzNTExLzIzNTExXTogCWNvbnN1bWVyZDMyIGNtZCB1bml4IHNvY2sgcGF0aDovdmFyL3J1
-bi9sdHRuZy91c3Rjb25zdW1lcmQzMi9jb21tYW5kCkRFQlVHMSAtIDIyOjM2OjM5LjkwODc0ODIw
-MCBbMjM1MTEvMjM1MTFdOiAJY29uc3VtZXJkNjQgcGF0aDogICAgICAgICAgICAgIC92YXIvcnVu
-L2x0dG5nL3VzdGNvbnN1bWVyZDY0CkRFQlVHMSAtIDIyOjM2OjM5LjkwODc1NTMwMCBbMjM1MTEv
-MjM1MTFdOiAJY29uc3VtZXJkNjQgYmluIHBhdGg6ICAgICAgICAgIC91c3IvbGliNjQvbHR0bmcv
-bGliZXhlYy9sdHRuZy1jb25zdW1lcmQKREVCVUcxIC0gMjI6MzY6MzkuOTA4NzYyNzAwIFsyMzUx
-MS8yMzUxMV06IAljb25zdW1lcmQ2NCBsaWIgZGlyOiAgICAgICAgICAgL3Vzci9saWI2NApERUJV
-RzEgLSAyMjozNjozOS45MDg3NzI1MDAgWzIzNTExLzIzNTExXTogCWNvbnN1bWVyZDY0IGVyciB1
-bml4IHNvY2sgcGF0aDovdmFyL3J1bi9sdHRuZy91c3Rjb25zdW1lcmQ2NC9lcnJvcgpERUJVRzEg
-LSAyMjozNjozOS45MDg3ODQ1MDAgWzIzNTExLzIzNTExXTogCWNvbnN1bWVyZDY0IGNtZCB1bml4
-IHNvY2sgcGF0aDovdmFyL3J1bi9sdHRuZy91c3Rjb25zdW1lcmQ2NC9jb21tYW5kCkRFQlVHMSAt
-IDIyOjM2OjM5LjkwODc5MTkwMCBbMjM1MTEvMjM1MTFdOiAJa2NvbnN1bWVyZCBwYXRoOiAgICAg
-ICAgICAgICAgIC92YXIvcnVuL2x0dG5nL2tjb25zdW1lcmQKREVCVUcxIC0gMjI6MzY6MzkuOTA4
-Nzk5MzAwIFsyMzUxMS8yMzUxMV06IAlrY29uc3VtZXJkIGVyciB1bml4IHNvY2sgcGF0aDogL3Zh
-ci9ydW4vbHR0bmcva2NvbnN1bWVyZC9lcnJvcgpERUJVRzEgLSAyMjozNjozOS45MDg4MDcyMDAg
-WzIzNTExLzIzNTExXTogCWtjb25zdW1lcmQgY21kIHVuaXggc29jayBwYXRoOiAvdmFyL3J1bi9s
-dHRuZy9rY29uc3VtZXJkL2NvbW1hbmQKREVCVUczIC0gMjI6MzY6MzkuOTA4ODE1MDAwIFsyMzUx
-MS8yMzUxMV06IENyZWF0aW5nIExUVG5nIHJ1biBkaXJlY3Rvcnk6IC92YXIvcnVuL2x0dG5nIChp
-biBjcmVhdGVfbHR0bmdfcnVuZGlyKCkgYXQgbWFpbi5jOjUzMDEpCkVycm9yOiBBIHNlc3Npb24g
-ZGFlbW9uIGlzIGFscmVhZHkgcnVubmluZy4KREVCVUcxIC0gMjI6MzY6MzkuOTA4OTYwNDAwIFsy
-MzUxMS8yMzUxMV06IENsZWFuaW5nIHVwIG9wdGlvbnMgKGluIHNlc3Npb25kX2NsZWFudXBfb3B0
-aW9ucygpIGF0IG1haW4uYzo2NDIpCkRFQlVHMSAtIDIyOjM2OjM5LjkwODk3MzYwMCBbMjM1MTEv
-MjM1MTFdOiBEZXN0cm95aW5nIHJ1bl9hcyB3b3JrZXIgKGluIHJ1bl9hc19kZXN0cm95X3dvcmtl
-cigpIGF0IHJ1bmFzLmM6NzEwKQoK
-
-------=_Part_1088920_1868740719.1556329487899
+--===============6164888423423465612==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -190,4 +418,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
-------=_Part_1088920_1868740719.1556329487899--
+--===============6164888423423465612==--
