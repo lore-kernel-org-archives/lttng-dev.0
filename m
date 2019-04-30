@@ -1,20 +1,15 @@
-From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
-Subject: Re: [PATCH lttng-tools] Bump LTTNG_UST_ABI to 8.0
-Date: Tue, 30 Apr 2019 15:12:52 -0400
-Message-ID: <20190430191250.GA11256__1212.37837463326$1556651593$gmane$org@gmail.com>
-References: <20190430185951.12050-1-mathieu.desnoyers@efficios.com>
+From: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+Subject: [PATCH lttng-tools] Fix: getenv can return null
+Date: Tue, 30 Apr 2019 19:09:24 -0400
+Message-ID: <20190430230924.23711-1-jonathan.rajotte-julien__48695.4177425773$1556665792$gmane$org@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-qt1-f196.google.com (mail-qt1-f196.google.com
- [209.85.160.196])
- by lists.lttng.org (Postfix) with ESMTPS id 44trlC3tH7z1Kc0
- for <lttng-dev@lists.lttng.org>; Tue, 30 Apr 2019 15:12:55 -0400 (EDT)
-Received: by mail-qt1-f196.google.com with SMTP id i31so8833587qti.13
- for <lttng-dev@lists.lttng.org>; Tue, 30 Apr 2019 12:12:55 -0700 (PDT)
-Content-Disposition: inline
-In-Reply-To: <20190430185951.12050-1-mathieu.desnoyers@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 44ty0D5Q0Kz1Kwg
+ for <lttng-dev@lists.lttng.org>; Tue, 30 Apr 2019 19:09:32 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,45 +19,33 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
+To: lttng-dev@lists.lttng.org
+Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Merged in master and stable-2.11.
+On system with LANG not defined getenv will return null.
 
-I added a note to the commit message referencing the fix
-(6c737d05) in the lttng-ust tree.
+An example of such system is the lava runner used by ci.lttng.org.
 
-Thanks!
-J=E9r=E9mie
+https://ci.lttng.org/view/System%20Tests/
 
-On Tue, Apr 30, 2019 at 02:59:51PM -0400, Mathieu Desnoyers wrote:
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
->  src/bin/lttng-sessiond/lttng-ust-abi.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> =
+Signed-off-by: Jonathan Rajotte <jonathan.rajotte-julien@efficios.com>
+---
+ src/common/time.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> diff --git a/src/bin/lttng-sessiond/lttng-ust-abi.h b/src/bin/lttng-sessi=
-ond/lttng-ust-abi.h
-> index 687eb0b2..40ba1f47 100644
-> --- a/src/bin/lttng-sessiond/lttng-ust-abi.h
-> +++ b/src/bin/lttng-sessiond/lttng-ust-abi.h
-> @@ -44,8 +44,8 @@
->  #define LTTNG_UST_COMM_MAGIC			0xC57C57C5
->  =
-
->  /* Version for ABI between liblttng-ust, sessiond, consumerd */
-> -#define LTTNG_UST_ABI_MAJOR_VERSION		7
-> -#define LTTNG_UST_ABI_MINOR_VERSION		2
-> +#define LTTNG_UST_ABI_MAJOR_VERSION		8
-> +#define LTTNG_UST_ABI_MINOR_VERSION		0
->  =
-
->  struct lttng_ust_calibrate;
->  =
-
-> -- =
-
-> 2.11.0
-> =
+diff --git a/src/common/time.c b/src/common/time.c
+index 5519e3ab4..a01c16df5 100644
+--- a/src/common/time.c
++++ b/src/common/time.c
+@@ -76,7 +76,7 @@ void __attribute__((constructor)) init_locale_utf8_support(void)
+ 
+ 	if (program_locale && strstr(program_locale, "utf8")) {
+ 		utf8_output_supported = true;
+-	} else if (strstr(lang, "utf8")) {
++	} else if (lang && strstr(lang, "utf8")) {
+ 		utf8_output_supported = true;
+ 	}
+ }
+-- 
+2.17.1
