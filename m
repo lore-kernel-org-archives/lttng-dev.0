@@ -1,16 +1,16 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [RFC PATCH lttng-tools v2 07/20] Document
- inter-proccesses communication protocols requirements
-Date: Wed,  1 May 2019 15:34:31 -0400
-Message-ID: <20190501193444.17403-8-ylamarre__4318.69865148968$1556739878$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-tools v2 03/20] Clean-up: Switch enum
+ fields in lttcomm_consumer_status_msg
+Date: Wed,  1 May 2019 15:34:27 -0400
+Message-ID: <20190501193444.17403-4-ylamarre__29972.8302912385$1556739903$gmane$org@efficios.com>
 References: <20190501193444.17403-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44vTBC6b42z1Kj4
- for <lttng-dev@lists.lttng.org>; Wed,  1 May 2019 15:34:59 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 44vTBD6qTKz1KjF
+ for <lttng-dev@lists.lttng.org>; Wed,  1 May 2019 15:35:00 -0400 (EDT)
 In-Reply-To: <20190501193444.17403-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,37 +25,26 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-The introduction of serialization changes previously established
-requirements for lttng-tools.
-This document drafts the guidelines to follow in future communication
-protocol development.
+Size of an enum type is not guaranteed by the C spec, which is why the
+field's tpye is replaced to uin32_t.
 
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
-Unsure how this document should be structured and what specific information
-should be kept here or even if it's the right place.
-It might be interesting to move this to lttng-doc since it is likely to also
-document communication protocols between consumers (ust and kernel modules)
-and the sessiond.
+ src/common/sessiond-comm/sessiond-comm.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- doc/comm-requirements.txt | 9 +++++++++
- 1 file changed, 9 insertions(+)
- create mode 100644 doc/comm-requirements.txt
-
-diff --git a/doc/comm-requirements.txt b/doc/comm-requirements.txt
-new file mode 100644
-index 00000000..7f62260d
---- /dev/null
-+++ b/doc/comm-requirements.txt
-@@ -0,0 +1,9 @@
-+LTTng Communication Protocols' Requirements
-+Yannick Lamarre, April 2019
-+
-+This document describes the requirements for the development of communication
-+protocols.
-+The integration of serialization officially breaks from the implicit
-+requirement to keep backward compatibility by removing padding fields from
-+serialized structures. This forces users to upgrade in a lock-step fashion.
-+
+diff --git a/src/common/sessiond-comm/sessiond-comm.h b/src/common/sessiond-comm/sessiond-comm.h
+index 47ade871..c6ec8eed 100644
+--- a/src/common/sessiond-comm/sessiond-comm.h
++++ b/src/common/sessiond-comm/sessiond-comm.h
+@@ -768,7 +768,7 @@ struct lttcomm_consumer_channel_monitor_msg {
+  * Status message returned to the sessiond after a received command.
+  */
+ struct lttcomm_consumer_status_msg {
+-	enum lttcomm_return_code ret_code;
++	uint32_t ret_code; /* enum lttcomm_return_code */
+ } LTTNG_PACKED;
+ 
+ struct lttcomm_consumer_status_channel {
 -- 
 2.11.0
