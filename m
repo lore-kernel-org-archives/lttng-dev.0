@@ -1,16 +1,15 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [RFC PATCH lttng-tools v2 05/20] Clean-up: Remove
- unused structure
-Date: Wed,  1 May 2019 15:34:29 -0400
-Message-ID: <20190501193444.17403-6-ylamarre__25272.8700915881$1556739842$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-tools v2 07/20] Document
+ inter-proccesses communication protocols requirements
+Date: Wed,  1 May 2019 15:34:31 -0400
+Message-ID: <20190501193444.17403-8-ylamarre__4318.69865148968$1556739878$gmane$org@efficios.com>
 References: <20190501193444.17403-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44vTBC5GjGz1Khw
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 44vTBC6b42z1Kj4
  for <lttng-dev@lists.lttng.org>; Wed,  1 May 2019 15:34:59 -0400 (EDT)
 In-Reply-To: <20190501193444.17403-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -26,36 +25,37 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
+The introduction of serialization changes previously established
+requirements for lttng-tools.
+This document drafts the guidelines to follow in future communication
+protocol development.
+
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
- src/common/sessiond-comm/sessiond-comm.h | 15 ---------------
- 1 file changed, 15 deletions(-)
+Unsure how this document should be structured and what specific information
+should be kept here or even if it's the right place.
+It might be interesting to move this to lttng-doc since it is likely to also
+document communication protocols between consumers (ust and kernel modules)
+and the sessiond.
 
-diff --git a/src/common/sessiond-comm/sessiond-comm.h b/src/common/sessiond-comm/sessiond-comm.h
-index 84d87808..f9f6f97b 100644
---- a/src/common/sessiond-comm/sessiond-comm.h
-+++ b/src/common/sessiond-comm/sessiond-comm.h
-@@ -782,21 +782,6 @@ struct lttcomm_consumer_status_channel {
- #include <lttng/ust-abi.h>
- 
- /*
-- * Data structure for the commands sent from sessiond to UST.
-- */
--struct lttcomm_ust_msg {
--	uint32_t handle;
--	uint32_t cmd;
--	union {
--		struct lttng_ust_channel channel;
--		struct lttng_ust_stream stream;
--		struct lttng_ust_event event;
--		struct lttng_ust_context context;
--		struct lttng_ust_tracer_version version;
--	} u;
--} LTTNG_PACKED;
--
--/*
-  * Data structure for the response from UST to the session daemon.
-  * cmd_type is sent back in the reply for validation.
-  */
+ doc/comm-requirements.txt | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+ create mode 100644 doc/comm-requirements.txt
+
+diff --git a/doc/comm-requirements.txt b/doc/comm-requirements.txt
+new file mode 100644
+index 00000000..7f62260d
+--- /dev/null
++++ b/doc/comm-requirements.txt
+@@ -0,0 +1,9 @@
++LTTng Communication Protocols' Requirements
++Yannick Lamarre, April 2019
++
++This document describes the requirements for the development of communication
++protocols.
++The integration of serialization officially breaks from the implicit
++requirement to keep backward compatibility by removing padding fields from
++serialized structures. This forces users to upgrade in a lock-step fashion.
++
 -- 
 2.11.0
