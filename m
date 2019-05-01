@@ -1,16 +1,17 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [RFC PATCH lttng-tools v2 00/20] Improvements in
- sessiond-comm
-Date: Wed,  1 May 2019 15:34:24 -0400
-Message-ID: <20190501193444.17403-1-ylamarre__20110.8576658711$1556739381$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-tools v2 12/20] Add serdes functions
+ for lttng_event_context
+Date: Wed,  1 May 2019 15:34:36 -0400
+Message-ID: <20190501193444.17403-13-ylamarre__10255.8789820009$1556739417$gmane$org@efficios.com>
+References: <20190501193444.17403-1-ylamarre@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44vTB72P0Sz1KbG
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 44vTB72V5Nz1KbH
  for <lttng-dev@lists.lttng.org>; Wed,  1 May 2019 15:34:55 -0400 (EDT)
+In-Reply-To: <20190501193444.17403-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,57 +25,81 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-SGVyZSdzIGEgYnJvYWQgZGVzY3JpcHRpb24gb2YgY2hhbmdlcyBmcm9tIHYxOgoxKSBSZW1vdmVk
-IG1lbnRpb25zIG9mIGJpZyBlbmRpYW4gc3RvcmFnZSBpbiBqZ2FsYXIgcGF0Y2ggc2luY2UgdGhl
-eSdyZQogICBvYnNvbGV0ZQoyKSBDaGFuZ2VkIGNvbW1pdCB0aXRsZXMgdG8gc3BlY2lmeSB0YXJn
-ZXRlZCBzdHJ1Y3RzCjMpIEZpeGVkIHJlcG9ydGVkIHNwZWxsaW5nIGVycm9ycwo0KSBBZGRlZCBt
-aXNzaW5nIGFzc2VydHMgaW4gc2VyZGVzIGZ1bmN0aW9ucwo1KSBGaXhlZCByZXBvcnRlZCBjb2Rp
-bmcgc3R5bGUgaXNzdWVzCjYpIERvY3VtZW50IGZvciBpbnRlci1wcm9jZXNzIGNvbW0gcmVxdWly
-ZW1lbnRzIGFkZGVkCiAgIChSRkMgb24gaG93IHRoaXMgc2hvdWxkIGJlIHN0cnVjdHVyZWQpCjcp
-IFJlcGhyYXNlZCBzb21lIGNvbW1pdCBtZXNzYWdlcyAocG9pbnRlcnMgYW5kIHBhZGRpbmcgcmVt
-b3ZhbCkKOCkgUmVwbGFjZWQgYXdrd2FyZCBpZi9lbHNlIGlmL2Vsc2UgY29kZSBzdHJ1Y3R1cmUg
-Ynkgc3dpdGNoIGZvciBsdHRuZ19ldmVudAogICBzZXJpYWxpemF0aW9uCgpTZWUgaW5kaXZpZHVh
-bCBwYXRjaGVzIGZvciBhZGRpdGlvbm5hbCBjb21tZW50cy4KCkrDqXLDqW1pZSBHYWxhcm5lYXUg
-KDEpOgogIEZpeDogVXNlIHBsYXRmb3JtLWluZGVwZW5kYW50IHR5cGVzIGluIHNlc3Npb25kIHRv
-IGNvbnN1bWVyZAogICAgY29tbXVuaWNhdGlvbgoKWWFubmljayBMYW1hcnJlICgxOSk6CiAgQ2xl
-YW4tdXA6IFN3aXRjaCBlbnVtIGZpZWxkcyBpbiBsdHRjb21tX2NvbnN1bWVyX21zZwogIENsZWFu
-LXVwOiBTd2l0Y2ggZW51bSBmaWVsZHMgaW4gbHR0Y29tbV9jb25zdW1lcl9zdGF0dXNfbXNnCiAg
-Q2xlYW4tdXA6IFN3aXRjaCBlbnVtIGZpZWxkcyBpbiBsdHRjb21tX2NvbnN1bWVyX3N0YXR1c19j
-aGFubmVsCiAgQ2xlYW4tdXA6IFJlbW92ZSB1bnVzZWQgc3RydWN0dXJlCiAgQ2xlYW4tdXA6IFJl
-bW92ZWQgZGVwcmVjYXRlZCBmaWVsZAogIERvY3VtZW50IGludGVyLXByb2NjZXNzZXMgY29tbXVu
-aWNhdGlvbiBwcm90b2NvbHMgcmVxdWlyZW1lbnRzCiAgQWRkIHNlcmlhbGl6ZWQgdmVyc2lvbnMg
-b2YgbHR0bmdfY2hhbm5lbCBzdHJ1Y3RzCiAgQWRkIHNlcmRlcyBmdW5jdGlvbnMgZm9yIGx0dG5n
-X2NoYW5uZWwKICBJbnRlZ3JhdGUgc2VyaWFsaXplZCBjb21tdW5pY2F0aW9uIGZvciBsdHRuZ19j
-aGFubmVsCiAgQWRkIHNlcmlhbGl6ZWQgdmVyc2lvbnMgb2YgbHR0bmdfZXZlbnRfY29udGV4dCBz
-dHJ1Y3RzCiAgQWRkIHNlcmRlcyBmdW5jdGlvbnMgZm9yIGx0dG5nX2V2ZW50X2NvbnRleHQKICBJ
-bnRlZ3JhdGUgc2VyaWFsaXplZCBjb21tdW5pY2F0aW9uIGZvciBsdHRuZ19ldmVudF9jb250ZXh0
-CiAgQWRkIHNlcmlhbGl6ZWQgdmVyc2lvbnMgb2YgbHR0bmdfZXZlbnQgc3RydWN0cwogIEFkZCBz
-ZXJkZXMgZnVuY3Rpb25zIGZvciBsdHRuZ19ldmVudAogIEludGVncmF0ZSBzZXJpYWxpemVkIGNv
-bW11bmljYXRpb24gZm9yIGx0dG5nX2V2ZW50CiAgQWRkIHNlcmlhbGl6ZWQgdmVyc2lvbnMgb2Yg
-bHR0bmdfc25hcHNob3Rfb3V0cHV0IHN0cnVjdHMKICBBZGQgc2VyZGVzIGZ1bmN0aW9ucyBmb3Ig
-bHR0bmdfc25hcHNob3Rfb3V0cHV0CiAgSW50ZWdyYXRlIHNlcmlhbGl6ZWQgY29tbXVuaWNhdGlv
-biBmb3IgbHR0bmdfc25hcHNob3Rfb3V0cHV0CiAgSW50cm9kdWNlIHNlcmlhbGl6YXRpb24gdW5p
-dCB0ZXN0CgogLmdpdGlnbm9yZSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgfCAgIDEgKwogZG9jL2NvbW0tcmVxdWlyZW1lbnRzLnR4dCAgICAgICAgICAgICAgICAgICAg
-ICAgICAgfCAgIDkgKwogaW5jbHVkZS9sdHRuZy9jaGFubmVsLWludGVybmFsLmggICAgICAgICAg
-ICAgICAgICAgfCAgMzUgKysKIGluY2x1ZGUvbHR0bmcvZXZlbnQtaW50ZXJuYWwuaCAgICAgICAg
-ICAgICAgICAgICAgIHwgIDU5ICsrKwogaW5jbHVkZS9sdHRuZy9zbmFwc2hvdC1pbnRlcm5hbC5o
-ICAgICAgICAgICAgICAgICAgfCAgMTIgKwogc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9jbGllbnQu
-YyAgICAgICAgICAgICAgICAgICAgfCAgOTMgKysrLQogc3JjL2Jpbi9sdHRuZy1zZXNzaW9uZC9j
-b25zdW1lci5jICAgICAgICAgICAgICAgICAgfCAgIDUgKy0KIHNyYy9jb21tb24va2VybmVsLWNv
-bnN1bWVyL2tlcm5lbC1jb25zdW1lci5jICAgICAgIHwgIDExICstCiBzcmMvY29tbW9uL3Nlc3Np
-b25kLWNvbW0vc2Vzc2lvbmQtY29tbS5jICAgICAgICAgICB8IDQ5MCArKysrKysrKysrKysrKysr
-KysrKysKIHNyYy9jb21tb24vc2Vzc2lvbmQtY29tbS9zZXNzaW9uZC1jb21tLmggICAgICAgICAg
-IHwgMTQ5ICsrKysrLS0KIHNyYy9jb21tb24vdXN0LWNvbnN1bWVyL3VzdC1jb25zdW1lci5jICAg
-ICAgICAgICAgIHwgIDExICstCiBzcmMvbGliL2x0dG5nLWN0bC9sdHRuZy1jdGwuYyAgICAgICAg
-ICAgICAgICAgICAgICB8ICA1NyArLS0KIHNyYy9saWIvbHR0bmctY3RsL3NuYXBzaG90LmMgICAg
-ICAgICAgICAgICAgICAgICAgIHwgIDI2ICstCiB0ZXN0cy9yZWdyZXNzaW9uL3Rvb2xzL2xpdmUv
-TWFrZWZpbGUuYW0gICAgICAgICAgICB8ICAgMiArLQogdGVzdHMvdW5pdC9NYWtlZmlsZS5hbSAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMTQgKy0KIC4uLi91bml0L3Rlc3RfdXRpbHNf
-c2Vzc2lvbmRfY29tbV9zZXJpYWxpemF0aW9uLmMgIHwgMjkwICsrKysrKysrKysrKwogMTYgZmls
-ZXMgY2hhbmdlZCwgMTE2NSBpbnNlcnRpb25zKCspLCA5OSBkZWxldGlvbnMoLSkKIGNyZWF0ZSBt
-b2RlIDEwMDY0NCBkb2MvY29tbS1yZXF1aXJlbWVudHMudHh0CiBjcmVhdGUgbW9kZSAxMDA2NDQg
-dGVzdHMvdW5pdC90ZXN0X3V0aWxzX3Nlc3Npb25kX2NvbW1fc2VyaWFsaXphdGlvbi5jCgotLSAK
-Mi4xMS4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwps
-dHRuZy1kZXYgbWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9s
-aXN0cy5sdHRuZy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+Since those structs are only transferred across unix sockets, endianness
+is kept in host order.
+
+Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
+---
+Fixed spelling errors
+
+ src/common/sessiond-comm/sessiond-comm.c | 42 ++++++++++++++++++++++++++++++++
+ src/common/sessiond-comm/sessiond-comm.h |  1 +
+ 2 files changed, 43 insertions(+)
+
+diff --git a/src/common/sessiond-comm/sessiond-comm.c b/src/common/sessiond-comm/sessiond-comm.c
+index f1f0ebdf..26b2d66d 100644
+--- a/src/common/sessiond-comm/sessiond-comm.c
++++ b/src/common/sessiond-comm/sessiond-comm.c
+@@ -76,6 +76,48 @@ static const char *lttcomm_readable_code[] = {
+ 
+ static unsigned long network_timeout;
+ 
++LTTNG_HIDDEN
++int lttng_event_perf_counter_ctx_serialize(struct lttng_event_perf_counter_ctx_serialized *dst,
++		const struct lttng_event_perf_counter_ctx *src)
++{
++	assert(src && dst);
++	dst->type = src->type;
++	dst->config = src->config;
++	memcpy(&dst->name, &src->name, LTTNG_SYMBOL_NAME_LEN);
++	return 0;
++}
++
++LTTNG_HIDDEN
++int lttng_event_perf_counter_ctx_deserialize(struct lttng_event_perf_counter_ctx *dst,
++		const struct lttng_event_perf_counter_ctx_serialized *src)
++{
++	assert(src && dst);
++	dst->type = src->type;
++	dst->config = src->config;
++	memcpy(&dst->name, &src->name, LTTNG_SYMBOL_NAME_LEN);
++	return 0;
++}
++
++LTTNG_HIDDEN
++int lttng_event_context_serialize(struct lttng_event_context_serialized *dst,
++		const struct lttng_event_context *src)
++{
++	assert(src && dst);
++	dst->ctx = (uint32_t) src->ctx;
++	lttng_event_perf_counter_ctx_serialize(&dst->perf_counter, &src->u.perf_counter);
++	return 0;
++}
++
++LTTNG_HIDDEN
++int lttng_event_context_deserialize(struct lttng_event_context *dst,
++		const struct lttng_event_context_serialized *src)
++{
++	assert(src && dst);
++	dst->ctx = (enum lttng_event_context_type) src->ctx;
++	lttng_event_perf_counter_ctx_deserialize(&dst->u.perf_counter, &src->perf_counter);
++	return 0;
++}
++
+ int init_serialized_extended_channel(struct lttng_domain *domain, struct
+ 		lttng_channel_extended_serialized *extended)
+ {
+diff --git a/src/common/sessiond-comm/sessiond-comm.h b/src/common/sessiond-comm/sessiond-comm.h
+index f87b9098..3455a4ea 100644
+--- a/src/common/sessiond-comm/sessiond-comm.h
++++ b/src/common/sessiond-comm/sessiond-comm.h
+@@ -31,6 +31,7 @@
+ #include <lttng/snapshot-internal.h>
+ #include <lttng/save-internal.h>
+ #include <lttng/channel-internal.h>
++#include <lttng/event-internal.h>
+ #include <lttng/trigger/trigger-internal.h>
+ #include <lttng/rotate-internal.h>
+ #include <common/compat/socket.h>
+-- 
+2.11.0
