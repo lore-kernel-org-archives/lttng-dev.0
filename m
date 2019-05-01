@@ -1,16 +1,16 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [RFC PATCH lttng-tools v2 03/20] Clean-up: Switch enum
- fields in lttcomm_consumer_status_msg
-Date: Wed,  1 May 2019 15:34:27 -0400
-Message-ID: <20190501193444.17403-4-ylamarre__29972.8302912385$1556739903$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-tools v2 08/20] Add serialized
+ versions of lttng_channel structs
+Date: Wed,  1 May 2019 15:34:32 -0400
+Message-ID: <20190501193444.17403-9-ylamarre__43370.9245336772$1556739942$gmane$org@efficios.com>
 References: <20190501193444.17403-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44vTBD6qTKz1KjF
- for <lttng-dev@lists.lttng.org>; Wed,  1 May 2019 15:35:00 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 44vTBG1JBqz1Kjh
+ for <lttng-dev@lists.lttng.org>; Wed,  1 May 2019 15:35:02 -0400 (EDT)
 In-Reply-To: <20190501193444.17403-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -25,26 +25,70 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Size of an enum type is not guaranteed by the C spec, which is why the
-field's tpye is replaced to uin32_t.
+Serialized versions of lttng_channel and lttng_channel_extended are
+packed structures to be used in communication protocols for consistent
+sizes across platforms. The serialized versions are stripped of pointers
+and padding.
+
+Pointers are removed since their size can vary across processes on
+platforms supporting multiple pointer sizes (32bits vs 64bits) and this
+creates mismatches in structure sizes.
+Padding is also removed since it defeats the purpose of a packed struct
+and is not used to extend the protocols.
 
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
- src/common/sessiond-comm/sessiond-comm.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reworded commit message to better justify removal of pointer and padding
+fields.
 
-diff --git a/src/common/sessiond-comm/sessiond-comm.h b/src/common/sessiond-comm/sessiond-comm.h
-index 47ade871..c6ec8eed 100644
---- a/src/common/sessiond-comm/sessiond-comm.h
-+++ b/src/common/sessiond-comm/sessiond-comm.h
-@@ -768,7 +768,7 @@ struct lttcomm_consumer_channel_monitor_msg {
-  * Status message returned to the sessiond after a received command.
-  */
- struct lttcomm_consumer_status_msg {
--	enum lttcomm_return_code ret_code;
-+	uint32_t ret_code; /* enum lttcomm_return_code */
+ include/lttng/channel-internal.h | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/include/lttng/channel-internal.h b/include/lttng/channel-internal.h
+index 030b4701..c956c19d 100644
+--- a/include/lttng/channel-internal.h
++++ b/include/lttng/channel-internal.h
+@@ -20,11 +20,41 @@
+ 
+ #include <common/macros.h>
+ 
++struct lttng_channel_attr_serialized {
++	int overwrite;                      /* -1: session default, 1: overwrite, 0: discard */
++	uint64_t subbuf_size;               /* bytes, power of 2 */
++	uint64_t num_subbuf;                /* power of 2 */
++	unsigned int switch_timer_interval; /* usec */
++	unsigned int read_timer_interval;   /* usec */
++	uint32_t output; /* enum lttng_event_output */
++	/* LTTng 2.1 padding limit */
++	uint64_t tracefile_size;            /* bytes */
++	uint64_t tracefile_count;           /* number of tracefiles */
++	/* LTTng 2.3 padding limit */
++	unsigned int live_timer_interval;   /* usec */
++	/* LTTng 2.7 padding limit */
++
++} LTTNG_PACKED;
++
++struct lttng_channel_serialized {
++	char name[LTTNG_SYMBOL_NAME_LEN];
++	uint32_t enabled;
++	struct lttng_channel_attr_serialized attr;
++
++} LTTNG_PACKED;
++
+ struct lttng_channel_extended {
+ 	uint64_t discarded_events;
+ 	uint64_t lost_packets;
+ 	uint64_t monitor_timer_interval;
+ 	int64_t blocking_timeout;
++};
++
++struct lttng_channel_extended_serialized {
++	uint64_t discarded_events;
++	uint64_t lost_packets;
++	uint64_t monitor_timer_interval;
++	int64_t blocking_timeout;
  } LTTNG_PACKED;
  
- struct lttcomm_consumer_status_channel {
+ #endif /* LTTNG_CHANNEL_INTERNAL_H */
 -- 
 2.11.0
