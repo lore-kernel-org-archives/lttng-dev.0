@@ -1,15 +1,15 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [RFC PATCH lttng-tools v2 12/20] Add serdes functions
- for lttng_event_context
-Date: Wed,  1 May 2019 15:34:36 -0400
-Message-ID: <20190501193444.17403-13-ylamarre__10255.8789820009$1556739417$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-tools v2 10/20] Integrate serialized
+ communication for lttng_channel
+Date: Wed,  1 May 2019 15:34:34 -0400
+Message-ID: <20190501193444.17403-11-ylamarre__28873.2357135572$1556739456$gmane$org@efficios.com>
 References: <20190501193444.17403-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44vTB72V5Nz1KbH
+ by lists.lttng.org (Postfix) with ESMTPS id 44vTB72VbXz1KbJ
  for <lttng-dev@lists.lttng.org>; Wed,  1 May 2019 15:34:55 -0400 (EDT)
 In-Reply-To: <20190501193444.17403-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -25,81 +25,98 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Since those structs are only transferred across unix sockets, endianness
-is kept in host order.
+lttng-ctl and lttng-sessiond use serialized communication for
+messages using lttng_channel.
 
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
-Fixed spelling errors
+Reworded commit title to better identify changes in patch.
 
- src/common/sessiond-comm/sessiond-comm.c | 42 ++++++++++++++++++++++++++++++++
- src/common/sessiond-comm/sessiond-comm.h |  1 +
- 2 files changed, 43 insertions(+)
+ src/bin/lttng-sessiond/client.c          | 10 +++++++---
+ src/common/sessiond-comm/sessiond-comm.h |  4 ++--
+ src/lib/lttng-ctl/lttng-ctl.c            | 24 ++++--------------------
+ 3 files changed, 13 insertions(+), 25 deletions(-)
 
-diff --git a/src/common/sessiond-comm/sessiond-comm.c b/src/common/sessiond-comm/sessiond-comm.c
-index f1f0ebdf..26b2d66d 100644
---- a/src/common/sessiond-comm/sessiond-comm.c
-+++ b/src/common/sessiond-comm/sessiond-comm.c
-@@ -76,6 +76,48 @@ static const char *lttcomm_readable_code[] = {
- 
- static unsigned long network_timeout;
- 
-+LTTNG_HIDDEN
-+int lttng_event_perf_counter_ctx_serialize(struct lttng_event_perf_counter_ctx_serialized *dst,
-+		const struct lttng_event_perf_counter_ctx *src)
-+{
-+	assert(src && dst);
-+	dst->type = src->type;
-+	dst->config = src->config;
-+	memcpy(&dst->name, &src->name, LTTNG_SYMBOL_NAME_LEN);
-+	return 0;
-+}
+diff --git a/src/bin/lttng-sessiond/client.c b/src/bin/lttng-sessiond/client.c
+index f3002f91..614f19c7 100644
+--- a/src/bin/lttng-sessiond/client.c
++++ b/src/bin/lttng-sessiond/client.c
+@@ -1184,10 +1184,14 @@ error_add_context:
+ 	}
+ 	case LTTNG_ENABLE_CHANNEL:
+ 	{
+-		cmd_ctx->lsm->u.channel.chan.attr.extended.ptr =
+-				(struct lttng_channel_extended *) &cmd_ctx->lsm->u.channel.extended;
++		struct lttng_channel channel;
++		struct lttng_channel_extended extended;
 +
-+LTTNG_HIDDEN
-+int lttng_event_perf_counter_ctx_deserialize(struct lttng_event_perf_counter_ctx *dst,
-+		const struct lttng_event_perf_counter_ctx_serialized *src)
-+{
-+	assert(src && dst);
-+	dst->type = src->type;
-+	dst->config = src->config;
-+	memcpy(&dst->name, &src->name, LTTNG_SYMBOL_NAME_LEN);
-+	return 0;
-+}
-+
-+LTTNG_HIDDEN
-+int lttng_event_context_serialize(struct lttng_event_context_serialized *dst,
-+		const struct lttng_event_context *src)
-+{
-+	assert(src && dst);
-+	dst->ctx = (uint32_t) src->ctx;
-+	lttng_event_perf_counter_ctx_serialize(&dst->perf_counter, &src->u.perf_counter);
-+	return 0;
-+}
-+
-+LTTNG_HIDDEN
-+int lttng_event_context_deserialize(struct lttng_event_context *dst,
-+		const struct lttng_event_context_serialized *src)
-+{
-+	assert(src && dst);
-+	dst->ctx = (enum lttng_event_context_type) src->ctx;
-+	lttng_event_perf_counter_ctx_deserialize(&dst->u.perf_counter, &src->perf_counter);
-+	return 0;
-+}
-+
- int init_serialized_extended_channel(struct lttng_domain *domain, struct
- 		lttng_channel_extended_serialized *extended)
- {
++		lttng_channel_extended_deserialize(&extended, &cmd_ctx->lsm->u.channel.extended);
++		lttng_channel_deserialize(&channel, &cmd_ctx->lsm->u.channel.chan);
++		channel.attr.extended.ptr = &extended;
+ 		ret = cmd_enable_channel(cmd_ctx->session, &cmd_ctx->lsm->domain,
+-				&cmd_ctx->lsm->u.channel.chan,
++				&channel,
+ 				kernel_poll_pipe[1]);
+ 		break;
+ 	}
 diff --git a/src/common/sessiond-comm/sessiond-comm.h b/src/common/sessiond-comm/sessiond-comm.h
-index f87b9098..3455a4ea 100644
+index ac59d770..f87b9098 100644
 --- a/src/common/sessiond-comm/sessiond-comm.h
 +++ b/src/common/sessiond-comm/sessiond-comm.h
-@@ -31,6 +31,7 @@
- #include <lttng/snapshot-internal.h>
- #include <lttng/save-internal.h>
- #include <lttng/channel-internal.h>
-+#include <lttng/event-internal.h>
- #include <lttng/trigger/trigger-internal.h>
- #include <lttng/rotate-internal.h>
- #include <common/compat/socket.h>
+@@ -402,9 +402,9 @@ struct lttcomm_session_msg {
+ 		} LTTNG_PACKED disable;
+ 		/* Create channel */
+ 		struct {
+-			struct lttng_channel chan LTTNG_PACKED;
++			struct lttng_channel_serialized chan;
+ 			/* struct lttng_channel_extended is already packed. */
+-			struct lttng_channel_extended extended;
++			struct lttng_channel_extended_serialized extended;
+ 		} LTTNG_PACKED channel;
+ 		/* Context */
+ 		struct {
+diff --git a/src/lib/lttng-ctl/lttng-ctl.c b/src/lib/lttng-ctl/lttng-ctl.c
+index f50ca306..15f66034 100644
+--- a/src/lib/lttng-ctl/lttng-ctl.c
++++ b/src/lib/lttng-ctl/lttng-ctl.c
+@@ -1525,34 +1525,18 @@ int lttng_enable_channel(struct lttng_handle *handle,
+ 	}
+ 
+ 	memset(&lsm, 0, sizeof(lsm));
+-	memcpy(&lsm.u.channel.chan, in_chan, sizeof(lsm.u.channel.chan));
+-	lsm.u.channel.chan.attr.extended.ptr = NULL;
+-
+ 	if (!in_chan->attr.extended.ptr) {
+-		struct lttng_channel *channel;
+-		struct lttng_channel_extended *extended;
+-
+-		channel = lttng_channel_create(&handle->domain);
+-		if (!channel) {
+-			return -LTTNG_ERR_NOMEM;
+-		}
+-
+-		/*
+-		 * Create a new channel in order to use default extended
+-		 * attribute values.
+-		 */
+-		extended = (struct lttng_channel_extended *)
+-				channel->attr.extended.ptr;
+-		memcpy(&lsm.u.channel.extended, extended, sizeof(*extended));
+-		lttng_channel_destroy(channel);
++		init_serialized_extended_channel(&handle->domain, &lsm.u.channel.extended);
+ 	} else {
+ 		struct lttng_channel_extended *extended;
+ 
+ 		extended = (struct lttng_channel_extended *)
+ 				in_chan->attr.extended.ptr;
+-		memcpy(&lsm.u.channel.extended, extended, sizeof(*extended));
++		lttng_channel_extended_serialize(&lsm.u.channel.extended, extended);
+ 	}
+ 
++	lttng_channel_serialize(&lsm.u.channel.chan, in_chan);
++
+ 	/*
+ 	 * Verify that the amount of memory required to create the requested
+ 	 * buffer is available on the system at the moment.
 -- 
 2.11.0
