@@ -1,15 +1,15 @@
 From: Yannick Lamarre <ylamarre@efficios.com>
-Subject: [RFC PATCH lttng-tools v2 17/20] Add serialized
- versions of lttng_snapshot_output structs
-Date: Wed,  1 May 2019 15:34:41 -0400
-Message-ID: <20190501193444.17403-18-ylamarre__18283.5957779147$1556739668$gmane$org@efficios.com>
+Subject: [RFC PATCH lttng-tools v2 18/20] Add serdes functions
+ for lttng_snapshot_output
+Date: Wed,  1 May 2019 15:34:42 -0400
+Message-ID: <20190501193444.17403-19-ylamarre__19589.1467666783$1556739701$gmane$org@efficios.com>
 References: <20190501193444.17403-1-ylamarre@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44vTB846LMz1KcQ
+ by lists.lttng.org (Postfix) with ESMTPS id 44vTB85N5Qz1Kcd
  for <lttng-dev@lists.lttng.org>; Wed,  1 May 2019 15:34:56 -0400 (EDT)
 In-Reply-To: <20190501193444.17403-1-ylamarre@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -25,50 +25,70 @@ To: lttng-dev@lists.lttng.org
 Cc: jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Serialized version of lttng_snapshot_output is a packed structure to be
-used in communication protocols for consistent size across platforms.
-The serialized version is stripped of pointers and padding.
-
-Pointers are removed since their size can vary across processes on
-platforms supporting multiple pointer sizes (32bits vs 64bits) and this
-creates mismatches in structure sizes.
-Padding is also removed since it defeats the purpose of a packed struct
-and is not used to extend the protocols.
+Since those structs are only transferred across unix sockets, endianness
+is kept in host order.
 
 Signed-off-by: Yannick Lamarre <ylamarre@efficios.com>
 ---
-Reworded commit message to better justify removal of pointer and padding
-fields.
+1) Fixed spelling errors
+2) Added missing asserts
 
- include/lttng/snapshot-internal.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ include/lttng/snapshot-internal.h        |  3 +++
+ src/common/sessiond-comm/sessiond-comm.c | 30 ++++++++++++++++++++++++++++++
+ 2 files changed, 33 insertions(+)
 
 diff --git a/include/lttng/snapshot-internal.h b/include/lttng/snapshot-internal.h
-index b7391c22..9bde25fb 100644
+index 9bde25fb..2280cb85 100644
 --- a/include/lttng/snapshot-internal.h
 +++ b/include/lttng/snapshot-internal.h
-@@ -21,6 +21,7 @@
- #include <limits.h>
- #include <stdint.h>
- #include <lttng/constant.h>
-+#include <common/macros.h>
- 
- /*
-  * Object used for the snapshot API. This is opaque to the public library.
-@@ -45,6 +46,14 @@ struct lttng_snapshot_output {
- 	char data_url[PATH_MAX];
+@@ -74,4 +74,7 @@ struct lttng_snapshot_output_list {
+ 	struct lttng_snapshot_output *array;
  };
  
-+struct lttng_snapshot_output_serialized {
-+	uint32_t id;
-+	uint64_t max_size;
-+	char name[LTTNG_NAME_MAX];
-+	char ctrl_url[PATH_MAX];
-+	char data_url[PATH_MAX];
-+} LTTNG_PACKED;
++int lttng_snapshot_output_serialize(struct lttng_snapshot_output_serialized *dst, const struct lttng_snapshot_output *src);
++int lttng_snapshot_output_deserialize(struct lttng_snapshot_output *dst, const struct lttng_snapshot_output_serialized *src);
 +
- /*
-  * Snapshot output list object opaque to the user.
-  */
+ #endif /* LTTNG_SNAPSHOT_INTERNAL_ABI_H */
+diff --git a/src/common/sessiond-comm/sessiond-comm.c b/src/common/sessiond-comm/sessiond-comm.c
+index 01e564af..1397e8ac 100644
+--- a/src/common/sessiond-comm/sessiond-comm.c
++++ b/src/common/sessiond-comm/sessiond-comm.c
+@@ -77,6 +77,36 @@ static const char *lttcomm_readable_code[] = {
+ static unsigned long network_timeout;
+ 
+ LTTNG_HIDDEN
++int lttng_snapshot_output_serialize(struct lttng_snapshot_output_serialized *dst,
++		const struct lttng_snapshot_output *src)
++{
++	assert(src && dst);
++	dst->id = src->id;
++	dst->max_size = src->max_size;
++
++	memcpy(dst->name, src->name, LTTNG_NAME_MAX);
++	memcpy(dst->ctrl_url, src->ctrl_url, PATH_MAX);
++	memcpy(dst->data_url, src->data_url, PATH_MAX);
++
++	return 0;
++}
++
++LTTNG_HIDDEN
++int lttng_snapshot_output_deserialize(struct lttng_snapshot_output *dst,
++		const struct lttng_snapshot_output_serialized *src)
++{
++	assert(src && dst);
++	dst->id = src->id;
++	dst->max_size = src->max_size;
++
++	memcpy(dst->name, src->name, LTTNG_NAME_MAX);
++	memcpy(dst->ctrl_url, src->ctrl_url, PATH_MAX);
++	memcpy(dst->data_url, src->data_url, PATH_MAX);
++
++	return 0;
++}
++
++LTTNG_HIDDEN
+ int lttng_event_common_serialize(struct lttng_event_serialized *dst,
+ 		const struct lttng_event *src)
+ {
 -- 
 2.11.0
