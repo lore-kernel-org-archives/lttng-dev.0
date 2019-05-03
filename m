@@ -1,8 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 6/9] tests: invoke full_cleanup from
- script trap handlers, use modprobe -r
-Date: Fri,  3 May 2019 09:55:44 -0400
-Message-ID: <20190503135547.12968-7-mathieu.desnoyers__46344.8027426907$1556911125$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 3/9] Fix: utils.sh: handle SIGPIPE
+Date: Fri,  3 May 2019 09:55:41 -0400
+Message-ID: <20190503135547.12968-4-mathieu.desnoyers__9070.52687123127$1556911375$gmane$org@efficios.com>
 References: <20190503135547.12968-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +9,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44wYZB0ZbGz1Kb2
- for <lttng-dev@lists.lttng.org>; Fri,  3 May 2019 09:56:02 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 44wYZ73xyqz1KYy
+ for <lttng-dev@lists.lttng.org>; Fri,  3 May 2019 09:55:59 -0400 (EDT)
 In-Reply-To: <20190503135547.12968-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -26,216 +25,44 @@ To: jgalar@efficios.com, joraj@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Scripts implementing their own trap handlers override the generic
-one provided by utils.sh (full_cleanup). Invoke it at the end of
-the handlers to provide the utils cleanup as well.
+perl prove closes its child pipes before giving it a chance to execute
+the signal trap handler. This means the child will not be able to
+complete execution of the trap handler if that handler writes to stdout
+or stderr.
 
-Moreover, change use of "rmmod" to "modprobe -r", which is better
-in trap handlers because it does not print errors if the module
-was not loaded yet when the signal occurs.
+Work-around this situation by redirecting stdin, stdout, and stderr
+to /dev/null if a SIGPIPE is caught.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- tests/regression/kernel/test_clock_override                    | 10 +++-------
- tests/regression/kernel/test_rotation_destroy_flush            |  7 +++----
- tests/regression/tools/crash/test_crash                        |  3 +--
- tests/regression/tools/notification/test_notification_kernel   |  2 +-
- .../regression/tools/notification/test_notification_multi_app  |  2 +-
- tests/regression/tools/notification/test_notification_ust      |  2 +-
- tests/regression/tools/streaming/test_high_throughput_limits   |  1 -
- .../ust/rotation-destroy-flush/test_rotation_destroy_flush     |  3 +--
- tests/stress/test_multi_sessions_per_uid_10app                 |  5 ++---
- tests/stress/test_multi_sessions_per_uid_5app_streaming        |  5 ++---
- .../test_multi_sessions_per_uid_5app_streaming_kill_relayd     |  5 ++---
- 11 files changed, 17 insertions(+), 28 deletions(-)
+ tests/utils/utils.sh | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/tests/regression/kernel/test_clock_override b/tests/regression/kernel/test_clock_override
-index e19b77e1..1fbba771 100755
---- a/tests/regression/kernel/test_clock_override
-+++ b/tests/regression/kernel/test_clock_override
-@@ -49,11 +49,9 @@ source $TESTDIR/utils/utils.sh
- function signal_cleanup()
- {
- 	diag "*** Exiting ***"
--	rmmod lttng-test
- 	stop_lttng_sessiond
--	rmmod lttng-clock-plugin-test
--	rmmod lttng-clock
--	exit 1
-+	modprobe -r lttng-test lttng-clock-plugin-test lttng-clock
-+	full_cleanup
+diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
+index d273b278..b8ac88c1 100644
+--- a/tests/utils/utils.sh
++++ b/tests/utils/utils.sh
+@@ -68,9 +68,21 @@ function full_cleanup ()
+ 	trap - SIGTERM && kill -- -$$
  }
  
- function extract_clock_metadata()
-@@ -93,10 +91,8 @@ function test_clock_override_metadata()
- 	stop_lttng_tracing_ok $SESSION_NAME
- 	destroy_lttng_session_ok $SESSION_NAME
++function null_pipes ()
++{
++	exec 0>/dev/null
++	exec 1>/dev/null
++	exec 2>/dev/null
++}
  
--	rmmod lttng-test
- 	stop_lttng_sessiond
--	rmmod lttng-clock-plugin-test
--	rmmod lttng-clock
-+	modprobe -r lttng-test lttng-clock-plugin-test lttng-clock
+ trap full_cleanup SIGINT SIGTERM
  
- 	local TRACE_METADATA_FILE_PATH="$(find "$TRACE_PATH" -name metadata -type f)"
- 	local TRACE_METADATA_DIR="$(dirname "$TRACE_METADATA_FILE_PATH")"
-diff --git a/tests/regression/kernel/test_rotation_destroy_flush b/tests/regression/kernel/test_rotation_destroy_flush
-index 0b0b0ca7..03933a3a 100755
---- a/tests/regression/kernel/test_rotation_destroy_flush
-+++ b/tests/regression/kernel/test_rotation_destroy_flush
-@@ -39,9 +39,8 @@ source $TESTDIR/utils/utils.sh
- function signal_cleanup()
- {
- 	diag "*** Exiting ***"
--	rmmod lttng-test
--	stop_lttng_sessiond
--	exit 1
-+	modprobe -r lttng-test
-+	full_cleanup
- }
- 
- function enable_kernel_lttng_channel_size_limit ()
-@@ -107,7 +106,7 @@ function test_rotation_destroy_flush_single()
- 
- 	rm -rf $TRACE_PATH
- 
--	rmmod lttng-test
-+	modprobe -r lttng-test
- 	stop_lttng_sessiond
- }
- 
-diff --git a/tests/regression/tools/crash/test_crash b/tests/regression/tools/crash/test_crash
-index 13909c1b..5bad16e5 100755
---- a/tests/regression/tools/crash/test_crash
-+++ b/tests/regression/tools/crash/test_crash
-@@ -392,8 +392,7 @@ function interrupt_cleanup()
- {
-     diag "*** Cleaning-up test ***"
-     stop_test_apps
--    stop_lttng_sessiond
--    exit 1
-+    full_cleanup
- }
- 
- TESTS=(
-diff --git a/tests/regression/tools/notification/test_notification_kernel b/tests/regression/tools/notification/test_notification_kernel
-index e7368df2..cc6fc581 100755
---- a/tests/regression/tools/notification/test_notification_kernel
-+++ b/tests/regression/tools/notification/test_notification_kernel
-@@ -56,7 +56,7 @@ function kernel_event_generator
- 	state_file=$1
- 	kernel_event_generator_suspended=0
- 	trap kernel_event_generator_toogle_state SIGUSR1
--	trap "exit" SIGTERM SIGINT EXIT
++# perl prove closes its child pipes before giving it a chance to run its
++# signal trap handlers. Redirect pipes to /dev/null if SIGPIPE is caught
++# to allow those trap handlers to proceed.
 +
- 	while (true); do
- 		if [[ $kernel_event_generator_suspended -eq "1" ]]; then
- 			touch $state_file
-diff --git a/tests/regression/tools/notification/test_notification_multi_app b/tests/regression/tools/notification/test_notification_multi_app
-index 7465a83f..51d94e4f 100755
---- a/tests/regression/tools/notification/test_notification_multi_app
-+++ b/tests/regression/tools/notification/test_notification_multi_app
-@@ -64,7 +64,7 @@ function kernel_event_generator
- 	state_file=$1
- 	kernel_event_generator_suspended=0
- 	trap kernel_event_generator_toogle_state SIGUSR1
--	trap "exit" SIGTERM SIGINT
++trap null_pipes SIGPIPE
 +
- 	while (true); do
- 		if [[ $kernel_event_generator_suspended -eq "1" ]]; then
- 			touch $state_file
-diff --git a/tests/regression/tools/notification/test_notification_ust b/tests/regression/tools/notification/test_notification_ust
-index 8941e476..82f79a8e 100755
---- a/tests/regression/tools/notification/test_notification_ust
-+++ b/tests/regression/tools/notification/test_notification_ust
-@@ -56,7 +56,7 @@ function ust_event_generator
- 	state_file=$1
- 	ust_event_generator_suspended=0
- 	trap ust_event_generator_toogle_state SIGUSR1
--	trap "exit" SIGTERM SIGINT
-+
- 	while (true); do
- 		if [[ $ust_event_generator_suspended -eq "1" ]]; then
- 			touch $state_file
-diff --git a/tests/regression/tools/streaming/test_high_throughput_limits b/tests/regression/tools/streaming/test_high_throughput_limits
-index 68973c73..c49c13c2 100755
---- a/tests/regression/tools/streaming/test_high_throughput_limits
-+++ b/tests/regression/tools/streaming/test_high_throughput_limits
-@@ -170,7 +170,6 @@ function interrupt_cleanup()
- 	reset_bw_limit
- 	# invoke utils cleanup
- 	full_cleanup
--	exit 1
- }
- 
- plan_tests $NUM_TESTS
-diff --git a/tests/regression/ust/rotation-destroy-flush/test_rotation_destroy_flush b/tests/regression/ust/rotation-destroy-flush/test_rotation_destroy_flush
-index a7a93771..e404564e 100755
---- a/tests/regression/ust/rotation-destroy-flush/test_rotation_destroy_flush
-+++ b/tests/regression/ust/rotation-destroy-flush/test_rotation_destroy_flush
-@@ -48,8 +48,7 @@ function run_app()
- function signal_cleanup()
+ function print_ok ()
  {
- 	diag "*** Exiting ***"
--	stop_lttng_sessiond
--	exit 1
-+	full_cleanup
- }
- 
- function enable_ust_lttng_channel_size_limit ()
-diff --git a/tests/stress/test_multi_sessions_per_uid_10app b/tests/stress/test_multi_sessions_per_uid_10app
-index 82e8ad50..c9f8403e 100755
---- a/tests/stress/test_multi_sessions_per_uid_10app
-+++ b/tests/stress/test_multi_sessions_per_uid_10app
-@@ -112,11 +112,10 @@ function sighandler()
- {
- 	cleanup
- 	rm $LOG_FILE
--	exit 1
-+	full_cleanup
- }
- 
--trap sighandler SIGINT
--trap sighandler SIGTERM
-+trap sighandler SIGINT SIGTERM
- 
- # Make sure we collect a coredump if possible.
- ulimit -c unlimited
-diff --git a/tests/stress/test_multi_sessions_per_uid_5app_streaming b/tests/stress/test_multi_sessions_per_uid_5app_streaming
-index ed989498..4203ac30 100755
---- a/tests/stress/test_multi_sessions_per_uid_5app_streaming
-+++ b/tests/stress/test_multi_sessions_per_uid_5app_streaming
-@@ -142,11 +142,10 @@ function sighandler()
- {
- 	cleanup
- 	rm $LOG_FILE_SESSIOND $LOG_FILE_RELAYD
--	exit 1
-+	full_cleanup
- }
- 
--trap sighandler SIGINT
--trap sighandler SIGTERM
-+trap sighandler SIGINT SIGTERM
- 
- # Make sure we collect a coredump if possible.
- ulimit -c unlimited
-diff --git a/tests/stress/test_multi_sessions_per_uid_5app_streaming_kill_relayd b/tests/stress/test_multi_sessions_per_uid_5app_streaming_kill_relayd
-index c699ac22..d0121e32 100755
---- a/tests/stress/test_multi_sessions_per_uid_5app_streaming_kill_relayd
-+++ b/tests/stress/test_multi_sessions_per_uid_5app_streaming_kill_relayd
-@@ -144,11 +144,10 @@ function sighandler()
- {
- 	cleanup
- 	#rm $LOG_FILE_SESSIOND $LOG_FILE_RELAYD
--	exit 1
-+	full_cleanup
- }
- 
--trap sighandler SIGINT
--trap sighandler SIGTERM
-+trap sighandler SIGINT SIGTERM
- 
- # Make sure we collect a coredump if possible.
- ulimit -c unlimited
+ 	# Check if we are a terminal
 -- 
 2.11.0
