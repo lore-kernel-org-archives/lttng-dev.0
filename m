@@ -1,17 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 8/9] lttng-ctl: notifications: use
- epoll()/poll() instead of select()
-Date: Fri,  3 May 2019 09:55:46 -0400
-Message-ID: <20190503135547.12968-9-mathieu.desnoyers__6349.43288039125$1556911085$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 7/9] epoll/poll compat: expose
+ interruptible API
+Date: Fri,  3 May 2019 09:55:45 -0400
+Message-ID: <20190503135547.12968-8-mathieu.desnoyers__18409.1716002271$1556911092$gmane$org@efficios.com>
 References: <20190503135547.12968-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44wYZB2d5tz1KbH
- for <lttng-dev@lists.lttng.org>; Fri,  3 May 2019 09:56:02 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 44wYZC4HHPz1Kbr
+ for <lttng-dev@lists.lttng.org>; Fri,  3 May 2019 09:56:03 -0400 (EDT)
 In-Reply-To: <20190503135547.12968-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -26,199 +25,106 @@ To: jgalar@efficios.com, joraj@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-The select(2) system call is an ancient ABI limited to processes
-containing at most FD_SETSIZE file descriptors overall (typically
-1024).
-
-Those notification APIs will fail if the target file descriptor
-is above FD_SETSIZE in a process containing many file descriptors.
-
-Never use select, use the lttng epoll/poll wrapper instead.
-
-This patch depends on "Change lttng_poll_wait behaviour of compat-poll
-to match compat-epoll" posted by Yannick Lamarre.
+Some use of the epoll/poll wrapper require interruption
+by signals to make the poll call return -1, errno EINTR.
+Expose a new lttng_poll_wait_interruptible API for this
+purpose.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 CC: Yannick Lamarre <ylamarre@efficios.com>
 ---
- src/lib/lttng-ctl/channel.c | 76 +++++++++++++++++++++++++++------------------
- 1 file changed, 45 insertions(+), 31 deletions(-)
+ src/common/compat/compat-epoll.c |  9 +++++----
+ src/common/compat/compat-poll.c  |  9 +++++----
+ src/common/compat/poll.h         | 12 ++++++++----
+ 3 files changed, 18 insertions(+), 12 deletions(-)
 
-diff --git a/src/lib/lttng-ctl/channel.c b/src/lib/lttng-ctl/channel.c
-index 5271aa13..bcecc65f 100644
---- a/src/lib/lttng-ctl/channel.c
-+++ b/src/lib/lttng-ctl/channel.c
-@@ -26,8 +26,7 @@
- #include <common/defaults.h>
- #include <assert.h>
- #include "lttng-ctl-helper.h"
--#include <sys/select.h>
--#include <sys/time.h>
-+#include <common/compat/poll.h>
- 
- static
- int handshake(struct lttng_notification_channel *channel);
-@@ -211,7 +210,7 @@ lttng_notification_channel_get_next_notification(
- 	struct lttng_notification *notification = NULL;
- 	enum lttng_notification_channel_status status =
- 			LTTNG_NOTIFICATION_CHANNEL_STATUS_OK;
--	fd_set read_fds;
-+	struct lttng_poll_event events;
- 
- 	if (!channel || !_notification) {
- 		status = LTTNG_NOTIFICATION_CHANNEL_STATUS_INVALID;
-@@ -241,9 +240,9 @@ lttng_notification_channel_get_next_notification(
- 	}
- 
- 	/*
--	 * Block on select() instead of the message reception itself as the
--	 * recvmsg() wrappers always restard on EINTR. We choose to wait
--	 * using select() in order to:
-+	 * Block on interruptible epoll/poll() instead of the message reception
-+	 * itself as the recvmsg() wrappers always restart on EINTR. We choose
-+	 * to wait using interruptible epoll/poll() in order to:
- 	 *   1) Return if a signal occurs,
- 	 *   2) Not deal with partially received messages.
- 	 *
-@@ -252,20 +251,28 @@ lttng_notification_channel_get_next_notification(
- 	 * announced length, receive_message() will block on recvmsg()
- 	 * and never return (even if a signal is received).
- 	 */
--	FD_ZERO(&read_fds);
--	FD_SET(channel->socket, &read_fds);
--	ret = select(channel->socket + 1, &read_fds, NULL, NULL, NULL);
--	if (ret == -1) {
--		status = errno == EINTR ?
-+	ret = lttng_poll_create(&events, 1, LTTNG_CLOEXEC);
-+	if (ret < 0) {
-+		status = LTTNG_NOTIFICATION_CHANNEL_STATUS_ERROR;
-+		goto end_unlock;
-+	}
-+	ret = lttng_poll_add(&events, channel->socket, LPOLLIN | LPOLLERR);
-+	if (ret < 0) {
-+		status = LTTNG_NOTIFICATION_CHANNEL_STATUS_ERROR;
-+		goto end_clean_poll;
-+	}
-+	ret = lttng_poll_wait_interruptible(&events, -1);
-+	if (ret <= 0) {
-+		status = (ret == -1 && errno == EINTR) ?
- 			LTTNG_NOTIFICATION_CHANNEL_STATUS_INTERRUPTED :
- 			LTTNG_NOTIFICATION_CHANNEL_STATUS_ERROR;
--		goto end_unlock;
-+		goto end_clean_poll;
- 	}
- 
- 	ret = receive_message(channel);
- 	if (ret) {
- 		status = LTTNG_NOTIFICATION_CHANNEL_STATUS_ERROR;
--		goto end_unlock;
-+		goto end_clean_poll;
- 	}
- 
- 	switch (get_current_message_type(channel)) {
-@@ -274,7 +281,7 @@ lttng_notification_channel_get_next_notification(
- 				channel);
- 		if (!notification) {
- 			status = LTTNG_NOTIFICATION_CHANNEL_STATUS_ERROR;
--			goto end_unlock;
-+			goto end_clean_poll;
- 		}
- 		break;
- 	case LTTNG_NOTIFICATION_CHANNEL_MESSAGE_TYPE_NOTIFICATION_DROPPED:
-@@ -284,9 +291,11 @@ lttng_notification_channel_get_next_notification(
- 	default:
- 		/* Protocol error. */
- 		status = LTTNG_NOTIFICATION_CHANNEL_STATUS_ERROR;
--		goto end_unlock;
-+		goto end_clean_poll;
- 	}
- 
-+end_clean_poll:
-+	lttng_poll_clean(&events);
- end_unlock:
- 	pthread_mutex_unlock(&channel->lock);
- 	*_notification = notification;
-@@ -387,11 +396,7 @@ lttng_notification_channel_has_pending_notification(
+diff --git a/src/common/compat/compat-epoll.c b/src/common/compat/compat-epoll.c
+index 6a781c7a..7108b717 100644
+--- a/src/common/compat/compat-epoll.c
++++ b/src/common/compat/compat-epoll.c
+@@ -241,7 +241,7 @@ error:
+ /*
+  * Wait on epoll set. This is a blocking call of timeout value.
+  */
+-int compat_epoll_wait(struct lttng_poll_event *events, int timeout)
++int compat_epoll_wait(struct lttng_poll_event *events, int timeout, int interruptible)
+ {
  	int ret;
- 	enum lttng_notification_channel_status status =
- 			LTTNG_NOTIFICATION_CHANNEL_STATUS_OK;
--	fd_set read_fds;
--	struct timeval timeout;
--
--	FD_ZERO(&read_fds);
--	memset(&timeout, 0, sizeof(timeout));
-+	struct lttng_poll_event events;
+ 	uint32_t new_size;
+@@ -273,10 +273,11 @@ int compat_epoll_wait(struct lttng_poll_event *events, int timeout)
  
- 	if (!channel || !_notification_pending) {
- 		status = LTTNG_NOTIFICATION_CHANNEL_STATUS_INVALID;
-@@ -426,48 +431,57 @@ lttng_notification_channel_has_pending_notification(
- 	 * message if we see data available on the socket. If the peer does
- 	 * not respect the protocol, this may block indefinitely.
- 	 */
--	FD_SET(channel->socket, &read_fds);
--	do {
--		ret = select(channel->socket + 1, &read_fds, NULL, NULL, &timeout);
--	} while (ret < 0 && errno == EINTR);
--
-+	ret = lttng_poll_create(&events, 1, LTTNG_CLOEXEC);
-+	if (ret < 0) {
-+		status = LTTNG_NOTIFICATION_CHANNEL_STATUS_ERROR;
-+		goto end_unlock;
-+	}
-+	ret = lttng_poll_add(&events, channel->socket, LPOLLIN | LPOLLERR);
-+	if (ret < 0) {
-+		status = LTTNG_NOTIFICATION_CHANNEL_STATUS_ERROR;
-+		goto end_clean_poll;
-+	}
-+	/* timeout = 0: return immediately. */
-+	ret = lttng_poll_wait_interruptible(&events, 0);
- 	if (ret == 0) {
- 		/* No data available. */
- 		*_notification_pending = false;
--		goto end_unlock;
-+		goto end_clean_poll;
- 	} else if (ret < 0) {
- 		status = LTTNG_NOTIFICATION_CHANNEL_STATUS_ERROR;
--		goto end_unlock;
-+		goto end_clean_poll;
+ 	do {
+ 		ret = epoll_wait(events->epfd, events->events, events->nb_fd, timeout);
+-	} while (ret == -1 && errno == EINTR);
++	} while (!interruptible && ret == -1 && errno == EINTR);
+ 	if (ret < 0) {
+-		/* At this point, every error is fatal */
+-		PERROR("epoll_wait");
++		if (errno != EINTR) {
++			PERROR("epoll_wait");
++		}
+ 		goto error;
  	}
  
- 	/* Data available on socket. */
- 	ret = receive_message(channel);
- 	if (ret) {
- 		status = LTTNG_NOTIFICATION_CHANNEL_STATUS_ERROR;
--		goto end_unlock;
-+		goto end_clean_poll;
+diff --git a/src/common/compat/compat-poll.c b/src/common/compat/compat-poll.c
+index b45b39dc..cdb6f8b5 100644
+--- a/src/common/compat/compat-poll.c
++++ b/src/common/compat/compat-poll.c
+@@ -281,7 +281,7 @@ error:
+ /*
+  * Wait on poll() with timeout. Blocking call.
+  */
+-int compat_poll_wait(struct lttng_poll_event *events, int timeout)
++int compat_poll_wait(struct lttng_poll_event *events, int timeout, int interruptible)
+ {
+ 	int ret;
+ 
+@@ -308,10 +308,11 @@ int compat_poll_wait(struct lttng_poll_event *events, int timeout)
+ 
+ 	do {
+ 		ret = poll(events->wait.events, events->wait.nb_fd, timeout);
+-	} while (ret == -1 && errno == EINTR);
++	} while (!interruptible && ret == -1 && errno == EINTR);
+ 	if (ret < 0) {
+-		/* At this point, every error is fatal */
+-		PERROR("poll wait");
++		if (errno != EINTR) {
++			PERROR("poll wait");
++		}
+ 		goto error;
  	}
  
- 	switch (get_current_message_type(channel)) {
- 	case LTTNG_NOTIFICATION_CHANNEL_MESSAGE_TYPE_NOTIFICATION:
- 		ret = enqueue_notification_from_current_message(channel);
- 		if (ret) {
--			goto end_unlock;
-+			goto end_clean_poll;
- 		}
- 		*_notification_pending = true;
- 		break;
- 	case LTTNG_NOTIFICATION_CHANNEL_MESSAGE_TYPE_NOTIFICATION_DROPPED:
- 		ret = enqueue_dropped_notification(channel);
- 		if (ret) {
--			goto end_unlock;
-+			goto end_clean_poll;
- 		}
- 		*_notification_pending = true;
- 		break;
- 	default:
- 		/* Protocol error. */
- 		status = LTTNG_NOTIFICATION_CHANNEL_STATUS_ERROR;
--		goto end_unlock;
-+		goto end_clean_poll;
- 	}
+diff --git a/src/common/compat/poll.h b/src/common/compat/poll.h
+index d4bd87f5..5400e5b1 100644
+--- a/src/common/compat/poll.h
++++ b/src/common/compat/poll.h
+@@ -152,9 +152,11 @@ static inline int compat_glibc_epoll_create(int size, int flags)
+  * Wait on epoll set with the number of fd registered to the lttng_poll_event
+  * data structure (events).
+  */
+-extern int compat_epoll_wait(struct lttng_poll_event *events, int timeout);
++extern int compat_epoll_wait(struct lttng_poll_event *events, int timeout, int interruptible);
+ #define lttng_poll_wait(events, timeout) \
+-	compat_epoll_wait(events, timeout)
++	compat_epoll_wait(events, timeout, 0)
++#define lttng_poll_wait_interruptible(events, timeout) \
++	compat_epoll_wait(events, timeout, 1)
  
-+end_clean_poll:
-+	lttng_poll_clean(&events);
- end_unlock:
- 	pthread_mutex_unlock(&channel->lock);
- end:
+ /*
+  * Add a fd to the epoll set and resize the epoll_event structure if needed.
+@@ -334,9 +336,11 @@ extern int compat_poll_create(struct lttng_poll_event *events, int size);
+  * Wait on poll(2) event with nb_fd registered to the lttng_poll_event data
+  * structure.
+  */
+-extern int compat_poll_wait(struct lttng_poll_event *events, int timeout);
++extern int compat_poll_wait(struct lttng_poll_event *events, int timeout, int interruptible);
+ #define lttng_poll_wait(events, timeout) \
+-	compat_poll_wait(events, timeout)
++	compat_poll_wait(events, timeout, 0)
++#define lttng_poll_wait_interruptible(events, timeout) \
++	compat_poll_wait(events, timeout, 1)
+ 
+ /*
+  * Add the fd to the pollfd structure. Resize if needed.
 -- 
 2.11.0
