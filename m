@@ -1,16 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-ust] Fix: bitfield: left shift undefined
- behavior
-Date: Tue,  7 May 2019 16:43:09 -0400
-Message-ID: <20190507204309.18035-1-mathieu.desnoyers__20558.0996045441$1557261857$gmane$org@efficios.com>
+From: Mosleh Uddin <mosleh1235@gmail.com>
+Subject: default sub-buf size and count
+Date: Tue, 7 May 2019 17:08:33 -0400
+Message-ID: <CAJyWpKEO5i2MHZpvQQmtctzbFfuTCP9AvjmPAhQsa3yf9tKPhg__25675.2512346551$1557263339$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7249650931679263240=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com
- [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44zBQZ3wNdz1K5f
- for <lttng-dev@lists.lttng.org>; Tue,  7 May 2019 16:43:34 -0400 (EDT)
+Received: from mail-it1-x135.google.com (mail-it1-x135.google.com
+ [IPv6:2607:f8b0:4864:20::135])
+ by lists.lttng.org (Postfix) with ESMTPS id 44zBzd0mHRz1K7w
+ for <lttng-dev@lists.lttng.org>; Tue,  7 May 2019 17:08:44 -0400 (EDT)
+Received: by mail-it1-x135.google.com with SMTP id s3so562720itk.1
+ for <lttng-dev@lists.lttng.org>; Tue, 07 May 2019 14:08:44 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,190 +20,45 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: mathieu.desnoyers@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-bitfield.h uses the left shift operator with a left operand which
-may be negative. The C99 standard states that shifting a negative
-value is undefined.
+--===============7249650931679263240==
+Content-Type: multipart/alternative; boundary="0000000000004048200588529fe4"
 
-We also need to cast the result explicitly into the left hand
-side type to deal with:
+--0000000000004048200588529fe4
+Content-Type: text/plain; charset="UTF-8"
 
-warning: large integer implicitly truncated to unsigned type [-Woverflow]
+Hello,
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
----
- include/lttng/bitfield.h | 58 +++++++++++++++++++++++++++++-------------------
- 1 file changed, 35 insertions(+), 23 deletions(-)
+I was just wondering what the default values for the sub-buffer size and
+the number of sub-buffers are. I attempted to print them out after setting
+the channel with default attr, however both values appear 0.
 
-diff --git a/include/lttng/bitfield.h b/include/lttng/bitfield.h
-index ef5453c2..21b41d18 100644
---- a/include/lttng/bitfield.h
-+++ b/include/lttng/bitfield.h
-@@ -58,13 +58,25 @@
- 
- #define _bt_is_signed_type(type)	((type) -1 < (type) 0)
- 
-+/*
-+ * NOTE: The unsigned cast ensures that we're not shifting a negative
-+ * value, which is undefined in C. However, this limits the maximum
-+ * type size of `type` and `v` to 64-bit. The _bt_check_max_64bit() is
-+ * used to check that the users of this header do not use types with a
-+ * size greater than 64-bit.
-+ */
- #define _bt_unsigned_cast(type, v)					\
- ({									\
--	(sizeof(v) < sizeof(type)) ?					\
--		((type) (v)) & (~(~(type) 0 << (sizeof(v) * CHAR_BIT))) : \
--		(type) (v);						\
-+	__builtin_types_compatible_p(type, int8_t) ? (uint8_t) (v) :	\
-+	__builtin_types_compatible_p(type, int16_t) ? (uint16_t) (v) :	\
-+	__builtin_types_compatible_p(type, int32_t) ? (uint32_t) (v) :	\
-+	__builtin_types_compatible_p(type, int64_t) ? (uint64_t) (v) :	\
-+	(type) (v);							\
- })
- 
-+/* Unsigned bitwise complement. */
-+#define _bt_bitwise_not(type, v)	_bt_unsigned_cast(type, ~(type) v)
-+
- /*
-  * bt_bitfield_write - write integer to a bitfield in native endianness
-  *
-@@ -102,15 +114,15 @@ do {									\
- 									\
- 	/* Trim v high bits */						\
- 	if (__length < sizeof(__v) * CHAR_BIT)				\
--		__v &= ~((~(__typeof__(__v)) 0) << __length);		\
-+		__v &= (__typeof__(__v)) ~(_bt_bitwise_not(typeof(__v), 0) << __length); \
- 									\
- 	/* We can now append v with a simple "or", shift it piece-wise */ \
- 	this_unit = start_unit;						\
- 	if (start_unit == end_unit - 1) {				\
--		mask = ~((~(type) 0) << (__start % ts));		\
-+		mask = (__typeof__(mask)) ~(_bt_bitwise_not(type, 0) << (__start % ts)); \
- 		if (end % ts)						\
--			mask |= (~(type) 0) << (end % ts);		\
--		cmask = (type) __v << (__start % ts);			\
-+			mask |= (__typeof__(mask)) (_bt_bitwise_not(type, 0) << (end % ts)); \
-+		cmask = (__typeof__(cmask)) (_bt_unsigned_cast(type, __v) << (__start % ts)); \
- 		cmask &= ~mask;						\
- 		__ptr[this_unit] &= mask;				\
- 		__ptr[this_unit] |= cmask;				\
-@@ -118,8 +130,8 @@ do {									\
- 	}								\
- 	if (__start % ts) {						\
- 		cshift = __start % ts;					\
--		mask = ~((~(type) 0) << cshift);			\
--		cmask = (type) __v << cshift;				\
-+		mask = (__typeof__(mask)) ~(_bt_bitwise_not(type, 0) << cshift); \
-+		cmask = (__typeof__(cmask)) (_bt_unsigned_cast(type, __v) << cshift); \
- 		cmask &= ~mask;						\
- 		__ptr[this_unit] &= mask;				\
- 		__ptr[this_unit] |= cmask;				\
-@@ -133,7 +145,7 @@ do {									\
- 		__start += ts;						\
- 	}								\
- 	if (end % ts) {							\
--		mask = (~(type) 0) << (end % ts);			\
-+		mask = (__typeof__(mask)) (_bt_bitwise_not(type, 0) << (end % ts)); \
- 		cmask = (type) __v;					\
- 		cmask &= ~mask;						\
- 		__ptr[this_unit] &= mask;				\
-@@ -161,15 +173,15 @@ do {									\
- 									\
- 	/* Trim v high bits */						\
- 	if (__length < sizeof(__v) * CHAR_BIT)				\
--		__v &= ~((~(__typeof__(__v)) 0) << __length);		\
-+		__v &= (__typeof__(__v)) ~(_bt_bitwise_not(typeof(__v), 0) << __length); \
- 									\
- 	/* We can now append v with a simple "or", shift it piece-wise */ \
- 	this_unit = end_unit - 1;					\
- 	if (start_unit == end_unit - 1) {				\
--		mask = ~((~(type) 0) << ((ts - (end % ts)) % ts));	\
-+		mask = (__typeof__(mask)) ~(_bt_bitwise_not(type, 0) << ((ts - (end % ts)) % ts)); \
- 		if (__start % ts)					\
--			mask |= (~((type) 0)) << (ts - (__start % ts));	\
--		cmask = (type) __v << ((ts - (end % ts)) % ts);		\
-+			mask |= (__typeof__(mask)) (_bt_bitwise_not(type, 0) << (ts - (__start % ts))); \
-+		cmask = (__typeof__(cmask)) (_bt_unsigned_cast(type, __v) << ((ts - (end % ts)) % ts)); \
- 		cmask &= ~mask;						\
- 		__ptr[this_unit] &= mask;				\
- 		__ptr[this_unit] |= cmask;				\
-@@ -177,8 +189,8 @@ do {									\
- 	}								\
- 	if (end % ts) {							\
- 		cshift = end % ts;					\
--		mask = ~((~(type) 0) << (ts - cshift));			\
--		cmask = (type) __v << (ts - cshift);			\
-+		mask = (__typeof__(mask)) ~(_bt_bitwise_not(type, 0) << (ts - cshift));	\
-+		cmask = (__typeof__(cmask)) (_bt_unsigned_cast(type, __v) << (ts - cshift)); \
- 		cmask &= ~mask;						\
- 		__ptr[this_unit] &= mask;				\
- 		__ptr[this_unit] |= cmask;				\
-@@ -192,7 +204,7 @@ do {									\
- 		end -= ts;						\
- 	}								\
- 	if (__start % ts) {						\
--		mask = (~(type) 0) << (ts - (__start % ts));		\
-+		mask = (__typeof__(mask)) (_bt_bitwise_not(type, 0) << (ts - (__start % ts))); \
- 		cmask = (type) __v;					\
- 		cmask &= ~mask;						\
- 		__ptr[this_unit] &= mask;				\
-@@ -265,7 +277,7 @@ do {									\
- 		cmask = __ptr[this_unit];				\
- 		cmask >>= (__start % ts);				\
- 		if ((end - __start) % ts) {				\
--			mask = ~((~(type) 0) << (end - __start));	\
-+			mask = (__typeof__(mask)) ~(_bt_bitwise_not(type, 0) << (end - __start)); \
- 			cmask &= mask;					\
- 		}							\
- 		__v = _bt_piecewise_lshift(__v, end - __start);		\
-@@ -275,7 +287,7 @@ do {									\
- 	}								\
- 	if (end % ts) {							\
- 		cshift = end % ts;					\
--		mask = ~((~(type) 0) << cshift);			\
-+		mask = (__typeof__(mask)) ~(_bt_bitwise_not(type, 0) << cshift); \
- 		cmask = __ptr[this_unit];				\
- 		cmask &= mask;						\
- 		__v = _bt_piecewise_lshift(__v, cshift);		\
-@@ -289,7 +301,7 @@ do {									\
- 		end -= ts;						\
- 	}								\
- 	if (__start % ts) {						\
--		mask = ~((~(type) 0) << (ts - (__start % ts)));		\
-+		mask = (__typeof__(mask)) ~(_bt_bitwise_not(type, 0) << (ts - (__start % ts))); \
- 		cmask = __ptr[this_unit];				\
- 		cmask >>= (__start % ts);				\
- 		cmask &= mask;						\
-@@ -332,7 +344,7 @@ do {									\
- 		cmask = __ptr[this_unit];				\
- 		cmask >>= (ts - (end % ts)) % ts;			\
- 		if ((end - __start) % ts) {				\
--			mask = ~((~(type) 0) << (end - __start));	\
-+			mask = (__typeof__(mask)) ~(_bt_bitwise_not(type, 0) << (end - __start)); \
- 			cmask &= mask;					\
- 		}							\
- 		__v = _bt_piecewise_lshift(__v, end - __start);		\
-@@ -342,7 +354,7 @@ do {									\
- 	}								\
- 	if (__start % ts) {						\
- 		cshift = __start % ts;					\
--		mask = ~((~(type) 0) << (ts - cshift));			\
-+		mask = (__typeof__(mask)) ~(_bt_bitwise_not(type, 0) << (ts - cshift));	\
- 		cmask = __ptr[this_unit];				\
- 		cmask &= mask;						\
- 		__v = _bt_piecewise_lshift(__v, ts - cshift);		\
-@@ -356,7 +368,7 @@ do {									\
- 		__start += ts;						\
- 	}								\
- 	if (end % ts) {							\
--		mask = ~((~(type) 0) << (end % ts));			\
-+		mask = (__typeof__(mask)) ~(_bt_bitwise_not(type, 0) << (end % ts)); \
- 		cmask = __ptr[this_unit];				\
- 		cmask >>= ts - (end % ts);				\
- 		cmask &= mask;						\
--- 
-2.11.0
+Thanks for any insight,
+Mosleh
+
+--0000000000004048200588529fe4
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello,<div><br></div><div>I was just wondering what the de=
+fault values for the sub-buffer size and the number of sub-buffers are. I a=
+ttempted to print them out after setting the channel with default attr, how=
+ever both values appear 0.</div><div><br></div><div>Thanks for any insight,=
+</div><div>Mosleh</div></div>
+
+--0000000000004048200588529fe4--
+
+--===============7249650931679263240==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============7249650931679263240==--
