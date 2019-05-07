@@ -1,16 +1,16 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-modules] Fix: bitfield: left shift
- undefined behavior
-Date: Tue,  7 May 2019 16:43:28 -0400
-Message-ID: <20190507204328.18078-1-mathieu.desnoyers__22568.0760618829$1557261828$gmane$org@efficios.com>
+Subject: [PATCH lttng-ust] Fix: bitfield: left shift undefined
+ behavior
+Date: Tue,  7 May 2019 16:43:09 -0400
+Message-ID: <20190507204309.18035-1-mathieu.desnoyers__20558.0996045441$1557261857$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 44zBQY2YvFz1K5X
- for <lttng-dev@lists.lttng.org>; Tue,  7 May 2019 16:43:33 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 44zBQZ3wNdz1K5f
+ for <lttng-dev@lists.lttng.org>; Tue,  7 May 2019 16:43:34 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -35,16 +35,16 @@ warning: large integer implicitly truncated to unsigned type [-Woverflow]
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- lib/bitfield.h | 58 +++++++++++++++++++++++++++++++++++-----------------------
+ include/lttng/bitfield.h | 58 +++++++++++++++++++++++++++++-------------------
  1 file changed, 35 insertions(+), 23 deletions(-)
 
-diff --git a/lib/bitfield.h b/lib/bitfield.h
-index a729db99..164e2aaf 100644
---- a/lib/bitfield.h
-+++ b/lib/bitfield.h
-@@ -43,13 +43,25 @@
+diff --git a/include/lttng/bitfield.h b/include/lttng/bitfield.h
+index ef5453c2..21b41d18 100644
+--- a/include/lttng/bitfield.h
++++ b/include/lttng/bitfield.h
+@@ -58,13 +58,25 @@
  
- #define _bt_is_signed_type(type)	(((type)(-1)) < 0)
+ #define _bt_is_signed_type(type)	((type) -1 < (type) 0)
  
 +/*
 + * NOTE: The unsigned cast ensures that we're not shifting a negative
@@ -71,11 +71,11 @@ index a729db99..164e2aaf 100644
  /*
   * bt_bitfield_write - write integer to a bitfield in native endianness
   *
-@@ -87,15 +99,15 @@ do {									\
+@@ -102,15 +114,15 @@ do {									\
  									\
  	/* Trim v high bits */						\
  	if (__length < sizeof(__v) * CHAR_BIT)				\
--		__v &= ~((~(typeof(__v)) 0) << __length);		\
+-		__v &= ~((~(__typeof__(__v)) 0) << __length);		\
 +		__v &= (__typeof__(__v)) ~(_bt_bitwise_not(typeof(__v), 0) << __length); \
  									\
  	/* We can now append v with a simple "or", shift it piece-wise */ \
@@ -91,7 +91,7 @@ index a729db99..164e2aaf 100644
  		cmask &= ~mask;						\
  		__ptr[this_unit] &= mask;				\
  		__ptr[this_unit] |= cmask;				\
-@@ -103,8 +115,8 @@ do {									\
+@@ -118,8 +130,8 @@ do {									\
  	}								\
  	if (__start % ts) {						\
  		cshift = __start % ts;					\
@@ -102,7 +102,7 @@ index a729db99..164e2aaf 100644
  		cmask &= ~mask;						\
  		__ptr[this_unit] &= mask;				\
  		__ptr[this_unit] |= cmask;				\
-@@ -118,7 +130,7 @@ do {									\
+@@ -133,7 +145,7 @@ do {									\
  		__start += ts;						\
  	}								\
  	if (end % ts) {							\
@@ -111,11 +111,11 @@ index a729db99..164e2aaf 100644
  		cmask = (type) __v;					\
  		cmask &= ~mask;						\
  		__ptr[this_unit] &= mask;				\
-@@ -146,15 +158,15 @@ do {									\
+@@ -161,15 +173,15 @@ do {									\
  									\
  	/* Trim v high bits */						\
  	if (__length < sizeof(__v) * CHAR_BIT)				\
--		__v &= ~((~(typeof(__v)) 0) << __length);		\
+-		__v &= ~((~(__typeof__(__v)) 0) << __length);		\
 +		__v &= (__typeof__(__v)) ~(_bt_bitwise_not(typeof(__v), 0) << __length); \
  									\
  	/* We can now append v with a simple "or", shift it piece-wise */ \
@@ -131,7 +131,7 @@ index a729db99..164e2aaf 100644
  		cmask &= ~mask;						\
  		__ptr[this_unit] &= mask;				\
  		__ptr[this_unit] |= cmask;				\
-@@ -162,8 +174,8 @@ do {									\
+@@ -177,8 +189,8 @@ do {									\
  	}								\
  	if (end % ts) {							\
  		cshift = end % ts;					\
@@ -142,7 +142,7 @@ index a729db99..164e2aaf 100644
  		cmask &= ~mask;						\
  		__ptr[this_unit] &= mask;				\
  		__ptr[this_unit] |= cmask;				\
-@@ -177,7 +189,7 @@ do {									\
+@@ -192,7 +204,7 @@ do {									\
  		end -= ts;						\
  	}								\
  	if (__start % ts) {						\
@@ -151,7 +151,7 @@ index a729db99..164e2aaf 100644
  		cmask = (type) __v;					\
  		cmask &= ~mask;						\
  		__ptr[this_unit] &= mask;				\
-@@ -250,7 +262,7 @@ do {									\
+@@ -265,7 +277,7 @@ do {									\
  		cmask = __ptr[this_unit];				\
  		cmask >>= (__start % ts);				\
  		if ((end - __start) % ts) {				\
@@ -160,7 +160,7 @@ index a729db99..164e2aaf 100644
  			cmask &= mask;					\
  		}							\
  		__v = _bt_piecewise_lshift(__v, end - __start);		\
-@@ -260,7 +272,7 @@ do {									\
+@@ -275,7 +287,7 @@ do {									\
  	}								\
  	if (end % ts) {							\
  		cshift = end % ts;					\
@@ -169,7 +169,7 @@ index a729db99..164e2aaf 100644
  		cmask = __ptr[this_unit];				\
  		cmask &= mask;						\
  		__v = _bt_piecewise_lshift(__v, cshift);		\
-@@ -274,7 +286,7 @@ do {									\
+@@ -289,7 +301,7 @@ do {									\
  		end -= ts;						\
  	}								\
  	if (__start % ts) {						\
@@ -178,7 +178,7 @@ index a729db99..164e2aaf 100644
  		cmask = __ptr[this_unit];				\
  		cmask >>= (__start % ts);				\
  		cmask &= mask;						\
-@@ -317,7 +329,7 @@ do {									\
+@@ -332,7 +344,7 @@ do {									\
  		cmask = __ptr[this_unit];				\
  		cmask >>= (ts - (end % ts)) % ts;			\
  		if ((end - __start) % ts) {				\
@@ -187,7 +187,7 @@ index a729db99..164e2aaf 100644
  			cmask &= mask;					\
  		}							\
  		__v = _bt_piecewise_lshift(__v, end - __start);		\
-@@ -327,7 +339,7 @@ do {									\
+@@ -342,7 +354,7 @@ do {									\
  	}								\
  	if (__start % ts) {						\
  		cshift = __start % ts;					\
@@ -196,7 +196,7 @@ index a729db99..164e2aaf 100644
  		cmask = __ptr[this_unit];				\
  		cmask &= mask;						\
  		__v = _bt_piecewise_lshift(__v, ts - cshift);		\
-@@ -341,7 +353,7 @@ do {									\
+@@ -356,7 +368,7 @@ do {									\
  		__start += ts;						\
  	}								\
  	if (end % ts) {							\
