@@ -1,143 +1,87 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] Userspace RCU 0.11
-Date: Mon, 6 May 2019 16:32:54 -0400 (EDT)
-Message-ID: <990796059.510.1557174774246.JavaMail.zimbra@efficios.com>
+From: =?iso-8859-1?Q?J=E9r=E9mie?= Galarneau <jeremie.galarneau@efficios.com>
+Subject: Re: [PATCH lttng-tools v6 0/8] Change in compat (e)poll
+Date: Tue, 7 May 2019 13:28:41 -0400
+Message-ID: <20190507172839.GA15803__44759.9203138211$1557250141$gmane$org@gmail.com>
+References: <20190425222334.30349-1-ylamarre@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Return-path: <linux-kernel-owner@vger.kernel.org>
-Sender: linux-kernel-owner@vger.kernel.org
-To: linux-kernel@vger.kernel.org, lttng-dev@lists.lttng.org, rp@svcs.cs.pdx.edu
-Cc: "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>, Stephen Hemminger <stephen@networkplumber.org>, Alan Stern <stern@rowland.harvard.edu>, Lai Jiangshan <jiangshanlai@gmail.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Return-path: <lttng-dev-bounces@lists.lttng.org>
+Received: from mail-qk1-f193.google.com (mail-qk1-f193.google.com
+ [209.85.222.193])
+ by lists.lttng.org (Postfix) with ESMTPS id 44z65m0qCmz1Jpt
+ for <lttng-dev@lists.lttng.org>; Tue,  7 May 2019 13:28:43 -0400 (EDT)
+Received: by mail-qk1-f193.google.com with SMTP id z6so1106558qkl.10
+ for <lttng-dev@lists.lttng.org>; Tue, 07 May 2019 10:28:43 -0700 (PDT)
+Content-Disposition: inline
+In-Reply-To: <20190425222334.30349-1-ylamarre@efficios.com>
+List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
+List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
+List-Post: <mailto:lttng-dev@lists.lttng.org>
+List-Help: <mailto:lttng-dev-request@lists.lttng.org?subject=help>
+List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
+ <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
+Errors-To: lttng-dev-bounces@lists.lttng.org
+Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
+To: Yannick Lamarre <ylamarre@efficios.com>
+Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-Hi,
+All merged in master and stable-2.11.
 
-This is a 0.11 release of the Userspace RCU project.
+I made some minor changes to the messages of the unit tests.
 
-liburcu is a LGPLv2.1 userspace RCU (read-copy-update) library. This
-data synchronization library provides read-side access which scales
-linearly with the number of cores. It does so by allowing multiple
-copies of a given data structure to live at the same time, and by
-monitoring the data structure accesses to detect grace periods after
-which memory reclamation is possible.
+"Fix: lttng_poll_mod calls compat_(e)poll_add" was backported to
+stable-2.10.
 
-liburcu-cds provides efficient data structures based on RCU and
-lock-free algorithms. Those structures include hash tables, queues,
-stacks, and doubly-linked lists.
+Thanks!
+J=E9r=E9mie
 
-Here is the high-level view of the changes introduced in this release:
+On Thu, Apr 25, 2019 at 06:23:26PM -0400, Yannick Lamarre wrote:
+> From v5, fixed compilation problem in unit test and changed the title of =
+some
+> commits.
+> =
 
-* Allow combining many urcu flavors within the same
-  compile unit. Prefix public APIs with urcu_<flavor>_ prefix. Keep old
-  symbols as aliases for backward compatibility.
+> Yannick Lamarre (8):
+>   Fix: lttng_poll_mod calls compat_(e)poll_add
+>   Add Unit test to poll compatibility layer
+>   Change LTTNG_POLL_GETNB behaviour for poll flavor
+>   Adapt poll layer behaviour to match the epoll layer
+>   Fix: hang in thread_rotation when using compat-poll
+>   Change lttng_poll_wait behaviour of compat-poll to match compat-epoll
+>   Clean code base from redundant verification
+>   Clean-up: correct typo from epoll to poll
+> =
 
-* liburcu flavors public headers are moved, including them from previous
-  headers for backward compatibility:
+>  .gitignore                                   |   1 +
+>  src/bin/lttng-consumerd/health-consumerd.c   |   5 -
+>  src/bin/lttng-relayd/health-relayd.c         |   5 -
+>  src/bin/lttng-relayd/live.c                  |  10 --
+>  src/bin/lttng-relayd/main.c                  |  16 --
+>  src/bin/lttng-sessiond/agent-thread.c        |   5 -
+>  src/bin/lttng-sessiond/client.c              |   5 -
+>  src/bin/lttng-sessiond/dispatch.c            |   5 -
+>  src/bin/lttng-sessiond/health.c              |   5 -
+>  src/bin/lttng-sessiond/ht-cleanup.c          |   5 -
+>  src/bin/lttng-sessiond/manage-apps.c         |   5 -
+>  src/bin/lttng-sessiond/manage-consumer.c     |  10 --
+>  src/bin/lttng-sessiond/manage-kernel.c       |   5 -
+>  src/bin/lttng-sessiond/notification-thread.c |   3 -
+>  src/bin/lttng-sessiond/notify-apps.c         |   5 -
+>  src/bin/lttng-sessiond/register.c            |   5 -
+>  src/common/compat/compat-poll.c              |  68 ++++++--
+>  src/common/compat/poll.h                     |  10 +-
+>  src/common/consumer/consumer.c               |  10 --
+>  tests/unit/Makefile.am                       |   9 +-
+>  tests/unit/test_utils_compat_poll.c          | 233 +++++++++++++++++++++=
+++++++
+>  21 files changed, 302 insertions(+), 123 deletions(-)
+>  create mode 100644 tests/unit/test_utils_compat_poll.c
+> =
 
-  urcu-bp.h -> urcu/urcu-bp.h
-  urcu-qsbr.h -> urcu/urcu-qsbr.h
-  urcu.h -> urcu/urcu-memb.h
-  urcu.h (after #define RCU_MEMBARRIER) -> urcu/urcu-memb.h
-  urcu.h (after #define RCU_MB) -> urcu/urcu-mb.h
-  urcu.h (after #define RCU_SIGNAL) -> urcu/urcu-mb.h
+> -- =
 
-* The library liburcu is renamed to liburcu-memb, keeping the old
-  library name as alias for backward compatibility.
-
-* RCU lock-free hash table debugging:
-
-  --enable-cds-lfht-iter-debug is introduced.
-
-  Building liburcu with --enable-cds-lfht-iter-debug and rebuilding
-  application to match the ABI change allows finding cases where the hash
-  table iterator is re-purposed to be used on a different hash table
-  while still being used to iterate on a hash table.
-
-  This option alters the rculfhash ABI. Make sure to compile both library
-  and application with matching configuration.
-
-* Added support for RISC-V architecture.
-
-* Use membarrier PRIVATE_EXPEDITED when available from liburcu-bp and
-  liburcu-memb flavors.
-
-The backward compatibility header files, library shared objects, and
-symbols will be kept for a few liburcu versions before being removed, at
-which point a major soname bump will happen.
-
-As always, feedback is welcome!
-
-Thanks,
-
-Mathieu
-
-Changelog:
-
-2019-05-06 Userspace RCU 0.11.0
-        * Bump library version to 6:0:1
-        * Cleanup: update code layout to fix old gcc warning
-        * Fix: typo CPPLAGS in examples Makefile
-        * Harmonize pprint macro across projects
-        * Check for TLS support after CC detection
-        * Update macros from the autotools archive
-        * tap-driver.sh: flush stdout after each test result
-        * Update dead link in lgpl-relicensing.txt
-        * Add multiflavor compat identifiers
-        * Cleanup: missing sign compare fixes
-        * Cleanup: enable signed/unsigned compare compiler warning
-        * Cleanup: compiler warning on 32-bit architectures
-        * config.h.in: rename CONFIG_RCU_MULTIFLAVOR to CONFIG_RCU_HAVE_MULTIFLAVOR
-        * rculfhash: implement iterator debugging config option
-        * Fix: examples silent rules on Solaris
-        * Add missing fall through annotations
-        * Fix: symbol aliases with TLS compat
-        * Port: no symbols aliases on MacOS
-        * Add -Wextra to CFLAGS
-        * Add silent mode to examples Makefiles
-        * doc: update examples to API changes
-        * test multiflavor single compile unit
-        * Update README following API changes
-        * Use new header locations for includes from urcu code
-        * Update call-rcu.h and defer.h comments and include guards
-        * rculfqueue.h: do not include urcu-call-rcu.h
-        * rculfhash: support use with multiple flavors per compile unit
-        * rculfhash: do not include urcu-call-rcu.h from public API
-        * Refactor liburcu to support many flavors per compile unit
-        * Fix: only wait if work queue is empty in real-time mode
-        * Fix: don't wait after completion of a work queue job batch
-        * Fix: don't wait after completion of job batch if work queue is empty
-        * Fix: workqueue: struct urcu_work vs rcu_head mixup
-        * Cleanup: workqueue: update comments referring to call-rcu
-        * Fix: mixup between URCU_WORKQUEUE_RT and URCU_CALL_RCU_RT
-        * test_rwlock: Add per-thread count to verbose output
-        * Add *.exe to gitignore for Cygwin
-        * Fix: pthread_rwlock initialization on Cygwin
-        * Fix: compat_futex_noasync on Cygwin
-        * wfcqueue: allow defining CDS_WFCQ_WAIT_SLEEP to override `poll'
-        * Update documentation for call_rcu before/after fork
-        * Add support for the RISC-V architecture
-        * Tests: Add tap-driver.sh for automake < 1.12
-        * Tests: Replace prove by autotools tap runner
-        * liburcu-bp: Use membarrier private expedited when available
-        * liburcu: Use membarrier private expedited when available
-        * rculfhash: improve error handling of mmap backend
-        * Fix: don't use overlapping mmap mappings on Cygwin
-        * Tests fix: errors in shell scripts
-        * Revert "Use initial-exec tls model"
-        * Use initial-exec tls model
-        * Fix: don't use membarrier SHARED syscall command in liburcu-bp
-        * Tests fix: add missing Cygwin thread id
-        * Fix: assignment from incompatible pointer type warnings
-        * Tests fix: unused variable warnings
-        * Fix: add missing m68k headers to dist
-        * Bump version to 0.11-pre
-
-
-Project website: http://liburcu.org
-Git repository: git://git.liburcu.org/urcu.git
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+> 2.11.0
+> =
