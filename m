@@ -1,16 +1,18 @@
-From: Mosleh Uddin <mosleh1235@gmail.com>
-Subject: default sub-buf size and count
-Date: Tue, 7 May 2019 17:08:33 -0400
-Message-ID: <CAJyWpKEO5i2MHZpvQQmtctzbFfuTCP9AvjmPAhQsa3yf9tKPhg__25675.2512346551$1557263339$gmane$org@mail.gmail.com>
+From: Simon Marchi <simark@simark.ca>
+Subject: Re: [PATCH babeltrace] Fix: bitfield: left shift
+ undefined behavior
+Date: Tue, 7 May 2019 18:13:45 -0400
+Message-ID: <af860b96-0b30-0e7e-3668-53f0e76297c3__42794.1855554067$1557267690$gmane$org@simark.ca>
+References: <20190507204039.10496-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7249650931679263240=="
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail-it1-x135.google.com (mail-it1-x135.google.com
- [IPv6:2607:f8b0:4864:20::135])
- by lists.lttng.org (Postfix) with ESMTPS id 44zBzd0mHRz1K7w
- for <lttng-dev@lists.lttng.org>; Tue,  7 May 2019 17:08:44 -0400 (EDT)
-Received: by mail-it1-x135.google.com with SMTP id s3so562720itk.1
- for <lttng-dev@lists.lttng.org>; Tue, 07 May 2019 14:08:44 -0700 (PDT)
+Received: from simark.ca (simark.ca [158.69.221.121])
+ by lists.lttng.org (Postfix) with ESMTPS id 44zDbF3y7zz1KDY
+ for <lttng-dev@lists.lttng.org>; Tue,  7 May 2019 18:21:13 -0400 (EDT)
+In-Reply-To: <20190507204039.10496-1-mathieu.desnoyers@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -20,45 +22,96 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: lttng-dev <lttng-dev@lists.lttng.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, jgalar@efficios.com, joraj@efficios.com
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============7249650931679263240==
-Content-Type: multipart/alternative; boundary="0000000000004048200588529fe4"
-
---0000000000004048200588529fe4
-Content-Type: text/plain; charset="UTF-8"
-
-Hello,
-
-I was just wondering what the default values for the sub-buffer size and
-the number of sub-buffers are. I attempted to print them out after setting
-the channel with default attr, however both values appear 0.
-
-Thanks for any insight,
-Mosleh
-
---0000000000004048200588529fe4
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello,<div><br></div><div>I was just wondering what the de=
-fault values for the sub-buffer size and the number of sub-buffers are. I a=
-ttempted to print them out after setting the channel with default attr, how=
-ever both values appear 0.</div><div><br></div><div>Thanks for any insight,=
-</div><div>Mosleh</div></div>
-
---0000000000004048200588529fe4--
-
---===============7249650931679263240==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============7249650931679263240==--
+T24gMjAxOS0wNS0wNyA0OjQwIHAubS4sIE1hdGhpZXUgRGVzbm95ZXJzIHdyb3RlOgo+IGJpdGZp
+ZWxkLmggdXNlcyB0aGUgbGVmdCBzaGlmdCBvcGVyYXRvciB3aXRoIGEgbGVmdCBvcGVyYW5kIHdo
+aWNoCj4gbWF5IGJlIG5lZ2F0aXZlLiBUaGUgQzk5IHN0YW5kYXJkIHN0YXRlcyB0aGF0IHNoaWZ0
+aW5nIGEgbmVnYXRpdmUKPiB2YWx1ZSBpcyB1bmRlZmluZWQuCgpQbGVhc2UgYWRkIGEgcmVmZXJl
+bmNlIHRvIHRoZSBvcmlnaW5hbCBwcm9ibGVtIHRoYXQgcHJvbXB0ZWQgeW91IHRvCmRvIHRoaXMg
+Y2hhbmdlIGluIHRoZSBjb21taXQgbWVzc2FnZS4gIEZvciBleGFtcGxlOgoKLS0tIDg8IC0tLQoK
+V2hlbiBidWlsZGluZyB3aXRoIC1Xc2hpZnQtbmVnYXRpdmUtdmFsdWUsIHdlIGdldCB0aGlzIGdj
+YyB3YXJuaW5nOgoKSW4gZmlsZSBpbmNsdWRlZCBmcm9tIC9ob21lL3NtYXJjaGkvc3JjL2JhYmVs
+dHJhY2UvaW5jbHVkZS9iYWJlbHRyYWNlL2N0ZnNlci1pbnRlcm5hbC5oOjQ0OjAsCiAgICAgICAg
+ICAgICAgICAgZnJvbSAvaG9tZS9zbWFyY2hpL3NyYy9iYWJlbHRyYWNlL2N0ZnNlci9jdGZzZXIu
+Yzo0MjoKL2hvbWUvc21hcmNoaS9zcmMvYmFiZWx0cmFjZS9pbmNsdWRlL2JhYmVsdHJhY2UvY3Rm
+c2VyLWludGVybmFsLmg6IEluIGZ1bmN0aW9uIOKAmGJ0X2N0ZnNlcl93cml0ZV91bnNpZ25lZF9p
+bnTigJk6Ci9ob21lL3NtYXJjaGkvc3JjL2JhYmVsdHJhY2UvaW5jbHVkZS9iYWJlbHRyYWNlL2Jp
+dGZpZWxkLWludGVybmFsLmg6MTE2OjI0OiBlcnJvcjogbGVmdCBzaGlmdCBvZiBuZWdhdGl2ZSB2
+YWx1ZSBbLVdlcnJvcj1zaGlmdC1uZWdhdGl2ZS12YWx1ZV0KICAgbWFzayA9IH4oKH4odHlwZSkg
+MCkgPDwgKF9fc3RhcnQgJSB0cykpOyAgXAogICAgICAgICAgICAgICAgICAgICAgICBeCi9ob21l
+L3NtYXJjaGkvc3JjL2JhYmVsdHJhY2UvaW5jbHVkZS9iYWJlbHRyYWNlL2JpdGZpZWxkLWludGVy
+bmFsLmg6MjIyOjI6IG5vdGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybyDigJhfYnRfYml0ZmllbGRf
+d3JpdGVfbGXigJkKICBfYnRfYml0ZmllbGRfd3JpdGVfbGUocHRyLCB0eXBlLCBfc3RhcnQsIF9s
+ZW5ndGgsIF92KQogIF5+fn5+fn5+fn5+fn5+fn5+fn5+fgovaG9tZS9zbWFyY2hpL3NyYy9iYWJl
+bHRyYWNlL2luY2x1ZGUvYmFiZWx0cmFjZS9jdGZzZXItaW50ZXJuYWwuaDo0MTg6Mzogbm90ZTog
+aW4gZXhwYW5zaW9uIG9mIG1hY3JvIOKAmGJ0X2JpdGZpZWxkX3dyaXRlX2xl4oCZCiAgIGJ0X2Jp
+dGZpZWxkX3dyaXRlX2xlKG1tYXBfYWxpZ25fYWRkcihjdGZzZXItPmJhc2VfbW1hKSArCiAgIF5+
+fn5+fn5+fn5+fn5+fn5+fn5+CgoKVGhpcyBib2lscyBkb3duIHRvIHRoZSBmYWN0IHRoYXQgdGhl
+IGV4cHJlc3Npb24gfigodWludDhfdCkwKSBoYXMgdHlwZQoic2lnbmVkIGludCIsIHdoaWNoIGlz
+IHVzZWQgYXMgYW4gb3BlcmFuZCBvZiB0aGUgbGVmdCBzaGlmdC4gIFRoaXMgaXMgZHVlCnRvIHRo
+ZSBpbnRlZ2VyIHByb21vdGlvbiBydWxlcyBvZiBDOTkgKDYuMy4zLjEpOgoKICAgIElmIGFuIGlu
+dCBjYW4gcmVwcmVzZW50IGFsbCB2YWx1ZXMgb2YgdGhlIG9yaWdpbmFsIHR5cGUsIHRoZSB2YWx1
+ZSBpcwogICAgY29udmVydGVkIHRvIGFuIGludDsgb3RoZXJ3aXNlLCBpdCBpcyBjb252ZXJ0ZWQg
+dG8gYW4gdW5zaWduZWQgaW50LgogICAgVGhlc2UgYXJlIGNhbGxlZCB0aGUgaW50ZWdlciBwcm9t
+b3Rpb25zLiBBbGwgb3RoZXIgdHlwZXMgYXJlIHVuY2hhbmdlZAogICAgYnkgdGhlIGludGVnZXIg
+cHJvbW90aW9ucy4KCi0tLSA+OCAtLS0KCj4gCj4gV2UgYWxzbyBuZWVkIHRvIGNhc3QgdGhlIHJl
+c3VsdCBleHBsaWNpdGx5IGludG8gdGhlIGxlZnQgaGFuZAo+IHNpZGUgdHlwZSB0byBkZWFsIHdp
+dGg6Cj4gCj4gd2FybmluZzogbGFyZ2UgaW50ZWdlciBpbXBsaWNpdGx5IHRydW5jYXRlZCB0byB1
+bnNpZ25lZCB0eXBlIFstV292ZXJmbG93XQo+IAo+IFNpZ25lZC1vZmYtYnk6IE1hdGhpZXUgRGVz
+bm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4gLS0tCj4gIGluY2x1ZGUv
+YmFiZWx0cmFjZS9iaXRmaWVsZC1pbnRlcm5hbC5oIHwgNjEgKysrKysrKysrKysrKysrKysrLS0t
+LS0tLS0tLS0tLS0tLQo+ICAxIGZpbGUgY2hhbmdlZCwgMzMgaW5zZXJ0aW9ucygrKSwgMjggZGVs
+ZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvYmFiZWx0cmFjZS9iaXRmaWVsZC1p
+bnRlcm5hbC5oIGIvaW5jbHVkZS9iYWJlbHRyYWNlL2JpdGZpZWxkLWludGVybmFsLmgKPiBpbmRl
+eCBjNWQ1ZWNjZC4uZGE1NmYwODkgMTAwNjQ0Cj4gLS0tIGEvaW5jbHVkZS9iYWJlbHRyYWNlL2Jp
+dGZpZWxkLWludGVybmFsLmgKPiArKysgYi9pbmNsdWRlL2JhYmVsdHJhY2UvYml0ZmllbGQtaW50
+ZXJuYWwuaAo+IEBAIC01NSwxOSArNTUsMjQgQEAKPiAgI2RlZmluZSBfYnRfaXNfc2lnbmVkX3R5
+cGUodHlwZSkJKCh0eXBlKSAtMSA8ICh0eXBlKSAwKQo+ICAKPiAgLyoKPiAtICogTk9URTogVGhl
+IGNhc3QgdG8gKHVpbnQ2NF90KSBiZWxvdyBlbnN1cmVzIHRoYXQgd2UncmUgbm90IGNhc3Rpbmcg
+YQo+IC0gKiBuZWdhdGl2ZSB2YWx1ZSwgd2hpY2ggaXMgdW5kZWZpbmVkIGluIEMuIEhvd2V2ZXIs
+IHRoaXMgbGltaXRzIHRoZQo+IC0gKiBtYXhpbXVtIHR5cGUgc2l6ZSBvZiBgdHlwZWAgYW5kIGB2
+YCB0byA2NC1iaXQuIFRoZQo+IC0gKiBfYnRfY2hlY2tfbWF4XzY0Yml0KCkgaXMgdXNlZCB0byBj
+aGVjayB0aGF0IHRoZSB1c2VycyBvZiB0aGlzIGhlYWRlcgo+IC0gKiBkbyBub3QgdXNlIHR5cGVz
+IHdpdGggYSBzaXplIGdyZWF0ZXIgdGhhbiA2NC1iaXQuCj4gKyAqIE5PVEU6IFRoZSB1bnNpZ25l
+ZCBjYXN0IGVuc3VyZXMgdGhhdCB3ZSdyZSBub3Qgc2hpZnRpbmcgYSBuZWdhdGl2ZQo+ICsgKiB2
+YWx1ZSwgd2hpY2ggaXMgdW5kZWZpbmVkIGluIEMuIEhvd2V2ZXIsIHRoaXMgbGltaXRzIHRoZSBt
+YXhpbXVtCj4gKyAqIHR5cGUgc2l6ZSBvZiBgdHlwZWAgYW5kIGB2YCB0byA2NC1iaXQuIFRoZSBf
+YnRfY2hlY2tfbWF4XzY0Yml0KCkgaXMKPiArICogdXNlZCB0byBjaGVjayB0aGF0IHRoZSB1c2Vy
+cyBvZiB0aGlzIGhlYWRlciBkbyBub3QgdXNlIHR5cGVzIHdpdGggYQo+ICsgKiBzaXplIGdyZWF0
+ZXIgdGhhbiA2NC1iaXQuCj4gICAqLwoKVGhlIGNvbW1lbnQgZXhwbGFpbnMgIndoeSIgdGhpcyBt
+YWNybyBpcyBuZWVkZWQsIGJ1dCBkb2Vzbid0IGV4cGxhaW4gd2hhdAppdCBkb2VzLiAgSSB3b3Vs
+ZCBzdWdnZXN0IHN0YXJ0aW5nIHRoZSBjb21tZW50IHdpdGg6CgpDYXN0IHZhbHVlIGB2YCB0byBh
+biB1bnNpZ25lZCBpbnRlZ2VyIHR5cGUgb2YgdGhlIHNpemUgb2YgdHlwZSBgdHlwZWAuCgo+Cj4g
+ICNkZWZpbmUgX2J0X3Vuc2lnbmVkX2Nhc3QodHlwZSwgdikJCQkJCVwKPiAgKHsJCQkJCQkJCQlc
+Cj4gLQkoc2l6ZW9mKHYpIDwgc2l6ZW9mKHR5cGUpKSA/CQkJCQlcCj4gLQkJKCh0eXBlKSAodikp
+ICYgKCh0eXBlKSAofih+KHVpbnQ2NF90KSAwIDw8IChzaXplb2YodikgKiBDSEFSX0JJVCkpKSkg
+OiBcCj4gLQkJKHR5cGUpICh2KTsJCQkJCQlcCj4gKwlfX2J1aWx0aW5fdHlwZXNfY29tcGF0aWJs
+ZV9wKHR5cGUsIGludDhfdCkgPyAodWludDhfdCkgKHYpIDoJXAo+ICsJX19idWlsdGluX3R5cGVz
+X2NvbXBhdGlibGVfcCh0eXBlLCBpbnQxNl90KSA/ICh1aW50MTZfdCkgKHYpIDoJXAo+ICsJX19i
+dWlsdGluX3R5cGVzX2NvbXBhdGlibGVfcCh0eXBlLCBpbnQzMl90KSA/ICh1aW50MzJfdCkgKHYp
+IDoJXAo+ICsJX19idWlsdGluX3R5cGVzX2NvbXBhdGlibGVfcCh0eXBlLCBpbnQ2NF90KSA/ICh1
+aW50NjRfdCkgKHYpIDoJXAo+ICsJKHR5cGUpICh2KTsJCQkJCQkJXAo+ICB9KQoKV2hhdCBzaG91
+bGQgd2UgZG8gaW4gdGhlICJlbHNlIiBjYXNlLiAgVGhlIG1hY3JvIGNsYWltcyB0byBjYXN0IHRv
+IGFuIHVuc2lnbmVkCnR5cGUsIGJ1dCBpbiB0aGUgY2FzZSB3aGVyZSB0aGUgImVsc2UiIGJyYW5j
+aCB3b3VsZCBiZSB0YWtlbiwgdGhlIHZhbHVlIGlzIGNhc3QKdG8gdGhlIG9yaWdpbmFsIHR5cGUg
+KHBvc3NpYmxlIHNpZ25lZCkuICBJIHRoaW5rIHRoaXMgY2FuIGJlIHZlcnkgbWlzbGVhZGluZy4K
+Cktub3dpbmcgdGhhdCBhbGwgb2YgdGhpcyBpcyBzdXBwb3NlZCB0byBnZXQgcmVzb2x2ZWQgYXQg
+Y29tcGlsZWQgdGltZSwgd291bGQKdGhlcmUgYmUgYSB3YXkgdG8gZ2VuZXJhdGUgY29tcGlsYXRp
+b24gZXJyb3IgaW4gdGhlICJlbHNlIiBicmFuY2g/ICBJZiB3ZSBldmVyCnJlYWNoIGl0LCBpdCBt
+ZWFucyB3ZSBuZWVkIHRvIGFkZCBzb21ldGhpbmcgaGVyZS4KCj4gIAo+ICsvKiBVbnNpZ25lZCBi
+aXR3aXNlIGNvbXBsZW1lbnQuICovCj4gKyNkZWZpbmUgX2J0X2JpdHdpc2Vfbm90KHR5cGUsIHYp
+CV9idF91bnNpZ25lZF9jYXN0KHR5cGUsIH4odHlwZSkgdikKCkkgd2FzIHRyeWluZyB0byBwdXQg
+d29yZHMgb24gd2hhdCB0aGlzIG1hY3JvIGRvZXMsIHRvIGRvY3VtZW50IGl0IGEgYml0IGJldHRl
+ciwKYnV0IHRoZW4gcmVhbGl6ZWQgaXQgaXNzIGFsd2F5cyB1c2VkIHdpdGggdiA9IDAuICBJIGRv
+bid0IGtub3cgaWYgeW91IHdhbnQgdG8Kc2ltcGxpZnkgYW5kIHJlbW92ZSB0aGUgdiBwYXJhbWV0
+ZXIgdG8gaGFyZC1jb2RlIDA/ICBJbiB0aGUgZW5kLCBhbGwgeW91IHdhbnQgaXMKc29tZXRoaW5n
+IHRoYXQgeWllbGRzIGEgdmFsdWUgb2YgdGhlIHNhbWUgc2l6ZSBhcyB0eXBlLCBidXQgdW5zaWdu
+ZWQsIGFuZCBmaWxsZWQKd2l0aCBvbmVzLgoKU2luY2UgeW91IHNhaWQgdGhhdCB5b3Ugd291bGQg
+Y2hhbmdlIHRoZSBjb2RlLCBJJ2xsIHdhaXQgZm9yIHRoZSBuZXh0IHZlcnNpb24gdG8KbG9vayBh
+dCB0aGUgaGFpcnkgZGV0YWlscy4KClNpbW9uCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fCmx0dG5nLWRldiBtYWlsaW5nIGxpc3QKbHR0bmctZGV2QGxpc3Rz
+Lmx0dG5nLm9yZwpodHRwczovL2xpc3RzLmx0dG5nLm9yZy9jZ2ktYmluL21haWxtYW4vbGlzdGlu
+Zm8vbHR0bmctZGV2Cg==
