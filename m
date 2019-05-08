@@ -1,18 +1,21 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+From: Simon Marchi <simon.marchi@efficios.com>
 Subject: Re: [PATCH babeltrace v2] Fix: bitfield: left shift
  undefined behavior
-Date: Wed, 8 May 2019 11:59:51 -0400 (EDT)
-Message-ID: <634308112.1933.1557331191087.JavaMail.zimbra__12786.5007076011$1557331211$gmane$org@efficios.com>
+Date: Wed, 8 May 2019 12:08:27 -0400
+Message-ID: <23cd90d8-daaf-9951-c183-9315e6d7db96__19155.3322061495$1557331734$gmane$org@efficios.com>
 References: <20190508143901.1393-1-mathieu.desnoyers@efficios.com>
  <9020b4de-9c66-680f-f28f-6681ebae44c6@simark.ca>
+ <634308112.1933.1557331191087.JavaMail.zimbra@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44zh4m1jtgz1Jrh
- for <lttng-dev@lists.lttng.org>; Wed,  8 May 2019 11:59:52 -0400 (EDT)
-In-Reply-To: <9020b4de-9c66-680f-f28f-6681ebae44c6@simark.ca>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 44zhGv1D6xz1Jt1
+ for <lttng-dev@lists.lttng.org>; Wed,  8 May 2019 12:08:38 -0400 (EDT)
+In-Reply-To: <634308112.1933.1557331191087.JavaMail.zimbra@efficios.com>
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -22,73 +25,52 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Simon Marchi <simark@simark.ca>
-Cc: Simon Marchi <simon.marchi@efficios.com>, Jeremie Galarneau <jgalar@efficios.com>, lttng-dev <lttng-dev@lists.lttng.org>, Jonathan Rajotte-Julien <joraj@efficios.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Simon Marchi <simark@simark.ca>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>, Jonathan Rajotte-Julien <joraj@efficios.com>
 List-Id: lttng-dev@lists.lttng.org
 
-LS0tLS0gT24gTWF5IDgsIDIwMTksIGF0IDExOjQ5IEFNLCBTaW1vbiBNYXJjaGkgc2ltYXJrQHNp
-bWFyay5jYSB3cm90ZToKCj4gT24gMjAxOS0wNS0wOCAxMDozOSBhLm0uLCBNYXRoaWV1IERlc25v
-eWVycyB3cm90ZToKPj4gYml0ZmllbGQuaCB1c2VzIHRoZSBsZWZ0IHNoaWZ0IG9wZXJhdG9yIHdp
-dGggYSBsZWZ0IG9wZXJhbmQgd2hpY2gKPj4gbWF5IGJlIG5lZ2F0aXZlLiBUaGUgQzk5IHN0YW5k
-YXJkIHN0YXRlcyB0aGF0IHNoaWZ0aW5nIGEgbmVnYXRpdmUKPj4gdmFsdWUgaXMgdW5kZWZpbmVk
-Lgo+PiAKPj4gV2hlbiBidWlsZGluZyB3aXRoIC1Xc2hpZnQtbmVnYXRpdmUtdmFsdWUsIHdlIGdl
-dCB0aGlzIGdjYyB3YXJuaW5nOgo+PiAKPj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tCj4+IC9ob21l
-L3NtYXJjaGkvc3JjL2JhYmVsdHJhY2UvaW5jbHVkZS9iYWJlbHRyYWNlL2N0ZnNlci1pbnRlcm5h
-bC5oOjQ0OjAsCj4+ICAgICAgICAgICAgICAgICAgZnJvbSAvaG9tZS9zbWFyY2hpL3NyYy9iYWJl
-bHRyYWNlL2N0ZnNlci9jdGZzZXIuYzo0MjoKPj4gL2hvbWUvc21hcmNoaS9zcmMvYmFiZWx0cmFj
-ZS9pbmNsdWRlL2JhYmVsdHJhY2UvY3Rmc2VyLWludGVybmFsLmg6IEluIGZ1bmN0aW9uCj4+IOKA
-mGJ0X2N0ZnNlcl93cml0ZV91bnNpZ25lZF9pbnTigJk6Cj4+IC9ob21lL3NtYXJjaGkvc3JjL2Jh
-YmVsdHJhY2UvaW5jbHVkZS9iYWJlbHRyYWNlL2JpdGZpZWxkLWludGVybmFsLmg6MTE2OjI0Ogo+
-PiBlcnJvcjogbGVmdCBzaGlmdCBvZiBuZWdhdGl2ZSB2YWx1ZSBbLVdlcnJvcj1zaGlmdC1uZWdh
-dGl2ZS12YWx1ZV0KPj4gICAgbWFzayA9IH4oKH4odHlwZSkgMCkgPDwgKF9fc3RhcnQgJSB0cykp
-OyAgXAo+PiAgICAgICAgICAgICAgICAgICAgICAgICBeCj4+IC9ob21lL3NtYXJjaGkvc3JjL2Jh
-YmVsdHJhY2UvaW5jbHVkZS9iYWJlbHRyYWNlL2JpdGZpZWxkLWludGVybmFsLmg6MjIyOjI6IG5v
-dGU6Cj4+IGluIGV4cGFuc2lvbiBvZiBtYWNybyDigJhfYnRfYml0ZmllbGRfd3JpdGVfbGXigJkK
-Pj4gICBfYnRfYml0ZmllbGRfd3JpdGVfbGUocHRyLCB0eXBlLCBfc3RhcnQsIF9sZW5ndGgsIF92
-KQo+PiAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+fgo+PiAvaG9tZS9zbWFyY2hpL3NyYy9iYWJlbHRy
-YWNlL2luY2x1ZGUvYmFiZWx0cmFjZS9jdGZzZXItaW50ZXJuYWwuaDo0MTg6Mzogbm90ZToKPj4g
-aW4gZXhwYW5zaW9uIG9mIG1hY3JvIOKAmGJ0X2JpdGZpZWxkX3dyaXRlX2xl4oCZCj4+ICAgIGJ0
-X2JpdGZpZWxkX3dyaXRlX2xlKG1tYXBfYWxpZ25fYWRkcihjdGZzZXItPmJhc2VfbW1hKSArCj4+
-ICAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+Cj4+IAo+PiBUaGlzIGJvaWxzIGRvd24gdG8gdGhlIGZh
-Y3QgdGhhdCB0aGUgZXhwcmVzc2lvbiB+KCh1aW50OF90KTApIGhhcyB0eXBlCj4+ICJzaWduZWQg
-aW50Iiwgd2hpY2ggaXMgdXNlZCBhcyBhbiBvcGVyYW5kIG9mIHRoZSBsZWZ0IHNoaWZ0LiAgVGhp
-cyBpcyBkdWUKPj4gdG8gdGhlIGludGVnZXIgcHJvbW90aW9uIHJ1bGVzIG9mIEM5OSAoNi4zLjMu
-MSk6Cj4+IAo+PiAgICAgSWYgYW4gaW50IGNhbiByZXByZXNlbnQgYWxsIHZhbHVlcyBvZiB0aGUg
-b3JpZ2luYWwgdHlwZSwgdGhlIHZhbHVlIGlzCj4+ICAgICBjb252ZXJ0ZWQgdG8gYW4gaW50OyBv
-dGhlcndpc2UsIGl0IGlzIGNvbnZlcnRlZCB0byBhbiB1bnNpZ25lZCBpbnQuCj4+ICAgICBUaGVz
-ZSBhcmUgY2FsbGVkIHRoZSBpbnRlZ2VyIHByb21vdGlvbnMuIEFsbCBvdGhlciB0eXBlcyBhcmUg
-dW5jaGFuZ2VkCj4+ICAgICBieSB0aGUgaW50ZWdlciBwcm9tb3Rpb25zLgo+PiAKPj4gV2UgYWxz
-byBuZWVkIHRvIGNhc3QgdGhlIHJlc3VsdCBleHBsaWNpdGx5IGludG8gdGhlIGxlZnQgaGFuZAo+
-PiBzaWRlIHR5cGUgdG8gZGVhbCB3aXRoOgo+PiAKPj4gd2FybmluZzogbGFyZ2UgaW50ZWdlciBp
-bXBsaWNpdGx5IHRydW5jYXRlZCB0byB1bnNpZ25lZCB0eXBlIFstV292ZXJmbG93XQo+PiAKPj4g
-U2lnbmVkLW9mZi1ieTogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmlj
-aW9zLmNvbT4KPj4gLS0tCj4+IENoYW5nZXMgc2luY2UgdjE6Cj4+IC0gR2VuZXJhdGUgY29tcGls
-ZS10aW1lIGVycm9yIGlmIHRoZSB0eXBlIGFyZ3VtZW50IHBhc3NlZCB0bwo+PiAgIF9idF91bnNp
-Z25lZF9jYXN0KCkgaXMgbGFyZ2VyIHRoYW4gc2l6ZW9mKHVpbnQ2NF90KSwgdGhpcwo+PiAgIGFs
-bG93cyByZW1vdmluZyBfYnRfY2hlY2tfbWF4XzY0Yml0LAo+PiAtIEludHJvZHVjZSBfYnJfZmls
-bF9tYXNrLCB3aGljaCByZXBsYWNlcyBfYnRfYml0d2lzZV9ub3QsCj4+IC0gQ2xhcmlmeSBfYnRf
-dW5zaWduZWRfY2FzdCBjb21tZW50LAo+PiAtIEV4cGFuZCBleHBsYW5hdGlvbiBvZiB0aGUgaXNz
-dWUgd2l0aGluIHRoZSBwYXRjaCBjb21taXQgbWVzc2FnZS4KPiAKPiBJIGRpZG4ndCBzcG90IGFu
-eSBtaXN0YWtlIGJ5IGluc3BlY3RpbmcgdGhlIGNvZGUsIGJ1dCBJIGdldCBzb21lIGVycm9ycyBy
-dW5uaW5nCj4gdGVzdHMvbGliL3Rlc3RfYml0ZmllbGQsIHNvIEkgZ3Vlc3MgdGhlcmUgYXJlIHNv
-bWUgOikuICBEb2VzIGl0IHBhc3Mgb24geW91cgo+IHNpZGU/CgpXaGF0IGNvbXBpbGVyIGRvIHlv
-dSB1c2UsIGFuZCB3aGljaCBjb21waWxhdGlvbiBmbGFncyA/CihpdCB3b3JrcyBoZXJlKQoKWy4u
-Ll0KPj4gIAo+PiAgLyoKPj4gICAqIGJ0X2JpdGZpZWxkX3dyaXRlIC0gd3JpdGUgaW50ZWdlciB0
-byBhIGJpdGZpZWxkIGluIG5hdGl2ZSBlbmRpYW5uZXNzCj4+IEBAIC0xMDgsMTUgKzExMywxNSBA
-QCBkbyB7CQkJCQkJCQkJXAo+PiAgCQkJCQkJCQkJXAo+PiAgCS8qIFRyaW0gdiBoaWdoIGJpdHMg
-Ki8JCQkJCQlcCj4+ICAJaWYgKF9fbGVuZ3RoIDwgc2l6ZW9mKF9fdikgKiBDSEFSX0JJVCkJCQkJ
-XAo+PiAtCQlfX3YgJj0gfigofih0eXBlb2YoX192KSkgMCkgPDwgX19sZW5ndGgpOwkJXAo+PiAr
-CQlfX3YgJj0gKHR5cGVvZihfX3YpKSB+KF9idF9maWxsX21hc2sodHlwZW9mKF9fdikpIDw8IF9f
-bGVuZ3RoKTsgXAo+IAo+IE5vdCBhIGJsb2NrZXIsIGJ1dCB0aGlzIG9wZXJhdGlvbiBpcyBkb25l
-IGVub3VnaCB0aW1lcyB0aGF0IGl0IG1pZ2h0IGJlIHdvcnRoCj4gZ2l2aW5nIGl0IGEgbmFtZSBh
-bmQgbWFrZSBhIG1hY3JvIGZvciBpdC4gIEl0IGNvdWxkIGhlbHAgbWFrZSB0aGlzIGJpZyBtYWNy
-bwo+IG1vcmUgcmVhZGFibGUsIGFuZCB3ZSBjb3VsZCB0ZXN0IGl0IG9uIGl0cyBvd24gaWYgbmVl
-ZGVkLgo+IAo+IC8qIEdlbmVyYXRlIGEgbWFzayBvZiB0eXBlIGB0eXBlYCB3aXRoIHRoZSBgbGVu
-Z3RoYCBsZWFzdCBzaWduaWZpY2FudCBiaXRzIHNldC4KPiAqLwo+IAo+ICNkZWZpbmUgX2J0X21h
-a2VfbWFzayh0eXBlLCBsZW5ndGgpIFwKPgkoKHR5cGUpIH4oX2J0X2ZpbGxfbWFzayh0eXBlKSA8
-PCBsZW5ndGgpKQoKR29vZCBwb2ludCEgV2lsbCBkby4gTWlzc2luZyAoKSBhcm91bmQgImxlbmd0
-aCIgdGhvdWdoLgoKVGhhbmtzLAoKTWF0aGlldQoKPiAKPiBTaW1vbgoKLS0gCk1hdGhpZXUgRGVz
-bm95ZXJzCkVmZmljaU9TIEluYy4KaHR0cDovL3d3dy5lZmZpY2lvcy5jb20KX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlz
-dApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1i
-aW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+On 2019-05-08 11:59 a.m., Mathieu Desnoyers wrote:
+> What compiler do you use, and which compilation flags ?
+> (it works here)
+
+"gcc (Ubuntu 7.4.0-1ubuntu1~18.04) 7.4.0", which is the system compiler on Ubuntu 18.04.
+
+I just built with
+
+  ./configure 'CFLAGS=-g3 -O0 -fsanitize=address -Wall'
+
+and got some failures, the first one being
+
+not ok 8 - Writing and reading back 0xC07EBC7, signed
+#     Failed test (test_bitfield.c:run_test_signed() at line 224)
+# Failed reading value written "signed char"-wise, with start=0 and length=29. Read FFFFFFFFFFFFFFC7
+# 0xFFFFFFC7 0xFFFFFFEB 0x7 0xC 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0
+
+The test passes without the patch.  If you can't reproduce it easily, I can dig
+on my side.
+
+>>>  
+>>>  /*
+>>>   * bt_bitfield_write - write integer to a bitfield in native endianness
+>>> @@ -108,15 +113,15 @@ do {									\
+>>>  									\
+>>>  	/* Trim v high bits */						\
+>>>  	if (__length < sizeof(__v) * CHAR_BIT)				\
+>>> -		__v &= ~((~(typeof(__v)) 0) << __length);		\
+>>> +		__v &= (typeof(__v)) ~(_bt_fill_mask(typeof(__v)) << __length); \
+>>
+>> Not a blocker, but this operation is done enough times that it might be worth
+>> giving it a name and make a macro for it.  It could help make this big macro
+>> more readable, and we could test it on its own if needed.
+>>
+>> /* Generate a mask of type `type` with the `length` least significant bits set.
+>> */
+>>
+>> #define _bt_make_mask(type, length) \
+>> 	((type) ~(_bt_fill_mask(type) << length))
+> 
+> Good point! Will do. Missing () around "length" though.
+
+Right, and I should have mentioned I didn't actually test that macro, so handle with care!
+
+Simon
