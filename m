@@ -1,20 +1,20 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH babeltrace v2] Fix: bitfield: left shift
- undefined behavior
-Date: Wed, 8 May 2019 13:01:44 -0400 (EDT)
-Message-ID: <409310574.2023.1557334904540.JavaMail.zimbra__28087.9164159828$1557334923$gmane$org@efficios.com>
-References: <20190508143901.1393-1-mathieu.desnoyers@efficios.com>
- <9020b4de-9c66-680f-f28f-6681ebae44c6@simark.ca>
- <634308112.1933.1557331191087.JavaMail.zimbra@efficios.com>
- <23cd90d8-daaf-9951-c183-9315e6d7db96@efficios.com>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: default sub-buf size and count
+Date: Wed, 8 May 2019 13:12:50 -0400
+Message-ID: <20190508171250.GA14627__28730.8237094962$1557335591$gmane$org@joraj-alpa>
+References: <CAJyWpKEO5i2MHZpvQQmtctzbFfuTCP9AvjmPAhQsa3yf9tKPhg@mail.gmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 44zjSB4rXfz1JxW
- for <lttng-dev@lists.lttng.org>; Wed,  8 May 2019 13:01:46 -0400 (EDT)
-In-Reply-To: <23cd90d8-daaf-9951-c183-9315e6d7db96@efficios.com>
+ by lists.lttng.org (Postfix) with ESMTPS id 44zjj266G6z1K03
+ for <lttng-dev@lists.lttng.org>; Wed,  8 May 2019 13:12:54 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 13DC31E1F79
+ for <lttng-dev@lists.lttng.org>; Wed,  8 May 2019 13:12:54 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <CAJyWpKEO5i2MHZpvQQmtctzbFfuTCP9AvjmPAhQsa3yf9tKPhg@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,76 +24,38 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Simon Marchi <simon.marchi@efficios.com>
-Cc: Simon Marchi <simark@simark.ca>, lttng-dev <lttng-dev@lists.lttng.org>, Jeremie Galarneau <jgalar@efficios.com>, Jonathan Rajotte-Julien <joraj@efficios.com>
+To: Mosleh Uddin <mosleh1235@gmail.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
------ On May 8, 2019, at 12:08 PM, Simon Marchi simon.marchi@efficios.com wrote:
+Hi,
 
-> On 2019-05-08 11:59 a.m., Mathieu Desnoyers wrote:
->> What compiler do you use, and which compilation flags ?
->> (it works here)
+On Tue, May 07, 2019 at 05:08:33PM -0400, Mosleh Uddin wrote:
+> Hello,
 > 
-> "gcc (Ubuntu 7.4.0-1ubuntu1~18.04) 7.4.0", which is the system compiler on
-> Ubuntu 18.04.
-> 
-> I just built with
-> 
->  ./configure 'CFLAGS=-g3 -O0 -fsanitize=address -Wall'
-> 
-> and got some failures, the first one being
-> 
-> not ok 8 - Writing and reading back 0xC07EBC7, signed
-> #     Failed test (test_bitfield.c:run_test_signed() at line 224)
-> # Failed reading value written "signed char"-wise, with start=0 and length=29.
-> Read FFFFFFFFFFFFFFC7
-> # 0xFFFFFFC7 0xFFFFFFEB 0x7 0xC 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0
-> 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0
-> 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0
-> 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0
-> 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0
-> 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0
-> 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0
-> 
-> The test passes without the patch.  If you can't reproduce it easily, I can dig
-> on my side.
+> I was just wondering what the default values for the sub-buffer size and
+> the number of sub-buffers are. I attempted to print them out after setting
+> the channel with default attr, however both values appear 0.
 
-it fails here too... the executable test-bitfield was renamed to test_bitfield
-and I had an old tree with the prior executable. Will investigate.
+This information is normally found in the man pages.
 
-Thanks,
+man lttng enable-channel, search for --subbuf-size=SIZE
 
-Mathieu
+Could you outline the session configuration used so we can see if the fact that
+both value are zero is a bug?
+
+Cheers
 
 > 
->>>>  
->>>>  /*
->>>>   * bt_bitfield_write - write integer to a bitfield in native endianness
->>>> @@ -108,15 +113,15 @@ do {									\
->>>>  									\
->>>>  	/* Trim v high bits */						\
->>>>  	if (__length < sizeof(__v) * CHAR_BIT)				\
->>>> -		__v &= ~((~(typeof(__v)) 0) << __length);		\
->>>> +		__v &= (typeof(__v)) ~(_bt_fill_mask(typeof(__v)) << __length); \
->>>
->>> Not a blocker, but this operation is done enough times that it might be worth
->>> giving it a name and make a macro for it.  It could help make this big macro
->>> more readable, and we could test it on its own if needed.
->>>
->>> /* Generate a mask of type `type` with the `length` least significant bits set.
->>> */
->>>
->>> #define _bt_make_mask(type, length) \
->>> 	((type) ~(_bt_fill_mask(type) << length))
->> 
->> Good point! Will do. Missing () around "length" though.
-> 
-> Right, and I should have mentioned I didn't actually test that macro, so handle
-> with care!
-> 
-> Simon
+> Thanks for any insight,
+> Mosleh
+
+> _______________________________________________
+> lttng-dev mailing list
+> lttng-dev@lists.lttng.org
+> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Jonathan Rajotte-Julien
+EfficiOS
