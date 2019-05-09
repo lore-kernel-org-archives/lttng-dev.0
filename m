@@ -1,17 +1,18 @@
-From: Simon Marchi <simark@simark.ca>
+From: Simon Marchi <simon.marchi@efficios.com>
 Subject: Re: [PATCH babeltrace v3] Fix: bitfield: left shift
  undefined behavior
-Date: Thu, 9 May 2019 10:02:52 -0400
-Message-ID: <cbd49a5b-b955-e50c-46e0-c24507108b85__29486.9753810175$1557410603$gmane$org@simark.ca>
+Date: Thu, 9 May 2019 10:19:23 -0400
+Message-ID: <207dfb5a-d99a-ecab-3080-16ba3e6e998a__20105.9881759406$1557411592$gmane$org@efficios.com>
 References: <20190508222318.6014-1-mathieu.desnoyers@efficios.com>
+ <cbd49a5b-b955-e50c-46e0-c24507108b85@simark.ca>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from simark.ca (simark.ca [158.69.221.121])
- by lists.lttng.org (Postfix) with ESMTPS id 450FRR6Jxzz1LBY
- for <lttng-dev@lists.lttng.org>; Thu,  9 May 2019 10:02:59 -0400 (EDT)
-In-Reply-To: <20190508222318.6014-1-mathieu.desnoyers@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 450FpW3ys1z1LG2
+ for <lttng-dev@lists.lttng.org>; Thu,  9 May 2019 10:19:31 -0400 (EDT)
+In-Reply-To: <cbd49a5b-b955-e50c-46e0-c24507108b85@simark.ca>
 Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -22,60 +23,27 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, simon.marchi@efficios.com, jgalar@efficios.com, joraj@efficios.com
+To: Simon Marchi <simark@simark.ca>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, jgalar@efficios.com, joraj@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-T24gMjAxOS0wNS0wOCA2OjIzIHAubS4sIE1hdGhpZXUgRGVzbm95ZXJzIHdyb3RlOgo+IGJpdGZp
-ZWxkLmggdXNlcyB0aGUgbGVmdCBzaGlmdCBvcGVyYXRvciB3aXRoIGEgbGVmdCBvcGVyYW5kIHdo
-aWNoCj4gbWF5IGJlIG5lZ2F0aXZlLiBUaGUgQzk5IHN0YW5kYXJkIHN0YXRlcyB0aGF0IHNoaWZ0
-aW5nIGEgbmVnYXRpdmUKPiB2YWx1ZSBpcyB1bmRlZmluZWQuCj4gCj4gV2hlbiBidWlsZGluZyB3
-aXRoIC1Xc2hpZnQtbmVnYXRpdmUtdmFsdWUsIHdlIGdldCB0aGlzIGdjYyB3YXJuaW5nOgo+IAo+
-IEluIGZpbGUgaW5jbHVkZWQgZnJvbSAvaG9tZS9zbWFyY2hpL3NyYy9iYWJlbHRyYWNlL2luY2x1
-ZGUvYmFiZWx0cmFjZS9jdGZzZXItaW50ZXJuYWwuaDo0NDowLAo+ICAgICAgICAgICAgICAgICAg
-ZnJvbSAvaG9tZS9zbWFyY2hpL3NyYy9iYWJlbHRyYWNlL2N0ZnNlci9jdGZzZXIuYzo0MjoKPiAv
-aG9tZS9zbWFyY2hpL3NyYy9iYWJlbHRyYWNlL2luY2x1ZGUvYmFiZWx0cmFjZS9jdGZzZXItaW50
-ZXJuYWwuaDogSW4gZnVuY3Rpb24g4oCYYnRfY3Rmc2VyX3dyaXRlX3Vuc2lnbmVkX2ludOKAmToK
-PiAvaG9tZS9zbWFyY2hpL3NyYy9iYWJlbHRyYWNlL2luY2x1ZGUvYmFiZWx0cmFjZS9iaXRmaWVs
-ZC1pbnRlcm5hbC5oOjExNjoyNDogZXJyb3I6IGxlZnQgc2hpZnQgb2YgbmVnYXRpdmUgdmFsdWUg
-Wy1XZXJyb3I9c2hpZnQtbmVnYXRpdmUtdmFsdWVdCj4gICAgbWFzayA9IH4oKH4odHlwZSkgMCkg
-PDwgKF9fc3RhcnQgJSB0cykpOyAgXAo+ICAgICAgICAgICAgICAgICAgICAgICAgIF4KPiAvaG9t
-ZS9zbWFyY2hpL3NyYy9iYWJlbHRyYWNlL2luY2x1ZGUvYmFiZWx0cmFjZS9iaXRmaWVsZC1pbnRl
-cm5hbC5oOjIyMjoyOiBub3RlOiBpbiBleHBhbnNpb24gb2YgbWFjcm8g4oCYX2J0X2JpdGZpZWxk
-X3dyaXRlX2xl4oCZCj4gICBfYnRfYml0ZmllbGRfd3JpdGVfbGUocHRyLCB0eXBlLCBfc3RhcnQs
-IF9sZW5ndGgsIF92KQo+ICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+Cj4gL2hvbWUvc21hcmNoaS9z
-cmMvYmFiZWx0cmFjZS9pbmNsdWRlL2JhYmVsdHJhY2UvY3Rmc2VyLWludGVybmFsLmg6NDE4OjM6
-IG5vdGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybyDigJhidF9iaXRmaWVsZF93cml0ZV9sZeKAmQo+
-ICAgIGJ0X2JpdGZpZWxkX3dyaXRlX2xlKG1tYXBfYWxpZ25fYWRkcihjdGZzZXItPmJhc2VfbW1h
-KSArCj4gICAgXn5+fn5+fn5+fn5+fn5+fn5+fn4KPiAKPiBUaGlzIGJvaWxzIGRvd24gdG8gdGhl
-IGZhY3QgdGhhdCB0aGUgZXhwcmVzc2lvbiB+KCh1aW50OF90KTApIGhhcyB0eXBlCj4gInNpZ25l
-ZCBpbnQiLCB3aGljaCBpcyB1c2VkIGFzIGFuIG9wZXJhbmQgb2YgdGhlIGxlZnQgc2hpZnQuICBU
-aGlzIGlzIGR1ZQo+IHRvIHRoZSBpbnRlZ2VyIHByb21vdGlvbiBydWxlcyBvZiBDOTkgKDYuMy4z
-LjEpOgo+IAo+ICAgICBJZiBhbiBpbnQgY2FuIHJlcHJlc2VudCBhbGwgdmFsdWVzIG9mIHRoZSBv
-cmlnaW5hbCB0eXBlLCB0aGUgdmFsdWUgaXMKPiAgICAgY29udmVydGVkIHRvIGFuIGludDsgb3Ro
-ZXJ3aXNlLCBpdCBpcyBjb252ZXJ0ZWQgdG8gYW4gdW5zaWduZWQgaW50Lgo+ICAgICBUaGVzZSBh
-cmUgY2FsbGVkIHRoZSBpbnRlZ2VyIHByb21vdGlvbnMuIEFsbCBvdGhlciB0eXBlcyBhcmUgdW5j
-aGFuZ2VkCj4gICAgIGJ5IHRoZSBpbnRlZ2VyIHByb21vdGlvbnMuCj4gCj4gV2UgYWxzbyBuZWVk
-IHRvIGNhc3QgdGhlIHJlc3VsdCBleHBsaWNpdGx5IGludG8gdGhlIGxlZnQgaGFuZAo+IHNpZGUg
-dHlwZSB0byBkZWFsIHdpdGg6Cj4gCj4gd2FybmluZzogbGFyZ2UgaW50ZWdlciBpbXBsaWNpdGx5
-IHRydW5jYXRlZCB0byB1bnNpZ25lZCB0eXBlIFstV292ZXJmbG93XQo+IAo+IFNpZ25lZC1vZmYt
-Ynk6IE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVyc0BlZmZpY2lvcy5jb20+Cj4g
-LS0tCj4gQ2hhbmdlcyBzaW5jZSB2MToKPiAtIEdlbmVyYXRlIGNvbXBpbGUtdGltZSBlcnJvciBp
-ZiB0aGUgdHlwZSBhcmd1bWVudCBwYXNzZWQgdG8KPiAgIF9idF91bnNpZ25lZF9jYXN0KCkgaXMg
-bGFyZ2VyIHRoYW4gc2l6ZW9mKHVpbnQ2NF90KSwgdGhpcwo+ICAgYWxsb3dzIHJlbW92aW5nIF9i
-dF9jaGVja19tYXhfNjRiaXQsCj4gLSBJbnRyb2R1Y2UgX2JyX2ZpbGxfbWFzaywgd2hpY2ggcmVw
-bGFjZXMgX2J0X2JpdHdpc2Vfbm90LAo+IC0gQ2xhcmlmeSBfYnRfdW5zaWduZWRfY2FzdCBjb21t
-ZW50LAo+IC0gRXhwYW5kIGV4cGxhbmF0aW9uIG9mIHRoZSBpc3N1ZSB3aXRoaW4gdGhlIHBhdGNo
-IGNvbW1pdCBtZXNzYWdlLgo+IAo+IENoYW5nZXMgc2luY2UgdjI6Cj4gLSBGaXggdW53YW50ZWQg
-c2lnbiBleHRlbnNpb24gd2hlbiBnZW5lcmF0aW5nIG1hc2tzLAo+IC0gSW50cm9kdWNlIG1hY3Jv
-IGhlbHBlcnMgdG8gY2xhcmlmeSBjb2RlOgo+ICAgLSBfYnRfY2FzdF92YWx1ZV90b191bnNpZ25l
-ZCgpCj4gICAtIF9idF9jYXN0X3ZhbHVlX3RvX3Vuc2lnbmVkX3R5cGUoKSwKPiAgIC0gX2J0X21h
-a2VfbWFza19jb21wbGVtZW50KCksCj4gICAtIF9idF9tYWtlX21hc2soKS4KCkkgbWlnaHQgaGF2
-ZSBtb3JlIGNhc2VzIGZvciB5b3UgdG8gaW52ZXN0aWdhdGUgOikKCkNhbiB5b3UgdHJ5IGJ1aWxk
-aW5nIHdpdGggLWZzYW5pdGl6ZT11bmRlZmluZWQgYW5kIHJ1biB0ZXN0X2JpdGZpZWxkPyBJIGdl
-dCBzb21lOgoKL2hvbWUvc21hcmNoaS9zcmMvYmFiZWx0cmFjZS90ZXN0cy9saWIvdGVzdF9iaXRm
-aWVsZC5jOjIyMjo0OiBydW50aW1lIGVycm9yOiBsZWZ0IHNoaWZ0IG9mIG5lZ2F0aXZlIHZhbHVl
-IC0xCgpXaGljaCB3b3VsZCBoaW50IHRoYXQgd2UgYXJlIG1pc3NpbmcgYSBjYXN0IGJlZm9yZSBh
-IHNoaWZ0LgoKU2ltb24KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KbHR0bmctZGV2IG1haWxpbmcgbGlzdApsdHRuZy1kZXZAbGlzdHMubHR0bmcub3JnCmh0
-dHBzOi8vbGlzdHMubHR0bmcub3JnL2NnaS1iaW4vbWFpbG1hbi9saXN0aW5mby9sdHRuZy1kZXYK
+On 2019-05-09 10:02 a.m., Simon Marchi wrote:
+> I might have more cases for you to investigate :)
+> 
+> Can you try building with -fsanitize=undefined and run test_bitfield? I get some:
+> 
+> /home/smarchi/src/babeltrace/tests/lib/test_bitfield.c:222:4: runtime error: left shift of negative value -1
+> 
+> Which would hint that we are missing a cast before a shift.
+> 
+> Simon
+
+I digged a bit, and it's these lines
+
+  ___v >>= final;
+
+  ___v <<= final;
+
+in _bt_piecewise_lshift and _bt_piecewise_rshift.
+
+Simon
