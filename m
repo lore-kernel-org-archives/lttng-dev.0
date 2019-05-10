@@ -1,15 +1,17 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH babeltrace v4 1/2] Fix: bitfield: left shift
- undefined behavior
-Date: Fri, 10 May 2019 13:47:49 -0400
-Message-ID: <20190510174750.13152-1-mathieu.desnoyers__42835.1589058124$1557510501$gmane$org@efficios.com>
+Subject: [PATCH babeltrace 2/2] Extend test-bitfield coverage
+Date: Fri, 10 May 2019 13:47:50 -0400
+Message-ID: <20190510174750.13152-2-mathieu.desnoyers__11921.4839114406$1557510531$gmane$org@efficios.com>
+References: <20190510174750.13152-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 450yNh6yT4z1K0h
- for <lttng-dev@lists.lttng.org>; Fri, 10 May 2019 13:48:04 -0400 (EDT)
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 450yNk1jNgz1K18
+ for <lttng-dev@lists.lttng.org>; Fri, 10 May 2019 13:48:06 -0400 (EDT)
+In-Reply-To: <20190510174750.13152-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,320 +25,729 @@ To: simon.marchi@efficios.com, jgalar@efficios.com, joraj@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Yml0ZmllbGQuaCB1c2VzIHRoZSBsZWZ0IHNoaWZ0IG9wZXJhdG9yIHdpdGggYSBsZWZ0IG9wZXJh
-bmQgd2hpY2gKbWF5IGJlIG5lZ2F0aXZlLiBUaGUgQzk5IHN0YW5kYXJkIHN0YXRlcyB0aGF0IHNo
-aWZ0aW5nIGEgbmVnYXRpdmUKdmFsdWUgaXMgdW5kZWZpbmVkLgoKV2hlbiBidWlsZGluZyB3aXRo
-IC1Xc2hpZnQtbmVnYXRpdmUtdmFsdWUsIHdlIGdldCB0aGlzIGdjYyB3YXJuaW5nOgoKSW4gZmls
-ZSBpbmNsdWRlZCBmcm9tIC9ob21lL3NtYXJjaGkvc3JjL2JhYmVsdHJhY2UvaW5jbHVkZS9iYWJl
-bHRyYWNlL2N0ZnNlci1pbnRlcm5hbC5oOjQ0OjAsCiAgICAgICAgICAgICAgICAgZnJvbSAvaG9t
-ZS9zbWFyY2hpL3NyYy9iYWJlbHRyYWNlL2N0ZnNlci9jdGZzZXIuYzo0MjoKL2hvbWUvc21hcmNo
-aS9zcmMvYmFiZWx0cmFjZS9pbmNsdWRlL2JhYmVsdHJhY2UvY3Rmc2VyLWludGVybmFsLmg6IElu
-IGZ1bmN0aW9uIOKAmGJ0X2N0ZnNlcl93cml0ZV91bnNpZ25lZF9pbnTigJk6Ci9ob21lL3NtYXJj
-aGkvc3JjL2JhYmVsdHJhY2UvaW5jbHVkZS9iYWJlbHRyYWNlL2JpdGZpZWxkLWludGVybmFsLmg6
-MTE2OjI0OiBlcnJvcjogbGVmdCBzaGlmdCBvZiBuZWdhdGl2ZSB2YWx1ZSBbLVdlcnJvcj1zaGlm
-dC1uZWdhdGl2ZS12YWx1ZV0KICAgbWFzayA9IH4oKH4odHlwZSkgMCkgPDwgKF9fc3RhcnQgJSB0
-cykpOyAgXAogICAgICAgICAgICAgICAgICAgICAgICBeCi9ob21lL3NtYXJjaGkvc3JjL2JhYmVs
-dHJhY2UvaW5jbHVkZS9iYWJlbHRyYWNlL2JpdGZpZWxkLWludGVybmFsLmg6MjIyOjI6IG5vdGU6
-IGluIGV4cGFuc2lvbiBvZiBtYWNybyDigJhfYnRfYml0ZmllbGRfd3JpdGVfbGXigJkKICBfYnRf
-Yml0ZmllbGRfd3JpdGVfbGUocHRyLCB0eXBlLCBfc3RhcnQsIF9sZW5ndGgsIF92KQogIF5+fn5+
-fn5+fn5+fn5+fn5+fn5+fgovaG9tZS9zbWFyY2hpL3NyYy9iYWJlbHRyYWNlL2luY2x1ZGUvYmFi
-ZWx0cmFjZS9jdGZzZXItaW50ZXJuYWwuaDo0MTg6Mzogbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1h
-Y3JvIOKAmGJ0X2JpdGZpZWxkX3dyaXRlX2xl4oCZCiAgIGJ0X2JpdGZpZWxkX3dyaXRlX2xlKG1t
-YXBfYWxpZ25fYWRkcihjdGZzZXItPmJhc2VfbW1hKSArCiAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+
-CgpUaGlzIGJvaWxzIGRvd24gdG8gdGhlIGZhY3QgdGhhdCB0aGUgZXhwcmVzc2lvbiB+KCh1aW50
-OF90KTApIGhhcyB0eXBlCiJzaWduZWQgaW50Iiwgd2hpY2ggaXMgdXNlZCBhcyBhbiBvcGVyYW5k
-IG9mIHRoZSBsZWZ0IHNoaWZ0LiAgVGhpcyBpcyBkdWUKdG8gdGhlIGludGVnZXIgcHJvbW90aW9u
-IHJ1bGVzIG9mIEM5OSAoNi4zLjMuMSk6CgogICAgSWYgYW4gaW50IGNhbiByZXByZXNlbnQgYWxs
-IHZhbHVlcyBvZiB0aGUgb3JpZ2luYWwgdHlwZSwgdGhlIHZhbHVlIGlzCiAgICBjb252ZXJ0ZWQg
-dG8gYW4gaW50OyBvdGhlcndpc2UsIGl0IGlzIGNvbnZlcnRlZCB0byBhbiB1bnNpZ25lZCBpbnQu
-CiAgICBUaGVzZSBhcmUgY2FsbGVkIHRoZSBpbnRlZ2VyIHByb21vdGlvbnMuIEFsbCBvdGhlciB0
-eXBlcyBhcmUgdW5jaGFuZ2VkCiAgICBieSB0aGUgaW50ZWdlciBwcm9tb3Rpb25zLgoKV2UgYWxz
-byBuZWVkIHRvIGNhc3QgdGhlIHJlc3VsdCBleHBsaWNpdGx5IGludG8gdGhlIGxlZnQgaGFuZApz
-aWRlIHR5cGUgdG8gZGVhbCB3aXRoOgoKd2FybmluZzogbGFyZ2UgaW50ZWdlciBpbXBsaWNpdGx5
-IHRydW5jYXRlZCB0byB1bnNpZ25lZCB0eXBlIFstV292ZXJmbG93XQoKU2lnbmVkLW9mZi1ieTog
-TWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KQ2hhbmdl
-LUlkOiBJNzc5YTU1MjI4YzYyNTYxODhlZGRjOTRjZWQ2Y2ViNzdmZmM4NTE1ZAotLS0KQ2hhbmdl
-cyBzaW5jZSB2MToKLSBHZW5lcmF0ZSBjb21waWxlLXRpbWUgZXJyb3IgaWYgdGhlIHR5cGUgYXJn
-dW1lbnQgcGFzc2VkIHRvCiAgX2J0X3Vuc2lnbmVkX2Nhc3QoKSBpcyBsYXJnZXIgdGhhbiBzaXpl
-b2YodWludDY0X3QpLCB0aGlzCiAgYWxsb3dzIHJlbW92aW5nIF9idF9jaGVja19tYXhfNjRiaXQs
-Ci0gSW50cm9kdWNlIF9icl9maWxsX21hc2ssIHdoaWNoIHJlcGxhY2VzIF9idF9iaXR3aXNlX25v
-dCwKLSBDbGFyaWZ5IF9idF91bnNpZ25lZF9jYXN0IGNvbW1lbnQsCi0gRXhwYW5kIGV4cGxhbmF0
-aW9uIG9mIHRoZSBpc3N1ZSB3aXRoaW4gdGhlIHBhdGNoIGNvbW1pdCBtZXNzYWdlLgoKQ2hhbmdl
-cyBzaW5jZSB2MjoKLSBGaXggdW53YW50ZWQgc2lnbiBleHRlbnNpb24gd2hlbiBnZW5lcmF0aW5n
-IG1hc2tzLAotIEludHJvZHVjZSBtYWNybyBoZWxwZXJzIHRvIGNsYXJpZnkgY29kZToKICAtIF9i
-dF9jYXN0X3ZhbHVlX3RvX3Vuc2lnbmVkKCkKICAtIF9idF9jYXN0X3ZhbHVlX3RvX3Vuc2lnbmVk
-X3R5cGUoKSwKICAtIF9idF9tYWtlX21hc2tfY29tcGxlbWVudCgpLAogIC0gX2J0X21ha2VfbWFz
-aygpLgoKQ2hhbmdlcyBzaW5jZSB2MzoKLSBGaXggYWRkaXRpb25hbCBsZWZ0IHNoaWZ0IHVuZGVm
-aW5lZCBiZWhhdmlvci4gSWRlbnRpZmllZCB3aXRoCiAgLWZzYW5pdGl6ZT11bmRlZmluZWQuCi0g
-Q3JlYXRlIGZhbGxiYWNrIGZvciByaWdodCBzaGlmdCBpbXBsZW1lbnRhdGlvbi1kZWZpbmVkIGJl
-aGF2aW9yCiAgaWYgdGhlIGJlaGF2aW9yIGlzIGZvdW5kIG5vdCB0byBiZSBhcyBpbnRlbmRlZC4g
-RGV0ZWN0IHRoZSBiZWhhdmlvcgogIHdpdGggYSBwcmVwcm9jZXNzb3IgY2hlY2suCi0gRW5zdXJl
-IHRoYXQgdGhlIGNvbXBpbGVyIHJlcHJlc2VudHMgc2lnbmVkIHR5cGVzIHdpdGggdHdvJ3MgY29t
-cGxlbWVudAogIHdpdGggYSBwcmVwcm9jZXNzb3IgY2hlY2suCi0gQWRkIF9idF9yc2hpZnQoKSBh
-bmQgX2J0X2xzaGlmdCgpIHNoaWZ0IGhlbHBlcnMgdG8gdGFrZSBjYXJlIG9mCiAgQzk5J3MgdW5k
-ZWZpbmVkIGJlaGF2aW9ycyByZWxhdGVkIHRvIHNoaWZ0aW5nIHNpZ25lZCB0eXBlcy4KLS0tCiBp
-bmNsdWRlL2JhYmVsdHJhY2UvYml0ZmllbGQtaW50ZXJuYWwuaCB8IDIxNiArKysrKysrKysrKysr
-KysrKysrKysrLS0tLS0tLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCAxNDcgaW5zZXJ0aW9ucygrKSwg
-NjkgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9iYWJlbHRyYWNlL2JpdGZpZWxk
-LWludGVybmFsLmggYi9pbmNsdWRlL2JhYmVsdHJhY2UvYml0ZmllbGQtaW50ZXJuYWwuaAppbmRl
-eCBjNWQ1ZWNjZC4uMzI1NGNmODAgMTAwNjQ0Ci0tLSBhL2luY2x1ZGUvYmFiZWx0cmFjZS9iaXRm
-aWVsZC1pbnRlcm5hbC5oCisrKyBiL2luY2x1ZGUvYmFiZWx0cmFjZS9iaXRmaWVsZC1pbnRlcm5h
-bC5oCkBAIC0yLDcgKzIsNyBAQAogI2RlZmluZSBfQkFCRUxUUkFDRV9CSVRGSUVMRF9ICiAKIC8q
-Ci0gKiBDb3B5cmlnaHQgMjAxMCAtIE1hdGhpZXUgRGVzbm95ZXJzIDxtYXRoaWV1LmRlc25veWVy
-c0BlZmZpY2lvcy5jb20+CisgKiBDb3B5cmlnaHQgMjAxMC0yMDE5IC0gTWF0aGlldSBEZXNub3ll
-cnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9zLmNvbT4KICAqCiAgKiBQZXJtaXNzaW9uIGlz
-IGhlcmVieSBncmFudGVkLCBmcmVlIG9mIGNoYXJnZSwgdG8gYW55IHBlcnNvbiBvYnRhaW5pbmcg
-YSBjb3B5CiAgKiBvZiB0aGlzIHNvZnR3YXJlIGFuZCBhc3NvY2lhdGVkIGRvY3VtZW50YXRpb24g
-ZmlsZXMgKHRoZSAiU29mdHdhcmUiKSwgdG8gZGVhbApAQCAtMjcsNyArMjcsMTA4IEBACiAjaW5j
-bHVkZSA8YmFiZWx0cmFjZS9jb21wYXQvbGltaXRzLWludGVybmFsLmg+CS8qIEM5OSA1LjIuNC4y
-IE51bWVyaWNhbCBsaW1pdHMgKi8KICNpbmNsdWRlIDxiYWJlbHRyYWNlL2VuZGlhbi1pbnRlcm5h
-bC5oPgkvKiBOb24tc3RhbmRhcmQgQklHX0VORElBTiwgTElUVExFX0VORElBTiwgQllURV9PUkRF
-UiAqLwogCi0vKiBXZSBjYW4ndCBzaGlmdCBhIGludCBmcm9tIDMyIGJpdCwgPj4gMzIgYW5kIDw8
-IDMyIG9uIGludCBpcyB1bmRlZmluZWQgKi8KKy8qCisgKiBUaGlzIGJpdGZpZWxkIGhlYWRlciBy
-ZXF1aXJlcyB0aGUgY29tcGlsZXIgcmVwcmVzZW50YXRpb24gb2Ygc2lnbmVkCisgKiBpbnRlZ2Vy
-cyB0byBiZSB0d28ncyBjb21wbGVtZW50LgorICovCisjaWYgKC0xICE9IH4wKQorI2Vycm9yICJi
-aXRmaWVsZC5oIHJlcXVpcmVzIHRoZSBjb21waWxlciByZXByZXNlbnRhdGlvbiBvZiBzaWduZWQg
-aW50ZWdlcnMgdG8gYmUgdHdvJ3MgY29tcGxlbWVudC4iCisjZW5kaWYKKworI2RlZmluZSBfYnRf
-aXNfc2lnbmVkX3R5cGUodHlwZSkJKCh0eXBlKSAtMSA8ICh0eXBlKSAwKQorCisvKgorICogQ2Fz
-dCB2YWx1ZSBgdmAgdG8gYW4gdW5zaWduZWQgaW50ZWdlciBvZiB0aGUgc2FtZSBzaXplIGFzIGB2
-YC4KKyAqLworI2RlZmluZSBfYnRfY2FzdF92YWx1ZV90b191bnNpZ25lZCh2KQkJCQkJXAorCShz
-aXplb2YodikgPT0gc2l6ZW9mKHVpbnQ4X3QpID8gKHVpbnQ4X3QpICh2KSA6CQkJXAorCXNpemVv
-Zih2KSA9PSBzaXplb2YodWludDE2X3QpID8gKHVpbnQxNl90KSAodikgOgkJXAorCXNpemVvZih2
-KSA9PSBzaXplb2YodWludDMyX3QpID8gKHVpbnQzMl90KSAodikgOgkJXAorCXNpemVvZih2KSA9
-PSBzaXplb2YodWludDY0X3QpID8gKHVpbnQ2NF90KSAodikgOgkJXAorCXNpemVvZihzdHJ1Y3Qg
-eyBpbnQgZjooc2l6ZW9mKHYpID4gc2l6ZW9mKHVpbnQ2NF90KSA/IC0xIDogMSk7IH0pKQorCisv
-KgorICogQ2FzdCB2YWx1ZSBgdmAgdG8gYW4gdW5zaWduZWQgaW50ZWdlciB0eXBlIG9mIHRoZSBz
-aXplIG9mIHR5cGUgYHR5cGVgCisgKiAqd2l0aG91dCogc2lnbi1leHRlbnNpb24uCisgKgorICog
-VGhlIHVuc2lnbmVkIGNhc3QgZW5zdXJlcyB0aGF0IHdlJ3JlIG5vdCBzaGlmdGluZyBhIG5lZ2F0
-aXZlIHZhbHVlLAorICogd2hpY2ggaXMgdW5kZWZpbmVkIGluIEMuIEhvd2V2ZXIsIHRoaXMgbGlt
-aXRzIHRoZSBtYXhpbXVtIHR5cGUgc2l6ZQorICogb2YgYHR5cGVgIHRvIDY0LWJpdC4gR2VuZXJh
-dGUgYSBjb21waWxlLXRpbWUgZXJyb3IgaWYgdGhlIHNpemUgb2YKKyAqIGB0eXBlYCBpcyBsYXJn
-ZXIgdGhhbiA2NC1iaXQuCisgKi8KKyNkZWZpbmUgX2J0X2Nhc3RfdmFsdWVfdG9fdW5zaWduZWRf
-dHlwZSh0eXBlLCB2KQkJCVwKKwkoc2l6ZW9mKHR5cGUpID09IHNpemVvZih1aW50OF90KSA/CQkJ
-CVwKKwkJKHVpbnQ4X3QpIF9idF9jYXN0X3ZhbHVlX3RvX3Vuc2lnbmVkKHYpIDoJCVwKKwlzaXpl
-b2YodHlwZSkgPT0gc2l6ZW9mKHVpbnQxNl90KSA/CQkJCVwKKwkJKHVpbnQxNl90KSBfYnRfY2Fz
-dF92YWx1ZV90b191bnNpZ25lZCh2KSA6CQlcCisJc2l6ZW9mKHR5cGUpID09IHNpemVvZih1aW50
-MzJfdCkgPwkJCQlcCisJCSh1aW50MzJfdCkgX2J0X2Nhc3RfdmFsdWVfdG9fdW5zaWduZWQodikg
-OgkJXAorCXNpemVvZih0eXBlKSA9PSBzaXplb2YodWludDY0X3QpID8JCQkJXAorCQkodWludDY0
-X3QpIF9idF9jYXN0X3ZhbHVlX3RvX3Vuc2lnbmVkKHYpIDoJCVwKKwlzaXplb2Yoc3RydWN0IHsg
-aW50IGY6KHNpemVvZih0eXBlKSA+IHNpemVvZih1aW50NjRfdCkgPyAtMSA6IDEpOyB9KSkKKwor
-LyoKKyAqIF9idF9maWxsX21hc2sgZXZhbHVhdGVzIHRvIGEgInR5cGUiIGludGVnZXIgd2l0aCBh
-bGwgYml0cyBzZXQuCisgKi8KKyNkZWZpbmUgX2J0X2ZpbGxfbWFzayh0eXBlKQkoKHR5cGUpIH4o
-dHlwZSkgMCkKKworLyoKKyAqIExlZnQgc2hpZnQgYSB2YWx1ZSBgdmAgb2YgYHNoaWZ0YCBiaXRz
-LgorICoKKyAqIFRoZSB0eXBlIG9mIGB2YCBjYW4gYmUgc2lnbmVkIG9yIHVuc2lnbmVkIGludGVn
-ZXIuCisgKiBUaGUgdmFsdWUgb2YgYHNoaWZ0YCBtdXN0IGJlIGxlc3MgdGhhbiB0aGUgc2l6ZSBv
-ZiBgdmAgKGluIGJpdHMpLAorICogb3RoZXJ3aXNlIHRoZSBiZWhhdmlvciBpcyB1bmRlZmluZWQu
-CisgKgorICogQWNjb3JkaW5nIHRvIHRoZSBDOTkgc3RhbmRhcmQsIGxlZnQgc2hpZnQgb2YgYSBs
-ZWZ0IGhhbmQtc2lkZSBzaWduZWQKKyAqIHR5cGUgaXMgdW5kZWZpbmVkIGlmIGl0IGhhcyBhIG5l
-Z2F0aXZlIHZhbHVlIG9yIGlmIHRoZSByZXN1bHQgY2Fubm90CisgKiBiZSByZXByZXNlbnRlZCBp
-biB0aGUgcmVzdWx0IHR5cGUuIFRoaXMgYml0ZmllbGQgaGVhZGVyIGRpc2NhcmRzIHRoZQorICog
-Yml0cyB0aGF0IGFyZSBsZWZ0LXNoaWZ0ZWQgYmV5b25kIHRoZSByZXN1bHQgdHlwZSByZXByZXNl
-bnRhdGlvbiwKKyAqIHdoaWNoIGlzIHRoZSBiZWhhdmlvciBvZiBhbiB1bnNpZ25lZCB0eXBlIGxl
-ZnQgc2hpZnQgb3BlcmF0aW9uLgorICogVGhlcmVmb3JlLCBhbHdheXMgcGVyZm9ybSBsZWZ0IHNo
-aWZ0IG9uIGFuIHVuc2lnbmVkIHR5cGUuCisgKi8KKyNkZWZpbmUgX2J0X2xzaGlmdCh2LCBzaGlm
-dCkJCQkJCQlcCisJKCh0eXBlb2YodikpIChfYnRfY2FzdF92YWx1ZV90b191bnNpZ25lZCh2KSA8
-PCAoc2hpZnQpKSkKKworLyoKKyAqIEdlbmVyYXRlIGEgbWFzayBvZiB0eXBlIGB0eXBlYCB3aXRo
-IHRoZSBgbGVuZ3RoYCBsZWFzdCBzaWduaWZpY2FudCBiaXRzCisgKiBjbGVhcmVkLCBhbmQgdGhl
-IG1vc3Qgc2lnbmlmaWNhbnQgYml0cyBzZXQuCisgKi8KKyNkZWZpbmUgX2J0X21ha2VfbWFza19j
-b21wbGVtZW50KHR5cGUsIGxlbmd0aCkJCQkJXAorCV9idF9sc2hpZnQoX2J0X2ZpbGxfbWFzayh0
-eXBlKSwgbGVuZ3RoKQorCisvKgorICogR2VuZXJhdGUgYSBtYXNrIG9mIHR5cGUgYHR5cGVgIHdp
-dGggdGhlIGBsZW5ndGhgIGxlYXN0IHNpZ25pZmljYW50IGJpdHMKKyAqIHNldCwgYW5kIHRoZSBt
-b3N0IHNpZ25pZmljYW50IGJpdHMgY2xlYXJlZC4KKyAqLworI2RlZmluZSBfYnRfbWFrZV9tYXNr
-KHR5cGUsIGxlbmd0aCkJCQkJCVwKKwkoKHR5cGUpIH5fYnRfbWFrZV9tYXNrX2NvbXBsZW1lbnQo
-dHlwZSwgbGVuZ3RoKSkKKworLyoKKyAqIFJpZ2h0IHNoaWZ0IGEgdmFsdWUgYHZgIG9mIGBzaGlm
-dGAgYml0cy4KKyAqCisgKiBUaGUgdHlwZSBvZiBgdmAgY2FuIGJlIHNpZ25lZCBvciB1bnNpZ25l
-ZCBpbnRlZ2VyLgorICogVGhlIHZhbHVlIG9mIGBzaGlmdGAgbXVzdCBiZSBsZXNzIHRoYW4gdGhl
-IHNpemUgb2YgYHZgIChpbiBiaXRzKSwKKyAqIG90aGVyd2lzZSB0aGUgYmVoYXZpb3IgaXMgdW5k
-ZWZpbmVkLgorICoKKyAqIEFjY29yZGluZyB0byB0aGUgQzk5IHN0YW5kYXJkLCByaWdodCBzaGlm
-dCBvZiBhIGxlZnQgaGFuZC1zaWRlIHNpZ25lZAorICogdHlwZSB3aGljaCBoYXMgYSBuZWdhdGl2
-ZSB2YWx1ZSBpcyBpbXBsZW1lbnRhdGlvbiBkZWZpbmVkLiBUaGlzCisgKiBiaXRmaWVsZCBoZWFk
-ZXIgcmVsaWVzIG9uIHRoZSByaWdodCBzaGlmdCBpbXBsZW1lbnRhdGlvbiBjYXJyeWluZyB0aGUK
-KyAqIHNpZ24gYml0LiBJZiB0aGUgY29tcGlsZXIgaW1wbGVtZW50YXRpb24gaGFzIGEgZGlmZmVy
-ZW50IGJlaGF2aW9yLAorICogZW11bGF0ZSBjYXJyeWluZyB0aGUgc2lnbiBiaXQuCisgKi8KKyNp
-ZiAoKC0xID4+IDEpID09IC0xKQorI2RlZmluZSBfYnRfcnNoaWZ0KHYsIHNoaWZ0KQkoKHYpID4+
-IChzaGlmdCkpCisjZWxzZQorI2RlZmluZSBfYnRfcnNoaWZ0KHYsIHNoaWZ0KQkJCQkJCVwKKwko
-KHR5cGVvZih2KSkgKChfYnRfY2FzdF92YWx1ZV90b191bnNpZ25lZCh2KSA+PiAoc2hpZnQpKSB8
-CVwKKwkJKCh2KSA8IDAgPyBfYnRfbWFrZV9tYXNrX2NvbXBsZW1lbnQodHlwZW9mKHYpLAkJXAor
-CQkJc2l6ZW9mKHYpICogQ0hBUl9CSVQgLSAoc2hpZnQpKSA6IDApKSkKKyNlbmRpZgorCisvKgor
-ICogUmlnaHQgc2hpZnQgYSBzaWduZWQgb3IgdW5zaWduZWQgaW50ZWdlciB3aXRoIGBfc2hpZnRg
-IHZhbHVlIGJlaW5nIGFuCisgKiBhcmJpdHJhcnkgbnVtYmVyIG9mIGJpdHMuCisgKi8KICNkZWZp
-bmUgX2J0X3BpZWNld2lzZV9yc2hpZnQoX3YsIF9zaGlmdCkJCQkJXAogKHsJCQkJCQkJCQlcCiAJ
-dHlwZW9mKF92KSBfX192ID0gKF92KTsJCQkJCQlcCkBAIC0zNiwxMCArMTM3LDE0IEBACiAJdW5z
-aWduZWQgbG9uZyBmaW5hbCA9IChfX19zaGlmdCkgJSAoc2l6ZW9mKF9fX3YpICogQ0hBUl9CSVQg
-LSAxKTsgXAogCQkJCQkJCQkJXAogCWZvciAoOyBzYjsgc2ItLSkJCQkJCQlcCi0JCV9fX3YgPj49
-IHNpemVvZihfX192KSAqIENIQVJfQklUIC0gMTsJCQlcCi0JX19fdiA+Pj0gZmluYWw7CQkJCQkJ
-CVwKKwkJX19fdiA9IF9idF9yc2hpZnQoX19fdiwgc2l6ZW9mKF9fX3YpICogQ0hBUl9CSVQgLSAx
-KTsJXAorCV9fX3YgPSBfYnRfcnNoaWZ0KF9fX3YsIGZpbmFsKTsJCQkJCVwKIH0pCiAKKy8qCisg
-KiBMZWZ0IHNoaWZ0IGEgc2lnbmVkIG9yIHVuc2lnbmVkIGludGVnZXIgd2l0aCBgX3NoaWZ0YCB2
-YWx1ZSBiZWluZyBhbgorICogYXJiaXRyYXJ5IG51bWJlciBvZiBiaXRzLgorICovCiAjZGVmaW5l
-IF9idF9waWVjZXdpc2VfbHNoaWZ0KF92LCBfc2hpZnQpCQkJCVwKICh7CQkJCQkJCQkJXAogCXR5
-cGVvZihfdikgX19fdiA9IChfdik7CQkJCQkJXApAQCAtNDgsMjkgKzE1MywxMCBAQAogCXVuc2ln
-bmVkIGxvbmcgZmluYWwgPSAoX19fc2hpZnQpICUgKHNpemVvZihfX192KSAqIENIQVJfQklUIC0g
-MSk7IFwKIAkJCQkJCQkJCVwKIAlmb3IgKDsgc2I7IHNiLS0pCQkJCQkJXAotCQlfX192IDw8PSBz
-aXplb2YoX19fdikgKiBDSEFSX0JJVCAtIDE7CQkJXAotCV9fX3YgPDw9IGZpbmFsOwkJCQkJCQlc
-CisJCV9fX3YgPSBfYnRfbHNoaWZ0KF9fX3YsIHNpemVvZihfX192KSAqIENIQVJfQklUIC0gMSk7
-CVwKKwlfX192ID0gX2J0X2xzaGlmdChfX192LCBmaW5hbCk7CQkJCQlcCiB9KQogCi0jZGVmaW5l
-IF9idF9pc19zaWduZWRfdHlwZSh0eXBlKQkoKHR5cGUpIC0xIDwgKHR5cGUpIDApCi0KLS8qCi0g
-KiBOT1RFOiBUaGUgY2FzdCB0byAodWludDY0X3QpIGJlbG93IGVuc3VyZXMgdGhhdCB3ZSdyZSBu
-b3QgY2FzdGluZyBhCi0gKiBuZWdhdGl2ZSB2YWx1ZSwgd2hpY2ggaXMgdW5kZWZpbmVkIGluIEMu
-IEhvd2V2ZXIsIHRoaXMgbGltaXRzIHRoZQotICogbWF4aW11bSB0eXBlIHNpemUgb2YgYHR5cGVg
-IGFuZCBgdmAgdG8gNjQtYml0LiBUaGUKLSAqIF9idF9jaGVja19tYXhfNjRiaXQoKSBpcyB1c2Vk
-IHRvIGNoZWNrIHRoYXQgdGhlIHVzZXJzIG9mIHRoaXMgaGVhZGVyCi0gKiBkbyBub3QgdXNlIHR5
-cGVzIHdpdGggYSBzaXplIGdyZWF0ZXIgdGhhbiA2NC1iaXQuCi0gKi8KLSNkZWZpbmUgX2J0X3Vu
-c2lnbmVkX2Nhc3QodHlwZSwgdikJCQkJCVwKLSh7CQkJCQkJCQkJXAotCShzaXplb2YodikgPCBz
-aXplb2YodHlwZSkpID8JCQkJCVwKLQkJKCh0eXBlKSAodikpICYgKCh0eXBlKSAofih+KHVpbnQ2
-NF90KSAwIDw8IChzaXplb2YodikgKiBDSEFSX0JJVCkpKSkgOiBcCi0JCSh0eXBlKSAodik7CQkJ
-CQkJXAotfSkKLQotI2RlZmluZSBfYnRfY2hlY2tfbWF4XzY0Yml0KHR5cGUpCQkJCQlcCi0JY2hh
-ciBfbWF4XzY0Yml0X2Fzc2VydGlvbltzaXplb2YodHlwZSkgPD0gc2l6ZW9mKHVpbnQ2NF90KSA/
-IDEgOiAtMV0gX19hdHRyaWJ1dGVfXygodW51c2VkKSkKLQogLyoKICAqIGJ0X2JpdGZpZWxkX3dy
-aXRlIC0gd3JpdGUgaW50ZWdlciB0byBhIGJpdGZpZWxkIGluIG5hdGl2ZSBlbmRpYW5uZXNzCiAg
-KgpAQCAtMTA4LDE1ICsxOTQsMTUgQEAgZG8gewkJCQkJCQkJCVwKIAkJCQkJCQkJCVwKIAkvKiBU
-cmltIHYgaGlnaCBiaXRzICovCQkJCQkJXAogCWlmIChfX2xlbmd0aCA8IHNpemVvZihfX3YpICog
-Q0hBUl9CSVQpCQkJCVwKLQkJX192ICY9IH4oKH4odHlwZW9mKF9fdikpIDApIDw8IF9fbGVuZ3Ro
-KTsJCVwKKwkJX192ICY9IF9idF9tYWtlX21hc2sodHlwZW9mKF9fdiksIF9fbGVuZ3RoKTsJCVwK
-IAkJCQkJCQkJCVwKIAkvKiBXZSBjYW4gbm93IGFwcGVuZCB2IHdpdGggYSBzaW1wbGUgIm9yIiwg
-c2hpZnQgaXQgcGllY2Utd2lzZSAqLyBcCiAJdGhpc191bml0ID0gc3RhcnRfdW5pdDsJCQkJCQlc
-CiAJaWYgKHN0YXJ0X3VuaXQgPT0gZW5kX3VuaXQgLSAxKSB7CQkJCVwKLQkJbWFzayA9IH4oKH4o
-dHlwZSkgMCkgPDwgKF9fc3RhcnQgJSB0cykpOwkJXAorCQltYXNrID0gX2J0X21ha2VfbWFzayh0
-eXBlLCBfX3N0YXJ0ICUgdHMpOwkJXAogCQlpZiAoZW5kICUgdHMpCQkJCQkJXAotCQkJbWFzayB8
-PSAofih0eXBlKSAwKSA8PCAoZW5kICUgdHMpOwkJXAotCQljbWFzayA9ICh0eXBlKSBfX3YgPDwg
-KF9fc3RhcnQgJSB0cyk7CQkJXAorCQkJbWFzayB8PSBfYnRfbWFrZV9tYXNrX2NvbXBsZW1lbnQo
-dHlwZSwgZW5kICUgdHMpOyBcCisJCWNtYXNrID0gX2J0X2xzaGlmdCgodHlwZSkgKF9fdiksIF9f
-c3RhcnQgJSB0cyk7CQlcCiAJCWNtYXNrICY9IH5tYXNrOwkJCQkJCVwKIAkJX19wdHJbdGhpc191
-bml0XSAmPSBtYXNrOwkJCQlcCiAJCV9fcHRyW3RoaXNfdW5pdF0gfD0gY21hc2s7CQkJCVwKQEAg
-LTEyNCw4ICsyMTAsOCBAQCBkbyB7CQkJCQkJCQkJXAogCX0JCQkJCQkJCVwKIAlpZiAoX19zdGFy
-dCAlIHRzKSB7CQkJCQkJXAogCQljc2hpZnQgPSBfX3N0YXJ0ICUgdHM7CQkJCQlcCi0JCW1hc2sg
-PSB+KCh+KHR5cGUpIDApIDw8IGNzaGlmdCk7CQkJXAotCQljbWFzayA9ICh0eXBlKSBfX3YgPDwg
-Y3NoaWZ0OwkJCQlcCisJCW1hc2sgPSBfYnRfbWFrZV9tYXNrKHR5cGUsIGNzaGlmdCk7CQkJXAor
-CQljbWFzayA9IF9idF9sc2hpZnQoKHR5cGUpIChfX3YpLCBjc2hpZnQpOwkJXAogCQljbWFzayAm
-PSB+bWFzazsJCQkJCQlcCiAJCV9fcHRyW3RoaXNfdW5pdF0gJj0gbWFzazsJCQkJXAogCQlfX3B0
-clt0aGlzX3VuaXRdIHw9IGNtYXNrOwkJCQlcCkBAIC0xMzksNyArMjI1LDcgQEAgZG8gewkJCQkJ
-CQkJCVwKIAkJX19zdGFydCArPSB0czsJCQkJCQlcCiAJfQkJCQkJCQkJXAogCWlmIChlbmQgJSB0
-cykgewkJCQkJCQlcCi0JCW1hc2sgPSAofih0eXBlKSAwKSA8PCAoZW5kICUgdHMpOwkJCVwKKwkJ
-bWFzayA9IF9idF9tYWtlX21hc2tfY29tcGxlbWVudCh0eXBlLCBlbmQgJSB0cyk7CVwKIAkJY21h
-c2sgPSAodHlwZSkgX192OwkJCQkJXAogCQljbWFzayAmPSB+bWFzazsJCQkJCQlcCiAJCV9fcHRy
-W3RoaXNfdW5pdF0gJj0gbWFzazsJCQkJXApAQCAtMTY3LDE1ICsyNTMsMTUgQEAgZG8gewkJCQkJ
-CQkJCVwKIAkJCQkJCQkJCVwKIAkvKiBUcmltIHYgaGlnaCBiaXRzICovCQkJCQkJXAogCWlmIChf
-X2xlbmd0aCA8IHNpemVvZihfX3YpICogQ0hBUl9CSVQpCQkJCVwKLQkJX192ICY9IH4oKH4odHlw
-ZW9mKF9fdikpIDApIDw8IF9fbGVuZ3RoKTsJCVwKKwkJX192ICY9IF9idF9tYWtlX21hc2sodHlw
-ZW9mKF9fdiksIF9fbGVuZ3RoKTsJCVwKIAkJCQkJCQkJCVwKIAkvKiBXZSBjYW4gbm93IGFwcGVu
-ZCB2IHdpdGggYSBzaW1wbGUgIm9yIiwgc2hpZnQgaXQgcGllY2Utd2lzZSAqLyBcCiAJdGhpc191
-bml0ID0gZW5kX3VuaXQgLSAxOwkJCQkJXAogCWlmIChzdGFydF91bml0ID09IGVuZF91bml0IC0g
-MSkgewkJCQlcCi0JCW1hc2sgPSB+KCh+KHR5cGUpIDApIDw8ICgodHMgLSAoZW5kICUgdHMpKSAl
-IHRzKSk7CVwKKwkJbWFzayA9IF9idF9tYWtlX21hc2sodHlwZSwgKHRzIC0gKGVuZCAlIHRzKSkg
-JSB0cyk7CVwKIAkJaWYgKF9fc3RhcnQgJSB0cykJCQkJCVwKLQkJCW1hc2sgfD0gKH4oKHR5cGUp
-IDApKSA8PCAodHMgLSAoX19zdGFydCAlIHRzKSk7CVwKLQkJY21hc2sgPSAodHlwZSkgX192IDw8
-ICgodHMgLSAoZW5kICUgdHMpKSAlIHRzKTsJCVwKKwkJCW1hc2sgfD0gX2J0X21ha2VfbWFza19j
-b21wbGVtZW50KHR5cGUsIHRzIC0gKF9fc3RhcnQgJSB0cykpOyBcCisJCWNtYXNrID0gX2J0X2xz
-aGlmdCgodHlwZSkgKF9fdiksICh0cyAtIChlbmQgJSB0cykpICUgdHMpOyBcCiAJCWNtYXNrICY9
-IH5tYXNrOwkJCQkJCVwKIAkJX19wdHJbdGhpc191bml0XSAmPSBtYXNrOwkJCQlcCiAJCV9fcHRy
-W3RoaXNfdW5pdF0gfD0gY21hc2s7CQkJCVwKQEAgLTE4Myw4ICsyNjksOCBAQCBkbyB7CQkJCQkJ
-CQkJXAogCX0JCQkJCQkJCVwKIAlpZiAoZW5kICUgdHMpIHsJCQkJCQkJXAogCQljc2hpZnQgPSBl
-bmQgJSB0czsJCQkJCVwKLQkJbWFzayA9IH4oKH4odHlwZSkgMCkgPDwgKHRzIC0gY3NoaWZ0KSk7
-CQkJXAotCQljbWFzayA9ICh0eXBlKSBfX3YgPDwgKHRzIC0gY3NoaWZ0KTsJCQlcCisJCW1hc2sg
-PSBfYnRfbWFrZV9tYXNrKHR5cGUsIHRzIC0gY3NoaWZ0KTsJCVwKKwkJY21hc2sgPSBfYnRfbHNo
-aWZ0KCh0eXBlKSAoX192KSwgdHMgLSBjc2hpZnQpOwkJXAogCQljbWFzayAmPSB+bWFzazsJCQkJ
-CQlcCiAJCV9fcHRyW3RoaXNfdW5pdF0gJj0gbWFzazsJCQkJXAogCQlfX3B0clt0aGlzX3VuaXRd
-IHw9IGNtYXNrOwkJCQlcCkBAIC0xOTgsNyArMjg0LDcgQEAgZG8gewkJCQkJCQkJCVwKIAkJZW5k
-IC09IHRzOwkJCQkJCVwKIAl9CQkJCQkJCQlcCiAJaWYgKF9fc3RhcnQgJSB0cykgewkJCQkJCVwK
-LQkJbWFzayA9ICh+KHR5cGUpIDApIDw8ICh0cyAtIChfX3N0YXJ0ICUgdHMpKTsJCVwKKwkJbWFz
-ayA9IF9idF9tYWtlX21hc2sodHlwZSwgdHMgLSAoX19zdGFydCAlIHRzKSk7CVwKIAkJY21hc2sg
-PSAodHlwZSkgX192OwkJCQkJXAogCQljbWFzayAmPSB+bWFzazsJCQkJCQlcCiAJCV9fcHRyW3Ro
-aXNfdW5pdF0gJj0gbWFzazsJCQkJXApAQCAtMjUyLDEwICszMzgsNiBAQCBkbyB7CQkJCQkJCQkJ
-XAogCXVuc2lnbmVkIGxvbmcgc3RhcnRfdW5pdCwgZW5kX3VuaXQsIHRoaXNfdW5pdDsJCQlcCiAJ
-dW5zaWduZWQgbG9uZyBlbmQsIGNzaGlmdDsgLyogY3NoaWZ0IGlzICJjb21wbGVtZW50IHNoaWZ0
-IiAqLwlcCiAJCQkJCQkJCQlcCi0JeyBfYnRfY2hlY2tfbWF4XzY0Yml0KHR5cGUpOyB9CQkJCQlc
-Ci0JeyBfYnRfY2hlY2tfbWF4XzY0Yml0KHR5cGVvZigqX3ZwdHIpKTsgfQkJCVwKLQl7IF9idF9j
-aGVja19tYXhfNjRiaXQodHlwZW9mKCpfcHRyKSk7IH0JCQkJXAotCQkJCQkJCQkJXAogCWlmICgh
-X19sZW5ndGgpIHsJCQkJCQlcCiAJCSpfX3ZwdHIgPSAwOwkJCQkJCVwKIAkJYnJlYWs7CQkJCQkJ
-CVwKQEAgLTI2Nyw0NyArMzQ5LDQ3IEBAIGRvIHsJCQkJCQkJCQlcCiAJCQkJCQkJCQlcCiAJdGhp
-c191bml0ID0gZW5kX3VuaXQgLSAxOwkJCQkJXAogCWlmIChfYnRfaXNfc2lnbmVkX3R5cGUodHlw
-ZW9mKF9fdikpCQkJCVwKLQkgICAgJiYgKF9fcHRyW3RoaXNfdW5pdF0gJiAoKHR5cGUpIDEgPDwg
-KChlbmQgJSB0cyA/IDogdHMpIC0gMSkpKSkgXAorCSAgICAmJiAoX19wdHJbdGhpc191bml0XSAm
-IF9idF9sc2hpZnQoKHR5cGUpIDEsIChlbmQgJSB0cyA/IDogdHMpIC0gMSkpKSBcCiAJCV9fdiA9
-IH4odHlwZW9mKF9fdikpIDA7CQkJCQlcCiAJZWxzZQkJCQkJCQkJXAogCQlfX3YgPSAwOwkJCQkJ
-CVwKIAlpZiAoc3RhcnRfdW5pdCA9PSBlbmRfdW5pdCAtIDEpIHsJCQkJXAogCQljbWFzayA9IF9f
-cHRyW3RoaXNfdW5pdF07CQkJCVwKLQkJY21hc2sgPj49IChfX3N0YXJ0ICUgdHMpOwkJCQlcCisJ
-CWNtYXNrID0gX2J0X3JzaGlmdChjbWFzaywgX19zdGFydCAlIHRzKTsJCVwKIAkJaWYgKChlbmQg
-LSBfX3N0YXJ0KSAlIHRzKSB7CQkJCVwKLQkJCW1hc2sgPSB+KCh+KHR5cGUpIDApIDw8IChlbmQg
-LSBfX3N0YXJ0KSk7CVwKKwkJCW1hc2sgPSBfYnRfbWFrZV9tYXNrKHR5cGUsIGVuZCAtIF9fc3Rh
-cnQpOwlcCiAJCQljbWFzayAmPSBtYXNrOwkJCQkJXAogCQl9CQkJCQkJCVwKIAkJX192ID0gX2J0
-X3BpZWNld2lzZV9sc2hpZnQoX192LCBlbmQgLSBfX3N0YXJ0KTsJCVwKLQkJX192IHw9IF9idF91
-bnNpZ25lZF9jYXN0KHR5cGVvZihfX3YpLCBjbWFzayk7CQlcCisJCV9fdiB8PSBfYnRfY2FzdF92
-YWx1ZV90b191bnNpZ25lZF90eXBlKHR5cGVvZihfX3YpLCBjbWFzayk7IFwKIAkJKl9fdnB0ciA9
-IF9fdjsJCQkJCQlcCiAJCWJyZWFrOwkJCQkJCQlcCiAJfQkJCQkJCQkJXAogCWlmIChlbmQgJSB0
-cykgewkJCQkJCQlcCiAJCWNzaGlmdCA9IGVuZCAlIHRzOwkJCQkJXAotCQltYXNrID0gfigofih0
-eXBlKSAwKSA8PCBjc2hpZnQpOwkJCVwKKwkJbWFzayA9IF9idF9tYWtlX21hc2sodHlwZSwgY3No
-aWZ0KTsJCQlcCiAJCWNtYXNrID0gX19wdHJbdGhpc191bml0XTsJCQkJXAogCQljbWFzayAmPSBt
-YXNrOwkJCQkJCVwKIAkJX192ID0gX2J0X3BpZWNld2lzZV9sc2hpZnQoX192LCBjc2hpZnQpOwkJ
-XAotCQlfX3YgfD0gX2J0X3Vuc2lnbmVkX2Nhc3QodHlwZW9mKF9fdiksIGNtYXNrKTsJCVwKKwkJ
-X192IHw9IF9idF9jYXN0X3ZhbHVlX3RvX3Vuc2lnbmVkX3R5cGUodHlwZW9mKF9fdiksIGNtYXNr
-KTsgXAogCQllbmQgLT0gY3NoaWZ0OwkJCQkJCVwKIAkJdGhpc191bml0LS07CQkJCQkJXAogCX0J
-CQkJCQkJCVwKIAlmb3IgKDsgKGxvbmcpIHRoaXNfdW5pdCA+PSAobG9uZykgc3RhcnRfdW5pdCAr
-IDE7IHRoaXNfdW5pdC0tKSB7IFwKIAkJX192ID0gX2J0X3BpZWNld2lzZV9sc2hpZnQoX192LCB0
-cyk7CQkJXAotCQlfX3YgfD0gX2J0X3Vuc2lnbmVkX2Nhc3QodHlwZW9mKF9fdiksIF9fcHRyW3Ro
-aXNfdW5pdF0pO1wKKwkJX192IHw9IF9idF9jYXN0X3ZhbHVlX3RvX3Vuc2lnbmVkX3R5cGUodHlw
-ZW9mKF9fdiksIF9fcHRyW3RoaXNfdW5pdF0pOyBcCiAJCWVuZCAtPSB0czsJCQkJCQlcCiAJfQkJ
-CQkJCQkJXAogCWlmIChfX3N0YXJ0ICUgdHMpIHsJCQkJCQlcCi0JCW1hc2sgPSB+KCh+KHR5cGUp
-IDApIDw8ICh0cyAtIChfX3N0YXJ0ICUgdHMpKSk7CQlcCisJCW1hc2sgPSBfYnRfbWFrZV9tYXNr
-KHR5cGUsIHRzIC0gKF9fc3RhcnQgJSB0cykpOwlcCiAJCWNtYXNrID0gX19wdHJbdGhpc191bml0
-XTsJCQkJXAotCQljbWFzayA+Pj0gKF9fc3RhcnQgJSB0cyk7CQkJCVwKKwkJY21hc2sgPSBfYnRf
-cnNoaWZ0KGNtYXNrLCBfX3N0YXJ0ICUgdHMpOwkJXAogCQljbWFzayAmPSBtYXNrOwkJCQkJCVwK
-IAkJX192ID0gX2J0X3BpZWNld2lzZV9sc2hpZnQoX192LCB0cyAtIChfX3N0YXJ0ICUgdHMpKTsJ
-XAotCQlfX3YgfD0gX2J0X3Vuc2lnbmVkX2Nhc3QodHlwZW9mKF9fdiksIGNtYXNrKTsJCVwKKwkJ
-X192IHw9IF9idF9jYXN0X3ZhbHVlX3RvX3Vuc2lnbmVkX3R5cGUodHlwZW9mKF9fdiksIGNtYXNr
-KTsgXAogCX0gZWxzZSB7CQkJCQkJCVwKIAkJX192ID0gX2J0X3BpZWNld2lzZV9sc2hpZnQoX192
-LCB0cyk7CQkJXAotCQlfX3YgfD0gX2J0X3Vuc2lnbmVkX2Nhc3QodHlwZW9mKF9fdiksIF9fcHRy
-W3RoaXNfdW5pdF0pO1wKKwkJX192IHw9IF9idF9jYXN0X3ZhbHVlX3RvX3Vuc2lnbmVkX3R5cGUo
-dHlwZW9mKF9fdiksIF9fcHRyW3RoaXNfdW5pdF0pOyBcCiAJfQkJCQkJCQkJXAogCSpfX3ZwdHIg
-PSBfX3Y7CQkJCQkJCVwKIH0gd2hpbGUgKDApCkBAIC0zMjMsMTAgKzQwNSw2IEBAIGRvIHsJCQkJ
-CQkJCQlcCiAJdW5zaWduZWQgbG9uZyBzdGFydF91bml0LCBlbmRfdW5pdCwgdGhpc191bml0OwkJ
-CVwKIAl1bnNpZ25lZCBsb25nIGVuZCwgY3NoaWZ0OyAvKiBjc2hpZnQgaXMgImNvbXBsZW1lbnQg
-c2hpZnQiICovCVwKIAkJCQkJCQkJCVwKLQl7IF9idF9jaGVja19tYXhfNjRiaXQodHlwZSk7IH0J
-CQkJCVwKLQl7IF9idF9jaGVja19tYXhfNjRiaXQodHlwZW9mKCpfdnB0cikpOyB9CQkJXAotCXsg
-X2J0X2NoZWNrX21heF82NGJpdCh0eXBlb2YoKl9wdHIpKTsgfQkJCQlcCi0JCQkJCQkJCQlcCiAJ
-aWYgKCFfX2xlbmd0aCkgewkJCQkJCVwKIAkJKl9fdnB0ciA9IDA7CQkJCQkJXAogCQlicmVhazsJ
-CQkJCQkJXApAQCAtMzM4LDQ3ICs0MTYsNDcgQEAgZG8gewkJCQkJCQkJCVwKIAkJCQkJCQkJCVwK
-IAl0aGlzX3VuaXQgPSBzdGFydF91bml0OwkJCQkJCVwKIAlpZiAoX2J0X2lzX3NpZ25lZF90eXBl
-KHR5cGVvZihfX3YpKQkJCQlcCi0JICAgICYmIChfX3B0clt0aGlzX3VuaXRdICYgKCh0eXBlKSAx
-IDw8ICh0cyAtIChfX3N0YXJ0ICUgdHMpIC0gMSkpKSkgXAorCSAgICAmJiAoX19wdHJbdGhpc191
-bml0XSAmIF9idF9sc2hpZnQoKHR5cGUpIDEsIHRzIC0gKF9fc3RhcnQgJSB0cykgLSAxKSkpIFwK
-IAkJX192ID0gfih0eXBlb2YoX192KSkgMDsJCQkJCVwKIAllbHNlCQkJCQkJCQlcCiAJCV9fdiA9
-IDA7CQkJCQkJXAogCWlmIChzdGFydF91bml0ID09IGVuZF91bml0IC0gMSkgewkJCQlcCiAJCWNt
-YXNrID0gX19wdHJbdGhpc191bml0XTsJCQkJXAotCQljbWFzayA+Pj0gKHRzIC0gKGVuZCAlIHRz
-KSkgJSB0czsJCQlcCisJCWNtYXNrID0gX2J0X3JzaGlmdChjbWFzaywgKHRzIC0gKGVuZCAlIHRz
-KSkgJSB0cyk7CVwKIAkJaWYgKChlbmQgLSBfX3N0YXJ0KSAlIHRzKSB7CQkJCVwKLQkJCW1hc2sg
-PSB+KCh+KHR5cGUpIDApIDw8IChlbmQgLSBfX3N0YXJ0KSk7CVwKKwkJCW1hc2sgPSBfYnRfbWFr
-ZV9tYXNrKHR5cGUsIGVuZCAtIF9fc3RhcnQpOwlcCiAJCQljbWFzayAmPSBtYXNrOwkJCQkJXAog
-CQl9CQkJCQkJCVwKIAkJX192ID0gX2J0X3BpZWNld2lzZV9sc2hpZnQoX192LCBlbmQgLSBfX3N0
-YXJ0KTsJCVwKLQkJX192IHw9IF9idF91bnNpZ25lZF9jYXN0KHR5cGVvZihfX3YpLCBjbWFzayk7
-CQlcCisJCV9fdiB8PSBfYnRfY2FzdF92YWx1ZV90b191bnNpZ25lZF90eXBlKHR5cGVvZihfX3Yp
-LCBjbWFzayk7IFwKIAkJKl9fdnB0ciA9IF9fdjsJCQkJCQlcCiAJCWJyZWFrOwkJCQkJCQlcCiAJ
-fQkJCQkJCQkJXAogCWlmIChfX3N0YXJ0ICUgdHMpIHsJCQkJCQlcCiAJCWNzaGlmdCA9IF9fc3Rh
-cnQgJSB0czsJCQkJCVwKLQkJbWFzayA9IH4oKH4odHlwZSkgMCkgPDwgKHRzIC0gY3NoaWZ0KSk7
-CQkJXAorCQltYXNrID0gX2J0X21ha2VfbWFzayh0eXBlLCB0cyAtIGNzaGlmdCk7CQlcCiAJCWNt
-YXNrID0gX19wdHJbdGhpc191bml0XTsJCQkJXAogCQljbWFzayAmPSBtYXNrOwkJCQkJCVwKIAkJ
-X192ID0gX2J0X3BpZWNld2lzZV9sc2hpZnQoX192LCB0cyAtIGNzaGlmdCk7CQlcCi0JCV9fdiB8
-PSBfYnRfdW5zaWduZWRfY2FzdCh0eXBlb2YoX192KSwgY21hc2spOwkJXAorCQlfX3YgfD0gX2J0
-X2Nhc3RfdmFsdWVfdG9fdW5zaWduZWRfdHlwZSh0eXBlb2YoX192KSwgY21hc2spOyBcCiAJCV9f
-c3RhcnQgKz0gdHMgLSBjc2hpZnQ7CQkJCQlcCiAJCXRoaXNfdW5pdCsrOwkJCQkJCVwKIAl9CQkJ
-CQkJCQlcCiAJZm9yICg7IHRoaXNfdW5pdCA8IGVuZF91bml0IC0gMTsgdGhpc191bml0KyspIHsJ
-CQlcCiAJCV9fdiA9IF9idF9waWVjZXdpc2VfbHNoaWZ0KF9fdiwgdHMpOwkJCVwKLQkJX192IHw9
-IF9idF91bnNpZ25lZF9jYXN0KHR5cGVvZihfX3YpLCBfX3B0clt0aGlzX3VuaXRdKTtcCisJCV9f
-diB8PSBfYnRfY2FzdF92YWx1ZV90b191bnNpZ25lZF90eXBlKHR5cGVvZihfX3YpLCBfX3B0clt0
-aGlzX3VuaXRdKTsgXAogCQlfX3N0YXJ0ICs9IHRzOwkJCQkJCVwKIAl9CQkJCQkJCQlcCiAJaWYg
-KGVuZCAlIHRzKSB7CQkJCQkJCVwKLQkJbWFzayA9IH4oKH4odHlwZSkgMCkgPDwgKGVuZCAlIHRz
-KSk7CQkJXAorCQltYXNrID0gX2J0X21ha2VfbWFzayh0eXBlLCBlbmQgJSB0cyk7CQkJXAogCQlj
-bWFzayA9IF9fcHRyW3RoaXNfdW5pdF07CQkJCVwKLQkJY21hc2sgPj49IHRzIC0gKGVuZCAlIHRz
-KTsJCQkJXAorCQljbWFzayA9IF9idF9yc2hpZnQoY21hc2ssIHRzIC0gKGVuZCAlIHRzKSk7CQlc
-CiAJCWNtYXNrICY9IG1hc2s7CQkJCQkJXAogCQlfX3YgPSBfYnRfcGllY2V3aXNlX2xzaGlmdChf
-X3YsIGVuZCAlIHRzKTsJCVwKLQkJX192IHw9IF9idF91bnNpZ25lZF9jYXN0KHR5cGVvZihfX3Yp
-LCBjbWFzayk7CQlcCisJCV9fdiB8PSBfYnRfY2FzdF92YWx1ZV90b191bnNpZ25lZF90eXBlKHR5
-cGVvZihfX3YpLCBjbWFzayk7IFwKIAl9IGVsc2UgewkJCQkJCQlcCiAJCV9fdiA9IF9idF9waWVj
-ZXdpc2VfbHNoaWZ0KF9fdiwgdHMpOwkJCVwKLQkJX192IHw9IF9idF91bnNpZ25lZF9jYXN0KHR5
-cGVvZihfX3YpLCBfX3B0clt0aGlzX3VuaXRdKTtcCisJCV9fdiB8PSBfYnRfY2FzdF92YWx1ZV90
-b191bnNpZ25lZF90eXBlKHR5cGVvZihfX3YpLCBfX3B0clt0aGlzX3VuaXRdKTsgXAogCX0JCQkJ
-CQkJCVwKIAkqX192cHRyID0gX192OwkJCQkJCQlcCiB9IHdoaWxlICgwKQotLSAKMi4xMS4wCgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpsdHRuZy1kZXYg
-bWFpbGluZyBsaXN0Cmx0dG5nLWRldkBsaXN0cy5sdHRuZy5vcmcKaHR0cHM6Ly9saXN0cy5sdHRu
-Zy5vcmcvY2dpLWJpbi9tYWlsbWFuL2xpc3RpbmZvL2x0dG5nLWRldgo=
+test-bitfield was mainly testing various write unit size. Add
+variations of read unit size as well.
+
+Previously, the test was only covering input from a 32-bit integer.
+Additionally test source and destination of 64-bit.
+
+Change-Id: Ic2b7849140e04fe7cca3de576e31bfef8f0a03ae
+---
+ tests/lib/test_bitfield.c | 562 ++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 491 insertions(+), 71 deletions(-)
+
+diff --git a/tests/lib/test_bitfield.c b/tests/lib/test_bitfield.c
+index efbbc30e..1ad8e7c6 100644
+--- a/tests/lib/test_bitfield.c
++++ b/tests/lib/test_bitfield.c
+@@ -3,7 +3,7 @@
+  *
+  * BabelTrace - bitfield test program
+  *
+- * Copyright 2010 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
++ * Copyright 2010-2019 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+@@ -40,39 +40,109 @@ void fct(void)
+ /* Test array size, in bytes */
+ #define TEST_LEN 128
+ #define NR_TESTS 10
+-#define SIGNED_TEST_DESC_FMT_STR "Writing and reading back 0x%X, signed"
+-#define UNSIGNED_TEST_DESC_FMT_STR "Writing and reading back 0x%X, unsigned"
++#define SIGNED_INT_READ_TEST_DESC_FMT_STR "Writing and reading back 0x%X, signed int dest, varying read unit size"
++#define SIGNED_INT_WRITE_TEST_DESC_FMT_STR "Writing and reading back 0x%X, signed int source, varying write unit size"
++#define SIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR "Writing and reading back 0x%llX, signed long long dest, varying read unit size"
++#define SIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR "Writing and reading back 0x%llX, signed long long source, varying write unit size"
++#define UNSIGNED_INT_READ_TEST_DESC_FMT_STR "Writing and reading back 0x%X, unsigned int dest, varying read unit size"
++#define UNSIGNED_INT_WRITE_TEST_DESC_FMT_STR "Writing and reading back 0x%X, unsigned int source, varying write unit size"
++#define UNSIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR "Writing and reading back 0x%llX, unsigned long long dest, varying read unit size"
++#define UNSIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR "Writing and reading back 0x%llX, unsigned long long source, varying write unit size"
+ #define DIAG_FMT_STR "Failed reading value written \"%s\"-wise, with start=%i" \
+ 	" and length=%i. Read %llX"
+ 
+-unsigned int srcrand;
++unsigned int srcrand_ui;
++unsigned long long srcrand_ull;
+ 
++/*
++ * fls: returns the position of the most significant bit.
++ * Returns 0 if no bit is set, else returns the position of the most
++ * significant bit (from 1 to 32 on 32-bit, from 1 to 64 on 64-bit).
++ */
+ #if defined(__i386) || defined(__x86_64)
+-
+-static inline int fls(int x)
++static inline
++unsigned int fls_u32(uint32_t x)
+ {
+ 	int r;
+-	asm("bsrl %1,%0\n\t"
+-	    "cmovzl %2,%0"
+-	    : "=&r" (r) : "rm" (x), "rm" (-1));
++
++	__asm__ ("bsrl %1,%0\n\t"
++	    "jnz 1f\n\t"
++	    "movl $-1,%0\n\t"
++	    "1:\n\t"
++	    : "=r" (r) : "rm" (x));
+ 	return r + 1;
+ }
+-
++#define HAS_FLS_U32
+ #elif defined(__PPC__)
+-
+-static __inline__ int fls(unsigned int x)
++static inline
++unsigned int fls_u32(uint32_t x)
+ {
+ 	int lz;
+ 
+-	asm ("cntlzw %0,%1" : "=r" (lz) : "r" (x));
++	__asm__ ("cntlzw %0,%1" : "=r" (lz) : "r" (x));
+ 	return 32 - lz;
+ }
++#define HAS_FLS_U32
++#endif
+ 
+-#else
++#if defined(__x86_64)
++static inline
++unsigned int fls_u64(uint64_t x)
++{
++	long r;
+ 
+-static int fls(unsigned int x)
++	__asm__ ("bsrq %1,%0\n\t"
++	    "jnz 1f\n\t"
++	    "movq $-1,%0\n\t"
++	    "1:\n\t"
++	    : "=r" (r) : "rm" (x));
++	return r + 1;
++}
++#define HAS_FLS_U64
++#endif
++
++#ifndef HAS_FLS_U64
++static __attribute__((unused))
++unsigned int fls_u64(uint64_t x)
+ {
+-	int r = 32;
++	unsigned int r = 64;
++
++	if (!x)
++		return 0;
++
++	if (!(x & 0xFFFFFFFF00000000ULL)) {
++		x <<= 32;
++		r -= 32;
++	}
++	if (!(x & 0xFFFF000000000000ULL)) {
++		x <<= 16;
++		r -= 16;
++	}
++	if (!(x & 0xFF00000000000000ULL)) {
++		x <<= 8;
++		r -= 8;
++	}
++	if (!(x & 0xF000000000000000ULL)) {
++		x <<= 4;
++		r -= 4;
++	}
++	if (!(x & 0xC000000000000000ULL)) {
++		x <<= 2;
++		r -= 2;
++	}
++	if (!(x & 0x8000000000000000ULL)) {
++		x <<= 1;
++		r -= 1;
++	}
++	return r;
++}
++#endif
++
++#ifndef HAS_FLS_U32
++static __attribute__((unused))
++unsigned int fls_u32(uint32_t x)
++{
++	unsigned int r = 32;
+ 
+ 	if (!x)
+ 		return 0;
+@@ -98,7 +168,6 @@ static int fls(unsigned int x)
+ 	}
+ 	return r;
+ }
+-
+ #endif
+ 
+ #define print_byte_array(c, len)	\
+@@ -133,9 +202,9 @@ do {					\
+ 	(val) != (ref);							\
+ })
+ 
+-void run_test_unsigned(void)
++void run_test_unsigned_write(void)
+ {
+-	unsigned int src, nrbits;
++	unsigned int src_ui, nrbits_ui, nrbits_ull;
+ 	union {
+ 		unsigned char c[TEST_LEN];
+ 		unsigned short s[TEST_LEN/sizeof(unsigned short)];
+@@ -143,62 +212,229 @@ void run_test_unsigned(void)
+ 		unsigned long l[TEST_LEN/sizeof(unsigned long)];
+ 		unsigned long long ll[TEST_LEN/sizeof(unsigned long long)];
+ 	} target;
+-	unsigned long long readval;
++	unsigned long long src_ull, readval;
+ 	unsigned int s, l;
+ 
+-	src = srcrand;
+-	nrbits = fls(src);
++	src_ui = srcrand_ui;
++	nrbits_ui = fls_u32(src_ui);
+ 
++	/* Write from unsigned integer src input. */
+ 	for (s = 0; s < CHAR_BIT * TEST_LEN; s++) {
+-		for (l = nrbits; l < (CHAR_BIT * TEST_LEN) - s; l++) {
++		for (l = nrbits_ui; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+ 			init_byte_array(target.c, TEST_LEN, 0xFF);
+-			bt_bitfield_write(target.c, unsigned char, s, l, src);
++			bt_bitfield_write(target.c, unsigned char, s, l, src_ui);
+ 			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+-			if (check_result(src, readval, target.c, unsigned char,
+-					  s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
++			if (check_result(src_ui, readval, target.c, unsigned char,
++					  s, l, UNSIGNED_INT_WRITE_TEST_DESC_FMT_STR)) {
+ 				return;
+ 			}
+ 
+ 			init_byte_array(target.c, TEST_LEN, 0xFF);
+-			bt_bitfield_write(target.s, unsigned short, s, l, src);
++			bt_bitfield_write(target.s, unsigned short, s, l, src_ui);
+ 			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+-			if (check_result(src, readval, target.c, unsigned short,
+-					  s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
++			if (check_result(src_ui, readval, target.c, unsigned short,
++					  s, l, UNSIGNED_INT_WRITE_TEST_DESC_FMT_STR)) {
+ 				return;
+ 			}
+ 
+ 			init_byte_array(target.c, TEST_LEN, 0xFF);
+-			bt_bitfield_write(target.i, unsigned int, s, l, src);
++			bt_bitfield_write(target.i, unsigned int, s, l, src_ui);
+ 			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+-			if (check_result(src, readval, target.c, unsigned int,
+-					   s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
++			if (check_result(src_ui, readval, target.c, unsigned int,
++					   s, l, UNSIGNED_INT_WRITE_TEST_DESC_FMT_STR)) {
+ 				return;
+ 			}
+ 
+ 			init_byte_array(target.c, TEST_LEN, 0xFF);
+-			bt_bitfield_write(target.l, unsigned long, s, l, src);
++			bt_bitfield_write(target.l, unsigned long, s, l, src_ui);
+ 			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+-			if (check_result(src, readval, target.c, unsigned long,
+-					  s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
++			if (check_result(src_ui, readval, target.c, unsigned long,
++					  s, l, UNSIGNED_INT_WRITE_TEST_DESC_FMT_STR)) {
+ 				return;
+ 			}
+ 
+ 			init_byte_array(target.c, TEST_LEN, 0xFF);
+-			bt_bitfield_write(target.ll, unsigned long long, s, l, src);
++			bt_bitfield_write(target.ll, unsigned long long, s, l, src_ui);
+ 			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
+-			if (check_result(src, readval, target.c, unsigned long long,
+-				     s, l, UNSIGNED_TEST_DESC_FMT_STR)) {
++			if (check_result(src_ui, readval, target.c, unsigned long long,
++				     s, l, UNSIGNED_INT_WRITE_TEST_DESC_FMT_STR)) {
+ 				return;
+ 			}
+ 		}
+ 	}
++	pass(UNSIGNED_INT_WRITE_TEST_DESC_FMT_STR, src_ui);
++
++	src_ull = srcrand_ull;
++	nrbits_ull = fls_u64(src_ull);
++
++	/* Write from unsigned long long src input. */
++	for (s = 0; s < CHAR_BIT * TEST_LEN; s++) {
++		for (l = nrbits_ull; l < (CHAR_BIT * TEST_LEN) - s; l++) {
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.c, unsigned char, s, l, src_ull);
++			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
++			if (check_result(src_ull, readval, target.c, unsigned char,
++					  s, l, UNSIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.s, unsigned short, s, l, src_ull);
++			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
++			if (check_result(src_ull, readval, target.c, unsigned short,
++					  s, l, UNSIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.i, unsigned int, s, l, src_ull);
++			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
++			if (check_result(src_ull, readval, target.c, unsigned int,
++					   s, l, UNSIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR)) {
++				return;
++			}
+ 
+-	pass(UNSIGNED_TEST_DESC_FMT_STR, src);
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.l, unsigned long, s, l, src_ull);
++			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
++			if (check_result(src_ull, readval, target.c, unsigned long,
++					  s, l, UNSIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.ll, unsigned long long, s, l, src_ull);
++			bt_bitfield_read(target.c, unsigned char, s, l, &readval);
++			if (check_result(src_ull, readval, target.c, unsigned long long,
++				     s, l, UNSIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR)) {
++				return;
++			}
++		}
++	}
++	pass(UNSIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR, src_ull);
+ }
+ 
+-void run_test_signed(void)
++void run_test_unsigned_read(void)
++{
++	unsigned int src_ui, nrbits_ui, nrbits_ull, readval_ui;
++	union {
++		unsigned char c[TEST_LEN];
++		unsigned short s[TEST_LEN/sizeof(unsigned short)];
++		unsigned int i[TEST_LEN/sizeof(unsigned int)];
++		unsigned long l[TEST_LEN/sizeof(unsigned long)];
++		unsigned long long ll[TEST_LEN/sizeof(unsigned long long)];
++	} target;
++	unsigned long long src_ull, readval_ull;
++	unsigned int s, l;
++
++	src_ui = srcrand_ui;
++	nrbits_ui = fls_u32(src_ui);
++
++	/* Read to unsigned integer readval output. */
++	for (s = 0; s < CHAR_BIT * TEST_LEN; s++) {
++		for (l = nrbits_ui; l < (CHAR_BIT * TEST_LEN) - s; l++) {
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.c, unsigned char, s, l, src_ui);
++			bt_bitfield_read(target.c, unsigned char, s, l, &readval_ui);
++			if (check_result(src_ui, readval_ui, target.c, unsigned char,
++					  s, l, UNSIGNED_INT_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.s, unsigned char, s, l, src_ui);
++			bt_bitfield_read(target.c, unsigned short, s, l, &readval_ui);
++			if (check_result(src_ui, readval_ui, target.c, unsigned short,
++					  s, l, UNSIGNED_INT_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.i, unsigned char, s, l, src_ui);
++			bt_bitfield_read(target.c, unsigned int, s, l, &readval_ui);
++			if (check_result(src_ui, readval_ui, target.c, unsigned int,
++					   s, l, UNSIGNED_INT_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.l, unsigned char, s, l, src_ui);
++			bt_bitfield_read(target.c, unsigned long, s, l, &readval_ui);
++			if (check_result(src_ui, readval_ui, target.c, unsigned long,
++					  s, l, UNSIGNED_INT_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.ll, unsigned char, s, l, src_ui);
++			bt_bitfield_read(target.c, unsigned long long, s, l, &readval_ui);
++			if (check_result(src_ui, readval_ui, target.c, unsigned long long,
++				     s, l, UNSIGNED_INT_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++		}
++	}
++	pass(UNSIGNED_INT_READ_TEST_DESC_FMT_STR, src_ui);
++
++	src_ull = srcrand_ull;
++	nrbits_ull = fls_u64(src_ull);
++
++	/* Read to unsigned long long readval output. */
++	for (s = 0; s < CHAR_BIT * TEST_LEN; s++) {
++		for (l = nrbits_ull; l < (CHAR_BIT * TEST_LEN) - s; l++) {
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.c, unsigned char, s, l, src_ull);
++			bt_bitfield_read(target.c, unsigned char, s, l, &readval_ull);
++			if (check_result(src_ull, readval_ull, target.c, unsigned char,
++					  s, l, UNSIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.s, unsigned char, s, l, src_ull);
++			bt_bitfield_read(target.c, unsigned short, s, l, &readval_ull);
++			if (check_result(src_ull, readval_ull, target.c, unsigned short,
++					  s, l, UNSIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.i, unsigned char, s, l, src_ull);
++			bt_bitfield_read(target.c, unsigned int, s, l, &readval_ull);
++			if (check_result(src_ull, readval_ull, target.c, unsigned int,
++					   s, l, UNSIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.l, unsigned char, s, l, src_ull);
++			bt_bitfield_read(target.c, unsigned long, s, l, &readval_ull);
++			if (check_result(src_ull, readval_ull, target.c, unsigned long,
++					  s, l, UNSIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.ll, unsigned char, s, l, src_ull);
++			bt_bitfield_read(target.c, unsigned long long, s, l, &readval_ull);
++			if (check_result(src_ull, readval_ull, target.c, unsigned long long,
++				     s, l, UNSIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++		}
++	}
++	pass(UNSIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR, src_ull);
++}
++
++void run_test_unsigned(void)
++{
++	run_test_unsigned_write();
++	run_test_unsigned_read();
++}
++
++void run_test_signed_write(void)
+ {
+-	int src, nrbits;
++	int src_i, nrbits_i, nrbits_ll;
+ 	union {
+ 		signed char c[TEST_LEN];
+ 		short s[TEST_LEN/sizeof(short)];
+@@ -206,88 +442,272 @@ void run_test_signed(void)
+ 		long l[TEST_LEN/sizeof(long)];
+ 		long long ll[TEST_LEN/sizeof(long long)];
+ 	} target;
+-	long long readval;
++	long long src_ll, readval;
+ 	unsigned int s, l;
+ 
+-	src = srcrand;
+-	if (src & 0x80000000U)
+-		nrbits = fls(~src) + 1;	/* Find least significant bit conveying sign */
++	src_i = srcrand_ui;
++	if (src_i & 0x80000000U)
++		nrbits_i = fls_u32(~src_i) + 1;	/* Find least significant bit conveying sign */
+ 	else
+-		nrbits = fls(src) + 1;	/* Keep sign at 0 */
++		nrbits_i = fls_u32(src_i) + 1;	/* Keep sign at 0 */
+ 
++	/* Write from signed integer src input. */
+ 	for (s = 0; s < CHAR_BIT * TEST_LEN; s++) {
+-		for (l = nrbits; l < (CHAR_BIT * TEST_LEN) - s; l++) {
++		for (l = nrbits_i; l < (CHAR_BIT * TEST_LEN) - s; l++) {
+ 			init_byte_array(target.c, TEST_LEN, 0x0);
+-			bt_bitfield_write(target.c, signed char, s, l, src);
++			bt_bitfield_write(target.c, signed char, s, l, src_i);
+ 			bt_bitfield_read(target.c, signed char, s, l, &readval);
+-			if (check_result(src, readval, target.c, signed char,
+-					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
++			if (check_result(src_i, readval, target.c, signed char,
++					  s, l, SIGNED_INT_WRITE_TEST_DESC_FMT_STR)) {
+ 				return;
+ 			}
+ 
+ 			init_byte_array(target.c, TEST_LEN, 0x0);
+-			bt_bitfield_write(target.s, short, s, l, src);
++			bt_bitfield_write(target.s, short, s, l, src_i);
+ 			bt_bitfield_read(target.c, signed char, s, l, &readval);
+-			if (check_result(src, readval, target.c, short,
+-					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
++			if (check_result(src_i, readval, target.c, short,
++					  s, l, SIGNED_INT_WRITE_TEST_DESC_FMT_STR)) {
+ 				return;
+ 			}
+ 
+ 			init_byte_array(target.c, TEST_LEN, 0x0);
+-			bt_bitfield_write(target.i, int, s, l, src);
++			bt_bitfield_write(target.i, int, s, l, src_i);
+ 			bt_bitfield_read(target.c, signed char, s, l, &readval);
+-			if (check_result(src, readval, target.c, int,
+-					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
++			if (check_result(src_i, readval, target.c, int,
++					  s, l, SIGNED_INT_WRITE_TEST_DESC_FMT_STR)) {
+ 				return;
+ 			}
+ 
+ 			init_byte_array(target.c, TEST_LEN, 0x0);
+-			bt_bitfield_write(target.l, long, s, l, src);
++			bt_bitfield_write(target.l, long, s, l, src_i);
+ 			bt_bitfield_read(target.c, signed char, s, l, &readval);
+-			if (check_result(src, readval, target.c, long,
+-					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
++			if (check_result(src_i, readval, target.c, long,
++					  s, l, SIGNED_INT_WRITE_TEST_DESC_FMT_STR)) {
+ 				return;
+ 			}
+ 
+ 			init_byte_array(target.c, TEST_LEN, 0x0);
+-			bt_bitfield_write(target.ll, long long, s, l, src);
++			bt_bitfield_write(target.ll, long long, s, l, src_i);
+ 			bt_bitfield_read(target.c, signed char, s, l, &readval);
+-			if (check_result(src, readval, target.c, long long,
+-					  s, l, SIGNED_TEST_DESC_FMT_STR)) {
++			if (check_result(src_i, readval, target.c, long long,
++					  s, l, SIGNED_INT_WRITE_TEST_DESC_FMT_STR)) {
+ 				return;
+ 			}
+ 		}
+ 	}
++	pass(SIGNED_INT_WRITE_TEST_DESC_FMT_STR, src_i);
++
++	src_ll = srcrand_ull;
++	if (src_ll & 0x8000000000000000ULL)
++		nrbits_ll = fls_u64(~src_ll) + 1;	/* Find least significant bit conveying sign */
++	else
++		nrbits_ll = fls_u64(src_ll) + 1;	/* Keep sign at 0 */
++
++	/* Write from signed long long src input. */
++	for (s = 0; s < CHAR_BIT * TEST_LEN; s++) {
++		for (l = nrbits_ll; l < (CHAR_BIT * TEST_LEN) - s; l++) {
++			init_byte_array(target.c, TEST_LEN, 0x0);
++			bt_bitfield_write(target.c, signed char, s, l, src_ll);
++			bt_bitfield_read(target.c, signed char, s, l, &readval);
++			if (check_result(src_ll, readval, target.c, signed char,
++					  s, l, SIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR)) {
++				return;
++			}
+ 
+-	pass(SIGNED_TEST_DESC_FMT_STR, src);
++			init_byte_array(target.c, TEST_LEN, 0x0);
++			bt_bitfield_write(target.s, short, s, l, src_ll);
++			bt_bitfield_read(target.c, signed char, s, l, &readval);
++			if (check_result(src_ll, readval, target.c, short,
++					  s, l, SIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0x0);
++			bt_bitfield_write(target.i, int, s, l, src_ll);
++			bt_bitfield_read(target.c, signed char, s, l, &readval);
++			if (check_result(src_ll, readval, target.c, int,
++					  s, l, SIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0x0);
++			bt_bitfield_write(target.l, long, s, l, src_ll);
++			bt_bitfield_read(target.c, signed char, s, l, &readval);
++			if (check_result(src_ll, readval, target.c, long,
++					  s, l, SIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0x0);
++			bt_bitfield_write(target.ll, long long, s, l, src_ll);
++			bt_bitfield_read(target.c, signed char, s, l, &readval);
++			if (check_result(src_ll, readval, target.c, long long,
++					  s, l, SIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR)) {
++				return;
++			}
++		}
++	}
++	pass(SIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR, src_ll);
++}
++
++void run_test_signed_read(void)
++{
++	int src_i, nrbits_i, nrbits_ll, readval_i;
++	union {
++		unsigned char c[TEST_LEN];
++		unsigned short s[TEST_LEN/sizeof(unsigned short)];
++		unsigned int i[TEST_LEN/sizeof(unsigned int)];
++		unsigned long l[TEST_LEN/sizeof(unsigned long)];
++		unsigned long long ll[TEST_LEN/sizeof(unsigned long long)];
++	} target;
++	long long src_ll, readval_ll;
++	unsigned int s, l;
++
++	src_i = srcrand_ui;
++	if (src_i & 0x80000000U)
++		nrbits_i = fls_u32(~src_i) + 1;	/* Find least significant bit conveying sign */
++	else
++		nrbits_i = fls_u32(src_i) + 1;	/* Keep sign at 0 */
++
++	/* Read to signed integer readval output. */
++	for (s = 0; s < CHAR_BIT * TEST_LEN; s++) {
++		for (l = nrbits_i; l < (CHAR_BIT * TEST_LEN) - s; l++) {
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.c, signed char, s, l, src_i);
++			bt_bitfield_read(target.c, signed char, s, l, &readval_i);
++			if (check_result(src_i, readval_i, target.c, signed char,
++					  s, l, SIGNED_INT_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.s, signed char, s, l, src_i);
++			bt_bitfield_read(target.c, short, s, l, &readval_i);
++			if (check_result(src_i, readval_i, target.c, short,
++					  s, l, SIGNED_INT_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.i, signed char, s, l, src_i);
++			bt_bitfield_read(target.c, int, s, l, &readval_i);
++			if (check_result(src_i, readval_i, target.c, int,
++					   s, l, SIGNED_INT_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.l, signed char, s, l, src_i);
++			bt_bitfield_read(target.c, long, s, l, &readval_i);
++			if (check_result(src_i, readval_i, target.c, long,
++					  s, l, SIGNED_INT_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.ll, signed char, s, l, src_i);
++			bt_bitfield_read(target.c, long long, s, l, &readval_i);
++			if (check_result(src_i, readval_i, target.c, long long,
++				     s, l, SIGNED_INT_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++		}
++	}
++	pass(SIGNED_INT_READ_TEST_DESC_FMT_STR, src_i);
++
++	src_ll = srcrand_ull;
++	if (src_ll & 0x8000000000000000ULL)
++		nrbits_ll = fls_u64(~src_ll) + 1;	/* Find least significant bit conveying sign */
++	else
++		nrbits_ll = fls_u64(src_ll) + 1;	/* Keep sign at 0 */
++
++	/* Read to unsigned long long readval output. */
++	for (s = 0; s < CHAR_BIT * TEST_LEN; s++) {
++		for (l = nrbits_ll; l < (CHAR_BIT * TEST_LEN) - s; l++) {
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.c, signed char, s, l, src_ll);
++			bt_bitfield_read(target.c, signed char, s, l, &readval_ll);
++			if (check_result(src_ll, readval_ll, target.c, signed char,
++					  s, l, SIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.s, signed char, s, l, src_ll);
++			bt_bitfield_read(target.c, short, s, l, &readval_ll);
++			if (check_result(src_ll, readval_ll, target.c, short,
++					  s, l, SIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.i, signed char, s, l, src_ll);
++			bt_bitfield_read(target.c, int, s, l, &readval_ll);
++			if (check_result(src_ll, readval_ll, target.c, int,
++					   s, l, SIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.l, signed char, s, l, src_ll);
++			bt_bitfield_read(target.c, long, s, l, &readval_ll);
++			if (check_result(src_ll, readval_ll, target.c, long,
++					  s, l, SIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++
++			init_byte_array(target.c, TEST_LEN, 0xFF);
++			bt_bitfield_write(target.ll, signed char, s, l, src_ll);
++			bt_bitfield_read(target.c, long long, s, l, &readval_ll);
++			if (check_result(src_ll, readval_ll, target.c, long long,
++				     s, l, SIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR)) {
++				return;
++			}
++		}
++	}
++	pass(SIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR, src_ll);
++}
++
++void run_test_signed(void)
++{
++	run_test_signed_write();
++	run_test_signed_read();
+ }
+ 
+ void run_test(void)
+ {
+ 	int i;
+-	plan_tests(NR_TESTS * 2 + 6);
++	plan_tests(NR_TESTS * 8 + 24);
+ 
+ 	srand(time(NULL));
+ 
+-	srcrand = 0;
++	srcrand_ui = 0;
++	srcrand_ull = 0;
+ 	run_test_unsigned();
+-	srcrand = 0;
++	srcrand_ui = 0;
++	srcrand_ull = 0;
+ 	run_test_signed();
+ 
+-	srcrand = 1;
++	srcrand_ui = 1;
++	srcrand_ull = 1;
+ 	run_test_unsigned();
+ 
+-	srcrand = ~0U;
++	srcrand_ui = ~0U;
++	srcrand_ull = ~0ULL;
+ 	run_test_unsigned();
+ 
+-	srcrand = -1;
++	srcrand_ui = -1U;
++	srcrand_ull = -1ULL;
+ 	run_test_signed();
+ 
+-	srcrand = (int)0x80000000U;
++	srcrand_ui = 0x80000000U;
++	srcrand_ull = 0x8000000000000000ULL;
+ 	run_test_signed();
+ 
+ 	for (i = 0; i < NR_TESTS; i++) {
+-		srcrand = rand();
++		srcrand_ui = rand();
++		srcrand_ull = ((unsigned long long) (unsigned int) rand() << 32) |
++				(unsigned long long) (unsigned int) rand();
+ 		run_test_unsigned();
+ 		run_test_signed();
+ 	}
+-- 
+2.11.0
