@@ -1,15 +1,15 @@
 From: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
-Subject: [PATCH lttng-ust] Fix: allocate ts_end in ringbuffer
+Subject: [PATCH lttng-ust v2] Fix: allocate ts_end in ringbuffer
  shared memory
-Date: Fri, 10 May 2019 11:12:24 -0400
-Message-ID: <20190510151224.2848-1-gabriel.pollo-guilbert__21233.2815559179$1557501180$gmane$org@efficios.com>
+Date: Fri, 10 May 2019 11:26:32 -0400
+Message-ID: <20190510152632.8730-1-gabriel.pollo-guilbert__28947.5295272254$1557502082$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 450txH4TRhz1JlQ
- for <lttng-dev@lists.lttng.org>; Fri, 10 May 2019 11:12:35 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 450vFh48jDz1Jmr
+ for <lttng-dev@lists.lttng.org>; Fri, 10 May 2019 11:26:48 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -26,6 +26,22 @@ This patch allocates the memory used by the ts_end field added by commit
 6c737d05. When allocating lots of subbuffer for a channel (512 or more),
 zalloc_shm() will fail to allocate all the objects because the allocated memory
 map didn't take account the newly added field.
+
+lttng-tools version: b14f53d4 (2.12.0-pre)
+
+Steps to reproduce the bug:
+
+	1. lttng-sessiond -vvv --verbose-consumer
+	2. start a traced application
+	3. lttng create "test-sesssion"
+	4. lttng enable-channel --userspace --num-subbuf 512 --subbuf-size 8k --overwrite channel
+	5. lttng enable-event -u -a -c channel
+	6. lttng start
+
+After these steps, the following error message show should be thrown:
+
+	Error: ask_channel_creation consumer command failed
+	Error: Error creating UST channel "channel" on the consumer daemon
 
 Signed-off-by: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
 ---
