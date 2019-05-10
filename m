@@ -1,20 +1,16 @@
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH lttng-ust v2] Fix: allocate ts_end in
- ringbuffer shared memory
-Date: Fri, 10 May 2019 15:34:22 -0400 (EDT)
-Message-ID: <1120045260.787.1557516862762.JavaMail.zimbra__44746.0416167573$1557516881$gmane$org@efficios.com>
-References: <20190510152632.8730-1-gabriel.pollo-guilbert@efficios.com>
- <c9f0e5ee-14ed-a2e7-1113-49a77bc7312a@gydle.com>
- <1897690228.618.1557511236306.JavaMail.zimbra@efficios.com>
- <84225c7a-c13e-ff39-9891-5ddab703e8b9@gydle.com>
+From: Sebastien Boisvert <sboisvert@gydle.com>
+Subject: [lttng-ust] duplicated struct
+ ustctl_consumer_channel_attr
+Date: Fri, 10 May 2019 15:35:38 -0400
+Message-ID: <46193ce3-1320-a982-2cb2-7f5d11596195__34769.7041391925$1557516959$gmane$org@gydle.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 4510lM5shkz1KGJ
- for <lttng-dev@lists.lttng.org>; Fri, 10 May 2019 15:34:23 -0400 (EDT)
-In-Reply-To: <84225c7a-c13e-ff39-9891-5ddab703e8b9@gydle.com>
+Received: from mail.gydle.com (mail.gydle.com [64.18.173.180])
+ by lists.lttng.org (Postfix) with ESMTPS id 4510mq4Sn6z1KGp
+ for <lttng-dev@lists.lttng.org>; Fri, 10 May 2019 15:35:39 -0400 (EDT)
+Content-Language: en-US
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -24,34 +20,48 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Sebastien Boisvert <sboisvert@gydle.com>
-Cc: lttng-dev <lttng-dev@lists.lttng.org>
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
------ On May 10, 2019, at 3:16 PM, Sebastien Boisvert sboisvert@gydle.com wrote:
+Hello,
 
-> On 2019-05-10 2:00 p.m., Mathieu Desnoyers wrote:
-[...]
->>> [sboisvert@GT480:lttng-ust]$ ./configure
->>> --prefix=/home/sboisvert/open-source/lttng.org/Build/lttng-ust/v2.9.4
->>> LDFLAGS=-L/home/sboisvert/open-source/lttng.org/Build/userspace-rcu/v0.11.0/lib
->> 
->> I think you need a lttng-ust which is more recent than 2.9.4.
-> 
-> Got it.
-> 
-> I used the most recent git tag for lttng-ust: v2.9.4
+As suggested by Jonathan [1], I should start a new email thread.
 
-The most recent git tag stable version for lttng-ust is actually 2.10.3.
+Why are there 2 identical declarations of struct ustctl_consumer_channel_attr
+(one in lttng-ust, one in lttng-tools) instead of just one ?
 
-The patch in this thread addresses an issue recently introduced only in the
-master branch and the stable-2.11 branch (no release tags yet).
+It just seems redundant to me.
 
-Thanks,
 
-Mathieu
+[sboisvert@GT480:lttng-ust]$ grep "struct ustctl_consumer_channel_attr {" -A 11 include/lttng/ust-ctl.h
+struct ustctl_consumer_channel_attr {
+	enum lttng_ust_chan_type type;
+	uint64_t subbuf_size;			/* bytes */
+	uint64_t num_subbuf;			/* power of 2 */
+	int overwrite;				/* 1: overwrite, 0: discard */
+	unsigned int switch_timer_interval;	/* usec */
+	unsigned int read_timer_interval;	/* usec */
+	enum lttng_ust_output output;		/* splice, mmap */
+	uint32_t chan_id;			/* channel ID */
+	unsigned char uuid[LTTNG_UST_UUID_LEN]; /* Trace session unique ID */
+	int64_t blocking_timeout;			/* Blocking timeout (usec) */
+} LTTNG_PACKED;
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+
+[sboisvert@GT480:lttng-tools]$ grep "struct ustctl_consumer_channel_attr {" -A 11 src/bin/lttng-sessiond/lttng-ust-ctl.h
+struct ustctl_consumer_channel_attr {
+	enum lttng_ust_chan_type type;
+	uint64_t subbuf_size;			/* bytes */
+	uint64_t num_subbuf;			/* power of 2 */
+	int overwrite;				/* 1: overwrite, 0: discard */
+	unsigned int switch_timer_interval;	/* usec */
+	unsigned int read_timer_interval;	/* usec */
+	enum lttng_ust_output output;		/* splice, mmap */
+	uint32_t chan_id;			/* channel ID */
+	unsigned char uuid[LTTNG_UST_UUID_LEN]; /* Trace session unique ID */
+	int64_t blocking_timeout;			/* Blocking timeout (usec) */
+} LTTNG_PACKED;
+
+
+----
+[1] https://lists.lttng.org/pipermail/lttng-dev/2019-May/028894.html
