@@ -1,19 +1,15 @@
-From: Simon Marchi <simon.marchi@efficios.com>
-Subject: Re: [PATCH babeltrace v3] Fix: bitfield: left shift
- undefined behavior
-Date: Thu, 9 May 2019 10:19:23 -0400
-Message-ID: <207dfb5a-d99a-ecab-3080-16ba3e6e998a__20105.9881759406$1557411592$gmane$org@efficios.com>
-References: <20190508222318.6014-1-mathieu.desnoyers@efficios.com>
- <cbd49a5b-b955-e50c-46e0-c24507108b85@simark.ca>
+From: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
+Subject: [PATCH lttng-ust] Fix: allocate ts_end in ringbuffer
+ shared memory
+Date: Fri, 10 May 2019 11:12:24 -0400
+Message-ID: <20190510151224.2848-1-gabriel.pollo-guilbert__21233.2815559179$1557501180$gmane$org@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 450FpW3ys1z1LG2
- for <lttng-dev@lists.lttng.org>; Thu,  9 May 2019 10:19:31 -0400 (EDT)
-In-Reply-To: <cbd49a5b-b955-e50c-46e0-c24507108b85@simark.ca>
-Content-Language: en-US
+ by lists.lttng.org (Postfix) with ESMTPS id 450txH4TRhz1JlQ
+ for <lttng-dev@lists.lttng.org>; Fri, 10 May 2019 11:12:35 -0400 (EDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,27 +19,32 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Simon Marchi <simark@simark.ca>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, jgalar@efficios.com, joraj@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-On 2019-05-09 10:02 a.m., Simon Marchi wrote:
-> I might have more cases for you to investigate :)
-> 
-> Can you try building with -fsanitize=undefined and run test_bitfield? I get some:
-> 
-> /home/smarchi/src/babeltrace/tests/lib/test_bitfield.c:222:4: runtime error: left shift of negative value -1
-> 
-> Which would hint that we are missing a cast before a shift.
-> 
-> Simon
+This patch allocates the memory used by the ts_end field added by commit
+6c737d05. When allocating lots of subbuffer for a channel (512 or more),
+zalloc_shm() will fail to allocate all the objects because the allocated memory
+map didn't take account the newly added field.
 
-I digged a bit, and it's these lines
+Signed-off-by: Gabriel-Andrew Pollo-Guilbert <gabriel.pollo-guilbert@efficios.com>
+---
+ libringbuffer/ring_buffer_backend.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-  ___v >>= final;
-
-  ___v <<= final;
-
-in _bt_piecewise_lshift and _bt_piecewise_rshift.
-
-Simon
+diff --git a/libringbuffer/ring_buffer_backend.c b/libringbuffer/ring_buffer_backend.c
+index a0ef7446..431b8eae 100644
+--- a/libringbuffer/ring_buffer_backend.c
++++ b/libringbuffer/ring_buffer_backend.c
+@@ -341,6 +341,9 @@ int channel_backend_init(struct channel_backend *chanb,
+ 	shmsize += sizeof(struct commit_counters_hot) * num_subbuf;
+ 	shmsize += offset_align(shmsize, __alignof__(struct commit_counters_cold));
+ 	shmsize += sizeof(struct commit_counters_cold) * num_subbuf;
++	/* Sampled timestamp end */
++	shmsize += offset_align(shmsize, __alignof__(uint64_t));
++	shmsize += sizeof(uint64_t) * num_subbuf;
+ 
+ 	if (config->alloc == RING_BUFFER_ALLOC_PER_CPU) {
+ 		struct lttng_ust_lib_ring_buffer *buf;
+-- 
+2.21.0
