@@ -1,8 +1,8 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH babeltrace 4/4] Silence compiler "always false
- comparison" warning
-Date: Mon, 13 May 2019 14:11:35 -0400
-Message-ID: <20190513181135.15420-4-mathieu.desnoyers__5706.24401313893$1557771233$gmane$org@efficios.com>
+Subject: [PATCH babeltrace 3/4] Cleanup: test-bitfield: pass
+ source integers as parameters
+Date: Mon, 13 May 2019 14:11:34 -0400
+Message-ID: <20190513181135.15420-3-mathieu.desnoyers__12660.9856075206$1557771271$gmane$org@efficios.com>
 References: <20190513181135.15420-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,8 +10,8 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 452pmg6RxJz1Kth
- for <lttng-dev@lists.lttng.org>; Mon, 13 May 2019 14:11:47 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 452pmj0W5qz1Kv0
+ for <lttng-dev@lists.lttng.org>; Mon, 13 May 2019 14:11:49 -0400 (EDT)
 In-Reply-To: <20190513181135.15420-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
@@ -26,92 +26,229 @@ To: simon.marchi@efficios.com, jgalar@efficios.com, joraj@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-Compiling the bitfield test with gcc -Wextra generates those warnings:
-
- ../../include/babeltrace/bitfield-internal.h:38:45: warning: comparison of unsigned expression < 0 is always false [-Wtype-limits]
- #define _bt_is_signed_type(type) ((type) -1 < (type) 0)
-
-This is the intent of the macro. Disable compiler warnings around use of
-that macro.
+It is a good practice to pass arguments as parameters rather
+than through global variables.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Change-Id: I2dd980e11ebd6cd37ae71b013925a6fca5d7b483
+Change-Id: I0d7cc94b1d492ca53ad29b1d39831ee6288b2672
 ---
- include/babeltrace/bitfield-internal.h | 34 ++++++++++++++++++++++++++++++++--
- 1 file changed, 32 insertions(+), 2 deletions(-)
+ tests/lib/test_bitfield.c | 85 +++++++++++++++++------------------------------
+ 1 file changed, 30 insertions(+), 55 deletions(-)
 
-diff --git a/include/babeltrace/bitfield-internal.h b/include/babeltrace/bitfield-internal.h
-index b2a3162e..a1d54ac4 100644
---- a/include/babeltrace/bitfield-internal.h
-+++ b/include/babeltrace/bitfield-internal.h
-@@ -35,6 +35,26 @@
- #error "bitfield.h requires the compiler representation of signed integers to be two's complement."
- #endif
+diff --git a/tests/lib/test_bitfield.c b/tests/lib/test_bitfield.c
+index 59bf89fd..63168fcd 100644
+--- a/tests/lib/test_bitfield.c
++++ b/tests/lib/test_bitfield.c
+@@ -51,9 +51,6 @@ void fct(void)
+ #define DIAG_FMT_STR "Failed reading value written \"%s\"-wise, with start=%i" \
+ 	" and length=%i. Read %llX"
  
-+/*
-+ * _bt_is_signed_type() willingly generates comparison of unsigned
-+ * expression < 0, which is always false. Silence compiler warnings.
-+ */
-+#ifdef __GNUC__
-+# define _BT_DIAG_PUSH			_Pragma("GCC diagnostic push")
-+# define _BT_DIAG_POP			_Pragma("GCC diagnostic pop")
-+
-+# define _BT_DIAG_STRINGIFY_1(x)	#x
-+# define _BT_DIAG_STRINGIFY(x)		_BT_DIAG_STRINGIFY_1(x)
-+
-+# define _BT_DIAG_IGNORE(option)	\
-+	_Pragma(_BT_DIAG_STRINGIFY(GCC diagnostic ignored option))
-+# define _BT_DIAG_IGNORE_TYPE_LIMITS	_BT_DIAG_IGNORE("-Wtype-limits")
-+#else
-+# define _BT_DIAG_PUSH
-+# define _BT_DIAG_POP
-+# define _BT_DIAG_IGNORE
-+#endif
-+
- #define _bt_is_signed_type(type)	((type) -1 < (type) 0)
- 
+-unsigned int srcrand_ui;
+-unsigned long long srcrand_ull;
+-
  /*
-@@ -342,6 +362,7 @@ do {									\
- 	unsigned long ts = sizeof(type) * CHAR_BIT; /* type size */	\
- 	unsigned long start_unit, end_unit, this_unit;			\
- 	unsigned long end, cshift; /* cshift is "complement shift" */	\
-+	int is_signed_type;						\
- 									\
- 	if (!__length) {						\
- 		*__vptr = 0;						\
-@@ -353,7 +374,11 @@ do {									\
- 	end_unit = (end + (ts - 1)) / ts;				\
- 									\
- 	this_unit = end_unit - 1;					\
--	if (_bt_is_signed_type(__typeof__(__v))				\
-+	_BT_DIAG_PUSH							\
-+	_BT_DIAG_IGNORE_TYPE_LIMITS					\
-+	is_signed_type = _bt_is_signed_type(__typeof__(__v));		\
-+	_BT_DIAG_POP							\
-+	if (is_signed_type						\
- 	    && (__ptr[this_unit] & _bt_lshift((type) 1, (end % ts ? end % ts : ts) - 1))) \
- 		__v = ~(__typeof__(__v)) 0;				\
- 	else								\
-@@ -409,6 +434,7 @@ do {									\
- 	unsigned long ts = sizeof(type) * CHAR_BIT; /* type size */	\
- 	unsigned long start_unit, end_unit, this_unit;			\
- 	unsigned long end, cshift; /* cshift is "complement shift" */	\
-+	int is_signed_type;						\
- 									\
- 	if (!__length) {						\
- 		*__vptr = 0;						\
-@@ -420,7 +446,11 @@ do {									\
- 	end_unit = (end + (ts - 1)) / ts;				\
- 									\
- 	this_unit = start_unit;						\
--	if (_bt_is_signed_type(__typeof__(__v))				\
-+	_BT_DIAG_PUSH							\
-+	_BT_DIAG_IGNORE_TYPE_LIMITS					\
-+	is_signed_type = _bt_is_signed_type(__typeof__(__v));		\
-+	_BT_DIAG_POP							\
-+	if (is_signed_type						\
- 	    && (__ptr[this_unit] & _bt_lshift((type) 1, ts - (__start % ts) - 1))) \
- 		__v = ~(__typeof__(__v)) 0;				\
- 	else								\
+  * fls: returns the position of the most significant bit.
+  * Returns 0 if no bit is set, else returns the position of the most
+@@ -202,9 +199,9 @@ do {					\
+ 	(val) != (ref);							\
+ })
+ 
+-void run_test_unsigned_write(void)
++void run_test_unsigned_write(unsigned int src_ui, unsigned long long src_ull)
+ {
+-	unsigned int src_ui, nrbits_ui, nrbits_ull;
++	unsigned int nrbits_ui, nrbits_ull;
+ 	union {
+ 		unsigned char c[TEST_LEN];
+ 		unsigned short s[TEST_LEN/sizeof(unsigned short)];
+@@ -212,10 +209,9 @@ void run_test_unsigned_write(void)
+ 		unsigned long l[TEST_LEN/sizeof(unsigned long)];
+ 		unsigned long long ll[TEST_LEN/sizeof(unsigned long long)];
+ 	} target;
+-	unsigned long long src_ull, readval;
++	unsigned long long readval;
+ 	unsigned int s, l;
+ 
+-	src_ui = srcrand_ui;
+ 	nrbits_ui = fls_u32(src_ui);
+ 
+ 	/* Write from unsigned integer src input. */
+@@ -264,7 +260,6 @@ void run_test_unsigned_write(void)
+ 	}
+ 	pass(UNSIGNED_INT_WRITE_TEST_DESC_FMT_STR, src_ui);
+ 
+-	src_ull = srcrand_ull;
+ 	nrbits_ull = fls_u64(src_ull);
+ 
+ 	/* Write from unsigned long long src input. */
+@@ -314,9 +309,9 @@ void run_test_unsigned_write(void)
+ 	pass(UNSIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR, src_ull);
+ }
+ 
+-void run_test_unsigned_read(void)
++void run_test_unsigned_read(unsigned int src_ui, unsigned long long src_ull)
+ {
+-	unsigned int src_ui, nrbits_ui, nrbits_ull, readval_ui;
++	unsigned int nrbits_ui, nrbits_ull, readval_ui;
+ 	union {
+ 		unsigned char c[TEST_LEN];
+ 		unsigned short s[TEST_LEN/sizeof(unsigned short)];
+@@ -324,10 +319,9 @@ void run_test_unsigned_read(void)
+ 		unsigned long l[TEST_LEN/sizeof(unsigned long)];
+ 		unsigned long long ll[TEST_LEN/sizeof(unsigned long long)];
+ 	} target;
+-	unsigned long long src_ull, readval_ull;
++	unsigned long long readval_ull;
+ 	unsigned int s, l;
+ 
+-	src_ui = srcrand_ui;
+ 	nrbits_ui = fls_u32(src_ui);
+ 
+ 	/* Read to unsigned integer readval output. */
+@@ -376,7 +370,6 @@ void run_test_unsigned_read(void)
+ 	}
+ 	pass(UNSIGNED_INT_READ_TEST_DESC_FMT_STR, src_ui);
+ 
+-	src_ull = srcrand_ull;
+ 	nrbits_ull = fls_u64(src_ull);
+ 
+ 	/* Read to unsigned long long readval output. */
+@@ -426,15 +419,15 @@ void run_test_unsigned_read(void)
+ 	pass(UNSIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR, src_ull);
+ }
+ 
+-void run_test_unsigned(void)
++void run_test_unsigned(unsigned int src_ui, unsigned long long src_ull)
+ {
+-	run_test_unsigned_write();
+-	run_test_unsigned_read();
++	run_test_unsigned_write(src_ui, src_ull);
++	run_test_unsigned_read(src_ui, src_ull);
+ }
+ 
+-void run_test_signed_write(void)
++void run_test_signed_write(int src_i, long long src_ll)
+ {
+-	int src_i, nrbits_i, nrbits_ll;
++	int nrbits_i, nrbits_ll;
+ 	union {
+ 		signed char c[TEST_LEN];
+ 		short s[TEST_LEN/sizeof(short)];
+@@ -442,10 +435,9 @@ void run_test_signed_write(void)
+ 		long l[TEST_LEN/sizeof(long)];
+ 		long long ll[TEST_LEN/sizeof(long long)];
+ 	} target;
+-	long long src_ll, readval;
++	long long readval;
+ 	unsigned int s, l;
+ 
+-	src_i = srcrand_ui;
+ 	if (src_i & 0x80000000U)
+ 		nrbits_i = fls_u32(~src_i) + 1;	/* Find least significant bit conveying sign */
+ 	else
+@@ -497,7 +489,6 @@ void run_test_signed_write(void)
+ 	}
+ 	pass(SIGNED_INT_WRITE_TEST_DESC_FMT_STR, src_i);
+ 
+-	src_ll = srcrand_ull;
+ 	if (src_ll & 0x8000000000000000ULL)
+ 		nrbits_ll = fls_u64(~src_ll) + 1;	/* Find least significant bit conveying sign */
+ 	else
+@@ -550,9 +541,9 @@ void run_test_signed_write(void)
+ 	pass(SIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR, src_ll);
+ }
+ 
+-void run_test_signed_read(void)
++void run_test_signed_read(int src_i, long long src_ll)
+ {
+-	int src_i, nrbits_i, nrbits_ll, readval_i;
++	int nrbits_i, nrbits_ll, readval_i;
+ 	union {
+ 		unsigned char c[TEST_LEN];
+ 		unsigned short s[TEST_LEN/sizeof(unsigned short)];
+@@ -560,10 +551,9 @@ void run_test_signed_read(void)
+ 		unsigned long l[TEST_LEN/sizeof(unsigned long)];
+ 		unsigned long long ll[TEST_LEN/sizeof(unsigned long long)];
+ 	} target;
+-	long long src_ll, readval_ll;
++	long long readval_ll;
+ 	unsigned int s, l;
+ 
+-	src_i = srcrand_ui;
+ 	if (src_i & 0x80000000U)
+ 		nrbits_i = fls_u32(~src_i) + 1;	/* Find least significant bit conveying sign */
+ 	else
+@@ -615,7 +605,6 @@ void run_test_signed_read(void)
+ 	}
+ 	pass(SIGNED_INT_READ_TEST_DESC_FMT_STR, src_i);
+ 
+-	src_ll = srcrand_ull;
+ 	if (src_ll & 0x8000000000000000ULL)
+ 		nrbits_ll = fls_u64(~src_ll) + 1;	/* Find least significant bit conveying sign */
+ 	else
+@@ -668,48 +657,34 @@ void run_test_signed_read(void)
+ 	pass(SIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR, src_ll);
+ }
+ 
+-void run_test_signed(void)
++void run_test_signed(int src_i, long long src_ll)
+ {
+-	run_test_signed_write();
+-	run_test_signed_read();
++	run_test_signed_write(src_i, src_ll);
++	run_test_signed_read(src_i, src_ll);
+ }
+ 
+ void run_test(void)
+ {
+ 	int i;
++
+ 	plan_tests(NR_TESTS * 8 + 24);
+ 
+ 	srand(time(NULL));
+ 
+-	srcrand_ui = 0;
+-	srcrand_ull = 0;
+-	run_test_unsigned();
+-	srcrand_ui = 0;
+-	srcrand_ull = 0;
+-	run_test_signed();
+-
+-	srcrand_ui = 1;
+-	srcrand_ull = 1;
+-	run_test_unsigned();
+-
+-	srcrand_ui = ~0U;
+-	srcrand_ull = ~0ULL;
+-	run_test_unsigned();
+-
+-	srcrand_ui = -1U;
+-	srcrand_ull = -1ULL;
+-	run_test_signed();
+-
+-	srcrand_ui = 0x80000000U;
+-	srcrand_ull = 0x8000000000000000ULL;
+-	run_test_signed();
++	run_test_unsigned(0, 0);
++	run_test_signed(0, 0);
++	run_test_unsigned(1, 1);
++	run_test_unsigned(~0U, ~0ULL);
++	run_test_signed(-1U, -1ULL);
++	run_test_signed(0x80000000U, 0x8000000000000000ULL);
+ 
+ 	for (i = 0; i < NR_TESTS; i++) {
+-		srcrand_ui = rand();
+-		srcrand_ull = ((unsigned long long) (unsigned int) rand() << 32) |
++		unsigned int src_ui = rand();
++		unsigned long long src_ull = ((unsigned long long) (unsigned int) rand() << 32) |
+ 				(unsigned long long) (unsigned int) rand();
+-		run_test_unsigned();
+-		run_test_signed();
++
++		run_test_unsigned(src_ui, src_ull);
++		run_test_signed((int) src_ui, (long long) src_ull);
+ 	}
+ }
+ 
 -- 
 2.11.0
