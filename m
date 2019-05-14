@@ -1,17 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-ust 2/2] Silence compiler "always false
- comparison" warning
-Date: Tue, 14 May 2019 16:36:29 -0400
-Message-ID: <20190514203629.24947-2-mathieu.desnoyers__13120.4613995337$1557866248$gmane$org@efficios.com>
-References: <20190514203629.24947-1-mathieu.desnoyers@efficios.com>
+Subject: [PATCH lttng-modules 2/2] Silence compiler "always
+ false comparison" warning
+Date: Tue, 14 May 2019 16:37:59 -0400
+Message-ID: <20190514203759.27112-2-mathieu.desnoyers__26461.8752453075$1557866297$gmane$org@efficios.com>
+References: <20190514203759.27112-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 453TxL217JzyTt
- for <lttng-dev@lists.lttng.org>; Tue, 14 May 2019 16:36:38 -0400 (EDT)
-In-Reply-To: <20190514203629.24947-1-mathieu.desnoyers@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 453Tyz63LQzyW0
+ for <lttng-dev@lists.lttng.org>; Tue, 14 May 2019 16:38:03 -0400 (EDT)
+In-Reply-To: <20190514203759.27112-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -35,14 +36,14 @@ that macro.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com
 ---
- include/lttng/bitfield.h | 34 ++++++++++++++++++++++++++++++++--
+ lib/bitfield.h | 34 ++++++++++++++++++++++++++++++++--
  1 file changed, 32 insertions(+), 2 deletions(-)
 
-diff --git a/include/lttng/bitfield.h b/include/lttng/bitfield.h
-index 35b382b2..ab74a8dd 100644
---- a/include/lttng/bitfield.h
-+++ b/include/lttng/bitfield.h
-@@ -40,6 +40,26 @@
+diff --git a/lib/bitfield.h b/lib/bitfield.h
+index 49b21f0d..76a98d23 100644
+--- a/lib/bitfield.h
++++ b/lib/bitfield.h
+@@ -26,6 +26,26 @@
  #error "bitfield.h requires the compiler representation of signed integers to be two's complement."
  #endif
  
@@ -69,7 +70,7 @@ index 35b382b2..ab74a8dd 100644
  #define _bt_is_signed_type(type)	((type) -1 < (type) 0)
  
  /*
-@@ -347,6 +367,7 @@ do {									\
+@@ -333,6 +353,7 @@ do {									\
  	unsigned long ts = sizeof(type) * CHAR_BIT; /* type size */	\
  	unsigned long start_unit, end_unit, this_unit;			\
  	unsigned long end, cshift; /* cshift is "complement shift" */	\
@@ -77,7 +78,7 @@ index 35b382b2..ab74a8dd 100644
  									\
  	if (!__length) {						\
  		*__vptr = 0;						\
-@@ -358,7 +379,11 @@ do {									\
+@@ -344,7 +365,11 @@ do {									\
  	end_unit = (end + (ts - 1)) / ts;				\
  									\
  	this_unit = end_unit - 1;					\
@@ -90,7 +91,7 @@ index 35b382b2..ab74a8dd 100644
  	    && (__ptr[this_unit] & _bt_lshift((type) 1, (end % ts ? end % ts : ts) - 1))) \
  		__v = ~(__typeof__(__v)) 0;				\
  	else								\
-@@ -414,6 +439,7 @@ do {									\
+@@ -400,6 +425,7 @@ do {									\
  	unsigned long ts = sizeof(type) * CHAR_BIT; /* type size */	\
  	unsigned long start_unit, end_unit, this_unit;			\
  	unsigned long end, cshift; /* cshift is "complement shift" */	\
@@ -98,7 +99,7 @@ index 35b382b2..ab74a8dd 100644
  									\
  	if (!__length) {						\
  		*__vptr = 0;						\
-@@ -425,7 +451,11 @@ do {									\
+@@ -411,7 +437,11 @@ do {									\
  	end_unit = (end + (ts - 1)) / ts;				\
  									\
  	this_unit = start_unit;						\
