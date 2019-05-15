@@ -1,23 +1,19 @@
 From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: lttng-tools-2.10.6: Spawning consumerd failed
-Date: Wed, 15 May 2019 10:33:00 -0400
-Message-ID: <20190515143300.GA15967__6602.61180471338$1557930803$gmane$org@joraj-alpa>
-References: <CABRndgyrxUfZqtcu=4Y7U8rvjpBa=0AqcDCkvU3UMxixRfQCoQ@mail.gmail.com>
- <20190514142948.GA10361@joraj-alpa>
- <20190514180433.GB10361@joraj-alpa>
- <CABRndgxNtLbXZ0peWNm7qq_kxT4fY_PspgJ6hR=H82r3o8Nhmw@mail.gmail.com>
+Subject: Re: [PATCH lttng-tools 7/9] epoll/poll compat: expose
+ interruptible API
+Date: Wed, 15 May 2019 11:18:03 -0400
+Message-ID: <20190515151803.GA14986__19404.6483886027$1557933506$gmane$org@joraj-alpa>
+References: <20190503135547.12968-1-mathieu.desnoyers@efficios.com>
+ <20190503135547.12968-8-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 453xqR497bz11bw
- for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 10:33:07 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
- by mail.efficios.com (Postfix) with ESMTP id 2AEECBD58A
- for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 10:33:05 -0400 (EDT)
+ by lists.lttng.org (Postfix) with ESMTPS id 453yqN5vNCz11pQ
+ for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 11:18:08 -0400 (EDT)
 Content-Disposition: inline
-In-Reply-To: <CABRndgxNtLbXZ0peWNm7qq_kxT4fY_PspgJ6hR=H82r3o8Nhmw@mail.gmail.com>
+In-Reply-To: <20190503135547.12968-8-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -27,78 +23,123 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Zvi Vered <veredz72@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com, joraj@efficios.com
 List-Id: lttng-dev@lists.lttng.org
 
-On Wed, May 15, 2019 at 04:42:57PM +0300, Zvi Vered wrote:
-> Hi Jonathan,
-> 
-> I'm not using buildroot nor Yokto.
-> In order to build lttng-tools I ran:
-> ./configure --prefix=/64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs
+Hi,
 
-I'm no expert on building/cross compiling but I think you are missing some
-options here. with-sysroot is probably one of them.
+This patch does not apply.
 
-I think this should do the trick:
-
-./configure --with-sysroot=/64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs
---prefix /
-
-Another possibility would be using DESTDIR on make install.
-
-> make
-> make install
-> 
-> This path contains a complete root file system (based on busybox) that is
-> later copied to my target.
-> 
-> On the target I ran:
-> lttng-sessiond -vvv --verbose-consumer
-> and got:
-> ....
-> I/O warning : failed to load external entity
-> "/64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs/share/xml/lttng/session.xsd"
-> XML Error: Failed to locate the main schema resource at
-> '/64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs/share/xml/lttng/session.xsd'.
-> Error: XSD parsing failed
-> Error: Session load failed: Invalid session configuration
-> DEBUG1 - 00:10:36.746330272 [1476/1618]: Accepting client command ... (in
-> thread_manage_clients() at main.c:4374)
-> 
-> Then I ran:
-> lttng create my-kernel-session
-> and got:
-> ....
-> DEBUG3 - 00:11:41.869875832 [1628/1628]: Looking for a kernel consumer at
-> these locations: (in spawn_consumerd() at main.c:2429)
-> DEBUG3 - 00:11:41.869901726 [1628/1628]:        1) NULL (in
-> spawn_consumerd() at main.c:2430)
-> DEBUG3 - 00:11:41.869908520 [1628/1628]:        2)
-> /64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs/lib/lttng/libexec/lttng-consumerd
-> (in spawn_consumerd() at main.c:2431)
-> DEBUG3 - 00:11:41.869915959 [1628/1628]:        3)
-> /64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs/lib/lttng/libexec/lttng-consumerd
-> (in spawn_consumerd() at main.c:2432)
-> DEBUG1 - 00:11:41.869971468 [1628/1628]: Could not find any valid consumerd
-> executable (in spawn_consumerd() at main.c:2444)
-> Error: Spawning consumerd failed
-> 
-> I double checked: The target has /lib/lttng-libexec/lttng-consumerd
-> But it looks for it in:
->  /64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs/lib/lttng/libexec ]
-> 
-> What is missing in my configuration ?
-
-The prefix is used to bake in the path used by lttng-sessiond for
-consumerd lookup.
-
-We use libdir as the base path.
-
-  --libdir=DIR            object code libraries [EPREFIX/lib]
+Please rebase.
 
 Cheers
+
+On Fri, May 03, 2019 at 09:55:45AM -0400, Mathieu Desnoyers wrote:
+> Some use of the epoll/poll wrapper require interruption
+> by signals to make the poll call return -1, errno EINTR.
+> Expose a new lttng_poll_wait_interruptible API for this
+> purpose.
+> 
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> CC: Yannick Lamarre <ylamarre@efficios.com>
+> ---
+>  src/common/compat/compat-epoll.c |  9 +++++----
+>  src/common/compat/compat-poll.c  |  9 +++++----
+>  src/common/compat/poll.h         | 12 ++++++++----
+>  3 files changed, 18 insertions(+), 12 deletions(-)
+> 
+> diff --git a/src/common/compat/compat-epoll.c b/src/common/compat/compat-epoll.c
+> index 6a781c7a..7108b717 100644
+> --- a/src/common/compat/compat-epoll.c
+> +++ b/src/common/compat/compat-epoll.c
+> @@ -241,7 +241,7 @@ error:
+>  /*
+>   * Wait on epoll set. This is a blocking call of timeout value.
+>   */
+> -int compat_epoll_wait(struct lttng_poll_event *events, int timeout)
+> +int compat_epoll_wait(struct lttng_poll_event *events, int timeout, int interruptible)
+>  {
+>  	int ret;
+>  	uint32_t new_size;
+> @@ -273,10 +273,11 @@ int compat_epoll_wait(struct lttng_poll_event *events, int timeout)
+>  
+>  	do {
+>  		ret = epoll_wait(events->epfd, events->events, events->nb_fd, timeout);
+> -	} while (ret == -1 && errno == EINTR);
+> +	} while (!interruptible && ret == -1 && errno == EINTR);
+>  	if (ret < 0) {
+> -		/* At this point, every error is fatal */
+> -		PERROR("epoll_wait");
+> +		if (errno != EINTR) {
+> +			PERROR("epoll_wait");
+> +		}
+>  		goto error;
+>  	}
+>  
+> diff --git a/src/common/compat/compat-poll.c b/src/common/compat/compat-poll.c
+> index b45b39dc..cdb6f8b5 100644
+> --- a/src/common/compat/compat-poll.c
+> +++ b/src/common/compat/compat-poll.c
+> @@ -281,7 +281,7 @@ error:
+>  /*
+>   * Wait on poll() with timeout. Blocking call.
+>   */
+> -int compat_poll_wait(struct lttng_poll_event *events, int timeout)
+> +int compat_poll_wait(struct lttng_poll_event *events, int timeout, int interruptible)
+>  {
+>  	int ret;
+>  
+> @@ -308,10 +308,11 @@ int compat_poll_wait(struct lttng_poll_event *events, int timeout)
+>  
+>  	do {
+>  		ret = poll(events->wait.events, events->wait.nb_fd, timeout);
+> -	} while (ret == -1 && errno == EINTR);
+> +	} while (!interruptible && ret == -1 && errno == EINTR);
+>  	if (ret < 0) {
+> -		/* At this point, every error is fatal */
+> -		PERROR("poll wait");
+> +		if (errno != EINTR) {
+> +			PERROR("poll wait");
+> +		}
+>  		goto error;
+>  	}
+>  
+> diff --git a/src/common/compat/poll.h b/src/common/compat/poll.h
+> index d4bd87f5..5400e5b1 100644
+> --- a/src/common/compat/poll.h
+> +++ b/src/common/compat/poll.h
+> @@ -152,9 +152,11 @@ static inline int compat_glibc_epoll_create(int size, int flags)
+>   * Wait on epoll set with the number of fd registered to the lttng_poll_event
+>   * data structure (events).
+>   */
+> -extern int compat_epoll_wait(struct lttng_poll_event *events, int timeout);
+> +extern int compat_epoll_wait(struct lttng_poll_event *events, int timeout, int interruptible);
+>  #define lttng_poll_wait(events, timeout) \
+> -	compat_epoll_wait(events, timeout)
+> +	compat_epoll_wait(events, timeout, 0)
+> +#define lttng_poll_wait_interruptible(events, timeout) \
+> +	compat_epoll_wait(events, timeout, 1)
+>  
+>  /*
+>   * Add a fd to the epoll set and resize the epoll_event structure if needed.
+> @@ -334,9 +336,11 @@ extern int compat_poll_create(struct lttng_poll_event *events, int size);
+>   * Wait on poll(2) event with nb_fd registered to the lttng_poll_event data
+>   * structure.
+>   */
+> -extern int compat_poll_wait(struct lttng_poll_event *events, int timeout);
+> +extern int compat_poll_wait(struct lttng_poll_event *events, int timeout, int interruptible);
+>  #define lttng_poll_wait(events, timeout) \
+> -	compat_poll_wait(events, timeout)
+> +	compat_poll_wait(events, timeout, 0)
+> +#define lttng_poll_wait_interruptible(events, timeout) \
+> +	compat_poll_wait(events, timeout, 1)
+>  
+>  /*
+>   * Add the fd to the pollfd structure. Resize if needed.
+> -- 
+> 2.11.0
+> 
 
 -- 
 Jonathan Rajotte-Julien
