@@ -1,19 +1,16 @@
-From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
-Subject: Re: [PATCH lttng-tools 5/9] Cleanup: test: don't stop
- relayd twice
-Date: Wed, 15 May 2019 12:44:16 -0400
-Message-ID: <20190515164416.GF14986__12257.3835820489$1557938876$gmane$org@joraj-alpa>
-References: <20190503135547.12968-1-mathieu.desnoyers@efficios.com>
- <20190503135547.12968-6-mathieu.desnoyers@efficios.com>
+From: Zvi Vered <veredz72@gmail.com>
+Subject: Monitor threads with lttng
+Date: Wed, 15 May 2019 19:42:09 +0300
+Message-ID: <CABRndgyfAyQ=t1==vPY9UHv8wZjMhrsu9bOtnwLu6f=ARjEj4w__31511.7275387578$1557938912$gmane$org@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0530746035396231903=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 4540kn1SRZz12Cf
- for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 12:44:16 -0400 (EDT)
-Content-Disposition: inline
-In-Reply-To: <20190503135547.12968-6-mathieu.desnoyers@efficios.com>
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com
+ [IPv6:2607:f8b0:4864:20::b34])
+ by lists.lttng.org (Postfix) with ESMTPS id 4540n02pKJz12DS
+ for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 12:46:12 -0400 (EDT)
+Received: by mail-yb1-xb34.google.com with SMTP id v78so106677ybv.1
+ for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 09:46:12 -0700 (PDT)
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -23,41 +20,49 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: lttng-dev@lists.lttng.org, jgalar@efficios.com, joraj@efficios.com
+To: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
-LGTM
+--===============0530746035396231903==
+Content-Type: multipart/alternative; boundary="0000000000000a364c0588efe36b"
 
-On Fri, May 03, 2019 at 09:55:43AM -0400, Mathieu Desnoyers wrote:
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> ---
->  tests/regression/tools/live/test_lttng_ust | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/tests/regression/tools/live/test_lttng_ust b/tests/regression/tools/live/test_lttng_ust
-> index 06017d01..830fc783 100755
-> --- a/tests/regression/tools/live/test_lttng_ust
-> +++ b/tests/regression/tools/live/test_lttng_ust
-> @@ -34,7 +34,7 @@ TRACE_PATH=$(mktemp -d)
->  
->  DIR=$(readlink -f $TESTDIR)
->  
-> -NUM_TESTS=12
-> +NUM_TESTS=11
->  
->  source $TESTDIR/utils/utils.sh
->  
-> @@ -84,5 +84,4 @@ stop_lttng_relayd
->  
->  test_custom_url
->  
-> -stop_lttng_relayd
->  stop_lttng_sessiond
-> -- 
-> 2.11.0
-> 
+--0000000000000a364c0588efe36b
+Content-Type: text/plain; charset="UTF-8"
 
--- 
-Jonathan Rajotte-Julien
-EfficiOS
+Hello,
+
+Can I use lttng to monitor threads in my process ?
+For example, I want to see when a thread is active and when it is blocked
+(waiting for a signal or an IOCL to complete).
+
+Is it possible doing it without linking the application with libust and
+calling UST API ?
+
+Thank you,
+Zvika
+
+--0000000000000a364c0588efe36b
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello,<div><br></div><div>Can I use lttng to monitor threa=
+ds in my process ?</div><div>For example, I want to see when a thread is ac=
+tive and when it is blocked (waiting for a signal or an IOCL to complete).=
+=C2=A0</div><div><br></div><div>Is it possible doing it without linking the=
+ application with libust and calling UST API ?</div><div><br></div><div>Tha=
+nk you,</div><div>Zvika=C2=A0</div></div>
+
+--0000000000000a364c0588efe36b--
+
+--===============0530746035396231903==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+lttng-dev mailing list
+lttng-dev@lists.lttng.org
+https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+
+--===============0530746035396231903==--
