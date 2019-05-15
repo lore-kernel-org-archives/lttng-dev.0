@@ -1,17 +1,18 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH babeltrace 4/4] Cleanup: test_bitfield: pass
- source integers as parameters
-Date: Wed, 15 May 2019 17:46:53 -0400
-Message-ID: <20190515214653.15059-4-mathieu.desnoyers__20673.9420000062$1557956937$gmane$org@efficios.com>
-References: <20190515214653.15059-1-mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH lttng-ust 1/2] Fix: bitfield: shift
+ undefined/implementation defined behaviors
+Date: Wed, 15 May 2019 17:51:12 -0400 (EDT)
+Message-ID: <1143277706.1564.1557957072293.JavaMail.zimbra__20229.7488039889$1557957088$gmane$org@efficios.com>
+References: <20190514203629.24947-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
- by lists.lttng.org (Postfix) with ESMTPS id 4547SB6Dmvzynj
- for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 17:47:06 -0400 (EDT)
-In-Reply-To: <20190515214653.15059-1-mathieu.desnoyers@efficios.com>
+Received: from mail.efficios.com (mail.efficios.com
+ [IPv6:2607:5300:60:7898::beef])
+ by lists.lttng.org (Postfix) with ESMTPS id 4547Xx1SMqzyqn
+ for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 17:51:13 -0400 (EDT)
+In-Reply-To: <20190514203629.24947-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -21,233 +22,78 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: jgalar@efficios.com, joraj@efficios.com, simon.marchi@efficios.com
-Cc: lttng-dev@lists.lttng.org
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: lttng-dev <lttng-dev@lists.lttng.org>
 List-Id: lttng-dev@lists.lttng.org
 
-It is a good practice to pass arguments as parameters rather
-than through global variables.
+----- On May 14, 2019, at 4:36 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Change-Id: I0d7cc94b1d492ca53ad29b1d39831ee6288b2672
----
- tests/lib/test_bitfield.c | 85 +++++++++++++++++------------------------------
- 1 file changed, 30 insertions(+), 55 deletions(-)
+[...]
+							\
+> 
+> #define _bt_bitfield_write_be(_ptr, type, _start, _length, _v)		\
+> do {									\
+> -	__typeof__(_v) __v = (_v);						\
+> +	__typeof__(_v) __v = (_v);					\
+> 	type *__ptr = (void *) (_ptr);					\
+> 	unsigned long __start = (_start), __length = (_length);		\
+> 	type mask, cmask;						\
+> @@ -161,15 +263,15 @@ do {									\
+> 									\
+> 	/* Trim v high bits */						\
+> 	if (__length < sizeof(__v) * CHAR_BIT)				\
+> -		__v &= ~((~(__typeof__(__v)) 0) << __length);		\
+> +		__v &= _bt_make_mask(__typeof__(__v), __length);	\
+> 									\
+> 	/* We can now append v with a simple "or", shift it piece-wise */ \
+> 	this_unit = end_unit - 1;					\
+> 	if (start_unit == end_unit - 1) {				\
+> -		mask = ~((~(type) 0) << ((ts - (end % ts)) % ts));	\
+> +		mask = _bt_make_mask(type, (ts - (end % ts)) % ts);	\
+> 		if (__start % ts)					\
+> -			mask |= (~((type) 0)) << (ts - (__start % ts));	\
+> -		cmask = (type) __v << ((ts - (end % ts)) % ts);		\
+> +			mask |= _bt_make_mask_complement(type, ts - (__start % ts)); \
+> +		cmask = _bt_lshift((type) (__v), (ts - (end % ts)) % ts); \
+> 		cmask &= ~mask;						\
+> 		__ptr[this_unit] &= mask;				\
+> 		__ptr[this_unit] |= cmask;				\
+> @@ -177,22 +279,22 @@ do {									\
+> 	}								\
+> 	if (end % ts) {							\
+> 		cshift = end % ts;					\
+> -		mask = ~((~(type) 0) << (ts - cshift));			\
+> -		cmask = (type) __v << (ts - cshift);			\
+> +		mask = _bt_make_mask(type, ts - cshift);		\
+> +		cmask = _bt_lshift((type) (__v), ts - cshift);		\
+> 		cmask &= ~mask;						\
+> 		__ptr[this_unit] &= mask;				\
+> 		__ptr[this_unit] |= cmask;				\
+> -		__v = _bt_piecewise_rshift(__v, cshift);		\
+> +		_bt_piecewise_rshift(__v, cshift);			\
+> 		end -= cshift;						\
+> 		this_unit--;						\
+> 	}								\
+> 	for (; (long) this_unit >= (long) start_unit + 1; this_unit--) { \
+> 		__ptr[this_unit] = (type) __v;				\
+> -		__v = _bt_piecewise_rshift(__v, ts);			\
+> +		_bt_piecewise_rshift(__v, ts);				\
+> 		end -= ts;						\
+> 	}								\
+> 	if (__start % ts) {						\
+> -		mask = (~(type) 0) << (ts - (__start % ts));		\
+> +		mask = _bt_make_mask(type, ts - (__start % ts));	\
 
-diff --git a/tests/lib/test_bitfield.c b/tests/lib/test_bitfield.c
-index 59bf89fd..63168fcd 100644
---- a/tests/lib/test_bitfield.c
-+++ b/tests/lib/test_bitfield.c
-@@ -51,9 +51,6 @@ void fct(void)
- #define DIAG_FMT_STR "Failed reading value written \"%s\"-wise, with start=%i" \
- 	" and length=%i. Read %llX"
- 
--unsigned int srcrand_ui;
--unsigned long long srcrand_ull;
--
- /*
-  * fls: returns the position of the most significant bit.
-  * Returns 0 if no bit is set, else returns the position of the most
-@@ -202,9 +199,9 @@ do {					\
- 	(val) != (ref);							\
- })
- 
--void run_test_unsigned_write(void)
-+void run_test_unsigned_write(unsigned int src_ui, unsigned long long src_ull)
- {
--	unsigned int src_ui, nrbits_ui, nrbits_ull;
-+	unsigned int nrbits_ui, nrbits_ull;
- 	union {
- 		unsigned char c[TEST_LEN];
- 		unsigned short s[TEST_LEN/sizeof(unsigned short)];
-@@ -212,10 +209,9 @@ void run_test_unsigned_write(void)
- 		unsigned long l[TEST_LEN/sizeof(unsigned long)];
- 		unsigned long long ll[TEST_LEN/sizeof(unsigned long long)];
- 	} target;
--	unsigned long long src_ull, readval;
-+	unsigned long long readval;
- 	unsigned int s, l;
- 
--	src_ui = srcrand_ui;
- 	nrbits_ui = fls_u32(src_ui);
- 
- 	/* Write from unsigned integer src input. */
-@@ -264,7 +260,6 @@ void run_test_unsigned_write(void)
- 	}
- 	pass(UNSIGNED_INT_WRITE_TEST_DESC_FMT_STR, src_ui);
- 
--	src_ull = srcrand_ull;
- 	nrbits_ull = fls_u64(src_ull);
- 
- 	/* Write from unsigned long long src input. */
-@@ -314,9 +309,9 @@ void run_test_unsigned_write(void)
- 	pass(UNSIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR, src_ull);
- }
- 
--void run_test_unsigned_read(void)
-+void run_test_unsigned_read(unsigned int src_ui, unsigned long long src_ull)
- {
--	unsigned int src_ui, nrbits_ui, nrbits_ull, readval_ui;
-+	unsigned int nrbits_ui, nrbits_ull, readval_ui;
- 	union {
- 		unsigned char c[TEST_LEN];
- 		unsigned short s[TEST_LEN/sizeof(unsigned short)];
-@@ -324,10 +319,9 @@ void run_test_unsigned_read(void)
- 		unsigned long l[TEST_LEN/sizeof(unsigned long)];
- 		unsigned long long ll[TEST_LEN/sizeof(unsigned long long)];
- 	} target;
--	unsigned long long src_ull, readval_ull;
-+	unsigned long long readval_ull;
- 	unsigned int s, l;
- 
--	src_ui = srcrand_ui;
- 	nrbits_ui = fls_u32(src_ui);
- 
- 	/* Read to unsigned integer readval output. */
-@@ -376,7 +370,6 @@ void run_test_unsigned_read(void)
- 	}
- 	pass(UNSIGNED_INT_READ_TEST_DESC_FMT_STR, src_ui);
- 
--	src_ull = srcrand_ull;
- 	nrbits_ull = fls_u64(src_ull);
- 
- 	/* Read to unsigned long long readval output. */
-@@ -426,15 +419,15 @@ void run_test_unsigned_read(void)
- 	pass(UNSIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR, src_ull);
- }
- 
--void run_test_unsigned(void)
-+void run_test_unsigned(unsigned int src_ui, unsigned long long src_ull)
- {
--	run_test_unsigned_write();
--	run_test_unsigned_read();
-+	run_test_unsigned_write(src_ui, src_ull);
-+	run_test_unsigned_read(src_ui, src_ull);
- }
- 
--void run_test_signed_write(void)
-+void run_test_signed_write(int src_i, long long src_ll)
- {
--	int src_i, nrbits_i, nrbits_ll;
-+	int nrbits_i, nrbits_ll;
- 	union {
- 		signed char c[TEST_LEN];
- 		short s[TEST_LEN/sizeof(short)];
-@@ -442,10 +435,9 @@ void run_test_signed_write(void)
- 		long l[TEST_LEN/sizeof(long)];
- 		long long ll[TEST_LEN/sizeof(long long)];
- 	} target;
--	long long src_ll, readval;
-+	long long readval;
- 	unsigned int s, l;
- 
--	src_i = srcrand_ui;
- 	if (src_i & 0x80000000U)
- 		nrbits_i = fls_u32(~src_i) + 1;	/* Find least significant bit conveying sign */
- 	else
-@@ -497,7 +489,6 @@ void run_test_signed_write(void)
- 	}
- 	pass(SIGNED_INT_WRITE_TEST_DESC_FMT_STR, src_i);
- 
--	src_ll = srcrand_ull;
- 	if (src_ll & 0x8000000000000000ULL)
- 		nrbits_ll = fls_u64(~src_ll) + 1;	/* Find least significant bit conveying sign */
- 	else
-@@ -550,9 +541,9 @@ void run_test_signed_write(void)
- 	pass(SIGNED_LONG_LONG_WRITE_TEST_DESC_FMT_STR, src_ll);
- }
- 
--void run_test_signed_read(void)
-+void run_test_signed_read(int src_i, long long src_ll)
- {
--	int src_i, nrbits_i, nrbits_ll, readval_i;
-+	int nrbits_i, nrbits_ll, readval_i;
- 	union {
- 		unsigned char c[TEST_LEN];
- 		unsigned short s[TEST_LEN/sizeof(unsigned short)];
-@@ -560,10 +551,9 @@ void run_test_signed_read(void)
- 		unsigned long l[TEST_LEN/sizeof(unsigned long)];
- 		unsigned long long ll[TEST_LEN/sizeof(unsigned long long)];
- 	} target;
--	long long src_ll, readval_ll;
-+	long long readval_ll;
- 	unsigned int s, l;
- 
--	src_i = srcrand_ui;
- 	if (src_i & 0x80000000U)
- 		nrbits_i = fls_u32(~src_i) + 1;	/* Find least significant bit conveying sign */
- 	else
-@@ -615,7 +605,6 @@ void run_test_signed_read(void)
- 	}
- 	pass(SIGNED_INT_READ_TEST_DESC_FMT_STR, src_i);
- 
--	src_ll = srcrand_ull;
- 	if (src_ll & 0x8000000000000000ULL)
- 		nrbits_ll = fls_u64(~src_ll) + 1;	/* Find least significant bit conveying sign */
- 	else
-@@ -668,48 +657,34 @@ void run_test_signed_read(void)
- 	pass(SIGNED_LONG_LONG_READ_TEST_DESC_FMT_STR, src_ll);
- }
- 
--void run_test_signed(void)
-+void run_test_signed(int src_i, long long src_ll)
- {
--	run_test_signed_write();
--	run_test_signed_read();
-+	run_test_signed_write(src_i, src_ll);
-+	run_test_signed_read(src_i, src_ll);
- }
- 
- void run_test(void)
- {
- 	int i;
-+
- 	plan_tests(NR_TESTS * 8 + 24);
- 
- 	srand(time(NULL));
- 
--	srcrand_ui = 0;
--	srcrand_ull = 0;
--	run_test_unsigned();
--	srcrand_ui = 0;
--	srcrand_ull = 0;
--	run_test_signed();
--
--	srcrand_ui = 1;
--	srcrand_ull = 1;
--	run_test_unsigned();
--
--	srcrand_ui = ~0U;
--	srcrand_ull = ~0ULL;
--	run_test_unsigned();
--
--	srcrand_ui = -1U;
--	srcrand_ull = -1ULL;
--	run_test_signed();
--
--	srcrand_ui = 0x80000000U;
--	srcrand_ull = 0x8000000000000000ULL;
--	run_test_signed();
-+	run_test_unsigned(0, 0);
-+	run_test_signed(0, 0);
-+	run_test_unsigned(1, 1);
-+	run_test_unsigned(~0U, ~0ULL);
-+	run_test_signed(-1U, -1ULL);
-+	run_test_signed(0x80000000U, 0x8000000000000000ULL);
- 
- 	for (i = 0; i < NR_TESTS; i++) {
--		srcrand_ui = rand();
--		srcrand_ull = ((unsigned long long) (unsigned int) rand() << 32) |
-+		unsigned int src_ui = rand();
-+		unsigned long long src_ull = ((unsigned long long) (unsigned int) rand() << 32) |
- 				(unsigned long long) (unsigned int) rand();
--		run_test_unsigned();
--		run_test_signed();
-+
-+		run_test_unsigned(src_ui, src_ull);
-+		run_test_signed((int) src_ui, (long long) src_ull);
- 	}
- }
- 
+Should be:
+
++               mask = _bt_make_mask_complement(type, ts - (__start % ts)); \
+
+Will fix before merging.
+
+Mathieu
+
+
 -- 
-2.11.0
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
