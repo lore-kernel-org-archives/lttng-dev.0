@@ -1,29 +1,23 @@
-From: "Jones, Tim" <tim.jones4@hpe.com>
-Subject: Tracing a userspace app from startup
-Date: Wed, 15 May 2019 10:16:40 +0000
-Message-ID: <DF4PR8401MB0939224BB5C202B61D624D3BDF090__28505.8271883585$1557929980$gmane$org@DF4PR8401MB0939.NAMPRD84.PROD.OUTLOOK.COM>
+From: Jonathan Rajotte-Julien <jonathan.rajotte-julien@efficios.com>
+Subject: Re: lttng-tools-2.10.6: Spawning consumerd failed
+Date: Wed, 15 May 2019 10:33:00 -0400
+Message-ID: <20190515143300.GA15967__6602.61180471338$1557930803$gmane$org@joraj-alpa>
+References: <CABRndgyrxUfZqtcu=4Y7U8rvjpBa=0AqcDCkvU3UMxixRfQCoQ@mail.gmail.com>
+ <20190514142948.GA10361@joraj-alpa>
+ <20190514180433.GB10361@joraj-alpa>
+ <CABRndgxNtLbXZ0peWNm7qq_kxT4fY_PspgJ6hR=H82r3o8Nhmw@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7309950831503369129=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com
- [148.163.143.35])
- by lists.lttng.org (Postfix) with ESMTPS id 453tPr6p8gz115c
- for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 07:59:12 -0400 (EDT)
-Received: from pps.filterd (m0150245.ppops.net [127.0.0.1])
- by mx0b-002e3701.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id
- x4FA6Jng026857
- for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 10:16:47 GMT
-Received: from g2t2353.austin.hpe.com (g2t2353.austin.hpe.com [15.233.44.26])
- by mx0b-002e3701.pphosted.com with ESMTP id 2sge4g1bvy-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
- for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 10:16:47 +0000
-Received: from G1W8106.americas.hpqcorp.net (g1w8106.austin.hp.com
- [16.193.72.61])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
- (No client certificate requested)
- by g2t2353.austin.hpe.com (Postfix) with ESMTPS id D8DE382
- for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 10:16:46 +0000 (UTC)
-Content-Language: en-GB
+Received: from mail.efficios.com (mail.efficios.com [167.114.142.138])
+ by lists.lttng.org (Postfix) with ESMTPS id 453xqR497bz11bw
+ for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 10:33:07 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+ by mail.efficios.com (Postfix) with ESMTP id 2AEECBD58A
+ for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 10:33:05 -0400 (EDT)
+Content-Disposition: inline
+In-Reply-To: <CABRndgxNtLbXZ0peWNm7qq_kxT4fY_PspgJ6hR=H82r3o8Nhmw@mail.gmail.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -33,124 +27,79 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: "lttng-dev@lists.lttng.org" <lttng-dev@lists.lttng.org>
+To: Zvi Vered <veredz72@gmail.com>
+Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
---===============7309950831503369129==
-Content-Language: en-GB
-Content-Type: multipart/alternative;
-	boundary="_000_DF4PR8401MB0939224BB5C202B61D624D3BDF090DF4PR8401MB0939_"
+On Wed, May 15, 2019 at 04:42:57PM +0300, Zvi Vered wrote:
+> Hi Jonathan,
+> 
+> I'm not using buildroot nor Yokto.
+> In order to build lttng-tools I ran:
+> ./configure --prefix=/64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs
 
---_000_DF4PR8401MB0939224BB5C202B61D624D3BDF090DF4PR8401MB0939_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+I'm no expert on building/cross compiling but I think you are missing some
+options here. with-sysroot is probably one of them.
 
-Hi,
+I think this should do the trick:
 
-I've been attempting to use LTTng to trace some apps but need to trace from=
- their startup to shutdown. Is this possible with LTTng?
+./configure --with-sysroot=/64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs
+--prefix /
 
-For example, I'd like to be able to run something along the lines of this:
+Another possibility would be using DESTDIR on make install.
 
-lttng start -- <command> <args>
+> make
+> make install
+> 
+> This path contains a complete root file system (based on busybox) that is
+> later copied to my target.
+> 
+> On the target I ran:
+> lttng-sessiond -vvv --verbose-consumer
+> and got:
+> ....
+> I/O warning : failed to load external entity
+> "/64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs/share/xml/lttng/session.xsd"
+> XML Error: Failed to locate the main schema resource at
+> '/64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs/share/xml/lttng/session.xsd'.
+> Error: XSD parsing failed
+> Error: Session load failed: Invalid session configuration
+> DEBUG1 - 00:10:36.746330272 [1476/1618]: Accepting client command ... (in
+> thread_manage_clients() at main.c:4374)
+> 
+> Then I ran:
+> lttng create my-kernel-session
+> and got:
+> ....
+> DEBUG3 - 00:11:41.869875832 [1628/1628]: Looking for a kernel consumer at
+> these locations: (in spawn_consumerd() at main.c:2429)
+> DEBUG3 - 00:11:41.869901726 [1628/1628]:        1) NULL (in
+> spawn_consumerd() at main.c:2430)
+> DEBUG3 - 00:11:41.869908520 [1628/1628]:        2)
+> /64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs/lib/lttng/libexec/lttng-consumerd
+> (in spawn_consumerd() at main.c:2431)
+> DEBUG3 - 00:11:41.869915959 [1628/1628]:        3)
+> /64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs/lib/lttng/libexec/lttng-consumerd
+> (in spawn_consumerd() at main.c:2432)
+> DEBUG1 - 00:11:41.869971468 [1628/1628]: Could not find any valid consumerd
+> executable (in spawn_consumerd() at main.c:2444)
+> Error: Spawning consumerd failed
+> 
+> I double checked: The target has /lib/lttng-libexec/lttng-consumerd
+> But it looks for it in:
+>  /64_sw/git/zvi_vered/MY_PROJ/linux4.9.20/boot/rootfs/lib/lttng/libexec ]
+> 
+> What is missing in my configuration ?
 
-I've searched the docs and Google, but I can't find anything regarding this=
- way of using LTTng!?
+The prefix is used to bake in the path used by lttng-sessiond for
+consumerd lookup.
 
-Cheers,
+We use libdir as the base path.
 
-Tim
+  --libdir=DIR            object code libraries [EPREFIX/lib]
 
---_000_DF4PR8401MB0939224BB5C202B61D624D3BDF090DF4PR8401MB0939_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Cheers
 
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
-ttom:0;} </style>
-</head>
-<body dir=3D"ltr">
-<div style=3D"font-family: Verdana, Geneva, sans-serif; font-size: 10pt; co=
-lor: rgb(0, 0, 0);">
-<span style=3D"font-size:10pt">Hi,</span></div>
-<div style=3D"font-family: Verdana, Geneva, sans-serif; font-size: 10pt; co=
-lor: rgb(0, 0, 0);">
-<span style=3D"font-size:10pt"><br>
-</span></div>
-<div style=3D"font-family: Verdana, Geneva, sans-serif; font-size: 10pt; co=
-lor: rgb(0, 0, 0);">
-<span style=3D"font-size:10pt">I've been attempting to use LTTng to trace s=
-ome apps but need to trace from their startup to shutdown. Is this possible=
- with LTTng?<br>
-</span></div>
-<div style=3D"font-family: Verdana, Geneva, sans-serif; font-size: 10pt; co=
-lor: rgb(0, 0, 0);">
-<span style=3D"font-size:10pt"><br>
-</span></div>
-<div style=3D"font-family: Verdana, Geneva, sans-serif; font-size: 10pt; co=
-lor: rgb(0, 0, 0);">
-<span style=3D"font-size:10pt">For example, I'd like to be able to run some=
-thing along the lines of this:</span></div>
-<div style=3D"font-family: Verdana, Geneva, sans-serif; font-size: 10pt; co=
-lor: rgb(0, 0, 0);">
-<span style=3D"font-size:10pt"><br>
-</span></div>
-<div style=3D"font-family: Verdana, Geneva, sans-serif; font-size: 10pt; co=
-lor: rgb(0, 0, 0);">
-<span style=3D"font-size:10pt">lttng start -- &lt;command&gt; &lt;args&gt;<=
-br>
-</span></div>
-<div style=3D"font-family: Verdana, Geneva, sans-serif; font-size: 10pt; co=
-lor: rgb(0, 0, 0);">
-<span style=3D"font-size:10pt"><br>
-</span></div>
-<div style=3D"font-family: Verdana, Geneva, sans-serif; font-size: 10pt; co=
-lor: rgb(0, 0, 0);">
-<span style=3D"font-size:10pt">I've searched the docs and Google, but I can=
-'t find anything regarding this way of using LTTng!?</span></div>
-<div style=3D"font-family: Verdana, Geneva, sans-serif; font-size: 10pt; co=
-lor: rgb(0, 0, 0);">
-<span style=3D"font-size:10pt"><br>
-</span></div>
-<div style=3D"font-family: Verdana, Geneva, sans-serif; font-size: 10pt; co=
-lor: rgb(0, 0, 0);">
-<span style=3D"font-size:10pt">Cheers,</span></div>
-<div style=3D"font-family: Verdana, Geneva, sans-serif; font-size: 10pt; co=
-lor: rgb(0, 0, 0);">
-<span style=3D"font-size:10pt"><br>
-</span></div>
-<div style=3D"font-family: Verdana, Geneva, sans-serif; font-size: 10pt; co=
-lor: rgb(0, 0, 0);">
-<span style=3D"font-size:10pt">Tim<br style=3D"font-family:Verdana,Geneva,s=
-ans-serif">
-</span></div>
-<span style=3D"font-size:10pt"><span style=3D"font-family:Verdana,Geneva,sa=
-ns-serif"></span></span>
-<div id=3D"Signature">
-<div id=3D"divtagdefaultwrapper" dir=3D"ltr" style=3D"font-size:10pt; color=
-:rgb(0,0,0); background-color:rgb(255,255,255); font-family:Verdana,Geneva,=
-sans-serif,&quot;EmojiFont&quot;,&quot;Apple Color Emoji&quot;,&quot;Segoe =
-UI Emoji&quot;,NotoColorEmoji,&quot;Segoe UI Symbol&quot;,&quot;Android Emo=
-ji&quot;,EmojiSymbols">
-</div>
-</div>
-</body>
-</html>
-
---_000_DF4PR8401MB0939224BB5C202B61D624D3BDF090DF4PR8401MB0939_--
-
---===============7309950831503369129==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-lttng-dev mailing list
-lttng-dev@lists.lttng.org
-https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
-
---===============7309950831503369129==--
+-- 
+Jonathan Rajotte-Julien
+EfficiOS
