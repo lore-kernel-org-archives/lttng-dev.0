@@ -1,15 +1,16 @@
-From: Michel Dagenais <michel.dagenais@polymtl.ca>
-Subject: Re: Monitor threads with lttng
-Date: Wed, 15 May 2019 13:21:09 -0400 (EDT)
-Message-ID: <2013253114.9075074.1557940869814.JavaMail.zimbra__20196.1517495633$1557941326$gmane$org@polymtl.ca>
-References: <CABRndgyfAyQ=t1==vPY9UHv8wZjMhrsu9bOtnwLu6f=ARjEj4w@mail.gmail.com>
+From: Milian Wolff via lttng-dev <lttng-dev@lists.lttng.org>
+Subject: Re: Tracing a userspace app from startup
+Date: Wed, 15 May 2019 22:08:18 +0200
+Message-ID: <27361403.iBIxfkJtIM__39055.4284838558$1557951448$gmane$org@agathebauer>
+References: <DF4PR8401MB0939224BB5C202B61D624D3BDF090@DF4PR8401MB0939.NAMPRD84.PROD.OUTLOOK.COM>
+Reply-To: Milian Wolff <milian.wolff@kdab.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7927758304744423668=="
+Content-Type: multipart/mixed; boundary="===============1407552900290300689=="
 Return-path: <lttng-dev-bounces@lists.lttng.org>
-Received: from smtp.polymtl.ca (smtp.polymtl.ca [132.207.4.11])
- by lists.lttng.org (Postfix) with ESMTPS id 4541jq4Rcmz12Pf
- for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 13:28:31 -0400 (EDT)
-In-Reply-To: <CABRndgyfAyQ=t1==vPY9UHv8wZjMhrsu9bOtnwLu6f=ARjEj4w@mail.gmail.com>
+Received: from mail.kdab.com (mail.kdab.com [176.9.126.58])
+ by lists.lttng.org (Postfix) with ESMTPS id 4545QX453mzydT
+ for <lttng-dev@lists.lttng.org>; Wed, 15 May 2019 16:15:32 -0400 (EDT)
+In-Reply-To: <DF4PR8401MB0939224BB5C202B61D624D3BDF090@DF4PR8401MB0939.NAMPRD84.PROD.OUTLOOK.COM>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=unsubscribe>
 List-Archive: <https://lists.lttng.org/pipermail/lttng-dev>
@@ -19,67 +20,126 @@ List-Subscribe: <https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev>,
  <mailto:lttng-dev-request@lists.lttng.org?subject=subscribe>
 Errors-To: lttng-dev-bounces@lists.lttng.org
 Sender: "lttng-dev" <lttng-dev-bounces@lists.lttng.org>
-To: Zvi Vered <veredz72@gmail.com>
-Cc: lttng-dev@lists.lttng.org
+To: lttng-dev@lists.lttng.org
+Cc: "Jones, Tim" <tim.jones4@hpe.com>
 List-Id: lttng-dev@lists.lttng.org
 
---===============7927758304744423668==
-Content-Type: multipart/alternative;
-	boundary="=_6a34e08b-90e2-401f-8a08-11ab33c018f7"
+--===============1407552900290300689==
+Content-Type: multipart/signed; boundary="nextPart4183467.9IWyVTaiTi";
+ micalg="sha256"; protocol="application/pkcs7-signature"
 
---=_6a34e08b-90e2-401f-8a08-11ab33c018f7
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+--nextPart4183467.9IWyVTaiTi
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-On Linux, with pthreads, thread scheduling takes place in the kernel. You c=
-an then obtain this information through lttng tracing in the kernel domain =
-(scheduling events) and view the trace in Trace Compass.=20
+On Mittwoch, 15. Mai 2019 12:16:40 CEST Jones, Tim wrote:
+> Hi,
+> 
+> I've been attempting to use LTTng to trace some apps but need to trace from
+> their startup to shutdown. Is this possible with LTTng?
+> 
+> For example, I'd like to be able to run something along the lines of this:
+> 
+> lttng start -- <command> <args>
+> 
+> I've searched the docs and Google, but I can't find anything regarding this
+> way of using LTTng!?
 
------ Le 15 Mai 19, =C3=A0 12:42, Zvi Vered <veredz72@gmail.com> a =C3=A9cr=
-it :=20
+I asked this myself recently. Sadly, it's not supported. For now I'm using 
+this script myself:
 
-> Hello,
-> Can I use lttng to monitor threads in my process ?
-> For example, I want to see when a thread is active and when it is blocked
-> (waiting for a signal or an IOCL to complete).
+https://github.com/milianw/shell-helpers/blob/master/run_lttng_trace.sh
 
-> Is it possible doing it without linking the application with libust and c=
-alling
-> UST API ?
+You may want to enable events explicitly, instead of enabling all of them. 
+These traces can become quite large.
 
-> Thank you,
-> Zvika
+Cheers
 
-> _______________________________________________
-> lttng-dev mailing list
-> lttng-dev@lists.lttng.org
-> https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
+-- 
+Milian Wolff | milian.wolff@kdab.com | Senior Software Engineer
+KDAB (Deutschland) GmbH, a KDAB Group company
+Tel: +49-30-521325470
+KDAB - The Qt, C++ and OpenGL Experts
+--nextPart4183467.9IWyVTaiTi
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
---=_6a34e08b-90e2-401f-8a08-11ab33c018f7
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCDEIw
+ggXmMIIDzqADAgECAhBqm+E4O/8ra58B1dm4p1JWMA0GCSqGSIb3DQEBDAUAMIGFMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYD
+VQQKExFDT01PRE8gQ0EgTGltaXRlZDErMCkGA1UEAxMiQ09NT0RPIFJTQSBDZXJ0aWZpY2F0aW9u
+IEF1dGhvcml0eTAeFw0xMzAxMTAwMDAwMDBaFw0yODAxMDkyMzU5NTlaMIGXMQswCQYDVQQGEwJH
+QjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRowGAYDVQQK
+ExFDT01PRE8gQ0EgTGltaXRlZDE9MDsGA1UEAxM0Q09NT0RPIFJTQSBDbGllbnQgQXV0aGVudGlj
+YXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+AL6znlesKHZ1QBbHOAOY08YYdiFQ8yV5C0y1oNF9Olg+nKcxLqf2NHbZhGra0D00SOTq9bus3/mx
+gUsg/Wh/eXQ0pnp8tZ8XZWAnlyKMpjL+qUByRjXCA6RQyDMqVaVUkbIr5SU0RDX/kSsKwer3H1pT
+/HUrBN0X8sKtPTdGX8XAWt/VdMLBrZBlgvnkCos+KQWWCo63OTTqRvaq8aWccm+KOMjTcE6s2mj6
+RkalweyDI7X+7U5lNo6jzC8RTXtVV4/Vwdax720YpMPJQaDaElmOupyTf1Qib+cpukNJnQmwygjD
+8m046DQkLnpXNCAGjuJy1F5NATksUsbfJAr7FLUCAwEAAaOCATwwggE4MB8GA1UdIwQYMBaAFLuv
+fgI9+qbxPISOre44mOzZMjLUMB0GA1UdDgQWBBSCr2yM+MX+lmF86B89K3FIXsSLwDAOBgNVHQ8B
+Af8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIBADARBgNVHSAECjAIMAYGBFUdIAAwTAYDVR0fBEUw
+QzBBoD+gPYY7aHR0cDovL2NybC5jb21vZG9jYS5jb20vQ09NT0RPUlNBQ2VydGlmaWNhdGlvbkF1
+dGhvcml0eS5jcmwwcQYIKwYBBQUHAQEEZTBjMDsGCCsGAQUFBzAChi9odHRwOi8vY3J0LmNvbW9k
+b2NhLmNvbS9DT01PRE9SU0FBZGRUcnVzdENBLmNydDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3Au
+Y29tb2RvY2EuY29tMA0GCSqGSIb3DQEBDAUAA4ICAQB4XLKBKDRPPO5fVs6fl1bsj6JrF/bz9kkI
+BtTYLzXN30D+03Hj6OxCDBEaIeNmsBhrJmuubvyE7HtoSmR809AgcYboW+rcTNZ/8u/Hv+GTrNI/
+AhqX2/kiQNxmgUPt/eJPs92Qclj0HnVyy9TnSvGkSDU7I5Px+TbO+88G4zipA2psZaWeEykgzClZ
+lPz1FjTCkk77ZXp5cQYYexE6zeeN4/0OqqoAloFrjAF4o50YJafX8mnahjp3I2Y2mkjhk0xQfhNq
+bzlLWPoT3m7j7U26u7zg6swjOq8hITYc3/np5tM5aVyu6t99p17bTbY7+1RTWBviN9YJzK8HxzOb
+XYWBf/L+VGOYNsQDTxAk0Hbvb1j6KjUhg7fO294F29QIhhmiNOr84JHoy+fNLpfvYc/Q9EtFOI5I
+SYgOxLk3nD/whbUe9rmEQXLp8MB933Ij474gwwCPUpwv9mj2PMnXoc7mbrS22XUSeTwxCTP9bcmU
+dp4jmIoWfhQm7X9w/Zgddg+JZ/YnIHOwsGsaTUgj7fIvxqith7DoJC91WJ8Lce3CVJqb1XWeKIJ8
+4F7YLXZN0oa7TktYgDdmQVxYkZo1c5noaDKH9Oq9cbm/vOYRUM1cWcef20Wkyk5S/GFyyPJwG0fR
+1nRas3DqAf4cXxMiEKcff7PNa4M3RGTqH0pWR8p6EjCCBlQwggU8oAMCAQICEAf6KCF9+1doL2oE
+OTPysLwwDQYJKoZIhvcNAQELBQAwgZcxCzAJBgNVBAYTAkdCMRswGQYDVQQIExJHcmVhdGVyIE1h
+bmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNVBAoTEUNPTU9ETyBDQSBMaW1pdGVkMT0w
+OwYDVQQDEzRDT01PRE8gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWls
+IENBMB4XDTE3MDUyMzAwMDAwMFoXDTIwMDUyMjIzNTk1OVowggFZMQswCQYDVQQGEwJTRTEPMA0G
+A1UEERMGNjgzIDMxMRIwEAYDVQQIEwlWYWVybWxhbmQxEDAOBgNVBAcTB0hhZ2ZvcnMxGDAWBgNV
+BAkTD05vcnJpbmdzIHZhZWcgMjEPMA0GA1UEEhMGQm94IDMwMSYwJAYDVQQKDB1LbGFyw6RsdmRh
+bGVucyBEYXRha29uc3VsdCBBQjEdMBsGA1UECxMUQSBLREFCIEdyb3VwIENvbXBhbnkxQzBBBgNV
+BAsMOklzc3VlZCB0aHJvdWdoIEtsYXLDpGx2ZGFsZW5zIERhdGFrb25zdWx0IEFCIEUtUEtJIE1h
+bmFnZXIxHzAdBgNVBAsTFkNvcnBvcmF0ZSBTZWN1cmUgRW1haWwxFTATBgNVBAMTDE1pbGlhbiBX
+b2xmZjEkMCIGCSqGSIb3DQEJARYVbWlsaWFuLndvbGZmQGtkYWIuY29tMIIBIjANBgkqhkiG9w0B
+AQEFAAOCAQ8AMIIBCgKCAQEAxrzfNBVvRbiAknuTBXuQnNm9sLIFLo0vbPB6kswk78A3tA++Zn5c
+lQUHhGlQq1cdYxagnUpqwvG3Sod15mPSOLkAPf/mabLN7p+lFbRaUP+97ZkTZtvb4BCC3osIEFI4
+G393OSFWqc2qmIPE/SwSASbAA20Fcaa2M6P1lhOk/ttUh2jIurTPF0wUycIA7lBddrOgaOA8e2m6
+iLTNHtlrfRbBaUX91D5ebY+UWmIjXSQ9+CtutMzBkwnF0rZKririvOkklg9VzEGNQVHrQfDF2s/U
+pOtmtuVSwElauGT/KALyCFuIrYC1pmaKH8S1xODJqiRaf6jH8E+KQzKjyM/ErwIDAQABo4IB1TCC
+AdEwHwYDVR0jBBgwFoAUgq9sjPjF/pZhfOgfPStxSF7Ei8AwHQYDVR0OBBYEFN+m99RtIuA1bSdw
+6b1brOX7X3AJMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUF
+BwMEBggrBgEFBQcDAjBGBgNVHSAEPzA9MDsGDCsGAQQBsjEBAgEDBTArMCkGCCsGAQUFBwIBFh1o
+dHRwczovL3NlY3VyZS5jb21vZG8ubmV0L0NQUzBaBgNVHR8EUzBRME+gTaBLhklodHRwOi8vY3Js
+LmNvbW9kb2NhLmNvbS9DT01PRE9SU0FDbGllbnRBdXRoZW50aWNhdGlvbmFuZFNlY3VyZUVtYWls
+Q0EuY3JsMIGLBggrBgEFBQcBAQR/MH0wVQYIKwYBBQUHMAKGSWh0dHA6Ly9jcnQuY29tb2RvY2Eu
+Y29tL0NPTU9ET1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcnQwJAYI
+KwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmNvbW9kb2NhLmNvbTAgBgNVHREEGTAXgRVtaWxpYW4ud29s
+ZmZAa2RhYi5jb20wDQYJKoZIhvcNAQELBQADggEBABf47LSJADqH+ow9INv3QM1NC/qq2bjxGvsZ
+68iD11VEUAFlsYfsVTgQqUirwPVTYenXtwVBELHZyywsui1JxL7HKQetLQegDDP/RyfjReVaWxhy
+3OpuItsgLVbru9QVgPifnoBFPtfZcwjeJDmeSbLT8oj4Rd0KYBOIve7WKvsfNPsNwfbLwY2zILkE
+LjxZcVi2AwZHDyab+dzL/3YcLuJj1lSawBGn7ilpcdZydlv4aye51pD/MemLIYLcylt+ImrmjnTV
+y+QlAHRF3s5FE8yAr+W1MBD/1bKZCSgFt8VQoAlz3hiQh8QqZp4Zl8WuVL4+mP/mT6VDEWgq/0Bo
+cukxggJuMIICagIBATCBrDCBlzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hl
+c3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEaMBgGA1UEChMRQ09NT0RPIENBIExpbWl0ZWQxPTA7BgNV
+BAMTNENPTU9ETyBSU0EgQ2xpZW50IEF1dGhlbnRpY2F0aW9uIGFuZCBTZWN1cmUgRW1haWwgQ0EC
+EAf6KCF9+1doL2oEOTPysLwwDQYJYIZIAWUDBAIBBQCggZMwGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMTkwNTE1MjAwODE4WjAoBgkqhkiG9w0BCQ8xGzAZMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzAvBgkqhkiG9w0BCQQxIgQgF1YuvU3RB415oRfYLi1dkvCUdmOP
+HPFiMgTp5nj6Sh0wDQYJKoZIhvcNAQEBBQAEggEAepRFytgzkfwhQnST35K4r122Ce32VQ2w0vgY
+tPTzBk/fIxUaoPpTh4bZES3DPzNje7wGwHAlpYI5S/v/v0Y6y74AaKBzkUc+w6eWqF5FWikRv02I
+J8sC06kORMtNvJRSukRez/SAsQx8WnYKpsi/0TeGE1pD31nxNt/A852RZQFXpqAJB7E8UPL6mmyS
+zJl0lzuE5vw+4V4PYGmnnCdvCeiboGqys83DOI0y8IaLQyxAXXqJxnjrdxeOe0DqxP9SKWSL5NYE
+ZXFOIqiJnN+aAqwgLV/Q4F0hr6nkkEVV5usug8XzeIvyHjhUOAzv6jWSYs3SPLX59c5dEfHxj89g
+iQAAAAAAAA==
 
-<html><body><div style=3D"font-family: arial, helvetica, sans-serif; font-s=
-ize: 12pt; color: #000000"><div>On Linux, with pthreads, thread scheduling =
-takes place in the kernel. You can then obtain this information through ltt=
-ng tracing in the kernel domain (scheduling events) and view the trace in T=
-race Compass.</div><div><br></div><div><span id=3D"zwchr" data-marker=3D"__=
-DIVIDER__">----- Le 15 Mai 19, =C3=A0 12:42, Zvi Vered &lt;veredz72@gmail.c=
-om&gt; a =C3=A9crit :<br></span></div><div data-marker=3D"__QUOTED_TEXT__">=
-<blockquote style=3D"border-left:2px solid #1010FF;margin-left:5px;padding-=
-left:5px;color:#000;font-weight:normal;font-style:normal;text-decoration:no=
-ne;font-family:Helvetica,Arial,sans-serif;font-size:12pt;"><div dir=3D"ltr"=
->Hello,<br><div>Can I use lttng to monitor threads in my process ?</div><di=
-v>For example, I want to see when a thread is active and when it is blocked=
- (waiting for a signal or an IOCL to complete).&nbsp;</div><br><div>Is it p=
-ossible doing it without linking the application with libust and calling US=
-T API ?</div><br><div>Thank you,</div><div>Zvika&nbsp;</div></div>
-<br>_______________________________________________<br>lttng-dev mailing li=
-st<br>lttng-dev@lists.lttng.org<br>https://lists.lttng.org/cgi-bin/mailman/=
-listinfo/lttng-dev<br></blockquote></div></div></body></html>
---=_6a34e08b-90e2-401f-8a08-11ab33c018f7--
 
---===============7927758304744423668==
+--nextPart4183467.9IWyVTaiTi--
+
+
+
+--===============1407552900290300689==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -90,4 +150,4 @@ lttng-dev mailing list
 lttng-dev@lists.lttng.org
 https://lists.lttng.org/cgi-bin/mailman/listinfo/lttng-dev
 
---===============7927758304744423668==--
+--===============1407552900290300689==--
