@@ -1,8 +1,7 @@
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH lttng-tools 4/6] Fix: test: utils.sh: exit from
- process on full_cleanup
-Date: Thu, 16 May 2019 15:07:59 -0400
-Message-ID: <20190516190801.16878-4-mathieu.desnoyers__11614.495264233$1558033763$gmane$org@efficios.com>
+Subject: [PATCH lttng-tools 3/6] Fix: utils.sh: handle SIGPIPE
+Date: Thu, 16 May 2019 15:07:58 -0400
+Message-ID: <20190516190801.16878-3-mathieu.desnoyers__44394.3920008437$1558033798$gmane$org@efficios.com>
 References: <20190516190801.16878-1-mathieu.desnoyers@efficios.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +9,7 @@ Content-Transfer-Encoding: 7bit
 Return-path: <lttng-dev-bounces@lists.lttng.org>
 Received: from mail.efficios.com (mail.efficios.com
  [IPv6:2607:5300:60:7898::beef])
- by lists.lttng.org (Postfix) with ESMTPS id 454gtH6mmlzypP
+ by lists.lttng.org (Postfix) with ESMTPS id 454gtH6mZBzypN
  for <lttng-dev@lists.lttng.org>; Thu, 16 May 2019 15:08:07 -0400 (EDT)
 In-Reply-To: <20190516190801.16878-1-mathieu.desnoyers@efficios.com>
 List-Unsubscribe: <https://lists.lttng.org/cgi-bin/mailman/options/lttng-dev>,
@@ -26,22 +25,44 @@ To: joraj@efficios.com, jgalar@efficios.com
 Cc: lttng-dev@lists.lttng.org
 List-Id: lttng-dev@lists.lttng.org
 
+perl prove closes its child pipes before giving it a chance to execute
+the signal trap handler. This means the child will not be able to
+complete execution of the trap handler if that handler writes to stdout
+or stderr.
+
+Work-around this situation by redirecting stdin, stdout, and stderr
+to /dev/null if a SIGPIPE is caught.
+
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 ---
- tests/utils/utils.sh | 1 +
- 1 file changed, 1 insertion(+)
+ tests/utils/utils.sh | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/tests/utils/utils.sh b/tests/utils/utils.sh
-index 53964027..ad3088d6 100644
+index 8f6381eb..53964027 100644
 --- a/tests/utils/utils.sh
 +++ b/tests/utils/utils.sh
-@@ -66,6 +66,7 @@ function full_cleanup ()
- 	# The '-' before the pid number ($$) indicates 'kill' to signal the
- 	# whole process group.
+@@ -68,9 +68,21 @@ function full_cleanup ()
  	trap - SIGTERM && kill -- -$$
-+	exit 1
  }
  
- function null_pipes ()
++function null_pipes ()
++{
++	exec 0>/dev/null
++	exec 1>/dev/null
++	exec 2>/dev/null
++}
+ 
+ trap full_cleanup SIGINT SIGTERM
+ 
++# perl prove closes its child pipes before giving it a chance to run its
++# signal trap handlers. Redirect pipes to /dev/null if SIGPIPE is caught
++# to allow those trap handlers to proceed.
++
++trap null_pipes SIGPIPE
++
+ function print_ok ()
+ {
+ 	# Check if we are a terminal
 -- 
 2.17.1
